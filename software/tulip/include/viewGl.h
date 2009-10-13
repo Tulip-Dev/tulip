@@ -80,6 +80,7 @@ protected slots:
   void helpContents();
   void helpAbout();
   void plugins();
+  void displayRestartForPlugins();
   void helpAssistantError(const QString &msg);
   void fileExit();
   void fileSave();

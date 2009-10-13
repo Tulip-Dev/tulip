@@ -68,13 +68,11 @@ namespace tlp {
     settings.endGroup();
 
     if(plugins.size()==0){
-      emit checkFinished(false);
       return;
     }
 
     UpdatePluginsDialog dialog(plugins,parent);
     if(dialog.exec()==QDialog::Rejected){
-      emit checkFinished(false);
       return;
     }
 
@@ -83,7 +81,6 @@ namespace tlp {
     dialog.getPluginsToUpdate(pluginsToUpdate);
 
     if(pluginsToUpdate.size()==0){
-      emit checkFinished(false);
       return;
     }
 
@@ -91,15 +88,12 @@ namespace tlp {
     connect(updatePlugin,SIGNAL(pluginInstalled()),this,SLOT(pluginInstalled()));
     connect(updatePlugin,SIGNAL(pluginUninstalled()),this,SLOT(pluginUninstalled()));
     numberOfPluginsToUpdate=updatePlugin->pluginsCheckAndUpdate(msm,pluginsToUpdate, pluginsToRemove,parent);
-    if(numberOfPluginsToUpdate==0){
-      emit checkFinished(false);
-    }
   }
 
   void PluginsUpdateChecker::pluginInstalled(){
     numberOfPluginsToUpdate--;
     if(numberOfPluginsToUpdate==0){
-      emit checkFinished(true);
+      emit updateFinished();
     }
   }
 
