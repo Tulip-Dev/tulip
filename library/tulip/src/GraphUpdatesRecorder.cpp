@@ -645,9 +645,10 @@ void GraphUpdatesRecorder::addNode(Graph* g, node n) {
 void GraphUpdatesRecorder::addEdge(Graph* g, edge e) {
   TLP_HASH_MAP<edge, EdgeRecord>::iterator it =
     addedEdges.find(e);
-  if (it == addedEdges.end())
-    addedEdges[e] = EdgeRecord(g, g->source(e), g->target(e));
-  else
+  if (it == addedEdges.end()) {
+    const pair<node, node> &eEnds = g->ends(e);
+    addedEdges[e] = EdgeRecord(g, eEnds.first, eEnds.second);
+  } else
     (*it).second.graphs.insert(g);
 }
 
@@ -683,29 +684,32 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
   TLP_HASH_MAP<edge, EdgeRecord>::iterator it = addedEdges.find(e);
   // remove e from addedEdges if it is a newly added edge
   if (it != addedEdges.end()) {
+    node src = (*it).second.source;
+    node tgt = (*it).second.target;
     set<Graph*>& graphs = (*it).second.graphs;
     graphs.erase(g);
     if (graphs.empty())
       addedEdges.erase(it);
     // remove from revertedEdges if needed
-    set<edge>::iterator it = revertedEdges.find(e);
-    if (it != revertedEdges.end())
-      revertedEdges.erase(it);
+    set<edge>::iterator itR = revertedEdges.find(e);
+    if (itR != revertedEdges.end())
+      revertedEdges.erase(itR);
     // remove edge from nodes newContainers if needed
-    removeFromEdgeContainer(newContainers, e, g->source(e));
-    removeFromEdgeContainer(newContainers, e, g->target(e));
+    removeFromEdgeContainer(newContainers, e, src);
+    removeFromEdgeContainer(newContainers, e, tgt);
     return;
   }
   // insert e into deletedEdges
   it = deletedEdges.find(e);
   if (it == deletedEdges.end()) {
     // remove from revertedEdges if needed
+    const pair<node, node> &eEnds = g->ends(e);
     set<edge>::iterator it = revertedEdges.find(e);
     if (it != revertedEdges.end()) {
       revertedEdges.erase(it);
-      deletedEdges[e] = EdgeRecord(g, g->target(e), g->source(e));
+      deletedEdges[e] = EdgeRecord(g, eEnds.second, eEnds.first);
     } else
-      deletedEdges[e] = EdgeRecord(g, g->source(e), g->target(e));
+      deletedEdges[e] = EdgeRecord(g, eEnds.first, eEnds.second);
   }
   else
     (*it).second.graphs.insert(g);
@@ -718,12 +722,22 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
   }
   if (g == g->getSuperGraph()) {
     // record source & target old containers
-    recordEdgeContainer(oldContainers, (GraphImpl*) g, g->source(e));
-    recordEdgeContainer(oldContainers, (GraphImpl*) g, g->target(e));
+    const pair<node, node> &eEnds = g->ends(e);
+    recordEdgeContainer(oldContainers, (GraphImpl*) g, eEnds.first);
+    recordEdgeContainer(oldContainers, (GraphImpl*) g, eEnds.second);
   }
 }
 
 void GraphUpdatesRecorder::reverseEdge(Graph* g,  edge e) {
+  TLP_HASH_MAP<edge, EdgeRecord>::iterator itA = addedEdges.find(e);
+  // remove e from addedEdges if it is a newly added edge
+  if (itA != addedEdges.end()) {
+    node src = (*itA).second.source;
+    node tgt = (*itA).second.target;
+    (*itA).second.source = tgt;
+    (*itA).second.target = src;
+    return;
+  }
   set<edge>::iterator it = revertedEdges.find(e);
   if (it != revertedEdges.end())
     revertedEdges.erase(it);
