@@ -16,9 +16,9 @@
 #include <config.h>
 #endif
 
+#include <vector>
 #include "tulip/tuliphash.h"
 #include "tulip/ObservableGraph.h"
-#include <list>
 #include <tulip/MutableContainer.h>
 
 
