@@ -67,17 +67,21 @@ void PushPopTest::testAddDel() {
   CPPUNIT_ASSERT(graph->existEdge(n2, n3) == e1);
   CPPUNIT_ASSERT(graph->isElement(e0) == false);
 
-  graph->delEdge(e1);
-  CPPUNIT_ASSERT(graph->isElement(e1) == false);
-  CPPUNIT_ASSERT(graph->isElement(n2) == true);
-  CPPUNIT_ASSERT(graph->isElement(n3) == true);
-
+  graph->reverse(e1);
+  CPPUNIT_ASSERT(graph->existEdge(n3, n2) == e1);
+  
   graph->pop();
   CPPUNIT_ASSERT(graph->isElement(e1) == false);
   CPPUNIT_ASSERT(graph->isElement(n2) == false);
   CPPUNIT_ASSERT(graph->isElement(n3) == false);
 
   graph->unpop();
+  CPPUNIT_ASSERT(graph->isElement(e1) == true);
+  CPPUNIT_ASSERT(graph->isElement(n2) == true);
+  CPPUNIT_ASSERT(graph->isElement(n3) == true);
+  CPPUNIT_ASSERT(graph->existEdge(n3, n2) == e1);
+
+  graph->delEdge(e1);
   CPPUNIT_ASSERT(graph->isElement(e1) == false);
   CPPUNIT_ASSERT(graph->isElement(n2) == true);
   CPPUNIT_ASSERT(graph->isElement(n3) == true);
