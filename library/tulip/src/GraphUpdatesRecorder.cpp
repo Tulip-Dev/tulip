@@ -724,6 +724,15 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
 }
 
 void GraphUpdatesRecorder::reverseEdge(Graph* g,  edge e) {
+  hash_map<edge, EdgeRecord>::iterator itA = addedEdges.find(e);
+  // revert EdgeRecord if it is a newly added edge
+  if (itA != addedEdges.end()) {
+    node src = (*itA).second.source;
+    node tgt = (*itA).second.target;
+    (*itA).second.source = tgt;
+    (*itA).second.target = src;
+    return;
+  }
   set<edge>::iterator it = revertedEdges.find(e);
   if (it != revertedEdges.end())
     revertedEdges.erase(it);
