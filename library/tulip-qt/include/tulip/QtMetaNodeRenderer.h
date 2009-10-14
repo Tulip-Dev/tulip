@@ -14,6 +14,7 @@
 #include <tulip/tulipconf.h>
 #include <tulip/tuliphash.h>
 #include <tulip/GlMetaNodeRenderer.h>
+#include <tulip/Color.h>
 
 #include <tulip/ObservableGraph.h>
 #include <tulip/ObservableProperty.h>
@@ -93,6 +94,9 @@ namespace tlp {
     virtual void render(node n,float lod,Camera *camera);
     virtual bool havePrerender() {return true;}
 
+    void setBackgroundColor(const Color &color){backgroundColor=color;}
+    void setStopUpdateMetaNodes(bool stopUpdate){stopUpdateMetaNodes=stopUpdate;}
+
   protected :
 
     QWidget *parent;
@@ -107,6 +111,9 @@ namespace tlp {
 
     GlMainWidget *glMainWidget;
     GlGraphInputData *inputData;
+
+    Color backgroundColor;
+    bool stopUpdateMetaNodes;
 
   };
 

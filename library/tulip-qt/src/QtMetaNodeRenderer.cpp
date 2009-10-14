@@ -10,7 +10,7 @@ using namespace std;
 
 namespace tlp {
 
-  QtMetaNodeRenderer::QtMetaNodeRenderer(QWidget *parent, GlMainWidget *widget,GlGraphInputData *inputData):parent(parent),parentGlMainWidget(widget),inputData(inputData) {
+  QtMetaNodeRenderer::QtMetaNodeRenderer(QWidget *parent, GlMainWidget *widget,GlGraphInputData *inputData):parent(parent),parentGlMainWidget(widget),inputData(inputData),backgroundColor(Color(255,255,255,0)),stopUpdateMetaNodes(false) {
     glMainWidget=NULL;
   }
 
@@ -98,7 +98,7 @@ namespace tlp {
         render=false;
       }
     }
-    if(haveToRenderGraph.find(metaGraph)!=haveToRenderGraph.end()){
+    if(haveToRenderGraph.find(metaGraph)!=haveToRenderGraph.end() && !stopUpdateMetaNodes){
       if(haveToRenderGraph[metaGraph]){
         render=true;
         haveToRenderGraph[metaGraph]=false;
@@ -108,8 +108,9 @@ namespace tlp {
     if(render){
       if(!glMainWidget){
         glMainWidget=new GlMainWidget(NULL,NULL);
-        glMainWidget->getScene()->setBackgroundColor(Color(255,255,255,0));
       }
+      glMainWidget->getScene()->setBackgroundColor(backgroundColor);
+
       //clear QGLFramebufferObject
       list<string>::iterator it=find(textureName.begin(),textureName.end(),str.str());
       if(it!=textureName.end()){
