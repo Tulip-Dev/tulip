@@ -170,24 +170,28 @@ namespace tlp {
   void UpdatePlugin::install(const string &serverAddr,const DistPluginInfo &pluginInfo){
     distPluginInfo=pluginInfo;
     version=pluginInfo.version;
-    while(version.find(" ")!=string::npos) {
-      version.replace(version.find(" "),1,".");
-    }
+    version=version.substr(version.rfind(" ")+1,version.size()-version.rfind(" ")-1);
+
     partNumber=2;
     string realServerAddr=serverAddr.substr(0,serverAddr.rfind("/")+1);
     serverWS=new Server(serverAddr);
     serverGet=new Server(realServerAddr);
+    // inform server when we want to download a plugin
     serverWS->send(new DownloadPluginRequest(pluginInfo.name));
-    serverGet->send(new GetPluginRequest(new PluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".doc.")+version,installPath+pluginInfo.fileName+std::string(".doc")));
-    serverGet->send(new GetPluginRequest(new PluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".helpdoc.")+version,installPath+pluginInfo.fileName+std::string(".helpdoc")));
+    // download .doc
+    serverGet->send(new GetPluginRequest(new PluginDownloadFinish(this),pluginInfo.fileName+"."+version+"/"+pluginInfo.fileName+string(".doc"),installPath+pluginInfo.fileName+std::string(".doc")));
+    // download .helpdoc
+    serverGet->send(new GetPluginRequest(new PluginDownloadFinish(this),pluginInfo.fileName+"."+version+"/"+pluginInfo.fileName+string(".helpdoc"),installPath+pluginInfo.fileName+std::string(".helpdoc")));
+
+    // download plugin
     #if defined(__APPLE__)
-      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".dylib.")+version,installPath+pluginInfo.fileName+std::string(".dylib")));
+      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"."+version+"/i386/"+pluginInfo.fileName+string(".dylib"),installPath+pluginInfo.fileName+std::string(".dylib")));
     #elif defined(_WIN32)
-      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".dll.")+version,installPath+pluginInfo.fileName+std::string(".dll")));
+      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"."+version+"/i386/"+pluginInfo.fileName+string(".dll"),installPath+pluginInfo.fileName+std::string(".dll")));
     #elif defined(I64)
-      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".so.")+version+".i64",installPath+pluginInfo.fileName+std::string(".so")));
+      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"."+version+"/i64/"+pluginInfo.fileName+string(".so"),installPath+pluginInfo.fileName+std::string(".so")));
     #else
-      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"/"+pluginInfo.fileName+string(".so.")+version+".i386",installPath+pluginInfo.fileName+std::string(".so")));
+      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"."+version+"/i386/"+pluginInfo.fileName+string(".so"),installPath+pluginInfo.fileName+std::string(".so")));
     #endif
   }
 

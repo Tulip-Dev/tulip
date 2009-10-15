@@ -45,9 +45,7 @@ namespace tlp {
       Server* sm = new Server(addrWS);
 
       string versionStr=distPlugin->version;
-      while(versionStr.find(" ")!=string::npos){
-        versionStr.replace(versionStr.find(" "),1,".");
-      }
+      versionStr=versionStr.substr(versionStr.rfind(" ")+1,versionStr.size()-versionStr.rfind(" ")-1);
 
       GetPluginInfoTreatment *infoTreat = new GetPluginInfoTreatment(this);
       GetPluginInfoRequest* infoReq = new GetPluginInfoRequest(distPlugin->fileName,versionStr,infoTreat);

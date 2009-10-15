@@ -59,7 +59,9 @@ namespace tlp {
 						   childElement.attribute("linuxVersion").toStdString()=="true",
 						   childElement.attribute("macVersion").toStdString()=="true",
 						   childElement.attribute("windowsVersion").toStdString()=="true",
-						   childElement.attribute("i64Version").toStdString()=="true"));
+						   childElement.attribute("linuxVersion_i64").toStdString()=="true",
+						   childElement.attribute("macVersion_i64").toStdString()=="true",
+						   childElement.attribute("windowsVersion_i64").toStdString()=="true"));
 	}
       }
     }

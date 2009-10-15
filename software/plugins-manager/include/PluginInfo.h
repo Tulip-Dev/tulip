@@ -150,7 +150,9 @@ namespace tlp {
     bool linuxVersion;
     bool macVersion;
     bool windowsVersion;
-    bool i64Version;
+    bool linuxVersion_i64;
+    bool macVersion_i64;
+    bool windowsVersion_i64;
     bool installIsOK;
 
     virtual ~DistPluginInfo() {};
@@ -167,15 +169,21 @@ namespace tlp {
 		   bool linuxVersion,
 		   bool macVersion,
 		   bool windowsVersion,
-		   bool i64Version)
+		   bool linuxVersion_i64,
+		   bool macVersion_i64,
+		   bool windowsVersion_i64)
       : PluginInfo(name,type,displayType,server,version,dependencies,false),
       fileName(fileName),
       localVersion(localVersion),
       linuxVersion(linuxVersion),
       macVersion(macVersion),
       windowsVersion(windowsVersion),
-      i64Version(i64Version){
-	local=false;};
+      linuxVersion_i64(linuxVersion_i64),
+      macVersion_i64(macVersion_i64),
+      windowsVersion_i64(windowsVersion_i64)
+      {
+        local=false;
+      };
   };
 
   class TLP_PLUGINSMANAGER_SCOPE LocalPluginInfo : public PluginInfo{

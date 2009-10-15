@@ -125,7 +125,7 @@ namespace tlp {
   public: 
     
     GetPluginRequest(RequestFinish* requestFinish,const std::string& pluginName,const std::string &outFileName)
-      :GetRequest(requestFinish,std::string("/plugins/")+pluginName,outFileName){};
+      :GetRequest(requestFinish,std::string("/pluginsV2/")+pluginName,outFileName){};
     
   };
 
@@ -141,7 +141,7 @@ namespace tlp {
     void getXml(std::string &xml) const {
       SoapRequestBuilder request;
       
-      request.setFunctionName("getPluginXMLInfo");
+      request.setFunctionName("getPluginXMLInfo_v2");
       
       request.addFunctionParameter("pluginFileName","string",pluginFileName);
       request.addFunctionParameter("pluginVersion","string",pluginVersion);
@@ -169,7 +169,7 @@ namespace tlp {
     void getXml(std::string &xml) const {
       SoapRequestBuilder request;
       
-      request.setFunctionName("getPluginXMLDoc");
+      request.setFunctionName("getPluginXMLDoc_v2");
       
       request.addFunctionParameter("pluginFileName","string",pluginFileName);
       request.addFunctionParameter("pluginVersion","string",pluginVersion);

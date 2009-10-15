@@ -75,7 +75,7 @@ namespace tlp {
     
   void GetPluginsListRequest::getXml(std::string &xml) const {
     SoapRequestBuilder request;
-    request.setFunctionName("getPluginXMLList");
+    request.setFunctionName("getPluginXMLList_v2");
     
     request.getXML(xml);
   }
