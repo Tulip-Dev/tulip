@@ -116,7 +116,7 @@ namespace tlp {
 #elif defined(_WIN32)
             if(pluginInfo->windowsVersion){
 #elif defined(I64)
-            if(pluginInfo->i64Version){
+            if(pluginInfo->linuxVersion_i64){
 #else
             if(pluginInfo->linuxVersion){
 #endif

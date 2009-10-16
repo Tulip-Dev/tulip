@@ -191,7 +191,7 @@ namespace tlp {
 #elif defined(_WIN32)
       havePlugin=((DistPluginInfo*)pluginInfo)->windowsVersion;
 #elif defined(I64)
-      havePlugin=((DistPluginInfo*)pluginInfo)->i64Version;
+      havePlugin=((DistPluginInfo*)pluginInfo)->linuxVersion_i64;
 #else
       havePlugin=((DistPluginInfo*)pluginInfo)->linuxVersion;
 #endif
