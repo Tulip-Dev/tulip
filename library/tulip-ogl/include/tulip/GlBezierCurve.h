@@ -20,7 +20,7 @@
 
 namespace tlp {
 
-class  GlBezierCurve : public GlSimpleEntity {
+class TLP_GL_SCOPE GlBezierCurve : public GlSimpleEntity {
 public:
 
 	GlBezierCurve(const std::vector<Coord> &controlPoints,
