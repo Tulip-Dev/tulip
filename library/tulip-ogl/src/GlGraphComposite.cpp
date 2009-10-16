@@ -12,7 +12,7 @@ using namespace std;
 
 namespace tlp {
 
-  GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),haveToSort(true),nodesModified(true) {
+  GlGraphComposite::GlGraphComposite(Graph* graph):inputData(graph,&parameters),rootGraph(graph->getRoot()),haveToSort(true),nodesModified(true) {
     graph->addGraphObserver(this);
     graph->getProperty<GraphProperty>("viewMetaGraph")->addPropertyObserver(this);
 
@@ -33,6 +33,9 @@ namespace tlp {
   void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor)
   {
     Graph *graph=inputData.getGraph();
+
+    // Check if the current graph are in the hierarchy
+    assert((rootGraph==graph) || (rootGraph->isDescendantGraph(graph)));
 
     if(!parameters.isElementOrdered()){
       if(isDisplayNodes() || isDisplayMetaNodes()){

@@ -173,6 +173,7 @@ namespace tlp {
     unsigned int currentGraphNbNodes;
     unsigned int currentGraphNbEdges;
     Graph *graphToReload;
+    bool blockUpdate;
 
     Morphing *morph;
 

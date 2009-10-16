@@ -45,7 +45,7 @@ namespace tlp {
     void delNode(Graph *graph,const node ){haveToRenderGraph[graph]=true;}
     void delEdge(Graph *graph,const edge ){haveToRenderGraph[graph]=true;}
     void reverseEdge(Graph *graph,const edge ){haveToRenderGraph[graph]=true;}
-    void destroy(Graph *graph){}
+    void destroy(Graph *graph);
     void addSubGraph(Graph *graph, Graph *){haveToRenderGraph[graph]=true;}
     void delSubGraph(Graph *graph, Graph*){haveToRenderGraph[graph]=true;}
     void addLocalProperty(Graph *graph, const std::string&){

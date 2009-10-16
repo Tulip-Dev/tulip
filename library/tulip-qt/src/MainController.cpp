@@ -207,7 +207,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    currentGraph(NULL),currentView(NULL),copyCutPasteGraph(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),clusterTreeWidget(NULL) {
+    blockUpdate(false),currentGraph(NULL),currentView(NULL),copyCutPasteGraph(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),clusterTreeWidget(NULL) {
     morph = new Morphing();
   }
   //**********************************************************************
@@ -405,6 +405,9 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::update ( ObserverIterator begin, ObserverIterator end) {
+    if(blockUpdate)
+      return;
+
     if(graphToReload){
       Graph *graph=graphToReload;
       graphToReload=NULL;
@@ -1652,7 +1655,9 @@ namespace tlp {
     map<View *,list<int> > hierarchies=saveViewsHierarchiesBeforePop();
 
     Graph *root=currentGraph->getRoot();
+    blockUpdate=true;
     root->pop();
+    blockUpdate=false;
 
     checkViewsHierarchiesAfterPop(hierarchies);
     Graph *newGraph=viewGraph[currentView];
@@ -1662,6 +1667,8 @@ namespace tlp {
     clusterTreeWidget->update();
     propertiesWidget->setGraph(newGraph);
     eltProperties->setGraph(newGraph,false);
+
+    redrawViews();
     updateUndoRedoInfos();
 
   }
@@ -1670,7 +1677,9 @@ namespace tlp {
     map<View *,list<int> > hierarchies=saveViewsHierarchiesBeforePop();
 
     Graph* root = currentGraph->getRoot();
+    blockUpdate=true;
     root->unpop();
+    blockUpdate=false;
 
     checkViewsHierarchiesAfterPop(hierarchies);
     Graph *newGraph=viewGraph[currentView];
@@ -1679,6 +1688,8 @@ namespace tlp {
     clusterTreeWidget->update();
     propertiesWidget->setGraph(newGraph);
     eltProperties->setGraph(newGraph,false);
+
+    redrawViews();
     updateUndoRedoInfos();
   }
   //**********************************************************************

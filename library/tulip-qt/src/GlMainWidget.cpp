@@ -95,7 +95,7 @@ namespace tlp {
 
   //==================================================
   GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
-    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new QtQuadTreeLODCalculator),view(view){
+    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(/*new QtQuadTreeLODCalculator*/),view(view){
     //setObjectName(name);
     //  cerr << __PRETTY_FUNCTION__ << endl;
     setFocusPolicy(Qt::StrongFocus);

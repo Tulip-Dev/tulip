@@ -42,6 +42,29 @@ namespace tlp {
     }
   }
 
+  void QtMetaNodeRenderer::destroy(Graph *graph){
+    graph->removeObserver(this);
+    graph->removeGraphObserver(this);
+
+    map<Graph *,list<Graph *> >::iterator it=parentGraphToGraph.find(graph);
+    if(it!=parentGraphToGraph.end()){
+      (*it).first->removeGraphObserver(this);
+      parentGraphToGraph.erase(it);
+    }
+
+    vector<multimap<PropertyInterface *,Graph *>::iterator> toErase;
+    for(multimap<PropertyInterface *,Graph *>::iterator it=propertyToGraph.begin();it!=propertyToGraph.end();++it){
+      if((*it).second==graph){
+        (*it).first->removeObserver(this);
+        (*it).first->removePropertyObserver(this);
+        toErase.push_back(it);
+      }
+    }
+    for(vector<multimap<PropertyInterface *,Graph *>::iterator>::iterator it=toErase.begin();it!=toErase.end();++it){
+      propertyToGraph.erase(*it);
+    }
+  }
+
   void QtMetaNodeRenderer::prerender(node n,float lod,Camera *camera){
     if(lod<8.)
       return;

@@ -24,7 +24,7 @@ namespace tlp {
     return pair<Coord,Coord>(center-size,center+size);
   }
 
-  QtQuadTreeLODCalculator::QtQuadTreeLODCalculator() : scene(NULL),nodesQuadTree(NULL),edgesQuadTree(NULL),nodesSelectedQuadTree(NULL),edgesSelectedQuadTree(NULL),entitiesQuadTree(NULL),
+  QtQuadTreeLODCalculator::QtQuadTreeLODCalculator() : scene(NULL),rootGraph(NULL),nodesQuadTree(NULL),edgesQuadTree(NULL),nodesSelectedQuadTree(NULL),edgesSelectedQuadTree(NULL),entitiesQuadTree(NULL),
                                                        haveToCompute(true),inputData(NULL),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
   }
 
@@ -37,9 +37,15 @@ namespace tlp {
       removeObservers();
     this->scene=scene;
     haveToCompute=true;
+    rootGraph=NULL;
   }
 
   bool QtQuadTreeLODCalculator::needEntities(){
+    // Check if current graph are in the hierarchy
+    if(!rootGraph)
+      rootGraph=scene->getGlGraphComposite()->getInputData()->graph->getRoot();
+    assert((rootGraph==scene->getGlGraphComposite()->getInputData()->graph) || (rootGraph->isDescendantGraph(scene->getGlGraphComposite()->getInputData()->graph)));
+
     if(haveToCompute)
       return true;
 

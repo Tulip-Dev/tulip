@@ -154,6 +154,7 @@ namespace tlp {
 
     GlGraphRenderingParameters parameters;
     GlGraphInputData inputData;
+    Graph *rootGraph;
 
     bool haveToSort;
     bool nodesModified;

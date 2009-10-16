@@ -87,6 +87,7 @@ namespace tlp {
   protected :
 
     GlScene *scene;
+    Graph *rootGraph;
 
     QuadTreeNode *nodesQuadTree;
     QuadTreeNode *edgesQuadTree;
