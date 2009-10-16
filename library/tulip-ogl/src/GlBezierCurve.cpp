@@ -460,7 +460,7 @@ void GlBezierCurve::draw(float lod, Camera *camera) {
 				fisheyeShader->getUniformFloatVariableValue("center", fisheyeCenter);
 				fisheyeShader->getUniformFloatVariableValue("radius", &fisheyeRadius);
 				fisheyeShader->getUniformFloatVariableValue("height", &fisheyeHeight);
-				fisheyeShader->getUniformIntVariableValue("fisheyeType", &fisheyeType);
+				fisheyeShader->getUniformIntVariableValue("fisheyeType", (int*)(&fisheyeType));
 			}
 
 			GlShaderManager::getInstance()->activateShaderProgram(bezierVertexShader);
