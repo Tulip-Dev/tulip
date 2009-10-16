@@ -97,6 +97,12 @@ TARGET_LINK_LIBRARIES(Circular-${TulipVersion} ${LibTulipName})
 ADD_DEPENDENCIES(Circular-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+SET(HierarchicalGraph_SRCS HierarchicalGraph.h HierarchicalGraph.cpp DatasetTools.h DatasetTools.cpp)
+ADD_LIBRARY(HierarchicalGraph-${TulipVersion} SHARED ${HierarchicalGraph_SRCS})
+TARGET_LINK_LIBRARIES(HierarchicalGraph-${TulipVersion} ${LibTulipName})
+ADD_DEPENDENCIES(HierarchicalGraph-${TulipVersion} ${LibTulipName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 SET(Tutte_SRCS Tutte.h Tutte.cpp)
 ADD_LIBRARY(Tutte-${TulipVersion} SHARED ${Tutte_SRCS})
 TARGET_LINK_LIBRARIES(Tutte-${TulipVersion} ${LibTulipName})
@@ -182,6 +188,7 @@ INSTALL(TARGETS
 	TreeLeaf-${TulipVersion}
 	BubbleTree-${TulipVersion}
 	Circular-${TulipVersion}
+	HierarchicalGraph-${TulipVersion}
 	Tutte-${TulipVersion}
 	Embedder-${TulipVersion}
 	Dendrogram-${TulipVersion}
