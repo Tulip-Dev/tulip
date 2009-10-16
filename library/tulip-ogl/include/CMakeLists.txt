@@ -61,4 +61,5 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/TextRenderer.h	
 	tulip/Context.h
 	tulip/Fonts.h
+	tulip/Curves.h
 )

@@ -140,17 +140,21 @@ SET(exec_prefix "\${prefix}")
 SET(includedir "\${prefix}${TulipIncludeInstallDir}")
 SET(libdir "\${prefix}${TulipLibInstallDir}")
 SET(sharedir "\${prefix}${TulipShareInstallDir}")
+SET(libversion ${TulipMMVersion})
 SET(VERSION "${TulipVersion}")
 SET(WIN_VERSION "${TulipMajorVersion}.${TulipMinorVersion}")
 SET(QT_CPPFLAGS "-DQT_MINOR_REL=${QT_VERSION_MINOR}")
+
 SET(GL_INCLUDES "-I${OPENGL_INCLUDE_DIR}")
-SET(GL_LDFLAGS "-l${OPENGL_gl_LIBRARY} -l${OPENGL_glu_LIBRARY} -l${GLEW_LIBRARY}")
-SET(QT_LDFLAGS "-l${QT_QTCORE_LIBRARY_RELEASE} -l${QT_QTGUI_LIBRARY_RELEASE} -l${QT_QTNETWORK_LIBRARY_RELEASE} -l${QT_QTOPENGL_LIBRARY_RELEASE} -l${QT_QTXML_LIBRARY_RELEASE}")
+SET(GL_LDFLAGS "${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} ${GLEW_LIBRARY}")
+
+SET(QT_LDFLAGS "${QT_QTCORE_LIBRARY_RELEASE} ${QT_QTGUI_LIBRARY_RELEASE} ${QT_QTOPENGL_LIBRARY_RELEASE} ${QT_QTXML_LIBRARY_RELEASE} ${QT_QTNETWORK_LIBRARY_RELEASE}")
 SET(QT_INCLUDES "-I${QT_INCLUDE_DIR}")
+
 GET_TARGET_PROPERTY(CMakeTulipLib ${LibTulipName} LOCATION)
 GET_TARGET_PROPERTY(CMakeTulipOglLib ${LibTulipOglName} LOCATION)
 GET_TARGET_PROPERTY(CMakeTulipQtLib ${LibTulipQtName} LOCATION)
-CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
+CONFIGURE_FILE("tulip-config.cmake.in" "tulip-config" @ONLY)
 
 ## -----------------------------------------------------------------------------------------------
 ## Create tulip.nsi script
