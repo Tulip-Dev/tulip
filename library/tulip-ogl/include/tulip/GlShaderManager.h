@@ -23,13 +23,14 @@
 
 #include <string>
 #include <map>
+#include <tulip/tulipconf.h>
 
 void printOGLError(const char *file, int line);
 #define printOpenGLError() printOGLError(__FILE__, __LINE__)
 
 namespace tlp {
 
-class GlShaderManager {
+class TLP_GL_SCOPE GlShaderManager {
 
 public :
 
