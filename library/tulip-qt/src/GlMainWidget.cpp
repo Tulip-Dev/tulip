@@ -99,7 +99,7 @@ namespace tlp {
     //setObjectName(name);
     //  cerr << __PRETTY_FUNCTION__ << endl;
     setFocusPolicy(Qt::StrongFocus);
-    //_composite = new GlADComposite();
+    //_cGlSphere(const Coord &position, float radius,const Color& color,float rotX,float rotY,float rotZ)omposite = new GlADComposite();
     renderingStore=NULL;
   }
   //==================================================
