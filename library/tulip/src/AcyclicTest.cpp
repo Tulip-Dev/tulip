@@ -36,13 +36,14 @@ void AcyclicTest::makeAcyclic(Graph* graph,vector<edge> &reversed, vector<tlp::S
   StableIterator<edge> itE(graph->getEdges());
   while (itE.hasNext()) {
     edge e = itE.next();
-    if (graph->source(e) == graph->target(e)) {
+    const pair<node, node>& eEnds = graph->ends(e);
+    if (eEnds.first == eEnds.second) {
       node n1 = graph->addNode();
       node n2 = graph->addNode();
       selfLoops.push_back(tlp::SelfLoops(n1 , n2 , 
-					 graph->addEdge(graph->source(e), n1) , 
+					 graph->addEdge(eEnds.first, n1) , 
 					 graph->addEdge(n1,n2) , 
-					 graph->addEdge(graph->source(e), n2) , 
+					 graph->addEdge(eEnds.first, n2) , 
 					 e ));
       graph->delEdge(e);
     }
