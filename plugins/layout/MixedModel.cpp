@@ -165,8 +165,9 @@ bool MixedModel::run() {
       while(ite->hasNext()){
 	edge e_tmp = ite->next();
 	if(resultatAlgoSelection->getEdgeValue(e_tmp)){
-	  G->addNode(currentGraph->source(e_tmp));
-	  G->addNode(currentGraph->target(e_tmp));
+	  const pair<node, node>& eEnds = currentGraph->ends(e_tmp);
+	  G->addNode(eEnds.first);
+	  G->addNode(eEnds.second);
 	  G->addEdge(e_tmp);
 	  edge_planar.push_back(e_tmp);
 	}
@@ -322,9 +323,8 @@ vector<edge> MixedModel::getPlanarSubGraph(PlanarConMap *sg, vector<edge> unplan
   vector<edge> res;
   for(unsigned int ui = 0; ui < unplanar_edges.size() ; ++ui){
     edge e = unplanar_edges[ui];
-    node n = sg->source(e); 
-    node n2 =  sg->target(e);
-    Face f = sg->sameFace(n, n2);
+    const pair<node, node>& eEnds = sg->ends(e);
+    Face f = sg->sameFace(eEnds.first, eEnds.second);
     if( f != Face()){
       sg->splitFace(f,e);
       res.push_back(e);
@@ -350,22 +350,26 @@ void MixedModel::placeNodesEdges(){
   
   Iterator<edge> *ite = carte->getEdges();
   
-  while(ite->hasNext()){
+  while(ite->hasNext()) {
     edge e = ite->next();
+    const pair<node, node>& eEnds = carte->ends(e);
+    node src = eEnds.first;
+    node tgt = eEnds.second;
     Coord cs, ct, c;
+
     
-    unsigned int rs = rank[carte->source(e)], rt = rank[carte->target(e)];
+    unsigned int rs = rank[src], rt = rank[tgt];
     if(rs != rt){
       vector<Coord> bends;
       
       if(rs>rt){
-	cs = InPoints[e][0] + NodeCoords[carte->source(e)]; 
-	ct = OutPoints[e] + NodeCoords[carte->target(e)];
+	cs = InPoints[e][0] + NodeCoords[src]; 
+	ct = OutPoints[e] + NodeCoords[tgt];
 	c = Coord(ct.getX(),cs.getY(), 0);
       }
       else{
-	ct = InPoints[e][0] + NodeCoords[carte->target(e)]; 
-	cs = OutPoints[e] + NodeCoords[carte->source(e)];
+	ct = InPoints[e][0] + NodeCoords[tgt]; 
+	cs = OutPoints[e] + NodeCoords[src];
 	c = Coord(cs.getX(),ct.getY(), 0);
       }
       if(ct.getX() >= maxX)
@@ -377,10 +381,10 @@ void MixedModel::placeNodesEdges(){
       if(cs.getY() >= maxY)
 	maxY = cs.getY();
       
-      if((cs != NodeCoords[carte->source(e)]) && (cs != ct))
+      if((cs != NodeCoords[src]) && (cs != ct))
 	bends.push_back(cs);
       if((c != cs) && (c != ct)) bends.push_back(c);
-      if((ct != NodeCoords[carte->target(e)]) && (ct != cs)) 
+      if((ct != NodeCoords[tgt]) && (ct != cs)) 
 	bends.push_back(ct);
        
 		    
@@ -398,8 +402,9 @@ void MixedModel::placeNodesEdges(){
     maxY /= 8;
     for(unsigned int ui = 0; ui < unplanar_edges.size(); ++ui){
       edge e = unplanar_edges[ui];
-      node n = currentGraph->source(e);
-      node v = currentGraph->target(e);
+      const pair<node, node>& eEnds = carte->ends(e);
+      node n = eEnds.first;
+      node v = eEnds.second;
       Coord c_n(-maxX+(NodeCoords[n].getX()+NodeCoords[v].getX())/2, -maxY+(NodeCoords[n].getY()+NodeCoords[v].getY())/2, -z_size);
       vector<Coord> bends;
       bends.push_back(c_n);
@@ -503,7 +508,9 @@ void MixedModel::assignInOutPoints(){  // on considère qu'il n'y a pas d'arc do
       tmp.clear();
       while(it->hasNext()){
 	edge e = it->next();
-	node n = (carte->source(e) == v)? carte->target(e):carte->source(e);
+	const pair<node, node>& eEnds = carte->ends(e);
+
+	node n = (eEnds.first == v)? eEnds.second : eEnds.first;
 	
        	bool trouve = false;
 	unsigned int r = rank[n];
@@ -707,7 +714,8 @@ void MixedModel::assignInOutPoints(){  // on considère qu'il n'y a pas d'arc do
       if(k !=0){
 	for(unsigned int ui = 0; ui < listOfEdgesIN.size();++ui){
 	  edge e_tmp = listOfEdgesIN[ui];
-	  node n_tmp = (carte->source(e_tmp) == v ? carte->target(e_tmp) : carte->source(e_tmp));
+	  const pair<node, node>& eEnds = carte->ends(e_tmp);
+	  node n_tmp = (eEnds.first == v) ? eEnds.second : eEnds.first;
 	  if(rank[n_tmp] < k){
 	    if( i == 0){
 	      unsigned int t = out_points[n_tmp].size();
@@ -968,7 +976,8 @@ void MixedModel::computeCoords(){
 node MixedModel::leftV(unsigned int k){
   assert( (0<k) && (k<V.size()) );
   edge el = EdgesIN[V[k][0]][0];
-  return (carte->source(el) == V[k][0])?carte->target(el):carte->source(el);
+  const pair<node, node>& eEnds = carte->ends(el);
+  return (eEnds.first == V[k][0]) ? eEnds.second : eEnds.first;
 }
 
 //====================================================
@@ -977,6 +986,7 @@ node MixedModel::rightV(unsigned int k){
   unsigned int p = V[k].size();
   unsigned int n = EdgesIN[V[k][p-1]].size();
   edge er = EdgesIN[V[k][p-1]][n-1];
-  return (carte->source(er) == V[k][p-1])?carte->target(er):carte->source(er);
+  const pair<node, node>& eEnds = carte->ends(er);
+  return (eEnds.first == V[k][p-1]) ? eEnds.second : eEnds.first;
 }
 //====================================================
