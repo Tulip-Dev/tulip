@@ -12,23 +12,6 @@ using namespace tlp;
 
 ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","Alpha","1.2");
 
-struct MetaEdge {
-  unsigned int source,target;
-  edge mE;
-};
-
-namespace std {
-  template<>
-  struct less<MetaEdge> {
-    bool operator()(const MetaEdge &c,const MetaEdge &d) const {
-      if (c.source<d.source) return true;
-      if (c.source>d.source) return false;
-      if (c.target<d.target) return true;
-      if (c.target>d.target) return false;
-      return false;
-    }
-  };
-};
 //==============================================================================
 namespace {
   const char * paramHelp[] = {
@@ -242,7 +225,7 @@ bool QuotientClustering::run() {
   if (useSubGraphName || metaLabel)
     label = quotientGraph->getProperty<StringProperty>("viewLabel");
   if (!oriented) {
-    opProp = quotientGraph->getLocalProperty<IntegerProperty>("opposite edge");
+    opProp = new IntegerProperty(quotientGraph);
     opProp->setAllEdgeValue(edge().id);
   }
   if (edgeCardinality)
@@ -369,7 +352,9 @@ bool QuotientClustering::run() {
     for ( it = edgesToDel.begin(); it!=edgesToDel.end(); ++it)
       quotientGraph->delEdge(*it);
   }
-  quotientGraph->delLocalProperty("opposite edge");
+
+  if (opProp)
+    delete opProp;
 	    
   if (dataSet!=0) {
     dataSet->set("quotientGraph", quotientGraph);

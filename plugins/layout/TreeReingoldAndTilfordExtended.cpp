@@ -332,8 +332,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   //use bounding circles if specified
   if (boundingCircles) {
     node n;
-    SizeProperty *circleSizes = 
-      graph->getLocalProperty<SizeProperty> ("bounding circle sizes");
+    SizeProperty *circleSizes = new SizeProperty(graph);
     forEach(n, graph->getNodes()) {
       const Size& boundCircle = sizes->getNodeValue (n);
       double diam = 2*sqrt (boundCircle.getW()*boundCircle.getW()/4.0 +
@@ -433,12 +432,9 @@ bool TreeReingoldAndTilfordExtended::run() {
   }
 
   if (boundingCircles)
-    graph->delLocalProperty ("bounding circle sizes");
+    delete sizes;
 
-  // if not in tulip gui, ensure cleanup
-  LayoutProperty* elementLayout;
-  if (!graph->getAttribute("viewLayout", elementLayout))
-    TreeTest::cleanComputedTree(graph, tree);
+  TreeTest::cleanComputedTree(graph, tree);
 
   return true;
 }

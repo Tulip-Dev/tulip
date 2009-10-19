@@ -10,7 +10,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(HierarchicalClustering,"Hierarchical","David Auber","27/01/2000","Alpha","1.0");
+ALGORITHMPLUGIN(HierarchicalClustering, "Hierarchical","David Auber","27/01/2000","Alpha","1.0");
 
 //================================================================================
 HierarchicalClustering::HierarchicalClustering(AlgorithmContext context):Algorithm(context)
@@ -72,49 +72,46 @@ bool HierarchicalClustering::run() {
     list<node> badNodeList;
     result = split(metric,badNodeList);
     if (!result) {
-      BooleanProperty *sel1 =graph->getLocalProperty<BooleanProperty>("good select");
-      BooleanProperty *sel2 =graph->getLocalProperty<BooleanProperty>("bad select");
-      BooleanProperty *splitRes =graph->getLocalProperty<BooleanProperty>("split result");
+      BooleanProperty sel1(graph);
+      BooleanProperty sel2(graph);
+      BooleanProperty splitRes(graph);
 
-      sel1->setAllNodeValue(true);
-      sel1->setAllEdgeValue(true);
-      sel2->setAllNodeValue(true);
-      sel2->setAllEdgeValue(true);
-      splitRes->setAllNodeValue(true);
-      splitRes->setAllEdgeValue(true);
+      sel1.setAllNodeValue(true);
+      sel1.setAllEdgeValue(true);
+      sel2.setAllNodeValue(true);
+      sel2.setAllEdgeValue(true);
+      splitRes.setAllNodeValue(true);
+      splitRes.setAllEdgeValue(true);
 
       list<node>::iterator itl;
       for (itl=badNodeList.begin();itl!=badNodeList.end();++itl)
-	splitRes->setNodeValue(*itl,false);
+	splitRes.setNodeValue(*itl, false);
 
       Iterator<node> *itN=graph->getNodes();
       for (;itN->hasNext();) {
 	node nit=itN->next();
-	if (splitRes->getNodeValue(nit)) {
-	  sel2->setNodeValue(nit,false);
+	if (splitRes.getNodeValue(nit)) {
+	  sel2.setNodeValue(nit, false);
 	  Iterator<edge> *itE=graph->getInOutEdges(nit);
 	  for (;itE->hasNext();) {
 	    edge ite=itE->next();
-	    sel2->setEdgeValue(ite,false);
+	    sel2.setEdgeValue(ite, false);
 	  }delete itE;
 	}
 	else {
-	  sel1->setNodeValue(nit,false);
+	  sel1.setNodeValue(nit,false);
 	  Iterator<edge> *itE=graph->getInOutEdges(nit);
 	  for (;itE->hasNext();) {
 	    edge ite=itE->next();
-	    sel1->setEdgeValue(ite,false);
+	    sel1.setEdgeValue(ite, false);
 	  } delete itE;
 	}
       }delete itN;
 
       Graph * tmpSubGraph;
-      tmpSubGraph = graph->addSubGraph(sel1);
+      tmpSubGraph = graph->addSubGraph(&sel1);
       tmpSubGraph->setAttribute<string>("name",tmp1);
-      (graph->addSubGraph(sel2))->setAttribute<string>("name",tmp2);
-      graph->delLocalProperty("good select");
-      graph->delLocalProperty("bad select");
-      graph->delLocalProperty("split result");
+      (graph->addSubGraph(&sel2))->setAttribute<string>("name",tmp2);
       graph=tmpSubGraph;
     }
   }
@@ -131,7 +128,3 @@ void HierarchicalClustering::reset()
 {
 }
 //================================================================================
-
-
-
-

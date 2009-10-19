@@ -133,8 +133,7 @@ public:
     LayoutProperty tmpLayout(graph);
   
     node n;
-    SizeProperty *circleSizes = 
-      graph->getLocalProperty<SizeProperty> ("bounding circle sizes");
+    SizeProperty *circleSizes = new SizeProperty(graph);
     forEach(n, tree->getNodes()) {
       const Size& boundingBox = sizes->getNodeValue (n);
       double diam = 2*sqrt (boundingBox.getW() * boundingBox.getW()/4.0 +
@@ -154,7 +153,7 @@ public:
     dfsComputeAngularSpread(root, 0, sizes, &angles);
     doLayout(root, 0, 0., 2 * M_PI, &angles);
 
-    graph->delLocalProperty("bounding circle sizes");
+    delete sizes;
 
     // if not in tulip gui, ensure cleanup
     LayoutProperty* elementLayout;
