@@ -212,7 +212,7 @@ namespace tlp {
       //  setMaterial(c);
       glLineWidth(lineWidth);
       glDisable(GL_LIGHTING);
-      glColor3ub(c[0],c[1],c[2]);
+      glColor4ub(c[0],c[1],c[2],c[3]);
       if(canUseGlew){
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
         glDrawElements(GL_LINES, 24, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
