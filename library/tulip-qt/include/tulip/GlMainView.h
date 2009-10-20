@@ -79,7 +79,20 @@ namespace tlp {
      */
     virtual void createPicture(const std::string &pictureName,int width=0, int height=0);
 
+    /**
+     * Build context menu for this view
+     */
     virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
+
+    /**
+     * Return the overview widget use by this view
+     */
+    GWOverviewWidget *getOverviewWidget() {return overviewWidget;}
+
+    /**
+     * Return QAction of overview use in the context menu
+     */
+    QAction *getOverviewAction() {return overviewAction;}
 
   protected :
 
@@ -96,23 +109,31 @@ namespace tlp {
     QDockWidget *overviewDock;
     GWOverviewWidget *overviewWidget;
     QFrame *overviewFrame;
+    QMenu *dialogMenu;
 
     QAction* overviewAction;
 
   public slots:
+
     /**
      * Draw the OpenGl widget
      */
-    void draw();
+    virtual void draw();
+
     /**
      * Refresh the OpenGl widget
      */
-    void refresh();
+    virtual void refresh();
 
     /**
      * Hide the overview
      */
-    void hideOverview(bool);
+    virtual void hideOverview(bool);
+
+    /**
+     * This slot is call when a QAction in dialog sub menu of context menu is toggle
+     */
+    virtual void showDialog(QAction* action);
 
   };
 

@@ -274,6 +274,12 @@ else
   CONFIGURE_tulipgui=""
 fi
 
+if test $QT_MINOR_VERSION -ge 4; then
+VAR_QT44=1
+fi
+
+AM_CONDITIONAL(QT44, test $VAR_QT44 = 1) 
+
 AC_SUBST(CONFIGURE_tulipqt)
 AC_SUBST(CONFIGURE_tulipgui)
 AM_CONDITIONAL(HAVE_TULIP_QT, test "${CONFIGURE_tulipqt}" != "")

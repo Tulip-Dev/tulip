@@ -83,9 +83,13 @@ BUILT_SOURCES = \
 	moc_ColorScaleConfigDialog.cpp \
 	moc_ListPropertyWidget.cpp
 
-nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
+QT44_BUILD_SOURCES = \
+	moc_GlMainWidgetGraphicsView.cpp \
+	moc_BaseGraphicsViewComponent.cpp \
+	moc_GlMainWidgetItem.cpp \
+	moc_TabWidgetHidableMenuGraphicsProxy.cpp
 
-dist_libtulip_qt4_la_SOURCES = \
+SOURCES = \
 	TulipTableWidget.cpp \
 	GlMainWidget.cpp \
 	GlMainView.cpp \
@@ -139,6 +143,21 @@ dist_libtulip_qt4_la_SOURCES = \
 	QtMetaNodeRenderer.cpp \
 	QGlPixelBufferManager.cpp \
 	ListPropertyWidget.cpp
+
+QT44_SOURCES = \
+	GlMainWidgetGraphicsView.cpp \
+	BaseGraphicsViewComponent.cpp \
+	TabWidgetHidableMenuGraphicsProxy.cpp \
+	GraphicsWidgetBase.cpp \
+	GlMainWidgetItem.cpp
+
+if QT44
+nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES) $(QT44_BUILD_SOURCES)
+dist_libtulip_qt4_la_SOURCES = $(SOURCES) $(QT44_SOURCES)
+else
+nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
+dist_libtulip_qt4_la_SOURCES = $(SOURCES)
+endif
 
 CLEANFILES = $(BUILT_SOURCES) moc_GlMainWidgetPlugin.cpp moc_PropertyWidgetPlugin.cpp moc_ElementPropertiesWidgetPlugin.cpp moc_SGHierarchyWidgetPlugin.cpp moc_GWOverviewWidgetPlugin.cpp
 

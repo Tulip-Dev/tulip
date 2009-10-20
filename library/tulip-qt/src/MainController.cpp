@@ -757,25 +757,33 @@ namespace tlp {
     string verifiedName=name;
     View *newView=ViewPluginsManager::getInst().createView(name);
     QWidget *widget;
-    if(newView){
-      widget=newView->construct(mainWindowFacade.getWorkspace());
-      newView->setData(graph,dataSet);
-    }else{
+
+    if(!newView){
       verifiedName="Node Link Diagram view";
       newView=ViewPluginsManager::getInst().createView("Node Link Diagram view");
-      widget=newView->construct(mainWindowFacade.getWorkspace());
-      newView->setData(graph,DataSet());
     }
+
+    multimap<int,string> interactorsNamesAndPriorityMap;
+
+    if(newView->getRealViewName()=="")
+      interactorsNamesAndPriorityMap=InteractorManager::getInst().getSortedCompatibleInteractors(verifiedName);
+    else
+      interactorsNamesAndPriorityMap=InteractorManager::getInst().getSortedCompatibleInteractors(newView->getRealViewName());
+
+    list<Interactor *> interactorsList;
+    for(multimap<int,string>::reverse_iterator it=interactorsNamesAndPriorityMap.rbegin();it!=interactorsNamesAndPriorityMap.rend();++it){
+      interactorsList.push_back(InteractorManager::getInst().getInteractor((*it).second));
+    }
+    newView->setInteractors(interactorsList);
+
+    widget=newView->construct(mainWindowFacade.getWorkspace());
+    newView->setData(graph,dataSet);
+
     viewGraph[newView]=graph;
     viewNames[newView]=verifiedName;
     viewWidget[widget]=newView;
 
-    multimap<int,string> interactorsNamesAndPriorityMap=InteractorManager::getInst().getSortedCompatibleInteractors(verifiedName);
-    list<Interactor *> interactorsList;
-    for(multimap<int,string>::reverse_iterator it=interactorsNamesAndPriorityMap.rbegin();it!=interactorsNamesAndPriorityMap.rend();++it){
-      interactorsList.push_back(InteractorManager::getInst().getInteractor((*it).second));
-      }
-    newView->setInteractors(interactorsList);
+
 
     widget->setAttribute(Qt::WA_DeleteOnClose,true);
     mainWindowFacade.getWorkspace()->addWindow(widget);

@@ -165,18 +165,34 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
    */
   virtual void makeCurrent();
 
+  /**
+   * Resize openGL view
+   */
+  void  resizeGL(int w, int h);
+
+  /**
+   * Compute interactors before drawing
+   */
+  void  computeInteractors();
+
+  /**
+   * Draw interactors
+   */
+  void  drawInteractors();
+
+  /**
+   * Draw foreground entities
+   */
+  void drawForegroundEntities();
+
 private:
 
   void  updateGL();
   void  glInit();
   void  glDraw();
   void  paintGL();
-  void  resizeGL(int w, int h);
   void  setupOpenGlContext();
   void  initializeGL();
-  void  computeInteractors();
-  void  drawInteractors();
-  void drawForegroundEntities();
 
   tlp::GlScene scene;
   tlp::GlHierarchyConvexHulls hulls;
@@ -204,10 +220,13 @@ public slots:
 
 protected slots:
   void paintEvent( QPaintEvent* );
+  void viewDrawnSlot(GlMainWidget *glWidget,bool graphChanged) {emit graphRedrawn(glWidget,graphChanged);}
 
 signals:
   void closing(GlMainWidget *, QCloseEvent *);
   void graphRedrawn(GlMainWidget *glWidget,bool graphChanged);
+  void viewRedrawn(GlMainWidget *glWidget);
+  void viewDrawn(GlMainWidget *glWidget,bool graphChanged);
 
 public :
 	static QGLWidget* getFirstQGLWidget();

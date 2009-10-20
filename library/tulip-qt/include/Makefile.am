@@ -1,4 +1,4 @@
-nobase_include_HEADERS = \
+INCLUDES_H = \
 	tulip/TulipTableWidget.h \
 	tulip/GlMainWidget.h \
 	tulip/TabWidget.h \
@@ -15,6 +15,7 @@ nobase_include_HEADERS = \
 	tulip/Interactor.h \
 	tulip/InteractorChainOfResponsibility.h \
 	tulip/InteractorComponent.h \
+	tulip/GlMainWidgetInteractorComponent.h \
 	tulip/GlMainViewInteractor.h \
 	tulip/ForegroundEntity.h \
 	tulip/MouseSelector.h \
@@ -56,7 +57,21 @@ nobase_include_HEADERS = \
 	tulip/StringsListSelectionWidgetInterface.h \
 	tulip/SimpleStringsListSelectionWidget.h \
 	tulip/DoubleStringsListSelectionWidget.h \
-	tulip/QGlPixelBufferManager.h
+	tulip/QGlPixelBufferManager.h \
+	tulip/BaseGraphicsViewComponentMacro.h
+
+QT44_INCLUDES_H = \
+	tulip/BaseGraphicsViewComponent.h \
+	tulip/GlMainWidgetGraphicsView.h \
+	tulip/GlMainWidgetItem.h \
+	tulip/TabWidgetHidableMenuGraphicsProxy.h \
+	tulip/GraphicsWidgetBase.h
+
+if QT44
+nobase_include_HEADERS = $(INCLUDES_H) $(QT44_INCLUDES_H)
+else
+nobase_include_HEADERS = $(INCLUDES_H)
+endif
 
 noinst_HEADERS = \
 	tulip/Morphing.h \

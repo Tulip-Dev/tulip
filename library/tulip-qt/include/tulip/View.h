@@ -37,6 +37,10 @@ namespace tlp {
      */
     virtual QWidget *construct(QWidget *parent) = 0;
     /**
+     * Return the widget of this view
+     */
+    virtual QWidget *getWidget() =0;
+    /**
      * Set the graph and data to the view
      */
     virtual void setData(Graph *graph,DataSet dataSet) = 0;
@@ -69,6 +73,11 @@ namespace tlp {
      * Take a snapshot of the view and put it in a picture
      */
     virtual void createPicture(const std::string &pictureName,int width=0, int height=0) = 0;
+
+    /**
+     * Return the real view name (if "" the real name is the name give by plugin)
+     */
+    virtual std::string getRealViewName() {return "";}
 
   public slots:
 

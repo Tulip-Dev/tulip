@@ -23,12 +23,14 @@
 #include "tulip/InteractorManager.h"
 #include "tulip/QtMetaNodeRenderer.h"
 #include "tulip/TlpQtTools.h"
+#include "tulip/BaseGraphicsViewComponentMacro.h"
 
 using namespace std;
 
 namespace tlp {
 
   VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0");
+  GRAPHICSVIEWEXTENSION(NodeLinkDiagramComponentGraphicsView, "Node Link Diagram graphics view","Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram GV", "1.0");
 
   //==================================================
   NodeLinkDiagramComponent::NodeLinkDiagramComponent():GlMainView(),qtMetaNode(true),currentMetaNodeRenderer(NULL) {
@@ -45,11 +47,6 @@ namespace tlp {
   	viewMenu->addAction("&Redraw View", this, SLOT(draw()), tr("Ctrl+Shift+R"));
   	viewMenu->addAction("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
   	//Dialogs Menu
-  	dialogMenu=new QMenu("Dialog");
-  	connect(dialogMenu, SIGNAL(triggered(QAction*)), SLOT(showDialog(QAction*)));
-  	overviewAction=dialogMenu->addAction("3D &Overview");
-  	overviewAction->setCheckable(true);
-  	overviewAction->setChecked(true);
   	renderingParametersDialog=new RenderingParametersDialog();
   	connect(renderingParametersDialog,SIGNAL(viewNeedDraw()),this, SLOT(drawAfterRenderingParametersChange()));
   	layerManagerWidget=new LayerManagerWidget();
@@ -87,6 +84,7 @@ namespace tlp {
   void NodeLinkDiagramComponent::setData(Graph *graph,DataSet dataSet) {
     DataSet data;
     if(dataSet.exist("data")){
+      cout << "find data" << endl;
       dataSet.get("data",data);
     }else{
       data=dataSet;
@@ -177,7 +175,6 @@ namespace tlp {
 
   void NodeLinkDiagramComponent::buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) {
   	contextMenu->addMenu(viewMenu);
-  	contextMenu->addMenu(dialogMenu);
   	contextMenu->addMenu(optionsMenu);
 
   	GlMainView::buildContextMenu(object,event,contextMenu);
@@ -438,14 +435,9 @@ namespace tlp {
   }
   //==================================================
   void NodeLinkDiagramComponent::showDialog(QAction* action){
-    string name(action->text().toStdString());
+    GlMainView::showDialog(action);
 
-    if (name=="3D &Overview") {
-      if(overviewFrame->isVisible())
-	overviewFrame->hide();
-      else
-	overviewFrame->show();
-    }
+    string name(action->text().toStdString());
 
     if(name =="Augmented Display") {
       Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();

@@ -124,6 +124,24 @@ set(tulip-qt_MOC
     ../include/tulip/ListPropertyWidget.h
 )
 
+IF(QT_VERSION_MINOR GREATER 3)
+SET(tulip-qt_LIB_SRCS
+    ${tulip-qt_LIB_SRCS}
+    GlMainWidgetGraphicsView.cpp
+    BaseGraphicsViewComponent.cpp
+    TabWidgetHidableMenuGraphicsProxy.cpp
+    GraphicsWidgetBase.cpp
+    GlMainWidgetItem.cpp
+)
+set(tulip-qt_MOC
+    ${tulip-qt_MOC}
+    ../include/tulip/GlMainWidgetGraphicsView.h
+    ../include/tulip/BaseGraphicsViewComponent.h
+    ../include/tulip/GlMainWidgetItem.h
+    ../include/tulip/TabWidgetHidableMenuGraphicsProxy.h
+)
+ENDIF(QT_VERSION_MINOR GREATER 3)
+
 set(tulip-qt_RCC
     ../designer/TulipQtResource.qrc )
 

@@ -28,10 +28,13 @@ namespace tlp {
   Q_OBJECT
 
 public:
-  GWOverviewWidget(QWidget* parent = 0);
+  GWOverviewWidget(QWidget* parent = 0,bool drawIfNotVisible = false);
   ~GWOverviewWidget();
   bool eventFilter(QObject *, QEvent *);
   GlMainWidget *getObservedView();
+  GlMainWidget *getView();
+
+  void setDrawIfNotVisible(bool drawIfNotVisible){this->drawIfNotVisible=drawIfNotVisible;}
 
 signals:
 
@@ -60,6 +63,7 @@ private :
   RectPosition *_glDraw;
   tlp::Camera *_initialCamera;
   GlMetaNodeRenderer metaNodeRenderer;
+  bool drawIfNotVisible;
   //void setBackgroundColor(QColor);
 };
 

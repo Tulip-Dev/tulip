@@ -101,6 +101,7 @@ namespace tlp {
     setFocusPolicy(Qt::StrongFocus);
     //_cGlSphere(const Coord &position, float radius,const Color& color,float rotX,float rotY,float rotZ)omposite = new GlADComposite();
     renderingStore=NULL;
+    connect(this,SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(viewDrawnSlot(GlMainWidget *,bool)));
   }
   //==================================================
   GlMainWidget::~GlMainWidget() {
@@ -256,43 +257,47 @@ namespace tlp {
   }
   //==================================================
   void GlMainWidget::redraw() {
-    checkIfGlAuxBufferAvailable();
-    //Gl_AUX is not available we must redraw everything
-    //TODO : make copy into memory in that case
-    makeCurrent();
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_STENCIL_TEST);
-    glDisable(GL_BLEND);
-    glDisable(GL_LIGHTING);
+    if (isVisible()) {
+      checkIfGlAuxBufferAvailable();
+      
+      makeCurrent();
+      
+      glDisable(GL_TEXTURE_2D);
+      glDisable(GL_DEPTH_TEST);
+      glDisable(GL_STENCIL_TEST);
+      glDisable(GL_BLEND);
+      glDisable(GL_LIGHTING);
 
-    if (!_glAuxBufferAvailable) {
+
       glDrawBuffer(GL_BACK);
-      glDrawPixels(width(),height(),GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-    }else{
-      glDrawBuffer(GL_BACK);
-      glReadBuffer(GL_AUX0);
-      setRasterPosition(0,0);
-      //Restore the graph image
-      glCopyPixels(0,0,width(), height(), GL_COLOR);
-      //draw the glAugmented on top of the graph
-      //_composite->draw(this);
-      //draw the interactors on top of graph and augmented display
-      tlp::glTest(__PRETTY_FUNCTION__);
+
+
+      if (!_glAuxBufferAvailable) {
+        glDrawPixels(width(),height(),GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+      }else{
+        glReadBuffer(GL_AUX0);
+        setRasterPosition(0,0);
+        //Restore the graph image
+        glCopyPixels(0,0,width(), height(), GL_COLOR);
+      }
+      drawInteractors();
+      drawForegroundEntities();
+
+      swapBuffers();
+
     }
-    drawInteractors();
-    drawForegroundEntities();
-    swapBuffers();
+    emit viewRedrawn(this);
   }
   //==================================================
   void GlMainWidget::draw(bool graphChanged) {
     if (isVisible()) {
-      checkIfGlAuxBufferAvailable();
+
       makeCurrent();
 
+      checkIfGlAuxBufferAvailable();
       computeInteractors();
       if(scene.getGlGraphComposite()) {
-  hulls.compute(scene.getLayer("Main"),scene.getGlGraphComposite()->getInputData()->getGraph());
+        hulls.compute(scene.getLayer("Main"),scene.getGlGraphComposite()->getInputData()->getGraph());
       }
       scene.prerenderMetaNodes();
       scene.draw();
@@ -306,19 +311,19 @@ namespace tlp {
       //save the drawing of the graph in order to prevent redrawing during
       //Interactor draw
       if (_glAuxBufferAvailable) {
-  glReadBuffer(GL_BACK);
-  glDrawBuffer(GL_AUX0);
-  glClear(GL_COLOR_BUFFER_BIT);
-  setRasterPosition(0,0);
-  glCopyPixels(0,0,width(), height(), GL_COLOR);
-  glFlush();
-  glDrawBuffer(GL_BACK);
+        glReadBuffer(GL_BACK);
+        glDrawBuffer(GL_AUX0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        setRasterPosition(0,0);
+        glCopyPixels(0,0,width(), height(), GL_COLOR);
+        glFlush();
+        glDrawBuffer(GL_BACK);
       }else{
         glReadBuffer(GL_BACK);
-  if(!renderingStore)
-    renderingStore=new char[4*height()*width()];
-  glReadPixels(0,0,width(),height(),GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-  glFlush();
+        if(!renderingStore)
+          renderingStore=new char[4*height()*width()];
+        glReadPixels(0,0,width(),height(),GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+        glFlush();
       }
       glTest(__PRETTY_FUNCTION__);
 
@@ -329,8 +334,8 @@ namespace tlp {
       drawInteractors();
 
       swapBuffers();
-      emit graphRedrawn(this,graphChanged);
     }
+    emit viewDrawn(this,graphChanged);
   }
   //==================================================
   void GlMainWidget::computeInteractors() {

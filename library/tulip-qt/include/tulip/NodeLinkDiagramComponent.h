@@ -36,7 +36,6 @@ namespace tlp {
   protected :
 
     QMenu *viewMenu;
-    QMenu *dialogMenu;
     QMenu *optionsMenu;
     QAction *actionTooltips;
     QAction *actionsGridOptions;
@@ -73,9 +72,9 @@ namespace tlp {
   public slots:
     void centerView();
     void drawAfterRenderingParametersChange();
-    void draw();
-    void refresh();
-    void init();
+    virtual void draw();
+    virtual void refresh();
+    virtual void init();
     void setGraph(Graph *graph);
 
     void elementSelectedSlot(unsigned int id,bool isNode) {

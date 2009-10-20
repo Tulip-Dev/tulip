@@ -59,4 +59,15 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/DoubleStringsListSelectionWidget.h 
 	tulip/QGlPixelBufferManager.h
 	tulip/QtQuadTreeLODCalculator.h
+	tulip/BaseGraphicsViewComponentMacro.h
 )
+
+IF(QT_VERSION_MINOR GREATER 3)
+INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
+        tulip/BaseGraphicsViewComponent.h
+	tulip/GlMainWidgetGraphicsView.h
+	tulip/GlMainWidgetItem.h
+	tulip/TabWidgetHidableMenuGraphicsProxy.h	
+	tulip/GraphicsWidgetBase.h
+)
+ENDIF(QT_VERSION_MINOR GREATER 3)

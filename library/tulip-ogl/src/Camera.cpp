@@ -24,7 +24,7 @@ namespace tlp {
   }
   //====================================================
   Camera::Camera(GlScene* scene,bool d3) :
-    matrixCoherent(false),d3(d3) {
+    matrixCoherent(false),scene(scene),d3(d3) {
   }
   //===================================================
   void Camera::setScene(GlScene* scene) {

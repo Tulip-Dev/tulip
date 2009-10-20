@@ -41,6 +41,12 @@ QWidget *GlMainView::construct(QWidget *parent) {
 	gridLayout_2->addWidget(overviewWidget, 0, 0, 1, 1);
 	connect(overviewWidget, SIGNAL(hideOverview(bool)), this, SLOT(hideOverview(bool)));
 
+	dialogMenu=new QMenu("Dialog");
+	connect(dialogMenu, SIGNAL(triggered(QAction*)), SLOT(showDialog(QAction*)));
+	overviewAction=dialogMenu->addAction("3D &Overview");
+	overviewAction->setCheckable(true);
+	overviewAction->setChecked(true);
+
 	return widget;
 }
 //==================================================
@@ -80,6 +86,7 @@ GlMainWidget *GlMainView::getGlMainWidget() {
 //==================================================
 void GlMainView::buildContextMenu(QObject *object, QMouseEvent *event, QMenu *contextMenu) {
 	AbstractView::buildContextMenu(object, event, contextMenu);
+	contextMenu->addMenu(dialogMenu);
 }
 
 //==================================================
@@ -100,6 +107,17 @@ void GlMainView::hideOverview(bool hide) {
 		overviewFrame->show();
 	}
 	overviewAction->setChecked(!hide);
+}
+//==================================================
+void GlMainView::showDialog(QAction* action){
+  string name(action->text().toStdString());
+
+  if (name=="3D &Overview") {
+    if(overviewFrame->isVisible())
+      overviewFrame->hide();
+    else
+      overviewFrame->show();
+  }
 }
 }
 
