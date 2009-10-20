@@ -724,7 +724,7 @@ namespace tlp {
     optionsMenu->setEnabled(false);
     forceRatioAction = optionsMenu->addAction("Force ratio");
     forceRatioAction->setCheckable(true);
-    forceRatioAction->setChecked(true);
+    forceRatioAction->setChecked(false);
     mapMetricAction = optionsMenu->addAction("Map metric");
     mapMetricAction->setCheckable(true);
     mapMetricAction->setChecked(true);
