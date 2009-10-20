@@ -5,14 +5,14 @@ namespace tlp {
   class GlMainWidget;
 }
 
-class viewGl;
+class TulipApp;
 
 struct ElementInfoToolTip : public QToolTip {
   virtual ~ElementInfoToolTip(){}
-  ElementInfoToolTip(tlp::GlMainWidget *glWidget, viewGl *viewWidget);
+  ElementInfoToolTip(tlp::GlMainWidget *glWidget, TulipApp *viewWidget);
   void maybeTip ( const QPoint & );
 
  private:
   tlp:: GlMainWidget *glWidget;
-  viewGl *viewWidget;
+  TulipApp *viewWidget;
 };

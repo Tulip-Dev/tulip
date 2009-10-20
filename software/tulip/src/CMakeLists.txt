@@ -11,10 +11,10 @@ set(tulip_UI
 set(tulip_MOC
     ../include/AppStartUp.h
     ../include/InfoDialog.h
-    ../include/viewGl.h)
+    ../include/TulipApp.h)
 
 set(tulip_SRCS 
-    viewGl.cpp
+    TulipApp.cpp
     Application.cpp
     geometrie2D.cpp
     InfoDialog.cpp

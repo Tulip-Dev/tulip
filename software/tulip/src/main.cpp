@@ -7,12 +7,12 @@
 
 #include "AppStartUp.h"
 #include "Application.h"
-#include "viewGl.h"
+#include "TulipApp.h"
 
 using namespace std;
 int main( int argc, char **argv ) {
   Application tulip( argc, argv );
-  viewGl *mainWindow = new viewGl();
+  TulipApp *mainWindow = new TulipApp();
   QDesktopWidget desktop;
   QRect screenRect = desktop.availableGeometry();
   if (screenRect.height() > 890) {

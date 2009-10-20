@@ -40,12 +40,12 @@ struct FileInfo {
 };
 
 ///Widget for manipulation and visualization of a graph
-class viewGl : public QMainWindow, public Ui::TulipData {
+class TulipApp : public QMainWindow, public Ui::TulipData {
   Q_OBJECT;
 
 public:
-  viewGl(QWidget *parent=NULL);
-  virtual ~viewGl();
+  TulipApp(QWidget *parent=NULL);
+  virtual ~TulipApp();
   void setParameters(const tlp::DataSet &);
 
 protected:

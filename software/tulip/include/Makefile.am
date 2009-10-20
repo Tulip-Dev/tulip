@@ -12,7 +12,7 @@ noinst_HEADERS = \
 	AppStartUp.h\
 	geometrie2D.h\
 	InfoDialog.h\
-	viewGl.h
+	TulipApp.h
 
 CLEANFILES = $(BUILT_SOURCES)
 

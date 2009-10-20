@@ -25,12 +25,12 @@ BUILT_SOURCES = \
 	TulipResource.cpp \
 	moc_AppStartUp.cpp \
 	moc_InfoDialog.cpp \
-	moc_viewGl.cpp
+	moc_TulipApp.cpp
 
 nodist_tulip_SOURCES = $(BUILT_SOURCES)
 
 dist_tulip_SOURCES = \
-	viewGl.cpp \
+	TulipApp.cpp \
 	Application.cpp \
 	geometrie2D.cpp \
 	InfoDialog.cpp \
