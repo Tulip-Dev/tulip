@@ -61,7 +61,7 @@ namespace tlp {
   	gridOptionsWidget=NULL;
   	actionZOrderingOptions=optionsMenu->addAction("Z Ordering");
   	actionZOrderingOptions->setCheckable(true);
-  	actionZOrderingOptions->setChecked(false);
+  	actionZOrderingOptions->setChecked(true);
   	actionAntialiasingOptions=optionsMenu->addAction("Antialiasing");
   	actionAntialiasingOptions->setCheckable(true);
   	actionAntialiasingOptions->setChecked(true);
