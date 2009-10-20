@@ -172,7 +172,7 @@ public:
     }
 
 
-    GlComposite *composite=new GlComposite();
+    /*GlComposite *composite=new GlComposite();
     DataSet mainDataSet;
     DataSet layerDataSet;
     DataSet viewDataSet;
@@ -211,7 +211,7 @@ public:
     infoDataSet.set<string>("layer","Foreground");
     nodeLinkDiagramComponentDataSet.set<DataSet>(infoName,infoDataSet);
     graph->setAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
-
+*/
 
     return true;
   }

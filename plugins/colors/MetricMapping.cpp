@@ -229,7 +229,7 @@ public:
     if(graph->numberOfEdges()!=0)
       computeEdgeColor();
 
-    GlComposite *composite=new GlComposite();
+    /*GlComposite *composite=new GlComposite();
 
     int xMax=0;
     double minN,maxN;
@@ -293,7 +293,7 @@ public:
     infoDataSet.set<long>("composite",(long)composite);
     infoDataSet.set<string>("layer","Foreground");
     nodeLinkDiagramComponentDataSet.set<DataSet>(infoName,infoDataSet);
-    graph->setAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
+    graph->setAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);*/
 
     if (!mappingType) delete entryMetric;
     return true;
