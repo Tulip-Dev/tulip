@@ -17,6 +17,7 @@ class TLP_QT_SCOPE MouseSelector:public InteractorComponent
 protected:
   Qt::MouseButton mButton;
   Qt::KeyboardModifier kModifier;
+  Qt::KeyboardModifiers mousePressModifier;
   unsigned int x,y;
   int w,h;
   bool started;
