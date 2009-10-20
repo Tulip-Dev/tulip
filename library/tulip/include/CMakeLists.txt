@@ -56,6 +56,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/TulipPlugin.h 
 	tulip/ExportModule.h 
 	tulip/Reflect.h 
+	tulip/DataSet.h
 	tulip/WithParameter.h 
 	tulip/WithDependency.h 
 	tulip/PluginProgress.h 

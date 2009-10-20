@@ -64,6 +64,7 @@ nobase_include_HEADERS = \
 	tulip/TulipPlugin.h \
 	tulip/ExportModule.h \
 	tulip/Reflect.h \
+	tulip/DataSet.h \
 	tulip/WithParameter.h \
 	tulip/WithDependency.h \
 	tulip/PluginProgress.h \
@@ -84,8 +85,8 @@ nobase_include_HEADERS = \
 	tulip/PlanarityTest.h \
 	tulip/OuterPlanarTest.h \
 	tulip/FaceIterator.h \
-        tulip/PlanarConMap.h \
-        tulip/GraphDecorator.h \
+	tulip/PlanarConMap.h \
+	tulip/GraphDecorator.h \
 	tulip/ForEach.h \
 	tulip/MapIterator.h \
 	tulip/BoundingBox.h \
