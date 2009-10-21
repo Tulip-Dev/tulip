@@ -1,7 +1,8 @@
 BUILT_SOURCES = \
-	TulipData.h\
-	AppStartUpData.h\
-	InfoDialogData.h
+	TulipData.h \
+	AppStartUpData.h \
+	InfoDialogData.h \
+	PreferenceDialogData.h
 
 nodist_noinst_HEADERS = $(BUILT_SOURCES)
 
@@ -12,6 +13,7 @@ noinst_HEADERS = \
 	AppStartUp.h\
 	geometrie2D.h\
 	InfoDialog.h\
+	PreferenceDialog.h\
 	TulipApp.h
 
 CLEANFILES = $(BUILT_SOURCES)

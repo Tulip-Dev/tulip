@@ -25,7 +25,8 @@ BUILT_SOURCES = \
 	TulipResource.cpp \
 	moc_AppStartUp.cpp \
 	moc_InfoDialog.cpp \
-	moc_TulipApp.cpp
+	moc_TulipApp.cpp \
+	moc_PreferenceDialog.cpp
 
 nodist_tulip_SOURCES = $(BUILT_SOURCES)
 
@@ -35,6 +36,7 @@ dist_tulip_SOURCES = \
 	geometrie2D.cpp \
 	InfoDialog.cpp \
 	AppStartUp.cpp \
+	PreferenceDialog.cpp \
 	main.cpp
 
 moc_%.cpp: ../include/%.h

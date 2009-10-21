@@ -87,4 +87,5 @@ libtulip_la_SOURCES = \
 	TLPImport.cpp \
 	TLPExport.cpp \
 	GraphUpdatesRecorder.cpp \
-	ColorScale.cpp
+	ColorScale.cpp \
+	PreferenceManager.cpp

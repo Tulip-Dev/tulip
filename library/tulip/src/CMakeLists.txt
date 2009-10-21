@@ -69,6 +69,7 @@ SET(tulip_LIB_SRCS
 	TLPExport.cpp 
 	GraphUpdatesRecorder.cpp 
 	ColorScale.cpp
+	PreferenceManager.cpp
 )
 
 INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${PROJECT_SOURCE_DIR})

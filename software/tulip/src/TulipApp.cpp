@@ -79,6 +79,7 @@
 #include <tulip/TabWidget.h>
 #include <tulip/MainController.h>
 #include <tulip/QtProgress.h>
+#include <tulip/PreferenceManager.h>
 
 #include <PluginsHelp.h>
 #include <PluginsManagerDialog.h>
@@ -89,6 +90,7 @@
 #include "ElementInfoToolTip.h"
 #include "InfoDialog.h"
 #include "AppStartUp.h"
+#include "PreferenceDialog.h"
 
 #define UNNAMED "unnamed"
 
@@ -186,9 +188,13 @@ void TulipApp::startTulip() {
   }
   enableElements(false);
 
-  pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
-  connect(pluginsUpdateChecker,SIGNAL(updateFinished()),this,SLOT(displayRestartForPlugins()));
-  multiServerManager = pluginsUpdateChecker->getMultiServerManager();
+  if(PreferenceManager::getInst().getNetworkConnection()){
+    pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
+    connect(pluginsUpdateChecker,SIGNAL(updateFinished()),this,SLOT(displayRestartForPlugins()));
+    multiServerManager = pluginsUpdateChecker->getMultiServerManager();
+  }else{
+    pluginsUpdateChecker=NULL;
+  }
 
   /*QWidget *centralwidget = new QWidget(this);
   QGridLayout *gridLayout = new QGridLayout(centralwidget);
@@ -222,6 +228,9 @@ void TulipApp::startTulip() {
   assistant = new QAssistantClient("", this);
 #endif
   connect(assistant, SIGNAL(error(const QString&)), SLOT(helpAssistantError(const QString&)));
+
+  /*Load preference*/
+  PreferenceDialog::loadPreference();
 
   /*saveActions(menuBar(),NULL,controllerToMenu);
   saveActions(toolBar,NULL,controllerToToolBar);*/
@@ -800,6 +809,12 @@ void TulipApp::closeEvent(QCloseEvent *e) {
 }
 //==============================================================
 void TulipApp::plugins() {
+  if(!pluginsUpdateChecker){
+    pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
+    connect(pluginsUpdateChecker,SIGNAL(updateFinished()),this,SLOT(displayRestartForPlugins()));
+    multiServerManager = pluginsUpdateChecker->getMultiServerManager();
+  }
+
   PluginsHelp::checkViewHelp();
 
   PluginsManagerDialog *pluginsManager=new PluginsManagerDialog(multiServerManager,this);
@@ -975,6 +990,11 @@ void TulipApp::helpAbout() {
   if (aboutWidget==0)
     aboutWidget = new InfoDialog(this);
   aboutWidget->show();
+}
+//==============================================================
+void TulipApp::preference() {
+  PreferenceDialog pref(this);
+  pref.exec();
 }
 //==============================================================
 void TulipApp::helpIndex() {

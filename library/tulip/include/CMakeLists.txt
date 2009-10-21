@@ -77,13 +77,14 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/PlanarityTest.h 
 	tulip/OuterPlanarTest.h 
 	tulip/FaceIterator.h 
-        tulip/PlanarConMap.h 
-        tulip/GraphDecorator.h 
+	tulip/PlanarConMap.h 
+	tulip/GraphDecorator.h 
 	tulip/ForEach.h 
 	tulip/MapIterator.h 
 	tulip/BoundingBox.h 
 	tulip/ColorScale.h
 	tulip/TulipRelease.h
+	tulip/PreferenceManager.h
 )
 
 INSTALL_FILES(${TulipIncludeInstallDir}/tulip/cxx/ FILES

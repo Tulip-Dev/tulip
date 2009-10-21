@@ -9,6 +9,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
+#include <tulip/PreferenceManager.h>
 
 #include "tulip/GlTools.h"
 #include "tulip/GlyphManager.h"
@@ -33,7 +34,7 @@ using namespace std;
 
 namespace tlp {
 
-static const Color COLORSELECT = Color(255, 102, 255, 255);
+//static const Color COLORSELECT = Color(255, 102, 255, 255);
 
 //BoundingBox eeGlyphBoundingBox(const Coord& anchor, const Coord& dest, const Coord& size) {
 //
@@ -163,6 +164,7 @@ void GlEdge::acceptVisitor(GlSceneVisitor *visitor) {
 }
 
 void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
+  Color selectionColor=PreferenceManager::getInst().getSelectionColor();
 	edge e = edge(id);
 
   if(data->parameters->isElementZOrdered()){
@@ -214,8 +216,8 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 
 	Color* srcCol, *tgtCol;
 	if (selected) {
-		srcCol = (Color *) &COLORSELECT;
-		tgtCol = (Color *) &COLORSELECT;
+		srcCol = &selectionColor;
+		tgtCol = &selectionColor;
 	} else {
 		if (data->parameters->isEdgeColorInterpolate()) {
 			srcCol = &(Color&) data->elementColor->getNodeValue(source);
@@ -291,6 +293,18 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	}
 
 	if (selected) {
+	  /*Matrix<float, 4> transformMatrix;
+	  camera->getTransformMatrix(camera->getViewport(),transformMatrix);
+	  Coord p=projectPoint(tgtCoord-srcCoord,transformMatrix,camera->getViewport());
+	  p[2]=0;
+	  cout << "p : " << p << endl;
+	  Coord p1=unprojectPoint(p,transformMatrix,camera->getViewport());
+	  cout << "p1 : " << p1 << endl;
+	  Coord p2=unprojectPoint(p+Coord(1,0,0),transformMatrix,camera->getViewport());
+	  cout << "p2 : " << p2 << endl;
+	  edgeSize[0] += (p1-p2).norm();
+	  edgeSize[1] += (p1-p2).norm();
+	  cout << "norm : " << (p1-p2).norm() << endl;*/
 		edgeSize[0] += 0.05;
 		edgeSize[1] += 0.05;
 	}
@@ -370,7 +384,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 			glPushMatrix();
 			glMultMatrixf((GLfloat *) &srcTransformationMatrix);
 			glMultMatrixf((GLfloat *) &srcScalingMatrix);
-			extremityGlyph->draw(e, source, (selected ? COLORSELECT : *srcCol), lod);
+			extremityGlyph->draw(e, source, (selected ? selectionColor : *srcCol), lod);
 			glPopMatrix();
 
 			//Compute new Anchor
@@ -450,7 +464,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 			glPushMatrix();
 			glMultMatrixf((GLfloat *) &tgtTransformationMatrix);
 			glMultMatrixf((GLfloat *) &tgtScalingMatrix);
-			extremityGlyph->draw(e, target, (selected ? COLORSELECT : *tgtCol), lod);
+			extremityGlyph->draw(e, target, (selected ? selectionColor : *tgtCol), lod);
 			glPopMatrix();
 
 			//Compute new Anchor

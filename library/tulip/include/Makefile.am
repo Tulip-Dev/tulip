@@ -90,7 +90,8 @@ nobase_include_HEADERS = \
 	tulip/ForEach.h \
 	tulip/MapIterator.h \
 	tulip/BoundingBox.h \
-	tulip/ColorScale.h
+	tulip/ColorScale.h \
+	tulip/PreferenceManager.h
 
 nobase_nodist_include_HEADERS = tulip/TulipRelease.h
 

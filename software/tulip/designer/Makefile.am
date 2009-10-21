@@ -1,6 +1,7 @@
 dist_noinst_DATA = AppStartUp.ui \
 		InfoDialog.ui \
 		Tulip.ui \
+		PreferenceDialog.ui \
 		i_open.png \
 		i_print.png \
 		i_redo.png \

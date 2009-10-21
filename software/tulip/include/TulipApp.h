@@ -73,6 +73,7 @@ protected slots:
   void helpIndex();
   void helpContents();
   void helpAbout();
+  void preference();
   void plugins();
   void displayRestartForPlugins();
   void helpAssistantError(const QString &msg);

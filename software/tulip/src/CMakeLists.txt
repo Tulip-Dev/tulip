@@ -6,12 +6,14 @@ INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
 set(tulip_UI
     ../designer/Tulip.ui
     ../designer/AppStartUp.ui
-    ../designer/InfoDialog.ui)
+    ../designer/InfoDialog.ui
+    ../designer/PreferenceDialog.ui)
 
 set(tulip_MOC
     ../include/AppStartUp.h
     ../include/InfoDialog.h
-    ../include/TulipApp.h)
+    ../include/TulipApp.h
+    ../include/PreferenceDialog.h)
 
 set(tulip_SRCS 
     TulipApp.cpp
@@ -19,6 +21,7 @@ set(tulip_SRCS
     geometrie2D.cpp
     InfoDialog.cpp
     AppStartUp.cpp
+    PreferenceDialog.cpp
     main.cpp)
 
 SET(tulip_RCC

@@ -62,9 +62,14 @@
      <x>0</x>
      <y>0</y>
      <width>1005</width>
-     <height>25</height>
+     <height>23</height>
     </rect>
    </property>
+   <widget class="QMenu" name="windowsMenu" >
+    <property name="title" >
+     <string>&amp;Windows</string>
+    </property>
+   </widget>
    <widget class="QMenu" name="fileMenu" >
     <property name="title" >
      <string>&amp;File</string>
@@ -78,11 +83,6 @@
     <addaction name="fileCloseTabAction" />
     <addaction name="fileExitAction" />
    </widget>
-   <widget class="QMenu" name="windowsMenu" >
-    <property name="title" >
-     <string>&amp;Windows</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="helpMenu" >
     <property name="title" >
      <string>&amp;Help</string>
@@ -90,6 +90,7 @@
     <addaction name="helpContentsAction" />
     <addaction name="helpIndexAction" />
     <addaction name="separator" />
+    <addaction name="filePreferenceAction" />
     <addaction name="pluginsAction" />
     <addaction name="separator" />
     <addaction name="helpAboutAction" />
@@ -611,6 +612,11 @@
     <string>Tranforms the current graph into a directed tree</string>
    </property>
   </action>
+  <action name="filePreferenceAction" >
+   <property name="text" >
+    <string>Preference...</string>
+   </property>
+  </action>
   <actiongroup name="mouseActionGroup" >
    <action name="addEdgeAction" >
     <property name="checkable" >
@@ -950,6 +956,22 @@
     <hint type="destinationlabel" >
      <x>20</x>
      <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>filePreferenceAction</sender>
+   <signal>activated()</signal>
+   <receiver>TulipData</receiver>
+   <slot>preference()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>510</x>
+     <y>377</y>
     </hint>
    </hints>
   </connection>

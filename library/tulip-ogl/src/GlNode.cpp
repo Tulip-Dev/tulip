@@ -10,6 +10,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
+#include <tulip/PreferenceManager.h>
 
 #include "tulip/GlTools.h"
 #include "tulip/GlyphManager.h"
@@ -27,8 +28,6 @@
 using namespace std;
 
 namespace tlp {
-
-  static const Color colorSelect2 = Color(255, 102, 255, 255);
 
   BoundingBox GlNode::getBoundingBox(GlGraphInputData* data) {
     node n=node(id);
@@ -59,6 +58,8 @@ namespace tlp {
   }
 
   void GlNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
+    Color colorSelect2=PreferenceManager::getInst().getSelectionColor();
+
     glEnable(GL_CULL_FACE);
     GLenum error = glGetError();
     if(GlDisplayListManager::getInst().beginNewDisplayList("selection")) {
@@ -167,6 +168,7 @@ namespace tlp {
   }
 
   void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
+    Color colorSelect2=PreferenceManager::getInst().getSelectionColor();
 
     node n=node(id);
 
