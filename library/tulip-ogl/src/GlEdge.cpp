@@ -293,20 +293,10 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	}
 
 	if (selected) {
-	  /*Matrix<float, 4> transformMatrix;
-	  camera->getTransformMatrix(camera->getViewport(),transformMatrix);
-	  Coord p=projectPoint(tgtCoord-srcCoord,transformMatrix,camera->getViewport());
-	  p[2]=0;
-	  cout << "p : " << p << endl;
-	  Coord p1=unprojectPoint(p,transformMatrix,camera->getViewport());
-	  cout << "p1 : " << p1 << endl;
-	  Coord p2=unprojectPoint(p+Coord(1,0,0),transformMatrix,camera->getViewport());
-	  cout << "p2 : " << p2 << endl;
-	  edgeSize[0] += (p1-p2).norm();
-	  edgeSize[1] += (p1-p2).norm();
-	  cout << "norm : " << (p1-p2).norm() << endl;*/
-		edgeSize[0] += 0.05;
-		edgeSize[1] += 0.05;
+	  Coord p1=camera->screenTo3DWorld(Coord(0,0,0));
+	  Coord p2=camera->screenTo3DWorld(Coord(2,0,0));
+	  edgeSize[0] += (p2-p1).norm();
+	  edgeSize[1] += (p2-p1).norm();
 	}
 
 	int startEdgeGlyph = data->elementSrcAnchorShape->getEdgeValue(e);
