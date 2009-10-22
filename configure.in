@@ -422,7 +422,6 @@ plugins/glyph/Makefile
 plugins/interactor/Makefile
 plugins/view/Makefile
 plugins/view/spreadsheet/Makefile
-plugins/view/parallel/Makefile
 plugins/controller/Makefile
 unit_test/library/tulip/tuliplibtest.cpp
 docs/Makefile
