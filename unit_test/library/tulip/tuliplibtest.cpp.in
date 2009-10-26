@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <stdlib.h>
+#include <iostream>
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <tulip/TlpTools.h>
@@ -11,6 +12,7 @@
 #endif
 
 int main( int argc, char** argv ) {
+#if defined(_GLIBCXX_HAVE_SETENV)
   std::string tlpdir("@prefix@");
   // check for lib64
   std::string tlpdir64 = tlpdir + "/lib64/tlp";
@@ -20,6 +22,12 @@ int main( int argc, char** argv ) {
   else
     tlpdir += "/lib";
   setenv("TLP_DIR", tlpdir.c_str(), 1);
+#else
+  if (!getenv("TLP_DIR") && !getenv("TLP_PLUGINS_PATH")) {
+    std::cerr << "Error: one of TLP_DIR or TLP_PLUGINS_PATH envt variables needs to be defined" << std::endl;
+    return EXIT_FAILURE;
+  }
+#endif
   tlp::initTulipLib();
   tlp::PluginLoader* pLoader = NULL;
 #ifndef NDEBUG
@@ -32,7 +40,7 @@ int main( int argc, char** argv ) {
   CPPUNIT_NS::TextUi::TestRunner runner;
   runner.addTest( CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest() );
   runner.run( );
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 /*

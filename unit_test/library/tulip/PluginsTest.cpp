@@ -637,7 +637,7 @@ CppUnit::Test * PluginsTest::suite() {
   suiteOfTests->addTest(new CppUnit::TestCaller<PluginsTest>("SpanningDagSelection", &PluginsTest::testSpanningDagSelection));
   suiteOfTests->addTest(new CppUnit::TestCaller<PluginsTest>("SpanningTreeSelection", &PluginsTest::testSpanningTreeSelection));
   suiteOfTests->addTest(new CppUnit::TestCaller<PluginsTest>("AutoSize", &PluginsTest::testAutoSize));
-  suiteOfTests->addTest(new CppUnit::TestCaller<PluginsTest>("FitToLabel", &PluginsTest::testFitToLabel));
+  //suiteOfTests->addTest(new CppUnit::TestCaller<PluginsTest>("FitToLabel", &PluginsTest::testFitToLabel));
   suiteOfTests->addTest(new CppUnit::TestCaller<PluginsTest>("MetricSizeMapping", &PluginsTest::testMetricSizeMapping));
   suiteOfTests->addTest(new CppUnit::TestCaller<PluginsTest>("EqualValueClustering", &PluginsTest::testEqualValueClustering));
   suiteOfTests->addTest(new CppUnit::TestCaller<PluginsTest>("HierarchicalClustering", &PluginsTest::testHierarchicalClustering));

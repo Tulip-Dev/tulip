@@ -5,10 +5,11 @@
  *      Author: antoine
  */
 
-#include "IntegerPropertyMinMaxUpdateTest.h"
-
 #include <string>
 #include <iostream>
+
+#include <cppunit/TestCaller.h>
+#include "IntegerPropertyMinMaxUpdateTest.h"
 
 using namespace tlp;
 using namespace std;
@@ -21,6 +22,7 @@ const int originalMax = 10;
 const int newMin = 1;
 const int newMax = 15;
 
+#include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( IntegerPropertyMinMaxUpdateTest );
 
 void IntegerPropertyMinMaxUpdateTest::setUp() {
@@ -66,4 +68,12 @@ void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdate() {
 	CPPUNIT_ASSERT_MESSAGE("test IntegerProperty max value after update", maxNode == newMax);
 }
 
+//==========================================================
+CppUnit::Test * IntegerPropertyMinMaxUpdateTest::suite() {
+  CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Integer Property" );
 
+  suiteOfTests->addTest(new CppUnit::TestCaller<IntegerPropertyMinMaxUpdateTest>(" Min update", &IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMinUpdate));
+  suiteOfTests->addTest(new CppUnit::TestCaller<IntegerPropertyMinMaxUpdateTest>(" Max update", &IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdate));
+
+  return suiteOfTests;
+}

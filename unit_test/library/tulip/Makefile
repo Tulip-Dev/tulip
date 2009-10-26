@@ -1,4 +1,3 @@
-SHELL=bash
 TARGET= libtulip_test
 SRCS=   tuliplibtest.cpp \
 	ExtendedClusterOperationTest.cpp \
@@ -19,12 +18,16 @@ SRCS=   tuliplibtest.cpp \
 	IntegerPropertyMinMaxUpdateTest.cpp
 #	PlanarConMapTest.cpp
 
+TULIP_CONFIG=$(shell which tulip-config)
 
+ifeq ($?, 1)
+TULIP_CONFIG=..\..\..\tulip-config
+endif
 
-CXXFLAGS =  -g -Wall `../../../tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags`
-#CXXFLAGS = -O2 -DNO_THREAD -DNDEBUG `../../../tulip-config --cxxflags` `xml2-config --cflags` `cppunit-config --cflags`
+CXXFLAGS =  -g -Wall `${TULIP_CONFIG} --cxxflags` `cppunit-config --cflags`
+#CXXFLAGS = -O2 -DNO_THREAD -DNDEBUG `${TULIP_CONFIG} --cxxflags` `cppunit-config --cflags`
 CXX=g++
-LDFLAGS= `../../../tulip-config --lib_tulip` `cppunit-config --libs`
+LDFLAGS= `${TULIP_CONFIG} --lib_tulip` `cppunit-config --libs`
 
 OBJS=$(SRCS:.cpp=.o)
 
