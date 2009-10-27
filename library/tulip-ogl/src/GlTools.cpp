@@ -104,7 +104,7 @@ namespace tlp {
     point[3] = 1;
     point =  point * transform;// * transform;
 #ifndef NDEBUG
-    if(fabs(point[3]) > 1E-6){
+    if(fabs(point[3]) < 1E-6){
       std::cerr << "Error in projectPoint with coord : " << obj << " and transform matrix : " << transform << std::endl;
     }
 #endif
@@ -138,7 +138,7 @@ namespace tlp {
 
     point = point * invtransform;
 #ifndef NDEBUG
-    if(fabs(point[3]) > 1E-6){
+    if(fabs(point[3]) < 1E-6){
       std::cerr << "Error in unprojectPoint with coord : " << obj << " and transform matrix : " << invtransform << std::endl;
     }
 #endif
