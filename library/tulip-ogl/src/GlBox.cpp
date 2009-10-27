@@ -148,14 +148,14 @@ namespace tlp {
     //     |/             |/
     //  p3 +--------------+ p2 
 
-    points[0] = new Coord(position->getX() - size->getW(), position->getY() - size->getH(), position->getZ() - size->getD());
-    points[1] = new Coord(position->getX() + size->getW(), position->getY() - size->getH(), position->getZ() - size->getD());
-    points[2] = new Coord(position->getX() + size->getW(), position->getY() + size->getH(), position->getZ() - size->getD()); 
-    points[3] = new Coord(position->getX() - size->getW(), position->getY() + size->getH(), position->getZ() - size->getD()); 
-    points[4] = new Coord(position->getX() - size->getW(), position->getY() - size->getH(), position->getZ() + size->getD()); 
-    points[5] = new Coord(position->getX() + size->getW(), position->getY() - size->getH(), position->getZ() + size->getD()); 
-    points[6] = new Coord(position->getX() + size->getW(), position->getY() + size->getH(), position->getZ() + size->getD()); 
-    points[7] = new Coord(position->getX() - size->getW(), position->getY() + size->getH(), position->getZ() + size->getD()); 
+    points[0] = new Coord(position->getX() - size->getW()/2., position->getY() - size->getH()/2., position->getZ() - size->getD()/2.);
+    points[1] = new Coord(position->getX() + size->getW()/2., position->getY() - size->getH()/2., position->getZ() - size->getD()/2.);
+    points[2] = new Coord(position->getX() + size->getW()/2., position->getY() + size->getH()/2., position->getZ() - size->getD()/2.);
+    points[3] = new Coord(position->getX() - size->getW()/2., position->getY() + size->getH()/2., position->getZ() - size->getD()/2.);
+    points[4] = new Coord(position->getX() - size->getW()/2., position->getY() - size->getH()/2., position->getZ() + size->getD()/2.);
+    points[5] = new Coord(position->getX() + size->getW()/2., position->getY() - size->getH()/2., position->getZ() + size->getD()/2.);
+    points[6] = new Coord(position->getX() + size->getW()/2., position->getY() + size->getH()/2., position->getZ() + size->getD()/2.);
+    points[7] = new Coord(position->getX() - size->getW()/2., position->getY() + size->getH()/2., position->getZ() + size->getD()/2.);
 
     computeFaces();
  
