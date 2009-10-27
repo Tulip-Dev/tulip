@@ -87,6 +87,10 @@ namespace tlp {
      * return the ith color used for filling the polygon
      */
     virtual Color& fcolor(const unsigned int i);
+    /**
+     * Set the ith color used for filling the polygon
+     */
+    virtual void setFColor(const unsigned int i,const Color &color);
 
     /**
      * return the ith color used for outlining the polygon
@@ -96,6 +100,10 @@ namespace tlp {
      * return the ith color used for outlining the polygon
      */
     virtual Color& ocolor(const unsigned int i);
+    /**
+     * Set the ith color used for outlining the polygon
+     */
+    virtual void setOColor(const unsigned int i,const Color &color);
 
     /**
      * Set if the polygon is filled or not

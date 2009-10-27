@@ -83,20 +83,28 @@ namespace tlp {
     boundingBox.check(point);
   }
   //=====================================================
-  const tlp::Color& GlPolygon::fcolor(const unsigned int i) const {
+  const Color& GlPolygon::fcolor(const unsigned int i) const {
     return fillColors[i];
   }
   //=====================================================
-  tlp::Color& GlPolygon::fcolor(const unsigned int i) {
+  Color& GlPolygon::fcolor(const unsigned int i) {
     return fillColors[i];
   }
   //=====================================================
-  const tlp::Color& GlPolygon::ocolor(const unsigned int i) const {
+  void GlPolygon::setFColor(const unsigned int i,const Color &color) {
+    fillColors[i]=color;
+  }
+  //=====================================================
+  const Color& GlPolygon::ocolor(const unsigned int i) const {
     return outlineColors[i];
   }
   //=====================================================
-  tlp::Color& GlPolygon::ocolor(const unsigned int i) {
+  Color& GlPolygon::ocolor(const unsigned int i) {
     return outlineColors[i];
+  }
+  //=====================================================
+  void GlPolygon::setOColor(const unsigned int i,const Color &color) {
+    outlineColors[i]=color;
   }
   //=====================================================
   void GlPolygon::draw(float lod,Camera *camera) {
