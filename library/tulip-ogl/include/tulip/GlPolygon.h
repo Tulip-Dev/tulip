@@ -106,6 +106,19 @@ namespace tlp {
     virtual void setOColor(const unsigned int i,const Color &color);
 
     /**
+     * Return the outline size
+     */
+    virtual int getOutlineSize(){
+      return outlineSize;
+    }
+    /**
+     * Set the outline size
+     */
+    virtual void setOutlineSize(int size){
+      outlineSize=size;
+    }
+
+    /**
      * Set if the polygon is filled or not
      */
     void setFillMode(const bool);
