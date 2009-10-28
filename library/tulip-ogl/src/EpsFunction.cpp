@@ -30,7 +30,7 @@ void tlp::Rect(float x, float y , float z, float w , float h) {
   glEnd();
 }
 //====================================================
-static char *gouraudtriangleEPS[] =
+static const char* gouraudtriangleEPS[] =
 {
 "/bd{bind def}bind def /triangle { aload pop   setrgbcolor  aload pop 5 3",
 "roll 4 2 roll 3 2 roll exch moveto lineto lineto closepath fill } bd",

@@ -768,7 +768,7 @@ void GlScene::outputSVG(unsigned int size,const string& filename) {
 	 initMapsSVG(_renderingParameters.getGraph(), &ge); */
 		FILE* file = fopen(filename.c_str(), "w");
 		if (file) {
-			fprintf(file, str.c_str());
+			fprintf(file, "%s",str.c_str());
 			fclose(file);
 		} else {
 			perror(filename.c_str());
@@ -807,7 +807,7 @@ void GlScene::outputEPS(unsigned int size,const string& filename) {
 	if(!filename.empty()) {
 		FILE* file = fopen(filename.c_str(), "w");
 		if (file) {
-			fprintf(file, str.c_str());
+			fprintf(file, "%s", str.c_str());
 			fclose(file);
 		} else {
 			perror(filename.c_str());

@@ -60,7 +60,7 @@ namespace tlp {
     default:
       std::string str(__PRETTY_FUNCTION__);
       str += ": current displayMode is invalid!";
-      qWarning(str.c_str());
+      qWarning("%s",str.c_str());
       return QStringList();
     }
   }

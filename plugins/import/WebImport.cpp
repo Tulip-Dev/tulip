@@ -141,7 +141,7 @@ void UrlElement::load() {
   fill(data);
 }
 
-static char* not_html_extensions[] = {
+static const char* not_html_extensions[] = {
   ".bmp", ".css", ".doc", ".ico", ".exe", ".gif", ".gz", ".js", ".jpeg", ".jpg",
   ".pdf", ",.png", ".ps", ".tar", ".tgz", ".wav", ".zip", ".z",
   0 /* must be the last */
@@ -193,7 +193,7 @@ bool UrlElement::siteconnect(const string &server, const string &url,const int s
   return context->status;
 } /* end, siteconnect */
 
-static char * rejected_protocols[] = {
+static const char * rejected_protocols[] = {
   "https:", "ftp:", "gopher:", "sftp:", "javascript:", "mms:", "mailto:",
   0 /* must be the last */
 };
