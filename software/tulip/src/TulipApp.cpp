@@ -91,6 +91,7 @@
 #include "InfoDialog.h"
 #include "AppStartUp.h"
 #include "PreferenceDialog.h"
+#include "ChooseControllerDialog.h"
 
 #define UNNAMED "unnamed"
 
@@ -517,31 +518,6 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     noPlugin = true;
   }
   if (!cancel) {
-    //todo
-    /*if(currentController && !controllerAutoLoad) {
-      Graph *graph=currentController->getGraph();
-      if(askSaveGraph(graph->getAttribute<string>("name")))
-        return;
-      delete currentController;
-      currentController=NULL;
-      //newWorkspace->closeAllWindows();
-    }*/
-    /*if(noPlugin) {
-      QWidgetList windows = newWorkspace->windowList();
-      for( int i = 0; i < int(windows.count()); ++i ) {
-        QWidget *win = windows.at(i);
-        if (typeid(*win)==typeid(GlMainWidget)) {
-          GlMainWidget *tmpNavigate = dynamic_cast<GlMainWidget *>(win);
-          if(openFiles[((unsigned long)tmpNavigate)].name == s.toAscii().data()) {
-            int answer = QMessageBox::question(this, "Open", "This file is already opened. Do you want to load it anyway?",
-                QMessageBox::Yes,  QMessageBox::No);
-            if(answer == QMessageBox::No)
-              return;
-            break;
-          }
-        }
-      }
-    }*/
 
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     Graph *newGraph = tlp::newGraph();
@@ -552,51 +528,93 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     QFileInfo tmp(s);
     QDir::setCurrent(tmp.dir().path() + "/");
 
-    //GlMainWidget *glW = newOpenGlView(newGraph, s);
-    //    changeGraph(0);
     QtProgress *progressBar = new QtProgress(this, string("Loading : ")+ s.section('/',-1).toAscii().data());
-    // this will avoid too much notification when
-    // importing a graph (see changeGraph)
-    //importedGraph = newGraph;
+
     result = tlp::importGraph(*plugin, dataSet, progressBar ,newGraph);
-    //importedGraph = 0;
+
+    string errorMessage;
+    DataSet controllerData;
+    bool haveControllerData=false;
+    string controllerName;
     // now ensure notification
     if (progressBar->state()==TLP_CANCEL || !result ) {
-      //      changeGraph(0);
-      //delete glW;
+      errorMessage = progressBar->getError();
+      delete progressBar;
+      QApplication::restoreOverrideCursor();
+    }else{
+      delete progressBar;
+      QApplication::restoreOverrideCursor();
+
+      MutableContainer<Controller *> controllers;
+      ControllerPluginsManager::getInst().initControllerPluginsList(controllers);
+      TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
+      vector<string> controllersName;
+      for (it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
+        controllersName.push_back(it->first);
+      }
+
+      ChooseControllerDialog chooseControllerDialog;
+
+      //check if we have controller information in file and set to default controller in ChooseControllerDialog
+      string defaultControllerName="MainController";
+      if(dataSet.exist("controller")) {
+        DataSet controller;
+        dataSet.get<DataSet>("controller", controller);
+        Iterator< std::pair<std::string, DataType*> > *it=controller.getValues();
+        assert(it->hasNext());
+        pair<string, DataType*> p;
+        p = it->next();
+        controllerData=*((DataSet*)p.second->value);
+        haveControllerData=true;
+        defaultControllerName=p.first;
+      }
+
+      if(controllersName.size()==1){
+        // if we have only one controller : auto load it
+        controllerName = controllersName[0];
+      }else{
+        bool displayDialog=true;
+
+        // if auto load controller setting is set
+        if(haveControllerData && PreferenceManager::getInst().getAutoLoadController()){
+          // check if this controller is in available controllers
+          for(vector<string>::iterator it=controllersName.begin();it!=controllersName.end();++it){
+            if((*it)==defaultControllerName){
+              displayDialog=false;
+              controllerName=defaultControllerName;
+              break;
+            }
+          }
+        }
+
+        if(displayDialog){
+          // If we find controller name : display this name is ChooseControllerDialog (replace None)
+          if(haveControllerData)
+            chooseControllerDialog.setDefaultControllerName(defaultControllerName);
+
+          chooseControllerDialog.setDefaultCheckedControllerName(defaultControllerName);
+          chooseControllerDialog.setControllersAvailable(controllersName);
+          if(chooseControllerDialog.exec()==QDialog::Rejected){
+            errorMessage="Cancel by user";
+          }else{
+            controllerName = chooseControllerDialog.getCheckedControllerName();
+          }
+        }
+      }
+    }
+
+    if(errorMessage!=""){
       delete newGraph;
       QApplication::restoreOverrideCursor();
-      // qWarning("Canceled import/Open");
       std::string errorTitle("Canceled import/Open: ");
       errorTitle += s.section('/',-1).toAscii().data();
-      std::string errorMsg = progressBar->getError();
-      delete progressBar;
-      QMessageBox::critical(this, errorTitle.c_str(), errorMsg.c_str());
+      QMessageBox::critical(this, errorTitle.c_str(), errorMessage.c_str());
       QApplication::restoreOverrideCursor();
       return;
     }
 
-    delete progressBar;
-    /*if(noPlugin)
-      setGraphName(newGraph, s);*/
-    QApplication::restoreOverrideCursor();
-
-    if(dataSet.exist("controller")) {
-      // last version of tlp file
-      DataSet controller;
-      dataSet.get<DataSet>("controller", controller);
-      Iterator< std::pair<std::string, DataType*> > *it=controller.getValues();
-      assert(it->hasNext());
-
-      pair<string, DataType*> p;
-      p = it->next();
-      DataSet *controllerData=(DataSet*)p.second->value;
-      string controllerName=p.first;
-
-      createController(controllerName,s.toStdString());
-      tabIndexToController[tabWidget->currentIndex()]->setData(newGraph,*controllerData);
-      enableElements(true);
-    }else{
+    //We have no controller data, so controller is not save in the file
+    if(!haveControllerData) {
       DataSet newDataSet;
 
       if(dataSet.exist("scene")) {
@@ -611,9 +629,13 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
         dataSet.get<DataSet>("displaying", glGraphData);
         newDataSet.set<DataSet>("displaying",glGraphData);
       }
-      createController("MainController",s.toStdString());
-      tabIndexToController[tabWidget->currentIndex()]->setData(newGraph,newDataSet);
+
+      controllerData=newDataSet;
     }
+
+    createController(controllerName,s.toStdString());
+    tabIndexToController[tabWidget->currentIndex()]->setData(newGraph,controllerData);
+    enableElements(true);
 
     if(noPlugin) {
       FileInfo vFile;

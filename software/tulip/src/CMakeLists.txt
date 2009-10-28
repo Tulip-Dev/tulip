@@ -7,13 +7,15 @@ set(tulip_UI
     ../designer/Tulip.ui
     ../designer/AppStartUp.ui
     ../designer/InfoDialog.ui
-    ../designer/PreferenceDialog.ui)
+    ../designer/PreferenceDialog.ui
+    ../designer/ChooseControllerDialog.ui)
 
 set(tulip_MOC
     ../include/AppStartUp.h
     ../include/InfoDialog.h
     ../include/TulipApp.h
-    ../include/PreferenceDialog.h)
+    ../include/PreferenceDialog.h
+    ../include/ChooseControllerDialog.h)
 
 set(tulip_SRCS 
     TulipApp.cpp
@@ -22,6 +24,7 @@ set(tulip_SRCS
     InfoDialog.cpp
     AppStartUp.cpp
     PreferenceDialog.cpp
+    ChooseControllerDialog.cpp
     main.cpp)
 
 SET(tulip_RCC

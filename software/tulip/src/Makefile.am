@@ -26,7 +26,8 @@ BUILT_SOURCES = \
 	moc_AppStartUp.cpp \
 	moc_InfoDialog.cpp \
 	moc_TulipApp.cpp \
-	moc_PreferenceDialog.cpp
+	moc_PreferenceDialog.cpp \
+	moc_ChooseControllerDialog.cpp
 
 nodist_tulip_SOURCES = $(BUILT_SOURCES)
 
@@ -37,6 +38,7 @@ dist_tulip_SOURCES = \
 	InfoDialog.cpp \
 	AppStartUp.cpp \
 	PreferenceDialog.cpp \
+	ChooseControllerDialog.cpp \
 	main.cpp
 
 moc_%.cpp: ../include/%.h

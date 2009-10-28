@@ -69,6 +69,20 @@ namespace tlp {
       return selectionColor;
     }
 
+    /**
+     * Set if tulip auto load controller
+     */
+    void setAutoLoadController(bool autoLoad){
+      autoLoadController=autoLoad;
+    }
+
+    /**
+     * Get if tulip auto load controller
+     */
+    bool getAutoLoadController() {
+      return autoLoadController;
+    }
+
   private:
 
     /**
@@ -80,6 +94,7 @@ namespace tlp {
 
     bool networkConnection;
     Color selectionColor;
+    bool autoLoadController;
 
   };
 

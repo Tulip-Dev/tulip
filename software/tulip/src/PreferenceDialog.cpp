@@ -20,10 +20,12 @@ PreferenceDialog::PreferenceDialog( QWidget* parent)
 
   PreferenceManager &preferenceManager=PreferenceManager::getInst();
   bool networkConnection=preferenceManager.getNetworkConnection();
+  bool autoLoadController=preferenceManager.getAutoLoadController();
   Color selectionColor=preferenceManager.getSelectionColor();
 
   setSelectionButtonColor(QColor(selectionColor[0],selectionColor[1],selectionColor[2],selectionColor[3]));
   networkRadioButton->setChecked(networkConnection);
+  autoLoadControllerButton->setChecked(autoLoadController);
 
   connect(selectionColorButton,SIGNAL(clicked()),this,SLOT(selectionColorButtonSlot()));
 }
@@ -45,12 +47,14 @@ void PreferenceDialog::loadPreference(){
   selectionColor[3] = settings.value("selectionColorA",255).toUInt();
 
   bool networkConnection= settings.value("networkConnection",true).toBool();
+  bool autoLoadController = settings.value("autoLoadConnection",false).toBool();
 
   settings.endGroup();
 
   PreferenceManager &preferenceManager=PreferenceManager::getInst();
   preferenceManager.setNetworkConnection(networkConnection);
   preferenceManager.setSelectionColor(selectionColor);
+  preferenceManager.setAutoLoadController(autoLoadController);
 }
 void PreferenceDialog::savePreference(){
   PreferenceManager &preferenceManager=PreferenceManager::getInst();
@@ -64,6 +68,7 @@ void PreferenceDialog::savePreference(){
   settings.setValue("selectionColorA",preferenceManager.getSelectionColor()[3]);
 
   settings.setValue("networkConnection",preferenceManager.getNetworkConnection());
+  settings.setValue("autoLoadController",preferenceManager.getAutoLoadController());
 
   settings.endGroup();
 }
@@ -105,11 +110,10 @@ void PreferenceDialog::selectionColorButtonSlot(){
 }
 
 void PreferenceDialog::accept() {
-  cout << "accept" << endl;
 
   PreferenceManager &preferenceManager=PreferenceManager::getInst();
-  cout << "down : " << networkRadioButton->isChecked() << endl;
   preferenceManager.setNetworkConnection(networkRadioButton->isChecked());
+  preferenceManager.setAutoLoadController(autoLoadControllerButton->isChecked());
   QColor selectionColor = selectionColorButton->palette().color(QPalette::Button);
   preferenceManager.setSelectionColor(Color(selectionColor.red(),selectionColor.green(),selectionColor.blue(),selectionColor.alpha()));
 
