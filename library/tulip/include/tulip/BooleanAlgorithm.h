@@ -36,12 +36,12 @@ public:
   /** This Boolean is the one associated to the algorithm,
       The data should be store in it*/
   BooleanProperty *booleanResult;
+  ///
+  virtual ~BooleanAlgorithm(){}
 
 protected:
   ///
   BooleanAlgorithm (const PropertyContext &);
-  ///
-  virtual ~BooleanAlgorithm(){}
 };
 /*@*/
 

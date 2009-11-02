@@ -35,12 +35,12 @@ public:
   /** This string is the one associated to the algorithm,
       The data should be store in it*/
   StringProperty *stringResult;
+  ///
+  virtual ~StringAlgorithm(){}
 
 protected:
   ///
   StringAlgorithm (const PropertyContext &context);
-  ///
-  virtual ~StringAlgorithm(){}
 };
 /*@}*/
 

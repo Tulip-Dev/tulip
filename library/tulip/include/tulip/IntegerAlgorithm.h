@@ -35,12 +35,12 @@ public:
   /** This int obj is the one associated to the algorithm,
       The data should be store in it*/
   IntegerProperty *integerResult;
+  ///
+  virtual ~IntegerAlgorithm(){}
 
 protected:
   ///
   IntegerAlgorithm (const PropertyContext  &context);
-  ///
-  virtual ~IntegerAlgorithm(){}
 };
 /*@}*/
 

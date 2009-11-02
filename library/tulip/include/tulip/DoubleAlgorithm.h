@@ -34,12 +34,12 @@ public:
   /** This metric is the one associated to the algorithm,
       The data should be store in it*/
   DoubleProperty *doubleResult;
+  ///
+  virtual ~DoubleAlgorithm();
 
 protected:
   ///
   DoubleAlgorithm (const PropertyContext  &context);
-  ///
-  virtual ~DoubleAlgorithm();
 };
 /*@}*/
 

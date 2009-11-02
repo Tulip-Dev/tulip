@@ -37,12 +37,12 @@ public:
    * The data should be store in it
    */
   LayoutProperty *layoutResult;
+  ///
+  virtual ~LayoutAlgorithm();
 
 protected: 
   ///
   LayoutAlgorithm (const PropertyContext &context);
-  ///
-  virtual ~LayoutAlgorithm();
 };
 /*@}*/
 

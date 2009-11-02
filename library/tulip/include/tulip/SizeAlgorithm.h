@@ -33,12 +33,12 @@ class TLP_SCOPE SizeAlgorithm:public PropertyAlgorithm {
   friend class SizeProperty;
 public:
   SizeProperty *sizeResult;
+  ///
+  virtual ~SizeAlgorithm(){}
 
 protected:
   ///
   SizeAlgorithm (const PropertyContext  &context);
-  ///
-  virtual ~SizeAlgorithm(){}
 };
 /*@}*/
 

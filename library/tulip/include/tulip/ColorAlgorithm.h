@@ -32,12 +32,12 @@ class TLP_SCOPE ColorAlgorithm:public PropertyAlgorithm {
   friend class ColorProperty;
 public:
   ColorProperty *colorResult;
+  ///
+  virtual ~ColorAlgorithm();
 
 protected:
   ///
   ColorAlgorithm (const PropertyContext & context);
-  ///
-  virtual ~ColorAlgorithm();
 };
 /*@}*/
 

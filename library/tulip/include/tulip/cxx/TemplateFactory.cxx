@@ -41,6 +41,7 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(Obje
     (*itD).factoryName = std::string(tlp::demangleTlpClassName(factoryDepName));
   }
   objDeps[pluginName] = dependencies;
+  delete withParam;
   objRels[pluginName] = objectFactory->getRelease();
   if (currentLoader!=0) currentLoader->loaded(
 					      pluginName,
