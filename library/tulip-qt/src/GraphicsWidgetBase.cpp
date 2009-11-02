@@ -7,7 +7,9 @@ GraphicsWidgetBase::GraphicsWidgetBase() {
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
 	setAcceptHoverEvents(true);
+#if(QT_VERSION >= QT_VERSION_CHECK(4,5,0))
 	setOpacity(0.8);
+#endif
 }
 
 void GraphicsWidgetBase::wheelEvent(QGraphicsSceneWheelEvent * event) {
@@ -22,7 +24,9 @@ void GraphicsWidgetBase::wheelEvent(QGraphicsSceneWheelEvent * event) {
 			sx = sy = 1. / scalefactor;
 		}
 		scale(sx, sy);
-	} else {
+	}
+ #if(QT_VERSION >= QT_VERSION_CHECK(4,5,0))
+	else {
 		double cur_opacity = opacity();
 		cur_opacity += numSteps * 0.01;
 		if (cur_opacity < 0.2) {
@@ -32,6 +36,7 @@ void GraphicsWidgetBase::wheelEvent(QGraphicsSceneWheelEvent * event) {
 		}
 		setOpacity(cur_opacity);
 	}
-}
+#endif
+ }
 
 }
