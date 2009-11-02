@@ -50,4 +50,5 @@ INSTALL(TARGETS
 	InducedSubGraphSelection-${TulipVersion}
 	LoopSelection-${TulipVersion}
 	MultipleSelection-${TulipVersion}
+	Kruskal-${TulipVersion}
 	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/)

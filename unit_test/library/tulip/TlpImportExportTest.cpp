@@ -19,7 +19,7 @@ void TlpImportExportTest::testLoad() {
   CPPUNIT_ASSERT(graph == 0);
   graph = tlp::loadGraph("TlpImportExportTest.cpp");
   CPPUNIT_ASSERT(graph == 0);
-  graph = tlp::loadGraph("data/filesystem.tlp.gz");
+  graph = tlp::loadGraph("DATA/filesystem.tlp.gz");
   CPPUNIT_ASSERT(graph != 0);
   delete graph;
 }
@@ -32,7 +32,7 @@ void TlpImportExportTest::testImport() {
   dataSet.set("file::filename", std::string("TlpImportExportTest.cpp"));
   graph = tlp::importGraph("tlp", dataSet, NULL);
   CPPUNIT_ASSERT(graph == 0);
-  dataSet.set("file::filename", std::string("data/filesystem.tlp.gz"));
+  dataSet.set("file::filename", std::string("DATA/filesystem.tlp.gz"));
   graph = tlp::importGraph("tlp", dataSet, NULL);
   CPPUNIT_ASSERT(graph != 0);
   delete graph;
