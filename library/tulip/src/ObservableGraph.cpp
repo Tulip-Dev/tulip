@@ -9,6 +9,32 @@
 using namespace stdext;
 using namespace tlp;
 
+GraphObserver::~GraphObserver(){
+/*#ifndef NDEBUG
+  if(observables.size()!=0)
+    std::cerr << "Delete a graph observer without remove it from observable list" << std::endl;
+#endif*/
+  for(slist<ObservableGraph *>::iterator it=observables.begin();it!=observables.end();++it){
+    (*it)->removeOnlyGraphObserver(this);
+  }
+}
+
+void GraphObserver::addObservable(ObservableGraph *graph){
+  observables.push_front(graph);
+}
+
+void GraphObserver::removeObservable(ObservableGraph *graph){
+  slist<ObservableGraph*>::iterator itObs = observables.begin();
+  slist<ObservableGraph*>::iterator ite = observables.end();
+  while(itObs!=ite){
+    if(graph == (*itObs)){
+      observables.erase(itObs);
+      return;
+    }
+    ++itObs;
+  }
+}
+
 void ObservableGraph::addGraphObserver(GraphObserver *obs) const {
   // ensure obs does not already exists in observers
   slist<GraphObserver*>::iterator itObs = observers.begin();
@@ -19,6 +45,7 @@ void ObservableGraph::addGraphObserver(GraphObserver *obs) const {
     ++itObs;
   }
   observers.push_front(obs); 
+  obs->addObservable((ObservableGraph *)this);
 }
 
 void ObservableGraph::notifyAddNode(Graph *sg, const node n) {

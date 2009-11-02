@@ -8,6 +8,7 @@ namespace tlp {
 
 struct Graph;
  struct PropertyInterface;
+ class ObservableGraph;
 //=========================================================
 
 /** \addtogroup graphs */ 
@@ -20,21 +21,25 @@ struct Graph;
  * object.
  */
 class  TLP_SCOPE GraphObserver {
+   stdext::slist<ObservableGraph *> observables;
  public:
-  virtual ~GraphObserver() {}
+  virtual ~GraphObserver();
   virtual void addNode(Graph *,const node ){}
   virtual void addEdge(Graph *,const edge ){}
   virtual void delNode(Graph *,const node ){}
   virtual void delEdge(Graph *,const edge ){}
   virtual void reverseEdge(Graph *,const edge ){}
   virtual void destroy(Graph *){}
-  virtual void addSubGraph(Graph*, Graph *){}
-  virtual void delSubGraph(Graph*, Graph*){}
+  virtual void addSubGraph(Graph *graph, Graph *subGraph){}
+  virtual void delSubGraph(Graph *graph, Graph *subGraph){}
   virtual void addLocalProperty(Graph*, const std::string&){}
   virtual void delLocalProperty(Graph*, const std::string&){}
   virtual void beforeSetAttribute(Graph*, const std::string&) {}
   virtual void afterSetAttribute(Graph*, const std::string&) {}
   virtual void removeAttribute(Graph*, const std::string&) {}
+
+  void addObservable(ObservableGraph *);
+  void removeObservable(ObservableGraph *);
 };
 /*@}*/
 }
@@ -58,8 +63,10 @@ namespace tlp {
  */
 /// Observable object for graph
 class  TLP_SCOPE ObservableGraph {
+  friend class GraphObserver;
+
  public:
-  virtual ~ObservableGraph() {}
+  virtual ~ObservableGraph() {removeGraphObservers();}
   /**
    * Register a new observer
    */
@@ -91,6 +98,7 @@ class  TLP_SCOPE ObservableGraph {
   void notifyAfterSetAttribute(Graph*, const std::string&);
   void notifyRemoveAttribute(Graph*, const std::string&);
   void notifyDestroy(Graph*);
+  void removeOnlyGraphObserver(GraphObserver *) const;
   mutable stdext::slist<GraphObserver*> observers;
 };
 /*@}*/
@@ -99,11 +107,19 @@ inline unsigned int ObservableGraph::countGraphObservers() {
   return observers.size(); 
 }
 
-inline void ObservableGraph::removeGraphObserver(GraphObserver *item) const{  
+inline void ObservableGraph::removeGraphObserver(GraphObserver *item) const {
+  observers.remove(item);
+  item->removeObservable((ObservableGraph*)this);
+}
+
+inline void ObservableGraph::removeOnlyGraphObserver(GraphObserver *item) const {
   observers.remove(item);
 }
 
-inline void ObservableGraph::removeGraphObservers() { 
+inline void ObservableGraph::removeGraphObservers() {
+  for(stdext::slist<GraphObserver*>::iterator it=observers.begin();it!=observers.end();++it){
+    (*it)->removeObservable(this);
+  }
   observers.clear();
 }
 

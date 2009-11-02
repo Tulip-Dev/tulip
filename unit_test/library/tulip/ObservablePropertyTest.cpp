@@ -405,12 +405,23 @@ void ObservablePropertyTest::testRemoveObserver() {
   setEdgeValue(props[4], "()", true, false, false);
   setEdgeValue(props[5], "(0.0, 0.0, 0.0)", true, false, false);
   setEdgeValue(props[6], "tulip", true, false, false);
+
   for(unsigned int i = 0; i < 7; ++i) {
     delete props[i];
     CPPUNIT_ASSERT(observer->nbObservables() == 0);
     CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
     props[i] = NULL;
   }
+}
+
+//==========================================================
+void ObservablePropertyTest::testObserverWhenRemoveObservable() {
+  CPPUNIT_ASSERT(props[0]->countPropertyObservers() == 1);
+  PropertyObserverTest* pObserverTmp=new PropertyObserverTest();
+  props[0]->addPropertyObserver(pObserverTmp);
+  CPPUNIT_ASSERT(props[0]->countPropertyObservers() == 2);
+  delete pObserverTmp;
+  CPPUNIT_ASSERT(props[0]->countPropertyObservers() == 1);
 }
 
 //==========================================================
@@ -440,7 +451,8 @@ CppUnit::Test * ObservablePropertyTest::suite() {
 								  &ObservablePropertyTest::testAsynchronousDelete) );
   suiteOfTests->addTest( new CppUnit::TestCaller<ObservablePropertyTest>( "removeObserver", 
 								  &ObservablePropertyTest::testRemoveObserver) );
-
+  suiteOfTests->addTest( new CppUnit::TestCaller<ObservablePropertyTest>( "observerWhenRemoveObservable", 
+								  &ObservablePropertyTest::testObserverWhenRemoveObservable) );
   return suiteOfTests;
 }
 //==========================================================

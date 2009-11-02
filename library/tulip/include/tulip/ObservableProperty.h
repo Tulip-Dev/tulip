@@ -1,12 +1,14 @@
 #ifndef PROPERTYOBSERVABLE_H
 #define PROPERTYOBSERVABLE_H
 #include <ext/slist>
+#include <iostream>
 #include "tulip/Node.h"
 #include "tulip/Edge.h"
 
 namespace tlp {
 
 struct PropertyInterface;
+class ObservableProperty;
 //=========================================================
 
 /** \addtogroup graphs */ 
@@ -19,8 +21,9 @@ struct PropertyInterface;
  * object.
  */
 class  TLP_SCOPE PropertyObserver {
+  stdext::slist<ObservableProperty *> observables;
  public:
-  virtual ~PropertyObserver() {}
+  virtual ~PropertyObserver();
   virtual void beforeSetNodeValue(PropertyInterface*, const node){}
   virtual void afterSetNodeValue(PropertyInterface*, const node){}
   virtual void beforeSetEdgeValue(PropertyInterface*, const edge){}
@@ -30,6 +33,9 @@ class  TLP_SCOPE PropertyObserver {
   virtual void beforeSetAllEdgeValue(PropertyInterface*){}
   virtual void afterSetAllEdgeValue(PropertyInterface*){}
   virtual void destroy(PropertyInterface*){}
+
+  void addObservable(ObservableProperty *);
+  void removeObservable(ObservableProperty *);
 };
 /*@}*/
 }
@@ -53,8 +59,10 @@ namespace tlp {
  */
 /// Observable object for Property
 class  TLP_SCOPE ObservableProperty {
+  friend class PropertyObserver;
+
  public:
-  virtual ~ObservableProperty() {}
+  virtual ~ObservableProperty() {removePropertyObservers();}
   /**
    * Register a new observer
    */
@@ -82,6 +90,7 @@ class  TLP_SCOPE ObservableProperty {
   void notifyBeforeSetAllEdgeValue(PropertyInterface*);
   void notifyAfterSetAllEdgeValue(PropertyInterface*);
   void notifyDestroy(PropertyInterface*);
+  void removeOnlyPropertyObserver(PropertyObserver *) const;
   mutable stdext::slist<PropertyObserver*> observers;
 };
 /*@}*/
@@ -92,9 +101,17 @@ inline unsigned int ObservableProperty::countPropertyObservers() {
 
 inline void ObservableProperty::removePropertyObserver(PropertyObserver *item) const{  
   observers.remove(item);
+  item->removeObservable((ObservableProperty*)this);
+}
+
+inline void ObservableProperty::removeOnlyPropertyObserver(PropertyObserver *item) const{
+  observers.remove(item);
 }
 
 inline void ObservableProperty::removePropertyObservers() { 
+  for(stdext::slist<PropertyObserver*>::iterator it=observers.begin();it!=observers.end();++it){
+    (*it)->removeObservable(this);
+  }
   observers.clear(); 
 }
 

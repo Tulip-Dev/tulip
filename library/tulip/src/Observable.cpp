@@ -19,6 +19,32 @@ ObserverMap Observable::holdMap;
 
 static bool unholdLock=false;
 
+Observer::~Observer(){
+/*#ifndef NDEBUG
+  if(observables.size()!=0)
+    std::cerr << "Delete an observer without remove it from observable list" << std::endl;
+#endif*/
+  for(slist<Observable *>::iterator it=observables.begin();it!=observables.end();++it){
+    (*it)->removeOnlyObserver(this);
+  }
+}
+
+void Observer::addObservable(Observable *observable){
+  observables.push_front(observable);
+}
+
+void Observer::removeObservable(Observable *observable){
+  slist<Observable*>::iterator itObs = observables.begin();
+  slist<Observable*>::iterator ite = observables.end();
+  while(itObs!=ite){
+    if(observable == (*itObs)){
+      observables.erase(itObs);
+      return;
+    }
+    ++itObs;
+  }
+}
+
 void Observable::addObserver(Observer *obs) {
   // ensure obs does not already exists in observersList
   slist<Observer*>::iterator itlObs = observersList.begin();

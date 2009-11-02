@@ -29,6 +29,7 @@ public:
   void testSynchronousDelete();
   void testAsynchronousDelete();
   void testRemoveObserver();
+  void testObserverWhenRemoveObservable();
 
   void setNodeValue(tlp::PropertyInterface*, char*, bool, bool, bool = true);
   void setEdgeValue(tlp::PropertyInterface*, char*, bool, bool, bool = true);

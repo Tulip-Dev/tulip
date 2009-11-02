@@ -23,8 +23,9 @@ class Observable;
  * of Design Patterns by Gamma, Helm, Johnson, and Vlissides.
  */
 class Observer {
+  stdext::slist<Observable *> observables;
  public:
-  virtual ~Observer() {}
+  virtual ~Observer();
   /**
    * Methods called when a change occur in the observed objects
    * Due to the possibility to differs notificatiosn several objects can
@@ -38,6 +39,16 @@ class Observer {
    * have no effects on this function.
    */
   virtual void observableDestroyed(Observable *) = 0;
+
+  /**
+   * This method is call when this observer is add to an observable
+   */
+  void addObservable(Observable *);
+
+  /**
+   * This method is call when this observer is remove from an observable
+   */
+  void removeObservable(Observable *);
 };
 
 typedef std::map<Observer *,std::set<Observable *> > ObserverMap;
@@ -47,8 +58,10 @@ typedef std::map<Observer *,std::set<Observable *> > ObserverMap;
   * Observer class. 
   */
 class TLP_SCOPE Observable {
+  friend class Observer;
+
  public:
-  virtual ~Observable() {}
+  virtual ~Observable() {removeObservers();}
   /**
    * Register a new observer
    */
@@ -87,6 +100,7 @@ class TLP_SCOPE Observable {
   static int holdCounter;
   static ObserverMap holdMap;
   stdext::slist<Observer*> observersList;
+  void removeOnlyObserver(Observer *);
 };
 
 
@@ -96,9 +110,17 @@ inline unsigned int Observable::countObservers() {
 
 inline void Observable::removeObserver(Observer *item) {  
   observersList.remove(item);
+  item->removeObservable((Observable*)this);
+}
+
+inline void Observable::removeOnlyObserver(Observer *item) {
+  observersList.remove(item);
 }
 
 inline void Observable::removeObservers() { 
+  for(stdext::slist<Observer*>::iterator it=observersList.begin();it!=observersList.end();++it){
+    (*it)->removeObservable(this);
+  }
   observersList.clear(); 
 }
 

@@ -21,6 +21,7 @@ public:
   void testSubgraph();
   void testDeleteSubgraph();
   void testReverse();
+  void testObserverWhenRemoveObservable();
 
   static CppUnit::Test *suite();
 };

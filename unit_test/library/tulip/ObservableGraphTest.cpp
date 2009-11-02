@@ -469,6 +469,22 @@ void ObservableGraphTest::testDeleteSubgraph() {
   CPPUNIT_ASSERT(observer->found(g2));
 }
 //==========================================================
+void ObservableGraphTest::testObserverWhenRemoveObservable() {
+  CPPUNIT_ASSERT(graph->countGraphObservers() == 1);
+  GraphObserverTest *graphObserverTmp=new GraphObserverTest();
+  graph->addGraphObserver(graphObserverTmp);
+  CPPUNIT_ASSERT(graph->countGraphObservers() == 2);
+  delete graphObserverTmp;
+  CPPUNIT_ASSERT(graph->countGraphObservers() == 1);
+  
+  /*CPPUNIT_ASSERT(graph->countObservers() == 1);
+  ObserverGTest *observerTmp=new ObserverGTest();
+  graph->addObserver(observerTmp);
+  CPPUNIT_ASSERT(graph->countObservers() == 2);
+  delete observerTmp;
+  CPPUNIT_ASSERT(graph->countObservers() == 1);*/
+}
+//==========================================================
 CppUnit::Test * ObservableGraphTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph" );
   suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Add/Del operations (Simple Graph)", 
@@ -482,6 +498,8 @@ CppUnit::Test * ObservableGraphTest::suite() {
 								  &ObservableGraphTest::testSubgraph) );
   suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test Sub Graph delete", 
 								  &ObservableGraphTest::testDeleteSubgraph) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test Observer when remove Observable", 
+								  &ObservableGraphTest::testObserverWhenRemoveObservable) );
 
 
   return suiteOfTests;

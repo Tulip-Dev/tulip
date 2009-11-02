@@ -9,6 +9,32 @@
 using namespace stdext;
 using namespace tlp;
 
+PropertyObserver::~PropertyObserver(){
+/*#ifndef NDEBUG
+  if(observables.size()!=0)
+    std::cerr << "Delete a property observer without remove it from observable list" << std::endl;
+#endif*/
+  for(slist<ObservableProperty *>::iterator it=observables.begin();it!=observables.end();++it){
+    (*it)->removeOnlyPropertyObserver(this);
+  }
+}
+
+void PropertyObserver::addObservable(ObservableProperty *property){
+  observables.push_front(property);
+}
+
+void PropertyObserver::removeObservable(ObservableProperty *property){
+  slist<ObservableProperty*>::iterator itObs = observables.begin();
+  slist<ObservableProperty*>::iterator ite = observables.end();
+  while(itObs!=ite){
+    if(property == (*itObs)){
+      observables.erase(itObs);
+      return;
+    }
+    ++itObs;
+  }
+}
+
 void ObservableProperty::addPropertyObserver(PropertyObserver *obs) const {
   // ensure obs does not already exists in observers
   slist<PropertyObserver*>::iterator itObs = observers.begin();
@@ -18,7 +44,8 @@ void ObservableProperty::addPropertyObserver(PropertyObserver *obs) const {
       return;
     ++itObs;
   }
-  observers.push_front(obs); 
+  observers.push_front(obs);
+  obs->addObservable((ObservableProperty*)this);
 }
 
 void ObservableProperty::notifyBeforeSetNodeValue(PropertyInterface* p,
