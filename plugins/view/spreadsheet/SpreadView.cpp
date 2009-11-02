@@ -3,54 +3,111 @@
 #include <iostream>
 
 #include <tulip/Graph.h>
+#include "SpreadConfigurationWidget.h"
 
 using namespace std;
 
+static void tokenize(const string& str, vector<string>& tokens, const string& delimiters = " ") {
+	string::size_type lastPos = str.find_first_not_of(delimiters, 0);
+	string::size_type pos = str.find_first_of(delimiters, lastPos);
+	while (string::npos != pos || string::npos != lastPos) {
+		tokens.push_back(str.substr(lastPos, pos - lastPos));
+		lastPos = str.find_first_not_of(delimiters, pos);
+		pos = str.find_first_of(delimiters, lastPos);
+	}
+}
+
 namespace tlp {
 
-  SpreadView::SpreadView() :AbstractView() {
-  }
+SpreadView::SpreadView() :
+	AbstractView() {
+}
+SpreadView::~SpreadView() {
+	delete configurationWidget;
+}
 
-  QWidget *SpreadView::construct(QWidget *parent) {
-  	QWidget *widget=AbstractView::construct(parent);
-    mainWidget=new SpreadWidget(widget);
-    setCentralWidget(mainWidget);
-    return widget;
-  }
+QWidget *SpreadView::construct(QWidget *parent) {
+	QWidget *widget = AbstractView::construct(parent);
+	mainWidget = new SpreadWidget(this, widget);
+	setCentralWidget(mainWidget);
 
-  void SpreadView::setData(Graph *graph,DataSet dataSet) {
-    mainWidget->setData(graph,dataSet);
-  }
+	configurationWidget = new SpreadConfigurationWidget();
+	connect(configurationWidget, SIGNAL(updated()), this, SLOT(updated()));
 
-  void SpreadView::getData(Graph **graph,DataSet *dataSet) {
-    dataSet->set<DataSet>("data",DataSet());
-    *graph=mainWidget->getGraph();
-  }
+	return widget;
+}
 
-  Graph* SpreadView::getGraph() {
-    return mainWidget->getGraph();
-  }
+void SpreadView::setData(Graph *graph, DataSet dataSet) {
+	configurationWidget->setGraph(graph);
+	if (dataSet.exist("data")) {
+		DataSet data;
+		dataSet.get("data", data);
+		if (data.exist("displayedProperties")) {
+			string properties;
+			data.get("displayedProperties", properties);
+			vector<string> propertiesVector;
+			tokenize(properties, propertiesVector, ";");
+			configurationWidget->setSelectedProperties(propertiesVector);
+		}
+	}
+	mainWidget->setData(graph, dataSet);
+}
 
-  void SpreadView::setGraph(Graph *graph) {
-    mainWidget->setData(graph,DataSet());
-  }
+void SpreadView::getData(Graph **graph, DataSet *dataSet) {
+	DataSet data;
 
-  void SpreadView::draw() {
-    mainWidget->redrawView();
-  }
+	if (!configurationWidget->allPropertiesSelected()) {
+		ostringstream oss;
+		vector<string> selectedProperties = configurationWidget->getSelectedProperties();
+		for (vector<string>::iterator it = selectedProperties.begin(); it
+				!= selectedProperties.end(); ++it) {
+			oss << *it << ";";
+		}
+		data.set("displayedProperties", oss.str());
+	}
+	dataSet->set<DataSet> ("data", data);
+	*graph = mainWidget->getGraph();
+}
 
-  void SpreadView::refresh() {
-    draw();
-  }
+Graph* SpreadView::getGraph() {
+	return mainWidget->getGraph();
+}
 
-  void SpreadView::init() {
-    draw();
-  }
+void SpreadView::setGraph(Graph *graph) {
+	mainWidget->setData(graph, DataSet());
+}
 
-  void SpreadView::createPicture(const string &pictureName,int width, int height){
-    cout << "createPicture not implement yet for SpreadView" << endl;
-  }
+void SpreadView::draw() {
+	mainWidget->redrawView();
+}
 
-  VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "1.0");
+void SpreadView::refresh() {
+	draw();
+}
+
+void SpreadView::init() {
+	draw();
+}
+
+void SpreadView::createPicture(const string &pictureName, int width, int height) {
+	cout << "createPicture not implement yet for SpreadView" << endl;
+}
+
+list<pair<QWidget *, string> > SpreadView::getConfigurationWidget() {
+	list<pair<QWidget *, string> > widgets;
+	widgets.push_back(make_pair(configurationWidget, "Properties Selection"));
+	return widgets;
+}
+
+std::vector<std::string> SpreadView::getSelectedProperties() const {
+	return configurationWidget->getSelectedProperties();
+}
+
+void SpreadView::updated() {
+	//Force to reload
+	mainWidget->redrawView();
+}
+VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "1.0")
+;
 
 }

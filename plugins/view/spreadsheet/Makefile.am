@@ -18,6 +18,7 @@ libSpreadSheet_@VERSION@_la_SOURCES = \
 			SpreadValue.cpp \
 			SpreadItemDelegate.cpp \
 			SpreadCommands.cpp \
+			SpreadConfigurationWidget.cpp \
 			SpreadWidget.h \
 			SpreadTable.h \
 			SpreadCell.h \
@@ -25,7 +26,8 @@ libSpreadSheet_@VERSION@_la_SOURCES = \
 			SpreadValue.h \
 			SpreadItemDelegate.h \
 			SpreadCommands.h \
-			SpreadLineEdit.h
+			SpreadLineEdit.h \
+			SpreadConfigurationWidget.h
 
 nodist_libSpreadSheet_@VERSION@_la_SOURCES = \
 			moc_SpreadView.cpp \
@@ -36,11 +38,12 @@ nodist_libSpreadSheet_@VERSION@_la_SOURCES = \
 			moc_SpreadValue.cpp \
 			moc_SpreadItemDelegate.cpp \
 			moc_SpreadCommands.cpp \
-			moc_SpreadLineEdit.cpp
+			moc_SpreadLineEdit.cpp \
+			moc_SpreadConfigurationWidget.cpp 
 
-BUILT_SOURCES = SpreadInsertColumnDialogData.h SpreadMainWidgetData.h
-
-dist_noinst_DATA = SpreadInsertColumnDialog.ui SpreadMainWidget.ui
+BUILT_SOURCES = SpreadInsertColumnDialogData.h SpreadMainWidgetData.h SpreadConfigurationWidgetData.h
+ 
+dist_noinst_DATA = SpreadInsertColumnDialog.ui SpreadMainWidget.ui SpreadConfigurationWidget.ui
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 

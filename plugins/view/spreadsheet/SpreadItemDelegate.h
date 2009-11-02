@@ -56,6 +56,8 @@ class QStyleOptionViewItem;
 class QModelIndex;
 class QAbstractItemModel;
 
+#include <tulip/tulipconf.h>
+
 namespace tlp {
 
   class SpreadItemDelegate : public QItemDelegate

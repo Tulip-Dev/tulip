@@ -54,6 +54,8 @@
 #include <vector>
 #include <QtCore/QString>
 
+#include <tulip/tulipconf.h>
+
 #include "SpreadValue.h"
 
 namespace tlp {

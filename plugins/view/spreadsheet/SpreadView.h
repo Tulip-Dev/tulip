@@ -25,45 +25,56 @@
 
 #include <QtGui/QWidget>
 
+#include <tulip/tulipconf.h>
+
 #include <tulip/AbstractView.h>
 
 #include "SpreadWidget.h"
 
 namespace tlp {
 
-  class Graph;
+class Graph;
 
-  class SpreadView : public AbstractView
-  {
-    Q_OBJECT
+class SpreadConfigurationWidget;
 
-  public:
+class SpreadView: public AbstractView {
+Q_OBJECT
 
-    SpreadView();
-    virtual ~SpreadView() {}
+public:
 
-    QWidget *construct(QWidget *parent);
-    void setData(Graph *graph,DataSet dataSet);
-    void getData(Graph **graph,DataSet *dataSet);
-    Graph *getGraph();
+	SpreadView();
+	virtual ~SpreadView();
 
-    void installInteractor(QAction*) {}
+	QWidget *construct(QWidget *parent);
+	void setData(Graph *graph, DataSet dataSet);
+	void getData(Graph **graph, DataSet *dataSet);
+	Graph *getGraph();
 
-    virtual void createPicture(const std::string&, int, int);
+	void installInteractor(QAction*) {
+	}
+
+	virtual void createPicture(const std::string&, int, int);
+
+	std::list<std::pair<QWidget *, std::string> > getConfigurationWidget();
+
+	std::vector<std::string> getSelectedProperties() const;
+protected:
 
 
-  protected :
+	SpreadWidget *mainWidget;
+	SpreadConfigurationWidget *configurationWidget;
 
-    SpreadWidget *mainWidget;
+public slots :
 
-  public slots :
+	void draw();
+	void refresh();
+	void init();
+	void setGraph(Graph *graph);
 
-    void draw();
-    void refresh();
-    void init();
-    void setGraph(Graph *graph);
 
-  };
+	protected slots:
+	void updated();
+};
 
 }
 

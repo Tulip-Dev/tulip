@@ -25,6 +25,8 @@
 
 #include <QtGui/QWidget>
 
+#include <tulip/tulipconf.h>
+
 #include <tulip/View.h>
 
 #include "SpreadTable.h"
@@ -33,14 +35,14 @@
 namespace tlp {
   
   class Graph;
-
+class SpreadView;
   class SpreadWidget : public QWidget, public Ui::SpreadMainWidgetData 
   {
     Q_OBJECT
       
   public:
 
-    SpreadWidget(QWidget *parent=0);
+    SpreadWidget(SpreadView* view,QWidget *parent=0);
     virtual ~SpreadWidget() {}
 
     void setData(Graph *graph,DataSet dataSet);

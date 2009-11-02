@@ -12,6 +12,7 @@ SET(spreadsheet_LIB_SRCS
     SpreadValue.cpp
     SpreadItemDelegate.cpp
     SpreadCommands.cpp
+    SpreadConfigurationWidget.cpp
     SpreadWidget.h
     SpreadTable.h
     SpreadCell.h
@@ -20,11 +21,13 @@ SET(spreadsheet_LIB_SRCS
     SpreadItemDelegate.h
     SpreadCommands.h
     SpreadLineEdit.h
+    SpreadConfigurationWidget.h
 )
 
 set(spreadsheet_UI
     SpreadInsertColumnDialog.ui
     SpreadMainWidget.ui
+    SpreadConfigurationWidget.ui
 )
 
 set(spreadsheet_MOC
@@ -37,6 +40,7 @@ set(spreadsheet_MOC
     SpreadItemDelegate.h
     SpreadCommands.h
     SpreadLineEdit.h
+    SpreadConfigurationWidget.h
 )
 
 TULIP_QT4_WRAP_UI(spreadsheet_UI_SRCS ${spreadsheet_UI})
