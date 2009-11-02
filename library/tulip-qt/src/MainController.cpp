@@ -213,19 +213,21 @@ namespace tlp {
   //**********************************************************************
   MainController::~MainController() {
     clearObservers();
-    currentGraph->removeObserver(this);
-    currentGraph->removeGraphObserver(this);
-  	delete editMenu;
-		delete algorithmMenu;
-  	delete viewMenu;
-  	delete optionsMenu;
-  	delete graphMenu;
-  	delete undoAction;
-  	delete redoAction;
+    if (currentGraph) {
+      currentGraph->removeObserver(this);
+      currentGraph->removeGraphObserver(this);
+    }
+    delete editMenu;
+    delete algorithmMenu;
+    delete viewMenu;
+    delete optionsMenu;
+    delete graphMenu;
+    delete undoAction;
+    delete redoAction;
 
-  	delete clusterTreeWidget;
-  	delete propertiesWidget;
-  	delete eltProperties;
+    delete clusterTreeWidget;
+    delete propertiesWidget;
+    delete eltProperties;
 #ifdef STATS_UI
     delete statsWidget;
 #endif
