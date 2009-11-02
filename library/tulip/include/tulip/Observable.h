@@ -22,7 +22,7 @@ class Observable;
  * object. It is described in the lecture notes and pp293-304 
  * of Design Patterns by Gamma, Helm, Johnson, and Vlissides.
  */
-class Observer {
+class TLP_SCOPE Observer {
   stdext::slist<Observable *> observables;
  public:
   virtual ~Observer();

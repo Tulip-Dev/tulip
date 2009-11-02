@@ -21,7 +21,7 @@ namespace tlp {
 class IdManagerIterator;
 
 /// class for the management of the identifiers : node, edge
-class IdManager {
+class TLP_SCOPE IdManager {
 
 public:
   IdManager();
