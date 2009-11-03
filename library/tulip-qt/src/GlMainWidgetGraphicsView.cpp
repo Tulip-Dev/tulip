@@ -20,9 +20,6 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/Interactor.h>
 #include <tulip/QGlPixelBufferManager.h>
-
-#include <GL/gl.h>
-
 #include "tulip/GlMainWidgetGraphicsView.h"
 #include "tulip/TabWidgetHidableMenuGraphicsProxy.h"
 #include "tulip/GlMainWidgetItem.h"
