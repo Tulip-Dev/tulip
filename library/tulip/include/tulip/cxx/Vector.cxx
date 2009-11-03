@@ -160,16 +160,13 @@ Obj  VECTORTLP::norm() const{
     return VECTORTLP::array[0];
   case 2:
     return sqrt(VECTORTLP::array[0]*VECTORTLP::array[0]+VECTORTLP::array[1]*VECTORTLP::array[1]);
-    break;
   case 3:
     return sqrt(VECTORTLP::array[0]*VECTORTLP::array[0]+VECTORTLP::array[1]*VECTORTLP::array[1]+VECTORTLP::array[2]*VECTORTLP::array[2]);
-    break;
   default :
     Obj tmp=0;
     for (unsigned int i=0;i<SIZE;++i)
       tmp+=VECTORTLP::array[i]*VECTORTLP::array[i];
     return(sqrt(tmp));
-    break;
   }
 }
 //======================================================
@@ -180,16 +177,13 @@ Obj  VECTORTLP::dist(const VECTOR &c) const{
     return 0;
   case 2:
     return sqrt((VECTORTLP::array[0]-c.VECTORTLP::array[0])*(VECTORTLP::array[0]-c.VECTORTLP::array[0])+(VECTORTLP::array[1]-c.VECTORTLP::array[1])*(VECTORTLP::array[1]-c.VECTORTLP::array[1]));
-    break;
-  case 3:
+   case 3:
     return sqrt((VECTORTLP::array[0]-c.VECTORTLP::array[0])*(VECTORTLP::array[0]-c.VECTORTLP::array[0])+(VECTORTLP::array[1]-c.VECTORTLP::array[1])*(VECTORTLP::array[1]-c.VECTORTLP::array[1])+(VECTORTLP::array[2]-c.VECTORTLP::array[2])*(VECTORTLP::array[2]-c.VECTORTLP::array[2]));
-    break;
-  default :
+   default :
     Obj tmp=0;
     for (unsigned int i=0;i<SIZE;++i)
       tmp+=(VECTORTLP::array[i]-c.VECTORTLP::array[i])*(VECTORTLP::array[i]-c.VECTORTLP::array[i]);
     return(sqrt(tmp));
-    break;
-  }
+   }
 }
 //=======================================================================
