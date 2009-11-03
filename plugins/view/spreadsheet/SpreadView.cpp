@@ -20,10 +20,11 @@ static void tokenize(const string& str, vector<string>& tokens, const string& de
 namespace tlp {
 
 SpreadView::SpreadView() :
-	AbstractView() {
+	AbstractView(),configurationWidget(NULL) {
 }
 SpreadView::~SpreadView() {
-	delete configurationWidget;
+  if(configurationWidget)
+    delete configurationWidget;
 }
 
 QWidget *SpreadView::construct(QWidget *parent) {
