@@ -4,35 +4,30 @@ INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${Tu
 SET(Eccentricity_SRCS Eccentricity.h Eccentricity.cpp)
 ADD_LIBRARY(Eccentricity-${TulipVersion} SHARED ${Eccentricity_SRCS})
 TARGET_LINK_LIBRARIES(Eccentricity-${TulipVersion} ${LibTulipName})
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ Eccentricity-${TulipVersion})
 ADD_DEPENDENCIES(Eccentricity-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(ArityMetric_SRCS ArityMetric.cpp ArityMetric.h)
 ADD_LIBRARY(ArityMetric-${TulipVersion} SHARED ${ArityMetric_SRCS})
 TARGET_LINK_LIBRARIES(ArityMetric-${TulipVersion} ${LibTulipName})
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ ArityMetric-${TulipVersion})
 ADD_DEPENDENCIES(ArityMetric-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(ClusterMetric_SRCS ClusterMetric.cpp ClusterMetric.h)
 ADD_LIBRARY(ClusterMetric-${TulipVersion} SHARED ${ClusterMetric_SRCS})
 TARGET_LINK_LIBRARIES(ClusterMetric-${TulipVersion} ${LibTulipName})
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ ClusterMetric-${TulipVersion})
 ADD_DEPENDENCIES(ClusterMetric-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(StrengthMetric_SRCS StrengthMetric.cpp StrengthMetric.h)
 ADD_LIBRARY(StrengthMetric-${TulipVersion} SHARED ${StrengthMetric_SRCS})
 TARGET_LINK_LIBRARIES(StrengthMetric-${TulipVersion} ${LibTulipName})
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ StrengthMetric-${TulipVersion})
 ADD_DEPENDENCIES(StrengthMetric-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(BiconnectedComponent_SRCS BiconnectedComponent.cpp)
 ADD_LIBRARY(BiconnectedComponent-${TulipVersion} SHARED ${BiconnectedComponent_SRCS})
 TARGET_LINK_LIBRARIES(BiconnectedComponent-${TulipVersion} ${LibTulipName})
-INSTALL_TARGETS(${TulipLibInstallDir}tlp/ BiconnectedComponent-${TulipVersion})
 ADD_DEPENDENCIES(BiconnectedComponent-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
