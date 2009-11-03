@@ -423,7 +423,7 @@ plugins/interactor/Makefile
 plugins/view/Makefile
 plugins/view/spreadsheet/Makefile
 plugins/controller/Makefile
-unit_test/library/tulip/tuliplibtest.cpp
+unit_test/plugins/pluginstest.cpp
 docs/Makefile
 docs/devTeamDoxygen/Makefile
 docs/devTeamDoxygen/footer.html:docs/devTeamDoxygen/footer.html.in

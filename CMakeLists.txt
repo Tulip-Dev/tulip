@@ -157,9 +157,9 @@ GET_TARGET_PROPERTY(CMakeTulipQtLib ${LibTulipQtName} LOCATION)
 CONFIGURE_FILE("tulip-config.cmake.in" "tulip-config" @ONLY)
 
 ## -----------------------------------------------------------------------------------------------
-## create tuliplibtest.cpp
+## create pluginstest.cpp
 ## -----------------------------------------------------------------------------------------------
-CONFIGURE_FILE("unit_test/library/tulip/tuliplibtest.cpp.in" "unit_test/library/tulip/tuliplibtest.cpp" @ONLY)
+CONFIGURE_FILE("unit_test/plugins/pluginstest.cpp.in" "unit_test/plugins/pluginstest.cpp" @ONLY)
 
 ## -----------------------------------------------------------------------------------------------
 ## Create tulip.nsi script
