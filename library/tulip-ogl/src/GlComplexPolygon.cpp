@@ -138,10 +138,14 @@ namespace tlp {
 
       double result[3];
       double dec=1./(bezier*coords.size());
-      for(double j=dec;j<1;j+=dec) {
-	Bezier(result,dCoords,coords.size(),j);
-	addPoint(Coord(result[0],result[1],result[2]));
+      
+      for(i=0;i+3<coords.size();i+=3) {
+        for(double j=dec;j<1;j+=dec) {
+	      Bezier(result,&(dCoords[i]),4,j);
+	      addPoint(Coord(result[0],result[1],result[2]));
+        }
       }
+
       addPoint(coords[coords.size()-1]);
     }
   }
