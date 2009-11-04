@@ -923,6 +923,36 @@ void TulipApp::loadInterface(int index){
 
   clearInterface();
 
+  if(controllerToWorkspace.count(controller)!=0){
+    controllerToWorkspace[controller]->setActiveWindow(controllerToWorkspace[controller]->activeWindow());
+  }
+
+  if(controllerToDockWidget.count(controller)!=0){
+    vector<pair<Qt::DockWidgetArea,QDockWidget*> > tmp=controllerToDockWidget[controller];
+    vector<pair<Qt::DockWidgetArea,QDockWidget*> >::iterator it=tmp.end();
+
+#if QT_MINOR_REL > 3
+    it=tmp.begin();
+    while(it!=tmp.end()){
+      restoreDockWidget((*it).second);
+      ++it;
+    }
+#else
+    while(it!=tmp.begin()){
+      --it;
+      addDockWidget((*it).first,(*it).second);
+      (*it).second->show();
+    }
+
+    if(controller) {
+      vector<pair<QDockWidget *,QDockWidget*> > tabifiedDockWidget=controller->getMainWindowFacade()->getTabifiedDockWidget();
+      for(vector<pair<QDockWidget *,QDockWidget*> >::iterator it=tabifiedDockWidget.begin();it!=tabifiedDockWidget.end();++it) {
+	tabifyDockWidget((*it).first,(*it).second);
+      }
+    }
+#endif
+  }
+
   if(controllerToMenu.count(controller)!=0){
     vector<QAction *> actionsToAdd=controllerToMenu[controller];
     if(actionsToAdd.size()!=0){
@@ -946,41 +976,11 @@ void TulipApp::loadInterface(int index){
     if(actionsToAdd.size()!=0){
       for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
         graphToolBar->addAction(*it);
-        if((*it)->isChecked()){
+        /*if((*it)->isChecked()){
           (*it)->activate(QAction::Trigger);
-        }
+        }*/
       }
     }
-  }
-
-  if(controllerToWorkspace.count(controller)!=0){
-    controllerToWorkspace[controller]->setActiveWindow(controllerToWorkspace[controller]->activeWindow());
-  }
-
-  if(controllerToDockWidget.count(controller)!=0){
-    vector<pair<Qt::DockWidgetArea,QDockWidget*> > tmp=controllerToDockWidget[controller];
-    vector<pair<Qt::DockWidgetArea,QDockWidget*> >::iterator it=tmp.end();
-
-#if QT_MINOR_REL > 3
-    it=tmp.begin();
-    while(it!=tmp.end()){
-      restoreDockWidget((*it).second);
-      ++it;
-    }
-#else
-    while(it!=tmp.begin()){
-      --it;
-      addDockWidget((*it).first,(*it).second);
-      (*it).second->show();
-    }
-    
-    if(controller) {
-      vector<pair<QDockWidget *,QDockWidget*> > tabifiedDockWidget=controller->getMainWindowFacade()->getTabifiedDockWidget();
-      for(vector<pair<QDockWidget *,QDockWidget*> >::iterator it=tabifiedDockWidget.begin();it!=tabifiedDockWidget.end();++it) {
-	tabifyDockWidget((*it).first,(*it).second);
-      }
-    }
-#endif
   }
 
   if(controllerToStatusBar.count(controller)!=0){
