@@ -40,10 +40,10 @@ $(TARGET): $(OBJS)
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $@ $(LDFLAGS) $(LIBS)
 
 testPlugin.so:
-	$(CXX) $(CXXFLAGS) testPlugin.cpp -fPIC -shared -o testPlugin.so $(LDFLAGS) $(LIBS)
+	$(CXX) $(CXXFLAGS) testPlugin.cpp -o testPlugin.so `${TULIP_CONFIG} --pluginldflags` `${TULIP_CONFIG} --libs`
 
 testPlugin2.so:
-	$(CXX) $(CXXFLAGS) testPlugin2.cpp -fPIC -shared -o testPlugin2.so $(LDFLAGS) $(LIBS)
+	$(CXX) $(CXXFLAGS) testPlugin2.cpp -o testPlugin2.so `${TULIP_CONFIG} --pluginldflags` `${TULIP_CONFIG} --libs`
 
 
 
