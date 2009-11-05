@@ -170,7 +170,7 @@ double StrengthClustering::findBestThreshold(int numberOfSteps, bool& stopped){
     tmp = computeNodePartition(i);
     if (pluginProgress && ((++steps % (numberOfSteps / 10)) == 0)) {
       pluginProgress->progress(steps, numberOfSteps);
-      if (stopped = (pluginProgress->state() !=TLP_CONTINUE)) {
+      if ((stopped = (pluginProgress->state() !=TLP_CONTINUE))) {
 	return threshold;
       }
     }

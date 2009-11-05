@@ -207,7 +207,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    blockUpdate(false),currentGraph(NULL),currentView(NULL),copyCutPasteGraph(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),clusterTreeWidget(NULL) {
+    currentGraph(NULL),currentView(NULL),copyCutPasteGraph(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),blockUpdate(false),clusterTreeWidget(NULL) {
     morph = new Morphing();
   }
   //**********************************************************************
@@ -216,23 +216,23 @@ namespace tlp {
     if (currentGraph) {
       currentGraph->removeObserver(this);
       currentGraph->removeGraphObserver(this);
-    }
-    delete editMenu;
-    delete algorithmMenu;
-    delete viewMenu;
-    delete optionsMenu;
-    delete graphMenu;
-    delete undoAction;
-    delete redoAction;
+      delete editMenu;
+      delete algorithmMenu;
+      delete viewMenu;
+      delete optionsMenu;
+      delete graphMenu;
+      delete undoAction;
+      delete redoAction;
 
-    delete clusterTreeWidget;
-    delete propertiesWidget;
-    delete eltProperties;
+      delete clusterTreeWidget;
+      delete propertiesWidget;
+      delete eltProperties;
 #ifdef STATS_UI
-    delete statsWidget;
+      delete statsWidget;
 #endif
 
-    delete tabWidgetDock;
+      delete tabWidgetDock;
+    }
   }
   //**********************************************************************
   void MainController::attachMainWindow(MainWindowFacade facade){

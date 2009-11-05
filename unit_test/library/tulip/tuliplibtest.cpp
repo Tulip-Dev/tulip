@@ -5,7 +5,6 @@
 
 int main( int argc, char** argv ) {
   tlp::initTulipLib();
-  tlp::loadPlugins();   // library side plugins  
 
   //CPPUNIT_NS::QtUi::TestRunner runner;
   CPPUNIT_NS::TextUi::TestRunner runner;

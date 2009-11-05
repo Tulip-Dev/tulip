@@ -47,18 +47,6 @@ Proxytype* tlp::Graph::getProperty(const std::string &name) {
     return getLocalProperty<Proxytype>(name);
   }
 }
-//=============================================================
-static bool isAncestor(tlp::Graph *g1, tlp::Graph *g2) {
-  if(g1 == g2->getRoot())
-    return true;
-  tlp::Graph *currentGraph = g2;
-  while(currentGraph->getSuperGraph() != currentGraph) {
-    if(currentGraph == g1)
-      return true;
-    currentGraph = currentGraph->getSuperGraph();
-  }
-  return false;
-}
 //====================================================================================
 template<typename PropertyType>
 bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* prop,
@@ -77,10 +65,17 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
   context.graph = this;
   context.dataSet = data;
   
-  //resultBool = result->compute(algorithm, msg, context);
-  
-  if(!isAncestor(prop->graph, this))
-    return false;
+  // check if this is a subgraph of prop->graph
+  if (getRoot() != prop->graph) {
+    tlp::Graph *currentGraph = this;
+    while(currentGraph->getSuperGraph() != currentGraph) {
+      if (currentGraph == prop->graph)
+	break;
+      currentGraph = currentGraph->getSuperGraph();
+    }
+    if (currentGraph != prop->graph)
+      return false;
+  }    
 
 #ifndef NDEBUG
   std::cerr << __PRETTY_FUNCTION__ << std::endl;

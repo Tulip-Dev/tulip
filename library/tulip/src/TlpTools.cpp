@@ -118,6 +118,18 @@ void tlp::initTulipLib(char* appDirPath) {
   TulipUserHandBookIndex=tulipDocDir+"userHandbook/html/index.html";
 
   TulipBitmapDir=TulipLibDir+"tlp/bitmaps/";
+
+  // intialize factories
+  SizeProperty::initFactory();
+  IntegerProperty::initFactory();
+  LayoutProperty::initFactory();
+  ColorProperty::initFactory();
+  DoubleProperty::initFactory();
+  StringProperty::initFactory();
+  BooleanProperty::initFactory();
+  AlgorithmFactory::initFactory();
+  ImportModuleFactory::initFactory();
+  ExportModuleFactory::initFactory();
 }
 //=========================================================
 istream *tlp::getIgzstream(const char *name, int open_mode) {
@@ -216,21 +228,6 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
 }
   
 
-static void loadAlgorithmPluginsFromDir(std::string dir, tlp::PluginLoader* loader) {
-  SizeProperty::initFactory();
-  IntegerProperty::initFactory();
-  LayoutProperty::initFactory();
-  ColorProperty::initFactory();
-  DoubleProperty::initFactory();
-  StringProperty::initFactory();
-  BooleanProperty::initFactory();
-  AlgorithmFactory::initFactory();
-  ImportModuleFactory::initFactory();
-  ExportModuleFactory::initFactory();
-  // plugins load
-  loadPluginsFromDir(dir, "Algorithm", loader);
-
-}
 //=========================================================
 void tlp::loadPlugins(PluginLoader *plug) {
   string::const_iterator begin=TulipPluginsPath.begin();
@@ -238,13 +235,13 @@ void tlp::loadPlugins(PluginLoader *plug) {
   while (end!=TulipPluginsPath.end())
     if ((*end)==PATH_DELIMITER) {
       if (begin!=end) 
-	loadAlgorithmPluginsFromDir(string(begin,end), plug);
+	loadPluginsFromDir(string(begin,end), "Algorithm", plug);
       ++end;
       begin=end;
     } else
       ++end;
   if (begin!=end) 
-    loadAlgorithmPluginsFromDir(string(begin,end), plug);
+    loadPluginsFromDir(string(begin,end), "Algorithm", plug);
 }
 //=========================================================
 bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {

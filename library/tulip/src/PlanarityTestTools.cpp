@@ -337,12 +337,12 @@ void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode,
 
   // endpoint to correctly concatentates with RBC[new_cnode];
   node first = n1;
-  if (n1.id == UINT_MAX)
+  if (n1.id == UINT_MAX) {
     if (ul!= NULL_NODE)
       first = predNode;
     else
       first = succNode;
-
+  }
   // note that oldCNode may have flipped;
   if (RBC[oldCNode].lastItem()->getData() == first)
      RBC[oldCNode].reverse();

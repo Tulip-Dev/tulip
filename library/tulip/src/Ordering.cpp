@@ -648,16 +648,18 @@ void Ordering::augment(Face f, node pred, node n, node pred_last, node last, int
 
   // update of is_selectable_visited_face, is_selectable_face, is_selectable and is_selectable
   if(pair && left_ov == 2 && left_oe == 1) {
-    if(isSelectable(n_n))
+    if(isSelectable(n_n)) {
       if(visitedNodes.get(n_n.id))
 	is_selectable_visited.set(n_n.id,true);
       else
 	is_selectable.set(n_n.id,true);
-    if(isSelectable(n_pred))
+    }
+    if(isSelectable(n_pred)) {
       if(visitedNodes.get(n_pred.id))
 	is_selectable_visited.set(n_pred.id,true);
       else
 	is_selectable.set(n_pred.id,true);
+    }
   }
 
   else if(pair){
