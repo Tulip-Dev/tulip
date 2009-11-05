@@ -119,9 +119,17 @@ namespace tlp {
     }
 
     /**
+     * Get if the polygon is filled or not
+     */
+    bool getFillMode();
+    /**
      * Set if the polygon is filled or not
      */
     void setFillMode(const bool);
+    /**
+     * Get if the polygon is outlined or not
+     */
+    bool getOutlineMode();
     /**
      * Set if the polygon is outlined or not
      */

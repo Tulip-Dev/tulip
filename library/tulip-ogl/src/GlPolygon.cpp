@@ -50,8 +50,16 @@ namespace tlp {
   GlPolygon::~GlPolygon() {
   }
   //=====================================================
+  bool GlPolygon::getFillMode() {
+    return filled;
+  }
+  //=====================================================
   void GlPolygon::setFillMode(const bool filled) {
     this->filled = filled;
+  }
+  //=====================================================
+  bool GlPolygon::getOutlineMode() {
+    return outlined;
   }
   //=====================================================
   void GlPolygon::setOutlineMode(const bool outlined) {
