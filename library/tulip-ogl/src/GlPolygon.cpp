@@ -119,29 +119,41 @@ namespace tlp {
     glDisable(GL_CULL_FACE);
 
     if (filled){
-      Coord normal=points[0]-points[1];
-      normal^=(points[2]-points[1]);
-      normal/=normal.norm();
-      if(normal[2]<0)
-        normal=Coord(-normal[0],-normal[1],-normal[2]);
+      vector<Coord> normalPoints;
+      normalPoints.push_back(points[0]);
+      for(int i=1;i<points.size() && normalPoints.size()<3;++i){
+        for(int j=0;j<normalPoints.size();++j){
+          if(normalPoints[j]!=points[i])
+            normalPoints.push_back(points[i]);
+        }
+      }
 
-      if (points.size() == 3) {
-        glBegin(GL_TRIANGLES);
-      }else{
-        if (points.size() == 4){
-          glBegin(GL_QUADS);
+      // Ok we have a valid filled polygon
+      if(normalPoints.size()==3){
+        Coord normal=normalPoints[0]-normalPoints[1];
+        normal^=(normalPoints[2]-normalPoints[1]);
+        normal/=normal.norm();
+        if(normal[2]<0)
+          normal=Coord(-normal[0],-normal[1],-normal[2]);
+
+        if (points.size() == 3) {
+          glBegin(GL_TRIANGLES);
         }else{
-          glBegin(GL_POLYGON);
+          if (points.size() == 4){
+            glBegin(GL_QUADS);
+          }else{
+            glBegin(GL_POLYGON);
+          }
         }
-      }
-      glNormal3fv((float*)&normal);
-      for(unsigned int i=0; i < points.size(); ++i) {
-        if (i < fillColors.size()) {
-          setMaterial(fillColors[i]);
+        glNormal3fv((float*)&normal);
+        for(unsigned int i=0; i < points.size(); ++i) {
+          if (i < fillColors.size()) {
+            setMaterial(fillColors[i]);
+          }
+          glVertex3fv((float *)&points[i]);
         }
-        glVertex3fv((float *)&points[i]);
+        glEnd();
       }
-      glEnd();
     }
 
     if (outlined) {
