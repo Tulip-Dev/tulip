@@ -122,10 +122,15 @@ namespace tlp {
       vector<Coord> normalPoints;
       normalPoints.push_back(points[0]);
       for(int i=1;i<points.size() && normalPoints.size()<3;++i){
+        bool find=false;
         for(int j=0;j<normalPoints.size();++j){
-          if(normalPoints[j]!=points[i])
-            normalPoints.push_back(points[i]);
+          if(normalPoints[j]==points[i]){
+            find=true;
+            break;
+          }
         }
+        if(!find)
+          normalPoints.push_back(points[i]);
       }
 
       // Ok we have a valid filled polygon
