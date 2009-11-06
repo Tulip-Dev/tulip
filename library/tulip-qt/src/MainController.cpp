@@ -478,8 +478,6 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::delSubGraph(Graph *g, Graph *sg){
-    if(currentGraph!=g)
-      return;
     Iterator<Graph *> *itS=sg->getSubGraphs();
     while(itS->hasNext()) {
       Graph *subgraph = itS->next();
