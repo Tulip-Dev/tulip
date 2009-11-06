@@ -40,6 +40,7 @@ private :
   _view = new GlMainWidget(frame);
   _view->setViewLabel(false);
   GlLayer* layer=new GlLayer("Main");
+  layer->getComposite()->setDeleteComponentsInDestructor(false);
   _view->getScene()->addLayer(layer);
   QGridLayout* gridLayout = new QGridLayout(frame);
   gridLayout->setMargin(0);
@@ -54,10 +55,6 @@ GWOverviewWidget::~GWOverviewWidget() {
   if (_observedView != 0) {
     disconnect(this, 0, 0, 0);
   }
-  // no need to explicitely delete _view because it is a children
-  // of frame8, and so it will be deleted further
-  //delete _view;
-  delete _glDraw;
 }
 //=============================================================================
 GlMainWidget *GWOverviewWidget::getObservedView() {

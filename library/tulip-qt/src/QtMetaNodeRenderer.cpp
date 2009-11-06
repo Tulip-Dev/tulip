@@ -15,8 +15,10 @@ namespace tlp {
   }
 
   QtMetaNodeRenderer::~QtMetaNodeRenderer(){
-    if(glMainWidget)
+    if(glMainWidget){
+      delete glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer();
       delete glMainWidget;
+    }
 
     for(list<string>::iterator it=textureName.begin();it!=textureName.end();++it){
       GlTextureManager::getInst().deleteTexture(*it);
@@ -131,6 +133,10 @@ namespace tlp {
     if(render){
       if(!glMainWidget){
         glMainWidget=new GlMainWidget(NULL,NULL);
+        glMainWidget->setData(metaGraph,DataSet());
+        GlGraphRenderingParameters param=parentGlMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+        glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new QtMetaNodeRenderer(NULL,glMainWidget,glMainWidget->getScene()->getGlGraphComposite()->getInputData()));
+        glMainWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
       }
       glMainWidget->getScene()->setBackgroundColor(backgroundColor);
 
@@ -142,7 +148,6 @@ namespace tlp {
         textureName.erase(it);
       }
 
-      GlGraphRenderingParameters param=parentGlMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
       Vector<int,4> viewport;
       glGetIntegerv(GL_VIEWPORT, (GLint *) &viewport[0]);
       QGLContext *context=(QGLContext *)(QGLContext::currentContext());
@@ -157,9 +162,7 @@ namespace tlp {
 
       Graph *metaGraph = graph->getNodeMetaInfo(n);
 
-      glMainWidget->setData(metaGraph,DataSet());
-      glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new QtMetaNodeRenderer(NULL,glMainWidget,glMainWidget->getScene()->getGlGraphComposite()->getInputData()));
-      glMainWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+      glMainWidget->setGraph(metaGraph);
 
       glMainWidget->createTexture(str.str(),textureWidth,textureHeight);
       textureName.push_back(str.str());

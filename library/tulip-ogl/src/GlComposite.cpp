@@ -11,11 +11,11 @@ using namespace std;
 namespace tlp {
   typedef std::map<string, GlSimpleEntity *>::const_iterator ITM;
   //============================================================
-  GlComposite::GlComposite() {
+  GlComposite::GlComposite(bool deleteComponentsInDestructor):deleteComponentsInDestructor(deleteComponentsInDestructor) {
   }
   //============================================================
   GlComposite::~GlComposite() {
-    reset(false);
+    reset(deleteComponentsInDestructor);
   }
   //============================================================
   void GlComposite::addLayerParent(GlLayer *layer){

@@ -86,6 +86,10 @@ GlScene::GlScene(GlLODCalculator *calculator):backgroundColor(255, 255, 255, 255
 
 GlScene::~GlScene(){
   delete lodCalculator;
+  for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+    delete (*it).second;
+  }
+  delete selectionLayer;
 }
 
 void GlScene::initGlParameters() {
@@ -139,23 +143,23 @@ void GlScene::prerenderMetaNodes(){
 	set<node> metaNodes=glGraphComposite->getMetaNodes();
 	if(!metaNodes.empty() && glGraphComposite->getInputData()->getMetaNodeRenderer()->havePrerender()){
 
-		initGlParameters();
+	  initGlParameters();
 
-      GlLODCalculator *newLodCalculator=lodCalculator->clone();
-      newLodCalculator->beginNewCamera(getLayer("Main")->getCamera());
-		GlNode glNode(0);
-		for(set<node>::iterator it=metaNodes.begin();it!=metaNodes.end();++it){
-			glNode.id=(*it).id;
-        newLodCalculator->addNodeBoundingBox((*it).id,glNode.getBoundingBox(glGraphComposite->getInputData()));
-		}
-      newLodCalculator->compute(viewport,viewport,RenderingAll);
-      VectorOfComplexLODResultVector* nodesVector=newLodCalculator->getResultForNodes();
+	  GlLODCalculator *newLodCalculator=lodCalculator->clone();
+	  newLodCalculator->beginNewCamera(getLayer("Main")->getCamera());
+	  GlNode glNode(0);
+	  for(set<node>::iterator it=metaNodes.begin();it!=metaNodes.end();++it){
+	    glNode.id=(*it).id;
+	    newLodCalculator->addNodeBoundingBox((*it).id,glNode.getBoundingBox(glGraphComposite->getInputData()));
+	  }
+	  newLodCalculator->compute(viewport,viewport,RenderingAll);
+	  VectorOfComplexLODResultVector* nodesVector=newLodCalculator->getResultForNodes();
 
-		assert(nodesVector->size()!=0);
-		for(vector<LODResultComplexEntity>::iterator it=(*nodesVector)[0].begin();it!=(*nodesVector)[0].end();++it) {
-			glGraphComposite->getInputData()->getMetaNodeRenderer()->prerender(node((*it).first),(*it).second,getLayer("Main")->getCamera());
-		}
-      delete newLodCalculator;
+	  assert(nodesVector->size()!=0);
+	  for(vector<LODResultComplexEntity>::iterator it=(*nodesVector)[0].begin();it!=(*nodesVector)[0].end();++it) {
+	    glGraphComposite->getInputData()->getMetaNodeRenderer()->prerender(node((*it).first),(*it).second,getLayer("Main")->getCamera());
+	  }
+	  delete newLodCalculator;
 	}
 }
 

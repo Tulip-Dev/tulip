@@ -20,7 +20,7 @@ namespace tlp {
 
 
   public:
-    GlComposite();
+    GlComposite(bool deleteComponentsInDestructor=true);
     ~GlComposite();
 
     /**
@@ -91,6 +91,13 @@ namespace tlp {
     }
 
     /**
+     * Set if at the destruction of composite, components well be deleted
+     */
+    void setDeleteComponentsInDestructor(bool deleteComponentsInDestructor){
+      this->deleteComponentsInDestructor=deleteComponentsInDestructor;
+    }
+
+    /**
      * translate the composite with children
      */
     virtual void translate(const Coord &mouvement);
@@ -110,6 +117,7 @@ namespace tlp {
     std::map<std::string, GlSimpleEntity*> elements;
     std::list<GlSimpleEntity *> _sortedElements; //necessary to enable ordering of elements (for alpha blending)
     std::vector<GlLayer *> layerParents;
+    bool deleteComponentsInDestructor;
   };
 }
 #endif

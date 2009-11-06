@@ -108,10 +108,9 @@ namespace tlp {
   }
   //==================================================
   void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
-    if(scene.getLayer("Main")){
-      GlGraphComposite* oldGraphComposite=(GlGraphComposite *)(scene.getLayer("Main")->findGlEntity("graph"));
-      if(oldGraphComposite)
-        delete oldGraphComposite;
+    vector<pair<string, GlLayer*> >* layerList=scene.getLayersList();
+    for(vector<pair<string, GlLayer *> >::iterator it=layerList->begin();it!=layerList->end();++it){
+      delete (*it).second;
     }
 
     scene.clearLayersList();
