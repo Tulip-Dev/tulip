@@ -215,3 +215,10 @@ void ObservableGraph::notifyRemoveAttribute(Graph *g, const std::string& name) {
     observer->removeAttribute(g, name);
   }
 }
+
+void ObservableGraph::removeGraphObservers() {
+  for(stdext::slist<GraphObserver*>::iterator it=observers.begin();it!=observers.end();++it){
+    (*it)->removeObservable(this);
+  }
+  observers.clear();
+}

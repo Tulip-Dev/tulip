@@ -168,3 +168,11 @@ void ObservableProperty::notifyDestroy(PropertyInterface* p) {
   }
 }
 
+void ObservableProperty::removePropertyObservers() {
+  for(stdext::slist<PropertyObserver*>::iterator it=observers.begin();it!=observers.end();++it){
+    (*it)->removeObservable(this);
+  }
+  observers.clear(); 
+}
+
+

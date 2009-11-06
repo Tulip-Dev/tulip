@@ -116,13 +116,6 @@ inline void ObservableGraph::removeOnlyGraphObserver(GraphObserver *item) const 
   observers.remove(item);
 }
 
-inline void ObservableGraph::removeGraphObservers() {
-  for(stdext::slist<GraphObserver*>::iterator it=observers.begin();it!=observers.end();++it){
-    (*it)->removeObservable(this);
-  }
-  observers.clear();
-}
-
 }
 
 #endif

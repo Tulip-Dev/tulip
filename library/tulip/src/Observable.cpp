@@ -124,3 +124,10 @@ void Observable::unholdObservers() {
   unholdLock=false;
 }
 //===============================================================
+void Observable::removeObservers() { 
+  for(stdext::slist<Observer*>::iterator it=observersList.begin();it!=observersList.end();++it){
+    (*it)->removeObservable(this);
+  }
+  observersList.clear(); 
+}
+

@@ -108,13 +108,6 @@ inline void ObservableProperty::removeOnlyPropertyObserver(PropertyObserver *ite
   observers.remove(item);
 }
 
-inline void ObservableProperty::removePropertyObservers() { 
-  for(stdext::slist<PropertyObserver*>::iterator it=observers.begin();it!=observers.end();++it){
-    (*it)->removeObservable(this);
-  }
-  observers.clear(); 
-}
-
 }
 
 #endif
