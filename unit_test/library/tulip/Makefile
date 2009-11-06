@@ -4,7 +4,6 @@ SRCS=   tuliplibtest.cpp \
 	VectorTest.cpp \
 	MatrixTest.cpp \
 	TestAlgorithmTest.cpp \
-	MutableContainerTest.cpp \
 	SelectionProxyTest.cpp \
 	MetaGraphProxyTest.cpp \
 	SuperGraphTest.cpp \
@@ -13,6 +12,7 @@ SRCS=   tuliplibtest.cpp \
 	IdManagerTest.cpp \
 	DataSetTest.cpp \
 	ObservablePropertyTest.cpp \
+	MutableContainerTest.cpp \
 	ObservableGraphTest.cpp \
 	PushPopTest.cpp \
 	IntegerPropertyMinMaxUpdateTest.cpp
