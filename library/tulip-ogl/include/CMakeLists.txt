@@ -16,6 +16,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/GlSphere.h 
 	tulip/GlLayer.h 
 	tulip/GlLODCalculator.h 
+	tulip/GlLODSceneVisitor.h
 	tulip/GlBox.h 
 	tulip/GlScene.h 
 	tulip/GlTextureManager.h 

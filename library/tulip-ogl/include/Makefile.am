@@ -16,6 +16,7 @@ nobase_include_HEADERS = \
 	tulip/GlSphere.h \
 	tulip/GlLayer.h \
 	tulip/GlLODCalculator.h \
+	tulip/GlLODSceneVisitor.h \
 	tulip/GlBox.h \
 	tulip/GlScene.h \
 	tulip/GlTextureManager.h \
@@ -80,7 +81,6 @@ noinst_HEADERS = \
 	tulip/TLPPixmapFont.h\
 	tulip/TLPPixmapGlyph.h\
 	tulip/GlCPULODCalculator.h \
-	tulip/GlLODSceneVisitor.h \
 	tulip/GlSVGFeedBackBuilder.h \
 	tulip/GlEPSFeedBackBuilder.h \
 	tulip/GlewManager.h \
