@@ -18,6 +18,7 @@ namespace tlp {
     QDialog(parent),
     firstCall(true),label(text), parent(parent),view(view) {
     setupUi(this);
+    setModal(true);
   }
   //=====================================
   QtProgress::~QtProgress() {
