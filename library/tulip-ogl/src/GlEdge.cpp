@@ -286,8 +286,12 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 		edgeSize[1] = std::min(tgtSize[0], tgtSize[1]) / 16.;
 	} else {
 		const Size &size = data->elementSize->getEdgeValue(e);
-		edgeSize[0] = std::min(maxSrcSize, size[0]);
-		edgeSize[1] = std::min(maxTgtSize, size[1]);
+		edgeSize[0]=size[0];
+		edgeSize[1]=size[1];
+		if(data->parameters->getEdgesMaxSizeToNodesSize()){
+		  edgeSize[0] = std::min(maxSrcSize, size[0]);
+		  edgeSize[1] = std::min(maxTgtSize, size[1]);
+		}
 		edgeSize[0]=edgeSize[0]/2.;
 		edgeSize[1]=edgeSize[1]/2.;
 	}

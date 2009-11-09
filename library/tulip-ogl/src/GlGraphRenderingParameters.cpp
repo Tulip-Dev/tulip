@@ -38,6 +38,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _labelsBorder(2) {
   _fontsPath = tlp::TulipLibDir + "tlp/bitmaps/";
   _texturePath = "";
+  _edgesMaxSizeToNodesSize = true;
   _feedbackRender=false;
 }
 //This function should rewriten completly
@@ -71,6 +72,7 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("nodesLabelStencil", _nodesLabelStencil);
   data.set("metaNodesLabelStencil", _metaNodesLabelStencil);
   data.set("edgesLabelStencil", _edgesLabelStencil);
+  data.set("edgesMaxSizeToNodesSize", _edgesMaxSizeToNodesSize);
   //data.set("SupergraphId", _graph->getId());
   return data;
 }
@@ -140,6 +142,8 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setMetaNodesLabelStencil(i);
   if (data.get<int>("edgesLabelStencil", i))
     setEdgesLabelStencil(i);
+  if (data.get<bool>("edgesMaxSizeToNodesSize", b))
+    setEdgesMaxSizeToNodesSize(b);
 }
 //====================================================
 unsigned int GlGraphRenderingParameters::getLabelsBorder() const {
@@ -329,6 +333,13 @@ bool GlGraphRenderingParameters::isEdgeSizeInterpolate()const {
 }
 void GlGraphRenderingParameters::setEdgeSizeInterpolate(const bool b){
   _edgeSizeInterpolate=b;
+}
+//====================================================
+bool GlGraphRenderingParameters::getEdgesMaxSizeToNodesSize()const {
+  return (_edgesMaxSizeToNodesSize);
+}
+void GlGraphRenderingParameters::setEdgesMaxSizeToNodesSize(const bool b){
+  _edgesMaxSizeToNodesSize=b;
 }
 //====================================================
 void GlGraphRenderingParameters::setFeedbackRender(bool feedback){

@@ -320,6 +320,32 @@
             </item>
            </layout>
           </item>
+          <item>
+           <layout class="QHBoxLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QCheckBox" name="blockEdgeSizeCheckBox" >
+	      <property name="focusPolicy" >
+               <enum>Qt::StrongFocus</enum>
+              </property>
+              <property name="toolTip" >
+               <string>With this option edge size can't be greater than node size</string>
+              </property>
+              <property name="text" >
+               <string>Block max edge size to node size</string>
+              </property>
+	      <property name="checked" >
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
          </layout>
         </item>
        </layout>
@@ -453,6 +479,22 @@
   </connection>
   <connection>
    <sender>colorInterpolation</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>RenderingParametersDialogData</receiver>
+   <slot>updateView()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>86</x>
+     <y>157</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>162</x>
+     <y>179</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>blockEdgeSizeCheckBox</sender>
    <signal>stateChanged(int)</signal>
    <receiver>RenderingParametersDialogData</receiver>
    <slot>updateView()</slot>

@@ -266,6 +266,14 @@ namespace tlp {
      */
     void setLabelsBorder(const unsigned int);
     /**
+     * set if Edge max size is block to node size
+     */
+    void setEdgesMaxSizeToNodesSize(const bool b);
+    /**
+     * return if Edge max size is block to node size
+     */
+    bool getEdgesMaxSizeToNodesSize() const;
+    /**
      * if true draw graph with feedback information (very low)
      */
     void setFeedbackRender(bool feedback);
@@ -303,6 +311,7 @@ namespace tlp {
     unsigned int _labelsBorder;
     std::string _fontsPath;
     std::string _texturePath;
+    bool _edgesMaxSizeToNodesSize;
     bool _feedbackRender;
   };
 }

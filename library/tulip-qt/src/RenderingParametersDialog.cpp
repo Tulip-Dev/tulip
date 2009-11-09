@@ -34,6 +34,7 @@ namespace tlp {
     setBackgroundColor(QColor(inColor[0],inColor[1],inColor[2]));
     fonts->setCurrentIndex(param.getFontsType());
     density->setValue(param.getLabelsBorder());
+    blockEdgeSizeCheckBox->setChecked(param.getEdgesMaxSizeToNodesSize());
 
     holdUpdateView=false;
   }
@@ -54,6 +55,7 @@ namespace tlp {
     QColor outColor = background->palette().color(QPalette::Button);
     mainView->getGlMainWidget()->getScene()->setBackgroundColor(Color(outColor.red(),outColor.green(),outColor.blue()));
     param.setLabelsBorder(density->value());
+    param.setEdgesMaxSizeToNodesSize(blockEdgeSizeCheckBox->isChecked());
 
     mainView->getGlMainWidget()->getScene()->getGlGraphComposite()->setRenderingParameters(param);
     emit viewNeedDraw();
