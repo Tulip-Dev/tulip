@@ -82,6 +82,7 @@ namespace tlp {
     currentVector(0),
     outlined(false),
     fillColor(fcolor),
+    outlineSize(1),
     textureName(textureName){
     createPolygon(coords,bezier);
   }
@@ -91,6 +92,7 @@ namespace tlp {
     outlined(true),
     fillColor(fcolor),
     outlineColor(ocolor),
+    outlineSize(1),
     textureName(textureName) {
     createPolygon(coords,bezier);
   }
@@ -99,6 +101,7 @@ namespace tlp {
     currentVector(0),
     outlined(false),
     fillColor(fcolor),
+    outlineSize(1),
     textureName(textureName){
     for(unsigned int i=0;i<coords.size();++i) {
       createPolygon(coords[i],bezier);
@@ -111,6 +114,7 @@ namespace tlp {
     outlined(true),
     fillColor(fcolor),
     outlineColor(ocolor),
+    outlineSize(1),
     textureName(textureName) {
     for(unsigned int i=0;i<coords.size();++i) {
       createPolygon(coords[i],bezier);
@@ -154,6 +158,10 @@ namespace tlp {
     this->outlined = outlined;
   }
   //=====================================================
+  void GlComplexPolygon::setOutlineSize(double size) {
+    outlineSize=size;
+  }
+  //=====================================================
   void GlComplexPolygon::addPoint(const Coord& point) {
     points[currentVector].push_back(point);
     boundingBox.check(point);
@@ -194,36 +202,45 @@ namespace tlp {
 		    (GLUTesselatorFunction)errorCallback);
 #endif
 
-    glShadeModel(GL_SMOOTH);
+    //Compute number of points to compute and create a big tab to store points' informations
+    unsigned int numberOfPoints=0;
+    for(unsigned int v=0;v<points.size();++v) {
+      numberOfPoints+=points[v].size();
+    }
+    GLdouble *pointsData=new GLdouble[7*numberOfPoints];
 
+    unsigned int pointNumber=0;
+    glShadeModel(GL_SMOOTH);
     gluTessBeginPolygon(tobj, NULL);
     for(unsigned int v=0;v<points.size();++v) {
       gluTessBeginContour(tobj);
       for(unsigned int i=0; i < points[v].size(); ++i) {
-	GLdouble *tmp=new GLdouble[7];
-	tmp[0]=points[v][i][0];
-	tmp[1]=points[v][i][1];
-	tmp[2]=points[v][i][2];
-	tmp[3]=fillColor[0];
-	tmp[4]=fillColor[1];
-	tmp[5]=fillColor[2];
-	tmp[6]=fillColor[3];
-	gluTessVertex(tobj,tmp,tmp);
+        pointsData[pointNumber*7]=points[v][i][0];
+        pointsData[pointNumber*7+1]=points[v][i][1];
+        pointsData[pointNumber*7+2]=points[v][i][2];
+        pointsData[pointNumber*7+3]=fillColor[0];
+        pointsData[pointNumber*7+4]=fillColor[1];
+        pointsData[pointNumber*7+5]=fillColor[2];
+        pointsData[pointNumber*7+6]=fillColor[3];
+        gluTessVertex(tobj,&pointsData[pointNumber*7],&pointsData[pointNumber*7]);
+        pointNumber++;
       }
       gluTessEndContour(tobj);
     }
     gluTessEndPolygon(tobj);
     gluDeleteTess(tobj);
+    delete pointsData;
     GlTextureManager::getInst().desactivateTexture();
 
     if (outlined) {
+      glLineWidth(outlineSize);
       for(unsigned int v=0;v<points.size();++v) {
-	glBegin(GL_LINE_LOOP);
-	for(unsigned int i=0; i < points[v].size(); ++i) {
-	  setColor(outlineColor);
-	  glVertex3fv((float *)&points[v][i]);
-	}
-	glEnd();
+        glBegin(GL_LINE_LOOP);
+        for(unsigned int i=0; i < points[v].size(); ++i) {
+          setColor(outlineColor);
+          glVertex3fv((float *)&points[v][i]);
+        }
+        glEnd();
       }
     }
 
@@ -263,6 +280,7 @@ namespace tlp {
     GlXMLTools::getXML(dataNode,"fillColor",fillColor);
     GlXMLTools::getXML(dataNode,"outlineColor",outlineColor);
     GlXMLTools::getXML(dataNode,"outlined",outlined);
+    GlXMLTools::getXML(dataNode,"outlineSize",outlineSize);
     GlXMLTools::getXML(dataNode,"textureName",textureName);
   }
   //============================================================
@@ -285,6 +303,7 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode,"fillColor",fillColor);
       GlXMLTools::setWithXML(dataNode,"outlineColor",outlineColor);
       GlXMLTools::setWithXML(dataNode,"outlined",outlined);
+      GlXMLTools::setWithXML(dataNode,"outlineSize",outlineSize);
       GlXMLTools::setWithXML(dataNode,"textureName",textureName);
 
       for(vector<vector<Coord> >::iterator it= points.begin();it!=points.end();++it) {

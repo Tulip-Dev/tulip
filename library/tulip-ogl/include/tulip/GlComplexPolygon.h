@@ -72,6 +72,11 @@ namespace tlp {
     void setOutlineMode(const bool);
 
     /**
+     * Set size of outline
+     */
+    void setOutlineSize(double size);
+
+    /**
      * Translate entity
      */
     virtual void translate(const Coord& mouvement);
@@ -99,6 +104,7 @@ namespace tlp {
     bool outlined;
     Color fillColor;
     Color outlineColor;
+    double outlineSize;
     std::string textureName;
   };
 }
