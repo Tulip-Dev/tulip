@@ -26,7 +26,7 @@ using namespace tlp;
 using namespace std;
 
 //========================================================================================
-MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL){
+MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),composite(false){
   operation = NONE;
 
   //composite.addGlEntity(&centerRect, "CenterRectangle");
