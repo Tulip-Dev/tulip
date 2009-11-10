@@ -44,7 +44,7 @@ using namespace tlp;
 
 //================================================================================
 PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
-  TulipTableWidget(parent, name), graph(0), vScrollPos(0) {
+  TulipTableWidget(parent, name), graph(0), vScrollPos(0),inUpdate(false){
   resetBackColor1();
   resetBackColor2();
   editedProperty=0;
@@ -56,7 +56,7 @@ PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
   horizontalHeader()->setStretchLastSection(true);
   showProperties = false;
   connect(verticalScrollBar(), SIGNAL(valueChanged(int)), SLOT(scroll(int)));
-  connect(this,SIGNAL(cellChanged(int,int)),SLOT(changePropertyValue(int,int)));
+  connect(this,SIGNAL(cellChanged(int,int)),this,SLOT(changePropertyValue(int,int)));
   // enable context menu
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this,SIGNAL(customContextMenuRequested (const QPoint &)),
@@ -99,6 +99,8 @@ void PropertyWidget::selectNodeOrEdge(bool b) {
 }
 
 void PropertyWidget::changePropertyValue(int i,int j) {
+  if(inUpdate)
+    return;
   if (displayNode)
     changePropertyNodeValue(i,j);
   else
@@ -187,7 +189,7 @@ void PropertyWidget::filterSelection(bool b) {
   _filterSelection=b;
   if (!b)
     updateNbElements();
-  update();
+  //update();
 }
 
 void PropertyWidget::scroll(int i) {
@@ -221,13 +223,14 @@ void PropertyWidget::update() {
   if (editedProperty && !graph->existProperty(editedPropertyName))
     editedProperty = NULL;
 
-  disconnect(this,SIGNAL(cellChanged(int,int)), this, SLOT(changePropertyValue(int,int)));
+  bool lastUpdateStatus=inUpdate;
+  inUpdate=true;
   clearContents();
   if (displayNode)
     updateNodes();
   else
     updateEdges();
-  connect(this,SIGNAL(cellChanged(int,int)),SLOT(changePropertyValue(int,int)));
+  inUpdate=lastUpdateStatus;
   horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
   QTableWidget::repaint();
 }

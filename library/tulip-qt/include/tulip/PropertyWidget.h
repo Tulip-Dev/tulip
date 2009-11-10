@@ -50,6 +50,7 @@ private :
   unsigned int nbElement;
   tlp::PropertyInterface *editedProperty;
   std::string editedPropertyName;
+  bool inUpdate;
   
 private slots:
   void showContextMenu(const QPoint & pos); 
