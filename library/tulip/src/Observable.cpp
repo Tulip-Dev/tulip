@@ -30,7 +30,8 @@ Observer::~Observer(){
 }
 
 void Observer::addObservable(Observable *observable){
-  observables.push_front(observable);
+  if (updateObservables)
+    observables.push_front(observable);
 }
 
 void Observer::removeObservable(Observable *observable){

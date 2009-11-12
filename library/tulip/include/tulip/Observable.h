@@ -24,7 +24,10 @@ class Observable;
  */
 class TLP_SCOPE Observer {
   stdext::slist<Observable *> observables;
+  bool updateObservables;
  public:
+  Observer(bool manageObservables = true)
+   :updateObservables(manageObservables) {}
   virtual ~Observer();
   /**
    * Methods called when a change occur in the observed objects

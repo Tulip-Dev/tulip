@@ -20,10 +20,13 @@ GraphObserver::~GraphObserver(){
 }
 
 void GraphObserver::addObservable(ObservableGraph *graph){
-  observables.push_front(graph);
+  if (updateObservables)
+    observables.push_front(graph);
 }
 
-void GraphObserver::removeObservable(ObservableGraph *graph){
+void GraphObserver::removeObservable(ObservableGraph *graph) {
+  if (!updateObservables)
+    return;
   slist<ObservableGraph*>::iterator itObs = observables.begin();
   slist<ObservableGraph*>::iterator ite = observables.end();
   while(itObs!=ite){

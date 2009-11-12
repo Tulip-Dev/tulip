@@ -7,7 +7,7 @@ using namespace std;
 using namespace stdext;
 using namespace tlp;
 
-GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart) :
+GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart) : GraphObserver(false), PropertyObserver(false),
 #if !defined(NDEBUG)
   recordingStopped(true),
 #endif
@@ -357,14 +357,14 @@ void GraphUpdatesRecorder::restartRecording(Graph* g) {
   set<PropertyRecord>*  newProps = NULL;
   if (itp != addedProperties.end())
     newProps = &((*itp).second);
-  string pName;
-  forEach(pName, g->getLocalProperties()) {
+  PropertyInterface* prop;
+  forEach(prop, g->getLocalObjectProperties()) {
     if (newProps) {
-      PropertyRecord p(g->getProperty(pName),  pName);
+      PropertyRecord p(prop,  prop->getName());
       if (newProps->find(p) != newProps->end())
 	continue;
     }
-    g->getProperty(pName)->addPropertyObserver(this);
+    prop->addPropertyObserver(this);
   }
 
   // add self as a GraphObserver for all previously
@@ -389,9 +389,9 @@ void GraphUpdatesRecorder::stopRecording(Graph* g) {
   }
 #endif
   g->removeGraphObserver(this);
-  string pName;
-  forEach(pName, g->getLocalProperties())
-    g->getProperty(pName)->removePropertyObserver(this);
+  PropertyInterface* prop;
+  forEach(prop, g->getLocalObjectProperties())
+    prop->removePropertyObserver(this);
   Graph* sg;
   forEach(sg, g->getSubGraphs())
     stopRecording(sg);  
@@ -671,10 +671,9 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
   } else
     (*it).second.insert(g);    set<node> nodes;
   // loop on properties to save the node's associated values
-  string pName;
-  forEach(pName, g->getLocalProperties()) {
-    PropertyInterface* p = g->getProperty(pName);
-    beforeSetNodeValue(p, n);
+  PropertyInterface* prop;
+  forEach(prop, g->getLocalObjectProperties()) {
+    beforeSetNodeValue(prop, n);
   }
   if (g == g->getSuperGraph())
     recordEdgeContainer(oldContainers, (GraphImpl*) g, n);
@@ -714,11 +713,10 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
   else
     (*it).second.graphs.insert(g);
   // loop on properties
-  string pName;
+  PropertyInterface* prop;
   // loop on properties to save the edge's associated values
-  forEach(pName, g->getLocalProperties()) {
-    PropertyInterface* p = g->getProperty(pName);
-    beforeSetEdgeValue(p, e);
+  forEach(prop, g->getLocalObjectProperties()) {
+    beforeSetEdgeValue(prop, e);
   }
   if (g == g->getSuperGraph()) {
     // record source & target old containers

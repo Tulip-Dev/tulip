@@ -123,34 +123,33 @@ public:
   }
   //=====================================================
   void saveLocalProperties(ostream &os,Graph *graph) {
-    Iterator<string> *itS=graph->getLocalProperties();
-    PropertyInterface *pproxy;
-    while (itS->hasNext()) {
-      string its=itS->next();
-      pproxy=graph->getProperty(its);
+    Iterator<PropertyInterface *> *itP=graph->getLocalObjectProperties();
+    PropertyInterface *prop;
+    while (itP->hasNext()) {
+      prop = itP->next();
       if (graph->getSuperGraph()==graph)
-	os << "(property " << " 0 " << pproxy->getTypename() << " " ;
+	os << "(property " << " 0 " << prop->getTypename() << " " ;
       else
-	os << "(property " << " " << graph->getId() << " " << pproxy->getTypename() << " " ;
-      os << "\"" << convert(its) << "\"" << endl;
-      string nDefault = pproxy->getNodeDefaultStringValue();
-      string eDefault = pproxy->getEdgeDefaultStringValue();
+	os << "(property " << " " << graph->getId() << " " << prop->getTypename() << " " ;
+      os << "\"" << convert(prop->getName()) << "\"" << endl;
+      string nDefault = prop->getNodeDefaultStringValue();
+      string eDefault = prop->getEdgeDefaultStringValue();
       os <<"(default \"" << convert(nDefault) << "\" \"" << convert(eDefault) << "\")" << endl;
       Iterator<node> *itN=graph->getNodes();
       while (itN->hasNext()) {
 	node itn=itN->next();
-	string tmp = pproxy->getNodeStringValue(itn);
+	string tmp = prop->getNodeStringValue(itn);
 	if (strcmp(tmp.c_str(),nDefault.c_str())!=0) os << "(node " << itn.id << " \"" << convert(tmp) << "\")" << endl ;
       } delete itN;
       Iterator<edge> *itE=graph->getEdges();
       while (itE->hasNext()) {
 	edge ite=itE->next();
-	string tmp = pproxy->getEdgeStringValue(ite);
+	string tmp = prop->getEdgeStringValue(ite);
 	if (strcmp(tmp.c_str(),eDefault.c_str())!=0) os << "(edge " << ite.id << " \"" << convert(tmp) << "\")" << endl ;
       } delete itE;
       os << ")" << endl;
     }
-    delete itS;
+    delete itP;
   }
   //=====================================================
   void saveProperties(ostream &os,Graph *graph) {

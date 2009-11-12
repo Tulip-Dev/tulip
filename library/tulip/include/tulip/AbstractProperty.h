@@ -57,7 +57,7 @@ public:
   static  std::string getTypename( PropertyInterface * );
 
   // name management
-  const std::string& getName() {
+  const std::string& getName() const {
     return name;
   }
 

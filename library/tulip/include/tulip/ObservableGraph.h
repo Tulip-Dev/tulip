@@ -22,7 +22,10 @@ struct Graph;
  */
 class  TLP_SCOPE GraphObserver {
    stdext::slist<ObservableGraph *> observables;
+  bool updateObservables;
  public:
+  GraphObserver(bool manageObservables = true)
+   :updateObservables(manageObservables) {}
   virtual ~GraphObserver();
   virtual void addNode(Graph *,const node ){}
   virtual void addEdge(Graph *,const edge ){}

@@ -363,6 +363,20 @@ Iterator<std::string>* GraphDecorator::getInheritedProperties(){
 Iterator<std::string>* GraphDecorator::getProperties(){
   return graph_component->getProperties();
 }
+//============================================================
+Iterator<PropertyInterface*>* GraphDecorator::getLocalObjectProperties(){
+  return graph_component->getLocalObjectProperties();
+}
+
+//============================================================
+Iterator<PropertyInterface*>* GraphDecorator::getInheritedObjectProperties(){
+  return graph_component->getInheritedObjectProperties();
+}
+
+//============================================================
+Iterator<PropertyInterface*>* GraphDecorator::getObjectProperties(){
+  return graph_component->getObjectProperties();
+}
 //----------------------------------------------------------------
 bool GraphDecorator::canPop() {
   return graph_component->canPop();

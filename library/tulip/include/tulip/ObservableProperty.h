@@ -22,7 +22,10 @@ class ObservableProperty;
  */
 class  TLP_SCOPE PropertyObserver {
   stdext::slist<ObservableProperty *> observables;
+  bool updateObservables;
  public:
+ PropertyObserver(bool manageObservables = true)
+   :updateObservables(manageObservables) {}
   virtual ~PropertyObserver();
   virtual void beforeSetNodeValue(PropertyInterface*, const node){}
   virtual void afterSetNodeValue(PropertyInterface*, const node){}

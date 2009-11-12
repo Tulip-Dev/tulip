@@ -257,14 +257,13 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
     graphSize->setEdgeValue(ite, clusterSize->getEdgeValue(ite));
   } delete itE;
   // propagate all local properties
-  string pName;
-  forEach(pName, cluster->getLocalProperties()) {
-    PropertyInterface *property = graph->getProperty(pName);
+  PropertyInterface* property;
+  forEach(property, cluster->getLocalObjectProperties()) {
     if (property == graphLayout ||
 	property == graphSize ||
 	property == graphRot)
       continue;
-    PropertyInterface *clusterProp = cluster->getProperty(pName);
+    PropertyInterface *clusterProp = cluster->getProperty(property->getName());
     itN = cluster->getNodes();
     while(itN->hasNext()) {
       node itn = itN->next();

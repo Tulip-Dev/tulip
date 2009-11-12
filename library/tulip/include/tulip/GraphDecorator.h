@@ -94,6 +94,9 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
   virtual Iterator<std::string>* getLocalProperties();
   virtual Iterator<std::string>* getInheritedProperties();
   virtual Iterator<std::string>* getProperties();
+  virtual Iterator<PropertyInterface*>* getLocalObjectProperties();
+  virtual Iterator<PropertyInterface*>* getInheritedObjectProperties();
+  virtual Iterator<PropertyInterface*>* getObjectProperties();
   // updates management
   virtual void push(bool unpopAllowed = true);
   virtual void pop(bool unpopAllowed = true);

@@ -86,7 +86,8 @@ static bool integrityTest(Graph *graph) {
 }
 */
 //----------------------------------------------------------------
-GraphImpl::GraphImpl():GraphAbstract(this),nbNodes(0), nbEdges(0) {
+GraphImpl::GraphImpl():
+  GraphAbstract(this),Observer(false),nbNodes(0), nbEdges(0) {
   // id 0 is for the root
   graphIds.get();
   outDegree.setAll(0);
@@ -473,9 +474,8 @@ void GraphImpl::observeUpdates(Graph *g) {
   observedGraphs.push_front(g);
 
   // loop on local properties
-  string pName;
-  forEach(pName, g->getLocalProperties()) {
-    PropertyInterface *prop = g->getProperty(pName);
+  PropertyInterface* prop;
+  forEach(prop, g->getLocalObjectProperties()) {
     prop->addObserver(this);
     observedProps.push_front(prop);
   }

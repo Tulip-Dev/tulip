@@ -398,17 +398,29 @@ public:
    */
   virtual  void delLocalProperty(const std::string& name)=0;
   /**
-   * Returns an iterator on the local properties
+   * Returns an iterator on the names of local properties
    */
   virtual Iterator<std::string>* getLocalProperties()=0;
   /**
-   * Returns an iterator on the inherited properties
+   * Returns an iterator on the names of the inherited properties
    */
   virtual Iterator<std::string>* getInheritedProperties()=0;
   /**
-   * Returns an iterator on all the properties
+   * Returns an iterator on the name of all the properties
    */
   virtual Iterator<std::string>* getProperties()=0;
+  /**
+   * Returns an iterator on the local properties
+   */
+  virtual Iterator<PropertyInterface*>* getLocalObjectProperties()=0;
+  /**
+   * Returns an iterator on the inherited properties
+   */
+  virtual Iterator<PropertyInterface*>* getInheritedObjectProperties()=0;
+  /**
+   * Returns an iterator on all the properties
+   */
+  virtual Iterator<PropertyInterface*>* getObjectProperties()=0;
 
   // updates management
   virtual void push(bool unpopAllowed = true)=0;

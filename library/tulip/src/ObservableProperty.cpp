@@ -20,10 +20,13 @@ PropertyObserver::~PropertyObserver(){
 }
 
 void PropertyObserver::addObservable(ObservableProperty *property){
-  observables.push_front(property);
+  if (updateObservables)
+    observables.push_front(property);
 }
 
-void PropertyObserver::removeObservable(ObservableProperty *property){
+void PropertyObserver::removeObservable(ObservableProperty *property) {
+  if (!updateObservables)
+    return;
   slist<ObservableProperty*>::iterator itObs = observables.begin();
   slist<ObservableProperty*>::iterator ite = observables.end();
   while(itObs!=ite){

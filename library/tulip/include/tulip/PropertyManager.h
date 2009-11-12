@@ -58,39 +58,17 @@ public:
   /**Used to inform the pool that an edge doesn't belong anymore to the
      associated Graph*/
   virtual void erase(const edge )=0;
-  /**Return an iterator on the local properties*/
+  /**Return an iterator on names of the local properties*/
   virtual Iterator<std::string>* getLocalProperties()=0;
-  /**Return an iterator on the inherited properties*/
+  /**Return an iterator on names of the inherited properties*/
   virtual Iterator<std::string>* getInheritedProperties()=0;
+  /**Return an iterator on the local properties*/
+  virtual Iterator<PropertyInterface*>* getLocalObjectProperties()=0;
+  /**Return an iterator on the inherited properties*/
+  virtual Iterator<PropertyInterface*>* getInheritedObjectProperties()=0;
 };
 
-class PropertyManagerImpl;
-//======================================================================================
-class LocalPropertiesIterator: public Iterator<std::string> {
- public:
-  LocalPropertiesIterator(PropertyManagerImpl *ppc);
-  std::string next();
-  bool hasNext();
- private:
-  PropertyManagerImpl *ppc;
-  std::map<std::string,PropertyInterface*>::iterator it,itEnd;
-};
-//======================================================================================
-class InheritedPropertiesIterator: public Iterator<std::string> {
-  struct ltstr {
-    bool operator()(const std::string &s1, const std::string &s2) const {
-      return s1.compare(s2) < 0;
-    }
-  };
- public:
-  InheritedPropertiesIterator(PropertyManager *ppc);
-  std::string next();
-  bool hasNext();
- private:
-  PropertyManager *ppc;
-  std::set<std::string,ltstr> inhList; 
-  std::set<std::string,ltstr>::iterator it,itEnd;
-};
+class LocalPropertiesIterator;
 //======================================================================================
 /**
    Implemantation of the interface PropertyManager.
@@ -100,7 +78,7 @@ class PropertyManagerImpl: public PropertyManager {
   friend class LocalPropertiesIterator;
 
 private:
-  std::map<std::string,PropertyInterface*> propertyProxyMap;
+  std::map<std::string, PropertyInterface*> propertyProxyMap;
 
 public:
   explicit  PropertyManagerImpl(Graph*);
@@ -119,6 +97,8 @@ public:
   //======================================================================================
   Iterator<std::string>* getLocalProperties();
   Iterator<std::string>* getInheritedProperties();
+  Iterator<PropertyInterface*>* getLocalObjectProperties();
+  Iterator<PropertyInterface*>* getInheritedObjectProperties();
 };
 
 }

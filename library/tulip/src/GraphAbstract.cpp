@@ -334,6 +334,18 @@ Iterator<std::string>* GraphAbstract::getProperties() {
   return new ConcatIterator<std::string> (propertyContainer->getLocalProperties(),propertyContainer->getInheritedProperties());
 }
 //=========================================================================
+Iterator<PropertyInterface*>* GraphAbstract::getLocalObjectProperties() {
+  return propertyContainer->getLocalObjectProperties();
+}
+//=========================================================================
+Iterator<PropertyInterface*>* GraphAbstract::getInheritedObjectProperties() {
+  return propertyContainer->getInheritedObjectProperties();
+}
+//=========================================================================
+Iterator<PropertyInterface*>* GraphAbstract::getObjectProperties() {
+  return new ConcatIterator<PropertyInterface*> (propertyContainer->getLocalObjectProperties(),propertyContainer->getInheritedObjectProperties());
+}
+//=========================================================================
 unsigned int GraphAbstract::numberOfNodes() const {
   unsigned int result=0;
   Iterator<node> *it=getNodes();
