@@ -444,15 +444,11 @@ namespace tlp {
   //**********************************************************************
   void MainController::initObservers() {
     if (currentGraph==0) return;
-    Iterator<string> *it=currentGraph->getLocalProperties();
+    Iterator<PropertyInterface*> *it =
+      currentGraph->getObjectProperties();
     while (it->hasNext()) {
-      string tmp=it->next();
-      currentGraph->getProperty(tmp)->addObserver(this);
-    } delete it;
-    it=currentGraph->getInheritedProperties();
-    while (it->hasNext()) {
-      string tmp=it->next();
-      currentGraph->getProperty(tmp)->addObserver(this);
+      PropertyInterface* tmp = it->next();
+      tmp->addObserver(this);
     } delete it;
     currentGraphNbNodes=currentGraph->numberOfNodes();
     currentGraphNbEdges=currentGraph->numberOfEdges();
@@ -461,13 +457,10 @@ namespace tlp {
   //**********************************************************************
   void MainController::clearObservers() {
     if (currentGraph == 0) return;
-    Iterator<string> *it=currentGraph->getLocalProperties();
+    Iterator<PropertyInterface*> *it =
+      currentGraph->getObjectProperties();
     while (it->hasNext()) {
-      currentGraph->getProperty(it->next())->removeObserver(this);
-    } delete it;
-    it=currentGraph->getInheritedProperties();
-    while (it->hasNext()) {
-      currentGraph->getProperty(it->next())->removeObserver(this);
+      (it->next())->removeObserver(this);
     } delete it;
   }
   //**********************************************************************

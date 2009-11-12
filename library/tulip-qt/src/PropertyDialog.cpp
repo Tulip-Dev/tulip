@@ -249,22 +249,24 @@ namespace tlp {
     CopyPropertyDialog dialog(parentWidget());
     vector<string> localProps;
     vector<string> inheritedProps;
-    string prop;
+    PropertyInterface* prop;
     Graph *parent = graph->getSuperGraph();
     if (parent == graph)
       parent = 0;
-    forEach(prop, graph->getLocalProperties()) {
-      if (typeid(*graph->getProperty(prop)) == typeid(*editedProp)) {
-        if (prop != editedPropertyName)
-          localProps.push_back(prop);
-        if (parent && parent->existProperty(prop))
-          inheritedProps.push_back(prop);
+    forEach(prop, graph->getLocalObjectProperties()) {
+      if (typeid(*prop) == typeid(*editedProp)) {
+	const string &pName = prop->getName();
+        if (pName != editedPropertyName)
+          localProps.push_back(pName);
+        if (parent && parent->existProperty(pName))
+          inheritedProps.push_back(pName);
       }
     }
-    forEach(prop, graph->getInheritedProperties()) {
-      if ((prop != editedPropertyName) &&
-          (typeid(*graph->getProperty(prop)) == typeid(*editedProp)))
-        inheritedProps.push_back(prop);
+    forEach(prop, graph->getInheritedObjectProperties()) {
+      const string &pName = prop->getName();
+      if ((pName != editedPropertyName) &&
+          (typeid(*prop) == typeid(*editedProp)))
+        inheritedProps.push_back(pName);
     }
     dialog.setProperties(editedPropertyName, localProps, inheritedProps);
     CopyPropertyDialog::destType type;
