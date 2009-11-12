@@ -21,7 +21,7 @@ SRCS=   tuliplibtest.cpp \
 TULIP_CONFIG=$(shell which tulip-config)
 
 ifeq ($?, 1)
-TULIP_CONFIG=..\..\..\tulip-config
+TULIP_CONFIG=../../../tulip-config
 endif
 
 CXXFLAGS =  -g -Wall `${TULIP_CONFIG} --cxxflags` `cppunit-config --cflags`
