@@ -291,7 +291,12 @@ namespace tlp {
           (*(DataSet*)p.second->value).get("width",width);
           (*(DataSet*)p.second->value).get("height",height);
 
-          createView(v.first,lastViewedGraph,*(DataSet*)v.second->value,QRect(x,y,width,height));
+          bool maximized=false;
+          if((*(DataSet*)p.second->value).exist("maximized")){
+            (*(DataSet*)p.second->value).get("maximized",maximized);
+          }
+
+          createView(v.first,lastViewedGraph,*(DataSet*)v.second->value,QRect(x,y,width,height),maximized);
 
         }
       }
@@ -374,6 +379,7 @@ namespace tlp {
         tmp.set<int>("y",rect.top());
         tmp.set<int>("width",rect.width());
         tmp.set<int>("height",rect.height());
+        tmp.set<bool>("maximized", ((QWidget *)(widgetList[i]->parent()))->isMaximized());
         views.set<DataSet>(str.str(),tmp);
       }
     }
@@ -410,6 +416,8 @@ namespace tlp {
     if(blockUpdate)
       return;
 
+    blockUpdate=true;
+
     if(graphToReload){
       Graph *graph=graphToReload;
       graphToReload=NULL;
@@ -432,6 +440,8 @@ namespace tlp {
     }else{
       redrawViews();
     }
+
+    blockUpdate=false;
 
     if(currentGraph){
       currentGraphNbNodes=currentGraph->numberOfNodes();
@@ -573,7 +583,7 @@ namespace tlp {
 
     //+++++++++++++++++++++++++++
     //Connection of the menus
-    connect(mainWindowFacade.getInteractorsToolBar(), SIGNAL(actionTriggered(QAction *)), SLOT(changeInteractor(QAction*)));
+    //connect(mainWindowFacade.getInteractorsToolBar(), SIGNAL(actionTriggered(QAction *)), SLOT(changeInteractor(QAction*)));
 
   }
   //**********************************************************************
@@ -746,7 +756,7 @@ namespace tlp {
     return newView;
   }
   //**********************************************************************
-  View* MainController::createView(const string &name,Graph *graph,DataSet dataSet,const QRect &rect){
+  View* MainController::createView(const string &name,Graph *graph,DataSet dataSet,const QRect &rect,bool maximized){
     string verifiedName=name;
     View *newView=ViewPluginsManager::getInst().createView(name);
     QWidget *widget;
@@ -798,6 +808,10 @@ namespace tlp {
     }else{
       ((QWidget*)(widget->parent()))->setGeometry(rect);
     }
+
+    if(maximized)
+      ((QWidget*)(widget->parent()))->showMaximized();
+
     widget->setMaximumSize(32767, 32767);
     widget->show();
 
@@ -888,7 +902,14 @@ namespace tlp {
    }
   //**********************************************************************
   void MainController::installInteractors(View *view) {
+    //remove connection of old actions
+    QList<QAction *> oldActions=mainWindowFacade.getInteractorsToolBar()->actions();
+    for(QList<QAction *>::iterator it=oldActions.begin();it!=oldActions.end();++it){
+      disconnect((*it),SIGNAL(triggered()),this,SLOT(changeInteractor()));
+    }
+
     mainWindowFacade.getInteractorsToolBar()->clear();
+
 
     list<Interactor *> interactorsList=view->getInteractors();
     list<QAction *> interactorsActionList;
@@ -897,6 +918,8 @@ namespace tlp {
 
     for(list<QAction *>::iterator it=interactorsActionList.begin();it!=interactorsActionList.end();++it) {
       mainWindowFacade.getInteractorsToolBar()->addAction(*it);
+      //connect action with change interactor slot
+      connect((*it),SIGNAL(triggered()),this,SLOT(changeInteractor()));
     }
 
     if(!interactorsActionList.empty()) {
@@ -910,6 +933,12 @@ namespace tlp {
 
       changeInteractor(interactorsActionList.front());
     }
+  }
+  //**********************************************************************
+  void MainController::changeInteractor() {
+    //Get QAction who emit the signal (sett QObject protected functions)
+    QAction *action=(QAction*)sender();
+    changeInteractor(action);
   }
   //**********************************************************************
   void MainController::changeInteractor(QAction* action) {
@@ -926,11 +955,18 @@ namespace tlp {
       QWidget *interactorWidget=interactorAction->getInteractor()->getConfigurationWidget();
       bool onInteractorConfigTab=configWidgetTab->currentIndex()==0;
       configWidgetTab->removeTab(0);
+      QWidget *containerWidget=new QWidget();
+      QGridLayout *gridLayout = new QGridLayout(containerWidget);
+      gridLayout->setSpacing(0);
+      gridLayout->setMargin(0);
       if(interactorWidget){
-        configWidgetTab->insertTab(0,interactorWidget,"Interactor");
+        gridLayout->addWidget(interactorWidget,0,0);
       }else{
-        configWidgetTab->insertTab(0,noInteractorConfigWidget,"Interactor");
+        gridLayout->addWidget(noInteractorConfigWidget,0,0);
       }
+
+      configWidgetTab->insertTab(0,containerWidget,"Interactor");
+
       if(onInteractorConfigTab)
         configWidgetTab->setCurrentIndex(0);
 

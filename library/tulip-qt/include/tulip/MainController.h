@@ -97,7 +97,7 @@ namespace tlp {
     /**
      * Create a view with name : name
      */
-    View* createView(const std::string &name,Graph *graph,DataSet dataSet,const QRect &rect=QRect(0,0,0,0));
+    View* createView(const std::string &name,Graph *graph,DataSet dataSet,const QRect &rect=QRect(0,0,0,0),bool maximized=false);
     /**
      * Put interactors of the given view in graphToolBar
      */
@@ -224,6 +224,10 @@ namespace tlp {
      * Change GUI when a QWidget is activated
      */
     void windowActivated(QWidget *w);
+    /**
+     * Load the interactor (in this function we catch the QAction who send this signal) in current View
+     */
+    void changeInteractor();
     /**
      * Load the interactor (referenced by the given QAction) in current View
      */
