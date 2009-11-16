@@ -255,14 +255,39 @@ void TulipApp::startTulip() {
   }
 
   int argc = qApp->argc();
-   if (argc>1) {
-     char ** argv = qApp->argv();
-     for (int i=1;i<argc;++i) {
-       QFileInfo info(argv[i]);
-       QString s = info.absoluteFilePath();
-       fileOpen(0, s);
-     }
-   }
+  if (argc>1) {
+    char ** argv = qApp->argv();
+    for (int i=1;i<argc;++i) {
+      if(string(argv[i])=="--width") {
+        int width = atoi(argv[i+1]);
+        wRect.setWidth(width);
+        ++i;
+        continue;
+      }
+      if(string(argv[i])=="--height") {
+        int height = atoi(argv[i+1]);
+        wRect.setHeight(height);
+        ++i;
+        continue;
+      }
+      if(string(argv[i])=="--x") {
+        int x = atoi(argv[i+1]);
+        wRect.setX(x);
+        ++i;
+        continue;
+      }
+      if(string(argv[i])=="--y") {
+        int y = atoi(argv[i+1]);
+        wRect.setY(y);
+        ++i;
+        continue;
+      }
+      QFileInfo info(argv[i]);
+      QString s = info.absoluteFilePath();
+      fileOpen(0, s);
+    }
+  }
+  this->setGeometry(wRect.x(), wRect.y(),wRect.width(), wRect.height());
 
 }
 //**********************************************************************
@@ -976,9 +1001,9 @@ void TulipApp::loadInterface(int index){
     if(actionsToAdd.size()!=0){
       for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
         graphToolBar->addAction(*it);
-        /*if((*it)->isChecked()){
+        if((*it)->isChecked()){
           (*it)->activate(QAction::Trigger);
-        }*/
+        }
       }
     }
   }
