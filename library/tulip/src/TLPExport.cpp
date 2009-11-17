@@ -134,18 +134,39 @@ public:
       os << "\"" << convert(prop->getName()) << "\"" << endl;
       string nDefault = prop->getNodeDefaultStringValue();
       string eDefault = prop->getEdgeDefaultStringValue();
+      // replace real path with symbolic one using TulipBitmapDir
+      if (prop->getName() == string("viewFont")) {
+	size_t pos = nDefault.find(TulipBitmapDir);
+	if(pos != string::npos)
+	  nDefault.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+	pos = eDefault.find(TulipBitmapDir);
+	if(pos != string::npos)
+	  eDefault.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+      }
       os <<"(default \"" << convert(nDefault) << "\" \"" << convert(eDefault) << "\")" << endl;
-      Iterator<node> *itN=graph->getNodes();
+      Iterator<node> *itN = prop->getNonDefaultValuatedNodes();
       while (itN->hasNext()) {
 	node itn=itN->next();
 	string tmp = prop->getNodeStringValue(itn);
-	if (strcmp(tmp.c_str(),nDefault.c_str())!=0) os << "(node " << itn.id << " \"" << convert(tmp) << "\")" << endl ;
+	// replace real path with symbolic one using TulipBitmapDir
+	if (prop->getName() == string("viewFont")) {
+	  size_t pos = tmp.find(TulipBitmapDir);
+	  if (pos != string::npos)
+	    tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+	}
+	os << "(node " << itn.id << " \"" << convert(tmp) << "\")" << endl ;
       } delete itN;
-      Iterator<edge> *itE=graph->getEdges();
+      Iterator<edge> *itE = prop->getNonDefaultValuatedEdges();
       while (itE->hasNext()) {
 	edge ite=itE->next();
+	// replace real path with symbolic one using TulipBitmapDir
 	string tmp = prop->getEdgeStringValue(ite);
-	if (strcmp(tmp.c_str(),eDefault.c_str())!=0) os << "(edge " << ite.id << " \"" << convert(tmp) << "\")" << endl ;
+	if (prop->getName() == string("viewFont")) {
+	  size_t pos = tmp.find(TulipBitmapDir);
+	  if (pos != string::npos)
+	    tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+	}
+	os << "(edge " << ite.id << " \"" << convert(tmp) << "\")" << endl ;
       } delete itE;
       os << ")" << endl;
     }

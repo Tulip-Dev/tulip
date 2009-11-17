@@ -143,8 +143,15 @@ struct TLPGraphBuilder:public TLPTrue {
 	return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setNodeStringValue( nodeIndex[nodeId], value );
       if (propertyType==BOOL)
 	return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setNodeStringValue( nodeIndex[nodeId], value );
-      if (propertyType==STRING)
+      if (propertyType==STRING) {
+	if (propertyName == string("viewFont")) {
+	  // if needed replace symbolic path by real path
+	  size_t pos = value.find("TulipBitmapDir/");
+	  if (pos!=string::npos)
+	    value.replace(pos, 15, TulipBitmapDir);
+	}
 	return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setNodeStringValue( nodeIndex[nodeId], value );
+      }
       if (propertyType==SIZE_VECTOR)
 	return clusterIndex[clusterId]->getLocalProperty<SizeVectorProperty>(propertyName)->setNodeStringValue( nodeIndex[nodeId], value );
       if (propertyType==COLOR_VECTOR)
@@ -188,8 +195,15 @@ struct TLPGraphBuilder:public TLPTrue {
 	return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
       if (propertyType==BOOL)
 	return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
-      if (propertyType==STRING)
+      if (propertyType==STRING) {
+	if (propertyName == string("viewFont")) {
+	  // if needed replace symbolic path by real path
+	  size_t pos = value.find("TulipBitmapDir/");
+	  if (pos!=string::npos)
+	    value.replace(pos, 15, TulipBitmapDir);
+	}
 	return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
+      }
       if (propertyType==SIZE_VECTOR)
 	return clusterIndex[clusterId]->getLocalProperty<SizeVectorProperty>(propertyName)->setEdgeStringValue( edgeIndex[edgeId], value );
       if (propertyType==COLOR_VECTOR)
@@ -235,8 +249,15 @@ struct TLPGraphBuilder:public TLPTrue {
 	return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setAllNodeStringValue( value );
       if (propertyType==BOOL)
 	return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setAllNodeStringValue( value );
-      if (propertyType==STRING)
+      if (propertyType==STRING) {
+	if (propertyName == string("viewFont")) {
+	  // if needed replace symbolic path by real path
+	  size_t pos = value.find("TulipBitmapDir/");
+	  if (pos!=string::npos)
+	    value.replace(pos, 15, TulipBitmapDir);
+	}
 	return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setAllNodeStringValue( value );
+      }
       if (propertyType==SIZE_VECTOR)
 	return clusterIndex[clusterId]->getLocalProperty<SizeVectorProperty>(propertyName)->setAllNodeStringValue( value );
       if (propertyType==COLOR_VECTOR)
@@ -279,8 +300,15 @@ struct TLPGraphBuilder:public TLPTrue {
 	return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setAllEdgeStringValue( value );
       if (propertyType==BOOL)
 	return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setAllEdgeStringValue( value );
-      if (propertyType==STRING)
+      if (propertyType==STRING) {
+	if (propertyName == string("viewFont")) {
+	  // if needed replace symbolic path by real path
+	  size_t pos = value.find("TulipBitmapDir/");
+	  if (pos!=string::npos)
+	    value.replace(pos, 15, TulipBitmapDir);
+	}
 	return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setAllEdgeStringValue( value );
+      }
       if (propertyType==SIZE_VECTOR)
 	return clusterIndex[clusterId]->getLocalProperty<SizeVectorProperty>(propertyName)->setAllEdgeStringValue( value );
       if (propertyType==COLOR_VECTOR)
