@@ -81,10 +81,12 @@ InteractorSelectionModifier::InteractorSelectionModifier():NodeLinkDiagramCompon
   setPriority(3);
   setConfigurationWidgetText(QString("<h3>Selection modifier interactor</h3>")+
 			     "Modify selection<br/><br/>"+
-			     "Resize: <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
-			     "Rotate: <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
-			     "Resize & Rotate: <ul><li><b>Mouse left</b> down on suqare + moves</li></ul>" +
-			     "Translate: <ul><li><b>Mouse left</b> down inside rectangle + moves</li></ul>");
+			     "Resize : <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
+			     "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +
+			     "Resize only selected Nodes : <ul><li><b>Ctrl + Mouse left</b> down on triangle + moves</li></ul>" +
+			     "Rotate : <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
+ 			     "Rotate only selected Nodes : <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
+			     "Translate : <ul><li><b>Mouse left</b> down inside rectangle + moves</li></ul>");
 }
 
 void InteractorSelectionModifier::construct(){
