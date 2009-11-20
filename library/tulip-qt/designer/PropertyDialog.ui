@@ -238,6 +238,9 @@
          <property name="text" >
           <string>All</string>
          </property>
+	 <property name="checked"> 	 
+	  <bool>true</bool> 	 
+	 </property>
         </widget>
        </item>
        <item>
