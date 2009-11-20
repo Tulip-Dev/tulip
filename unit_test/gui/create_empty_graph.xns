@@ -1,0 +1,190 @@
+####################################
+#         System information       #
+####################################
+# Date:                   2009:11:20 
+# Time:                   07:04:26 
+# Xnee program:           cnee 
+# Xnee version:           3.03 
+# Xnee home:              http://www.gnu.org/software/xnee/ 
+# Xnee info mailing list: info-xnee@gnu.org 
+# Xnee bug mailing list:  bug-xnee@gnu.org 
+# X version:              11 
+# X revision:             0 
+# X vendor:               The X.Org Foundation 
+# X vendor release:       10502000 
+# Record version major:   1
+# Record version minor:   13
+# OS name:                Linux 
+# OS Release:             2.6.27-15-generic 
+# OS Version:             #1 SMP Tue Oct 20 06:52:09 UTC 2009 
+# Machine:                i686 
+# Nodename:               pm-kubuntu-8 
+# Display name:           :0
+# Dimension:              1600x1021
+
+
+
+##############################################
+#      Xnee application arguments            #
+##############################################
+#  /home/pm/xnee-3.03/cnee/src//cnee -rec -etr -1 --keyboard --mouse -sk End -o create_empty_graph.xns 
+
+
+##############################################
+#      Displays                              #
+##############################################
+# display :0
+# distribute
+
+
+##############################################
+#      Files                                 #
+##############################################
+# out-file create_empty_graph.xns
+# err-file stderr
+
+
+##############################################
+#      Key Grabs                             #
+##############################################
+# stop-key         End
+# pause-key        0
+# resume-key       0
+# insert-key       0
+# exec-key         0
+# exec-program-key         xnee-exec-no-program
+
+
+##############################################
+#      Recording limits etc                  #
+##############################################
+
+events-to-record        -1
+data-to-record          -1
+seconds-to-record       -1
+# first-last
+
+# Record  all (including current) clients or only future ones
+all-clients
+# future-clients
+
+# Store the starting mouse position 
+# store-mouse-position
+
+
+##############################################
+#      Resolution                            #
+##############################################
+
+# Resolution
+#recorded-resolution  1600x1021
+#replay-resolution  1x1
+#resolution-adjustment  0
+
+
+##############################################
+#      Speed                                 #
+##############################################
+
+# Speed
+#speed-percent  100
+
+
+##############################################
+#      Replaying limits etc                  #
+##############################################
+
+max-threshold 20 
+min-threshold 20 
+tot-threshold 40 
+
+
+##############################################
+#      Feedback                              #
+##############################################
+#feedback-none
+#feedback-stderr
+feedback-xosd
+ 
+
+
+##############################################
+#      Various                               #
+##############################################
+
+# Plugin file 
+# plugin       (null)
+
+# Modes (currently not used)
+# synchronised-replay
+
+# Replay offset
+#replay-offset 0x0
+
+# Human printout of X11 data (instead of Xnee format)
+# human-printout  
+
+# Delay before starting record/replay
+# time 0
+
+# Various
+#########################################
+#          Record settings              #
+#########################################
+#   data_flags          7
+#   rState              167555648
+#   xids[0]             3
+#   xids[1]             0
+# Number of Ranges      1
+# RecordRange[0]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         21-21 
+device-event-range            2-6 
+error-range                   0-0 
+0,2,0,0,0,64,0,51965458
+0,2,0,0,0,41,0,51965756
+0,3,0,0,0,41,0,51965823
+0,3,0,0,0,64,0,51965917
+0,2,0,0,0,36,0,51966867
+0,3,0,0,0,36,0,51966949
+NEW-WINDOW:-1209408841,167717340:25167956,25167956,97,0,0,0:0x0+0+-1075343752:4096,4096:
+NEW-WINDOW:493,182:25167958,25167958,25169372,0,0,0:0x0+1+1:0,0:
+NEW-WINDOW:493,182:25167980,25167980,25169372,0,0,0:0x0+492+466:0,0:
+NEW-WINDOW:-1209408841,-1209294448:25167993,25167993,97,0,0,0:0x0+0+-1075343752:4096,4096:
+NEW-WINDOW:91,-1208213504:25167995,25167995,97,0,0,0:0x0+0+-1075343752:4096,4096:
+0,2,0,0,0,37,0,51969194
+0,2,0,0,0,50,0,51969437
+0,2,0,0,0,39,0,51969981
+NEW-WINDOW:367,261:25169976,25169976,29822892,0,0,0:0x0+490+477:0,0:Enter Export parameters
+NEW-WINDOW:362,236:29822899,29822899,29822891,0,0,0:0x0+500+507:0,0:kwin
+0,3,0,0,0,39,0,51970080
+0,3,0,0,0,50,0,51970141
+0,3,0,0,0,37,0,51970180
+0,2,0,0,0,36,0,51971435
+0,3,0,0,0,36,0,51971500
+NEW-WINDOW:295,288:25170179,25170179,29823488,0,0,0:0x0+633+424:0,0:Choose a file to save
+NEW-WINDOW:290,263:29823495,29823495,29823487,0,0,0:0x0+643+454:0,0:kwin
+0,2,0,0,0,28,0,51973812
+0,3,0,0,0,28,0,51973881
+0,2,0,0,0,26,0,51974213
+0,3,0,0,0,26,0,51974295
+0,2,0,0,0,39,0,51974426
+0,3,0,0,0,39,0,51974497
+0,2,0,0,0,28,0,51974638
+0,3,0,0,0,28,0,51974757
+0,2,0,0,0,17,0,51975008
+0,3,0,0,0,17,0,51975077
+0,2,0,0,0,42,0,51975528
+0,3,0,0,0,42,0,51975604
+0,2,0,0,0,30,0,51975625
+0,2,0,0,0,31,0,51975712
+0,3,0,0,0,30,0,51975760
+0,3,0,0,0,31,0,51975831
+0,2,0,0,0,36,0,51977267
+NEW-WINDOW:290,263:25170179,25170179,97,290,263,0:290x263+633+424:0,0:Choose a file to save
+0,3,0,0,0,36,0,51977329
