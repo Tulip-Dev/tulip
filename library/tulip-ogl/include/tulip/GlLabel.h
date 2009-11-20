@@ -32,6 +32,9 @@ namespace tlp {
   {
   public :
 
+    static const int TEXTURE_MODE = 0;
+    static const int POLYGON_MODE = 1;
+
     GlLabel();
 
     /**
@@ -100,6 +103,22 @@ namespace tlp {
      * Function to set data with XML
      */
     virtual void setWithXML(xmlNodePtr rootNode);
+
+    /**
+     * Switch to bold font
+     */
+    virtual void setBoldFont();
+
+    /**
+     * Switch to plain font
+     */
+    virtual void setPlainFont();
+
+    /**
+     * Switch rendering mode to polygon- or texture-based rendering
+     */
+    virtual void setRenderingMode(int mode);
+
 
   private :
 

@@ -63,6 +63,28 @@ namespace tlp {
   Coord GlLabel::getSize() {
     return size;
   }
+
+  //============================================================
+  void GlLabel::setBoldFont() {
+    renderer->setContext(TulipBitmapDir + "fontb.ttf", 20, 0, 0, 255);
+  }
+  //============================================================
+  void GlLabel::setPlainFont() {
+    renderer->setContext(TulipBitmapDir + "font.ttf", 20, 0, 0, 255);
+  }
+  void GlLabel::setRenderingMode(int mode) {
+    switch (mode) {
+    case TEXTURE_MODE:
+      renderer->setMode(TLP_TEXTURE);
+      break;
+    case POLYGON_MODE:
+      renderer->setMode(TLP_POLYGON);
+      break;
+    default:
+      renderer->setMode(TLP_TEXTURE);
+    }
+  }
+
   //============================================================
   void GlLabel::draw(float lod, Camera *camera) {
 
@@ -85,17 +107,17 @@ namespace tlp {
 
     div_w = size[0]/w;
     div_h = size[1]/h;
-
+    
     if(!leftAlign) {
       glTranslatef(centerPosition[0],centerPosition[1], centerPosition[2]);
-      if(div_h > div_w)
-	glScalef(div_w, div_w, 1);
-      else
-	glScalef(div_h, div_h, 1);
     }else{
       glTranslatef(centerPosition[0]+size[0]/2,centerPosition[1], centerPosition[2]);
-      glScalef(div_w, div_h, 1);
     }
+    if(div_h * w > size[0])        // too wide, so make it fit and maintain aspect ratio
+      glScalef(div_w, div_w, 1);
+    else
+      glScalef(div_h, div_h, 1);
+    
 
     if(xRot!=0.)
       glRotatef(xRot,1.,0.,0.);
