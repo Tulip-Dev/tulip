@@ -85,9 +85,11 @@ class SGraphNodeIterator:public FactorNodeIterator {
   Iterator<node> *it;
   node curNode;
   bool _hasnext;
+  bool value;
 
  public:
-  SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter);
+  SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter,
+		     bool value=true);
   ~SGraphNodeIterator();
   node next();
   bool hasNext();
@@ -143,9 +145,11 @@ class SGraphEdgeIterator:public FactorEdgeIterator
   Iterator<edge> *it;
   edge curEdge;
   bool _hasnext;
+  bool value;
 
  public:
-  SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter);
+  SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter,
+		     bool value = true);
   ~SGraphEdgeIterator();
   edge next();
   bool hasNext();

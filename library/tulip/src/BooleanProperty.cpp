@@ -17,7 +17,7 @@ Iterator<node>* BooleanProperty::getNodesEqualTo(const bool val, Graph *sg) {
   if (sg == graph)
     it = nodeProperties.findAll(val);
   if (it == 0)
-    return new SGraphNodeIterator(sg, nodeProperties);
+    return new SGraphNodeIterator(sg, nodeProperties, val);
   return (new UINTIterator<node>(it));
 }
 //=================================================================================
@@ -27,7 +27,7 @@ Iterator<edge>* BooleanProperty::getEdgesEqualTo(const bool val, Graph *sg) {
   if (sg == graph)
     it = edgeProperties.findAll(val);
   if (it == 0)
-    return new SGraphEdgeIterator(sg, edgeProperties);
+    return new SGraphEdgeIterator(sg, edgeProperties, val);
   return (new UINTIterator<edge>(it));
 }
 //=================================================================================
