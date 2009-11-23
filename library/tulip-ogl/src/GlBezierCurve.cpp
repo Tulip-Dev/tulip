@@ -65,8 +65,8 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 
 	// if no texture set, draw the curve outline for anti-aliasing
 	if(texture == "" && points != NULL) {
-		glEnable(GL_BLEND);
-		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		/*glEnable(GL_BLEND);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 		glBegin(GL_LINE_STRIP);
 		for (unsigned int i = 0 ; i < size ; ++i) {
 			tlp::setMaterial(curveColors[i]);
@@ -309,7 +309,7 @@ string genBezierVertexShaderPolynomEvalSrc(unsigned int nbControlPoints) {
 	return oss.str();
 }
 
-static const unsigned int CONTROL_POINTS_LIMIT = 70;
+static const unsigned int CONTROL_POINTS_LIMIT = 60;
 
 namespace tlp {
 
@@ -507,8 +507,8 @@ void GlBezierCurve::draw(float lod, Camera *camera) {
 				}
 
 				if (texture == "") {
-					glEnable(GL_BLEND);
-					glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					/*glEnable(GL_BLEND);
+					glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 					if (vboOk) {
 						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
 						glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
