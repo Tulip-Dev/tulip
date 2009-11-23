@@ -211,10 +211,10 @@ class QuadTreeNode {
   //======================================
   //reutrn true id p is in box
   bool isInside(const tlp::Coord &p, const BBox &box) const{
-    if ((p[0] <= box.second[0]) &&
-        (p[0] >= box.first[0]) &&
-        (p[1] <= box.second[1]) &&
-        (p[1] >= box.first[1]))
+    if ((p[0] < box.second[0]) &&
+        (p[0] > box.first[0]) &&
+        (p[1] < box.second[1]) &&
+        (p[1] > box.first[1]))
       return true;
     return false;
   }
