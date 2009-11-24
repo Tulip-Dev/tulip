@@ -84,7 +84,13 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     }
     if (started) {
       started = false;
-      if ((abs(w) > 10) && (abs(h) > 10)) {
+      if(!(w==0 && h==0)){
+	if (abs(w) < 10){
+	  w=10;
+	}
+	if(abs(h) < 10) {
+	  h=10;
+	}
 	//      cerr << __FUNCTION__ << ": " << this << "(x,y)=(" << e->x() << "," << e->y() << ")" << endl;
 	int width = glw->width();
 	int height = glw->height();
