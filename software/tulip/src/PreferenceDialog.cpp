@@ -57,18 +57,18 @@ void PreferenceDialog::loadPreference(){
   preferenceManager.setAutoLoadController(autoLoadController);
 }
 void PreferenceDialog::savePreference(){
-  PreferenceManager &preferenceManager=PreferenceManager::getInst();
-
+  QColor selectionColor = selectionColorButton->palette().color(QPalette::Button);
+  
   QSettings settings("TulipSoftware","Tulip");
   settings.beginGroup("Preference");
 
-  settings.setValue("selectionColorR",preferenceManager.getSelectionColor()[0]);
-  settings.setValue("selectionColorG",preferenceManager.getSelectionColor()[1]);
-  settings.setValue("selectionColorB",preferenceManager.getSelectionColor()[2]);
-  settings.setValue("selectionColorA",preferenceManager.getSelectionColor()[3]);
+  settings.setValue("selectionColorR",selectionColor.red());
+  settings.setValue("selectionColorG",selectionColor.green());
+  settings.setValue("selectionColorB",selectionColor.blue());
+  settings.setValue("selectionColorA",selectionColor.alpha());
 
-  settings.setValue("networkConnection",preferenceManager.getNetworkConnection());
-  settings.setValue("autoLoadController",preferenceManager.getAutoLoadController());
+  settings.setValue("networkConnection",networkRadioButton->isChecked());
+  settings.setValue("autoLoadController",autoLoadControllerButton->isChecked());
 
   settings.endGroup();
 }
@@ -110,14 +110,7 @@ void PreferenceDialog::selectionColorButtonSlot(){
 }
 
 void PreferenceDialog::accept() {
-
-  PreferenceManager &preferenceManager=PreferenceManager::getInst();
-  preferenceManager.setNetworkConnection(networkRadioButton->isChecked());
-  preferenceManager.setAutoLoadController(autoLoadControllerButton->isChecked());
-  QColor selectionColor = selectionColorButton->palette().color(QPalette::Button);
-  preferenceManager.setSelectionColor(Color(selectionColor.red(),selectionColor.green(),selectionColor.blue(),selectionColor.alpha()));
-
-  PreferenceDialog::savePreference();
+  savePreference();
 
   QDialog::accept();
 }

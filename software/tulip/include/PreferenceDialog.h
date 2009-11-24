@@ -11,7 +11,7 @@ public:
   ~PreferenceDialog();
 
   static void loadPreference();
-  static void savePreference();
+  void savePreference();
 
 protected slots:
 

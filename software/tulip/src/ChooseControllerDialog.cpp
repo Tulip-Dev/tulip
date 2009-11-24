@@ -7,9 +7,9 @@
 #include <iostream>
 
 #include <QtGui/QPushButton>
+#include <QtCore/QSettings>
 
 #include <tulip/PreferenceManager.h>
-#include "PreferenceDialog.h"
 
 using namespace std;
 using namespace tlp;
@@ -73,8 +73,9 @@ void ChooseControllerDialog::itemClicked(QListWidgetItem *item){
 }
 
 void ChooseControllerDialog::accept() {
-  PreferenceManager &preferenceManager=PreferenceManager::getInst();
-  preferenceManager.setAutoLoadController(askAgain->isChecked());
-  PreferenceDialog::savePreference();
+  QSettings settings("TulipSoftware","Tulip");
+  settings.beginGroup("Preference");
+  settings.setValue("autoLoadController",askAgain->isChecked());
+  settings.endGroup();
   QDialog::accept();
 }

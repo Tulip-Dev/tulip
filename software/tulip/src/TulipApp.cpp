@@ -188,6 +188,9 @@ void TulipApp::startTulip() {
     errorDlg->show();
   }
   enableElements(false);
+  
+  /*Load preference*/
+  PreferenceDialog::loadPreference();
 
   if(PreferenceManager::getInst().getNetworkConnection()){
     pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
@@ -229,9 +232,6 @@ void TulipApp::startTulip() {
   assistant = new QAssistantClient("", this);
 #endif
   connect(assistant, SIGNAL(error(const QString&)), SLOT(helpAssistantError(const QString&)));
-
-  /*Load preference*/
-  PreferenceDialog::loadPreference();
 
   /*saveActions(menuBar(),NULL,controllerToMenu);
   saveActions(toolBar,NULL,controllerToToolBar);*/
@@ -1042,6 +1042,14 @@ void TulipApp::helpAbout() {
 void TulipApp::preference() {
   PreferenceDialog pref(this);
   pref.exec();
+  
+  int result = QMessageBox::warning(this,
+				    tr(""),
+				    tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
+				    QMessageBox::Yes | QMessageBox::Default,
+				    QMessageBox::No);
+  if(result == QMessageBox::Yes)
+    fileExit();
 }
 //==============================================================
 void TulipApp::helpIndex() {
