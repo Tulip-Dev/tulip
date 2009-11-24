@@ -176,8 +176,10 @@ namespace tlp {
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_BLEND);
 
-    if(GlTextureManager::getInst().activateTexture(textureName));
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    if(textureName!=""){
+      if(GlTextureManager::getInst().activateTexture(textureName))
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    }
 
     GLUtesselator *tobj;
     tobj = gluNewTess();
@@ -230,7 +232,8 @@ namespace tlp {
     gluTessEndPolygon(tobj);
     gluDeleteTess(tobj);
     delete pointsData;
-    GlTextureManager::getInst().desactivateTexture();
+    if(textureName!="")
+      GlTextureManager::getInst().desactivateTexture();
 
     if (outlined) {
       glLineWidth(outlineSize);
