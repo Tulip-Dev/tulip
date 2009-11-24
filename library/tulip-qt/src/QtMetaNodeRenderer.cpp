@@ -221,6 +221,7 @@ namespace tlp {
     glTranslatef(newCenter[0],newCenter[1],newCenter[2]);
     glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., 1.);
     glDisable(GL_LIGHTING);
+    glDisable(GL_BLEND);
     glBegin(GL_QUADS);
     glTexCoord2f(xTextureDec, yTextureDec);
     glVertex3f(-newSize[0]/2.,-newSize[1]/2.,0);
@@ -231,6 +232,7 @@ namespace tlp {
     glTexCoord2f(xTextureDec, 1.0-yTextureDec);
     glVertex3f(-newSize[0]/2.,newSize[1]/2.,0);
     glEnd();
+    glEnable(GL_BLEND);
     glEnable(GL_LIGHTING);
 
     GlTextureManager::getInst().desactivateTexture();
