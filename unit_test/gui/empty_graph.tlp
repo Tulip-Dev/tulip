@@ -31,7 +31,7 @@
 (default "0" "0")
 )
 (property  0 layout "viewLayout"
-(default "(12,923,999)" "()")
+(default "(0,0,0)" "()")
 )
 (property  0 graph "viewMetaGraph"
 (default "" "()")

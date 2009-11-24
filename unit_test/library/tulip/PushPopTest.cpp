@@ -423,7 +423,7 @@ void PushPopTest::testAddDelProps() {
 void PushPopTest::testMetaNode() {
   node n0 = graph->addNode();
   LayoutProperty* layout = graph->getProperty<LayoutProperty>("viewLayout");
-  Coord coord0(0, 0, 0);
+  Coord coord0(-1, -1, -1);
   layout->setNodeValue(n0, coord0);
 
   set<node> tmp;

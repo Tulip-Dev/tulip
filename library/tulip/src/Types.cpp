@@ -437,9 +437,8 @@ Coord PointType::undefinedValue() {
   return tmp;
 }
 
-Coord
-PointType::defaultValue() {
-  return Coord(rand()%1024,rand()%1024,rand()%1024);
+Coord PointType::defaultValue() {
+  return Coord(0, 0, 0);
 }
 
 string PointType::toString( const RealType & v ) {
