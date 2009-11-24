@@ -623,7 +623,7 @@ namespace tlp {
     editRedoAction->setEnabled(false);
 
      //Algorithm Menu
-    algorithmMenu = new QMenu("Algorithm");
+    algorithmMenu = new QMenu("&Algorithm");
     algorithmMenu->setEnabled(false);
     intMenu=new QMenu("&Integer");
     stringMenu=new QMenu("L&abel");
