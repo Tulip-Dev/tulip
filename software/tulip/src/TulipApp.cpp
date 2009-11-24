@@ -113,7 +113,7 @@ static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::st
 ///Constructor of ViewGl
 TulipApp::TulipApp(QWidget* parent): QMainWindow(parent),currentTabIndex(-1)  {
   setupUi(this);
-
+  tabWidget=centralTabWidget;
 }
 
 //**********************************************************************
@@ -398,6 +398,7 @@ bool TulipApp::createController(const string &name,const string &graphName) {
     QWidget *tab=new QWidget();
     QGridLayout *gridLayout = new QGridLayout(tab);
     QWorkspace *newWorkspace=new QWorkspace(tab);
+    
     newWorkspace->setBackground(QBrush(QPixmap(QString::fromUtf8(":/background_logo.png"))));
 
     gridLayout->addWidget(newWorkspace, 0, 0, 1, 1);
@@ -411,6 +412,10 @@ bool TulipApp::createController(const string &name,const string &graphName) {
     tabIndexToController[index]=newController;
     controllerToControllerName[newController]=name;
     controllerToWorkspace[newController]=newWorkspace;
+    
+    //Set Qt object names
+    tab->setObjectName(QString("ControllerMainWidget ")+QString::number(index));
+    newWorkspace->setObjectName(QString("ControllerWorkspace ")+QString::number(index));
 
   }else{
     controllerAutoLoad=false;

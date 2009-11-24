@@ -759,7 +759,6 @@ namespace tlp {
   View* MainController::createView(const string &name,Graph *graph,DataSet dataSet,const QRect &rect,bool maximized){
     string verifiedName=name;
     View *newView=ViewPluginsManager::getInst().createView(name);
-    QWidget *widget;
 
     if(!newView){
       verifiedName="Node Link Diagram view";
@@ -779,8 +778,10 @@ namespace tlp {
     }
     newView->setInteractors(interactorsList);
 
+    QWidget *widget;
     widget=newView->construct(mainWindowFacade.getWorkspace());
     newView->setData(graph,dataSet);
+    widget->setObjectName(QString("ViewMainWidget p:")+QString::number((long)widget));
 
     viewGraph[newView]=graph;
     viewNames[newView]=verifiedName;

@@ -107,6 +107,7 @@ private:
 
   QMenu *newMenu;
   QAction *newAction;
+  QTabWidget *tabWidget;
   unsigned int mouseClicX,mouseClicY;
 
   QAssistantClient* assistant;
