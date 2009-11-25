@@ -15,6 +15,8 @@ LayoutProperty::LayoutProperty (Graph *sg, std::string n):AbstractProperty<Point
   minMaxOk[(unsigned long)graph]=false;
   // the property observes itself; see beforeSet... methods
   addPropertyObserver(this);
+  // but do not need to be in observables
+  removeObservable(this);
 }
 //======================================================
 Coord LayoutProperty::getMax(Graph *sg) {

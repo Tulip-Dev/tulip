@@ -15,6 +15,8 @@ SizeProperty::SizeProperty (Graph *sg, std::string n):
   AbstractProperty<SizeType,SizeType, SizeAlgorithm>(sg, n) {
   // the property observes itself; see beforeSet... methods
   addPropertyObserver(this);
+  // but do not need to be in observables
+  removeObservable(this);
 }
 //====================================================================
 void SizeProperty::scale(const tlp::Vector<float,3>& v, Iterator<node> *itN, Iterator<edge> *itE) {

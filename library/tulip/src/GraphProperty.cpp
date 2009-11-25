@@ -13,6 +13,8 @@ GraphProperty::GraphProperty (Graph *sg, std::string n) :
   setAllNodeValue(0);
   // the property observes itself; see beforeSet... methods
   addPropertyObserver(this);
+  // but do not need to be in observables
+  PropertyObserver::removeObservable(this);
 }
 //==============================
 GraphProperty::~GraphProperty() {
