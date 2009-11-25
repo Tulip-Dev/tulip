@@ -65,17 +65,18 @@ void tlp::initTulipLib(char* appDirPath) {
       TulipLibDir = std::string(appDirPath) + "/lib";
 #else
       // one dir up to initialize the lib dir
-      char *last = strrchr(appDirPath, '/');
-      last[1] = 0;
+      TulipLibDir.append(appDirPath,
+			 strlen(appDirPath) -
+			 strlen(strrchr(appDirPath, '/') + 1));
 #ifdef I64
       // check for lib64
-      string tlpPath64 = std::string(appDirPath) + "lib64/tlp";
+      string tlpPath64 = TulipLibDir + "lib64/tlp";
       struct stat statInfo;
       if (stat(tlpPath64.c_str(), &statInfo) == 0)
-	TulipLibDir = std::string(appDirPath) + "lib64";
+	TulipLibDir.append("lib64");
       else
 #endif
-      TulipLibDir = std::string(appDirPath) + "lib";
+	TulipLibDir.append("lib");
 #endif
     } else
       TulipLibDir=string(_TULIP_LIB_DIR);
