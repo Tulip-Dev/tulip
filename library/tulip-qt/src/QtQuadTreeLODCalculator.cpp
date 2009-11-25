@@ -41,10 +41,6 @@ namespace tlp {
   }
 
   bool QtQuadTreeLODCalculator::needEntities(){
-    // Check if current graph are in the hierarchy
-    if(!rootGraph)
-      rootGraph=scene->getGlGraphComposite()->getInputData()->graph->getRoot();
-    assert((rootGraph==scene->getGlGraphComposite()->getInputData()->graph) || (rootGraph->isDescendantGraph(scene->getGlGraphComposite()->getInputData()->graph)));
 
     if(haveToCompute)
       return true;
@@ -383,6 +379,16 @@ namespace tlp {
       nodesResultVector.clear();
       edgesResultVector.clear();
       cameraVector.clear();
+    }
+    
+    void QtQuadTreeLODCalculator::modifyLayer(GlScene*, const std::string& name, GlLayer*){
+      haveToCompute=true;
+      removeObservers();
+    }
+    
+    void QtQuadTreeLODCalculator::modifyEntity(GlScene *,GlSimpleEntity *e){
+      haveToCompute=true;
+      removeObservers();
     }
 
 }
