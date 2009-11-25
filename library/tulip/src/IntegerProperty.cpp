@@ -11,150 +11,148 @@ using namespace tlp;
 
 //==============================
 ///Constructeur d'un IntegerProperty
-IntegerProperty::IntegerProperty (Graph *sg, std::string n):AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>(sg, n) {
-  minMaxOk=false;
+IntegerProperty::IntegerProperty (Graph *sg, std::string n):AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>(sg, n),
+  minMaxOkNode(false),minMaxOkEdge(false) {
   // the property observes itself; see afterSet... methods
   addPropertyObserver(this);
 }
 //====================================================================
 ///Renvoie le minimum de la m�trique associ� aux noeuds du IntegerProperty
-int IntegerProperty::getNodeMin() {
-  if (!minMaxOk) 
-    computeMinMax();
-  return minN;
+int IntegerProperty::getNodeMin(Graph *sg) {
+  if (sg==0) sg=graph;
+  unsigned long sgi=(unsigned long)sg;
+  if (minMaxOkNode.find(sgi)==minMaxOkNode.end()) minMaxOkNode[sgi]=false;
+  if (!minMaxOkNode[sgi]) computeMinMaxNode(sg);
+  return minN[sgi];
 }
 //====================================================================
 ///Renvoie le maximum de la m�trique associ� aux noeuds du IntegerProperty
-int IntegerProperty::getNodeMax() {
-  if (!minMaxOk) 
-    computeMinMax();
-  return maxN;
+int IntegerProperty::getNodeMax(Graph *sg) {
+  if (sg==0) sg=graph;
+  unsigned long sgi=(unsigned long)sg;
+  if (minMaxOkNode.find(sgi)==minMaxOkNode.end()) minMaxOkNode[sgi]=false;
+  if (!minMaxOkNode[sgi]) computeMinMaxNode(sg);
+  return maxN[sgi];
 }
 //====================================================================
 ///Renvoie le Minimum de la m�trique associ� aux ar�tes du IntegerProperty
-int IntegerProperty::getEdgeMin() {
-  if (!minMaxOk) 
-    computeMinMax();
-  return minE;
+int IntegerProperty::getEdgeMin(Graph *sg) {
+  if (sg==0) sg=graph;
+  unsigned long sgi=(unsigned long)sg;
+  if (minMaxOkEdge.find(sgi)==minMaxOkEdge.end()) minMaxOkEdge[sgi]=false;
+  if (!minMaxOkEdge[sgi]) computeMinMaxEdge(sg);
+  return minE[sgi];
 }
 //====================================================================
 ///Renvoie le Maximum de la m�trique associ� aux ar�tes du IntegerProperty
-int IntegerProperty::getEdgeMax() {
-  if (!minMaxOk) 
-    computeMinMax();
-  return maxE;
+int IntegerProperty::getEdgeMax(Graph *sg) {
+  if (sg==0) sg=graph;
+  unsigned long sgi=(unsigned long)sg;
+  if (minMaxOkEdge.find(sgi)==minMaxOkEdge.end()) minMaxOkEdge[sgi]=false;
+  if (!minMaxOkEdge[sgi]) computeMinMaxEdge(sg);
+  return maxE[sgi];
 }
 //========================================================================
 ///Calcul le min et le Max de la m�trique associ� au proxy
-///Attention, la gestion du mim et max des ar�tes n'est pas 
-///assur� ici et doit �tre ajout� ult�rieurement
-void IntegerProperty::computeMinMax() {
-  //cerr << "Compute Min Max" << endl;
-  int tmp;
-  Iterator<node> *itN=graph->getNodes();
+void IntegerProperty::computeMinMaxNode(Graph *sg) {
+  int maxN2,minN2;
+  if (sg==0) sg=graph;
+  Iterator<node> *itN=sg->getNodes();
   if (itN->hasNext()) {
     node itn=itN->next();
-    tmp=getNodeValue(itn);
-    maxN=tmp;
-    minN=tmp;
+    int tmp=getNodeValue(itn);
+    maxN2=tmp;
+    minN2=tmp;
   }
-  for (;itN->hasNext();) {
+  while (itN->hasNext()) {
     node itn=itN->next();
-    tmp=getNodeValue(itn);
-    if (tmp>maxN) maxN=tmp;
-    if (tmp<minN) minN=tmp;
-  }
-  delete itN;
-  Iterator<edge> *itE=graph->getEdges();
+    int tmp=getNodeValue(itn);
+    if (tmp>maxN2) maxN2=tmp;
+    if (tmp<minN2) minN2=tmp;
+  } delete itN;
+
+  unsigned long sgi=(unsigned long)sg;
+
+  minMaxOkNode[sgi]=true;  
+  minN[sgi]=minN2;
+  maxN[sgi]=maxN2;
+}
+//=========================================================
+void IntegerProperty::computeMinMaxEdge(Graph *sg) {
+  int maxE2,minE2;
+  if (sg==0) sg=graph;
+  Iterator<edge> *itE=sg->getEdges();
   if (itE->hasNext()) {
     edge ite=itE->next();
-    tmp=getEdgeValue(ite);
-    maxE=tmp;
-    minE=tmp;
+    int tmp=getEdgeValue(ite);
+    maxE2=tmp;
+    minE2=tmp;
   }
-  for (;itE->hasNext();) {
+  while (itE->hasNext()) {
     edge ite=itE->next();
-    tmp=getEdgeValue(ite);
-    if (tmp>maxE) maxE=tmp;
-    if (tmp<minE) minE=tmp;
-  }
-  delete itE;
-  minMaxOk=true;
+    int tmp=getEdgeValue(ite);
+    if (tmp>maxE2) maxE2=tmp;
+    if (tmp<minE2) minE2=tmp;
+  } delete itE;
+
+  unsigned long sgi=(unsigned long)sg;
+
+  minMaxOkEdge[sgi]=true;
+  minE[sgi]=minE2;
+  maxE[sgi]=maxE2;
 }
 //=================================================================================
 void IntegerProperty::clone_handler(AbstractProperty<IntegerType,IntegerType> &proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     IntegerProperty *proxy=(IntegerProperty *)&proxyC;
-    minMaxOk=proxy->minMaxOk;
-    if (minMaxOk) {
-      minE=proxy->minE;
-      maxE=proxy->maxE;
-      minN=proxy->minN;
-      maxN=proxy->maxN;
-    }
-  }
-  else{
-    minMaxOk=false;
+    minMaxOkNode=proxy->minMaxOkNode;
+    minMaxOkEdge=proxy->minMaxOkEdge;
+    minN=proxy->minN;
+    maxN=proxy->maxN;
+    minE=proxy->minE;
+    maxE=proxy->maxE;
   }
 }
-
 //=================================================================================
 PropertyInterface* IntegerProperty::clonePrototype(Graph * g, const std::string& n)
 {
-	if( !g )
-		return 0;
-	IntegerProperty * p = g->getLocalProperty<IntegerProperty>( n );
-	p->setAllNodeValue( getNodeDefaultValue() );
-	p->setAllEdgeValue( getEdgeDefaultValue() );
-	return p;
-}
+  if( !g )
+    return 0;
+  IntegerProperty * p = g->getLocalProperty<IntegerProperty>( n );
+  p->setAllNodeValue( getNodeDefaultValue() );
+  p->setAllEdgeValue( getEdgeDefaultValue() );
+  return p;
+ }
 //=============================================================
 void IntegerProperty::copy( const node n0, const node n1, PropertyInterface * p )
 {
-	if( !p )
-		return;
-	IntegerProperty * tp = dynamic_cast<IntegerProperty*>(p);
-	assert( tp );
-	setNodeValue( n0, tp->getNodeValue(n1) );
+  if( !p )
+    return;
+  IntegerProperty * tp = dynamic_cast<IntegerProperty*>(p);
+  assert( tp );
+  setNodeValue( n0, tp->getNodeValue(n1) );
 }
 //=============================================================
 void IntegerProperty::copy( const edge e0, const edge e1, PropertyInterface * p )
 {
-	if( !p )
-		return;
-	IntegerProperty * tp = dynamic_cast<IntegerProperty*>(p);
-	assert( tp );
-	setEdgeValue( e0, tp->getEdgeValue(e1) );
+  if( !p )
+    return;
+  IntegerProperty * tp = dynamic_cast<IntegerProperty*>(p);
+  assert( tp );
+  setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 //===============================================================
-void IntegerProperty::afterSetNodeValue(PropertyInterface* prop, const node n) {
-  if (minMaxOk) {
-    IntegerType::RealType val = getNodeValue(n);
-    if (val > maxN)
-      maxN = val;
-    else if (val < minN)
-      minN = val;
-  }
+void IntegerProperty::beforeSetNodeValue(PropertyInterface*, const node) {
+  minMaxOkNode.clear();
 }
-//===============================================================
-void IntegerProperty::afterSetEdgeValue(PropertyInterface* prop, const edge e) {
-  if (minMaxOk) {
-    IntegerType::RealType val = getEdgeValue(e);
-    if (val > maxE)
-      maxE = val;
-    else if (val < minE)
-      minE = val;
-  }
+void IntegerProperty::beforeSetEdgeValue(PropertyInterface*, const edge) {
+  minMaxOkEdge.clear();
 }
-//===============================================================
-void IntegerProperty::afterSetAllNodeValue(PropertyInterface* prop) {
-  if (minMaxOk)
-    minN = maxN = getNodeDefaultValue();
+void IntegerProperty::beforeSetAllNodeValue(PropertyInterface*) {
+  minMaxOkNode.clear();
 }
-//===============================================================
-void IntegerProperty::afterSetAllEdgeValue(PropertyInterface* prop) {
-  if (minMaxOk)
-    minE = maxE = getEdgeDefaultValue();
+void IntegerProperty::beforeSetAllEdgeValue(PropertyInterface*) {
+  minMaxOkEdge.clear();
 }
 //=================================================================================
 PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, const std::string& n) {
@@ -181,7 +179,3 @@ void IntegerVectorProperty::copy( const edge e0, const edge e1, PropertyInterfac
   assert( tp );
   setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
-
-
-
-

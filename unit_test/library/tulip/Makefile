@@ -15,6 +15,7 @@ SRCS=   tuliplibtest.cpp \
 	MutableContainerTest.cpp \
 	ObservableGraphTest.cpp \
 	PushPopTest.cpp \
+	IntegerPropertyMinMaxSubgraphTest.cpp \
 	IntegerPropertyMinMaxUpdateTest.cpp
 #	PlanarConMapTest.cpp
 
