@@ -560,6 +560,7 @@ namespace tlp {
 
     configWidgetDock = new QDockWidget("Data manipulation", mainWindowFacade.getParentWidget());
     configWidgetTab = new QTabWidget(configWidgetDock);
+    configWidgetTab->setFocusPolicy(Qt::StrongFocus);
 
     //create no plugins configuration widget
     noInteractorConfigWidget = new QWidget(configWidgetTab);
