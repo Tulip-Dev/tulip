@@ -2,13 +2,25 @@
 
 # This script allows the run of all previously recorded tests
 
-TESTS=
-
+# clean up log file
 if [ -f all_tests_run.log ]; then
     rm all_tests_run.log
 fi
 
 touch all_tests_run.log
+
+# launch Tulip for nothing
+# just to reduce the future time of shared libs loading
+# expecting they will be already in memory
+echo "Check Tulip launch ..."
+TULIP=`which tulip`
+if [ $? -eq 1 ]; then
+    echo 'tulip executable not found';
+    exit
+fi
+.  ./launch_tulip.sh
+sleep 10
+. ./stop_tulip.sh
  
 # run tests loop
 for TEST in `ls run_*_test.sh`
