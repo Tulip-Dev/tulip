@@ -126,10 +126,10 @@ namespace tlp {
     if(zRot!=0.)
       glRotatef(zRot,0.,0.,1.);
 
-    glEnable( GL_TEXTURE_2D);
+    //glEnable( GL_TEXTURE_2D);
     glBlendFunc(GL_ONE_MINUS_DST_COLOR,GL_ONE_MINUS_SRC_COLOR);
     renderer->draw(w, w, 0);
-    glDisable( GL_TEXTURE_2D);
+    //glDisable( GL_TEXTURE_2D);
     glPopMatrix();
     glPopAttrib();
   }
