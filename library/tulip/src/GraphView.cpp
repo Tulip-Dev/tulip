@@ -11,12 +11,13 @@
 #include <config.h>
 #endif
 
-#include "tulip/GraphView.h"
+#include "tulip/StableIterator.h"
+#include "tulip/ForEach.h"
 #include "tulip/BooleanProperty.h"
 #include "tulip/Graph.h"
 #include "tulip/GraphIterator.h"
 #include "tulip/GraphImpl.h"
-#include "tulip/StableIterator.h"
+#include "tulip/GraphView.h"
 
 using namespace std;
 using namespace tlp;
@@ -24,11 +25,8 @@ using namespace tlp;
 GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 		     unsigned int sgId):
   GraphAbstract(supergraph),
-  GraphObserver(false),
   nNodes(0),
   nEdges(0) {
-  // observe root to be informed of reversal of edges
-  getRoot()->addGraphObserver(this);
   // get id
   id = ((GraphImpl *) getRoot())->getSubGraphId(sgId);
   nodeAdaptativeFilter.setAll(false);
@@ -65,8 +63,6 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 }
 //----------------------------------------------------------------
 GraphView::~GraphView() {
-  // stop observing the root graph
-  getRoot()->removeGraphObserver(this);
   notifyDestroy();
   StableIterator<Graph *> itS(getSubGraphs());
   while(itS.hasNext())
@@ -97,15 +93,21 @@ unsigned int GraphView::outdeg(const node n) const {
   return outDegree.get(n.id);
 }
 //----------------------------------------------------------------
-void GraphView::reverseEdge(Graph*, const edge e) {
+void GraphView::reverse(const edge e, const node src, const node tgt) {
   if (isElement(e)) {
-    const std::pair<node, node>& eEnds = ends(e);
-    node src = eEnds.second;
-    node tgt = eEnds.first;
     outDegree.set(src.id, outDegree.get(src.id)-1);
     inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
     inDegree.set(src.id, inDegree.get(src.id)+1);
     outDegree.set(tgt.id, outDegree.get(tgt.id)+1);
+
+    notifyReverseEdge(this,e);
+    notifyObservers();
+
+    // propagate edge reversal on subgraphs
+    Graph* sg;
+    forEach(sg, getSubGraphs()) {
+      ((GraphView*) sg)->reverse(e, src, tgt);
+    }
   }
 }
 //----------------------------------------------------------------

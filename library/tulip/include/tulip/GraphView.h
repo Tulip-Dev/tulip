@@ -16,6 +16,7 @@
 #ifndef DOXYGEN_NOTFOR_USER
 
 #include "tulip/GraphAbstract.h"
+#include "tulip/GraphImpl.h"
 #include "tulip/MutableContainer.h"
 
 namespace tlp {
@@ -24,8 +25,9 @@ namespace tlp {
  * This class is one the implementation of the Graph Interface
  * It only filters the elements of its parents.
  */
-  class GraphView:public GraphAbstract, public GraphObserver {
+ class GraphView:public GraphAbstract {
     
+   friend class GraphImpl;
 public:
   GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int id = 0);
   ~GraphView();
@@ -40,9 +42,6 @@ public:
   void delAllEdge(const edge);
   void setEdgeOrder(const node,const std::vector<edge> & );
   void swapEdgeOrder(const node,const edge , const edge );
-  // Part of the GraphObserver interface
-  // needed to update inDegree & outDegree
-  void reverseEdge(Graph*, const edge);
   //=========================================================================
   bool isElement(const node ) const;
   bool isElement(const edge ) const;
@@ -90,6 +89,7 @@ private:
   edge addEdgeInternal(edge);
   void delEdgeInternal(const edge);
   void delNodeInternal(const node);
+  void reverse(const edge, const node src, const node tgt);
 };
 
 }

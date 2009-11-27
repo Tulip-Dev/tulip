@@ -152,7 +152,7 @@ node GraphImpl::restoreNode(node newNode) {
   }
   assert(nodes[newNode.id].empty());
   nbNodes++;
-  notifyAddNode(this,newNode);
+  notifyAddNode(this, newNode);
   notifyObservers();
   return newNode;
 }
@@ -395,8 +395,15 @@ void GraphImpl::reverse(const edge e) {
       graphLayout->setEdgeValue(e, bends);
     }
   }
+
   notifyReverseEdge(this,e);
   notifyObservers();
+
+  // propagate edge reversal on subgraphs
+  Graph* sg;
+  forEach(sg, getSubGraphs()) {
+    ((GraphView*) sg)->reverse(e, src, tgt);
+  }
 }
 //----------------------------------------------------------------
 unsigned int GraphImpl::numberOfEdges()const{return nbEdges;}

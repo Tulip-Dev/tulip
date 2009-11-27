@@ -46,13 +46,18 @@ void TestAlgorithmTest::testTree() {
   CPPUNIT_ASSERT(!TreeTest::isTree(graph));
   edge e2 = graph->addEdge(n4, n1);
   CPPUNIT_ASSERT(TreeTest::isTree(graph));
+  Graph* clone = tlp::newCloneSubGraph(graph);
+  CPPUNIT_ASSERT(TreeTest::isTree(clone));
   graph->reverse(e1);
   CPPUNIT_ASSERT(!TreeTest::isTree(graph));
-  graph->reverse(e0);
+  CPPUNIT_ASSERT(!TreeTest::isTree(clone));
+  clone->reverse(e0);
+  CPPUNIT_ASSERT(!TreeTest::isTree(clone));
   CPPUNIT_ASSERT(!TreeTest::isTree(graph));
   graph->reverse(e2);
-  graph->delNode(n3);
-  CPPUNIT_ASSERT(TreeTest::isTree(graph));
+  clone->delNode(n3);
+  CPPUNIT_ASSERT(!TreeTest::isTree(graph));
+  CPPUNIT_ASSERT(TreeTest::isTree(clone));
   //known bug test 
   {
     graph->clear();
@@ -73,13 +78,21 @@ void TestAlgorithmTest::testAcyclic() {
   node n3 = graph->addNode();
   graph->addEdge(n1, n2);
   edge e0 = graph->addEdge(n1, n3);
+  Graph* clone = tlp::newCloneSubGraph(graph);
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(graph));
-  edge e1 = graph->addEdge(n2, n3);
+  CPPUNIT_ASSERT(AcyclicTest::isAcyclic(clone));
+  edge e1 = clone->addEdge(n2, n3);
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(graph));
+  CPPUNIT_ASSERT(AcyclicTest::isAcyclic(clone));
   edge e2 = graph->addEdge(n3, n1);
   CPPUNIT_ASSERT(!AcyclicTest::isAcyclic(graph));
-  graph->reverse(e2);
+  CPPUNIT_ASSERT(!AcyclicTest::isAcyclic(clone));
+  clone->reverse(e2);
   CPPUNIT_ASSERT(AcyclicTest::isAcyclic(graph));
+  CPPUNIT_ASSERT(AcyclicTest::isAcyclic(clone));
+  clone->delEdge(e2);
+  CPPUNIT_ASSERT(AcyclicTest::isAcyclic(graph));
+  CPPUNIT_ASSERT(!AcyclicTest::isAcyclic(clone));
 }
 //==========================================================
 void TestAlgorithmTest::testConnected() {
