@@ -24,7 +24,7 @@ namespace tlp {
  * This class is one the implementation of the Graph Interface
  * It only filters the elements of its parents.
  */
-class GraphView:public GraphAbstract {
+  class GraphView:public GraphAbstract, public GraphObserver {
     
 public:
   GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int id = 0);
@@ -40,16 +40,18 @@ public:
   void delAllEdge(const edge);
   void setEdgeOrder(const node,const std::vector<edge> & );
   void swapEdgeOrder(const node,const edge , const edge );
-  //  void reverse(const edge);
+  // Part of the GraphObserver interface
+  // needed to update inDegree & outDegree
+  void reverseEdge(Graph*, const edge);
   //=========================================================================
   bool isElement(const node ) const;
   bool isElement(const edge ) const;
   unsigned int numberOfNodes() const;
   unsigned int numberOfEdges() const;
-    //=========================================================================
-  /*  unsigned int deg(const node) const;
+  //=========================================================================
+  unsigned int deg(const node) const;
   unsigned int indeg(const node) const;
-  unsigned int outdeg(const node) const;*/
+  unsigned int outdeg(const node) const;
   //=========================================================================
   Iterator<node>* getNodes() const;
   Iterator<node>* getInNodes(const node) const;
@@ -81,8 +83,8 @@ protected:
 private:
   MutableContainer<bool> nodeAdaptativeFilter;
   MutableContainer<bool> edgeAdaptativeFilter;
-  //  MutableContainer<unsigned int> outDegree;
-  //  MutableContainer<unsigned int> inDegree;
+  MutableContainer<unsigned int> outDegree;
+  MutableContainer<unsigned int> inDegree;
   mutable int nNodes;
   mutable int nEdges;
   edge addEdgeInternal(edge);

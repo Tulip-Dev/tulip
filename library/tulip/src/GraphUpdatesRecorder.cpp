@@ -438,8 +438,10 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   TLP_HASH_MAP<edge, EdgeRecord>::iterator ite = edgesToDel.begin();
   while(ite != edgesToDel.end()) {
     edge e = (*ite).first;
-    set<Graph*>::iterator itg = (*ite).second.graphs.begin();
-    set<Graph*>::iterator itge = (*ite).second.graphs.end();
+    // iterate in reverse order
+    // to ensure it will be removed at last from the graph root
+    set<Graph*>::reverse_iterator itg = (*ite).second.graphs.rbegin();
+    set<Graph*>::reverse_iterator itge = (*ite).second.graphs.rend();
     while(itg != itge) {
       if ((*itg)->isElement(e))
 	(*itg)->removeEdge(e);

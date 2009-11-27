@@ -24,13 +24,17 @@ using namespace tlp;
 GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 		     unsigned int sgId):
   GraphAbstract(supergraph),
+  GraphObserver(false),
   nNodes(0),
   nEdges(0) {
+  // observe root to be informed of reversal of edges
+  getRoot()->addGraphObserver(this);
+  // get id
   id = ((GraphImpl *) getRoot())->getSubGraphId(sgId);
   nodeAdaptativeFilter.setAll(false);
   edgeAdaptativeFilter.setAll(false);
-  //  inDegree.setAll(0);
-  //  outDegree.setAll(0);
+  inDegree.setAll(0);
+  outDegree.setAll(0);
   if (filter == 0) return;
   Iterator<unsigned int> *it=0;
   it = filter->nodeProperties.findAll(true);
@@ -61,6 +65,8 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 }
 //----------------------------------------------------------------
 GraphView::~GraphView() {
+  // stop observing the root graph
+  getRoot()->removeGraphObserver(this);
   notifyDestroy();
   StableIterator<Graph *> itS(getSubGraphs());
   while(itS.hasNext())
@@ -79,30 +85,29 @@ bool GraphView::isElement(const edge e) const {
   return edgeAdaptativeFilter.get(e.id);
 }
 //----------------------------------------------------------------
-//unsigned int GraphView::deg(const node n) const {
-//  return inDegree.get(n.id)+outDegree.get(n.id);
-//}
+unsigned int GraphView::deg(const node n) const {
+  return inDegree.get(n.id)+outDegree.get(n.id);
+}
 //----------------------------------------------------------------
-//unsigned int GraphView::indeg(const node n) const {
-//  return inDegree.get(n.id);
-//}
+unsigned int GraphView::indeg(const node n) const {
+  return inDegree.get(n.id);
+}
 //----------------------------------------------------------------
-//unsigned int GraphView::outdeg(const node n) const {
-//  return outDegree.get(n.id);
-//}
+unsigned int GraphView::outdeg(const node n) const {
+  return outDegree.get(n.id);
+}
 //----------------------------------------------------------------
-/*
-  void GraphView::reverse(const edge e) {
-  notifyReverseEdge(this,e);
-  node src = source(e);
-  node tgt = target(e);
-  outDegree.set(src.id, outDegree.get(src.id)-1);
-  inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
-  inDegree.set(src.id, inDegree.get(src.id)+1);
-  outDegree.set(tgt.id, outDegree.get(tgt.id)+1);
-  getSuperGraph()->reverse(e);
+void GraphView::reverseEdge(Graph*, const edge e) {
+  if (isElement(e)) {
+    const std::pair<node, node>& eEnds = ends(e);
+    node src = eEnds.second;
+    node tgt = eEnds.first;
+    outDegree.set(src.id, outDegree.get(src.id)-1);
+    inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
+    inDegree.set(src.id, inDegree.get(src.id)+1);
+    outDegree.set(tgt.id, outDegree.get(tgt.id)+1);
   }
-*/
+}
 //----------------------------------------------------------------
 node GraphView::addNode() {
   node tmp = getSuperGraph()->addNode();
@@ -128,6 +133,11 @@ void GraphView::addNode(const node n) {
 edge GraphView::addEdgeInternal(edge e) {
   edgeAdaptativeFilter.set(e.id,true);
   ++nEdges;
+  const std::pair<node, node>& eEnds = ends(e);
+  node src = eEnds.first;
+  node tgt = eEnds.second;
+  outDegree.set(src.id, outDegree.get(src.id)+1);
+  inDegree.set(tgt.id, inDegree.get(tgt.id)+1);
   notifyAddEdge(this, e);
   notifyObservers();
   return e;
@@ -207,6 +217,11 @@ void GraphView::delEdgeInternal(const edge e) {
   edgeAdaptativeFilter.set(e.id,false);
   getPropertyManager()->erase(e);
   --nEdges;
+  const std::pair<node, node>& eEnds = ends(e);
+  node src = eEnds.first;
+  node tgt = eEnds.second;
+  outDegree.set(src.id, outDegree.get(src.id)-1);
+  inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
 }
 //----------------------------------------------------------------
 void GraphView::removeEdge(const edge e, const node) {
@@ -218,7 +233,6 @@ void GraphView::removeEdge(const edge e, const node) {
 //----------------------------------------------------------------
 void GraphView::delEdge(const edge e) {
   assert(isElement(e));
-  //  if (isElement(e)) {
   notifyDelEdge(this,e);
   // propagate to subgraphs
   Iterator<Graph *>*itS=getSubGraphs();
@@ -227,9 +241,6 @@ void GraphView::delEdge(const edge e) {
     if (subGraph->isElement(e))
       subGraph->delEdge(e);
   } delete itS;
-  //    outDegree.set(source(e).id, outDegree.get(source(e).id)-1);
-  //    inDegree.set(target(e).id, inDegree.get(target(e).id)-1);
-  //  }
   delEdgeInternal(e);
   notifyObservers();
 }
