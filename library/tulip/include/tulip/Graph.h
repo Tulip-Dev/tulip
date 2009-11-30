@@ -358,9 +358,10 @@ public:
   template<typename PropertyType>
   PropertyType* getLocalProperty(const std::string &name);
   /**
-   * Compute a property on this graph using an external algorithm (plug-in)
+   * Computes a property on the current graph, if it is not empty,
+   * using an external named algorithm (plug-in).
    * The result is stored in result, Warning all information in result will be deleted
-   * If the function return false error message are stored in msg.
+   * If the function returns false error message are stored in msg.
    * One can give a PluginProgress to the algortihm in order to have feed back or to stop
    * the algorithm during its computation. One can give parameter to the algorithm
    * using the DataSet. In some cases algorithms can use this DataSet in order
@@ -423,11 +424,42 @@ public:
   virtual Iterator<PropertyInterface*>* getObjectProperties()=0;
 
   // updates management
+  /*
+   * Marks the state of the current root graph hierarchy.
+   * The next updates will be recorded in order to be undone at the
+   * next call of the pop method. Be careful that all the updates are undone
+   * except those who affect the ordering of edges.
+   * If the argument unpopAllowed is set to false, the next updates
+   * could not be replayed after undone. If some previously undone
+   * updates exist they could no longer be replayed.
+   */
   virtual void push(bool unpopAllowed = true)=0;
+  /*
+   * Restores a previously marked state of the current root graph
+   * hierarchy. The restored state does not remain marked.
+   * If the argument unpopAllowed is set to false then
+   * the undone updates could not be replayed.
+   */
   virtual void pop(bool unpopAllowed = true)=0;
+  /*
+   * Indicates that next updates of the property given in argument
+   * will be preserved during the next call of the pop method.
+   * Returns false if updates of that property are already recorded
+   * since the last call of the push method.
+   */
   virtual bool nextPopKeepPropertyUpdates(PropertyInterface* prop)=0;
+  /*
+   * Marks again the current state of the root graph hierarchy
+   * and replays the last updates previously undone.
+   */
   virtual void unpop()=0;
+  /*
+   * Returns true if a previously marked state can be restored.
+   */
   virtual bool canPop()=0;
+  /*
+   * Returns true if some previously undone updates can be replayed.
+   */
   virtual bool canUnpop()=0;
 
   // meta nodes management
