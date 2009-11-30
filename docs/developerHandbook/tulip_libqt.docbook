@@ -1,23 +1,122 @@
 <chapter id="qt-library"><title>Tulip QT Library</title>
   <sect1 id="qtintro"><title>Introduction</title>
-    <para>From version 3.1 of Tulip the plugin system is extend to views and interactors</para>
-    <para>An interactor provide a mechanisme to modify view and/or data</para>
-    <para>A view is a way to visualize graph data (and others data if you want)</para>
-    <para>You can three class : View, AbstractView and GlMainView, so your class (plugin) must implement one of this three class</para>
-    <graphic fileref="images/view-inheritance.png"/>
-    <itemizedlist>
+    <para>In Tulip the plugin system is extend to interactors, views and controllers</para>
+     <itemizedlist>
       <listitem>
-        <para>View : is the main interface without implementation</para>
+        <para>An interactor provide a mechanisme to modify view and/or data</para>
       </listitem>
       <listitem>
-        <para>AbstractView : provide a basic implementation of interactor system</para>
+	<para>A view is a way to visualize graph data (and others data if you want)</para>
       </listitem>
       <listitem>
-        <para>GlMainView : provide a OpenGl view with overview</para>
+	<para>A controller is here to change the aspect of Tulip and to manage views</para>
       </listitem>
-    </itemizedlist>
+     </itemizedlist>
+    <graphic fileref="images/mvc.png"/>
+    <para>Here you have a picture represent a modified Model-View-Controller architectural pattern</para>
+     <itemizedlist>
+      <listitem>
+	<para>Controller manage views and model (graphs)</para>
+      </listitem>
+      <listitem>
+	<para>Views use model to display it</para>
+      </listitem>
+      <listitem>
+        <para>Interactors is a mini controller system who manage attached view and model</para>
+      </listitem>
+     </itemizedlist>
   </sect1>
-  <sect1 id="qtplugin-skeleton"><title>Compilation ( Makefiles )</title>
+  <sect1 id="qtinteractors"><title>Interactors</title>
+    <para>An interactor is construct to interact with a view</para>
+    <para>In node link diagram view we have many interactors, for example : node builder interactor, selection interactor ...</para>
+    <para>In interactor Tulip system we have two main classes : InteractorComponent and Interactor itself</para>
+    <para>Interactor is the assembly of several interactor component</para>
+    <sect2 id="qtinteractorexample"><title>Interactor example</title>
+      <para>If you want you can download an interactor example <ulink url="http://tulip.labri.fr/samples/interactorplugintemplates.tar.gz">here</ulink></para>
+      <para>Extract archive, go in the directory, run make and make install</para>
+      <para>All the code of this interactor is commented inside</para>
+    </sect2>
+    <sect2 id="qtinteractorcomponent"><title>Interactor Component</title>
+      <para>An interactor component is the basic building block of the interactor system</para>
+      <para>To construct an interactor component you have to build a class that inherits InteractorComponent class</para>
+      <sect3 id="qtinteractorcomponentclass"><title>InteractorComponent class</title>
+	<graphic fileref="images/interactorcomponent.png"/>
+	<para>In InteractorComponent class we have 7 functions, but 4 of them are implemented on InteractorComponent. So if you want to create a new InteractorComponent, you have to implement 3 functions (4 if you count the eventFilter function)</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>compute : This function is call before the rendering of the scene. It can be used to add GlEntities in the scene</para>
+	  </listitem>
+	  <listitem>
+	    <para>draw : This function is call just after the graph rendering. It can be used to add some OpenGL object directly on the OpenGL view</para>
+	    <para>For example : selection interactor use this function to draw the selection rectangle</para>
+	  </listitem>
+	  <listitem>
+	    <para>clone : This function must be implemented to return a copy of the interactor component</para>
+	  </listitem>
+	  <listitem>
+	    <para>eventFilter : More important function ! This function is call by Qt to treat the event. You must reimplement this function and treat the event if you can</para>
+	  </listitem>
+	</itemizedlist>
+      </sect3>
+    </sect2>
+    <sect2 id="qtinteractoritself"><title>Interactor itself</title>
+      <para>You have two options to create an interactor : </para>
+      <itemizedlist>
+	<listitem>
+	  <para>Directly implement Interactor interface</para>
+	</listitem>
+	<listitem>
+	  <para>Implement InteractorChainOfResponsibility class</para>
+	</listitem>
+      </itemizedlist>
+      <para>InteractorChainOfResponsibility class is a first partial implementation of Interactor class with chain of responsibility system</para>
+      <graphic fileref="images/interactorandinteractorcor.png"/>
+      <sect3 id="qtinteractorchainofresponsibilityconcept"><title>InteractorChainOfResponsibility concept</title>
+	<para>In this class the interactor system is build with the chain of responsibility pattern</para>
+	<para>Here we have a chain of responsibility of InteractorComponent</para>
+	<para>You have a list of InteractorComponent. When Qt have an event, this event is passed to first element of this list, if InteractorComponent don't treat this event (function eventFilter return false)
+	 the event is passed to second element of the list ...</para>
+      </sect3>
+      <sect3 id="qtinteractorchainofresponsibilityclass"><title>InteractorChainOfResponsibility class</title>
+	<para>If you want to use InteractorChainOfResponsibility system, you have some class to implement :</para>
+	<itemizedlist>
+	  <listitem>
+	    <para>In you constructor :</para>
+	    <itemizedlist>
+	      <listitem>
+		<para>Call InteractorChainOfResponsibility constructor with two string. First is the path to interactor icon, second is the interactor tooltip text.</para>
+	      </listitem>
+	      <listitem>
+		<para>Call setPriority(int) function to set the priority of the interactor in the toolbar : if priority is high ( >5 for example) interactor icon is placed at left side of the toolbar</para>
+	      </listitem>
+	      <listitem>
+		<para>Call setConfigurationWidgetText("Text displayed in the configuration widget of the interactor"), an other solution is to reimplement the getConfigurationWidget function who return the QWidget used to configure this interactor</para>
+	      </listitem>
+	    </itemizedlist>
+	  </listitem>
+	  <listitem>
+	    <para>Implement construct() function : in this function you have to call pushInteractorComponent(new nameOfYourInteractorComponent) to add interactor component in the chain of responsibility</para>
+	  </listitem>
+	  <listitem>
+	    <para>Implement isCompatible(string viewName) function, if your iteractor is compatible with view (with name viewName) this function must return true, else return false</para>
+	  </listitem>
+	</itemizedlist>
+      </sect3>
+      <sect3 id="qtinteractor class"><title>Interactor class</title>
+      <para>If you want to directly use Interactor class (if you doesn't want the chain of responsibility system), you have to implement function :</para>
+      <para>setView(View *), install(QWidget *), remove(), isCompatible(string), getAction(), compute() and draw()</para>
+      <para>And you have to call setConfigurationWidgetText(string) (or reimplement getConfigurationWidget()) and setPriority(int)</para>
+      <para>Interactor function documentation is available in the Library API page</para>
+      </sect3>
+    </sect2>
+    <sect2 id="qtinteractorpluginmacro"><title>INTERACTORPLUGIN macro</title>
+      <para>After inplementation of InteractorComponent and Interactor, you have to add you interactor to plugin system : </para>
+      <para>To do that you have to call INTERACTORPLUGIN macro</para>	
+      <para>INTERACTORPLUGIN(InteractorPluginClassName, "InteractorPluginName", "Authors", "Date", "Interactor plugin full name", "plugin release");</para>
+    </sect2>
+  </sect1>
+  <sect1 id="qtviews"><title>Views</title>
+  <sect2 id="qtplugin-skeleton"><title>Compilation ( Makefiles )</title>
     <para>You can download view plugins skeletons  <ulink url="http://tulip.labri.fr/samples/viewplugintemplates.tar.gz">here</ulink> .</para>
     <para>In tar.gz you have three files : </para>
     <itemizedlist>
@@ -40,8 +139,21 @@
         <para>Copy .so files to you tulip installation dir</para>
       </listitem>
     </itemizedlist>
-  </sect1>
-  <sect1 id="qtview-class"><title>The View class</title>
+  </sect2>
+  <sect2 id="qtview-class"><title>The View class</title>
+    <para>You can three class : View, AbstractView and GlMainView, so your class (plugin) must implement one of this three class</para>
+    <graphic fileref="images/view-inheritance.png"/>
+    <itemizedlist>
+      <listitem>
+        <para>View : is the main interface without implementation</para>
+      </listitem>
+      <listitem>
+        <para>AbstractView : provide a basic implementation of interactor system</para>
+      </listitem>
+      <listitem>
+        <para>GlMainView : provide a OpenGl view with overview</para>
+      </listitem>
+    </itemizedlist>
     <para>If you need to create a new view, you have to create a new class that implements the View interface</para>
     <para>View interface (in library/tulip-qt/include/tulip/View.h) can be split into 3 parts</para>
     <itemizedlist>
@@ -79,7 +191,7 @@ void init();
         </programlisting> 
       </listitem>
     </itemizedlist>
-    <sect2 id="qtview_example"><title>An example of view plugin</title>
+    <sect3 id="qtview_example"><title>An example of view plugin</title>
       <para>This is an example of a simple view. This view displays the number of nodes/edges on the graph</para>
       <graphic fileref="images/tuto_view.png"/>
       <para>This example provides just a view without interactors</para>
@@ -152,9 +264,9 @@ public slots :
 // Warning : last parameter(42) is the id of the plugin, it must be unique
 VIEWPLUGIN(TutoView, "TutorielView", "Tulip Team", "21/11/2008", "Tutoriel view", "1.0", 42);
       </programlisting>
-    </sect2>
-  </sect1>
-  <sect1 id="qtabstractview-class"><title>The AbstractView class</title>
+    </sect3>
+  </sect2>
+  <sect2 id="qtabstractview-class"><title>The AbstractView class</title>
     <para>This class provides a basic implementation of an interactor system and a right click context menu</para>
     <para>AbstractView can be separated into 3 parts : </para>
     <itemizedlist>
@@ -208,8 +320,8 @@ QWidget *YouViewClass::construct(QWidget *parent) {
         </programlisting>
       </listitem>
     </itemizedlist>
-  </sect1>
-  <sect1 id="qtglmainview-class"><title>The GlMainView class</title>
+  </sect2>
+  <sect2 id="qtglmainview-class"><title>The GlMainView class</title>
     <para>GlMainView provide an OpenGL view with overview</para>
     <para>Is the more simple view to implement</para>
     <para>You just have to implement : </para>
@@ -232,6 +344,7 @@ QWidget *YouViewClass::construct(QWidget *parent) {
     <para>In setData you have some code like this : mainWidget->setData(Graph *,DataSet); This code specify what you want to be rendered. if the DataSet is empty GlMainWidget construct a default scene with 3 layers : Foreground, Main and Background</para>
     <para>The last element you need to create your OpenGl View is the overview mechanism</para>
     <para>In the overview, you can display only one composite (in NodeLinkDiagramComponent is the GlGraphComposite with the graph). To specify this composite you have to call overviewWidget->setObservedView(mainWidget,youComposite);</para>
+  </sect2>
   </sect1>
 
 </chapter>
