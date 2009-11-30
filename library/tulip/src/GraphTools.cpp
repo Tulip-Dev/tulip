@@ -168,7 +168,7 @@ namespace tlp {
 			    PluginProgress *pluginProgress) {
     list<node> fifo;
 
-    BooleanProperty *nodeFlag= graph->getLocalProperty<BooleanProperty>("selectionNodeFlag");
+    BooleanProperty nodeFlag(graph);
     
     unsigned int nbSelectedNodes = 0;
     unsigned int nbNodes = 0;
@@ -179,7 +179,7 @@ namespace tlp {
       node itn=itN->next();
       if (selectionProperty->getNodeValue(itn)==true) {
 	fifo.push_back(itn);
-	nodeFlag->setNodeValue(itn,true);
+	nodeFlag.setNodeValue(itn,true);
 	++nbSelectedNodes;
       }
     } delete itN;
@@ -197,8 +197,8 @@ namespace tlp {
 	Iterator<edge> *itE=graph->getOutEdges(tmp1);
 	for(;itE->hasNext();) {
 	  edge adjit=itE->next();
-	  if (!nodeFlag->getNodeValue(graph->target(adjit))) {
-	    nodeFlag->setNodeValue(graph->target(adjit),true);
+	  if (!nodeFlag.getNodeValue(graph->target(adjit))) {
+	    nodeFlag.setNodeValue(graph->target(adjit),true);
 	    ++nbSelectedNodes;
 	    fifo.push_back(graph->target(adjit));
 	  }
@@ -209,7 +209,6 @@ namespace tlp {
 	    ++edgeCount;
 	    if (edgeCount == 200 ) {
 	      if (pluginProgress->progress(nbSelectedNodes*100/nbNodes, 100) != TLP_CONTINUE) {
-		graph->delLocalProperty("selectionNodeFlag");
 		return;
 	      }
 	      edgeCount = 0;
@@ -223,14 +222,14 @@ namespace tlp {
       Iterator<node> *itN=graph->getNodes();
       for(;itN->hasNext();) {
 	node itn=itN->next();
-	if (!nodeFlag->getNodeValue(itn)) {
+	if (!nodeFlag.getNodeValue(itn)) {
 	  if (!ok) {
 	    goodNode=itn;
 	    ok=true;
 	  }
 	  if (graph->indeg(itn)==0) {
 	    fifo.push_back(itn);
-	    nodeFlag->setNodeValue(itn,true);
+	    nodeFlag.setNodeValue(itn,true);
 	    ++nbSelectedNodes;
 	    degZ=true;
 	  }
@@ -247,11 +246,10 @@ namespace tlp {
       } delete itN;
       if (ok && (!degZ)) {
 	fifo.push_back(goodNode);
-	nodeFlag->setNodeValue(goodNode,true);
+	nodeFlag.setNodeValue(goodNode,true);
 	++nbSelectedNodes;
       }
     }
-    graph->delLocalProperty("selectionNodeFlag");
   }
 
   //======================================================================
