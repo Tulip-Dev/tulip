@@ -136,7 +136,7 @@ public:
   /**
    * get the value associated to i and indicates if it not the default one
    */
-  typename ReturnType<TYPE>::Value get(const unsigned int i, bool& isNotDefault);
+  typename ReturnType<TYPE>::Value get(const unsigned int i, bool& isNotDefault) const;
   /**
    * return a pointer on an iterator for all the elements whose associated value
    * if equal to a given value or different from the default value.
@@ -464,7 +464,7 @@ typename ReturnType<TYPE>::ConstValue MutableContainer<TYPE>::get(const unsigned
 }
 //===================================================================
 template <typename TYPE>   
-  typename ReturnType<TYPE>::Value MutableContainer<TYPE>::get(const unsigned int i, bool& notDefault) {
+  typename ReturnType<TYPE>::Value MutableContainer<TYPE>::get(const unsigned int i, bool& notDefault) const {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (maxIndex == UINT_MAX) {
     notDefault = false;

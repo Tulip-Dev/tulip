@@ -1,7 +1,7 @@
 #ifndef PROPERTYOBSERVABLE_H
 #define PROPERTYOBSERVABLE_H
 #include <ext/slist>
-#include <iostream>
+#include "tulip/tulipconf.h"
 #include "tulip/Node.h"
 #include "tulip/Edge.h"
 
@@ -11,7 +11,7 @@ struct PropertyInterface;
 class ObservableProperty;
 //=========================================================
 
-/** \addtogroup graphs */ 
+/** \addtogroup properties */ 
 /*@{*/
 /// Observer for Property
 /**
@@ -43,20 +43,9 @@ class  TLP_SCOPE PropertyObserver {
 /*@}*/
 }
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
-/* namespace std {
-  template <>
-    struct less<tlp::PropertyObserver *> {
-    size_t operator()(const tlp::PropertyObserver * obs1,const tlp::PropertyObserver *obs2) const {
-      return (unsigned long)obs1<(unsigned long)obs2;
-    }
-  };
-  }*/
-#endif // DOXYGEN_NOTFOR_DEVEL
-
 namespace tlp {
 
-/** \addtogroup graphs */ 
+/** \addtogroup properties */ 
 /*@{*/
 /**
  */

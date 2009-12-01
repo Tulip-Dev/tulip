@@ -12,7 +12,7 @@
 
 using namespace tlp;
 
-std::string PropertyInterface::getTypename( PropertyInterface * propertyName ) {
+std::string PropertyInterface::getTypename(const PropertyInterface* propertyName ) {
   if (typeid((*propertyName)) == typeid(GraphProperty)) return "graph";
   if (typeid((*propertyName)) == typeid(DoubleProperty)) return "double";
   if (typeid((*propertyName)) == typeid(LayoutProperty)) return "layout";
@@ -43,14 +43,14 @@ PropertyInterface::~PropertyInterface() {
 }
 
 void PropertyInterface::notifyAfterSetNodeValue(PropertyInterface* p,
-					   const node n) {
+						const node n) {
   // dispatch to PropertyObserver & Observer
   ObservableProperty::notifyAfterSetNodeValue(p, n);
   Observable::notifyObservers();
 }
 
 void PropertyInterface::notifyAfterSetEdgeValue(PropertyInterface* p,
-					   const edge e) {
+						const edge e) {
   // dispatch to PropertyObserver & Observer
   ObservableProperty::notifyAfterSetEdgeValue(p, e);
   Observable::notifyObservers();
