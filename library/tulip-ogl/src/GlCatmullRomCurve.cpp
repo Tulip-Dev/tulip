@@ -158,7 +158,7 @@ std::map<std::pair<unsigned int, unsigned int>, GLuint *> GlCatmullRomCurve::ver
 GlCatmullRomCurve::GlCatmullRomCurve(const vector<Coord> &curvePassPoints, const Color &beginColor, const Color &endColor,
 		const float beginSize, const float endSize, const string &texture, const bool closedCurve, const unsigned int nbPointsPerBezierSegments) :
 			beginColor(beginColor), endColor(endColor), beginSize(beginSize), endSize(endSize), texture(texture), closedCurve(closedCurve), nbPointsPerBezierSegments(nbPointsPerBezierSegments),
-			curvePassPointsArray(NULL), nbCurvePassPoints(curvePassPoints.size()), catmullShaderProgram(NULL) {
+			curvePassPointsArray(NULL), nbCurvePassPoints(curvePassPoints.size()), catmullShaderProgram(NULL), outlined(false) {
 
 
 	for (unsigned int i = 0 ; i < nbCurvePassPoints ; ++i) {
@@ -345,8 +345,6 @@ void GlCatmullRomCurve::draw(float lod, Camera *camera) {
 		catmullShaderProgram->setUniformVec3FloatArray("curvePoints", nbCurvePassPoints, curvePassPointsArray);
 		catmullShaderProgram->setUniformFloat("startWidth", beginSize);
 		catmullShaderProgram->setUniformFloat("endWidth", endSize);
-		catmullShaderProgram->setUniformColor("startColor", beginColor);
-		catmullShaderProgram->setUniformColor("endColor", endColor);
 		catmullShaderProgram->setUniformFloat("step", step);
 		catmullShaderProgram->setUniformBool("closedCurve", closedCurve);
 		catmullShaderProgram->setUniformBool("fisheye", fisheyeActivated);
@@ -359,10 +357,6 @@ void GlCatmullRomCurve::draw(float lod, Camera *camera) {
 
 		unsigned int nbBezierSegments = closedCurve ? nbCurvePassPoints : nbCurvePassPoints - 1;
 
-		if (texture != "") {
-			GlTextureManager::getInst().activateTexture(texture);
-		}
-
 		if (vboOk) {
 
 			glEnableClientState(GL_VERTEX_ARRAY);
@@ -374,15 +368,28 @@ void GlCatmullRomCurve::draw(float lod, Camera *camera) {
 
 				GLuint *vbo = vertexBuffersObjectMap[idx];
 
+				catmullShaderProgram->setUniformColor("startColor", beginColor);
+				catmullShaderProgram->setUniformColor("endColor", endColor);
+
 				if (beginSize != 1 || endSize != 1) {
+					if (texture != "") {
+						GlTextureManager::getInst().activateTexture(texture);
+					}
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
 					glDrawElements(GL_TRIANGLE_STRIP, nbPointsPerBezierSegments * 2, GL_UNSIGNED_SHORT, 0);
+					if (texture != "") {
+						GlTextureManager::getInst().desactivateTexture();
+					}
 				} else {
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
 					glDrawElements(GL_LINE_STRIP, nbPointsPerBezierSegments, GL_UNSIGNED_SHORT, 0);
 				}
 
-				if ((beginSize != 1 || endSize != 1) && texture == "") {
+				if ((beginSize != 1 || endSize != 1) && (texture == "" || outlined)) {
+					if (outlined) {
+						catmullShaderProgram->setUniformColor("startColor", outlineColor);
+						catmullShaderProgram->setUniformColor("endColor", outlineColor);
+					}
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
 					glDrawElements(GL_LINE_STRIP, nbPointsPerBezierSegments, GL_UNSIGNED_SHORT, 0);
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[4]);
@@ -398,6 +405,9 @@ void GlCatmullRomCurve::draw(float lod, Camera *camera) {
 		} else {
 
 			if (beginSize != 1 || endSize != 1) {
+				if (texture != "") {
+					GlTextureManager::getInst().activateTexture(texture);
+				}
 				glBegin(GL_TRIANGLE_STRIP);
 				for (unsigned int i = 0 ; i < nbBezierSegments ; ++i) {
 					for (unsigned int j = 0 ; j < nbPointsPerBezierSegments ; ++j) {
@@ -408,7 +418,9 @@ void GlCatmullRomCurve::draw(float lod, Camera *camera) {
 					}
 				}
 				glEnd();
-
+				if (texture != "") {
+					GlTextureManager::getInst().desactivateTexture();
+				}
 			} else {
 				glBegin(GL_LINE_STRIP);
 				for (unsigned int i = 0 ; i < nbBezierSegments ; ++i) {
@@ -418,6 +430,8 @@ void GlCatmullRomCurve::draw(float lod, Camera *camera) {
 				}
 				glEnd();
 			}
+
+
 
 			if ((beginSize != 1 || endSize != 1) && texture == "") {
 				glBegin(GL_LINE_STRIP);
@@ -437,10 +451,6 @@ void GlCatmullRomCurve::draw(float lod, Camera *camera) {
 			}
 		}
 
-		if (texture != "") {
-			GlTextureManager::getInst().desactivateTexture();
-		}
-
 		GlShaderManager::getInstance()->desactivateShaderProgram();
 
 
@@ -456,6 +466,23 @@ void GlCatmullRomCurve::draw(float lod, Camera *camera) {
 
 }
 
+void GlCatmullRomCurve::setOutlined(const bool outlined) {
+	this->outlined = outlined;
+	if (bezierSegments.size() > 0) {
+		for (unsigned int i = 0 ; i < bezierSegments.size() ; ++i) {
+			bezierSegments[i]->setOutlined(outlined);
+		}
+	}
 
+}
+
+void GlCatmullRomCurve::setOutlineColor(const Color &outlineColor) {
+	this->outlineColor = outlineColor;
+	if (bezierSegments.size() > 0) {
+		for (unsigned int i = 0 ; i < bezierSegments.size() ; ++i) {
+			bezierSegments[i]->setOutlineColor(outlineColor);
+		}
+	}
+}
 
 }

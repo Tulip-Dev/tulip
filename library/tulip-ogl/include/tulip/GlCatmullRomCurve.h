@@ -40,6 +40,10 @@ public :
 
 	void draw(float lod, Camera *camera);
 
+	void setOutlined(const bool outlined);
+
+	void setOutlineColor(const Color &outlineColor);
+
 	virtual void getXML(xmlNodePtr rootNode) {}
 
 	virtual void setWithXML(xmlNodePtr rootNode) {}
@@ -65,6 +69,8 @@ private :
 	GlShaderProgram *catmullShaderProgram;
 	bool vboOk;
 	std::vector<GlBezierCurve *> bezierSegments;
+	bool outlined;
+	Color outlineColor;
 
 	static std::map<std::pair<unsigned int, unsigned int>, GLfloat *> vertexBuffersDataMap;
 	static std::map<std::pair<unsigned int, unsigned int>, std::vector<GLushort *> > vertexBuffersIndicesMap;

@@ -37,6 +37,10 @@ public:
 
 	void setTexture(const std::string &texture);
 
+	void setOutlined(const bool outlined) {this->outlined = outlined;}
+
+	void setOutlineColor(const Color &outlineColor) {this->outlineColor = outlineColor;}
+
 	void translate(const Coord& mouvement);
 
 	void getXML(xmlNodePtr rootNode);
@@ -57,6 +61,8 @@ protected:
 	float endSize;
 	std::string texture;
 	unsigned int nbCurvePoints;
+	bool outlined;
+	Color outlineColor;
 
 private :
 

@@ -30,7 +30,7 @@ public:
 	virtual ~Sphere();
 	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
 	virtual void draw(node n, float lod);
-	virtual void draw(edge e, node n, const Color& glyphColor, float lod);
+	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
 
 private:
 	void generateBuffers(int space);
@@ -130,7 +130,7 @@ void Sphere::draw(node n, float lod) {
 			glGraphInputData->parameters->getTexturePath(), lod);
 }
 
-void Sphere::draw(edge e, node n, const Color& glyphColor, float lod) {
+void Sphere::draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod) {
 	drawGlyph(glyphColor,
 			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
 			edgeExtGlGraphInputData->parameters->getTexturePath(), lod);

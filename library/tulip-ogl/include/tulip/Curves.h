@@ -22,8 +22,25 @@ namespace tlp {
   TLP_GL_SCOPE void polyLine(const std::vector<Coord> &,/* polyline vertices */
 		const Color &,             /* start color */
 		const Color &);            /* end color */
+  TLP_GL_SCOPE void polyLine(const std::vector<Coord> &,/* polyline vertices */
+		const Color &,             /* start color */
+		const Color &);            /* end color */
   TLP_GL_SCOPE void polyLine(const std::vector<Coord> &, /* polyline vertices */
 		const std::vector<Color> &);/* colors at polyline verts */
+  TLP_GL_SCOPE void polyQuad(const std::vector<Coord> &, /* polyline vertces */
+		const std::vector<Color> &, /* colors at polyline verts */
+		const std::vector<float> &, /* size at polyline verts */
+		const Coord &,            /* nomal to the begin of the curve */
+		const Coord &,            /* nomal to the end curve */
+		const std::string &textureName="");			/* textureName */
+  TLP_GL_SCOPE void polyQuad(const std::vector<Coord> &, /* polyline vertces */
+		const std::vector<Color> &, /* colors at polyline verts */
+		const std::vector<float> &, /* size at polyline verts */
+		const Coord &,            /* nomal to the begin of the curve */
+		const Coord &,            /* nomal to the end curve */
+		bool,	  		  /* if true : use start and end color to border lines, if false : use borderColor*/
+		const Color &,		  /* border color */
+		const std::string &textureName="");			/* textureName */
   TLP_GL_SCOPE void polyQuad(const std::vector<Coord> &, /* polyline vertces */
 		const Color &,            /* start color */
 		const Color &,            /* end color */
@@ -31,12 +48,16 @@ namespace tlp {
 		const float,              /* end size */
 		const Coord &,            /* normal to the begin of the curve */
 		const Coord &,            /* normal to the end curve */
+		bool,	  		  /* if true : use start and end color to border lines, if false : use borderColor*/
+		const Color &,		  /* border color */
 		const std::string &textureName="");			/* textureName */
   TLP_GL_SCOPE void polyQuad(const std::vector<Coord> &, /* polyline vertces */
-		const std::vector<Color> &, /* colors at polyline verts */
-		const std::vector<float> &, /* size at polyline verts */
-		const Coord &,            /* nomal to the begin of the curve */
-		const Coord &,            /* nomal to the end curve */
+		const Color &,            /* start color */
+		const Color &,            /* end color */
+		const float,              /* start size */
+		const float,              /* end size */
+		const Coord &,            /* normal to the begin of the curve */
+		const Coord &,            /* normal to the end curve */
 		const std::string &textureName="");			/* textureName */
   TLP_GL_SCOPE void polyCylinder(const std::vector<Coord> &,    /* polyline vertces */
 		    const std::vector<Color> &,    /* colors at polyline verts */

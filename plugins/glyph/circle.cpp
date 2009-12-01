@@ -32,7 +32,7 @@ public:
 	virtual ~Circle();
 	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
 	virtual void draw(node n, float lod);
-	virtual void draw(edge e, node n, const Color& glyphColor, float lod);
+	virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod);
 protected:
 	inline void drawGlyph(const Color& glyphColor, const string& texture,
 			const string& texturePath, double borderWidth,
@@ -61,12 +61,12 @@ void Circle::getIncludeBoundingBox(BoundingBox &boundingBox) {
 	boundingBox.second = Coord(0.85, 0.85, 0);
 }
 
-void Circle::draw(edge e, node n, const Color& glyphColor, float lod) {
+void Circle::draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
 	drawGlyph(glyphColor,
 			edgeExtGlGraphInputData->parameters->getTexturePath(),
 			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
 			edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
-			edgeExtGlGraphInputData->elementBorderColor->getEdgeValue(e), lod);
+			borderColor, lod);
 	glDisable(GL_LIGHTING);
 }
 

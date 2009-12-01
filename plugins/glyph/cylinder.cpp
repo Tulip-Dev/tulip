@@ -27,7 +27,7 @@ public:
 	virtual ~Cylinder();
 	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
 	virtual void draw(node n, float lod);
-	virtual void draw(edge e, node n, const Color& glyphColor, float lod);
+	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
 	virtual Coord getAnchor(const Coord &vector) const;
 
 private:
@@ -87,7 +87,7 @@ Coord Cylinder::getAnchor(const Coord &vector) const {
 }
 //=================================================================================================
 
-void Cylinder::draw(edge e, node n, const Color& glyphColor, float lod) {
+void Cylinder::draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod) {
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Cylinder_cylinder")) {
 		drawCylinder();
 	}

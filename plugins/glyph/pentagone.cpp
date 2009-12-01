@@ -33,7 +33,7 @@ public:
 	virtual ~Pentagone();
 	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
 	virtual void draw(node n, float lod);
-	virtual void draw(edge e, node n, const Color& glyphColor, float lod);
+	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
 
 protected:
 	inline void drawGlyph(const Color& glyphColor, const string& texture,
@@ -114,12 +114,12 @@ void Pentagone::draw(node n, float lod) {
 			glGraphInputData->elementBorderColor->getNodeValue(n), lod);
 }
 
-void Pentagone::draw(edge e, node n, const Color& glyphColor, float lod) {
+void Pentagone::draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod) {
 	drawGlyph(glyphColor,
 			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
 			edgeExtGlGraphInputData->parameters->getTexturePath(),
 			edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
-			edgeExtGlGraphInputData->elementBorderColor->getEdgeValue(e), lod);
+			borderColor, lod);
 	glDisable(GL_LIGHTING);
 }
 //=====================================================

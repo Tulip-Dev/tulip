@@ -29,7 +29,7 @@ using namespace std;
 
 static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &startColor, const tlp::Color &endColor,
 		const float startSize, const float endSize, const tlp::Coord &startN, const tlp::Coord &endN,
-		const string &texture) {
+		const string &texture, const bool outlined, const tlp::Color outlineColor) {
 
 	unsigned int size = curvePoints.size();
 	GLfloat *points = NULL;
@@ -37,14 +37,14 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 		points = tlp::buildCurvePoints(curvePoints, tlp::getSizes(curvePoints, startSize, endSize), startN, endN ,size);
 	}
 	vector<tlp::Color> curveColors = tlp::getColors(curvePoints, startColor, endColor);
-	if(texture != "") {
-		tlp::GlTextureManager::getInst().activateTexture(texture);
-	}
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_LIGHTING);
 
 	if (startSize != 1 && endSize != 1) {
+		if (texture != "") {
+			tlp::GlTextureManager::getInst().activateTexture(texture);
+		}
 		glBegin(GL_TRIANGLE_STRIP);
 		for (unsigned int i = 0; i < size; ++i) {
 			tlp::setMaterial(curveColors[i]);
@@ -54,6 +54,9 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 			glVertex3fv(&points[i*3 + size*3]);
 		}
 		glEnd();
+		if (texture != "") {
+			tlp::GlTextureManager::getInst().desactivateTexture();
+		}
 	} else {
 		glBegin(GL_LINE_STRIP);
 		for (unsigned int i = 0; i < size; ++i) {
@@ -63,25 +66,28 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 		glEnd();
 	}
 
-	// if no texture set, draw the curve outline for anti-aliasing
-	if(texture == "" && points != NULL) {
-		/*glEnable(GL_BLEND);
-		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
+	if ((texture == "" || outlined) && points != NULL) {
 		glBegin(GL_LINE_STRIP);
 		for (unsigned int i = 0 ; i < size ; ++i) {
-			tlp::setMaterial(curveColors[i]);
+			if (!outlined) {
+				tlp::setMaterial(curveColors[i]);
+			} else {
+				tlp::setMaterial(outlineColor);
+			}
 			glVertex3fv(&points[i*3]);
 		}
 		glEnd();
 
 		glBegin(GL_LINE_STRIP);
 		for (unsigned int i = 0 ; i < size ; ++i) {
-			tlp::setMaterial(curveColors[i]);
+			if (!outlined) {
+				tlp::setMaterial(curveColors[i]);
+			} else {
+				tlp::setMaterial(outlineColor);
+			}
 			glVertex3fv(&points[i*3+size*3]);
 		}
 		glEnd();
-	} else {
-		tlp::GlTextureManager::getInst().desactivateTexture();
 	}
 
 	glEnable(GL_CULL_FACE);
@@ -334,8 +340,8 @@ GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints,
 			beginSize(beginSize),
 			endSize(endSize),
 			texture(texture),
-			nbCurvePoints(nbCurvePoints)
-			{
+			nbCurvePoints(nbCurvePoints),
+			outlined(false) {
 
 	vboOk = checkVboSupport();
 
@@ -441,10 +447,6 @@ void GlBezierCurve::buildBezierVertexBuffers(const unsigned int nbCurvePoints) {
 //=====================================================
 void GlBezierCurve::draw(float lod, Camera *camera) {
 
-	if (texture != "") {
-		GlTextureManager::getInst().activateTexture(texture);
-	}
-
 	GLuint *vbo = bezierVertexBuffersObject[nbCurvePoints];
 
 	if (controlPoints.size() <= CONTROL_POINTS_LIMIT) {
@@ -498,6 +500,9 @@ void GlBezierCurve::draw(float lod, Camera *camera) {
 				}
 
 			} else {
+				if (texture != "") {
+					GlTextureManager::getInst().activateTexture(texture);
+				}
 				if (vboOk) {
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
 					glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, 0);
@@ -505,10 +510,14 @@ void GlBezierCurve::draw(float lod, Camera *camera) {
 					glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), bezierVertexBuffersDataNoVbo[nbCurvePoints][0]);
 					glDrawArrays(GL_TRIANGLE_STRIP, 0, nbCurvePoints * 2);
 				}
-
-				if (texture == "") {
-					/*glEnable(GL_BLEND);
-					glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
+				if(texture != "") {
+					GlTextureManager::getInst().desactivateTexture();
+				}
+				if (texture == "" || outlined) {
+					if (outlined) {
+						bezierVertexShader->setUniformColor("startColor", outlineColor);
+						bezierVertexShader->setUniformColor("endColor", outlineColor);
+					}
 					if (vboOk) {
 						glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
 						glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
@@ -542,7 +551,7 @@ void GlBezierCurve::draw(float lod, Camera *camera) {
 		} else {
 			vector<Coord> curvePoints;
 			FastBezier::computeBezierPoints(controlPoints,curvePoints,nbCurvePoints);
-			drawCurve(curvePoints, beginColor, endColor, beginSize, endSize, curvePoints[0] - Coord(1,0,0), curvePoints[curvePoints.size() - 1] + Coord(1,0,0), texture);
+			drawCurve(curvePoints, beginColor, endColor, beginSize, endSize, curvePoints[0] - Coord(1,0,0), curvePoints[curvePoints.size() - 1] + Coord(1,0,0), texture, outlined, outlineColor);
 		}
 	} else {
 		vector<Coord> curvePoints;
@@ -550,10 +559,6 @@ void GlBezierCurve::draw(float lod, Camera *camera) {
 		FastBezier::computeBezierPoints(controlPoints,curvePoints, 20);
 		GlCatmullRomCurve curve(curvePoints, beginColor, endColor, beginSize, endSize, "", false, 20);
 		curve.draw(0,0);
-	}
-
-	if(texture != "") {
-		GlTextureManager::getInst().desactivateTexture();
 	}
 }
 //=====================================================

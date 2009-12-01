@@ -27,7 +27,7 @@ public:
 	CubeOutLinedTransparent(EdgeExtremityGlyphContext *gc = NULL);
 	virtual ~CubeOutLinedTransparent();
 	virtual void draw(node n, float lod);
-	virtual void draw(edge e, node n, const Color& glyphColor, float lod);
+	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
 	virtual Coord getAnchor(const Coord & vector) const;
 
 private:
@@ -98,13 +98,13 @@ void CubeOutLinedTransparent::draw(node n, float lod) {
 			glGraphInputData->elementBorderColor->getNodeValue(n), lod);
 }
 
-void CubeOutLinedTransparent::draw(edge e, node n, const Color& glyphColor,
+void CubeOutLinedTransparent::draw(edge e, node n, const Color &borderColor, const Color& glyphColor,
 		float lod) {
 	drawGlyph(glyphColor,
 			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
 			edgeExtGlGraphInputData->parameters->getTexturePath(),
 			edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
-			edgeExtGlGraphInputData->elementBorderColor->getEdgeValue(e), lod);
+			borderColor, lod);
 	glDisable(GL_LIGHTING);
 }
 

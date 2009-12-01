@@ -52,7 +52,7 @@ public:
 	EdgeExtremityGlyph(EdgeExtremityGlyphContext *gc);
 	virtual ~EdgeExtremityGlyph();
 
-	virtual void draw(edge e, node n, const Color& glyphColor, float lod) = 0;
+	virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) = 0;
 
 	virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
 			const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix) = 0;

@@ -299,50 +299,80 @@ namespace tlp {
 		const vector<Color> &colors,
 		const vector<float> &sizes,
 		const Coord & startN, const Coord &endN,
+		bool colorInterpolate,const Color &borderColor,
 		const string &textureName) {
     unsigned int size;
     vector<unsigned int> decTab;
     unsigned int dec=0;
     GLfloat *points = buildCurvePoints(vertices, sizes, startN, endN,size,&decTab);
     if(textureName!="") {
-    	GlTextureManager::getInst().activateTexture(textureName);
-		}
+      GlTextureManager::getInst().activateTexture(textureName);
+    }
     glBegin(GL_QUAD_STRIP);
     for (unsigned int i = 0; i < size; ++i) {
       if(dec<decTab.size())
-        if(i==decTab[dec])
-    			dec++;
-      glColor4ubv(((const GLubyte *)&colors[i-dec]));
+	if(i==decTab[dec])
+	  dec++;
+	glColor4ubv(((const GLubyte *)&colors[i-dec]));
       glVertex3fv(&points[i*3]);
       glVertex3fv(&points[i*3 + size*3]);
-    		}
+    }
     glEnd();
-
+    
     dec=0;
     glBegin(GL_LINE_STRIP);
+    if(!colorInterpolate)
+      glColor4ubv(((const GLubyte *)&borderColor));
     for (unsigned int i = 0; i < size; ++i) {
       if(dec<decTab.size())
-        if(i==decTab[dec])
-          dec++;
-      glColor4ubv(((const GLubyte *)&colors[i-dec]));
-      glVertex3fv(&points[i*3]);
-    	}
+	if(i==decTab[dec])
+	  dec++;
+	if(colorInterpolate)
+	  glColor4ubv(((const GLubyte *)&colors[i-dec]));
+	glVertex3fv(&points[i*3]);
+    }
     glEnd();
     dec=0;
     glBegin(GL_LINE_STRIP);
+    if(!colorInterpolate)
+      glColor4ubv(((const GLubyte *)&borderColor));
     for (unsigned int i = 0; i < size; ++i) {
       if(dec<decTab.size())
-        if(i==decTab[dec])
-          dec++;
-      glColor4ubv(((const GLubyte *)&colors[i-dec]));
-      glVertex3fv(&points[i*3 + size*3]);
+	if(i==decTab[dec])
+	  dec++;
+	if(colorInterpolate)
+	  glColor4ubv(((const GLubyte *)&colors[i-dec]));
+	glVertex3fv(&points[i*3 + size*3]);
     }
     glEnd();
     if(textureName!="") {
-    	GlTextureManager::getInst().desactivateTexture();
+      GlTextureManager::getInst().desactivateTexture();
     }
     delete [] points;
   }
+  //=============================================
+  void polyQuad(const vector<Coord> &vertices,
+		const vector<Color> &colors,
+		const vector<float> &sizes,
+		const Coord & startN, const Coord &endN,
+		const string &textureName){
+    polyQuad(vertices,colors,sizes,startN,endN,true,Color(0,0,0,0),textureName);
+  }
+  //=============================================
+  void polyQuad(const vector<Coord> &vertices,
+		const Color &c1, const Color &c2,
+		float s1, float s2,
+		const Coord &startN, const Coord &endN,
+		bool colorInterpolate,const Color &borderColor,
+		const string &textureName) {
+    polyQuad(vertices,
+	     getColors(vertices, c1, c2),
+	     getSizes(vertices, s1, s2),
+	     startN, endN,
+	     colorInterpolate,borderColor,
+	     textureName);
+  }
+  //=============================================
   void polyQuad(const vector<Coord> &vertices,
 		const Color &c1, const Color &c2,
 		float s1, float s2,

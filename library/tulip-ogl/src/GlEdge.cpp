@@ -306,7 +306,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	int startEdgeGlyph = data->elementSrcAnchorShape->getEdgeValue(e);
 	int endEdgeGlyph = data->elementTgtAnchorShape->getEdgeValue(e);
 
-	if (startEdgeGlyph != 0) {
+	if (startEdgeGlyph != 0 && data->parameters->isViewArrow()) {
 		const Size &sizeRatio = data->elementSrcAnchorSize->getEdgeValue(e);
 
 		//Correct begin tmp Anchor
@@ -324,11 +324,11 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 
 		Size size;
 		if (data->parameters->isEdgeSizeInterpolate()) {
-			size[0] = sizeRatio[0] * edgeSize[0];
+			size[0] = (sizeRatio[0]*10.) * edgeSize[0];
 			if (size[0] > maxGlyphSize)
 				size[0] = maxGlyphSize;
-			size[1] = std::min(maxSrcSize, edgeSize[0] * sizeRatio[1]);
-			size[2] = std::min(maxSrcSize, edgeSize[0] * sizeRatio[2]);
+			size[1] = std::min(maxSrcSize, (float)(edgeSize[0] * (sizeRatio[1]*10.)));
+			size[2] = std::min(maxSrcSize, (float)(edgeSize[0] * (sizeRatio[2]*10.)));
 		} else {
 			size[0] = sizeRatio[0] > maxGlyphSize ? maxGlyphSize : sizeRatio[0];
 			size[1] = std::min(maxSrcSize, sizeRatio[1]);
@@ -378,7 +378,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 			glPushMatrix();
 			glMultMatrixf((GLfloat *) &srcTransformationMatrix);
 			glMultMatrixf((GLfloat *) &srcScalingMatrix);
-			extremityGlyph->draw(e, source, (selected ? selectionColor : *srcCol), lod);
+			extremityGlyph->draw(e, source, (selected ? selectionColor : *srcCol),(data->parameters->isEdgeColorInterpolate() ? *srcCol : data->elementBorderColor->getEdgeValue(e)), lod);
 			glPopMatrix();
 
 			//Compute new Anchor
@@ -395,7 +395,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 		beginLineAnchor = srcAnchor;
 	}
 
-	if (endEdgeGlyph != 0) {
+	if (endEdgeGlyph != 0 && data->parameters->isViewArrow()) {
 		const Size& sizeRatio = data->elementTgtAnchorSize->getEdgeValue(e);
 		endLineAnchor = endTmpAnchor - tgtAnchor;
 		float nrm = endLineAnchor.norm();
@@ -407,11 +407,11 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 
 		Size size;
 		if (data->parameters->isEdgeSizeInterpolate()) {
-			size[0] = sizeRatio[0] * edgeSize[1];
+			size[0] = (sizeRatio[0]*10.) * edgeSize[1];
 			if (size[0] > maxGlyphSize)
 				size[0] = maxGlyphSize;
-			size[1] = std::min(maxTgtSize, edgeSize[1] * sizeRatio[1]);
-			size[2] = std::min(maxTgtSize, edgeSize[1] * sizeRatio[2]);
+			size[1] = std::min(maxTgtSize, (float)(edgeSize[1] * (sizeRatio[1]*10.)));
+			size[2] = std::min(maxTgtSize, (float)(edgeSize[1] * (sizeRatio[2]*10.)));
 		} else {
 			size[0] = sizeRatio[0] > maxGlyphSize ? maxGlyphSize : sizeRatio[0];
 			size[1] = std::min(maxTgtSize, sizeRatio[1]);
@@ -458,7 +458,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 			glPushMatrix();
 			glMultMatrixf((GLfloat *) &tgtTransformationMatrix);
 			glMultMatrixf((GLfloat *) &tgtScalingMatrix);
-			extremityGlyph->draw(e, target, (selected ? selectionColor : *tgtCol), lod);
+			extremityGlyph->draw(e, target, (selected ? selectionColor : *tgtCol),(data->parameters->isEdgeColorInterpolate() ? *tgtCol : data->elementBorderColor->getEdgeValue(e)), lod);
 			glPopMatrix();
 
 			//Compute new Anchor
@@ -498,7 +498,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 			camera->getViewport());
 
 	//draw Edge
-	drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, *srcCol, *tgtCol, edgeSize,
+	drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, *srcCol, *tgtCol,data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
 			data->elementShape->getEdgeValue(e), data->parameters->isEdge3D(), lodSize);
 
 	if (data->parameters->getFeedbackRender()) {
@@ -512,7 +512,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 #define L3D_BIT (1<<9)
 void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Coord &startPoint,
 		const Coord &endPoint, const LineType::RealType &bends, const Color &startColor,
-		const Color &endColor, const Size &size, int shape, bool edge3D, float lod) {
+		const Color &endColor, bool colorInterpolate, const Color &borderColor,const Size &size, int shape, bool edge3D, float lod) {
 	glDisable(GL_CULL_FACE);
 	glDepthFunc(GL_LEQUAL);
 
@@ -534,7 +534,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 	switch (shape) {
 	case POLYLINESHAPE:
 		if (lod > 0.05 || lod < -0.05)
-			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir);
+			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,colorInterpolate,borderColor);
 		else
 			tlp::polyLine(tmp, startColor, endColor);
 		break;
@@ -542,6 +542,10 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 		if (lod > 0.05 || lod < -0.05) {
 			//tlp::bezierQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
 			GlBezierCurve bezier(tmp, startColor, endColor, size[0], size[1]);
+			if(!colorInterpolate){
+			  bezier.setOutlined(true);
+			  bezier.setOutlineColor(borderColor);
+			}
 			bezier.draw(0, 0);
 
 		} else {
@@ -554,6 +558,10 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 		if (lod > 0.05 || lod < -0.05) {
 			//tlp::splineQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
 			GlCatmullRomCurve catmull(tmp, startColor, endColor, size[0], size[1]);
+			if(!colorInterpolate){
+			  catmull.setOutlined(true);
+			  catmull.setOutlineColor(borderColor);
+			}
 			catmull.draw(0, 0);
 		} else {
 			//tlp::splineLine(tmp, startColor, endColor);
@@ -578,7 +586,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 		break;
 	default:
 		if (lod > 0.05 || lod < -0.05)
-			tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
+			tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir,colorInterpolate,borderColor);
 		else
 			tlp::polyLine(tmp, startColor, endColor);
 		break;

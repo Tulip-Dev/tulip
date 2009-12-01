@@ -31,7 +31,7 @@ public:
 	virtual ~Cube();
 	virtual void draw(node n, float lod);
 	virtual Coord getAnchor(const Coord & vector) const;
-	virtual void draw(edge e, node n, const Color& glyphColor, float lod);
+	virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod);
 
 protected:
 	void drawCube();
@@ -88,7 +88,7 @@ void Cube::draw(node n, float lod) {
 	GlTextureManager::getInst().desactivateTexture();
 }
 
-void Cube::draw(edge e, node n, const Color& glyphColor, float lod) {
+void Cube::draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Cube_cube")) {
 		drawCube();
 		GlDisplayListManager::getInst().endNewDisplayList();

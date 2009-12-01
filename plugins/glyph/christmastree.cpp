@@ -27,7 +27,7 @@ public:
 	ChristmasTree(GlyphContext *gc = NULL);
 	ChristmasTree(EdgeExtremityGlyphContext *gc = NULL);
 	virtual void draw(node n, float lod);
-	virtual void draw(edge e, node n, const Color& glyphColor, float lod);
+	virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod);
 
 protected:
 	void drawTree();
@@ -58,7 +58,7 @@ void ChristmasTree::draw(node n, float lod) {
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_outsphere");
 }
 
-void ChristmasTree::draw(edge e, node n, const Color& glyphColor, float lod) {
+void ChristmasTree::draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
 	drawTree();
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_tree");
 	setMaterial(glyphColor);

@@ -30,7 +30,7 @@ public:
 	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
 	virtual void draw(node n, float lod);
 	virtual Coord getAnchor(const Coord &vector) const;
-	virtual void draw(edge e, node n, const Color& glyphColor, float lod);
+	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
 
 private:
 	void drawCone();
@@ -105,7 +105,7 @@ Coord Cone::getAnchor(const Coord &vector) const {
 	return anchor;
 }
 
-void Cone::draw(edge e, node n, const Color& glyphColor, float lod) {
+void Cone::draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
 		drawCone();
 	}

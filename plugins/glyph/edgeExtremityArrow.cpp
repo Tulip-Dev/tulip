@@ -12,14 +12,12 @@
 #include <string>
 using namespace tlp;
 using namespace std;
-class GlArrow2DEdgeExtremity: public tlp::EdgeExtremityGlyphFrom2DGlyph {
+class GlArrow2DEdgeExtremity: public EdgeExtremityGlyphFrom2DGlyph {
 public:
-	GlArrow2DEdgeExtremity(tlp::EdgeExtremityGlyphContext *gc);
+	GlArrow2DEdgeExtremity(EdgeExtremityGlyphContext *gc);
 	virtual ~GlArrow2DEdgeExtremity();
 
-	void
-			draw(tlp::edge e, tlp::node n, const tlp::Color& glyphColor,
-					float lod);
+	void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
 };
 
 EEGLYPHPLUGIN(GlArrow2DEdgeExtremity,"2D - Arrow","Jonathan Dubois","09/04/09","Edge Extremity with 2D arrow","1.0",50)
@@ -33,7 +31,7 @@ GlArrow2DEdgeExtremity::GlArrow2DEdgeExtremity(EdgeExtremityGlyphContext *gc) :
 GlArrow2DEdgeExtremity::~GlArrow2DEdgeExtremity() {
 }
 
-void GlArrow2DEdgeExtremity::draw(edge e, node n, const Color& glyphColor,
+void GlArrow2DEdgeExtremity::draw(edge e, node n, const Color& glyphColor, const Color &borderColor,
 		float lod) {
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Arrow 2D")) {
 		glBegin(GL_TRIANGLES);
@@ -64,7 +62,7 @@ void GlArrow2DEdgeExtremity::draw(edge e, node n, const Color& glyphColor,
 			glLineWidth(width);
 
 
-		setColor(edgeExtGlGraphInputData->elementBorderColor->getEdgeValue(e));
+		setColor(borderColor);
 		GlDisplayListManager::getInst().callDisplayList("Arrow 2D Border");
 	}
 }
