@@ -97,6 +97,8 @@ protected:
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);
   virtual void removeEdge(const edge, const node = node());
+  // used by PropertyManager
+  virtual bool canDeleteProperty(Graph* g, PropertyInterface *prop);
 
 private :
   typedef SimpleVector<edge> EdgeContainer;

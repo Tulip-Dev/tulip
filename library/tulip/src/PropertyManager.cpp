@@ -11,38 +11,34 @@
 #include <config.h>
 #endif
 
+#include "tulip/ForEach.h"
+#include "tulip/GraphAbstract.h"
 #include "tulip/PropertyManager.h"
-#include "tulip/Graph.h"
 #include "tulip/AbstractProperty.h"
 
 namespace tlp {
 //======================================================================================
-class LocalPropertiesIterator: public Iterator<PropertyInterface*> {
+class PropertiesIterator: public Iterator<PropertyInterface*> {
  public:
-  LocalPropertiesIterator(PropertyManagerImpl *ppc);
+  PropertiesIterator(std::map<std::string, PropertyInterface*>::iterator,
+		     std::map<std::string, PropertyInterface*>::iterator);
   PropertyInterface* next();
   bool hasNext();
  private:
-  PropertyManagerImpl *ppc;
-  std::map<std::string, PropertyInterface*>::iterator it,itEnd;
+  std::map<std::string, PropertyInterface*>::iterator it, itEnd;
 };
-//======================================================================================
-class InheritedPropertiesIterator: public Iterator<PropertyInterface*> {
-  struct ltProp {
-    bool operator()(PropertyInterface* const &p1,
-		    PropertyInterface* const &p2) const {
-      return p1->getName().compare(p2->getName()) < 0;
-    }
-  };
- public:
-  InheritedPropertiesIterator(PropertyManager *ppc);
-  PropertyInterface* next();
-  bool hasNext();
- private:
-  PropertyManager *ppc;
-  std::set<PropertyInterface*,ltProp> inhList; 
-  std::set<PropertyInterface*,ltProp>::iterator it,itEnd;
-};
+//==============================================================
+PropertiesIterator::PropertiesIterator(std::map<std::string, PropertyInterface*>::iterator itB,
+				       std::map<std::string, PropertyInterface*>::iterator itE): it(itB), itEnd(itE) {
+}
+PropertyInterface* PropertiesIterator::next() {
+  PropertyInterface* tmp=(*it).second;
+  ++it;
+  return tmp;
+}
+bool PropertiesIterator::hasNext() {
+  return (it!=itEnd);
+}
 //======================================================================================
 class PropertyNamesIterator: public Iterator<std::string> {
  public:
@@ -60,94 +56,157 @@ using namespace std;
 using namespace tlp;
 
 //==============================================================
-PropertyManagerImpl::PropertyManagerImpl(Graph *spGr) {
-  graph=spGr;
+PropertyManager::PropertyManager(Graph *g): graph(g) {
+  // get inherited properties
+  if (graph != graph->getSuperGraph()) {
+    Iterator<PropertyInterface *> *it = graph->getSuperGraph()->getObjectProperties();
+    while(it->hasNext()) {
+      PropertyInterface* prop = it->next();
+      inheritedProperties[prop->getName()] = prop;
+    }
+  }
 }
 //==============================================================
-PropertyManagerImpl::~PropertyManagerImpl() {
+PropertyManager::~PropertyManager() {
   map<string,PropertyInterface*>::const_iterator itP;
-  for (itP=propertyProxyMap.begin();itP!=propertyProxyMap.end();++itP) {
+  for (itP=localProperties.begin();itP!=localProperties.end();++itP) {
     PropertyInterface *prop = (*itP).second;
     prop->graph = NULL;
     delete prop;
   }
 }
 //==============================================================
-bool PropertyManagerImpl::existProperty(const string &str) {
-  if (existLocalProperty(str)) 
-    return true;
+bool PropertyManager::existProperty(const string &str) {
+  return existLocalProperty(str) || existInheritedProperty(str);
+}
+//==============================================================
+bool PropertyManager::existLocalProperty(const string &str) {
+  return (localProperties.find(str)!=localProperties.end());
+}
+//==============================================================
+bool PropertyManager::existInheritedProperty(const string &str) {
+  return (inheritedProperties.find(str)!=inheritedProperties.end());
+}
+//==============================================================
+void PropertyManager::setLocalProperty(const string &str,
+				       PropertyInterface *p) {
+  if (existLocalProperty(str))
+    // delete previously existing local property
+    delete localProperties[str];
   else {
-    Graph* super = graph->getSuperGraph();
-    if (super == graph)
-      return false;
-    else 
-      return (super->existProperty(str));
+    // remove previously existing inherited property
+    map<string,PropertyInterface *>::iterator it;
+    it = inheritedProperties.find(str);
+    if (it != inheritedProperties.end())
+      inheritedProperties.erase(it);
+  }
+
+  // register property as local
+  localProperties[str] = p;
+
+  // loop on subgraphs
+  Graph* sg;
+  forEach(sg, graph->getSubGraphs()) {
+    // to set p as inherited property
+    (((GraphAbstract *) sg)->propertyContainer)->setInheritedProperty(str, p);
   }
 }
 //==============================================================
-bool PropertyManagerImpl::existLocalProperty(const string &str) {
-  return (propertyProxyMap.find(str)!=propertyProxyMap.end());
+void PropertyManager::setInheritedProperty(const string &str,
+					   PropertyInterface *p) {
+  if (!existLocalProperty(str)) {
+    inheritedProperties[str] = p;
+
+    // loop on subgraphs
+    Graph* sg;
+    forEach(sg, graph->getSubGraphs()) {
+      // to set p as inherited property
+      (((GraphAbstract *) sg)->propertyContainer)->setInheritedProperty(str, p);
+    }
+  }
 }
 //==============================================================
-void PropertyManagerImpl::setLocalProxy(const string &str, PropertyInterface *p) {
-  if (existLocalProperty(str))
-    delete propertyProxyMap[str];
-  propertyProxyMap[str]=p;
-}
-//==============================================================
-PropertyInterface* PropertyManagerImpl::getProperty(const string &str) {
+PropertyInterface* PropertyManager::getProperty(const string &str) {
   assert(existProperty(str));
-  //  cerr << "Get Proxy :" << str << endl;
   if (existLocalProperty(str))
-    return this->getLocalProperty(str);
-  else {
-    Graph* super = graph->getSuperGraph();
-    if (super != graph)
-      return (super->getProperty(str));
-  }
+    return getLocalProperty(str);
+  if (existInheritedProperty(str))
+    return getInheritedProperty(str);
   return NULL;
 }
 //==============================================================
-PropertyInterface* PropertyManagerImpl::getLocalProperty(const string &str) {
+PropertyInterface* PropertyManager::getLocalProperty(const string &str) {
   assert(existLocalProperty(str));
-  return (propertyProxyMap[str]);
+  return (localProperties[str]);
 }
 //==============================================================
-PropertyInterface* PropertyManagerImpl::delLocalProperty(const string &str) {
+PropertyInterface* PropertyManager::getInheritedProperty(const string &str) {
+  assert(existInheritedProperty(str));
+  return (inheritedProperties[str]);
+}
+//==============================================================
+void PropertyManager::delLocalProperty(const string &str) {
   map<string,PropertyInterface *>::iterator it;
-  it=propertyProxyMap.find(str);
-  if (it!=propertyProxyMap.end()) {
-    PropertyInterface* prop = (*it).second;
-    propertyProxyMap.erase(it);
-    return prop;
+  it = localProperties.find(str);
+  // if found remove from local properties
+  if (it!=localProperties.end()) {
+    PropertyInterface* oldProp = (*it).second;
+    localProperties.erase(it);
+    if (graph->canDeleteProperty(graph, oldProp))
+      //if (!graph->canPop())
+      delete oldProp;
+
+    // loop in the ascendant hierarchy to get
+    // an inherited property
+    PropertyInterface* newProp = NULL;
+    Graph* g = graph;
+    while (g != g->getSuperGraph()) {
+      g = g->getSuperGraph();
+      if (g->existLocalProperty(str)) {
+	newProp = g->getProperty(str);
+	break;
+      }
+    }
+
+    if (newProp)
+      setInheritedProperty(str, newProp);
+    else {
+      // loop on subgraphs
+     forEach(g, graph->getSubGraphs()) {
+       // to remove old inherited property
+       (((GraphAbstract *) g)->propertyContainer)->delInheritedProperty(str);
+     }
+    }
   }
-  return NULL;
-}
-Iterator<string>*  PropertyManagerImpl::getLocalProperties() {
-  return (new PropertyNamesIterator(new LocalPropertiesIterator(this)));
-}
-Iterator<string>*  PropertyManagerImpl::getInheritedProperties() {
-  return (new PropertyNamesIterator(new InheritedPropertiesIterator(this)));
-}
-Iterator<PropertyInterface*>*  PropertyManagerImpl::getLocalObjectProperties() {
-  return (new LocalPropertiesIterator(this));
-}
-Iterator<PropertyInterface*>*  PropertyManagerImpl::getInheritedObjectProperties() {
-  return (new InheritedPropertiesIterator(this));
 }
 //==============================================================
-LocalPropertiesIterator::LocalPropertiesIterator(PropertyManagerImpl *ppc) {
-  this->ppc=ppc;
-  it=ppc->propertyProxyMap.begin();
-  itEnd=ppc->propertyProxyMap.end();
+void PropertyManager::delInheritedProperty(const string &str) {
+  map<string,PropertyInterface *>::iterator it;
+  it = inheritedProperties.find(str);
+  // if found remove from inherited properties
+  if (it != inheritedProperties.end()) {
+    inheritedProperties.erase(it);
+    // loop on subgraphs
+    Graph* sg;
+    forEach(sg, graph->getSubGraphs()) {
+      // to remove as inherited property
+      (((GraphAbstract *) sg)->propertyContainer)->delInheritedProperty(str);
+    }
+  }
 }
-PropertyInterface* LocalPropertiesIterator::next() {
-  PropertyInterface* tmp=(*it).second;
-  ++it;
-  return tmp;
+Iterator<string>*  PropertyManager::getLocalProperties() {
+  return (new PropertyNamesIterator(getLocalObjectProperties()));
 }
-bool LocalPropertiesIterator::hasNext() {
-  return (it!=itEnd);
+Iterator<string>*  PropertyManager::getInheritedProperties() {
+  return (new PropertyNamesIterator(getInheritedObjectProperties()));
+}
+Iterator<PropertyInterface*>*  PropertyManager::getLocalObjectProperties() {
+  return (new PropertiesIterator(localProperties.begin(),
+				 localProperties.end()));
+}
+Iterator<PropertyInterface*>*  PropertyManager::getInheritedObjectProperties() {
+  return (new PropertiesIterator(inheritedProperties.begin(),
+				 inheritedProperties.end()));
 }
 //==============================================================
 PropertyNamesIterator::PropertyNamesIterator(Iterator<PropertyInterface*>* it): itp(it) {}
@@ -163,49 +222,16 @@ bool PropertyNamesIterator::hasNext() {
   return itp->hasNext();
 }
 //===============================================================
-InheritedPropertiesIterator::InheritedPropertiesIterator(PropertyManager *ppc) {
-  this->ppc=ppc; 
-  if (ppc->graph->getSuperGraph()!=ppc->graph) {
-    //Récupération des propriétées locale du père.
-    Iterator<PropertyInterface*> *itP=
-      ppc->graph->getSuperGraph()->getLocalObjectProperties();
-    for (;itP->hasNext();) {
-      PropertyInterface* tmp=itP->next();
-      if (!ppc->existLocalProperty(tmp->getName())) {
-	inhList.insert(tmp);
-      }
-    } delete itP;
-    //Récupération des propriétées héritées du père.
-    itP=ppc->graph->getSuperGraph()->getInheritedObjectProperties();
-    for (;itP->hasNext();) {
-      PropertyInterface* tmp=itP->next();
-      if (!ppc->existLocalProperty(tmp->getName())) {
-	inhList.insert(tmp);
-      }
-    } delete itP;  
-  }
-  it=inhList.begin();
-  itEnd=inhList.end();
-}
-PropertyInterface* InheritedPropertiesIterator::next() {
-  PropertyInterface* tmp=(*it);
-  ++it;
-  return tmp;
-}
-bool InheritedPropertiesIterator::hasNext() {
-  return (it!=itEnd);
-}
-//===============================================================
-void PropertyManagerImpl::erase(const node n) {
+void PropertyManager::erase(const node n) {
   map<string,PropertyInterface*>::iterator itP;
-  for (itP=propertyProxyMap.begin();itP!=propertyProxyMap.end();++itP) {
+  for (itP=localProperties.begin();itP!=localProperties.end();++itP) {
     itP->second->erase(n);
   }
 }
 //===============================================================
-void PropertyManagerImpl::erase(const edge e) {
+void PropertyManager::erase(const edge e) {
   map<string,PropertyInterface*>::iterator itP;
-  for (itP=propertyProxyMap.begin();itP!=propertyProxyMap.end();++itP) {
+  for (itP=localProperties.begin();itP!=localProperties.end();++itP) {
     itP->second->erase(e);
   }
 }

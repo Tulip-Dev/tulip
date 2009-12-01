@@ -3,6 +3,7 @@
 #endif
 
 #include "tulip/GraphAbstract.h"
+#include "tulip/PropertyManager.h"
 #include "tulip/BooleanProperty.h"
 #include "tulip/GraphProperty.h"
 #include "tulip/StlIterator.h"
@@ -26,7 +27,7 @@ GraphAbstract::GraphAbstract(Graph *supergraph)
     root = this;
   else
     root = supergraph->getRoot();*/
-  propertyContainer=new PropertyManagerImpl(this);
+  propertyContainer=new PropertyManager(this);
 }
 //=========================================================================
 GraphAbstract::~GraphAbstract() {
@@ -309,15 +310,13 @@ PropertyInterface* GraphAbstract::getProperty(const string &str) {
 //=========================================================================
 void GraphAbstract::delLocalProperty(const std::string &name) {
   notifyDelLocalProperty(this, name);
-  PropertyInterface* prop = propertyContainer->delLocalProperty(name);
-  if (prop && !canPop())
-    delete prop;
+  propertyContainer->delLocalProperty(name);
   notifyObservers();
 }
 //=========================================================================
 void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface *prop) {
   assert(!existLocalProperty(name));
-  propertyContainer->setLocalProxy(name, prop);
+  propertyContainer->setLocalProperty(name, prop);
   notifyAddLocalProperty(this, name);
   notifyObservers();
 }

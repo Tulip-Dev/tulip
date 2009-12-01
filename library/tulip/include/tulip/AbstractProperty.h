@@ -35,11 +35,11 @@ namespace tlp {
 /*@{*/
 //=============================================================
 class TLP_SCOPE PropertyInterface: public Observable, public ObservableProperty {
-  friend class PropertyManagerImpl;
+  friend class PropertyManager;
 protected:
   // name of the property when registered as a property of a graph
   std::string name;
-  // the graph for whom the properety is registered
+  // the graph for whom the property is registered
   Graph *graph;
 
 public:

@@ -633,6 +633,20 @@ bool GraphUpdatesRecorder::dontObserveProperty(PropertyInterface* prop) {
   return false;
 }
 
+bool GraphUpdatesRecorder::isAddedOrDeletedProperty(Graph* g,
+						    PropertyInterface *prop) {
+  PropertyRecord p(prop,  prop->getName());
+  TLP_HASH_MAP<unsigned long, set<PropertyRecord> >::iterator it =
+    addedProperties.find((unsigned long) g);
+  if (it != addedProperties.end() &&
+      ((*it).second.find(p) != (*it).second.end()))
+    return true;
+  it = deletedProperties.find((unsigned long) g);
+  return it != deletedProperties.end() &&
+    ((*it).second.find(p) != (*it).second.end());
+}
+
+
 void GraphUpdatesRecorder::addNode(Graph* g, node n) {
   TLP_HASH_MAP<node, set<Graph*> >::iterator it =
     addedNodes.find(n);
@@ -799,9 +813,8 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
     addedProperties.find((unsigned long) g);
   // remove p from addedProperties if it is a newly added node
   if (it != addedProperties.end() && ((*it).second.find(p) != (*it).second.end())) {
+    // the property is no longer recorded
     (*it).second.erase(p);
-    // the property must be really deleted
-    delete p.prop;
     return;
   }
   // insert p into deletedProperties

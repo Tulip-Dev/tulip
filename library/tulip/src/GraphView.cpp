@@ -18,6 +18,7 @@
 #include "tulip/GraphIterator.h"
 #include "tulip/GraphImpl.h"
 #include "tulip/GraphView.h"
+#include "tulip/PropertyManager.h"
 
 using namespace std;
 using namespace tlp;
@@ -170,7 +171,7 @@ void GraphView::addEdge(const edge e) {
 //----------------------------------------------------------------
 void GraphView::delNodeInternal(const node n) {
   nodeAdaptativeFilter.set(n.id, false);
-  getPropertyManager()->erase(n);
+  propertyContainer->erase(n);
   --nNodes;
 }
 //----------------------------------------------------------------
@@ -217,7 +218,7 @@ void GraphView::delNode(const node n) {
 //----------------------------------------------------------------
 void GraphView::delEdgeInternal(const edge e) {
   edgeAdaptativeFilter.set(e.id,false);
-  getPropertyManager()->erase(e);
+  propertyContainer->erase(e);
   --nEdges;
   const std::pair<node, node>& eEnds = ends(e);
   node src = eEnds.first;

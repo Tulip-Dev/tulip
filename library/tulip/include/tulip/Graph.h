@@ -96,6 +96,7 @@ template<class C>class Iterator;
   friend class GraphAbstract;
   friend class GraphUpdatesRecorder;
   friend class GraphDecorator;
+  friend class PropertyManager;
 
 public:
   Graph():id(0) {}
@@ -511,6 +512,12 @@ protected:
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node)=0;
   virtual void removeEdge(const edge, const node=node())=0;
+
+  // to check if a property can be deleted
+  // used by PropertyManager
+  virtual bool canDeleteProperty(Graph* g, PropertyInterface *prop) {
+    return getRoot()->canDeleteProperty(g, prop);
+  }
 
   // to deal with sub graph deletion
   virtual void removeSubGraph(Graph*)=0;

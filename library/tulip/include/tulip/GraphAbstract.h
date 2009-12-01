@@ -7,16 +7,17 @@
 #include <set>
 #include "tulip/Graph.h"
 #include "tulip/Reflect.h"
-#include "tulip/PropertyManager.h"
 
 namespace tlp {
 
 #define GRAPH_SEQ std::vector<Graph *>
 
 template<class C>class Iterator;
+class PropertyManager;
 
 ///Abstract class for default graph operations.
 class GraphAbstract:public Graph {
+  friend class PropertyManager;
 public:
   GraphAbstract(Graph *supergraph=0);
   virtual ~GraphAbstract();
@@ -70,9 +71,6 @@ protected:
   DataSet& getNonConstAttributes();
   void setSuperGraph(Graph *);
   PropertyManager *propertyContainer;
-  PropertyManager *getPropertyManager() {
-    return propertyContainer;
-  }
   const std::set<edge>& getReferencedEdges(const edge) const;
 
   // to deal with sub graph deletion

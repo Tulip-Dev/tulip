@@ -170,6 +170,8 @@ namespace tlp {
     // remove a property from the observed ones
     // only if nothing is yet recorded for that property
     bool dontObserveProperty(PropertyInterface *);
+    // check if the property is newly added or deleted
+    bool isAddedOrDeletedProperty(Graph*, PropertyInterface *);
 
   public:
     GraphUpdatesRecorder(bool allowRestart = true);

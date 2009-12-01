@@ -14,6 +14,7 @@
 
 #include "tulip/Graph.h"
 #include "tulip/GraphImpl.h"
+#include "tulip/PropertyManager.h"
 #include "tulip/GraphView.h"
 #include "tulip/LayoutProperty.h"
 #include "tulip/GraphIterator.h"
@@ -205,7 +206,7 @@ void GraphImpl::addEdge(const edge e) {
 }
 //----------------------------------------------------------------
 void GraphImpl::delNodeInternal(const node n) {
-  getPropertyManager()->erase(n);
+  propertyContainer->erase(n);
   nodes[n.id].clear();
   nodeIds.free(n.id);
   nbNodes--;
@@ -413,7 +414,7 @@ unsigned int GraphImpl::numberOfNodes()const{return nbNodes;}
 void GraphImpl::removeEdge(const edge e, node dontUpdateNode) {
   assert(isElement(e));
   notifyDelEdge(this,e);
-  getPropertyManager()->erase(e);
+  propertyContainer->erase(e);
   edgeIds.free(e.id);
   nbEdges--;
   pair<node, node>edgeNodes = edges[e.id];
@@ -592,6 +593,8 @@ bool GraphImpl::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
     if (recorders.front()->dontObserveProperty(prop)) {
       stdext::slist<GraphUpdatesRecorder*>::iterator it = recorders.begin();
       if (++it != recorders.end())
+	// allow the previous recorder to record
+	// the next property updates
 	prop->addPropertyObserver((*it));
       return true;
     } 
@@ -604,3 +607,9 @@ bool GraphImpl::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
   }
   return false;
 }
+//----------------------------------------------------------------
+bool GraphImpl::canDeleteProperty(Graph* g, PropertyInterface *prop) {
+  return recorders.empty() ||
+    !recorders.front()->isAddedOrDeletedProperty(g, prop);
+}
+
