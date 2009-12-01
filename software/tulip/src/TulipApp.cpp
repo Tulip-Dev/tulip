@@ -316,7 +316,7 @@ void TulipApp::initializeGraph(Graph *graph) {
   graph->getProperty<IntegerProperty>("viewFontSize")->setAllEdgeValue(18);
   graph->getProperty<IntegerProperty>("viewSrcAnchorShape")->setAllEdgeValue(0);
   graph->getProperty<SizeProperty>("viewSrcAnchorSize")->setAllEdgeValue(Size(0.25,0.25,0.25));
-  graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setAllEdgeValue(0);
+  graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setAllEdgeValue(50);
   graph->getProperty<SizeProperty>("viewTgtAnchorSize")->setAllEdgeValue(Size(0.25,0.25,0.25));
 }
 //**********************************************************************
