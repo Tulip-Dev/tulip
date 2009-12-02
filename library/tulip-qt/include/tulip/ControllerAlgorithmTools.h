@@ -25,31 +25,127 @@ namespace tlp {
 
     public :
       
+      /**
+       * Return parameters need by a plugin
+       */
       static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::string name);
       
+      /**
+       * Apply an algorithm on graph with given name, and if the algorithm has a problem : display it in a QDialog in parent widget
+       */
       static bool applyAlgorithm(Graph *graph,QWidget *parent,const std::string &name);
+      /**
+       * Change a property on graph with algorithm with given name and store result in destination property
+       * view is use to preview result if redraw are at true
+       * if query is at true, open a parameters widget (if need)
+       * if push is at true, save graph before modify it with push/pop system
+       * if algorithm has a problem : display it in a QDialog in parent widget
+       */
       template<typename PROPERTY> static bool changeProperty(Graph *graph,QWidget *parent,std::string name, std::string destination,View *view=NULL, bool query=true, bool redraw=false, bool push=true);
+      /**
+       * Apply a string property algorithm with given name on property with name : propertyName on graph
+       * if algorithm has a problem : display it in a QDialog in parent widget
+       * view is use to preview result
+       */
       static bool changeString(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL);
+      /**
+       * Apply a boolean property algorithm with given name on property with name : propertyName on graph
+       * if algorithm has a problem : display it in a QDialog in parent widget
+       * view is use to preview result
+       */
       static bool changeBoolean(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL);
+      /**
+       * Apply a metric property algorithm with given name on property with name : propertyName on graph
+       * if algorithm has a problem : display it in a QDialog in parent widget
+       * view is use to preview result
+       * if mapMetric is at true : apply a color algoritm after metric algorithm
+       */
       static bool changeMetric(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL,bool mapMetric=false, const std::string &colorAlgorithmName="", const std::string &colorPropertyName="");
+      /**
+       * Apply a layout property algorithm with given name on property with name : propertyName on graph
+       * if algorithm has a problem : display it in a QDialog in parent widget
+       * view is use to preview result
+       */
       static bool changeLayout(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL);
+      /**
+       * Apply an integer property algorithm with given name on property with name : propertyName on graph
+       * if algorithm has a problem : display it in a QDialog in parent widget
+       * view is use to preview result
+       */
       static bool changeInt(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL);
+      /**
+       * Apply a color property algorithm with given name on property with name : propertyName on graph
+       * if algorithm has a problem : display it in a QDialog in parent widget
+       * view is use to preview result
+       */
       static bool changeColors(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL);
+      /**
+       * Apply a size property algorithm with given name on property with name : propertyName on graph
+       * if algorithm has a problem : display it in a QDialog in parent widget
+       * view is use to preview result
+       */
       static bool changeSizes(Graph *graph,QWidget *parent,const std::string &name,const std::string &propertyName,View *view=NULL);
       
+      /**
+       * Test if graph is acyclic and display result in a QWidget in parent widget
+       */
       static void isAcyclic(Graph *graph,QWidget *parent);
+      /**
+       * Modify graph to make it acyclic
+       * if push is at true : save graph before modification with push/pop system
+       */
       static void makeAcyclic(Graph *graph,bool pushGraph=true);
+      /**
+       * Test if graph is simple and display result in a QWidget in parent widget
+       */
       static void isSimple(Graph *graph,QWidget *parent);
+      /**
+       * Modify graph to make it simple
+       * if push is at true : save graph before modification with push/pop system
+       */
       static void makeSimple(Graph *graph,bool pushGraph=true);
+      /**
+       * Test if graph is connected and display result in a QWidget in parent widget
+       */
       static void isConnected(Graph *graph,QWidget *parent);
+      /**
+       * Modify graph to make it connected
+       * if push is at true : save graph before modification with push/pop system
+       */
       static void makeConnected(Graph *graph,bool pushGraph=true);
+      /**
+       * Test if graph is biconnected and display result in a QWidget in parent widget
+       */
       static void isBiconnected(Graph *graph,QWidget *parent);
+      /**
+       * Modify graph to make it biconnected
+       * if push is at true : save graph before modification with push/pop system
+       */
       static void makeBiconnected(Graph *graph,bool pushGraph=true);
+      /**
+       * Test if graph is triconnected and display result in a QWidget in parent widget
+       */
       static void isTriconnected(Graph *graph,QWidget *parent);
+      /**
+       * Test if graph is a tree and display result in a QWidget in parent widget
+       */
       static void isTree(Graph *graph,QWidget *parent);
+      /**
+       * Test if graph is a free tree and display result in a QWidget in parent widget
+       */
       static void isFreeTree(Graph *graph,QWidget *parent);
+      /**
+       * Modify graph to make it directed
+       * if push is at true : save graph before modification with push/pop system
+       */
       static void makeDirected(QWidget *parent,Graph *graph,bool pushGraph=true);
+      /**
+       * Test if graph is planar and display result in a QWidget in parent widget
+       */
       static void isPlanar(Graph *graph,QWidget *parent);
+      /**
+       * Test if graph is outer planar and display result in a QWidget in parent widget
+       */
       static void isOuterPlanar(Graph *graph,QWidget *parent);
 
   };
