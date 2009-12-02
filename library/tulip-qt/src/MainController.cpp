@@ -51,19 +51,6 @@ using namespace std;
 namespace tlp {
 
   //**********************************************************************
-  static Graph* getCurrentSubGraph(Graph *graph, int id) {
-    if (graph->getId() == id) {
-      return graph;
-    }
-    Graph *sg;
-    forEach(sg, graph->getSubGraphs()) {
-      Graph *csg = getCurrentSubGraph(sg, id);
-      if (csg)
-        returnForEach(csg);
-    }
-    return (Graph *) 0;
-  }
-  //**********************************************************************
   static Graph* getCurrentSubGraph(Graph *graph,const string &name) {
     if(graph->getAttribute<string>("name")==name)
       return graph;
@@ -272,7 +259,7 @@ namespace tlp {
             int id;
             (*(DataSet*)p.second->value).get("id",id);
             if(id!=0){
-              lastViewedGraph=getCurrentSubGraph(newGraph, id);
+	      lastViewedGraph=newGraph->getDescendantGraph(id);
               if(!lastViewedGraph)
                 lastViewedGraph=newGraph;
             }
@@ -339,7 +326,7 @@ namespace tlp {
         // show current subgraph if any
         int id = 0;
         if (displayingData.get<int>("SupergraphId", id) && id) {
-          Graph *subGraph = getCurrentSubGraph(newGraph, id);
+          Graph *subGraph = newGraph->getDescendantGraph(id);
           if (subGraph){
             view->setGraph(subGraph);
             viewGraph[view]=subGraph;
@@ -1446,6 +1433,7 @@ namespace tlp {
     bool result = changeProperty<SizeProperty>(name,"viewSize");
     if( result ) {
       if( morphingAction->isChecked() && mainView!=NULL) {
+	
         clearObservers();
         mainView->getGlMainWidget()->getScene()->centerScene();
         GraphState * g1 = new GraphState( mainView->getGlMainWidget() );
