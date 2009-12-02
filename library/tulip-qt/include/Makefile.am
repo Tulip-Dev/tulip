@@ -43,6 +43,7 @@ INCLUDES_H = \
 	tulip/QtQuadTreeLODCalculator.h \
 	tulip/QtProgress.h \
 	tulip/Controller.h \
+	tulip/ControllerAlgorithmTools.h \
 	tulip/MainController.h \
 	tulip/ControllerPluginsManager.h \
 	tulip/View.h \

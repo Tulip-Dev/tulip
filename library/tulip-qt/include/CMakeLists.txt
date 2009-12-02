@@ -44,6 +44,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/QtCPULODCalculator.h 
 	tulip/QtProgress.h 
 	tulip/Controller.h 
+	tulip/ControllerAlgorithmTools.h
 	tulip/MainController.h 
 	tulip/ControllerPluginsManager.h 
 	tulip/View.h 

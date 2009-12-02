@@ -124,6 +124,7 @@ SOURCES = \
 	GlMainViewInteractor.cpp \
 	QtProgress.cpp \
 	Controller.cpp \
+	ControllerAlgorithmTools.cpp \
 	MainController.cpp \
 	View.cpp \
 	AbstractView.cpp \

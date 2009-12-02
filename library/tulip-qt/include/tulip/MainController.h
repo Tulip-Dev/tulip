@@ -38,6 +38,7 @@ namespace tlp {
   class TulipStats;
 #endif
   class Morphing;
+  class GraphState;
 
   /** \brief Default controller of Tulip
    *
@@ -147,11 +148,6 @@ namespace tlp {
     void updateCurrentGraphInfos();
 
     /**
-     * Change a property
-     */
-    template<typename PROPERTY> bool changeProperty(std::string, std::string, bool = true, bool = false , bool = true);
-
-    /**
      * Save graph hierarchy for views before undo/redo
      */
     std::map<View *,std::list<int> > saveViewsHierarchiesBeforePop();
@@ -160,7 +156,21 @@ namespace tlp {
      * Check views graph after undo/redo
      */
     void checkViewsHierarchiesAfterPop(std::map<View *,std::list<int> > &hierarchies);
-
+    
+    /**
+     * Activate undo/redo button, reload propertyWidget and redrawViews after we have change a property
+     */
+    void afterChangeProperty();
+    
+    /**
+     * Store current view in a GraphState to use it with applyMorphing function
+     */
+    GraphState *constructGraphState();
+    
+    /**
+     * Do a morphing between current state and the given GraphState
+     */
+    void applyMorphing(GraphState *graphState);
 
     Graph *currentGraph;
     View *currentView;

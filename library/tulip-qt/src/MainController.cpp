@@ -27,16 +27,7 @@
 #include <tulip/StableIterator.h>
 #include <tulip/ForEach.h>
 
-#include <tulip/AcyclicTest.h>
-#include <tulip/SimpleTest.h>
-#include <tulip/ConnectedTest.h>
-#include <tulip/BiconnectedTest.h>
-#include <tulip/TriconnectedTest.h>
-#include <tulip/TreeTest.h>
-#include <tulip/GraphTools.h>
-#include <tulip/PlanarityTest.h>
-#include <tulip/OuterPlanarTest.h>
-
+#include "tulip/ControllerAlgorithmTools.h"
 #include "tulip/TabWidget.h"
 #include "tulip/ViewPluginsManager.h"
 #include "tulip/QtProgress.h"
@@ -62,16 +53,6 @@ namespace tlp {
         returnForEach(csg);
     }
     return (Graph *) 0;
-  }
-  //**********************************************************************
-  // we use a hash_map to store plugin parameters
-  static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
-    static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > > paramMaps;
-    TLP_HASH_MAP<std::string, StructDef *>::const_iterator it;
-    it = paramMaps[(unsigned long) factory].find(name);
-    if (it == paramMaps[(unsigned long) factory].end())
-      paramMaps[(unsigned long) factory][name] = new StructDef(factory->getPluginParameters(name));
-    return paramMaps[(unsigned long) factory][name];
   }
   //*********************************************************************
   static std::vector<std::string> getItemGroupNames(std::string itemGroup) {
@@ -1228,161 +1209,74 @@ namespace tlp {
   //**********************************************************************
   /// Apply a general algorithm
   void MainController::applyAlgorithm(QAction* action) {
-    Observable::holdObservers();
-    string name = action->text().toStdString();
-    string erreurMsg;
-    DataSet dataSet;
-    Graph *graph=currentGraph;
-    StructDef *params = getPluginParameters(AlgorithmFactory::factory, name);
-    StructDef sysDef = AlgorithmFactory::factory->getPluginParameters(name);
-    params->buildDefaultDataSet(dataSet, graph );
-    bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
-				     "Tulip Parameter Editor", graph, mainWindowFacade.getParentWidget());
-    if (ok) {
-      QtProgress myProgress(mainWindowFacade.getParentWidget(),name);
-      myProgress.hide();
-      graph->push();
-      if (!tlp::applyAlgorithm(graph, erreurMsg, &dataSet, name, &myProgress  )) {
-        QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + ":\n" + erreurMsg).c_str()));
-        graph->pop();
-      }
-      undoAction->setEnabled(graph->canPop());
-      editUndoAction->setEnabled(graph->canPop());
+    bool result=ControllerAlgorithmTools::applyAlgorithm(currentGraph,mainWindowFacade.getParentWidget(),action->text().toStdString());
+    if(result){
+      undoAction->setEnabled(currentGraph->canPop());
+      editUndoAction->setEnabled(currentGraph->canPop());
       clusterTreeWidget->update();
-      clusterTreeWidget->setGraph(graph);
+      clusterTreeWidget->setGraph(currentGraph);
+      redrawViews(true);
     }
-    Observable::unholdObservers();
+  }
+  //**********************************************************************
+  void MainController::afterChangeProperty() {
+    undoAction->setEnabled(true);
+    editUndoAction->setEnabled(true);          
+    propertiesWidget->setGraph(currentGraph);
     redrawViews(true);
   }
   //**********************************************************************
-  //Management of properties
+  GraphState *MainController::constructGraphState() {
+    GlMainView *mainView=dynamic_cast<GlMainView *>(currentView);
+    if(mainView)
+      return new GraphState(mainView->getGlMainWidget());
+    
+    return NULL;
+  }
   //**********************************************************************
-  template<typename PROPERTY>
-  bool MainController::changeProperty(string name, string destination, bool query, bool redraw, bool push) {
-    /*if( !glWidget ) return false;*/
-    Graph *graph = currentGraph;
-    if(graph == 0) return false;
-    Observable::holdObservers();
-    /*overviewWidget->setObservedView(0);*/
-    GlGraphRenderingParameters param;
-    QtProgress *myProgress=new QtProgress(mainWindowFacade.getParentWidget(), name,redraw ? currentView : 0);
-
-    string erreurMsg;
-    bool   resultBool=true;
-    DataSet dataSet;
-    if (query) {
-      StructDef *params = getPluginParameters(PROPERTY::factory, name);
-      StructDef sysDef = PROPERTY::factory->getPluginParameters(name);
-      params->buildDefaultDataSet(dataSet, graph );
-      resultBool = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
-					  "Tulip Parameter Editor", graph, mainWindowFacade.getParentWidget());
+  void MainController::applyMorphing(GraphState *graphState){
+    GlMainView *mainView=dynamic_cast<GlMainView *>(currentView);
+    clearObservers();
+    mainView->getGlMainWidget()->getScene()->centerScene();
+    GraphState * g1 = constructGraphState();
+    bool morphable = morph->init(mainView->getGlMainWidget(), graphState, g1);
+    if( !morphable ) {
+      delete g1;
+      g1 = 0;
+    } else {
+      morph->start(mainView->getGlMainWidget());
+      graphState = 0;	// state remains in morph data ...
     }
-
-    if (resultBool) {
-      PROPERTY* tmp = new PROPERTY(graph);
-      if (push)
-	graph->push();
-      // must be done after push because destination property
-      // may not exist and thus the getLocalProperty call may create it
-      // and so it must be deleted at pop time
-      PROPERTY* dest = graph->template getLocalProperty<PROPERTY>(destination);
-      tmp->setAllNodeValue(dest->getNodeDefaultValue());
-      tmp->setAllEdgeValue(dest->getEdgeDefaultValue());
-      graph->push(false);
-      bool updateLayout = (typeid(PROPERTY) == typeid(LayoutProperty) &&
-			   viewNames[currentView]=="Node Link Diagram view");
-      if (updateLayout) {
-	graph->setAttribute("viewLayout", tmp);
-	((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
-      }
-      resultBool = currentGraph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
-      bool hasNdldc = false;
-      DataSet nodeLinkDiagramComponentDataSet;
-      if ((typeid(PROPERTY) == typeid(ColorProperty) &&
-	   viewNames[currentView]=="Node Link Diagram view"))
-	hasNdldc = graph->getAttribute("NodeLinkDiagramComponent", nodeLinkDiagramComponentDataSet);
-      graph->pop();
-      if (updateLayout) {
-	graph->removeAttribute("viewLayout");
-	((NodeLinkDiagramComponent*)currentView)->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
-      }
-      if (!resultBool) {
-        QMessageBox::critical(mainWindowFacade.getParentWidget(), "Tulip Algorithm Check Failed", QString((name + ":\n" + erreurMsg).c_str()) );
-	graph->pop();
-      }
-      else
-        switch(myProgress->state()){
-        case TLP_CONTINUE:
-        case TLP_STOP:
-          if (push) {
-	    undoAction->setEnabled(true);
-            editUndoAction->setEnabled(true);
-          }
-	  if (hasNdldc)
-	    graph->setAttribute("NodeLinkDiagramComponent", nodeLinkDiagramComponentDataSet);
-	  *dest = *tmp;
-
-          break;
-        case TLP_CANCEL:
-          resultBool=false;
-        };
-      delete tmp;
-    }
-
-    propertiesWidget->setGraph(graph);
-    /*overviewWidget->setObservedView(glWidget);*/
-    Observable::unholdObservers();
-    delete myProgress;
-    return resultBool;
+    initObservers();
   }
   //**********************************************************************
   void MainController::changeString(QAction* action) {
-    string name = action->text().toStdString();
-    if (changeProperty<StringProperty>(name,"viewLabel"))
-      redrawViews(true);
+    if(ControllerAlgorithmTools::changeString(currentGraph,mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewLabel",currentView))
+      afterChangeProperty();
   }
   //**********************************************************************
   void MainController::changeSelection(QAction* action) {
-    string name = action->text().toStdString();
-    if (changeProperty<BooleanProperty>(name, "viewSelection")) {
-      redrawViews();
-    }
+    if(ControllerAlgorithmTools::changeBoolean(currentGraph,mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewSelection",currentView))
+      afterChangeProperty();
   }
   //**********************************************************************
   void MainController::changeMetric(QAction* action) {
-    string name = action->text().toStdString();
-    bool result = changeProperty<DoubleProperty>(name,"viewMetric", true);
-    if (result && mapMetricAction->isChecked()) {
-      if (changeProperty<ColorProperty>("Metric Mapping","viewColor", false,true, false))
-        redrawViews(true);
-    }
+    if(ControllerAlgorithmTools::changeMetric(currentGraph,mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewMetric",currentView,mapMetricAction->isChecked(),"Metric Mapping","viewColor"))
+      afterChangeProperty();
   }
   //**********************************************************************
   void MainController::changeLayout(QAction* action) {
-    string name = action->text().toStdString();
-    GraphState * g0 = 0;
-    GlMainView *mainView=dynamic_cast<GlMainView *>(currentView);
-    if( morphingAction->isChecked() && mainView!=NULL)
-      g0 = new GraphState(mainView->getGlMainWidget());
-
-    bool result = changeProperty<LayoutProperty>(name, "viewLayout", true, true);
+    GraphState * g0=NULL;
+    if(morphingAction->isChecked())
+      g0=constructGraphState();
+    
+    bool result = ControllerAlgorithmTools::changeLayout(currentGraph,mainWindowFacade.getParentWidget(),action->text().toStdString(), "viewLayout",currentView);
     if (result) {
       if( forceRatioAction->isChecked() )
         currentGraph->getLocalProperty<LayoutProperty>("viewLayout")->perfectAspectRatio();
 
-      if( morphingAction->isChecked() && mainView!=NULL) {
-        clearObservers();
-        mainView->getGlMainWidget()->getScene()->centerScene();
-        GraphState * g1 = new GraphState(mainView->getGlMainWidget());
-        bool morphable = morph->init(mainView->getGlMainWidget(), g0, g1);
-        if( !morphable ) {
-          delete g1;
-          g1 = 0;
-        } else {
-          morph->start(mainView->getGlMainWidget());
-          g0 = 0;	// state remains in morph data ...
-        }
-        initObservers();
+      if( morphingAction->isChecked() && g0) {
+	applyMorphing(g0);
       }
     }
     redrawViews(true);
@@ -1391,32 +1285,19 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::changeInt(QAction* action) {
-    string name = action->text().toStdString();
-    changeProperty<IntegerProperty>(name, "viewInt");
-    redrawViews(true);
+    if(ControllerAlgorithmTools::changeInt(currentGraph,mainWindowFacade.getParentWidget(),action->text().toStdString(), "viewInt",currentView))
+      afterChangeProperty();
   }
   //**********************************************************************
   void MainController::changeColors(QAction* action) {
-    GraphState * g0 = 0;
-    GlMainView *mainView=dynamic_cast<GlMainView *>(currentView);
-    if( morphingAction->isChecked() && mainView!=NULL)
-      g0 = new GraphState(mainView->getGlMainWidget());
-    string name = action->text().toStdString();
-    bool result = changeProperty<ColorProperty>(name,"viewColor");
+    GraphState * g0=NULL;
+    if(morphingAction->isChecked())
+      g0=constructGraphState();
+    
+    bool result = ControllerAlgorithmTools::changeColors(currentGraph,mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewColor",currentView);
     if( result ) {
-      if( morphingAction->isChecked() && mainView!=NULL) {
-        clearObservers();
-        mainView->getGlMainWidget()->getScene()->centerScene();
-        GraphState * g1 = new GraphState( mainView->getGlMainWidget() );
-        bool morphable = morph->init( mainView->getGlMainWidget(), g0, g1);
-        if( !morphable ) {
-          delete g1;
-          g1 = 0;
-        } else {
-          morph->start(mainView->getGlMainWidget());
-          g0 = 0;	// state remains in morph data ...
-        }
-        initObservers();
+      if( morphingAction->isChecked() && g0) {
+        applyMorphing(g0);
       }
       redrawViews(true);
     }
@@ -1425,27 +1306,15 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::changeSizes(QAction* action) {
-    GraphState * g0 = 0;
+    GraphState * g0 = NULL;
     GlMainView *mainView=dynamic_cast<GlMainView *>(currentView);
-    if( morphingAction->isChecked() && mainView!=NULL)
-      g0 = new GraphState(mainView->getGlMainWidget());
-    string name = action->text().toStdString();
-    bool result = changeProperty<SizeProperty>(name,"viewSize");
+    if(morphingAction->isChecked())
+      g0=constructGraphState();
+  
+    bool result = ControllerAlgorithmTools::changeSizes(currentGraph,mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewSize",currentView);
     if( result ) {
-      if( morphingAction->isChecked() && mainView!=NULL) {
-	
-        clearObservers();
-        mainView->getGlMainWidget()->getScene()->centerScene();
-        GraphState * g1 = new GraphState( mainView->getGlMainWidget() );
-        bool morphable = morph->init( mainView->getGlMainWidget(), g0, g1);
-        if( !morphable ) {
-          delete g1;
-          g1 = 0;
-        } else {
-          morph->start(mainView->getGlMainWidget());
-          g0 = 0; // state remains in morph data ...
-        }
-        initObservers();
+      if( morphingAction->isChecked() && g0) {
+	applyMorphing(g0);
       }
       redrawViews(true);
     }
@@ -1454,179 +1323,64 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::isAcyclic() {
-    if (AcyclicTest::isAcyclic(currentGraph))
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is acyclic"
-				);
-    else
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is not acyclic"
-				);
+    ControllerAlgorithmTools::isAcyclic(currentGraph,mainWindowFacade.getParentWidget());
   }
   void MainController::makeAcyclic() {
-    Observable::holdObservers();
-    vector<tlp::SelfLoops> tmpSelf;
-    vector<edge> tmpReversed;
-    currentGraph->push();
     undoAction->setEnabled(true);
     editUndoAction->setEnabled(true);
-
-    AcyclicTest::makeAcyclic(currentGraph, tmpReversed, tmpSelf);
-    Observable::unholdObservers();
+    ControllerAlgorithmTools::makeAcyclic(currentGraph);
   }
   //**********************************************************************
   void MainController::isSimple() {
-    //if (glWidget == 0) return;
-    if (SimpleTest::isSimple(currentGraph))
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is simple"
-				);
-    else
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is not simple"
-				);
+    ControllerAlgorithmTools::isSimple(currentGraph,mainWindowFacade.getParentWidget());
   }
   void MainController::makeSimple() {
-    Observable::holdObservers();
-    vector<edge> removed;
-    currentGraph->push();
     undoAction->setEnabled(true);
     editUndoAction->setEnabled(true);
-
-    SimpleTest::makeSimple(currentGraph, removed);
-    Observable::unholdObservers();
+    ControllerAlgorithmTools::makeSimple(currentGraph);
   }
   //**********************************************************************
   void MainController::isConnected() {
-    //if (glWidget == 0) return;
-    if (ConnectedTest::isConnected(currentGraph))
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is connected"
-				);
-    else
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is not connected"
-				);
+    ControllerAlgorithmTools::isConnected(currentGraph,mainWindowFacade.getParentWidget());
   }
   void MainController::makeConnected() {
-    Observable::holdObservers();
-    vector<edge> tmp;
-
-    currentGraph->push();
     undoAction->setEnabled(true);
     editUndoAction->setEnabled(true);
-
-    ConnectedTest::makeConnected(currentGraph, tmp);
-    Observable::unholdObservers();
+    ControllerAlgorithmTools::makeConnected(currentGraph);
   }
   //**********************************************************************
   void MainController::isBiconnected() {
-    //if (glWidget == 0) return;
-    if (BiconnectedTest::isBiconnected(currentGraph))
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is biconnected"
-				);
-    else
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is not biconnected"
-				);
+    ControllerAlgorithmTools::isBiconnected(currentGraph,mainWindowFacade.getParentWidget());
   }
   void MainController::makeBiconnected() {
-    Observable::holdObservers();
-    vector<edge> tmp;
-    currentGraph->push();
     undoAction->setEnabled(true);
     editUndoAction->setEnabled(true);
-
-    BiconnectedTest::makeBiconnected(currentGraph, tmp);
-    Observable::unholdObservers();
+    ControllerAlgorithmTools::makeBiconnected(currentGraph);
   }
   //**********************************************************************
   void MainController::isTriconnected() {
-    //if (glWidget == 0) return;
-    if (TriconnectedTest::isTriconnected(currentGraph))
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is triconnected"
-				);
-    else
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is not triconnected"
-				);
+    ControllerAlgorithmTools::isTriconnected(currentGraph,mainWindowFacade.getParentWidget());
   }
   //**********************************************************************
   void MainController::isTree() {
-    //if (glWidget == 0) return;
-    if (TreeTest::isTree(currentGraph))
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is a directed tree"
-				);
-    else
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is not a directed tree"
-				);
+    ControllerAlgorithmTools::isTree(currentGraph,mainWindowFacade.getParentWidget());
   }
   //**********************************************************************
   void MainController::isFreeTree() {
-    //if (glWidget == 0) return;
-    if (TreeTest::isFreeTree(currentGraph))
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is a free tree"
-				);
-    else
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is not a free tree"
-				);
+    ControllerAlgorithmTools::isFreeTree(currentGraph,mainWindowFacade.getParentWidget());
   }
   void MainController::makeDirected() {
-    if (!TreeTest::isFreeTree(currentGraph))
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test","The graph is not a free tree");
-    node n, root;
-    forEach(n, currentGraph->getProperty<BooleanProperty>("viewSelection")->getNodesEqualTo(true)) {
-      if (root.isValid()) {
-        QMessageBox::critical( mainWindowFacade.getParentWidget(), "Make Rooted","Only one root node must be selected.");
-        breakForEach;
-      }
-      root = n;
-    }
-    if (!root.isValid())
-      root = graphCenterHeuristic(currentGraph);
-
-    Observable::holdObservers();
-
-    currentGraph->push();
     undoAction->setEnabled(true);
     editUndoAction->setEnabled(true);
-
-    TreeTest::makeRootedTree(currentGraph, root);
-    Observable::unholdObservers();
+    ControllerAlgorithmTools::makeDirected(mainWindowFacade.getParentWidget(),currentGraph);
   }
   //**********************************************************************
   void MainController::isPlanar() {
-    //if (glWidget == 0) return;
-    Observable::holdObservers();
-    if (PlanarityTest::isPlanar(currentGraph))
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is planar"
-				);
-    else
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is not planar"
-				);
-    Observable::unholdObservers();
+    ControllerAlgorithmTools::isPlanar(currentGraph,mainWindowFacade.getParentWidget());
   }
   //**********************************************************************
   void MainController::isOuterPlanar() {
-    //if (glWidget == 0) return;
-    Observable::holdObservers();
-    if (OuterPlanarTest::isOuterPlanar(currentGraph))
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is outer planar"
-				);
-    else
-      QMessageBox::information( mainWindowFacade.getParentWidget(), "Tulip test",
-				"The graph is not outer planar"
-				);
-    Observable::unholdObservers();
+    ControllerAlgorithmTools::isOuterPlanar(currentGraph,mainWindowFacade.getParentWidget());
   }
   //**********************************************************************
   void MainController::reverseSelectedEdgeDirection() {
