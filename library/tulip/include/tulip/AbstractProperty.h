@@ -15,6 +15,8 @@
 
 namespace tlp {
 
+class GraphView;
+
 /**
  * \defgroup properties
  */ 

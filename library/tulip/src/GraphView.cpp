@@ -21,7 +21,7 @@
 #include "tulip/PropertyManager.h"
 
 using namespace std;
-using namespace tlp;
+namespace tlp {
 //----------------------------------------------------------------
 GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 		     unsigned int sgId):
@@ -330,4 +330,5 @@ bool GraphView::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
 //----------------------------------------------------------------
 void GraphView::unpop() {
   getRoot()->unpop();
+}
 }
