@@ -256,14 +256,14 @@ bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {
 // tlp class names demangler
 #if defined(__GNUC__)
 #include <cxxabi.h>
-char *tlp::demangleTlpClassName(const char* className) {
+std::string tlp::demangleTlpClassName(const char* className) {
   static char demangleBuffer[256];
   int status;
   size_t length = 256;
   abi::__cxa_demangle((char *) className, (char *) demangleBuffer,
 		      &length, &status);
   // skip tlp::
-  return demangleBuffer + 5;
+  return std::string(demangleBuffer + 5);
 }
 #else
 #error define symbols demangling function

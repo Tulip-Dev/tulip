@@ -55,16 +55,6 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
   bool result;
   tlp::PropertyContext context;
 
-  tlp::PluginProgress *tmpProgress;
-  if (progress==0) 
-    tmpProgress=new tlp::PluginProgress();
-  else 
-    tmpProgress=progress;
-
-  context.pluginProgress = tmpProgress;
-  context.graph = this;
-  context.dataSet = data;
-  
   // check if this is a subgraph of prop->graph
   if (getRoot() != prop->graph) {
     tlp::Graph *currentGraph = this;
@@ -93,6 +83,16 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
     return false;
   }
 
+  tlp::PluginProgress *tmpProgress;
+  if (progress==0) 
+    tmpProgress=new tlp::PluginProgress();
+  else 
+    tmpProgress=progress;
+
+  context.pluginProgress = tmpProgress;
+  context.graph = this;
+  context.dataSet = data;
+  
   tlp::Observable::holdObservers();
   circularCalls.insert(prop);
   tlp::PropertyContext tmpContext(context);

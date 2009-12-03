@@ -63,7 +63,7 @@ PropertyManager::PropertyManager(Graph *g): graph(g) {
     while(it->hasNext()) {
       PropertyInterface* prop = it->next();
       inheritedProperties[prop->getName()] = prop;
-    }
+    } delete it;
   }
 }
 //==============================================================

@@ -38,7 +38,7 @@ void tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::registerPlugin(Obje
   std::list<tlp::Dependency>::iterator itD = dependencies.begin();
   for (; itD != dependencies.end(); itD++) {
     const char *factoryDepName = (*itD).factoryName.c_str();
-    (*itD).factoryName = std::string(tlp::demangleTlpClassName(factoryDepName));
+    (*itD).factoryName = tlp::demangleTlpClassName(factoryDepName);
   }
   objDeps[pluginName] = dependencies;
   delete withParam;
@@ -97,5 +97,5 @@ std::list<tlp::Dependency> tlp::TemplateFactory<ObjectFactory,ObjectType,Context
 }
 
 template<class ObjectFactory, class ObjectType, class Context> std::string tlp::TemplateFactory<ObjectFactory,ObjectType,Context>::getPluginsClassName() {
-  return std::string(demangleTlpClassName(typeid(ObjectType).name()));
+  return demangleTlpClassName(typeid(ObjectType).name());
 }

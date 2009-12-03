@@ -30,7 +30,7 @@ namespace tlp {
    * The tlp:: prefix is omitted and the returned pointer
    * do not have to be deallocated.
    */
-  TLP_SCOPE char *demangleTlpClassName(const char *className);
+  TLP_SCOPE std::string demangleTlpClassName(const char *className);
 
   TLP_SCOPE std::istream *getIgzstream(const char *name, int open_mode = std::ios::in);
   /**
