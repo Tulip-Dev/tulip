@@ -58,7 +58,7 @@
 (default "" "")
 )
 (property  0 int "viewTgtAnchorShape"
-(default "0" "0")
+(default "0" "50")
 )
 (property  0 size "viewTgtAnchorSize"
 (default "(1,1,0)" "(0.25,0.25,0.25)")
