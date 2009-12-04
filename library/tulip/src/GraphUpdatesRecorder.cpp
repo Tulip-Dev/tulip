@@ -830,6 +830,10 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
 }
 
 void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {
+  // dont record the old value if the default one has been changed
+  if (oldNodeDefaultValues.find((unsigned long) p) !=
+      oldNodeDefaultValues.end())
+    return;
   TLP_HASH_MAP<node, set<Graph*> >::iterator ita = addedNodes.find(n);
   // don't record old values for newly added nodes
   if (ita != addedNodes.end()) {
@@ -854,15 +858,22 @@ void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {
 void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface* p) {
   if  (oldNodeDefaultValues.find((unsigned long) p) ==
        oldNodeDefaultValues.end()) {
-    oldNodeDefaultValues[(unsigned long) p] = p->getNodeDefaultDataMemValue();
-    // save the already existing value for all non default valuated nodes
+    // first save the already existing value for all non default valuated nodes
     node n;
     forEach(n, p->getNonDefaultValuatedNodes())
       beforeSetNodeValue(p, n);
+    // then record the old default value
+    // because beforeSetNodeValue does nothing if it has already been changed
+    oldNodeDefaultValues[(unsigned long) p] = p->getNodeDefaultDataMemValue();
+
   }
 }
             
 void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface* p, edge e) {
+  // dont record the old value if the default one has been changed
+  if (oldEdgeDefaultValues.find((unsigned long) p) !=
+       oldEdgeDefaultValues.end())
+    return;
   TLP_HASH_MAP<edge, EdgeRecord>::iterator ita = addedEdges.find(e);
   // dont record old value for newly added edge
   if (ita != addedEdges.end()) {
@@ -887,11 +898,13 @@ void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface* p, edge e) {
 void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface* p) {
   if (oldEdgeDefaultValues.find((unsigned long) p) ==
        oldEdgeDefaultValues.end()) {
-    oldEdgeDefaultValues[(unsigned long) p] = p->getEdgeDefaultDataMemValue();
-    // save the already existing value for all non default valuated edges
+    // first save the already existing value for all non default valuated edges
     edge e;
     forEach(e, p->getNonDefaultValuatedEdges())
       beforeSetEdgeValue(p, e);
+    // then record the old default value
+    // because beforeSetEdgeValue does nothing if it has already been changed
+    oldEdgeDefaultValues[(unsigned long) p] = p->getEdgeDefaultDataMemValue();
   }
 }
 
