@@ -201,6 +201,8 @@ namespace tlp {
     string name=editedPropertyName;
     if (name == "viewLabel") return;
     Observable::holdObservers();
+    // allow to undo
+    graph->push();
     PropertyInterface *newLabels=graph->getProperty(name);
     StringProperty *labels=graph->getLocalProperty<StringProperty>("viewLabel");
     if (tabWidget->currentIndex()==0) {
@@ -227,6 +229,7 @@ namespace tlp {
   void PropertyDialog::removeProperty() {
     if (editedProperty==0) return;
     if(graph->existLocalProperty(editedPropertyName)) {
+      // allow to undo
       graph->push();
       graph->delLocalProperty(editedPropertyName);
       //setGlMainWidget(glWidget);
@@ -294,7 +297,8 @@ namespace tlp {
           }
         }
         Observable::holdObservers();
-        graph->push();
+        // allow to undo
+	graph->push();
         if (typeid((*editedProp)) == typeid(DoubleProperty))
         {*graph->getLocalProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProp);}
         if (typeid((*editedProp)) == typeid(LayoutProperty))
@@ -327,7 +331,8 @@ namespace tlp {
       } else {
         Graph *parent = graph->getSuperGraph();
         Observable::holdObservers();
-        parent->push();
+        // allow to undo
+	parent->push();
         if (typeid((*editedProp)) == typeid(DoubleProperty))
         {*parent->getProperty<DoubleProperty>(text)=*((DoubleProperty*)editedProp);}
         if (typeid((*editedProp)) == typeid(LayoutProperty))
