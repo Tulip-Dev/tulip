@@ -40,10 +40,14 @@ class QuadTreeNode {
     if(box.first[0]==box.second[0] && box.first[1]==box.second[1])
       return;
 
-    for (int i=0; i<4; ++i) {
-      if (isInside(box, getChildBox(i))) {
-        getChild(i)->insert(box, id);
-        return;
+    //Check for infini recursion : check if we are on float limit case
+    Coord subBox=(_box.first+_box.second)/2.;
+    if((subBox[0] != _box.first[0] && subBox[0]!= _box.second[0]) || (subBox[1]!=_box.first[1] && subBox[1]!=_box.second[1])){
+      for (int i=0; i<4; ++i) {
+	if (isInside(box, getChildBox(i))) {
+	  getChild(i)->insert(box, id);
+	  return;
+	}
       }
     }
 
@@ -60,10 +64,14 @@ class QuadTreeNode {
     if(box.first[0]==box.second[0] && box.first[1]==box.second[1])
           return;
 
-    for (int i=0; i<4; ++i) {
-      if (isInside(box, getChildBox(i))) {
-        getChild(i)->insert(box, address);
-        return;
+    //Check for infini recursion : check if we are on float limit case
+    Coord subBox=(_box.first+_box.second)/2.;
+    if((subBox[0] != _box.first[0] && subBox[0]!= _box.second[0]) || (subBox[1]!=_box.first[1] && subBox[1]!=_box.second[1])){
+      for (int i=0; i<4; ++i) {
+	if (isInside(box, getChildBox(i))) {
+	  getChild(i)->insert(box, address);
+	  return;
+	}
       }
     }
 
