@@ -55,7 +55,6 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("metaLabel", _viewMetaLabel);
   data.set("elementOrdered", _elementOrdered);
   data.set("elementZOrdered", _elementZOrdered);
-  data.set("autoScale", _viewAutoScale);
   data.set("incrementalRendering", _incrementalRendering);
   data.set("edgeColorInterpolation", _edgeColorInterpolate);
   data.set("edgeSizeInterpolation", _edgeSizeInterpolate);
@@ -110,8 +109,6 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setElementOrdered(b);
   if (data.get<bool>("elementZOrdered", b))
     setElementZOrdered(b);
-  if (data.get<bool>("autoScale", b))
-    _viewAutoScale=b;
   if (data.get<bool>("incrementalRendering", b))
     setIncrementalRendering(b);
   if (data.get<bool>("edgeColorInterpolation", b))
