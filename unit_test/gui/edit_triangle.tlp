@@ -94,7 +94,6 @@
 (bool "metaLabel" false)
 (bool "elementOrdered" false)
 (bool "elementZOrdered" false)
-(bool "autoScale" false)
 (bool "incrementalRendering" true)
 (bool "edgeColorInterpolation" true)
 (bool "edgeSizeInterpolation" true)
