@@ -103,7 +103,7 @@ class IteratorHash : public IteratorValue {
 	     StoredValueType<TYPE>::equal((*it).second,_value) != _equal);
     return tmp;
   }
-  unsigned nextValue(AnyValueContainer& val) {
+  unsigned int nextValue(AnyValueContainer& val) {
     ((TypedValueContainer<TYPE>&) val).value =
       StoredValueType<TYPE>::get((*it).second);
     unsigned int pos = (*it).first;
