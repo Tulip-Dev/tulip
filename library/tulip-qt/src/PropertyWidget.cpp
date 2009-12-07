@@ -384,7 +384,7 @@ void PropertyWidget::setAllNodeValue() {
     }
   }
   else if (typeid(*editedProperty) == typeid(ColorProperty)) {
-    QRgb col = QColorDialog::getRgba(qRgba(0,0,0,200), &ok);
+    QRgb col = QColorDialog::getRgba(qRgba(255,0,0,200), &ok);
     if (ok) {
       stringstream ss;
       ss << "(" << qRed(col) << "," << qGreen(col) << "," << qBlue(col) << "," << qAlpha(col) << ")";
@@ -440,7 +440,7 @@ void  PropertyWidget::setAllEdgeValue() {
   string tmpStr;
 
   if (typeid(*editedProperty) == typeid(ColorProperty)) {
-    QRgb col = QColorDialog::getRgba(qRgba(255,0,0,200), &ok);
+    QRgb col = QColorDialog::getRgba(qRgba(0,0,0,200), &ok);
     if (ok) {
       stringstream ss;
       ss << "(" << qRed(col) << "," << qGreen(col) << "," << qBlue(col) << "," << qAlpha(col) << ")";
