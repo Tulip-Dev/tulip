@@ -352,7 +352,7 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
     controlPoints[i+2][2] = bends[i].getZ();
   }
 
-  gleSetNumSides(8);
+  gleSetNumSides(32);
   gleSetJoinStyle(TUBE_JN_ANGLE |  TUBE_JN_CAP | TUBE_NORM_MASK);
 
   if (bends.size() == 0) interpolation = LINEAR;
