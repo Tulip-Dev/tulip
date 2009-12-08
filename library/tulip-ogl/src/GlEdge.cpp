@@ -185,10 +185,10 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 
 	if(!data->parameters->isEdge3D()){
 	  glDisable(GL_LIGHTING);
-	  glEnable(GL_COLOR_MATERIAL);
 	}else{
 	  glEnable(GL_LIGHTING);
 	}
+	glEnable(GL_COLOR_MATERIAL);
 
 	const node source = data->graph->source(e);
 	const node target = data->graph->target(e);
