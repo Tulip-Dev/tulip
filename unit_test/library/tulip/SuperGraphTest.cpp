@@ -588,6 +588,22 @@ void SuperGraphTest::testPropertiesIteration() {
   } delete itS;
   graph->clear();
 }
+
+//==========================================================
+void SuperGraphTest::testAttributes() {
+  graph->clear();
+  float f = 12.12;
+  CPPUNIT_ASSERT(!graph->getAttribute("f", f));
+  graph->setAttribute("name", string("The Graph"));
+  string name = graph->getAttribute<string>("name");
+  CPPUNIT_ASSERT(name == string("The Graph"));
+  CPPUNIT_ASSERT(graph->getAttribute("name", name));
+  CPPUNIT_ASSERT(name == string("The Graph"));
+  DataType* dt = graph->getAttribute("name");
+  CPPUNIT_ASSERT(dt != NULL);
+  delete dt;
+}  
+
 //==========================================================
 CppUnit::Test * SuperGraphTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph" );
@@ -611,6 +627,8 @@ CppUnit::Test * SuperGraphTest::suite() {
 								  &SuperGraphTest::testPropertiesIteration) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test subgraph id", 
 								  &SuperGraphTest::testSubgraphId) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test attributes", 
+								  &SuperGraphTest::testAttributes) );
   return suiteOfTests;
 }
 //==========================================================
