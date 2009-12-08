@@ -332,3 +332,14 @@ void Graph::notifyAddSubGraph(Graph* sg) {
   ObservableGraph::notifyAddSubGraph(this, sg);
   Observable::notifyObservers();
 }
+
+DataType* Graph::getAttribute(const std::string& name) const {
+    return getAttributes().getData(name);
+}
+
+void Graph::setAttribute(const std::string &name, const DataType* value) {
+  notifyBeforeSetAttribute(this, name);
+  getNonConstAttributes().setData(name, value);
+  notifyAfterSetAttribute(this, name);
+}
+

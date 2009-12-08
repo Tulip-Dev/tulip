@@ -24,7 +24,7 @@ struct Graph;
  struct TLP_SIMPLE_SCOPE DataType :public DataMem {
    DataType(){}
    DataType(void *value,const std::string typeName):value(value),typeName(typeName){}
-   virtual DataType *clone() = 0;
+   virtual DataType *clone() const = 0;
    void *value;
    std::string typeName;
  };
@@ -54,7 +54,7 @@ struct TLP_SIMPLE_SCOPE DataSet {
   /** return an untyped value if any */
   DataType* getData(const std::string &str) const;
   /** set from an untyped value */
-  void setData(const std::string &str, DataType* value);
+  void setData(const std::string &str, const DataType* value);
   /** Return an iterator on all values */
   Iterator< std::pair<std::string, DataType*> > *getValues() const;
 private:

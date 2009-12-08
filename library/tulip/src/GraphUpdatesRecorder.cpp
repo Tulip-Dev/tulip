@@ -606,7 +606,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     while(itv->hasNext()) {
       pair<string, DataType*> pval = itv->next();
       if (pval.second)
-	g->getNonConstAttributes().setData(pval.first, pval.second->clone());
+	g->getNonConstAttributes().setData(pval.first, pval.second);
       else
 	g->getNonConstAttributes().remove(pval.first);
     } delete itv;

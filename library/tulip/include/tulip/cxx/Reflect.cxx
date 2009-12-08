@@ -56,12 +56,13 @@ struct DataTypeContainer :public tlp::DataType {
   ~DataTypeContainer() {
     delete (T*) value;
   }
-  DataType* clone() {
+  DataType* clone() const {
     return new DataTypeContainer<T>(new T(*(T*)value), typeName);
   }
 };
 
 template<typename T> void tlp::DataSet::set(const std::string &str,const T& value) {
-  setData(str, new DataTypeContainer<T>(new T(value), typeid(T).name()));
+  DataTypeContainer<T> dtc(new T(value), typeid(T).name());
+  setData(str, &dtc);
 }
 //=======================================================================

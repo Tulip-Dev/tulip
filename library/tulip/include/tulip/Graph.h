@@ -320,19 +320,23 @@ public:
   // Access to the graph attributes and to the node/edge property.
   //================================================================================
   ///Return graph attributes
-  const DataSet & getAttributes() {
-    return getNonConstAttributes();
+  const DataSet & getAttributes() const {
+    return (const_cast<Graph *>(this))->getNonConstAttributes();
   }
   ///Get an attribute of the graph; returns true if a value was found
   ///false if not
   template<typename ATTRIBUTETYPE>
-  bool getAttribute(const std::string &name, ATTRIBUTETYPE& value);
+  bool getAttribute(const std::string &name, ATTRIBUTETYPE& value) const;
   ///deprecated version of the previous method
   template<typename ATTRIBUTETYPE>
-  ATTRIBUTETYPE getAttribute(const std::string &name);
+  ATTRIBUTETYPE getAttribute(const std::string &name) const;
+  /// Untyped accessor returning a copy
+  DataType* getAttribute(const std::string& name) const;
   ///Set an attribute of the graph
   template<typename ATTRIBUTETYPE>
   void setAttribute(const std::string &name,const ATTRIBUTETYPE &value);
+  /// set attritute from an untyped value
+  void setAttribute(const std::string &name, const DataType* value);
   /// remove an existing attribute
   void removeAttribute(const std::string &name) {
     notifyRemoveAttribute(this, name);
@@ -502,8 +506,7 @@ public:
   void openMetaNode(node n);
 
 protected:
-  // to allow attributes modification
-  virtual DataSet &getNonConstAttributes()=0;
+  virtual DataSet &getNonConstAttributes() = 0;
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder
   virtual node restoreNode(node)=0;

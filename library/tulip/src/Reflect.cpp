@@ -72,18 +72,18 @@ DataType* DataSet::getData(const string &str) const {
   return NULL;
 }
 
-void DataSet::setData(const std::string &str, DataType* value) {
+void DataSet::setData(const std::string &str, const DataType* value) {
   for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
 	 data.begin(); it != data.end(); ++it) {
     std::pair<std::string, tlp::DataType*> &p = *it;
     if (p.first == str) {
       if (p.second)
 	delete p.second;
-      p.second = value;
+      p.second = value->clone();
       return;
     }
   }
-  data.push_back(std::pair<std::string, tlp::DataType*>(str, value));
+  data.push_back(std::pair<std::string, tlp::DataType*>(str, value->clone()));
 }
 
 Iterator< pair<string, DataType*> >* DataSet::getValues() const {
