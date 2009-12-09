@@ -1108,7 +1108,7 @@ void TulipApp::filePrint() {
     if(workspace){
       QWidget *viewWidget=workspace->activeWindow();
       MainController *mainController=(MainController*)tabIndexToController[tabWidget->currentIndex()];
-      View *view=mainController->getView(viewWidget);
+      View *view=mainController->getViewOfWidget(viewWidget);
       nldc=dynamic_cast<NodeLinkDiagramComponent*>(view);
     }
   }
