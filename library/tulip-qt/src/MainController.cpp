@@ -206,7 +206,7 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::attachMainWindow(MainWindowFacade facade){
-    Controller::attachMainWindow(facade);
+    ControllerViewsManager::attachMainWindow(facade);
     loadGUI();
   }
   //**********************************************************************
@@ -457,7 +457,6 @@ namespace tlp {
   void MainController::loadGUI() {
 
   	mainWindowFacade.getWorkspace()->setScrollBarsEnabled( true );
-    connect (mainWindowFacade.getWorkspace(), SIGNAL(windowActivated(QWidget *)), this, SLOT(windowActivated(QWidget *)));
 
     //+++++++++++++++++++++++++++
     //Create Data information editor (Hierarchy, Element info, Property Info)
@@ -514,10 +513,6 @@ namespace tlp {
     mainWindowFacade.tabifyDockWidget(tabWidgetDock,configWidgetDock);
 
     buildMenu();
-
-    //+++++++++++++++++++++++++++
-    //Connection of the menus
-    //connect(mainWindowFacade.getInteractorsToolBar(), SIGNAL(actionTriggered(QAction *)), SLOT(changeInteractor(QAction*)));
 
   }
   //**********************************************************************
@@ -694,18 +689,15 @@ namespace tlp {
     QRect newRect=rect;
     forceWidgetSize=true;
     unsigned int viewsNumber=getViewsNumber();
-    cout << viewsNumber << endl;
     if(newRect.width()==0 && newRect.height()==0){
       forceWidgetSize=false;
       newRect=QRect(QPoint((viewsNumber)*20,(viewsNumber)*20),QSize(0,0));
     }
     
     View *createdView=ControllerViewsManager::createView(name,graph,dataSet,forceWidgetSize,newRect,maximized);
-    QWidget *createdWidget=getWidgetOfView(createdView);
 
     connect(createdView, SIGNAL(elementSelected(unsigned int, bool)),this,SLOT(showElementProperties(unsigned int, bool)));
     connect(createdView, SIGNAL(requestChangeGraph(View *,Graph *)), this, SLOT(viewRequestChangeGraph(View *,Graph *)));
-    connect(createdWidget, SIGNAL(destroyed(QObject *)),this, SLOT(widgetWillBeClosed(QObject *)));
 
     return createdView;
   }

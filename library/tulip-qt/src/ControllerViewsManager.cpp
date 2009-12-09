@@ -15,6 +15,12 @@ namespace tlp {
   ControllerViewsManager::ControllerViewsManager():currentGraph(NULL),currentView(NULL) {  
   }
   //**********************************************************************
+  void ControllerViewsManager::attachMainWindow(MainWindowFacade facade){
+    Controller::attachMainWindow(facade);
+    
+    connect(mainWindowFacade.getWorkspace(), SIGNAL(windowActivated(QWidget *)), this, SLOT(windowActivated(QWidget *)));
+  }
+  //**********************************************************************
   //**********************************************************************
   // Accessors and setters
   //**********************************************************************
@@ -91,6 +97,8 @@ namespace tlp {
     View *createdView;
     QWidget *createdWidget;
     ControllerViewsTools::createView(name,graph,dataSet,mainWindowFacade.getWorkspace(),&createdViewName,&createdView,&createdWidget);
+    
+    connect(createdWidget, SIGNAL(destroyed(QObject *)),this, SLOT(widgetWillBeClosed(QObject *)));
     
     viewGraph[createdView]=graph;
     viewNames[createdView]=createdViewName;

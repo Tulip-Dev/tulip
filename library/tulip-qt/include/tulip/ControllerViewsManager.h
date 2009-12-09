@@ -34,6 +34,11 @@ namespace tlp {
       virtual ~ControllerViewsManager() {}
       
       /**
+       * Attach the QMainWindow to the controller
+       */
+      void attachMainWindow(MainWindowFacade facade);
+      
+      /**
        * Return the Graph visualized by the controller
        * Equivalent to getCurrentGraph()
        */
