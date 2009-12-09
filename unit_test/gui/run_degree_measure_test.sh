@@ -1,0 +1,1 @@
+sh tulip_run_test.sh degree_measure grid_approximation.tlp
