@@ -21,7 +21,7 @@
 #include <tulip/Observable.h>
 #include <tulip/Graph.h>
 
-#include "tulip/Controller.h"
+#include "tulip/ControllerViewsManager.h"
 
 class QAction;
 class QMenu;
@@ -46,7 +46,7 @@ namespace tlp {
    * On left : Property, and hierarchical view
    * In view menu you have access to all view plugins
    */
-  class TLP_QT_SCOPE MainController : public Controller, public Observer, public GraphObserver {
+  class TLP_QT_SCOPE MainController :  public ControllerViewsManager, public Observer, public GraphObserver {
 
     Q_OBJECT;
 
@@ -73,10 +73,7 @@ namespace tlp {
      * Return the graph and the dataSet of the controller
      */
     void getData(Graph **graph,DataSet *dataSet);
-    /**
-     * Return the Graph visualized by the controller
-     */
-    Graph *getGraph();
+    
 
   protected :
     /**
@@ -98,18 +95,14 @@ namespace tlp {
     /**
      * Create a view with name : name
      */
-    View* createView(const std::string &name,Graph *graph,DataSet dataSet,const QRect &rect=QRect(0,0,0,0),bool maximized=false);
-    /**
-     * Put interactors of the given view in graphToolBar
-     */
-    void installInteractors(View *view);
+    virtual View* createView(const std::string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize=true,const QRect &rect=QRect(0,0,0,0),bool maximized=false);
 
     typedef std::set< tlp::Observable * >::iterator ObserverIterator;
 
     /**
-     * Redraw all views
+     * Draw/Init all views
      */
-    void redrawViews(bool init=false);
+    virtual void drawViews(bool init=false);
     /**
      * This function is call when an observable is destroyed
      */
@@ -146,16 +139,6 @@ namespace tlp {
      * Call to update number of nodes/edges
      */
     void updateCurrentGraphInfos();
-
-    /**
-     * Save graph hierarchy for views before undo/redo
-     */
-    std::map<View *,std::list<int> > saveViewsHierarchiesBeforePop();
-
-    /**
-     * Check views graph after undo/redo
-     */
-    void checkViewsHierarchiesAfterPop(std::map<View *,std::list<int> > &hierarchies);
     
     /**
      * Activate undo/redo button, reload propertyWidget and redrawViews after we have change a property
@@ -172,14 +155,8 @@ namespace tlp {
      */
     void applyMorphing(GraphState *graphState);
 
-    Graph *currentGraph;
-    View *currentView;
-    Graph * copyCutPasteGraph;
-    std::map<View *,std::string> viewNames;
-    std::map<QWidget *,View*> viewWidget;
-    std::map<View *, QAction *> lastInteractorOnView;
     std::map<View *, int> lastConfigTabIndexOnView;
-    std::map<View *,Graph* > viewGraph;
+    Graph * copyCutPasteGraph;
     unsigned int currentGraphNbNodes;
     unsigned int currentGraphNbEdges;
     Graph *graphToReload;
@@ -190,7 +167,6 @@ namespace tlp {
     QDockWidget *tabWidgetDock;
     QDockWidget *configWidgetDock;
     QTabWidget *configWidgetTab;
-    QWidget *noInteractorConfigWidget;
     SGHierarchyWidget *clusterTreeWidget;
     PropertyDialog *propertiesWidget;
     ElementPropertiesWidget *eltProperties;
@@ -222,30 +198,23 @@ namespace tlp {
     QMenu *generalMenu;
 
   protected slots:
-    /*
+    /**
      * Change the graph and load it in left part of the GUI
      */
-    void changeGraph(Graph *graph);
-    /*
+    virtual bool changeGraph(Graph *graph);
+    /**
      * Clear observers when a graph is about to be remove
      */
     void graphAboutToBeRemove(Graph *graph);
     /**
-     * Change GUI when a QWidget is activated
+     * This function is call when a view is activated
+     * Return true if view can be activated (ie this view exist)
      */
-    void windowActivated(QWidget *w);
-    /**
-     * Load the interactor (in this function we catch the QAction who send this signal) in current View
-     */
-    void changeInteractor();
+    virtual bool windowActivated(QWidget *w);
     /**
      * Load the interactor (referenced by the given QAction) in current View
-     */
-    void changeInteractor(QAction* action);
-    /**
-     * Add a new view to the controller
-     */
-    void addView(QAction *action);
+    */
+    virtual bool changeInteractor(QAction* action);
     /**
      * This slot is call when a view emit elementSelected
      * Show the element in left part of the GUI
@@ -255,11 +224,6 @@ namespace tlp {
      * This slot is call when a view want to change its graph
      */
     void viewRequestChangeGraph(View *view, Graph *graph);
-
-    /**
-     * This slot is call went a view will be closed
-     */
-    void widgetWillBeClosed(QObject *object);
 
     void isAcyclic();
     void isSimple();
@@ -301,11 +265,6 @@ namespace tlp {
       void editReverseSelection();
       void editSelectAll();
       void editDeselectAll();
-
-  public :
-
-    View *getView(QWidget *);
-    View *getCurrentView();
 
   };
 

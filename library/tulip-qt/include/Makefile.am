@@ -44,6 +44,8 @@ INCLUDES_H = \
 	tulip/QtProgress.h \
 	tulip/Controller.h \
 	tulip/ControllerAlgorithmTools.h \
+  tulip/ControllerViewsTools.h \
+  tulip/ControllerViewsManager.h \
 	tulip/MainController.h \
 	tulip/ControllerPluginsManager.h \
 	tulip/View.h \

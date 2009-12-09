@@ -71,6 +71,7 @@ BUILT_SOURCES = \
 	moc_GridOptionsData.cpp \
 	moc_QtProgress.cpp \
 	moc_Controller.cpp \
+  moc_ControllerViewsManager.cpp \
 	moc_MainController.cpp \
 	moc_View.cpp \
 	moc_AbstractView.cpp \
@@ -125,6 +126,8 @@ SOURCES = \
 	QtProgress.cpp \
 	Controller.cpp \
 	ControllerAlgorithmTools.cpp \
+  ControllerViewsTools.cpp \
+  ControllerViewsManager.cpp \
 	MainController.cpp \
 	View.cpp \
 	AbstractView.cpp \

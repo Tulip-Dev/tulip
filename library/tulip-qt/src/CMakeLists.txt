@@ -38,6 +38,8 @@ SET(tulip-qt_LIB_SRCS
     QtProgress.cpp 
     Controller.cpp 
     ControllerAlgorithmTools.cpp
+    ControllerViewsTools.cpp
+    ControllerViewsManager.cpp
     MainController.cpp 
     View.cpp 
     AbstractView.cpp 
@@ -112,6 +114,7 @@ set(tulip-qt_MOC
     ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/GridOptionsData.h
     ../include/tulip/QtProgress.h
     ../include/tulip/Controller.h
+    ../include/tulip/ControllerViewsManager.h
     ../include/tulip/MainController.h
     ../include/tulip/View.h
     ../include/tulip/AbstractView.h
