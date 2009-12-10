@@ -45,7 +45,7 @@ private:
   void delNode(Graph *,const node);
   void destroy(Graph *);
   bool compute(Graph *graph);
-  PlanarityTest(){}
+  PlanarityTest() : GraphObserver(false) {}
   static PlanarityTest * instance;
   TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };

@@ -17,7 +17,10 @@ OuterPlanarTest * OuterPlanarTest::instance=0;
 bool OuterPlanarTest::isOuterPlanar(Graph *graph){
   if(instance==0)
     instance = new OuterPlanarTest();
-  return instance->compute(graph);
+  Observable::holdObservers();
+  bool result = instance->compute(graph);
+  Observable::unholdObservers();
+  return result;
 }
 //=================================================================
 bool OuterPlanarTest::compute(Graph *graph) { 

@@ -25,7 +25,7 @@ private:
   void delNode(Graph *,const node);
   void destroy(Graph *);
   bool compute(Graph *graph);
-  OuterPlanarTest(){}
+  OuterPlanarTest() : GraphObserver(false) {}
   static OuterPlanarTest* instance;
   TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };

@@ -17,12 +17,16 @@ PlanarityTest * PlanarityTest::instance=0;
 bool PlanarityTest::isPlanar(Graph *graph){
   if(instance==0)
     instance = new PlanarityTest();
-  return instance->compute(graph);
+  Observable::holdObservers();
+  bool result = instance->compute(graph);
+  Observable::unholdObservers();
+  return result;
 }
 //=================================================================
 bool PlanarityTest::planarEmbedding(Graph *graph) {
   if (!PlanarityTest::isPlanar(graph))
     return false;
+  Observable::holdObservers();
   vector<edge> addedEdges;
   BiconnectedTest::makeBiconnected(graph, addedEdges);
   PlanarityTestImpl planarTest(graph);
@@ -30,6 +34,7 @@ bool PlanarityTest::planarEmbedding(Graph *graph) {
   vector<edge>::const_iterator it = addedEdges.begin();
   for (; it!=addedEdges.end(); ++it)
     graph->delAllEdge(*it);
+  Observable::unholdObservers();
   return true;
 }
 //=================================================================
@@ -37,6 +42,7 @@ list<edge> PlanarityTest::getObstructionsEdges(Graph *graph) {
   if (PlanarityTest::isPlanar(graph))
     return list<edge>();
   vector<edge> addedEdges;
+  Observable::holdObservers();
   BiconnectedTest::makeBiconnected(graph, addedEdges);
   PlanarityTestImpl planarTest(graph);
   planarTest.isPlanar(true);
@@ -46,6 +52,7 @@ list<edge> PlanarityTest::getObstructionsEdges(Graph *graph) {
     for (; it!=addedEdges.end(); ++it)
       graph->delAllEdge(*it);
   }
+  Observable::unholdObservers();
   set<edge> tmpAdded(addedEdges.begin(), addedEdges.end());
   list<edge> result;
   for (list<edge>::iterator it = tmpList.begin(); it != tmpList.end(); ++it) {
