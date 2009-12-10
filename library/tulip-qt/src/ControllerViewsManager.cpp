@@ -171,6 +171,7 @@ namespace tlp {
   //**********************************************************************
   void ControllerViewsManager::updateViewsOfSubGraphs(Graph *graph){
     for(map<View *,Graph* >::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
+      assert(graph);
       Graph *subGraph=(*it).second;
       if(graph->isDescendantGraph(subGraph)){
         (*it).first->setGraph(subGraph);

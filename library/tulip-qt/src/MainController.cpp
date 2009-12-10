@@ -382,8 +382,8 @@ namespace tlp {
       Graph *graph=graphToReload;
       graphToReload=NULL;
       
-      updateViewsOfGraph(graphToReload);
-      updateViewsOfSubGraphs(graphToReload);
+      updateViewsOfGraph(graph);
+      updateViewsOfSubGraphs(graph);
     }else{
       drawViews();
     }
