@@ -1185,7 +1185,7 @@
 (string "scene" "<?xml version=\"1.0\"?>
 <scene>
   <data>
-    <viewport>(0,0,492,472)</viewport>
+    <viewport>(0,0,492,466)</viewport>
     <background>(255,255,255,255)</background>
   </data>
   <children>
