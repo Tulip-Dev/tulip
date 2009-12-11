@@ -33,9 +33,24 @@ namespace tlp {
     return paramMaps[(unsigned long) factory][name];
   }
   //**********************************************************************
-  bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const string &name) {
+  bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const string &name,DataSet *dataSet) {
     Observable::holdObservers();
+    QtProgress myProgress(parent,name);
+    myProgress.hide();
+    graph->push();
+    
+    bool ok=true;
     string erreurMsg;
+    if (!tlp::applyAlgorithm(graph, erreurMsg, dataSet, name, &myProgress  )) {
+      QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + ":\n" + erreurMsg).c_str()));
+      graph->pop();
+      bool ok=false;
+    }
+    Observable::unholdObservers();
+    return ok;
+  }
+  //**********************************************************************
+  bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const string &name) {
     DataSet dataSet;
     StructDef *params = getPluginParameters(AlgorithmFactory::factory, name);
     StructDef sysDef = AlgorithmFactory::factory->getPluginParameters(name);
@@ -43,15 +58,8 @@ namespace tlp {
     bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
 				     "Tulip Parameter Editor", graph, parent);
     if (ok) {
-      QtProgress myProgress(parent,name);
-      myProgress.hide();
-      graph->push();
-      if (!tlp::applyAlgorithm(graph, erreurMsg, &dataSet, name, &myProgress  )) {
-        QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + ":\n" + erreurMsg).c_str()));
-        graph->pop();
-      }
+      return applyAlgorithm(graph,parent,name,&dataSet);
     }
-    Observable::unholdObservers();
     return ok;
   }
   //**********************************************************************
