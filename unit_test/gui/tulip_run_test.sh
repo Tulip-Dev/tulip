@@ -1,22 +1,24 @@
 #!/bin/sh
 
 # This script allows the run of an already recorded test
-# Giving a <test_name> it assumes the existence of 2 files
+# Giving a <test_name> it assumes the existence of
 # <test_name>.xns which is the cnee events file
+# and if no tlp_output_file is given,
 # <test_name>.tlp which is the expected tulip result graph
 # The test must locally produces a tulip result graph
 # in the test_gui.tlp file
 # After the test run, the files <test_name>.tlp and test_gui.tlp
 # are compared; the test is successful if they only differ from the date field
 
-if [ $# -ne 2 ]; then
+if [ $# -lt 2 ]; then
     echo "$0 running test failed"
-    echo "usage: $0 <test_name> <tlp_input_file>"
+    echo "usage: $0 <test_name> <tlp_input_file>  [tlp_output_file = test_name.tlp]"
     exit
 fi
 
 TEST_NAME=$1
 TLP_INPUT_FILE=$2
+TLP_OUTPUT_FILE=$3
 
 echo "***********************************************"
 echo "Running ${TEST_NAME} test"
@@ -35,9 +37,12 @@ if [ ! -f $TEST_NAME.xns ]; then
 fi
 
 # $TEST_NAME.tlp must exist
-if [ ! -f $TEST_NAME.tlp ]; then
+if [ "$TLP_OUTPUT_FILE" = "" ]; then
+  if [ ! -f $TEST_NAME.tlp ]; then
     echo "$TEST_NAME test failed: $TEST_NAME.tlp does not exist"
     exit
+  fi
+  TLP_OUTPUT_FILE=$TEST_NAME.tlp
 fi
 
 # remove test_gui.tlp which is always
@@ -57,15 +62,15 @@ fi
 
 # check the result graph file
 # first check dates
-if [ "$(grep '(date ' $TEST_NAME.tlp)" = "$(grep '(date ' test_gui.tlp)" ]; then
+if [ "$(grep '(date ' $TLP_OUTPUT_FILE)" = "$(grep '(date ' test_gui.tlp)" ]; then
      NB_DIFFS=0
 else
      NB_DIFFS=4
 fi
 # the 2 files may only have different dates
-if [ $(diff $TEST_NAME.tlp test_gui.tlp | wc -l) -gt $NB_DIFFS ]; then
+if [ $(diff $TLP_OUTPUT_FILE test_gui.tlp | wc -l) -gt $NB_DIFFS ]; then
     mv test_gui.tlp failed_${TEST_NAME}.tlp
-    echo "$TEST_NAME test failed: diff failure between ${TEST_NAME}.tlp & failed_${TEST_NAME}.tlp"
+    echo "$TEST_NAME test failed: diff failure between ${TLP_OUTPUT_FILE} & failed_${TEST_NAME}.tlp"
 else
     rm test_gui.tlp
     echo "*** $TEST_NAME test OK ***"
