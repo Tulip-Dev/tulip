@@ -361,12 +361,18 @@ namespace tlp {
 
   void  PluginsViewWidget::applyChange(){
 
-    connect(&updatePlugin,SIGNAL(pluginInstalled()),this,SLOT(pluginInstalledSlot()));
-    connect(&updatePlugin,SIGNAL(pluginUninstalled()),this,SLOT(pluginUninstalledSlot()));
-    updatePlugin.pluginsCheckAndUpdate(_msm,pluginsToInstall,pluginsToRemove,this);
+    if(pluginsToInstall.size()!=0 || pluginsToRemove.size()!=0){
+      connect(&updatePlugin,SIGNAL(pluginInstalled()),this,SLOT(pluginInstalledSlot()));
+      connect(&updatePlugin,SIGNAL(pluginUninstalled()),this,SLOT(pluginUninstalledSlot()));
+      updatePlugin.pluginsCheckAndUpdate(_msm,pluginsToInstall,pluginsToRemove,this);
 
-    pluginsToInstall.clear();
-    pluginsToRemove.clear();
+      pluginsToInstall.clear();
+      pluginsToRemove.clear();
+    }else{
+      QMessageBox::warning(this, tr("Apply change"),
+                         tr("No plugin to install/remove"),
+                         QMessageBox::Ok);
+    }
   }
 
   void PluginsViewWidget::pluginInstalledSlot(){
