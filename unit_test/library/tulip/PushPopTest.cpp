@@ -175,6 +175,69 @@ void PushPopTest::testSetValue() {
   CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 2.0);  
 }
 
+//==========================================================
+void PushPopTest::testCopyProperty() {
+  node n0 = graph->addNode();
+  node n1 = graph->addNode();
+
+  edge e0 = graph->addEdge(n0, n1);
+  edge e1 = graph->addEdge(n1, n0);
+
+  DoubleProperty* prop = graph->getProperty<DoubleProperty>("prop");
+
+  prop->setNodeValue(n0, 1.0);
+  prop->setEdgeValue(e0, 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 0.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 0.0);  
+
+  DoubleProperty p(graph);
+
+  p.setNodeValue(n1, 1.0);
+  p.setEdgeValue(e1, 1.0);
+  CPPUNIT_ASSERT(p.getNodeValue(n0) == 0.0);
+  CPPUNIT_ASSERT(p.getNodeValue(n1) == 1.0);
+  CPPUNIT_ASSERT(p.getEdgeValue(e0) == 0.0);  
+  CPPUNIT_ASSERT(p.getEdgeValue(e1) == 1.0);
+
+  graph->push();
+
+  *prop = p;
+  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 0.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 1.0);  
+
+  graph->pop();
+  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 0.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 0.0);
+
+  graph->push();
+  prop->setAllNodeValue(0.0);
+  prop->setAllEdgeValue(0.0);
+  prop->setNodeValue(n1, 1.0);
+  prop->setEdgeValue(e1, 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 0.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 1.0);  
+
+  graph->pop();
+  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 0.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 0.0);
+
+  graph->unpop();
+  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 0.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 1.0);  
+}
+
 void PushPopTest::testSubgraph() {
   Graph *g1, *g2, *g3, *g4;
 
@@ -491,6 +554,8 @@ CppUnit::Test * PushPopTest::suite() {
 								  &PushPopTest::testAddDel) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetNode/EdgeValue operations", 
 								  &PushPopTest::testSetValue) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Copy Prop operations", 
+								  &PushPopTest::testCopyProperty) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraph operations", 
 								  &PushPopTest::testSubgraph) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Tests operations", 

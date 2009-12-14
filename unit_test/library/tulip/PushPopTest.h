@@ -17,6 +17,7 @@ public:
 
   void testAddDel();
   void testSetValue();
+  void testCopyProperty();
   void testSubgraph();
   void testTests();
   void testAddDelProps();
