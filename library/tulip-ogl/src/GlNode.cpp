@@ -58,7 +58,7 @@ namespace tlp {
   }
 
   void GlNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
-    Color colorSelect2=PreferenceManager::getInst().getSelectionColor();
+    const Color& colorSelect2=PreferenceManager::getInst().getSelectionColor();
 
     glEnable(GL_CULL_FACE);
     GLenum error = glGetError();
@@ -114,17 +114,16 @@ namespace tlp {
       glPassThrough(id); //id of the node for the feed back mode
     }
 
+    bool selected = data->elementSelected->getNodeValue(n);
     if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
       if (lod < 1) lod = 1;
       //const Color &nodeColor = data->elementColor->getNodeValue(n);
-      Color color;
-      int size=sqrt(lod);
-      if (!data->elementSelected->getNodeValue(n)) {
-        color=fillColor;
+      const Color& color = selected ? colorSelect2 : fillColor;
+      int size= sqrt(lod);
+      if (!selected) {
         if(size>2)
           size=2;
       }else{
-        color=colorSelect2;
         if(size<5)
           size=5;
       }
@@ -149,14 +148,14 @@ namespace tlp {
 
       data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n,lod);
 
-      if (data->elementSelected->getNodeValue(n)) {
+      if (selected) {
         //glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
         GlDisplayListManager::getInst().callDisplayList("selection");
       }
       glPopMatrix();
     }
 
-    if (data->elementSelected->getNodeValue(n)) {
+    if (selected) {
       glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
     }
 
@@ -168,12 +167,12 @@ namespace tlp {
   }
 
   void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
-    Color colorSelect2=PreferenceManager::getInst().getSelectionColor();
+    const Color& colorSelect2=PreferenceManager::getInst().getSelectionColor();
 
     node n=node(id);
 
-    bool select=data->elementSelected->getNodeValue(n);
-        if(drawSelect!=select)
+    bool selected=data->elementSelected->getNodeValue(n);
+        if(drawSelect!=selected)
           return;
 
     const string &tmp = data->elementLabel->getNodeValue(n);
@@ -182,12 +181,12 @@ namespace tlp {
     }
 
     if(!data->getGraph()->isMetaNode(n)){
-      if(select)
+      if(selected)
         glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil() ,0xFFFF);
       else
         glStencilFunc(GL_LEQUAL,data->parameters->getNodesLabelStencil(),0xFFFF);
     }else{
-      if(select)
+      if(selected)
         glStencilFunc(GL_LEQUAL,data->parameters->getSelectedMetaNodesStencil() ,0xFFFF);
       else
         glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesLabelStencil(),0xFFFF);
@@ -200,7 +199,7 @@ namespace tlp {
     if(fontSize==0)
       fontSize=18;
 
-    if(select)
+    if(selected)
       renderer->setContext(fontName, fontSize+2, 0, 0, 255);
     else
       renderer->setContext(fontName, fontSize, 255, 255, 255);
@@ -226,10 +225,8 @@ namespace tlp {
     }
     //if (elementSelected->getNodeValue(n) != mode) return;
 
-    Color* fontColor = &((Color &)data->elementLabelColor->getNodeValue(n));
-
-    if (select)
-      fontColor = (Color *) &colorSelect2;
+    const Color& fontColor = selected ? colorSelect2 :
+      data->elementLabelColor->getNodeValue(n);
 
     float w_max = 300;
     float w,h;
@@ -239,7 +236,7 @@ namespace tlp {
     switch(data->parameters->getFontsType()){
     case 0:
       renderer->setMode(TLP_POLYGON);
-      renderer->setColor((*fontColor)[0], (*fontColor)[1], (*fontColor)[2]);
+      renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
       renderer->setString(tmp, VERBATIM);
       //      w_max = nodeSize.getW()*50.0;
       renderer->getBoundingBox(w_max, h, w);
@@ -261,13 +258,13 @@ namespace tlp {
       glPopMatrix();
       break;
     case 1:
-      drawPixmapFont(test,renderer,data,tmp, *fontColor, nodePos, labelPos, data->elementSelected->getNodeValue(n), nodeSize.getW());
+      drawPixmapFont(test,renderer,data,tmp, fontColor, nodePos, labelPos, selected, nodeSize.getW());
       break;
     case 2:
       //if (projectSize(nodeCoord, nodeSize, camera->projectionMatrix, camera->modelviewMatrix, camera->getViewport()) < 8.0) return;
 
       renderer->setMode(TLP_TEXTURE);
-      renderer->setColor((*fontColor)[0], (*fontColor)[1], (*fontColor)[2]);
+      renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
       renderer->setString(tmp, VERBATIM);
 
       //      w_max = nodeSize.getW();

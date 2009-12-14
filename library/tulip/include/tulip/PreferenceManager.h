@@ -65,7 +65,7 @@ namespace tlp {
     /**
      * Get color for selection
      */
-    Color getSelectionColor() {
+    const Color& getSelectionColor() {
       return selectionColor;
     }
 

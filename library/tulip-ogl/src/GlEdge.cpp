@@ -63,8 +63,9 @@ BoundingBox GlEdge::getBoundingBox(GlGraphInputData* data) {
   edge e = edge(id);
   BoundingBox bb;
 
-  const node source = data->graph->source(e);
-  const node target = data->graph->target(e);
+  std::pair<node, node> eEnds = data->graph->ends(e);
+  const node source = eEnds.first;
+  const node target = eEnds.second;
   const Coord& srcCoord = data->elementLayout->getNodeValue(source);
   const Coord& tgtCoord = data->elementLayout->getNodeValue(target);
 
@@ -137,8 +138,9 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
   }
   glEnable(GL_COLOR_MATERIAL);
 
-  const node source = data->graph->source(e);
-  const node target = data->graph->target(e);
+  std::pair<node, node> eEnds = data->graph->ends(e);
+  const node source = eEnds.first;
+  const node target = eEnds.second;
   const Coord& srcCoord = data->elementLayout->getNodeValue(source);
   const Coord& tgtCoord = data->elementLayout->getNodeValue(target);
 
@@ -572,8 +574,11 @@ void GlEdge::drawLabel(bool drawSelect, OcclusionTest* test, TextRenderer* rende
   else
     renderer->setContext(fontName, fontSize, 255, 255, 255);
 
-  const Coord & srcCoord = data->elementLayout->getNodeValue(data->graph->source(e));
-  const Coord & tgtCoord = data->elementLayout->getNodeValue(data->graph->target(e));
+  std::pair<node, node> eEnds = data->graph->ends(e);
+  const node source = eEnds.first;
+  const node target = eEnds.second;
+  const Coord & srcCoord = data->elementLayout->getNodeValue(source);
+  const Coord & tgtCoord = data->elementLayout->getNodeValue(target);
   const LineType::RealType &bends = data->elementLayout->getEdgeValue(e);
   Coord position;
   if (bends.empty()) {
