@@ -16,13 +16,9 @@
  *  ACM Transactions on Graphics, vol. 11, 1 (Jan. 1992) 92-99. \n
  *  HCIL-91-03, CS-TR-2645, CAR-TR-548  
  *
- *  <b>HISTORY</b>
- *
- *  - 01/04/99 Verson 0.0.1: Initial release
- *
  *  \note This algorithm only works on trees.
- *  This version use the "viewMetric" property to determine
- *  The size of elements. \n
+ *  This version use a predefined metric property to determine
+ *  The size of the elements. \n
  *  Let n be the number of nodes, the algorithm complexity is in O(n).
  *
  *

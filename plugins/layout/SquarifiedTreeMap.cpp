@@ -11,10 +11,10 @@ using namespace std;
 using namespace tlp;
 
 LAYOUTPLUGINOFGROUP(SquarifiedTreeMap,"Squarified Tree Map",
-             "Julien Testut, Antony Durand, Pascal Ollier, "
-             "Yashvin Nababsing, Sebastien Leclerc, "
-             "Thibault Ruchon, Eric Dauchier",
-		    "03/11/2004", "ok", "1.0", "Tree");
+		    "Julien Testut, Antony Durand, Pascal Ollier, "
+		    "Yashvin Nababsing, Sebastien Leclerc, "
+		    "Thibault Ruchon, Eric Dauchier",
+		    "03/11/2004", "ok", "1.1", "Tree");
 
 //====================================================================
 
@@ -33,7 +33,7 @@ namespace
       HTML_HELP_OPEN() \
       HTML_HELP_DEF( "type", "Metric" ) \
       HTML_HELP_DEF( "values", "An existing metric property" ) \
-      HTML_HELP_DEF( "default", "viewMetric" ) \
+      HTML_HELP_DEF( "default", "viewMetric if it exists" ) \
       HTML_HELP_BODY() \
       "This parameter defines the metric used to estimate the size allocated to each node." \
       HTML_HELP_CLOSE(),
@@ -58,7 +58,7 @@ namespace
 //====================================================================
 SquarifiedTreeMap::SquarifiedTreeMap(const PropertyContext& context) :LayoutAlgorithm(context){
   aspectRatio = DEFAULT_RATIO;
-  addParameter<DoubleProperty>("metric", paramHelp[0], "viewMetric");
+  addParameter<DoubleProperty>("metric", paramHelp[0], 0, false);
   addParameter<float>("Aspect Ratio", paramHelp[1], "1.");
   addParameter<bool>("Texture?", paramHelp[2], "false");
 }
@@ -69,28 +69,24 @@ SquarifiedTreeMap::~SquarifiedTreeMap() {
 
 //====================================================================
 bool SquarifiedTreeMap::check(string& errorMsg) {
-  metric = graph->getProperty<DoubleProperty>("viewMetric"); 
-  if (dataSet != 0)
-    dataSet->get("metric", metric);    
-  if (!metric) {
-    errorMsg = "metric is not valid";
+  if (!TreeTest::isTree(graph)) {
+    errorMsg = "The Graph must be a Tree";
     return false;
   }
-
-  if (TreeTest::isTree(graph)) {
+    
+  metric = NULL;
+  if (dataSet != 0)
+    dataSet->get("metric", metric);
+      
+  if (!metric && graph->existProperty("viewMetric")) {
+    metric = graph->getProperty<DoubleProperty>("viewMetric");
     if (verifyMetricIsPositive()) {
       errorMsg = "Graph's nodes must have positive metric";
       return false;
     }
-    else {
-      errorMsg = "";
-      return true;
-    }
   }
-  else {
-    errorMsg = "The Graph must be a Tree";
-    return false;
-  }
+  errorMsg = "";
+  return true;
 }
 
 //====================================================================
@@ -272,7 +268,7 @@ float SquarifiedTreeMap::findWorstRatio(float metric1, float metric2,
 float SquarifiedTreeMap::initializeMapSum(node n) {
     
   if (isLeaf(graph, n)) {
-    if ((sumChildrenMetric[n] = metric->getNodeValue(n)) == 0)
+    if ((sumChildrenMetric[n] = metric ? metric->getNodeValue(n) : 1) == 0)
       sumChildrenMetric[n] = 1;
     return sumChildrenMetric[n];
   }

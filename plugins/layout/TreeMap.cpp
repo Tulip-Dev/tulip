@@ -2,10 +2,23 @@
 #include <tulip/TreeTest.h>
 #include "TreeMap.h"
 
-LAYOUTPLUGINOFGROUP(TreeMap,"Tree Map (Shneiderman)","David Auber","01/12/1999","ok","1.0","Tree");
+LAYOUTPLUGINOFGROUP(TreeMap,"Tree Map (Shneiderman)","David Auber","01/12/1999","ok","1.1","Tree");
 
 using namespace std;
 using namespace tlp;
+
+static const char * paramHelp[] = 
+    {
+      // metric :
+      HTML_HELP_OPEN() \
+      HTML_HELP_DEF( "type", "Metric" ) \
+      HTML_HELP_DEF( "values", "An existing metric property" ) \
+      HTML_HELP_DEF( "default", "viewMetric if it exists" ) \
+      HTML_HELP_BODY() \
+      "This parameter defines the metric used to estimate the size allocated to each node." \
+      HTML_HELP_CLOSE(),
+    };
+
 
 void TreeMap::dfsPlacement(node n, int depth, double x, double y, double width, double height,
 			   bool direction, TLP_HASH_MAP<node,double> &value) {
@@ -47,13 +60,16 @@ void TreeMap::dfsPlacement(node n, int depth, double x, double y, double width, 
   }delete itN;
 }
 
-TreeMap::TreeMap(const PropertyContext &context):LayoutAlgorithm(context){}
+TreeMap::TreeMap(const PropertyContext &context):LayoutAlgorithm(context){
+  addParameter<DoubleProperty>("metric", paramHelp[0], 0, false);
+}
 
 TreeMap::~TreeMap() {}
 
 double TreeMap::initVal(node n, TLP_HASH_MAP<node,double> &value) {
   if (graph->outdeg(n)==0) { 
-    if (!(value[n]=metric->getNodeValue(n)>0)) value[n]=1;
+    if (!((value[n] = metric ? metric->getNodeValue(n) : 1) >0))
+      value[n]=1;
     return value[n];
   }
   double sum=0;
@@ -67,8 +83,7 @@ double TreeMap::initVal(node n, TLP_HASH_MAP<node,double> &value) {
 }
 
 bool TreeMap::run() {
-  metric=graph->getProperty<DoubleProperty>("viewMetric");
-  size=graph->getLocalProperty<SizeProperty>("viewSize");
+  size = graph->getLocalProperty<SizeProperty>("viewSize");
   // ensure size updates will be kept after a pop
   preservePropertyUpdates(size);
 
@@ -87,18 +102,22 @@ bool TreeMap::run() {
   return true;
 }
 
-bool TreeMap::check(string &erreurMsg) {
-  if (TreeTest::isTree(graph)) {
-    erreurMsg="";
-    return true;
-  }
-  else {
-    erreurMsg="The Graph must be a Tree";
+bool TreeMap::check(string &errorMsg) {
+  if (!TreeTest::isTree(graph)) {
+    errorMsg = "The Graph must be a Tree";
     return false;
   }
+    
+  metric = NULL;
+  if (dataSet != 0)
+    dataSet->get("metric", metric);
+      
+  if (!metric && graph->existProperty("viewMetric")) {
+    metric = graph->getProperty<DoubleProperty>("viewMetric");
+  }
+  errorMsg = "";
+  return true;
 }
-
-
 
 
 
