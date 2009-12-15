@@ -852,7 +852,7 @@ namespace tlp {
     SetSelection( selP, nodeA, edgeA, graph );
     tlp::removeFromGraph( graph, selP );
     Observable::unholdObservers();
-    drawViews(true);
+    drawViews();
   }
   //==============================================================
   void MainController::editCopy() {
@@ -1024,7 +1024,7 @@ namespace tlp {
     graph->addObserver(this);
     updateCurrentGraphInfos();
 
-    drawViews(true);
+    drawViews();
   }
   //==============================================================
   void MainController::editReverseSelection() {
