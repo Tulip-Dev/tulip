@@ -252,11 +252,14 @@ bool MixedModel::run() {
       currentGraph->delAllEdge(*ite);
     
     ite = added_edges.begin();
-    for (; ite!=added_edges.end(); ++ite)
-      currentGraph->delAllEdge(*ite);
-    
-      delete carte;
-      currentGraph->delAllSubGraphs(G);
+    const vector<Coord>& dv = layoutResult->getEdgeDefaultValue();
+    for (; ite!=added_edges.end(); ++ite) {
+      edge e = *ite;
+      currentGraph->delAllEdge(e);
+      layoutResult->setEdgeValue(e, dv);
+    }    
+    delete carte;
+    currentGraph->delAllSubGraphs(G);
       
   } delete it;
   if(nbConnectedComponent != 1){
