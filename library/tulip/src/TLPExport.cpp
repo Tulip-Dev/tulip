@@ -122,7 +122,7 @@ public:
     if (graph->getSuperGraph() != graph)  os << ")" << endl;
   }
   //=====================================================
-  void saveLocalProperties(ostream &os,Graph *graph) {
+  void saveLocalProperties(ostream &os, Graph *graph) {
     Iterator<PropertyInterface *> *itP=graph->getLocalObjectProperties();
     PropertyInterface *prop;
     while (itP->hasNext()) {
@@ -147,6 +147,8 @@ public:
       Iterator<node> *itN = prop->getNonDefaultValuatedNodes();
       while (itN->hasNext()) {
 	node itn=itN->next();
+	if (!graph->isElement(itn))
+	  continue;
 	string tmp = prop->getNodeStringValue(itn);
 	// replace real path with symbolic one using TulipBitmapDir
 	if (prop->getName() == string("viewFont")) {
@@ -159,6 +161,8 @@ public:
       Iterator<edge> *itE = prop->getNonDefaultValuatedEdges();
       while (itE->hasNext()) {
 	edge ite=itE->next();
+	if (!graph->isElement(ite))
+	  continue;
 	// replace real path with symbolic one using TulipBitmapDir
 	string tmp = prop->getEdgeStringValue(ite);
 	if (prop->getName() == string("viewFont")) {
