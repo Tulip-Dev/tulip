@@ -1277,7 +1277,7 @@ namespace tlp {
     propertiesWidget->setGraph(newGraph);
     eltProperties->setGraph(newGraph,false);
 
-    drawViews();
+    drawViews(true);
     updateUndoRedoInfos();
 
   }
@@ -1298,7 +1298,7 @@ namespace tlp {
     propertiesWidget->setGraph(newGraph);
     eltProperties->setGraph(newGraph,false);
 
-    drawViews();
+    drawViews(true);
     updateUndoRedoInfos();
   }
 
