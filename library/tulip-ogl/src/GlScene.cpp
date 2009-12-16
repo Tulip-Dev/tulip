@@ -28,7 +28,7 @@ namespace tlp {
 
 struct entityWithDistanceCompare {
 	static GlGraphInputData *inputData;
-	static bool compare(const EntityWithDistance &e1, const EntityWithDistance &e2 ){
+    bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2 ) const{
 		if(e1.distance>e2.distance)
 			return true;
 		if(e1.distance<e2.distance)
@@ -236,7 +236,7 @@ void GlScene::draw() {
 			}
 		}else{
 			entityWithDistanceCompare::inputData=glGraphComposite->getInputData();
-			vector<EntityWithDistance> entitiesVector;
+            multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;
 			Coord camPos=camera->getEyes();
 			BoundingBox bb;
 			Coord middle;
@@ -248,8 +248,8 @@ void GlScene::draw() {
 				dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
 				dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
 				dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
-				entitiesVector.push_back(EntityWithDistance(dist,&(*it)));
-			}
+                entitiesSet.insert(EntityWithDistance(dist,&(*it)));
+            }
 
 			if(glGraphComposite){
 				GlNode glNode(0);
@@ -260,7 +260,7 @@ void GlScene::draw() {
 					dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
 					dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
 					dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
-					entitiesVector.push_back(EntityWithDistance(dist,&(*it),true));
+                    entitiesSet.insert(EntityWithDistance(dist,&(*it),true));
 				}
 				GlEdge glEdge(0);
 				for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
@@ -270,15 +270,15 @@ void GlScene::draw() {
 					dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
 					dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
 					dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
-					entitiesVector.push_back(EntityWithDistance(dist,&(*it),false));
+                    entitiesSet.insert(EntityWithDistance(dist,&(*it),false));
 				}
 			}
 
-			sort(entitiesVector.begin(),entitiesVector.end(),entityWithDistanceCompare::compare);
+            //entitiesVector.sort(entityWithDistanceCompare::compare);
 
-			for(vector<EntityWithDistance>::iterator it=entitiesVector.begin();it!=entitiesVector.end();++it){
+            for(set<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin();it!=entitiesSet.end();++it){
 				if(!(*it).isComplexEntity){
-					glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*it).simpleEntity->first))->getStencil(),0xFFFF);
+                    glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*it).simpleEntity->first))->getStencil(),0xFFFF);
 					((GlSimpleEntity*)((*it).simpleEntity->first))->draw((*it).simpleEntity->second,camera);
 				}else{
 					if((*it).isNode){
