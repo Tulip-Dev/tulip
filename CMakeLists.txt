@@ -108,6 +108,14 @@ if (DEFINED NO_DEPRECATED)
 endif (DEFINED NO_DEPRECATED)
 
 ## -----------------------------------------------------------------------------------------------
+## Disable process to make MainController plugin (for developpers)
+## -----------------------------------------------------------------------------------------------
+SET(TULIP_USE_MAIN_CONTROLLER ON CACHE BOOL "Link Main controller plugin")
+IF(NOT TULIP_USE_MAIN_CONTROLLER)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITHOUT_MAIN_CONTROLLER")
+ENDIF(NOT TULIP_USE_MAIN_CONTROLLER)
+
+## -----------------------------------------------------------------------------------------------
 ## Define NDEBUG when we are in release mode
 ## -----------------------------------------------------------------------------------------------
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
