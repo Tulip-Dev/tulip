@@ -2,6 +2,8 @@
 
 # This script allows the run of all previously recorded tests
 
+TYPE=$1
+
 # clean up log file
 if [ -f all_tests_run.log ]; then
     rm all_tests_run.log
@@ -23,7 +25,7 @@ sleep 10
 . ./stop_tulip.sh
  
 # run tests loop
-for TEST in `ls run_*_test.sh`
+for TEST in `ls run_*${TYPE}_test.sh`
 do
     echo "Running $TEST ..."
     sh $TEST >> all_tests_run.log 2>&1

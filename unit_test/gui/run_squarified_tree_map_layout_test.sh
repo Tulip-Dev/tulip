@@ -1,1 +1,1 @@
-sh tulip_run_test.sh squarified_tree_map_layout random_tree.tlp
+sh tulip_run_test.sh squarified_tree_map_layout random_tree.tlp empty_graph.tlp
