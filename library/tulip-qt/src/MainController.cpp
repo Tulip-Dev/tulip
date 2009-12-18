@@ -900,19 +900,28 @@ namespace tlp {
     static string currentProperty;
     FindSelectionWidget *sel = new FindSelectionWidget(graph, currentProperty, mainWindowFacade.getParentWidget());
     Observable::holdObservers();
+    // allow to undo
+    graph->push();
     int nbItemsFound = sel->exec();
-    Observable::unholdObservers();
     if (nbItemsFound > - 1)
       currentProperty = sel->getCurrentProperty();
     delete sel;
     switch(nbItemsFound) {
-    case -1: break;
-    case 0: mainWindowFacade.getStatusBar()->showMessage("No item found."); break;
+    case 0:
+      mainWindowFacade.getStatusBar()->showMessage("No item found.");
+    case -1:
+      // forget the current graph state
+      graph->pop(false);
+      break;
     default:
       stringstream sstr;
       sstr << nbItemsFound << " item(s) found.";
       mainWindowFacade.getStatusBar()->showMessage(sstr.str().c_str());
     }
+    // unhold at last to ensure that in case of cancellation or
+    // no item found the current graph state has been pop before
+    // the call to updateUndoRedoInfos
+    Observable::unholdObservers();
   }
   //==============================================================
   void MainController::editCreateGroup() {
