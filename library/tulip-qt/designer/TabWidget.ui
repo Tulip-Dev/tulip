@@ -84,22 +84,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="StatsTab" >
-      <attribute name="title" >
-       <string>Statistics</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item row="0" column="0" >
-        <widget class="tlp::TulipStats" native="1" name="tulipStats" />
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
   </layout>

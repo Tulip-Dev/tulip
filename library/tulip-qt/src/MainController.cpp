@@ -199,9 +199,6 @@ namespace tlp {
       delete clusterTreeWidget;
       delete propertiesWidget;
       delete eltProperties;
-#ifdef STATS_UI
-      delete statsWidget;
-#endif
 
       delete tabWidgetDock;
     }
@@ -470,10 +467,6 @@ namespace tlp {
 			    QDockWidget::DockWidgetMovable |
 			    QDockWidget::DockWidgetFloatable);
     TabWidget *tabWidget = new TabWidget(tabWidgetDock);
-#ifndef STATS_UI
-    // remove Statistics tab if not needed
-    tabWidget->tabWidget2->removeTab(tabWidget->tabWidget2->indexOf(tabWidget->StatsTab));
-#endif
     tabWidgetDock->setWidget(tabWidget);
     mainWindowFacade.addDockWidget(Qt::LeftDockWidgetArea, tabWidgetDock);
     tabWidget->show();
@@ -494,11 +487,6 @@ namespace tlp {
 	    this, SLOT(showElementProperties(unsigned int,bool)));
     //Init Element info widget
     eltProperties = tabWidget->elementInfo;
-#ifdef STATS_UI
-    //Init Statistics panel
-    statsWidget = tabWidget->tulipStats;
-    statsWidget->setSGHierarchyWidgetWidget(clusterTreeWidget);
-#endif
 
     configWidgetDock = new QDockWidget("Data manipulation", mainWindowFacade.getParentWidget());
     configWidgetTab = new QTabWidget(configWidgetDock);

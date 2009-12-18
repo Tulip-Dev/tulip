@@ -262,10 +262,6 @@ AC_PATH_QT_MOC
 AC_PATH_QT_UIC
 AC_PATH_QT_RCC
 
-AC_ARG_ENABLE(stats-gui,
-[  --enable-stats-gui      Compilation flag to add the Tulip statistics Graphical User Interface],
-   CPPFLAGS="$CPPFLAGS -DSTATS_UI")
-
 AC_ARG_ENABLE(tulip-gui,
 [  --disable-tulip-gui     Disable build of tulip gui],
   CONFIGURE_tulipgui="", CONFIGURE_tulipgui="plugins-manager tulip"

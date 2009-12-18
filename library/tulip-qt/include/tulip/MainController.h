@@ -34,9 +34,6 @@ namespace tlp {
   class SGHierarchyWidget;
   class PropertyDialog;
   class ElementPropertiesWidget;
-#ifdef STATS_UI
-  class TulipStats;
-#endif
   class Morphing;
   class GraphState;
 
@@ -170,9 +167,6 @@ namespace tlp {
     SGHierarchyWidget *clusterTreeWidget;
     PropertyDialog *propertiesWidget;
     ElementPropertiesWidget *eltProperties;
-#ifdef STATS_UI
-    TulipStats *statsWidget;
-#endif
 
     QMenu *editMenu;
     QMenu *algorithmMenu;

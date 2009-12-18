@@ -36,9 +36,6 @@ namespace tlp {
   class ElementPropertiesWidget;
   class RenderingParametersDialog;
   class LayerManagerWidget;
-#ifdef STATS_UI
-  class TulipStats;
-#endif
   class GridOptionsWidget;
   class GlMainWidget;
 
