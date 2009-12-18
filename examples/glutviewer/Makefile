@@ -1,9 +1,8 @@
-TULIP_DIR=../..
-TULIP_CONFIG=$(TULIP_DIR)/tulip-config
+TULIP_CONFIG=tulip-config
 TARGET= glutviewer
 SRCS=   glutviewer.cpp
 
-CXXFLAGS = -DNDEBUG -O3 -funroll-loops -Wall `${TULIP_CONFIG} --cxxflags`
+CXXFLAGS = -g -O3 -funroll-loops -Wall `${TULIP_CONFIG} --cxxflags`
 
 CXX=g++
 LDFLAGS=  `${TULIP_CONFIG} --lib_tulip --lib_ogl` -L/usr/lib/GL -lGL -lGLU -lglut

@@ -1,0 +1,5 @@
+To compile and install this small application :
+ - change your path variable : export PATH=$PATH:/path/to/your/tulip-config/ for example
+ - make
+ - change your LD_LIBRARY_PATH variable : export LD_LIBRARY_PATH=/path/to/your/tulip/lib/ for example
+ - run qtviewer

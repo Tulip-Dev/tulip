@@ -238,6 +238,8 @@ int main (int argc, char **argv) {
   glGlutScreen->scene.addGlGraphCompositeInfo(glGlutScreen->scene.getLayer("Main"),graphComposite);
   glGlutScreen->scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
   glGlutScreen->scene.centerScene();
+
+  Reshape(640,480);
   
   //glGlutScreen->centerScene();
   timer = glutGet(GLUT_ELAPSED_TIME);
