@@ -23,7 +23,7 @@ using namespace std;
 namespace tlp {
 
   void openGraphOnGlMainWidget(Graph *graph,DataSet *dataSet,GlMainWidget *glMainWidget){
-    glMainWidget->setData(graph,dataSet);
+    glMainWidget->setData(graph,*dataSet);
   }
 
   void loadInteractorPluginsFromDir(std::string dir,PluginLoader *loader) {
