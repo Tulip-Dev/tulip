@@ -173,6 +173,20 @@ namespace tlp {
 					   "Please enter the property name",
 					   QLineEdit::Normal, QString::null,
 					   &ok);
+      if(ok && text==""){
+        ok=false;
+        QMessageBox::warning(this, "Fail to create property",
+                             "You can't create a property with empty name",
+                             QMessageBox::Ok,
+                             QMessageBox::Ok);
+      }
+      if(ok && graph->existLocalProperty(text.toStdString())) {
+        ok = false;
+        QMessageBox::warning(this, "Fail to create property",
+                             "A property with same name already exist",
+                           QMessageBox::Ok,
+                           QMessageBox::Ok);
+      }
       if (ok) {
         string erreurMsg;
         graph->push();
@@ -364,6 +378,11 @@ namespace tlp {
       }
       setGraph(graph);
       Observable::unholdObservers();
+    }else{
+      QMessageBox::warning(this, tr("Fail to copy property"),
+                           "You can't create a property with empty name",
+                           QMessageBox::Ok,
+                           QMessageBox::Ok);
     }
   }
   //=================================================
