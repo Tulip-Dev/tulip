@@ -122,7 +122,7 @@ public:
   static bool fromString( RealType & v, const std::string & s );
 };
 
-DECL_STORED_STRUCT(std::vector<Coord>);
+  DECL_STORED_STRUCT(std::vector<Coord>);
 
 class TLP_SCOPE LineType:public Type
 {

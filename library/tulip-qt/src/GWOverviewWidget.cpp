@@ -83,7 +83,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       Coord lowerRightCorner(viewport[0] + viewport[2],
 			     viewport[1] + viewport[3],
 			     0);
-      Coord middle = (upperLeftCorner + lowerRightCorner) / 2.0;
+      Coord middle = (upperLeftCorner + lowerRightCorner) / 2.f;
       middle[2] = 0.;
       middle = _observedView->getScene()->getCamera()->screenTo3DWorld(middle);
       Camera cover  = *_view->getScene()->getCamera();

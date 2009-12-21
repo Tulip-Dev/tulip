@@ -51,7 +51,7 @@ static void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
   pair<Coord, Coord> box = tlp::computeBoundingBox(graph->getNodeMetaInfo(metanode), graphLayout, graphSize, graphRotation);
   Coord maxL = box.first;
   Coord minL = box.second;
-  graphLayout->setNodeValue(metanode, (maxL + minL) / 2.0 );
+  graphLayout->setNodeValue(metanode, (maxL + minL) / 2.0f );
   Coord v = (maxL - minL);
   if (v[2] < 0.0001) v[2] = 0.1;
   graphSize->setNodeValue(metanode, Size(v[0],v[1],v[2]));
@@ -236,7 +236,7 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
   if (width<0.0001) width=1.0;
   if (height<0.0001) height=1.0;
   if (depth<0.0001) depth=1.0;
-  Coord center = (maxL + minL) / -2.0;
+  Coord center = (maxL + minL) / -2.0f;
   clusterLayout->translate(center, cluster);
   clusterLayout->rotateZ(graphRot->getNodeValue(metanode), cluster);
   clusterLayout->scale(Coord(size[0]/width, size[1]/height, size[2]/depth), cluster);

@@ -34,6 +34,12 @@ namespace tlp {
 	(*this)+=v;
       }
       /**
+       * Give the instersction of "this" with c, return false if no intersection exist
+       */
+      bool intersection(const Circle<Obj> &c, const Vector<Obj,2> &p1,  const Vector<Obj,2> &p2) {
+	return true;
+      }
+      /**
        * Merges this circle with another circle; merging operation
        * consists in computing the smallest enclosing circle of the 
        * two circle and to store the result in "this".

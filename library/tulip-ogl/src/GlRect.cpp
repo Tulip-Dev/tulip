@@ -29,7 +29,7 @@ namespace tlp {
   }
   //=====================================================
   Coord GlRect::getCenter()  {
-    return (point(0) + point(2)) / 2.0;
+    return (point(0) + point(2)) / 2.f;
   }
   //=====================================================
   Coord GlRect::getTopLeftPos() {

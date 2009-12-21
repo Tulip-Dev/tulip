@@ -95,8 +95,8 @@ namespace tlp {
     BoundingBox includeBoundingBox;
     data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
     Coord includeScale=includeBoundingBox.second-includeBoundingBox.first;
-    Coord size=(maxC + minC)/-1.;
-    Coord translate=(maxC+minC)/-2 - (maxC-minC) + includeBoundingBox.first*((maxC-minC)*2) +(maxC-minC)*includeScale ;
+    Coord size=(maxC + minC)/-1.f;
+    Coord translate=(maxC+minC)/-2.f - (maxC-minC) + includeBoundingBox.first*((maxC-minC)*2.f) +(maxC-minC)*includeScale ;
     double dept  = (maxC[2] - minC[2]) / includeScale[2];
     double width  = (maxC[0] - minC[0]) / includeScale[0];
     double height = (maxC[1] - minC[1]) / includeScale[1];

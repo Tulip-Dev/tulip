@@ -47,8 +47,8 @@ namespace tlp {
     BoundingBox includeBoundingBox;
     inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
     Coord includeScale=includeBoundingBox.second-includeBoundingBox.first;
-    Coord size=(maxC + minC)/-1.;
-    Coord translate=(maxC+minC)/-2 - (maxC-minC) + includeBoundingBox.first*((maxC-minC)*2) +(maxC-minC)*includeScale ;
+    Coord size=(maxC + minC)/-1.f;
+    Coord translate=(maxC+minC)/-2.f - (maxC-minC) + includeBoundingBox.first*((maxC-minC)*2.f) +(maxC-minC)*includeScale ;
     double dept  = (maxC[2] - minC[2]) / includeScale[2];
     double width  = (maxC[0] - minC[0]) / includeScale[0];
     double height = (maxC[1] - minC[1]) / includeScale[1];
@@ -61,8 +61,8 @@ namespace tlp {
 
     vector<Coord> objectScale, objectTranslate, objectCoord;
     activeCamera=new Camera(*camera);
-    activeCamera->addObjectTransformation(nodeCoord+translate,nodeSize*scale,nodeCoord);
-    activeCamera->getObjectTransformation(objectTranslate,objectScale,objectCoord);
+    activeCamera->addObjectTransformation(nodeCoord+translate, Coord(nodeSize*scale), nodeCoord);
+    activeCamera->getObjectTransformation(objectTranslate, objectScale, objectCoord);
 
 
     GlCPULODCalculator calculator;
@@ -76,7 +76,7 @@ namespace tlp {
       BoundingBox bb = glNode.getBoundingBox(&metaData);
 
       Coord size=(bb.second-bb.first);
-      Coord middle=bb.first+size/2;
+      Coord middle=bb.first+size/2.f;
 
       for(int i=objectScale.size()-1; i>=0;--i) {
         middle+=objectTranslate[i];
@@ -84,8 +84,8 @@ namespace tlp {
         size*=objectScale[i];
       }
 
-      bb.first=middle-size/2;
-      bb.second=middle+size/2;
+      bb.first=middle-size/2.f;
+      bb.second=middle+size/2.f;
       calculator.addNodeBoundingBox(glNode.id,bb);
     }
     delete itN;
@@ -97,7 +97,7 @@ namespace tlp {
         glEdge.id=itE->next().id;
         BoundingBox bb = glEdge.getBoundingBox(&metaData);
         Coord size=bb.second-bb.first;
-        Coord middle=bb.first+(size)/2;
+        Coord middle=bb.first+(size)/2.f;
 
         for(int i=objectScale.size()-1; i>=0;--i) {
           middle+=objectTranslate[i];
@@ -105,8 +105,8 @@ namespace tlp {
           size*=objectScale[i];
         }
 
-        bb.first=middle-size/2;
-        bb.second=middle+size/2;
+        bb.first=middle-size/2.f;
+        bb.second=middle+size/2.f;
         calculator.addEdgeBoundingBox(glEdge.id,bb);
       }
       delete itE;

@@ -244,7 +244,7 @@ namespace tlp {
 
         for(vector<LODResultSimpleEntity>::iterator it=(*itSimple).begin();it!=(*itSimple).end();++it) {
           bb=((GlSimpleEntity*)((*it).first))->getBoundingBox();
-          middle=bb.first+(bb.second-bb.first)/2;
+          middle=bb.first+(bb.second-bb.first)/2.f;
           dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
           dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
           dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
@@ -256,7 +256,7 @@ namespace tlp {
           for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
             glNode.id=(*it).first;
             bb=glNode.getBoundingBox(glGraphComposite->getInputData());
-            middle=bb.first+(bb.second-bb.first)/2;
+            middle=bb.first+(bb.second-bb.first)/2.f;
             dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
             dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
             dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
@@ -266,7 +266,7 @@ namespace tlp {
           for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
             glEdge.id=(*it).first;
             bb=glEdge.getBoundingBox(glGraphComposite->getInputData());
-            middle=bb.first+(bb.second-bb.first)/2;
+            middle=bb.first+(bb.second-bb.first)/2.f;
             dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
             dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
             dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
@@ -396,7 +396,7 @@ namespace tlp {
 
 	for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       Camera* camera=(*it).second->getCamera();
-      camera->setCenter((maxC + minC) / 2.0);
+      camera->setCenter((maxC + minC) / 2.f);
 
       if ((dx==0) && (dy==0) && (dz==0))
         dx = dy = dz = 10.0;
@@ -436,7 +436,7 @@ namespace tlp {
 	double dy = maxC[1] - minC[1];
 	double dz = maxC[2] - minC[2];
 
-	Coord centerTmp=(maxC + minC)/2.;
+	Coord centerTmp=(maxC + minC)/2.f;
 	if(center)
       *center=centerTmp;
 

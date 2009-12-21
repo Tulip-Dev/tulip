@@ -118,7 +118,7 @@ ENDIF(NOT TULIP_USE_MAIN_CONTROLLER)
 ## -----------------------------------------------------------------------------------------------
 ## Define NDEBUG when we are in release mode
 ## -----------------------------------------------------------------------------------------------
-SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
+SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG -funroll-loops -mtune=native -march=native")
 
 ## -----------------------------------------------------------------------------------------------
 ## Qt assistant config

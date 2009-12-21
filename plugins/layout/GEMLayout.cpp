@@ -143,7 +143,7 @@ Coord GEMLayout::computeForces(unsigned int v,
     force[cnt] =  shake  - ((double(rand()) * (2. * shake)))/double(RAND_MAX);
   }
   //Add central force
-  force += (_center / double(_nbNodes) - vPos) * vMass * gravity;
+  force += (_center / float(_nbNodes) - vPos) * vMass * gravity;
   //
   double  maxEdgeLength;
   if (_useLength) 
@@ -158,7 +158,7 @@ Coord GEMLayout::computeForces(unsigned int v,
       Coord d(vPos - _particules[u].pos);
       float n = d[0]*d[0] + d[1]*d[1] + d[2]*d[2]; //d.norm() * d.norm();
       if (n > 0.) 
-	force += d * maxEdgeLength / n;
+	force += d * (float)maxEdgeLength / n;
     }
   }
   //attractive forces
@@ -176,7 +176,7 @@ Coord GEMLayout::computeForces(unsigned int v,
       Coord d(vPos - gemQ->pos);
       float n = d.norm() / vMass;
       n = std::min(n, MAXATTRACT);  //   1048576L
-      force -= (d * n) / (edgeLength * edgeLength + 1.);
+      force -= (d * n) / (float)(edgeLength * edgeLength + 1.);
     }
   }
   return force;

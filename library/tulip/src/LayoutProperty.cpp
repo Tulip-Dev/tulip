@@ -110,7 +110,7 @@ void LayoutProperty::scale(const tlp::Vector<float,3>& v, Iterator<node> *itN, I
   while (itN->hasNext()) {
     node itn = itN->next();
     Coord tmpCoord(getNodeValue(itn));
-    tmpCoord *= v;
+    tmpCoord *= *(Coord*)&v;
     setNodeValue(itn,tmpCoord);
   }
   while (itE->hasNext()) {
@@ -120,7 +120,7 @@ void LayoutProperty::scale(const tlp::Vector<float,3>& v, Iterator<node> *itN, I
       LineType::RealType::iterator itCoord;
       itCoord=tmp.begin();
       while(itCoord!=tmp.end()) {
-	*itCoord *= v;
+	*itCoord *= *(Coord*)&v;
 	++itCoord;
       }
       setEdgeValue(ite,tmp);
@@ -144,7 +144,7 @@ void LayoutProperty::translate(const tlp::Vector<float,3>& v, Iterator<node> *it
   while (itN->hasNext()) {
     node itn = itN->next();
     Coord tmpCoord(getNodeValue(itn));
-    tmpCoord += v;
+    tmpCoord += *(Coord*)&v;
     setNodeValue(itn,tmpCoord);
   }
   while (itE->hasNext()) {
@@ -154,7 +154,7 @@ void LayoutProperty::translate(const tlp::Vector<float,3>& v, Iterator<node> *it
       LineType::RealType::iterator itCoord;
       itCoord=tmp.begin();
       while(itCoord!=tmp.end()) {
-	*itCoord += v;
+	*itCoord += *(Coord*)&v;
 	++itCoord;
       }
       setEdgeValue(ite,tmp);

@@ -77,7 +77,7 @@ pair<Coord, Coord> tlp::computeBoundingBox(Graph *graph, LayoutProperty *layout,
 
     if (selection == 0 || selection->getNodeValue(itn)) {
 	const Coord& curCoord = layout->getNodeValue(itn);
-	Size curSize  = size->getNodeValue(itn) / 2.0;
+	Size curSize(size->getNodeValue(itn) / 2.0f);
 	const double& curRot = rotation->getNodeValue(itn);
 	computePoint(result, curCoord, curSize, curRot);
       }
@@ -110,7 +110,7 @@ pair<Coord, Coord> tlp::computeBoundingRadius(Graph *graph,
   if (graph->numberOfNodes()==0) return result;
   pair <Coord, Coord> boundingBox = 
     tlp::computeBoundingBox (graph, layout, size, rotation, selection);
-  Coord centre = (boundingBox.first + boundingBox.second)/2.0;
+  Coord centre = (boundingBox.first + boundingBox.second)/2.0f;
   result.first = result.second = centre;
   
   double maxRad = 0;
@@ -118,7 +118,7 @@ pair<Coord, Coord> tlp::computeBoundingRadius(Graph *graph,
   while (itN->hasNext()) {
     node itn = itN->next();
     const Coord& curCoord = layout->getNodeValue(itn);
-    Size curSize  = size->getNodeValue(itn) / 2.0;
+    Size curSize(size->getNodeValue(itn) / 2.0f);
     if (selection == 0 || selection->getNodeValue(itn)) {
       double nodeRad = sqrt (curSize.getW()*curSize.getW() +
 			     curSize.getH()*curSize.getH());

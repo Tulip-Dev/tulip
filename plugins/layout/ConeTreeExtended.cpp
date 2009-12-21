@@ -44,7 +44,7 @@ double ConeTreeExtended::treePlace3D(node n,
   (*posRelX)[n]=0;
   (*posRelY)[n]=0;
   if (tree->outdeg(n)==0) {
-    const Coord& tmp = nodeSize->getNodeValue(n);
+    const Coord& tmp = Coord(nodeSize->getNodeValue(n));
     return sqrt(tmp[0]*tmp[0] + tmp[2]*tmp[2])/2.0;
   }
   

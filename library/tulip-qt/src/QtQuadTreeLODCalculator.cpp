@@ -16,7 +16,7 @@ using namespace std;
 namespace tlp {
 
   BBox computeNewBoundingBox(const BBox &box,const Coord &centerScene,float aX,float aZ) {
-    Coord size=(box.second-box.first)/2.;
+    Coord size=(box.second-box.first)/2.f;
     Coord center=box.first+size;
     size=Coord(size.norm(),size.norm(),size.norm());
     center[0]=centerScene[0]+(cos(aZ)*(center[0]-centerScene[0]));
@@ -110,7 +110,7 @@ namespace tlp {
         Coord eye;
         if(camera->is3D()) {
           currentCamera=camera;
-          eye=camera->getEyes() + ( camera->getEyes() -camera->getCenter() ) / camera->getZoomFactor();
+          eye=camera->getEyes() + ( camera->getEyes() -camera->getCenter() ) / (float)camera->getZoomFactor();
           computeFor3DCamera(&simpleBoundingBoxVector[i],&nodesBoundingBoxVector[i],&edgesBoundingBoxVector[i],
               &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
               eye,transformMatrix,globalViewport,currentViewport);
@@ -140,7 +140,7 @@ namespace tlp {
         Coord eye;
         if(camera->is3D()) {
           currentCamera=camera;
-          eye=camera->getEyes() + ( camera->getEyes() -camera->getCenter() ) / camera->getZoomFactor();
+          eye=camera->getEyes() + ( camera->getEyes() -camera->getCenter() ) / (float)camera->getZoomFactor();
           computeFor3DCamera(NULL,NULL,NULL,
               &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
               eye,transformMatrix,globalViewport,currentViewport);

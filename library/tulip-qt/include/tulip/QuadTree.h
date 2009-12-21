@@ -41,7 +41,7 @@ class QuadTreeNode {
       return;
 
     //Check for infini recursion : check if we are on float limit case
-    Coord subBox=(_box.first+_box.second)/2.;
+    Coord subBox=(_box.first+_box.second)/2.f;
     if((subBox[0] != _box.first[0] && subBox[0]!= _box.second[0]) || (subBox[1]!=_box.first[1] && subBox[1]!=_box.second[1])){
       for (int i=0; i<4; ++i) {
 	if (isInside(box, getChildBox(i))) {
@@ -65,7 +65,7 @@ class QuadTreeNode {
           return;
 
     //Check for infini recursion : check if we are on float limit case
-    Coord subBox=(_box.first+_box.second)/2.;
+    Coord subBox=(_box.first+_box.second)/2.f;
     if((subBox[0] != _box.first[0] && subBox[0]!= _box.second[0]) || (subBox[1]!=_box.first[1] && subBox[1]!=_box.second[1])){
       for (int i=0; i<4; ++i) {
 	if (isInside(box, getChildBox(i))) {

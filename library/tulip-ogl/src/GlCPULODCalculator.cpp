@@ -57,7 +57,7 @@ namespace tlp {
 
       Coord eye;
       if(camera->is3D()) {
-        eye=camera->getEyes() + ( camera->getEyes() -camera->getCenter() ) / camera->getZoomFactor();
+        eye=camera->getEyes() + ( camera->getEyes() - camera->getCenter() ) / (float)camera->getZoomFactor();
         computeFor3DCamera(&simpleBoundingBoxVector[i],&nodesBoundingBoxVector[i],&edgesBoundingBoxVector[i],
             &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
             eye,transformMatrix,globalViewport,currentViewport);

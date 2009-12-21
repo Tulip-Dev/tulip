@@ -24,8 +24,8 @@ namespace tlp {
     /*renderOptions.setRenderState(GlAD_Wireframe, true);
       renderOptions.setRenderState(GlAD_Solid, true);*/
 
-    boundingBox.check(position-size/2);
-    boundingBox.check(position+size/2);
+    boundingBox.check(position-size/2.f);
+    boundingBox.check(position+size/2.f);
 
     computePoints();
   }
@@ -59,8 +59,8 @@ namespace tlp {
 
   GlBox::GlBox(const Coord& frontTopLeft, const Coord& backBottomRight, const Color& color)
   {
-    Coord middle  = (frontTopLeft + backBottomRight) / 2;
-    Coord tmpsize = (frontTopLeft - backBottomRight) / 2;
+    Coord middle  = (frontTopLeft + backBottomRight) / 2.f;
+    Coord tmpsize = (frontTopLeft - backBottomRight) / 2.f;
 
     for(int i=0; i < 3; i++)
       tmpsize[i] = fabs(tmpsize[i]);
@@ -229,8 +229,8 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode, "color", color);
       GlXMLTools::setWithXML(dataNode, "size", size);
 
-      boundingBox.check(position-size/2);
-      boundingBox.check(position+size/2);
+      boundingBox.check(position-size/2.f);
+      boundingBox.check(position+size/2.f);
       
       computePoints();
     }

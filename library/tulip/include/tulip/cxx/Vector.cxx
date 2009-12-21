@@ -79,48 +79,53 @@ VECTORTLP & VECTORTLP::operator^=(const VECTORTLP &v) {
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
-VECTORTLP VECTORTLP::operator+(const VECTORTLP &v) const { 
-  return VECTORTLP(*this)+=v;
+VECTORTLP tlp::operator+(const VECTORTLP &u, const VECTORTLP &v) { 
+  return VECTORTLP(u)+=v;
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
-VECTORTLP VECTORTLP::operator+(const Obj& scalaire) const {
-  return VECTORTLP(*this)+=scalaire;
+VECTORTLP tlp::operator+(const VECTORTLP &u, const Obj& scalaire) {
+  return VECTORTLP(u)+=scalaire;
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
-VECTORTLP VECTORTLP::operator-(const VECTORTLP &v) const { 
-  return VECTORTLP(*this)-=v;
+VECTORTLP tlp::operator-(const VECTORTLP &u, const VECTORTLP &v) { 
+  return VECTORTLP(u) -= v;
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
-VECTORTLP VECTORTLP::operator-(const Obj& scalaire) const {
-  return VECTORTLP(*this)-=scalaire;
+VECTORTLP tlp::operator-(const VECTORTLP &u, const Obj& scalaire) {
+  return VECTORTLP(u) -= scalaire;
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
-VECTORTLP tlp::operator*(const VECTORTLP &v1, const VECTORTLP &v2) { 
-  return VECTORTLP(v1)*=v2;
+VECTORTLP tlp::operator*(const VECTORTLP &u, const VECTORTLP &v) { 
+  return VECTORTLP(u)*=v;
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
-VECTORTLP  tlp::operator*(const VECTORTLP &v, const Obj& scalaire) {
-  return VECTORTLP(v)*=scalaire;
+VECTORTLP  tlp::operator*(const VECTORTLP &u, const Obj& scalaire) {
+  return VECTORTLP(u)*=scalaire;
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
-VECTORTLP VECTORTLP::operator/(const VECTORTLP &v) const { 
-  return VECTORTLP(*this)/=v;
+VECTORTLP  tlp::operator*(const Obj& scalaire, const VECTORTLP &u ) {
+  return VECTORTLP(u)*=scalaire;
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
-VECTORTLP VECTORTLP::operator/(const Obj& scalaire) const {
-  return VECTORTLP(*this)/=scalaire;
+VECTORTLP tlp::operator/(const VECTORTLP &u, const VECTORTLP &v) { 
+  return VECTORTLP(u)/=v;
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>
-VECTORTLP VECTORTLP::operator^(const VECTORTLP &v) const {
-  return VECTORTLP(*this) ^= v;
+VECTORTLP tlp::operator/(const VECTORTLP &u, const Obj& scalaire) {
+  return VECTORTLP(u)/=scalaire;
+}
+//======================================================
+template <typename Obj,unsigned int SIZE>
+VECTORTLP tlp::operator^(const VECTORTLP &u, const VECTORTLP &v) {
+  return VECTORTLP(u) ^= v;
 }
 //======================================================
 template <typename Obj,unsigned int SIZE>

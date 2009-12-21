@@ -28,7 +28,7 @@ bool operator<(const p0Vectors &p1, const p0Vectors &p2) {
 inline double cross (Coord v1, Coord v2) {
   v1.setZ (0.0);
   v2.setZ (0.0);
-  return ((v1^v2).getZ());
+  return ((v1^v2)[2]);
 }//end cross
 
 //==============================================================
@@ -59,7 +59,16 @@ inline bool hit (const Coord &v1Tail, const Coord &v1Head,
   t = -(v1Tail.getX()*(v2Tail.getY() - v1Head.getY()) +
 	v1Head.getX()*(v1Tail.getY() - v2Tail.getY()) +
 	v2Tail.getX()*(v1Head.getY() - v1Tail.getY()))/D;
-  intersection = v1Tail + (v1Head - v1Tail)*s;
+  
+  //intersection = v1Tail;
+  
+  //  Coord tmp = *(Coord *)&(operator-<float, 3u, Coord>(v1Head, v1Tail)*s);
+  //  Coord tmp = v1Head - v1Tail;
+  //  Coord tmp = operator-<float, 3u, Coord>(v1Head, v1Tail);
+  Coord tmp = v1Head.operator-(v1Tail);
+  tmp *= s;
+
+  intersection = v1Tail + tmp;
 
   //If both hit times are less than one, the segments intersect
   if (((0.0 <= s) && (s <= 1.0)) && ((0.0 <= t) && (t <= 1.0)))

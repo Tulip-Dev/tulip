@@ -28,7 +28,7 @@ using namespace tlp;
 inline double cross (Coord v1, Coord v2) {
   v1.setZ (0.0);
   v2.setZ (0.0);
-  return ((v1^v2).getZ());
+  return ((v1^v2)[2]);
 }//end cross
 
 //==============================================================
@@ -128,7 +128,7 @@ void reverseCellOrder (tlp::VoronoiDiagram::Cell &voronoiCell) {
 //An inline function to make the voronoi diagram of two vertices.
 inline void voronoiOfTwo (const vector<Coord> &points,
 			  tlp::VoronoiDiagram *voronoiDiagram) {
-  voronoiDiagram->vertices.push_back ((points[0] + points[1])/2.0);
+  voronoiDiagram->vertices.push_back ((points[0] + points[1])/2.0f);
   tlp::VoronoiDiagram::Ray ray;
   ray.p = 0;
   Coord edge = points[1] - points[0];

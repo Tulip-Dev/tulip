@@ -55,9 +55,9 @@ namespace tlp {
   //============================================================
   BoundingBox GlLabel::getBoundingBox() {
     if(!leftAlign)
-      return BoundingBox(centerPosition-size/2,centerPosition+size/2);
+      return BoundingBox(centerPosition-size/2.f,centerPosition+size/2.f);
     else
-      return BoundingBox(centerPosition-Coord(0,size[1]/2,0),centerPosition+Coord(size[0],size[1]/2,0));
+      return BoundingBox(centerPosition-Coord(0,size[1]/2.f,0),centerPosition+Coord(size[0],size[1]/2.f,0));
   }
   //============================================================
   Coord GlLabel::getSize() {

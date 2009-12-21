@@ -195,7 +195,7 @@ namespace tlp {
     BoundingBox includeBoundingBox;
     inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
 
-    Coord newCenter=nodePos+((includeBoundingBox.second-includeBoundingBox.first)/2.+includeBoundingBox.first-0.5)*nodeSize;
+    Coord newCenter=nodePos+((includeBoundingBox.second-includeBoundingBox.first)/2.f+includeBoundingBox.first-0.5f)*nodeSize;
     //newCenter[2]+=nodeSize[2]/10.;
     Coord newSize=(includeBoundingBox.second-includeBoundingBox.first)*nodeSize;
 

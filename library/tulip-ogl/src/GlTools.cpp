@@ -183,10 +183,10 @@ namespace tlp {
       return size;
   }
   //====================================================
-  GLfloat projectSize(const Coord &position,const Coord& size,
+  GLfloat projectSize(const Coord &position,const Size& size,
 		      const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix,
 		      const Vector<int, 4> &viewport) {
-    return projectSize(BoundingBox(position-size/2,position+size/2),projectionMatrix,modelviewMatrix,viewport);
+    return projectSize(BoundingBox(position - size/2.f, position+size/2.f), projectionMatrix, modelviewMatrix, viewport);
   }
   //====================================================
   GLfloat projectSize(const BoundingBox &bb,

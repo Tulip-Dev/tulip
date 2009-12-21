@@ -504,7 +504,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   if (boundingBox.first[0] == -FLT_MAX)
     return false;
   Coord min2D, max2D;
-  _layoutCenter = (boundingBox.first + boundingBox.second) / 2.0;
+  _layoutCenter = (boundingBox.first + boundingBox.second) / 2.f;
 
   //project the 8 points of the cube to obtain the bounding square on the 2D screen
   Coord bbsize = (boundingBox.first - boundingBox.second);
@@ -549,7 +549,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
 
-  ffdCenter = (boundingBox.first + boundingBox.second) / 2.0;
+  ffdCenter = (boundingBox.first + boundingBox.second) / 2.f;
 
   Coord tmpCenter = glMainWidget->getScene()->getCamera()->worldTo2DScreen(ffdCenter);
 

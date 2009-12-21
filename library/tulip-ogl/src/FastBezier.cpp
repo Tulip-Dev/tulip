@@ -9,7 +9,7 @@ namespace tlp {
 
 void FastBezier::computeLinearBezierPoints(const Coord &p0, const Coord &p1, std::vector<Coord> &curvePoints, const unsigned int nbCurvePoints) {
 	float h = 1.0 / (float) (nbCurvePoints - 1);
-	Coord firstFD = h * (p1 - p0);
+	Coord firstFD = (p1 - p0) * h;
 
 	Coord c = p0;
 
@@ -37,8 +37,8 @@ void FastBezier::computeQuadraticBezierPoints(const Coord &p0, const Coord &p1, 
 	h2 = h*h;
 
 	// Compute Initial forward difference
-	firstFD = (h2 - 2 * h) * p0 + (-2 * h2 + 2 * h) * p1 + h2 * p2;
-	secondFD = 2 * h2 * p0 - 4 * h2 * p1 + 2 * h2 * p2;
+	firstFD  = p0 * (h2 - 2 * h) + p1 * (-2 * h2 + 2 * h) + p2 * h2;
+	secondFD = p0 * 2 * h2  - p1 * 4 * h2  + p2 * 2 * h2;
 
 	Coord c = p0;
 
@@ -66,9 +66,9 @@ void FastBezier::computeCubicBezierPoints(const Coord &p0, const Coord &p1, cons
 	Coord firstFD, secondFD, thirdFD;
 
 	// Compute polynomial coefficients from Bezier points
-	A = -1 * p0 + 3 * (p1 - p2) + p3;
-	B = 3 * p0 - 6 * p1 + 3 * p2;
-	C = -3 * p0 + 3 * p1;
+	A = p0 * -1.f + (p1 - p2) * 3.f + p3;
+	B = p0 * 3.f  - p1 * 6.f + p2 * 3.f;
+	C = p0 * -3.f + p1 * 3.f;
 
 	// Compute our step size
 	h = 1.0 / (float) (nbCurvePoints - 1);
@@ -134,10 +134,10 @@ void FastBezier::computeBezierPoints(const vector<Coord> &controlPoints, vector<
 void computeBezierSegmentControlPoints(const Coord &pBefore, const Coord &pStart, const Coord &pEnd, const Coord &pAfter, vector<Coord> &bezierSegmentControlPoints) {
 	bezierSegmentControlPoints.push_back(pStart);
 	Coord d0, d1;
-	d0 = (pEnd - pBefore) / 2.;
-	bezierSegmentControlPoints.push_back(pStart + d0 / 3.);
-	d1 = (pAfter - pStart) / 2.;
-	bezierSegmentControlPoints.push_back(pEnd - d1 / 3.);
+	d0 = (pEnd - pBefore) / 2.f;
+	bezierSegmentControlPoints.push_back(pStart + d0 / 3.f);
+	d1 = (pAfter - pStart) / 2.f;
+	bezierSegmentControlPoints.push_back(pEnd - d1 / 3.f);
 	bezierSegmentControlPoints.push_back(pEnd);
 }
 

@@ -259,10 +259,10 @@ void GlCatmullRomCurve::genVertexBuffers() {
 void GlCatmullRomCurve::computeBezierSegmentControlPoints(const Coord &pBefore, const Coord &pStart, const Coord &pEnd, const Coord &pAfter, vector<Coord> &bezierSegmentControlPoints) {
 	bezierSegmentControlPoints.push_back(pStart);
 	Coord d0, d1;
-	d0 = (pEnd - pBefore) / 2.;
-	bezierSegmentControlPoints.push_back(pStart + d0 / 3.);
-	d1 = (pAfter - pStart) / 2.;
-	bezierSegmentControlPoints.push_back(pEnd - d1 / 3.);
+	d0 = (pEnd - pBefore) / 2.f;
+	bezierSegmentControlPoints.push_back(pStart + d0 / 3.f);
+	d1 = (pAfter - pStart) / 2.f;
+	bezierSegmentControlPoints.push_back(pEnd - d1 / 3.f);
 	bezierSegmentControlPoints.push_back(pEnd);
 }
 

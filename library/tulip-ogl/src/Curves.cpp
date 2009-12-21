@@ -190,9 +190,9 @@ namespace tlp {
       tgt_xu_xv /= tgt_xu_xv.norm();
       Coord dir = tgt_xu_xv ^ bi_xu_xv;
       dir /= dir.norm();
-      curve.push_back(vertices[i] - (dir * (n_xu/5.0)));
+      curve.push_back(vertices[i] - (dir * (n_xu/5.0f)));
       curve.push_back(vertices[i]);
-      curve.push_back(vertices[i] + (dir * (n_xv/5.0)));
+      curve.push_back(vertices[i] + (dir * (n_xv/5.0f)));
     }
     curve.push_back(vertices.back());
     return curve;

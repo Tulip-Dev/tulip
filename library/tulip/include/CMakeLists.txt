@@ -8,6 +8,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/tuliphash.h 
 	tulip/Array.h
 	tulip/Vector.h
+	tulip/VectorCast.h
 	tulip/Matrix.h
 	tulip/Rectangle.h
 	tulip/Circle.h

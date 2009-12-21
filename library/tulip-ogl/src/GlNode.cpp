@@ -32,14 +32,14 @@ namespace tlp {
   BoundingBox GlNode::getBoundingBox(GlGraphInputData* data) {
     node n=node(id);
     if(data->elementRotation->getNodeValue(n)==0)
-      return BoundingBox(data->elementLayout->getNodeValue(n)-data->elementSize->getNodeValue(n)/2,data->elementLayout->getNodeValue(n)+data->elementSize->getNodeValue(n)/2);
+      return BoundingBox(data->elementLayout->getNodeValue(n)-data->elementSize->getNodeValue(n)/2.f,data->elementLayout->getNodeValue(n)+data->elementSize->getNodeValue(n)/2.f);
     else{
       float cosAngle=cos((float)data->elementRotation->getNodeValue(n)/180.*M_PI);
       float sinAngle=sin((float)data->elementRotation->getNodeValue(n)/180.*M_PI);
-      Coord tmp1=data->elementSize->getNodeValue(n)/2;
-      Coord tmp2=Coord(tmp1[0],-tmp1[1],tmp1[2]);
-      Coord tmp3=Coord(-tmp1[0],-tmp1[1],-tmp1[2]);
-      Coord tmp4=Coord(-tmp1[0],tmp1[1],-tmp1[2]);
+      Coord tmp1(data->elementSize->getNodeValue(n)/2.f);
+      Coord tmp2(tmp1[0] ,-tmp1[1], tmp1[2]);
+      Coord tmp3(-tmp1[0],-tmp1[1],-tmp1[2]);
+      Coord tmp4(-tmp1[0], tmp1[1],-tmp1[2]);
       tmp1=Coord(tmp1[0]*cosAngle-tmp1[1]*sinAngle,tmp1[0]*sinAngle+tmp1[1]*cosAngle,tmp1[2]);
       tmp2=Coord(tmp2[0]*cosAngle-tmp2[1]*sinAngle,tmp2[0]*sinAngle+tmp2[1]*cosAngle,tmp2[2]);
       tmp3=Coord(tmp3[0]*cosAngle-tmp3[1]*sinAngle,tmp3[0]*sinAngle+tmp3[1]*cosAngle,tmp3[2]);

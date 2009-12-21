@@ -42,19 +42,19 @@ BoundingBox GlEdge::eeGlyphBoundingBox(const Coord& anchor, const Coord& tgt, fl
   if (fabs(nrm) > 1E-6)
     vect /= nrm;
 
-  Coord mid = anchor + vect * glyphNrm * .5;
+  Coord mid = anchor + vect * glyphNrm * .5f;
 
   Coord vAB(transformation[0][0], transformation[0][1], transformation[0][2]);
   Coord vV(transformation[0][1], transformation[1][1], transformation[2][1]);
   Coord vW(transformation[0][2], transformation[1][2], transformation[2][2]);
 
   BoundingBox box;
-  box.check(mid + vAB * (-size[0][0]) * .5);
-  box.check(mid + vAB * (size[0][0]) * .5);
-  box.check(mid + vV * (-size[1][1]) * .5);
-  box.check(mid + vV * (size[1][1]) * .5);
-  box.check(mid + vW * (-size[2][2]) * .5);
-  box.check(mid + vW * (size[2][2]) * .5);
+  box.check(mid + vAB * (-size[0][0]) * .5f);
+  box.check(mid + vAB * (size[0][0]) * .5f);
+  box.check(mid + vV * (-size[1][1]) * .5f);
+  box.check(mid + vV * (size[1][1]) * .5f);
+  box.check(mid + vW * (-size[2][2]) * .5f);
+  box.check(mid + vW * (size[2][2]) * .5f);
 
   return box;
 }
@@ -303,7 +303,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
         srcTransformationMatrix, srcScalingMatrix);
 
     Coord boxSize = box.second - box.first;
-    Coord middle = box.first + (size) / 2;
+    Coord middle = box.first + (size) / 2.f;
 
     for (int i = objectScale.size() - 1; i >= 0; --i) {
       middle += objectTranslate[i];
@@ -311,13 +311,13 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
       boxSize *= objectScale[i];
     }
 
-    box.first = middle - boxSize / 2;
-    box.second = middle + boxSize / 2;
+    box.first = middle - boxSize / 2.f;
+    box.second = middle + boxSize / 2.f;
 
     float lod = 0;
     if (camera->is3D()) {
       Coord eyes = camera->getEyes() + (camera->getEyes() - camera->getCenter())
-          / camera->getZoomFactor();
+	/ (float)camera->getZoomFactor();
       lod = calculateAABBSize(box, eyes, transformMatrix, camera->getViewport(),
           camera->getViewport());
     } else {
@@ -386,7 +386,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
         tgtTransformationMatrix, tgtScalingMatrix);
 
     Coord boxSize = box.second - box.first;
-    Coord middle = box.first + (size) / 2;
+    Coord middle = box.first + (size) / 2.f;
 
     for (int i = objectScale.size() - 1; i >= 0; --i) {
       middle += objectTranslate[i];
@@ -394,12 +394,12 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
       boxSize *= objectScale[i];
     }
 
-    box.first = middle - boxSize / 2;
-    box.second = middle + boxSize / 2;
+    box.first = middle - boxSize / 2.f;
+    box.second = middle + boxSize / 2.f;
     float lod = 0;
     if (camera->is3D()) {
       Coord eyes = camera->getEyes() + (camera->getEyes() - camera->getCenter())
-          / camera->getZoomFactor();
+	/ (float)camera->getZoomFactor();
       lod = calculateAABBSize(box, eyes, transformMatrix, camera->getViewport(),
           camera->getViewport());
     } else {
@@ -447,7 +447,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
   Matrix<float, 4u> modelviewMatrix;
   camera->getProjectionMatrix(projectionMatrix);
   camera->getModelviewMatrix(modelviewMatrix);
-  float lodSize = projectSize(srcCoord, edgeSize[0], projectionMatrix, modelviewMatrix,
+  float lodSize = projectSize(srcCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), projectionMatrix, modelviewMatrix,
       camera->getViewport());
 
   //draw Edge
@@ -582,10 +582,10 @@ void GlEdge::drawLabel(bool drawSelect, OcclusionTest* test, TextRenderer* rende
   const LineType::RealType &bends = data->elementLayout->getEdgeValue(e);
   Coord position;
   if (bends.empty()) {
-    position = (srcCoord + tgtCoord) / 2.0;
+    position = (srcCoord + tgtCoord) / 2.f;
   } else {
     if (bends.size() % 2 == 0)
-      position = (bends[bends.size() / 2 - 1] + bends[bends.size() / 2]) / 2.0;
+      position = (bends[bends.size() / 2 - 1] + bends[bends.size() / 2]) / 2.f;
     else
       position = bends[bends.size() / 2];
   }
