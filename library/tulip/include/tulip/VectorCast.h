@@ -68,31 +68,31 @@ namespace tlp {
     }
 
     inline TYPE operator*(const Vector<Obj,SIZE> &v) const {
-      return *((TYPE *)& ( (*(const Vector<Obj,SIZE> *)this) * (*((const Vector<Obj,SIZE> *) &v)) ));
+      return static_cast< TYPE >  ( (*(const Vector<Obj,SIZE> *)this) * (*((const Vector<Obj,SIZE> *) &v)) );
     }
     inline TYPE operator*(const Obj &v) const {
-      return *((TYPE *)& ( (*(const Vector<Obj,SIZE> *)this) * v ));
+      return static_cast< TYPE >  ( (*(const Vector<Obj,SIZE> *)this) * v );
     }
     inline TYPE operator+(const Vector<Obj,SIZE> &v) const {
-      return *((TYPE *)& ( (*(const Vector<Obj,SIZE> *)this) + (*((const Vector<Obj,SIZE> *) &v)) ));
+      return static_cast< TYPE >  ((*(const Vector<Obj,SIZE> *)this) + (*((const Vector<Obj,SIZE> *) &v)));
     }
     inline TYPE operator+(const Obj &v) const {
-      return *((TYPE *)& ( (*(const Vector<Obj,SIZE> *)this) + v ));
+      return static_cast< TYPE >  ((*(const Vector<Obj,SIZE> *)this) + v );
     }
     inline TYPE operator-(const Vector<Obj,SIZE> &v) const {
-      return *((TYPE *)& ( (*(const Vector<Obj,SIZE> *)this) - (*((const Vector<Obj,SIZE> *) &v)) ));
+      return static_cast< TYPE >  (((*(const Vector<Obj,SIZE> *)this) - (*((const Vector<Obj,SIZE> *) &v)) ));
     }
     inline TYPE operator-(const Obj &v)const {
-      return *((TYPE *)& ( (*(const Vector<Obj,SIZE> *)this) - v ));
+      return static_cast< TYPE > (( (*(const Vector<Obj,SIZE> *)this) - v ));
     }
     inline TYPE operator/(const Vector<Obj,SIZE> &v) const {
-      return *((TYPE *)& ( (*(const Vector<Obj,SIZE> *)this) / (*((const Vector<Obj,SIZE> *) &v)) ));
+      return static_cast< TYPE > (( (*(const Vector<Obj,SIZE> *)this) / (*((const Vector<Obj,SIZE> *) &v)) ));
     }
     inline TYPE operator/(const Obj &v) const {
-      return *((TYPE *)& ( (*(const Vector<Obj,SIZE> *)this) / v ));
+      return static_cast< TYPE > (( (*(const Vector<Obj,SIZE> *)this) / v ));
     }
     inline TYPE operator^(const Vector<Obj,SIZE> &v) const {
-      return *((TYPE *)& ( (*(const Vector<Obj,SIZE> *)this) ^ (*((const Vector<Obj,SIZE> *) &v)) ));
+      return static_cast< TYPE > (( (*(const Vector<Obj,SIZE> *)this) ^ (*((const Vector<Obj,SIZE> *) &v)) ));
     }
 
   };
