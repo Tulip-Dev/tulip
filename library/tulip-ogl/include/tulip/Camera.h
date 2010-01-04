@@ -104,7 +104,7 @@ namespace tlp {
     /**
      * Set the zoom factor
      */
-    void setZoomFactor(double zoomFactor) {this->zoomFactor=zoomFactor;matrixCoherent=false;}
+    void setZoomFactor(double zoomFactor) {if(zoomFactor>1E10){return;}this->zoomFactor=zoomFactor;matrixCoherent=false;}
     /**
      * Return the zoom factor
      */
