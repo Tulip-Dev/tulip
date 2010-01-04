@@ -15,16 +15,17 @@ using namespace std;
 
 namespace tlp {
 
-  BBox computeNewBoundingBox(const BBox &box,const Coord &centerScene,float aX,float aZ) {
+  BBox computeNewBoundingBox(const BBox &box,const Coord &centerScene,double aX,double aY) {
     Coord size=(box.second-box.first)/2.f;
     Coord center=box.first+size;
     size=Coord(size.norm(),size.norm(),size.norm());
-    center[0]=centerScene[0]+(cos(aZ)*(center[0]-centerScene[0]));
+    center[0]=centerScene[0]+(cos(aY)*(center[0]-centerScene[0]));
     center[1]=centerScene[1]+(cos(aX)*(center[1]-centerScene[1]));
+    //cout << "bb : " << center << " # " << size << endl;
     return pair<Coord,Coord>(center-size,center+size);
   }
 
-  QtQuadTreeLODCalculator::QtQuadTreeLODCalculator() : scene(NULL),rootGraph(NULL),nodesQuadTree(NULL),edgesQuadTree(NULL),nodesSelectedQuadTree(NULL),edgesSelectedQuadTree(NULL),entitiesQuadTree(NULL),
+  QtQuadTreeLODCalculator::QtQuadTreeLODCalculator() : scene(NULL),nodesQuadTree(NULL),edgesQuadTree(NULL),nodesSelectedQuadTree(NULL),edgesSelectedQuadTree(NULL),entitiesQuadTree(NULL),
                                                        haveToCompute(true),inputData(NULL),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
   }
 
@@ -37,11 +38,9 @@ namespace tlp {
       removeObservers();
     this->scene=scene;
     haveToCompute=true;
-    rootGraph=NULL;
   }
 
   bool QtQuadTreeLODCalculator::needEntities(){
-
     if(haveToCompute)
       return true;
 
@@ -86,7 +85,9 @@ namespace tlp {
 
   void QtQuadTreeLODCalculator::compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport,RenderingEntitiesFlag type) {
     this->type=type;
+
     if(haveToCompute){
+      // if have to compute : rebuild quadtree
       addObservers();
 
       cameras.clear();
@@ -126,6 +127,7 @@ namespace tlp {
       }
 
     }else{
+      // if don't have to compute : use stored quadtree data
       int i=0;
       for(vector<pair<Camera*,Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
         cameraVector.push_back((unsigned long)((*it).first));
@@ -166,37 +168,61 @@ namespace tlp {
     if(inputData)
       selectedProperty=inputData->getGraph()->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
 
-    //backup old rotation
-    Coord oldEyes=currentCamera->getEyes();
-    Coord oldCenter=currentCamera->getCenter();
+    // Contruct a new camera : this camera is the same as currentCamera but it only have z rotation
+    Coord newEye=currentCamera->getCenter();
+    newEye[2]=(currentCamera->getCenter()-currentCamera->getEyes()).norm();
     Coord oldUp=currentCamera->getUp();
-
-
-    //remove rotation of the camera
-    Coord newUp=projectPoint(oldEyes+oldUp,transformMatrix,globalViewport)-projectPoint(oldEyes,transformMatrix,globalViewport);
-    currentCamera->setEyes(oldCenter+Coord(0,0,(oldEyes-oldCenter).norm()));
-    currentCamera->setUp(Coord(newUp[0]/newUp.norm(),newUp[1]/newUp.norm(),0));
+    float oldUpX=oldUp[0];
+    float oldUpY=oldUp[1];
+    Coord newUp(oldUpX/(oldUpX+oldUpY),oldUpY/(oldUpX+oldUpY),0);
+    Camera newCamera(currentCamera->getScene(),currentCamera->getCenter(),newEye,newUp,currentCamera->getZoomFactor(),currentCamera->getSceneRadius());
 
     Matrix<float,4> newTransformMatrix;
-    currentCamera->getTransformMatrix(globalViewport,newTransformMatrix);
+    newCamera.getTransformMatrix(globalViewport,newTransformMatrix);
     MatrixGL tmp(newTransformMatrix);
     tmp.inverse();
 
     BoundingBox cameraBoundingBox;
-    Coord pScr = projectPoint(Coord(0,0,0), newTransformMatrix, globalViewport);
-    pScr[0] = currentViewport[0];
-    pScr[1] = globalViewport[3]-(currentViewport[1]+currentViewport[3]);
-    cameraBoundingBox.check(unprojectPoint(pScr, tmp, globalViewport));
-    pScr[0] = currentViewport[0]+currentViewport[2];
-    cameraBoundingBox.check(unprojectPoint(pScr, tmp, globalViewport));
-    pScr[1] = globalViewport[3]-currentViewport[1];
-    cameraBoundingBox.check(unprojectPoint(pScr, tmp, globalViewport));
-    pScr[0] = currentViewport[0];
-    cameraBoundingBox.check(unprojectPoint(pScr, tmp, globalViewport));
+    if(oldUp[2]>=0.99 || oldUp[2]<=-0.99){
+      // if camera up is equal to (0,0,1) or (0,0,-1) : we can't project point
+      //  so we take entities bonding box to camera bonding box
+      cameraBoundingBox=nodesGlobalBoundingBox;
+      cameraBoundingBox.check(edgesGlobalBoundingBox.first);
+      cameraBoundingBox.check(edgesGlobalBoundingBox.second);
+      cameraBoundingBox.check(entitiesGlobalBoundingBox.first);
+    }else{
+      Coord pSrc = projectPoint(Coord(0,0,0), newTransformMatrix, globalViewport);
 
-    //restore rotation od the camera
-    currentCamera->setEyes(oldEyes);
-    currentCamera->setUp(oldUp);
+      Vector<int,4> transformedViewport=currentViewport;
+      transformedViewport[1]=globalViewport[3]-(currentViewport[1]+currentViewport[3]);
+
+      // apply x/y inversion if we need
+      float angle=acos(oldUp[1]/sqrt((oldUp[0]*oldUp[0])+(oldUp[1]*oldUp[1])));
+      if(((angle>M_PI/4.) && oldUp[0]<0) || ((angle>(M_PI/4.+M_PI/2.)) && oldUp[0]>=0)){
+        transformedViewport[1]=currentViewport[1];
+        if((currentCamera->getEyes()[2]-currentCamera->getCenter()[2])>=0) {
+          transformedViewport[0]=globalViewport[2]-(currentViewport[0]+currentViewport[2]);
+        }
+      }
+      if((currentCamera->getEyes()[2]-currentCamera->getCenter()[2])<0){
+        if(((angle<(M_PI-M_PI/4.)) && oldUp[0]>=0) || ((angle<M_PI/4.) && oldUp[0]<0)){
+          transformedViewport[0]=globalViewport[2]-(currentViewport[0]+currentViewport[2]);
+        }
+      }
+
+      // Project camera bondinx box to know visible part of the quadtree
+      pSrc[0] = transformedViewport[0];
+      pSrc[1] = transformedViewport[1];
+      cameraBoundingBox.check(unprojectPoint(pSrc, tmp, globalViewport));
+      pSrc[1] = transformedViewport[1]+transformedViewport[3];
+      cameraBoundingBox.check(unprojectPoint(pSrc, tmp, globalViewport));
+      pSrc[0] = transformedViewport[0]+transformedViewport[2];
+      cameraBoundingBox.check(unprojectPoint(pSrc, tmp, globalViewport));
+      pSrc[1] = transformedViewport[1];
+      cameraBoundingBox.check(unprojectPoint(pSrc, tmp, globalViewport));
+    }
+
+    //cout << "camera : " << cameraBoundingBox.first << " # " << cameraBoundingBox.second << endl;
 
     if(haveToCompute){
       if(entitiesQuadTree)
@@ -215,16 +241,16 @@ namespace tlp {
         delete edgesSelectedQuadTree;
       edgesSelectedQuadTree = new QuadTreeNode(edgesGlobalBoundingBox);
 
-
+      // Apply rotation to elements
       Coord eyeCenter=currentCamera->getCenter()-currentCamera->getEyes();
-      float aX=atan(eyeCenter[1]/eyeCenter[2]);
-      float aZ=atan(eyeCenter[0]/eyeCenter[2]);
+      double aX=atan(eyeCenter[1]/eyeCenter[2]);
+      double aY=atan(eyeCenter[0]/eyeCenter[2]);
 
       for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){
-        if(aX==0 && aZ==0){
+        if(aX==0 && aY==0){
           entitiesQuadTree->insert((*it).second,(*it).first);
         }else{
-          entitiesQuadTree->insert(computeNewBoundingBox((*it).second,currentCamera->getCenter(),aX,aZ),(*it).first);
+          entitiesQuadTree->insert(computeNewBoundingBox((*it).second,currentCamera->getCenter(),aX,aY),(*it).first);
         }
       }
       for(ComplexBoundingBoxVector::iterator it=inputNodes->begin();it!=inputNodes->end();++it){
@@ -235,10 +261,10 @@ namespace tlp {
         else
           quadTree=nodesQuadTree;
 
-        if(aX==0 && aZ==0){
+        if(aX==0 && aY==0){
           quadTree->insert((*it).second,(*it).first);
         }else{
-          quadTree->insert(computeNewBoundingBox((*it).second,currentCamera->getCenter(),aX,aZ),(*it).first);
+          quadTree->insert(computeNewBoundingBox((*it).second,currentCamera->getCenter(),aX,aY),(*it).first);
         }
       }
       for(ComplexBoundingBoxVector::iterator it=inputEdges->begin();it!=inputEdges->end();++it){
@@ -249,10 +275,10 @@ namespace tlp {
         else
           quadTree=edgesQuadTree;
 
-        if(aX==0 && aZ==0){
+        if(aX==0 && aY==0){
           quadTree->insert((*it).second,(*it).first);
         }else{
-          quadTree->insert(computeNewBoundingBox((*it).second,currentCamera->getCenter(),aX,aZ),(*it).first);
+          quadTree->insert(computeNewBoundingBox((*it).second,currentCamera->getCenter(),aX,aY),(*it).first);
         }
       }
 
@@ -379,16 +405,6 @@ namespace tlp {
       nodesResultVector.clear();
       edgesResultVector.clear();
       cameraVector.clear();
-    }
-    
-    void QtQuadTreeLODCalculator::modifyLayer(GlScene*, const std::string& name, GlLayer*){
-      haveToCompute=true;
-      removeObservers();
-    }
-    
-    void QtQuadTreeLODCalculator::modifyEntity(GlScene *,GlSimpleEntity *e){
-      haveToCompute=true;
-      removeObservers();
     }
 
 }

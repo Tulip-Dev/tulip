@@ -74,8 +74,8 @@ namespace tlp {
 
     void addLayer(GlScene*, const std::string&, GlLayer*){haveToCompute=true;removeObservers();}
     void delLayer(GlScene*, const std::string&, GlLayer*){haveToCompute=true;removeObservers();}
-    void modifyLayer(GlScene*, const std::string&, GlLayer*);
-    void modifyEntity(GlScene *,GlSimpleEntity *);
+    void modifyLayer(GlScene*, const std::string&, GlLayer*){haveToCompute=true;removeObservers();}
+    void modifyEntity(GlScene *,GlSimpleEntity *){haveToCompute=true;removeObservers();}
 
     virtual GlLODCalculator *clone() {
       QtQuadTreeLODCalculator *newCalculator=new QtQuadTreeLODCalculator();
@@ -87,7 +87,6 @@ namespace tlp {
   protected :
 
     GlScene *scene;
-    Graph *rootGraph;
 
     QuadTreeNode *nodesQuadTree;
     QuadTreeNode *edgesQuadTree;
