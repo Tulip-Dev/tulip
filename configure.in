@@ -426,7 +426,7 @@ docs/devTeamDoxygen/footer.html:docs/devTeamDoxygen/footer.html.in
 docs/devTeamDoxygen/header.html:docs/devTeamDoxygen/header.html.in
 docs/devTeamDoxygen/tulip.html:docs/devTeamDoxygen/tulip.html.in
 docs/doxygen/Makefile
-docs/doxygen/dox-html.xsl:docs/doxygen/dox-html.xsl.in
+docs/doxygen/header-allPlugins.html:docs/doxygen/header-allPlugins.html.in
 docs/doxygen/footer.html:docs/doxygen/footer.html.in
 docs/doxygen/header.html:docs/doxygen/header.html.in
 docs/doxygen/tulip.html:docs/doxygen/tulip.html.in

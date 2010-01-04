@@ -3,7 +3,7 @@ EXTRA_DIST = header.html footer.html general general-html general-man tulip.html
 
 all : 
 
-html: tulip-lib tulip-ogl-lib tulip-qt-lib tulipdoc.html profile.dcf allPlugins.html tulipPlugins.html man
+html: tulip-lib tulip-ogl-lib tulip-qt-lib tulipdoc.html profile.dcf allPluginsBody.html allPlugins.html tulipPlugins.html man
 
 tulipdoc.html: ../common/gen-index.sh
 	sh ../common/gen-index.sh
@@ -110,7 +110,7 @@ tulipPlugins.html: ../common/CatalogManager.properties dox-plugins.xsl tulip-plu
 	-r org.apache.xml.resolver.tools.CatalogResolver \
 	-o $@ tulip-plugins.tag  dox-plugins.xsl
 
-allPlugins.html: ../common/CatalogManager.properties dox-html.xsl tulip-plugins.tag
+allPluginsBody.html: ../common/CatalogManager.properties dox-html.xsl tulip-plugins.tag
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar" \
 	 com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
@@ -118,8 +118,13 @@ allPlugins.html: ../common/CatalogManager.properties dox-html.xsl tulip-plugins.
 	-r org.apache.xml.resolver.tools.CatalogResolver \
 	-o $@ tulip-plugins.tag dox-html.xsl
 
+allPlugins.html: allPluginsBody.html 	
+	cat header-allPlugins.html > $@
+	cat allPluginsBody.html >> $@
+	echo "</BODY>" >> $@	
+
 clean:
-	rm -rf tulip-man profile.dcf xml allPlugins.html tulipPlugins.html
+	rm -rf tulip-man profile.dcf xml allPluginsBody.html allPlugins.html tulipPlugins.html
 	rm -rf tulipdoc.html *~ tulip-plugins.tag *.doxygen
 	rm -rf tulip-libogl tulip-libqt tulip-lib
 
@@ -141,6 +146,9 @@ install-data-am :
 	fi ;
 	if test -d tulip-man ; then\
 		cp -r tulip-man/* $(DESTDIR)$(pkgdatadir)/man/. ;\
+	fi ;
+	if test -f allPluginsBody.html ; then \
+		cp allPluginsBody.html $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
 	fi ;
 	if test -f allPlugins.html ; then \
 		cp allPlugins.html $(DESTDIR)$(pkgdatadir)/doxygen/. ;\
