@@ -12,6 +12,7 @@ nobase_include_HEADERS = \
 	tulip/cxx/Vector.cxx\
 	tulip/Matrix.h\
 	tulip/cxx/Matrix.cxx\
+	tulip/VectorCast.h\
 	tulip/Rectangle.h\
 	tulip/Circle.h\
 	tulip/cxx/Circle.cxx \
