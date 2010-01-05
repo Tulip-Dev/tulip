@@ -77,6 +77,8 @@ namespace tlp {
 	selectionLayer= new GlLayer("Selection");
 	selectionLayer->setCamera(camera);
 	selectionLayer->setScene(this);
+    selectionLayer->getComposite()->setDeleteComponentsInDestructor(false);
+
 	if(calculator!=NULL)
       lodCalculator=calculator;
 	else
