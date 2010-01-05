@@ -365,7 +365,7 @@ public:
   /**
    * Computes a property on the current graph, if it is not empty,
    * using an external named algorithm (plug-in).
-   * The result is stored in result, Warning all information in result will be deleted
+   * The result is stored in result. Warning: all information in result will be deleted
    * If the function returns false error message are stored in msg.
    * One can give a PluginProgress to the algortihm in order to have feed back or to stop
    * the algorithm during its computation. One can give parameter to the algorithm
@@ -469,9 +469,10 @@ public:
 
   // meta nodes management
   /**
-   * method to close a set of existing nodes into a metanode.  Edges from nodes
-   * in the subgraph to nodes outside the subgraph are replaced with
-   * edges from the metanode to the nodes outside the subgraph.
+   * method to close a set of existing nodes into a metanode.
+   * Edges from nodes in the set to other nodes are replaced with
+   * edges from the metanode to the other nodes.
+   * Warning: this method will failed when called on the root graph.
    *
    * \param nodeSet: a set of existing nodes
    * \param multiEdges: indicates if a meta edge will be created for each underlying edge
@@ -493,6 +494,7 @@ public:
    * Method to close an existing subgraph into a metanode.  Edges from nodes
    * in the subgraph to nodes outside the subgraph are replaced with
    * edges from the metanode to the nodes outside the subgraph.
+   * Warning: this method will failed when called on the root graph.
    *
    * \param subGraph: an existing subgraph
    * \param multiEdges: indicates if a meta edge will be created for each underlying edge
@@ -502,6 +504,7 @@ public:
   /**
    * Method to open a metanode and replace all edges between that
    * meta node and other nodes in the graph.
+   * Warning: this method will failed when called on the root graph.
    */
   void openMetaNode(node n);
 

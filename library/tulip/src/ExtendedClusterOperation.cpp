@@ -435,6 +435,11 @@ node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool
 
 //====================================================================================
 node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
+  if (getRoot() == this) {
+    cerr << __PRETTY_FUNCTION__ << endl;
+    cerr << "\t Error: Could not create a meta node in the root graph" << endl;
+    return node();
+  }
   GraphProperty* metaInfo = getRoot()->getProperty<GraphProperty>(metaGraphProperty);
   node metaNode = addNode();
   metaInfo->setNodeValue(metaNode, subGraph);

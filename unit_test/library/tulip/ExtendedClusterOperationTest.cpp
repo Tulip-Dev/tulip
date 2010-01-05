@@ -40,7 +40,10 @@ void ExtendedClusterOperationTest::tearDown() {
 }
 //==========================================================
 void ExtendedClusterOperationTest::testCreateMetaNode() {
-  cerr << __PRETTY_FUNCTION__ << endl;
+  cerr << endl << "L'erreur à suivre sur createMetaNode fait partie de testCreateMetaNode" << endl;
+  meta = graph->createMetaNode(group);
+  CPPUNIT_ASSERT_EQUAL(false, meta.isValid());
+
   meta = quotient->createMetaNode(group);
   CPPUNIT_ASSERT_EQUAL(false, quotient->isElement(nodes[0]));
   CPPUNIT_ASSERT_EQUAL(false, quotient->isElement(nodes[1]));
