@@ -27,7 +27,7 @@ namespace tlp {
     header()->setResizeMode(QHeaderView::ResizeToContents);
     pluginsDirIsWritable = UpdatePlugin::isInstallDirWritable();
     if (!pluginsDirIsWritable)
-      QMessageBox::warning(parent, "Unable to manage plugins", "The plugins installation directory is not writable,\nyou are not allowed to install/remove plugins.");
+      QMessageBox::warning(parent, "Unable to manage plugins", QString("The plugins installation directory : \n")+QString(PluginInfo::pluginsDirName.c_str())+QString("\n is not writable,\nyou are not allowed to install/remove plugins."));
     //header()->setStretchLastSection(false);
   }
 
