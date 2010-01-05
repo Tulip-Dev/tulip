@@ -129,7 +129,7 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
   /**
    * Take a snapshot of the Widget and put it in a picture
    */
-  void createPicture(const std::string &pictureName,int width, int height);
+  void createPicture(const std::string &pictureName,int width, int height,bool center=true);
 
   /**
    * Function to do picking on entities.  It just calls

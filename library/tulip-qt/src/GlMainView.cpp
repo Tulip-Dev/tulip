@@ -68,9 +68,9 @@ void GlMainView::createPicture(const std::string &pictureName, int width, int he
 	}
 
 	if (width == 0 && height == 0)
-		mainWidget->createPicture(pictureName, mainWidget->width(), mainWidget->height());
+        mainWidget->createPicture(pictureName, mainWidget->width(), mainWidget->height(),false);
 	else
-		mainWidget->createPicture(pictureName, width, height);
+        mainWidget->createPicture(pictureName, width, height,false);
 }
 
 //==================================================

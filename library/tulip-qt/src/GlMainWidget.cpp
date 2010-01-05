@@ -526,9 +526,10 @@ namespace tlp {
     return NULL;
   }
   //=====================================================
-  void GlMainWidget::createPicture(const string &pictureName, int width, int height){
+  void GlMainWidget::createPicture(const string &pictureName, int width, int height,bool center){
     scene.setViewport(0,0,width,height);
-    scene.ajustSceneToSize(width,height);
+    if(center)
+      scene.ajustSceneToSize(width,height);
 
     scene.prerenderMetaNodes();
 
