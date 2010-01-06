@@ -36,6 +36,7 @@ Paragraph::~Paragraph(){
 void Paragraph::drawLeft(float w_max, float x_depl, int debut, int fin) const{
   int val;
   float decal = 0;
+  float decal_total = 0;
 
   for(int j = debut; j<=fin; ++j){  // on affiche chaque mot sur la ligne
     Context* c_current = myString.at(j).getContext();
@@ -52,8 +53,10 @@ void Paragraph::drawLeft(float w_max, float x_depl, int debut, int fin) const{
        renderer.drawString(myString.at(j).getString());
        decal = renderer.getAdvance(myString.at(j).getString());
        renderer.translate(-decal, 0, 0);
+       decal_total+=decal;
     }
-
+    if(j==fin)
+      renderer.translate(decal_total,0,0);
   }
 }
 //---------------------------------------------------------------------------
@@ -154,27 +157,27 @@ void Paragraph::draw(float w_max, float& w) const{
     if(do_test){
       size_s = cumul_s;
       if((x_depl + size_s <= w_max) && (s != "")){ // test si la longeur cumulée va dépasser
-	if(maxHeightSup<HeightSup) maxHeightSup = HeightSup;
-	if(maxHeightInf<HeightInf) maxHeightInf = HeightInf;
-	x_depl += size_s;
+        if(maxHeightSup<HeightSup) maxHeightSup = HeightSup;
+        if(maxHeightInf<HeightInf) maxHeightInf = HeightInf;
+        x_depl += size_s;
       }
       else{
-	renderer.translate(0,-(maxHeightSup),0);
-	float sav_inf = maxHeightInf;
-	maxHeightSup =  HeightSup;
-	maxHeightInf =  HeightInf;
-	switch(alignement){
-	case LEFT:      drawLeft(w_max, x_depl, i_deb, i-taille);   break;
-	case RIGHT:     drawRight(w_max, x_depl, i_deb, i-taille);  break;
-	case CENTER:    drawCenter(w_max, x_depl, i_deb, i-taille); break;
-	case JUSTIFIED: drawLeft(w_max, x_depl, i_deb, i-taille); // A FAIRE       !!!!!!!!!!!!!!!!!!!!!!!!!!!
-	}
-	// retour à la ligne
-	// renderer.translate(-x_depl,-(sav_inf+H),0);
-	renderer.translate(0,-(sav_inf+H),0);
-	if(x_depl > w) w = x_depl;
-	i_deb = i-taille+1; // maj du valeur
-	x_depl = size_s;
+        renderer.translate(0,-(maxHeightSup),0);
+        float sav_inf = maxHeightInf;
+        maxHeightSup =  HeightSup;
+        maxHeightInf =  HeightInf;
+        switch(alignement){
+        case LEFT:      drawLeft(w_max, x_depl, i_deb, i-taille);   break;
+        case RIGHT:     drawRight(w_max, x_depl, i_deb, i-taille);  break;
+        case CENTER:    drawCenter(w_max, x_depl, i_deb, i-taille); break;
+        case JUSTIFIED: drawLeft(w_max, x_depl, i_deb, i-taille); // A FAIRE       !!!!!!!!!!!!!!!!!!!!!!!!!!!
+        }
+        // retour à la ligne
+        //renderer.translate(-x_depl,-(sav_inf+H),0);
+        renderer.translate(0,-(sav_inf+H),0);
+        if(x_depl > w) w = x_depl;
+        i_deb = i-taille+1; // maj du valeur
+        x_depl = size_s;
       }
       taille = 1;
       cumul_s = 0;
