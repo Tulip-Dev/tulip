@@ -52,7 +52,7 @@ void TreeTest::makeRootedTree(Graph *graph, node root) {
     return;
   }//end if
   if (!TreeTest::isFreeTree (graph)) {
-    cerr << "makeRootedTree:  Graph is not topological tree, so rooted " 
+    cerr << "makeRootedTree:  Graph is not topologically a tree, so rooted " 
 	 << "tree cannot be made." << endl;
     return;
   }//end if
