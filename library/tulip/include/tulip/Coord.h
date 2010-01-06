@@ -6,7 +6,6 @@
 #include <config.h>
 #endif
 
-#include <limits>
 #include <string.h>
 #include <tulip/tulipconf.h>
 #include <tulip/VectorCast.h>
@@ -46,22 +45,6 @@ namespace tlp {
     inline void get(float &xx,float &yy,float &zz) const {
       xx=(*this)[0];yy=(*this)[1];zz=(*this)[2];
     }
-
-
-    inline bool operator!=(const Coord & p) const {
-      for (int i=0;i<3;++i)
-	if((p[i]-(*this)[i]>std::numeric_limits<float>::epsilon()) || (p[i]-(*this)[i]<-std::numeric_limits<float>::epsilon()))
-	  return true;
-      return false;
-    }
-
-    inline bool operator==(const Coord & p) const {
-      for (int i=0;i<3;++i)
-	if((p[i]-(*this)[i]>std::numeric_limits<float>::epsilon()) || (p[i]-(*this)[i]<-std::numeric_limits<float>::epsilon()))
-	  return false;
-      return true;
-    }
-    
   };
 }
 

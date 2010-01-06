@@ -10,8 +10,8 @@
 #include <cassert>
 #include <tulip/Array.h>
 
-#define VECTOR Vector<Obj,SIZE>
-#define TEMPLATEVECTOR template <typename Obj, unsigned int SIZE>
+#define VECTOR Vector<TYPE,SIZE>
+#define TEMPLATEVECTOR template <typename TYPE, unsigned int SIZE>
 
 namespace tlp {
   /**
@@ -22,54 +22,54 @@ namespace tlp {
   /**
    * \brief class for mathematical vector
    *
-   * Enables to create a Vector of Obj with a
+   * Enables to create a Vector of TYPE (must be a numeric basic type) with a
    * fixed size and provides Mathematical operation. Mathematical 
-   * operators must be defined for Obj. Out of bound accesses are only checked
+   * operators must be defined for TYPE. Out of bound accesses are only checked
    * in debug mode.
    *
    * \author : David Auber auber@tulip-software.org
    * \version 0.0.1 24/01/2003 
    */
   TEMPLATEVECTOR
-    class Vector:public Array<Obj,SIZE> {
+    class Vector:public Array<TYPE,SIZE> {
     public:
 
-    inline VECTOR & operator*=(const Obj &);
+    inline VECTOR & operator*=(const TYPE &);
     inline VECTOR & operator*=(const VECTOR &);
-    inline VECTOR & operator/=(const Obj &);
+    inline VECTOR & operator/=(const TYPE &);
     inline VECTOR & operator/=(const VECTOR &);
-    inline VECTOR & operator+=(const Obj &);
+    inline VECTOR & operator+=(const TYPE &);
     inline VECTOR & operator+=(const VECTOR &);
-    inline VECTOR & operator-=(const Obj &);
+    inline VECTOR & operator-=(const TYPE &);
     inline VECTOR & operator-=(const VECTOR &);
     inline VECTOR & operator^=(const VECTOR &);
     
     inline bool operator!=(const VECTOR &) const;
     inline bool operator==(const VECTOR &) const;
-    inline VECTOR & fill(const Obj &obj);
-    inline Obj norm () const;
-    inline Obj dist (const VECTOR &) const;
-    inline Obj dotProduct(const VECTOR &) const;
+    inline VECTOR & fill(const TYPE &obj);
+    inline TYPE norm () const;
+    inline TYPE dist (const VECTOR &) const;
+    inline TYPE dotProduct(const VECTOR &) const;
   };
 
   TEMPLATEVECTOR
     inline VECTOR operator*(const VECTOR &, const VECTOR &);
   TEMPLATEVECTOR
-    inline VECTOR operator*(const Obj &   , const VECTOR &);
+    inline VECTOR operator*(const TYPE &   , const VECTOR &);
   TEMPLATEVECTOR
-    inline VECTOR operator*(const VECTOR &, const Obj &);
+    inline VECTOR operator*(const VECTOR &, const TYPE &);
   TEMPLATEVECTOR
     inline VECTOR operator+(const VECTOR &, const VECTOR &);
   TEMPLATEVECTOR
-    inline VECTOR operator+(const VECTOR &, const Obj &);
+    inline VECTOR operator+(const VECTOR &, const TYPE &);
   TEMPLATEVECTOR
     inline VECTOR operator-(const VECTOR &, const VECTOR &);
   TEMPLATEVECTOR
-    inline VECTOR operator-(const VECTOR &, const Obj &);
+    inline VECTOR operator-(const VECTOR &, const TYPE &);
   TEMPLATEVECTOR
     inline VECTOR operator/(const VECTOR &, const VECTOR &);
   TEMPLATEVECTOR
-    inline VECTOR operator/(const VECTOR &, const Obj &);
+    inline VECTOR operator/(const VECTOR &, const TYPE &);
   TEMPLATEVECTOR
     inline VECTOR operator^(const VECTOR &, const VECTOR &);
 
