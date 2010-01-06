@@ -95,10 +95,6 @@ struct SmallWorldGraph:public ImportModule {
 	}
       }
     }
-    SizeProperty *newSize=graph->getLocalProperty<SizeProperty>("viewSize");
-    newSize->setAllNodeValue(Size(1, 1, 1));
-    newSize->setAllEdgeValue(Size(1, 1, 1));
-
     return  pluginProgress->state()!=TLP_CANCEL;
   }
 };
