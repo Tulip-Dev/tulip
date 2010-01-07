@@ -9,10 +9,10 @@ using namespace std;
 using namespace tlp;
 
 void printFloat(ostream &os, const string &name , float f){
-  float a=floor(f);
+  /*float a=floor(f);
   float b=(f-a)*1000;
-  if (b<0) b*=-1;
-  os << name << (int)a << "." << (int)b << endl; 
+  if (b<0) b*=-1;*/
+  os << name << f << endl; 
 }
 
 void printCoord(ostream &os,const Coord &v){
