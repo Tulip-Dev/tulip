@@ -1,0 +1,1 @@
+sh tulip_run_test.sh complete_general_graph_import 

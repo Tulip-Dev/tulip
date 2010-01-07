@@ -1,0 +1,1 @@
+sh tulip_run_test.sh random_general_graph_import 

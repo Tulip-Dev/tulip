@@ -8,7 +8,7 @@
 # A self sufficient run_<test_name>_test.sh script
 # for the test run will also be created
 
-if [ $# -ne 2 ]; then
+if [ $# -lt 1 ]; then
     echo "$0 failed"
     echo "usage: $0 <test_name> <tlp_input_file>"
     exit
@@ -18,9 +18,11 @@ TEST_NAME=$1
 TLP_INPUT_FILE=$2
 
 # $TLP_INPUT_FILE must exist
-if [ ! -f $TLP_INPUT_FILE ]; then
+if [ "$TLP_INPUT_FILE" != "" ]; then
+  if [ ! -f $TLP_INPUT_FILE ]; then
     echo "$0 failed: $TLP_INPUT_FILE does not exist"
     exit
+  fi
 fi
 
 # remove test_gui.tlp which is always
@@ -47,9 +49,24 @@ fi
 echo $TEST_NAME.xns created
 
 # rename test_gui.tlp
-mv test_gui.tlp $TEST_NAME.tlp
-echo $TEST_NAME.tlp created
-
+if [ "$TLP_INPUT_FILE" != "" ]; then
+  mv test_gui.tlp $TEST_NAME.tlp
+  echo $TEST_NAME.tlp created
+else
+# test_gui.tlp must be an empty graph
+  if [ "$(grep '(date ' empty_graph.tlp)" = "$(grep '(date ' test_gui.tlp)" ]; then
+    NB_DIFFS=0
+  else
+    NB_DIFFS=4
+  fi
+# the 2 files may only have different dates
+  if [ $(diff empty_graph.tlp test_gui.tlp | wc -l) -gt $NB_DIFFS ]; then
+    echo "test recording failed: test_gui.tlp is different from empty_graph.tlp"
+    exit
+  else
+    rm test_gui.tlp
+  fi
+fi
 
 # create script file for test run
 echo "sh tulip_run_test.sh $TEST_NAME $TLP_INPUT_FILE" > run_${TEST_NAME}_test.sh

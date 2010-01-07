@@ -5,14 +5,16 @@
 # <test_name>.xns which is the cnee events file
 # and if no tlp_output_file is given,
 # <test_name>.tlp which is the expected tulip result graph
+# If no tlp_input_file is given, tlp_output_file is set
+# to empty_graph.tlp.
 # The test must locally produces a tulip result graph
 # in the test_gui.tlp file
 # After the test run, the files <test_name>.tlp and test_gui.tlp
 # are compared; the test is successful if they only differ from the date field
 
-if [ $# -lt 2 ]; then
+if [ $# -lt 1 ]; then
     echo "$0 running test failed"
-    echo "usage: $0 <test_name> <tlp_input_file>  [tlp_output_file = test_name.tlp]"
+    echo "usage: $0 <test_name> [<tlp_input_file> tlp_output_file = test_name.tlp]"
     exit
 fi
 
@@ -24,10 +26,14 @@ echo "***********************************************"
 echo "Running ${TEST_NAME} test"
 echo "***********************************************"
 
-# $TLP_INPUT_FILE must exist
-if [ ! -f $TLP_INPUT_FILE ]; then
+# check if $TLP_INPUT_FILE exists
+if [ "$TLP_INPUT_FILE" != "" ]; then
+  if [ ! -f $TLP_INPUT_FILE ]; then
     echo "$TEST_NAME test failed: $TLP_INPUT_FILE does not exist"
     exit
+  fi
+else
+  TLP_OUTPUT_FILE=empty_graph.tlp
 fi
 
 # $TEST_NAME.xns must exist
