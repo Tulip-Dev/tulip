@@ -38,7 +38,6 @@ public:
   ~FileSystem(){}
 
   DoubleProperty *size,*gid,*uid,*lastaccess,*lastmodif,*lastchange;
-  IntegerProperty *type;
   StringProperty *label;
   StringProperty *url,*path;
 
@@ -154,12 +153,10 @@ public:
     lastaccess=graph->getProperty<DoubleProperty>("lastaccess");
     lastmodif=graph->getProperty<DoubleProperty>("lastmodif");
     lastchange=graph->getProperty<DoubleProperty>("lastchange");
-    type=graph->getProperty<IntegerProperty>("viewShape");
     layout=graph->getProperty<LayoutProperty>("viewLayout");
     label=graph->getProperty<StringProperty>("name");
     url=graph->getProperty<StringProperty>("url");
-	path=graph->getProperty<StringProperty>("path");
-    type->setAllNodeValue(0);
+    path=graph->getProperty<StringProperty>("path");
     layout->setAllNodeValue(Coord(0,0,0));
     node newNode=graph->addNode();
     string dirName;
