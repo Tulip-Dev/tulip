@@ -1,0 +1,1 @@
+sh tulip_run_test.sh enumerated_values_mapping_color degree_measure.tlp
