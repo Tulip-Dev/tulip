@@ -9,15 +9,6 @@
 
 using namespace std;
 
-const string viewPropertiesName[] = {"viewBorderColor", "viewBorderWidth", "viewColor", "viewLabel",
-									 "viewLabelColor", "viewLabelPosition", "viewLayout", "viewMetaGraph",
-									 "viewRotation", "viewSelection", "viewShape", "viewSize",
-									 "viewTexture"};
-
-const unsigned int nbViewProperties = sizeof(viewPropertiesName) / sizeof(string);
-
-const vector<string> graphViewProperties(viewPropertiesName, viewPropertiesName + nbViewProperties);
-
 namespace tlp {
 
 GraphPropertiesSelectionWidget::GraphPropertiesSelectionWidget(QWidget *parent, const StringsListSelectionWidget::ListType &listType, const unsigned int maxNbSelectedProperties) :
@@ -66,7 +57,7 @@ bool GraphPropertiesSelectionWidget::propertySelectable(const std::string &prope
 		selectProperty = true;
 	}
 
-	if (selectProperty && !includeViewProperties && std::find(graphViewProperties.begin(), graphViewProperties.end(), propertyName) != graphViewProperties.end()) {
+    if (selectProperty && !includeViewProperties && propertyName.find("view")==0) {
 		selectProperty = false;
 	}
 	return selectProperty;
