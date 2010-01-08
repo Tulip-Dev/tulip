@@ -235,41 +235,44 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, Graph *inG) {
       assert( res );
       if( res )
 	ioDataSet.set( name, v );
-    }
-    // BooleanProperty
-    else if( inG && tname == TN(BooleanProperty) ) {
-      ioDataSet.set( name, inG->getProperty<BooleanProperty>(defv) );
-    }
-    // DoubleProperty
-    else if( inG && tname == TN(DoubleProperty) ) {
-      ioDataSet.set( name, inG->getProperty<DoubleProperty>(defv) );
-    }
-    // LayoutProperty
-    else if( inG && tname == TN(LayoutProperty) ) {
-      ioDataSet.set( name, inG->getProperty<LayoutProperty>(defv) );
-    }
-    // StringProperty
-    else if( inG && tname == TN(StringProperty) ) {
-      ioDataSet.set( name, inG->getProperty<StringProperty>(defv) );
-    }
-    // IntegerProperty
-    else if( inG && tname == TN(IntegerProperty) ) {
-      ioDataSet.set( name, inG->getProperty<IntegerProperty>(defv) );
-    }
-    // SizeProperty
-    else if( inG && tname == TN(SizeProperty) ) {
-      ioDataSet.set( name, inG->getProperty<SizeProperty>(defv) );
-    }
-    // ColorProperty
-    else if( inG && tname == TN(ColorProperty) ) {
-      ioDataSet.set( name, inG->getProperty<ColorProperty>(defv) );
-    }
-    //
-    else if ( inG && tname == TN(PropertyInterface*) ) {
+    } else
       // look for an already existing property
-      if (inG->existProperty(defv))
-	ioDataSet.set( name, inG->getProperty(defv) );
-    }
+      if (inG && (inG->existProperty(defv))) {
+	// BooleanProperty
+	if( tname == TN(BooleanProperty) ) {
+	  ioDataSet.set( name, inG->getProperty<BooleanProperty>(defv) );
+	}
+	// DoubleProperty
+	else if( tname == TN(DoubleProperty) ) {
+	  // look for an already existing property
+	  if (inG->existProperty(defv))
+	    ioDataSet.set( name, inG->getProperty<DoubleProperty>(defv) );
+	}
+	// LayoutProperty
+	else if( tname == TN(LayoutProperty) ) {
+	  ioDataSet.set( name, inG->getProperty<LayoutProperty>(defv) );
+	}
+	// StringProperty
+	else if( tname == TN(StringProperty) ) {
+	  ioDataSet.set( name, inG->getProperty<StringProperty>(defv) );
+	}
+	// IntegerProperty
+	else if( tname == TN(IntegerProperty) ) {
+	  ioDataSet.set( name, inG->getProperty<IntegerProperty>(defv) );
+	}
+	// SizeProperty
+	else if( tname == TN(SizeProperty) ) {
+	  ioDataSet.set( name, inG->getProperty<SizeProperty>(defv) );
+	}
+	// ColorProperty
+	else if( tname == TN(ColorProperty) ) {
+	  ioDataSet.set( name, inG->getProperty<ColorProperty>(defv) );
+	}
+	//
+	else if ( tname == TN(PropertyInterface*) ) {
+	  ioDataSet.set( name, inG->getProperty(defv) );
+	}
+      }
   }
   delete defIt;
 }
