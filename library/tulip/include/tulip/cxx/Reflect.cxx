@@ -52,7 +52,7 @@ template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& val
 
 template<typename T>
 struct DataTypeContainer :public tlp::DataType {
-  DataTypeContainer(void *value, std::string str) :DataType(value, str) {}
+  DataTypeContainer(void *value, const std::string& str) :DataType(value, str) {}
   ~DataTypeContainer() {
     delete (T*) value;
   }
@@ -62,7 +62,7 @@ struct DataTypeContainer :public tlp::DataType {
 };
 
 template<typename T> void tlp::DataSet::set(const std::string &str,const T& value) {
-  DataTypeContainer<T> dtc(new T(value), typeid(T).name());
+  DataTypeContainer<T> dtc(new T(value), std::string(typeid(T).name()));
   setData(str, &dtc);
 }
 //=======================================================================

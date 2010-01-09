@@ -23,7 +23,7 @@ struct Graph;
 
  struct TLP_SIMPLE_SCOPE DataType :public DataMem {
    DataType(){}
-   DataType(void *value,const std::string typeName):value(value),typeName(typeName){}
+   DataType(void *value,const std::string& typeName):value(value),typeName(typeName){}
    virtual DataType *clone() const = 0;
    void *value;
    std::string typeName;
