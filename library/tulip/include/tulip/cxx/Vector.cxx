@@ -131,33 +131,15 @@ VECTORTLP tlp::operator^(const VECTORTLP &u, const VECTORTLP &v) {
 //======================================================
 template <typename TYPE,unsigned int SIZE>
 bool VECTORTLP::operator!=(const VECTORTLP &vecto) const {
-  if (std::numeric_limits<TYPE>::is_integer) {
   for (unsigned int i=0;i<SIZE;++i)
     if (VECTORTLP::array[i]!=vecto[i]) return true;
-  } else {
-      for (unsigned int i=0;i<SIZE;++i) {
-	TYPE tmp = VECTORTLP::array[i] - vecto[i];
-	if (tmp > std::numeric_limits<TYPE>::epsilon() ||
-	    tmp < -std::numeric_limits<TYPE>::epsilon())
-	  return true;
-      }
-  }
   return false;
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE>
 bool VECTORTLP::operator==(const VECTORTLP &vecto) const {
-  if (std::numeric_limits<TYPE>::is_integer) {
-    for (unsigned int i=0;i<SIZE;++i)
+  for (unsigned int i=0;i<SIZE;++i)
       if (VECTORTLP::array[i]!=vecto[i]) return false;
-  } else {
-      for (unsigned int i=0;i<SIZE;++i) {
-	TYPE tmp = VECTORTLP::array[i] - vecto[i];
-	if (tmp > std::numeric_limits<TYPE>::epsilon() ||
-	    tmp < -std::numeric_limits<TYPE>::epsilon())
-	  return false;
-      }
-    }
   return true;
 }
 //======================================================
