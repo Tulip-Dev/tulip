@@ -1116,9 +1116,6 @@
 (property  0 graph "viewMetaGraph"
 (default "" "()")
 )
-(property  0 double "viewMetric"
-(default "0" "0")
-)
 (property  0 double "viewRotation"
 (default "0" "0")
 )
