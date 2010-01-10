@@ -602,7 +602,12 @@ void SuperGraphTest::testAttributes() {
   DataType* dt = graph->getAttribute("name");
   CPPUNIT_ASSERT(dt != NULL);
   delete dt;
-}  
+  DataTypeContainer<string> dtc(new string("test"), typeid(string).name());
+  graph->setAttribute("name", (const DataType *) &dtc);
+  CPPUNIT_ASSERT(graph->attributeExist("name"));
+  DataType *dataType = graph->getAttribute("name");
+  CPPUNIT_ASSERT(dataType->typeName.compare(typeid(string).name())==0);
+}
 
 //==========================================================
 CppUnit::Test * SuperGraphTest::suite() {
