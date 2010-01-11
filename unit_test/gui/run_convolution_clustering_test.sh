@@ -1,0 +1,1 @@
+sh tulip_run_test.sh convolution_clustering strahler_measure.tlp strahler_measure.tlp
