@@ -71,6 +71,11 @@ namespace tlp {
       virtual Graph *getGraphOfView(View *view);
       
       /**
+       * return the views for the given graph.
+       */
+      virtual std::vector<View*> getViewsOfGraph(Graph *graph);
+
+      /**
        * Set the graph associated with the given view
        */
       virtual void setGraphOfView(View *view,Graph *graph);
@@ -100,6 +105,21 @@ namespace tlp {
        */
       virtual void setNameOfView(View *view,const std::string &name);
       
+      /**
+       * Close all the views.
+       */
+      virtual void closeAllViews();
+
+      /**
+       * Close the given view.
+       */
+      virtual void closeView(View *view);
+
+      /**
+       * Close all the views for the given graph.
+       */
+      virtual void closeViewsRelatedToGraph(Graph* graph);
+
       //*************************************************************************
       
       /**
@@ -175,8 +195,8 @@ namespace tlp {
       /**
        * This slot is call went a view will be closed
        */
-      void widgetWillBeClosed(QObject *object);
-      
+      virtual void widgetWillBeClosed(QObject *object);
+
     private :
       
       Graph *currentGraph;
