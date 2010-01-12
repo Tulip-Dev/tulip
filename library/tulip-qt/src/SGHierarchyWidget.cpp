@@ -122,11 +122,16 @@ namespace tlp {
     }
   }
   //=======================================================
-  void SGHierarchyWidget::updateCurrentGraphInfos(unsigned int nbNodes, unsigned int nbEdges) {
-    if (_currentGraph == 0) return;
-    QTreeWidgetItem* item = graphItems.get(_currentGraph->getId());
+  void SGHierarchyWidget::updateCurrentGraphInfos(Graph *graph) {
+    if (graph == 0 || _currentGraph==0) return;
+    QTreeWidgetItem* item = graphItems.get(graph->getId());
     if (item != 0)
-      setItemInfos(item, _currentGraph, nbNodes, nbEdges);
+      setItemInfos(item, graph, graph->numberOfNodes(), graph->numberOfEdges());
+    Iterator<Graph *> *subGraphsIt=graph->getSubGraphs();
+    while(subGraphsIt->hasNext()){
+      Graph *subGraph=subGraphsIt->next();
+      updateCurrentGraphInfos(subGraph);
+    }
   }
   //=======================================================
   //Cluster Tree Structure modification

@@ -30,7 +30,7 @@ namespace tlp {
     public slots:
     void setGraph(Graph *);
     void update();
-    void updateCurrentGraphInfos(unsigned int nbNodes, unsigned int nbEdges);
+    void updateCurrentGraphInfos(Graph *graph);
     
   signals:
     void aboutToRemoveView(Graph *);

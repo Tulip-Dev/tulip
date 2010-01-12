@@ -810,7 +810,8 @@ namespace tlp {
     char tmp[255];
     sprintf(tmp,"nodes:%d, edges:%d", currentGraphNbNodes, currentGraphNbEdges);
     currentGraphInfosLabel->setText(tmp);
-    clusterTreeWidget->updateCurrentGraphInfos(currentGraphNbNodes, currentGraphNbEdges);
+    // Update nb nodes/edges for current graph ans sub graphs
+    clusterTreeWidget->updateCurrentGraphInfos(getCurrentGraph());
   }
   //==============================================================
   void MainController::editCut() {
