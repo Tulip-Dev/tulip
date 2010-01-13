@@ -608,6 +608,29 @@ void SuperGraphTest::testAttributes() {
   DataType *dataType = graph->getAttribute("name");
   CPPUNIT_ASSERT(dataType->typeName.compare(typeid(string).name())==0);
 }
+//==========================================================
+void SuperGraphTest::testGetNodesEqualTo() {
+  for (int i = 0; i != 10; ++i) {
+    graph->addNode();
+  }
+  BooleanProperty property(graph);
+  property.setAllNodeValue(false);
+  Graph* subGraph = graph->addSubGraph();
+
+  Iterator<node>* it = graph->getNodes();
+  /*for (int i = 0; i < 5; ++i) {
+    subGraph->addNode(it->next());
+    }*/
+  delete it;
+
+  it = property.getNodesEqualTo(false, subGraph);
+  while(it->hasNext()) {
+    node n = it->next();
+    CPPUNIT_ASSERT(subGraph->isElement(n));
+  }
+  delete it;
+}
+
 
 //==========================================================
 CppUnit::Test * SuperGraphTest::suite() {
@@ -634,6 +657,8 @@ CppUnit::Test * SuperGraphTest::suite() {
 								  &SuperGraphTest::testSubgraphId) );
   suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test attributes", 
 								  &SuperGraphTest::testAttributes) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<SuperGraphTest>( "Test getNodesEqualTo", 
+								  &SuperGraphTest::testGetNodesEqualTo) );
   return suiteOfTests;
 }
 //==========================================================

@@ -26,6 +26,7 @@ public:
   void testPropertiesIteration();
   void testDegree();
   void testAttributes();
+  void testGetNodesEqualTo();
 
   static CppUnit::Test *suite();
  private:

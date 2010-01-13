@@ -60,7 +60,7 @@ int getNumIterators() {
 
 
 //============================================================
-  SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val):FactorNodeIterator(sG,filter), value(val) {
+  SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val):FactorNodeIterator(sG,filter), sg(sG), value(val) {
   it=_parentGraph->getNodes();
   _hasnext=false;
 #ifndef NDEBUG
@@ -68,11 +68,11 @@ int getNumIterators() {
 #endif
   if (it->hasNext()) {
     curNode=it->next();
-    while (_filter.get(curNode.id)!= value) {
+    while (!(_hasnext = !(_filter.get(curNode.id) != value ||
+			  !sg->isElement(curNode)))) {
       if (!it->hasNext()) break;
       curNode=it->next();
     }
-    if (_filter.get(curNode.id) == value) _hasnext=true;
   }
 }
 SGraphNodeIterator::~SGraphNodeIterator() {
@@ -86,11 +86,11 @@ node SGraphNodeIterator::next() {
   _hasnext=false;
   if (it->hasNext()) {
     curNode=it->next();
-    while (_filter.get(curNode.id)!= value) {
+    while (!(_hasnext = !(_filter.get(curNode.id)!= value ||
+			  !sg->isElement(curNode)))) {
       if (!it->hasNext()) break;
       curNode=it->next();
     }
-    if (_filter.get(curNode.id) == value) _hasnext=true;
   }
   return tmp;
 }
@@ -183,11 +183,11 @@ bool InOutNodesIterator::hasNext() {
 #endif
   if (it->hasNext()) {
     curEdge=it->next();
-    while (_filter.get(curEdge.id)!= value) {
+    while (!(_hasnext = !(_filter.get(curEdge.id)!= value ||
+			  !sg->isElement(curEdge)))) {
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_filter.get(curEdge.id) == value) _hasnext=true;
   }
 }
 SGraphEdgeIterator::~SGraphEdgeIterator() {
@@ -201,11 +201,11 @@ edge SGraphEdgeIterator::next() {
   _hasnext=false;
   if (it->hasNext()){
     curEdge=it->next();
-    while (_filter.get(curEdge.id)!= value) {
+    while (!(_hasnext = !(_filter.get(curEdge.id)!= value ||
+			  !sg->isElement(curEdge)))) {
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_filter.get(curEdge.id) == value) _hasnext=true;
   }
   return tmp;
 }
@@ -280,11 +280,10 @@ edge InEdgesIterator::next() {
   _hasnext=false;
   if (it->hasNext()) {
     curEdge=it->next();
-    while (_filter.get(curEdge.id)!=true) {
+    while (!(_hasnext = _filter.get(curEdge.id))) {
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_filter.get(curEdge.id)) _hasnext=true;
   }  
   return tmp;
 }
@@ -301,11 +300,10 @@ InOutEdgesIterator::InOutEdgesIterator(const Graph *sG,const MutableContainer<bo
 #endif
   if (it->hasNext()) {
     curEdge=it->next();
-    while (_filter.get(curEdge.id)!=true) {
+    while (!(_hasnext = _filter.get(curEdge.id))) {
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_filter.get(curEdge.id)) _hasnext=true;
   }
 }
 InOutEdgesIterator::~InOutEdgesIterator() {
@@ -319,11 +317,10 @@ edge InOutEdgesIterator::next() {
   _hasnext=false;
   if (it->hasNext()) {
     curEdge=it->next();
-    while (_filter.get(curEdge.id)!=true) {
+    while (!(_hasnext = _filter.get(curEdge.id))) {
       if (!it->hasNext()) break;
       curEdge=it->next();
     }
-    if (_filter.get(curEdge.id)) _hasnext=true;
   }
   return tmp;
 }

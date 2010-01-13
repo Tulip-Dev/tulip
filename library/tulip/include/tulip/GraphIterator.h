@@ -82,6 +82,7 @@ class FactorEdgeIterator
 ///Node iterator for GraphView
 class SGraphNodeIterator:public FactorNodeIterator {
  private:
+  const Graph* sg;
   Iterator<node> *it;
   node curNode;
   bool _hasnext;
@@ -142,6 +143,7 @@ class InOutNodesIterator:public FactorNodeIterator {
 class SGraphEdgeIterator:public FactorEdgeIterator
 {
  private:
+  const Graph* sg;
   Iterator<edge> *it;
   edge curEdge;
   bool _hasnext;
