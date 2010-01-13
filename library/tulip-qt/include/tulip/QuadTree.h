@@ -112,6 +112,28 @@ class QuadTreeNode {
   }
 
   /*
+   * return all elements
+   */
+  void getElements(std::vector<unsigned int> *resultForInt, std::vector<unsigned long> *resultForLong) const{
+    if(entitiesInInt){
+      for (unsigned int i=0; i<entitiesInInt->size(); ++i){
+        assert(resultForInt);
+        resultForInt->push_back((*entitiesInInt)[i]);
+      }
+    }
+    if(entitiesInLong){
+      for (unsigned int i=0; i<entitiesInLong->size(); ++i){
+        assert(resultForLong);
+        resultForLong->push_back((*entitiesInLong)[i]);
+      }
+    }
+    for (unsigned int i=0; i<4; ++i) {
+      if (children[i]!=0)
+        children[i]->getElements(resultForInt, resultForLong);
+    }
+  }
+
+  /*
     same as getElements, however if the size of the elements are to small compare
     to the size of the box (equivalent to have severeal item at the same position on the screen)
     only one elements is returned for the small cells.

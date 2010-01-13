@@ -26,7 +26,7 @@ namespace tlp {
   }
 
   QtQuadTreeLODCalculator::QtQuadTreeLODCalculator() : scene(NULL),nodesQuadTree(NULL),edgesQuadTree(NULL),nodesSelectedQuadTree(NULL),edgesSelectedQuadTree(NULL),entitiesQuadTree(NULL),
-                                                       haveToCompute(true),inputData(NULL),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
+  haveToCompute(true),inputData(NULL),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
   }
 
   QtQuadTreeLODCalculator::~QtQuadTreeLODCalculator() {
@@ -113,13 +113,13 @@ namespace tlp {
           currentCamera=camera;
           eye=camera->getEyes() + ( camera->getEyes() -camera->getCenter() ) / (float)camera->getZoomFactor();
           computeFor3DCamera(&simpleBoundingBoxVector[i],&nodesBoundingBoxVector[i],&edgesBoundingBoxVector[i],
-              &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
-              eye,transformMatrix,globalViewport,currentViewport);
+                             &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
+                             eye,transformMatrix,globalViewport,currentViewport);
         }else{
           simpleEntities.push_back(simpleBoundingBoxVector[i]);
           computeFor2DCamera(&simpleBoundingBoxVector[i],&nodesBoundingBoxVector[i],&edgesBoundingBoxVector[i],
-              &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
-              globalViewport,currentViewport);
+                             &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
+                             globalViewport,currentViewport);
         }
 
         glMatrixMode(GL_MODELVIEW);
@@ -144,12 +144,12 @@ namespace tlp {
           currentCamera=camera;
           eye=camera->getEyes() + ( camera->getEyes() -camera->getCenter() ) / (float)camera->getZoomFactor();
           computeFor3DCamera(NULL,NULL,NULL,
-              &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
-              eye,transformMatrix,globalViewport,currentViewport);
+                             &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
+                             eye,transformMatrix,globalViewport,currentViewport);
         }else{
           computeFor2DCamera(&simpleEntities[i],new ComplexBoundingBoxVector(),new ComplexBoundingBoxVector(),
-              &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
-              globalViewport,currentViewport);
+                             &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
+                             globalViewport,currentViewport);
           ++i;
         }
       }
@@ -158,71 +158,19 @@ namespace tlp {
   }
 
   void QtQuadTreeLODCalculator::computeFor3DCamera(SimpleBoundingBoxVector *inputSimple,ComplexBoundingBoxVector *inputNodes,ComplexBoundingBoxVector *inputEdges,
-      SimpleLODResultVector *outputSimple, ComplexLODResultVector *outputNodes, ComplexLODResultVector *outputEdges,
-      const Coord &eye,
-      const Matrix<float, 4> transformMatrix,
-      const Vector<int,4>& globalViewport,
-      const Vector<int,4>& currentViewport) {
+                                                   SimpleLODResultVector *outputSimple, ComplexLODResultVector *outputNodes, ComplexLODResultVector *outputEdges,
+                                                   const Coord &eye,
+                                                   const Matrix<float, 4> transformMatrix,
+                                                   const Vector<int,4>& globalViewport,
+                                                   const Vector<int,4>& currentViewport) {
 
     BooleanProperty *selectedProperty=NULL;
     if(inputData)
       selectedProperty=inputData->getGraph()->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
 
-    // Contruct a new camera : this camera is the same as currentCamera but it only have z rotation
-    Coord newEye=currentCamera->getCenter();
-    newEye[2]=(currentCamera->getCenter()-currentCamera->getEyes()).norm();
-    Coord oldUp=currentCamera->getUp();
-    float oldUpX=oldUp[0];
-    float oldUpY=oldUp[1];
-    Coord newUp(oldUpX/(oldUpX+oldUpY),oldUpY/(oldUpX+oldUpY),0);
-    Camera newCamera(currentCamera->getScene(),currentCamera->getCenter(),newEye,newUp,currentCamera->getZoomFactor(),currentCamera->getSceneRadius());
-
-    Matrix<float,4> newTransformMatrix;
-    newCamera.getTransformMatrix(globalViewport,newTransformMatrix);
-    MatrixGL tmp(newTransformMatrix);
-    tmp.inverse();
-
-    BoundingBox cameraBoundingBox;
-    if(oldUp[2]>=0.99 || oldUp[2]<=-0.99){
-      // if camera up is equal to (0,0,1) or (0,0,-1) : we can't project point
-      //  so we take entities bonding box to camera bonding box
-      cameraBoundingBox=nodesGlobalBoundingBox;
-      cameraBoundingBox.check(edgesGlobalBoundingBox.first);
-      cameraBoundingBox.check(edgesGlobalBoundingBox.second);
-      cameraBoundingBox.check(entitiesGlobalBoundingBox.first);
-    }else{
-      Coord pSrc = projectPoint(Coord(0,0,0), newTransformMatrix, globalViewport);
-
-      Vector<int,4> transformedViewport=currentViewport;
-      transformedViewport[1]=globalViewport[3]-(currentViewport[1]+currentViewport[3]);
-
-      // apply x/y inversion if we need
-      float angle=acos(oldUp[1]/sqrt((oldUp[0]*oldUp[0])+(oldUp[1]*oldUp[1])));
-      if(((angle>M_PI/4.) && oldUp[0]<0) || ((angle>(M_PI/4.+M_PI/2.)) && oldUp[0]>=0)){
-        transformedViewport[1]=currentViewport[1];
-        if((currentCamera->getEyes()[2]-currentCamera->getCenter()[2])>=0) {
-          transformedViewport[0]=globalViewport[2]-(currentViewport[0]+currentViewport[2]);
-        }
-      }
-      if((currentCamera->getEyes()[2]-currentCamera->getCenter()[2])<0){
-        if(((angle<(M_PI-M_PI/4.)) && oldUp[0]>=0) || ((angle<M_PI/4.) && oldUp[0]<0)){
-          transformedViewport[0]=globalViewport[2]-(currentViewport[0]+currentViewport[2]);
-        }
-      }
-
-      // Project camera bondinx box to know visible part of the quadtree
-      pSrc[0] = transformedViewport[0];
-      pSrc[1] = transformedViewport[1];
-      cameraBoundingBox.check(unprojectPoint(pSrc, tmp, globalViewport));
-      pSrc[1] = transformedViewport[1]+transformedViewport[3];
-      cameraBoundingBox.check(unprojectPoint(pSrc, tmp, globalViewport));
-      pSrc[0] = transformedViewport[0]+transformedViewport[2];
-      cameraBoundingBox.check(unprojectPoint(pSrc, tmp, globalViewport));
-      pSrc[1] = transformedViewport[1];
-      cameraBoundingBox.check(unprojectPoint(pSrc, tmp, globalViewport));
-    }
-
-    //cout << "camera : " << cameraBoundingBox.first << " # " << cameraBoundingBox.second << endl;
+    Coord eyeCenter=currentCamera->getCenter()-currentCamera->getEyes();
+    double aX=atan(eyeCenter[1]/eyeCenter[2]);
+    double aY=atan(eyeCenter[0]/eyeCenter[2]);
 
     if(haveToCompute){
       if(entitiesQuadTree)
@@ -241,17 +189,10 @@ namespace tlp {
         delete edgesSelectedQuadTree;
       edgesSelectedQuadTree = new QuadTreeNode(edgesGlobalBoundingBox);
 
-      // Apply rotation to elements
-      Coord eyeCenter=currentCamera->getCenter()-currentCamera->getEyes();
-      double aX=atan(eyeCenter[1]/eyeCenter[2]);
-      double aY=atan(eyeCenter[0]/eyeCenter[2]);
+
 
       for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){
-        if(aX==0 && aY==0){
-          entitiesQuadTree->insert((*it).second,(*it).first);
-        }else{
-          entitiesQuadTree->insert(computeNewBoundingBox((*it).second,currentCamera->getCenter(),aX,aY),(*it).first);
-        }
+        entitiesQuadTree->insert((*it).second,(*it).first);
       }
       for(ComplexBoundingBoxVector::iterator it=inputNodes->begin();it!=inputNodes->end();++it){
         assert(selectedProperty);
@@ -261,11 +202,7 @@ namespace tlp {
         else
           quadTree=nodesQuadTree;
 
-        if(aX==0 && aY==0){
-          quadTree->insert((*it).second,(*it).first);
-        }else{
-          quadTree->insert(computeNewBoundingBox((*it).second,currentCamera->getCenter(),aX,aY),(*it).first);
-        }
+        quadTree->insert((*it).second,(*it).first);
       }
       for(ComplexBoundingBoxVector::iterator it=inputEdges->begin();it!=inputEdges->end();++it){
         assert(selectedProperty);
@@ -275,15 +212,39 @@ namespace tlp {
         else
           quadTree=edgesQuadTree;
 
-        if(aX==0 && aY==0){
-          quadTree->insert((*it).second,(*it).first);
-        }else{
-          quadTree->insert(computeNewBoundingBox((*it).second,currentCamera->getCenter(),aX,aY),(*it).first);
-        }
+        quadTree->insert((*it).second,(*it).first);
       }
 
       haveToCompute = false;
     }
+
+    MatrixGL invTransformMatrix(transformMatrix);
+    invTransformMatrix.inverse();
+
+    Coord pSrc = projectPoint(Coord(0,0,0), transformMatrix, globalViewport);
+
+    Vector<int,4> transformedViewport=currentViewport;
+    transformedViewport[1]=globalViewport[3]-(currentViewport[1]+currentViewport[3]);
+
+    BoundingBox cameraBoundingBox;
+    // Project camera bondinx box to know visible part of the quadtree
+    pSrc[0] = transformedViewport[0];
+    pSrc[1] = transformedViewport[1];
+    cameraBoundingBox.check(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
+    pSrc[1] = transformedViewport[1]+transformedViewport[3];
+    cameraBoundingBox.check(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
+    pSrc[0] = transformedViewport[0]+transformedViewport[2];
+    cameraBoundingBox.check(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
+    pSrc[1] = transformedViewport[1];
+    cameraBoundingBox.check(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
+
+    //cout << "camera : " << cameraBoundingBox.first << " # " << cameraBoundingBox.second << endl;
+
+    int ratio;
+    if(currentViewport[2]>currentViewport[3])
+      ratio=currentViewport[2];
+    else
+      ratio=currentViewport[3];
 
     SimpleBoundingBoxVector simples;
     ComplexBoundingBoxVector nodes;
@@ -293,20 +254,18 @@ namespace tlp {
     vector<unsigned int> resEdges;
     vector<unsigned long> resEntities;
 
-    int ratio;
-    if(currentViewport[2]>currentViewport[3])
-      ratio=currentViewport[2];
-    else
-      ratio=currentViewport[3];
-
-
     if((type & RenderingNodes)!=0){
-      if((type & RenderingWithoutRemove)==0){
-        nodesQuadTree->getElementsWithRatio(cameraBoundingBox,&resNodes,NULL,ratio);
-        nodesSelectedQuadTree->getElementsWithRatio(cameraBoundingBox,&resNodes,NULL,ratio);
+      if(aX==0 && aY==0){
+        if((type & RenderingWithoutRemove)==0){
+          nodesQuadTree->getElementsWithRatio(cameraBoundingBox,&resNodes,NULL,ratio);
+          nodesSelectedQuadTree->getElementsWithRatio(cameraBoundingBox,&resNodes,NULL,ratio);
+        }else{
+          nodesQuadTree->getElements(cameraBoundingBox,&resNodes,NULL);
+          nodesSelectedQuadTree->getElements(cameraBoundingBox,&resNodes,NULL);
+        }
       }else{
-        nodesQuadTree->getElements(cameraBoundingBox,&resNodes,NULL);
-        nodesSelectedQuadTree->getElements(cameraBoundingBox,&resNodes,NULL);
+        nodesQuadTree->getElements(&resNodes,NULL);
+        nodesSelectedQuadTree->getElements(&resNodes,NULL);
       }
 
       for(unsigned int i=0;i<resNodes.size();++i){
@@ -314,12 +273,17 @@ namespace tlp {
       }
     }
     if((type & RenderingEdges)!=0){
-      if((type & RenderingWithoutRemove)==0){
-        edgesQuadTree->getElementsWithRatio(cameraBoundingBox,&resEdges,NULL,ratio);
-        edgesSelectedQuadTree->getElementsWithRatio(cameraBoundingBox,&resEdges,NULL,ratio);
+      if(aX==0 && aY==0){
+        if((type & RenderingWithoutRemove)==0){
+          edgesQuadTree->getElementsWithRatio(cameraBoundingBox,&resEdges,NULL,ratio);
+          edgesSelectedQuadTree->getElementsWithRatio(cameraBoundingBox,&resEdges,NULL,ratio);
+        }else{
+          edgesQuadTree->getElements(cameraBoundingBox,&resEdges,NULL);
+          edgesSelectedQuadTree->getElements(cameraBoundingBox,&resEdges,NULL);
+        }
       }else{
-        edgesQuadTree->getElements(cameraBoundingBox,&resEdges,NULL);
-        edgesSelectedQuadTree->getElements(cameraBoundingBox,&resEdges,NULL);
+        edgesQuadTree->getElements(&resEdges,NULL);
+        edgesSelectedQuadTree->getElements(&resEdges,NULL);
       }
 
       for(unsigned int i=0;i<resEdges.size();++i){
@@ -327,18 +291,24 @@ namespace tlp {
       }
     }
     if((type & RenderingSimpleEntities)!=0){
-      if((type & RenderingWithoutRemove)==0)
-        entitiesQuadTree->getElementsWithRatio(cameraBoundingBox,NULL,&resEntities,ratio);
-      else
-        entitiesQuadTree->getElements(cameraBoundingBox,NULL,&resEntities);
+      if(aX==0 && aY==0){
+        if((type & RenderingWithoutRemove)==0)
+          entitiesQuadTree->getElementsWithRatio(cameraBoundingBox,NULL,&resEntities,ratio);
+        else
+          entitiesQuadTree->getElements(cameraBoundingBox,NULL,&resEntities);
+      }else{
+        entitiesQuadTree->getElements(NULL,&resEntities);
+      }
       for(unsigned int i=0;i<resEntities.size();++i){
         simples.push_back(pair<unsigned long,BoundingBox>(resEntities[i],((GlSimpleEntity*)(resEntities[i]))->getBoundingBox()));
       }
     }
 
+    cout << "nodes : " << nodes.size() << endl;
+
     QtCPULODCalculator::computeFor3DCamera(&simples,&nodes,&edges,
-          outputSimple, outputNodes, outputEdges,
-          eye,transformMatrix,globalViewport,currentViewport);
+                                           outputSimple, outputNodes, outputEdges,
+                                           eye,transformMatrix,globalViewport,currentViewport);
   }
 
   void QtQuadTreeLODCalculator::removeObservers() {
@@ -398,14 +368,14 @@ namespace tlp {
   }
 
   void QtQuadTreeLODCalculator::clear() {
-      simpleBoundingBoxVector.clear();
-      nodesBoundingBoxVector.clear();
-      edgesBoundingBoxVector.clear();
-      simpleResultVector.clear();
-      nodesResultVector.clear();
-      edgesResultVector.clear();
-      cameraVector.clear();
-    }
+    simpleBoundingBoxVector.clear();
+    nodesBoundingBoxVector.clear();
+    edgesBoundingBoxVector.clear();
+    simpleResultVector.clear();
+    nodesResultVector.clear();
+    edgesResultVector.clear();
+    cameraVector.clear();
+  }
 
 }
 
