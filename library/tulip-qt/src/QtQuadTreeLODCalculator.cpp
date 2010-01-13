@@ -304,8 +304,6 @@ namespace tlp {
       }
     }
 
-    cout << "nodes : " << nodes.size() << endl;
-
     QtCPULODCalculator::computeFor3DCamera(&simples,&nodes,&edges,
                                            outputSimple, outputNodes, outputEdges,
                                            eye,transformMatrix,globalViewport,currentViewport);
