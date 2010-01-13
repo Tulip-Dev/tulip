@@ -9,8 +9,12 @@
 #include "Application.h"
 #include "TulipApp.h"
 
+
 using namespace std;
 int main( int argc, char **argv ) {
+
+  QLocale::setDefault(QLocale(QLocale::English));
+
   Application tulip( argc, argv );
   TulipApp *mainWindow = new TulipApp();
   QDesktopWidget desktop;
