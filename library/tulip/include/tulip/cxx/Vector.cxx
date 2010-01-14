@@ -5,6 +5,12 @@
 
 //======================================================
 template <typename TYPE,unsigned int SIZE>
+VECTORTLP::Vector(int v) {
+  for (unsigned int i=0;i<SIZE;++i)
+    VECTORTLP::array[i] = (TYPE) v;
+}
+//======================================================
+template <typename TYPE,unsigned int SIZE>
 VECTORTLP & VECTORTLP::operator*=(const TYPE &scalaire) {
   for (unsigned int i=0;i<SIZE;++i)
     VECTORTLP::array[i]*=scalaire;
@@ -130,16 +136,55 @@ VECTORTLP tlp::operator^(const VECTORTLP &u, const VECTORTLP &v) {
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE>
+VECTORTLP tlp::operator-(const VECTORTLP &u) {
+  return VECTORTLP(u) *= (TYPE) -1;
+}
+//======================================================
+template <typename TYPE,unsigned int SIZE>
+bool VECTORTLP::operator>(const VECTORTLP &vecto) const {
+  for (unsigned int i=0;i<SIZE;++i)
+    if (VECTORTLP::array[i] <= vecto[i]) return false;
+  return true;
+}
+//======================================================
+template <typename TYPE,unsigned int SIZE>
+bool VECTORTLP::operator<(const VECTORTLP &vecto) const {
+  for (unsigned int i=0;i<SIZE;++i)
+    if (VECTORTLP::array[i] >= vecto[i]) return false;
+  return true;
+}
+//======================================================
+template <typename TYPE,unsigned int SIZE>
 bool VECTORTLP::operator!=(const VECTORTLP &vecto) const {
+  if (std::numeric_limits<TYPE>::is_integer ||
+      !std::numeric_limits<TYPE>::is_specialized) {
   for (unsigned int i=0;i<SIZE;++i)
     if (VECTORTLP::array[i]!=vecto[i]) return true;
+  } else {
+      for (unsigned int i=0;i<SIZE;++i) {
+	TYPE tmp = VECTORTLP::array[i] - vecto[i];
+	if (tmp > std::numeric_limits<TYPE>::epsilon() ||
+	    tmp < -std::numeric_limits<TYPE>::epsilon())
+	  return true;
+      }
+  }
   return false;
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE>
 bool VECTORTLP::operator==(const VECTORTLP &vecto) const {
-  for (unsigned int i=0;i<SIZE;++i)
+  if (std::numeric_limits<TYPE>::is_integer ||
+      !std::numeric_limits<TYPE>::is_specialized) {
+    for (unsigned int i=0;i<SIZE;++i)
       if (VECTORTLP::array[i]!=vecto[i]) return false;
+  } else {
+      for (unsigned int i=0;i<SIZE;++i) {
+	TYPE tmp = VECTORTLP::array[i] - vecto[i];
+	if (tmp > std::numeric_limits<TYPE>::epsilon() ||
+	    tmp < -std::numeric_limits<TYPE>::epsilon())
+	  return false;
+      }
+    }
   return true;
 }
 //======================================================

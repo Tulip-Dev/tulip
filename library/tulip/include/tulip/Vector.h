@@ -34,6 +34,7 @@ namespace tlp {
     class Vector:public Array<TYPE,SIZE> {
     public:
 
+    explicit inline VECTOR(int v = 0);      
     inline VECTOR & operator*=(const TYPE &);
     inline VECTOR & operator*=(const VECTOR &);
     inline VECTOR & operator/=(const TYPE &);
@@ -44,6 +45,8 @@ namespace tlp {
     inline VECTOR & operator-=(const VECTOR &);
     inline VECTOR & operator^=(const VECTOR &);
     
+    inline bool operator>(const VECTOR &) const;
+    inline bool operator<(const VECTOR &) const;
     inline bool operator!=(const VECTOR &) const;
     inline bool operator==(const VECTOR &) const;
     inline VECTOR & fill(const TYPE &obj);
@@ -55,7 +58,7 @@ namespace tlp {
   TEMPLATEVECTOR
     inline VECTOR operator*(const VECTOR &, const VECTOR &);
   TEMPLATEVECTOR
-    inline VECTOR operator*(const TYPE &   , const VECTOR &);
+    inline VECTOR operator*(const TYPE & , const VECTOR &);
   TEMPLATEVECTOR
     inline VECTOR operator*(const VECTOR &, const TYPE &);
   TEMPLATEVECTOR
@@ -72,6 +75,8 @@ namespace tlp {
     inline VECTOR operator/(const VECTOR &, const TYPE &);
   TEMPLATEVECTOR
     inline VECTOR operator^(const VECTOR &, const VECTOR &);
+  TEMPLATEVECTOR
+    inline VECTOR operator-(const VECTOR&);
 
   /*@}*/
 }

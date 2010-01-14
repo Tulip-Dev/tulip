@@ -95,35 +95,6 @@ namespace tlp {
       return static_cast< TYPE > (( (*(const Vector<Obj,SIZE> *)this) ^ (*((const Vector<Obj,SIZE> *) &v)) ));
     }
 
-    bool operator!=(const Vector<Obj,SIZE> &vecto) const {
-      if (std::numeric_limits<Obj>::is_integer) {
-	for (unsigned int i=0;i<SIZE;++i)
-	  if (Vector<Obj,SIZE>::array[i]!=vecto[i]) return true;
-      } else {
-	for (unsigned int i=0;i<SIZE;++i) {
-	  Obj tmp = Vector<Obj,SIZE>::array[i] - vecto[i];
-	  if (tmp > std::numeric_limits<Obj>::epsilon() ||
-	      tmp < -std::numeric_limits<Obj>::epsilon())
-	    return true;
-	}
-      }
-      return false;
-    }
-
-    bool operator==(const Vector<Obj,SIZE> &vecto) const {
-      if (std::numeric_limits<Obj>::is_integer) {
-	for (unsigned int i=0;i<SIZE;++i)
-	  if (Vector<Obj,SIZE>::array[i]!=vecto[i]) return false;
-      } else {
-	for (unsigned int i=0;i<SIZE;++i) {
-	  Obj tmp = Vector<Obj,SIZE>::array[i] - vecto[i];
-	  if (tmp > std::numeric_limits<Obj>::epsilon() ||
-	      tmp < -std::numeric_limits<Obj>::epsilon())
-	    return false;
-	}
-      }
-      return true;
-    }
  };
 
 
