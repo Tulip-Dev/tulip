@@ -3,6 +3,7 @@
 #endif
 
 #include <qtimer.h>
+#include <qlocale.h>
 #include <QtGui/qdesktopwidget.h>
 
 #include "AppStartUp.h"
