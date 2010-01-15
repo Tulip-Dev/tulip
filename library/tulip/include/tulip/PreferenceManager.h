@@ -58,7 +58,7 @@ namespace tlp {
     /**
      * Set color for selection
      */
-    bool setSelectionColor(const Color &color) {
+    void setSelectionColor(const Color &color) {
       selectionColor=color;
     }
 
