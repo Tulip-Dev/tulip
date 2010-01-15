@@ -15,31 +15,6 @@ using namespace std;
 
 namespace tlp {
 
-static GLuint copyFboTexture(QGLFramebufferObject *glFrameBuf) {
-
-	GLuint textureId = 0;
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
-
-
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	unsigned char* buff = new unsigned char[glFrameBuf->width() * glFrameBuf->height() * 4];
-	glBindTexture(GL_TEXTURE_2D, glFrameBuf->texture());
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
-
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	gluBuild2DMipmaps(GL_TEXTURE_2D, 4, glFrameBuf->width(), glFrameBuf->height(), GL_RGBA, GL_UNSIGNED_BYTE, buff);
-
-	delete [] buff;
-
-	return textureId;
-}
-
 GlMainWidgetItem::GlMainWidgetItem(GlMainWidgetGraphicsView *parent,GlMainWidget *glMainWidget, int width, int height,QGraphicsItem *parentItem,bool decorate) :
 	QGraphicsItem(parentItem),parent(parent),glMainWidget(glMainWidget),redrawNeed(true),decorate(decorate),fbo1(NULL),fbo2(NULL),width(width),height(height) {
 	setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -56,13 +31,13 @@ GlMainWidgetItem::~GlMainWidgetItem() {
 		delete fbo1;
 
 	if(fbo2)
-	  delete fbo2;
+		delete fbo2;
 }
 
 const float offset = 2;
 
 QRectF GlMainWidgetItem::boundingRect() const {
-  return QRectF(-width / 2, -height / 2, width, height);
+  return QRectF(-width / 2.0f, -height / 2.0f, width, height);
 }
 
 void GlMainWidgetItem::glMainWidgetDraw(GlMainWidget *,bool){
@@ -78,11 +53,8 @@ void GlMainWidgetItem::glMainWidgetRedraw(GlMainWidget *){
 void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
   QRectF rect = boundingRect().translated(pos());
 
-  vpWidth = painter->device()->width();
-  vpHeight = painter->device()->height();
-
-  float left = 2.0f * float(rect.left()) / vpWidth - 1.0f;
-  float top = 1.0f - 2.0f * float(rect.top()) / vpHeight;
+  float left = 2.0f * float(rect.left()) / width - 1.0f;
+  float top = 1.0f - 2.0f * float(rect.top()) / height;
 
   ostringstream oss1;
   oss1 << "fbo1#" << (unsigned long) this;
@@ -122,8 +94,7 @@ void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     glMainWidget->getScene()->draw();
     fbo1->release();
 
-    GlTextureManager::getInst().deleteTexture(oss1.str());
-    GlTextureManager::getInst().registerExternalTexture(oss1.str(), copyFboTexture(fbo1));
+    GlTextureManager::getInst().registerExternalTexture(oss1.str(), fbo1->texture());
 
     redrawNeed=false;
   }
@@ -133,7 +104,7 @@ void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
   Camera newCamera(glMainWidget->getScene(),false);
   newCamera.initGl();
   glClearColor(255, 255, 255, 0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
   glDisable(GL_BLEND);
   setMaterial(Color(255,255,255,255));
@@ -165,10 +136,9 @@ void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 
   glPopAttrib();
 
-  GlTextureManager::getInst().deleteTexture(oss2.str());
-  GlTextureManager::getInst().registerExternalTexture(oss2.str(), copyFboTexture(fbo2));
+  GlTextureManager::getInst().registerExternalTexture(oss2.str(), fbo2->texture());
 
-  rect = QRectF(left - width / 2, top - height / 2, width, height);
+  rect = QRectF(left - width / 2.0f, top - height / 2.0f, width, height);
 
   if(decorate){
     QPainterPath path;
@@ -207,6 +177,11 @@ void GlMainWidgetItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 void GlMainWidgetItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
   QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonPress,QPoint(event->pos().x()+((float)width)/2.,event->pos().y()+((float)height)/2.), event->button(), event->buttons(), event->modifiers());
   QApplication::sendEvent(glMainWidget,eventModif);
+}
+
+void GlMainWidgetItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+	QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonDblClick,QPoint(event->pos().x()+((float)width)/2.,event->pos().y()+((float)height)/2.), event->button(), event->buttons(), event->modifiers());
+	QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 void GlMainWidgetItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {

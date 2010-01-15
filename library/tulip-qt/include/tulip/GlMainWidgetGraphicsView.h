@@ -69,8 +69,6 @@ protected:
 
   void resizeEvent(QResizeEvent *event);
 
-  bool viewportEvent(QEvent* e);
-
 protected slots :
 
   void hideOverview(bool);

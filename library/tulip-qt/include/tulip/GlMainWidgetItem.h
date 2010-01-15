@@ -88,6 +88,7 @@ protected :
   void mousePressEvent(QGraphicsSceneMouseEvent *event);
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
   void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
+  void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
 
 protected slots:
 

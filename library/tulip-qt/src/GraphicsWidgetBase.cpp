@@ -6,6 +6,7 @@ GraphicsWidgetBase::GraphicsWidgetBase() {
 	setFlag(QGraphicsItem::ItemIsMovable, true);
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
+	setCacheMode(QGraphicsItem::ItemCoordinateCache);
 	setAcceptHoverEvents(true);
 #if(QT_VERSION >= QT_VERSION_CHECK(4,5,0))
 	setOpacity(0.8);

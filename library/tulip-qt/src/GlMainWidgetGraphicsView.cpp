@@ -42,6 +42,7 @@ static QGLFormat GlInit() {
   tmpFormat.setAlpha(true);
   tmpFormat.setOverlay(false);
   tmpFormat.setStereo(false);
+  tmpFormat.setSampleBuffers(true);
   return tmpFormat;
 }
 
@@ -68,7 +69,6 @@ glMainWidget(glMainWidget), tulipView(tulipView), drawNeeded(true){
 	setFrameStyle(QFrame::NoFrame);
 
 	tabWidgetProxy = new TabWidgetHidableMenuGraphicsProxy(30);
-
 	/*QToolBar *toolBar=new QToolBar;
 	list<Interactor *> interactorsList=tulipView->getInteractors();
 	list<QAction *> interactorsActionList;
@@ -112,8 +112,6 @@ glMainWidget(glMainWidget), tulipView(tulipView), drawNeeded(true){
 	    tabWidgetProxy->translate(0,128);
 	  }
 	}
-
-
 }
 
 void GlMainWidgetGraphicsView::draw(bool glSceneChanged) {
@@ -138,49 +136,6 @@ void GlMainWidgetGraphicsView::resizeEvent(QResizeEvent *event) {
 	glSceneItem->resize(size().width(),size().height());
 }
 
-bool GlMainWidgetGraphicsView::viewportEvent(QEvent* event) {
-	if (event->type() == QEvent::MouseButtonDblClick || event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonRelease) {
-		QMouseEvent* e = static_cast<QMouseEvent*>(event);
-		QList<QGraphicsItem *> itemsUnderPointer = scene()->items(QRectF(e->pos(), QSizeF(1, 1)), Qt::IntersectsItemBoundingRect);
-		if (!scene()->mouseGrabberItem() && itemsUnderPointer.isEmpty()) {
-			if (event->type() == QEvent::MouseButtonRelease && (scene()->selectedItems().size() > 0 || scene()->activeWindow() != NULL)) {
-				scene()->clearSelection();
-				scene()->clearFocus();
-				scene()->setActiveWindow(0);
-				scene()->update();
-			}
-			return QGraphicsView::event(e);
-		}
-	} else if (event->type() == QEvent::MouseMove) {
-		QMouseEvent* e = static_cast<QMouseEvent*>(event);
-		QList<QGraphicsItem *> itemsUnderPointer = scene()->items(QRectF(e->pos(), QSizeF(1, 1)), Qt::IntersectsItemBoundingRect);
-		if (!itemsUnderPointer.isEmpty()) {
-			bool selectedItemsUnderPointer = false;
-			QList<QGraphicsItem *> selectedItems = scene()->selectedItems();
-			for (int i = 0 ; i < itemsUnderPointer.size() ; ++i) {
-				for (int j = 0 ; j < selectedItems.size() ; ++j) {
-					if (itemsUnderPointer.at(i) == selectedItems.at(j)) {
-						selectedItemsUnderPointer = true;
-						break;
-					}
-				}
-				if (selectedItemsUnderPointer) {
-					break;
-				}
-			}
-			if (!selectedItemsUnderPointer && scene()->activeWindow() == NULL) {
-				return QGraphicsView::event(e);
-			}
-		} else {
-
-			QGraphicsView::viewportEvent(e);
-			return QGraphicsView::event(e);
-		}
-	}
-
-	return QGraphicsView::viewportEvent(event);
-}
-
 void GlMainWidgetGraphicsView::hideOverview(bool hide){
   if(hide){
     overviewItem->setVisible(false);
@@ -194,7 +149,6 @@ void GlMainWidgetGraphicsView::hideOverview(bool hide){
 void GlMainWidgetGraphicsView::setVisibleOverview(bool visible){
   hideOverview(!visible);
 }
-
 
 }
 
