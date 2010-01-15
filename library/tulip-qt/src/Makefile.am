@@ -71,7 +71,7 @@ BUILT_SOURCES = \
 	moc_GridOptionsData.cpp \
 	moc_QtProgress.cpp \
 	moc_Controller.cpp \
-  moc_ControllerViewsManager.cpp \
+	moc_ControllerViewsManager.cpp \
 	moc_MainController.cpp \
 	moc_View.cpp \
 	moc_AbstractView.cpp \
@@ -90,7 +90,7 @@ QT44_BUILD_SOURCES = \
 	moc_GlMainWidgetItem.cpp \
 	moc_TabWidgetHidableMenuGraphicsProxy.cpp
 
-SOURCES = \
+DIST_SOURCES = \
 	TulipTableWidget.cpp \
 	GlMainWidget.cpp \
 	GlMainView.cpp \
@@ -126,8 +126,8 @@ SOURCES = \
 	QtProgress.cpp \
 	Controller.cpp \
 	ControllerAlgorithmTools.cpp \
-  ControllerViewsTools.cpp \
-  ControllerViewsManager.cpp \
+	ControllerViewsTools.cpp \
+	ControllerViewsManager.cpp \
 	MainController.cpp \
 	View.cpp \
 	AbstractView.cpp \
@@ -157,10 +157,10 @@ QT44_SOURCES = \
 
 if QT44
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES) $(QT44_BUILD_SOURCES)
-dist_libtulip_qt4_la_SOURCES = $(SOURCES) $(QT44_SOURCES)
+dist_libtulip_qt4_la_SOURCES = $(DIST_SOURCES) $(QT44_SOURCES)
 else
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
-dist_libtulip_qt4_la_SOURCES = $(SOURCES)
+dist_libtulip_qt4_la_SOURCES = $(DIST_SOURCES)
 endif
 
 CLEANFILES = $(BUILT_SOURCES) moc_GlMainWidgetPlugin.cpp moc_PropertyWidgetPlugin.cpp moc_ElementPropertiesWidgetPlugin.cpp moc_SGHierarchyWidgetPlugin.cpp moc_GWOverviewWidgetPlugin.cpp
