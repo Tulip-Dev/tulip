@@ -44,8 +44,8 @@ INCLUDES_H = \
 	tulip/QtProgress.h \
 	tulip/Controller.h \
 	tulip/ControllerAlgorithmTools.h \
-  tulip/ControllerViewsTools.h \
-  tulip/ControllerViewsManager.h \
+	tulip/ControllerViewsTools.h \
+	tulip/ControllerViewsManager.h \
 	tulip/MainController.h \
 	tulip/ControllerPluginsManager.h \
 	tulip/View.h \
@@ -59,6 +59,7 @@ INCLUDES_H = \
 	tulip/StringsListSelectionWidgetInterface.h \
 	tulip/SimpleStringsListSelectionWidget.h \
 	tulip/DoubleStringsListSelectionWidget.h \
+	tulip/ListPropertyWidget.h \
 	tulip/QGlPixelBufferManager.h \
 	tulip/BaseGraphicsViewComponentMacro.h
 
