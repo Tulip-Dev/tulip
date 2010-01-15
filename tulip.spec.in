@@ -181,7 +181,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libFileSystem-%{version}.*
 %{prefix}/lib/tlp/libWebImport-%{version}.*
 %{prefix}/lib/tlp/designer/lib*.*
-%{prefix}/lib/tlp/view/libParallelCoordinates-%{version}.*
 %{prefix}/lib/tlp/view/libSpreadSheet-%{version}.*
 
 %changelog
