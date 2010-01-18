@@ -121,6 +121,18 @@ ENDIF(NOT TULIP_USE_MAIN_CONTROLLER)
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG -funroll-loops -mtune=native -march=native")
 
 ## -----------------------------------------------------------------------------------------------
+## Check 64 bits
+## -----------------------------------------------------------------------------------------------
+EXEC_PROGRAM(uname ARGS "-m" OUTPUT_VARIABLE UNAME_OUT)
+STRING(COMPARE EQUAL "${UNAME_OUT}" "x86_64" I64)
+IF(NOT I64)
+  STRING(COMPARE EQUAL "${UNAME_OUT}" "ia64" I64)
+ENDIF(NOT I64)
+IF(I64)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DI64")
+ENDIF(I64)
+
+## -----------------------------------------------------------------------------------------------
 ## Qt assistant config
 ## -----------------------------------------------------------------------------------------------
 IF(WIN32)
