@@ -1,5 +1,5 @@
-if [ $# -lt 2 ]; then
-  echo "usage: $(basename $0) plugins_src_top_dir plugins_server_dir arch"
+if [ $# -lt 3 ]; then
+  echo "usage: $(basename $0) plugins_src_top_dir plugins_server_dir generate_doc(yes/no) arch"
   exit
 fi
 
@@ -7,9 +7,11 @@ TULIP_VERSION=`$(dirname $0)/../../../../tulip-config --version`
 
 SRC_TOP_DIR=$1
 SRV_DIR=$2
+GENERATEDOC=$3
 ARCH="i386"
-if [ $# -gt 2 ]; then
-  ARCH=$3
+if [ $# -gt 3 ]; then
+  echo "ok"
+  ARCH=$4
 fi
 
 if [ -d /tmp/plugins_doc ]; then
@@ -31,6 +33,6 @@ else
 FILE=${FILE_CPP}
 fi
 sh generate_plugin_doc.sh ${FILE} /tmp/plugins_doc
-./pluginInstaller ${LIB_DIR}/lib*.so /tmp/plugins_doc/xml/${DIR}*.xml $SRV_DIR $ARCH
+./pluginInstaller ${LIB_DIR}/lib*.so /tmp/plugins_doc/xml/${DIR}*.xml $SRV_DIR $GENERATEDOC $ARCH
 done
 

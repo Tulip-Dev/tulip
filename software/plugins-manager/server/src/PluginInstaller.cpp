@@ -19,11 +19,12 @@ using namespace std;
 using namespace tlp;
 
 int main(int argc,char **argv) {
-  if(argc != 4 && argc != 5)  {
+  if(argc != 5 && argc != 6)  {
     cout << "How to use :" << endl;
     cout << " First arg : plugin file" << endl;
     cout << " Second arg : doxygen generated plugin doc file" << endl;
     cout << " Third arg : target directory" << endl;
+    cout << " 4th arg : generate .xml/.doc files (yes/no)" << endl;
     cout << " 5th arg : i386/i64 : default i386" << endl;
     exit(1);
   }
@@ -36,9 +37,12 @@ int main(int argc,char **argv) {
   cout << "plugin doc path : " << pluginDocPath.toStdString() << endl;
   cout << "target path : " << targetPath.toStdString() << endl;
 
+  bool generateDoc=true;
+  if(QString(argv[4])=="no")
+    generateDoc=false;
   QString subDir("i386");
   if(argc>=6)
-    subDir=QString(argv[4]);
+    subDir=QString(argv[5]);
     
   QFileInfo fileInfo(pluginPath);
   QDir srcDir = fileInfo.dir();
@@ -139,8 +143,9 @@ int main(int argc,char **argv) {
   QDir dstSubDir(targetPath+"/plugins/"+path+"/"+subDir);
   dstSubDir.mkpath(targetPath+"/plugins/"+path+"/"+subDir);
 
-  if (!generatePluginInfoFile(pluginInfo, dstDir))
-    return EXIT_FAILURE;
+  if(generateDoc)
+    if (!generatePluginInfoFile(pluginInfo, dstDir))
+      return EXIT_FAILURE;
 
   if (suffix == "so")
     UpdatePlugin::copyFile(srcDir,
@@ -159,10 +164,12 @@ int main(int argc,char **argv) {
 			   QString(pluginInfo.fileName.c_str())+".dll");
 
   // Documentation
-  QString fileName(pluginInfo.fileName.c_str());
-  QString version(pluginInfo.version.c_str());
-  QFile docFile(pluginDocPath);
-  generatePluginDocFile(fileName, version, docFile, dstDir);
-    
+  if(generateDoc){
+    QString fileName(pluginInfo.fileName.c_str());
+    QString version(pluginInfo.version.c_str());
+    QFile docFile(pluginDocPath);
+    generatePluginDocFile(fileName, version, docFile, dstDir);
+  }    
+
   return EXIT_SUCCESS;
 }
