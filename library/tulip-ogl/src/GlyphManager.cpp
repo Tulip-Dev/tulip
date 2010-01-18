@@ -76,7 +76,7 @@ namespace tlp
   //
   void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs) {
     GlyphContext gc = GlyphContext(graph,glGraphInputData);
-    glyphs.setAll(0);
+    glyphs.setAll(GlyphFactory::factory->getPluginObject("3D - Cube OutLined", &gc));
     Iterator<string> *itS = GlyphFactory::factory->availablePlugins();
     while (itS->hasNext()) {
       string glyphName=itS->next();
