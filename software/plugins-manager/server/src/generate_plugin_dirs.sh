@@ -1,5 +1,5 @@
 if [ $# -lt 2 ]; then
-  echo "usage: $(basename $0) plugins_src_top_dir plugins_server_dir"
+  echo "usage: $(basename $0) plugins_src_top_dir plugins_server_dir arch"
   exit
 fi
 
@@ -7,6 +7,10 @@ TULIP_VERSION=`$(dirname $0)/../../../../tulip-config --version`
 
 SRC_TOP_DIR=$1
 SRV_DIR=$2
+ARCH="i386"
+if [ $# -gt 2 ]; then
+  ARCH=$3
+fi
 
 if [ -d /tmp/plugins_doc ]; then
   rm -rf /tmp/plugins_doc
@@ -27,6 +31,6 @@ else
 FILE=${FILE_CPP}
 fi
 sh generate_plugin_doc.sh ${FILE} /tmp/plugins_doc
-./pluginInstaller ${LIB_DIR}/lib*.so /tmp/plugins_doc/xml/${DIR}*.xml $SRV_DIR
+./pluginInstaller ${LIB_DIR}/lib*.so /tmp/plugins_doc/xml/${DIR}*.xml $SRV_DIR $ARCH
 done
 

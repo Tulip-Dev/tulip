@@ -38,6 +38,8 @@ bool generatePluginInfoFile(LocalPluginInfo& pInfo, QDir& dstDir) {
   rootNode = xmlNewNode(NULL, BAD_CAST "pluginInfo");
   xmlDocSetRootElement(doc, rootNode);
     
+  cout << "type : " << pInfo.type << " dptype : " << pInfo.displayType << endl;
+
   xmlNewProp(rootNode, BAD_CAST "name", BAD_CAST pInfo.name.c_str());
   xmlNewProp(rootNode, BAD_CAST "type", BAD_CAST pInfo.type.c_str());
   xmlNewProp(rootNode, BAD_CAST "displayType", BAD_CAST pInfo.displayType.c_str());
@@ -56,8 +58,7 @@ bool generatePluginInfoFile(LocalPluginInfo& pInfo, QDir& dstDir) {
   xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
   xmlFreeDoc(doc);
 
-  QFile pluginXmlFile(dstDir.absolutePath() + "/" + pInfo.fileName.c_str() + ".xml." +
-		      QString(pInfo.version.c_str()).replace(" ","."));
+  QFile pluginXmlFile(dstDir.absolutePath() + "/" + pInfo.fileName.c_str() + ".xml");
   if(!pluginXmlFile.open(QIODevice::WriteOnly)) {
     cerr << "Error in write file : " << pluginXmlFile.fileName().toStdString() << endl;
     return false;
@@ -73,7 +74,7 @@ bool generatePluginInfoFile(LocalPluginInfo& pInfo, QDir& dstDir) {
 }
 
 void generatePluginDocFile(QString& pFileName, QString& pVersion, QFile& pDoxFile, QDir& dstDir) {
-  QFile dstFile(dstDir.absolutePath()+ "/"+ pFileName + ".doc." + pVersion.replace(" ","."));
+  QFile dstFile(dstDir.absolutePath()+ "/"+ pFileName + ".doc");
   pDoxFile.open(QIODevice::ReadOnly | QIODevice::Text);
   dstFile.open(QIODevice::WriteOnly | QIODevice::Text);
 
