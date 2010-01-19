@@ -12,7 +12,7 @@
 namespace tlp {
 
   //==============================================================
-  struct TLP_PLUGINSMANAGER_SCOPE PluginLoaderWithInfo:public PluginLoader {
+  struct PluginLoaderWithInfo:public PluginLoader {
     std::vector<LocalPluginInfo> pluginsList;
     std::string currentType;
     std::string currentDisplayType;
