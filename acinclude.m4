@@ -711,7 +711,7 @@ dnl look for Qt minor version and add QT_MINOR_REL
    AC_SUBST(QT_MINOR_VERSION)
 dnl set QtAssistant exe name
    QT_ASSISTANT="assistant"
-   if test $QT_MINOR_VERSION -eq 4; then
+   if test $QT_MINOR_VERSION -ge 4; then
      if test ${VAR_MACOSX} = 1
      then
        QT_ASSISTANT="Assistant_adp"
