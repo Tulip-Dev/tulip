@@ -19,7 +19,7 @@ OutFile "TulipSetup_@TulipVersion@.exe"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP_NOSTRETCH
 
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "COPYING"
+!insertmacro MUI_PAGE_LICENSE "COPYING.LESSER"
 
 !insertmacro MUI_PAGE_COMPONENTS
 !insertmacro MUI_PAGE_DIRECTORY
