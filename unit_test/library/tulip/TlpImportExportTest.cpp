@@ -87,6 +87,44 @@ void TlpImportExportTest::testExport() {
   delete graph;
 }
 //==========================================================
+void TlpImportExportTest::testExportCluster() {
+  Graph *graph = newGraph();
+  CPPUNIT_ASSERT(graph != 0);
+  node n1 = graph->addNode();
+  node n2 = graph->addNode();
+  edge e1 = graph->addEdge(n1, n2);
+  Graph* sg = newSubGraph(graph, "\"name with double quotes \"");
+  sg->addNode(n1);
+  sg->addNode(n2);
+  ostream *os = new ofstream("export_test.tlp");
+  DataSet dataSet;
+  bool ok = exportGraph(graph, *os, "tlp", dataSet);
+  delete graph;
+  delete os;
+  CPPUNIT_ASSERT(ok == true);
+  graph = (Graph *) NULL;
+  graph = loadGraph("export_test.tlp");
+  CPPUNIT_ASSERT(graph != 0);
+  node n;
+  forEach(n, graph->getNodes()) {
+    CPPUNIT_ASSERT((n == n1) || (n == n2));
+  }
+  edge e;
+  forEach(e, graph->getEdges()) {
+    CPPUNIT_ASSERT(e == e1);
+  }
+  Graph* g;
+  forEach(g, graph->getSubGraphs()) {
+    string name;
+    g->getAttribute(string("name"), name);
+    CPPUNIT_ASSERT(name == string("\"name with double quotes \""));
+    forEach(n, g->getNodes()) {
+      CPPUNIT_ASSERT((n == n1) || (n == n2));
+    }
+  }
+  delete graph;
+}
+//==========================================================
 CppUnit::Test * TlpImportExportTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Tlp Import/Export mechanism" );
   suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>( 
@@ -101,5 +139,8 @@ CppUnit::Test * TlpImportExportTest::suite() {
   suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>( 
 							      "Export test", 
 							      &TlpImportExportTest::testExport ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>( 
+							      "Export Cluster test", 
+							      &TlpImportExportTest::testExportCluster ) );
   return suiteOfTests;
 }

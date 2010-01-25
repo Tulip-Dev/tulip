@@ -93,7 +93,7 @@ public:
     //=====================================================
   void saveGraphElements(ostream &os, Graph *graph) {
     if (graph->getSuperGraph() != graph) {
-      os << "(cluster " << graph->getId() << " \"" << graph->getAttribute<string>("name") << "\"" << endl;
+      os << "(cluster " << graph->getId() << " \"" << convert(graph->getAttribute<string>("name")) << "\"" << endl;
       Iterator<node> *itN = graph->getNodes();
       if (itN->hasNext()) {
 	os << "(nodes ";

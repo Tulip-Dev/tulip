@@ -14,6 +14,7 @@ public:
   void testImport();
   void testSave();
   void testExport();
+  void testExportCluster();
   static CppUnit::Test *suite();
 };
 
