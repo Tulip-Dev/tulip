@@ -30,8 +30,8 @@ class TLP_SCOPE Bfs {
 
   BooleanProperty* s_proxy;
   unsigned int nbNodes;
-  MutableContainer<bool>::MutableContainer selectedNodes;
-  MutableContainer<bool>::MutableContainer selectedEdges;
+  MutableContainer<bool> selectedNodes;
+  MutableContainer<bool> selectedEdges;
 
  };  
 }

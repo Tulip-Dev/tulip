@@ -20,7 +20,7 @@ tlp::BmdList<TYPE>::BmdList():head(0),tail(0),count(0) {
 }
 //=================================================================
 template <typename TYPE>
-tlp::BmdList<TYPE>::BmdList<TYPE>::~BmdList() {
+tlp::BmdList<TYPE>::~BmdList() {
   clear();
 }
 //=================================================================

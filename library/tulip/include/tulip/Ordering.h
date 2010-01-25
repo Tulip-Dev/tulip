@@ -48,21 +48,21 @@ class TLP_SCOPE Ordering : public std::vector<std::vector<node> > {
 
  private :
  
-  PlanarConMap::PlanarConMap * Gp;
-  MutableContainer<int>::MutableContainer oute;
-  MutableContainer<int>::MutableContainer outv;
-  MutableContainer<bool>::MutableContainer visitedNodes;
-  MutableContainer<bool>::MutableContainer visitedFaces;
-  MutableContainer<bool>::MutableContainer markedFaces;
-  MutableContainer<int>::MutableContainer seqP;
-  MutableContainer<bool>::MutableContainer isOuterFace;
-  MutableContainer<bool>::MutableContainer contour;
-  MutableContainer<bool>::MutableContainer is_selectable;
-  MutableContainer<bool>::MutableContainer is_selectable_visited;
-  MutableContainer<bool>::MutableContainer is_selectable_face;
-  MutableContainer<bool>::MutableContainer is_selectable_visited_face;
-  MutableContainer<node>::MutableContainer left;
-  MutableContainer<node>::MutableContainer right;
+  PlanarConMap * Gp;
+  MutableContainer<int> oute;
+  MutableContainer<int> outv;
+  MutableContainer<bool> visitedNodes;
+  MutableContainer<bool> visitedFaces;
+  MutableContainer<bool> markedFaces;
+  MutableContainer<int> seqP;
+  MutableContainer<bool> isOuterFace;
+  MutableContainer<bool> contour;
+  MutableContainer<bool> is_selectable;
+  MutableContainer<bool> is_selectable_visited;
+  MutableContainer<bool> is_selectable_face;
+  MutableContainer<bool> is_selectable_visited_face;
+  MutableContainer<node> left;
+  MutableContainer<node> right;
   bool existMarkedF;
   FaceAndPos minMarkedFace ; 
   Face ext;

@@ -158,7 +158,7 @@ bool MixedModel::run() {
     if(!planar){
       // cout << "Graph is not planar ...";
       BooleanProperty * resultatAlgoSelection = currentGraph->getProperty<BooleanProperty>("viewSelection");
-      Bfs::Bfs sp(currentGraph,resultatAlgoSelection);
+      Bfs sp(currentGraph,resultatAlgoSelection);
       currentGraph->delSubGraph(sp.graph);
       G = tlp::newSubGraph(currentGraph);
       Iterator<edge> * ite = currentGraph->getEdges();

@@ -85,7 +85,7 @@ class MixedModel : public tlp::LayoutAlgorithm {
   tlp::Graph * currentGraph;
   std::vector<tlp::edge> dummy;
   std::map<tlp::node, std::vector<tlp::Coord> > out_points;
-  tlp::MutableContainer<tlp::Coord>::MutableContainer nodeSize;
+  tlp::MutableContainer<tlp::Coord> nodeSize;
   std::vector<tlp::edge> unplanar_edges;
   bool planar;
   tlp::SizeProperty *size;
