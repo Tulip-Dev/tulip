@@ -836,6 +836,7 @@ bool TulipApp::closeWin() {
     for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
       if((*it).second){
         Graph *graph=((*it).second)->getGraph();
+        assert(graph);
         while(graph->getRoot()!=graph)
           graph=graph->getRoot();
         bool canceled = askSaveGraph(graph->getAttribute<string>("name"),(*it).first);
