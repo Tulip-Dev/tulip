@@ -118,7 +118,7 @@ ENDIF(NOT TULIP_USE_MAIN_CONTROLLER)
 ## -----------------------------------------------------------------------------------------------
 ## Define NDEBUG when we are in release mode
 ## -----------------------------------------------------------------------------------------------
-SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG -funroll-loops -mtune=native -march=native")
+SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -DNDEBUG -funroll-loops -pipe")
 
 ## -----------------------------------------------------------------------------------------------
 ## Check 64 bits
