@@ -64,13 +64,14 @@ namespace tlp {
     void setInputData(GlGraphInputData *newInputData);
 
     void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end);
-    void observableDestroyed(Observable *) {}
+    void observableDestroyed(Observable *){}
     void addNode(Graph *,const node ){haveToCompute=true;removeObservers();}
     void addEdge(Graph *,const edge ){haveToCompute=true;removeObservers();}
     void delNode(Graph *,const node ){haveToCompute=true;removeObservers();}
     void delEdge(Graph *,const edge ){haveToCompute=true;removeObservers();}
     void addLocalProperty(Graph*, const std::string &name);
     void delLocalProperty(Graph*, const std::string &name);
+    void destroy(Graph *);
 
     void addLayer(GlScene*, const std::string&, GlLayer*){haveToCompute=true;removeObservers();}
     void delLayer(GlScene*, const std::string&, GlLayer*){haveToCompute=true;removeObservers();}

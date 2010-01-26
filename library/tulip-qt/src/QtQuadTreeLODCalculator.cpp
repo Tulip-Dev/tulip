@@ -342,6 +342,13 @@ namespace tlp {
       removeObservers();
 
     inputData=newInputData;
+    if (newInputData == NULL) {
+      currentCamera = NULL;
+      currentGraph = NULL;
+      layoutProperty = NULL;
+      sizeProperty = NULL;
+      selectionProperty = NULL;
+    }
     haveToCompute=true;
   }
 
@@ -375,5 +382,10 @@ namespace tlp {
     cameraVector.clear();
   }
 
+  void QtQuadTreeLODCalculator::destroy(Graph *) {
+    std::cout << __PRETTY_FUNCTION__ << ":" << __LINE__ << " " << std::endl;
+    clear();
+    setInputData( NULL);
+  }
 }
 
