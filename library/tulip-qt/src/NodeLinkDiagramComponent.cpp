@@ -393,11 +393,12 @@ namespace tlp {
   // GUI functions
   //==================================================
   void NodeLinkDiagramComponent::drawAfterRenderingParametersChange(){
-    if(currentMetaNodeRenderer) {
-      delete currentMetaNodeRenderer;
-      currentMetaNodeRenderer = NULL;
-    }
     if(qtMetaNode){
+      if(currentMetaNodeRenderer) {
+        delete currentMetaNodeRenderer;
+        currentMetaNodeRenderer = NULL;
+      }
+
       currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
       mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
     }
