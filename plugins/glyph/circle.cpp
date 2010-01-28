@@ -73,10 +73,10 @@ void Circle::draw(edge e, node n, const Color& glyphColor,const Color &borderCol
 //=====================================================
 void Circle::draw(node n, float lod) {
 	drawGlyph(Glyph::glGraphInputData->elementColor->getNodeValue(n),
-			Glyph::glGraphInputData->elementTexture->getNodeValue(n),
-			Glyph::glGraphInputData->parameters->getTexturePath(),
-			Glyph::glGraphInputData->elementBorderWidth->getNodeValue(n),
-			Glyph::glGraphInputData->elementBorderColor->getNodeValue(n), lod);
+              Glyph::glGraphInputData->parameters->getTexturePath(),
+              Glyph::glGraphInputData->elementTexture->getNodeValue(n),
+              Glyph::glGraphInputData->elementBorderWidth->getNodeValue(n),
+              Glyph::glGraphInputData->elementBorderColor->getNodeValue(n), lod);
 }
 
 void Circle::drawGlyph(const Color& glyphColor, const string& texturePath,
@@ -93,8 +93,8 @@ void Circle::drawGlyph(const Color& glyphColor, const string& texturePath,
 	}
 	setMaterial(glyphColor);
 
-	if (texture != "") {
-		GlTextureManager::getInst().activateTexture(texturePath + texture);
+    if(texture != "") {
+      GlTextureManager::getInst().activateTexture(texturePath + texture);
 	}
 
 	GlDisplayListManager::getInst().callDisplayList("Circle_circle");
