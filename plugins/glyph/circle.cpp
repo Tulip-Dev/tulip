@@ -41,9 +41,9 @@ protected:
 	inline void drawCircleBorder();
 };
 //=====================================================
-GLYPHPLUGIN(Circle, "2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.0", 14)
+GLYPHPLUGIN(Circle, "2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", 14)
 ;
-EEGLYPHPLUGIN(Circle,"2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.0", 15)
+EEGLYPHPLUGIN(Circle,"2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", 15)
 ;
 //===================================================================================
 Circle::Circle(GlyphContext *gc) :
