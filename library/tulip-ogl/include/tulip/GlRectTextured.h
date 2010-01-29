@@ -65,6 +65,13 @@ namespace tlp {
     virtual void translate(const Coord& mouvement);
 
     /**
+     * Set color of the rectangle
+     */
+    virtual void setColor(const Color &color){
+      this->color=color;
+    }
+
+    /**
      * Set texture of the GlRectTextured
      */
     virtual void setTexture(const std::string &name);
@@ -95,6 +102,7 @@ namespace tlp {
     float bottom;
     float left;
     float right;
+    Color color;
     bool inPercent;
     std::string textureName;
     bool xInv;
