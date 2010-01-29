@@ -14,6 +14,7 @@
  */
 
 #include <math.h>
+#include <list> 
 #include "Circular.h"
 #include "DatasetTools.h"
 
@@ -40,28 +41,38 @@ Circular::Circular(const PropertyContext &context):LayoutAlgorithm(context){
 
 namespace {
   //============================================================================
-  void dfsRecCall(Graph *sg, vector<node> &vec, MutableContainer<bool> &nodeVisited, node n) {
+  void visitNode(Graph *sg, node n, vector<node> &vec,
+		 MutableContainer<bool> &nodeVisited,
+		 std::list<node> &toVisit) {
     nodeVisited.set(n.id, true);
     vec.push_back(n);
-    node dest;
-    forEach(dest, sg->getInOutNodes(n)) {
-      if (!nodeVisited.get(dest.id)) {
-	dfsRecCall(sg, vec, nodeVisited, dest);
-      }
+    node neighbour;
+    forEach(neighbour, sg->getInOutNodes(n)) {
+      if (!nodeVisited.get(neighbour.id))
+	toVisit.push_back(neighbour);
     }
   }
+    
   //============================================================================
   void buildDfsOrdering(Graph *sg, vector<node> &vec) {
     MutableContainer<bool> nodeVisited;
     nodeVisited.setAll(false);
     node n;
     forEach(n, sg->getNodes()) {
+      std::list<node> toVisit;
       if (!nodeVisited.get(n.id)) {
-	dfsRecCall(sg, vec, nodeVisited, n);
+	visitNode(sg, n, vec, nodeVisited, toVisit);
+	// toVisit loop
+	std::list<node>::iterator itl = toVisit.begin();
+	while(itl != toVisit.end()) {
+	  node current = *itl;
+	  if (!nodeVisited.get(current.id))
+	    visitNode(sg, current, vec, nodeVisited, toVisit);
+	  itl++;
+	}
       }
     }
   }
-  //============================================================================
   //===============================================================================
   vector<node> extractCycle(node n, deque<node> &st) {
     // cerr << __PRETTY_FUNCTION__ << endl;
