@@ -1,24 +1,9 @@
-/**
- Author: David Auber / Daniel Archambault
- Email : auber@labri.fr, archam@cs.ubc.ca
- Last modification : 25/11/2004
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
- (at your option) any later version.
-*/
-
-/**
- * implementation of Circular (which is bubble circular).  For nodes, history, 
- * author and licence please see the header file Circular.h
- */
-
 #include <math.h>
 #include <list> 
 #include "Circular.h"
 #include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(Circular,"Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","1.0","Basic");
+LAYOUTPLUGINOFGROUP(Circular,"Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","1.1","Basic");
 
 using namespace std;
 using namespace tlp;
