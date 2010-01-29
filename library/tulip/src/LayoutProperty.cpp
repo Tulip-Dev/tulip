@@ -1,5 +1,6 @@
 //-*-c++-*-
 #include <cmath>
+#include <float.h>
 #include <fstream>
 #include "tulip/LayoutProperty.h"
 #include "tulip/Coord.h"
@@ -253,8 +254,8 @@ void LayoutProperty::computeMinMax(Graph *sg) {
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << endl;
 #endif
-  Coord maxT(0,0,0);
-  Coord minT(0,0,0);
+  Coord maxT(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+  Coord minT(FLT_MAX, FLT_MAX, FLT_MAX);
 
   if (sg==0) sg=graph;
   Iterator<node> *itN=sg->getNodes();
