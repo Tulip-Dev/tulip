@@ -115,6 +115,10 @@ namespace tlp {
 
     int textureWidth,textureHeight;
     GlMainWidget::getTextureRealSize(newWidth,newHeight, textureWidth, textureHeight);
+    if(textureWidth>textureHeight)
+      textureHeight=textureWidth;
+    else
+      textureWidth=textureHeight;
 
     bool render=true;
 
@@ -135,8 +139,8 @@ namespace tlp {
         glMainWidget=new GlMainWidget(NULL,NULL);
         glMainWidget->setData(metaGraph,DataSet());
         GlGraphRenderingParameters param=parentGlMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
-        glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new QtMetaNodeRenderer(NULL,glMainWidget,glMainWidget->getScene()->getGlGraphComposite()->getInputData()));
         glMainWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+        glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new QtMetaNodeRenderer(NULL,glMainWidget,glMainWidget->getScene()->getGlGraphComposite()->getInputData()));
       }
       glMainWidget->getScene()->setBackgroundColor(backgroundColor);
 
@@ -158,11 +162,17 @@ namespace tlp {
       glGetFloatv (GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
 
       //glMainWidget->makeCurrent();
+
       Graph *graph=inputData->getGraph();
 
       Graph *metaGraph = graph->getNodeMetaInfo(n);
 
+      QtMetaNodeRenderer *oldMetaNodeRenderer=(QtMetaNodeRenderer *)glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer();
       glMainWidget->setGraph(metaGraph);
+      oldMetaNodeRenderer->setInputData(glMainWidget->getScene()->getGlGraphComposite()->getInputData());
+
+      glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new QtMetaNodeRenderer(NULL,glMainWidget,glMainWidget->getScene()->getGlGraphComposite()->getInputData()));
+      ((QtMetaNodeRenderer*)glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer())->setBackgroundColor(backgroundColor);
 
       glMainWidget->createTexture(str.str(),textureWidth,textureHeight);
       textureName.push_back(str.str());
@@ -206,6 +216,10 @@ namespace tlp {
       newWidth=128;
     if(newHeight<128)
       newHeight=128;
+    if(newWidth>newHeight)
+      newHeight=newWidth;
+    else
+      newWidth=newHeight;
 
     int textureWidth,textureHeight;
     float xTextureDec;
@@ -221,6 +235,7 @@ namespace tlp {
     glTranslatef(newCenter[0],newCenter[1],newCenter[2]);
     glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., 1.);
     glDisable(GL_LIGHTING);
+    //glBlendFunc(GL_SRC_ALPHA_SATURATE,GL_ONE);
     glDisable(GL_BLEND);
     glBegin(GL_QUADS);
     glTexCoord2f(xTextureDec, yTextureDec);
@@ -238,6 +253,16 @@ namespace tlp {
     GlTextureManager::getInst().desactivateTexture();
     glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., -1.);
     glTranslatef(-newCenter[0],-newCenter[1],-newCenter[2]);
+  }
+
+  void QtMetaNodeRenderer::setBackgroundColor(const Color &color){
+    backgroundColor=color;
+    for(TLP_HASH_MAP<Graph *,bool>::iterator it=haveToRenderGraph.begin();it!=haveToRenderGraph.end();++it){
+      (*it).second=true;
+    }
+    if(glMainWidget){
+      ((QtMetaNodeRenderer*)glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer())->setBackgroundColor(color);
+    }
   }
 
 }

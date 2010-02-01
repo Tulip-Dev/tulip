@@ -94,7 +94,11 @@ namespace tlp {
     virtual void render(node n,float lod,Camera *camera);
     virtual bool havePrerender() {return true;}
 
-    void setBackgroundColor(const Color &color){backgroundColor=color;}
+    void setInputData(GlGraphInputData *data){
+      inputData=data;
+    }
+
+    void setBackgroundColor(const Color &color);
     void setStopUpdateMetaNodes(bool stopUpdate){stopUpdateMetaNodes=stopUpdate;}
 
   protected :

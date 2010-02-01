@@ -91,9 +91,10 @@ namespace tlp {
     mainWidget->setData(graph,data);
     if(currentMetaNodeRenderer)
       delete currentMetaNodeRenderer;
-    if(qtMetaNode)
+    if(qtMetaNode){
       currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
-    else
+      ((QtMetaNodeRenderer*)currentMetaNodeRenderer)->setBackgroundColor(getGlMainWidget()->getScene()->getBackgroundColor());
+    }else
       currentMetaNodeRenderer = new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
     mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
     renderingParametersDialog->setGlMainView(this);
@@ -112,9 +113,10 @@ namespace tlp {
     overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
     if(currentMetaNodeRenderer)
       delete currentMetaNodeRenderer;
-    if(qtMetaNode)
+    if(qtMetaNode){
       currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
-    else
+      ((QtMetaNodeRenderer*)currentMetaNodeRenderer)->setBackgroundColor(getGlMainWidget()->getScene()->getBackgroundColor());
+    }else
       currentMetaNodeRenderer = new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
 
     mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
@@ -262,6 +264,7 @@ namespace tlp {
       if(currentMetaNodeRenderer)
         delete currentMetaNodeRenderer;
       currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
+      ((QtMetaNodeRenderer*)currentMetaNodeRenderer)->setBackgroundColor(getGlMainWidget()->getScene()->getBackgroundColor());
       mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
       draw();
     }
@@ -400,6 +403,7 @@ namespace tlp {
       }
 
       currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
+      ((QtMetaNodeRenderer*)currentMetaNodeRenderer)->setBackgroundColor(getGlMainWidget()->getScene()->getBackgroundColor());
       mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
     }
     draw();
