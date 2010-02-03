@@ -116,7 +116,10 @@ public:
   virtual Graph *addSubGraph(BooleanProperty *selection=0,
 			     unsigned int id = 0)=0;
   /**
-   *  Creates and returns the subgraph induced by a set of nodes
+   *  Creates and returns a new subgraph of the graph
+   *  induced by a set of nodes. The subgraph contains all
+   *  the nodes of the set and all the existing edges between
+   *  two nodes of the set including self-loops.
    */
   Graph *inducedSubGraph(const std::set<node>& nodeSet);
   /**
