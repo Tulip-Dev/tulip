@@ -161,13 +161,12 @@ namespace tlp {
       Matrix<float, 4> projectionMatrix;
       glGetFloatv (GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
 
-      //glMainWidget->makeCurrent();
-
       Graph *graph=inputData->getGraph();
 
       Graph *metaGraph = graph->getNodeMetaInfo(n);
 
       glMainWidget->setGraph(metaGraph);
+      ((QtMetaNodeRenderer*)glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer())->setBackgroundColor(backgroundColor);
 
       glMainWidget->createTexture(str.str(),textureWidth,textureHeight);
       textureName.push_back(str.str());
@@ -221,7 +220,7 @@ namespace tlp {
     float yTextureDec;
 
     Graph *metaGraph=inputData->getGraph()->getNodeMetaInfo(n);
-    glMainWidget->setData(metaGraph,DataSet());
+    glMainWidget->setGraph(metaGraph);
     GlMainWidget::getTextureRealSize(newWidth, newHeight, textureWidth,textureHeight);
     glMainWidget->getTextureShift(newWidth, newHeight, xTextureDec, yTextureDec);
 

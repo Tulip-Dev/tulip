@@ -27,6 +27,7 @@
 #include "tulip/QtCPULODCalculator.h"
 #include "tulip/Interactor.h"
 #include "tulip/InteractorManager.h"
+#include "tulip/QtMetaNodeRenderer.h"
 
 using namespace std;
 
@@ -198,8 +199,15 @@ namespace tlp {
     }
 
     GlGraphRenderingParameters param=oldGraphComposite->getRenderingParameters();
+    GlMetaNodeRenderer *metaNodeRenderer=oldGraphComposite->getInputData()->getMetaNodeRenderer();
+    oldGraphComposite->getInputData()->setMetaNodeRenderer(NULL);
     GlGraphComposite* graphComposite=new GlGraphComposite(graph);
     graphComposite->setRenderingParameters(param);
+    QtMetaNodeRenderer *qtMetaNodeRenderer = dynamic_cast<QtMetaNodeRenderer*>(metaNodeRenderer);
+    if(qtMetaNodeRenderer){
+      qtMetaNodeRenderer->setInputData(graphComposite->getInputData());
+    }
+    graphComposite->getInputData()->setMetaNodeRenderer(metaNodeRenderer);
     scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
     scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
     delete oldGraphComposite;

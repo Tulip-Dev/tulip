@@ -98,6 +98,10 @@ namespace tlp {
       inputData=data;
     }
 
+    GlGraphInputData *getInputData() {
+      return inputData;
+    }
+
     void setBackgroundColor(const Color &color);
     void setStopUpdateMetaNodes(bool stopUpdate){stopUpdateMetaNodes=stopUpdate;}
 
