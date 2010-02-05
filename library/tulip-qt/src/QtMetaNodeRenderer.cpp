@@ -139,8 +139,8 @@ namespace tlp {
         glMainWidget=new GlMainWidget(NULL,NULL);
         glMainWidget->setData(metaGraph,DataSet());
         GlGraphRenderingParameters param=parentGlMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
-        glMainWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
         glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new QtMetaNodeRenderer(NULL,glMainWidget,glMainWidget->getScene()->getGlGraphComposite()->getInputData()));
+        glMainWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
       }
       glMainWidget->getScene()->setBackgroundColor(backgroundColor);
 
@@ -167,12 +167,7 @@ namespace tlp {
 
       Graph *metaGraph = graph->getNodeMetaInfo(n);
 
-      QtMetaNodeRenderer *oldMetaNodeRenderer=(QtMetaNodeRenderer *)glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer();
       glMainWidget->setGraph(metaGraph);
-      oldMetaNodeRenderer->setInputData(glMainWidget->getScene()->getGlGraphComposite()->getInputData());
-
-      glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new QtMetaNodeRenderer(NULL,glMainWidget,glMainWidget->getScene()->getGlGraphComposite()->getInputData()));
-      ((QtMetaNodeRenderer*)glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer())->setBackgroundColor(backgroundColor);
 
       glMainWidget->createTexture(str.str(),textureWidth,textureHeight);
       textureName.push_back(str.str());
