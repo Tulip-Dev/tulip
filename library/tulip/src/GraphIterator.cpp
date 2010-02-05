@@ -175,7 +175,7 @@ bool InOutNodesIterator::hasNext() {
   return (it->hasNext());
 }
 //===============================================================
-  SGraphEdgeIterator::SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val):FactorEdgeIterator(sG,filter), value(val) {
+  SGraphEdgeIterator::SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val):FactorEdgeIterator(sG,filter), sg(sG), value(val) {
   it=_parentGraph->getEdges();
   _hasnext=false;
 #ifndef NDEBUG
