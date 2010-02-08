@@ -21,6 +21,7 @@ public:
   //  void testExtractNodeFromMetaNode();
   //  void testAddNodeToMetaNode();
   void testOpenMetaNode();
+  void testOpenMetaNodes();
   static CppUnit::Test *suite();
 };
 

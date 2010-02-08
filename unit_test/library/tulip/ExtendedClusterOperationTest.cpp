@@ -110,12 +110,43 @@ void ExtendedClusterOperationTest::testOpenMetaNode() {
 
 }
 //==========================================================
+void ExtendedClusterOperationTest::testOpenMetaNodes() {
+
+  meta = quotient->createMetaNode(group);
+  group.clear();
+  group.insert(nodes[3]);
+  group.insert(nodes[4]);
+  node meta2 = quotient->createMetaNode(group);
+  quotient->openMetaNode(meta);
+  quotient->openMetaNode(meta2);
+  
+  CPPUNIT_ASSERT_EQUAL(false, quotient->isElement(meta));
+  CPPUNIT_ASSERT_EQUAL(false, graph->isElement(meta));
+  CPPUNIT_ASSERT_EQUAL(false, quotient->isElement(meta2));
+  CPPUNIT_ASSERT_EQUAL(false, graph->isElement(meta2));
+
+  CPPUNIT_ASSERT_EQUAL( 5u, graph->numberOfNodes());
+  CPPUNIT_ASSERT_EQUAL( 5u, graph->numberOfEdges());
+  
+  CPPUNIT_ASSERT_EQUAL( 5u, quotient->numberOfNodes());
+  CPPUNIT_ASSERT_EQUAL( 5u, quotient->numberOfEdges());
+  
+  CPPUNIT_ASSERT(quotient->existEdge(nodes[0], nodes[1]).isValid());
+  CPPUNIT_ASSERT(quotient->existEdge(nodes[0], nodes[2]).isValid());
+  CPPUNIT_ASSERT(quotient->existEdge(nodes[1], nodes[3]).isValid());
+  CPPUNIT_ASSERT(quotient->existEdge(nodes[1], nodes[4]).isValid());
+  CPPUNIT_ASSERT(quotient->existEdge(nodes[2], nodes[3]).isValid());
+
+}
+//==========================================================
 CppUnit::Test * ExtendedClusterOperationTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : ExtendedClusterOperation" );
   suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Group a set of nodes", 
 								    &ExtendedClusterOperationTest::testCreateMetaNode ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Ungroup a MetaNode", 
 								    &ExtendedClusterOperationTest::testOpenMetaNode ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Ungroup MetaNodes in reverse order", 
+								    &ExtendedClusterOperationTest::testOpenMetaNodes ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Open a metanode in a hierarchy of subgraph #BUG-1", 
 										&ExtendedClusterOperationTest::testBugOpenInSubgraph ) );
   return suiteOfTests;
