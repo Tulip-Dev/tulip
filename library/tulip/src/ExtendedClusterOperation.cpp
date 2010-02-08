@@ -557,11 +557,15 @@ void Graph::openMetaNode(node metaNode) {
   if (metaGraph == 0) return;
 
   Observable::holdObservers();
-  //add node from meta to graph
+  MutableContainer<node> mappingM;
+  //add node from meta to graph  
   {
     node n;
-    stableForEach(n, metaGraph->getNodes()) //stable in case of fractal graph
+    //stable in case of fractal graph 
+    stableForEach(n, metaGraph->getNodes()) {
       addNode(n);
+      mappingM.set(n.id, n);
+    }
     edge e;
     stableForEach(e, metaGraph->getEdges())
       addEdge(e);
@@ -581,17 +585,56 @@ void Graph::openMetaNode(node metaNode) {
   ColorProperty *graphColors = 
     getProperty<ColorProperty>(colorProperty);
   if (hasSubEdges) {
+    node mn;
+    // compute mapping for neighbour nodes
+    // and their sub nodes
+    forEach(mn, super->getInOutNodes(metaNode)) {
+      if (isElement(mn))
+	mappingM.set(mn.id, mn);
+      Graph *mnGraph = metaInfo->getNodeValue(mn);
+      if (mnGraph != 0) {
+	Iterator<node> *it = mnGraph->getNodes();
+	while(it->hasNext()) {
+	  mappingM.set(it->next().id, mn);
+	}
+      }
+    }
     while (metaEdges->hasNext()) {
       edge metaEdge = metaEdges->next();
       Color metaColor = graphColors->getEdgeValue(metaEdge);
       Iterator<edge>* subEdges = getEdgeMetaInfo(metaEdge);
+      TLP_HASH_MAP<node, TLP_HASH_MAP<node, set<edge> > > newMetaEdges;
       while(subEdges->hasNext()) {
 	edge e = subEdges->next();
-	addEdge(e);
-	if (!isElement(metaEdge))
-	  delEdge(e);
-	graphColors->setEdgeValue(e, metaColor);
+	std::pair<node, node> eEnds = super->ends(e);
+	if (isElement(eEnds.first)) {
+	  if (isElement(eEnds.second)) {
+	    addEdge(e);
+	    if (!isElement(metaEdge))
+	      delEdge(e);
+	    graphColors->setEdgeValue(e, metaColor);
+	  } else {
+	    newMetaEdges[eEnds.first][mappingM.get(eEnds.second.id)].insert(e);
+	  }
+	} else {
+	  newMetaEdges[mappingM.get(eEnds.first.id)][eEnds.second].insert(e);
+	}
       } delete subEdges;
+      // iterate on newMetaEdges
+      TLP_HASH_MAP<node, TLP_HASH_MAP<node, set<edge> > >::iterator itme =
+	newMetaEdges.begin();
+      while(itme != newMetaEdges.end()) {
+	node src = (*itme).first;
+	TLP_HASH_MAP<node, set<edge> >::iterator itnme = (*itme).second.begin();
+	TLP_HASH_MAP<node, set<edge> >::iterator itnmeEnd = (*itme).second.end();
+	while(itnme != itnmeEnd) {
+	  edge me = addEdge(src, (*itnme).first);
+	  metaInfo->setEdgeValue(me, (*itnme).second);
+	  graphColors->setEdgeValue(me, metaColor);
+	  ++itnme;
+	}
+	++itme;
+      }
     }
     getRoot()->delAllNode(metaNode);
   } else {
@@ -748,7 +791,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
   map<edge, set<edge> >::const_iterator itm = eMapping.begin();
   while(itm != eMapping.end()) {
     metaInfo->setEdgeValue((*itm).first, (*itm).second);
-    itm++;
+    ++itm;
   }
   //compute layout according to the layouts of subgraphs
   vector<node>::iterator itn = metaNodes.begin();
