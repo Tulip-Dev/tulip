@@ -234,9 +234,11 @@ namespace tlp {
       Graph *metaGraph=graph->getNodeMetaInfo(node(itemId));
       emit requestChangeGraph(this,metaGraph);
     } else if (action == ungroupAction) { // Ungroup
+      graph->push();
       graph->openMetaNode(node(itemId));
     } else if(action == selectAction || action == addRemoveAction) {
       BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
+      graph->push();
       if (action == selectAction) { // Select
         // empty selection
         elementSelected->setAllNodeValue(false);
