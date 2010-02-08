@@ -36,6 +36,12 @@ namespace tlp {
   void GlMetaNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
     node n=node(id);
 
+    if (data->elementSelected->getNodeValue(n)) {
+      glStencilFunc(GL_LEQUAL,data->parameters->getSelectedMetaNodesStencil(),0xFFFF);
+    }else{
+      glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesStencil(),0xFFFF);
+    }
+
     if(!(((data->elementColor->getNodeValue(n))[3]==255) && (data->parameters->getNodesStencil()==0xFFFF)))
       data->getMetaNodeRenderer()->render(n,lod,camera);
 
