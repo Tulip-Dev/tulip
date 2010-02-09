@@ -32,6 +32,9 @@ namespace tlp {
     virtual void render(node n,float lod,Camera* camera) {}
     virtual bool havePrerender() {return false;}
 
+    virtual void setInputData(GlGraphInputData *data) {}
+    virtual GlGraphInputData *getInputData() {return NULL;}
+
   };
 
 }

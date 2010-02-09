@@ -203,10 +203,9 @@ namespace tlp {
     oldGraphComposite->getInputData()->setMetaNodeRenderer(NULL);
     GlGraphComposite* graphComposite=new GlGraphComposite(graph);
     graphComposite->setRenderingParameters(param);
-    QtMetaNodeRenderer *qtMetaNodeRenderer = dynamic_cast<QtMetaNodeRenderer*>(metaNodeRenderer);
-    if(qtMetaNodeRenderer){
-      qtMetaNodeRenderer->setInputData(graphComposite->getInputData());
-    }
+
+    metaNodeRenderer->setInputData(graphComposite->getInputData());
+
     graphComposite->getInputData()->setMetaNodeRenderer(metaNodeRenderer);
     scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
     scene.getLayer("Main")->addGlEntity(graphComposite,"graph");

@@ -32,6 +32,14 @@ namespace tlp {
 
     virtual void render(node n,float lod,Camera* camera);
 
+    virtual void setInputData(GlGraphInputData *data){
+      inputData=data;
+    }
+    virtual GlGraphInputData *getInputData(){
+      return inputData;
+    }
+
+
   private :
 
     GlGraphInputData *inputData;

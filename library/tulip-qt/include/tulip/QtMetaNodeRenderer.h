@@ -94,11 +94,11 @@ namespace tlp {
     virtual void render(node n,float lod,Camera *camera);
     virtual bool havePrerender() {return true;}
 
-    void setInputData(GlGraphInputData *data){
+    virtual void setInputData(GlGraphInputData *data){
       inputData=data;
     }
 
-    GlGraphInputData *getInputData() {
+    virtual GlGraphInputData *getInputData() {
       return inputData;
     }
 
