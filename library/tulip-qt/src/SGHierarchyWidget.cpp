@@ -146,10 +146,12 @@ namespace tlp {
     _currentGraph = graph->getSuperGraph();
   // allow to undo
   _currentGraph->push();
+  Observable::holdObservers();
     if (!recursive)
       _currentGraph->delSubGraph(graph);
     else
       _currentGraph->delAllSubGraphs(graph);
+   Observable::unholdObservers();
     update();
     emit graphChanged(_currentGraph);
   }

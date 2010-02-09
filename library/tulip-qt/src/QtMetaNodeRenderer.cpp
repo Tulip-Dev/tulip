@@ -74,6 +74,8 @@ namespace tlp {
     lod=lod/2.;
 
     Graph *metaGraph=inputData->getGraph()->getNodeMetaInfo(n);
+    if(!metaGraph)
+      return;
     if(graphToMetaNode.find(metaGraph)==graphToMetaNode.end()){
       metaGraph->addObserver(this);
       metaGraph->addGraphObserver(this);
@@ -190,6 +192,10 @@ namespace tlp {
 
     lod=lod/2.;
 
+    Graph *metaGraph=inputData->getGraph()->getNodeMetaInfo(n);
+    if(!metaGraph)
+      return;
+
     stringstream str;
     str << this << "metaNode" << n.id;
 
@@ -219,7 +225,6 @@ namespace tlp {
     float xTextureDec;
     float yTextureDec;
 
-    Graph *metaGraph=inputData->getGraph()->getNodeMetaInfo(n);
     glMainWidget->setGraph(metaGraph);
     GlMainWidget::getTextureRealSize(newWidth, newHeight, textureWidth,textureHeight);
     glMainWidget->getTextureShift(newWidth, newHeight, xTextureDec, yTextureDec);
