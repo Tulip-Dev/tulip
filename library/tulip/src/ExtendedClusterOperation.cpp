@@ -62,13 +62,15 @@ static void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
   node viewMetricMaxNode;
   double vMax = DBL_MIN;
   double vAvg = 0;
-  DoubleProperty *graphMetric = graph->getProperty<DoubleProperty>("viewMetric");
+  DoubleProperty *graphMetric = NULL;
+  if (graph->existProperty("viewMetric"))
+    graph->getProperty<DoubleProperty>("viewMetric");
   while (itN->hasNext()){
     nbNodes++;
     node itn = itN->next();
     clusterLayout->setNodeValue(itn, graphLayout->getNodeValue(itn));
     clusterSize->setNodeValue(itn, graphSize->getNodeValue(itn));
-    const double& value = graphMetric->getNodeValue(itn);
+    const double& value = graphMetric ? graphMetric->getNodeValue(itn) : 0.0;
     if (value > vMax) {
       vMax = value;
       viewMetricMaxNode = itn;
@@ -78,7 +80,8 @@ static void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
   // set metanode label to label of viewMetric max corresponding node
   cluster->getProperty<StringProperty>("viewLabel")->setNodeValue(metanode, graph->getProperty<StringProperty>("viewLabel")->getNodeValue(viewMetricMaxNode));
   // set metanode viewMetric to average value
-  cluster->getProperty<DoubleProperty>("viewMetric")->setNodeValue(metanode, vAvg/nbNodes);
+  if (graphMetric)
+    cluster->getProperty<DoubleProperty>("viewMetric")->setNodeValue(metanode, vAvg/nbNodes);
   // compute other metrics average value
   string pName;
   forEach(pName, graph->getProperties()) {
