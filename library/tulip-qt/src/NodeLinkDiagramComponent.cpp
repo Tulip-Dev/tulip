@@ -108,19 +108,24 @@ namespace tlp {
     *graph=mainWidget->getGraph();
   }
   //==================================================
-  void NodeLinkDiagramComponent::setGraph(Graph *graph) {
+  void NodeLinkDiagramComponent::setGraph(Graph *graph,bool initView) {
     mainWidget->setGraph(graph);
     overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
-    if(currentMetaNodeRenderer)
+    /*if(currentMetaNodeRenderer)
       delete currentMetaNodeRenderer;
     if(qtMetaNode){
       currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
       ((QtMetaNodeRenderer*)currentMetaNodeRenderer)->setBackgroundColor(getGlMainWidget()->getScene()->getBackgroundColor());
     }else
-      currentMetaNodeRenderer = new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
+      currentMetaNodeRenderer = new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());*/
 
-    mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
-    init();
+    //mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
+    if(initView)
+      init();
+  }
+  //==================================================
+  void NodeLinkDiagramComponent::setGraph(Graph *graph) {
+    setGraph(graph,true);
   }
   //==================================================
   list<pair<QWidget *,string> > NodeLinkDiagramComponent::getConfigurationWidget() {

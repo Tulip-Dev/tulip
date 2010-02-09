@@ -33,6 +33,10 @@ namespace tlp {
     virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
     virtual void computeContextMenuAction(QAction *action);
 
+    void emitRequestChangeGraph(Graph *graph){
+      emit requestChangeGraph(this,graph);
+    }
+
   protected :
 
     QMenu *viewMenu;
@@ -76,6 +80,7 @@ namespace tlp {
     virtual void refresh();
     virtual void init();
     void setGraph(Graph *graph);
+    void setGraph(Graph *graph,bool initView);
 
     void elementSelectedSlot(unsigned int id,bool isNode) {
       emit elementSelected(id,isNode);
