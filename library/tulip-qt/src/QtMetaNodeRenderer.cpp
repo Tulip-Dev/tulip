@@ -100,7 +100,7 @@ namespace tlp {
     }
 
     stringstream str;
-    str << "metaNode" << n.id ;
+    str << this << "metaNode" << n.id ;
 
     const Size &nodeSize = inputData->elementSize->getNodeValue(n);
 
@@ -191,7 +191,7 @@ namespace tlp {
     lod=lod/2.;
 
     stringstream str;
-    str << "metaNode" << n.id;
+    str << this << "metaNode" << n.id;
 
     const Coord &nodePos = inputData->elementLayout->getNodeValue(n);
     const Size &nodeSize = inputData->elementSize->getNodeValue(n);
