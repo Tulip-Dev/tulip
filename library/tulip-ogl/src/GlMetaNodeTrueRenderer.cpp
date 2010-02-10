@@ -27,6 +27,7 @@ namespace tlp {
   }
 
   void GlMetaNodeTrueRenderer::render(node n,float lod,Camera* camera){
+    GlGraphInputData *inputDataBackup=inputData;
     GlPointManager::getInst().endRendering();
     GlPointManager::getInst().beginRendering();
     glPushMatrix();
@@ -121,6 +122,7 @@ namespace tlp {
     glScalef(scale[0],scale[1],scale[2]);
     glTranslatef(translate[0],translate[1],translate[2]);
 
+    metaData.getMetaNodeRenderer()->setInputData(&metaData);
     GlMetaNode glMetaNode(0);
     GlEdge glEdge(0);
     for(ComplexLODResultVector::iterator it=nodesResult->begin();it!=nodesResult->end();++it){
@@ -136,6 +138,7 @@ namespace tlp {
       glEdge.id=(*it).first;
       glEdge.draw((*it).second,&metaData,activeCamera);
     }
+    metaData.getMetaNodeRenderer()->setInputData(inputDataBackup);
 
     GlPointManager::getInst().endRendering();
     GlPointManager::getInst().beginRendering();
