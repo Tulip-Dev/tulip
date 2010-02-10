@@ -185,6 +185,12 @@ namespace tlp {
 
   	GlMainView::buildContextMenu(object,event,contextMenu);
 
+    //set default value with rendering parameters values
+    GlGraphRenderingParameters param=mainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+    actionZOrderingOptions->setChecked(param.isElementZOrdered());
+    actionAntialiasingOptions->setChecked(param.isAntialiased());
+
+    //Check if a node/edge is under the mouse pointer
   	node tmpNode;
   	edge tmpEdge;
   	Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
