@@ -35,11 +35,7 @@ MouseEdgeBendEditor::MouseEdgeBendEditor()
   basicCircle.fcolor(0) = Color(255, 102, 255, 200);
   basicCircle.ocolor(0) = Color(128, 20, 20, 200);
 
-  /*basicCircle.setRenderState(GlAD_ZEnable, false);
-  basicCircle.setRenderState(GlAD_Culling, false);
-  basicCircle.setRenderState(GlAD_AlphaBlending, true);
-  basicCircle.setRenderState(GlAD_Wireframe, false);
-  basicCircle.setRenderState(GlAD_Solid, true);*/
+  circleString.setDeleteComponentsInDestructor(false);
 }
 //========================================================================================
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
