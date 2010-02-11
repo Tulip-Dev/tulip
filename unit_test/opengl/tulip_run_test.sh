@@ -64,14 +64,13 @@ sh tulip_replay.sh $TEST_NAME.xns $TLP_INPUT_FILE
 if [ ! -f test_gui.jpg ]; then
     echo "$TEST_NAME test failed: test_gui.jpg does not exist"
     cp test_failed.jpg test_gui.jpg
-    exit
 fi
 
 NB_DIFFS=0
 # check the result jpg file
 if [ $(diff $TLP_OUTPUT_FILE test_gui.jpg | wc -l) -gt $NB_DIFFS ]; then
     mv test_gui.jpg result_${TEST_NAME}.jpg
-    echo "$TEST_NAME test failed: diff failure between ${TLP_OUTPUT_FILE} & model_${TEST_NAME}.jpg"
+    echo "$TEST_NAME test failed: diff failure between ${TLP_OUTPUT_FILE} & result_${TEST_NAME}.jpg"
 else
     rm test_gui.jpg
     echo "*** $TEST_NAME test OK ***"

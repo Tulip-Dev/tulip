@@ -1,0 +1,1 @@
+sh tulip_run_test.sh change_background_color grid_metanode.tlp
