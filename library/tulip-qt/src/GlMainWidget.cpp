@@ -7,6 +7,7 @@
 #include <QtGui/qtooltip.h>
 #include <QtOpenGL/QGLPixelBuffer>
 #include <QtCore/QTime>
+#include <QtGui/QPainter>
 
 
 #include "tulip/GlMainWidget.h"
@@ -534,6 +535,7 @@ namespace tlp {
   }
   //=====================================================
   void GlMainWidget::createPicture(const string &pictureName, int width, int height,bool center){
+#ifndef WITHOUT_QT_PICTURE_OUTPUT   
     scene.setViewport(0,0,width,height);
     if(center)
       scene.ajustSceneToSize(width,height);
@@ -547,6 +549,35 @@ namespace tlp {
     scene.draw();
 
     glFrameBuf->toImage().save(pictureName.c_str());
+#else
+    makeCurrent();
+    scene.setViewport(0,0,width,height);
+    if(center)
+      scene.ajustSceneToSize(width,height);
+    scene.prerenderMetaNodes();
+
+    unsigned char *image = (unsigned char *)malloc(width*height*3*sizeof(unsigned char));
+    scene.draw();
+    glFlush();
+    glFinish();
+    glPixelStorei(GL_PACK_ALIGNMENT,1);
+    glReadPixels(0,0,width,height,GL_RGB,GL_UNSIGNED_BYTE,image);
+
+    QPixmap pm(width,height);
+    QPainter painter;
+    painter.begin(&pm);
+    for (int y=0; y<height; y++) {
+      for (int x=0; x<width; x++) {
+        painter.setPen(QColor(image[(height-y-1)*width*3+(x)*3],
+			      image[(height-y-1)*width*3+(x)*3+1],
+			      image[(height-y-1)*width*3+(x)*3+2]));
+	painter.drawPoint(x,y);
+      }
+    }
+    painter.end();
+    free(image);
+    pm.save(pictureName.c_str());
+#endif
   }
 
 }

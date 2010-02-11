@@ -116,6 +116,15 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITHOUT_MAIN_CONTROLLER")
 ENDIF(NOT TULIP_USE_MAIN_CONTROLLER)
 
 ## -----------------------------------------------------------------------------------------------
+## Disable process to make MainController plugin (for developpers)
+## -----------------------------------------------------------------------------------------------
+SET(TULIP_USE_QT_PICTURE_OUTPUT ON CACHE BOOL "Use Qt picture output")
+IF(NOT TULIP_USE_QT_PICTURE_OUTPUT)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITHOUT_QT_PICTURE_OUTPUT")
+ENDIF(NOT TULIP_USE_QT_PICTURE_OUTPUT)
+
+
+## -----------------------------------------------------------------------------------------------
 ## Define NDEBUG when we are in release mode
 ## -----------------------------------------------------------------------------------------------
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -DNDEBUG -funroll-loops -pipe")
