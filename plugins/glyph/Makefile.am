@@ -6,6 +6,8 @@ endif
 
 if HAVE_TULIP_OGL
 
+EXTRA_DIST = CMakeLists.txt
+
 plugins_LTLIBRARIES = \
 	libCube-@VERSION@.la \
 	libCubeOutlinedTransparent-@VERSION@.la \

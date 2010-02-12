@@ -9,10 +9,13 @@ EXTRA_DIST = gen-conf.sh gen-doc.sh \
 	     tulip_mac_info.plist.in \
 	     tulip.nsi.in \
 	     tulip.spec.in \
-	     tulip-config.in \
+	     tulip-config.in tulip-config.cmake.in \
 	     tulip.m4 \
 	     libxml.m4 \
-	     WriteEnvStr.nsh
+	     WriteEnvStr.nsh \
+	     CMakeLists.txt \
+	     FindFTGL.cmake  FindGLEW.cmake  FindXML2.cmake \
+	     UseTulip.cmake UseTulipPlugins.cmake
 
 if !WIN32
 bin_SCRIPTS = tulip-config

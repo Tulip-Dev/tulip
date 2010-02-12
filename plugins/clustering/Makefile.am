@@ -22,7 +22,7 @@ pluginsqt_LTLIBRARIES = libConvolutionClustering-@VERSION@.la
 
 pluginsqtdir = $(libdir)/tlp
 
-EXTRA_DIST = ConvolutionClusteringSetup.ui
+EXTRA_DIST = ConvolutionClusteringSetup.ui CMakeLists.txt
 
 libConvolutionClustering_@VERSION@_la_SOURCES = \
 			ConvolutionClustering.h \

@@ -8,6 +8,8 @@ FREETYPE_INCLUDE = `freetype-config --cflags`
 FREETYPELDFLAGS = `freetype-config --libs`
 endif 
 
+EXTRA_DIST = AUTHORS BUGS COPYING INSTALL NEWS README CMakeLists.txt
+
 libftgl_la_SOURCES = \
     FTBuffer.cpp \
     FTCharmap.cpp \
@@ -39,7 +41,7 @@ libftgl_la_SOURCES = \
 INCLUDES = @GL_INCLUDES@ ${FREETYPE_INCLUDE}
 AM_LDFLAGS = ${FREETYPELDFLAGS} @GL_LDFLAGS@ @LIB_GL@
 
-ftgl_headers = \
+ftgl_headers = config.h \
     FTGL/ftgl.h \
     FTGL/FTBBox.h \
     FTGL/FTBuffer.h \

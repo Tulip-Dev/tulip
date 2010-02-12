@@ -1,5 +1,6 @@
 EXTRA_DIST = *.docbook \
-	images/*.png
+	images/*.png \
+	CMakeLists.txt
 
 DOCBOOK_SRC = index.docbook \
 	tulip_lib.docbook \

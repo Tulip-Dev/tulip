@@ -8,6 +8,8 @@ DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 endif
 
+EXTRA_DIST = CMakeLists.txt
+
 lib_LTLIBRARIES = libtulip-pluginsmanager.la
 
 bin_PROGRAMS = tulip_check_pl

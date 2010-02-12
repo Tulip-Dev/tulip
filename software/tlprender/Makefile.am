@@ -1,2 +1,3 @@
-SUBDIRS = include src
-DIST_SUBDIRS = include src
+SUBDIRS = src
+DIST_SUBDIRS = src
+EXTRA_DIST = CMakeLists.txt

@@ -4,6 +4,8 @@ else
 DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
+EXTRA_DIST = CMakeLists.txt
+
 plugins_LTLIBRARIES = 	libSpanningDagSelection-@VERSION@.la \
 			libInducedSubGraphSelection-@VERSION@.la \
 			libReachableSubGraphSelection-@VERSION@.la \

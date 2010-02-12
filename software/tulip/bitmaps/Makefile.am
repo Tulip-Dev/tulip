@@ -1,3 +1,5 @@
+EXTRA_DIST = CMakeLists.txt
+
 dist_default_DATA = startup.gif \
 	headerlogo.bmp \
 	logo32x32.bmp \

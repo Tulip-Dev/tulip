@@ -21,6 +21,8 @@ endif
 endif
 AM_CPPFLAGS= @QT_CPPFLAGS@
 
+EXTRA_DIST = CMakeLists.txt
+
 BUILT_SOURCES = \
 	TulipResource.cpp \
 	moc_AppStartUp.cpp \

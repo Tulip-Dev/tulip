@@ -18,7 +18,9 @@ EXTRA_DIST = gen-profile.sh \
 	common/dtd/catalog.xml \
 	common/dtd/ent/*.ent \
 	common/dtd/ent/README \
-	README
+	README \
+	common/CMakeLists.txt \
+	CMakeLists.txt
 
 all :
 

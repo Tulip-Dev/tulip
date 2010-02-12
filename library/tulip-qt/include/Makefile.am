@@ -1,3 +1,5 @@
+EXTRA_DIST = CMakeLists.txt
+
 INCLUDES_H = \
 	tulip/TulipTableWidget.h \
 	tulip/GlMainWidget.h \

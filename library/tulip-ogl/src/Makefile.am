@@ -20,6 +20,8 @@ else
 AM_LDFLAGS = ${DLL_FLAGS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @LIB_IMAGES_LDFLAGS@ @FTGL_LDFLAGS@ ${ADDLDFLAGS} -export-dynamic -release @MAJOR_VERSION@.@MINOR_VERSION@ @LIBGLE_LDFLAGS@
 endif
 
+EXTRA_DIST = CMakeLists.txt
+
 libtulip_ogl_la_SOURCES = \
 	GlGraphRenderingParameters.cpp\
 	GlTools.cpp \

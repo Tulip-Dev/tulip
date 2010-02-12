@@ -11,7 +11,7 @@ EXTRA_DIST = \
   INSTALL \
   NEWS \
   README \
-  README.gutil
+  README.gutil CMakeLists.txt
 
 libgle_la_SOURCES = 	\
   ex_angle.c		\

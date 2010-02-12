@@ -42,6 +42,8 @@ nodist_libElementPropertiesWidgetPlugin_la_SOURCES = moc_ElementPropertiesWidget
 libPropertyWidgetPlugin_la_SOURCES = PropertyWidgetPlugin.cpp
 nodist_libPropertyWidgetPlugin_la_SOURCES = moc_PropertyWidgetPlugin.cpp
 
+EXTRA_DIST = CMakeLists.txt
+
 BUILT_SOURCES = \
 	TulipQtResource.cpp \
 	moc_TulipTableWidget.cpp \

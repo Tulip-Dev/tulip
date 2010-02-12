@@ -1,4 +1,4 @@
-EXTRA_DIST = *.docbook images/*.png
+EXTRA_DIST = *.docbook images/*.png CMakeLists.txt
 
 DOCBOOK_SRC = index.docbook functions.docbook graph_interface.docbook algorithms.docbook subgraphs.docbook tutorials.docbook
 

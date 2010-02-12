@@ -1,3 +1,5 @@
+EXTRA_DIST = CMakeLists.txt
+
 BUILT_SOURCES = \
 	PluginLoaderWithInfo.h \
 	PluginInfo.h \

@@ -25,6 +25,8 @@ plugins_LTLIBRARIES = \
 
 pluginsdir = $(libdir)/tlp
 
+EXTRA_DIST = CMakeLists.txt
+
 libMixedModel_@VERSION@_la_SOURCES = MixedModel.h MixedModel.cpp DatasetTools.h DatasetTools.cpp
 libConnectedComponentPacking_@VERSION@_la_SOURCES = ConnectedComponentPacking.h ConnectedComponentPacking.cpp Number.h Number.cpp RectanglePacking.h RectanglePacking.cpp rectanglePackingFonctions.h rectanglePackingFonctions.cpp RectangleRelativePositionList.h RectangleRelativePositionList.cpp DatasetTools.h DatasetTools.cpp
 libRandom_@VERSION@_la_SOURCES = Random.h Random.cpp

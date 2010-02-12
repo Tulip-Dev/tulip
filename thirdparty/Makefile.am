@@ -5,4 +5,4 @@ else
 SUBDIRS = gzstream
 DIST_SUBDIRS = gzstream
 endif
-EXTRA_DIST = saxon xml-commons
+EXTRA_DIST = saxon xml-commons CMakeLists.txt

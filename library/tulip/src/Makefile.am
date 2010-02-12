@@ -17,6 +17,8 @@ else
 AM_LDFLAGS = ${DLL_FLAGS} `ls ../../../thirdparty/gzstream/*.lo` -lz -release @MAJOR_VERSION@.@MINOR_VERSION@
 endif
 
+EXTRA_DIST = CMakeLists.txt
+
 libtulip_la_SOURCES = \
 	Bfs.cpp \
 	Ordering.cpp \

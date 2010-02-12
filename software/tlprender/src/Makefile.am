@@ -4,6 +4,8 @@ else
 ADDLDFLAGS = `freetype-config --libs` `xml2-config --libs`
 endif
 
+EXTRA_DIST = CMakeLists.txt
+
 bin_PROGRAMS = tlprender
 EXTRA_PROGRAMS = tlprender
 INCLUDES = -I$(srcdir)../include @GL_INCLUDES@ @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@

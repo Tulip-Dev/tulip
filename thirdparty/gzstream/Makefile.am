@@ -5,4 +5,4 @@ AM_CXXFLAGS = -fPIC
 libgzstream_la_SOURCES = gzstream.cpp gzstream.h
 
 EXTRA_DIST = 	COPYING.LIB \
-		index.html
+		index.html CMakeLists.txt

@@ -1,5 +1,5 @@
 EXTRA_DIST = header.html footer.html general general-html general-man tulip.html \
-	     dox-html.xsl dox-profile.xsl dox-plugins.xsl
+	     dox-html.xsl dox-profile.xsl dox-plugins.xsl CMakeLists.txt
 
 all : 
 
