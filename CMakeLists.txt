@@ -71,6 +71,9 @@ IF(PNG_FOUND)
 ENDIF(PNG_FOUND)
 
 INCLUDE(FindGLEW.cmake)
+IF(NOT GLEW_FOUND)
+   message(FATAL_ERROR "Cannot find the GLEW library (required)")
+ENDIF()
 INCLUDE(FindXML2.cmake)
 
 ## -----------------------------------------------------------------------------------------------
