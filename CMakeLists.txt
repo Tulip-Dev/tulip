@@ -35,7 +35,7 @@ SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipMMVersion}")
 ## -----------------------------------------------------------------------------------------------
 ## Find need packages
 ## -----------------------------------------------------------------------------------------------
-FIND_PACKAGE(Freetype)
+FIND_PACKAGE(Freetype REQUIRED)
 FIND_PACKAGE(Qt4  REQUIRED)
 INCLUDE(${QT_USE_FILE})
 IF(DEFINED CMAKE_VERSION)
