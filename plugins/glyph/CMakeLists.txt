@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude})
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${GLEW_INCLUDE_DIR})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(Circle_SRCS circle.cpp)

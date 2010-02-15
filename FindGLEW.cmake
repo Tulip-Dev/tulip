@@ -19,8 +19,9 @@ if( WIN32 )
    if( MSVC71 )
        set( COMPILER_PATH "C:/Program\ Files/Microsoft\ Visual\ Studio\ .NET\ 2003/Vc7" )
    endif( MSVC71 )
-   FIND_PATH( GLEW_INCLUDE_DIR gl/glew.h gl/wglew.h
-              PATHS c:/glew/include ${COMPILER_PATH}/PlatformSDK/Include )
+   FIND_PATH( GLEW_INCLUDE_DIR glew.h wglew.h
+              PATHS c:/glew/include ${COMPILER_PATH}/PlatformSDK/Include
+              PATH_SUFFIXES gl GL )
    SET( GLEW_NAMES glew32 )
    FIND_LIBRARY( GLEW_LIBRARY
                  NAMES ${GLEW_NAMES}
@@ -28,7 +29,7 @@ if( WIN32 )
 else( WIN32 )
    FIND_PATH( GLEW_INCLUDE_DIR glew.h wglew.h
               PATHS /usr/local/include /usr/include
-              PATH_SUFFIXES gl/ GL/ )
+              PATH_SUFFIXES gl GL )
    SET( GLEW_NAMES glew GLEW )
    FIND_LIBRARY( GLEW_LIBRARY
                  NAMES ${GLEW_NAMES}
@@ -36,6 +37,10 @@ else( WIN32 )
 endif( WIN32 )
 
 GET_FILENAME_COMPONENT( GLEW_LIBRARY_DIR ${GLEW_LIBRARY} PATH )
+IF(GLEW_INCLUDE_DIR)
+    # Remove the GL or gl subdirectory, because you should say #include <GL/foo.h>, not #include <foo.h>
+    set(GLEW_INCLUDE_DIR ${GLEW_INCLUDE_DIR}/..)
+ENDIF()
 
 IF (GLEW_INCLUDE_DIR AND GLEW_LIBRARY)
    SET(GLEW_FOUND TRUE)
