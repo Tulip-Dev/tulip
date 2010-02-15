@@ -22,12 +22,13 @@ namespace tlp {
     header.setContentType("text/xml; charset=ISO-8859-1");
     header.setRequest( "POST", url.path() );
     header.setValue( "Host", url.host() );
-
+    header.setValue( "User-Agent", "Tulip Agent");
     http.setHost( url.host() );
     QNetworkProxy proxy=getProxy();
     http.setProxy(proxy.hostName(), proxy.port(), proxy.user(), proxy.password());
 
     QByteArray bamsg(msg.c_str());
+    header.setContentLength(bamsg.length());
     http.request( header, bamsg );
   }
 
@@ -39,6 +40,7 @@ namespace tlp {
     header.setContentType("text/xml; charset=ISO-8859-1");
     header.setRequest( "GET", url.path() );
     header.setValue( "Host", url.host() );
+    header.setValue( "User-Agent", "Tulip Agent");
 
     http.setHost( url.host() );
 
