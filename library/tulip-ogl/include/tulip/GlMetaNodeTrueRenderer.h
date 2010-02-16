@@ -44,6 +44,8 @@ namespace tlp {
 
     GlGraphInputData *inputData;
 
+    static unsigned int depth;
+
   };
 
 }

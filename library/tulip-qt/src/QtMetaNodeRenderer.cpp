@@ -8,6 +8,15 @@
 
 using namespace std;
 
+//====================================================
+#ifdef _WIN32
+#ifdef DLL_EXPORT
+unsigned int tlp::QtMetaNodeRenderer::depth=0;
+#endif
+#else
+unsigned int tlp::QtMetaNodeRenderer::depth=0;
+#endif
+
 namespace tlp {
 
   QtMetaNodeRenderer::QtMetaNodeRenderer(QWidget *parent, GlMainWidget *widget,GlGraphInputData *inputData):parent(parent),parentGlMainWidget(widget),inputData(inputData),backgroundColor(Color(255,255,255,0)),stopUpdateMetaNodes(false) {
@@ -68,7 +77,10 @@ namespace tlp {
   }
 
   void QtMetaNodeRenderer::prerender(node n,float lod,Camera *camera){
-    if(lod<8.)
+    if(QtMetaNodeRenderer::depth>=3)
+      return;
+
+    if(lod<20.)
       return;
 
     lod=lod/2.;
@@ -110,10 +122,10 @@ namespace tlp {
     int newWidth=(int)(nodeSize[0]*(lod/diagonal));
     int newHeight=(int)(nodeSize[1]*(lod/diagonal));
 
-    if(newWidth<128)
-      newWidth=128;
-    if(newHeight<128)
-      newHeight=128;
+    if(newWidth<16)
+      newWidth=16;
+    if(newHeight<16)
+      newHeight=16;
 
     int textureWidth,textureHeight;
     GlMainWidget::getTextureRealSize(newWidth,newHeight, textureWidth, textureHeight);
@@ -170,7 +182,9 @@ namespace tlp {
       glMainWidget->setGraph(metaGraph);
       ((QtMetaNodeRenderer*)glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer())->setBackgroundColor(backgroundColor);
 
+      QtMetaNodeRenderer::depth++;
       glMainWidget->createTexture(str.str(),textureWidth,textureHeight);
+      QtMetaNodeRenderer::depth--;
       textureName.push_back(str.str());
 
       glMatrixMode(GL_PROJECTION);
@@ -187,7 +201,10 @@ namespace tlp {
   }
 
   void QtMetaNodeRenderer::render(node n,float lod, Camera *camera){
-    if(lod<8.)
+    if(QtMetaNodeRenderer::depth>=3)
+      return;
+
+    if(lod<20.)
       return;
 
     lod=lod/2.;
@@ -212,10 +229,10 @@ namespace tlp {
     float diagonal=sqrt(nodeSize[0]*nodeSize[0]+nodeSize[1]*nodeSize[1]);
     int newWidth=(int)(nodeSize[0]*(lod/diagonal));
     int newHeight=(int)(nodeSize[1]*(lod/diagonal));
-	if(newWidth<128)
-      newWidth=128;
-    if(newHeight<128)
-      newHeight=128;
+    if(newWidth<16)
+      newWidth=16;
+    if(newHeight<16)
+      newHeight=16;
     if(newWidth>newHeight)
       newHeight=newWidth;
     else

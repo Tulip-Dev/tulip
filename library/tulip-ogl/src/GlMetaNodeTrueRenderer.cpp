@@ -20,6 +20,15 @@
 
 using namespace std;
 
+//====================================================
+#ifdef _WIN32
+#ifdef DLL_EXPORT
+unsigned int tlp::GlMetaNodeTrueRenderer::depth=0;
+#endif
+#else
+unsigned int tlp::GlMetaNodeTrueRenderer::depth=0;
+#endif
+
 namespace tlp {
 
   GlMetaNodeTrueRenderer::GlMetaNodeTrueRenderer(GlGraphInputData *inputData):inputData(inputData){
@@ -27,6 +36,11 @@ namespace tlp {
   }
 
   void GlMetaNodeTrueRenderer::render(node n,float lod,Camera* camera){
+    if(GlMetaNodeTrueRenderer::depth>=3)
+      return;
+    if(lod<10)
+      return;
+
     GlGraphInputData *inputDataBackup=inputData;
     GlPointManager::getInst().endRendering();
     GlPointManager::getInst().beginRendering();
@@ -122,6 +136,8 @@ namespace tlp {
     glScalef(scale[0],scale[1],scale[2]);
     glTranslatef(translate[0],translate[1],translate[2]);
 
+    GlMetaNodeTrueRenderer::depth++;
+
     metaData.getMetaNodeRenderer()->setInputData(&metaData);
     GlMetaNode glMetaNode(0);
     GlEdge glEdge(0);
@@ -142,6 +158,8 @@ namespace tlp {
 
     GlPointManager::getInst().endRendering();
     GlPointManager::getInst().beginRendering();
+
+    GlMetaNodeTrueRenderer::depth--;
 
     glPopMatrix();
     glPopMatrix();

@@ -123,6 +123,8 @@ namespace tlp {
     Color backgroundColor;
     bool stopUpdateMetaNodes;
 
+    static unsigned int depth;
+
   };
 
 }
