@@ -1034,7 +1034,21 @@ namespace tlp {
     
     graph->push();
     Observable::holdObservers();
-    graph->getProperty<BooleanProperty>("viewSelection")->reverse();
+    if(graph->existLocalProperty("viewSelection")){
+      graph->getProperty<BooleanProperty>("viewSelection")->reverse();
+    }else{
+      BooleanProperty *selectionProperty=graph->getProperty<BooleanProperty>("viewSelection");
+      StableIterator<node> itN(graph->getNodes());
+      while(itN.hasNext()) {
+        node itv = itN.next();
+        selectionProperty->setNodeValue(itv,!selectionProperty->getNodeValue(itv));
+      }
+      StableIterator<edge> itE(graph->getEdges());
+      while(itE.hasNext()) {
+        edge ite=itE.next();
+        selectionProperty->setEdgeValue(ite,!selectionProperty->getEdgeValue(ite));
+      }
+    }
     Observable::unholdObservers();
   }
   //==============================================================
@@ -1045,8 +1059,22 @@ namespace tlp {
     
     graph->push();
     Observable::holdObservers();
-    graph->getProperty<BooleanProperty>("viewSelection")->setAllNodeValue(true);
-    graph->getProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(true);
+    if(graph->existLocalProperty("viewSelection")){
+      graph->getProperty<BooleanProperty>("viewSelection")->setAllNodeValue(true);
+      graph->getProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(true);
+    }else{
+      BooleanProperty *selectionProperty=graph->getProperty<BooleanProperty>("viewSelection");
+      StableIterator<node> itN(graph->getNodes());
+      while(itN.hasNext()) {
+        node itv = itN.next();
+        selectionProperty->setNodeValue(itv,true);
+      }
+      StableIterator<edge> itE(graph->getEdges());
+      while(itE.hasNext()) {
+        edge ite=itE.next();
+        selectionProperty->setEdgeValue(ite,true);
+      }
+    }
     Observable::unholdObservers();
   }
   //==============================================================
@@ -1057,8 +1085,22 @@ namespace tlp {
     
     graph->push();
     Observable::holdObservers();
-    graph->getProperty<BooleanProperty>("viewSelection")->setAllNodeValue(false);
-    graph->getProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(false);
+    if(graph->existLocalProperty("viewSelection")){
+      graph->getProperty<BooleanProperty>("viewSelection")->setAllNodeValue(false);
+      graph->getProperty<BooleanProperty>("viewSelection")->setAllEdgeValue(false);
+    }else{
+      BooleanProperty *selectionProperty=graph->getProperty<BooleanProperty>("viewSelection");
+      StableIterator<node> itN(graph->getNodes());
+      while(itN.hasNext()) {
+        node itv = itN.next();
+        selectionProperty->setNodeValue(itv,false);
+      }
+      StableIterator<edge> itE(graph->getEdges());
+      while(itE.hasNext()) {
+        edge ite=itE.next();
+        selectionProperty->setEdgeValue(ite,false);
+      }
+    }
     Observable::unholdObservers();
   }
   //**********************************************************************
