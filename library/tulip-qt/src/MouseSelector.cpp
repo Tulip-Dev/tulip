@@ -125,8 +125,9 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
           } else
             delete ite;
         }
-      } else
-        revertSelection = true; // revert selection
+      } else {
+        boolVal = true;
+      }
       if ((w==0) && (h==0)) {
         node tmpNode;
         edge tmpEdge;
