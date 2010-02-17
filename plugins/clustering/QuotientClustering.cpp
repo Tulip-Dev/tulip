@@ -10,7 +10,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","Alpha","1.2");
+ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","OK","1.3");
 
 //==============================================================================
 namespace {
@@ -67,7 +67,15 @@ namespace {
     HTML_HELP_DEF( "default", "false" ) \
     HTML_HELP_BODY() \
     "This parameter indicates whether the cardinality of the underlying edges of the meta-edges has to be computed or not. If yes, the property edgeCardinality will be created for the quotient graph." \
-    HTML_HELP_CLOSE()
+    HTML_HELP_CLOSE(),
+    // layout quotient graph
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "values", "[true, false]" ) \
+    HTML_HELP_DEF( "default", "false" ) \
+    HTML_HELP_BODY() \
+    "This parameter indicates whether the layout of the quotient graph(s) has to be computed or not." \
+    HTML_HELP_CLOSE(),
   };
 }
 #define AGGREGATION_FUNCTIONS "none;average;sum;max;min"
@@ -78,12 +86,16 @@ namespace {
 #define MIN_FN 4
 //================================================================================
 QuotientClustering::QuotientClustering(AlgorithmContext context):Algorithm(context) {
+  addDependency<LayoutAlgorithm>("Circular", "1.0");
+  addDependency<LayoutAlgorithm>("GEM (Frick)", "1.0");
+  addDependency<SizeAlgorithm>("Auto Sizing", "1.0");
   addParameter<bool>("oriented", paramHelp[0], "true");
   addParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS);
   addParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS);
   addParameter<StringProperty>("meta-node label", paramHelp[4], 0, false);
   addParameter<bool>("use name of subgraph", paramHelp[5], "false");
   addParameter<bool>("recursive", paramHelp[1], "false");
+  addParameter<bool>("layout quotient graph(s)", paramHelp[7], "false");
   addParameter<bool>("edge cardinality", paramHelp[6], "false");
 }
 //================================================================================
@@ -184,7 +196,7 @@ static void computeMEdgeMetric(Graph* graph, edge mE, Iterator<edge>* itE,
 //===============================================================================
 bool QuotientClustering::run() {
   bool oriented = true, edgeCardinality = true;
-  bool recursive = false, useSubGraphName = false;
+  bool recursive = false, quotientLayout = true, useSubGraphName = false;
   StringProperty *metaLabel = NULL;
   StringCollection nodeFunctions(AGGREGATION_FUNCTIONS);
   nodeFunctions.setCurrent(0);
@@ -198,6 +210,7 @@ bool QuotientClustering::run() {
     dataSet->get("recursive", recursive);
     dataSet->get("meta-node label", metaLabel);
     dataSet->get("use name of subgraph", useSubGraphName);
+    dataSet->get("layout quotient graph(s)", quotientLayout);
   }
 
   Iterator<Graph *> *itS= graph->getSubGraphs();
@@ -360,6 +373,21 @@ bool QuotientClustering::run() {
     dataSet->set("quotientGraph", quotientGraph);
   }
 
+  // layouting if needed
+  if (quotientLayout) {
+    string errMsg;
+    string layoutName;
+    if (mNodes.size() > 300  ||
+	quotientGraph->numberOfEdges() == 0)
+      layoutName = "Circular";
+    else
+      layoutName = "GEM (Frick)";
+    string sizesName="Auto Sizing";
+    quotientGraph->computeProperty(layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg);
+    if (mNodes.size() < 300)
+      quotientGraph->computeProperty(sizesName, quotientGraph->getLocalProperty<SizeProperty>("viewSize"),errMsg);
+  }
+
   // recursive call if needed
   if (recursive) {
     DataSet dSet;
@@ -370,14 +398,21 @@ bool QuotientClustering::run() {
     dSet.set("recursive", recursive);
     dSet.set("meta-node label", metaLabel);
     dSet.set("use name of subgraph", useSubGraphName);
-    StableIterator<Graph *> sitS(graph->getSubGraphs());
-    while (sitS.hasNext()) {
-      Graph* sg = sitS.next();
-      if (sg!=quotientGraph) {
-	string eMsg;
-	tlp::applyAlgorithm(sg, eMsg, &dSet, "Quotient Clustering",
-			    pluginProgress);
-      }
+    dSet.set("layout quotient graph(s)", quotientLayout);
+    GraphProperty *metaInfo =
+      graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph");
+    vector<node>::iterator itn = mNodes.begin();
+    while(itn != mNodes.end()) {
+      node mn = *itn;
+      Graph* sg = quotientGraph->getNodeMetaInfo(mn);
+      string eMsg;
+      tlp::applyAlgorithm(sg, eMsg, &dSet, "Quotient Clustering",
+			  pluginProgress);
+      // if a quotient graph has been computed
+      // update metaInfo of current meta node
+      if (dSet.getAndFree("quotientGraph", sg))
+	metaInfo->setNodeValue(mn, sg);
+      itn++;
     }
   }
 
