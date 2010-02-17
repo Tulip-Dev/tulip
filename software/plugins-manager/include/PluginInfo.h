@@ -148,10 +148,10 @@ namespace tlp {
     std::string fileName;
     std::string localVersion;
     bool linuxVersion;
-    bool macVersion;
+    bool macVersion_ppc;
+    bool macVersion_intel;
     bool windowsVersion;
     bool linuxVersion_i64;
-    bool macVersion_i64;
     bool windowsVersion_i64;
     bool installIsOK;
 
@@ -167,19 +167,19 @@ namespace tlp {
 		   const std::string& localVersion,
 		   const std::vector<PluginDependency>& dependencies,
 		   bool linuxVersion,
-		   bool macVersion,
+           bool macVersion_ppc,
+           bool macVersion_intel,
 		   bool windowsVersion,
 		   bool linuxVersion_i64,
-		   bool macVersion_i64,
 		   bool windowsVersion_i64)
       : PluginInfo(name,type,displayType,server,version,dependencies,false),
       fileName(fileName),
       localVersion(localVersion),
       linuxVersion(linuxVersion),
-      macVersion(macVersion),
+      macVersion_ppc(macVersion_ppc),
+      macVersion_intel(macVersion_intel),
       windowsVersion(windowsVersion),
       linuxVersion_i64(linuxVersion_i64),
-      macVersion_i64(macVersion_i64),
       windowsVersion_i64(windowsVersion_i64)
       {
         local=false;

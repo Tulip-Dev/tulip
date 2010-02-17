@@ -184,8 +184,11 @@ namespace tlp {
     serverGet->send(new GetPluginRequest(new PluginDownloadFinish(this),pluginInfo.fileName+"."+version+"/"+pluginInfo.fileName+string(".helpdoc"),installPath+pluginInfo.fileName+std::string(".helpdoc")));
 
     // download plugin
+    // TODO : change for new mac version (__APPLE__ to ???? and /i386/ to /i386/ppc/)
     #if defined(__APPLE__)
       serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"."+version+"/i386/"+pluginInfo.fileName+string(".dylib"),installPath+pluginInfo.fileName+std::string(".dylib")));
+    #elif defined(__APPLE_INTEL__)
+      serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"."+version+"/i386/intel/"+pluginInfo.fileName+string(".dylib"),installPath+pluginInfo.fileName+std::string(".dylib")));
     #elif defined(_WIN32)
       serverGet->send(new GetPluginRequest(new EndPluginDownloadFinish(this),pluginInfo.fileName+"."+version+"/i386/"+pluginInfo.fileName+string(".dll"),installPath+pluginInfo.fileName+std::string(".dll")));
     #elif defined(I64)
