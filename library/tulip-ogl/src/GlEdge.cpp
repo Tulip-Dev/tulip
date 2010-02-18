@@ -451,7 +451,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
       camera->getViewport());
 
   //draw Edge
-  drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, *srcCol, *tgtCol,data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
+  drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, *srcCol, *tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
       data->elementShape->getEdgeValue(e), data->parameters->isEdge3D(), lodSize);
 
   if (data->parameters->getFeedbackRender()) {
@@ -465,7 +465,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 #define L3D_BIT (1<<9)
 void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Coord &startPoint,
     const Coord &endPoint, const LineType::RealType &bends, const Color &startColor,
-    const Color &endColor, bool colorInterpolate, const Color &borderColor,const Size &size, int shape, bool edge3D, float lod) {
+    const Color &endColor, const Coord &lookDir, bool colorInterpolate, const Color &borderColor,const Size &size, int shape, bool edge3D, float lod) {
   glDisable(GL_CULL_FACE);
   glDepthFunc(GL_LEQUAL);
 
@@ -523,12 +523,13 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
     }
     break;
     //3D lines
-  case L3D_BIT + POLYLINESHAPE:
-    GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size,
-        GlLines::TLP_PLAIN, GlLines::LINEAR, startColor, endColor);
-    glDepthFunc(GL_LESS);
-    tlp::polyLine(tmp, startColor, endColor);
+  case L3D_BIT + POLYLINESHAPE:{
+    glDisable(GL_LIGHTING);
+    string dir=TulipBitmapDir;
+    simpleQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,dir+"cylinderTexture.png");
+    glEnable(GL_LIGHTING);
     break;
+  }
   case L3D_BIT + BEZIERSHAPE:
     GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size,
         GlLines::TLP_PLAIN, GlLines::BEZIER, startColor, endColor);

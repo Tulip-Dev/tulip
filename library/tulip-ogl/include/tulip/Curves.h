@@ -51,6 +51,17 @@ namespace tlp {
 		bool,	  		  /* if true : use start and end color to border lines, if false : use borderColor*/
 		const Color &,		  /* border color */
 		const std::string &textureName="");			/* textureName */
+  TLP_GL_SCOPE void simpleQuad(const std::vector<Coord> &, /* quad vertces */
+        const Color &,            /* start color */
+        const Color &,            /* end color */
+        const float,              /* start size */
+        const float,              /* end size */
+        const Coord &,            /* normal to the begin of the curve */
+        const Coord &,            /* normal to the end curve */
+        const Coord &,            /* direction of the camera*/
+        bool,	  		  /* if true : use start and end color to border lines, if false : use borderColor*/
+        const Color &,		  /* border color */
+        const std::string &textureName="");			/* textureName */
   TLP_GL_SCOPE void polyQuad(const std::vector<Coord> &, /* polyline vertces */
 		const Color &,            /* start color */
 		const Color &,            /* end color */
