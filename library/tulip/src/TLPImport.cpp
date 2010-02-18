@@ -475,7 +475,7 @@ struct TLPDataSetBuilder: public TLPFalse {
       while(it->hasNext()) {
 	pair<string, DataType*> p;
 	p = it->next();
-      }
+      } delete it;
     }
     return true;
   }
