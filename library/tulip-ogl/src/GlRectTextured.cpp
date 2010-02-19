@@ -13,13 +13,13 @@ namespace tlp {
   GlRectTextured::GlRectTextured(float top,float bottom,float left, float right,
 				 const std::string& textureName,
 				 bool inPercent)
-    :top(top),bottom(bottom),left(left),right(right),inPercent(inPercent),textureName(textureName),xInv(false),yInv(false),color(255,255,255,255)
+    :top(top),bottom(bottom),left(left),right(right),inPercent(inPercent),textureName(textureName),xInv(false),yInv(false)
   {
     GlTextureManager::getInst().loadTexture(textureName);
   }
 
   GlRectTextured::GlRectTextured(float bottom,float left,float height, float width,const std::string& textureName,bool xInv, bool yInv)
-  :top(bottom),bottom(bottom+height),left(left),right(left+width),inPercent(false),textureName(textureName),xInv(xInv),yInv(yInv),color(255,255,255,255)
+  :top(bottom),bottom(bottom+height),left(left),right(left+width),inPercent(false),textureName(textureName),xInv(xInv),yInv(yInv)
   {
     GlTextureManager::getInst().loadTexture(textureName);
   }
@@ -70,7 +70,7 @@ namespace tlp {
     }
 
     if(GlTextureManager::getInst().activateTexture(textureName))
-      setMaterial(color);
+      setMaterial(Color(255,255,255,255));
 
     glBegin(GL_QUADS);
     glNormal3f(0.0f, 0.0f, 1.0f);
