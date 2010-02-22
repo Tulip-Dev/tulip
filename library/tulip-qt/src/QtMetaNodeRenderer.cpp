@@ -5,6 +5,7 @@
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlTools.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
 
 using namespace std;
 
@@ -245,6 +246,21 @@ namespace tlp {
     glMainWidget->setGraph(metaGraph);
     GlMainWidget::getTextureRealSize(newWidth, newHeight, textureWidth,textureHeight);
     glMainWidget->getTextureShift(newWidth, newHeight, xTextureDec, yTextureDec);
+
+    GlBoundingBoxSceneVisitor *visitor;
+    if(glMainWidget->getScene()->getGlGraphComposite())
+      visitor=new GlBoundingBoxSceneVisitor(glMainWidget->getScene()->getGlGraphComposite()->getInputData());
+    else
+      visitor=new GlBoundingBoxSceneVisitor(NULL);
+
+    glMainWidget->getScene()->getGraphLayer()->acceptVisitor(visitor);
+
+    Coord contentSize = visitor->getBoundingBox().second - visitor->getBoundingBox().first;
+    if(nodeSize[0]/contentSize[0]<nodeSize[1]/contentSize[1]){
+      newSize[1]*=((nodeSize[0]/contentSize[0])/(nodeSize[1]/contentSize[1]));
+    }else{
+      newSize[0]*=((nodeSize[1]/contentSize[1])/(nodeSize[0]/contentSize[0]));
+    }
 
     setMaterial(Color(255,255,255,255));
     GlTextureManager::getInst().activateTexture(str.str());

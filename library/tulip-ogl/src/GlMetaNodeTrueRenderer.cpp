@@ -50,7 +50,6 @@ namespace tlp {
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
     glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., 1.);
     // We remove nodeSize[N]/100. to be sure that includes nodes are in meta node
-    glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
 
     Graph *metaGraph = inputData->getGraph()->getNodeMetaInfo(n);
     GlGraphRenderingParameters metaParameters = *inputData->parameters;
@@ -67,6 +66,16 @@ namespace tlp {
     double dept  = (maxC[2] - minC[2]) / includeScale[2];
     double width  = (maxC[0] - minC[0]) / includeScale[0];
     double height = (maxC[1] - minC[1]) / includeScale[1];
+
+    Size includeSize=nodeSize;
+    if(includeSize[0]/includeScale[0]<includeSize[1]/includeScale[1]){
+      includeSize[1]*=((includeSize[0]/includeScale[0])/(includeSize[1]/includeScale[1]));
+    }else{
+      includeSize[0]*=((includeSize[1]/includeScale[1])/(includeSize[0]/includeScale[0]));
+    }
+
+    glScalef(includeSize[0], includeSize[1], includeSize[2]);
+
     if (width<0.0001) width=1;
     if (height<0.0001) height=1;
     if (dept<0.0001) dept=1;
@@ -76,7 +85,7 @@ namespace tlp {
 
     vector<Coord> objectScale, objectTranslate, objectCoord;
     activeCamera=new Camera(*camera);
-    activeCamera->addObjectTransformation(nodeCoord+translate, Coord(nodeSize*scale), nodeCoord);
+    activeCamera->addObjectTransformation(nodeCoord+translate, Coord(includeSize*scale), nodeCoord);
     activeCamera->getObjectTransformation(objectTranslate, objectScale, objectCoord);
 
 
