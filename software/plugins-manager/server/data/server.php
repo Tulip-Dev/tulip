@@ -165,15 +165,22 @@ function buildPluginsListForOneFilePHP5_v2($outDoc,$outNode,$dirName,$file){
 
   $linuxVersion="false";
   $macVersion="false";
+  $macVersion_ppc="false";
+  $macVersion_intel="false";
   $windobVersion="false";
   $linuxVersion_i34="false";
-  $macVersion_i64="false";
   $windobVersion_i64="false";
   if(file_exists($dirName."i386/".$linuxFileName)){
     $linuxVersion="true";
   }
   if(file_exists($dirName."i386/".$macFileName)){
     $macVersion="true";
+  }
+  if(file_exists($dirName."i386/".$macFileName)){
+    $macVersion_ppc="true";
+  }
+  if(file_exists($dirName."i386/intel/".$macFileName)){
+    $macVersion_intel="true";
   }
   if(file_exists($dirName."i386/".$windobFileName)){
     $windobVersion="true";
@@ -195,9 +202,11 @@ function buildPluginsListForOneFilePHP5_v2($outDoc,$outNode,$dirName,$file){
   $outNode->setAttribute("fileName",$node->getAttribute("fileName"));
   $outNode->setAttribute("linuxVersion",$linuxVersion);
   $outNode->setAttribute("macVersion",$macVersion);
+  $outNode->setAttribute("macVersion_ppc",$macVersion_ppc);
+  $outNode->setAttribute("macVersion_intel",$macVersion_intel);
   $outNode->setAttribute("windowsVersion",$windobVersion);
   $outNode->setAttribute("linuxVersion_i64",$linuxVersion_i64);
-  $outNode->setAttribute("macVersion_i64",$macVersion_i64);
+  $outNode->setAttribute("macVersion_i64",false);
   $outNode->setAttribute("windowsVersion_i64",$windobVersion_i64);
 
   $deps = $node->getElementsByTagname("dependency");
@@ -283,12 +292,11 @@ function getPluginXMLDoc_v2($pluginFileName,$pluginVersion){
 // Function for server version 1 and version 2
 //***************************************************************************************************
 function getServerName(){
-  $fileName = "serverName.txt";
-  $handle = fopen($fileName, "r");
-  
-  $data = fread($handle, filesize($fileName));
+  $fileName = "serverName.txt"; 
+  $handle = fopen($fileName, "r"); 
+  $data = fread($handle, filesize($fileName)); 
   fclose($handle); 
-  return $data;
+  return $data; 
 }
 
 function downloadPlugin($name){
