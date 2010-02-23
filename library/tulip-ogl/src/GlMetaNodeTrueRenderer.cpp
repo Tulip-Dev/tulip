@@ -67,11 +67,13 @@ namespace tlp {
     double width  = (maxC[0] - minC[0]) / includeScale[0];
     double height = (maxC[1] - minC[1]) / includeScale[1];
 
-    Size includeSize=nodeSize;
-    if(includeSize[0]/includeScale[0]<includeSize[1]/includeScale[1]){
-      includeSize[1]*=((includeSize[0]/includeScale[0])/(includeSize[1]/includeScale[1]));
+    Coord includeSize=bboxes.first-bboxes.second;
+    if(nodeSize[0]/includeSize[0]<nodeSize[1]/includeSize[1]){
+      includeSize[1]*=nodeSize[0]/includeSize[0];
+      includeSize[0]*=nodeSize[0]/includeSize[0];
     }else{
-      includeSize[0]*=((includeSize[1]/includeScale[1])/(includeSize[0]/includeScale[0]));
+      includeSize[0]*=nodeSize[1]/includeSize[1];
+      includeSize[1]*=nodeSize[1]/includeSize[1];
     }
 
     glScalef(includeSize[0], includeSize[1], includeSize[2]);
