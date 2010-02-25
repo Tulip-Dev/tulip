@@ -238,6 +238,9 @@
          <property name="text" >
           <string>All</string>
          </property>
+	 <property name="toolTip" >
+           <string>Displays all properties</string>
+         </property>
 	 <property name="checked"> 	 
 	  <bool>true</bool> 	 
 	 </property>
@@ -246,7 +249,10 @@
        <item>
         <widget class="QRadioButton" name="radioWork" >
          <property name="text" >
-          <string>Work</string>
+          <string>User</string>
+         </property>
+	 <property name="toolTip" >
+           <string>Only display user properties (properties whose names don't start with view)</string>
          </property>
         </widget>
        </item>
@@ -254,6 +260,9 @@
         <widget class="QRadioButton" name="radioView" >
          <property name="text" >
           <string>View</string>
+         </property>
+	 <property name="toolTip" >
+           <string>Only display visual properties (properties whose names start with view)</string>
          </property>
         </widget>
        </item>
