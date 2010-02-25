@@ -1128,7 +1128,7 @@ namespace tlp {
   }
   //**********************************************************************
   GraphState *MainController::constructGraphState() {
-    GlMainView *mainView=dynamic_cast<GlMainView *>(getCurrentGraph());
+    GlMainView *mainView=dynamic_cast<GlMainView *>(getCurrentView());
     if(mainView)
       return new GraphState(mainView->getGlMainWidget());
     
@@ -1136,7 +1136,7 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::applyMorphing(GraphState *graphState){
-    GlMainView *mainView=dynamic_cast<GlMainView *>(getCurrentGraph());
+    GlMainView *mainView=dynamic_cast<GlMainView *>(getCurrentView());
     clearObservers();
     mainView->getGlMainWidget()->getScene()->centerScene();
     GraphState * g1 = constructGraphState();
@@ -1177,12 +1177,10 @@ namespace tlp {
         getCurrentGraph()->getLocalProperty<LayoutProperty>("viewLayout")->perfectAspectRatio();
 
       if( morphingAction->isChecked() && g0) {
-	applyMorphing(g0);
+        applyMorphing(g0);
       }
     }
     drawViews(true);
-    if( g0 )
-      delete g0;
   }
   //**********************************************************************
   void MainController::changeInt(QAction* action) {
