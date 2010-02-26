@@ -129,13 +129,13 @@ namespace tlp {
       }
 
       if(GlewManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()){
-        GlPointManager::getInst().addPoint(Coord(nodeCoord[0],nodeCoord[1], nodeCoord[2]+nodeSize[2]),color,size);
+        GlPointManager::getInst().addPoint(Coord(nodeCoord[0],nodeCoord[1], nodeCoord[2]+nodeSize[2]/2.),color,size);
       }else{
         glDisable(GL_LIGHTING);
         setColor(color);
         glPointSize(size);
         glBegin(GL_POINTS);
-        glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]);
+        glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]/2.);
         glEnd();
         glEnable(GL_LIGHTING);
       }
