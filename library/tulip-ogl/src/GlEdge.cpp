@@ -486,38 +486,42 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 
   switch (shape) {
   case POLYLINESHAPE:
-    if (lod > 0.05 || lod < -0.05)
+    if (lod > 20 || lod < -20){
       tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,colorInterpolate,borderColor);
-    else
+    }else if(lod > 0.05 || lod < -0.05){
+      tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,true,borderColor);
+    }else{
       tlp::polyLine(tmp, startColor, endColor);
+    }
     break;
   case BEZIERSHAPE:
-    if (lod > 0.05 || lod < -0.05) {
-      //tlp::bezierQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
+    if (lod > 10 || lod < -10) {
       GlBezierCurve bezier(tmp, startColor, endColor, size[0], size[1]);
       if(!colorInterpolate){
         bezier.setOutlined(true);
         bezier.setOutlineColor(borderColor);
       }
       bezier.draw(0, 0);
-
+    } else if (lod > 0.05 || lod < -0.05) {
+      GlBezierCurve bezier(tmp, startColor, endColor, size[0], size[1]);
+      bezier.draw(0, 0);
     } else {
-      //tlp::bezierLine(tmp, startColor, endColor);
       GlBezierCurve bezier(tmp, startColor, endColor, 1, 1);
       bezier.draw(0, 0);
     }
     break;
   case SPLINESHAPE:
-    if (lod > 0.05 || lod < -0.05) {
-      //tlp::splineQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir);
+    if (lod > 10 || lod < -10) {
       GlCatmullRomCurve catmull(tmp, startColor, endColor, size[0], size[1]);
       if(!colorInterpolate){
         catmull.setOutlined(true);
         catmull.setOutlineColor(borderColor);
       }
       catmull.draw(0, 0);
+    } else if (lod > 0.05 || lod < -0.05) {
+      GlCatmullRomCurve catmull(tmp, startColor, endColor, size[0], size[1]);
+      catmull.draw(0, 0);
     } else {
-      //tlp::splineLine(tmp, startColor, endColor);
       GlCatmullRomCurve catmull(tmp, startColor, endColor, 1, 1);
       catmull.draw(0, 0);
     }
@@ -539,10 +543,13 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
         GlLines::TLP_PLAIN, GlLines::SPLINE3, startColor, endColor);
     break;
   default:
-    if (lod > 0.05 || lod < -0.05)
-      tlp::polyQuad(tmp, startColor, endColor, size[0], size[1], srcDir, tgtDir,colorInterpolate,borderColor);
-    else
+    if (lod > 20 || lod < -20){
+      tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,colorInterpolate,borderColor);
+    }else if(lod > 0.05 || lod < -0.05){
+      tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,true,borderColor);
+    }else{
       tlp::polyLine(tmp, startColor, endColor);
+    }
     break;
   }
 
