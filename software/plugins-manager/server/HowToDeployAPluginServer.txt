@@ -1,0 +1,48 @@
+HowTo deploy a plugin server
+
+//***********************************
+- First part : server code
+  
+  (needed files and directory are in data directory)
+  - Copy nusoap directory on your server
+  - Copy server.php 
+  - Modify and copy serverName.txt
+  
+  At this point your server is ok, but if you had it on Tulip you will no see anything.
+
+- Second part : add plugins
+
+ - Plugins files and directory architecture
+   
+   server
+   |
+   - nusoap/...
+   - server.php
+   - serverName.txt
+   - pluginsV2
+    |
+    - libCircular-3.3.0.1.0 (libPluginName-TulipVersion.PluginVersion)
+     |
+     - libCircular-3.3.0.doc (documentation file)
+     - libCircular-3.3.0.xml (most important file : plugin summary)
+     - i386
+      |
+      - libCircular-3.3.0.so
+      - libCircular-3.3.0.dylib
+      - libCircular-3.3.0.dll
+     - i64
+      |
+      - libCircular-3.3.0.so
+
+  - To create this directory architecture, you can use a simple script :
+    generate_plugin_dirs.sh available in src dir
+    To use this script you have to compile the content of src directory (you juste have to do a make)
+    
+    - generate_plugin_dirs.sh plugins_src_top_dir plugins_server_dir generate_doc(yes/no) arch
+      plugins_src_top_dir : directory where you have your plugins to add to the server
+      plugins_server_dir : directory were hierarchy will be created
+      generate_doc : create .doc files
+      arch : i386/i64 (i386 by default)
+
+    After this, you can copy the content of plugins_server_dir in pluginsV2 directory of your plugin server  
+      
