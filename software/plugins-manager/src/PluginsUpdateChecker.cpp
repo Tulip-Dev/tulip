@@ -111,11 +111,12 @@ namespace tlp {
         if(!(*it).first->local) {
           DistPluginInfo *pluginInfo=(DistPluginInfo*)((*it).first);
           if(pluginInfo->version.compare(pluginInfo->localVersion)>0 && pluginInfo->localVersion!="") {
-            // TODO : change for new mac version ( __APPLE__ to ????)
 #if defined(__APPLE__)
+#if defined(MACPPC)
             if(pluginInfo->macVersion_ppc){
-#elif defined(__APPLE_INTEL__)
+#else
             if(pluginInfo->macVersion_intel){
+#endif
 #elif defined(_WIN32)
             if(pluginInfo->windowsVersion){
 #elif defined(I64)

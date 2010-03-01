@@ -185,11 +185,12 @@ namespace tlp {
     }
     if(!pluginInfo->local && ((twi->flags() & Qt::ItemIsUserCheckable) == Qt::ItemIsUserCheckable)) {
       bool havePlugin=false;
-// TODO : change for new mac version (__APPLE__ to ????)
 #if defined(__APPLE__)
+#if defined(MACPPC)
       havePlugin=((DistPluginInfo*)pluginInfo)->macVersion_ppc;
-#elif defined(__APPLE_INTEL__)
+#else
       havePlugin=((DistPluginInfo*)pluginInfo)->macVersion_intel;
+#endif
 #elif defined(_WIN32)
       havePlugin=((DistPluginInfo*)pluginInfo)->windowsVersion;
 #elif defined(I64)
