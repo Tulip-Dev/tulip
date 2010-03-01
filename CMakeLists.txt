@@ -143,9 +143,15 @@ STRING(COMPARE EQUAL "${UNAME_OUT}" "x86_64" I64)
 IF(NOT I64)
   STRING(COMPARE EQUAL "${UNAME_OUT}" "ia64" I64)
 ENDIF(NOT I64)
+IF(NOT I64)
+  STRING(COMPARE EQUAL "${UNAME_OUT}" "Power Macintosh" MACPPC)
+ENDIF(NOT I64)
 IF(I64)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DI64")
 ENDIF(I64)
+IF(MACPPC)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DMACPPC")
+ENDIF(MACPPC)
 
 ## -----------------------------------------------------------------------------------------------
 ## Qt assistant config

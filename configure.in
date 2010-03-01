@@ -108,6 +108,7 @@ VAR_MACOSX=0
 VAR_MACOSX_7=0
 VAR_I64=0
 VAR_LINUX=0
+VAR_MACPPC=0
 
 case "`uname -m`" in
      x86_64  | ia64)
@@ -130,6 +131,9 @@ case "`uname -s`" in
         if test "$(uname -r)" = "7.9.0"; then
 	  VAR_MACOSX_7=1
         fi
+        if test "$(uname -m)" = "Power Macintosh"; then
+	  VAR_MACPPC=1
+        fi
 	;;
     *Linux*)
 	VAR_LINUX=1
@@ -141,6 +145,7 @@ AM_CONDITIONAL(MACOSX, test $VAR_MACOSX = 1)
 AM_CONDITIONAL(MACOSX_7, test $VAR_MACOSX_7 = 1)
 AM_CONDITIONAL(I64, test $VAR_I64 = 1)
 AM_CONDITIONAL(LINUX, test $VAR_LINUX = 1)
+AM_CONDITIONAL(MACPPC, test $VAR_MACPPC = 1)
 
 dnl
 AC_LIBTOOL_DLOPEN
@@ -194,6 +199,11 @@ AC_ARG_ENABLE(debug,
 if test ${VAR_I64} = 1
 then
   CPPFLAGS="$CPPFLAGS -DI64"
+else
+  if test ${VAR_MACPPC} = 1
+  then
+    CPPFLAGS="$CPPFLAGS -DMACPPC"
+  fi
 fi
 
 dnl check if we build tulip-ogl
