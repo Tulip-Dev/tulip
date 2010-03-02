@@ -417,7 +417,6 @@ software/tulip/src/Makefile
 software/tulip/bitmaps/Makefile
 software/tulip/designer/Makefile
 software/tlprender/Makefile
-software/tlprender/include/Makefile
 software/tlprender/src/Makefile
 plugins/Makefile
 plugins/layout/Makefile
@@ -428,13 +427,9 @@ plugins/import/Makefile
 plugins/export/Makefile
 plugins/sizes/Makefile
 plugins/colors/Makefile
-plugins/int/Makefile
-plugins/string/Makefile
 plugins/glyph/Makefile
-plugins/interactor/Makefile
 plugins/view/Makefile
 plugins/view/spreadsheet/Makefile
-plugins/controller/Makefile
 unit_test/plugins/pluginstest.cpp
 docs/Makefile
 docs/devTeamDoxygen/Makefile
