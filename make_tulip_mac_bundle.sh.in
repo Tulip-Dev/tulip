@@ -41,6 +41,18 @@ function make_bundle_lib() {
   if [ "$slib" = "/usr/lib/libSystem.B.dylib" ]; then
    return
   fi
+  if [ "$slib" = "/usr/lib/libobjc.A.dylib" ]; then
+   return
+  fi
+  if [ "$slib" = "/usr/lib/libgcc_s.1.dylib" ]; then
+    return
+  fi
+  if [ "$slib" = "/usr/lib/libicucore.A.dylib" ]; then
+    return
+  fi
+  if [ "$slib" = "/usr/lib/libstdc++.6.dylib" ]; then
+    return
+  fi
   if [ ! -f $slib ]; then
     if [ -f /usr/lib/$slib ]; then
       slib=/usr/lib/$slib
