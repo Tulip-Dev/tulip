@@ -75,7 +75,8 @@ namespace tlp {
   }
   //**********************************************************************
   static void insertInMenu(QMenu &menu, string itemName, string itemGroup,
-			   std::vector<QMenu*> &groupMenus, std::string::size_type &nGroups) {
+			   std::vector<QMenu*> &groupMenus, std::string::size_type &nGroups,
+			   QObject *receiver, const char *slot) {
     std::vector<std::string> itemGroupNames = getItemGroupNames(itemGroup);
     QMenu *subMenu = &menu;
     std::string::size_type nGroupNames = itemGroupNames.size();
@@ -96,7 +97,8 @@ namespace tlp {
 	subMenu = groupMenu;
       }
     }
-    subMenu->addAction(itemName.c_str());
+    QAction *action=subMenu->addAction(itemName.c_str());
+    QObject::connect(action,SIGNAL(triggered()),receiver,slot);
   }
   //**********************************************************************
   template <typename TYPEN, typename TYPEE, typename TPROPERTY>
@@ -106,7 +108,7 @@ namespace tlp {
     std::string::size_type nGroups = 0;
     it=AbstractProperty<TYPEN, TYPEE, TPROPERTY>::factory->objMap.begin();
     for (;it!=AbstractProperty<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end();++it)
-      insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
+      insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
   }
   template <typename TFACTORY, typename TMODULE>
   void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
@@ -114,7 +116,7 @@ namespace tlp {
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
     for (it=TFACTORY::factory->objMap.begin();it != TFACTORY::factory->objMap.end();++it)
-      insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
+      insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
   }
   typedef std::vector<node> NodeA;
   typedef std::vector<edge> EdgeA;
@@ -553,23 +555,14 @@ namespace tlp {
     selectMenu=new QMenu("&Selection");
     generalMenu=new QMenu("&General");
 
-    buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(*intMenu, this, SLOT(changeInt(QAction*)));
-    buildPropertyMenu<StringType, StringType, StringAlgorithm>(*stringMenu, this, SLOT(changeString(QAction*)));
-    buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(*sizesMenu, this, SLOT(changeSize(QAction*)));
-    buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(*colorsMenu, this, SLOT(changeColor(QAction*)));
-    buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(*layoutMenu, this, SLOT(changeLayout(QAction*)));
-    buildPropertyMenu<DoubleType, DoubleType, DoubleAlgorithm>(*metricMenu, this, SLOT(changeMetric(QAction*)));
-    buildPropertyMenu<BooleanType, BooleanType, BooleanAlgorithm>(*selectMenu, this, SLOT(changeSelection(QAction*)));
-    buildMenuWithContext<AlgorithmFactory, Algorithm>(*generalMenu, this, SLOT(applyAlgorithm(QAction*)));
-
-    connect(stringMenu, SIGNAL(triggered(QAction*)), this, SLOT(changeString(QAction*)));
-    connect(metricMenu, SIGNAL(triggered(QAction*)), this, SLOT(changeMetric(QAction*)));
-    connect(layoutMenu, SIGNAL(triggered(QAction*)), this, SLOT(changeLayout(QAction*)));
-    connect(selectMenu, SIGNAL(triggered(QAction*)), this, SLOT(changeSelection(QAction*)));
-    connect(generalMenu, SIGNAL(triggered(QAction*)), this, SLOT(applyAlgorithm(QAction*)));
-    connect(sizesMenu, SIGNAL(triggered(QAction*)), this, SLOT(changeSizes(QAction*)));
-    connect(intMenu, SIGNAL(triggered(QAction*)), this, SLOT(changeInt(QAction*)));
-    connect(colorsMenu, SIGNAL(triggered(QAction*)), this, SLOT(changeColors(QAction*)));
+    buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(*intMenu, this, SLOT(changeInt()));
+    buildPropertyMenu<StringType, StringType, StringAlgorithm>(*stringMenu, this, SLOT(changeString()));
+    buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(*sizesMenu, this, SLOT(changeSizes()));
+    buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(*colorsMenu, this, SLOT(changeColors()));
+    buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(*layoutMenu, this, SLOT(changeLayout()));
+    buildPropertyMenu<DoubleType, DoubleType, DoubleAlgorithm>(*metricMenu, this, SLOT(changeMetric()));
+    buildPropertyMenu<BooleanType, BooleanType, BooleanAlgorithm>(*selectMenu, this, SLOT(changeSelection()));
+    buildMenuWithContext<AlgorithmFactory, Algorithm>(*generalMenu, this, SLOT(applyAlgorithm()));
 
     if (selectMenu->actions().count()>0)
       algorithmMenu->addMenu(selectMenu);
@@ -1105,7 +1098,8 @@ namespace tlp {
   }
   //**********************************************************************
   /// Apply a general algorithm
-  void MainController::applyAlgorithm(QAction* action) {
+  void MainController::applyAlgorithm() {
+    QAction *action=(QAction*)(sender());
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
@@ -1151,22 +1145,26 @@ namespace tlp {
     initObservers();
   }
   //**********************************************************************
-  void MainController::changeString(QAction* action) {
+  void MainController::changeString() {
+    QAction *action=(QAction*)(sender());
     if(ControllerAlgorithmTools::changeString(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewLabel",getCurrentView()))
       afterChangeProperty();
   }
   //**********************************************************************
-  void MainController::changeSelection(QAction* action) {
+  void MainController::changeSelection() {
+    QAction *action=(QAction*)(sender());
     if(ControllerAlgorithmTools::changeBoolean(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewSelection",getCurrentView()))
       afterChangeProperty();
   }
   //**********************************************************************
-  void MainController::changeMetric(QAction* action) {
+  void MainController::changeMetric() {
+    QAction *action=(QAction*)(sender());
     if(ControllerAlgorithmTools::changeMetric(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewMetric",getCurrentView(),mapMetricAction->isChecked(),"Metric Mapping","viewColor"))
       afterChangeProperty();
   }
   //**********************************************************************
-  void MainController::changeLayout(QAction* action) {
+  void MainController::changeLayout() {
+    QAction *action=(QAction*)(sender());
     GraphState * g0=NULL;
     if(morphingAction->isChecked())
       g0=constructGraphState();
@@ -1183,12 +1181,14 @@ namespace tlp {
     drawViews(true);
   }
   //**********************************************************************
-  void MainController::changeInt(QAction* action) {
+  void MainController::changeInt() {
+    QAction *action=(QAction*)(sender());
     if(ControllerAlgorithmTools::changeInt(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(), "viewInt",getCurrentView()))
       afterChangeProperty();
   }
   //**********************************************************************
-  void MainController::changeColors(QAction* action) {
+  void MainController::changeColors() {
+    QAction *action=(QAction*)(sender());
     GraphState * g0=NULL;
     if(morphingAction->isChecked())
       g0=constructGraphState();
@@ -1204,7 +1204,8 @@ namespace tlp {
       delete g0;
   }
   //**********************************************************************
-  void MainController::changeSizes(QAction* action) {
+  void MainController::changeSizes() {
+    QAction *action=(QAction*)(sender());
     GraphState * g0 = NULL;
     GlMainView *mainView=dynamic_cast<GlMainView *>(getCurrentView());
     if(morphingAction->isChecked())

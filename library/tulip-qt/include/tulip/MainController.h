@@ -235,14 +235,14 @@ namespace tlp {
     void makeDirected();
     void reverseSelectedEdgeDirection();
 
-    void changeMetric(QAction*);
-    void changeString(QAction*);
-    void changeSizes(QAction*);
-    void changeColors(QAction*);
-    void changeInt(QAction*);
-    void changeSelection(QAction*);
-    void changeLayout(QAction*);
-    void applyAlgorithm(QAction*);
+    void changeMetric();
+    void changeString();
+    void changeSizes();
+    void changeColors();
+    void changeInt();
+    void changeSelection();
+    void changeLayout();
+    void applyAlgorithm();
 
     void updateUndoRedoInfos();
     void undo();

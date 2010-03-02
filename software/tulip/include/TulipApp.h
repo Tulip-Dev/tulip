@@ -86,6 +86,8 @@ protected slots:
   bool createController(const std::string &name,const std::string &graphName);
   void fileOpen();
   void filePrint();
+  void importGraph();
+  void exportGraph();
   void importGraph(QAction*);
   void exportGraph(QAction*);
   void windowsMenuAboutToShow();

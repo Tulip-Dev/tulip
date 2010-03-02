@@ -683,6 +683,11 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     }
 }
 //**********************************************************************
+void TulipApp::importGraph() {
+  QAction *action=(QAction*)(sender());
+  importGraph(action);
+}
+//**********************************************************************
 void TulipApp::importGraph(QAction* action) {
   string name = action->text().toStdString();
   QString s;
@@ -708,7 +713,7 @@ void TulipApp::importGraph(QAction* action) {
   }
 //**********************************************************************
   static void insertInMenu(QMenu &menu, string itemName, string itemGroup,
-			   std::vector<QMenu*> &groupMenus, std::string::size_type &nGroups) {
+			   std::vector<QMenu*> &groupMenus, std::string::size_type &nGroups,QObject *receiver, const char *slot) {
     std::vector<std::string> itemGroupNames = getItemGroupNames(itemGroup);
     QMenu *subMenu = &menu;
     std::string::size_type nGroupNames = itemGroupNames.size();
@@ -730,7 +735,8 @@ void TulipApp::importGraph(QAction* action) {
       }
     }
     //cout << subMenu->name() << "->" << itemName << endl;
-    subMenu->addAction(itemName.c_str());
+    QAction *action=subMenu->addAction(itemName.c_str());
+    QObject::connect(action,SIGNAL(triggered()),receiver,slot);
   }
 //**********************************************************************
 template <typename TFACTORY, typename TMODULE>
@@ -739,7 +745,7 @@ template <typename TFACTORY, typename TMODULE>
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
     for (it=TFACTORY::factory->objMap.begin();it != TFACTORY::factory->objMap.end();++it)
-      insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups);
+      insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
   }
 //**********************************************************************
 void TulipApp::buildMenus() {
@@ -766,10 +772,10 @@ void TulipApp::buildMenus() {
     fileMenu->insertAction(fileOpenAction,newAction);
   }
 
-  buildMenuWithContext<ExportModuleFactory, ExportModule>(exportGraphMenu, this, SLOT(exportGraph(QAction*)));
-  buildMenuWithContext<ImportModuleFactory, ImportModule>(importGraphMenu, this, SLOT(importGraph(QAction*)));
-  connect(&exportGraphMenu, SIGNAL(triggered(QAction*)), SLOT(exportGraph(QAction*)));
-  connect(&importGraphMenu, SIGNAL(triggered(QAction*)), SLOT(importGraph(QAction*)));
+  buildMenuWithContext<ExportModuleFactory, ExportModule>(exportGraphMenu, this, SLOT(exportGraph()));
+  buildMenuWithContext<ImportModuleFactory, ImportModule>(importGraphMenu, this, SLOT(importGraph()));
+  //connect(&exportGraphMenu, SIGNAL(triggered(QAction*)), SLOT(exportGraph(QAction*)));
+  //connect(&importGraphMenu, SIGNAL(triggered(QAction*)), SLOT(importGraph(QAction*)));
   if (importGraphMenu.actions().count()>0) {
     importGraphMenu.setTitle("&Import");
     fileMenu->insertMenu(filePrintAction,&importGraphMenu);
@@ -779,6 +785,11 @@ void TulipApp::buildMenus() {
     fileMenu->insertMenu(filePrintAction,&exportGraphMenu);
   }
   fileMenu->insertSeparator(filePrintAction);
+}
+//**********************************************************************
+void TulipApp::exportGraph() {
+  QAction *action=(QAction*)(sender());
+  exportGraph(action);
 }
 //**********************************************************************
 void TulipApp::exportGraph(QAction* action) {
