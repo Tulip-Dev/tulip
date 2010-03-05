@@ -489,9 +489,10 @@ void PushPopTest::testAddDelProps() {
   graph->delLocalProperty("double");
   CPPUNIT_ASSERT(!graph->existProperty("double"));
   // we must try to ensure to not allocate the memory previously allocated
-  // to old "double" to a new "double", so get "dd" before "double"
-  graph->getProperty<DoubleProperty>("dd");
+  // to old "double" to a new "double", so allocate chunk before "double"
+  void* chunk = malloc(500);
   graph->getProperty<DoubleProperty>("double");
+  free(chunk);
   CPPUNIT_ASSERT(graph->existProperty("double"));
   CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double") != dProp);
 
