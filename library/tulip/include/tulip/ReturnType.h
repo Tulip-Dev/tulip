@@ -3,6 +3,7 @@
 
 #include "tulip/Node.h"
 #include "tulip/Edge.h"
+#include "tulip/Color.h"
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
@@ -26,6 +27,7 @@ namespace tlp {
   DECL_BASIC_RETURN(bool);
   DECL_BASIC_RETURN(node);
   DECL_BASIC_RETURN(edge);
+  DECL_BASIC_RETURN(Color);
   DECL_BASIC_RETURN(int);
   DECL_BASIC_RETURN(long);
   DECL_BASIC_RETURN(unsigned int);

@@ -122,7 +122,7 @@ public:
   static bool fromString( RealType & v, const std::string & s );
 };
 
-  DECL_STORED_STRUCT(std::vector<Coord>);
+DECL_STORED_STRUCT(std::vector<Coord>);
 
 class TLP_SCOPE LineType:public Type
 {
@@ -133,8 +133,6 @@ public:
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
 };
-
-DECL_STORED_STRUCT(Coord);
 
 class TLP_SCOPE PointType:public Type {
 public:
@@ -188,8 +186,6 @@ public:
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
 };
-
-DECL_STORED_STRUCT(Color);
 
 class TLP_SCOPE ColorType:public Type {
 public:
