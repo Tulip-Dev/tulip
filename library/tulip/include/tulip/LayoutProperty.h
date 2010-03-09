@@ -7,6 +7,7 @@
 #endif
 
 #include "tulip/tuliphash.h"
+#include "tulip/ObservableGraph.h"
 #include "tulip/AbstractProperty.h"
 #include "tulip/TemplateFactory.h"
 #include "tulip/LayoutAlgorithm.h"
@@ -19,11 +20,12 @@ class Graph;
 
 /** \addtogroup properties */ 
 /*@{*/
-  class TLP_SCOPE LayoutProperty:public AbstractProperty<PointType, LineType, LayoutAlgorithm>, public PropertyObserver {
+  class TLP_SCOPE LayoutProperty:public AbstractProperty<PointType, LineType, LayoutAlgorithm>, public PropertyObserver, public GraphObserver {
   friend class LayoutAlgorithm;
 
 public:
-  LayoutProperty (Graph *, std::string n="");
+  LayoutProperty(Graph *, std::string n="", bool updateOnEdgeReversal = true);
+  ~LayoutProperty();
 
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );
@@ -96,6 +98,9 @@ public:
   virtual void beforeSetEdgeValue(PropertyInterface* prop, const edge e);
   virtual void beforeSetAllNodeValue(PropertyInterface* prop);
   virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
+
+  // redefinition of a GraphObserver method
+  virtual void reverseEdge(Graph *, const edge);
 
 protected:
   void clone_handler(AbstractProperty<PointType,LineType> &);

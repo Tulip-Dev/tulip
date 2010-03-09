@@ -12,12 +12,20 @@ using namespace tlp;
 inline double sqr(double x){return (x*x);}
 
 //======================================================
-LayoutProperty::LayoutProperty (Graph *sg, std::string n):AbstractProperty<PointType,LineType,LayoutAlgorithm>(sg, n) {
+LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeReversal):AbstractProperty<PointType,LineType,LayoutAlgorithm>(sg, n) {
   minMaxOk[(unsigned long)graph]=false;
   // the property observes itself; see beforeSet... methods
   addPropertyObserver(this);
   // but do not need to be in observables
-  removeObservable(this);
+  PropertyObserver::removeObservable(this);
+  // if needed the property observes the graph (see reverseEdge)
+  if (updateOnEdgeReversal)
+    graph->addGraphObserver(this);
+}
+//======================================================
+LayoutProperty::~LayoutProperty() {
+  if (graph)
+    graph->removeGraphObserver(this);
 }
 //======================================================
 Coord LayoutProperty::getMax(Graph *sg) {
@@ -314,6 +322,21 @@ void LayoutProperty::beforeSetAllNodeValue(PropertyInterface*) {
 }
 void LayoutProperty::beforeSetAllEdgeValue(PropertyInterface*) {
   resetBoundingBox();
+}
+//================================================================================
+void LayoutProperty::reverseEdge(Graph *sg, const edge e) {
+  assert(sg == graph);
+  std::vector<Coord> bends = getEdgeValue(e);
+  // reverse bends if needed
+  if (bends.size() > 1) {
+    unsigned int halfSize = bends.size()/2;
+    for (unsigned int i = 0, j = bends.size() - 1; i < halfSize; ++i, j--) {
+      Coord tmp = bends[i];
+      bends[i] = bends[j];
+      bends[j] = tmp;
+    }
+    setEdgeValue(e, bends);
+  }
 }
 //=================================================================================
 double LayoutProperty::averageAngularResolution(Graph *sg) {

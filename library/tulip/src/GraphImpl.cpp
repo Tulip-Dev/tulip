@@ -373,7 +373,6 @@ node GraphImpl::opposite(const edge e, const node n) const {
   return (eEnds.first == n) ? eEnds.second : eEnds.first;
 }
 //----------------------------------------------------------------
-const string layoutProperty = "viewLayout";
 void GraphImpl::reverse(const edge e) {
   assert(isElement(e));
   node src = edges[e.id].first;
@@ -382,21 +381,7 @@ void GraphImpl::reverse(const edge e) {
   edges[e.id].second = src;
   outDegree.set(src.id, outDegree.get(src.id) - 1);
   outDegree.set(tgt.id, outDegree.get(tgt.id) + 1);
-  // reverse bends if needed
-  if (existProperty(layoutProperty)) {
-    LayoutProperty *graphLayout = (LayoutProperty *) getProperty(layoutProperty);
-    std::vector<Coord> bends = graphLayout->getEdgeValue(e);
-    if (bends.size() > 0) {
-      unsigned int halfSize = bends.size()/2;
-      for (unsigned int i = 0, j = bends.size() - 1; i < halfSize; ++i, j--) {
-	Coord tmp = bends[i];
-	bends[i] = bends[j];
-	bends[j] = tmp;
-      }
-      graphLayout->setEdgeValue(e, bends);
-    }
-  }
-
+  // notification
   notifyReverseEdge(this,e);
   notifyObservers();
 
