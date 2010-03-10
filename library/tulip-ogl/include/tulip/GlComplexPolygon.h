@@ -77,6 +77,26 @@ namespace tlp {
     void setOutlineSize(double size);
 
     /**
+     * Get fill color of GlComplexPolygon
+     */
+    Color getFillColor() {return fillColor;}
+
+    /**
+     * Set fill color of GlComplexPolygon
+     */
+    void setFillColor(const Color &color){fillColor=color;}
+
+    /**
+     * Get outline color of GlComplexPolygon
+     */
+    Color getOutlineColor() {return outlineColor;}
+
+    /**
+     * Set outline color of GlComplexPolygon
+     */
+    void setOutlineColor(const Color &color){outlineColor=color;}
+
+    /**
      * Translate entity
      */
     virtual void translate(const Coord& mouvement);
