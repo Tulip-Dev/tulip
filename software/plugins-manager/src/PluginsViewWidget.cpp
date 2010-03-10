@@ -212,10 +212,11 @@ namespace tlp {
       }
     }else{
       if(pluginInfo->local){
-        if(((LocalPluginInfo*)pluginInfo)->isInstalledInHome())
+        if(((LocalPluginInfo*)pluginInfo)->isInstalledInHome()){
           twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
-        else
+        }else{
           twi->setFlags(twi->flags() & (!Qt::ItemIsUserCheckable));
+        }
       }else{
         twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
       }
@@ -346,18 +347,24 @@ namespace tlp {
       return true;
     }else{
       DistPluginInfo *distPluginInfo=(DistPluginInfo*)pluginInfo;
-      if(distPluginInfo->localVersion==distPluginInfo->version) {
-	twi->setCheckState(0,Qt::Checked);
-	twi->setText(1, QString("=Installed="));
-	twi->setTextColor(1, QColor(0,255,0));
-	return true;
+      QString localPluginVersion;
+      if(distPluginInfo->localVersion!="")
+        localPluginVersion=QString(distPluginInfo->localVersion.c_str()).split(" ")[1];
+      QString distPluginVersion;
+      if(distPluginInfo->version!="")
+        distPluginVersion=QString(distPluginInfo->version.c_str()).split(" ")[1];
+      if(localPluginVersion==distPluginVersion) {
+        twi->setCheckState(0,Qt::Checked);
+        twi->setText(1, QString("=Installed="));
+        twi->setTextColor(1, QColor(0,255,0));
+        return true;
       }else{
-	if(distPluginInfo->localVersion!=""){
-	  twi->setText(1, QString(distPluginInfo->localVersion.c_str()));
-	  twi->setTextColor(1, QColor(0,0,255));
-	}
-	twi->setCheckState(0,Qt::Unchecked);
-	return false;
+        if(distPluginInfo->localVersion!=""){
+          twi->setText(1, QString(distPluginInfo->localVersion.c_str()));
+          twi->setTextColor(1, QColor(0,0,255));
+        }
+        twi->setCheckState(0,Qt::Unchecked);
+        return false;
       }
     }
   }
@@ -508,27 +515,27 @@ namespace tlp {
 
     if( it->parent()!=NULL ){
       if( state==Qt::Checked ){
-	if(  (namePosition>typePosition && it->text(0).toStdString().compare(name)== 0 && it->parent()->text(0).toStdString().compare(type)== 0)
-	     || (namePosition<typePosition && it->text(0).toStdString().compare(type)== 0 && it->parent()->text(0).toStdString().compare(name)== 0) ){
-	  for(int i=0;i<it->childCount();i++){
-	    if( (it->child(i)->text(0).toStdString().compare(version) != 0) && (it->child(i)->checkState(0)==Qt::Checked) ){
-	      it->child(i)->setCheckState(0,Qt::Unchecked);
-	    }
-	    if( (it->child(i)->text(0).toStdString().compare(version) == 0) && (it->child(i)->checkState(0)==Qt::Unchecked) ){
-	      it->child(i)->setCheckState(0,Qt::Checked);
-	    }
-	  }
-	}
+        if(  (namePosition>typePosition && it->text(0).toStdString().compare(name)== 0 && it->parent()->text(0).toStdString().compare(type)== 0)
+          || (namePosition<typePosition && it->text(0).toStdString().compare(type)== 0 && it->parent()->text(0).toStdString().compare(name)== 0) ){
+          for(int i=0;i<it->childCount();i++){
+            if( (it->child(i)->text(0).toStdString().compare(version) != 0) && (it->child(i)->checkState(0)==Qt::Checked) ){
+              it->child(i)->setCheckState(0,Qt::Unchecked);
+            }
+            if( (it->child(i)->text(0).toStdString().compare(version) == 0) && (it->child(i)->checkState(0)==Qt::Unchecked) ){
+              it->child(i)->setCheckState(0,Qt::Checked);
+            }
+          }
+        }
       }
       else{
-	if( (namePosition>typePosition && it->text(0).toStdString().compare(name)== 0 && it->parent()->text(0).toStdString().compare(type)== 0)
-	    || (namePosition<typePosition && it->text(0).toStdString().compare(type)== 0 && it->parent()->text(0).toStdString().compare(name)== 0) ){
-	  for(int i=0;i<it->childCount();i++){
-	    if( (it->child(i)->text(0).toStdString().compare(version) == 0) && (it->child(i)->checkState(0)==Qt::Checked) ){
-	      it->child(i)->setCheckState(0,Qt::Unchecked);
-	    }
-	  }
-	}
+        if( (namePosition>typePosition && it->text(0).toStdString().compare(name)== 0 && it->parent()->text(0).toStdString().compare(type)== 0)
+          || (namePosition<typePosition && it->text(0).toStdString().compare(type)== 0 && it->parent()->text(0).toStdString().compare(name)== 0) ){
+          for(int i=0;i<it->childCount();i++){
+            if( (it->child(i)->text(0).toStdString().compare(version) == 0) && (it->child(i)->checkState(0)==Qt::Checked) ){
+              it->child(i)->setCheckState(0,Qt::Unchecked);
+            }
+          }
+        }
       }
     }
     for(int i=0;i<it->childCount();i++){
