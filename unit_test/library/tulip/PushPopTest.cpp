@@ -490,7 +490,7 @@ void PushPopTest::testAddDelProps() {
   CPPUNIT_ASSERT(!graph->existProperty("double"));
   // we must try to ensure to not allocate the memory previously allocated
   // to old "double" to a new "double", so allocate chunk before "double"
-  void* chunk = malloc(500);
+  void* chunk = malloc(128);
   graph->getProperty<DoubleProperty>("double");
   free(chunk);
   CPPUNIT_ASSERT(graph->existProperty("double"));

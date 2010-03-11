@@ -88,6 +88,14 @@ public:
   unsigned int getSubGraphId(unsigned int id);
   void freeSubGraphId(unsigned int id);
 
+  // to improve memory allocation
+  // attempt to reserve enough space to store nodes/edges
+  void reserveNodes(unsigned int nbNodes);
+  void reserveEdges(unsigned int nbEdges);
+  // indicate fragmented space of nodes/edges
+  bool hasFragmentedNodeIds();
+  bool hasFragmentedEdgeIds();
+
 protected:
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder

@@ -17,10 +17,26 @@ using namespace tlp;
 ostream & operator << (ostream &os,const Graph *sp) {
   os << ";(nodes <node_id> <node_id> ...)" << endl;
   os << "(nodes ";
+  node beginNode, previousNode;
   Iterator<node> *itn=sp->getNodes();
-  for (;itn->hasNext();) {
-    os << itn->next().id;
-    if (itn->hasNext()) os << " ";
+  while (itn->hasNext()) {
+    node current = itn->next();
+    if (!beginNode.isValid()) {
+      beginNode = previousNode = current;
+      os << beginNode.id;
+    } else {
+      if (current.id == previousNode.id + 1) {
+	previousNode = current;
+	if (!itn->hasNext())
+	  os << ".." << current.id;
+      } else {
+	if (previousNode != beginNode) {
+	  os << ".." << previousNode.id;
+	}
+	os  << " " << current.id;
+	beginNode = previousNode = current;
+      }
+    }
   } delete itn;
   os << ")" << endl;
   os << ";(edge <edge_id> <source_id> <target_id>)" << endl;

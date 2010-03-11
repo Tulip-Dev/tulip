@@ -76,6 +76,10 @@ Iterator<unsigned int>* IdManager::getIds() const{
   return new IdManagerIterator(*this);
 }
 //-----------------------------------------------------------
+bool IdManager::hasFreeIds() const {
+  return !freeIds.empty();
+}
+//-----------------------------------------------------------
 IdManagerIterator::IdManagerIterator(const IdManager &idMan):
   current(idMan.firstId), it(idMan.freeIds.begin()), last(idMan.nextId), idManager(idMan)
 {

@@ -24,9 +24,10 @@ struct TLPValue {
   long integer;
   double real;
   bool boolean;
+  std::pair<long, long> range;
 };
 
-enum TLPToken{ BOOLTOKEN,ENDOFSTREAM,STRINGTOKEN,INTTOKEN,DOUBLETOKEN,IDTOKEN,ERRORINFILE,OPENTOKEN,CLOSETOKEN,COMMENTTOKEN };
+ enum TLPToken{ BOOLTOKEN,ENDOFSTREAM,STRINGTOKEN,INTTOKEN,DOUBLETOKEN,IDTOKEN,ERRORINFILE,OPENTOKEN,CLOSETOKEN,COMMENTTOKEN,RANGETOKEN};
 //=====================================================================================
 struct TLPTokenParser {
   int curLine;
@@ -76,25 +77,44 @@ struct TLPTokenParser {
     }
     if (!started && !endOfStream) return ENDOFSTREAM;
     char *endPtr=0;
+    const char *cstr = val.str.c_str();
     errno = 0;
-    long resultl=strtol(val.str.c_str(),&endPtr,10);
+    long resultl= strtol(cstr, &endPtr, 10);
     if (errno == ERANGE)
       return ERRORINFILE;
-    if (endPtr==(val.str.c_str()+val.str.length())) {
+    unsigned long strlength = val.str.length();
+    if (endPtr==(cstr+ strlength)) {
       val.integer=resultl;
       return INTTOKEN;
     }
+    // check for a range
+    if (endPtr > cstr && (cstr + strlength) > (endPtr + 2)) {
+      val.range.first = resultl;
+      if ((endPtr[0] == '.') && (endPtr[1] == '.')) {
+	char* beginPtr = endPtr + 2;
+	errno = 0;
+	resultl = strtol(beginPtr, &endPtr, 10);
+	if (errno == ERANGE)
+	  return ERRORINFILE;
+	if (endPtr == (cstr + strlength)) {
+	  if (resultl < val.range.first)
+	    return ERRORINFILE;
+	  val.range.second = resultl;
+	  return RANGETOKEN;
+	}
+      }
+    }
     endPtr=0;
 
-    double resultd=strtod(val.str.c_str(),&endPtr);
+    double resultd=strtod(cstr, &endPtr);
     if (errno == ERANGE)
       return ERRORINFILE;
-    if (endPtr==(val.str.c_str()+val.str.length())) {
+    if (endPtr==(cstr + strlength)) {
       val.real=resultd;
       return DOUBLETOKEN;
     }
-    if (strcasecmp(val.str.c_str(),"true")==0) {val.boolean=true;return BOOLTOKEN;}
-    if (strcasecmp(val.str.c_str(),"false")==0) {val.boolean=false;return BOOLTOKEN;}
+    if (strcasecmp(cstr, "true")==0) {val.boolean=true;return BOOLTOKEN;}
+    if (strcasecmp(cstr, "false")==0) {val.boolean=false;return BOOLTOKEN;}
     if (started) return STRINGTOKEN;
     return ERRORINFILE;
   }
@@ -104,6 +124,7 @@ struct TLPBuilder {
   virtual ~TLPBuilder() {}
   virtual bool addBool(const bool)=0;
   virtual bool addInt(const int)=0;
+  virtual bool addRange(int, int)=0;
   virtual bool addDouble(const double)=0;
   virtual bool addString(const std::string &)=0;
   virtual bool addStruct(const std::string&,TLPBuilder*&)=0;  
@@ -113,6 +134,7 @@ struct TLPBuilder {
 struct TLPTrue:public TLPBuilder {
   bool addBool(const bool) {return true;}
   bool addInt(const int) {return true;}
+  bool addRange(int, int) {return true;}
   bool addDouble(const double) {return true;}
   bool addString(const std::string &) {return true;}
   bool addStruct(const std::string& structName,TLPBuilder*&newBuilder) {
@@ -125,6 +147,7 @@ struct TLPTrue:public TLPBuilder {
 struct TLPFalse:public TLPBuilder {
   bool addBool(const bool) {return false;}
   bool addInt(const int) {return false;}
+  bool addRange(int, int) {return false;}
   bool addDouble(const double) {return false;}
   bool addString(const std::string &) {return false;}
   bool addStruct(const std::string& structName,TLPBuilder*&newBuilder) {
@@ -137,6 +160,7 @@ struct TLPFalse:public TLPBuilder {
 struct TLPWriter:public TLPBuilder {
   bool addBool(const bool boolean)  {std::cout << "bool::" << boolean << std::endl;return true;}
   bool addInt(const int integer)  {std::cout << "int::" << integer << std::endl;return true;}
+  bool addRange(int first, int second)  {std::cout << "range::" << first << ".." << second << std::endl;return true;}
   bool addDouble(const double real) {std::cout.flags(std::ios::scientific); std::cout << "real::" << real << std::endl;return true;}
   bool addString(const std::string &str)  {std::cout << "string::" << str << std::endl;return true;}
   bool addStruct(const std::string& structName,TLPBuilder*&newBuilder) 
@@ -208,6 +232,11 @@ struct TLPParser {
 	    break;
 	  case INTTOKEN:
 	    if (!builderStack.front()->addInt(currentValue.integer))
+	      return formatError();
+	    break;
+	  case RANGETOKEN:
+	    if (!builderStack.front()->addRange(currentValue.range.first,
+						currentValue.range.second))
 	      return formatError();
 	    break;
 	  case DOUBLETOKEN:

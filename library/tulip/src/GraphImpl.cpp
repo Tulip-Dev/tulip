@@ -166,6 +166,15 @@ void GraphImpl::addNode(const node n) {
   cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << endl;
 }
 //----------------------------------------------------------------
+void GraphImpl::reserveNodes(unsigned int nbNodes) {
+  if (nbNodes)
+    nodes.reserve(nbNodes);
+}
+//----------------------------------------------------------------
+bool GraphImpl::hasFragmentedNodeIds() {
+  return nodeIds.hasFreeIds();
+}
+//----------------------------------------------------------------
 edge GraphImpl::addEdgeInternal(edge newEdge, const node s,
 				const node t, bool updateContainers) {
   assert(isElement(s) && isElement(t));
@@ -203,6 +212,15 @@ edge GraphImpl::addEdge(const node s,const node t) {
 void GraphImpl::addEdge(const edge e) {
   cerr << "{Warning ] : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << endl;
   cerr << "\t Trying to add edge " << e.id << " (" << source(e).id << "," << target(e).id << ")" << endl;
+}
+//----------------------------------------------------------------
+void GraphImpl::reserveEdges(unsigned int nbEdges) {
+  if (nbEdges)
+    edges.reserve(nbEdges);
+}
+//----------------------------------------------------------------
+bool GraphImpl::hasFragmentedEdgeIds() {
+  return edgeIds.hasFreeIds();
 }
 //----------------------------------------------------------------
 void GraphImpl::delNodeInternal(const node n) {

@@ -47,6 +47,11 @@ public:
    * will be invalidate.
    */
   Iterator<unsigned int>* getIds() const;
+  /**
+   * indicates if space of ids is fragmented
+   *
+   */
+  bool hasFreeIds() const;
 
   friend std::ostream& operator<<(std::ostream &,const IdManager &);
   friend class IdManagerIterator;
