@@ -312,13 +312,23 @@ namespace tlp {
         if(glGraphComposite->getInputData()->parameters->isViewNodeLabel()) {
           // Draw Label for selected Nodes
           for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
-            glNode.id=(*it).first;
-            glNode.drawLabel(true,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
+            if(!graph->isMetaNode(node((*it).first))){
+              glNode.id=(*it).first;
+              glNode.drawLabel(true,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
+            }else{
+              glMetaNode.id=(*it).first;
+              glMetaNode.drawLabel(true,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
+            }
           }
           // Draw Label for others Nodes
           for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
-            glNode.id=(*it).first;
-            glNode.drawLabel(false,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
+            if(!graph->isMetaNode(node((*it).first))){
+              glNode.id=(*it).first;
+              glNode.drawLabel(false,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
+            }else{
+              glMetaNode.id=(*it).first;
+              glMetaNode.drawLabel(false,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
+            }
           }
         }
         // Draw Edges Label

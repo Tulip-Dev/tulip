@@ -52,9 +52,13 @@ namespace tlp {
   }
 
   void GlMetaNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data){
+
     node n=node(id);
 
     GlNode::drawLabel(drawSelect,test,renderer,data);
+
+    if(!data->parameters->isViewMetaLabel())
+      return;
 
     if((data->elementColor->getNodeValue(n))[3]==255){
       return;
@@ -92,7 +96,6 @@ namespace tlp {
     const Size &nodeSize = data->elementSize->getNodeValue(n);
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
     glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
-    glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
 
     pair<Coord, Coord> bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.elementLayout, metaData.elementSize, metaData.elementRotation);
 
@@ -106,6 +109,17 @@ namespace tlp {
     double dept  = (maxC[2] - minC[2]) / includeScale[2];
     double width  = (maxC[0] - minC[0]) / includeScale[0];
     double height = (maxC[1] - minC[1]) / includeScale[1];
+    Coord includeSize=bboxes.first-bboxes.second;
+    if(nodeSize[0]/includeSize[0]<nodeSize[1]/includeSize[1]){
+      includeSize[1]*=nodeSize[0]/includeSize[0];
+      includeSize[0]*=nodeSize[0]/includeSize[0];
+    }else{
+      includeSize[0]*=nodeSize[1]/includeSize[1];
+      includeSize[1]*=nodeSize[1]/includeSize[1];
+    }
+
+    glScalef(includeSize[0], includeSize[1], includeSize[2]);
+
     if (width<0.0001) width=1;
     if (height<0.0001) height=1;
     if (dept<0.0001) dept=1;
