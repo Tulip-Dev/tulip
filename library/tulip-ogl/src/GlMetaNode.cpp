@@ -57,6 +57,9 @@ namespace tlp {
 
     GlNode::drawLabel(drawSelect,test,renderer,data);
 
+    if(!data->getMetaNodeRenderer()->glMetaNodeHaveToRenderLabels())
+      return;
+
     if(!data->parameters->isViewMetaLabel())
       return;
 

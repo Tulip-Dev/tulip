@@ -182,6 +182,11 @@ namespace tlp {
 
       glMainWidget->setGraph(metaGraph);
       ((QtMetaNodeRenderer*)glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer())->setBackgroundColor(backgroundColor);
+      GlGraphRenderingParameters param=glMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+      GlGraphRenderingParameters parentParam=parentGlMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+      param.setViewNodeLabel(parentParam.isViewMetaLabel());
+      param.setViewMetaLabel(parentParam.isViewMetaLabel());
+      glMainWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
 
       QtMetaNodeRenderer::depth++;
       glMainWidget->createTexture(str.str(),textureWidth,textureHeight);

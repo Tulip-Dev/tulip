@@ -31,6 +31,7 @@ namespace tlp {
     virtual void prerender(node n,float lod,Camera* camera) {}
     virtual void render(node n,float lod,Camera* camera) {}
     virtual bool havePrerender() {return false;}
+    virtual bool glMetaNodeHaveToRenderLabels(){return true;}
 
     virtual void setInputData(GlGraphInputData *data) {}
     virtual GlGraphInputData *getInputData() {return NULL;}
