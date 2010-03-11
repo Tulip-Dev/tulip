@@ -27,6 +27,7 @@
 #include "tulip/GlBezierCurve.h"
 #include "tulip/GlCatmullRomCurve.h"
 #include "tulip/GlRenderer.h"
+#include "tulip/GlOpenUniformCubicBSpline.h"
 
 #include <iostream>
 
@@ -452,7 +453,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 
   //draw Edge
   drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, *srcCol, *tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
-      data->elementShape->getEdgeValue(e), data->parameters->isEdge3D(), lodSize);
+      data->elementShape->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, data->elementTexture->getEdgeValue(e));
 
   if (data->parameters->getFeedbackRender()) {
     glPassThrough(TLP_FB_END_EDGE);
@@ -465,7 +466,9 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 #define L3D_BIT (1<<9)
 void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Coord &startPoint,
     const Coord &endPoint, const LineType::RealType &bends, const Color &startColor,
-    const Color &endColor, const Coord &lookDir, bool colorInterpolate, const Color &borderColor,const Size &size, int shape, bool edge3D, float lod) {
+    const Color &endColor, const Coord &lookDir, bool colorInterpolate, const Color &borderColor,
+    const Size &size, int shape, bool edge3D, float lod,const string &textureName) {
+
   glDisable(GL_CULL_FACE);
   glDepthFunc(GL_LEQUAL);
 
@@ -487,23 +490,24 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
   switch (shape) {
   case POLYLINESHAPE:
     if (lod > 20 || lod < -20){
-      tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,colorInterpolate,borderColor);
+      tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,colorInterpolate,borderColor,textureName);
     }else if(lod > 0.05 || lod < -0.05){
-      tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,true,borderColor);
+      tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,true,borderColor,textureName);
     }else{
       tlp::polyLine(tmp, startColor, endColor);
     }
     break;
   case BEZIERSHAPE:
     if (lod > 10 || lod < -10) {
-      GlBezierCurve bezier(tmp, startColor, endColor, size[0], size[1]);
+      GlBezierCurve bezier(tmp, startColor, endColor, size[0]*.5, size[1]*.5);
       if(!colorInterpolate){
         bezier.setOutlined(true);
         bezier.setOutlineColor(borderColor);
       }
+      bezier.setTexture(textureName);
       bezier.draw(0, 0);
     } else if (lod > 0.05 || lod < -0.05) {
-      GlBezierCurve bezier(tmp, startColor, endColor, size[0], size[1]);
+      GlBezierCurve bezier(tmp, startColor, endColor, size[0]*.5, size[1]*.5);
       bezier.draw(0, 0);
     } else {
       GlBezierCurve bezier(tmp, startColor, endColor, 1, 1);
@@ -512,34 +516,51 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
     break;
   case SPLINESHAPE:
     if (lod > 10 || lod < -10) {
-      GlCatmullRomCurve catmull(tmp, startColor, endColor, size[0], size[1]);
+      GlCatmullRomCurve catmull(tmp, startColor, endColor, size[0]*.5, size[1]*.5);
       if(!colorInterpolate){
         catmull.setOutlined(true);
         catmull.setOutlineColor(borderColor);
       }
+      catmull.setTexture(textureName);
       catmull.draw(0, 0);
     } else if (lod > 0.05 || lod < -0.05) {
-      GlCatmullRomCurve catmull(tmp, startColor, endColor, size[0], size[1]);
+      GlCatmullRomCurve catmull(tmp, startColor, endColor, size[0]*.5, size[1]*.5);
       catmull.draw(0, 0);
     } else {
       GlCatmullRomCurve catmull(tmp, startColor, endColor, 1, 1);
       catmull.draw(0, 0);
     }
     break;
-    //3D lines
+  case CUBICBSPLINE:
+    if (lod > 10 || lod < -10) {
+      GlOpenUniformCubicBSpline bspline(tmp, startColor, endColor, size[0]*.5, size[1]*.5);
+      if(!colorInterpolate){
+        bspline.setOutlined(true);
+        bspline.setOutlineColor(borderColor);
+      }
+      bspline.setTexture(textureName);
+      bspline.draw(0, 0);
+    } else if (lod > 0.05 || lod < -0.05) {
+      GlOpenUniformCubicBSpline bspline(tmp, startColor, endColor, size[0]*.5, size[1]*.5);
+      bspline.draw(0, 0);
+    } else {
+      GlOpenUniformCubicBSpline bspline(tmp, startColor, endColor, 1, 1);
+      bspline.draw(0, 0);
+    }
+    break;
+    //3D lines 
   case L3D_BIT + POLYLINESHAPE:{
     glDisable(GL_LIGHTING);
-    string dir=TulipBitmapDir;
-    simpleQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,dir+"cylinderTexture.png");
+    simpleQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
     glEnable(GL_LIGHTING);
     break;
   }
   case L3D_BIT + BEZIERSHAPE:
-    GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size,
+    GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size*.5,
         GlLines::TLP_PLAIN, GlLines::BEZIER, startColor, endColor);
     break;
   case L3D_BIT + SPLINESHAPE:
-    GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size,
+    GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size*.5,
         GlLines::TLP_PLAIN, GlLines::SPLINE3, startColor, endColor);
     break;
   default:

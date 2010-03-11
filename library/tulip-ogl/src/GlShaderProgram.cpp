@@ -1,7 +1,7 @@
 /*
-	  GlShaderManager.cpp
+	  GlShaderProgram.cpp
 
-   Created on: 29 avr. 2009
+   Created on: 08 mar. 2010
        Author: Antoine Lambert
        E-mail: antoine.lambert@labri.fr
 
@@ -16,25 +16,16 @@
 
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
-#include "tulip/GlShaderManager.h"
+#include "tulip/GlShaderProgram.h"
+#include "tulip/GlewManager.h"
 
 using namespace std;
 
-// Returns 1 if an OpenGL error occurred, 0 otherwise.
-void printOGLError(const char *file, int line) {
-	GLenum err = glGetError();
-	while (err != GL_NO_ERROR) {
-		cerr << "OpenGL error in file " << file << " at line " << line << " : " << gluErrorString(err) << endl;
-		err = glGetError();
-	}
-}
-
 enum ObjectType {SHADER, PROGRAM};
 
-// Print out the information log for a shader object or a program object
-static void printInfoLog(GLuint obj, ObjectType objectType)
-{
+static void getInfoLog(GLuint obj, ObjectType objectType, string &logStr) {
 	GLint infoLogLength = 0;
 	GLint charsWritten  = 0;
 	GLchar *infoLog;
@@ -45,7 +36,7 @@ static void printInfoLog(GLuint obj, ObjectType objectType)
 		glGetProgramiv(obj, GL_INFO_LOG_LENGTH, &infoLogLength);
 	}
 
-	if (infoLogLength > 0) {
+	if (infoLogLength > 1) {
 		infoLog = new GLchar[infoLogLength+1];
 		if (objectType == SHADER) {
 			glGetShaderInfoLog(obj, infoLogLength, &charsWritten, infoLog);
@@ -53,135 +44,220 @@ static void printInfoLog(GLuint obj, ObjectType objectType)
 			glGetProgramInfoLog(obj, infoLogLength, &charsWritten, infoLog);
 		}
 		infoLog[infoLogLength] = '\0';
-		cout << infoLog << endl;
+		logStr = infoLog;
 		delete [] infoLog;
 	}
 }
 
-static void readShaderSourceFile(const string &vertexShaderSourceFilePath, GLchar **shader) {
+static void readShaderSourceFile(const string &vertexShaderSourceFilePath, char **shader) {
 	ifstream ifs;
 	ifs.open(vertexShaderSourceFilePath.c_str());
 	if (!ifs.is_open()) {
 		cerr << "Error opening file : " << vertexShaderSourceFilePath << endl;
 		return;
 	}
-	// get length of file:
 	ifs.seekg (0, ios::end);
 	unsigned int length = ifs.tellg();
 	ifs.seekg (0, ios::beg);
 
-	// allocate memory:
-	*shader = new GLchar[length+1];
+	*shader = new char[length+1];
 
-	// read data as a block:
 	ifs.read ((char *)*shader,length);
 	(*shader)[length] = '\0';
 	ifs.close();
 }
 
-enum ShaderType {VERTEX_SHADER, FRAGMENT_SHADER, GEOMETRY_SHADER};
-
-static GLuint compileShaderObject(GLchar *shaderSrc, ShaderType shaderType) {
-	GLuint shaderObject;
-	GLint shaderCompiled;
-
-	// Create a shader object
-	if (shaderType == VERTEX_SHADER) {
-		shaderObject = glCreateShader(GL_VERTEX_SHADER);
-	} else if (shaderType == FRAGMENT_SHADER) {
-		shaderObject = glCreateShader(GL_FRAGMENT_SHADER);
-	} else {
-		shaderObject = glCreateShader(GL_GEOMETRY_SHADER_EXT);
-	}
-
-	// Load source code strings into shaders
-	glShaderSource(shaderObject, 1,(const GLchar **) &shaderSrc, NULL);
-
-	// Compile the shader, and print out the compiler log file.
-	glCompileShader(shaderObject);
-
-
-	printOpenGLError();
-
-
-	glGetShaderiv(shaderObject, GL_COMPILE_STATUS, &shaderCompiled);
-
-#ifndef NDEBUG
-	printInfoLog(shaderObject, SHADER);
-#endif
-	if (!shaderCompiled) {
-		glDeleteShader(shaderObject);
-		shaderObject = 0;
-	}
-
-	return shaderObject;
-}
-
-static GLuint getShaderObjectFromFile(const std::string &shaderSourceFilePath, ShaderType shaderType) {
-
-	if (shaderSourceFilePath == "") {
-		return 0;
-	}
-
-	GLchar  *shaderSrc = NULL;
-
-	// Read the shader source file
-	readShaderSourceFile(shaderSourceFilePath, &shaderSrc);
-
-	// File can't be read
-	if(!shaderSrc) {
-		return 0;
-	}
-
-	GLuint shaderObject = compileShaderObject(shaderSrc, shaderType);
-
-	delete [] shaderSrc;
-
-	return shaderObject;
-}
-
-static GLuint getShaderObjectFromString(const std::string &shaderSource, ShaderType shaderType) {
-
-	if (shaderSource == "") {
-		return 0;
-	}
-
-	GLuint shaderObject = compileShaderObject((GLchar *) shaderSource.c_str(), shaderType);
-
-	return shaderObject;
-}
-
 namespace tlp {
 
-#ifdef _WIN32
-#ifdef DLL_EXPORT
-tlp::GlShaderManager* tlp::GlShaderManager::instance=0;
-#endif
-#else
-tlp::GlShaderManager* tlp::GlShaderManager::instance=0;
-#endif
-
-GlShaderManager::GlShaderManager() : currentShaderProgram(NULL) {
-	shaderProgramsSupported = checkShaderProgramsSupport();
-	geometryShaderSupported = checkGeometryShaderSupport();
-}
-
-GlShaderManager* GlShaderManager::getInstance() {
-	if (instance == NULL) {
-		instance = new GlShaderManager();
+GlShader::GlShader(ShaderType shaderType) : shaderType(shaderType), shaderObjectId(0), shaderCompiled(false), anonymousCreation(false) {
+	if (shaderType == Vertex) {
+		shaderObjectId = glCreateShader(GL_VERTEX_SHADER);
+	} else if (shaderType == Fragment) {
+		shaderObjectId = glCreateShader(GL_FRAGMENT_SHADER);
 	}
-	return instance;
 }
 
-bool GlShaderManager::checkShaderProgramsSupport() {
-	GLenum err = glewInit();
-	if (err != GLEW_OK) {
+GlShader::GlShader(GLenum inputPrimitiveType, GLenum outputPrimitiveType) : shaderType(Geometry), shaderObjectId(0),
+		inputPrimitiveType(inputPrimitiveType), outputPrimitiveType(outputPrimitiveType),
+		shaderCompiled(false), anonymousCreation(false) {
+	shaderObjectId = glCreateShader(GL_GEOMETRY_SHADER_EXT);
+}
+
+GlShader::~GlShader() {
+	if (shaderObjectId != 0) {
+		glDeleteShader(shaderObjectId);
+	}
+}
+
+void GlShader::compileFromSourceCode(const char *shaderSrc) {
+	compileShaderObject(shaderSrc);
+}
+
+void GlShader::compileFromSourceCode(const std::string &shaderSrc) {
+	compileShaderObject(shaderSrc.c_str());
+}
+
+void GlShader::compileFromSourceFile(const std::string &shaderSrcFilename) {
+	char *shaderSrcCode = NULL;
+	readShaderSourceFile(shaderSrcFilename, &shaderSrcCode);
+	if (shaderSrcCode) {
+		compileShaderObject(shaderSrcCode);
+		delete [] shaderSrcCode;
+	}
+}
+
+void GlShader::compileShaderObject(const char *shaderSrc) {
+	glShaderSource(shaderObjectId, 1,(const char **) &shaderSrc, NULL);
+	glCompileShader(shaderObjectId);
+	GLint compileStatus;
+	glGetShaderiv(shaderObjectId, GL_COMPILE_STATUS, &compileStatus);
+	shaderCompiled = compileStatus > 0;
+	getInfoLog(shaderObjectId, SHADER, compilationLog);
+}
+
+GlShaderProgram *GlShaderProgram::currentActiveShaderProgram(NULL);
+
+GlShaderProgram::GlShaderProgram(const std::string &name) : programName(name), programObjectId(0), programLinked(false) {
+	programObjectId = glCreateProgram();
+}
+
+GlShaderProgram::~GlShaderProgram() {
+	removeAllShaders();
+	glDeleteProgram(programObjectId);
+}
+
+void GlShaderProgram::addShaderFromSourceCode(const ShaderType shaderType, const char *shaderSrc) {
+	GlShader *shader = new GlShader(shaderType);
+	shader->setAnonymousCreation(true);
+	shader->compileFromSourceCode(shaderSrc);
+	addShader(shader);
+
+}
+
+void GlShaderProgram::addShaderFromSourceCode(const ShaderType shaderType, const std::string &shaderSrc) {
+	GlShader *shader = new GlShader(shaderType);
+	shader->setAnonymousCreation(true);
+	shader->compileFromSourceCode(shaderSrc);
+	addShader(shader);
+
+}
+
+void GlShaderProgram::addShaderFromSourceFile(const ShaderType shaderType, const std::string &shaderSrcFilename) {
+	GlShader *shader = new GlShader(shaderType);
+	shader->setAnonymousCreation(true);
+	shader->compileFromSourceFile(shaderSrcFilename);
+	addShader(shader);
+
+}
+
+void GlShaderProgram::addGeometryShaderFromSourceCode(const char *geometryShaderSrc, GLenum inputPrimitiveType, GLenum outputPrimitiveType) {
+	GlShader *shader = new GlShader(inputPrimitiveType, outputPrimitiveType);
+	shader->setAnonymousCreation(true);
+	shader->compileFromSourceCode(geometryShaderSrc);
+	addShader(shader);
+}
+
+void GlShaderProgram::addGeometryShaderFromSourceCode(const std::string &geometryShaderSrc, GLenum inputPrimitiveType, GLenum outputPrimitiveType) {
+	GlShader *shader = new GlShader(inputPrimitiveType, outputPrimitiveType);
+	shader->setAnonymousCreation(true);
+	shader->compileFromSourceCode(geometryShaderSrc);
+	addShader(shader);
+}
+
+void GlShaderProgram::addGeometryShaderFromSourceFile(const std::string &geometryShaderSrcFilename, GLenum inputPrimitiveType, GLenum outputPrimitiveType) {
+	GlShader *shader = new GlShader(inputPrimitiveType, outputPrimitiveType);
+	shader->setAnonymousCreation(true);
+	shader->compileFromSourceFile(geometryShaderSrcFilename);
+	addShader(shader);
+}
+
+void GlShaderProgram::addShader(GlShader *shader) {
+	if (std::find(attachedShaders.begin(), attachedShaders.end(), shader) == attachedShaders.end()) {
+		if (shader->isCompiled()) {
+			glAttachShader(programObjectId, shader->getShaderId());
+		}
+		attachedShaders.push_back(shader);
+		programLinked = false;
+	}
+}
+
+void GlShaderProgram::removeShader(GlShader *shader) {
+	if (std::find(attachedShaders.begin(), attachedShaders.end(), shader) != attachedShaders.end()) {
+		if (shader->isCompiled()) {
+			glDetachShader(programObjectId, shader->getShaderId());
+		}
+		attachedShaders.erase(remove(attachedShaders.begin(), attachedShaders.end(), shader), attachedShaders.end());
+		programLinked = false;
+	}
+}
+
+void GlShaderProgram::removeAllShaders() {
+	for (size_t i = 0 ; i < attachedShaders.size() ; ++i) {
+		removeShader(attachedShaders[i]);
+		if (attachedShaders[i]->anonymouslyCreated()) {
+			delete attachedShaders[i];
+		}
+	}
+}
+
+void GlShaderProgram::link() {
+	for (size_t i = 0 ; i < attachedShaders.size() ; ++i) {
+		if (attachedShaders[i]->getShaderType() == Geometry) {
+			glProgramParameteriEXT(programObjectId, GL_GEOMETRY_INPUT_TYPE_EXT, attachedShaders[i]->getInputPrimitiveType());
+			glProgramParameteriEXT(programObjectId, GL_GEOMETRY_OUTPUT_TYPE_EXT, attachedShaders[i]->getOutputPrimitiveType());
+
+			GLint maxOutputVertices;
+			glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT, &maxOutputVertices);
+			glProgramParameteriEXT(programObjectId, GL_GEOMETRY_VERTICES_OUT_EXT, maxOutputVertices);
+		}
+	}
+
+	glLinkProgram(programObjectId);
+
+	getInfoLog(programObjectId, PROGRAM, programLinkLog);
+
+	GLint linked;
+	glGetProgramiv(programObjectId, GL_LINK_STATUS, &linked);
+	programLinked = linked > 0;
+}
+
+void GlShaderProgram::printInfoLog() {
+	for (size_t i = 0 ; i < attachedShaders.size() ; ++i) {
+		string shaderCompilationlog = attachedShaders[i]->getCompilationLog();
+		if (shaderCompilationlog != "") {
+			cout << shaderCompilationlog << endl;
+		}
+	}
+
+	if (programLinkLog != "") {
+		cout << programLinkLog << endl;
+	}
+}
+
+void GlShaderProgram::activate() {
+	if (!programLinked) {
+		link();
+	}
+	if (programLinked) {
+		glUseProgram(programObjectId);
+		currentActiveShaderProgram = this;
+	}
+}
+
+void GlShaderProgram::desactivate() {
+	glUseProgram(0);
+	currentActiveShaderProgram = NULL;
+}
+
+bool GlShaderProgram::shaderProgramsSupported() {
+	GlewManager::getInst().initGlew();
+	if (!GlewManager::getInst().canUseGlew()) {
 		return false;
 	}
 	return (GL_ARB_vertex_shader && GL_ARB_fragment_shader);
 }
 
-bool GlShaderManager::checkGeometryShaderSupport() {
+bool GlShaderProgram::geometryShaderSupported() {
 	GLenum err = glewInit();
 	if (err != GLEW_OK) {
 		return false;
@@ -189,223 +265,9 @@ bool GlShaderManager::checkGeometryShaderSupport() {
 	return GL_EXT_geometry_shader4;
 }
 
-bool GlShaderManager::shadersSupported(bool checkGeometry) {
-	if (!shaderProgramsSupported) {
-		cerr << "Shader programs are not supported by the graphic card" << endl;
-		return false;
-	}
-
-	if (checkGeometry) {
-		if (!geometryShaderSupported) {
-			cerr << "Geometry shaders are not supported by the graphic card" << endl;
-			return false;
-		}
-	}
-
-	return true;
+GlShaderProgram *GlShaderProgram::getCurrentActiveShader() {
+	return currentActiveShaderProgram;
 }
-
-GlShaderProgram *GlShaderManager::registerShaderProgram(const std::string &programName, const GLuint vertexShaderObject, const GLuint fragmentShaderObject,
-		const GLuint geometryShaderObject, const GLenum inputPrimitiveType, const GLenum outputPrimitiveType) {
-
-	// Create a program object and attach the two compiled shaders
-	GLuint programObject = glCreateProgram();
-
-	if (vertexShaderObject != 0) {
-		glAttachShader(programObject, vertexShaderObject);
-		glDeleteShader(vertexShaderObject);
-	}
-
-	if (fragmentShaderObject != 0) {
-		glAttachShader(programObject, fragmentShaderObject);
-		glDeleteShader(fragmentShaderObject);
-	}
-
-	if (geometryShaderObject != 0) {
-		glAttachShader(programObject, geometryShaderObject);
-		glProgramParameteriEXT(programObject, GL_GEOMETRY_INPUT_TYPE_EXT, inputPrimitiveType);
-		glProgramParameteriEXT(programObject, GL_GEOMETRY_OUTPUT_TYPE_EXT, outputPrimitiveType);
-
-		GLint temp;
-		glGetIntegerv(GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT, &temp);
-		glProgramParameteriEXT(programObject, GL_GEOMETRY_VERTICES_OUT_EXT, temp);
-
-		glDeleteShader(geometryShaderObject);
-	}
-
-	//  Link the program object and print out the info log
-	glLinkProgram(programObject);
-
-#ifndef NDEBUG
-	printInfoLog(programObject, PROGRAM);
-#endif
-	GLint linked;
-	glGetProgramiv(programObject, GL_LINK_STATUS, &linked);
-
-	if (linked) {
-		GlShaderProgram *shaderProgram = new GlShaderProgram(programName, programObject);
-		shaderProgramsMap[programName] = shaderProgram;
-		return shaderProgram;
-	} else {
-		shaderProgramsMap[programName] = NULL;
-		return NULL;
-	}
-}
-
-GlShaderProgram *GlShaderManager::createVertexShaderFromFile(const string &name, const std::string &vertexShaderSourceFilePath) {
-	if (!shadersSupported()) {
-		return NULL;
-	}
-	if (shaderProgramsMap.find(name) != shaderProgramsMap.end()) {
-		return shaderProgramsMap[name];
-	}
-	GLuint vertexShaderObject = getShaderObjectFromFile(vertexShaderSourceFilePath, VERTEX_SHADER);
-
-	return registerShaderProgram(name, vertexShaderObject, 0, 0);
-}
-
-GlShaderProgram *GlShaderManager::createFragmentShaderFromFile(const string &name, const std::string &fragmentShaderSourceFilePath) {
-	if (!shadersSupported()) {
-		return NULL;
-	}
-	if (shaderProgramsMap.find(name) != shaderProgramsMap.end()) {
-		return shaderProgramsMap[name];
-	}
-
-	GLuint fragmentShaderObject = getShaderObjectFromFile(fragmentShaderSourceFilePath, FRAGMENT_SHADER);
-
-	return registerShaderProgram(name, 0, fragmentShaderObject, 0);
-}
-
-GlShaderProgram *GlShaderManager::createVertexAndFragmentShaderFromFiles(const string &name, const std::string &vertexShaderSourceFilePath, const std::string &fragmentShaderSourceFilePath) {
-	if (!shadersSupported()) {
-		return NULL;
-	}
-	if (shaderProgramsMap.find(name) != shaderProgramsMap.end()) {
-		return shaderProgramsMap[name];
-	}
-	GLuint vertexShaderObject = getShaderObjectFromFile(vertexShaderSourceFilePath, VERTEX_SHADER);
-	GLuint fragmentShaderObject = getShaderObjectFromFile(fragmentShaderSourceFilePath, FRAGMENT_SHADER);
-
-	return registerShaderProgram(name, vertexShaderObject, fragmentShaderObject, 0);
-}
-
-GlShaderProgram *GlShaderManager::createGeometryShaderFromFile(const string &name, const std::string &geometryShaderSourceFilePath, GLenum inputPrimitiveType, GLenum outputPrimitiveType) {
-	if (!shadersSupported(true)) {
-		return NULL;
-	}
-	if (shaderProgramsMap.find(name) != shaderProgramsMap.end()) {
-		return shaderProgramsMap[name];
-	}
-	GLuint geometryShaderObject = getShaderObjectFromFile(geometryShaderSourceFilePath, GEOMETRY_SHADER);
-
-	return registerShaderProgram(name, 0, 0, geometryShaderObject, inputPrimitiveType, outputPrimitiveType);
-}
-
-GlShaderProgram *GlShaderManager::createVertexShaderFromString(const string &name, const std::string &vertexShaderSource) {
-	if (!shadersSupported()) {
-		return NULL;
-	}
-	if (shaderProgramsMap.find(name) != shaderProgramsMap.end()) {
-		return shaderProgramsMap[name];
-	}
-	GLuint vertexShaderObject = getShaderObjectFromString(vertexShaderSource, VERTEX_SHADER);
-
-	return registerShaderProgram(name, vertexShaderObject, 0, 0);
-}
-
-GlShaderProgram *GlShaderManager::createFragmentShaderFromString(const string &name, const std::string &fragmentShaderSource) {
-	if (!shadersSupported()) {
-		return NULL;
-	}
-	if (shaderProgramsMap.find(name) != shaderProgramsMap.end()) {
-		return shaderProgramsMap[name];
-	}
-
-	GLuint fragmentShaderObject = getShaderObjectFromString(fragmentShaderSource, FRAGMENT_SHADER);
-
-	return registerShaderProgram(name, 0, fragmentShaderObject, 0);
-}
-
-GlShaderProgram *GlShaderManager::createVertexAndFragmentShaderFromStrings(const string &name, const std::string &vertexShaderSource, const std::string &fragmentShaderSource) {
-	if (!shadersSupported()) {
-		return NULL;
-	}
-	if (shaderProgramsMap.find(name) != shaderProgramsMap.end()) {
-		return shaderProgramsMap[name];
-	}
-	GLuint vertexShaderObject = getShaderObjectFromString(vertexShaderSource, VERTEX_SHADER);
-	GLuint fragmentShaderObject = getShaderObjectFromString(fragmentShaderSource, FRAGMENT_SHADER);
-
-	return registerShaderProgram(name, vertexShaderObject, fragmentShaderObject, 0);
-}
-
-static const string dummyVertexShader =
-"void main()"
-"{"
-"	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;"
-"	gl_FrontColor =  gl_Color;"
-"	gl_TexCoord[0] = gl_MultiTexCoord0;"
-"}";
-
-GlShaderProgram *GlShaderManager::createGeometryShaderFromString(const string &name, const std::string &geometryShaderSource, GLenum inputPrimitiveType, GLenum outputPrimitiveType) {
-	if (!shadersSupported(true)) {
-		return NULL;
-	}
-	if (shaderProgramsMap.find(name) != shaderProgramsMap.end()) {
-		return shaderProgramsMap[name];
-	}
-
-	GLuint vertexShaderObject = getShaderObjectFromString(dummyVertexShader, VERTEX_SHADER);
-	GLuint geometryShaderObject = getShaderObjectFromString(geometryShaderSource, GEOMETRY_SHADER);
-
-	return registerShaderProgram(name, vertexShaderObject, 0, geometryShaderObject, inputPrimitiveType, outputPrimitiveType);
-}
-
-void GlShaderManager::deleteShaderProgram(GlShaderProgram *shaderProgram) {
-	if (shaderProgramsMap.find(shaderProgram->getName()) != shaderProgramsMap.end()) {
-		glDeleteProgram(shaderProgram->getShaderProgramId());
-		shaderProgramsMap.erase(shaderProgram->getName());
-	}
-}
-
-void GlShaderManager::activateShaderProgram(GlShaderProgram *shaderProgram) {
-	if (shaderProgramsMap.find(shaderProgram->getName()) != shaderProgramsMap.end()) {
-		glUseProgram(shaderProgram->getShaderProgramId());
-		currentShaderProgram = shaderProgram;
-	}
-}
-
-void GlShaderManager::desactivateShaderProgram() {
-	glUseProgram(0);
-	currentShaderProgram = NULL;
-}
-
-string GlShaderManager::getCurrentShaderProgramName() const {
-	if (currentShaderProgram != NULL) {
-		return currentShaderProgram->getName();
-	} else {
-		return "";
-	}
-}
-
-GlShaderProgram *GlShaderManager::getCurrentShaderProgram() const {
-	return currentShaderProgram;
-}
-
-bool GlShaderManager::shaderProgramAlreadyCompiled(const std::string &programName) {
-	return shaderProgramsMap.find(programName) != shaderProgramsMap.end();
-}
-
-GlShaderProgram *GlShaderManager::getShaderProgram(const std::string &programName) {
-	if (shaderProgramsMap.find(programName) != shaderProgramsMap.end()) {
-		return shaderProgramsMap[programName];
-	} else {
-		return NULL;
-	}
-}
-
-GlShaderProgram::GlShaderProgram(const std::string &name, const GLuint programObjectId) : name(name), programObjectId(programObjectId) {}
 
 GLint GlShaderProgram::getUniformVariableLocation(const std::string &variableName) {
 	return glGetUniformLocation(programObjectId, variableName.c_str());

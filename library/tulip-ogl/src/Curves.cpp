@@ -1,10 +1,19 @@
 #include <vector>
 #include <string.h>
 #include <gle.h>
+#include <GL/glew.h>
 #include <tulip/Vector.h>
 #include <tulip/Size.h>
+#include <tulip/TlpTools.h>
 #include "tulip/Curves.h"
 #include "tulip/GlTextureManager.h"
+
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
 
 using namespace std;
@@ -309,14 +318,36 @@ namespace tlp {
     if(textureName!="") {
       GlTextureManager::getInst().activateTexture(textureName);
     }
+
+    float length;
     glBegin(GL_QUAD_STRIP);
     for (unsigned int i = 0; i < size; ++i) {
       if(dec<decTab.size())
-	if(i==decTab[dec])
-	  dec++;
-	glColor4ubv(((const GLubyte *)&colors[i-dec]));
-      glVertex3fv(&points[i*3]);
-      glVertex3fv(&points[i*3 + size*3]);
+        if(i==decTab[dec])
+          dec++;
+
+      glColor4ubv(((const GLubyte *)&colors[i-dec]));
+
+      if(i==0){
+        length=0.;
+        glTexCoord2f(0, 0.0f);
+        glVertex3fv(&points[i*3]);
+        glTexCoord2f(0, 1.0f);
+        glVertex3fv(&points[i*3 + size*3]);
+      }else{
+        if(textureName!="") {
+          Coord p1_0(points[i*3 - 3],points[i*3-2],points[i*3-1]);
+          Coord p1_1(points[i*3],points[i*3+1],points[i*3+2]);
+          Coord p2_0(points[i*3 + size*3 - 3],points[i*3 + size*3-2],points[i*3 + size*3-1]);
+          Coord p2_1(points[i*3 + size*3],points[i*3 + size*3+1],points[i*3 + size*3+2]);
+          length += ((p1_1+p2_1)/2.-(p1_0+p2_0)/2.).norm()/(p1_0-p2_0).norm();
+        }
+
+        glTexCoord2f(length, 0.0f);
+        glVertex3fv(&points[i*3]);
+        glTexCoord2f(length, 1.0f);
+        glVertex3fv(&points[i*3 + size*3]);
+      }
     }
     glEnd();
     
@@ -437,19 +468,57 @@ namespace tlp {
     unsigned int size=vertices.size();
     GLfloat *points = result.data;
 
-    if(textureName!="") {
-      GlTextureManager::getInst().activateTexture(textureName);
-    }
+    //if(textureName!="") {
+    string newTextureName1=TulipBitmapDir+"cylinderTexture.png";
+    //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE);
+    glActiveTexture(GL_TEXTURE0);
+    glEnable(GL_TEXTURE_2D);
+    GlTextureManager::getInst().activateTexture(textureName);
 
+    //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
+    //glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+    //glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
+
+    glActiveTexture(GL_TEXTURE1);
+    glEnable(GL_TEXTURE_2D);
+    GlTextureManager::getInst().activateTexture(newTextureName1);
+    //}
+
+    float length;
     glBegin(GL_QUAD_STRIP);
     for (unsigned int i = 0; i < size; ++i) {
       glColor4ubv(((const GLubyte *)&colors[i]));
-      glTexCoord2f(i/size, 0.0f);
-      glVertex3fv(&points[i*3]);
-      glTexCoord2f(i/size, 1.0f);
-      glVertex3fv(&points[i*3 + size*3]);
+      if(i==0){
+        length=0.;
+        glMultiTexCoord2f(GL_TEXTURE0,0, 0.0f);
+        glMultiTexCoord2f(GL_TEXTURE1,0, 0.0f);
+        glVertex3fv(&points[i*3]);
+        glMultiTexCoord2f(GL_TEXTURE0,0, 1.0f);
+        glMultiTexCoord2f(GL_TEXTURE1,0, 1.0f);
+        glVertex3fv(&points[i*3 + size*3]);
+      }else{
+        Coord p1_0(points[i*3 - 3],points[i*3-2],points[i*3-1]);
+        Coord p1_1(points[i*3],points[i*3+1],points[i*3+2]);
+        Coord p2_0(points[i*3 + size*3 - 3],points[i*3 + size*3-2],points[i*3 + size*3-1]);
+        Coord p2_1(points[i*3 + size*3],points[i*3 + size*3+1],points[i*3 + size*3+2]);
+
+        length += ((p1_1+p2_1)/2.-(p1_0+p2_0)/2.).norm()/(p1_0-p2_0).norm();
+        glMultiTexCoord2f(GL_TEXTURE0,length, 0.0f);
+        glMultiTexCoord2f(GL_TEXTURE1,length, 0.0f);
+        glVertex3fv(&points[i*3]);
+        glMultiTexCoord2f(GL_TEXTURE0,length, 1.0f);
+        glMultiTexCoord2f(GL_TEXTURE1,length, 1.0f);
+        glVertex3fv(&points[i*3 + size*3]);
+        //length+=(l1+l2)/2.;
+      }
     }
     glEnd();
+    glActiveTexture(GL_TEXTURE1);
+    glDisable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE0);
 
     if(textureName!="") {
       GlTextureManager::getInst().desactivateTexture();

@@ -308,38 +308,17 @@ namespace tlp {
         glDisable(GL_CULL_FACE);
         glDisable(GL_COLOR_MATERIAL);
 
-        // Draw Nodes Label
+        // Draw Nodes and MetaNodes Label
         if(glGraphComposite->getInputData()->parameters->isViewNodeLabel()) {
           // Draw Label for selected Nodes
           for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
-            if(!graph->isMetaNode(node((*it).first))){
-              glNode.id=(*it).first;
-              glNode.drawLabel(true,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
-            }
+            glNode.id=(*it).first;
+            glNode.drawLabel(true,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
           }
           // Draw Label for others Nodes
           for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
-            if(!graph->isMetaNode(node((*it).first))){
-              glNode.id=(*it).first;
-              glNode.drawLabel(false,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
-            }
-          }
-        }
-        // Draw MetaNodes Label
-        if(glGraphComposite->getInputData()->parameters->isViewMetaLabel()) {
-          // Draw Label for selected MetaNodes
-          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
-            if(graph->isMetaNode(node((*it).first))){
-              glMetaNode.id=(*it).first;
-              glMetaNode.drawLabel(true,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
-            }
-          }
-          // Draw Label for others MetaNodes
-          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
-            if(graph->isMetaNode(node((*it).first))){
-              glMetaNode.id=(*it).first;
-              glMetaNode.drawLabel(false,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
-            }
+            glNode.id=(*it).first;
+            glNode.drawLabel(false,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
           }
         }
         // Draw Edges Label

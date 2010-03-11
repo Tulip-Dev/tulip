@@ -17,7 +17,7 @@
 
 namespace tlp {
 
-  enum EdgeShape {POLYLINESHAPE = 0, BEZIERSHAPE = 4, SPLINESHAPE = 8};
+  enum EdgeShape {POLYLINESHAPE = 0, BEZIERSHAPE = 4, SPLINESHAPE = 8, CUBICBSPLINE=16};
   
   class TLP_GL_SCOPE GlGraphStaticData {
   

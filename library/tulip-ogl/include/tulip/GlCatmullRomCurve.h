@@ -3,7 +3,7 @@
 
    Created on: 29 avr. 2009
        Author: Antoine Lambert
-       E-mail: antoine.lambert@labri.fr
+       E-mail: lambert@labri.fr
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -16,9 +16,7 @@
 #ifndef GLCATMULLROMCURVE_H_
 #define GLCATMULLROMCURVE_H_
 
-#include <tulip/GlBezierCurve.h>
-#include <tulip/GlSimpleEntity.h>
-#include <tulip/GlShaderManager.h>
+#include <tulip/AbstractGlCurve.h>
 
 #include <vector>
 
@@ -26,56 +24,56 @@ namespace tlp {
 
 
 /**
- * This class allow to draw a smooth curve which passes through all the points passes as parameters
+ * \brief A class to draw a Catmull-Rom curve
+ *
+ * This class allow to draw a Catmull-Rom curve, a smooth curve which passes through all its control points.
+ * Catmull-Rom splines are a family of cubic interpolating splines formulated such that the tangent at each
+ * control point is calculated using the previous and next control point point of the spline.
+ * Catmull-Rom splines have C^1 continuity, local control, and interpolation, but do not lie within the convex
+ * hull of their control points.
  */
-class TLP_GL_SCOPE GlCatmullRomCurve : public GlSimpleEntity {
+class TLP_GL_SCOPE GlCatmullRomCurve : public AbstractGlCurve {
 
 public :
 
-	GlCatmullRomCurve(const std::vector<Coord> &curvePassPoints, const Color &beginColor, const Color &endColor,
-					  const float beginSize, const float endSize, const std::string &texture = "", const bool closedCurve = false,
-					  const unsigned int nbPointsPerBezierSegments = 20);
+	/**
+	 * GlCatmullRomCurve constructor
+	 *
+	 * \param controlPoints a vector of control points (size must be greater or equal to 4)
+	 * \param startColor the color at the start of the curve
+	 * \param endColor the color at the end of the curve
+	 * \param startSize the width at the start of the curve
+	 * \param endSize the width at the end of the curve
+	 * \param closedCurve if true, the curve will be closed and a bezier segment will be drawn between the last and first control point
+	 * \param nbCurvePoints the number of curve points to generate
+	 * \param outlined if true the curve will be outlined
+	 * \param outlineColor the outline color
+	 * \param texture a texture to apply on the curve
+	 */
+	GlCatmullRomCurve(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
+					  const float startSize, const float endSize, const bool closedCurve = false,
+				      const unsigned int nbCurvePoints = 100, const bool outlined = false, const Color &outlineColor = Color(0,0,0),
+				      const std::string &texture = "");
 
 	~GlCatmullRomCurve();
 
 	void draw(float lod, Camera *camera);
 
-	void setOutlined(const bool outlined);
+protected :
 
-	void setOutlineColor(const Color &outlineColor);
+	void setCurveVertexShaderRenderingSpecificParameters();
 
-	virtual void getXML(xmlNodePtr rootNode) {}
-
-	virtual void setWithXML(xmlNodePtr rootNode) {}
+	void computeCurvePointsOnCPU(std::vector<Coord> &curvePoints);
 
 private :
 
-	void genVertexBuffers();
-	void genBezierSegments(const std::vector<Coord> &curvePassPoints);
-
 	void computeBezierSegmentControlPoints(const Coord &pBefore, const Coord &pStart, const Coord &pEnd, const Coord &pAfter,
-										   std::vector<Coord> &bezierSegmentControlPoints);
+			std::vector<Coord> &bezierSegmentControlPoints);
 
-	void computeBezierSegments(const std::vector<Coord> &curvePassPoints);
+	int computeSegmentIndex(float t);
+	Coord computeCatmullRomCurvePoint(float t);
 
-	Color beginColor, endColor;
-	float beginSize, endSize;
-	std::string texture;
 	bool closedCurve;
-	unsigned int nbCurvePassPoints;
-	unsigned int nbPointsPerBezierSegments;
-	GLfloat *curvePassPointsArray;
-	std::string shaderProgramName;
-	GlShaderProgram *catmullShaderProgram;
-	bool vboOk;
-	std::vector<GlBezierCurve *> bezierSegments;
-	bool outlined;
-	Color outlineColor;
-
-	static std::map<std::pair<unsigned int, unsigned int>, GLfloat *> vertexBuffersDataMap;
-	static std::map<std::pair<unsigned int, unsigned int>, std::vector<GLushort *> > vertexBuffersIndicesMap;
-	static std::map<std::pair<unsigned int, unsigned int>, GLuint *> vertexBuffersObjectMap;
-
 };
 
 

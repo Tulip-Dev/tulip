@@ -71,8 +71,11 @@ set(tulip-ogl_LIB_SRCS
 	GlCatmullRomCurve.cpp 
 	EdgeExtremityGlyph.cpp 
 	EdgeExtremityGlyphManager.cpp
-	GlShaderManager.cpp 
 	GlSimpleEntity.cpp
+    GlShaderProgram.cpp
+    GlOpenUniformCubicBSpline.cpp
+    GlCubicBSplineInterpolation.cpp
+    AbstractGlCurve.cpp
 )
 
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ../include/ ${PROJECT_SOURCE_DIR} ${GLEInclude} ${FTGLInclude} ${LIBXML2_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS})

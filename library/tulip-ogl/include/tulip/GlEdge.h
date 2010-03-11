@@ -66,7 +66,7 @@ namespace tlp {
     void drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos,
 		  const Coord &startPoint, const Coord &endPoint, const LineType::RealType &bends,
           const Color &startColor, const Color &endColor, const Coord &lookDir, bool colorInterpolate, const Color &borderColor,
-		  const Size &size, int shape, bool edge3D, float lod);
+          const Size &size, int shape, bool edge3D, float lod,const std::string &textureName);
 
     /**
      * Function used to compute bounding box for edge extremity.

@@ -95,6 +95,9 @@ libtulip_ogl_la_SOURCES = \
 	GlCatmullRomCurve.cpp \
 	EdgeExtremityGlyph.cpp \
 	EdgeExtremityGlyphManager.cpp \
-	GlShaderManager.cpp \
-	GlSimpleEntity.cpp
+	GlSimpleEntity.cpp \
+	GlShaderProgram.cpp \
+	GlOpenUniformCubicBSpline.cpp \
+	GlCubicBSplineInterpolation.cpp \
+	AbstractGlCurve.cpp
 

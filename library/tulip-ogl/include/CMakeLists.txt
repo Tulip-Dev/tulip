@@ -55,7 +55,6 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/FastBezier.h 
 	tulip/GlBezierCurve.h 
 	tulip/GlCatmullRomCurve.h 
-	tulip/GlShaderManager.h 
 	tulip/EdgeExtremityGlyph.h
 	tulip/EdgeExtremityGlyphManager.h
 	tulip/OcclusionTest.h
@@ -63,4 +62,8 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/Context.h
 	tulip/Fonts.h
 	tulip/Curves.h
+    tulip/GlShaderProgram.h
+    tulip/GlOpenUniformCubicBSpline.h
+    tulip/GlCubicBSplineInterpolation.h
+    tulip/AbstractGlCurve.h
 )

@@ -6,8 +6,8 @@ using namespace std;
 
 namespace tlp {
 
-  const int GlGraphStaticData::edgeShapesCount = 3;
-  int GlGraphStaticData::edgeShapeIds[edgeShapesCount] = {BEZIERSHAPE, POLYLINESHAPE, SPLINESHAPE};
+  const int GlGraphStaticData::edgeShapesCount = 4;
+  int GlGraphStaticData::edgeShapeIds[edgeShapesCount] = {BEZIERSHAPE, POLYLINESHAPE, SPLINESHAPE, CUBICBSPLINE};
   string GlGraphStaticData::labelPositionNames[] = { string("Center"), string("Top"), string("Bottom"),string("Left"), string("Right") };
 
   string GlGraphStaticData::edgeShapeName(int id) {
@@ -17,7 +17,9 @@ namespace tlp {
     case BEZIERSHAPE:
       return string("Bezier Curve");
     case SPLINESHAPE:
-      return string("Spline Curve");
+      return string("Catmull-Rom Spline");
+    case CUBICBSPLINE:
+      return string("Cubic B-Spline");
     default:
       cerr << __PRETTY_FUNCTION__ << endl;
       cerr << "Invalid edge shape id" << endl;
@@ -32,6 +34,8 @@ namespace tlp {
       return BEZIERSHAPE;
     if (name == edgeShapeName(SPLINESHAPE))
       return SPLINESHAPE;
+    if (name == edgeShapeName(CUBICBSPLINE))
+      return CUBICBSPLINE;
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << "Invalid edge shape name" << endl;
     return -1;

@@ -15,63 +15,65 @@
 #ifndef GLBEZIERCURVE_H_
 #define GLBEZIERCURVE_H_
 
-#include <tulip/GlSimpleEntity.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlShaderManager.h>
+#include <tulip/AbstractGlCurve.h>
 
 namespace tlp {
 
-class TLP_GL_SCOPE GlBezierCurve : public GlSimpleEntity {
+/**
+ * \brief A class to draw Bézier curves
+ *
+ * This class allows to draw Bézier curves defined by an arbitrary number of control points.
+ * Bézier curves are named after their inventor, Dr. Pierre Bézier. He was an engineer with the
+ * Renault car company and set out in the early 1960’s to develop a curve formulation which would
+ * lend itself to shape design.
+ * Bézier curves are widely used in computer graphics to model smooth curves. A Bézier curve is
+ * completely contained in the convex hull of its control points and passes through its first and
+ * last control points. The curve is also always tangent to the first and last convex hull polygon segments.
+ * In addition, the curve shape tends to follow the polygon shape.
+ *
+ */
+class TLP_GL_SCOPE GlBezierCurve : public AbstractGlCurve {
 
 public:
 
-	GlBezierCurve(const std::vector<Coord> &controlPoints,
-				  const Color &beginColor, const Color &endColor,
-				  const float &beginSize, const float &endSize,
-				  const unsigned int nbCurvePoints = 100,
+	/**
+	 * GlBezierCurve constructor
+	 *
+	 * \param controlPoints a vector of control points (size must be greater or equal to 2)
+	 * \param startColor the color at the start of the curve
+	 * \param endColor the color at the end of the curve
+	 * \param startSize the width at the start of the curve
+	 * \param endSize the width at the end of the curve
+	 * \param nbCurvePoints the number of curve points to generate
+	 * \param outlined if true the curve will be outlined
+	 * \param outlineColor the outline color
+	 * \param texture a texture to apply on the curve
+	 */
+	GlBezierCurve(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
+				  const float &startSize, const float &endSize, const unsigned int nbCurvePoints = 100,
+				  const bool outlined = false, const Color &outlineColor = Color(0,0,0),
 				  const std::string &texture = "");
 
 	~GlBezierCurve();
 
 	void draw(float lod,Camera *camera);
 
-	void setTexture(const std::string &texture);
+protected :
 
-	void setOutlined(const bool outlined) {this->outlined = outlined;}
+	std::string genCurveVertexShaderSpecificCode();
 
-	void setOutlineColor(const Color &outlineColor) {this->outlineColor = outlineColor;}
+	void setCurveVertexShaderRenderingSpecificParameters();
 
-	void translate(const Coord& mouvement);
+	void cleanupAfterCurveVertexShaderRendering();
 
-	void getXML(xmlNodePtr rootNode);
-
-	void setWithXML(xmlNodePtr rootNode);
-
-protected:
-
-	GlShaderProgram *bezierVertexShader;
-	bool vboOk;
-	std::string shaderProgramName;
-	std::vector<Coord> controlPoints;
-	GLfloat *controlPointsArray;
-	int nbControlPoints;
-	Color beginColor;
-	Color endColor;
-	float beginSize;
-	float endSize;
-	std::string texture;
-	unsigned int nbCurvePoints;
-	bool outlined;
-	Color outlineColor;
+	void computeCurvePointsOnCPU(std::vector<Coord> &curvePoints);
 
 private :
 
-	void buildBezierVertexBuffers(const unsigned int nbCurvePoints);
+	static void buildPascalTriangleTexture();
+	static float *pascalTriangleTextureData;
+	static GLuint pascalTriangleTextureId;
 
-	static std::map<unsigned int, GLfloat *> bezierVertexBuffersData;
-	static std::map<unsigned int, std::vector<GLushort *> > bezierVertexBuffersIndices;
-	static std::map<unsigned int, GLuint* > bezierVertexBuffersObject;
-	static std::map<unsigned int, std::vector<GLfloat *> > bezierVertexBuffersDataNoVbo;
 };
 
 }

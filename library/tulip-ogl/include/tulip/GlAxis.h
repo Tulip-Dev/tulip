@@ -35,10 +35,10 @@ public :
 	 * GlAxis constructor
 	 *
 	 * \param axisName the name of the axis
-	 * \axisBaseCoord the base coord of the axis (if the axis is horizontal, it is the the left end, if vertical it is the down end)
-	 * \axisLength the length of the axis
-	 * \axisOrientation the orientation of the axis, 2 possible values (HORIZONTAL_AXIS or VERTICAL_AXIS)
-	 * \axisColor the color of the axis
+     * \param axisBaseCoord the base coord of the axis (if the axis is horizontal, it is the the left end, if vertical it is the down end)
+     * \param axisLength the length of the axis
+     * \param axisOrientation the orientation of the axis, 2 possible values (HORIZONTAL_AXIS or VERTICAL_AXIS)
+     * \param axisColor the color of the axis
 	 */
 	GlAxis(const std::string &axisName, const Coord &axisBaseCoord, const float axisLength,
 		   const AxisOrientation &axisOrientation, const Color &axisColor);
