@@ -99,7 +99,8 @@ BUILT_SOURCES = \
 	tulip/ColorScaleConfigDialogData.h \
 	tulip/SimpleStringsListSelectionWidgetData.h \
 	tulip/DoubleStringsListSelectionWidgetData.h \
-	tulip/ListPropertyWidgetData.h
+	tulip/ListPropertyWidgetData.h \
+	tulip/ChooseFileNameDialogData.h
 else
 BUILT_SOURCES = \
 	tulip/TabWidgetData.h \
@@ -121,7 +122,8 @@ BUILT_SOURCES = \
 	tulip/elementpropertieswidget.h \
 	tulip/gwoverviewwidget.h \
 	tulip/propertywidget.h \
-	tulip/ListPropertyWidgetData.h
+	tulip/ListPropertyWidgetData.h \
+	tulip/ChooseFileNameDialogData.h
 
 tulip/sghierarchywidget.h : tulip/SGHierarchyWidget.h
 	cp -f $< $@

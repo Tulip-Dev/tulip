@@ -78,6 +78,7 @@ set(tulip-qt_UI
      ../designer/SimpleStringsListSelectionWidget.ui
      ../designer/DoubleStringsListSelectionWidget.ui
      ../designer/ListPropertyWidget.ui
+     ../designer/ChooseFileNameDialog.ui
 )
 
 set(tulip-qt_PLUGINS

@@ -1032,6 +1032,9 @@ void TulipTableWidget::setTulipEdgeItem(
     setItem(row,col,new EdgeShapeTableItem(shapenum));
   } else if (propertyName == "viewFont") {
     setItem(row,col,new FileTableFontItem(QString(const_cast<PropertyInterface *> (editedProperty)->getEdgeStringValue(e).c_str())));
+  } else if (propertyName == "viewTexture") {
+    setItem(row, col, new FileTableItem(QString(
+        const_cast<PropertyInterface *> (editedProperty)->getEdgeStringValue(e).c_str())));
   } else if (propertyName.compare("viewLayout") == 0) {
     setItem(row,col,new ListItem(new CoordTableItem(Coord()),new DynamicTypeHandler<LineType,PointType> (((LayoutProperty*) editedProperty)->getEdgeStringValue(e))));
   } else if (typeid(*editedProperty) == typeid(StringVectorProperty)) {

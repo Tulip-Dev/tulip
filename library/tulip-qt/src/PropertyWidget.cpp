@@ -4,7 +4,6 @@
 
 #include <QtCore/qstring.h>
 #include <QtGui/qpushbutton.h>
-#include <QtGui/qfiledialog.h>
 #include <QtGui/qcolordialog.h>
 #include <QtGui/qpainter.h>
 #include <QtGui/qfontmetrics.h>
@@ -341,22 +340,16 @@ void PropertyWidget::setAllNodeValue() {
       tmpStr = ss.str();
     }
   } else if (editedPropertyName == "viewFont") {
-    QString viewFontName = QFileDialog::getOpenFileName(this, tr("Open File"),
-        QString(),
-        QString("Font (*.ttf)"));
-    if(viewFontName!="")
+    ChooseFileNameDialog dialog(QString("Font (*.ttf)"),this);
+    if(dialog.exec()==QDialog::Accepted){
+      tmpStr=dialog.getText().toStdString();
       ok=true;
-    if (ok) {
-      tmpStr = viewFontName.toStdString();
     }
   } else if (editedPropertyName == "viewTexture") {
-    QString viewFontName = QFileDialog::getOpenFileName(this, tr("Open File"),
-        QString(),
-        QString("Images (*.png *.jpeg *.jpg *.bmp)"));
-    if(viewFontName!="")
+    ChooseFileNameDialog dialog(QString("Images (*.png *.jpeg *.jpg *.bmp)"),this);
+    if(dialog.exec()==QDialog::Accepted){
+      tmpStr=dialog.getText().toStdString();
       ok=true;
-    if (ok) {
-      tmpStr = viewFontName.toStdString();
     }
   } else if (editedPropertyName == "viewLabelPosition") {
     QStringList tmp;
@@ -478,8 +471,13 @@ void  PropertyWidget::setAllEdgeValue() {
 		  ss << EdgeExtremityGlyphManager::getInst().glyphId(shapeName.toAscii().data());
 		  tmpStr = ss.str();
 	  }
-  }
-  else {
+  } else if (editedPropertyName == "viewTexture") {
+    ChooseFileNameDialog dialog(QString("Images (*.png *.jpeg *.jpg *.bmp)"),this);
+    if(dialog.exec()==QDialog::Accepted){
+      tmpStr=dialog.getText().toStdString();
+      ok=true;
+    }
+  } else {
     QString text = QInputDialog::getText(this, string("Property \"" + editedPropertyName + "\": set all edge value").c_str(),
                                          "Please enter your value",
                                          QLineEdit::Normal, QString::null, &ok);

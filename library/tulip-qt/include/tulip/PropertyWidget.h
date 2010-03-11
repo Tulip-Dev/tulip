@@ -8,11 +8,14 @@
 #include <string>
 
 #include <QtGui/qwidget.h>
+#include <QtGui/QFileDialog>
 
 #include <tulip/Graph.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/TulipTableWidget.h>
+
+#include "tulip/ChooseFileNameDialogData.h"
 
 namespace tlp {
 
@@ -75,6 +78,33 @@ signals:
   void tulipNodePropertyChanged(tlp::Graph *, const tlp::node &, const QString &property, const QString &value);
   void tulipEdgePropertyChanged(tlp::Graph *, const tlp::edge &, const QString &property, const QString &value);
   void showElementProperties(unsigned int eltId, bool isNode);
+};
+
+class TLP_QT_SIMPLE_SCOPE ChooseFileNameDialog : public QDialog,public Ui::ChooseFileNameDialogData {
+
+  Q_OBJECT
+
+public :
+
+  ChooseFileNameDialog(const QString &filter,QWidget *parent=NULL):filter(filter) {
+    setupUi(this);
+    connect(fileOpenButton,SIGNAL(clicked()),this,SLOT(openFile()));
+  }
+
+QString getText(){return fileName->text();}
+
+protected slots:
+
+  void openFile() {
+    QString fileNameText = QFileDialog::getOpenFileName(this, tr("Open File"),QString(),filter);
+    if(fileNameText!="")
+      fileName->setText(fileNameText);
+  }
+
+protected :
+
+    QString filter;
+
 };
 /*@}*/
 #endif //PROPERTYWIDGETS_H
