@@ -609,7 +609,7 @@ void Graph::openMetaNode(node metaNode) {
       TLP_HASH_MAP<node, TLP_HASH_MAP<node, set<edge> > > newMetaEdges;
       while(subEdges->hasNext()) {
 	edge e = subEdges->next();
-	std::pair<node, node> eEnds = super->ends(e);
+	const std::pair<node, node>& eEnds = super->ends(e);
 	if (isElement(eEnds.first)) {
 	  if (isElement(eEnds.second)) {
 	    addEdge(e);

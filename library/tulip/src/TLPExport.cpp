@@ -188,7 +188,7 @@ public:
       unsigned int id = 0;
       for (;ite->hasNext();) {
 	edge e = ite->next();
-	pair<node, node> ends = graph->ends(e);
+	const pair<node, node>& ends = graph->ends(e);
 	os << "(edge " << id << " " << getNode(ends.first).id << " " << getNode(ends.second).id << ")";
 	if (ite->hasNext()) os << endl;
 	id++;

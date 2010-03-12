@@ -89,10 +89,10 @@ bool ReachableSubGraphSelection::run() {
     Iterator<edge> *itE = graph->getEdges();
     while(itE->hasNext()) {
       edge e = itE->next();
-      node source = graph->source(e);
-      node target = graph->target(e);
-      if (booleanResult->getNodeValue(source) && booleanResult->getNodeValue(target))
-	booleanResult->setEdgeValue(e,true);
+      const std::pair<node, node>& ends = graph->ends(e);
+      if (booleanResult->getNodeValue(ends.first) &&
+	  booleanResult->getNodeValue(ends.second))
+	booleanResult->setEdgeValue(e, true);
     }delete itE;
   }
  
