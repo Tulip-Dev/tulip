@@ -1058,7 +1058,8 @@ void TulipApp::helpAbout() {
 //==============================================================
 void TulipApp::preference() {
   PreferenceDialog pref(this);
-  pref.exec();
+  if(pref.exec()!=QDialog::Accepted)
+    return;
   
   int result = QMessageBox::warning(this,
 				    tr(""),
