@@ -64,7 +64,7 @@ BoundingBox GlEdge::getBoundingBox(GlGraphInputData* data) {
   edge e = edge(id);
   BoundingBox bb;
 
-  std::pair<node, node> eEnds = data->graph->ends(e);
+  const std::pair<node, node>& eEnds = data->graph->ends(e);
   const node source = eEnds.first;
   const node target = eEnds.second;
   const Coord& srcCoord = data->elementLayout->getNodeValue(source);
@@ -139,7 +139,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
   }
   glEnable(GL_COLOR_MATERIAL);
 
-  std::pair<node, node> eEnds = data->graph->ends(e);
+  const std::pair<node, node>& eEnds = data->graph->ends(e);
   const node source = eEnds.first;
   const node target = eEnds.second;
   const Coord& srcCoord = data->elementLayout->getNodeValue(source);
@@ -645,7 +645,7 @@ void GlEdge::drawLabel(bool drawSelect, OcclusionTest* test, TextRenderer* rende
   else
     renderer->setContext(fontName, fontSize, 255, 255, 255);
 
-  std::pair<node, node> eEnds = data->graph->ends(e);
+  const std::pair<node, node>& eEnds = data->graph->ends(e);
   const node source = eEnds.first;
   const node target = eEnds.second;
   const Coord & srcCoord = data->elementLayout->getNodeValue(source);
