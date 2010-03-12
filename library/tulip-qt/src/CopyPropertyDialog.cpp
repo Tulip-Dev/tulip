@@ -47,18 +47,23 @@ void CopyPropertyDialog::setProperties(std::string& srcProp,
       inheritedProperties->addItem(QString(inheritedProps[i].c_str()));
 }
 
-std::string CopyPropertyDialog::getDestinationProperty(CopyPropertyDialog::destType& type) {
+bool CopyPropertyDialog::getDestinationProperty(CopyPropertyDialog::destType& type, std::string& prop) {
   type = CopyPropertyDialog::NEW;
   if (exec() == QDialog::Accepted) {
     if (newPropertyText->isEnabled())
-      return newPropertyText->text().toAscii().data();
-    type = CopyPropertyDialog::LOCAL;
-    if (localProperties->isEnabled())
-      return localProperties->currentText().toAscii().data();
-    type = CopyPropertyDialog::INHERITED;
-      return inheritedProperties->currentText().toAscii().data();
+      prop = std::string(newPropertyText->text().toAscii().data());
+    else {
+      type = CopyPropertyDialog::LOCAL;
+      if (localProperties->isEnabled())
+	prop = std::string(localProperties->currentText().toAscii().data());
+      else {
+	type = CopyPropertyDialog::INHERITED;
+	prop = std::string(inheritedProperties->currentText().toAscii().data());
+      }
+    }
+    return true;
   }
-  return std::string();
+  return false;
 }
 
 void CopyPropertyDialog::setNew(bool flag) {

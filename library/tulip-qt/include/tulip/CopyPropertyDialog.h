@@ -24,7 +24,7 @@ public:
 		     std::vector<std::string>& localProps,
 		     std::vector<std::string>& inheritedProps);
   enum destType {NEW, LOCAL, INHERITED};
-  std::string getDestinationProperty(destType&);
+  bool getDestinationProperty(destType&, std::string& prop);
   
 public slots:  
   void setNew( bool );
