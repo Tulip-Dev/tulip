@@ -88,7 +88,7 @@ void PropertyWidget::changeProperty(Graph *sg,const std::string &name) {
   }
   setColumnCount(2);
   horizontalHeaderItem(0)->setText("Id");
-  horizontalHeaderItem(1)->setText(name.c_str());
+  horizontalHeaderItem(1)->setText(QString::fromUtf8(name.c_str()));
   updateNbElements();
   update();
 }
@@ -111,7 +111,7 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
   if (editedProperty == NULL) return;
   Observable::holdObservers();
   bool result=true;
-  string str=((TulipTableWidgetItem *)item(i,j))->textForTulip().toAscii().data();
+  string str=((TulipTableWidgetItem *)item(i,j))->textForTulip().toUtf8().data();
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
   Iterator<edge> *it=graph->getEdges();
   edge tmp;
@@ -150,7 +150,7 @@ void PropertyWidget::changePropertyNodeValue(int i, int j) {
   if (editedProperty == NULL) return;
   Observable::holdObservers();
   bool result=true;
-  string str = ((TulipTableWidgetItem*)item(i, j))->textForTulip().toAscii().data();
+  string str = ((TulipTableWidgetItem*)item(i, j))->textForTulip().toUtf8().data();
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
   Iterator<node> *it=graph->getNodes();
   node tmp;
@@ -336,7 +336,7 @@ void PropertyWidget::setAllNodeValue() {
                                               tmp, 0, false, &ok);
     if (ok) {
       stringstream ss;
-      ss << GlyphManager::getInst().glyphId(shapeName.toAscii().data());
+      ss << GlyphManager::getInst().glyphId(shapeName.toUtf8().data());
       tmpStr = ss.str();
     }
   } else if (editedPropertyName == "viewFont") {
@@ -361,7 +361,7 @@ void PropertyWidget::setAllNodeValue() {
                                               tmp, 0, false, &ok);
     if (ok) {
       stringstream ss;
-      ss << GlGraphStaticData::labelPositionId(labelPosName.toAscii().data());
+      ss << GlGraphStaticData::labelPositionId(labelPosName.toUtf8().data());
       tmpStr = ss.str();
     }
   }
@@ -388,7 +388,7 @@ void PropertyWidget::setAllNodeValue() {
     QString text = QInputDialog::getText(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
                                          "Please enter your value",
                                          QLineEdit::Normal,QString::null, &ok);
-    if (ok) tmpStr = text.toAscii().data();
+    if (ok) tmpStr = text.toUtf8().data();
     else ok = false;
   }
 
@@ -450,7 +450,7 @@ void  PropertyWidget::setAllEdgeValue() {
                                               tmp, 0, false, &ok);
     if (ok) {
       stringstream ss;
-      ss << GlGraphStaticData::edgeShapeId(shapeName.toAscii().data());
+      ss << GlGraphStaticData::edgeShapeId(shapeName.toUtf8().data());
       tmpStr = ss.str();
     }
   }
@@ -468,7 +468,7 @@ void  PropertyWidget::setAllEdgeValue() {
 	                                                tmp, 0, false, &ok);
 	  if(ok){
 		  stringstream ss;
-		  ss << EdgeExtremityGlyphManager::getInst().glyphId(shapeName.toAscii().data());
+		  ss << EdgeExtremityGlyphManager::getInst().glyphId(shapeName.toUtf8().data());
 		  tmpStr = ss.str();
 	  }
   } else if (editedPropertyName == "viewTexture") {
@@ -481,7 +481,7 @@ void  PropertyWidget::setAllEdgeValue() {
     QString text = QInputDialog::getText(this, string("Property \"" + editedPropertyName + "\": set all edge value").c_str(),
                                          "Please enter your value",
                                          QLineEdit::Normal, QString::null, &ok);
-    if (ok) tmpStr = text.toAscii().data();
+    if (ok) tmpStr = text.toUtf8().data();
     else ok = false;
   }
 
@@ -526,7 +526,7 @@ void PropertyWidget::showContextMenu(const QPoint & pos) {
   QModelIndex index = indexAt(pos);
   int row = index.row();
   if ((unsigned int) row < nbElement) {
-    std::string textId(item(row, 0)->text().toAscii().data());
+    std::string textId(item(row, 0)->text().toUtf8().data());
     if (textId.size() && (textId.find_first_not_of("0123456789") == string::npos)) {
       selectRow(row);
       QMenu contextMenu(this);

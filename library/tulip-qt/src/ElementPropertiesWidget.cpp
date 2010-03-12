@@ -252,7 +252,7 @@ namespace tlp {
 	QTableWidgetItem* nameItem = new QTableWidgetItem(*it);
 	nameItem->setFlags(Qt::ItemIsEnabled);
 	propertyTable->setItem(i, 0, nameItem);
-      string pname = (*it).toAscii().data();
+      string pname = (*it).toUtf8().data();
 	if (graph->existProperty(pname)) {
 	PropertyInterface *editedProperty = graph->getProperty(pname);
 	  switch(displayMode) {
@@ -287,20 +287,20 @@ namespace tlp {
 
     QString property = propertyTable->item(row, 0)->text();
     QString value = ((TulipTableWidgetItem *)propertyTable->item(row, col))->textForTulip();
-    PropertyInterface *editedProperty = graph->getProperty(property.toAscii().data());
+    PropertyInterface *editedProperty = graph->getProperty(property.toUtf8().data());
     if (editedProperty==0) return;
-    //cerr << "Value :" << value.toAscii().data() << endl;
+    //cerr << "Value :" << value.toUtf8().data() << endl;
     bool result=true;
     switch(displayMode) {
     case NODE:
     // allow to undo
     graph->push();
-      result=editedProperty->setNodeStringValue(currentNode, value.toAscii().data());
+      result=editedProperty->setNodeStringValue(currentNode, value.toUtf8().data());
       break;
     case EDGE:
     // allow to undo
     graph->push();
-      result=editedProperty->setEdgeStringValue(currentEdge, value.toAscii().data());
+      result=editedProperty->setEdgeStringValue(currentEdge, value.toUtf8().data());
       break;
     }
 

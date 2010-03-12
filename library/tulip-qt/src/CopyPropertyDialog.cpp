@@ -33,32 +33,32 @@ CopyPropertyDialog::CopyPropertyDialog(QWidget* parent)
 void CopyPropertyDialog::setProperties(std::string& srcProp,
 				       std::vector<std::string>& localProps,
 				       std::vector<std::string>& inheritedProps) {
-  setWindowTitle((std::string("Copy property ") + srcProp).c_str());
+  setWindowTitle(QString::fromUtf8((std::string("Copy property ") + srcProp).c_str()));
   unsigned int i = 0;
   if (localProps.size() == 0)
     localPropertyButton->setEnabled(false);
   else
     for (; i < localProps.size(); ++i)
-      localProperties->addItem(QString(localProps[i].c_str()));
+      localProperties->addItem(QString::fromUtf8(localProps[i].c_str()));
   if (inheritedProps.size() == 0)
     inheritedPropertyButton->setEnabled(false);
   else
     for (i = 0; i < inheritedProps.size(); ++i)
-      inheritedProperties->addItem(QString(inheritedProps[i].c_str()));
+      inheritedProperties->addItem(QString::fromUtf8(inheritedProps[i].c_str()));
 }
 
 bool CopyPropertyDialog::getDestinationProperty(CopyPropertyDialog::destType& type, std::string& prop) {
   type = CopyPropertyDialog::NEW;
   if (exec() == QDialog::Accepted) {
     if (newPropertyText->isEnabled())
-      prop = std::string(newPropertyText->text().toAscii().data());
+      prop = std::string(newPropertyText->text().toUtf8().data());
     else {
       type = CopyPropertyDialog::LOCAL;
       if (localProperties->isEnabled())
-	prop = std::string(localProperties->currentText().toAscii().data());
+	prop = std::string(localProperties->currentText().toUtf8().data());
       else {
 	type = CopyPropertyDialog::INHERITED;
-	prop = std::string(inheritedProperties->currentText().toAscii().data());
+	prop = std::string(inheritedProperties->currentText().toUtf8().data());
       }
     }
     return true;

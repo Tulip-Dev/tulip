@@ -112,7 +112,7 @@ namespace tlp {
     mainWindowFacade.getWorkspace()->addWindow(createdWidget);
 
     string windowTitle = createdViewName + " : " + graph->getAttribute<string> ("name");
-    createdWidget->setWindowTitle(windowTitle.c_str());
+    createdWidget->setWindowTitle(QString::fromUtf8(windowTitle.c_str()));
 
     if (forceWidgetSize) {
       ((QWidget*) (createdWidget->parent()))->setGeometry(rect);
@@ -301,7 +301,7 @@ namespace tlp {
     QWidget *widget = getWidgetOfView(currentView);
 
     string windowTitle = viewNames[currentView] + " : " + graph->getAttribute<string> ("name");
-    widget->setWindowTitle(windowTitle.c_str());
+    widget->setWindowTitle(QString::fromUtf8(windowTitle.c_str()));
 
     return true;
   }

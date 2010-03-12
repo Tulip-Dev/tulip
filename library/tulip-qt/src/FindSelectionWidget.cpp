@@ -137,7 +137,7 @@ int FindSelectionWidget::getMode() {
 }
 
 std::string FindSelectionWidget::getCurrentProperty() {
-  return std::string(inputProp->currentText().toAscii().data());
+  return std::string(inputProp->currentText().toUtf8().data());
 }
 
 PropertyInterface * FindSelectionWidget::getProperty() {
@@ -161,7 +161,7 @@ void FindSelectionWidget::insertProperties(std::string &currentProperty) {
     std::string n = propIt->next();
     PropertyInterface* p = graph->getProperty( n );
     if (IsEvaluableProxy(p)) {
-      inputProp->addItem(QString(n.c_str()));
+      inputProp->addItem(QString::fromUtf8(n.c_str()));
       if (currentProperty == n)
 	inputProp->setCurrentIndex(inputProp->count() - 1);
     }
@@ -175,8 +175,9 @@ int FindSelectionWidget::exec() {
   return nbItemsFound;
 }
 
-void FindSelectionWidget::evalNodes(PropertyInterface *p, int mode, std::string fv, int op,
-				BooleanProperty *selP) {
+void FindSelectionWidget::evalNodes(PropertyInterface *p, int mode,
+				    std::string fv, int op,
+				    BooleanProperty *selP) {
   Iterator<node> * nodeIt = graph->getNodes();
   while( nodeIt->hasNext() ) {
     node n = nodeIt->next();
@@ -199,8 +200,9 @@ void FindSelectionWidget::evalNodes(PropertyInterface *p, int mode, std::string 
   delete nodeIt;
 }
 
-void FindSelectionWidget::evalEdges(PropertyInterface *p, int mode, std::string fv, int op, 
-				BooleanProperty *selP) {
+void FindSelectionWidget::evalEdges(PropertyInterface *p, int mode,
+				    std::string fv, int op, 
+				    BooleanProperty *selP) {
   Iterator<edge> * edgeIt = graph->getEdges();
   while( edgeIt->hasNext() ) {
     edge e = edgeIt->next();
@@ -226,7 +228,7 @@ void FindSelectionWidget::evalEdges(PropertyInterface *p, int mode, std::string 
 void FindSelectionWidget::find(BooleanProperty *selP) {
   PropertyInterface * p = getProperty();
   int mode  = getMode();
-  std::string fv = filterValue->text().toAscii().data();
+  std::string fv = filterValue->text().toUtf8().data();
   int op = getOperation();
   nbItemsFound = 0;
   if( (getSource()+1) & 1 ) 

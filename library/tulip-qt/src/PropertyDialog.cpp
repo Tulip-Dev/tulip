@@ -71,15 +71,15 @@ namespace tlp {
 
     tableNodes->selectNodeOrEdge(true);
     tableEdges->selectNodeOrEdge(false);
-    tableNodes->changeProperty(graph,item->text().toAscii().data());
-    tableEdges->changeProperty(graph,item->text().toAscii().data());
+    tableNodes->changeProperty(graph, item->text().toUtf8().data());
+    tableEdges->changeProperty(graph, item->text().toUtf8().data());
 
-    PropertyInterface *tmpProxy=graph->getProperty(item->text().toAscii().data());
+    PropertyInterface *tmpProxy=graph->getProperty(item->text().toUtf8().data());
     editedProperty=tmpProxy;
-    editedPropertyName=item->text().toAscii().data();
+    editedPropertyName=item->text().toUtf8().data();
     //propertyName->setText(item->text());
 
-    if (graph->existLocalProperty(item->text().toAscii().data()))
+    if (graph->existLocalProperty(item->text().toUtf8().data()))
       inheritedProperties->clearSelection();
     else
       localProperties->clearSelection();
@@ -144,7 +144,7 @@ namespace tlp {
         continue;
 
       QListWidgetItem* tmpItem = new QListWidgetItem(localProperties);
-      tmpItem->setText(QString(tmp.c_str()));
+      tmpItem->setText(QString::fromUtf8(tmp.c_str()));
     } delete it;
     it=graph->getInheritedProperties();
     while (it->hasNext()) {
@@ -156,7 +156,7 @@ namespace tlp {
         continue;
 
       QListWidgetItem *tmpItem = new QListWidgetItem(inheritedProperties);
-      tmpItem->setText(QString(tmp.c_str()));
+      tmpItem->setText(QString::fromUtf8(tmp.c_str()));
     } delete it;
   }
   //=================================================
@@ -180,7 +180,8 @@ namespace tlp {
                              QMessageBox::Ok,
                              QMessageBox::Ok);
       }
-      if(ok && graph->existLocalProperty(text.toStdString())) {
+      string textString(text.toUtf8().data());
+      if(ok && graph->existLocalProperty(textString)) {
         ok = false;
         QMessageBox::warning(this, "Fail to create property",
                              "A property with same name already exist",
@@ -190,22 +191,37 @@ namespace tlp {
       if (ok) {
         string erreurMsg;
         graph->push();
-        if (strcmp(res.toAscii().data(),"Selection")==0) graph->getLocalProperty<BooleanProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"Metric")==0) graph->getLocalProperty<DoubleProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"Layout")==0) graph->getLocalProperty<LayoutProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"String")==0) graph->getLocalProperty<StringProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"Integer")==0) graph->getLocalProperty<IntegerProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"Size")==0) graph->getLocalProperty<SizeProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"Color")==0) graph->getLocalProperty<ColorProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"BooleanVector")==0) graph->getLocalProperty<BooleanVectorProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"DoubleVector")==0) graph->getLocalProperty<DoubleVectorProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"CoordVector")==0) graph->getLocalProperty<CoordVectorProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"StringVector")==0) graph->getLocalProperty<StringVectorProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"IntegerVector")==0) graph->getLocalProperty<IntegerVectorProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"SizeVector")==0) graph->getLocalProperty<SizeVectorProperty>(text.toAscii().data());
-        if (strcmp(res.toAscii().data(),"ColorVector")==0) graph->getLocalProperty<ColorVectorProperty>(text.toAscii().data());
+	char* resChars = res.toUtf8().data();
+        if (strcmp(resChars,"Selection")==0)
+	  graph->getLocalProperty<BooleanProperty>(textString);
+        if (strcmp(resChars,"Metric")==0)
+	  graph->getLocalProperty<DoubleProperty>(textString);
+        if (strcmp(resChars,"Layout")==0)
+	  graph->getLocalProperty<LayoutProperty>(textString);
+        if (strcmp(resChars,"String")==0)
+	  graph->getLocalProperty<StringProperty>(textString);
+        if (strcmp(resChars,"Integer")==0)
+	  graph->getLocalProperty<IntegerProperty>(textString);
+        if (strcmp(resChars,"Size")==0)
+	  graph->getLocalProperty<SizeProperty>(textString);
+        if (strcmp(resChars,"Color")==0)
+	  graph->getLocalProperty<ColorProperty>(textString);
+        if (strcmp(resChars,"BooleanVector")==0)
+	  graph->getLocalProperty<BooleanVectorProperty>(textString);
+        if (strcmp(resChars,"DoubleVector")==0)
+	  graph->getLocalProperty<DoubleVectorProperty>(textString);
+        if (strcmp(resChars,"CoordVector")==0)
+	  graph->getLocalProperty<CoordVectorProperty>(textString);
+        if (strcmp(resChars,"StringVector")==0)
+	  graph->getLocalProperty<StringVectorProperty>(textString);
+        if (strcmp(resChars,"IntegerVector")==0)
+	  graph->getLocalProperty<IntegerVectorProperty>(textString);
+        if (strcmp(resChars,"SizeVector")==0)
+	  graph->getLocalProperty<SizeVectorProperty>(textString);
+        if (strcmp(resChars,"ColorVector")==0)
+	  graph->getLocalProperty<ColorVectorProperty>(textString);
         setGraph(graph);
-        emit newPropertySignal(graph,text.toAscii().data());
+        emit newPropertySignal(graph, textString);
       }
     }
   }

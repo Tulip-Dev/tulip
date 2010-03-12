@@ -153,17 +153,17 @@ namespace {
 		ip.typeName == TN(float) ||
 		ip.typeName == TN(double)) {
 	  QLineEdit * le = (QLineEdit *) ip.wA[0];
-	  inDef->setDefValue(ip.name, le->text().toAscii().data());
+	  inDef->setDefValue(ip.name, le->text().toUtf8().data());
 	}
 
 	// string
 	else if(ip.typeName == TN(string)) {
 	  if (ip.name.find("text::") != string::npos) {
 	    QTextEdit *te = (QTextEdit *) ip.wA[0];
-	    inDef->setDefValue(ip.name, te->toPlainText().toAscii().data());
+	    inDef->setDefValue(ip.name, te->toPlainText().toUtf8().data());
 	  } else {
 	    QLineEdit * le = (QLineEdit *) ip.wA[0];
-	    inDef->setDefValue( ip.name, le->text().toAscii().data() );
+	    inDef->setDefValue( ip.name, le->text().toUtf8().data() );
 	  }
 	}
 
@@ -202,7 +202,7 @@ namespace {
 		 || ip.typeName == TN(SizeProperty)
 		 || ip.typeName == TN(ColorProperty)) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  string value = cb->currentText().toAscii().data();
+	  string value = cb->currentText().toUtf8().data();
 	  if (value != NONE_PROP)
 	    inDef->setDefValue(ip.name, value);
 	}
@@ -210,12 +210,12 @@ namespace {
 	// StringCollection
 	else if (ip.typeName == TN(StringCollection)) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  string current = cb->currentText().toAscii().data();
+	  string current = cb->currentText().toUtf8().data();
 	  string value(current);
 	  for ( int i = 0; i < cb->count(); i++)
-	    if (current != cb->itemText(i).toAscii().data()){
+	    if (current != cb->itemText(i).toUtf8().data()){
 	      value += ";";
-	      value += cb->itemText(i).toAscii().data();
+	      value += cb->itemText(i).toUtf8().data();
 	    }
 	  inDef->setDefValue(ip.name, value);
 	}
@@ -249,10 +249,10 @@ namespace {
 	else if(ip.typeName == TN(string)) {
 	  if (ip.name.find("text::") != string::npos) {
 	    QTextEdit *te = (QTextEdit *) ip.wA[0];
-	    te->setText(QString(sysDef->getDefValue(ip.name).c_str()));
+	    te->setText(QString::fromUtf8(sysDef->getDefValue(ip.name).c_str()));
 	  } else {
 	    QLineEdit * le = (QLineEdit *) ip.wA[0];
-	    le->setText(QString(sysDef->getDefValue(ip.name).c_str()));
+	    le->setText(QString::fromUtf8(sysDef->getDefValue(ip.name).c_str()));
 	  }
 	}
 
@@ -303,7 +303,7 @@ namespace {
 	      value = NONE_PROP;
 	  
 	    for (int i = 0; i <  cb->count(); i++)
-	      if (value == cb->itemText(i).toAscii().data()) {
+	      if (value == cb->itemText(i).toUtf8().data()) {
 		cb->setCurrentIndex(i);
 		break;
 	      }
@@ -316,7 +316,7 @@ namespace {
 	  StringCollection coll(sysDef->getDefValue(ip.name));
 	  string current = coll.getCurrentString();
 	  for ( int i = 0; i < cb->count(); i++)
-	    if (current == cb->itemText(i).toAscii().data()){
+	    if (current == cb->itemText(i).toUtf8().data()){
 	      cb->setCurrentIndex(i);
 	      break;
 	    }
@@ -657,7 +657,7 @@ namespace {
 	  if( proxyA.size() ) {
 	    QComboBox * cb = new QComboBox( this );
 	    for( unsigned int i = 0 ; i < proxyA.size() ; i++ )
-	      cb->addItem(QString(proxyA[i].c_str()));
+	      cb->addItem(QString::fromUtf8(proxyA[i].c_str()));
 	    ip.wA.push_back( cb );
 	    // if property is not mandatory, insert None
 	    if (!inDef->isMandatory(ip.name)) {
@@ -677,7 +677,7 @@ namespace {
 	  StringCollection stringCol(valueCollection);
 	  QComboBox * cb = new QComboBox( this );
 	  for(unsigned int i=0; i < stringCol.size(); i++ ) {
-            cb->addItem(QString(stringCol[i].c_str()));
+            cb->addItem(QString::fromUtf8(stringCol[i].c_str()));
 	  }
 	  cb->setCurrentIndex(0);
 	  ip.wA.push_back( cb );       
@@ -846,10 +846,10 @@ namespace {
 	else if(	ip.typeName == TN(string)	) {
 	  if (ip.name.find("text::") != string::npos) {
 	    QTextEdit *te = (QTextEdit *) ip.wA[0];
-	    outSet.set<string>(ip.name, te->toPlainText().toAscii().data());
+	    outSet.set<string>(ip.name, te->toPlainText().toUtf8().data());
 	  } else {
 	    QLineEdit * le = (QLineEdit *) ip.wA[0];
-	    outSet.set<string>( ip.name, le->text().toAscii().data() );
+	    outSet.set<string>( ip.name, le->text().toUtf8().data() );
 	  }
 	}
 
@@ -889,7 +889,7 @@ namespace {
 		  || ip.typeName == TN(SizeProperty)
 		  || ip.typeName == TN(ColorProperty))) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  string propName(cb->currentText().toAscii().data());
+	  string propName(cb->currentText().toUtf8().data());
 	  if (propName != NONE_PROP)
 	    outSet.set<PropertyInterface*>( ip.name, inG->getProperty(propName) );
 	  else {
@@ -903,10 +903,10 @@ namespace {
         QComboBox * cb = (QComboBox*) ip.wA[0];
         std::vector<string> vectorTemp;
         for ( int i = 0; i < cb->count(); i++) {
-            vectorTemp.push_back(cb->itemText(i).toAscii().data());
+            vectorTemp.push_back(cb->itemText(i).toUtf8().data());
         }
         outSet.set<StringCollection>( ip.name,
-                StringCollection( vectorTemp, cb->currentText().toAscii().data()));
+                StringCollection( vectorTemp, cb->currentText().toUtf8().data()));
         StringCollection toto;
         outSet.get<StringCollection>( ip.name,toto);
 	}

@@ -131,7 +131,7 @@ void ListItem::setContentFromEditor(QWidget *w) {
 }
 
 void ListItem::updateText() {
-  setText(QString::fromStdString(handler->getString()));
+  setText(QString::fromUtf8(handler->getString().c_str()));
 }
 
 //================================================================================
@@ -346,21 +346,21 @@ void SizeEditor::setFocus() {
 }
 void SizeEditor::changeW(const QString &s) {
   stringstream ss;
-  ss << s.toAscii().data();
+  ss << s.toUtf8().data();
   float f;
   ss >> f;
   size.setW(f);
 }
 void SizeEditor::changeH(const QString &s) {
   stringstream ss;
-  ss << s.toAscii().data();
+  ss << s.toUtf8().data();
   float f;
   ss >> f;
   size.setH(f);
 }
 void SizeEditor::changeD(const QString &s) {
   stringstream ss;
-  ss << s.toAscii().data();
+  ss << s.toUtf8().data();
   float f;
   ss >> f;
   size.setD(f);
@@ -459,21 +459,21 @@ void CoordEditor::setFocus() {
 
 void CoordEditor::changeX(const QString &s) {
   stringstream ss;
-  ss << s.toAscii().data();
+  ss << s.toUtf8().data();
   float f;
   ss >> f;
   coord.setX(f);
 }
 void CoordEditor::changeY(const QString &s) {
   stringstream ss;
-  ss << s.toAscii().data();
+  ss << s.toUtf8().data();
   float f;
   ss >> f;
   coord.setY(f);
 }
 void CoordEditor::changeZ(const QString &s) {
   stringstream ss;
-  ss << s.toAscii().data();
+  ss << s.toUtf8().data();
   float f;
   ss >> f;
   coord.setZ(f);
@@ -625,7 +625,7 @@ QString GlyphTableItem::valueToText(int val) const {
 }
 
 int GlyphTableItem::textToValue(const QString& s) const {
-  return GlyphManager::getInst().glyphId(s.toAscii().data());
+  return GlyphManager::getInst().glyphId(s.toUtf8().data());
 }
 
 QStringList* GlyphTableItem::glyphNames = NULL;
@@ -659,7 +659,7 @@ QString EdgeShapeTableItem::valueToText(int val) const {
 }
 
 int EdgeShapeTableItem::textToValue(const QString& s) const {
-  return GlGraphStaticData::edgeShapeId(s.toAscii().data());
+  return GlGraphStaticData::edgeShapeId(s.toUtf8().data());
 }
 
 QStringList* EdgeShapeTableItem::edgeShapeNames = NULL;
@@ -692,7 +692,7 @@ QString LabelPositionTableItem::valueToText(int val) const {
 }
 
 int LabelPositionTableItem::textToValue(const QString& s) const {
-  return GlGraphStaticData::labelPositionId(s.toAscii().data());
+  return GlGraphStaticData::labelPositionId(s.toUtf8().data());
 }
 
 QStringList* LabelPositionTableItem::labelPositionNames = NULL;
@@ -734,7 +734,7 @@ QString EdgeExtremityGlyphTableItem::valueToText(int val) const {
 int EdgeExtremityGlyphTableItem::textToValue(const QString& s) const {
 	if (s.compare("NONE") == 0)
 		return 0;
-	return EdgeExtremityGlyphManager::getInst().glyphId(s.toAscii().data());
+	return EdgeExtremityGlyphManager::getInst().glyphId(s.toUtf8().data());
 }
 
 QStringList* EdgeExtremityGlyphTableItem::glyphNames = NULL;
@@ -995,7 +995,7 @@ void TulipTableWidget::setTulipNodeItem(const PropertyInterface *editedProperty,
   } else if (typeid(*editedProperty) == typeid(CoordVectorProperty)) {
     setItem(row,col,new ListItem(new CoordTableItem(Coord()),new DynamicTypeHandler<CoordVectorType,PointType> (((CoordVectorProperty*) editedProperty)->getNodeStringValue(n))));
   } else {
-    setItem(row,col,new TulipTableWidgetItem(QString(const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
+    setItem(row,col,new TulipTableWidgetItem(QString::fromUtf8(const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
   }
   setRowHeight(row,ROW_HEIGHT);
   if (updateColumnTitle) {
@@ -1052,7 +1052,7 @@ void TulipTableWidget::setTulipEdgeItem(
   } else if (typeid(*editedProperty) == typeid(CoordVectorProperty)) {
     setItem(row,col,new ListItem(new CoordTableItem(Coord()),new DynamicTypeHandler<CoordVectorType,PointType> (((CoordVectorProperty*) editedProperty)->getEdgeStringValue(e))));
   }  else {
-    setItem(row,col,new TulipTableWidgetItem(QString(const_cast<PropertyInterface *> (editedProperty)->getEdgeStringValue(e).c_str())));
+    setItem(row,col,new TulipTableWidgetItem(QString::fromUtf8(const_cast<PropertyInterface *> (editedProperty)->getEdgeStringValue(e).c_str())));
   }
   setRowHeight(row,ROW_HEIGHT);
   if (updateColumnTitle) {

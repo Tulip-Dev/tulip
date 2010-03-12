@@ -137,7 +137,7 @@ void SpreadTable::updateHeaders() {
 	adjustHorizontalHeader();
 
 	for (vector<string>::iterator it = selectedProperties.begin(); it != selectedProperties.end(); ++it) {
-		horizontalHeaderLabels.append(QString::fromStdString(*it));
+	  horizontalHeaderLabels.append(QString::fromUtf8((*it).c_str()));
 	}
 
 	setHorizontalHeaderLabels(horizontalHeaderLabels);
@@ -216,9 +216,9 @@ void SpreadTable::reloadView() {
 						labelColor[3])));
 			}
 			if (view == NodesView)
-				curCell->setData(Qt::EditRole, currentProperty->getNodeStringValue(node(i)).c_str());
+			  curCell->setData(Qt::EditRole, QString::fromUtf8(currentProperty->getNodeStringValue(node(i)).c_str()));
 			else
-				curCell->setData(Qt::EditRole, currentProperty->getEdgeStringValue(edge(i)).c_str());
+			  curCell->setData(Qt::EditRole, QString::fromUtf8(currentProperty->getEdgeStringValue(edge(i)).c_str()));
 			setItem(i, currentPropId, curCell);
 		}
 		currentPropId++;

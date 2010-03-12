@@ -83,7 +83,7 @@ namespace tlp {
     for (std::string::size_type i = 0; i < nGroupNames; i++) {
       QMenu *groupMenu = (QMenu *) 0;
       for (std::string::size_type j = 0; j < nGroups; j++) {
-	if (itemGroupNames[i] == groupMenus[j]->objectName().toAscii().data()) {
+	if (itemGroupNames[i] == groupMenus[j]->objectName().toUtf8().data()) {
 	  subMenu = groupMenu = groupMenus[j];
 	  break;
 	}
@@ -858,7 +858,7 @@ namespace tlp {
     DataSet dataSet;
     tlp::exportGraph(newGraph, tmpss, "tlp", dataSet, NULL);
     QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setText(tmpss.str().c_str());
+    clipboard->setText(QString::fromUtf8(tmpss.str().c_str()));
     Observable::unholdObservers();
   }
   //==============================================================
@@ -875,7 +875,7 @@ namespace tlp {
     Graph *newGraph=tlp::newGraph();
     DataSet dataSet;
     QClipboard *clipboard = QApplication::clipboard();
-    dataSet.set<string>("file::data",clipboard->text().toStdString());
+    dataSet.set<string>("file::data", clipboard->text().toUtf8().data());
     tlp::importGraph("tlp", dataSet, NULL ,newGraph);
     tlp::copyToGraph( graph, newGraph, 0, selP );
     Observable::unholdObservers();
@@ -978,7 +978,7 @@ namespace tlp {
       sel1 = graph->getProperty<BooleanProperty>("viewSelection");
       graph->push();
       Graph *tmp = graph->addSubGraph(sel1);
-      tmp->setAttribute("name",string(text.toAscii().data()));
+      tmp->setAttribute("name", string(text.toUtf8().data()));
       clusterTreeWidget->update();
       //emit clusterTreeNeedUpdate();
     }

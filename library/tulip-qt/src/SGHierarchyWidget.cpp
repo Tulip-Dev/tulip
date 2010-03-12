@@ -102,7 +102,7 @@ namespace tlp {
   //=======================================================
   void SGHierarchyWidget::setItemInfos(QTreeWidgetItem *item, Graph *graph,
 				       unsigned int nbNodes, unsigned int nbEdges) {
-    item->setText(0, QString(graph->getAttribute<string>("name").c_str()));
+    item->setText(0, QString::fromUtf8(graph->getAttribute<string>("name").c_str()));
     char tmpstr[9];
     sprintf(tmpstr, " %.7d", nbNodes);
     item->setText(1, QString(tmpstr));
@@ -177,7 +177,7 @@ namespace tlp {
     // allow to undo
     _currentGraph->push();
       Graph *tmp=_currentGraph->getSuperGraph()->addSubGraph();
-      tmp->setAttribute("name",string(text.toAscii().data()));
+      tmp->setAttribute("name", string(text.toUtf8().data()));
       Iterator<node> *itN=_currentGraph->getNodes();
       while (itN->hasNext())
 	tmp->addNode(itN->next());
@@ -201,7 +201,7 @@ namespace tlp {
       sel1.setAllNodeValue(true);
       sel1.setAllEdgeValue(true);
       _currentGraph = _currentGraph->addSubGraph(&sel1);
-      _currentGraph->setAttribute("name",string(text.toAscii().data()));
+      _currentGraph->setAttribute("name", string(text.toUtf8().data()));
       update();
       emit graphChanged(_currentGraph);
     }
@@ -216,7 +216,7 @@ namespace tlp {
 			    _currentGraph->getAttribute<string>("name").c_str(),
 			    &ok);
     if (ok) {
-      _currentGraph->setAttribute("name",string(text.toAscii().data()));
+      _currentGraph->setAttribute("name", string(text.toUtf8().data()));
       graphItems.get(_currentGraph->getId())->setText(0, text);
     }
   }
