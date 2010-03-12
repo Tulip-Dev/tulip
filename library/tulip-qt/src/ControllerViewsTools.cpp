@@ -102,14 +102,12 @@ QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
   }
   //**********************************************************************
   QWidget *ControllerViewsTools::getNoInteractorConfigurationWidget(){
-    if(!noInteractorConfigurationWidget){
-      noInteractorConfigurationWidget = new QWidget();
-      QGridLayout *gridLayout = new QGridLayout(noInteractorConfigurationWidget);
-      QLabel *label = new QLabel(noInteractorConfigurationWidget);
-      label->setAlignment(Qt::AlignCenter);
-      gridLayout->addWidget(label, 0, 0, 1, 1);
-      label->setText("No interactor configuration");
-    }
+    QWidget *noInteractorConfigurationWidget = new QWidget();
+    QGridLayout *gridLayout = new QGridLayout(noInteractorConfigurationWidget);
+    QLabel *label = new QLabel(noInteractorConfigurationWidget);
+    label->setAlignment(Qt::AlignCenter);
+    gridLayout->addWidget(label, 0, 0, 1, 1);
+    label->setText("No interactor configuration");
     return noInteractorConfigurationWidget;
   }
   

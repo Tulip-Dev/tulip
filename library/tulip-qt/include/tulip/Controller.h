@@ -59,7 +59,7 @@ namespace tlp {
 		/**
 		 * get workspace
 		 * \return the workspace
-		 */
+         */
 		QWorkspace *getWorkspace() {return workspace;}
 		/**
 		 * get status bar
@@ -114,6 +114,12 @@ namespace tlp {
   public:
 
     virtual ~Controller() {}
+
+    /**
+     * By default in Tulip, if we have only one controller, we auto load it
+     * If in your controller, you modify return of this function, you stop this process
+     */
+    //virtual bool autoLoadController() {return true;}
 
     /**
      * Attach the main window to this controller
