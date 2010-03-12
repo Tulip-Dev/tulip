@@ -125,7 +125,7 @@ namespace tlp {
       Coord v=vertices[i+1]-vertices[i];
       float angle=M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm()));
       if(isnan(angle))
-        angle=M_PI;
+        angle=0;
       newSize=newSize/cos(angle/2.);
 
       if(angle<M_PI/2+M_PI/4) {
@@ -452,7 +452,7 @@ namespace tlp {
       Coord v=vertices[i+1]-vertices[i];
       float angle=M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm()));
       if(isnan(angle))
-        angle=M_PI;
+        angle=0;
       newSize=newSize/cos(angle/2.);
 
       result(i,0) = vertices[i] - xu_xv*newSize;

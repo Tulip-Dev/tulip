@@ -474,11 +474,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 
   if (edge3D)
     shape |= L3D_BIT;
-  if (shape & L3D_BIT) {
-    if (shape >= (L3D_BIT + 16)) {
-      shape = shape & ~L3D_BIT; //no 3D model defined, falling back to Line model
-    }
-  }
+  
   Coord srcDir(srcNodePos);
   Coord tgtDir(tgtNodePos);
   vector<Coord> tmp = tlp::computeCleanVertices(bends, startPoint, endPoint, srcDir, tgtDir);

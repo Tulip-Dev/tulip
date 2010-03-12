@@ -3,6 +3,7 @@
 #include <tulip/AbstractGlCurve.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/Curves.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 
@@ -80,19 +81,29 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 
 	if (startSize != 1 && endSize != 1) {
 		if (texture != "") {
+			glActiveTexture(GL_TEXTURE0);
 			tlp::GlTextureManager::getInst().activateTexture(texture);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE);
+		}
+		if (billboardCurve) {
+			glActiveTexture(GL_TEXTURE1);
+			tlp::GlTextureManager::getInst().activateTexture(tlp::TulipBitmapDir+"cylinderTexture.png");
 		}
 		glBegin(GL_TRIANGLE_STRIP);
 		for (unsigned int i = 0; i < size; ++i) {
 			tlp::setMaterial(curveColors[i]);
-			glTexCoord2f(i*texCoordFactor, 0.0f);
+			glMultiTexCoord2f(GL_TEXTURE0, i*texCoordFactor, 0.0f);
+			glMultiTexCoord2f(GL_TEXTURE1, i*texCoordFactor, 0.0f);
 			if (!billboardCurve) {
 				glVertex3fv(&points[i*3]);
 			} else {
 				glVertex3fv(&points[i*6]);
 			}
-			glTexCoord2f(i*texCoordFactor, 1.0f);
+			glMultiTexCoord2f(GL_TEXTURE0, i*texCoordFactor, 1.0f);
+			glMultiTexCoord2f(GL_TEXTURE1, i*texCoordFactor, 1.0f);
 			if (!billboardCurve) {
 				glVertex3fv(&points[i*3 + size*3]);
 			} else {
@@ -101,39 +112,43 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 		}
 		glEnd();
 		if (texture != "") {
+			glActiveTexture(GL_TEXTURE0);
 			tlp::GlTextureManager::getInst().desactivateTexture();
 		}
-		if (texture == "" || billboardCurve || outlined) {
-			glBegin(GL_LINE_STRIP);
-			for (unsigned int i = 0 ; i < size ; ++i) {
-				if (outlined) {
-					tlp::setMaterial(outlineColor);
-				} else {
-					tlp::setMaterial(curveColors[i]);
-				}
-				if (!billboardCurve) {
-					glVertex3fv(&points[i*3]);
-				} else {
-					glVertex3fv(&points[i*6]);
-				}
-			}
-			glEnd();
-
-			glBegin(GL_LINE_STRIP);
-			for (unsigned int i = 0 ; i < size ; ++i) {
-				if (outlined) {
-					tlp::setMaterial(outlineColor);
-				} else {
-					tlp::setMaterial(curveColors[i]);
-				}
-				if (!billboardCurve) {
-					glVertex3fv(&points[i*3+size*3]);
-				} else {
-					glVertex3fv(&points[i*6+3]);
-				}
-			}
-			glEnd();
+		if (billboardCurve) {
+			glActiveTexture(GL_TEXTURE1);
+			tlp::GlTextureManager::getInst().desactivateTexture();
 		}
+
+		glBegin(GL_LINE_STRIP);
+		for (unsigned int i = 0 ; i < size ; ++i) {
+			if (outlined) {
+				tlp::setMaterial(outlineColor);
+			} else {
+				tlp::setMaterial(curveColors[i]);
+			}
+			if (!billboardCurve) {
+				glVertex3fv(&points[i*3]);
+			} else {
+				glVertex3fv(&points[i*6]);
+			}
+		}
+		glEnd();
+
+		glBegin(GL_LINE_STRIP);
+		for (unsigned int i = 0 ; i < size ; ++i) {
+			if (outlined) {
+				tlp::setMaterial(outlineColor);
+			} else {
+				tlp::setMaterial(curveColors[i]);
+			}
+			if (!billboardCurve) {
+				glVertex3fv(&points[i*3+size*3]);
+			} else {
+				glVertex3fv(&points[i*6+3]);
+			}
+		}
+		glEnd();
 	} else {
 		glBegin(GL_LINE_STRIP);
 		for (unsigned int i = 0; i < size; ++i) {
@@ -267,10 +282,13 @@ static string curveVertexShaderMainSrc =
 		"		gl_Position = fisheyeDistortion(curvePoint);"
 		"	}"
 		"	gl_FrontColor =  mix(startColor, endColor, t);"
-		"	if (gl_Vertex.y > 0.0)"
+		"	if (gl_Vertex.y > 0.0) {"
 		"		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 1.0);"
-		"	else"
+		"		gl_TexCoord[1].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 1.0);"
+		"	} else {"
 		"		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 0.0);"
+		"		gl_TexCoord[1].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 0.0);"
+		"	}"
 		"}"
 		;
 
@@ -449,8 +467,16 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 			}
 		} else {
 			if (texture != "") {
+				glActiveTexture(GL_TEXTURE0);
 				GlTextureManager::getInst().activateTexture(texture);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+				glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+				glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE);
+			}
+			if (billboardCurve) {
+				glActiveTexture(GL_TEXTURE1);
+				GlTextureManager::getInst().activateTexture(TulipBitmapDir+"cylinderTexture.png");
 			}
 			if (vboOk) {
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
@@ -459,28 +485,34 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 				glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][0]);
 			}
 			if (texture != "") {
+				glActiveTexture(GL_TEXTURE0);
 				GlTextureManager::getInst().desactivateTexture();
 			}
-			if (texture == "" || billboardCurve || outlined) {
-				if (outlined) {
-					curveShaderProgram->setUniformColor("startColor", outlineColor);
-					curveShaderProgram->setUniformColor("endColor", outlineColor);
-				}
-				if (vboOk) {
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
-					glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
-				} else {
-					glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][2]);
-				}
+			if (billboardCurve) {
+				glActiveTexture(GL_TEXTURE1);
+				GlTextureManager::getInst().desactivateTexture();
+			}
 
-				if (vboOk) {
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[4]);
-					glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
-				} else {
-					glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][3]);
-				}
+			if (outlined) {
+				curveShaderProgram->setUniformColor("startColor", outlineColor);
+				curveShaderProgram->setUniformColor("endColor", outlineColor);
+			}
+
+			if (vboOk) {
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
+				glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+			} else {
+				glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][2]);
+			}
+
+			if (vboOk) {
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[4]);
+				glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
+			} else {
+				glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][3]);
 			}
 		}
+
 		if (vboOk) {
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
