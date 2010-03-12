@@ -14,13 +14,65 @@ static bool checkVboSupport() {
 
 static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &startColor, const tlp::Color &endColor,
 		const float startSize, const float endSize, const tlp::Coord &startN, const tlp::Coord &endN,
-		const string &texture, const bool outlined, const tlp::Color outlineColor) {
+		const string &texture, const bool outlined, const tlp::Color outlineColor,
+		float texCoordFactor=1, bool billboardCurve=false, const tlp::Coord &lookDir=tlp::Coord(0,0,0)) {
 
 	unsigned int size = curvePoints.size();
 	GLfloat *points = NULL;
 	if (startSize != 1 && endSize != 1) {
-		points = tlp::buildCurvePoints(curvePoints, tlp::getSizes(curvePoints, startSize, endSize), startN, endN ,size);
+		vector<float> sizes =  tlp::getSizes(curvePoints, startSize, endSize);
+		if (!billboardCurve) {
+			points = tlp::buildCurvePoints(curvePoints, sizes, startN, endN ,size);
+		} else {
+			points = new GLfloat[size*6];
+			tlp::Coord xu = curvePoints[0] - curvePoints[1];
+			tlp::Coord dir = xu^lookDir;
+			dir /= dir.norm();
+			tlp::Coord v1 = curvePoints[0] - dir*startSize;
+			tlp::Coord v2 = curvePoints[0] + dir*startSize;
+			points[0] = v1[0];
+			points[1] = v1[1];
+			points[2] = v1[2];
+			points[3] = v2[0];
+			points[4] = v2[1];
+			points[5] = v2[2];
+			for(unsigned int i=1; i< curvePoints.size() - 1; ++i) {
+				tlp::Coord u=curvePoints[i-1]-curvePoints[i];
+				tlp::Coord v=curvePoints[i+1]-curvePoints[i];
+				xu = u ^ lookDir;
+				tlp::Coord xv = v ^ (-lookDir);
+				tlp::Coord xu_xv=xu+xv;
+				xu_xv /= xu_xv.norm();
+
+				float newSize=sizes[i];
+				float angle=M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm()));
+				if(isnan(angle)) angle=0;
+				newSize=newSize/cos(angle/2.);
+
+				v1 = curvePoints[i] - xu_xv*newSize;
+				v2 = curvePoints[i] + xu_xv*newSize;
+
+				points[6*i] = v1[0];
+				points[6*i+1] = v1[1];
+				points[6*i+2] = v1[2];
+				points[6*i+3] = v2[0];
+				points[6*i+4] = v2[1];
+				points[6*i+5] = v2[2];
+			}
+			xu = curvePoints[curvePoints.size()-2] - curvePoints[curvePoints.size()-1];
+			xu = xu ^ lookDir;
+			xu /= xu.norm();
+			v1 = curvePoints[curvePoints.size()-1] - xu*endSize;
+			v2 = curvePoints[curvePoints.size()-1] + xu*endSize;
+			points[6*(curvePoints.size()-1)] = v1[0];
+			points[6*(curvePoints.size()-1)+1] = v1[1];
+			points[6*(curvePoints.size()-1)+2] = v1[2];
+			points[6*(curvePoints.size()-1)+3] = v2[0];
+			points[6*(curvePoints.size()-1)+4] = v2[1];
+			points[6*(curvePoints.size()-1)+5] = v2[2];
+		}
 	}
+
 	vector<tlp::Color> curveColors = tlp::getColors(curvePoints, startColor, endColor);
 
 	glDisable(GL_CULL_FACE);
@@ -29,18 +81,58 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 	if (startSize != 1 && endSize != 1) {
 		if (texture != "") {
 			tlp::GlTextureManager::getInst().activateTexture(texture);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		}
 		glBegin(GL_TRIANGLE_STRIP);
 		for (unsigned int i = 0; i < size; ++i) {
 			tlp::setMaterial(curveColors[i]);
-			glTexCoord2f(i, 0.0f);
-			glVertex3fv(&points[i*3]);
-			glTexCoord2f(i, 1.0f);
-			glVertex3fv(&points[i*3 + size*3]);
+			glTexCoord2f(i*texCoordFactor, 0.0f);
+			if (!billboardCurve) {
+				glVertex3fv(&points[i*3]);
+			} else {
+				glVertex3fv(&points[i*6]);
+			}
+			glTexCoord2f(i*texCoordFactor, 1.0f);
+			if (!billboardCurve) {
+				glVertex3fv(&points[i*3 + size*3]);
+			} else {
+				glVertex3fv(&points[i*6+3]);
+			}
 		}
 		glEnd();
 		if (texture != "") {
 			tlp::GlTextureManager::getInst().desactivateTexture();
+		}
+		if (texture == "" || billboardCurve || outlined) {
+			glBegin(GL_LINE_STRIP);
+			for (unsigned int i = 0 ; i < size ; ++i) {
+				if (outlined) {
+					tlp::setMaterial(outlineColor);
+				} else {
+					tlp::setMaterial(curveColors[i]);
+				}
+				if (!billboardCurve) {
+					glVertex3fv(&points[i*3]);
+				} else {
+					glVertex3fv(&points[i*6]);
+				}
+			}
+			glEnd();
+
+			glBegin(GL_LINE_STRIP);
+			for (unsigned int i = 0 ; i < size ; ++i) {
+				if (outlined) {
+					tlp::setMaterial(outlineColor);
+				} else {
+					tlp::setMaterial(curveColors[i]);
+				}
+				if (!billboardCurve) {
+					glVertex3fv(&points[i*3+size*3]);
+				} else {
+					glVertex3fv(&points[i*6+3]);
+				}
+			}
+			glEnd();
 		}
 	} else {
 		glBegin(GL_LINE_STRIP);
@@ -51,25 +143,6 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 		glEnd();
 	}
 
-	if ((texture == "" || outlined) && points != NULL) {
-		glBegin(GL_LINE_STRIP);
-		for (unsigned int i = 0 ; i < size ; ++i) {
-			if (outlined) {
-				tlp::setMaterial(outlineColor);
-			}
-			glVertex3fv(&points[i*3]);
-		}
-		glEnd();
-
-		glBegin(GL_LINE_STRIP);
-		for (unsigned int i = 0 ; i < size ; ++i) {
-			if (outlined) {
-				tlp::setMaterial(outlineColor);
-			}
-			glVertex3fv(&points[i*3+size*3]);
-		}
-		glEnd();
-	}
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_LIGHTING);
@@ -131,8 +204,12 @@ static string curveVertexShaderMainSrc =
 		"uniform vec4 startColor;"
 		"uniform vec4 endColor;"
 		"uniform float step;"
-
+		"uniform float texCoordFactor;"
+		"uniform bool billboardCurve;"
+		"uniform vec3 lookDir;"
 		"uniform bool fisheye;"
+
+		"const float PI = 3.141592653589793238462643;"
 
 		"vec4 fisheyeDistortion(vec3 glScenePoint);"
 
@@ -142,19 +219,47 @@ static string curveVertexShaderMainSrc =
 		"	float t = gl_Vertex.x;"
 		"	float size = mix(startSize, endSize, t);"
 		"	vec3 curvePoint = computeCurvePoint(t);"
+		"	float localTexCoordFactor = 1.0;"
 		"	if (gl_Vertex.y != 0.0) {"
+		"		vec3 nextCurvePoint = vec3(0.0);"
+		"		vec3 prevCurvePoint = vec3(0.0);"
 		"		vec3 tangent = vec3(0.0);"
 		"		if (t != 1.0) {"
-		"			vec3 nextCurvePoint = computeCurvePoint(t + step);"
+		"			nextCurvePoint = computeCurvePoint(t + step);"
 		"			tangent = normalize(nextCurvePoint - curvePoint);"
 		"		} else {"
-		"			vec3 prevCurvePoint = computeCurvePoint(t - step);"
+		"			prevCurvePoint = computeCurvePoint(t - step);"
 		"			tangent = normalize(curvePoint - prevCurvePoint);"
 		"		}"
 		"		vec3 normal = tangent;"
 		"		normal.x = -tangent.y;"
 		"		normal.y = tangent.x;"
-		"		curvePoint += normal * (gl_Vertex.y * size);"
+		"		if (!billboardCurve) {"
+		"			curvePoint += normal * (gl_Vertex.y * size);"
+		"		} else { "
+		"			if (t == 0.0) {"
+		"				vec3 xu = curvePoint - nextCurvePoint;"
+		"				vec3 dir = cross(xu, lookDir);"
+		"				dir = normalize(dir);"
+		"				curvePoint += dir * (gl_Vertex.y * size);"
+		"			} else if (t == 1.0) {"
+		"				vec3 xu = prevCurvePoint - curvePoint;"
+		"				vec3 dir = cross(xu, lookDir);"
+		"				dir = normalize(dir);"
+		"				curvePoint += dir * (gl_Vertex.y * size);"
+		"			} else {"
+		"				vec3 u = computeCurvePoint(t-step) - curvePoint;"
+		"				vec3 v = nextCurvePoint - curvePoint;"
+		"				vec3 xu = cross(u, lookDir);"
+		"				vec3 xv = cross(v,-lookDir);"
+		"				vec3 xu_xv = xu+xv;"
+		"				xu_xv = normalize(xu_xv);"
+		" 				float angle = PI - acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(length(u)*length(v)));"
+		"				if (isnan(angle)) angle = 0;"
+		"				float newSize = size/cos(angle/2.0);"
+		"				curvePoint += xu_xv * (gl_Vertex.y * newSize);"
+		"			}"
+		"		}"
 		"	}"
 		"	if (!fisheye) {"
 		"		gl_Position = gl_ModelViewProjectionMatrix * vec4(curvePoint, 1.0);"
@@ -163,9 +268,9 @@ static string curveVertexShaderMainSrc =
 		"	}"
 		"	gl_FrontColor =  mix(startColor, endColor, t);"
 		"	if (gl_Vertex.y > 0.0)"
-		"		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1), 0.0);"
+		"		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 1.0);"
 		"	else"
-		"		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1), 1.0);"
+		"		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 0.0);"
 		"}"
 		;
 
@@ -178,12 +283,11 @@ GlShader *AbstractGlCurve::fisheyeDistortionVertexShader(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderMain(NULL);
 
 AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &curveSpecificShaderCode, const vector<Coord> &controlPoints,
-		const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints,
-		const bool outlined, const Color &outlineColor, const string &texture) :
+		const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) :
 		shaderProgramName(shaderProgramName), curveShaderProgram(NULL),
 		controlPoints(controlPoints), nbControlPoints(controlPoints.size()),
 		startColor(startColor), endColor(endColor), startSize(startSize), endSize(endSize), nbCurvePoints(nbCurvePoints),
-		outlined(outlined), outlineColor(outlineColor), texture(texture){
+		outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
 
 	glControlPoints = new float[nbControlPoints * 4];
 	memset(glControlPoints, 0, nbControlPoints * 4 * sizeof(float));
@@ -206,7 +310,7 @@ AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &
 			// on several graphic cards with different video memory size
 			glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS_ARB, &MAX_SHADER_CONTROL_POINTS);
 			MAX_SHADER_CONTROL_POINTS /= 4;
-			MAX_SHADER_CONTROL_POINTS -= 26;
+			MAX_SHADER_CONTROL_POINTS -= 30;
 		}
 		if (curveVertexShaderMain == NULL) {
 			curveVertexShaderMain = new GlShader(Vertex);
@@ -279,6 +383,14 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 	GLint renderMode;
 	glGetIntegerv(GL_RENDER_MODE, &renderMode);
 
+	if (texture != "") {
+		unsigned int i = nbCurvePoints / 2;
+		Coord firstCurvePoint = computeCurvePointOnCPU(i / static_cast<float>(nbCurvePoints - 1));
+		Coord nexCurvePoint = computeCurvePointOnCPU((i+1) / static_cast<float>(nbCurvePoints - 1));
+		float dist = firstCurvePoint.dist(nexCurvePoint);
+		texCoordFactor = dist / (startSize * 2.0f);
+	}
+
 	if (curveShaderProgram != NULL && nbControlPoints <= MAX_SHADER_CONTROL_POINTS && renderMode != GL_SELECT) {
 
 		GLuint *vbo = curveVertexBuffersObject[nbCurvePoints];
@@ -305,6 +417,9 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 		curveShaderProgram->setUniformColor("startColor", startColor);
 		curveShaderProgram->setUniformColor("endColor", endColor);
 		curveShaderProgram->setUniformFloat("step", 1.0f / (static_cast<float>(nbCurvePoints) - 1.0f));
+		curveShaderProgram->setUniformFloat("texCoordFactor", texCoordFactor);
+		curveShaderProgram->setUniformBool("billboardCurve", billboardCurve);
+		curveShaderProgram->setUniformVec3Float("lookDir", lookDir);
 
 		curveShaderProgram->setUniformBool("fisheye", fisheyeActivated);
 		if (fisheyeActivated) {
@@ -315,11 +430,6 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 		}
 
 		setCurveVertexShaderRenderingSpecificParameters();
-
-		if (texture != "") {
-			GlTextureManager::getInst().activateTexture(texture);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		}
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -338,13 +448,20 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 				glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][1]);
 			}
 		} else {
+			if (texture != "") {
+				GlTextureManager::getInst().activateTexture(texture);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			}
 			if (vboOk) {
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
 				glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, 0);
 			} else {
 				glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][0]);
 			}
-			if (texture == "" || outlined) {
+			if (texture != "") {
+				GlTextureManager::getInst().desactivateTexture();
+			}
+			if (texture == "" || billboardCurve || outlined) {
 				if (outlined) {
 					curveShaderProgram->setUniformColor("startColor", outlineColor);
 					curveShaderProgram->setUniformColor("endColor", outlineColor);
@@ -375,10 +492,6 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 
 		cleanupAfterCurveVertexShaderRendering();
 
-		if (texture != "") {
-			GlTextureManager::getInst().desactivateTexture();
-		}
-
 		if (fisheyeActivated) {
 			currentActiveShader->activate();
 		}
@@ -386,7 +499,15 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 	} else {
 		vector<Coord> curvePoints;
 		computeCurvePointsOnCPU(curvePoints);
-		drawCurve(curvePoints, startColor, endColor, startSize, endSize, (curvePoints[0] - (curvePoints[1] - curvePoints[0])), curvePoints[curvePoints.size() - 1] + (curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]), texture, outlined, outlineColor);
+		drawCurve(curvePoints, startColor, endColor, startSize, endSize, (curvePoints[0] - (curvePoints[1] - curvePoints[0])),
+				curvePoints[curvePoints.size() - 1] + (curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]),
+				texture, outlined, outlineColor, texCoordFactor, billboardCurve, lookDir);
+	}
+}
+
+void AbstractGlCurve::computeCurvePointsOnCPU(vector<Coord> &curvePoints) {
+	for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
+		curvePoints.push_back(computeCurvePointOnCPU(i / static_cast<float>(nbCurvePoints - 1)));
 	}
 }
 

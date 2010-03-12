@@ -556,12 +556,58 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
     break;
   }
   case L3D_BIT + BEZIERSHAPE:
-    GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size*.5,
-        GlLines::TLP_PLAIN, GlLines::BEZIER, startColor, endColor);
+    if (lod > 0.05 || lod < -0.05) {
+      GlBezierCurve bezier(tmp, startColor, endColor, size[0]*.5, size[1]*.5);
+      bezier.setBillboardCurve(true);
+      bezier.setLookDir(lookDir);
+      if (lod > 10 || lod < -10) {
+        if(!colorInterpolate){
+          bezier.setOutlined(true);
+          bezier.setOutlineColor(borderColor);
+        }
+        bezier.setTexture(textureName);
+      }
+      bezier.draw(0, 0);
+    }else {
+      GlBezierCurve bezier(tmp, startColor, endColor, 1, 1);
+      bezier.draw(0, 0);
+    }
     break;
   case L3D_BIT + SPLINESHAPE:
-    GlLines::glDrawExtrusion(srcDir, tgtDir, startPoint, bends, endPoint, 10, size*.5,
-        GlLines::TLP_PLAIN, GlLines::SPLINE3, startColor, endColor);
+    if (lod > 0.05 || lod < -0.05) {
+      GlCatmullRomCurve catmull(tmp, startColor, endColor, size[0]*.5, size[1]*.5);
+      catmull.setBillboardCurve(true);
+      catmull.setLookDir(lookDir);
+      if (lod > 10 || lod < -10) {
+        if(!colorInterpolate){
+          catmull.setOutlined(true);
+          catmull.setOutlineColor(borderColor);
+        }
+        catmull.setTexture(textureName);
+      }
+      catmull.draw(0, 0);
+    } else {
+      GlCatmullRomCurve catmull(tmp, startColor, endColor, 1, 1);
+      catmull.draw(0, 0);
+    }
+    break;
+  case L3D_BIT + CUBICBSPLINE:
+    if (lod > 0.05 || lod < -0.05) {
+      GlOpenUniformCubicBSpline bspline(tmp, startColor, endColor, size[0]*.5, size[1]*.5);
+      bspline.setBillboardCurve(true);
+      bspline.setLookDir(lookDir);
+      if (lod > 10 || lod < -10) {
+        if(!colorInterpolate){
+          bspline.setOutlined(true);
+          bspline.setOutlineColor(borderColor);
+        }
+        bspline.setTexture(textureName);
+      }
+      bspline.draw(0, 0);
+    } else {
+      GlOpenUniformCubicBSpline bspline(tmp, startColor, endColor, 1, 1);
+      bspline.draw(0, 0);
+    }
     break;
   default:
     if (lod > 20 || lod < -20){

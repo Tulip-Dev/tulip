@@ -3,7 +3,7 @@
 
    Created on: 29 avr. 2009
        Author: Antoine Lambert
-       E-mail: lambert@labri.fr
+       E-mail: antoine.lambert@labri.fr
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -46,14 +46,9 @@ public :
 	 * \param endSize the width at the end of the curve
 	 * \param closedCurve if true, the curve will be closed and a bezier segment will be drawn between the last and first control point
 	 * \param nbCurvePoints the number of curve points to generate
-	 * \param outlined if true the curve will be outlined
-	 * \param outlineColor the outline color
-	 * \param texture a texture to apply on the curve
 	 */
 	GlCatmullRomCurve(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
-					  const float startSize, const float endSize, const bool closedCurve = false,
-				      const unsigned int nbCurvePoints = 100, const bool outlined = false, const Color &outlineColor = Color(0,0,0),
-				      const std::string &texture = "");
+					  const float startSize, const float endSize, const bool closedCurve = false, const unsigned int nbCurvePoints = 100);
 
 	~GlCatmullRomCurve();
 
@@ -63,7 +58,7 @@ protected :
 
 	void setCurveVertexShaderRenderingSpecificParameters();
 
-	void computeCurvePointsOnCPU(std::vector<Coord> &curvePoints);
+	Coord computeCurvePointOnCPU(float t);
 
 private :
 
@@ -71,7 +66,6 @@ private :
 			std::vector<Coord> &bezierSegmentControlPoints);
 
 	int computeSegmentIndex(float t);
-	Coord computeCatmullRomCurvePoint(float t);
 
 	bool closedCurve;
 };

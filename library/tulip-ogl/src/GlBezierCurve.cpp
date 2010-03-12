@@ -39,19 +39,7 @@ vector<vector<double> > buildPascalTriangle(unsigned int n) {
 
 static const unsigned int CONTROL_POINTS_LIMIT = 120;
 
-tlp::Coord computeBezierPoint(const vector<tlp::Coord> &controlPoints, double t) {
-	static vector<vector<double> > pascalTriangle = buildPascalTriangle(3*CONTROL_POINTS_LIMIT);
-	tlp::Vector<double, 3> bezierPoint;
-	bezierPoint.fill(0.0);
-	for (unsigned int i = 0 ; i < controlPoints.size() ; ++i) {
-		tlp::Vector<double, 3> controlPoint;
-		controlPoint[0] = controlPoints[i][0];
-		controlPoint[1] = controlPoints[i][1];
-		controlPoint[2] = controlPoints[i][2];
-		bezierPoint += controlPoint * pascalTriangle[controlPoints.size() - 1][i] * pow(t, i) * pow((1.0 - t), (controlPoints.size() - 1 - i));
-	}
-	return tlp::Coord(bezierPoint[0], bezierPoint[1], bezierPoint[2]);
-}
+
 
 static string bezierSpecificVertexShaderSrc =
 		"uniform sampler2D pascalTriangleTex;"
@@ -82,9 +70,8 @@ float *GlBezierCurve::pascalTriangleTextureData(NULL);
 GLuint GlBezierCurve::pascalTriangleTextureId(0);
 
 GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
-		const float &startSize, const float &endSize, const unsigned int nbCurvePoints,
-		const bool outlined, const Color &outlineColor, const string &texture)
-: AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc, controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints, outlined, outlineColor, texture) {
+		const float &startSize, const float &endSize, const unsigned int nbCurvePoints) :
+		AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc, controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints) {
 
 	if (pascalTriangleTextureId == 0) {
 		buildPascalTriangleTexture();
@@ -130,10 +117,18 @@ void GlBezierCurve::cleanupAfterCurveVertexShaderRendering() {
 	glActiveTexture(GL_TEXTURE0);
 }
 
-void GlBezierCurve::computeCurvePointsOnCPU(vector<Coord> &curvePoints) {
-	for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
-		curvePoints.push_back(computeBezierPoint(controlPoints, i / static_cast<double>(nbCurvePoints - 1)));
+Coord GlBezierCurve::computeCurvePointOnCPU(float t) {
+	static vector<vector<double> > pascalTriangle = buildPascalTriangle(3*CONTROL_POINTS_LIMIT);
+	tlp::Vector<double, 3> bezierPoint;
+	bezierPoint.fill(0.0);
+	for (unsigned int i = 0 ; i < controlPoints.size() ; ++i) {
+		tlp::Vector<double, 3> controlPoint;
+		controlPoint[0] = controlPoints[i][0];
+		controlPoint[1] = controlPoints[i][1];
+		controlPoint[2] = controlPoints[i][2];
+		bezierPoint += controlPoint * pascalTriangle[controlPoints.size() - 1][i] * pow(t, i) * pow((1.0 - t), (controlPoints.size() - 1 - i));
 	}
+	return Coord(bezierPoint[0], bezierPoint[1], bezierPoint[2]);
 }
 
 void GlBezierCurve::draw(float lod, Camera *camera) {
@@ -143,11 +138,14 @@ void GlBezierCurve::draw(float lod, Camera *camera) {
 		const unsigned int nbApproximationPoints = 20;
 		vector<Coord> curvePoints;
 		for (unsigned int i = 0 ; i < nbApproximationPoints ; ++i) {
-			curvePoints.push_back(computeBezierPoint(controlPoints, i / static_cast<double>(nbApproximationPoints-1)));
+			curvePoints.push_back(computeCurvePointOnCPU(i / static_cast<float>(nbApproximationPoints-1)));
 		}
-		GlCatmullRomCurve curve(curvePoints, startColor, endColor, startSize, endSize, false, nbCurvePoints, outlined, outlineColor, texture);
+		GlCatmullRomCurve curve(curvePoints, startColor, endColor, startSize, endSize, false, nbCurvePoints);
 		curve.setOutlined(outlined);
 		curve.setOutlineColor(outlineColor);
+		curve.setTexture(texture);
+		curve.setBillboardCurve(billboardCurve);
+		curve.setLookDir(lookDir);
 		curve.draw(lod,camera);
 	}
 }

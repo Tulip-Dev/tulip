@@ -13,8 +13,7 @@ class TLP_GL_SCOPE AbstractGlCurve : public GlSimpleEntity {
 public :
 
 	AbstractGlCurve(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode, const std::vector<Coord> &controlPoints,
-				    const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints,
-				    const bool outlined, const Color &outlineColor, const std::string &texture);
+				    const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints);
 
 	virtual ~AbstractGlCurve();
 
@@ -28,6 +27,10 @@ public :
 
 	virtual void setOutlineColor(const Color &outlineColor) {this->outlineColor = outlineColor;}
 
+	virtual void setBillboardCurve(const bool billboardCurve) {this->billboardCurve = billboardCurve;}
+
+	virtual void setLookDir(const Coord &lookDir) {this->lookDir = lookDir;}
+
 	void getXML(xmlNodePtr rootNode);
 
 	void setWithXML(xmlNodePtr rootNode);
@@ -38,7 +41,9 @@ protected:
 
 	virtual void cleanupAfterCurveVertexShaderRendering() {};
 
-	virtual void computeCurvePointsOnCPU(std::vector<Coord> &curvePoints) = 0;
+	virtual Coord computeCurvePointOnCPU(float t) = 0;
+
+	void computeCurvePointsOnCPU(std::vector<Coord> &curvePoints);
 
 	static void buildCurveVertexBuffers(const unsigned int nbCurvePoints, bool vboOk);
 
@@ -65,6 +70,9 @@ protected:
 	Color outlineColor;
 	std::string texture;
 	bool vboOk;
+	float texCoordFactor;
+	bool billboardCurve;
+	Coord lookDir;
 
 };
 

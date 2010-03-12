@@ -58,9 +58,8 @@ static string bSplineSpecificShaderCode =
 const unsigned int curveDegree = 3;
 
 GlOpenUniformCubicBSpline::GlOpenUniformCubicBSpline(const vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
-		const float startSize, const float endSize, const unsigned int nbCurvePoints,
-		const bool outlined, const Color &outlineColor, const string &texture)
-:  AbstractGlCurve("open uniform cubic bspline vertex shader", bSplineSpecificShaderCode, controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints, outlined, outlineColor, texture) {
+		const float startSize, const float endSize, const unsigned int nbCurvePoints)
+:  AbstractGlCurve("open uniform cubic bspline vertex shader", bSplineSpecificShaderCode, controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints) {
 	nbKnots = nbControlPoints + curveDegree + 1;
 	stepKnots = 1.0f / ((static_cast<float>(nbKnots) - 2.0f * (static_cast<float>(curveDegree) + 1.0f)) + 2.0f - 1.0f);
 }
@@ -71,15 +70,14 @@ void GlOpenUniformCubicBSpline::setCurveVertexShaderRenderingSpecificParameters(
 	curveShaderProgram->setUniformFloat("stepKnots", stepKnots);
 }
 
-void GlOpenUniformCubicBSpline::computeCurvePointsOnCPU(std::vector<Coord> &curvePoints) {
-	for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
-		curvePoints.push_back(computeBSplinePoint(i / static_cast<float>(nbCurvePoints - 1)));
-	}
-}
-
 void GlOpenUniformCubicBSpline::draw(float lod,Camera *camera) {
 	if (nbControlPoints < (curveDegree + 1)) {
-		GlBezierCurve curve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints, outlined, outlineColor, texture);
+		GlBezierCurve curve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
+		curve.setOutlined(outlined);
+		curve.setOutlineColor(outlineColor);
+		curve.setTexture(texture);
+		curve.setBillboardCurve(billboardCurve);
+		curve.setLookDir(lookDir);
 		curve.draw(lod, camera);
 	} else {
 		AbstractGlCurve::draw(lod, camera);
@@ -90,7 +88,7 @@ static float clamp(float f, float minVal, float maxVal) {
 	return min(max(f, minVal), maxVal);
 }
 
-Coord GlOpenUniformCubicBSpline::computeBSplinePoint(float t) {
+Coord GlOpenUniformCubicBSpline::computeCurvePointOnCPU(float t) {
 	if (t == 0.0) {
 		return Coord(glControlPoints[0], glControlPoints[1], glControlPoints[2]);
 	} else if (t >= 1.0) {

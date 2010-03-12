@@ -42,14 +42,9 @@ public:
 	 * \param startSize the width at the start of the curve
 	 * \param endSize the width at the end of the curve
 	 * \param nbCurvePoints the number of curve points to generate
-	 * \param outlined if true the curve will be outlined
-	 * \param outlineColor the outline color
-	 * \param texture a texture to apply on the curve
-	 */
+	*/
 	GlOpenUniformCubicBSpline(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
-							  const float startSize, const float endSize, const unsigned int nbCurvePoints = 100,
-							  const bool outlined = false, const Color &outlineColor = Color(0,0,0),
-							  const std::string &texture = "");
+							  const float startSize, const float endSize, const unsigned int nbCurvePoints = 100);
 
 	~GlOpenUniformCubicBSpline();
 
@@ -59,11 +54,9 @@ protected :
 
 	void setCurveVertexShaderRenderingSpecificParameters();
 
-	void computeCurvePointsOnCPU(std::vector<Coord> &curvePoints);
+	Coord computeCurvePointOnCPU(float t);
 
 private:
-
-	Coord computeBSplinePoint(float t);
 
 	unsigned nbKnots;
 	float stepKnots;

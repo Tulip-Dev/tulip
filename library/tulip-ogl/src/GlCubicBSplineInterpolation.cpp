@@ -5,39 +5,11 @@ using namespace std;
 namespace tlp {
 
 GlCubicBSplineInterpolation::GlCubicBSplineInterpolation(const vector<Coord> &pointsToInterpolate, const Color &startColor, const Color &endColor,
-														 const float startSize, const float endSize, const unsigned int nbCurvePoints,
-														 const bool outlined, const Color &outlineColor, const string &texture) : bspline(NULL) {
-	vector<Coord> bsplineControlPoints;
-	constructInterpolatingCubicBSpline(pointsToInterpolate, bsplineControlPoints);
-	bspline = new GlOpenUniformCubicBSpline(bsplineControlPoints, startColor, endColor, startSize, endSize, nbCurvePoints, outlined, outlineColor, texture);
-	boundingBox = bspline->getBoundingBox();
-}
+														 const float startSize, const float endSize, const unsigned int nbCurvePoints) :
+	GlOpenUniformCubicBSpline(constructInterpolatingCubicBSpline(pointsToInterpolate), startColor, endColor, startSize, endSize, nbCurvePoints) {}
 
-GlCubicBSplineInterpolation::~GlCubicBSplineInterpolation() {
-	delete bspline;
-}
 
-void GlCubicBSplineInterpolation::setTexture(const std::string &texture) {
-	bspline->setTexture(texture);
-}
-
-void GlCubicBSplineInterpolation::setOutlined(const bool outlined) {
-	bspline->setOutlined(outlined);
-}
-
-void GlCubicBSplineInterpolation::setOutlineColor(const Color &outlineColor) {
-	bspline->setOutlineColor(outlineColor);
-}
-
-void GlCubicBSplineInterpolation::translate(const Coord& mouvement) {
-	bspline->translate(mouvement);
-}
-
-void GlCubicBSplineInterpolation::draw(float lod,Camera *camera) {
-	bspline->draw(lod, camera);
-}
-
-void GlCubicBSplineInterpolation::constructInterpolatingCubicBSpline(const vector<Coord> &pointsToInterpolate, vector<Coord> &bSplineControlPoints) {
+vector<Coord> GlCubicBSplineInterpolation::constructInterpolatingCubicBSpline(const vector<Coord> &pointsToInterpolate) {
 	Coord Ai[pointsToInterpolate.size()];
 	float Bi[pointsToInterpolate.size()];
 	Coord di[pointsToInterpolate.size()];
@@ -52,6 +24,7 @@ void GlCubicBSplineInterpolation::constructInterpolatingCubicBSpline(const vecto
 	for (unsigned int i = pointsToInterpolate.size() - 2; i > 0; --i) {
 		di[i] = Ai[i] + di[i+1]*Bi[i];
 	}
+	vector<Coord> bSplineControlPoints;
 	bSplineControlPoints.push_back(pointsToInterpolate[0]);
 	bSplineControlPoints.push_back(pointsToInterpolate[0]+di[0]);
 	for (unsigned int i = 1 ; i < pointsToInterpolate.size() - 1 ; ++i) {
@@ -61,7 +34,7 @@ void GlCubicBSplineInterpolation::constructInterpolatingCubicBSpline(const vecto
 	}
 	bSplineControlPoints.push_back(pointsToInterpolate[pointsToInterpolate.size() - 1]-di[pointsToInterpolate.size() - 1]);
 	bSplineControlPoints.push_back(pointsToInterpolate[pointsToInterpolate.size() - 1]);
-
+	return bSplineControlPoints;
 }
 
 }
