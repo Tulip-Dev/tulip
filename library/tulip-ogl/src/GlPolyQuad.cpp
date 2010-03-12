@@ -57,8 +57,7 @@ void GlPolyQuad::draw(float lod, Camera *camera) {
 	GLfloat *texCoordsArray = new GLfloat[((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment * 2 * 2];
 	GLfloat *colorsArray = new GLfloat[((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment * 2 * 4];
 	GLushort *quadIndices = new GLushort[((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment * 2];
-	GLushort *topOutlineIndices = new GLushort[((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment];
-	GLushort *bottomOutlineIndices = new GLushort[((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment];
+	GLushort *outlineIndices = new GLushort[((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment * 2];
 
 	for (unsigned int i = 0 ; i < (polyQuadEdges.size() / 2) - 1 ; ++i) {
 		Vector<float, 4> startColor;
@@ -77,6 +76,7 @@ void GlPolyQuad::draw(float lod, Camera *camera) {
 			Coord v1 = polyQuadEdges[2*i] + (j / static_cast<float>(nbSubdivisionsPerSegment - 1)) * (polyQuadEdges[2*(i+1)] - polyQuadEdges[2*i]);
 			Coord v2 = polyQuadEdges[2*i+1] + (j / static_cast<float>(nbSubdivisionsPerSegment - 1)) * (polyQuadEdges[2*(i+1)+1] - polyQuadEdges[2*i+1]);
 			Vector<float, 4> color = startColor + (j / static_cast<float>(nbSubdivisionsPerSegment - 1)) * (endColor - startColor);
+			float texCoordFactor = ((polyQuadEdges[2*i].dist(polyQuadEdges[2*i+2])) / (nbSubdivisionsPerSegment - 1)) / (polyQuadEdges[2*i].dist(polyQuadEdges[2*i+1]));
 
 			vertexArray[6*n] = v1[0];
 			vertexArray[6*n+1] = v1[1];
@@ -85,9 +85,9 @@ void GlPolyQuad::draw(float lod, Camera *camera) {
 			vertexArray[6*n+4] = v2[1];
 			vertexArray[6*n+5] = v2[2];
 
-			texCoordsArray[4*n] = static_cast<GLfloat>(n);
+			texCoordsArray[4*n] = static_cast<GLfloat>(j) * texCoordFactor;
 			texCoordsArray[4*n+1] = 0.0f;
-			texCoordsArray[4*n+2] = static_cast<GLfloat>(n);
+			texCoordsArray[4*n+2] = static_cast<GLfloat>(j) * texCoordFactor;
 			texCoordsArray[4*n+3] = 1.0f;
 
 			colorsArray[8*n] = color[0];
@@ -102,8 +102,8 @@ void GlPolyQuad::draw(float lod, Camera *camera) {
 			quadIndices[2*n] = 2*n;
 			quadIndices[2*n+1] = 2*n+1;
 
-			topOutlineIndices[n] = 2*n;
-			bottomOutlineIndices[n] = 2*n+1;
+			outlineIndices[n] = 2*n;
+			outlineIndices[((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment * 2 - (n+1)] = 2*n+1;
 		}
 	}
 
@@ -129,8 +129,7 @@ void GlPolyQuad::draw(float lod, Camera *camera) {
 	if (outlined && textureName == "") {
 		glLineWidth(outlineWidth);
 		setMaterial(outlineColor);
-		glDrawElements(GL_LINE_STRIP, ((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment, GL_UNSIGNED_SHORT, topOutlineIndices);
-		glDrawElements(GL_LINE_STRIP, ((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment, GL_UNSIGNED_SHORT, bottomOutlineIndices);
+		glDrawElements(GL_LINE_LOOP, ((polyQuadEdges.size() / 2) - 1) * nbSubdivisionsPerSegment * 2, GL_UNSIGNED_SHORT, outlineIndices);
 		if (outlineWidth != 1) {
 			glLineWidth(1);
 		}
@@ -142,8 +141,7 @@ void GlPolyQuad::draw(float lod, Camera *camera) {
 	delete [] texCoordsArray;
 	delete [] colorsArray;
 	delete [] quadIndices;
-	delete [] topOutlineIndices;
-	delete [] bottomOutlineIndices;
+	delete [] outlineIndices;
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_LIGHTING);

@@ -270,7 +270,8 @@ static string curveVertexShaderMainSrc =
 		"				vec3 xu_xv = xu+xv;"
 		"				xu_xv = normalize(xu_xv);"
 		" 				float angle = PI - acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(length(u)*length(v)));"
-		"				if (isnan(angle)) angle = 0;"
+		//	Check to see if angle == NaN (GLSL Spec NaN != NaN) because the isnan builtin function is available since version 130 of GLSL
+		"				if (angle != angle) angle = 0;"
 		"				float newSize = size/cos(angle/2.0);"
 		"				curvePoint += xu_xv * (gl_Vertex.y * newSize);"
 		"			}"
