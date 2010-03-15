@@ -15,6 +15,7 @@ public:
   void testSave();
   void testExport();
   void testExportCluster();
+  void testExportAttributes();
   static CppUnit::Test *suite();
 };
 

@@ -631,6 +631,13 @@ struct TLPDataBuilder : public TLPFalse
 	else cerr << __PRETTY_FUNCTION__ << ": COORD failed" << endl;
 	//else return false;
       }
+      else if (type==SIZE) {
+	Size s;
+	if ( SizeType::fromString(s, val) )
+		dataSet->set(prop, s);
+	else cerr << __PRETTY_FUNCTION__ << ": SIZE failed" << endl;
+	//else return false;
+      }
       else if (type==STRING)
 	dataSet->set(prop, val);
       else {
@@ -666,6 +673,12 @@ struct TLPDataBuilder : public TLPFalse
     }
     else if ((type==UINT) && (token == 1)) {
       dataSet->set<unsigned int>(prop, val);
+    }
+    else if ((type==DOUBLE) && (token == 1)) {
+      dataSet->set<double>(prop, (double) val);
+    }
+    else if ((type==FLOAT) && (token == 1)) {
+      dataSet->set<float>(prop, (float) val);
     }
     token++;
     return true;
@@ -845,7 +858,7 @@ bool TLPGraphBuilder::addStruct(const string& structName,TLPBuilder*&newBuilder)
 bool TLPDataSetBuilder::addStruct(const string& structName,TLPBuilder*&newBuilder) {
   if (structName==COORD || structName==COLOR || structName==BOOL ||
       structName==INT || structName==UINT || structName==FLOAT ||
-      structName==DOUBLE || structName==STRING) {
+      structName==DOUBLE || structName == SIZE || structName==STRING) {
     newBuilder= new TLPDataBuilder(this, structName);
   }else if(structName==DATASET) {
     newBuilder = new TLPDataSetBuilder(this->graphBuilder,&this->dataSet);

@@ -3,6 +3,10 @@
 #include "TlpImportExportTest.h"
 #include <tulip/Graph.h>
 #include <tulip/ForEach.h>
+#include <tulip/DataSet.h>
+#include <tulip/Color.h>
+#include <tulip/Coord.h>
+#include <tulip/Size.h>
 
 #include <string>
 
@@ -125,6 +129,69 @@ void TlpImportExportTest::testExportCluster() {
   delete graph;
 }
 //==========================================================
+void TlpImportExportTest::testExportAttributes() {
+  Graph *graph = newGraph();
+  ostream *os = new ofstream("export_attributes.tlp");
+  bool b = true;
+  double d = 100.;
+  Color color(1, 2, 3, 4);
+  Coord coord(5., 6., 7.);
+  float f = 200.;
+  int i = -10;
+  unsigned int ui = 10;
+  Size size(8., 9., 10.);
+  string str("data");
+
+  // set graph attributes of different types
+  graph->setAttribute("type = bool", b);
+  graph->setAttribute("type = double", d);
+  graph->setAttribute("type = color", color);
+  graph->setAttribute("type = coord", coord);
+  graph->setAttribute("type = float", f);
+  graph->setAttribute("type = int", i);
+  graph->setAttribute("type = uint", ui);
+  graph->setAttribute("type = size", size);
+  graph->setAttribute("type = string", str);
+  DataSet dataSet;
+  bool ok = exportGraph(graph, *os, "tlp", dataSet);
+  delete graph;
+  delete os;
+  CPPUNIT_ASSERT(ok == true);
+  graph = (Graph *) NULL;
+  graph = loadGraph("export_attributes.tlp");
+  CPPUNIT_ASSERT(graph);
+
+  b = false;
+  CPPUNIT_ASSERT(graph->getAttribute("type = bool", b));
+  CPPUNIT_ASSERT(b);
+  d = 0.;
+  CPPUNIT_ASSERT(graph->getAttribute("type = double", d));
+  CPPUNIT_ASSERT(d == 100.);
+  color = Color(0, 0, 0, 0);
+  CPPUNIT_ASSERT(graph->getAttribute("type = color", color));
+  CPPUNIT_ASSERT(color == Color(1, 2, 3, 4));
+  coord = Coord(0., 0., 0);
+  CPPUNIT_ASSERT(graph->getAttribute("type = coord", coord));
+  CPPUNIT_ASSERT(coord == Coord(5., 6., 7.));
+  f = 0.;
+  CPPUNIT_ASSERT(graph->getAttribute("type = float", f));
+  CPPUNIT_ASSERT(f == 200.);
+  i = 0;
+  CPPUNIT_ASSERT(graph->getAttribute("type = int", i));
+  CPPUNIT_ASSERT(i == -10);
+  ui = 0;
+  CPPUNIT_ASSERT(graph->getAttribute("type = uint", ui));
+  CPPUNIT_ASSERT(ui == 10);
+  size = Size(0., 0., 0.);
+  CPPUNIT_ASSERT(graph->getAttribute("type = size", size));
+  CPPUNIT_ASSERT(size == Size(8., 9., 10.));
+  str = string("");
+  CPPUNIT_ASSERT(graph->getAttribute("type = string", str));
+  CPPUNIT_ASSERT(str == "data");
+
+  delete graph;
+}
+//==========================================================
 CppUnit::Test * TlpImportExportTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Tlp Import/Export mechanism" );
   suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>( 
@@ -142,5 +209,8 @@ CppUnit::Test * TlpImportExportTest::suite() {
   suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>( 
 							      "Export Cluster test", 
 							      &TlpImportExportTest::testExportCluster ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TlpImportExportTest>( 
+							      "Export Attributes test", 
+							      &TlpImportExportTest::testExportAttributes ) );
   return suiteOfTests;
 }

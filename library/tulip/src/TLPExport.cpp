@@ -31,7 +31,7 @@ static string convert(const string & tmp) {
   return newStr;
 }
 
-static const char* boolTN, *colorTN, *coordTN, *doubleTN, *floatTN, *intTN, *stringTN, *uintTN, *DataSetTN;
+static const char* boolTN, *colorTN, *coordTN, *doubleTN, *floatTN, *intTN, *sizeTN, *stringTN, *uintTN, *DataSetTN;
 static bool typesInited = false;
 
 namespace {
@@ -279,6 +279,8 @@ public:
       floatTN = typeid(f).name();
       int i;
       intTN = typeid(i).name();
+      Size siz;
+      sizeTN = typeid(siz).name();
       string s;
       stringTN = typeid(s).name();
       unsigned int ui;
@@ -310,6 +312,8 @@ public:
 	os << '(' << "float";
       else if (tn == intTN)
 	os << '(' << "int";
+      else if (tn == sizeTN)
+	os << '(' << "size";
       else if (tn == stringTN)
 	os << '(' << "string";
       else if (tn == uintTN)
@@ -332,6 +336,10 @@ public:
 	Coord *coord =  (Coord*) p.second->value;
 	//os << "\"(" << coord->getX() << "," << coord->getY() << "," << coord->getZ() << ")\"";
 	os << "\"" << convert(PointType::toString(*coord)) << "\"";
+      } else if (tn == sizeTN) {
+	Size *size =  (Size*) p.second->value;
+	//os << "\"(" << size->getW() << "," << size->getH() << "," << size->getD() << ")\"";
+	os << "\"" << convert(SizeType::toString(*size)) << "\"";
       }	else if (tn == DataSetTN) {
 	os << endl;
 	DataSet *dataSet = (DataSet*) p.second->value;
