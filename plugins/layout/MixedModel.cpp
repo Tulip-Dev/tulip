@@ -157,14 +157,14 @@ bool MixedModel::run() {
     Graph * G;
     if(!planar){
       // cout << "Graph is not planar ...";
-      BooleanProperty * resultatAlgoSelection = currentGraph->getProperty<BooleanProperty>("viewSelection");
-      Bfs sp(currentGraph,resultatAlgoSelection);
+      BooleanProperty resultatAlgoSelection(currentGraph);
+      Bfs sp(currentGraph, &resultatAlgoSelection);
       currentGraph->delSubGraph(sp.graph);
       G = tlp::newSubGraph(currentGraph);
       Iterator<edge> * ite = currentGraph->getEdges();
       while(ite->hasNext()){
 	edge e_tmp = ite->next();
-	if(resultatAlgoSelection->getEdgeValue(e_tmp)){
+	if(resultatAlgoSelection.getEdgeValue(e_tmp)){
 	  const pair<node, node>& eEnds = currentGraph->ends(e_tmp);
 	  G->addNode(eEnds.first);
 	  G->addNode(eEnds.second);
@@ -177,19 +177,17 @@ bool MixedModel::run() {
       //===================================================
       
       graphMap = new PlanarConMap(G);
-      vector<edge> re_added = getPlanarSubGraph(graphMap,unplanar_edges);
+      vector<edge> re_added = getPlanarSubGraph(graphMap, unplanar_edges);
       
       for (unsigned int ui = 0; ui < re_added.size() ; ++ui){
 	edge e = re_added[ui];
 	G->addEdge(e);
-	resultatAlgoSelection->setEdgeValue(e,true);
+	resultatAlgoSelection.setEdgeValue(e,true);
 	edge_planar.push_back(e);
 	vector<edge>::iterator ite = find(unplanar_edges.begin(),unplanar_edges.end(),e);
 	unplanar_edges.erase(ite);
       }
       delete graphMap;
-      resultatAlgoSelection->setAllEdgeValue(false);
-      resultatAlgoSelection->setAllNodeValue(false);
       // cout << "... Planar subGraph computed" << endl;
     }
     else {

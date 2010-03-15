@@ -28,7 +28,6 @@ class TLP_SCOPE Bfs {
 
   void computeBfs(Graph * G, BooleanProperty* resultatAlgoSelection, node root);  
 
-  BooleanProperty* s_proxy;
   unsigned int nbNodes;
   MutableContainer<bool> selectedNodes;
   MutableContainer<bool> selectedEdges;
