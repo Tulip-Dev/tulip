@@ -844,6 +844,17 @@ namespace tlp {
 
     return true;
   }
+  //**********************************************************************
+  void MainController::widgetWillBeClosed(QObject *object) {
+    ControllerViewsManager::widgetWillBeClosed(object);
+
+    //If after close this widget we have no widget open : clear
+    if(getViewsNumber()==0){
+      while(configWidgetTab->count()>0)
+        configWidgetTab->removeTab(0);
+      configWidgetTab->addTab(ControllerViewsTools::getNoInteractorConfigurationWidget(),"Interactor");
+    }
+  }
   //==================================================
   void MainController::showElementProperties(unsigned int eltId, bool isNode) {
     if (isNode)

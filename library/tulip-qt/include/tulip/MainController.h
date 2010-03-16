@@ -218,6 +218,10 @@ namespace tlp {
      * This slot is call when a view want to change its graph
      */
     void viewRequestChangeGraph(View *view, Graph *graph);
+    /**
+     * This slot is call went a view will be closed
+     */
+    virtual void widgetWillBeClosed(QObject *object);
 
     void isAcyclic();
     void isSimple();
