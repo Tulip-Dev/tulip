@@ -126,7 +126,7 @@ Coord GlBezierCurve::computeCurvePointOnCPU(float t) {
 		controlPoint[0] = controlPoints[i][0];
 		controlPoint[1] = controlPoints[i][1];
 		controlPoint[2] = controlPoints[i][2];
-		bezierPoint += controlPoint * pascalTriangle[controlPoints.size() - 1][i] * pow(t, i) * pow((1.0 - t), (controlPoints.size() - 1 - i));
+		bezierPoint += controlPoint * pascalTriangle[controlPoints.size() - 1][i] * pow((double) t, (double) i) * pow( (double) (1.0 - t), (double) (controlPoints.size() - 1 - i));
 	}
 	return Coord(bezierPoint[0], bezierPoint[1], bezierPoint[2]);
 }
