@@ -186,16 +186,16 @@ bool QuotientClustering::run() {
   DoubleProperty::PredefinedMetaValueCalculator edgeFn =
     (DoubleProperty::PredefinedMetaValueCalculator) edgeFunctions.getCurrent();
   QuotientLabelCalculator viewLabelCalc(metaLabel, useSubGraphName);
-  TLP_HASH_MAP<PropertyInterface*, PropertyInterface::MetaValueCalculator *> prevCalcs;
+  TLP_HASH_MAP<unsigned long, PropertyInterface::MetaValueCalculator *> prevCalcs;
   string pName;
   forEach(pName, quotientGraph->getProperties()) {
     PropertyInterface *prop = quotientGraph->getProperty(pName);
     if (dynamic_cast<DoubleProperty *>(prop)) {
-      prevCalcs[prop] = prop->getMetaValueCalculator();
+      prevCalcs[(unsigned long) prop] = prop->getMetaValueCalculator();
       ((DoubleProperty *)prop)->setMetaValueCalculator(nodeFn, edgeFn);
     }
     if (pName == "viewLabel") {
-      prevCalcs[prop] = prop->getMetaValueCalculator();
+      prevCalcs[(unsigned long) prop] = prop->getMetaValueCalculator();
       ((StringProperty*) prop)->setMetaValueCalculator(&viewLabelCalc);
     }
   }
@@ -206,38 +206,13 @@ bool QuotientClustering::run() {
   delete itS;
 
   // restore previous calculators
-  TLP_HASH_MAP<PropertyInterface*, PropertyInterface::MetaValueCalculator *>::iterator itC =
+  TLP_HASH_MAP<unsigned long, PropertyInterface::MetaValueCalculator *>::iterator itC =
     prevCalcs.begin();
   while(itC != prevCalcs.end()) {
-    (*itC).first->setMetaValueCalculator((*itC).second);
+    ((PropertyInterface*) (*itC).first)->setMetaValueCalculator((*itC).second);
     itC++;
   }
 
-  // compute metrics
-  /* string pName;
-  forEach(pName, graph->getProperties()) {
-    PropertyInterface *property = graph->getProperty(pName);
-    if (dynamic_cast<DoubleProperty *>(property) &&
-	// try to avoid view... properties
-	(pName.find("view") != 0 || pName == "viewMetric")) {
-      DoubleProperty *metric = graph->getProperty<DoubleProperty>(pName);
-      if (nodeFn != NO_FN) {
-	Iterator<node> *itN = quotientGraph->getNodes();
-	while (itN->hasNext()) {
-	  node mN = itN->next();
-	  computeMNodeMetric(quotientGraph->getNodeMetaInfo(mN), mN,
-			     metric, nodeFn);
-	} delete itN;
-      }
-      if (edgeFn != NO_FN || edgeCardinality) {
-	edge mE;
-	forEach(mE, quotientGraph->getEdges()) {
-	  computeMEdgeMetric(graph, mE, quotientGraph->getEdgeMetaInfo(mE),
-			     metric, edgeFn, cardProp);
-	}
-      }
-    }
-    } */
   // orientation
   if (!oriented) {
     // for each edge 
