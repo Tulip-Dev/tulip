@@ -54,6 +54,12 @@ public:
   virtual bool setEdgeStringValue( const edge e, const std::string & v ) = 0;
   virtual bool setAllNodeStringValue( const std::string & v ) = 0;
   virtual bool setAllEdgeStringValue( const std::string & v ) = 0;
+  // two methods to compute the values for meta nodes or edges
+  // mN is the meta node, sg is the corresponding subgraph
+  virtual void computeMetaValue( node mN, Graph* sg )=0;
+  // mE is the meta edge, itE is an iterator on the underlying edges
+  // g is the graph owning the underlying edges
+  virtual void computeMetaValue( edge mE, Iterator<edge>* itE, Graph* g )=0;
   // the ones below are used by GraphUpdatesRecorder
   virtual Iterator<node>* getNonDefaultValuatedNodes() const = 0;
   virtual Iterator<edge>* getNonDefaultValuatedEdges() const = 0;
@@ -68,7 +74,24 @@ public:
   virtual void setAllNodeDataMemValue(const DataMem* v ) = 0;
   virtual void setAllEdgeDataMemValue(const DataMem* v ) = 0;
 
+  // superclass of further MetaValueCalculator
+  class MetaValueCalculator {
+  public:
+    virtual ~MetaValueCalculator() {}
+  };
+
+  // method to specify the meta value calculator.
+  // be careful that its destruction is not managed by the property
+  virtual void setMetaValueCalculator(MetaValueCalculator* mvCalc) {
+    metaValueCalculator = mvCalc;
+  }
+
+  MetaValueCalculator* getMetaValueCalculator() {
+    return metaValueCalculator;
+  }
+
  protected:
+  MetaValueCalculator* metaValueCalculator;
   // redefinitions of ObservableProperty methods
   void notifyAfterSetNodeValue(PropertyInterface*,const node n);
   void notifyAfterSetEdgeValue(PropertyInterface*,const edge e);

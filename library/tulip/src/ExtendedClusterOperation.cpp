@@ -43,7 +43,7 @@ static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, Gr
    * Update the layout of metanode in cluster according to the layout of underlying nodes in graph
    *
    */
-static void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
+/*static void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
   LayoutProperty *graphLayout = graph->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty *graphSize = graph->getProperty<SizeProperty>(sizeProperty);
   DoubleProperty *graphRotation = graph->getProperty<DoubleProperty>(rotationProperty);
@@ -107,7 +107,7 @@ static void updateGroupLayout(Graph *graph, Graph *cluster, node metanode) {
     clusterSize->setEdgeValue(ite, graphSize->getEdgeValue(ite));
   } delete itE;
   //  shrink(graph, metanode);
-}
+  }*/
 //====================================================================================
 /*
 node createMNode (Graph *graph, Graph* subGraph,
@@ -447,9 +447,17 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   node metaNode = addNode();
   metaInfo->setNodeValue(metaNode, subGraph);
   Observable::holdObservers();
-  updateGroupLayout(this, subGraph, metaNode);
-  ColorProperty *colors = getProperty<ColorProperty>(colorProperty);
-  colors->setNodeValue(metaNode, Color(255, 255, 255, 127));
+  //updateGroupLayout(this, subGraph, metaNode);
+  // compute meta node values
+  string pName;
+  forEach(pName, getProperties()) {
+    PropertyInterface *property = getProperty(pName);
+    property->computeMetaValue(metaNode, subGraph);
+  }
+
+  
+  /*ColorProperty *colors = getProperty<ColorProperty>(colorProperty);
+    colors->setNodeValue(metaNode, Color(255, 255, 255, 127));*/
 
   // keep track of graph existing edges
   MutableContainer<bool> graphEdges;
@@ -466,7 +474,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
   //create new meta edges from nodes to metanode
   Graph* super = getSuperGraph();
-  colors = super->getProperty<ColorProperty> (colorProperty);
+  //colors = super->getProperty<ColorProperty> (colorProperty);
   TLP_HASH_MAP<node, TLP_HASH_SET<node> > edges;
   TLP_HASH_MAP<node, edge> metaEdges;
   TLP_HASH_MAP<edge, set<edge> > subEdges;
@@ -498,7 +506,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 	      metaEdges[src] = metaEdge;
 	    if (!super->isElement(metaEdge))
 	      super->addEdge(metaEdge);
-	    colors->setEdgeValue (metaEdge, colors->getEdgeValue(e));
+	    //colors->setEdgeValue (metaEdge, colors->getEdgeValue(e));
 	  } else if (!multiEdges)
 	    // e is a sub-edge of an already created meta edge
 	    subEdges[metaEdges[src]].insert(e);
@@ -525,7 +533,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 	      metaEdges[src] = metaEdge;
 	    if (!super->isElement(metaEdge))
 	      super->addEdge(metaEdge);
-	    colors->setEdgeValue(metaEdge, colors->getEdgeValue (e));
+	    //colors->setEdgeValue(metaEdge, colors->getEdgeValue (e));
 	  } else if (!multiEdges)
 	    // e is a sub-edge of an already created meta edge
 	    subEdges[metaEdges[tgt]].insert(e);
@@ -542,8 +550,18 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   } delete subGraphNodes;
   // update metaInfo of new meta edges
   TLP_HASH_MAP<edge, set<edge> >::const_iterator it;
-  for(it = subEdges.begin(); it != subEdges.end(); ++it)
-    metaInfo->setEdgeValue((*it).first, (*it).second);
+  for(it = subEdges.begin(); it != subEdges.end(); ++it) {
+    edge mE = (*it).first;
+    metaInfo->setEdgeValue(mE, (*it).second);
+    // compute meta edge values
+    string pName;
+    forEach(pName, getProperties()) {
+      Iterator<edge> *itE = getEdgeMetaInfo(mE);
+      PropertyInterface *property = getProperty(pName);
+      property->computeMetaValue(mE, itE, this);
+      delete itE;
+    }
+  }
 
   Observable::unholdObservers();
   return metaNode;
@@ -740,10 +758,13 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
 	// Create one metanode for each subgraph(cluster)
 	node metaN = quotientGraph->addNode();
 	metaNodes.push_back(metaN);
-	// set meta node properties
-	// according to parameters
-	quotientGraph->getProperty<ColorProperty>("viewColor")->setNodeValue(metaN, Color(255,255,255,127));
 	metaInfo->setNodeValue(metaN, its);
+	// compute meta node values
+	string pName;
+	forEach(pName, quotientGraph->getProperties()) {
+	  PropertyInterface *property = quotientGraph->getProperty(pName);
+	  property->computeMetaValue(metaN, its);
+	}
 	node n;
 	forEach(n, its->getNodes()) {
 	  // map each subgraph's node to a set of meta nodes
@@ -793,15 +814,24 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
   // set viewMetaGraph for added meta edges
   map<edge, set<edge> >::const_iterator itm = eMapping.begin();
   while(itm != eMapping.end()) {
-    metaInfo->setEdgeValue((*itm).first, (*itm).second);
+    edge mE = (*itm).first;
+    metaInfo->setEdgeValue(mE, (*itm).second);
+    // compute meta edge values
+    string pName;
+    forEach(pName, quotientGraph->getProperties()) {
+      Iterator<edge> *itE = getRoot()->getEdgeMetaInfo(mE);
+      PropertyInterface *property = quotientGraph->getProperty(pName);
+      property->computeMetaValue(mE, itE, quotientGraph);
+      delete itE;
+    }
     ++itm;
   }
   //compute layout according to the layouts of subgraphs
-  vector<node>::iterator itn = metaNodes.begin();
+  /*vector<node>::iterator itn = metaNodes.begin();
   while(itn != metaNodes.end()) {
     updateGroupLayout(this, quotientGraph, *itn);
     itn++;
-  }
+    }*/
 
   Observable::unholdObservers();
 }

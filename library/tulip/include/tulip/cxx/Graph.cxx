@@ -21,30 +21,29 @@ void tlp::Graph::setAttribute(const std::string &name,const ATTRIBUTETYPE&value)
   notifyAfterSetAttribute(this, name);
 }
 //================================================================================
-template<typename Proxytype>
-Proxytype* tlp::Graph::getLocalProperty(const std::string &name) { 
-  Proxytype *tmp;
+template<typename PropertyType>
+PropertyType* tlp::Graph::getLocalProperty(const std::string &name) { 
   if (existLocalProperty(name)) {
-    tlp::PropertyInterface* tmpProxy=getProperty(name);
-    assert ( typeid((*tmpProxy)) == typeid(Proxytype) );
-    return ( (Proxytype *)(tmpProxy) );
+    PropertyInterface* prop = getProperty(name);
+    assert (typeid((*prop)) == typeid(PropertyType));
+    return (PropertyType *) prop;
   }
   else {
-    tmp=new Proxytype(this, name);
-    this->addLocalProperty(name, tmp);
+    PropertyType* prop = new PropertyType(this, name);
+    this->addLocalProperty(name, prop);
+    return prop;
   }
-  return (tmp);
 }
 //====================================================================================
-template<typename Proxytype>
-Proxytype* tlp::Graph::getProperty(const std::string &name) {
+template<typename PropertyType>
+PropertyType* tlp::Graph::getProperty(const std::string &name) {
   if (existProperty(name)) {
-    tlp::PropertyInterface* tmpProxy=getProperty(name);
-    assert ( typeid((*tmpProxy)) == typeid(Proxytype) );
-    return ( (Proxytype *)(tmpProxy) );
+    tlp::PropertyInterface* prop = getProperty(name);
+    assert (typeid((*prop)) == typeid(PropertyType));
+    return ((PropertyType *)(prop));
   }
   else {
-    return getLocalProperty<Proxytype>(name);
+    return getLocalProperty<PropertyType>(name);
   }
 }
 //====================================================================================

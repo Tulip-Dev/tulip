@@ -15,9 +15,10 @@ namespace tlp {
 
 class PropertyContext;
 
+typedef AbstractProperty<DoubleType, DoubleType, DoubleAlgorithm> AbstractDoubleProperty;
 /** \addtogroup properties */ 
 /*\@{*/
-  class TLP_SCOPE DoubleProperty:public AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>, public PropertyObserver { 
+  class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, public PropertyObserver { 
 
   friend class DoubleAlgorithm;
 
@@ -39,6 +40,14 @@ public :
   virtual void beforeSetEdgeValue(PropertyInterface* prop, const edge e);
   virtual void beforeSetAllNodeValue(PropertyInterface* prop);
   virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
+
+  enum PredefinedMetaValueCalculator {NO_CALC = 0, AVG_CALC = 1, SUM_CALC = 2,
+				      MAX_CALC = 3, MIN_CALC = 4};
+
+  // setMetaValueCalculator overloading
+  virtual void setMetaValueCalculator(MetaValueCalculator* calc);
+  void setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc = AVG_CALC,
+			      PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
 
 private:
   TLP_HASH_MAP<unsigned long, double> maxN,minN,maxE,minE;

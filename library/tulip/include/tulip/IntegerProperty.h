@@ -15,14 +15,15 @@ namespace tlp {
 class Graph;
 class PropertyContext;
 
+typedef AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> AbstractIntegerProperty;
 /** \addtogroup properties */ 
 /*@{*/
-class TLP_SCOPE IntegerProperty:public AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>, public PropertyObserver{ 
+class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public PropertyObserver{ 
 
   friend class IntegerAlgorithm;
 
 public :
-  IntegerProperty (Graph *, std::string n = "");
+  IntegerProperty(Graph *, std::string n = "");
   IntegerType::RealType  getNodeMin(Graph *sg=0);
   IntegerType::RealType  getNodeMax(Graph *sg=0);
   IntegerType::RealType  getEdgeMin(Graph *sg=0);

@@ -13,12 +13,15 @@
 namespace tlp {
 
 class PropertyContext;
+
+typedef AbstractProperty<ColorType, ColorType, ColorAlgorithm> AbstractColorProperty;
+
 /** \addtogroup properties */ 
 /*@{*/
-class TLP_SCOPE ColorProperty:public AbstractProperty<ColorType,ColorType, ColorAlgorithm> { 
+class TLP_SCOPE ColorProperty:public AbstractColorProperty { 
   friend class ColorAlgorithm;
 public :
-  ColorProperty (Graph *g, std::string n="") :AbstractProperty<ColorType,ColorType, ColorAlgorithm>(g, n) {}
+  ColorProperty (Graph *g, std::string n="") :AbstractColorProperty(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );
   void copy( const edge, const edge, PropertyInterface * );

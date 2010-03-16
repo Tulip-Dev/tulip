@@ -13,14 +13,16 @@
 namespace tlp {
 
 class PropertyContext;
+
+  typedef AbstractProperty<StringType,StringType, StringAlgorithm> AbstractStringProperty;
 /** \addtogroup properties */ 
 /*\@{*/
-class TLP_SCOPE StringProperty:public AbstractProperty<StringType,StringType, StringAlgorithm>{ 
+class TLP_SCOPE StringProperty:public AbstractStringProperty{ 
 
   friend class StringAlgorithm;
 
 public :
-  StringProperty (Graph *g, std::string n="") :AbstractProperty<StringType,StringType, StringAlgorithm>(g, n) {}
+  StringProperty (Graph *g, std::string n="") :AbstractStringProperty(g, n) {}
 
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   void copy( const node, const node, PropertyInterface * );

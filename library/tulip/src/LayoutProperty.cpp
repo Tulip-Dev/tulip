@@ -11,8 +11,32 @@ using namespace tlp;
 
 inline double sqr(double x){return (x*x);}
 
+// define a specific MetaValueCalculator
+class LayoutMetaValueCalculator
+  :public AbstractLayoutProperty::MetaValueCalculator {
+public:
+  void computeMetaValue(AbstractLayoutProperty* layout,
+			node mN, Graph* sg) {
+    switch(sg->numberOfNodes()) {
+    case 0:
+      layout->setNodeValue(mN, Coord(0, 0, 0));
+      return;
+    case 1:
+      layout->setNodeValue(mN,((LayoutProperty *)layout)->getMax(sg));
+      return;
+    default:
+    // between the min and max computed values
+    layout->setNodeValue(mN,
+			 (((LayoutProperty *)layout)->getMax(sg) +
+			  ((LayoutProperty *)layout)->getMin(sg)) / 2.0);
+    }
+  }
+};
+
+static LayoutMetaValueCalculator mvLayoutCalculator;
+
 //======================================================
-LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeReversal):AbstractProperty<PointType,LineType,LayoutAlgorithm>(sg, n) {
+LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeReversal):AbstractLayoutProperty(sg, n) {
   minMaxOk[(unsigned long)graph]=false;
   // the property observes itself; see beforeSet... methods
   addPropertyObserver(this);
@@ -21,6 +45,8 @@ LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeRevers
   // if needed the property observes the graph (see reverseEdge)
   if (updateOnEdgeReversal)
     graph->addGraphObserver(this);
+  // set default MetaValueCalculator
+  setMetaValueCalculator(&mvLayoutCalculator);
 }
 //======================================================
 LayoutProperty::~LayoutProperty() {

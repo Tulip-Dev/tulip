@@ -360,7 +360,7 @@ public:
    * Returns a pointer to a PropertyInterface which is in the pool.
    * The real type of the PropertyInterface is tested with the template parameter.
    * If the PropertyInterface is not in the pool, a new one is created and returned.
-   * Using of delete on that property will cause a segmentation violation
+   * Using of delete on that property will cause an abort of the program
    * (use delLocalProperty instead).
    */
   template<typename PropertyType>

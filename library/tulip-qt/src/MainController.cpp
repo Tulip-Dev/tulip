@@ -26,6 +26,7 @@
 #include <tulip/ExtendedClusterOperation.h>
 #include <tulip/StableIterator.h>
 #include <tulip/ForEach.h>
+#include <tulip/DrawingTools.h>
 
 #include "tulip/ControllerAlgorithmTools.h"
 #include "tulip/ControllerViewsTools.h"
@@ -211,6 +212,72 @@ namespace tlp {
     loadGUI();
   }
   //**********************************************************************
+  // define some specific MetaValueCalculator classes
+  // viewColor
+  class ViewColorCalculator :public AbstractColorProperty::MetaValueCalculator {
+  public:
+    virtual void computeMetaValue(AbstractColorProperty* color, node mN, Graph* sg) {
+      // meta node color is half opaque white
+      color->setNodeValue(mN, Color(255, 255, 255, 127));
+    }
+
+    virtual void computeMetaValue(AbstractColorProperty* color, edge mE,
+				  Iterator<edge>*itE, Graph* g) {
+      // meta edge color is the color of the first underlying edge
+      color->setEdgeValue(mE, color->getEdgeValue(itE->next()));
+    }
+  };
+
+  // viewLabel
+  class ViewLabelCalculator :public AbstractStringProperty::MetaValueCalculator {
+  public:
+    // set the meta node label to label of viewMetric max corresponding node
+    void computeMetaValue(AbstractStringProperty* label,
+			  node mN, Graph* sg) {
+      // nothing to do if viewMetric does not exist
+      if (!sg->existProperty("viewMetric"))
+	return;
+      node viewMetricMaxNode;
+      double vMax = -DBL_MAX;
+      DoubleProperty *metric = sg->getProperty<DoubleProperty>("viewMetric");
+      Iterator<node> *itN= sg->getNodes();
+      while (itN->hasNext()){
+	node itn = itN->next();
+	const double& value = metric->getNodeValue(itn);
+	if (value > vMax) {
+	  vMax = value;
+	  viewMetricMaxNode = itn;
+	}
+      } delete itN;
+      label->setNodeValue(mN, label->getNodeValue(viewMetricMaxNode));
+    }
+  };
+
+  // viewLayout
+  class ViewLayoutCalculator :public AbstractLayoutProperty::MetaValueCalculator {
+  public:
+    void computeMetaValue(AbstractLayoutProperty* layout,
+			  node mN, Graph* sg) {
+      Graph* super = sg->getSuperGraph();
+      SizeProperty* size = super->getProperty<SizeProperty>("viewSize");
+      DoubleProperty* rot = super->getProperty<DoubleProperty>("viewRotation");
+
+      std::pair<Coord, Coord> box =
+	tlp::computeBoundingBox(sg, (LayoutProperty *) layout, size, rot);
+      Coord maxL = box.first;
+      Coord minL = box.second;
+      layout->setNodeValue(mN, (maxL + minL) / 2.0 );
+      Coord v = (maxL - minL);
+      if (v[2] < 0.0001) v[2] = 0.1;
+      size->setNodeValue(mN, Size(v[0],v[1],v[2]));
+    }
+  };
+
+  // corresponding static instances
+  static ViewColorCalculator vColorCalc;
+  static ViewLabelCalculator vLabelCalc;
+  static ViewLayoutCalculator vLayoutCalc;
+  //**********************************************************************
   void MainController::setData(Graph *graph,DataSet dataSet) {
     editMenu->setEnabled(true);
     algorithmMenu->setEnabled(true);
@@ -223,6 +290,14 @@ namespace tlp {
     newGraph->addObserver(this);
     newGraph->addGraphObserver(this);
     Graph *lastViewedGraph=newGraph;
+    // install predefined meta value calculators
+    newGraph->getProperty<ColorProperty>("viewColor")->
+      setMetaValueCalculator(&vColorCalc);
+    newGraph->getProperty<StringProperty>("viewLabel")->
+      setMetaValueCalculator(&vLabelCalc);
+    newGraph->getProperty<LayoutProperty>("viewLayout")->
+      setMetaValueCalculator(&vLayoutCalc);
+
     Observable::unholdObservers();
     setCurrentGraph(newGraph);
     if(dataSet.exist("views")) {

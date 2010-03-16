@@ -1,6 +1,7 @@
 //-*-c++-*-
 
 #include <float.h>
+#include "tulip/ForEach.h"
 #include "tulip/DoubleProperty.h"
 #include "tulip/PluginContext.h"
 #include "tulip/Observable.h"
@@ -10,6 +11,148 @@
 using namespace std;
 using namespace tlp;
 
+//=============================================================
+// Predefined Meta Value Calculators
+//=============================================================
+typedef void (*DoubleNodePredefinedCalculator) (AbstractDoubleProperty* metric,
+						node mN, Graph* sg);
+
+typedef void (*DoubleEdgePredefinedCalculator) (AbstractDoubleProperty* metric, edge mE,
+						Iterator<edge>* itE);
+
+// average values
+static void computeNodeAvgValue(AbstractDoubleProperty* metric, node mN, Graph* sg) {
+  double value = 0;
+  unsigned int nbNodes = 0;
+  node n;
+  forEach(n, sg->getNodes()) {
+    ++nbNodes;
+    value += metric->getNodeValue(n);
+  }
+  metric->setNodeValue(mN, value/nbNodes);
+}
+
+static void computeEdgeAvgValue(AbstractDoubleProperty* metric, edge mE, Iterator<edge>* itE) {
+  double value = 0;
+  unsigned int nbEdges = 0;
+  while(itE->hasNext()) {
+    edge e = itE->next();
+    ++nbEdges;
+    value += metric->getEdgeValue(e);
+  }
+  metric->setEdgeValue(mE, value/nbEdges);
+}
+
+// sum values
+static void computeNodeSumValue(AbstractDoubleProperty* metric, node mN, Graph* sg) {
+  double value = 0;
+  node n;
+  forEach(n, sg->getNodes()) {
+    value += metric->getNodeValue(n);
+  }
+  metric->setNodeValue(mN, value);
+}
+
+static void computeEdgeSumValue(AbstractDoubleProperty* metric, edge mE, Iterator<edge>* itE) {
+  double value = 0;
+  unsigned int nbEdges = 0;
+  while(itE->hasNext()) {
+    edge e = itE->next();
+    ++nbEdges;
+    value += metric->getEdgeValue(e);
+  }
+  metric->setEdgeValue(mE, value/nbEdges);
+}
+
+// max values
+static void computeNodeMaxValue(AbstractDoubleProperty* metric, node mN, Graph* sg) {
+  double value = -DBL_MAX;
+  node n;
+  forEach(n, sg->getNodes()) {
+    const double& nVal = metric->getNodeValue(n);
+    if (nVal > value)
+      value = nVal;
+  }
+  metric->setNodeValue(mN, value);
+}
+
+static void computeEdgeMaxValue(AbstractDoubleProperty* metric, edge mE, Iterator<edge>* itE) {
+  double value = -DBL_MAX;
+  while(itE->hasNext()) {
+    const double& eVal = metric->getEdgeValue(itE->next());
+    if (eVal > value)
+      value = eVal;
+  }
+  metric->setEdgeValue(mE, value);
+}
+
+// min values
+static void computeNodeMinValue(AbstractDoubleProperty* metric, node mN, Graph* sg) {
+  double value = DBL_MAX;
+  node n;
+  forEach(n, sg->getNodes()) {
+    const double& nVal = metric->getNodeValue(n);
+    if (nVal < value)
+      value = nVal;
+  }
+  metric->setNodeValue(mN, value);
+}
+
+static void computeEdgeMinValue(AbstractDoubleProperty* metric, edge mE, Iterator<edge>* itE) {
+  double value = DBL_MAX;
+  while(itE->hasNext()) {
+    const double& eVal = metric->getEdgeValue(itE->next());
+    if (eVal < value)
+      value = eVal;
+  }
+  metric->setEdgeValue(mE, value);
+}
+
+// 2 arrays to hold the predefined functions
+DoubleNodePredefinedCalculator nodeCalculators[] = {
+  NULL,
+  computeNodeAvgValue,
+  computeNodeSumValue,
+  computeNodeMaxValue,
+  computeNodeMinValue
+};
+
+DoubleEdgePredefinedCalculator edgeCalculators[] = {
+  NULL,
+  computeEdgeAvgValue,
+  computeEdgeSumValue,
+  computeEdgeMaxValue,
+  computeEdgeMinValue
+};
+
+class DoublePropertyPredefinedCalculator :public AbstractDoubleProperty::MetaValueCalculator {
+  DoubleNodePredefinedCalculator nodeCalc;
+  DoubleEdgePredefinedCalculator edgeCalc;
+
+public:
+  DoublePropertyPredefinedCalculator(DoubleProperty::PredefinedMetaValueCalculator nCalc =
+				     DoubleProperty::AVG_CALC,
+				     DoubleProperty::PredefinedMetaValueCalculator eCalc =
+				     DoubleProperty::AVG_CALC)
+    :AbstractDoubleProperty::MetaValueCalculator(),
+     nodeCalc(nodeCalculators[(int) nCalc]),
+     edgeCalc(edgeCalculators[(int) eCalc]) {}
+
+  void computeMetaValue(AbstractDoubleProperty* metric, node mN, Graph* sg) {
+    if (nodeCalc)
+      nodeCalc(metric, mN, sg);
+  }
+
+  void computeMetaValue(AbstractDoubleProperty* metric, edge mE, Iterator<edge>* itE,
+			Graph*) {
+    if (edgeCalc)
+      edgeCalc(metric, mE, itE);
+  }
+};
+
+// default calculator
+static DoublePropertyPredefinedCalculator avgCalculator;
+
 //==============================
 ///Constructeur d'un DoubleProperty
 DoubleProperty::DoubleProperty (Graph *sg, std::string n):AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>(sg, n),
@@ -18,6 +161,8 @@ DoubleProperty::DoubleProperty (Graph *sg, std::string n):AbstractProperty<Doubl
   addPropertyObserver(this);
   // but do not need to be in observables
   removeObservable(this);
+  // the computed meta value will be the average value
+  setMetaValueCalculator(&avgCalculator);
 }
 
 void DoubleProperty::uniformQuantification(unsigned int k) {
@@ -251,4 +396,15 @@ void DoubleVectorProperty::copy( const edge e0, const edge e1, PropertyInterface
   setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 //=============================================================
+void DoubleProperty::setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc,
+					    PredefinedMetaValueCalculator edgeCalc) {
+  setMetaValueCalculator(new DoublePropertyPredefinedCalculator(nodeCalc, edgeCalc));
+}
+//=============================================================
+void DoubleProperty::setMetaValueCalculator(MetaValueCalculator* calc) {
+  if (metaValueCalculator && metaValueCalculator != &avgCalculator &&
+      typeid(metaValueCalculator) == typeid(DoublePropertyPredefinedCalculator))
+    delete metaValueCalculator;
+  metaValueCalculator = calc;
+}
 

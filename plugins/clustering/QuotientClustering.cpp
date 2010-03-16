@@ -79,11 +79,6 @@ namespace {
   };
 }
 #define AGGREGATION_FUNCTIONS "none;average;sum;max;min"
-#define NO_FN 0
-#define AVG_FN 1
-#define SUM_FN 2
-#define MAX_FN 3
-#define MIN_FN 4
 //================================================================================
 QuotientClustering::QuotientClustering(AlgorithmContext context):Algorithm(context) {
   addDependency<LayoutAlgorithm>("Circular", "1.0");
@@ -101,98 +96,37 @@ QuotientClustering::QuotientClustering(AlgorithmContext context):Algorithm(conte
 //================================================================================
 QuotientClustering::~QuotientClustering(){}
 //===============================================================================
-static void computeMNodeMetric(Graph *mGraph, node mN, DoubleProperty *metric,
-			       unsigned int nodeFn) {
-  double value;
-  switch(nodeFn) {
-  case AVG_FN:
-  case SUM_FN: {
-    value = 0;
-    break;
+// define a specific calculator for viewLabel
+class QuotientLabelCalculator :public AbstractStringProperty::MetaValueCalculator {
+  StringProperty* sgLabel;
+  bool useSubGraphName;
+public:
+  QuotientLabelCalculator(StringProperty* label, bool useSgName)
+  : AbstractStringProperty::MetaValueCalculator(),
+    sgLabel(label), useSubGraphName(useSgName) {}
+  
+  void computeMetaValue(AbstractStringProperty* label, node mN, Graph* sg) {
+    if (sgLabel)
+      label->setNodeValue(mN, label->getNodeValue(sg->getOneNode()));
+    else if (useSubGraphName)
+      label->setNodeValue(mN, sg->getAttribute<string>("name"));
   }
-  case MAX_FN: {
-    value = DBL_MIN;
-    break;
-  }
-  case MIN_FN:
-    value = DBL_MAX;
-    break;
-  }
+};      
 
-  unsigned int nbNodes = 0;
-  node n;
-  forEach(n, mGraph->getNodes()) {
-    const double& nVal = metric->getNodeValue(n);
-    switch(nodeFn) {
-    case AVG_FN:
-      ++nbNodes;
-    case SUM_FN:
-      value += nVal;
-      break;
-    case MAX_FN:
-      if (nVal > value)
-	value = nVal;
-      break;
-    case MIN_FN:
-      if (nVal < value)
-	value = nVal;
-      break;
+// define a specific calculator for edgeCardinality
+class EdgeCardinalityCalculator :public AbstractIntegerProperty::MetaValueCalculator {
+public:
+  void computeMetaValue(AbstractIntegerProperty* card, edge mE,
+			Iterator<edge>* itE, Graph* g) {
+    unsigned int nbEdges = 0;
+    while(itE->hasNext()) {
+      itE->next();
+      ++nbEdges;
     }
+    card->setEdgeValue(mE, nbEdges);
   }
-  if (nodeFn == AVG_FN)
-    value /= nbNodes;
-  metric->setNodeValue(mN, value);
-}
-//===============================================================================
-static void computeMEdgeMetric(Graph* graph, edge mE, Iterator<edge>* itE,
-			       DoubleProperty *metric, unsigned int edgeFn,
-			       IntegerProperty *cardProp) {
-  double value;
-  if (edgeFn != NO_FN) {
-    switch(edgeFn) {
-    case AVG_FN:
-    case SUM_FN:
-      value = 0;
-      break;
-    case MAX_FN:
-      value = DBL_MIN;
-      break;
-    case MIN_FN:
-      value = DBL_MAX;
-      break;
-    }
-  }
-   
-  unsigned int nbEdges = 0;
-  while(itE->hasNext()) {
-    edge e = itE->next();
-    ++nbEdges;
-    if (edgeFn != NO_FN) {
-      const double& eVal = metric->getEdgeValue(e);
-      switch(edgeFn) {
-      case AVG_FN:
-      case SUM_FN:
-	value += eVal;
-	break;
-      case MAX_FN:
-	if (eVal > value)
-	  value = eVal;
-	break;
-      case MIN_FN:
-	if (eVal < value)
-	  value = eVal;
-	break;
-      }
-    }
-  } delete itE;
-
-  if (edgeFn == AVG_FN)
-    value /= nbEdges;
-  if (edgeFn != NO_FN)
-    metric->setEdgeValue(mE, value);
-  if (cardProp)
-    cardProp->setEdgeValue(mE, nbEdges);
-}
+};      
+      
 //===============================================================================
 bool QuotientClustering::run() {
   bool oriented = true, edgeCardinality = true;
@@ -234,40 +168,53 @@ bool QuotientClustering::run() {
       sstr << " " << graph->getId();
   }
   quotientGraph->setAttribute(string("name"), sstr.str());
-  StringProperty *label = NULL;
-  if (useSubGraphName || metaLabel)
-    label = quotientGraph->getProperty<StringProperty>("viewLabel");
   if (!oriented) {
     opProp = new IntegerProperty(quotientGraph);
     opProp->setAllEdgeValue(edge().id);
   }
-  if (edgeCardinality)
-    cardProp = quotientGraph->getLocalProperty<IntegerProperty>("edgeCardinality");
 
-  // compute mete nodes
+  EdgeCardinalityCalculator cardCalc;
+  if (edgeCardinality) {
+    cardProp = quotientGraph->getLocalProperty<IntegerProperty>("edgeCardinality");
+    cardProp->setMetaValueCalculator(&cardCalc);
+  }
+
+  // set specific meta value calculators
+  // for most properties
+  DoubleProperty::PredefinedMetaValueCalculator nodeFn =
+    (DoubleProperty::PredefinedMetaValueCalculator ) nodeFunctions.getCurrent();
+  DoubleProperty::PredefinedMetaValueCalculator edgeFn =
+    (DoubleProperty::PredefinedMetaValueCalculator) edgeFunctions.getCurrent();
+  QuotientLabelCalculator viewLabelCalc(metaLabel, useSubGraphName);
+  TLP_HASH_MAP<PropertyInterface*, PropertyInterface::MetaValueCalculator *> prevCalcs;
+  string pName;
+  forEach(pName, quotientGraph->getProperties()) {
+    PropertyInterface *prop = quotientGraph->getProperty(pName);
+    if (dynamic_cast<DoubleProperty *>(prop)) {
+      prevCalcs[prop] = prop->getMetaValueCalculator();
+      ((DoubleProperty *)prop)->setMetaValueCalculator(nodeFn, edgeFn);
+    }
+    if (pName == "viewLabel") {
+      prevCalcs[prop] = prop->getMetaValueCalculator();
+      ((StringProperty*) prop)->setMetaValueCalculator(&viewLabelCalc);
+    }
+  }
+  // compute meta nodes, edges and associated meta values
   itS = graph->getSubGraphs();
   vector<node> mNodes;
   graph->createMetaNodes(itS, quotientGraph, mNodes);
   delete itS;
-  // update label property if needed
-  if (label) {
-    vector<node>::iterator itn = mNodes.begin();
-    while(itn != mNodes.end()) {
-      string mLabel;
-      Graph* sg = quotientGraph->getNodeMetaInfo(*itn);
-      if (useSubGraphName)
-	mLabel = sg->getAttribute<string>("name");
-      else
-	mLabel = label->getNodeValue(sg->getOneNode());
-      label->setNodeValue(*itn, mLabel);
-      ++itn;
-    }
+
+  // restore previous calculators
+  TLP_HASH_MAP<PropertyInterface*, PropertyInterface::MetaValueCalculator *>::iterator itC =
+    prevCalcs.begin();
+  while(itC != prevCalcs.end()) {
+    (*itC).first->setMetaValueCalculator((*itC).second);
+    itC++;
   }
 
   // compute metrics
-  string pName;
-  unsigned int nodeFn = nodeFunctions.getCurrent();
-  unsigned int edgeFn = edgeFunctions.getCurrent();
+  /* string pName;
   forEach(pName, graph->getProperties()) {
     PropertyInterface *property = graph->getProperty(pName);
     if (dynamic_cast<DoubleProperty *>(property) &&
@@ -290,7 +237,7 @@ bool QuotientClustering::run() {
 	}
       }
     }
-  }
+    } */
   // orientation
   if (!oriented) {
     // for each edge 
@@ -318,7 +265,7 @@ bool QuotientClustering::run() {
 	// than the mE associated value than we will keep it instead of mE
 	bool opOK =
 	  viewMetric->getEdgeValue(mE) < viewMetric->getEdgeValue(op);
-	if (edgeFn != NO_FN) {
+	if (edgeFn != DoubleProperty::NO_CALC) {
 	  forEach(pName, graph->getProperties()) {
 	    PropertyInterface *property = graph->getProperty(pName);
 	    if (dynamic_cast<DoubleProperty *>(property) &&
@@ -327,17 +274,17 @@ bool QuotientClustering::run() {
 	      DoubleProperty *metric = graph->getProperty<DoubleProperty>(pName);
 	      double value = metric->getEdgeValue(mE);	    
 	      switch(edgeFn) {
-	      case AVG_FN:
+	      case DoubleProperty::AVG_CALC:
 		value = (value + metric->getEdgeValue(op))/2;
 		break;
-	      case SUM_FN:
+	      case DoubleProperty::SUM_CALC:
 		value += metric->getEdgeValue(op);
 		break;
-	      case MAX_FN:
+	      case DoubleProperty::MAX_CALC:
 		if (value < metric->getEdgeValue(op))
 		  value = metric->getEdgeValue(op);
 		break;
-	      case MIN_FN:
+	      case DoubleProperty::MIN_CALC:
 		if (value > metric->getEdgeValue(op))
 		  value = metric->getEdgeValue(op);
 		break;

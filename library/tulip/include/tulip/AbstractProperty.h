@@ -61,8 +61,8 @@ public:
    */
   typename ReturnType<typename Tnode::RealType>::ConstValue getNodeValue(const node n ) const;
   /**
-   * Returns the value associated to the node n in this property.
-   * If there is no value it returns the default value
+   * Returns the value associated to the edge e in this property.
+   * If there is no value , it returns the default value
    * depending of the type.
    */
   typename ReturnType<typename Tedge::RealType>::ConstValue getEdgeValue(const edge e) const;
@@ -174,6 +174,22 @@ public:
   virtual void setEdgeDataMemValue( const edge e, const DataMem* v);
   virtual void setAllNodeDataMemValue(const DataMem* v);
   virtual void setAllEdgeDataMemValue(const DataMem* v);
+
+  // PropertyInterface methods
+  virtual void computeMetaValue(node mN, Graph* sg);
+  virtual void computeMetaValue(edge mE, Iterator<edge>* itE, Graph* g);
+  virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *mvCalc);
+
+  // This class is used to delegate the computation of the values associated
+  // to meta nodes or edges
+  class MetaValueCalculator :public PropertyInterface::MetaValueCalculator {
+  public:
+    virtual void computeMetaValue(AbstractProperty<Tnode, Tedge,
+				  TPROPERTY>* prop, node mN, Graph* sg) {}
+    virtual void computeMetaValue(AbstractProperty<Tnode, Tedge,
+				  TPROPERTY>* prop,
+				  edge mE, Iterator<edge>* itE, Graph* g) {}
+  };
 
 protected:
   typedef PropertyAlgorithm PAlgorithm;

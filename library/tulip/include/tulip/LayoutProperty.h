@@ -18,9 +18,11 @@ namespace tlp {
 class PropertyContext;
 class Graph;
 
+typedef AbstractProperty<PointType, LineType, LayoutAlgorithm> AbstractLayoutProperty;
+
 /** \addtogroup properties */ 
 /*@{*/
-  class TLP_SCOPE LayoutProperty:public AbstractProperty<PointType, LineType, LayoutAlgorithm>, public PropertyObserver, public GraphObserver {
+  class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, public PropertyObserver, public GraphObserver {
   friend class LayoutAlgorithm;
 
 public:

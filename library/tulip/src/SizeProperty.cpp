@@ -10,6 +10,25 @@
 using namespace std;
 using namespace tlp;
 
+class SizeMetaValueCalculator
+  :public AbstractSizeProperty::MetaValueCalculator {
+public:
+  void computeMetaValue(AbstractSizeProperty* prop,
+			node mN, Graph* sg) {
+    if (sg->numberOfNodes() == 0) {
+      prop->setNodeValue(mN, Size(0, 0, 0));
+      return;
+    }
+
+    // between the min and max computed values
+    prop->setNodeValue(mN,
+			 (((SizeProperty *)prop)->getMax(sg) +
+			  ((SizeProperty *)prop)->getMin(sg)) / 2.0);
+  }
+};
+
+static SizeMetaValueCalculator mvSizeCalculator;
+
 //==============================
 SizeProperty::SizeProperty (Graph *sg, std::string n):
   AbstractProperty<SizeType,SizeType, SizeAlgorithm>(sg, n) {

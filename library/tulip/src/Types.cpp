@@ -168,7 +168,7 @@ bool EdgeSetType::fromString( RealType & v, const string & s ) {
 // DoubleType
 
 double DoubleType::undefinedValue() {
-  return DBL_MIN;
+  return -DBL_MAX;
 }
 
 double DoubleType::defaultValue() {
@@ -433,7 +433,7 @@ bool LineType::fromString( RealType & v, const string & s ) {
 // PointType
 Coord PointType::undefinedValue() {
   Coord tmp;
-  tmp.set(DBL_MIN,DBL_MIN,DBL_MIN);
+  tmp.set(-DBL_MAX,-DBL_MAX,-DBL_MAX);
   return tmp;
 }
 
@@ -457,7 +457,7 @@ bool PointType::fromString( RealType & v, const string & s ) {
 // SizeType
 
 Size SizeType::undefinedValue() {
-  return Size(DBL_MIN,DBL_MIN,DBL_MIN);
+  return Size(-DBL_MAX,-DBL_MAX,-DBL_MAX);
 }
 
 Size SizeType::defaultValue() {

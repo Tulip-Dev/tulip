@@ -14,11 +14,14 @@
 namespace tlp {
 
 class PropertyContext;
+
+ typedef AbstractProperty<SizeType,SizeType, SizeAlgorithm> AbstractSizeProperty;
+
 /**
  * \addtogroup properties
  */ 
 /*@{*/
-  class TLP_SCOPE SizeProperty:public AbstractProperty<SizeType,SizeType, SizeAlgorithm>,
+  class TLP_SCOPE SizeProperty:public AbstractSizeProperty,
   public PropertyObserver { 
 
   friend class SizeAlgorithm;
