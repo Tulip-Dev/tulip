@@ -168,16 +168,16 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
     glPassThrough(id); //id of the node for the feed back mode
   }
 
-  Color* srcCol, *tgtCol;
+  Color srcCol, tgtCol;
   if (selected) {
-    srcCol = &selectionColor;
-    tgtCol = &selectionColor;
+    srcCol = selectionColor;
+    tgtCol = selectionColor;
   } else {
     if (data->parameters->isEdgeColorInterpolate()) {
-      srcCol = &(Color&) data->elementColor->getNodeValue(source);
-      tgtCol = &(Color&) data->elementColor->getNodeValue(target);
+      srcCol = data->elementColor->getNodeValue(source);
+      tgtCol = data->elementColor->getNodeValue(target);
     } else {
-      srcCol = tgtCol = &(Color&) data->elementColor->getEdgeValue(e);
+      srcCol = tgtCol = data->elementColor->getEdgeValue(e);
     }
   }
 
@@ -332,7 +332,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
       glPushMatrix();
       glMultMatrixf((GLfloat *) &srcTransformationMatrix);
       glMultMatrixf((GLfloat *) &srcScalingMatrix);
-      extremityGlyph->draw(e, source, (selected ? selectionColor : *srcCol),(data->parameters->isEdgeColorInterpolate() ? *srcCol : data->elementBorderColor->getEdgeValue(e)), lod);
+      extremityGlyph->draw(e, source, (selected ? selectionColor : srcCol),(data->parameters->isEdgeColorInterpolate() ? srcCol : data->elementBorderColor->getEdgeValue(e)), lod);
       glPopMatrix();
 
       //Compute new Anchor
@@ -412,7 +412,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
       glPushMatrix();
       glMultMatrixf((GLfloat *) &tgtTransformationMatrix);
       glMultMatrixf((GLfloat *) &tgtScalingMatrix);
-      extremityGlyph->draw(e, target, (selected ? selectionColor : *tgtCol),(data->parameters->isEdgeColorInterpolate() ? *tgtCol : data->elementBorderColor->getEdgeValue(e)), lod);
+      extremityGlyph->draw(e, target, (selected ? selectionColor : tgtCol),(data->parameters->isEdgeColorInterpolate() ? tgtCol : data->elementBorderColor->getEdgeValue(e)), lod);
       glPopMatrix();
 
       //Compute new Anchor
@@ -430,9 +430,9 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 
   if (lod < 5) {
     if (GlewManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()) {
-      GlPointManager::getInst().addPoint(srcCoord, *srcCol, 1);
+      GlPointManager::getInst().addPoint(srcCoord, srcCol, 1);
     } else {
-      setColor(*srcCol);
+      setColor(srcCol);
       glPointSize(1);
       glBegin(GL_POINTS);
       glVertex3f(srcCoord[0], srcCoord[1], srcCoord[2]);
@@ -452,7 +452,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
       camera->getViewport());
 
   //draw Edge
-  drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, *srcCol, *tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
+  drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, srcCol, tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
       data->elementShape->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, data->elementTexture->getEdgeValue(e));
 
   if (data->parameters->getFeedbackRender()) {
