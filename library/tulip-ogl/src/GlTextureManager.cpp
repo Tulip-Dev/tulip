@@ -1,7 +1,5 @@
 #include "tulip/GlTextureManager.h"
 
-#include <iostream>
-
 extern "C" {
 #include <stdio.h>
 
@@ -33,18 +31,11 @@ using namespace std;
 namespace tlp
 {
 
-typedef struct {
-  bool hasAlpha;
-  int  width;
-  int  height;
-  unsigned char *data;
-} textureImage;
-
-typedef bool (TextureLoader_t)(const string &, textureImage *);
+typedef bool (TextureLoader_t)(const string &, TextureInfo *,string &);
 
 //====================================================================
 /* simple loader for 24bit bitmaps (data is in rgb-format) */
-static bool loadBMP(const string &filename, textureImage *texture) {
+static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMsg) {
 
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
@@ -61,19 +52,22 @@ static bool loadBMP(const string &filename, textureImage *texture) {
   /* make sure the file is there and open it read-only (binary) */
   if ((file = fopen(filename.c_str(), "rb")) == NULL)
     {
-      cerr << __PRETTY_FUNCTION__ << ": File not found :" << filename << endl;
+      errorMsg = "File not found : " + filename;
+      //cerr << __PRETTY_FUNCTION__ << ": File not found :" << filename << endl;
       return false;
     }
   if(!fread(&bfType, sizeof(short int), 1, file))
     {
-      cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
+      errorMsg = "Error reading : " + filename;
+      //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
       fclose(file);
       return false;
     }
   /* check if file is a bitmap */
   if (bfType != 19778)
     {
-      cerr << __PRETTY_FUNCTION__ << ": Not a Bitmap-File: " << filename << endl;
+      errorMsg = "Not a Bitmap-File : " + filename;
+      //cerr << __PRETTY_FUNCTION__ << ": Not a Bitmap-File: " << filename << endl;
       fclose(file);
       return false;
     }
@@ -83,7 +77,8 @@ static bool loadBMP(const string &filename, textureImage *texture) {
   /* get the position of the actual bitmap data */
   if (!fread(&bfOffBits, sizeof(long int), 1, file))
     {
-      cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
+      errorMsg = "Error reading : " + filename;
+      //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
       fclose(file);
       return false;
     }
@@ -96,20 +91,23 @@ static bool loadBMP(const string &filename, textureImage *texture) {
   fread(&biPlanes, sizeof(short int), 1, file);
   if (biPlanes != 1)
     {
-      cerr << __PRETTY_FUNCTION__ << ": Error: number of Planes not 1: " << filename << endl;
+      errorMsg = "Error: number of Planes not 1 in : " + filename;
+      //cerr << __PRETTY_FUNCTION__ << ": Error: number of Planes not 1: " << filename << endl;
       fclose(file);
       return false;
     }
   /* get the number of bits per pixel */
   if (!fread(&biBitCount, sizeof(short int), 1, file))
     {
-      cerr << __PRETTY_FUNCTION__ << ": Error reading file: " << filename << endl;
+      errorMsg = "Error reading file : " + filename;
+      //cerr << __PRETTY_FUNCTION__ << ": Error reading file: " << filename << endl;
       fclose(file);
       return false;
     }
   if (biBitCount != 24)
     {
-      cerr << __PRETTY_FUNCTION__ << ": Bits per Pixel not 24: " << filename << endl;
+      errorMsg = "Error : Bits per Pixel not 24 : " + filename;
+      //cerr << __PRETTY_FUNCTION__ << ": Bits per Pixel not 24: " << filename << endl;
       fclose(file);
       return false;
     }
@@ -120,7 +118,8 @@ static bool loadBMP(const string &filename, textureImage *texture) {
   fseek(file, bfOffBits, SEEK_SET);
   if (!fread(texture->data, biSizeImage, 1, file))
     {
-      cerr << __PRETTY_FUNCTION__ << ": Error loading file: " << filename << endl;
+      errorMsg = "Error loading file : " + filename;
+      //cerr << __PRETTY_FUNCTION__ << ": Error loading file: " << filename << endl;
       delete [] texture->data;
       texture->data=NULL;
       fclose(file);
@@ -138,13 +137,14 @@ static bool loadBMP(const string &filename, textureImage *texture) {
 }
 //====================================================================
 #ifdef HAVE_LIBJPEG
-static bool loadJPEG(const string &filename, textureImage *texture) {
+static bool loadJPEG(const string &filename, TextureInfo *texture,string &errorMsg) {
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
 #endif
   FILE *file;
   if ((file = fopen(filename.c_str(), "rb")) == NULL) {
-    cerr << __PRETTY_FUNCTION__ << ": File not found:" << filename << endl;
+    errorMsg = "File not found : " + filename;
+    //cerr << __PRETTY_FUNCTION__ << ": File not found:" << filename << endl;
     return false;
   }
 
@@ -181,7 +181,7 @@ static bool loadJPEG(const string &filename, textureImage *texture) {
 #endif
 //====================================================================
 #ifdef HAVE_LIBPNG
-static bool loadPNG(const string &filename, textureImage *texture)
+static bool loadPNG(const string &filename, TextureInfo *texture,string &errorMsg)
 {
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
@@ -190,7 +190,8 @@ static bool loadPNG(const string &filename, textureImage *texture)
   FILE *file;
 
   if ((file = fopen(filename.c_str(), "rb")) == NULL) {
-    cerr << __PRETTY_FUNCTION__ << ": File not found:" << filename << endl;
+    errorMsg = "File not found : " + filename;
+    //cerr << __PRETTY_FUNCTION__ << ": File not found:" << filename << endl;
     return false;
   }
 
@@ -258,30 +259,16 @@ bool GlTextureManager::loadTextureFromRawData(const string &textureName, int wid
   if (texturesMap[currentContext].find(textureName) != texturesMap[currentContext].end())
       return true;
 
-  GLuint textureNum;
-  textureImage texti;
-
-  texti.width = width;
-  texti.height = height;
-  texti.hasAlpha = hasAlpha;
-  texti.data = data;
-
-  int GLFmt = texti.hasAlpha ? GL_RGBA : GL_RGB;
+  TextureInfo texti;
+  texti.data=data;
+  texti.hasAlpha=hasAlpha;
+  texti.width=width;
+  texti.height=height;
 
   GlTexture texture;
-  texture.width=texti.width;
-  texture.height=texti.height;
+  if(!loadTexture(textureName,texti,texture))
+    return false;
 
-  glGenTextures(1, &textureNum);  //FIXME: handle case where no memory is available to load texture
-  glBindTexture(GL_TEXTURE_2D, textureNum);
-
-  texture.id=textureNum;
-
-  glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, texti.width, texti.height, 0, GLFmt, GL_UNSIGNED_BYTE, texti.data);
-  /* use no filtering */
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  //delete [] texti.data;
   (texturesMap[currentContext])[textureName] = texture;
 
   return true;
@@ -309,9 +296,6 @@ bool GlTextureManager::loadTexture(const string& filename)
   if (texturesMap[currentContext].find(filename) != texturesMap[currentContext].end())
     return true;
 
-  GLuint textureNum;
-  textureImage texti;
-
   string extension = filename.substr(filename.find_last_of('.') + 1);
   for (int i=0; i < (int)extension.length(); ++i)
     extension[i] = (char) toupper(extension[i]);
@@ -325,38 +309,104 @@ bool GlTextureManager::loadTexture(const string& filename)
   else if (extension == "PNG") loader = &loadPNG;
 #endif
   else {
-    cerr << "Warning: don't know extension \"" << extension << "\"" << endl;
+    errorViewer->displayError(filename,"Warning : don't know extension "+extension+" for file : "+filename);
+    //cerr << "Warning: don't know extension \"" << extension << "\"" << endl;
   }
 
-  if ((loader == NULL) || !(*loader)(filename, &texti)) {
+  TextureInfo texti;
+  string errorMsg;
+  if ((loader == NULL) || !(*loader)(filename, &texti,errorMsg)) {
+    if(errorMsg!="")
+      errorViewer->displayError(filename,errorMsg);
     glDisable(GL_TEXTURE_2D);
     return false;
   }
 
+  GlTexture texture;
+  if(!loadTexture(filename,texti,texture)){
+    delete [] texti.data;
+    return false;
+  }
+
+  delete [] texti.data;
+
+  (texturesMap[currentContext])[filename] = texture;
+
+  return true;
+}
+
+bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo &texti,GlTexture &glTexture){
   int GLFmt = texti.hasAlpha ? GL_RGBA : GL_RGB;
 
-  GlTexture texture;
-  texture.width=texti.width;
-  texture.height=texti.height;
+  bool spriteOnHeight;
+  unsigned int spriteNumber=1;
+  int width=texti.width;
+  int height=texti.height;
 
-  glGenTextures(1, &textureNum);	//FIXME: handle case where no memory is available to load texture
-  glBindTexture(GL_TEXTURE_2D, textureNum);
+  if((texti.height-(texti.height/texti.width)*texti.width)!=0){
+    errorViewer->displayError(filename,"Texture size is not valid\nTexture size should be of the form :\n - width=height or\n - height=N*width (for animated textures)\nfor file :"+filename);
+    return false;
+  }else{
+    if(texti.width!=texti.height){
+      spriteOnHeight=true;
+      spriteNumber=texti.height/texti.width;
+      height=width;
+    }else{
+      spriteOnHeight=false;
+    }
 
-  texture.id=textureNum;
+    bool formatOk=false;
+    for(unsigned int i=1;i<=width;i*=2){
+      if(i==width)
+        formatOk=true;
+    }
+    if(!formatOk){
+      errorViewer->displayError(filename,"Texture size is not valid\nTexture width should be a power of two\nfor file :"+filename);
+      return false;
+    }
 
-  glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, texti.width, texti.height, 0, GLFmt, GL_UNSIGNED_BYTE, texti.data);
-  /* use no filtering */
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  delete [] texti.data;
-  (texturesMap[currentContext])[filename] = texture;
+    formatOk=false;
+    cout << "height : " << height << endl;
+    for(unsigned int i=1;i<=height;i*=2){
+      if(i==height)
+        formatOk=true;
+    }
+    if(!formatOk){
+      errorViewer->displayError(filename,"Texture size is not valid\nTexture height should be a power of two\nfor file :"+filename);
+      return false;
+    }
+  }
+
+  GLuint textureNum[spriteNumber];
+
+  glTexture.width=width;
+  glTexture.height=height;
+  glTexture.spriteNumber=spriteNumber;
+  glTexture.id=new GLuint[spriteNumber];
+
+  glGenTextures(spriteNumber, textureNum);	//FIXME: handle case where no memory is available to load texture
+  for(unsigned int i=0;i<spriteNumber;++i){
+    glBindTexture(GL_TEXTURE_2D, textureNum[i]);
+
+    glTexture.id[i]=textureNum[i];
+
+    if(texti.hasAlpha)
+      glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, texti.data + (width*height*4*i));
+    else
+      glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, texti.data + (width*height*3*i));
+    /* use no filtering */
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  }
 
   return true;
 }
 
 void GlTextureManager::registerExternalTexture(const std::string &textureName, const GLuint textureId) {
 	GlTexture texture;
-	texture.id = textureId;
+    texture.spriteNumber=1;
+    texture.id=new GLuint[1];
+    texture.id[0] = textureId;
 	(texturesMap[currentContext])[textureName] = texture;
 }
 
@@ -365,7 +415,8 @@ void GlTextureManager::deleteTexture(const string& name){
   for(ContextAndTextureMap::iterator it=texturesMap.begin();it!=texturesMap.end();++it){
     TextureUnit::iterator it2=(*it).second.find(name);
     if(it2!=(*it).second.end()){
-      glDeleteTextures(1,&((*it2).second.id));
+      for(unsigned int i=0;i<(*it2).second.spriteNumber;++i)
+        glDeleteTextures(1,&((*it2).second.id[i]));
       (*it).second.erase(name);
     }
   }
@@ -383,18 +434,29 @@ void GlTextureManager::beginNewTexture(const string& name)
 }
 //====================================================================
 bool GlTextureManager::activateTexture(const string& filename) {
+  activateTexture(filename,animationFrame);
+}
+//====================================================================
+bool GlTextureManager::activateTexture(const string& filename,unsigned int frame) {
+  bool loadOk=true;
   if (texturesMap[currentContext].find(filename) == texturesMap[currentContext].end())
-    loadTexture(filename);
+    loadOk=loadTexture(filename);
   else
     glEnable(GL_TEXTURE_2D);
 
-  glBindTexture(GL_TEXTURE_2D, (texturesMap[currentContext])[filename].id);
+  if(!loadOk){
+    glDisable(GL_TEXTURE_2D);
+    return false;
+  }
+  unsigned int spriteNumber=((texturesMap[currentContext])[filename]).spriteNumber;
+  frame=frame-(frame/spriteNumber)*spriteNumber;
+  glBindTexture(GL_TEXTURE_2D, (texturesMap[currentContext])[filename].id[frame]);
   return true;
 }
-
 //====================================================================
 void GlTextureManager::desactivateTexture() {
   glDisable(GL_TEXTURE_2D);
 }
+
 
 }

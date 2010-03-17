@@ -111,7 +111,6 @@ void PreferenceDialog::selectionColorButtonSlot(){
 
 void PreferenceDialog::accept() {
   savePreference();
-
   QDialog::accept();
 }
 

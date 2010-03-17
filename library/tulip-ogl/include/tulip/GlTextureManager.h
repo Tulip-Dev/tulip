@@ -26,13 +26,33 @@
 #include <GL/glu.h>
 #endif
 #include <string>
+#include <set>
+#include <iostream>
 
 namespace tlp {
 
   struct GlTexture {
-    GLuint id;
+    GLuint *id;
     int height;
     int width;
+    unsigned int spriteNumber;
+  };
+
+  struct TextureInfo{
+    bool hasAlpha;
+    int  width;
+    int  height;
+    unsigned char *data;
+  };
+
+  class TLP_GL_SCOPE GlTextureManagerErrorViewer {
+
+  public :
+
+    virtual void displayError(const std::string &fileName,const std::string &errorMsg){
+      std::cerr << errorMsg << std::endl;
+    }
+
   };
 
   /** \brief Class to manage textures
@@ -56,6 +76,15 @@ namespace tlp {
       if(!inst)
         inst=new GlTextureManager();
       return *inst;
+    }
+
+    /**
+     * Change the error viewer and return the old one
+     */
+    GlTextureManagerErrorViewer *setErrorViewer(GlTextureManagerErrorViewer *errorViewer){
+      GlTextureManagerErrorViewer *oldErrorViewer=this->errorViewer;
+      this->errorViewer=errorViewer;
+      return oldErrorViewer;
     }
 
     /**
@@ -90,12 +119,28 @@ namespace tlp {
     /**
      * Activate a texture with given name
      */
+    bool activateTexture(const std::string&,unsigned int);
+    /**
+     * Activate a texture with given name
+     */
     bool activateTexture(const std::string&);
     /**
      * Disable texture with given name
      */
     void desactivateTexture();
+    /**
+     * Set animationStep for next textures (for next activateTexture)
+     */
+    void setAnimationFrame(unsigned int id) {animationFrame=id;}
+    /**
+     * Get animationStep of next textures
+     */
+    unsigned int getAnimationFrame() {return animationFrame;}
 
+
+    /**
+     * Register an external texture is GlTextureManager
+     */
     void registerExternalTexture(const std::string &textureName, const GLuint textureId);
 
   private:
@@ -103,13 +148,19 @@ namespace tlp {
     /**
      * empty private constructor for singleton
      */
-    GlTextureManager() {}
+    GlTextureManager():animationFrame(0),errorViewer(new GlTextureManagerErrorViewer) {}
+
+    bool loadTexture(const std::string&,const TextureInfo &,GlTexture &);
 
     static GlTextureManager* inst;
+
+    GlTextureManagerErrorViewer *errorViewer;
 
     unsigned long currentContext;
 
     ContextAndTextureMap texturesMap;
+
+    unsigned int animationFrame;
 
   };
 
