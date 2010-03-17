@@ -46,8 +46,8 @@ void AppStartUp::initTulip(TulipPluginLoader *loader, std::string &errors) {
 	tlp::loadPlugins(loader); // library side plugins
 	GlyphManager::getInst().loadPlugins(loader); // software side plugins, i.e. glyphs
 	EdgeExtremityGlyphManager::getInst().loadPlugins(loader);
+	InteractorManager::getInst().loadPlugins(loader); // interactors plugins
 	ViewPluginsManager::getInst().loadPlugins(loader); // view plugins
-    InteractorManager::getInst().loadPlugins(loader); // interactors plugins
 	ControllerPluginsManager::getInst().loadPlugins(loader); // controller plugins
 
 	loadPluginsCheckDependencies(loader);
