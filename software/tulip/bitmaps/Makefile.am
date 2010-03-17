@@ -8,9 +8,7 @@ dist_default_DATA = startup.gif \
 	welcomelogo.bmp \
 	logotulip.jpg \
 	logolabri.jpg \
-	tex_back.png \
-	parallel_sliders_texture.png \
-	parallel_texture.png 
+	tex_back.png
 
 dist_noinst_DATA = startup.gif \
 	addedge.bmp \

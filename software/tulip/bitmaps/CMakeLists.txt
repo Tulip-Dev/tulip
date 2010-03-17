@@ -8,6 +8,4 @@ INSTALL_FILES(${TulipBitmapInstallDir} FILES
 	      logotulip.jpg
 	      logolabri.jpg
 	      tex_back.png
-	      parallel_sliders_texture.png
-	      parallel_texture.png 
 )
