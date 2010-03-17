@@ -28,6 +28,7 @@
 #include "tulip/GlCatmullRomCurve.h"
 #include "tulip/GlRenderer.h"
 #include "tulip/GlOpenUniformCubicBSpline.h"
+#include "tulip/GlTextureManager.h"
 
 #include <iostream>
 
@@ -451,9 +452,11 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
   float lodSize = projectSize(srcCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), projectionMatrix, modelviewMatrix,
       camera->getViewport());
 
+  GlTextureManager::getInst().setAnimationFrame(data->elementAnimationFrame->getEdgeValue(e));
   //draw Edge
   drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, srcCol, tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
       data->elementShape->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, data->elementTexture->getEdgeValue(e));
+  GlTextureManager::getInst().setAnimationFrame(0);
 
   if (data->parameters->getFeedbackRender()) {
     glPassThrough(TLP_FB_END_EDGE);

@@ -22,6 +22,7 @@
 #include "tulip/GlGraphRenderingParameters.h"
 #include "tulip/GlPointManager.h"
 #include "tulip/GlRenderer.h"
+#include "tulip/GlTextureManager.h"
 
 #include <iostream>
 
@@ -103,6 +104,7 @@ namespace tlp {
     const Color& fillColor = data->elementColor->getNodeValue(n);
     const Color& strokeColor = data->elementBorderColor->getNodeValue(n);
     const Color& textColor = data->elementLabelColor->getNodeValue(n);
+    GlTextureManager::getInst().setAnimationFrame(data->elementAnimationFrame->getNodeValue(n));
 
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_COLOR_INFO);
@@ -158,6 +160,8 @@ namespace tlp {
     if (selected) {
       glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
     }
+
+    GlTextureManager::getInst().setAnimationFrame(0);
 
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_END_NODE);

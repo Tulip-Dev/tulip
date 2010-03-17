@@ -353,6 +353,7 @@ public:
 	SizeProperty *elementSrcAnchorSize;
 	IntegerProperty *elementTgtAnchorShape;
 	SizeProperty *elementTgtAnchorSize;
+    IntegerProperty *elementAnimationFrame;
 
 	Graph* graph;
 

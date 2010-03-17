@@ -82,7 +82,8 @@ namespace tlp {
     elementLabelPropName("viewLabel"), elementTexturePropName("viewTexture"),
     elementBorderColorPropName("viewBorderColor"), elementBorderWidthPropName("viewBorderWidth"), elementLayoutPropName(""),
     elementSrcAnchorShapePropName("viewSrcAnchorShape"),elementSrcAnchorSizePropName("viewSrcAnchorSize"),
-    elementTgtAnchorShapePropName("viewTgtAnchorShape"),elementTgtAnchorSizePropName("viewTgtAnchorSize"), graph(graph),
+    elementTgtAnchorShapePropName("viewTgtAnchorShape"),elementTgtAnchorSizePropName("viewTgtAnchorSize"),elementAnimationFrame(new IntegerProperty(graph,"viewAnimationFrame")),
+    graph(graph),
     parameters(parameters) {
 
     reloadAllProperties();

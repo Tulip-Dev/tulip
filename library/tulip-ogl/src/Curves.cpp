@@ -350,6 +350,9 @@ namespace tlp {
       }
     }
     glEnd();
+
+    if(textureName!="")
+      GlTextureManager::getInst().desactivateTexture();
     
     dec=0;
     glBegin(GL_LINE_STRIP);
@@ -377,9 +380,7 @@ namespace tlp {
 	glVertex3fv(&points[i*3 + size*3]);
     }
     glEnd();
-    if(textureName!="") {
-      GlTextureManager::getInst().desactivateTexture();
-    }
+
     delete [] points;
   }
   //=============================================
@@ -493,11 +494,11 @@ namespace tlp {
       glColor4ubv(((const GLubyte *)&colors[i]));
       if(i==0){
         length=0.;
-        glMultiTexCoord2f(GL_TEXTURE0,0, 0.0f);
-        glMultiTexCoord2f(GL_TEXTURE1,0, 0.0f);
-        glVertex3fv(&points[i*3]);
         glMultiTexCoord2f(GL_TEXTURE0,0, 1.0f);
         glMultiTexCoord2f(GL_TEXTURE1,0, 1.0f);
+        glVertex3fv(&points[i*3]);
+        glMultiTexCoord2f(GL_TEXTURE0,0, 0.0f);
+        glMultiTexCoord2f(GL_TEXTURE1,0, 0.0f);
         glVertex3fv(&points[i*3 + size*3]);
       }else{
         Coord p1_0(points[i*3 - 3],points[i*3-2],points[i*3-1]);
@@ -506,11 +507,11 @@ namespace tlp {
         Coord p2_1(points[i*3 + size*3],points[i*3 + size*3+1],points[i*3 + size*3+2]);
 
         length += ((p1_1+p2_1)/2.-(p1_0+p2_0)/2.).norm()/(p1_0-p2_0).norm();
-        glMultiTexCoord2f(GL_TEXTURE0,length, 0.0f);
-        glMultiTexCoord2f(GL_TEXTURE1,length, 0.0f);
-        glVertex3fv(&points[i*3]);
         glMultiTexCoord2f(GL_TEXTURE0,length, 1.0f);
         glMultiTexCoord2f(GL_TEXTURE1,length, 1.0f);
+        glVertex3fv(&points[i*3]);
+        glMultiTexCoord2f(GL_TEXTURE0,length, 0.0f);
+        glMultiTexCoord2f(GL_TEXTURE1,length, 0.0f);
         glVertex3fv(&points[i*3 + size*3]);
         //length+=(l1+l2)/2.;
       }
