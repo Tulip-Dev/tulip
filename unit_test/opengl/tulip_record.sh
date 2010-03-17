@@ -32,8 +32,9 @@ CNEE_OUTPUT_FILE=$1
 TLP_INPUT_FILE=$2
 
 # launch tulip gui
-.  ./launch_tulip.sh
+sh  ./launch_tulip.sh $TULIP $TLP_INPUT_FILE &
 
+sleep 5
 echo "Recording events in $CNEE_OUTPUT_FILE"
 echo "use <End> key to stop recording ..."
 $CNEE -rec -etr -1 --keyboard --mouse -sk End -o $CNEE_OUTPUT_FILE

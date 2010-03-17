@@ -31,11 +31,13 @@ CNEE_INPUT_FILE=$1
 TLP_INPUT_FILE=$2
 
 # launch tulip gui
-.  ./launch_tulip.sh
+sh  ./launch_tulip.sh $TULIP $TLP_INPUT_FILE  > /dev/null 2>&1 &
 
+sleep 5
 # replay events
 echo "Replaying events from $CNEE_INPUT_FILE"
 $CNEE -rep --file $CNEE_INPUT_FILE -fp > /dev/null 2>&1
+xset r
 echo "Replay finished"
 
 # stop tulip if it is still running
