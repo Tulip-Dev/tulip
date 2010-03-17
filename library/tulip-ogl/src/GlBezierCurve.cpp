@@ -73,8 +73,15 @@ GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints, const Color &st
 		const float &startSize, const float &endSize, const unsigned int nbCurvePoints) :
 		AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc, controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints) {
 
-	if (pascalTriangleTextureId == 0) {
+	static bool floatTextureOk = glewIsSupported("GL_ARB_texture_float");
+	if (pascalTriangleTextureId == 0 && floatTextureOk) { 
 		buildPascalTriangleTexture();
+	}
+
+	if (!floatTextureOk) {
+		// float texture not supported, forcing CPU rendering
+		curveShaderProgramNormal=NULL;
+		curveShaderProgramBillboard=NULL;
 	}
 }
 
@@ -126,7 +133,7 @@ Coord GlBezierCurve::computeCurvePointOnCPU(float t) {
 		controlPoint[0] = controlPoints[i][0];
 		controlPoint[1] = controlPoints[i][1];
 		controlPoint[2] = controlPoints[i][2];
-		bezierPoint += controlPoint * pascalTriangle[controlPoints.size() - 1][i] * pow((double) t, (double) i) * pow( (double) (1.0 - t), (double) (controlPoints.size() - 1 - i));
+		bezierPoint += controlPoint * pascalTriangle[controlPoints.size() - 1][i] * pow((double)t, (double)i) * pow((double)(1.0 - t), (double)(controlPoints.size() - 1 - i));
 	}
 	return Coord(bezierPoint[0], bezierPoint[1], bezierPoint[2]);
 }

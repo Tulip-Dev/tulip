@@ -254,15 +254,18 @@ bool GlShaderProgram::shaderProgramsSupported() {
 	if (!GlewManager::getInst().canUseGlew()) {
 		return false;
 	}
-	return (GL_ARB_vertex_shader && GL_ARB_fragment_shader);
+	static bool vertexShaderExtOk = glewIsSupported("GL_ARB_vertex_shader");
+	static bool fragmentShaderExtOk = glewIsSupported("GL_ARB_fragment_shader");
+	return (vertexShaderExtOk && fragmentShaderExtOk);
 }
 
 bool GlShaderProgram::geometryShaderSupported() {
-	GLenum err = glewInit();
-	if (err != GLEW_OK) {
+	GlewManager::getInst().initGlew();
+	if (!GlewManager::getInst().canUseGlew()) {
 		return false;
 	}
-	return GL_EXT_geometry_shader4;
+	static bool geometryShaderExtOk = glewIsSupported("GL_EXT_geometry_shader4");
+	return geometryShaderExtOk;
 }
 
 GlShaderProgram *GlShaderProgram::getCurrentActiveShader() {

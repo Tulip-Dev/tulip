@@ -50,13 +50,18 @@ protected:
 	static std::map<unsigned int, GLfloat *> curveVertexBuffersData;
 	static std::map<unsigned int, std::vector<GLushort *> > curveVertexBuffersIndices;
 	static std::map<unsigned int, GLuint* > curveVertexBuffersObject;
-	static GLint MAX_SHADER_CONTROL_POINTS;	
+	static GLint MAX_SHADER_CONTROL_POINTS;
 	static std::map<std::string, GlShaderProgram *> curvesShadersMap;
-	static GlShader *curveVertexShaderMain;
+	static std::map<std::string, GlShaderProgram *> curvesBillboardShadersMap;
+	static GlShader *curveVertexShaderNormalMain;
+	static GlShader *curveVertexShaderBillboardMain;
 	static GlShader *fisheyeDistortionVertexShader;
 
 	std::string shaderProgramName;
+	GlShaderProgram *curveShaderProgramNormal;
+	GlShaderProgram *curveShaderProgramBillboard;
 	GlShaderProgram *curveShaderProgram;
+
 
 	std::vector<Coord> controlPoints;
 	unsigned int nbControlPoints;
