@@ -136,6 +136,14 @@ namespace tlp {
      * Get animationStep of next textures
      */
     unsigned int getAnimationFrame() {return animationFrame;}
+    /**
+     * Clear vector of textures with error
+     */
+    void clearErrorVector() {texturesWithError.clear();}
+    /**
+     * Remove an entry of vector of textures with error
+     */
+    void removeEntryOfErrorVector(const std::string &name) {texturesWithError.erase(name);}
 
 
     /**
@@ -159,6 +167,7 @@ namespace tlp {
     unsigned long currentContext;
 
     ContextAndTextureMap texturesMap;
+    std::set<std::string> texturesWithError;
 
     unsigned int animationFrame;
 

@@ -36,6 +36,7 @@
 #include <tulip/Types.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/GlTextureManager.h>
 
 #include "tulip/TulipTableWidget.h"
 #include <tulip/ListPropertyWidget.h>
@@ -292,6 +293,7 @@ void FileTableItem::setContentFromEditor(QWidget *w) {
   QString s = ((FilenameEditor *) w)->fileName();
   if (!s.isNull()) {
     setText(s);
+    GlTextureManager::getInst().clearErrorVector();
     qApp->processEvents();
   }
 }

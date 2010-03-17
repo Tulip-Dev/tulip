@@ -338,21 +338,26 @@ bool GlTextureManager::loadTexture(const string& filename)
 bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo &texti,GlTexture &glTexture){
   int GLFmt = texti.hasAlpha ? GL_RGBA : GL_RGB;
 
-  bool spriteOnHeight;
+  bool spriteOnHeight=false;
+  bool spriteOnWidth=false;
   unsigned int spriteNumber=1;
   int width=texti.width;
   int height=texti.height;
 
-  if((texti.height-(texti.height/texti.width)*texti.width)!=0){
+  if((texti.height-(texti.height/texti.width)*texti.width)!=0 && (texti.width-(texti.width/texti.height)*texti.height)!=0){
     errorViewer->displayError(filename,"Texture size is not valid\nTexture size should be of the form :\n - width=height or\n - height=N*width (for animated textures)\nfor file :"+filename);
     return false;
   }else{
     if(texti.width!=texti.height){
-      spriteOnHeight=true;
-      spriteNumber=texti.height/texti.width;
-      height=width;
-    }else{
-      spriteOnHeight=false;
+      if(texti.height>texti.width){
+        spriteOnHeight=true;
+        spriteNumber=texti.height/texti.width;
+        height=width;
+      }else{
+        spriteOnWidth=true;
+        spriteNumber=texti.width/texti.height;
+        width=height;
+      }
     }
 
     bool formatOk=false;
@@ -366,7 +371,6 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
     }
 
     formatOk=false;
-    cout << "height : " << height << endl;
     for(unsigned int i=1;i<=height;i*=2){
       if(i==height)
         formatOk=true;
@@ -384,16 +388,49 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
   glTexture.spriteNumber=spriteNumber;
   glTexture.id=new GLuint[spriteNumber];
 
+  unsigned char **dataForWidthSpriteTexture;
+  dataForWidthSpriteTexture=new unsigned char*[spriteNumber];
+  if(spriteOnWidth){
+    for(unsigned int i=0;i<spriteNumber;i++){
+      if(texti.hasAlpha)
+        dataForWidthSpriteTexture[i]=new unsigned char[4*width*height];
+      else
+        dataForWidthSpriteTexture[i]=new unsigned char[3*width*height];
+    }
+
+    for(unsigned int i=0;i<texti.height;i++){
+      for(unsigned int j=0;j<texti.width;++j){
+        if(texti.hasAlpha){
+          dataForWidthSpriteTexture[j/width][i*width*4+(j-(j/width)*width)*4]=texti.data[i*texti.width*4+j*4];
+          dataForWidthSpriteTexture[j/width][i*width*4+(j-(j/width)*width)*4+1]=texti.data[i*texti.width*4+j*4+1];
+          dataForWidthSpriteTexture[j/width][i*width*4+(j-(j/width)*width)*4+2]=texti.data[i*texti.width*4+j*4+2];
+          dataForWidthSpriteTexture[j/width][i*width*4+(j-(j/width)*width)*4+3]=texti.data[i*texti.width*4+j*4+3];
+        }else{
+          dataForWidthSpriteTexture[j/width][i*width*3+(j-(j/width)*width)*3]=texti.data[i*texti.width*3+j*3];
+          dataForWidthSpriteTexture[j/width][i*width*3+(j-(j/width)*width)*3+1]=texti.data[i*texti.width*3+j*3+1];
+          dataForWidthSpriteTexture[j/width][i*width*3+(j-(j/width)*width)*3+2]=texti.data[i*texti.width*3+j*3+2];
+        }
+      }
+    }
+  }
+
   glGenTextures(spriteNumber, textureNum);	//FIXME: handle case where no memory is available to load texture
   for(unsigned int i=0;i<spriteNumber;++i){
     glBindTexture(GL_TEXTURE_2D, textureNum[i]);
 
     glTexture.id[i]=textureNum[i];
 
-    if(texti.hasAlpha)
-      glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, texti.data + (width*height*4*i));
-    else
-      glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, texti.data + (width*height*3*i));
+    if(!spriteOnWidth){
+      if(texti.hasAlpha)
+        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, texti.data + (width*height*4*i));
+      else
+        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, texti.data + (width*height*3*i));
+    }else{
+      if(texti.hasAlpha)
+        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, dataForWidthSpriteTexture[i]);
+      else
+        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, dataForWidthSpriteTexture[i]);
+    }
     /* use no filtering */
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -438,6 +475,9 @@ bool GlTextureManager::activateTexture(const string& filename) {
 }
 //====================================================================
 bool GlTextureManager::activateTexture(const string& filename,unsigned int frame) {
+  if(texturesWithError.count(filename)!=0)
+    return false;
+
   bool loadOk=true;
   if (texturesMap[currentContext].find(filename) == texturesMap[currentContext].end())
     loadOk=loadTexture(filename);
@@ -445,6 +485,7 @@ bool GlTextureManager::activateTexture(const string& filename,unsigned int frame
     glEnable(GL_TEXTURE_2D);
 
   if(!loadOk){
+    texturesWithError.insert(filename);
     glDisable(GL_TEXTURE_2D);
     return false;
   }

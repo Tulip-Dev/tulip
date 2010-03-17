@@ -33,6 +33,7 @@
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/GlTextureManager.h>
 
 #include "tulip/PropertyWidget.h"
 
@@ -349,6 +350,7 @@ void PropertyWidget::setAllNodeValue() {
     ChooseFileNameDialog dialog(QString("Images (*.png *.jpeg *.jpg *.bmp)"),this);
     if(dialog.exec()==QDialog::Accepted){
       tmpStr=dialog.getText().toStdString();
+      GlTextureManager::getInst().clearErrorVector();
       ok=true;
     }
   } else if (editedPropertyName == "viewLabelPosition") {
@@ -475,6 +477,7 @@ void  PropertyWidget::setAllEdgeValue() {
     ChooseFileNameDialog dialog(QString("Images (*.png *.jpeg *.jpg *.bmp)"),this);
     if(dialog.exec()==QDialog::Accepted){
       tmpStr=dialog.getText().toStdString();
+      GlTextureManager::getInst().clearErrorVector();
       ok=true;
     }
   } else {

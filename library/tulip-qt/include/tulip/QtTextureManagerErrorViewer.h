@@ -18,7 +18,6 @@ public :
 protected :
 
   QWidget *parent;
-  std::map<std::string,std::string> lastErrorForFile;
 
 };
 
