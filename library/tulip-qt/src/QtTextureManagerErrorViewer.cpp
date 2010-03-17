@@ -1,4 +1,4 @@
-#include "QtTextureManagerErrorViewer.h"
+#include "tulip/QtTextureManagerErrorViewer.h"
 
 #include <QtGui/QMessageBox>
 
