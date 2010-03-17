@@ -60,6 +60,7 @@ SET(tulip-qt_LIB_SRCS
     QGlPixelBufferManager.cpp
     QtQuadTreeLODCalculator.cpp
     ListPropertyWidget.cpp
+    QtTextureManagerErrorViewer.cpp
 )
 
 set(tulip-qt_UI

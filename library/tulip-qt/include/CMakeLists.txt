@@ -63,6 +63,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/QGlPixelBufferManager.h
 	tulip/QtQuadTreeLODCalculator.h
 	tulip/BaseGraphicsViewComponentMacro.h
+    tulip/QtTextureManagerErrorViewer.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)

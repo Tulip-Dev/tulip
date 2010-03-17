@@ -148,7 +148,8 @@ TODIST_SOURCES = \
 	ColorScaleConfigDialog.cpp \
 	QtMetaNodeRenderer.cpp \
 	QGlPixelBufferManager.cpp \
-	ListPropertyWidget.cpp
+	ListPropertyWidget.cpp \
+	QtTextureManagerErrorViewer.cpp
 
 QT44_SOURCES = \
 	GlMainWidgetGraphicsView.cpp \

@@ -63,7 +63,8 @@ INCLUDES_H = \
 	tulip/DoubleStringsListSelectionWidget.h \
 	tulip/ListPropertyWidget.h \
 	tulip/QGlPixelBufferManager.h \
-	tulip/BaseGraphicsViewComponentMacro.h
+	tulip/BaseGraphicsViewComponentMacro.h \
+	tulip/QtTextureManagerErrorViewer.h
 
 QT44_INCLUDES_H = \
 	tulip/BaseGraphicsViewComponent.h \

@@ -80,6 +80,7 @@
 #include <tulip/MainController.h>
 #include <tulip/QtProgress.h>
 #include <tulip/PreferenceManager.h>
+#include <tulip/QtTextureManagerErrorViewer.h>
 
 #include <PluginsHelp.h>
 #include <PluginsManagerDialog.h>
@@ -237,6 +238,9 @@ void TulipApp::startTulip() {
   saveActions(toolBar,NULL,controllerToToolBar);*/
   tabIndexToController[-1]=NULL;
   saveInterface(-1);
+
+  GlTextureManagerErrorViewer *oldViewer=GlTextureManager::getInst().setErrorViewer(new QtTextureManagerErrorViewer(this));
+  delete oldViewer;
 
   // if we have only one controller : auto load it
   MutableContainer<Controller *> controllers;
