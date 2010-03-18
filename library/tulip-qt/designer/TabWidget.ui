@@ -93,22 +93,18 @@
   <customwidget>
    <class>tlp::TulipStats</class>
    <extends>QWidget</extends>
-   <header>../include/tulip/TulipStatsWidget.h</header>
   </customwidget>
   <customwidget>
    <class>tlp::SGHierarchyWidget</class>
    <extends>QWidget</extends>
-   <header>sghierarchywidget.h</header>
   </customwidget>
   <customwidget>
    <class>tlp::ElementPropertiesWidget</class>
    <extends>QWidget</extends>
-   <header>elementpropertieswidget.h</header>
   </customwidget>
   <customwidget>
    <class>tlp::PropertyDialog</class>
    <extends>QWidget</extends>
-   <header>../include/tulip/PropertyDialog.h</header>
   </customwidget>
  </customwidgets>
  <includes>

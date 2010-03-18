@@ -84,7 +84,6 @@ noinst_HEADERS = \
 	tulip/QuadTree.h
 
 
-if WIN32 
 BUILT_SOURCES = \
 	tulip/TabWidgetData.h \
 	tulip/PropertyDialogData.h \
@@ -102,46 +101,6 @@ BUILT_SOURCES = \
 	tulip/DoubleStringsListSelectionWidgetData.h \
 	tulip/ListPropertyWidgetData.h \
 	tulip/ChooseFileNameDialogData.h
-else
-BUILT_SOURCES = \
-	tulip/TabWidgetData.h \
-	tulip/PropertyDialogData.h \
-	tulip/CopyPropertyDialogData.h \
-	tulip/TulipStatsData.h \
-	tulip/FindSelectionData.h \
-	tulip/RenderingParametersDialogData.h \
-	tulip/LayerManagerWidgetData.h \
-	tulip/AugmentedDisplayDialogData.h \
-	tulip/GWOverviewWidgetData.h \
-	tulip/GridOptionsData.h \
-	tulip/QtProgressData.h \
-	tulip/ColorScaleConfigDialogData.h \
-	tulip/SimpleStringsListSelectionWidgetData.h \
-	tulip/DoubleStringsListSelectionWidgetData.h \
-	tulip/sghierarchywidget.h \
-	tulip/glmainwidget.h \
-	tulip/elementpropertieswidget.h \
-	tulip/gwoverviewwidget.h \
-	tulip/propertywidget.h \
-	tulip/ListPropertyWidgetData.h \
-	tulip/ChooseFileNameDialogData.h
-
-tulip/sghierarchywidget.h : tulip/SGHierarchyWidget.h
-	cp -f $< $@
-
-tulip/glmainwidget.h : tulip/GlMainWidget.h
-	cp -f $< $@
-
-tulip/gwoverviewwidget.h : tulip/GWOverviewWidget.h
-	cp -f $< $@
-
-tulip/elementpropertieswidget.h : tulip/ElementPropertiesWidget.h
-	cp -f $< $@
-
-tulip/propertywidget.h : tulip/PropertyWidget.h
-	cp -f $< $@
-
-endif
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 
