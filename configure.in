@@ -203,6 +203,12 @@ else
   if test ${VAR_MACPPC} = 1
   then
     CPPFLAGS="$CPPFLAGS -DMACPPC"
+  else
+    if test ${VAR_MACOSX} = 1
+    then
+      CPPFLAGS="$CPPFLAGS -m32"
+      LDFLAGS="${LDFLAGS} -m32"
+    fi
   fi
 fi
 
@@ -217,7 +223,7 @@ AC_SUBST(CONFIGURE_tulipogl)
 dnl Checks for X11, OpenGL, Qt
 if test "${CONFIGURE_tulipogl}" != ""
  then
-   if test ${VAR_WIN32} != 1
+   if test ${VAR_LINUX} = 1
    then
      AC_PATH_X
      AM_PATH_XML2(2.5.4)

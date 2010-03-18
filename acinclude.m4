@@ -435,7 +435,7 @@ then
 else
   if test ${VAR_MACOSX} = 1
   then
-    LIB_GL="/usr/local/lib/libGLEW.dylib -framework OpenGL"
+    LIB_GL="-lGLEW -framework OpenGL"
   else
     LIB_GL="-lGLEW -lGLU -lGL"
   fi
