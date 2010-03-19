@@ -43,12 +43,12 @@ void SimpleStringsListSelectionWidget::qtWidgetsConnection() {
 
 void SimpleStringsListSelectionWidget::setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) {
 	for (unsigned int i = 0 ; i < unselectedStringsList.size() ; ++i) {
-		QList<QListWidgetItem *> items = listWidget->findItems(QString(unselectedStringsList[i].c_str()), Qt::MatchExactly);
+	  QList<QListWidgetItem *> items = listWidget->findItems(QString::fromUtf8(unselectedStringsList[i].c_str()), Qt::MatchExactly);
 		if (items.size() > 0) {
 			items[0]->setFlags(items[0]->flags() | Qt::ItemIsUserCheckable);
 			items[0]->setCheckState(Qt::Unchecked);
 		} else {
-			QListWidgetItem *item = new QListWidgetItem(QString(unselectedStringsList[i].c_str()));
+		  QListWidgetItem *item = new QListWidgetItem(QString::fromUtf8(unselectedStringsList[i].c_str()));
 			item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
 			item->setCheckState(Qt::Unchecked);
 			listWidget->addItem(item);
@@ -61,12 +61,12 @@ void SimpleStringsListSelectionWidget::setSelectedStringsList(const std::vector<
 		if (maxSelectedStringsListSize != 0 && getSelectedStringsList().size() == maxSelectedStringsListSize) {
 			break;
 		}
-		QList<QListWidgetItem *> items = listWidget->findItems(QString(selectedStringsList[i].c_str()), Qt::MatchExactly);
+		QList<QListWidgetItem *> items = listWidget->findItems(QString::fromUtf8(selectedStringsList[i].c_str()), Qt::MatchExactly);
 		if (items.size() > 0) {
 			items[0]->setFlags(items[0]->flags() | Qt::ItemIsUserCheckable);
 			items[0]->setCheckState(Qt::Checked);
 		} else {
-			QListWidgetItem *item = new QListWidgetItem(QString(selectedStringsList[i].c_str()));
+		  QListWidgetItem *item = new QListWidgetItem(QString::fromUtf8(selectedStringsList[i].c_str()));
 			item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
 			item->setCheckState(Qt::Checked);
 			listWidget->addItem(item);
@@ -114,7 +114,7 @@ vector<string> SimpleStringsListSelectionWidget::getSelectedStringsList() const 
 	for (int i = 0 ; i < listWidget->count() ; ++i) {
 		QListWidgetItem *item = listWidget->item(i);
 		if (item->checkState() == Qt::Checked) {
-			ret.push_back(item->text().toStdString());
+		  ret.push_back(string(item->text().toUtf8().data()));
 		}
 	}
 	return ret;
@@ -125,7 +125,7 @@ vector<string> SimpleStringsListSelectionWidget::getUnselectedStringsList() cons
 	for (int i = 0 ; i < listWidget->count() ; ++i) {
 		QListWidgetItem *item = listWidget->item(i);
 		if (item->checkState() == Qt::Unchecked) {
-			ret.push_back(item->text().toStdString());
+		  ret.push_back(string(item->text().toUtf8().data()));
 		}
 	}
 	return ret;

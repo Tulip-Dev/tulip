@@ -448,13 +448,13 @@ bool SpreadTable::setItemText(int row, int column, const QString &text) {
 	result = ((SpreadCell*) curItem)->computeValue(result);
 
 	PropertyInterface *currentProperty = graph->getProperty(
-			horizontalHeaderItem(column)->text().toStdString());
+								string(horizontalHeaderItem(column)->text().toUtf8().data()));
 
 	bool changementAccepted;
 	if (view == NodesView)
-		changementAccepted = currentProperty->setNodeStringValue(node(row), result.toStdString());
+	  changementAccepted = currentProperty->setNodeStringValue(node(row), string(result.toUtf8().data()));
 	else
-		changementAccepted = currentProperty->setEdgeStringValue(edge(row), result.toStdString());
+	  changementAccepted = currentProperty->setEdgeStringValue(edge(row), string(result.toUtf8().data()));
 
 	//cout << "Set text : " << horizontalHeaderItem(column)->text().toStdString() << endl;
 	if (!changementAccepted)

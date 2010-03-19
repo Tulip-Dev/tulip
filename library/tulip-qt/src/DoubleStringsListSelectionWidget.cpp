@@ -31,13 +31,13 @@ DoubleStringsListSelectionWidget::DoubleStringsListSelectionWidget(QWidget *pare
 
 void DoubleStringsListSelectionWidget::setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) {
 	for (unsigned int i = 0; i < unselectedStringsList.size(); ++i) {
-		inputList->addItemList(QString(unselectedStringsList[i].c_str()));
+	  inputList->addItemList(QString::fromUtf8(unselectedStringsList[i].c_str()));
 	}
 }
 
 void DoubleStringsListSelectionWidget::setSelectedStringsList(const std::vector<std::string> &selectedStringsList) {
 	for (unsigned int i = 0; i < selectedStringsList.size(); ++i) {
-		outputList->addItemList(QString(selectedStringsList[i].c_str()));
+	  outputList->addItemList(QString::fromUtf8(selectedStringsList[i].c_str()));
 	}
 }
 
@@ -50,11 +50,11 @@ void DoubleStringsListSelectionWidget::clearSelectedStringsList() {
 }
 
 void DoubleStringsListSelectionWidget::setUnselectedStringsListLabel(const std::string &unselectedStringsListLabel) {
-	inputListLabel->setText(QString(unselectedStringsListLabel.c_str()));
+  inputListLabel->setText(QString::fromUtf8(unselectedStringsListLabel.c_str()));
 }
 
 void DoubleStringsListSelectionWidget::setSelectedStringsListLabel(const std::string &selectedStringsListLabel) {
-	outputListLabel->setText(QString(selectedStringsListLabel.c_str()));
+  outputListLabel->setText(QString::fromUtf8(selectedStringsListLabel.c_str()));
 }
 
 void DoubleStringsListSelectionWidget::setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize) {
@@ -69,7 +69,7 @@ void DoubleStringsListSelectionWidget::setMaxSelectedStringsListSize(const unsig
 vector<string> DoubleStringsListSelectionWidget::getSelectedStringsList() const {
 	vector<string> outputStringList;
 	for (int i = 0; i < outputList->count(); ++i) {
-		outputStringList.push_back(outputList->item(i)->text().toStdString());
+	  outputStringList.push_back(string(outputList->item(i)->text().toUtf8().data()));
 	}
 	return outputStringList;
 }
@@ -77,7 +77,7 @@ vector<string> DoubleStringsListSelectionWidget::getSelectedStringsList() const 
 vector<string> DoubleStringsListSelectionWidget::getUnselectedStringsList() const {
 	vector<string> inputStringList;
 	for (int i = 0; i < inputList->count(); ++i) {
-		inputStringList.push_back(inputList->item(i)->text().toStdString());
+	  inputStringList.push_back(string(inputList->item(i)->text().toUtf8().data()));
 	}
 	return inputStringList;
 }

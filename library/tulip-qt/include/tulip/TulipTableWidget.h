@@ -142,7 +142,7 @@ public:
 	}
 
 	virtual void setTextFromTulip(const std::string& data) {
-		setText(QString::fromStdString(data));
+	  setText(QString::fromUtf8(data.c_str()));
 	}
 };
 

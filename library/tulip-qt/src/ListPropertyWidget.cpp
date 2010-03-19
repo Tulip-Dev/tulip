@@ -58,7 +58,7 @@ void ListPropertyWidget::updateData() {
 	handler->clear();
 	for (int i = 0; i < tableWidget->rowCount(); ++i) {
 		handler->set(i,
-				((TulipTableWidgetItem*) tableWidget->item(i, 0))->textForTulip().toStdString());
+			     string(((TulipTableWidgetItem*) tableWidget->item(i, 0))->textForTulip().toUtf8().data()));
 	}
 }
 
@@ -83,7 +83,7 @@ void ListPropertyWidget::setAll() {
 			TulipTableWidgetItem *item = (TulipTableWidgetItem *)tableWidget->item(0, 0);
 			for (int i = 0; i < tableWidget->rowCount(); ++i) {
 				((TulipTableWidgetItem*) tableWidget->item(i, 0))->setTextFromTulip(
-						item->textForTulip().toStdString());
+												    string(item->textForTulip().toUtf8().data()));
 			}
 		}
 	}

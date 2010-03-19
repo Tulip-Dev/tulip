@@ -93,7 +93,7 @@ public:
 		setupUi(this);
 	}
 	std::string getName() {
-		return lineEdit->text().toStdString();
+	  return std::string(lineEdit->text().toUtf8().data());
 	}
 	std::string getType() {
 		return comboBox->itemText(comboBox->currentIndex()).toStdString();
