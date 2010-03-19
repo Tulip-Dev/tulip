@@ -474,27 +474,29 @@ void PushPopTest::testAddDelProps() {
 
   DoubleProperty* dProp = graph->getProperty<DoubleProperty>("double");
   CPPUNIT_ASSERT(graph->existProperty("double"));
+  node n = graph->addNode();
+  dProp->setNodeValue(n, 123456789.);
 
   graph->pop();
 
   CPPUNIT_ASSERT(!graph->existProperty("double"));
+  CPPUNIT_ASSERT(!graph->isElement(n));
   
   graph->unpop();
   CPPUNIT_ASSERT(graph->existProperty("double"));
   CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double") == dProp);
   CPPUNIT_ASSERT(graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(graph->isElement(n));
+  CPPUNIT_ASSERT(dProp->getNodeValue(n) == 123456789.);
 
   graph->delLocalProperty("boolean");
   CPPUNIT_ASSERT(!graph->existProperty("boolean"));
   graph->delLocalProperty("double");
   CPPUNIT_ASSERT(!graph->existProperty("double"));
-  // we must try to ensure to not allocate the memory previously allocated
-  // to old "double" to a new "double", so allocate chunk before "double"
-  void* chunk = malloc(128);
   graph->getProperty<DoubleProperty>("double");
-  free(chunk);
   CPPUNIT_ASSERT(graph->existProperty("double"));
-  CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double") != dProp);
+  CPPUNIT_ASSERT(graph->isElement(n));
+  CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double")->getNodeValue(n) != 123456789.);
 
   graph->push();
   CPPUNIT_ASSERT(graph->existProperty("double"));
@@ -504,7 +506,8 @@ void PushPopTest::testAddDelProps() {
   graph->pop();
   CPPUNIT_ASSERT(!graph->existProperty("boolean"));
   CPPUNIT_ASSERT(graph->existProperty("double"));
-  CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double") != dProp);
+  CPPUNIT_ASSERT(graph->isElement(n));
+  CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double")->getNodeValue(n) != 123456789.);
 
   graph->pop();
   CPPUNIT_ASSERT(!graph->existProperty("double"));
