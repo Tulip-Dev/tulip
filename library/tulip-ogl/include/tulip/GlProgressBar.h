@@ -18,7 +18,7 @@
 #include "tulip/GlComposite.h"
 #include <tulip/PluginProgress.h>
 
-const std::string SLIDER_TEXTURE_NAME = "sliders_texture.png";
+const std::string SLIDER_TEXTURE_NAME = "cylinderTexture.png";
 
 namespace tlp {
 /**
