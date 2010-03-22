@@ -17,6 +17,9 @@ namespace tlp {
   void PluginsManagerMainWindow::createWidget(QWidget *parent){
     w = new QWidget(this);
     setCentralWidget(w);
+#if QT_MINOR_REL >= 6
+    menuBar()->setNativeMenuBar(false);
+#endif
 
     vbox = new QVBoxLayout();
     vbox->addWidget(widg);
