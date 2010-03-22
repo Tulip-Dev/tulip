@@ -156,7 +156,7 @@ namespace tlp {
     /**
      * empty private constructor for singleton
      */
-    GlTextureManager():animationFrame(0),errorViewer(new GlTextureManagerErrorViewer) {}
+    GlTextureManager():errorViewer(new GlTextureManagerErrorViewer),animationFrame(0) {}
 
     bool loadTexture(const std::string&,const TextureInfo &,GlTexture &);
 
