@@ -86,7 +86,7 @@ BUILT_SOURCES = \
 	moc_ColorScaleConfigDialog.cpp \
 	moc_ListPropertyWidget.cpp
 
-QT44_BUILD_SOURCES = \
+QT44_BUILT_SOURCES = \
 	moc_GlMainWidgetGraphicsView.cpp \
 	moc_BaseGraphicsViewComponent.cpp \
 	moc_GlMainWidgetItem.cpp \
@@ -159,14 +159,14 @@ QT44_SOURCES = \
 	GlMainWidgetItem.cpp
 
 if QT44
-nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES) $(QT44_BUILD_SOURCES)
+nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES) $(QT44_BUILT_SOURCES)
 dist_libtulip_qt4_la_SOURCES = $(TODIST_SOURCES) $(QT44_SOURCES)
 else
 nodist_libtulip_qt4_la_SOURCES = $(BUILT_SOURCES)
 dist_libtulip_qt4_la_SOURCES = $(TODIST_SOURCES)
 endif
 
-CLEANFILES = $(BUILT_SOURCES) moc_GlMainWidgetPlugin.cpp moc_PropertyWidgetPlugin.cpp moc_ElementPropertiesWidgetPlugin.cpp moc_SGHierarchyWidgetPlugin.cpp moc_GWOverviewWidgetPlugin.cpp
+CLEANFILES = $(BUILT_SOURCES) moc_GlMainWidgetPlugin.cpp moc_PropertyWidgetPlugin.cpp moc_ElementPropertiesWidgetPlugin.cpp moc_SGHierarchyWidgetPlugin.cpp moc_GWOverviewWidgetPlugin.cpp $(QT44_BUILT_SOURCES)
 
 
 
@@ -181,5 +181,3 @@ moc_SGHierarchyWidget.cpp: $(srcdir)/../include/tulip/SGHierarchyWidget.h
 
 TulipQtResource.cpp: ../designer/TulipQtResource.qrc
 	$(RCC) -name TulipQt -o $@ $<
-
-
