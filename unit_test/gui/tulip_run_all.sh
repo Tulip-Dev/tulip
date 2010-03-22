@@ -20,7 +20,7 @@ if [ $? -eq 1 ]; then
     echo 'tulip executable not found';
     exit
 fi
-.  ./launch_tulip.sh
+sh  ./launch_tulip.sh $TULIP > /dev/null 2>&1 &
 sleep 10
 . ./stop_tulip.sh
  

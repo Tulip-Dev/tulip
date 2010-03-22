@@ -5,7 +5,7 @@
 TYPE=$1
 
 # clean up result_*.jpg files
-rm result_*.jpg
+rm result_*.jpg > /dev/null 2>&1
 
 # clean up log file
 if [ -f all_tests_run.log ]; then
@@ -29,7 +29,7 @@ if [ $? -eq 1 ]; then
     echo 'tulip executable not found';
     exit
 fi
-.  ./launch_tulip.sh
+sh  ./launch_tulip.sh $TULIP > /dev/null 2>&1 &
 sleep 10
 . ./stop_tulip.sh
  
