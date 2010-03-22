@@ -84,12 +84,12 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 			glActiveTexture(GL_TEXTURE0);
 			tlp::GlTextureManager::getInst().activateTexture(texture);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		}
-		if (billboardCurve) {
-			glActiveTexture(GL_TEXTURE1);
 			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
 			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE);
+		}
+		if (billboardCurve) {
+			glActiveTexture(GL_TEXTURE1);
 			tlp::GlTextureManager::getInst().activateTexture(tlp::TulipBitmapDir+"cylinderTexture.png");
 		}
 		glBegin(GL_TRIANGLE_STRIP);
@@ -113,11 +113,11 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 		glEnd();
 		if (billboardCurve) {
 			glActiveTexture(GL_TEXTURE1);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			tlp::GlTextureManager::getInst().desactivateTexture();
 		}
 		if (texture != "") {
 			glActiveTexture(GL_TEXTURE0);
+			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 			tlp::GlTextureManager::getInst().desactivateTexture();
 		}
 		glBegin(GL_LINE_STRIP);
@@ -352,10 +352,10 @@ AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &
 	if (GlShaderProgram::shaderProgramsSupported()) {
 		if (MAX_SHADER_CONTROL_POINTS == 0) {
 			// has been determined experimentally by testing the implementation
-			// on several graphic cards with different video memory size
+			// on several graphic cards with different video memory size and graphics drivers
 			glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS_ARB, &MAX_SHADER_CONTROL_POINTS);
 			MAX_SHADER_CONTROL_POINTS /= 4;
-			MAX_SHADER_CONTROL_POINTS -= 32;
+			MAX_SHADER_CONTROL_POINTS -= 44;
 		}
 		if (curveVertexShaderNormalMain == NULL) {
 			curveVertexShaderNormalMain = new GlShader(Vertex);
@@ -443,6 +443,8 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 	GLint renderMode;
 	glGetIntegerv(GL_RENDER_MODE, &renderMode);
 
+	glDisable(GL_LIGHTING);
+
 	if (texture != "") {
 		unsigned int i = nbCurvePoints / 2;
 		Coord firstCurvePoint = computeCurvePointOnCPU(i / static_cast<float>(nbCurvePoints - 1));
@@ -519,13 +521,13 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 				glActiveTexture(GL_TEXTURE0);
 				GlTextureManager::getInst().activateTexture(texture);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+				glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+				glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE);
 			}
 			if (billboardCurve) {
 				glActiveTexture(GL_TEXTURE1);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-				glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
-				glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE);
 				GlTextureManager::getInst().activateTexture(TulipBitmapDir+"cylinderTexture.png");
 			}
 			if (vboOk) {
@@ -536,11 +538,11 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 			}
 			if (billboardCurve) {
 				glActiveTexture(GL_TEXTURE1);
-				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 				GlTextureManager::getInst().desactivateTexture();
 			}
 			if (texture != "") {
 				glActiveTexture(GL_TEXTURE0);
+				glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 				GlTextureManager::getInst().desactivateTexture();
 			}
 			if (outlined) {

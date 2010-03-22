@@ -469,24 +469,21 @@ namespace tlp {
     unsigned int size=vertices.size();
     GLfloat *points = result.data;
 
-    //if(textureName!="") {
+    if(textureName!="") {
+    	glActiveTexture(GL_TEXTURE0);
+    	glEnable(GL_TEXTURE_2D);
+    	GlTextureManager::getInst().activateTexture(textureName);
+    	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+    	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
+    	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE);
+    }
+
     string newTextureName1=TulipBitmapDir+"cylinderTexture.png";
-    //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE);
-    glActiveTexture(GL_TEXTURE0);
-    glEnable(GL_TEXTURE_2D);
-    GlTextureManager::getInst().activateTexture(textureName);
-
-    //glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
-    //glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
-    //glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_REPLACE);
-
     glActiveTexture(GL_TEXTURE1);
     glEnable(GL_TEXTURE_2D);
     GlTextureManager::getInst().activateTexture(newTextureName1);
-    //}
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 
     float length;
     glBegin(GL_QUAD_STRIP);
@@ -513,16 +510,17 @@ namespace tlp {
         glMultiTexCoord2f(GL_TEXTURE0,length, 0.0f);
         glMultiTexCoord2f(GL_TEXTURE1,length, 0.0f);
         glVertex3fv(&points[i*3 + size*3]);
-        //length+=(l1+l2)/2.;
       }
     }
     glEnd();
+
     glActiveTexture(GL_TEXTURE1);
     glDisable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);
 
     if(textureName!="") {
-      GlTextureManager::getInst().desactivateTexture();
+    	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    	GlTextureManager::getInst().desactivateTexture();
     }
 
     glBegin(GL_LINE_STRIP);
