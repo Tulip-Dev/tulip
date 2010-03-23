@@ -84,11 +84,29 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
     }
   /* skip size of bitmap info header */
   fseek(file, 4, SEEK_CUR);
-  fread(&texture->width, sizeof(int), 1, file);
-  fread(&texture->height, sizeof(int), 1, file);
+  if (!fread(&texture->width, sizeof(int), 1, file))
+    {
+      errorMsg = "Error reading : " + filename;
+      //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
+      fclose(file);
+      return false;
+    }
+   if (!fread(&texture->height, sizeof(int), 1, file))
+    {
+      errorMsg = "Error reading : " + filename;
+      //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
+      fclose(file);
+      return false;
+    }
 
   /* get the number of planes (must be set to 1) */
-  fread(&biPlanes, sizeof(short int), 1, file);
+  if (!fread(&biPlanes, sizeof(short int), 1, file))
+    {
+      errorMsg = "Error reading : " + filename;
+      //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
+      fclose(file);
+      return false;
+    }
   if (biPlanes != 1)
     {
       errorMsg = "Error: number of Planes not 1 in : " + filename;
