@@ -75,6 +75,10 @@ void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
   if(!fbo2)
     fbo2 = new QGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
 
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+        painter->beginNativePainting();
+#endif
+
   glMainWidget->getScene()->setViewport(0,0,width, height);
   glMainWidget->resize(width,height);
 
@@ -138,6 +142,10 @@ void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 
   GlTextureManager::getInst().registerExternalTexture(oss2.str(), fbo2->texture());
 
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+        painter->endNativePainting();
+#endif
+
   rect = QRectF(left - width / 2.0f, top - height / 2.0f, width, height);
 
   if(decorate){
@@ -150,6 +158,9 @@ void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     painter->setRenderHint(QPainter::Antialiasing, false);
   }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+        painter->beginNativePainting();
+#endif
 
   glDisable(GL_BLEND);
   setMaterial(Color(255,255,255,255));
@@ -167,6 +178,10 @@ void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
   glEnd();
   glEnable(GL_BLEND);
   GlTextureManager::getInst().desactivateTexture();
+
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+        painter->endNativePainting();
+#endif
 }
 
 void GlMainWidgetItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
