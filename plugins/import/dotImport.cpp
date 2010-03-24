@@ -2,7 +2,7 @@
 #include <errno.h>
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
-#include <dotImportCLUT.h>
+#include "dotImportCLUT.h"
 
 using namespace std;
 using namespace tlp;
