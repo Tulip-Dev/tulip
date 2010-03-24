@@ -187,13 +187,14 @@ const unsigned long FTUnicodeStringItr<T>::offsetsFromUTF8[6] = { 0x00000000UL, 
 template <typename T>
 inline void FTUnicodeStringItr<T>::readUTF8()
 {
+  /*
     unsigned int ch = 0;
     unsigned int extraBytesToRead = utf8bytes[(unsigned char)(*nextPos)];
     // falls through
     switch (extraBytesToRead)
     {
-          case 6: ch += *nextPos++; ch <<= 6; /* remember, illegal UTF-8 */
-          case 5: ch += *nextPos++; ch <<= 6; /* remember, illegal UTF-8 */
+          case 6: ch += *nextPos++; ch <<= 6; // remember, illegal UTF-8
+          case 5: ch += *nextPos++; ch <<= 6; // remember, illegal UTF-8
           case 4: ch += *nextPos++; ch <<= 6;
           case 3: ch += *nextPos++; ch <<= 6;
           case 2: ch += *nextPos++; ch <<= 6;
@@ -201,6 +202,50 @@ inline void FTUnicodeStringItr<T>::readUTF8()
     }
     ch -= offsetsFromUTF8[extraBytesToRead-1];
     curChar = ch;
+  */
+  // check invalid UTF8
+  unsigned int ch = 0;
+  unsigned char *u = (unsigned char *) nextPos;
+  unsigned int len =  utf8bytes[*u];
+  switch (len) {
+  case 2:
+    ch = *u & 0x1F;
+    break;
+  case 3:
+    ch = *u & 0x0F;
+    break;
+  case 4:
+    ch = *u & 0x07;
+    break;
+  default:
+    // len > 4 are invalid
+    // return it as extended-ASCII
+    curChar = *u;
+    ++nextPos;
+    return; 
+  }
+  ++u;
+  // read the remaining bytes
+  for (unsigned int i = 1; i < len; ++u, ++i) {
+    if ((*u >=0) || ((*u & 0xC0) != 0x80)) {
+      // invalid UTF8
+      // return it as an extended-ASCII
+      curChar = *nextPos++;
+      return;
+    }
+    // build the Unicode
+    ch = (ch<<6) | (*u & 0x3F);
+  } 
+  // According to Unicode 5.0 
+  // codes in the range 0xD800 to 0xDFFF 
+  // are invalid
+  if (((ch) >= 0xD800) || ((ch) <= 0xDFFF)) {
+    // replace it with question mark
+    ch = '?';
+    len = 1;
+  }
+  nextPos += len;
+  curChar = ch;
 }
 
 // Magic numbers for UTF-16 conversions
