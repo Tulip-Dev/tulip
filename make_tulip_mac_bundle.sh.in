@@ -11,7 +11,6 @@ APP_DIR=Tulip-@PACKAGE_VERSION@.app
 QT_DIR=@QTDIR@
 
 BIN_BUNDLE_DIR=$APP_DIR/Contents/MacOS
-BIN_BUNDLE=$BIN_BUNDLE_DIR/tulip
 LIBS_BUNDLE_DIR=$APP_DIR/Contents/Frameworks
 RESOURCES_BUNDLE_DIR=$APP_DIR/Contents/Resources
 BUNDLE_LIB_PATH=@executable_path/../Frameworks
@@ -148,22 +147,17 @@ mv tulip.app $APP_DIR
 
 # create the tulip shared libs bundle directory
 mkdir -p $LIBS_BUNDLE_DIR
-# look for shared libs
-SHARED_LIBS=$(otool -L $BIN_BUNDLE | grep "$SHLIBS_REGEXP" | awk '{print $1}')
-# copy libs in shared libs bundle directory
-for LIB in $SHARED_LIBS
+# package every binary in the bundle
+for BIN_BUNDLE in tulip_app tulip tulip_check_pl
 do
-  make_bundle_lib $LIB $LIBS_BUNDLE_DIR $BIN_BUNDLE
-done
-# same for tulip_check_pl
 # look for shared libs
-SHARED_LIBS=$(otool -L $BIN_BUNDLE_DIR/tulip_check_pl | grep "$SHLIBS_REGEXP" | awk '{print $1}')
+  SHARED_LIBS=$(otool -L $BIN_BUNDLE_DIR/$BIN_BUNDLE | grep "$SHLIBS_REGEXP" | awk '{print $1}')
 # copy libs in shared libs bundle directory
-for LIB in $SHARED_LIBS
-do
-  make_bundle_lib $LIB $LIBS_BUNDLE_DIR $BIN_BUNDLE_DIR/tulip_check_pl
+  for LIB in $SHARED_LIBS
+  do
+    make_bundle_lib $LIB $LIBS_BUNDLE_DIR $BIN_BUNDLE_DIR/$BIN_BUNDLE
+  done
 done
-
 
 # clean up the plugins bundle dir
 TLP_PLUGINS_BUNDLE_DIR=$APP_DIR/Contents/lib/tlp
