@@ -13,7 +13,7 @@ if [ $? -eq 1 ]; then
     MUST_EXIT=1
 fi
 
-TULIP=`which tulip`
+TULIP=`which tulip_app`
 if [ $? -eq 1 ]; then
     echo 'tulip executable not found';
     MUST_EXIT=1

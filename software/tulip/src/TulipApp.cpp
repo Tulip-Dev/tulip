@@ -43,6 +43,7 @@
 #include <QtGui/qprintdialog.h>
 #include <QtGui/qmenudata.h>
 #include <QtGui/qtextedit.h>
+#include <QtCore/QSettings>
 
 #include <tulip/tuliphash.h>
 #include <tulip/TlpTools.h>
@@ -899,8 +900,16 @@ void TulipApp::displayRestartForPlugins() {
       tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
       QMessageBox::Yes | QMessageBox::Default,
       QMessageBox::No);
-  if(result == QMessageBox::Yes)
+  if(result == QMessageBox::Yes){
+    // Store that tulip must be auto restarted
+    QSettings settings("TulipSoftware","Tulip");
+    settings.beginGroup("PluginsManager");
+    settings.setValue("needRestart",true);
+    settings.endGroup();
+    settings.sync();
+
     fileExit();
+  }
 }
 //==============================================================
 void TulipApp::deletePluginsUpdateChecker(){
@@ -1070,8 +1079,17 @@ void TulipApp::preference() {
 				    tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
 				    QMessageBox::Yes | QMessageBox::Default,
 				    QMessageBox::No);
-  if(result == QMessageBox::Yes)
+  if(result == QMessageBox::Yes) {
+
+    // Store that tulip must be auto restarted
+    QSettings settings("TulipSoftware","Tulip");
+    settings.beginGroup("PluginsManager");
+    settings.setValue("needRestart",true);
+    settings.endGroup();
+    settings.sync();
+
     fileExit();
+  }
 }
 //==============================================================
 void TulipApp::helpIndex() {
