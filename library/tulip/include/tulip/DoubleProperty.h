@@ -50,9 +50,9 @@ public :
 			      PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
 
 private:
-  TLP_HASH_MAP<unsigned long, double> maxN,minN,maxE,minE;
-  TLP_HASH_MAP<unsigned long, bool> minMaxOkNode;
-  TLP_HASH_MAP<unsigned long, bool> minMaxOkEdge;
+  TLP_HASH_MAP<unsigned int, double> maxN,minN,maxE,minE;
+  TLP_HASH_MAP<unsigned int, bool> minMaxOkNode;
+  TLP_HASH_MAP<unsigned int, bool> minMaxOkEdge;
   void computeMinMaxNode(Graph *sg=0);
   void computeMinMaxEdge(Graph *sg=0);
 };

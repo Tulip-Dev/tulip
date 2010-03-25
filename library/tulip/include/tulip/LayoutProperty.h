@@ -108,8 +108,8 @@ protected:
   void clone_handler(AbstractProperty<PointType,LineType> &);
 
 private:
-  TLP_HASH_MAP<unsigned long,Coord> max,min;
-  TLP_HASH_MAP<unsigned long,bool> minMaxOk;
+  TLP_HASH_MAP<unsigned int, Coord> max,min;
+  TLP_HASH_MAP<unsigned int, bool> minMaxOk;
   void computeMinMax(Graph * graph=NULL);
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
 };

@@ -42,8 +42,8 @@ protected:
   void clone_handler(AbstractProperty<IntegerType,IntegerType> &);
 
 private:
-  TLP_HASH_MAP<unsigned long, int> maxN,minN,maxE,minE;
-  TLP_HASH_MAP<unsigned long, bool> minMaxOkNode;
+  TLP_HASH_MAP<unsigned int, int> maxN,minN,maxE,minE;
+  TLP_HASH_MAP<unsigned int, bool> minMaxOkNode;
   TLP_HASH_MAP<unsigned long, bool> minMaxOkEdge;
   void computeMinMaxNode(Graph *sg=0);
   void computeMinMaxEdge(Graph *sg=0);

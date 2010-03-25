@@ -47,8 +47,8 @@ protected:
   void resetMinMax();
 
 private:
-  TLP_HASH_MAP<unsigned long, Size> max,min;
-  TLP_HASH_MAP<unsigned long, bool> minMaxOk;
+  TLP_HASH_MAP<unsigned int, Size> max,min;
+  TLP_HASH_MAP<unsigned int, bool> minMaxOk;
   void computeMinMax(Graph * sg=NULL);
 };
 

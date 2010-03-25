@@ -56,7 +56,7 @@ LayoutProperty::~LayoutProperty() {
 //======================================================
 Coord LayoutProperty::getMax(Graph *sg) {
   if (sg==0) sg=graph;
-  unsigned long sgi=(unsigned long)sg;
+  unsigned int sgi = sg->getId();
   if (minMaxOk.find(sgi)==minMaxOk.end()) minMaxOk[sgi]=false;
   if (!minMaxOk[sgi]) computeMinMax(sg);
   return max[sgi];
@@ -64,7 +64,7 @@ Coord LayoutProperty::getMax(Graph *sg) {
 //======================================================
 Coord  LayoutProperty::getMin(Graph *sg) {
   if (sg==0) sg=graph;
-  unsigned long sgi=(unsigned long)sg;
+  unsigned int sgi = sg->getId();
   if (minMaxOk.find(sgi)==minMaxOk.end()) minMaxOk[sgi]=false;
   if (!minMaxOk[sgi]) computeMinMax(sg);
   return min[sgi];
@@ -315,7 +315,7 @@ void LayoutProperty::computeMinMax(Graph *sg) {
       minV(minT, tmpCoord);
     }
   } delete itE;
-  unsigned long sgi=(unsigned long)sg;
+  unsigned int sgi = sg->getId();
   minMaxOk[sgi]=true;  
   min[sgi] = minT;
   max[sgi] = maxT;

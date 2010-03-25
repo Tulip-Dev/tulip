@@ -236,7 +236,7 @@ void DoubleProperty::uniformQuantification(unsigned int k) {
 ///Renvoie le minimum de la metrique associe aux noeuds du DoubleProperty
 double DoubleProperty::getNodeMin(Graph *sg) {
   if (sg==0) sg=graph;
-  unsigned long sgi=(unsigned long)sg;
+  unsigned int sgi = sg->getId();
   if (minMaxOkNode.find(sgi)==minMaxOkNode.end()) minMaxOkNode[sgi]=false;
   if (!minMaxOkNode[sgi]) computeMinMaxNode(sg);
   return minN[sgi];
@@ -248,7 +248,7 @@ double DoubleProperty::getNodeMin(Graph *sg) {
 ///Renvoie le maximum de la metrique associe aux noeuds du DoubleProperty
 double DoubleProperty::getNodeMax(Graph *sg) {
   if (sg==0) sg=graph;
-  unsigned long sgi=(unsigned long)sg;
+  unsigned int sgi = sg->getId();
   if (minMaxOkNode.find(sgi)==minMaxOkNode.end()) minMaxOkNode[sgi]=false;
   if (!minMaxOkNode[sgi]) computeMinMaxNode(sg);
   return maxN[sgi];
@@ -260,7 +260,7 @@ double DoubleProperty::getNodeMax(Graph *sg) {
 ///Renvoie le Minimum de la metrique associe aux aretes du DoubleProperty
 double DoubleProperty::getEdgeMin(Graph *sg) {
   if (sg==0) sg=graph;
-  unsigned long sgi=(unsigned long)sg;
+  unsigned int sgi = sg->getId();
   if (minMaxOkEdge.find(sgi)==minMaxOkEdge.end()) minMaxOkEdge[sgi]=false;
   if (!minMaxOkEdge[sgi]) computeMinMaxEdge(sg);
   return minE[sgi];
@@ -269,7 +269,7 @@ double DoubleProperty::getEdgeMin(Graph *sg) {
 ///Renvoie le Maximum de la metrique associe aux aretes du DoubleProperty
 double DoubleProperty::getEdgeMax(Graph *sg) {
   if (sg==0) sg=graph;
-  unsigned long sgi=(unsigned long)sg;
+  unsigned int sgi = sg->getId();
   if (minMaxOkEdge.find(sgi)==minMaxOkEdge.end()) minMaxOkEdge[sgi]=false;
   if (!minMaxOkEdge[sgi]) computeMinMaxEdge(sg);
   return maxE[sgi];
@@ -292,7 +292,7 @@ void DoubleProperty::computeMinMaxNode(Graph *sg) {
     if (tmp<minN2) minN2=tmp;
   } delete itN;
 
-  unsigned long sgi=(unsigned long)sg;
+  unsigned int sgi = sg->getId();
 
   minMaxOkNode[sgi]=true;  
   minN[sgi]=minN2;
@@ -316,7 +316,7 @@ void DoubleProperty::computeMinMaxEdge(Graph *sg) {
     if (tmp<minE2) minE2=tmp;
   } delete itE;
 
-  unsigned long sgi=(unsigned long)sg;
+  unsigned int sgi = sg->getId();
 
   minMaxOkEdge[sgi]=true;
   minE[sgi]=minE2;
