@@ -71,6 +71,7 @@ set(tulip-ogl_LIB_SRCS
 	GlCatmullRomCurve.cpp 
 	EdgeExtremityGlyph.cpp 
 	EdgeExtremityGlyphManager.cpp
+	edgeExtremityArrow.cpp
 	GlSimpleEntity.cpp
     GlShaderProgram.cpp
     GlOpenUniformCubicBSpline.cpp
