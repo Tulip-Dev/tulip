@@ -163,34 +163,37 @@ void TulipApp::startTulip() {
   appStart->show();
   appStart->initTulip(&pluginLoader,errors);
   delete appStart;
+  if (errors.size() > 0) {
+      errorDlg = new QDialog(this);
+      errorDlg->setWindowTitle("Errors when loading Tulip plugins !!!");
+      QVBoxLayout* errorDlgLayout = new QVBoxLayout(errorDlg);
+      errorDlgLayout->setMargin(11);
+      errorDlgLayout->setSpacing(6);
+      QFrame *frame = new QFrame(errorDlg);
+      QHBoxLayout* frameLayout = new QHBoxLayout(frame);
+      frameLayout->setMargin(0);
+      frameLayout->setSpacing(0);
+      QSpacerItem* spacer  = new QSpacerItem( 180, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
+      frameLayout->addItem( spacer );
+      QTextEdit* textWidget = new QTextEdit(QString(""),errorDlg);
+      textWidget->setReadOnly(true);
+      textWidget->setLineWrapMode(QTextEdit::NoWrap);
+      errorDlgLayout->addWidget( textWidget );
+      QPushButton * closeB = new QPushButton( "Close", frame);
+      frameLayout->addWidget( closeB );
+      errorDlgLayout->addWidget( frame );
+      QWidget::connect(closeB, SIGNAL(clicked()), errorDlg, SLOT(hide()));
+      errorDlg->resize( QSize(400, 250).expandedTo(errorDlg->minimumSizeHint()) );
+      textWidget->setText(QString(errors.c_str()));
+      errorDlg->show();
+    }
+  if(ControllerFactory::factory->objMap.empty()){
+    QMessageBox::critical(this,tr("No controller found"),tr("No controller where found in Tulip plug-ins.\n Tulip can't work without controller."));
+    exit(-1);
+  }
   buildMenus();
   this->show();
-  if (errors.size() > 0) {
-    errorDlg = new QDialog(this);
-    errorDlg->setWindowTitle("Errors when loading Tulip plugins !!!");
-    QVBoxLayout* errorDlgLayout = new QVBoxLayout(errorDlg);
-    errorDlgLayout->setMargin(11);
-    errorDlgLayout->setSpacing(6);
-    QFrame *frame = new QFrame(errorDlg);
-    QHBoxLayout* frameLayout = new QHBoxLayout(frame);
-    frameLayout->setMargin(0);
-    frameLayout->setSpacing(0);
-    QSpacerItem* spacer  = new QSpacerItem( 180, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    frameLayout->addItem( spacer );
-    QTextEdit* textWidget = new QTextEdit(QString(""),errorDlg);
-    textWidget->setReadOnly(true);
-    textWidget->setLineWrapMode(QTextEdit::NoWrap);
-    errorDlgLayout->addWidget( textWidget );
-    QPushButton * closeB = new QPushButton( "Close", frame);
-    frameLayout->addWidget( closeB );
-    errorDlgLayout->addWidget( frame );
-    QWidget::connect(closeB, SIGNAL(clicked()), errorDlg, SLOT(hide()));
-    errorDlg->resize( QSize(400, 250).expandedTo(errorDlg->minimumSizeHint()) );
-    textWidget->setText(QString(errors.c_str()));
-    errorDlg->show();
-  }
   enableElements(false);
-  
   /*Load preference*/
   PreferenceDialog::loadPreference();
 
