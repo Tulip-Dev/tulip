@@ -7,6 +7,7 @@ AC_CONFIG_SRCDIR(library/tulip/include/tulip/Graph.h)
 AM_INIT_AUTOMAKE(1.6 dist-bzip2)
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
+AC_CANONICAL_HOST
 
 dnl autoheader templates for config.h.in
 AH_TOP(
@@ -135,7 +136,7 @@ case "`uname -s`" in
 	  VAR_MACPPC=1
         fi
 	;;
-    *Linux*)
+    *Linux*|*GNU/kFreeBSD*)
 	VAR_LINUX=1
 	;;	
 esac
