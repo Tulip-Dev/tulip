@@ -43,7 +43,14 @@
 		<listitem><para><code>viewBorderWidth :</code>
 			Width of the border of an edge or a node.
 		</para></listitem>
-		<listitem><para>viewColor : color of an edge or a node.
+		<listitem><para><code>viewColor :</code>
+			Color of an edge or a node.
+		</para></listitem>
+		<listitem><para><code>viewFont :</code>
+			Font path used to render label of an edge or a node.
+		</para></listitem>
+		<listitem><para><code>viewFontSize :</code>
+			font size used to render label of an edge or a node.
 		</para></listitem>
 		<listitem><para><code>viewLabel :</code>
 			Label of an edge or a node.
@@ -72,8 +79,20 @@
 		<listitem><para><code>viewSize :</code>
 			Size (height, width, depth) of a node or an edge. To re-size an edge, the parameter "Size Interpolation" (CONTROL+R) must be switched off. For an edge, the three fields are : Width at source of the edge, Width at the end of the edge, Size of the arrow. 
 		</para></listitem>
+		<listitem><para><code>viewSrcAnchorShape :</code>
+			Shape of the source anchor of an egde. 
+		</para></listitem>
+		<listitem><para><code>viewSrcAnchorShape :</code>
+			Size of the source anchor of an egde. 
+		</para></listitem>
 		<listitem><para><code>viewTexture :</code>
 			Texture will replace the color background of the node.
+		</para></listitem>
+		<listitem><para><code>viewTgtAnchorShape :</code>
+			Shape of the target anchor of an egde. 
+		</para></listitem>
+		<listitem><para><code>viewTgtAnchorShape :</code>
+			Size of the target anchor of an egde. 
 		</para></listitem>
 	</itemizedlist>
 	</sect2>
@@ -135,9 +154,6 @@
     </sect1>
      <sect1 id="hierarchy"><title>Hierarchy</title>
 		&Subgraphs;
-    </sect1>
-    <sect1 id="stats-panels"><title>Statistics Panel (not available in standard version)</title>
-        <para><application>Tulip</application> also provides a simple statistics interface which allows the user to compute Histograms, Scatter Plots, Augmented Displays and Clustering. The computation of Histogram and Scatter Plot depends on a number for metrics, chosen by the user (from 1 to 3), and a discretization step (one given per metric). Finally, the clustering is performed from a clustering plane, specified by the user with a plane equation.</para>
     </sect1>
     <sect1 id="text-rend"><title>Text Rendering</title>
         <para>It is possible to assign a label to each element of the graph. <application>Tulip</application> can display them with three methods : 3D and texture for node labels, bitmap for node and edge labels. 
