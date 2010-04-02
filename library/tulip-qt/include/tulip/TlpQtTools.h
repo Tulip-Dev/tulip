@@ -6,10 +6,12 @@
 #include <config.h>
 #endif
 
-
+#include "tulip/Color.h"
 #include "tulip/Reflect.h"
 #include "tulip/Graph.h"
 #include "tulip/GlMainWidget.h"
+
+#include <QtGui/QColor>
 
 class QWidget;
 
@@ -42,6 +44,13 @@ namespace tlp {
   TLP_QT_SCOPE void loadControllerPluginsFromDir(std::string dir,PluginLoader *loader=0);
 
   TLP_QT_SCOPE bool canUseQGLPixelBuffer();
+
+  TLP_QT_SCOPE QColor colorToQColor(const Color& color) {
+     return QColor(color.getR(), color.getG(), color.getB(), color.getA());
+   }
+  TLP_QT_SCOPE Color QColorToColor(const QColor& color) {
+     return Color(color.red(), color.green(), color.blue(), color.alpha());
+   }
 
 }
 
