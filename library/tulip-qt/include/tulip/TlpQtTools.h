@@ -45,10 +45,10 @@ namespace tlp {
 
   TLP_QT_SCOPE bool canUseQGLPixelBuffer();
 
-  TLP_QT_SCOPE QColor colorToQColor(const Color& color) {
+  inline QColor colorToQColor(const Color& color) {
      return QColor(color.getR(), color.getG(), color.getB(), color.getA());
    }
-  TLP_QT_SCOPE Color QColorToColor(const QColor& color) {
+  inline Color QColorToColor(const QColor& color) {
      return Color(color.red(), color.green(), color.blue(), color.alpha());
    }
 
