@@ -254,6 +254,9 @@ namespace tlp {
 
     View *view = getViewOfWidget(widget);
 
+    if(currentView==view)
+      return false;
+
     currentView = view;
     currentGraph = currentView->getGraph();
 
@@ -277,12 +280,19 @@ namespace tlp {
     if (!currentView)
       return false;
 
+    // Check if we have a previously intalled interactor
+    //   If not, we don't have to draw the view
+    bool needRefresh=true;
+    if(lastInteractorOnView.count(currentView)==0)
+      needRefresh=false;
+
     lastInteractorOnView[currentView] = action;
 
     ControllerViewsTools::changeInteractor(currentView, mainWindowFacade.getInteractorsToolBar(),
                                            action, configurationWidget);
 
-    currentView->refresh();
+    if(needRefresh)
+      currentView->refresh();
 
     return true;
   }
