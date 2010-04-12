@@ -33,7 +33,7 @@ const vector<vector<string> > & CSVParser::parse(const string& fileName, const s
     lines.push_back(line);
   }
   tokens.resize(lines.size());
-  unsigned int maxNumberOfCol = 0;
+  size_t maxNumberOfCol = 0;
   for (int i = 0; i < lines.size(); ++i) {
     tokenize(lines[i], tokens[i], separator, numberOfCol);
     maxNumberOfCol = max(maxNumberOfCol, tokens[i].size());
