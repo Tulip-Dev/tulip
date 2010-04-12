@@ -235,34 +235,34 @@
        </item>
        <item>
         <widget class="QRadioButton" name="radioAll" >
+         <property name="toolTip" >
+          <string>Displays all properties</string>
+         </property>
          <property name="text" >
           <string>All</string>
          </property>
-	 <property name="toolTip" >
-           <string>Displays all properties</string>
+         <property name="checked" >
+          <bool>true</bool>
          </property>
-	 <property name="checked"> 	 
-	  <bool>true</bool> 	 
-	 </property>
         </widget>
        </item>
        <item>
         <widget class="QRadioButton" name="radioWork" >
+         <property name="toolTip" >
+          <string>Only display user properties (properties whose names don't start with view)</string>
+         </property>
          <property name="text" >
           <string>User</string>
-         </property>
-	 <property name="toolTip" >
-           <string>Only display user properties (properties whose names don't start with view)</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QRadioButton" name="radioView" >
+         <property name="toolTip" >
+          <string>Only display visual properties (properties whose names start with view)</string>
+         </property>
          <property name="text" >
           <string>View</string>
-         </property>
-	 <property name="toolTip" >
-           <string>Only display visual properties (properties whose names start with view)</string>
          </property>
         </widget>
        </item>
@@ -447,20 +447,14 @@
            </property>
           </widget>
          </item>
-         <item>
-          <spacer>
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" >
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="importCSVPushButton" >
+         <property name="text" >
+          <string>Import CSV Data</string>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" >
@@ -585,6 +579,22 @@
     <hint type="destinationlabel" >
      <x>20</x>
      <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>importCSVPushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PropertyDialogData</receiver>
+   <slot>importCSVData()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>133</x>
+     <y>437</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>164</x>
+     <y>239</y>
     </hint>
    </hints>
   </connection>

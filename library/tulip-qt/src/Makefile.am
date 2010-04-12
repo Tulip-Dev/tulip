@@ -84,7 +84,10 @@ BUILT_SOURCES = \
 	moc_SimpleStringsListSelectionWidget.cpp \
 	moc_DoubleStringsListSelectionWidget.cpp \
 	moc_ColorScaleConfigDialog.cpp \
-	moc_ListPropertyWidget.cpp
+	moc_ListPropertyWidget.cpp \
+	moc_ImportCSVDataDialog.cpp \
+	moc_ImportCSVDataWidget.cpp \
+	moc_ImportCSVDataConfigurationWidget.cpp
 
 QT44_BUILT_SOURCES = \
 	moc_GlMainWidgetGraphicsView.cpp \
@@ -149,7 +152,11 @@ TODIST_SOURCES = \
 	QtMetaNodeRenderer.cpp \
 	QGlPixelBufferManager.cpp \
 	ListPropertyWidget.cpp \
-	QtTextureManagerErrorViewer.cpp
+	QtTextureManagerErrorViewer.cpp \
+	ImportCSVDataDialog.cpp \
+	ImportCSVDataWidget.cpp \
+	ImportCSVDataConfigurationWidget.cpp \
+	CSVParser.cpp
 
 QT44_SOURCES = \
 	GlMainWidgetGraphicsView.cpp \

@@ -48,6 +48,7 @@ namespace tlp {
     void toStringProperty();
     void filterSelection(bool);
     void setAllValue();
+    void importCSVData();
 
   signals:
     void tulipAllNodePropertyChanged(Graph *, const QString &property, const QString &value);

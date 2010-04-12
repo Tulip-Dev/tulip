@@ -61,6 +61,10 @@ SET(tulip-qt_LIB_SRCS
     QtQuadTreeLODCalculator.cpp
     ListPropertyWidget.cpp
     QtTextureManagerErrorViewer.cpp
+    CSVParser.cpp
+    ImportCSVDataDialog.cpp
+    ImportCSVDataWidget.cpp
+    ImportCSVDataConfigurationWidget.cpp
 )
 
 set(tulip-qt_UI
@@ -80,6 +84,7 @@ set(tulip-qt_UI
      ../designer/DoubleStringsListSelectionWidget.ui
      ../designer/ListPropertyWidget.ui
      ../designer/ChooseFileNameDialog.ui
+     ../designer/ImportCSVDataConfigurationWidget.ui
 )
 
 set(tulip-qt_PLUGINS
@@ -128,6 +133,9 @@ set(tulip-qt_MOC
     ../include/tulip/DoubleStringsListSelectionWidget.h
     ../include/tulip/ColorScaleConfigDialog.h
     ../include/tulip/ListPropertyWidget.h
+    ../include/tulip/ImportCSVDataDialog.h
+    ../include/tulip/ImportCSVDataWidget.h
+    ../include/tulip/ImportCSVDataConfigurationWidget.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)

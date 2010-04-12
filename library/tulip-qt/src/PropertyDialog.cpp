@@ -37,6 +37,8 @@
 
 #include "tulip/PropertyDialog.h"
 #include "tulip/CopyPropertyDialog.h"
+#include "tulip/ImportCSVDataWidget.h"
+#include "tulip/ImportCSVDataDialog.h"
 
 using namespace std;
 
@@ -404,5 +406,14 @@ namespace tlp {
     }
   }
   //=================================================
-
+  void PropertyDialog::importCSVData(){
+     if(graph!=NULL){
+     ImportCSVDataDialog dialog(new ImportCSVDataWidget(),graph,this);
+     dialog.setWindowTitle(tr("Import CSV data"));
+     graph->push();
+     if(dialog.exec()==QDialog::Rejected){
+       graph->pop(false);
+     }
+     }
+   }
 }

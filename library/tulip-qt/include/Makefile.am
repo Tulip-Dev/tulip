@@ -64,7 +64,11 @@ INCLUDES_H = \
 	tulip/ListPropertyWidget.h \
 	tulip/QGlPixelBufferManager.h \
 	tulip/BaseGraphicsViewComponentMacro.h \
-	tulip/QtTextureManagerErrorViewer.h
+	tulip/QtTextureManagerErrorViewer.h \
+	tulip/CSVParser.h \
+	tulip/ImportCSVDataWidget.h \
+	tulip/ImportCSVDataConfigurationWidget.h \
+	tulip/ImportCSVDataDialog.h
 
 QT44_INCLUDES_H = \
 	tulip/BaseGraphicsViewComponent.h \
@@ -100,7 +104,8 @@ BUILT_SOURCES = \
 	tulip/SimpleStringsListSelectionWidgetData.h \
 	tulip/DoubleStringsListSelectionWidgetData.h \
 	tulip/ListPropertyWidgetData.h \
-	tulip/ChooseFileNameDialogData.h
+	tulip/ChooseFileNameDialogData.h \
+	tulip/ImportCSVDataConfigurationWidgetData.h
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 
