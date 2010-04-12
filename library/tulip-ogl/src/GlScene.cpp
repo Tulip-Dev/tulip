@@ -168,6 +168,9 @@ namespace tlp {
   void GlScene::draw() {
 	initGlParameters();
 
+    /*
+      If LOD Calculator need entities to compute LOD, we use visitor system
+    */
     if(lodCalculator->needEntities()){
       GlLODSceneVisitor *lodVisitor;
       if(glGraphComposite)
@@ -177,6 +180,8 @@ namespace tlp {
 
       for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
         (*it).second->acceptVisitor(lodVisitor);
+        
+        //Here we have a special layer (layer used by selectionEditor), we will remove this layer if we can
         if((*it).first=="Main")
           selectionLayer->acceptVisitor(lodVisitor);
       }
@@ -198,16 +203,20 @@ namespace tlp {
 
 	Camera *camera;
 	Graph *graph=NULL;
-	if(glGraphComposite)
+    if(glGraphComposite){
       graph=glGraphComposite->getInputData()->graph;
+    }
+
 	GlNode glNode(0);
 	GlMetaNode glMetaNode(0);
 	GlEdge glEdge(0);
 
+    // Iterate on Camera
 	for(VectorOfCamera::iterator itCamera=cameraVector->begin();itCamera!=cameraVector->end();++itCamera){
       camera=(Camera*)(*itCamera);
       camera->initGl();
 
+      // Init GlPointManager for a new rendering pass
       GlPointManager::getInst().beginRendering();
 
       bool zOrdering=false;
