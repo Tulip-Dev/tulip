@@ -12,14 +12,18 @@ public:
 
   static void loadPreference();
   void savePreference();
+  bool preferencesAreModified() {return modified;}
 
 protected slots:
 
   virtual void accept();
   void selectionColorButtonSlot();
 
-private :
+protected :
+
   void setSelectionButtonColor(QColor tmp);
+
+  bool modified;
 
 };
 

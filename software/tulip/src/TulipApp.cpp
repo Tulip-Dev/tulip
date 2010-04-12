@@ -1076,10 +1076,13 @@ void TulipApp::preference() {
   PreferenceDialog pref(this);
   if(pref.exec()!=QDialog::Accepted)
     return;
+
+  if(!pref.preferencesAreModified())
+    return;
   
   int result = QMessageBox::warning(this,
 				    tr(""),
-				    tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
+                    tr("To apply preferences modifications \nTulip must be restart.\nDo you want to exit Tulip now ?"),
 				    QMessageBox::Yes | QMessageBox::Default,
 				    QMessageBox::No);
   if(result == QMessageBox::Yes) {

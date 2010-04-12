@@ -15,7 +15,7 @@ using namespace std;
 using namespace tlp;
 
 PreferenceDialog::PreferenceDialog( QWidget* parent)
-    : QDialog( parent) {
+    : QDialog( parent),modified(false) {
   setupUi(this);
 
   PreferenceManager &preferenceManager=PreferenceManager::getInst();
@@ -47,7 +47,9 @@ void PreferenceDialog::loadPreference(){
   selectionColor[3] = settings.value("selectionColorA",255).toUInt();
 
   bool networkConnection= settings.value("networkConnection",true).toBool();
-  bool autoLoadController = settings.value("autoLoadConnection",false).toBool();
+  bool autoLoadController = settings.value("autoLoadController",false).toBool();
+
+  cout << "autoLoad : " << autoLoadController << endl;
 
   settings.endGroup();
 
@@ -62,11 +64,19 @@ void PreferenceDialog::savePreference(){
   QSettings settings("TulipSoftware","Tulip");
   settings.beginGroup("Preference");
 
+  // Check modification
+  modified = modified || (settings.value("selectionColorR",255).toUInt()!=selectionColor.red());
+  modified = modified || (settings.value("selectionColorG",255).toUInt()!=selectionColor.green());
+  modified = modified || (settings.value("selectionColorB",255).toUInt()!=selectionColor.blue());
+  modified = modified || (settings.value("selectionColorA",255).toUInt()!=selectionColor.alpha());
+  modified = modified || (settings.value("networkConnection",true).toBool()!=networkRadioButton->isChecked());
+  modified = modified || (settings.value("autoLoadController",true).toBool()!=autoLoadControllerButton->isChecked());
+
+  // Store data
   settings.setValue("selectionColorR",selectionColor.red());
   settings.setValue("selectionColorG",selectionColor.green());
   settings.setValue("selectionColorB",selectionColor.blue());
   settings.setValue("selectionColorA",selectionColor.alpha());
-
   settings.setValue("networkConnection",networkRadioButton->isChecked());
   settings.setValue("autoLoadController",autoLoadControllerButton->isChecked());
 
