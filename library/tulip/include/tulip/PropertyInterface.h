@@ -28,21 +28,58 @@ protected:
 
 public:
   virtual ~PropertyInterface();
-
-  virtual void erase(const node) =0;
-  virtual void erase(const edge) =0;
+  /**
+   * Remove the value stored for the node given in parameter.
+   */
+  virtual void erase(const node) = 0;
+  /**
+   * Remove the value stored for the edge given in parameter.
+   */
+  virtual void erase(const edge) = 0;
+  /**
+   * Set the value of a node (first argument) into the
+   * property (third argument) with the value of the node (second argument)
+   * defned in this property (this).
+   */
   virtual void copy(const node, const node, PropertyInterface *) =0;
+  /**
+   * Set the value of a edge (first argument) into the
+   * property (third argument) with the value of the edge (second argument)
+   * defned in this property (this).
+   */
   virtual void copy(const edge, const edge, PropertyInterface *) =0;
+  /**
+    * Create an object of the same real type of the current property, in the
+    * the graph (first parameter) with the name (second parameter).
+    * Values are copied.
+    */
   virtual PropertyInterface* clonePrototype(Graph *, const std::string&) =0;
   //=================================================================================
-  // Returns a string describing the type of the property.
-  // i.e. "graph", "double", "layout", "string", "integer", "color", "size", ...
+  /**
+    * Returns a string describing the type of the property.
+    * i.e. "graph", "double", "layout", "string", "integer", "color", "size", ...
+    */
   virtual std::string getTypename() const = 0;
+  /**
+    * Returns a string describing the type a property (first parameter).
+    * i.e. "graph", "double", "layout", "string", "integer", "color", "size", ...
+    */
   static  std::string getTypename(const PropertyInterface *);
 
-  // name management
+  /**
+    * Return the name of the property
+    */
   const std::string& getName() const {
     return name;
+  }
+
+  /**
+  * Return the graph on which the property has been defined.
+  * WARNING : If the property is inherited the graph could different
+  * than the one on wich one got the property.
+  */
+  tlp::Graph * getGraph() {
+      return graph;
   }
 
   // Untyped accessors
