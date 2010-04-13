@@ -252,10 +252,12 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
   }
 
   if (selected) {
+    glPushMatrix();
     Coord p1=camera->screenTo3DWorld(Coord(0,0,0));
     Coord p2=camera->screenTo3DWorld(Coord(2,0,0));
     edgeSize[0] += (p2-p1).norm();
     edgeSize[1] += (p2-p1).norm();
+    glPopMatrix();
   }
 
   int startEdgeGlyph = data->elementSrcAnchorShape->getEdgeValue(e);
