@@ -428,6 +428,7 @@ namespace tlp {
     GlMainView::draw();
     if (gridOptionsWidget !=0)
       gridOptionsWidget->validateGrid();
+    layerManagerWidget->setGlMainView(this);
     //overviewWidget->updateView();
   }
   //==================================================

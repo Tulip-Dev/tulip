@@ -43,7 +43,9 @@ namespace tlp {
      */
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
       visitor->visit(this);
-      GlComposite::acceptVisitor(visitor);
+      for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
+        (*it)->acceptVisitor(visitor);
+      }
     }
 
 
