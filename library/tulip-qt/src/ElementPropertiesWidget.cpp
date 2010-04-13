@@ -28,6 +28,7 @@ namespace tlp {
     setEdgeListedProperties(edgeListedProperties);
     propertyTable->horizontalHeaderItem(0)->setText("Property");
     propertyTable->horizontalHeaderItem(1)->setText("Value");
+    propertyTable->horizontalHeader()->setStretchLastSection(false);
     displayAllProperties=false;
     connect(propertyTable,SIGNAL(cellChanged(int,int)),
 	    this, SLOT(propertyTableValueChanged(int,int)));
@@ -270,7 +271,7 @@ namespace tlp {
     // Ugly hack to avoid resizing
     if (propertyTable->isVisible()) {
       propertyTable->setColumnWidth(1, propertyTable->horizontalHeader()->length()
-				    - propertyTable->columnWidth(0) - 5);
+                    - propertyTable->columnWidth(0) - 5);
     }
   }
   //==========================================
