@@ -3,4 +3,4 @@ if [ -f test_gui.gml ]; then
     rm test_gui.gml
 fi
 
-sh tulip_run_test.sh gml_export_import grid_approximation.tlp grid_approximation.tlp
+sh tulip_run_test.sh gml_export_import grid_approximation.tlp gml_grid_approximation.tlp
