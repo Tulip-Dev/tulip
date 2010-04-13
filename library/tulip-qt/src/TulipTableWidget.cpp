@@ -855,6 +855,9 @@ void TulipTableItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* m
   case FILETABLEITEM_RTTI:
     ((FileTableItem *) item)->setContentFromEditor(editor);
     break;
+  case FILETABLEFONTITEM_RTTI:
+    ((FileTableFontItem *) item)->setContentFromEditor(editor);
+    break;
   case GLYPHTABLEITEM_RTTI:
     ((GlyphTableItem *) item)->setContentFromEditor(editor);
     break;
