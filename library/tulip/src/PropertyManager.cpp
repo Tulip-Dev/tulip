@@ -15,6 +15,7 @@
 #include "tulip/GraphAbstract.h"
 #include "tulip/PropertyManager.h"
 #include "tulip/AbstractProperty.h"
+#include "tulip/GraphProperty.h"
 
 namespace tlp {
 //======================================================================================
@@ -24,7 +25,6 @@ class PropertiesIterator: public Iterator<PropertyInterface*> {
 		     std::map<std::string, PropertyInterface*>::iterator);
   PropertyInterface* next();
   bool hasNext();
- private:
   std::map<std::string, PropertyInterface*>::iterator it, itEnd;
 };
 //==============================================================
@@ -42,18 +42,27 @@ bool PropertiesIterator::hasNext() {
 //======================================================================================
 class PropertyNamesIterator: public Iterator<std::string> {
  public:
-  PropertyNamesIterator(Iterator<PropertyInterface*> *it);
-  ~PropertyNamesIterator();
-  std::string next();
-  bool hasNext();
- private:
-  Iterator<PropertyInterface*> *itp;
+  PropertyNamesIterator(std::map<std::string, PropertyInterface*>::iterator itB,
+			std::map<std::string, PropertyInterface*>::iterator itE)
+    :itProp(itB, itE) {}
+  std::string next() {
+    std::string tmp=(*(itProp.it)).first;
+    ++(itProp.it);
+    return tmp;
+  }
+    
+  bool hasNext() {
+    return itProp.hasNext();
+  }
+  PropertiesIterator itProp;
 };
 
 }
 
 using namespace std;
 using namespace tlp;
+
+const string metaGraphPropertyName = "viewMetaGraph";
 
 //==============================================================
 PropertyManager::PropertyManager(Graph *g): graph(g) {
@@ -63,6 +72,8 @@ PropertyManager::PropertyManager(Graph *g): graph(g) {
     while(it->hasNext()) {
       PropertyInterface* prop = it->next();
       inheritedProperties[prop->getName()] = prop;
+      if (prop->getName() == metaGraphPropertyName)
+	((GraphAbstract *) graph)->metaGraphProperty = (GraphProperty *) prop;
     } delete it;
   }
 }
@@ -95,7 +106,7 @@ void PropertyManager::setLocalProperty(const string &str,
     delete localProperties[str];
   else {
     // remove previously existing inherited property
-    map<string,PropertyInterface *>::iterator it;
+    map<string, PropertyInterface *>::iterator it;
     it = inheritedProperties.find(str);
     if (it != inheritedProperties.end())
       inheritedProperties.erase(it);
@@ -116,6 +127,8 @@ void PropertyManager::setInheritedProperty(const string &str,
 					   PropertyInterface *p) {
   if (!existLocalProperty(str)) {
     inheritedProperties[str] = p;
+    if (str == metaGraphPropertyName)
+      ((GraphAbstract *) graph)->metaGraphProperty = (GraphProperty *) p;
 
     // loop on subgraphs
     Graph* sg;
@@ -195,10 +208,12 @@ void PropertyManager::delInheritedProperty(const string &str) {
   }
 }
 Iterator<string>*  PropertyManager::getLocalProperties() {
-  return (new PropertyNamesIterator(getLocalObjectProperties()));
+  return (new PropertyNamesIterator(localProperties.begin(),
+				    localProperties.end()));
 }
 Iterator<string>*  PropertyManager::getInheritedProperties() {
-  return (new PropertyNamesIterator(getInheritedObjectProperties()));
+  return (new PropertyNamesIterator(inheritedProperties.begin(),
+				    inheritedProperties.end()));
 }
 Iterator<PropertyInterface*>*  PropertyManager::getLocalObjectProperties() {
   return (new PropertiesIterator(localProperties.begin(),
@@ -207,19 +222,6 @@ Iterator<PropertyInterface*>*  PropertyManager::getLocalObjectProperties() {
 Iterator<PropertyInterface*>*  PropertyManager::getInheritedObjectProperties() {
   return (new PropertiesIterator(inheritedProperties.begin(),
 				 inheritedProperties.end()));
-}
-//==============================================================
-PropertyNamesIterator::PropertyNamesIterator(Iterator<PropertyInterface*>* it): itp(it) {}
-
-PropertyNamesIterator::~PropertyNamesIterator() {
-  delete itp;
-}
-
-string PropertyNamesIterator::next() {
-  return itp->next()->getName();
-}
-bool PropertyNamesIterator::hasNext() {
-  return itp->hasNext();
 }
 //===============================================================
 void PropertyManager::erase(const node n) {

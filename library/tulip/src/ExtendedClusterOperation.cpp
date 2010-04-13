@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <tulip/Graph.h>
 #include <tulip/Node.h>
+#include <tulip/GraphAbstract.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/StableIterator.h>
 #include <tulip/ExtendedClusterOperation.h>
@@ -20,11 +21,10 @@ using namespace std;
 using namespace tlp;
 using namespace stdext;
 
-const string layoutProperty = "viewLayout";
-const string sizeProperty = "viewSize";
-const string rotationProperty = "viewRotation";
-const string colorProperty = "viewColor";
-const string metaGraphProperty = "viewMetaGraph";
+static const string layoutProperty = "viewLayout";
+static const string sizeProperty = "viewSize";
+static const string rotationProperty = "viewRotation";
+static const string colorProperty = "viewColor";
 
 static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, GraphProperty * metaInfo, const node from = node()) {
   while(it->hasNext()) {
@@ -443,15 +443,15 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
     cerr << "\t Error: Could not create a meta node in the root graph" << endl;
     return node();
   }
-  GraphProperty* metaInfo = getRoot()->getProperty<GraphProperty>(metaGraphProperty);
+  GraphProperty* metaInfo =
+    ((GraphAbstract *)getRoot())->getMetaGraphProperty();
   node metaNode = addNode();
   metaInfo->setNodeValue(metaNode, subGraph);
   Observable::holdObservers();
   //updateGroupLayout(this, subGraph, metaNode);
   // compute meta node values
-  string pName;
-  forEach(pName, getProperties()) {
-    PropertyInterface *property = getProperty(pName);
+  PropertyInterface *property;
+  forEach(property, getObjectProperties()) {
     property->computeMetaValue(metaNode, subGraph);
   }
 
@@ -554,10 +554,9 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
     edge mE = (*it).first;
     metaInfo->setEdgeValue(mE, (*it).second);
     // compute meta edge values
-    string pName;
-    forEach(pName, getProperties()) {
+    forEach(property, getObjectProperties()) {
       Iterator<edge> *itE = getEdgeMetaInfo(mE);
-      PropertyInterface *property = getProperty(pName);
+      assert(itE->hasNext());
       property->computeMetaValue(mE, itE, this);
       delete itE;
     }
@@ -573,7 +572,8 @@ void Graph::openMetaNode(node metaNode) {
     cerr << "\t Error: Could not ungroup a meta node in the root graph" << endl;
     return;
   }
-  GraphProperty* metaInfo = getProperty<GraphProperty> (metaGraphProperty);
+  GraphProperty* metaInfo =
+    ((GraphAbstract *) getRoot())->getMetaGraphProperty();
   Graph *metaGraph = metaInfo->getNodeValue(metaNode);
   if (metaGraph == 0) return;
 
@@ -747,7 +747,7 @@ namespace std {
 void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
 			    vector<node>& metaNodes) {
   GraphProperty *metaInfo =
-    getRoot()->getProperty<GraphProperty>("viewMetaGraph");
+    ((GraphAbstract*)getRoot())->getMetaGraphProperty();
   map <edge, set<edge> > eMapping;
   Observable::holdObservers();
   {

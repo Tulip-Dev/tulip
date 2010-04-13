@@ -14,19 +14,13 @@
 using namespace std;
 using namespace tlp;
 
-const string metaGraphProperty = "viewMetaGraph";
+const string metaGraphPropertyName = "viewMetaGraph";
 
 //=========================================================================
 GraphAbstract::GraphAbstract(Graph *supergraph)
  :supergraph(supergraph ? supergraph : this),
   root((supergraph == this) ? this : supergraph->getRoot()),
-  subGraphToKeep(NULL) {
-  /*if (supergraph == 0)
-    supergraph = this;
-  if (supergraph == this)
-    root = this;
-  else
-    root = supergraph->getRoot();*/
+  subGraphToKeep(NULL), metaGraphProperty(NULL) {
   propertyContainer=new PropertyManager(this);
 }
 //=========================================================================
@@ -317,6 +311,9 @@ void GraphAbstract::delLocalProperty(const std::string &name) {
 void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface *prop) {
   assert(!existLocalProperty(name));
   propertyContainer->setLocalProperty(name, prop);
+  if (name == metaGraphPropertyName) {
+    metaGraphProperty = (GraphProperty *) prop;
+  }    
   notifyAddLocalProperty(this, name);
   notifyObservers();
 }
@@ -371,21 +368,17 @@ DataSet& GraphAbstract::getNonConstAttributes() {
 //----------------------------------------------------------------
 bool GraphAbstract::isMetaNode(const node n) const {
   assert(isElement(n));
-  return getNodeMetaInfo(n) != NULL;
+  return metaGraphProperty && metaGraphProperty->hasNonDefaultValue(n);
 }
 //----------------------------------------------------------------
 bool GraphAbstract::isMetaEdge(const edge e) const {
   assert(isElement(e));
-  return getReferencedEdges(e).size() != 0;
+  return metaGraphProperty && metaGraphProperty->hasNonDefaultValue(e);
 }
 //=========================================================================
 Graph* GraphAbstract::getNodeMetaInfo(const node n) const {
-  if (((GraphAbstract *) this)->existProperty(metaGraphProperty)) {
-    tlp::PropertyInterface* prop =
-      ((GraphAbstract *) this)->getProperty(metaGraphProperty);
-    assert(typeid((*prop)) == typeid(GraphProperty));
-    return ((GraphProperty *) prop)->getNodeValue(n);
-  }
+  if (metaGraphProperty)
+    return metaGraphProperty->getNodeValue(n);
   return NULL;
 }
 
@@ -393,13 +386,10 @@ Graph* GraphAbstract::getNodeMetaInfo(const node n) const {
 static set<edge> noReferencedEdges;
 //=========================================================================
 const set<edge>& GraphAbstract::getReferencedEdges(const edge e) const {
-  if (((GraphAbstract *) this)->existProperty(metaGraphProperty)) {
-    tlp::PropertyInterface* prop =
-      ((GraphAbstract *) this)->getProperty(metaGraphProperty);
-    assert(typeid((*prop)) == typeid(GraphProperty));
-    return ((GraphProperty *) prop)->getReferencedEdges(e);
-  }
-  return noReferencedEdges;
+  if (metaGraphProperty)
+    return metaGraphProperty->getReferencedEdges(e);
+  else
+    return noReferencedEdges;
 }
 //=========================================================================
 // Iterator on a vector of edges
@@ -423,4 +413,11 @@ public:
 
 Iterator<edge>* GraphAbstract::getEdgeMetaInfo(const edge e) const {
   return new EdgeSetIterator(getReferencedEdges(e));
+}
+
+GraphProperty* GraphAbstract::getMetaGraphProperty() {
+  if (metaGraphProperty)
+    return metaGraphProperty;
+  return metaGraphProperty =
+    getRoot()->getProperty<GraphProperty>(metaGraphPropertyName);
 }

@@ -37,6 +37,14 @@ public :
   virtual void beforeSetAllNodeValue(PropertyInterface* prop);
   virtual void afterSetAllNodeValue(PropertyInterface* prop);
 
+  // for optimizations purpose
+  bool hasNonDefaultValue(const node n) const {
+    return nodeProperties.hasNonDefaultValue(n.id);
+  }
+  bool hasNonDefaultValue(const edge e) const  {
+    return nodeProperties.hasNonDefaultValue(e.id);
+  }
+
 private:
   MutableContainer<std::set<node> > referencedGraph;
   const std::set<edge>& getReferencedEdges(const edge) const;

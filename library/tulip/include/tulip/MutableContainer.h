@@ -138,6 +138,10 @@ public:
    */
   typename ReturnType<TYPE>::Value get(const unsigned int i, bool& isNotDefault) const;
   /**
+   * return is the value associated to i is not the default
+   */
+  bool hasNonDefaultValue(const unsigned int i) const;
+  /**
    * return a pointer on an iterator for all the elements whose associated value
    * if equal to a given value or different from the default value.
    * A null pointer is returned in case of an iteration on all the elements
@@ -446,7 +450,7 @@ typename ReturnType<TYPE>::ConstValue MutableContainer<TYPE>::get(const unsigned
   case VECT:
     if (i>maxIndex || i<minIndex) 
       return StoredValueType<TYPE>::get(defaultValue);
-    else 
+    else
       return StoredValueType<TYPE>::get((*vData)[i - minIndex]);
     break;
   case HASH:
@@ -460,6 +464,22 @@ typename ReturnType<TYPE>::ConstValue MutableContainer<TYPE>::get(const unsigned
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     return StoredValueType<TYPE>::get(defaultValue);
     break;
+  }
+}
+//===================================================================
+ template <typename TYPE>
+   bool MutableContainer<TYPE>::hasNonDefaultValue(const unsigned int i) const {
+   if (maxIndex == UINT_MAX) return false;
+  switch (state) {
+  case VECT:
+    return (i<=maxIndex && i>=minIndex && 
+	    (StoredValueType<TYPE>::get((*vData)[i - minIndex]) != defaultValue));
+  case HASH:
+    return ((hData->find(i))!=hData->end());
+  default:
+    assert(false);
+    std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
+    return false;
   }
 }
 //===================================================================

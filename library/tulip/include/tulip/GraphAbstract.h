@@ -14,6 +14,7 @@ namespace tlp {
 
 template<class C>class Iterator;
 class PropertyManager;
+class GraphProperty;
 
 ///Abstract class for default graph operations.
 class GraphAbstract:public Graph {
@@ -67,6 +68,9 @@ public:
   Iterator<PropertyInterface*>* getObjectProperties();
   PropertyInterface* getProperty(const std::string &);
 
+  // to get viewMetaGraph property
+  GraphProperty* getMetaGraphProperty();    
+
 protected:
   DataSet& getNonConstAttributes();
   void setSuperGraph(Graph *);
@@ -88,6 +92,8 @@ private:
   Graph* const root;
   GRAPH_SEQ subgraphs;
   Graph* subGraphToKeep;
+  // pointer to root viewMetaGraph property
+  GraphProperty* metaGraphProperty;
 };
 
 }
