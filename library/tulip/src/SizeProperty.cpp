@@ -36,6 +36,8 @@ SizeProperty::SizeProperty (Graph *sg, std::string n):
   addPropertyObserver(this);
   // but do not need to be in observables
   removeObservable(this);
+  // the computed meta value will be the average value
+  setMetaValueCalculator(&mvSizeCalculator);
 }
 //====================================================================
 void SizeProperty::scale(const tlp::Vector<float,3>& v, Iterator<node> *itN, Iterator<edge> *itE) {
