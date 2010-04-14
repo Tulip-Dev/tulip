@@ -430,6 +430,21 @@ node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool
   }
 
   Graph *subGraph = getSuperGraph()->inducedSubGraph(nodeSet);
+  // all local properties
+  // must be cloned in subgraph
+  PropertyInterface *prop;
+  forEach(prop, getLocalObjectProperties()) {
+    PropertyInterface* sgProp =
+      prop->clonePrototype(subGraph, prop->getName());
+    set<node>::const_iterator itNodeSet = nodeSet.begin();
+    for(;itNodeSet!=nodeSet.end(); ++itNodeSet) {
+      node n = *itNodeSet;
+      DataMem* val =  prop->getNodeDataMemValue(n);
+      sgProp->setNodeDataMemValue(n, val);
+      delete val;
+    }
+  }
+  
   stringstream st;
   st << "grp_" << setfill('0') << setw(5) << subGraph->getId(); 
   subGraph->setAttribute("name", st.str());
@@ -452,7 +467,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   // compute meta node values
   PropertyInterface *property;
   forEach(property, getObjectProperties()) {
-    property->computeMetaValue(metaNode, subGraph);
+    property->computeMetaValue(metaNode, subGraph, this);
   }
 
   
@@ -763,7 +778,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
 	string pName;
 	forEach(pName, quotientGraph->getProperties()) {
 	  PropertyInterface *property = quotientGraph->getProperty(pName);
-	  property->computeMetaValue(metaN, its);
+	  property->computeMetaValue(metaN, its, quotientGraph);
 	}
 	node n;
 	forEach(n, its->getNodes()) {

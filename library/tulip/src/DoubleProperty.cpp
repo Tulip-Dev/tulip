@@ -138,13 +138,14 @@ public:
      nodeCalc(nodeCalculators[(int) nCalc]),
      edgeCalc(edgeCalculators[(int) eCalc]) {}
 
-  void computeMetaValue(AbstractDoubleProperty* metric, node mN, Graph* sg) {
+  void computeMetaValue(AbstractDoubleProperty* metric, node mN, Graph* sg,
+			Graph*) {
     if (nodeCalc)
       nodeCalc(metric, mN, sg);
   }
 
-  void computeMetaValue(AbstractDoubleProperty* metric, edge mE, Iterator<edge>* itE,
-			Graph*) {
+  void computeMetaValue(AbstractDoubleProperty* metric, edge mE,
+			Iterator<edge>* itE, Graph*) {
     if (edgeCalc)
       edgeCalc(metric, mE, itE);
   }

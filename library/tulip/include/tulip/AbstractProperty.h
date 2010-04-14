@@ -176,8 +176,12 @@ public:
   virtual void setAllEdgeDataMemValue(const DataMem* v);
 
   // PropertyInterface methods
-  virtual void computeMetaValue(node mN, Graph* sg);
-  virtual void computeMetaValue(edge mE, Iterator<edge>* itE, Graph* g);
+  // mN is the meta node, sg is the corresponding subgraph
+  // and mg is the graph owning mN
+  virtual void computeMetaValue(node mN, Graph* sg, Graph* mg);
+  // mE is the meta edge, itE is an iterator on the underlying edges
+  // mg is the graph owning mE
+  virtual void computeMetaValue(edge mE, Iterator<edge>* itE, Graph* mg);
   virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *mvCalc);
 
   // This class is used to delegate the computation of the values associated
@@ -185,10 +189,12 @@ public:
   class MetaValueCalculator :public PropertyInterface::MetaValueCalculator {
   public:
     virtual void computeMetaValue(AbstractProperty<Tnode, Tedge,
-				  TPROPERTY>* prop, node mN, Graph* sg) {}
+				  TPROPERTY>* prop, node mN,
+				  Graph* sg, Graph* mg) {}
     virtual void computeMetaValue(AbstractProperty<Tnode, Tedge,
 				  TPROPERTY>* prop,
-				  edge mE, Iterator<edge>* itE, Graph* g) {}
+				  edge mE, Iterator<edge>* itE,
+				  Graph* mg) {}
   };
 
 protected:

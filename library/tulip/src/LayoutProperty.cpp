@@ -16,7 +16,7 @@ class LayoutMetaValueCalculator
   :public AbstractLayoutProperty::MetaValueCalculator {
 public:
   void computeMetaValue(AbstractLayoutProperty* layout,
-			node mN, Graph* sg) {
+			node mN, Graph* sg, Graph*) {
     switch(sg->numberOfNodes()) {
     case 0:
       layout->setNodeValue(mN, Coord(0, 0, 0));

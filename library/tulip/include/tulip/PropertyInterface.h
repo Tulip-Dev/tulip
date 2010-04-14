@@ -51,7 +51,7 @@ public:
   /**
     * Create an object of the same real type of the current property, in the
     * the graph (first parameter) with the name (second parameter).
-    * Values are copied.
+    * Values are not copied.
     */
   virtual PropertyInterface* clonePrototype(Graph *, const std::string&) =0;
   //=================================================================================
@@ -93,10 +93,11 @@ public:
   virtual bool setAllEdgeStringValue( const std::string & v ) = 0;
   // two methods to compute the values for meta nodes or edges
   // mN is the meta node, sg is the corresponding subgraph
-  virtual void computeMetaValue( node mN, Graph* sg )=0;
+  // and g is the graph owning mN
+  virtual void computeMetaValue(node mN, Graph* sg, Graph* mg)=0;
   // mE is the meta edge, itE is an iterator on the underlying edges
-  // g is the graph owning the underlying edges
-  virtual void computeMetaValue( edge mE, Iterator<edge>* itE, Graph* g )=0;
+  // mg is the graph owning mE
+  virtual void computeMetaValue(edge mE, Iterator<edge>* itE, Graph* mg)=0;
   // the ones below are used by GraphUpdatesRecorder
   virtual Iterator<node>* getNonDefaultValuatedNodes() const = 0;
   virtual Iterator<edge>* getNonDefaultValuatedEdges() const = 0;

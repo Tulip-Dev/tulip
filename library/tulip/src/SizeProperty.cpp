@@ -14,7 +14,7 @@ class SizeMetaValueCalculator
   :public AbstractSizeProperty::MetaValueCalculator {
 public:
   void computeMetaValue(AbstractSizeProperty* prop,
-			node mN, Graph* sg) {
+			node mN, Graph* sg, Graph*) {
     if (sg->numberOfNodes() == 0) {
       prop->setNodeValue(mN, Size(0, 0, 0));
       return;

@@ -249,14 +249,15 @@ void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setMetaValueCalculator(Proper
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
 void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::computeMetaValue(node n,
-								    Graph* sg) {
+								    Graph* sg,
+								    Graph* mg) {
   if (metaValueCalculator)
     ((typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::MetaValueCalculator *) 
-    metaValueCalculator)->computeMetaValue(this, n, sg);
+     metaValueCalculator)->computeMetaValue(this, n, sg, mg);
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::computeMetaValue(edge e, Iterator<edge>* itE, Graph* g) {
+void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::computeMetaValue(edge e, Iterator<edge>* itE, Graph* mg) {
   if (metaValueCalculator)
-    ((typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::MetaValueCalculator *)metaValueCalculator)->computeMetaValue(this, e, itE, g);
+    ((typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::MetaValueCalculator *)metaValueCalculator)->computeMetaValue(this, e, itE, mg);
 }
