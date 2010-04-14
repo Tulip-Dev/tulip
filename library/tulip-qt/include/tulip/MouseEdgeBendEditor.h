@@ -17,7 +17,7 @@ namespace tlp {
   public:
 
     MouseEdgeBendEditor();
-    ~MouseEdgeBendEditor() {if(glMainWidget)glMainWidget->getScene()->getSelectionLayer()->deleteGlEntity("EdgeBendEditorComposite");}
+    ~MouseEdgeBendEditor();
     bool compute(GlMainWidget *glMainWidget);
     bool draw(GlMainWidget *);
     bool eventFilter(QObject *, QEvent *);
@@ -49,10 +49,11 @@ namespace tlp {
 
     Coord editPosition;
 
+    GlLayer *layer;
     std::vector<tlp::GlCircle> circles;
     std::vector<Coord> coordinates;
     tlp::GlCircle basicCircle;
-    tlp::GlComposite circleString;
+    tlp::GlComposite *circleString;
     std::vector <GlEntity * > select;
     edge mEdge;
     Coord start, end;

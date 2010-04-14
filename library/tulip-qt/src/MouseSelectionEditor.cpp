@@ -26,7 +26,7 @@ using namespace tlp;
 using namespace std;
 
 //========================================================================================
-MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),composite(false){
+MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),layer(NULL),composite(NULL){
   operation = NONE;
 
   //composite.addGlEntity(&centerRect, "CenterRectangle");
@@ -89,6 +89,13 @@ MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),composite(false)
   }
 }
 //========================================================================================
+MouseSelectionEditor::~MouseSelectionEditor(){
+  if(layer){
+    glMainWidget->getScene()->removeLayer(layer,true);
+    layer=NULL;
+  }
+}
+//========================================================================================
 bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
@@ -129,14 +136,13 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       }
       if (!hasSelection ||
           (!glMainWidget->selectGlEntities((int)editPosition[0]-3, (int)editPosition[1]-3,
-              6, 6, select,glMainWidget->getScene()->getSelectionLayer()) &&
+              6, 6, select,layer) &&
               !centerRect.inRect((double) qMouseEv->x(),
-                  (double) qMouseEv->y()))) {
+                  (double)qMouseEv->y()))) {
         // event occurs outside the selection rectangle
         // so from now we delegate the job to a MouseSelector object
         // which should intercept the event
         operation = NONE;
-        glMainWidget->getScene()->getSelectionLayer()->clear();
         return false;
       }
 
@@ -264,20 +270,29 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 //========================================================================================
 bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
   if (computeFFD(glMainWidget)) {
-    glMainWidget->getScene()->getSelectionLayer()->addGlEntity(&composite,"selectionComposite");
-    composite.addGlEntity(&centerRect, "CenterRectangle");
-    composite.addGlEntity(&_controls[0], "left");
-    composite.addGlEntity(&_controls[1], "top-left");
-    composite.addGlEntity(&_controls[2], "top");
-    composite.addGlEntity(&_controls[3], "top-right");
-    composite.addGlEntity(&_controls[4], "right");
-    composite.addGlEntity(&_controls[5], "bottom-right");
-    composite.addGlEntity(&_controls[6], "bottom");
-    composite.addGlEntity(&_controls[7], "bottom-left");
+    if(!layer){
+      layer=new GlLayer("selectionEditorLayer",true);
+      layer->setCamera(Camera(glMainWidget->getScene(),false));
+      glMainWidget->getScene()->insertLayerAfter(layer,"Main");
+      composite = new GlComposite(false);
+      layer->addGlEntity(composite,"selectionComposite");
+    }
+    composite->addGlEntity(&centerRect, "CenterRectangle");
+    composite->addGlEntity(&_controls[0], "left");
+    composite->addGlEntity(&_controls[1], "top-left");
+    composite->addGlEntity(&_controls[2], "top");
+    composite->addGlEntity(&_controls[3], "top-right");
+    composite->addGlEntity(&_controls[4], "right");
+    composite->addGlEntity(&_controls[5], "bottom-right");
+    composite->addGlEntity(&_controls[6], "bottom");
+    composite->addGlEntity(&_controls[7], "bottom-left");
     this->glMainWidget=glMainWidget;
     return true;
   }else{
-    glMainWidget->getScene()->getSelectionLayer()->clear();
+    if(layer){
+      glMainWidget->getScene()->removeLayer(layer,true);
+      layer=NULL;
+    }
     return false;
   }
 }
@@ -299,7 +314,10 @@ void MouseSelectionEditor::undoEdition() {
 //========================================================================================
 void MouseSelectionEditor::stopEdition() {
   //cerr << __PRETTY_FUNCTION__ << endl;
-  glMainWidget->getScene()->getSelectionLayer()->clear();
+  if(layer){
+    glMainWidget->getScene()->removeLayer(layer,true);
+    layer=NULL;
+  }
 
   operation = NONE;
 }

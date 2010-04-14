@@ -184,9 +184,31 @@ namespace tlp {
     void addLayer(GlLayer *layer);
 
     /**
+     * Add a layer just before layer with given name
+     * Return true if insert is ok and false if layer with given name is not find
+     */
+    bool insertLayerBefore(GlLayer *layer,const std::string &name);
+
+    /**
+     * Add a layer just after layer with given name
+     * Return true if insert is ok and false if layer with given name is not find
+     */
+    bool insertLayerAfter(GlLayer *layer,const std::string &name);
+
+    /**
      * Return the layer with name : name
      */
     GlLayer* getLayer(const std::string& name);
+
+    /**
+     * Remove the layer with name and delete it (if bool deleteLayer == true)
+     */
+    void removeLayer(const std::string& name,bool deleteLayer);
+
+    /**
+     * Remove a layer and delete it (if bool deleteLayer == true)
+     */
+    void removeLayer(GlLayer *layer,bool deleteLayer);
 
     /**
      * Return the layer list
@@ -234,15 +256,12 @@ namespace tlp {
     GlGraphComposite* getGlGraphComposite() {return glGraphComposite;}
     GlLayer* getGraphLayer() {return graphLayer;}
 
-    GlLayer* getSelectionLayer() {return selectionLayer;}
-
     Camera* getCamera() {return getLayer("Main")->getCamera();}
     void setCamera(Camera* camera) {getLayer("Main")->setCamera(*camera);}
 
   private:
 
     std::vector<std::pair<std::string,GlLayer *> > layersList;
-    GlLayer* selectionLayer;
     GlLODCalculator *lodCalculator;
     Vector<int, 4> viewport;
     Color backgroundColor;

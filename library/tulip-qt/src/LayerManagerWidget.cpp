@@ -45,6 +45,8 @@ namespace tlp {
   }
   //=============================================================================
   void LayerManagerWidget::addLayer(GlScene* scene, const string& name, GlLayer* layer){
+    if(layer->isAWorkingLayer())
+      return;
     QTreeWidgetItem *item=new QTreeWidgetItem(treeWidget,QStringList(name.c_str()));
     item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     if(layer->isVisible())

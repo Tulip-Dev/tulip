@@ -34,7 +34,7 @@ namespace tlp {
     /**
      * Layer constructor : construct a layer with his name
      */
-    GlLayer(const std::string& name);
+    GlLayer(const std::string& name,bool workingLayer=false);
 
     /**
      * Set the scene where the layer is
@@ -122,6 +122,12 @@ namespace tlp {
     void clear() {composite.reset(false);}
 
     /**
+     * return if this layer is a working layer
+     *  this property doesn't change the layer, but for example working layers are not displayed in LayerManagerWidget
+     */
+    bool isAWorkingLayer(){return workingLayer;}
+
+    /**
      * Return the layer's data in XML
      */
     void getXML(xmlNodePtr rootNode);
@@ -139,6 +145,8 @@ namespace tlp {
     GlScene *scene;
 
     Camera camera;
+
+    bool workingLayer;
 
   };
 

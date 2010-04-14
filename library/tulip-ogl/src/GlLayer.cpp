@@ -11,8 +11,8 @@ using namespace std;
 
 namespace tlp {
 
-  GlLayer::GlLayer(const std::string& name)
-    :name(name),scene(0),camera(0){
+  GlLayer::GlLayer(const std::string& name,bool workingLayer)
+    :name(name),scene(0),camera(0),workingLayer(workingLayer){
     composite.addLayerParent(this);
   }
 

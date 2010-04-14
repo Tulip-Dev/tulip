@@ -23,7 +23,7 @@ using namespace std;
 
 //========================================================================================
 MouseEdgeBendEditor::MouseEdgeBendEditor()
-  :glMainWidget(NULL){
+  :glMainWidget(NULL),layer(NULL),circleString(NULL){
   operation = NONE_OP;
   _copyLayout = 0;
   _copySizes = 0;
@@ -34,8 +34,10 @@ MouseEdgeBendEditor::MouseEdgeBendEditor()
   basicCircle.setOutlineMode(true);
   basicCircle.fcolor(0) = Color(255, 102, 255, 200);
   basicCircle.ocolor(0) = Color(128, 20, 20, 200);
-
-  circleString.setDeleteComponentsInDestructor(false);
+}
+//========================================================================================
+MouseEdgeBendEditor::~MouseEdgeBendEditor(){
+  glMainWidget->getScene()->removeLayer(layer,true);
 }
 //========================================================================================
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
@@ -76,9 +78,9 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
         mMouseCreate(editPosition[0], editPosition[1], glMainWidget);
       } else {
         bool circleSelected =
-          glMainWidget->selectGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, glMainWidget->getScene()->getSelectionLayer());
+          glMainWidget->selectGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, layer);
         if (circleSelected) {
-          theCircle=circleString.findKey((GlSimpleEntity*)(select[0]));
+          theCircle=circleString->findKey((GlSimpleEntity*)(select[0]));
           //(&circles[i])->fcolor(0) = Color(40,255,40,200);
           //(&circles[i])->ocolor(0) = Color(20,128,20,200);
           if (qMouseEv->modifiers() &
@@ -147,7 +149,14 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 //========================================================================================
 bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
   if (computeBendsCircles(glMainWidget)) {
-    glMainWidget->getScene()->getSelectionLayer()->addGlEntity(&circleString,"EdgeBendEditorComposite");
+    if(!layer){
+      layer=new GlLayer("edgeBendEditorLayer",true);
+      layer->setCamera(Camera(glMainWidget->getScene(),false));
+      glMainWidget->getScene()->insertLayerAfter(layer,"Main");
+      if(!circleString)
+        circleString = new GlComposite(false);
+      layer->addGlEntity(circleString,"selectionComposite");
+    }
     this->glMainWidget=glMainWidget;
     return true;
   }
@@ -365,7 +374,10 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
   coordinates.clear();
   circles.clear();
   select.clear();
-  circleString.reset(false);
+  if(circleString)
+    circleString->reset(false);
+  else
+    circleString=new GlComposite(false);
   //int W = glMainWidget->width();
   //int H = glMainWidget->height();
   itE =_graph->getEdges();
@@ -390,7 +402,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
   }
   delete itE;
   for(unsigned int i=0;i<circles.size();i++)
-    circleString.addGlEntity(&circles[i], IntegerType::toString(i));
+    circleString->addGlEntity(&circles[i], IntegerType::toString(i));
   return hasSelection;
 }
 //========================================================================================

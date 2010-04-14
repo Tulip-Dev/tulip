@@ -73,11 +73,7 @@ namespace tlp {
 #endif
 
   GlScene::GlScene(GlLODCalculator *calculator):backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
-	Camera camera(this,false);
-	selectionLayer= new GlLayer("Selection");
-	selectionLayer->setCamera(camera);
-	selectionLayer->setScene(this);
-    selectionLayer->getComposite()->setDeleteComponentsInDestructor(false);
+    Camera camera(this,false);
 
 	if(calculator!=NULL)
       lodCalculator=calculator;
@@ -91,7 +87,6 @@ namespace tlp {
     for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       delete (*it).second;
     }
-    delete selectionLayer;
   }
 
   void GlScene::initGlParameters() {
@@ -180,10 +175,6 @@ namespace tlp {
 
       for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
         (*it).second->acceptVisitor(lodVisitor);
-        
-        //Here we have a special layer (layer used by selectionEditor), we will remove this layer if we can
-        if((*it).first=="Main")
-          selectionLayer->acceptVisitor(lodVisitor);
       }
       delete lodVisitor;
     }
@@ -212,9 +203,13 @@ namespace tlp {
 	GlEdge glEdge(0);
 
     // Iterate on Camera
-	for(VectorOfCamera::iterator itCamera=cameraVector->begin();itCamera!=cameraVector->end();++itCamera){
+    Camera *oldCamera=NULL;
+    for(VectorOfCamera::iterator itCamera=cameraVector->begin();itCamera!=cameraVector->end();++itCamera){
       camera=(Camera*)(*itCamera);
-      camera->initGl();
+      if(camera!=oldCamera){
+        camera->initGl();
+        oldCamera=camera;
+      }
 
       // Init GlPointManager for a new rendering pass
       GlPointManager::getInst().beginRendering();
@@ -224,11 +219,15 @@ namespace tlp {
         zOrdering=glGraphComposite->getRenderingParameters().isElementZOrdered();
 
       if(!zOrdering){
+        // If elements are not zOrdered
+
+        // Draw simple entities
         for(vector<LODResultSimpleEntity>::iterator it=(*itSimple).begin();it!=(*itSimple).end();++it) {
           glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*it).first))->getStencil(),0xFFFF);
           ((GlSimpleEntity*)((*it).first))->draw((*it).second,camera);
         }
 
+        // Draw complex entities
         if(glGraphComposite){
           for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
             assert(graph);
@@ -245,7 +244,10 @@ namespace tlp {
             glEdge.draw((*it).second,glGraphComposite->getInputData(),camera);
           }
         }
+
       }else{
+        // If elements are zOrdered
+
         entityWithDistanceCompare::inputData=glGraphComposite->getInputData();
         multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;
         Coord camPos=camera->getEyes();
@@ -253,6 +255,7 @@ namespace tlp {
         Coord middle;
         double dist;
 
+        // Colect simple entities
         for(vector<LODResultSimpleEntity>::iterator it=(*itSimple).begin();it!=(*itSimple).end();++it) {
           bb=((GlSimpleEntity*)((*it).first))->getBoundingBox();
           middle=bb.first+(bb.second-bb.first)/2.f;
@@ -262,6 +265,7 @@ namespace tlp {
           entitiesSet.insert(EntityWithDistance(dist,&(*it)));
         }
 
+        // Colect complex entities
         if(glGraphComposite){
           GlNode glNode(0);
           for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
@@ -285,13 +289,14 @@ namespace tlp {
           }
         }
 
-        //entitiesVector.sort(entityWithDistanceCompare::compare);
-
+        // Draw
         for(set<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin();it!=entitiesSet.end();++it){
           if(!(*it).isComplexEntity){
+            // Simple entities
             glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*it).simpleEntity->first))->getStencil(),0xFFFF);
             ((GlSimpleEntity*)((*it).simpleEntity->first))->draw((*it).simpleEntity->second,camera);
           }else{
+            // Complex entities
             if((*it).isNode){
               if(!graph->isMetaNode(node((*it).complexEntity->first))){
                 glNode.id=(*it).complexEntity->first;
@@ -308,8 +313,12 @@ namespace tlp {
         }
       }
 
+      // End rendering of GlPointManager
       GlPointManager::getInst().endRendering();
 
+      /*
+        Label draw
+      */
       if(viewLabel && glGraphComposite) {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glDisable(GL_LIGHTING);
@@ -370,6 +379,57 @@ namespace tlp {
 	layersList.push_back(std::pair<std::string,GlLayer*>(layer->getName(),layer));
 	layer->setScene(this);
 	notifyAddLayer(this,layer->getName(),layer);
+  }
+
+  bool GlScene::insertLayerBefore(GlLayer *layer,const string &name) {
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it){
+      if((*it).first==name){
+        layersList.insert(it,pair<string,GlLayer*>(layer->getName(),layer));
+        layer->setScene(this);
+        notifyAddLayer(this,layer->getName(),layer);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool GlScene::insertLayerAfter(GlLayer *layer,const string &name) {
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it){
+      if((*it).first==name){
+        ++it;
+        layersList.insert(it,pair<string,GlLayer*>(layer->getName(),layer));
+        layer->setScene(this);
+        notifyAddLayer(this,layer->getName(),layer);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void GlScene::removeLayer(const std::string& name,bool deleteLayer){
+    for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it){
+      if((*it).first==name){
+        GlLayer *layer=(*it).second;
+        layersList.erase(it);
+        notifyDelLayer(this,name,layer);
+        if(deleteLayer)
+          delete layer;
+        return;
+      }
+    }
+  }
+
+  void GlScene::removeLayer(GlLayer *layer,bool deleteLayer){
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it){
+      if((*it).second==layer){
+        GlLayer *layer=(*it).second;
+        layersList.erase(it);
+        notifyDelLayer(this,layer->getName(),layer);
+        if(deleteLayer)
+          delete layer;
+        return;
+      }
+    }
   }
 
   void GlScene::centerScene() {
@@ -593,8 +653,6 @@ namespace tlp {
       if(selectLODCalculator->needEntities()){
         for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
           (*it).second->acceptVisitor(lodVisitor);
-          if((*it).first=="Main")
-            selectionLayer->acceptVisitor(lodVisitor);
         }
       }
     }else{

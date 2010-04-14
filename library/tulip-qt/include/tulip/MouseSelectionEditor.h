@@ -20,7 +20,7 @@ namespace tlp {
   public:
 
     MouseSelectionEditor();
-    ~MouseSelectionEditor() {if(glMainWidget)glMainWidget->getScene()->getSelectionLayer()->deleteGlEntity("selectionComposite");}
+    ~MouseSelectionEditor();
     bool compute(GlMainWidget *glMainWidget);
     bool draw(GlMainWidget *);
     bool eventFilter(QObject *, QEvent *);
@@ -56,7 +56,8 @@ namespace tlp {
     //    double centerX, centerY;
     Coord ffdCenter;
 
-    GlComposite composite;
+    GlLayer *layer;
+    GlComposite *composite;
     GlCircle _controls[8];
     GlRect centerRect;
     Coord _layoutCenter;
