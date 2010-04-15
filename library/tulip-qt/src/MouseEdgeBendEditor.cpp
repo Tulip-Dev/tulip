@@ -37,7 +37,8 @@ MouseEdgeBendEditor::MouseEdgeBendEditor()
 }
 //========================================================================================
 MouseEdgeBendEditor::~MouseEdgeBendEditor(){
-  glMainWidget->getScene()->removeLayer(layer,true);
+  if(layer)
+    glMainWidget->getScene()->removeLayer(layer,true);
 }
 //========================================================================================
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
