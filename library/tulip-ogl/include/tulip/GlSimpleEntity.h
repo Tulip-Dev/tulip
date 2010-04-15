@@ -80,9 +80,26 @@ namespace tlp {
     virtual void addLayerParent(GlLayer *layer) {}
 
     /**
+     * remove a layer parent to this entity
+     */
+    virtual void removeLayerParent(GlLayer *layer) {}
+
+    /**
      * Add a parent to this entity
      */
     void addParent(GlComposite *composite) {parents.push_back(composite);}
+
+    /**
+     * remove a parent to this entity
+     */
+    void removeParent(GlComposite *composite) {
+      for(std::vector<GlComposite*>::iterator it=parents.begin();it!=parents.end();++it){
+        if((*it)==composite){
+          parents.erase(it);
+          return;
+        }
+      }
+    }
 
     /**
      * virtual fucntion : Translate entity

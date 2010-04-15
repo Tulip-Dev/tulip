@@ -29,6 +29,11 @@ namespace tlp {
     virtual void addLayerParent(GlLayer *layer);
 
     /**
+     * Remove a layer parent to this entity
+     */
+    virtual void removeLayerParent(GlLayer *layer);
+
+    /**
      * Clear the composite, if deleteElems is true, composite's entities are delete
      */
     void reset(bool deleteElems);

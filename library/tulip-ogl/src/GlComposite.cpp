@@ -26,10 +26,30 @@ namespace tlp {
     }
   }
   //============================================================
+  void GlComposite::removeLayerParent(GlLayer *layer){
+    for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it){
+      if((*it)==layer){
+        layerParents.erase(it);
+        break;
+      }
+    }
+
+    for(list<GlSimpleEntity *>::iterator it = _sortedElements.begin(); it != _sortedElements.end(); ++it) {
+      (*it)->removeLayerParent(layer);
+    }
+  }
+  //============================================================
   void GlComposite::reset(bool deleteElems) {
-    if (deleteElems)
-      for(ITM i = elements.begin(); i != elements.end(); ++i)
+    for(ITM i = elements.begin(); i != elements.end(); ++i){
+      if (deleteElems){
         delete (*i).second;
+      }else{
+        (*i).second->removeParent(this);
+        for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it){
+          (*i).second->removeLayerParent(*it);
+        }
+      }
+    }
     elements.clear();
     _sortedElements.clear();
 
@@ -61,6 +81,15 @@ namespace tlp {
   }
   //============================================================
   void GlComposite::deleteGlEntity(const string &key) {
+    if(elements.count(key)==0)
+      return;
+
+    GlSimpleEntity *entity=elements[key];
+    entity->removeParent(this);
+    for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it){
+      entity->removeLayerParent(*it);
+    }
+
     _sortedElements.remove(elements[key]);
     elements.erase(key);
 
@@ -73,6 +102,11 @@ namespace tlp {
   void GlComposite::deleteGlEntity(GlSimpleEntity *entity) {
     for(ITM i = elements.begin(); i != elements.end(); ++i) {
       if(entity == (*i).second) {
+        entity->removeParent(this);
+        for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it){
+          entity->removeLayerParent(*it);
+        }
+
         _sortedElements.remove((*i).second);
         elements.erase(i->first);
 
