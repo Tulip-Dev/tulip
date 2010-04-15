@@ -37,9 +37,19 @@ namespace tlp {
     GlLayer(const std::string& name,bool workingLayer=false);
 
     /**
+     * Layer constructor : construct a layer with his name and use the camera : camera
+     */
+    GlLayer(const std::string& name,Camera *camera,bool workingLayer=false);
+
+    /**
+     * Destructor
+     */
+    ~GlLayer();
+
+    /**
      * Set the scene where the layer is
      */
-    void setScene(GlScene *scene) {this->scene=scene;camera.setScene(scene);}
+    void setScene(GlScene *scene) {this->scene=scene;camera->setScene(scene);}
 
     /**
      * Return the scene where the layer is
@@ -54,22 +64,22 @@ namespace tlp {
     /**
      * Set the layer's camera with a pointer to a camera
      */
-    void setCamera(Camera *camera) {this->camera=*camera;}
+    void setCamera(Camera *camera) {this->camera=new Camera(*camera);}
 
     /**
      * Set the layer's camera
      */
-    void setCamera(const Camera& camera) {this->camera=camera;}
+    void setCamera(const Camera& camera) {this->camera=new Camera(camera);}
 
     /**
      * Replace the layer's camera with a new 2D one
      */
-    void set2DMode() {this->camera=Camera(NULL,false);}
+    void set2DMode() {this->camera=new Camera(NULL,false);}
 
     /**
      * Return the layer's camera
      */
-    Camera *getCamera() {return &camera;}
+    Camera *getCamera() {return camera;}
 
     /**
      * Set if the layer is visible
@@ -128,6 +138,11 @@ namespace tlp {
     bool isAWorkingLayer(){return workingLayer;}
 
     /**
+     * return if this layer use a shared camera
+     */
+    bool useSharedCamera(){return sharedCamera;}
+
+    /**
      * Return the layer's data in XML
      */
     void getXML(xmlNodePtr rootNode);
@@ -144,7 +159,8 @@ namespace tlp {
     GlComposite composite;
     GlScene *scene;
 
-    Camera camera;
+    Camera *camera;
+    bool sharedCamera;
 
     bool workingLayer;
 

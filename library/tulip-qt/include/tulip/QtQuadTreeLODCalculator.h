@@ -89,11 +89,11 @@ namespace tlp {
 
     GlScene *scene;
 
-    QuadTreeNode *nodesQuadTree;
-    QuadTreeNode *edgesQuadTree;
-    QuadTreeNode *nodesSelectedQuadTree;
-    QuadTreeNode *edgesSelectedQuadTree;
-    QuadTreeNode *entitiesQuadTree;
+    std::vector<QuadTreeNode *> nodesQuadTree;
+    std::vector<QuadTreeNode *> edgesQuadTree;
+    std::vector<QuadTreeNode *> nodesSelectedQuadTree;
+    std::vector<QuadTreeNode *> edgesSelectedQuadTree;
+    std::vector<QuadTreeNode *> entitiesQuadTree;
     VectorOfSimpleBoundingBoxVector simpleEntities;
 
     bool haveToCompute;
@@ -111,7 +111,7 @@ namespace tlp {
     PropertyInterface *sizeProperty;
     PropertyInterface *selectionProperty;
 
-    //int size;
+    int quadTreesVectorPosition;
   };
 
 }

@@ -441,7 +441,7 @@ namespace tlp {
       visitor=new GlBoundingBoxSceneVisitor(NULL);
 
 	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D())
+      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera()))
         (*it).second->acceptVisitor(visitor);
 	}
 
@@ -483,7 +483,7 @@ namespace tlp {
       visitor=new GlBoundingBoxSceneVisitor(NULL);
 
 	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D())
+      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera()))
         (*it).second->acceptVisitor(visitor);
 	}
 
@@ -569,7 +569,7 @@ namespace tlp {
   void GlScene::zoomXY(int step, const int x, const int y) {
 
 	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D())
+      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera()))
         (*it).second->getCamera()->setZoomFactor((*it).second->getCamera()->getZoomFactor() * pow(1.1,step));
 	}
 	if (step < 0) step *= -1;
@@ -580,7 +580,7 @@ namespace tlp {
 
   void GlScene::zoom(float factor,const Coord& dest) {
 	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D()) {
+      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
         (*it).second->getCamera()->setEyes(dest + ((*it).second->getCamera()->getEyes() - (*it).second->getCamera()->getCenter()));
         (*it).second->getCamera()->setCenter(dest);
       }
@@ -589,7 +589,7 @@ namespace tlp {
 
   void GlScene::translateCamera(const int x, const int y, const int z) {
 	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D()) {
+      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
         Coord v1(0, 0, 0);
         Coord v2(x, y, z);
         v1 = (*it).second->getCamera()->screenTo3DWorld(v1);
@@ -603,7 +603,7 @@ namespace tlp {
 
   void GlScene::zoom(int step) {
 	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D()) {
+      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
         (*it).second->getCamera()->setZoomFactor((*it).second->getCamera()->getZoomFactor() * pow(1.1, step));
       }
 	}
@@ -611,7 +611,7 @@ namespace tlp {
 
   void GlScene::rotateScene(const int x, const int y, const int z) {
 	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D()) {
+      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
         (*it).second->getCamera()->rotate(float(x)/360.0 * M_PI, 1.0, 0, 0);
         (*it).second->getCamera()->rotate(float(y)/360.0 * M_PI, 0, 1.0, 0);
         (*it).second->getCamera()->rotate(float(z)/360.0 * M_PI, 0, 0, 1.0);

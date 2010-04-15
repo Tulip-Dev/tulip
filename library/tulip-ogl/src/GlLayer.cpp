@@ -12,8 +12,18 @@ using namespace std;
 namespace tlp {
 
   GlLayer::GlLayer(const std::string& name,bool workingLayer)
-    :name(name),scene(0),camera(0),workingLayer(workingLayer){
+    :name(name),scene(0),camera(new Camera(0)),sharedCamera(false),workingLayer(workingLayer){
     composite.addLayerParent(this);
+  }
+
+  GlLayer::GlLayer(const std::string& name,Camera *camera,bool workingLayer)
+    :name(name),scene(0),camera(camera),sharedCamera(true),workingLayer(workingLayer){
+    composite.addLayerParent(this);
+  }
+
+  GlLayer::~GlLayer(){
+    if(!sharedCamera)
+      delete camera;
   }
 
   void GlLayer::acceptVisitor(GlSceneVisitor *visitor) {
@@ -57,7 +67,7 @@ namespace tlp {
     GlXMLTools::createDataAndChildrenNodes(rootNode, dataNode, childrenNode);
 
     GlXMLTools::createChild(dataNode,"camera",node);
-    camera.getXML(node);
+    camera->getXML(node);
     bool visible=composite.isVisible();
     GlXMLTools::getXML(dataNode,"visible",visible);
 
@@ -76,7 +86,7 @@ namespace tlp {
     if(dataNode) {
       GlXMLTools::getData("camera", dataNode, node);
       if(node) {
-	camera.setWithXML(node);
+    camera->setWithXML(node);
       }
       bool visible;
       GlXMLTools::setWithXML(dataNode,"visible",visible);

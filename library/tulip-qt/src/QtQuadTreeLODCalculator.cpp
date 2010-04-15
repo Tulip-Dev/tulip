@@ -21,12 +21,11 @@ namespace tlp {
     size=Coord(size.norm(),size.norm(),size.norm());
     center[0]=centerScene[0]+(cos(aY)*(center[0]-centerScene[0]));
     center[1]=centerScene[1]+(cos(aX)*(center[1]-centerScene[1]));
-    //cout << "bb : " << center << " # " << size << endl;
+
     return pair<Coord,Coord>(center-size,center+size);
   }
 
-  QtQuadTreeLODCalculator::QtQuadTreeLODCalculator() : scene(NULL),nodesQuadTree(NULL),edgesQuadTree(NULL),nodesSelectedQuadTree(NULL),edgesSelectedQuadTree(NULL),entitiesQuadTree(NULL),
-  haveToCompute(true),inputData(NULL),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
+  QtQuadTreeLODCalculator::QtQuadTreeLODCalculator() : scene(NULL),haveToCompute(true),inputData(NULL),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
   }
 
   QtQuadTreeLODCalculator::~QtQuadTreeLODCalculator() {
@@ -41,9 +40,11 @@ namespace tlp {
   }
 
   bool QtQuadTreeLODCalculator::needEntities(){
+    // Check if quadtree need entities
     if(haveToCompute)
       return true;
 
+    // Check if a camera have changed (diff between old backup camera and current camera)
     for(vector<pair<Camera *,Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
       if(((*it).first)->is3D()){
         Camera *camera=(*it).first;
@@ -88,16 +89,29 @@ namespace tlp {
 
     if(haveToCompute){
       // if have to compute : rebuild quadtree
+
       addObservers();
 
+      // Clear all vectors
       cameras.clear();
+      for(vector<QuadTreeNode *>::iterator it=nodesQuadTree.begin();it!=nodesQuadTree.end();++it){delete (*it);}
+      for(vector<QuadTreeNode *>::iterator it=edgesQuadTree.begin();it!=edgesQuadTree.end();++it){delete (*it);}
+      for(vector<QuadTreeNode *>::iterator it=entitiesQuadTree.begin();it!=entitiesQuadTree.end();++it){delete (*it);}
+      for(vector<QuadTreeNode *>::iterator it=nodesSelectedQuadTree.begin();it!=nodesSelectedQuadTree.end();++it){delete (*it);}
+      for(vector<QuadTreeNode *>::iterator it=edgesSelectedQuadTree.begin();it!=edgesSelectedQuadTree.end();++it){delete (*it);}
       simpleEntities.clear();
+      nodesQuadTree.clear();
+      edgesQuadTree.clear();
+      nodesSelectedQuadTree.clear();
+      edgesSelectedQuadTree.clear();
+      entitiesQuadTree.clear();
 
       for(VectorOfCamera::iterator it=cameraVector.begin();it!=cameraVector.end();++it){
         cameras.push_back(pair<Camera*,Camera>((Camera*)(*it),*((Camera *)(*it))));
       }
 
       int i=0;
+      quadTreesVectorPosition=0;
       for(VectorOfCamera::iterator it=cameraVector.begin();it!=cameraVector.end();++it){
         Camera *camera=(Camera*)(*it);
 
@@ -115,6 +129,7 @@ namespace tlp {
           computeFor3DCamera(&simpleBoundingBoxVector[i],&nodesBoundingBoxVector[i],&edgesBoundingBoxVector[i],
                              &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
                              eye,transformMatrix,globalViewport,currentViewport);
+          quadTreesVectorPosition++;
         }else{
           simpleEntities.push_back(simpleBoundingBoxVector[i]);
           computeFor2DCamera(&simpleBoundingBoxVector[i],&nodesBoundingBoxVector[i],&edgesBoundingBoxVector[i],
@@ -126,9 +141,13 @@ namespace tlp {
         ++i;
       }
 
+      haveToCompute = false;
+
     }else{
       // if don't have to compute : use stored quadtree data
+
       int i=0;
+      quadTreesVectorPosition=0;
       for(vector<pair<Camera*,Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
         cameraVector.push_back((unsigned long)((*it).first));
         simpleResultVector.push_back(std::vector<LODResultSimpleEntity>());
@@ -146,6 +165,7 @@ namespace tlp {
           computeFor3DCamera(NULL,NULL,NULL,
                              &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
                              eye,transformMatrix,globalViewport,currentViewport);
+          quadTreesVectorPosition++;
         }else{
           computeFor2DCamera(&simpleEntities[i],new ComplexBoundingBoxVector(),new ComplexBoundingBoxVector(),
                              &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
@@ -163,7 +183,6 @@ namespace tlp {
                                                    const Matrix<float, 4> transformMatrix,
                                                    const Vector<int,4>& globalViewport,
                                                    const Vector<int,4>& currentViewport) {
-
     BooleanProperty *selectedProperty=NULL;
     if(inputData)
       selectedProperty=inputData->getGraph()->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
@@ -173,34 +192,24 @@ namespace tlp {
     double aY=atan(eyeCenter[0]/eyeCenter[2]);
 
     if(haveToCompute){
-      if(entitiesQuadTree)
-        delete entitiesQuadTree;
-      entitiesQuadTree = new QuadTreeNode(entitiesGlobalBoundingBox);
-      if(nodesQuadTree)
-        delete nodesQuadTree;
-      nodesQuadTree = new QuadTreeNode(nodesGlobalBoundingBox);
-      if(edgesQuadTree)
-        delete edgesQuadTree;
-      edgesQuadTree = new QuadTreeNode(edgesGlobalBoundingBox);
-      if(nodesSelectedQuadTree)
-        delete nodesSelectedQuadTree;
-      nodesSelectedQuadTree = new QuadTreeNode(nodesGlobalBoundingBox);
-      if(edgesSelectedQuadTree)
-        delete edgesSelectedQuadTree;
-      edgesSelectedQuadTree = new QuadTreeNode(edgesGlobalBoundingBox);
+      // Create quadtrees
+      entitiesQuadTree.push_back(new QuadTreeNode(entitiesGlobalBoundingBox));
+      nodesQuadTree.push_back(new QuadTreeNode(nodesGlobalBoundingBox));
+      edgesQuadTree.push_back(new QuadTreeNode(edgesGlobalBoundingBox));
+      nodesSelectedQuadTree.push_back(new QuadTreeNode(nodesGlobalBoundingBox));
+      edgesSelectedQuadTree.push_back(new QuadTreeNode(edgesGlobalBoundingBox));
 
-
-
+      // Add entities in quadtrees
       for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){
-        entitiesQuadTree->insert((*it).second,(*it).first);
+        entitiesQuadTree[quadTreesVectorPosition]->insert((*it).second,(*it).first);
       }
       for(ComplexBoundingBoxVector::iterator it=inputNodes->begin();it!=inputNodes->end();++it){
         assert(selectedProperty);
         QuadTreeNode *quadTree;
         if(selectedProperty->getNodeValue(node((*it).first)))
-          quadTree=nodesSelectedQuadTree;
+          quadTree=nodesSelectedQuadTree[quadTreesVectorPosition];
         else
-          quadTree=nodesQuadTree;
+          quadTree=nodesQuadTree[quadTreesVectorPosition];
 
         quadTree->insert((*it).second,(*it).first);
       }
@@ -208,14 +217,12 @@ namespace tlp {
         assert(selectedProperty);
         QuadTreeNode *quadTree;
         if(selectedProperty->getEdgeValue(edge((*it).first)))
-          quadTree=edgesSelectedQuadTree;
+          quadTree=edgesSelectedQuadTree[quadTreesVectorPosition];
         else
-          quadTree=edgesQuadTree;
+          quadTree=edgesQuadTree[quadTreesVectorPosition];
 
         quadTree->insert((*it).second,(*it).first);
       }
-
-      haveToCompute = false;
     }
 
     MatrixGL invTransformMatrix(transformMatrix);
@@ -238,8 +245,6 @@ namespace tlp {
     pSrc[1] = transformedViewport[1];
     cameraBoundingBox.check(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
 
-    //cout << "camera : " << cameraBoundingBox.first << " # " << cameraBoundingBox.second << endl;
-
     int ratio;
     if(currentViewport[2]>currentViewport[3])
       ratio=currentViewport[2];
@@ -254,18 +259,19 @@ namespace tlp {
     vector<unsigned int> resEdges;
     vector<unsigned long> resEntities;
 
+    // Get result of quadtrees
     if((type & RenderingNodes)!=0){
       if(aX==0 && aY==0){
         if((type & RenderingWithoutRemove)==0){
-          nodesQuadTree->getElementsWithRatio(cameraBoundingBox,&resNodes,NULL,ratio);
-          nodesSelectedQuadTree->getElementsWithRatio(cameraBoundingBox,&resNodes,NULL,ratio);
+          nodesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,&resNodes,NULL,ratio);
+          nodesSelectedQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,&resNodes,NULL,ratio);
         }else{
-          nodesQuadTree->getElements(cameraBoundingBox,&resNodes,NULL);
-          nodesSelectedQuadTree->getElements(cameraBoundingBox,&resNodes,NULL);
+          nodesQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,&resNodes,NULL);
+          nodesSelectedQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,&resNodes,NULL);
         }
       }else{
-        nodesQuadTree->getElements(&resNodes,NULL);
-        nodesSelectedQuadTree->getElements(&resNodes,NULL);
+        nodesQuadTree[quadTreesVectorPosition]->getElements(&resNodes,NULL);
+        nodesSelectedQuadTree[quadTreesVectorPosition]->getElements(&resNodes,NULL);
       }
 
       for(unsigned int i=0;i<resNodes.size();++i){
@@ -275,15 +281,15 @@ namespace tlp {
     if((type & RenderingEdges)!=0){
       if(aX==0 && aY==0){
         if((type & RenderingWithoutRemove)==0){
-          edgesQuadTree->getElementsWithRatio(cameraBoundingBox,&resEdges,NULL,ratio);
-          edgesSelectedQuadTree->getElementsWithRatio(cameraBoundingBox,&resEdges,NULL,ratio);
+          edgesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,&resEdges,NULL,ratio);
+          edgesSelectedQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,&resEdges,NULL,ratio);
         }else{
-          edgesQuadTree->getElements(cameraBoundingBox,&resEdges,NULL);
-          edgesSelectedQuadTree->getElements(cameraBoundingBox,&resEdges,NULL);
+          edgesQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,&resEdges,NULL);
+          edgesSelectedQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,&resEdges,NULL);
         }
       }else{
-        edgesQuadTree->getElements(&resEdges,NULL);
-        edgesSelectedQuadTree->getElements(&resEdges,NULL);
+        edgesQuadTree[quadTreesVectorPosition]->getElements(&resEdges,NULL);
+        edgesSelectedQuadTree[quadTreesVectorPosition]->getElements(&resEdges,NULL);
       }
 
       for(unsigned int i=0;i<resEdges.size();++i){
@@ -293,17 +299,18 @@ namespace tlp {
     if((type & RenderingSimpleEntities)!=0){
       if(aX==0 && aY==0){
         if((type & RenderingWithoutRemove)==0)
-          entitiesQuadTree->getElementsWithRatio(cameraBoundingBox,NULL,&resEntities,ratio);
+          entitiesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,NULL,&resEntities,ratio);
         else
-          entitiesQuadTree->getElements(cameraBoundingBox,NULL,&resEntities);
+          entitiesQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,NULL,&resEntities);
       }else{
-        entitiesQuadTree->getElements(NULL,&resEntities);
+        entitiesQuadTree[quadTreesVectorPosition]->getElements(NULL,&resEntities);
       }
       for(unsigned int i=0;i<resEntities.size();++i){
         simples.push_back(pair<unsigned long,BoundingBox>(resEntities[i],((GlSimpleEntity*)(resEntities[i]))->getBoundingBox()));
       }
     }
 
+    // Use QtCPULODCalculator to compute LOD
     QtCPULODCalculator::computeFor3DCamera(&simples,&nodes,&edges,
                                            outputSimple, outputNodes, outputEdges,
                                            eye,transformMatrix,globalViewport,currentViewport);
