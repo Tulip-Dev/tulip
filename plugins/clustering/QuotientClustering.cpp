@@ -105,7 +105,8 @@ public:
   : AbstractStringProperty::MetaValueCalculator(),
     sgLabel(label), useSubGraphName(useSgName) {}
   
-  void computeMetaValue(AbstractStringProperty* label, node mN, Graph* sg) {
+  void computeMetaValue(AbstractStringProperty* label, node mN, Graph* sg,
+			Graph*) {
     if (sgLabel)
       label->setNodeValue(mN, label->getNodeValue(sg->getOneNode()));
     else if (useSubGraphName)
