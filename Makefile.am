@@ -17,11 +17,7 @@ EXTRA_DIST = gen-conf.sh gen-doc.sh \
 	     FindFTGL.cmake  FindGLEW.cmake  FindXML2.cmake \
 	     UseTulip.cmake UseTulipPlugins.cmake
 
-if !WIN32
 bin_SCRIPTS = tulip-config
-else
-bin_SCRIPTS = tulip-config tulip.exe.manifest
-endif
 
 if !WIN32
 m4datadir = $(datadir)/aclocal
