@@ -608,10 +608,13 @@ void Graph::openMetaNode(node metaNode) {
   }
   updatePropertiesUngroup(this, metaNode, metaInfo);
 
+  // check for edges from or to the meta node
   Graph* super = getSuperGraph();
   Iterator<edge>* metaEdges = super->getInOutEdges(metaNode);
   if (!metaEdges->hasNext()) {
     delete metaEdges;
+    // no edge so just remove the meta node
+    getRoot()->delAllNode(metaNode);
     Observable::unholdObservers();
     return;
   }

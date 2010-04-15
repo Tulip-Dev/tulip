@@ -216,13 +216,14 @@ namespace tlp {
   // viewColor
   class ViewColorCalculator :public AbstractColorProperty::MetaValueCalculator {
   public:
-    virtual void computeMetaValue(AbstractColorProperty* color, node mN, Graph* sg) {
+    virtual void computeMetaValue(AbstractColorProperty* color, node mN,
+				  Graph* sg, Graph*) {
       // meta node color is half opaque white
       color->setNodeValue(mN, Color(255, 255, 255, 127));
     }
 
     virtual void computeMetaValue(AbstractColorProperty* color, edge mE,
-				  Iterator<edge>*itE, Graph* g) {
+				  Iterator<edge>*itE, Graph*) {
       // meta edge color is the color of the first underlying edge
       color->setEdgeValue(mE, color->getEdgeValue(itE->next()));
     }
@@ -233,7 +234,7 @@ namespace tlp {
   public:
     // set the meta node label to label of viewMetric max corresponding node
     void computeMetaValue(AbstractStringProperty* label,
-			  node mN, Graph* sg) {
+			  node mN, Graph* sg, Graph*) {
       // nothing to do if viewMetric does not exist
       if (!sg->existProperty("viewMetric"))
 	return;
@@ -257,19 +258,26 @@ namespace tlp {
   class ViewLayoutCalculator :public AbstractLayoutProperty::MetaValueCalculator {
   public:
     void computeMetaValue(AbstractLayoutProperty* layout,
-			  node mN, Graph* sg) {
-      Graph* super = sg->getSuperGraph();
-      SizeProperty* size = super->getProperty<SizeProperty>("viewSize");
-      DoubleProperty* rot = super->getProperty<DoubleProperty>("viewRotation");
-
+			  node mN, Graph* sg, Graph* mg) {
+      SizeProperty* size = mg->getProperty<SizeProperty>("viewSize");
+      DoubleProperty* rot = mg->getProperty<DoubleProperty>("viewRotation");
       std::pair<Coord, Coord> box =
-	tlp::computeBoundingBox(sg, (LayoutProperty *) layout, size, rot);
+      tlp::computeBoundingBox(sg, (LayoutProperty *) layout, size, rot);
       Coord maxL = box.first;
       Coord minL = box.second;
       layout->setNodeValue(mN, (maxL + minL) / 2.0 );
       Coord v = (maxL - minL);
       if (v[2] < 0.0001) v[2] = 0.1;
-      size->setNodeValue(mN, Size(v[0],v[1],v[2]));
+      mg->getProperty<SizeProperty>("viewSize")->
+	setNodeValue(mN, Size(v[0],v[1],v[2]));
+    }
+  };
+
+  class ViewSizeCalculator
+    :public AbstractSizeProperty::MetaValueCalculator {
+  public:
+    void computeMetaValue(AbstractSizeProperty*, node, Graph*, Graph*) {
+      // do nothing
     }
   };
 
@@ -277,6 +285,7 @@ namespace tlp {
   static ViewColorCalculator vColorCalc;
   static ViewLabelCalculator vLabelCalc;
   static ViewLayoutCalculator vLayoutCalc;
+  static ViewSizeCalculator vSizeCalc;
   //**********************************************************************
   void MainController::setData(Graph *graph,DataSet dataSet) {
     editMenu->setEnabled(true);
@@ -290,6 +299,8 @@ namespace tlp {
     newGraph->addObserver(this);
     newGraph->addGraphObserver(this);
     Graph *lastViewedGraph=newGraph;
+    Observable::unholdObservers();
+    setCurrentGraph(newGraph);
     // install predefined meta value calculators
     newGraph->getProperty<ColorProperty>("viewColor")->
       setMetaValueCalculator(&vColorCalc);
@@ -297,9 +308,8 @@ namespace tlp {
       setMetaValueCalculator(&vLabelCalc);
     newGraph->getProperty<LayoutProperty>("viewLayout")->
       setMetaValueCalculator(&vLayoutCalc);
-
-    Observable::unholdObservers();
-    setCurrentGraph(newGraph);
+    newGraph->getProperty<SizeProperty>("viewSize")->
+      setMetaValueCalculator(&vSizeCalc);
     if(dataSet.exist("views")) {
       DataSet views;
       dataSet.get<DataSet>("views", views);
@@ -822,6 +832,15 @@ namespace tlp {
     //Add observer
     graph->addGraphObserver(this);
     graph->addObserver(this);
+    // install predefined meta value calculators
+    graph->getProperty<ColorProperty>("viewColor")->
+      setMetaValueCalculator(&vColorCalc);
+    graph->getProperty<StringProperty>("viewLabel")->
+      setMetaValueCalculator(&vLabelCalc);
+    graph->getProperty<LayoutProperty>("viewLayout")->
+      setMetaValueCalculator(&vLayoutCalc);
+    graph->getProperty<SizeProperty>("viewSize")->
+      setMetaValueCalculator(&vSizeCalc);
     
     return true;
   }
