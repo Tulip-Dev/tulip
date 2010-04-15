@@ -44,11 +44,11 @@ namespace tlp {
     /**
      * Delete entity with name : key
      */
-    void deleteGlEntity(const std::string &key);
+    void deleteGlEntity(const std::string &key,bool informTheEntity=true);
     /**
      * Detele given entity
      */
-    void deleteGlEntity(GlSimpleEntity *entity);
+    void deleteGlEntity(GlSimpleEntity *entity,bool informTheEntity=true);
     /**
      * Find name of given entity
      */

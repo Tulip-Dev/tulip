@@ -32,6 +32,8 @@ namespace tlp {
 
     GlSimpleEntity():visible(true),stencil(0xFFFF),checkByBoundingBoxVisitor(true) {}
 
+    virtual ~GlSimpleEntity();
+
     /**
      * Draw function
      */
@@ -87,19 +89,12 @@ namespace tlp {
     /**
      * Add a parent to this entity
      */
-    void addParent(GlComposite *composite) {parents.push_back(composite);}
+    void addParent(GlComposite *composite);
 
     /**
      * remove a parent to this entity
      */
-    void removeParent(GlComposite *composite) {
-      for(std::vector<GlComposite*>::iterator it=parents.begin();it!=parents.end();++it){
-        if((*it)==composite){
-          parents.erase(it);
-          return;
-        }
-      }
-    }
+    void removeParent(GlComposite *composite);
 
     /**
      * virtual fucntion : Translate entity

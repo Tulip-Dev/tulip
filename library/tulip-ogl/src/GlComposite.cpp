@@ -80,14 +80,16 @@ namespace tlp {
     }
   }
   //============================================================
-  void GlComposite::deleteGlEntity(const string &key) {
+  void GlComposite::deleteGlEntity(const string &key,bool informTheEntity) {
     if(elements.count(key)==0)
       return;
 
-    GlSimpleEntity *entity=elements[key];
-    entity->removeParent(this);
-    for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it){
-      entity->removeLayerParent(*it);
+    if(informTheEntity){
+      GlSimpleEntity *entity=elements[key];
+      if(informTheEntity)
+      for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it){
+        entity->removeLayerParent(*it);
+      }
     }
 
     _sortedElements.remove(elements[key]);
@@ -99,12 +101,15 @@ namespace tlp {
     }
   }
   //============================================================
-  void GlComposite::deleteGlEntity(GlSimpleEntity *entity) {
+  void GlComposite::deleteGlEntity(GlSimpleEntity *entity,bool informTheEntity) {
     for(ITM i = elements.begin(); i != elements.end(); ++i) {
       if(entity == (*i).second) {
-        entity->removeParent(this);
-        for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it){
-          entity->removeLayerParent(*it);
+
+        if(informTheEntity){
+          entity->removeParent(this);
+          for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it){
+            entity->removeLayerParent(*it);
+          }
         }
 
         _sortedElements.remove((*i).second);
