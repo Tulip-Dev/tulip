@@ -49,8 +49,6 @@ void PreferenceDialog::loadPreference(){
   bool networkConnection= settings.value("networkConnection",true).toBool();
   bool autoLoadController = settings.value("autoLoadController",false).toBool();
 
-  cout << "autoLoad : " << autoLoadController << endl;
-
   settings.endGroup();
 
   PreferenceManager &preferenceManager=PreferenceManager::getInst();
