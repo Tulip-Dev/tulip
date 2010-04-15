@@ -238,16 +238,28 @@ namespace tlp {
     PropertyInterface *newLabels=graph->getProperty(name);
     StringProperty *labels=graph->getLocalProperty<StringProperty>("viewLabel");
     if (tabWidget->currentIndex()==0) {
-      labels->setAllNodeValue( newLabels->getNodeDefaultStringValue() );
-      Iterator<node> *itN=graph->getNodes();
+      Iterator<node> *itN;
+      if (_filterSelection)
+	itN = graph->getProperty<BooleanProperty>("viewSelection")->
+	  getNonDefaultValuatedNodes();
+      else {
+	labels->setAllNodeValue( newLabels->getNodeDefaultStringValue() );
+	itN = graph->getNodes();
+      }
       while(itN->hasNext()) {
 	node itn=itN->next();
 	labels->setNodeValue(itn,  newLabels->getNodeStringValue(itn) );
       } delete itN;
     }
     else {
-      labels->setAllEdgeValue( newLabels->getEdgeDefaultStringValue() );
-      Iterator<edge> *itE=graph->getEdges();
+      Iterator<edge> *itE;
+      if (_filterSelection)
+	itE = graph->getProperty<BooleanProperty>("viewSelection")->
+	  getNonDefaultValuatedEdges();
+      else {
+	labels->setAllEdgeValue( newLabels->getEdgeDefaultStringValue() );
+	itE = graph->getEdges();
+      }
       while(itE->hasNext()) {
 	edge ite=itE->next();
 	labels->setEdgeValue(ite,newLabels->getEdgeStringValue(ite));
