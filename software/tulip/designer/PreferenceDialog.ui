@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Preference</string>
+   <string>Preferences</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >

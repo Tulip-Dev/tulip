@@ -614,7 +614,7 @@
   </action>
   <action name="filePreferenceAction" >
    <property name="text" >
-    <string>Preference...</string>
+    <string>Preferences...</string>
    </property>
   </action>
   <actiongroup name="mouseActionGroup" >
