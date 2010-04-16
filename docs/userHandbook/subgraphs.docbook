@@ -59,20 +59,20 @@
 			</itemizedlist>
 	</sect3>
 </sect2>
-<sect2 id="hierarchy-del"><title>Deleting / Ungrouping a subgraph or a Group :</title>
+<sect2 id="hierarchy-del"><title>Removing / Ungrouping a subgraph or a Group :</title>
 	 <sect3 id="hierarchy-delgroup"><title>Groups :</title>
-	 	<sect4 id="hierarchy-del-group"><title>Delete .</title>
-	 	<para>To delete a group, left click on its name (in the Hierachy tab of Graph editor) => delete </para>
+	 	<sect4 id="hierarchy-del-group"><title>Remove .</title>
+	 	<para>To remove a group, press the mouse right button (press <keycap>Ctrl</keycap> key when mouse pressing on Mac) when on its name (in the Hierachy tab of Graph editor), and choose 'Remove' in the displayed contextual menu.</para>
 	 	<remark>By deleting a group, all nodes in this group will be deleted as well, whereas the meta-node will still exist.</remark>
 	 	</sect4>
 	 	<sect4 id="hierarchy-ungroup-group"><title>Ungroup .</title>
-	 	<para>To ungroup a group, select it, Left click => Ungroup </para>
+	 	<para>To ungroup a group, press the mouse right button (press <keycap>Ctrl</keycap> key when mouse pressing on Mac) when on the group, and choose 'Ungroup' in the displayed contextual menu</para>
 	 	<remark>By ungrouping a group, all the layouts properties of the group's nodes will be applied to the root graph. The subgraphs created with the group wont be deleted.</remark>
 	 	</sect4>
 	 </sect3>
 	  <sect3 id="hierarchy-del-subgraph"><title>Subgraphs :</title>
-	 	<para>To delete a subgraph, left click on its name (in the Info editor) => delete.</para>
-	 	<remark>Deleting a subgraph has no effects on the root graph.</remark>
+	 	<para>To remove a subgraph, press the mouse right button (press <keycap>Ctrl</keycap> key when mouse pressing on Mac) when on its name (in the Hierachy tab of Graph editor), and choose 'Remove' in the displayed contextual menu.</para>
+	 	<remark>Removing a subgraph has no effects on the root graph.</remark>
 	 	
 	 </sect3>
 </sect2> 
@@ -90,7 +90,7 @@
 		<para>Changes on groups, wont be applied to the root graph unless you ungroup the group.</para>
 	</sect3>
 </sect2>
-<sect2 id="hierarchy-algos"><title>Algorithms that creates subgraphs :</title>
+<sect2 id="hierarchy-algos"><title>Algorithms that create subgraphs :</title>
 	<para>You can find those algorithms in the menu Algorithm => General.
 	<itemizedlist>
 		<listitem><para>Equal Value.<xref linkend="equal-value"/></para></listitem>

@@ -5,10 +5,41 @@
       The main window of Tulip software is composed of several subwindows and a menu bar :
       <itemizedlist>
         <listitem>
-          <para><code>File</code>: this menu is used for usual file operations : New(<keycap>Ctrl+N</keycap>, <keycap>APPLE+N</keycap> on Mac), Open(<keycap>Ctrl+O</keycap>, <keycap>APPLE+0</keycap> on Mac), Save(<keycap>Ctrl+S</keycap>, <keycap>APPLE+S</keycap> on Mac), Save As(<keycap>Ctrl+Shift+S</keycap>, <keycap>APPLE+Shift+S</keycap> on Mac), Print(<keycap>Ctrl+P</keycap>, <keycap>APPLE+P</keycap> on Mac), Close Tab, and Exit(<keycap>Ctrl+Q</keycap>, <keycap>APPLE+Q</keycap> on Mac). Others are added:
+          <para><code>File</code>: this menu is used for usual file operations :
+	    <itemizedlist>
+	      <listitem>
+		<para><code>New</code> (<keycap>Ctrl+N</keycap>, <keycap>APPLE+N</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Open</code> (<keycap>Ctrl+O</keycap>, <keycap>APPLE+0</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Save</code> (<keycap>Ctrl+S</keycap>, <keycap>APPLE+S</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Save As</code> (<keycap>Ctrl+Shift+S</keycap>, <keycap>APPLE+Shift+S</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Print</code> (<keycap>Ctrl+P</keycap>, <keycap>APPLE+P</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Close Tab</code>,
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Exit</code>(<keycap>Ctrl+Q</keycap>, <keycap>APPLE+Q</keycap> on Mac).
+		</para>
+	      </listitem>
+	    </itemizedlist>
+	    Others are added:
             <itemizedlist>
               <listitem>
-                <para><code>Import</code>: this submenu is populated by import plugins. 
+                <para><code>Import</code> : this submenu is populated by import plugins. 
                   <itemizedlist>
                     <listitem>
                       <para><code>File</code> : Plugins allowing importation of graph files in different format such as Adjacent Matrix, gml, dot (graphviz), or tlp (tulip default file format).
@@ -33,19 +64,71 @@
           </para>
         </listitem>
         <listitem>
-          <para><code>Edit</code>: this is composed of tools : Cut(<keycap>Ctrl+X</keycap>, <keycap>APPLE+X</keycap> on Mac), Copy(<keycap>Ctrl+C</keycap>, <keycap>APPLE+C</keycap> on Mac), Paste(<keycap>Ctrl+V</keycap>, <keycap>APPLE+V</keycap> on Mac), and Find(<keycap>Ctrl+F</keycap>, <keycap>APPLE+F</keycap> on Mac), which affect the selected elements. This menu contains also: Select All(<keycap>Ctrl+A</keycap>, <keycap>APPLE+A</keycap> on Mac), Delete selection(<keycap>Del</keycap>), Deselect all(<keycap>Ctrl+Shift+A</keycap>, <keycap>APPLE+Shift+A</keycap> on Mac), Invert Selection(<keycap>Ctrl+I</keycap>, <keycap>APPLE+I</keycap> on Mac), Create group(<keycap>Ctrl+G</keycap>, <keycap>APPLE+G</keycap> on Mac), Create subgraph(<keycap>Ctrl+Shift+G</keycap>, <keycap>APPLE+Shift+G</keycap> on Mac), Undo(<keycap>Ctrl+Z</keycap>, <keycap>APPLE+Z</keycap> on Mac), Redo(<keycap>Ctrl+Y</keycap>, <keycap>APPLE+Y</keycap> on Mac).</para>
-          <para>More details on the <code>Find</code> tool : The find tool has 4 options :</para>
-          <itemizedlist>
-            <listitem><para>Replace : Replace the current selection (nodes or edges already selected).
-            </para></listitem>
-            <listitem><para>Add : Add the nodes (or edges) to be selected to the current selection.
-            </para></listitem>
-            <listitem><para>Remove : Remove nodes (or edges) from the current selection.
-            </para></listitem>
-            <listitem><para>Intersect : Select the intersection between the nodes (or edges) TO BE selected, and the ones from the current selection.
-            </para></listitem>
-          </itemizedlist>
-        </listitem>
+          <para><code>Edit</code>: this is composed of tools affecting the selected elements:
+	    <itemizedlist>
+	      <listitem>
+		<para><code>Cut</code> (<keycap>Ctrl+X</keycap>, <keycap>APPLE+X</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Copy</code> (<keycap>Ctrl+C</keycap>, <keycap>APPLE+C</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Paste</code> (<keycap>Ctrl+V</keycap>, <keycap>APPLE+V</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Find</code> (<keycap>Ctrl+F</keycap>, <keycap>APPLE+F</keycap> on Mac). This tool has 4 options:
+		  <itemizedlist>
+		    <listitem><para>Replace : Replace the current selection (nodes or edges already selected).
+		    </para></listitem>
+		    <listitem><para>Add : Add the nodes (or edges) to be selected to the current selection.
+		    </para></listitem>
+		    <listitem><para>Remove : Remove nodes (or edges) from the current selection.
+		    </para></listitem>
+		    <listitem><para>Intersect : Select the intersection between the nodes (or edges) TO BE selected, and the ones from the current selection.
+		    </para></listitem>
+		  </itemizedlist>
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Select All</code> (<keycap>Ctrl+A</keycap>, <keycap>APPLE+A</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Delete selection</code> (<keycap>Del</keycap>),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Deselect all</code> (<keycap>Ctrl+Shift+A</keycap>, <keycap>APPLE+Shift+A</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Invert Selection</code> (<keycap>Ctrl+I</keycap>, <keycap>APPLE+I</keycap> on Mac).
+		</para>
+	      </listitem>
+	    </itemizedlist>
+	    This menu contains also:
+	    <itemizedlist>
+	      <listitem>
+		<para><code>Create group</code> (<keycap>Ctrl+G</keycap>, <keycap>APPLE+G</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Create subgraph</code> (<keycap>Ctrl+Shift+G</keycap>, <keycap>APPLE+Shift+G</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Undo</code> (<keycap>Ctrl+Z</keycap>, <keycap>APPLE+Z</keycap> on Mac),
+		</para>
+	      </listitem>
+	      <listitem>
+		<para><code>Redo</code> (<keycap>Ctrl+Y</keycap>, <keycap>APPLE+Y</keycap> on Mac).</para>
+              </listitem>
+	    </itemizedlist>
+	    </para>
+	</listitem>
         <listitem>
           <para><code>Algorithm</code>: this one is divided in several parts to make a difference between the kind of algorithms you can apply. These are:
             <itemizedlist>
@@ -53,7 +136,7 @@
                 <para><code>Selection</code>: this submenu is populated by 'selection' algorithms. These algorithms allows to select nodes and or edges (assign the 'viewSelection' property see <xref linkend="graph-properties"/> for more details) satifying some criteria. For example the 'Loop Selection' algorithm detects all edges for which the starting and ending nodes are the same.</para>
               </listitem>
               <listitem>
-                <para><code>Color</code>: this submenu is populated by 'color' algorithms. These king of algorithm computes the color (the 'viewColor' property see <xref linkend="graph-properties"/> for more details ) of the graph elements. A default one, 'Metric Mapping', is provided; it allows to color all graph elements according to a metric property.</para>
+                <para><code>Color</code>: this submenu is populated by 'color' algorithms. This kind of algorithm computes the color (the 'viewColor' property see <xref linkend="graph-properties"/> for more details ) of the graph elements. A default one, 'Metric Mapping', is provided; it allows to color all graph elements according to a metric property.</para>
               </listitem>
               <listitem>
                 <para><code>Measure</code>: this submenu is populated by 'metric' algorithms. These algorithms allows to compute and assigned a value to the 'viewMetric' property of graph elements see <xref linkend="graph-properties"/> for more details. For example, when running the 'Degree' algorithm, the degree (the number of its neighbors) is compute and assigned to each graph node 'viewMetric' property.</para>
@@ -323,7 +406,7 @@
             </itemizedlist>
           </para>
           <graphic fileref="images/view-contextmenu-element.png"/>
-          <para>If you press right button of the mouse when your pointer is on a graph element, you have this context menu to perform simple actions on this element : 
+          <para>If you press the mouse right button (press <keycap>Ctrl</keycap> key when mouse pressing on Mac) when on a graph element, you have this contextual menu to perform simple actions on this element : 
             <itemizedlist>
               <listitem><para><code>Add to/Remove from selection</code> : this allows to change the selection state of the element,</para>
               </listitem>
@@ -342,60 +425,58 @@
         </sect4>
       </sect3>
       <sect3 id="renderingparams"><title>Rendering Parameters</title>
-        <sect4 id="renderingparams_parameters"><title>Parameters</title>
-          <para>All actions in this dialog are just performed for the current view window.
-            <graphic fileref="images/renderingparams.png"/>
-            This dialog is displayed when clicking on the Configuration tab at button left corner. Enables to configure the rendering of the graph. The available options are grouped in the following three frames:
-            <itemizedlist>
-              <listitem><para><code>Labels</code> : the options in this frame only affect the display of the labels:
-                  <itemizedlist>
-                    <listitem><para><code>Type</code> : this indicates the text display mode which can be one of Bitmap, Texture or 3D.</para>
-                    </listitem>
-                    <listitem><para><code>metric ordering</code> : when checked the labels are displayed in using the viewMetric property decreasing order.</para>
-                    </listitem>
-                    <listitem><para><code>Density</code> : use this slider to avoid having too much labels displayed (max is on the left).</para>
-                    </listitem>
-                  </itemizedlist></para>
-              </listitem>
-              <listitem><para><code>Edges</code> : this frame options affect the way the edges are displayed:
-                  <itemizedlist>
-                    <listitem><para><code>arrows</code> : enables/disables the display of arrows.</para>
-                    </listitem>
-                    <listitem><para><code>3D</code> : enables/disables the display of edges in 3D.</para>
-                    </listitem>
-                    <listitem><para><code>Color interpolation</code> : when checked the edge color is interpolated from the color of its source node to the color of its target node.</para>
-                    </listitem>
-                    <listitem><para><code>Size interpolation</code> : when checked the edge size is interpolated from the size of its source node to the size of its target node.</para>
-                    </listitem>
-                    <listitem><para><code>Block max edge size to node size</code> : when whecked the edge size can not be greater than the node size.</para>
-                    </listitem>
-                  </itemizedlist></para>
-              </listitem>
-              <listitem><para><code>Others</code> : the options in this frame are related to general aspects of the rendering:
-                  <itemizedlist>
-                    <listitem><para><code>Orthogonal projection</code> : enables/disables the orthogonal projection. If not checked, the perpsective projection is used.</para>
-                    </listitem>
-                    <listitem><para><code>Background color</code> : enables to choose a color for the background of a graph view.</para>
-                    </listitem>
-                  </itemizedlist></para>
-              </listitem>
-            </itemizedlist>
-          </para>
-        </sect4>
-        <sect4 id="layermanager"><title>Layer Manager</title>
         <para>All actions in this dialog are just performed for the current view window.
-                <graphic fileref="images/layermanager.png"/>
-            This dialog is displayed when clicking on the Configuration tab at button left corner. Enables to configure the elements visibility and priority. The available options are grouped in two columns :
-            <itemizedlist>
-              <listitem><para><code>Visible</code> : Visibility of the entity
-                </para></listitem>
-              <listitem><para><code>Stencil</code> : Priority to display the entity
-                </para></listitem>
-            </itemizedlist>
-          </para>
-          <para>In this menu, you see Hull entity, it represents the convex hulls of the graph. When you click on visible, a hierarchy of convex hulls is build. The name of a hull is the name of the coresponding subgraph.</para>   
-          <para>In a future version you could add/modify/remove entity</para>
-        </sect4>
+          <graphic fileref="images/renderingparams.png"/>
+          This dialog is displayed when clicking on the Configuration tab at button left corner. Enables to configure the rendering of the graph. The available options are grouped in the following three frames:
+          <itemizedlist>
+            <listitem><para><code>Labels</code> : the options in this frame only affect the display of the labels:
+                <itemizedlist>
+                  <listitem><para><code>Type</code> : this indicates the text display mode which can be one of Bitmap, Texture or 3D.</para>
+                  </listitem>
+                  <listitem><para><code>metric ordering</code> : when checked the labels are displayed in using the viewMetric property decreasing order.</para>
+                  </listitem>
+                  <listitem><para><code>Density</code> : use this slider to avoid having too much labels displayed (max is on the left).</para>
+                  </listitem>
+              </itemizedlist></para>
+            </listitem>
+            <listitem><para><code>Edges</code> : this frame options affect the way the edges are displayed:
+                <itemizedlist>
+                  <listitem><para><code>arrows</code> : enables/disables the display of arrows.</para>
+                  </listitem>
+                  <listitem><para><code>3D</code> : enables/disables the display of edges in 3D.</para>
+                  </listitem>
+                  <listitem><para><code>Color interpolation</code> : when checked the edge color is interpolated from the color of its source node to the color of its target node.</para>
+                  </listitem>
+                  <listitem><para><code>Size interpolation</code> : when checked the edge size is interpolated from the size of its source node to the size of its target node.</para>
+                  </listitem>
+                  <listitem><para><code>Block max edge size to node size</code> : when whecked the edge size can not be greater than the node size.</para>
+                  </listitem>
+              </itemizedlist></para>
+            </listitem>
+            <listitem><para><code>Others</code> : the options in this frame are related to general aspects of the rendering:
+                <itemizedlist>
+                  <listitem><para><code>Orthogonal projection</code> : enables/disables the orthogonal projection. If not checked, the perpsective projection is used.</para>
+                  </listitem>
+                  <listitem><para><code>Background color</code> : enables to choose a color for the background of a graph view.</para>
+                  </listitem>
+              </itemizedlist></para>
+            </listitem>
+          </itemizedlist>
+        </para>
+      </sect3>
+      <sect3 id="layermanager"><title>Layer Manager</title>
+        <para>All actions in this dialog are just performed for the current view window.
+          <graphic fileref="images/layermanager.png"/>
+          This dialog is displayed when clicking on the Configuration tab at button left corner. Enables to configure the elements visibility and priority. The available options are grouped in two columns :
+          <itemizedlist>
+            <listitem><para><code>Visible</code> : Visibility of the entity
+            </para></listitem>
+            <listitem><para><code>Stencil</code> : Priority to display the entity
+            </para></listitem>
+          </itemizedlist>
+        </para>
+        <para>In this menu, you see Hull entity, it represents the convex hulls of the graph. When you click on visible, a hierarchy of convex hulls is build. The name of a hull is the name of the coresponding subgraph.</para>   
+        <para>In a future version you could add/modify/remove entity</para>
       </sect3>
     </sect2>
     <sect2 id="SpreadsheetComponent"><title>Table view</title>
