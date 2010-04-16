@@ -63,12 +63,12 @@ function make_bundle_lib() {
   if [ -f $slib ]; then
     if [ ! -f $slibdir/`basename $slib` ]; then
       if [ $check_slib -eq 0 ]; then
+	echo installing $slib in $slibdir
         cp $slib $slibdir
 	slib=`basename $slib`
 	chmod 755 $slibdir/$slib
-	echo installing $slib in $slibdir
         # update the name of the current bundle lib
-        install_name_tool -id $BUNDLE_LIB_PATH/$slib $slibdir/$slib
+        #install_name_tool -id $BUNDLE_LIB_PATH/$slib $slibdir/$slib
       else
 	echo `basename $slib` not found... exiting
         exit
@@ -76,9 +76,9 @@ function make_bundle_lib() {
     else
        slib=`basename $slib`
     fi
-    echo renaming $slib in `basename $bbin`
     # package tulip bundle binary with the current bundle lib
-    install_name_tool -change $oldlib $BUNDLE_LIB_PATH/$slib $bbin
+    # echo renaming $slib in `basename $bbin`
+    #install_name_tool -change $oldlib $BUNDLE_LIB_PATH/$slib $bbin
   else
     echo `basename $slib` not found... exiting
     exit
@@ -148,7 +148,7 @@ mv tulip.app $APP_DIR
 # create the tulip shared libs bundle directory
 mkdir -p $LIBS_BUNDLE_DIR
 # package every binary in the bundle
-for BIN_BUNDLE in tulip_app tulip tulip_check_pl
+for BIN_BUNDLE in tulip_app tulip_check_pl
 do
 # look for shared libs
   SHARED_LIBS=$(otool -L $BIN_BUNDLE_DIR/$BIN_BUNDLE | grep "$SHLIBS_REGEXP" | awk '{print $1}')
@@ -175,10 +175,11 @@ if [ "$QT_DIR" == "" ]; then
   QT_ASSISTANT=Assistant
 fi
 ASSISTANT_BUNDLE_DIR=$APP_DIR/Contents/@QT_ASSISTANT@.app
-ASSISTANT_LIBS_BUNDLE_DIR=$ASSISTANT_BUNDLE_DIR/Contents/Frameworks
+#ASSISTANT_LIBS_BUNDLE_DIR=$ASSISTANT_BUNDLE_DIR/Contents/Frameworks
+ASSISTANT_LIBS_BUNDLE_DIR=$LIBS_BUNDLE_DIR
 ASSISTANT_BIN_BUNDLE=$ASSISTANT_BUNDLE_DIR/Contents/MacOS/@QT_ASSISTANT@
 echo packaging $ASSISTANT_BUNDLE_DIR
-mkdir $ASSISTANT_LIBS_BUNDLE_DIR
+#mkdir $ASSISTANT_LIBS_BUNDLE_DIR
 #update assistant binary and libs
 SHARED_LIBS=$(otool -L $ASSISTANT_BIN_BUNDLE | grep "$SHLIBS_REGEXP" | awk '{print $1}')
 # copy libs in shared libs bundle directory

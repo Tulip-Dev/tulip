@@ -2,7 +2,14 @@ if WIN32
 MWINDOWS = -mwindows
 endif
 
+if MACOSX
+bin_PROGRAMS = tulip_app
+bin_SCRIPTS = tulip
+tulip: tulip.sh
+	cp $< $@
+else
 bin_PROGRAMS = tulip tulip_app
+endif
 
 tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT
 tulip_app_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT -DQT_ASSISTANT='"@QT_ASSISTANT@"'
@@ -52,6 +59,10 @@ moc_%.cpp: ../include/%.h
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
 
 CLEANFILES = $(BUILT_SOURCES)
+
+if MACOSX
+CLEANFILES += tulip
+endif
 
 ../include/%Data.h: ../designer/%.ui
 	$(UIC) -o $@ $<
