@@ -29,7 +29,6 @@ int main( int argc, char **argv ) {
     QSettings settings("TulipSoftware","Tulip");
     settings.beginGroup("PluginsManager");
     needStart=settings.value("needRestart",false).toBool();
-    settings.setValue("needRestart",false);
     settings.endGroup();
   }
 

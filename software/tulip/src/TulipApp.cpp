@@ -43,7 +43,6 @@
 #include <QtGui/qprintdialog.h>
 #include <QtGui/qmenudata.h>
 #include <QtGui/qtextedit.h>
-#include <QtCore/QSettings>
 
 #include <tulip/tuliphash.h>
 #include <tulip/TlpTools.h>
@@ -114,6 +113,8 @@ static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::st
 //**********************************************************************
 ///Constructor of ViewGl
 TulipApp::TulipApp(QWidget* parent): QMainWindow(parent),currentTabIndex(-1)  {
+  // initialize needRestart setting
+  disableRestart();
   setupUi(this);
   tabWidget=centralTabWidget;
 }
@@ -900,16 +901,12 @@ void TulipApp::plugins() {
 void TulipApp::displayRestartForPlugins() {
   int result = QMessageBox::warning(this,
       tr("Update plugins"),
-      tr("To finish installing/removing plugins \nTulip must be restart.\nDo you want to exit Tulip now ?"),
+      tr("To finish installing/removing plugins, \nTulip must be restarted.\nDo you want to restart Tulip now ?"),
       QMessageBox::Yes | QMessageBox::Default,
       QMessageBox::No);
   if(result == QMessageBox::Yes){
     // Store that tulip must be auto restarted
-    QSettings settings("TulipSoftware","Tulip");
-    settings.beginGroup("PluginsManager");
-    settings.setValue("needRestart",true);
-    settings.endGroup();
-    settings.sync();
+    enableRestart();
 
     fileExit();
   }
@@ -1082,17 +1079,13 @@ void TulipApp::preference() {
   
   int result = QMessageBox::warning(this,
 				    tr(""),
-                    tr("To apply preferences modifications \nTulip must be restart.\nDo you want to exit Tulip now ?"),
+                    tr("To apply preferences modifications, \nTulip must be restarted.\nDo you want to restart Tulip now ?"),
 				    QMessageBox::Yes | QMessageBox::Default,
 				    QMessageBox::No);
   if(result == QMessageBox::Yes) {
 
     // Store that tulip must be auto restarted
-    QSettings settings("TulipSoftware","Tulip");
-    settings.beginGroup("PluginsManager");
-    settings.setValue("needRestart",true);
-    settings.endGroup();
-    settings.sync();
+    enableRestart();
 
     fileExit();
   }

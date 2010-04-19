@@ -1,17 +1,15 @@
 if WIN32
 MWINDOWS = -mwindows
-endif
-
-if MACOSX
-bin_PROGRAMS = tulip_app
+bin_PROGRAMS = tulip tulip_app
+else
+bin_PROGRAMS = tulip_app tulip_need_restart
 bin_SCRIPTS = tulip
 tulip: tulip.sh
 	cp $< $@
-else
-bin_PROGRAMS = tulip tulip_app
 endif
 
 tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT
+tulip_need_restart_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT
 tulip_app_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT -DQT_ASSISTANT='"@QT_ASSISTANT@"'
 
 INCLUDES = -I$(srcdir)/../include -I../include \
@@ -24,9 +22,11 @@ tulip_app_LDFLAGS = @GL_LDFLAGS@ @LIB_GL@ `ls $(top_builddir)/library/tulip/src/
 else
 if MACOSX
 tulip_LDFLAGS = -framework Carbon @LIB_QT@
+tulip_need_restart_LDFLAGS = -framework Carbon @LIB_QT@
 tulip_app_LDFLAGS = @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ @TULIP_PLUGINSMANAGER_LDFLAGS@ -framework Carbon -framework AGL -lfreetype -lxml2 ${ADD_LIB} @LIB_QT_ASSISTANT@ @LIB_QT@ @LIB_IMAGES_LDFLAGS@
 else
 tulip_LDFLAGS = ${MWINDOWS} @TULIP_QT_LDFLAGS@ @LIB_QT@
+tulip_need_restart_LDFLAGS = ${MWINDOWS} @LIB_QT@
 tulip_app_LDFLAGS = ${MWINDOWS} @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ @TULIP_PLUGINSMANAGER_LDFLAGS@ -lfreetype -lxml2 ${ADD_LIB} @LIB_QT_ASSISTANT@ @LIB_QT@ @LIB_IMAGES_LDFLAGS@
 endif
 endif
@@ -45,6 +45,7 @@ BUILT_SOURCES = \
 nodist_tulip_app_SOURCES = $(BUILT_SOURCES)
 
 dist_tulip_SOURCES = TulipLauncher.cpp
+dist_tulip_need_restart_SOURCES = TulipNeedRestart.cpp
 dist_tulip_app_SOURCES = \
 	TulipApp.cpp \
 	Application.cpp \
@@ -61,7 +62,11 @@ moc_%.cpp: ../include/%.h
 CLEANFILES = $(BUILT_SOURCES)
 
 if MACOSX
-CLEANFILES += tulip
+CLEANFILES +=tulip
+endif
+
+if LINUX
+CLEANFILES +=tulip
 endif
 
 ../include/%Data.h: ../designer/%.ui

@@ -11,6 +11,7 @@
 #include <QtGui/qmainwindow.h>
 #include <QtGui/qmenu.h>
 #include <QtGui/QTabWidget>
+#include <QtCore/QSettings>
 #include <QtAssistant/qassistantclient.h>
 #include <string>
 #include <tulip/Reflect.h>
@@ -47,6 +48,30 @@ public:
   TulipApp(QWidget *parent=NULL);
   virtual ~TulipApp();
   void setParameters(const tlp::DataSet &);
+
+  static bool needRestart() {
+    QSettings settings("TulipSoftware","Tulip");
+    settings.beginGroup("PluginsManager");
+    bool needStart = settings.value("needRestart",false).toBool();
+    settings.endGroup();
+    return needStart;
+  }
+
+  static void enableRestart() {
+    QSettings settings("TulipSoftware","Tulip");
+    settings.beginGroup("PluginsManager");
+    settings.setValue("needRestart", true);
+    settings.endGroup();
+    settings.sync();
+  }    
+
+  static void disableRestart() {
+    QSettings settings("TulipSoftware","Tulip");
+    settings.beginGroup("PluginsManager");
+    settings.setValue("needRestart", false);
+    settings.endGroup();
+    settings.sync();
+  }    
 
 protected:
   QWidget *aboutWidget;

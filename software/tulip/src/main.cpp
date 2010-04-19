@@ -5,6 +5,7 @@
 #include <qtimer.h>
 #include <qlocale.h>
 #include <QtGui/qdesktopwidget.h>
+#include <QtCore/QSettings>
 
 #include "AppStartUp.h"
 #include "Application.h"
