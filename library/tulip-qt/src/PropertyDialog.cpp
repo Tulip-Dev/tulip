@@ -423,9 +423,11 @@ namespace tlp {
      ImportCSVDataDialog dialog(new ImportCSVDataWidget(),graph,this);
      dialog.setWindowTitle(tr("Import CSV data"));
      graph->push();
+     Observable::holdObservers();
      if(dialog.exec()==QDialog::Rejected){
        graph->pop(false);
      }
+     Observable::unholdObservers();
      }
    }
 }

@@ -68,6 +68,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
     tulip/ImportCSVDataWidget.h
     tulip/ImportCSVDataConfigurationWidget.h
     tulip/ImportCSVDataDialog.h
+    tulip/CSVContentHandler.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)

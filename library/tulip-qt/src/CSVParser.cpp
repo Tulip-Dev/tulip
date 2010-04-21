@@ -11,7 +11,12 @@
  *  (at your option) any later version.
  */
 #include "tulip/CSVParser.h"
+#include "tulip/CSVContentHandler.h"
+#include <tulip/PluginProgress.h>
+#include <QtGui/QProgressBar>
+#include <QtGui/QApplication>
 #include <fstream>
+#include <algorithm>
 #include <cassert>
 using namespace std;
 using namespace tlp;
@@ -23,33 +28,52 @@ CSVParser::CSVParser() :
 CSVParser::~CSVParser() {
 }
 
-const vector<vector<string> > & CSVParser::parse(const string& fileName, const string& separator,
-    unsigned int numberOfRows, unsigned int numberOfCol) {
-  tokens.clear();
+void CSVParser::parse(const string& fileName, const string& separator, CSVContentHandler* handler,
+    PluginProgress* progress) {
+  assert(handler);
+  handler->begin();
   ifstream csvFile(fileName.c_str());
-  string line;
-  vector<string> lines;
-  while (getline(csvFile, line) && lines.size() < numberOfRows) {
-    lines.push_back(line);
-  }
-  tokens.resize(lines.size());
-  size_t maxNumberOfCol = 0;
-  for (int i = 0; i < lines.size(); ++i) {
-    tokenize(lines[i], tokens[i], separator, numberOfCol);
-    maxNumberOfCol = max(maxNumberOfCol, tokens[i].size());
-  }
 
-  //Ensure lines have the right col number
-  for (int i = 0; i < tokens.size(); ++i) {
-    tokens[i].resize(maxNumberOfCol);
-  }
+  unsigned int row = 0;
+  unsigned int columnMax = 0;
+  if (csvFile) {
+    long fileSize = computeFileSize(fileName);
+    string line;
+    vector<string> tokens;
 
-  for (int i = 0; i < tokens.size(); ++i) {
-    for (int j = 0; j < tokens[i].size(); ++j) {
-      tokens[i][j] = treatToken(tokens[i][j], i, j);
+    unsigned int displayProgressEachLineNumber = 10;
+
+    if (progress) {
+      progress->progress(0, 100);
+    }
+    while (getline(csvFile, line)) {
+      if (progress) {
+        if (progress->state() != TLP_CONTINUE) {
+          break;
+        }
+        //Each displayProgressEachLineNumber display progression
+        if (row % displayProgressEachLineNumber == 0) {
+          // compute progression in function of read size (current position) and max file size.
+          progress->progress((csvFile.tellg()*100)/fileSize, 100);
+          QApplication::processEvents();
+        }
+      }
+      tokens.clear();
+      tokenize(line, tokens, separator, 0);
+      unsigned int column = 0;
+      for (column = 0; column < tokens.size(); ++column) {
+        if (progress) {
+          if (progress->state() != TLP_CONTINUE) {
+            break;
+          }
+        }
+        handler->token(row, column, treatToken(tokens[column], row, column));
+      }
+      columnMax = max(columnMax, column);
+      ++row;
     }
   }
-  return tokens;
+  handler->end(row, columnMax);
 }
 void CSVParser::tokenize(const string& str, vector<string>& tokens, const string& delimiters, unsigned int numberOfCol) {
   // Skip delimiters at beginning.
@@ -89,23 +113,14 @@ string CSVParser::removeQuotesIfAny(const string &s) {
   }
 }
 
-vector<string> CSVParser::extractRow(unsigned int rowNumber, unsigned int colBegin, unsigned int colNumber) {
-  assert(tokens.size() >= rowNumber);
-  assert(tokens[rowNumber].size() >= colBegin + colNumber);
-  vector<string> data;
+long CSVParser::computeFileSize(const std::string& fileName) {
+  ifstream csvFile(fileName.c_str());
+  // save the current position
+  long pos = csvFile.tellg();
+  // go to the end of the file
+  csvFile.seekg(0, std::ios_base::end);
+  // get position = file size
+  long size = csvFile.tellg();
+  return size;
 
-  for (int i = 0; i < colNumber; ++i) {
-    data .push_back(tokens[rowNumber][colBegin + i]);
-  }
-  return data;
-}
-vector<string> CSVParser::extractColumn(unsigned int colNumber, unsigned int rowBegin, unsigned int rowNumber) {
-  assert(tokens.size() >= rowBegin + rowNumber);
-  assert(tokens[0].size() >= colNumber);
-  vector<string> data;
-
-  for (int i = 0; i < rowNumber; ++i) {
-    data.push_back(tokens[rowBegin + i][colNumber]);
-  }
-  return data;
 }

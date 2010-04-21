@@ -17,9 +17,25 @@
 #include <string>
 #include <vector>
 #include <limits.h>
+
+class QProgressBar;
 namespace tlp {
+
+class CSVContentHandler;
+class PluginProgress;
+
 /*
- * Parse a csv file and store data in double string vector.
+ * @brief Parse a csv data and send each tokens to the given CSVContentHandler object.
+ * Parse a csv data and send each tokens to the given CSVContentHandler object. Get each line of the file and parse them.
+ * Send the found tokens to the CSVContentHandler interface.
+ * \code
+ * CSVParser parser;
+ * \/\/Automatically remove quotes.
+ * parser.setRemoveQuotes(true);
+ * string filename = "fileName.csv";
+ * CSVContentHandler * handler ;
+ * parser.parse(filename,";",handler);
+ * \endcode
  */
 class TLP_QT_SCOPE CSVParser {
 public:
@@ -29,41 +45,15 @@ public:
   void setRemoveQuotes(bool removeQuotes) {
     this->removeQuotes = removeQuotes;
   }
-  virtual const std::vector<std::vector<std::string> >
-  & parse(const std::string& fileName, const std::string& separator, unsigned int numberOfRows = UINT_MAX,
-      unsigned int numberOfCol = UINT_MAX);
-  const std::vector<std::vector<std::string> >& getResult() const {
-    return tokens;
-  }
-  bool resultIsEmpty() const {
-    return tokens.empty();
-  }
-
-  std::vector<std::string> extractRow(unsigned int rowNumber, unsigned int colBegin = 0, unsigned int colNumber = 0);
-  std::vector<std::string> extractColumn(unsigned int colNumber, unsigned int rowBegin = 0, unsigned int rowNumber = 0);
-
-  unsigned int rowNumber() const {
-    return tokens.size();
-  }
-
-  unsigned int colNumber() const {
-    if (!tokens.empty()) {
-      return tokens[0].size();
-    }
-    else {
-      return 0;
-    }
-  }
+  virtual void parse(const std::string& fileName, const std::string& separator,CSVContentHandler * handler,tlp::PluginProgress* progress=NULL);
 
 protected:
   virtual std::string treatToken(const std::string& token, int row, int column);
 
 private:
-
-
+  long computeFileSize(const std::string& fileName);
   void tokenize(const std::string& str, std::vector<std::string>& tokens, const std::string& delimiters, unsigned int numberOfCol);
   std::string removeQuotesIfAny(const std::string &s);
-  std::vector<std::vector<std::string> > tokens;
   bool removeQuotes;
 };
 }

@@ -18,16 +18,18 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QValidator>
 #include <tulip/ImportCSVDataConfigurationWidgetData.h>
+#include "tulip/CSVContentHandler.h"
 
 class QComboBox;
 class QLineEdit;
 class QCheckBox;
+class QTableWidget;
 namespace tlp {
 /**
  * Configuration widget for a property.
  */
 class TLP_QT_SCOPE PropertyConfigurationWidget: public QWidget {
-Q_OBJECT
+  Q_OBJECT
 public:
   PropertyConfigurationWidget(unsigned int propertyNumber, const QString& propertyName, bool propertyNameIsEditable,
       int PropertyType, QWidget* parent = NULL);
@@ -54,6 +56,7 @@ public:
   QCheckBox *getCheckBox() {
     return usedCheckBox;
   }
+
 private:
   void fillPropertyTypeComboBox();
   QLineEdit *propertyNameLineEdit;
@@ -66,7 +69,7 @@ private slots:
   void nameEditFinished();
   void useStateChanged(int state);
 
-signals:
+  signals:
   void propertyNameChange(QString newName);
   void stateChange(bool state);
 };
@@ -76,8 +79,8 @@ class PropertyNameValidator;
 /*
  * Widget that encapsulate import and properties settings for ImportCSVDataWidget class.
  */
-class TLP_QT_SCOPE ImportCSVDataConfigurationWidget: public QWidget, public Ui::ImportCSVDataConfigurationWidget {
-Q_OBJECT
+class TLP_QT_SCOPE ImportCSVDataConfigurationWidget: public QWidget, public Ui::ImportCSVDataConfigurationWidget, public CSVContentHandler {
+  Q_OBJECT
 public:
   enum PropertyType {
     AutoDetect,
@@ -139,20 +142,44 @@ public:
       AutoDetect);
 
   QString getPropertyName(unsigned int propertyNumber) const;
+
   ImportCSVDataConfigurationWidget::PropertyType getPropertyType(unsigned int propertyNumber) const;
+
+  /**
+   * Return true if the property with the given number must be loaded in the graph.
+   */
   bool useProperty(unsigned int propertyNumber);
+
   bool checkIfMoreThanOnePropertyHaveTheName(const QString& name);
+
+  void begin();
+  void token(unsigned int row, unsigned int column, const std::string& token);
+  void end(unsigned int rowNumber,unsigned int columnNumber);
 
 protected:
 
   /**
    * Build the property configuration widget from given parameters.
+   * @param propertyNumber the property number.
+   * @param propertyName
+   * @param isEditable Is the property name editable?
+   * @param defaultPropertyType the default property type.
    */
   virtual PropertyConfigurationWidget *createPropertyConfigurationWidget(unsigned int propertyNumber,
-      const QString& propertyName, bool isEditable, ImportCSVDataConfigurationWidget::PropertyType, QWidget* parent);
+      const QString& propertyName, bool propertyNameIsEditable, ImportCSVDataConfigurationWidget::PropertyType defaultPropertyType, QWidget* parent);
+
+  /**
+   * Create and return the table widget preview widget.
+   */
+  virtual QTableWidget* buildPreviewWidget(QWidget* parent);
 
   std::vector<PropertyConfigurationWidget*> propertyWidgets;
   PropertyNameValidator *propertyNameValidator;
+  QTableWidget* previewWidget;
+
+private:
+  void propertyNameChanged(unsigned int propertyNumber, QString newPropertyName);
+  void propertyStateChanged(unsigned int propertyNumber, bool state);
 
 private slots:
   void browseNewCsvFile();
@@ -162,13 +189,11 @@ private slots:
   void propertyOrientationButtonPressed(QAbstractButton * button);
   void propertyStateChanged(bool state);
 
-signals:
+  signals:
   void csvFileChange(QString newFile);
   void separatorChange(QString newSeparator);
   void useFirstRowAsPropertyNameChange(bool useFirstRowAsPropName);
   void propertiesOrientationChange(ImportCSVDataConfigurationWidget::PropertyOrientation orientation);
-  void propertyNameChange(unsigned int propertyNumber, QString newPropertyName);
-  void propertyStateChange(unsigned int propertyNumber, bool useProperty);
 
 };
 /*
@@ -177,11 +202,12 @@ signals:
 class TLP_QT_SCOPE PropertyNameValidator: public QValidator {
 public:
   PropertyNameValidator(ImportCSVDataConfigurationWidget *parent) :
-    QValidator(parent), parent(parent) {
+  QValidator(parent), parent(parent) {
   }
   virtual ~PropertyNameValidator() {
 
   }
+
   /**
    * Validate the new property name. Check if any property does not have the same name
    */
