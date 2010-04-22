@@ -452,17 +452,6 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
   DataSet dataSet;
   StructDef parameter = ExportModuleFactory::factory->getPluginParameters(plugin);
   parameter.buildDefaultDataSet(dataSet);
-  if(filename.length())
-    dataSet.set<string>("name", filename);
-  if (author.length() > 0)
-    dataSet.set<string>("author", author);
-  if (comments.length() > 0)
-    dataSet.set<string>("text::comments", comments);
-  if (!tlp::openDataSetDialog(dataSet, 0, &parameter,
-			      &dataSet, "Enter Export parameters", NULL,
-			      this))
-    return false;
-
   DataSet controller;
   DataSet controllerData;
   Graph *graph;
@@ -470,7 +459,22 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
   controller.set<DataSet>(controllerToControllerName[controllerToSave],controllerData);
   dataSet.set<DataSet>("controller",controller);
 
-  if (filename.length() == 0) {
+  string graphName;
+  
+  if (graph->getAttribute("name", graphName) && graphName.find("unnamed") != 0)
+    dataSet.set<string>("name", graphName);
+  else
+    dataSet.set<string>("name", filename);
+  if (!author.empty())
+    dataSet.set<string>("author", author);
+  if (!comments.empty())
+    dataSet.set<string>("text::comments", comments);
+  if (!tlp::openDataSetDialog(dataSet, 0, &parameter,
+			      &dataSet, "Enter Export parameters", NULL,
+			      this))
+    return false;
+
+  if (filename.empty()) {
     QString name;
     if (plugin == "tlp")
       name =
@@ -499,6 +503,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
   vFile.name = filename;
   dataSet.get<string>("author", vFile.author);
   dataSet.get<string>("text::comments", vFile.comments);
+  dataSet.get<string>("name", graphName);
 
   if (!(result=tlp::exportGraph(graph, *os, plugin, dataSet, NULL))) {
     QMessageBox::critical( 0, "Tulip export Failed",
