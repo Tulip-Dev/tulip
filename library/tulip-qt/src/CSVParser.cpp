@@ -13,7 +13,6 @@
 #include "tulip/CSVParser.h"
 #include "tulip/CSVContentHandler.h"
 #include <tulip/PluginProgress.h>
-#include <QtGui/QProgressBar>
 #include <QtGui/QApplication>
 #include <fstream>
 #include <algorithm>
@@ -28,8 +27,8 @@ CSVParser::CSVParser() :
 CSVParser::~CSVParser() {
 }
 
-void CSVParser::parse(const string& fileName, const string& separator, CSVContentHandler* handler,
-    PluginProgress* progress) {
+void CSVParser::parse(const string& fileName, const string& separator,
+		      CSVContentHandler* handler, PluginProgress* progress) {
   assert(handler);
   handler->begin();
   ifstream csvFile(fileName.c_str());
@@ -37,7 +36,11 @@ void CSVParser::parse(const string& fileName, const string& separator, CSVConten
   unsigned int row = 0;
   unsigned int columnMax = 0;
   if (csvFile) {
-    long fileSize = computeFileSize(fileName);
+    csvFile.seekg(0, std::ios_base::end);
+    // get position = file size
+    unsigned long fileSize = csvFile.tellg(), readSize = 0;
+    // reset position
+    csvFile.seekg(0, std::ios_base::beg);
     string line;
     vector<string> tokens;
 
@@ -48,14 +51,14 @@ void CSVParser::parse(const string& fileName, const string& separator, CSVConten
     }
     while (getline(csvFile, line)) {
       if (progress) {
+	readSize += line.size();
         if (progress->state() != TLP_CONTINUE) {
           break;
         }
         //Each displayProgressEachLineNumber display progression
         if (row % displayProgressEachLineNumber == 0) {
-          // compute progression in function of read size (current position) and max file size.
-          progress->progress((csvFile.tellg()*100)/fileSize, 100);
-          QApplication::processEvents();
+          // compute progression in function of read size and file size.
+          progress->progress(readSize, fileSize);
         }
       }
       tokens.clear();
@@ -75,7 +78,8 @@ void CSVParser::parse(const string& fileName, const string& separator, CSVConten
   }
   handler->end(row, columnMax);
 }
-void CSVParser::tokenize(const string& str, vector<string>& tokens, const string& delimiters, unsigned int numberOfCol) {
+void CSVParser::tokenize(const string& str, vector<string>& tokens,
+			 const string& delimiters, unsigned int numberOfCol) {
   // Skip delimiters at beginning.
   string::size_type lastPos = 0;
   // Find first "non-delimiter".
@@ -95,32 +99,49 @@ void CSVParser::tokenize(const string& str, vector<string>& tokens, const string
   }
 }
 
+const string spaceChars = " \t\r\n";
 string CSVParser::treatToken(const string& token, int row, int column) {
+  string currentToken = token;
+  // erase space chars at the beginning/end of the value
+  // and replace multiple occurences of space chars by a blank
+  string::size_type beginPos = currentToken.find_first_of(spaceChars);
+  while (beginPos != string::npos) {
+    string::size_type endPos =
+      currentToken.find_first_not_of(spaceChars, beginPos);
+    if (beginPos == 0) {
+      // erase space chars at the beginning
+      if (endPos != string::npos)
+	currentToken.erase(beginPos, endPos - beginPos);
+      else
+	// only space chars in currentToken
+	currentToken.clear();
+      beginPos = currentToken.find_first_of(spaceChars);
+    } else {
+      if (endPos == string::npos) {
+	// erase space chars at the end
+	currentToken.erase(beginPos);
+	break;
+      }
+      // replace multiple space chars
+      currentToken.replace(beginPos, endPos - beginPos, 1, ' ');
+      beginPos = currentToken.find_first_of(spaceChars, beginPos + 1);
+    }
+  }
+
   if (removeQuotes) {
-    return removeQuotesIfAny(token);
+    return removeQuotesIfAny(currentToken);
   }
   else {
-    return token;
+    return currentToken;
   }
 }
 
+const string rejectedChars = "\"\r";
 string CSVParser::removeQuotesIfAny(const string &s) {
-  if (s[0] == '"' && s[s.length() - 1] == '"') {
-    return s.substr(1, s.length() - 2);
-  }
-  else {
+  string::size_type beginPos = s.find_first_not_of(rejectedChars);
+  string::size_type endPos = s.find_last_not_of(rejectedChars);
+  if (beginPos != string::npos && endPos != string::npos)
+    return s.substr(beginPos, endPos - beginPos + 1);
+  else
     return s;
-  }
-}
-
-long CSVParser::computeFileSize(const std::string& fileName) {
-  ifstream csvFile(fileName.c_str());
-  // save the current position
-  long pos = csvFile.tellg();
-  // go to the end of the file
-  csvFile.seekg(0, std::ios_base::end);
-  // get position = file size
-  long size = csvFile.tellg();
-  return size;
-
 }

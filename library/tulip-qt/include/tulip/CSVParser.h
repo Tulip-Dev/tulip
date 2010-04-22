@@ -18,7 +18,6 @@
 #include <vector>
 #include <limits.h>
 
-class QProgressBar;
 namespace tlp {
 
 class CSVContentHandler;
@@ -45,14 +44,16 @@ public:
   void setRemoveQuotes(bool removeQuotes) {
     this->removeQuotes = removeQuotes;
   }
-  virtual void parse(const std::string& fileName, const std::string& separator,CSVContentHandler * handler,tlp::PluginProgress* progress=NULL);
+  virtual void parse(const std::string& fileName, const std::string& separator,
+		     CSVContentHandler * handler,
+		     tlp::PluginProgress* progress=NULL);
 
 protected:
   virtual std::string treatToken(const std::string& token, int row, int column);
 
 private:
-  long computeFileSize(const std::string& fileName);
-  void tokenize(const std::string& str, std::vector<std::string>& tokens, const std::string& delimiters, unsigned int numberOfCol);
+  void tokenize(const std::string& str, std::vector<std::string>& tokens,
+		const std::string& delimiters, unsigned int numberOfCol);
   std::string removeQuotesIfAny(const std::string &s);
   bool removeQuotes;
 };
