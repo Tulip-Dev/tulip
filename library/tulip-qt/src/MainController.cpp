@@ -490,8 +490,6 @@ namespace tlp {
       PropertyInterface* tmp = it->next();
       tmp->addObserver(this);
     } delete it;
-    
-    updateCurrentGraphInfos();
   }
   //**********************************************************************
   void MainController::clearObservers() {
@@ -823,8 +821,9 @@ namespace tlp {
     eltProperties->setGraph(graph);
     propertiesWidget->setGraph(graph);
 
+    updateCurrentGraphInfos();
     updateUndoRedoInfos();
-
+    
     initObservers();
     //Remove observer (nothing if this not observe)
     graph->removeGraphObserver(this);
@@ -1417,8 +1416,8 @@ namespace tlp {
     eltProperties->setGraph(newGraph,false);
 
     drawViews(true);
+    updateCurrentGraphInfos();
     updateUndoRedoInfos();
-
   }
   //**********************************************************************
   void MainController::redo() {
@@ -1438,6 +1437,7 @@ namespace tlp {
     eltProperties->setGraph(newGraph,false);
 
     drawViews(true);
+    updateCurrentGraphInfos();
     updateUndoRedoInfos();
   }
 
