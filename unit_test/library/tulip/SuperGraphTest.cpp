@@ -347,6 +347,9 @@ void SuperGraphTest::testDeleteSubgraph() {
   g2 = g1->addSubGraph();
   g3 = g2->addSubGraph();
   g4 = g3->addSubGraph();
+  // try to delete its father
+  // fail because of an assertion in GraphAbstract::delSubGraph
+  //g3->delSubGraph(g2);
   g1->delAllSubGraphs(g2);
   Iterator<Graph *> *itGr = g1->getSubGraphs();
   CPPUNIT_ASSERT(!itGr->hasNext());

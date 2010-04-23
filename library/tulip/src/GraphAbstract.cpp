@@ -61,31 +61,32 @@ Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, unsigned int id){
 }
 //=========================================================================
 void GraphAbstract::delSubGraph(Graph *toRemove) {
-  //check if the graph we want to remove is a subgraph of the graph
-#ifndef NDEBUG
-  bool find = false;
-  for (GRAPH_SEQ::iterator it = subgraphs.begin(); it != subgraphs.end(); it++) {
+  // look for the graph we want to remove in the subgraphs
+  GRAPH_SEQ::iterator it = subgraphs.begin();
+  while (it != subgraphs.end()) {
     if (*it == toRemove) {
-      find = true;
       break;
     }
+    ++it;
   }
-  assert(find);
-#endif
+  assert(it != subgraphs.end());
+  if (it != subgraphs.end()) {
+    subGraphToKeep = NULL;
+    notifyDelSubGraph(this, toRemove);
 
-  subGraphToKeep = NULL;
-  notifyDelSubGraph(this, toRemove);
-
-  Iterator<Graph *> *itS = toRemove->getSubGraphs();
-  while (itS->hasNext()) {
-    restoreSubGraph(itS->next());
-  } delete itS;
-  removeSubGraph(toRemove);
-  if (toRemove != subGraphToKeep) {
-    delete toRemove;
-  } else
-    toRemove->notifyDestroy();
-  notifyObservers();
+    Iterator<Graph *> *itS = toRemove->getSubGraphs();
+    // remove from subgraphs
+    subgraphs.erase(it);
+    // add toRemove subgraphs
+    while (itS->hasNext()) {
+      restoreSubGraph(itS->next());
+    } delete itS;
+    if (toRemove != subGraphToKeep) {
+      delete toRemove;
+    } else
+      toRemove->notifyDestroy();
+    notifyObservers();
+  }
 }
 //=========================================================================
 void GraphAbstract::removeSubGraph(Graph * toRemove) {
