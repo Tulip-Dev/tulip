@@ -133,6 +133,10 @@ namespace tlp {
      */
     void delLocalProperty(Graph*, const std::string&);
     /**
+     * Call when an attribute is set on a graph
+     */
+    void afterSetAttribute(Graph*, const std::string&);
+    /**
      * Call to update number of nodes/edges
      */
     void updateCurrentGraphInfos();

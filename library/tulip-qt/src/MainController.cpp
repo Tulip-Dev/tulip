@@ -506,6 +506,7 @@ namespace tlp {
     if(getCurrentGraph()!=g)
       return;
     sg->addObserver(this);
+    sg->addGraphObserver(this);
     clusterTreeWidget->update();
   }
   //**********************************************************************
@@ -537,6 +538,12 @@ namespace tlp {
       eltProperties->setGraph(graph);
       propertiesWidget->setGraph(graph);
     }
+  }
+  //**********************************************************************
+  void MainController::afterSetAttribute(Graph *graph, const std::string &name){
+    // In this function we only do threatment if graph name is changed (attribute "name" is changed)
+    if(name=="name")
+      clusterTreeWidget->update();
   }
   //**********************************************************************
   void MainController::loadGUI() {
