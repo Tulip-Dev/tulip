@@ -912,6 +912,11 @@ namespace tlp {
 	GlXMLTools::getXML(dataNode,"background",backgroundColor);
 
 	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+
+      // Don't save working layers
+      if((*it).second->isAWorkingLayer())
+        continue;
+
       GlXMLTools::createChild(childrenNode, "GlLayer", node);
       GlXMLTools::createProperty(node, "name", (*it).first);
       (*it).second->getXML(node);
