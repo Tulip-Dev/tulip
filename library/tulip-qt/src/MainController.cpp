@@ -506,6 +506,7 @@ namespace tlp {
     if(getCurrentGraph()!=g)
       return;
     sg->addObserver(this);
+    clusterTreeWidget->update();
   }
   //**********************************************************************
   void MainController::delSubGraph(Graph *g, Graph *sg){
