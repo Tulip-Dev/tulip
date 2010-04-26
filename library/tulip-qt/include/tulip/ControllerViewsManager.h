@@ -104,6 +104,11 @@ namespace tlp {
        * Set the name of the given view
        */
       virtual void setNameOfView(View *view,const std::string &name);
+
+      /**
+       * Get the configuration widget of interactor activated for this view
+       */
+      virtual QWidget *getInteractorConfigurationWidgetOfView(View *view);
       
       /**
        * Close all the views.
@@ -207,6 +212,7 @@ namespace tlp {
       std::map<View *,Graph* > viewGraph;
       
       std::map<View *, QAction *> lastInteractorOnView;
+      std::map<View *, QWidget *> lastInteractorConfigurationWidgetOnView;
       std::map<View *,std::list<int> > viewsGraphsHierarchy;
       
   };

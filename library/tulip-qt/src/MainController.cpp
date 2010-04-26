@@ -775,21 +775,28 @@ namespace tlp {
     if(!ControllerViewsManager::windowActivated(widget))
       return false;
     
-    while(configWidgetTab->count()>1){
-      configWidgetTab->removeTab(1);
-    }
-    if(configWidgetTab->widget(0)!=ControllerViewsTools::getNoInteractorConfigurationWidget()) {
+    // Remove tabs of View Editor
+    while(configWidgetTab->count()>0){
       configWidgetTab->removeTab(0);
-      configWidgetTab->addTab(ControllerViewsTools::getNoInteractorConfigurationWidget(),"Interactor");
     }
     
+    // Find view and graph of this widget
     View *view=getViewOfWidget(widget);
     Graph *graph=getGraphOfView(view);
     
+    // Update left part of tulip
     clusterTreeWidget->setGraph(graph);
     eltProperties->setGraph(graph);
     propertiesWidget->setGraph(graph);
 
+    // Load interactor configuration widget
+    QWidget *interactorConfigurationWidget=ControllerViewsManager::getInteractorConfigurationWidgetOfView(view);
+    if(interactorConfigurationWidget)
+      configWidgetTab->addTab(interactorConfigurationWidget,"Interactor");
+    else
+      configWidgetTab->addTab(ControllerViewsTools::getNoInteractorConfigurationWidget(),"Interactor");
+
+    // Load view configuration widget
     list<pair<QWidget *,string> > configWidgetsList=view->getConfigurationWidget();
     for(list<pair<QWidget *,string> >::iterator it=configWidgetsList.begin();it!=configWidgetsList.end();++it){
       configWidgetTab->addTab((*it).first,(*it).second.c_str());

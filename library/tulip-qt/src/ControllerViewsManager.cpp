@@ -88,7 +88,13 @@ namespace tlp {
   void ControllerViewsManager::setNameOfView(View *view, const string &name) {
     viewNames[view] = name;
   }
-
+  //**********************************************************************
+  QWidget *ControllerViewsManager::getInteractorConfigurationWidgetOfView(View *view){
+    if(lastInteractorConfigurationWidgetOnView.count(view)!=0)
+      return lastInteractorConfigurationWidgetOnView[view];
+    else
+      return NULL;
+  }
   //**********************************************************************
   //**********************************************************************
   // Main functions
@@ -291,6 +297,8 @@ namespace tlp {
     ControllerViewsTools::changeInteractor(currentView, mainWindowFacade.getInteractorsToolBar(),
                                            action, configurationWidget);
 
+    lastInteractorConfigurationWidgetOnView[currentView] = *configurationWidget;
+
     if(needRefresh)
       currentView->refresh();
 
@@ -324,6 +332,7 @@ namespace tlp {
     viewWidget.erase(widget);
     viewNames.erase(view);
     lastInteractorOnView.erase(view);
+    lastInteractorConfigurationWidgetOnView.erase(view);
     viewGraph.erase(view);
     if (viewWidget.size() == 0) {
       mainWindowFacade.getInteractorsToolBar()->clear();
