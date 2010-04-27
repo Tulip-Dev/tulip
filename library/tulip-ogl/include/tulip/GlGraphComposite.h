@@ -158,8 +158,6 @@ namespace tlp {
 
     bool haveToSort;
     bool nodesModified;
-    std::list<node> sortedNodes;
-    std::list<edge> sortedEdges;
     std::set<node> metaNodes;
   };
 }

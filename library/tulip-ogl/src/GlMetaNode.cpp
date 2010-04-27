@@ -51,11 +51,11 @@ namespace tlp {
       GlNode::draw(20,data,camera);
   }
 
-  void GlMetaNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data){
+  void GlMetaNode::drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data){
 
     node n=node(id);
 
-    GlNode::drawLabel(drawSelect,test,renderer,data);
+    GlNode::drawLabel(test,renderer,data);
 
     if(!data->getMetaNodeRenderer()->glMetaNodeHaveToRenderLabels())
       return;
@@ -131,15 +131,15 @@ namespace tlp {
     glTranslatef(translate[0],translate[1],translate[2]);
 
     for(vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
-      (*it).drawLabel(drawSelect,test,renderer,&metaData);
+      (*it).drawLabel(test,renderer,&metaData);
     }
 
     for(vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
-      (*it).drawLabel(drawSelect,test,renderer,&metaData);
+      (*it).drawLabel(test,renderer,&metaData);
     }
 
     for(vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
-      (*it).drawLabel(drawSelect,test,renderer,&metaData);
+      (*it).drawLabel(test,renderer,&metaData);
     }
 
     glPopMatrix();

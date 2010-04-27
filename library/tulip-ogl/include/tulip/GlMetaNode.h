@@ -37,7 +37,7 @@ namespace tlp {
     /**
      * Draw label of the meta-node
      */
-    virtual void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+    virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
 
   };
 

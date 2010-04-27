@@ -55,7 +55,7 @@ namespace tlp {
      * Draw the label of the edge if drawEdgesLabel is true and if label selection is equal to drawSelect
      * Use TextRenderer : renderer to draw the label
      */
-    void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+    void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
 
     unsigned int id;
 

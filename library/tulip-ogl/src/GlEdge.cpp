@@ -624,7 +624,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
   glDepthFunc(GL_LEQUAL);
 }
 
-void GlEdge::drawLabel(bool drawSelect, OcclusionTest* test, TextRenderer* renderer,
+void GlEdge::drawLabel(OcclusionTest* test, TextRenderer* renderer,
     GlGraphInputData* data) {
 
   edge e = edge(id);
@@ -635,8 +635,11 @@ void GlEdge::drawLabel(bool drawSelect, OcclusionTest* test, TextRenderer* rende
   }
 
   bool select = data->elementSelected->getEdgeValue(e);
-  if (drawSelect != select)
-    return;
+
+  if(select)
+    glStencilFunc(GL_LEQUAL,data->parameters->getSelectedEdgesStencil() ,0xFFFF);
+  else
+    glStencilFunc(GL_LEQUAL,data->parameters->getEdgesLabelStencil(),0xFFFF);
 
   string fontName=data->elementFont->getEdgeValue(e);
   int fontSize=data->elementFontSize->getEdgeValue(e);

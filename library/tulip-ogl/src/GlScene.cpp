@@ -64,6 +64,23 @@ namespace tlp {
 	}
   };
   //====================================================
+  class LessThanNode {
+  public:
+    DoubleProperty *metric;
+    bool operator() (node n1,node n2)  {
+      return (metric->getNodeValue(n1) < metric->getNodeValue(n2));
+    }
+  };
+  //====================================================
+  class LessThanEdge {
+  public:
+    DoubleProperty *metric;
+    Graph *sp;
+    bool operator() (edge e1,edge e2) {
+      return (metric->getEdgeValue(e1) < metric->getEdgeValue(e2));
+    }
+  };
+  //====================================================
 #ifdef _WIN32
 #ifdef DLL_EXPORT
   GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
@@ -159,6 +176,87 @@ namespace tlp {
 	  delete newLodCalculator;
 	}
   }
+
+  void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphComposite,TextRenderer *fontRenderer,
+                                    OcclusionTest *occlusionTest,vector<LODResultComplexEntity> *nodes,vector<LODResultComplexEntity> *edges){
+    Graph *graph=glGraphComposite->getInputData()->getGraph();
+    BooleanProperty *selectionProperty=glGraphComposite->getInputData()->elementSelected;
+    DoubleProperty *metric=glGraphComposite->getInputData()->getGraph()->getProperty<DoubleProperty>("viewMetric");
+    vector<node> nodesMetricOrdered;
+    vector<edge> edgesMetricOrdered;
+    GlNode glNode(0);
+    GlEdge glEdge(0);
+    GlMetaNode glMetaNode(0);
+
+    // Draw Labels for Nodes
+    if(glGraphComposite->getInputData()->parameters->isViewNodeLabel()) {
+      node n;
+      for(vector<LODResultComplexEntity>::iterator it=nodes->begin();it!=nodes->end();++it) {
+        n.id=(*it).first;
+
+        if(selectionProperty->getNodeValue(n)==drawSelected){
+          if(!glGraphComposite->getInputData()->parameters->isElementOrdered()){
+            // Not metric ordered
+            if(!graph->isMetaNode(n)){
+              glNode.id=n.id;
+              glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
+            }else{
+              glMetaNode.id=n.id;
+              glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
+            }
+          }else{
+            // Metric ordered
+            nodesMetricOrdered.push_back(n);
+          }
+        }
+      }
+      // If not Metric ordered : a this point selected nodes are draw
+      if(glGraphComposite->getInputData()->parameters->isElementOrdered()){
+        // Draw selected nodes label with metric ordering
+        LessThanNode ltn;
+        ltn.metric=metric;
+        sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
+        for(vector<node>::iterator it=nodesMetricOrdered.begin();it!=nodesMetricOrdered.end();++it){
+          if(!graph->isMetaNode(n)){
+            glNode.id=(*it).id;
+            glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
+          }else{
+            glMetaNode.id=(*it).id;
+            glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
+          }
+        }
+      }
+    }
+    // Draw Labels for Edges
+    if(glGraphComposite->getInputData()->parameters->isViewEdgeLabel()) {
+      edge e;
+      for(vector<LODResultComplexEntity>::iterator it=edges->begin();it!=edges->end();++it) {
+        e.id=(*it).first;
+        if(selectionProperty->getEdgeValue(e) == drawSelected){
+          if(!glGraphComposite->getInputData()->parameters->isElementOrdered()){
+            // Not metric ordered
+            glEdge.id=e.id;
+            glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
+          }else{
+            // Metric ordered
+            edgesMetricOrdered.push_back(e);
+          }
+        }
+      }
+      // If not Metric ordered : a this point selected edges are draw
+      if(glGraphComposite->getInputData()->parameters->isElementOrdered()){
+        // Draw selected edges label with metric ordering
+        LessThanEdge lte;
+        lte.metric=metric;
+        sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
+        for(vector<edge>::iterator it=edgesMetricOrdered.begin();it!=edgesMetricOrdered.end();++it){
+          glEdge.id=(*it).id;
+          glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
+        }
+      }
+    }
+  }
+
 
   void GlScene::draw() {
 	initGlParameters();
@@ -326,43 +424,11 @@ namespace tlp {
         glDisable(GL_CULL_FACE);
         glDisable(GL_COLOR_MATERIAL);
 
-        // Draw Nodes and MetaNodes Label
-        if(glGraphComposite->getInputData()->parameters->isViewNodeLabel()) {
-          // Draw Label for selected Nodes
-          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
-            if(!graph->isMetaNode(node((*it).first))){
-              glNode.id=(*it).first;
-              glNode.drawLabel(true,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
-            }else{
-              glMetaNode.id=(*it).first;
-              glMetaNode.drawLabel(true,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
-            }
-          }
-          // Draw Label for others Nodes
-          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
-            if(!graph->isMetaNode(node((*it).first))){
-              glNode.id=(*it).first;
-              glNode.drawLabel(false,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
-            }else{
-              glMetaNode.id=(*it).first;
-              glMetaNode.drawLabel(false,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
-            }
-          }
-        }
-        // Draw Edges Label
-        if(glGraphComposite->getInputData()->parameters->isViewEdgeLabel()) {
-          glStencilFunc(GL_LEQUAL,glGraphComposite->getEdgesLabelStencil(),0xFFFF);
-          // Draw Label for selected Edges
-          for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
-            glEdge.id=(*it).first;
-            glEdge.drawLabel(true,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
-          }
-          // Draw Label for others Edges
-          for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
-            glEdge.id=(*it).first;
-            glEdge.drawLabel(false,&occlusionTest,&fontRenderer,glGraphComposite->getInputData());
-          }
-        }
+        // Draw Labels for selected entities
+        drawLabelsForComplexEntities(true,glGraphComposite,&fontRenderer,&occlusionTest,&(*itNodes),&(*itEdges));
+
+        // Draw Labels for unselected entities
+        drawLabelsForComplexEntities(false,glGraphComposite,&fontRenderer,&occlusionTest,&(*itNodes),&(*itEdges));
 
         glPopAttrib();
       }
