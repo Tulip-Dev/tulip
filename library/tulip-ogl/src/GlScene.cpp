@@ -181,7 +181,9 @@ namespace tlp {
                                     OcclusionTest *occlusionTest,vector<LODResultComplexEntity> *nodes,vector<LODResultComplexEntity> *edges){
     Graph *graph=glGraphComposite->getInputData()->getGraph();
     BooleanProperty *selectionProperty=glGraphComposite->getInputData()->elementSelected;
-    DoubleProperty *metric=glGraphComposite->getInputData()->getGraph()->getProperty<DoubleProperty>("viewMetric");
+    DoubleProperty *metric=NULL;
+    if(graph->existProperty("viewMetric"))
+      metric=graph->getProperty<DoubleProperty>("viewMetric");
     vector<node> nodesMetricOrdered;
     vector<edge> edgesMetricOrdered;
     GlNode glNode(0);
@@ -195,7 +197,7 @@ namespace tlp {
         n.id=(*it).first;
 
         if(selectionProperty->getNodeValue(n)==drawSelected){
-          if(!glGraphComposite->getInputData()->parameters->isElementOrdered()){
+          if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric){
             // Not metric ordered
             if(!graph->isMetaNode(n)){
               glNode.id=n.id;
@@ -217,7 +219,7 @@ namespace tlp {
         ltn.metric=metric;
         sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
         for(vector<node>::iterator it=nodesMetricOrdered.begin();it!=nodesMetricOrdered.end();++it){
-          if(!graph->isMetaNode(n)){
+          if(!graph->isMetaNode(*it)){
             glNode.id=(*it).id;
             glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
           }else{
@@ -233,7 +235,7 @@ namespace tlp {
       for(vector<LODResultComplexEntity>::iterator it=edges->begin();it!=edges->end();++it) {
         e.id=(*it).first;
         if(selectionProperty->getEdgeValue(e) == drawSelected){
-          if(!glGraphComposite->getInputData()->parameters->isElementOrdered()){
+          if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric){
             // Not metric ordered
             glEdge.id=e.id;
             glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
