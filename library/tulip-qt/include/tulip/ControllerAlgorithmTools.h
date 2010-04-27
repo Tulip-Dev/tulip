@@ -47,6 +47,11 @@ namespace tlp {
        */
       template<typename PROPERTY> static bool changeProperty(Graph *graph,QWidget *parent,std::string name, std::string destination,View *view=NULL, bool query=true, bool redraw=false, bool push=true);
       /**
+       * Change a property on graph with algorithm with given name and store result in destination property
+       * Similar to previous changeProperty function but in this one you have to pass a dataset, this dataset is use by the algorithm
+       */
+      template<typename PROPERTY> static bool changeProperty(Graph *graph,QWidget *parent,std::string name, std::string destination,DataSet dataSet,View *view=NULL, bool query=true, bool redraw=false, bool push=true);
+      /**
        * Apply a string property algorithm with given name on property with name : propertyName on graph
        * if algorithm has a problem : display it in a QDialog in parent widget
        * view is use to preview result

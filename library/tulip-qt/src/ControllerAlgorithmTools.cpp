@@ -65,6 +65,11 @@ namespace tlp {
   //**********************************************************************
   template<typename PROPERTY>
   bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,string name, string destination,View *view, bool query, bool redraw, bool push) {
+    changeProperty<PROPERTY>(graph,parent,name,destination,DataSet(),view,query,redraw,push);
+  }
+  //**********************************************************************
+  template<typename PROPERTY>
+  bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,string name, string destination,DataSet dataSet,View *view, bool query, bool redraw, bool push) {
     NodeLinkDiagramComponent *nldc=NULL;
     if(view)
       nldc=dynamic_cast<NodeLinkDiagramComponent*>(view);
@@ -75,7 +80,6 @@ namespace tlp {
 
     string erreurMsg;
     bool   resultBool=true;
-    DataSet dataSet;
     if (query) {
       StructDef *params = ControllerAlgorithmTools::getPluginParameters(PROPERTY::factory, name);
       StructDef sysDef = PROPERTY::factory->getPluginParameters(name);
