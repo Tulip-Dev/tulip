@@ -374,10 +374,10 @@ namespace tlp {
     if(pluginsToInstall.size()!=0 || pluginsToRemove.size()!=0){
       connect(&updatePlugin,SIGNAL(pluginInstalled()),this,SLOT(pluginInstalledSlot()));
       connect(&updatePlugin,SIGNAL(pluginUninstalled()),this,SLOT(pluginUninstalledSlot()));
-      updatePlugin.pluginsCheckAndUpdate(_msm,pluginsToInstall,pluginsToRemove,this);
-
-      pluginsToInstall.clear();
-      pluginsToRemove.clear();
+      if(updatePlugin.pluginsCheckAndUpdate(_msm,pluginsToInstall,pluginsToRemove,this)!=0){
+        pluginsToInstall.clear();
+        pluginsToRemove.clear();
+      }
     }else{
       QMessageBox::warning(this, tr("Apply change"),
                          tr("No plugin to install/remove"),
@@ -399,59 +399,6 @@ namespace tlp {
     pluginsToRemove.clear();
     changeList();
   }
-
-  /*bool PluginsViewWidget::isInstalled(const string & type,const string & plugName){
-    string plugpath("home/morgan/install/tulip.3.0.0/lib/tlp/" + type + QDir::separator().toLatin1() + plugName);
-    string plugSO = plugpath + ".so";
-    string plugA = plugpath + ".a";
-    string plugLA = plugpath + ".la";
-    QFile* f1 = new QFile(plugSO.c_str());
-    QFile* f2 = new QFile(plugA.c_str());
-    QFile* f3 = new QFile(plugLA.c_str());
-    bool ret = f1->exists() && f2->exists() && f3->exists();
-    delete f1;
-    delete f2;
-    delete f3;
-    return ret;
-    }*/
-
-
-
-  /*void PluginsViewWidget::installAllDependencies(vector<DistPluginInfo> depNoInstall){
-
-    std::vector<string> namePlugins;
-    for(unsigned int i=0;i<depNoInstall.size();i++){
-      namePlugins.push_back(depNoInstall[i].name);
-    }
-
-    pluginDialog->addInstallPlugins(namePlugins);
-
-      for(unsigned int i=0;i<depNoInstall.size();i++){
-	//string fileName = depNoInstall[i].fileName;
-      string name = depNoInstall[i].name;
-      string type = depNoInstall[i].type;
-      string version = depNoInstall[i].version;
-      string serverAddr = "";
-      string serverName = "";
-      UpdatePlugin* plug = new UpdatePlugin(this);
-      pluginUpdaters.push_back(plug);
-      connect(plug, SIGNAL(pluginInstalled(UpdatePlugin*,const DistPluginInfo)), this, SLOT(terminatePluginInstall(UpdatePlugin*,const DistPluginInfo*)));
-
-
-      // A trouver : string serverAddr;
-      // PARTIE DE CODE A VERIFIEE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      std::vector<const PluginInfo *> infos;
-      _msm->getPluginsInformation(name,type,version,infos);
-      serverName = infos[0]->server; // Le premier serveur de la liste
-      _msm->getAddr(serverName,serverAddr);
-      // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-      pluginDialog->installStart(depNoInstall[i].name);
-      plug->install(serverAddr,depNoInstall[i]);
-
-      }
-
-      }*/
 
   bool PluginsViewWidget::isAVersionItem(QTreeWidgetItem *item){
 

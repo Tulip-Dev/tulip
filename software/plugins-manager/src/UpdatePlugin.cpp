@@ -36,10 +36,11 @@ namespace tlp {
     set<LocalPluginInfo,PluginCmp> depToRemoveWithoutAsk;
 
     for(set<DistPluginInfo,PluginCmp>::iterator it = pluginsToInstall.begin(); it!=pluginsToInstall.end(); ++it) {
-      bool ok=msm->getPluginDependenciesToInstall(*it,depNoInstalled,depToRemoveWithoutAsk);
+      string errorMessage;
+      bool ok=msm->getPluginDependenciesToInstall(*it,depNoInstalled,depToRemoveWithoutAsk,errorMessage);
 
       if(ok==false){
-        windowToDisplayError((*it).name,parent);
+        windowToDisplayError("For plugin :\n"+(*it).name+"\n\ndependency missing : \n"+errorMessage+"\n",parent);
         return 0;
 
       }
@@ -118,7 +119,7 @@ namespace tlp {
     QDialog* dia = new QDialog(parent);
     QVBoxLayout* box = new QVBoxLayout(dia);
     QLabel* labelName = new QLabel(pluginName.c_str(),dia);
-    QLabel* label=new QLabel("Dependencies check faild\nInstallation cancel",dia);
+    QLabel* label=new QLabel("Installation cancel",dia);
     box->addWidget(labelName);
     box->addWidget(label);
 

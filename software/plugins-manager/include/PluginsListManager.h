@@ -73,9 +73,9 @@ namespace tlp {
 
     bool pluginExist(const std::string &pluginName);
     bool pluginIsInstalled(const PluginInfo &plugin);
-    bool getPluginDependencies(const PluginInfo &plugin, std::set<PluginDependency,PluginDependencyCmp> &dependencies);
-    bool getPluginDependenciesNotInstalled(const PluginInfo &plugin, std::set<PluginDependency,PluginDependencyCmp> &dependencies);
-    bool getPluginDependenciesToInstall(const PluginInfo &plugin, std::set<DistPluginInfo,PluginCmp> &toInstall,std::set<LocalPluginInfo,PluginCmp> &toRemove);
+    bool getPluginDependencies(const PluginInfo &plugin, std::set<PluginDependency,PluginDependencyCmp> &dependencies,std::string &errorMessage);
+    bool getPluginDependenciesNotInstalled(const PluginInfo &plugin, std::set<PluginDependency,PluginDependencyCmp> &dependencies,std::string &errorMessage);
+    bool getPluginDependenciesToInstall(const PluginInfo &plugin, std::set<DistPluginInfo,PluginCmp> &toInstall,std::set<LocalPluginInfo,PluginCmp> &toRemove,std::string &errorMessage);
     bool getPluginDependenciesToRemove(const PluginInfo &plugin, std::set<LocalPluginInfo,PluginCmp> &toRemove);
 
     LocalPluginInfo *getLocalPlugin(const PluginInfo *plugin);

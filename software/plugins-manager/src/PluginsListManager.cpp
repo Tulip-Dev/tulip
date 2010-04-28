@@ -290,40 +290,42 @@ namespace tlp {
       return false;
   }
 
-  bool PluginsListManager::getPluginDependencies(const PluginInfo &plugin, set<PluginDependency,PluginDependencyCmp> &dependencies) {
+  bool PluginsListManager::getPluginDependencies(const PluginInfo &plugin, set<PluginDependency,PluginDependencyCmp> &dependencies,string &errorMessage) {
     for(vector<PluginDependency>::const_iterator it=plugin.dependencies.begin();it!=plugin.dependencies.end();++it) {
       dependencies.insert(*it);
       const PluginInfo* nextPlugin=getPluginInformation((*it).name,(*it).type,(*it).version);
-      if(!nextPlugin)
-	return false;
-      if(!getPluginDependencies(*nextPlugin,dependencies))
-	return false;
+      if(!nextPlugin){
+        errorMessage=(*it).name+" version : "+(*it).version;
+        return false;
+      }
+      if(!getPluginDependencies(*nextPlugin,dependencies,errorMessage))
+        return false;
     }
     return true;
   }
 
-  bool PluginsListManager::getPluginDependenciesNotInstalled(const PluginInfo &plugin, set<PluginDependency,PluginDependencyCmp> &dependencies) {
+  bool PluginsListManager::getPluginDependenciesNotInstalled(const PluginInfo &plugin, set<PluginDependency,PluginDependencyCmp> &dependencies,string &errorMessage) {
     set<PluginDependency,PluginDependencyCmp> allDependencies;
-    if(!getPluginDependencies(plugin,allDependencies))
+    if(!getPluginDependencies(plugin,allDependencies,errorMessage))
       return false;
     for(set<PluginDependency,PluginDependencyCmp>::const_iterator it=allDependencies.begin();it!=allDependencies.end();++it) {
       const PluginInfo* nextPlugin=getPluginInformation((*it).name,(*it).type,(*it).version);
       if(!nextPlugin)
-	return false;
+        return false;
       if(!pluginIsInstalled(*nextPlugin))
-	dependencies.insert(*it);
+        dependencies.insert(*it);
     }
     return true;
   }
 
-  bool PluginsListManager::getPluginDependenciesToInstall(const PluginInfo &plugin, set<DistPluginInfo,PluginCmp> &toInstall, set<LocalPluginInfo,PluginCmp> &toRemove) {
+  bool PluginsListManager::getPluginDependenciesToInstall(const PluginInfo &plugin, set<DistPluginInfo,PluginCmp> &toInstall, set<LocalPluginInfo,PluginCmp> &toRemove,string &errorMessage) {
     set<PluginDependency,PluginDependencyCmp> dependenciesNotInstalled;
-    if(!getPluginDependenciesNotInstalled(plugin,dependenciesNotInstalled))
+    if(!getPluginDependenciesNotInstalled(plugin,dependenciesNotInstalled,errorMessage))
       return false;
     for(set<PluginDependency,PluginDependencyCmp>::iterator it=dependenciesNotInstalled.begin();it!=dependenciesNotInstalled.end();++it) {
       const PluginInfo* nextPlugin=getPluginInformation((*it).name,(*it).type,(*it).version);
       if(!nextPlugin)
-	return false;
+        return false;
       assert(!nextPlugin->local);
       toInstall.insert(*(DistPluginInfo*)nextPlugin);
       vector<const PluginInfo *> resultList;
