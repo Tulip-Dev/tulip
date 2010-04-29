@@ -25,47 +25,34 @@
 using namespace tlp;
 using namespace std;
 
+const unsigned int arrowWithLineSize=8;
+const Coord arrowWithLine[] = {Coord(0,3,0),Coord(-5,-5,0),Coord(5,-5,0),Coord(0,3,0),Coord(5,3,0),Coord(5,5,0),Coord(-5,5,0),Coord(-5,3,0)};
+const unsigned int twoArrowWithLineSize=10;
+const Coord twoArrowWithLine[] = {Coord(0,0,0),Coord(5,-5,0),Coord(-5,-5,0),Coord(0,0,0),Coord(-5,0,0),Coord(5,0,0),Coord(0,0,0),Coord(5,5,0),Coord(-5,5,0),Coord(0,0,0)};
+
 //========================================================================================
 MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),layer(NULL),composite(NULL){
   operation = NONE;
 
-  //composite.addGlEntity(&centerRect, "CenterRectangle");
-  //composite.addGlEntity(&_controls[0], "left");
   _controls[0].resizePoints(3); //triangle
   _controls[0].setStencil(0);
-  //composite.addGlEntity(&_controls[1], "top-left");
   _controls[1].resizePoints(4); //square
   _controls[1].setStencil(0);
-  //composite.addGlEntity(&_controls[2], "top");
   _controls[2].resizePoints(3); //triangle
   _controls[2].setStencil(0);
-  //composite.addGlEntity(&_controls[3], "top-right");
   _controls[3].resizePoints(30); //circle
   _controls[3].setStencil(0);
-  //composite.addGlEntity(&_controls[4], "right");
   _controls[4].resizePoints(3); //triangle
   _controls[4].setStencil(0);
-  //composite.addGlEntity(&_controls[5], "bottom-right");
   _controls[5].resizePoints(4); //square
   _controls[5].setStencil(0);
-  //composite.addGlEntity(&_controls[6], "bottom");
   _controls[6].resizePoints(3); //triangle
   _controls[6].setStencil(0);
-  //composite.addGlEntity(&_controls[7], "bottom-left");
   _controls[7].resizePoints(30); //circle
   _controls[7].setStencil(0);
 
   centerRect.setStencil(0);
-
-
-  //widget->getScene()->getLayout()->addGlEntity(&composite);
-
-  /*centerRect.setRenderState(GlAD_ZEnable, false);
-  centerRect.setRenderState(GlAD_Culling, false);
-  centerRect.setRenderState(GlAD_Wireframe, false);
-  centerRect.setRenderState(GlAD_Solid, true);
-  centerRect.setRenderState(GlAD_AlphaBlending, true);
-  centerRect.setRenderState(GlAD_Lighting, false);*/
+  advRect.setStencil(0);
 
   Color hudColor(128,128,128,128);
   centerRect.setFillMode(true);
@@ -74,18 +61,19 @@ MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),layer(NULL),comp
   centerRect.fcolor(1) =  hudColor;
   centerRect.fcolor(2) =  hudColor;
   centerRect.fcolor(3) =  hudColor;
+  hudColor=Color(128,128,128,64);
+  advRect.setFillMode(true);
+  advRect.setOutlineMode(false);
+  advRect.fcolor(0) =  hudColor;
+  advRect.fcolor(1) =  hudColor;
+  advRect.fcolor(2) =  hudColor;
+  advRect.fcolor(3) =  hudColor;
 
   for(unsigned int i=0; i < 8; ++i) {
     _controls[i].setFillMode(true);
     _controls[i].setOutlineMode(true);
     _controls[i].fcolor(0) = Color(255,40,40,200);
     _controls[i].ocolor(0) = Color(128,20,20,200);
-
-    /*_controls[i].setRenderState(GlAD_ZEnable, false);
-    _controls[i].setRenderState(GlAD_Culling, false);
-    _controls[i].setRenderState(GlAD_AlphaBlending, true);
-    _controls[i].setRenderState(GlAD_Wireframe, false);
-    _controls[i].setRenderState(GlAD_Solid, true);*/
   }
 }
 //========================================================================================
@@ -93,6 +81,62 @@ MouseSelectionEditor::~MouseSelectionEditor(){
   if(layer){
     glMainWidget->getScene()->removeLayer(layer,true);
     layer=NULL;
+  }
+}
+//========================================================================================
+void MouseSelectionEditor::getOperation(GlEntity *select){
+  //left <-> right anchor
+  // stretch_x
+  if (select == &_controls[0] || select == &_controls[4]) {
+    operation = STRETCH_X;
+    glMainWidget->setCursor(QCursor(Qt::SizeHorCursor));
+    return;
+  }
+  //top <-> bottom anchor
+  // stretch_y
+  if (select == &_controls[2] || select == &_controls[6]) {
+    operation = STRETCH_Y;
+    glMainWidget->setCursor(QCursor(Qt::SizeVerCursor));
+    return;
+  }
+  //Corner anchor bottom-right top-left
+  // rotate
+  if (select == &_controls[3] || select == &_controls[7]) {
+    glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
+    operation = ROTATE_Z;
+    return;
+  }
+  //Corner anchor top-right bottom-left
+  //stretch_xy
+  if (select == &_controls[1] || select == &_controls[5]) {
+    operation = STRETCH_XY;
+    glMainWidget->setCursor(QCursor(Qt::SizeFDiagCursor));
+    return;
+  }
+
+  if( select == &_advControls[0]){
+    operation = ALIGN_TOP;
+    return;
+  }
+  if( select == &_advControls[1]){
+    operation = ALIGN_BOTTOM;
+    return;
+  }
+  if( select == &_advControls[2]){
+    operation = ALIGN_LEFT;
+    return;
+  }
+  if( select == &_advControls[3]){
+    operation = ALIGN_RIGHT;
+    return;
+  }
+  if( select == &_advControls[4]){
+    operation = ALIGN_HORIZONTALLY;
+    return;
+  }
+  if( select == &_advControls[5]){
+    operation = ALIGN_VERTICALLY;
+    return;
   }
 }
 //========================================================================================
@@ -147,6 +191,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       }
 
       int shapeId=-1;
+      bool advShape=false;
 
       for (unsigned int i = 0; (i < select.size()) && (shapeId==-1); ++i) {
         for(int j=0 ; j<8;++j) {
@@ -154,37 +199,30 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
             shapeId=i;
           }
         }
+        for(int j=0 ; j<6;++j) {
+          if(select[i]==&_advControls[j]){
+            advShape=true;
+            shapeId=i;
+          }
+        }
       }
       if (shapeId != -1) {
-        ((GlCircle *)select[shapeId])->fcolor(0) = Color(40,255,40,200);
-        ((GlCircle *)select[shapeId])->ocolor(0) = Color(20,128,20,200);
-        //left <-> right anchor
-        // stretch_x
-        if (select[shapeId] == &_controls[0] || select[shapeId] == &_controls[4]) {
-          operation = STRETCH_X;
-          glMainWidget->setCursor(QCursor(Qt::SizeHorCursor));
-        }else
-          //top <-> bottom anchor
-          // stretch_y
-          if (select[shapeId] == &_controls[2] || select[shapeId] == &_controls[6]) {
-            operation = STRETCH_Y;
-            glMainWidget->setCursor(QCursor(Qt::SizeVerCursor));
-          }
-          else
-            //Corner anchor bottom-right top-left
-            // rotate
-            if (select[shapeId] == &_controls[3] || select[shapeId] == &_controls[7]) {
-              glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
-              operation = ROTATE_Z;
-            }
-            else
-              //Corner anchor top-right bottom-left
-              //stretch_xy
-              if (select[shapeId] == &_controls[1] || select[shapeId] == &_controls[5]) {
-                operation = STRETCH_XY;
-                glMainWidget->setCursor(QCursor(Qt::SizeFDiagCursor));
+        if(!advShape){
+          ((GlCircle *)select[shapeId])->fcolor(0) = Color(40,255,40,200);
+          ((GlCircle *)select[shapeId])->ocolor(0) = Color(20,128,20,200);
+        }
+        getOperation(select[shapeId]);
 
-              }
+        switch (operation) {
+        case ALIGN_TOP:
+        case ALIGN_BOTTOM:
+        case ALIGN_LEFT:
+        case ALIGN_RIGHT:
+        case ALIGN_VERTICALLY:
+        case ALIGN_HORIZONTALLY:
+          mAlign(operation,glMainWidget);
+          return true;
+        }
       }
       else {
         if (qMouseEv->modifiers() &
@@ -231,7 +269,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       operation != NONE) {
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     stopEdition();
-    for(unsigned int i=0; i < 8; ++i) { //restore colors
+    //restore colors
+    for(unsigned int i=0; i < 8; ++i) {
       _controls[i].fcolor(0) = Color(255,40,40,200);
       _controls[i].ocolor(0) = Color(128,20,20,200);
     }
@@ -278,6 +317,7 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
       layer->addGlEntity(composite,"selectionComposite");
     }
     composite->addGlEntity(&centerRect, "CenterRectangle");
+    composite->addGlEntity(&advRect, "AdvRectangle");
     composite->addGlEntity(&_controls[0], "left");
     composite->addGlEntity(&_controls[1], "top-left");
     composite->addGlEntity(&_controls[2], "top");
@@ -286,6 +326,12 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
     composite->addGlEntity(&_controls[5], "bottom-right");
     composite->addGlEntity(&_controls[6], "bottom");
     composite->addGlEntity(&_controls[7], "bottom-left");
+    composite->addGlEntity(&_advControls[0], "top");
+    composite->addGlEntity(&_advControls[1], "bottom");
+    composite->addGlEntity(&_advControls[2], "right");
+    composite->addGlEntity(&_advControls[3], "left");
+    composite->addGlEntity(&_advControls[4], "horizontally");
+    composite->addGlEntity(&_advControls[5], "vertically");
     this->glMainWidget=glMainWidget;
     return true;
   }else{
@@ -499,6 +545,93 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
   }
 }
 //========================================================================================
+void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*){
+  Observable::holdObservers();
+  _graph->push();
+
+  Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
+  bool init=false;
+  float min,max;
+  while (itN->hasNext()) {
+    node n=itN->next();
+
+    float valueMin,valueMax;
+    switch(operation){
+    case ALIGN_TOP:
+      valueMax=_layout->getNodeValue(n)[1]+_sizes->getNodeValue(n)[1];
+      break;
+    case ALIGN_BOTTOM:
+      valueMin=_layout->getNodeValue(n)[1]-_sizes->getNodeValue(n)[1];
+      break;
+    case ALIGN_HORIZONTALLY:
+      valueMax=_layout->getNodeValue(n)[1]+_sizes->getNodeValue(n)[1];
+      valueMin=_layout->getNodeValue(n)[1]-_sizes->getNodeValue(n)[1];
+      break;
+    case ALIGN_LEFT:
+      valueMin=_layout->getNodeValue(n)[0]-_sizes->getNodeValue(n)[0];
+      break;
+    case ALIGN_RIGHT:
+      valueMax=_layout->getNodeValue(n)[0]+_sizes->getNodeValue(n)[0];
+      break;
+    case ALIGN_VERTICALLY:
+      valueMax=_layout->getNodeValue(n)[0]-_sizes->getNodeValue(n)[0];
+      valueMin=_layout->getNodeValue(n)[0]+_sizes->getNodeValue(n)[0];
+      break;
+    }
+    if(!init){
+      max=valueMax;
+      min=valueMin;
+      init=true;
+    }else{
+      switch(operation){
+      case ALIGN_TOP:
+      case ALIGN_RIGHT:
+        if(valueMax>max)
+          max=valueMax;
+        break;
+      case ALIGN_BOTTOM:
+      case ALIGN_LEFT:
+        if(valueMin<min)
+          min=valueMin;
+        break;
+      case ALIGN_HORIZONTALLY:
+      case ALIGN_VERTICALLY:
+        if(valueMax>max) max=valueMax;
+        if(valueMin<min) min=valueMin;
+        break;
+      }
+    }
+  }
+
+  itN = _selection->getNodesEqualTo(true, _graph);
+  while (itN->hasNext()) {
+    node n=itN->next();
+    Coord old(_layout->getNodeValue(n));
+    switch(operation){
+    case ALIGN_TOP:
+      old[1]=max-_sizes->getNodeValue(n)[1];
+      break;
+    case ALIGN_BOTTOM:
+      old[1]=min+_sizes->getNodeValue(n)[1];
+      break;
+    case ALIGN_HORIZONTALLY:
+      old[1]=(max+min)/2;
+      break;
+    case ALIGN_LEFT:
+      old[0]=min+_sizes->getNodeValue(n)[0];
+      break;
+    case ALIGN_RIGHT:
+      old[0]=max-_sizes->getNodeValue(n)[0];
+      break;
+    case ALIGN_VERTICALLY:
+      old[0]=(max+min)/2;
+      break;
+    }
+    _layout->setNodeValue(n,old);
+  }
+  Observable::unholdObservers();
+}
+//========================================================================================
 Coord minCoord(const Coord &v1, const Coord &v2) {
   Coord result;
   for (unsigned int i =0; i<3; ++i)
@@ -604,6 +737,8 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   //Parameters of the rectangle that shows the selected area.
   centerRect.setTopLeftPos(positions[1]);
   centerRect.setBottomRightPos(positions[5]);
+  advRect.setTopLeftPos(positions[7]+Coord(-92,16,0));
+  advRect.setBottomRightPos(positions[7]);
 
   _controls[0].set(positions[0], 7, 0.0); //t
   _controls[1].set(positions[1], 6, M_PI/4.); //c
@@ -613,6 +748,30 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   _controls[5].set(positions[5], 6, M_PI/4.);//c
   _controls[6].set(positions[6], 7, M_PI/2.);//
   _controls[7].set(positions[7], 5, 0.);//s
+
+  vector<Coord> advControlVect;
+  for(unsigned int i=0;i<arrowWithLineSize;++i){advControlVect.push_back(arrowWithLine[i]+positions[7]+Coord(-11,8,0));}
+  _advControls[0] = GlComplexPolygon(advControlVect,Color(255,40,40,200),Color(128,20,20,200));
+  advControlVect.clear();
+  for(unsigned int i=0;i<arrowWithLineSize;++i){advControlVect.push_back(Coord(arrowWithLine[i][0],-arrowWithLine[i][1],0)+positions[7]+Coord(-25,8,0));}
+  _advControls[1] = GlComplexPolygon(advControlVect,Color(255,40,40,200),Color(128,20,20,200));
+  advControlVect.clear();
+  for(unsigned int i=0;i<arrowWithLineSize;++i){advControlVect.push_back(Coord(-arrowWithLine[i][1],arrowWithLine[i][0],0)+positions[7]+Coord(-39,8,0));}
+  _advControls[2] = GlComplexPolygon(advControlVect,Color(255,40,40,200),Color(128,20,20,200));
+  advControlVect.clear();
+  for(unsigned int i=0;i<arrowWithLineSize;++i){advControlVect.push_back(Coord(arrowWithLine[i][1],arrowWithLine[i][0],0)+positions[7]+Coord(-53,8,0));}
+  _advControls[3] = GlComplexPolygon(advControlVect,Color(255,40,40,200),Color(128,20,20,200));
+  advControlVect.clear();
+  for(unsigned int i=0;i<twoArrowWithLineSize;++i){advControlVect.push_back(twoArrowWithLine[i]+positions[7]+Coord(-67,8,0));}
+  _advControls[4] = GlComplexPolygon(advControlVect,Color(255,40,40,200),Color(128,20,20,200));
+  advControlVect.clear();
+  for(unsigned int i=0;i<twoArrowWithLineSize;++i){advControlVect.push_back(Coord(twoArrowWithLine[i][1],twoArrowWithLine[i][0],0)+positions[7]+Coord(-81,8,0));}
+  _advControls[5] = GlComplexPolygon(advControlVect,Color(255,40,40,200),Color(128,20,20,200));
+  advControlVect.clear();
+
+  for(unsigned int i=0;i<6;++i){
+    _advControls[i].setStencil(0);
+  }
 
   return true;
 }

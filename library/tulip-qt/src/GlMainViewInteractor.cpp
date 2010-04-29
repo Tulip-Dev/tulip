@@ -86,7 +86,9 @@ InteractorSelectionModifier::InteractorSelectionModifier():NodeLinkDiagramCompon
 			     "Resize only selected Nodes : <ul><li><b>Ctrl + Mouse left</b> down on triangle + moves</li></ul>" +
 			     "Rotate : <ul><li><b>Mouse left</b> down on circle + moves</li></ul>" +
  			     "Rotate only selected Nodes : <ul><li><b>Ctrl + Mouse left</b> down on circle + moves</li></ul>" +
-			     "Translate : <ul><li><b>Mouse left</b> down inside rectangle + moves</li></ul>");
+                 "Translate : <ul><li><b>Mouse left</b> down inside rectangle + moves</li></ul>"+
+                 "Align vertically/horizontally : <ul><li><b>Mouse left</b> click on two arrows icon in top right zone</li></ul>"+
+                 "Align left/right/top/bottom : <ul><li><b>Mouse left</b> click on simple arrow icon in top right zone</li></ul>");
 }
 
 void InteractorSelectionModifier::construct(){

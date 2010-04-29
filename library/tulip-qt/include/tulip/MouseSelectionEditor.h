@@ -8,6 +8,7 @@
 #include <tulip/GlComposite.h>
 #include <tulip/Observable.h>
 #include <tulip/InteractorComponent.h>
+#include <tulip/GlComplexPolygon.h>
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
@@ -27,7 +28,7 @@ namespace tlp {
     InteractorComponent *clone() { return new MouseSelectionEditor(); }
 
   private:
-    enum EditOperation { NONE=0, ROTATE_Z, ROTATE_XY, STRETCH_X, STRETCH_Y, STRETCH_XY, TRANSLATE};
+    enum EditOperation { NONE=0, ROTATE_Z, ROTATE_XY, STRETCH_X, STRETCH_Y, STRETCH_XY, TRANSLATE, ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT, ALIGN_VERTICALLY, ALIGN_HORIZONTALLY};
     enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
 
     Graph *_graph;
@@ -59,13 +60,17 @@ namespace tlp {
     GlLayer *layer;
     GlComposite *composite;
     GlCircle _controls[8];
+    GlComplexPolygon _advControls[6];
     GlRect centerRect;
+    GlRect advRect;
     Coord _layoutCenter;
 
     bool computeFFD(GlMainWidget*);
+    void getOperation(GlEntity *select);
     void mMouseTranslate(double, double, GlMainWidget*);
     void mMouseRotate(double, double, GlMainWidget*);
     void mMouseStretchAxis(double, double, GlMainWidget*);
+    void mAlign(EditOperation operation,GlMainWidget*);
 
 
   };
