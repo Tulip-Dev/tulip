@@ -8,7 +8,7 @@
  the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
-#ifndef Tulip_OPENGLCONFIGMANAGER_H
+#ifndef Tulip_OPENGLERRORVIEWER_H
 #define Tulip_OPENGLERRORVIEWER_H
 
 #ifdef HAVE_CONFIG_H
