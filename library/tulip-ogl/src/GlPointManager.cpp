@@ -1,4 +1,5 @@
-#include "tulip/GlewManager.h"
+#include "tulip/OpenGlConfigManager.h"
+
 #include "tulip/GlPointManager.h"
 
 #include <iostream>

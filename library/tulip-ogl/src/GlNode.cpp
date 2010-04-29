@@ -1,4 +1,4 @@
-#include "tulip/GlewManager.h"
+#include "tulip/OpenGlConfigManager.h"
 
 #include "tulip/GlNode.h"
 
@@ -130,7 +130,7 @@ namespace tlp {
           size=5;
       }
 
-      if(GlewManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()){
+      if(OpenGlConfigManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()){
         GlPointManager::getInst().addPoint(Coord(nodeCoord[0],nodeCoord[1], nodeCoord[2]+nodeSize[2]/2.),color,size);
       }else{
         glDisable(GL_LIGHTING);

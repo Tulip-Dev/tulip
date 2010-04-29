@@ -64,7 +64,7 @@ INCLUDES_H = \
 	tulip/ListPropertyWidget.h \
 	tulip/QGlPixelBufferManager.h \
 	tulip/BaseGraphicsViewComponentMacro.h \
-	tulip/QtTextureManagerErrorViewer.h \
+    tulip/QtOpenGlErrorViewer.h \
 	tulip/CSVParser.h \
 	tulip/ImportCSVDataWidget.h \
 	tulip/ImportCSVDataConfigurationWidget.h \

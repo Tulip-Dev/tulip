@@ -152,7 +152,7 @@ TODIST_SOURCES = \
 	QtMetaNodeRenderer.cpp \
 	QGlPixelBufferManager.cpp \
 	ListPropertyWidget.cpp \
-	QtTextureManagerErrorViewer.cpp \
+    QtOpenGlErrorViewer.cpp \
 	ImportCSVDataDialog.cpp \
 	ImportCSVDataWidget.cpp \
 	ImportCSVDataConfigurationWidget.cpp \

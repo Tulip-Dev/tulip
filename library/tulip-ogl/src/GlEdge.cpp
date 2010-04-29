@@ -1,4 +1,4 @@
-#include "tulip/GlewManager.h"
+#include "tulip/OpenGlConfigManager.h"
 #include "tulip/GlEdge.h"
 
 #include <tulip/Coord.h>
@@ -432,7 +432,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
   }
 
   if (lod < 5) {
-    if (GlewManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()) {
+    if (OpenGlConfigManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()) {
       GlPointManager::getInst().addPoint(srcCoord, srcCol, 1);
     } else {
       setColor(srcCol);

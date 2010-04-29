@@ -31,6 +31,8 @@
 
 namespace tlp {
 
+  class OpenGlErrorViewer;
+
   struct GlTexture {
     GLuint *id;
     int height;
@@ -43,16 +45,6 @@ namespace tlp {
     int  width;
     int  height;
     unsigned char *data;
-  };
-
-  class TLP_GL_SCOPE GlTextureManagerErrorViewer {
-
-  public :
-
-    virtual void displayError(const std::string &fileName,const std::string &errorMsg){
-      std::cerr << errorMsg << std::endl;
-    }
-
   };
 
   /** \brief Class to manage textures
@@ -81,8 +73,8 @@ namespace tlp {
     /**
      * Change the error viewer and return the old one
      */
-    GlTextureManagerErrorViewer *setErrorViewer(GlTextureManagerErrorViewer *errorViewer){
-      GlTextureManagerErrorViewer *oldErrorViewer=this->errorViewer;
+    OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer){
+      OpenGlErrorViewer *oldErrorViewer=this->errorViewer;
       this->errorViewer=errorViewer;
       return oldErrorViewer;
     }
@@ -156,13 +148,13 @@ namespace tlp {
     /**
      * empty private constructor for singleton
      */
-    GlTextureManager():errorViewer(new GlTextureManagerErrorViewer),animationFrame(0) {}
+    GlTextureManager();
 
     bool loadTexture(const std::string&,const TextureInfo &,GlTexture &);
 
     static GlTextureManager* inst;
 
-    GlTextureManagerErrorViewer *errorViewer;
+    OpenGlErrorViewer *errorViewer;
 
     unsigned long currentContext;
 

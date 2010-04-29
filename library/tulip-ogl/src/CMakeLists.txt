@@ -53,7 +53,7 @@ set(tulip-ogl_LIB_SRCS
 	GlEdge.cpp 
 	GlMetaNodeTrueRenderer.cpp 
 	GlDisplayListManager.cpp 
-	GlewManager.cpp 
+    OpenGlConfigManager.cpp
 	GlSceneObserver.cpp 
 	GlLine.cpp 
 	GlCurve.cpp 

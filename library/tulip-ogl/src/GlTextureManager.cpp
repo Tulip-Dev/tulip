@@ -1,3 +1,5 @@
+#include "tulip/OpenGlConfigManager.h"
+
 #include "tulip/GlTextureManager.h"
 
 extern "C" {
@@ -270,6 +272,9 @@ static bool loadPNG(const string &filename, TextureInfo *texture,string &errorMs
   return true;
 }
 #endif
+//====================================================================
+GlTextureManager::GlTextureManager():errorViewer(new OpenGlErrorViewer),animationFrame(0) {
+}
 //====================================================================
 bool GlTextureManager::loadTextureFromRawData(const string &textureName, int width, int height, bool hasAlpha, unsigned char *data)
 {

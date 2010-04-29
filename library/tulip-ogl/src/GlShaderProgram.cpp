@@ -19,7 +19,7 @@
 #include <algorithm>
 
 #include "tulip/GlShaderProgram.h"
-#include "tulip/GlewManager.h"
+#include "tulip/OpenGlConfigManager.h"
 
 using namespace std;
 
@@ -250,8 +250,8 @@ void GlShaderProgram::desactivate() {
 }
 
 bool GlShaderProgram::shaderProgramsSupported() {
-	GlewManager::getInst().initGlew();
-	if (!GlewManager::getInst().canUseGlew()) {
+    OpenGlConfigManager::getInst().initGlew();
+    if (!OpenGlConfigManager::getInst().canUseGlew()) {
 		return false;
 	}
 	static bool vertexShaderExtOk = glewIsSupported("GL_ARB_vertex_shader");
@@ -260,8 +260,8 @@ bool GlShaderProgram::shaderProgramsSupported() {
 }
 
 bool GlShaderProgram::geometryShaderSupported() {
-	GlewManager::getInst().initGlew();
-	if (!GlewManager::getInst().canUseGlew()) {
+    OpenGlConfigManager::getInst().initGlew();
+    if (!OpenGlConfigManager::getInst().canUseGlew()) {
 		return false;
 	}
 	static bool geometryShaderExtOk = glewIsSupported("GL_EXT_geometry_shader4");

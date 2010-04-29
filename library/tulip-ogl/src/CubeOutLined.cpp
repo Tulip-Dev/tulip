@@ -5,7 +5,9 @@
 #include <tulip/StringProperty.h>
 #include <tulip/DoubleProperty.h>
 
-#include "tulip/GlewManager.h"
+#include <GL/glew.h>
+
+#include "tulip/OpenGlConfigManager.h"
 #include "tulip/Glyph.h"
 #include "tulip/Graph.h"
 #include "tulip/GlTools.h"
@@ -138,7 +140,7 @@ namespace tlp {
   void CubeOutLined::draw(node n, float lod) {
     glEnable(GL_LIGHTING);
 
-    bool canUseGlew=GlewManager::getInst().canUseGlew();
+    bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
 
     if(canUseGlew){
       if(buffers[0]==0){

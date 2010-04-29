@@ -63,7 +63,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/QGlPixelBufferManager.h
 	tulip/QtQuadTreeLODCalculator.h
 	tulip/BaseGraphicsViewComponentMacro.h
-    tulip/QtTextureManagerErrorViewer.h
+    tulip/QtOpenGlErrorViewer.h
     tulip/CSVParser.h
     tulip/ImportCSVDataWidget.h
     tulip/ImportCSVDataConfigurationWidget.h

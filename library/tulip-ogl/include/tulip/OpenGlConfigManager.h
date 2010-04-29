@@ -8,12 +8,11 @@
  the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
-#ifndef Tulip_GLEWMANAGER_H
-#define Tulip_GLEWMANAGER_H
+#ifndef Tulip_OPENGLCONFIGMANAGER_H
+#define Tulip_OPENGLCONFIGMANAGER_H
 
 #include <cassert>
 #include <iostream>
-#include <GL/glew.h>
 #if defined(__APPLE__)
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -32,54 +31,40 @@
 
 namespace tlp {
 
-  /** \brief Singleton used to manage Glew
+  /** \brief Singleton used to manage OpenGl configuration
    *
-   * Singleton used to manage Glew.
+   * Singleton used to manage OpenGl configuration
    */
-  class TLP_GL_SCOPE GlewManager {
+  class TLP_GL_SCOPE OpenGlConfigManager {
 
   public:
 
     /**
      * Return the current instance. If instance doesn't exist, create it.
      */
-    static GlewManager &getInst() {
+    static OpenGlConfigManager &getInst() {
       if(!inst)
-        inst=new GlewManager();
+        inst=new OpenGlConfigManager();
       return *inst;
     }
 
     /**
      * Init Glew
      */
-    void initGlew() {
-      if(_glewIsInit)
-        return;
-      GLenum err = glewInit();
-      if (GLEW_OK != err) {
-        glewIsOk=false;
-      }else{
-	if(((void*)(glGenBuffers))!=NULL){
-	  glewIsOk=true;
-	}else{
-	  glewIsOk=false;
-	}
-      }
-      _glewIsInit=true;
-    }
+    void initGlew();
 
     /**
      * Glew is init
      */
     bool glewIsInit() {
-     return _glewIsInit;
+     return glewIsChecked;
     }
 
     /**
      * Return if glew can be used
      */
     bool canUseGlew() {
-      if(!_glewIsInit)
+      if(!glewIsChecked)
         return false;
       return glewIsOk;
     }
@@ -89,16 +74,16 @@ namespace tlp {
     /**
      * Private constructor for singleton
      */
-    GlewManager():_glewIsInit(false),glewIsOk(false) {
+    OpenGlConfigManager():glewIsChecked(false),glewIsOk(false) {
     }
 
-    static GlewManager* inst;
+    static OpenGlConfigManager* inst;
 
-    bool _glewIsInit;
+    bool glewIsChecked;
     bool glewIsOk;
 
   };
 
 }
 
-#endif // Tulip_GLEWMANAGER_H
+#endif

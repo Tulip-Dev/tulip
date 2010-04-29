@@ -67,6 +67,8 @@ nobase_include_HEADERS = \
 	tulip/GlShaderProgram.h \
 	tulip/GlOpenUniformCubicBSpline.h \
 	tulip/GlCubicBSplineInterpolation.h \
+    tulip/OpenGlConfigManager.h \
+    tulip/OpenGlErrorViewer.h \
 	tulip/AbstractGlCurve.h
 
 noinst_HEADERS = \
@@ -88,5 +90,4 @@ noinst_HEADERS = \
 	tulip/GlCPULODCalculator.h \
 	tulip/GlSVGFeedBackBuilder.h \
 	tulip/GlEPSFeedBackBuilder.h \
-	tulip/GlewManager.h \
 	tulip/GlPointManager.h

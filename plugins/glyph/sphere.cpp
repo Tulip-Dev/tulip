@@ -1,4 +1,6 @@
-#include <tulip/GlewManager.h>
+#include <GL/glew.h>
+
+#include <tulip/OpenGlConfigManager.h>
 
 #include <iostream>
 
@@ -66,65 +68,6 @@ static GLfloat *texturesCoord;
 static GLushort *indices;
 //=====================================================
 void Sphere::draw(node n, float lod) {
-
-	//	bool canUseGlew = GlewManager::getInst().canUseGlew();
-	//
-	//	int space = 9;
-	//	int vertexCount = (90 / space) * (360 / space) * 4;
-	//
-	//	if (canUseGlew) {
-	//		if (buffers[0] == 0) {
-	//			generateBuffers(space);
-	//		}
-	//	} else {
-	//		if (GlDisplayListManager::getInst().beginNewDisplayList("Sphere_sphere")) {
-	//			GLUquadricObj *quadratic;
-	//			quadratic = gluNewQuadric();
-	//			gluQuadricNormals(quadratic, GLU_SMOOTH);
-	//			gluQuadricTexture(quadratic, GL_TRUE);
-	//			gluSphere(quadratic, 0.5f, 30, 30);
-	//			GlDisplayListManager::getInst().endNewDisplayList();
-	//			gluDeleteQuadric(quadratic);
-	//		}
-	//	}
-	//
-	//	tlp::setMaterial(glGraphInputData->elementColor->getNodeValue(n));
-	//	string texFile = glGraphInputData->elementTexture->getNodeValue(n);
-	//
-	//	if (texFile.size() != 0) {
-	//		string texturePath = glGraphInputData->parameters->getTexturePath();
-	//		GlTextureManager::getInst().activateTexture(texturePath + texFile);
-	//	}
-	//
-	//	if (canUseGlew) {
-	//		glEnableClientState(GL_VERTEX_ARRAY);
-	//		glEnableClientState(GL_NORMAL_ARRAY);
-	//
-	//		glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-	//		glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
-	//		glNormalPointer(GL_FLOAT, 0, BUFFER_OFFSET(0));
-	//
-	//		if (texFile.size() != 0) {
-	//			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	//			glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-	//			glTexCoordPointer(2, GL_FLOAT, 0, BUFFER_OFFSET(0));
-	//		}
-	//
-	//		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
-	//		glDrawElements(GL_TRIANGLE_STRIP, vertexCount * 2, GL_UNSIGNED_SHORT,
-	//				BUFFER_OFFSET(0));
-	//
-	//		glDisableClientState(GL_VERTEX_ARRAY);
-	//		glDisableClientState(GL_NORMAL_ARRAY);
-	//		if (texFile.size() != 0)
-	//			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	//		glBindBuffer(GL_ARRAY_BUFFER, 0);
-	//		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	//	} else {
-	//		GlDisplayListManager::getInst().callDisplayList("Sphere_sphere");
-	//	}
-	//
-	//	GlTextureManager::getInst().desactivateTexture();
 	drawGlyph(glGraphInputData->elementColor->getNodeValue(n),
 			glGraphInputData->elementTexture->getNodeValue(n),
 			glGraphInputData->parameters->getTexturePath(), lod);
@@ -223,7 +166,7 @@ void Sphere::generateBuffers(int space) {
 	/*@}*/
 void Sphere::drawGlyph(const Color& glyphColor, const string& texture,
 		const string& texturePath, float lod) {
-	bool canUseGlew = GlewManager::getInst().canUseGlew();
+    bool canUseGlew = OpenGlConfigManager::getInst().canUseGlew();
 
 	int space = 9;
 	int vertexCount = (90 / space) * (360 / space) * 4;

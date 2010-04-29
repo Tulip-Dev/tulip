@@ -60,7 +60,7 @@ SET(tulip-qt_LIB_SRCS
     QGlPixelBufferManager.cpp
     QtQuadTreeLODCalculator.cpp
     ListPropertyWidget.cpp
-    QtTextureManagerErrorViewer.cpp
+    QtOpenGlErrorViewer.cpp
     CSVParser.cpp
     ImportCSVDataDialog.cpp
     ImportCSVDataWidget.cpp
