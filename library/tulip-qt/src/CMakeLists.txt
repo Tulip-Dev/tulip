@@ -85,6 +85,7 @@ set(tulip-qt_UI
      ../designer/ListPropertyWidget.ui
      ../designer/ChooseFileNameDialog.ui
      ../designer/ImportCSVDataConfigurationWidget.ui
+     ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui
 )
 
 set(tulip-qt_PLUGINS

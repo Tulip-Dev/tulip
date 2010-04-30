@@ -13,6 +13,7 @@ dist_noinst_DATA = FindSelection.ui \
 	SimpleStringsListSelectionWidget.ui \
 	DoubleStringsListSelectionWidget.ui \
 	ChooseFileNameDialog.ui \
+    QtOpenGlErrorViewerWithAskAgainDialog.ui \
 	i_addedge.png \
 	i_addnode.png \
 	i_bends.png \
@@ -32,5 +33,5 @@ dist_noinst_DATA = FindSelection.ui \
 	TulipQtResource.qrc \
 	ListPropertyWidget.ui
 
-SOURCES = FindSelection.ui GWOverviewWidget.ui RenderingParametersDialog.ui AugmentedDisplayDialog.ui TabWidget.ui PropertyDialog.ui CopyPropertyDialog.ui TulipStats.ui GridOptions.ui QtProgress.ui elementtable.xpm GlMainWidget.xpm gwoverviewwidget.xpm sghierarchywidget.xpm ListPropertyWidget.ui ChooseFileNameDialog.ui
+SOURCES = FindSelection.ui GWOverviewWidget.ui RenderingParametersDialog.ui AugmentedDisplayDialog.ui TabWidget.ui PropertyDialog.ui CopyPropertyDialog.ui TulipStats.ui GridOptions.ui QtProgress.ui elementtable.xpm GlMainWidget.xpm gwoverviewwidget.xpm sghierarchywidget.xpm ListPropertyWidget.ui ChooseFileNameDialog.ui QtOpenGlErrorViewerWithAskAgainDialog.ui
 EXTRA_DIST = $(SOURCES)

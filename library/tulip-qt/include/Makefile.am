@@ -106,7 +106,8 @@ BUILT_SOURCES = \
 	tulip/DoubleStringsListSelectionWidgetData.h \
 	tulip/ListPropertyWidgetData.h \
 	tulip/ChooseFileNameDialogData.h \
-	tulip/ImportCSVDataConfigurationWidgetData.h
+    tulip/ImportCSVDataConfigurationWidgetData.h \
+    tulip/QtOpenGlErrorViewerWithAskAgainDialogData.h
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 

@@ -30,8 +30,18 @@ namespace tlp {
 
   public :
 
-    virtual void displayError(const std::string &fileName,const std::string &errorMsg){
-      std::cerr << errorMsg << std::endl;
+    /**
+     * Simple error display with cerr output
+     */
+    virtual void displayError(const std::string &title,const std::string &errorMsg){
+      std::cerr << title << " : " << errorMsg << std::endl;
+    }
+
+    /**
+     * Simple error display with cerr output
+     */
+    virtual void displayErrorWithAskAgain(const std::string &title,const std::string &errorMsg){
+      displayError(title,errorMsg);
     }
 
   };

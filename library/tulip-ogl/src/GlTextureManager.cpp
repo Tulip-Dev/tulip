@@ -1,6 +1,7 @@
-#include "tulip/OpenGlConfigManager.h"
-
 #include "tulip/GlTextureManager.h"
+
+#include "tulip/OpenGlConfigManager.h"
+#include "tulip/OpenGlErrorViewer.h"
 
 extern "C" {
 #include <stdio.h>
@@ -332,7 +333,7 @@ bool GlTextureManager::loadTexture(const string& filename)
   else if (extension == "PNG") loader = &loadPNG;
 #endif
   else {
-    errorViewer->displayError(filename,"Warning : don't know extension "+extension+" for file : "+filename);
+    errorViewer->displayError("Texture manager","Warning : don't know extension "+extension+" for file : "+filename);
     //cerr << "Warning: don't know extension \"" << extension << "\"" << endl;
   }
 
@@ -340,7 +341,7 @@ bool GlTextureManager::loadTexture(const string& filename)
   string errorMsg;
   if ((loader == NULL) || !(*loader)(filename, &texti,errorMsg)) {
     if(errorMsg!="")
-      errorViewer->displayError(filename,errorMsg);
+      errorViewer->displayError("textureManager",errorMsg);
     glDisable(GL_TEXTURE_2D);
     return false;
   }
@@ -368,7 +369,7 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
   int height=texti.height;
 
   if((texti.height-(texti.height/texti.width)*texti.width)!=0 && (texti.width-(texti.width/texti.height)*texti.height)!=0){
-    errorViewer->displayError(filename,"Texture size is not valid\nTexture size should be of the form :\n - width=height or\n - height=N*width (for animated textures)\nfor file :"+filename);
+    errorViewer->displayError("Texture manager","Texture size is not valid\nTexture size should be of the form :\n - width=height or\n - height=N*width (for animated textures)\nfor file :"+filename);
     return false;
   }else{
     if(texti.width!=texti.height){
@@ -389,7 +390,7 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
         formatOk=true;
     }
     if(!formatOk){
-      errorViewer->displayError(filename,"Texture size is not valid\nTexture width should be a power of two\nfor file :"+filename);
+      errorViewer->displayError("Texture manager","Texture size is not valid\nTexture width should be a power of two\nfor file :"+filename);
       return false;
     }
 
@@ -399,7 +400,7 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
         formatOk=true;
     }
     if(!formatOk){
-      errorViewer->displayError(filename,"Texture size is not valid\nTexture height should be a power of two\nfor file :"+filename);
+      errorViewer->displayError("Texture manager","Texture size is not valid\nTexture height should be a power of two\nfor file :"+filename);
       return false;
     }
   }

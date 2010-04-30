@@ -31,6 +31,8 @@
 
 namespace tlp {
 
+  class OpenGlErrorViewer;
+
   /** \brief Singleton used to manage OpenGl configuration
    *
    * Singleton used to manage OpenGl configuration
@@ -47,6 +49,16 @@ namespace tlp {
         inst=new OpenGlConfigManager();
       return *inst;
     }
+
+    /**
+     * Change the error viewer and return the old one
+     */
+    OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer);
+
+    /**
+     * Check if system has good graphics card drivers
+     */
+    void checkDrivers();
 
     /**
      * Init Glew
@@ -74,12 +86,14 @@ namespace tlp {
     /**
      * Private constructor for singleton
      */
-    OpenGlConfigManager():glewIsChecked(false),glewIsOk(false) {
-    }
+    OpenGlConfigManager();
 
     static OpenGlConfigManager* inst;
 
+    OpenGlErrorViewer *errorViewer;
+
     bool glewIsChecked;
+    bool driversAreChecked;
     bool glewIsOk;
 
   };

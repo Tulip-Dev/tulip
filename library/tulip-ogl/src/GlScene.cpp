@@ -1,4 +1,4 @@
-#include "tulip/GlewManager.h"
+#include "tulip/OpenGlConfigManager.h"
 
 #include "tulip/GlScene.h"
 
@@ -107,8 +107,10 @@ namespace tlp {
   }
 
   void GlScene::initGlParameters() {
-	if(!GlewManager::getInst().glewIsInit())
-      GlewManager::getInst().initGlew();
+    OpenGlConfigManager::getInst().checkDrivers();
+    if(!OpenGlConfigManager::getInst().glewIsInit())
+      OpenGlConfigManager::getInst().initGlew();
+
 	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 	bool antialiased = true;
 	if(glGraphComposite) {

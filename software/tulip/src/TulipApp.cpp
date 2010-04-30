@@ -80,6 +80,7 @@
 #include <tulip/MainController.h>
 #include <tulip/QtProgress.h>
 #include <tulip/PreferenceManager.h>
+#include <tulip/OpenGlConfigManager.h>
 #include <tulip/QtOpenGlErrorViewer.h>
 
 #include <PluginsHelp.h>
@@ -195,8 +196,12 @@ void TulipApp::startTulip() {
   buildMenus();
   this->show();
   enableElements(false);
+
   /*Load preference*/
   PreferenceDialog::loadPreference();
+
+  OpenGlErrorViewer *oldErrorViewer=OpenGlConfigManager::getInst().setErrorViewer(new QtOpenGlErrorViewer);
+  delete oldErrorViewer;
 
   if(PreferenceManager::getInst().getNetworkConnection()){
     pluginsUpdateChecker = new PluginsUpdateChecker(pluginLoader.pluginsList,this);
