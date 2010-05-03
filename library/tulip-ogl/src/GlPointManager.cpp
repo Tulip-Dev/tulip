@@ -1,3 +1,5 @@
+#include <GL/glew.h>
+
 #include "tulip/OpenGlConfigManager.h"
 
 #include "tulip/GlPointManager.h"
