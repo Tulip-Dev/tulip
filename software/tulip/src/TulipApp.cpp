@@ -452,7 +452,8 @@ void TulipApp::fileSave() {
   doFileSave(tabWidget->currentIndex());
 }
 //**********************************************************************
-bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string filename, string author, string comments) {
+bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string filename,
+			  string author, string comments) {
 
   DataSet dataSet;
   StructDef parameter = ExportModuleFactory::factory->getPluginParameters(plugin);
@@ -491,7 +492,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
 	QFileDialog::getSaveFileName(this,
 				     this->windowTitle().toAscii().data());
     if (name == QString::null) return false;
-    filename = name.toAscii().data();
+    filename = name.toUtf8().data();
   }
   bool result;
   ostream *os;
@@ -517,7 +518,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
   } else {
     statusBar()->showMessage((filename + " saved.").c_str());
   }
-  tabWidget->setTabText(tabWidget->currentIndex(),filename.c_str());
+  tabWidget->setTabText(tabWidget->currentIndex(), QString::fromUtf8(filename.c_str()));
   //setNavigateCaption(filename);
   //setGraphName(graph, QString(filename.c_str()));
   delete os;
@@ -551,7 +552,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       if (s == QString::null)
 	cancel=true;
       else
-	dataSet.set("file::filename", string(s.toAscii().data()));
+	dataSet.set("file::filename", string(s.toUtf8().data()));
     }else {
       noPlugin = false;
       s = QString::null;
@@ -563,7 +564,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     }
   } else {
     plugin = &tmpStr;
-    dataSet.set("file::filename", string(s.toAscii().data()));
+    dataSet.set("file::filename", string(s.toUtf8().data()));
     noPlugin = true;
   }
   if (!cancel) {
