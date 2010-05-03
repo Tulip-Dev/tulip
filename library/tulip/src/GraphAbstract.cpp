@@ -100,7 +100,7 @@ void GraphAbstract::removeSubGraph(Graph * toRemove) {
 //=========================================================================
 void GraphAbstract::delAllSubGraphsInternal(Graph * toRemove,
 					    bool deleteSubGraphs) {
-  if (this != toRemove->getSuperGraph())
+  if (this != toRemove->getSuperGraph() || this==toRemove) // this==toRemove : root graph
     return;
   notifyDelSubGraph(this, toRemove);
   removeSubGraph(toRemove);
