@@ -700,7 +700,7 @@ void Ordering::selectAndUpdate(node n) {
   vector<node> noeuds;
   vector<Face > faces = vector<Face>();
   vector<bool> splited;
-  MutableContainer<bool>::MutableContainer on_cont;
+  MutableContainer<bool> on_cont;
   node n1;
 
   res.push_back(n);
