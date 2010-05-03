@@ -162,6 +162,9 @@ ENDIF(WIN32)
 IF(APPLE)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__APPLE__ -DQT_ASSISTANT='\"Assistant_adp\"'")
 ENDIF(APPLE)
+IF(UNIX)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_UNIX")
+ENDIF(UNIX)
 
 ## -----------------------------------------------------------------------------------------------
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in
