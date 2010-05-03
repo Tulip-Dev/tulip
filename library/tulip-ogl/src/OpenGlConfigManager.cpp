@@ -33,7 +33,6 @@ namespace tlp
       return;
     driversAreChecked=true;
 
-#ifdef _UNIX
     bool nvidia=false;
     bool ati=false;
     string vendor(((const char*)glGetString(GL_VENDOR)));
@@ -42,10 +41,9 @@ namespace tlp
     if(vendor.find("ATI")!=string::npos)
       ati=true;
 
-    if(!nvidia || !ati){
-      errorViewer->displayErrorWithAskAgain("Video card or drivers warning","Warning :\n\nIt seems that your video card not powerful enough\nor your drivers are not properly configured to use\nevery capacity to Tulip\n\nIf you have an ATI or NVIDIA card, we recommend\nto install the official drivers");
+    if(!nvidia && !ati){
+      errorViewer->displayErrorWithAskAgain("Graphics card warning","Warning :\n\nYour graphics card is not powerful enough\nor it is not configured with the correct driver\nto suit the Tulip graphics rendering needs.\n\nIf you have an ATI or NVIDIA graphics card,\nwe recommend to install the official driver\nto benefit from an optimal graphics rendering.");
     }
-#endif
   }
 
   void OpenGlConfigManager::initGlew() {
