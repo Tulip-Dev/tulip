@@ -170,6 +170,15 @@ namespace tlp {
     cerr << "end [OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
   }
 
+  void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
+    node n=node(id);
+    bool selected=data->elementSelected->getNodeValue(n);
+    if(drawSelect!=selected)
+      return;
+
+    drawLabel(test,renderer,data);
+  }
+
   void GlNode::drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
     const Color& colorSelect2=PreferenceManager::getInst().getSelectionColor();
 

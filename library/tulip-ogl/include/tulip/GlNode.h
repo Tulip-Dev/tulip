@@ -34,6 +34,9 @@ namespace tlp {
     virtual BoundingBox getBoundingBox(GlGraphInputData* data);
 
     virtual void draw(float lod,GlGraphInputData *data,Camera* camera);
+
+    virtual void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+
     virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
 
     unsigned int id;

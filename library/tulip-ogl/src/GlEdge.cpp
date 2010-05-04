@@ -624,8 +624,16 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
   glDepthFunc(GL_LEQUAL);
 }
 
-void GlEdge::drawLabel(OcclusionTest* test, TextRenderer* renderer,
-    GlGraphInputData* data) {
+void GlEdge::drawLabel(bool drawSelect,OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data) {
+  edge e = edge(id);
+  bool select = data->elementSelected->getEdgeValue(e);
+  if(select!=drawSelect)
+    return;
+
+  drawLabel(test, renderer, data);
+}
+
+void GlEdge::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data) {
 
   edge e = edge(id);
 
