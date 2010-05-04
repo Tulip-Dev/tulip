@@ -65,7 +65,7 @@ namespace tlp {
   //**********************************************************************
   template<typename PROPERTY>
   bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,string name, string destination,View *view, bool query, bool redraw, bool push) {
-    changeProperty<PROPERTY>(graph,parent,name,destination,DataSet(),view,query,redraw,push);
+    return changeProperty<PROPERTY>(graph,parent,name,destination,DataSet(),view,query,redraw,push);
   }
   //**********************************************************************
   template<typename PROPERTY>
