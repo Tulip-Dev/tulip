@@ -112,7 +112,7 @@ void ImportCSVDataWidget::loadCSVData() {
   progress.setComment("Generating preview");
   progress.showPreview(false);
   progress.show();
-  parser->parse(propertiesWidget->getCsvFile().toStdString(), propertiesWidget->getSeparator().toStdString(),
+  parser->parse(propertiesWidget->getCsvFile().toUtf8().data(), propertiesWidget->getSeparator().toUtf8().data(),
       propertiesWidget, &progress);
 }
 
@@ -130,7 +130,7 @@ bool ImportCSVDataWidget::loadDataIntoGraph() {
   pluginProgress = &progress;
   progress.showPreview(false);
   progress.show();
-  parser->parse(propertiesWidget->getCsvFile().toStdString(), propertiesWidget->getSeparator().toStdString(), this,
+  parser->parse(propertiesWidget->getCsvFile().toUtf8().data(), propertiesWidget->getSeparator().toUtf8().data(), this,
       &progress);
   if (progress.state() == TLP_CANCEL) {
     return false;
@@ -246,6 +246,7 @@ PropertyInterface *ImportCSVDataWidget::getProperty(Graph* graph, const string& 
 ImportCSVDataConfigurationWidget::PropertyType ImportCSVDataWidget::guessVectorDataType(const vector<string> &dataRow) {
   ImportCSVDataConfigurationWidget::PropertyType dataType;
   for (vector<string>::const_iterator it = dataRow.begin(); it != dataRow.end(); ++it) {
+    //Store the first type.
     if (it == dataRow.begin()) {
       dataType = guessDataType(*it, decimalChars);
     }
@@ -253,6 +254,7 @@ ImportCSVDataConfigurationWidget::PropertyType ImportCSVDataWidget::guessVectorD
       if ((*it).empty()) {
         continue;
       }
+      //Test if the type found is compatible with previous types.
       ImportCSVDataConfigurationWidget::PropertyType currentDataType = guessDataType(*it, decimalChars);
       if (currentDataType != dataType) {
         if ((currentDataType == ImportCSVDataConfigurationWidget::Double && dataType
@@ -322,10 +324,12 @@ void ImportCSVDataWidget::begin() {
 }
 
 void ImportCSVDataWidget::token(unsigned int row, unsigned int column, const std::string& token) {
+  //Ignore the first row if it is used as property name.
   if (row == 0 && propertiesWidget->getPropertyOrientation() == ImportCSVDataConfigurationWidget::Column
       && propertiesWidget->useFirstRowAsPropertyName()) {
     return;
   }
+  //Ignore the first column if it is used as property name.
   if (column == 0 && propertiesWidget->getPropertyOrientation() == ImportCSVDataConfigurationWidget::Row
       && propertiesWidget->useFirstRowAsPropertyName()) {
     return;
@@ -374,7 +378,7 @@ PropertyInterface *ImportCSVDataWidget::getPropertyInterface(unsigned int row, u
 
   ImportCSVDataConfigurationWidget::PropertyType propertyType = propertiesWidget->getPropertyType(i);
   if (propertyType == ImportCSVDataConfigurationWidget::AutoDetect) {
-    //Determiner le type
+    //Determine type
     propertyType = guessDataType(token, decimalChars);
     //If auto detection fail set to default type : string.
     if (propertyType == ImportCSVDataConfigurationWidget::AutoDetect) {
