@@ -416,7 +416,7 @@ bool TulipApp::createController(const string &name,const string &graphName) {
     newWorkspace->setBackground(QBrush(QPixmap(QString::fromUtf8(":/background_logo.png"))));
 
     gridLayout->addWidget(newWorkspace, 0, 0, 1, 1);
-    int index=tabWidget->addTab(tab, graphName.c_str());
+    int index=tabWidget->addTab(tab, QString::fromUtf8(graphName.c_str()));
     tabWidget->setCurrentIndex(index);
 
     loadInterface(-1);
@@ -433,7 +433,7 @@ bool TulipApp::createController(const string &name,const string &graphName) {
 
   }else{
     controllerAutoLoad=false;
-    tabWidget->setTabText(0,graphName.c_str());
+    tabWidget->setTabText(0, QString::fromUtf8(graphName.c_str()));
   }
   return true;
 }
@@ -490,7 +490,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
     else
       name =
 	QFileDialog::getSaveFileName(this,
-				     this->windowTitle().toAscii().data());
+				     this->windowTitle().toUtf8().data());
     if (name == QString::null) return false;
     filename = name.toUtf8().data();
   }
@@ -516,7 +516,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
 			   "The file has not been saved"
 			   );
   } else {
-    statusBar()->showMessage((filename + " saved.").c_str());
+    statusBar()->showMessage(QString::fromUtf8((filename + " saved.").c_str()));
   }
   tabWidget->setTabText(tabWidget->currentIndex(), QString::fromUtf8(filename.c_str()));
   //setNavigateCaption(filename);
@@ -578,7 +578,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     QFileInfo tmp(s);
     QDir::setCurrent(tmp.dir().path() + "/");
 
-    QtProgress *progressBar = new QtProgress(this, string("Loading : ")+ s.section('/',-1).toAscii().data());
+    QtProgress *progressBar = new QtProgress(this, string("Loading : ")+ s.section('/',-1).toUtf8().data());
 
     result = tlp::importGraph(*plugin, dataSet, progressBar ,newGraph);
 
@@ -657,7 +657,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       delete newGraph;
       QApplication::restoreOverrideCursor();
       std::string errorTitle("Canceled import/Open: ");
-      errorTitle += s.section('/',-1).toAscii().data();
+      errorTitle += s.section('/',-1).toUtf8().data();
       QMessageBox::critical(this, errorTitle.c_str(), errorMessage.c_str());
       QApplication::restoreOverrideCursor();
       return;
@@ -683,13 +683,13 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       controllerData=newDataSet;
     }
 
-    createController(controllerName,s.toStdString());
+    createController(controllerName,s.toUtf8().data());
     tabIndexToController[tabWidget->currentIndex()]->setData(newGraph,controllerData);
     enableElements(true);
 
     if(noPlugin) {
       FileInfo vFile;
-      vFile.name = s.toAscii().data();
+      vFile.name = s.toUtf8().data();
       dataSet.get<std::string>("author", vFile.author);
       dataSet.get<std::string>("text::comments", vFile.comments);
       openFiles[tabIndexToController[tabWidget->currentIndex()]] = vFile;
@@ -850,7 +850,7 @@ void TulipApp::windowsMenuAboutToShow() {
 /* returns true if user canceled */
 bool TulipApp::askSaveGraph(const std::string name,int index) {
   string message = "Do you want to save this graph : " + name + " ?";
-  int answer = QMessageBox::question(this, "Save", message.c_str(),
+  int answer = QMessageBox::question(this, "Save", QString::fromUtf8(message.c_str()),
     QMessageBox::Yes | QMessageBox::Default,
     QMessageBox::No,
     QMessageBox::Cancel | QMessageBox::Escape);
@@ -1133,7 +1133,7 @@ void TulipApp::helpContents() {
 }
 //==============================================================
 void TulipApp::helpAssistantError(const QString &msg) {
-  cerr << msg.toAscii().data() << endl;
+  cerr << msg.toUtf8().data() << endl;
 }
 //==============================================================
 void TulipApp::fileExit() {

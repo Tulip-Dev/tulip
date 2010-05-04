@@ -509,7 +509,7 @@ namespace {
 	      string v;
 	      if( inSet->get
 		  (ip.name, v) )
-		te->setText( v.c_str() );
+		te->setText(QString::fromUtf8(v.c_str()));
 	    }
 	  } else {
 	    QLineEdit * le = new QLineEdit( "", this );
@@ -521,7 +521,7 @@ namespace {
 	      string v;
 	      if( inSet->get
 		  (ip.name, v) )
-		le->setText( v.c_str() );
+		le->setText(QString::fromUtf8(v.c_str()));
 	    }
 	    if ((ip.name.find("file::") == 0) ||
 		(ip.name.find("dir::") == 0)) {
