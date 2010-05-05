@@ -459,12 +459,14 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::update ( ObserverIterator begin, ObserverIterator end) {
+    // block update when we do an undo/redo
     if(blockUpdate)
       return;
 
     blockUpdate=true;
 
     if(graphToReload){
+      // enter here if a property is add/delete on the graph
       Graph *graph=graphToReload;
       graphToReload=NULL;
       
@@ -485,6 +487,7 @@ namespace tlp {
     if (!getCurrentGraph()) 
       return;
     
+    // Observe properties of the graph
     Iterator<PropertyInterface*> *it = getCurrentGraph()->getObjectProperties();
     while (it->hasNext()) {
       PropertyInterface* tmp = it->next();
@@ -505,8 +508,10 @@ namespace tlp {
   void MainController::addSubGraph(Graph *g, Graph *sg){
     if(getCurrentGraph()!=g)
       return;
+
     sg->addObserver(this);
     sg->addGraphObserver(this);
+
     clusterTreeWidget->update();
   }
   //**********************************************************************
@@ -516,8 +521,12 @@ namespace tlp {
       Graph *subgraph = itS->next();
       delSubGraph(sg,subgraph);
     }
-    
-    setCurrentGraph(g);
+
+    sg->removeObserver(this);
+    sg->removeGraphObserver(this);
+
+    if(getCurrentGraph()==sg)
+      setCurrentGraph(g);
     
     changeGraphOfViews(sg,g);
   }
@@ -911,11 +920,10 @@ namespace tlp {
     
     static QLabel *currentGraphInfosLabel = 0;
     if (!currentGraphInfosLabel) {
-      //mainWindowFacade.getStatusBar()->addWidget(new QLabel(mainWindowFacade.getStatusBar()), true);
       currentGraphInfosLabel = new QLabel(mainWindowFacade.getStatusBar());
       mainWindowFacade.getStatusBar()->addPermanentWidget(currentGraphInfosLabel);
     }
-    
+
     currentGraphNbNodes=getCurrentGraph()->numberOfNodes();
     currentGraphNbEdges=getCurrentGraph()->numberOfEdges();
     
