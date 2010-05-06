@@ -1196,7 +1196,7 @@
 (default "(1,1,0)" "(0.25,0.25,0.25)")
 )
 (attributes 
-(string "name" "unnamed_1")
+(string "name" "sub1")
 )
 (controller 
 (DataSet "MainController" 
