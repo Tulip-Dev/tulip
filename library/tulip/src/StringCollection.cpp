@@ -4,7 +4,8 @@
 using namespace std;
 using namespace tlp;
 
-StringCollection::StringCollection() {     
+StringCollection::StringCollection() {
+  current = 0;
 }
     
 StringCollection::StringCollection(const vector<string> &vectorParam) 
@@ -30,7 +31,7 @@ StringCollection::StringCollection(const string param) {
 } 
      
 StringCollection::StringCollection(const vector<string>&  vectorParam, 
-                           int currentParam)
+				   int currentParam)
   : vector<string>(vectorParam) {
   if (currentParam < int(size())) 
     current = currentParam;
@@ -52,7 +53,9 @@ StringCollection::StringCollection(const vector<string>& vectorParam,
 
     
 string StringCollection::getCurrentString() {
-  return at(current);
+  if (current < size())
+    return at(current);
+  return string();
 }
 
 
