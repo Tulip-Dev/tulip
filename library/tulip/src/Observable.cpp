@@ -10,11 +10,13 @@ using namespace tlp;
 #ifdef _WIN32 
 #ifdef DLL_EXPORT
 int Observable::holdCounter=0;
-ObserverMap Observable::holdMap;
+ObserverMap Observable::holdObserverMap;
+ObservableMap Observable::holdObservableMap;
 #endif
 #else
 int Observable::holdCounter=0;
-ObserverMap Observable::holdMap;
+ObserverMap Observable::holdObserverMap;
+ObservableMap Observable::holdObservableMap;
 #endif
 
 static bool unholdLock=false;
@@ -70,6 +72,23 @@ void Observable::notifyDestroy() {
     // during the call to the observableDestroyed method
     ++itlObs;
     observer->observableDestroyed(this);
+    if (holdCounter) {
+      // remove this from registered sets of Observable in holdObserverMap
+      ObservableMap::iterator ito = holdObservableMap.find(this);
+      if (ito != holdObservableMap.end()) {
+	set<Observer*>::iterator itob = (*ito).second.begin();
+	set<Observer*>::iterator itoe = (*ito).second.end();
+	while(itob != itoe) {
+#ifdef NDEBUG
+	  holdObserverMap[*itob].erase(this);
+#else
+	  assert(holdObserverMap[*itob].erase(this) == 1);
+#endif
+	  ++itob;
+	}
+	holdObservableMap.erase(ito);
+      }
+    }
   }
 }
 //===============================================================
@@ -86,8 +105,10 @@ void Observable::notifyObservers() {
   //  cerr << "Observable::notifyObservers" << endl;
   assert(holdCounter>=0);
   if (holdCounter)
-    for (;itlObs != itle; ++itlObs)
-      holdMap[*itlObs].insert(this);
+    for (;itlObs != itle; ++itlObs) {
+      holdObserverMap[*itlObs].insert(this);
+      holdObservableMap[this].insert(*itlObs);
+    }
   else {
     set<Observable *> tmpSet;
     tmpSet.insert(this);
@@ -115,11 +136,15 @@ void Observable::unholdObservers() {
   if (unholdLock) return;
   unholdLock=true; 
   if (holdCounter==0) {
-    ObserverMap tmp(holdMap);
-    holdMap.clear();
+    holdObservableMap.clear();
+    ObserverMap tmp(holdObserverMap);
+    holdObserverMap.clear();
     ObserverMap::iterator itMObs;
     for (itMObs=tmp.begin();itMObs!=tmp.end();++itMObs) {
-      itMObs->first->update(itMObs->second.begin(),itMObs->second.end());
+      std::set<Observable *>::iterator begin = itMObs->second.begin();
+      std::set<Observable *>::iterator end = itMObs->second.end();
+      if (begin != end)
+	itMObs->first->update(begin, end);
     }
   }
   unholdLock=false;

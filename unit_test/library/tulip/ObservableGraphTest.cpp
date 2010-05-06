@@ -467,6 +467,30 @@ void ObservableGraphTest::testDeleteSubgraph() {
   CPPUNIT_ASSERT(observer->nbObservables() == 2);
   CPPUNIT_ASSERT(observer->found(graph));
   CPPUNIT_ASSERT(observer->found(g2));
+
+  observer->reset();
+  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  Observable::holdObservers();
+  g2 = graph->addSubGraph();
+  g2->addObserver(observer);
+  g3 = g2->addSubGraph();
+  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  g3->addObserver(observer);
+  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  g2->delSubGraph(g3);
+  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT(observer->found(g3));
+  observer->reset();
+  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  graph->delSubGraph(g2);
+  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT(observer->found(g2));
+  observer->reset();
+  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  Observable::unholdObservers();
+  CPPUNIT_ASSERT(observer->nbObservables() == 1);
+  CPPUNIT_ASSERT(observer->found(graph));
+  CPPUNIT_ASSERT(observer->found(g2) == false);
 }
 //==========================================================
 void ObservableGraphTest::testObserverWhenRemoveObservable() {

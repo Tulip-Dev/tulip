@@ -55,6 +55,7 @@ class TLP_SCOPE Observer {
 };
 
 typedef std::map<Observer *,std::set<Observable *> > ObserverMap;
+typedef std::map<Observable *,std::set<Observer *> > ObservableMap;
 
 //=========================================================
 /** All instances of that class can be observed by by an instance of the
@@ -101,7 +102,8 @@ class TLP_SCOPE Observable {
 
  protected:
   static int holdCounter;
-  static ObserverMap holdMap;
+  static ObserverMap holdObserverMap;
+  static ObservableMap holdObservableMap;
   stdext::slist<Observer*> observersList;
   void removeOnlyObserver(Observer *);
 };
