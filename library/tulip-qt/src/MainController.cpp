@@ -499,6 +499,7 @@ namespace tlp {
     if (!getCurrentGraph()) 
       return;
     
+    // Remove observation of properties
     Iterator<PropertyInterface*> *it =getCurrentGraph()->getObjectProperties();
     while (it->hasNext()) {
       (it->next())->removeObserver(this);
@@ -516,19 +517,34 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::delSubGraph(Graph *g, Graph *sg){
-    Iterator<Graph *> *itS=sg->getSubGraphs();
-    while(itS->hasNext()) {
-      Graph *subgraph = itS->next();
-      delSubGraph(sg,subgraph);
+    // BFS on deleted subgraph to remove observer and to update views that were on sg or a sub-graph of sg
+    vector<Graph *> toCompute;
+    toCompute.push_back(sg);
+
+    while(toCompute.size()!=0){
+      vector<Graph *> newToCompute;
+      for(vector<Graph*>::iterator it=toCompute.begin();it!=toCompute.end();++it){
+        // Remove observers
+        (*it)->removeObserver(this);
+        (*it)->removeGraphObserver(this);
+
+        // if the current graph is *it, set current graph at g
+        if(getCurrentGraph()==(*it))
+          setCurrentGraph(g);
+
+        // update views that were on *it
+        changeGraphOfViews(*it,g);
+
+        Iterator<Graph *> *itS=(*it)->getSubGraphs();
+        while(itS->hasNext()) {
+          newToCompute.push_back(itS->next());
+        }
+      }
+      toCompute=newToCompute;
     }
 
-    sg->removeObserver(this);
-    sg->removeGraphObserver(this);
-
-    if(getCurrentGraph()==sg)
-      setCurrentGraph(g);
-    
-    changeGraphOfViews(sg,g);
+    if(graphToReload==sg)
+      graphToReload=NULL;
   }
   //**********************************************************************
   void  MainController::addLocalProperty(Graph *graph, const std::string&){
