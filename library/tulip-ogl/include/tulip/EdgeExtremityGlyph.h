@@ -143,13 +143,13 @@ public:                                          \
     initFactory(); 			         \
     factory->registerPlugin(this);	         \
   }       					 \
-  string getName() const { return string(N);}	 \
-  string getGroup() const { return string(G);}	 \
-  string getAuthor() const {return string(A);}	 \
-  string getDate() const {return string(D);}	 \
-  string getInfo() const {return string(I);}	 \
-  string getRelease() const {return string(R);}\
-  string getTulipRelease() const {return string(TULIP_RELEASE);}\
+  std::string getName() const { return std::string(N);}	 \
+  std::string getGroup() const { return std::string(G);}	 \
+  std::string getAuthor() const {return std::string(A);}	 \
+  std::string getDate() const {return std::string(D);}	 \
+  std::string getInfo() const {return std::string(I);}	 \
+  std::string getRelease() const {return std::string(R);}\
+  std::string getTulipRelease() const {return std::string(TULIP_RELEASE);}\
   int    getId() const {return ID;}		 \
   tlp::T * createPluginObject(tlp::EdgeExtremityGlyphContext *gc)	 \
   {						 \

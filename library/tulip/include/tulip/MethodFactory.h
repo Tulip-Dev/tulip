@@ -103,7 +103,7 @@ class C##T##Factory:public tlp::T##Factory              \
   std::string getInfo() const {return std::string(I);}	\
   std::string getRelease() const {return std::string(R);}\
   std::string getTulipRelease() const {return std::string(TULIP_RELEASE);}\
-  tlp::T * createPluginObject(AlgorithmContext context)	\
+  tlp::T * createPluginObject(tlp::AlgorithmContext context)		\
    {							\
      C *tmp=new C(context);				\
      return ((tlp::T *) tmp);				\
