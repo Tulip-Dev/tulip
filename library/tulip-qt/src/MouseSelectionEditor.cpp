@@ -326,12 +326,12 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
     composite->addGlEntity(&_controls[5], "bottom-right");
     composite->addGlEntity(&_controls[6], "bottom");
     composite->addGlEntity(&_controls[7], "bottom-left");
-    composite->addGlEntity(&_advControls[0], "top");
-    composite->addGlEntity(&_advControls[1], "bottom");
-    composite->addGlEntity(&_advControls[2], "right");
-    composite->addGlEntity(&_advControls[3], "left");
-    composite->addGlEntity(&_advControls[4], "horizontally");
-    composite->addGlEntity(&_advControls[5], "vertically");
+    composite->addGlEntity(&_advControls[0], "center-top");
+    composite->addGlEntity(&_advControls[1], "center-bottom");
+    composite->addGlEntity(&_advControls[2], "center-right");
+    composite->addGlEntity(&_advControls[3], "center-left");
+    composite->addGlEntity(&_advControls[4], "center-horizontally");
+    composite->addGlEntity(&_advControls[5], "center-vertically");
     this->glMainWidget=glMainWidget;
     return true;
   }else{
