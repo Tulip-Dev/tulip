@@ -86,8 +86,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/bitmaps/logolabri.jpg
 %{prefix}/lib/tlp/bitmaps/tex_back.png
 %{prefix}/lib/tlp/bitmaps/startup.gif
-%{prefix}/lib/tlp/bitmaps/parallel_sliders_texture.png
-%{prefix}/lib/tlp/bitmaps/parallel_texture.png
 %{prefix}/include
 %{prefix}/share/@PACKAGE@
 
