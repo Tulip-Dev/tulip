@@ -96,16 +96,15 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 	int height = glw->height();
 	glw->getScene()->translateCamera(width/2 - (x+w/2), height/2 - (y-h/2), 0);
 	w = abs(w); h = abs(h);
-	Camera cam = *glw->getScene()->getCamera();
+    Camera *cam = glw->getScene()->getCamera();
 	//we prevent zooming in a minimal square area less than 4x4: a least
 	//one of the 2 lengths must be higher than 3
 	if (w > h) {
-	  cam.setZoomFactor(cam.getZoomFactor() * ((double) width / (double) w));
+      cam->setZoomFactor(cam->getZoomFactor() * ((double) width / (double) w));
 	}
 	else {
-	  cam.setZoomFactor(cam.getZoomFactor() * ((double) height / (double) h));
+      cam->setZoomFactor(cam->getZoomFactor() * ((double) height / (double) h));
 	}
-	glw->getScene()->setCamera(&cam);
 	glw->draw(false);
       }
     }
