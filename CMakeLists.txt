@@ -241,7 +241,7 @@ CONFIGURE_FILE("unit_test/plugins/pluginstest.cpp.in" "unit_test/plugins/plugins
 ## -----------------------------------------------------------------------------------------------
 #IF(WIN32)
   EXEC_PROGRAM(grep ARGS "mingw /etc/fstab"  OUTPUT_VARIABLE MINDIR)
-  STRING(REGEX REPLACE "[ \t]+/mingw" "" MINDIR ${MINDIR})
+  STRING(REGEX REPLACE "[ \t]+/mingw" "" MINDIR "${MINDIR}")
   SET(qt_libraries ${QT_LIBRARY_DIR})
   SET(WIN_EXE_VERSION ${TulipMajorVersion}_${TulipMinorVersion}_${TulipReleaseVersion})
   CONFIGURE_FILE("tulip.nsi.in" "tulip-${VERSION}.nsi" @ONLY)
