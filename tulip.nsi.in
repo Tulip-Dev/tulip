@@ -89,9 +89,7 @@ Section "-Programs (required)"
 SetOutPath $INSTDIR
 FILE @prefix@\lib\tlp\bitmaps\logo32x32.ico
 FILE "${NSISDIR}\Contrib\Graphics\Icons\win-uninstall.ico"
-File @prefix@\bin\tulip.exe
-File @prefix@\bin\tulip_app.exe
-File @prefix@\bin\tulip_check_pl.exe
+File @prefix@\bin\*.exe
 File @prefix@\bin\tulip-config
 File "@MINDIR@\bin\iconv.dll"
 File "@MINDIR@\bin\zlib1.dll" 
@@ -101,6 +99,7 @@ File "@MINDIR@\bin\libxml*.dll"
 File "@MINDIR@\bin\jpeg*.dll"
 File "@MINDIR@\bin\libpng*.dll"
 File "@MINDIR@\bin\mingwm*.dll"
+File "@qt_libraries@\..\..\mingw\bin\libgcc_s_dw2-1.dll"
 File "@qt_libraries@\..\bin\QtCore4.dll"
 File "@qt_libraries@\..\bin\QtGui4.dll"
 File "@qt_libraries@\..\bin\QtNetWork4.dll"
@@ -112,7 +111,7 @@ File "@qt_libraries@\..\bin\QtSql4.dll"
 File "@qt_libraries@\..\bin\QtWebkit4.dll"
 File "@qt_libraries@\..\bin\QtXmlPatterns4.dll"
 File "@qt_libraries@\..\bin\phonon4.dll"
-File  "@qt_libraries@\..\bin\@QT_ASSISTANT@.exe"
+File "@qt_libraries@\..\bin\@QT_ASSISTANT@.exe"
 File "@prefix@\bin\libtulip-@WIN_VERSION@.dll" 
 File "@prefix@\bin\libtulip-ogl-@WIN_VERSION@.dll" 
 File "@prefix@\bin\libtulip-qt4-@WIN_VERSION@.dll" 
@@ -125,13 +124,25 @@ SectionEnd
 
 Section "-Install Plugins and Docs"
 setOutPath $INSTDIR\lib\tlp
-File @prefix@\lib\bin\*.dll
+; autotools
+File /nonfatal @prefix@\lib\bin\*-@VERSION@.dll
+; cmake
+File /nonfatal @prefix@\lib\tlp\*-@VERSION@.dll
 setOutPath $INSTDIR\lib\tlp\glyphs
-File @prefix@\lib\tlp\bin\lib*-@VERSION@.dll
+; autotools
+File /nonfatal @prefix@\lib\tlp\bin\lib*-@VERSION@.dll
+; cmake
+File /nonfatal @prefix@\lib\tlp\glyphs\lib*-@VERSION@.dll
 setOutPath $INSTDIR\lib\tlp\view
-File @prefix@\lib\tlp\bin\libSpreadSheet-@VERSION@.dll
+; autotools
+File /nonfatal @prefix@\lib\tlp\bin\libSpreadSheet-@VERSION@.dll
+; cmake
+File /nonfatal @prefix@\lib\tlp\view\libSpreadSheet-@VERSION@.dll
 setOutPath $INSTDIR\lib\tlp\designer
-File @prefix@\lib\tlp\bin\*-@WIN_VERSION@.dll
+; autotools
+File /nonfatal @prefix@\lib\tlp\bin\*-@WIN_VERSION@.dll
+; cmake
+File /nonfatal @prefix@\lib\tlp\designer\*-@WIN_VERSION@.dll
 setOutPath $INSTDIR\share
 ; Try to save doc files if any
 File /nonfatal /r @prefix@\share\*
@@ -170,14 +181,9 @@ UninstallText "Do you really want to remove Tulip @VERSION@ from your system ?"
 Section "Uninstall"
 DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip"
 DeleteRegKey HKLM "Software\Tulip"
-Delete "$INSTDIR\tulip.exe"
-Delete "$INSTDIR\tulip_app.exe"
-Delete "$INSTDIR\tulip_check_pl.exe"
+Delete "$INSTDIR\*.exe"
 Delete "$INSTDIR\tulip-config"
-;Delete "$INSTDIR\Tulip.txt"
-Delete "$INSTDIR\uninst-Tulip.exe"
-Delete "$INSTDIR\logo32x32.ico"
-Delete "$INSTDIR\win-uninstall.ico"
+Delete "$INSTDIR\*.ico"
 Delete "$DESKTOP\Tulip @VERSION@.lnk"
 Delete "$SMPROGRAMS\Tulip @VERSION@\*.*"
 RMDir "$SMPROGRAMS\Tulip @VERSION@"
@@ -205,6 +211,5 @@ RMDir "$INSTDIR\include\tulip"
 RMDir "$INSTDIR\include"
 IfFileExists "$INSTDIR\share\*.*" 0 +2
 RMDir /r "$INSTDIR\share"
-Delete "$INSTDIR\@QT_ASSISTANT@.exe"
 RMDir "$INSTDIR"
 SectionEnd

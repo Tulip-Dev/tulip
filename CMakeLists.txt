@@ -158,6 +158,7 @@ ENDIF(MACPPC)
 ## -----------------------------------------------------------------------------------------------
 IF(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DDLL_EXPORT -DQT_ASSISTANT='\"assistant_adp\"'")
+   SET(QT_ASSISTANT assistant_adp)
 ENDIF(WIN32)
 IF(APPLE)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__APPLE__ -DQT_ASSISTANT='\"Assistant_adp\"'")
@@ -238,11 +239,19 @@ CONFIGURE_FILE("unit_test/plugins/pluginstest.cpp.in" "unit_test/plugins/plugins
 ## -----------------------------------------------------------------------------------------------
 ## Create tulip.nsi script
 ## -----------------------------------------------------------------------------------------------
-IF(WIN32)
-  EXEC_PROGRAM(grep ARGS "mingw /etc/fstab" OUTPUT_VARIABLE MINDIR)
-  STRING(REPLACE " /mingw" "" MINDIR ${MINDIR})
-  CONFIGURE_FILE("tulip_cmake.nsi.in" "tulip.nsi" @ONLY)
-ENDIF(WIN32)
+#IF(WIN32)
+  EXEC_PROGRAM(grep ARGS "mingw /etc/fstab"  OUTPUT_VARIABLE MINDIR)
+  STRING(REGEX REPLACE "[ \t]+/mingw" "" MINDIR ${MINDIR})
+  SET(qt_libraries ${QT_LIBRARY_DIR})
+  SET(WIN_EXE_VERSION ${TulipMajorVersion}_${TulipMinorVersion}_${TulipReleaseVersion})
+  CONFIGURE_FILE("tulip.nsi.in" "tulip-${VERSION}.nsi" @ONLY)
+  ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_BINARY_DIR}/COPYING.LESSER
+		DEPENDS ${PROJECT_SOURCE_DIR}/COPYING.LESSER
+		COMMAND ${CMAKE_COMMAND}
+		ARGS -E copy_if_different ${PROJECT_SOURCE_DIR}/COPYING.LESSER ${PROJECT_BINARY_DIR}/COPYING.LESSER)
+  ADD_CUSTOM_TARGET(wininst makensis.exe "tulip-${VERSION}.nsi"
+		DEPENDS ${PROJECT_BINARY_DIR}/COPYING.LESSER)
+#ENDIF(WIN32)
 
 ## -----------------------------------------------------------------------------------------------
 ## Installation of files
