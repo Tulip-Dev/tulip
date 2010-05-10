@@ -467,7 +467,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
 
   string graphName;
   
-  if (graph->getAttribute("name", graphName) && graphName.find("unnamed") != 0)
+  if (graph->getRoot()->getAttribute("name", graphName) && graphName.find("unnamed") != 0)
     dataSet.set<string>("name", graphName);
   else
     dataSet.set<string>("name", filename);
