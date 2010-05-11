@@ -92,6 +92,8 @@ public:
   bool useOldFormat;
   map<unsigned int, node>* nodeIndex;
   map<unsigned int, edge>* edgeIndex;
+  unsigned int firstNodeId;
+  unsigned int firstEdgeId;
 
   TLPExport(AlgorithmContext context):ExportModule(context),
 				      useOldFormat(false),
@@ -111,11 +113,11 @@ public:
   }
   //====================================================
   node getNode(node n) {
-    return nodeIndex ? (*nodeIndex)[n.id] : n;
+    return nodeIndex ? (*nodeIndex)[n.id] : node(n.id - firstNodeId);
   }
   //====================================================
   edge getEdge(edge e) {
-    return edgeIndex ? (*edgeIndex)[e.id] : e;
+    return edgeIndex ? (*edgeIndex)[e.id] : edge(e.id - firstEdgeId);
   }
   //=====================================================
   void saveGraphElements(ostream &os, Graph *graph) {
@@ -415,7 +417,9 @@ public:
 	(*nodeIndex)[n.id] = node(i);
 	i++;
       }
-    }
+    } else
+      // no map needed, id translation only
+      firstNodeId = ((GraphImpl *) graph)->getFirstNodeId();
     if (((GraphImpl *) graph)->hasFragmentedEdgeIds()) {
       edgeIndex = new map<unsigned int, edge>;
       unsigned int i = 0;
@@ -424,7 +428,9 @@ public:
 	(*edgeIndex)[e.id] = edge(i);
 	i++;
       }
-    }
+    } else
+      // no map needed, id translation only
+      firstEdgeId = ((GraphImpl *) graph)->getFirstEdgeId();
     
     string name;
     string author;

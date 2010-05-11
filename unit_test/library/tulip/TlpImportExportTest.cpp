@@ -69,6 +69,9 @@ void TlpImportExportTest::testExport() {
   Graph *graph = newGraph();
   CPPUNIT_ASSERT(graph != 0);
   node n1 = graph->addNode();
+  // for sf bug  #2999413
+  graph->delNode(n1);
+  n1 = graph->addNode();
   node n2 = graph->addNode();
   edge e1 = graph->addEdge(n1, n2);
   ostream *os = new ofstream("export_test.tlp");
@@ -82,7 +85,8 @@ void TlpImportExportTest::testExport() {
   CPPUNIT_ASSERT(graph != 0);
   node n;
   forEach(n, graph->getNodes()) {
-    CPPUNIT_ASSERT((n == n1) || (n == n2));
+    // - 1 is because of delNode
+    CPPUNIT_ASSERT((n == node(n1.id - 1)) || (n == node(n2.id - 1)));
   }
   edge e;
   forEach(e, graph->getEdges()) {

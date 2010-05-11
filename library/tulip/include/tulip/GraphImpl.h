@@ -93,8 +93,19 @@ public:
   void reserveNodes(unsigned int nbNodes);
   void reserveEdges(unsigned int nbEdges);
   // indicate fragmented space of nodes/edges
-  bool hasFragmentedNodeIds();
-  bool hasFragmentedEdgeIds();
+  bool hasFragmentedNodeIds() const {
+    return nodeIds.hasFreeIds();
+  }
+  bool hasFragmentedEdgeIds() const {
+      return edgeIds.hasFreeIds();
+  }
+  // return first node or edge id
+  unsigned int getFirstNodeId() const {
+    return nodeIds.getFirstId();
+  }
+  unsigned int getFirstEdgeId() const {
+    return edgeIds.getFirstId();
+  }
 
 protected:
   // designed to reassign an id to a previously deleted elt

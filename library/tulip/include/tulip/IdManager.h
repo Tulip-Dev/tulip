@@ -52,6 +52,12 @@ public:
    *
    */
   bool hasFreeIds() const;
+  /**
+   * returns first used id
+   */
+  unsigned int getFirstId() const {
+    return firstId;
+  }
 
   friend std::ostream& operator<<(std::ostream &,const IdManager &);
   friend class IdManagerIterator;

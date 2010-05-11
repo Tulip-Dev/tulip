@@ -171,10 +171,6 @@ void GraphImpl::reserveNodes(unsigned int nbNodes) {
     nodes.reserve(nbNodes);
 }
 //----------------------------------------------------------------
-bool GraphImpl::hasFragmentedNodeIds() {
-  return nodeIds.hasFreeIds();
-}
-//----------------------------------------------------------------
 edge GraphImpl::addEdgeInternal(edge newEdge, const node s,
 				const node t, bool updateContainers) {
   assert(isElement(s) && isElement(t));
@@ -217,10 +213,6 @@ void GraphImpl::addEdge(const edge e) {
 void GraphImpl::reserveEdges(unsigned int nbEdges) {
   if (nbEdges)
     edges.reserve(nbEdges);
-}
-//----------------------------------------------------------------
-bool GraphImpl::hasFragmentedEdgeIds() {
-  return edgeIds.hasFreeIds();
 }
 //----------------------------------------------------------------
 void GraphImpl::delNodeInternal(const node n) {
