@@ -37,17 +37,22 @@ public:
    */
   virtual void erase(const edge) = 0;
   /**
-   * Set the value of a node (first argument) into the
-   * property (third argument) with the value of the node (second argument)
-   * defned in this property (this).
+   * Set the value of a node (first argument) in the current property (this)
+   * with the value of the node (second argument) defined in prop (third argument)
+   * If the fourth argument is set to true, the value will be copied only if
+   * it is not the default value.
    */
-  virtual void copy(const node, const node, PropertyInterface *) =0;
+  virtual void copy(const node src, const node dst, PropertyInterface *prop,
+		    bool ifNotDefault = false) =0;
   /**
-   * Set the value of a edge (first argument) into the
-   * property (third argument) with the value of the edge (second argument)
-   * defned in this property (this).
+   * Set the value of an edge (first argument) in the current property (this)
+   * with the value of the edge (second argument) defined in prop (third argument)
+   * defined in this property (this).
+   * If the fourth argument is set to true, the value will be copied only if
+   * it is not the default value.
    */
-  virtual void copy(const edge, const edge, PropertyInterface *) =0;
+  virtual void copy(const edge src, const edge dst , PropertyInterface *prop,
+		    bool ifNotDefault = false) =0;
   /**
     * Create an object of the same real type of the current property, in the
     * the graph (first parameter) with the name (second parameter).
@@ -74,9 +79,9 @@ public:
   }
 
   /**
-  * Return the graph on which the property has been defined.
-  * WARNING : If the property is inherited the graph could different
-  * than the one on wich one got the property.
+  * Returns the graph on which the property has been defined.
+  * WARNING : If the property is inherited the graph could be different
+  * that the one used to get that property.
   */
   tlp::Graph * getGraph() {
       return graph;
@@ -99,8 +104,8 @@ public:
   // mg is the graph owning mE
   virtual void computeMetaValue(edge mE, Iterator<edge>* itE, Graph* mg)=0;
   // the ones below are used by GraphUpdatesRecorder
-  virtual Iterator<node>* getNonDefaultValuatedNodes() const = 0;
-  virtual Iterator<edge>* getNonDefaultValuatedEdges() const = 0;
+  virtual Iterator<node>* getNonDefaultValuatedNodes(const Graph* = NULL) const = 0;
+  virtual Iterator<edge>* getNonDefaultValuatedEdges(const Graph* = NULL) const = 0;
   virtual DataMem* getNodeDefaultDataMemValue() const = 0;
   virtual DataMem* getEdgeDefaultDataMemValue() const = 0;
   virtual DataMem* getNodeDataMemValue( const node n ) const = 0;

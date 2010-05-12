@@ -6,6 +6,7 @@
 #include <tulip/Coord.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/GraphImpl.h>
+#include <tulip/tuliphash.h>
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
@@ -90,8 +91,8 @@ class TLPExport:public ExportModule {
 public:
   DataSet controller;
   bool useOldFormat;
-  map<unsigned int, node>* nodeIndex;
-  map<unsigned int, edge>* edgeIndex;
+  TLP_HASH_MAP<unsigned int, node>* nodeIndex;
+  TLP_HASH_MAP<unsigned int, edge>* edgeIndex;
   unsigned int firstNodeId;
   unsigned int firstEdgeId;
 
@@ -256,11 +257,9 @@ public:
 	  eDefault.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
       }
       os <<"(default \"" << convert(nDefault) << "\" \"" << convert(eDefault) << "\")" << endl;
-      Iterator<node> *itN = prop->getNonDefaultValuatedNodes();
+      Iterator<node> *itN = prop->getNonDefaultValuatedNodes(graph);
       while (itN->hasNext()) {
 	node itn = itN->next();
-	if (!graph->isElement(itn))
-	  continue;
 	string tmp = prop->getNodeStringValue(itn);
 	// replace real path with symbolic one using TulipBitmapDir
 	if (prop->getName() == string("viewFont")) {
@@ -270,11 +269,9 @@ public:
 	}
 	os << "(node " << getNode(itn).id << " \"" << convert(tmp) << "\")" << endl ;
       } delete itN;
-      Iterator<edge> *itE = prop->getNonDefaultValuatedEdges();
+      Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(graph);
       while (itE->hasNext()) {
 	edge ite = itE->next();
-	if (!graph->isElement(ite))
-	  continue;
 	// replace real path with symbolic one using TulipBitmapDir
 	string tmp = prop->getEdgeStringValue(ite);
 	if (prop->getName() == string("viewFont")) {
@@ -410,7 +407,7 @@ public:
 
     // reindex nodes/edges if needed
     if (((GraphImpl *) graph)->hasFragmentedNodeIds()) {
-      nodeIndex = new map<unsigned int, node>;
+      nodeIndex = new TLP_HASH_MAP<unsigned int, node>;
       unsigned int i = 0;
       node n;
       forEach(n, graph->getNodes()) {
@@ -421,7 +418,7 @@ public:
       // no map needed, id translation only
       firstNodeId = ((GraphImpl *) graph)->getFirstNodeId();
     if (((GraphImpl *) graph)->hasFragmentedEdgeIds()) {
-      edgeIndex = new map<unsigned int, edge>;
+      edgeIndex = new TLP_HASH_MAP<unsigned int, edge>;
       unsigned int i = 0;
       edge e;
       forEach(e, graph->getEdges()) {

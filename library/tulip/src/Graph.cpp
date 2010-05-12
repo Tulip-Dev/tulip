@@ -253,7 +253,8 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
     ioG->delNode( nodeA[in] );
 }
 
-void tlp::copyToGraph (	Graph *outG, Graph *	inG, BooleanProperty *inSel, BooleanProperty* outSel) {
+void tlp::copyToGraph (Graph *outG, Graph* inG,
+		       BooleanProperty *inSel, BooleanProperty* outSel) {
   if( outSel ) {
     outSel->setAllNodeValue( false );
     outSel->setAllEdgeValue( false );
@@ -264,79 +265,73 @@ void tlp::copyToGraph (	Graph *outG, Graph *	inG, BooleanProperty *inSel, Boolea
 
   // extend the selection to edge ends
   if( inSel ) {
-    Iterator<edge> * edgeIt = inG->getEdges();
-    while( edgeIt->hasNext() ) {
-      edge e = edgeIt->next();
-      if( inSel->getEdgeValue(e) ) {
-	node n0 = inG->source( e );
-	node n1 = inG->target( e );
-	inSel->setNodeValue( n0, true );
-	inSel->setNodeValue( n1, true );
-      }
-    }
-    delete edgeIt;
+    Iterator<edge> *itE = inSel->getNonDefaultValuatedEdges(inG);
+    while (itE->hasNext()) {
+      edge e = itE->next();
+      const pair<node, node>& eEnds = inG->ends(e);
+      inSel->setNodeValue(eEnds.first, true);
+      inSel->setNodeValue(eEnds.second, true);
+    } delete itE;
   }
-	
-  // copy selected nodes
+
   MutableContainer<node> nodeTrl;
-  {
-    Iterator<node> * nodeIt = inG->getNodes();
-    while( nodeIt->hasNext() ) {
-      node n0 = nodeIt->next();
-      if( !inSel || inSel->getNodeValue(n0) ) {
-	node n1 = outG->addNode();
+  // loop on selected nodes
+  Iterator<node> * nodeIt =
+    inSel ? inSel->getNonDefaultValuatedNodes(inG) : inG->getNodes();
+  while( nodeIt->hasNext() ) {
+    node nIn = nodeIt->next();
+    // add outG corresponding node
+    node nOut = outG->addNode();
 	      
-	// select appended node
-	if( outSel )
-	  outSel->setNodeValue( n1, true );
-	      
-	// add to translation tab
-	nodeTrl.set( n0.id, n1 );
-	      
-	// copy node properties
-	Iterator<std::string> * propIt = inG->getProperties();
-	while( propIt->hasNext() ) {
-	  std::string n = propIt->next();
-	  PropertyInterface * src = inG->getProperty( n );
-	  if(dynamic_cast<GraphProperty *>(src) == 0) {
-	    PropertyInterface *dst = outG->existProperty(n) ? outG->getProperty(n) : src->clonePrototype(outG,n);
-	    dst->copy( n1, n0, src );
-	  }
-	}
-	delete propIt;
+    // select added node
+    if( outSel )
+      outSel->setNodeValue( nOut, true );
+    
+    // add to translation tab
+    nodeTrl.set(nIn.id, nOut);
+    // copy node properties
+    Iterator<PropertyInterface *>* propIt = inG->getObjectProperties();
+    while (propIt->hasNext()) {
+      PropertyInterface *src = propIt->next();
+      if (dynamic_cast<GraphProperty *>(src) == 0) {
+	const std::string& pName = src->getName();
+	PropertyInterface *dst =
+	  outG->existProperty(pName) ? outG->getProperty(pName)
+	  : src->clonePrototype(outG, pName);
+	dst->copy( nOut, nIn, src, true );
       }
-    }
-    delete nodeIt;
-  }
+    } delete propIt;
+  } delete nodeIt;
+
+  // loop on selected edges
+  Iterator<edge> * edgeIt =
+    inSel ? inSel->getNonDefaultValuatedEdges(inG) : inG->getEdges();
 	
-  // copy selected edges
-  {
-    Iterator<edge> * edgeIt = inG->getEdges();
-    while( edgeIt->hasNext() ) {
-      edge e0    = edgeIt->next();
-      if( !inSel || inSel->getEdgeValue(e0) ) {
-	node e0_n0 = inG->source(e0);
-	node e0_n1 = inG->target(e0);
-	edge e1 = outG->addEdge( nodeTrl.get(e0_n0.id),
-				 nodeTrl.get(e0_n1.id) );
+  edgeIt = inSel ? inSel->getNonDefaultValuatedEdges(inG) : inG->getEdges();
+  while( edgeIt->hasNext() ) {
+    edge eIn = edgeIt->next();
+    const pair<node, node>& eEnds = inG->ends(eIn);
+    // add outG correponding edge
+    edge eOut = outG->addEdge(nodeTrl.get(eEnds.first.id),
+			      nodeTrl.get(eEnds.second.id));
 	      
-	// select appended edge
-	if( outSel )
-	  outSel->setEdgeValue( e1, true );
-	      
-	// copy edge properties
-	Iterator<std::string> * propIt = inG->getProperties();
-	while( propIt->hasNext() ) {
-	  std::string n = propIt->next();
-	  PropertyInterface * src = inG->getProperty( n ),
-	    * dst = outG->existProperty(n) ? outG->getProperty(n) : src->clonePrototype(outG,n);
-	  dst->copy( e1, e0, src );
-	}
-	delete propIt;
+    // select added edge
+    if( outSel )
+      outSel->setEdgeValue( eOut, true );
+
+    // copy edge properties
+    Iterator<PropertyInterface *>* propIt = inG->getObjectProperties();
+    while (propIt->hasNext()) {
+      PropertyInterface *src = propIt->next();
+      if (dynamic_cast<GraphProperty *>(src) == 0) {
+	const std::string& pName = src->getName();
+	PropertyInterface *dst =
+	  outG->existProperty(pName) ? outG->getProperty(pName)
+	  : src->clonePrototype(outG, pName);
+	dst->copy( eOut, eIn, src, true );
       }
-    }
-    delete edgeIt;
-  }
+    } delete propIt;
+  } delete edgeIt;
 }
 
 void Graph::notifyDestroy() {

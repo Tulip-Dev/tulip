@@ -125,24 +125,6 @@ PropertyInterface* IntegerProperty::clonePrototype(Graph * g, const std::string&
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
  }
-//=============================================================
-void IntegerProperty::copy( const node n0, const node n1, PropertyInterface * p )
-{
-  if( !p )
-    return;
-  IntegerProperty * tp = dynamic_cast<IntegerProperty*>(p);
-  assert( tp );
-  setNodeValue( n0, tp->getNodeValue(n1) );
-}
-//=============================================================
-void IntegerProperty::copy( const edge e0, const edge e1, PropertyInterface * p )
-{
-  if( !p )
-    return;
-  IntegerProperty * tp = dynamic_cast<IntegerProperty*>(p);
-  assert( tp );
-  setEdgeValue( e0, tp->getEdgeValue(e1) );
-}
 //===============================================================
 void IntegerProperty::beforeSetNodeValue(PropertyInterface*, const node) {
   minMaxOkNode.clear();
@@ -164,20 +146,4 @@ PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, const std::s
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
-}
-//=============================================================
-void IntegerVectorProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  IntegerVectorProperty * tp = dynamic_cast<IntegerVectorProperty*>(p);
-  assert( tp );
-  setNodeValue( n0, tp->getNodeValue(n1) );
-}
-//=============================================================
-void IntegerVectorProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  IntegerVectorProperty * tp = dynamic_cast<IntegerVectorProperty*>(p);
-  assert( tp );
-  setEdgeValue( e0, tp->getEdgeValue(e1) );
 }

@@ -355,22 +355,6 @@ PropertyInterface* DoubleProperty::clonePrototype(Graph * g, const std::string& 
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
 }
-//=============================================================
-void DoubleProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  DoubleProperty * tp = dynamic_cast<DoubleProperty*>(p);
-  assert( tp );
-  setNodeValue( n0, tp->getNodeValue(n1) );
-}
-//=============================================================
-void DoubleProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  DoubleProperty * tp = dynamic_cast<DoubleProperty*>(p);
-  assert( tp );
-  setEdgeValue( e0, tp->getEdgeValue(e1) );
-}
 //=================================================================================
 PropertyInterface* DoubleVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
@@ -379,22 +363,6 @@ PropertyInterface* DoubleVectorProperty::clonePrototype(Graph * g, const std::st
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
-}
-//=============================================================
-void DoubleVectorProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  DoubleVectorProperty * tp = dynamic_cast<DoubleVectorProperty*>(p);
-  assert( tp );
-  setNodeValue( n0, tp->getNodeValue(n1) );
-}
-//=============================================================
-void DoubleVectorProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  DoubleVectorProperty * tp = dynamic_cast<DoubleVectorProperty*>(p);
-  assert( tp );
-  setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 //=============================================================
 void DoubleProperty::setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc,

@@ -18,22 +18,6 @@ PropertyInterface* ColorProperty::clonePrototype(Graph * g, const std::string& n
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
 }
-//=============================================================
-void ColorProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  ColorProperty * tp = dynamic_cast<ColorProperty*>(p);
-  assert( tp );
-  setNodeValue( n0, tp->getNodeValue(n1) );
-}
-//=============================================================
-void ColorProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  ColorProperty * tp = dynamic_cast<ColorProperty*>(p);
-  assert( tp );
-  setEdgeValue( e0, tp->getEdgeValue(e1) );
-}
 //=================================================================================
 PropertyInterface* ColorVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
@@ -42,20 +26,4 @@ PropertyInterface* ColorVectorProperty::clonePrototype(Graph * g, const std::str
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
-}
-//=============================================================
-void ColorVectorProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  ColorVectorProperty * tp = dynamic_cast<ColorVectorProperty*>(p);
-  assert( tp );
-  setNodeValue( n0, tp->getNodeValue(n1) );
-}
-//=============================================================
-void ColorVectorProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  ColorVectorProperty * tp = dynamic_cast<ColorVectorProperty*>(p);
-  assert( tp );
-  setEdgeValue( e0, tp->getEdgeValue(e1) );
 }

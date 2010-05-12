@@ -21,8 +21,6 @@ class TLP_SCOPE BooleanProperty:public AbstractProperty<BooleanType,BooleanType,
 public :
   BooleanProperty (Graph *g, std::string n="") :AbstractProperty<BooleanType,BooleanType, BooleanAlgorithm>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string&);
-  void copy( const node, const node, PropertyInterface * );
-  void copy( const edge, const edge, PropertyInterface * );
   void reverse();
   ///reverse all the direction of edges of the visible graph which are true in this BooleanProperty
   void reverseEdgeDirection();
@@ -34,8 +32,6 @@ class TLP_SCOPE BooleanVectorProperty:public AbstractProperty<BooleanVectorType,
 public :
   BooleanVectorProperty(Graph *g, std::string n="") :AbstractProperty<BooleanVectorType, BooleanVectorType>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string&);
-  void copy( const node, const node, PropertyInterface * );
-  void copy( const edge, const edge, PropertyInterface * );
 };
 
 }

@@ -29,8 +29,6 @@ public :
   DoubleType::RealType  getEdgeMin(Graph *sg=0);
   DoubleType::RealType  getEdgeMax(Graph *sg=0);
   PropertyInterface* clonePrototype(Graph *, const std::string& );
-  void copy( const node, const node, PropertyInterface * );
-  void copy( const edge, const edge, PropertyInterface * );
   void uniformQuantification(unsigned int);
 
   void clone_handler(AbstractProperty<DoubleType,DoubleType> &);
@@ -61,8 +59,6 @@ class TLP_SCOPE DoubleVectorProperty:public AbstractProperty<DoubleVectorType,Do
 public :
   DoubleVectorProperty(Graph *g, std::string n=""):AbstractProperty<DoubleVectorType, DoubleVectorType>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string& );
-  void copy( const node, const node, PropertyInterface * );
-  void copy( const edge, const edge, PropertyInterface * );
 };
 /*@}*/
 

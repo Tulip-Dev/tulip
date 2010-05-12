@@ -553,22 +553,6 @@ PropertyInterface* LayoutProperty::clonePrototype(Graph * g, const std::string& 
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
 }
-//=============================================================
-void LayoutProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  LayoutProperty * tp = dynamic_cast<LayoutProperty*>(p);
-  assert( tp );
-  setNodeValue( n0, tp->getNodeValue(n1) );
-}
-//=============================================================
-void LayoutProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  LayoutProperty * tp = dynamic_cast<LayoutProperty*>(p);
-  assert( tp );
-  setEdgeValue( e0, tp->getEdgeValue(e1) );
-}
 //=================================================================================
 PropertyInterface* CoordVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
@@ -578,20 +562,3 @@ PropertyInterface* CoordVectorProperty::clonePrototype(Graph * g, const std::str
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
 }
-//=============================================================
-void CoordVectorProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  CoordVectorProperty * tp = dynamic_cast<CoordVectorProperty*>(p);
-  assert( tp );
-  setNodeValue( n0, tp->getNodeValue(n1) );
-}
-//=============================================================
-void CoordVectorProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  CoordVectorProperty * tp = dynamic_cast<CoordVectorProperty*>(p);
-  assert( tp );
-  setEdgeValue( e0, tp->getEdgeValue(e1) );
-}
-//======================================================

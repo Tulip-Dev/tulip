@@ -30,8 +30,6 @@ public:
   ~LayoutProperty();
 
   PropertyInterface* clonePrototype(Graph *, const std::string&);
-  void copy( const node, const node, PropertyInterface * );
-  void copy( const edge, const edge, PropertyInterface * );
 
   //=======================================
   //Functions for extra layout information
@@ -118,8 +116,6 @@ class TLP_SCOPE CoordVectorProperty:public AbstractProperty<CoordVectorType,Coor
 public :
   CoordVectorProperty(Graph *g, std::string n=""):AbstractProperty<CoordVectorType, CoordVectorType>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string&);
-  void copy( const node, const node, PropertyInterface * );
-  void copy( const edge, const edge, PropertyInterface * );
 };
 
 /*@}*/

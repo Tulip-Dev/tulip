@@ -9,6 +9,7 @@
 */
 #include <iostream>
 #include <stdlib.h>
+#include "tulip/Iterator.h"
 
 // This is not the right place to do the initialization below
 // because this file is include in many cpp files
@@ -39,24 +40,24 @@ typename Tedge::RealType tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeDe
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-typename tlp::ReturnType<typename Tnode::RealType>::ConstValue tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNodeValue(const node n ) const {
+typename tlp::ReturnType<typename Tnode::RealType>::ConstValue tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNodeValue(const tlp::node n ) const {
   return nodeProperties.get(n.id);
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-typename tlp::ReturnType<typename Tedge::RealType>::ConstValue tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeValue(const edge e) const {
+typename tlp::ReturnType<typename Tedge::RealType>::ConstValue tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeValue(const tlp::edge e) const {
   return edgeProperties.get(e.id);
 } 
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setNodeValue(const node n,const typename Tnode::RealType &v) {
+void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setNodeValue(const tlp::node n,const typename Tnode::RealType &v) {
   notifyBeforeSetNodeValue(this, n);
   nodeProperties.set(n.id,v);
   notifyAfterSetNodeValue(this, n);
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setEdgeValue(const edge e,const typename Tedge::RealType &v) {
+void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setEdgeValue(const tlp::edge e,const typename Tedge::RealType &v) {
   notifyBeforeSetEdgeValue(this, e);
   edgeProperties.set(e.id,v);
   notifyAfterSetEdgeValue(this, e);
@@ -79,12 +80,12 @@ void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllEdgeValue(const typenam
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::erase(const node n) {
+void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::erase(const tlp::node n) {
   setNodeValue(n, nodeDefaultValue);
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::erase(const edge e) {
+void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::erase(const tlp::edge e) {
   setEdgeValue(e, edgeDefaultValue);
 }
 //==============================================================
@@ -108,18 +109,18 @@ std::string tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeDefaultStringVa
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-std::string tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNodeStringValue( const node inN ) const {
+std::string tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNodeStringValue( const tlp::node inN ) const {
   typename Tnode::RealType v = getNodeValue( inN );
   return Tnode::toString( v );
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY> std::string
-tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeStringValue( const edge inE ) const {
+tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeStringValue( const tlp::edge inE ) const {
   typename Tedge::RealType v = getEdgeValue( inE );
   return Tedge::toString( v );
 }
 template <class Tnode, class Tedge, class TPROPERTY>
-bool tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setNodeStringValue( const node inN, const std::string & inV ) {
+bool tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setNodeStringValue( const tlp::node inN, const std::string & inV ) {
   typename Tnode::RealType v;
   if( !Tnode::fromString(v,inV) )
     return false;
@@ -128,7 +129,7 @@ bool tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setNodeStringValue( const nod
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-bool tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setEdgeStringValue( const edge inE, const std::string & inV ) {
+bool tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setEdgeStringValue( const tlp::edge inE, const std::string & inV ) {
   typename Tedge::RealType v;
   if( !Tedge::fromString(v,inV) )
     return false;
@@ -179,17 +180,17 @@ tlp::DataMem* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeDefaultDataMe
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-tlp::DataMem* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNodeDataMemValue( const node inN ) const {
+tlp::DataMem* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNodeDataMemValue( const tlp::node inN ) const {
   return new PropertyValueContainer<typename Tnode::RealType>(getNodeValue(inN));
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY> tlp::DataMem*
-tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeDataMemValue( const edge inE ) const {
+tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeDataMemValue( const tlp::edge inE ) const {
   return new PropertyValueContainer<typename Tedge::RealType>(getEdgeValue(inE));
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-tlp::DataMem* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultDataMemValue(const node n) const {
+tlp::DataMem* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultDataMemValue(const tlp::node n) const {
   bool notDefault;
   typename ReturnType<typename Tnode::RealType>::Value value = nodeProperties.get(n.id, notDefault);
   if (notDefault)
@@ -198,7 +199,7 @@ tlp::DataMem* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultDataMem
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-tlp::DataMem* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultDataMemValue( const edge e ) const {
+tlp::DataMem* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultDataMemValue( const tlp::edge e ) const {
   bool notDefault;
   typename ReturnType<typename Tedge::RealType>::Value value = edgeProperties.get(e.id, notDefault);
   if (notDefault)
@@ -207,15 +208,15 @@ tlp::DataMem* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultDataMem
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setNodeDataMemValue( const node inN, const tlp::DataMem* inV ) {
+void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setNodeDataMemValue( const tlp::node inN, const tlp::DataMem* inV ) {
   setNodeValue(inN, ((PropertyValueContainer<typename Tnode::RealType> *) inV)->value);
 }
-
+//==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setEdgeDataMemValue( const edge inE, const tlp::DataMem* inV ) {
+void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setEdgeDataMemValue( const tlp::edge inE, const tlp::DataMem* inV ) {
   setEdgeValue(inE, ((PropertyValueContainer<typename Tedge::RealType> *) inV)->value);
 }
-
+//==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
 void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllNodeDataMemValue( const DataMem* inV ) {
   setAllNodeValue(((PropertyValueContainer<typename Tnode::RealType> *) inV)->value);
@@ -226,14 +227,89 @@ tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllEdgeDataMemValue( const Data
   setAllEdgeValue(((PropertyValueContainer<typename Tedge::RealType> *) inV)->value);
 }
 //==============================================================
+// define template iterator class to iterate over graph elts
+// belonging to a given graph instance
+template <typename ELT_TYPE>
+class GraphEltIterator :public tlp::Iterator<ELT_TYPE> {
+private:
+  tlp::Iterator<ELT_TYPE> *it;
+  const tlp::Graph* graph;
+  ELT_TYPE curElt;
+  bool _hasnext;
+
+public:
+  ELT_TYPE next() {
+    ELT_TYPE tmp = curElt;
+    if ((_hasnext = it->hasNext())) {
+      curElt = it->next();
+      while (!(_hasnext = (!graph || graph->isElement(curElt)))) {
+	if (!it->hasNext()) break;
+	curElt=it->next();
+      }
+    }
+    return tmp;
+  }
+  GraphEltIterator(const tlp::Graph* g, tlp::Iterator<ELT_TYPE>* itN)
+    :it(itN), graph(g), curElt(ELT_TYPE()), _hasnext(false) {
+    next();
+  }
+
+  bool hasNext() {
+    return (_hasnext);
+  }
+  ~GraphEltIterator() {
+    delete it;
+  }
+};
+//==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultValuatedNodes() const {
-  return new tlp::UINTIterator<tlp::node>(nodeProperties.findAll(nodeDefaultValue, false));
+tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultValuatedNodes(const tlp::Graph* g) const {
+  tlp::Iterator<tlp::node> *it =
+    new tlp::UINTIterator<tlp::node>(nodeProperties.findAll(nodeDefaultValue, false));
+  return ((g == NULL) || (g == graph)) ? it : new GraphEltIterator<tlp::node>(g, it);
 }
 //==============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
-tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultValuatedEdges() const {
-  return new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
+tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultValuatedEdges(const tlp::Graph* g) const {
+  Iterator<tlp::edge>* it =
+    new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
+  return ((g == NULL) || (g == graph)) ? it : new GraphEltIterator<tlp::edge>(g, it);
+}
+//==============================================================
+template <class Tnode, class Tedge, class TPROPERTY>
+void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::copy(const tlp::node dst,
+							const tlp::node src,
+							PropertyInterface* prop,
+							bool ifNotDefault) {
+  if (prop == NULL)
+    return;
+  tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* tp =
+    dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(prop);
+  assert(tp);
+  bool notDefault;
+  typename ReturnType<typename Tnode::RealType>::Value value =
+    tp->nodeProperties.get(src.id, notDefault);
+  if (ifNotDefault && !notDefault)
+    return;
+  setNodeValue(dst, value);
+}
+//==============================================================
+template <class Tnode, class Tedge, class TPROPERTY>
+void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::copy(const tlp::edge dst,
+							const tlp::edge src,
+							PropertyInterface* prop,
+							bool ifNotDefault) {
+  if (prop == NULL)
+    return;
+  tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* tp =
+    dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(prop);
+  assert(tp);
+  bool notDefault;
+  typename ReturnType<typename Tedge::RealType>::Value value =
+    tp->edgeProperties.get(src.id, notDefault);
+  if (ifNotDefault && !notDefault)
+    return;
+  setEdgeValue(dst, value);
 }
 //==============================================================
 // meta values management

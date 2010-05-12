@@ -134,21 +134,6 @@ PropertyInterface* GraphProperty::clonePrototype(Graph * g, const std::string& n
   return p;
 }
 //=============================================================
-void GraphProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  GraphProperty * tp = dynamic_cast<GraphProperty*>(p);
-  assert( tp );
-  setNodeValue( n0, tp->getNodeValue(n1) );
-}
-//=============================================================
-void GraphProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
-  if( !p ) return;
-  GraphProperty * tp = dynamic_cast<GraphProperty*>(p);
-  assert( tp );
-  setEdgeValue( e0, tp->getEdgeValue(e1) );
-}
-//=============================================================
 // disabled, use setNodeValue instead
 bool GraphProperty::setNodeStringValue(const node, const std::string &) {
   return false;

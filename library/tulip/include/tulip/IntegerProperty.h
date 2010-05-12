@@ -29,8 +29,6 @@ public :
   IntegerType::RealType  getEdgeMin(Graph *sg=0);
   IntegerType::RealType  getEdgeMax(Graph *sg=0);
   PropertyInterface* clonePrototype(Graph *, const std::string&);
-  void copy( const node, const node, PropertyInterface * );
-  void copy( const edge, const edge, PropertyInterface * );
 
   // redefinition of some PropertyObserver methods 
   virtual void beforeSetNodeValue(PropertyInterface* prop, const node n);
@@ -53,8 +51,6 @@ class TLP_SCOPE IntegerVectorProperty:public AbstractProperty<IntegerVectorType,
 public :
   IntegerVectorProperty(Graph *g, std::string n =""):AbstractProperty<IntegerVectorType, IntegerVectorType>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string&);
-  void copy( const node, const node, PropertyInterface * );
-  void copy( const edge, const edge, PropertyInterface * );
 };
 /*@}*/
 

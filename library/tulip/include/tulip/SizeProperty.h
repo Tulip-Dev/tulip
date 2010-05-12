@@ -32,8 +32,6 @@ public :
   Size getMax(Graph *sg=0);
   Size getMin(Graph *sg=0);
   PropertyInterface* clonePrototype(Graph *, const std::string&);
-  void copy( const node, const node, PropertyInterface * );
-  void copy( const edge, const edge, PropertyInterface * );
   void scale( const tlp::Vector<float,3>&, Graph *sg=0 );
   void scale( const tlp::Vector<float,3>&, Iterator<node> *, Iterator<edge> *);
 
@@ -57,8 +55,6 @@ public :
   SizeVectorProperty(Graph *g, std::string n=""):AbstractProperty<SizeVectorType, SizeVectorType>(g, n) {}
 
   PropertyInterface* clonePrototype(Graph *, const std::string&);
-  void copy( const node, const node, PropertyInterface * );
-  void copy( const edge, const edge, PropertyInterface * );
 };
 /*@}*/
 

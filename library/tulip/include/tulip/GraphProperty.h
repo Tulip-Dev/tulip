@@ -23,8 +23,6 @@ public :
   GraphProperty (Graph *, std::string n="");
   virtual ~GraphProperty();
   PropertyInterface* clonePrototype(Graph *, const std::string&);
-  void copy( const node, const node, PropertyInterface * );
-  void copy( const edge, const edge, PropertyInterface * );
   void destroy(Graph *);
   bool setNodeStringValue(const node n, const std::string & v);
   bool setAllNodeStringValue(const std::string & v);

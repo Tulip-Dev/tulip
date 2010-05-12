@@ -157,12 +157,28 @@ public:
   virtual bool setEdgeStringValue( const edge e, const std::string & v );
   virtual bool setAllNodeStringValue( const std::string & v );
   virtual bool setAllEdgeStringValue( const std::string & v );
-  // returns an iterator on all nodes whose value is different
+  // returns an iterator on all nodes (belonging to g) whose value is different
   // from the default value
-  virtual Iterator<node>* getNonDefaultValuatedNodes() const;
-  // returns an iterator on all edges whose value is different
+  virtual Iterator<node>* getNonDefaultValuatedNodes(const Graph* g = NULL) const;
+  // returns an iterator on all edges (belonging to g) whose value is different
   // from the default value
-  virtual Iterator<edge>* getNonDefaultValuatedEdges() const;
+  virtual Iterator<edge>* getNonDefaultValuatedEdges(const Graph* g = NULL) const;
+  /**
+   * Set the value of a node (first argument) in the current property (this)
+   * with the value of the node (second argument) defined in prop (third argument).
+   * If the fourth argument is set to true, the value will be copied only if
+   * it is not the default value.
+   */
+  virtual void copy(const node dst, const node src, PropertyInterface *prop,
+		    bool ifNotDefault = false);
+  /**
+   * Set the value of an edge (first argument) in the current property (this)
+   * with the value of the edge (second argument) defined in prop (third argument).
+   * If the fourth argument is set to true, the value will be copied only if
+   * it is not the default value.
+   */
+  virtual void copy(const edge dst, const edge src, PropertyInterface *prop,
+		    bool ifNotDefault = false);
   // for performance reason and use in GraphUpdatesRecorder
   virtual DataMem* getNodeDefaultDataMemValue() const;
   virtual DataMem* getEdgeDefaultDataMemValue() const;

@@ -72,24 +72,6 @@ PropertyInterface* BooleanProperty::clonePrototype(Graph * g, const std::string&
 	p->setAllEdgeValue( getEdgeDefaultValue() );
 	return p;
 }
-//=============================================================
-void BooleanProperty::copy( const node n0, const node n1, PropertyInterface * p )
-{
-	if( !p )
-		return;
-	BooleanProperty * tp = dynamic_cast<BooleanProperty*>(p);
-	assert( tp );
-	setNodeValue( n0, tp->getNodeValue(n1) );
-}
-//=============================================================
-void BooleanProperty::copy( const edge e0, const edge e1, PropertyInterface * p )
-{
-	if( !p )
-		return;
-	BooleanProperty * tp = dynamic_cast<BooleanProperty*>(p);
-	assert( tp );
-	setEdgeValue( e0, tp->getEdgeValue(e1) );
-}
 //=================================================================================
 PropertyInterface* BooleanVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
@@ -98,22 +80,6 @@ PropertyInterface* BooleanVectorProperty::clonePrototype(Graph * g, const std::s
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
-}
-//=============================================================
-void BooleanVectorProperty::copy( const node n0, const node n1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  BooleanVectorProperty * tp = dynamic_cast<BooleanVectorProperty*>(p);
-  assert( tp );
-  setNodeValue( n0, tp->getNodeValue(n1) );
-}
-//=============================================================
-void BooleanVectorProperty::copy( const edge e0, const edge e1, PropertyInterface * p ) {
-  if( !p )
-    return;
-  BooleanVectorProperty * tp = dynamic_cast<BooleanVectorProperty*>(p);
-  assert( tp );
-  setEdgeValue( e0, tp->getEdgeValue(e1) );
 }
 
 
