@@ -33,30 +33,12 @@ namespace tlp {
         return true;
       if(e1.distance<e2.distance)
         return false;
-      BoundingBox bb1,bb2;
-      if(e1.isComplexEntity)
-        if(e1.isNode){
-        GlNode glNode(e1.complexEntity->first);
-        bb1=glNode.getBoundingBox(inputData);
-      }else{
-        GlEdge glEdge(e1.complexEntity->first);
-        bb1=glEdge.getBoundingBox(inputData);
-      }
-      else
-        bb1=((GlSimpleEntity*)(e1.simpleEntity->first))->getBoundingBox();
 
-      if(e2.isComplexEntity)
-        if(e2.isNode){
-        GlNode glNode(e2.complexEntity->first);
-        bb2=glNode.getBoundingBox(inputData);
-      }else{
-        GlEdge glEdge(e2.complexEntity->first);
-        bb2=glEdge.getBoundingBox(inputData);
-      }
-      else
-        bb2=((GlSimpleEntity*)(e2.simpleEntity->first))->getBoundingBox();
+      BoundingBox *bb1,*bb2;
+      bb1=&e1.entity->boundingBox;
+      bb2=&e2.entity->boundingBox;
 
-      if(bb1.second[0]-bb1.first[0] > bb2.second[0]-bb2.first[0])
+      if(bb1->second[0]-bb1->first[0] > bb2->second[0]-bb2->first[0])
         return false;
       else
         return true;
@@ -162,25 +144,28 @@ namespace tlp {
 	  initGlParameters();
 
 	  GlLODCalculator *newLodCalculator=lodCalculator->clone();
+      newLodCalculator->setRenderingEntitiesFlag(RenderingAll);
 	  newLodCalculator->beginNewCamera(getLayer("Main")->getCamera());
 	  GlNode glNode(0);
 	  for(set<node>::iterator it=metaNodes.begin();it!=metaNodes.end();++it){
 	    glNode.id=(*it).id;
 	    newLodCalculator->addNodeBoundingBox((*it).id,glNode.getBoundingBox(glGraphComposite->getInputData()));
 	  }
-	  newLodCalculator->compute(viewport,viewport,RenderingAll);
-	  VectorOfComplexLODResultVector* nodesVector=newLodCalculator->getResultForNodes();
+      newLodCalculator->compute(viewport,viewport);
 
-	  assert(nodesVector->size()!=0);
-	  for(vector<LODResultComplexEntity>::iterator it=(*nodesVector)[0].begin();it!=(*nodesVector)[0].end();++it) {
-	    glGraphComposite->getInputData()->getMetaNodeRenderer()->prerender(node((*it).first),(*it).second,getLayer("Main")->getCamera());
+      LayersLODVector *layersLODVector=newLodCalculator->getResult();
+      LayerLODUnit *layerLODUnit=&(layersLODVector->front());
+
+      for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->nodesLODVector.begin();it!=layerLODUnit->nodesLODVector.end();++it) {
+        if((*it).lod>=0)
+          glGraphComposite->getInputData()->getMetaNodeRenderer()->prerender(node((*it).id),(*it).lod,getLayer("Main")->getCamera());
 	  }
 	  delete newLodCalculator;
 	}
   }
 
   void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphComposite,TextRenderer *fontRenderer,
-                                    OcclusionTest *occlusionTest,vector<LODResultComplexEntity> *nodes,vector<LODResultComplexEntity> *edges){
+                                    OcclusionTest *occlusionTest,LayerLODUnit *layerLODUnit){
     Graph *graph=glGraphComposite->getInputData()->getGraph();
     BooleanProperty *selectionProperty=glGraphComposite->getInputData()->elementSelected;
     DoubleProperty *metric=NULL;
@@ -195,8 +180,11 @@ namespace tlp {
     // Draw Labels for Nodes
     if(glGraphComposite->getInputData()->parameters->isViewNodeLabel()) {
       node n;
-      for(vector<LODResultComplexEntity>::iterator it=nodes->begin();it!=nodes->end();++it) {
-        n.id=(*it).first;
+      for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->nodesLODVector.begin();it!=layerLODUnit->nodesLODVector.end();++it) {
+        if((*it).lod<0)
+          continue;
+
+        n.id=(*it).id;
 
         if(selectionProperty->getNodeValue(n)==drawSelected){
           if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric){
@@ -234,8 +222,11 @@ namespace tlp {
     // Draw Labels for Edges
     if(glGraphComposite->getInputData()->parameters->isViewEdgeLabel()) {
       edge e;
-      for(vector<LODResultComplexEntity>::iterator it=edges->begin();it!=edges->end();++it) {
-        e.id=(*it).first;
+      for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->edgesLODVector.begin();it!=layerLODUnit->edgesLODVector.end();++it) {
+        if((*it).lod<0)
+          continue;
+
+        e.id=(*it).id;
         if(selectionProperty->getEdgeValue(e) == drawSelected){
           if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric){
             // Not metric ordered
@@ -265,6 +256,8 @@ namespace tlp {
   void GlScene::draw() {
 	initGlParameters();
 
+    lodCalculator->setRenderingEntitiesFlag(RenderingAll);
+
     /*
       If LOD Calculator need entities to compute LOD, we use visitor system
     */
@@ -281,18 +274,12 @@ namespace tlp {
       delete lodVisitor;
     }
 
-    lodCalculator->compute(viewport,viewport,RenderingAll);
+    lodCalculator->compute(viewport,viewport);
+
+    LayersLODVector *layersLODVector=lodCalculator->getResult();
 
 	TextRenderer fontRenderer;
 	OcclusionTest occlusionTest;
-
-	VectorOfCamera* cameraVector=lodCalculator->getVectorOfCamera();
-	VectorOfSimpleLODResultVector* simpleVector=lodCalculator->getResultForSimpleEntities();
-	VectorOfComplexLODResultVector* nodesVector=lodCalculator->getResultForNodes();
-	VectorOfComplexLODResultVector* edgesVector=lodCalculator->getResultForEdges();
-	VectorOfSimpleLODResultVector::iterator itSimple=simpleVector->begin();
-	VectorOfComplexLODResultVector::iterator itNodes=nodesVector->begin();
-	VectorOfComplexLODResultVector::iterator itEdges=edgesVector->begin();
 
 	Camera *camera;
 	Graph *graph=NULL;
@@ -306,8 +293,8 @@ namespace tlp {
 
     // Iterate on Camera
     Camera *oldCamera=NULL;
-    for(VectorOfCamera::iterator itCamera=cameraVector->begin();itCamera!=cameraVector->end();++itCamera){
-      camera=(Camera*)(*itCamera);
+    for(vector<LayerLODUnit>::iterator itLayer=layersLODVector->begin();itLayer!=layersLODVector->end();++itLayer){
+      camera=(Camera*)((*itLayer).camera);
       if(camera!=oldCamera){
         camera->initGl();
         oldCamera=camera;
@@ -324,26 +311,34 @@ namespace tlp {
         // If elements are not zOrdered
 
         // Draw simple entities
-        for(vector<LODResultSimpleEntity>::iterator it=(*itSimple).begin();it!=(*itSimple).end();++it) {
-          glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*it).first))->getStencil(),0xFFFF);
-          ((GlSimpleEntity*)((*it).first))->draw((*it).second,camera);
+        for(vector<SimpleEntityLODUnit>::iterator it=(*itLayer).simpleEntitiesLODVector.begin();it!=(*itLayer).simpleEntitiesLODVector.end();++it) {
+          if((*it).lod<0)
+            continue;
+
+          glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*it).id))->getStencil(),0xFFFF);
+          ((GlSimpleEntity*)((*it).id))->draw((*it).lod,camera);
         }
 
         // Draw complex entities
         if(glGraphComposite){
-          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
-            assert(graph);
-            if(!graph->isMetaNode(node((*it).first))){
-              glNode.id=(*it).first;
-              glNode.draw((*it).second,glGraphComposite->getInputData(),camera);
+          for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).nodesLODVector.begin();it!=(*itLayer).nodesLODVector.end();++it) {
+            if((*it).lod<0)
+              continue;
+
+            if(!graph->isMetaNode(node((*it).id))){
+              glNode.id=(*it).id;
+              glNode.draw((*it).lod,glGraphComposite->getInputData(),camera);
             }else{
-              glMetaNode.id=(*it).first;
-              glMetaNode.draw((*it).second,glGraphComposite->getInputData(),camera);
+              glMetaNode.id=(*it).id;
+              glMetaNode.draw((*it).lod,glGraphComposite->getInputData(),camera);
             }
           }
-          for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
-            glEdge.id=(*it).first;
-            glEdge.draw((*it).second,glGraphComposite->getInputData(),camera);
+          for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).edgesLODVector.begin();it!=(*itLayer).edgesLODVector.end();++it) {
+            if((*it).lod<0)
+              continue;
+
+            glEdge.id=(*it).id;
+            glEdge.draw((*it).lod,glGraphComposite->getInputData(),camera);
           }
         }
 
@@ -358,8 +353,11 @@ namespace tlp {
         double dist;
 
         // Colect simple entities
-        for(vector<LODResultSimpleEntity>::iterator it=(*itSimple).begin();it!=(*itSimple).end();++it) {
-          bb=((GlSimpleEntity*)((*it).first))->getBoundingBox();
+        for(vector<SimpleEntityLODUnit>::iterator it=(*itLayer).simpleEntitiesLODVector.begin();it!=(*itLayer).simpleEntitiesLODVector.end();++it) {
+          if((*it).lod<0)
+            continue;
+
+          bb=(*it).boundingBox;
           middle=bb.first+(bb.second-bb.first)/2.f;
           dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
           dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
@@ -369,20 +367,23 @@ namespace tlp {
 
         // Colect complex entities
         if(glGraphComposite){
-          GlNode glNode(0);
-          for(vector<LODResultComplexEntity>::iterator it=(*itNodes).begin();it!=(*itNodes).end();++it) {
-            glNode.id=(*it).first;
-            bb=glNode.getBoundingBox(glGraphComposite->getInputData());
+          for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).nodesLODVector.begin();it!=(*itLayer).nodesLODVector.end();++it) {
+            if((*it).lod<0)
+              continue;
+
+            bb=(*it).boundingBox;
             middle=bb.first+(bb.second-bb.first)/2.f;
             dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
             dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
             dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
             entitiesSet.insert(EntityWithDistance(dist,&(*it),true));
           }
-          GlEdge glEdge(0);
-          for(vector<LODResultComplexEntity>::iterator it=(*itEdges).begin();it!=(*itEdges).end();++it) {
-            glEdge.id=(*it).first;
-            bb=glEdge.getBoundingBox(glGraphComposite->getInputData());
+
+          for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).edgesLODVector.begin();it!=(*itLayer).edgesLODVector.end();++it) {
+            if((*it).lod<0)
+              continue;
+
+            bb=(*it).boundingBox;
             middle=bb.first+(bb.second-bb.first)/2.f;
             dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
             dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
@@ -395,21 +396,23 @@ namespace tlp {
         for(set<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin();it!=entitiesSet.end();++it){
           if(!(*it).isComplexEntity){
             // Simple entities
-            glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*it).simpleEntity->first))->getStencil(),0xFFFF);
-            ((GlSimpleEntity*)((*it).simpleEntity->first))->draw((*it).simpleEntity->second,camera);
+            GlSimpleEntity *entity=(GlSimpleEntity*)(((SimpleEntityLODUnit*)((*it).entity))->id);
+            glStencilFunc(GL_LEQUAL,entity->getStencil(),0xFFFF);
+            entity->draw((*it).entity->lod,camera);
           }else{
             // Complex entities
+            ComplexEntityLODUnit *entity=(ComplexEntityLODUnit*)((*it).entity);
             if((*it).isNode){
-              if(!graph->isMetaNode(node((*it).complexEntity->first))){
-                glNode.id=(*it).complexEntity->first;
-                glNode.draw((*it).complexEntity->second,glGraphComposite->getInputData(),camera);
+              if(!graph->isMetaNode(node(entity->id))){
+                glNode.id=entity->id;
+                glNode.draw(entity->lod,glGraphComposite->getInputData(),camera);
               }else{
-                glMetaNode.id=(*it).complexEntity->first;
-                glMetaNode.draw((*it).complexEntity->second,glGraphComposite->getInputData(),camera);
+                glMetaNode.id=entity->id;
+                glMetaNode.draw(entity->lod,glGraphComposite->getInputData(),camera);
               }
             }else{
-              glEdge.id=(*it).complexEntity->first;
-              glEdge.draw((*it).complexEntity->second,glGraphComposite->getInputData(),camera);
+              glEdge.id=entity->id;
+              glEdge.draw(entity->lod,glGraphComposite->getInputData(),camera);
             }
           }
         }
@@ -429,17 +432,13 @@ namespace tlp {
         glDisable(GL_COLOR_MATERIAL);
 
         // Draw Labels for selected entities
-        drawLabelsForComplexEntities(true,glGraphComposite,&fontRenderer,&occlusionTest,&(*itNodes),&(*itEdges));
+        drawLabelsForComplexEntities(true,glGraphComposite,&fontRenderer,&occlusionTest,&(*itLayer));
 
         // Draw Labels for unselected entities
-        drawLabelsForComplexEntities(false,glGraphComposite,&fontRenderer,&occlusionTest,&(*itNodes),&(*itEdges));
+        drawLabelsForComplexEntities(false,glGraphComposite,&fontRenderer,&occlusionTest,&(*itLayer));
 
         glPopAttrib();
       }
-
-      ++itSimple;
-      ++itNodes;
-      ++itEdges;
 	}
 
 	lodCalculator->clear();
@@ -711,6 +710,7 @@ namespace tlp {
     }else{
       selectLODCalculator=lodCalculator->clone();
     }
+    selectLODCalculator->setRenderingEntitiesFlag((RenderingEntitiesFlag)(RenderingAll | RenderingWithoutRemove));
 
     //Collect entities if need
     GlLODSceneVisitor *lodVisitor;
@@ -738,38 +738,20 @@ namespace tlp {
 
 	glViewport(selectionViewport[0],selectionViewport[1],selectionViewport[2],selectionViewport[3]);
 
-    selectLODCalculator->compute(viewport,selectionViewport,type);
-	//lodCalculator->compute();
+    selectLODCalculator->compute(viewport,selectionViewport);
 
-    VectorOfCamera* cameraVector=selectLODCalculator->getVectorOfCamera();
-    VectorOfSimpleLODResultVector* simpleVector=selectLODCalculator->getResultForSimpleEntities();
-    VectorOfComplexLODResultVector* nodesVector=selectLODCalculator->getResultForNodes();
-    VectorOfComplexLODResultVector* edgesVector=selectLODCalculator->getResultForEdges();
-	VectorOfSimpleLODResultVector::iterator itSimple=simpleVector->begin();
-	VectorOfComplexLODResultVector::iterator itNodes=nodesVector->begin();
-	VectorOfComplexLODResultVector::iterator itEdges=edgesVector->begin();
+    LayersLODVector *layersLODVector=selectLODCalculator->getResult();
 
-	for(VectorOfCamera::iterator it=cameraVector->begin();it!=cameraVector->end();++it) {
-
-      Camera *camera=(Camera*)(*it);
+    for(vector<LayerLODUnit>::iterator itLayer=layersLODVector->begin();itLayer!=layersLODVector->end();++itLayer){
+      Camera *camera=(Camera*)((*itLayer).camera);
 
       Vector<int, 4> viewport = camera->getViewport();
 
       unsigned int size;
-      if((type & RenderingSimpleEntities)!=0) {
-        size=(*itSimple).size();
-      }else if((type & RenderingNodes)!=0){
-        size=(*itNodes).size();
-      }else{
-        size=(*itEdges).size();
-      }
+      size=(*itLayer).simpleEntitiesLODVector.size()+(*itLayer).nodesLODVector.size()+(*itLayer).edgesLODVector.size();
 
-      if(size==0){
-        itSimple++;
-        itNodes++;
-        itEdges++;
+      if(size==0)
         continue;
-      }
 
       glPushAttrib(GL_ALL_ATTRIB_BITS); //save previous attributes
       glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS); //save previous attributes
@@ -807,32 +789,46 @@ namespace tlp {
       map<unsigned int, unsigned long> idToEntity;
       unsigned int id=1;
 
-      if((type&RenderingSimpleEntities)!=0) {
-        for(vector<LODResultSimpleEntity>::iterator itE=(*itSimple).begin();itE!=(*itSimple).end();++itE){
-          idToEntity[id]=(*itE).first;
+      if((type & RenderingSimpleEntities)!=0){
+        for(vector<SimpleEntityLODUnit>::iterator it=(*itLayer).simpleEntitiesLODVector.begin();it!=(*itLayer).simpleEntitiesLODVector.end();++it) {
+          if((*it).lod<0)
+            continue;
+
+          idToEntity[id]=(*it).id;
           glLoadName(id);
           id++;
-          ((GlSimpleEntity*)((*itE).first))->draw(20.,camera);
+          ((GlSimpleEntity*)((*it).id))->draw(20.,camera);
         }
-      }else if((type&RenderingNodes)!=0){
-        if(glGraphComposite){
+      }
+
+      // Draw complex entities
+      if(glGraphComposite){
+        if((type & RenderingNodes)!=0){
           GlNode glNode(0);
-          for(vector<LODResultComplexEntity>::iterator itE=(*itNodes).begin();itE!=(*itNodes).end();++itE){
-            idToEntity[id]=(*itE).first;
+          for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).nodesLODVector.begin();it!=(*itLayer).nodesLODVector.end();++it) {
+            if((*it).lod<0)
+              continue;
+
+            idToEntity[id]=(*it).id;
             glLoadName(id);
             id++;
-            glNode.id=(*itE).first;
+
+            glNode.id=(*it).id;
             glNode.draw(20.,glGraphComposite->getInputData(),camera);
           }
         }
-      }else{
-        if(glGraphComposite){
+
+        if((type & RenderingEdges)!=0){
           GlEdge glEdge(0);
-          for(vector<LODResultComplexEntity>::iterator itE=(*itEdges).begin();itE!=(*itEdges).end();++itE){
-            idToEntity[id]=(*itE).first;
+          for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).edgesLODVector.begin();it!=(*itLayer).edgesLODVector.end();++it) {
+            if((*it).lod<0)
+              continue;
+
+            idToEntity[id]=(*it).id;
             glLoadName(id);
             id++;
-            glEdge.id=(*itE).first;
+
+            glEdge.id=(*it).id;
             glEdge.draw(20.,glGraphComposite->getInputData(),camera);
           }
         }
@@ -856,9 +852,6 @@ namespace tlp {
       glPopAttrib();
 
       delete[] selectBuf;
-      itSimple++;
-      itNodes++;
-      itEdges++;
 	}
 
     selectLODCalculator->clear();

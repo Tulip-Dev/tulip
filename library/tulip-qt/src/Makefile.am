@@ -63,7 +63,6 @@ BUILT_SOURCES = \
 	moc_FindSelectionWidget.cpp \
 	moc_SGHierarchyWidget.cpp \
 	moc_GWOverviewWidget.cpp \
-	moc_QtCPULODCalculator.cpp \
 	moc_Interactor.cpp \
 	moc_PropertyDialogData.cpp \
 	moc_CopyPropertyDialogData.cpp \
@@ -122,7 +121,6 @@ TODIST_SOURCES = \
 	MouseShowElementInfos.cpp \
 	DataSetDialog.cpp \
 	TlpQtTools.cpp \
-	QtCPULODCalculator.cpp \
 	QtQuadTreeLODCalculator.cpp \
 	InteractorManager.cpp \
 	Interactor.cpp \

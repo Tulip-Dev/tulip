@@ -32,13 +32,38 @@ namespace tlp {
     RenderingWithoutRemove=8
   };
 
-  typedef std::pair<unsigned long, float> LODResultSimpleEntity;
-  typedef std::pair<unsigned int, float> LODResultComplexEntity;
-  typedef std::vector<LODResultSimpleEntity> SimpleLODResultVector;
-  typedef std::vector<LODResultComplexEntity> ComplexLODResultVector;
-  typedef std::vector<SimpleLODResultVector> VectorOfSimpleLODResultVector;
-  typedef std::vector<ComplexLODResultVector> VectorOfComplexLODResultVector;
-  typedef std::vector<unsigned long> VectorOfCamera;
+  struct EntityLODUnit {  
+
+    EntityLODUnit(const BoundingBox &boundingBox):boundingBox(boundingBox),lod(-1){}
+
+    BoundingBox boundingBox;
+    float lod;
+  };
+
+  // struct to store simple entity lod
+  struct SimpleEntityLODUnit : public EntityLODUnit{
+
+    SimpleEntityLODUnit(unsigned long id,const BoundingBox &boundingBox):EntityLODUnit(boundingBox),id(id){}
+
+    unsigned long id;
+  };
+
+  // struct to store complex entity (nodes/edges) lod
+  struct ComplexEntityLODUnit : public EntityLODUnit{
+
+    ComplexEntityLODUnit(unsigned int id,const BoundingBox &boundingBox):EntityLODUnit(boundingBox),id(id){}
+
+    unsigned int id;
+  };
+
+  struct LayerLODUnit{
+    std::vector<SimpleEntityLODUnit> simpleEntitiesLODVector;
+    std::vector<ComplexEntityLODUnit> nodesLODVector;
+    std::vector<ComplexEntityLODUnit> edgesLODVector;
+    unsigned long camera;
+  };
+
+  typedef std::vector<LayerLODUnit> LayersLODVector;
 
   /**
    * Class use to calculate lod of scene entities
@@ -59,6 +84,11 @@ namespace tlp {
      * Set input data use to render
      */
     virtual void setInputData(GlGraphInputData *inputData) {}
+
+    /**
+     * Set RenderingEntitiesFlag to : RenderingSimpleEntities,RenderingNodes,RenderingEdges,RenderingAll,RenderingWithoutRemove
+     */
+    virtual void setRenderingEntitiesFlag(RenderingEntitiesFlag flag) {renderingEntitiesFlag=flag;}
 
     /**
      * Return if the LODCalculator need to have entities to compute
@@ -86,30 +116,37 @@ namespace tlp {
     virtual void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb)=0;
 
     /**
-     * Compute all lod
+     * Reserve memory to store nodes LOD
      */
-    virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport,RenderingEntitiesFlag type)=0;
+    virtual void reserveMemoryForNodes(unsigned int numberOfNodes) {}
 
     /**
-     * Return lod result for simple entities
+     * Reserve memory to store edges LOD
      */
-    virtual VectorOfSimpleLODResultVector* getResultForSimpleEntities() = 0;
+    virtual void reserveMemoryForEdges(unsigned int numberOfEdges) {}
+
     /**
-     * Return lod result for nodes
+     * Compute all lod
      */
-    virtual VectorOfComplexLODResultVector* getResultForNodes() = 0;
+    virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport)=0;
+
     /**
-     * Return lod result for edges
+     * Return a pointer on LOD result
      */
-    virtual VectorOfComplexLODResultVector* getResultForEdges() = 0;
-    /**
-     * Return cameras vector
-     */
-    virtual VectorOfCamera* getVectorOfCamera() = 0;
+    LayersLODVector *getResult(){return &layersLODVector;}
+
     /**
      * Clear class data
      */
-    virtual void clear() = 0;
+    virtual void clear() {
+      layersLODVector.clear();
+    }
+
+  protected :
+
+    RenderingEntitiesFlag renderingEntitiesFlag;
+
+    LayersLODVector layersLODVector;
   };
 
 }

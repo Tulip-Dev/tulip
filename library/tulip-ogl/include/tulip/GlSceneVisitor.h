@@ -30,6 +30,8 @@ namespace tlp {
     virtual void visit(GlNode *glNode) {}
     virtual void visit(GlEdge *glEdge) {}
     virtual void visit(GlLayer *layer) {}
+    virtual void reserveMemoryForNodes(unsigned int numberOfNodes) {}
+    virtual void reserveMemoryForEdges(unsigned int numberOfEdges) {}
 
   };
   

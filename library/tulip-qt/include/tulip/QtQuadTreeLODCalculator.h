@@ -19,8 +19,7 @@
 #include <tulip/Matrix.h>
 #include <tulip/Vector.h>
 #include <tulip/GlSceneObserver.h>
-
-#include "tulip/QtCPULODCalculator.h"
+#include <tulip/GlCPULODCalculator.h>
 
 namespace tlp {
 
@@ -31,7 +30,7 @@ namespace tlp {
   /**
    * Class use to compute bounding boxs of a vector of GlEntity
    */
-  class TLP_QT_SCOPE QtQuadTreeLODCalculator : public QtCPULODCalculator, public GraphObserver, public Observer, public GlSceneObserver {
+  class TLP_QT_SCOPE QtQuadTreeLODCalculator : public GlCPULODCalculator, public GraphObserver, public Observer, public GlSceneObserver {
 
   public:
 
@@ -47,16 +46,12 @@ namespace tlp {
     void addNodeBoundingBox(unsigned int id,const BoundingBox& bb);
     void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb);
 
-    void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport,RenderingEntitiesFlag type);
+    void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
-    void computeFor3DCamera(SimpleBoundingBoxVector *inputSimple,ComplexBoundingBoxVector *inputNodes,ComplexBoundingBoxVector *inputEdges,
-        SimpleLODResultVector *outputSimple, ComplexLODResultVector *outputNodes, ComplexLODResultVector *outputEdges,
-        const Coord &eye,
-        const Matrix<float, 4> transformMatrix,
-        const Vector<int,4>& globalViewport,
-        const Vector<int,4>& currentViewport);
-
-    void clear();
+    void computeFor3DCamera(LayerLODUnit *layerLODUnit,const Coord &eye,
+                            const Matrix<float, 4> transformMatrix,
+                            const Vector<int,4>& globalViewport,
+                            const Vector<int,4>& currentViewport);
 
     void removeObservers();
     void addObservers();
@@ -89,12 +84,12 @@ namespace tlp {
 
     GlScene *scene;
 
-    std::vector<QuadTreeNode *> nodesQuadTree;
-    std::vector<QuadTreeNode *> edgesQuadTree;
-    std::vector<QuadTreeNode *> nodesSelectedQuadTree;
-    std::vector<QuadTreeNode *> edgesSelectedQuadTree;
-    std::vector<QuadTreeNode *> entitiesQuadTree;
-    VectorOfSimpleBoundingBoxVector simpleEntities;
+    std::vector<QuadTreeNode> nodesQuadTree;
+    std::vector<QuadTreeNode> edgesQuadTree;
+    std::vector<QuadTreeNode> nodesSelectedQuadTree;
+    std::vector<QuadTreeNode> edgesSelectedQuadTree;
+    std::vector<QuadTreeNode> entitiesQuadTree;
+    std::vector<std::vector<SimpleEntityLODUnit> > simpleEntities;
 
     bool haveToCompute;
 
@@ -112,6 +107,7 @@ namespace tlp {
     PropertyInterface *selectionProperty;
 
     int quadTreesVectorPosition;
+    int simpleEntitiesVectorPosition;
   };
 
 }

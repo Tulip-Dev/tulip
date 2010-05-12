@@ -29,8 +29,7 @@ SET(tulip-qt_LIB_SRCS
     MouseEdgeBendEditor.cpp 
     MouseShowElementInfos.cpp 
     DataSetDialog.cpp 
-    TlpQtTools.cpp 
-    QtCPULODCalculator.cpp 
+    TlpQtTools.cpp
     InteractorManager.cpp 
     Interactor.cpp 
     InteractorChainOfResponsibility.cpp 
@@ -113,7 +112,6 @@ set(tulip-qt_MOC
     ../include/tulip/FindSelectionWidget.h
     ../include/tulip/SGHierarchyWidget.h
     ../include/tulip/GWOverviewWidget.h
-    ../include/tulip/QtCPULODCalculator.h
     ../include/tulip/Interactor.h
     ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/PropertyDialogData.h
     ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/CopyPropertyDialogData.h

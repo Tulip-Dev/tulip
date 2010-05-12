@@ -25,7 +25,6 @@
 
 #include "tulip/QtQuadTreeLODCalculator.h"
 #include "tulip/QGlPixelBufferManager.h"
-#include "tulip/QtCPULODCalculator.h"
 #include "tulip/Interactor.h"
 #include "tulip/InteractorManager.h"
 #include "tulip/QtMetaNodeRenderer.h"

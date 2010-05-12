@@ -92,6 +92,7 @@ namespace tlp {
 
 
     GlCPULODCalculator calculator;
+    calculator.setRenderingEntitiesFlag(RenderingAll);
 
     calculator.beginNewCamera(activeCamera);
 
@@ -138,10 +139,10 @@ namespace tlp {
       delete itE;
     }
 
-    calculator.compute(camera->getViewport(),camera->getViewport(),RenderingAll);
+    calculator.compute(camera->getViewport(),camera->getViewport());
 
-    ComplexLODResultVector* nodesResult=&((calculator.getResultForNodes())->front());
-    ComplexLODResultVector* edgesResult=&((calculator.getResultForEdges())->front());
+    LayersLODVector *layersLODVector=calculator.getResult();
+    LayerLODUnit *layerLODUnit=&(layersLODVector->front());
 
     glPushMatrix();
     glScalef(scale[0],scale[1],scale[2]);
@@ -152,18 +153,24 @@ namespace tlp {
     metaData.getMetaNodeRenderer()->setInputData(&metaData);
     GlMetaNode glMetaNode(0);
     GlEdge glEdge(0);
-    for(ComplexLODResultVector::iterator it=nodesResult->begin();it!=nodesResult->end();++it){
-      if(!metaData.getGraph()->isMetaNode(node((*it).first))){
-        glNode.id=(*it).first;
-        glNode.draw((*it).second,&metaData,activeCamera);
+    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->nodesLODVector.begin();it!=layerLODUnit->nodesLODVector.end();++it){
+      if((*it).lod<0)
+        continue;
+
+      if(!metaData.getGraph()->isMetaNode(node((*it).id))){
+        glNode.id=(*it).id;
+        glNode.draw((*it).lod,&metaData,activeCamera);
       }else{
-        glMetaNode.id=(*it).first;
-        glMetaNode.draw((*it).second,&metaData,activeCamera);
+        glMetaNode.id=(*it).id;
+        glMetaNode.draw((*it).lod,&metaData,activeCamera);
       }
     }
-    for(ComplexLODResultVector::iterator it=edgesResult->begin();it!=edgesResult->end();++it){
-      glEdge.id=(*it).first;
-      glEdge.draw((*it).second,&metaData,activeCamera);
+    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->edgesLODVector.begin();it!=layerLODUnit->edgesLODVector.end();++it){
+      if((*it).lod<0)
+        continue;
+
+      glEdge.id=(*it).id;
+      glEdge.draw((*it).lod,&metaData,activeCamera);
     }
     metaData.getMetaNodeRenderer()->setInputData(inputDataBackup);
 

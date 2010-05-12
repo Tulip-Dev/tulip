@@ -28,15 +28,6 @@ namespace tlp {
    */
   class TLP_GL_SCOPE GlCPULODCalculator : public GlLODCalculator {
 
-  protected:
-
-    typedef std::pair<unsigned long, BoundingBox> SimpleBoundingBoxUnit;
-    typedef std::pair<unsigned int, BoundingBox> ComplexBoundingBoxUnit;
-    typedef std::vector<SimpleBoundingBoxUnit> SimpleBoundingBoxVector;
-    typedef std::vector<ComplexBoundingBoxUnit> ComplexBoundingBoxVector;
-    typedef std::vector<SimpleBoundingBoxVector> VectorOfSimpleBoundingBoxVector;
-    typedef std::vector<ComplexBoundingBoxVector> VectorOfComplexBoundingBoxVector;
-
   public:
 
     virtual ~GlCPULODCalculator();
@@ -60,60 +51,27 @@ namespace tlp {
     virtual void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb);
 
     /**
+     * Reserve memory to store nodes LOD
+     */
+    virtual void reserveMemoryForNodes(unsigned int numberOfNodes);
+
+    /**
+     * Reserve memory to store edges LOD
+     */
+    virtual void reserveMemoryForEdges(unsigned int numberOfEdges);
+
+    /**
      * Compute all bounding boxs with the given viewport
      */
-    virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport,RenderingEntitiesFlag type);
+    virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
-    virtual void computeFor3DCamera(SimpleBoundingBoxVector *inputSimple,ComplexBoundingBoxVector *inputNodes,ComplexBoundingBoxVector *inputEdges,
-        SimpleLODResultVector *outputSimple, ComplexLODResultVector *outputNodes, ComplexLODResultVector *outputEdges,
-        const Coord &eye,
-        const Matrix<float, 4> transformMatrix,
-        const Vector<int,4>& globalViewport,
-        const Vector<int,4>& currentViewport);
+    virtual void computeFor3DCamera(LayerLODUnit *layerLODUnit,const Coord &eye,const Matrix<float, 4> transformMatrix,const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
-    void computeFor2DCamera(SimpleBoundingBoxVector *inputSimple,ComplexBoundingBoxVector *inputNodes,ComplexBoundingBoxVector *inputEdges,
-        SimpleLODResultVector *outputSimple, ComplexLODResultVector *outputNodes, ComplexLODResultVector *outputEdges,
-        const Vector<int,4>& globalViewport,
-        const Vector<int,4>& currentViewport);
-
-    /**
-     * Return the result vector for simpleEntities
-     */
-    virtual VectorOfSimpleLODResultVector* getResultForSimpleEntities();
-    /**
-     * Return the result vector for nodes
-     */
-    virtual VectorOfComplexLODResultVector* getResultForNodes();
-    /**
-     * Return the result vector for edges
-     */
-    virtual VectorOfComplexLODResultVector* getResultForEdges();
-    /**
-     * Return cameras vector
-     */
-    virtual VectorOfCamera* getVectorOfCamera();
-
-    /**
-     * Clear the class data
-     */
-    virtual void clear();
+    virtual void computeFor2DCamera(LayerLODUnit *layerLODUnit,const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
   protected:
 
-    VectorOfCamera cameraVector;
-
-    SimpleBoundingBoxVector* actualSimpleBoundingBoxVector;
-    ComplexBoundingBoxVector* actualNodesBoundingBoxVector;
-    ComplexBoundingBoxVector* actualEdgesBoundingBoxVector;
-    VectorOfSimpleBoundingBoxVector simpleBoundingBoxVector;
-    VectorOfComplexBoundingBoxVector nodesBoundingBoxVector;
-    VectorOfComplexBoundingBoxVector edgesBoundingBoxVector;
-
-    VectorOfSimpleLODResultVector simpleResultVector;
-    VectorOfComplexLODResultVector nodesResultVector;
-    VectorOfComplexLODResultVector edgesResultVector;
-
-    RenderingEntitiesFlag type;
+    LayerLODUnit *currentLayerLODUnit;
 
   };
 

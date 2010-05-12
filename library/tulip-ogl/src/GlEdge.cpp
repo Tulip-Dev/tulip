@@ -182,6 +182,19 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
     }
   }
 
+  if (lod < 5) {
+    if (OpenGlConfigManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()) {
+      GlPointManager::getInst().addPoint(srcCoord, srcCol, 1);
+    } else {
+      setColor(srcCol);
+      glPointSize(1);
+      glBegin(GL_POINTS);
+      glVertex3f(srcCoord[0], srcCoord[1], srcCoord[2]);
+      glEnd();
+    }
+    return;
+  }
+
   const LineType::RealType &bends = data->elementLayout->getEdgeValue(e);
   unsigned nbBends = bends.size();
 
@@ -429,19 +442,6 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
     }
   } else {
     endLineAnchor = tgtAnchor;
-  }
-
-  if (lod < 5) {
-    if (OpenGlConfigManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()) {
-      GlPointManager::getInst().addPoint(srcCoord, srcCol, 1);
-    } else {
-      setColor(srcCol);
-      glPointSize(1);
-      glBegin(GL_POINTS);
-      glVertex3f(srcCoord[0], srcCoord[1], srcCoord[2]);
-      glEnd();
-    }
-    return;
   }
 
   //Reset in case of drawing extremity glyph that can alterate value

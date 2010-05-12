@@ -55,6 +55,16 @@ namespace tlp {
      */
     virtual void visit(GlLayer *layer);
 
+    /**
+     * Reserve memory to store nodes LOD
+     */
+    virtual void reserveMemoryForNodes(unsigned int numberOfNodes);
+
+    /**
+     * Reserve memory to store edges LOD
+     */
+    virtual void reserveMemoryForEdges(unsigned int numberOfEdges);
+
   private:
     
     GlLODCalculator* calculator;

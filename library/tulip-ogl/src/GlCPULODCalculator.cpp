@@ -2,6 +2,10 @@
 
 #include <tulip/Matrix.h>
 
+#ifdef HAVE_OMP
+#include <omp.h>
+#endif
+
 #include "tulip/Camera.h"
 #include "tulip/GlEntity.h"
 #include "tulip/GlTools.h"
@@ -17,40 +21,42 @@ namespace tlp {
   }
 
   void GlCPULODCalculator::beginNewCamera(Camera* camera) {
-    cameraVector.push_back((unsigned long)camera);
-
-    simpleBoundingBoxVector.push_back(SimpleBoundingBoxVector());
-    nodesBoundingBoxVector.push_back(ComplexBoundingBoxVector());
-    edgesBoundingBoxVector.push_back(ComplexBoundingBoxVector());
-
-    actualSimpleBoundingBoxVector=&(simpleBoundingBoxVector.back());
-    actualNodesBoundingBoxVector=&(nodesBoundingBoxVector.back());
-    actualEdgesBoundingBoxVector=&(edgesBoundingBoxVector.back());
+    // add a new layerLODUnit add set camera pointer
+    layersLODVector.push_back(LayerLODUnit());
+    currentLayerLODUnit=&layersLODVector.back();
+    currentLayerLODUnit->camera=(unsigned long)camera;
   }
 
   void GlCPULODCalculator::addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb) {
-    actualSimpleBoundingBoxVector->push_back(SimpleBoundingBoxUnit(entity,bb));
+    // check if we have to render simple entities
+    if((renderingEntitiesFlag & RenderingSimpleEntities) !=0)
+      currentLayerLODUnit->simpleEntitiesLODVector.push_back(SimpleEntityLODUnit(entity,bb));
   }
   void GlCPULODCalculator::addNodeBoundingBox(unsigned int id,const BoundingBox& bb) {
-    actualNodesBoundingBoxVector->push_back(ComplexBoundingBoxUnit(id,bb));
+    // check if we have to render nodes
+    if((renderingEntitiesFlag & RenderingNodes) !=0)
+      currentLayerLODUnit->nodesLODVector.push_back(ComplexEntityLODUnit(id,bb));
   }
   void GlCPULODCalculator::addEdgeBoundingBox(unsigned int id,const BoundingBox& bb) {
-    actualEdgesBoundingBoxVector->push_back(ComplexBoundingBoxUnit(id,bb));
+    // check if we have to render edges
+    if((renderingEntitiesFlag & RenderingEdges) !=0)
+      currentLayerLODUnit->edgesLODVector.push_back(ComplexEntityLODUnit(id,bb));
   }
 
-  void GlCPULODCalculator::compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport,RenderingEntitiesFlag type) {
-    this->type=type;
-    assert(cameraVector.size()==simpleBoundingBoxVector.size());
-    assert(cameraVector.size()==nodesBoundingBoxVector.size());
-    assert(cameraVector.size()==edgesBoundingBoxVector.size());
+  void GlCPULODCalculator::reserveMemoryForNodes(unsigned int numberOfNodes) {
+    if((renderingEntitiesFlag & RenderingNodes) !=0)
+      currentLayerLODUnit->nodesLODVector.reserve(numberOfNodes);
+  }
 
-    int i=0;
-    for(VectorOfCamera::iterator it=cameraVector.begin();it!=cameraVector.end();++it){
-      Camera *camera=(Camera*)(*it);
+  void GlCPULODCalculator::reserveMemoryForEdges(unsigned int numberOfEdges) {
+    if((renderingEntitiesFlag & RenderingEdges) !=0)
+      currentLayerLODUnit->edgesLODVector.reserve(numberOfEdges);
+  }
 
-      simpleResultVector.push_back(std::vector<LODResultSimpleEntity>());
-      nodesResultVector.push_back(std::vector<LODResultComplexEntity>());
-      edgesResultVector.push_back(std::vector<LODResultComplexEntity>());
+  void GlCPULODCalculator::compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport) {
+
+    for(vector<LayerLODUnit>::iterator it=layersLODVector.begin();it!=layersLODVector.end();++it){
+      Camera *camera=(Camera*)((*it).camera);
 
       Matrix<float,4> transformMatrix;
       camera->getTransformMatrix(globalViewport,transformMatrix);
@@ -58,101 +64,63 @@ namespace tlp {
       Coord eye;
       if(camera->is3D()) {
         eye=camera->getEyes() + ( camera->getEyes() - camera->getCenter() ) / (float)camera->getZoomFactor();
-        computeFor3DCamera(&simpleBoundingBoxVector[i],&nodesBoundingBoxVector[i],&edgesBoundingBoxVector[i],
-            &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
-            eye,transformMatrix,globalViewport,currentViewport);
+        computeFor3DCamera(&(*it),eye,transformMatrix,globalViewport,currentViewport);
       }else{
-        computeFor2DCamera(&simpleBoundingBoxVector[i],&nodesBoundingBoxVector[i],&edgesBoundingBoxVector[i],
-            &(simpleResultVector.back()),&(nodesResultVector.back()),&(edgesResultVector.back()),
-            globalViewport,currentViewport);
+        computeFor2DCamera(&(*it),globalViewport,currentViewport);
       }
 
       glMatrixMode(GL_MODELVIEW);
-      ++i;
     }
   }
 
-  void GlCPULODCalculator::computeFor3DCamera(SimpleBoundingBoxVector *inputSimple,ComplexBoundingBoxVector *inputNodes,ComplexBoundingBoxVector *inputEdges,
-      SimpleLODResultVector *outputSimple, ComplexLODResultVector *outputNodes, ComplexLODResultVector *outputEdges,
-      const Coord &eye,
-      const Matrix<float, 4> transformMatrix,
+  void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
+                                              const Coord &eye,
+                                              const Matrix<float, 4> transformMatrix,
+                                              const Vector<int,4>& globalViewport,
+                                              const Vector<int,4>& currentViewport) {
+    size_t nb=layerLODUnit->simpleEntitiesLODVector.size();
+
+#ifdef HAVE_OMP
+    omp_set_num_threads(omp_get_num_procs());
+    omp_set_nested(true);
+    omp_set_dynamic(false);
+#endif
+
+#ifdef HAVE_OMP
+#pragma omp parallel for
+#endif
+    for(size_t i=0;i<nb;++i){
+      layerLODUnit->simpleEntitiesLODVector[i].lod=calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
+    }
+    nb=layerLODUnit->nodesLODVector.size();
+#ifdef HAVE_OMP
+#pragma omp parallel for
+#endif
+    for(size_t i=0;i<nb;++i){
+      layerLODUnit->nodesLODVector[i].lod=calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
+    }
+    nb=layerLODUnit->edgesLODVector.size();
+#ifdef HAVE_OMP
+#pragma omp parallel for
+#endif
+    for(size_t i=0;i<nb;++i){
+      layerLODUnit->edgesLODVector[i].lod=calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
+    }
+  }
+
+  void GlCPULODCalculator::computeFor2DCamera(LayerLODUnit *layerLODUnit,
       const Vector<int,4>& globalViewport,
       const Vector<int,4>& currentViewport) {
 
-    float lod;
-    if((type & RenderingSimpleEntities)!=0){
-      for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){
-        lod=calculateAABBSize((*it).second,eye,transformMatrix,globalViewport,currentViewport);
-        if(lod>=0)
-          outputSimple->push_back(pair<unsigned long,float>((*it).first,lod));
-      }
+    for(vector<SimpleEntityLODUnit>::iterator it=layerLODUnit->simpleEntitiesLODVector.begin();it!=layerLODUnit->simpleEntitiesLODVector.end();++it){
+      (*it).lod=calculate2DLod((*it).boundingBox,globalViewport,currentViewport);
     }
-    if((type & RenderingNodes)!=0){
-      for(ComplexBoundingBoxVector::iterator it=inputNodes->begin();it!=inputNodes->end();++it){
-        lod=calculateAABBSize((*it).second,eye,transformMatrix,globalViewport,currentViewport);
-        if(lod>=0)
-          outputNodes->push_back(pair<unsigned int,float>((*it).first,lod));
-      }
+    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->nodesLODVector.begin();it!=layerLODUnit->nodesLODVector.end();++it){
+      (*it).lod=calculate2DLod((*it).boundingBox,globalViewport,currentViewport);
     }
-    if((type & RenderingEdges)!=0){
-      for(ComplexBoundingBoxVector::iterator it=inputEdges->begin();it!=inputEdges->end();++it){
-        lod=calculateAABBSize((*it).second,eye,transformMatrix,globalViewport,currentViewport);
-        if(lod>=0)
-          outputEdges->push_back(pair<unsigned int,float>((*it).first,lod));
-      }
+    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->edgesLODVector.begin();it!=layerLODUnit->edgesLODVector.end();++it){
+      (*it).lod=calculate2DLod((*it).boundingBox,globalViewport,currentViewport);
     }
-  }
-
-  void GlCPULODCalculator::computeFor2DCamera(SimpleBoundingBoxVector *inputSimple,ComplexBoundingBoxVector *inputNodes,ComplexBoundingBoxVector *inputEdges,
-      SimpleLODResultVector *outputSimple, ComplexLODResultVector *outputNodes, ComplexLODResultVector *outputEdges,
-      const Vector<int,4>& globalViewport,
-      const Vector<int,4>& currentViewport) {
-
-    float lod;
-    if((type & RenderingSimpleEntities)!=0){
-      for(SimpleBoundingBoxVector::iterator it=inputSimple->begin();it!=inputSimple->end();++it){
-        lod=calculate2DLod((*it).second,globalViewport,currentViewport);
-        if(lod>=0)
-          outputSimple->push_back(pair<unsigned long,float>((*it).first,lod));
-      }
-    }
-    if((type & RenderingNodes)!=0){
-      for(ComplexBoundingBoxVector::iterator it=inputNodes->begin();it!=inputNodes->end();++it){
-        lod=calculate2DLod((*it).second,globalViewport,currentViewport);
-        if(lod>=0)
-          outputNodes->push_back(pair<unsigned int,float>((*it).first,lod));
-      }
-    }
-    if((type & RenderingEdges)!=0){
-      for(ComplexBoundingBoxVector::iterator it=inputEdges->begin();it!=inputEdges->end();++it){
-        lod=calculate2DLod((*it).second,globalViewport,currentViewport);
-        if(lod>=0)
-          outputEdges->push_back(pair<unsigned int,float>((*it).first,lod));
-      }
-    }
-  }
-
-  VectorOfSimpleLODResultVector* GlCPULODCalculator::getResultForSimpleEntities(){
-    return &simpleResultVector;
-  }
-  VectorOfComplexLODResultVector* GlCPULODCalculator::getResultForNodes(){
-    return &nodesResultVector;
-  }
-  VectorOfComplexLODResultVector* GlCPULODCalculator::getResultForEdges(){
-    return &edgesResultVector;
-  }
-  VectorOfCamera* GlCPULODCalculator::getVectorOfCamera(){
-    return &cameraVector;
-  }
-
-  void GlCPULODCalculator::clear() {
-    simpleBoundingBoxVector.clear();
-    nodesBoundingBoxVector.clear();
-    edgesBoundingBoxVector.clear();
-    simpleResultVector.clear();
-    nodesResultVector.clear();
-    edgesResultVector.clear();
-    cameraVector.clear();
   }
 
 }

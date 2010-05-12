@@ -154,7 +154,7 @@ IF(MACPPC)
 ENDIF(MACPPC)
 
 ## -----------------------------------------------------------------------------------------------
-## Qt assistant config
+## Windows, Apple and Linux
 ## -----------------------------------------------------------------------------------------------
 IF(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DDLL_EXPORT -DQT_ASSISTANT='\"assistant_adp\"'")
@@ -163,13 +163,24 @@ ENDIF(WIN32)
 IF(APPLE)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__APPLE__ -DQT_ASSISTANT='\"Assistant_adp\"'")
 ENDIF(APPLE)
-STRING(COMPARE EQUAL "${UNAME_OUT}" "LINUX" LINUX)
+
+EXEC_PROGRAM(uname OUTPUT_VARIABLE UNAME_OUT)
+STRING(COMPARE EQUAL "${UNAME_OUT}" "Linux" LINUX)
 IF(NOT LINUX)
   STRING(COMPARE EQUAL "${UNAME_OUT}" "GNU/kFreeBSD" LINUX)
 ENDIF(NOT LINUX)
 IF(LINUX)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_LINUX")
 ENDIF(LINUX)
+
+## -----------------------------------------------------------------------------------------------
+## OpenMP
+## -----------------------------------------------------------------------------------------------
+
+FIND_PACKAGE(OpenMP)
+IF(OPENMP_FOUND)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_OMP ${OpenMP_CXX_FLAGS}")
+ENDIF(OPENMP_FOUND)
 
 ## -----------------------------------------------------------------------------------------------
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in

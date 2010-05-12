@@ -41,7 +41,6 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/ElementPropertiesWidgetPlugin.h 
 	tulip/GWOverviewWidgetPlugin.h 
 	tulip/PropertyWidgetPlugin.h 
-	tulip/QtCPULODCalculator.h 
 	tulip/QtProgress.h 
 	tulip/Controller.h 
 	tulip/ControllerAlgorithmTools.h

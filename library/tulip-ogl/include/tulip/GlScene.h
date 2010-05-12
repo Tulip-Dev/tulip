@@ -32,18 +32,15 @@ namespace tlp {
    */
   struct EntityWithDistance {
 
-    EntityWithDistance(const double &dist,LODResultSimpleEntity *entity)
-      :distance(dist),isComplexEntity(false){
-      simpleEntity=entity;
+    EntityWithDistance(const double &dist,EntityLODUnit *entity)
+      :distance(dist),entity(entity),isComplexEntity(false){
     }
-    EntityWithDistance(const double &dist,LODResultComplexEntity *entity,bool isNode)
-      :distance(dist),isComplexEntity(true),isNode(isNode){
-      complexEntity=entity;
+    EntityWithDistance(const double &dist,ComplexEntityLODUnit *entity,bool isNode)
+      :distance(dist),entity(entity),isComplexEntity(true),isNode(isNode){
     }
 
     double distance;
-    LODResultSimpleEntity *simpleEntity;
-    LODResultComplexEntity *complexEntity;
+    EntityLODUnit *entity;
     bool isComplexEntity;
     bool isNode;
   };

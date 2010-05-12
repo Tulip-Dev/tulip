@@ -30,4 +30,12 @@ namespace tlp {
   void GlLODSceneVisitor::visit(GlLayer *layer) {
     calculator->beginNewCamera(layer->getCamera());
   }
+
+  void GlLODSceneVisitor::reserveMemoryForNodes(unsigned int numberOfNodes){
+    calculator->reserveMemoryForNodes(numberOfNodes);
+  }
+
+  void GlLODSceneVisitor::reserveMemoryForEdges(unsigned int numberOfEdges){
+    calculator->reserveMemoryForEdges(numberOfEdges);
+  }
 }

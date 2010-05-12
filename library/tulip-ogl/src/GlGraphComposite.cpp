@@ -38,53 +38,43 @@ namespace tlp {
     assert((rootGraph==graph) || (rootGraph->isDescendantGraph(graph)));
 
 
-    if(isDisplayNodes() || isDisplayMetaNodes()){
-      GlNode glNode(0);
-      bool isMetaNode;
+#pragma omp parallel
+    {
+#pragma omp sections nowait
+      {
+        if(isDisplayNodes() || isDisplayMetaNodes()){
+          visitor->reserveMemoryForNodes(graph->numberOfNodes());
+          GlNode glNode(0);
+          bool isMetaNode;
 
-      Iterator<node>* nodesIterator = graph->getNodes();
-      while (nodesIterator->hasNext()){
-        node n=nodesIterator->next();
-        isMetaNode = inputData.getGraph()->isMetaNode(n);
-        if((isDisplayNodes() && !isMetaNode) || (isDisplayMetaNodes() && isMetaNode)){
-          glNode.id=n.id;
-          glNode.acceptVisitor(visitor);
+          Iterator<node>* nodesIterator = graph->getNodes();
+          while (nodesIterator->hasNext()){
+            node n=nodesIterator->next();
+            isMetaNode = inputData.getGraph()->isMetaNode(n);
+            if((isDisplayNodes() && !isMetaNode) || (isDisplayMetaNodes() && isMetaNode)){
+              glNode.id=n.id;
+              glNode.acceptVisitor(visitor);
+            }
+          }
+          delete nodesIterator;
         }
       }
-      delete nodesIterator;
-    }
+#pragma omp sections nowait
+      {
+        if(isDisplayEdges() || parameters.isViewEdgeLabel()) {
+          visitor->reserveMemoryForEdges(graph->numberOfEdges());
 
-    if(isDisplayEdges() || parameters.isViewEdgeLabel()) {
-      GlEdge glEdge(0);
-      Iterator<edge>* edgesIterator = graph->getEdges();
-      while (edgesIterator->hasNext()){
-        glEdge.id=edgesIterator->next().id;
-        glEdge.acceptVisitor(visitor);
+          GlEdge glEdge(0);
+          Iterator<edge>* edgesIterator = graph->getEdges();
+          while (edgesIterator->hasNext()){
+            glEdge.id=edgesIterator->next().id;
+            glEdge.acceptVisitor(visitor);
+          }
+          delete edgesIterator;
+        }
       }
-      delete edgesIterator;
     }
   }
-
-  /*void GlGraphComposite::buildSortedList() {
-    haveToSort=false;
-
-    sortedNodes.clear();
-    sortedEdges.clear();
-    DoubleProperty *metric = inputData.getGraph()->getProperty<DoubleProperty>("viewMetric");
-    node n;
-    forEach(n, inputData.getGraph()->getNodes())
-      sortedNodes.push_back(n);
-    LessThanNode comp;
-    comp.metric=metric;
-    sortedNodes.sort(comp);
-    edge e;
-    forEach(e, inputData.getGraph()->getEdges())
-      sortedEdges.push_back(e);
-    LessThanEdge comp2;
-    comp2.metric = metric;
-    comp2.sp = inputData.getGraph();
-    sortedEdges.sort(comp2);
-  }*/
   //===================================================================
   const GlGraphRenderingParameters& GlGraphComposite::getRenderingParameters() {
     return parameters;

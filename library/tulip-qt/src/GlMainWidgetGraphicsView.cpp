@@ -15,7 +15,6 @@
 #include <QtOpenGL/QGLPixelBuffer>
 
 #include <tulip/GlRectTextured.h>
-#include <tulip/QtCPULODCalculator.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/Interactor.h>
