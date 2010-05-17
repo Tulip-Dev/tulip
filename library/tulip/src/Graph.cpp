@@ -352,6 +352,5 @@ void Graph::setAttribute(const std::string &name, const DataType* value) {
   notifyBeforeSetAttribute(this, name);
   getNonConstAttributes().setData(name, value);
   notifyAfterSetAttribute(this, name);
-  Observable::notifyObservers();
 }
 
