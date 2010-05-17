@@ -37,7 +37,6 @@ public:
 
 class EdgeIteratorObserver :public EdgeIterator, public GraphObserver {
 public:
-  bool nodeIteration;
   // GraphObserver interface
   void addEdge(Graph* g, edge e);
   void delEdge(Graph* g, edge e);
