@@ -698,8 +698,11 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
   if (it != addedNodes.end()) {
     set<Graph*>& graphs = (*it).second;
     graphs.erase(g);
-    if (graphs.empty())
-      addedNodes.erase(it);
+    // do not remove from addedNodes
+    // to ensure further erasal from property will not
+    // record a value as if it was a preexisting node
+    /*if (graphs.empty())
+      addedNodes.erase(it);*/
     return;
   }
   // insert n into deletedNodes
@@ -727,8 +730,11 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
     node tgt = (*it).second.target;
     set<Graph*>& graphs = (*it).second.graphs;
     graphs.erase(g);
-    if (graphs.empty())
-      addedEdges.erase(it);
+    // do not remove from addedEdges
+    // to ensure further erasal from property will not
+    // record a value as if it was a preexisting edge
+    /* if (graphs.empty())
+       addedEdges.erase(it); */
     // remove from revertedEdges if needed
     set<edge>::iterator itR = revertedEdges.find(e);
     if (itR != revertedEdges.end())
