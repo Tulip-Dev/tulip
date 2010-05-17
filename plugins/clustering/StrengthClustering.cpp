@@ -212,7 +212,7 @@ Graph* StrengthClustering::buildSubGraphs(const vector< set<node > > &partition)
   return tmpGraph;
 }
 //==============================================================================
-bool StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &mapGraph) {
+bool StrengthClustering::recursiveCall(Graph *rootGraph) {
   Iterator<Graph*> *itS = rootGraph->getSubGraphs();
   while(itS->hasNext()) {
     Graph *sg=itS->next();
@@ -249,7 +249,6 @@ bool StrengthClustering::recursiveCall(Graph *rootGraph, map<Graph *,Graph *> &m
 	tmpData.get("strengthGraph",tmpGr);
       }
     }
-    mapGraph[sg]=tmpGr;
     if (subgraphsLayout && sg==tmpGr) {
       drawGraph(sg);
     }
@@ -376,7 +375,6 @@ bool StrengthClustering::run() {
     return true;
   }
 
-  map<Graph *,Graph *> mapGraph;
   Graph *tmpGraph, *quotientGraph;
 
   if (pluginProgress)
@@ -384,7 +382,7 @@ bool StrengthClustering::run() {
   tmpGraph = buildSubGraphs(tmp);
   if (!tmpGraph)
     return pluginProgress->state()!= TLP_CANCEL;
-  if (!recursiveCall(tmpGraph, mapGraph))
+  if (!recursiveCall(tmpGraph))
     return pluginProgress->state()!= TLP_CANCEL;
   if (pluginProgress)
     pluginProgress->setComment("Building quotient graph...");
