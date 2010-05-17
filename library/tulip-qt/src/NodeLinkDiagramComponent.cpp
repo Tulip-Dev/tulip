@@ -30,7 +30,7 @@ using namespace std;
 namespace tlp {
 
   VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0");
-  GRAPHICSVIEWEXTENSION(NodeLinkDiagramComponentGraphicsView, "Node Link Diagram graphics view","Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram GV", "1.0");
+  //GRAPHICSVIEWEXTENSION(NodeLinkDiagramComponentGraphicsView, "Node Link Diagram graphics view","Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram GV", "1.0");
 
   //==================================================
   NodeLinkDiagramComponent::NodeLinkDiagramComponent():GlMainView(),qtMetaNode(true),currentMetaNodeRenderer(NULL) {
