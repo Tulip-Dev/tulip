@@ -181,7 +181,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    copyCutPasteGraph(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),blockUpdate(false),clusterTreeWidget(NULL) {
+    copyCutPasteGraph(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL) {
     morph = new Morphing();
   }
   //**********************************************************************
@@ -510,13 +510,17 @@ namespace tlp {
     if(getCurrentGraph()!=g)
       return;
 
-    sg->addObserver(this);
-    sg->addGraphObserver(this);
-
-    clusterTreeWidget->update();
+    if(!inAlgorithm){
+      sg->addObserver(this);
+      clusterTreeWidget->update();
+    }
   }
   //**********************************************************************
   void MainController::delSubGraph(Graph *g, Graph *sg){
+    if(inAlgorithm){
+      return;
+    }
+
     // BFS on deleted subgraph to remove observer and to update views that were on sg or a sub-graph of sg
     vector<Graph *> toCompute;
     toCompute.push_back(sg);
@@ -526,7 +530,6 @@ namespace tlp {
       for(vector<Graph*>::iterator it=toCompute.begin();it!=toCompute.end();++it){
         // Remove observers
         (*it)->removeObserver(this);
-        (*it)->removeGraphObserver(this);
 
         // if the current graph is *it, set current graph at g
         if(getCurrentGraph()==(*it))
@@ -1240,7 +1243,9 @@ namespace tlp {
     if(!graph)
       return;
     
+    inAlgorithm=true;
     bool result=ControllerAlgorithmTools::applyAlgorithm(graph,mainWindowFacade.getParentWidget(),action->text().toStdString());
+    inAlgorithm=false;
     if(result){
       undoAction->setEnabled(graph->canPop());
       editUndoAction->setEnabled(graph->canPop());

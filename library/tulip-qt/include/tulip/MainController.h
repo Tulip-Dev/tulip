@@ -162,6 +162,7 @@ namespace tlp {
     unsigned int currentGraphNbEdges;
     Graph *graphToReload;
     bool blockUpdate;
+    bool inAlgorithm;
 
     Morphing *morph;
 
