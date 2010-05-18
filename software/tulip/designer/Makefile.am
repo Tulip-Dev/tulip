@@ -12,4 +12,5 @@ dist_noinst_DATA = AppStartUp.ui \
 		background_logo.png \
 		logo160x145.png \
 		logo32x32.png \
-		logolabri.jpg
+		logolabri.jpg \
+		startUpPicture.png

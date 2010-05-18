@@ -15,6 +15,8 @@ class AppStartUp : public QDialog, public Ui::AppStartUpData {
   int totalSteps;
   int currentFrame;
   std::string errorMgs;
+  bool dontClose;
+  unsigned int currentTipNumber;
 
 public:
   AppStartUp( QWidget* parent = 0);
@@ -29,6 +31,7 @@ public slots:
     ///Change the total step of the progress bar.
     void setTotalSteps(int);
     void initTulip(tlp::TulipPluginLoader *loader,std::string& errors);
+    void nextTip();
 };
 
 #endif // APPSTARTUP_H

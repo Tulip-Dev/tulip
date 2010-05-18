@@ -7,5 +7,6 @@
         <file>logo160x145.png</file>
         <file>logo32x32.png</file>
         <file>logolabri.jpg</file>
+	<file>startUpPicture.png</file>
     </qresource>
 </RCC>

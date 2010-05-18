@@ -164,7 +164,7 @@ void TulipApp::startTulip() {
   std::string errors;
   appStart->show();
   appStart->initTulip(&pluginLoader,errors);
-  delete appStart;
+  //delete appStart;
   if (errors.size() > 0) {
       errorDlg = new QDialog(this);
       errorDlg->setWindowTitle("Errors when loading Tulip plugins !!!");
