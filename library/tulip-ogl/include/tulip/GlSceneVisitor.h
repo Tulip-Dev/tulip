@@ -24,6 +24,7 @@ namespace tlp {
 
   public:
 
+    GlSceneVisitor():threadSafe(false){}
     virtual ~GlSceneVisitor() {}
 
     virtual void visit(GlSimpleEntity *entity) {}
@@ -32,6 +33,11 @@ namespace tlp {
     virtual void visit(GlLayer *layer) {}
     virtual void reserveMemoryForNodes(unsigned int numberOfNodes) {}
     virtual void reserveMemoryForEdges(unsigned int numberOfEdges) {}
+    bool isThreadSafe(){return threadSafe;}
+
+  protected :
+
+    bool threadSafe;
 
   };
   

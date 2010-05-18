@@ -32,7 +32,9 @@ namespace tlp {
     /**
      * Constructor 
      */
-    GlBoundingBoxSceneVisitor(GlGraphInputData* inputData):inputData(inputData){}
+    GlBoundingBoxSceneVisitor(GlGraphInputData* inputData):inputData(inputData){
+      threadSafe=true;
+    }
     
     /**
      * Method used for GlSimpleEntity

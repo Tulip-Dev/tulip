@@ -36,7 +36,9 @@ namespace tlp {
      * Basic constructor 
      */
     GlLODSceneVisitor(GlLODCalculator *calculator,GlGraphInputData* inputData)
-      : calculator(calculator),inputData(inputData) {}
+      : calculator(calculator),inputData(inputData) {
+      threadSafe=true;
+    }
 
     /**
      * Visit a GlSimpleEntity

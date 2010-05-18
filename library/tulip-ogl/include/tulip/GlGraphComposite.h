@@ -151,6 +151,8 @@ namespace tlp {
   protected:
 
     void buildSortedList();
+    void acceptVisitorForNodes(Graph *graph,GlSceneVisitor *visitor);
+    void acceptVisitorForEdges(Graph *graph,GlSceneVisitor *visitor);
 
     GlGraphRenderingParameters parameters;
     GlGraphInputData inputData;
