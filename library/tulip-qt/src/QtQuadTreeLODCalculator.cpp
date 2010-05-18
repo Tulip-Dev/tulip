@@ -2,6 +2,10 @@
 
 #include <QtCore/QTime>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include <tulip/Matrix.h>
 
 #include <tulip/Camera.h>
@@ -189,11 +193,11 @@ namespace tlp {
       size_t nbSimples=layerLODUnit->simpleEntitiesLODVector.size();
       size_t nbNodes=layerLODUnit->nodesLODVector.size();
       size_t nbEdges=layerLODUnit->edgesLODVector.size();
-#ifdef HAVE_OMP
+#ifdef _OPENMP
 #pragma omp parallel
 #endif
       {
-#ifdef HAVE_OMP
+#ifdef _OPENMP
 #pragma omp sections nowait
 #endif
         {
@@ -201,7 +205,7 @@ namespace tlp {
             entitiesQuadTree[quadTreesVectorPosition].insert(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,layerLODUnit->simpleEntitiesLODVector[i].id);
           }
         }
-#ifdef HAVE_OMP
+#ifdef _OPENMP
 #pragma omp sections nowait
 #endif
         {
@@ -216,7 +220,7 @@ namespace tlp {
             quadTree->insert(layerLODUnit->nodesLODVector[i].boundingBox,layerLODUnit->nodesLODVector[i].id);
           }
         }
-#ifdef HAVE_OMP
+#ifdef _OPENMP
 #pragma omp sections nowait
 #endif
         {
@@ -269,11 +273,11 @@ namespace tlp {
     vector<unsigned long> resEntities;
 
     // Get result of quadtrees
-#ifdef HAVE_OMP
+#ifdef _OPENMP
 #pragma omp parallel
 #endif
     {
-#ifdef HAVE_OMP
+#ifdef _OPENMP
 #pragma omp sections nowait
 #endif
       {
@@ -299,7 +303,7 @@ namespace tlp {
           }
         }
       }
-#ifdef HAVE_OMP
+#ifdef _OPENMP
 #pragma omp sections nowait
 #endif
       {
@@ -325,7 +329,7 @@ namespace tlp {
           }
         }
       }
-#ifdef HAVE_OMP
+#ifdef _OPENMP
 #pragma omp sections nowait
 #endif
       {

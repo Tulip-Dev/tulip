@@ -2,7 +2,7 @@
 
 #include <tulip/Matrix.h>
 
-#ifdef HAVE_OMP
+#ifdef _OPENMP
 #include <omp.h>
 #endif
 
@@ -80,27 +80,27 @@ namespace tlp {
                                               const Vector<int,4>& currentViewport) {
     size_t nb=layerLODUnit->simpleEntitiesLODVector.size();
 
-#ifdef HAVE_OMP
+#ifdef _OPENMP
     omp_set_num_threads(omp_get_num_procs());
     omp_set_nested(true);
     omp_set_dynamic(false);
 #endif
 
-#ifdef HAVE_OMP
+#ifdef _OPENMP
 #pragma omp parallel for
 #endif
     for(size_t i=0;i<nb;++i){
       layerLODUnit->simpleEntitiesLODVector[i].lod=calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
     }
     nb=layerLODUnit->nodesLODVector.size();
-#ifdef HAVE_OMP
+#ifdef _OPENMP
 #pragma omp parallel for
 #endif
     for(size_t i=0;i<nb;++i){
       layerLODUnit->nodesLODVector[i].lod=calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
     }
     nb=layerLODUnit->edgesLODVector.size();
-#ifdef HAVE_OMP
+#ifdef _OPENMP
 #pragma omp parallel for
 #endif
     for(size_t i=0;i<nb;++i){
