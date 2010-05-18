@@ -73,6 +73,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %{prefix}/bin/tulip
 %{prefix}/bin/tulip_check_pl
+%{prefix}/bin/tulip_app
+%{prefix}/bin/tulip_need_restart
 #%{prefix}/bin/tlprender
 %{prefix}/lib/libtulip-pluginsmanager.la
 %{prefix}/lib/libtulip-pluginsmanager.so
