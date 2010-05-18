@@ -527,8 +527,9 @@ double LayoutProperty::averageAngularResolution(const node n, Graph *sg) {
 }
 //=================================================================================
 double LayoutProperty::edgeLength(edge e) {
-  Coord start=getNodeValue(graph->source(e));
-  const Coord& end=getNodeValue(graph->target(e));
+  pair<node, node> eEnds = graph->ends(e);
+  Coord start=getNodeValue(eEnds.first);
+  const Coord& end=getNodeValue(eEnds.second);
   double result=0;
   const vector<Coord> & tmp=getEdgeValue(e);
   for (unsigned int i=0;i<tmp.size();++i) {

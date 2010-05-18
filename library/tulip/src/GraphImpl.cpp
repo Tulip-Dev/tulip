@@ -271,9 +271,8 @@ void GraphImpl::delEdge(const edge e) {
   }
   //Warning, the current implementation doesn't manage the updating of 
   //properties for upper_subgraph in the case of Super Graph Implementation
-  node s = source(e);
-  node t = target(e);
-  outDegree.set(s.id, outDegree.get(s.id)-1);
+  unsigned srcId = source(e).id;
+  outDegree.set(srcId, outDegree.get(srcId)-1);
   Iterator<Graph *>*itS=getSubGraphs();
   while (itS->hasNext()) {
     Graph *subgraph = itS->next();

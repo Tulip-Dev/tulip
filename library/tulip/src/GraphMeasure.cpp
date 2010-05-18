@@ -194,10 +194,9 @@ static void clusterBuildSubGraph(Graph *graph, node n, node startNode,
 }
 //=================================================
 static double clusterGetEdgeValue(Graph *graph, DoubleProperty *prop, const edge e ) {
-  node src = graph->source(e);
-  node tgt = graph->target(e);
-  const double& v1 = prop->getNodeValue(src);
-  const double& v2 = prop->getNodeValue(tgt);
+  pair<node, node> eEnds = graph->ends(e);
+  const double& v1 = prop->getNodeValue(eEnds.first);
+  const double& v2 = prop->getNodeValue(eEnds.second);
   if (v1*v1 + v2*v2 > 0)
     return 1.-fabs(v1 - v2)/sqrt(v1*v1 + v2*v2);
   return 0.;
@@ -211,11 +210,9 @@ static double clusterGetNodeValue(Graph *graph, const node n, unsigned int maxDe
     node itn=*itSN;
     Iterator<edge> *itE=graph->getInOutEdges(itn);
     while (itE->hasNext()) {
-      edge ite=itE->next();
-      node source=graph->source(ite);
-      node target=graph->target(ite);
-      if ( (reachableNodes.find(source)!=reachableNodes.end()) && 
-	   (reachableNodes.find(target)!=reachableNodes.end())) {
+      pair<node, node> eEnds = graph->ends(itE->next());
+      if ( (reachableNodes.find(eEnds.first)!=reachableNodes.end()) && 
+	   (reachableNodes.find(eEnds.second)!=reachableNodes.end())) {
 	nbEdge++;
       }
     } delete itE;

@@ -43,22 +43,24 @@ namespace tlp {
       edgeLength->setAllEdgeValue(1);
     for (vector<edge>::const_iterator itEdge=sgEdges.begin();itEdge!=sgEdges.end();++itEdge) {
       edge ite=*itEdge;
-      int delta=(int)rint(dagLevel.getNodeValue(graph->target(ite))-dagLevel.getNodeValue(graph->source(ite)));
+      pair<node, node> eEnds = graph->ends(ite);
+      int delta=(int)rint(dagLevel.getNodeValue(eEnds.second)
+			  - dagLevel.getNodeValue(eEnds.first));
       if (delta>1) {
 	tmp1=graph->addNode();
-	replacedEdges[ite]=graph->addEdge(graph->source(ite),tmp1);
+	replacedEdges[ite]=graph->addEdge(eEnds.first, tmp1);
 	addedNodes.push_back(tmp1);
-	dagLevel.setNodeValue(tmp1,dagLevel.getNodeValue(graph->source(ite))+1);
+	dagLevel.setNodeValue(tmp1, dagLevel.getNodeValue(eEnds.first)+1);
 	if (delta>2) {
 	  tmp2=graph->addNode();
 	  addedNodes.push_back(tmp2);
-	  edge e=graph->addEdge(tmp1,tmp2);
+	  edge e=graph->addEdge(tmp1, tmp2);
 	  if (edgeLength)
-	    edgeLength->setEdgeValue(e,delta-2);	  
-	  dagLevel.setNodeValue(tmp2,dagLevel.getNodeValue(graph->target(ite))-1);
+	    edgeLength->setEdgeValue(e, delta-2);	  
+	  dagLevel.setNodeValue(tmp2,dagLevel.getNodeValue(eEnds.second)-1);
 	  tmp1=tmp2;
 	}
-	graph->addEdge(tmp1,graph->target(ite));
+	graph->addEdge(tmp1, eEnds.second);
       }
     }
     for (TLP_HASH_MAP<edge,edge>::const_iterator it=replacedEdges.begin();it!=replacedEdges.end();++it)
@@ -293,10 +295,11 @@ namespace tlp {
       sortedEdges.sort<ltEdge>(ltEdge(edgeWeight));
     while(numClasses > 1) {
       edge cur;
+      pair<node, node> curEnds;
       do {
-	cur = sortedEdges.front();
+	curEnds = graph->ends(cur = sortedEdges.front());
 	sortedEdges.pop_front();
-      } while(!(classes[graph->source(cur).id] !=  classes[graph->target(cur).id]));
+      } while(!(classes[curEnds.first.id] !=  classes[curEnds.second.id]));
     
       selection->setEdgeValue(cur, true);
       if (pluginProgress) {
@@ -311,8 +314,8 @@ namespace tlp {
 	}
       }	  
 
-      int x = classes[graph->source(cur).id];
-      int y = classes[graph->target(cur).id];
+      int x = classes[curEnds.first.id];
+      int y = classes[curEnds.second.id];
 
       Iterator<node> *itN = graph->getNodes();
       while (itN->hasNext()) { 
@@ -380,8 +383,9 @@ namespace tlp {
 	pluginProgress->setComment("Partitioning edges...");
 	while(itE.hasNext()) {
 	  edge ite = itE.next();
-	  const double& tmp = metric->getNodeValue(graph->source(ite));
-	  if (tmp == metric->getNodeValue(graph->target(ite))) {
+	  pair<node, node> eEnds = graph->ends(ite);
+	  const double& tmp = metric->getNodeValue(eEnds.first);
+	  if (tmp == metric->getNodeValue(eEnds.second)) {
 	    partitions[tmp]->addEdge(ite);
 	  }
 	  if ((++step % (maxSteps/100)) == 0) {
@@ -404,8 +408,9 @@ namespace tlp {
 	    subGraphs.push_back(sg);
 	  } else
 	    sg = partitions[tmp];
-	  sg->addNode(graph->source(e));
-	  sg->addNode(graph->target(e));
+	  pair<node, node> eEnds = graph->ends(e);
+	  sg->addNode(eEnds.first);
+	  sg->addNode(eEnds.second);
 	  sg->addEdge(e);
 	  if ((++step % (maxSteps/100)) == 0) {
 	    pluginProgress->progress(step, maxSteps);
@@ -443,8 +448,9 @@ namespace tlp {
 	pluginProgress->setComment("Partitioning edges...");
 	while(itE.hasNext()) {
 	  edge ite = itE.next();
-	  string tmp = property->getNodeStringValue(graph->source(ite));
-	  if (tmp == property->getNodeStringValue(graph->target(ite))) {
+	  pair<node, node> eEnds = graph->ends(ite);
+	  string tmp = property->getNodeStringValue(eEnds.first);
+	  if (tmp == property->getNodeStringValue(eEnds.second)) {
 	    partitions[tmp]->addEdge(ite);
 	  }
 	  if ((++step % (maxSteps/100)) == 0) {
@@ -465,8 +471,9 @@ namespace tlp {
 	    subGraphs.push_back(sg);
 	  } else
 	    sg = partitions[tmp];
-	  sg->addNode(graph->source(e));
-	  sg->addNode(graph->target(e));
+	  pair<node, node> eEnds = graph->ends(e);
+	  sg->addNode(eEnds.first);
+	  sg->addNode(eEnds.second);
 	  sg->addEdge(e);
 	  if ((++step % (maxSteps/100)) == 0) {
 	    pluginProgress->progress(step, maxSteps);

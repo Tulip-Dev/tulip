@@ -116,19 +116,22 @@ NodeFaceIterator::NodeFaceIterator(PlanarConMap* m, const Face face){
   edge e1 = e[0];
   edge e2 = e[1];
   node prev;
-  if( m->source(e1) == m->source(e2) || m->source(e1) == m->target(e2))
-    prev = m->source(e1);
+  pair<node, node> e1Ends = m->ends(e1);
+  pair<node, node> e2Ends = m->ends(e2);
+  if( e1Ends.first == e2Ends.first || e1Ends.first == e2Ends.second)
+    prev = e1Ends.first;
   else 
-    prev = m->target(e1);
+    prev = e1Ends.second;
   nodes.push_back(prev);
   for(unsigned int j = 1; j < m->facesEdges[face].size(); ++j){
     e1 = m->facesEdges[face][j];
-    if( m->source(e1) == prev ){
-      prev = m->target(e1);
+    e1Ends = m->ends(e1);
+    if (e1Ends.first == prev ){
+      prev = e1Ends.second;
       nodes.push_back(prev);
     }
     else {
-      prev = m->source(e1);
+      prev = e1Ends.first;
       nodes.push_back(prev);
     }
   }

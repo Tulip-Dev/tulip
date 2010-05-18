@@ -64,9 +64,8 @@ void PlanarityTestImpl::makeBidirected(Graph *sG) {
   StableIterator<edge> stIte(sG->getEdges());
   while(stIte.hasNext()) {
     edge e = stIte.next();
-    node target = sG->target(e);
-    node source = sG->source(e);
-    edge newEdge = sG->addEdge(target, source);
+    pair<node, node> eEnds = sG->ends(e);
+    edge newEdge = sG->addEdge(eEnds.second, eEnds.first);
     bidirectedEdges[newEdge] = e;
     reversalEdge[newEdge] = e;
     reversalEdge[e] = newEdge;
@@ -78,12 +77,19 @@ void PlanarityTestImpl::makeBidirected(Graph *sG) {
  *         false otherwise.
  */
 bool PlanarityTestImpl::isT0Edge(Graph *g, edge e) {
-  edge e1 = T0EdgeIn.get((g->target(e)).id);
+  pair<node, node> eEnds = g->ends(e);
+  edge e1 = T0EdgeIn.get(eEnds.second.id);
   //test à revoir je pense qu'en testant juste e == e1 ça suffit !
-  if (e1 != NULL_EDGE && g->source(e1) == g->source(e) && g->target(e1) == g->target(e))
-    return true;
-  e1 = T0EdgeIn.get((g->source(e)).id);
-  return (e1!= NULL_EDGE && g->target(e1) == g->source(e) && g->source(e1) == g->target(e));
+  if (e1 != NULL_EDGE) {
+    pair<node, node> e1Ends = g->ends(e1);
+    if (e1Ends.first == eEnds.first && e1Ends.second == eEnds.second)
+      return true;
+  }
+  e1 = T0EdgeIn.get(eEnds.first.id);
+  if (e1 == NULL_EDGE)
+    return false;
+  pair<node, node> e1Ends = g->ends(e1);
+  return (e1Ends.second == eEnds.first && e1Ends.first == eEnds.second);
 }
 //=================================================================
 /*
