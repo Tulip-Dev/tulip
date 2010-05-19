@@ -25,7 +25,7 @@ namespace tlp {
     /**
      * Contructor, you have to put the global bounding box of the quadtree
      */
-    QuadTreeNode(const BoundingBox &box):entities(NULL),_box(box) {
+    QuadTreeNode(const BoundingBox &box):_box(box) {
       for(int i=0; i<4; ++i)
         children[i] = 0;
     }
@@ -35,8 +35,6 @@ namespace tlp {
     ~QuadTreeNode() {
       for(int i=0; i<4; ++i)
         if (children[i] != 0) delete children[i];
-      if(entities)
-        delete entities;
     }
     /**
      * Insert an element in the quadtree
@@ -56,11 +54,7 @@ namespace tlp {
         }
       }
 
-      if(!entities){
-        entities=new std::vector<TYPE>();
-      }
-
-      entities->push_back(id);
+      entities.push_back(id);
     }
     /**
      * return all elements that could be in
@@ -68,13 +62,10 @@ namespace tlp {
      * all elements inside the box are return. However
      * some elements not inside the box can be returned.
      */
-    void getElements(const BoundingBox &box, std::vector<TYPE> *result) const{
+    void getElements(const BoundingBox &box, std::vector<TYPE> &result) const{
       if (intersect(box, _box)) {
-        if(entities){
-          for (unsigned int i=0; i<entities->size(); ++i){
-            assert(result);
-            result->push_back((*entities)[i]);
-          }
+        for (size_t i=0; i<entities.size(); ++i){
+          result.push_back(entities[i]);
         }
 
         for (unsigned int i=0; i<4; ++i) {
@@ -87,12 +78,9 @@ namespace tlp {
     /**
      * Return all elements of the quadtree
      */
-    void getElements(std::vector<TYPE> *result) const{
-      if(entities){
-        for (unsigned int i=0; i<entities->size(); ++i){
-          assert(result);
-          result->push_back((*entities)[i]);
-        }
+    void getElements(std::vector<TYPE> &result) const{
+      for (size_t i=0; i<entities.size(); ++i){
+        result.push_back(entities[i]);
       }
       for (unsigned int i=0; i<4; ++i) {
         if (children[i]!=0)
@@ -109,17 +97,14 @@ namespace tlp {
      * the size of box is max(1000,800) times smaller than the box given in parameter.
      * so the ratio should be 1000.(merge elements that are 1000 times smaller
      */
-    void getElementsWithRatio(const BoundingBox &box, std::vector<TYPE> *result, float ratio = 1000.) const{
+    void getElementsWithRatio(const BoundingBox &box, std::vector<TYPE> &result, float ratio = 1000.) const{
       if (intersect(box, _box)) {
         float xRatio = (box.second[0] - box.first[0]) / (_box.second[0] - _box.first[0]) ;
         float yRatio = (box.second[1] - box.first[1]) / (_box.second[1] - _box.first[1]);
         //elements are big enough and all of them must be displayed
         if (xRatio < ratio || yRatio < ratio) {
-          if(entities){
-            for (unsigned int i=0; i<entities->size(); ++i){
-              assert(result);
-              result->push_back((*entities)[i]);
-            }
+          for (size_t i=0; i<entities.size(); ++i){
+            result.push_back(entities[i]);
           }
           for (unsigned int i=0; i<4; ++i) {
             if (children[i]!=0)
@@ -128,13 +113,10 @@ namespace tlp {
         }
         //elements are too small return only one elements (we must seach it)
         else {
-          assert(result);
           bool find=false;
-          if(entities){
-            if (entities->size() > 0){
-              result->push_back((*entities)[0]);
-              find=true;
-            }
+          if (entities.size() > 0){
+            result.push_back(entities[0]);
+            find=true;
           }
           if(!find){
             for (unsigned int i=0; i<4; ++i) {
@@ -228,7 +210,7 @@ namespace tlp {
     }
     //======================================
     QuadTreeNode *children[4];
-    std::vector<TYPE> *entities;
+    std::vector<TYPE> entities;
     BoundingBox _box;
   };
 
