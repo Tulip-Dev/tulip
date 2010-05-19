@@ -1,11 +1,11 @@
-Tulip version 3.0.0 Readme file.
+Tulip Readme file.
 
 This software is under GPL licence,(see COPYING file).
 It has been designed and implmented by David Auber.
 
 Requirements :
 
-- autotools
+- autotools or cmake
 - libxml2
 - freetype2
 - Qt 4.2 or higher
@@ -16,8 +16,8 @@ Requirements :
 The installation procedure is described in the files :
 INSTALL, INSTALL.mac, INSTALL.win
 
-tar jxvf tulip-3.0.0.tar.bz2
-cd tulip-3.0.0
+tar jxvf tulip-*.tar.bz2
+cd tulip-*
 sh gen-conf.sh
 ./configure [--prefix=<install_path>]    (Default=/usr/local/)
 make
