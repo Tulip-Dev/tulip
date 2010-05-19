@@ -95,7 +95,8 @@ nobase_include_HEADERS = \
 	tulip/MapIterator.h \
 	tulip/BoundingBox.h \
 	tulip/ColorScale.h \
-	tulip/PreferenceManager.h
+    tulip/PreferenceManager.h \
+    tulip/QuadTree.h
 
 nobase_nodist_include_HEADERS = tulip/TulipRelease.h
 

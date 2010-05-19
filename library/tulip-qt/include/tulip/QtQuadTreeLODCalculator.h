@@ -24,7 +24,7 @@
 namespace tlp {
 
   class Camera;
-  class QuadTreeNode;
+  template <class TYPE> class QuadTreeNode;
   class GlScene;
 
   /**
@@ -84,11 +84,11 @@ namespace tlp {
 
     GlScene *scene;
 
-    std::vector<QuadTreeNode> nodesQuadTree;
-    std::vector<QuadTreeNode> edgesQuadTree;
-    std::vector<QuadTreeNode> nodesSelectedQuadTree;
-    std::vector<QuadTreeNode> edgesSelectedQuadTree;
-    std::vector<QuadTreeNode> entitiesQuadTree;
+    std::vector<QuadTreeNode<unsigned int> > nodesQuadTree;
+    std::vector<QuadTreeNode<unsigned int> > edgesQuadTree;
+    std::vector<QuadTreeNode<unsigned int> > nodesSelectedQuadTree;
+    std::vector<QuadTreeNode<unsigned int> > edgesSelectedQuadTree;
+    std::vector<QuadTreeNode<unsigned long> > entitiesQuadTree;
     std::vector<std::vector<SimpleEntityLODUnit> > simpleEntities;
 
     bool haveToCompute;

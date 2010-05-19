@@ -87,6 +87,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/ColorScale.h
 	tulip/TulipRelease.h
 	tulip/PreferenceManager.h
+    tulip/QuadTree.h
 )
 
 INSTALL_FILES(${TulipIncludeInstallDir}/tulip/cxx/ FILES

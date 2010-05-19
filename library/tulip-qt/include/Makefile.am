@@ -84,8 +84,7 @@ nobase_include_HEADERS = $(INCLUDES_H)
 endif
 
 noinst_HEADERS = \
-	tulip/Morphing.h \
-	tulip/QuadTree.h
+    tulip/Morphing.h
 
 
 BUILT_SOURCES = \
