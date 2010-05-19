@@ -6,6 +6,7 @@
 #include <tulip/Vector.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/TlpTools.h>
+#include <tulip/PreferenceManager.h>
 
 using namespace tlp;
 
@@ -40,6 +41,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _texturePath = "";
   _edgesMaxSizeToNodesSize = true;
   _feedbackRender=false;
+  _selectionColor=PreferenceManager::getInst().getSelectionColor();
 }
 //This function should rewriten completly
 DataSet GlGraphRenderingParameters::getParameters() const {
@@ -72,6 +74,7 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("metaNodesLabelStencil", _metaNodesLabelStencil);
   data.set("edgesLabelStencil", _edgesLabelStencil);
   data.set("edgesMaxSizeToNodesSize", _edgesMaxSizeToNodesSize);
+  data.set("selectionColor",_selectionColor);
   //data.set("SupergraphId", _graph->getId());
   return data;
 }
@@ -89,6 +92,7 @@ static Graph *findGraphById(Graph *sg, const int id) {
 //This function should rewriten completly
 void GlGraphRenderingParameters::setParameters(const DataSet &data) {
   bool b;
+  Color c;
   if (data.get<bool>("antialiased", b))
     setAntialiasing(b);
   if (data.get<bool>("arrow", b))
@@ -141,6 +145,8 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setEdgesLabelStencil(i);
   if (data.get<bool>("edgesMaxSizeToNodesSize", b))
     setEdgesMaxSizeToNodesSize(b);
+  if(data.get<Color>("selectionColor", c))
+    setSelectionColor(c);
 }
 //====================================================
 unsigned int GlGraphRenderingParameters::getLabelsBorder() const {
@@ -345,4 +351,12 @@ void GlGraphRenderingParameters::setFeedbackRender(bool feedback){
 //====================================================
 bool GlGraphRenderingParameters::getFeedbackRender(){
   return _feedbackRender;
+}
+//====================================================
+void GlGraphRenderingParameters::setSelectionColor(const Color &color){
+  _selectionColor=color;
+}
+//====================================================
+Color GlGraphRenderingParameters::getSelectionColor(){
+return _selectionColor;
 }

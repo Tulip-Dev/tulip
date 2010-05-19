@@ -59,7 +59,7 @@ namespace tlp {
   }
 
   void GlNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
-    const Color& colorSelect2=PreferenceManager::getInst().getSelectionColor();
+    const Color& colorSelect2=data->parameters->getSelectionColor();
 
     glEnable(GL_CULL_FACE);
     GLenum error = glGetError();
@@ -68,7 +68,6 @@ namespace tlp {
       glDisable(GL_LIGHTING);
       glDepthFunc(GL_LEQUAL);
       glLineWidth(3);
-      setColor(colorSelect2);
       tlp::cube(GL_LINE_LOOP);
       glPopAttrib();
       GlDisplayListManager::getInst().endNewDisplayList();
@@ -152,6 +151,7 @@ namespace tlp {
 
       if (selected) {
         //glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
+        setColor(colorSelect2);
         GlDisplayListManager::getInst().callDisplayList("selection");
       }
       glPopMatrix();
@@ -180,7 +180,7 @@ namespace tlp {
   }
 
   void GlNode::drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
-    const Color& colorSelect2=PreferenceManager::getInst().getSelectionColor();
+    const Color& colorSelect2=data->parameters->getSelectionColor();
 
     node n=node(id);
 

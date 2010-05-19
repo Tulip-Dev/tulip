@@ -23,11 +23,8 @@ PreferenceDialog::PreferenceDialog( QWidget* parent)
   bool autoLoadController=preferenceManager.getAutoLoadController();
   Color selectionColor=preferenceManager.getSelectionColor();
 
-  setSelectionButtonColor(QColor(selectionColor[0],selectionColor[1],selectionColor[2],selectionColor[3]));
   networkRadioButton->setChecked(networkConnection);
   autoLoadControllerButton->setChecked(autoLoadController);
-
-  connect(selectionColorButton,SIGNAL(clicked()),this,SLOT(selectionColorButtonSlot()));
 }
 
 
@@ -57,64 +54,18 @@ void PreferenceDialog::loadPreference(){
   preferenceManager.setAutoLoadController(autoLoadController);
 }
 void PreferenceDialog::savePreference(){
-  QColor selectionColor = selectionColorButton->palette().color(QPalette::Button);
-  
   QSettings settings("TulipSoftware","Tulip");
   settings.beginGroup("Preference");
 
   // Check modification
-  modified = modified || (settings.value("selectionColorR",255).toUInt()!=selectionColor.red());
-  modified = modified || (settings.value("selectionColorG",255).toUInt()!=selectionColor.green());
-  modified = modified || (settings.value("selectionColorB",255).toUInt()!=selectionColor.blue());
-  modified = modified || (settings.value("selectionColorA",255).toUInt()!=selectionColor.alpha());
   modified = modified || (settings.value("networkConnection",true).toBool()!=networkRadioButton->isChecked());
   modified = modified || (settings.value("autoLoadController",true).toBool()!=autoLoadControllerButton->isChecked());
 
   // Store data
-  settings.setValue("selectionColorR",selectionColor.red());
-  settings.setValue("selectionColorG",selectionColor.green());
-  settings.setValue("selectionColorB",selectionColor.blue());
-  settings.setValue("selectionColorA",selectionColor.alpha());
   settings.setValue("networkConnection",networkRadioButton->isChecked());
   settings.setValue("autoLoadController",autoLoadControllerButton->isChecked());
 
   settings.endGroup();
-}
-
-void PreferenceDialog::setSelectionButtonColor(QColor tmp) {
-   if (tmp.isValid()) {
-     QString colorStr;
-     QString str;
-
-     str.setNum(tmp.red(),16);
-     if(str.size()!=2)
-       str.insert(0,"0");
-     colorStr.append(str);
-
-     str.setNum(tmp.green(),16);
-     if(str.size()!=2)
-       str.insert(0,"0");
-     colorStr.append(str);
-
-     str.setNum(tmp.blue(),16);
-     if(str.size()!=2)
-       str.insert(0,"0");
-     colorStr.append(str);
-
-     QString textColor;
-     int h,s,v;
-     tmp.getHsv(&h, &s, &v);
-     if (v < 128)
-       textColor="ffffff";
-     else
-       textColor="000000";
-
-     selectionColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr+"; color: #"+textColor+" }");
-   }
- }
-
-void PreferenceDialog::selectionColorButtonSlot(){
-  setSelectionButtonColor(QColorDialog::getColor(selectionColorButton->palette().color(QPalette::Button), this));
 }
 
 void PreferenceDialog::accept() {

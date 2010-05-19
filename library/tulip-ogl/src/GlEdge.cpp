@@ -114,7 +114,7 @@ void GlEdge::acceptVisitor(GlSceneVisitor *visitor) {
 }
 
 void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
-  Color selectionColor=PreferenceManager::getInst().getSelectionColor();
+  Color selectionColor=data->parameters->getSelectionColor();
   edge e = edge(id);
 
   if(data->parameters->isElementZOrdered()){

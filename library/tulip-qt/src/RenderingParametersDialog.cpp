@@ -2,6 +2,9 @@
 
 #include <QtGui/QHeaderView>
 #include <QtGui/QColorDialog>
+#include <QtCore/QSettings>
+
+#include <tulip/PreferenceManager.h>
 
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlMainWidget.h"
@@ -30,8 +33,10 @@ namespace tlp {
     ordering->setChecked( param.isElementOrdered());
     orthogonal->setChecked(mainView->getGlMainWidget()->getScene()->isViewOrtho());
     edge3D->setChecked( param.isEdge3D());
-    Color inColor = mainView->getGlMainWidget()->getScene()->getBackgroundColor();
-    setBackgroundColor(QColor(inColor[0],inColor[1],inColor[2]));
+    Color backgroundC = mainView->getGlMainWidget()->getScene()->getBackgroundColor();
+    setButtonColor(QColor(backgroundC[0],backgroundC[1],backgroundC[2]),background);
+    Color selectionC = param.getSelectionColor();
+    setButtonColor(QColor(selectionC[0],selectionC[1],selectionC[2]),selection);
     fonts->setCurrentIndex(param.getFontsType());
     density->setValue(param.getLabelsBorder());
     blockEdgeSizeCheckBox->setChecked(param.getEdgesMaxSizeToNodesSize());
@@ -52,8 +57,10 @@ namespace tlp {
     mainView->getGlMainWidget()->getScene()->setViewOrtho(orthogonal->isChecked());
     param.setEdge3D(edge3D->isChecked());
     param.setFontsType(fonts->currentIndex());
-    QColor outColor = background->palette().color(QPalette::Button);
-    mainView->getGlMainWidget()->getScene()->setBackgroundColor(Color(outColor.red(),outColor.green(),outColor.blue()));
+    QColor backgroundC = background->palette().color(QPalette::Button);
+    mainView->getGlMainWidget()->getScene()->setBackgroundColor(Color(backgroundC.red(),backgroundC.green(),backgroundC.blue()));
+    QColor selectionC = selection->palette().color(QPalette::Button);
+    param.setSelectionColor(Color(selectionC.red(),selectionC.green(),selectionC.blue()));
     param.setLabelsBorder(density->value());
     param.setEdgesMaxSizeToNodesSize(blockEdgeSizeCheckBox->isChecked());
 
@@ -63,11 +70,30 @@ namespace tlp {
   }
 
   void RenderingParametersDialog::backColor() {
-    setBackgroundColor(QColorDialog::getColor(background->palette().color(QPalette::Button), this));
+    setButtonColor(QColorDialog::getColor(background->palette().color(QPalette::Button), this),background);
     updateView();
   }
 
-  void RenderingParametersDialog::setBackgroundColor(QColor tmp) {
+  void RenderingParametersDialog::selectionColor() {
+    setButtonColor(QColorDialog::getColor(selection->palette().color(QPalette::Button), this),selection);
+    updateView();
+  }
+
+  void RenderingParametersDialog::selectionSaveAtDefaultColor() {
+    QColor selectionC = selection->palette().color(QPalette::Button);
+
+    QSettings settings("TulipSoftware","Tulip");
+    settings.beginGroup("Preference");
+    settings.setValue("selectionColorR",selectionC.red());
+    settings.setValue("selectionColorG",selectionC.green());
+    settings.setValue("selectionColorB",selectionC.blue());
+    settings.setValue("selectionColorA",selectionC.alpha());
+    settings.endGroup();
+
+    PreferenceManager::getInst().setSelectionColor(Color(selectionC.red(),selectionC.green(),selectionC.blue()));
+  }
+
+  void RenderingParametersDialog::setButtonColor(QColor tmp,QPushButton *button){
     if (tmp.isValid()) {
       QString colorStr;
       QString str;
@@ -95,7 +121,7 @@ namespace tlp {
       else
         textColor="000000";
 
-      background->setStyleSheet("QPushButton { background-color: #"+colorStr+"; color: #"+textColor+" }");
+      button->setStyleSheet("QPushButton { background-color: #"+colorStr+"; color: #"+textColor+" }");
     }
   }
 }

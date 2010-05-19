@@ -264,8 +264,17 @@ namespace tlp {
      * return true if the graph is draw with feedback information
      */
     bool getFeedbackRender();
+    /**
+     * Change the selection color
+     */
+    void setSelectionColor(const Color &color);
+    /**
+     * return the selection color
+     */
+    Color getSelectionColor();
+
   private:
-    //tlp::Graph  *_graph;
+
     bool _antialiased;
     bool _viewArrow;
     bool _viewNodeLabel;
@@ -295,6 +304,7 @@ namespace tlp {
     std::string _texturePath;
     bool _edgesMaxSizeToNodesSize;
     bool _feedbackRender;
+    Color _selectionColor;
   };
 }
 

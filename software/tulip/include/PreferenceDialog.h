@@ -17,11 +17,8 @@ public:
 protected slots:
 
   virtual void accept();
-  void selectionColorButtonSlot();
 
 protected :
-
-  void setSelectionButtonColor(QColor tmp);
 
   bool modified;
 

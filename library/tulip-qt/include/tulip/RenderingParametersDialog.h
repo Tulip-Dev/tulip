@@ -46,7 +46,9 @@ namespace tlp {
 
     void updateView();
     void backColor();
-    void setBackgroundColor(QColor tmp);
+    void selectionColor();
+    void selectionSaveAtDefaultColor();
+    void setButtonColor(QColor tmp,QPushButton *button);
 
   signals :
 
