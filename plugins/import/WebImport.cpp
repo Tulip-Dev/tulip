@@ -293,14 +293,14 @@ namespace {
     HTML_HELP_DEF( "type", "string" ) \
     HTML_HELP_DEF( "default", "www.labri.fr" ) \
     HTML_HELP_BODY() \
-    "This parameter defines the web server that you want to inspect." \
+    "This parameter defines the web server that you want to inspect. No need for http:// at the beginning; http protocol is always assumed. No need for / at the end." \
     HTML_HELP_CLOSE(),
     // initial page
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "string" ) \
     HTML_HELP_DEF( "default", "" ) \
     HTML_HELP_BODY() \
-    "This parameter defines the first web page to visit."\
+    "This parameter defines the first web page to visit. No need for / at the beginning."\
     HTML_HELP_CLOSE(),
     // max number of links
     HTML_HELP_OPEN() \
@@ -362,7 +362,7 @@ struct WebImport:public ImportModule {
   tlp::StringProperty *urls;
   tlp::ColorProperty *colors;
   tlp::Color *redirectionColor;
-  unsigned int maxSize;
+  unsigned int maxSize, nbNodes;
   bool visitOther;
   bool extractNonHttp;
 
@@ -379,16 +379,55 @@ struct WebImport:public ImportModule {
     addDependency<LayoutAlgorithm>("GEM (Frick)", "1.0");
   }
 
+  string urlDecode(const string& url) { 
+    string buffer = "";
+    int len = url.length();
+
+    for (int i = 0; i < len; ++i) {
+      char ch = url.at(i);
+      if (ch == '%'){
+	int chnum = 0;
+	ch = url.at(++i);
+	chnum = ch - '0';
+	if (chnum > 9) {
+	  if (ch >= 'A')
+	    chnum = 10 + (ch - 'A');
+	  else
+	    chnum = 10 + (ch - 'a');
+	}
+	chnum *= 16;
+	ch = url.at(++i);
+	if (ch - '0' > 9) {
+	  if (ch >= 'A')
+	    chnum += ch - 'A';
+	  else
+	    chnum += ch - 'a';
+	} else
+	  chnum += ch - '0';
+	buffer += chnum;
+      } else {
+	buffer += ch;
+      }
+    }
+    return buffer;
+  }
+
   //========================================================
   bool addNode(const UrlElement &url, node& n) {
     if (nodes.find(url)==nodes.end()) {
+      // no more added node after maxSize
+      if (nbNodes == maxSize) {
+	n = node();
+	return false;
+      }
       n=graph->addNode();
+      ++nbNodes;
       stringstream str;
       str << url.server;
       if (url.url[0] != '/')
 	str << "/";
       str << url.getUrl();
-      labels->setNodeValue(n, str.str());
+      labels->setNodeValue(n, urlDecode(str.str()));
       ostringstream oss;
       if(url.is_http){
     	  oss<<"http://";
@@ -403,11 +442,15 @@ struct WebImport:public ImportModule {
   }
 
   //========================================================
-  void addEdge(const UrlElement &source, const UrlElement &target,
+  bool addEdge(const UrlElement &source, const UrlElement &target,
 	       const char* type, const Color *color) {
     node sNode,tNode;
     bool sAdded = addNode(source, sNode);
     bool tAdded = addNode(target, tNode);
+    // if new nodes can node be added (nbNodes > maxSize)
+    // stop adding edge
+    if (!sNode.isValid() || !tNode.isValid())
+      return false;
     if (sAdded || tAdded || (sNode != tNode) && !graph->existEdge(sNode, tNode).isValid()) {
       edge e = graph->addEdge(sNode, tNode);
       if (type)
@@ -415,6 +458,7 @@ struct WebImport:public ImportModule {
       if (color)
 	colors->setEdgeValue(e, *color);
     }
+    return true;
   }
   //========================================================
   bool nextUrl(UrlElement & url) {
@@ -508,20 +552,20 @@ struct WebImport:public ImportModule {
   //========================================================
   void parseUrl (const string &href, UrlElement &starturl) {
     UrlElement newUrl = starturl.parseUrl(href);
-    if (newUrl.isValid() && (extractNonHttp || newUrl.is_http)) {
+    if (newUrl.isValid() && (extractNonHttp || newUrl.is_http) &&
+	addEdge(starturl, newUrl, 0, 0))
       addUrl(newUrl, visitOther || (newUrl.server == starturl.server));
-      addEdge(starturl, newUrl, 0, 0);
-    }
   }
   //========================================================
   bool start() {
     UrlElement url;
     unsigned step = 20;
-    while (nextUrl(url) && graph->numberOfNodes()<maxSize) {
+    while (nextUrl(url)) {
       if (url.isHtmlPage()) {
-	if (pluginProgress && ((graph->numberOfNodes() % step) == 0)) {
-	  pluginProgress->setComment(string("Visiting ") + url.server + url.url);
-	  if (pluginProgress->progress(graph->numberOfNodes(), maxSize) !=TLP_CONTINUE)
+	if (pluginProgress && ((nbNodes % step) == 0)) {
+	  pluginProgress->setComment(string("Visiting ") +
+				     urlDecode(url.server + url.url));
+	  if (pluginProgress->progress(nbNodes, maxSize) !=TLP_CONTINUE)
 	    return pluginProgress->state()!= TLP_CANCEL;
 	}
 #ifndef NDEBUG
@@ -533,9 +577,9 @@ struct WebImport:public ImportModule {
 #ifndef NDEBUG
 	    cerr << endl << "redirected to " << redirection.server << redirection.url << endl;
 #endif
-	    addUrl(redirection,
-		   visitOther || redirection.server == url.server);
-	    addEdge(url, redirection,  "redirection", redirectionColor);
+	    if (addEdge(url, redirection,  "redirection", redirectionColor))
+	      addUrl(redirection,
+		     visitOther || redirection.server == url.server);
 	  } else
 	    cerr << endl << "invalid redirection" << endl;
 	} else {
@@ -544,7 +588,7 @@ struct WebImport:public ImportModule {
 	  url.clear();
 #ifndef NDEBUG
 	  cerr << " done" << endl << flush;
-#endif      
+#endif
 	}
       }
 #ifndef NDEBUG
@@ -564,6 +608,7 @@ struct WebImport:public ImportModule {
     Color lColor(0,0,255,128);
     Color rColor(255,255,0,128);
     maxSize = 1000;
+    nbNodes = 0;
     visitOther = false;
     extractNonHttp = true;
     if (dataSet != 0) {
@@ -579,7 +624,20 @@ struct WebImport:public ImportModule {
     }
 
     UrlElement mySite;
+    size_t pos = server.find("http://");
+    if (pos == 0)
+      // remove http:// prefix
+      server = server.substr(7);
+    // remove / prfix
+    if (server[0] == 0)
+      server = server.substr(1);
+    if (server[server.size() - 1] == '/')
+      // remove / suffix
+      server = server.substr(0, server.size() - 1); 
     mySite.server = server;
+    if (url[0] == '/')
+      // remove / prefix
+      url = url.substr(1);
     mySite.setUrl(string("/") + url);
     mySite.serverport = 80;
     mySite.data = "";
