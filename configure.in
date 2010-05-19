@@ -34,6 +34,7 @@ CFLAGS=${CFLAGS}
 AC_LANG(C++)    dnl uses C++ compiler and preprocessor for tests
 AC_PROG_CXX
 AC_PROG_CXXCPP
+m4_pattern_allow(AC_OPENMP)
 AC_OPENMP
 ##AC_PROG_JAVA
 
