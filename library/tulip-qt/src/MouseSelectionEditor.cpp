@@ -558,24 +558,24 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*){
     float valueMin,valueMax;
     switch(operation){
     case ALIGN_TOP:
-      valueMax=_layout->getNodeValue(n)[1]+_sizes->getNodeValue(n)[1];
+      valueMax=_layout->getNodeValue(n)[1]+_sizes->getNodeValue(n)[1]/2.;
       break;
     case ALIGN_BOTTOM:
-      valueMin=_layout->getNodeValue(n)[1]-_sizes->getNodeValue(n)[1];
+      valueMin=_layout->getNodeValue(n)[1]-_sizes->getNodeValue(n)[1]/2.;
       break;
     case ALIGN_HORIZONTALLY:
-      valueMax=_layout->getNodeValue(n)[1]+_sizes->getNodeValue(n)[1];
-      valueMin=_layout->getNodeValue(n)[1]-_sizes->getNodeValue(n)[1];
+      valueMax=_layout->getNodeValue(n)[1]+_sizes->getNodeValue(n)[1]/2.;
+      valueMin=_layout->getNodeValue(n)[1]-_sizes->getNodeValue(n)[1]/2.;
       break;
     case ALIGN_LEFT:
-      valueMin=_layout->getNodeValue(n)[0]-_sizes->getNodeValue(n)[0];
+      valueMin=_layout->getNodeValue(n)[0]-_sizes->getNodeValue(n)[0]/2.;
       break;
     case ALIGN_RIGHT:
-      valueMax=_layout->getNodeValue(n)[0]+_sizes->getNodeValue(n)[0];
+      valueMax=_layout->getNodeValue(n)[0]+_sizes->getNodeValue(n)[0]/2.;
       break;
     case ALIGN_VERTICALLY:
-      valueMax=_layout->getNodeValue(n)[0]-_sizes->getNodeValue(n)[0];
-      valueMin=_layout->getNodeValue(n)[0]+_sizes->getNodeValue(n)[0];
+      valueMax=_layout->getNodeValue(n)[0]-_sizes->getNodeValue(n)[0]/2.;
+      valueMin=_layout->getNodeValue(n)[0]+_sizes->getNodeValue(n)[0]/2.;
       break;
     }
     if(!init){
@@ -609,19 +609,19 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*){
     Coord old(_layout->getNodeValue(n));
     switch(operation){
     case ALIGN_TOP:
-      old[1]=max-_sizes->getNodeValue(n)[1];
+      old[1]=max-_sizes->getNodeValue(n)[1]/2.;
       break;
     case ALIGN_BOTTOM:
-      old[1]=min+_sizes->getNodeValue(n)[1];
+      old[1]=min+_sizes->getNodeValue(n)[1]/2.;
       break;
     case ALIGN_HORIZONTALLY:
       old[1]=(max+min)/2;
       break;
     case ALIGN_LEFT:
-      old[0]=min+_sizes->getNodeValue(n)[0];
+      old[0]=min+_sizes->getNodeValue(n)[0]/2.;
       break;
     case ALIGN_RIGHT:
-      old[0]=max-_sizes->getNodeValue(n)[0];
+      old[0]=max-_sizes->getNodeValue(n)[0]/2.;
       break;
     case ALIGN_VERTICALLY:
       old[0]=(max+min)/2;
