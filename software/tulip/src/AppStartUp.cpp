@@ -2,6 +2,7 @@
 #include <config.h>
 #endif
 
+#include <time.h>
 #include <string>
 #include <QtGui/qprogressbar.h>
 #include <QtGui/qdialog.h>
