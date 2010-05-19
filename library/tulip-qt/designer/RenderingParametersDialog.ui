@@ -430,7 +430,7 @@
         <item>
          <widget class="QPushButton" name="selectionSaveAtDefault" >
           <property name="text" >
-           <string>Save at default</string>
+           <string>Save as default</string>
           </property>
          </widget>
         </item>
