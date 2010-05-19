@@ -40,7 +40,7 @@ namespace tlp {
   }
   //=====================================
   void QtProgress::setComment(string msg) {
-    comment->setText(QString(msg.c_str()));
+    comment->setText(QString::fromUtf8(msg.c_str()));
     if (firstCall) show();
     firstCall=false;
     qApp->processEvents();
