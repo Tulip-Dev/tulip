@@ -196,22 +196,21 @@ void PropertyWidget::scroll(int i) {
   if (editedProperty == NULL) return;
   int curId = i;
   bool toUpdate = false;
-  if (curId > (vScrollPos + TABLEBUFSIZE/4)) {
-    if ((vScrollPos + TABLEBUFSIZE/2) != (int) nbElement) {
+  if (curId > (vScrollPos + TABLEBUFSIZE/2)) {
+    if ((vScrollPos + TABLEBUFSIZE+1) != (int) nbElement) {
+      if (curId + TABLEBUFSIZE >= (int) nbElement)
+        curId=nbElement-TABLEBUFSIZE-1;
       vScrollPos=curId;
-      if (curId + TABLEBUFSIZE/2 > (int) nbElement)
-	curId=nbElement-TABLEBUFSIZE/2;
       toUpdate=true;
     }
   }
-  if (curId<vScrollPos-TABLEBUFSIZE/4) {
-    if (vScrollPos-TABLEBUFSIZE/2!=0) {
+  if (curId<vScrollPos) {
+    if (vScrollPos!=0) {
       vScrollPos=curId;
-      if (curId-TABLEBUFSIZE/2<0)
-	curId=TABLEBUFSIZE/2-1;
       toUpdate=true;
     }
   }
+
   if (toUpdate){
     update();
   }
@@ -247,14 +246,14 @@ void PropertyWidget::updateEdges() {
     char buf[16];
     edge tmp=it->next();
     if (!_filterSelection || tmpSel->getEdgeValue(tmp)) {
-      if ((i>=vScrollPos-TABLEBUFSIZE/2) && (i<=vScrollPos+TABLEBUFSIZE/2)) {
-	sprintf (buf,"%d", tmp.id );
-	QTableWidgetItem* idItem = new QTableWidgetItem(buf);
-	idItem->setFlags(Qt::ItemIsEnabled);
-	setItem(i, 0, idItem);
-	setTulipEdgeItem(editedProperty, editedPropertyName, tmp, i, 1);
+      if ((i>=vScrollPos) && (i<=vScrollPos+TABLEBUFSIZE)) {
+        sprintf (buf,"%d", tmp.id );
+        QTableWidgetItem* idItem = new QTableWidgetItem(buf);
+        idItem->setFlags(Qt::ItemIsEnabled);
+        setItem(i, 0, idItem);
+        setTulipEdgeItem(editedProperty, editedPropertyName, tmp, i, 1);
       }
-      else if (i>vScrollPos+TABLEBUFSIZE/2) break;
+      else if (i>vScrollPos+TABLEBUFSIZE) break;
       ++i;
     }
   } delete it;
@@ -272,14 +271,14 @@ void PropertyWidget::updateNodes() {
     char buf[16];
     node tmp=it->next();
     if (!_filterSelection || tmpSel->getNodeValue(tmp)) {
-      if ((i>=vScrollPos-TABLEBUFSIZE/2) && (i<=vScrollPos+TABLEBUFSIZE/2)) {
-	sprintf (buf,"%d", tmp.id );
-	QTableWidgetItem* idItem = new QTableWidgetItem(buf);
-	idItem->setFlags(Qt::ItemIsEnabled);
-	setItem(i, 0, idItem);
-	setTulipNodeItem(editedProperty, editedPropertyName, tmp, i, 1);
+      if ((i>=vScrollPos) && (i<=vScrollPos+TABLEBUFSIZE)) {
+        sprintf (buf,"%d", tmp.id );
+        QTableWidgetItem* idItem = new QTableWidgetItem(buf);
+        idItem->setFlags(Qt::ItemIsEnabled);
+        setItem(i, 0, idItem);
+        setTulipNodeItem(editedProperty, editedPropertyName, tmp, i, 1);
       }
-      else if (i>vScrollPos+TABLEBUFSIZE/2) break;
+      else if (i>vScrollPos+TABLEBUFSIZE) break;
       ++i;
     }
   } delete it;
