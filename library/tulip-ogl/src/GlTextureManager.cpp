@@ -78,7 +78,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
   /* skip file size and reserved fields of bitmap file header */
   fseek(file, 8, SEEK_CUR);
   /* get the position of the actual bitmap data */
-  if (!fread(&bfOffBits, sizeof(long int), 1, file))
+  if (!fread(&bfOffBits, sizeof(int), 1, file))
     {
       errorMsg = "Error reading : " + filename;
       //cerr << __PRETTY_FUNCTION__ << ": Error reading " << filename << endl;
