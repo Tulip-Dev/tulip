@@ -52,7 +52,6 @@ PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
   setColumnCount(2);
   setHorizontalHeaderItem(0, new QTableWidgetItem("Id"));
   setHorizontalHeaderItem(1, new QTableWidgetItem(""));
-  horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
   horizontalHeader()->setStretchLastSection(true);
   showProperties = false;
   connect(verticalScrollBar(), SIGNAL(valueChanged(int)), SLOT(scroll(int)));
