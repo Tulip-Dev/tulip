@@ -209,7 +209,7 @@ namespace tlp {
     for(unsigned int v=0;v<points.size();++v) {
       numberOfPoints+=points[v].size();
     }
-    GLdouble *pointsData=new GLdouble[7*numberOfPoints];
+    GLdouble *pointsData = new GLdouble[7*numberOfPoints];
 
     unsigned int pointNumber=0;
     glShadeModel(GL_SMOOTH);
@@ -231,7 +231,7 @@ namespace tlp {
     }
     gluTessEndPolygon(tobj);
     gluDeleteTess(tobj);
-    delete pointsData;
+    delete [] pointsData;
     if(textureName!="")
       GlTextureManager::getInst().desactivateTexture();
 
