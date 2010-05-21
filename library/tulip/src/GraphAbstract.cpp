@@ -90,7 +90,7 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
 }
 //=========================================================================
 void GraphAbstract::removeSubGraph(Graph * toRemove) {
-  for (GRAPH_SEQ::iterator it = subgraphs.begin(); it != subgraphs.end(); it++) {
+  for (GRAPH_SEQ::iterator it = subgraphs.begin(); it != subgraphs.end(); ++it) {
     if (*it == toRemove) {
       subgraphs.erase(it);
       break;
