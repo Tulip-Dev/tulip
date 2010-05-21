@@ -8,9 +8,8 @@
 using namespace std;
 
 static bool checkVboSupport() {
-	return ((void*)(glGenBuffers)!=NULL) &&
-			((void*)(glBindBuffer)!=NULL) &&
-			((void*)(glBufferData)!=NULL);
+	static bool vboOk = glewIsSupported("GL_ARB_vertex_buffer_object");
+	return vboOk;
 }
 
 static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &startColor, const tlp::Color &endColor,
@@ -95,15 +94,15 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 		glBegin(GL_TRIANGLE_STRIP);
 		for (unsigned int i = 0; i < size; ++i) {
 			tlp::setMaterial(curveColors[i]);
-            glMultiTexCoord2f(GL_TEXTURE0, i*texCoordFactor, 1.0f);
-            glMultiTexCoord2f(GL_TEXTURE1, i*texCoordFactor, 1.0f);
+			glMultiTexCoord2f(GL_TEXTURE0, i*texCoordFactor, 1.0f);
+			glMultiTexCoord2f(GL_TEXTURE1, i*texCoordFactor, 1.0f);
 			if (!billboardCurve) {
 				glVertex3fv(&points[i*3]);
 			} else {
 				glVertex3fv(&points[i*6]);
 			}
-            glMultiTexCoord2f(GL_TEXTURE0, i*texCoordFactor, 0.0f);
-            glMultiTexCoord2f(GL_TEXTURE1, i*texCoordFactor, 0.0f);
+			glMultiTexCoord2f(GL_TEXTURE0, i*texCoordFactor, 0.0f);
+			glMultiTexCoord2f(GL_TEXTURE1, i*texCoordFactor, 0.0f);
 			if (!billboardCurve) {
 				glVertex3fv(&points[i*3 + size*3]);
 			} else {
@@ -308,11 +307,11 @@ static string curveVertexShaderBillboardMainSrc =
 		"	}"
 		"	gl_FrontColor =  mix(startColor, endColor, t);"
 		"	if (gl_Vertex.y > 0.0) {"
-        "		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 0.0);"
-        "		gl_TexCoord[1].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 0.0);"
+		"		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 0.0);"
+		"		gl_TexCoord[1].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 0.0);"
 		"	} else {"
-        "		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 1.0);"
-        "		gl_TexCoord[1].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 1.0);"
+		"		gl_TexCoord[0].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 1.0);"
+		"		gl_TexCoord[1].st = vec2(t * float(nbCurvePoints - 1) * texCoordFactor, 1.0);"
 		"	}"
 		"}"
 		;
@@ -334,6 +333,7 @@ AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &
 		startColor(startColor), endColor(endColor), startSize(startSize), endSize(endSize), nbCurvePoints(nbCurvePoints),
 		outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
 
+	float totalDist = 0;
 	glControlPoints = new float[nbControlPoints * 4];
 	memset(glControlPoints, 0, nbControlPoints * 4 * sizeof(float));
 	for (unsigned int i = 0 ; i < nbControlPoints ; ++i) {
@@ -341,12 +341,15 @@ AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &
 		glControlPoints[4*i+1] = controlPoints[i][1];
 		glControlPoints[4*i+2] = controlPoints[i][2];
 		boundingBox.check(controlPoints[i]);
+		if (i != nbControlPoints - 1) {
+			totalDist += controlPoints[i].dist(controlPoints[i+1]);
+		}
 	}
 
 	vboOk = checkVboSupport();
 
-	if (curveVertexBuffersData.find(nbCurvePoints) == curveVertexBuffersData.end()) {
-		buildCurveVertexBuffers(nbCurvePoints, vboOk);
+	if (curveVertexBuffersData.find(this->nbCurvePoints) == curveVertexBuffersData.end()) {
+		buildCurveVertexBuffers(this->nbCurvePoints, vboOk);
 	}
 
 	if (GlShaderProgram::shaderProgramsSupported()) {

@@ -48,7 +48,7 @@ public :
 	 * \param nbCurvePoints the number of curve points to generate
 	 */
 	GlCatmullRomCurve(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
-					  const float startSize, const float endSize, const bool closedCurve = false, const unsigned int nbCurvePoints = 100);
+					  const float startSize, const float endSize, const bool closedCurve = false, const unsigned int nbCurvePoints = 200);
 
 	~GlCatmullRomCurve();
 
