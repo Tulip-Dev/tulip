@@ -341,6 +341,7 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
 
     default:
       /* XXX Left as an excersie to the reader. */
+      free(prims);
       return;
     }
   }
