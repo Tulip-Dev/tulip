@@ -156,6 +156,10 @@ void ColorScaleConfigDialog::displayUserGradientPreview() {
 	displayGradientPreview(colorsVector, gradientCB->isChecked(), userGradientPreview);
 }
 
+static qreal clamp(qreal f, qreal minVal, qreal maxVal) {
+	return min(max(f, minVal), maxVal);
+}
+
 void ColorScaleConfigDialog::displayGradientPreview(const QList<QColor> &colorsVector, bool gradient, QLabel *displayLabel) {
 	QPixmap pixmap(displayLabel->width(), displayLabel->height());
 	pixmap.fill(Qt::transparent);
@@ -164,10 +168,10 @@ void ColorScaleConfigDialog::displayGradientPreview(const QList<QColor> &colorsV
 	if (gradient) {
 		QLinearGradient qLinearGradient(displayLabel->width() / 2, 0,
 				displayLabel->width() / 2, displayLabel->height() - 1);
-		float increment = 1. / (colorsVector.size() - 1);
-		float relPos = 0;
+		qreal increment = 1.0 / (colorsVector.size() - 1);
+		qreal relPos = 0;
 		for (int i = 0 ; i < colorsVector.size() ; ++i) {
-			qLinearGradient.setColorAt(relPos, colorsVector.at(i));
+			qLinearGradient.setColorAt(clamp(relPos, 0.0, 1.0), colorsVector.at(i));
 			relPos += increment;
 		}
 		painter.fillRect(0, 0, displayLabel->width(), displayLabel->height(), qLinearGradient);
