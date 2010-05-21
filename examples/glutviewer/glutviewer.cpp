@@ -26,34 +26,18 @@ using namespace tlp;
 static int win;
 const unsigned int WIN_SIZE = 500;
 unsigned int frameCount = 5;
-GLuint LList;
-bool listOk = false;
-//==============================================================================
-class GLGlut {
-public:
-  GLGlut(string name, const int width = WIN_SIZE, const int height = WIN_SIZE) {}
-  virtual ~GLGlut(){}
-  void setupOpenGlContext() {
-    glutSetWindow(win);
-  }
-
-  GlScene scene;
-  private:
-  int width,height;
-};
-//=============================================
 static int width(WIN_SIZE), height(WIN_SIZE);
-static GLGlut *glGlutScreen;
 static int frame = 0;
 static GLint timer;
 static int rx = 0, ry = 0, rz = 0;
 static bool frameRateDisplaying = false;
 static char strFrameRate[50] = {0};      
+GlScene scene;
 
 using namespace tlp;
 //=============================================
 void idle(void) {  
-  glGlutScreen->scene.rotateScene(rx*2, ry*2, rz*2);
+  scene.rotateScene(rx*2, ry*2, rz*2);
   if (frameRateDisplaying) {
     if (frame%frameCount == 0) {
       GLint t = glutGet(GLUT_ELAPSED_TIME);
@@ -74,7 +58,7 @@ static void printMessage(const string &str, const bool b) {
 }
 //=============================================
 static void changeOption(const int key) {
-  GlGraphRenderingParameters param = glGlutScreen->scene.getGlGraphComposite()->getRenderingParameters();
+  GlGraphRenderingParameters param = scene.getGlGraphComposite()->getRenderingParameters();
   switch (key) {
   case '1':
     glutFullScreen();
@@ -82,10 +66,10 @@ static void changeOption(const int key) {
   case 27:
     exit(EXIT_SUCCESS);
   case '+':
-    glGlutScreen->scene.zoom(2);
+    scene.zoom(2);
     break;
   case '-':
-    glGlutScreen->scene.zoom(-2);
+    scene.zoom(-2);
     break;
   case 'x':
     rx = (rx+1)%2;
@@ -109,12 +93,12 @@ static void changeOption(const int key) {
     printMessage("Arrow ",param.isViewArrow());
     break;
   case 'o':
-    glGlutScreen->scene.setViewOrtho(!glGlutScreen->scene.isViewOrtho());
-    printMessage("Projection orthogonal",glGlutScreen->scene.isViewOrtho());
+    scene.setViewOrtho(!scene.isViewOrtho());
+    printMessage("Projection orthogonal", scene.isViewOrtho());
     break;
   case 'l':
     param.setViewNodeLabel(!param.isViewNodeLabel());
-    printMessage("Labels",param.isViewNodeLabel());
+    printMessage("Labels", param.isViewNodeLabel());
     param.setFontsType(1);
     break;
   case 'm':
@@ -135,7 +119,7 @@ static void changeOption(const int key) {
   default:
     return;
   }
-  glGlutScreen->scene.getGlGraphComposite()->setRenderingParameters(param);
+  scene.getGlGraphComposite()->setRenderingParameters(param);
 }
 //=============================================
 static void Key(const unsigned char key, const int x, const int y) {
@@ -151,11 +135,11 @@ void Reshape(int widt, int heigh) {
   viewport[1] = 0;
   viewport[2] = width;
   viewport[3] = height;
-  glGlutScreen->scene.setViewport(viewport);
+  scene.setViewport(viewport);
 }
 //=============================================
 void Draw(void) {
-  glGlutScreen->scene.draw();
+  scene.draw();
   glutSwapBuffers();
   if (frameRateDisplaying) ++frame;
 }
@@ -213,21 +197,19 @@ int main (int argc, char **argv) {
   GlDisplayListManager::getInst().changeContext(0);
   GlTextureManager::getInst().changeContext(0);
 
-  glGlutScreen = new GLGlut("", width, height);
   glutIdleFunc(idle);
   Graph *graph = tlp::loadGraph(argv[1]);
 
   GlLayer *layer=new GlLayer("Main");
-  glGlutScreen->scene.addLayer(layer);
+  scene.addLayer(layer);
 
   GlGraphComposite* graphComposite = new GlGraphComposite(graph);
-  glGlutScreen->scene.addGlGraphCompositeInfo(glGlutScreen->scene.getLayer("Main"), graphComposite);
-  glGlutScreen->scene.getLayer("Main")->addGlEntity(graphComposite, "graph");
-  glGlutScreen->scene.centerScene();
+  scene.addGlGraphCompositeInfo(scene.getLayer("Main"), graphComposite);
+  scene.getLayer("Main")->addGlEntity(graphComposite, "graph");
+  scene.centerScene();
 
   Reshape(500, 500);
   
-  //glGlutScreen->centerScene();
   timer = glutGet(GLUT_ELAPSED_TIME);
   glutReshapeFunc(Reshape);
   glutKeyboardFunc(Key);
@@ -250,7 +232,6 @@ int main (int argc, char **argv) {
   glutAddMenuEntry("Frame rate (b)",    'b');
   glutAddMenuEntry("Full screen (1)",   '1');
   glutAddMenuEntry("exit (esc)",   27);
-  
   glutAttachMenu(GLUT_RIGHT_BUTTON);
 
   helpMessage();
