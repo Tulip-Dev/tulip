@@ -59,6 +59,7 @@ void Cone::getIncludeBoundingBox(BoundingBox& boundingBox) {
 void Cone::draw(node n, float lod) {
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
 		drawCone();
+    GlDisplayListManager::getInst().endNewDisplayList();
 	}
 	setMaterial(glGraphInputData->elementColor->getNodeValue(n));
 	string texFile = glGraphInputData->elementTexture->getNodeValue(n);
@@ -108,6 +109,7 @@ Coord Cone::getAnchor(const Coord &vector) const {
 void Cone::draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
 		drawCone();
+    GlDisplayListManager::getInst().endNewDisplayList();
 	}
 	setMaterial(glyphColor);
 	string texFile = edgeExtGlGraphInputData->elementTexture->getEdgeValue(e);

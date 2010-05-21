@@ -56,6 +56,7 @@ void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox) {
 void Cylinder::draw(node n, float lod) {
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Cylinder_cylinder")) {
 		drawCylinder();
+    GlDisplayListManager::getInst().endNewDisplayList();
 	}
 	setMaterial(glGraphInputData->elementColor->getNodeValue(n));
 	string texFile = glGraphInputData->elementTexture->getNodeValue(n);
@@ -90,6 +91,7 @@ Coord Cylinder::getAnchor(const Coord &vector) const {
 void Cylinder::draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod) {
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Cylinder_cylinder")) {
 		drawCylinder();
+    GlDisplayListManager::getInst().endNewDisplayList();
 	}
 	setMaterial(glyphColor);
 	string texFile = edgeExtGlGraphInputData->elementTexture->getNodeValue(n);
