@@ -164,10 +164,10 @@ void FastBezier::computeSplinePoints(const std::vector<Coord> &splinePassPoints,
 			} else {
 				computeBezierSegmentControlPoints(splinePassPoints[i-1], splinePassPoints[i], splinePassPoints[i+1], splinePassPoints[i+2], bezierSegmentControlPoints);
 			}
-			if (bezierSegmentControlPoints.size() > 0) {
+			if (!bezierSegmentControlPoints.empty()) {
 				FastBezier::computeBezierPoints(bezierSegmentControlPoints, bezierSegmentPoints, nbPointsPerSegment);
-				if (bezierSegmentPoints.size() > 0) {
-					if (splinePoints.size() > 0 && bezierSegmentPoints[0] == splinePoints[splinePoints.size() - 1]) {
+				if (!bezierSegmentPoints.empty()) {
+					if (!splinePoints.empty() && bezierSegmentPoints[0] == splinePoints[splinePoints.size() - 1]) {
 						splinePoints.pop_back();
 					}
 					splinePoints.insert(splinePoints.end(), bezierSegmentPoints.begin(), bezierSegmentPoints.end());
