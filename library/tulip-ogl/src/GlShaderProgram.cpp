@@ -201,7 +201,11 @@ void GlShaderProgram::removeAllShaders() {
 }
 
 void GlShaderProgram::link() {
+	bool allShaderCompiled = true;
 	for (size_t i = 0 ; i < attachedShaders.size() ; ++i) {
+		if (!attachedShaders[i]->isCompiled()) {
+			allShaderCompiled = false;
+		}
 		if (attachedShaders[i]->getShaderType() == Geometry) {
 			glProgramParameteriEXT(programObjectId, GL_GEOMETRY_INPUT_TYPE_EXT, attachedShaders[i]->getInputPrimitiveType());
 			glProgramParameteriEXT(programObjectId, GL_GEOMETRY_OUTPUT_TYPE_EXT, attachedShaders[i]->getOutputPrimitiveType());
@@ -218,7 +222,7 @@ void GlShaderProgram::link() {
 
 	GLint linked;
 	glGetProgramiv(programObjectId, GL_LINK_STATUS, &linked);
-	programLinked = linked > 0;
+	programLinked = allShaderCompiled && linked > 0;
 }
 
 void GlShaderProgram::printInfoLog() {
