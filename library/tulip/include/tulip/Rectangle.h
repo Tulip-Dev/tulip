@@ -63,7 +63,7 @@ namespace tlp {
 	/**
 	* @return true if the Rectangle is well define [0] min corner, [1] max corner.
 	*/
-	bool isValid() {
+        bool isValid() const {
             return (*this)[0][0] <= (*this)[1][0] && (*this)[0][1] <= (*this)[1][1];
 	}
         /**
