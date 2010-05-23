@@ -77,7 +77,30 @@ namespace tlp {
     inline VECTOR operator^(const VECTOR &, const VECTOR &);
   TEMPLATEVECTOR
     inline VECTOR operator-(const VECTOR&);
-
+    /**
+      * @brief typedef for 2D vector of double
+      */
+  typedef Vector<double, 2> Vec2d;
+  /**
+    * @brief typedef for 3D vector of double
+    */
+  typedef Vector<double, 3> Vec3d;
+  /**
+    * @brief typedef for 4D vector of double
+    */
+  typedef Vector<double, 4> Vec4d;
+  /**
+    * @brief typedef for 2D vector of float
+    */
+  typedef Vector<float,  2> Vec2f;
+  /**
+    * @brief typedef for 3D vector of float
+    */
+  typedef Vector<float,  3> Vec3f;
+  /**
+    * @brief typedef for 4D vector of float
+    */
+  typedef Vector<float,  4> Vec4f;
   /*@}*/
 }
 
