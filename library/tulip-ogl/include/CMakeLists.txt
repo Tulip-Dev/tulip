@@ -62,10 +62,11 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/Context.h
 	tulip/Fonts.h
 	tulip/Curves.h
-    tulip/GlShaderProgram.h
-    tulip/GlOpenUniformCubicBSpline.h
-    tulip/GlCubicBSplineInterpolation.h
-    tulip/OpenGlConfigManager.h
-    tulip/OpenGlErrorViewer.h
-    tulip/AbstractGlCurve.h
+	tulip/GlShaderProgram.h
+	tulip/GlOpenUniformCubicBSpline.h
+	tulip/GlCubicBSplineInterpolation.h
+	tulip/OpenGlConfigManager.h
+	tulip/OpenGlErrorViewer.h
+	tulip/AbstractGlCurve.h
+  tulip/GlQuadTreeLODCalculator.h
 )

@@ -41,7 +41,6 @@ INCLUDES_H = \
 	tulip/ElementPropertiesWidgetPlugin.h \
 	tulip/GWOverviewWidgetPlugin.h \
 	tulip/PropertyWidgetPlugin.h \
-	tulip/QtQuadTreeLODCalculator.h \
 	tulip/QtProgress.h \
 	tulip/Controller.h \
 	tulip/ControllerAlgorithmTools.h \

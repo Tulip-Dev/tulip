@@ -1,6 +1,4 @@
-#include "tulip/QtQuadTreeLODCalculator.h"
-
-#include <QtCore/QTime>
+#include "tulip/GlQuadTreeLODCalculator.h"
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -9,10 +7,10 @@
 #include <tulip/Matrix.h>
 #include <tulip/QuadTree.h>
 
-#include <tulip/Camera.h>
-#include <tulip/GlEntity.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlScene.h>
+#include "tulip/Camera.h"
+#include "tulip/GlEntity.h"
+#include "tulip/GlTools.h"
+#include "tulip/GlScene.h"
 #include <iostream>
 
 using namespace std;
@@ -30,14 +28,14 @@ namespace tlp {
     return BoundingBox(center-size,center+size);
   }
 
-  QtQuadTreeLODCalculator::QtQuadTreeLODCalculator() : scene(NULL),haveToCompute(true),inputData(NULL),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
+  GlQuadTreeLODCalculator::GlQuadTreeLODCalculator() : scene(NULL),haveToCompute(true),inputData(NULL),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
   }
 
-  QtQuadTreeLODCalculator::~QtQuadTreeLODCalculator() {
+  GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
     removeObservers();
   }
 
-  void QtQuadTreeLODCalculator::setScene(GlScene *scene){
+  void GlQuadTreeLODCalculator::setScene(GlScene *scene){
     // If we change scene, whe have to remove observer on the graph and the scene
     // in the next rendering, we have to compute quadtree
     if(this->scene)
@@ -46,7 +44,7 @@ namespace tlp {
     haveToCompute=true;
   }
 
-  bool QtQuadTreeLODCalculator::needEntities(){
+  bool GlQuadTreeLODCalculator::needEntities(){
     // Check if quadtree need entities
     if(haveToCompute)
       return true;
@@ -70,28 +68,28 @@ namespace tlp {
     return false;
   }
 
-  void QtQuadTreeLODCalculator::setNeedEntities(bool need){
+  void GlQuadTreeLODCalculator::setNeedEntities(bool need){
     haveToCompute=true;
     removeObservers();
   }
 
-  void QtQuadTreeLODCalculator::addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb) {
+  void GlQuadTreeLODCalculator::addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb) {
     GlCPULODCalculator::addSimpleEntityBoundingBox(entity,bb);
     entitiesGlobalBoundingBox.check(bb.first);
     entitiesGlobalBoundingBox.check(bb.second);
   }
-  void QtQuadTreeLODCalculator::addNodeBoundingBox(unsigned int id,const BoundingBox& bb) {
+  void GlQuadTreeLODCalculator::addNodeBoundingBox(unsigned int id,const BoundingBox& bb) {
     GlCPULODCalculator::addNodeBoundingBox(id,bb);
     nodesGlobalBoundingBox.check(bb.first);
     nodesGlobalBoundingBox.check(bb.second);
   }
-  void QtQuadTreeLODCalculator::addEdgeBoundingBox(unsigned int id,const BoundingBox& bb) {
+  void GlQuadTreeLODCalculator::addEdgeBoundingBox(unsigned int id,const BoundingBox& bb) {
     GlCPULODCalculator::addEdgeBoundingBox(id,bb);
     edgesGlobalBoundingBox.check(bb.first);
     edgesGlobalBoundingBox.check(bb.second);
   }
 
-  void QtQuadTreeLODCalculator::compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport) {
+  void GlQuadTreeLODCalculator::compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport) {
 
     if(haveToCompute){
       // if have to compute : rebuild quadtree
@@ -165,7 +163,7 @@ namespace tlp {
     }
   }
 
-  void QtQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
+  void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
                                                    const Coord &eye,
                                                    const Matrix<float, 4> transformMatrix,
                                                    const Vector<int,4>& globalViewport,
@@ -351,7 +349,7 @@ namespace tlp {
 
   }
 
-  void QtQuadTreeLODCalculator::removeObservers() {
+  void GlQuadTreeLODCalculator::removeObservers() {
     if(inputData){
       if(currentGraph)
         currentGraph->removeGraphObserver(this);
@@ -365,7 +363,7 @@ namespace tlp {
     scene->removeObserver(this);
   }
 
-  void QtQuadTreeLODCalculator::addObservers() {
+  void GlQuadTreeLODCalculator::addObservers() {
     if(inputData){
       currentGraph=inputData->getGraph();
       currentGraph->addGraphObserver(this);
@@ -379,7 +377,7 @@ namespace tlp {
     scene->addObserver(this);
   }
 
-  void QtQuadTreeLODCalculator::setInputData(GlGraphInputData *newInputData){
+  void GlQuadTreeLODCalculator::setInputData(GlGraphInputData *newInputData){
     if(inputData)
       removeObservers();
 
@@ -394,19 +392,19 @@ namespace tlp {
     haveToCompute=true;
   }
 
-  void QtQuadTreeLODCalculator::update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end){
+  void GlQuadTreeLODCalculator::update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end){
     haveToCompute=true;
     removeObservers();
   }
 
-  void QtQuadTreeLODCalculator::addLocalProperty(Graph*, const std::string &name){
+  void GlQuadTreeLODCalculator::addLocalProperty(Graph*, const std::string &name){
     if(name==inputData->getElementLayoutPropName() || name==inputData->getElementSizePropName()){
       haveToCompute=true;
       removeObservers();
       addObservers();
     }
   }
-  void QtQuadTreeLODCalculator::delLocalProperty(Graph*, const std::string &name){
+  void GlQuadTreeLODCalculator::delLocalProperty(Graph*, const std::string &name){
     if(name==inputData->getElementLayoutPropName() || name==inputData->getElementSizePropName()){
       haveToCompute=true;
       removeObservers();
@@ -414,7 +412,7 @@ namespace tlp {
     }
   }
 
-  void QtQuadTreeLODCalculator::destroy(Graph *) {
+  void GlQuadTreeLODCalculator::destroy(Graph *) {
     clear();
     setInputData( NULL);
   }

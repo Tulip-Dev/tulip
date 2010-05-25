@@ -22,8 +22,8 @@
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlRectTextured.h>
+#include <tulip/GlQuadTreeLODCalculator.h>
 
-#include "tulip/QtQuadTreeLODCalculator.h"
 #include "tulip/QGlPixelBufferManager.h"
 #include "tulip/Interactor.h"
 #include "tulip/InteractorManager.h"
@@ -96,7 +96,7 @@ namespace tlp {
 
   //==================================================
   GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
-    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new QtQuadTreeLODCalculator),view(view){
+    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view){
     //setObjectName(name);
     //  cerr << __PRETTY_FUNCTION__ << endl;
     setFocusPolicy(Qt::StrongFocus);

@@ -102,5 +102,6 @@ libtulip_ogl_la_SOURCES = \
 	GlShaderProgram.cpp \
 	GlOpenUniformCubicBSpline.cpp \
 	GlCubicBSplineInterpolation.cpp \
-	AbstractGlCurve.cpp
+	AbstractGlCurve.cpp \
+	GlQuadTreeLODCalculator.cpp
 
