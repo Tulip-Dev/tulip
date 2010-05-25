@@ -21,7 +21,7 @@ namespace tlp {
       float deltaX = cos(startAngle + i * delta) * (radius);
       float deltaY = sin(startAngle + i * delta) * (radius);
       points[i] = Coord(center[0] + deltaX, center[1] + deltaY, center[2]);
-      boundingBox.insert(points[i]);
+      boundingBox.expand(points[i]);
     }
   }
   //===========================================================

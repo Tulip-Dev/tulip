@@ -37,7 +37,7 @@ GlQuad::GlQuad(Coord positions[N_QUAD_POINTS], const Color &color)
     {
       this->positions[i] = new Coord(positions[i]);
       this->colors[i]    = new Color(color);
-      boundingBox.insert(*this->positions[i]);
+      boundingBox.expand(*this->positions[i]);
     }
 }
 
@@ -47,7 +47,7 @@ GlQuad::GlQuad(Coord positions[N_QUAD_POINTS], Color colors[N_QUAD_POINTS])
     this->positions[i] = new Coord(positions[i]);
     this->colors[i]    = new Color(colors[i]);
 
-    boundingBox.insert(*this->positions[i]);
+    boundingBox.expand(*this->positions[i]);
   }
 }
 
@@ -70,7 +70,7 @@ void GlQuad::setPosition(int idPosition, const Coord &position)
   this->positions[idPosition] = new Coord(position);
   boundingBox=BoundingBox();
   for(int i=0;i<N_QUAD_POINTS;++i)
-    boundingBox.insert(*positions[i]);
+    boundingBox.expand(*positions[i]);
 }
 
 void GlQuad::setColor(int idColor, const Color &color)
@@ -185,7 +185,7 @@ void GlQuad::getXML(xmlNodePtr rootNode) {
       GlXMLTools::setWithXML(dataNode,"color3",*colors[3]);
 
       for(int i=0; i < N_QUAD_POINTS; i++) {
-        boundingBox.insert(*this->positions[i]);
+        boundingBox.expand(*this->positions[i]);
       }
     }
   }

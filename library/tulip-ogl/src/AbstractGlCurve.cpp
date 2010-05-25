@@ -340,7 +340,7 @@ AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &
 		glControlPoints[4*i] = controlPoints[i][0];
 		glControlPoints[4*i+1] = controlPoints[i][1];
 		glControlPoints[4*i+2] = controlPoints[i][2];
-                boundingBox.insert(controlPoints[i]);
+                boundingBox.expand(controlPoints[i]);
 		if (i != nbControlPoints - 1) {
 			totalDist += controlPoints[i].dist(controlPoints[i+1]);
 		}

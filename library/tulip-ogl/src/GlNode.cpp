@@ -46,10 +46,10 @@ namespace tlp {
       tmp3=Coord(tmp3[0]*cosAngle-tmp3[1]*sinAngle,tmp3[0]*sinAngle+tmp3[1]*cosAngle,tmp3[2]);
       tmp4=Coord(tmp4[0]*cosAngle-tmp4[1]*sinAngle,tmp4[0]*sinAngle+tmp4[1]*cosAngle,tmp4[2]);
       BoundingBox bb;
-      bb.insert(data->elementLayout->getNodeValue(n)+tmp1);
-      bb.insert(data->elementLayout->getNodeValue(n)+tmp2);
-      bb.insert(data->elementLayout->getNodeValue(n)+tmp3);
-      bb.insert(data->elementLayout->getNodeValue(n)+tmp4);
+      bb.expand(data->elementLayout->getNodeValue(n)+tmp1);
+      bb.expand(data->elementLayout->getNodeValue(n)+tmp2);
+      bb.expand(data->elementLayout->getNodeValue(n)+tmp3);
+      bb.expand(data->elementLayout->getNodeValue(n)+tmp4);
       return bb;
     }
   }

@@ -56,7 +56,7 @@ namespace tlp {
       * @brief recompute the current Bounding to ensure that coord belongs to it
       *
       */
-    void insert(const tlp::Vec3f& coord) {
+    void expand(const tlp::Vec3f& coord) {
       if(!isValid()) {
           (*this)[0] = coord;
           (*this)[1] = coord;

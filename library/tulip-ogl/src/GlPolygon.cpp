@@ -30,7 +30,7 @@ namespace tlp {
     outlineSize(outlineSize) {
     assert(points.size() >= 3);
     for(vector<Coord>::const_iterator it=points.begin();it!=points.end();++it)
-      boundingBox.insert(*it);
+      boundingBox.expand(*it);
   }
   //=====================================================
   GlPolygon::GlPolygon(const unsigned int nbPoints,
@@ -88,7 +88,7 @@ namespace tlp {
     points.push_back(point);
     fillColors.push_back(fcolor);
     outlineColors.push_back(ocolor);
-    boundingBox.insert(point);
+    boundingBox.expand(point);
   }
   //=====================================================
   const Color& GlPolygon::fcolor(const unsigned int i) const {
@@ -225,7 +225,7 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode,"outlineSize",outlineSize);
 
       for(vector<Coord>::iterator it= points.begin();it!=points.end();++it)
-        boundingBox.insert(*it);
+        boundingBox.expand(*it);
     }
   }
 }

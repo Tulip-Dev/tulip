@@ -164,7 +164,7 @@ namespace tlp {
   //=====================================================
   void GlComplexPolygon::addPoint(const Coord& point) {
     points[currentVector].push_back(point);
-    boundingBox.insert(point);
+    boundingBox.expand(point);
   }
   //=====================================================
   void GlComplexPolygon::beginNewHole() {
@@ -309,7 +309,7 @@ namespace tlp {
 
       for(vector<vector<Coord> >::iterator it= points.begin();it!=points.end();++it) {
         for(vector<Coord>::iterator it2=(*it).begin();it2!=(*it).end();++it2) {
-          boundingBox.insert(*it2);
+          boundingBox.expand(*it2);
         }
       }
     }

@@ -14,8 +14,8 @@ namespace tlp {
     cell(cell){
     for(unsigned int i=0; i < 3; i++)
       this->displayDim[i] = displayDim[i];
-    boundingBox.insert(frontTopLeft);
-    boundingBox.insert(backBottomRight);
+    boundingBox.expand(frontTopLeft);
+    boundingBox.expand(backBottomRight);
   }
   //============================================================
   void GlGrid::draw(float lod,Camera *camera) {
