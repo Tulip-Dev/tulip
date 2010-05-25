@@ -1,7 +1,6 @@
 #include "tulip/LayerManagerWidget.h"
 
 #include <QtGui/QHeaderView>
-#include <QtGui/QColorDialog>
 
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlMainWidget.h"

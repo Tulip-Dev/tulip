@@ -1,7 +1,6 @@
 #include "PreferenceDialog.h"
 
 #include <QtCore/QSettings>
-#include <QtGui/QColorDialog>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

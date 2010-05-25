@@ -19,7 +19,6 @@
 #include <QtCore/qstring.h>
 #include <QtCore/qstringlist.h>
 #include <QtGui/qlabel.h>
-#include <QtGui/qcolordialog.h>
 #include <QtGui/qtabwidget.h>
 
 #include <tulip/Graph.h>
