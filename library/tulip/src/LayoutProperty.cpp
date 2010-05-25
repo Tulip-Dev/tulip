@@ -365,7 +365,7 @@ void LayoutProperty::reverseEdge(Graph *sg, const edge e) {
   }
 }
 //=================================================================================
-double LayoutProperty::averageAngularResolution(Graph *sg) {
+double LayoutProperty::averageAngularResolution(const Graph *sg) const {
   if (sg==0) sg=graph;
   Iterator<node> *itN=sg->getNodes();
   double result=0;
@@ -392,10 +392,10 @@ struct AngularOrder {
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
 //=================================================================================
-vector<double> LayoutProperty::angularResolutions(const node n, Graph *sg) {
+vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg) const {
   vector<double> result;
-  if (sg==0) sg=graph;
-  double degree=sg->deg(n);
+  if (sg == 0) sg = graph;
+  double degree = sg->deg(n);
   if (sg->deg(n)==0) return result;
   if (sg->deg(n)==1) {
     result.push_back(0.0);
@@ -461,72 +461,17 @@ vector<double> LayoutProperty::angularResolutions(const node n, Graph *sg) {
   return result;
 }
 //=================================================================================
-double LayoutProperty::averageAngularResolution(const node n, Graph *sg) {
-  if (sg==0) sg=graph;
-  double degree=sg->deg(n);
-  if (sg->deg(n)<2) return 0;
-
-  list<Coord> adjCoord;
-  //Extract all adjacent edges, the bends are taken
-  //into account.
-  Iterator<edge> *itE=sg->getInOutEdges(n);
-  for (unsigned int i=0;itE->hasNext();++i) {
-    edge ite=itE->next();
-    if (getEdgeValue(ite).size()>0) {
-      if (sg->source(ite)==n)
-	adjCoord.push_back(getEdgeValue(ite).front());
-      else
-	adjCoord.push_back(getEdgeValue(ite).back());
-    }
-    else {
-      adjCoord.push_back(getNodeValue(sg->opposite(ite,n)));
-    }
-  } delete itE;
-  
-  //Compute normalized vectors associated to incident edges.
-  const Coord& center=getNodeValue(n);
-  list<Coord>::iterator it;
-  for (it=adjCoord.begin();it!=adjCoord.end();++it) {
-    (*it)-=center;
-    (*it)/=(*it).norm();
-  }
-  //Sort the vector to compute angles between two edges
-  //Correctly.
-  adjCoord.sort(AngularOrder());
-  //Compute the angles
-  double result=0;
-  it=adjCoord.begin();
-  Coord first=(*it);
-  Coord current=first;
-  ++it;
-
-  int stop=2;
-  for (;stop>0;) {
-    Coord next=*it;
-    double cosTheta = current.dotProduct(next); //current *  next;
-    double sinTheta=(current^next)[2];
-    if (cosTheta+0.0001>1) cosTheta-=0.0001;
-    if (cosTheta-0.0001<-1) cosTheta+=0.0001;
-    if (sinTheta+0.0001>1) sinTheta-=0.0001;
-    if (sinTheta-0.0001<-1) sinTheta+=0.0001;
-    if (sinTheta>=0) {
-      result+=fabs(2.0*M_PI/degree-acos(cosTheta));
-    }
-    else {
-      result+=fabs(2.0*M_PI/degree-(2.0*M_PI-acos(cosTheta)));
-    }
-    current=next;
-    ++it;
-    if (stop<2) stop=0;
-    if (it==adjCoord.end()){
-      it=adjCoord.begin();
-      stop--;
-    }
-  }
-  return result/degree;  
+double LayoutProperty::averageAngularResolution(const node n, const Graph *sg) const {
+    vector<double> tmp(angularResolutions(n, sg));
+    if (tmp.empty()) return 0.;
+    double sum = 0.;
+    vector<double>::const_iterator it = tmp.begin();
+    for (;it != tmp.end(); ++it)
+        sum += *it;
+    return sum / double(tmp.size());
 }
 //=================================================================================
-double LayoutProperty::edgeLength(edge e) {
+double LayoutProperty::edgeLength(const edge e) const {
   pair<node, node> eEnds = graph->ends(e);
   Coord start=getNodeValue(eEnds.first);
   const Coord& end=getNodeValue(eEnds.second);
@@ -540,7 +485,7 @@ double LayoutProperty::edgeLength(edge e) {
   return result;
 }
 //=================================================================================
-unsigned int LayoutProperty::crossingNumber() {
+unsigned int LayoutProperty::crossingNumber() const {
   cerr << "!!! Warning: Not Implemented function :" << endl;
   cerr << __PRETTY_FUNCTION__ << endl;
   return 0;
