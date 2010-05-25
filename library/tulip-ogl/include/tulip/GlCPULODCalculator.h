@@ -16,7 +16,7 @@
 #include <vector>
 
 #include <tulip/BoundingBox.h>
-
+#include <tulip/Coord.h>
 #include "tulip/GlLODCalculator.h"
 
 namespace tlp {
@@ -65,7 +65,7 @@ namespace tlp {
      */
     virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
-    virtual void computeFor3DCamera(LayerLODUnit *layerLODUnit,const Coord &eye,const Matrix<float, 4> transformMatrix,const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
+    virtual void computeFor3DCamera(LayerLODUnit *layerLODUnit, const Coord &eye, const Matrix<float, 4> transformMatrix, const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
     virtual void computeFor2DCamera(LayerLODUnit *layerLODUnit,const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 

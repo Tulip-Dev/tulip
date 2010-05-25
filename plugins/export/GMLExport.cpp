@@ -39,12 +39,12 @@ void printSize(ostream &os,const Size &v){
  * This format is the file format used by Graphlet.
  * See www.infosun.fmi.uni-passau.de/Graphlet/GML/ for details.
  */
-class GMLExport:public ExportModule {
+class GDFExport:public ExportModule {
 public:
-  GMLExport(AlgorithmContext context):ExportModule(context)
+  GDFExport(AlgorithmContext context):ExportModule(context)
   {}
 
-  ~GMLExport(){}
+  ~GDFExport(){}
 
   string convert(string tmp) {
     string newStr;
@@ -58,85 +58,21 @@ public:
   }
 
   bool exportGraph(ostream &os,Graph *currentGraph) {
+  os << "nodedef> name,x,y" << endl; //jobfun VARCHAR(100),dept VARCHAR(32)
 
-    os << "graph [" << endl;
-    os << "directed 1" << endl;
-    os << "version 2" << endl;
-
-    LayoutProperty *layout = currentGraph->getProperty<LayoutProperty>("viewLayout");
-    StringProperty *label = currentGraph->getProperty<StringProperty>("viewLabel");
-    //    IntegerProperty *shape =getProperty<IntegerProperty>(currentGraph->getPropertyManager(),"viewShape");
-    ColorProperty *colors = currentGraph->getProperty<ColorProperty>("viewColor");    
-    SizeProperty  *sizes = currentGraph->getProperty<SizeProperty>("viewSize");  
-    //Save Nodes
-    Iterator<node> *itN=currentGraph->getNodes();
-    if (itN->hasNext())  {
-
-      for (;itN->hasNext();) {
-	node itn=itN->next();
-	os << "node [" << endl;
-	os << "id "<< itn.id << endl ;
-	os << "label \"" << convert(label->getNodeValue(itn)) << "\"" << endl;
-	os << "graphics [" << endl;
-	printCoord(os,layout->getNodeValue(itn));
-	printSize(os,sizes->getNodeValue(itn));
-	os << "type \"rectangle\"" << endl;
-	os << "width 0.12" << endl;
-	os << "fill \"#"<< hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getR()
-	   << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getG()
-	   << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getB() << "\""<< endl;
-
-	//	    os << "outline \"#"<< hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getR()
-	//	       << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getG()
-	//	       << hex << setfill('0') << setw(2) <<(int)colors->getNodeValue(itn).getB() << "\""<< endl;
-
-	os << "outline \"#000000\"" << endl;
-	os << dec << setfill(' ') << setw(6) << "]" << endl;
-	os << ']' << endl;
-      }
-    }
-    delete itN;
-
-    //Save edges
-    Iterator<edge> *itE=currentGraph->getEdges();
-    for (;itE->hasNext();)
-      {
-	edge ite=itE->next();
-	os << "edge [" << endl;
-	os << "source " << graph->source(ite).id << endl; 
-	os << "target " << graph->target(ite).id << endl;
-	os << "id " << ite.id << endl;
-	os << "label \"" << label->getEdgeValue(ite) << "\"" << endl;
-	os << "graphics [" << endl;
-	os << "type \"line\"" << endl;
-	os << "arrow \"last\"" << endl;
-	os << "width 0.1" << endl;
-	os << "Line [" << endl;
-	vector<Coord> lcoord;
-	vector<Coord>::const_iterator it;
-	lcoord=layout->getEdgeValue(ite);
-	if (!lcoord.empty())
-	  {
-	    node itn=graph->source(ite);
-	    printPoint(os,layout->getNodeValue(itn));
-	  }
-	for (it=lcoord.begin();it!=lcoord.end();++it)
-	  {
-	    printPoint(os,*it);
-	  }
-	if (!lcoord.empty())
-	  {
-	    node itn=graph->target(ite);
-	    printPoint(os,layout->getNodeValue(itn));
-	  }
-	os << "]" << endl;
-	os << "]" << endl;
-	os << "]" << endl;
-      }
-    delete itE;
-    os << "]" << endl;
+  LayoutProperty *layout = currentGraph->getProperty<LayoutProperty>("viewLayout");
+  node n;
+  forEach(n, currentGraph->getNodes()) {
+  os << "v" << n.id << "," << layout->getNodeValue(n).getX() << "," << layout->getNodeValue(n).getY() << endl;
+  }
+  os << "edgedef> node1,node2" << endl;
+  edge e;
+  forEach (e, currentGraph->getEdges()) {
+    os << "v" << currentGraph->source(e).id << ",v" << currentGraph->target(e).id << endl;
+  }
+  os << endl;
     return true;
   }
 };
 /*@}*/
-EXPORTPLUGIN(GMLExport,"GML","Auber David","31/07/2001","GML Export plugin","1.0")
+EXPORTPLUGIN(GDFExport,"GDF","Auber David","31/07/2001","GDF Export plugin","1.0")

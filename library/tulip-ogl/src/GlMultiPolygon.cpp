@@ -18,9 +18,9 @@ namespace tlp {
       newPolygon->addPoint((*it),fillColor,outlineColor);
     }
 
-    BoundingBox bb=newPolygon->getBoundingBox();
-    boundingBox.check(bb.first);
-    boundingBox.check(bb.second);
+    BoundingBox bb(newPolygon->getBoundingBox());
+    boundingBox.insert(bb[0]);
+    boundingBox.insert(bb[1]);
   }
 
   void GlMultiPolygon::draw(float lod,Camera *camera) {
@@ -29,12 +29,11 @@ namespace tlp {
     }
   }
   //=====================================================
-  void GlMultiPolygon::translate(const Coord& mouvement) {
-    boundingBox.first+=mouvement;
-    boundingBox.second+=mouvement;
+  void GlMultiPolygon::translate(const Coord& vec) {
+    boundingBox.translate(vec);
     
     for(vector<GlPolygon>::iterator it=polygons.begin();it!=polygons.end();++it) {
-      (*it).translate(mouvement);
+      (*it).translate(vec);
     }
   }
   //=====================================================

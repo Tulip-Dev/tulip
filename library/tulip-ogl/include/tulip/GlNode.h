@@ -14,7 +14,7 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <tulip/Color.h>
-
+#include <tulip/Coord.h>
 #include "tulip/GlComplexeEntity.h"
 
 namespace tlp {

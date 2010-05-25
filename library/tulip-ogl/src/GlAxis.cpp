@@ -154,31 +154,31 @@ void GlAxis::addCaption(const LabelPosition &captionPos, const float captionHeig
 
 void GlAxis::addAxisCaption(const Coord &captionLabelCenter, const bool frame) {
 
-	captionComposite->reset(true);
-	captionSet = true;
+    captionComposite->reset(true);
+    captionSet = true;
 
-	GlLabel *captionLabel = new GlLabel(captionLabelCenter, Coord(captionWidth, captionHeight), axisColor);
-	captionLabel->setText(captionText);
-	captionComposite->addGlEntity(captionLabel, axisName + " axis caption");
+    GlLabel *captionLabel = new GlLabel(captionLabelCenter, Coord(captionWidth, captionHeight), axisColor);
+    captionLabel->setText(captionText);
+    captionComposite->addGlEntity(captionLabel, axisName + " axis caption");
 
-	if (frame) {
+    if (frame) {
+        BoundingBox labelBB(captionLabel->getBoundingBox());
+        GlRect *captionLabelInnerFrame = new GlRect(Coord(labelBB[0][0] - 1, labelBB[1][1] + 1),
+                                                    Coord(labelBB[1][0] + 1, labelBB[0][1] - 1),
+                                                    axisColor, axisColor, false, true);
+        for (unsigned int i = 0 ; i < 4 ; ++i) {
+            captionLabelInnerFrame->ocolor(i) = axisColor;
+        }
+        captionComposite->addGlEntity(captionLabelInnerFrame, "caption inner frame" + captionText);
 
-		GlRect *captionLabelInnerFrame = new GlRect(Coord(captionLabel->getBoundingBox().first.getX() - 1, captionLabel->getBoundingBox().second.getY() + 1),
-							          			    Coord(captionLabel->getBoundingBox().second.getX() + 1, captionLabel->getBoundingBox().first.getY() - 1),
-													axisColor, axisColor, false, true);
-		for (unsigned int i = 0 ; i < 4 ; ++i) {
-			captionLabelInnerFrame->ocolor(i) = axisColor;
-		}
-		captionComposite->addGlEntity(captionLabelInnerFrame, "caption inner frame" + captionText);
-
-		GlRect *captionLabelOuterFrame = new GlRect(Coord(captionLabel->getBoundingBox().first.getX() - 2, captionLabel->getBoundingBox().second.getY() + 2),
-												    Coord(captionLabel->getBoundingBox().second.getX() + 2, captionLabel->getBoundingBox().first.getY() - 2),
-												    axisColor, axisColor, false, true);
-		for (unsigned int i = 0 ; i < 4 ; ++i) {
-			captionLabelOuterFrame->ocolor(i) = axisColor;
-		}
-		captionComposite->addGlEntity(captionLabelOuterFrame, "caption outer frame" + captionText);
-	}
+        GlRect *captionLabelOuterFrame = new GlRect(Coord(labelBB[0][0] - 2, labelBB[1][1] + 2),
+                                                    Coord(labelBB[1][0] + 2, labelBB[0][1] - 2),
+                                                    axisColor, axisColor, false, true);
+        for (unsigned int i = 0 ; i < 4 ; ++i) {
+            captionLabelOuterFrame->ocolor(i) = axisColor;
+        }
+        captionComposite->addGlEntity(captionLabelOuterFrame, "caption outer frame" + captionText);
+    }
 }
 
 void GlAxis::computeCaptionSize(float height) {

@@ -58,8 +58,8 @@ Hexagone::~Hexagone() {
 }
 //=====================================================
 void Hexagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
-	boundingBox.first = Coord(0.15, 0.15, 0);
-	boundingBox.second = Coord(0.85, 0.85, 0);
+        boundingBox[0] = Coord(0.15, 0.15, 0);
+        boundingBox[1] = Coord(0.85, 0.85, 0);
 }
 //=====================================================
 void Hexagone::draw(node n, float lod) {

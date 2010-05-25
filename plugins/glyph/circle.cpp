@@ -57,10 +57,10 @@ Circle::~Circle() {
 }
 //=====================================================
 void Circle::getIncludeBoundingBox(BoundingBox &boundingBox) {
-	boundingBox.first = Coord(0.15, 0.15, 0);
-	boundingBox.second = Coord(0.85, 0.85, 0);
+        boundingBox[0] = Coord(0.15, 0.15, 0);
+        boundingBox[1] = Coord(0.85, 0.85, 0);
 }
-
+//=====================================================
 void Circle::draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
 	drawGlyph(glyphColor,
 			edgeExtGlGraphInputData->parameters->getTexturePath(),

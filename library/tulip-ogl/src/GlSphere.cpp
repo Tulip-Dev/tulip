@@ -11,13 +11,13 @@ using namespace std;
 namespace tlp {
 
   GlSphere::GlSphere(const Coord &position, float radius,const Color& color,float rotX,float rotY,float rotZ):position(position),radius(radius),color(color),rot(rotX,rotY,rotZ) { 
-    boundingBox.first=Coord(position[0]-radius,position[1]-radius,position[2]-radius);
-    boundingBox.second=Coord(position[0]+radius,position[1]+radius,position[2]+radius);
+    boundingBox[0]  = Coord(position[0]-radius,position[1]-radius,position[2]-radius);
+    boundingBox[1] = Coord(position[0]+radius,position[1]+radius,position[2]+radius);
   }
 
   GlSphere::GlSphere(const Coord &position, float radius,const string& textureFile,int alpha,float rotX,float rotY,float rotZ):position(position),radius(radius),color(255,255,255,alpha),textureFile(textureFile),rot(rotX,rotY,rotZ) { 
-    boundingBox.first=Coord(position[0]-radius,position[1]-radius,position[2]-radius);
-    boundingBox.second=Coord(position[0]+radius,position[1]+radius,position[2]+radius);
+      boundingBox[0] = Coord(position[0]-radius,position[1]-radius,position[2]-radius);
+      boundingBox[1] = Coord(position[0]+radius,position[1]+radius,position[2]+radius);
   }
 
   void GlSphere::draw(float lod, Camera *camera){
@@ -47,11 +47,9 @@ namespace tlp {
     glPopMatrix();
   }
   //===========================================================
-  void GlSphere::translate(const Coord& mouvement) {
-    boundingBox.first+=mouvement;
-    boundingBox.second+=mouvement;
-    
-    position+=mouvement;
+  void GlSphere::translate(const Coord& vec) {
+    boundingBox.translate(vec);
+    position += vec;
   }
   //===========================================================
   void GlSphere::getXML(xmlNodePtr rootNode) {
@@ -83,8 +81,8 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode,"textureFile",textureFile);
       GlXMLTools::setWithXML(dataNode,"rotation",rot);
 
-      boundingBox.first=Coord(position[0]-radius,position[1]-radius,position[2]-radius);
-      boundingBox.second=Coord(position[0]+radius,position[1]+radius,position[2]+radius);
+      boundingBox[0] = Coord(position[0]-radius,position[1]-radius,position[2]-radius);
+      boundingBox[1] = Coord(position[0]+radius,position[1]+radius,position[2]+radius);
     }
   }
 

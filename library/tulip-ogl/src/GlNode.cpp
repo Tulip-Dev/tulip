@@ -46,10 +46,10 @@ namespace tlp {
       tmp3=Coord(tmp3[0]*cosAngle-tmp3[1]*sinAngle,tmp3[0]*sinAngle+tmp3[1]*cosAngle,tmp3[2]);
       tmp4=Coord(tmp4[0]*cosAngle-tmp4[1]*sinAngle,tmp4[0]*sinAngle+tmp4[1]*cosAngle,tmp4[2]);
       BoundingBox bb;
-      bb.check(data->elementLayout->getNodeValue(n)+tmp1);
-      bb.check(data->elementLayout->getNodeValue(n)+tmp2);
-      bb.check(data->elementLayout->getNodeValue(n)+tmp3);
-      bb.check(data->elementLayout->getNodeValue(n)+tmp4);
+      bb.insert(data->elementLayout->getNodeValue(n)+tmp1);
+      bb.insert(data->elementLayout->getNodeValue(n)+tmp2);
+      bb.insert(data->elementLayout->getNodeValue(n)+tmp3);
+      bb.insert(data->elementLayout->getNodeValue(n)+tmp4);
       return bb;
     }
   }
@@ -253,7 +253,7 @@ namespace tlp {
       renderer->getBoundingBox(w_max, h, w);
       glPushMatrix();
       data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBB);
-      if(includeBB.second[2]==0.)
+      if(includeBB[1][2]==0.)
         glTranslatef(nodePos[0], nodePos[1], nodePos[2]+0.01);
       else
         glTranslatef(nodePos[0], nodePos[1], nodePos[2]+nodeSize[2]/2.+0.01);

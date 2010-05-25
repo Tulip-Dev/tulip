@@ -36,8 +36,8 @@ GlPolyQuad::GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &pol
 void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const Color &edgeColor) {
 	polyQuadEdges.push_back(startEdge);
 	polyQuadEdges.push_back(endEdge);
-	boundingBox.check(startEdge);
-	boundingBox.check(endEdge);
+        boundingBox.insert(startEdge);
+        boundingBox.insert(endEdge);
 	polyQuadEdgesColors.push_back(edgeColor);
 }
 
@@ -149,8 +149,7 @@ void GlPolyQuad::draw(float lod, Camera *camera) {
 }
 
 void GlPolyQuad::translate(const Coord& move) {
-	boundingBox.first+=move;
-	boundingBox.second+=move;
+        boundingBox.translate(move);
 
 	for (unsigned int i = 0 ; i < polyQuadEdges.size() ; ++i) {
 		polyQuadEdges[i]+=move;
@@ -185,7 +184,7 @@ void GlPolyQuad::setWithXML(xmlNodePtr rootNode) {
 
 	vector<Coord>::iterator it;
 	for (it = polyQuadEdges.begin() ; it != polyQuadEdges.end() ; ++it) {
-		boundingBox.check(*it);
+                boundingBox.insert(*it);
 	}
 }
 

@@ -80,8 +80,8 @@ GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints, const Color &st
 
 	if (!floatTextureOk) {
 		// float texture not supported, forcing CPU rendering
-		curveShaderProgramNormal=NULL;
-		curveShaderProgramBillboard=NULL;
+		curveShaderProgramNormal = NULL;
+		curveShaderProgramBillboard = NULL;
 	}
 }
 

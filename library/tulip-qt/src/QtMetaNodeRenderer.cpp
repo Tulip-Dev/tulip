@@ -228,9 +228,9 @@ namespace tlp {
     BoundingBox includeBoundingBox;
     inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
 
-    Coord newCenter=nodePos+((includeBoundingBox.second-includeBoundingBox.first)/2.f+includeBoundingBox.first-0.5f)*nodeSize;
+    Coord newCenter = nodePos + ((includeBoundingBox[1] - includeBoundingBox[0])/2.f + includeBoundingBox[0] - 0.5f)*nodeSize;
     //newCenter[2]+=nodeSize[2]/10.;
-    Coord newSize=(includeBoundingBox.second-includeBoundingBox.first)*nodeSize;
+    Coord newSize( (includeBoundingBox[1] - includeBoundingBox[0])*nodeSize);
 
     float diagonal=sqrt(nodeSize[0]*nodeSize[0]+nodeSize[1]*nodeSize[1]);
     int newWidth=(int)(nodeSize[0]*(lod/diagonal));
@@ -260,7 +260,7 @@ namespace tlp {
 
     glMainWidget->getScene()->getGraphLayer()->acceptVisitor(visitor);
 
-    Coord contentSize = visitor->getBoundingBox().second - visitor->getBoundingBox().first;
+    Coord contentSize ( visitor->getBoundingBox()[1] - visitor->getBoundingBox()[0]);
     if(nodeSize[0]/contentSize[0]<nodeSize[1]/contentSize[1]){
       newSize[1]*=((nodeSize[0]/contentSize[0])/(nodeSize[1]/contentSize[1]));
     }else{

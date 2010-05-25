@@ -24,8 +24,8 @@ namespace tlp {
     /*renderOptions.setRenderState(GlAD_Wireframe, true);
       renderOptions.setRenderState(GlAD_Solid, true);*/
 
-    boundingBox.check(position-size/2.f);
-    boundingBox.check(position+size/2.f);
+    boundingBox.insert(position-size/2.f);
+    boundingBox.insert(position+size/2.f);
 
     computePoints();
   }
@@ -37,7 +37,7 @@ namespace tlp {
     for(int i=0; i < N_BOX_POINTS; i++){
       average += points[i];
       this->points[i] = new Coord(points[i]);
-      boundingBox.check(points[i]);
+      boundingBox.insert(points[i]);
     }
 
     average /= N_BOX_POINTS;
@@ -78,8 +78,8 @@ namespace tlp {
     for(int i=0; i < N_BOX_FACES; i++)
       faces[i] = NULL;
 
-    boundingBox.check(frontTopLeft);
-    boundingBox.check(backBottomRight);
+    boundingBox.insert(frontTopLeft);
+    boundingBox.insert(backBottomRight);
 
     computePoints();
   }
@@ -112,7 +112,7 @@ namespace tlp {
   {
     delete this->position;
 
-    boundingBox.check(position);
+    boundingBox.insert(position);
 
     this->position = new Coord(position);
 
@@ -194,8 +194,7 @@ namespace tlp {
   }
   //===========================================================
   void GlBox::translate(const Coord &mouvement) {
-    boundingBox.first+=mouvement;
-    boundingBox.second+=mouvement;
+    boundingBox.translate(mouvement);
 
     *position+=mouvement;
     computePoints();
@@ -229,8 +228,8 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode, "color", color);
       GlXMLTools::setWithXML(dataNode, "size", size);
 
-      boundingBox.check(position-size/2.f);
-      boundingBox.check(position+size/2.f);
+      boundingBox.insert(position-size/2.f);
+      boundingBox.insert(position+size/2.f);
       
       computePoints();
     }
