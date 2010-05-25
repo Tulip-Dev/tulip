@@ -13,7 +13,6 @@
  */
 
 #include <QtGui/QFileDialog>
-#include <QtGui/QColorDialog>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLinearGradient>
 #include <QtGui/QPainter>
@@ -23,6 +22,7 @@
 
 #include <vector>
 
+#include "tulip/TlpQtTools.h"
 #include "tulip/ColorScaleConfigDialog.h"
 
 using namespace std;
@@ -220,17 +220,11 @@ void ColorScaleConfigDialog::nbColorsValueChanged(int value) {
 
 void ColorScaleConfigDialog::colorTableItemDoubleClicked(QTableWidgetItem *item) {
 	QColor itemBgColor = item->backgroundColor();
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
-	QColor newColor = QColorDialog::getColor(itemBgColor, this, "Select Color", QColorDialog::ShowAlphaChannel);
-	item->setBackgroundColor(newColor);
-#else
-	bool ok = true;
-	QRgb newColor = QColorDialog::getRgba(qRgba(itemBgColor.red(),
-			itemBgColor.green(), itemBgColor.blue(), itemBgColor.alpha()), &ok, this);
-	item->setBackgroundColor(QColor(qRed(newColor), qGreen(newColor), qBlue(
-			newColor), qAlpha(newColor)));
-#endif
-	displayUserGradientPreview();
+  QColor newColor;
+  if(getColorDialog(itemBgColor, this, "Select Color",newColor)){
+    item->setBackgroundColor(newColor);
+    displayUserGradientPreview();
+  }
 }
 
 void ColorScaleConfigDialog::saveCurrentColorScale() {

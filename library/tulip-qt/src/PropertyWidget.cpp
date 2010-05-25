@@ -4,7 +4,6 @@
 
 #include <QtCore/qstring.h>
 #include <QtGui/qpushbutton.h>
-#include <QtGui/qcolordialog.h>
 #include <QtGui/qpainter.h>
 #include <QtGui/qfontmetrics.h>
 #include <QtGui/qapplication.h>
@@ -35,6 +34,7 @@
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GlTextureManager.h>
 
+#include "tulip/TlpQtTools.h"
 #include "tulip/PropertyWidget.h"
 
 #define TABLEBUFSIZE 100
@@ -377,10 +377,10 @@ void PropertyWidget::setAllNodeValue() {
     }
   }
   else if (typeid(*editedProperty) == typeid(ColorProperty)) {
-    QRgb col = QColorDialog::getRgba(qRgba(255,0,0,200), &ok);
-    if (ok) {
+    QColor col;
+    if (getColorDialog(qRgba(255,0,0,200),NULL,"Color chooser",col)) {
       stringstream ss;
-      ss << "(" << qRed(col) << "," << qGreen(col) << "," << qBlue(col) << "," << qAlpha(col) << ")";
+      ss << "(" << col.red() << "," << col.green() << "," << col.blue() << "," << col.alpha() << ")";
       tmpStr = ss.str();
     }
   }
@@ -433,10 +433,10 @@ void  PropertyWidget::setAllEdgeValue() {
   string tmpStr;
 
   if (typeid(*editedProperty) == typeid(ColorProperty)) {
-    QRgb col = QColorDialog::getRgba(qRgba(0,0,0,200), &ok);
-    if (ok) {
+    QColor col;
+    if (getColorDialog(qRgba(0,0,0,200),NULL,"Color chooser",col)) {
       stringstream ss;
-      ss << "(" << qRed(col) << "," << qGreen(col) << "," << qBlue(col) << "," << qAlpha(col) << ")";
+      ss << "(" << col.red() << "," << col.green() << "," << col.blue() << "," << col.alpha() << ")";
       tmpStr = ss.str();
     }
   }

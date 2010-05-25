@@ -45,6 +45,8 @@ namespace tlp {
 
   TLP_QT_SCOPE bool canUseQGLPixelBuffer();
 
+  TLP_QT_SCOPE bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QColor &result);
+
   inline QColor colorToQColor(const Color& color) {
      return QColor(color.getR(), color.getG(), color.getB(), color.getA());
    }

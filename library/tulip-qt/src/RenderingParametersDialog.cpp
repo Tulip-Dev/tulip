@@ -1,11 +1,11 @@
 #include "tulip/RenderingParametersDialog.h"
 
 #include <QtGui/QHeaderView>
-#include <QtGui/QColorDialog>
 #include <QtCore/QSettings>
 
 #include <tulip/PreferenceManager.h>
 
+#include "tulip/TlpQtTools.h"
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlMainView.h"
@@ -70,12 +70,16 @@ namespace tlp {
   }
 
   void RenderingParametersDialog::backColor() {
-    setButtonColor(QColorDialog::getColor(background->palette().color(QPalette::Button), this),background);
+    QColor col=background->palette().color(QPalette::Button);
+    if(getColorDialog(col,this,"Color chooser",col))
+      setButtonColor(col,background);
     updateView();
   }
 
   void RenderingParametersDialog::selectionColor() {
-    setButtonColor(QColorDialog::getColor(selection->palette().color(QPalette::Button), this),selection);
+    QColor col=background->palette().color(QPalette::Button);
+    if(getColorDialog(col,this,"Color chooser",col))
+      setButtonColor(col,selection);
     updateView();
   }
 
