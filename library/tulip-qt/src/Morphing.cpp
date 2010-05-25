@@ -49,9 +49,7 @@ namespace tlp {
     return true;
   }
   //===========================================================
-  Morphing::Morphing(){
-    g0 = g1 = 0;
-    e0 = e1 = 0; 
+  Morphing::Morphing():g0(NULL),g1(NULL),e0(NULL),e1(NULL){
     tid = -1;
     t = 0.0f;
     glWidget = 0;
@@ -71,8 +69,8 @@ namespace tlp {
     if( !hasdiff ) return false;
     g0  = inG0;
     g1  = inG1;
-    e0  = 0;
-    e1  = 0;
+    e0  = NULL;
+    e1  = NULL;
 
     // Edges association
     if( g0->layout && g1->layout ) {
@@ -112,12 +110,13 @@ namespace tlp {
   }
   //===========================================================
   void Morphing::stop( ) {
-    if( g0 )	delete g0;
-    if( g1 )	delete g1;
-    if( e0 )	delete e0;
-    if( e1 )	delete e1;
-    g0 = g1 = 0;
-    e0 = e1 = 0;
+    delete g0;
+    delete g1;
+    delete e0;
+    delete e1;
+
+    g0 = g1 = NULL;
+    e0 = e1 = NULL;
     tid = -1;
   }
   //===========================================================

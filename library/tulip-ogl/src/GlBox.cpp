@@ -89,8 +89,7 @@ namespace tlp {
     for(int i=0; i < N_BOX_POINTS; i++)
       delete points[i];
 
-    if (size != NULL)
-      delete size;
+    delete size;
   }
 
   void GlBox::draw(float lod,Camera *camera)

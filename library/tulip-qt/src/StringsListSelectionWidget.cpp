@@ -33,9 +33,8 @@ StringsListSelectionWidget::StringsListSelectionWidget(
 
 void StringsListSelectionWidget::setListType(const ListType listType) {
 	QLayout *currentLayout = layout();
-	if (currentLayout != NULL) {
-		delete currentLayout;
-	}
+  delete currentLayout;
+
 	if (stringsListSelectionWidget != NULL) {
 		QWidget *widget = dynamic_cast<QWidget *> (stringsListSelectionWidget);
 		delete widget;

@@ -64,9 +64,9 @@ GraphState::GraphState( GlMainWidget * glgw ) {
 }
 //====================================================
 GraphState::~GraphState() {
-  if( layout ) delete layout;
-  if( size ) delete size;
-  if( color ) delete color;
+  delete layout;
+  delete size;
+  delete color;
 }
 //====================================================
 bool GraphState::setupDiff( Graph * inG, 

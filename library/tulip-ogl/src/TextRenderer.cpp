@@ -41,13 +41,12 @@ typedef stack<Cell*> sCell; // pile
 // CLASSE TextRenderer
 //***************************************************************************
 //---------------------------------------------------------------------------
-TextRenderer::TextRenderer(): c(getFontFile(), DEFAULT_SIZE, ROUGE, VERT, BLEU) {
+TextRenderer::TextRenderer(): c(getFontFile(), DEFAULT_SIZE, ROUGE, VERT, BLEU),doc(NULL) {
   c.renderer = new GlRenderer();
-  doc = 0;
 }
 TextRenderer::~TextRenderer() {
   delete c.renderer;
-  if (doc!=0) delete doc;
+  delete doc;
 }
 //---------------------------------------------------------------------------
 void TextRenderer::initTextManager(const string &str){

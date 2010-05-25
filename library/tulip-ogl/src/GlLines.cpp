@@ -433,7 +433,7 @@ void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
 
   delete [] controlPoints;
   delete [] colorArray;
-  if (radiusArray != NULL) delete radiusArray;
+  delete radiusArray;
 }
 //=============================================================
 void GlLines::glDrawPoint(const Coord &p) {
