@@ -36,7 +36,7 @@ namespace tlp {
 
     for (;it != convexHullIdxs.end(); ++it) {
       points.push_back(_points[*it]);
-      boundingBox.check(_points[*it]);
+      boundingBox.insert(_points[*it]);
     }
     _points = points;
   }
@@ -296,8 +296,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 }
   //====================================================
   void GlConvexHull::translate(const Coord& mouvement){
-    boundingBox.first+=mouvement;
-    boundingBox.second+=mouvement;
+    boundingBox.translate(mouvement);
 
     for(vector<Coord>::iterator it=_points.begin();it!=_points.end();++it){
       (*it)+=mouvement;

@@ -30,7 +30,7 @@ namespace tlp {
     outlineSize(outlineSize) {
     assert(points.size() >= 3);
     for(vector<Coord>::const_iterator it=points.begin();it!=points.end();++it)
-      boundingBox.check(*it);
+      boundingBox.insert(*it);
   }
   //=====================================================
   GlPolygon::GlPolygon(const unsigned int nbPoints,
@@ -88,7 +88,7 @@ namespace tlp {
     points.push_back(point);
     fillColors.push_back(fcolor);
     outlineColors.push_back(ocolor);
-    boundingBox.check(point);
+    boundingBox.insert(point);
   }
   //=====================================================
   const Color& GlPolygon::fcolor(const unsigned int i) const {
@@ -179,12 +179,10 @@ namespace tlp {
     glTest(__PRETTY_FUNCTION__);
   }
   //===========================================================
-  void GlPolygon::translate(const Coord& mouvement) {
-    boundingBox.first+=mouvement;
-    boundingBox.second+=mouvement;
-
-    for(vector<Coord>::iterator it=points.begin();it!=points.end();++it){
-      (*it)+=mouvement;
+  void GlPolygon::translate(const Coord& vec) {
+    boundingBox.translate(vec);
+    for(vector<Coord>::iterator it = points.begin(); it!=points.end(); ++it) {
+      (*it) += vec;
     }
   }
   //===========================================================
@@ -227,7 +225,7 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode,"outlineSize",outlineSize);
 
       for(vector<Coord>::iterator it= points.begin();it!=points.end();++it)
-        boundingBox.check(*it);
+        boundingBox.insert(*it);
     }
   }
 }

@@ -192,7 +192,7 @@ namespace tlp {
   GLfloat projectSize(const BoundingBox &bb,
 		      const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix,
 		      const Vector<int, 4> &viewport) {
-    Coord bbSize=bb.second-bb.first;
+    Coord bbSize(bb[1] - bb[0]);
     float  nSize = bbSize.norm(); //Enclosing bounding box
 
     MatrixGL translate;
@@ -200,7 +200,7 @@ namespace tlp {
     for (unsigned int i = 0; i<4; ++i)
       translate[i][i] = 1;
     for (unsigned int i = 0; i<3; ++i)
-      translate[3][i] = bb.first[i] + bbSize[i]/2 ;
+      translate[3][i] = bb[0][i] + bbSize[i]/2 ;
 
     MatrixGL tmp(translate * modelviewMatrix);
     //MatrixGL tmp(modelviewMatrix);
@@ -254,15 +254,7 @@ namespace tlp {
     Rectangle<float> r2;
     r2[0] = upleftV;
     r2[1] = downrightV;
-    /*
-      cerr << r1 << endl;
-      cerr << r2 << endl;
-      cerr << " ==> inter :";
-      if (r1.intersect(r2))
-      cerr << "yes" << endl;
-      else
-      cerr << "no" << endl;
-    */
+
     if (!r1.intersect(r2)) {
       size *= -1.0;
     }
@@ -273,18 +265,18 @@ namespace tlp {
   //====================================================
   float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<float, 4>& transformMatrix,const Vector<int, 4>& globalViewport,const Vector<int, 4>& currentViewport) {
     //float lod=0.;
-    BoundingBox bbTmp=bb;
+    BoundingBox bbTmp(bb);
     Coord src[8];
     Coord dst[8];
     int pos;
     int num;
 
     for(int i=0;i<3;i++) {
-      if(bbTmp.first[i]>bbTmp.second[i]) {
-	float tmp=bbTmp.first[i];
-	bbTmp.first[i]=bbTmp.second[i];
-	bbTmp.second[i]=tmp;
-      }
+        if(bbTmp[0][i]>bbTmp[1][i]) {
+            float tmp = bbTmp[0][i];
+            bbTmp[0][i] = bbTmp[1][i];
+            bbTmp[1][i] = tmp;
+        }
     }
 
     bbTmp.getCompleteBB(src);
@@ -333,10 +325,10 @@ namespace tlp {
   }
   //====================================================
   float calculate2DLod(const BoundingBox& bb,const Vector<int, 4>& globalViewport,const Vector<int, 4>& currentViewport) {
-    Coord first=bb.first;
-    Coord second=bb.second;
-    first[1]=globalViewport[3]-bb.second[1];
-    second[1]=globalViewport[3]-bb.first[1];
+    Coord first(bb[0]);
+    Coord second (bb[1]);
+    first[1]  = globalViewport[3]-bb[1][1];
+    second[1] = globalViewport[3]-bb[0][1];
 
     if(!(first[0]<currentViewport[0]+currentViewport[2] && second[0]>currentViewport[0] && first[1]<currentViewport[1]+currentViewport[3] && second[1]>currentViewport[1])){
       return -1.;

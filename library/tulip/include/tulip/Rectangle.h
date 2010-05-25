@@ -2,6 +2,8 @@
 #ifndef TLP_RECTANGLE_H
 #define TLP_RECTANGLE_H
 #include <tulip/Vector.h>
+#include <tulip/BoundingBox.h>
+
 namespace tlp {
 
     /**
@@ -24,6 +26,16 @@ namespace tlp {
             (*this)[0].fill(1);
             (*this)[1].fill(-1);
         }
+        /**
+          * Create a new Rectangle from a Bounding Box correct conversion from 3D -> 2D
+          */
+        Rectangle(const tlp::BoundingBox &b) {
+            (*this)[0][0] = b[0][0];
+            (*this)[0][1] = b[0][1];
+            (*this)[1][0] = b[1][0];
+            (*this)[1][1] = b[1][1];
+        }
+
        /**
        * create a new Rectangle
        * Validity is checked in debug mode

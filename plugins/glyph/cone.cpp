@@ -52,8 +52,8 @@ Cone::~Cone() {
 }
 //===========================================================
 void Cone::getIncludeBoundingBox(BoundingBox& boundingBox) {
-	boundingBox.first = Coord(0.25, 0.25, 0);
-	boundingBox.second = Coord(0.75, 0.75, 0.5);
+    boundingBox[0] = Coord(0.25, 0.25, 0);
+    boundingBox[1] = Coord(0.75, 0.75, 0.5);
 }
 //===========================================================
 void Cone::draw(node n, float lod) {

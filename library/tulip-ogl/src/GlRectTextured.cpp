@@ -32,11 +32,11 @@ namespace tlp {
     BoundingBox bb;
 
     if(!inPercent){
-      bb.check(Coord(left,bottom,0));
-      bb.check(Coord(right,top,0));
+      bb.insert(Coord(left,bottom,0));
+      bb.insert(Coord(right,top,0));
     }else{
-      bb.check(Coord(numeric_limits<float>::min(),numeric_limits<float>::min(),0));
-      bb.check(Coord(numeric_limits<float>::max(),numeric_limits<float>::max(),0));
+      bb.insert(Coord(numeric_limits<float>::min(),numeric_limits<float>::min(),0));
+      bb.insert(Coord(numeric_limits<float>::max(),numeric_limits<float>::max(),0));
     }
     return bb;
   }
@@ -87,15 +87,13 @@ namespace tlp {
     GlTextureManager::getInst().desactivateTexture();
   }
   //===========================================================
-  void GlRectTextured::translate(const Coord& mouvement) {
-    if(!inPercent) {
-      boundingBox.first+=mouvement;
-      boundingBox.second+=mouvement;
-
-      top+=mouvement[1];
-      bottom+=mouvement[1];
-      left+=mouvement[0];
-      right+=mouvement[0];
+  void GlRectTextured::translate(const Coord& vec) {
+    if(!inPercent) {        
+      boundingBox.translate(vec);
+      top   += vec[1];
+      bottom+= vec[1];
+      left  += vec[0];
+      right += vec[0];
     }
   }
   //===========================================================

@@ -14,8 +14,8 @@ namespace tlp {
     cell(cell){
     for(unsigned int i=0; i < 3; i++)
       this->displayDim[i] = displayDim[i];
-    boundingBox.check(frontTopLeft);
-    boundingBox.check(backBottomRight);
+    boundingBox.insert(frontTopLeft);
+    boundingBox.insert(backBottomRight);
   }
   //============================================================
   void GlGrid::draw(float lod,Camera *camera) {
@@ -87,12 +87,11 @@ namespace tlp {
       this->displayDim[i] = displayDim[i];
   }
   //============================================================
-  void GlGrid::translate(const Coord& mouvement){
-    boundingBox.first+=mouvement;
-    boundingBox.second+=mouvement;
-
-    frontTopLeft+=mouvement;
-    backBottomRight+=mouvement;
+  void GlGrid::translate(const Coord& vec){
+    boundingBox[0]  += vec;
+    boundingBox[1]  += vec;
+    frontTopLeft    += vec;
+    backBottomRight += vec;
   }
   //============================================================
   void GlGrid::getXML(xmlNodePtr rootNode){

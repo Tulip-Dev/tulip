@@ -59,8 +59,8 @@ Square::~Square() {
 }
 //=====================================================
 void Square::getIncludeBoundingBox(BoundingBox &boundingBox) {
-	boundingBox.first = Coord(0, 0, 0);
-	boundingBox.second = Coord(1, 1, 0);
+    boundingBox[0] = Coord(0, 0, 0);
+        boundingBox[1] = Coord(1, 1, 0);
 }
 //=====================================================
 void Square::draw(node n, float lod) {

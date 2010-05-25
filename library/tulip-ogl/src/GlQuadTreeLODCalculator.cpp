@@ -19,9 +19,10 @@ namespace tlp {
 
   BoundingBox computeNewBoundingBox(const BoundingBox &box,const Coord &centerScene,double aX,double aY) {
     // compute a new bouding box : this bounding box is the rotation of the old bounding box
-    Coord size=(box.second-box.first)/2.f;
-    Coord center=box.first+size;
-    size=Coord(size.norm(),size.norm(),size.norm());
+    Coord size( (box[1] - box[0])/2.f);
+    Coord center(box[0] + size);
+    //size = Coord(size.norm(),size.norm(),size.norm());
+    size.fill(size.norm());
     center[0]=centerScene[0]+(cos(aY)*(center[0]-centerScene[0]));
     center[1]=centerScene[1]+(cos(aX)*(center[1]-centerScene[1]));
 
@@ -75,18 +76,18 @@ namespace tlp {
 
   void GlQuadTreeLODCalculator::addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb) {
     GlCPULODCalculator::addSimpleEntityBoundingBox(entity,bb);
-    entitiesGlobalBoundingBox.check(bb.first);
-    entitiesGlobalBoundingBox.check(bb.second);
+    entitiesGlobalBoundingBox.insert(bb[0]);
+    entitiesGlobalBoundingBox.insert(bb[1]);
   }
   void GlQuadTreeLODCalculator::addNodeBoundingBox(unsigned int id,const BoundingBox& bb) {
     GlCPULODCalculator::addNodeBoundingBox(id,bb);
-    nodesGlobalBoundingBox.check(bb.first);
-    nodesGlobalBoundingBox.check(bb.second);
+    nodesGlobalBoundingBox.insert(bb[0]);
+    nodesGlobalBoundingBox.insert(bb[1]);
   }
   void GlQuadTreeLODCalculator::addEdgeBoundingBox(unsigned int id,const BoundingBox& bb) {
     GlCPULODCalculator::addEdgeBoundingBox(id,bb);
-    edgesGlobalBoundingBox.check(bb.first);
-    edgesGlobalBoundingBox.check(bb.second);
+    edgesGlobalBoundingBox.insert(bb[0]);
+    edgesGlobalBoundingBox.insert(bb[1]);
   }
 
   void GlQuadTreeLODCalculator::compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport) {
@@ -250,13 +251,13 @@ namespace tlp {
     // Project camera bondinx box to know visible part of the quadtree
     pSrc[0] = transformedViewport[0];
     pSrc[1] = transformedViewport[1];
-    cameraBoundingBox.check(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
+    cameraBoundingBox.insert(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
     pSrc[1] = transformedViewport[1]+transformedViewport[3];
-    cameraBoundingBox.check(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
+    cameraBoundingBox.insert(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
     pSrc[0] = transformedViewport[0]+transformedViewport[2];
-    cameraBoundingBox.check(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
+    cameraBoundingBox.insert(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
     pSrc[1] = transformedViewport[1];
-    cameraBoundingBox.check(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
+    cameraBoundingBox.insert(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
 
     int ratio;
     if(currentViewport[2]>currentViewport[3])

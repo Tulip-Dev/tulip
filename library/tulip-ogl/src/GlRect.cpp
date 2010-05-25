@@ -13,8 +13,8 @@ namespace tlp {
     point(3) = topLeftPos;
     point(3)[1] = bottomRightPos[1];
 
-    boundingBox.check(topLeftPos);
-    boundingBox.check(bottomRightPos);
+    boundingBox.insert(topLeftPos);
+    boundingBox.insert(bottomRightPos);
 
     fcolor(0) = topLeftCol;
     fcolor(1) = topLeftCol;
@@ -53,8 +53,8 @@ namespace tlp {
     point(1)[1] = _topLeftPos[1];
     point(3)[0] = _topLeftPos[0];
     boundingBox = BoundingBox();
-    boundingBox.check(point(0));
-    boundingBox.check(point(2));
+    boundingBox.insert(point(0));
+    boundingBox.insert(point(2));
   }
   //=====================================================
   void GlRect::setBottomRightPos(const Coord &_bottomRightPos) {
@@ -62,8 +62,8 @@ namespace tlp {
     point(1)[0] = _bottomRightPos[0];
     point(3)[1] = _bottomRightPos[1];
     boundingBox = BoundingBox();
-    boundingBox.check(point(0));
-    boundingBox.check(point(2));
+    boundingBox.insert(point(0));
+    boundingBox.insert(point(2));
   }
   //=====================================================
   void GlRect::setTopLeftColor(const Color &_topLeftCol) {

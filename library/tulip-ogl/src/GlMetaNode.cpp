@@ -51,7 +51,7 @@ namespace tlp {
       GlNode::draw(20,data,camera);
   }
 
-  void GlMetaNode::drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data){
+  void GlMetaNode::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data){
 
     node n=node(id);
 
@@ -106,16 +106,16 @@ namespace tlp {
     Coord minC = bboxes.second;
     BoundingBox includeBoundingBox;
     data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
-    Coord includeScale=includeBoundingBox.second-includeBoundingBox.first;
-    Coord size=(maxC + minC)/-1.f;
-    Coord translate=(maxC+minC)/-2.f - (maxC-minC) + includeBoundingBox.first*((maxC-minC)*2.f) +(maxC-minC)*includeScale ;
-    double dept  = (maxC[2] - minC[2]) / includeScale[2];
+    Coord includeScale(includeBoundingBox[1] - includeBoundingBox[0]);
+    Coord size ((maxC + minC)/-1.f);
+    Coord translate( (maxC+minC)/-2.f - (maxC-minC) + includeBoundingBox[0] * ((maxC-minC)*2.f) +(maxC-minC)*includeScale );
+    double dept   = (maxC[2] - minC[2]) / includeScale[2];
     double width  = (maxC[0] - minC[0]) / includeScale[0];
     double height = (maxC[1] - minC[1]) / includeScale[1];
-    Coord includeSize=bboxes.first-bboxes.second;
+    Coord includeSize = bboxes.first - bboxes.second;
     if(nodeSize[0]/includeSize[0]<nodeSize[1]/includeSize[1]){
-      includeSize[1]*=nodeSize[0]/includeSize[0];
-      includeSize[0]*=nodeSize[0]/includeSize[0];
+      includeSize[1] *= nodeSize[0]/includeSize[0];
+      includeSize[0] *= nodeSize[0]/includeSize[0];
     }else{
       includeSize[0]*=nodeSize[1]/includeSize[1];
       includeSize[1]*=nodeSize[1]/includeSize[1];

@@ -26,25 +26,24 @@ using namespace std;
 
 namespace tlp {
 
-  struct entityWithDistanceCompare {
+    struct entityWithDistanceCompare {
 	static GlGraphInputData *inputData;
-    bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2 ) const{
-      if(e1.distance>e2.distance)
-        return true;
-      if(e1.distance<e2.distance)
-        return false;
+        bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2 ) const{
+            if(e1.distance>e2.distance)
+                return true;
+            if(e1.distance<e2.distance)
+                return false;
 
-      BoundingBox *bb1,*bb2;
-      bb1=&e1.entity->boundingBox;
-      bb2=&e2.entity->boundingBox;
+            BoundingBox &bb1 = e1.entity->boundingBox;
+            BoundingBox &bb2 = e2.entity->boundingBox;
 
-      if(bb1->second[0]-bb1->first[0] > bb2->second[0]-bb2->first[0])
-        return false;
-      else
-        return true;
+            if(bb1[1][0] - bb1[0][0] > bb2[1][0] - bb2[0][0])
+                return false;
+            else
+                return true;
 
 	}
-  };
+    };
   //====================================================
   class LessThanNode {
   public:
@@ -349,7 +348,6 @@ namespace tlp {
         multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;
         Coord camPos=camera->getEyes();
         BoundingBox bb;
-        Coord middle;
         double dist;
 
         // Colect simple entities
@@ -357,8 +355,8 @@ namespace tlp {
           if((*it).lod<0)
             continue;
 
-          bb=(*it).boundingBox;
-          middle=bb.first+(bb.second-bb.first)/2.f;
+          bb = (*it).boundingBox;
+          Coord middle((bb[1] + bb[0])/2.f);
           dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
           dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
           dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
@@ -372,7 +370,7 @@ namespace tlp {
               continue;
 
             bb=(*it).boundingBox;
-            middle=bb.first+(bb.second-bb.first)/2.f;
+            Coord middle((bb[1]+bb[0])/2.f);
             dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
             dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
             dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
@@ -383,8 +381,8 @@ namespace tlp {
             if((*it).lod<0)
               continue;
 
-            bb=(*it).boundingBox;
-            middle=bb.first+(bb.second-bb.first)/2.f;
+            bb = (*it).boundingBox;
+            Coord middle((bb[0] + bb[1])/2.f);
             dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
             dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
             dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
@@ -514,8 +512,8 @@ namespace tlp {
         (*it).second->acceptVisitor(visitor);
 	}
 
-	Coord maxC = visitor->getBoundingBox().second;
-	Coord minC = visitor->getBoundingBox().first;
+        Coord maxC (visitor->getBoundingBox()[1]);
+        Coord minC (visitor->getBoundingBox()[0]);
 
 	delete visitor;
 
@@ -556,8 +554,8 @@ namespace tlp {
         (*it).second->acceptVisitor(visitor);
 	}
 
-	Coord maxC = visitor->getBoundingBox().second;
-	Coord minC = visitor->getBoundingBox().first;
+        Coord maxC ( visitor->getBoundingBox()[1]);
+        Coord minC ( visitor->getBoundingBox()[0]);
 
 	delete visitor;
 

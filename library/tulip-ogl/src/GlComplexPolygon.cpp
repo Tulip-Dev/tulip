@@ -164,7 +164,7 @@ namespace tlp {
   //=====================================================
   void GlComplexPolygon::addPoint(const Coord& point) {
     points[currentVector].push_back(point);
-    boundingBox.check(point);
+    boundingBox.insert(point);
   }
   //=====================================================
   void GlComplexPolygon::beginNewHole() {
@@ -250,13 +250,11 @@ namespace tlp {
     glTest(__PRETTY_FUNCTION__);
   }
   //===========================================================
-  void GlComplexPolygon::translate(const Coord& mouvement) {
-    boundingBox.first+=mouvement;
-    boundingBox.second+=mouvement;
-
-    for(vector<vector<Coord> >::iterator it=points.begin();it!=points.end();++it){
-      for(vector<Coord>::iterator it2=(*it).begin();it2!=(*it).end();++it2) {
-	(*it2)+=mouvement;
+  void GlComplexPolygon::translate(const Coord& vec) {
+    boundingBox.translate(vec);
+    for(vector<vector<Coord> >::iterator it = points.begin(); it != points.end(); ++it){
+      for(vector<Coord>::iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2) {
+        (*it2) += vec;
       }
     }
   }
@@ -311,7 +309,7 @@ namespace tlp {
 
       for(vector<vector<Coord> >::iterator it= points.begin();it!=points.end();++it) {
         for(vector<Coord>::iterator it2=(*it).begin();it2!=(*it).end();++it2) {
-          boundingBox.check(*it2);
+          boundingBox.insert(*it2);
         }
       }
     }

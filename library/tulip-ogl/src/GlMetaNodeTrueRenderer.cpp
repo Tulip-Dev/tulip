@@ -60,9 +60,9 @@ namespace tlp {
     Coord minC = bboxes.second;
     BoundingBox includeBoundingBox;
     inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
-    Coord includeScale=includeBoundingBox.second-includeBoundingBox.first;
-    Coord size=(maxC + minC)/-1.f;
-    Coord translate=(maxC+minC)/-2.f - (maxC-minC) + includeBoundingBox.first*((maxC-minC)*2.f) +(maxC-minC)*includeScale ;
+    Coord includeScale(includeBoundingBox[1] - includeBoundingBox[0]);
+    Coord size = (maxC + minC)/-1.f;
+    Coord translate( (maxC+minC)/-2.f - (maxC-minC) + includeBoundingBox[0]*((maxC-minC)*2.f) +(maxC-minC)*includeScale) ;
     double dept  = (maxC[2] - minC[2]) / includeScale[2];
     double width  = (maxC[0] - minC[0]) / includeScale[0];
     double height = (maxC[1] - minC[1]) / includeScale[1];
@@ -102,8 +102,8 @@ namespace tlp {
       glNode.id=itN->next().id;
       BoundingBox bb = glNode.getBoundingBox(&metaData);
 
-      Coord size=(bb.second-bb.first);
-      Coord middle=bb.first+size/2.f;
+      Coord size(bb[1] - bb[0]);
+      Coord middle(bb[0] + size/2.f);
 
       for(int i=objectScale.size()-1; i>=0;--i) {
         middle+=objectTranslate[i];
@@ -111,8 +111,8 @@ namespace tlp {
         size*=objectScale[i];
       }
 
-      bb.first=middle-size/2.f;
-      bb.second=middle+size/2.f;
+      bb[0]  = middle-size/2.f;
+      bb[1]  = middle+size/2.f;
       calculator.addNodeBoundingBox(glNode.id,bb);
     }
     delete itN;
@@ -123,8 +123,8 @@ namespace tlp {
       while (itE->hasNext()) {
         glEdge.id=itE->next().id;
         BoundingBox bb = glEdge.getBoundingBox(&metaData);
-        Coord size=bb.second-bb.first;
-        Coord middle=bb.first+(size)/2.f;
+        Coord size(bb[1] - bb[0]);
+        Coord middle(bb[0] + (size)/2.f);
 
         for(int i=objectScale.size()-1; i>=0;--i) {
           middle+=objectTranslate[i];
@@ -132,8 +132,8 @@ namespace tlp {
           size*=objectScale[i];
         }
 
-        bb.first=middle-size/2.f;
-        bb.second=middle+size/2.f;
+        bb[0] = middle-size/2.f;
+        bb[1] = middle+size/2.f;
         calculator.addEdgeBoundingBox(glEdge.id,bb);
       }
       delete itE;

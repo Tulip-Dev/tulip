@@ -105,7 +105,7 @@ void FastBezier::computeCubicBezierPoints(const Coord &p0, const Coord &p1, cons
 
 // Compute bezier curve point defined by controlPoints associated to paramter t (0 <= t <= 1) using "De Casteljau's algorithm"
 Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
-	vector<Coord> internalControlPoints = controlPoints;
+	vector<Coord> internalControlPoints(controlPoints);
 	for (unsigned int i = controlPoints.size() - 1 ; i > 0 ; --i) {
 		for (unsigned int j = 0 ; j < i ; ++j) {
 			internalControlPoints[j] = internalControlPoints[j] + t * (internalControlPoints[j+1] - internalControlPoints[j]);
@@ -115,6 +115,21 @@ Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
 }
 
 void FastBezier::computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curvePoints, unsigned int nbCurvePoints) {
+	cout << __PRETTY_FUNCTION__ << endl << flush;
+	assert(controlPoints.size() > 1);
+	switch(controlPoints.size()) {
+	  case 2:computeLinearBezierPoints(controlPoints[0], controlPoints[1], curvePoints, nbCurvePoints);break;
+	  case 3:computeQuadraticBezierPoints(controlPoints[0], controlPoints[1], controlPoints[2], curvePoints, nbCurvePoints);break;
+	  case 4:computeCubicBezierPoints(controlPoints[0], controlPoints[1], controlPoints[2], controlPoints[3], curvePoints, nbCurvePoints);break;
+	  default:
+		curvePoints.resize(nbCurvePoints);
+		float h = 1.0 / (float) (nbCurvePoints - 1);
+		for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
+			float curStep = i * h;
+			curvePoints[i] = computeBezierPoint(controlPoints, curStep);
+		}
+	}
+	/*
 	if (controlPoints.size() == 2) {
 		computeLinearBezierPoints(controlPoints[0], controlPoints[1], curvePoints, nbCurvePoints);
 	} else if (controlPoints.size() == 3) {
@@ -129,14 +144,14 @@ void FastBezier::computeBezierPoints(const vector<Coord> &controlPoints, vector<
 			curvePoints[i] = computeBezierPoint(controlPoints, curStep);
 		}
 	}
+	*/
 }
 
 void computeBezierSegmentControlPoints(const Coord &pBefore, const Coord &pStart, const Coord &pEnd, const Coord &pAfter, vector<Coord> &bezierSegmentControlPoints) {
 	bezierSegmentControlPoints.push_back(pStart);
-	Coord d0, d1;
-	d0 = (pEnd - pBefore) / 2.f;
+	Coord d0((pEnd - pBefore) / 2.f);
 	bezierSegmentControlPoints.push_back(pStart + d0 / 3.f);
-	d1 = (pAfter - pStart) / 2.f;
+	Coord d1((pAfter - pStart) / 2.f);
 	bezierSegmentControlPoints.push_back(pEnd - d1 / 3.f);
 	bezierSegmentControlPoints.push_back(pEnd);
 }

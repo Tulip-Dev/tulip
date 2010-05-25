@@ -51,12 +51,12 @@ BoundingBox GlEdge::eeGlyphBoundingBox(const Coord& anchor, const Coord& tgt, fl
   Coord vW(transformation[0][2], transformation[1][2], transformation[2][2]);
 
   BoundingBox box;
-  box.check(mid + vAB * (-size[0][0]) * .5f);
-  box.check(mid + vAB * (size[0][0]) * .5f);
-  box.check(mid + vV * (-size[1][1]) * .5f);
-  box.check(mid + vV * (size[1][1]) * .5f);
-  box.check(mid + vW * (-size[2][2]) * .5f);
-  box.check(mid + vW * (size[2][2]) * .5f);
+  box.insert(mid + vAB * (-size[0][0]) * .5f);
+  box.insert(mid + vAB * (size[0][0]) * .5f);
+  box.insert(mid + vV * (-size[1][1]) * .5f);
+  box.insert(mid + vV * (size[1][1]) * .5f);
+  box.insert(mid + vW * (-size[2][2]) * .5f);
+  box.insert(mid + vW * (size[2][2]) * .5f);
 
   return box;
 }
@@ -100,11 +100,11 @@ BoundingBox GlEdge::getBoundingBox(GlGraphInputData* data) {
         tgtAnchor);
 
     for (vector<Coord>::iterator it = tmp.begin(); it != tmp.end(); ++it)
-      bb.check(*it);
+      bb.insert(*it);
   }
 
-  bb.check(srcCoord);
-  bb.check(tgtCoord);
+  bb.insert(srcCoord);
+  bb.insert(tgtCoord);
 
   return bb;
 }
@@ -319,8 +319,8 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
     BoundingBox box = eeGlyphBoundingBox(srcAnchor, beginTmpAnchor, size[0],
         srcTransformationMatrix, srcScalingMatrix);
 
-    Coord boxSize = box.second - box.first;
-    Coord middle = box.first + (size) / 2.f;
+    Coord boxSize( box[1] - box[0] );
+    Coord middle( box[0] + (size) / 2.f);
 
     for (int i = objectScale.size() - 1; i >= 0; --i) {
       middle += objectTranslate[i];
@@ -328,8 +328,8 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
       boxSize *= objectScale[i];
     }
 
-    box.first = middle - boxSize / 2.f;
-    box.second = middle + boxSize / 2.f;
+    box[0] = middle - boxSize / 2.f;
+    box[1] = middle + boxSize / 2.f;
 
     float lod = 0;
     if (camera->is3D()) {
@@ -402,17 +402,18 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
     BoundingBox box = eeGlyphBoundingBox(tgtAnchor, endTmpAnchor, size[0],
         tgtTransformationMatrix, tgtScalingMatrix);
 
-    Coord boxSize = box.second - box.first;
-    Coord middle = box.first + (size) / 2.f;
-
+    Coord boxSize (box[1] - box[0]);
+    Coord middle  (box[0] + (size) / 2.f);
+//    Coord middle((box[0] + box[1]) / 2.f);
     for (int i = objectScale.size() - 1; i >= 0; --i) {
-      middle += objectTranslate[i];
-      middle = objectCoord[i] - (objectCoord[i] - middle) * objectScale[i];
-      boxSize *= objectScale[i];
+      middle   += objectTranslate[i];
+      middle    = objectCoord[i] - (objectCoord[i] - middle) * objectScale[i];
+      boxSize  *= objectScale[i];
     }
 
-    box.first = middle - boxSize / 2.f;
-    box.second = middle + boxSize / 2.f;
+    box[0] = middle - boxSize / 2.f;
+    box[1] = middle + boxSize / 2.f;
+
     float lod = 0;
     if (camera->is3D()) {
       Coord eyes = camera->getEyes() + (camera->getEyes() - camera->getCenter())

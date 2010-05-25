@@ -189,8 +189,8 @@ void SquareBorderTextured::generateTexture(Graph* sg) {
 }
 //=====================================================
 void SquareBorderTextured::getIncludeBoundingBox(BoundingBox &boundingBox) {
-  boundingBox.first=Coord(0,0,0);
-  boundingBox.second=Coord(1,1,0);
+  boundingBox[0] = Coord(0,0,0);
+  boundingBox[1] = Coord(1,1,0);
 }
 //====================================================================
 void SquareBorderTextured::draw(node n,float lod) {
