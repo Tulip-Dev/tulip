@@ -847,7 +847,7 @@ void TulipApp::windowsMenuAboutToShow() {
 }
 //**********************************************************************
 /* returns true if user canceled */
-bool TulipApp::askSaveGraph(const std::string name,int index) {
+bool TulipApp::askSaveGraph(const std::string &name,int index) {
   string message = "Do you want to save this graph : " + name + " ?";
   int answer = QMessageBox::question(this, "Save", QString::fromUtf8(message.c_str()),
     QMessageBox::Yes | QMessageBox::Default,
