@@ -27,11 +27,8 @@ GlMainWidgetItem::GlMainWidgetItem(GlMainWidgetGraphicsView *parent,GlMainWidget
 }
 
 GlMainWidgetItem::~GlMainWidgetItem() {
-	if (fbo1)
-		delete fbo1;
-
-	if(fbo2)
-		delete fbo2;
+  delete fbo1;
+  delete fbo2;
 }
 
 const float offset = 2;
