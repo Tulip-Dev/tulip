@@ -69,29 +69,29 @@ public:
    * only measure the length of the polyline between bends, when using
    * curves like bezier etc... the result will not be the length of the curve.
    */
-  double edgeLength(edge e);
+  double edgeLength(const edge e) const;
   /**
    * Returns the average angular resolution of the layout
    * it is defined for 2D drawing, the third coordinates
    * is omitted
    */
-  double averageAngularResolution(Graph *graph=0);
+  double averageAngularResolution(const Graph *graph = 0) const;
   /**
    * Returns the average angular resolution of a node
    * it is defined for 2D drawing, the third coordinates
    * is omitted
    */
-  double averageAngularResolution(const node n,Graph *graph=0);
+  double averageAngularResolution(const node n,const Graph *graph = 0) const;
   /**
    * Returns a vector of all angular resolution of a node
    * it is defined for 2D drawing, the third coordinates
    * is omitted
    */
-  std::vector<double> angularResolutions(const node n, Graph *graph=0);
+  std::vector<double> angularResolutions(const node n, const Graph *graph = 0) const;
   /**
    * Returns the number of crossings in the layout
    */
-  unsigned int crossingNumber();
+  unsigned int crossingNumber() const;
 
   // redefinition of some PropertyObserver methods 
   virtual void beforeSetNodeValue(PropertyInterface* prop, const node n);
