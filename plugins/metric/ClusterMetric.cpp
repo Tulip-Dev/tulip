@@ -23,10 +23,29 @@ ClusterMetric::ClusterMetric(const PropertyContext &context):DoubleAlgorithm(con
   addParameter<unsigned int>("depth",paramHelp[0],"1");
 }
 //=================================================
+static double clusterGetEdgeValue(Graph *graph,
+				  MutableContainer<double>& clusters,
+				  const edge e ) {
+  pair<node, node> eEnds = graph->ends(e);
+  const double& v1 = clusters.get(eEnds.first.id);
+  const double& v2 = clusters.get(eEnds.second.id);
+  if (v1*v1 + v2*v2 > 0)
+    return 1.- fabs(v1 - v2)/sqrt(v1*v1 + v2*v2);
+  return 0.;
+}
+//=================================================
 bool ClusterMetric::run() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  unsigned int maxDepth=1;
-  if (dataSet!=0) dataSet->get("depth",maxDepth);
-  return computeClusterMetric(graph, doubleResult, maxDepth, pluginProgress);
+  unsigned int maxDepth = 1;
+  if (dataSet!=0) dataSet->get("depth", maxDepth);
+  MutableContainer<double> clusters;
+  clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);
+  node n;
+  forEach(n, graph->getNodes())
+    doubleResult->setNodeValue(n, clusters.get(n.id));
+  edge e;
+  forEach(e, graph->getEdges())
+    doubleResult->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
+  return true;
 }
 

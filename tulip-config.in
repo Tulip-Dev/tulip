@@ -109,7 +109,7 @@ while test $# -gt 0; do
       echo @CMakeTulipLib@ @CMakeTulipOglLib@ @CMakeTulipQtLib@
       ;;
     --lib_tulip)
-      echo -L${libdir} -ltulip${libversion}
+      echo -L${libdir} -ltulip${libversion} @OPENMP_CXXFLAGS@
       ;;
 	--cmakelib_tulip)
       echo @CMakeTulipLib@

@@ -11,7 +11,12 @@ DagLevelMetric::DagLevelMetric(const PropertyContext &context):DoubleAlgorithm(c
 DagLevelMetric::~DagLevelMetric() {}
 //====================================================== 
 bool DagLevelMetric::run() {
-  return computeDagLevelMetric(graph, doubleResult, pluginProgress);
+  MutableContainer<unsigned int> level;
+  dagLevel(graph, level, pluginProgress);
+  node n;
+  forEach(n, graph->getNodes())
+    doubleResult->setNodeValue(n, level.get(n.id));
+  return true;
 }
 //====================================================== 
 bool DagLevelMetric::check(string &erreurMsg) {
