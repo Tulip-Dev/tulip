@@ -1378,6 +1378,7 @@
 (int "metaNodesLabelStencil" 65535)
 (int "edgesLabelStencil" 65535)
 (bool "edgesMaxSizeToNodesSize" true)
+(color "selectionColor" "(255,0,255,255)")
 )
 (string "scene" "<?xml version=\"1.0\"?>
 <scene>
