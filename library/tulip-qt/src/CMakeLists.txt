@@ -122,7 +122,6 @@ set(tulip-qt_MOC
     ../include/tulip/Controller.h
     ../include/tulip/ControllerViewsManager.h
     ../include/tulip/MainController.h
-    ../include/tulip/Morphing.h
     ../include/tulip/View.h
     ../include/tulip/AbstractView.h
     ../include/tulip/GraphPropertiesSelectionWidget.h
