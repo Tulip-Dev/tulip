@@ -67,10 +67,10 @@ nobase_include_HEADERS = \
 	tulip/GlShaderProgram.h \
 	tulip/GlOpenUniformCubicBSpline.h \
 	tulip/GlCubicBSplineInterpolation.h \
-    tulip/OpenGlConfigManager.h \
-    tulip/OpenGlErrorViewer.h \
+	tulip/OpenGlConfigManager.h \
+	tulip/OpenGlErrorViewer.h \
 	tulip/AbstractGlCurve.h \
-	tulip/GlQuadTreeLODCalculator.h \
+	tulip/GlQuadTreeLODCalculator.h
 
 noinst_HEADERS = \
 	tulip/Bezier.h \
