@@ -500,41 +500,7 @@ namespace tlp {
   }
 
   void GlScene::centerScene() {
-	GlBoundingBoxSceneVisitor *visitor;
-
-	if(glGraphComposite)
-      visitor=new GlBoundingBoxSceneVisitor(glGraphComposite->getInputData());
-	else
-      visitor=new GlBoundingBoxSceneVisitor(NULL);
-
-	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera()))
-        (*it).second->acceptVisitor(visitor);
-	}
-
-        Coord maxC (visitor->getBoundingBox()[1]);
-        Coord minC (visitor->getBoundingBox()[0]);
-
-	delete visitor;
-
-	double dx = maxC[0] - minC[0];
-	double dy = maxC[1] - minC[1];
-	double dz = maxC[2] - minC[2];
-
-	for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      Camera* camera=(*it).second->getCamera();
-      camera->setCenter((maxC + minC) / 2.f);
-
-      if ((dx==0) && (dy==0) && (dz==0))
-        dx = dy = dz = 10.0;
-
-      camera->setSceneRadius(sqrt(dx*dx+dy*dy+dz*dz)/2.);
-
-      camera->setEyes(Coord(0, 0, camera->getSceneRadius()));
-      camera->setEyes(camera->getEyes() + camera->getCenter());
-      camera->setUp(Coord(0, 1., 0));
-      camera->setZoomFactor(0.5);
-	}
+	  ajustSceneToSize(viewport[2], viewport[3]);
   }
 
   void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor){
