@@ -21,7 +21,6 @@
 #include <QtGui/qlabel.h>
 #include <QtGui/qlineedit.h>
 #include <QtGui/qcombobox.h>
-#include <QtGui/qcolordialog.h>
 #include <QtGui/qfiledialog.h>
 #include <QtGui/qtoolbutton.h>
 #include <QtGui/qtooltip.h>
@@ -373,21 +372,16 @@ namespace {
 	  QLineEdit * leG = (QLineEdit*) ip->wA[2];
 	  QLineEdit * leB = (QLineEdit*) ip->wA[4];
 	  QLineEdit * leA = (QLineEdit*) ip->wA[6];
-	  QRgb rgb = qRgba( leR->text().toInt(),
-			    leG->text().toInt(),
-			    leB->text().toInt(),
-			    leA->text().toInt()
-			    );
-	  bool ok = false;
-	  rgb = QColorDialog::getRgba(rgb,&ok);
-	  if( ok ) {
-	    leR->setText( QString("%1").arg(qRed(rgb)));
-	    leG->setText( QString("%1").arg(qGreen(rgb)));
-	    leB->setText( QString("%1").arg(qBlue(rgb)));
-	    leA->setText( QString("%1").arg(qAlpha(rgb)));
+    QColor baseColor( leR->text().toInt(),leG->text().toInt(),leB->text().toInt(),leA->text().toInt());
+    QColor color=baseColor;
+    if(getColorDialog(baseColor,NULL,"Color chooser",color)) {
+      leR->setText( QString("%1").arg(color.red()));
+      leG->setText( QString("%1").arg(color.green()));
+      leB->setText( QString("%1").arg(color.blue()));
+      leA->setText( QString("%1").arg(color.alpha()));
 	  }
 	  QPalette palette;
-	  palette.setColor(QPalette::Button, QColor(rgb));
+    palette.setColor(QPalette::Button, color);
 	  ((QWidget *)obj)->setPalette(palette);
 	  return false;
 	} else if( ip->typeName == TN(string) ) {

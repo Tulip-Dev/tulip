@@ -4,7 +4,6 @@
 
 #include <QtCore/qstring.h>
 #include <QtGui/qfiledialog.h>
-#include <QtGui/qcolordialog.h>
 #include <QtGui/qpainter.h>
 #include <QtGui/qfontmetrics.h>
 #include <QtGui/qapplication.h>
@@ -38,6 +37,7 @@
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GlTextureManager.h>
 
+#include "tulip/TlpQtTools.h"
 #include "tulip/TulipTableWidget.h"
 #include <tulip/ListPropertyWidget.h>
 #include <QtGui/QDialogButtonBox>
@@ -149,10 +149,9 @@ QRgb ColorButton::getColor() const {
   return color;
 }
 void ColorButton::colorDialog() {
-  bool ok;
-  QRgb tmpcolor = QColorDialog::getRgba(color, &ok, parentWidget());
-  if (ok)
-    color = tmpcolor;
+  QColor col;
+  if (getColorDialog(color,parentWidget(),"Color chooser",col))
+    color = col.rgba();
 }
 void ColorButton::paintEvent(QPaintEvent *qpe) {
   QPainter p(this);
