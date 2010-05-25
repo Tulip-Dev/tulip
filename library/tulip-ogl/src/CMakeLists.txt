@@ -53,7 +53,7 @@ set(tulip-ogl_LIB_SRCS
 	GlEdge.cpp 
 	GlMetaNodeTrueRenderer.cpp 
 	GlDisplayListManager.cpp 
-        OpenGlConfigManager.cpp
+    OpenGlConfigManager.cpp
 	GlSceneObserver.cpp 
 	GlLine.cpp 
 	GlCurve.cpp 
@@ -73,11 +73,12 @@ set(tulip-ogl_LIB_SRCS
 	EdgeExtremityGlyphManager.cpp
 	edgeExtremityArrow.cpp
 	GlSimpleEntity.cpp
-        GlShaderProgram.cpp
-        GlOpenUniformCubicBSpline.cpp
-        GlCubicBSplineInterpolation.cpp
-        AbstractGlCurve.cpp
-        GlQuadTreeLODCalculator.cpp
+    GlShaderProgram.cpp
+    GlOpenUniformCubicBSpline.cpp
+    GlCubicBSplineInterpolation.cpp
+    AbstractGlCurve.cpp
+    GlQuadTreeLODCalculator.cpp
+    GlSceneZoomAndPan.cpp
 )
 
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ../include/ ${PROJECT_SOURCE_DIR} ${GLEInclude} ${FTGLInclude} ${LIBXML2_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS})

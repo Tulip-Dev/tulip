@@ -44,8 +44,8 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/QtProgress.h 
 	tulip/Controller.h 
 	tulip/ControllerAlgorithmTools.h
-        tulip/ControllerViewsTools.h
-        tulip/ControllerViewsManager.h
+    tulip/ControllerViewsTools.h
+    tulip/ControllerViewsManager.h
 	tulip/MainController.h 
 	tulip/ControllerPluginsManager.h 
 	tulip/View.h 
@@ -61,12 +61,13 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/DoubleStringsListSelectionWidget.h 
 	tulip/QGlPixelBufferManager.h
 	tulip/BaseGraphicsViewComponentMacro.h
-        tulip/QtOpenGlErrorViewer.h
-        tulip/CSVParser.h
-        tulip/ImportCSVDataWidget.h
-        tulip/ImportCSVDataConfigurationWidget.h
-        tulip/ImportCSVDataDialog.h
-        tulip/CSVContentHandler.h
+    tulip/QtOpenGlErrorViewer.h
+    tulip/CSVParser.h
+    tulip/ImportCSVDataWidget.h
+    tulip/ImportCSVDataConfigurationWidget.h
+    tulip/ImportCSVDataDialog.h
+    tulip/CSVContentHandler.h
+    tulip/QtGlSceneZoomAndPanAnimator.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)

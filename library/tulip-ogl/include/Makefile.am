@@ -70,8 +70,9 @@ nobase_include_HEADERS = \
 	tulip/OpenGlConfigManager.h \
 	tulip/OpenGlErrorViewer.h \
 	tulip/AbstractGlCurve.h \
-  tulip/GlCPULODCalculator.h \
-	tulip/GlQuadTreeLODCalculator.h
+  	tulip/GlCPULODCalculator.h \
+	tulip/GlQuadTreeLODCalculator.h \
+	tulip/GlSceneZoomAndPan.h
 
 noinst_HEADERS = \
 	tulip/Bezier.h \

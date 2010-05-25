@@ -101,5 +101,6 @@ libtulip_ogl_la_SOURCES = \
 	GlOpenUniformCubicBSpline.cpp \
 	GlCubicBSplineInterpolation.cpp \
 	AbstractGlCurve.cpp \
-	GlQuadTreeLODCalculator.cpp
+	GlQuadTreeLODCalculator.cpp \
+	GlSceneZoomAndPan.cpp
 

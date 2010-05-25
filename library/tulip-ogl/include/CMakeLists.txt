@@ -68,6 +68,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/OpenGlConfigManager.h
 	tulip/OpenGlErrorViewer.h
 	tulip/AbstractGlCurve.h
-  tulip/GlCPULODCalculator.h
-  tulip/GlQuadTreeLODCalculator.h
+  	tulip/GlCPULODCalculator.h
+  	tulip/GlQuadTreeLODCalculator.h
+  	tulip/GlSceneZoomAndPan.h
 )

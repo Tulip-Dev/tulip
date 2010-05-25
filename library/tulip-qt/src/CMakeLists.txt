@@ -63,6 +63,7 @@ SET(tulip-qt_LIB_SRCS
     ImportCSVDataDialog.cpp
     ImportCSVDataWidget.cpp
     ImportCSVDataConfigurationWidget.cpp
+    QtGlSceneZoomAndPanAnimator.cpp
 )
 
 set(tulip-qt_UI
@@ -121,6 +122,7 @@ set(tulip-qt_MOC
     ../include/tulip/Controller.h
     ../include/tulip/ControllerViewsManager.h
     ../include/tulip/MainController.h
+    ../include/tulip/Morphing.h
     ../include/tulip/View.h
     ../include/tulip/AbstractView.h
     ../include/tulip/GraphPropertiesSelectionWidget.h
@@ -134,6 +136,7 @@ set(tulip-qt_MOC
     ../include/tulip/ImportCSVDataDialog.h
     ../include/tulip/ImportCSVDataWidget.h
     ../include/tulip/ImportCSVDataConfigurationWidget.h
+    ../include/tulip/QtGlSceneZoomAndPanAnimator.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)
