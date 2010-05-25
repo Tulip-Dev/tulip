@@ -17,7 +17,7 @@ namespace tlp {
  *  This class aims to encapsulate a Tulip OpenGL scene animation.
  *  Derive it if you want to add extra animations to the Tulip OpenGL scene while a Zoom and Pan is performed
  */
-class AdditionalGlSceneAnimation {
+class TLP_GL_SCOPE AdditionalGlSceneAnimation {
 
 public :
 
@@ -47,7 +47,7 @@ protected :
  *  Even if this class contains the whole Zoom and Pan implementation, it is not aimed to be used directly because its role is only to compute new camera parameters.
  *  Use the derived class QtGlSceneZoomAndPanAnimator in the tulip-qt library instead to perform the animation.
  */
-class GlSceneZoomAndPan  {
+class TLP_GL_SCOPE GlSceneZoomAndPan  {
 
 public :
 
