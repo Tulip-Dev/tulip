@@ -19,8 +19,8 @@ namespace tlp {
     }
 
     BoundingBox bb(newPolygon->getBoundingBox());
-    boundingBox.insert(bb[0]);
-    boundingBox.insert(bb[1]);
+    boundingBox.expand(bb[0]);
+    boundingBox.expand(bb[1]);
   }
 
   void GlMultiPolygon::draw(float lod,Camera *camera) {

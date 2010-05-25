@@ -32,11 +32,11 @@ namespace tlp {
     BoundingBox bb;
 
     if(!inPercent){
-      bb.insert(Coord(left,bottom,0));
-      bb.insert(Coord(right,top,0));
+      bb.expand(Coord(left,bottom,0));
+      bb.expand(Coord(right,top,0));
     }else{
-      bb.insert(Coord(numeric_limits<float>::min(),numeric_limits<float>::min(),0));
-      bb.insert(Coord(numeric_limits<float>::max(),numeric_limits<float>::max(),0));
+      bb.expand(Coord(numeric_limits<float>::min(),numeric_limits<float>::min(),0));
+      bb.expand(Coord(numeric_limits<float>::max(),numeric_limits<float>::max(),0));
     }
     return bb;
   }

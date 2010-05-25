@@ -24,8 +24,8 @@ namespace tlp {
     /*renderOptions.setRenderState(GlAD_Wireframe, true);
       renderOptions.setRenderState(GlAD_Solid, true);*/
 
-    boundingBox.insert(position-size/2.f);
-    boundingBox.insert(position+size/2.f);
+    boundingBox.expand(position-size/2.f);
+    boundingBox.expand(position+size/2.f);
 
     computePoints();
   }
@@ -37,7 +37,7 @@ namespace tlp {
     for(int i=0; i < N_BOX_POINTS; i++){
       average += points[i];
       this->points[i] = new Coord(points[i]);
-      boundingBox.insert(points[i]);
+      boundingBox.expand(points[i]);
     }
 
     average /= N_BOX_POINTS;
@@ -78,8 +78,8 @@ namespace tlp {
     for(int i=0; i < N_BOX_FACES; i++)
       faces[i] = NULL;
 
-    boundingBox.insert(frontTopLeft);
-    boundingBox.insert(backBottomRight);
+    boundingBox.expand(frontTopLeft);
+    boundingBox.expand(backBottomRight);
 
     computePoints();
   }
@@ -112,7 +112,7 @@ namespace tlp {
   {
     delete this->position;
 
-    boundingBox.insert(position);
+    boundingBox.expand(position);
 
     this->position = new Coord(position);
 
@@ -228,8 +228,8 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode, "color", color);
       GlXMLTools::setWithXML(dataNode, "size", size);
 
-      boundingBox.insert(position-size/2.f);
-      boundingBox.insert(position+size/2.f);
+      boundingBox.expand(position-size/2.f);
+      boundingBox.expand(position+size/2.f);
       
       computePoints();
     }

@@ -10,7 +10,7 @@ namespace tlp {
     _points(points),_colors(colors),width(1.0),factor(1),pattern(0){
 
     for(vector<Coord>::iterator it= _points.begin();it!=_points.end();++it)
-      boundingBox.insert(*it);
+      boundingBox.expand(*it);
   }
   //=====================================================
   GlLine::~GlLine() {
@@ -36,7 +36,7 @@ namespace tlp {
   void GlLine::addPoint(const Coord& point,const Color& color) {
     _points.push_back(point);
     _colors.push_back(color);
-    boundingBox.insert(point);
+    boundingBox.expand(point);
   }
   //=====================================================
   const tlp::Color& GlLine::color(const unsigned int i) const {
@@ -119,7 +119,7 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode,"pattern",pattern);
 
       for(vector<Coord>::iterator it= _points.begin();it!=_points.end();++it)
-        boundingBox.insert(*it);
+        boundingBox.expand(*it);
     }
   }
 }

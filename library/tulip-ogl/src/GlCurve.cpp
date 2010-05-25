@@ -24,7 +24,7 @@ namespace tlp {
     assert(points.size() >= 3);
 
     for(vector<Coord>::iterator it= _points.begin();it!=_points.end();++it)
-      boundingBox.insert(*it);
+      boundingBox.expand(*it);
   }
   //=====================================================
   GlCurve::GlCurve(const unsigned int nbPoints):
@@ -123,7 +123,7 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode,"endSize",_endSize);
 
       for(vector<Coord>::iterator it= _points.begin();it!=_points.end();++it)
-        boundingBox.insert(*it);
+        boundingBox.expand(*it);
     }
   }
 }

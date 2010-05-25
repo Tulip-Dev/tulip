@@ -19,8 +19,8 @@ namespace tlp {
       BoundingBox bb=entity->getBoundingBox();
       
       if(bb.isValid() && entity->isCheckByBoundingBoxVisitor()) {
-        boundingBox.insert(bb[0]);
-        boundingBox.insert(bb[1]);
+        boundingBox.expand(bb[0]);
+        boundingBox.expand(bb[1]);
       }
     }
   }
@@ -28,14 +28,14 @@ namespace tlp {
   void GlBoundingBoxSceneVisitor::visit(GlNode *glNode) {
     BoundingBox bb=glNode->getBoundingBox(inputData);
 
-    boundingBox.insert(bb[0]);
-    boundingBox.insert(bb[1]);
+    boundingBox.expand(bb[0]);
+    boundingBox.expand(bb[1]);
   }
 
   void GlBoundingBoxSceneVisitor::visit(GlEdge *glEdge) {
     BoundingBox bb=glEdge->getBoundingBox(inputData);
 
-    boundingBox.insert(bb[0]);
-    boundingBox.insert(bb[1]);
+    boundingBox.expand(bb[0]);
+    boundingBox.expand(bb[1]);
   }
 }

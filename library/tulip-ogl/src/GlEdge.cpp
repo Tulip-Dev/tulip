@@ -51,12 +51,12 @@ BoundingBox GlEdge::eeGlyphBoundingBox(const Coord& anchor, const Coord& tgt, fl
   Coord vW(transformation[0][2], transformation[1][2], transformation[2][2]);
 
   BoundingBox box;
-  box.insert(mid + vAB * (-size[0][0]) * .5f);
-  box.insert(mid + vAB * (size[0][0]) * .5f);
-  box.insert(mid + vV * (-size[1][1]) * .5f);
-  box.insert(mid + vV * (size[1][1]) * .5f);
-  box.insert(mid + vW * (-size[2][2]) * .5f);
-  box.insert(mid + vW * (size[2][2]) * .5f);
+  box.expand(mid + vAB * (-size[0][0]) * .5f);
+  box.expand(mid + vAB * (size[0][0]) * .5f);
+  box.expand(mid + vV * (-size[1][1]) * .5f);
+  box.expand(mid + vV * (size[1][1]) * .5f);
+  box.expand(mid + vW * (-size[2][2]) * .5f);
+  box.expand(mid + vW * (size[2][2]) * .5f);
 
   return box;
 }
@@ -100,11 +100,11 @@ BoundingBox GlEdge::getBoundingBox(GlGraphInputData* data) {
         tgtAnchor);
 
     for (vector<Coord>::iterator it = tmp.begin(); it != tmp.end(); ++it)
-      bb.insert(*it);
+      bb.expand(*it);
   }
 
-  bb.insert(srcCoord);
-  bb.insert(tgtCoord);
+  bb.expand(srcCoord);
+  bb.expand(tgtCoord);
 
   return bb;
 }

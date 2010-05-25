@@ -36,7 +36,7 @@ namespace tlp {
 
     for (;it != convexHullIdxs.end(); ++it) {
       points.push_back(_points[*it]);
-      boundingBox.insert(_points[*it]);
+      boundingBox.expand(_points[*it]);
     }
     _points = points;
   }
