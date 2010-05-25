@@ -100,10 +100,21 @@ namespace tlp {
       // Clear all vectors
       cameras.clear();
       simpleEntities.clear();
+
+      for(vector<QuadTreeNode<unsigned int> *>::iterator it=nodesQuadTree.begin();it!=nodesQuadTree.end();++it)
+        delete (*it);
       nodesQuadTree.clear();
+      for(vector<QuadTreeNode<unsigned int> *>::iterator it=edgesQuadTree.begin();it!=edgesQuadTree.end();++it)
+        delete (*it);
       edgesQuadTree.clear();
+      for(vector<QuadTreeNode<unsigned int> *>::iterator it=nodesSelectedQuadTree.begin();it!=nodesSelectedQuadTree.end();++it)
+        delete (*it);
       nodesSelectedQuadTree.clear();
+      for(vector<QuadTreeNode<unsigned int> *>::iterator it=edgesSelectedQuadTree.begin();it!=edgesSelectedQuadTree.end();++it)
+        delete (*it);
       edgesSelectedQuadTree.clear();
+      for(vector<QuadTreeNode<unsigned long> *>::iterator it=entitiesQuadTree.begin();it!=entitiesQuadTree.end();++it)
+        delete (*it);
       entitiesQuadTree.clear();
 
       quadTreesVectorPosition=0;
@@ -180,11 +191,26 @@ namespace tlp {
 
     if(haveToCompute){
       // Create quadtrees
-      entitiesQuadTree.push_back(QuadTreeNode<unsigned long>(entitiesGlobalBoundingBox));
-      nodesQuadTree.push_back(QuadTreeNode<unsigned int>(nodesGlobalBoundingBox));
-      edgesQuadTree.push_back(QuadTreeNode<unsigned int>(edgesGlobalBoundingBox));
-      nodesSelectedQuadTree.push_back(QuadTreeNode<unsigned int>(nodesGlobalBoundingBox));
-      edgesSelectedQuadTree.push_back(QuadTreeNode<unsigned int>(edgesGlobalBoundingBox));
+      if(entitiesGlobalBoundingBox.isValid())
+        entitiesQuadTree.push_back(new QuadTreeNode<unsigned long>(entitiesGlobalBoundingBox));
+      else
+        entitiesQuadTree.push_back(NULL);
+
+      if(nodesGlobalBoundingBox.isValid()){
+        nodesQuadTree.push_back(new QuadTreeNode<unsigned int>(nodesGlobalBoundingBox));
+        nodesSelectedQuadTree.push_back(new QuadTreeNode<unsigned int>(nodesGlobalBoundingBox));
+      }else{
+        nodesQuadTree.push_back(NULL);
+        nodesSelectedQuadTree.push_back(NULL);
+      }
+
+      if(edgesGlobalBoundingBox.isValid()){
+        edgesQuadTree.push_back(new QuadTreeNode<unsigned int>(edgesGlobalBoundingBox));
+        edgesSelectedQuadTree.push_back(new QuadTreeNode<unsigned int>(edgesGlobalBoundingBox));
+      }else{
+        edgesQuadTree.push_back(NULL);
+        edgesSelectedQuadTree.push_back(NULL);
+      }
 
       // Add entities in quadtrees
       size_t nbSimples=layerLODUnit->simpleEntitiesLODVector.size();
@@ -199,7 +225,7 @@ namespace tlp {
 #endif
         {
           for(size_t i=0;i<nbSimples;++i){
-            entitiesQuadTree[quadTreesVectorPosition].insert(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,layerLODUnit->simpleEntitiesLODVector[i].id);
+            entitiesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,layerLODUnit->simpleEntitiesLODVector[i].id);
           }
         }
 #ifdef _OPENMP
@@ -210,9 +236,9 @@ namespace tlp {
             assert(selectedProperty);
             QuadTreeNode<unsigned int> *quadTree;
             if(selectedProperty->getNodeValue(node(layerLODUnit->nodesLODVector[i].id)))
-              quadTree=&nodesSelectedQuadTree[quadTreesVectorPosition];
+              quadTree=nodesSelectedQuadTree[quadTreesVectorPosition];
             else
-              quadTree=&nodesQuadTree[quadTreesVectorPosition];
+              quadTree=nodesQuadTree[quadTreesVectorPosition];
 
             quadTree->insert(layerLODUnit->nodesLODVector[i].boundingBox,layerLODUnit->nodesLODVector[i].id);
           }
@@ -225,9 +251,9 @@ namespace tlp {
             assert(selectedProperty);
             QuadTreeNode<unsigned int> *quadTree;
             if(selectedProperty->getEdgeValue(edge(layerLODUnit->edgesLODVector[i].id)))
-              quadTree=&edgesSelectedQuadTree[quadTreesVectorPosition];
+              quadTree=edgesSelectedQuadTree[quadTreesVectorPosition];
             else
-              quadTree=&edgesQuadTree[quadTreesVectorPosition];
+              quadTree=edgesQuadTree[quadTreesVectorPosition];
 
             quadTree->insert(layerLODUnit->edgesLODVector[i].boundingBox,layerLODUnit->edgesLODVector[i].id);
           }
@@ -281,15 +307,21 @@ namespace tlp {
         if((renderingEntitiesFlag & RenderingNodes)!=0){
           if(aX==0 && aY==0){
             if((renderingEntitiesFlag & RenderingWithoutRemove)==0){
-              nodesQuadTree[quadTreesVectorPosition].getElementsWithRatio(cameraBoundingBox,resNodes,ratio);
-              nodesSelectedQuadTree[quadTreesVectorPosition].getElementsWithRatio(cameraBoundingBox,resNodes,ratio);
+              if(nodesQuadTree[quadTreesVectorPosition])
+                nodesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resNodes,ratio);
+              if(nodesSelectedQuadTree[quadTreesVectorPosition])
+                nodesSelectedQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resNodes,ratio);
             }else{
-              nodesQuadTree[quadTreesVectorPosition].getElements(cameraBoundingBox,resNodes);
-              nodesSelectedQuadTree[quadTreesVectorPosition].getElements(cameraBoundingBox,resNodes);
+              if(nodesQuadTree[quadTreesVectorPosition])
+                nodesQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resNodes);
+              if(nodesSelectedQuadTree[quadTreesVectorPosition])
+                nodesSelectedQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resNodes);
             }
           }else{
-            nodesQuadTree[quadTreesVectorPosition].getElements(resNodes);
-            nodesSelectedQuadTree[quadTreesVectorPosition].getElements(resNodes);
+            if(nodesQuadTree[quadTreesVectorPosition])
+              nodesQuadTree[quadTreesVectorPosition]->getElements(resNodes);
+            if(nodesSelectedQuadTree[quadTreesVectorPosition])
+              nodesSelectedQuadTree[quadTreesVectorPosition]->getElements(resNodes);
           }
 
           GlNode glNode(0);
@@ -307,15 +339,21 @@ namespace tlp {
         if((renderingEntitiesFlag & RenderingEdges)!=0){
           if(aX==0 && aY==0){
             if((renderingEntitiesFlag & RenderingWithoutRemove)==0){
-              edgesQuadTree[quadTreesVectorPosition].getElementsWithRatio(cameraBoundingBox,resEdges,ratio);
-              edgesSelectedQuadTree[quadTreesVectorPosition].getElementsWithRatio(cameraBoundingBox,resEdges,ratio);
+              if(edgesQuadTree[quadTreesVectorPosition])
+                edgesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resEdges,ratio);
+              if(edgesSelectedQuadTree[quadTreesVectorPosition])
+                edgesSelectedQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resEdges,ratio);
             }else{
-              edgesQuadTree[quadTreesVectorPosition].getElements(cameraBoundingBox,resEdges);
-              edgesSelectedQuadTree[quadTreesVectorPosition].getElements(cameraBoundingBox,resEdges);
+              if(edgesQuadTree[quadTreesVectorPosition])
+                edgesQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resEdges);
+              if(edgesSelectedQuadTree[quadTreesVectorPosition])
+              edgesSelectedQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resEdges);
             }
           }else{
-            edgesQuadTree[quadTreesVectorPosition].getElements(resEdges);
-            edgesSelectedQuadTree[quadTreesVectorPosition].getElements(resEdges);
+            if(edgesQuadTree[quadTreesVectorPosition])
+              edgesQuadTree[quadTreesVectorPosition]->getElements(resEdges);
+            if(edgesSelectedQuadTree[quadTreesVectorPosition])
+              edgesSelectedQuadTree[quadTreesVectorPosition]->getElements(resEdges);
           }
 
           GlEdge glEdge(0);
@@ -330,14 +368,14 @@ namespace tlp {
 #pragma omp sections nowait
 #endif
       {
-        if((renderingEntitiesFlag & RenderingSimpleEntities)!=0){
+        if((renderingEntitiesFlag & RenderingSimpleEntities)!=0 && entitiesQuadTree[quadTreesVectorPosition]!=NULL){
           if(aX==0 && aY==0){
             if((renderingEntitiesFlag & RenderingWithoutRemove)==0)
-              entitiesQuadTree[quadTreesVectorPosition].getElementsWithRatio(cameraBoundingBox,resEntities,ratio);
+              entitiesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resEntities,ratio);
             else
-              entitiesQuadTree[quadTreesVectorPosition].getElements(cameraBoundingBox,resEntities);
+              entitiesQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resEntities);
           }else{
-            entitiesQuadTree[quadTreesVectorPosition].getElements(resEntities);
+            entitiesQuadTree[quadTreesVectorPosition]->getElements(resEntities);
           }
           for(size_t i=0;i<resEntities.size();++i){
             layerLODUnit->simpleEntitiesLODVector.push_back(SimpleEntityLODUnit(resEntities[i],((GlSimpleEntity*)(resEntities[i]))->getBoundingBox()));

@@ -27,8 +27,10 @@ namespace tlp {
      * Contructor, you have to put the global bounding box of the quadtree
      */
       QuadTreeNode(const tlp::Rectangle<float> &box):_box(box) {
-      for(int i=0; i<4; ++i)
-        children[i] = 0;
+        assert(_box.isValid());
+
+        for(int i=0; i<4; ++i)
+          children[i] = 0;
     }
     /**
      * Basic destructor
@@ -42,6 +44,8 @@ namespace tlp {
      */
     void insert(const tlp::Rectangle<float> &box, const TYPE id) {
         assert(box.isValid());
+        assert(_box.isValid());
+
         if (box[0]==box[1])
             return;
         //Check for infini recursion : check if we are on float limit case
@@ -64,8 +68,8 @@ namespace tlp {
      * some elements not inside the box can be returned.
      */
     void getElements(const tlp::Rectangle<float> &box, std::vector<TYPE> &result) const{
-        assert(box.isValid());
-        assert(_box.isValid());
+      assert(box.isValid());
+      assert(_box.isValid());
 
       if (_box.intersect(box)) {
         for (size_t i=0; i<entities.size(); ++i){
@@ -102,10 +106,9 @@ namespace tlp {
      * so the ratio should be 1000.(merge elements that are 1000 times smaller
      */
     void getElementsWithRatio(const tlp::Rectangle<float> &box, std::vector<TYPE> &result, float ratio = 1000.) const{
-        if (!_box.isValid()) return;
-            //std::cout << _box << std::endl << std::flush;
-        assert(_box.isValid());
-        assert(box.isValid());
+      assert(_box.isValid());
+      assert(box.isValid());
+
       if (_box.intersect(box)) {
         float xRatio = (box[1][0] - box[0][0]) / (_box[1][0] - _box[0][0]) ;
         float yRatio = (box[1][1] - box[0][1]) / (_box[1][1] - _box[0][1]);
@@ -145,14 +148,15 @@ namespace tlp {
     QuadTreeNode* getChild(int i) {
       if (children[i] == 0) {
         Rectangle<float> box (getChildBox(i));
-        if(box[0] ==_box[0] && box[1]==_box[1])
-          assert(false);
+        assert(!(box[0] ==_box[0] && box[1]==_box[1]));
+
         children[i] = new QuadTreeNode<TYPE>(box);
       }
       return children[i];
     }
     //======================================
     Rectangle<float> getChildBox(int i) {
+      assert(_box.isValid());
       // A***I***B
       // *-------*
       // E---F---G
