@@ -69,7 +69,7 @@ namespace tlp {
     return false;
   }
 
-  void GlQuadTreeLODCalculator::setNeedEntities(bool need){
+  void GlQuadTreeLODCalculator::setNeedEntities(bool){
     haveToCompute=true;
     removeObservers();
   }
@@ -393,7 +393,7 @@ namespace tlp {
     haveToCompute=true;
   }
 
-  void GlQuadTreeLODCalculator::update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end){
+  void GlQuadTreeLODCalculator::update(std::set<Observable *>::iterator,std::set<Observable *>::iterator){
     haveToCompute=true;
     removeObservers();
   }
