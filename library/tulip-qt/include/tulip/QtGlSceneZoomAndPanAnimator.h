@@ -23,7 +23,7 @@ namespace tlp {
  *  The algorithm used to perform this task is the one published in : Jarke J. van Wijk and Wim A.A. Nuij, "Smooth and efficient zooming and panning"
  *  For more details, the paper can be downloaded at the following url : www.win.tue.nl/~vanwijk/zoompan.pdf
  */
-class QtGlSceneZoomAndPanAnimator : public QObject, public GlSceneZoomAndPan {
+class TLP_QT_SCOPE QtGlSceneZoomAndPanAnimator : public QObject, public GlSceneZoomAndPan {
 
 	Q_OBJECT
 
