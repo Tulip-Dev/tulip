@@ -20,7 +20,6 @@
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qapplication.h>
-#include <QtGui/qcolordialog.h>
 #include <QtGui/qfiledialog.h>
 #include <QtCore/qfileinfo.h>
 #include <QtCore/qdir.h>

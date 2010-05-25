@@ -13,7 +13,6 @@
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qinputdialog.h>
 #include <QtGui/qlabel.h>
-#include <QtGui/qcolordialog.h>
 #include <QtGui/qtabwidget.h>
 
 #include "tulip/CopyPropertyDialog.h"

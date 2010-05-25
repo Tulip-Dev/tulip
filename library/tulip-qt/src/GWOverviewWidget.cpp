@@ -3,7 +3,6 @@
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qcombobox.h>
 #include <QtGui/qcheckbox.h>
-#include <QtGui/qcolordialog.h>
 #include <QtGui/qframe.h>
 #include <QtGui/qevent.h>
 #include <QtGui/qtooltip.h>
