@@ -27,9 +27,8 @@ namespace tlp {
     assert(AcyclicTest::isAcyclic(graph));
     //We compute the dag level metric on resulting sg.
     bool resultBool;
-    DoubleProperty dagLevel(graph);
-    resultBool = computeDagLevelMetric(graph, &dagLevel);
-    assert(resultBool);
+    MutableContainer<unsigned int> dLevel;
+    dagLevel(graph, dLevel);
     //we now transform the dag in a proper Dag, two linked nodes of a proper dag
     //must have a difference of one of dag level metric.
     node tmp1,tmp2;
@@ -44,20 +43,20 @@ namespace tlp {
     for (vector<edge>::const_iterator itEdge=sgEdges.begin();itEdge!=sgEdges.end();++itEdge) {
       edge ite=*itEdge;
       pair<node, node> eEnds = graph->ends(ite);
-      int delta=(int)rint(dagLevel.getNodeValue(eEnds.second)
-			  - dagLevel.getNodeValue(eEnds.first));
+      int delta=(int)rint(dLevel.get(eEnds.second.id)
+			  - dLevel.get(eEnds.first.id));
       if (delta>1) {
 	tmp1=graph->addNode();
 	replacedEdges[ite]=graph->addEdge(eEnds.first, tmp1);
 	addedNodes.push_back(tmp1);
-	dagLevel.setNodeValue(tmp1, dagLevel.getNodeValue(eEnds.first)+1);
+	dLevel.set(tmp1.id, dLevel.get(eEnds.first.id) + 1);
 	if (delta>2) {
 	  tmp2=graph->addNode();
 	  addedNodes.push_back(tmp2);
 	  edge e=graph->addEdge(tmp1, tmp2);
 	  if (edgeLength)
 	    edgeLength->setEdgeValue(e, delta-2);	  
-	  dagLevel.setNodeValue(tmp2,dagLevel.getNodeValue(eEnds.second)-1);
+	  dLevel.set(tmp2.id, dLevel.get(eEnds.second.id) - 1);
 	  tmp1=tmp2;
 	}
 	graph->addEdge(tmp1, eEnds.second);
@@ -101,7 +100,7 @@ namespace tlp {
     unsigned minD = UINT_MAX;
     forEach(n, graph->getNodes()) {
       MutableContainer<unsigned int> tmp;
-      unsigned int maxD = maxDistance(graph, n, tmp, 2);
+      unsigned int maxD = maxDistance(graph, n, tmp, UNDIRECTED);
       _dist.set(n.id, maxD);
       minD = std::min(minD, maxD);
     }

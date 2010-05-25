@@ -36,7 +36,7 @@ bool EccentricityMetric::run() {
     if (pluginProgress->progress(i,graph->numberOfNodes())!=TLP_CONTINUE) break;
     node n = itN->next();
     MutableContainer<unsigned int> distance;
-    double val = tlp::maxDistance(graph, n, distance, 2);
+    double val = tlp::maxDistance(graph, n, distance, UNDIRECTED);
     if (allPaths) {
       node n2;
       val = 0;

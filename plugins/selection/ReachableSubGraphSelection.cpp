@@ -58,11 +58,11 @@ ReachableSubGraphSelection::~ReachableSubGraphSelection() {}
 
 ///===========================================================
 bool ReachableSubGraphSelection::run() {
-  unsigned int maxDepth = 5;
-  int direction = 0;
+  unsigned int maxDistance = 5;
+  unsigned int direction = 0;
   BooleanProperty * startNodes=graph->getProperty<BooleanProperty>("viewSelection");
   if ( dataSet!=0) {
-    dataSet->get("distance", maxDepth);
+    dataSet->get("distance", maxDistance);
     dataSet->get("direction", direction);
     dataSet->get("startingnodes", startNodes);
   }
@@ -70,22 +70,26 @@ bool ReachableSubGraphSelection::run() {
   booleanResult->setAllEdgeValue(false);
   booleanResult->setAllNodeValue(false);
 
-  if ( startNodes ) {
-    Iterator<node> *itN = graph->getNodes();
-    while (itN->hasNext()) { 
+  if (startNodes) {
+    Iterator<node>* itN = startNodes->getNodesEqualTo(true);
+    std::set<node> reachables;
+    // iterate on startNodes add them and their reachables
+    while (itN->hasNext()) {
       node current = itN->next();
-      if (startNodes->getNodeValue(current)) {
-	MutableContainer<unsigned int> distance;
-	tlp::maxDistance(graph, current, distance, direction);
-	Iterator<node> *itN = graph->getNodes();
-	while (itN->hasNext()) { 
-	  node itn = itN->next();
-	  if (distance.get(itn.id) <= maxDepth) 
-	    booleanResult->setNodeValue(itn,true);
-	} delete itN;
-      }
+      reachables.insert(current);
+      reachableNodes(graph, current, reachables, maxDistance,
+		     (EDGE_TYPE) direction);
     } delete itN;
 
+    std::set<node>::const_iterator itr = reachables.begin();
+    std::set<node>::const_iterator ite = reachables.end();
+    // select nodes
+    while (itr != ite) {
+      booleanResult->setNodeValue((*itr), true);
+      ++itr;
+    }
+
+    // select corresponding edges
     Iterator<edge> *itE = graph->getEdges();
     while(itE->hasNext()) {
       edge e = itE->next();
