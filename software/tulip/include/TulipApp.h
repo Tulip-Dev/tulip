@@ -125,7 +125,7 @@ private:
   bool doFileSave(int);
   bool doFileSaveAs();
   bool doFileSave(tlp::Controller *controllerToSave,std::string plugin, std::string filename, std::string author, std::string comments);
-  bool askSaveGraph(const std::string name,int index);
+  bool askSaveGraph(const std::string &name,int index);
   bool closeWin();
   void saveActions(QWidget *widget,tlp::Controller *controller,std::map<tlp::Controller *,std::vector<QAction *> > &mapToSave);
   void clearInterface();

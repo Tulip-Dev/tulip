@@ -17,9 +17,7 @@
 
 using namespace std;
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
-#endif //DOXYGEN_NOTFOR_DEVEL
 /** \addtogroup glyph */
 /*@{*/
 /// A 3D glyph.
