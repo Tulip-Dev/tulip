@@ -34,8 +34,7 @@ namespace tlp {
 
     PluginsServer():serv(NULL) {}
     ~PluginsServer() {
-      if(serv)
-	delete serv;
+      delete serv;
     }
   
   };
