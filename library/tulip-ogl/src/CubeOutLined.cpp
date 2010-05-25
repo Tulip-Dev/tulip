@@ -18,6 +18,7 @@
 using namespace std;
 
 namespace tlp {
+
 /** \addtogroup glyph */
 /*@{*/
 /// A 3D glyph.
@@ -34,7 +35,6 @@ namespace tlp {
     virtual Coord getAnchor(const Coord & vector) const;
 
   private:
-    void drawCube(GLenum);
     void drawCubeSimple(GLenum);
   };
 
@@ -154,7 +154,7 @@ namespace tlp {
       }
     }else{
       if(GlDisplayListManager::getInst().beginNewDisplayList("CubeOutLined_cube")) {
-        drawCube(GL_QUADS);
+        cube(GL_QUADS);
         GlDisplayListManager::getInst().endNewDisplayList();
       }
       if(GlDisplayListManager::getInst().beginNewDisplayList("CubeOutLined_outline")) {
@@ -244,80 +244,6 @@ namespace tlp {
       return vector;
   }
 
-  void CubeOutLined::drawCube(GLenum type) {
-    /* front face */
-    glBegin(type);
-    glNormal3f(0.0f, 0.0f, 1.0f);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, 0.5f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, 0.5f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.5f, 0.5f, 0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f, 0.5f, 0.5f);
-    glEnd();
-    /* back face */
-    glBegin(type);
-    glNormal3f(0.0f, 0.0f, -1.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, -0.5f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-0.5f, 0.5f, -0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0.5f, 0.5f, -0.5f);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, -0.5f);
-    glEnd();
-    /* right face */
-    glBegin(type);
-    glNormal3f(1.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, -0.5f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.5f, 0.5f, -0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0.5f, 0.5f, 0.5f);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, 0.5f);
-    glEnd();
-    /* left face */
-    glBegin(type);
-    glNormal3f(-1.0f, 0.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, 0.5f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-0.5f, 0.5f, 0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f, 0.5f, -0.5f);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, -0.5f);
-    glEnd();
-    /* top face */
-    glBegin(type);
-    glNormal3f(0.0f, 1.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, 0.5f, 0.5f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.5f, 0.5f, -0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f, 0.5f, -0.5f);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, 0.5f, 0.5f);
-    glEnd();
-    /* bottom face */
-    glBegin(type);
-    glNormal3f(0.0f, -1.0f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, -0.5f);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.5f, -0.5f, 0.5f);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f, -0.5f, 0.5f);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, -0.5f);
-    glEnd();
-  }
   void CubeOutLined::drawCubeSimple(GLenum type) {
     /* front face */
     glBegin(type);
