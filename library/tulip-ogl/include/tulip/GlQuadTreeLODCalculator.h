@@ -8,8 +8,8 @@
  the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
-#ifndef Tulip_QTQUADTREELODCALCULATOR_H
-#define Tulip_QTQUADTREELODCALCULATOR_H
+#ifndef Tulip_QLQUADTREELODCALCULATOR_H
+#define Tulip_QLQUADTREELODCALCULATOR_H
 
 #include <map>
 #include <vector>
@@ -30,12 +30,12 @@ namespace tlp {
   /**
    * Class use to compute bounding boxs of a vector of GlEntity
    */
-  class TLP_QT_SCOPE QtQuadTreeLODCalculator : public GlCPULODCalculator, public GraphObserver, public Observer, public GlSceneObserver {
+  class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, public GraphObserver, public Observer, public GlSceneObserver {
 
   public:
 
-    QtQuadTreeLODCalculator();
-    ~QtQuadTreeLODCalculator();
+    GlQuadTreeLODCalculator();
+    ~GlQuadTreeLODCalculator();
 
     void setScene(GlScene *scene);
 
@@ -74,7 +74,7 @@ namespace tlp {
     void modifyEntity(GlScene *,GlSimpleEntity *){haveToCompute=true;removeObservers();}
 
     virtual GlLODCalculator *clone() {
-      QtQuadTreeLODCalculator *newCalculator=new QtQuadTreeLODCalculator();
+      GlQuadTreeLODCalculator *newCalculator=new GlQuadTreeLODCalculator();
       newCalculator->setScene(scene);
       newCalculator->setInputData(inputData);
       return newCalculator;
@@ -112,4 +112,4 @@ namespace tlp {
 
 }
 
-#endif // Tulip_GLQUADTREELODCALCULATOR_H
+#endif // Tulip_QTQUADTREELODCALCULATOR_H

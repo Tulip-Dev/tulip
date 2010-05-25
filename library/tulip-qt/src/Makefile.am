@@ -121,7 +121,6 @@ TODIST_SOURCES = \
 	MouseShowElementInfos.cpp \
 	DataSetDialog.cpp \
 	TlpQtTools.cpp \
-	QtQuadTreeLODCalculator.cpp \
 	InteractorManager.cpp \
 	Interactor.cpp \
 	InteractorChainOfResponsibility.cpp \
