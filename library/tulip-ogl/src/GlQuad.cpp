@@ -107,7 +107,7 @@ string GlQuad::getTextureName() const {
   return textureName;
 }
 
-void GlQuad::draw(float lod, Camera *camera)
+void GlQuad::draw(float, Camera *camera)
 {
 
   if(textureName!="") {

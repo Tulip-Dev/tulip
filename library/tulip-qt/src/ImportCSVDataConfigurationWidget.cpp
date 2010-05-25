@@ -53,7 +53,7 @@ void ImportCSVDataConfigurationWidget::lineEditEditionFinished() {
   }
 }
 
-void ImportCSVDataConfigurationWidget::useFirstRowAsPropertyNameStateChanged(int state) {
+void ImportCSVDataConfigurationWidget::useFirstRowAsPropertyNameStateChanged(int) {
   emit useFirstRowAsPropertyNameChange(useFirstRowAsPropertyName());
 }
 
