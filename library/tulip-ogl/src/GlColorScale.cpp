@@ -48,9 +48,8 @@ void GlColorScale::update(std::set<Observable *>::iterator begin ,std::set<Obser
 }
 
 void GlColorScale::updateDrawing() {
-  if (colorScalePolyQuad != NULL) {
-    delete colorScalePolyQuad;
-  }
+  delete colorScalePolyQuad;
+
   colorScalePolyQuad = new GlPolyQuad();
   if (!colorScale->colorScaleInitialized()) {
 	  colorScalePolyQuad->setOutlined(true);

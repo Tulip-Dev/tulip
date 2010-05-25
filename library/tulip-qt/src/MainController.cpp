@@ -1341,8 +1341,8 @@ namespace tlp {
       }
       drawViews(true);
     }
-    if( g0 )
-      delete g0;
+
+    delete g0;
   }
   //**********************************************************************
   void MainController::changeSizes() {
@@ -1359,8 +1359,8 @@ namespace tlp {
       }
       drawViews(true);
     }
-    if( g0 )
-      delete g0;
+
+    delete g0;
   }
   //**********************************************************************
   void MainController::isAcyclic() {

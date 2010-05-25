@@ -89,8 +89,9 @@ namespace tlp {
       data=dataSet;
     }
     mainWidget->setData(graph,data);
-    if(currentMetaNodeRenderer)
-      delete currentMetaNodeRenderer;
+
+    delete currentMetaNodeRenderer;
+
     if(qtMetaNode){
       currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
       ((QtMetaNodeRenderer*)currentMetaNodeRenderer)->setBackgroundColor(getGlMainWidget()->getScene()->getBackgroundColor());
@@ -266,16 +267,18 @@ namespace tlp {
     param.setAntialiasing(actionAntialiasingOptions->isChecked());
     if(!actionTrueMetaNodeOptions->isChecked() && qtMetaNode){
       qtMetaNode=false;
-      if(currentMetaNodeRenderer)
-        delete currentMetaNodeRenderer;
+
+      delete currentMetaNodeRenderer;
+
       currentMetaNodeRenderer = new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
       mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
       draw();
     }
     if(actionTrueMetaNodeOptions->isChecked() && !qtMetaNode){
       qtMetaNode=true;
-      if(currentMetaNodeRenderer)
-        delete currentMetaNodeRenderer;
+
+      delete currentMetaNodeRenderer;
+
       currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
       ((QtMetaNodeRenderer*)currentMetaNodeRenderer)->setBackgroundColor(getGlMainWidget()->getScene()->getBackgroundColor());
       mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);

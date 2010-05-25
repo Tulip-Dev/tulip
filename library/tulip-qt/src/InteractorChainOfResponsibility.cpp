@@ -10,8 +10,8 @@ InteractorChainOfResponsibility::~InteractorChainOfResponsibility() {
   for(vector<InteractorComponent *>::iterator it =interactorComponents.begin(); it != interactorComponents.end(); ++it) {
     delete(*it);
   }
-  if(action)
-    delete action;
+
+  delete action;
 }
 
 void InteractorChainOfResponsibility::setView(View *view){

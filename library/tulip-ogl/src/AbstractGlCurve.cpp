@@ -161,9 +161,8 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_LIGHTING);
 
-	if (points != NULL) {
-		delete [] points;
-	}
+
+  delete [] points;
 }
 
 namespace tlp {
