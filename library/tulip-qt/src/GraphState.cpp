@@ -63,10 +63,22 @@ GraphState::GraphState( GlMainWidget * glgw ) {
   camera = new Camera(*glgw->getScene()->getCamera());
 }
 //====================================================
+GraphState::GraphState(Graph *graph, LayoutProperty *l, SizeProperty *s, ColorProperty *c, Camera *cam) {
+	g = graph;
+	layout = new LayoutProperty(g);
+	*layout = *l;
+	size = new SizeProperty(g);
+	*size = *s;
+	color = new ColorProperty(g);
+	*color = *c;
+	camera = new Camera(*cam);
+}
+//====================================================
 GraphState::~GraphState() {
   delete layout;
   delete size;
   delete color;
+  delete camera;
 }
 //====================================================
 bool GraphState::setupDiff( Graph * inG, 

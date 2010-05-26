@@ -31,6 +31,7 @@ namespace tlp {
     std::vector<Coord> interpolateCenters;
 
     GraphState( GlMainWidget * glgw );
+    GraphState(Graph *graph, LayoutProperty *layout, SizeProperty *size, ColorProperty *color, Camera *camera);
     ~GraphState();
     static bool setupDiff( Graph * inG, GraphState * inGS0, GraphState * inGS1 );
     void EdgeEnds( Coord & outC0, Coord & outC1, edge e );
@@ -44,7 +45,7 @@ namespace tlp {
 	      GraphState * inG0, 
 	      GraphState * inG1);
     void interpolate( GlMainWidget *, float inT);
-    bool start(GlMainWidget * outGlgw);
+    bool start(GlMainWidget * outGlgw, unsigned int morphingDurationSeconds = 10);
 
   public slots:
 
