@@ -100,10 +100,10 @@ bool Morphing::init( GlMainWidget * outGlgw,
 	return true;
 }
 //===========================================================
-bool Morphing::start(GlMainWidget * outGlgw) {
+bool Morphing::start(GlMainWidget * outGlgw, unsigned int morphingDurationSeconds) {
 	frameCpt = 0;
 	interpolate( outGlgw, 0.0f );
-	QTimeLine timeLine(10000);
+	QTimeLine timeLine(morphingDurationSeconds * 1000);
 	connect(&timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(interpolationSlot(qreal)));
 	timeLine.start();
 	while (timeLine.state() == QTimeLine::Running) {
