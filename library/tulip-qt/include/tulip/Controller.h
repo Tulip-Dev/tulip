@@ -208,7 +208,7 @@ public:                                          \
   std::string getInfo() const {return std::string(I);}	 \
   std::string getRelease() const {return std::string(R);}\
   std::string getTulipRelease() const {return std::string(TULIP_RELEASE);} \
-  tlp::T * createPluginObject(tlp::ControllerContext *ic)		\
+  tlp::T * createPluginObject(tlp::ControllerContext *)		\
   {						 \
     C *tmp = new C();				 \
     return ((tlp::T *) tmp);			 \

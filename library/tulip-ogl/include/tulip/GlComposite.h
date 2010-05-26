@@ -72,7 +72,7 @@ namespace tlp {
     /**
      * \attention This function do nothing, GlComposite is a GlSimpleEntity so draw function must be define
      */
-    virtual void draw(float lod,Camera *camera) {}
+    virtual void draw(float,Camera *) {}
 
     /**
      * Set stencil number for all composite's children

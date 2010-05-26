@@ -78,12 +78,12 @@ namespace tlp {
     /**
      * Set scene use by this LOD calculator
      */
-    virtual void setScene(GlScene *scene){}
+    virtual void setScene(GlScene *){}
 
     /**
      * Set input data use to render
      */
-    virtual void setInputData(GlGraphInputData *inputData) {}
+    virtual void setInputData(GlGraphInputData *) {}
 
     /**
      * Set RenderingEntitiesFlag to : RenderingSimpleEntities,RenderingNodes,RenderingEdges,RenderingAll,RenderingWithoutRemove
@@ -118,12 +118,12 @@ namespace tlp {
     /**
      * Reserve memory to store nodes LOD
      */
-    virtual void reserveMemoryForNodes(unsigned int numberOfNodes) {}
+    virtual void reserveMemoryForNodes(unsigned int) {}
 
     /**
      * Reserve memory to store edges LOD
      */
-    virtual void reserveMemoryForEdges(unsigned int numberOfEdges) {}
+    virtual void reserveMemoryForEdges(unsigned int) {}
 
     /**
      * Compute all lod

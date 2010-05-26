@@ -60,7 +60,7 @@ namespace tlp {
     /**
      * empty function : implement this function if you want a specific event filter in your view
      */
-    virtual void specificEventFilter(QObject *object,QEvent *event) {}
+    virtual void specificEventFilter(QObject *,QEvent *) {}
     /**
      * empty function : implement this function if you want a context menu when you right click the mouse
      */
@@ -70,7 +70,7 @@ namespace tlp {
     /**
      * empty function : implement this function if you have implement buildContextMenu()
      */
-    virtual void computeContextMenuAction(QAction *action) {}
+    virtual void computeContextMenuAction(QAction *) {}
 
     /**
      * set the central widget of the view

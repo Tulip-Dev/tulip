@@ -38,8 +38,8 @@ class EdgeExtremityGlyphContext {
 public:
 	GlGraphInputData *glGraphInputData;
 	///
-	EdgeExtremityGlyphContext(Graph **s = NULL, GlGraphInputData *glGraphInputData = NULL, int LOF =
-			5, int LOD = 5) :
+	EdgeExtremityGlyphContext(Graph ** = NULL, GlGraphInputData *glGraphInputData = NULL, int =
+			5, int = 5) :
 		glGraphInputData(glGraphInputData) {
 	}
 	///
@@ -103,8 +103,8 @@ public:
 	EdgeExtremityGlyphFrom3DGlyph(EdgeExtremityGlyphContext *gc);
 	virtual ~EdgeExtremityGlyphFrom3DGlyph();
 
-	virtual void draw(edge e, node n, const Color& glyphColor, float lod,
-			GlGraphInputData* inputData) {
+	virtual void draw(edge, node, const Color&, float,
+			GlGraphInputData*) {
 	}
 
 	virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
@@ -121,8 +121,8 @@ public:
 	EdgeExtremityGlyphFrom2DGlyph(EdgeExtremityGlyphContext *gc);
 	virtual ~EdgeExtremityGlyphFrom2DGlyph();
 
-	virtual void draw(edge e, node n, const Color& glyphColor, float lod,
-			GlGraphInputData* inputData) {
+	virtual void draw(edge, node, const Color&, float,
+			GlGraphInputData*) {
 	}
 
 	virtual void getTransformationMatrix(const Coord &src, const Coord &dest,

@@ -79,12 +79,12 @@ namespace tlp {
     /**
      * Add a layer parent to this entity
      */
-    virtual void addLayerParent(GlLayer *layer) {}
+    virtual void addLayerParent(GlLayer *) {}
 
     /**
      * remove a layer parent to this entity
      */
-    virtual void removeLayerParent(GlLayer *layer) {}
+    virtual void removeLayerParent(GlLayer *) {}
 
     /**
      * Add a parent to this entity
@@ -99,7 +99,7 @@ namespace tlp {
     /**
      * virtual fucntion : Translate entity
      */
-    virtual void translate(const Coord &mouvement){};
+    virtual void translate(const Coord &){};
 
     /**
      * Save the entity in Xml

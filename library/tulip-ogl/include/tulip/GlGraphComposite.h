@@ -53,7 +53,7 @@ namespace tlp {
     /**
      * Function use by the GraphObserver when a node is create in the graph
      */
-    virtual void addNode(Graph *graph,const node n){
+    virtual void addNode(Graph *,const node){
       nodesModified=true;
       haveToSort=true;
     }
@@ -66,7 +66,7 @@ namespace tlp {
     /**
      * Function use by the GraphObserver when a node is delete in the graph
      */
-    virtual void delNode(Graph *graph,const node n){
+    virtual void delNode(Graph *,const node){
       nodesModified=true;
       haveToSort=true;
     }
