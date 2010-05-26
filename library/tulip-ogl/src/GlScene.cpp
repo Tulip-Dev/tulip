@@ -45,20 +45,20 @@ namespace tlp {
 	}
     };
   //====================================================
-  class LessThanNode {
+  class GreatThanNode {
   public:
     DoubleProperty *metric;
     bool operator() (node n1,node n2)  {
-      return (metric->getNodeValue(n1) < metric->getNodeValue(n2));
+      return (metric->getNodeValue(n1) > metric->getNodeValue(n2));
     }
   };
   //====================================================
-  class LessThanEdge {
+  class GreatThanEdge {
   public:
     DoubleProperty *metric;
     Graph *sp;
     bool operator() (edge e1,edge e2) {
-      return (metric->getEdgeValue(e1) < metric->getEdgeValue(e2));
+      return (metric->getEdgeValue(e1) > metric->getEdgeValue(e2));
     }
   };
   //====================================================
@@ -204,7 +204,7 @@ namespace tlp {
       // If not Metric ordered : a this point selected nodes are draw
       if(glGraphComposite->getInputData()->parameters->isElementOrdered()){
         // Draw selected nodes label with metric ordering
-        LessThanNode ltn;
+        GreatThanNode ltn;
         ltn.metric=metric;
         sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
         for(vector<node>::iterator it=nodesMetricOrdered.begin();it!=nodesMetricOrdered.end();++it){
@@ -240,7 +240,7 @@ namespace tlp {
       // If not Metric ordered : a this point selected edges are draw
       if(glGraphComposite->getInputData()->parameters->isElementOrdered()){
         // Draw selected edges label with metric ordering
-        LessThanEdge lte;
+        GreatThanEdge lte;
         lte.metric=metric;
         sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
         for(vector<edge>::iterator it=edgesMetricOrdered.begin();it!=edgesMetricOrdered.end();++it){
