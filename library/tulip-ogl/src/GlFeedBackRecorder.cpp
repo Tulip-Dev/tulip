@@ -15,7 +15,7 @@ namespace tlp {
     if (diff > 0.0) {
       return 1;
     } else if (diff < 0.0) {
-    return -1;
+      return -1;
     } else {
       return 0;
     }
@@ -40,7 +40,7 @@ namespace tlp {
     int nprimitives, item;
     DepthIndex *prims;
     int nvertices, i;
-  
+
     end = feedBackBuffer + size;
     
     /* Count how many primitives there are. */
@@ -52,25 +52,25 @@ namespace tlp {
       switch (token) {
       case GL_LINE_TOKEN:
       case GL_LINE_RESET_TOKEN:
-	loc += pointSize*2;
-	nprimitives++;
-	break;
+        loc += pointSize*2;
+        nprimitives++;
+        break;
       case GL_POLYGON_TOKEN:
-	nvertices = (int)*loc;
-	loc++;
-	loc += (pointSize * nvertices);
-	nprimitives++;
-	break;
+        nvertices = (int)*loc;
+        loc++;
+        loc += (pointSize * nvertices);
+        nprimitives++;
+        break;
       case GL_POINT_TOKEN:
-	loc += pointSize;
-	nprimitives++;
-	break;
+        loc += pointSize;
+        nprimitives++;
+        break;
       case GL_PASS_THROUGH_TOKEN:
-	loc++;
-	break;
+        loc++;
+        break;
       default:
-	/* XXX Left as an excersie to the reader. */
-	printf("Incomplete implementation.  Unexpected token (%d).\n",token);
+        /* XXX Left as an excersie to the reader. */
+        printf("Incomplete implementation.  Unexpected token (%d).\n",token);
       }
     }
     
@@ -90,37 +90,38 @@ namespace tlp {
       switch (token) {
       case GL_LINE_TOKEN:
       case GL_LINE_RESET_TOKEN:
-	vertex = (Feedback3Dcolor *) loc;
-	depthSum = vertex[0].z + vertex[1].z;
-	prims[item].depth = depthSum / 2.0;
-	loc += pointSize*2;
-	item++;
-	break;
+        vertex = (Feedback3Dcolor *) loc;
+        depthSum = vertex[0].z + vertex[1].z;
+        prims[item].depth = depthSum / 2.0;
+        loc += pointSize*2;
+        item++;
+        break;
       case GL_POLYGON_TOKEN:
-	nvertices = (int)*loc;
-	loc++;
-	vertex = (Feedback3Dcolor *) loc;
-	depthSum = vertex[0].z;
-	for (i = 1; i < nvertices; i++) {
-	  depthSum += vertex[i].z;
-	}
-	prims[item].depth = depthSum / nvertices;
-	loc += (pointSize * nvertices);
-	item++;
-	break;
+        nvertices = (int)*loc;
+        loc++;
+        vertex = (Feedback3Dcolor *) loc;
+        depthSum = vertex[0].z;
+        for (i = 1; i < nvertices; i++) {
+          depthSum += vertex[i].z;
+        }
+        prims[item].depth = depthSum / nvertices;
+        loc += (pointSize * nvertices);
+        item++;
+        break;
       case GL_POINT_TOKEN:
-	vertex = (Feedback3Dcolor *) loc;
-	prims[item].depth = vertex[0].z;
-	loc += pointSize;
-	item++;
-	break;
+        vertex = (Feedback3Dcolor *) loc;
+        prims[item].depth = vertex[0].z;
+        loc += pointSize;
+        item++;
+        break;
       case GL_PASS_THROUGH_TOKEN:
-	loc++;
-	break;
-	
+        loc++;
+        break;
+
       default:
-	/* XXX Left as an excersie to the reader. */
-	return;
+        /* XXX Left as an excersie to the reader. */
+        free(prims);
+        return;
       }
     }
     assert(item == nprimitives);
