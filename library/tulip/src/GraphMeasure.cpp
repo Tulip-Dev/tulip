@@ -44,14 +44,6 @@ unsigned int tlp::maxDistance(const Graph *sg, const node n,
     fifo.pop_front();
     unsigned int nDist = distance.get(current.id) + 1;
     Iterator<node>* itn;
-#ifdef _OPENMP
-    // iterator creation is set as critical because maxDistance
-    // is called in the parallel loop of averagePathLength
-    // and there is an implicit GraphObserver addition which results
-    // in concurrent updates of the GraphObserver::observers
-    // data member which are not thread safe
-    #pragma omp critical(maxDistanceIterator)
-#endif
     itn = getIt(sg, current, direction);
     while (itn->hasNext()) {
       node n = itn->next();
