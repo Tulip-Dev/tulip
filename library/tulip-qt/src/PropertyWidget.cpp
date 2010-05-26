@@ -379,6 +379,7 @@ void PropertyWidget::setAllNodeValue() {
   else if (typeid(*editedProperty) == typeid(ColorProperty)) {
     QColor col;
     if (getColorDialog(qRgba(255,0,0,200),NULL,"Color chooser",col)) {
+      ok=true;
       stringstream ss;
       ss << "(" << col.red() << "," << col.green() << "," << col.blue() << "," << col.alpha() << ")";
       tmpStr = ss.str();
@@ -435,6 +436,7 @@ void  PropertyWidget::setAllEdgeValue() {
   if (typeid(*editedProperty) == typeid(ColorProperty)) {
     QColor col;
     if (getColorDialog(qRgba(0,0,0,200),NULL,"Color chooser",col)) {
+      ok=true;
       stringstream ss;
       ss << "(" << col.red() << "," << col.green() << "," << col.blue() << "," << col.alpha() << ")";
       tmpStr = ss.str();
