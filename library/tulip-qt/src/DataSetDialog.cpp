@@ -932,8 +932,10 @@ tlp::openDataSetDialog(	DataSet & outSet,
   QParamDialog *dlg = new QParamDialog(sysDef, inDef, parent);
   dlg->setWindowTitle( inName );
 
-  if( !dlg->fillIn(inSet, inG) )
+  if( !dlg->fillIn(inSet, inG) ){
+    delete dlg;
     return true;
+  }
 
   bool res = ( dlg->exec() == QDialog::Accepted );
 
