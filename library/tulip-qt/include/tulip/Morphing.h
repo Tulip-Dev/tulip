@@ -8,12 +8,8 @@
 #include <tulip/Edge.h>
 
 #include <QtGui/qevent.h>
-#include <QtCore/qdatetime.h>
 #include <QtCore/qobject.h>
 #include <tulip/tulipconf.h>
-
-#define	MORPHING_MAX_FPS	30
-
 
 namespace tlp {
 
@@ -41,6 +37,7 @@ namespace tlp {
   };
   //=====================================
   class TLP_QT_SCOPE Morphing : public QObject {
+	  Q_OBJECT
   public:
     Morphing();
     bool init(GlMainWidget * outGlgw, 
@@ -48,19 +45,19 @@ namespace tlp {
 	      GraphState * inG1);
     void interpolate( GlMainWidget *, float inT);
     bool start(GlMainWidget * outGlgw);
+
+  public slots:
+
+	void interpolationSlot(qreal t);
     
   protected:
-    void timerEvent( QTimerEvent * );
     void stop();
-    float fps();
 
   private: 
     GraphState *g0, *g1;
     LayoutProperty *e0, *e1;
     GlMainWidget *glWidget;
-    QTime qt0;
     int frameCpt; 
-    int tid;
     float t;
   };
   //=====================================

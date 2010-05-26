@@ -87,7 +87,8 @@ BUILT_SOURCES = \
 	moc_ImportCSVDataDialog.cpp \
 	moc_ImportCSVDataWidget.cpp \
 	moc_ImportCSVDataConfigurationWidget.cpp \
-	moc_QtGlSceneZoomAndPanAnimator.cpp
+	moc_QtGlSceneZoomAndPanAnimator.cpp \
+	moc_Morphing.cpp
 
 QT44_BUILT_SOURCES = \
 	moc_GlMainWidgetGraphicsView.cpp \

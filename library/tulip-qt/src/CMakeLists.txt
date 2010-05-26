@@ -136,6 +136,7 @@ set(tulip-qt_MOC
     ../include/tulip/ImportCSVDataWidget.h
     ../include/tulip/ImportCSVDataConfigurationWidget.h
     ../include/tulip/QtGlSceneZoomAndPanAnimator.h
+    ../include/tulip/Morphing.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)
