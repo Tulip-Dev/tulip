@@ -298,7 +298,7 @@ void tlp::copyToGraph (Graph *outG, Graph* inG,
 	PropertyInterface *dst =
 	  outG->existProperty(pName) ? outG->getProperty(pName)
 	  : src->clonePrototype(outG, pName);
-	dst->copy( nOut, nIn, src, true );
+	dst->copy( nOut, nIn, src );
       }
     } delete propIt;
   } delete nodeIt;
@@ -328,7 +328,7 @@ void tlp::copyToGraph (Graph *outG, Graph* inG,
 	PropertyInterface *dst =
 	  outG->existProperty(pName) ? outG->getProperty(pName)
 	  : src->clonePrototype(outG, pName);
-	dst->copy( eOut, eIn, src, true );
+	dst->copy( eOut, eIn, src );
       }
     } delete propIt;
   } delete edgeIt;
