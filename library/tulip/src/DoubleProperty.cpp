@@ -55,13 +55,11 @@ static void computeNodeSumValue(AbstractDoubleProperty* metric, node mN, Graph* 
 
 static void computeEdgeSumValue(AbstractDoubleProperty* metric, edge mE, Iterator<edge>* itE) {
   double value = 0;
-  unsigned int nbEdges = 0;
   while(itE->hasNext()) {
     edge e = itE->next();
-    ++nbEdges;
     value += metric->getEdgeValue(e);
   }
-  metric->setEdgeValue(mE, value/nbEdges);
+  metric->setEdgeValue(mE, value);
 }
 
 // max values
