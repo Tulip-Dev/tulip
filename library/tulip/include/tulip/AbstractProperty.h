@@ -204,9 +204,16 @@ public:
   // to meta nodes or edges
   class MetaValueCalculator :public PropertyInterface::MetaValueCalculator {
   public:
+    // computes the value of the meta node mN of the graph mg
+    // for the property prop, according to the values associated
+    // to the underlying nodes i.e the nodes of the subgraph sg.
     virtual void computeMetaValue(AbstractProperty<Tnode, Tedge,
 				  TPROPERTY>* prop, node mN,
 				  Graph* sg, Graph* mg) {}
+    // computes the value of the meta node mE of the graph mg
+    // for the property prop, according to the values associated
+    // to the underlying edges given by the iterator itE.
+    // The method do not have to delete the iterator
     virtual void computeMetaValue(AbstractProperty<Tnode, Tedge,
 				  TPROPERTY>* prop,
 				  edge mE, Iterator<edge>* itE,
