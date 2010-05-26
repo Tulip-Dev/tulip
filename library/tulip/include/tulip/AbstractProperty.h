@@ -208,16 +208,16 @@ public:
     // for the property prop, according to the values associated
     // to the underlying nodes i.e the nodes of the subgraph sg.
     virtual void computeMetaValue(AbstractProperty<Tnode, Tedge,
-				  TPROPERTY>* prop, node mN,
-				  Graph* sg, Graph* mg) {}
+				  TPROPERTY>*, node,
+				  Graph*, Graph*) {}
     // computes the value of the meta node mE of the graph mg
     // for the property prop, according to the values associated
     // to the underlying edges given by the iterator itE.
     // The method do not have to delete the iterator
     virtual void computeMetaValue(AbstractProperty<Tnode, Tedge,
-				  TPROPERTY>* prop,
-				  edge mE, Iterator<edge>* itE,
-				  Graph* mg) {}
+				  TPROPERTY>*,
+				  edge, Iterator<edge>*,
+				  Graph*) {}
   };
 
 protected:
