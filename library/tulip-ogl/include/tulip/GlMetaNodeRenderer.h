@@ -28,12 +28,12 @@ namespace tlp {
 
     virtual ~GlMetaNodeRenderer() {}
 
-    virtual void prerender(node n,float lod,Camera* camera) {}
-    virtual void render(node n,float lod,Camera* camera) {}
+    virtual void prerender(node,float,Camera*) {}
+    virtual void render(node,float,Camera*) {}
     virtual bool havePrerender() {return false;}
     virtual bool glMetaNodeHaveToRenderLabels(){return true;}
 
-    virtual void setInputData(GlGraphInputData *data) {}
+    virtual void setInputData(GlGraphInputData *) {}
     virtual GlGraphInputData *getInputData() {return NULL;}
 
   };

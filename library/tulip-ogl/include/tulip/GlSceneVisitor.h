@@ -27,12 +27,12 @@ namespace tlp {
     GlSceneVisitor():threadSafe(false){}
     virtual ~GlSceneVisitor() {}
 
-    virtual void visit(GlSimpleEntity *entity) {}
-    virtual void visit(GlNode *glNode) {}
-    virtual void visit(GlEdge *glEdge) {}
-    virtual void visit(GlLayer *layer) {}
-    virtual void reserveMemoryForNodes(unsigned int numberOfNodes) {}
-    virtual void reserveMemoryForEdges(unsigned int numberOfEdges) {}
+    virtual void visit(GlSimpleEntity *) {}
+    virtual void visit(GlNode *) {}
+    virtual void visit(GlEdge *) {}
+    virtual void visit(GlLayer *) {}
+    virtual void reserveMemoryForNodes(unsigned int) {}
+    virtual void reserveMemoryForEdges(unsigned int) {}
     bool isThreadSafe(){return threadSafe;}
 
   protected :

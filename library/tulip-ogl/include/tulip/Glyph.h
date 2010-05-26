@@ -31,7 +31,7 @@ namespace tlp {
   public:
     GlGraphInputData *glGraphInputData;
     ///
-    GlyphContext(Graph **s=NULL, GlGraphInputData *glGraphInputData=NULL, int LOF=5, int LOD=5): 
+    GlyphContext(Graph ** =NULL, GlGraphInputData *glGraphInputData=NULL, int =5, int =5): 
       glGraphInputData(glGraphInputData) {
     }
     ///

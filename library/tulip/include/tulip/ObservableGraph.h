@@ -33,8 +33,8 @@ class  TLP_SCOPE GraphObserver {
   virtual void delEdge(Graph *,const edge ){}
   virtual void reverseEdge(Graph *,const edge ){}
   virtual void destroy(Graph *){}
-  virtual void addSubGraph(Graph *graph, Graph *subGraph){}
-  virtual void delSubGraph(Graph *graph, Graph *subGraph){}
+  virtual void addSubGraph(Graph *, Graph *){}
+  virtual void delSubGraph(Graph *, Graph *){}
   virtual void addLocalProperty(Graph*, const std::string&){}
   virtual void delLocalProperty(Graph*, const std::string&){}
   virtual void beforeSetAttribute(Graph*, const std::string&) {}

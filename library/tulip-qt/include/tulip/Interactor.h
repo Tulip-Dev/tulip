@@ -172,7 +172,7 @@ public:                                          \
   std::string getInfo() const {return std::string(I);}	 \
   std::string getRelease() const {return std::string(R);}\
   std::string getTulipRelease() const {return std::string(TULIP_RELEASE);} \
-  T * createPluginObject(tlp::InteractorContext *ic)		     \
+  T * createPluginObject(tlp::InteractorContext *)		     \
   {						 \
     C *tmp = new C();				 \
     return ((T *) tmp);			 \
