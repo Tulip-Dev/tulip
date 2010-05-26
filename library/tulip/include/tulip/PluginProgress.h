@@ -24,7 +24,7 @@ class TLP_SCOPE PluginProgress {
   ProgressState state() const;
   std::string getError() { return _error; }
   void setError(std::string error) { _error = error; }
-  virtual void setComment(std::string msg) {}
+  virtual void setComment(std::string) {}
   virtual void progress_handler(int step, int max_step);
  private:
   ProgressState _state;
