@@ -5,15 +5,7 @@
 
 namespace tlp {
 
-struct TLP_GL_SCOPE RectangleInt2D : public tlp::Rectangle<int> {
-  RectangleInt2D(int x, int y, int x1, int y1) {
-    (*this)[0][0]=x;
-    (*this)[0][1]=y;
-    (*this)[1][0]=x1;
-    (*this)[1][1]=y1;
-  }
-  RectangleInt2D(const RectangleInt2D &r): tlp::Rectangle<int>(r){}
-};
+typedef Rectangle<int> RectangleInt2D;
 
 /**
 * @brief Manage a set of non overlapping 2D Axis Aligned Bounding Box
