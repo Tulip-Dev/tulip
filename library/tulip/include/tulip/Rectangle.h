@@ -27,13 +27,28 @@ namespace tlp {
             (*this)[1].fill(-1);
         }
         /**
+          * Create a new rectangle with
+          * (*this)[0] = min = (xmin, ymin);
+          * (*this)[1] = max = (xmax, ymax);
+          * Validity is tested in debug mode;
+          */
+        Rectangle(const Obj xmin, const Obj ymin, const Obj xmax, const Obj ymax) {
+            (*this)[0][0] = xmin;
+            (*this)[0][1] = ymin;
+            (*this)[1][0] = xmax;
+            (*this)[1][1] = ymax;
+            assert(isValid());
+        }
+        /**
           * Create a new Rectangle from a Bounding Box correct conversion from 3D -> 2D
+          * validity of the new Rectangle is tested in debug mode
           */
         Rectangle(const tlp::BoundingBox &b) {
             (*this)[0][0] = b[0][0];
             (*this)[0][1] = b[0][1];
             (*this)[1][0] = b[1][0];
             (*this)[1][1] = b[1][1];
+            assert(isValid());
         }
 
        /**
@@ -49,7 +64,8 @@ namespace tlp {
        * @return true if r intersect "this".
        */
 	bool intersect(const Rectangle &r) const {
-            assert(r.isValid() && this->isValid());
+            assert(this->isValid());
+            assert(r.isValid());
 	    
             if ((*this)[0][0] > r[1][0])  return false;
             if ((*this)[1][0] < r[0][0])  return false;
@@ -62,7 +78,8 @@ namespace tlp {
        * @return the true if there is an intersection else false, the intersection parameter is used to stored the Rectangle pf intersection (if it exists). 
        */
 	bool intersect(const Rectangle &r, Rectangle &intersection) const {
-            assert(r.isValid() && this->isValid());
+            assert(this->isValid());
+            assert(r.isValid());
             if (!this->intersect(r)) return false;
 
             intersection[0][0] = std::max((*this)[0][0] , r[0][0]);
@@ -80,8 +97,10 @@ namespace tlp {
 	}
         /**
         * Return true if point is stricly inside the AARectangle
+        * validity of the current rectangle is tested in debug mode
         */
         bool isInside(const Vector<Obj, 2> &p) const {
+            assert(isValid());
             if (p[0] > (*this)[1][0]) return false;
             if (p[0] < (*this)[0][0]) return false;
             if (p[1] > (*this)[1][1]) return false;
@@ -90,8 +109,11 @@ namespace tlp {
         }
         /**
         * @return true if r is inside or equal to the AARectangle
+        * Validity of Rectangles is tested in debug mode
         */
         bool isInside(const Rectangle &r) const{
+            assert(isValid());
+            assert(r.isValid());
             if ((*this)[0] == r[0] && (*this)[1] == r[1]) return true;
             if (this->isInside(r[0]) && this->isInside(r[1])) return true;
             return false;
@@ -99,8 +121,10 @@ namespace tlp {
 
         /**
         * Translate "this" by vector v
+        * validity of the Rectangle is tested in debubg
         */
         void translate(const tlp::Vector<Obj,2> &v) {
+            assert(isValid());
             (*this)[0] += v;
             (*this)[1] += v;
         }
