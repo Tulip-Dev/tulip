@@ -179,7 +179,12 @@ ENDIF(LINUX)
 
 FIND_PACKAGE(OpenMP)
 IF(OPENMP_FOUND)
+IF(WIN32)
+## HACK: do not know why OpenMP_CXX_FLAGS is not set when running on window ?
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_C_FLAGS}")
+ELSE(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+ENDIF(WIN32)
 ENDIF(OPENMP_FOUND)
 
 ## -----------------------------------------------------------------------------------------------
