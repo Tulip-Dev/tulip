@@ -40,6 +40,7 @@ INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${PR
 IF(WIN32)
 ADD_EXECUTABLE( tulip TulipLauncher.cpp)
 SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}")
+TARGET_LINK_LIBRARIES( tulip -mwindows )
 TARGET_LINK_LIBRARIES( tulip ${QT_LIBRARIES} )
 ENDIF(WIN32)
 
@@ -50,6 +51,9 @@ ADD_DEPENDENCIES(tulip_need_restart tulip_app)
 
 ADD_EXECUTABLE( tulip_app ${tulip_UI_SRCS} ${tulip_MOC_SRCS} ${tulip_SRCS} ${tulip_RCC_SRCS})
 SET_TARGET_PROPERTIES(tulip_app PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}")
+IF(WIN32)
+TARGET_LINK_LIBRARIES( tulip_app -mwindows )
+ENDIF(WIN32)
 TARGET_LINK_LIBRARIES( tulip_app ${FREETYPE_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${GZStreamLibrary} )
 TARGET_LINK_LIBRARIES( tulip_app ${QT_LIBRARIES} )
