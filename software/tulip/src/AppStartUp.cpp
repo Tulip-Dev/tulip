@@ -58,6 +58,7 @@ void AppStartUp::initTulip(TulipPluginLoader *loader, std::string &errors) {
   errorMsgs.resize(0);
 
   if(dontClose){
+    closeButton->setEnabled(true);
     setTotalSteps(100);
     setProgress(100);
   }else{
@@ -100,6 +101,7 @@ AppStartUp::AppStartUp(QWidget* parent) :
   settings.endGroup();
   if(!dontClose)
     showAgain->setCheckState(Qt::Unchecked);
+  closeButton->setEnabled(false);
 
   connect(closeButton,SIGNAL(clicked()),this,SLOT(close()));
   connect(nextButton,SIGNAL(clicked()),this,SLOT(nextTip()));
