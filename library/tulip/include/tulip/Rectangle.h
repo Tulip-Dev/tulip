@@ -128,6 +128,49 @@ namespace tlp {
             (*this)[0] += v;
             (*this)[1] += v;
         }
+        /**
+          * Return the width of the rectangle
+          * The Rectangle must be valid (tested in debug)
+          */
+        Obj width() const {
+            assert(isValid());
+            return (*this)[1][0] - (*this)[0][0];
+        }
+        /**
+          * Return the height of the rectangle
+          * The Rectangle must be valid (tested in debug)
+          */
+        Obj height() const {
+            assert(isValid());
+            return (*this)[1][1] - (*this)[0][1];
+        }
+        /**
+          * Return the surface of the rectangle
+          * The Rectangle must be valid (tested in debug)
+          */
+        Obj surface() const {
+            assert(isValid());
+            return height() * width();
+        }
+        /**
+          * Return the aspect ratio of the reactangle
+          * a value between [0..1]
+          */
+        Obj aspectRatio() const {
+            assert(isValid());
+            if (std::min(height(), width()) < std::numeric_limits<Obj>::epsilon())
+                return 0.;
+            return std::max(height(), width()) / std::min(height(), width());
+        }
+        /**
+          * Return the aspect ratio of the reactangle
+          * a value between [0..1]
+          */
+        Vector<Obj, 2> center() const {
+            assert(isValid());
+            return ((*this)[0] + (*this)[1]) / Obj(2);
+        }
+
     };
     /*@}*/
 }
