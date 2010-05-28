@@ -5,14 +5,12 @@
 #include <utility>
 #include <tulip/tuliphash.h>
 #include "tulip/TulipPlugin.h"
-#include "tulip/RectangleArea.h"
+#include "tulip/Rectangle.h"
 
-typedef std::vector<tlp::node> vecNode;
-typedef TLP_HASH_MAP<tlp::node, float> mapNode;
-typedef std::pair<tlp::node, float> pairNodeF;
-typedef std::vector<pairNodeF> pairVector;
-typedef pairVector::iterator pairIterator;
-
+typedef std::vector<tlp::node> VecNode;
+typedef TLP_HASH_MAP<tlp::node, double> MapNode;
+typedef std::pair<tlp::node, double> PairNodeF;
+typedef std::vector<PairNodeF> PairVector;
 /** \addtogroup layout */
 /*@{*/
 /// SquarifiedTreeMap.h - An implementation of a squarified treemap layout.
@@ -26,7 +24,11 @@ typedef pairVector::iterator pairIterator;
  *  \note This algorith only works on tree.
  *  Let n be the number of nodes, the algorithm complexity is in O(n).
  *
- *  \author Julien Testut, Antony Durand, Pascal Ollier, Yashvin Nababsing, \n 
+ *  @version 1.0.0 complete rewrite
+ *  @author Auber David
+ *
+ *  @version 0.0.0
+ *  @author Julien Testut, Antony Durand, Pascal Ollier, Yashvin Nababsing, \n
  *  Sebastien Leclerc, Thibault Ruchon, Eric Dauchier \n
  *  University Bordeaux I France
  */
@@ -41,20 +43,31 @@ public:
     bool run();
 
 private:
-    tlp::SizeProperty*     size;   
-    tlp::DoubleProperty*    metric;
-    tlp::IntegerProperty*   glyph;
-    mapNode    sumChildrenMetric;
-    float      aspectRatio;
-    
-    void    layRow(pairIterator firstChildNode, pairIterator endChildNode,
-                   int depth, tlp::RectangleArea rectArea, float listMetric);
-    void    squarify(tlp::node n, tlp::RectangleArea rectArea, int depth);
-    float   findWorstRatio(float metric1, float metric2, float listMetric, 
-                           const tlp::RectangleArea& rectArea);
-    float   initializeMapSum(tlp::node n);
-    bool    verifyMetricIsPositive();       
+    tlp::SizeProperty*         size;
+    tlp::DoubleProperty*       metric;
+    tlp::IntegerProperty*      glyph;
+    tlp::MutableContainer<double>    nodesSize;
+    double aspectRatio;
+    /**
+    * return a measure quality of row in which one wants ot add n
+    * width is the width of the rectangle in which we create the row
+    * length is the height of the rectangle in wich on creates the row
+    * surface is sum of size of elements what belongs to the rectangle
+    */
+    double evaluateRow(const std::vector<tlp::node> &row, tlp::node n, double width, double length, double surface);
+    void layoutRow(const std::vector<tlp::node> &row, const int depth, const tlp::Rectangle<double> &rectArea);
+    void squarify(const std::vector<tlp::node> &toTreat, const tlp::Rectangle<double> &rectArea, const int depth);
+    tlp::Rectangle<double> adjustRectangle(const tlp::Rectangle<double> &r) const;
+    //return a vector containing children of n ordered in decreasing order of their size.
+    std::vector<tlp::node> orderedChildren(const tlp::node n) const;
+    /**
+    * compute the size of each node in the tree
+    * the size is the sum of all the size of all leaves descendant of a node
+    * in the tree.
+    */
+    void   computeNodesSize(tlp::node n);
 
+    enum Orientation{HORIZONTAL = 0, VERTICAL = 1};
 };
 /*@}*/
 #endif
