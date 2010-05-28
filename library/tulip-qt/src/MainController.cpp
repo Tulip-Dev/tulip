@@ -1288,19 +1288,29 @@ namespace tlp {
   //**********************************************************************
   void MainController::changeString() {
     QAction *action=(QAction*)(sender());
-    if(ControllerAlgorithmTools::changeString(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewLabel",getCurrentView()))
+    inAlgorithm=true;
+    bool result = ControllerAlgorithmTools::changeString(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewLabel",getCurrentView());
+    inAlgorithm=false;
+    if (result)
       afterChangeProperty();
   }
   //**********************************************************************
   void MainController::changeSelection() {
     QAction *action=(QAction*)(sender());
-    if(ControllerAlgorithmTools::changeBoolean(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewSelection",getCurrentView()))
+    
+    inAlgorithm=true;
+    bool result = ControllerAlgorithmTools::changeBoolean(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewSelection",getCurrentView());
+    inAlgorithm=false;
+    if (result)
       afterChangeProperty();
   }
   //**********************************************************************
   void MainController::changeMetric() {
     QAction *action=(QAction*)(sender());
-    if(ControllerAlgorithmTools::changeMetric(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewMetric",getCurrentView(),mapMetricAction->isChecked(),"Metric Mapping","viewColor"))
+    inAlgorithm=true;
+    bool result = ControllerAlgorithmTools::changeMetric(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewMetric",getCurrentView(),mapMetricAction->isChecked(),"Metric Mapping","viewColor");
+    inAlgorithm=false;
+    if (result)
       afterChangeProperty();
   }
   //**********************************************************************
@@ -1310,7 +1320,9 @@ namespace tlp {
     if(morphingAction->isChecked())
       g0=constructGraphState();
     
+    inAlgorithm=true;
     bool result = ControllerAlgorithmTools::changeLayout(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(), "viewLayout",getCurrentView());
+    inAlgorithm=false;
     if (result) {
       if( forceRatioAction->isChecked() )
         getCurrentGraph()->getLocalProperty<LayoutProperty>("viewLayout")->perfectAspectRatio();
@@ -1324,7 +1336,10 @@ namespace tlp {
   //**********************************************************************
   void MainController::changeInt() {
     QAction *action=(QAction*)(sender());
-    if(ControllerAlgorithmTools::changeInt(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(), "viewInt",getCurrentView()))
+    inAlgorithm=true;
+    bool result = ControllerAlgorithmTools::changeInt(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(), "viewInt",getCurrentView());
+    inAlgorithm=false;
+    if (result)
       afterChangeProperty();
   }
   //**********************************************************************
@@ -1334,7 +1349,9 @@ namespace tlp {
     if(morphingAction->isChecked())
       g0=constructGraphState();
     
+    inAlgorithm=true;
     bool result = ControllerAlgorithmTools::changeColors(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewColor",getCurrentView());
+    inAlgorithm=false;
     if( result ) {
       if( morphingAction->isChecked() && g0) {
         applyMorphing(g0);
@@ -1352,7 +1369,9 @@ namespace tlp {
     if(morphingAction->isChecked())
       g0=constructGraphState();
   
+    inAlgorithm=true;
     bool result = ControllerAlgorithmTools::changeSizes(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewSize",getCurrentView());
+    inAlgorithm=false;
     if( result ) {
       if( morphingAction->isChecked() && g0) {
 	applyMorphing(g0);
