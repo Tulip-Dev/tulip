@@ -15,14 +15,16 @@ namespace tlp {
 
     QSettings settings("TulipSoftware","Tulip");
     settings.beginGroup("PluginsManager");
-    serverNumber=settings.value("serverNumber",0).toInt();
+    serverNumber=settings.value("serverNumber_v2",0).toInt();
     vector<string> serversAddr;
+
     if(serverNumber!=0) {
       for(int i=0;i<serverNumber;i++) {
-	msm->addServer(settings.value("server"+QString::number(i),"").toString().toStdString());
+        msm->addServer(settings.value("server_v2_"+QString::number(i),"").toString().toStdString());
       }
     }else{
-      msm->addServer("http://tulip.labri.fr/pluginsServer/server.php");
+      msm->addServer("http://tulip.labri.fr/pluginsServer_Stable/server.php");
+      msm->addServer("http://tulip.labri.fr/pluginsServer_Testing/server.php");
     }
     settings.endGroup();
 

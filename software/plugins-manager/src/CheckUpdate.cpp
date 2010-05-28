@@ -12,10 +12,10 @@ namespace tlp {
 
     QSettings settings("TulipSoftware","Tulip");
     settings.beginGroup("PluginsManager");
-    serverNumber=settings.value("serverNumber",0).toInt();
+    serverNumber=settings.value("serverNumber_v2",0).toInt();
     vector<string> serversAddr;
     for(int i=0;i<serverNumber;i++) {
-      msm->addServer(settings.value("server"+QString::number(i),"").toString().toStdString());
+      msm->addServer(settings.value("server_v2_"+QString::number(i),"").toString().toStdString());
     }
     settings.endGroup();
   }
