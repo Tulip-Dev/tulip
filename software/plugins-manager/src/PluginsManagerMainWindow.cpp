@@ -41,10 +41,10 @@ namespace tlp {
 
     QSettings settings("TulipSoftware","Tulip");
     settings.beginGroup("PluginsManager");
-    int serverNumber=settings.value("serverNumber",0).toInt();
+    int serverNumber=settings.value("serverNumber_v2",0).toInt();
     vector<string> serversAddr;
     for(int i=0;i<serverNumber;i++) {
-      serversAddr.push_back(settings.value("server"+QString::number(i),"").toString().toStdString());
+      serversAddr.push_back(settings.value("server_v2_"+QString::number(i),"").toString().toStdString());
     }
     settings.endGroup();
 
