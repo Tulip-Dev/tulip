@@ -72,6 +72,7 @@ SET(tulip_LIB_SRCS
 	PreferenceManager.cpp
 )
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_TULIP_LIB_DIR=\"\\\"${CMAKE_INSTALL_PREFIX}/lib/\\\"\"")
 INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${PROJECT_SOURCE_DIR})
 
 ADD_LIBRARY (${LibTulipName} SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)
