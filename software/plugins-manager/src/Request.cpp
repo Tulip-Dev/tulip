@@ -1,5 +1,7 @@
 #include "Request.h"
 
+#include <tulip/TulipRelease.h>
+
 #include "SoapRequestBuilder.h"
 
 #include <iostream>
@@ -37,14 +39,16 @@ namespace tlp {
     
   void DownloadPluginRequest::getXml(std::string &xml) const {
     SoapRequestBuilder request;
-    request.setFunctionName("downloadPlugin");
+    request.setFunctionName("downloadPlugin_v2");
     request.addFunctionParameter("pluginName","string",name);
+    request.addFunctionParameter("tulipVersion","string",TULIP_RELEASE);
     request.getXML(xml);
   }
     
   void ConnectServerRequest::getXml(std::string &xml) const {
     SoapRequestBuilder request;
-    request.setFunctionName("connect");
+    request.setFunctionName("connect_v2");
+    request.addFunctionParameter("tulipVersion","string",TULIP_RELEASE);
     request.getXML(xml);
   }
     
