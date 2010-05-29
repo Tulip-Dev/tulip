@@ -11,11 +11,8 @@ using namespace std;
 using namespace tlp;
 
 LAYOUTPLUGINOFGROUP(SquarifiedTreeMap,"Squarified Tree Map",
-		    "Julien Testut, Antony Durand, Pascal Ollier, "
-		    "Yashvin Nababsing, Sebastien Leclerc, "
-		    "Thibault Ruchon, Eric Dauchier",
-		    "03/11/2004", "ok", "1.1", "Tree");
-
+                    "Tulip Team",
+                    "25/05/2010", "ok", "2.0", "Tree");
 //====================================================================
 
 const double SEPARATION_Z  = 150; 
@@ -90,6 +87,10 @@ bool SquarifiedTreeMap::check(string& errorMsg) {
 }
 
 //====================================================================
+/**
+  *
+  *  @todo manage correctly parameters remove texture mode, enable to choose bordersize + header size
+  */
 bool SquarifiedTreeMap::run() {
   double aspectRatio  = DEFAULT_RATIO;
   bool glyphTextured = false;
@@ -134,9 +135,10 @@ tlp::Rectangle<double> SquarifiedTreeMap::adjustRectangle(const tlp::Rectangle<d
     assert(r.isValid());
     Rectangle<double> result(r);
     Vec2d dist(r[1] - r[0]);
-    //header + border
-
-    result[1][1] -= dist[1] * 0.14;
+    //header size
+    result[1][1] -= dist[1] * 0.1;
+    //border size
+    result[1][1] -= dist[1] * 0.02 * 2.;
     result[1][0] -= dist[0] * 0.02;
     result[0][0] += dist[0] * 0.02;
     result[0][1] += dist[1] * 0.02;
