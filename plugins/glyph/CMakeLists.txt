@@ -92,13 +92,6 @@ TARGET_LINK_LIBRARIES(HalfCylinder-${TulipVersion} ${LibTulipOglName})
 ADD_DEPENDENCIES(HalfCylinder-${TulipVersion} ${LibTulipName} ${LibTulipOglName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(SquareBorderTextured_SRCS squarebordertextured.cpp)
-ADD_LIBRARY(SquareBorderTextured-${TulipVersion} SHARED ${SquareBorderTextured_SRCS})
-TARGET_LINK_LIBRARIES(SquareBorderTextured-${TulipVersion} ${LibTulipName})
-TARGET_LINK_LIBRARIES(SquareBorderTextured-${TulipVersion} ${LibTulipOglName})
-ADD_DEPENDENCIES(SquareBorderTextured-${TulipVersion} ${LibTulipName} ${LibTulipOglName})
-
-##----------------------------------------------------------------------------------------------------------------------------
 SET(ChristmasTree_SRCS christmastree.cpp)
 ADD_LIBRARY(ChristmasTree-${TulipVersion} SHARED ${ChristmasTree_SRCS})
 TARGET_LINK_LIBRARIES(ChristmasTree-${TulipVersion} ${LibTulipName})
@@ -120,7 +113,6 @@ INSTALL(TARGETS
 	Cone-${TulipVersion}
 	Cylinder-${TulipVersion}
 	HalfCylinder-${TulipVersion}
-	SquareBorderTextured-${TulipVersion}
 	ChristmasTree-${TulipVersion}
 	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/glyphs/)
 
