@@ -14,17 +14,23 @@ typedef std::vector<PairNodeF> PairVector;
 /** \addtogroup layout */
 /*@{*/
 /// SquarifiedTreeMap.h - An implementation of a squarified treemap layout.
-/** This plugin is an implementation of a Squarified treemap layout.
+/** This plugin is an implementation of TreeMap and Squarified treemap layout.
  * 
  *  Squarified Treemaps : \n
  *  Bruls, M., Huizing, K., & van Wijk, J. J. \n
  *  In Proc. of Joint Eurographics and IEEE TCVG Symp. on Visualization \n
  *  (TCVG 2000) IEEE Press, pp. 33-42.
- * 
- *  \note This algorith only works on tree.
- *  Let n be the number of nodes, the algorithm complexity is in O(n).
  *
- *  @version 1.0.0 complete rewrite
+ *  Shneiderman, B. (March 1991)
+ *  Tree visualization with treemaps: a 2-d space-filling approach
+ *  ACM Transactions on Graphics, vol. 11, 1 (Jan. 1992) 92-99.
+ *  HCIL-91-03, CS-TR-2645, CAR-TR-548
+ *
+ *  \note This algorith only works on tree.
+ *
+ *  @version 1.0.0 complete rewrite, merge treemap and squarified in the same algorithm
+ *  simplify implementation. The algorithm can be tune to go 2 or 3 time faster however, since the algorithm
+ *  is fast enough, the code is written to be easily read and maintain.
  *  @author Auber David
  *
  *  @version 0.0.0
@@ -47,6 +53,7 @@ private:
     tlp::DoubleProperty*       metric;
     tlp::IntegerProperty*      glyph;
     tlp::MutableContainer<double>    nodesSize;
+    bool shneidermanTreeMap;
     double aspectRatio;
     /**
     * return a measure quality of row in which one wants ot add n
