@@ -69,14 +69,15 @@ static const float AROTATIONDEF    = 1.;
 static const float ASHAKEDEF       = 0.3;
 
 
-LAYOUTPLUGINOFGROUP(GEMLayout,"GEM (Frick)","David Duke","16/10/2008","Stable","1.1","Force Directed")
+LAYOUTPLUGINOFGROUP(GEMLayout,"GEM (Frick)","Tulip Team","16/10/2008","Stable","1.1","Force Directed")
 
 GEMLayout::GEMLayout(const PropertyContext &context) : LayoutAlgorithm(context) {
   addParameter<bool>("3D layout", paramHelp[0], "false");
   addParameter<DoubleProperty>("edge length", paramHelp[1], 0, false);
   addParameter<LayoutProperty>("initial layout", paramHelp[2], 0, false);
   addParameter<unsigned int>("max iterations", paramHelp[3], 0);
-  
+  addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");
+
   i_maxtemp      = IMAXTEMPDEF;
   a_maxtemp      = AMAXTEMPDEF;
   i_starttemp    = ISTARTTEMPDEF;
@@ -313,6 +314,25 @@ void GEMLayout::arrange() {
 }
 //============================================================================
 bool GEMLayout::run() {
+    if (!ConnectedTest::isConnected(graph)) {
+        // for each component draw
+        std::vector<std::set<node> > components;
+        string err;
+        ConnectedTest::computeConnectedComponents(graph, components);
+        for (int i = 0; i < components.size(); ++i) {
+            Graph * tmp = graph->inducedSubGraph(components[i]);
+            tmp->computeProperty("GEM (Frick)", layoutResult, err, pluginProgress, dataSet);
+            graph->delAllSubGraphs(tmp);
+        }
+        // call connected componnent packing
+        LayoutProperty tmpLayout(graph);
+        dataSet->set("coordinates", layoutResult);
+        graph->computeProperty("Connected Component Packing", &tmpLayout, err, pluginProgress, dataSet);
+        *layoutResult = tmpLayout;
+        return true;
+    }
+
+
   /* Handle parameters */
   metric = NULL;
   LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
