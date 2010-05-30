@@ -36,6 +36,8 @@ class TLP_GL_SCOPE GlCatmullRomCurve : public AbstractGlCurve {
 
 public :
 
+	GlCatmullRomCurve();
+
 	/**
 	 * GlCatmullRomCurve constructor
 	 *
@@ -52,13 +54,15 @@ public :
 
 	~GlCatmullRomCurve();
 
-	void draw(float lod, Camera *camera);
+	void drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=200);
+
+	void setClosedCurve(const bool closedCurve) {this->closedCurve = closedCurve;}
 
 protected :
 
 	void setCurveVertexShaderRenderingSpecificParameters();
 
-	Coord computeCurvePointOnCPU(float t);
+	Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t);
 
 private :
 
@@ -68,6 +72,8 @@ private :
 	int computeSegmentIndex(float t);
 
 	bool closedCurve;
+	float *globalParameter;
+	float totalLength;
 };
 
 

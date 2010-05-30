@@ -17,17 +17,17 @@ vector<Coord> GlCubicBSplineInterpolation::constructInterpolatingCubicBSpline(co
 	di[pointsToInterpolate.size() - 1] = (pointsToInterpolate[pointsToInterpolate.size()-1] - pointsToInterpolate[pointsToInterpolate.size()-2]) / 3.0f;
 	Bi[1] = -0.25f;
 	Ai[1] = (pointsToInterpolate[2] - pointsToInterpolate[0] - di[0]) / 4.0f;
-	for (unsigned int i = 2; i < pointsToInterpolate.size() - 1; ++i) {
+	for (size_t i = 2; i < pointsToInterpolate.size() - 1; ++i) {
 		Bi[i] = -1.0f /(4.0f + Bi[i-1]);
 		Ai[i] = Coord(-(pointsToInterpolate[i+1] - pointsToInterpolate[i-1] - Ai[i-1])*Bi[i]);
 	}
-	for (unsigned int i = pointsToInterpolate.size() - 2; i > 0; --i) {
+	for (size_t i = pointsToInterpolate.size() - 2; i > 0; --i) {
 		di[i] = Ai[i] + di[i+1]*Bi[i];
 	}
 	vector<Coord> bSplineControlPoints;
 	bSplineControlPoints.push_back(pointsToInterpolate[0]);
 	bSplineControlPoints.push_back(pointsToInterpolate[0]+di[0]);
-	for (unsigned int i = 1 ; i < pointsToInterpolate.size() - 1 ; ++i) {
+	for (size_t i = 1 ; i < pointsToInterpolate.size() - 1 ; ++i) {
 		bSplineControlPoints.push_back(pointsToInterpolate[i]-di[i]);
 		bSplineControlPoints.push_back(pointsToInterpolate[i]);
 		bSplineControlPoints.push_back(pointsToInterpolate[i]+di[i]);

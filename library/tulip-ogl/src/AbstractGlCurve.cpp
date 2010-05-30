@@ -12,7 +12,7 @@ static bool checkVboSupport() {
 	return vboOk;
 }
 
-static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &startColor, const tlp::Color &endColor,
+static void drawCurveCPU(const vector<tlp::Coord> &curvePoints, const tlp::Color &startColor, const tlp::Color &endColor,
 		const float startSize, const float endSize, const tlp::Coord &startN, const tlp::Coord &endN,
 		const string &texture, const bool outlined, const tlp::Color outlineColor,
 		float texCoordFactor=1, bool billboardCurve=false, const tlp::Coord &lookDir=tlp::Coord(0,0,0)) {
@@ -162,7 +162,7 @@ static void drawCurve(const vector<tlp::Coord> &curvePoints, const tlp::Color &s
 	glEnable(GL_LIGHTING);
 
 
-  delete [] points;
+	delete [] points;
 }
 
 namespace tlp {
@@ -203,7 +203,7 @@ static string genCommonUniformVariables(const unsigned int maxNbControlPoints) {
 	ostringstream oss;
 
 	oss << "#version 120" << endl;
-	oss << "uniform vec4 controlPoints[" << maxNbControlPoints << "];" << endl;
+	oss << "uniform vec3 controlPoints[" << maxNbControlPoints << "];" << endl;
 	oss << "uniform int nbControlPoints;" << endl;
 
 	return oss.str();
@@ -325,80 +325,26 @@ GlShader *AbstractGlCurve::fisheyeDistortionVertexShader(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderNormalMain(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderBillboardMain(NULL);
 
+AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &curveSpecificShaderCode) :
+				curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
+				outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
+	initShader(shaderProgramName, curveSpecificShaderCode);
+}
+
 AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &curveSpecificShaderCode, const vector<Coord> &controlPoints,
 		const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) :
 		shaderProgramName(shaderProgramName), curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
-		controlPoints(controlPoints), nbControlPoints(controlPoints.size()),
-		startColor(startColor), endColor(endColor), startSize(startSize), endSize(endSize), nbCurvePoints(nbCurvePoints),
+		controlPoints(controlPoints), startColor(startColor), endColor(endColor), startSize(startSize), endSize(endSize), nbCurvePoints(nbCurvePoints),
 		outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
 
-	float totalDist = 0;
-	glControlPoints = new float[nbControlPoints * 4];
-	memset(glControlPoints, 0, nbControlPoints * 4 * sizeof(float));
-	for (unsigned int i = 0 ; i < nbControlPoints ; ++i) {
-		glControlPoints[4*i] = controlPoints[i][0];
-		glControlPoints[4*i+1] = controlPoints[i][1];
-		glControlPoints[4*i+2] = controlPoints[i][2];
-                boundingBox.expand(controlPoints[i]);
-		if (i != nbControlPoints - 1) {
-			totalDist += controlPoints[i].dist(controlPoints[i+1]);
-		}
-	}
+	initShader(shaderProgramName, curveSpecificShaderCode);
 
-	vboOk = checkVboSupport();
-
-	if (curveVertexBuffersData.find(this->nbCurvePoints) == curveVertexBuffersData.end()) {
-		buildCurveVertexBuffers(this->nbCurvePoints, vboOk);
-	}
-
-	if (GlShaderProgram::shaderProgramsSupported()) {
-		if (MAX_SHADER_CONTROL_POINTS == 0) {
-			// has been determined experimentally by testing the implementation
-			// on several graphic cards with different video memory size and graphics drivers
-			glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS_ARB, &MAX_SHADER_CONTROL_POINTS);
-			MAX_SHADER_CONTROL_POINTS /= 4;
-			MAX_SHADER_CONTROL_POINTS -= 44;
-		}
-		if (curveVertexShaderNormalMain == NULL) {
-			curveVertexShaderNormalMain = new GlShader(Vertex);
-			curveVertexShaderNormalMain->compileFromSourceCode(curveVertexShaderNormalMainSrc);
-		}
-		if (curveVertexShaderBillboardMain == NULL) {
-			curveVertexShaderBillboardMain = new GlShader(Vertex);
-			curveVertexShaderBillboardMain->compileFromSourceCode(curveVertexShaderBillboardMainSrc);
-		}
-		if (fisheyeDistortionVertexShader == NULL) {
-			fisheyeDistortionVertexShader = new GlShader(Vertex);
-			fisheyeDistortionVertexShader->compileFromSourceCode(fisheyeDistortionVertexShaderSrc);
-		}
-		if (curvesShadersMap.find(shaderProgramName) == curvesShadersMap.end()) {
-			curvesShadersMap[shaderProgramName] = new GlShaderProgram(shaderProgramName);
-			curvesShadersMap[shaderProgramName]->addShaderFromSourceCode(Vertex, genCommonUniformVariables(MAX_SHADER_CONTROL_POINTS) + curveSpecificShaderCode);
-			curvesShadersMap[shaderProgramName]->addShader(curveVertexShaderNormalMain);
-			curvesShadersMap[shaderProgramName]->addShader(fisheyeDistortionVertexShader);
-			curvesShadersMap[shaderProgramName]->link();
-			curvesShadersMap[shaderProgramName]->printInfoLog();
-		}
-		if (curvesBillboardShadersMap.find(shaderProgramName) == curvesBillboardShadersMap.end()) {
-			curvesBillboardShadersMap[shaderProgramName] = new GlShaderProgram(shaderProgramName);
-			curvesBillboardShadersMap[shaderProgramName]->addShaderFromSourceCode(Vertex, genCommonUniformVariables(MAX_SHADER_CONTROL_POINTS) + curveSpecificShaderCode);
-			curvesBillboardShadersMap[shaderProgramName]->addShader(curveVertexShaderBillboardMain);
-			curvesBillboardShadersMap[shaderProgramName]->addShader(fisheyeDistortionVertexShader);
-			curvesBillboardShadersMap[shaderProgramName]->link();
-			curvesBillboardShadersMap[shaderProgramName]->printInfoLog();
-		}
-		if (curvesShadersMap[shaderProgramName]->isLinked()) {
-			curveShaderProgramNormal = curvesShadersMap[shaderProgramName];
-		}
-		if (curvesBillboardShadersMap[shaderProgramName]->isLinked()) {
-			curveShaderProgramBillboard = curvesBillboardShadersMap[shaderProgramName];
-		}
+	for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
+		boundingBox.expand(controlPoints[i]);
 	}
 }
 
-AbstractGlCurve::~AbstractGlCurve() {
-	delete [] glControlPoints;
-}
+AbstractGlCurve::~AbstractGlCurve() {}
 
 void AbstractGlCurve::buildCurveVertexBuffers(const unsigned int nbCurvePoints, bool vboOk) {
 	curveVertexBuffersObject[nbCurvePoints] = new GLuint[5];
@@ -441,6 +387,62 @@ void AbstractGlCurve::buildCurveVertexBuffers(const unsigned int nbCurvePoints, 
 }
 
 void AbstractGlCurve::draw(float lod, Camera *camera) {
+	drawCurve(&controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
+}
+
+void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode) {
+	if (GlShaderProgram::shaderProgramsSupported()) {
+		if (MAX_SHADER_CONTROL_POINTS == 0) {
+			// has been determined experimentally by testing the implementation
+			// on several graphic cards with different video memory size and graphics drivers
+			glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS_ARB, &MAX_SHADER_CONTROL_POINTS);
+			MAX_SHADER_CONTROL_POINTS /= 4;
+			MAX_SHADER_CONTROL_POINTS -= 144;
+		}
+		if (curveVertexShaderNormalMain == NULL) {
+			curveVertexShaderNormalMain = new GlShader(Vertex);
+			curveVertexShaderNormalMain->compileFromSourceCode(curveVertexShaderNormalMainSrc);
+		}
+		if (curveVertexShaderBillboardMain == NULL) {
+			curveVertexShaderBillboardMain = new GlShader(Vertex);
+			curveVertexShaderBillboardMain->compileFromSourceCode(curveVertexShaderBillboardMainSrc);
+		}
+		if (fisheyeDistortionVertexShader == NULL) {
+			fisheyeDistortionVertexShader = new GlShader(Vertex);
+			fisheyeDistortionVertexShader->compileFromSourceCode(fisheyeDistortionVertexShaderSrc);
+		}
+		if (curvesShadersMap.find(shaderProgramName) == curvesShadersMap.end()) {
+			curvesShadersMap[shaderProgramName] = new GlShaderProgram(shaderProgramName);
+			curvesShadersMap[shaderProgramName]->addShaderFromSourceCode(Vertex, genCommonUniformVariables(MAX_SHADER_CONTROL_POINTS) + curveSpecificShaderCode);
+			curvesShadersMap[shaderProgramName]->addShader(curveVertexShaderNormalMain);
+			curvesShadersMap[shaderProgramName]->addShader(fisheyeDistortionVertexShader);
+			curvesShadersMap[shaderProgramName]->link();
+			curvesShadersMap[shaderProgramName]->printInfoLog();
+		}
+		if (curvesBillboardShadersMap.find(shaderProgramName) == curvesBillboardShadersMap.end()) {
+			curvesBillboardShadersMap[shaderProgramName] = new GlShaderProgram(shaderProgramName);
+			curvesBillboardShadersMap[shaderProgramName]->addShaderFromSourceCode(Vertex, genCommonUniformVariables(MAX_SHADER_CONTROL_POINTS) + curveSpecificShaderCode);
+			curvesBillboardShadersMap[shaderProgramName]->addShader(curveVertexShaderBillboardMain);
+			curvesBillboardShadersMap[shaderProgramName]->addShader(fisheyeDistortionVertexShader);
+			curvesBillboardShadersMap[shaderProgramName]->link();
+			curvesBillboardShadersMap[shaderProgramName]->printInfoLog();
+		}
+		if (curvesShadersMap[shaderProgramName]->isLinked()) {
+			curveShaderProgramNormal = curvesShadersMap[shaderProgramName];
+		}
+		if (curvesBillboardShadersMap[shaderProgramName]->isLinked()) {
+			curveShaderProgramBillboard = curvesBillboardShadersMap[shaderProgramName];
+		}
+	}
+}
+
+void AbstractGlCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
+
+	vboOk = checkVboSupport();
+
+	if (curveVertexBuffersData.find(nbCurvePoints) == curveVertexBuffersData.end()) {
+		buildCurveVertexBuffers(nbCurvePoints, vboOk);
+	}
 
 	GLint renderMode;
 	glGetIntegerv(GL_RENDER_MODE, &renderMode);
@@ -449,8 +451,8 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 
 	if (texture != "") {
 		unsigned int i = nbCurvePoints / 2;
-		Coord firstCurvePoint = computeCurvePointOnCPU(i / static_cast<float>(nbCurvePoints - 1));
-		Coord nexCurvePoint = computeCurvePointOnCPU((i+1) / static_cast<float>(nbCurvePoints - 1));
+		Coord firstCurvePoint = computeCurvePointOnCPU(*controlPoints, i / static_cast<float>(nbCurvePoints - 1));
+		Coord nexCurvePoint = computeCurvePointOnCPU(*controlPoints, (i+1) / static_cast<float>(nbCurvePoints - 1));
 		float dist = firstCurvePoint.dist(nexCurvePoint);
 		texCoordFactor = dist / (startSize * 2.0f);
 	}
@@ -461,7 +463,7 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 		curveShaderProgram = curveShaderProgramNormal;
 	}
 
-	if (curveShaderProgram != NULL && nbControlPoints <= MAX_SHADER_CONTROL_POINTS && renderMode != GL_SELECT) {
+	if (curveShaderProgram != NULL && controlPoints->size() <= MAX_SHADER_CONTROL_POINTS && renderMode != GL_SELECT) {
 
 		GLuint *vbo = curveVertexBuffersObject[nbCurvePoints];
 		GlShaderProgram *currentActiveShader = GlShaderProgram::getCurrentActiveShader();
@@ -479,8 +481,8 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 		}
 
 		curveShaderProgram->activate();
-		curveShaderProgram->setUniformVec4FloatArray("controlPoints", nbControlPoints, glControlPoints);
-		curveShaderProgram->setUniformInt("nbControlPoints", nbControlPoints);
+		curveShaderProgram->setUniformVec3FloatArray("controlPoints", controlPoints->size(), &((*controlPoints)[0][0]));
+		curveShaderProgram->setUniformInt("nbControlPoints", controlPoints->size());
 		curveShaderProgram->setUniformInt("nbCurvePoints", nbCurvePoints);
 		curveShaderProgram->setUniformFloat("startSize", startSize);
 		curveShaderProgram->setUniformFloat("endSize", endSize);
@@ -584,26 +586,24 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 
 	} else {
 		vector<Coord> curvePoints;
-		computeCurvePointsOnCPU(curvePoints);
-		drawCurve(curvePoints, startColor, endColor, startSize, endSize, (curvePoints[0] - (curvePoints[1] - curvePoints[0])),
+		computeCurvePointsOnCPU(*controlPoints, curvePoints, nbCurvePoints);
+		drawCurveCPU(curvePoints, startColor, endColor, startSize, endSize, (curvePoints[0] - (curvePoints[1] - curvePoints[0])),
 				curvePoints[curvePoints.size() - 1] + (curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]),
 				texture, outlined, outlineColor, texCoordFactor, billboardCurve, lookDir);
 	}
 }
 
-void AbstractGlCurve::computeCurvePointsOnCPU(vector<Coord> &curvePoints) {
+void AbstractGlCurve::computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, vector<Coord> &curvePoints, unsigned int nbCurvePoints) {
 	for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
-		curvePoints.push_back(computeCurvePointOnCPU(i / static_cast<float>(nbCurvePoints - 1)));
+		curvePoints.push_back(computeCurvePointOnCPU(controlPoints, i / static_cast<float>(nbCurvePoints - 1)));
 	}
 }
 
 void AbstractGlCurve::translate(const Coord &move) {
-	for (unsigned int i = 0 ; i < controlPoints.size() ; ++i) {
+	for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
 		controlPoints[i] += move;
-		glControlPoints[3*i] += move[0];
-		glControlPoints[3*i+1] += move[1];
-		glControlPoints[3*i+2] += move[2];
 	}
+	boundingBox.translate(move);
 }
 
 void AbstractGlCurve::getXML(xmlNodePtr rootNode) {}

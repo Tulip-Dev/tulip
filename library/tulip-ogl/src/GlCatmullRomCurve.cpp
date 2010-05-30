@@ -21,10 +21,12 @@
 
 using namespace std;
 
-static string catmullRomSpecificShaderCode =
+static string catmullRomSpecificShaderCode=
 		"uniform bool closedCurve;"
-
+		"uniform float totalLength;"
 		"vec3 bezierControlPoints[4] = vec3[4](vec3(0.0), vec3(0.0), vec3(0.0), vec3(0.0));"
+
+		"float parameter[2];"
 
 		"void computeBezierSegmentControlPoints(vec3 pBefore, vec3 pStart, vec3 pEnd, vec3 pAfter) {"
 		"	vec3 d0, d1;"
@@ -37,15 +39,21 @@ static string catmullRomSpecificShaderCode =
 		"}"
 
 		"int computeSegmentIndex(float t) {"
+		"	float dist = distance(controlPoints[0], controlPoints[1]);"
+		"	parameter[0] = 0.0;"
+		"	parameter[1] = dist / totalLength;"
 		"	if (t == 0.0) {"
 		"		return 0;"
 		"	} else if (t == 1.0)   {"
 		"		return nbControlPoints - 1;"
 		"	} else {"
 		"		int i = 0;"
-		"		while (t >= controlPoints[i+1].w) {"
+		"		while (t >= (dist / totalLength)) {"
 		"			++i;"
+		"			parameter[0] = dist / totalLength;"
+		"			dist += distance(controlPoints[i], controlPoints[i+1]);"
 		"		}"
+		"		parameter[1] = dist / totalLength;"
 		"		return i;"
 		"	}"
 		"}"
@@ -56,16 +64,16 @@ static string catmullRomSpecificShaderCode =
 		"	if (t == 1.0) {"
 		"		localT = 1.0;"
 		"	} else if (t != 0.0) {"
-		"		localT = (t - controlPoints[i].w) / (controlPoints[i+1].w - controlPoints[i].w);"
+		"		localT = (t - parameter[0]) / (parameter[1] - parameter[0]);"
 		"	}"
 		"	if (i == 0) {"
-		"		computeBezierSegmentControlPoints(closedCurve ? controlPoints[nbControlPoints - 1].xyz : controlPoints[i].xyz, controlPoints[i].xyz, controlPoints[i+1].xyz, controlPoints[i+2].xyz);"
+		"		computeBezierSegmentControlPoints(closedCurve ? controlPoints[nbControlPoints - 1] : controlPoints[i], controlPoints[i], controlPoints[i+1], controlPoints[i+2]);"
 		"	} else if (i == nbControlPoints - 2) {"
-		"		computeBezierSegmentControlPoints(controlPoints[i-1].xyz, controlPoints[i].xyz, controlPoints[i+1].xyz, closedCurve ? controlPoints[0].xyz : controlPoints[i+1].xyz);"
+		"		computeBezierSegmentControlPoints(controlPoints[i-1], controlPoints[i], controlPoints[i+1], closedCurve ? controlPoints[0] : controlPoints[i+1]);"
 		"	} else if (i == nbControlPoints - 1) {"
-		"		computeBezierSegmentControlPoints(controlPoints[i-2].xyz, controlPoints[i-1].xyz, controlPoints[i].xyz, closedCurve ? controlPoints[0].xyz : controlPoints[i].xyz);"
+		"		computeBezierSegmentControlPoints(controlPoints[i-2], controlPoints[i-1], controlPoints[i], closedCurve ? controlPoints[0] : controlPoints[i]);"
 		"	} else {"
-		"		computeBezierSegmentControlPoints(controlPoints[i-1].xyz, controlPoints[i].xyz, controlPoints[i+1].xyz, controlPoints[i+2].xyz);"
+		"		computeBezierSegmentControlPoints(controlPoints[i-1], controlPoints[i], controlPoints[i+1], controlPoints[i+2]);"
 		"	}"
 		"	float t2 = localT * localT;"
 		"	float t3 = t2 * localT;"
@@ -86,29 +94,11 @@ static vector<Coord> getCamullControlPoints(const vector<Coord> &controlPoints, 
 	return controlPointsCp;
 }
 
+GlCatmullRomCurve::GlCatmullRomCurve() : AbstractGlCurve("catmull rom vertex shader", catmullRomSpecificShaderCode), closedCurve(false), globalParameter(NULL) {}
+
 GlCatmullRomCurve::GlCatmullRomCurve(const vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
 		const float startSize, const float endSize, const bool closedCurve, const unsigned int nbCurvePoints)
-: AbstractGlCurve("catmull rom vertex shader", catmullRomSpecificShaderCode, controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints), closedCurve(closedCurve) {
-
-	float globalParameter[nbControlPoints];
-	globalParameter[0] = 0.0f;
-	globalParameter[nbControlPoints - 1] = 1.0f;
-	float cumLength[nbControlPoints - 1];
-	cumLength[0] = 0.0f;
-	float totalLength = 0;
-	for (unsigned int i = 1 ; i < nbControlPoints ; ++i) {
-		float dist = controlPoints[i-1].dist(controlPoints[i]);
-		cumLength[i] = cumLength[i-1] + dist;
-		totalLength += dist;
-	}
-	for (unsigned int i = 1 ; i < nbControlPoints - 1 ; ++i) {
-		globalParameter[i] = cumLength[i] / totalLength;
-	}
-
-	for (unsigned int i = 0 ; i < nbControlPoints ; ++i) {
-		glControlPoints[4*i+3] = globalParameter[i];
-	}
-}
+: AbstractGlCurve("catmull rom vertex shader", catmullRomSpecificShaderCode, controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints), closedCurve(closedCurve) {}
 
 GlCatmullRomCurve::~GlCatmullRomCurve() {}
 
@@ -116,32 +106,32 @@ int GlCatmullRomCurve::computeSegmentIndex(float t) {
 	if (t == 0.0) {
 		return 0;
 	} else if (t == 1.0)  {
-		return nbControlPoints - 1;
+		return controlPoints.size() - 1;
 	} else {
 		int i = 0;
-		while (t >= glControlPoints[4*(i+1)+3]) {
+		while (t >= globalParameter[i+1]) {
 			++i;
 		}
 		return i;
 	}
 }
 
-Coord GlCatmullRomCurve::computeCurvePointOnCPU(float t) {
+Coord GlCatmullRomCurve::computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) {
 	int i = computeSegmentIndex(t);
 	float localT = 0.0;
 	if (t == 1.0) {
 		localT = 1.0;
 	} else if (t != 0.0) {
-		localT = (t - glControlPoints[4*i+3]) / (glControlPoints[4*(i+1)+3] - glControlPoints[4*i+3]);
+		localT = (t - globalParameter[i]) / (globalParameter[i+1] - globalParameter[i]);
 	}
 	vector<Coord> bezierControlPoints;
 	if (i == 0) {
 		computeBezierSegmentControlPoints(closedCurve ? controlPoints[controlPoints.size() - 1] : controlPoints[i], controlPoints[i], controlPoints[i+1], controlPoints[i+2], bezierControlPoints);
-	} else if (i == nbControlPoints - 2) {
+	} else if (i == controlPoints.size() - 2) {
 		computeBezierSegmentControlPoints(controlPoints[i-1], controlPoints[i], controlPoints[i+1], closedCurve ? controlPoints[0] : controlPoints[i+1], bezierControlPoints);
-	} else if (i == nbControlPoints - 1) {
+	} else if (i == controlPoints.size() - 1) {
 		computeBezierSegmentControlPoints(controlPoints[i-2], controlPoints[i-1], controlPoints[i], closedCurve ? controlPoints[0] : controlPoints[i], bezierControlPoints);
-	} else if (i != nbControlPoints - 1) {
+	} else if (i != controlPoints.size() - 1) {
 		computeBezierSegmentControlPoints(controlPoints[i-1], controlPoints[i], controlPoints[i+1], controlPoints[i+2], bezierControlPoints);
 	}
 	float t2 = localT * localT;
@@ -164,33 +154,50 @@ void GlCatmullRomCurve::computeBezierSegmentControlPoints(const Coord &pBefore, 
 
 void GlCatmullRomCurve::setCurveVertexShaderRenderingSpecificParameters() {
 	curveShaderProgram->setUniformBool("closedCurve", closedCurve);
+	curveShaderProgram->setUniformFloat("totalLength", totalLength);
 }
 
+void GlCatmullRomCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
 
-void GlCatmullRomCurve::draw(float lod, Camera *camera) {
-	if (controlPoints.size() == 2) {
-		GlBezierCurve curve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
+	globalParameter = new float[controlPoints->size()];
+	globalParameter[0] = 0.0f;
+	globalParameter[controlPoints->size() - 1] = 1.0f;
+	float cumLength[controlPoints->size() - 1];
+	cumLength[0] = 0.0f;
+	totalLength = 0.0f;
+	for (size_t i = 1 ; i < controlPoints->size() ; ++i) {
+		float dist = (*controlPoints)[i-1].dist((*controlPoints)[i]);
+		cumLength[i] = cumLength[i-1] + dist;
+		totalLength += dist;
+	}
+	for (size_t i = 1 ; i < controlPoints->size() - 1 ; ++i) {
+		globalParameter[i] = cumLength[i] / totalLength;
+	}
+
+	static GlBezierCurve curve;
+	if (controlPoints->size() == 2) {
 		curve.setOutlined(outlined);
 		curve.setOutlineColor(outlineColor);
 		curve.setTexture(texture);
 		curve.setBillboardCurve(billboardCurve);
 		curve.setLookDir(lookDir);
-		curve.draw(lod, camera);
+		curve.drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
 	} else {
-		AbstractGlCurve::draw(lod, camera);
+		AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
 	}
 
 	if (closedCurve) {
 		vector<Coord> lastCurveSegmentControlPoints;
-		computeBezierSegmentControlPoints(controlPoints[controlPoints.size() - 2], controlPoints[controlPoints.size() - 1], controlPoints[0], controlPoints[1], lastCurveSegmentControlPoints);
-		GlBezierCurve bezierSegment(lastCurveSegmentControlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
-		bezierSegment.setOutlined(outlined);
-		bezierSegment.setOutlineColor(outlineColor);
-		bezierSegment.setTexture(texture);
-		bezierSegment.setBillboardCurve(billboardCurve);
-		bezierSegment.setLookDir(lookDir);
-		bezierSegment.draw(lod, camera);
+		computeBezierSegmentControlPoints((*controlPoints)[controlPoints->size() - 2], (*controlPoints)[controlPoints->size() - 1], (*controlPoints)[0], (*controlPoints)[1], lastCurveSegmentControlPoints);
+		curve.setOutlined(outlined);
+		curve.setOutlineColor(outlineColor);
+		curve.setTexture(texture);
+		curve.setBillboardCurve(billboardCurve);
+		curve.setLookDir(lookDir);
+		curve.drawCurve(&lastCurveSegmentControlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
 	}
+
+	delete [] globalParameter;
 }
 
 }

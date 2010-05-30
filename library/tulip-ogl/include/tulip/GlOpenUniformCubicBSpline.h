@@ -33,6 +33,9 @@ class TLP_GL_SCOPE GlOpenUniformCubicBSpline : public AbstractGlCurve {
 
 public:
 
+
+	GlOpenUniformCubicBSpline();
+
 	/**
 	 * GlOpenUniformCubicBSpline constructor
 	 *
@@ -48,13 +51,13 @@ public:
 
 	~GlOpenUniformCubicBSpline();
 
-	void draw(float lod, Camera *camera);
+	void drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=200);
 
 protected :
 
 	void setCurveVertexShaderRenderingSpecificParameters();
 
-	Coord computeCurvePointOnCPU(float t);
+	Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t);
 
 private:
 
