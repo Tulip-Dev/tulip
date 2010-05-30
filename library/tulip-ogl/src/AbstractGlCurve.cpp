@@ -397,7 +397,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
 			// on several graphic cards with different video memory size and graphics drivers
 			glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS_ARB, &MAX_SHADER_CONTROL_POINTS);
 			MAX_SHADER_CONTROL_POINTS /= 4;
-			MAX_SHADER_CONTROL_POINTS -= 144;
+			MAX_SHADER_CONTROL_POINTS -= 44;
 		}
 		if (curveVertexShaderNormalMain == NULL) {
 			curveVertexShaderNormalMain = new GlShader(Vertex);
