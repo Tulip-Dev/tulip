@@ -20,9 +20,9 @@ static string bSplineSpecificShaderCode =
 
 		"vec3 computeCurvePoint(float t) {"
 		"	if (t == 0.0) {"
-		"		return controlPoints[0].xyz;"
+		"		return controlPoints[0];"
 		"	} else if (t >= 1.0) {"
-		"		return controlPoints[nbControlPoints - 1].xyz;"
+		"		return controlPoints[nbControlPoints - 1];"
 		"	} else {"
 		"		int k = curveDegree;"
 		"		float cpt = 0.0;"
@@ -47,7 +47,7 @@ static string bSplineSpecificShaderCode =
 		"		int startIdx = k - curveDegree;"
 		"		vec3 curvePoint = vec3(0.0);"
 		"		for (int i = 0 ; i <= curveDegree ; ++i) {"
-		"			curvePoint += coeffs[i] * controlPoints[startIdx + i].xyz;"
+		"			curvePoint += coeffs[i] * controlPoints[startIdx + i];"
 		"		}"
 		"		return curvePoint;"
 		"	}"
@@ -57,12 +57,11 @@ static string bSplineSpecificShaderCode =
 
 const unsigned int curveDegree = 3;
 
+GlOpenUniformCubicBSpline::GlOpenUniformCubicBSpline() : AbstractGlCurve("open uniform cubic bspline vertex shader", bSplineSpecificShaderCode) {}
+
 GlOpenUniformCubicBSpline::GlOpenUniformCubicBSpline(const vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
 		const float startSize, const float endSize, const unsigned int nbCurvePoints)
-:  AbstractGlCurve("open uniform cubic bspline vertex shader", bSplineSpecificShaderCode, controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints) {
-	nbKnots = nbControlPoints + curveDegree + 1;
-	stepKnots = 1.0f / ((static_cast<float>(nbKnots) - 2.0f * (static_cast<float>(curveDegree) + 1.0f)) + 2.0f - 1.0f);
-}
+:  AbstractGlCurve("open uniform cubic bspline vertex shader", bSplineSpecificShaderCode, controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints) {}
 
 GlOpenUniformCubicBSpline::~GlOpenUniformCubicBSpline() {}
 
@@ -70,17 +69,21 @@ void GlOpenUniformCubicBSpline::setCurveVertexShaderRenderingSpecificParameters(
 	curveShaderProgram->setUniformFloat("stepKnots", stepKnots);
 }
 
-void GlOpenUniformCubicBSpline::draw(float lod,Camera *camera) {
-	if (nbControlPoints < (curveDegree + 1)) {
-		GlBezierCurve curve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
+void GlOpenUniformCubicBSpline::drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
+
+	nbKnots = controlPoints->size() + curveDegree + 1;
+	stepKnots = 1.0f / ((static_cast<float>(nbKnots) - 2.0f * (static_cast<float>(curveDegree) + 1.0f)) + 2.0f - 1.0f);
+
+	if (controlPoints->size() < (curveDegree + 1)) {
+		static GlBezierCurve curve;
 		curve.setOutlined(outlined);
 		curve.setOutlineColor(outlineColor);
 		curve.setTexture(texture);
 		curve.setBillboardCurve(billboardCurve);
 		curve.setLookDir(lookDir);
-		curve.draw(lod, camera);
+		curve.drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
 	} else {
-		AbstractGlCurve::draw(lod, camera);
+		AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
 	}
 }
 
@@ -88,11 +91,11 @@ static float clamp(float f, float minVal, float maxVal) {
 	return min(max(f, minVal), maxVal);
 }
 
-Coord GlOpenUniformCubicBSpline::computeCurvePointOnCPU(float t) {
+Coord GlOpenUniformCubicBSpline::computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) {
 	if (t == 0.0) {
-		return Coord(glControlPoints[0], glControlPoints[1], glControlPoints[2]);
+		return controlPoints[0];
 	} else if (t >= 1.0) {
-		return Coord(glControlPoints[4*(nbControlPoints-1)], glControlPoints[4*(nbControlPoints-1)+1], glControlPoints[4*(nbControlPoints-1)+2]);
+		return controlPoints[controlPoints.size() - 1];
 	} else {
 		float coeffs[curveDegree + 1];
 		memset(coeffs, 0, (curveDegree + 1) * sizeof(float));
@@ -116,7 +119,7 @@ Coord GlOpenUniformCubicBSpline::computeCurvePointOnCPU(float t) {
 		Coord curvePoint(0.0f, 0.0f, 0.0f);
 		int startIdx = k - curveDegree;
 		for (unsigned int i = 0 ; i <= curveDegree ; ++i) {
-			curvePoint += coeffs[i] * Coord(glControlPoints[4*(startIdx + i)], glControlPoints[4*(startIdx + i)+1], glControlPoints[4*(startIdx + i)+2]);
+			curvePoint += coeffs[i] * controlPoints[startIdx + i];
 		}
 		return curvePoint;
 	}

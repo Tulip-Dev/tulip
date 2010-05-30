@@ -48,9 +48,9 @@ static string bezierSpecificVertexShaderSrc =
 
 		"vec3 computeCurvePoint(float t) {"
 		"	if (t == 0.0) {"
-		"		return controlPoints[0].xyz;"
+		"		return controlPoints[0];"
 		"	} else if (t == 1.0) {"
-		"		return controlPoints[nbControlPoints - 1].xyz;"
+		"		return controlPoints[nbControlPoints - 1];"
 		"	} else {"
 		"		float s = (1.0 - t);"
 		"		vec3 bezierPoint = vec3(0.0);"
@@ -69,20 +69,11 @@ namespace tlp {
 float *GlBezierCurve::pascalTriangleTextureData(NULL);
 GLuint GlBezierCurve::pascalTriangleTextureId(0);
 
+GlBezierCurve::GlBezierCurve() : AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc) {}
+
 GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
 		const float &startSize, const float &endSize, const unsigned int nbCurvePoints) :
 		AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc, controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints) {
-
-	static bool floatTextureOk = glewIsSupported("GL_ARB_texture_float");
-	if (pascalTriangleTextureId == 0 && floatTextureOk) { 
-		buildPascalTriangleTexture();
-	}
-
-	if (!floatTextureOk) {
-		// float texture not supported, forcing CPU rendering
-		curveShaderProgramNormal = NULL;
-		curveShaderProgramBillboard = NULL;
-	}
 }
 
 GlBezierCurve::~GlBezierCurve() {}
@@ -124,11 +115,11 @@ void GlBezierCurve::cleanupAfterCurveVertexShaderRendering() {
 	glActiveTexture(GL_TEXTURE0);
 }
 
-Coord GlBezierCurve::computeCurvePointOnCPU(float t) {
+Coord GlBezierCurve::computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) {
 	static vector<vector<double> > pascalTriangle = buildPascalTriangle(3*CONTROL_POINTS_LIMIT);
 	tlp::Vector<double, 3> bezierPoint;
 	bezierPoint.fill(0.0);
-	for (unsigned int i = 0 ; i < controlPoints.size() ; ++i) {
+	for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
 		tlp::Vector<double, 3> controlPoint;
 		controlPoint[0] = controlPoints[i][0];
 		controlPoint[1] = controlPoints[i][1];
@@ -138,22 +129,37 @@ Coord GlBezierCurve::computeCurvePointOnCPU(float t) {
 	return Coord(bezierPoint[0], bezierPoint[1], bezierPoint[2]);
 }
 
-void GlBezierCurve::draw(float lod, Camera *camera) {
-	if (controlPoints.size() <= CONTROL_POINTS_LIMIT) {
-		AbstractGlCurve::draw(lod, camera);
+void GlBezierCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
+
+	static bool floatTextureOk = glewIsSupported("GL_ARB_texture_float");
+	if (pascalTriangleTextureId == 0 && floatTextureOk) {
+		buildPascalTriangleTexture();
+	}
+
+	if (!floatTextureOk) {
+		// float texture not supported, forcing CPU rendering
+		curveShaderProgramNormal = NULL;
+		curveShaderProgramBillboard = NULL;
+	}
+
+	if (controlPoints->size() <= CONTROL_POINTS_LIMIT) {
+		AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize, controlPoints->size() > 2 ? nbCurvePoints : 2);
 	} else {
+
+		static GlCatmullRomCurve curve;
+
 		const unsigned int nbApproximationPoints = 20;
 		vector<Coord> curvePoints;
 		for (unsigned int i = 0 ; i < nbApproximationPoints ; ++i) {
-			curvePoints.push_back(computeCurvePointOnCPU(i / static_cast<float>(nbApproximationPoints-1)));
+			curvePoints.push_back(computeCurvePointOnCPU(*controlPoints, i / static_cast<float>(nbApproximationPoints-1)));
 		}
-		GlCatmullRomCurve curve(curvePoints, startColor, endColor, startSize, endSize, false, nbCurvePoints);
+		curve.setClosedCurve(false);
 		curve.setOutlined(outlined);
 		curve.setOutlineColor(outlineColor);
 		curve.setTexture(texture);
 		curve.setBillboardCurve(billboardCurve);
 		curve.setLookDir(lookDir);
-		curve.draw(lod,camera);
+		curve.drawCurve(&curvePoints, startColor, endColor, startSize, endSize, nbCurvePoints);
 	}
 }
 

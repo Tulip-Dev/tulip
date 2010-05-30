@@ -12,6 +12,8 @@ class TLP_GL_SCOPE AbstractGlCurve : public GlSimpleEntity {
 
 public :
 
+	AbstractGlCurve(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode);
+
 	AbstractGlCurve(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode, const std::vector<Coord> &controlPoints,
 				    const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints);
 
@@ -35,17 +37,21 @@ public :
 
 	void setWithXML(xmlNodePtr rootNode);
 
+	virtual void drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=100);
+
 protected:
 
 	virtual void setCurveVertexShaderRenderingSpecificParameters() {};
 
 	virtual void cleanupAfterCurveVertexShaderRendering() {};
 
-	virtual Coord computeCurvePointOnCPU(float t) = 0;
+	virtual Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) = 0;
 
-	void computeCurvePointsOnCPU(std::vector<Coord> &curvePoints);
+	void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
 
 	static void buildCurveVertexBuffers(const unsigned int nbCurvePoints, bool vboOk);
+
+	void initShader(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode);
 
 	static std::map<unsigned int, GLfloat *> curveVertexBuffersData;
 	static std::map<unsigned int, std::vector<GLushort *> > curveVertexBuffersIndices;
@@ -64,8 +70,6 @@ protected:
 
 
 	std::vector<Coord> controlPoints;
-	unsigned int nbControlPoints;
-	float *glControlPoints;
 	Color startColor;
 	Color endColor;
 	float startSize;
