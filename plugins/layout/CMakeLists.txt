@@ -177,7 +177,6 @@ INSTALL(TARGETS
 	GemLayout-${TulipVersion}
 	TreeReingoldAndTilforExtended-${TulipVersion}
 	ConeTreeExtended-${TulipVersion}
-	TreeMap-${TulipVersion}
 	TreeRadial-${TulipVersion}
 	TreeLeaf-${TulipVersion}
 	BubbleTree-${TulipVersion}
