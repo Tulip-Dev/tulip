@@ -20,7 +20,7 @@ const double DEFAULT_RATIO = 1.;
 const int DEFAULT_WIDTH   = 1024;
 const int DEFAULT_HEIGHT  = 1024;
 
-const int TEXTUREDGLYPHID = 101;
+const int TEXTUREDGLYPHID = 142;
 
 namespace 
 {
@@ -41,23 +41,23 @@ namespace
       HTML_HELP_BODY() \
       "This parameter enables to set up the aspect ratio (height/width) for the rectangle corresponding to the root node." \
       HTML_HELP_CLOSE(),
-      // texture
+      // treemap type
       HTML_HELP_OPEN() \
       HTML_HELP_DEF( "type", "bool" ) \
-      HTML_HELP_DEF( "values", "[true, false]" ) \
+      HTML_HELP_DEF( "true", "B. Shneiderman" ) \
+      HTML_HELP_DEF( "false", "J. J. van Wijk" ) \
       HTML_HELP_DEF( "default", "false" ) \
       HTML_HELP_BODY() \
-      "This parameter indicates if the glyphs representing nodes are textured or not." \
+      "This parameter indicates to use normal Treemaps (B. Shneiderman) or Squarified Treemaps (van Wijk)" \
       HTML_HELP_CLOSE(),
     };
 }
-
 //====================================================================
 SquarifiedTreeMap::SquarifiedTreeMap(const PropertyContext& context) :LayoutAlgorithm(context){
   aspectRatio = DEFAULT_RATIO;
   addParameter<DoubleProperty>("metric", paramHelp[0], 0, false);
   addParameter<double>("Aspect Ratio", paramHelp[1], "1.");
-  addParameter<bool>("Texture?", paramHelp[2], "false");
+  addParameter<bool>("Treemap Type", paramHelp[2], "false");
 }
 
 //====================================================================
@@ -94,23 +94,23 @@ bool SquarifiedTreeMap::check(string& errorMsg) {
 bool SquarifiedTreeMap::run() {
   double aspectRatio  = DEFAULT_RATIO;
   bool glyphTextured = false;
-    
+  shneidermanTreeMap = false;
   size  = graph->getProperty<SizeProperty>("viewSize");    
+
   // ensure size updates will be kept after a pop
   preservePropertyUpdates(size);
 
   if (dataSet != 0) {
     dataSet->get("Aspect Ratio", aspectRatio);
-    dataSet->get("Texture?", glyphTextured);
+    dataSet->get("Treemap Type", shneidermanTreeMap);
   }
     
   glyph = graph->getProperty<IntegerProperty>("viewShape"); 
-    
-  if (glyphTextured) {
-    // ensure glyph updates will be kept after a pop
-    //preservePropertyUpdates(glyph);
-    //glyph->setAllNodeValue(TEXTUREDGLYPHID);
-  }
+  // ensure shapes updates will be kept after a pop
+  preservePropertyUpdates(glyph);
+
+  glyph->setAllNodeValue(TEXTUREDGLYPHID);
+
 
   Rectangle<double> initialSpace(0, 0, DEFAULT_WIDTH * aspectRatio, DEFAULT_HEIGHT);
 
@@ -176,7 +176,7 @@ void SquarifiedTreeMap::layoutRow(const vector<node> &row, const int depth, cons
         if (graph->outdeg(*it) > 0) {
             vector<node> toTreat(orderedChildren(*it));
             Rectangle<double> newRec(adjustRectangle(layoutRec));
-            squarify(toTreat, newRec, depth);
+            squarify(toTreat, newRec, depth + 1);
         }
     }
 }
@@ -244,6 +244,9 @@ void SquarifiedTreeMap::squarify(const vector<node> &toTreat, const Rectangle<do
   assert(!toTreat.empty());
 
   vector<node> rowNodes;
+  vector<node> unTreated;
+  double unTreatedSurface = 0;
+
   vector<node>::const_iterator  it;
   double surface = 0;
   for (it = toTreat.begin(); it!=toTreat.end(); ++it)
@@ -257,19 +260,28 @@ void SquarifiedTreeMap::squarify(const vector<node> &toTreat, const Rectangle<do
   ++it;
   //build the new row
   while (it != toTreat.end()) { //add node in the current row while condition is ok
-      double newRatio = evaluateRow(rowNodes, *it, width, length, surface);
-      if (newRatio < ratio) break; //we finish to build that row
-      ratio = newRatio;
-      rowNodes.push_back(*it); //add the node to the current row
+      if (shneidermanTreeMap) {
+          rowNodes.push_back(*it);
+      }
+      else {
+          double newRatio = evaluateRow(rowNodes, *it, width, length, surface);
+          if (newRatio < ratio) {  //we finish to build that row
+              //break;
+              unTreated.push_back(*it);
+              unTreatedSurface += nodesSize.get(it->id);
+          }
+          else {
+              ratio = newRatio;
+              rowNodes.push_back(*it); //add the node to the current row
+          }
+      }
       ++it;
   }
 
   //Compute measure on unTreated nodes to do a recursive call
-  vector<node> unTreated;
-  double unTreatedSurface = 0;
   while (it != toTreat.end()) {
       unTreated.push_back(*it);
-      unTreatedSurface += nodesSize.get(it->id);
+       unTreatedSurface += nodesSize.get(it->id);
       ++it;
   }
   assert(unTreated.size() + rowNodes.size() == toTreat.size());
