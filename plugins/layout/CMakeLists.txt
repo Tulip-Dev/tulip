@@ -54,12 +54,6 @@ TARGET_LINK_LIBRARIES(ConeTreeExtended-${TulipVersion} ${LibTulipName})
 ADD_DEPENDENCIES(ConeTreeExtended-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(TreeMap_SRCS TreeMap.h TreeMap.cpp)
-ADD_LIBRARY(TreeMap-${TulipVersion} SHARED ${TreeMap_SRCS})
-TARGET_LINK_LIBRARIES(TreeMap-${TulipVersion} ${LibTulipName})
-ADD_DEPENDENCIES(TreeMap-${TulipVersion} ${LibTulipName})
-
-##----------------------------------------------------------------------------------------------------------------------------
 SET(TreeRadial_SRCS TreeRadial.cpp DatasetTools.h DatasetTools.cpp)
 ADD_LIBRARY(TreeRadial-${TulipVersion} SHARED ${TreeRadial_SRCS})
 TARGET_LINK_LIBRARIES(TreeRadial-${TulipVersion} ${LibTulipName})
