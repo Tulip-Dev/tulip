@@ -10,7 +10,6 @@ plugins_LTLIBRARIES = \
 	libRandom-@VERSION@.la \
 	libGemLayout-@VERSION@.la \
 	libTreeReingoldAndTilforExtended-@VERSION@.la \
-	libTreeMap-@VERSION@.la \
 	libConeTreeExtended-@VERSION@.la\
 	libCircular-@VERSION@.la \
 	libHierarchicalGraph-@VERSION@.la \
@@ -33,7 +32,6 @@ libRandom_@VERSION@_la_SOURCES = Random.h Random.cpp
 libGemLayout_@VERSION@_la_SOURCES = GEMLayout.h GEMLayout.cpp
 libTreeReingoldAndTilforExtended_@VERSION@_la_SOURCES = TreeReingoldAndTilfordExtended.h TreeReingoldAndTilfordExtended.cpp DatasetTools.h DatasetTools.cpp
 libConeTreeExtended_@VERSION@_la_SOURCES = ConeTreeExtended.h ConeTreeExtended.cpp DatasetTools.h DatasetTools.cpp
-libTreeMap_@VERSION@_la_SOURCES = TreeMap.h TreeMap.cpp 
 libTreeRadial_@VERSION@_la_SOURCES = TreeRadial.cpp DatasetTools.h DatasetTools.cpp
 libTreeLeaf_@VERSION@_la_SOURCES = TreeLeaf.h TreeLeaf.cpp DatasetTools.h DatasetTools.cpp OrientableCoord.h OrientableLayout.h OrientableSize.h OrientableSizeProxy.h OrientableCoord.cpp OrientableLayout.cpp OrientableSize.cpp OrientableSizeProxy.cpp
 libBubbleTree_@VERSION@_la_SOURCES = BubbleTree.h BubbleTree.cpp DatasetTools.h DatasetTools.cpp
