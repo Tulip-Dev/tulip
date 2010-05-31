@@ -189,73 +189,55 @@ void SpreadTable::reloadView() {
 		string propName = *it;
 
 		PropertyInterface *currentProperty = graph->getProperty(propName);
-
+    Iterator<node> *itN=graph->getNodes();
+    Iterator<edge> *itE=graph->getEdges();
+    for(unsigned int i=0;i<verticalBufferBegin;++i){
+      if (view == NodesView)
+        itN->next();
+      else
+        itE->next();
+    }
 		for (unsigned int i = verticalBufferBegin; i < verticalBufferBegin + TABLEHEIGHTBUFSIZE
 				&& i < numberOfRow; ++i) {
 			SpreadCell *curCell = new SpreadCell;
-			if (colorProperty) {
+      node n;
+      edge e;
+
+      if(view == NodesView)
+        n=itN->next();
+      else
+        e=itE->next();
+
+      if (colorProperty) {
 				Color color;
 				Color labelColor;
 				if (view == NodesView) {
-					if (!selectionProperty->getNodeValue(node(i)))
-						color = colorProperty->getNodeValue(node(i));
+          if (!selectionProperty->getNodeValue(n))
+            color = colorProperty->getNodeValue(n);
 					else
 						color = Color(255, 102, 255, 255);
 
-					labelColor = labelColorProperty->getNodeValue(node(i));
+          labelColor = labelColorProperty->getNodeValue(n);
 				} else {
-					if (!selectionProperty->getEdgeValue(edge(i)))
-						color = colorProperty->getEdgeValue(edge(i));
+          if (!selectionProperty->getEdgeValue(e))
+            color = colorProperty->getEdgeValue(e);
 					else
 						color = Color(255, 102, 255, 255);
 
-					labelColor = labelColorProperty->getEdgeValue(edge(i));
+          labelColor = labelColorProperty->getEdgeValue(e);
 				}
 				curCell->setBackground(QBrush(QColor(color[0], color[1], color[2], color[3])));
 				curCell->setForeground(QBrush(QColor(labelColor[0], labelColor[1], labelColor[2],
 						labelColor[3])));
 			}
 			if (view == NodesView)
-			  curCell->setData(Qt::EditRole, QString::fromUtf8(currentProperty->getNodeStringValue(node(i)).c_str()));
+        curCell->setData(Qt::EditRole, QString::fromUtf8(currentProperty->getNodeStringValue(n).c_str()));
 			else
-			  curCell->setData(Qt::EditRole, QString::fromUtf8(currentProperty->getEdgeStringValue(edge(i)).c_str()));
+        curCell->setData(Qt::EditRole, QString::fromUtf8(currentProperty->getEdgeStringValue(e).c_str()));
 			setItem(i, currentPropId, curCell);
 		}
 		currentPropId++;
-	}
-	//delete it;
-	/*it = graph->getInheritedProperties();
-	 while (it->hasNext()) {
-	 string propName = it->next();
-
-	 PropertyInterface *currentProperty = graph->getProperty(propName);
-
-	 for (unsigned int i = verticalBufferBegin; i < verticalBufferBegin + TABLEHEIGHTBUFSIZE
-	 && i < numberOfRow; ++i) {
-	 SpreadCell *curCell = new SpreadCell;
-	 if (colorProperty) {
-	 Color color;
-	 Color labelColor;
-	 if (view == NodesView) {
-	 color = colorProperty->getNodeValue(node(i));
-	 labelColor = labelColorProperty->getNodeValue(node(i));
-	 } else {
-	 color = colorProperty->getEdgeValue(edge(i));
-	 labelColor = labelColorProperty->getEdgeValue(edge(i));
-	 }
-	 curCell->setBackground(QBrush(QColor(color[0], color[1], color[2], color[3])));
-	 curCell->setForeground(QBrush(QColor(labelColor[0], labelColor[1], labelColor[2],
-	 labelColor[3])));
-	 }
-	 if (view == NodesView)
-	 curCell->setData(Qt::EditRole, currentProperty->getNodeStringValue(node(i)).c_str());
-	 else
-	 curCell->setData(Qt::EditRole, currentProperty->getEdgeStringValue(edge(i)).c_str());
-	 setItem(i, currentPropId, curCell);
-	 }
-	 currentPropId++;
-	 }
-	 delete it;*/
+  }
 }
 
 void SpreadTable::loadCell(int minRow, int maxRow, int minColumn, int maxColumn) {
