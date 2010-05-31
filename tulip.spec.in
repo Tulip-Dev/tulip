@@ -155,7 +155,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libStrengthMetric-%{version}.*
 %{prefix}/lib/tlp/libStrongComponent-%{version}.*
 %{prefix}/lib/tlp/libTreeLeaf-%{version}.*
-%{prefix}/lib/tlp/libTreeMap-%{version}.*
 %{prefix}/lib/tlp/libTreeRadial-%{version}.*
 %{prefix}/lib/tlp/libTreeReingoldAndTilforExtended-%{version}.*
 %{prefix}/lib/tlp/libTutte-%{version}.*
