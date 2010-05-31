@@ -42,7 +42,10 @@ namespace tlp {
      * Function used to visit composite's children
      */
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
-      visitor->visit(this);
+      if(boundingBox.isValid()){
+        visitor->visit(this);
+      }
+
       for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
         (*it)->acceptVisitor(visitor);
       }
