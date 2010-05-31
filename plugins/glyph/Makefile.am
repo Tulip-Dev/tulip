@@ -22,7 +22,6 @@ plugins_LTLIBRARIES = \
 	libBillboard-@VERSION@.la \
 	libCylinder-@VERSION@.la \
 	libHalfCylinder-@VERSION@.la \
-	libSquareBorderTextured-@VERSION@.la \
 	libChristmasTree-@VERSION@.la 
 #	libSquareBorder-@VERSION@.la
 
@@ -41,7 +40,6 @@ libSphere_@VERSION@_la_SOURCES = sphere.cpp
 libCone_@VERSION@_la_SOURCES = cone.cpp 
 libCylinder_@VERSION@_la_SOURCES = cylinder.cpp 
 libHalfCylinder_@VERSION@_la_SOURCES = halfcylinder.cpp 
-libSquareBorderTextured_@VERSION@_la_SOURCES = squarebordertextured.cpp
 libChristmasTree_@VERSION@_la_SOURCES = christmastree.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
