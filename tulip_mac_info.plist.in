@@ -17,6 +17,6 @@
         <key>CFBundleShortVersionString</key>
         <string>@PACKAGE_VERSION@</string>
 	<key>NOTE</key>
-	<string>Created by Auber from LABRI (France)</string>
+	<string>Created by LaBRI Visualization Team</string>
 </dict>
 </plist>
