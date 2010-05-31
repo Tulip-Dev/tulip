@@ -326,7 +326,7 @@ GlShader *AbstractGlCurve::curveVertexShaderNormalMain(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderBillboardMain(NULL);
 
 AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &curveSpecificShaderCode) :
-				curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
+				curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
 				outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
 	initShader(shaderProgramName, curveSpecificShaderCode);
 }
@@ -391,7 +391,11 @@ void AbstractGlCurve::draw(float lod, Camera *camera) {
 }
 
 void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode) {
-	if (GlShaderProgram::shaderProgramsSupported()) {
+	// restrict shaders compilation on compatible hardware, crashs can happened when using the Mesa software rasterizer
+	static string glVendor(((const char*)glGetString(GL_VENDOR)));
+	static bool glVendorOk = (glVendor.find("NVIDIA")!=string::npos) || (glVendor.find("ATI")!=string::npos);
+
+	if (glVendorOk && GlShaderProgram::shaderProgramsSupported()) {
 		if (MAX_SHADER_CONTROL_POINTS == 0) {
 			// has been determined experimentally by testing the implementation
 			// on several graphic cards with different video memory size and graphics drivers
