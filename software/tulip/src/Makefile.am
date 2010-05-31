@@ -34,6 +34,7 @@ AM_CPPFLAGS= @QT_CPPFLAGS@
 
 EXTRA_DIST = CMakeLists.txt tulip.sh
 
+if WIN32
 BUILT_SOURCES = \
 	TulipResource.cpp \
 	moc_AppStartUp.cpp \
@@ -41,6 +42,16 @@ BUILT_SOURCES = \
 	moc_TulipApp.cpp \
 	moc_PreferenceDialog.cpp \
 	moc_ChooseControllerDialog.cpp
+else
+BUILT_SOURCES = \
+	TulipResource.cpp \
+	moc_AppStartUp.cpp \
+	moc_InfoDialog.cpp \
+	moc_TulipApp.cpp \
+	moc_PreferenceDialog.cpp \
+	moc_ChooseControllerDialog.cpp \
+	tulip
+endif
 
 nodist_tulip_app_SOURCES = $(BUILT_SOURCES)
 
@@ -60,14 +71,6 @@ moc_%.cpp: ../include/%.h
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<
 
 CLEANFILES = $(BUILT_SOURCES)
-
-if MACOSX
-CLEANFILES +=tulip
-endif
-
-if LINUX
-CLEANFILES +=tulip
-endif
 
 ../include/%Data.h: ../designer/%.ui
 	$(UIC) -o $@ $<
