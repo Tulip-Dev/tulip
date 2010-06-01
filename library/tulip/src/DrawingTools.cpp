@@ -4,6 +4,8 @@
 #include "tulip/SizeProperty.h"
 #include "tulip/DoubleProperty.h"
 #include "tulip/BooleanProperty.h"
+#include "tulip/ForEach.h"
+
 #include <climits>
 
 using namespace std;
@@ -30,7 +32,7 @@ namespace {
     vec[1] = backupVec[0]*sinz + backupVec[1]*cosz;
   }
 
-  void computePoint(pair<Coord, Coord> &boundingbox, const Coord &point, const Size & size, const double & rot) {
+  void computePoint(BoundingBox &boundingbox, const Coord &point, const Size & size, const double & rot) {
     //rotate size
     vector<Coord> points(4);
     points[0].set(size[0], size[1], size[2]);
@@ -40,8 +42,7 @@ namespace {
     for (unsigned int i=0; i<4; ++i) {
       rotate(points[i], rot);
       points[i] += point;
-      boundingbox.first = maxCoord(boundingbox.first, points[i]);
-      boundingbox.second =minCoord(boundingbox.second, points[i]);
+      boundingbox.expand(points[i]);
     }
   }
   
@@ -62,55 +63,51 @@ namespace {
   }
 }
 
-pair<Coord, Coord> tlp::computeBoundingBox(Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation, BooleanProperty *selection) {
-  pair<Coord, Coord> result;
+BoundingBox tlp::computeBoundingBox(const Graph *graph,
+                                           const LayoutProperty *layout,
+                                           const SizeProperty *size,
+                                           const DoubleProperty *rotation,
+                                           const BooleanProperty *selection) {
+  BoundingBox result;
   if (graph->numberOfNodes()==0) {
-    result.first.set(0, 0, 0);
-    result.second.set(0, 0, 0);
+    result[0].fill(0);
+    result[1].fill(0);
     return result;
   }
-  result.first.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-  result.second.set(FLT_MAX, FLT_MAX, FLT_MAX);
-  Iterator<node> *itN=graph->getNodes();
-  while (itN->hasNext()) {
-    node itn=itN->next();
-
+  node itn;
+  forEach(itn, graph->getNodes()) {
     if (selection == 0 || selection->getNodeValue(itn)) {
 	const Coord& curCoord = layout->getNodeValue(itn);
 	Size curSize(size->getNodeValue(itn) / 2.0f);
 	const double& curRot = rotation->getNodeValue(itn);
 	computePoint(result, curCoord, curSize, curRot);
       }
-  } delete itN;
+  }
 
-  Iterator<edge> *itE=graph->getEdges();
-  while (itE->hasNext()) {
-    edge ite=itE->next();
-
+  edge ite;
+  forEach(ite, graph->getEdges()) {
     if (selection == 0 || selection->getEdgeValue(ite)) {
 	LineType::RealType::const_iterator itCoord;
 	const LineType::RealType &bends = layout->getEdgeValue(ite);
 	for (itCoord = bends.begin(); itCoord!=bends.end();++itCoord) {
-	  result.first = maxCoord(result.first, *itCoord);
-	  result.second = minCoord(result.second, *itCoord);
+          result.expand(*itCoord);
 	}
     }
-  } delete itE;
+  }
   return result;
 }
-
-pair<Coord, Coord> tlp::computeBoundingRadius(Graph *graph, 
-					      LayoutProperty *layout, 
-					      SizeProperty *size, 
-					      DoubleProperty *rotation, 
-					      BooleanProperty *selection) {
+//===========================================================================
+pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph,
+                                              const LayoutProperty *layout,
+                                              const SizeProperty *size,
+                                              const DoubleProperty *rotation,
+                                              const BooleanProperty *selection) {
   pair<Coord, Coord> result;
   result.first.set(0, 0, 0);
   result.second.set(0, 0, 0);
   if (graph->numberOfNodes()==0) return result;
-  pair <Coord, Coord> boundingBox = 
-    tlp::computeBoundingBox (graph, layout, size, rotation, selection);
-  Coord centre = (boundingBox.first + boundingBox.second)/2.0f;
+  BoundingBox boundingBox(tlp::computeBoundingBox (graph, layout, size, rotation, selection));
+  Coord centre(boundingBox.center());
   result.first = result.second = centre;
   
   double maxRad = 0;
@@ -153,4 +150,12 @@ pair<Coord, Coord> tlp::computeBoundingRadius(Graph *graph,
     }//end if
   } delete itE;
   return result;
+}
+//======================================================================================
+std::vector<Coord> tlp::computeConvexHull (const Graph *graph,
+                                           const LayoutProperty *layout,
+                                           const SizeProperty *size,
+                                           const DoubleProperty *rotation,
+                                           const BooleanProperty *selection) {
+
 }

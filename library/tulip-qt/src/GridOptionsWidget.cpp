@@ -78,10 +78,10 @@ namespace tlp
 	LayoutProperty *layout = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<LayoutProperty>("viewLayout");
 	SizeProperty *sizes = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<SizeProperty>("viewSize");
 	DoubleProperty *rotation = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<DoubleProperty>("viewRotation");
-	pair<Coord, Coord> bboxes = tlp::computeBoundingBox(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), layout,
+        BoundingBox bboxes = tlp::computeBoundingBox(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph(), layout,
 							    sizes, rotation);
-	max = bboxes.first;
-	min = bboxes.second;
+        max = Coord(bboxes[1]);
+        min = Coord(bboxes[0]);
 
 
 	for(int i=0; i < 3; i++) {

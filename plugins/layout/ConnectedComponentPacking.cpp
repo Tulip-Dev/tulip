@@ -87,12 +87,13 @@ bool ConnectedComponentPacking::run() {
   Iterator<Graph *> *it = workingGraph->getSubGraphs();
   while(it->hasNext()) {
     Graph *sg = it->next();
-    pair<Coord, Coord> tmp = tlp::computeBoundingBox(sg, layout, size, rotation);
+    BoundingBox tmp = tlp::computeBoundingBox(sg, layout, size, rotation);
     Rectangle<float> tmpRec;
-    tmpRec[1][0] = tmp.first[0] + spacing;
-    tmpRec[1][1] = tmp.first[1] + spacing;
-    tmpRec[0][0] = tmp.second[0] + spacing;
-    tmpRec[0][1] = tmp.second[1] + spacing;
+    tmpRec[1][0] = tmp[1][0] + spacing;
+    tmpRec[1][1] = tmp[1][1] + spacing;
+    tmpRec[0][0] = tmp[0][0] + spacing;
+    tmpRec[0][1] = tmp[0][1] + spacing;
+    assert(tmpRec.isValid());
     rectangles.push_back(tmpRec);
   } delete it;
 

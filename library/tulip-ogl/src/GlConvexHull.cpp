@@ -102,7 +102,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
   Graph *sg;
   //vector<GlConvexHull *> sgConvexHulls;
   ConvexHullItem *convexHullItem=new ConvexHullItem;
-
+  convexHullItem->_graph = graph;
   graph->getAttributes().get("name",convexHullItem->name);
   if(convexHullItem->name=="") {
     std::stringstream s;
@@ -287,7 +287,8 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 	  }
 	}
 	// add a GlConvexHull for this graph in front of convexHulls
-	convexHullItem->hull=new GlConvexHull(gConvexHull, filledColors, outColors, true, true, graph->getAttribute<string>("name"));
+        convexHullItem->hull = new GlConvexHull(gConvexHull, filledColors, outColors, true, true, graph->getAttribute<string>("name"));
+        convexHullItem->hull->_graph = graph;
     }
       //}
   }

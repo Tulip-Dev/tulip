@@ -87,6 +87,8 @@ namespace tlp {
      */
     void setWithXML(xmlNodePtr rootNode);
 
+    tlp::Graph *_graph;
+
   protected:
     std::vector<Coord> _points;
     std::vector<Color> _fillColors;
@@ -98,6 +100,7 @@ namespace tlp {
 
   struct ConvexHullItem {
     GlConvexHull* hull;
+    Graph *_graph;
     std::string name;
     std::vector<ConvexHullItem *> children;
   };
