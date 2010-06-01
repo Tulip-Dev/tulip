@@ -26,8 +26,8 @@ namespace stdext {
   template<>
     struct hash<double> {
     size_t operator()(const double s) const { return (size_t) s; }
-  };
 }
+  };
 #else
 #  include <tr1/unordered_map>
 #  include <tr1/unordered_set>

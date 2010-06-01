@@ -90,23 +90,25 @@ VECTORTLP tlp::operator+(const VECTORTLP &u, const VECTORTLP &v) {
   return VECTORTLP(u)+=v;
 }
 //======================================================
+/* @todo find why the compiler do not want that code here
 template <typename TYPE,unsigned int SIZE>
-VECTORTLP tlp::min(const VECTORTLP &u, const VECTORTLP &v) {
+VECTORTLP tlp::minVector(const VECTORTLP &u, const VECTORTLP &v) {
    VECTORTLP tmp;
-   for(unsigned int i = 0; i<SIZE; ++i) {
+   for(unsigned int i = 0; i<SIZE; ++i)
        tmp[i] = std::min(u[i], v[i]);
-   }
     return tmp;
 }
+*/
 //======================================================
+/* @todo find why the compiler do not want that code here
 template <typename TYPE,unsigned int SIZE>
-VECTORTLP tlp::max(const VECTORTLP &u, VECTORTLP &v) {
+VECTORTLP tlp::maxVector(const VECTORTLP &u, VECTORTLP &v) {
    VECTORTLP tmp;
-   for(unsigned int i = 0; i<SIZE; ++i) {
+   for(unsigned int i = 0; i<SIZE; ++i)
        tmp[i] = std::max(u[i], v[i]);
-   }
     return tmp;
 }
+*/
 //======================================================
 template <typename TYPE,unsigned int SIZE>
 VECTORTLP tlp::operator+(const VECTORTLP &u, const TYPE& scalaire) {

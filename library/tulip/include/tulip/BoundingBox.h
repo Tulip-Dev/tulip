@@ -61,13 +61,8 @@ namespace tlp {
           (*this)[0] = coord;
           (*this)[1] = coord;
       } else {
-          (*this)[0][0] = std::min((*this)[0][0], coord[0]);
-          (*this)[0][1] = std::min((*this)[0][1], coord[1]);
-          (*this)[0][2] = std::min((*this)[0][2], coord[2]);
-
-          (*this)[1][0] = std::max((*this)[1][0], coord[0]);
-          (*this)[1][1] = std::max((*this)[1][1], coord[1]);
-          (*this)[1][2] = std::max((*this)[1][2], coord[2]);
+          (*this)[0] = tlp::minVector((*this)[0], coord);
+          (*this)[1] = tlp::maxVector((*this)[1], coord);
       }
     }
     /**

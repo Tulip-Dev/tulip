@@ -15,10 +15,10 @@ float tlp::evaluateBorderSize(int nodeLevel) {
 
 //====================================================================
 float tlp::evaluateBorderSize(int nodeLevel, const RectangleArea& NodeArea, int) {
-    float limitSize  = min(NodeArea.getWidth()  / BORDERWIDTH_LIMIT,
+    float limitSize  = std::min(NodeArea.getWidth()  / BORDERWIDTH_LIMIT,
                            NodeArea.getHeight() / BORDERWIDTH_LIMIT);
     float borderSize = tlp::evaluateBorderSize(nodeLevel);
-    return min(limitSize, borderSize);
+    return std::min(limitSize, borderSize);
 }
 
 //====================================================================
