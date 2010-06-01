@@ -83,7 +83,6 @@ ENDIF(NOT LIBXML2_FOUND)
 ## Include file paths
 ## -----------------------------------------------------------------------------------------------
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
-SET(GLEInclude ${PROJECT_SOURCE_DIR}/thirdparty/gle/)
 SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
 SET(TulipInclude ${PROJECT_SOURCE_DIR}/library/tulip/include/)
 SET(TulipBuildInclude ${PROJECT_BINARY_DIR}/library/tulip/include/)
