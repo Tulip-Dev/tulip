@@ -487,22 +487,6 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 		return;
 	}
 
-	static GlBezierCurve bezier;
-	static GlCatmullRomCurve catmull;
-	static GlOpenUniformCubicBSpline bspline;
-
-	AbstractGlCurve *curve = NULL;
-	unsigned int nbCurvePoints = 100;
-	if (shape == BEZIERSHAPE) {
-		curve = &bezier;
-	} else if (shape == SPLINESHAPE) {
-		curve = &catmull;
-		nbCurvePoints = 200;
-	} else {
-		curve = &bspline;
-		nbCurvePoints = 200;
-	}
-
 	if (edge3D)
 		shape |= L3D_BIT;
 
@@ -529,27 +513,43 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 	case BEZIERSHAPE + L3D_BIT:
 	case SPLINESHAPE + L3D_BIT:
 	case CUBICBSPLINE + L3D_BIT: {
-		curve->setOutlined(false);
-		curve->setBillboardCurve(false);
-		curve->setTexture(textureName);
-		if (edge3D) {
-			curve->setBillboardCurve(true);
-			curve->setLookDir(lookDir);
-		}
-		float startSize = 1, endSize = 1;
-		if (lod > 10 || lod < -10) {
-			if(!colorInterpolate){
-				curve->setOutlined(true);
-				curve->setOutlineColor(borderColor);
-			}
-			startSize =  size[0]*.5;
-			endSize = size[1]*.5;
-		} else if (lod > 0.05 || lod < -0.05) {
-			startSize =  size[0]*.5;
-			endSize = size[1]*.5;;
-		}
-		curve->drawCurve(&tmp, startColor, endColor, startSize, endSize, nbCurvePoints);
-		break;
+	  static GlBezierCurve bezier;
+	  static GlCatmullRomCurve catmull;
+	  static GlOpenUniformCubicBSpline bspline;
+	  AbstractGlCurve *curve = NULL;
+	  unsigned int nbCurvePoints = 100;
+
+	  if (shape == BEZIERSHAPE) {
+	    curve = &bezier;
+	  } else if (shape == SPLINESHAPE) {
+	    curve = &catmull;
+	    nbCurvePoints = 200;
+	  } else {
+	    curve = &bspline;
+	    nbCurvePoints = 200;
+	  }
+
+	  curve->setOutlined(false);
+	  curve->setBillboardCurve(false);
+	  curve->setTexture(textureName);
+	  if (edge3D) {
+	    curve->setBillboardCurve(true);
+	    curve->setLookDir(lookDir);
+	  }
+	  float startSize = 1, endSize = 1;
+	  if (lod > 10 || lod < -10) {
+	    if(!colorInterpolate){
+	      curve->setOutlined(true);
+	      curve->setOutlineColor(borderColor);
+	    }
+	    startSize =  size[0]*.5;
+	    endSize = size[1]*.5;
+	  } else if (lod > 0.05 || lod < -0.05) {
+	    startSize =  size[0]*.5;
+	    endSize = size[1]*.5;;
+	  }
+	  curve->drawCurve(&tmp, startColor, endColor, startSize, endSize, nbCurvePoints);
+	  break;
 	}
 	default:
 		if (lod > 20 || lod < -20){
