@@ -40,31 +40,31 @@ namespace tlp {
 		unsigned int segments = 10);
 
     /**
-     * Accessor in writing to the center, the radius and the startAngle of the circle
+     * Write-acess Accessor to the center, the radius and the startAngle of the circle.
      */
     void set(const Coord &center, float radius, float startAngle);
 
     /**
-     * return the fill color of the circle (i parameters is not use)
-     * This function is write to overload the GlPolygon function
+     * return the fill color of the circle (i parameter is not used)
+     * This is an overload of the GlPolygon function to dismiss its behavior.
      */
-    virtual const Color& fcolor(const unsigned int i) const {return GlPolygon::fcolor(0);}
+    virtual const Color& fcolor(const unsigned int) const {return GlPolygon::fcolor(0);}
     /**
-     * return the fill color of the circle (i parameters is not use)
-     * This function is write to overload the GlPolygon function
+     * return the fill color of the circle (i parameter is not used)
+     * This is an overload of the GlPolygon function to dismiss its behavior.
      */
-    virtual Color& fcolor(const unsigned int i) {return GlPolygon::fcolor(0);}
+    virtual Color& fcolor(const unsigned int) {return GlPolygon::fcolor(0);}
 
     /**
-     * return the outline color of the circle (i parameters is not use)
-     * This function is write to overload the GlPolygon function
+     * return the outline color of the circle (i parameter is not used)
+     * This is an overload of the GlPolygon function to dismiss its behavior.
      */
-    virtual const Color& ocolor(const unsigned int i) const {return GlPolygon::ocolor(0);}
+    virtual const Color& ocolor(const unsigned int) const {return GlPolygon::ocolor(0);}
     /**
-     * return the outline color of the circle (i parameters is not use)
-     * This function is write to overload the GlPolygon function
+     * return the outline color of the circle (i parameter is not used)
+     * This is an overload of the GlPolygon function to dismiss its behavior.
      */
-    virtual Color& ocolor(const unsigned int i) {return GlPolygon::ocolor(0);}
+    virtual Color& ocolor(const unsigned int) {return GlPolygon::ocolor(0);}
 
     /**
      * Function to export data in XML
