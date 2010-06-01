@@ -91,6 +91,24 @@ VECTORTLP tlp::operator+(const VECTORTLP &u, const VECTORTLP &v) {
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE>
+VECTORTLP tlp::min(const VECTORTLP &u, const VECTORTLP &v) {
+   VECTORTLP tmp;
+   for(unsigned int i = 0; i<SIZE; ++i) {
+       tmp[i] = std::min(u[i], v[i]);
+   }
+    return tmp;
+}
+//======================================================
+template <typename TYPE,unsigned int SIZE>
+VECTORTLP tlp::max(const VECTORTLP &u, VECTORTLP &v) {
+   VECTORTLP tmp;
+   for(unsigned int i = 0; i<SIZE; ++i) {
+       tmp[i] = std::max(u[i], v[i]);
+   }
+    return tmp;
+}
+//======================================================
+template <typename TYPE,unsigned int SIZE>
 VECTORTLP tlp::operator+(const VECTORTLP &u, const TYPE& scalaire) {
   return VECTORTLP(u)+=scalaire;
 }
