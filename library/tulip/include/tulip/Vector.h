@@ -54,7 +54,20 @@ namespace tlp {
     inline TYPE dist (const VECTOR &) const;
     inline TYPE dotProduct(const VECTOR &) const;
   };
-
+  /**
+    * Return the minimun of each dimension of the two vectors
+    * for instance for a 2 vectors of dim 2 :
+    * min(V1, V2) = (min(V1[0], v2[0]), min(V1[1], v2[1))
+    */
+  TEMPLATEVECTOR
+    inline VECTOR min(const VECTOR &, const VECTOR &);
+  /**
+    * Return the maximum of each dimension of the two vectors
+    * for instance for a 2 vectors of dim 2 :
+    * max(V1, V2) = (max(V1[0], v2[0]), max(V1[1], v2[1))
+    */
+  TEMPLATEVECTOR
+    inline VECTOR max(const VECTOR &, const VECTOR &);
   TEMPLATEVECTOR
     inline VECTOR operator*(const VECTOR &, const VECTOR &);
   TEMPLATEVECTOR
