@@ -70,18 +70,6 @@ namespace tlp {
 		const Coord &,            /* normal to the begin of the curve */
 		const Coord &,            /* normal to the end curve */
 		const std::string &textureName="");			/* textureName */
-  TLP_GL_SCOPE void polyCylinder(const std::vector<Coord> &,    /* polyline vertces */
-		    const std::vector<Color> &,    /* colors at polyline verts */
-		    const std::vector<float> &,    /* size at polyline verts */
-		    const Coord &,            /* nomal to the begin of the curve */
-		    const Coord &);           /* nomal to the end curve */
-  TLP_GL_SCOPE void polyCylinder(const std::vector<Coord> &,    /* polyline vertces */
-		    const Color &,            /* start color */
-		    const Color &,            /* end color */
-		    const float,              /* start size */
-		    const float,              /* end size */
-		    const Coord &,            /* nomal to the begin of the curve */
-		    const Coord &);           /* nomal to the end curve */
   //====================================================================
   TLP_GL_SCOPE void bezierCylinder(const std::vector<Coord> &,  /* polyline vertces */
 		      const Color &,          /* start color */

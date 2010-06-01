@@ -10,7 +10,6 @@ extern "C" {
 #else
 #include <GL/gl.h>
 #endif
-#include <gle.h>
 }
 #include "tulip/GlLines.h"
 #include "tulip/Bezier.h"
@@ -325,115 +324,6 @@ void GlLines::glDrawSpline2Curve(const Coord &startPoint,const vector<Coord> &be
 			     steps,width,stippleType,
 			     startColor,endColor,arrow,arrowWidth,
 			     arrowHeight);
-}
-//=============================================================
-void GlLines::glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
-                              const Coord &startPoint, const vector<Coord> &bends, const Coord &endPoint,
-                              unsigned int steps, const Size &size, const StippleType stippleType,
-                              InterpolationMethod interpolation,
-                              const Color &startColor,const Color &endColor)
-{
-  unsigned int cpSize = bends.size()+2+2, pathSize = cpSize-2;
-  double (*controlPoints)[3] = new double[cpSize][3];
-  double (*path)[3] = &(controlPoints[1]);
-  float (*colorArray)[3] = NULL;
-  double *radiusArray = NULL;
-
-  //build line's path
-  controlPoints[1][0] = startPoint.getX();
-  controlPoints[1][1] = startPoint.getY();
-  controlPoints[1][2] = startPoint.getZ();
-  controlPoints[cpSize-2][0] = endPoint.getX();
-  controlPoints[cpSize-2][1] = endPoint.getY();
-  controlPoints[cpSize-2][2] = endPoint.getZ();
-  for (unsigned int i=0; i<(pathSize-2); ++i) {
-    controlPoints[i+2][0] = bends[i].getX();
-    controlPoints[i+2][1] = bends[i].getY();
-    controlPoints[i+2][2] = bends[i].getZ();
-  }
-
-  gleSetNumSides(32);
-  gleSetJoinStyle(TUBE_JN_ANGLE |  TUBE_JN_CAP | TUBE_NORM_MASK);
-
-  if (bends.size() == 0) interpolation = LINEAR;
-
-  switch(interpolation) {
-  case LINEAR: {
-    colorArray = buildColorArray(startColor, endColor, pathSize-1, true);
-    if (size.getH() != size.getW()) {
-      radiusArray = buildRadiusArray(size.getW(), size.getH(), pathSize-1, true);
-    }
-    Coord tmp = gleComputeAngle(Coord(path[1][0], path[1][1], path[1][2]),
-				startPoint, startNode);
-    controlPoints[0][0] = tmp.getX();
-    controlPoints[0][1] = tmp.getY();
-    controlPoints[0][2] = tmp.getZ();
-
-    tmp = gleComputeAngle(Coord(path[pathSize-2][0], path[pathSize-2][1], path[pathSize-2][2]),
-			  endPoint, finalNode);
-    controlPoints[cpSize-1][0] = tmp.getX();
-    controlPoints[cpSize-1][1] = tmp.getY();
-    controlPoints[cpSize-1][2] = tmp.getZ();
-
-    if (radiusArray == NULL) glePolyCylinder(cpSize, controlPoints, colorArray, size.getH());
-    else glePolyCone(cpSize, controlPoints, colorArray, radiusArray);
-    break;
-  }
-
-  case BEZIER:
-  case SPLINE3:
-  case SPLINE4: {
-    void (*curvefn)(double (&)[3], const double (*)[3], unsigned int, double);
-    switch(interpolation)
-      {
-      case BEZIER: curvefn = &Bezier; break;
-      case SPLINE3: curvefn = &Spline3; break;
-      case SPLINE4: curvefn = &Spline4; break;
-      default: curvefn = NULL;
-      }
-
-    double (*pointArray)[3] = new double[steps+1+2][3]; //steps+1 points + 2 to define angles at end of polycylinder
-    colorArray = buildColorArray(startColor, endColor, steps, true);
-    if (size.getH() != size.getW()) {
-      radiusArray = buildRadiusArray(size.getW(), size.getH(), steps, true);
-    }
-
-    for (unsigned int i=1; i < steps; ++i) {
-      (*curvefn)(pointArray[i+1], path, pathSize, (double)i/(double)steps);
-    }
-
-    for (int i=0; i < 3; ++i) {
-      pointArray[1][i] = path[0][i];                      //startPoint
-      pointArray[steps+1][i] = path[pathSize-1][i];       //endPoint
-    }
-
-    Coord tmp = gleComputeAngle(Coord(pointArray[2][0], pointArray[2][1], pointArray[2][2]),
-				startPoint, startNode);
-
-    pointArray[0][0] = tmp.getX();
-    pointArray[0][1] = tmp.getY();
-    pointArray[0][2] = tmp.getZ();
-
-    tmp = gleComputeAngle(Coord(pointArray[steps][0], pointArray[steps][1], pointArray[steps][2]), endPoint, finalNode);
-
-    pointArray[steps+2][0] = tmp.getX();
-    pointArray[steps+2][1] = tmp.getY();
-    pointArray[steps+2][2] = tmp.getZ();
-
-     if (radiusArray == NULL)
-       glePolyCylinder(steps+1+2, pointArray, colorArray, size.getW());
-     else
-       glePolyCone(steps+1+2, pointArray, colorArray, radiusArray);
-
-    delete [] pointArray;
-    break;
-  }
-  default: break;
-  }
-
-  delete [] controlPoints;
-  delete [] colorArray;
-  delete radiusArray;
 }
 //=============================================================
 void GlLines::glDrawPoint(const Coord &p) {

@@ -348,18 +348,6 @@ AC_CHECK_LIB(jpeg, jpeg_std_error,
 AM_CONDITIONAL(JPEG, test x$JPEG = xtrue)
 AC_SUBST(LIB_IMAGES_LDFLAGS)
 
-dnl
-dnl configure thirdparty libraries and sets flags
-dnl
-AC_ARG_WITH([gle-includes],AS_HELP_STRING([--with-gle-includes=FLAGS],[cppflags for libgle]),
- [LIBGLE_INCLUDE=$withval],
- [LIBGLE_INCLUDE='-I$(top_srcdir)/thirdparty/gle'])
-AC_ARG_WITH([gle-lib],AS_HELP_STRING([--with-gle-lib=FLAGS],[ldflags to link with libgle]),
- [LIBGLE_LDFLAGS=$withval],
- [LIBGLE_LDFLAGS='$(top_builddir)/thirdparty/gle/libgle.la'])
-AC_SUBST(LIBGLE_INCLUDE)
-AC_SUBST(LIBGLE_LDFLAGS)
-
 dnl gzstream ldflag points to top_srcdir
 dnl because it is a no_inst target and 'distcheck' makes the difference
 AC_ARG_WITH([gzstream-includes],AS_HELP_STRING([--with-gzstream-includes=FLAGS],[cppflags for libgzstream]),
@@ -413,7 +401,6 @@ library/tulip-qt/src/Makefile
 thirdparty/Makefile
 thirdparty/gzstream/Makefile
 thirdparty/ftgl/Makefile
-thirdparty/gle/Makefile
 software/Makefile
 software/plugins-manager/Makefile
 software/plugins-manager/src/Makefile

@@ -39,12 +39,6 @@ struct TLP_GL_SCOPE GlLines
 				const double width,const unsigned int stippleType,const Color &startColor,const Color &endColor,
 				const bool arrow=false,const double arrowWidth=1,const double arrowHeight=1);
 
-  static void glDrawExtrusion(const Coord &startNode, const Coord &finalNode,
-                              const Coord &startPoint, const std::vector<Coord> &bends, const Coord &endPoint,
-			      unsigned int steps, const Size &size, const StippleType stippleType,
-			      InterpolationMethod interpolation,
-			      const Color &startColor,const Color &endColor);
-
   private:
   static void glDisableLineStipple(unsigned int stippleType);
   static void glEnableLineStipple(unsigned int stippleType);

@@ -53,7 +53,7 @@ set(tulip-ogl_LIB_SRCS
 	GlEdge.cpp 
 	GlMetaNodeTrueRenderer.cpp 
 	GlDisplayListManager.cpp 
-    OpenGlConfigManager.cpp
+    	OpenGlConfigManager.cpp
 	GlSceneObserver.cpp 
 	GlLine.cpp 
 	GlCurve.cpp 
@@ -81,12 +81,11 @@ set(tulip-ogl_LIB_SRCS
     GlSceneZoomAndPan.cpp
 )
 
-INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ../include/ ${PROJECT_SOURCE_DIR} ${GLEInclude} ${FTGLInclude} ${LIBXML2_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ../include/ ${PROJECT_SOURCE_DIR} ${FTGLInclude} ${LIBXML2_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
 
 ADD_LIBRARY (${LibTulipOglName} SHARED ${tulip-ogl_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipOglName} ftgl)
-TARGET_LINK_LIBRARIES(${LibTulipOglName} gle)
 TARGET_LINK_LIBRARIES(${LibTulipOglName} ${GLEW_LIBRARY})
 TARGET_LINK_LIBRARIES(${LibTulipOglName} ${LibTulipName})
 TARGET_LINK_LIBRARIES(${LibTulipOglName} ${OPENGL_glu_LIBRARY})
@@ -95,7 +94,7 @@ TARGET_LINK_LIBRARIES(${LibTulipOglName} ${LIBXML2_LIBRARIES})
 TARGET_LINK_LIBRARIES(${LibTulipOglName} ${JPEG_LIBRARY})
 TARGET_LINK_LIBRARIES(${LibTulipOglName} ${PNG_LIBRARY})
 TARGET_LINK_LIBRARIES(${LibTulipOglName} ${FREETYPE_LIBRARY})
-ADD_DEPENDENCIES(${LibTulipOglName} ftgl gle ${LibTulipName})
+ADD_DEPENDENCIES(${LibTulipOglName} ftgl ${LibTulipName})
 
 INSTALL_TARGETS(${TulipLibInstallDir} ${LibTulipOglName})
 

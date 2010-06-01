@@ -1,6 +1,5 @@
 #include <vector>
 #include <string.h>
-#include <gle.h>
 #include <GL/glew.h>
 #include <tulip/Vector.h>
 #include <tulip/Size.h>
@@ -544,44 +543,6 @@ namespace tlp {
     glEnd();
 
     delete [] points;
-  }
-  //=============================================
-  typedef gleDouble gleCoord[3];
-  void polyCylinder(const vector<Coord> &vertices,
-		    const vector<Color> &colors,
-		    const vector<float> &sizes,
-		    const Coord & startN, const Coord &endN) {
-
-
-    gleCoord  *point_array  = new gleCoord [vertices.size() + 2];
-    gleColor  *color_array  = new gleColor [vertices.size() + 2];
-    gleDouble *radius_array = new gleDouble[vertices.size() + 2];
-
-    for (unsigned int i = 0; i < vertices.size(); ++i) {
-      gleColor col;
-      col[0] = (float)colors[i][0]/255.;
-      col[1] = (float)colors[i][1]/255.;
-      col[2] = (float)colors[i][2]/255.;
-      for (unsigned int j=0; j < 3; ++j) {
-	color_array[i+1][j]   = col[j];
-	point_array[i+1][j] = vertices[i][j];
-      }
-      radius_array[i+1] = sizes[i];
-    }
-    for (unsigned int j=0; j < 3; ++j) {
-      point_array[0][j] = startN[j];
-      point_array[vertices.size()+1][j] = endN[j];
-    }
-    glePolyCone(vertices.size()+2, point_array, color_array, radius_array);
-  }
-  void polyCylinder(const vector<Coord> &vertices,
-		    const Color &c1, const Color &c2,
-		    float s1, float s2,
-		    const Coord &startN, const Coord &endN) {
-    polyCylinder(vertices,
-		 getColors(vertices, c1, c2),
-		 getSizes(vertices, s1, s2),
-		 startN, endN);
   }
   //=============================================
   void bezierCylinder(const vector<Coord> &vertices,
