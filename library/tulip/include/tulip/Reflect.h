@@ -16,12 +16,12 @@ namespace tlp {
 
 struct Graph;
 
- struct TLP_SIMPLE_SCOPE DataMem {
+ struct TLP_SCOPE DataMem {
    DataMem(){}
    virtual ~DataMem() {};
  };
 
- struct TLP_SIMPLE_SCOPE DataType :public DataMem {
+ struct TLP_SCOPE DataType :public DataMem {
    DataType(){}
    DataType(void *value,const std::string& typeName):value(value),typeName(typeName){}
    virtual DataType *clone() const = 0;
@@ -31,7 +31,7 @@ struct Graph;
 
 /*!  A container which allows insertion of different types.
      The inserted data must have a copy-constructor well done */
-struct TLP_SIMPLE_SCOPE DataSet {
+struct TLP_SCOPE DataSet {
   DataSet() {}
   DataSet(const DataSet &set);
   DataSet& operator=(const DataSet &set);
@@ -64,7 +64,7 @@ private:
 
 
 ///This class enables to define a structure
-struct TLP_SIMPLE_SCOPE StructDef {
+struct TLP_SCOPE StructDef {
   ///Add the variable of type T and name str in the structure.
   template<typename T> void add(const char* str,
 				const char* inHelp = 0,

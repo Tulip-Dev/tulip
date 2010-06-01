@@ -31,7 +31,7 @@ namespace tlp {
    * \version 0.0.1 24/01/2003 
    */
   TEMPLATEVECTOR
-    class Vector:public Array<TYPE,SIZE> {
+    class TLP_SCOPE Vector:public Array<TYPE,SIZE> {
     public:
 
     explicit inline VECTOR(int v = 0);      
