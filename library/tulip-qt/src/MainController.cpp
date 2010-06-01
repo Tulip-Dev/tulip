@@ -261,12 +261,12 @@ namespace tlp {
 			  node mN, Graph* sg, Graph* mg) {
       SizeProperty* size = mg->getProperty<SizeProperty>("viewSize");
       DoubleProperty* rot = mg->getProperty<DoubleProperty>("viewRotation");
-      std::pair<Coord, Coord> box =
+      BoundingBox box =
       tlp::computeBoundingBox(sg, (LayoutProperty *) layout, size, rot);
-      Coord maxL = box.first;
-      Coord minL = box.second;
+      Coord maxL(box[1]);
+      Coord minL(box[0]);
       layout->setNodeValue(mN, (maxL + minL) / 2.0 );
-      Coord v = (maxL - minL);
+      Coord v(maxL - minL);
       if (v[2] < 0.0001) v[2] = 0.1;
       mg->getProperty<SizeProperty>("viewSize")->
 	setNodeValue(mN, Size(v[0],v[1],v[2]));

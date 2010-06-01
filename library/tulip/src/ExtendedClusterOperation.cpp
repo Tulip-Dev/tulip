@@ -52,9 +52,9 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
   LayoutProperty *clusterLayout = cluster->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty  *clusterSize   = cluster->getProperty<SizeProperty>(sizeProperty);
   DoubleProperty *clusterRot = cluster->getProperty<DoubleProperty>(rotationProperty);
-  pair<Coord, Coord> box = tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
-  Coord maxL = box.first;
-  Coord minL = box.second;
+  BoundingBox box = tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
+  Coord maxL(box[1]);
+  Coord minL(box[0]);
   double width  = maxL[0] - minL[0];
   double height = maxL[1] - minL[1];
   double depth =  maxL[2] - minL[2];

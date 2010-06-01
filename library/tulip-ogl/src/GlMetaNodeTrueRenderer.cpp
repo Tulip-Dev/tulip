@@ -55,9 +55,9 @@ namespace tlp {
     GlGraphRenderingParameters metaParameters = *inputData->parameters;
     GlGraphInputData metaData(metaGraph,&metaParameters);
     metaData.setMetaNodeRenderer(inputData->getMetaNodeRenderer());
-    pair<Coord, Coord> bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.elementLayout, metaData.elementSize, metaData.elementRotation);
-    Coord maxC = bboxes.first;
-    Coord minC = bboxes.second;
+    BoundingBox bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.elementLayout, metaData.elementSize, metaData.elementRotation);
+    Coord maxC(bboxes[1]);
+    Coord minC(bboxes[0]);
     BoundingBox includeBoundingBox;
     inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
     Coord includeScale(includeBoundingBox[1] - includeBoundingBox[0]);
@@ -67,7 +67,7 @@ namespace tlp {
     double width  = (maxC[0] - minC[0]) / includeScale[0];
     double height = (maxC[1] - minC[1]) / includeScale[1];
 
-    Coord includeSize=bboxes.first-bboxes.second;
+    Coord includeSize(bboxes[1] - bboxes[0]);
     if(nodeSize[0]/includeSize[0]<nodeSize[1]/includeSize[1]){
       includeSize[1]*=nodeSize[0]/includeSize[0];
       includeSize[0]*=nodeSize[0]/includeSize[0];
