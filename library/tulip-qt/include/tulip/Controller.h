@@ -89,6 +89,13 @@ namespace tlp {
 		std::vector<std::pair<QDockWidget *,QDockWidget *> > getTabifiedDockWidget(){
 		  return tabifiedDockWidget;
 		}
+		
+		/**
+		 * Set the given dock widget area to occupy the specified corner.
+		 */
+		void setCorner(Qt::Corner corner, Qt::DockWidgetArea area) {
+			mainWindow->setCorner(corner, area);
+		}
 
 	private:
 
