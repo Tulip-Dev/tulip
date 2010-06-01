@@ -64,6 +64,7 @@ namespace tlp {
     }else
       box->setTextureName("");
 
+    box->setOutlineColor(glGraphInputData->elementBorderColor->getNodeValue(n));
     double lineWidth=glGraphInputData->elementBorderWidth->getNodeValue(n);
     if(lineWidth < 1e-6)
       lineWidth=1e-6;
