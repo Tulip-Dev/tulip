@@ -645,62 +645,62 @@ Coord maxCoord(const Coord &v1, const Coord &v2) {
   return result;
 }
 //========================================================================================
+//========================================================================================
 bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   if (!glMainWidget->getScene()->getGlGraphComposite() || !glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
       return false;
   // We calculate the bounding box for the selection :
   initProxies(glMainWidget);
-  pair<Coord, Coord> boundingBox = tlp::computeBoundingBox(_graph, _layout, _sizes, _rotation, _selection);
+  BoundingBox boundingBox = tlp::computeBoundingBox(_graph, _layout, _sizes, _rotation, _selection);
 
-  if (boundingBox.first[0] == -FLT_MAX)
-    return false;
+  if (!boundingBox.isValid()) return false;
   Coord min2D, max2D;
-  _layoutCenter = (boundingBox.first + boundingBox.second) / 2.f;
+  _layoutCenter = Coord(boundingBox.center());
 
   //project the 8 points of the cube to obtain the bounding square on the 2D screen
-  Coord bbsize = (boundingBox.first - boundingBox.second);
+  Coord bbsize(boundingBox[1] - boundingBox[0]);
   //v1
-  Coord tmp(boundingBox.second);
+  Coord tmp(boundingBox[0]);
   tmp = glMainWidget->getScene()->getCamera()->worldTo2DScreen(tmp);
   min2D = tmp;
   max2D = tmp;
   //v2, v3, V4
   for (unsigned int i=0; i<3; ++i) {
-    tmp = boundingBox.second;
+    tmp = Coord(boundingBox[0]);
     tmp[i] += bbsize[i];
     tmp = glMainWidget->getScene()->getCamera()->worldTo2DScreen(tmp);
     min2D = minCoord(tmp, min2D);
     max2D = maxCoord(tmp, max2D);
   }
   //v4
-  tmp = boundingBox.second;
+  tmp = Coord(boundingBox[0]);
   tmp[0] += bbsize[0];
   tmp[1] += bbsize[1];
   tmp = glMainWidget->getScene()->getCamera()->worldTo2DScreen(tmp);
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
   //v6
-  tmp = boundingBox.second;
+  tmp = Coord(boundingBox[0]);
   tmp[0] += bbsize[0];
   tmp[2] += bbsize[2];
   tmp = glMainWidget->getScene()->getCamera()->worldTo2DScreen(tmp);
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
   //v7
-  tmp = boundingBox.second;
+  tmp = Coord(boundingBox[0]);
   tmp[1] += bbsize[1];
   tmp[2] += bbsize[2];
   tmp = glMainWidget->getScene()->getCamera()->worldTo2DScreen(tmp);
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
   //v8
-  tmp = boundingBox.second;
+  tmp = Coord(boundingBox[0]);
   tmp += bbsize;
   tmp = glMainWidget->getScene()->getCamera()->worldTo2DScreen(tmp);
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
 
-  ffdCenter = (boundingBox.first + boundingBox.second) / 2.f;
+  ffdCenter = Coord(boundingBox.center());
 
   Coord tmpCenter = glMainWidget->getScene()->getCamera()->worldTo2DScreen(ffdCenter);
 
