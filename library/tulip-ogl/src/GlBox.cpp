@@ -150,11 +150,7 @@ namespace tlp {
   }
   //===========================================================
   GlBox::~GlBox() {
-    delete[] newCubeCoordArrays;
-    if(OpenGlConfigManager::getInst().canUseGlew()){
-      if(generated)
-        glDeleteBuffers(5,buffers);
-    }
+    clearGenerated();
   }
   //===========================================================
   void GlBox::draw(float lod,Camera *camera) {
@@ -272,6 +268,8 @@ namespace tlp {
     boundingBox = BoundingBox();
     boundingBox.expand(position-size/2.f);
     boundingBox.expand(position+size/2.f);
+
+    clearGenerated();
   }
   //===========================================================
   void GlBox::setPosition(const Coord& position) {
@@ -280,6 +278,8 @@ namespace tlp {
     boundingBox = BoundingBox();
     boundingBox.expand(position-size/2.f);
     boundingBox.expand(position+size/2.f);
+
+    clearGenerated();
   }
   //===========================================================
   Size GlBox::getSize() const {
@@ -324,6 +324,8 @@ namespace tlp {
     boundingBox.translate(mouvement);
 
     position+=mouvement;
+
+    clearGenerated();
   }
   //===========================================================
   void GlBox::getXML(xmlNodePtr rootNode) {
@@ -364,6 +366,15 @@ namespace tlp {
       boundingBox = BoundingBox();
       boundingBox.expand(position-size/2.f);
       boundingBox.expand(position+size/2.f);
+    }
+  }
+  //============================================================
+  void GlBox::clearGenerated() {
+    delete[] newCubeCoordArrays;
+    newCubeCoordArrays=NULL;
+    if(OpenGlConfigManager::getInst().canUseGlew()){
+      if(generated)
+        glDeleteBuffers(5,buffers);
     }
   }
 }

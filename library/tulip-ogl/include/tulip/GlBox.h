@@ -137,6 +137,8 @@ class TLP_GL_SCOPE GlBox : public GlSimpleEntity
 
 protected:
 
+  virtual void clearGenerated();
+
   Coord position; /**< The position of the center of the box*/
   Size size; /**< size is the "radius" of the box */
   std::vector<Color> fillColors; /**< fillColor of the box */
