@@ -2,8 +2,6 @@
 #include <float.h>
 #include <algorithm>
 #include <tulip/TreeTest.h>
-#include "tulip/RectangleArea.h"
-#include "tulip/Border.h"
 #include "SquarifiedTreeMap.h"
 #include "TreeTools.h"
 
