@@ -13,7 +13,6 @@
 #include "tulip/GlGrid.h"
 #include "tulip/GlLabel.h"
 #include "tulip/GlLine.h"
-#include "tulip/GlMultiPolygon.h"
 #include "tulip/GlPolygon.h"
 #include "tulip/GlRect.h"
 #include "tulip/GlSphere.h"
@@ -136,8 +135,6 @@ namespace tlp {
       return new GlLabel();
     }else if(name=="GlLine"){
       return new GlLine();
-    }else if(name=="GlMultiPolygon"){
-      return new GlMultiPolygon();
     }else if(name=="GlPolygon"){
       return new GlPolygon();
     }else if(name=="GlQuad"){
