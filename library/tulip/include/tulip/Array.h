@@ -26,7 +26,7 @@ namespace tlp {
    * \version 0.0.1 24/01/2003 
    */
   template <typename Obj,unsigned int SIZE>
-  struct Array {
+  struct TLP_SCOPE Array {
     Obj array[SIZE];
     inline Obj  operator[](const unsigned int i) const;
     inline Obj& operator[](const unsigned int i);

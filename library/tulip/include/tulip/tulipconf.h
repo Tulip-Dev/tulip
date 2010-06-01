@@ -27,17 +27,6 @@
 #endif
 
 #ifdef _WIN32
-# 	ifdef DLL_TULIP
-#		define TLP_SIMPLE_SCOPE         __declspec(dllexport)
-# 	else
-#		define TLP_SIMPLE_SCOPE       
-# 	endif
-#endif
-#ifndef TLP_SIMPLE_SCOPE
-#define TLP_SIMPLE_SCOPE           
-#endif
-
-#ifdef _WIN32
 # 	ifdef DLL_TULIP_GL
 #		define TLP_GL_SCOPE         __declspec(dllexport)
 # 	else

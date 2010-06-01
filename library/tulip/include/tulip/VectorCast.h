@@ -30,7 +30,7 @@ namespace tlp {
    * \version 0.0.1 24/01/2003 
    */
   TEMPLATEVECTORCAST
-    class VectorCast : public Vector<Obj,SIZE> {
+    class TLP_SCOPE VectorCast : public Vector<Obj,SIZE> {
     public:
     VectorCast() {}
     inline explicit VectorCast(const tlp::Vector<float,3> &v):Vector<Obj,SIZE>(v) {

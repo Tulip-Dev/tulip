@@ -91,7 +91,7 @@ template<class C>class Iterator;
 /**
  * The class Graph is the interface of a Graph in the Tulip Library.
  */
-  class TLP_SIMPLE_SCOPE Graph : public Observable, public ObservableGraph {
+  class TLP_SCOPE Graph : public Observable, public ObservableGraph {
 
   friend class GraphAbstract;
   friend class GraphUpdatesRecorder;
