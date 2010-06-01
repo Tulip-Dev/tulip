@@ -13,16 +13,12 @@
 #ifndef Tulip_GLBOX_H
 #define Tulip_GLBOX_H
 
+#include <tulip/Coord.h>
+#include <tulip/Color.h>
+#include <tulip/Size.h>
+
 #include "tulip/GlSimpleEntity.h"
-#include "tulip/GlPolygon.h"
-
-#include "tulip/Coord.h"
-#include "tulip/Color.h"
-#include "tulip/Size.h"
-
-#define N_BOX_POINTS 8
-#define N_BOX_FACES  6
-#define N_QUAD_POINTS 4
+#include "tulip/GlTextureManager.h"
 
 namespace tlp {
 /** \brief General class used to render boxes as GlEntity.
@@ -31,32 +27,6 @@ namespace tlp {
  */
 class TLP_GL_SCOPE GlBox : public GlSimpleEntity
 {
- protected:
-  Coord* position; /**< The position of the center of the box*/
-  Color* color; /**< The color of the box */
-  Size* size; /**< size is the "radius" of the box */
-  
-  Coord* points[N_BOX_POINTS]; /**< The coordinates of each of the 8 points of the box. 
-				  \attention points[0] = front top left
-				  \attention points[1] = front top right
-				  \attention points[2] = front bottom right
-				  \attention points[3] = front bottom left
-				  \attention points[4] = back top left
-				  \attention points[5] = back top right
-				  \attention points[6] = back bottom right
-				  \attention points[7] = back bottom left */
-
-  GlPolygon* faces[N_BOX_FACES]; /**< Stores a GlPolygon per face */
-
-  /**
-   * Function used to compute the points of the box from a center and a size.
-   */
-  void computePoints();
-
-  /**
-   * Function used to compute the GlADQuad from the points of the box.
-   */
-  void computeFaces();
 
  public:  
 
@@ -72,26 +42,13 @@ class TLP_GL_SCOPE GlBox : public GlSimpleEntity
    *
    * \param position The center of the box.
    * \param size The length of each dimension of the box.
-   * \param color The color of the box.
+   * \param fillColor The fill color of the box.
+   * \param outlineColor The outline color of the box
+   * \param filled Fill the box ?
+   * \param outlined outline the box ?
+   * \param outlineSize The size of the outline
    */
-  GlBox(const Coord& position, const Size &size, const Color& color);
-
-  /**
-   * Constructor from points
-   *
-   * \param points Each point of the box. c.f. the variable "points" to know the placement.
-   * \param color The color of the box.
-   */
-  GlBox(Coord points[8], const Color& color);
-
-  /**
-   * Constructor from bounding box
-   *
-   * \param frontTopLeft The position of the point at the front-top-left of the box (points[0]).
-   * \param backbottomRight The position of the point at the back-bottom-right of the box (points[6]).
-   * \param color The color of the box.
-   */
-  GlBox(const Coord& frontTopLeft, const Coord& backBottomRight, const Color& color);
+  GlBox(const Coord& position, const Size &size, const Color& fillColor, const Color &outlineColor,bool filled=true, bool outlined=true, const std::string &textureName="",float outlineSize=1.);
 
   /**
    * Destructor.
@@ -104,9 +61,19 @@ class TLP_GL_SCOPE GlBox : public GlSimpleEntity
   virtual void draw(float lod,Camera *camera);
 
   /**
-   * Accessor in writing to the size.
+   * Accessor in reading to the size.
+   */
+  Size getSize() const;
+
+  /**
+   * Accessor in writing to the size of the box
    */
   void setSize(const Size& size);
+
+  /**
+   * Accessor in reading to the position.
+   */
+  Coord* getPosition() const;
 
   /**
    * Accessor in writing to the position.
@@ -114,9 +81,44 @@ class TLP_GL_SCOPE GlBox : public GlSimpleEntity
   void setPosition(const Coord& position);
 
   /**
-   * Accessor in reading to the size.
+   * Accessor in reading to the fill color.
    */
-  Size* getSize() const;
+  Color getFillColor() const;
+
+  /**
+   * Accessor in writing to the fill color of the box
+   */
+  void setFillColor(const Color& color);
+
+  /**
+   * Accessor in reading to the outline color.
+   */
+  Color getOutlineColor() const;
+
+  /**
+   * Accessor in writing to the outline color of the box
+   */
+  void setOutlineColor(const Color& color);
+
+  /**
+   * Accessor in reading to the outline size.
+   */
+  float getOutlineSize() const;
+
+  /**
+   * Accessor in writing to the outline size of the box
+   */
+  void setOutlineSize(float size);
+
+  /**
+   * Accessor in reading to the texture name.
+   */
+  std::string getTextureName() const;
+
+  /**
+   * Accessor in writing to the texture name of the box
+   */
+  void setTextureName(const std::string& textureName);
 
   /**
    * Translate entity
@@ -132,6 +134,21 @@ class TLP_GL_SCOPE GlBox : public GlSimpleEntity
    * Function to set data with XML
    */
   virtual void setWithXML(xmlNodePtr rootNode);
+
+protected:
+
+  Coord position; /**< The position of the center of the box*/
+  Size size; /**< size is the "radius" of the box */
+  std::vector<Color> fillColors; /**< fillColor of the box */
+  std::vector<Color> outlineColors; /**< outlineColor of the box */
+  bool filled; /**< the box is filled ? */
+  bool outlined; /**< the box is outlined ? */
+  std::string textureName;
+  float outlineSize; /**< size of the ouline */
+
+  float *newCubeCoordArrays;
+  bool generated;
+  GLuint buffers[5];
 };
 }
 #endif

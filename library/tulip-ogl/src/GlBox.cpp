@@ -1,202 +1,329 @@
+#include <GL/glew.h>
+
 #include "tulip/GlBox.h"
+
+#include "tulip/OpenGlConfigManager.h"
+#include "tulip/GlTools.h"
 
 using namespace std;
 
 namespace tlp {
 
+  //    v6----- v5
+  //   /|      /|
+  //  v1------v0|
+  //  | |     | |
+  //  | |v7---|-|v4
+  //  |/      |/
+  //  v2------v3
+  static GLfloat cubeTexArrays[] = {
+    //***
+    1.0f, 1.0f, // v0
+    0.0f, 1.0f, // v1
+    0.0f, 0.0f, // v2
+    1.0f, 0.0f, // v3
+    //***
+    1.0f, 1.0f, // v0
+    0.0f, 1.0f, // v3
+    0.0f, 0.0f, // v4
+    1.0f, 0.0f, // v5
+    //***
+    1.0f, 1.0f, // v0
+    0.0f, 1.0f, // v5
+    0.0f, 0.0f, // v6
+    1.0f, 0.0f, // v1
+    //***
+    1.0f, 1.0f, // v1
+    0.0f, 1.0f, // v6
+    0.0f, 0.0f, // v7
+    1.0f, 0.0f, // v2
+    //***
+    1.0f, 1.0f, // v7
+    0.0f, 1.0f, // v4
+    0.0f, 0.0f, // v3
+    1.0f, 0.0f, // v2
+    //***
+    1.0f, 1.0f, // v4
+    0.0f, 1.0f, // v7
+    0.0f, 0.0f, // v6
+    1.0f, 0.0f}; // v5
+
+  static GLfloat cubeNormalArrays[] = {
+    //***
+    0.0f, 0.0f, 1.0f, // v0
+    0.0f, 0.0f, 1.0f, // v1
+    0.0f, 0.0f, 1.0f, // v2
+    0.0f, 0.0f, 1.0f, // v3
+    //***
+    1.0f, 0.0f, 0.0f, // v0
+    1.0f, 0.0f, 0.0f, // v3
+    1.0f, 0.0f, 0.0f, // v4
+    1.0f, 0.0f, 0.0f, // v5
+    //***
+    0.0f, 1.0f, 0.0f, // v0
+    0.0f, 1.0f, 0.0f, // v5
+    0.0f, 1.0f, 0.0f, // v6
+    0.0f, 1.0f, 0.0f, // v1
+    //***
+    -1.0f, 0.0f, 0.0f, // v1
+    -1.0f, 0.0f, 0.0f, // v6
+    -1.0f, 0.0f, 0.0f, // v7
+    -1.0f, 0.0f, 0.0f, // v2
+    //***
+    0.0f, -1.0f, 0.0f, // v7
+    0.0f, -1.0f, 0.0f, // v4
+    0.0f, -1.0f, 0.0f, // v3
+    0.0f, -1.0f, 0.0f, // v2
+    //***
+    0.0f, 0.0f, -1.0f, // v4
+    0.0f, 0.0f, -1.0f, // v7
+    0.0f, 0.0f, -1.0f, // v6
+    0.0f, 0.0f, -1.0f}; // v5
+
+  static GLfloat cubeCoordArrays[] = {
+    //***
+    0.5f, 0.5f, 0.5f, // v0
+    -0.5f, 0.5f, 0.5f, // v1
+    -0.5f, -0.5f, 0.5f, // v2
+    0.5f, -0.5f, 0.5f, // v3
+    //***
+    0.5f, 0.5f, 0.5f, // v0
+    0.5f, -0.5f, 0.5f, // v3
+    0.5f, -0.5f, -0.5f, // v4
+    0.5f, 0.5f, -0.5f, // v5
+    //***
+    0.5f, 0.5f, 0.5f, // v0
+    0.5f, 0.5f, -0.5f, // v5
+    -0.5f, 0.5f, -0.5f, // v6
+    -0.5f, 0.5f, 0.5f, // v1
+    //***
+    -0.5f, 0.5f, 0.5f, // v1
+    -0.5f, 0.5f, -0.5f, // v6
+    -0.5f, -0.5f, -0.5f, // v7
+    -0.5f, -0.5f, 0.5f, // v2
+    //***
+    -0.5f, -0.5f, -0.5f, // v7
+    0.5f, -0.5f, -0.5f, // v4
+    0.5f, -0.5f, 0.5f, // v3
+    -0.5f, -0.5f, 0.5f, // v2
+    //***
+    0.5f, -0.5f, -0.5f, // v4
+    -0.5f, -0.5f, -0.5f, // v7
+    -0.5f, 0.5f, -0.5f, // v6
+    0.5f, 0.5f, -0.5f}; // v5
+
+  static GLubyte cubeIndices[] = {
+    0,1,2,3,
+    4,5,6,7,
+    8,9,10,11,
+    12,13,14,15,
+    16,17,18,19,
+    20,21,22,23};
+
+  static GLubyte cubeOutlineIndices[] = {
+    0,1,1,2,2,3,3,0,
+    20,21,21,22,22,23,23,20,
+    0,23,1,22,2,21,3,20
+  };
+
+  //===========================================================
+  //===========================================================
+  //===========================================================
+  //===========================================================
+  //===========================================================
+
   GlBox::GlBox()
   {
     // no default constructor :)
   }
-
-  GlBox::GlBox(const Coord& position, const Size &size, const Color& color)
+  //===========================================================
+  GlBox::GlBox(const Coord& position, const Size &size, const Color& fillColor, const Color &outlineColor,bool filled, bool outlined,const string &textureName,float outlineSize)
+    :position(position),size(size),filled(filled),outlined(outlined),textureName(textureName),outlineSize(outlineSize),newCubeCoordArrays(NULL),generated(false)
   {
-    this->position = new Coord(position);
-    this->color    = new Color(color);
-    this->size     = new Size(size);
-
-    for(int i=0; i < N_BOX_POINTS; i++)
-      points[i] = NULL;
-
-    for(int i=0; i < N_BOX_FACES; i++)
-      faces[i] = NULL;
-
-    /*renderOptions.setRenderState(GlAD_Wireframe, true);
-      renderOptions.setRenderState(GlAD_Solid, true);*/
+    if(filled)
+      fillColors.push_back(fillColor);
+    if(outlined)
+      outlineColors.push_back(outlineColor);
 
     boundingBox.expand(position-size/2.f);
     boundingBox.expand(position+size/2.f);
-
-    computePoints();
   }
+  //===========================================================
+  GlBox::~GlBox() {
+    delete[] newCubeCoordArrays;
+    if(OpenGlConfigManager::getInst().canUseGlew()){
+      if(generated)
+        glDeleteBuffers(5,buffers);
+    }
+  }
+  //===========================================================
+  void GlBox::draw(float lod,Camera *camera) {
 
-  GlBox::GlBox(Coord points[N_BOX_POINTS], const Color& color)
-  {
-    Coord average = Coord(0, 0, 0);
+    bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
 
-    for(int i=0; i < N_BOX_POINTS; i++){
-      average += points[i];
-      this->points[i] = new Coord(points[i]);
-      boundingBox.expand(points[i]);
+    if(canUseGlew){
+      if(!generated){
+        GLfloat newCubeCoordArrays[72];
+        for(unsigned int i=0;i<24;++i){
+          newCubeCoordArrays[i*3]=cubeCoordArrays[i*3]*size[0]+position[0];
+          newCubeCoordArrays[i*3+1]=cubeCoordArrays[i*3+1]*size[1]+position[1];
+          newCubeCoordArrays[i*3+2]=cubeCoordArrays[i*3+2]*size[2]+position[2];
+        }
+
+        glGenBuffers(5,buffers);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(newCubeCoordArrays),newCubeCoordArrays, GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(cubeNormalArrays),cubeNormalArrays, GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(cubeTexArrays),cubeTexArrays, GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIndices), cubeIndices, GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[4]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeOutlineIndices), cubeOutlineIndices, GL_STATIC_DRAW);
+        generated=true;
+      }
+    }else{
+      if(!generated){
+        newCubeCoordArrays= new GLfloat[72];
+        for(unsigned int i=0;i<24;++i){
+          newCubeCoordArrays[i*3]=cubeCoordArrays[i*3]*size[0]+position[0];
+          newCubeCoordArrays[i*3+1]=cubeCoordArrays[i*3+1]*size[1]+position[1];
+          newCubeCoordArrays[i*3+2]=cubeCoordArrays[i*3+2]*size[2]+position[2];
+        }
+
+        generated=true;
+      }
     }
 
-    average /= N_BOX_POINTS;
+    glEnable(GL_LIGHTING);
 
-    this->position = new Coord(average);
-    this->color    = new Color(color);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    if(canUseGlew){
+      glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+      glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), BUFFER_OFFSET(0));
+    }else{
+      glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), newCubeCoordArrays);
+    }
 
-    // We can't calculate a size since it's not a parallelepiped
-    this->size = NULL;
+    if(filled){
+      setMaterial(fillColors[0]);
 
-    /*renderOptions.setRenderState(GlAD_Wireframe, true);
-      renderOptions.setRenderState(GlAD_Solid, true);*/
+      glEnableClientState(GL_NORMAL_ARRAY);
+      if(canUseGlew){
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+        glNormalPointer(GL_FLOAT, 3*sizeof(GLfloat), BUFFER_OFFSET(0));
+      }else{
+        glNormalPointer(GL_FLOAT, 3*sizeof(GLfloat), cubeNormalArrays);
+      }
 
-    for(int i=0; i < N_BOX_FACES; i++)
-      faces[i] = NULL;
+      if(textureName!=""){
+        GlTextureManager::getInst().activateTexture(textureName);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        if(canUseGlew){
+          glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+          glTexCoordPointer(2,GL_FLOAT, 2*sizeof(GLfloat), BUFFER_OFFSET(0));
+        }else{
+          glTexCoordPointer(2,GL_FLOAT, 2*sizeof(GLfloat), cubeTexArrays);
+        }
+      }
 
-    computeFaces();
+      if(canUseGlew){
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
+        glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
+      }else{
+        glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, cubeIndices);
+      }
+        
+      glDisableClientState(GL_NORMAL_ARRAY);
+      if(textureName!=""){
+        GlTextureManager::getInst().desactivateTexture();
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+      }
+    }
+
+    if(outlined && outlineSize!=0) {
+      if((outlineSize<1 && lod>=20) || (lod>(20/outlineSize))) {
+        glDisable(GL_LIGHTING);
+
+        glColor4ub(outlineColors[0][0],outlineColors[0][1],outlineColors[0][2],outlineColors[0][3]);
+        glLineWidth(outlineSize);
+
+        if(canUseGlew){
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[4]);
+          glDrawElements(GL_LINES, 24, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
+        }else{
+          glDrawElements(GL_LINES, 24, GL_UNSIGNED_BYTE, cubeOutlineIndices);
+        }
+
+        glEnable(GL_LIGHTING);
+      }
+    }
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   }
+  //===========================================================
+  void GlBox::setSize(const Size& size) {
+    this->size = size;
 
-  GlBox::GlBox(const Coord& frontTopLeft, const Coord& backBottomRight, const Color& color)
-  {
-    Coord middle  = (frontTopLeft + backBottomRight) / 2.f;
-    Coord tmpsize = (frontTopLeft - backBottomRight) / 2.f;
-
-    for(int i=0; i < 3; i++)
-      tmpsize[i] = fabs(tmpsize[i]);
-
-    this->position               = new Coord(middle);
-    this->size                   = new Size(tmpsize.getX(), tmpsize.getY(), tmpsize.getZ());
-    this->color                  = new Color(color);
-
-    /*renderOptions.setRenderState(GlAD_Wireframe, true);
-      renderOptions.setRenderState(GlAD_Solid, true);*/
-
-    for(int i=0; i < N_BOX_POINTS; i++)
-      points[i] = NULL;
-
-    for(int i=0; i < N_BOX_FACES; i++)
-      faces[i] = NULL;
-
-    boundingBox.expand(frontTopLeft);
-    boundingBox.expand(backBottomRight);
-
-    computePoints();
+    boundingBox = BoundingBox();
+    boundingBox.expand(position-size/2.f);
+    boundingBox.expand(position+size/2.f);
   }
+  //===========================================================
+  void GlBox::setPosition(const Coord& position) {
+    this->position = position;
 
-  GlBox::~GlBox()
-  {
-    for(int i=0; i < N_BOX_POINTS; i++)
-      delete points[i];
-
-    delete size;
+    boundingBox = BoundingBox();
+    boundingBox.expand(position-size/2.f);
+    boundingBox.expand(position+size/2.f);
   }
-
-  void GlBox::draw(float lod,Camera *camera)
-  {
-    for(int i=0; i < N_BOX_FACES; i++)
-      faces[i]->draw(lod,camera);   
-  }
-
-  void GlBox::setSize(const Size& size)
-  {
-    delete this->size;
-
-    this->size = new Size(size);
-
-    computePoints();
-  }
-
-  void GlBox::setPosition(const Coord& position)
-  {
-    delete this->position;
-
-    boundingBox.expand(position);
-
-    this->position = new Coord(position);
-
-    computePoints();
-  }
-
-  Size* GlBox::getSize() const
-  {
+  //===========================================================
+  Size GlBox::getSize() const {
     return size;
   }
-
-  void GlBox::computePoints()
-  {
-    if (size == NULL)
-      return;
-
-    for(int i=0; i < N_BOX_POINTS; i++)
-      if (points[i] != NULL)
-	delete (points[i]);
-
-    //       p4 +--------------+ p5
-    //         /|             /|
-    //        / |            / |
-    //       /  |           /  |
-    //      /   |          /   |
-    //  p0 +--------------+ p1 |
-    //     |    |         |    |
-    //     |    |         |    |
-    //     | p7 +---------|----+ p6
-    //     |   /          |   /
-    //     |  /           |  /
-    //     | /            | /
-    //     |/             |/
-    //  p3 +--------------+ p2 
-
-    points[0] = new Coord(position->getX() - size->getW()/2., position->getY() - size->getH()/2., position->getZ() - size->getD()/2.);
-    points[1] = new Coord(position->getX() + size->getW()/2., position->getY() - size->getH()/2., position->getZ() - size->getD()/2.);
-    points[2] = new Coord(position->getX() + size->getW()/2., position->getY() + size->getH()/2., position->getZ() - size->getD()/2.);
-    points[3] = new Coord(position->getX() - size->getW()/2., position->getY() + size->getH()/2., position->getZ() - size->getD()/2.);
-    points[4] = new Coord(position->getX() - size->getW()/2., position->getY() - size->getH()/2., position->getZ() + size->getD()/2.);
-    points[5] = new Coord(position->getX() + size->getW()/2., position->getY() - size->getH()/2., position->getZ() + size->getD()/2.);
-    points[6] = new Coord(position->getX() + size->getW()/2., position->getY() + size->getH()/2., position->getZ() + size->getD()/2.);
-    points[7] = new Coord(position->getX() - size->getW()/2., position->getY() + size->getH()/2., position->getZ() + size->getD()/2.);
-
-    computeFaces();
- 
+  //===========================================================
+  Color GlBox::getFillColor() const {
+    return fillColors[0];
   }
-
-  void GlBox::computeFaces()
-  {
-    boundingBox=BoundingBox(*points[0],*points[6]);
-
-    for(int i=0; i < N_BOX_FACES; i++)
-      if (faces[i] != NULL)
-	delete faces[i];
-
-    int indices[N_QUAD_POINTS * N_BOX_FACES] = {0, 1, 2, 3,  // Front
-						5, 4, 7, 6,  // Back
-						0, 3, 7, 4,  // Left
-						1, 5, 6, 2,  // Right
-						4, 5, 1, 0,  // Top
-						3, 2, 6, 7}; // Bottom
-			
-    Coord Quad[N_QUAD_POINTS];
-
-    // For each face
-    for(int i=0; i < N_BOX_FACES; i++)
-      {
-	// We compute the 4 points of the considered face (using the index array)
-
-	for(int j=0; j < N_QUAD_POINTS; j++)
-	  Quad[j] = *points[indices[(i * N_QUAD_POINTS) + j]];
-
-	faces[i] = new GlPolygon(true,false);
-	for(int j=0;j<N_QUAD_POINTS;++j)
-	  faces[i]->addPoint(Quad[j], *color, *color);
-	//faces[i]->setRenderOptions(renderOptions);
-      }
+  //===========================================================
+  void GlBox::setFillColor(const Color& color) {
+    fillColors.clear();
+    fillColors.push_back(color);
+  }
+  //===========================================================
+  Color GlBox::getOutlineColor() const {
+    return outlineColors[0];
+  }
+  //===========================================================
+  void GlBox::setOutlineColor(const Color& color) {
+    outlineColors.clear();
+    outlineColors.push_back(color);
+  }
+  //===========================================================
+  float GlBox::getOutlineSize() const {
+    return outlineSize;
+  }
+  //===========================================================
+  void GlBox::setOutlineSize(float size) {
+    outlineSize=size;
+  }
+  //===========================================================
+  string GlBox::getTextureName() const {
+    return textureName;
+  }
+  //===========================================================
+  void GlBox::setTextureName(const string& textureName) {
+    this->textureName=textureName;
   }
   //===========================================================
   void GlBox::translate(const Coord &mouvement) {
     boundingBox.translate(mouvement);
 
-    *position+=mouvement;
-    computePoints();
+    position+=mouvement;
   }
   //===========================================================
   void GlBox::getXML(xmlNodePtr rootNode) {
@@ -206,10 +333,14 @@ namespace tlp {
     
     GlXMLTools::getDataNode(rootNode,dataNode);
 
-    GlXMLTools::getXML(dataNode,"position",*position);
-    GlXMLTools::getXML(dataNode,"color",*color);
-    GlXMLTools::getXML(dataNode,"size",*size);
-    
+    GlXMLTools::getXML(dataNode,"position",position);
+    GlXMLTools::getXML(dataNode,"size",size);
+    GlXMLTools::getXML(dataNode,"fillColors",fillColors);
+    GlXMLTools::getXML(dataNode,"outlineColors",outlineColors);
+    GlXMLTools::getXML(dataNode,"filled",filled);
+    GlXMLTools::getXML(dataNode,"outlined",outlined);
+    GlXMLTools::getXML(dataNode,"textureName",textureName);
+    GlXMLTools::getXML(dataNode,"outlineSize",outlineSize);
   }
   //============================================================
   void GlBox::setWithXML(xmlNodePtr rootNode) {
@@ -219,18 +350,20 @@ namespace tlp {
 
     // Parse Data
     if(dataNode) {
-      Coord position;
-      Color color;
-      Size size;
+      GlXMLTools::setWithXML(dataNode,"position",position);
+      GlXMLTools::setWithXML(dataNode,"size",size);
+      fillColors.clear();
+      GlXMLTools::setWithXML(dataNode,"fillColors",fillColors);
+      outlineColors.clear();
+      GlXMLTools::setWithXML(dataNode,"outlineColors",outlineColors);
+      GlXMLTools::setWithXML(dataNode,"filled",filled);
+      GlXMLTools::setWithXML(dataNode,"outlined",outlined);
+      GlXMLTools::setWithXML(dataNode,"textureName",textureName);
+      GlXMLTools::setWithXML(dataNode,"outlineSize",outlineSize);
 
-      GlXMLTools::setWithXML(dataNode, "position", position);
-      GlXMLTools::setWithXML(dataNode, "color", color);
-      GlXMLTools::setWithXML(dataNode, "size", size);
-
+      boundingBox = BoundingBox();
       boundingBox.expand(position-size/2.f);
       boundingBox.expand(position+size/2.f);
-      
-      computePoints();
     }
   }
 }
