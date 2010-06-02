@@ -52,7 +52,6 @@ SET(tulip_LIB_SRCS
 	GraphMeasure.cpp 
 	PluginLibraryLoader.cpp 
 	StlFunctions.cpp 
-	StatisticsNodeModule.cpp 
 	Polynome.cpp 
 	Plane.cpp 
 	FaceIterator.cpp 
@@ -63,8 +62,6 @@ SET(tulip_LIB_SRCS
 	PlanarityTestEmbed.cpp 
 	PlanarityTestObstr.cpp 
 	PlanarityTestTools.cpp 
-	RectangleArea.cpp 
-	Border.cpp 
 	TLPImport.cpp 
 	TLPExport.cpp 
 	GraphUpdatesRecorder.cpp 
