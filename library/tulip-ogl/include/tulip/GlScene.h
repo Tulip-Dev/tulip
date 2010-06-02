@@ -88,6 +88,11 @@ namespace tlp {
     void ajustSceneToSize(int width, int height);
 
     /**
+     * Ajust camera for empty scene
+     */
+    void ajustCameraToEmptyScene();
+
+    /**
      * Zoom to x,y
      */
     void zoomXY(int step, const int x, const int y);
