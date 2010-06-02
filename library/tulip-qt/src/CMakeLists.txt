@@ -44,7 +44,6 @@ SET(tulip-qt_LIB_SRCS
     AbstractView.cpp 
     ControllerPluginsManager.cpp 
     ViewPluginsManager.cpp 
-    TulipStatsWidget.cpp 
     RenderingParametersDialog.cpp 
     LayerManagerWidget.cpp 
     AugmentedDisplayDialog.cpp 
@@ -70,7 +69,6 @@ set(tulip-qt_UI
      ../designer/TabWidget.ui
      ../designer/PropertyDialog.ui
      ../designer/CopyPropertyDialog.ui
-     ../designer/TulipStats.ui
      ../designer/FindSelection.ui
      ../designer/RenderingParametersDialog.ui
      ../designer/LayerManagerWidget.ui
@@ -102,8 +100,6 @@ set(tulip-qt_MOC
     ../include/tulip/PropertyWidget.h
     ../include/tulip/PropertyDialog.h
     ../include/tulip/CopyPropertyDialog.h
-    ../include/tulip/TulipStatsWidget.h
-    ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/TulipStatsData.h
     ../include/tulip/RenderingParametersDialog.h
     ../include/tulip/LayerManagerWidget.h
     ../include/tulip/AugmentedDisplayDialog.h

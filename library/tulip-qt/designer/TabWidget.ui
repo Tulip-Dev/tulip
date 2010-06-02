@@ -91,10 +91,6 @@
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
-   <class>tlp::TulipStats</class>
-   <extends>QWidget</extends>
-  </customwidget>
-  <customwidget>
    <class>tlp::SGHierarchyWidget</class>
    <extends>QWidget</extends>
   </customwidget>
@@ -112,7 +108,6 @@
   <include location="local" >../include/tulip/ElementPropertiesWidget.h</include>
   <include location="local" >../include/tulip/PropertyWidget.h</include>
   <include location="local" >../include/tulip/SGHierarchyWidget.h</include>
-  <include location="local" >../include/tulip/TulipStatsWidget.h</include>
  </includes>
  <resources/>
  <connections/>

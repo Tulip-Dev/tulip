@@ -6,7 +6,6 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/TabWidget.h 
 	tulip/PropertyDialog.h  
 	tulip/CopyPropertyDialog.h 
-	tulip/TulipStatsWidget.h 
 	tulip/RenderingParametersDialog.h 
 	tulip/LayerManagerWidget.h 
 	tulip/AugmentedDisplayDialog.h 
