@@ -376,5 +376,6 @@ namespace tlp {
       if(generated)
         glDeleteBuffers(5,buffers);
     }
+    generated=false;
   }
 }
