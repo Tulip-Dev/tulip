@@ -334,7 +334,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 		float lod = 0;
 		if (camera->is3D()) {
 			Coord eyes = camera->getEyes() + (camera->getEyes() - camera->getCenter())
-																													/ (float)camera->getZoomFactor();
+																																			/ (float)camera->getZoomFactor();
 			lod = calculateAABBSize(box, eyes, transformMatrix, camera->getViewport(),
 					camera->getViewport());
 		} else {
@@ -417,7 +417,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 		float lod = 0;
 		if (camera->is3D()) {
 			Coord eyes = camera->getEyes() + (camera->getEyes() - camera->getCenter())
-																													/ (float)camera->getZoomFactor();
+																																			/ (float)camera->getZoomFactor();
 			lod = calculateAABBSize(box, eyes, transformMatrix, camera->getViewport(),
 					camera->getViewport());
 		} else {
@@ -513,43 +513,43 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 	case BEZIERSHAPE + L3D_BIT:
 	case SPLINESHAPE + L3D_BIT:
 	case CUBICBSPLINE + L3D_BIT: {
-	  static GlBezierCurve bezier;
-	  static GlCatmullRomCurve catmull;
-	  static GlOpenUniformCubicBSpline bspline;
-	  AbstractGlCurve *curve = NULL;
-	  unsigned int nbCurvePoints = 100;
+		static GlBezierCurve bezier;
+		static GlCatmullRomCurve catmull;
+		static GlOpenUniformCubicBSpline bspline;
+		AbstractGlCurve *curve = NULL;
+		unsigned int nbCurvePoints = 100;
 
-	  if (shape == BEZIERSHAPE) {
-	    curve = &bezier;
-	  } else if (shape == SPLINESHAPE) {
-	    curve = &catmull;
-	    nbCurvePoints = 200;
-	  } else {
-	    curve = &bspline;
-	    nbCurvePoints = 200;
-	  }
+		if (shape == BEZIERSHAPE || shape == BEZIERSHAPE + L3D_BIT) {
+			curve = &bezier;
+		} else if (shape == SPLINESHAPE || shape == SPLINESHAPE + L3D_BIT) {
+			curve = &catmull;
+			nbCurvePoints = 200;
+		} else {
+			curve = &bspline;
+			nbCurvePoints = 200;
+		}
 
-	  curve->setOutlined(false);
-	  curve->setBillboardCurve(false);
-	  curve->setTexture(textureName);
-	  if (edge3D) {
-	    curve->setBillboardCurve(true);
-	    curve->setLookDir(lookDir);
-	  }
-	  float startSize = 1, endSize = 1;
-	  if (lod > 10 || lod < -10) {
-	    if(!colorInterpolate){
-	      curve->setOutlined(true);
-	      curve->setOutlineColor(borderColor);
-	    }
-	    startSize =  size[0]*.5;
-	    endSize = size[1]*.5;
-	  } else if (lod > 0.05 || lod < -0.05) {
-	    startSize =  size[0]*.5;
-	    endSize = size[1]*.5;;
-	  }
-	  curve->drawCurve(&tmp, startColor, endColor, startSize, endSize, nbCurvePoints);
-	  break;
+		curve->setOutlined(false);
+		curve->setBillboardCurve(false);
+		curve->setTexture(textureName);
+		if (edge3D) {
+			curve->setBillboardCurve(true);
+			curve->setLookDir(lookDir);
+		}
+		float startSize = 1, endSize = 1;
+		if (lod > 10 || lod < -10) {
+			if(!colorInterpolate){
+				curve->setOutlined(true);
+				curve->setOutlineColor(borderColor);
+			}
+			startSize =  size[0]*.5;
+			endSize = size[1]*.5;
+		} else if (lod > 0.05 || lod < -0.05) {
+			startSize =  size[0]*.5;
+			endSize = size[1]*.5;;
+		}
+		curve->drawCurve(&tmp, startColor, endColor, startSize, endSize, nbCurvePoints);
+		break;
 	}
 	default:
 		if (lod > 20 || lod < -20){
