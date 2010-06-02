@@ -53,8 +53,6 @@ BUILT_SOURCES = \
 	moc_PropertyWidget.cpp \
 	moc_PropertyDialog.cpp \
 	moc_CopyPropertyDialog.cpp \
-	moc_TulipStatsWidget.cpp \
-	moc_TulipStatsData.cpp \
 	moc_RenderingParametersDialog.cpp \
 	moc_LayerManagerWidget.cpp \
 	moc_AugmentedDisplayDialog.cpp \
@@ -66,7 +64,6 @@ BUILT_SOURCES = \
 	moc_Interactor.cpp \
 	moc_PropertyDialogData.cpp \
 	moc_CopyPropertyDialogData.cpp \
-	moc_TulipStatsData.cpp \
 	moc_RenderingParametersDialogData.cpp \
 	moc_GridOptionsWidget.cpp \
 	moc_GridOptionsData.cpp \
@@ -137,7 +134,6 @@ TODIST_SOURCES = \
 	AbstractView.cpp \
 	ControllerPluginsManager.cpp \
 	ViewPluginsManager.cpp \
-	TulipStatsWidget.cpp \
 	RenderingParametersDialog.cpp \
 	LayerManagerWidget.cpp \
 	AugmentedDisplayDialog.cpp \
