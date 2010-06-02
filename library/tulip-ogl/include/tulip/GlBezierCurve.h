@@ -15,7 +15,7 @@
 #ifndef GLBEZIERCURVE_H_
 #define GLBEZIERCURVE_H_
 
-#include <tulip/AbstractGlCurve.h>
+#include "tulip/AbstractGlCurve.h"
 
 namespace tlp {
 
@@ -58,6 +58,8 @@ public:
 protected :
 
 	Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t);
+
+	void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
 
 	std::string genCurveVertexShaderSpecificCode();
 

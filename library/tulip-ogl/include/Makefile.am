@@ -53,7 +53,6 @@ nobase_include_HEADERS = \
 	tulip/GlMetaNodeRenderer.h \
 	tulip/GlMetaNodeTrueRenderer.h \
 	tulip/GlTools.h \
-	tulip/FastBezier.h \
 	tulip/GlBezierCurve.h \
 	tulip/GlCatmullRomCurve.h \
 	tulip/EdgeExtremityGlyph.h \
@@ -71,13 +70,12 @@ nobase_include_HEADERS = \
 	tulip/AbstractGlCurve.h \
   	tulip/GlCPULODCalculator.h \
 	tulip/GlQuadTreeLODCalculator.h \
-	tulip/GlSceneZoomAndPan.h
+	tulip/GlSceneZoomAndPan.h \
+	tulip/ParametricCurves.h
 
 noinst_HEADERS = \
-	tulip/Bezier.h \
 	tulip/GlRenderer.h\
 	tulip/EpsFunction.h\
-	tulip/Spline.h \
 	tulip/Document.h \
 	tulip/Hline.h \
 	tulip/Table.h \

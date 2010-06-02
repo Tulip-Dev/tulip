@@ -35,8 +35,6 @@ set(tulip-ogl_LIB_SRCS
 	GlTextureManager.cpp 
 	GlConvexHull.cpp 
 	GlHierarchyConvexHulls.cpp 
-	Bezier.cpp 
-	Spline.cpp 
    	GlLines.cpp 
 	TLPPixmapFont.cpp 
 	TLPPixmapGlyph.cpp 
@@ -52,7 +50,7 @@ set(tulip-ogl_LIB_SRCS
 	GlEdge.cpp 
 	GlMetaNodeTrueRenderer.cpp 
 	GlDisplayListManager.cpp 
-    	OpenGlConfigManager.cpp
+    OpenGlConfigManager.cpp
 	GlSceneObserver.cpp 
 	GlLine.cpp 
 	GlCurve.cpp 
@@ -65,7 +63,6 @@ set(tulip-ogl_LIB_SRCS
 	GlXMLTools.cpp 
 	GlColorScale.cpp 
 	GlPointManager.cpp 
-	FastBezier.cpp 
 	GlBezierCurve.cpp 
 	GlCatmullRomCurve.cpp 
 	EdgeExtremityGlyph.cpp 
@@ -78,6 +75,7 @@ set(tulip-ogl_LIB_SRCS
     AbstractGlCurve.cpp
     GlQuadTreeLODCalculator.cpp
     GlSceneZoomAndPan.cpp
+    ParametricCurves.cpp
 )
 
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ../include/ ${PROJECT_SOURCE_DIR} ${FTGLInclude} ${LIBXML2_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS})

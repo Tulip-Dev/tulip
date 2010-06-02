@@ -12,8 +12,6 @@ extern "C" {
 #endif
 }
 #include "tulip/GlLines.h"
-#include "tulip/Bezier.h"
-#include "tulip/Spline.h"
 #include "tulip/GlTools.h"
 
 using namespace std;
