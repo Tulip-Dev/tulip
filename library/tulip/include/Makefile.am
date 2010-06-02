@@ -115,10 +115,7 @@ noinst_HEADERS = tulip/TLPParser.h \
 	tulip/IdManager.h \
 	tulip/PropertyManager.h \
 	tulip/PlanarityTestImpl.h \
-	tulip/RectangleArea.h \
-	tulip/Border.h \
 	tulip/Plane.h \
 	tulip/Polynome.h \
 	tulip/PluginLibraryLoader.h \
-	tulip/StatisticsNodeModule.h \
 	tulip/GraphUpdatesRecorder.h
