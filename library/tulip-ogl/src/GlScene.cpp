@@ -596,6 +596,19 @@ namespace tlp {
 	}
   }
 
+  void GlScene::ajustCameraToEmptyScene() {
+    for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+      Camera* camera=(*it).second->getCamera();
+      camera->setCenter(Coord(0,0,0));
+      camera->setSceneRadius(sqrt(300)/2.);
+
+      camera->setEyes(Coord(0, 0, camera->getSceneRadius()));
+      camera->setEyes(camera->getEyes() + camera->getCenter());
+      camera->setUp(Coord(0, 1., 0));
+      camera->setZoomFactor(0.5);
+    }
+  }
+
   void GlScene::zoomXY(int step, const int x, const int y) {
 
 	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
