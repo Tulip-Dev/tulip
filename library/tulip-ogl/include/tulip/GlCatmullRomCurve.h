@@ -16,9 +16,9 @@
 #ifndef GLCATMULLROMCURVE_H_
 #define GLCATMULLROMCURVE_H_
 
-#include <tulip/AbstractGlCurve.h>
-
 #include <vector>
+
+#include "tulip/AbstractGlCurve.h"
 
 namespace tlp {
 
@@ -64,15 +64,11 @@ protected :
 
 	Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t);
 
+	void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
+
 private :
 
-	void computeBezierSegmentControlPoints(const Coord &pBefore, const Coord &pStart, const Coord &pEnd, const Coord &pAfter,
-			std::vector<Coord> &bezierSegmentControlPoints);
-
-	int computeSegmentIndex(float t);
-
 	bool closedCurve;
-	float *globalParameter;
 	float totalLength;
 };
 

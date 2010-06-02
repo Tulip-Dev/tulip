@@ -12,8 +12,7 @@
 
  */
 
-#include <tulip/GlSimpleEntity.h>
-#include <tulip/GlOpenUniformCubicBSpline.h>
+#include "tulip/GlOpenUniformCubicBSpline.h"
 
 namespace tlp {
 

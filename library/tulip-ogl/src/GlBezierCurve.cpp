@@ -16,6 +16,7 @@
 
 #include "tulip/GlBezierCurve.h"
 #include "tulip/GlCatmullRomCurve.h"
+#include "tulip/ParametricCurves.h"
 
 using namespace std;
 
@@ -115,18 +116,12 @@ void GlBezierCurve::cleanupAfterCurveVertexShaderRendering() {
 	glActiveTexture(GL_TEXTURE0);
 }
 
+void GlBezierCurve::computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints) {
+	computeBezierPoints(controlPoints, curvePoints, nbCurvePoints);
+}
+
 Coord GlBezierCurve::computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) {
-	static vector<vector<double> > pascalTriangle = buildPascalTriangle(3*CONTROL_POINTS_LIMIT);
-	tlp::Vector<double, 3> bezierPoint;
-	bezierPoint.fill(0.0);
-	for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
-		tlp::Vector<double, 3> controlPoint;
-		controlPoint[0] = controlPoints[i][0];
-		controlPoint[1] = controlPoints[i][1];
-		controlPoint[2] = controlPoints[i][2];
-		bezierPoint += controlPoint * pascalTriangle[controlPoints.size() - 1][i] * pow((double)t, (double)i) * pow((double)(1.0 - t), (double)(controlPoints.size() - 1 - i));
-	}
-	return Coord(bezierPoint[0], bezierPoint[1], bezierPoint[2]);
+	return computeBezierPoint(controlPoints, t);
 }
 
 void GlBezierCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
@@ -150,9 +145,7 @@ void GlBezierCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &st
 
 		const unsigned int nbApproximationPoints = 20;
 		vector<Coord> curvePoints;
-		for (unsigned int i = 0 ; i < nbApproximationPoints ; ++i) {
-			curvePoints.push_back(computeCurvePointOnCPU(*controlPoints, i / static_cast<float>(nbApproximationPoints-1)));
-		}
+		computeBezierPoints(*controlPoints, curvePoints, nbApproximationPoints);
 		curve.setClosedCurve(false);
 		curve.setOutlined(outlined);
 		curve.setOutlineColor(outlineColor);

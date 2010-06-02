@@ -15,8 +15,8 @@
 #ifndef GLUNIFORMCUBICBSPLINE_H_
 #define GLUNIFORMCUBICBSPLINE_H_
 
-#include <tulip/AbstractGlCurve.h>
-#include <tulip/GlTools.h>
+#include "tulip/AbstractGlCurve.h"
+#include "tulip/GlTools.h"
 
 namespace tlp {
 
@@ -58,6 +58,8 @@ protected :
 	void setCurveVertexShaderRenderingSpecificParameters();
 
 	Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t);
+
+	void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
 
 private:
 

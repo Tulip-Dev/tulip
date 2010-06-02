@@ -59,8 +59,6 @@ libtulip_ogl_la_SOURCES = \
 	GlTextureManager.cpp \
 	GlConvexHull.cpp \
 	GlHierarchyConvexHulls.cpp \
-	Bezier.cpp \
-	Spline.cpp \
 	GlLines.cpp \
 	TLPPixmapFont.cpp \
 	TLPPixmapGlyph.cpp \
@@ -89,7 +87,6 @@ libtulip_ogl_la_SOURCES = \
 	GlXMLTools.cpp \
 	GlColorScale.cpp \
 	GlPointManager.cpp \
-	FastBezier.cpp \
 	GlBezierCurve.cpp \
 	GlCatmullRomCurve.cpp \
 	EdgeExtremityGlyph.cpp \
@@ -101,5 +98,6 @@ libtulip_ogl_la_SOURCES = \
 	GlCubicBSplineInterpolation.cpp \
 	AbstractGlCurve.cpp \
 	GlQuadTreeLODCalculator.cpp \
-	GlSceneZoomAndPan.cpp
+	GlSceneZoomAndPan.cpp \
+	ParametricCurves.cpp
 

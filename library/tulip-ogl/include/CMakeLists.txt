@@ -51,7 +51,6 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/GlMetaNodeRenderer.h 
 	tulip/GlMetaNodeTrueRenderer.h 
 	tulip/GlTools.h 
-	tulip/FastBezier.h 
 	tulip/GlBezierCurve.h 
 	tulip/GlCatmullRomCurve.h 
 	tulip/EdgeExtremityGlyph.h
@@ -70,4 +69,5 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
   	tulip/GlCPULODCalculator.h
   	tulip/GlQuadTreeLODCalculator.h
   	tulip/GlSceneZoomAndPan.h
+  	tulip/ParametricCurves.h
 )

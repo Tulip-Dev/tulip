@@ -1,168 +1,15 @@
 #include <GL/glew.h>
 
-#include <tulip/AbstractGlCurve.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/Curves.h>
-#include <tulip/TlpTools.h>
+#include "tulip/AbstractGlCurve.h"
+#include "tulip/GlTextureManager.h"
+#include "tulip/Curves.h"
+#include "tulip/TlpTools.h"
 
 using namespace std;
 
 static bool checkVboSupport() {
 	static bool vboOk = glewIsSupported("GL_ARB_vertex_buffer_object");
 	return vboOk;
-}
-
-static void drawCurveCPU(const vector<tlp::Coord> &curvePoints, const tlp::Color &startColor, const tlp::Color &endColor,
-		const float startSize, const float endSize, const tlp::Coord &startN, const tlp::Coord &endN,
-		const string &texture, const bool outlined, const tlp::Color outlineColor,
-		float texCoordFactor=1, bool billboardCurve=false, const tlp::Coord &lookDir=tlp::Coord(0,0,0)) {
-
-	unsigned int size = curvePoints.size();
-	GLfloat *points = NULL;
-	if (startSize != 1 && endSize != 1) {
-		vector<float> sizes =  tlp::getSizes(curvePoints, startSize, endSize);
-		if (!billboardCurve) {
-			points = tlp::buildCurvePoints(curvePoints, sizes, startN, endN ,size);
-		} else {
-			points = new GLfloat[size*6];
-			tlp::Coord xu = curvePoints[0] - curvePoints[1];
-			tlp::Coord dir = xu^lookDir;
-			dir /= dir.norm();
-			tlp::Coord v1 = curvePoints[0] - dir*startSize;
-			tlp::Coord v2 = curvePoints[0] + dir*startSize;
-			points[0] = v1[0];
-			points[1] = v1[1];
-			points[2] = v1[2];
-			points[3] = v2[0];
-			points[4] = v2[1];
-			points[5] = v2[2];
-			for(unsigned int i=1; i< curvePoints.size() - 1; ++i) {
-				tlp::Coord u=curvePoints[i-1]-curvePoints[i];
-				tlp::Coord v=curvePoints[i+1]-curvePoints[i];
-				xu = u ^ lookDir;
-				tlp::Coord xv = v ^ (-lookDir);
-				tlp::Coord xu_xv=xu+xv;
-				xu_xv /= xu_xv.norm();
-
-				float newSize=sizes[i];
-				float angle=M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm()));
-				if(isnan(angle)) angle=0;
-				newSize=newSize/cos(angle/2.);
-
-				v1 = curvePoints[i] - xu_xv*newSize;
-				v2 = curvePoints[i] + xu_xv*newSize;
-
-				points[6*i] = v1[0];
-				points[6*i+1] = v1[1];
-				points[6*i+2] = v1[2];
-				points[6*i+3] = v2[0];
-				points[6*i+4] = v2[1];
-				points[6*i+5] = v2[2];
-			}
-			xu = curvePoints[curvePoints.size()-2] - curvePoints[curvePoints.size()-1];
-			xu = xu ^ lookDir;
-			xu /= xu.norm();
-			v1 = curvePoints[curvePoints.size()-1] - xu*endSize;
-			v2 = curvePoints[curvePoints.size()-1] + xu*endSize;
-			points[6*(curvePoints.size()-1)] = v1[0];
-			points[6*(curvePoints.size()-1)+1] = v1[1];
-			points[6*(curvePoints.size()-1)+2] = v1[2];
-			points[6*(curvePoints.size()-1)+3] = v2[0];
-			points[6*(curvePoints.size()-1)+4] = v2[1];
-			points[6*(curvePoints.size()-1)+5] = v2[2];
-		}
-	}
-
-	vector<tlp::Color> curveColors = tlp::getColors(curvePoints, startColor, endColor);
-
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_LIGHTING);
-
-	if (startSize != 1 && endSize != 1) {
-		if (texture != "") {
-			glActiveTexture(GL_TEXTURE0);
-			tlp::GlTextureManager::getInst().activateTexture(texture);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
-			glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE);
-		}
-		if (billboardCurve) {
-			glActiveTexture(GL_TEXTURE1);
-			tlp::GlTextureManager::getInst().activateTexture(tlp::TulipBitmapDir+"cylinderTexture.png");
-		}
-		glBegin(GL_TRIANGLE_STRIP);
-		for (unsigned int i = 0; i < size; ++i) {
-			tlp::setMaterial(curveColors[i]);
-			glMultiTexCoord2f(GL_TEXTURE0, i*texCoordFactor, 1.0f);
-			glMultiTexCoord2f(GL_TEXTURE1, i*texCoordFactor, 1.0f);
-			if (!billboardCurve) {
-				glVertex3fv(&points[i*3]);
-			} else {
-				glVertex3fv(&points[i*6]);
-			}
-			glMultiTexCoord2f(GL_TEXTURE0, i*texCoordFactor, 0.0f);
-			glMultiTexCoord2f(GL_TEXTURE1, i*texCoordFactor, 0.0f);
-			if (!billboardCurve) {
-				glVertex3fv(&points[i*3 + size*3]);
-			} else {
-				glVertex3fv(&points[i*6+3]);
-			}
-		}
-		glEnd();
-		if (billboardCurve) {
-			glActiveTexture(GL_TEXTURE1);
-			tlp::GlTextureManager::getInst().desactivateTexture();
-		}
-		if (texture != "") {
-			glActiveTexture(GL_TEXTURE0);
-			glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-			tlp::GlTextureManager::getInst().desactivateTexture();
-		}
-		glBegin(GL_LINE_STRIP);
-		for (unsigned int i = 0 ; i < size ; ++i) {
-			if (outlined) {
-				tlp::setMaterial(outlineColor);
-			} else {
-				tlp::setMaterial(curveColors[i]);
-			}
-			if (!billboardCurve) {
-				glVertex3fv(&points[i*3]);
-			} else {
-				glVertex3fv(&points[i*6]);
-			}
-		}
-		glEnd();
-
-		glBegin(GL_LINE_STRIP);
-		for (unsigned int i = 0 ; i < size ; ++i) {
-			if (outlined) {
-				tlp::setMaterial(outlineColor);
-			} else {
-				tlp::setMaterial(curveColors[i]);
-			}
-			if (!billboardCurve) {
-				glVertex3fv(&points[i*3+size*3]);
-			} else {
-				glVertex3fv(&points[i*6+3]);
-			}
-		}
-		glEnd();
-	} else {
-		glBegin(GL_LINE_STRIP);
-		for (unsigned int i = 0; i < size; ++i) {
-			tlp::setMaterial(curveColors[i]);
-			glVertex3fv((float *) &curvePoints[i]);
-		}
-		glEnd();
-	}
-
-
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_LIGHTING);
-
-
-	delete [] points;
 }
 
 namespace tlp {
@@ -442,7 +289,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
 
 void AbstractGlCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
 
-	vboOk = checkVboSupport();
+	static bool vboOk = checkVboSupport();
 
 	if (curveVertexBuffersData.find(nbCurvePoints) == curveVertexBuffersData.end()) {
 		buildCurveVertexBuffers(nbCurvePoints, vboOk);
@@ -452,11 +299,12 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &
 	glGetIntegerv(GL_RENDER_MODE, &renderMode);
 
 	glDisable(GL_LIGHTING);
+	glDisable(GL_CULL_FACE);
 
 	if (texture != "") {
 		unsigned int i = nbCurvePoints / 2;
-		Coord firstCurvePoint = computeCurvePointOnCPU(*controlPoints, i / static_cast<float>(nbCurvePoints - 1));
-		Coord nexCurvePoint = computeCurvePointOnCPU(*controlPoints, (i+1) / static_cast<float>(nbCurvePoints - 1));
+		Coord firstCurvePoint(computeCurvePointOnCPU(*controlPoints, i / static_cast<float>(nbCurvePoints - 1)));
+		Coord nexCurvePoint(computeCurvePointOnCPU(*controlPoints, (i+1) / static_cast<float>(nbCurvePoints - 1)));
 		float dist = firstCurvePoint.dist(nexCurvePoint);
 		texCoordFactor = dist / (startSize * 2.0f);
 	}
@@ -591,16 +439,17 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &
 	} else {
 		vector<Coord> curvePoints;
 		computeCurvePointsOnCPU(*controlPoints, curvePoints, nbCurvePoints);
-		drawCurveCPU(curvePoints, startColor, endColor, startSize, endSize, (curvePoints[0] - (curvePoints[1] - curvePoints[0])),
-				curvePoints[curvePoints.size() - 1] + (curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]),
-				texture, outlined, outlineColor, texCoordFactor, billboardCurve, lookDir);
+		if (!billboardCurve) {
+			polyQuad(curvePoints, startColor, endColor, startSize, endSize, Coord(2.f*curvePoints[0] - curvePoints[1]), Coord(2.f*curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]),!outlined,outlineColor,texture);
+		} else {
+			simpleQuad(curvePoints, startColor, endColor, startSize, endSize, Coord(2.f*curvePoints[0] - curvePoints[1]),
+					 Coord(2.f*curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]), lookDir, !outlined,outlineColor,texture);
+		}
 	}
-}
 
-void AbstractGlCurve::computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, vector<Coord> &curvePoints, unsigned int nbCurvePoints) {
-	for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
-		curvePoints.push_back(computeCurvePointOnCPU(controlPoints, i / static_cast<float>(nbCurvePoints - 1)));
-	}
+	glEnable(GL_LIGHTING);
+	glEnable(GL_CULL_FACE);
+
 }
 
 void AbstractGlCurve::translate(const Coord &move) {

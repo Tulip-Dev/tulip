@@ -1,10 +1,10 @@
 #ifndef ABSTRACTGLCURVE_H
 #define ABSTRACTGLCURVE_H
 
-#include <tulip/GlSimpleEntity.h>
-#include <tulip/Coord.h>
-#include <tulip/Color.h>
-#include <tulip/GlShaderProgram.h>
+#include "tulip/GlSimpleEntity.h"
+#include "tulip/Coord.h"
+#include "tulip/Color.h"
+#include "tulip/GlShaderProgram.h"
 
 namespace tlp {
 
@@ -47,7 +47,7 @@ protected:
 
 	virtual Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) = 0;
 
-	void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
+	virtual void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints) = 0;
 
 	static void buildCurveVertexBuffers(const unsigned int nbCurvePoints, bool vboOk);
 
@@ -78,7 +78,6 @@ protected:
 	bool outlined;
 	Color outlineColor;
 	std::string texture;
-	bool vboOk;
 	float texCoordFactor;
 	bool billboardCurve;
 	Coord lookDir;

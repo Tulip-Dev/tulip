@@ -2,11 +2,12 @@
 
 #include <sstream>
 
-#include <tulip/GlTextureManager.h>
-#include <tulip/GlOpenUniformCubicBSpline.h>
-#include <tulip/GlTools.h>
-#include <tulip/Curves.h>
-#include <tulip/GlBezierCurve.h>
+#include "tulip/GlTextureManager.h"
+#include "tulip/GlOpenUniformCubicBSpline.h"
+#include "tulip/GlTools.h"
+#include "tulip/Curves.h"
+#include "tulip/GlBezierCurve.h"
+#include "tulip/ParametricCurves.h"
 
 using namespace std;
 
@@ -92,37 +93,11 @@ static float clamp(float f, float minVal, float maxVal) {
 }
 
 Coord GlOpenUniformCubicBSpline::computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) {
-	if (t == 0.0) {
-		return controlPoints[0];
-	} else if (t >= 1.0) {
-		return controlPoints[controlPoints.size() - 1];
-	} else {
-		float coeffs[curveDegree + 1];
-		memset(coeffs, 0, (curveDegree + 1) * sizeof(float));
-		int k = curveDegree;
-		int cpt = 0;
-		while (t > (cpt*stepKnots) && t >= ((cpt+1)*stepKnots)) {
-			++k;
-			++cpt;
-		}
-		float knotVal = (cpt * stepKnots);
-		coeffs[curveDegree] = 1.0;
-		for (int i = 1 ; i <= curveDegree ; ++i) {
-			coeffs[curveDegree-i] = (clamp(knotVal + stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + stepKnots, 0.0, 1.0) - clamp(knotVal + (-i+1) * stepKnots, 0.0, 1.0)) * coeffs[curveDegree-i+1];
-			int tabIdx = curveDegree-i+1;
-			for (int j = -i+1 ; j <= -1 ; ++j) {
-				coeffs[tabIdx] = ((t - clamp(knotVal + j * stepKnots, 0.0, 1.0)) / (clamp(knotVal + (j+i) * stepKnots, 0.0, 1.0) - clamp(knotVal + j * stepKnots, 0.0, 1.0))) * coeffs[tabIdx] + ((clamp(knotVal + (j+i+1) * stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + (j+i+1) * stepKnots, 0.0, 1.0) - clamp(knotVal + (j+1) * stepKnots, 0.0, 1.0))) * coeffs[tabIdx+1];
-				++tabIdx;
-			}
-			coeffs[curveDegree] = ((t - knotVal) / (clamp(knotVal + i * stepKnots, 0.0, 1.0) - knotVal)) * coeffs[curveDegree];
-		}
-		Coord curvePoint(0.0f, 0.0f, 0.0f);
-		int startIdx = k - curveDegree;
-		for (unsigned int i = 0 ; i <= curveDegree ; ++i) {
-			curvePoint += coeffs[i] * controlPoints[startIdx + i];
-		}
-		return curvePoint;
-	}
+	return computeOpenUniformBsplinePoint(controlPoints, t, curveDegree);
+}
+
+void GlOpenUniformCubicBSpline::computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints) {
+	computeOpenUniformBsplinePoints(controlPoints, curvePoints, curveDegree, nbCurvePoints);
 }
 
 }
