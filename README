@@ -1,11 +1,11 @@
 Tulip Readme file.
 
-This software is under GPL licence,(see COPYING file).
-It has been designed and implmented by David Auber.
+This software is under LGPL licence,(see COPYING.LESSER file).
+It has been designed and implemented by David Auber.
 
 Requirements :
 
-- autotools or cmake
+- autotools or cmake >= 2.6.4
 - libxml2
 - freetype2
 - Qt 4.2 or higher
