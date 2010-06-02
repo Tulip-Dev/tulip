@@ -100,13 +100,10 @@ namespace tlp {
 
 	if(antialiased) {
       glEnable(GL_LINE_SMOOTH);
-      glEnable(GL_POLYGON_SMOOTH);
       glHint(GL_LINE_SMOOTH_HINT,GL_DONT_CARE);
-      glHint(GL_POLYGON_SMOOTH_HINT,GL_DONT_CARE);
       glShadeModel(GL_SMOOTH);
 	}else{
       glDisable(GL_LINE_SMOOTH);
-      glDisable(GL_POLYGON_SMOOTH);
 	}
 
 	glDisable(GL_POINT_SMOOTH);
