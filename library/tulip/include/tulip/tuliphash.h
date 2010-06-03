@@ -1,7 +1,8 @@
 #ifndef TLP_HASH_H
 #define TLP_HASH_H
-#include "tulip/tulipconf.h"
+
 #if  (__GNUC__ < 4 || __GNUC_MINOR__ < 1)
+#  include <tulip/tulipconf.h>
 #  if (__GNUC__ < 3)
 #    include <hash_map>
 #    include <hash_set>
@@ -25,9 +26,9 @@ namespace stdext {
   };
   template<>
     struct hash<double> {
-    size_t operator()(const double s) const { return (size_t) s; }
+      size_t operator()(const double s) const { return (size_t) s; }
+    };
 }
-  };
 #else
 #  include <tr1/unordered_map>
 #  include <tr1/unordered_set>
