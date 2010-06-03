@@ -1,15 +1,13 @@
 #ifndef GL_HCVXHULL_H
 #define GL_HCVXHULL_H
 
-#include <tulip/Graph.h>
-
-#include "tulip/GlLayer.h"
-
 namespace tlp {
 
   class GlComposite;
   class ConvexHullItem;
   class GlConvexHull;
+	class Graph;
+	class GlLayer;
 
   /**
    * Build a hierarchy of convex hulls
@@ -18,25 +16,19 @@ namespace tlp {
 
   public:
     /**
-     * Basic constructor
-     */
-    GlHierarchyConvexHulls(bool fatherHullsIsDeducedFromChilds = true) {
-      deducedFromChilds = fatherHullsIsDeducedFromChilds;
-    }
-    virtual ~GlHierarchyConvexHulls() {}
-
-    /**
      * Build the hierarchy for the given graph in GlLayer
      */
-    virtual void compute(tlp::GlLayer*,tlp::Graph *);
+    static void compute(tlp::GlLayer*,tlp::Graph *);
 
-    /**
+		private:
+		GlHierarchyConvexHulls();
+		~GlHierarchyConvexHulls();
+		
+		/**
      * Create the hierarchy of ConvexHullItem
      */
-    ConvexHullItem *buildComposite(ConvexHullItem *convexHull, GlConvexHull *oldHull);
-    void setToOld(ConvexHullItem *convexHull, GlConvexHull *oldHull);
-
-    bool deducedFromChilds;
+    static void buildComposite(ConvexHullItem *convexHull, GlConvexHull *oldHull);
+    static void setToOld(ConvexHullItem *convexHull, GlConvexHull *oldHull);
   };
 }
 

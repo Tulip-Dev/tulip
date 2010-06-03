@@ -195,7 +195,6 @@ private:
   void  initializeGL();
 
   tlp::GlScene scene;
-  tlp::GlHierarchyConvexHulls hulls;
   bool _firstStepOfIncrementalRendering;
   QRegion _visibleArea;
   AbstractView *view;

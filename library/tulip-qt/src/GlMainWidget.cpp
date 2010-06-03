@@ -306,7 +306,7 @@ namespace tlp {
       checkIfGlAuxBufferAvailable();
       computeInteractors();
       if(scene.getGlGraphComposite()) {
-        hulls.compute(scene.getLayer("Main"),scene.getGlGraphComposite()->getInputData()->getGraph());
+        GlHierarchyConvexHulls::compute(scene.getLayer("Main"),scene.getGlGraphComposite()->getInputData()->getGraph());
       }
       scene.prerenderMetaNodes();
       scene.draw();
