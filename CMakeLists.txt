@@ -11,7 +11,7 @@
 ## -----------------------------------------------------------------------------------------------
 
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.4)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 ## -----------------------------------------------------------------------------------------------
 ## Tulip version numbers
@@ -176,7 +176,7 @@ ENDIF(LINUX)
 ## OpenMP
 ## -----------------------------------------------------------------------------------------------
 
-FIND_PACKAGE(OpenMP)
+FIND_PACKAGE(OpenMP QUIET)
 IF(OPENMP_FOUND)
 IF(WIN32)
 ## HACK: do not know why OpenMP_CXX_FLAGS is not set when running on window ?
@@ -184,6 +184,8 @@ IF(WIN32)
 ELSE(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 ENDIF(WIN32)
+ELSE(OPENMP_FOUND)
+MESSAGE("OpenMP not found: multithreaded code will not be used")
 ENDIF(OPENMP_FOUND)
 
 ## -----------------------------------------------------------------------------------------------
@@ -199,7 +201,7 @@ ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)
 ADD_SUBDIRECTORY(software)
 ADD_SUBDIRECTORY(plugins)
-FIND_PACKAGE(Doxygen)
+FIND_PACKAGE(Doxygen QUIET)
 if (DOXYGEN_FOUND)
   OPTION(GENERATE_DOC "Do you want to generate the documentation ? [OFF|ON]")
   if (GENERATE_DOC)
@@ -220,6 +222,8 @@ if (DOXYGEN_FOUND)
     CONFIGURE_FILE("docs/doxygen/header-allPlugins.html.in" "docs/doxygen/header-allPlugins.html")
     CONFIGURE_FILE("docs/doxygen/tulip-plugins.doxygen.in" "docs/doxygen/tulip-plugins.doxygen")    
   endif(GENERATE_DOC)
+else(DOXYGEN_FOUND)
+MESSAGE("Doxygen not found: unable to generate documentation")
 endif(DOXYGEN_FOUND)
 
 ## -----------------------------------------------------------------------------------------------
@@ -244,7 +248,7 @@ SET(QT_INCLUDES "-I${QT_INCLUDE_DIR}")
 GET_TARGET_PROPERTY(CMakeTulipLib ${LibTulipName} LOCATION)
 GET_TARGET_PROPERTY(CMakeTulipOglLib ${LibTulipOglName} LOCATION)
 GET_TARGET_PROPERTY(CMakeTulipQtLib ${LibTulipQtName} LOCATION)
-CONFIGURE_FILE("tulip-config.cmake.in" "tulip-config" @ONLY)
+CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 
 ## -----------------------------------------------------------------------------------------------
 ## create pluginstest.cpp

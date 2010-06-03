@@ -105,22 +105,22 @@ while test $# -gt 0; do
     --libs)
       echo -L${libdir} -ltulip${libversion} -ltulip-ogl${libversion} -ltulip-qt4${libversion}
       ;;
-	--cmakelibs)
+    --cmakelibs)
       echo @CMakeTulipLib@ @CMakeTulipOglLib@ @CMakeTulipQtLib@
       ;;
     --lib_tulip)
       echo -L${libdir} -ltulip${libversion} @OPENMP_CXXFLAGS@
       ;;
-	--cmakelib_tulip)
+    --cmakelib_tulip)
       echo @CMakeTulipLib@
       ;;
     --lib_ogl)
       echo -L${libdir} -ltulip-ogl${libversion}
       ;;
-	--cmakelib_ogl)
+    --cmakelib_ogl)
       echo @CMakeTulipOglLib@
       ;;  
-	--cmakelib_qt)
+    --cmakelib_qt)
       echo @CMakeTulipQtLib@
       ;;  
     --plugincxxflags)
@@ -135,7 +135,7 @@ while test $# -gt 0; do
     --pluginpath)
       echo ${pluginpath}
       ;;
-	--cmakepluginpath)
+    --cmakepluginpath)
       echo @libdir@/tlp
       ;;
     --qtlibs)
