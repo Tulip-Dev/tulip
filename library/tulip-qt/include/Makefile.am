@@ -68,7 +68,8 @@ INCLUDES_H = \
 	tulip/ImportCSVDataDialog.h \
 	tulip/CSVContentHandler.h \
 	tulip/QtGlSceneZoomAndPanAnimator.h \
-	tulip/Morphing.h
+	tulip/Morphing.h \
+	tulip/GraphPropertiesTableWidget.h
 
 QT44_INCLUDES_H = \
 	tulip/BaseGraphicsViewComponent.h \
