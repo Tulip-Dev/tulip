@@ -5,6 +5,7 @@
 #include "tulip/DoubleProperty.h"
 #include "tulip/BooleanProperty.h"
 #include "tulip/ForEach.h"
+#include "tulip/ConvexHull.h"
 
 #include <climits>
 
@@ -178,5 +179,11 @@ std::vector<Coord> tlp::computeConvexHull(const Graph *graph, const LayoutProper
     const BooleanProperty *selection) {
   ConvexHullCalculator calc;
   computeGraphPoints(graph, layout, size, rotation, selection, calc);
-  return calc.getResult();
+  vector<Coord> controlPoints(calc.getResult());
+  vector<unsigned int> resultIds;
+  convexHull(controlPoints, resultIds);
+  vector<Coord> result;
+  for (vector<unsigned int>::iterator it = resultIds.begin(); it != resultIds.end(); ++it)
+    result.push_back(controlPoints[*it]);
+  return result;
 }
