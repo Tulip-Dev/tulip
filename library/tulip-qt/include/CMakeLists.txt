@@ -68,6 +68,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
     tulip/CSVContentHandler.h
     tulip/QtGlSceneZoomAndPanAnimator.h
     tulip/Morphing.h
+    tulip/GraphPropertiesTableWidget.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)

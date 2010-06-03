@@ -63,6 +63,7 @@ SET(tulip-qt_LIB_SRCS
     ImportCSVDataWidget.cpp
     ImportCSVDataConfigurationWidget.cpp
     QtGlSceneZoomAndPanAnimator.cpp
+    GraphPropertiesTableWidget.cpp
 )
 
 set(tulip-qt_UI
@@ -82,7 +83,7 @@ set(tulip-qt_UI
      ../designer/ListPropertyWidget.ui
      ../designer/ChooseFileNameDialog.ui
      ../designer/ImportCSVDataConfigurationWidget.ui
-     ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui
+     ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui     
 )
 
 set(tulip-qt_PLUGINS
@@ -133,6 +134,7 @@ set(tulip-qt_MOC
     ../include/tulip/ImportCSVDataConfigurationWidget.h
     ../include/tulip/QtGlSceneZoomAndPanAnimator.h
     ../include/tulip/Morphing.h
+    ../include/tulip/GraphPropertiesTableWidget.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)

@@ -85,7 +85,8 @@ BUILT_SOURCES = \
 	moc_ImportCSVDataWidget.cpp \
 	moc_ImportCSVDataConfigurationWidget.cpp \
 	moc_QtGlSceneZoomAndPanAnimator.cpp \
-	moc_Morphing.cpp
+	moc_Morphing.cpp \
+	moc_GraphPropertiesTableWidget.cpp
 
 QT44_BUILT_SOURCES = \
 	moc_GlMainWidgetGraphicsView.cpp \
@@ -152,7 +153,8 @@ TODIST_SOURCES = \
 	ImportCSVDataWidget.cpp \
 	ImportCSVDataConfigurationWidget.cpp \
 	CSVParser.cpp \
-	QtGlSceneZoomAndPanAnimator.cpp
+	QtGlSceneZoomAndPanAnimator.cpp \
+	GraphPropertiesTableWidget.cpp
 
 QT44_SOURCES = \
 	GlMainWidgetGraphicsView.cpp \
