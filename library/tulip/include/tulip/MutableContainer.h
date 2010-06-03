@@ -1,12 +1,10 @@
 #ifndef _TLPMUTABLECONTAINER_
 #define _TLPMUTABLECONTAINER_
 
-#include <iostream>
 #include <deque>
-#include <exception>
 #include <iostream>
-#include <string.h>
-#include <assert.h>
+#include <string>
+#include <cassert>
 #include <tulip/tulipconf.h>
 #include <tulip/tuliphash.h>
 #include <tulip/ReturnType.h>
