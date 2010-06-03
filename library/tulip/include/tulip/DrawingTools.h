@@ -20,6 +20,12 @@ class BooleanProperty;
 
 /**
   *
+  * add a "Circle computeBoundingCircle(...)" function (the code to compute it correctly is already available in Circle.h)
+  *
+  */
+
+/**
+  *
   * Compute the bounding box of a graph according to node position edge bends
   * node z-rotation, and size of elements
   *
@@ -34,6 +40,8 @@ TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
   * Compute a bounding sphere of a graph according to node position edge bends
   * node z-rotation, and size of elements
   *
+  * @todo make that fucntion return a new type of class called BoundingSphere
+  * @todo test if that function correctly compute a bounding sphere.
   */
 TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (const Graph *graph,
                                                            const LayoutProperty *layout,
