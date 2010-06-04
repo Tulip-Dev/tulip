@@ -36,17 +36,19 @@ TLP_GL_SCOPE void computeBezierPoints(const std::vector<Coord> &controlPoints, s
  * \param controlPoints a vector of control points
  * \param t curve parameter value (0 <= t <= 1)
  * \param closedCurve if true, the curve will be closed, meaning a Bézier segment will connect the last and first control point
+ * \param alpha curve parameterization parameter (0 <= alpha <= 1), alpha = 0 -> uniform parameterization, alpha = 0.5 -> centripetal parameterization, alpha = 1.0 -> chord-length parameterization
  */
-TLP_GL_SCOPE Coord computeCatmullRomPoint(const std::vector<Coord> &controlPoints, const float t, const bool closedCurve = false);
+TLP_GL_SCOPE Coord computeCatmullRomPoint(const std::vector<Coord> &controlPoints, const float t, const bool closedCurve = false, const float alpha = 0.5);
 
 /** Compute a set of points approximating a Catmull-Rom curve
  *
  *  \param controlPoints a vector of control points
  *  \param curvePoints an empty vector to store the computed points
  *  \param closedCurve if true, the curve will be closed, meaning a Bézier segment will connect the last and first control point
+ *  \param alpha curve parameterization parameter (0 <= alpha <= 1), alpha = 0 -> uniform parameterization, alpha = 0.5 -> centripetal parameterization, alpha = 1.0 -> chord-length parameterization
  *  \param nbCurvePoints number of points to generate
  */
-TLP_GL_SCOPE void computeCatmullRomPoints(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, const bool closedCurve = false, const unsigned int nbCurvePoints = 100);
+TLP_GL_SCOPE void computeCatmullRomPoints(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, const bool closedCurve = false, const unsigned int nbCurvePoints = 100, const float alpha = 0.5);
 
 /**
   * Compute the position of a point 'p' at t (0 <= t <= 1)

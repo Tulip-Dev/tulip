@@ -121,7 +121,8 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
 	}
 }
 
-static void computeCatmullRomGlobalParameter(const vector<Coord> &controlPoints, vector<float> &globalParameter) {
+
+static void computeCatmullRomGlobalParameter(const vector<Coord> &controlPoints, vector<float> &globalParameter, const float alpha) {
 	globalParameter.resize(controlPoints.size());
 	globalParameter[0] = 0.0f;
 	globalParameter[controlPoints.size() - 1] = 1.0f;
@@ -130,7 +131,7 @@ static void computeCatmullRomGlobalParameter(const vector<Coord> &controlPoints,
 	cumDist[0] = 0.0f;
 	float totalDist = 0.f;
 	for (size_t i = 1 ; i < controlPoints.size() ; ++i) {
-		float dist = controlPoints[i-1].dist(controlPoints[i]);
+		float dist = pow(controlPoints[i-1].dist(controlPoints[i]), alpha);
 		cumDist[i] = cumDist[i-1] + dist;
 		totalDist += dist;
 	}
@@ -153,16 +154,23 @@ static int computeSegmentIndex(float t, const vector<Coord> &controlPoints, cons
 	}
 }
 
-static void computeBezierSegmentControlPoints(const Coord &pBefore, const Coord &pStart, const Coord &pEnd, const Coord &pAfter, vector<Coord> &bezierSegmentControlPoints) {
+static void computeBezierSegmentControlPoints(const Coord &pBefore, const Coord &pStart, const Coord &pEnd, const Coord &pAfter, vector<Coord> &bezierSegmentControlPoints, const float alpha) {
 	bezierSegmentControlPoints.push_back(pStart);
-	Coord d0((pEnd - pBefore) / 2.f);
-	bezierSegmentControlPoints.push_back(pStart + d0 / 3.f);
-	Coord d1((pAfter - pStart) / 2.f);
-	bezierSegmentControlPoints.push_back(pEnd - d1 / 3.f);
+	float d1 = pBefore.dist(pStart);
+	float d2 = pStart.dist(pEnd);
+	float d3 = pEnd.dist(pAfter);
+	float d1alpha = pow(d1, alpha);
+	float d12alpha = pow(d1, 2*alpha);
+	float d2alpha = pow(d2, alpha);
+	float d22alpha = pow(d2, 2*alpha);
+	float d3alpha = pow(d3, alpha);
+	float d32alpha = pow(d3, 2*alpha);
+	bezierSegmentControlPoints.push_back(Coord((d12alpha*pEnd-d22alpha*pBefore+(2*d12alpha+3*d1alpha*d2alpha+d22alpha)*pStart)/(3*d1alpha*(d1alpha+d2alpha))));
+	bezierSegmentControlPoints.push_back(Coord((d32alpha*pStart-d22alpha*pAfter+(2*d32alpha+3*d3alpha*d2alpha+d22alpha)*pEnd)/(3*d3alpha*(d3alpha+d2alpha))));
 	bezierSegmentControlPoints.push_back(pEnd);
 }
 
-static Coord computeCatmullRomPointImpl(const vector<Coord> &controlPoints, const float t, const vector<float> &globalParameter, const bool closedCurve) {
+static Coord computeCatmullRomPointImpl(const vector<Coord> &controlPoints, const float t, const vector<float> &globalParameter, const bool closedCurve, const float alpha) {
 	int i = computeSegmentIndex(t, controlPoints, globalParameter);
 	float localT = 0.0;
 	if (t == 1.0) {
@@ -172,13 +180,13 @@ static Coord computeCatmullRomPointImpl(const vector<Coord> &controlPoints, cons
 	}
 	vector<Coord> bezierControlPoints;
 	if (i == 0) {
-		computeBezierSegmentControlPoints(closedCurve ? controlPoints[controlPoints.size() - 2] : controlPoints[i], controlPoints[i], controlPoints[i+1], controlPoints[i+2], bezierControlPoints);
+		computeBezierSegmentControlPoints(closedCurve ? controlPoints[controlPoints.size() - 2] : controlPoints[i] - (controlPoints[i+1] - controlPoints[i]), controlPoints[i], controlPoints[i+1], controlPoints[i+2], bezierControlPoints, alpha);
 	} else if (i == controlPoints.size() - 2) {
-		computeBezierSegmentControlPoints(controlPoints[i-1], controlPoints[i], controlPoints[i+1], closedCurve ? controlPoints[1] : controlPoints[i+1], bezierControlPoints);
+		computeBezierSegmentControlPoints(controlPoints[i-1], controlPoints[i], controlPoints[i+1], closedCurve ? controlPoints[1] : controlPoints[i+1] + (controlPoints[i+1] - controlPoints[i]), bezierControlPoints, alpha);
 	} else if (i == controlPoints.size() - 1) {
-		computeBezierSegmentControlPoints(controlPoints[i-2], controlPoints[i-1], controlPoints[i], closedCurve ? controlPoints[1] : controlPoints[i], bezierControlPoints);
+		computeBezierSegmentControlPoints(controlPoints[i-2], controlPoints[i-1], controlPoints[i], closedCurve ? controlPoints[1] : controlPoints[i] + (controlPoints[i] - controlPoints[i-1]), bezierControlPoints, alpha);
 	} else if (i != controlPoints.size() - 1) {
-		computeBezierSegmentControlPoints(controlPoints[i-1], controlPoints[i], controlPoints[i+1], controlPoints[i+2], bezierControlPoints);
+		computeBezierSegmentControlPoints(controlPoints[i-1], controlPoints[i], controlPoints[i+1], controlPoints[i+2], bezierControlPoints, alpha);
 	}
 	float t2 = localT * localT;
 	float t3 = t2 * localT;
@@ -188,21 +196,25 @@ static Coord computeCatmullRomPointImpl(const vector<Coord> &controlPoints, cons
 	return (bezierControlPoints[0] * s3 + bezierControlPoints[1] * 3.0 * localT * s2 + bezierControlPoints[2] * 3.0 * t2 * s + bezierControlPoints[3] * t3);
 }
 
-Coord computeCatmullRomPoint(const vector<Coord> &controlPoints, const float t, const bool closedCurve) {
-	vector<float> globalParameter;
-	computeCatmullRomGlobalParameter(controlPoints, globalParameter);
-	return computeCatmullRomPointImpl(controlPoints, t, globalParameter, closedCurve);
-}
-
-void computeCatmullRomPoints(const vector<Coord> &controlPoints, vector<Coord> &curvePoints, const bool closedCurve, const unsigned int nbCurvePoints) {
+Coord computeCatmullRomPoint(const vector<Coord> &controlPoints, const float t, const bool closedCurve, const float alpha) {
 	vector<float> globalParameter;
 	vector<Coord> controlPointsCp(controlPoints);
 	if (closedCurve) {
 		controlPointsCp.push_back(controlPoints[0]);
 	}
-	computeCatmullRomGlobalParameter(controlPointsCp, globalParameter);
+	computeCatmullRomGlobalParameter(controlPointsCp, globalParameter, alpha);
+	return computeCatmullRomPointImpl(controlPointsCp, t, globalParameter, closedCurve, alpha);
+}
+
+void computeCatmullRomPoints(const vector<Coord> &controlPoints, vector<Coord> &curvePoints, const bool closedCurve, const unsigned int nbCurvePoints, const float alpha) {
+	vector<float> globalParameter;
+	vector<Coord> controlPointsCp(controlPoints);
+	if (closedCurve) {
+		controlPointsCp.push_back(controlPoints[0]);
+	}
+	computeCatmullRomGlobalParameter(controlPointsCp, globalParameter, alpha);
 	for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
-		curvePoints.push_back(computeCatmullRomPointImpl(controlPointsCp, i / static_cast<float>(nbCurvePoints - 1), globalParameter, closedCurve));
+		curvePoints.push_back(computeCatmullRomPointImpl(controlPointsCp, i / static_cast<float>(nbCurvePoints - 1), globalParameter, closedCurve, alpha));
 	}
 }
 

@@ -34,6 +34,8 @@ namespace tlp {
  */
 class TLP_GL_SCOPE GlCatmullRomCurve : public AbstractGlCurve {
 
+	enum ParameterizationType {UNIFORM, CHORD_LENGTH, CENTRIPETAL};
+
 public :
 
 	GlCatmullRomCurve();
@@ -47,12 +49,16 @@ public :
 	 * \param startSize the width at the start of the curve
 	 * \param endSize the width at the end of the curve
 	 * \param closedCurve if true, the curve will be closed and a bezier segment will be drawn between the last and first control point
+	 * \param paramType curve parameterization type (GlCatmullRomCurve::UNIFORM | GlCatmullRomCurve::CENTRIPETAL | GlCatmullRomCurve::CHORD_LENGTH (default))
 	 * \param nbCurvePoints the number of curve points to generate
 	 */
 	GlCatmullRomCurve(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
-					  const float startSize, const float endSize, const bool closedCurve = false, const unsigned int nbCurvePoints = 200);
+					  const float startSize, const float endSize, const bool closedCurve = false,
+					  const unsigned int nbCurvePoints = 200, const ParameterizationType paramType = CENTRIPETAL);
 
 	~GlCatmullRomCurve();
+
+	void setParameterizationType(const ParameterizationType paramType) {this->paramType = paramType;}
 
 	void drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=200);
 
@@ -70,6 +76,8 @@ private :
 
 	bool closedCurve;
 	float totalLength;
+	float alpha;
+	ParameterizationType paramType;
 };
 
 
