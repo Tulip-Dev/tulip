@@ -20,16 +20,7 @@ typedef GLvoid (*GLUTesselatorFunction)();
 #elif defined( __mips ) || defined( __linux__ ) || defined( __FreeBSD_kernel__) || defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __sun ) || defined (__CYGWIN__)
 typedef GLvoid (*GLUTesselatorFunction)();
 #elif defined ( WIN32)
-// inspired from ftgl/FTGL.h & ftgl/FTVectoriser.cpp
-#define  WIN32_LEAN_AND_MEAN
-#include <windows.h>
-namespace tlp {
-void CALLBACK beginCallback(GLenum which);
-void CALLBACK endCallback(void);
-void CALLBACK errorCallback(GLenum errorCode);
-void CALLBACK vertexCallback(GLvoid *vertex);
-void CALLBACK combineCallback(GLvoid *vertex);
-}
+typedef void (__stdcall*GLUTesselatorFunction)(void);
 #else
 #error "Error - need to define type GLUTesselatorFunction for this platform/compiler"
 #endif
@@ -203,18 +194,6 @@ void GlComplexPolygon::draw(float lod,Camera *camera) {
 	GLUtesselator *tobj;
 	tobj = gluNewTess();
 
-#ifdef WIN32
-	gluTessCallback(tobj, GLU_TESS_VERTEX,
-			(void (__stdcall*)(void))vertexCallback);
-	gluTessCallback(tobj, GLU_TESS_BEGIN,
-			(void (__stdcall*)(void))beginCallback);
-	gluTessCallback(tobj, GLU_TESS_END,
-			(void (__stdcall*)(void))endCallback);
-	gluTessCallback(tobj, GLU_TESS_ERROR,
-			(void (__stdcall*)(void))errorCallback);
-	gluTessCallback(tobj, GLU_TESS_ERROR,
-			(void (__stdcall*)(void))combineCallback);
-#else
 	gluTessCallback(tobj, GLU_TESS_VERTEX,
 			(GLUTesselatorFunction)vertexCallback);
 	gluTessCallback(tobj, GLU_TESS_BEGIN,
@@ -225,7 +204,6 @@ void GlComplexPolygon::draw(float lod,Camera *camera) {
 			(GLUTesselatorFunction)errorCallback);
 	gluTessCallback(tobj, GLU_TESS_COMBINE,
 			(GLUTesselatorFunction)combineCallback);
-#endif
 
 //Compute number of points to compute and create a big tab to store points' informations
 	unsigned int numberOfPoints=0;
