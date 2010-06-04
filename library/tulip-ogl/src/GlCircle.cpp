@@ -23,6 +23,7 @@ namespace tlp {
       points[i] = Coord(center[0] + deltaX, center[1] + deltaY, center[2]);
       boundingBox.expand(points[i]);
     }
+    clearGenerated();
   }
   //===========================================================
   void GlCircle::getXML(xmlNodePtr rootNode) {

@@ -55,6 +55,8 @@ namespace tlp {
     boundingBox = BoundingBox();
     boundingBox.expand(point(0));
     boundingBox.expand(point(2));
+
+    clearGenerated();
   }
   //=====================================================
   void GlRect::setBottomRightPos(const Coord &_bottomRightPos) {
@@ -64,16 +66,22 @@ namespace tlp {
     boundingBox = BoundingBox();
     boundingBox.expand(point(0));
     boundingBox.expand(point(2));
+
+    clearGenerated();
   }
   //=====================================================
   void GlRect::setTopLeftColor(const Color &_topLeftCol) {
     fcolor(0) = _topLeftCol;
     fcolor(1) = _topLeftCol;
+
+    clearGenerated();
   }
   //=====================================================
   void GlRect::setBottomRightColor(const Color &_bottomRightCol) {
     fcolor(2) = _bottomRightCol;
     fcolor(3) = _bottomRightCol;
+
+    clearGenerated();
   }
   //=====================================================
   bool GlRect::inRect(double x, double y) {
