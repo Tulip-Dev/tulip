@@ -3,13 +3,11 @@
 #include <tulip/StringProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/GlDisplayListManager.h>
-#include <tulip/GlTextureManager.h>
 
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/Graph.h>
-#include <tulip/GlTools.h>
+#include <tulip/GlBox.h>
 
 using namespace std;
 using namespace tlp;
@@ -28,14 +26,22 @@ public:
 	virtual ~CubeOutLinedTransparent();
 	virtual void draw(node n, float lod);
 	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
-	virtual Coord getAnchor(const Coord & vector) const;
+  virtual void draw(const Color &borderColor,float borderWidth,const std::string &textureName, float lod);
+  virtual Coord getAnchor(const Coord & vector) const;
 
-private:
-	inline void drawGlyph(const Color& glyohColor, const string& texture,
-			const string& texturePath, double borderWidth,
-			const Color& borderColor, float lod);
-	void drawCubeSimple(GLenum);
+protected:
+
+  static GlBox* box;
+
 };
+
+#ifdef _WIN32
+#ifdef DLL_EXPORT
+GlBox* CubeOutLinedTransparent::box=0;
+#endif
+#else
+GlBox* CubeOutLinedTransparent::box=0;
+#endif
 
 GLYPHPLUGIN(CubeOutLinedTransparent, "3D - Cube OutLined Transparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 9)
 ;
@@ -45,67 +51,49 @@ EEGLYPHPLUGIN(CubeOutLinedTransparent, "3D - Cube OutLined Transparent", "David 
 //===================================================================================
 CubeOutLinedTransparent::CubeOutLinedTransparent(GlyphContext *gc) :
 	Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
+  if(!box)
+    box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
 }
 CubeOutLinedTransparent::CubeOutLinedTransparent(EdgeExtremityGlyphContext *gc) :
 	Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
+  if(!box)
+    box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
 }
 
 CubeOutLinedTransparent::~CubeOutLinedTransparent() {
 }
 
 void CubeOutLinedTransparent::draw(node n, float lod) {
-	//	if (GlDisplayListManager::getInst().beginNewDisplayList(
-	//			"CubeOutLinedTransparent_cube")) {
-	//		drawCubeSimple(GL_LINE_LOOP);
-	//		GlDisplayListManager::getInst().endNewDisplayList();
-	//	}
-	//
-	//	tlp::setMaterial(glGraphInputData->elementColor->getNodeValue(n));
-	//	string texFile = glGraphInputData->elementTexture->getNodeValue(n);
-	//	if (texFile != "") {
-	//		string texturePath = glGraphInputData->parameters->getTexturePath();
-	//		if (GlTextureManager::getInst().activateTexture(texturePath + texFile))
-	//			setMaterial(Color(255, 255, 255,
-	//					(glGraphInputData->elementColor->getNodeValue(n))[3]));
-	//	}
-	//	//glCallList(LList);
-	//	ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<
-	//			ColorProperty> ("viewBorderColor");
-	//	DoubleProperty *borderWidth = 0;
-	//	if (glGraphInputData->getGraph()->existProperty("viewBorderWidth"))
-	//		borderWidth
-	//				= glGraphInputData->getGraph()->getProperty<DoubleProperty> (
-	//						"viewBorderWidth");
-	//	GlTextureManager::getInst().desactivateTexture();
-	//	if (borderWidth == 0)
-	//		glLineWidth(2);
-	//	else {
-	//		double lineWidth = borderWidth->getNodeValue(n);
-	//		if (lineWidth < 1e-6)
-	//			glLineWidth(1e-6); //no negative borders
-	//		else
-	//			glLineWidth(lineWidth);
-	//	}
-	//	glDisable(GL_LIGHTING);
-	//	setColor(borderColor->getNodeValue(n));
-	//	GlDisplayListManager::getInst().callDisplayList(
-	//			"CubeOutLinedTransparent_cube");
-	//	glEnable(GL_LIGHTING);
-	drawGlyph(glGraphInputData->elementColor->getNodeValue(n),
-			glGraphInputData->elementTexture->getNodeValue(n),
-			glGraphInputData->parameters->getTexturePath(),
-			glGraphInputData->elementBorderWidth->getNodeValue(n),
-			glGraphInputData->elementBorderColor->getNodeValue(n), lod);
+  draw(glGraphInputData->elementBorderColor->getNodeValue(n),
+       glGraphInputData->elementBorderWidth->getNodeValue(n),
+       glGraphInputData->elementTexture->getNodeValue(n),
+       lod);
 }
 
 void CubeOutLinedTransparent::draw(edge e, node n, const Color &borderColor, const Color& glyphColor,
 		float lod) {
-	drawGlyph(glyphColor,
-			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
-			edgeExtGlGraphInputData->parameters->getTexturePath(),
-			edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
-			borderColor, lod);
+  draw(borderColor,
+       edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
+       edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
+       lod);
 	glDisable(GL_LIGHTING);
+}
+
+void CubeOutLinedTransparent::draw(const Color &borderColor,float borderWidth,const std::string &textureName, float lod){
+  if (textureName.size() != 0){
+    const string& texturePath=glGraphInputData->parameters->getTexturePath();
+    box->setTextureName(texturePath+textureName);
+  }else
+    box->setTextureName("");
+
+  box->setFillColor(Color(0,0,0,0));
+  box->setOutlineColor(borderColor);
+  double lineWidth=borderWidth;
+  if(lineWidth < 1e-6)
+    lineWidth=1e-6;
+  box->setOutlineSize(lineWidth);
+
+  box->draw(lod,NULL);
 }
 
 Coord CubeOutLinedTransparent::getAnchor(const Coord & vector) const {
@@ -116,78 +104,4 @@ Coord CubeOutLinedTransparent::getAnchor(const Coord & vector) const {
 		return vector * (0.5f / fmax);
 	else
 		return vector;
-}
-
-void CubeOutLinedTransparent::drawCubeSimple(GLenum type) {
-	/* front face */
-	glBegin(type);
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glEnd();
-	/* back face */
-	glBegin(type);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glVertex3f(0.5f, -0.5f, -0.5f);
-	glEnd();
-	/* right face */
-	glBegin(type);
-	glVertex3f(0.5f, -0.5f, -0.5f);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glEnd();
-	/* left face */
-	glBegin(type);
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glEnd();
-	/* top face */
-	glBegin(type);
-	glVertex3f(0.5f, 0.5f, 0.5f);
-	glVertex3f(0.5f, 0.5f, -0.5f);
-	glVertex3f(-0.5f, 0.5f, -0.5f);
-	glVertex3f(-0.5f, 0.5f, 0.5f);
-	glEnd();
-	/* bottom face */
-	glBegin(type);
-	glVertex3f(0.5f, -0.5f, -0.5f);
-	glVertex3f(0.5f, -0.5f, 0.5f);
-	glVertex3f(-0.5f, -0.5f, 0.5f);
-	glVertex3f(-0.5f, -0.5f, -0.5f);
-	glEnd();
-}
-/*@}*/
-void CubeOutLinedTransparent::drawGlyph(const Color& glyphColor,
-		const string& texture, const string& texturePath, double borderWidth,
-		const Color& borderColor, float lod) {
-	if (GlDisplayListManager::getInst().beginNewDisplayList(
-			"CubeOutLinedTransparent_cube")) {
-		drawCubeSimple(GL_LINE_LOOP);
-		GlDisplayListManager::getInst().endNewDisplayList();
-	}
-
-	tlp::setMaterial(glyphColor);
-
-	if (texture != "") {
-		if (GlTextureManager::getInst().activateTexture(texturePath + texture))
-			setMaterial(Color(255, 255, 255, (glyphColor[3])));
-	}
-	//glCallList(LList);
-
-	if (borderWidth < 1e-6)
-		glLineWidth(1e-6); //no negative borders
-	else
-		glLineWidth(borderWidth);
-
-	glDisable(GL_LIGHTING);
-	setColor(borderColor);
-	GlDisplayListManager::getInst().callDisplayList(
-			"CubeOutLinedTransparent_cube");
-	glEnable(GL_LIGHTING);
 }
