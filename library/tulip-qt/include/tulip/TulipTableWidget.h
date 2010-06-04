@@ -8,6 +8,9 @@
 #include <QtGui/qpainter.h>
 #include <QtGui/qitemdelegate.h>
 #include <QtGui/qtablewidget.h>
+#if QT_MINOR_REL < 5
+#include <QtGui/qheaderview.h>
+#endif
 
 #include <tulip/Graph.h>
 #include <tulip/Size.h>
