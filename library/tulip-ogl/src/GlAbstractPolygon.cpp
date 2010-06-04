@@ -86,7 +86,7 @@ namespace tlp {
   //=====================================================
   void GlAbstractPolygon::draw(float lod,Camera *camera) {
 
-    bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
+    bool canUseGlew=false;//OpenGlConfigManager::getInst().canUseGlew();
 
     glDisable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);
@@ -147,6 +147,7 @@ namespace tlp {
       }
 
       if(canUseGlew) {
+
         // Generate buffers
         glGenBuffers(6,buffers);
         glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
