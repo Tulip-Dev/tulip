@@ -71,6 +71,11 @@ namespace tlp {
     clearGenerated();
   }
   //=====================================================
+  void GlAbstractPolygon::setFillColor(const Color &color){
+    fillColors.clear();
+    fillColors.push_back(color);
+  }
+  //=====================================================
   Color GlAbstractPolygon::getOutlineColor(unsigned int i){
     if(outlineColors.size()<i)
       outlineColors.resize(i,outlineColors.back());
@@ -82,6 +87,11 @@ namespace tlp {
       outlineColors.resize(i,outlineColors.back());
     outlineColors[i]=color;
     clearGenerated();
+  }
+  //=====================================================
+  void GlAbstractPolygon::setOutlineColor(const Color &color){
+    outlineColors.clear();
+    outlineColors.push_back(color);
   }
   //=====================================================
   void GlAbstractPolygon::draw(float lod,Camera *camera) {
@@ -131,10 +141,12 @@ namespace tlp {
       // Expand vector
       if(filled){
         normalArray.resize(size,normal);
-        fillColors.resize(size,fillColors.back());
+        if(fillColors.size()!=1)
+          fillColors.resize(size,fillColors.back());
       }
       if(outlined){
-        outlineColors.resize(size,outlineColors.back());
+        if(outlineColors.size()!=1)
+          outlineColors.resize(size,outlineColors.back());
       }
 
       // Compute texture coord array and indice array
@@ -159,12 +171,14 @@ namespace tlp {
         if(filled){
           glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
           glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*3*size,&normalArray[0], GL_STATIC_DRAW);
-          glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-          glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte)*4*size,&fillColors[0], GL_STATIC_DRAW);
+          if(fillColors.size()!=1){
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte)*4*size,&fillColors[0], GL_STATIC_DRAW);
+          }
           glBindBuffer(GL_ARRAY_BUFFER, buffers[4]);
           glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*2*size,texArray, GL_STATIC_DRAW);
         }
-        if(outlined){
+        if(outlined && outlineColors.size()!=1){
           glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
           glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte)*4*size,&outlineColors[0], GL_STATIC_DRAW);
         }
@@ -199,13 +213,17 @@ namespace tlp {
         glNormalPointer(GL_FLOAT, 3*sizeof(GLfloat), &normalArray[0]);
       }
 
-      // fillColor array
-      glEnableClientState(GL_COLOR_ARRAY);
-      if(canUseGlew){
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-        glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), BUFFER_OFFSET(0));
+      if(fillColors.size()!=1){
+        // fillColor array
+        glEnableClientState(GL_COLOR_ARRAY);
+        if(canUseGlew){
+          glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+          glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), BUFFER_OFFSET(0));
+        }else{
+          glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), &fillColors[0]);
+        }
       }else{
-        glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), &fillColors[0]);
+        setMaterial(fillColors[0]);
       }
 
       // texture Array
@@ -245,13 +263,17 @@ namespace tlp {
 
         glLineWidth(outlineSize);
 
-        // outlineColor
-        glEnableClientState(GL_COLOR_ARRAY);
-        if(canUseGlew){
-          glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
-          glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), BUFFER_OFFSET(0));
+        if(outlineColors.size()!=1){
+          // outlineColor
+          glEnableClientState(GL_COLOR_ARRAY);
+          if(canUseGlew){
+            glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
+            glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), BUFFER_OFFSET(0));
+          }else{
+            glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), &outlineColors[0]);
+          }
         }else{
-          glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), &outlineColors[0]);
+          glColor4ub(outlineColors[0][0],outlineColors[0][1],outlineColors[0][2],outlineColors[0][3]);
         }
 
         // Draw

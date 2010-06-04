@@ -67,6 +67,11 @@ namespace tlp {
     void setFillColor(unsigned int i, const Color &color);
 
     /**
+     * Set color used to filling the whole polygon
+     */
+    void setFillColor(const Color &color);
+
+    /**
      * Get the ith color used to outlining the polygon
      */
     Color getOutlineColor(unsigned int i);
@@ -75,6 +80,11 @@ namespace tlp {
      * Set the ith color used to outlining the polygon
      */
     void setOutlineColor(unsigned int i, const Color &color);
+
+    /**
+     * Set the color used to outlining the whole polygon
+     */
+    void setOutlineColor(const Color &color);
 
     /**
      * Get the textureName
