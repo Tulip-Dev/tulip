@@ -1,0 +1,376 @@
+#include <GL/glew.h>
+
+#include "tulip/GlAbstractPolygon.h"
+
+#include "tulip/OpenGlConfigManager.h"
+#include "tulip/GlLayer.h"
+#include "tulip/GlTextureManager.h"
+
+using namespace std;
+
+namespace tlp {
+
+  GlAbstractPolygon::GlAbstractPolygon():
+    filled(true),
+    outlined(true),
+    textureName(""),
+    outlineSize(1.),
+    indices(NULL),
+    texArray(NULL),
+    generated(false) {
+  }
+  //=====================================================
+  GlAbstractPolygon::~GlAbstractPolygon() {
+    clearGenerated();
+  }
+  //=====================================================
+  bool GlAbstractPolygon::getFillMode() {
+    return filled;
+  }
+  //=====================================================
+  void GlAbstractPolygon::setFillMode(const bool filled) {
+    this->filled = filled;
+  }
+  //=====================================================
+  bool GlAbstractPolygon::getOutlineMode() {
+    return outlined;
+  }
+  //=====================================================
+  void GlAbstractPolygon::setOutlineMode(const bool outlined) {
+    this->outlined = outlined;
+  }
+  //=====================================================
+  string GlAbstractPolygon::getTextureName() {
+    return textureName;
+  }
+  //=====================================================
+  void GlAbstractPolygon::setTextureName(const string &name) {
+    textureName=name;
+  }
+  //=====================================================
+  float GlAbstractPolygon::getOutlineSize(){
+    return outlineSize;
+  }
+  //=====================================================
+  void GlAbstractPolygon::setOutlineSize(float size){
+    outlineSize=size;
+  }
+  //=====================================================
+  Color GlAbstractPolygon::getFillColor(unsigned int i){
+    if(fillColors.size()<i)
+      fillColors.resize(i,fillColors.back());
+    return fillColors[i];
+  }
+  //=====================================================
+  void GlAbstractPolygon::setFillColor(unsigned int i, const Color &color){
+    if(fillColors.size()<i)
+      fillColors.resize(i,fillColors.back());
+    fillColors[i]=color;
+  }
+  //=====================================================
+  Color GlAbstractPolygon::getOutlineColor(unsigned int i){
+    if(outlineColors.size()<i)
+      outlineColors.resize(i,outlineColors.back());
+    return outlineColors[i];
+  }
+  //=====================================================
+  void GlAbstractPolygon::setOutlineColor(unsigned int i, const Color &color){
+    if(outlineColors.size()<i)
+      outlineColors.resize(i,outlineColors.back());
+    outlineColors[i]=color;
+  }
+  //=====================================================
+  void GlAbstractPolygon::draw(float lod,Camera *camera) {
+
+    bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
+
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_COLOR_MATERIAL);
+
+    if(!generated) {
+      // Normal compute
+      vector<Coord> normalPoints;
+      normalPoints.push_back(points[0]);
+      for(int i=1;i<points.size() && normalPoints.size()<3;++i){
+        bool find=false;
+        for(int j=0;j<normalPoints.size();++j){
+          if(normalPoints[j]==points[i]){
+            find=true;
+            break;
+          }
+        }
+        if(!find)
+          normalPoints.push_back(points[i]);
+      }
+
+      assert(normalPoints.size()==3);
+      if(normalPoints.size()!=3)
+        return;
+
+      // Ok we have a valid filled polygon
+      Coord normal=normalPoints[0]-normalPoints[1];
+      normal^=(normalPoints[2]-normalPoints[1]);
+      normal/=normal.norm();
+      if(normal[2]<0)
+        normal=Coord(-normal[0],-normal[1],-normal[2]);
+
+      size_t size=points.size();
+
+      // Create arrays
+      indices=new GLubyte[size];
+      texArray=new GLfloat[size*2];
+
+      // Expand vector
+      normalArray.resize(size,normal);
+      fillColors.resize(size,fillColors.back());
+      outlineColors.resize(size,outlineColors.back());
+
+      // Compute texture coord array and indice array
+      for(size_t i=0;i<points.size();++i){
+        texArray[i*2]=(points[i][0]-boundingBox[0][0])/(boundingBox[1][0]-boundingBox[0][0]);
+        texArray[i*2+1]=(points[i][1]-boundingBox[0][1])/(boundingBox[1][1]-boundingBox[0][1]);
+        indices[i]=i;
+      }
+
+      if(canUseGlew) {
+        // Generate buffers
+        glGenBuffers(6,buffers);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*3*size,&points[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*3*size,&normalArray[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte)*4*size,&fillColors[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte)*4*size,&outlineColors[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[4]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*2*size,texArray, GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+        delete[] indices;
+        indices=NULL;
+        delete[] texArray;
+        texArray=NULL;
+        normalArray.clear();
+      }
+
+      generated=true;
+    }
+
+    // Coord array
+    glEnableClientState(GL_VERTEX_ARRAY);
+    if(canUseGlew){
+      glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+      glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), BUFFER_OFFSET(0));
+    }else{
+      glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), &points[0]);
+    }
+
+    // Fill
+    if (filled){
+      // Normal array
+      glEnableClientState(GL_NORMAL_ARRAY);
+      if(canUseGlew){
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+        glNormalPointer(GL_FLOAT, 3*sizeof(GLfloat), BUFFER_OFFSET(0));
+      }else{
+        glNormalPointer(GL_FLOAT, 3*sizeof(GLfloat), &normalArray[0]);
+      }
+
+      // fillColor array
+      glEnableClientState(GL_COLOR_ARRAY);
+      if(canUseGlew){
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+        glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), BUFFER_OFFSET(0));
+      }else{
+        glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), &fillColors[0]);
+      }
+
+      // texture Array
+      if(textureName!=""){
+        GlTextureManager::getInst().activateTexture(textureName);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        if(canUseGlew){
+          glBindBuffer(GL_ARRAY_BUFFER, buffers[4]);
+          glTexCoordPointer(2,GL_FLOAT, 2*sizeof(GLfloat), BUFFER_OFFSET(0));
+        }else{
+          glTexCoordPointer(2,GL_FLOAT, 2*sizeof(GLfloat), texArray);
+        }
+      }
+
+      // Draw
+      if(canUseGlew){
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
+        glDrawElements(GL_POLYGON, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
+      }else{
+        glDrawElements(GL_POLYGON, points.size(), GL_UNSIGNED_BYTE, indices);
+      }
+
+      // Disable
+      glDisableClientState(GL_NORMAL_ARRAY);
+      glDisableClientState(GL_COLOR_ARRAY);
+
+      if(textureName!=""){
+        GlTextureManager::getInst().desactivateTexture();
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+      }
+    }
+
+    // Outline
+    if(outlined && outlineSize!=0) {
+      if((outlineSize<1 && lod>=20) || (lod>(20/outlineSize))) {
+        glDisable(GL_LIGHTING);
+
+        glLineWidth(outlineSize);
+
+        // outlineColor
+        glEnableClientState(GL_COLOR_ARRAY);
+        if(canUseGlew){
+          glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
+          glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), BUFFER_OFFSET(0));
+        }else{
+          glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), &outlineColors[0]);
+        }
+
+        // Draw
+        if(canUseGlew){
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
+          glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
+        }else{
+          glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, indices);
+        }
+
+        // Disable
+        glDisableClientState(GL_COLOR_ARRAY);
+      }
+    }
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    glDisable(GL_COLOR_MATERIAL);
+
+    glTest(__PRETTY_FUNCTION__);
+  }
+  //===========================================================
+  void GlAbstractPolygon::translate(const Coord& vec) {
+    boundingBox.translate(vec);
+    for(vector<Coord>::iterator it = points.begin(); it!=points.end(); ++it) {
+      (*it) += vec;
+    }
+  }
+  //===========================================================
+  void GlAbstractPolygon::getXML(xmlNodePtr rootNode) {
+
+    GlXMLTools::createProperty(rootNode, "type", "GlPolygon");
+
+    getXMLOnlyData(rootNode);
+
+  }
+  //===========================================================
+  void GlAbstractPolygon::getXMLOnlyData(xmlNodePtr rootNode) {
+    xmlNodePtr dataNode=NULL;
+
+    GlXMLTools::getDataNode(rootNode,dataNode);
+
+    GlXMLTools::getXML(dataNode,"points",points);
+    GlXMLTools::getXML(dataNode,"fillColors",fillColors);
+    GlXMLTools::getXML(dataNode,"outlineColors",outlineColors);
+    GlXMLTools::getXML(dataNode,"filled",filled);
+    GlXMLTools::getXML(dataNode,"outlined",outlined);
+    GlXMLTools::getXML(dataNode,"textureName",textureName);
+    GlXMLTools::getXML(dataNode,"outlineSize",outlineSize);
+  }
+  //============================================================
+  void GlAbstractPolygon::setWithXML(xmlNodePtr rootNode) {
+    xmlNodePtr dataNode=NULL;
+
+    GlXMLTools::getDataNode(rootNode,dataNode);
+
+    // Parse Data
+    if(dataNode) {
+      points.clear();
+      GlXMLTools::setWithXML(dataNode,"points",points);
+      fillColors.clear();
+      GlXMLTools::setWithXML(dataNode,"fillColors",fillColors);
+      outlineColors.clear();
+      GlXMLTools::setWithXML(dataNode,"outlineColors",outlineColors);
+      GlXMLTools::setWithXML(dataNode,"filled",filled);
+      GlXMLTools::setWithXML(dataNode,"outlined",outlined);
+      GlXMLTools::setWithXML(dataNode,"textureName",textureName);
+      GlXMLTools::setWithXML(dataNode,"outlineSize",outlineSize);
+
+      for(vector<Coord>::iterator it= points.begin();it!=points.end();++it)
+        boundingBox.expand(*it);
+    }
+  }
+  //============================================================
+  void GlAbstractPolygon::setPoints(const vector<Coord> &points){
+    assert(points.size() >= 3);
+    for(vector<Coord>::const_iterator it=points.begin();it!=points.end();++it)
+      boundingBox.expand(*it);
+
+    this->points=points;
+  }
+  //============================================================
+  void GlAbstractPolygon::setFillColors(const std::vector<Color> &colors){
+    fillColors=colors;
+  }
+  //============================================================
+  void GlAbstractPolygon::setOutlineColors(const std::vector<Color> &colors){
+    outlineColors=colors;
+  }
+  //============================================================
+  void GlAbstractPolygon::clearGenerated() {
+    delete[] indices;
+    indices=NULL;
+    delete[] texArray;
+    texArray=NULL;
+    normalArray.clear();
+
+    if(OpenGlConfigManager::getInst().canUseGlew()){
+      if(generated)
+        glDeleteBuffers(6,buffers);
+    }
+    generated=false;
+  }
+
+  //=====================================================
+  // Deprecated
+  //=====================================================
+
+  //=====================================================
+  const Color& GlAbstractPolygon::fcolor(const unsigned int i) const {
+    cout << __PRETTY_FUNCTION__ << " deprecated : use getFillColor" << endl;
+    return fillColors[i];
+  }
+  //=====================================================
+  Color& GlAbstractPolygon::fcolor(const unsigned int i) {
+    cout << __PRETTY_FUNCTION__ << " deprecated : use getFillColor" << endl;
+    return fillColors[i];
+  }
+  //=====================================================
+  void GlAbstractPolygon::setFColor(const unsigned int i,const Color &color) {
+    cout << __PRETTY_FUNCTION__ << " deprecated : use setFillColor" << endl;
+    fillColors[i]=color;
+  }
+  //=====================================================
+  const Color& GlAbstractPolygon::ocolor(const unsigned int i) const {
+    cout << __PRETTY_FUNCTION__ << " deprecated : use getOutlineColor" << endl;
+    return outlineColors[i];
+  }
+  //=====================================================
+  Color& GlAbstractPolygon::ocolor(const unsigned int i) {
+    cout << __PRETTY_FUNCTION__ << " deprecated : use getOutlineColor" << endl;
+    return outlineColors[i];
+  }
+  //=====================================================
+  void GlAbstractPolygon::setOColor(const unsigned int i,const Color &color) {
+    cout << __PRETTY_FUNCTION__ << " deprecated : use getOutlineColor" << endl;
+    outlineColors[i]=color;
+  }
+}
