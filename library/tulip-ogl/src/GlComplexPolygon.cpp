@@ -101,8 +101,7 @@ void combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** da
 	*dataOut = vertex;
 }
 
-
-GlComplexPolygon::GlComplexPolygon(vector<Coord> &coords,Color fcolor,int bezier,const string &textureName):
+GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,int bezier,const string &textureName):
     						currentVector(0),
     						outlined(false),
     						fillColor(fcolor),
@@ -111,7 +110,7 @@ GlComplexPolygon::GlComplexPolygon(vector<Coord> &coords,Color fcolor,int bezier
 	createPolygon(coords,bezier);
 }
 //=====================================================
-GlComplexPolygon::GlComplexPolygon(vector<Coord> &coords,Color fcolor,Color ocolor,int bezier,const string &textureName):
+GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,Color ocolor,int bezier,const string &textureName):
     						currentVector(0),
     						outlined(true),
     						fillColor(fcolor),
@@ -121,7 +120,7 @@ GlComplexPolygon::GlComplexPolygon(vector<Coord> &coords,Color fcolor,Color ocol
 	createPolygon(coords,bezier);
 }
 //=====================================================
-GlComplexPolygon::GlComplexPolygon(vector<vector<Coord> >&coords,Color fcolor,int bezier,const string &textureName):
+GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fcolor,int bezier,const string &textureName):
     						currentVector(0),
     						outlined(false),
     						fillColor(fcolor),
@@ -133,7 +132,7 @@ GlComplexPolygon::GlComplexPolygon(vector<vector<Coord> >&coords,Color fcolor,in
 	}
 }
 //=====================================================
-GlComplexPolygon::GlComplexPolygon(vector<vector<Coord> >&coords,Color fcolor,Color ocolor,int bezier,const string &textureName):
+GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fcolor,Color ocolor,int bezier,const string &textureName):
     						currentVector(0),
     						outlined(true),
     						fillColor(fcolor),
@@ -149,10 +148,10 @@ GlComplexPolygon::GlComplexPolygon(vector<vector<Coord> >&coords,Color fcolor,Co
 GlComplexPolygon::~GlComplexPolygon() {
 }
 //=====================================================
-void GlComplexPolygon::createPolygon(vector<Coord> &coords,int bezier) {
+void GlComplexPolygon::createPolygon(const vector<Coord> &coords,int bezier) {
 	points.push_back(vector<Coord>());
 	if(bezier==0) {
-		for(vector<Coord>::iterator it=coords.begin();it!=coords.end();++it) {
+		for(vector<Coord>::const_iterator it=coords.begin();it!=coords.end();++it) {
 			addPoint(*it);
 		}
 	}else{
@@ -182,6 +181,8 @@ void GlComplexPolygon::beginNewHole() {
 }
 //=====================================================
 void GlComplexPolygon::draw(float lod,Camera *camera) {
+  cout << __PRETTY_FUNCTION__ << endl;
+
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_BLEND);
