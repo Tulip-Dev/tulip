@@ -61,11 +61,13 @@ namespace tlp {
   void GlPolygon::resizePoints(const unsigned int nbPoints) {
     assert(nbPoints >= 3);
     points.resize(nbPoints);
+    clearGenerated();
   }
   //=====================================================
   void GlPolygon::resizeColors(const unsigned int nbColors) {
     assert(nbColors >= 1);
     points.resize(nbColors);
+    clearGenerated();
   }
   //=====================================================
   const tlp::Coord& GlPolygon::point(const unsigned int i) const {
