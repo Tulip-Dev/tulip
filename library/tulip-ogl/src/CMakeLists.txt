@@ -34,7 +34,8 @@ set(tulip-ogl_LIB_SRCS
 	GlBox.cpp 
 	GlScene.cpp 
 	GlTextureManager.cpp 
-	GlConvexHull.cpp 
+	GlConvexHull.cpp
+    GlConvexGraphHull.cpp 
 	GlHierarchyConvexHulls.cpp 
    	GlLines.cpp 
 	TLPPixmapFont.cpp 
