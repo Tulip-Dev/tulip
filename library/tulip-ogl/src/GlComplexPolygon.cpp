@@ -181,8 +181,6 @@ void GlComplexPolygon::beginNewHole() {
 }
 //=====================================================
 void GlComplexPolygon::draw(float lod,Camera *camera) {
-  cout << __PRETTY_FUNCTION__ << endl;
-
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_BLEND);
