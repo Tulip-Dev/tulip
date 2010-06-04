@@ -41,8 +41,7 @@ void GlConvexGraphHull::draw(float lod, Camera *camera) {
   assert(graph);
 #endif /* NDEBUG */
   points.clear();
-  cout << "points.size()= " << points.size() << endl;
-  createPolygon(computeConvexHull(graph, layout, size, rotation, 0), 0);
+  createPolygon(computeConvexHull(graph, layout, size, rotation, 0), 1);
   GlComplexPolygon::draw(lod, camera);
 }
 
