@@ -29,6 +29,7 @@ namespace tlp {
 class TLP_QT_SCOPE GlMainWidgetItem : public QObject, public QGraphicsItem {
 
   Q_OBJECT
+  Q_INTERFACES(QGraphicsItem)
 
 public :
 
