@@ -167,7 +167,7 @@ void GlAxis::addAxisCaption(const Coord &captionLabelCenter, const bool frame) {
                                                     Coord(labelBB[1][0] + 1, labelBB[0][1] - 1),
                                                     axisColor, axisColor, false, true);
         for (unsigned int i = 0 ; i < 4 ; ++i) {
-            captionLabelInnerFrame->ocolor(i) = axisColor;
+            captionLabelInnerFrame->setOutlineColor(i, axisColor);
         }
         captionComposite->addGlEntity(captionLabelInnerFrame, "caption inner frame" + captionText);
 
@@ -175,7 +175,7 @@ void GlAxis::addAxisCaption(const Coord &captionLabelCenter, const bool frame) {
                                                     Coord(labelBB[1][0] + 2, labelBB[0][1] - 2),
                                                     axisColor, axisColor, false, true);
         for (unsigned int i = 0 ; i < 4 ; ++i) {
-            captionLabelOuterFrame->ocolor(i) = axisColor;
+            captionLabelOuterFrame->setOutlineColor(i, axisColor);
         }
         captionComposite->addGlEntity(captionLabelOuterFrame, "caption outer frame" + captionText);
     }

@@ -57,23 +57,17 @@ MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),layer(NULL),comp
   Color hudColor(128,128,128,128);
   centerRect.setFillMode(true);
   centerRect.setOutlineMode(true);
-  centerRect.fcolor(0) =  hudColor;
-  centerRect.fcolor(1) =  hudColor;
-  centerRect.fcolor(2) =  hudColor;
-  centerRect.fcolor(3) =  hudColor;
+  centerRect.setFillColor(hudColor);
   hudColor=Color(128,128,128,64);
   advRect.setFillMode(true);
   advRect.setOutlineMode(false);
-  advRect.fcolor(0) =  hudColor;
-  advRect.fcolor(1) =  hudColor;
-  advRect.fcolor(2) =  hudColor;
-  advRect.fcolor(3) =  hudColor;
+  advRect.setFillColor(hudColor);
 
   for(unsigned int i=0; i < 8; ++i) {
     _controls[i].setFillMode(true);
     _controls[i].setOutlineMode(true);
-    _controls[i].fcolor(0) = Color(255,40,40,200);
-    _controls[i].ocolor(0) = Color(128,20,20,200);
+    _controls[i].setFillColor(Color(255,40,40,200));
+    _controls[i].setOutlineColor(Color(128,20,20,200));
   }
 }
 //========================================================================================
@@ -208,8 +202,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       }
       if (shapeId != -1) {
         if(!advShape){
-          ((GlCircle *)select[shapeId])->fcolor(0) = Color(40,255,40,200);
-          ((GlCircle *)select[shapeId])->ocolor(0) = Color(20,128,20,200);
+          ((GlCircle *)select[shapeId])->setFillColor(Color(40,255,40,200));
+          ((GlCircle *)select[shapeId])->setOutlineColor(Color(20,128,20,200));
         }
         getOperation(select[shapeId]);
 
@@ -271,8 +265,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     stopEdition();
     //restore colors
     for(unsigned int i=0; i < 8; ++i) {
-      _controls[i].fcolor(0) = Color(255,40,40,200);
-      _controls[i].ocolor(0) = Color(128,20,20,200);
+      _controls[i].setFillColor(Color(255,40,40,200));
+      _controls[i].setOutlineColor(Color(128,20,20,200));
     }
     glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
     glMainWidget->draw();
