@@ -32,8 +32,8 @@ MouseEdgeBendEditor::MouseEdgeBendEditor()
   basicCircle.resizePoints(30); //circle
   basicCircle.setFillMode(true);
   basicCircle.setOutlineMode(true);
-  basicCircle.fcolor(0) = Color(255, 102, 255, 200);
-  basicCircle.ocolor(0) = Color(128, 20, 20, 200);
+  basicCircle.setFillColor(Color(255, 102, 255, 200));
+  basicCircle.setOutlineColor(Color(128, 20, 20, 200));
 }
 //========================================================================================
 MouseEdgeBendEditor::~MouseEdgeBendEditor(){
@@ -82,8 +82,6 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
           glMainWidget->selectGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, layer);
         if (circleSelected) {
           theCircle=circleString->findKey((GlSimpleEntity*)(select[0]));
-          //(&circles[i])->fcolor(0) = Color(40,255,40,200);
-          //(&circles[i])->ocolor(0) = Color(20,128,20,200);
           if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
               Qt::AltModifier

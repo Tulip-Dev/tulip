@@ -16,10 +16,10 @@ namespace tlp {
     boundingBox.expand(topLeftPos);
     boundingBox.expand(bottomRightPos);
 
-    fcolor(0) = topLeftCol;
-    fcolor(1) = topLeftCol;
-    fcolor(2) = bottomRightCol ;
-    fcolor(3) = bottomRightCol;
+    setFillColor(0,topLeftCol);
+    setFillColor(1,topLeftCol);
+    setFillColor(2,bottomRightCol);
+    setFillColor(3,bottomRightCol);
 
   }
   GlRect::GlRect(bool filled, bool outlined):GlPolygon(4u,4u,4u,filled,outlined) {
@@ -41,11 +41,11 @@ namespace tlp {
   }
   //=====================================================
   Color GlRect::getTopLeftColor() {
-    return fcolor(0);
+    return getFillColor(0);
   }
   //=====================================================
   Color GlRect::getBottomRightColor() {
-    return fcolor(2);
+    return getFillColor(2);
   }
   //=====================================================
   void GlRect::setTopLeftPos(const Coord &_topLeftPos) {
@@ -71,15 +71,15 @@ namespace tlp {
   }
   //=====================================================
   void GlRect::setTopLeftColor(const Color &_topLeftCol) {
-    fcolor(0) = _topLeftCol;
-    fcolor(1) = _topLeftCol;
+    setFillColor(0, _topLeftCol);
+    setFillColor(1, _topLeftCol);
 
     clearGenerated();
   }
   //=====================================================
   void GlRect::setBottomRightColor(const Color &_bottomRightCol) {
-    fcolor(2) = _bottomRightCol;
-    fcolor(3) = _bottomRightCol;
+    setFillColor(2, _bottomRightCol);
+    setFillColor(3, _bottomRightCol);
 
     clearGenerated();
   }
