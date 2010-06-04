@@ -30,6 +30,7 @@ namespace tlp {
   //=====================================================
   void GlAbstractPolygon::setFillMode(const bool filled) {
     this->filled = filled;
+    clearGenerated();
   }
   //=====================================================
   bool GlAbstractPolygon::getOutlineMode() {
@@ -38,6 +39,7 @@ namespace tlp {
   //=====================================================
   void GlAbstractPolygon::setOutlineMode(const bool outlined) {
     this->outlined = outlined;
+    clearGenerated();
   }
   //=====================================================
   string GlAbstractPolygon::getTextureName() {
@@ -66,6 +68,7 @@ namespace tlp {
     if(fillColors.size()<i)
       fillColors.resize(i,fillColors.back());
     fillColors[i]=color;
+    clearGenerated();
   }
   //=====================================================
   Color GlAbstractPolygon::getOutlineColor(unsigned int i){
@@ -78,6 +81,7 @@ namespace tlp {
     if(outlineColors.size()<i)
       outlineColors.resize(i,outlineColors.back());
     outlineColors[i]=color;
+    clearGenerated();
   }
   //=====================================================
   void GlAbstractPolygon::draw(float lod,Camera *camera) {
@@ -89,31 +93,34 @@ namespace tlp {
     glEnable(GL_COLOR_MATERIAL);
 
     if(!generated) {
-      // Normal compute
-      vector<Coord> normalPoints;
-      normalPoints.push_back(points[0]);
-      for(int i=1;i<points.size() && normalPoints.size()<3;++i){
-        bool find=false;
-        for(int j=0;j<normalPoints.size();++j){
-          if(normalPoints[j]==points[i]){
-            find=true;
-            break;
+      Coord normal;
+      if(filled){
+        // Normal compute
+        vector<Coord> normalPoints;
+        normalPoints.push_back(points[0]);
+        for(int i=1;i<points.size() && normalPoints.size()<3;++i){
+          bool find=false;
+          for(int j=0;j<normalPoints.size();++j){
+            if(normalPoints[j]==points[i]){
+              find=true;
+              break;
+            }
           }
+          if(!find)
+            normalPoints.push_back(points[i]);
         }
-        if(!find)
-          normalPoints.push_back(points[i]);
+
+        assert(normalPoints.size()==3);
+        if(normalPoints.size()!=3)
+          return;
+
+        // Ok we have a valid filled polygon
+        normal=normalPoints[0]-normalPoints[1];
+        normal^=(normalPoints[2]-normalPoints[1]);
+        normal/=normal.norm();
+        if(normal[2]<0)
+          normal=Coord(-normal[0],-normal[1],-normal[2]);
       }
-
-      assert(normalPoints.size()==3);
-      if(normalPoints.size()!=3)
-        return;
-
-      // Ok we have a valid filled polygon
-      Coord normal=normalPoints[0]-normalPoints[1];
-      normal^=(normalPoints[2]-normalPoints[1]);
-      normal/=normal.norm();
-      if(normal[2]<0)
-        normal=Coord(-normal[0],-normal[1],-normal[2]);
 
       size_t size=points.size();
 
@@ -122,14 +129,20 @@ namespace tlp {
       texArray=new GLfloat[size*2];
 
       // Expand vector
-      normalArray.resize(size,normal);
-      fillColors.resize(size,fillColors.back());
-      outlineColors.resize(size,outlineColors.back());
+      if(filled){
+        normalArray.resize(size,normal);
+        fillColors.resize(size,fillColors.back());
+      }
+      if(outlined){
+        outlineColors.resize(size,outlineColors.back());
+      }
 
       // Compute texture coord array and indice array
       for(size_t i=0;i<points.size();++i){
-        texArray[i*2]=(points[i][0]-boundingBox[0][0])/(boundingBox[1][0]-boundingBox[0][0]);
-        texArray[i*2+1]=(points[i][1]-boundingBox[0][1])/(boundingBox[1][1]-boundingBox[0][1]);
+        if(filled){
+          texArray[i*2]=(points[i][0]-boundingBox[0][0])/(boundingBox[1][0]-boundingBox[0][0]);
+          texArray[i*2+1]=(points[i][1]-boundingBox[0][1])/(boundingBox[1][1]-boundingBox[0][1]);
+        }
         indices[i]=i;
       }
 
@@ -138,16 +151,22 @@ namespace tlp {
         glGenBuffers(6,buffers);
         glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*3*size,&points[0], GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*3*size,&normalArray[0], GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte)*4*size,&fillColors[0], GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte)*4*size,&outlineColors[0], GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, buffers[4]);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*2*size,texArray, GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+
+        if(filled){
+          glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+          glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*3*size,&normalArray[0], GL_STATIC_DRAW);
+          glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+          glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte)*4*size,&fillColors[0], GL_STATIC_DRAW);
+          glBindBuffer(GL_ARRAY_BUFFER, buffers[4]);
+          glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*2*size,texArray, GL_STATIC_DRAW);
+        }
+        if(outlined){
+          glBindBuffer(GL_ARRAY_BUFFER, buffers[3]);
+          glBufferData(GL_ARRAY_BUFFER, sizeof(GLubyte)*4*size,&outlineColors[0], GL_STATIC_DRAW);
+        }
 
         delete[] indices;
         indices=NULL;
@@ -262,6 +281,7 @@ namespace tlp {
     for(vector<Coord>::iterator it = points.begin(); it!=points.end(); ++it) {
       (*it) += vec;
     }
+    clearGenerated();
   }
   //===========================================================
   void GlAbstractPolygon::getXML(xmlNodePtr rootNode) {
@@ -357,6 +377,7 @@ namespace tlp {
   void GlAbstractPolygon::setFColor(const unsigned int i,const Color &color) {
     cout << __PRETTY_FUNCTION__ << " deprecated : use setFillColor" << endl;
     fillColors[i]=color;
+    clearGenerated();
   }
   //=====================================================
   const Color& GlAbstractPolygon::ocolor(const unsigned int i) const {
@@ -372,5 +393,6 @@ namespace tlp {
   void GlAbstractPolygon::setOColor(const unsigned int i,const Color &color) {
     cout << __PRETTY_FUNCTION__ << " deprecated : use getOutlineColor" << endl;
     outlineColors[i]=color;
+    clearGenerated();
   }
 }
