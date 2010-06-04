@@ -86,7 +86,7 @@ namespace tlp {
   //=====================================================
   void GlAbstractPolygon::draw(float lod,Camera *camera) {
 
-    bool canUseGlew=false;//OpenGlConfigManager::getInst().canUseGlew();
+    bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
 
     glDisable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);
@@ -153,7 +153,7 @@ namespace tlp {
         glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*3*size,&points[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*size, indices, GL_STATIC_DRAW);
 
 
         if(filled){
