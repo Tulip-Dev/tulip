@@ -9,11 +9,9 @@
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/GlDisplayListManager.h>
-#include <tulip/GlTextureManager.h>
+#include <tulip/GlHexagon.h>
 
 #include <tulip/Graph.h>
-#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -34,13 +32,20 @@ public:
 	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
 	virtual void draw(node n, float lod);
 	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
-protected:
-	inline void drawGlyph(const Color& glyphColor, const string& texture,
-			const string& texturePath, double borderWidth,
-			const Color& borderColor, float lod);
-	void drawHexagone();
-	void drawHexagoneBorder();
+  virtual void draw(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod);
+protected :
+
+  static GlHexagon *hexagon;
 };
+
+#ifdef _WIN32
+#ifdef DLL_EXPORT
+GlHexagon* Hexagone::hexagon=0;
+#endif
+#else
+GlHexagon* Hexagone::hexagon=0;
+#endif
+
 //=====================================================
 GLYPHPLUGIN(Hexagone, "2D - Hexagone", "David Auber", "09/07/2002", "Textured Hexagone", "1.0", 13)
 ;
@@ -49,9 +54,13 @@ EEGLYPHPLUGIN(Hexagone,"2D - Hexagone", "David Auber", "09/07/2002", "Textured H
 //===================================================================================
 Hexagone::Hexagone(GlyphContext *gc) :
 	Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
+  if(!hexagon)
+    hexagon=new GlHexagon(Coord(0,0,0),Size(.5,.5,0));
 }
 Hexagone::Hexagone(EdgeExtremityGlyphContext *gc) :
 	Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
+  if(!hexagon)
+    hexagon=new GlHexagon(Coord(0,0,0),Size(.5,.5,0));
 }
 //=====================================================
 Hexagone::~Hexagone() {
@@ -63,118 +72,44 @@ void Hexagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
 }
 //=====================================================
 void Hexagone::draw(node n, float lod) {
-	//	if (GlDisplayListManager::getInst().beginNewDisplayList("Hexagone_hexagone")) {
-	//		drawHexagone();
-	//		GlDisplayListManager::getInst().endNewDisplayList();
-	//	}
-	//	if (GlDisplayListManager::getInst().beginNewDisplayList(
-	//			"Hexagone_hexagoneborder")) {
-	//		drawHexagoneBorder();
-	//		GlDisplayListManager::getInst().endNewDisplayList();
-	//	}
-	//	setMaterial(glGraphInputData->elementColor->getNodeValue(n));
-	//	string texFile = glGraphInputData->elementTexture->getNodeValue(n);
-	//	if (texFile != "") {
-	//		string texturePath = glGraphInputData->parameters->getTexturePath();
-	//		GlTextureManager::getInst().activateTexture(texturePath + texFile);
-	//	}
-	//
-	//	GlDisplayListManager::getInst().callDisplayList("Hexagone_hexagone");
-	//
-	//	GlTextureManager::getInst().desactivateTexture();
-	//
-	//	if (lod > 20) {
-	//		ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<
-	//				ColorProperty> ("viewBorderColor");
-	//		DoubleProperty *borderWidth = 0;
-	//		if (glGraphInputData->getGraph()->existProperty("viewBorderWidth"))
-	//			borderWidth = glGraphInputData->getGraph()->getProperty<
-	//					DoubleProperty> ("viewBorderWidth");
-	//		GlTextureManager::getInst().desactivateTexture();
-	//		if (borderWidth == 0)
-	//			glLineWidth(2);
-	//		else {
-	//			double lineWidth = borderWidth->getNodeValue(n);
-	//			if (lineWidth < 1e-6)
-	//				glLineWidth(1e-6); //no negative borders
-	//			else
-	//				glLineWidth(lineWidth);
-	//		}
-	//		glDisable(GL_LIGHTING);
-	//		setColor(borderColor->getNodeValue(n));
-	//		GlDisplayListManager::getInst().callDisplayList(
-	//				"Hexagone_hexagoneborder");
-	//		glEnable(GL_LIGHTING);
-	//	}
-	drawGlyph(glGraphInputData->elementColor->getNodeValue(n),
-			glGraphInputData->elementTexture->getNodeValue(n),
-			glGraphInputData->parameters->getTexturePath(),
-			glGraphInputData->elementBorderWidth->getNodeValue(n),
-			glGraphInputData->elementBorderColor->getNodeValue(n), lod);
+  string textureName=glGraphInputData->elementTexture->getNodeValue(n);
+  if(textureName!="")
+    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
+
+  draw(glGraphInputData->elementColor->getNodeValue(n),
+       glGraphInputData->elementBorderColor->getNodeValue(n),
+       glGraphInputData->elementBorderWidth->getNodeValue(n),
+       textureName,
+       lod);
 }
 
-void Hexagone::draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod) {
-	drawGlyph(glyphColor,
-			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
-			edgeExtGlGraphInputData->parameters->getTexturePath(),
-			edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
-			borderColor, lod);
-	glDisable(GL_LIGHTING);
+void Hexagone::draw(edge e,
+                    node n,
+                    const Color & glyphColor,
+                    const Color &borderColor,
+                    float lod) {
+  string textureName=edgeExtGlGraphInputData->elementTexture->getEdgeValue(e);
+  if(textureName!="")
+    textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
+
+  draw(glyphColor,
+       borderColor,
+       edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
+       textureName,
+       lod);
 }
 //=====================================================
-void Hexagone::drawHexagone() {
-	GLUquadricObj *quadratic;
-	quadratic = gluNewQuadric();
-	gluQuadricNormals(quadratic, GLU_SMOOTH);
-	gluQuadricTexture(quadratic, GL_TRUE);
-	gluQuadricOrientation(quadratic, GLU_OUTSIDE);
-	gluDisk(quadratic, 0.0f, 0.5f, 6, 1);
-	gluQuadricOrientation(quadratic, GLU_INSIDE);
-	gluDisk(quadratic, 0.0f, 0.5f, 6, 1);
-	gluDeleteQuadric(quadratic);
-}
+void Hexagone::draw(const Color &fillColor,
+                    const Color &borderColor,
+                    float borderWidth,
+                    const std::string &textureName,
+                    float lod){
+  if(borderWidth<1e-6)
+    borderWidth=1e-6;
 
-void Hexagone::drawHexagoneBorder() {
-	glBegin(GL_LINE_LOOP);
-	double alpha = M_PI / 2.;
-	double delta = 2. * M_PI / 6.0;
-	for (unsigned int i = 0; i < 6; ++i) {
-		glVertex3f(0.5 * cos(alpha), 0.5 * sin(alpha), 0.0);
-		alpha += delta;
-	}
-	glEnd();
-}
-/*@}*/
-void Hexagone::drawGlyph(const Color& glyphColor, const string& texture,
-		const string& texturePath, double borderWidth,
-		const Color& borderColor, float lod) {
-	if (GlDisplayListManager::getInst().beginNewDisplayList("Hexagone_hexagone")) {
-		drawHexagone();
-		GlDisplayListManager::getInst().endNewDisplayList();
-	}
-	if (GlDisplayListManager::getInst().beginNewDisplayList(
-			"Hexagone_hexagoneborder")) {
-		drawHexagoneBorder();
-		GlDisplayListManager::getInst().endNewDisplayList();
-	}
-	setMaterial(glyphColor);
-	if (texture != "") {
-		GlTextureManager::getInst().activateTexture(texturePath + texture);
-	}
-
-	GlDisplayListManager::getInst().callDisplayList("Hexagone_hexagone");
-
-	GlTextureManager::getInst().desactivateTexture();
-
-	if (lod > 20) {
-		if (borderWidth < 1e-6)
-			glLineWidth(1e-6); //no negative borders
-		else
-			glLineWidth(borderWidth);
-		glDisable(GL_LIGHTING);
-		setColor(borderColor);
-		GlDisplayListManager::getInst().callDisplayList(
-				"Hexagone_hexagoneborder");
-		glEnable(GL_LIGHTING);
-	}
+  hexagon->setFillColor(fillColor);
+  hexagon->setOutlineColor(borderColor);
+  hexagon->setOutlineSize(borderWidth);
+  hexagon->setTextureName(textureName);
+  hexagon->draw(lod,NULL);
 }
