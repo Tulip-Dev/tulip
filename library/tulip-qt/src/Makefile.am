@@ -154,6 +154,7 @@ TODIST_SOURCES = \
 	ImportCSVDataConfigurationWidget.cpp \
 	CSVParser.cpp \
 	QtGlSceneZoomAndPanAnimator.cpp \
+	GlCompositeHierarchyManager.cpp \
 	GraphPropertiesTableWidget.cpp
 
 QT44_SOURCES = \

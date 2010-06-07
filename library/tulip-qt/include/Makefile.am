@@ -69,6 +69,7 @@ INCLUDES_H = \
 	tulip/CSVContentHandler.h \
 	tulip/QtGlSceneZoomAndPanAnimator.h \
 	tulip/Morphing.h \
+	tulip/GlCompositeHierarchyManager.h \
 	tulip/GraphPropertiesTableWidget.h
 
 QT44_INCLUDES_H = \
