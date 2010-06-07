@@ -38,7 +38,8 @@ namespace tlp {
      */
     void reset(bool deleteElems);
     /**
-     * Add new entity with name : key
+     * Add new entity with name : key.
+		 * The composite does not takes the entity's ownership, i.e. it is not its responsibility to delete it.
      */
     void addGlEntity(GlSimpleEntity *entity, const std::string &key);
     /**

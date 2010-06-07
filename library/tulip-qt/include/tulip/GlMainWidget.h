@@ -25,11 +25,13 @@
 
 #include "tulip/AbstractView.h"
 #include "tulip/ForegroundEntity.h"
-#include <tulip/GlHierarchyConvexHulls.h>
 
 class QGLFramebufferObject;
 
 namespace tlp {
+
+class GlCompositeHierarchyManager;
+
 
 //class QTextView;
 
@@ -200,6 +202,7 @@ private:
   AbstractView *view;
   char *renderingStore;
   std::vector<ForegroundEntity *> foregroundEntity;
+	GlCompositeHierarchyManager* manager;
 
 public slots:
   /**

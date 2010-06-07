@@ -150,6 +150,7 @@ public:
         vector<Coord>::iterator itR = finalResult.begin();
         for(it = hullIndices.begin(); it != hullIndices.end(); ++it, ++itR) {
             (*itR) = allPoints[*it];
+						(*itR)[2] = 0;
         }
         return finalResult;
     }
