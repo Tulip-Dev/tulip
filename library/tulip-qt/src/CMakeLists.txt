@@ -63,6 +63,7 @@ SET(tulip-qt_LIB_SRCS
     ImportCSVDataWidget.cpp
     ImportCSVDataConfigurationWidget.cpp
     QtGlSceneZoomAndPanAnimator.cpp
+    GlCompositeHierarchyManager.cpp
     GraphPropertiesTableWidget.cpp
 )
 

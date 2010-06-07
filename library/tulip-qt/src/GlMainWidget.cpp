@@ -9,7 +9,6 @@
 #include <QtCore/QTime>
 #include <QtGui/QPainter>
 
-
 #include "tulip/GlMainWidget.h"
 
 #include <tulip/Graph.h>
@@ -28,6 +27,7 @@
 #include "tulip/Interactor.h"
 #include "tulip/InteractorManager.h"
 #include "tulip/QtMetaNodeRenderer.h"
+#include <tulip/GlCompositeHierarchyManager.h>
 
 using namespace std;
 
@@ -138,10 +138,6 @@ namespace tlp {
       labri->setVisible(false);
       foregroundLayer->addGlEntity(labri,"labrilogo");
 
-      GlComposite *hulls=new GlComposite;
-      hulls->setVisible(false);
-      layer->addGlEntity(hulls,"Hulls");
-
       scene.addLayer(backgroundLayer);
       scene.addLayer(layer);
       scene.addLayer(foregroundLayer);
@@ -172,6 +168,13 @@ namespace tlp {
       rp.setParameters(renderingParameters);
       scene.getGlGraphComposite()->setRenderingParameters(rp);
     }
+    
+    manager = new GlCompositeHierarchyManager(scene.getGlGraphComposite()->getInputData()->getGraph(), 
+																							scene.getLayer("Main"), 
+																							"Hulls", 
+																							this->getScene()->getGlGraphComposite()->getInputData()->elementLayout, 
+																							this->getScene()->getGlGraphComposite()->getInputData()->elementSize,
+																							this->getScene()->getGlGraphComposite()->getInputData()->elementRotation);
   }
   //==================================================
   DataSet GlMainWidget::getData() {
@@ -305,9 +308,6 @@ namespace tlp {
 
       checkIfGlAuxBufferAvailable();
       computeInteractors();
-      if(scene.getGlGraphComposite()) {
-        GlHierarchyConvexHulls::compute(scene.getLayer("Main"),scene.getGlGraphComposite()->getInputData()->getGraph());
-      }
       scene.prerenderMetaNodes();
       scene.draw();
 
