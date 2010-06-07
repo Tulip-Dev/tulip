@@ -17,7 +17,6 @@ namespace tlp {
 																													 SizeProperty *size, DoubleProperty *rotation, std::string namingProperty, std::string subCompositeSuffix) 
 		:_currentColor(0), _graph(graph), _layer(layer), _layerName(layerName), _layout(layout), _size(size), _rotation(rotation), _subCompositesSuffix(subCompositeSuffix), _property(namingProperty) {
 		this->_composite = new GlComposite();
-		this->_composite->setVisible(false);
 		this->_layer->addGlEntity(this->_composite, this->_layerName);
 		
 		_fillColors.push_back(Color(255, 148, 169, 100));
@@ -36,7 +35,7 @@ namespace tlp {
 
 	const tlp::Color GlCompositeHierarchyManager::getColor() {
 		tlp::Color current = this->_fillColors.at(_currentColor++);
-		_currentColor = _currentColor > _fillColors.size() ? 0 : _currentColor;
+		_currentColor = _currentColor % _fillColors.size();
 		return current;
 	}
 
@@ -50,7 +49,7 @@ namespace tlp {
 		current->getAttribute<string>(_property, propertyValue);
 		
 		composite->addGlEntity(hull, propertyValue);
-		_hulls.insert(std::pair<Graph*, GlComposite*>(current, composite));
+		_graphsComposites.insert(std::pair<Graph*, GlComposite*>(current, composite));
 		
 		tlp::Iterator<Graph*>* it = current->getSubGraphs();
 		if(it->hasNext()) {
@@ -69,7 +68,7 @@ namespace tlp {
 		
 		string parentPropertyValue;
 		parent->getAttribute<string>(_property, parentPropertyValue);
-		GlComposite* composite = _hulls.at(parent);
+		GlComposite* composite = _graphsComposites.at(parent);
 		GlEntity* parentEntity = composite->findGlEntity(parentPropertyValue);
 		GlComposite* parentComposite = dynamic_cast<GlComposite*>(composite->findGlEntity(parentPropertyValue + _subCompositesSuffix));
 		if(parentComposite) {
@@ -80,12 +79,12 @@ namespace tlp {
 			composite->addGlEntity(parentComposite, parentPropertyValue + _subCompositesSuffix);
 			parentComposite->addGlEntity(hull, propertyValue);
 		}
-		_hulls.insert(std::pair<Graph*, GlComposite*>(subgraph, parentComposite));
+		_graphsComposites.insert(std::pair<Graph*, GlComposite*>(subgraph, parentComposite));
 		subgraph->addGraphObserver(this);
 	}
 	
 	void GlCompositeHierarchyManager::delSubGraph(Graph *parent, Graph *subgraph) {
-		GlComposite* composite = _hulls.at(subgraph);
+		GlComposite* composite = _graphsComposites.at(subgraph);
 		string propertyValue;
 		subgraph->getAttribute<string>(_property, propertyValue);
 		
@@ -113,7 +112,7 @@ namespace tlp {
 			graph->getAttribute<string>(property, propertyValue);
 			string oldPropertyValue;
 			graph->getAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, oldPropertyValue);
-			GlComposite* composite = _hulls.at(graph);
+			GlComposite* composite = _graphsComposites.at(graph);
 			GlSimpleEntity* temporaryEntity = composite->findGlEntity(oldPropertyValue);
 			if(temporaryEntity) {
 				composite->deleteGlEntity(temporaryEntity);
@@ -121,4 +120,18 @@ namespace tlp {
 			}
 		}
 	}
+	
+	void GlCompositeHierarchyManager::setGraph(tlp::Graph* graph) {
+		this->_graph = graph;
+		
+		//TODO here we could rebuild only if the graph is not in the composites map
+		this->_layer->deleteGlEntity(this->_layerName);
+		delete this->_composite;
+		this->_graphsComposites.clear();;
+		
+		this->_composite = new GlComposite();
+		this->_layer->addGlEntity(this->_composite, this->_layerName);
+		this->buildComposite(_graph, _composite);
+	}
+	
 }

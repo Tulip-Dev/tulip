@@ -196,6 +196,7 @@ namespace tlp {
       setData(graph,DataSet());
       return;
     }
+    manager->setGraph(graph);
 
     GlGraphComposite* oldGraphComposite=(GlGraphComposite *)(scene.getLayer("Main")->findGlEntity("graph"));
 
