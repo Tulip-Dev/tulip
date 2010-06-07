@@ -63,8 +63,6 @@ libtulip_ogl_la_SOURCES = \
 	GlScene.cpp \
 	GlTextureManager.cpp \
 	GlConvexHull.cpp \
-	GlConvexGraphHull.cpp \
-	GlHierarchyConvexHulls.cpp \
 	GlLines.cpp \
 	TLPPixmapFont.cpp \
 	TLPPixmapGlyph.cpp \
