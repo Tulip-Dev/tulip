@@ -97,6 +97,7 @@ namespace tlp {
       std::stringstream str;
       str << "(" ;
       typename std::vector<Obj>::const_iterator it=vect.begin();
+			assert(it != vect.end());
       str << *it ;
       ++it;
       for(;it!=vect.end();++it) {

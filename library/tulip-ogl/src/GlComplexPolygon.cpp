@@ -281,7 +281,9 @@ void GlComplexPolygon::getXMLOnlyData(xmlNodePtr rootNode) {
 	for(unsigned int i=0;i<points.size();++i){
 		stringstream str;
 		str << i ;
-		GlXMLTools::getXML(dataNode,"points"+str.str(),points[i]);
+		//TODO point[i] might be empty, review patch
+		if(!points[i].empty())
+			GlXMLTools::getXML(dataNode,"points"+str.str(),points[i]);
 	}
 	GlXMLTools::getXML(dataNode,"fillColor",fillColor);
 	GlXMLTools::getXML(dataNode,"outlineColor",outlineColor);
