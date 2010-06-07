@@ -141,10 +141,12 @@ namespace tlp {
       // Expand vector
       if(filled){
         normalArray.resize(size,normal);
+        assert(fillColors.size()!=0);
         if(fillColors.size()!=1)
           fillColors.resize(size,fillColors.back());
       }
       if(outlined){
+        assert(outlineColors.size());
         if(outlineColors.size()!=1)
           outlineColors.resize(size,outlineColors.back());
       }
