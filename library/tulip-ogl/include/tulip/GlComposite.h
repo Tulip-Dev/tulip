@@ -91,8 +91,20 @@ namespace tlp {
     virtual void acceptVisitor(GlSceneVisitor *visitor) {
       //visitor->visit(this);
       for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
-        if((*it)->isVisible())
+        if((*it)->isVisible()){
           (*it)->acceptVisitor(visitor);
+
+#ifndef NDEBUG
+          if(!(*it)->getBoundingBox().isValid()){
+            for(std::map<std::string, GlSimpleEntity*>::iterator itE=elements.begin();itE!=elements.end();++itE){
+              if((*itE).second==(*it)){
+                std::cerr << "Invalid bounding box for entity : " << (*itE).first << std::endl;
+                assert(false);
+              }
+            }
+          }
+#endif
+        }
       }
     }
 
