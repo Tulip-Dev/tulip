@@ -26,6 +26,8 @@ set(tulip-ogl_LIB_SRCS
 	GlAbstractPolygon.cpp
 	GlRegularPolygon.cpp
 	GlTriangle.cpp
+	GlHexagon.cpp
+	GlPentagon.cpp
 	GlComplexPolygon.cpp 
 	GlSphere.cpp 
 	GlLayer.cpp 
