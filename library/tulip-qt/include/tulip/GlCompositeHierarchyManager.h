@@ -36,6 +36,8 @@ namespace tlp {
 		virtual void afterSetAttribute(Graph*, const std::string&);
 		virtual void beforeSetAttribute(Graph*, const std::string&);
 		
+		void setGraph(tlp::Graph* graph);
+		
 		private:
 		
 		const tlp::Color getColor();
@@ -61,7 +63,7 @@ namespace tlp {
 		/**
 		 * This map contains the composite that contains the associated graph's hull.
 		 */
-		std::map<tlp::Graph*, tlp::GlComposite*> _hulls;
+		std::map<tlp::Graph*, tlp::GlComposite*> _graphsComposites;
   };
 }
 
