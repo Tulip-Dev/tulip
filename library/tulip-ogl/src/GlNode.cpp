@@ -32,9 +32,13 @@ namespace tlp {
 
   BoundingBox GlNode::getBoundingBox(GlGraphInputData* data) {
     node n=node(id);
-    if(data->elementRotation->getNodeValue(n)==0)
-      return BoundingBox(data->elementLayout->getNodeValue(n)-data->elementSize->getNodeValue(n)/2.f,data->elementLayout->getNodeValue(n)+data->elementSize->getNodeValue(n)/2.f);
-    else{
+    if(data->elementRotation->getNodeValue(n)==0){
+      BoundingBox box;
+      box.expand(data->elementLayout->getNodeValue(n)-data->elementSize->getNodeValue(n)/2.f);
+      box.expand(data->elementLayout->getNodeValue(n)+data->elementSize->getNodeValue(n)/2.f);
+      assert(box.isValid());
+      return box;
+    }else{
       float cosAngle=cos((float)data->elementRotation->getNodeValue(n)/180.*M_PI);
       float sinAngle=sin((float)data->elementRotation->getNodeValue(n)/180.*M_PI);
       Coord tmp1(data->elementSize->getNodeValue(n)/2.f);
