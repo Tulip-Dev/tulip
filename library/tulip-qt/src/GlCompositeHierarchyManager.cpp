@@ -44,6 +44,7 @@ namespace tlp {
 		current->addGraphObserver(this);
 		GlComposite* newComposite = new GlComposite();
 		GlConvexGraphHull* hull = new GlConvexGraphHull(getColor(), current, _layout, _size, _rotation);
+		hull->setVisible(false);
 		
 		string propertyValue;
 		current->getAttribute<string>(_property, propertyValue);
