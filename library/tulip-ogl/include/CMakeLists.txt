@@ -12,6 +12,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/GlRectTextured.h 
 	tulip/GlAbstractPolygon.h
 	tulip/GlPolygon.h 
+	tulip/GlRegularPolygon.h
 	tulip/GlComplexPolygon.h 
 	tulip/GlSphere.h 
 	tulip/GlLayer.h 
