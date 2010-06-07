@@ -10,6 +10,7 @@ namespace tlp {
 		     float startAngle,
 		     unsigned int segments) :
     GlPolygon(segments, 1u, 1u, filled, outlined) {
+    assert(segments<=256);
     setFillColor(fillColor);
     setOutlineColor(outlineColor);
     set(center, radius, startAngle);
