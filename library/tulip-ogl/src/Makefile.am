@@ -49,6 +49,7 @@ libtulip_ogl_la_SOURCES = \
 	GlAbstractPolygon.cpp \
 	GlPolygon.cpp \
 	GlRegularPolygon.cpp \
+	GlTriangle.cpp \
 	GlComplexPolygon.cpp \
 	GlSphere.cpp \
 	GlLayer.cpp \
