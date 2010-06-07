@@ -38,7 +38,6 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/GlDisplayListManager.h 
 	tulip/GlConvexHull.h 
 	tulip/GlConvexGraphHull.h 
-	tulip/GlHierarchyConvexHulls.h 
 	tulip/GlSceneObserver.h 
 	tulip/GlLine.h 
 	tulip/GlCurve.h 

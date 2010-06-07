@@ -40,7 +40,6 @@ nobase_include_HEADERS = \
 	tulip/GlDisplayListManager.h \
 	tulip/GlConvexHull.h \
 	tulip/GlConvexGraphHull.h \
-	tulip/GlHierarchyConvexHulls.h \
 	tulip/GlSceneObserver.h \
 	tulip/GlLine.h \
 	tulip/GlCurve.h \
