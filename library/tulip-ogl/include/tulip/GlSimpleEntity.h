@@ -49,7 +49,7 @@ namespace tlp {
     /**
      * Set if entity is visible
      */
-    void setVisible(bool visible);
+    virtual void setVisible(bool visible);
     /**
      * Return if entity is visible
      */
