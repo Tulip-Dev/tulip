@@ -115,6 +115,9 @@ namespace tlp {
     {
       xmlNodePtr node;
       GlXMLTools::getData(name, rootNode, node);
+      if(!node)
+        return;
+
       std::string tmp;
       getContent(node,tmp);
       std::istringstream is(tmp);
