@@ -6,6 +6,7 @@
 
 #include <sstream>
 #include <tulip/GlConvexGraphHull.h>
+#include <tulip/LayoutProperty.h>
 
 using namespace std;
 
@@ -15,8 +16,9 @@ namespace tlp {
 	
 	GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty *layout, 
 																													 SizeProperty *size, DoubleProperty *rotation, std::string namingProperty, std::string subCompositeSuffix) 
-		:_currentColor(0), _graph(graph), _layer(layer), _layerName(layerName), _layout(layout), _size(size), _rotation(rotation), _subCompositesSuffix(subCompositeSuffix), _property(namingProperty) {
-		this->_composite = new GlComposite();
+		:_currentColor(0), _graph(graph), _layer(layer), _layerName(layerName), _layout(layout), _size(size), _rotation(rotation), 
+		 _subCompositesSuffix(subCompositeSuffix), _property(namingProperty), _composite(new GlHierarchyMainComposite(this)) {
+		this->_composite->setVisible(false);
 		this->_layer->addGlEntity(this->_composite, this->_layerName);
 		
 		_fillColors.push_back(Color(255, 148, 169, 100));
@@ -25,8 +27,6 @@ namespace tlp {
     _fillColors.push_back(Color(157, 152, 255, 100));
     _fillColors.push_back(Color(255, 220, 0, 100));
     _fillColors.push_back(Color(252, 255, 158, 100));
-		
-		this->buildComposite(_graph, _composite);
 	}
 	
 	GlCompositeHierarchyManager::~GlCompositeHierarchyManager() {
@@ -40,11 +40,10 @@ namespace tlp {
 	}
 
   void GlCompositeHierarchyManager::buildComposite(Graph* current, GlComposite* composite) {
-    
 		current->addGraphObserver(this);
 		GlComposite* newComposite = new GlComposite();
 		GlConvexGraphHull* hull = new GlConvexGraphHull(getColor(), current, _layout, _size, _rotation);
-		hull->setVisible(false);
+// 		hull->setVisible(false);
 		
 		string propertyValue;
 		current->getAttribute<string>(_property, propertyValue);
@@ -102,7 +101,7 @@ namespace tlp {
 		//we save the old property value in a temporary attribute, so we can find the GlEntity and change its name once the attribute has been set
 		if(property == _property) {
 			string propertyValue;
-			graph->getAttribute<string>(property, propertyValue);
+			graph->getAttribute<string>(_property, propertyValue);
 			graph->setAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, propertyValue);
 		}
 	}
@@ -110,9 +109,10 @@ namespace tlp {
 	void GlCompositeHierarchyManager::afterSetAttribute(Graph* graph, const std::string& property) {
 		if(property == _property) {
 			string propertyValue;
-			graph->getAttribute<string>(property, propertyValue);
+			graph->getAttribute<string>(_property, propertyValue);
 			string oldPropertyValue;
 			graph->getAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, oldPropertyValue);
+			graph->removeAttribute(GlCompositeHierarchyManager::temporaryPropertyValue);
 			GlComposite* composite = _graphsComposites.at(graph);
 			GlSimpleEntity* temporaryEntity = composite->findGlEntity(oldPropertyValue);
 			if(temporaryEntity) {
@@ -132,7 +132,59 @@ namespace tlp {
 		
 		this->_composite = new GlComposite();
 		this->_layer->addGlEntity(this->_composite, this->_layerName);
-		this->buildComposite(_graph, _composite);
+		
+		if(_composite->isVisible())
+			this->buildComposite(_graph, _composite);
 	}
 	
+	void GlCompositeHierarchyManager::addNode(tlp::Graph* graph, tlp::node n) {
+		//whenever a node gets added to a graph we observe, we add this node's coordinates to it's hull
+		string attributeValue;
+		graph->getAttribute<string>(_property, attributeValue);
+		GlComposite* parent = _graphsComposites[graph];
+		GlSimpleEntity* simpleEntity = parent->findGlEntity(attributeValue);
+		GlConvexGraphHull* hull = dynamic_cast<GlConvexGraphHull*>(simpleEntity);
+		hull->updateHull();
+	}
+	
+	void GlCompositeHierarchyManager::createComposite() {
+		this->_composite->reset(true);
+		this->buildComposite(_graph, _composite);
+		_layout->addPropertyObserver(this);
+	}
+	
+	void GlCompositeHierarchyManager::deleteComposite() {
+		
+		for(std::map<tlp::Graph*, tlp::GlComposite*>::const_iterator it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
+			it->first->removeGraphObserver(this);
+		}
+		_graphsComposites.clear();
+		_layout->removePropertyObserver(this);
+	}
+	
+	void GlCompositeHierarchyManager::afterSetNodeValue(PropertyInterface* property, const node n) {
+		string attributeValue;
+		std::map<tlp::Graph*, tlp::GlComposite*>::const_iterator it = _graphsComposites.begin();
+		while(it != _graphsComposites.end()) {
+			it->first->getAttribute<string>(_property, attributeValue);
+			GlSimpleEntity* simpleEntity = it->second->findGlEntity(attributeValue);
+			GlConvexGraphHull* hull = dynamic_cast<GlConvexGraphHull*>(simpleEntity);
+			hull->updateHull();
+			++it;
+		}
+	}
+	
+	GlHierarchyMainComposite::GlHierarchyMainComposite(GlCompositeHierarchyManager* manager) :_manager(manager) {
+	}
+	
+	void GlHierarchyMainComposite::setVisible(bool visible) {
+		if(visible) {
+			_manager->createComposite();
+		}
+		else {
+			_manager->deleteComposite();
+		}
+		GlSimpleEntity::setVisible(visible);
+	}
 }
+

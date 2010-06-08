@@ -40,9 +40,12 @@ void GlConvexGraphHull::draw(float lod, Camera *camera) {
 #ifndef NDEBUG
   assert(graph);
 #endif /* NDEBUG */
-  points.clear();
-  createPolygon(computeConvexHull(graph, layout, size, rotation, 0), 1);
   GlComplexPolygon::draw(lod, camera);
+}
+
+void GlConvexGraphHull::updateHull() {
+	points.clear();
+  createPolygon(computeConvexHull(graph, layout, size, rotation, 0), 1);
 }
 
 #ifndef NDEBUG
