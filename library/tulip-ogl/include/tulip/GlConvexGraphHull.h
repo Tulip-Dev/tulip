@@ -54,6 +54,11 @@ public:
    */
   virtual void translate(const Coord& mouvement);
 
+	/**
+	 * Recomputes the whole Hull
+	 */
+	void updateHull();
+	
   /**
    * Draw the complex polygon
    */
