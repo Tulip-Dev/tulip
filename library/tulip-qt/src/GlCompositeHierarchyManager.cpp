@@ -16,8 +16,8 @@ namespace tlp {
 	
 	GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty *layout, 
 																													 SizeProperty *size, DoubleProperty *rotation, std::string namingProperty, std::string subCompositeSuffix) 
-		:_currentColor(0), _graph(graph), _layer(layer), _layerName(layerName), _layout(layout), _size(size), _rotation(rotation), 
-		 _subCompositesSuffix(subCompositeSuffix), _property(namingProperty), _composite(new GlHierarchyMainComposite(this)) {
+		:_currentColor(0), _graph(graph), _layer(layer), _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size), _rotation(rotation), _layerName(layerName), 
+		 _subCompositesSuffix(subCompositeSuffix), _property(namingProperty) {
 		this->_composite->setVisible(false);
 		this->_layer->addGlEntity(this->_composite, this->_layerName);
 		
@@ -69,7 +69,6 @@ namespace tlp {
 		string parentPropertyValue;
 		parent->getAttribute<string>(_property, parentPropertyValue);
 		GlComposite* composite = _graphsComposites.at(parent);
-		GlEntity* parentEntity = composite->findGlEntity(parentPropertyValue);
 		GlComposite* parentComposite = dynamic_cast<GlComposite*>(composite->findGlEntity(parentPropertyValue + _subCompositesSuffix));
 		if(parentComposite) {
 			parentComposite->addGlEntity(hull, propertyValue);
@@ -83,7 +82,7 @@ namespace tlp {
 		subgraph->addGraphObserver(this);
 	}
 	
-	void GlCompositeHierarchyManager::delSubGraph(Graph *parent, Graph *subgraph) {
+	void GlCompositeHierarchyManager::delSubGraph(Graph*, Graph *subgraph) {
 		GlComposite* composite = _graphsComposites.at(subgraph);
 		string propertyValue;
 		subgraph->getAttribute<string>(_property, propertyValue);
@@ -137,7 +136,7 @@ namespace tlp {
 			this->buildComposite(_graph, _composite);
 	}
 	
-	void GlCompositeHierarchyManager::addNode(tlp::Graph* graph, tlp::node n) {
+	void GlCompositeHierarchyManager::addNode(tlp::Graph* graph, tlp::node) {
 		//whenever a node gets added to a graph we observe, we add this node's coordinates to it's hull
 		string attributeValue;
 		graph->getAttribute<string>(_property, attributeValue);
@@ -162,7 +161,7 @@ namespace tlp {
 		_layout->removePropertyObserver(this);
 	}
 	
-	void GlCompositeHierarchyManager::afterSetNodeValue(PropertyInterface* property, const node n) {
+	void GlCompositeHierarchyManager::afterSetNodeValue(PropertyInterface*, const node) {
 		string attributeValue;
 		std::map<tlp::Graph*, tlp::GlComposite*>::const_iterator it = _graphsComposites.begin();
 		while(it != _graphsComposites.end()) {

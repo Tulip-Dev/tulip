@@ -31,7 +31,7 @@ GlArrow2DEdgeExtremity::GlArrow2DEdgeExtremity(EdgeExtremityGlyphContext *gc) :
 GlArrow2DEdgeExtremity::~GlArrow2DEdgeExtremity() {
 }
 
-void GlArrow2DEdgeExtremity::draw(edge e, node n, const Color& glyphColor, const Color &borderColor,
+void GlArrow2DEdgeExtremity::draw(edge e, node, const Color& glyphColor, const Color &borderColor,
 		float lod) {
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Arrow 2D")) {
 		glBegin(GL_TRIANGLES);

@@ -277,7 +277,7 @@ std::string tlp::getMajor(const std::string& v) {
 
 //=========================================================
 std::string tlp::getMinor(const std::string& v) {
-  unsigned int pos = v.find('.');
+  size_t pos = v.find('.');
   if (pos == string::npos)
     return string("0");
   unsigned int rpos = v.rfind('.');

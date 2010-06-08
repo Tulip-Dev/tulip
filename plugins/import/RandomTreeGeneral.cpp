@@ -62,7 +62,7 @@ struct RandomTreeGeneral:public ImportModule {
     return result;
   }
 
-  bool import(const string &name) {
+  bool import(const string &) {
     srand(clock()); 
 
     unsigned int sizeMin  = 10;

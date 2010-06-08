@@ -84,7 +84,7 @@ void Hexagone::draw(node n, float lod) {
 }
 
 void Hexagone::draw(edge e,
-                    node n,
+                    node,
                     const Color & glyphColor,
                     const Color &borderColor,
                     float lod) {

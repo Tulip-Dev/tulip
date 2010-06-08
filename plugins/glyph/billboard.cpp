@@ -47,7 +47,7 @@ Billboard::Billboard(GlyphContext *gc): Glyph(gc){
 Billboard::~Billboard() {
 }
 //========================================================
-void Billboard::draw(node n,float lod) {
+void Billboard::draw(node n,float) {
   if(GlDisplayListManager::getInst().beginNewDisplayList("Billboard_billboard")) {
     drawBillboard();
     GlDisplayListManager::getInst().endNewDisplayList();

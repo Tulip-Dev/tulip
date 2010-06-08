@@ -61,7 +61,7 @@ void TriconnectedTest::delEdge(Graph *graph,const edge) {
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
-void TriconnectedTest::reverseEdge(Graph *graph,const edge) {
+void TriconnectedTest::reverseEdge(Graph *,const edge) {
 }
 //=================================================================
 void TriconnectedTest::addNode(Graph *graph,const node) {

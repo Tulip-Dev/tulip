@@ -115,7 +115,7 @@ void Ring::draw(node n, float lod) {
 			glGraphInputData->elementBorderColor->getNodeValue(n), lod);
 
 }
-void Ring::draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod) {
+void Ring::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
 	drawGlyph(glyphColor,
 			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
 			edgeExtGlGraphInputData->parameters->getTexturePath(),

@@ -51,7 +51,7 @@ struct RandomGraph:public ImportModule {
   ~RandomGraph(){
   }
   
-  bool import(const string &name) {
+  bool import(const string &) {
     srand(clock());
     unsigned int nbNodes  = 5;
     unsigned int nbEdges  = 9;

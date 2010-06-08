@@ -91,7 +91,6 @@ bool SquarifiedTreeMap::check(string& errorMsg) {
   */
 bool SquarifiedTreeMap::run() {
   double aspectRatio  = DEFAULT_RATIO;
-  bool glyphTextured = false;
   shneidermanTreeMap = false;
   size  = graph->getProperty<SizeProperty>("viewSize");    
 
