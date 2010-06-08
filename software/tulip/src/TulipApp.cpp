@@ -344,7 +344,7 @@ void TulipApp::fileNew(QAction *action) {
   enableElements(true);
 }
 //**********************************************************************
-bool TulipApp::fileNew(bool checked) {
+bool TulipApp::fileNew(bool) {
   MutableContainer<Controller *> controllers;
   ControllerPluginsManager::getInst().initControllerPluginsList(controllers);
   TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;

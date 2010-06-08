@@ -47,7 +47,7 @@ ChristmasTree::ChristmasTree(EdgeExtremityGlyphContext *gc) :
 	Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
 }
 //=======================================================
-void ChristmasTree::draw(node n, float lod) {
+void ChristmasTree::draw(node n, float) {
 
 	drawTree();
 	glRotatef(-90., 1., 0., 0.);

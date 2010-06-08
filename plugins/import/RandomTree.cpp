@@ -53,7 +53,7 @@ struct RandomTree:public ImportModule {
     return result;
   }
 
-  bool import(const string &name) {
+  bool import(const string &) {
     srand(clock()); 
     unsigned int minSize  = 100;
     unsigned int maxSize  = 1000;

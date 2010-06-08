@@ -62,7 +62,7 @@ public:
   }
   ~DotImport(){}
 
-  bool import(const string &name) {
+  bool import(const string &) {
 
     // Open input stream
     string fn;

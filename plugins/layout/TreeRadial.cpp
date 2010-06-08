@@ -36,7 +36,7 @@ public:
     }
   }
 
-  void bfsComputeLayerRadii(float lSpacing, float nSpacing, SizeProperty *sizes) {
+  void bfsComputeLayerRadii(float lSpacing, float nSpacing, SizeProperty *) {
     if (bfs.size() < 2) return;
     
     float lRadius = 0, lSpacingMax = 0;

@@ -220,7 +220,7 @@ float RectanglePacking::calculateRatio(){
 
 
 
-void RectanglePacking::coordinatesOfNewRectangle(list<RectangleRelativePosition>::iterator itRectLeftOrBelowOfNewRect, int positionInFirstSequence, int positionInSecondSequence){
+void RectanglePacking::coordinatesOfNewRectangle(list<RectangleRelativePosition>::iterator itRectLeftOrBelowOfNewRect, int, int positionInSecondSequence){
 
   float rightAbscissa;
   float highOrdinate;

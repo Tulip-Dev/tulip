@@ -49,7 +49,7 @@ struct SmallWorldGraph:public ImportModule {
   }
   ~SmallWorldGraph(){}
   
-  bool import(const string &name) {
+  bool import(const string &) {
     int nbNodes  = 200;
     int avgDegree = 10;
     bool enableLongEdge = false;

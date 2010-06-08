@@ -41,7 +41,7 @@ HalfCylinder::HalfCylinder(GlyphContext *gc): Glyph(gc) {
 HalfCylinder::~HalfCylinder() {
 }
 //=================================================================================================
-void HalfCylinder::draw(node n,float lod) {
+void HalfCylinder::draw(node n,float) {
   if(GlDisplayListManager::getInst().beginNewDisplayList("Halfcylinder_halfcylinder")) {
     GLUquadricObj *quadratic;
     quadratic = gluNewQuadric();

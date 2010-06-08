@@ -85,7 +85,7 @@ void Pentagone::draw(node n, float lod) {
        lod);
 }
 
-void Pentagone::draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod) {
+void Pentagone::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
   string textureName=edgeExtGlGraphInputData->elementTexture->getEdgeValue(e);
   if(textureName!="")
     textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;

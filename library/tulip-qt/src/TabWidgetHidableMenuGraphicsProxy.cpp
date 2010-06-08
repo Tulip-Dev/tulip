@@ -39,7 +39,7 @@ void TabWidgetHidableMenuGraphicsProxy::hideTabWidget() {
 }
 
 void TabWidgetHidableMenuGraphicsProxy::mouseDoubleClickEvent(
-		QGraphicsSceneMouseEvent * event) {
+		QGraphicsSceneMouseEvent *) {
 	double dx = sceneBoundingRect().width() - transform().m11() * offsetWhenHiding;
 	xStart = scenePos().x();
 	if (hidden) {
