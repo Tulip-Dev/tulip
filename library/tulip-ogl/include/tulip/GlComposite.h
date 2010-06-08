@@ -92,10 +92,10 @@ namespace tlp {
       //visitor->visit(this);
       for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
         if((*it)->isVisible()){
-          (*it)->acceptVisitor(visitor);
 
 #ifndef NDEBUG
-          if(!(*it)->getBoundingBox().isValid()){
+          GlComposite *composite=dynamic_cast<GlComposite*>(*it);
+          if(!composite && !(*it)->getBoundingBox().isValid()){
             for(std::map<std::string, GlSimpleEntity*>::iterator itE=elements.begin();itE!=elements.end();++itE){
               if((*itE).second==(*it)){
                 std::cerr << "Invalid bounding box for entity : " << (*itE).first << std::endl;
@@ -104,6 +104,8 @@ namespace tlp {
             }
           }
 #endif
+
+          (*it)->acceptVisitor(visitor);
         }
       }
     }
