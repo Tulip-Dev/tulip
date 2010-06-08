@@ -172,8 +172,8 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   _glDraw->setObservedView(_observedView);
 
   if (_observedView != 0) {
-    _view->getScene()->getLayer("Main")->deleteGlEntity("entity");
-    _view->getScene()->getLayer("Main")->addGlEntity(observedEntity,"entity");
+    _view->getScene()->getLayer("Main")->deleteGlEntity("overviewEntity");
+    _view->getScene()->getLayer("Main")->addGlEntity(observedEntity,"overviewEntity");
 
     GlGraphComposite *p_subclass = dynamic_cast<GlGraphComposite *>( observedEntity );
     if(p_subclass)
@@ -190,7 +190,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
 	    this, SLOT(observedViewDestroyed(QObject *)));
   } else {
     _view->getScene()->addGlGraphCompositeInfo(0,0);
-    _view->getScene()->getLayer("Main")->deleteGlEntity("entity");
+    _view->getScene()->getLayer("Main")->deleteGlEntity("overviewEntity");
   }
 }
 //=============================================================================
@@ -198,7 +198,7 @@ void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) {
   assert(_observedView == glWidget);
   _observedView = 0;
   _glDraw->setObservedView(0);
-  _view->getScene()->getLayer("Main")->deleteGlEntity("entity");
+  _view->getScene()->getLayer("Main")->deleteGlEntity("overviewEntity");
   _view->getScene()->addGlGraphCompositeInfo(0,0);
   draw(0);
 }
