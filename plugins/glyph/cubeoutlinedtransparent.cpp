@@ -64,17 +64,25 @@ CubeOutLinedTransparent::~CubeOutLinedTransparent() {
 }
 
 void CubeOutLinedTransparent::draw(node n, float lod) {
+  string textureName=glGraphInputData->elementTexture->getNodeValue(n);
+  if(textureName!="")
+    textureName=glGraphInputData->parameters->getTexturePath()+textureName;
+
   draw(glGraphInputData->elementBorderColor->getNodeValue(n),
        glGraphInputData->elementBorderWidth->getNodeValue(n),
-       glGraphInputData->elementTexture->getNodeValue(n),
+       textureName,
        lod);
 }
 
 void CubeOutLinedTransparent::draw(edge e, node n, const Color &borderColor, const Color& glyphColor,
-		float lod) {
+    float lod) {
+  string textureName=edgeExtGlGraphInputData->elementTexture->getEdgeValue(e);
+  if(textureName!="")
+    textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
+
   draw(borderColor,
        edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
-       edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
+       textureName,
        lod);
 	glDisable(GL_LIGHTING);
 }
