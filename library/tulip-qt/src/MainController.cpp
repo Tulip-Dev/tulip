@@ -458,7 +458,7 @@ namespace tlp {
     //cerr << "[WARNING]" << __PRETTY_FUNCTION__ << endl;
   }
   //**********************************************************************
-  void MainController::update ( ObserverIterator begin, ObserverIterator end) {
+  void MainController::update ( ObserverIterator, ObserverIterator end) {
     // block update when we do an undo/redo
     if(blockUpdate)
       return;
