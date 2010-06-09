@@ -830,7 +830,7 @@ void TulipApp::windowsMenuAboutToShow() {
   if(tabWidget->currentIndex()==-1)
     return;
   QWorkspace *currentWorkspace=controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]];
-  QAction* cascadeAction = windowsMenu->addAction("&Cascade", currentWorkspace, SLOT(cascade() ) );
+  QAction* cascadeAction = windowsMenu->addAction("&Cascade", this, SLOT(cascade() ) );
   QAction* tileAction = windowsMenu->addAction("&Tile", currentWorkspace, SLOT(tile() ) );
   if ( currentWorkspace->windowList().isEmpty() ) {
     cascadeAction->setEnabled(false);
@@ -1178,5 +1178,14 @@ void TulipApp::filePrint() {
       }
     painter.end();
     delete image;
+  }
+}
+//==============================================================
+void TulipApp::cascade(){
+  QWorkspace *currentWorkspace=controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]];
+  currentWorkspace->cascade();
+  QWidgetList widgetList=currentWorkspace->windowList();
+  for(QWidgetList::iterator it=widgetList.begin();it!=widgetList.end();++it){
+    (*it)->resize(QSize(512,512));
   }
 }
