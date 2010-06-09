@@ -93,7 +93,6 @@ BUILT_SOURCES = \
 	tulip/TabWidgetData.h \
 	tulip/PropertyDialogData.h \
 	tulip/CopyPropertyDialogData.h \
-	tulip/TulipStatsData.h \
 	tulip/FindSelectionData.h \
 	tulip/RenderingParametersDialogData.h \
 	tulip/LayerManagerWidgetData.h \

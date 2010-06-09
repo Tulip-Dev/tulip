@@ -9,7 +9,7 @@ EXTRA_DIST = gen-conf.sh gen-doc.sh \
 	     tulip_mac_info.plist.in \
 	     tulip.nsi.in \
 	     tulip.spec.in \
-	     tulip-config.in tulip-config.cmake.in \
+	     tulip-config.in \
 	     tulip.m4 \
 	     libxml.m4 \
 	     WriteEnvStr.nsh \
