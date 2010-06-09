@@ -24,8 +24,6 @@ SET(TulipReleaseVersion 0)
 SET(TulipVersion "${TulipMajorVersion}.${TulipMinorVersion}.${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}.${TulipMinorVersion}")
 
-set(CMAKE_CXX_FLAGS "-Wall")
-
 ## -----------------------------------------------------------------------------------------------
 ## Lib names
 ## -----------------------------------------------------------------------------------------------
