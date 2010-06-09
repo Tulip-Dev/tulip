@@ -99,7 +99,7 @@ struct Grid: public ImportModule {
   }
 
   void connectRow(vector<node> &row1, unsigned int row1H, vector<node> &row2,
-      unsigned int row2H, int conn, bool isTore) {
+      unsigned int, int conn, bool isTore) {
     assert(row1.size()==row2.size());
     int width = row1.size();
     for (int i = 0; i < width; ++i) {
@@ -136,7 +136,7 @@ struct Grid: public ImportModule {
   }
 
 
-  bool import(const string &name) {
+  bool import(const string &) {
     int width = 10;
     int height = 10;
     bool isTore = false;

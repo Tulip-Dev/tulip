@@ -548,27 +548,27 @@ void runTriangle (const vector<Coord> &points,
 */
 
 //==============================================================
-void tlp::delaunayTriangulation (const vector<Coord> &points, 
-	    vector<pair<unsigned int, unsigned int> > &edges) {
+void tlp::delaunayTriangulation (const vector<Coord> &, 
+	    vector<pair<unsigned int, unsigned int> > &) {
   std::cerr << __PRETTY_FUNCTION__ << " not yet implemented" << std::endl;
   //runTriangle (points, &edges);
 }//end delaunayTriangulation
 //==============================================================
-void tlp::delaunayTriangulation (const vector<Coord> &points, 
-	    vector< tlp::Array<unsigned int, 3> > &triangles) {
+void tlp::delaunayTriangulation (const vector<Coord> &, 
+	    vector< tlp::Array<unsigned int, 3> > &) {
   std::cerr << __PRETTY_FUNCTION__ << " not yet implemented" << std::endl;
   //runTriangle (points, NULL, &triangles);
 }//end delaunayTriangulation
 //==============================================================
-void tlp::delaunayTriangulation (const vector<Coord> &points,
-		       vector<pair<unsigned int, unsigned int> > &edges,
-		       vector< tlp::Array<unsigned int, 3> > &triangles) {
+void tlp::delaunayTriangulation (const vector<Coord> &,
+		       vector<pair<unsigned int, unsigned int> > &,
+		       vector< tlp::Array<unsigned int, 3> > &) {
   //runTriangle (points, &edges, &triangles);
 }//end delaunayTriangulation
 //==============================================================
-void tlp::voronoiDiagram (const vector<Coord> &points,
-			  VoronoiDiagram &voronoiDiagram,
-			  bool returnVoronoiEdgeList) {
+void tlp::voronoiDiagram (const vector<Coord> &,
+			  VoronoiDiagram &,
+			  bool) {
   std::cerr << __PRETTY_FUNCTION__ << " not yet implemented" << std::endl;
   //runTriangle (points, NULL, NULL, returnVoronoiEdgeList, &voronoiDiagram);
 }//end voronoiDiagram

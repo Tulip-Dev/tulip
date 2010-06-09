@@ -46,7 +46,7 @@ struct CompleteTree:public ImportModule {
       buildNode(n1,degree,depth - 1);
     }
   }
-  bool import(const string &name) {
+  bool import(const string &) {
     int degree  = 2;
     int depth   = 5;
     if (dataSet!=0) {

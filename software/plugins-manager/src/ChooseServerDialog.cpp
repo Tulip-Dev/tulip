@@ -50,7 +50,7 @@ namespace tlp {
   }
   
   
-  void ChooseServerDialog::closeEvent(QCloseEvent *e){
+  void ChooseServerDialog::closeEvent(QCloseEvent*){
     reject();
   }
   

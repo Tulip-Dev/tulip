@@ -100,7 +100,7 @@ void CSVParser::tokenize(const string& str, vector<string>& tokens,
 }
 
 const string spaceChars = " \t\r\n";
-string CSVParser::treatToken(const string& token, int row, int column) {
+string CSVParser::treatToken(const string& token, int, int) {
   string currentToken = token;
   // erase space chars at the beginning/end of the value
   // and replace multiple occurences of space chars by a blank
