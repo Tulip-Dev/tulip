@@ -18,7 +18,6 @@ namespace tlp {
 																													 SizeProperty *size, DoubleProperty *rotation, std::string namingProperty, std::string subCompositeSuffix) 
 		:_currentColor(0), _graph(graph), _layer(layer), _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size), _rotation(rotation), _layerName(layerName), 
 		 _subCompositesSuffix(subCompositeSuffix), _property(namingProperty) {
-		this->_composite->setVisible(false);
 		this->_layer->addGlEntity(this->_composite, this->_layerName);
 		
 		_fillColors.push_back(Color(255, 148, 169, 100));
@@ -130,6 +129,7 @@ namespace tlp {
 		this->_graphsComposites.clear();;
 		
 		this->_composite = new GlComposite();
+		this->_composite->setVisible(false);
 		this->_layer->addGlEntity(this->_composite, this->_layerName);
 		
 		if(_composite->isVisible())
@@ -148,6 +148,7 @@ namespace tlp {
 	
 	void GlCompositeHierarchyManager::createComposite() {
 		this->_composite->reset(true);
+		this->_composite->setVisible(false);
 		this->buildComposite(_graph, _composite);
 		_layout->addPropertyObserver(this);
 	}
