@@ -96,25 +96,40 @@ struct GMLGraphBuilder:public GMLTrue {
     return false;
   }
 
-  bool setEdgeValue(edge e, const string &propertyName, string value) {
+	/**
+	 * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+	 */
+  bool setEdgeValue(edge, const string &, string) {
     return true;
   }
-  bool setEdgeValue(edge e, const string &propertyName, int value) {
+  /**
+	 * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+	 */
+  bool setEdgeValue(edge, const string &, int) {
     return true;
   }
-  bool setEdgeValue(edge e, const string &propertyName, bool value) {
+  /**
+	 * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+	 */
+  bool setEdgeValue(edge, const string &, bool) {
     return true;
   }
-  bool setEdgeValue(edge e, const string &propertyName, double value) {
+  /**
+	 * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+	 */
+  bool setEdgeValue(edge, const string &, double) {
     return true;
   }
   void setEdgeValue(edge e,const LineType::RealType & lCoord) {
     _graph->getLocalProperty<LayoutProperty>("viewLayout")->setEdgeValue(e,lCoord);
   }
-  bool setAllNodeValue(const string propertyType, const string propertyName, string value) {
+  bool setAllNodeValue(const string, const string, string) {
     return true;
   }
-  bool setAllEdgeValue(const string &propertyType, const string &propertyName, string value) {
+  /**
+	 * Set all the edges values of the property 1st param, of type 2nd param to the value 3rd param.
+	 */
+  bool setAllEdgeValue(const string &, const string &, string) {
     return true;
   }
   bool addStruct(const string& structName,GMLBuilder*&newBuilder) ;

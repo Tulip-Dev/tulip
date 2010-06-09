@@ -94,7 +94,7 @@ namespace tlp {
     outlineColors.push_back(color);
   }
   //=====================================================
-  void GlAbstractPolygon::draw(float lod,Camera *camera) {
+  void GlAbstractPolygon::draw(float lod,Camera *) {
 
     bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
 
@@ -108,9 +108,9 @@ namespace tlp {
         // Normal compute
         vector<Coord> normalPoints;
         normalPoints.push_back(points[0]);
-        for(int i=1;i<points.size() && normalPoints.size()<3;++i){
+        for(size_t i=1;i<points.size() && normalPoints.size()<3;++i){
           bool find=false;
-          for(int j=0;j<normalPoints.size();++j){
+          for(size_t j=0;j<normalPoints.size();++j){
             if(normalPoints[j]==points[i]){
               find=true;
               break;
