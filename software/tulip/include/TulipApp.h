@@ -119,6 +119,7 @@ protected slots:
   void windowsMenuActivated(QAction*);
   void deletePluginsUpdateChecker();
   void tabChanged(int index);
+  void cascade();
 
 private:
   void buildMenus();
