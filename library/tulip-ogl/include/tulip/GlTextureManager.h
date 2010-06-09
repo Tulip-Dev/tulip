@@ -42,8 +42,8 @@ namespace tlp {
 
   struct TextureInfo{
     bool hasAlpha;
-    int  width;
-    int  height;
+    unsigned int  width;
+    unsigned int  height;
     unsigned char *data;
   };
 

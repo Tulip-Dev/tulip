@@ -20,22 +20,22 @@ void decrNumIterators() {
   NumIterators--;
 }
 
-void NodeIteratorObserver::addNode(Graph* g, node n) {
+void NodeIteratorObserver::addNode(Graph*, node) {
   if (hasNext())
     std::cerr << "Warning: node added while iterating !!!" << std::endl;
 }
 
-void NodeIteratorObserver::delNode(Graph* g, node n) {
+void NodeIteratorObserver::delNode(Graph*, node) {
   if (hasNext())
     std::cerr << "Warning: node deleted while iterating !!!" << std::endl;
 }
    
-void EdgeIteratorObserver::addEdge(Graph* g, edge e) {
+void EdgeIteratorObserver::addEdge(Graph*, edge) {
   if (hasNext())
     std::cerr << "Warning: edge added while iterating !!!" << std::endl;
 }
 
-void EdgeIteratorObserver::delEdge(Graph* g, edge e) {
+void EdgeIteratorObserver::delEdge(Graph*, edge) {
   if (hasNext())
     std::cerr << "Warning: edge deleted while iterating !!!" << std::endl;
 }

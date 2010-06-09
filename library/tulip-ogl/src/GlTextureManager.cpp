@@ -365,8 +365,8 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
   bool spriteOnHeight=false;
   bool spriteOnWidth=false;
   unsigned int spriteNumber=1;
-  int width=texti.width;
-  int height=texti.height;
+  unsigned int width=texti.width;
+  unsigned int height=texti.height;
 
   if((texti.height-(texti.height/texti.width)*texti.width)!=0 && (texti.width-(texti.width/texti.height)*texti.height)!=0){
     errorViewer->displayError("Texture manager","Texture size is not valid\nTexture size should be of the form :\n - width=height or\n - height=N*width (for animated textures)\nfor file :"+filename);
