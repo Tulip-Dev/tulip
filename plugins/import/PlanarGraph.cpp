@@ -34,7 +34,7 @@ struct PlanarGraph:public ImportModule {
   }
   ~PlanarGraph(){}
   
-  bool import(const string &name) {
+  bool import(const string &) {
     unsigned int nbNodes  = 30;
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);

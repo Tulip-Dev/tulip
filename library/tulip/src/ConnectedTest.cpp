@@ -135,7 +135,7 @@ void ConnectedTest::delEdge(Graph *graph,const edge) {
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
-void ConnectedTest::reverseEdge(Graph *graph,const edge) {
+void ConnectedTest::reverseEdge(Graph *,const edge) {
 }
 //=================================================================
 void ConnectedTest::addNode(Graph *graph,const node) {

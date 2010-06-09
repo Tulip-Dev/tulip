@@ -121,18 +121,18 @@ void AcyclicTest::destroy(Graph *graph) {
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
-void AcyclicTest::reverseEdge(Graph *graph,const edge e) {
+void AcyclicTest::reverseEdge(Graph *graph,const edge ) {
   graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
-void AcyclicTest::addEdge(Graph *graph,const edge e) {
+void AcyclicTest::addEdge(Graph *graph,const edge) {
   if (resultsBuffer[(unsigned long)graph]==false) return;
   graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
-void AcyclicTest::delEdge(Graph *graph,const edge e) {
+void AcyclicTest::delEdge(Graph *graph,const edge) {
   if (resultsBuffer[(unsigned long)graph]==true) return;
   graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);

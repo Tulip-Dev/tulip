@@ -44,7 +44,7 @@ namespace tlp {
     if (!tlp::applyAlgorithm(graph, erreurMsg, dataSet, name, &myProgress  )) {
       QMessageBox::critical( 0, "Tulip Algorithm Check Failed",QString((name + ":\n" + erreurMsg).c_str()));
       graph->pop();
-      bool ok=false;
+      ok=false;
     }
     Observable::unholdObservers();
     return ok;

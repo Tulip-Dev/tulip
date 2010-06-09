@@ -31,7 +31,7 @@ struct CompleteGraph:public ImportModule {
   ~CompleteGraph(){
   }
   
-  bool import(const string &name) {
+  bool import(const string &) {
     int nbNodes  = 5;
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);

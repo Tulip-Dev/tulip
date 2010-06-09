@@ -164,7 +164,7 @@ void BiconnectedTest::delEdge(Graph *graph,const edge) {
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
-void BiconnectedTest::reverseEdge(Graph *graph,const edge) {
+void BiconnectedTest::reverseEdge(Graph *,const edge) {
 }
 //=================================================================
 void BiconnectedTest::addNode(Graph *graph,const node) {

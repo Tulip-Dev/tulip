@@ -281,13 +281,13 @@ void ColorScaleConfigDialog::loadUserSavedColorScales() {
 	settings.endGroup();
 }
 
-void ColorScaleConfigDialog::resizeEvent(QResizeEvent * event) {
+void ColorScaleConfigDialog::resizeEvent(QResizeEvent *) {
 	displaySavedGradientPreview();
 	displayUserGradientPreview();
 	colorsTable->setColumnWidth(0, colorsTable->width());
 }
 
-void ColorScaleConfigDialog::showEvent(QShowEvent * event) {
+void ColorScaleConfigDialog::showEvent(QShowEvent *) {
 	displaySavedGradientPreview();
 	displayUserGradientPreview();
 	colorsTable->setColumnWidth(0, colorsTable->width());

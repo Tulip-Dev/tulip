@@ -146,7 +146,7 @@ public:
     return TLP_CONTINUE;
   }
 
-  bool import(const string &name) {
+  bool import(const string &) {
     size=graph->getProperty<DoubleProperty>("size");
     uid=graph->getProperty<DoubleProperty>("uid");
     gid=graph->getProperty<DoubleProperty>("gid");

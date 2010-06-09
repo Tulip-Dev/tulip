@@ -233,7 +233,7 @@ void AbstractGlCurve::buildCurveVertexBuffers(const unsigned int nbCurvePoints, 
 	}
 }
 
-void AbstractGlCurve::draw(float lod, Camera *camera) {
+void AbstractGlCurve::draw(float, Camera *) {
 	drawCurve(&controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
 }
 
@@ -459,8 +459,8 @@ void AbstractGlCurve::translate(const Coord &move) {
 	boundingBox.translate(move);
 }
 
-void AbstractGlCurve::getXML(xmlNodePtr rootNode) {}
+void AbstractGlCurve::getXML(xmlNodePtr) {}
 
-void AbstractGlCurve::setWithXML(xmlNodePtr rootNode) {}
+void AbstractGlCurve::setWithXML(xmlNodePtr) {}
 
 }

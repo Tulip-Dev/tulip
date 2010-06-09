@@ -1,4 +1,4 @@
-#include "tulip/AbstractView.h"
+#include "tulip//*AbstractView*/.h"
 
 #include <QtCore/QEvent>
 #include <QtGui/QMouseEvent>
@@ -133,7 +133,7 @@ void AbstractView::exportImage(QAction* action) {
 	createPicture(s.toStdString());
 }
 
-void AbstractView::buildContextMenu(QObject *object, QMouseEvent *event, QMenu *contextMenu) {
+void AbstractView::buildContextMenu(QObject *, QMouseEvent *, QMenu *contextMenu) {
 	if (!exportImageMenu->isEmpty())
 		contextMenu->addMenu(exportImageMenu);
 }
