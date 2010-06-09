@@ -637,6 +637,11 @@ namespace tlp {
                             dataSet->set(prop, s);
                         else cerr << __PRETTY_FUNCTION__ << ": SIZE failed" << endl;
                         //else return false;
+                    }else if (type==DOUBLE){
+                      double d;
+                      if(DoubleType::fromString(d,val))
+                        dataSet->set(prop,d);
+                      else cerr << __PRETTY_FUNCTION__ << ": DOUBLE failed" << endl;
                     }
                     else if (type==STRING)
                         dataSet->set(prop, val);
