@@ -1,4 +1,4 @@
-#include "tulip//*AbstractView*/.h"
+#include "tulip/AbstractView.h"
 
 #include <QtCore/QEvent>
 #include <QtGui/QMouseEvent>
