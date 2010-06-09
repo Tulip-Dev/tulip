@@ -41,7 +41,7 @@ namespace tlp {
     return bb;
   }
 
-  void GlRectTextured::draw(float lod,Camera *camera) {
+  void GlRectTextured::draw(float,Camera *camera) {
     Vector<int,4> viewport=camera->getViewport();
     float xMin;
     float xMax;

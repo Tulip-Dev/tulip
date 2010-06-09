@@ -180,7 +180,7 @@ void GlComplexPolygon::beginNewHole() {
 	currentVector++;
 }
 //=====================================================
-void GlComplexPolygon::draw(float lod,Camera *camera) {
+void GlComplexPolygon::draw(float,Camera *) {
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_BLEND);

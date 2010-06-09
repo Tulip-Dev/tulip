@@ -42,7 +42,7 @@ void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const
 	polyQuadEdgesColors.push_back(edgeColor);
 }
 
-void GlPolyQuad::draw(float lod, Camera *camera) {
+void GlPolyQuad::draw(float, Camera *) {
 
 	assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
 

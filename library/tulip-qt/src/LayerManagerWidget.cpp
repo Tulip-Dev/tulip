@@ -217,6 +217,7 @@ namespace tlp {
       GlGraphComposite *graphComposite=dynamic_cast<GlGraphComposite *>(entity);
 
       if(!graphComposite){
+				assert(entity != NULL);
         entity->setVisible(child->checkState(1)==Qt::Checked);
         entity->setStencil(child->checkState(2)==Qt::Checked?2:0xFFFF);
         GlComposite *childComposite=dynamic_cast<GlComposite *>(entity);

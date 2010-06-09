@@ -19,7 +19,7 @@ GlQuad::GlQuad():textureName("")
   // No default constructor :)
 }
 
-void GlQuad::setPosition(const Coord& position)
+void GlQuad::setPosition(const Coord&)
 {
   // No setPosition
 }
@@ -107,7 +107,7 @@ string GlQuad::getTextureName() const {
   return textureName;
 }
 
-void GlQuad::draw(float, Camera *camera)
+void GlQuad::draw(float, Camera *)
 {
 
   if(textureName!="") {

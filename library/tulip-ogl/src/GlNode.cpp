@@ -62,7 +62,7 @@ namespace tlp {
     visitor->visit(this);
   }
 
-  void GlNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
+  void GlNode::draw(float lod,GlGraphInputData* data,Camera*) {
     const Color& colorSelect2=data->parameters->getSelectionColor();
 
     glEnable(GL_CULL_FACE);
@@ -306,7 +306,7 @@ namespace tlp {
   }
 
   void GlNode::drawPixmapFont(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,const string &str, const Color &col,  const Coord &position,
-			      int labelPos, bool selected, float width) {
+			      int labelPos, bool, float) {
     int rastPos[4];
     float w_max = 300;
     float w,h;

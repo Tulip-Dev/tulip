@@ -19,7 +19,7 @@ namespace tlp {
 		:_currentColor(0), _graph(graph), _layer(layer), _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size), _rotation(rotation), _layerName(layerName), 
 		 _subCompositesSuffix(subCompositeSuffix), _property(namingProperty) {
 		this->_layer->addGlEntity(this->_composite, this->_layerName);
-		
+		this->_composite->setVisible(false);
 		_fillColors.push_back(Color(255, 148, 169, 100));
     _fillColors.push_back(Color(153, 250, 255, 100));
     _fillColors.push_back(Color(255, 152, 248, 100));
@@ -154,9 +154,11 @@ namespace tlp {
 	}
 	
 	void GlCompositeHierarchyManager::deleteComposite() {
-		
 		for(std::map<tlp::Graph*, tlp::GlComposite*>::const_iterator it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
 			it->first->removeGraphObserver(this);
+			if(it->second != _composite) {
+				delete it->second;
+			}
 		}
 		_graphsComposites.clear();
 		_layout->removePropertyObserver(this);

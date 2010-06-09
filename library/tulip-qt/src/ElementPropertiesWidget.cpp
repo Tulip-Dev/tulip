@@ -325,12 +325,12 @@ namespace tlp {
     //}
   }
   //==========================================
-  void ElementPropertiesWidget::nodePropertyChanged(Graph *s, node const &n, QString const &property, QString const &value) {
+  void ElementPropertiesWidget::nodePropertyChanged(Graph *s, node const &n, QString const &, QString const &) {
     if ((displayMode == NODE) && (graph == s) && (currentNode == n))
       updateTable();
   }
   //==========================================
-  void ElementPropertiesWidget::edgePropertyChanged(Graph *s, edge const &e, QString const &property, QString const &value) {
+  void ElementPropertiesWidget::edgePropertyChanged(Graph *s, edge const &e, QString const &, QString const &) {
     if ((displayMode == EDGE) && (graph == s) && (currentEdge == e))
       updateTable();
   }

@@ -111,8 +111,8 @@ void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
 		delete itS;
 }
 
-void EdgeExtremityGlyphManager::clearGlyphList(Graph **graph,
-		GlGraphInputData* glGraphInputData, MutableContainer<
+void EdgeExtremityGlyphManager::clearGlyphList(Graph **,
+		GlGraphInputData*, MutableContainer<
 				EdgeExtremityGlyph *>& glyphs) {
 		Iterator<string> *itS =
 			EdgeExtremityGlyphFactory::factory->availablePlugins();

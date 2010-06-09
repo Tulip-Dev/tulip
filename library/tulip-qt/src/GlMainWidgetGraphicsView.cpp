@@ -113,7 +113,7 @@ glMainWidget(glMainWidget), tulipView(tulipView), drawNeeded(true){
 	}
 }
 
-void GlMainWidgetGraphicsView::draw(bool glSceneChanged) {
+void GlMainWidgetGraphicsView::draw(bool) {
 	glSceneItem->getGlMainWidgetItem()->setRedrawNeed(true);
 	scene()->update();
 }

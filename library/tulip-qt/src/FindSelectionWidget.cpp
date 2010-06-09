@@ -85,7 +85,7 @@ static bool EvalProxy( PropertyInterface *p, const GItem &gi, std::string value,
 }
 
 
-void FindSelectionWidget::propertyChanged( int no ) {
+void FindSelectionWidget::propertyChanged(int) {
   PropertyInterface * p = getProperty();
   if( dynamic_cast<DoubleProperty*>(p) ) {
     filterOp->clear();

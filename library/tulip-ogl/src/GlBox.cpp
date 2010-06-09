@@ -153,7 +153,7 @@ namespace tlp {
     clearGenerated();
   }
   //===========================================================
-  void GlBox::draw(float lod,Camera *camera) {
+  void GlBox::draw(float lod,Camera *) {
 
     bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
 

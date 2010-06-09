@@ -24,7 +24,7 @@ static Coord gleComputeAngle(Coord point, const Coord &finalPoint, const Coord &
 //=============================================================
 void GlLines::glDrawLine(const Coord &startPoint, const Coord &endPoint, const double width, const unsigned int stippleType,
 			 const Color &startColor, const Color &endColor,
-			 const bool arrow, const double arrowWidth, const double arrowHeight)
+			 const bool, const double, const double)
 {
   GlLines::glEnableLineStipple(stippleType);
   glLineWidth(width);
