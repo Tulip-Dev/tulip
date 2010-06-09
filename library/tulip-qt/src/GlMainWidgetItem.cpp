@@ -47,7 +47,7 @@ void GlMainWidgetItem::glMainWidgetRedraw(GlMainWidget *){
 }
 
 
-void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
   QRectF rect = boundingRect().translated(pos());
 
   float left = 2.0f * float(rect.left()) / width - 1.0f;

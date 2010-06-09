@@ -133,7 +133,7 @@ public :
      * \param height size of scene
      * \param parentItem use this if you want to construct this item with a parent item
      */
-  GlMainWidgetGraphicsWidget(GlMainWidgetGraphicsView *parent,GlMainWidget *glMainWidget, int width, int height,QGraphicsItem *parentItem=NULL,Qt::WindowFlags flags=Qt::Widget):
+  GlMainWidgetGraphicsWidget(GlMainWidgetGraphicsView *parent,GlMainWidget *glMainWidget, int width, int height,QGraphicsItem * =NULL,Qt::WindowFlags flags=Qt::Widget):
     QGraphicsWidget(NULL,flags),parent(parent),glMainWidgetItem(parent,glMainWidget,width,height,this){
     glMainWidgetItem.setPos(width/2,height/2);
     resize(width,height);

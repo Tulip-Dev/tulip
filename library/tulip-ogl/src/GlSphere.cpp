@@ -20,7 +20,7 @@ namespace tlp {
       boundingBox[1] = Coord(position[0]+radius,position[1]+radius,position[2]+radius);
   }
 
-  void GlSphere::draw(float lod, Camera *camera){
+  void GlSphere::draw(float, Camera *){
 
     glEnable(GL_LIGHTING);
     glDisable(GL_COLOR_MATERIAL);

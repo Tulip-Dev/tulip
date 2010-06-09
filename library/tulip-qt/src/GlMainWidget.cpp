@@ -223,7 +223,7 @@ namespace tlp {
     return scene.getGlGraphComposite()->getInputData()->getGraph();
   }
   //==================================================
-  void GlMainWidget::paintEvent( QPaintEvent* e) {
+  void GlMainWidget::paintEvent( QPaintEvent*) {
     QRegion rect = this->visibleRegion();
     //If the visible are changed we need to draw the entire scene
     //Because the saved snapshot only backup the visibile part of the
@@ -475,7 +475,7 @@ namespace tlp {
     //return GlGraph::getImage();
   }
   //=====================================================
-  bool GlMainWidget::outputEPS(int size, int doSort, const char *filename) {
+  bool GlMainWidget::outputEPS(int size, int, const char *filename) {
     makeCurrent();
     scene.outputEPS(size, filename);
     return true;

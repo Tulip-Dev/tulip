@@ -545,10 +545,10 @@ namespace tlp {
     delete [] points;
   }
   //=============================================
-  void bezierCylinder(const vector<Coord> &vertices,
-		      const Color &c1, const Color &c2,
-		      float s1, float s2,
-		      const Coord &startN, const Coord &endN) {
+  void bezierCylinder(const vector<Coord> &,
+		      const Color &, const Color &,
+		      float, float,
+		      const Coord &, const Coord &) {
     /* gleCoord  *point_array  = new gleCoord [30 + 2];
     gleColor  *color_array  = new gleColor [30 + 2];
     gleDouble *radius_array = new gleDouble[30 + 2];

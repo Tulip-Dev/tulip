@@ -42,7 +42,7 @@ namespace tlp {
   }
 }
 
-void GlConvexHull::draw(float lod,Camera *camera) {
+void GlConvexHull::draw(float,Camera *) {
   glEnable(GL_BLEND);
   if (_filled){
     if (_points.size() == 3)

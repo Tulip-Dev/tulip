@@ -42,7 +42,7 @@ namespace tlp {
     GlLabel();
   }
 
-  GlLabel::GlLabel(const string &fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign),xRot(0),yRot(0),zRot(0){
+  GlLabel::GlLabel(const string &,Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign),xRot(0),yRot(0),zRot(0){
     GlLabel();
   }
 
@@ -86,7 +86,7 @@ namespace tlp {
   }
 
   //============================================================
-  void GlLabel::draw(float lod, Camera *camera) {
+  void GlLabel::draw(float, Camera *) {
 
     renderer->setColor(color[0], color[1], color[2]);
     renderer->setString(text, VERBATIM);

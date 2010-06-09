@@ -47,7 +47,7 @@ namespace tlp {
     return _colors[i];
   }
   //=====================================================
-  void GlLine::draw(float lod,Camera *camera) {
+  void GlLine::draw(float,Camera *) {
     glDisable(GL_LIGHTING);
     glLineWidth(width);
     if(pattern!=0){

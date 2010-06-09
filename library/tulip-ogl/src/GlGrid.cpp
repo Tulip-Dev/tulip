@@ -18,7 +18,7 @@ namespace tlp {
     boundingBox.expand(backBottomRight);
   }
   //============================================================
-  void GlGrid::draw(float lod,Camera *camera) {
+  void GlGrid::draw(float,Camera *) {
     Coord delta = backBottomRight - frontTopLeft;
     Coord gridSize = backBottomRight - frontTopLeft;
     delta /= gridSize / cell;

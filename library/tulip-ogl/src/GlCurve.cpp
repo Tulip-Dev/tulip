@@ -48,7 +48,7 @@ namespace tlp {
     return _points[i];
   }
   //=====================================================
-  void GlCurve::draw(float lod, Camera *camera) {
+  void GlCurve::draw(float, Camera *) {
     //    cerr << ".";
 
     glDisable(GL_CULL_FACE);

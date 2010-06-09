@@ -43,7 +43,7 @@ void GlColorScale::setColorScale(ColorScale * scale) {
   updateDrawing();
 }
 
-void GlColorScale::update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end) {
+void GlColorScale::update(std::set<Observable *>::iterator, std::set<Observable *>::iterator) {
 	updateDrawing();
 }
 
