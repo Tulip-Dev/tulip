@@ -11,17 +11,27 @@ using namespace std;
 namespace tlp {
 
   GlAbstractPolygon::GlAbstractPolygon():
-    filled(true),
-    outlined(true),
-    textureName(""),
-    outlineSize(1.),
-    indices(NULL),
-    texArray(NULL),
-    generated(false) {
+      polygonMode(POLYGON),
+      filled(true),
+      outlined(true),
+      textureName(""),
+      outlineSize(1.),
+      indices(NULL),
+      auxIndices(NULL),
+      texArray(NULL),
+      generated(false) {
   }
   //=====================================================
   GlAbstractPolygon::~GlAbstractPolygon() {
     clearGenerated();
+  }
+  //=====================================================
+  GlAbstractPolygon::PolygonMode GlAbstractPolygon::getPolygonMode(){
+    return polygonMode;
+  }
+  //=====================================================
+  void GlAbstractPolygon::setPolygonMode(PolygonMode mode){
+    polygonMode=mode;
   }
   //=====================================================
   bool GlAbstractPolygon::getFillMode() {
@@ -137,6 +147,9 @@ namespace tlp {
       // Create arrays
       indices=new GLubyte[size];
       texArray=new GLfloat[size*2];
+      if(polygonMode==QUAD_STRIP){
+        auxIndices=new GLubyte[size];
+      }
 
       // Expand vector
       if(filled){
@@ -152,23 +165,32 @@ namespace tlp {
       }
 
       // Compute texture coord array and indice array
-      for(size_t i=0;i<points.size();++i){
+      for(size_t i=0;i<size;++i){
         if(filled){
           texArray[i*2]=(points[i][0]-boundingBox[0][0])/(boundingBox[1][0]-boundingBox[0][0]);
           texArray[i*2+1]=(points[i][1]-boundingBox[0][1])/(boundingBox[1][1]-boundingBox[0][1]);
         }
         indices[i]=i;
+        if(polygonMode==QUAD_STRIP){
+          if(i<size/2){
+            auxIndices[i]=i*2;
+            auxIndices[i+size/2]=size-(i*2+1);
+          }
+        }
       }
 
       if(canUseGlew) {
 
         // Generate buffers
-        glGenBuffers(6,buffers);
+        glGenBuffers(7,buffers);
         glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
         glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat)*3*size,&points[0], GL_STATIC_DRAW);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*size, indices, GL_STATIC_DRAW);
-
+        if(polygonMode==QUAD_STRIP){
+          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[6]);
+          glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLubyte)*size, auxIndices, GL_STATIC_DRAW);
+        }
 
         if(filled){
           glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
@@ -186,7 +208,9 @@ namespace tlp {
         }
 
         delete[] indices;
+        delete[] auxIndices;
         indices=NULL;
+        auxIndices=NULL;
         delete[] texArray;
         texArray=NULL;
         normalArray.clear();
@@ -240,12 +264,24 @@ namespace tlp {
         }
       }
 
+      GLenum fillMode;
+      switch(polygonMode){
+      case(POLYGON):{
+          fillMode=GL_POLYGON;
+          break;
+        }
+      case(QUAD_STRIP):{
+          fillMode=GL_QUAD_STRIP;
+          break;
+        }
+      }
+
       // Draw
       if(canUseGlew){
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
-        glDrawElements(GL_POLYGON, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
+        glDrawElements(fillMode, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
       }else{
-        glDrawElements(GL_POLYGON, points.size(), GL_UNSIGNED_BYTE, indices);
+        glDrawElements(fillMode, points.size(), GL_UNSIGNED_BYTE, indices);
       }
 
       // Disable
@@ -279,11 +315,20 @@ namespace tlp {
         }
 
         // Draw
-        if(canUseGlew){
-          glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
-          glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
+        if(polygonMode!=QUAD_STRIP){
+          if(canUseGlew){
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
+            glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
+          }else{
+            glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, indices);
+          }
         }else{
-          glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, indices);
+          if(canUseGlew){
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[6]);
+            glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
+          }else{
+            glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, auxIndices);
+          }
         }
 
         // Disable
@@ -374,6 +419,8 @@ namespace tlp {
   void GlAbstractPolygon::clearGenerated() {
     delete[] indices;
     indices=NULL;
+    delete[] auxIndices;
+    auxIndices=NULL;
     delete[] texArray;
     texArray=NULL;
     normalArray.clear();

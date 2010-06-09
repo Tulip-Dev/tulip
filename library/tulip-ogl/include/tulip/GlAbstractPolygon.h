@@ -36,6 +36,18 @@ namespace tlp {
      */
     virtual ~GlAbstractPolygon();
 
+    enum PolygonMode {POLYGON = 0, QUAD_STRIP = 1};
+
+    /**
+     * Get the polygon mode (see PolygonMode enum)
+     */
+    PolygonMode getPolygonMode();
+
+    /**
+     * Set the polygon mode (see PolygonMode enum)
+     */
+    void setPolygonMode(PolygonMode mode);
+
     /**
      * Get if the polygon is filled or not
      */
@@ -150,6 +162,7 @@ namespace tlp {
 
     virtual void clearGenerated();
 
+    PolygonMode polygonMode;
     std::vector<Coord> points;
     std::vector<Color> fillColors;
     std::vector<Color> outlineColors;
@@ -160,10 +173,11 @@ namespace tlp {
 
     std::vector<Coord> normalArray;
     GLubyte *indices;
+    GLubyte *auxIndices;
     GLfloat *texArray;
 
     bool generated;
-    GLuint buffers[6];
+    GLuint buffers[7];
 
   public :
 

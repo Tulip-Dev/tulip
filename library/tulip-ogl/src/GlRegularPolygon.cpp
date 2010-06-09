@@ -15,12 +15,32 @@ namespace tlp {
                                      bool outlined,
                                      const string &textureName,
                                      float outlineSize):
-  numberOfSides(numberOfSides)
+  numberOfSides(numberOfSides),
+  startAngle(M_PI/2.)
   {
+    computePolygon(position,size);
+
+    setFillColor(fillColor);
+    setOutlineColor(outlineColor);
+    setFillMode(filled);
+    setOutlineMode(outlined);
+    setTextureName(textureName);
+    setOutlineSize(outlineSize);
+  }
+  //=====================================================
+  GlRegularPolygon::~GlRegularPolygon() {
+  }
+  //=====================================================
+  void GlRegularPolygon::setStartAngle(float angle){
+    startAngle=angle;
+  }
+  //=====================================================
+  void GlRegularPolygon::computePolygon(const Coord &position,const Size &size) {
+    boundingBox = BoundingBox();
+
     BoundingBox box;
     vector<Coord> points;
     float delta = (2.0f * M_PI) / (float)numberOfSides;
-    float startAngle=M_PI/2.;
     for (unsigned int i=0; i < numberOfSides; ++i) {
       float deltaX = cos(i * delta + startAngle);
       float deltaY = sin(i * delta + startAngle);
@@ -35,14 +55,7 @@ namespace tlp {
     boundingBox.expand(position-size/2.);
 
     setPoints(points);
-    setFillColor(fillColor);
-    setOutlineColor(outlineColor);
-    setFillMode(filled);
-    setOutlineMode(outlined);
-    setTextureName(textureName);
-    setOutlineSize(outlineSize);
-  }
-  //=====================================================
-  GlRegularPolygon::~GlRegularPolygon() {
+
+    clearGenerated();
   }
 }
