@@ -9,22 +9,15 @@ namespace tlp {
 		     bool filled, bool outlined ,
 		     float startAngle,
 		     unsigned int segments) :
-    GlPolygon(segments, 1u, 1u, filled, outlined) {
+    GlRegularPolygon(center,Size(radius,radius,0),segments,outlineColor,fillColor,filled,outlined) {
     assert(segments<=256);
-    setFillColor(fillColor);
-    setOutlineColor(outlineColor);
-    set(center, radius, startAngle);
+    setStartAngle(startAngle);
+    computePolygon(center,Size(radius,radius,0));
   }
   //===========================================================
   void  GlCircle::set(const Coord &center, float radius, float startAngle) {
-    float delta = (2.0f * M_PI) / (float)points.size();
-    for (unsigned int i=0; i < points.size(); ++i) {
-      float deltaX = cos(startAngle + i * delta) * (radius);
-      float deltaY = sin(startAngle + i * delta) * (radius);
-      points[i] = Coord(center[0] + deltaX, center[1] + deltaY, center[2]);
-      boundingBox.expand(points[i]);
-    }
-    clearGenerated();
+    setStartAngle(startAngle);
+    computePolygon(center,Size(radius,radius,0));
   }
   //===========================================================
   void GlCircle::getXML(xmlNodePtr rootNode) {

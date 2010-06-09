@@ -1,13 +1,13 @@
 #ifndef GLREGULARPOLYGON_H
 #define GLREGULARPOLYGON_H
 
-#include "tulip/GlAbstractPolygon.h"
+#include "tulip/GlPolygon.h"
 
 namespace tlp {
   /**
    * class to create a regular polygon
    */
-  class TLP_GL_SCOPE GlRegularPolygon : public GlAbstractPolygon {
+  class TLP_GL_SCOPE GlRegularPolygon : public GlPolygon {
   public:
     /**
      * Constructor
@@ -26,9 +26,18 @@ namespace tlp {
      */
     virtual ~GlRegularPolygon();
 
+    /**
+     * Set the start angle
+     */
+    void setStartAngle(float angle);
+
   protected :
 
+    void computePolygon(const Coord &position,const Size &size);
+
+
     unsigned int numberOfSides;
+    float startAngle;
 
   };
 }
