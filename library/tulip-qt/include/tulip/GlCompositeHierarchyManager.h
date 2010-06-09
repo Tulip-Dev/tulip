@@ -26,7 +26,7 @@ namespace tlp {
    * Create a GlComposite item for each and every graph and subgraph.
 	 * This class observes the graph to update said hierarchy when a subgraph is added or deleted.
    */
-  class TLP_GL_SCOPE GlCompositeHierarchyManager : public GraphObserver, PropertyObserver {
+  class TLP_QT_SCOPE GlCompositeHierarchyManager : public GraphObserver, PropertyObserver {
 
   public:
 		GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty* layout, SizeProperty* size, 

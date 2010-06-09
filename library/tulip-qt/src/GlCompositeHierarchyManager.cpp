@@ -67,7 +67,7 @@ namespace tlp {
 		
 		string parentPropertyValue;
 		parent->getAttribute<string>(_property, parentPropertyValue);
-		GlComposite* composite = _graphsComposites.at(parent);
+		GlComposite* composite = _graphsComposites[parent];
 		GlComposite* parentComposite = dynamic_cast<GlComposite*>(composite->findGlEntity(parentPropertyValue + _subCompositesSuffix));
 		if(parentComposite) {
 			parentComposite->addGlEntity(hull, propertyValue);
@@ -82,7 +82,7 @@ namespace tlp {
 	}
 	
 	void GlCompositeHierarchyManager::delSubGraph(Graph*, Graph *subgraph) {
-		GlComposite* composite = _graphsComposites.at(subgraph);
+		GlComposite* composite = _graphsComposites[subgraph];
 		string propertyValue;
 		subgraph->getAttribute<string>(_property, propertyValue);
 		
@@ -111,7 +111,7 @@ namespace tlp {
 			string oldPropertyValue;
 			graph->getAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, oldPropertyValue);
 			graph->removeAttribute(GlCompositeHierarchyManager::temporaryPropertyValue);
-			GlComposite* composite = _graphsComposites.at(graph);
+			GlComposite* composite = _graphsComposites[graph];
 			GlSimpleEntity* temporaryEntity = composite->findGlEntity(oldPropertyValue);
 			if(temporaryEntity) {
 				composite->deleteGlEntity(temporaryEntity);
