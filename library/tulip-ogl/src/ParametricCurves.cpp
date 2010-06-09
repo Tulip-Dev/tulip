@@ -140,13 +140,13 @@ static void computeCatmullRomGlobalParameter(const vector<Coord> &controlPoints,
 	}
 }
 
-static int computeSegmentIndex(float t, const vector<Coord> &controlPoints, const vector<float> &globalParameter) {
+static size_t computeSegmentIndex(float t, const vector<Coord> &controlPoints, const vector<float> &globalParameter) {
 	if (t == 0.0) {
 		return 0;
 	} else if (t == 1.0)  {
 		return controlPoints.size() - 1;
 	} else {
-		int i = 0;
+		size_t i = 0;
 		while (t >= globalParameter[i+1]) {
 			++i;
 		}
@@ -171,7 +171,7 @@ static void computeBezierSegmentControlPoints(const Coord &pBefore, const Coord 
 }
 
 static Coord computeCatmullRomPointImpl(const vector<Coord> &controlPoints, const float t, const vector<float> &globalParameter, const bool closedCurve, const float alpha) {
-	int i = computeSegmentIndex(t, controlPoints, globalParameter);
+	size_t i = computeSegmentIndex(t, controlPoints, globalParameter);
 	float localT = 0.0;
 	if (t == 1.0) {
 		localT = 1.0;

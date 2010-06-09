@@ -74,7 +74,7 @@ void CubeOutLinedTransparent::draw(node n, float lod) {
        lod);
 }
 
-void CubeOutLinedTransparent::draw(edge e, node n, const Color &borderColor, const Color& glyphColor,
+void CubeOutLinedTransparent::draw(edge e, node, const Color &borderColor, const Color&,
     float lod) {
   string textureName=edgeExtGlGraphInputData->elementTexture->getEdgeValue(e);
   if(textureName!="")

@@ -72,7 +72,7 @@ void Cube::draw(node n, float lod) {
        lod);
 }
 
-void Cube::draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
+void Cube::draw(edge, node n, const Color& glyphColor,const Color&, float lod) {
   draw(glyphColor,
        edgeExtGlGraphInputData->elementTexture->getNodeValue(n),
        lod);
