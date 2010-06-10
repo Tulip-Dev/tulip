@@ -31,11 +31,28 @@ namespace tlp {
      */
     void setStartAngle(float angle);
 
+    /**
+     * Get the number of Sides
+     */
+    unsigned int getNumberOfSides();
+
+    /**
+     * Set the number of sides (use setNumberOfSides)
+     */
+    void resizePoints(const unsigned int number);
+
+    /**
+     * Set the number of sides
+     */
+    void setNumberOfSides(unsigned int number);
+
   protected :
 
-    void computePolygon(const Coord &position,const Size &size);
+    void computePolygon();
 
 
+    Coord position;
+    Size size;
     unsigned int numberOfSides;
     float startAngle;
 

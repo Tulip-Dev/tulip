@@ -15,10 +15,12 @@ namespace tlp {
                                      bool outlined,
                                      const string &textureName,
                                      float outlineSize):
+  position(position),
+  size(size),
   numberOfSides(numberOfSides),
   startAngle(M_PI/2.)
   {
-    computePolygon(position,size);
+    computePolygon();
 
     setFillColor(fillColor);
     setOutlineColor(outlineColor);
@@ -33,9 +35,23 @@ namespace tlp {
   //=====================================================
   void GlRegularPolygon::setStartAngle(float angle){
     startAngle=angle;
+    computePolygon();
   }
   //=====================================================
-  void GlRegularPolygon::computePolygon(const Coord &position,const Size &size) {
+  unsigned int GlRegularPolygon::getNumberOfSides(){
+    return numberOfSides;
+  }
+  //=====================================================
+  void GlRegularPolygon::setNumberOfSides(unsigned int number){
+    numberOfSides=number;
+    computePolygon();
+  }
+  //=====================================================
+  void GlRegularPolygon::resizePoints(const unsigned int number){
+    setNumberOfSides(number);
+  }
+  //=====================================================
+  void GlRegularPolygon::computePolygon() {
     boundingBox = BoundingBox();
 
     BoundingBox box;
