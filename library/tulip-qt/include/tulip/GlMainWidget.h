@@ -197,12 +197,12 @@ private:
   void  initializeGL();
 
   tlp::GlScene scene;
-  bool _firstStepOfIncrementalRendering;
   QRegion _visibleArea;
   AbstractView *view;
   char *renderingStore;
   std::vector<ForegroundEntity *> foregroundEntity;
 	GlCompositeHierarchyManager* manager;
+	
 
 public slots:
   /**
