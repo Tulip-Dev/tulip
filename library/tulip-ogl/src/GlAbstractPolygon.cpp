@@ -16,6 +16,7 @@ namespace tlp {
       outlined(true),
       textureName(""),
       outlineSize(1.),
+      hideOutlineLod(0.),
       indices(NULL),
       auxIndices(NULL),
       texArray(NULL),
@@ -104,13 +105,21 @@ namespace tlp {
     outlineColors.push_back(color);
   }
   //=====================================================
+  float GlAbstractPolygon::getHideOutlineLod(){
+    return hideOutlineLod;
+  }
+  //=====================================================
+  void GlAbstractPolygon::setHideOutlineLod(float lod){
+    hideOutlineLod=lod;
+  }
+  //=====================================================
   void GlAbstractPolygon::draw(float lod,Camera *) {
 
     bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
 
     glDisable(GL_CULL_FACE);
     glEnable(GL_LIGHTING);
-    glEnable(GL_COLOR_MATERIAL);
+    glDisable(GL_COLOR_MATERIAL);
 
     if(!generated) {
       Coord normal;
@@ -296,7 +305,7 @@ namespace tlp {
 
     // Outline
     if(outlined && outlineSize!=0) {
-      if((outlineSize<1 && lod>=20) || (lod>(20/outlineSize))) {
+      if((outlineSize<1 && lod>=hideOutlineLod) || (lod>(hideOutlineLod/outlineSize))) {
         glDisable(GL_LIGHTING);
 
         glLineWidth(outlineSize);
@@ -333,6 +342,8 @@ namespace tlp {
 
         // Disable
         glDisableClientState(GL_COLOR_ARRAY);
+
+        glEnable(GL_LIGHTING);
       }
     }
 
@@ -340,8 +351,6 @@ namespace tlp {
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    glDisable(GL_COLOR_MATERIAL);
 
     glTest(__PRETTY_FUNCTION__);
   }

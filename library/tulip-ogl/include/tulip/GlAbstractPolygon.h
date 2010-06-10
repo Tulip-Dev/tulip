@@ -119,6 +119,16 @@ namespace tlp {
     void setOutlineSize(float size);
 
     /**
+     * Get the lod outline value, below this lod value outline will not be displayed
+     */
+    float getHideOutlineLod();
+
+    /**
+     * Set the lod outline value, below this lod value outline will not be displayed
+     */
+    void setHideOutlineLod(float lod);
+
+    /**
      * Draw the polygon
      */
     virtual void draw(float lod,Camera *camera);
@@ -170,6 +180,7 @@ namespace tlp {
     bool outlined;
     std::string textureName;
     float outlineSize;
+    float hideOutlineLod;
 
     std::vector<Coord> normalArray;
     GLubyte *indices;
