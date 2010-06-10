@@ -12,12 +12,13 @@ namespace tlp {
     GlRegularPolygon(center,Size(radius,radius,0),segments,outlineColor,fillColor,filled,outlined) {
     assert(segments<=256);
     setStartAngle(startAngle);
-    computePolygon(center,Size(radius,radius,0));
   }
   //===========================================================
   void  GlCircle::set(const Coord &center, float radius, float startAngle) {
-    setStartAngle(startAngle);
-    computePolygon(center,Size(radius,radius,0));
+    this->position=center;
+    this->size=Size(radius,radius,0);
+    this->startAngle=startAngle;
+    computePolygon();
   }
   //===========================================================
   void GlCircle::getXML(xmlNodePtr rootNode) {
