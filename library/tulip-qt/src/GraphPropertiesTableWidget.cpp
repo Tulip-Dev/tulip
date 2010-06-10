@@ -19,6 +19,10 @@
 #include <string>
 using namespace tlp;
 using namespace std;
+
+// same value as in TulipTableWidget.cpp
+#define ROW_HEIGHT 18
+
 GraphPropertiesTableWidget::GraphPropertiesTableWidget(QWidget *parent) :
   QTableWidget(parent), graph(NULL), typeFilter(All), nameFilter(".*") {
   setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -56,6 +60,7 @@ void GraphPropertiesTableWidget::updateTable() {
       for (int j = 0; j < columnCount(); ++j) {
         setItem(i, j, createPropertyItem(graph->getProperty(propertiesName[i]), j));
       }
+      setRowHeight(i, ROW_HEIGHT);
     }
   }
 }
