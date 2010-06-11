@@ -27,12 +27,6 @@ namespace tlp {
 class TLP_GL_SCOPE GlRect : public GlPolygon {
  protected:
 
-  Coord topLeftPos; /**< Top Left coordinate of the rectangle */
-  Coord bottomRightPos; /**< Bottom Right coordinate of the rectangle */
-
-  Color topLeftCol; /**< Top Left color of the rectangle */
-  Color bottomRightCol; /**< Bottom Right color of the rectangle */
-
  public:
   /**
    * Constructor
@@ -108,6 +102,12 @@ class TLP_GL_SCOPE GlRect : public GlPolygon {
    * Draw the GlRect
    */
   virtual void draw(float lod,Camera *camera);
+
+ private:
+  /**
+   * @brief Compute the bounding box for the GlRect.
+   */
+  inline void computeBoundingBox();
 };
 }
 #endif
