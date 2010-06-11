@@ -187,6 +187,9 @@ class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
    */
   void drawForegroundEntities();
 
+	void useHulls(bool hasHulls);
+	bool hasHulls() const;
+	
 private:
 
   void  updateGL();
@@ -202,8 +205,8 @@ private:
   char *renderingStore;
   std::vector<ForegroundEntity *> foregroundEntity;
 	GlCompositeHierarchyManager* manager;
+	bool _hasHulls;
 	
-
 public slots:
   /**
    * Draw the graph, the augmented dispaly and the interactors

@@ -14,8 +14,10 @@ using namespace std;
 
 namespace tlp {
 
+int GlConvexGraphHull::bezierValue = 1;
+	
 GlConvexGraphHull::GlConvexGraphHull(const Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation) :
-  GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, 0), fcolor), graph(graph), layout(layout), size(size), rotation(rotation) {
+  GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, 0), fcolor, GlConvexGraphHull::bezierValue), graph(graph), layout(layout), size(size), rotation(rotation) {
 #ifndef NDEBUG
   assert(graph);
   assert(layout);
@@ -45,7 +47,7 @@ void GlConvexGraphHull::draw(float lod, Camera *camera) {
 
 void GlConvexGraphHull::updateHull() {
 	points.clear();
-  createPolygon(computeConvexHull(graph, layout, size, rotation, 0), 1);
+  createPolygon(computeConvexHull(graph, layout, size, rotation, 0), GlConvexGraphHull::bezierValue);
 }
 
 #ifndef NDEBUG

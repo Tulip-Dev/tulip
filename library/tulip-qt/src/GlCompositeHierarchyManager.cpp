@@ -17,9 +17,9 @@ namespace tlp {
 	GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty *layout, 
 																													 SizeProperty *size, DoubleProperty *rotation, std::string namingProperty, std::string subCompositeSuffix) 
 		:_currentColor(0), _graph(graph), _layer(layer), _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size), _rotation(rotation), _layerName(layerName), 
-		 _subCompositesSuffix(subCompositeSuffix), _property(namingProperty) {
+		 _subCompositesSuffix(subCompositeSuffix), _property(namingProperty), _isVisible(false) {
 		this->_layer->addGlEntity(this->_composite, this->_layerName);
-		this->_composite->setVisible(false);
+		this->_composite->setVisible(_isVisible);
 		_fillColors.push_back(Color(255, 148, 169, 100));
     _fillColors.push_back(Color(153, 250, 255, 100));
     _fillColors.push_back(Color(255, 152, 248, 100));
@@ -88,7 +88,7 @@ namespace tlp {
 		
 		GlSimpleEntity* oldHull = composite->findGlEntity(propertyValue);
 		composite->deleteGlEntity(oldHull);
-		oldHull->setVisible(false);
+		oldHull->setVisible(_isVisible);
 		GlSimpleEntity* oldComposite = composite->findGlEntity(propertyValue + _subCompositesSuffix);
 		composite->deleteGlEntity(oldComposite);
 		delete oldHull;
@@ -129,7 +129,7 @@ namespace tlp {
 		this->_graphsComposites.clear();;
 		
 		this->_composite = new GlComposite();
-		this->_composite->setVisible(false);
+		this->_composite->setVisible(_isVisible);
 		this->_layer->addGlEntity(this->_composite, this->_layerName);
 		
 		if(_composite->isVisible())
@@ -148,7 +148,7 @@ namespace tlp {
 	
 	void GlCompositeHierarchyManager::createComposite() {
 		this->_composite->reset(true);
-		this->_composite->setVisible(false);
+// 		this->_composite->setVisible(_isVisible);
 		this->buildComposite(_graph, _composite);
 		_layout->addPropertyObserver(this);
 	}
@@ -176,16 +176,28 @@ namespace tlp {
 		}
 	}
 	
+	void GlCompositeHierarchyManager::setVisible(bool visible) {
+		if(_isVisible == visible)
+			return;
+		
+		this->_isVisible = visible;
+		if(_isVisible) {
+			createComposite();
+		}
+		else {
+			deleteComposite();
+		}
+	}
+	
+	bool GlCompositeHierarchyManager::isVisible() const {
+		return this->_isVisible;
+	}
+	
 	GlHierarchyMainComposite::GlHierarchyMainComposite(GlCompositeHierarchyManager* manager) :_manager(manager) {
 	}
 	
 	void GlHierarchyMainComposite::setVisible(bool visible) {
-		if(visible) {
-			_manager->createComposite();
-		}
-		else {
-			_manager->deleteComposite();
-		}
+		_manager->setVisible(visible);
 		GlSimpleEntity::setVisible(visible);
 	}
 }
