@@ -118,8 +118,12 @@ namespace tlp {
     bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
 
     glDisable(GL_CULL_FACE);
-    glEnable(GL_LIGHTING);
-    glDisable(GL_COLOR_MATERIAL);
+    if(cameraIs3D()){
+      glEnable(GL_LIGHTING);
+      glDisable(GL_COLOR_MATERIAL);
+    }else{
+      glDisable(GL_LIGHTING);
+    }
 
     if(!generated) {
       Coord normal;
