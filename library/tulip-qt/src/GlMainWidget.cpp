@@ -96,7 +96,7 @@ namespace tlp {
 
   //==================================================
   GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
-    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view){
+    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), _hasHulls(false){
     //setObjectName(name);
     //  cerr << __PRETTY_FUNCTION__ << endl;
     setFocusPolicy(Qt::StrongFocus);
@@ -168,13 +168,6 @@ namespace tlp {
       rp.setParameters(renderingParameters);
       scene.getGlGraphComposite()->setRenderingParameters(rp);
     }
-    
-    manager = new GlCompositeHierarchyManager(scene.getGlGraphComposite()->getInputData()->getGraph(), 
-																							scene.getLayer("Main"), 
-																							"Hulls", 
-																							this->getScene()->getGlGraphComposite()->getInputData()->elementLayout, 
-																							this->getScene()->getGlGraphComposite()->getInputData()->elementSize,
-																							this->getScene()->getGlGraphComposite()->getInputData()->elementRotation);
   }
   //==================================================
   DataSet GlMainWidget::getData() {
@@ -196,7 +189,8 @@ namespace tlp {
       setData(graph,DataSet());
       return;
     }
-    manager->setGraph(graph);
+    if(_hasHulls)
+			manager->setGraph(graph);
 
     GlGraphComposite* oldGraphComposite=(GlGraphComposite *)(scene.getLayer("Main")->findGlEntity("graph"));
 
@@ -582,5 +576,19 @@ namespace tlp {
     pm.save(pictureName.c_str());
 #endif
   }
-
+  
+  void GlMainWidget::useHulls(bool hasHulls) {
+		_hasHulls = hasHulls;
+		if(_hasHulls)
+			manager = new GlCompositeHierarchyManager(scene.getGlGraphComposite()->getInputData()->getGraph(), 
+																							scene.getLayer("Main"), 
+																							"Hulls", 
+																							this->getScene()->getGlGraphComposite()->getInputData()->elementLayout, 
+																							this->getScene()->getGlGraphComposite()->getInputData()->elementSize,
+																							this->getScene()->getGlGraphComposite()->getInputData()->elementRotation);
+	}
+	
+	bool GlMainWidget::hasHulls() const {
+		return _hasHulls;
+	}
 }

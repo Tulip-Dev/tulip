@@ -46,6 +46,9 @@ namespace tlp {
 		void createComposite();
 		void deleteComposite();
 		
+		void setVisible(bool visible);
+		bool isVisible() const;
+		
 		private:
 		
 		const tlp::Color getColor();
@@ -64,6 +67,7 @@ namespace tlp {
 		DoubleProperty* _rotation;
 		std::vector<Color> _fillColors;
 		std::string _layerName;
+		bool _isVisible;
 		const std::string _subCompositesSuffix;
 		const std::string _property;
 		

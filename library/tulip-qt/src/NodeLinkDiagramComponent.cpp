@@ -97,6 +97,9 @@ namespace tlp {
       ((QtMetaNodeRenderer*)currentMetaNodeRenderer)->setBackgroundColor(getGlMainWidget()->getScene()->getBackgroundColor());
     }else
       currentMetaNodeRenderer = new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
+		
+		getGlMainWidget()->useHulls(true);
+		
     mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
     renderingParametersDialog->setGlMainView(this);
     layerManagerWidget->setGlMainView(this);

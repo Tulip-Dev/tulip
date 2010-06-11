@@ -74,6 +74,7 @@ private:
   LayoutProperty *layout;
   SizeProperty *size;
   DoubleProperty *rotation;
+	static int bezierValue;
 };
 }
 
