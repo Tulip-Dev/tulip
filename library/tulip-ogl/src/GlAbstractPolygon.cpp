@@ -120,7 +120,7 @@ namespace tlp {
     glDisable(GL_CULL_FACE);
     if(cameraIs3D()){
       glEnable(GL_LIGHTING);
-      glDisable(GL_COLOR_MATERIAL);
+      glEnable(GL_COLOR_MATERIAL);
     }else{
       glDisable(GL_LIGHTING);
     }
