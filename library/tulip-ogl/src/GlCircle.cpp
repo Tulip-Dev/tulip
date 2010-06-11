@@ -9,7 +9,7 @@ namespace tlp {
 		     bool filled, bool outlined ,
 		     float startAngle,
 		     unsigned int segments) :
-    GlRegularPolygon(center,Size(radius,radius,0),segments,outlineColor,fillColor,filled,outlined) {
+    GlRegularPolygon(center,Size(radius,radius,0),segments,fillColor,outlineColor,filled,outlined) {
     assert(segments<=256);
     setStartAngle(startAngle);
   }
