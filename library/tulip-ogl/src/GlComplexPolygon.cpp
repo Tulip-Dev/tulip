@@ -181,6 +181,13 @@ void GlComplexPolygon::beginNewHole() {
 }
 //=====================================================
 void GlComplexPolygon::draw(float,Camera *) {
+
+  if(cameraIs3D()){
+    glEnable(GL_LIGHTING);
+  }else{
+    glDisable(GL_LIGHTING);
+  }
+
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_COLOR_MATERIAL);
 	glEnable(GL_BLEND);

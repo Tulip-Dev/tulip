@@ -18,6 +18,7 @@ namespace tlp {
   TLP_GL_SCOPE void setColor(const Color &c);
   TLP_GL_SCOPE void setColor(GLfloat *);
   TLP_GL_SCOPE void setMaterial(const Color &c);
+  TLP_GL_SCOPE bool cameraIs3D();
   /*
    * Project point on screnn according to the transformation matrix (modelview * projection)
    * and the viewport (x, y, width, height) given in parmaeter.

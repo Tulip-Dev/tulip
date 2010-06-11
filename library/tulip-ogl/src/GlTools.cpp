@@ -94,6 +94,10 @@ namespace tlp {
       glDepthMask ( GL_TRUE ) ;*/
   }
   //====================================================
+  bool cameraIs3D() {
+    return glIsEnabled(GL_LIGHT0);
+  }
+  //====================================================
   Coord projectPoint(const Coord &obj,
 		     const MatrixGL &transform,
 		     const Vector<int, 4> &viewport) {

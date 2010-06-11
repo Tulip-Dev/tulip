@@ -143,7 +143,7 @@ namespace tlp {
       glLightfv( GL_LIGHT0, GL_SPECULAR , specular);
     }else{
       glDisable( GL_LIGHTING );
-      //glDisable( GL_LIGHT0 );
+      glDisable( GL_LIGHT0 );
     }
     error = glGetError();
     if ( error != GL_NO_ERROR)
