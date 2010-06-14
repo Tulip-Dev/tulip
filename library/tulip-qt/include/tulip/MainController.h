@@ -220,6 +220,14 @@ namespace tlp {
      */
     void showElementProperties(unsigned int eltId, bool isNode);
     /**
+     * This slot is call to ensure the Graph Editor is visible
+     */
+    void showGraphEditor();
+    /**
+     * This slot is call to ensure the View Editor is visible
+     */
+    void showViewEditor();
+    /**
      * This slot is call when a view want to change its graph
      */
     void viewRequestChangeGraph(View *view, Graph *graph);
