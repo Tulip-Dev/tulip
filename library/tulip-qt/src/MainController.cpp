@@ -767,9 +767,9 @@ namespace tlp {
     morphingAction->setChecked(false);
     optionsMenu->addSeparator();
     QAction *propertiesDockAction = optionsMenu->addAction("Show graph editor");
-    connect(propertiesDockAction,SIGNAL(triggered()),tabWidgetDock,SLOT(show()));
+    connect(propertiesDockAction,SIGNAL(triggered()), this, SLOT(showGraphEditor()));
     QAction *configurationDockAction = optionsMenu->addAction("Show view editor");
-    connect(configurationDockAction,SIGNAL(triggered()),configWidgetDock,SLOT(show()));
+    connect(configurationDockAction,SIGNAL(triggered()), this, SLOT(showViewEditor()));
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,optionsMenu);
 
     redoAction=new QAction(QIcon(":/i_redo.png"),"redo",mainWindowFacade.getParentWidget());
@@ -926,6 +926,22 @@ namespace tlp {
     QWidget *tab = eltProperties->parentWidget();
     QTabWidget *tabWidget = (QTabWidget *) tab->parentWidget()->parentWidget();
     tabWidget->setCurrentIndex(tabWidget->indexOf(tab));
+    showGraphEditor();
+  }
+  //==================================================
+  void MainController::showGraphEditor() {
+    QMainWindow* mWindow = (QMainWindow *) mainWindowFacade.getParentWidget();
+    configWidgetDock->hide();
+    mWindow->tabifyDockWidget(tabWidgetDock,configWidgetDock);
+    configWidgetDock->show();
+  }
+  //==================================================
+  void MainController::showViewEditor() {
+    QMainWindow* mWindow = (QMainWindow *) mainWindowFacade.getParentWidget();
+    tabWidgetDock->hide();
+    configWidgetDock->show();
+    tabWidgetDock->show();
+    mWindow->tabifyDockWidget(tabWidgetDock,configWidgetDock);
   }
   //==================================================
   void MainController::viewRequestChangeGraph(View *view,Graph *graph) {
