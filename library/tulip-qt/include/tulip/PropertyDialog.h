@@ -27,13 +27,18 @@ public:
   ~PropertyDialog();
   void setGraph(Graph *);
 
+protected:
+  void keyReleaseEvent  ( QKeyEvent * event );
 private:
   Graph *graph;
-  //GlMainWidget *glWidget;
   PropertyInterface *editedProperty;
   std::string editedPropertyName;
   bool _filterSelection;
   void updateNbElements();
+  /**
+   * @brief Display the property with the given name in the node and edge table.
+   */
+  void displayProperty(const std::string& propertyName);
 
 public slots:
   ///Manages observers change notification.
