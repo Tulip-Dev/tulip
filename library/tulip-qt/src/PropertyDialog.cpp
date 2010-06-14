@@ -20,6 +20,7 @@
 #include <QtCore/qstringlist.h>
 #include <QtGui/qlabel.h>
 #include <QtGui/qtabwidget.h>
+#include <QtGui/qevent.h>
 
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
@@ -75,19 +76,22 @@ void PropertyDialog::propertySelectionChanged() {
     editedProperty = NULL;
     return;
   }
-  string erreurMsg;
 
+  displayProperty(selectedProperties.front());
+}
+//=================================================
+void PropertyDialog::displayProperty(const string& propertyName){
   tableNodes->selectNodeOrEdge(true);
-  tableEdges->selectNodeOrEdge(false);
-  tableNodes->changeProperty(graph, selectedProperties.front());
-  tableEdges->changeProperty(graph, selectedProperties.front());
+    tableEdges->selectNodeOrEdge(false);
+    tableNodes->changeProperty(graph, propertyName);
+    tableEdges->changeProperty(graph, propertyName);
 
-  PropertyInterface *tmpProxy = graph->getProperty(selectedProperties.front());
-  editedProperty = tmpProxy;
-  editedPropertyName = selectedProperties.front();
+    PropertyInterface *tmpProxy = graph->getProperty(propertyName);
+    editedProperty = tmpProxy;
+    editedPropertyName = propertyName;
 
-  tableEdges->update();
-  tableNodes->update();
+    tableEdges->update();
+    tableNodes->update();
 }
 //=================================================
 void PropertyDialog::filterSelection(bool b) {
@@ -498,7 +502,7 @@ void PropertyDialog::importCSVData() {
     Observable::unholdObservers();
   }
 }
-
+//=================================================
 void PropertyDialog::propertyTypeFilterChanged() {
   //Get the sender button.
   QRadioButton
@@ -524,12 +528,22 @@ void PropertyDialog::propertyTypeFilterChanged() {
         GraphPropertiesTableWidget::User);
   }
 }
-
+//=================================================
 void PropertyDialog::nameFilterChanged(
     const QString& text) {
   propertiesWidget->setPropertyNameFilter(
       QRegExp(
           text));
+}
+//=================================================
+void PropertyDialog::keyReleaseEvent  ( QKeyEvent * event ){
+  //If there is only one property and user press enter or return set this property as selected property.
+if(event->key()==Qt::Key_Return || event->key()==Qt::Key_Enter){
+  vector<string> selectedProperties = propertiesWidget->getDipslayedPropertiesNames();
+  if(selectedProperties.size()==1){
+    displayProperty(selectedProperties.front());
+  }
+}
 }
 
 }

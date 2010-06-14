@@ -49,6 +49,11 @@ public:
   }
 
   std::vector<std::string> getSelectedPropertiesNames() const;
+  /**
+   * @brief Get the list of the properties currently displayed in the table.
+   */
+  std::vector<std::string> getDipslayedPropertiesNames() const;
+
   virtual std::string getPropertyNameForRow(int row) const;
 
   /**

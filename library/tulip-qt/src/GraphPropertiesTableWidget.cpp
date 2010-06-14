@@ -103,6 +103,15 @@ vector<string> GraphPropertiesTableWidget::getSelectedPropertiesNames() const {
   }
   return properties;
 }
+
+vector<string> GraphPropertiesTableWidget::getDipslayedPropertiesNames() const {
+  vector<string> properties;
+  for (int i = 0; i < rowCount(); ++i) {
+    properties.push_back(getPropertyNameForRow(i));
+  }
+  return properties;
+}
+
 string GraphPropertiesTableWidget::getPropertyNameForRow(int row) const {
   assert(rowCount()>row);
   return item(row, 0)->text().toStdString();
@@ -127,6 +136,12 @@ bool GraphPropertiesTableWidget::checkPropertyFilter(const string& propertyName)
 }
 
 bool GraphPropertiesTableWidget::checkPropertyName(const string& propertyName) {
+
+  //Don't display viewMetaGraphProperty
+  if (propertyName.compare("viewMetaGraph") == 0) {
+    return false;
+  }
+
   if (nameFilter.isValid()) {
     //Find if the reg exp match in the string.
     return nameFilter.indexIn(QString::fromStdString(propertyName)) != -1;
