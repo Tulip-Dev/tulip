@@ -20,7 +20,7 @@
 #include <tulip/StlIterator.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/GlRectTextured.h>
+#include <tulip/Gl2DRect.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
 
 #include "tulip/QGlPixelBufferManager.h"
@@ -131,10 +131,10 @@ namespace tlp {
       backgroundLayer->set2DMode();
       foregroundLayer->set2DMode();
       string dir=TulipBitmapDir;
-      GlRectTextured *background=new GlRectTextured(0,1.,0,1.,dir + "tex_back.png",true);
+      Gl2DRect *background=new Gl2DRect(0,1.,0,1.,dir + "tex_back.png",true);
       backgroundLayer->addGlEntity(background,"background");
 
-      GlRectTextured *labri=new GlRectTextured(5.,5.,50.,50.,dir + "logolabri.jpg",true,false);
+      Gl2DRect *labri=new Gl2DRect(5.,5.,50.,50.,dir + "logolabri.jpg",true,false);
       labri->setVisible(false);
       foregroundLayer->addGlEntity(labri,"labrilogo");
 

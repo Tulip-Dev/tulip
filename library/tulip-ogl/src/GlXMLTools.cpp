@@ -6,7 +6,7 @@
 #include <libxml/parser.h>
 
 #include "tulip/GlSimpleEntity.h"
-#include "tulip/GlRectTextured.h"
+#include "tulip/Gl2DRect.h"
 #include "tulip/GlComposite.h"
 #include "tulip/GlBox.h"
 #include "tulip/GlCircle.h"
@@ -142,7 +142,9 @@ namespace tlp {
     }else if(name=="GlRect"){
       return new GlRect();
     }else if(name=="GlRectTextured"){
-      return new GlRectTextured();
+      return new Gl2DRect();
+    }else if(name=="Gl2DRect"){
+      return new Gl2DRect();
     }else if(name=="GlSphere"){
       return new GlSphere();
     }else{

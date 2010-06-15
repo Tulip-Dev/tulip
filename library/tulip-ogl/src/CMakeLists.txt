@@ -21,6 +21,7 @@ set(tulip-ogl_LIB_SRCS
 	GlGraphComposite.cpp 
 	GlCircle.cpp 
 	GlRect.cpp 
+	Gl2DRect.cpp
 	GlRectTextured.cpp 
 	GlPolygon.cpp 
 	GlAbstractPolygon.cpp

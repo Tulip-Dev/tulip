@@ -12,21 +12,16 @@
 #ifndef Tulip_GLRECTTEXTURED_H
 #define Tulip_GLRECTTEXTURED_H
 
-#include <string>
-
-#include <tulip/Coord.h>
-#include <tulip/tulipconf.h>
-
-#include "tulip/GlSimpleEntity.h"
+#include "tulip/Gl2DRect.h"
 
 namespace tlp {
   /**
    * Create a rectangle with a texture
    */
-  class TLP_GL_SCOPE GlRectTextured : public GlSimpleEntity {
+  class TLP_GL_SCOPE GlRectTextured : public Gl2DRect {
 
   public:
-    GlRectTextured() {}
+    GlRectTextured();
 
     /**
      * Constructor : with top/bottom/left/right coords, textureName and if inPercent is true coords are in percent
@@ -43,62 +38,6 @@ namespace tlp {
            bool xInv, bool yInv);
 
     virtual ~GlRectTextured() {}
-
-    /**
-     * Reload data of the rectangle
-     */
-    void reloadData();
-
-    /**
-     * Return the bounding box
-     */
-    virtual BoundingBox getBoundingBox();
-
-    /**
-     * Draw the rectangle
-     */
-    virtual void draw(float lod,Camera *camera);
-
-    /**
-     * Translate entity
-     */
-    virtual void translate(const Coord& mouvement);
-
-    /**
-     * Set texture of the GlRectTextured
-     */
-    virtual void setTexture(const std::string &name);
-
-    /**
-     * Get texture of the GlRectTextured
-     */
-    virtual std::string getTexture();
-
-    /**
-     * Set coordinates of rectangle
-     */
-    virtual void setCoordinates(float bottom, float left, float width, float height);
-
-    /**
-     * Function to export data in XML
-     */
-    virtual void getXML(xmlNodePtr rootNode);
-
-    /**
-     * Function to set data with XML
-     */
-    virtual void setWithXML(xmlNodePtr rootNode);
-
-  protected:
-
-    float top;
-    float bottom;
-    float left;
-    float right;
-    bool inPercent;
-    std::string textureName;
-    bool xInv;
-    bool yInv;
 
   };
 }
