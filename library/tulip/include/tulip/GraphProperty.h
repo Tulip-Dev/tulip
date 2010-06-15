@@ -46,6 +46,8 @@ public :
 private:
   MutableContainer<std::set<node> > referencedGraph;
   const std::set<edge>& getReferencedEdges(const edge) const;
+  // the current node pointing to a graph being removed
+  node currentNode;
   
 };
 /*@}*/
