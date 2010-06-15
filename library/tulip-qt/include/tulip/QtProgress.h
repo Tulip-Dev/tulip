@@ -3,7 +3,7 @@
 #include <string>
 #include <tulip/PluginProgress.h>
 #include <tulip/View.h>
-#include "QtProgressData.h"
+#include "tulip/QtProgressData.h"
 
 
 namespace tlp {
