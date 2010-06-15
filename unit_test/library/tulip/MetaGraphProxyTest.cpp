@@ -35,23 +35,16 @@ void MetaGraphProxyTest::testDestroyGraph() {
   Graph * g2 = tlp::newCloneSubGraph(graph, "G2");
   Graph * meta1 = tlp::newSubGraph(graph, "META1");
   GraphProperty * proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
-  GraphProperty proxy3(meta1);
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
   proxy1->setNodeValue(mnode1, g1);
   proxy1->setNodeValue(mnode2, g2);
-  proxy3.setNodeValue(mnode1, g1);
-  proxy3.setNodeValue(mnode2, g2);
   graph->delSubGraph(g2);
   CPPUNIT_ASSERT(0  == proxy1->getNodeValue(mnode2));
-  CPPUNIT_ASSERT(0  == proxy3.getNodeValue(mnode2));
   CPPUNIT_ASSERT(g1 == proxy1->getNodeValue(mnode1));
-  CPPUNIT_ASSERT(g1 == proxy3.getNodeValue(mnode1));
   graph->delSubGraph(g1);
   CPPUNIT_ASSERT(0 == proxy1->getNodeValue(mnode2));
-  CPPUNIT_ASSERT(0 == proxy3.getNodeValue(mnode2));
   CPPUNIT_ASSERT(0 == proxy1->getNodeValue(mnode1));
-  CPPUNIT_ASSERT(0 == proxy3.getNodeValue(mnode1));
 }
 //==========================================================
 void MetaGraphProxyTest::testSetGet() {
@@ -61,19 +54,14 @@ void MetaGraphProxyTest::testSetGet() {
   Graph * g3 = tlp::newCloneSubGraph(graph, "G3");
   Graph * meta1 = tlp::newSubGraph(graph, "META1");
   GraphProperty * proxy1 = meta1->getLocalProperty<GraphProperty>("viewMetaGraph");
-  GraphProperty proxy3(meta1);
   node mnode1 = meta1->addNode();
   node mnode2 = meta1->addNode();
   proxy1->setNodeValue(mnode1, g1);
   proxy1->setNodeValue(mnode2, g2);
-  proxy3.setNodeValue(mnode1, g1);
-  proxy3.setNodeValue(mnode2, g2);
   proxy1->setNodeValue(mnode2, g3);
   graph->delSubGraph(g2);
   CPPUNIT_ASSERT(g3 == proxy1->getNodeValue(mnode2));
-  CPPUNIT_ASSERT(0 == proxy3.getNodeValue(mnode2));
   CPPUNIT_ASSERT(g1 == proxy1->getNodeValue(mnode1));
-  CPPUNIT_ASSERT(g1 == proxy3.getNodeValue(mnode1));
 }
 //==========================================================
 void MetaGraphProxyTest::testSetAll() {
