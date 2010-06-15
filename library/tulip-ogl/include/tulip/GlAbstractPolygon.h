@@ -170,6 +170,14 @@ namespace tlp {
      */
     virtual void setOutlineColors(const std::vector<Color> &colors);
 
+    /**
+     * Clear previous bounding box and expand bounding box with polygons' points
+     */
+    virtual void recomputeBoundingBox();
+
+    /**
+     * Clear previously generated VBO
+     */
     virtual void clearGenerated();
 
     PolygonMode polygonMode;

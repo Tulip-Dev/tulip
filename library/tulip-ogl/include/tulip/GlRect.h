@@ -103,11 +103,6 @@ class TLP_GL_SCOPE GlRect : public GlPolygon {
    */
   virtual void draw(float lod,Camera *camera);
 
- private:
-  /**
-   * @brief Compute the bounding box for the GlRect.
-   */
-  inline void computeBoundingBox();
 };
 }
 #endif
