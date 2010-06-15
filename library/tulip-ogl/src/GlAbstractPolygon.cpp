@@ -418,10 +418,9 @@ namespace tlp {
   void GlAbstractPolygon::setPoints(const vector<Coord> &points){
     assert(points.size()<=256);
     assert(points.size() >= 3);
-    for(vector<Coord>::const_iterator it=points.begin();it!=points.end();++it)
-      boundingBox.expand(*it);
 
     this->points=points;
+    recomputeBoundingBox();
   }
   //============================================================
   void GlAbstractPolygon::setFillColors(const std::vector<Color> &colors){
