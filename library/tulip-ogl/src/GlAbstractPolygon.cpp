@@ -353,7 +353,6 @@ namespace tlp {
 
     GLfloat normalt[3];
     glGetFloatv(GL_CURRENT_NORMAL,normalt);
-    cout << "normal : " << normalt[0] << "#" << normalt[1] << "#" << normalt[2] << endl;
 
     glDisableClientState(GL_VERTEX_ARRAY);
 
