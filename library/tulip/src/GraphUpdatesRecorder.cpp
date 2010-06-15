@@ -142,7 +142,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
     while(itae != addedEdges.end()) {
       recordEdgeContainer(newContainers, root,(*itae).second.source);
       recordEdgeContainer(newContainers, root,(*itae).second.target);
-      itae++;
+      ++itae;
     }
     // record new properties default values & new values
     // loop on oldNodeDefaultValues
@@ -153,7 +153,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
       newNodeDefaultValues[(unsigned long) p] =
 	p->getNodeDefaultDataMemValue();
       recordNewNodeValues(p);
-      itdv++;
+      ++itdv;
     }
     // loop on oldNodeValues
     TLP_HASH_MAP<unsigned long, MutableContainer<DataMem*>* >::iterator itov =
@@ -426,21 +426,6 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   updatesReverted = undo;
 
   Observable::holdObservers();
-  // loop on subGraphsToDel
-  TLP_HASH_MAP<unsigned long, std::set<Graph*> >& subGraphsToDel =
-    undo ? addedSubGraphs : deletedSubGraphs; 
-  TLP_HASH_MAP<unsigned long, std::set<Graph*> >::iterator its =
-    subGraphsToDel.begin();
-  while(its != subGraphsToDel.end()) {
-    Graph* g = (Graph*) (*its).first;
-    set<Graph*>::iterator itg = (*its).second.begin();
-    set<Graph*>::iterator itge = (*its).second.end();
-    while(itg != itge) {
-      g->removeSubGraph((*itg));
-      ++itg;
-    }
-    ++its;
-  }
   // loop on propsToDel
   TLP_HASH_MAP<unsigned long,  set<PropertyRecord> >& propsToDel =
     undo ? addedProperties : deletedProperties; 
@@ -455,6 +440,22 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
       ++itp;
     }
     ++itpg;
+  }
+  // loop on subGraphsToDel
+  TLP_HASH_MAP<unsigned long, std::set<Graph*> >& subGraphsToDel =
+    undo ? addedSubGraphs : deletedSubGraphs; 
+  TLP_HASH_MAP<unsigned long, std::set<Graph*> >::iterator its =
+    subGraphsToDel.begin();
+  while(its != subGraphsToDel.end()) {
+    Graph* g = (Graph*) (*its).first;
+    set<Graph*>::iterator itg = (*its).second.begin();
+    set<Graph*>::iterator itge = (*its).second.end();
+    while(itg != itge) {
+      // remove from list of subgraphs + notify observers
+      g->removeSubGraph((*itg), true);
+      ++itg;
+    }
+    ++its;
   }
   // loop on edgesToDel
   TLP_HASH_MAP<edge, EdgeRecord>& edgesToDel =
@@ -820,7 +821,7 @@ void GraphUpdatesRecorder::delSubGraph(Graph* g, Graph* sg) {
     deletedSubGraphs[(unsigned long) g].insert(sg);
   // sg is no longer observed
   sg->removeGraphObserver(this);
-  // sg but it must not be really deleted
+  // but it must not be really deleted
   g->setSubGraphToKeep(sg);
 }
 

@@ -33,7 +33,7 @@ void GraphDecorator::setSubGraphToKeep(Graph * s){
 }
 
 //============================================================
-void GraphDecorator::removeSubGraph(Graph*){
+void GraphDecorator::removeSubGraph(Graph*, bool){
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 

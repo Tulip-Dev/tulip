@@ -36,13 +36,15 @@ void GraphAbstract::clear() {
     delNode(itN.next());
 }
 //=========================================================================
-void GraphAbstract::restoreSubGraph(Graph* sg, bool restoreSubGraphs){
+void GraphAbstract::restoreSubGraph(Graph* sg, bool undoOrRedo){
   subgraphs.push_back(sg);
   sg->setSuperGraph(this);
-  if (restoreSubGraphs) {
+  if (undoOrRedo) {
+    notifyAddSubGraph(sg);
     Iterator<Graph *> *itS = sg->getSubGraphs();
     while (itS->hasNext()) {
       Graph* ssg = itS->next();
+      // ssg is no longer a subgraph of this
       removeSubGraph(ssg);
       ssg->setSuperGraph(sg);
     } delete itS;
@@ -84,15 +86,25 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
     if (toRemove != subGraphToKeep) {
       delete toRemove;
     } else
+      // toRemove is not deleted,
+      // it can be restored on undo or redo
       toRemove->notifyDestroy();
     notifyObservers();
   }
 }
 //=========================================================================
-void GraphAbstract::removeSubGraph(Graph * toRemove) {
+void GraphAbstract::removeSubGraph(Graph * toRemove, bool notify) {
   for (GRAPH_SEQ::iterator it = subgraphs.begin(); it != subgraphs.end(); ++it) {
     if (*it == toRemove) {
+      // when called from GraphUpdatesRecorder
+      // we must notify the observers
+      if (notify)
+	notifyDelSubGraph(this, toRemove);
       subgraphs.erase(it);
+      if (notify) {
+	notifyObservers();
+	toRemove->notifyDestroy();
+      }
       break;
     }
   }
