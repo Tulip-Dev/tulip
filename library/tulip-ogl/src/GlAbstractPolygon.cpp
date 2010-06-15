@@ -351,6 +351,10 @@ namespace tlp {
       }
     }
 
+    GLfloat normalt[3];
+    glGetFloatv(GL_CURRENT_NORMAL,normalt);
+    cout << "normal : " << normalt[0] << "#" << normalt[1] << "#" << normalt[2] << endl;
+
     glDisableClientState(GL_VERTEX_ARRAY);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -443,6 +447,13 @@ namespace tlp {
         glDeleteBuffers(6,buffers);
     }
     generated=false;
+  }
+  //============================================================
+  void GlAbstractPolygon::recomputeBoundingBox(){
+    boundingBox=BoundingBox();
+    for(vector<Coord>::iterator it=points.begin();it!=points.end();++it){
+      boundingBox.expand(*it);
+    }
   }
 
   //=====================================================
