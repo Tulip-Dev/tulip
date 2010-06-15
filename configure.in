@@ -103,8 +103,10 @@ dnl AM_PROG_LEX
 
 MAJOR_VERSION=`echo ${VERSION} | tail -n 1 | awk -F'.' '{print $1}'`
 MINOR_VERSION=`echo ${VERSION} | tail -n 1 | awk -F'.' '{print $2}'`
+libversion=${MAJOR_VERSION}.${MINOR_VERSION}
 AC_SUBST(MAJOR_VERSION)
 AC_SUBST(MINOR_VERSION)
+AC_SUBST(libversion)
 
 VAR_WIN32=0
 VAR_MACOSX=0
