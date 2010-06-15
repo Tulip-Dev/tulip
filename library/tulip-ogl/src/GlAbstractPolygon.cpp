@@ -309,7 +309,7 @@ namespace tlp {
 
     // Outline
     if(outlined && outlineSize!=0) {
-      if((outlineSize<1 && lod>=hideOutlineLod) || (lod>(hideOutlineLod/outlineSize))) {
+      if((outlineSize<1 && lod>=hideOutlineLod) || (lod>=(hideOutlineLod/outlineSize))) {
         glDisable(GL_LIGHTING);
 
         glLineWidth(outlineSize);
