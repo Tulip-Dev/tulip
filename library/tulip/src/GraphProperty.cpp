@@ -54,6 +54,10 @@ void GraphProperty::afterSetAllNodeValue(PropertyInterface*) {
 //==============================
 void GraphProperty::beforeSetNodeValue(PropertyInterface* prop, const node n) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
+  // nothing to do if n points to a graph being removed
+  // see destroy
+  if (n == currentNode)
+    return;
   //gestion désabonnement
   Graph * oldGraph = getNodeValue(n); 
   if (oldGraph != NULL) {
@@ -72,6 +76,10 @@ void GraphProperty::beforeSetNodeValue(PropertyInterface* prop, const node n) {
   }
 }
 void GraphProperty::afterSetNodeValue(PropertyInterface* prop, const node n) {
+  // nothing to do if n points to a graph being removed
+  // see destroy
+  if (n == currentNode)
+    return;
   Graph* sg = getNodeValue(n);
   if (sg == NULL)
     return;
@@ -91,9 +99,7 @@ void GraphProperty::afterSetNodeValue(PropertyInterface* prop, const node n) {
 }
 //==========================================================
 void GraphProperty::destroy(Graph *sg) {
-  //test si c'est la valeur par défaut;
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  //sinon
 #ifndef NDEBUG
   cerr << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault" << endl;
 #endif
@@ -118,8 +124,17 @@ void GraphProperty::destroy(Graph *sg) {
   const set<node>& refs = referencedGraph.get(sg->getId());
   set<node>::const_iterator it = refs.begin();
   if (it != refs.end()) {
-    for (; it!=refs.end(); ++it)
-      nodeProperties.set((*it).id, 0);
+    // don't change values if this non longer exists (when undoing)
+    if (graph->existProperty(name)) {
+      for (; it!=refs.end(); ++it) {
+	// set current node to allow
+	// a call to setNodeValue (needed by undo/redo mechanism)
+	// and do nothing in (before/after)SetNodeValue
+	currentNode = (*it);
+	setNodeValue(currentNode, 0);
+      }
+      currentNode = node();
+    }
     referencedGraph.set(sg->getId(), set<node>());
     sg->removeGraphObserver(this);
   }
