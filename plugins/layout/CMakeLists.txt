@@ -103,24 +103,6 @@ TARGET_LINK_LIBRARIES(Tutte-${TulipVersion} ${LibTulipName})
 ADD_DEPENDENCIES(Tutte-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(Embedder_SRCS 
-    Embedder.cpp 
-    EmbedderEmbedGraph.h 
-    EmbedderEmbedGraph.cpp 
-    EmbedderDefs.h 
-    EmbedderDijkstra.h 
-    EmbedderDijkstra.cpp 
-    EmbedderBfs.h 
-    EmbedderBfs.cpp 
-    EmbedderParameters.h 
-    EmbedderParameters.cpp 
-    EmbedderPowerIterationDense.cpp
-)
-ADD_LIBRARY(Embedder-${TulipVersion} SHARED ${Embedder_SRCS})
-TARGET_LINK_LIBRARIES(Embedder-${TulipVersion} ${LibTulipName})
-ADD_DEPENDENCIES(Embedder-${TulipVersion} ${LibTulipName})
-
-##----------------------------------------------------------------------------------------------------------------------------
 SET(Dendrogram_SRCS 
     DatasetTools.h 
     DatasetTools.cpp 
@@ -183,7 +165,6 @@ INSTALL(TARGETS
 	Circular-${TulipVersion}
 	HierarchicalGraph-${TulipVersion}
 	Tutte-${TulipVersion}
-	Embedder-${TulipVersion}
 	Dendrogram-${TulipVersion}
 	ImprovedWalker-${TulipVersion}
 	SquarifiedTreeMap-${TulipVersion}
