@@ -69,7 +69,6 @@
 #include <tulip/GlScene.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/GlRectTextured.h>
 #include <tulip/InteractorManager.h>
 #include <tulip/ViewPluginsManager.h>
 #include <tulip/ControllerPluginsManager.h>

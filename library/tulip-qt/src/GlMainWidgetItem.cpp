@@ -3,7 +3,6 @@
 #include <QtGui/QApplication>
 
 #include <tulip/GlTextureManager.h>
-#include <tulip/GlRectTextured.h>
 #include <tulip/GlQuad.h>
 #include <tulip/GlTools.h>
 

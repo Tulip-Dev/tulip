@@ -15,7 +15,6 @@
 #include <tulip/StringProperty.h>
 
 #include <tulip/GlMetaNodeTrueRenderer.h>
-#include <tulip/GlRectTextured.h>
 
 #include "tulip/GWOverviewWidget.h"
 #include "tulip/RenderingParametersDialog.h"
