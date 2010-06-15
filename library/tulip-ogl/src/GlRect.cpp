@@ -7,6 +7,7 @@ namespace tlp {
   GlRect::GlRect(const Coord &topLeftPos, const Coord &bottomRightPos, const Color &topLeftCol, const Color &bottomRightCol, bool filled,
       bool outlined) :
     GlPolygon(4u, 4u, 4u, filled, outlined) {
+
     vector<Coord> coords;
     coords.push_back(topLeftPos);
     coords.push_back(topLeftPos);
@@ -21,8 +22,8 @@ namespace tlp {
     setFillColor(1, topLeftCol);
     setFillColor(2, bottomRightCol);
     setFillColor(3, bottomRightCol);
-
   }
+  //=====================================================
   GlRect::GlRect(bool filled, bool outlined) :
     GlPolygon(4u, 4u, 4u, filled, outlined) {
   }

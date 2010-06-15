@@ -29,10 +29,15 @@ class TLP_GL_SCOPE GlRect : public GlPolygon {
 
  public:
   /**
-   * Constructor
+   * Constructor : with topLeft/bottomRight coords, topLeft/bottomRight colors and if GlRect is filled/outlined
    */
   GlRect(const Coord &topLeftPos, const Coord &bottomRightPos, const Color &topLeftCol, const Color &bottomRightCol, bool filled=true, bool outlined=false);
+
+  /**
+   * Constructor : with GlRect is filled/outlined
+   */
   GlRect(bool filled=true, bool outlined=false);
+
   /**
    * Destructor
    */

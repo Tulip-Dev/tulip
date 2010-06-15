@@ -11,6 +11,7 @@ nobase_include_HEADERS = \
 	tulip/GlCircle.h \
 	tulip/GlLabel.h \
 	tulip/GlRect.h \
+	tulip/Gl2DRect.h \
 	tulip/GlRectTextured.h \
 	tulip/GlAbstractPolygon.h \
 	tulip/GlPolygon.h \
