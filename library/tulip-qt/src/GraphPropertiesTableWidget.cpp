@@ -26,6 +26,7 @@ using namespace std;
 GraphPropertiesTableWidget::GraphPropertiesTableWidget(QWidget *parent) :
   QTableWidget(parent), graph(NULL), typeFilter(All), nameFilter(".*") {
   setSelectionBehavior(QAbstractItemView::SelectRows);
+  setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 GraphPropertiesTableWidget::~GraphPropertiesTableWidget() {
