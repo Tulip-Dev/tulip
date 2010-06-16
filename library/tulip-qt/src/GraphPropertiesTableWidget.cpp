@@ -105,7 +105,7 @@ vector<string> GraphPropertiesTableWidget::getSelectedPropertiesNames() const {
   return properties;
 }
 
-vector<string> GraphPropertiesTableWidget::getDipslayedPropertiesNames() const {
+vector<string> GraphPropertiesTableWidget::getDisplayedPropertiesNames() const {
   vector<string> properties;
   for (int i = 0; i < rowCount(); ++i) {
     properties.push_back(getPropertyNameForRow(i));
