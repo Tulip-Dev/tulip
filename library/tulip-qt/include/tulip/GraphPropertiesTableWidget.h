@@ -52,7 +52,7 @@ public:
   /**
    * @brief Get the list of the properties currently displayed in the table.
    */
-  std::vector<std::string> getDipslayedPropertiesNames() const;
+  std::vector<std::string> getDisplayedPropertiesNames() const;
 
   virtual std::string getPropertyNameForRow(int row) const;
 

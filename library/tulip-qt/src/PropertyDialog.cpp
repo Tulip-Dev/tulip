@@ -539,7 +539,7 @@ void PropertyDialog::nameFilterChanged(
 void PropertyDialog::keyReleaseEvent  ( QKeyEvent * event ){
   //If there is only one property and user press enter or return set this property as selected property.
 if(event->key()==Qt::Key_Return || event->key()==Qt::Key_Enter){
-  vector<string> selectedProperties = propertiesWidget->getDipslayedPropertiesNames();
+  vector<string> selectedProperties = propertiesWidget->getDisplayedPropertiesNames();
   if(selectedProperties.size()==1){
     displayProperty(selectedProperties.front());
   }
