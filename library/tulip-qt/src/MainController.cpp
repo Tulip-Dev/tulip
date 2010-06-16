@@ -532,8 +532,10 @@ namespace tlp {
         (*it)->removeObserver(this);
 
         // if the current graph is *it, set current graph at g
-        if(getCurrentGraph()==(*it))
+        if(getCurrentGraph()==(*it)){
           setCurrentGraph(g);
+          clusterTreeWidget->setGraph(g);
+        }
 
         // update views that were on *it
         changeGraphOfViews(*it,g);
