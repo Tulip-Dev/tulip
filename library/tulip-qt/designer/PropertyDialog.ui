@@ -98,6 +98,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>460</height>
+              </size>
+             </property>
              <property name="showGrid" >
               <bool>true</bool>
              </property>
