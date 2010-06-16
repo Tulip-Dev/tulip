@@ -33,16 +33,14 @@ namespace tlp {
   }
 
   GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
-    removeObservers();
+    setHaveToCompute();
   }
 
   void GlQuadTreeLODCalculator::setScene(GlScene *scene){
     // If we change scene, whe have to remove observer on the graph and the scene
     // in the next rendering, we have to compute quadtree
-    if(this->scene)
-      removeObservers();
+    setHaveToCompute();
     this->scene=scene;
-    haveToCompute=true;
   }
 
   bool GlQuadTreeLODCalculator::needEntities(){
@@ -70,8 +68,7 @@ namespace tlp {
   }
 
   void GlQuadTreeLODCalculator::setNeedEntities(bool){
-    haveToCompute=true;
-    removeObservers();
+    setHaveToCompute();
   }
 
   void GlQuadTreeLODCalculator::addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb) {
@@ -417,8 +414,7 @@ namespace tlp {
   }
 
   void GlQuadTreeLODCalculator::setInputData(GlGraphInputData *newInputData){
-    if(inputData)
-      removeObservers();
+    setHaveToCompute();
 
     inputData=newInputData;
     if (newInputData == NULL) {
@@ -428,32 +424,42 @@ namespace tlp {
       sizeProperty = NULL;
       selectionProperty = NULL;
     }
-    haveToCompute=true;
   }
 
   void GlQuadTreeLODCalculator::update(std::set<Observable *>::iterator,std::set<Observable *>::iterator){
-    haveToCompute=true;
-    removeObservers();
+    setHaveToCompute();
   }
 
   void GlQuadTreeLODCalculator::addLocalProperty(Graph*, const std::string &name){
     if(name==inputData->getElementLayoutPropName() || name==inputData->getElementSizePropName()){
-      haveToCompute=true;
-      removeObservers();
+      setHaveToCompute();
       addObservers();
     }
   }
   void GlQuadTreeLODCalculator::delLocalProperty(Graph*, const std::string &name){
     if(name==inputData->getElementLayoutPropName() || name==inputData->getElementSizePropName()){
-      haveToCompute=true;
-      removeObservers();
+      setHaveToCompute();
       addObservers();
     }
   }
 
   void GlQuadTreeLODCalculator::destroy(Graph *) {
     clear();
-    setInputData( NULL);
+    setInputData(NULL);
+  }
+
+  void GlQuadTreeLODCalculator::setHaveToCompute(){
+    if(haveToCompute)
+      return;
+
+    haveToCompute=true;
+
+    if(!inputData)
+      return;
+    if(!scene)
+      return;
+
+    removeObservers();
   }
 }
 
