@@ -60,18 +60,18 @@ namespace tlp {
 
     void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end);
     void observableDestroyed(Observable *){}
-    void addNode(Graph *,const node ){haveToCompute=true;removeObservers();}
-    void addEdge(Graph *,const edge ){haveToCompute=true;removeObservers();}
-    void delNode(Graph *,const node ){haveToCompute=true;removeObservers();}
-    void delEdge(Graph *,const edge ){haveToCompute=true;removeObservers();}
+    void addNode(Graph *,const node ){setHaveToCompute();}
+    void addEdge(Graph *,const edge ){setHaveToCompute();}
+    void delNode(Graph *,const node ){setHaveToCompute();}
+    void delEdge(Graph *,const edge ){setHaveToCompute();}
     void addLocalProperty(Graph*, const std::string &name);
     void delLocalProperty(Graph*, const std::string &name);
     void destroy(Graph *);
 
-    void addLayer(GlScene*, const std::string&, GlLayer*){haveToCompute=true;removeObservers();}
-    void delLayer(GlScene*, const std::string&, GlLayer*){haveToCompute=true;removeObservers();}
-    void modifyLayer(GlScene*, const std::string&, GlLayer*){haveToCompute=true;removeObservers();}
-    void modifyEntity(GlScene *,GlSimpleEntity *){haveToCompute=true;removeObservers();}
+    void addLayer(GlScene*, const std::string&, GlLayer*){setHaveToCompute();}
+    void delLayer(GlScene*, const std::string&, GlLayer*){setHaveToCompute();}
+    void modifyLayer(GlScene*, const std::string&, GlLayer*){setHaveToCompute();}
+    void modifyEntity(GlScene *,GlSimpleEntity *){setHaveToCompute();}
 
     virtual GlLODCalculator *clone() {
       GlQuadTreeLODCalculator *newCalculator=new GlQuadTreeLODCalculator();
@@ -81,6 +81,8 @@ namespace tlp {
     }
 
   protected :
+
+    void setHaveToCompute();
 
     GlScene *scene;
 
