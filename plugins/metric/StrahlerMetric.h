@@ -29,7 +29,6 @@ struct Strahler {
 
 /** \addtogroup metric */
 /*@{*/
-/// StrahlerMetric.h - An implementation of the Strahler parameter.
 /** This plugin is an implementation of the Strahler Parameter.
  *  algorithm first published as:
  *
@@ -46,29 +45,12 @@ struct Strahler {
  *  pages 56-69, \n
  *  2002, September.
  *
- *  <b> HISTORY</b>
- *
- *  - 01/12/1999 Verson 0.0.1: Initial release
- *
- *  - 06/11/2002 Verson 0.0.2: Documentation and code clean up
- *
- *
  *  \note This algorithm works on general graphs, if no node is selected,
  *  the algorithm automatically choose the nodes with higher outdegree as
  *  starting nodes.
  *
  *  The algorithm use the (bool)"viewSelection" property to determine
  *  the starting nodes.
- *
- *
- *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
- *
- *  <b>LICENCE</b>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
- *  (at your option) any later version.
  *
  */
 class StrahlerMetric:public tlp::DoubleAlgorithm { 

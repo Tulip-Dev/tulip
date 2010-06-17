@@ -23,23 +23,7 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// IdDoubleMetric.h - This plugins assigns id to nodes and edges.
 /** This plugins assigns id to nodes and edges. The ids are those used by tulip.
- *
- *  <b>HISTORY</b>
- *
- *  - 26/02/2001 Verson 0.0.1: First implementation.
- *
- *  \note This algorithm works on general graphs. 
- *
- *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
- *
- *  <b>LICENCE</b>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
- *  (at your option) any later version.
  *
  */
 class IdMetric:public tlp::DoubleAlgorithm { 
