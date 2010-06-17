@@ -309,11 +309,6 @@ void BasicPluginsTest::testDendrogram() {
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
-void BasicPluginsTest::testEmbedder() {
-  bool result = computeProperty<LayoutProperty>("Embedder (HDE)");
-  CPPUNIT_ASSERT(result);
-}
-//==========================================================
 void BasicPluginsTest::testGEMLayout() {
   bool result = computeProperty<LayoutProperty>("GEM (Frick)");
   CPPUNIT_ASSERT(result);
@@ -571,7 +566,6 @@ CppUnit::Test * BasicPluginsTest::suite() {
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ConeTreeExtended", &BasicPluginsTest::testConeTreeExtended));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ConnectedComponentPacking", &BasicPluginsTest::testConnectedComponentPacking));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Dendrogram", &BasicPluginsTest::testDendrogram));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Embedder", &BasicPluginsTest::testEmbedder));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("GEMLayout", &BasicPluginsTest::testGEMLayout));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("HierarchicalGraph", &BasicPluginsTest::testHierarchicalGraph));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ImprovedWalker", &BasicPluginsTest::testImprovedWalker));
