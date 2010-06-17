@@ -341,7 +341,7 @@ bool GEMLayout::run() {
             tmp->computeProperty("GEM (Frick)", layoutResult, err, pluginProgress, dataSet);
             graph->delAllSubGraphs(tmp);
         }
-        // call connected componnent packing
+        // call connected component packing
         LayoutProperty tmpLayout(graph);
         dataSet->set("coordinates", layoutResult);
         graph->computeProperty("Connected Component Packing", &tmpLayout, err, pluginProgress, dataSet);
