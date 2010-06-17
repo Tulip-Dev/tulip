@@ -135,7 +135,7 @@ vector< set<node> > StrengthClustering::computeNodePartition(double threshold) {
     }
   }
 
-  //Extract connected componnent
+  //Extract connected component
   DoubleProperty *connected= new DoubleProperty(tmpGraph); 
   tmpGraph->computeProperty("Connected Component", connected, errMsg);
 
