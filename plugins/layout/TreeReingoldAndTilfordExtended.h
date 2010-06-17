@@ -29,7 +29,6 @@ struct LR {
 };
 /** \addtogroup layout */
 /*@{*/
-/// TreeReingoldAndTilfordExtended.h - An implementation of a hierarchical tree layout.
 /** This plugin is an implementation of the hierarchical tree layout
  *  algorithm first published as:
  *
@@ -39,27 +38,13 @@ struct LR {
  *  pages "223--228" \n
  *  1981 \n
  *
- *  <b>HISTORY</b>
- *
- *  - 21/02/2000 Verson 0.0.1: Initial release
- *  - 06/11/2002 Verson 0.0.2: Documentation and code clean up
- *  - 06/01/2005 Verson 0.0.3: Code refactoring, management of : orienetation, parameters
- *
- *  \note This algorithm only works on trees.\n
+ *  \note This algorithm only works on trees; so if the graph is not a tree
+ *  it will be applied on a spanning tree.\n
  *  Let n be the number of nodes, the algorithm complexity is in O(n).\n
  *  It extends the original Reingold and Tilford by providing managment
  *  of different node size and different edge length. \n \n
  *  The algorithm use the (Size)"viewSize" property for element size and the
  *  (int)"treeEdgeLength" for the edge length.
- *
- *  \author David Auber LaBRI, University Bordeaux I France, Email : auber@tulip-software.org
- *
- *  <b>LICENCE</b>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
- *  (at your option) any later version.
  *
  */
 class TreeReingoldAndTilfordExtended:public tlp::LayoutAlgorithm { 

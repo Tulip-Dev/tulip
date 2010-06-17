@@ -43,7 +43,6 @@ namespace {
 
 /** \addtogroup import */
 /*@{*/
-/// AdjacencyMatrixImport.cpp - Import a graph coded with matrix.
 /** This plugin enables to import a graph coded with a matrix
  *
  *  File format: 

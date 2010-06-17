@@ -22,7 +22,6 @@
 
 /** \addtogroup metric */
 /*@{*/
-/// EccentricyMetric.h - Compute the eccentricity of each node.
 /** This plugin compute the eccentricity of each node, 
  *
  * Eccentricity is the maximum distance to go from a node to all others.
@@ -37,22 +36,7 @@
  * "2004", \n
  * pages 321-340.
  *  
- *  <b>HISTORY</b>
- *
- *  18/06/2004 Verson 0.0.1: Initial release
- *
  *  \note The complexity of the algorithm is O(|V| * |E|) time and O(1) space.  
- *
- *
- *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.com
- *  Tamara Munzner, University of British Columbia Canada. Email: tmm@cs.ubc.ca
- *  
- * <b>LICENCE</b>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
- *  (at your option) any later version.
  *
  */
 class EccentricityMetric:public tlp::DoubleAlgorithm { 
