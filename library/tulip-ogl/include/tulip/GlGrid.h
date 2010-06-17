@@ -1,17 +1,20 @@
-//-*-c++-*-
-/*
- * Author: Delorme Maxime
- * Email : Maxime.Delorme@gmail.com
- * Last modification : 08/07/2005 (fr) 
- * Author: Auber David
- * Last modification : 08/10/2006 (fr) 
- * Author: Mathiaut Morgan
- * Last modification : 15/11/2007
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by  
- * the Free Software Foundation; either version 2 of the License, or     
- * (at your option) any later version.
-*/
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
 
 #ifndef _Tulip_GLGRID_H_
 #define _Tulip_GLGRID_H_

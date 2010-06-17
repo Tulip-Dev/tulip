@@ -1,3 +1,20 @@
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
 #include <string.h>
 #include <errno.h>
 #include <tulip/tuliphash.h>
@@ -33,7 +50,6 @@ namespace {
 
 /** \addtogroup import */
 /*@{*/
-/// DotImport.cpp - Import a graph coded in dot format
 /** This plugin enables to import a graph coded with in dot format
  *
  *  File format: 
@@ -43,17 +59,9 @@ namespace {
  *        - main graph entities are extracted (node/edges)
  *	  - subgraphs are not already supported
  *  	  - several attributes (node & edge) are supported
- *	  - based on a modified grammar file available with the graphviz' softwares
+ *	  - based on a modified grammar file available with the graphviz software
  *	  - this parser can be largely optimized ...
  *
- *  \author 08/02/2004 - Gerald Gainant (aka maGicG)
- *
- *  <b>LICENCE</b>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
- *  (at your option) any later version.
  */
 class DotImport:public ImportModule {
 public:

@@ -1,12 +1,27 @@
-//-*-c++-*-
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
 #ifndef _MixedModel_H
 #define _MixedModel_H
 
 
 /** \addtogroup layout */
 /*@{*/
-/// MixedModel.h- An implementation of a polyline graph drawing.
-/** This plugin is an implementation of the planar polyline 
+/** This plugin is an implementation of the planar polyline graph
  *  drawing algorithm, the mixed model algorithm, first published as:
  *
  *  C. Gutwenger and P. Mutzel, \n
@@ -16,11 +31,6 @@
  *  pages "167--182" \n
  *  1998 \n
  *
- *  <b>HISTORY</b>
- *
- *  - 19/06/2005 Verson 0.0.1: first version by S. BARDET and A. BURNETT
- *  - 06/11/2006 Version 0.0.2: new version with improvements
- *
  *  Let n be the number of nodes, the original algorithm complexity is in O(n).\n
  *  But the implementation of the canonical ordering has not been made in O(n).\n 
  *  This version of the algorithm considers each connected component of the graph, 
@@ -29,15 +39,6 @@
  *  algorithm is used, and if the connected component was not planar, it adds the
  *  "unplanar" edges in 3D. Finally, it uses the Connected Component Packing plugin 
  *  of Tulip Software to pack the connected components.\n
- *
- *  \author S. Bardet, Romain Bourqui LaBRI, University Bordeaux I France, Email : bourqui@labri.fr
- *
- *  <b>LICENCE</b>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
- *  (at your option) any later version.
  *
  */
 class MixedModel : public tlp::LayoutAlgorithm {
