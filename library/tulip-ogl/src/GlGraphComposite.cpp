@@ -26,8 +26,10 @@ namespace tlp {
   }
 
   GlGraphComposite::~GlGraphComposite(){
-    inputData.getGraph()->removeGraphObserver(this);
-    inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
+    if(inputData.getGraph()){
+      inputData.getGraph()->removeGraphObserver(this);
+      inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
+    }
   }
 
   void GlGraphComposite::acceptVisitorForNodes(Graph *graph,GlSceneVisitor *visitor){
@@ -66,6 +68,8 @@ namespace tlp {
   void GlGraphComposite::acceptVisitor(GlSceneVisitor *visitor)
   {
     Graph *graph=inputData.getGraph();
+    if(!graph)
+      return;
 
     // Check if the current graph are in the hierarchy
     assert((rootGraph==graph) || (rootGraph->isDescendantGraph(graph)));
@@ -93,6 +97,15 @@ namespace tlp {
       acceptVisitorForEdges(graph,visitor);
     }
   }
+  //===================================================================
+  void GlGraphComposite::destroy(Graph *g){
+    if(inputData.getGraph()==g){
+      inputData.getGraph()->removeGraphObserver(this);
+      inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
+      inputData.graph=NULL;
+    }
+  }
+
   //===================================================================
   const GlGraphRenderingParameters& GlGraphComposite::getRenderingParameters() {
     return parameters;
