@@ -82,7 +82,7 @@ namespace tlp {
     /**
      * Function use by the GraphObserver when the graph is delete
      */
-    virtual void destroy(Graph *) {}
+    virtual void destroy(Graph *);
 
     /**
      * Return set of metaNodes
