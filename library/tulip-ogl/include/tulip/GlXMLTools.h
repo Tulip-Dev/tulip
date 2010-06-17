@@ -151,10 +151,27 @@ namespace tlp {
       xmlNodePtr node;
       GlXMLTools::getData(name, rootNode, node);
       if (node) {
-	std::string tmp;
-	getContent(node,tmp);
-	std::stringstream str(tmp);
-	str >> value;
+        std::string tmp;
+        getContent(node,tmp);
+        std::stringstream str(tmp);
+        str >> value;
+      }
+    }
+
+    /**
+     * Set an Object with the given XML and default value
+     */
+    template <typename Obj>
+      static void setWithXML(xmlNodePtr rootNode, const std::string &name, Obj &value,const Obj &defValue) {
+      xmlNodePtr node;
+      GlXMLTools::getData(name, rootNode, node);
+      if (node) {
+        std::string tmp;
+        getContent(node,tmp);
+        std::stringstream str(tmp);
+        str >> value;
+      }else{
+        value=defValue;
       }
     }
 

@@ -142,8 +142,8 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode, "right", right);
       GlXMLTools::setWithXML(dataNode, "inPercent", inPercent);
       GlXMLTools::setWithXML(dataNode, "textureName", textureName);
-      GlXMLTools::setWithXML(dataNode,"xInv",xInv);
-      GlXMLTools::setWithXML(dataNode,"yInv",yInv);
+      GlXMLTools::setWithXML(dataNode,"xInv",xInv,false);
+      GlXMLTools::setWithXML(dataNode,"yInv",yInv,false);
     }
   }
 }
