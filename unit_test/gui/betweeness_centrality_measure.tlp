@@ -1398,7 +1398,7 @@
       <children type=\"GlComposite\">
         <data/>
         <children>
-          <GlEntity name=\"background\" type=\"GlRectTextured\">
+          <GlEntity name=\"background\" type=\"Gl2DRect\">
             <data>
               <visible>1</visible>
               <stencil>65535</stencil>
@@ -1408,6 +1408,8 @@
               <right>1</right>
               <inPercent>1</inPercent>
               <textureName>TulipBitmapDir/tex_back.png</textureName>
+              <xInv>0</xInv>
+              <yInv>0</yInv>
             </data>
           </GlEntity>
         </children>
@@ -1463,7 +1465,7 @@
       <children type=\"GlComposite\">
         <data/>
         <children>
-          <GlEntity name=\"labrilogo\" type=\"GlRectTextured\">
+          <GlEntity name=\"labrilogo\" type=\"Gl2DRect\">
             <data>
               <visible>0</visible>
               <stencil>65535</stencil>
@@ -1473,6 +1475,8 @@
               <right>55</right>
               <inPercent>0</inPercent>
               <textureName>TulipBitmapDir/logolabri.jpg</textureName>
+              <xInv>1</xInv>
+              <yInv>0</yInv>
             </data>
           </GlEntity>
         </children>
