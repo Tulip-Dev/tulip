@@ -15,7 +15,7 @@ touch all_tests_run.log
 # just to reduce the future time of shared libs loading
 # expecting they will be already in memory
 echo "Check Tulip launch ..."
-TULIP=`which tulip`
+TULIP=`which tulip_app`
 if [ $? -eq 1 ]; then
     echo 'tulip executable not found';
     exit
