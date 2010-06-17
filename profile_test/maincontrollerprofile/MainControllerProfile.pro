@@ -1,4 +1,4 @@
-TULIPCONFIG_PATH = /home/morgan/install/tulip/bin/tulip-config
+TULIPCONFIG_PATH = tulip-config
 
 TEMPLATE = app
 

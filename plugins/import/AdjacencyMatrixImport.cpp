@@ -1,3 +1,20 @@
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <errno.h>
@@ -64,25 +81,6 @@ namespace {
  *  <br>@ B
  *  <br># @ C
  *  <br>Define a graph with 3 nodes and 3 edges, the edge between A and C is named E and has the value 5
- *
- *  <b>HISTORY</b>
- *
- *  Version 1.0: First version replace old adjacency matrix format
- *  included in Tulip (no more supported)
- *
- *  <b>TODO :</b>
- *
- *  Add tests in order to prevent bad file format.
- *
- *  \author David Auber University of Bordeaux I (LaBRI) France \n
- *  Email:auber@tulip-software.org
- *
- *  <b>LICENCE</b>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
- *  (at your option) any later version.
  *
  */
 class AdjacencyMatrixImport:public ImportModule {

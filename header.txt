@@ -2,9 +2,7 @@
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
- * Authors: David Auber, Patrick Mary, Morgan Mathiaut
- * from the LaBRI Visualization Team
- * Last modification : dd/mm/yyyy
+ * Authors: David Auber and the Tulip development Team
  *
  * Tulip is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
