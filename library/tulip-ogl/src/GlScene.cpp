@@ -497,7 +497,16 @@ namespace tlp {
   }
 
   void GlScene::centerScene() {
-	  ajustSceneToSize(viewport[2], viewport[3]);
+    if(glGraphComposite){
+      if(glGraphComposite->getInputData()->getGraph()){
+        if(glGraphComposite->getInputData()->getGraph()->numberOfNodes()!=0){
+          ajustSceneToSize(viewport[2], viewport[3]);
+          return;
+        }
+      }
+    }
+
+    ajustCameraToEmptyScene();
   }
 
   void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor){
