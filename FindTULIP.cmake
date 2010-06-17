@@ -20,7 +20,7 @@
 # TULIP_CONFIG		 - tulip-config file.
 #
 # TULIP_DIR can be used to make it simpler to find the various include
-# directories and compiled libraries when glew was not installed in the
+# directories and compiled libraries when not installed in the
 # usual/well-known directories (e.g. because you made an in tree-source
 # compilation or because you installed it in an "unusual" directory).
 # Just set TULIP_DIR it to your specific installation directory
@@ -48,20 +48,21 @@ SET(TULIP_PATHS
   )
 ENDIF(WIN32)
 
+IF(NOT TULIP_CONFIG)
 FIND_FILE(TULIP_CONFIG tulip-config
 	PATHS ${TULIP_DIR}/bin
-       $ENV{TULIP_DIR}/bin
-	/usr/bin
-	/usr/local/bin
-	/opt/local/bin
+       $ENV{TULIP_DIR}/bin	
 	)
+ENDIF(NOT TULIP_CONFIG)
 
+IF(NOT TULIP_PLUGIN_VERSION AND TULIP_CONFIG)
 EXEC_PROGRAM(sh ARGS "${TULIP_CONFIG} --version" OUTPUT_VARIABLE TULIP_PLUGIN_VERSION)
 string(SUBSTRING ${TULIP_PLUGIN_VERSION} 0 3 TULIP_VERSION)
+ENDIF(NOT TULIP_PLUGIN_VERSION AND TULIP_CONFIG)
 
+IF(NOT TULIP_PLUGINS_PATH AND TULIP_CONFIG)
 EXEC_PROGRAM(sh ARGS "${TULIP_CONFIG} --pluginpath" OUTPUT_VARIABLE TULIP_PLUGINS_PATH)
-
-
+ENDIF(NOT TULIP_PLUGINS_PATH AND TULIP_CONFIG)
 
 FIND_LIBRARY(TULIP_LIBRARY "tulip-${TULIP_VERSION}"
   PATHS ${TULIP_PATHS}
@@ -79,24 +80,11 @@ FIND_LIBRARY(TULIP_PLUGINS_MANAGER_LIBRARY "tulip-pluginsmanager-${TULIP_VERSION
   PATHS ${TULIP_PATHS}
   )
 
-#FIND_LIBRARY(TULIP_GLEW_LIBRARY GLEW PATHS /usr/lib)
-FIND_PACKAGE( GLEW REQUIRED )
-
 SET(TULIP_LIBS ${TULIP_LIBRARY}
 	       ${TULIP_QT4_LIBRARY}
 	       ${TULIP_OGL_LIBRARY}
-	       ${TULIP_PLUGINS_MANAGER_LIBRARY}  
-	       ${GLEW_LIBRARY} 
+	       ${TULIP_PLUGINS_MANAGER_LIBRARY}
 )
-
-#IF (APPLE)
-#  SET (OPENGL_gl_LIBRARY "-framework OpenGL" CACHE STRING "OpenGL lib for OSX")
-#  SET(ADDITIONAL_LIBRARIES
-#    ${GLEW_LIBRARY}     ${OPENGL_gl_LIBRARY}
-#    )
-#ELSE (APPLE)
-#  SET(ADDITIONAL_LIBRARIES    ${GLEW_LIBRARY}   )
-#ENDIF (APPLE)
 
 IF( TULIP_INCLUDE_DIR )
   IF( TULIP_LIBRARY )
