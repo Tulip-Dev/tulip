@@ -121,10 +121,10 @@ void GlCatmullRomCurve::setCurveVertexShaderRenderingSpecificParameters() {
 	curveShaderProgram->setUniformFloat("alpha", alpha);
 }
 
-void GlCatmullRomCurve::drawCurve(vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
+void GlCatmullRomCurve::drawCurve(vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
 
 	vector<Coord> controlPointsCp;
-	vector<Coord> *controlPointsP = controlPoints;
+	vector<Coord> *controlPointsP = &controlPoints;
 
 	if (paramType == UNIFORM) {
 		alpha = 0.0f;
@@ -135,7 +135,7 @@ void GlCatmullRomCurve::drawCurve(vector<Coord> *controlPoints, const Color &sta
 	}
 
 	if (closedCurve && curveShaderProgramNormal != NULL) {
-		controlPointsCp = *controlPoints;
+		controlPointsCp = controlPoints;
 		controlPointsCp.push_back(controlPointsCp[0]);
 		controlPointsP = &controlPointsCp;
 	}
@@ -149,7 +149,7 @@ void GlCatmullRomCurve::drawCurve(vector<Coord> *controlPoints, const Color &sta
 	}
 
 	static GlBezierCurve curve;
-	if (controlPoints->size() == 2) {
+	if (controlPoints.size() == 2) {
 		curve.setOutlined(outlined);
 		curve.setOutlineColor(outlineColor);
 		curve.setTexture(texture);
@@ -157,7 +157,7 @@ void GlCatmullRomCurve::drawCurve(vector<Coord> *controlPoints, const Color &sta
 		curve.setLookDir(lookDir);
 		curve.drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
 	} else {
-		AbstractGlCurve::drawCurve(controlPointsP, startColor, endColor, startSize, endSize, nbCurvePoints);
+		AbstractGlCurve::drawCurve(*controlPointsP, startColor, endColor, startSize, endSize, nbCurvePoints);
 	}
 
 }
