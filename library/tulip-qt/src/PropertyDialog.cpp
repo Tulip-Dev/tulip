@@ -559,6 +559,8 @@ if(event->key()==Qt::Key_Return || event->key()==Qt::Key_Enter){
   vector<string> selectedProperties = propertiesWidget->getDisplayedPropertiesNames();
   if(selectedProperties.size()==1){
     displayProperty(selectedProperties.front());
+    //Select the property in the widget
+    propertiesWidget->setSelectedPropertiesNames(selectedProperties);
   }
 }
 }
