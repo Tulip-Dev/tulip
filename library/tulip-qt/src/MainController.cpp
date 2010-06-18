@@ -949,18 +949,23 @@ namespace tlp {
   }
   //==================================================
   void MainController::showGraphEditor() {
-    QMainWindow* mWindow = (QMainWindow *) mainWindowFacade.getParentWidget();
-    configWidgetDock->hide();
-    mWindow->tabifyDockWidget(tabWidgetDock,configWidgetDock);
-    configWidgetDock->show();
+    if (configWidgetDock->isVisible()) {
+      QMainWindow* mWindow = (QMainWindow *) mainWindowFacade.getParentWidget();
+      configWidgetDock->hide();
+      tabWidgetDock->show();
+      mWindow->tabifyDockWidget(tabWidgetDock,configWidgetDock);
+      configWidgetDock->show();
+    }
   }
   //==================================================
   void MainController::showViewEditor() {
-    QMainWindow* mWindow = (QMainWindow *) mainWindowFacade.getParentWidget();
-    tabWidgetDock->hide();
-    configWidgetDock->show();
-    tabWidgetDock->show();
-    mWindow->tabifyDockWidget(tabWidgetDock,configWidgetDock);
+    if (tabWidgetDock->isVisible()) {
+      QMainWindow* mWindow = (QMainWindow *) mainWindowFacade.getParentWidget();
+      tabWidgetDock->hide();
+      configWidgetDock->show();
+      tabWidgetDock->show();
+      mWindow->tabifyDockWidget(tabWidgetDock,configWidgetDock);
+    }
   }
   //==================================================
   void MainController::viewRequestChangeGraph(View *view,Graph *graph) {
