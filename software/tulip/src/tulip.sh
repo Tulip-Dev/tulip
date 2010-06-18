@@ -11,6 +11,8 @@ case "`uname -s`" in
 	;;	
 esac
 
+export LC_NUMERIC=C
+
 TULIP_NEED_RESTART=TRUE
 while [ "$TULIP_NEED_RESTART" = "TRUE" ];
 do
