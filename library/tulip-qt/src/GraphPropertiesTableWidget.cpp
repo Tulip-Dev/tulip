@@ -35,7 +35,7 @@ GraphPropertiesTableWidget::GraphPropertiesTableWidget(QWidget *parent) :
   setEditTriggers(QAbstractItemView::NoEditTriggers);
   // set sorting order to avoid different default value
   // depending on implementation (needed by gui tests)
-  horizontalHeader()->setSortIndicator(0, Qt::AscendingOrder);
+  sortItems(0, Qt::AscendingOrder);
 }
 
 GraphPropertiesTableWidget::~GraphPropertiesTableWidget() {
@@ -43,18 +43,16 @@ GraphPropertiesTableWidget::~GraphPropertiesTableWidget() {
 
 void GraphPropertiesTableWidget::setGraph(Graph* newGraph) {
   graph = newGraph;
+  //Deselect properties in old graph.
+  clearSelection();
   updateTable();
 }
 
 void GraphPropertiesTableWidget::updateTable() {
+  //Keep old selection
+  vector<string> oldSelection = getSelectedPropertiesNames();
   clear();
   if (graph != NULL) {
-    //Get the header list.
-    QStringList headersList = getHeaderList();
-    //Update the column number and labels.
-    setColumnCount(headersList.size());
-    setHorizontalHeaderLabels(getHeaderList());
-
     vector<string> propertiesName;
     string propertyName;
     //Get the properties list to display
@@ -63,8 +61,19 @@ void GraphPropertiesTableWidget::updateTable() {
         propertiesName.push_back(propertyName);
       }
     }
+    //Save the sorting state
+    bool previousSortingState = isSortingEnabled();
+    //We need to disable sort before adding elements as when adding element with sorting enabled the element index is moved.
+    setSortingEnabled(false);
+
     //Update the row number.
     setRowCount(propertiesName.size());
+    //Get the header list.
+    QStringList headersList = getHeaderList();
+    //Update the column number and labels.
+    setColumnCount(headersList.size());
+    setHorizontalHeaderLabels(getHeaderList());
+
     //Fill the table.
     for (int i = 0; i < propertiesName.size(); ++i) {
       for (int j = 0; j < columnCount(); ++j) {
@@ -72,6 +81,10 @@ void GraphPropertiesTableWidget::updateTable() {
       }
       setRowHeight(i, ROW_HEIGHT);
     }
+    //Restore sorting
+    setSortingEnabled(previousSortingState);
+    //Restore old selection.
+    setSelectedPropertiesNames(oldSelection);
   }
 }
 
@@ -85,7 +98,15 @@ QTableWidgetItem* GraphPropertiesTableWidget::createPropertyItem(PropertyInterfa
     return new QTableWidgetItem(QString::fromStdString(property->getName()));
   }
   else if (column == 1) {
-    return new QTableWidgetItem(QString::fromStdString(property->getTypename()));
+    //Update the name to correspond with interface name of properties.
+    string propertyType = property->getTypename();
+    if (propertyType.compare("bool") == 0) {
+      propertyType = "selection";
+    }
+    else if (propertyType.compare("double") == 0) {
+      propertyType = "metric";
+    }
+    return new QTableWidgetItem(QString::fromStdString(propertyType));
   }
   else if (column == 2) {
     if (graph->existLocalProperty(property->getName())) {
@@ -146,12 +167,12 @@ bool GraphPropertiesTableWidget::checkPropertyFilter(const string& propertyName)
 }
 
 bool GraphPropertiesTableWidget::checkPropertyName(const string& propertyName) {
-
-  //Don't display viewMetaGraphProperty
+#ifndef NDEBUG
+  //Don't display viewMetaGraphProperty in release
   if (propertyName.compare("viewMetaGraph") == 0) {
     return false;
   }
-
+#endif
   if (nameFilter.isValid()) {
     //Find if the reg exp match in the string.
     return nameFilter.indexIn(QString::fromStdString(propertyName)) != -1;
@@ -164,4 +185,20 @@ bool GraphPropertiesTableWidget::checkPropertyName(const string& propertyName) {
 void GraphPropertiesTableWidget::setPropertyNameFilter(const QRegExp& nameRegExp) {
   nameFilter = nameRegExp;
   updateTable();
+}
+
+void GraphPropertiesTableWidget::setSelectedPropertiesNames(const vector<string>& selectedProperties) {
+  //Avoid sending signals for selected element properties.
+  blockSignals(true);
+  //Destruct previous selection.
+  clearSelection();
+  for (vector<string>::const_iterator it = selectedProperties.begin(); it != selectedProperties.end(); ++it) {
+    for (int i = 0; i < rowCount(); ++i) {
+      QTableWidgetItem *propertyItem = item(i, 0);
+      if (propertyItem->text().compare(QString::fromStdString(*it)) == 0) {
+        selectRow(i);
+      }
+    }
+  }
+  blockSignals(false);
 }
