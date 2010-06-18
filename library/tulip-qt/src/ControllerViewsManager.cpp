@@ -208,9 +208,15 @@ namespace tlp {
   }
   //**********************************************************************
   void ControllerViewsManager::changeGraphOfViews(Graph *oldGraph, Graph *newGraph) {
+    string name = newGraph->getAttribute<string>("name");
     for (map<View *, Graph*>::iterator it = viewGraph.begin(); it != viewGraph.end(); ++it) {
       if ((*it).second == oldGraph) {
-        (*it).first->setGraph(newGraph);
+	View* view = (*it).first;
+        view->setGraph(newGraph);
+	// update view title
+	QWidget *widget = getWidgetOfView(view);
+	string windowTitle = viewNames[view] + " : " + name;
+	widget->setWindowTitle(QString::fromUtf8(windowTitle.c_str()));
         (*it).second = newGraph;
       }
     }
