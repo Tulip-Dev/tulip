@@ -514,16 +514,7 @@ namespace tlp {
   }
 
   void GlScene::centerScene() {
-    if(glGraphComposite){
-      if(glGraphComposite->getInputData()->getGraph()){
-        if(glGraphComposite->getInputData()->getGraph()->numberOfNodes()!=0){
-          ajustSceneToSize(viewport[2], viewport[3]);
-          return;
-        }
-      }
-    }
-
-    ajustCameraToEmptyScene();
+    ajustSceneToSize(viewport[2], viewport[3]);
   }
 
   void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor){
@@ -543,10 +534,21 @@ namespace tlp {
         (*it).second->acceptVisitor(visitor);
 	}
 
-        Coord maxC ( visitor->getBoundingBox()[1]);
-        Coord minC ( visitor->getBoundingBox()[0]);
+    BoundingBox boundingBox(visitor->getBoundingBox());
+    delete visitor;
 
-	delete visitor;
+
+    if(!boundingBox.isValid()){
+      *center=Coord(0,0,0);
+      *sceneRadius=sqrt(300);
+
+      *eye=Coord(0, 0, *sceneRadius);
+      *eye=*eye + *center;
+      return;
+    }
+
+    Coord maxC(boundingBox[1]);
+    Coord minC(boundingBox[0]);
 
 	double dx = maxC[0] - minC[0];
 	double dy = maxC[1] - minC[1];
@@ -620,19 +622,6 @@ namespace tlp {
       camera->setUp(Coord(0, 1., 0));
       camera->setZoomFactor(1.);
 	}
-  }
-
-  void GlScene::ajustCameraToEmptyScene() {
-    for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      Camera* camera=(*it).second->getCamera();
-      camera->setCenter(Coord(0,0,0));
-      camera->setSceneRadius(sqrt(300)/2.);
-
-      camera->setEyes(Coord(0, 0, camera->getSceneRadius()));
-      camera->setEyes(camera->getEyes() + camera->getCenter());
-      camera->setUp(Coord(0, 1., 0));
-      camera->setZoomFactor(0.5);
-    }
   }
 
   void GlScene::zoomXY(int step, const int x, const int y) {
