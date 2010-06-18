@@ -600,7 +600,11 @@ namespace tlp {
 																							this->getScene()->getGlGraphComposite()->getInputData()->elementLayout, 
 																							this->getScene()->getGlGraphComposite()->getInputData()->elementSize,
 																							this->getScene()->getGlGraphComposite()->getInputData()->elementRotation);
-	}
+        // Now we remove and add GlGraphComposite to be sure of the order (first Hulls and after GraphComposite)
+        // This code don't modify the functioning of tulip but change the tlp file
+        scene.getLayer("Main")->deleteGlEntity(this->getScene()->getGlGraphComposite());
+        scene.getLayer("Main")->addGlEntity(this->getScene()->getGlGraphComposite(),"graph");
+      }
 	
 	bool GlMainWidget::hasHulls() const {
 		return _hasHulls;
