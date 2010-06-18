@@ -565,7 +565,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 			startSize =  size[0]*.5;
 			endSize = size[1]*.5;;
 		}
-		curve->drawCurve(&tmp, startColor, endColor, startSize, endSize, nbCurvePoints);
+		curve->drawCurve(tmp, startColor, endColor, startSize, endSize, nbCurvePoints);
 		break;
 	}
 	default:

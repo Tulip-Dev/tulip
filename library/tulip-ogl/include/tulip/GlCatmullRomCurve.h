@@ -64,7 +64,7 @@ public :
 
 	void setParameterizationType(const ParameterizationType paramType) {this->paramType = paramType;}
 
-	void drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=200);
+	void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=200);
 
 	void setClosedCurve(const bool closedCurve) {this->closedCurve = closedCurve;}
 

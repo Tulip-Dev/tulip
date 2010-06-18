@@ -128,7 +128,7 @@ Coord GlBezierCurve::computeCurvePointOnCPU(const std::vector<Coord> &controlPoi
 	return computeBezierPoint(controlPoints, t);
 }
 
-void GlBezierCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
+void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
 
 	static bool floatTextureOk = glewIsSupported("GL_ARB_texture_float");
 	if (pascalTriangleTextureId == 0 && floatTextureOk) {
@@ -141,22 +141,22 @@ void GlBezierCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &st
 		curveShaderProgramBillboard = NULL;
 	}
 
-	if (controlPoints->size() <= CONTROL_POINTS_LIMIT) {
-		AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize, controlPoints->size() > 2 ? nbCurvePoints : 2);
+	if (controlPoints.size() <= CONTROL_POINTS_LIMIT) {
+		AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize, controlPoints.size() > 2 ? nbCurvePoints : 2);
 	} else {
 
 		static GlCatmullRomCurve curve;
 
 		const unsigned int nbApproximationPoints = 20;
 		vector<Coord> curvePoints;
-		computeBezierPoints(*controlPoints, curvePoints, nbApproximationPoints);
+		computeBezierPoints(controlPoints, curvePoints, nbApproximationPoints);
 		curve.setClosedCurve(false);
 		curve.setOutlined(outlined);
 		curve.setOutlineColor(outlineColor);
 		curve.setTexture(texture);
 		curve.setBillboardCurve(billboardCurve);
 		curve.setLookDir(lookDir);
-		curve.drawCurve(&curvePoints, startColor, endColor, startSize, endSize, nbCurvePoints);
+		curve.drawCurve(curvePoints, startColor, endColor, startSize, endSize, nbCurvePoints);
 	}
 }
 

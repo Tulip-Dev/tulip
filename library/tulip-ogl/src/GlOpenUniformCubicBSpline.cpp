@@ -87,12 +87,12 @@ void GlOpenUniformCubicBSpline::setCurveVertexShaderRenderingSpecificParameters(
 	curveShaderProgram->setUniformFloat("stepKnots", stepKnots);
 }
 
-void GlOpenUniformCubicBSpline::drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
+void GlOpenUniformCubicBSpline::drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
 
-	nbKnots = controlPoints->size() + curveDegree + 1;
+	nbKnots = controlPoints.size() + curveDegree + 1;
 	stepKnots = 1.0f / ((static_cast<float>(nbKnots) - 2.0f * (static_cast<float>(curveDegree) + 1.0f)) + 2.0f - 1.0f);
 
-	if (controlPoints->size() < (curveDegree + 1)) {
+	if (controlPoints.size() < (curveDegree + 1)) {
 		static GlBezierCurve curve;
 		curve.setOutlined(outlined);
 		curve.setOutlineColor(outlineColor);

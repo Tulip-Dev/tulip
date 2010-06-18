@@ -251,7 +251,7 @@ void AbstractGlCurve::buildCurveVertexBuffers(const unsigned int nbCurvePoints, 
 }
 
 void AbstractGlCurve::draw(float, Camera *) {
-	drawCurve(&controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
+	drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
 }
 
 void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode) {
@@ -304,7 +304,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
 	}
 }
 
-void AbstractGlCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
+void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
 
 	static bool vboOk = checkVboSupport();
 
@@ -320,8 +320,8 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &
 
 	if (texture != "") {
 		unsigned int i = nbCurvePoints / 2;
-		Coord firstCurvePoint(computeCurvePointOnCPU(*controlPoints, i / static_cast<float>(nbCurvePoints - 1)));
-		Coord nexCurvePoint(computeCurvePointOnCPU(*controlPoints, (i+1) / static_cast<float>(nbCurvePoints - 1)));
+		Coord firstCurvePoint(computeCurvePointOnCPU(controlPoints, i / static_cast<float>(nbCurvePoints - 1)));
+		Coord nexCurvePoint(computeCurvePointOnCPU(controlPoints, (i+1) / static_cast<float>(nbCurvePoints - 1)));
 		float dist = firstCurvePoint.dist(nexCurvePoint);
 		texCoordFactor = dist / (startSize * 2.0f);
 	}
@@ -332,7 +332,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &
 		curveShaderProgram = curveShaderProgramNormal;
 	}
 
-	if (curveShaderProgram != NULL && controlPoints->size() <= MAX_SHADER_CONTROL_POINTS && renderMode != GL_SELECT) {
+	if (curveShaderProgram != NULL && controlPoints.size() <= MAX_SHADER_CONTROL_POINTS && renderMode != GL_SELECT) {
 
 		GLuint *vbo = curveVertexBuffersObject[nbCurvePoints];
 		GlShaderProgram *currentActiveShader = GlShaderProgram::getCurrentActiveShader();
@@ -350,8 +350,8 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &
 		}
 
 		curveShaderProgram->activate();
-		curveShaderProgram->setUniformVec3FloatArray("controlPoints", controlPoints->size(), &((*controlPoints)[0][0]));
-		curveShaderProgram->setUniformInt("nbControlPoints", controlPoints->size());
+		curveShaderProgram->setUniformVec3FloatArray("controlPoints", controlPoints.size(), &controlPoints[0][0]);
+		curveShaderProgram->setUniformInt("nbControlPoints", controlPoints.size());
 		curveShaderProgram->setUniformInt("nbCurvePoints", nbCurvePoints);
 		curveShaderProgram->setUniformFloat("startSize", startSize);
 		curveShaderProgram->setUniformFloat("endSize", endSize);
@@ -455,7 +455,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> *controlPoints, const Color &
 
 	} else {
 		vector<Coord> curvePoints;
-		computeCurvePointsOnCPU(*controlPoints, curvePoints, nbCurvePoints);
+		computeCurvePointsOnCPU(controlPoints, curvePoints, nbCurvePoints);
 		if (!billboardCurve) {
 			polyQuad(curvePoints, startColor, endColor, startSize, endSize, Coord(2.f*curvePoints[0] - curvePoints[1]), Coord(2.f*curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]),!outlined,outlineColor,texture);
 		} else {
