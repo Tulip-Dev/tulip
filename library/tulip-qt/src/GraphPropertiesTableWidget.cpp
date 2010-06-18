@@ -20,6 +20,7 @@
 #include <tulip/PropertyInterface.h>
 #include <tulip/ForEach.h>
 #include <QtGui/QTableWidgetItem>
+#include <QtGui/QHeaderView>
 #include <algorithm>
 #include <string>
 using namespace tlp;
@@ -32,6 +33,9 @@ GraphPropertiesTableWidget::GraphPropertiesTableWidget(QWidget *parent) :
   QTableWidget(parent), graph(NULL), typeFilter(All), nameFilter(".*") {
   setSelectionBehavior(QAbstractItemView::SelectRows);
   setEditTriggers(QAbstractItemView::NoEditTriggers);
+  // set sorting order to avoid different default value
+  // depending on implementation (needed by gui tests)
+  horizontalHeader()->setSortIndicator(0, Qt::AscendingOrder);
 }
 
 GraphPropertiesTableWidget::~GraphPropertiesTableWidget() {
