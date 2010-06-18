@@ -95,7 +95,7 @@ QStringList GraphPropertiesTableWidget::getHeaderList() const {
 }
 QTableWidgetItem* GraphPropertiesTableWidget::createPropertyItem(PropertyInterface* property, int column) {
   if (column == 0) {
-    return new QTableWidgetItem(QString::fromStdString(property->getName()));
+    return new QTableWidgetItem(QString::fromUtf8(property->getName().c_str()));
   }
   else if (column == 1) {
     //Update the name to correspond with interface name of properties.
@@ -106,7 +106,7 @@ QTableWidgetItem* GraphPropertiesTableWidget::createPropertyItem(PropertyInterfa
     else if (propertyType.compare("double") == 0) {
       propertyType = "metric";
     }
-    return new QTableWidgetItem(QString::fromStdString(propertyType));
+    return new QTableWidgetItem(QString::fromUtf8(propertyType.c_str()));
   }
   else if (column == 2) {
     if (graph->existLocalProperty(property->getName())) {
@@ -175,7 +175,7 @@ bool GraphPropertiesTableWidget::checkPropertyName(const string& propertyName) {
 #endif
   if (nameFilter.isValid()) {
     //Find if the reg exp match in the string.
-    return nameFilter.indexIn(QString::fromStdString(propertyName)) != -1;
+    return nameFilter.indexIn(QString::fromUtf8(propertyName.c_str())) != -1;
   }
   else {
     return true;
@@ -195,7 +195,7 @@ void GraphPropertiesTableWidget::setSelectedPropertiesNames(const vector<string>
   for (vector<string>::const_iterator it = selectedProperties.begin(); it != selectedProperties.end(); ++it) {
     for (int i = 0; i < rowCount(); ++i) {
       QTableWidgetItem *propertyItem = item(i, 0);
-      if (propertyItem->text().compare(QString::fromStdString(*it)) == 0) {
+      if (propertyItem->text().compare(QString::fromUtf8(it->c_str())) == 0) {
         selectRow(i);
       }
     }
