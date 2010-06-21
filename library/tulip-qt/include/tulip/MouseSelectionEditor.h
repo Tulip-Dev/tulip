@@ -25,6 +25,9 @@
 #include <tulip/Observable.h>
 #include <tulip/InteractorComponent.h>
 #include <tulip/GlComplexPolygon.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/SizeProperty.h>
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
