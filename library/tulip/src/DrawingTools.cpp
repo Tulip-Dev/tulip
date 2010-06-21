@@ -58,10 +58,10 @@ namespace {
                 Vec3f point(layout->getNodeValue(itn));
                 double rot(rotation->getNodeValue(itn));
                 vector<Coord> points(4);
-                points[0].set( nSize[0],  nSize[1],  nSize[2]);
-                points[1].set(-nSize[0], -nSize[1], -nSize[2]);
-                points[2].set(+nSize[0], -nSize[1], -nSize[2]);
-                points[3].set(-nSize[0], +nSize[1], +nSize[2]);
+                points[0].set( nSize[0]/2.,  nSize[1]/2.,  nSize[2]/2.);
+                points[1].set(-nSize[0]/2., -nSize[1]/2., -nSize[2]/2.);
+                points[2].set(+nSize[0]/2., -nSize[1]/2., -nSize[2]/2.);
+                points[3].set(-nSize[0]/2., +nSize[1]/2., +nSize[2]/2.);
                 for (unsigned int i = 0; i < 4; ++i) {
                     rotate(points[i], rot);
                     points[i] += point;
