@@ -49,7 +49,7 @@ namespace tlp {
     pluginsList = new PluginsViewWidget(serverManager,this);
     boxLayout->addWidget(pluginsList);
     
-    pluginsInfo = new PluginsInfoWidget(this);
+    pluginsInfo = new PluginsInfoWidget(serverManager,this);
     boxLayout->addWidget(pluginsInfo);
     connect(pluginsList, SIGNAL(pluginInfoSignal(const PluginInfo*)), this, SLOT(clickOnPluginSlot(const PluginInfo *)));
 

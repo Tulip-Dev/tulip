@@ -24,12 +24,13 @@
 #include "PluginsInfoWidget.h"
 #include "Request.h"
 #include "Server.h"
+#include "MultiServerManager.h"
 
 using namespace std;
 
 namespace tlp {
 
-  PluginsInfoWidget::PluginsInfoWidget(QWidget *parent) : QWidget(parent){
+  PluginsInfoWidget::PluginsInfoWidget(MultiServerManager *multiServerManager,QWidget *parent) : QWidget(parent),multiServerManager(multiServerManager){
     setupUi(this);
   }
 
@@ -44,6 +45,15 @@ namespace tlp {
       QFile pluginInfoFile(pluginInfoPath.c_str());
 
       if (!pluginInfoFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        CompletePluginsList pluginsList;
+        multiServerManager->getPluginsList(pluginsList);
+        for(CompletePluginsList::iterator it=pluginsList.begin();it!=pluginsList.end();++it){
+          if((*it).first->name==localPlugin->name && !(*it).first->local){
+            string addr;
+            multiServerManager->getAddr((*it).first->server,addr);
+            setPluginInfo((*it).first,addr);
+          }
+        }
         return;
       }
 
