@@ -32,8 +32,7 @@ SET(tulip-qt_LIB_SRCS
     TlpQtTools.cpp
     InteractorManager.cpp 
     Interactor.cpp 
-    InteractorChainOfResponsibility.cpp 
-    GlMainViewInteractor.cpp 
+    InteractorChainOfResponsibility.cpp
     QtProgress.cpp 
     Controller.cpp 
     ControllerAlgorithmTools.cpp

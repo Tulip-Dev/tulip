@@ -1,4 +1,4 @@
-SUBDIRS = clustering  colors  import  layout  metric selection sizes export glyph view
+SUBDIRS = clustering  colors  import  layout  metric selection sizes export glyph view interactor
 EXTRA_DIST = mainpage.dox CMakeLists.txt
 
 if MACOSX
