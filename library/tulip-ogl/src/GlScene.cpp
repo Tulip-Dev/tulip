@@ -335,7 +335,7 @@ namespace tlp {
         // Draw complex entities
         if(glGraphComposite){
           for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).nodesLODVector.begin();it!=(*itLayer).nodesLODVector.end();++it) {
-            if((*it).lod<0)
+            if((*it).lod<=0)
               continue;
 
             if(!graph->isMetaNode(node((*it).id))){
@@ -347,7 +347,7 @@ namespace tlp {
             }
           }
           for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).edgesLODVector.begin();it!=(*itLayer).edgesLODVector.end();++it) {
-            if((*it).lod<0)
+            if((*it).lod<=0)
               continue;
 
             glEdge.id=(*it).id;
