@@ -55,6 +55,24 @@ void VectorTest::testInternalOperation() {
   CPPUNIT_ASSERT_EQUAL(true, vect1 == vectnull);
   vect1 = vect2;
   CPPUNIT_ASSERT_EQUAL(true, vect1 == vect2);
+
+  Vector<double, SIZE> vect2;
+  for (unsigned int i=0; i<SIZE; ++i) {
+    vect1[i]=i;
+    vect2[i]=i;
+  }
+  CPPUNIT_ASSERT_EQUAL(false, vect1 < vect2);
+  CPPUNIT_ASSERT_EQUAL(false, vect1 > vect2);
+  CPPUNIT_ASSERT_EQUAL(true, vect1 == vect2);
+  vect2[SIZE-1]++;
+  CPPUNIT_ASSERT_EQUAL(true, vect1 < vect2);
+  CPPUNIT_ASSERT_EQUAL(false, vect1 > vect2);
+  CPPUNIT_ASSERT_EQUAL(false, vect1 == vect2);
+  vect1[0]++;
+  CPPUNIT_ASSERT_EQUAL(false, vect1 < vect2);
+  CPPUNIT_ASSERT_EQUAL(true, vect1 > vect2);
+  CPPUNIT_ASSERT_EQUAL(false, vect1 == vect2);
+
 }
 //==========================================================
 CppUnit::Test * VectorTest::suite() {
