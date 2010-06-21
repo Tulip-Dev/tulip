@@ -26,7 +26,7 @@ using namespace tlp;
 /** \brief Tulip interactor to select par of the graph
  *
  */
-class TLP_QT_SCOPE InteractorSelection  : public NodeLinkDiagramComponentInteractor {
+class InteractorSelection  : public NodeLinkDiagramComponentInteractor {
 
 public:
 

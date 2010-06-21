@@ -27,7 +27,7 @@ using namespace tlp;
 /** \brief Tulip interactor to edit edge bends
  *
  */
-class TLP_QT_SCOPE InteractorEditEdgeBends  : public NodeLinkDiagramComponentInteractor {
+class InteractorEditEdgeBends  : public NodeLinkDiagramComponentInteractor {
 
 public:
 

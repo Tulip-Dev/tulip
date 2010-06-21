@@ -25,7 +25,7 @@ using namespace tlp;
 /** \brief Tulip interactor to delete an element
  *
  */
-class TLP_QT_SCOPE InteractorDeleteElement  : public NodeLinkDiagramComponentInteractor {
+class InteractorDeleteElement  : public NodeLinkDiagramComponentInteractor {
 
 public:
 

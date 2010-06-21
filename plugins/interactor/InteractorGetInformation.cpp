@@ -26,7 +26,7 @@ using namespace tlp;
 /** \brief Tulip interactor to get information about an element of the graph
  *
  */
-class TLP_QT_SCOPE InteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
+class InteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
 
 public:
 

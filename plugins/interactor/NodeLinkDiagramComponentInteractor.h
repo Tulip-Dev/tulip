@@ -25,7 +25,7 @@ namespace tlp {
   /** \brief Tulip interactor abstract class for NodeLinkDiagramComponent
    *
    */
-  class TLP_QT_SCOPE NodeLinkDiagramComponentInteractor  : public InteractorChainOfResponsibility {
+  class NodeLinkDiagramComponentInteractor  : public InteractorChainOfResponsibility {
 
   public :
 
