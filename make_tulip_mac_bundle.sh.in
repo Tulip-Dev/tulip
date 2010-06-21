@@ -52,6 +52,9 @@ function make_bundle_lib() {
   if [ "$slib" = "/usr/lib/libstdc++.6.dylib" ]; then
     return
   fi
+  if [ "$slib" = "/usr/lib/libxml2.2.dylib" ]; then
+    return
+  fi
   if [ ! -f $slib ]; then
     if [ -f /usr/lib/$slib ]; then
       slib=/usr/lib/$slib
