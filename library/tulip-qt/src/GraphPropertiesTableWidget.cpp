@@ -162,7 +162,7 @@ bool GraphPropertiesTableWidget::checkPropertyFilter(const string& propertyName)
 }
 
 bool GraphPropertiesTableWidget::checkPropertyName(const string& propertyName) {
-#ifndef NDEBUG
+#ifdef NDEBUG
   //Don't display viewMetaGraphProperty in release
   if (propertyName.compare("viewMetaGraph") == 0) {
     return false;
