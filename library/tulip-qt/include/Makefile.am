@@ -16,7 +16,6 @@ INCLUDES_H = \
 	tulip/Interactor.h \
 	tulip/InteractorChainOfResponsibility.h \
 	tulip/InteractorComponent.h \
-	tulip/GlMainViewInteractor.h \
 	tulip/ForegroundEntity.h \
 	tulip/MouseSelector.h \
 	tulip/MouseBoxZoomer.h \

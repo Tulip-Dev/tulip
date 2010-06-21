@@ -124,7 +124,6 @@ TODIST_SOURCES = \
 	InteractorManager.cpp \
 	Interactor.cpp \
 	InteractorChainOfResponsibility.cpp \
-	GlMainViewInteractor.cpp \
 	QtProgress.cpp \
 	Controller.cpp \
 	ControllerAlgorithmTools.cpp \
