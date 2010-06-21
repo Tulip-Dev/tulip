@@ -26,7 +26,7 @@ using namespace tlp;
 /** \brief Tulip interactor to do a rectangle zoom
  *
  */
-class TLP_QT_SCOPE InteractorRectangleZoom  : public NodeLinkDiagramComponentInteractor {
+class InteractorRectangleZoom  : public NodeLinkDiagramComponentInteractor {
 
 public:
 

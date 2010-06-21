@@ -27,7 +27,7 @@ using namespace tlp;
 /** \brief Tulip interactor to move/reshape
  *
  */
-class TLP_QT_SCOPE InteractorSelectionModifier  : public NodeLinkDiagramComponentInteractor {
+class InteractorSelectionModifier  : public NodeLinkDiagramComponentInteractor {
 
 public:
 

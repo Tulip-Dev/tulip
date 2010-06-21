@@ -26,7 +26,7 @@ using namespace tlp;
 /** \brief Tulip interactor to do a magic selection
  *
  */
-class TLP_QT_SCOPE InteractorMagicSelection  : public NodeLinkDiagramComponentInteractor {
+class InteractorMagicSelection  : public NodeLinkDiagramComponentInteractor {
 
 public:
 

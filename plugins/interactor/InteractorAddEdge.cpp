@@ -27,7 +27,7 @@ using namespace tlp;
 /** \brief Tulip interactor to add edges
  *
  */
-class TLP_QT_SCOPE InteractorAddEdge  : public NodeLinkDiagramComponentInteractor {
+class InteractorAddEdge  : public NodeLinkDiagramComponentInteractor {
 
 public:
 

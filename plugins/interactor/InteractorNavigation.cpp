@@ -25,7 +25,7 @@ using namespace tlp;
 /** \brief Tulip interactor to navigate on the graph
  *
  */
-class TLP_QT_SCOPE InteractorNavigation  : public NodeLinkDiagramComponentInteractor {
+class InteractorNavigation  : public NodeLinkDiagramComponentInteractor {
 
 public:
 

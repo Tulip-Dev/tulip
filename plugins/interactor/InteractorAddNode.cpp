@@ -26,7 +26,7 @@ using namespace tlp;
 /** \brief Tulip interactor to add a node
  *
  */
-class TLP_QT_SCOPE InteractorAddNode  : public NodeLinkDiagramComponentInteractor {
+class InteractorAddNode  : public NodeLinkDiagramComponentInteractor {
 
 public:
 
