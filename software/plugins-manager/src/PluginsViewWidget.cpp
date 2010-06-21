@@ -117,8 +117,8 @@ namespace tlp {
 	}else{
 	  if(i==versionPosition){
 	    if(twi->isHidden()){
-	      setItemCheckability(pluginInfo,true,twi);
-	    }else{
+          setItemCheckability(pluginInfo,true,twi);
+        }else{
 	      setItemCheckability(pluginInfo,false,twi);
 	    }
 	  }
@@ -229,11 +229,13 @@ namespace tlp {
       }
     }else{
       if(pluginInfo->local){
-        if(((LocalPluginInfo*)pluginInfo)->isInstalledInHome()){
-          twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
-        }else{
+        //if(((LocalPluginInfo*)pluginInfo)->isInstalledInHome()){
+        //twi->setFlags(twi->flags() & (!Qt::ItemIsUserCheckable));
+        twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
+        /*}else{
           twi->setFlags(twi->flags() & (!Qt::ItemIsUserCheckable));
-        }
+          twi->setFlags(twi->flags() | Qt::ItemIsSelectable);
+        }*/
       }else{
         twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
       }
@@ -357,8 +359,14 @@ namespace tlp {
 
     twi->setText(1, QString(""));
     if(pluginInfo->local) {
-      twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
-      twi->setCheckState(0,Qt::Checked);
+      if(!((LocalPluginInfo*)pluginInfo)->isInstalledInHome()){
+        twi->setFlags(twi->flags() & (!Qt::ItemIsUserCheckable));
+        twi->setFlags(twi->flags() | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
+      }else{
+        twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
+        twi->setCheckState(0,Qt::Checked);
+      }
+      //twi->setCheckState(0,Qt::Checked);
       twi->setText(1, QString("=Installed="));
       twi->setTextColor(1, QColor(0,255,0));
       return true;
@@ -457,18 +465,17 @@ namespace tlp {
     if(!tmpList.empty()){
       QTreeWidgetItem* ti = tmpList.first();
       if(isAVersionItem(ti)){
-	const PluginInfo *actualPlugin;
-	actualPlugin=_msm->getPluginInformation(getNthParent(ti,(versionPosition-namePosition))->text(0).toStdString(),getNthParent(ti,(versionPosition-typePosition))->text(0).toStdString(),ti->text(0).toStdString());
-	if(!PluginsInfoWidget::haveInfo(actualPlugin)) {
-	  vector<const PluginInfo *> resultList;
-	  _msm->getPluginsInformation(actualPlugin->name,actualPlugin->type,resultList);
-	  for(vector<const PluginInfo *>::const_iterator it=resultList.begin();it!=resultList.end();++it) {
-	    if(!(*it)->local)
-	      emit pluginInfoSignal(*it);
-	  }
-	}else{
-	  emit pluginInfoSignal(actualPlugin);
-	}
+        const PluginInfo *actualPlugin;
+        actualPlugin=_msm->getPluginInformation(getNthParent(ti,(versionPosition-namePosition))->text(0).toStdString(),getNthParent(ti,(versionPosition-typePosition))->text(0).toStdString(),ti->text(0).toStdString());
+        if(!PluginsInfoWidget::haveInfo(actualPlugin)) {
+          vector<const PluginInfo *> resultList;
+          _msm->getPluginsInformation(actualPlugin->name,actualPlugin->type,resultList);
+          for(vector<const PluginInfo *>::const_iterator it=resultList.begin();it!=resultList.end();++it) {
+            emit pluginInfoSignal(*it);
+          }
+        }else{
+          emit pluginInfoSignal(actualPlugin);
+        }
       }
     }
   }

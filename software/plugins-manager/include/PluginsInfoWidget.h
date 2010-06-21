@@ -36,6 +36,8 @@ namespace tlp {
   static std::string htmlBegin = "<html><body>";
   static std::string htmlEnd = "</html></body>";
 
+  class MultiServerManager;
+
   class TLP_PLUGINSMANAGER_SCOPE PluginsInfoWidget : public QWidget, public Ui::PluginsInfoWidgetData {
 
     Q_OBJECT
@@ -49,6 +51,7 @@ namespace tlp {
 
     std::string pluginInfoXML;
     std::string pluginDocXML;
+    MultiServerManager *multiServerManager;
 
 
   public :
@@ -56,7 +59,7 @@ namespace tlp {
     friend class GetPluginInfoTreatment;
     friend class GetPluginDocTreatment;
 
-    PluginsInfoWidget(QWidget *parent=0);
+    PluginsInfoWidget(MultiServerManager *multiServerManager,QWidget *parent=0);
     void setPluginInfo(const PluginInfo *pluginInfo, std::string addrWS);
 
     static bool haveInfo(const PluginInfo *pluginInfo);

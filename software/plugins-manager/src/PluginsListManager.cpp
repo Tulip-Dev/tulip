@@ -230,12 +230,24 @@ namespace tlp {
 
   void PluginsListManager::getPluginsInformation(const std::string &pluginName,const std::string &pluginType,const std::string &pluginVersion,std::vector<const PluginInfo *> &resultList) {
     PluginMatchNameTypeAndVersionPred pred(pluginName,pluginType,pluginVersion);
-    vector<PluginInfo*>::iterator it=find_if(pluginsList.begin(),pluginsList.end(),pred);
-    if(it!=pluginsList.end()){
-      while(it!=pluginsList.end()){
-	resultList.push_back((*it));
-	it++;
-	it = find_if(it,pluginsList.end(),pred);
+    {
+      vector<PluginInfo*>::iterator it=find_if(pluginsList.begin(),pluginsList.end(),pred);
+      if(it!=pluginsList.end()){
+        while(it!=pluginsList.end()){
+          resultList.push_back((*it));
+          it++;
+          it = find_if(it,pluginsList.end(),pred);
+        }
+      }
+    }
+    {
+      vector<LocalPluginInfo*>::iterator it=find_if(localPluginsList.begin(),localPluginsList.end(),pred);
+      if(it!=localPluginsList.end()){
+        while(it!=localPluginsList.end()){
+          resultList.push_back((*it));
+          it++;
+          it = find_if(it,localPluginsList.end(),pred);
+        }
       }
     }
   }
@@ -272,11 +284,15 @@ namespace tlp {
 
   const PluginInfo* PluginsListManager::getPluginInformation(const std::string &pluginName,const std::string &pluginType,const std::string &pluginVersion) {
     vector<const PluginInfo *> tmp;
-    getPluginsInformation(pluginName,pluginType,pluginVersion,tmp);
-    if(tmp.size()>=1)
-     return tmp[0];
-    else
+    getPluginsInformation(pluginName,pluginType,tmp);
+    if(tmp.size()>=1){
+      for(vector<const PluginInfo *>::iterator it=tmp.begin();it!=tmp.end();++it){
+        if((*it)->version>=pluginVersion)
+          return *it;
+      }
       return NULL;
+    }
+    return NULL;
   }
 
   const PluginInfo* PluginsListManager::getPluginInformation(const std::string &pluginName,const std::string &pluginType,const std::string &pluginVersion,const std::string &serverName) {
@@ -299,12 +315,14 @@ namespace tlp {
   }
 
   bool PluginsListManager::pluginIsInstalled(const PluginInfo &plugin) {
-    PluginMatchNameTypeAndVersionPred pred(plugin.name,plugin.type,plugin.version);
+    PluginMatchNameAndTypePred pred(plugin.name,plugin.type);
     vector<LocalPluginInfo*>::iterator it=find_if(localPluginsList.begin(),localPluginsList.end(),pred);
-    if(it!=localPluginsList.end())
-      return true;
-    else
-      return false;
+    while(it!=localPluginsList.end()){
+      if((*it)->version>=plugin.version)
+        return true;
+      it=find_if(it,localPluginsList.end(),pred);
+    }
+    return false;
   }
 
   bool PluginsListManager::getPluginDependencies(const PluginInfo &plugin, set<PluginDependency,PluginDependencyCmp> &dependencies,string &errorMessage) {
