@@ -180,15 +180,18 @@ VECTORTLP tlp::operator-(const VECTORTLP &u) {
 template <typename TYPE,unsigned int SIZE>
 bool VECTORTLP::operator>(const VECTORTLP &vecto) const {
   for (unsigned int i=0;i<SIZE;++i)
-    if (VECTORTLP::array[i] <= vecto[i]) return false;
-  return true;
+    if (VECTORTLP::array[i] < vecto[i]) return false;
+    else if (VECTORTLP::array[i] > vecto[i]) return true;
+  return false;
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE>
 bool VECTORTLP::operator<(const VECTORTLP &vecto) const {
-  for (unsigned int i=0;i<SIZE;++i)
-    if (VECTORTLP::array[i] >= vecto[i]) return false;
-  return true;
+  for (unsigned int i=0;i<SIZE;++i) {
+    if (VECTORTLP::array[i] > vecto[i]) return false;
+    else if (VECTORTLP::array[i] < vecto[i]) return true;
+  }
+  return false;
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE>
