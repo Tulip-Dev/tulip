@@ -158,12 +158,7 @@ bool GraphPropertiesTableWidget::checkPropertyFilter(const string& propertyName)
     return true;
   }
   bool isViewPrefix = propertyName.substr(0, 4).compare("view") == 0;
-  if (typeFilter == View) {
-    return isViewPrefix;
-  }
-  else if (typeFilter == User) {
-    return !isViewPrefix;
-  }
+  return (typeFilter == View) ? isViewPrefix : !isViewPrefix;
 }
 
 bool GraphPropertiesTableWidget::checkPropertyName(const string& propertyName) {
@@ -190,7 +185,7 @@ void GraphPropertiesTableWidget::setPropertyNameFilter(const QRegExp& nameRegExp
 void GraphPropertiesTableWidget::setSelectedPropertiesNames(const vector<string>& selectedProperties) {
   //Avoid sending signals for selected element properties.
   blockSignals(true);
-  //Destruct previous selection.
+  //Destroy previous selection.
   clearSelection();
   for (vector<string>::const_iterator it = selectedProperties.begin(); it != selectedProperties.end(); ++it) {
     for (int i = 0; i < rowCount(); ++i) {
