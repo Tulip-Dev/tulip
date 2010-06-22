@@ -593,18 +593,25 @@ namespace tlp {
   
   void GlMainWidget::useHulls(bool hasHulls) {
 		_hasHulls = hasHulls;
-		if(_hasHulls)
+		if(_hasHulls) {
+			bool visible = false;
+			GlSimpleEntity* oldHulls = scene.getLayer("Main")->findGlEntity("Hulls");
+			if(oldHulls) {
+				visible = oldHulls->isVisible();
+			}
 			manager = new GlCompositeHierarchyManager(scene.getGlGraphComposite()->getInputData()->getGraph(), 
 																							scene.getLayer("Main"), 
 																							"Hulls", 
 																							this->getScene()->getGlGraphComposite()->getInputData()->elementLayout, 
 																							this->getScene()->getGlGraphComposite()->getInputData()->elementSize,
-																							this->getScene()->getGlGraphComposite()->getInputData()->elementRotation);
+																							this->getScene()->getGlGraphComposite()->getInputData()->elementRotation, 
+																							visible);
         // Now we remove and add GlGraphComposite to be sure of the order (first Hulls and after GraphComposite)
         // This code don't modify the functioning of tulip but change the tlp file
         scene.getLayer("Main")->deleteGlEntity(this->getScene()->getGlGraphComposite());
         scene.getLayer("Main")->addGlEntity(this->getScene()->getGlGraphComposite(),"graph");
-      }
+			}
+		}
 	
 	bool GlMainWidget::hasHulls() const {
 		return _hasHulls;

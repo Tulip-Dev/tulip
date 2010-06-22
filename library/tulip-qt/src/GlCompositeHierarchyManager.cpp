@@ -32,17 +32,22 @@ namespace tlp {
 	const std::string GlCompositeHierarchyManager::temporaryPropertyValue = "temporaryPropertyFromGlCompositeHierarchyManager";
 	
 	GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty *layout, 
-																													 SizeProperty *size, DoubleProperty *rotation, std::string namingProperty, std::string subCompositeSuffix) 
+																													 SizeProperty *size, DoubleProperty *rotation, bool visible, std::string namingProperty, std::string subCompositeSuffix) 
 		:_currentColor(0), _graph(graph), _layer(layer), _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size), _rotation(rotation), _layerName(layerName), 
-		 _subCompositesSuffix(subCompositeSuffix), _property(namingProperty), _isVisible(false) {
+		 _subCompositesSuffix(subCompositeSuffix), _property(namingProperty), _isVisible(visible) {
 		this->_layer->addGlEntity(this->_composite, this->_layerName);
 		this->_composite->setVisible(_isVisible);
+		
 		_fillColors.push_back(Color(255, 148, 169, 100));
     _fillColors.push_back(Color(153, 250, 255, 100));
     _fillColors.push_back(Color(255, 152, 248, 100));
     _fillColors.push_back(Color(157, 152, 255, 100));
     _fillColors.push_back(Color(255, 220, 0, 100));
     _fillColors.push_back(Color(252, 255, 158, 100));
+		
+		if(_isVisible) {
+			createComposite();
+		}
 	}
 	
 	GlCompositeHierarchyManager::~GlCompositeHierarchyManager() {

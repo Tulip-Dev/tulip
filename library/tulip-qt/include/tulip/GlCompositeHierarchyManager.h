@@ -50,7 +50,7 @@ class GlConvexGraphHull;
 
   public:
 		GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty* layout, SizeProperty* size, 
-																DoubleProperty* rotation, std::string namingProperty = "name", std::string subCompositeSuffix = " sub-hulls");
+																DoubleProperty* rotation, bool visible = false, std::string namingProperty = "name", std::string subCompositeSuffix = " sub-hulls");
 		~GlCompositeHierarchyManager();
 		
 		virtual void addSubGraph(Graph *, Graph *);
