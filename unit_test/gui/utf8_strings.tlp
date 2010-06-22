@@ -54,9 +54,9 @@
 )
 (property  0 layout "viewLayout"
 (default "(0,0,0)" "()")
-(node 0 "(0.19,4.79,0)")
-(node 1 "(-5.28,-2.9,0)")
-(node 2 "(5.32,-3.35,0)")
+(node 0 "(-5.28,4.79,-2.9)")
+(node 1 "(-5.27792,-2.89914,0)")
+(node 2 "(5.31509,-3.34516,0)")
 )
 (property  0 graph "viewMetaGraph"
 (default "" "()")
@@ -136,11 +136,11 @@
       <data>
         <camera>
           <data>
-            <center>(0.02,0.72,0)</center>
-            <eyes>(0.02,0.72,10.987)</eyes>
+            <center>(0.017545,0.72242,-1.45)</center>
+            <eyes>(0.017545,0.72242,9.53234)</eyes>
             <up>(0,1,0)</up>
             <zoomFactor>1</zoomFactor>
-            <sceneRadius>10.987</sceneRadius>
+            <sceneRadius>10.9823</sceneRadius>
             <d3>0</d3>
           </data>
         </camera>
@@ -170,11 +170,11 @@
       <data>
         <camera>
           <data>
-            <center>(0.02,0.72,0)</center>
-            <eyes>(0.02,0.72,10.987)</eyes>
+            <center>(0.017545,0.72242,-1.45)</center>
+            <eyes>(0.017545,0.72242,9.53234)</eyes>
             <up>(0,1,0)</up>
             <zoomFactor>1</zoomFactor>
-            <sceneRadius>10.987</sceneRadius>
+            <sceneRadius>10.9823</sceneRadius>
             <d3>1</d3>
           </data>
         </camera>
@@ -203,11 +203,11 @@
       <data>
         <camera>
           <data>
-            <center>(0.02,0.72,0)</center>
-            <eyes>(0.02,0.72,10.987)</eyes>
+            <center>(0.017545,0.72242,-1.45)</center>
+            <eyes>(0.017545,0.72242,9.53234)</eyes>
             <up>(0,1,0)</up>
             <zoomFactor>1</zoomFactor>
-            <sceneRadius>10.987</sceneRadius>
+            <sceneRadius>10.9823</sceneRadius>
             <d3>0</d3>
           </data>
         </camera>
@@ -226,7 +226,7 @@
               <right>55</right>
               <inPercent>0</inPercent>
               <textureName>TulipBitmapDir/logolabri.jpg</textureName>
-              <xInv>0</xInv>
+              <xInv>1</xInv>
               <yInv>0</yInv>
             </data>
           </GlEntity>
