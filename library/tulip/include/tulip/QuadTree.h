@@ -67,7 +67,7 @@ namespace tlp {
             return;
         //Check for infini recursion : check if we are on float limit case
         Vec2f subBox((_box[0]+_box[1])/2.f);
-        if((subBox[0] != _box[0][0] && subBox[0]!= _box[1][0]) || (subBox[1]!=_box[0][1] && subBox[1]!=_box[1][1])){
+        if( !((subBox == _box[0]) || (subBox == _box[1]))){
             for (int i=0; i<4; ++i) {
                 if (getChildBox(i).isInside(box)) {
                     getChild(i)->insert(box, id);
