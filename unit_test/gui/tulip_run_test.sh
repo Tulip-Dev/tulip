@@ -66,15 +66,8 @@ if [ ! -f test_gui.tlp ]; then
     exit
 fi
 
-# check the result graph file
-# first check dates
-if [ "$(grep '(date ' $TLP_OUTPUT_FILE)" = "$(grep '(date ' test_gui.tlp)" ]; then
-     NB_DIFFS=0
-else
-     NB_DIFFS=4
-fi
-# the 2 files may only have different dates
-if [ $(diff $TLP_OUTPUT_FILE test_gui.tlp | wc -l) -gt $NB_DIFFS ]; then
+# check the result graph file (see tlp_diff.sh)
+if [ $(sh tlp_diff.sh $TLP_OUTPUT_FILE test_gui.tlp | wc -l) -gt 0 ]; then
     mv test_gui.tlp failed_${TEST_NAME}.tlp
     echo "$TEST_NAME test failed: diff failure between ${TLP_OUTPUT_FILE} & failed_${TEST_NAME}.tlp"
 else

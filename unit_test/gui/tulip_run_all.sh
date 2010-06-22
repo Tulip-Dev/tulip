@@ -3,6 +3,14 @@
 # This script allows the run of all previously recorded tests
 
 TYPE=$1
+TLP_DIFF_SCENE=$2
+
+# check if diff on scene part in tlp files is excluded (used in tlp_diff.sh)
+if [ "$TLP_DIFF_SCENE" = "no_scene_diff" ]; then
+  export TLP_DIFF_SCENE=NO
+else
+  unset TLP_DIFF_SCENE
+fi
 
 # clean up log file
 if [ -f all_tests_run.log ]; then
@@ -25,10 +33,21 @@ sleep 10
 . ./stop_tulip.sh
  
 # run tests loop
-for TEST in `ls run_*${TYPE}_test.sh`
+TESTS=`ls run_*${TYPE}_test.sh`
+NB_TESTS=`echo $TESTS | wc -w`
+TEST_ID=0
+for TEST in $TESTS
 do
-    echo "Running $TEST ..."
+    TEST_ID=`expr $TEST_ID + 1`
+    echo -n "launching test $TEST_ID/$NB_TESTS: $TEST ..."
     sh $TEST >> all_tests_run.log 2>&1
+    # check result
+    tail -1 all_tests_run.log | grep OK > /dev/null
+    if [ $? -eq 0 ]; then
+      echo " OK"
+    else
+      echo " failed"
+    fi
 done
 
 # check results
