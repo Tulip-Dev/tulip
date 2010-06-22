@@ -21,10 +21,7 @@
 
 #include <tulip/ObservableGraph.h>
 #include <tulip/Color.h>
-
-#ifndef NDEBUG
 #include <tulip/ObservableProperty.h>
-#endif /* NDEBUG */
 
 namespace tlp {
 
