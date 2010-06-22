@@ -24,7 +24,7 @@ fi
 # just to reduce the future time of shared libs loading
 # expecting they will be already in memory
 echo "Check Tulip launch ..."
-TULIP=`which tulip`
+TULIP=`which tulip_app`
 if [ $? -eq 1 ]; then
     echo 'tulip executable not found';
     exit
@@ -34,9 +34,13 @@ sleep 10
 . ./stop_tulip.sh
  
 # run tests loop
-for TEST in `ls run_*${TYPE}_test.sh`
+TESTS=`ls run_*${TYPE}_test.sh`
+NB_TESTS=`echo $TESTS | wc -w`
+TEST_ID=0
+for TEST in $TESTS
 do
-    echo "Running $TEST ..."
+    TEST_ID=`expr $TEST_ID + 1`
+    echo "launching test $TEST_ID/$NB_TESTS: $TEST ..."
     sh $TEST >> all_tests_run.log 2>&1
 done
 
