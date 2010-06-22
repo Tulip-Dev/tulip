@@ -129,7 +129,16 @@ namespace tlp {
       for(CompletePluginsList::iterator it=pluginsList.begin();it!=pluginsList.end();++it) {
         if(!(*it).first->local) {
           DistPluginInfo *pluginInfo=(DistPluginInfo*)((*it).first);
-          if(pluginInfo->version.compare(pluginInfo->localVersion)>0 && pluginInfo->localVersion!="") {
+          QString majorVersion(pluginInfo->localVersion.c_str());
+
+
+          QStringList tmp=majorVersion.split(".");
+          majorVersion="";
+          if(tmp.size()>2){
+            majorVersion=tmp[0]+"."+tmp[1];
+          }
+
+          if((pluginInfo->version.compare(pluginInfo->localVersion)>0) && QString(pluginInfo->version.c_str()).startsWith(majorVersion) && (pluginInfo->localVersion!="")) {
 #if defined(__APPLE__)
 #if defined(MACPPC)
             if(pluginInfo->macVersion_ppc){
@@ -143,7 +152,18 @@ namespace tlp {
 #else
             if(pluginInfo->linuxVersion){
 #endif
-              pluginsOutOfDate.push_back(pluginInfo);
+              bool find=false;
+              for(vector<DistPluginInfo*>::iterator it2=pluginsOutOfDate.begin();it2!=pluginsOutOfDate.end();++it2){
+                if((*it2)->name==pluginInfo->name){
+                  find=true;
+                  if((*it2)->version.compare(pluginInfo->version)<0){
+                    (*it2)=pluginInfo;
+                  }
+                }
+              }
+
+              if(!find)
+                pluginsOutOfDate.push_back(pluginInfo);
             }
           }
         }
