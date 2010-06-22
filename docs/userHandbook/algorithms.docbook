@@ -182,7 +182,7 @@
                         
                         <sect3 id="Component" ><title>Component :</title> 
                                         <sect4 id="biconnected-graph"><title>Biconnected Component :</title> 
-						<para>A connected graph is biconnected if the removal of any single node and his edges can not disconnect the graph.
+						<para>A connected graph is biconnected if the removal of any single node and its edges can not disconnect the graph.
 						The biconnected components of a graph are the maximal subsets of nodes such that the removal of a node from a particular component will not disconnect the component.
 
 						Note that unlike connected components, a node can belong to multiple biconnected components.
@@ -458,22 +458,10 @@
 			<para>Here is an example (left = before, right = after)
 			<graphic fileref="images/algos_connectedpack_1.png" /></para>
                 </sect4>
-                <sect4 id="scatter-plot"><title>Scatter Plot</title>
-			<para>This layout can be used to see a correlation between 3 metrics (parameters). For example, if we have a node with "usedMetric1" = 0, "usedMetric2" = 1 and, "usedMetric3" = 2, the node will be place in the space with the coordinates : (0,1,2).
-			</para>
-			<para> Following is an example, in which are 3 nodes. Those 3 nodes have 3 Metrics (called x,y,z). Node 1 equals to (0,0,0), Node 2 equals to (1,1,1) and Node 3 equals to (2,2,2). 
-			</para>
-			<para>We can see from the layout, that our correlation follow a linear function.</para>
-			<graphic fileref="images/algos_scatterplot_1.png" />
-                </sect4>
         </sect3>
 	<sect3 id="ForceDirected"><title>Force Directed</title>
 		<para>Force Directed layouts will try to place nodes so that, the distance in the graph (metric of the edges) should be the closest to the distance on the drawing.</para>
 		<para><code>Warning ! :</code> The previous property is not 100%.</para> 
-		<sect4 id="embedder-hde"><title>Embedder (HDE)</title>
-			<para>The HDE layout, will only work on a 2D Mesh like graph.
-			<ulink url="../../doxygen/allPlugins.html#Embedder" >Algorithm documentation</ulink></para>
-                </sect4>
                 <sect4 id="gem-frick"><title>GEM (Frick)</title>
 			<para>The GEM layout, unlike the HDE layout, works on all graphs. But it can take a very long computing time if the graph has more than 2000 nodes.
 			<ulink url="../../doxygen/allPlugins.html#GEMLayout" >Algorithm documentation</ulink></para>
@@ -483,10 +471,6 @@
 		<sect4 id="hierarchical-graph"><title>Hierarchical Graph</title>
 			<para>This layout, will place the nodes of a graph as if the graph was a tree.
 			<ulink url="../../doxygen/allPlugins.html#HierarchicalGraph" >Algorithm documentation</ulink></para>
-                </sect4>
-                <sect4 id="hierarchical-graph-3d"><title>Hierarchical Graph 3D</title>
-			<para>This layout is the same that the "Hierarchical Graph" but in 3D.
-			<ulink url="../../doxygen/allPlugins.html#GeneralGraph3D" >Algorithm documentation</ulink></para>
                 </sect4>
         </sect3>
 </sect2>
