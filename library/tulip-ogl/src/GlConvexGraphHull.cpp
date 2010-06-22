@@ -28,7 +28,6 @@ using namespace std;
 
 #ifndef NDEBUG
 #include <iostream>
-#include <tulip/GlComposite.h>
 #endif /* NDEBUG */
 
 namespace tlp {
