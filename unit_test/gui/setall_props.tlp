@@ -1303,7 +1303,7 @@
               <right>55</right>
               <inPercent>0</inPercent>
               <textureName>TulipBitmapDir/logolabri.jpg</textureName>
-              <xInv>0</xInv>
+              <xInv>1</xInv>
               <yInv>0</yInv>
             </data>
           </GlEntity>
