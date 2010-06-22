@@ -22,29 +22,40 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/DrawingTools.h>
-
+#include <tulip/GlComplexPolygon.h>
+#include <tulip/GlComposite.h>
 using namespace std;
 
 #ifndef NDEBUG
 #include <iostream>
+#include <tulip/GlComposite.h>
 #endif /* NDEBUG */
 
 namespace tlp {
 
 int GlConvexGraphHull::bezierValue = 1;
 	
-GlConvexGraphHull::GlConvexGraphHull(const Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation) :
-  GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, 0), fcolor, GlConvexGraphHull::bezierValue), graph(graph), layout(layout), size(size), rotation(rotation) {
+GlConvexGraphHull::GlConvexGraphHull(GlComposite* parent, const std::string& name, const Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation) :
+  _parent(parent), _name(name), _fcolor(fcolor), _polygon(NULL), graph(graph), layout(layout), size(size), rotation(rotation) {
+	if(graph->numberOfNodes() > 0) {
+		_polygon = new GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, 0), fcolor, GlConvexGraphHull::bezierValue);
+		_parent->addGlEntity(_polygon, _name);
+	}
+	graph->addGraphObserver(this);
+	layout->addPropertyObserver(this);
 #ifndef NDEBUG
   assert(graph);
   assert(layout);
   assert(size);
   assert(rotation);
-  graph->addGraphObserver(this);
-  layout->addPropertyObserver(this);
   size->addPropertyObserver(this);
   rotation->addPropertyObserver(this);
 #endif /* NDEBUG */
+}
+
+void GlConvexGraphHull::setVisible(bool visible) {
+	if(_polygon)
+		_polygon->setVisible(visible);
 }
 
 void GlConvexGraphHull::translate(const Coord& mouvement) {
@@ -59,12 +70,27 @@ void GlConvexGraphHull::draw(float lod, Camera *camera) {
 #ifndef NDEBUG
   assert(graph);
 #endif /* NDEBUG */
-  GlComplexPolygon::draw(lod, camera);
+	if(_polygon) {
+		_polygon->draw(lod, camera);
+	}
 }
 
 void GlConvexGraphHull::updateHull() {
-	points.clear();
-  createPolygon(computeConvexHull(graph, layout, size, rotation, 0), GlConvexGraphHull::bezierValue);
+	if(_polygon) {
+		_parent->deleteGlEntity(_polygon);
+		delete _polygon;
+	}
+	
+  _polygon = new GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, 0), _fcolor, GlConvexGraphHull::bezierValue);
+	_parent->addGlEntity(_polygon, _name);
+}
+
+void GlConvexGraphHull::addNode(tlp::Graph* graph, tlp::node n) {
+	updateHull();
+}
+
+void GlConvexGraphHull::afterSetNodeValue(PropertyInterface*, const node) {
+	updateHull();
 }
 
 #ifndef NDEBUG

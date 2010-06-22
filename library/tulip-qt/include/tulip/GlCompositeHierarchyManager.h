@@ -28,6 +28,9 @@
 #include <tulip/GlComposite.h>
 
 namespace tlp {
+
+class GlConvexGraphHull;
+
 	struct node;
 	class GlComposite;
 	class Color;
@@ -43,7 +46,7 @@ namespace tlp {
    * Create a GlComposite item for each and every graph and subgraph.
 	 * This class observes the graph to update said hierarchy when a subgraph is added or deleted.
    */
-  class TLP_QT_SCOPE GlCompositeHierarchyManager : public GraphObserver, PropertyObserver {
+  class TLP_QT_SCOPE GlCompositeHierarchyManager : public GraphObserver {
 
   public:
 		GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty* layout, SizeProperty* size, 
@@ -54,9 +57,6 @@ namespace tlp {
 		virtual void delSubGraph(Graph *, Graph *);
 		virtual void afterSetAttribute(Graph*, const std::string&);
 		virtual void beforeSetAttribute(Graph*, const std::string&);
-		virtual void addNode(tlp::Graph* graph, tlp::node n);
-		
-		virtual void afterSetNodeValue(PropertyInterface* property, const node n);
 		
 		void setGraph(tlp::Graph* graph);
 		
@@ -92,7 +92,7 @@ namespace tlp {
 		/**
 		 * This map contains the composite that contains the associated graph's hull.
 		 */
-		std::map<tlp::Graph*, tlp::GlComposite*> _graphsComposites;
+		std::map<tlp::Graph*, std::pair<tlp::GlComposite*, GlConvexGraphHull*> > _graphsComposites;
   };
 	
 	class GlHierarchyMainComposite : public GlComposite {

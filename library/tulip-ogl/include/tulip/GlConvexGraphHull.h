@@ -19,18 +19,24 @@
 #ifndef GLCONVEXGRAPHHULL_H_
 #define GLCONVEXGRAPHHULL_H_
 
-#include <tulip/GlComplexPolygon.h>
+#include <tulip/ObservableGraph.h>
+#include <tulip/Color.h>
+
 #ifndef NDEBUG
 #include <tulip/ObservableProperty.h>
-#include <tulip/ObservableGraph.h>
 #endif /* NDEBUG */
 
 namespace tlp {
-class Graph;
 
+class GlComposite;
+class GlSimpleEntity;
+class Camera;
+class Coord;
+class Graph;
 class LayoutProperty;
 class SizeProperty;
 class DoubleProperty;
+class GlComplexPolygon;
 
 /**
  * @brief This class draws a convex hull around a graph.
@@ -41,11 +47,7 @@ class DoubleProperty;
  * @warning The graph or any of the properties linked to a GlConvexGraphHull should never be deleted before the entity. Such a thing should be
  * reported to the user in debug mode, raising an assertion.
  */
-#ifndef NDEBUG
-class TLP_GL_SCOPE GlConvexGraphHull: public GlComplexPolygon, public GraphObserver, public PropertyObserver {
-#else
-  class TLP_GL_SCOPE GlConvexGraphHull: public GlComplexPolygon {
-#endif /* NDEBUG */
+class TLP_GL_SCOPE GlConvexGraphHull: public GraphObserver, public PropertyObserver {
 public:
   /**
    * @param fcolor The color used to fill the hull.
@@ -54,8 +56,7 @@ public:
    * @param size The property defining the graph's elements' sizes.
    * @param rotation The property defining the graph's elements' rotation.
    */
-  GlConvexGraphHull(const tlp::Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation);
-
+  GlConvexGraphHull(GlComposite* parent, const std::string& name, const tlp::Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation);
   /**
    * Translate entity
    */
@@ -66,17 +67,27 @@ public:
 	 */
 	void updateHull();
 	
+	void setVisible(bool visible);
+	
   /**
    * Draw the complex polygon
    */
   virtual void draw(float lod, Camera *camera);
 
+	virtual void addNode(tlp::Graph* graph, tlp::node n);
+	
+	virtual void afterSetNodeValue(PropertyInterface* property, const node n);
+	
 #ifndef NDEBUG
   virtual void destroy(Graph *);
   virtual void destroy(PropertyInterface*);
 #endif /* NDEBUG */
 
 private:
+	GlComposite* _parent;
+	std::string _name;
+	GlComplexPolygon* _polygon;
+	Color _fcolor;
   Graph *graph;
   LayoutProperty *layout;
   SizeProperty *size;
