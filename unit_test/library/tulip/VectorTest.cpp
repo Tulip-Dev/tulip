@@ -39,7 +39,7 @@ void VectorTest::testInternalOperation() {
     CPPUNIT_ASSERT_EQUAL(0.0, vectnull[i]);
     CPPUNIT_ASSERT_EQUAL(double(i), vect1[i]);
   }
-  const Vector<double, SIZE> vect2(vect1);
+  Vector<double, SIZE> vect2(vect1);
   CPPUNIT_ASSERT_EQUAL(true, vect1 == vect2);
   vect1 += 3;
   CPPUNIT_ASSERT_EQUAL(false, vect1 == vect2);
@@ -56,7 +56,6 @@ void VectorTest::testInternalOperation() {
   vect1 = vect2;
   CPPUNIT_ASSERT_EQUAL(true, vect1 == vect2);
 
-  Vector<double, SIZE> vect2;
   for (unsigned int i=0; i<SIZE; ++i) {
     vect1[i]=i;
     vect2[i]=i;
