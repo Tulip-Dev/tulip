@@ -195,6 +195,9 @@ namespace tlp {
       pos=out.find(TulipBitmapDir);
     }
     outDataSet.set<string>("scene",out);
+		if(_hasHulls && manager->isVisible()) {
+			outDataSet.set<DataSet>("Hulls", manager->getData());
+		}
     return outDataSet;
   }
   //==================================================
@@ -607,7 +610,7 @@ namespace tlp {
 																							this->getScene()->getGlGraphComposite()->getInputData()->elementRotation, 
 																							visible);
         // Now we remove and add GlGraphComposite to be sure of the order (first Hulls and after GraphComposite)
-        // This code don't modify the functioning of tulip but change the tlp file
+        // This code doesn't affect the behavior of tulip but the tlp file is modified 
         scene.getLayer("Main")->deleteGlEntity(this->getScene()->getGlGraphComposite());
         scene.getLayer("Main")->addGlEntity(this->getScene()->getGlGraphComposite(),"graph");
 			}

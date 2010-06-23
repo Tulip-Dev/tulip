@@ -57,6 +57,10 @@ void GlConvexGraphHull::setVisible(bool visible) {
 		_polygon->setVisible(visible);
 }
 
+bool GlConvexGraphHull::isVisible() {
+	return _polygon && _polygon->isVisible();
+}
+
 void GlConvexGraphHull::translate(const Coord& mouvement) {
 #ifndef NDEBUG
   assert(graph);

@@ -59,14 +59,14 @@ class GlConvexGraphHull;
 		virtual void beforeSetAttribute(Graph*, const std::string&);
 		
 		void setGraph(tlp::Graph* graph);
+		DataSet getData();
 		
 		void createComposite();
-		void deleteComposite();
 		
 		void setVisible(bool visible);
 		bool isVisible() const;
 		
-		private:
+	private:
 		
 		const tlp::Color getColor();
 		int _currentColor;
