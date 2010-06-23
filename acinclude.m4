@@ -533,28 +533,11 @@ dnl With the version 4 of Qt, its features are splitted in many libs
 if test ${VAR_WIN32} = 1
 then
   LIB_QT_ASSISTANT="-L${QTDIR}/lib -lQtAssistantClient4"
-  LIB_QT="-lQtCore4 -lQtGui4 -lQtOpenGL4 -lQtNetwork4 -lQtXml4"
-dnl For linking purpose, we need to copy some libs
-dnl Copy $QTDIR/lib/Qt*4.dll in $QTDIR/lib/libQt*4.dll if needed
-  if test ! -f ${QTDIR}/lib/libQtCore4.dll ; then
-    cp ${QTDIR}/bin/QtCore4.dll ${QTDIR}/lib/libQtCore4.dll
-  fi
-  if test ! -f ${QTDIR}/lib/libQtGui4.dll ; then
-    cp ${QTDIR}/bin/QtCore4.dll ${QTDIR}/lib/libQtGui4.dll
-  fi
-  if test ! -f ${QTDIR}/lib/libQtOpenGL4.dll ; then
-    cp ${QTDIR}/bin/QtOpenGL4.dll ${QTDIR}/lib/libQtOpenGL4.dll
-  fi
-  if test ! -f ${QTDIR}/lib/libQtNetwork4.dll ; then
-    cp ${QTDIR}/bin/QtNetwork4.dll ${QTDIR}/lib/libQtNetwork4.dll
-  fi
-  if test ! -f ${QTDIR}/lib/libQtXml4.dll ; then
-    cp ${QTDIR}/bin/QtXml4.dll ${QTDIR}/lib/libQtXml4.dll
-  fi
+  LIB_QT="${QTDIR}/bin/QtCore4.dll ${QTDIR}/bin/QtGui4.dll ${QTDIR}/bin/QtOpenGL4.dll ${QTDIR}/bin/QtNetWork4.dll  ${QTDIR}/bin/QtWebKit4.dll ${QTDIR}/bin/QtXml4.dll"
 else
   if test ${VAR_MACOSX} = 1
   then
-    LIB_QT="-F$ac_qt_libraries -framework QtCore -framework QtGui -framework QtOpenGL -framework QtNetwork -framework QtSql -framework QtXml"
+    LIB_QT="-F$ac_qt_libraries -framework QtCore -framework QtGui -framework QtOpenGL -framework QtNetwork -framework QtSql -framework QtWebKit -framework QtXml"
     if test -d ${QTDIR}/lib/QtAssistantClient.framework
     then
       LIB_QT_ASSISTANT="-F$ac_qt_libraries -framework QtAssistantClient"
@@ -568,7 +551,7 @@ else
     fi
   else
     LIB_QT_ASSISTANT="-L${QTDIR}/lib64 -L${QTDIR}/lib -lQtAssistantClient"
-    LIB_QT="-lQtCore -lQtGui -lQtOpenGL -lQtXml -lQtNetwork"
+    LIB_QT="-lQtCore -lQtGui -lQtOpenGL  -lQtWebKit -lQtXml -lQtNetwork"
   fi
 fi
 
