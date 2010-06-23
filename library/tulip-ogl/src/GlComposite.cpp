@@ -57,15 +57,20 @@ namespace tlp {
   }
   //============================================================
   void GlComposite::reset(bool deleteElems) {
+	  vector<GlSimpleEntity*> toTreat;
     for(ITM i = elements.begin(); i != elements.end(); ++i){
-      if (deleteElems){
-        delete (*i).second;
-      }else{
-        (*i).second->removeParent(this);
-        for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it){
-          (*i).second->removeLayerParent(*it);
-        }
-      }
+    	//Push elements to treat in a vector as deleting elements in the loop invalidate the current iterator.
+    	toTreat.push_back((*i).second);
+    }
+    for(vector<GlSimpleEntity*>::iterator it = toTreat.begin() ; it != toTreat.end() ; ++it){
+    	if (deleteElems){
+    		delete (*it);
+    	}else{
+    		(*it)->removeParent(this);
+    		for(vector<GlLayer*>::iterator itLayers=layerParents.begin();itLayers!=layerParents.end();++itLayers){
+    			(*it)->removeLayerParent(*itLayers);
+    		}
+    	}
     }
     elements.clear();
     _sortedElements.clear();
