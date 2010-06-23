@@ -80,7 +80,7 @@ Delete $PLUGINSDIR\spltmp.bmp ;idem pour l'image
 Push $PROGRAMFILES
 Call GetParentDir
 Pop $R0
-StrCpy $INSTDIR "$R0\Tulip_@VERSION@\"
+StrCpy $INSTDIR "$R0\Tulip\"
 
 Call CheckPreviousVersion
 FunctionEnd
