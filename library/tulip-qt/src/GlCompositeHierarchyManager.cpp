@@ -136,12 +136,11 @@ namespace tlp {
 			return;
 		
 		this->_isVisible = visible;
+		_composite->setVisible(visible);
+		
 		if(_isVisible) {
 			createComposite();
 		}
-// 		else {
-// 			deleteComposite();
-// 		}
 	}
 	
 	bool GlCompositeHierarchyManager::isVisible() const{
@@ -150,14 +149,30 @@ namespace tlp {
 	
 	DataSet GlCompositeHierarchyManager::getData() {
 		DataSet set;
-// 		_graph->
-		unsigned int graphId;
-		unsigned int visibility;
-		stringstream graph;
 		int i = 0;
 		for(std::map<tlp::Graph*, std::pair<tlp::GlComposite*, tlp::GlConvexGraphHull*> >::const_iterator it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
-			graph << "graph" << i++;
-			set.set<pair<unsigned int, unsigned int> >(graph.str(), pair<unsigned int, unsigned int>(graphId, visibility));
+			unsigned int graphId = it->first->getId();
+			unsigned int visibility = (int)it->second.first->isVisible()*2 + (int)it->second.second->isVisible();
+			stringstream graph;
+			graph << graphId;
+			set.set<unsigned int>(graph.str(), visibility);
+// 			set.set<pair<unsigned int, unsigned int> >(graph.str(), pair<unsigned int, unsigned int>(graphId, visibility));
+		}
+		return set;
+	}
+	
+	void GlCompositeHierarchyManager::setData(DataSet dataSet) {
+		for(std::map<tlp::Graph*, std::pair<tlp::GlComposite*, tlp::GlConvexGraphHull*> >::const_iterator it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
+			stringstream graph;
+			graph << it->first->getId();
+			if(dataSet.exist(graph.str())) {
+				unsigned int visibility;
+				dataSet.get<unsigned int>(graph.str(), visibility);
+				bool firstVisibility = visibility-1 > 0;
+				it->second.first->setVisible(firstVisibility);
+				bool secondVisibility = visibility%2 > 0;
+				it->second.second->setVisible(secondVisibility);
+			}
 		}
 	}
 			
