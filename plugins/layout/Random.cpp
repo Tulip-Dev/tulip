@@ -18,22 +18,41 @@
 #include <assert.h>
 #include "Random.h"
 
-LAYOUTPLUGINOFGROUP(Random,"Random","David Auber","01/12/1999","Ok","1.0","Basic");
+const char * paramHelp[] = {
+  // 3D
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Boolean" ) \
+  HTML_HELP_BODY() \
+  "If true the layout is in 3D else it is computed in 2D" \
+  HTML_HELP_CLOSE()
+};
+
+LAYOUTPLUGINOFGROUP(Random,"Random","David Auber","01/12/1999","Ok","1.1","Basic");
 
 using namespace std;
 using namespace tlp;
 
-Random::Random(const PropertyContext &context):LayoutAlgorithm(context){}
+Random::Random(const PropertyContext &context):LayoutAlgorithm(context){
+  addParameter<bool>("3D layout", paramHelp[0], "true");
+}
 
 Random::~Random() {}
 
 bool Random::run() {
+  bool is3D = true ;
+  if ( dataSet!=0 ) {
+    dataSet->get("3D layout", is3D);
+  }
+
   layoutResult->setAllEdgeValue(vector<Coord>(0));
   graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
   Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
-    layoutResult->setNodeValue(itn,Coord(rand()%1024,rand()%1024,rand()%1024));
+    if(is3D)
+      layoutResult->setNodeValue(itn,Coord(rand()%1024,rand()%1024,rand()%1024));
+    else
+      layoutResult->setNodeValue(itn,Coord(rand()%1024,rand()%1024,0));
   } delete itN;
   return true;
 }
