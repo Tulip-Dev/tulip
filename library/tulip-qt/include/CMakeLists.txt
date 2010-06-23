@@ -58,6 +58,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/SimpleStringsListSelectionWidget.h 
 	tulip/DoubleStringsListSelectionWidget.h 
 	tulip/QGlPixelBufferManager.h
+	tulip/GlCompositeHierarchyManager.h
 	tulip/BaseGraphicsViewComponentMacro.h
     tulip/QtOpenGlErrorViewer.h
     tulip/CSVParser.h

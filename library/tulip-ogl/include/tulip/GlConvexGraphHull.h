@@ -65,6 +65,7 @@ public:
 	void updateHull();
 	
 	void setVisible(bool visible);
+	bool isVisible();
 	
   /**
    * Draw the complex polygon
