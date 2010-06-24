@@ -2202,7 +2202,7 @@
 (default "false" "false")
 )
 (property  0 int "viewShape"
-(default "1" "0")
+(default "4" "0")
 )
 (property  0 size "viewSize"
 (default "(1,1,1)" "(0.125,0.125,0.5)")
