@@ -337,7 +337,7 @@ void TulipApp::initializeGraph(Graph *graph) {
   graph->getProperty<SizeProperty>("viewSize")->setAllEdgeValue(Size(0.125,0.125,0.5));
   graph->getProperty<ColorProperty>("viewColor")->setAllNodeValue(Color(255,0,0));
   graph->getProperty<ColorProperty>("viewColor")->setAllEdgeValue(Color(0,0,0));
-  graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(1);
+  graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(4);
   graph->getProperty<IntegerProperty>("viewShape")->setAllEdgeValue(0);
   graph->getProperty<StringProperty>("viewFont")->setAllNodeValue(tlp::TulipLibDir + "tlp/bitmaps/font.ttf");
   graph->getProperty<StringProperty>("viewFont")->setAllEdgeValue(tlp::TulipLibDir + "tlp/bitmaps/font.ttf");
