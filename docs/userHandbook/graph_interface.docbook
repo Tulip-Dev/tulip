@@ -347,6 +347,31 @@
                     <inlinegraphic fileref="images/mousebarselectsquare.png"/> The 'square' is used both for resizing AND rotating the selection.
                   </para>
                 </listitem>
+                <listitem>
+                  <para>
+                    <inlinegraphic fileref="images/mousebarselectalign.png"/> These five icons are used to align selected nodes.
+                    <itemizedlist>
+                      <listitem>
+                      First one : align vertically on center
+                      </listitem>
+                      <listitem>
+                      2nd : align horizontally on center
+                      </listitem>
+                      <listitem>
+                      3rd : align vertically on the right side
+                      </listitem>
+                      <listitem>
+                      4th : align vertically on the left side
+                      </listitem>
+                      <listitem>
+                      5th : align horizontally on the bottom side 
+                      </listitem>
+                      <listitem>
+                      6th : align horizontally on the top side
+                      </listitem>
+                    </itemizedlist>
+                  </para>
+                </listitem>
               </itemizedlist>
             </listitem>
             <listitem>
@@ -458,6 +483,8 @@
                   <listitem><para><code>Orthogonal projection</code> : enables/disables the orthogonal projection. If not checked, the perpsective projection is used.</para>
                   </listitem>
                   <listitem><para><code>Background color</code> : enables to choose a color for the background of a graph view.</para>
+                  </listitem>
+                  <listitem><para><code>Selection color</code> : enables to choose a color for the selected nodes/edges. If you click on \"Save at default\", this selection color is apply when you open a new view.</para>
                   </listitem>
               </itemizedlist></para>
             </listitem>
