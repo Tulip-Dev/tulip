@@ -1,0 +1,59 @@
+FIND_PACKAGE( Qt4 REQUIRED )
+INCLUDE( ${QT_USE_FILE} )
+
+INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
+
+set(serverGenerator_SRCS
+    PluginGenerate.cpp
+    ServerGenerator.cpp
+)
+
+set(pluginInstaller_SRCS
+    PluginGenerate.cpp
+    PluginInstaller.cpp
+)
+
+INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${LIBXML2_INCLUDE_DIR} ${PROJECT_BINARY_DIR}/library/tulip-qt/include/tulip ${PROJECT_BINARY_DIR}/software/tulip/include ${TulipInclude} ${TulipQtInclude} ${TulipOGLInclude} ${TulipPluginsManagerInclude})
+
+ADD_EXECUTABLE(serverGenerator ${serverGenerator_SRCS})
+TARGET_LINK_LIBRARIES(serverGenerator
+                      ${FREETYPE_LIBRARY}
+                      ${GZStreamLibrary}
+                      ${QT_LIBRARIES}
+                      ${QT_QTASSISTANT_LIBRARY}
+                      ${QT_QTASSISTANTCLIENT_LIBRARY}
+                      ${QT_QTXML_LIBRARY}
+                      ${QT_QTOPENGL_LIBRARY}
+                      ${OPENGL_glu_LIBRARY}
+                      ${OPENGL_gl_LIBRARY}
+                      ${LIBXML2_LIBRARIES}
+                      ${JPEG_LIBRARY}
+                      ${LibTulipName}
+                      ${LibTulipOglName}
+                      ${LibTulipQtName}
+                      ${LibTulipPluginsManagerName} )
+ADD_DEPENDENCIES(serverGenerator ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
+
+ADD_EXECUTABLE(pluginInstaller ${pluginInstaller_SRCS})
+TARGET_LINK_LIBRARIES(pluginInstaller
+                      ${FREETYPE_LIBRARY}
+                      ${GZStreamLibrary}
+                      ${QT_LIBRARIES}
+                      ${QT_QTASSISTANT_LIBRARY}
+                      ${QT_QTASSISTANTCLIENT_LIBRARY}
+                      ${QT_QTXML_LIBRARY}
+                      ${QT_QTOPENGL_LIBRARY}
+                      ${OPENGL_glu_LIBRARY}
+                      ${OPENGL_gl_LIBRARY}
+                      ${LIBXML2_LIBRARIES}
+                      ${JPEG_LIBRARY}
+                      ${LibTulipName}
+                      ${LibTulipOglName}
+                      ${LibTulipQtName}
+                      ${LibTulipPluginsManagerName} )
+ADD_DEPENDENCIES(pluginInstaller ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
+
+INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/generate_plugin_dirs.sh
+        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
+INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/generate_plugin_doc.sh
+        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")

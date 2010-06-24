@@ -3,7 +3,13 @@ if [ $# -lt 3 ]; then
   exit
 fi
 
-TULIP_VERSION=`$(dirname $0)/../../../../tulip-config --version`
+if [ -f generation.log ]; then
+    rm generation.log
+fi
+
+touch generation.log
+
+TULIP_VERSION=`sh $(dirname $0)/../../../../tulip-config --version`
 
 SRC_TOP_DIR=$1
 SRV_DIR=$2
@@ -33,6 +39,9 @@ else
 FILE=${FILE_CPP}
 fi
 sh generate_plugin_doc.sh ${FILE} /tmp/plugins_doc
-./pluginInstaller ${LIB_DIR}/lib*.so /tmp/plugins_doc/xml/${DIR}*.xml $SRV_DIR $GENERATEDOC $ARCH
+echo "" >> generation.log
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" >> generation.log
+./pluginInstaller ${LIB_DIR}/lib*.so /tmp/plugins_doc/xml/${DIR}*.xml $SRV_DIR $GENERATEDOC $ARCH >> generation.log
+echo "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" >> generation.log
 done
 
