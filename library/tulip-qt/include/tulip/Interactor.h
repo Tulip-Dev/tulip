@@ -215,7 +215,7 @@ R : Revision
 #define INTERACTORPLUGINVIEWEXTENSION(CN,CNT,BCNT,VCN,A,D,I,R)     \
 class CN : public Interactor { \
 public : \
-  CN() {baseInteractor=InteractorManager::getInst().getInteractor(BCNT);setPriority(baseInteractor->getPriority());} \
+CN() {baseInteractor=InteractorManager::getInst().getInteractor(BCNT);if(baseInteractor){setPriority(baseInteractor->getPriority());}} \
   void setView(View *view){baseInteractor->setView(view);} \
   void install(QWidget *widget){baseInteractor->install(widget);} \
   void remove(){baseInteractor->remove();} \
