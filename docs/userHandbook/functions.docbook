@@ -133,14 +133,33 @@
                 <itemizedlist>
                     <listitem><para>Click on the <code>New</code> button.</para></listitem>
                     <listitem><para>Select the type of property, <code>String</code>. (other possibilities are Color, Integer, Layout, Metric, Size, Selection)</para></listitem>
-                    <listitem><para>Type the name of the new Property (e.g. <code>mylabel</code>).</para></listitem>
+                    <listitem><para>Type the name of the new Property (e.g. <code>mylabel</code>). </para> </listitem>
                 </itemizedlist>
-
             For removing a property, you just have to select the property and click on the button named <code>Remove</code>. When deleting properties used by the render engine, those properties will be temporary removed from the list but still continue to exist. Note that it is not possible to remove <code>inherited</code> properties.
             </para>
-            <para>The last feature is cloning property. Select the desired property and click on the button named <code>Clone</code>. Type the name you have chosen. The new property keeps the values.</para>
+            <para> For importing properties from CSV files click on the <code>Import CSV Data</code>. A widget will appear to help user import data in the current graph see <xref />. </para>
+            <para> The last feature is cloning property. Select the desired property and click on the button named <code>Clone</code>. Type the name you have chosen. The new property keeps the values. </para>
         </sect3>
-
+        <sect3 id="csv-import"> <title>Import properties from CSV file.</title>
+	<para>With this functionnality user can easily import properties from CSV files into graph. A widget helps user import data during the process by giving a preview of the result. Data will be loaded on nodes until there is no more data or all the nodes have bee processed (in this case the excess of data will be lost). </para>
+	<para>If you want to import properties :</para>
+	    <itemizedlist>
+                        <listitem><para>Select the CSV file name with the <code>CSV file</code> text field.</para></listitem>
+                        <listitem><para>Choose the separator used in the file with the <code>Separator</code> text field. </para></listitem>
+                        <listitem><para>Set if the first row/column is used as properties name with the <code>Use first row as property name</code> check box.</para></listitem>
+			<listitem><para>Choose if the data are row arranged with the <code>Use column as properties</code> radio button or column arranged with the <code>Use row as properties</code> radio button <code>Use first row as property name</code> check box.</para></listitem>
+			<listitem><para>For each properties detected you can select or unselect it, change it's name and set this data type :</para>
+			<para>
+			<itemizedlist>
+			<listitem><para>To select or unselect a property just check or uncheck the check box before its name. Each unchecked property wont be load.</para></listitem>
+			<listitem><para>To change the name of the property edit the text field. Each property must have a unique name.</para></listitem>
+			<listitem><para>To change the data type of the property change the value in the combo box below its name. By default the type is auto detected, but if user know the data type of the properties he can choose the right in the combo box. Auto detected data types are only three types : integer, double or string.</para></listitem>
+			</itemizedlist>
+			</para>
+			</listitem>
+			<listitem><para>Launch the import process by clicking on the <code>Ok</code> button or cancel it by clicking on the <code>Cancel</code> button.</para></listitem>
+                </itemizedlist>	    
+	    </sect3>
         <sect3 id="find-tut"><title>Find : make a request.</title>
             <para>The find tool is in the <code>Edit</code> menu. Make a graph with several nodes. Change some properties of node for making operations. Select nodes, check the <code>Filter</code> box and select the properties you want to change : <code>viewRotation</code>. Click on the <code>Set all</code> button and type a value (<code>20</code> for example). Now, you have some node with a rotation of 0 degree and some other rotated of 20. So in the Find box : 
                 <itemizedlist>
@@ -149,7 +168,7 @@
                         <listitem><para>Select the action in the <code>Options</code> part : <code>Add</code> and the kind of the elements of the request : <code>on nodes</code>.</para></listitem>
                 </itemizedlist>
             </para>
-        </sect3>
+        </sect3>	
 	</sect2>
     </sect1>
      <sect1 id="hierarchy"><title>Hierarchy</title>
