@@ -202,7 +202,7 @@ void TulipApp::startTulip() {
       QWidget::connect(closeB, SIGNAL(clicked()), errorDlg, SLOT(hide()));
       errorDlg->resize( QSize(400, 250).expandedTo(errorDlg->minimumSizeHint()) );
       textWidget->setText(QString(errors.c_str()));
-      errorDlg->show();
+      errorDlg->exec();
     }
   if(ControllerFactory::factory->objMap.empty()){
     QMessageBox::critical(this,tr("No controller found"),tr("No controller where found in Tulip plug-ins.\n Tulip can't work without controller."));
