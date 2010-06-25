@@ -79,6 +79,9 @@ void GlConvexGraphHull::draw(float lod, Camera *camera) {
 }
 
 void GlConvexGraphHull::updateHull() {
+	if(!isVisible())
+		return;
+	
 	if(_polygon) {
 		_parent->deleteGlEntity(_polygon);
 		delete _polygon;
