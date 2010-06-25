@@ -72,8 +72,9 @@ namespace tlp {
     StructDef *params = getPluginParameters(AlgorithmFactory::factory, name);
     StructDef sysDef = AlgorithmFactory::factory->getPluginParameters(name);
     params->buildDefaultDataSet(dataSet, graph );
+    string title = string("Tulip Parameter Editor: ") + name;
     bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
-				     "Tulip Parameter Editor", graph, parent);
+				     title.c_str(), graph, parent);
     if (ok) {
       return applyAlgorithm(graph,parent,name,&dataSet);
     }
@@ -101,8 +102,9 @@ namespace tlp {
       StructDef *params = ControllerAlgorithmTools::getPluginParameters(PROPERTY::factory, name);
       StructDef sysDef = PROPERTY::factory->getPluginParameters(name);
       params->buildDefaultDataSet(dataSet, graph );
+      string title = string("Tulip Parameter Editor: ") + name;
       resultBool = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
-					  "Tulip Parameter Editor", graph, parent);
+					  title.c_str(), graph, parent);
     }
 
     if (resultBool) {
