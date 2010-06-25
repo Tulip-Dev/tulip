@@ -24,7 +24,7 @@
 namespace tlp {
 
 ///Interface of StableIterator,
-template<class itType> struct TLP_SCOPE StableIterator : public Iterator<itType> {
+template<class itType> struct StableIterator : public Iterator<itType> {
   StableIterator(Iterator<itType> *itIn) {
     for (;itIn->hasNext();) {
       cloneIt.push_back(itIn->next());
