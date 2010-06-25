@@ -431,6 +431,7 @@ plugins/glyph/Makefile
 plugins/view/Makefile
 plugins/view/spreadsheet/Makefile
 plugins/interactor/Makefile
+textures/Makefile
 unit_test/plugins/pluginstest.cpp
 docs/Makefile
 docs/devTeamDoxygen/Makefile
