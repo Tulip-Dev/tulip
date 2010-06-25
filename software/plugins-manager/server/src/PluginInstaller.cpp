@@ -15,6 +15,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <stdlib.h>
 #include "PluginGenerate.h"
 
 #include <PluginLoaderWithInfo.h>
@@ -66,7 +67,11 @@ int main(int argc,char **argv) {
   QString suffix = fileInfo.suffix();
 
   char *getEnvTlp=getenv("TLP_DIR");
+#if defined(_WIN32)
+  putenv("TLP_DIR=");
+#else
   setenv("TLP_DIR","",true);
+#endif
   PluginLoaderWithInfo plug;
   initTulipLib(NULL);
   loadPlugin(pluginPath.toStdString(), &plug);
@@ -74,10 +79,17 @@ int main(int argc,char **argv) {
   InteractorManager::getInst().loadPlugins(&plug);
   ViewPluginsManager::getInst().loadPlugins(&plug);
   ControllerPluginsManager::getInst().loadPlugins(&plug);
-  if(getEnvTlp)
+#if defined(_WIN32)
+  if (getEnvTlp)
+    putenv((string("TLP_DIR=") + getEnvTlp).c_str());
+  else
+    putenv("TLP_DIR=");
+#else
+  if (getEnvTlp)
     setenv("TLP_DIR",getEnvTlp,true);
   else
     unsetenv("TLP_DIR");
+#endif
 
   TemplateFactory<GlyphFactory, Glyph, GlyphContext>::ObjectCreator::const_iterator itGlyphs;
   vector<string> glyphsName;
