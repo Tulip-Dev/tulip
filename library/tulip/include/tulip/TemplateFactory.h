@@ -88,7 +88,7 @@ public:
 };
 
 
-template <class T> class TLP_SCOPE PropertyFactory:public Plugin {
+template <class T> class PropertyFactory:public Plugin {
 public:
   PropertyFactory(){}
   virtual ~PropertyFactory() {}
