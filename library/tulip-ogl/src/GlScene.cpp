@@ -269,6 +269,8 @@ namespace tlp {
   void GlScene::draw() {
 	initGlParameters();
 
+    lodCalculator->clear();
+
     lodCalculator->setRenderingEntitiesFlag(RenderingAll);
 
     /*
@@ -452,8 +454,6 @@ namespace tlp {
         glPopAttrib();
       }
 	}
-
-	lodCalculator->clear();
   }
 
   void GlScene::addLayer(GlLayer *layer) {
