@@ -4,7 +4,7 @@ else
 DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
-EXTRA_DIST = CMakeLists.txt
+EXTRA_DIST = CMakeLists.txt NodeLinkDiagramComponentInteractor.h
 
 if HAVE_TULIP_QT
 pluginsqt_LTLIBRARIES = \
