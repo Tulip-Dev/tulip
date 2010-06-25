@@ -100,8 +100,6 @@ class GlConvexGraphHull;
 		public:
 			GlHierarchyMainComposite(GlCompositeHierarchyManager* manager);
 			virtual void setVisible(bool visible);
-			virtual void getXML(xmlNodePtr rootNode) {}
-			virtual void setWithXML(xmlNodePtr rootNode) {}
 		private:
 			GlCompositeHierarchyManager* _manager;
 	};
