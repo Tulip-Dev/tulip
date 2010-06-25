@@ -86,7 +86,7 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/bitmaps/welcomelogo.bmp
 %{prefix}/lib/tlp/bitmaps/logotulip.jpg
 %{prefix}/lib/tlp/bitmaps/logolabri.jpg
-%{prefix}/lib/tlp/bitmaps/tex_back.png
+%{prefix}/lib/tlp/bitmaps/*.png
 %{prefix}/lib/tlp/bitmaps/startup.gif
 %{prefix}/include
 %{prefix}/share/@PACKAGE@
@@ -179,7 +179,8 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libFileSystem-%{version}.*
 %{prefix}/lib/tlp/libWebImport-%{version}.*
 %{prefix}/lib/tlp/designer/lib*.*
-%{prefix}/lib/tlp/view/libSpreadSheet-%{version}.*
+%{prefix}/lib/tlp/interactors/lib*-%{version}.*
+%{prefix}/lib/tlp/view/lib*-%{version}.*
 
 %changelog
 * Wed Jul 23 2003 Bertrand Mathieu <mathieu@labri.fr>
