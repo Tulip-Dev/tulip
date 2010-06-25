@@ -224,7 +224,7 @@ void ColorTableItem::setContentFromEditor(QWidget *w) {
 }
 //================================================================================
 FilenameEditor::FilenameEditor(QWidget *parent) :
-  QWidget(parent) {
+  QWidget(parent),basePath("./") {
   QHBoxLayout *layout = new QHBoxLayout(this);
   layout->setMargin(0);
   lineedit = new QLineEdit(this);
@@ -254,8 +254,14 @@ QString FilenameEditor::filter() const {
 void FilenameEditor::setFilter(const QString &f) {
   fileFilter = f;
 }
+QString FilenameEditor::getBasePath() const {
+  return basePath;
+}
+void FilenameEditor::setBasePath(const QString &f) {
+  basePath = f;
+}
 void FilenameEditor::buttonPressed() {
-  QFileDialog *dlg = new QFileDialog(this, "Choose a file", "./", fileFilter);
+  QFileDialog *dlg = new QFileDialog(this, "Choose a file", basePath, fileFilter);
   dlg->setModal(true);
   dlg->setFileMode(QFileDialog::ExistingFile);
   if (dlg->exec() == QDialog::Accepted) {
@@ -303,6 +309,7 @@ QWidget *FileTableItem::createEditor(QTableWidget* table) const {
   FilenameEditor *w = new FilenameEditor(table->viewport());
   w->setFilter("Images (*.png *.jpeg *.jpg *.bmp)");
   w->setFileName(text());
+  w->setBasePath(TulipBitmapDir.c_str());
   return w;
 }
 void FileTableItem::setContentFromEditor(QWidget *w) {

@@ -362,7 +362,7 @@ void PropertyWidget::setAllNodeValue() {
       ok=true;
     }
   } else if (editedPropertyName == "viewTexture") {
-    ChooseFileNameDialog dialog(QString("Images (*.png *.jpeg *.jpg *.bmp)"),this);
+    ChooseFileNameDialog dialog(QString("Images (*.png *.jpeg *.jpg *.bmp)"),TulipBitmapDir.c_str(),this);
     if(dialog.exec()==QDialog::Accepted){
       tmpStr=dialog.getText().toStdString();
       GlTextureManager::getInst().clearErrorVector();
@@ -491,7 +491,7 @@ void  PropertyWidget::setAllEdgeValue() {
 		  tmpStr = ss.str();
 	  }
   } else if (editedPropertyName == "viewTexture") {
-    ChooseFileNameDialog dialog(QString("Images (*.png *.jpeg *.jpg *.bmp)"),this);
+    ChooseFileNameDialog dialog(QString("Images (*.png *.jpeg *.jpg *.bmp)"),TulipBitmapDir.c_str(),this);
     if(dialog.exec()==QDialog::Accepted){
       tmpStr=dialog.getText().toStdString();
       GlTextureManager::getInst().clearErrorVector();
