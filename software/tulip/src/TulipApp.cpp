@@ -490,8 +490,9 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
     dataSet.set<string>("author", author);
   if (!comments.empty())
     dataSet.set<string>("text::comments", comments);
+  string title = string("Enter Export parameters: ") + plugin;
   if (!tlp::openDataSetDialog(dataSet, 0, &parameter,
-			      &dataSet, "Enter Export parameters", NULL,
+			      &dataSet, title.c_str(), NULL,
 			      this))
     return false;
 
@@ -574,8 +575,9 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       StructDef sysDef = ImportModuleFactory::factory->getPluginParameters(*plugin);
       StructDef *params = getPluginParameters(ImportModuleFactory::factory, *plugin);
       params->buildDefaultDataSet( dataSet );
+      string title = string("Enter Import parameters: ") + plugin->c_str();
       cancel = !tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
-				       "Enter plugin parameter(s)", NULL, this);
+				       title.c_str(), NULL, this);
     }
   } else {
     plugin = &tmpStr;
