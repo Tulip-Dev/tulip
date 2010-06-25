@@ -88,10 +88,12 @@ public:
 
 	QString fileName() const;
 	QString filter() const;
+    QString getBasePath() const;
 
 public slots:
 	void setFileName(const QString &);
 	void setFilter(const QString &);
+    void setBasePath(const QString &);
 
 signals:
 	void fileNameChanged(const QString &);
@@ -103,6 +105,7 @@ private:
 	QLineEdit *lineedit;
 	QPushButton *button;
 	QString fileFilter;
+    QString basePath;
 };
 
 class TLP_QT_SCOPE SizeEditor: public QWidget {

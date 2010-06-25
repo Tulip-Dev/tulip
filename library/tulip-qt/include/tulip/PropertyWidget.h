@@ -103,7 +103,12 @@ class TLP_QT_SIMPLE_SCOPE ChooseFileNameDialog : public QDialog,public Ui::Choos
 
 public :
 
-  ChooseFileNameDialog(const QString &filter,QWidget *parent=NULL):filter(filter) {
+  ChooseFileNameDialog(const QString &filter,QWidget *parent=NULL):filter(filter),basePath(QString()) {
+    setupUi(this);
+    connect(fileOpenButton,SIGNAL(clicked()),this,SLOT(openFile()));
+  }
+
+ChooseFileNameDialog(const QString &filter,const QString &basePath,QWidget *parent=NULL):filter(filter),basePath(basePath) {
     setupUi(this);
     connect(fileOpenButton,SIGNAL(clicked()),this,SLOT(openFile()));
   }
@@ -113,7 +118,7 @@ QString getText(){return fileName->text();}
 protected slots:
 
   void openFile() {
-    QString fileNameText = QFileDialog::getOpenFileName(this, tr("Open File"),QString(),filter);
+    QString fileNameText = QFileDialog::getOpenFileName(this, tr("Open File"),basePath,filter);
     if(fileNameText!="")
       fileName->setText(fileNameText);
   }
@@ -121,6 +126,7 @@ protected slots:
 protected :
 
     QString filter;
+    QString basePath;
 
 };
 /*@}*/
