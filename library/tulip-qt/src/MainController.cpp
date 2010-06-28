@@ -1528,6 +1528,16 @@ namespace tlp {
     propertiesWidget->setGraph(newGraph);
     eltProperties->setGraph(newGraph,false);
 
+    // views and interactors informed that undo has been made
+    vector<View *> views;
+    getViews(views);
+    for(vector<View*>::iterator it=views.begin();it!=views.end();++it){
+      (*it)->undoIsDone();
+      Interactor *interactor=(*it)->getActiveInteractor();
+      if(interactor)
+        interactor->undoIsDone();
+    }
+
     drawViews(true);
     updateCurrentGraphInfos();
     updateUndoRedoInfos();

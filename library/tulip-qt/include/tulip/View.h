@@ -88,6 +88,10 @@ namespace tlp {
      */
     virtual void setActiveInteractor(Interactor *interactor) = 0;
     /**
+     * Get active interactor on this view
+     */
+    virtual Interactor *getActiveInteractor() = 0;
+    /**
      * Take a snapshot of the view and put it in a picture
      */
     virtual void createPicture(const std::string &pictureName,int width=0, int height=0) = 0;
@@ -96,6 +100,11 @@ namespace tlp {
      * Return the real view name (if "" the real name is the name give by plugin)
      */
     virtual std::string getRealViewName() {return "";}
+
+    /**
+     * This function is call when an undo is perform by the controller
+     */
+    virtual void undoIsDone() {}
 
   public slots:
 
