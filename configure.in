@@ -36,6 +36,12 @@ AC_PROG_CXX
 AC_PROG_CXXCPP
 m4_pattern_allow([AC_OPENMP])
 AC_OPENMP
+
+if test "${OPENMP_CXXFLAGS-NULL}" = "NULL"; then
+OPENMP_CXXFLAGS=
+AC_SUBST(OPENMP_CXXFLAGS)
+fi
+
 ##AC_PROG_JAVA
 
 dnl check for java
