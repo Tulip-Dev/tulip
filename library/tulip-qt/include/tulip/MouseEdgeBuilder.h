@@ -40,6 +40,7 @@ class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent
   ~MouseEdgeBuilder(){}
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
+  void undoIsDone();
   InteractorComponent *clone() { return new MouseEdgeBuilder(); }
 };
 /*@}*/

@@ -30,6 +30,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlMainView.h>
 #include <tulip/GlTools.h>
 
 #include <tulip/MouseEdgeBuilder.h>
@@ -126,4 +127,12 @@ bool MouseEdgeBuilder::draw(GlMainWidget *glMainWidget) {
     glVertex3f(curPos.getX(),curPos.getY(),curPos.getZ());
   }glEnd();
   return true;
+}
+
+void MouseEdgeBuilder::undoIsDone() {
+  GlMainWidget *glMainWidget=((GlMainView*)view)->getGlMainWidget();
+  bends.clear();
+  glMainWidget->setMouseTracking(false);
+  started=false;
+  glMainWidget->draw();
 }
