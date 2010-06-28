@@ -109,6 +109,11 @@ namespace tlp {
       virtual void setViewOfWidget(QWidget *widget,View *view);
       
       /**
+       * Get views
+       */
+      virtual void getViews(std::vector<View*> &views);
+
+      /**
        * Get the widget associated with the given view
        */
       virtual QWidget *getWidgetOfView(View *view);

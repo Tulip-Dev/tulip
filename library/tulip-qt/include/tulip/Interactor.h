@@ -136,6 +136,11 @@ namespace tlp {
      */
     virtual void draw(GlMainWidget *) = 0;
 
+    /**
+     * This function is call when an undo is perform by the controller
+     */
+    virtual void undoIsDone() {}
+
 
   };
 

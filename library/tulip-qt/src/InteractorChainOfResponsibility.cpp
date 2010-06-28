@@ -75,3 +75,9 @@ InteractorAction* InteractorChainOfResponsibility::getAction(){
     action = new InteractorAction(this,QIcon(interactorIconPath),interactorText);
   return action;
 }
+
+void InteractorChainOfResponsibility::undoIsDone() {
+  for(vector<InteractorComponent *>::iterator it=installedInteractorComponents.begin();it!=installedInteractorComponents.end();++it){
+    (*it)->undoIsDone();
+  }
+}

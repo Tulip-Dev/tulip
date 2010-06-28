@@ -96,6 +96,12 @@ namespace tlp {
     return NULL;
   }
   //**********************************************************************
+  void ControllerViewsManager::getViews(vector<View *> &views){
+    for(map<View *,string>::iterator it=viewNames.begin();it!=viewNames.end();++it){
+      views.push_back((*it).first);
+    }
+  }
+  //**********************************************************************
   string ControllerViewsManager::getNameOfView(View *view) {
     if (viewNames.count(view) != 0)
       return viewNames[view];

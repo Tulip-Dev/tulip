@@ -60,10 +60,16 @@ namespace tlp {
      * Set interactor connected view
      */
     virtual void setView(View *view) {this->view=view;}
+
     /**
      * \return the interactor connected view
      */
     View *getView() {return view;}
+
+    /**
+     * This function is call when an undo is preform
+     */
+    virtual void undoIsDone() {}
 
     /**
      * Clone this interactor component
