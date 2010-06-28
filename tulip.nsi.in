@@ -136,6 +136,11 @@ setOutPath $INSTDIR\lib\tlp\glyphs
 File /nonfatal @prefix@\lib\tlp\bin\lib*-@VERSION@.dll
 ; cmake
 File /nonfatal @prefix@\lib\tlp\glyphs\lib*-@VERSION@.dll
+setOutPath $INSTDIR\lib\tlp\interactors
+; autotools
+File /nonfatal @prefix@\lib\tlp\bin\lib*-@VERSION@.dll
+; cmake
+File /nonfatal @prefix@\lib\tlp\interactors\lib*-@VERSION@.dll
 setOutPath $INSTDIR\lib\tlp\view
 ; autotools
 File /nonfatal @prefix@\lib\tlp\bin\libSpreadSheet-@VERSION@.dll
