@@ -32,6 +32,7 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlTools.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
 #include <tulip/MouseEdgeBuilder.h>
 
@@ -75,6 +76,8 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
           //	  mColors->setEdgeValue(newEdge, ((Application *)qApp)->edgeColor);
           bends.clear();
           Observable::unholdObservers();
+          NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view;
+          nodeLinkView->elementSelectedSlot(newEdge.id, false);
         }
         else {
           Coord point((double) glMainWidget->width() - (double) qMouseEv->x(),

@@ -30,6 +30,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
 
 #include <tulip/MouseNodeBuilder.h>
@@ -56,6 +57,8 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
       point = glw->getScene()->getCamera()->screenTo3DWorld(point);
       mLayout->setNodeValue(newNode, point);
       Observable::unholdObservers();
+      NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view;
+      nodeLinkView->elementSelectedSlot(newNode.id, true);
       //glw->redraw();
       return true;
     }
