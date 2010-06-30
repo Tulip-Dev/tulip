@@ -603,6 +603,16 @@ void GlEdge::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInput
 
 	bool select = data->elementSelected->getEdgeValue(e);
 
+    Color fontColor;
+    if (data->elementSelected->getEdgeValue(e))
+        fontColor.set(255, 0, 0, 255);
+    else {
+        fontColor = data->elementLabelColor->getEdgeValue(e);
+    }
+
+    if(fontColor.getA()==0)
+      return;
+
 	if(select)
 		glStencilFunc(GL_LEQUAL,data->parameters->getSelectedEdgesStencil() ,0xFFFF);
 	else
@@ -634,13 +644,6 @@ void GlEdge::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInput
 			position = (bends[bends.size() / 2 - 1] + bends[bends.size() / 2]) / 2.f;
 		else
 			position = bends[bends.size() / 2];
-	}
-
-	Color fontColor;
-	if (data->elementSelected->getEdgeValue(e))
-		fontColor.set(255, 0, 0, 255);
-	else {
-		fontColor = data->elementLabelColor->getEdgeValue(e);
 	}
 
 	float w_max = 300;

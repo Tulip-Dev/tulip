@@ -208,6 +208,12 @@ namespace tlp {
 
     bool selected=data->elementSelected->getNodeValue(n);
 
+    const Color& fontColor = selected ? colorSelect2 :
+      data->elementLabelColor->getNodeValue(n);
+
+    if(fontColor.getA()==0)
+      return;
+
     const string &tmp = data->elementLabel->getNodeValue(n);
     if (tmp.length() < 1) {
       return;
@@ -257,9 +263,6 @@ namespace tlp {
       break;
     }
     //if (elementSelected->getNodeValue(n) != mode) return;
-
-    const Color& fontColor = selected ? colorSelect2 :
-      data->elementLabelColor->getNodeValue(n);
 
     float w_max = 300;
     float w,h;
