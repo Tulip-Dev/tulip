@@ -64,6 +64,6 @@ namespace tlp {
    * Extracts Minor number from a release number
    */
   TLP_SCOPE std::string getMinor(const std::string &release);
-};
+}
 
 #endif
