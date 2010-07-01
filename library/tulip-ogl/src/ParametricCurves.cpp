@@ -132,6 +132,7 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
 	default:
 		curvePoints.resize(nbCurvePoints);
 		float h = 1.0 / static_cast<float>(nbCurvePoints - 1);
+		#pragma omp parallel for
 		for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
 			float curStep = i * h;
 			curvePoints[i] = computeBezierPoint(controlPoints, curStep);
@@ -191,7 +192,7 @@ static void computeBezierSegmentControlPoints(const Coord &pBefore, const Coord 
 static Coord computeCatmullRomPointImpl(const vector<Coord> &controlPoints, const float t, const vector<float> &globalParameter, const bool closedCurve, const float alpha) {
 	size_t i = computeSegmentIndex(t, controlPoints, globalParameter);
 	float localT = 0.0;
-	if (t == 1.0) {
+	if (t >= 1.0) {
 		localT = 1.0;
 	} else if (t != 0.0) {
 		localT = (t - globalParameter[i]) / (globalParameter[i+1] - globalParameter[i]);
@@ -203,7 +204,7 @@ static Coord computeCatmullRomPointImpl(const vector<Coord> &controlPoints, cons
 		computeBezierSegmentControlPoints(controlPoints[i-1], controlPoints[i], controlPoints[i+1], closedCurve ? controlPoints[1] : controlPoints[i+1] + (controlPoints[i+1] - controlPoints[i]), bezierControlPoints, alpha);
 	} else if (i == controlPoints.size() - 1) {
 		computeBezierSegmentControlPoints(controlPoints[i-2], controlPoints[i-1], controlPoints[i], closedCurve ? controlPoints[1] : controlPoints[i] + (controlPoints[i] - controlPoints[i-1]), bezierControlPoints, alpha);
-	} else if (i != controlPoints.size() - 1) {
+	} else {
 		computeBezierSegmentControlPoints(controlPoints[i-1], controlPoints[i], controlPoints[i+1], controlPoints[i+2], bezierControlPoints, alpha);
 	}
 	float t2 = localT * localT;
@@ -211,10 +212,11 @@ static Coord computeCatmullRomPointImpl(const vector<Coord> &controlPoints, cons
 	float s = 1.0 - localT;
 	float s2 = s * s;
 	float s3 = s2	* s;
-	return (bezierControlPoints[0] * s3 + bezierControlPoints[1] * 3.0 * localT * s2 + bezierControlPoints[2] * 3.0 * t2 * s + bezierControlPoints[3] * t3);
+	return bezierControlPoints[0] * s3 + bezierControlPoints[1] * 3.0 * localT * s2 + bezierControlPoints[2] * 3.0 * t2 * s + bezierControlPoints[3] * t3;
 }
 
 Coord computeCatmullRomPoint(const vector<Coord> &controlPoints, const float t, const bool closedCurve, const float alpha) {
+	assert(controlPoints.size() > 2);
 	vector<float> globalParameter;
 	vector<Coord> controlPointsCp(controlPoints);
 	if (closedCurve) {
@@ -225,14 +227,17 @@ Coord computeCatmullRomPoint(const vector<Coord> &controlPoints, const float t, 
 }
 
 void computeCatmullRomPoints(const vector<Coord> &controlPoints, vector<Coord> &curvePoints, const bool closedCurve, const unsigned int nbCurvePoints, const float alpha) {
+	assert(controlPoints.size() > 2);
 	vector<float> globalParameter;
 	vector<Coord> controlPointsCp(controlPoints);
 	if (closedCurve) {
 		controlPointsCp.push_back(controlPoints[0]);
 	}
 	computeCatmullRomGlobalParameter(controlPointsCp, globalParameter, alpha);
+	curvePoints.resize(nbCurvePoints);
+	#pragma omp parallel for
 	for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
-		curvePoints.push_back(computeCatmullRomPointImpl(controlPointsCp, i / static_cast<float>(nbCurvePoints - 1), globalParameter, closedCurve, alpha));
+		curvePoints[i] = computeCatmullRomPointImpl(controlPointsCp, i / static_cast<float>(nbCurvePoints - 1), globalParameter, closedCurve, alpha);
 	}
 }
 
@@ -241,6 +246,7 @@ static float clamp(float f, float minVal, float maxVal) {
 }
 
 Coord computeOpenUniformBsplinePoint(const vector<Coord> &controlPoints, const float t, const unsigned int curveDegree) {
+	assert(controlPoints.size() > 3);
 	unsigned int nbKnots = controlPoints.size() + curveDegree + 1;
 	float stepKnots = 1.0f / ((static_cast<float>(nbKnots) - 2.0f * (static_cast<float>(curveDegree) + 1.0f)) + 2.0f - 1.0f);
 	if (t == 0.0) {
@@ -278,8 +284,10 @@ Coord computeOpenUniformBsplinePoint(const vector<Coord> &controlPoints, const f
 
 
 void computeOpenUniformBsplinePoints(const vector<Coord> &controlPoints, vector<Coord> &curvePoints, const unsigned int curveDegree, const unsigned int nbCurvePoints) {
+	curvePoints.resize(nbCurvePoints);
+	#pragma omp parallel for
 	for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
-		curvePoints.push_back(computeOpenUniformBsplinePoint(controlPoints, i / static_cast<float>(nbCurvePoints - 1), curveDegree));
+		curvePoints[i] = computeOpenUniformBsplinePoint(controlPoints, i / static_cast<float>(nbCurvePoints - 1), curveDegree);
 	}
 }
 
