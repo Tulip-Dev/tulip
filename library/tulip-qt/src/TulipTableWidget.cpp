@@ -316,6 +316,13 @@ QWidget *FileTableItem::createEditor(QTableWidget* table) const {
 void FileTableItem::setContentFromEditor(QWidget *w) {
   QString s = ((FilenameEditor *) w)->fileName();
   if (!s.isNull()) {
+#ifdef _WIN32
+    // hack for fix of sf bug #3023677
+    // forget any char before the letter naming the partition
+    int pos = s.indexOf(':');
+    if (pos > -1)
+      s = s.mid(pos - 1);
+#endif
     setText(s);
     GlTextureManager::getInst().clearErrorVector();
     qApp->processEvents();
