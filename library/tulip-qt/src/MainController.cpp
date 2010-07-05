@@ -321,7 +321,7 @@ namespace tlp {
       DataSet dataSet;
       dataSet.set<bool>("3D layout",false);
       ControllerAlgorithmTools::changeProperty<LayoutProperty>(newGraph,mainWindowFacade.getParentWidget(),"Random","viewLayout",dataSet,NULL,false,false,false);
-    }
+    } delete itn;
 
     newGraph->addObserver(this);
     newGraph->addGraphObserver(this);
