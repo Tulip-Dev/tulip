@@ -22,25 +22,34 @@
 #include <tulip/Graph.h>
 #include <tulip/Coord.h>
 #include <tulip/InteractorComponent.h>
+#include <tulip/ObservableProperty.h>
+#include <tulip/LayoutProperty.h>
 
 namespace tlp {
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent
+class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent, public GraphObserver, public PropertyObserver
 {
  private:
   node source;
   bool started;
   Coord startPos,curPos;
   std::vector<Coord> bends;
+  Graph *graph;
+  LayoutProperty *layoutProperty;
 
  public:
   MouseEdgeBuilder();
-  ~MouseEdgeBuilder(){}
+  ~MouseEdgeBuilder();
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  void undoIsDone();
+  void initObserver(Graph *);
+  void clearObserver();
+  void delNode(Graph *,const node );
+  void destroy(Graph *);
+  void afterSetNodeValue(PropertyInterface*, const node);
+  void destroy(PropertyInterface*);
   InteractorComponent *clone() { return new MouseEdgeBuilder(); }
 };
 /*@}*/
