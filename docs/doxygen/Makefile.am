@@ -1,5 +1,5 @@
-EXTRA_DIST = header.html footer.html general general-html general-man tulip.html \
-	     dox-html.xsl dox-profile.xsl dox-plugins.xsl CMakeLists.txt
+EXTRA_DIST = header.html.in footer.html.in general general-html general-man tulip.html.in \
+	     dox-html.xsl dox-profile.xsl dox-plugins.xsl CMakeLists.txt tulip-lib.doxygen.in tulip-plugins.doxygen.in header-allPlugins.html.in
 
 all : 
 
