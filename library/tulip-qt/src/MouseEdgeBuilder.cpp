@@ -39,7 +39,12 @@
 using namespace std;
 using namespace tlp;
 
-MouseEdgeBuilder::MouseEdgeBuilder():started(false){}
+MouseEdgeBuilder::MouseEdgeBuilder():started(false),graph(NULL),layoutProperty(NULL){}
+
+MouseEdgeBuilder::~MouseEdgeBuilder(){
+  if(graph)
+    graph->removeGraphObserver(this);
+}
 
 bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
@@ -50,12 +55,14 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     node tmpNode;
     edge tmpEdge;
     Graph * _graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+
     LayoutProperty* mLayout = _graph->getProperty<LayoutProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
     if (qMouseEv->buttons()==Qt::LeftButton) {
       if (!started) {
         bool result=glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge);
         if (result && (type == NODE)) {
           started=true;
+          initObserver(_graph);
           source=tmpNode;
           glMainWidget->setMouseTracking(true);
           curPos=startPos=mLayout->getNodeValue(source);
@@ -68,6 +75,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
         if (result && (type == NODE)) {
           Observable::holdObservers();
           started=false;
+          clearObserver();
           glMainWidget->setMouseTracking(false);
           // allow to undo
           _graph->push();
@@ -93,6 +101,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
       bends.clear();
       glMainWidget->setMouseTracking(false);
       started=false;
+      clearObserver();
       glMainWidget->draw();
       return true;
     }
@@ -132,10 +141,44 @@ bool MouseEdgeBuilder::draw(GlMainWidget *glMainWidget) {
   return true;
 }
 
-void MouseEdgeBuilder::undoIsDone() {
-  GlMainWidget *glMainWidget=((GlMainView*)view)->getGlMainWidget();
-  bends.clear();
-  glMainWidget->setMouseTracking(false);
-  started=false;
-  glMainWidget->draw();
+void MouseEdgeBuilder::initObserver(Graph *newGraph){
+  newGraph->addGraphObserver(this);
+  graph=newGraph;
+  layoutProperty=newGraph->getProperty<LayoutProperty>("viewLayout");
+  layoutProperty->addPropertyObserver(this);
+}
+
+void MouseEdgeBuilder::clearObserver(){
+  if(graph)
+    graph->removeGraphObserver(this);
+  graph=NULL;
+  if(layoutProperty)
+    layoutProperty->removePropertyObserver(this);
+  layoutProperty=NULL;
+}
+
+void MouseEdgeBuilder::delNode(Graph *g,const node n){
+  if(n==source){
+    GlMainWidget *glMainWidget=((GlMainView*)view)->getGlMainWidget();
+    bends.clear();
+    glMainWidget->setMouseTracking(false);
+    started=false;
+    clearObserver();
+  }
+}
+
+void MouseEdgeBuilder::destroy(Graph *g){
+  if(graph=g)
+    graph=NULL;
+}
+
+void MouseEdgeBuilder::afterSetNodeValue(PropertyInterface *property, const node n){
+  if(n==source && property==layoutProperty){
+    startPos=layoutProperty->getNodeValue(source);
+  }
+}
+
+void MouseEdgeBuilder::destroy(PropertyInterface *property){
+  if(property==layoutProperty)
+    layoutProperty=NULL;
 }
