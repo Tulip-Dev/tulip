@@ -168,7 +168,7 @@ void MouseEdgeBuilder::delNode(Graph *g,const node n){
 }
 
 void MouseEdgeBuilder::destroy(Graph *g){
-  if(graph=g)
+  if(graph==g)
     graph=NULL;
 }
 
