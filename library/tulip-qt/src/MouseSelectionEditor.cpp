@@ -234,6 +234,15 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
         case ALIGN_HORIZONTALLY:
           mAlign(operation,glMainWidget);
           return true;
+        case ROTATE_Z:
+        case ROTATE_XY:
+        case NONE:
+        case STRETCH_X:
+        case STRETCH_Y:
+        case STRETCH_XY:
+        case TRANSLATE:
+        default:
+          break;
         }
       }
       else {
@@ -312,7 +321,14 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       mMouseTranslate(newX, newY, glMainWidget);
       return true;
     case NONE:
-      cerr << "[Error] : " <<__FUNCTION__ << " should not be call" << endl;
+    case ALIGN_TOP:
+    case ALIGN_BOTTOM:
+    case ALIGN_LEFT:
+    case ALIGN_RIGHT:
+    case ALIGN_VERTICALLY:
+    case ALIGN_HORIZONTALLY:
+    default:
+      cerr << "[Error] : " <<__FUNCTION__ << " should not have been called" << endl;
       break;
     }
   }
@@ -355,7 +371,7 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
   }
 }
 //========================================================================================
-bool MouseSelectionEditor::draw(GlMainWidget *glMainWidget) {
+bool MouseSelectionEditor::draw(GlMainWidget *) {
   //return compute(glMainWidget);
   return true;
 }
@@ -408,7 +424,7 @@ void MouseSelectionEditor::mMouseTranslate(double newX, double newY, GlMainWidge
   Observable::unholdObservers();
 }
 //========================================================================================
-void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWidget* glMainWidget) {
+void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWidget* ) {
   //  cerr << __PRETTY_FUNCTION__ << "/op=" << operation << ", mod:" << mode << endl;
   Coord curPos(newX, newY, 0);
   Coord stretch(1,1,1);
@@ -589,6 +605,15 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*){
       valueMax=_layout->getNodeValue(n)[0]-_sizes->getNodeValue(n)[0]/2.;
       valueMin=_layout->getNodeValue(n)[0]+_sizes->getNodeValue(n)[0]/2.;
       break;
+    case STRETCH_X:
+    case STRETCH_Y:
+    case STRETCH_XY:
+    case ROTATE_Z:
+    case ROTATE_XY:
+    case TRANSLATE:
+    case NONE:
+    default:
+      break;
     }
     if(!init){
       max=valueMax;
@@ -610,6 +635,15 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*){
       case ALIGN_VERTICALLY:
         if(valueMax>max) max=valueMax;
         if(valueMin<min) min=valueMin;
+        break;
+      case STRETCH_X:
+      case STRETCH_Y:
+      case STRETCH_XY:
+      case ROTATE_Z:
+      case ROTATE_XY:
+      case TRANSLATE:
+      case NONE:
+      default:
         break;
       }
     }
@@ -637,6 +671,15 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*){
       break;
     case ALIGN_VERTICALLY:
       old[0]=(max+min)/2;
+      break;
+    case STRETCH_X:
+    case STRETCH_Y:
+    case STRETCH_XY:
+    case ROTATE_Z:
+    case ROTATE_XY:
+    case TRANSLATE:
+    case NONE:
+    default:
       break;
     }
     _layout->setNodeValue(n,old);
