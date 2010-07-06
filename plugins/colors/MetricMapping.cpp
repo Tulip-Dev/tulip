@@ -316,7 +316,7 @@ public:
     return true;
   }
   //=========================================================
-  bool check(string &err){
+  bool check(string &){
     //    cerr << __PRETTY_FUNCTION__ << endl;
     return true;
   }

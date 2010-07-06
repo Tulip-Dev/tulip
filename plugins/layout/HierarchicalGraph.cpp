@@ -94,7 +94,7 @@ unsigned int HierarchicalGraph::degree(Graph *sg,node n,bool sense) {
 //If sense==true fixed_layer is freeLayer+1 else freeLayer-1
 //Compute barycenter heuristique
 
-void HierarchicalGraph::twoLayerCrossReduction(Graph *sg,unsigned int freeLayer,bool sense){
+void HierarchicalGraph::twoLayerCrossReduction(Graph *sg,unsigned int freeLayer,bool){
   vector<node>::const_iterator it;
   for (it = grid[freeLayer].begin(); it!=grid[freeLayer].end(); ++it) {
     node n = *it;

@@ -85,7 +85,7 @@ ImportCSVDataConfigurationWidget* ImportCSVDataWidget::buildConfigurationWidget(
   return confWidget;
 }
 
-void ImportCSVDataWidget::graphChanged(Graph* newGraph) {
+void ImportCSVDataWidget::graphChanged(Graph*) {
   parser = buildCSVParser();
   updateWidgetState();
   updatePreviews();

@@ -71,7 +71,7 @@ void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox) {
         boundingBox[1] = Coord(0.85, 0.85, 1);
 }
 //=================================================================================================
-void Cylinder::draw(node n, float lod) {
+void Cylinder::draw(node n, float) {
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Cylinder_cylinder")) {
 		drawCylinder();
     GlDisplayListManager::getInst().endNewDisplayList();
