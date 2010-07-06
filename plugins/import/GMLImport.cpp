@@ -356,7 +356,7 @@ struct GMLEdgeGraphicsBuilder:public GMLTrue {
     size(Size(0,0,0)),
     color(Color(0,0,0,0))
   {}
-  bool addString(const string &st,const string &str) {
+  bool addString(const string &,const string &) {
     return true;
   }
   void setLine(const LineType::RealType &lCoord) {
@@ -482,7 +482,7 @@ public:
     addParameter<string>("file::filename",paramHelp[0]);
   }
   ~GMLImport(){}
-  bool import(const string &dummy) {
+  bool import(const string &) {
     string filename;
     if (!dataSet->get<string>("file::filename", filename))
       return false;
