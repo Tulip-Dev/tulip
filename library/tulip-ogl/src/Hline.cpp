@@ -31,7 +31,7 @@ void Hline::draw(float w_max, float& w)const{
   w = w_max;
 }
 
-void Hline::getBoundingBox(float w_max, float& h, float& w)const{
+void Hline::getBoundingBox(float, float& h, float& w)const{
   h = 2*HAUTEUR;
   //  w = w_max;
   w = 1.0; 
