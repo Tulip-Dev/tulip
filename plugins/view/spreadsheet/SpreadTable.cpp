@@ -62,7 +62,7 @@ void Graphic::paintEvent(QPaintEvent*) {
 	painter.fillRect(0, 0, 10, 10, brush);
 }
 
-void Graphic::mousePressEvent(QMouseEvent *event) {
+void Graphic::mousePressEvent(QMouseEvent *) {
 	isClicked = true;
 }
 
@@ -100,7 +100,7 @@ void SpreadTable::setGraph(Graph *graph) {
 	reloadView();
 }
 
-void SpreadTable::addRow(unsigned int id) {
+void SpreadTable::addRow(unsigned int) {
 	unsigned int numberOfRow;
 	if (view == NodesView)
 		numberOfRow = graph->numberOfNodes();
@@ -111,7 +111,7 @@ void SpreadTable::addRow(unsigned int id) {
 	reloadView();
 }
 
-void SpreadTable::delRow(unsigned int id) {
+void SpreadTable::delRow(unsigned int) {
 	unsigned int numberOfRow;
 	if (view == NodesView)
 		numberOfRow = graph->numberOfNodes();
@@ -664,7 +664,7 @@ void SpreadTable::insertRows(int position, int amount) {
 	someThingChanged();
 }
 
-void SpreadTable::insertColumns(int position, int amount) {
+void SpreadTable::insertColumns(int, int) {
 	InsertColumnDialog *dialog = new InsertColumnDialog(this);
 	dialog->exec();
 

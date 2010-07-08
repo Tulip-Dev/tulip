@@ -53,24 +53,24 @@ namespace tlp {
 
     virtual ~GlTLPFeedBackBuilder() {}
 
-    virtual void begin(Vector<float,4>& viewport) {}
-    virtual void colorInfo(GLfloat *data) {}
-    virtual void beginGlEntity(GLfloat data) {}
+    virtual void begin(Vector<float,4>&) {}
+    virtual void colorInfo(GLfloat *) {}
+    virtual void beginGlEntity(GLfloat) {}
     virtual void endGlEntity() {}
-    virtual void beginGlGraph(GLfloat data) {}
+    virtual void beginGlGraph(GLfloat) {}
     virtual void endGlGraph() {}
-    virtual void beginNode(GLfloat data) {}
+    virtual void beginNode(GLfloat) {}
     virtual void endNode() {}
-    virtual void beginEdge(GLfloat data) {}
+    virtual void beginEdge(GLfloat) {}
     virtual void endEdge() {}
-    virtual void passThroughToken(GLfloat *data);
-    virtual void pointToken(GLfloat *data) {}
-    virtual void lineToken(GLfloat *data) {}
-    virtual void lineResetToken(GLfloat *data) {}
-    virtual void polygonToken(GLfloat *data) {}
-    virtual void bitmapToken(GLfloat *data) {}
-    virtual void drawPixelToken(GLfloat *data) {}
-    virtual void copyPixelToken(GLfloat *data) {}
+    virtual void passThroughToken(GLfloat *);
+    virtual void pointToken(GLfloat *) {}
+    virtual void lineToken(GLfloat *) {}
+    virtual void lineResetToken(GLfloat *) {}
+    virtual void polygonToken(GLfloat *) {}
+    virtual void bitmapToken(GLfloat *) {}
+    virtual void drawPixelToken(GLfloat *) {}
+    virtual void copyPixelToken(GLfloat *) {}
     virtual void end() {}
 
   private:
