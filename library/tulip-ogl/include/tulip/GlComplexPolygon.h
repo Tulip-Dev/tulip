@@ -21,6 +21,8 @@
 #define GLCOMPLEXPOLYGON_H
 
 #include <vector>
+#include <map>
+#include <set>
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
@@ -125,9 +127,16 @@ namespace tlp {
     virtual void setWithXML(xmlNodePtr rootNode);
 
   protected:
+    void runTesselation();
     void createPolygon(const std::vector<Coord> &coords,int bezier);
 
     std::vector<std::vector<Coord> > points;
+    std::set<int> primitivesSet;
+    std::map<int, std::vector<Coord> > verticesMap;
+    std::map<int, std::vector<Color> > colorsMap;
+    std::map<int, std::vector<Vec2f> > texCoordsMap;
+    std::map<int, std::vector<int> >startIndicesMap;
+    std::map<int, std::vector<int> >verticesCountMap;
     int currentVector;
     bool outlined;
     Color fillColor;
