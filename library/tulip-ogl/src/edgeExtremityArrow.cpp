@@ -45,6 +45,7 @@ GlArrow2DEdgeExtremity::~GlArrow2DEdgeExtremity() {
 
 void GlArrow2DEdgeExtremity::draw(edge e, node, const Color& glyphColor, const Color &borderColor,
 		float lod) {
+  glDisable(GL_LIGHTING);
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Arrow 2D")) {
 		glBegin(GL_TRIANGLES);
 		glVertex3f(.5, 0, 0);

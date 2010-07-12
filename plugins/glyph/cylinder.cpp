@@ -107,6 +107,7 @@ Coord Cylinder::getAnchor(const Coord &vector) const {
 //=================================================================================================
 
 void Cylinder::draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod) {
+  glEnable(GL_LIGHTING);
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Cylinder_cylinder")) {
 		drawCylinder();
     GlDisplayListManager::getInst().endNewDisplayList();

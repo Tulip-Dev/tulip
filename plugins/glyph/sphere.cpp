@@ -92,6 +92,7 @@ void Sphere::draw(node n, float lod) {
 }
 
 void Sphere::draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod) {
+  glEnable(GL_LIGHTING);
 	drawGlyph(glyphColor,
 			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
 			edgeExtGlGraphInputData->parameters->getTexturePath(), lod);

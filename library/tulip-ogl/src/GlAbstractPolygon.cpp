@@ -32,6 +32,7 @@ namespace tlp {
       polygonMode(POLYGON),
       filled(true),
       outlined(true),
+      lighting(true),
       textureName(""),
       outlineSize(1.),
       hideOutlineLod(0.),
@@ -69,6 +70,14 @@ namespace tlp {
   void GlAbstractPolygon::setOutlineMode(const bool outlined) {
     this->outlined = outlined;
     clearGenerated();
+  }
+  //=====================================================
+  bool GlAbstractPolygon::getLightingMode() {
+    return lighting;
+  }
+  //=====================================================
+  void GlAbstractPolygon::setLightingMode(const bool lighting) {
+    this->lighting = lighting;
   }
   //=====================================================
   string GlAbstractPolygon::getTextureName() {
@@ -136,9 +145,13 @@ namespace tlp {
     bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
 
     glDisable(GL_CULL_FACE);
-    if(cameraIs3D()){
-      glEnable(GL_LIGHTING);
-      glEnable(GL_COLOR_MATERIAL);
+    if(lighting){
+      if(cameraIs3D()){
+        glEnable(GL_LIGHTING);
+        glEnable(GL_COLOR_MATERIAL);
+      }else{
+        glDisable(GL_LIGHTING);
+      }
     }else{
       glDisable(GL_LIGHTING);
     }
