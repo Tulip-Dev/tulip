@@ -90,12 +90,12 @@ void Square::draw(node n, float lod) {
 }
 
 void Square::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
+  glDisable(GL_LIGHTING);
 	drawGlyph(glyphColor,
 			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
 			edgeExtGlGraphInputData->parameters->getTexturePath(),
 			edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
 			borderColor, lod);
-	glDisable(GL_LIGHTING);
 }
 
 //=====================================================

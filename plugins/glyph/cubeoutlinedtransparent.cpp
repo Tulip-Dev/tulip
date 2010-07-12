@@ -94,6 +94,7 @@ void CubeOutLinedTransparent::draw(node n, float lod) {
 
 void CubeOutLinedTransparent::draw(edge e, node, const Color &borderColor, const Color&,
     float lod) {
+  glEnable(GL_LIGHTING);
   string textureName=edgeExtGlGraphInputData->elementTexture->getEdgeValue(e);
   if(textureName!="")
     textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;

@@ -90,6 +90,7 @@ void Hexagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
 }
 //=====================================================
 void Hexagone::draw(node n, float lod) {
+  hexagon->setLightingMode(true);
   string textureName=glGraphInputData->elementTexture->getNodeValue(n);
   if(textureName!="")
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
@@ -106,6 +107,7 @@ void Hexagone::draw(edge e,
                     const Color & glyphColor,
                     const Color &borderColor,
                     float lod) {
+  hexagon->setLightingMode(false);
   string textureName=edgeExtGlGraphInputData->elementTexture->getEdgeValue(e);
   if(textureName!="")
     textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;

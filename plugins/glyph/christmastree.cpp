@@ -77,6 +77,7 @@ void ChristmasTree::draw(node n, float) {
 }
 
 void ChristmasTree::draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
+  glEnable(GL_LIGHTING);
 	drawTree();
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_tree");
 	setMaterial(glyphColor);

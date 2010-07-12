@@ -92,6 +92,7 @@ void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
 }
 //=====================================================
 void Pentagone::draw(node n, float lod) {
+  pentagon->setLightingMode(true);
   string textureName=glGraphInputData->elementTexture->getNodeValue(n);
   if(textureName!="")
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
@@ -104,6 +105,7 @@ void Pentagone::draw(node n, float lod) {
 }
 
 void Pentagone::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
+  pentagon->setLightingMode(false);
   string textureName=edgeExtGlGraphInputData->elementTexture->getEdgeValue(e);
   if(textureName!="")
     textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
@@ -113,7 +115,6 @@ void Pentagone::draw(edge e, node, const Color& glyphColor, const Color &borderC
        edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
        textureName,
        lod);
-	glDisable(GL_LIGHTING);
 }
 
 //=====================================================
