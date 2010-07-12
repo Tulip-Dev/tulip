@@ -50,15 +50,17 @@ namespace tlp {
     return result;
   }
   //================================================
-  vector<Color> getColors(const vector<Coord> &line, const Color &c1, const Color &c2) {
+  void getColors(const vector<Coord> &line, const Color &c1, const Color &c2, vector<Color> &result) {
     tlp::Vector<float, 4> _c1, _c2;
     for (unsigned int i=0; i<4; ++i) {
       _c1[i] = c1[i];
       _c2[i] = c2[i];
     }
-    vector<Color> result(line.size());
+    result.resize(line.size());
     result[0] = c1;
     result[line.size()-1] = c2;
+    if(line.size()==2)
+      return;
     _c2 -= _c1;
     _c2 /= lineLength(line);
     for (unsigned int i = 1; i < line.size() - 1; ++i) {
@@ -66,6 +68,11 @@ namespace tlp {
       _c1 += _c2 * delta;
       result[i] = Color((unsigned char)_c1[0], (unsigned char)_c1[1], (unsigned char)_c1[2], (unsigned char)_c1[3]);
     }
+  }
+  //================================================
+  vector<Color> getColors(const vector<Coord> &line, const Color &c1, const Color &c2) {
+    vector<Color> result;
+    getColors(line,c1,c2,result);
     return result;
   }
   //================================================
@@ -240,52 +247,60 @@ namespace tlp {
     return false;
   }
 
-  vector<Coord> computeCleanVertices(const vector<Coord> &bends,
-				     const Coord &startPoint, const Coord& endPoint,
-				     Coord &startN, Coord &endN) {
-    vector<Coord> result;
+  void computeCleanVertices(const vector<Coord> &bends,
+                            const Coord &startPoint, const Coord& endPoint,
+                            Coord &startN, Coord &endN,
+                            vector<Coord> &result){
     if (bends.size() > 0) {
       result.push_back(startPoint);
       Coord lastPoint = bends[0];
       if ((startPoint - lastPoint).norm()> 1E-4)
-	result.push_back(lastPoint);
+        result.push_back(lastPoint);
       unsigned int i;
       for(i = 1; i < bends.size(); ++i) {
-	Coord currentPoint = bends[i];
-	if ((currentPoint - lastPoint).norm() > 1E-4) {
-	  result.push_back(currentPoint);
-	}
-	lastPoint = currentPoint;
+        Coord currentPoint = bends[i];
+        if ((currentPoint - lastPoint).norm() > 1E-4) {
+          result.push_back(currentPoint);
+        }
+        lastPoint = currentPoint;
       }
       if ((endPoint - lastPoint).norm() > 1E-4) {
-	lastPoint = endPoint;
-	result.push_back(endPoint);
+        lastPoint = endPoint;
+        result.push_back(endPoint);
       }
       if (result.size() < 2) { //only one valid point for a line
-	result.clear();
-	return result;
+        result.clear();
+        return;
       }
       //Adjust tangent direction
       if ((startN - startPoint).norm() < 1E-4) {
-	startN = startPoint - (result[1] - startPoint);
+        startN = startPoint - (result[1] - startPoint);
       }
       if ((endN - lastPoint).norm()<1E-4) {
-	endN = lastPoint + lastPoint - result[result.size()-2];
+        endN = lastPoint + lastPoint - result[result.size()-2];
       }
-      return result;
+      return;
     } else {
       if ((startPoint - endPoint).norm()> 1E-4) {
-	result.push_back(startPoint);
-	result.push_back(endPoint);
-	if ((startN - startPoint).norm() < 1E-4) {
-	  startN = startPoint - (endPoint - startPoint);
-	}
-	if ((endN - endPoint).norm() < 1E-4) {
-	  endN = endPoint + endPoint - startPoint;
-	}
+        result.push_back(startPoint);
+        result.push_back(endPoint);
+        if ((startN - startPoint).norm() < 1E-4) {
+          startN = startPoint - (endPoint - startPoint);
+        }
+        if ((endN - endPoint).norm() < 1E-4) {
+          endN = endPoint + endPoint - startPoint;
+        }
       }
-      return result;
+      return;
     }
+  }
+
+  vector<Coord> computeCleanVertices(const vector<Coord> &bends,
+				     const Coord &startPoint, const Coord& endPoint,
+				     Coord &startN, Coord &endN) {
+    vector<Coord> result;
+    computeCleanVertices(bends,startPoint,endPoint,startN,endN,result);
+    return result;
   }
   //=============================================
   void curveVisibility(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
