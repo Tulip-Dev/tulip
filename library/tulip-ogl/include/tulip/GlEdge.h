@@ -88,6 +88,28 @@ namespace tlp {
     BoundingBox eeGlyphBoundingBox(const Coord& anchor, const Coord& tgt, float glyphNrm,
     		const Matrix<float, 4>& transformation, const Matrix<float, 4>& size);
 
+    void getEdgeColor(GlGraphInputData *data,edge e,node source, node target, bool selected,Color &srcCol, Color &tgtCol);
+
+    void getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,Size &edgeSize, float &maxSrcSize, float &maxTgtSize);
+
+    float getEdgeWidthLod(const Coord &edgeCoord,const Size &edgeSize,Camera *camera);
+
+    void displayArrow(GlGraphInputData *data,
+                      edge e,
+                      node source,
+                      float edgeSize,
+                      const Color &color,
+                      float maxSize,
+                      bool selected,
+                      int srcEdgeGlyph,
+                      int tgtEdgeGlyph,
+                      size_t numberOfBends,
+                      const Coord &anchor,
+                      const Coord &tgtCoord,
+                      const Coord &srcAnchor,
+                      const Coord &tgtAnchor,
+                      Coord &lineAnchor);
+
   };
 
 }

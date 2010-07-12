@@ -37,6 +37,9 @@ namespace tlp {
   TLP_GL_SCOPE std::vector<Coord> computeCleanVertices(const std::vector<Coord> &bends,
 					  const Coord &startPoint, const Coord &endPoint,
 					  Coord &startN, Coord &endN);
+  TLP_GL_SCOPE void computeCleanVertices(const std::vector<Coord> &bends,
+                      const Coord &startPoint, const Coord &endPoint,
+                      Coord &startN, Coord &endN,std::vector<Coord> &);
   TLP_GL_SCOPE void polyLine(const std::vector<Coord> &,/* polyline vertices */
 		const Color &,             /* start color */
 		const Color &);            /* end color */
@@ -126,6 +129,7 @@ namespace tlp {
 		  const Color &);          /* end color */
   //====================================================================
   TLP_GL_SCOPE std::vector<Color> getColors(const std::vector<Coord> &line, const Color &c1, const Color &c2);
+  TLP_GL_SCOPE void getColors(const std::vector<Coord> &line, const Color &c1, const Color &c2,std::vector<Color> &);
   TLP_GL_SCOPE std::vector<float> getSizes(const std::vector<Coord> &line, float s1, float s2);
   TLP_GL_SCOPE GLfloat* buildCurvePoints (const std::vector<Coord> &vertices,
       const std::vector<float> &sizes,
