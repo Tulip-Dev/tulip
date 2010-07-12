@@ -28,6 +28,7 @@
 #include "tulip/PluginProgress.h"
 #include "tulip/Plugin.h"
 #include "tulip/TemplateFactory.h"
+#include "tulip/MethodFactory.h"
 
 /**
  * \addtogroup plugins
