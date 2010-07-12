@@ -18,16 +18,19 @@
  */
 #if defined(__APPLE__)
 #include <OpenGL/glew.h>
-#include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #else
 #include <GL/glew.h>
-#include <GL/gl.h>
 #include <GL/glu.h>
 #endif
-#ifndef CALLBACK
-#define CALLBACK
-#endif
+
+#include "tulip/GlComplexPolygon.h"
+#include "tulip/GlTools.h"
+#include "tulip/GlLayer.h"
+#include "tulip/GlTextureManager.h"
+#include "tulip/ParametricCurves.h"
+
+#include <tulip/TlpTools.h>
 
 #ifdef __APPLE_CC__
 #if __APPLE_CC__ < 5400
@@ -39,85 +42,46 @@ typedef GLvoid (*GLUTesselatorFunction)();
 #endif
 #elif defined( __mips ) || defined( __linux__ ) || defined( __FreeBSD_kernel__) || defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __sun ) || defined (__CYGWIN__)
 typedef GLvoid (*GLUTesselatorFunction)();
-#elif defined ( WIN32)
-typedef void (__stdcall*GLUTesselatorFunction)(void);
+#elif defined (WIN32)
+typedef void (CALLBACK*GLUTesselatorFunction)(void);
 #else
 #error "Error - need to define type GLUTesselatorFunction for this platform/compiler"
 #endif
 
-#include "tulip/GlComplexPolygon.h"
-#include "tulip/GlTools.h"
-#include "tulip/GlLayer.h"
-#include "tulip/GlTextureManager.h"
-#include "tulip/ParametricCurves.h"
-
-#include <tulip/TlpTools.h>
 
 using namespace std;
 
 namespace tlp {
 
-static GLenum currentMode;
-static std::map<int, std::vector<Coord> > *verticesMapP;
-static std::map<int, std::vector<Color> > *colorsMapP;
-static std::map<int, std::vector<Vec2f> > *texCoordsMapP;
-static std::map<int, std::vector<int> >*startIndicesMapP;
-static std::map<int, std::vector<int> >*verticesCountMapP;
-static std::set<int> *primitivesSetP;
-static unsigned int nbVertices = 0;
-
-void beginCallback(GLenum which)
-{
-	currentMode = which;
-	nbVertices = 0;
-	(*startIndicesMapP)[which].push_back((*verticesMapP)[which].size());
-	(*primitivesSetP).insert(which);
+void CALLBACK beginCallback(GLenum which, GLvoid *polygonData) {
+    GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
+    complexPolygon->startPrimitive(which);
 }
 
-void errorCallback(GLenum errorCode)
-{
-	const GLubyte *estring;
-
-	estring = gluErrorString(errorCode);
+void CALLBACK errorCallback(GLenum errorCode) {
+	const GLubyte *estring = gluErrorString(errorCode);
 	cerr << "Tessellation Error: " << estring << endl;
 }
 
-void endCallback(void)
-{
-	(*verticesCountMapP)[currentMode].push_back(nbVertices);
+void CALLBACK endCallback(GLvoid *polygonData) {
+    GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
+	complexPolygon->endPrimitive();
 }
 
-
-void vertexCallback(GLvoid *vertex)
-{
+void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData) {
 	const GLdouble *pointer = static_cast<GLdouble *>(vertex);
+	GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
 	Coord v(pointer[0], pointer[1], pointer[2]);
+	Color color(pointer[3], pointer[4], pointer[5], pointer[6]);
 	Vec2f texCoord;
 	texCoord[0] = pointer[0];
 	texCoord[1] = pointer[1];
-	Color color(pointer[3], pointer[4], pointer[5], pointer[6]);
-	(*verticesMapP)[currentMode].push_back(v);
-	(*colorsMapP)[currentMode].push_back(color);
-	(*texCoordsMapP)[currentMode].push_back(texCoord);
-	++nbVertices;
+	complexPolygon->addVertex(v, color, texCoord);
 }
 
-typedef struct {
-	GLdouble x; /* x vertex coordinate */
-	GLdouble y; /* y vertex coordinate */
-	GLdouble z; /* z vertex coordinate */
-	GLdouble r; /* red color component of vertex */
-	GLdouble g; /* green color component of vertex */
-	GLdouble b; /* blue color component of vertex */
-	GLdouble a; /* alpha color component of vertex */
-} VERTEX;
-
-static vector<VERTEX *> createdVerticesAfterCombine;
-
-void combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut)
-{
-	VERTEX *vertex = new VERTEX;
-	createdVerticesAfterCombine.push_back(vertex);
+void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut, GLvoid *polygonData) {
+	GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
+	VERTEX *vertex = complexPolygon->allocateNewVertex();
 	vertex->x = coords[0];
 	vertex->y = coords[1];
 	vertex->z = coords[2];
@@ -181,9 +145,6 @@ GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fco
 	runTesselation();
 }
 //=====================================================
-GlComplexPolygon::~GlComplexPolygon() {
-}
-//=====================================================
 void GlComplexPolygon::createPolygon(const vector<Coord> &coords,int bezier) {
 	points.push_back(vector<Coord>());
 	if(bezier==0) {
@@ -217,27 +178,15 @@ void GlComplexPolygon::beginNewHole() {
 }
 void GlComplexPolygon::runTesselation() {
 
-	verticesMapP = &verticesMap;
-	colorsMapP = &colorsMap;
-	texCoordsMapP = &texCoordsMap;
-	startIndicesMapP = &startIndicesMap;
-	verticesCountMapP = &verticesCountMap;
-	primitivesSetP = &primitivesSet;
-
 	GLUtesselator *tobj;
 	tobj = gluNewTess();
 
-	gluTessCallback(tobj, GLU_TESS_VERTEX,
-			(GLUTesselatorFunction)vertexCallback);
-	gluTessCallback(tobj, GLU_TESS_BEGIN,
-			(GLUTesselatorFunction)beginCallback);
-	gluTessCallback(tobj, GLU_TESS_END,
-			(GLUTesselatorFunction)endCallback);
-	gluTessCallback(tobj, GLU_TESS_ERROR,
-			(GLUTesselatorFunction)errorCallback);
-	gluTessCallback(tobj, GLU_TESS_COMBINE,
-			(GLUTesselatorFunction)combineCallback);
-
+    gluTessCallback(tobj, GLU_TESS_BEGIN_DATA, reinterpret_cast<GLUTesselatorFunction>(&beginCallback));
+    gluTessCallback(tobj, GLU_TESS_VERTEX_DATA, reinterpret_cast<GLUTesselatorFunction>(&vertexCallback));
+    gluTessCallback(tobj, GLU_TESS_END_DATA, reinterpret_cast<GLUTesselatorFunction>(&endCallback));
+    gluTessCallback(tobj, GLU_TESS_COMBINE_DATA, reinterpret_cast<GLUTesselatorFunction>(&combineCallback));
+    gluTessCallback(tobj, GLU_TESS_ERROR, reinterpret_cast<GLUTesselatorFunction>(&errorCallback));
+	
 	//Compute number of points to compute and create a big tab to store points' informations
 	unsigned int numberOfPoints=0;
 	for(unsigned int v=0;v<points.size();++v) {
@@ -247,7 +196,7 @@ void GlComplexPolygon::runTesselation() {
 	GLdouble *pointsData = new GLdouble[7*numberOfPoints];
 
 	unsigned int pointNumber=0;
-	gluTessBeginPolygon(tobj, NULL);
+	gluTessBeginPolygon(tobj, static_cast<void *>(this));
 	for(unsigned int v=0;v<points.size();++v) {
 		gluTessBeginContour(tobj);
 		for(unsigned int i=0; i < points[v].size(); ++i) {
@@ -267,10 +216,35 @@ void GlComplexPolygon::runTesselation() {
 	gluDeleteTess(tobj);
 	delete [] pointsData;
 
-	for (size_t i = 0 ; i < createdVerticesAfterCombine.size() ; ++i) {
-		delete createdVerticesAfterCombine[i];
+	for (size_t i = 0 ; i < allocatedVertices.size() ; ++i) {
+		delete allocatedVertices[i];
 	}
-	createdVerticesAfterCombine.clear();
+	allocatedVertices.clear();
+	
+}
+//=====================================================
+void GlComplexPolygon::startPrimitive(GLenum primitive) {
+	currentPrimitive = primitive;
+	nbPrimitiveVertices = 0;
+	startIndicesMap[primitive].push_back(verticesMap[primitive].size());
+	primitivesSet.insert(primitive);
+}
+//=====================================================	
+void GlComplexPolygon::endPrimitive() {
+	verticesCountMap[currentPrimitive].push_back(nbPrimitiveVertices);
+}
+//=====================================================	
+void GlComplexPolygon::addVertex(const Coord &vertexCoord, const Color &vertexColor, const Vec2f &vertexTexCoord) {
+	verticesMap[currentPrimitive].push_back(vertexCoord);
+	colorsMap[currentPrimitive].push_back(vertexColor);
+	texCoordsMap[currentPrimitive].push_back(vertexTexCoord);
+	++nbPrimitiveVertices;
+}
+//=====================================================
+VERTEX *GlComplexPolygon::allocateNewVertex() {
+	VERTEX *vertex = new VERTEX();
+	allocatedVertices.push_back(vertex);
+	return vertex;
 }
 //=====================================================
 void GlComplexPolygon::draw(float,Camera *) {
@@ -297,7 +271,7 @@ void GlComplexPolygon::draw(float,Camera *) {
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	for (set<int>::iterator it = primitivesSet.begin() ; it != primitivesSet.end() ; ++it) {
+	for (set<GLenum>::iterator it = primitivesSet.begin() ; it != primitivesSet.end() ; ++it) {
 		glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), &verticesMap[*it][0][0]);
 		glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), &colorsMap[*it][0][0]);
 		glTexCoordPointer(2, GL_FLOAT, 2*sizeof(GLfloat), &texCoordsMap[*it][0]);
