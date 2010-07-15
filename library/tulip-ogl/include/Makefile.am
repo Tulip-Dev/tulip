@@ -77,7 +77,8 @@ nobase_include_HEADERS = \
   	tulip/GlCPULODCalculator.h \
 	tulip/GlQuadTreeLODCalculator.h \
 	tulip/GlSceneZoomAndPan.h \
-	tulip/ParametricCurves.h
+	tulip/ParametricCurves.h \
+	tulip/GlVertexArrayManager.h
 
 noinst_HEADERS = \
 	tulip/GlRenderer.h\
@@ -96,4 +97,5 @@ noinst_HEADERS = \
 	tulip/GlCPULODCalculator.h \
 	tulip/GlSVGFeedBackBuilder.h \
 	tulip/GlEPSFeedBackBuilder.h \
-	tulip/GlPointManager.h
+	tulip/GlPointManager.h \
+	tulip/GlVertexArrayVisitor.h

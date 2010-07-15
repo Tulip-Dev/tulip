@@ -46,6 +46,7 @@ class PropertyManager;
 class Graph;
 class Glyph;
 class EdgeExtremityGlyph;
+class GlVertexArrayManager;
 
 /**
  * Class use to store inputData of the graph
@@ -57,8 +58,7 @@ public:
 	/**
 	 * Create the inputData with Graph : graph and GlGraphRenderingParameters : parameters
 	 */
-	GlGraphInputData(Graph* graph, GlGraphRenderingParameters* parameters,
-			GlMetaNodeRenderer *renderer = NULL);
+	GlGraphInputData(Graph* graph, GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer = NULL);
 
 	~GlGraphInputData();
 
@@ -315,31 +315,16 @@ public:
 	/**
 	 * Return metaNode renderer
 	 */
-	GlMetaNodeRenderer *getMetaNodeRenderer() {
+  GlMetaNodeRenderer *getMetaNodeRenderer() {
 		return metaNodeRenderer;
 	}
 
-protected:
-
-	std::string elementColorPropName;
-	std::string elementLabelColorPropName;
-	std::string elementSizePropName;
-	std::string elementLabelPositionPropName;
-	std::string elementShapePropName;
-	std::string elementRotationPropName;
-	std::string elementSelectedPropName;
-    std::string elementFontPropName;
-    std::string elementFontSizePropName;
-	std::string elementLabelPropName;
-	std::string elementTexturePropName;
-	std::string elementBorderColorPropName;
-	std::string elementBorderWidthPropName;
-	std::string elementLayoutPropName;
-	std::string elementSrcAnchorShapePropName;
-	std::string elementSrcAnchorSizePropName;
-	std::string elementTgtAnchorShapePropName;
-	std::string elementTgtAnchorSizePropName;
-	GlMetaNodeRenderer *metaNodeRenderer;
+  /**
+   * Return glEdgeDisplayManager
+   */
+  GlVertexArrayManager *getGlVertexArrayManager(){
+    return glVertexArrayManager;
+  }
 
 public:
 
@@ -369,6 +354,32 @@ public:
 
 	MutableContainer<Glyph *> glyphs;
 	MutableContainer<EdgeExtremityGlyph *> extremityGlyphs;
+
+protected:
+
+  std::string elementColorPropName;
+  std::string elementLabelColorPropName;
+  std::string elementSizePropName;
+  std::string elementLabelPositionPropName;
+  std::string elementShapePropName;
+  std::string elementRotationPropName;
+  std::string elementSelectedPropName;
+    std::string elementFontPropName;
+    std::string elementFontSizePropName;
+  std::string elementLabelPropName;
+  std::string elementTexturePropName;
+  std::string elementBorderColorPropName;
+  std::string elementBorderWidthPropName;
+  std::string elementLayoutPropName;
+  std::string elementSrcAnchorShapePropName;
+  std::string elementSrcAnchorSizePropName;
+  std::string elementTgtAnchorShapePropName;
+  std::string elementTgtAnchorSizePropName;
+
+  GlMetaNodeRenderer *metaNodeRenderer;
+  GlVertexArrayManager *glVertexArrayManager;
+
+
 };
 }
 

@@ -105,5 +105,7 @@ libtulip_ogl_la_SOURCES = \
 	AbstractGlCurve.cpp \
 	GlQuadTreeLODCalculator.cpp \
 	GlSceneZoomAndPan.cpp \
-	ParametricCurves.cpp
+	ParametricCurves.cpp \
+	GlVertexArrayManager.cpp \
+	GlVertexArrayVisitor.cpp
 
