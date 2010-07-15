@@ -100,16 +100,14 @@ namespace tlp {
 
     std::vector<Coord> linesCoordsArray;
     std::vector<Color> linesColorsArray;
-    std::vector<GLint *> linesIndexArray;
+    std::vector<GLint> linesIndexArray;
     std::vector<GLsizei> linesIndexCountArray;
-    std::vector<GLint *> linesRenderingIndexArray;
-    std::vector<GLsizei> linesRenderingIndexCountArray;
-    std::vector<GLint *> linesSelectedRenderingIndexArray;
-    std::vector<GLsizei> linesSelectedRenderingIndexCountArray;
+    std::vector<GLint> linesRenderingIndexArray;
+    std::vector<GLint> linesSelectedRenderingIndexArray;
 
     unsigned int currentIndex;
 
-    TLP_HASH_MAP<unsigned int,unsigned int> edgeToLineIndexHashMap;
+    TLP_HASH_MAP<unsigned int,std::pair<unsigned int,unsigned int> > edgeToLineIndexHashMap;
   };
 
 }
