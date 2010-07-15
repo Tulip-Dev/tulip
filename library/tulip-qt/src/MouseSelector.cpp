@@ -124,6 +124,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         if (mousePressModifier == Qt::ShiftModifier)
           boolVal = false;
         else {
+          selection->setAllNodeValue(false);
           Iterator<node>* itn = selection->getNonDefaultValuatedNodes();
           if (itn->hasNext()) {
             graph->push();
