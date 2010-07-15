@@ -39,6 +39,8 @@
 #include "tulip/GlSVGFeedBackBuilder.h"
 #include "tulip/GlEPSFeedBackBuilder.h"
 #include "tulip/GlPointManager.h"
+#include "tulip/GlVertexArrayManager.h"
+#include "tulip/GlVertexArrayVisitor.h"
 
 using namespace std;
 
@@ -268,10 +270,12 @@ namespace tlp {
 
 
   void GlScene::draw() {
-	initGlParameters();
+    initGlParameters();
 
+    /**********************************************************************
+      LOD Compute
+    **********************************************************************/
     lodCalculator->clear();
-
     lodCalculator->setRenderingEntitiesFlag(RenderingAll);
 
     /*
@@ -289,23 +293,34 @@ namespace tlp {
       }
       delete lodVisitor;
     }
-
     lodCalculator->compute(viewport,viewport);
-
     LayersLODVector *layersLODVector=lodCalculator->getResult();
 
-	TextRenderer fontRenderer;
-	OcclusionTest occlusionTest;
+    /**********************************************************************
+      VertexArray compute
+    **********************************************************************/
 
-	Camera *camera;
-	Graph *graph=NULL;
+    if(glGraphComposite){
+      GlVertexArrayManager *vertexArrayManager=glGraphComposite->getInputData()->getGlVertexArrayManager();
+      if(vertexArrayManager->haveToCompute()){
+        GlVertexArrayVisitor vertexArrayVisitor(glGraphComposite->getInputData());
+        glGraphComposite->acceptVisitor(&vertexArrayVisitor);
+        vertexArrayManager->setHaveToCompute(false);
+      }
+    }
+
+    TextRenderer fontRenderer;
+    OcclusionTest occlusionTest;
+
+    Camera *camera;
+    Graph *graph=NULL;
     if(glGraphComposite){
       graph=glGraphComposite->getInputData()->graph;
     }
 
-	GlNode glNode(0);
-	GlMetaNode glMetaNode(0);
-	GlEdge glEdge(0);
+    GlNode glNode(0);
+    GlMetaNode glMetaNode(0);
+    GlEdge glEdge(0);
 
     // Iterate on Camera
     Camera *oldCamera=NULL;
@@ -318,6 +333,9 @@ namespace tlp {
 
       // Init GlPointManager for a new rendering pass
       GlPointManager::getInst().beginRendering();
+      if(glGraphComposite)
+        glGraphComposite->getInputData()->getGlVertexArrayManager()->beginRendering();
+      GlEdge::clearEdgeWidthLodSystem(viewOrtho);
 
       bool zOrdering=false;
       if(glGraphComposite)
@@ -432,6 +450,10 @@ namespace tlp {
           }
         }
       }
+
+
+      if(glGraphComposite)
+        glGraphComposite->getInputData()->getGlVertexArrayManager()->endRendering();
 
       // End rendering of GlPointManager
       GlPointManager::getInst().endRendering();

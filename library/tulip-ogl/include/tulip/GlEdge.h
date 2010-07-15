@@ -21,6 +21,14 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+
 #include <tulip/Types.h>
 
 #include "tulip/GlComplexeEntity.h"
@@ -71,9 +79,32 @@ namespace tlp {
      */
     void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
 
+    /**
+     * This function is used by the engine to get line coordinates of the edge
+     */
+    void getVertices(GlGraphInputData *data,std::vector<Coord> &linesCoordsArray);
+
+    /**
+     * This function is used by the engine to get line colors of the edge
+     */
+    void getColors(GlGraphInputData *data,const std::vector<Coord> &vertices,std::vector<Color> &linesColorsArray);
+
+    /**
+     * This function must be call before each graph rendering
+     * This function clear previously compute edgeWidthLod
+     */
+    static void clearEdgeWidthLodSystem(bool orthoProjection){
+      haveToComputeEdgeWidthBaseLod=true;
+    }
+
     unsigned int id;
 
   private :
+
+    static bool haveToComputeEdgeWidthBaseLod;
+    static bool orthoProjection;
+    static float edgeWidthBaseLod;
+
     /**
      * Draw the Edge : this function is used by draw function
      */
@@ -88,27 +119,33 @@ namespace tlp {
     BoundingBox eeGlyphBoundingBox(const Coord& anchor, const Coord& tgt, float glyphNrm,
     		const Matrix<float, 4>& transformation, const Matrix<float, 4>& size);
 
+    /**
+     * Compute the edge color
+     */
     void getEdgeColor(GlGraphInputData *data,edge e,node source, node target, bool selected,Color &srcCol, Color &tgtCol);
 
+    /**
+     * Compute the edge size
+     */
     void getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,Size &edgeSize, float &maxSrcSize, float &maxTgtSize);
 
+    /**
+     * Compute width lod of edge
+     * This lod is used to know if the edge is render in polygon mode or line mode
+     */
     float getEdgeWidthLod(const Coord &edgeCoord,const Size &edgeSize,Camera *camera);
 
-    void displayArrow(GlGraphInputData *data,
-                      edge e,
-                      node source,
-                      float edgeSize,
-                      const Color &color,
-                      float maxSize,
-                      bool selected,
-                      int srcEdgeGlyph,
-                      int tgtEdgeGlyph,
-                      size_t numberOfBends,
-                      const Coord &anchor,
-                      const Coord &tgtCoord,
-                      const Coord &srcAnchor,
-                      const Coord &tgtAnchor,
-                      Coord &lineAnchor);
+    /**
+     * Compute edge anchor
+     */
+    void getEdgeAnchor(GlGraphInputData *data,node source,node target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor);
+
+    /**
+     * Thgis function is used to render edge arrows
+     */
+    void displayArrow(GlGraphInputData *data,edge e,node source,float edgeSize,const Color &color,float maxSize,bool selected,
+                      int srcEdgeGlyph,int tgtEdgeGlyph,size_t numberOfBends,const Coord &anchor,const Coord &tgtCoord,
+                      const Coord &srcAnchor,const Coord &tgtAnchor,Coord &lineAnchor);
 
   };
 

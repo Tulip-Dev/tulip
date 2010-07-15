@@ -24,6 +24,7 @@
 #include "tulip/GlyphManager.h"
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include "tulip/GlGraphRenderingParameters.h"
+#include "tulip/GlVertexArrayManager.h"
 
 namespace tlp {
   GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer):
@@ -35,20 +36,23 @@ namespace tlp {
     elementSrcAnchorShapePropName("viewSrcAnchorShape"),elementSrcAnchorSizePropName("viewSrcAnchorSize"),
     elementTgtAnchorShapePropName("viewTgtAnchorShape"),elementTgtAnchorSizePropName("viewTgtAnchorSize"),elementAnimationFrame(new IntegerProperty(graph,"viewAnimationFrame")),
     graph(graph),
-    parameters(parameters) {
+    parameters(parameters){
 
     reloadAllProperties();
-	GlyphManager::getInst().initGlyphList(&this->graph, this, glyphs);
+    GlyphManager::getInst().initGlyphList(&this->graph, this, glyphs);
 
-	EdgeExtremityGlyphManager::getInst().initGlyphList(&this->graph, this,
-			extremityGlyphs);
+    EdgeExtremityGlyphManager::getInst().initGlyphList(&this->graph, this,
+                                                       extremityGlyphs);
     if(renderer)
       metaNodeRenderer=renderer;
     else
       metaNodeRenderer=new GlMetaNodeRenderer();
-}
+
+    glVertexArrayManager=new GlVertexArrayManager(this);
+  }
 
 GlGraphInputData::~GlGraphInputData() {
+  delete glVertexArrayManager;
 	GlyphManager::getInst().clearGlyphList(&this->graph, this, glyphs);
 	EdgeExtremityGlyphManager::getInst().clearGlyphList(&this->graph, this,
 			extremityGlyphs);

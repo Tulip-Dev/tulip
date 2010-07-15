@@ -76,4 +76,5 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
   	tulip/GlQuadTreeLODCalculator.h
   	tulip/GlSceneZoomAndPan.h
   	tulip/ParametricCurves.h
+	tulip/GlVertexArrayManager.h
 )

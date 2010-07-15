@@ -82,6 +82,8 @@ set(tulip-ogl_LIB_SRCS
     GlQuadTreeLODCalculator.cpp
     GlSceneZoomAndPan.cpp
     ParametricCurves.cpp
+	GlVertexArrayManager.cpp
+	GlVertexArrayVisitor.cpp
 )
 
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ../include/ ${PROJECT_SOURCE_DIR} ${FTGLInclude} ${LIBXML2_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIRS})
