@@ -56,9 +56,7 @@ namespace tlp
 
     isBegin=true;
     linesRenderingIndexArray.clear();
-    linesRenderingIndexCountArray.clear();
     linesSelectedRenderingIndexArray.clear();
-    linesSelectedRenderingIndexCountArray.clear();
   }
 
   void GlVertexArrayManager::endRendering() {
@@ -79,7 +77,7 @@ namespace tlp
 
     if(linesSelectedRenderingIndexArray.size()!=0){
       glVertexPointer(3, GL_FLOAT, 0, &linesCoordsArray.data()[0]);
-      glMultiDrawElements(GL_LINE_STRIP, linesSelectedRenderingIndexCountArray.data(), GL_UNSIGNED_INT, (const void **)(linesSelectedRenderingIndexArray.data()),linesSelectedRenderingIndexArray.size());
+      glDrawElements(GL_LINES, linesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, linesSelectedRenderingIndexArray.data());
     }
 
     glEnableClientState(GL_COLOR_ARRAY);
@@ -92,7 +90,7 @@ namespace tlp
       glColorPointer(4, GL_UNSIGNED_BYTE, 0, &linesColorsArray.data()[0]);
       glVertexPointer(3, GL_FLOAT, 0, &linesCoordsArray.data()[0]);
 
-      glMultiDrawElements(GL_LINE_STRIP, linesRenderingIndexCountArray.data(), GL_UNSIGNED_INT, (const void **)(linesRenderingIndexArray.data()),linesRenderingIndexArray.size());
+      glDrawElements(GL_LINES, linesRenderingIndexArray.size(), GL_UNSIGNED_INT, linesRenderingIndexArray.data());
     }
 
     glDisableClientState(GL_COLOR_ARRAY);
@@ -103,31 +101,39 @@ namespace tlp
     size_t lastIndex=linesCoordsArray.size();
     edge->getVertices(inputData,linesCoordsArray);
     size_t numberOfVertices=linesCoordsArray.size()-lastIndex;
+
+    edgeToLineIndexHashMap[edge->id]=pair<unsigned int,unsigned int>(linesIndexArray.size(),linesIndexCountArray.size());
+
     vector<Coord> vertices;
     if(numberOfVertices!=0){
-      linesIndexArray.push_back(new GLint[numberOfVertices]);
-      GLint *index=linesIndexArray.back();
+      linesIndexArray.push_back(lastIndex);
       for(size_t i=0;i<numberOfVertices;++i){
         vertices.push_back(linesCoordsArray[lastIndex+i]);
-        index[i]=lastIndex+i;
       }
       edge->getColors(inputData,vertices,linesColorsArray);
       linesIndexCountArray.push_back(numberOfVertices);
     }else{
-      linesIndexArray.push_back(NULL);
       linesIndexCountArray.push_back(0);
     }
-    edgeToLineIndexHashMap[edge->id]=linesIndexArray.size()-1;
   }
 
   void GlVertexArrayManager::activateLineEdgeDisplay(GlEdge *edge,bool selected){
-    size_t index=edgeToLineIndexHashMap[edge->id];
+    pair<unsigned int,unsigned int> index=edgeToLineIndexHashMap[edge->id];
+    unsigned int numberOfVertices=linesIndexCountArray[index.second];
+    if(numberOfVertices==0)
+      return;
+
+    unsigned int baseIndex=linesIndexArray[index.first];
     if(!selected){
-      linesRenderingIndexArray.push_back(linesIndexArray[index]);
-      linesRenderingIndexCountArray.push_back(linesIndexCountArray[index]);
+      for(unsigned int i=0;i<numberOfVertices-1;++i){
+        linesRenderingIndexArray.push_back(baseIndex+i);
+        linesRenderingIndexArray.push_back(baseIndex+i+1);
+      }
     }else{
-      linesSelectedRenderingIndexArray.push_back(linesIndexArray[index]);
-      linesSelectedRenderingIndexCountArray.push_back(linesIndexCountArray[index]);
+      for(unsigned int i=0;i<numberOfVertices-1;++i){
+        linesSelectedRenderingIndexArray.push_back(baseIndex+i);
+        linesSelectedRenderingIndexArray.push_back(baseIndex+i+1);
+      }
     }
   }
 
@@ -145,8 +151,6 @@ namespace tlp
     toCompute=true;
     linesCoordsArray.clear();
     linesColorsArray.clear();
-    for(vector<GLint*>::iterator it=linesIndexArray.begin();it!=linesIndexArray.end();++it)
-      delete[] (*it);
     linesIndexArray.clear();
     linesIndexCountArray.clear();
     edgeToLineIndexHashMap.clear();
