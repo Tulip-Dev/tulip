@@ -47,7 +47,7 @@ using namespace tlp;
 
 #ifndef _TULIP_LIB_DIR
 #ifdef _WIN32
-#define _TULIP_LIB_DIR "c:\\Program Files\\Tulip\\lib\\"
+#define _TULIP_LIB_DIR "c:\\Tulip\\lib\\"
 #else
 #define _TULIP_LIB_DIR "/usr/local/lib/"
 #endif
