@@ -125,6 +125,7 @@ Coord Cone::getAnchor(const Coord &vector) const {
 }
 
 void Cone::draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
+  glEnable(GL_LIGHTING);
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
 		drawCone();
     GlDisplayListManager::getInst().endNewDisplayList();

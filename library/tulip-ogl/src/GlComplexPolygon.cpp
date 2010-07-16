@@ -17,15 +17,20 @@
  *
  */
 #if defined(__APPLE__)
-#include <OpenGL/gl.h>
+#include <OpenGL/glew.h>
 #include <OpenGL/glu.h>
 #else
-#include <GL/gl.h>
+#include <GL/glew.h>
 #include <GL/glu.h>
 #endif
-#ifndef CALLBACK
-#define CALLBACK
-#endif
+
+#include "tulip/GlComplexPolygon.h"
+#include "tulip/GlTools.h"
+#include "tulip/GlLayer.h"
+#include "tulip/GlTextureManager.h"
+#include "tulip/ParametricCurves.h"
+
+#include <tulip/TlpTools.h>
 
 #ifdef __APPLE_CC__
 #if __APPLE_CC__ < 5400
@@ -37,73 +42,46 @@ typedef GLvoid (*GLUTesselatorFunction)();
 #endif
 #elif defined( __mips ) || defined( __linux__ ) || defined( __FreeBSD_kernel__) || defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __sun ) || defined (__CYGWIN__)
 typedef GLvoid (*GLUTesselatorFunction)();
-#elif defined ( WIN32)
-typedef void (__stdcall*GLUTesselatorFunction)(void);
+#elif defined (WIN32)
+typedef void (CALLBACK*GLUTesselatorFunction)(void);
 #else
 #error "Error - need to define type GLUTesselatorFunction for this platform/compiler"
 #endif
 
-#include "tulip/GlComplexPolygon.h"
-#include "tulip/GlTools.h"
-#include "tulip/GlLayer.h"
-#include "tulip/GlTextureManager.h"
-#include "tulip/ParametricCurves.h"
-
-#include <tulip/TlpTools.h>
 
 using namespace std;
 
 namespace tlp {
 
-void beginCallback(GLenum which)
-{
-	glBegin(which);
+void CALLBACK beginCallback(GLenum which, GLvoid *polygonData) {
+    GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
+    complexPolygon->startPrimitive(which);
 }
 
-void errorCallback(GLenum errorCode)
-{
-	const GLubyte *estring;
-
-	estring = gluErrorString(errorCode);
-	cout << "Tessellation Error: " << estring << endl;
+void CALLBACK errorCallback(GLenum errorCode) {
+	const GLubyte *estring = gluErrorString(errorCode);
+	cerr << "Tessellation Error: " << estring << endl;
 }
 
-void endCallback(void)
-{
-	glEnd();
+void CALLBACK endCallback(GLvoid *polygonData) {
+    GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
+	complexPolygon->endPrimitive();
 }
 
-
-void vertexCallback(GLvoid *vertex)
-{
-	const GLdouble *pointer;
-
-	pointer = (GLdouble *) vertex;
-	Color color=Color((unsigned char) pointer[3], (unsigned char)pointer[4],
-			(unsigned char) pointer[5], (unsigned char)pointer[6]);
-	setMaterial(color);
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(pointer[0], pointer[1]);
-	glVertex3dv((GLdouble *)vertex);
-	glColor3dv(pointer+3);
+void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData) {
+	const GLdouble *pointer = static_cast<GLdouble *>(vertex);
+	GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
+	Coord v(pointer[0], pointer[1], pointer[2]);
+	Color color(pointer[3], pointer[4], pointer[5], pointer[6]);
+	Vec2f texCoord;
+	texCoord[0] = pointer[0];
+	texCoord[1] = pointer[1];
+	complexPolygon->addVertex(v, color, texCoord);
 }
 
-typedef struct {
-	GLdouble x; /* x vertex coordinate */
-	GLdouble y; /* y vertex coordinate */
-	GLdouble z; /* z vertex coordinate */
-	GLdouble r; /* red color component of vertex */
-	GLdouble g; /* green color component of vertex */
-	GLdouble b; /* blue color component of vertex */
-	GLdouble a; /* alpha color component of vertex */
-} VERTEX;
-
-static vector<VERTEX *> createdVerticesAfterCombine;
-
-void combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut)
-{
-	VERTEX *vertex = new VERTEX;
-	createdVerticesAfterCombine.push_back(vertex);
+void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut, GLvoid *polygonData) {
+	GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
+	VERTEX *vertex = complexPolygon->allocateNewVertex();
 	vertex->x = coords[0];
 	vertex->y = coords[1];
 	vertex->z = coords[2];
@@ -120,50 +98,51 @@ void combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** da
 }
 
 GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,int bezier,const string &textureName):
-    						currentVector(0),
-    						outlined(false),
-    						fillColor(fcolor),
-    						outlineSize(1),
-    						textureName(textureName){
+    												currentVector(0),
+    												outlined(false),
+    												fillColor(fcolor),
+    												outlineSize(1),
+    												textureName(textureName){
 	createPolygon(coords,bezier);
+	runTesselation();
 }
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,Color ocolor,int bezier,const string &textureName):
-    						currentVector(0),
-    						outlined(true),
-    						fillColor(fcolor),
-    						outlineColor(ocolor),
-    						outlineSize(1),
-    						textureName(textureName) {
+    												currentVector(0),
+    												outlined(true),
+    												fillColor(fcolor),
+    												outlineColor(ocolor),
+    												outlineSize(1),
+    												textureName(textureName) {
 	createPolygon(coords,bezier);
+	runTesselation();
 }
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fcolor,int bezier,const string &textureName):
-    						currentVector(0),
-    						outlined(false),
-    						fillColor(fcolor),
-    						outlineSize(1),
-    						textureName(textureName){
+    												currentVector(0),
+    												outlined(false),
+    												fillColor(fcolor),
+    												outlineSize(1),
+    												textureName(textureName){
 	for(unsigned int i=0;i<coords.size();++i) {
 		createPolygon(coords[i],bezier);
 		beginNewHole();
 	}
+	runTesselation();
 }
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fcolor,Color ocolor,int bezier,const string &textureName):
-    						currentVector(0),
-    						outlined(true),
-    						fillColor(fcolor),
-    						outlineColor(ocolor),
-    						outlineSize(1),
-    						textureName(textureName) {
+    												currentVector(0),
+    												outlined(true),
+    												fillColor(fcolor),
+    												outlineColor(ocolor),
+    												outlineSize(1),
+    												textureName(textureName) {
 	for(unsigned int i=0;i<coords.size();++i) {
 		createPolygon(coords[i],bezier);
 		beginNewHole();
 	}
-}
-//=====================================================
-GlComplexPolygon::~GlComplexPolygon() {
+	runTesselation();
 }
 //=====================================================
 void GlComplexPolygon::createPolygon(const vector<Coord> &coords,int bezier) {
@@ -197,48 +176,27 @@ void GlComplexPolygon::addPoint(const Coord& point) {
 void GlComplexPolygon::beginNewHole() {
 	currentVector++;
 }
-//=====================================================
-void GlComplexPolygon::draw(float,Camera *) {
-
-  if(cameraIs3D()){
-    glEnable(GL_LIGHTING);
-  }else{
-    glDisable(GL_LIGHTING);
-  }
-
-	glDisable(GL_CULL_FACE);
-	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_BLEND);
-
-	if(textureName!=""){
-		if(GlTextureManager::getInst().activateTexture(textureName))
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	}
+void GlComplexPolygon::runTesselation() {
 
 	GLUtesselator *tobj;
 	tobj = gluNewTess();
 
-	gluTessCallback(tobj, GLU_TESS_VERTEX,
-			(GLUTesselatorFunction)vertexCallback);
-	gluTessCallback(tobj, GLU_TESS_BEGIN,
-			(GLUTesselatorFunction)beginCallback);
-	gluTessCallback(tobj, GLU_TESS_END,
-			(GLUTesselatorFunction)endCallback);
-	gluTessCallback(tobj, GLU_TESS_ERROR,
-			(GLUTesselatorFunction)errorCallback);
-	gluTessCallback(tobj, GLU_TESS_COMBINE,
-			(GLUTesselatorFunction)combineCallback);
-
-//Compute number of points to compute and create a big tab to store points' informations
+    gluTessCallback(tobj, GLU_TESS_BEGIN_DATA, reinterpret_cast<GLUTesselatorFunction>(&beginCallback));
+    gluTessCallback(tobj, GLU_TESS_VERTEX_DATA, reinterpret_cast<GLUTesselatorFunction>(&vertexCallback));
+    gluTessCallback(tobj, GLU_TESS_END_DATA, reinterpret_cast<GLUTesselatorFunction>(&endCallback));
+    gluTessCallback(tobj, GLU_TESS_COMBINE_DATA, reinterpret_cast<GLUTesselatorFunction>(&combineCallback));
+    gluTessCallback(tobj, GLU_TESS_ERROR, reinterpret_cast<GLUTesselatorFunction>(&errorCallback));
+	
+	//Compute number of points to compute and create a big tab to store points' informations
 	unsigned int numberOfPoints=0;
 	for(unsigned int v=0;v<points.size();++v) {
 		numberOfPoints+=points[v].size();
 	}
+
 	GLdouble *pointsData = new GLdouble[7*numberOfPoints];
 
 	unsigned int pointNumber=0;
-	glShadeModel(GL_SMOOTH);
-	gluTessBeginPolygon(tobj, NULL);
+	gluTessBeginPolygon(tobj, static_cast<void *>(this));
 	for(unsigned int v=0;v<points.size();++v) {
 		gluTessBeginContour(tobj);
 		for(unsigned int i=0; i < points[v].size(); ++i) {
@@ -257,25 +215,86 @@ void GlComplexPolygon::draw(float,Camera *) {
 	gluTessEndPolygon(tobj);
 	gluDeleteTess(tobj);
 	delete [] pointsData;
-	if(textureName!="")
-		GlTextureManager::getInst().desactivateTexture();
 
-	for (size_t i = 0 ; i < createdVerticesAfterCombine.size() ; ++i) {
-		delete createdVerticesAfterCombine[i];
+	for (size_t i = 0 ; i < allocatedVertices.size() ; ++i) {
+		delete allocatedVertices[i];
 	}
-	createdVerticesAfterCombine.clear();
+	allocatedVertices.clear();
+	
+}
+//=====================================================
+void GlComplexPolygon::startPrimitive(GLenum primitive) {
+	currentPrimitive = primitive;
+	nbPrimitiveVertices = 0;
+	startIndicesMap[primitive].push_back(verticesMap[primitive].size());
+	primitivesSet.insert(primitive);
+}
+//=====================================================	
+void GlComplexPolygon::endPrimitive() {
+	verticesCountMap[currentPrimitive].push_back(nbPrimitiveVertices);
+}
+//=====================================================	
+void GlComplexPolygon::addVertex(const Coord &vertexCoord, const Color &vertexColor, const Vec2f &vertexTexCoord) {
+	verticesMap[currentPrimitive].push_back(vertexCoord);
+	colorsMap[currentPrimitive].push_back(vertexColor);
+	texCoordsMap[currentPrimitive].push_back(vertexTexCoord);
+	++nbPrimitiveVertices;
+}
+//=====================================================
+VERTEX *GlComplexPolygon::allocateNewVertex() {
+	VERTEX *vertex = new VERTEX();
+	allocatedVertices.push_back(vertex);
+	return vertex;
+}
+//=====================================================
+void GlComplexPolygon::draw(float,Camera *) {
+
+	if(cameraIs3D()){
+		glEnable(GL_LIGHTING);
+	}else{
+		glDisable(GL_LIGHTING);
+	}
+
+	glDisable(GL_CULL_FACE);
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	if(textureName!=""){
+		if(GlTextureManager::getInst().activateTexture(textureName))
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	}
+
+	glNormal3f(0.0f, 0.0f, 1.0f);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	for (set<GLenum>::iterator it = primitivesSet.begin() ; it != primitivesSet.end() ; ++it) {
+		glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), &verticesMap[*it][0][0]);
+		glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), &colorsMap[*it][0][0]);
+		glTexCoordPointer(2, GL_FLOAT, 2*sizeof(GLfloat), &texCoordsMap[*it][0]);
+		glMultiDrawArrays(*it, &startIndicesMap[*it][0], &verticesCountMap[*it][0], verticesCountMap[*it].size());
+	}
+
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	if(textureName!="") {
+		GlTextureManager::getInst().desactivateTexture();
+	}
 
 	if (outlined) {
 		glLineWidth(outlineSize);
+		setMaterial(outlineColor);
 		for(unsigned int v=0;v<points.size();++v) {
-			glBegin(GL_LINE_LOOP);
-			for(unsigned int i=0; i < points[v].size(); ++i) {
-				setColor(outlineColor);
-				glVertex3fv((float *)&points[v][i]);
-			}
-			glEnd();
+			glVertexPointer(3, GL_FLOAT, 3 * sizeof(GLfloat), &points[v][0]);
+			glDrawArrays(GL_LINE_LOOP, 0, points[v].size());
 		}
 	}
+
+	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glTest(__PRETTY_FUNCTION__);
 }
@@ -307,11 +326,11 @@ void GlComplexPolygon::getXMLOnlyData(xmlNodePtr rootNode) {
 		stringstream str;
 		str << i ;
 
-    if(!points[i].empty()){
+		if(!points[i].empty()){
 			GlXMLTools::getXML(dataNode,"points"+str.str(),points[i]);
-    }else{
-      GlXMLTools::getXML(dataNode,"points"+str.str(),vector<Coord>());
-    }
+		}else{
+			GlXMLTools::getXML(dataNode,"points"+str.str(),vector<Coord>());
+		}
 	}
 	GlXMLTools::getXML(dataNode,"fillColor",fillColor);
 	GlXMLTools::getXML(dataNode,"outlineColor",outlineColor);

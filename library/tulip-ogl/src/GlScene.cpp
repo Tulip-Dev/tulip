@@ -702,6 +702,8 @@ namespace tlp {
     }
     selectLODCalculator->setRenderingEntitiesFlag((RenderingEntitiesFlag)(RenderingAll | RenderingWithoutRemove));
 
+    selectLODCalculator->clear();
+
     //Collect entities if need
     GlLODSceneVisitor *lodVisitor;
     if(glGraphComposite)

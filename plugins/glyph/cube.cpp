@@ -91,6 +91,7 @@ void Cube::draw(node n, float lod) {
 }
 
 void Cube::draw(edge, node n, const Color& glyphColor,const Color&, float lod) {
+  glEnable(GL_LIGHTING);
   draw(glyphColor,
        edgeExtGlGraphInputData->elementTexture->getNodeValue(n),
        lod);

@@ -438,6 +438,8 @@ bool TulipApp::createController(const string &name,const string &graphName) {
     loadInterface(-1);
 
     Controller *newController=ControllerPluginsManager::getInst().createController(name);
+    toolBar->setWindowTitle("Tool Bar");
+    graphToolBar->setWindowTitle("Interactors Tool Bar");
     newController->attachMainWindow(MainWindowFacade(this,toolBar,graphToolBar,newWorkspace));
     tabIndexToController[index]=newController;
     controllerToControllerName[newController]=name;

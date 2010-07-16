@@ -151,11 +151,6 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 		glStencilFunc(GL_LEQUAL, data->parameters->getEdgesStencil(), 0xFFFF);
 	}
 
-	if(!data->parameters->isEdge3D()){
-		glDisable(GL_LIGHTING);
-	}else{
-		glEnable(GL_LIGHTING);
-	}
 	glEnable(GL_COLOR_MATERIAL);
 
 	const std::pair<node, node>& eEnds = data->graph->ends(e);
@@ -505,8 +500,12 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 		return;
 	}
 
-	if (edge3D)
-		shape |= L3D_BIT;
+    if (edge3D){
+      shape |= L3D_BIT;
+      glEnable(GL_LIGHTING);
+    }else{
+      glDisable(GL_LIGHTING);
+    }
 
 
 	switch (shape) {

@@ -457,7 +457,9 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 	} else {
 		vector<Coord> curvePoints;
 		computeCurvePointsOnCPU(controlPoints, curvePoints, nbCurvePoints);
-		if (!billboardCurve) {
+		if (startSize == 1 && endSize == 1) {
+			polyLine(curvePoints, startColor, endColor);
+		} else if (!billboardCurve) {
 			polyQuad(curvePoints, startColor, endColor, startSize, endSize, Coord(2.f*curvePoints[0] - curvePoints[1]), Coord(2.f*curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]),!outlined,outlineColor,texture);
 		} else {
 			simpleQuad(curvePoints, startColor, endColor, startSize, endSize, Coord(2.f*curvePoints[0] - curvePoints[1]),

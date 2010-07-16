@@ -77,6 +77,16 @@ namespace tlp {
     void setOutlineMode(const bool);
 
     /**
+     * Get if the polygon use light or not
+     */
+    bool getLightingMode();
+
+    /**
+     * Set if the polygon use light or not
+     */
+    void setLightingMode(const bool);
+
+    /**
      * Get the ith color used to filling the polygon
      */
     Color getFillColor(unsigned int i);
@@ -194,6 +204,7 @@ namespace tlp {
     std::vector<Color> outlineColors;
     bool filled;
     bool outlined;
+    bool lighting;
     std::string textureName;
     float outlineSize;
     float hideOutlineLod;

@@ -20,7 +20,23 @@
 #ifndef GLCOMPLEXPOLYGON_H
 #define GLCOMPLEXPOLYGON_H
 
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+#ifndef CALLBACK
+#define CALLBACK
+#endif
+
 #include <vector>
+#include <map>
+#include <set>
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
@@ -29,10 +45,28 @@
 #include "tulip/GlSimpleEntity.h"
 
 namespace tlp {
+
+	typedef struct {
+		GLdouble x, y, z, r, g, b, a;
+	} VERTEX;
+
+	void CALLBACK beginCallback(GLenum which, GLvoid *polygonData);
+	void CALLBACK errorCallback(GLenum errorCode);
+	void CALLBACK endCallback(GLvoid *polygonData);
+	void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData);
+	void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut, GLvoid *polygonData);
+
   /**
    * class to create a complex polygon (concave polygon or polygon with hole)
    */
   class TLP_GL_SCOPE GlComplexPolygon : public GlSimpleEntity {
+  
+	friend void CALLBACK beginCallback(GLenum which, GLvoid *polygonData);
+	friend void CALLBACK errorCallback(GLenum errorCode);
+	friend void CALLBACK endCallback(GLvoid *polygonData);
+	friend void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData);
+	friend void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut, GLvoid *polygonData);
+  
   public:
     /**
      * Default constructor
@@ -58,7 +92,8 @@ namespace tlp {
      * a number of decomposition in bezier mode (if bezier==0 the polygon is render without bezier mode) and a textureName if you want
      */
     GlComplexPolygon(const std::vector<std::vector<Coord> >&coords,Color fcolor,Color ocolor,int bezier=0,const std::string &textureName = "");
-    virtual ~GlComplexPolygon();
+    
+	virtual ~GlComplexPolygon() {}
 
     /**
      * Draw the complex polygon
@@ -123,11 +158,28 @@ namespace tlp {
      * Function to set data with XML
      */
     virtual void setWithXML(xmlNodePtr rootNode);
-
+	
+		
   protected:
+	
+    void runTesselation();
     void createPolygon(const std::vector<Coord> &coords,int bezier);
 
+	void startPrimitive(GLenum primitive);
+	void endPrimitive();
+	void addVertex(const Coord &vertexCoord, const Color &vertexColor, const Vec2f &vertexTexCoord);
+	VERTEX *allocateNewVertex();
+	
     std::vector<std::vector<Coord> > points;
+    std::set<GLenum> primitivesSet;
+    std::map<GLenum, std::vector<Coord> > verticesMap;
+    std::map<GLenum, std::vector<Color> > colorsMap;
+    std::map<GLenum, std::vector<Vec2f> > texCoordsMap;
+    std::map<GLenum, std::vector<int> >startIndicesMap;
+    std::map<GLenum, std::vector<int> >verticesCountMap;
+	std::vector<VERTEX *> allocatedVertices;
+	GLenum currentPrimitive;
+	int nbPrimitiveVertices;
     int currentVector;
     bool outlined;
     Color fillColor;

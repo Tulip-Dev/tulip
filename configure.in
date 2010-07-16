@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 m4_pattern_allow([^AS_])
 AC_REVISION($Revision: 1.48 $)
 AC_PREREQ(2.53)
-AC_INIT(tulip, 3.4.0)
+AC_INIT(tulip, 3.4.1)
 AC_CONFIG_SRCDIR(library/tulip/include/tulip/Graph.h)
 AM_INIT_AUTOMAKE(1.6 dist-bzip2)
 AM_CONFIG_HEADER(config.h)

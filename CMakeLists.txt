@@ -20,7 +20,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 ## -----------------------------------------------------------------------------------------------
 SET(TulipMajorVersion 3)
 SET(TulipMinorVersion 4)
-SET(TulipReleaseVersion 0)
+SET(TulipReleaseVersion 1)
 SET(TulipVersion "${TulipMajorVersion}.${TulipMinorVersion}.${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}.${TulipMinorVersion}")
 
