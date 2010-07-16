@@ -137,7 +137,17 @@ namespace tlp
     }
   }
 
+  void GlVertexArrayManager::addEdge(Graph *,const edge){
+    clearData();
+    clearObservers();
+  }
+
   void GlVertexArrayManager::beforeSetNodeValue(PropertyInterface*, const node){
+    clearData();
+    clearObservers();
+  }
+
+  void GlVertexArrayManager::destroy(Graph *){
     clearData();
     clearObservers();
   }
@@ -157,11 +167,13 @@ namespace tlp
   }
 
   void GlVertexArrayManager::initObservers() {
+    graph->addGraphObserver(this);
     graph->getProperty(inputData->getElementLayoutPropName())->addPropertyObserver(this);
     graph->getProperty(inputData->getElementColorPropName())->addPropertyObserver(this);
   }
 
   void GlVertexArrayManager::clearObservers() {
+    graph->removeGraphObserver(this);
     graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
     graph->getProperty(inputData->getElementColorPropName())->removePropertyObserver(this);
   }
