@@ -97,41 +97,41 @@ void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VE
 	*dataOut = vertex;
 }
 
-GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,int bezier,const string &textureName):
+GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,int polygonEdgesType,const string &textureName):
     												currentVector(0),
     												outlined(false),
     												fillColor(fcolor),
     												outlineSize(1),
     												textureName(textureName){
-	createPolygon(coords,bezier);
+	createPolygon(coords,polygonEdgesType);
 	runTesselation();
 }
 //=====================================================
-GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,Color ocolor,int bezier,const string &textureName):
+GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,Color ocolor,int polygonEdgesType,const string &textureName):
     												currentVector(0),
     												outlined(true),
     												fillColor(fcolor),
     												outlineColor(ocolor),
     												outlineSize(1),
     												textureName(textureName) {
-	createPolygon(coords,bezier);
+	createPolygon(coords,polygonEdgesType);
 	runTesselation();
 }
 //=====================================================
-GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fcolor,int bezier,const string &textureName):
+GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fcolor,int polygonEdgesType,const string &textureName):
     												currentVector(0),
     												outlined(false),
     												fillColor(fcolor),
     												outlineSize(1),
     												textureName(textureName){
 	for(unsigned int i=0;i<coords.size();++i) {
-		createPolygon(coords[i],bezier);
+		createPolygon(coords[i],polygonEdgesType);
 		beginNewHole();
 	}
 	runTesselation();
 }
 //=====================================================
-GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fcolor,Color ocolor,int bezier,const string &textureName):
+GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fcolor,Color ocolor,int polygonEdgesType,const string &textureName):
     												currentVector(0),
     												outlined(true),
     												fillColor(fcolor),
@@ -139,23 +139,44 @@ GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fco
     												outlineSize(1),
     												textureName(textureName) {
 	for(unsigned int i=0;i<coords.size();++i) {
-		createPolygon(coords[i],bezier);
+		createPolygon(coords[i],polygonEdgesType);
 		beginNewHole();
 	}
 	runTesselation();
 }
 //=====================================================
-void GlComplexPolygon::createPolygon(const vector<Coord> &coords,int bezier) {
+void GlComplexPolygon::createPolygon(const vector<Coord> &coords,int polygonEdgesType) {
 	points.push_back(vector<Coord>());
-	if(bezier==0) {
-		for(vector<Coord>::const_iterator it=coords.begin();it!=coords.end();++it) {
-			addPoint(*it);
-		}
-	}else{
+
+	if (polygonEdgesType == 1){
 		vector<Coord> catmullPoints;
 		computeCatmullRomPoints(coords, catmullPoints, true, coords.size() * 20);
 		for (size_t i = 0 ; i < catmullPoints.size() ; ++i) {
 			addPoint(catmullPoints[i]);
+		}
+	} else if (polygonEdgesType == 2) {
+
+		const unsigned int nbCurvePoints = 20;
+		 addPoint(coords[0]);
+		 double dec=1./nbCurvePoints;
+
+	 	for(size_t i = 0 ; i+3 < coords.size() ; i+=3) {
+	 		vector<Coord> controlPoints;
+	 		vector<Coord> curvePoints;
+	 		controlPoints.push_back(coords[i]);
+	 		controlPoints.push_back(coords[i+1]);
+	 		controlPoints.push_back(coords[i+2]);
+	 		controlPoints.push_back(coords[i+3]);
+	 		computeBezierPoints(controlPoints, curvePoints, nbCurvePoints);
+	 		for (size_t j = 0 ; j < curvePoints.size() ; ++j) {
+	 			addPoint(curvePoints[j]);
+	 		}
+	 	}
+
+		addPoint(coords[coords.size()-1]);
+	} else {
+		for(vector<Coord>::const_iterator it=coords.begin();it!=coords.end();++it) {
+			addPoint(*it);
 		}
 	}
 }
