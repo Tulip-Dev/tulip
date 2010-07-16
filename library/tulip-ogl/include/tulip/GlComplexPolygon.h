@@ -73,25 +73,25 @@ namespace tlp {
      */
     GlComplexPolygon() {}
     /**
-     * Constructor with a vector of coords, a fill color, a number of decomposition in bezier mode (if bezier==0 the polygon is render without bezier mode)
+     * Constructor with a vector of coords, a fill color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves)
      * and a textureName if you want
      */
-    GlComplexPolygon(const std::vector<Coord> &coords,Color fcolor,int bezier=0,const std::string &textureName = "");
+    GlComplexPolygon(const std::vector<Coord> &coords,Color fcolor,int polygonEdgesType=0,const std::string &textureName = "");
     /**
-     *  Constructor with a vector of coords, a fill color, an outline color, a number of decomposition in bezier mode (if bezier==0 the polygon is render without bezier mode)
+     *  Constructor with a vector of coords, a fill color, an outline color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves)
      * and a textureName if you want
      */
-    GlComplexPolygon(const std::vector<Coord> &coords,Color fcolor,Color ocolor,int bezier=0,const std::string &textureName = "");
+    GlComplexPolygon(const std::vector<Coord> &coords,Color fcolor,Color ocolor,int polygonEdgesType=0,const std::string &textureName = "");
     /**
      * Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill color,
-     * a number of decomposition in bezier mode (if bezier==0 the polygon is render without bezier mode) and a textureName if you want
+     * a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
      */
-    GlComplexPolygon(const std::vector<std::vector<Coord> >&coords,Color fcolor,int bezier=0,const std::string &textureName = "");
+    GlComplexPolygon(const std::vector<std::vector<Coord> >&coords,Color fcolor,int polygonEdgesType=0,const std::string &textureName = "");
     /**
      * Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill color, an outline color
-     * a number of decomposition in bezier mode (if bezier==0 the polygon is render without bezier mode) and a textureName if you want
+     * a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
      */
-    GlComplexPolygon(const std::vector<std::vector<Coord> >&coords,Color fcolor,Color ocolor,int bezier=0,const std::string &textureName = "");
+    GlComplexPolygon(const std::vector<std::vector<Coord> >&coords,Color fcolor,Color ocolor,int polygonEdgesType=0,const std::string &textureName = "");
     
 	virtual ~GlComplexPolygon() {}
 
@@ -163,7 +163,7 @@ namespace tlp {
   protected:
 	
     void runTesselation();
-    void createPolygon(const std::vector<Coord> &coords,int bezier);
+    void createPolygon(const std::vector<Coord> &coords,int polygonEdgesType);
 
 	void startPrimitive(GLenum primitive);
 	void endPrimitive();
