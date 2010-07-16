@@ -164,7 +164,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 
   bool selected = data->elementSelected->getEdgeValue(e);
 
-  if(lodSize>-5 && lodSize<5 && data->getGlVertexArrayManager()->renderingIsBegin() && (!data->parameters->getFeedbackRender())){
+  if(lodSize>-5 && lodSize<5 && data->getGlVertexArrayManager()->renderingIsBegin() && (!data->parameters->getFeedbackRender()) && data->elementShape->getEdgeValue(e)==POLYLINESHAPE){
     data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
     return;
   }
@@ -320,13 +320,11 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 
 	switch (shape) {
 	case POLYLINESHAPE:
-		if (lod > 20 || lod < -20){
+    if (lod > 1000 || lod < -1000){
 			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,colorInterpolate,borderColor,textureName);
-		}else if(lod > 0.05 || lod < -0.05){
+    }else{
 			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,true,borderColor,textureName);
-		}else{
-			tlp::polyLine(tmp, startColor, endColor);
-		}
+    }
 		break;
 	case L3D_BIT + POLYLINESHAPE: {
 		glDisable(GL_LIGHTING);
@@ -364,7 +362,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 			curve->setLookDir(lookDir);
 		}
 		float startSize = 1, endSize = 1;
-		if (lod > 10 || lod < -10) {
+    if (lod > 1000 || lod < -1000) {
 			if(!colorInterpolate){
 				curve->setOutlined(true);
 				curve->setOutlineColor(borderColor);
@@ -379,13 +377,11 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 		break;
 	}
 	default:
-		if (lod > 20 || lod < -20){
+    if (lod > 1000 || lod < -1000){
 			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,colorInterpolate,borderColor);
-		}else if(lod > 0.05 || lod < -0.05){
+    }else{
 			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,true,borderColor);
-		}else{
-			tlp::polyLine(tmp, startColor, endColor);
-		}
+    }
 		break;
 	}
 

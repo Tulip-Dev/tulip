@@ -39,6 +39,7 @@
 #include <tulip/Size.h>
 #include <tulip/Graph.h>
 #include <tulip/tuliphash.h>
+#include <tulip/ObservableGraph.h>
 #include <tulip/ObservableProperty.h>
 
 namespace tlp {
@@ -51,7 +52,7 @@ namespace tlp {
    *
    * Class used to render edges/nodes with vertex array
    */
-  class TLP_GL_SCOPE GlVertexArrayManager : public PropertyObserver {
+  class TLP_GL_SCOPE GlVertexArrayManager : public GraphObserver, public PropertyObserver {
 
   public:
 
@@ -81,7 +82,9 @@ namespace tlp {
 
     void activateLineEdgeDisplay(GlEdge *edge, bool selected);
 
+    void addEdge(Graph *,const edge);
     void beforeSetNodeValue(PropertyInterface*, const node);
+    void destroy(Graph *);
     void destroy(PropertyInterface*);
 
   protected:
