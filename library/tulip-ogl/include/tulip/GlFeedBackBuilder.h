@@ -59,7 +59,7 @@ namespace tlp {
     
     virtual ~GlFeedBackBuilder() {}
     
-    virtual void begin(const Vector<int, 4> &viewport) {}
+    virtual void begin(const Vector<int, 4> &) {}
     virtual void passThroughToken(GLfloat*) {}
     virtual void pointToken(GLfloat*) {}
     virtual void lineToken(GLfloat*) {}
