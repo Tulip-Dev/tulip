@@ -50,7 +50,7 @@ void PluginProgress::setPreviewMode(bool b) {
   _preview = b;
 }
 //====================================================
-void PluginProgress::showPreview(bool b) {
+void PluginProgress::showPreview(bool) {
 }
 //====================================================
 ProgressState PluginProgress::state() const {

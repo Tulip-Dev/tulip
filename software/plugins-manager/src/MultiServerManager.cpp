@@ -161,7 +161,7 @@ namespace tlp {
   }
   
   
-  void MultiServerManager::changeName(ServerNameTreatment* treatment,string addr,string name){
+  void MultiServerManager::changeName(ServerNameTreatment*,string addr,string name){
     string address;
     
     for (list<PluginsServer*>::iterator iter=pluginsServersList.begin(); iter != pluginsServersList.end() ; ++iter){
