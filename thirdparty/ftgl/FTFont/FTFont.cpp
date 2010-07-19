@@ -307,19 +307,19 @@ unsigned int FTFontImpl::FaceSize() const
 }
 
 
-void FTFontImpl::Depth(float depth)
+void FTFontImpl::Depth(float)
 {
     ;
 }
 
 
-void FTFontImpl::Outset(float outset)
+void FTFontImpl::Outset(float)
 {
     ;
 }
 
 
-void FTFontImpl::Outset(float front, float back)
+void FTFontImpl::Outset(float, float)
 {
     ;
 }

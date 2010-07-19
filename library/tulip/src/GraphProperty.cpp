@@ -70,7 +70,7 @@ void GraphProperty::afterSetAllNodeValue(PropertyInterface*) {
   }
 }
 //==============================
-void GraphProperty::beforeSetNodeValue(PropertyInterface* prop, const node n) {
+void GraphProperty::beforeSetNodeValue(PropertyInterface*, const node n) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   // nothing to do if n points to a graph being removed
   // see destroy
@@ -93,7 +93,7 @@ void GraphProperty::beforeSetNodeValue(PropertyInterface* prop, const node n) {
       oldGraph->removeGraphObserver(this);
   }
 }
-void GraphProperty::afterSetNodeValue(PropertyInterface* prop, const node n) {
+void GraphProperty::afterSetNodeValue(PropertyInterface*, const node n) {
   // nothing to do if n points to a graph being removed
   // see destroy
   if (n == currentNode)
@@ -178,12 +178,12 @@ bool GraphProperty::setAllNodeStringValue(const std::string &) {
 }
 //=============================================================
 // disabled, use setEdgeValue instead
-bool GraphProperty::setEdgeStringValue(const edge e, const std::string & v) {
+bool GraphProperty::setEdgeStringValue(const edge, const std::string&) {
   return false;
 }
 //=============================================================
 // disabled use setAllEdgeValue instead
-bool GraphProperty::setAllEdgeStringValue(const std::string & v) {
+bool GraphProperty::setAllEdgeStringValue(const std::string&) {
   return false;
 }
 //=============================================================

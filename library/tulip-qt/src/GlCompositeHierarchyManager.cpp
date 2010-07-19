@@ -35,7 +35,7 @@ namespace tlp {
 	GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty *layout, 
 																													 SizeProperty *size, DoubleProperty *rotation, bool visible, std::string namingProperty, std::string subCompositeSuffix) 
 		:_currentColor(0), _graph(graph), _layer(layer), _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size), _rotation(rotation), _layerName(layerName), 
-		 _subCompositesSuffix(subCompositeSuffix), _property(namingProperty), _isVisible(visible) {
+		 _isVisible(visible), _subCompositesSuffix(subCompositeSuffix), _property(namingProperty) {
 		this->_layer->addGlEntity(this->_composite, this->_layerName);
 		this->_composite->setVisible(_isVisible);
 		
@@ -83,11 +83,11 @@ namespace tlp {
 		delete it;
   }
   
-  void GlCompositeHierarchyManager::addSubGraph(Graph *parent, Graph *subgraph) {
+  void GlCompositeHierarchyManager::addSubGraph(Graph *, Graph*) {
 		createComposite();
 	}
 	
-	void GlCompositeHierarchyManager::delSubGraph(Graph*, Graph *subgraph) {
+	void GlCompositeHierarchyManager::delSubGraph(Graph*, Graph*) {
 		createComposite();
 	}
 	
@@ -150,7 +150,6 @@ namespace tlp {
 	
 	DataSet GlCompositeHierarchyManager::getData() {
 		DataSet set;
-		int i = 0;
 		for(std::map<tlp::Graph*, std::pair<tlp::GlComposite*, tlp::GlConvexGraphHull*> >::const_iterator it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
 			unsigned int graphId = it->first->getId();
 			unsigned int visibility = (int)it->second.first->isVisible()*2 + (int)it->second.second->isVisible();

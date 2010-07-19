@@ -62,7 +62,7 @@ namespace tlp {
     float x, y, z, r, g, b, a;
   };
 
-  void GlEPSFeedBackBuilder::begin(const Vector<int, 4> &viewport,GLfloat* clearColor,GLfloat pointSize,GLfloat lineWidth) {
+  void GlEPSFeedBackBuilder::begin(const Vector<int, 4> &viewport,GLfloat*,GLfloat,GLfloat lineWidth) {
     /* Emit EPS header. */
     stream_out << "%%!PS-Adobe-2.0 EPSF-2.0" << endl;
     /* Notice %% for a single % in the fprintf calls. */
@@ -93,19 +93,19 @@ namespace tlp {
     strokeColor[0]=(unsigned char)data[4];strokeColor[1]=(unsigned char)data[5];strokeColor[2]=(unsigned char)data[6];strokeColor[3]=(unsigned char)data[7];
     textColor[0]=(unsigned char)data[8];textColor[1]=(unsigned char)data[9];textColor[2]=(unsigned char)data[10];textColor[3]=(unsigned char)data[11];
   }
-  void GlEPSFeedBackBuilder::beginGlGraph(GLfloat data) {
+  void GlEPSFeedBackBuilder::beginGlGraph(GLfloat) {
   }
   void GlEPSFeedBackBuilder::endGlGraph() {
   }
-  void GlEPSFeedBackBuilder::beginGlEntity(GLfloat data) {
+  void GlEPSFeedBackBuilder::beginGlEntity(GLfloat) {
   }
   void GlEPSFeedBackBuilder::endGlEntity() {
   }
-  void GlEPSFeedBackBuilder::beginNode(GLfloat data) {
+  void GlEPSFeedBackBuilder::beginNode(GLfloat) {
   }
   void GlEPSFeedBackBuilder::endNode() {
   }
-  void GlEPSFeedBackBuilder::beginEdge(GLfloat data) {
+  void GlEPSFeedBackBuilder::beginEdge(GLfloat) {
   }
   void GlEPSFeedBackBuilder::endEdge() {
   }
