@@ -145,7 +145,7 @@ QWidget *ListItem::createEditor(QTableWidget *table) const {
   return new ListItemPushButton(handler, (TulipTableWidgetItem*) orig->clone(),
       table->viewport(), "Edit");
 }
-void ListItem::setContentFromEditor(QWidget *w) {
+void ListItem::setContentFromEditor(QWidget*) {
   updateText();
 }
 
@@ -154,7 +154,7 @@ void ListItem::updateText() {
 }
 
 //================================================================================
-ColorButton::ColorButton(const QRgb &c, QWidget *parent, const char *name, Qt::WFlags f) :
+ColorButton::ColorButton(const QRgb &c, QWidget *parent, const char*, Qt::WFlags) :
   QPushButton(parent), color(c) {
   connect(this, SIGNAL(pressed()), SLOT(colorDialog()));
   emit
@@ -592,7 +592,7 @@ public:
     cerr << __PRETTY_FUNCTION__ << endl;
     return QString("error");
   }
-  virtual int textToValue(const QString &s) const {
+  virtual int textToValue(const QString &) const {
     cerr << __PRETTY_FUNCTION__ << endl;
     return 0;
   }
@@ -939,7 +939,7 @@ void ListItemPushButton::showListDialog() {
   delete dialog;
 }
 
-TulipTableWidget::TulipTableWidget(QWidget *parent, const char *name) :
+TulipTableWidget::TulipTableWidget(QWidget *parent, const char *) :
   QTableWidget(parent), updateColumnTitle(false) {
   resetBackColor1();
   resetBackColor2();

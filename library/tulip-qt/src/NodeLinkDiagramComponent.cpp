@@ -157,7 +157,7 @@ namespace tlp {
     return widgetList;
   }
 
-  void NodeLinkDiagramComponent::specificEventFilter(QObject *object,QEvent *event) {
+  void NodeLinkDiagramComponent::specificEventFilter(QObject *,QEvent *event) {
     if (event->type() == QEvent::KeyPress){
       QKeyEvent *keyEvent=(QKeyEvent*)event;
       if((keyEvent->key()==Qt::Key_R) && (keyEvent->modifiers() & Qt::ControlModifier)!=0 && (keyEvent->modifiers() & Qt::ShiftModifier)!=0)
@@ -512,10 +512,10 @@ namespace tlp {
   }
   //==================================================
   // GlSceneObserver interface
-  void NodeLinkDiagramComponent::addLayer(GlScene* scene, const std::string& name, GlLayer* layer) {
+  void NodeLinkDiagramComponent::addLayer(GlScene*, const std::string&, GlLayer*) {
     //renderingParametersDialog->addLayer(scene,name,layer);
   }
-  void NodeLinkDiagramComponent::modifyLayer(GlScene* scene, const std::string& name, GlLayer* layer){
+  void NodeLinkDiagramComponent::modifyLayer(GlScene*, const std::string&, GlLayer*){
     //renderingParametersDialog->updateLayer(name,layer);
   }
 }
