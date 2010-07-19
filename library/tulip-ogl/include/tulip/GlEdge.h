@@ -127,7 +127,7 @@ namespace tlp {
     /**
      * Compute the edge size
      */
-    void getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,Size &edgeSize, float &maxSrcSize, float &maxTgtSize);
+    void getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,const float maxSrcSize,const float maxTgtSize,Size &edgeSize);
 
     /**
      * Compute width lod of edge

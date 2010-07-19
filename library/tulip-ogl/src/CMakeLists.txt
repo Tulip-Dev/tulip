@@ -68,7 +68,6 @@ set(tulip-ogl_LIB_SRCS
 	GlProgressBar.cpp 
 	GlXMLTools.cpp 
 	GlColorScale.cpp 
-	GlPointManager.cpp 
 	GlBezierCurve.cpp 
 	GlCatmullRomCurve.cpp 
 	EdgeExtremityGlyph.cpp 

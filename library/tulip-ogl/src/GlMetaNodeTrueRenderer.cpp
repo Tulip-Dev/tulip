@@ -28,13 +28,13 @@
 #include <tulip/BoundingBox.h>
 
 #include "tulip/Camera.h"
-#include "tulip/GlPointManager.h"
 #include "tulip/GlGraphInputData.h"
 #include "tulip/GlCPULODCalculator.h"
 #include "tulip/Glyph.h"
 #include "tulip/GlNode.h"
 #include "tulip/GlEdge.h"
 #include "tulip/GlMetaNode.h"
+#include "tulip/GlVertexArrayManager.h"
 
 using namespace std;
 
@@ -60,8 +60,8 @@ namespace tlp {
       return;
 
     GlGraphInputData *inputDataBackup=inputData;
-    GlPointManager::getInst().endRendering();
-    GlPointManager::getInst().beginRendering();
+    inputData->getGlVertexArrayManager()->pauseRendering(true);
+
     glPushMatrix();
     const Coord &nodeCoord = inputData->elementLayout->getNodeValue(n);
     const Size &nodeSize = inputData->elementSize->getNodeValue(n);
@@ -192,8 +192,7 @@ namespace tlp {
     }
     metaData.getMetaNodeRenderer()->setInputData(inputDataBackup);
 
-    GlPointManager::getInst().endRendering();
-    GlPointManager::getInst().beginRendering();
+    inputData->getGlVertexArrayManager()->pauseRendering(false);
 
     GlMetaNodeTrueRenderer::depth--;
 

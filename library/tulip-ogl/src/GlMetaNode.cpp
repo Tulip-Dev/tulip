@@ -39,7 +39,6 @@
 #include "tulip/GlComplexeEntity.h"
 #include "tulip/GlGraphRenderingParameters.h"
 #include "tulip/Camera.h"
-#include "tulip/GlPointManager.h"
 #include "tulip/GlTools.h"
 #include "tulip/GlTextureManager.h"
 
