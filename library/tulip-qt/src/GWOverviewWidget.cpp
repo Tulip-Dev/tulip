@@ -227,7 +227,7 @@ void GWOverviewWidget::updateView() {
   }
 }
 //=============================================================================
-void RectPosition::draw(GlMainWidget *widget) {
+void RectPosition::draw(GlMainWidget*) {
   //assert (_view == target);
   if(_observedView == 0) {
     return ;

@@ -328,32 +328,32 @@ public:
 
 public:
 
-	ColorProperty *elementColor;
-	ColorProperty *elementLabelColor;
-	SizeProperty *elementSize;
-	IntegerProperty *elementLabelPosition;
-	IntegerProperty *elementShape;
-	DoubleProperty *elementRotation;
-	BooleanProperty *elementSelected;
-    StringProperty   *elementFont;
-    IntegerProperty  *elementFontSize;
-	StringProperty *elementLabel;
-	LayoutProperty *elementLayout;
-	StringProperty *elementTexture;
-	ColorProperty *elementBorderColor;
-	DoubleProperty *elementBorderWidth;
-	IntegerProperty *elementSrcAnchorShape;
-	SizeProperty *elementSrcAnchorSize;
-	IntegerProperty *elementTgtAnchorShape;
-	SizeProperty *elementTgtAnchorSize;
-    IntegerProperty *elementAnimationFrame;
+  ColorProperty *elementColor;
+  ColorProperty *elementLabelColor;
+  SizeProperty *elementSize;
+  IntegerProperty *elementLabelPosition;
+  IntegerProperty *elementShape;
+  DoubleProperty *elementRotation;
+  BooleanProperty *elementSelected;
+  StringProperty   *elementFont;
+  IntegerProperty  *elementFontSize;
+  StringProperty *elementLabel;
+  LayoutProperty *elementLayout;
+  StringProperty *elementTexture;
+  ColorProperty *elementBorderColor;
+  DoubleProperty *elementBorderWidth;
+  IntegerProperty *elementSrcAnchorShape;
+  SizeProperty *elementSrcAnchorSize;
+  IntegerProperty *elementTgtAnchorShape;
+  SizeProperty *elementTgtAnchorSize;
+  IntegerProperty *elementAnimationFrame;
 
-	Graph* graph;
+  Graph* graph;
 
-	GlGraphRenderingParameters* parameters;
+  GlGraphRenderingParameters* parameters;
 
-	MutableContainer<Glyph *> glyphs;
-	MutableContainer<EdgeExtremityGlyph *> extremityGlyphs;
+  MutableContainer<Glyph *> glyphs;
+  MutableContainer<EdgeExtremityGlyph *> extremityGlyphs;
 
 protected:
 
@@ -364,8 +364,8 @@ protected:
   std::string elementShapePropName;
   std::string elementRotationPropName;
   std::string elementSelectedPropName;
-    std::string elementFontPropName;
-    std::string elementFontSizePropName;
+  std::string elementFontPropName;
+  std::string elementFontSizePropName;
   std::string elementLabelPropName;
   std::string elementTexturePropName;
   std::string elementBorderColorPropName;

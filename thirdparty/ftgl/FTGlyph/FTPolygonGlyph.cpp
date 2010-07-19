@@ -115,7 +115,7 @@ FTPolygonGlyphImpl::~FTPolygonGlyphImpl()
 
 
 const FTPoint& FTPolygonGlyphImpl::RenderImpl(const FTPoint& pen,
-                                              int renderMode)
+                                              int)
 {
     glTranslatef(pen.Xf(), pen.Yf(), pen.Zf());
     if(glList)

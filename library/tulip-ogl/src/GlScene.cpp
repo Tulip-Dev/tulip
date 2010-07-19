@@ -659,7 +659,7 @@ namespace tlp {
 	translateCamera(factX,-factY,0);
   }
 
-  void GlScene::zoom(float factor,const Coord& dest) {
+  void GlScene::zoom(float,const Coord& dest) {
 	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
         (*it).second->getCamera()->setEyes(dest + ((*it).second->getCamera()->getEyes() - (*it).second->getCamera()->getCenter()));

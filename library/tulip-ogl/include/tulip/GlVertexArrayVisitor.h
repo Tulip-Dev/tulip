@@ -44,7 +44,7 @@ namespace tlp {
     /**
      * Method used for GlSimpleEntity
      */
-    virtual void visit(GlSimpleEntity *entity) {}
+    virtual void visit(GlSimpleEntity*) {}
     /**
      * Method used for GlNodes (and GlMetaNodes)
      */
