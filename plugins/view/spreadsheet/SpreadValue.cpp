@@ -87,10 +87,10 @@ namespace tlp {
     }else if(type==SpreadValue::colorv){
       assert(in.size()>=begin+4);
       for(int i=0;i<4;++i){
-	if(in[begin+i]>255)
-	  in[begin+i]=255;
-	if(in[begin+i]<0)
-	  in[begin+i]=0;
+        if(in[begin+i]>255)
+          in[begin+i]=255;
+        if(in[begin+i]<0)
+          in[begin+i]=0;
       }
       value.valueType=SpreadValue::colorv;
       value.colorV=Color((char)(in[begin]),(char)(in[begin+1]),(char)(in[begin+2]),(char)(in[begin+3]));
@@ -196,66 +196,78 @@ namespace tlp {
 
   SpreadValue SpreadValue::computeOpp2EqualValueType(const QChar &opp,const SpreadValue& arg1, const SpreadValue& arg2) {
     SpreadValue result(arg1.valueType);
-    
+      
     if(opp=='+') {
       switch(result.valueType) {
-      case SpreadValue::doublev : {
-	result.doubleV=arg1.doubleV+arg2.doubleV;
-	break;
-      }
-      case SpreadValue::coordv : {
-	result.coordV=arg1.coordV+arg2.coordV;
-	break;
-      }
-      case SpreadValue::colorv : {
-	result.colorV=arg1.colorV+arg2.colorV;
-	break;
-	}
+        case SpreadValue::doublev : {
+          result.doubleV=arg1.doubleV+arg2.doubleV;
+          break;
+        }
+        case SpreadValue::coordv : {
+          result.coordV=arg1.coordV+arg2.coordV;
+          break;
+        }
+        case SpreadValue::colorv : {
+          result.colorV=arg1.colorV+arg2.colorV;
+          break;
+          }
+        case SpreadValue::none : {
+          break;
+        }
       }
     }else if(opp=='-'){
       switch(result.valueType) {
-      case SpreadValue::doublev : {
-	result.doubleV=arg1.doubleV-arg2.doubleV;
-	break;
-	}
-      case SpreadValue::coordv : {
-	result.coordV=arg1.coordV-arg2.coordV;
-	break;
-      }
-      case SpreadValue::colorv : {
-	result.colorV=arg1.colorV-arg2.colorV;
-	break;
-	}
+        case SpreadValue::doublev : {
+          result.doubleV=arg1.doubleV-arg2.doubleV;
+          break;
+        }
+        case SpreadValue::coordv : {
+          result.coordV=arg1.coordV-arg2.coordV;
+          break;
+        }
+        case SpreadValue::colorv : {
+          result.colorV=arg1.colorV-arg2.colorV;
+          break;
+        }
+        case SpreadValue::none : {
+          break;
+        }
       }
     }else if(opp=='*'){
       switch(result.valueType) {
-      case SpreadValue::doublev : {
-	result.doubleV=arg1.doubleV*arg2.doubleV;
-	break;
-      }
-      case SpreadValue::coordv : {
-	result.coordV=arg1.coordV*arg2.coordV;
-	break;
-	}
-      case SpreadValue::colorv : {
-	result.colorV=arg1.colorV*arg2.colorV;
-	break;
-      }
+        case SpreadValue::doublev : {
+          result.doubleV=arg1.doubleV*arg2.doubleV;
+          break;
+        }
+        case SpreadValue::coordv : {
+          result.coordV=arg1.coordV*arg2.coordV;
+          break;
+        }
+        case SpreadValue::colorv : {
+          result.colorV=arg1.colorV*arg2.colorV;
+          break;
+        }
+        case SpreadValue::none : {
+          break;
+        }
       }
     }else{
       switch(result.valueType) {
-      case SpreadValue::doublev : {
-	result.doubleV=arg1.doubleV/arg2.doubleV;
-	break;
-      }
-      case SpreadValue::coordv : {
-	result.coordV=arg1.coordV/arg2.coordV;
-	break;
-      }
-      case SpreadValue::colorv : {
-	result.colorV=arg1.colorV/arg2.colorV;
-	break;
-      }
+        case SpreadValue::doublev : {
+          result.doubleV=arg1.doubleV/arg2.doubleV;
+          break;
+        }
+        case SpreadValue::coordv : {
+          result.coordV=arg1.coordV/arg2.coordV;
+          break;
+        }
+        case SpreadValue::colorv : {
+          result.colorV=arg1.colorV/arg2.colorV;
+          break;
+        }
+        case SpreadValue::none : {
+          break;
+        }
       }
     }
     return result;

@@ -235,7 +235,7 @@ namespace tlp {
   class ViewColorCalculator :public AbstractColorProperty::MetaValueCalculator {
   public:
     virtual void computeMetaValue(AbstractColorProperty* color, node mN,
-				  Graph* sg, Graph*) {
+				  Graph*, Graph*) {
       // meta node color is half opaque white
       color->setNodeValue(mN, Color(255, 255, 255, 127));
     }
@@ -485,7 +485,7 @@ namespace tlp {
     //cerr << "[WARNING]" << __PRETTY_FUNCTION__ << endl;
   }
   //**********************************************************************
-  void MainController::update ( ObserverIterator, ObserverIterator end) {
+  void MainController::update (ObserverIterator, ObserverIterator) {
     // block update when we do an undo/redo
     if(blockUpdate)
       return;
@@ -597,7 +597,7 @@ namespace tlp {
     }
   }
   //**********************************************************************
-  void MainController::afterSetAttribute(Graph *graph, const std::string &name){
+  void MainController::afterSetAttribute(Graph*, const std::string &name){
     // In this function we only do threatment if graph name is changed (attribute "name" is changed)
     if(name=="name")
       clusterTreeWidget->update();
@@ -916,7 +916,7 @@ namespace tlp {
     return true;
   }
   //**********************************************************************
-   void MainController::graphAboutToBeRemove(Graph *graph){
+   void MainController::graphAboutToBeRemove(Graph*){
      setCurrentGraph(NULL);
    }
   //**********************************************************************
@@ -1415,7 +1415,6 @@ namespace tlp {
   void MainController::changeSizes() {
     QAction *action=(QAction*)(sender());
     GraphState * g0 = NULL;
-    GlMainView *mainView=dynamic_cast<GlMainView *>(getCurrentView());
     if(morphingAction->isChecked())
       g0=constructGraphState();
   
@@ -1424,7 +1423,7 @@ namespace tlp {
     inAlgorithm=false;
     if( result ) {
       if( morphingAction->isChecked() && g0) {
-	applyMorphing(g0);
+        applyMorphing(g0);
       }
       drawViews(true);
     }

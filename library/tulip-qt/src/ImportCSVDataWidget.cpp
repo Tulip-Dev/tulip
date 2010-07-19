@@ -95,11 +95,11 @@ CSVParser *ImportCSVDataWidget::buildCSVParser() {
   return new CSVParser();
 }
 
-void ImportCSVDataWidget::CSVFileChanged(QString file) {
+void ImportCSVDataWidget::CSVFileChanged(QString) {
   updateWidgetState();
   updatePreviews();
 }
-void ImportCSVDataWidget::separatorChanged(QString newSeparator) {
+void ImportCSVDataWidget::separatorChanged(QString) {
   updateWidgetState();
   updatePreviews();
 }
@@ -122,11 +122,11 @@ void ImportCSVDataWidget::loadCSVData() {
       propertiesWidget, &progress);
 }
 
-void ImportCSVDataWidget::useFirstRowAsPropertyNameChanged(bool useFirstRow) {
+void ImportCSVDataWidget::useFirstRowAsPropertyNameChanged(bool) {
   updatePreviews();
 }
 
-void ImportCSVDataWidget::propertyOrientationChanged(ImportCSVDataConfigurationWidget::PropertyOrientation oritentation) {
+void ImportCSVDataWidget::propertyOrientationChanged(ImportCSVDataConfigurationWidget::PropertyOrientation) {
   updatePreviews();
 }
 
@@ -429,7 +429,7 @@ node ImportCSVDataWidget::getNextNode() {
 void ImportCSVDataWidget::stopDataLoading() {
   pluginProgress->stop();
 }
-void ImportCSVDataWidget::end(unsigned int rowNumber, unsigned int columnNumber) {
+void ImportCSVDataWidget::end(unsigned int, unsigned int) {
   delete nodesIterator;
   pluginProgress = NULL;
 }
