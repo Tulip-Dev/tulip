@@ -90,10 +90,11 @@ namespace tlp {
     void getColors(GlGraphInputData *data,const std::vector<Coord> &vertices,std::vector<Color> &linesColorsArray);
 
     /**
-     * This function must be call before each graph rendering
-     * This function clear previously compute edgeWidthLod
+     * This function must be called before each graph rendering
+     * This function clears previously compute edgeWidthLod
+     * FIXME remove the unused bool (was named orthoProjection) ?
      */
-    static void clearEdgeWidthLodSystem(bool orthoProjection){
+    static void clearEdgeWidthLodSystem(bool){
       haveToComputeEdgeWidthBaseLod=true;
     }
 

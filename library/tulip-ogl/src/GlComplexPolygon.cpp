@@ -158,7 +158,6 @@ void GlComplexPolygon::createPolygon(const vector<Coord> &coords,int polygonEdge
 
 		const unsigned int nbCurvePoints = 20;
 		 addPoint(coords[0]);
-		 double dec=1./nbCurvePoints;
 
 	 	for(size_t i = 0 ; i+3 < coords.size() ; i+=3) {
 	 		vector<Coord> controlPoints;
