@@ -60,14 +60,14 @@ namespace tlp {
     virtual ~GlFeedBackBuilder() {}
     
     virtual void begin(const Vector<int, 4> &viewport) {}
-    virtual void passThroughToken(GLfloat *data) {}
-    virtual void pointToken(GLfloat *data) {}
-    virtual void lineToken(GLfloat *data) {}
-    virtual void lineResetToken(GLfloat *data) {}
-    virtual void polygonToken(GLfloat *data) {}
-    virtual void bitmapToken(GLfloat *data) {}
-    virtual void drawPixelToken(GLfloat *data) {}
-    virtual void copyPixelToken(GLfloat *data) {}
+    virtual void passThroughToken(GLfloat*) {}
+    virtual void pointToken(GLfloat*) {}
+    virtual void lineToken(GLfloat*) {}
+    virtual void lineResetToken(GLfloat*) {}
+    virtual void polygonToken(GLfloat*) {}
+    virtual void bitmapToken(GLfloat*) {}
+    virtual void drawPixelToken(GLfloat*) {}
+    virtual void copyPixelToken(GLfloat*) {}
     virtual void end() {}
     
     virtual void getResult(std::string* str) = 0;
