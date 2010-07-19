@@ -76,7 +76,7 @@ void ChristmasTree::draw(node n, float) {
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_outsphere");
 }
 
-void ChristmasTree::draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
+void ChristmasTree::draw(edge, node, const Color& glyphColor,const Color&, float) {
   glEnable(GL_LIGHTING);
 	drawTree();
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_tree");

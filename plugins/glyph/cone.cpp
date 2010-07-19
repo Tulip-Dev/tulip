@@ -74,7 +74,7 @@ void Cone::getIncludeBoundingBox(BoundingBox& boundingBox) {
     boundingBox[1] = Coord(0.75, 0.75, 0.5);
 }
 //===========================================================
-void Cone::draw(node n, float lod) {
+void Cone::draw(node n, float) {
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
 		drawCone();
     GlDisplayListManager::getInst().endNewDisplayList();
@@ -124,7 +124,7 @@ Coord Cone::getAnchor(const Coord &vector) const {
 	return anchor;
 }
 
-void Cone::draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
+void Cone::draw(edge e, node, const Color& glyphColor,const Color&, float) {
   glEnable(GL_LIGHTING);
 	if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
 		drawCone();

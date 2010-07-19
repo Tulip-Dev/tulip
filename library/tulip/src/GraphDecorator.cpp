@@ -46,7 +46,7 @@ void GraphDecorator::restoreSubGraph(Graph *, bool){
 }
 
 //============================================================
-void GraphDecorator::setSubGraphToKeep(Graph * s){
+void GraphDecorator::setSubGraphToKeep(Graph *){
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
@@ -213,7 +213,7 @@ node GraphDecorator::addNode(){
 }
 
 //============================================================
-void GraphDecorator::addNode(const node n){
+void GraphDecorator::addNode(const node){
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
@@ -237,12 +237,12 @@ edge GraphDecorator::addEdge(const node n, const node n2){
 }
 
 //============================================================
-void GraphDecorator::addEdge(const edge e){
+void GraphDecorator::addEdge(const edge){
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
-edge GraphDecorator::restoreEdge(edge e, node source, node target){
+edge GraphDecorator::restoreEdge(edge e, node, node){
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
   return e;
 }

@@ -139,7 +139,7 @@ namespace tlp {
       }
   }
 
-  void ServersOptionDialog::closeEvent(QCloseEvent* event){
+  void ServersOptionDialog::closeEvent(QCloseEvent*){
     modifDialog->done(true);
 
     vector<string> serversAddrs;
@@ -156,7 +156,7 @@ namespace tlp {
     settings.endGroup();
   }
 
-  void ServersOptionDialog::serverNameReceived(MultiServerManager* msm,string addr,string name){
+  void ServersOptionDialog::serverNameReceived(MultiServerManager*,string,string){
     updateList();
   }
 
