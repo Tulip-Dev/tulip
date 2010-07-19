@@ -39,7 +39,7 @@ void PluginLoaderTxt::loading(const string &filename)
 void PluginLoaderTxt::loaded(const string &name,
 			     const string &author,
 			     const string &date, 
-			     const string &info,
+			     const string &,
 			     const string &release,
 			     const string &version,
 			     const list <Dependency> &deps)

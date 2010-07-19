@@ -207,7 +207,6 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
 
   GlMainWidget *mainWidget=(GlMainWidget *)widget;
-  AbstractView *abstractView=(AbstractView *)mainWidget->getView();
   if (e->type() == QEvent::MouseButtonPress) {
     if (((QMouseEvent *) e)->buttons() == Qt::LeftButton) {
       InteractorComponent *currentMouse;

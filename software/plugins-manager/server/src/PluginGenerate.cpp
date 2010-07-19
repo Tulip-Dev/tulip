@@ -91,7 +91,7 @@ bool generatePluginInfoFile(LocalPluginInfo& pInfo, QDir& dstDir) {
   return true;
 }
 
-void generatePluginDocFile(QString& pFileName, QString& pVersion, QFile& pDoxFile, QDir& dstDir) {
+void generatePluginDocFile(QString& pFileName, QString&, QFile& pDoxFile, QDir& dstDir) {
   QFile dstFile(dstDir.absolutePath()+ "/"+ pFileName + ".doc");
   pDoxFile.open(QIODevice::ReadOnly | QIODevice::Text);
   dstFile.open(QIODevice::WriteOnly | QIODevice::Text);

@@ -131,7 +131,7 @@ namespace tlp {
     return str.toStdString();
   }
 
-  void PluginsInfoWidget::formatInfo(const string &name,const string &author,const string &type,const string &date,const string &info,const string &version,const vector<string> &dependencies){
+  void PluginsInfoWidget::formatInfo(const string &name,const string &author,const string &type,const string &date,const string &info,const string &version,const vector<string>&){
     nameLabel->setText(name.c_str());
     authorLabel->setText(author.c_str());
     typeLabel->setText(type.c_str());

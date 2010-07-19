@@ -32,7 +32,7 @@ namespace tlp {
   }
 
   void MultiServerManager::addServer(const string& addr){
-    //TODO: ajouter test de validité du serveur (connexion possible)
+    //TODO: ajouter test de validitï¿½ du serveur (connexion possible)
     if(!(addr=="")){
       PluginsServer *plugServer=new PluginsServer;
       plugServer->name = addr;
