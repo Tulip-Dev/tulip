@@ -102,6 +102,7 @@ namespace tlp {
     tmpFormat.setAlpha(true);
     tmpFormat.setOverlay(false);
     tmpFormat.setStereo(false);
+    tmpFormat.setSampleBuffers(true);
     return tmpFormat;
   }
 

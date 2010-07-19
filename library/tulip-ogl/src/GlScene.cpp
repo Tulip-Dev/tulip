@@ -133,6 +133,7 @@ namespace tlp {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
 	glEnable(GL_NORMALIZE);
+  glEnable(GL_MULTISAMPLE);
 	glDepthFunc(GL_LEQUAL );
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glColorMask(1, 1, 1, 1);
