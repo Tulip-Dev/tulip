@@ -41,7 +41,6 @@
 #include "tulip/GlSceneVisitor.h"
 #include "tulip/GlGraphRenderingParameters.h"
 #include "tulip/Camera.h"
-#include "tulip/GlPointManager.h"
 #include "tulip/GlBezierCurve.h"
 #include "tulip/GlCatmullRomCurve.h"
 #include "tulip/GlRenderer.h"
@@ -150,24 +149,56 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
   const std::pair<node, node>& eEnds = data->graph->ends(e);
   const node source = eEnds.first;
   const node target = eEnds.second;
-  const Coord& srcCoord = data->elementLayout->getNodeValue(source);
-  const Coord& tgtCoord = data->elementLayout->getNodeValue(target);
+
 
   const Size &srcSize = data->elementSize->getNodeValue(source);
   const Size &tgtSize = data->elementSize->getNodeValue(target);
 
   Size edgeSize;
   float maxSrcSize, maxTgtSize;
-  getEdgeSize(data,e,srcSize,tgtSize,edgeSize,maxSrcSize,maxTgtSize);
+  if(srcSize[0]>=srcSize[1])
+    maxSrcSize=srcSize[0];
+  else
+    maxSrcSize=srcSize[1];
+  if(tgtSize[0]>=tgtSize[1])
+    maxTgtSize=tgtSize[0];
+  else
+    maxTgtSize=tgtSize[1];
 
-  float lodSize = getEdgeWidthLod(srcCoord,edgeSize,camera);
+  getEdgeSize(data,e,srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
+
+  float lodSize;
+  if(!orthoProjection)
+    lodSize = getEdgeWidthLod(Coord(0,0,0),edgeSize,camera);
+  else
+    lodSize = getEdgeWidthLod(data->elementLayout->getNodeValue(source),edgeSize,camera);
 
   bool selected = data->elementSelected->getEdgeValue(e);
+
+  if (lod < 5) {
+    if(data->getGlVertexArrayManager()->renderingIsBegin()){
+      data->getGlVertexArrayManager()->activatePointEdgeDisplay(this,selected);
+    }else{
+      const Coord& srcCoord = data->elementLayout->getNodeValue(source);
+      Color srcCol, tgtCol;
+      getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
+
+      setColor(srcCol);
+      glPointSize(1);
+      glBegin(GL_POINTS);
+      glVertex3f(srcCoord[0], srcCoord[1], srcCoord[2]);
+      glEnd();
+    }
+    return;
+  }
 
   if(lodSize>-5 && lodSize<5 && data->getGlVertexArrayManager()->renderingIsBegin() && (!data->parameters->getFeedbackRender()) && data->elementShape->getEdgeValue(e)==POLYLINESHAPE){
     data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
     return;
   }
+
+  const Coord& srcCoord = data->elementLayout->getNodeValue(source);
+  const Coord& tgtCoord = data->elementLayout->getNodeValue(target);
 
   /*if(data->parameters->isElementZOrdered()){
 		if(data->elementColor->getEdgeValue(e)[3]!=255){
@@ -212,7 +243,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	Color srcCol, tgtCol;
   getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
 
-	if (lod < 5) {
+  /*if (lod < 5) {
 		if (OpenGlConfigManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()) {
 			GlPointManager::getInst().addPoint(srcCoord, srcCol, 1);
 		} else {
@@ -223,7 +254,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 			glEnd();
 		}
 		return;
-	}
+  }*/
 
 	const LineType::RealType &bends = data->elementLayout->getEdgeValue(e);
 	unsigned nbBends = bends.size();
@@ -567,14 +598,18 @@ void GlEdge::getEdgeColor(GlGraphInputData *data,edge e,node source, node target
   }
 }
 
-void GlEdge::getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,Size &edgeSize, float &maxSrcSize, float &maxTgtSize){
-  //We block the max radius of the edge and extremities to node max Size
-  maxSrcSize = std::max(srcSize[0], srcSize[1]);
-  maxTgtSize = std::max(tgtSize[0], tgtSize[1]);
+void GlEdge::getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,const float maxSrcSize,const float maxTgtSize,Size &edgeSize){
 
   if (data->parameters->isEdgeSizeInterpolate()) {
-    edgeSize[0] = std::min(srcSize[0], srcSize[1]) / 16.;
-    edgeSize[1] = std::min(tgtSize[0], tgtSize[1]) / 16.;
+    if(srcSize[0]<srcSize[1])
+      edgeSize[0]=srcSize[0]/16.;
+    else
+      edgeSize[0]=srcSize[1]/16.;
+
+    if(tgtSize[0]<tgtSize[1])
+      edgeSize[1]=tgtSize[0]/16.;
+    else
+      edgeSize[1]=tgtSize[1]/16.;
   } else {
     const Size &size = data->elementSize->getEdgeValue(e);
     edgeSize[0]=size[0];

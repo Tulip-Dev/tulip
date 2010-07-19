@@ -38,9 +38,9 @@
 #include "tulip/GlTLPFeedBackBuilder.h"
 #include "tulip/GlSceneVisitor.h"
 #include "tulip/GlGraphRenderingParameters.h"
-#include "tulip/GlPointManager.h"
 #include "tulip/GlRenderer.h"
 #include "tulip/GlTextureManager.h"
+#include "tulip/GlVertexArrayManager.h"
 
 #include <iostream>
 
@@ -96,12 +96,12 @@ namespace tlp {
     }
 
     node n=node(id);
-    if(data->parameters->isElementZOrdered()){
+    /*if(data->parameters->isElementZOrdered()){
       if(data->elementColor->getNodeValue(n)[3]!=255){
         GlPointManager::getInst().endRendering();
         GlPointManager::getInst().beginRendering();
       }
-    }
+    }*/
 
     if (data->elementSelected->getNodeValue(n)) {
       glDisable(GL_DEPTH_TEST);
@@ -140,20 +140,18 @@ namespace tlp {
     bool selected = data->elementSelected->getNodeValue(n);
     if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
       if (lod < 1) lod = 1;
-      //const Color &nodeColor = data->elementColor->getNodeValue(n);
-      const Color& color = selected ? colorSelect2 : fillColor;
       int size= sqrt(lod);
-      if (!selected) {
+
+      if(data->getGlVertexArrayManager()->renderingIsBegin()){
+        if(size<2)
+          data->getGlVertexArrayManager()->activatePointNodeDisplay(this,true,selected);
+        else
+          data->getGlVertexArrayManager()->activatePointNodeDisplay(this,false,selected);
+      }else{
         if(size>2)
           size=2;
-      }else{
-        if(size<5)
-          size=5;
-      }
+        const Color& color = selected ? colorSelect2 : fillColor;
 
-      if(OpenGlConfigManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()){
-        GlPointManager::getInst().addPoint(Coord(nodeCoord[0],nodeCoord[1], nodeCoord[2]+nodeSize[2]/2.),color,size);
-      }else{
         glDisable(GL_LIGHTING);
         setColor(color);
         glPointSize(size);
@@ -162,22 +160,23 @@ namespace tlp {
         glEnd();
         glEnable(GL_LIGHTING);
       }
+      return;
 
-    } else { //draw a glyph or make recursive call for meta nodes
-      glPushMatrix();
-      glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
-      glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
-      glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
-
-      data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n,lod);
-
-      if (selected) {
-        //glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
-        setColor(colorSelect2);
-        GlDisplayListManager::getInst().callDisplayList("selection");
-      }
-      glPopMatrix();
     }
+    //draw a glyph or make recursive call for meta nodes
+    glPushMatrix();
+    glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
+    glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
+    glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
+
+    data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n,lod);
+
+    if (selected) {
+      //glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
+      setColor(colorSelect2);
+      GlDisplayListManager::getInst().callDisplayList("selection");
+    }
+    glPopMatrix();
 
     if (selected) {
       glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
@@ -359,5 +358,13 @@ namespace tlp {
 					  rastPos[1]+(int)(h/2.0) + labelsBorder))) {
       renderer->draw(w, w, labelPos);
     }
+  }
+
+  void GlNode::getPointAndColor(GlGraphInputData *inputData,std::vector<Coord> &pointsCoordsArray,std::vector<Color> &pointsColorsArray){
+    node n=node(id);
+    const Coord &nodeCoord = inputData->elementLayout->getNodeValue(n);
+    const Color& fillColor = inputData->elementColor->getNodeValue(n);
+    pointsCoordsArray.push_back(nodeCoord);
+    pointsColorsArray.push_back(fillColor);
   }
 }

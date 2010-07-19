@@ -31,26 +31,55 @@ namespace tlp {
   class TextRenderer;
   class GlSceneVisitor;
 
+  /**
+   * Class to represent a node of a graph
+   */
   class TLP_GL_SCOPE GlNode : public GlComplexeEntity{
 
   public:
 
+    /**
+     * Default constructor with id
+     * id must be the id of the node in graph
+     */
     GlNode(unsigned int id):id(id) {}
 
+    /**
+     * Virtual function to accept GlSceneVisitor on this class
+     */
     virtual void acceptVisitor(GlSceneVisitor *visitor);
 
+    /**
+     * Return the node bounding box
+     */
     virtual BoundingBox getBoundingBox(GlGraphInputData* data);
 
+    /**
+     * Draw the node with level of detail : lod and Camera : camera
+     */
     virtual void draw(float lod,GlGraphInputData *data,Camera* camera);
 
+    /**
+     * Draw the label of the node if drawNodesLabel is true and if label selection is equal to drawSelect
+     * Use TextRenderer : renderer to draw the label
+     */
     virtual void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
 
+    /**
+     * Draw the label of the node if drawEdgesLabel is true
+     * Use TextRenderer : renderer to draw the label
+     */
     virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
 
     unsigned int id;
 
     virtual void drawPixmapFont(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,
         const std::string &str, const Color &col,  const Coord &position, int labelPos, bool selected, float width);
+
+    /**
+     * This function is used by the engine to get point coordinate and color of the node
+     */
+    void getPointAndColor(GlGraphInputData *inputData,std::vector<Coord> &pointsCoordsArray,std::vector<Color> &pointsColorsArray);
 
   };
 

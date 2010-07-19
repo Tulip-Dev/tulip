@@ -97,5 +97,4 @@ noinst_HEADERS = \
 	tulip/GlCPULODCalculator.h \
 	tulip/GlSVGFeedBackBuilder.h \
 	tulip/GlEPSFeedBackBuilder.h \
-	tulip/GlPointManager.h \
 	tulip/GlVertexArrayVisitor.h

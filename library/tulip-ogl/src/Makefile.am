@@ -92,7 +92,6 @@ libtulip_ogl_la_SOURCES = \
 	GlProgressBar.cpp \
 	GlXMLTools.cpp \
 	GlColorScale.cpp \
-	GlPointManager.cpp \
 	GlBezierCurve.cpp \
 	GlCatmullRomCurve.cpp \
 	EdgeExtremityGlyph.cpp \

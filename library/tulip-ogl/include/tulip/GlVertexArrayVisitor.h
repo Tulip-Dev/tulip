@@ -48,7 +48,7 @@ namespace tlp {
     /**
      * Method used for GlNodes (and GlMetaNodes)
      */
-    virtual void visit(GlNode *glNode) {}
+    virtual void visit(GlNode *glNode);
     /**
      * Method used for GlEdges
      */

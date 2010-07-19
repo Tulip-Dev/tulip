@@ -38,7 +38,6 @@
 #include "tulip/GlFeedBackRecorder.h"
 #include "tulip/GlSVGFeedBackBuilder.h"
 #include "tulip/GlEPSFeedBackBuilder.h"
-#include "tulip/GlPointManager.h"
 #include "tulip/GlVertexArrayManager.h"
 #include "tulip/GlVertexArrayVisitor.h"
 
@@ -332,7 +331,7 @@ namespace tlp {
       }
 
       // Init GlPointManager for a new rendering pass
-      GlPointManager::getInst().beginRendering();
+      //GlPointManager::getInst().beginRendering();
       if(glGraphComposite)
         glGraphComposite->getInputData()->getGlVertexArrayManager()->beginRendering();
       GlEdge::clearEdgeWidthLodSystem(viewOrtho);
@@ -456,7 +455,7 @@ namespace tlp {
         glGraphComposite->getInputData()->getGlVertexArrayManager()->endRendering();
 
       // End rendering of GlPointManager
-      GlPointManager::getInst().endRendering();
+      //GlPointManager::getInst().endRendering();
 
       /*
         Label draw

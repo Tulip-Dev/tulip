@@ -78,9 +78,14 @@ namespace tlp {
     void beginRendering();
     void endRendering();
 
+    void pauseRendering(bool pause);
+
     void addEdge(GlEdge *edge);
+    void addNode(GlNode *node);
 
     void activateLineEdgeDisplay(GlEdge *edge, bool selected);
+    void activatePointEdgeDisplay(GlEdge *edge, bool selected);
+    void activatePointNodeDisplay(GlNode *node, bool onePixel, bool selected);
 
     void addEdge(Graph *,const edge);
     void beforeSetNodeValue(PropertyInterface*, const node);
@@ -98,6 +103,7 @@ namespace tlp {
 
     bool isBegin;
     bool toCompute;
+    bool vectorSizeInit;
 
     bool colorInterpolate;
 
@@ -108,9 +114,17 @@ namespace tlp {
     std::vector<GLint> linesRenderingIndexArray;
     std::vector<GLint> linesSelectedRenderingIndexArray;
 
-    unsigned int currentIndex;
+    std::vector<Coord> pointsCoordsArray;
+    std::vector<Color> pointsColorsArray;
+    std::vector<GLint> points1PRenderingIndexArray;
+    std::vector<GLint> points1PSelectedRenderingIndexArray;
+    std::vector<GLint> points2PRenderingIndexArray;
+    std::vector<GLint> points2PSelectedRenderingIndexArray;
 
-    TLP_HASH_MAP<unsigned int,std::pair<unsigned int,unsigned int> > edgeToLineIndexHashMap;
+
+    std::vector<std::pair<unsigned int,unsigned int> > edgeToLineIndexVector;
+    std::vector<unsigned int> edgeToPointIndexVector;
+    std::vector<unsigned int> nodeToPointIndexVector;
   };
 
 }

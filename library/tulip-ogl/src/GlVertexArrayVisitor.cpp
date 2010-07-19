@@ -22,6 +22,7 @@
 
 #include "tulip/GlGraphInputData.h"
 #include "tulip/GlEdge.h"
+#include "tulip/GlNode.h"
 #include "tulip/GlVertexArrayManager.h"
 
 using namespace std;
@@ -30,6 +31,10 @@ namespace tlp {
 
   void GlVertexArrayVisitor::visit(GlEdge *glEdge) {
     inputData->getGlVertexArrayManager()->addEdge(glEdge);
+  }
+
+  void GlVertexArrayVisitor::visit(GlNode *glNode) {
+    inputData->getGlVertexArrayManager()->addNode(glNode);
   }
 
 }
