@@ -791,7 +791,7 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
   }
 }
 
-void GraphUpdatesRecorder::reverseEdge(Graph* g,  edge e) {
+void GraphUpdatesRecorder::reverseEdge(Graph*,  edge e) {
   TLP_HASH_MAP<edge, EdgeRecord>::iterator itA = addedEdges.find(e);
   // remove e from addedEdges if it is a newly added edge
   if (itA != addedEdges.end()) {

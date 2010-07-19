@@ -180,7 +180,7 @@ bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
   return false;
 }
 //========================================================================================
-bool MouseEdgeBendEditor::draw(GlMainWidget *glMainWidget) {
+bool MouseEdgeBendEditor::draw(GlMainWidget*) {
   return true;
 }
 //========================================================================================

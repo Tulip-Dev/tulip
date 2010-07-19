@@ -44,7 +44,6 @@ namespace tlp {
     if (TreeTest::isTree(graph)) return;
     assert(AcyclicTest::isAcyclic(graph));
     //We compute the dag level metric on resulting sg.
-    bool resultBool;
     MutableContainer<unsigned int> dLevel;
     dagLevel(graph, dLevel);
     //we now transform the dag in a proper Dag, two linked nodes of a proper dag

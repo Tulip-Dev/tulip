@@ -89,7 +89,7 @@ void Circle::getIncludeBoundingBox(BoundingBox &boundingBox) {
         boundingBox[1] = Coord(0.85, 0.85, 0);
 }
 //=====================================================
-void Circle::draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) {
+void Circle::draw(edge e, node, const Color& glyphColor,const Color &borderColor, float lod) {
   circle->setLightingMode(false);
   string textureName=edgeExtGlGraphInputData->elementTexture->getEdgeValue(e);
   if(textureName!="")

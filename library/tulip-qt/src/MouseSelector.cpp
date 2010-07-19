@@ -99,7 +99,6 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
     return false;
   }
   if  (e->type() == QEvent::MouseButtonRelease) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;

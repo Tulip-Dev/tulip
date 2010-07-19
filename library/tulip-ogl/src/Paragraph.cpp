@@ -51,7 +51,7 @@ Paragraph::~Paragraph(){
   }
 }
 //---------------------------------------------------------------------------
-void Paragraph::drawLeft(float, float x_depl, int debut, int fin) const{
+void Paragraph::drawLeft(float, float, int debut, int fin) const{
   int val;
   float decal = 0;
   float decal_total = 0;

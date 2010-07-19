@@ -590,7 +590,7 @@ void PlanarityTestImpl::embedBackEdges(bool embBackEdgesOutW,
 */
 //#include <tulip/GraphImpl.h>
 int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
-				      node w,
+				      node,
 				      node repr,
 				      list<edge>& listBackEdges,
 				      vector<edge>& backEdge) {

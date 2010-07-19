@@ -157,7 +157,7 @@ void MouseEdgeBuilder::clearObserver(){
   layoutProperty=NULL;
 }
 
-void MouseEdgeBuilder::delNode(Graph *g,const node n){
+void MouseEdgeBuilder::delNode(Graph*,const node n){
   if(n==source){
     GlMainWidget *glMainWidget=((GlMainView*)view)->getGlMainWidget();
     bends.clear();

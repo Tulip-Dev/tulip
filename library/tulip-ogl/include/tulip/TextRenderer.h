@@ -50,8 +50,8 @@ class TLP_GL_SCOPE TextRenderer {
   void setMode(FontMode  m);
 
  private:
-  Document* doc;
   Context c;
+  Document* doc;
   void initTextManager(const std::string & str);
   Paragraph* textXMLManager(Document* d, Paragraph* f, char* text);
   void initTextXMLManager(Parser* P, xmlNodePtr courant, Document* d);

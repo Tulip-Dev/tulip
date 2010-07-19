@@ -924,7 +924,7 @@ namespace tlp {
             addParameter<DataSet>(DISPLAYING);
         }
         ~TLPImport(){}
-        bool import(const string &dummy) {
+        bool import(const string&) {
             string filename;
             string data;
             stringstream *tmpss=NULL;
