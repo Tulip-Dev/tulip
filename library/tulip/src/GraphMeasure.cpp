@@ -255,7 +255,7 @@ void tlp::clusteringCoefficient(const Graph *graph,
 }
 //==================================================
 void tlp::dagLevel (const Graph *graph, MutableContainer<unsigned int>& level,
-		    PluginProgress *pp) {
+		    PluginProgress*) {
   MutableContainer<unsigned int> totreat;
   deque<node> fifo;
   //===============================================

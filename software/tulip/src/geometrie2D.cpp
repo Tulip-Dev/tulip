@@ -23,8 +23,7 @@
 #include <geometrie2D.h>
 
 //---------------------------------------------
-// Calcule l'angle orienté BA,BC dans le sens
-// trigonométrique
+// Computes the oriented angle BA,BC in the trigonometric direction
 //---------------------------------------------
 double angleABC(const double xA,const double yA,
 		const double xB,const double yB,
@@ -42,8 +41,7 @@ double angleABC(const double xA,const double yA,
   return alpha;
 }
 //---------------------------------------------
-// rotation du point B autour du point A de l'angle 
-// Alpha.
+// rotation of the point B around the point A, of angle Alpha.
 //---------------------------------------------
 void rotABAlpha(const double xA,const double yA,double &xB, double &yB,
 		const double alpha)
@@ -67,91 +65,95 @@ void projABCircle(const double xA,const double yA,double &xB, double &yB,
   double d1,d2;
   int xx1OK=false;
   if (fabs(xA-xB) < 0.001)
-    {
-      a=0;
-      b=xB;
-      xx1=xB;
-      xx2=xB;
-      yy1=sqrt(pow(r,2)-pow(xB,2));
-      yy2=-yy1;
-    }
-    else
-    {
-      a=(yA-yB)/(xA-xB);
-      b=yB-a*xB;
+  {
+    a=0;
+    b=xB;
+    xx1=xB;
+    xx2=xB;
+    yy1=sqrt(pow(r,2)-pow(xB,2));
+    yy2=-yy1;
+  }
+  else
+  {
+    a=(yA-yB)/(xA-xB);
+    b=yB-a*xB;
     
-  A=pow(a,2)+1.0;
-  B=2.0*a*b;
-  C=pow(b,2)-pow(r,2);
-  Delta=pow(B,2)-4.0*A*C;
+    A=pow(a,2)+1.0;
+    B=2.0*a*b;
+    C=pow(b,2)-pow(r,2);
+    Delta=pow(B,2)-4.0*A*C;
 
-  x1=(-B+sqrt(Delta))/(2.0*A);
-  x2=(-B-sqrt(Delta))/(2.0*A);
+    x1=(-B+sqrt(Delta))/(2.0*A);
+    x2=(-B-sqrt(Delta))/(2.0*A);
 
-  //  cout << "\nx1 :" << x1 << " x2 : " << x2 << "\n";
+    //  cout << "\nx1 :" << x1 << " x2 : " << x2 << "\n";
 
-  y11=sqrt(pow(r,2)-pow(x1,2));
-  y12=-y11;
+    y11=sqrt(pow(r,2)-pow(x1,2));
+    y12=-y11;
 
-  y21=sqrt(pow(r,2)-pow(x2,2));
-  y22=-y21;
+    y21=sqrt(pow(r,2)-pow(x2,2));
+    y22=-y21;
 
-  tmpDouble=fabs(a*x1+b-y11);
-  if (tmpDouble<0.000001)
-    if (!xx1OK)
+    tmpDouble=fabs(a*x1+b-y11);
+    if (tmpDouble<0.000001) {
+      if (!xx1OK)
       {
-	xx1=x1;
-	yy1=y11;
-	xx1OK=true;
+        xx1=x1;
+        yy1=y11;
+        xx1OK=true;
       }
-    else
+      else
       {
-	xx2=x1;
-	yy2=y11;
-      }
-
-  tmpDouble=fabs(a*x1+b-y12);
-  if (tmpDouble<0.000001)
-    if (!xx1OK)
-      {
-	xx1=x1;
-	yy1=y12;
-	xx1OK=true;
-      }
-    else
-      {
-	xx2=x1;
-	yy2=y12;
-      }
-
-  tmpDouble=fabs(a*x2+b-y21);
-  if (tmpDouble<0.000001)
-    if (!xx1OK)
-      {
-	xx1=x2;
-	yy1=y21;
-	xx1OK=true;
-      }
-    else
-      {
-	xx2=x2;
-	yy2=y21;
-      }
-
-  tmpDouble=fabs(a*x2+b-y22);
-  if (tmpDouble<0.000001)
-    if (!xx1OK)
-      {
-	xx1=x2;
-	yy1=y22;
-	xx1OK=true;
-      }
-    else
-      {
-	xx2=x2;
-	yy2=y22;
+        xx2=x1;
+        yy2=y11;
       }
     }
+    
+    tmpDouble=fabs(a*x1+b-y12);
+    if (tmpDouble<0.000001) {
+      if (!xx1OK)
+      {
+        xx1=x1;
+        yy1=y12;
+        xx1OK=true;
+      }
+      else
+      {
+        xx2=x1;
+        yy2=y12;
+      }
+    }
+    
+    tmpDouble=fabs(a*x2+b-y21);
+    if (tmpDouble<0.000001) {
+      if (!xx1OK)
+      {
+        xx1=x2;
+        yy1=y21;
+        xx1OK=true;
+      }
+      else
+      {
+        xx2=x2;
+        yy2=y21;
+      }
+    }
+    
+    tmpDouble=fabs(a*x2+b-y22);
+    if (tmpDouble<0.000001) {
+      if (!xx1OK)
+      {
+        xx1=x2;
+        yy1=y22;
+        xx1OK=true;
+      }
+      else
+      {
+        xx2=x2;
+        yy2=y22;
+      }
+    }
+  }
 
   d1=pow(xx1-xB,2)+pow(yy1-yB,2);
   d2=pow(xx2-xB,2)+pow(yy2-yB,2);

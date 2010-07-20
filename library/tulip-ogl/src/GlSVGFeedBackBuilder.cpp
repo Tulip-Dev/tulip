@@ -129,11 +129,11 @@ namespace tlp {
     << ", " << (int)fillColor.getB()
     << ")\"/>" << endl;
   }
-  void GlSVGFeedBackBuilder::bitmapToken(GLfloat *data) {
+  void GlSVGFeedBackBuilder::bitmapToken(GLfloat*) {
   }
-  void GlSVGFeedBackBuilder::drawPixelToken(GLfloat *data) {
+  void GlSVGFeedBackBuilder::drawPixelToken(GLfloat*) {
   }
-  void GlSVGFeedBackBuilder::copyPixelToken(GLfloat *data) {
+  void GlSVGFeedBackBuilder::copyPixelToken(GLfloat*) {
   }
   void GlSVGFeedBackBuilder::end() {
     stream_out << "</svg>" << endl;

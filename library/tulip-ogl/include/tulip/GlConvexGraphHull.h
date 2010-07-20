@@ -85,8 +85,8 @@ public:
 private:
 	GlComposite* _parent;
 	std::string _name;
+  Color _fcolor;
 	GlComplexPolygon* _polygon;
-	Color _fcolor;
   Graph *graph;
   LayoutProperty *layout;
   SizeProperty *size;

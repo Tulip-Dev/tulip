@@ -26,7 +26,7 @@ using namespace std;
 
 namespace tlp {
 
-SpreadWidget::SpreadWidget(SpreadView* view, QWidget *parent) :
+SpreadWidget::SpreadWidget(SpreadView* view, QWidget*) :
 	currentCell(NULL), editingLine(false), nodeTab(true) {
 	setupUi(this);
 	spreadNodesTable->setView(SpreadTable::NodesView);

@@ -632,7 +632,7 @@ namespace tlp {
   }
 
 
-  void PluginsViewWidget::serverNameReceived(MultiServerManager* msm, string addr, string name){
+  void PluginsViewWidget::serverNameReceived(MultiServerManager*, string, string){
     changeList();
   }
 

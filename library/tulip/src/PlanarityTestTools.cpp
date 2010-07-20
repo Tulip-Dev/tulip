@@ -91,7 +91,7 @@ void PlanarityTestImpl::makeBidirected(Graph *sG) {
 bool PlanarityTestImpl::isT0Edge(Graph *g, edge e) {
   pair<node, node> eEnds = g->ends(e);
   edge e1 = T0EdgeIn.get(eEnds.second.id);
-  //test à revoir je pense qu'en testant juste e == e1 ça suffit !
+  //test Ä… revoir je pense qu'en testant juste e == e1 Ä“a suffit !
   if (e1 != NULL_EDGE) {
     pair<node, node> e1Ends = g->ends(e1);
     if (e1Ends.first == eEnds.first && e1Ends.second == eEnds.second)
@@ -308,7 +308,7 @@ node PlanarityTestImpl::activeCNodeOf(bool calculatingObstruction, node n) {
 }
 //=================================================================
 void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode,
-					   node newcnode,
+					   node,
 					   node n,
 					   node n1,
 					   node n2,
@@ -527,7 +527,7 @@ node PlanarityTestImpl::lcaBetweenTermNodes(node n1,
   return lca;
 }
 //=================================================================
-void PlanarityTestImpl::calculateNewRBC(Graph* sG,
+void PlanarityTestImpl::calculateNewRBC(Graph*,
 				    node newCNode,
 				    node n,
 				    list<node>& terminalNodes) {
@@ -601,7 +601,7 @@ void PlanarityTestImpl::calculateNewRBC(Graph* sG,
 }
 //=================================================================
 node PlanarityTestImpl::findNodeWithLabelBGreaterThanDfsN(bool saveLastNodeTraversed,
-						      Graph *sG,
+						      Graph*,
 						      node n,
 						      node t) {
   node result = NULL_NODE;
@@ -684,7 +684,7 @@ void PlanarityTestImpl::setPossibleK33Obstruction(node cNode,
   cNodeOfPossibleK33Obstruction = cNode;
 } 
 //=================================================================
-bool PlanarityTestImpl::testCNodeCounter(Graph* sG,
+bool PlanarityTestImpl::testCNodeCounter(Graph*,
 				     node cNode,
 				     node n,
 				     node n1,

@@ -279,7 +279,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture,string &errorMs
   int linestride = texture->width * (texture->hasAlpha ? 4 : 3);
   texture->data = new unsigned char[linestride * texture->height];
   png_bytep row_pointers[texture->height];
-  for (int i=0; i < texture->height; ++i)
+  for (unsigned int i=0; i < texture->height; ++i)
     row_pointers[i] = (png_bytep) &(texture->data[linestride*(texture->height-1-i)]);
 
   png_set_strip_16(png_ptr);	//force 8 bits/channel
@@ -501,7 +501,7 @@ void GlTextureManager::deleteTexture(const string& name){
   }
 }
 //====================================================================
-void GlTextureManager::beginNewTexture(const string& name)
+void GlTextureManager::beginNewTexture(const string&)
 {
   GLuint textureNum;
   glGenTextures(1, &textureNum);
@@ -513,7 +513,7 @@ void GlTextureManager::beginNewTexture(const string& name)
 }
 //====================================================================
 bool GlTextureManager::activateTexture(const string& filename) {
-  activateTexture(filename,animationFrame);
+  return activateTexture(filename,animationFrame);
 }
 //====================================================================
 bool GlTextureManager::activateTexture(const string& filename,unsigned int frame) {
