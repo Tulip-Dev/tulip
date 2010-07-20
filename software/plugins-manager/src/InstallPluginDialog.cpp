@@ -76,6 +76,7 @@ namespace tlp {
       }
     }
     totalProcess=processNumber;
+    progressBar->setMaximum(totalProcess);
 
     installTableWidget->resizeColumnsToContents();
     installTableWidget->horizontalHeader()->setVisible(false);
@@ -97,6 +98,7 @@ namespace tlp {
     }
     //installPart(name,1.);
     processNumber--;
+    progressBar->setValue(totalProcess-processNumber);
     if(processNumber==0)
       terminated();
   }
@@ -130,6 +132,7 @@ namespace tlp {
     }
     processNumber++;
     totalProcess++;
+    progressBar->setMaximum(totalProcess);
 
     installTableWidget->resizeColumnsToContents();
     removeTableWidget->resizeColumnsToContents();
@@ -167,7 +170,6 @@ namespace tlp {
   }
 
   void InstallPluginDialog::installPart(const std::string &name, int currentPart,int partNumber) {
-    progressBar->setValue(progressBar->value()+(int)(((100./(float)totalProcess)/(float)partNumber)));
 
     map<string, unsigned int>::iterator it;
     it=pluginsInstallIndex.find(name);
