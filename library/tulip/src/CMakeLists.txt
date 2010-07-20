@@ -1,4 +1,8 @@
 SET(tulip_LIB_SRCS
+  MQClusteringQualityMeasure.cpp
+  QClusteringQualityMeasure.cpp
+  ClusteringAlgorithmBase.cpp
+  ClusteringQualityMeasure.cpp
 	Bfs.cpp 
 	Ordering.cpp 
 	ConvexHull.cpp 
