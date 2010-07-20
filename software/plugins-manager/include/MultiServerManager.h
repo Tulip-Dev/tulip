@@ -66,16 +66,19 @@ namespace tlp {
     void getAddr(const std::string &name, std::string &address);
     void modifyTreeView(int viewNumber);
     void sendServerConnect();
+    bool requestTulipLastVersionNumber();
     
     void getResponse();
 		      
   public slots:
     void changeName(ServerNameTreatment* treat,std::string addr,std::string name); 
+    void tulipLastVersionNumberReceived(TulipLastVersionNumberTreatment*,std::string);
     
   signals:
     
     void newPluginList();
     void nameReceived(MultiServerManager*,std::string,std::string);
+    void versionReceived(std::string);
 
   private :
     
@@ -83,6 +86,7 @@ namespace tlp {
 
     bool requestPluginList(Server* serv);
     bool requestServerName(Server* serv);
+    bool requestTulipLastVersionNumber(Server* serv);
     bool requestServerConnect(Server* serv);
     bool requestPluginLists();
     

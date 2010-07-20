@@ -32,7 +32,9 @@ BUILT_SOURCES = \
 	ProxyConfigurationDialogData.h \
 	UpdatePluginsDialog.h \
 	UpdatePluginsDialogData.h \
-	PluginsHelp.h
+	PluginsHelp.h \
+	NewTulipVersionAvailableDialog.h \
+	NewTulipVersionAvailableDialogData.h
 
 noinst_HEADERS = $(BUILT_SOURCES)
 

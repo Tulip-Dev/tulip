@@ -8,6 +8,7 @@ set(${LibTulipPluginsManagerName}_UI
      ../designer/InstallPluginDialog.ui
      ../designer/ProxyConfigurationDialog.ui
      ../designer/UpdatePluginsDialog.ui
+     ../designer/NewTulipVersionAvailableDialog.ui
 )
 
 set(${LibTulipPluginsManagerName}_MOC
@@ -30,6 +31,7 @@ set(${LibTulipPluginsManagerName}_MOC
     ../include/PluginsUpdateChecker.h
     ../include/ProxyConfigurationDialog.h
     ../include/UpdatePluginsDialog.h
+    ../include/NewTulipVersionAvailableDialog.h
 )
 
 set(${LibTulipPluginsManagerName}_LIB_SRCS 
@@ -57,6 +59,7 @@ set(${LibTulipPluginsManagerName}_LIB_SRCS
     UpdatePluginsDialog.cpp 
     PluginsHelp.cpp
     PluginInfo.cpp
+    NewTulipVersionAvailableDialog.cpp
 )
 
 set(tulip_check_pl_SRCS TulipCheckPluginLoad.cpp)

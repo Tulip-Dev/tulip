@@ -120,6 +120,30 @@ namespace tlp {
     
   };
 
+  class TLP_PLUGINSMANAGER_SCOPE  GetTulipLastVersionNumberRequest: public SOAPRequest{
+
+  public:
+
+    GetTulipLastVersionNumberRequest(ResponseTreatment* resp);
+
+    void getXml(std::string &xml) const;
+
+  };
+
+
+  class TLP_PLUGINSMANAGER_SCOPE  TulipLastVersionNumberTreatment : public QObject, public ResponseTreatment{
+    Q_OBJECT
+
+  public :
+      TulipLastVersionNumberTreatment(){}
+
+  void operator()(const std::string &data);
+
+  signals:
+    void versionReceived(TulipLastVersionNumberTreatment*,std::string);
+
+  };
+
   class TLP_PLUGINSMANAGER_SCOPE  GetPluginsListRequest: public SOAPRequest{
     
   public:   
