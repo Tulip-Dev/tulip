@@ -1,0 +1,90 @@
+#ifndef CLUSTERINGALGORITHMBASE_H
+#define CLUSTERINGALGORITHMBASE_H
+
+#include "tulip/Algorithm.h"
+#include "tulip/MutableContainer.h"
+
+namespace tlp {
+  class DoubleProperty;
+  class ClusteringQualityMeasure;
+
+  class ClusteringAlgorithmBase : public tlp::Algorithm {
+    public:
+      ClusteringAlgorithmBase(AlgorithmContext context);
+      virtual ~ClusteringAlgorithmBase();
+      virtual bool runClustering() = 0;
+      virtual tlp::ClusteringQualityMeasure* getQualityMeasure() = 0;
+      
+      const Graph* const getOriginalGraph() const;
+      const Graph* const getQuotientGraph() const;
+      const DataSet& getDataSet() const;
+      
+      const double getIntraEdges(tlp::node n) const;
+      const double getExtraEdges(tlp::edge e) const;
+      const double getExtraEdges(tlp::node n) const;
+      const std::vector<std::vector<node> >& getPartition() const;
+      const unsigned int getPartitionId(tlp::node n) const;
+      
+      void orderByPartitionId(node &n1, node &n2) const;
+    protected:
+      tlp::Graph* _quotientGraph;
+      
+      std::vector<std::vector<node> > _partition; //partition of nodes
+      std::vector<std::vector<std::vector<node > > > _partitions;
+      MutableContainer<unsigned int> _partitionId;  //node of the Quotient Graph -> partition id
+      MutableContainer<node> _partitionNode;        //partition id -> node in the quotient graph
+      
+      DoubleProperty* _intraEdges;
+      DoubleProperty* _extraEdges;
+      
+      double bestQuality;
+      int best_ind;
+      
+      DoubleProperty* _metric;
+      
+      tlp::ClusteringQualityMeasure* _qualityMeasure;
+    private:
+      bool run();
+  };
+  
+  class AgglomerativeClusteringBase : public ClusteringAlgorithmBase {
+    public:
+      AgglomerativeClusteringBase(tlp::AlgorithmContext);
+      virtual bool runClustering() = 0;
+      virtual bool merge() = 0;
+      
+      /**
+      * Merges nodes together.
+      * This implementation deletes only one of the two nodes to reduce overhead.
+      * The node with fewer edges is deleted, and all the edges are redirected to the remaining node.
+      */
+      tlp::node mergeNodes(tlp::node n1, tlp::node n2);
+
+      void simpleGraphCopy(const tlp::Graph* source, tlp::Graph* target, MutableContainer<node>& nodeMapping);
+      void buildHierarchy(tlp::Graph* graph, std::vector<std::vector<std::vector<node > > >& partitions, int best_ind = -1);
+  };
+   
+  class DivisiveClusteringBase : public ClusteringAlgorithmBase {
+    public:
+      DivisiveClusteringBase(tlp::AlgorithmContext);
+      virtual bool runClustering() = 0;
+            
+      tlp::edge findEdgeToRemove();
+    protected:
+      int metric_mode;
+      std::string _metricAlgorithm;
+      Graph* _workingGraph;
+    private:
+      double _sumEdges;
+  };
+  
+  class DivisiveQClustering : public DivisiveClusteringBase {
+    public:
+      DivisiveQClustering(tlp::AlgorithmContext context);
+      virtual bool runClustering();
+      virtual ClusteringQualityMeasure* getQualityMeasure();
+    private:
+      bool mqUse;
+  };
+}
+#endif //CLUSTERINGALGORITHMBASE_H
