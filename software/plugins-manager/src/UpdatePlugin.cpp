@@ -168,11 +168,11 @@ namespace tlp {
     }
 
   void UpdatePlugin::terminatePluginInstall(UpdatePlugin* terminatedUpdater, const DistPluginInfo &pluginInfo){
-    pluginDialog->installFinished(pluginInfo.name, pluginInfo.installIsOK);
     pluginUpdaters.removeAll(terminatedUpdater);
     disconnect(terminatedUpdater, SIGNAL(pluginInstalled(UpdatePlugin*,const DistPluginInfo &)), this, SLOT(terminatePluginInstall(UpdatePlugin*,const DistPluginInfo &)));
     if (pluginInfo.installIsOK)
       msm->addLocalPlugin(&pluginInfo);
+    pluginDialog->installFinished(pluginInfo.name, pluginInfo.installIsOK);
     // in a distant future, we might like to pass the plugin's name to this signal
     emit pluginInstalled();
     delete terminatedUpdater;
