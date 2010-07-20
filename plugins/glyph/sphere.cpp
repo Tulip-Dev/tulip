@@ -91,7 +91,7 @@ void Sphere::draw(node n, float lod) {
 			glGraphInputData->parameters->getTexturePath(), lod);
 }
 
-void Sphere::draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod) {
+void Sphere::draw(edge e, node, const Color& glyphColor, const Color&, float lod) {
   glEnable(GL_LIGHTING);
 	drawGlyph(glyphColor,
 			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
@@ -184,7 +184,7 @@ void Sphere::generateBuffers(int space) {
 }
 	/*@}*/
 void Sphere::drawGlyph(const Color& glyphColor, const string& texture,
-		const string& texturePath, float lod) {
+		const string& texturePath, float) {
     bool canUseGlew = OpenGlConfigManager::getInst().canUseGlew();
 
 	int space = 9;

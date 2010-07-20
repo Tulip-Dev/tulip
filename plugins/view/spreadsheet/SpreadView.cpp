@@ -108,7 +108,7 @@ void SpreadView::init() {
 	draw();
 }
 
-void SpreadView::createPicture(const string &pictureName, int width, int height) {
+void SpreadView::createPicture(const string&, int, int) {
 	cout << "createPicture not implement yet for SpreadView" << endl;
 }
 

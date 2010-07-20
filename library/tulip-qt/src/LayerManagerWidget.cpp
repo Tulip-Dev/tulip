@@ -61,7 +61,7 @@ namespace tlp {
     connect(applyButton, SIGNAL(clicked()),this, SLOT(apply()));
   }
   //=============================================================================
-  void LayerManagerWidget::addLayer(GlScene* scene, const string& name, GlLayer* layer){
+  void LayerManagerWidget::addLayer(GlScene*, const string& name, GlLayer* layer){
     if(layer->isAWorkingLayer())
       return;
     QTreeWidgetItem *item=new QTreeWidgetItem(treeWidget,QStringList(name.c_str()));
@@ -208,7 +208,7 @@ namespace tlp {
     assert(false);
   }
   //=============================================================================
-  void LayerManagerWidget::itemClicked(QTreeWidgetItem *item,int column){
+  void LayerManagerWidget::itemClicked(QTreeWidgetItem*,int){
   }
   //=============================================================================
   void LayerManagerWidget::apply(){

@@ -67,8 +67,8 @@ namespace tlp {
       plugin.server="Installed";
       
       for(std::list<Dependency>::const_iterator it=deps.begin();it!=deps.end();++it) {
-	PluginDependency dep((*it).pluginName,(*it).factoryName,version+" "+(*it).pluginRelease);
-	plugin.dependencies.push_back(dep);
+        PluginDependency dep((*it).pluginName,(*it).factoryName,version+" "+(*it).pluginRelease);
+        plugin.dependencies.push_back(dep);
       }
       
       pluginsList.push_back(plugin);

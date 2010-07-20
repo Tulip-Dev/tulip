@@ -92,7 +92,7 @@ void GlConvexGraphHull::updateHull() {
 	_parent->addGlEntity(_polygon, _name);
 }
 
-void GlConvexGraphHull::addNode(tlp::Graph* graph, tlp::node n) {
+void GlConvexGraphHull::addNode(tlp::Graph*, tlp::node) {
 	updateHull();
 }
 
