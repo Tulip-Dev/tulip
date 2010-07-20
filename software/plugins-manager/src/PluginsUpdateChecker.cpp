@@ -20,6 +20,7 @@
 
 #include "MultiServerManager.h"
 #include "UpdatePluginsDialog.h"
+#include "NewTulipVersionAvailableDialog.h"
 
 #include <iostream>
 #include <QtCore/QSettings>
@@ -28,7 +29,7 @@
 using namespace std;
 
 namespace tlp {
-  PluginsUpdateChecker::PluginsUpdateChecker(vector<LocalPluginInfo> &pluginsList,QWidget *parent):parent(parent),updatePlugin(NULL) {
+  PluginsUpdateChecker::PluginsUpdateChecker(vector<LocalPluginInfo> &pluginsList,QWidget *parent):parent(parent),updatePlugin(NULL),newVersionFound(false) {
     msm = new MultiServerManager(pluginsList);
 
     QSettings settings("TulipSoftware","Tulip");
@@ -47,8 +48,10 @@ namespace tlp {
     settings.endGroup();
 
     msm->sendServerConnect();
+    msm->requestTulipLastVersionNumber();
 
     connect(msm,SIGNAL(newPluginList()),this,SLOT(getResponse()));
+    connect(msm,SIGNAL(versionReceived(std::string)),this,SLOT(versionReceived(std::string)));
   }
 
   PluginsUpdateChecker::~PluginsUpdateChecker() {
@@ -171,6 +174,22 @@ namespace tlp {
       }
 
       displayPopup(pluginsOutOfDate);
+    }
+  }
+
+  void PluginsUpdateChecker::versionReceived(std::string version)  {
+    if(newVersionFound)
+      return;
+    QString versionNumber(version.c_str());
+    if(versionNumber.count(".")!=2)
+      return;
+
+    if(versionNumber>QString(TULIP_RELEASE)){
+      if(NewTulipVersionAvailableDialog::needDisplayDialog(versionNumber)){
+        NewTulipVersionAvailableDialog dialog(versionNumber);
+        dialog.exec();
+        newVersionFound=true;
+      }
     }
   }
 }

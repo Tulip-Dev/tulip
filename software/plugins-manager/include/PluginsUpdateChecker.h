@@ -46,6 +46,7 @@ namespace tlp {
     int serverNumber;
     UpdatePlugin *updatePlugin;
     int numberOfPluginsToUpdate;
+    bool newVersionFound;
 
   public :
 
@@ -58,6 +59,7 @@ namespace tlp {
     void getResponse();
     void pluginInstalled();
     void pluginUninstalled();
+    void versionReceived(std::string);
 
   private :
 

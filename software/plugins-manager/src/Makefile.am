@@ -46,7 +46,8 @@ BUILT_SOURCES = \
 	moc_ModifyServerDialog.cpp \
 	moc_PluginsUpdateChecker.cpp \
 	moc_ProxyConfigurationDialog.cpp \
-	moc_UpdatePluginsDialog.cpp
+	moc_UpdatePluginsDialog.cpp \
+	moc_NewTulipVersionAvailableDialog.cpp
 
 nodist_libtulip_pluginsmanager_la_SOURCES = $(BUILT_SOURCES)
 
@@ -74,7 +75,8 @@ dist_libtulip_pluginsmanager_la_SOURCES = \
 	ProxyConfigurationDialog.cpp \
 	UpdatePluginsDialog.cpp \
 	PluginsHelp.cpp \
-	PluginInfo.cpp
+	PluginInfo.cpp \
+	NewTulipVersionAvailableDialog.cpp
 
 dist_tulip_check_pl_SOURCES = TulipCheckPluginLoad.cpp
 
