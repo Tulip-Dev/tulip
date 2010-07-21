@@ -113,10 +113,11 @@ public:
   TLP_HASH_MAP<unsigned int, edge>* edgeIndex;
   unsigned int firstNodeId;
   unsigned int firstEdgeId;
+  int progress;
 
   TLPExport(AlgorithmContext context):ExportModule(context),
 				      useOldFormat(false),
-				      nodeIndex(NULL), edgeIndex(NULL) {
+				      nodeIndex(NULL), edgeIndex(NULL), progress(0) {
     addParameter<StringCollection>("format", paramHelp[3], "2.1;2.0");
     addParameter<string>("name", paramHelp[0]);
     addParameter<string>("author", paramHelp[1]);
@@ -140,6 +141,8 @@ public:
   }
   //=====================================================
   void saveGraphElements(ostream &os, Graph *graph) {
+    pluginProgress->setComment("Saving Graph Elements");
+    pluginProgress->progress(progress, graph->numberOfEdges() + graph->numberOfNodes());
     if (graph->getSuperGraph() != graph) {
       os << "(cluster " << graph->getId() << " \"" << convert(graph->getAttribute<string>("name")) << "\"" << endl;
       Iterator<node> *itN = graph->getNodes();
@@ -147,6 +150,7 @@ public:
       if (itN->hasNext()) {
         os << "(nodes";
         while (itN->hasNext()) {
+          pluginProgress->progress(progress++, graph->numberOfEdges() + graph->numberOfNodes());
           node current = getNode(itN->next());
           if (useOldFormat) {
             os << " " << current.id;
@@ -180,6 +184,7 @@ public:
       if (itE->hasNext()) {
         os << "(edges";
         while (itE->hasNext()) {
+          pluginProgress->progress(progress++, graph->numberOfEdges() + graph->numberOfNodes());
           edge current = getEdge(itE->next());
           if (useOldFormat) {
             os << " " << current.id;
@@ -245,6 +250,7 @@ public:
       Iterator<edge> *ite = graph->getEdges();
       unsigned int id = 0;
       for (;ite->hasNext();) {
+        pluginProgress->progress(progress++, graph->numberOfEdges());
         edge e = ite->next();
         const pair<node, node>& ends = graph->ends(e);
         os << "(edge " << id << " " << getNode(ends.first).id << " " << getNode(ends.second).id << ")";
@@ -253,7 +259,7 @@ public:
       } 
       delete ite;
       os << endl;
-    }
+    } 
     
     Iterator<Graph *> *itS = graph->getSubGraphs();
     while (itS->hasNext())
@@ -263,7 +269,28 @@ public:
   }
   //=====================================================
   void saveLocalProperties(ostream &os, Graph *graph) {
+    pluginProgress->setComment("Saving Graph Properties");
+    progress = 0;
     Iterator<PropertyInterface *> *itP=graph->getLocalObjectProperties();
+    //we count the properties for the progress bar
+//     int propertiesNumber = 0;
+    int nonDefaultvaluatedElementCount = 0;
+    while (itP->hasNext()) {
+//       ++propertiesNumber;
+      PropertyInterface *prop = itP->next();
+      Iterator<node> *itN = prop->getNonDefaultValuatedNodes(graph);
+      while (itN->hasNext()) {
+        ++nonDefaultvaluatedElementCount;
+        itN->next();
+      }
+      Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(graph);
+      while (itE->hasNext()) {
+        ++nonDefaultvaluatedElementCount;
+        itE->next();
+      }
+    }
+    
+    itP=graph->getLocalObjectProperties();
     PropertyInterface *prop;
     while (itP->hasNext()) {
       prop = itP->next();
@@ -286,6 +313,7 @@ public:
       os <<"(default \"" << convert(nDefault) << "\" \"" << convert(eDefault) << "\")" << endl;
       Iterator<node> *itN = prop->getNonDefaultValuatedNodes(graph);
       while (itN->hasNext()) {
+        pluginProgress->progress(progress++, nonDefaultvaluatedElementCount);
         node itn = itN->next();
         string tmp = prop->getNodeStringValue(itn);
         // replace real path with symbolic one using TulipBitmapDir
@@ -300,6 +328,7 @@ public:
       
       Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(graph);
       while (itE->hasNext()) {
+        pluginProgress->progress(progress++, nonDefaultvaluatedElementCount);
         edge ite = itE->next();
         // replace real path with symbolic one using TulipBitmapDir
         string tmp = prop->getEdgeStringValue(ite);
@@ -349,10 +378,21 @@ public:
   }
   //=====================================================
   void saveDataSet(ostream &os, const DataSet &data) {
+    pluginProgress->setComment("Saving DataSet");
+    progress = 0;
+    int dataSetSize = 0;
     initTypeNames();
     // get iterator over pair attribute/value
     Iterator< pair<string, DataType*> > *it = data.getValues();
+    //we count the number of things to save for the progress bar
     while( it->hasNext() ) {
+      ++dataSetSize;
+      it->next();
+    }
+    
+    it = data.getValues();
+    while( it->hasNext() ) {
+      pluginProgress->progress(progress++, dataSetSize);
       pair<string, DataType*> p;
       p = it->next();
       const string tn = p.second->typeName;

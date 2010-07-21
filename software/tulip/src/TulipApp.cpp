@@ -530,13 +530,16 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
   dataSet.get<string>("text::comments", vFile.comments);
   dataSet.get<string>("name", graphName);
 
-  if (!(result=tlp::exportGraph(graph, *os, plugin, dataSet, NULL))) {
+  PluginProgress* progress = new QtProgress(NULL, "saving Graph");
+  if (!(result=tlp::exportGraph(graph, *os, plugin, dataSet, progress))) {
     QMessageBox::critical( 0, "Tulip export Failed",
 			   "The file has not been saved"
 			   );
   } else {
     statusBar()->showMessage(QString::fromUtf8((filename + " saved.").c_str()));
   }
+  delete progress;
+  
   tabWidget->setTabText(tabWidget->currentIndex(), QString::fromUtf8(filename.c_str()));
   //setNavigateCaption(filename);
   //setGraphName(graph, QString(filename.c_str()));
