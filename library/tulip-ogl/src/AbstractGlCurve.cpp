@@ -1,4 +1,4 @@
-/**
+  /**
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -333,7 +333,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 		curveShaderProgram = curveShaderProgramNormal;
 	}
 
-	if (curveShaderProgram != NULL && controlPoints.size() <= MAX_SHADER_CONTROL_POINTS && renderMode != GL_SELECT) {
+	if (curveShaderProgram != NULL && controlPoints.size() <= (size_t)MAX_SHADER_CONTROL_POINTS && renderMode != GL_SELECT) {
 
 		GLuint *vbo = curveVertexBuffersObject[nbCurvePoints];
 		GlShaderProgram *currentActiveShader = GlShaderProgram::getCurrentActiveShader();

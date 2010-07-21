@@ -74,11 +74,11 @@ namespace tlp {
       pluginsList.push_back(plugin);
     }
 
-    virtual void aborted(const std::string &filename,const  std::string &errormsg) {
+    virtual void aborted(const std::string&,const std::string &errormsg) {
       errorMsgs += errormsg + '\n';
     }
 
-    virtual void finished(bool state,const std::string &msg){}
+    virtual void finished(bool,const std::string&){}
   };
   
 }

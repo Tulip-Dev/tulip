@@ -242,7 +242,7 @@ namespace tlp {
   void ControllerViewsManager::saveViewsGraphsHierarchies() {
     viewsGraphsHierarchy.clear();
     for (map<View *, Graph*>::iterator itView = viewGraph.begin(); itView != viewGraph.end(); ++itView) {
-      viewsGraphsHierarchy[(*itView).first] = list<int> ();
+      viewsGraphsHierarchy[(*itView).first] = list<unsigned int> ();
       Graph *father = (*itView).second;
       while (father != father->getSuperGraph()) {
         viewsGraphsHierarchy[(*itView).first].push_back(father->getId());
@@ -255,7 +255,7 @@ namespace tlp {
   void ControllerViewsManager::checkViewsGraphsHierarchy() {
     for (map<View *, Graph*>::iterator itView = viewGraph.begin(); itView != viewGraph.end(); ++itView) {
       Graph *newGraph;
-      for (list<int>::iterator it = viewsGraphsHierarchy[(*itView).first].begin(); it
+      for (list<unsigned int>::iterator it = viewsGraphsHierarchy[(*itView).first].begin(); it
                                     != viewsGraphsHierarchy[(*itView).first].end(); ++it) {
         newGraph = currentGraph->getRoot()->getDescendantGraph(*it);
         if (!newGraph && (currentGraph->getRoot()->getId() == (*it)))

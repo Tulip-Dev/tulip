@@ -28,11 +28,11 @@ ClusteringAlgorithmBase::~ClusteringAlgorithmBase() {
 bool ClusteringAlgorithmBase::run() {
   _qualityMeasure = getQualityMeasure();
   _qualityMeasure->initialize();;
-  runClustering();
+  return runClustering();
 }
 
 //================================================================================
-const Graph* const ClusteringAlgorithmBase::getOriginalGraph() const {
+const Graph* ClusteringAlgorithmBase::getOriginalGraph() const {
     return graph;
 }
 
@@ -44,23 +44,23 @@ const std::vector<std::vector<node> >& ClusteringAlgorithmBase::getPartition() c
     return this->_partition;
 }
 
-const unsigned int ClusteringAlgorithmBase::getPartitionId(tlp::node n) const {
+unsigned int ClusteringAlgorithmBase::getPartitionId(tlp::node n) const {
   return _partitionId.get(n.id);
 }
 
-const Graph* const ClusteringAlgorithmBase::getQuotientGraph() const {
+const Graph* ClusteringAlgorithmBase::getQuotientGraph() const {
     return _quotientGraph;
 }
 
-const double ClusteringAlgorithmBase::getIntraEdges(tlp::node n) const {
+double ClusteringAlgorithmBase::getIntraEdges(tlp::node n) const {
   return _intraEdges->getNodeValue(n);
 }
 
-const double ClusteringAlgorithmBase::getExtraEdges(tlp::edge e) const {
+double ClusteringAlgorithmBase::getExtraEdges(tlp::edge e) const {
   return _extraEdges->getEdgeValue(e);
 }
 
-const double ClusteringAlgorithmBase::getExtraEdges(tlp::node n) const {
+double ClusteringAlgorithmBase::getExtraEdges(tlp::node n) const {
   return _extraEdges->getNodeValue(n);
 }
 
@@ -164,7 +164,7 @@ void AgglomerativeClusteringBase::simpleGraphCopy(const Graph* source, Graph* ta
 
 void AgglomerativeClusteringBase::buildHierarchy(Graph * graph, vector<std::vector<std::vector<node> > >& partitions, int best_ind) {
     assert(best_ind < partitions.size());
-    for (unsigned int i = 0; i < partitions[best_ind].size(); ++i) {
+    for (size_t i = 0; i < partitions[best_ind].size(); ++i) {
         vector<node> group = partitions[best_ind][i];
         set<node> toGroup;
         for (unsigned int j = 0; j < group.size(); ++j)
@@ -281,8 +281,7 @@ bool DivisiveQClustering::runClustering() {
     
     edge edgeToDel = findEdgeToRemove();
     
-    Graph * deconnectedG;
-    bool allConnected = true;
+    Graph * deconnectedG = curClusters[0];
     int ind =  -1;
     for(unsigned int i = 0 ; i < curClusters.size() ; ++i){
       if(curClusters[i]->isElement(edgeToDel)){
@@ -291,11 +290,11 @@ bool DivisiveQClustering::runClustering() {
         break;
       }
     }
+    assert(ind != -1);
     
     --nbEdges;
     _workingGraph->delEdge(edgeToDel);
-    if(ind != -1)
-      deconnectedG->delEdge(edgeToDel);
+    deconnectedG->delEdge(edgeToDel);
 
     if(!ConnectedTest::isConnected(deconnectedG)){
       DoubleProperty connectedComponnent(deconnectedG);
@@ -388,6 +387,8 @@ bool DivisiveQClustering::runClustering() {
   }
   cerr << "END :  q = " << bestQ << " with " << bestLevel.size() << " clusters" << endl;
   cerr << "[END]" << endl;
+  
+  return true;
 }
 
 ClusteringQualityMeasure* DivisiveQClustering::getQualityMeasure() {

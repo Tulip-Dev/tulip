@@ -236,7 +236,7 @@ namespace tlp {
       
       std::map<View *, QAction *> lastInteractorOnView;
       std::map<View *, QWidget *> lastInteractorConfigurationWidgetOnView;
-      std::map<View *,std::list<int> > viewsGraphsHierarchy;
+      std::map<View *,std::list<unsigned int> > viewsGraphsHierarchy;
       
   };
 

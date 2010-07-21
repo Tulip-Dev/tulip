@@ -145,104 +145,113 @@ public:
       Iterator<node> *itN = graph->getNodes();
       node beginNode, previousNode;
       if (itN->hasNext()) {
-	os << "(nodes";
-	while (itN->hasNext()) {
-	  node current = getNode(itN->next());
-	  if (useOldFormat) {
-	    os << " " << current.id;
-	  } else {
-	    if (!beginNode.isValid()) {
-	      beginNode = previousNode = current;
-	      os << " " << beginNode.id;
-	    } else {
-	      if (current.id == previousNode.id + 1) {
-		previousNode = current;
-		if (!itN->hasNext())
-		  os << ".." << current.id;
-	      } else {
-		if (previousNode != beginNode) {
-		  os << ".." << previousNode.id;
-		}
-		os  << " " << current.id;
-		beginNode = previousNode = current;
-	      }
-	    }
-	  }
-	}
-	os << ")" << endl;
-      } delete itN;
+        os << "(nodes";
+        while (itN->hasNext()) {
+          node current = getNode(itN->next());
+          if (useOldFormat) {
+            os << " " << current.id;
+          } 
+          else {
+            if (!beginNode.isValid()) {
+              beginNode = previousNode = current;
+              os << " " << beginNode.id;
+            } 
+            else {
+              if (current.id == previousNode.id + 1) {
+                previousNode = current;
+                if (!itN->hasNext())
+                  os << ".." << current.id;
+              }
+              else {
+                if (previousNode != beginNode) {
+                  os << ".." << previousNode.id;
+                }
+                os  << " " << current.id;
+                beginNode = previousNode = current;
+              }
+            }
+          }
+        }
+        os << ")" << endl;
+      }
+      delete itN;
       Iterator<edge> *itE = graph->getEdges();
       edge beginEdge, previousEdge;
       if (itE->hasNext()) {
-	os << "(edges";
-	while (itE->hasNext()) {
-	  edge current = getEdge(itE->next());
-	  if (useOldFormat) {
-	    os << " " << current.id;
-	  } else {	  
-	    if (!beginEdge.isValid()) {
-	      beginEdge = previousEdge = current;
-	      os << " " << beginEdge.id;
-	    } else {
-	      if (current.id == previousEdge.id + 1) {
-		previousEdge = current;
-		if (!itE->hasNext())
-		  os << ".." << current.id;
-	      } else {
-		if (previousEdge != beginEdge) {
-		  os << ".." << previousEdge.id;
-		}
-		os  << " " << current.id;
-		beginEdge = previousEdge = current;
-	      }
-	    }
-	  }
-	}
-	os << ")" << endl;
+        os << "(edges";
+        while (itE->hasNext()) {
+          edge current = getEdge(itE->next());
+          if (useOldFormat) {
+            os << " " << current.id;
+          } 
+          else {
+            if (!beginEdge.isValid()) {
+              beginEdge = previousEdge = current;
+              os << " " << beginEdge.id;
+            } 
+            else {
+              if (current.id == previousEdge.id + 1) {
+                previousEdge = current;
+                if (!itE->hasNext())
+                  os << ".." << current.id;
+              } 
+              else {
+                if (previousEdge != beginEdge) {
+                  os << ".." << previousEdge.id;
+                }
+                os  << " " << current.id;
+                beginEdge = previousEdge = current;
+              }
+            }
+          }
+        }
+        os << ")" << endl;
       } delete itE;
     }
     else {
        unsigned int nbElts = graph->numberOfNodes();
       // added in 2.1
       if (!useOldFormat)
-	os << "(nb_nodes " << nbElts << ")" << endl;
+        os << "(nb_nodes " << nbElts << ")" << endl;
       os << ";(nodes <node_id> <node_id> ...)" << endl;
       if (useOldFormat) {
-	os << "(nodes";
-	for (unsigned int i = 0; i < nbElts; ++i)
-	  os << " " << i;
-	os << ")" << endl;
-      } else { // added in 2.1
-	switch(nbElts) {
-	case 0:
-	  os << "(nodes)" << endl;
-	  break;
-	case 1:
-	  os << "(nodes 0)" << endl;
-	  break;
-	case 2:
-	  os << "(nodes 0 1)" << endl;
-	  break;
-	default:
-	  os << "(nodes 0.." << nbElts - 1 << ")" << endl;
-	}
+        os << "(nodes";
+        for (unsigned int i = 0; i < nbElts; ++i)
+          os << " " << i;
+        os << ")" << endl;
+      } 
+      else { // added in 2.1
+        switch(nbElts) {
+        case 0:
+          os << "(nodes)" << endl;
+          break;
+        case 1:
+          os << "(nodes 0)" << endl;
+          break;
+        case 2:
+          os << "(nodes 0 1)" << endl;
+          break;
+        default:
+          os << "(nodes 0.." << nbElts - 1 << ")" << endl;
+        }
       }
       // added in 2.1
       if (!useOldFormat) {
-	nbElts = graph->numberOfEdges();
-	os << "(nb_edges " << nbElts << ")" << endl;
+        nbElts = graph->numberOfEdges();
+        os << "(nb_edges " << nbElts << ")" << endl;
       }
       os << ";(edge <edge_id> <source_id> <target_id>)" << endl;
 
       Iterator<edge> *ite = graph->getEdges();
       unsigned int id = 0;
       for (;ite->hasNext();) {
-	edge e = ite->next();
-	const pair<node, node>& ends = graph->ends(e);
-	os << "(edge " << id << " " << getNode(ends.first).id << " " << getNode(ends.second).id << ")";
-	if (ite->hasNext()) os << endl;
-	id++;
-      } delete ite;
+        edge e = ite->next();
+        const pair<node, node>& ends = graph->ends(e);
+        os << "(edge " << id << " " << getNode(ends.first).id << " " << getNode(ends.second).id << ")";
+        if (ite->hasNext()) os << endl;
+        id++;
+      } 
+      delete ite;
       os << endl;
     }
     
@@ -259,45 +268,47 @@ public:
     while (itP->hasNext()) {
       prop = itP->next();
       if (graph->getSuperGraph()==graph)
-	os << "(property " << " 0 " << prop->getTypename() << " " ;
+        os << "(property " << " 0 " << prop->getTypename() << " " ;
       else
-	os << "(property " << " " << graph->getId() << " " << prop->getTypename() << " " ;
+        os << "(property " << " " << graph->getId() << " " << prop->getTypename() << " " ;
       os << "\"" << convert(prop->getName()) << "\"" << endl;
       string nDefault = prop->getNodeDefaultStringValue();
       string eDefault = prop->getEdgeDefaultStringValue();
       // replace real path with symbolic one using TulipBitmapDir
       if (prop->getName() == string("viewFont")) {
-	size_t pos = nDefault.find(TulipBitmapDir);
-	if(pos != string::npos)
-	  nDefault.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-	pos = eDefault.find(TulipBitmapDir);
-	if(pos != string::npos)
-	  eDefault.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+        size_t pos = nDefault.find(TulipBitmapDir);
+        if(pos != string::npos)
+          nDefault.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+        pos = eDefault.find(TulipBitmapDir);
+        if(pos != string::npos)
+          eDefault.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
       }
       os <<"(default \"" << convert(nDefault) << "\" \"" << convert(eDefault) << "\")" << endl;
       Iterator<node> *itN = prop->getNonDefaultValuatedNodes(graph);
       while (itN->hasNext()) {
-	node itn = itN->next();
-	string tmp = prop->getNodeStringValue(itn);
-	// replace real path with symbolic one using TulipBitmapDir
-	if (prop->getName() == string("viewFont")) {
-	  size_t pos = tmp.find(TulipBitmapDir);
-	  if (pos != string::npos)
-	    tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-	}
-	os << "(node " << getNode(itn).id << " \"" << convert(tmp) << "\")" << endl ;
-      } delete itN;
+        node itn = itN->next();
+        string tmp = prop->getNodeStringValue(itn);
+        // replace real path with symbolic one using TulipBitmapDir
+        if (prop->getName() == string("viewFont")) {
+          size_t pos = tmp.find(TulipBitmapDir);
+          if (pos != string::npos)
+            tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+        }
+        os << "(node " << getNode(itn).id << " \"" << convert(tmp) << "\")" << endl ;
+      } 
+      delete itN;
+      
       Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(graph);
       while (itE->hasNext()) {
-	edge ite = itE->next();
-	// replace real path with symbolic one using TulipBitmapDir
-	string tmp = prop->getEdgeStringValue(ite);
-	if (prop->getName() == string("viewFont")) {
-	  size_t pos = tmp.find(TulipBitmapDir);
-	  if (pos != string::npos)
-	    tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-	}
-	os << "(edge " << getEdge(ite).id << " \"" << convert(tmp) << "\")" << endl ;
+        edge ite = itE->next();
+        // replace real path with symbolic one using TulipBitmapDir
+        string tmp = prop->getEdgeStringValue(ite);
+        if (prop->getName() == string("viewFont")) {
+          size_t pos = tmp.find(TulipBitmapDir);
+          if (pos != string::npos)
+            tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+        }
+        os << "(edge " << getEdge(ite).id << " \"" << convert(tmp) << "\")" << endl ;
       } delete itE;
       os << ")" << endl;
     }
@@ -347,25 +358,25 @@ public:
       const string tn = p.second->typeName;
        // get output type name
       if (tn == boolTN)
-	os << '(' << "bool";
+        os << '(' << "bool";
       else if (tn == colorTN)
-	os << '(' << "color";
+        os << '(' << "color";
       else if (tn == coordTN)
-	os << '(' << "coord";
+        os << '(' << "coord";
       else if (tn == doubleTN)
-	os << '(' << "double";
+        os << '(' << "double";
       else if (tn == floatTN)
-	os << '(' << "float";
+        os << '(' << "float";
       else if (tn == intTN)
-	os << '(' << "int";
+        os << '(' << "int";
       else if (tn == sizeTN)
-	os << '(' << "size";
+        os << '(' << "size";
       else if (tn == stringTN)
-	os << '(' << "string";
+        os << '(' << "string";
       else if (tn == uintTN)
-	os << '(' << "uint";
+        os << '(' << "uint";
       else if (tn == DataSetTN)
-	os << '(' << "DataSet";
+        os << '(' << "DataSet";
       // general case do nothing
       else continue;
       // output attribute name
@@ -373,33 +384,33 @@ public:
       // output value
       // special cases
       if (tn == boolTN)
-	os << ((*(bool*)p.second->value) ? "true" : "false");
+        os << ((*(bool*)p.second->value) ? "true" : "false");
       else if (tn == colorTN) {
-	Color *color = (Color*) p.second->value;
-	//os << "\"(" << (int)color->getR() << ',' << (int)color->getG() << ',' << (int) color->getB() << ",0)\"";
-	os << "\"" << convert(ColorType::toString(*color)) << "\"";
+        Color *color = (Color*) p.second->value;
+        //os << "\"(" << (int)color->getR() << ',' << (int)color->getG() << ',' << (int) color->getB() << ",0)\"";
+        os << "\"" << convert(ColorType::toString(*color)) << "\"";
       } else if (tn == coordTN) {
-	Coord *coord =  (Coord*) p.second->value;
-	//os << "\"(" << coord->getX() << "," << coord->getY() << "," << coord->getZ() << ")\"";
-	os << "\"" << convert(PointType::toString(*coord)) << "\"";
+        Coord *coord =  (Coord*) p.second->value;
+        //os << "\"(" << coord->getX() << "," << coord->getY() << "," << coord->getZ() << ")\"";
+        os << "\"" << convert(PointType::toString(*coord)) << "\"";
       } else if (tn == sizeTN) {
-	Size *size =  (Size*) p.second->value;
-	//os << "\"(" << size->getW() << "," << size->getH() << "," << size->getD() << ")\"";
-	os << "\"" << convert(SizeType::toString(*size)) << "\"";
+        Size *size =  (Size*) p.second->value;
+        //os << "\"(" << size->getW() << "," << size->getH() << "," << size->getD() << ")\"";
+        os << "\"" << convert(SizeType::toString(*size)) << "\"";
       }	else if (tn == DataSetTN) {
-	os << endl;
-	DataSet *dataSet = (DataSet*) p.second->value;
-	saveDataSet(os, *dataSet);
+        os << endl;
+        DataSet *dataSet = (DataSet*) p.second->value;
+        saveDataSet(os, *dataSet);
       }else if (tn == doubleTN)
-	os << *(double*)p.second->value;
+        os << *(double*)p.second->value;
       else if (tn == floatTN)
-	os << *(float*)p.second->value;
+        os << *(float*)p.second->value;
       else if (tn == intTN)
-	os << *(int*)p.second->value;
+        os << *(int*)p.second->value;
       else if (tn == stringTN)
-	os << '"' << *(string *)p.second->value << '"';
+        os << '"' << *(string *)p.second->value << '"';
       else if (tn == uintTN)
-	os << *(unsigned int *) p.second->value;
+        os << *(unsigned int *) p.second->value;
       // output closed parenthesis
       os << ')' << endl;
     } delete it;
@@ -429,8 +440,8 @@ public:
       unsigned int i = 0;
       node n;
       forEach(n, graph->getNodes()) {
-	(*nodeIndex)[n.id] = node(i);
-	i++;
+        (*nodeIndex)[n.id] = node(i);
+        i++;
       }
     } else
       // no map needed, id translation only
@@ -440,8 +451,8 @@ public:
       unsigned int i = 0;
       edge e;
       forEach(e, graph->getEdges()) {
-	(*edgeIndex)[e.id] = edge(i);
-	i++;
+        (*edgeIndex)[e.id] = edge(i);
+        i++;
       }
     } else
       // no map needed, id translation only
@@ -457,7 +468,7 @@ public:
       dataSet->get("author", author);
       dataSet->get("text::comments", comments);
       if (dataSet->get("format", tmp))
-	format = tmp.getCurrentString();
+        format = tmp.getCurrentString();
     }
 
     if (format != string(TLP_FILE_VERSION))

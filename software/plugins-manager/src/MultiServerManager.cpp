@@ -190,7 +190,7 @@ namespace tlp {
     emit nameReceived(this,addr,name);
   }
 
-  void MultiServerManager::tulipLastVersionNumberReceived(TulipLastVersionNumberTreatment *treatment,std::string version){
+  void MultiServerManager::tulipLastVersionNumberReceived(TulipLastVersionNumberTreatment*,std::string version){
     emit versionReceived(version);
   }
 

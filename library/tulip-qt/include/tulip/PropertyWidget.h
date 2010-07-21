@@ -104,12 +104,12 @@ class TLP_QT_SIMPLE_SCOPE ChooseFileNameDialog : public QDialog,public Ui::Choos
 
 public :
 
-  ChooseFileNameDialog(const QString &filter,QWidget *parent=NULL):filter(filter),basePath(QString()) {
+  ChooseFileNameDialog(const QString &filter,QWidget *parent=NULL):QDialog(parent), filter(filter),basePath(QString()) {
     setupUi(this);
     connect(fileOpenButton,SIGNAL(clicked()),this,SLOT(openFile()));
   }
 
-ChooseFileNameDialog(const QString &filter,const QString &basePath,QWidget *parent=NULL):filter(filter),basePath(basePath) {
+ChooseFileNameDialog(const QString &filter,const QString &basePath,QWidget *parent=NULL):QDialog(parent), filter(filter),basePath(basePath) {
     setupUi(this);
     connect(fileOpenButton,SIGNAL(clicked()),this,SLOT(openFile()));
   }

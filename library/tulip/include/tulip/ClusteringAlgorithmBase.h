@@ -15,15 +15,15 @@ namespace tlp {
       virtual bool runClustering() = 0;
       virtual tlp::ClusteringQualityMeasure* getQualityMeasure() = 0;
       
-      const Graph* const getOriginalGraph() const;
-      const Graph* const getQuotientGraph() const;
+      const Graph* getOriginalGraph() const;
+      const Graph* getQuotientGraph() const;
       const DataSet& getDataSet() const;
       
-      const double getIntraEdges(tlp::node n) const;
-      const double getExtraEdges(tlp::edge e) const;
-      const double getExtraEdges(tlp::node n) const;
+      double getIntraEdges(tlp::node n) const;
+      double getExtraEdges(tlp::edge e) const;
+      double getExtraEdges(tlp::node n) const;
       const std::vector<std::vector<node> >& getPartition() const;
-      const unsigned int getPartitionId(tlp::node n) const;
+      unsigned int getPartitionId(tlp::node n) const;
       
       void orderByPartitionId(node &n1, node &n2) const;
     protected:
