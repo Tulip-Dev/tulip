@@ -50,11 +50,11 @@ namespace tlp {
     /**
      * This function compute the interactor visual feedback
      */
-    virtual bool compute(GlMainWidget *glMainWidget) { return false; }
+    virtual bool compute(GlMainWidget*) { return false; }
     /**
      * This function draw interactor
      */
-    virtual bool draw(GlMainWidget *glMainWidget){ return false; }
+    virtual bool draw(GlMainWidget*){ return false; }
 
     /**
      * Set interactor connected view

@@ -109,7 +109,7 @@ namespace tlp
     } delete itS;
   }
 
-  void GlyphManager::clearGlyphList(Graph**,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs) {
+  void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Glyph *>& glyphs) {
     Iterator<string> *itS = GlyphFactory::factory->availablePlugins();
     while (itS->hasNext()) {
       string glyphName=itS->next();
