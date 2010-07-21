@@ -124,10 +124,10 @@ void PropertyDialog::update() {
   tableNodes->update();
 }
 //=================================================
-void PropertyDialog::selectNode(node n) {
+void PropertyDialog::selectNode(node) {
 }
 //=================================================
-void PropertyDialog::selectEdge(edge e) {
+void PropertyDialog::selectEdge(edge) {
 }
 //=================================================
 void PropertyDialog::setAllValue() {

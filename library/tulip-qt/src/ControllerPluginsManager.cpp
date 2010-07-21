@@ -59,9 +59,12 @@ namespace tlp
     controllers.setAll(0);
 
     Iterator<string> *itS = ControllerFactory::factory->availablePlugins();
+    unsigned int i = 0;
     while (itS->hasNext()) {
       string controllerPluginName=itS->next();
       Controller *newControllerPlugin = ControllerFactory::factory->getPluginObject(controllerPluginName, &ic);
+      controllers.set(i, newControllerPlugin);
+      ++i;
     } delete itS;
   }
   //====================================================
