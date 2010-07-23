@@ -88,7 +88,7 @@ namespace tlp {
     removeTableWidget->setShowGrid(false);
   }
 
-  void InstallPluginDialog::installStart(const string &name){
+  void InstallPluginDialog::installStart(const string&){
   }
 
   void InstallPluginDialog::installFinished(const string &name,bool loadCheckOK){
@@ -138,7 +138,7 @@ namespace tlp {
     removeTableWidget->resizeColumnsToContents();
   }
 
-  void InstallPluginDialog::closeEvent(QCloseEvent *e){
+  void InstallPluginDialog::closeEvent(QCloseEvent*){
     /*if(terminate==false){
       e->ignore();
       cancelInstall();

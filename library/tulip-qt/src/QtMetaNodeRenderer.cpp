@@ -95,7 +95,7 @@ namespace tlp {
     }
   }
 
-  void QtMetaNodeRenderer::prerender(node n,float lod,Camera *camera){
+  void QtMetaNodeRenderer::prerender(node n,float lod,Camera*){
     if(QtMetaNodeRenderer::depth>=3)
       return;
 
@@ -224,7 +224,7 @@ namespace tlp {
     }
   }
 
-  void QtMetaNodeRenderer::render(node n,float lod, Camera *camera){
+  void QtMetaNodeRenderer::render(node n,float lod, Camera*){
     if(QtMetaNodeRenderer::depth>=3)
       return;
 
