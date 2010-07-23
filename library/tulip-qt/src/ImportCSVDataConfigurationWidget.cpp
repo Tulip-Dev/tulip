@@ -121,10 +121,14 @@ void ImportCSVDataConfigurationWidget::propertyNameChanged(QString newName) {
 void ImportCSVDataConfigurationWidget::propertyNameChanged(unsigned int propertyNumber, QString newPropertyName) {
   //Update header label
   if (getPropertyOrientation() == Column) {
+    if(previewWidget->horizontalHeaderItem(propertyNumber)){
     previewWidget->horizontalHeaderItem(propertyNumber)->setText(newPropertyName);
+    }
   }
   else {
+    if(previewWidget->verticalHeaderItem(propertyNumber)){
     previewWidget->verticalHeaderItem(propertyNumber)->setText(newPropertyName);
+    }
   }
 }
 
