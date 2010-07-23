@@ -163,7 +163,8 @@ void AgglomerativeClusteringBase::simpleGraphCopy(const Graph* source, Graph* ta
 }
 
 void AgglomerativeClusteringBase::buildHierarchy(Graph * graph, vector<std::vector<std::vector<node> > >& partitions, int best_ind) {
-    assert(best_ind < partitions.size());
+    assert(((int)partitions.size()) > 0);
+    assert(best_ind < (int)partitions.size());
     for (size_t i = 0; i < partitions[best_ind].size(); ++i) {
         vector<node> group = partitions[best_ind][i];
         set<node> toGroup;
