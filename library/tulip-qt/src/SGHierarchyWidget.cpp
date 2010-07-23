@@ -250,7 +250,7 @@ namespace tlp {
     menu.exec(mapToGlobal(p));
   }
   //=======================================================
-  void SGHierarchyWidget::changeGraph(QTreeWidgetItem *item, const QPoint &p, int i) {
+  void SGHierarchyWidget::changeGraph(QTreeWidgetItem *item, const QPoint&, int) {
     changeGraph(item, NULL);
   }
   //**********************************************************************
