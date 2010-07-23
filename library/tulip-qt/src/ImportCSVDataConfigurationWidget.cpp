@@ -121,10 +121,14 @@ void ImportCSVDataConfigurationWidget::propertyNameChanged(QString newName) {
 void ImportCSVDataConfigurationWidget::propertyNameChanged(unsigned int propertyNumber, QString newPropertyName) {
   //Update header label
   if (getPropertyOrientation() == Column) {
+    if(previewWidget->horizontalHeaderItem(propertyNumber)){
     previewWidget->horizontalHeaderItem(propertyNumber)->setText(newPropertyName);
+    }
   }
   else {
+    if(previewWidget->verticalHeaderItem(propertyNumber)){
     previewWidget->verticalHeaderItem(propertyNumber)->setText(newPropertyName);
+    }
   }
 }
 
@@ -227,7 +231,7 @@ void ImportCSVDataConfigurationWidget::token(unsigned int row, unsigned int colu
   }
   previewWidget->setItem(row, column, new QTableWidgetItem(QString::fromStdString(token)));
 }
-void ImportCSVDataConfigurationWidget::end(unsigned int rowNumber, unsigned int columnNumber) {
+void ImportCSVDataConfigurationWidget::end(unsigned int, unsigned int) {
   //delete empty row and columns created.
   if (useFirstRowAsPropertyName() && getPropertyOrientation() == Row) {
     previewWidget->removeColumn(0);
@@ -319,7 +323,7 @@ void PropertyConfigurationWidget::useStateChanged(int state) {
 void PropertyConfigurationWidget::setPropertyNameValidator(QValidator* validator) {
   propertyNameLineEdit->setValidator(validator);
 }
-QValidator::State PropertyNameValidator::validate(QString & input, int & pos) const {
+QValidator::State PropertyNameValidator::validate(QString & input, int&) const {
   if (input.isEmpty() || parent->checkIfMoreThanOnePropertyHaveTheName(input)) {
     return QValidator::Invalid;
   }
