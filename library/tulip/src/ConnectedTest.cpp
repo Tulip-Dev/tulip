@@ -91,7 +91,7 @@ void ConnectedTest::computeConnectedComponents(Graph *graph, std::vector<std::se
 }
 
 //=================================================================
-void connectedTest(Graph *graph, node n, 
+void connectedTest(const Graph * const graph, node n, 
 		   MutableContainer<bool> &visited,
 		   unsigned int &count) {
   if (visited.get(n.id)) return;
@@ -119,7 +119,7 @@ bool ConnectedTest::compute(const tlp::Graph* const graph) {
   return result;
 }
 //=================================================================
-void ConnectedTest::connect(Graph *graph, vector<node> &toLink) {
+void ConnectedTest::connect(const tlp::Graph* const graph, vector< node >& toLink) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) {
     if (resultsBuffer[(unsigned long)graph])
       return;

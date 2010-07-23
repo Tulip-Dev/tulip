@@ -58,7 +58,7 @@ public:
   static void computeConnectedComponents(Graph *graph, std::vector< std::set<node> >& components);
     
 private:
-  void connect(Graph *, std::vector<node>& toLink);
+  void connect(const Graph * const, std::vector<node>& toLink);
   bool compute(const Graph * const);
   void addEdge(Graph *,const edge);
   void delEdge(Graph *,const edge);
