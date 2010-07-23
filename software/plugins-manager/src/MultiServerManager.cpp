@@ -32,7 +32,7 @@ namespace tlp {
   }
 
   void MultiServerManager::addServer(const string& addr){
-    //TODO: ajouter test de validité du serveur (connexion possible)
+    //TODO: ajouter test de validitï¿½ du serveur (connexion possible)
     if(!(addr=="")){
       PluginsServer *plugServer=new PluginsServer;
       plugServer->name = addr;
@@ -141,10 +141,25 @@ namespace tlp {
     serv->send(request);
     return true;
   }
+
+  bool MultiServerManager::requestTulipLastVersionNumber(Server* serv){
+    TulipLastVersionNumberTreatment* treatment = new TulipLastVersionNumberTreatment();
+    connect(treatment,SIGNAL(versionReceived(TulipLastVersionNumberTreatment*,std::string)),this,SLOT(tulipLastVersionNumberReceived(TulipLastVersionNumberTreatment*,std::string)));
+    GetTulipLastVersionNumberRequest* request = new GetTulipLastVersionNumberRequest(treatment);
+    serv->send(request);
+    return true;
+  }
   
   bool MultiServerManager::requestPluginLists(){
     for (list<PluginsServer*>::iterator iter=pluginsServersList.begin(); iter != pluginsServersList.end() ; ++iter){
       requestPluginList((*iter)->serv);
+    }
+    return true;
+  }
+
+  bool MultiServerManager::requestTulipLastVersionNumber(){
+    for (list<PluginsServer*>::iterator iter=pluginsServersList.begin(); iter != pluginsServersList.end() ; ++iter){
+      requestTulipLastVersionNumber((*iter)->serv);
     }
     return true;
   }
@@ -161,7 +176,7 @@ namespace tlp {
   }
   
   
-  void MultiServerManager::changeName(ServerNameTreatment* treatment,string addr,string name){
+  void MultiServerManager::changeName(ServerNameTreatment*,string addr,string name){
     string address;
     
     for (list<PluginsServer*>::iterator iter=pluginsServersList.begin(); iter != pluginsServersList.end() ; ++iter){
@@ -173,6 +188,10 @@ namespace tlp {
     }
     modifyServerNameForEach(name,addr);
     emit nameReceived(this,addr,name);
+  }
+
+  void MultiServerManager::tulipLastVersionNumberReceived(TulipLastVersionNumberTreatment *treatment,std::string version){
+    emit versionReceived(version);
   }
 
 }

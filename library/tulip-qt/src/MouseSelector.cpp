@@ -99,7 +99,6 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
     return false;
   }
   if  (e->type() == QEvent::MouseButtonRelease) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;
@@ -124,11 +123,18 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         if (mousePressModifier == Qt::ShiftModifier)
           boolVal = false;
         else {
-          selection->setAllNodeValue(false);
+          if(selection->getNodeDefaultValue()==true || selection->getEdgeDefaultValue()==true){
+            graph->push();
+            selection->setAllNodeValue(false);
+            selection->setAllEdgeValue(false);
+            needPush=false;
+          }
           Iterator<node>* itn = selection->getNonDefaultValuatedNodes();
           if (itn->hasNext()) {
-            graph->push();
-            needPush = false;
+            if(needPush){
+              graph->push();
+              needPush = false;
+            }
             delete itn;
             selection->setAllNodeValue(false);
           } else
@@ -206,7 +212,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         }
       }
       started = false;
-      glMainWidget->redraw();
+      glMainWidget->draw();
       Observable::unholdObservers();
       return true;
     }

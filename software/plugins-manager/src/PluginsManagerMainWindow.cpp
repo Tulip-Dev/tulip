@@ -79,7 +79,7 @@ namespace tlp {
     createWidget(parent);
   }
 
-  void PluginsManagerMainWindow::createActions(QWidget *parent){
+  void PluginsManagerMainWindow::createActions(QWidget*){
 
     exitAct = new QAction(tr("E&xit"), vbox);
     exitAct->setShortcut(tr("Ctrl+X"));

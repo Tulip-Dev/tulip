@@ -90,6 +90,24 @@ namespace tlp {
       str.erase(returnPos,returnPos+1);
     emit nameReceived(this,addr,str);
   }
+
+  GetTulipLastVersionNumberRequest::GetTulipLastVersionNumberRequest(ResponseTreatment* resp){
+    respTreatment = resp;
+  }
+
+  void GetTulipLastVersionNumberRequest::getXml(std::string &xml) const {
+    SoapRequestBuilder request;
+    request.setFunctionName("getTulipLastVersionNumber");
+    request.getXML(xml);
+  }
+
+  void TulipLastVersionNumberTreatment::operator()(const std::string &data) {
+    string str=data;
+    int returnPos=str.find("\n");
+    if(returnPos!=-1)
+      str.erase(returnPos,returnPos+1);
+    emit versionReceived(this,str);
+  }
        
   GetPluginsListRequest::GetPluginsListRequest(ResponseTreatment* respT){
     respTreatment = respT;
