@@ -42,7 +42,7 @@ public:
    * Returns true if the graph is connected (ie. it exists an undirected path 
    * between each pair of nodes) else false.
    */
-  static bool isConnected(Graph *graph);
+  static bool isConnected(const Graph* const graph);
   /**
    * If the graph is not connected, adds edges in order to make the graph
    * connected. The new edges are added in addedEdges.
@@ -51,7 +51,7 @@ public:
   /**
    * Returns the number of connected components in the graph;
    */
-  static unsigned int numberOfConnectedComponents(Graph *graph);
+  static unsigned int numberOfConnectedComponents(const Graph* const graph);
   /**
    * Compute the nodes for each connected component
    */
@@ -59,7 +59,7 @@ public:
     
 private:
   void connect(Graph *, std::vector<node>& toLink);
-  bool compute(Graph *);
+  bool compute(const Graph * const);
   void addEdge(Graph *,const edge);
   void delEdge(Graph *,const edge);
   void reverseEdge(Graph *,const edge);

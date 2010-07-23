@@ -32,7 +32,7 @@ ConnectedTest * ConnectedTest::instance=0;
 ConnectedTest * ConnectedTest::instance=0;
 #endif
 //=================================================================
-bool ConnectedTest::isConnected(Graph *graph) {
+bool ConnectedTest::isConnected(const tlp::Graph*const graph) {
   if (instance==0)
     instance=new ConnectedTest();
   return instance->compute(graph);
@@ -51,7 +51,7 @@ void ConnectedTest::makeConnected(Graph *graph, vector<edge> &addedEdges) {
   assert(ConnectedTest::isConnected(graph));
 }
 //=================================================================
-unsigned int ConnectedTest::numberOfConnectedComponents(Graph *graph) {
+unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph* const graph) {
   if (graph->numberOfNodes()==0) return 0u;
   if (instance==0)
     instance=new ConnectedTest();
@@ -105,7 +105,7 @@ void connectedTest(Graph *graph, node n,
 //=================================================================
 ConnectedTest::ConnectedTest(){}
 //=================================================================
-bool ConnectedTest::compute(Graph *graph) {
+bool ConnectedTest::compute(const tlp::Graph* const graph) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) 
     return resultsBuffer[(unsigned long)graph];
   if (graph->numberOfNodes()==0) return true;
