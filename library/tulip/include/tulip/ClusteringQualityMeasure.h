@@ -14,6 +14,8 @@ namespace tlp {
       virtual double getQualityIfMerged(tlp::node n1, tlp::node n2) = 0;
       virtual void beforeMergeNodes(tlp::node, tlp::node) {}
       virtual void afterMergeNodes(tlp::node) {}
+      virtual void beforeSplitNode(tlp::node) {}
+      virtual void afterSplitNode(tlp::node, tlp::node) {}
       virtual void initialize()  {};
     protected:
       const tlp::ClusteringAlgorithmBase* const _clusteringAlgorithm;
