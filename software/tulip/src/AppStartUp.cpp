@@ -48,10 +48,11 @@ using namespace tlp;
 
 static std::string errorMsgs;
 
-static const int tipsNumber=2;
+static const int tipsNumber=3;
 static const std::string tips[tipsNumber] = {
-  "If you want to use the new plugins (algorithms, interactors, views), look at those available in the plugin manager.<br>Menu : <b>Help -> Plugins</b>",
-  "If you find a bug in tulip, please make a bug report on project page of sourceforge : http://sourceforge.net/tracker/?group_id=61223"
+  "If you want to add new plugins to Tulip(algorithms, interactors, views), take a look at the plugin manager: <br>Menu : <b>Help -> Plugins</b>",
+  "If you find a bug in tulip, please make a bug report on our sourceforge project page at: http://sourceforge.net/tracker/?group_id=61223",
+  "Tulip 3.5.0 increased performances on edge rendering by over 200%"
 };
 
 void AppStartUp::initTulip(TulipPluginLoader *loader, std::string &errors) {
