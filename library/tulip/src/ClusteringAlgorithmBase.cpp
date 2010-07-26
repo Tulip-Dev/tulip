@@ -11,7 +11,6 @@
 
 using namespace tlp;
 using namespace std;
-ALGORITHMPLUGIN(DivisiveQClustering, "Divisive Newman Clustering (new version)", "Romain Bourqui, Charles Huet","12/07/2010","OK","1.2");
 
 ClusteringAlgorithmBase::ClusteringAlgorithmBase(AlgorithmContext context)
   : Algorithm(context), 
@@ -19,6 +18,10 @@ ClusteringAlgorithmBase::ClusteringAlgorithmBase(AlgorithmContext context)
   _intraEdges(_quotientGraph->getProperty<DoubleProperty>("intraEdges")), 
   _extraEdges(_quotientGraph->getProperty<DoubleProperty>("extraEdges")),
   _qualityMeasure(NULL){
+    //use default values for the intra and extra edges
+    _intraEdges->setAllEdgeValue(0);
+    _extraEdges->setAllEdgeValue(1);
+    _extraEdges->setAllNodeValue(0);
 }
 
 ClusteringAlgorithmBase::~ClusteringAlgorithmBase() {
@@ -27,11 +30,10 @@ ClusteringAlgorithmBase::~ClusteringAlgorithmBase() {
 
 bool ClusteringAlgorithmBase::run() {
   _qualityMeasure = getQualityMeasure();
-  _qualityMeasure->initialize();;
+  _qualityMeasure->initialize();
   return runClustering();
 }
 
-//================================================================================
 const Graph* ClusteringAlgorithmBase::getOriginalGraph() const {
     return graph;
 }
@@ -40,8 +42,16 @@ const DataSet& ClusteringAlgorithmBase::getDataSet() const {
     return *dataSet;
 }
 
-const std::vector<std::vector<node> >& ClusteringAlgorithmBase::getPartition() const {
-    return this->_partition;
+int ClusteringAlgorithmBase::getPartitionSize() const {
+  return this->_partition.size();
+}
+
+int ClusteringAlgorithmBase::getPartitionSize(int paritionIndex) const {
+  return this->_partition[paritionIndex].size();
+}
+
+int ClusteringAlgorithmBase::getPartitionSize(node quotientNode) const {
+  return this->_partition[_partitionId.get(quotientNode.id)].size();
 }
 
 unsigned int ClusteringAlgorithmBase::getPartitionId(tlp::node n) const {
@@ -77,7 +87,26 @@ void ClusteringAlgorithmBase::orderByPartitionId(node &n1, node &n2) const {
 //================================================================================
 
 AgglomerativeClusteringBase::AgglomerativeClusteringBase(AlgorithmContext context)
-  :ClusteringAlgorithmBase(context) {   
+  :ClusteringAlgorithmBase(context) {
+  if(context.graph) {
+    MutableContainer<node> nodeMapping;  
+    simpleGraphCopy(graph, _quotientGraph, nodeMapping);
+    
+    unsigned int i = 0;
+    Iterator<node> *it = graph->getNodes();
+    while (it->hasNext()) {
+        vector<node> tmp;
+        node n = it->next();
+        tmp.push_back(n);
+        _partition.push_back(tmp);
+        _partitionId.set(nodeMapping.get(n.id).id, i);
+        _partitionNode.set(i, nodeMapping.get(n.id));
+        ++i;
+    } delete it;
+    
+    _intraEdges->setAllNodeValue(0);
+    _extraEdges->setAllEdgeValue(0);
+  }
 }
 
 node AgglomerativeClusteringBase::mergeNodes(node n1, node n2) {
@@ -158,8 +187,9 @@ void AgglomerativeClusteringBase::simpleGraphCopy(const Graph* source, Graph* ta
     forEach(e, source->getEdges()) {
         edge e2 = target->addEdge(nodeMapping.get(source->source(e).id), nodeMapping.get(source->target(e).id));
         _metric->setEdgeValue(e2, 1);
-        _extraEdges->setEdgeValue(e2, 1);
     }
+    _extraEdges->setAllEdgeValue(1);
+    _intraEdges->setAllNodeValue(0);
 }
 
 void AgglomerativeClusteringBase::buildHierarchy(Graph * graph, vector<std::vector<std::vector<node> > >& partitions, int best_ind) {
@@ -173,12 +203,26 @@ void AgglomerativeClusteringBase::buildHierarchy(Graph * graph, vector<std::vect
         tlp::inducedSubGraph(graph, toGroup);
     }
 }
+
 //================================================================================
 
 DivisiveClusteringBase::DivisiveClusteringBase(AlgorithmContext context) 
-  :ClusteringAlgorithmBase(context) {
-  if(context.graph)
+  :ClusteringAlgorithmBase(context), metric_mode(0) {
+  if(context.graph) {
     _sumEdges = context.graph->numberOfEdges();
+    vector<node> initialClustering;
+    node n;
+    node quotientOriginal = _quotientGraph->addNode();
+    forEach(n, context.graph->getNodes()) {
+      initialClustering.push_back(n);
+      _originalToQuotient[n] = quotientOriginal;
+    }
+    _partition.push_back(initialClustering);
+    
+    _intraEdges->setNodeValue(quotientOriginal, graph->numberOfEdges());
+    _partitionNode.set(0, quotientOriginal);
+    _partitionId.set(quotientOriginal.id, 0);
+  }
 }
 
 edge DivisiveClusteringBase::findEdgeToRemove() {
@@ -214,185 +258,112 @@ edge DivisiveClusteringBase::findEdgeToRemove() {
   return edgeToDel;
 }
 
-
-const char * paramHelp2[] = {
-  // Q/MQ
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Boolean" ) \
-  HTML_HELP_BODY() \
-  "If true uses MQ to compute the hierarchy, otherwise uses Q" \
-  HTML_HELP_CLOSE(), \
-  // Metric
-  HTML_HELP_OPEN()       \
-  HTML_HELP_DEF( "type", "int" )   \
-  HTML_HELP_DEF( "values", "{0,1,2}" )   \
-  HTML_HELP_DEF( "default", "0" )  \
-  HTML_HELP_BODY()              \
-  "This parameter defines the metric used for the algorithm. Following values are corrects :" \
-  "<ul><li>0: betweenness centrality;</li>"     \
-  "<li>1: strength metric;</li>"      \
-  "<li>2: Jaccard's index.</li>"    \
-   HTML_HELP_CLOSE(),
-};
-
-
-DivisiveQClustering::DivisiveQClustering(AlgorithmContext context)
-  : DivisiveClusteringBase(context) {
-    addParameter<bool>("MQ / Q", paramHelp2[0], "true");
-    addParameter<int>("Metric type", paramHelp2[1], "0");
-}
-
-bool DivisiveQClustering::runClustering() {
-  mqUse = true;
-  if(dataSet != 0){
-    dataSet->get("Metric type", metric_mode);
-    dataSet->get("MQ / Q", mqUse);
-  }
-  else{
-    metric_mode = 0;
-  }
-  
-  _metricAlgorithm = "Node - Edge Betweenness Centrality";
-  if(metric_mode == 1) 
-    _metricAlgorithm = "Strength";
-  else
-    _metricAlgorithm = "Jaccard Index";
-  
-  cerr << "[BEGIN] NewMan Clustering: " << graph->numberOfNodes() << "  " << graph->numberOfEdges() << endl;
-  vector<set<node> > bestLevel(1);
-  double bestQ = 0;
-  vector<Graph *> curClusters(1);
-  _workingGraph = tlp::newCloneSubGraph(graph);
-  node n = _quotientGraph->addNode();
-  _intraEdges->setNodeValue(n, graph->numberOfEdges());
-  _partitionNode.set(0, n);
-  _partitionId.set(n.id, 0);
-  
-  curClusters[0] = tlp::newCloneSubGraph(graph);;
-  
-  forEach(n,graph->getNodes()){
-    bestLevel[0].insert(n);
-  }
-
-  edge e;
-  int nbEdges = graph->numberOfEdges();
-  while(nbEdges > 0){
-    pluginProgress->progress(graph->numberOfEdges() - nbEdges, graph->numberOfEdges());
-    cerr << ".";
+bool DivisiveClusteringBase::splitGraphIfDisconnected(int clusterIndex, Graph*const cluster, Graph** subCluster1, Graph** subCluster2) {
+  bool isConnected = ConnectedTest::isConnected(cluster);
+  if(!isConnected){
+    _qualityMeasure->beforeSplitNode(_partitionNode.get(clusterIndex));
     
-    edge edgeToDel = findEdgeToRemove();
+    DoubleProperty connectedComponnent(cluster);
+    string err;
+    cluster->computeProperty(string("Connected Component"), &connectedComponnent, err);
+    DataSet tmp;
+    tmp.set("Property", &connectedComponnent);
+    tlp::applyAlgorithm(cluster, err, &tmp, "Equal Value");
     
-    Graph * deconnectedG = curClusters[0];
-    int ind =  -1;
-    for(unsigned int i = 0 ; i < curClusters.size() ; ++i){
-      if(curClusters[i]->isElement(edgeToDel)){
-        ind = i;
-        deconnectedG = curClusters[i];
-        break;
+    bool first = true;
+    Graph *g;
+    forEach(g, cluster->getSubGraphs()){
+      if(first) {
+        *subCluster1 = g;
+        first= false;
       }
+      else 
+        *subCluster2 = g;
     }
-    assert(ind != -1);
     
-    --nbEdges;
-    _workingGraph->delEdge(edgeToDel);
-    deconnectedG->delEdge(edgeToDel);
-
-    if(!ConnectedTest::isConnected(deconnectedG)){
-      DoubleProperty connectedComponnent(deconnectedG);
-      string err;
-      deconnectedG->computeProperty(string("Connected Component"), &connectedComponnent, err);
-      DataSet tmp;
-      tmp.set("Property", &connectedComponnent);
-      tlp::applyAlgorithm(deconnectedG, err, &tmp, "Equal Value");
-      bool first = true;
-
-      Graph *g;
-      forEach(g, deconnectedG->getSubGraphs()){
-        if(first) {
-          curClusters[ind] = g;
-          first= false;
-        }
-        else 
-          curClusters.push_back(g);
-      }
-      graph->delSubGraph(deconnectedG);
-      
-      //update the quotient graph
-      node newCluster = _quotientGraph->addNode();
-      node oldCluster = _partitionNode.get(ind);
-      
-      double oldClusterIntraEdges = 0;
-      double oldClusterDegree = 0;
-      forEach(n, curClusters[ind]->getNodes()) {
-        oldClusterDegree += graph->deg(n);
+    //update the quotient graph
+    node newCluster = _quotientGraph->addNode();
+    node oldCluster = _partitionNode.get(clusterIndex);
+    
+    edge e;
+    forEach(e, _quotientGraph->getInOutEdges(oldCluster)) {
+      _extraEdges->setEdgeValue(e, 0);
+    }
+    
+    double oldClusterIntraEdges = 0;
+    double oldClusterDegree = 0;
+    double newClusterIntraEdges = 0;
+    double newClusterDegree = 0;
+    node n;
+    
+    //arrays and loop to avoid code duplication
+    Graph* subClusters[2];
+    subClusters[0] = *subCluster1;
+    subClusters[1] = *subCluster2;
+    node quotientNodes[2];
+    quotientNodes[0] = oldCluster;
+    quotientNodes[1] = newCluster;
+    
+    _partition[clusterIndex].clear();
+    forEach(n, (*subCluster1)->getNodes()) {
+      _partition[clusterIndex].push_back(n);
+    }
+    
+    vector<node> newPartition;
+    forEach(n, (*subCluster2)->getNodes()) {
+      newPartition.push_back(n);
+      _originalToQuotient[n] = newCluster;
+    }
+    _partition.push_back(newPartition);
+    
+    _partitionId.set(newCluster.id, _partition.size()-1);
+    _partitionNode.set(_partition.size()-1, newCluster);
+    
+    for(int i = 0; i < 2; ++i) {
+      node quotientN = quotientNodes[i];
+      forEach(n, subClusters[i]->getNodes()) {
         forEach(e, graph->getInOutEdges(n)) {
           node opposite = graph->opposite(e, n);
-          if(curClusters[ind]->isElement(opposite))
-            ++oldClusterIntraEdges;
-        }
-      }
-      oldClusterDegree -= oldClusterIntraEdges;
-      oldClusterIntraEdges /= 2;
-      
-      double newClusterIntraEdges = 0;
-      double newClusterDegree = 0;
-      forEach(n, curClusters[curClusters.size()-1]->getNodes()) {
-        newClusterDegree += graph->deg(n);
-        forEach(e, graph->getInOutEdges(n)) {
-          node opposite = graph->opposite(e, n);
-          if(curClusters[curClusters.size()-1]->isElement(opposite))
-            ++newClusterIntraEdges;
-        }
-      }
-      newClusterDegree -= newClusterIntraEdges;
-      newClusterIntraEdges /= 2;
-      
-      _intraEdges->setNodeValue(newCluster, newClusterIntraEdges);
-      _intraEdges->setNodeValue(oldCluster, oldClusterIntraEdges);
-//       _intraEdges->setNodeValue(oldCluster, curClusters[ind]->numberOfEdges());
-      _partitionNode.set(curClusters.size()-1, newCluster);
-//       _partitionId.set(newCluster, curClusters.size()-1);
-
-      _extraEdges->setNodeValue(oldCluster, oldClusterDegree);
-      _extraEdges->setNodeValue(newCluster, newClusterDegree);
-      
-      edge clustersEdge = _quotientGraph->addEdge(oldCluster, newCluster);
-
-      double q = _qualityMeasure->getQuality();
-
-      stringstream comment;
-      comment << endl << "New Q = " << q << " with " << curClusters.size() << " clusters"<< endl;
-      cerr << comment.str();
-      pluginProgress->setComment(comment.str());
-      
-      if(q > bestQ){
-        bestQ = q;
-        bestLevel.clear();
-        for(unsigned int i = 0; i < curClusters.size(); ++i){
-          node u;
-          set<node> clust;
-          forEach(u,curClusters[i]->getNodes())
-            clust.insert(u);
-          bestLevel.push_back(clust);
+          if(subClusters[i]->isElement(opposite)) {
+            if(i==0)
+              oldClusterIntraEdges++;
+            else
+              newClusterIntraEdges++;
+          }
+          else {
+            node quotientOpposite = _originalToQuotient[opposite];
+            
+            edge quotientEdge = _quotientGraph->existEdge(quotientN, quotientOpposite, false);
+            if(!quotientEdge.isValid()) {
+              quotientEdge = _quotientGraph->addEdge(quotientN, quotientOpposite);
+            }
+            else {
+              _extraEdges->setEdgeValue(quotientEdge, _extraEdges->getEdgeValue(quotientEdge)+1);
+            }
+            if(i==0)
+              oldClusterDegree++;
+            else
+              newClusterDegree++;
+          }
         }
       }
     }
-  }
-  graph->delSubGraph(_workingGraph);
-  for(unsigned int i = 0 ; i < curClusters.size(); ++i){
-    graph->delSubGraph(curClusters[i]);
-  }
-  
-  for(unsigned int i = 0 ; i < bestLevel.size(); ++i){
-    tlp::inducedSubGraph(graph, bestLevel[i]);
-  }
-  cerr << "END :  q = " << bestQ << " with " << bestLevel.size() << " clusters" << endl;
-  cerr << "[END]" << endl;
-  
-  return true;
-}
+    newClusterIntraEdges /= 2;
+    oldClusterIntraEdges /= 2;
+    
+    edge newEdge = _quotientGraph->existEdge(newCluster, oldCluster, false);
+    _extraEdges->setEdgeValue(newEdge, _extraEdges->getEdgeValue(newEdge)/2);
+    
+    _intraEdges->setNodeValue(newCluster, newClusterIntraEdges);
+    _intraEdges->setNodeValue(oldCluster, oldClusterIntraEdges);
 
-ClusteringQualityMeasure* DivisiveQClustering::getQualityMeasure() {
-  //TODO mqUse should be used to determine the quality measure to use
-  return new QClusteringQualityMeasure(this);
+    _extraEdges->setNodeValue(newCluster, newClusterDegree);
+    _extraEdges->setNodeValue(oldCluster, oldClusterDegree);
+
+//     std::cout << "NEW (intra;extra): " << newClusterIntraEdges << ";" << newClusterDegree<< std::endl; 
+//     std::cout << "OLD (intra;extra): " << oldClusterIntraEdges << ";" << oldClusterDegree<< std::endl;
+    _qualityMeasure->afterSplitNode(oldCluster, newCluster);
+  }
+  
+  return !isConnected;
 }

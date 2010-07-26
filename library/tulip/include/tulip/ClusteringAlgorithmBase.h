@@ -14,7 +14,7 @@ namespace tlp {
       virtual ~ClusteringAlgorithmBase();
       virtual bool runClustering() = 0;
       virtual tlp::ClusteringQualityMeasure* getQualityMeasure() = 0;
-      
+            
       const Graph* getOriginalGraph() const;
       const Graph* getQuotientGraph() const;
       const DataSet& getDataSet() const;
@@ -22,7 +22,9 @@ namespace tlp {
       double getIntraEdges(tlp::node n) const;
       double getExtraEdges(tlp::edge e) const;
       double getExtraEdges(tlp::node n) const;
-      const std::vector<std::vector<node> >& getPartition() const;
+      int getPartitionSize() const;
+      int getPartitionSize(int paritionIndex) const;
+      int getPartitionSize(tlp::node quotientNode) const;
       unsigned int getPartitionId(tlp::node n) const;
       
       void orderByPartitionId(node &n1, node &n2) const;
@@ -68,23 +70,16 @@ namespace tlp {
     public:
       DivisiveClusteringBase(tlp::AlgorithmContext);
       virtual bool runClustering() = 0;
-            
+      
+      bool splitGraphIfDisconnected(int clusterIndex, tlp::Graph*const cluster, tlp::Graph** subCluster1, tlp::Graph** subCluster2);
       tlp::edge findEdgeToRemove();
     protected:
       int metric_mode;
       std::string _metricAlgorithm;
       Graph* _workingGraph;
+      std::map<tlp::node, tlp::node> _originalToQuotient;
     private:
       double _sumEdges;
-  };
-  
-  class DivisiveQClustering : public DivisiveClusteringBase {
-    public:
-      DivisiveQClustering(tlp::AlgorithmContext context);
-      virtual bool runClustering();
-      virtual ClusteringQualityMeasure* getQualityMeasure();
-    private:
-      bool mqUse;
   };
 }
 #endif //CLUSTERINGALGORITHMBASE_H
