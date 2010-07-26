@@ -773,7 +773,7 @@ namespace tlp {
 
 
     //View menu
-    viewMenu = new QMenu("View");
+    viewMenu = new QMenu("&View");
     viewMenu->setEnabled(false);
     connect(viewMenu, SIGNAL(triggered(QAction *)), SLOT(createView(QAction*)));
     TemplateFactory<ViewFactory, View, ViewContext>::ObjectCreator::const_iterator it;
