@@ -557,13 +557,13 @@ void GlEdge::getColors(GlGraphInputData *data,
 
   edge e = edge(id);
 
-  bool selected = data->elementSelected->getEdgeValue(e);
+  data->elementSelected->getEdgeValue(e);
 
   const std::pair<node, node>& eEnds = data->graph->ends(e);
   const node source = eEnds.first;
   const node target = eEnds.second;
 
-  const Color& fillColor = data->elementColor->getEdgeValue(e);
+  data->elementColor->getEdgeValue(e);
   Color selectionColor=data->parameters->getSelectionColor();
   Color srcCol, tgtCol;
   if (data->parameters->isEdgeColorInterpolate()) {

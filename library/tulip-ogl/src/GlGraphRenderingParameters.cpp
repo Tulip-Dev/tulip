@@ -97,7 +97,7 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   return data;
 }
 
-static Graph *findGraphById(Graph *sg, const int id) {
+static Graph *findGraphById(Graph *sg, const unsigned int id) {
   if (sg->getId()==id) return sg;
   Iterator<Graph *> *itS=sg->getSubGraphs();
   while (itS->hasNext()) {
