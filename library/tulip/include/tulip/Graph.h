@@ -576,6 +576,5 @@ TLP_BEGIN_HASH_NAMESPACE {
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 //include the template code
-#include <tulip/PropertyInterface.h>
 #include "cxx/Graph.cxx"
 #endif
