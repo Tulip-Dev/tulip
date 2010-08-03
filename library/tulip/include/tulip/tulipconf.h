@@ -23,6 +23,9 @@
 #  define stdext std
 #  define _DEPRECATED
 #  include <stl_hash_fun.h>
+#elif __clang__
+#  define _DEPRECATED __attribute__ ((deprecated))
+#  define stdext __gnu_cxx
 #else
 #    define _DEPRECATED __attribute__ ((deprecated))
 #    define stdext __gnu_cxx
