@@ -55,9 +55,7 @@ namespace tlp {
 				     const MatrixGL &, const Vector<int, 4> &viewport);
   TLP_GL_SCOPE double segmentSize(const Coord &u, const Coord &v,
 				  const MatrixGL &, const Vector<int, 4> &viewport);
-  inline GLfloat sqr(const GLfloat f){
-    return f*f;
-  }
+  inline GLfloat sqr(const GLfloat f);
   TLP_GL_SCOPE GLfloat projectSize(const BoundingBox& bb,
 		      const MatrixGL &, const MatrixGL &,const Vector<int, 4> &viewport);
   TLP_GL_SCOPE GLfloat projectSize(const Coord& position,const Size& size,
@@ -70,5 +68,9 @@ namespace tlp {
   TLP_GL_SCOPE MatrixGL makeArrowMatrix(const Coord &A, const Coord &B);
 }
 
+
+GLfloat tlp::sqr(const GLfloat f) {
+  return f*f;
+}
 #endif //DOXYGEN_NOTFOR_DEVEL
 #endif

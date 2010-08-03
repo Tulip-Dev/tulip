@@ -33,15 +33,10 @@ class Graph;
 class PropertyContext;
 
 typedef AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> AbstractIntegerProperty;
-
 /** \addtogroup properties */ 
 /*@{*/
-#ifdef __clang__
-//Due to a bug in clang the normal syntax does not work, this is a temporary workaround
-class TLP_SCOPE IntegerProperty:public AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>, public PropertyObserver{ 
-#else
 class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public PropertyObserver{ 
-#endif
+
   friend class IntegerAlgorithm;
 
 public :
