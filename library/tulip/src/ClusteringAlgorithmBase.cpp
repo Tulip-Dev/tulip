@@ -8,6 +8,7 @@
 #include <tulip/SimpleTest.h>
 #include <tulip/ConnectedTest.h>
 #include <tulip/QClusteringQualityMeasure.h>
+#include <sys/time.h>
 
 using namespace tlp;
 using namespace std;
@@ -29,9 +30,15 @@ ClusteringAlgorithmBase::~ClusteringAlgorithmBase() {
 }
 
 bool ClusteringAlgorithmBase::run() {
+  struct timeval start, end;
+  cout << "*starting" << endl;
+  gettimeofday(&start, NULL);
   _qualityMeasure = getQualityMeasure();
   _qualityMeasure->initialize();
-  return runClustering();
+  bool result = runClustering();
+  gettimeofday(&end, NULL);
+  std::cout << "time elapsed(s:ms): " << (end.tv_sec - start.tv_sec) << ":" << (end.tv_usec - start.tv_usec) << std::endl; 
+  return result;
 }
 
 const Graph* ClusteringAlgorithmBase::getOriginalGraph() const {
