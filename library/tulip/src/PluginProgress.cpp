@@ -57,6 +57,6 @@ ProgressState PluginProgress::state() const {
   return _state;
 }
 //====================================================
-void PluginProgress::progress_handler(int step, int max_step) {
+void PluginProgress::progress_handler(int, int) {
 }
 //====================================================

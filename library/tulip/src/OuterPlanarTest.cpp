@@ -80,10 +80,10 @@ void OuterPlanarTest::delEdge(Graph *graph,const edge) {
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
-void OuterPlanarTest::reverseEdge(Graph *graph,const edge) {
+void OuterPlanarTest::reverseEdge(Graph*,const edge) {
 }
 //=================================================================
-void OuterPlanarTest::addNode(Graph *graph,const node) {
+void OuterPlanarTest::addNode(Graph*,const node) {
 }
 //=================================================================
 void OuterPlanarTest::delNode(Graph *graph,const node) {

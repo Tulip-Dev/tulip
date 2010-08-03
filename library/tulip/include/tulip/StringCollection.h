@@ -32,7 +32,7 @@ namespace tlp {
 struct TLP_SCOPE StringCollection : public std::vector<std::string> {
 
 private:
-  int current;
+  size_t current;
 
 public:
   StringCollection();
