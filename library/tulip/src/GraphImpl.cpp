@@ -170,7 +170,7 @@ node GraphImpl::addNode() {
   return restoreNode(node(nodeIds.get()));
 }
 //----------------------------------------------------------------
-void GraphImpl::addNode(const node n) {
+void GraphImpl::addNode(const node) {
   cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << endl;
 }
 //----------------------------------------------------------------

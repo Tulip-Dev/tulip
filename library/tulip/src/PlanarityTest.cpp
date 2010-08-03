@@ -113,10 +113,10 @@ void PlanarityTest::delEdge(Graph *graph,const edge) {
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
-void PlanarityTest::reverseEdge(Graph *graph,const edge) {
+void PlanarityTest::reverseEdge(Graph*,const edge) {
 }
 //=================================================================
-void PlanarityTest::addNode(Graph *graph,const node) {
+void PlanarityTest::addNode(Graph*,const node) {
 }
 //=================================================================
 void PlanarityTest::delNode(Graph *graph,const node) {
