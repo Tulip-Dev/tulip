@@ -142,12 +142,17 @@ void AbstractView::buildOutputImagesFormatsList(set<string>& outputFormats) {
 }
 
 void AbstractView::exportImage(QAction* action) {
-	string name = action->text().toStdString();
-	QString s(QFileDialog::getSaveFileName());
+        QString extension = action->text().toLower();
+	QString s(QFileDialog::getSaveFileName(NULL, QString("Save Picture as ") + extension + " file", QString(), QString("Images (*.") + extension + ")"));
 
 	if (s.isNull())
 		return;
 
+	//If no extension found automatically add the selected format extension.
+	if(!s.contains(QChar('.')) ) {
+	  s.append('.');
+	  s.append(extension);
+	}
 	createPicture(s.toStdString());
 }
 
