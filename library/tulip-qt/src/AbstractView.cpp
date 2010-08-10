@@ -142,7 +142,8 @@ foreach  (QByteArray format, QImageWriter::supportedImageFormats())
 }
 
 void AbstractView::exportImage(QAction* action) {
-  QString s(QFileDialog::getSaveFileName());
+  QString extension = action->text().toLower();
+  QString s(QFileDialog::getSaveFileName(NULL, QString("Save Picture as ") + extension + " file", QString(), QString("Images (*.") + extension + ")"));
 
   if (s.isNull()) {
     return;
@@ -151,7 +152,7 @@ void AbstractView::exportImage(QAction* action) {
   //If no extension found automatically add the selected format extension.
   if(!s.contains(QChar('.')) ) {
     s.append('.');
-    s.append(action->text().toLower());
+    s.append(extension);
   }
 
   createPicture(s.toStdString());
