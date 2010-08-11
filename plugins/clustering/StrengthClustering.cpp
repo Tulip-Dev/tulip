@@ -225,7 +225,7 @@ Graph* StrengthClustering::buildSubGraphs(const vector< set<node > > &partition)
 	return 0;
       }
     }
-    tlp::inducedSubGraph(tmpGraph, partition[i]);
+    tmpGraph->inducedSubGraph(partition[i]);
   }
   return tmpGraph;
 }

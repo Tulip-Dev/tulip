@@ -207,7 +207,7 @@ void AgglomerativeClusteringBase::buildHierarchy(Graph * graph, vector<std::vect
         set<node> toGroup;
         for (unsigned int j = 0; j < group.size(); ++j)
             toGroup.insert(group[j]);
-        tlp::inducedSubGraph(graph, toGroup);
+        graph->inducedSubGraph(toGroup);
     }
 }
 

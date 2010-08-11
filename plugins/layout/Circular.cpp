@@ -126,7 +126,7 @@ namespace {
     std::vector<std::set<node> > components;
     ConnectedTest::computeConnectedComponents(g, components);
     for (unsigned int i = 0; i < components.size(); ++i) {
-      tlp::inducedSubGraph(g, components[i]);
+      g->inducedSubGraph(components[i]);
     }
     
     Graph * g_tmp;
