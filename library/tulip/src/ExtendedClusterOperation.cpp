@@ -239,11 +239,20 @@ void tlp::openMetaNode(Graph *graph, node metaNode,
 }
 */
 //=========================================================
-Graph * Graph::inducedSubGraph(const std::set<node> &nodes) {
+Graph * Graph::inducedSubGraph(const std::set<node> &nodes,
+			       Graph* origSubGraph) {
   Graph *result = addSubGraph();
   set<node>::const_iterator itNodeSet = nodes.begin();
-  for(;itNodeSet!=nodes.end(); ++itNodeSet) {
-    result->addNode(*itNodeSet);
+  if (origSubGraph) {
+    for(;itNodeSet!=nodes.end(); ++itNodeSet) {
+      node n = *itNodeSet;
+      if (origSubGraph->isElement(n))
+	result->addNode(n);
+    }
+  } else {
+    for(;itNodeSet!=nodes.end(); ++itNodeSet) {
+	result->addNode(*itNodeSet);
+    }
   }
   Iterator<node> *itN=result->getNodes();
   while (itN->hasNext()) {
@@ -251,7 +260,8 @@ Graph * Graph::inducedSubGraph(const std::set<node> &nodes) {
     Iterator<edge> *itE=getOutEdges(itn);
     while (itE->hasNext()) {
       edge ite = itE->next();
-      if (result->isElement(target(ite)))
+      if ((origSubGraph ? origSubGraph->isElement(ite) : true) &&
+	  result->isElement(target(ite)))
 	result->addEdge(ite);
     } delete itE;
   } delete itN;
@@ -269,7 +279,9 @@ node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool
     cerr << '\t' << "Warning: Creation of an empty metagraph" << endl;
   }
 
-  Graph *subGraph = getSuperGraph()->inducedSubGraph(nodeSet);
+  // create a brother sub graph, indicating that its added nodes and edges
+  // must be elements of this.
+  Graph *subGraph = getSuperGraph()->inducedSubGraph(nodeSet, this);
   // all local properties
   // must be cloned in subgraph
   PropertyInterface *prop;

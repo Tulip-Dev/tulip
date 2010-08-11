@@ -128,8 +128,12 @@ public:
    *  induced by a set of nodes. The subgraph contains all
    *  the nodes of the set and all the existing edges between
    *  two nodes of the set including self-loops.
+   *  If the originSubGraph argument is not null,
+   *  it must be a sub graph of the current graph,
+   *  and all the added nodes and edges belong to it.
    */
-  Graph *inducedSubGraph(const std::set<node>& nodeSet);
+  Graph *inducedSubGraph(const std::set<node>& nodeSet,
+			 Graph* originSubGraph = NULL);
   /**
    * Delete a SubGraph of this graph.
    * The SubGraph's SubGraphs become SubGraphs of the graph.
