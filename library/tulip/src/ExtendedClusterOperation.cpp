@@ -270,6 +270,17 @@ node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool
   }
 
   Graph *subGraph = getSuperGraph()->inducedSubGraph(nodeSet);
+  // fix for sf bug #3032155
+  // if the current graph is not the root graph
+  // remove edges of subgraph which are not elements
+  // of the current graph
+  if (this != getSuperGraph()) {
+    edge e;
+    stableForEach(e, subGraph->getEdges()) {
+      if (! isElement(e))
+	subGraph->delEdge(e);
+    }
+  }
   // all local properties
   // must be cloned in subgraph
   PropertyInterface *prop;
