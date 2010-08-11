@@ -113,7 +113,7 @@ bool MixedModel::run() {
   std::vector<std::set<node> > components;
   ConnectedTest::computeConnectedComponents(Pere, components);
   for (unsigned int i = 0; i < components.size(); ++i) {
-    tlp::inducedSubGraph(Pere, components[i]);
+    Pere->inducedSubGraph(components[i]);
   }
 
   vector<edge> edge_planar;

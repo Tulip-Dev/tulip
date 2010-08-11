@@ -98,7 +98,7 @@ bool ConnectedComponentPacking::run() {
   std::vector<std::set<node> > components;
   ConnectedTest::computeConnectedComponents(workingGraph, components);
   for (unsigned int i = 0; i < components.size(); ++i) {
-    tlp::inducedSubGraph(workingGraph, components[i]);
+    workingGraph->inducedSubGraph(components[i]);
   }
 
   vector<Rectangle<float> > rectangles;
