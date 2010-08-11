@@ -110,20 +110,19 @@ bool SquarifiedTreeMap::check(string& errorMsg) {
 bool SquarifiedTreeMap::run() {
   double aspectRatio  = DEFAULT_RATIO;
   shneidermanTreeMap = false;
- 
+  size  = graph->getProperty<SizeProperty>("viewSize");    
+
+  // ensure size updates will be kept after a pop
+  preservePropertyUpdates(size);
+
   if (dataSet != 0) {
     dataSet->get("Aspect Ratio", aspectRatio);
     dataSet->get("Treemap Type", shneidermanTreeMap);
   }
-  
-  size  = graph->getLocalProperty<SizeProperty>("viewSize");    
-  glyph = graph->getLocalProperty<IntegerProperty>("viewShape"); 
-
-  // ensure size updates will be kept after a pop
-  //preservePropertyUpdates(size);
-
+    
+  glyph = graph->getProperty<IntegerProperty>("viewShape"); 
   // ensure shapes updates will be kept after a pop
-  //preservePropertyUpdates(glyph);
+  preservePropertyUpdates(glyph);
 
   glyph->setAllNodeValue(TEXTUREDGLYPHID);
 
@@ -143,8 +142,6 @@ bool SquarifiedTreeMap::run() {
       Rectangle<double> tmp = adjustRectangle(initialSpace);
       squarify(toTreat, tmp, 1);
   }
-
-  graph->push(); 
 
   return true;
 }
