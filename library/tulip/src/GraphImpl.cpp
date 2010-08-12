@@ -592,12 +592,19 @@ void GraphImpl::unpop() {
 //----------------------------------------------------------------
 bool GraphImpl::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
   if (!recorders.empty()) {
+    bool isAddedProp =
+      recorders.front()->isAddedOrDeletedProperty(prop->getGraph(), prop);
     if (recorders.front()->dontObserveProperty(prop)) {
       stdext::slist<GraphUpdatesRecorder*>::iterator it = recorders.begin();
-      if (++it != recorders.end())
+      if (++it != recorders.end()) {
 	// allow the previous recorder to record
 	// the next property updates
-	prop->addPropertyObserver((*it));
+	if (isAddedProp)
+	  // register prop as a newly added
+	  (*it)->addLocalProperty(prop->getGraph(), prop->getName());
+	else 
+	  prop->addPropertyObserver((*it));
+      }
       return true;
     } 
 #ifndef NDEBUG
