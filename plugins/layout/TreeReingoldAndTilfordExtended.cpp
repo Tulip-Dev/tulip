@@ -329,8 +329,6 @@ bool TreeReingoldAndTilfordExtended::run() {
   layoutResult->setAllEdgeValue(vector<Coord>(0));
   if (!getNodeSizePropertyParameter(dataSet, sizes))
     sizes = graph->getProperty<SizeProperty>("viewSize");
-  // ensure size updates will be kept after a pop
-  preservePropertyUpdates(sizes);
   getSpacingParameters(dataSet, nodeSpacing, spacing);
   orientation = "horizontal";
   lengthMetric = 0;
@@ -361,7 +359,8 @@ bool TreeReingoldAndTilfordExtended::run() {
   }//end if
 
   //=========================================================
-  //rotate size if necessary
+  //rotate size if needed
+  //will be undone at the end
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
@@ -438,12 +437,16 @@ bool TreeReingoldAndTilfordExtended::run() {
     }
   }
 
-  //rotate layout and size
+  //rotate layout (and size if needed)
   if (orientation == "horizontal") {
     node n;
     forEach(n, tree->getNodes()) {
-      const Size&  tmp = sizes->getNodeValue(n);
-      sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      // if not in tulip gui, ensure cleanup
+      LayoutProperty* elementLayout;
+      if (!graph->getAttribute("viewLayout", elementLayout)) {
+	const Size&  tmp = sizes->getNodeValue(n);
+	sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      }
       const Coord& tmpC = layoutResult->getNodeValue(n);
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
@@ -452,7 +455,10 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (boundingCircles)
     delete sizes;
 
-  TreeTest::cleanComputedTree(graph, tree);
+  // if not in tulip gui, ensure cleanup
+  LayoutProperty* elementLayout;
+  if (!graph->getAttribute("viewLayout", elementLayout))
+    TreeTest::cleanComputedTree(graph, tree);
 
   return true;
 }
