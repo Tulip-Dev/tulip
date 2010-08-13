@@ -36,7 +36,7 @@ using namespace tlp;
 /* 
  * function to test if an edge e exist in the adjacency of a node
  */
-static bool existEdgeE(Graph *g, const node n1, const node n2, edge e) {
+static bool existEdgeE(Graph *g, const node n1, const node, edge e) {
   Iterator<edge> *it = g->getOutEdges(n1);
   while (it->hasNext()) {
     edge e1(it->next());
@@ -170,7 +170,7 @@ node GraphImpl::addNode() {
   return restoreNode(node(nodeIds.get()));
 }
 //----------------------------------------------------------------
-void GraphImpl::addNode(const node n) {
+void GraphImpl::addNode(const node) {
   cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << endl;
 }
 //----------------------------------------------------------------
@@ -592,12 +592,19 @@ void GraphImpl::unpop() {
 //----------------------------------------------------------------
 bool GraphImpl::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
   if (!recorders.empty()) {
+    bool isAddedProp =
+      recorders.front()->isAddedOrDeletedProperty(prop->getGraph(), prop);
     if (recorders.front()->dontObserveProperty(prop)) {
       stdext::slist<GraphUpdatesRecorder*>::iterator it = recorders.begin();
-      if (++it != recorders.end())
+      if (++it != recorders.end()) {
 	// allow the previous recorder to record
 	// the next property updates
-	prop->addPropertyObserver((*it));
+	if (isAddedProp)
+	  // register prop as a newly added
+	  (*it)->addLocalProperty(prop->getGraph(), prop->getName());
+	else 
+	  prop->addPropertyObserver((*it));
+      }
       return true;
     } 
 #ifndef NDEBUG

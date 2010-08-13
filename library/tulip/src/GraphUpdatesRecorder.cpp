@@ -670,6 +670,15 @@ bool GraphUpdatesRecorder::dontObserveProperty(PropertyInterface* prop) {
 	(updatedPropsAddedEdges.find(p) == updatedPropsAddedEdges.end())) {
       // prop is no longer observed
       prop->removePropertyObserver(this);
+      // may be a newly added property
+      PropertyRecord p(prop,  prop->getName());
+      unsigned long g = (unsigned long) prop->getGraph();
+      TLP_HASH_MAP<unsigned long, set<PropertyRecord> >::iterator it =
+	addedProperties.find(g);
+      if (it != addedProperties.end() &&
+	  ((*it).second.find(p) != (*it).second.end()))
+	// the property is no longer recorded
+	(*it).second.erase(p);
       return true;
     }
   }
@@ -791,7 +800,7 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
   }
 }
 
-void GraphUpdatesRecorder::reverseEdge(Graph* g,  edge e) {
+void GraphUpdatesRecorder::reverseEdge(Graph*,  edge e) {
   TLP_HASH_MAP<edge, EdgeRecord>::iterator itA = addedEdges.find(e);
   // remove e from addedEdges if it is a newly added edge
   if (itA != addedEdges.end()) {
@@ -860,7 +869,7 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
   PropertyRecord p(g->getProperty(name),  name);
   TLP_HASH_MAP<unsigned long, set<PropertyRecord> >::iterator it =
     addedProperties.find((unsigned long) g);
-  // remove p from addedProperties if it is a newly added node
+  // remove p from addedProperties if it is a newly added one
   if (it != addedProperties.end() && ((*it).second.find(p) != (*it).second.end())) {
     // the property is no longer recorded
     (*it).second.erase(p);
