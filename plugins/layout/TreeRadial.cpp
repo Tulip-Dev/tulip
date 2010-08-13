@@ -145,8 +145,6 @@ public:
     if (!getNodeSizePropertyParameter(dataSet, sizes))
       sizes = graph->getProperty<SizeProperty>("viewSize");
     getSpacingParameters(dataSet, nSpacing, lSpacing);
-    // ensure size updates will be kept after a pop
-    preservePropertyUpdates(sizes);
 
     LayoutProperty tmpLayout(graph);
   

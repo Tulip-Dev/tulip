@@ -156,7 +156,7 @@ ConeTreeExtended::ConeTreeExtended(const PropertyContext &context):LayoutAlgorit
 ConeTreeExtended::~ConeTreeExtended() {}
 //===============================================================
 bool ConeTreeExtended::run() {
-  nodeSize = graph->getProperty<SizeProperty>("viewSize");
+  nodeSize = NULL;
   string orientation = "vertical";
   if (dataSet!=0) {
     getNodeSizePropertyParameter(dataSet, nodeSize);
@@ -165,10 +165,11 @@ bool ConeTreeExtended::run() {
       orientation = tmp.getCurrentString();
     }
   }
-  // ensure size updates will be kept after a pop
-  preservePropertyUpdates(nodeSize);
+  if (!nodeSize)
+    nodeSize = graph->getProperty<SizeProperty>("viewSize");
   //=========================================================
-  //rotate size if necessary
+  //rotate size if needed
+  //will be undone at then end
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
@@ -196,8 +197,12 @@ bool ConeTreeExtended::run() {
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
-      const Size&  tmp = nodeSize->getNodeValue(n);
-      nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      // if not in tulip gui, ensure cleanup
+      LayoutProperty* elementLayout;
+      if (!graph->getAttribute("viewLayout", elementLayout)) {
+	const Size&  tmp = nodeSize->getNodeValue(n);
+	nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
+      }
       const Coord& tmpC = layoutResult->getNodeValue(n);
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
