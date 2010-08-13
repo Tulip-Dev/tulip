@@ -6,6 +6,8 @@ ADDLDFLAGS = `xml2-config --libs`
 ADD_INCLUDES = `xml2-config --cflags` 
 endif
 
+EXTRA_DIST = CMakeLists.txt
+
 bin_PROGRAMS = serverGenerator pluginInstaller
 
 tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT
