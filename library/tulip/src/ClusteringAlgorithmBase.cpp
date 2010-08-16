@@ -102,9 +102,9 @@ AgglomerativeClusteringBase::AgglomerativeClusteringBase(AlgorithmContext contex
     unsigned int i = 0;
     Iterator<node> *it = graph->getNodes();
     while (it->hasNext()) {
-        vector<node> tmp;
+        set<node> tmp;
         node n = it->next();
-        tmp.push_back(n);
+        tmp.insert(n);
         _partition.push_back(tmp);
         _partitionId.set(nodeMapping.get(n.id).id, i);
         _partitionNode.set(i, nodeMapping.get(n.id));
@@ -167,9 +167,9 @@ node AgglomerativeClusteringBase::mergeNodes(node n1, node n2) {
 
     unsigned int i = _partitionId.get(n1.id);
     unsigned int j = _partitionId.get(n2.id);
-    vector<node>::const_iterator itV = _partition[j].begin();
+    set<node>::const_iterator itV = _partition[j].begin();
     for (; itV!=_partition[j].end(); ++itV)
-        _partition[i].push_back(*itV);
+        _partition[i].insert(*itV);
     _partition[j] = _partition.back();
     node tmp = _partitionNode.get(_partition.size()-1);
     _partitionId.set(tmp.id, j);
@@ -199,15 +199,12 @@ void AgglomerativeClusteringBase::simpleGraphCopy(const Graph* source, Graph* ta
     _intraEdges->setAllNodeValue(0);
 }
 
-void AgglomerativeClusteringBase::buildHierarchy(Graph * graph, vector<std::vector<std::vector<node> > >& partitions, int best_ind) {
+void AgglomerativeClusteringBase::buildHierarchy(Graph * graph, vector<std::vector<std::set<node> > >& partitions, int best_ind) {
     assert(((int)partitions.size()) > 0);
     assert(best_ind < (int)partitions.size());
     for (size_t i = 0; i < partitions[best_ind].size(); ++i) {
-        vector<node> group = partitions[best_ind][i];
-        set<node> toGroup;
-        for (unsigned int j = 0; j < group.size(); ++j)
-            toGroup.insert(group[j]);
-        graph->inducedSubGraph(toGroup);
+        set<node> group = partitions[best_ind][i];
+        tlp::inducedSubGraph(graph, group);
     }
 }
 
@@ -217,11 +214,11 @@ DivisiveClusteringBase::DivisiveClusteringBase(AlgorithmContext context)
   :ClusteringAlgorithmBase(context), metric_mode(0) {
   if(context.graph) {
     _sumEdges = context.graph->numberOfEdges();
-    vector<node> initialClustering;
+    set<node> initialClustering;
     node n;
     node quotientOriginal = _quotientGraph->addNode();
     forEach(n, context.graph->getNodes()) {
-      initialClustering.push_back(n);
+      initialClustering.insert(n);
       _originalToQuotient[n] = quotientOriginal;
     }
     _partition.push_back(initialClustering);
@@ -313,12 +310,12 @@ bool DivisiveClusteringBase::splitGraphIfDisconnected(int clusterIndex, Graph*co
     
     _partition[clusterIndex].clear();
     forEach(n, (*subCluster1)->getNodes()) {
-      _partition[clusterIndex].push_back(n);
+      _partition[clusterIndex].insert(n);
     }
     
-    vector<node> newPartition;
+    set<node> newPartition;
     forEach(n, (*subCluster2)->getNodes()) {
-      newPartition.push_back(n);
+      newPartition.insert(n);
       _originalToQuotient[n] = newCluster;
     }
     _partition.push_back(newPartition);

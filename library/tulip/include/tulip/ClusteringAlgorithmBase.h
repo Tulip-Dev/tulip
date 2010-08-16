@@ -31,8 +31,8 @@ namespace tlp {
     protected:
       tlp::Graph* _quotientGraph;
       
-      std::vector<std::vector<node> > _partition; //partition of nodes
-      std::vector<std::vector<std::vector<node > > > _partitions;
+      std::vector<std::set<node> > _partition; //partition of nodes
+      std::vector<std::vector<std::set<node > > > _partitions;
       MutableContainer<unsigned int> _partitionId;  //node of the Quotient Graph -> partition id
       MutableContainer<node> _partitionNode;        //partition id -> node in the quotient graph
       
@@ -63,7 +63,7 @@ namespace tlp {
       tlp::node mergeNodes(tlp::node n1, tlp::node n2);
 
       void simpleGraphCopy(const tlp::Graph* source, tlp::Graph* target, MutableContainer<node>& nodeMapping);
-      void buildHierarchy(tlp::Graph* graph, std::vector<std::vector<std::vector<node > > >& partitions, int best_ind = -1);
+      void buildHierarchy(tlp::Graph* graph, std::vector<std::vector<std::set<node > > >& partitions, int best_ind = -1);
   };
    
   class DivisiveClusteringBase : public ClusteringAlgorithmBase {
@@ -78,6 +78,7 @@ namespace tlp {
       std::string _metricAlgorithm;
       Graph* _workingGraph;
       std::map<tlp::node, tlp::node> _originalToQuotient;
+      std::vector<Graph*> curClusters;
     private:
       double _sumEdges;
   };
