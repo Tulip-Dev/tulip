@@ -78,7 +78,7 @@ namespace tlp {
       std::string _metricAlgorithm;
       Graph* _workingGraph;
       std::map<tlp::node, tlp::node> _originalToQuotient;
-      std::vector<Graph*> curClusters;
+      std::vector<Graph*> _currentClusters;
     private:
       double _sumEdges;
   };
