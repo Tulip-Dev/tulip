@@ -30,15 +30,9 @@ ClusteringAlgorithmBase::~ClusteringAlgorithmBase() {
 }
 
 bool ClusteringAlgorithmBase::run() {
-  struct timeval start, end;
-  cout << "*starting" << endl;
-  gettimeofday(&start, NULL);
   _qualityMeasure = getQualityMeasure();
   _qualityMeasure->initialize();
-  bool result = runClustering();
-  gettimeofday(&end, NULL);
-  std::cout << "time elapsed(s:ms): " << (end.tv_sec - start.tv_sec) << ":" << (end.tv_usec - start.tv_usec) << std::endl; 
-  return result;
+  return runClustering();
 }
 
 const Graph* ClusteringAlgorithmBase::getOriginalGraph() const {
@@ -96,6 +90,12 @@ void ClusteringAlgorithmBase::orderByPartitionId(node &n1, node &n2) const {
 AgglomerativeClusteringBase::AgglomerativeClusteringBase(AlgorithmContext context)
   :ClusteringAlgorithmBase(context) {
   if(context.graph) {
+    _intraEdges->setAllNodeValue(0);
+    _extraEdges->setAllEdgeValue(0);
+    
+    best_ind = -1;
+    bestQuality = -2;
+    
     MutableContainer<node> nodeMapping;  
     simpleGraphCopy(graph, _quotientGraph, nodeMapping);
     
@@ -111,8 +111,7 @@ AgglomerativeClusteringBase::AgglomerativeClusteringBase(AlgorithmContext contex
         ++i;
     } delete it;
     
-    _intraEdges->setAllNodeValue(0);
-    _extraEdges->setAllEdgeValue(0);
+    _partitions.push_back(_partition);
   }
 }
 
@@ -226,6 +225,9 @@ DivisiveClusteringBase::DivisiveClusteringBase(AlgorithmContext context)
     _intraEdges->setNodeValue(quotientOriginal, graph->numberOfEdges());
     _partitionNode.set(0, quotientOriginal);
     _partitionId.set(quotientOriginal.id, 0);
+    
+    _workingGraph = tlp::newCloneSubGraph(graph);
+    _currentClusters.push_back(tlp::newCloneSubGraph(graph));
   }
 }
 
