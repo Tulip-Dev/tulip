@@ -68,7 +68,7 @@ namespace tlp {
    
   class DivisiveClusteringBase : public ClusteringAlgorithmBase {
     public:
-      DivisiveClusteringBase(tlp::AlgorithmContext);
+      DivisiveClusteringBase(tlp::AlgorithmContext context);
       virtual bool runClustering() = 0;
       
       bool splitGraphIfDisconnected(int clusterIndex, tlp::Graph*const cluster, tlp::Graph** subCluster1, tlp::Graph** subCluster2);

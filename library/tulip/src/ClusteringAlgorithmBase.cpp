@@ -232,6 +232,7 @@ DivisiveClusteringBase::DivisiveClusteringBase(AlgorithmContext context)
 }
 
 edge DivisiveClusteringBase::findEdgeToRemove() {
+  assert(_workingGraph->numberOfEdges() > 0);
   edge edgeToDel;
   edge e;
   
@@ -276,16 +277,11 @@ bool DivisiveClusteringBase::splitGraphIfDisconnected(int clusterIndex, Graph*co
     tmp.set("Property", &connectedComponnent);
     tlp::applyAlgorithm(cluster, err, &tmp, "Equal Value");
     
-    bool first = true;
-    Graph *g;
-    forEach(g, cluster->getSubGraphs()){
-      if(first) {
-        *subCluster1 = g;
-        first= false;
-      }
-      else 
-        *subCluster2 = g;
-    }
+    Iterator<Graph*>* it = cluster->getSubGraphs();
+    assert(it->hasNext());
+    *subCluster1 = it->next();
+    assert(it->hasNext());
+    *subCluster2 = it->next();
     
     //update the quotient graph
     node newCluster = _quotientGraph->addNode();

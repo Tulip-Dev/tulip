@@ -13,12 +13,12 @@ MQClusteringQualityMeasure::MQClusteringQualityMeasure(const tlp::ClusteringAlgo
 
 double MQClusteringQualityMeasure::getQuality() {
   double size = double(_clusteringAlgorithm->getPartitionSize());
-  std::cout << "partitionsize: " << size << std::endl; 
+//   std::cout << "partitionsize: " << size << std::endl; 
   double positive = _positive / size;
   if(size == 1) 
     return positive;
   double negative = _negative / (double(size*(size-1)) / 2.0);
-  std::cout << positive << "\t" << negative << std::endl;
+//   std::cout << positive << "\t" << negative << std::endl;
 //   std::cout << "(+: " << positive << ";" << _positive << ")" << "(-:" << negative << ";" << _negative << ")" << "(size:" << size << ")" << std::endl; 
   return positive - negative;
 }
@@ -74,7 +74,7 @@ void MQClusteringQualityMeasure::afterMergeNodes(tlp::node n1) {
     if ( (_clusteringAlgorithm->getPartitionSize(p1)!=0) && (_clusteringAlgorithm->getPartitionSize(p2)!=0))
       _negative += _clusteringAlgorithm->getExtraEdges(e) / double(_clusteringAlgorithm->getPartitionSize(p1) * _clusteringAlgorithm->getPartitionSize(p2));
   }
-  std::cout << "+: " << _positive << " ; -: " << _negative << std::endl; 
+//   std::cout << "+: " << _positive << " ; -: " << _negative << std::endl; 
 }
 
 void MQClusteringQualityMeasure::beforeSplitNode(tlp::node n) {
@@ -101,7 +101,7 @@ void MQClusteringQualityMeasure::beforeSplitNode(tlp::node n) {
 
 void MQClusteringQualityMeasure::afterSplitNode(tlp::node oldNode, tlp::node newNode) {
   //add positive
-  std::cout << "afterSplitNode: " << "(+: " << _positive << ")" << "(-:" << _negative << ")" << std::endl; 
+//   std::cout << "afterSplitNode: " << "(+: " << _positive << ")" << "(-:" << _negative << ")" << std::endl; 
   node tab[2]; //Tab enables iteration and thus avoids code duplication
   tab[0] = oldNode;
   tab[1] = newNode;
@@ -132,7 +132,7 @@ void MQClusteringQualityMeasure::afterSplitNode(tlp::node oldNode, tlp::node new
   _negative -= _clusteringAlgorithm->getExtraEdges(between) / double(_clusteringAlgorithm->getPartitionSize(oldNode) * _clusteringAlgorithm->getPartitionSize(newNode));
   
   //because we sum on all the couples of clusters, (i.e. sum on i, j and not sum on j > i)
-  std::cout << "/afterSplitNode: " << "(+: " << _positive << ")" << "(-:" << _negative << ")" << std::endl; 
+//   std::cout << "/afterSplitNode: " << "(+: " << _positive << ")" << "(-:" << _negative << ")" << std::endl; 
 }
 
 double MQClusteringQualityMeasure::getQualityIfMerged(node n1, node n2) {
@@ -190,7 +190,7 @@ void MQClusteringQualityMeasure::initialize() {
   } delete itN;
   _positive = positive;
   double partitionSize = _clusteringAlgorithm->getPartitionSize();
-  std::cout << "pos : " << positive << "/" << partitionSize << std::endl;
+//   std::cout << "pos : " << positive << "/" << partitionSize << std::endl;
   positive /= partitionSize;
 
   //compute negative part of MQ
@@ -210,11 +210,11 @@ void MQClusteringQualityMeasure::initialize() {
   _negative = negative;
   if (partitionSize > 1)
     negative /= double(partitionSize*(partitionSize-1)) / 2.0;
-  std::cout << "neg : " << negative << "/" << double(partitionSize*(partitionSize-1)) / 2.0 << std::endl;
-  std::cout << "pos : " << _positive << " neg:" << _negative << std::endl;
-  double nbNodes = double(_clusteringAlgorithm->getOriginalGraph()->numberOfNodes());
-  double nbEdges = double(_clusteringAlgorithm->getOriginalGraph()->numberOfEdges());
-  std::cout << "pos : " << (2*nbEdges)/(nbNodes*(nbNodes-1)) << " (" << nbNodes << ";" << nbEdges << ")";
-  std::cout << " neg:" << 0 << std::endl;
-//   return positive - negative;
+//   std::cout << "neg : " << negative << "/" << double(partitionSize*(partitionSize-1)) / 2.0 << std::endl;
+//   std::cout << "pos : " << _positive << " neg:" << _negative << std::endl;
+//   double nbNodes = double(_clusteringAlgorithm->getOriginalGraph()->numberOfNodes());
+//   double nbEdges = double(_clusteringAlgorithm->getOriginalGraph()->numberOfEdges());
+//   std::cout << "pos : " << (2*nbEdges)/(nbNodes*(nbNodes-1)) << " (" << nbNodes << ";" << nbEdges << ")";
+//   std::cout << " neg:" << 0 << std::endl;
+  return; // positive - negative;
 }
