@@ -126,6 +126,7 @@ void GlMainView::hideOverview(bool hide) {
 		overviewFrame->show();
 	}
 	overviewAction->setChecked(!hide);
+  refresh();
 }
 //==================================================
 void GlMainView::showDialog(QAction* action){
