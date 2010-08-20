@@ -777,7 +777,7 @@ void PlanarConMap::mergeFaces(Face f, Face g){
   for(unsigned int i = 0 ; i < ve.size(); ++i)
     if(isInF.get(ve[i].id))
       toDel.push_back(ve[i]);
-  assert(toDel.size()>0);
+  assert(!toDel.empty());
   assert(toDel.size()!=facesEdges[g].size() && toDel.size()!=facesEdges[f].size());
 
   // Search for the first edge to delete on vector toDel

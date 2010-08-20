@@ -59,7 +59,7 @@ unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph* const 
   vector<node> toLink;
   instance->connect(graph, toLink);
   unsigned int result;
-  if (toLink.size()>0) 
+  if (!toLink.empty()) 
     result =  toLink.size();
   else 
     result = 1u;

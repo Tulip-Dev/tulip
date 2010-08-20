@@ -408,7 +408,7 @@ void MixedModel::placeNodesEdges(){
        
 		    
 
-      if(bends.size() != 0)
+      if(!bends.empty())
 	layoutResult->setEdgeValue(e, bends);
     }
     // rs == rt, même partition donc pas de points intermédiaire à calculer

@@ -46,7 +46,7 @@ namespace tlp {
     observedMainWidget=graphWidget;
 
     vector<pair<string, GlLayer*> >* layers=graphWidget->getScene()->getLayersList();
-    if(layers->size()!=0) {
+    if(!layers->empty()) {
       for(vector<pair<string, GlLayer*> >::iterator it=layers->begin();it!=layers->end();++it) {
         addLayer(graphWidget->getScene(),(*it).first,(*it).second);
       }

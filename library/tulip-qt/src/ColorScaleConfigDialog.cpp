@@ -98,7 +98,7 @@ void ColorScaleConfigDialog::accept() {
 		}
 		gradient = gradientCB->isChecked();
 	}
-	if (colors.size() > 0) {
+	if (!colors.empty()) {
 		std::reverse(colors.begin(), colors.end());
 		colorScale->setColorScale(colors, gradient);
 	}

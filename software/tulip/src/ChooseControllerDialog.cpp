@@ -77,7 +77,7 @@ void ChooseControllerDialog::itemClicked(QListWidgetItem *item){
       checkedItems.push_back(item);
   }
 
-  if(checkedItems.size()==0)
+  if(checkedItems.empty())
     buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
   else
     buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);

@@ -496,7 +496,7 @@ void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW,
   }
   // checks if need to flip oldCNode;
   // u == nil when oldCNode is a terminal node;
-  bool flipped = ((listNodesL.size() > 0 && (jl == u || u == NULL_NODE))
+  bool flipped = ((!listNodesL.empty() && (jl == u || u == NULL_NODE))
                    || (jr != u && u != NULL_NODE));
   if (flipped)
     listNodesL.swap(listNodesR);

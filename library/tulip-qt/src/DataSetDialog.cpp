@@ -666,7 +666,7 @@ namespace {
 	    curIdx = getAllProperties( proxyA, inG, curProxy );
 	  else
 	    curIdx = getPropertyOf( proxyA, inG, ip.typeName, curProxy );
-	  if( proxyA.size() ) {
+	  if( !proxyA.empty() ) {
 	    QComboBox * cb = new QComboBox( this );
 	    for( unsigned int i = 0 ; i < proxyA.size() ; i++ )
 	      cb->addItem(QString::fromUtf8(proxyA[i].c_str()));

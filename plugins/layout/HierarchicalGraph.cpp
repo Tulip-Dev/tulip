@@ -485,7 +485,7 @@ bool HierarchicalGraph::run() {
     Coord srcPos = layoutResult->getNodeValue(src);
     Coord tgtPos = layoutResult->getNodeValue(tgt);
     vector<Coord> old = layoutResult->getEdgeValue(e);
-    if (old.size() == 0) {
+    if (old.empty()) {
       vector<Coord> pos(2);
       srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.0 + spacing/4.);
       tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.0 + spacing/4.);
