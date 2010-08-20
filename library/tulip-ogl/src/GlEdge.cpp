@@ -542,7 +542,7 @@ void GlEdge::getVertices(GlGraphInputData *data,
   Coord srcCoordTmp=srcCoord;
   Coord tgtCoordTmp=tgtCoord;
   computeCleanVertices(bends, srcAnchor, tgtAnchor, srcCoordTmp, tgtCoordTmp, vertices);
-  if(vertices.size()==0)
+  if(vertices.empty())
     return ;
 
   size_t numberOfVertices=vertices.size();

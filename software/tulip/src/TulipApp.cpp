@@ -1044,7 +1044,7 @@ void TulipApp::loadInterface(int index){
 
   if(controllerToMenu.count(controller)!=0){
     vector<QAction *> actionsToAdd=controllerToMenu[controller];
-    if(actionsToAdd.size()!=0){
+    if(!actionsToAdd.empty()){
       for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
         menuBar()->addAction(*it);
       }
@@ -1053,7 +1053,7 @@ void TulipApp::loadInterface(int index){
 
   if(controllerToToolBar.count(controller)!=0){
     vector<QAction *> actionsToAdd=controllerToToolBar[controller];
-    if(actionsToAdd.size()!=0){
+    if(!actionsToAdd.empty()){
       for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
         toolBar->addAction(*it);
       }
@@ -1062,7 +1062,7 @@ void TulipApp::loadInterface(int index){
 
   if(controllerToGraphToolBar.count(controller)!=0){
     vector<QAction *> actionsToAdd=controllerToGraphToolBar[controller];
-    if(actionsToAdd.size()!=0){
+    if(!actionsToAdd.empty()){
       for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
         graphToolBar->addAction(*it);
         if((*it)->isChecked()){

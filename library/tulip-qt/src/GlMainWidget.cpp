@@ -475,13 +475,13 @@ namespace tlp {
     makeCurrent();
     vector<unsigned long> selectedElements;
     scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedElements);
-    if(selectedElements.size()!=0) {
+    if(!selectedElements.empty()) {
       type=NODE;
       n=node((unsigned int)(selectedElements[0]));
       return true;
     }
     scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedElements);
-    if(selectedElements.size()!=0) {
+    if(!selectedElements.empty()) {
       type=EDGE;
       e=edge((unsigned int)(selectedElements[0]));
       return true;

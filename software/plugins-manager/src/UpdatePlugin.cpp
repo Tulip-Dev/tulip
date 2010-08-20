@@ -70,7 +70,7 @@ namespace tlp {
         depNoInstalled.erase(itD);
     }
 
-    if(depNoInstalled.size()>0){
+    if(!depNoInstalled.empty()){
       // Ask the user if he wants to install all dependancy
       AuthorizationInstallDependencies* authoriz = new AuthorizationInstallDependencies(&depNoInstalled,&pluginsToInstall);
       authoriz->exec();
@@ -91,7 +91,7 @@ namespace tlp {
         depToRemove.erase(itD);
     }
 
-    if(depToRemove.size()>0){
+    if(!depToRemove.empty()){
       // Ask the user if he wants to install all dependancy
       AuthorizationInstallDependencies* authoriz = new AuthorizationInstallDependencies(&depToRemove,&pluginsToRemove);
       authoriz->exec();

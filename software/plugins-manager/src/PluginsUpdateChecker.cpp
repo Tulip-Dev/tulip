@@ -90,7 +90,7 @@ namespace tlp {
     }
     settings.endGroup();
 
-    if(plugins.size()==0){
+    if(plugins.empty()){
       return;
     }
 
