@@ -54,7 +54,7 @@ namespace tlp {
       /**
        * Give the instersction of "this" with c, return false if no intersection exist
        */
-      bool intersection(const Circle<Obj> &c, const Vector<Obj,2> &p1,  const Vector<Obj,2> &p2) {
+      bool intersection(const Circle<Obj> &, const Vector<Obj,2> &,  const Vector<Obj,2> &) {
 	return true;
       }
       /**
