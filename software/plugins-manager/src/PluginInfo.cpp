@@ -25,10 +25,10 @@ using namespace std;
 //====================================================
 #ifdef _WIN32
 #ifdef DLL_EXPORT
-const string tlp::PluginInfo::pluginsDirName=(QDir::homePath()+"/Application Data/Tulip-" + QString(TULIP_RELEASE) +"/plugins/").toStdString();
+const string tlp::PluginInfo::pluginsDirName=(QDir::homePath()+"/Application Data/Tulip-3.4.0/plugins/").toStdString();
 #endif
 #else
-const string tlp::PluginInfo::pluginsDirName=(QDir::homePath()+"/.Tulip-" + QString(TULIP_RELEASE) +"/plugins/").toStdString();
+const string tlp::PluginInfo::pluginsDirName=(QDir::homePath()+"/.Tulip-3.4.0/plugins/").toStdString();
 #endif
 
 namespace tlp {

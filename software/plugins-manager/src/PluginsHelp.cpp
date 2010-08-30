@@ -28,13 +28,13 @@
 using namespace std;
 
 #if defined(_WIN32)
-static const QString viewPluginsDirName="Application Data/Tulip-" + QString(TULIP_RELEASE) +"/help/viewPluginsHandbook/";
-static const QString helpDirName="Application Data/Tulip-" + QString(TULIP_RELEASE) +"/help/";
-static const QString installPluginsDirName="Application Data/Tulip-" + QString(TULIP_RELEASE) +"/plugins/";
+static const QString viewPluginsDirName="Application Data/Tulip-3.4.0/help/viewPluginsHandbook/";
+static const QString helpDirName="Application Data/Tulip-3.4.0/help/";
+static const QString installPluginsDirName="Application Data/Tulip-3.4.0/plugins/";
 #else
-static const QString viewPluginsDirName=".Tulip-" + QString(TULIP_RELEASE) +"/help/viewPluginsHandbook/";
-static const QString helpDirName=".Tulip-" + QString(TULIP_RELEASE) +"/help/";
-static const QString installPluginsDirName=".Tulip-" + QString(TULIP_RELEASE) +"/plugins/";
+static const QString viewPluginsDirName=".Tulip-3.4.0/help/viewPluginsHandbook/";
+static const QString helpDirName=".Tulip-3.4.0/help/";
+static const QString installPluginsDirName=".Tulip-3.4.0/plugins/";
 #endif
 
 static QByteArray toByteArray(const qint64 &number){
