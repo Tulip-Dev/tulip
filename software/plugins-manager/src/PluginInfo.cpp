@@ -22,13 +22,17 @@
 
 using namespace std;
 
+const QString TulipSimpleVersion=(QString(TULIP_RELEASE).split("."))[0]+"."+(QString(TULIP_RELEASE).split("."))[1];
+
 //====================================================
 #ifdef _WIN32
 #ifdef DLL_EXPORT
-const string tlp::PluginInfo::pluginsDirName=(QDir::homePath()+"/Application Data/Tulip-" + QString(TULIP_RELEASE) +"/plugins/").toStdString();
+const string tlp::PluginInfo::localTulipDirectory=(QDir::homePath()+"/Application Data/Tulip-"+TulipSimpleVersion).toStdString();
+const string tlp::PluginInfo::pluginsDirName=localTulipDirectory+"/plugins/";
 #endif
 #else
-const string tlp::PluginInfo::pluginsDirName=(QDir::homePath()+"/.Tulip-" + QString(TULIP_RELEASE) +"/plugins/").toStdString();
+const string tlp::PluginInfo::localTulipDirectory=(QDir::homePath()+"/.Tulip-"+TulipSimpleVersion).toStdString();
+const string tlp::PluginInfo::pluginsDirName=localTulipDirectory+"/plugins/";
 #endif
 
 namespace tlp {
