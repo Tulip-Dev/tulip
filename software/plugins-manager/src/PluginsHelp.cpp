@@ -25,16 +25,18 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/TlpTools.h>
 
+#include "PluginInfo.h"
+
 using namespace std;
 
 #if defined(_WIN32)
-static const QString viewPluginsDirName="Application Data/Tulip-" + QString(TULIP_RELEASE) +"/help/viewPluginsHandbook/";
-static const QString helpDirName="Application Data/Tulip-" + QString(TULIP_RELEASE) +"/help/";
-static const QString installPluginsDirName="Application Data/Tulip-" + QString(TULIP_RELEASE) +"/plugins/";
+static const QString viewPluginsDirName=QString(tlp::PluginInfo::localTulipDirectory.c_str())+"/help/viewPluginsHandbook/";
+static const QString helpDirName=QString(tlp::PluginInfo::localTulipDirectory.c_str())+"/help/";
+static const QString installPluginsDirName=QString(tlp::PluginInfo::localTulipDirectory.c_str())+"/plugins/";
 #else
-static const QString viewPluginsDirName=".Tulip-" + QString(TULIP_RELEASE) +"/help/viewPluginsHandbook/";
-static const QString helpDirName=".Tulip-" + QString(TULIP_RELEASE) +"/help/";
-static const QString installPluginsDirName=".Tulip-" + QString(TULIP_RELEASE) +"/plugins/";
+static const QString viewPluginsDirName=QString(tlp::PluginInfo::localTulipDirectory.c_str())+"/help/viewPluginsHandbook/";
+static const QString helpDirName=QString(tlp::PluginInfo::localTulipDirectory.c_str())+"/help/";
+static const QString installPluginsDirName=QString(tlp::PluginInfo::localTulipDirectory.c_str())+"/plugins/";
 #endif
 
 static QByteArray toByteArray(const qint64 &number){
