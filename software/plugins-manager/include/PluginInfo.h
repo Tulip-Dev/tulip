@@ -70,6 +70,7 @@ namespace tlp {
 
   public :
 
+    static const std::string localTulipDirectory;
     static const std::string pluginsDirName;
     static std::string getInstallationSubDir(const std::string &str);
 
