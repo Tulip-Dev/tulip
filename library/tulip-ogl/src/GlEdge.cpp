@@ -641,7 +641,19 @@ float GlEdge::getEdgeWidthLod(const Coord &edgeCoord,
                               const Size &edgeSize,Camera *camera){
   if(!orthoProjection){
     if(haveToComputeEdgeWidthBaseLod){
-      Coord worldPosition=camera->screenTo3DWorld(Coord(0,0,0));
+      // This code is here because screenTo3DWorld function modify current projection
+      // ==>
+      Matrix<float, 4> transformMatrix;
+      Vector<int, 4> viewport = camera->getViewport();
+      camera->getTransformMatrix(transformMatrix);
+      Coord pScr = projectPoint(Coord(0,0,0), transformMatrix, viewport);
+      pScr[0] = (float)viewport[2];
+      pScr[1] = (float)viewport[3] - 1.0;
+      MatrixGL tmp(transformMatrix);
+      tmp.inverse();
+      Coord worldPosition=unprojectPoint(pScr, tmp, viewport);
+      // <==
+
       Matrix<float, 4u> projectionMatrix;
       Matrix<float, 4u> modelviewMatrix;
       camera->getProjectionMatrix(projectionMatrix);
