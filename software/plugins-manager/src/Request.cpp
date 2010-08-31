@@ -57,16 +57,42 @@ namespace tlp {
     
   void DownloadPluginRequest::getXml(std::string &xml) const {
     SoapRequestBuilder request;
-    request.setFunctionName("downloadPlugin_v2");
+    request.setFunctionName("downloadPlugin_v3");
     request.addFunctionParameter("pluginName","string",name);
     request.addFunctionParameter("tulipVersion","string",TULIP_RELEASE);
+#if defined(__APPLE__)
+#if defined(MACPPC)
+    request.addFunctionParameter("os","string","macppc");
+#else
+    request.addFunctionParameter("os","string","macintel");
+#endif
+#elif defined(_WIN32)
+    request.addFunctionParameter("os","string","windows");
+#elif defined(I64)
+    request.addFunctionParameter("os","string","i64");
+#else
+    request.addFunctionParameter("os","string","i386");
+#endif
     request.getXML(xml);
   }
     
   void ConnectServerRequest::getXml(std::string &xml) const {
     SoapRequestBuilder request;
-    request.setFunctionName("connect_v2");
+    request.setFunctionName("connect_v3");
     request.addFunctionParameter("tulipVersion","string",TULIP_RELEASE);
+#if defined(__APPLE__)
+#if defined(MACPPC)
+    request.addFunctionParameter("os","string","macppc");
+#else
+    request.addFunctionParameter("os","string","macintel");
+#endif
+#elif defined(_WIN32)
+    request.addFunctionParameter("os","string","windows");
+#elif defined(I64)
+    request.addFunctionParameter("os","string","i64");
+#else
+    request.addFunctionParameter("os","string","i386");
+#endif
     request.getXML(xml);
   }
     
