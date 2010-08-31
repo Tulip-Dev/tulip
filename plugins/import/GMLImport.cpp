@@ -232,8 +232,8 @@ struct GMLNodeGraphicsBuilder:public GMLTrue {
     if (st=="x") coord.setX(integer);
     if (st=="y") coord.setY(integer);
     if (st=="z") coord.setZ(integer);
-    if (st=="w") size.setH(integer);
-    if (st=="h") size.setW(integer);
+    if (st=="w") size.setW(integer);
+    if (st=="h") size.setH(integer);
     if (st=="d") size.setD(integer);
     return true;
   }
@@ -241,8 +241,8 @@ struct GMLNodeGraphicsBuilder:public GMLTrue {
     if (st=="x") coord.setX(real);
     if (st=="y") coord.setY(real);
     if (st=="z") coord.setZ(real);
-    if (st=="w") size.setH(real);
-    if (st=="h") size.setW(real);
+    if (st=="w") size.setW(real);
+    if (st=="h") size.setH(real);
     if (st=="d") size.setD(real);
     return true;
   }
@@ -506,4 +506,4 @@ public:
 };
 /*@}*/
 
-IMPORTPLUGINOFGROUP(GMLImport,"GML","Auber","04/07/2001","GML Import plugin","1.0","File")
+IMPORTPLUGINOFGROUP(GMLImport,"GML","Auber","04/07/2001","GML Import plugin","1.1","File")
