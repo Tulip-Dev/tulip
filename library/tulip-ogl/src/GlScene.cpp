@@ -193,8 +193,13 @@ namespace tlp {
     GlEdge glEdge(0);
     GlMetaNode glMetaNode(0);
 
+    bool nodeLabelEmpty=(!glGraphComposite->getInputData()->elementLabel->getNonDefaultValuatedNodes()->hasNext())
+                        && glGraphComposite->getInputData()->elementLabel->getNodeDefaultStringValue()=="";
+    bool edgeLabelEmpty=(!glGraphComposite->getInputData()->elementLabel->getNonDefaultValuatedEdges()->hasNext())
+                        && glGraphComposite->getInputData()->elementLabel->getEdgeDefaultStringValue()=="";
+
     // Draw Labels for Nodes
-    if(glGraphComposite->getInputData()->parameters->isViewNodeLabel()) {
+    if(glGraphComposite->getInputData()->parameters->isViewNodeLabel() && !nodeLabelEmpty) {
       node n;
       for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->nodesLODVector.begin();it!=layerLODUnit->nodesLODVector.end();++it) {
         if((*it).lod<0)
@@ -236,7 +241,7 @@ namespace tlp {
       }
     }
     // Draw Labels for Edges
-    if(glGraphComposite->getInputData()->parameters->isViewEdgeLabel()) {
+    if(glGraphComposite->getInputData()->parameters->isViewEdgeLabel() && !edgeLabelEmpty) {
       edge e;
       for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->edgesLODVector.begin();it!=layerLODUnit->edgesLODVector.end();++it) {
         if((*it).lod<0)
