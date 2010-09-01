@@ -47,6 +47,11 @@ namespace tlp {
      */
     virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
 
+    /**
+     * Draw label of the meta-node with lod
+     */
+    virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod);
+
   };
 
 }
