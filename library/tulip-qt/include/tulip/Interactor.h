@@ -222,14 +222,14 @@ R : Revision
 class CN : public Interactor { \
 public : \
 CN() {baseInteractor=InteractorManager::getInst().getInteractor(BCNT);if(baseInteractor){setPriority(baseInteractor->getPriority());}} \
-  void setView(View *view){baseInteractor->setView(view);} \
-  void install(QWidget *widget){baseInteractor->install(widget);} \
-  void remove(){baseInteractor->remove();} \
-  QWidget *getConfigurationWidget(){return baseInteractor->getConfigurationWidget();} \
-  bool isCompatible(const std::string &viewName){return viewName==VCN;} \
-  InteractorAction* getAction(){return baseInteractor->getAction();} \
-  void compute(GlMainWidget *widget){baseInteractor->compute(widget);} \
-  void draw(GlMainWidget *widget){baseInteractor->draw(widget);} \
+  void setView(View *view){if(baseInteractor){baseInteractor->setView(view);}} \
+  void install(QWidget *widget){if(baseInteractor){baseInteractor->install(widget);}} \
+  void remove(){if(baseInteractor){baseInteractor->remove();}} \
+  QWidget *getConfigurationWidget(){if(baseInteractor){return baseInteractor->getConfigurationWidget();}else{return NULL;}} \
+  bool isCompatible(const std::string &viewName){if(baseInteractor){return viewName==VCN;}else{return false;}} \
+  InteractorAction* getAction(){if(baseInteractor){return baseInteractor->getAction();}else{return NULL;}} \
+  void compute(GlMainWidget *widget){if(baseInteractor){baseInteractor->compute(widget);}} \
+  void draw(GlMainWidget *widget){if(baseInteractor){baseInteractor->draw(widget);}} \
 protected : \
   Interactor *baseInteractor; \
 }; \
@@ -242,15 +242,15 @@ P : Priority of this interactor (in ne menu)
 #define INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(CN,CNT,BCNT,VCN,A,D,I,R,P)     \
 class CN : public Interactor { \
 public : \
-  CN() {setPriority(P);baseInteractor=InteractorManager::getInst().getInteractor(BCNT);} \
-  void setView(View *view){baseInteractor->setView(view);} \
-  void install(QWidget *widget){baseInteractor->install(widget);} \
-  void remove(){baseInteractor->remove();} \
-  QWidget *getConfigurationWidget(){return baseInteractor->getConfigurationWidget();} \
-  bool isCompatible(const std::string &viewName){return viewName==VCN;} \
-  InteractorAction* getAction(){return baseInteractor->getAction();} \
-  void compute(GlMainWidget *widget){baseInteractor->compute(widget);} \
-  void draw(GlMainWidget *widget){baseInteractor->draw(widget);} \
+CN() {setPriority(P);baseInteractor=InteractorManager::getInst().getInteractor(BCNT);} \
+ void setView(View *view){if(baseInteractor){baseInteractor->setView(view);}} \
+ void install(QWidget *widget){if(baseInteractor){baseInteractor->install(widget);}} \
+ void remove(){if(baseInteractor){baseInteractor->remove();}} \
+ QWidget *getConfigurationWidget(){if(baseInteractor){return baseInteractor->getConfigurationWidget();}else{return NULL;}} \
+ bool isCompatible(const std::string &viewName){if(baseInteractor){return viewName==VCN;}else{return false;}} \
+ InteractorAction* getAction(){if(baseInteractor){return baseInteractor->getAction();}else{return NULL;}} \
+ void compute(GlMainWidget *widget){if(baseInteractor){baseInteractor->compute(widget);}} \
+ void draw(GlMainWidget *widget){if(baseInteractor){baseInteractor->draw(widget);}} \
 protected : \
   Interactor *baseInteractor; \
 }; \
