@@ -191,16 +191,20 @@ namespace tlp {
     cerr << "end [OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
   }
 
-  void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
+  void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod) {
     node n=node(id);
     bool selected=data->elementSelected->getNodeValue(n);
     if(drawSelect!=selected)
       return;
 
-    drawLabel(test,renderer,data);
+    drawLabel(test,renderer,data,lod);
   }
 
   void GlNode::drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
+    GlNode::drawLabel(test,renderer,data,0.);
+  }
+
+  void GlNode::drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod) {
     const Color& colorSelect2=data->parameters->getSelectionColor();
 
     node n=node(id);
@@ -217,6 +221,8 @@ namespace tlp {
     if (tmp.length() < 1) {
       return;
     }
+
+    Size size=data->elementSize->getNodeValue(n);
 
     if(!data->getGraph()->isMetaNode(n)){
       if(selected)
@@ -266,58 +272,77 @@ namespace tlp {
     float w_max = 300;
     float w,h;
     float div_w, div_h;
+    float screenH=20.;
     BoundingBox includeBB;
+    int fontType=data->parameters->getFontsType();
 
-    switch(data->parameters->getFontsType()){
+    switch(fontType){
     case 0:
-      renderer->setMode(TLP_POLYGON);
+    case 2:
+      if(fontType==0)
+        renderer->setMode(TLP_POLYGON);
+      else
+        renderer->setMode(TLP_TEXTURE);
+
       renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
       renderer->setString(tmp, VERBATIM);
-      //      w_max = nodeSize.getW()*50.0;
+
       renderer->getBoundingBox(w_max, h, w);
       glPushMatrix();
-      data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBB);
-      if(includeBB[1][2]==0.)
-        glTranslatef(nodePos[0], nodePos[1], nodePos[2]+0.01);
-      else
-        glTranslatef(nodePos[0], nodePos[1], nodePos[2]+nodeSize[2]/2.+0.01);
+      if(fontType==0){
+        data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBB);
+        if(includeBB[1][2]==0.)
+          glTranslatef(nodePos[0], nodePos[1], nodePos[2]+0.01);
+        else
+          glTranslatef(nodePos[0], nodePos[1], nodePos[2]+nodeSize[2]/2.+0.01);
+      }else{
+        glTranslatef(nodePos[0], nodePos[1], nodePos[2]);
+      }
+
       glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
       div_w = nodeSize.getW()/w;
       div_h = nodeSize.getH()/h;
       if(div_h > div_w)
-	glScalef(div_w, div_w, 1);
+        glScalef(div_w, div_w, 1);
       else
-	glScalef(div_h, div_h, 1);
-      glDepthFunc(GL_LEQUAL );
-      renderer->draw(w,w, labelPos);
+        glScalef(div_h, div_h, 1);
+
+      if(fontType==0)
+        glDepthFunc(GL_LEQUAL );
+
+      if(lod!=0){
+        screenH=size[1]/(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
+        float sizeRatio=size[0]/size[1];
+        float fontRatio=w/h;
+        if(fontRatio>sizeRatio){
+          screenH=screenH/(fontRatio/sizeRatio);
+        }
+      }
+
+      if(screenH < 15){
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glLineWidth(screenH/5.);
+        setColor(Color(fontColor[0],fontColor[1],fontColor[2],128));
+        glBegin(GL_LINES);
+        glVertex3f(-w/2.,0,0);
+        glVertex3f(w/2.,0,0);
+        glEnd();
+        glLineWidth(1);
+      }else{
+        if(fontType==0){
+          renderer->draw(w,w, labelPos);
+        }else{
+          glEnable( GL_TEXTURE_2D);
+          glBlendFunc(GL_ONE_MINUS_DST_COLOR,GL_ONE_MINUS_SRC_COLOR);
+          renderer->draw(w, w, labelPos);
+          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+          glDisable( GL_TEXTURE_2D);
+        }
+      }
       glPopMatrix();
       break;
     case 1:
       drawPixmapFont(test,renderer,data,tmp, fontColor, nodePos, labelPos, selected, nodeSize.getW());
-      break;
-    case 2:
-      //if (projectSize(nodeCoord, nodeSize, camera->projectionMatrix, camera->modelviewMatrix, camera->getViewport()) < 8.0) return;
-
-      renderer->setMode(TLP_TEXTURE);
-      renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
-      renderer->setString(tmp, VERBATIM);
-
-      //      w_max = nodeSize.getW();
-      renderer->getBoundingBox(w_max, h, w);
-      glPushMatrix();
-      glTranslatef(nodePos[0], nodePos[1], nodePos[2]);
-      glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
-      div_w = nodeSize.getW()/w;
-      div_h = nodeSize.getH()/h;
-      if(div_h > div_w)
-	glScalef(div_w, div_w, 1);
-      else
-	glScalef(div_h, div_h, 1);
-      glEnable( GL_TEXTURE_2D);
-      glBlendFunc(GL_ONE_MINUS_DST_COLOR,GL_ONE_MINUS_SRC_COLOR);
-      renderer->draw(w, w, labelPos);
-      glDisable( GL_TEXTURE_2D);
-      glPopMatrix();
       break;
     default:
       cerr << "GlGraph::DrawNodes unknown fonts" << endl;

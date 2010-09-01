@@ -71,13 +71,19 @@ namespace tlp {
      * Draw the label of the edge if drawEdgesLabel is true and if label selection is equal to drawSelect
      * Use TextRenderer : renderer to draw the label
      */
-    void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+    void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data, float lod);
     
     /**
      * Draw the label of the edge if drawEdgesLabel is true
      * Use TextRenderer : renderer to draw the label
      */
     void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+
+    /**
+     * Draw the label of the edge if drawEdgesLabel is true
+     * Use TextRenderer : renderer to draw the label
+     */
+    void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data, float lod);
 
     /**
      * This function is used by the engine to get line coordinates of the edge

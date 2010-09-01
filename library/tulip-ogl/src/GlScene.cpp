@@ -67,8 +67,8 @@ namespace tlp {
   class GreatThanNode {
   public:
     DoubleProperty *metric;
-    bool operator() (node n1,node n2)  {
-      return (metric->getNodeValue(n1) > metric->getNodeValue(n2));
+    bool operator() (pair<node,float> n1,pair<node,float> n2)  {
+      return (metric->getNodeValue(n1.first) > metric->getNodeValue(n2.first));
     }
   };
   //====================================================
@@ -76,8 +76,8 @@ namespace tlp {
   public:
     DoubleProperty *metric;
     Graph *sp;
-    bool operator() (edge e1,edge e2) {
-      return (metric->getEdgeValue(e1) > metric->getEdgeValue(e2));
+    bool operator() (pair<edge,float> e1,pair<edge,float> e2) {
+      return (metric->getEdgeValue(e1.first) > metric->getEdgeValue(e2.first));
     }
   };
   //====================================================
@@ -187,8 +187,8 @@ namespace tlp {
     DoubleProperty *metric=NULL;
     if(graph->existProperty("viewMetric"))
       metric=graph->getProperty<DoubleProperty>("viewMetric");
-    vector<node> nodesMetricOrdered;
-    vector<edge> edgesMetricOrdered;
+    vector<pair<node,float> > nodesMetricOrdered;
+    vector<pair<edge,float> > edgesMetricOrdered;
     GlNode glNode(0);
     GlEdge glEdge(0);
     GlMetaNode glMetaNode(0);
@@ -207,14 +207,14 @@ namespace tlp {
             // Not metric ordered
             if(!graph->isMetaNode(n)){
               glNode.id=n.id;
-              glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
+              glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod);
             }else{
               glMetaNode.id=n.id;
-              glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
+              glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod);
             }
           }else{
             // Metric ordered
-            nodesMetricOrdered.push_back(n);
+            nodesMetricOrdered.push_back(pair<node,float>(n,(*it).lod));
           }
         }
       }
@@ -224,13 +224,13 @@ namespace tlp {
         GreatThanNode ltn;
         ltn.metric=metric;
         sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
-        for(vector<node>::iterator it=nodesMetricOrdered.begin();it!=nodesMetricOrdered.end();++it){
-          if(!graph->isMetaNode(*it)){
-            glNode.id=(*it).id;
-            glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
+        for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin();it!=nodesMetricOrdered.end();++it){
+          if(!graph->isMetaNode((*it).first)){
+            glNode.id=(*it).first.id;
+            glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second);
           }else{
-            glMetaNode.id=(*it).id;
-            glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
+            glMetaNode.id=(*it).first.id;
+            glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second);
           }
         }
       }
@@ -247,10 +247,10 @@ namespace tlp {
           if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric){
             // Not metric ordered
             glEdge.id=e.id;
-            glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
+            glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod);
           }else{
             // Metric ordered
-            edgesMetricOrdered.push_back(e);
+            edgesMetricOrdered.push_back(pair<edge,float>(e,(*it).lod));
           }
         }
       }
@@ -260,9 +260,9 @@ namespace tlp {
         GreatThanEdge lte;
         lte.metric=metric;
         sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
-        for(vector<edge>::iterator it=edgesMetricOrdered.begin();it!=edgesMetricOrdered.end();++it){
-          glEdge.id=(*it).id;
-          glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData());
+        for(vector<pair<edge,float> >::iterator it=edgesMetricOrdered.begin();it!=edgesMetricOrdered.end();++it){
+          glEdge.id=(*it).first.id;
+          glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second);
         }
       }
     }

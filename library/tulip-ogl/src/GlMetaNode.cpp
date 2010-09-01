@@ -69,10 +69,14 @@ namespace tlp {
   }
 
   void GlMetaNode::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data){
+    drawLabel(test,renderer,data,0.);
+  }
+
+  void GlMetaNode::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data, float lod){
 
     node n=node(id);
 
-    GlNode::drawLabel(test,renderer,data);
+    GlNode::drawLabel(test,renderer,data,lod);
 
     if(!data->getMetaNodeRenderer()->glMetaNodeHaveToRenderLabels())
       return;

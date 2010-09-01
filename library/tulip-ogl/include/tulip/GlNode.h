@@ -63,13 +63,19 @@ namespace tlp {
      * Draw the label of the node if drawNodesLabel is true and if label selection is equal to drawSelect
      * Use TextRenderer : renderer to draw the label
      */
-    virtual void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+    virtual void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod);
 
     /**
      * Draw the label of the node if drawEdgesLabel is true
      * Use TextRenderer : renderer to draw the label
      */
     virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+
+    /**
+     * Draw the label of the node if drawEdgesLabel is true
+     * Use TextRenderer : renderer to draw the label
+     */
+    virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod);
 
     unsigned int id;
 
