@@ -86,10 +86,10 @@ struct TLPTokenParser {
 	  case '\t': if (started) stop=true; break;
 	  case 13 :
 	  case '\n': curChar=0;curLine++;if (started) stop=true; break;
-	  case '(': if (!started) return OPENTOKEN; else {is.unget();stop=true;} break;
-	  case ')': if (!started) return CLOSETOKEN; else {is.unget();stop=true;} break;
-	  case '"': strGet=true;if (started) {is.unget();stop=true;} else started=true;break;
-	  case ';': strComment=true;if (started) {is.unget();stop=true;} else started=true;break;
+	  case '(': if (!started) return OPENTOKEN; else {--curPos,--curChar;is.unget();stop=true;} break;
+	  case ')': if (!started) return CLOSETOKEN; else {--curPos,--curChar;is.unget();stop=true;} break;
+	  case '"': strGet=true;if (started) {--curPos,--curChar;is.unget();stop=true;} else started=true;break;
+	  case ';': strComment=true;if (started) {--curPos,--curChar;is.unget();stop=true;} else started=true;break;
 	  default : val.str+=ch;started=true;break;
 	  }
     }
