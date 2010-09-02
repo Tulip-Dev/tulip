@@ -37,6 +37,9 @@ namespace tlp {
     okButton->setEnabled(false);
     connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
     connect(cancelButton,SIGNAL(clicked()),this,SLOT(cancelInstall()));
+    // no edition allowed in table widgets
+    installTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    removeTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     titleLabel->setText("Requested operations");
 
