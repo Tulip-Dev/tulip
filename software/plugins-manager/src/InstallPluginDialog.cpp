@@ -37,6 +37,9 @@ namespace tlp {
     okButton->setEnabled(false);
     connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
     connect(cancelButton,SIGNAL(clicked()),this,SLOT(cancelInstall()));
+    // no edition allowed in table widgets
+    installTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    removeTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     titleLabel->setText("Requested operations");
 
@@ -88,7 +91,7 @@ namespace tlp {
     removeTableWidget->setShowGrid(false);
   }
 
-  void InstallPluginDialog::installStart(const string &name){
+  void InstallPluginDialog::installStart(const string&){
   }
 
   void InstallPluginDialog::installFinished(const string &name,bool loadCheckOK){
@@ -138,7 +141,7 @@ namespace tlp {
     removeTableWidget->resizeColumnsToContents();
   }
 
-  void InstallPluginDialog::closeEvent(QCloseEvent *e){
+  void InstallPluginDialog::closeEvent(QCloseEvent*){
     /*if(terminate==false){
       e->ignore();
       cancelInstall();
