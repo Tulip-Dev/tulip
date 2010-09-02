@@ -17,7 +17,12 @@
  *
  */
 #include <GL/glew.h>
+#if __APPLE_CC__ < 5400
+// Tiger
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif
 
 #include "tulip/GlComplexPolygon.h"
 #include "tulip/GlTools.h"
@@ -290,7 +295,7 @@ void GlComplexPolygon::draw(float,Camera *) {
 		glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), &verticesMap[*it][0][0]);
 		glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), &colorsMap[*it][0][0]);
 		glTexCoordPointer(2, GL_FLOAT, 2*sizeof(GLfloat), &texCoordsMap[*it][0]);
-		glMultiDrawArrays(*it, &startIndicesMap[*it][0], &verticesCountMap[*it][0], verticesCountMap[*it].size());
+		glMultiDrawArrays(*it, (GLint *) &startIndicesMap[*it][0], (GLsizei *) &verticesCountMap[*it][0], verticesCountMap[*it].size());
 	}
 
 	glDisableClientState(GL_COLOR_ARRAY);

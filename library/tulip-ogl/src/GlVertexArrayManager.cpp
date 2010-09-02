@@ -29,6 +29,14 @@
 
 using namespace std;
 
+// macro to get access to the undelying memory array of a vector
+#if (__GNUC__ < 4 || __GNUC_MINOR__ < 2)
+#define VECTOR_DATA(vec) &vec[0]
+#else
+#define VECTOR_DATA(vec) vec.data()
+#endif
+
+
 namespace tlp
 {
   GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData):inputData(inputData),graph(inputData->getGraph()),isBegin(false),toCompute(true),vectorSizeInit(false){
@@ -100,21 +108,21 @@ namespace tlp
 
     glPointSize(1);
     if(points1PSelectedRenderingIndexArray.size()!=0){
-      glVertexPointer(3, GL_FLOAT, 0, &pointsCoordsArray.data()[0]);
-      glDrawElements(GL_POINTS, points1PSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, points1PSelectedRenderingIndexArray.data());
+      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
+      glDrawElements(GL_POINTS, points1PSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points1PSelectedRenderingIndexArray));
     }
 
     glPointSize(2);
     if(points2PSelectedRenderingIndexArray.size()!=0){
-      glVertexPointer(3, GL_FLOAT, 0, &pointsCoordsArray.data()[0]);
-      glDrawElements(GL_POINTS, points2PSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, points2PSelectedRenderingIndexArray.data());
+      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
+      glDrawElements(GL_POINTS, points2PSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points2PSelectedRenderingIndexArray));
     }
 
     glPointSize(1);
 
     if(linesSelectedRenderingIndexArray.size()!=0){
-      glVertexPointer(3, GL_FLOAT, 0, &linesCoordsArray.data()[0]);
-      glDrawElements(GL_LINES, linesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, linesSelectedRenderingIndexArray.data());
+      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
+      glDrawElements(GL_LINES, linesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(linesSelectedRenderingIndexArray));
     }
 
     glEnableClientState(GL_COLOR_ARRAY);
@@ -125,23 +133,23 @@ namespace tlp
 
     glPointSize(1);
     if(points1PRenderingIndexArray.size()!=0){
-      glVertexPointer(3, GL_FLOAT, 0, &pointsCoordsArray.data()[0]);
-      glColorPointer(4, GL_UNSIGNED_BYTE, 0, &pointsColorsArray.data()[0]);
-      glDrawElements(GL_POINTS, points1PRenderingIndexArray.size(), GL_UNSIGNED_INT, points1PRenderingIndexArray.data());
+      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
+      glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(pointsColorsArray));
+      glDrawElements(GL_POINTS, points1PRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points1PRenderingIndexArray));
     }
     glPointSize(2);
     if(points2PRenderingIndexArray.size()!=0){
-      glVertexPointer(3, GL_FLOAT, 0, &pointsCoordsArray.data()[0]);
-      glColorPointer(4, GL_UNSIGNED_BYTE, 0, &pointsColorsArray.data()[0]);
-      glDrawElements(GL_POINTS, points2PRenderingIndexArray.size(), GL_UNSIGNED_INT, points2PRenderingIndexArray.data());
+      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
+      glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(pointsColorsArray));
+      glDrawElements(GL_POINTS, points2PRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points2PRenderingIndexArray));
     }
     glPointSize(1);
 
     if(linesRenderingIndexArray.size()!=0){
-      glColorPointer(4, GL_UNSIGNED_BYTE, 0, &linesColorsArray.data()[0]);
-      glVertexPointer(3, GL_FLOAT, 0, &linesCoordsArray.data()[0]);
+      glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(linesColorsArray));
+      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
 
-      glDrawElements(GL_LINES, linesRenderingIndexArray.size(), GL_UNSIGNED_INT, linesRenderingIndexArray.data());
+      glDrawElements(GL_LINES, linesRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(linesRenderingIndexArray));
     }
 
     glDisableClientState(GL_COLOR_ARRAY);
