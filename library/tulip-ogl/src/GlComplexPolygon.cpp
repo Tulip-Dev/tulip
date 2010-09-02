@@ -17,9 +17,13 @@
  *
  */
 #include <GL/glew.h>
+#ifdef __APPLE_CC__
 #if __APPLE_CC__ < 5400
 // Tiger
 #include <OpenGL/glu.h>
+#else
+#include <GL/glu.h>
+#endif
 #else
 #include <GL/glu.h>
 #endif
