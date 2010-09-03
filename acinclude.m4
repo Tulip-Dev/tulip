@@ -537,7 +537,7 @@ then
 else
   if test ${VAR_MACOSX} = 1
   then
-    LIB_QT="-F$ac_qt_libraries -framework QtCore -framework QtGui -framework QtOpenGL -framework QtNetwork -framework QtSql -framework QtWebKit -framework QtXml"
+    LIB_QT="-F$ac_qt_libraries -framework QtCore -framework QtGui -framework QtOpenGL -framework QtNetwork -framework QtSql -framework QtWebKit -framework QtXml -framework phonon -framework QtDBus -framework QtXmlPatterns"
     if test -d ${QTDIR}/lib/QtAssistantClient.framework
     then
       LIB_QT_ASSISTANT="-F$ac_qt_libraries -framework QtAssistantClient"
