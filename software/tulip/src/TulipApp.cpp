@@ -871,29 +871,38 @@ void TulipApp::windowsMenuAboutToShow() {
 }
 //**********************************************************************
 /* returns true if user canceled */
-bool TulipApp::askSaveGraph(const std::string &name,int index) {
+bool TulipApp::askSaveGraph(const std::string &name,int index,bool activateNoToAll,bool *noToAll) {
+  *noToAll=false;
   string message = "Do you want to save this graph : " + name + " ?";
-  int answer = QMessageBox::question(this, "Save", QString::fromUtf8(message.c_str()),
-    QMessageBox::Yes | QMessageBox::Default,
-    QMessageBox::No,
-    QMessageBox::Cancel | QMessageBox::Escape);
+  int answer;
+  if(activateNoToAll) {
+    answer = QMessageBox::question(this, "Save", QString::fromUtf8(message.c_str()),
+    QMessageBox::Yes | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel | QMessageBox::Escape
+    ,QMessageBox::Yes);
+  }else{
+    answer = QMessageBox::question(this, "Save", QString::fromUtf8(message.c_str()),
+    QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape
+    ,QMessageBox::Yes);
+  }
   switch(answer) {
     case QMessageBox::Cancel : return true;
     case QMessageBox::Yes: return !doFileSave(index);
+    case QMessageBox::NoToAll: *noToAll=true;return false;
     default: return false;
   }
 }
 //**********************************************************************
 /* returns true if window agrees to be closed */
 bool TulipApp::closeWin() {
+  bool noToAll=false;
   if(!controllerAutoLoad){
-    for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
+    for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end() && noToAll!=true;++it){
       if((*it).second){
         Graph *graph=((*it).second)->getGraph();
         assert(graph);
         while(graph->getRoot()!=graph)
           graph=graph->getRoot();
-        bool canceled = askSaveGraph(graph->getAttribute<string>("name"),(*it).first);
+        bool canceled = askSaveGraph(graph->getAttribute<string>("name"),(*it).first,true,&noToAll);
         if(canceled)
           return false;
       }
