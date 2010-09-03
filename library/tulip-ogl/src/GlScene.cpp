@@ -788,9 +788,9 @@ namespace tlp {
 
       //initialize picking matrix
       glLoadIdentity();
-      x += w/2;
-      y =  viewport[3] - (y + h/2);
-      gluPickMatrix(x, y, w, h, (GLint *)&viewport);
+      int newX = x + w/2;
+      int newY = viewport[3] - (y + h/2);
+      gluPickMatrix(newX, newY, w, h, (GLint *)&viewport);
 
 
       camera->initProjection(false);
