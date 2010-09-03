@@ -13,7 +13,7 @@ EXTRA_DIST = gen-conf.sh gen-doc.sh \
 	     tulip.m4 \
 	     libxml.m4 \
 	     WriteEnvStr.nsh \
-	     CMakeLists.txt \
+	     CMakeLists.txt externalplugins/CMakeLists.txt \
 	     FindFTGL.cmake  FindGLEW.cmake  FindXML2.cmake \
 	     UseTulip.cmake UseTulipPlugins.cmake
 
