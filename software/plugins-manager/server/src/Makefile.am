@@ -6,7 +6,7 @@ ADDLDFLAGS = `xml2-config --libs`
 ADD_INCLUDES = `xml2-config --cflags` 
 endif
 
-EXTRA_DIST = CMakeLists.txt
+EXTRA_DIST = CMakeLists.txt generate_plugin_dirs.sh generate_plugin_doc.sh
 
 bin_PROGRAMS = serverGenerator pluginInstaller
 
