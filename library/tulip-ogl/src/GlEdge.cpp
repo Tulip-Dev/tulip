@@ -361,7 +361,9 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 			glPushMatrix();
 			glMultMatrixf((GLfloat *) &srcTransformationMatrix);
 			glMultMatrixf((GLfloat *) &srcScalingMatrix);
+			glDisable(GL_CULL_FACE);
 			extremityGlyph->draw(e, source, (selected ? selectionColor : srcCol),(data->parameters->isEdgeColorInterpolate() ? srcCol : data->elementBorderColor->getEdgeValue(e)), lod);
+			glEnable(GL_CULL_FACE);
 			glPopMatrix();
 
 			//Compute new Anchor
@@ -442,7 +444,9 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 			glPushMatrix();
 			glMultMatrixf((GLfloat *) &tgtTransformationMatrix);
 			glMultMatrixf((GLfloat *) &tgtScalingMatrix);
+			glDisable(GL_CULL_FACE);
 			extremityGlyph->draw(e, target, (selected ? selectionColor : tgtCol),(data->parameters->isEdgeColorInterpolate() ? tgtCol : data->elementBorderColor->getEdgeValue(e)), lod);
+			glEnable(GL_CULL_FACE);
 			glPopMatrix();
 
 			//Compute new Anchor
