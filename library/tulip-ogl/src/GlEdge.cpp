@@ -762,7 +762,9 @@ void GlEdge::displayArrow(GlGraphInputData *data,
     glPushMatrix();
     glMultMatrixf((GLfloat *) &srcTransformationMatrix);
     glMultMatrixf((GLfloat *) &srcScalingMatrix);
+    glDisable(GL_CULL_FACE);
     extremityGlyph->draw(e, source, color,(data->parameters->isEdgeColorInterpolate() ? color : data->elementBorderColor->getEdgeValue(e)), 100.);
+    glEnable(GL_CULL_FACE);
     glPopMatrix();
 
     //Compute new Anchor
