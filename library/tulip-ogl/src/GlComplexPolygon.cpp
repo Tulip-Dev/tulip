@@ -306,7 +306,10 @@ void GlComplexPolygon::draw(float,Camera *) {
 	}
 
 	if (outlined) {
-		glLineWidth(outlineSize);
+    float lineWidth=outlineSize;
+    if(lineWidth < 1e-6)
+      lineWidth=1e-6;
+    glLineWidth(lineWidth);
 		setMaterial(outlineColor);
 		for(unsigned int v=0;v<points.size();++v) {
 			glVertexPointer(3, GL_FLOAT, 3 * sizeof(GLfloat), &points[v][0]);
