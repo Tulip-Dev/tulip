@@ -277,6 +277,26 @@ BubbleTree::BubbleTree(const PropertyContext &context):LayoutAlgorithm(context) 
 BubbleTree::~BubbleTree() {}
 
 bool BubbleTree::run() {
+  
+      if (!ConnectedTest::isConnected(graph)) {
+        // for each component draw
+        std::vector<std::set<node> > components;
+        string err;
+        ConnectedTest::computeConnectedComponents(graph, components);
+        for (unsigned int i = 0; i < components.size(); ++i) {
+            Graph * tmp = graph->inducedSubGraph(components[i]);
+            tmp->computeProperty("Bubble Tree", layoutResult, err, pluginProgress, dataSet);
+            graph->delAllSubGraphs(tmp);
+        }
+        // call connected componnent packing
+        LayoutProperty tmpLayout(graph);
+	DataSet tmpdataSet;
+	tmpdataSet.set("coordinates", layoutResult);
+        graph->computeProperty("Connected Component Packing", &tmpLayout, err, pluginProgress, &tmpdataSet);
+        *layoutResult = tmpLayout;
+        return true;
+    }
+  
   if (!getNodeSizePropertyParameter(dataSet, nodeSize)) {
     if (graph->existProperty("viewSize")) {
       nodeSize = graph->getProperty<SizeProperty>("viewSize");
@@ -308,6 +328,5 @@ bool BubbleTree::run() {
   LayoutProperty* elementLayout;
   if (!graph->getAttribute("viewLayout", elementLayout))
     TreeTest::cleanComputedTree(graph, tree);
-
   return true;
 }
