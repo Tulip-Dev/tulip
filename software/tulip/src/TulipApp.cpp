@@ -358,6 +358,10 @@ void TulipApp::fileNew(QAction *action) {
   graph->getAttribute("name",graphName);
   createController(name,graphName);
   tabIndexToController[tabWidget->currentIndex()]->setData(graph);
+  GraphNeedsSavingObserver* observer = new GraphNeedsSavingObserver(tabWidget, tabWidget->currentIndex());
+  observer->doNeedSaving();
+  graph->addObserver(observer);
+  controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]] = observer;    
   enableElements(true);
 }
 //**********************************************************************
@@ -373,6 +377,10 @@ bool TulipApp::fileNew(bool) {
   graph->getAttribute("name",graphName);
   if(createController(name,graphName)) {
     tabIndexToController[tabWidget->currentIndex()]->setData(graph);
+    GraphNeedsSavingObserver* observer = new GraphNeedsSavingObserver(tabWidget, tabWidget->currentIndex());
+    observer->doNeedSaving();
+    graph->addObserver(observer);
+    controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]] = observer;    
     enableElements(true);
   } else
     return false;
@@ -708,6 +716,9 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
 
     createController(controllerName,s.toUtf8().data());
     tabIndexToController[tabWidget->currentIndex()]->setData(newGraph,controllerData);
+    GraphNeedsSavingObserver* observer = new GraphNeedsSavingObserver(tabWidget, tabWidget->currentIndex());
+    newGraph->addGraphObserver(observer);
+    controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]] = observer;    
     enableElements(true);
 
     if(noPlugin) {
@@ -873,6 +884,9 @@ void TulipApp::windowsMenuAboutToShow() {
 /* returns true if user canceled */
 bool TulipApp::askSaveGraph(const std::string &name,int index,bool activateNoToAll,bool *noToAll) {
   *noToAll=false;
+  if(!controllerToGraphObserver[tabIndexToController[index]]->needSaving()) {
+    return false;
+  }
   string message = "Do you want to save this graph : " + name + " ?";
   int answer;
   if(activateNoToAll) {

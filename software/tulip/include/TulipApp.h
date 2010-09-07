@@ -39,6 +39,7 @@
 #include <PluginsUpdateChecker.h>
 #include "TulipPluginLoader.h"
 #include "TulipData.h"
+#include "GraphNeedsSavingObserver.h"
 
 namespace tlp {
   class Controller;
@@ -161,6 +162,7 @@ private:
   bool controllerAutoLoad;
   int currentTabIndex;
   std::map<int,tlp::Controller *> tabIndexToController;
+  std::map<tlp::Controller *, GraphNeedsSavingObserver*>controllerToGraphObserver;
   std::map<tlp::Controller *, std::string> controllerToControllerName;
   std::map<tlp::Controller *,QWorkspace *> controllerToWorkspace;
   std::map<tlp::Controller *,std::vector<QAction *> > controllerToMenu;
