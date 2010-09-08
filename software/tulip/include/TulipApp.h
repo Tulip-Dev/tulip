@@ -29,7 +29,13 @@
 #include <QtGui/qmenu.h>
 #include <QtGui/QTabWidget>
 #include <QtCore/QSettings>
+
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+#include <QtCore/QProcess>
+#else
 #include <QtAssistant/qassistantclient.h>
+#endif
+
 #include <string>
 #include <tulip/Reflect.h>
 #include <tulip/Graph.h>
@@ -156,7 +162,13 @@ private:
   QTabWidget *tabWidget;
   unsigned int mouseClicX,mouseClicY;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+  QProcess *assistantProcess;
+  QString assistantProcessApp;
+#else
   QAssistantClient* assistant;
+#endif
+
 	/*std::string currentControllerName;
   tlp::Controller *currentController;*/
   bool controllerAutoLoad;
