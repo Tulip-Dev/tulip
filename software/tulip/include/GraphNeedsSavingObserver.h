@@ -6,7 +6,7 @@
 #include <tulip/Observable.h>
 #include <tulip/Graph.h>
 
-#include <QTabWidget>
+#include <QtGui/qtabwidget.h>
 
 class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observer {
    public : 
