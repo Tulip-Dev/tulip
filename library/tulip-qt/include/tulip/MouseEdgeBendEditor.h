@@ -25,6 +25,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/SizeProperty.h>
+#include <tulip/IntegerProperty.h>
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
@@ -53,6 +54,8 @@ namespace tlp {
     BooleanProperty *_selection;
     DoubleProperty *_rotation;
     SizeProperty *_sizes;
+    IntegerProperty *_shape;
+    CoordVectorProperty *_coordsVectorProperty;
     LayoutProperty *_copyLayout;
     SizeProperty *_copySizes;
     DoubleProperty *_copyRotation;
@@ -75,7 +78,9 @@ namespace tlp {
     tlp::GlCircle basicCircle;
     tlp::GlComposite *circleString;
     std::vector <GlEntity * > select;
+    bool edgeSelected;
     edge mEdge;
+    node mNode;
     Coord start, end;
     std::string theCircle;
     bool belong(Coord, Coord, Coord, GlMainWidget*);

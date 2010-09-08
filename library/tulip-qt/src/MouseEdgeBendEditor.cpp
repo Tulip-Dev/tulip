@@ -52,6 +52,7 @@ MouseEdgeBendEditor::MouseEdgeBendEditor()
   basicCircle.setOutlineMode(true);
   basicCircle.setFillColor(Color(255, 102, 255, 200));
   basicCircle.setOutlineColor(Color(128, 20, 20, 200));
+  basicCircle.setStencil(0);
 }
 //========================================================================================
 MouseEdgeBendEditor::~MouseEdgeBendEditor(){
@@ -243,6 +244,11 @@ void MouseEdgeBendEditor::initProxies(GlMainWidget *glMainWidget) {
   _selection = _graph->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
   _rotation  = _graph->getProperty<DoubleProperty>(inputData->getElementRotationPropName());
   _sizes     = _graph->getProperty<SizeProperty>(inputData->getElementSizePropName());
+  _shape     = _graph->getProperty<IntegerProperty>(inputData->getElementShapePropName());
+  if(_graph->existProperty("viewPolygonCoords"))
+    _coordsVectorProperty=_graph->getProperty<CoordVectorProperty>("viewPolygonCoords");
+  else
+    _coordsVectorProperty=NULL;
 }
 //========================================================================================
 //Does the point p belong to the segment [u,v]?
@@ -294,7 +300,10 @@ initProxies(glMainWidget);
   IntegerType::fromString(i, theCircle);
   coordinates[i]+=v1;
   Observable::holdObservers();
-  _layout->setEdgeValue(mEdge, coordinates);
+  if(edgeSelected)
+    _layout->setEdgeValue(mEdge, coordinates);
+  else
+    _coordsVectorProperty->setNodeValue(mNode,coordinates);
   Observable::unholdObservers();
   editPosition[0]  = newX;
   editPosition[1]  = newY;
@@ -312,12 +321,17 @@ void MouseEdgeBendEditor::mMouseDelete()
   }
   //cout << "D E L E T E : " << theCircle << endl;
   //cout << "===================================" << endl;
+  if(!edgeSelected && coordinates.size() <= 3)
+    return;
   coordinates.erase(CoordIt);
   circles.erase(circleIt);
   Observable::holdObservers();
   // allow to undo
   _graph->push();
-  _layout->setEdgeValue(mEdge, coordinates);
+  if(edgeSelected)
+    _layout->setEdgeValue(mEdge, coordinates);
+  else
+    _coordsVectorProperty->setNodeValue(mNode, coordinates);
   Observable::unholdObservers();
 }
 //========================================================================================
@@ -332,26 +346,29 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainW
     Coord last=coordinates[coordinates.size() - 1];
     bool firstSeg=belong(start, first, screenClick, glMainWidget);
     bool lastSeg=belong(end, last, screenClick, glMainWidget);
+    bool firstLastSeg=false;
+    if(!edgeSelected)
+      firstLastSeg=belong(first,last,screenClick,glMainWidget);
     if(firstSeg)
       coordinates.insert(coordinates.begin(),worldLocation);
-    if(lastSeg)
+    if(lastSeg || firstLastSeg)
       coordinates.push_back(worldLocation);
-    if(!firstSeg && !lastSeg){
+    if(!firstSeg && !lastSeg && !firstLastSeg){
       bool midSeg;
       vector<Coord>::iterator CoordIt=coordinates.begin();
       last=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
       CoordIt++;
       while(CoordIt!=coordinates.end())
-	{
-	  first=last;
-	  last=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
-	  midSeg=belong(first, last, screenClick, glMainWidget);
-	  if(midSeg){
-	    coordinates.insert(CoordIt, worldLocation);
-	    break;
-	  }
-	  CoordIt++;
-	}
+      {
+        first=last;
+        last=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
+        midSeg=belong(first, last, screenClick, glMainWidget);
+        if(midSeg){
+          coordinates.insert(CoordIt, worldLocation);
+          break;
+        }
+        CoordIt++;
+      }
       //delete CoordIt;
     }
   }
@@ -360,7 +377,10 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainW
   Observable::holdObservers();
   // allow to undo
   _graph->push();
-  _layout->setEdgeValue(mEdge, coordinates);
+  if(edgeSelected)
+    _layout->setEdgeValue(mEdge, coordinates);
+  else
+    _coordsVectorProperty->setNodeValue(mNode,coordinates);
   Observable::unholdObservers();
 }
 //========================================================================================
@@ -368,8 +388,11 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
   initProxies(glMainWidget);
 
   Iterator<edge> *itE;
+  Iterator<node> *itN;
   edge ite;
+  node itn;
   bool hasSelection=false;
+  bool multipleSelection=false;
 
   //Verify if we have only one selected edge
   //  if we have more than one selected : deselect all edges
@@ -379,12 +402,36 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
     if(_selection->getEdgeValue(ite)){
       if(hasSelection){
         _selection->setAllEdgeValue(false);
+        _selection->setAllNodeValue(false);
         hasSelection=false;
+        multipleSelection=true;
         break;
       }else{
+        mEdge=ite;
+        edgeSelected=true;
         hasSelection=true;
       }
     }
+  }
+  delete itE;
+  if(!multipleSelection){
+    itN=_graph->getNodes();
+    while(itN->hasNext()){
+      itn=itN->next();
+      if(_selection->getNodeValue(itn)){
+        if(hasSelection){
+          _selection->setAllEdgeValue(false);
+          _selection->setAllNodeValue(false);
+          hasSelection=false;
+          break;
+        }else{
+          mNode=itn;
+          edgeSelected=false;
+          hasSelection=true;
+        }
+      }
+    }
+    delete itN;
   }
 
   Coord tmp;
@@ -395,29 +442,65 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
     circleString->reset(false);
   else
     circleString=new GlComposite(false);
-  //int W = glMainWidget->width();
-  //int H = glMainWidget->height();
-  itE =_graph->getEdges();
-  while (itE->hasNext()) {
-    ite=itE->next();
-    if (_selection->getEdgeValue(ite)) {
-      mEdge=ite;
-      coordinates=_layout->getEdgeValue(ite);
-      start=_layout->getNodeValue(_graph->source(mEdge));
-      end=_layout->getNodeValue(_graph->target(mEdge));
-      vector<Coord>::iterator CoordIt=coordinates.begin();
-      while(CoordIt!=coordinates.end()) {
-        tmp=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
-        tmp=glMainWidget->getScene()->getLayer("Main")->getCamera()->worldTo2DScreen(tmp);
-        //tmp[1] = (double)H - tmp[1];
-        //tmp[0] = (double)W - tmp[0];
-        basicCircle.set(tmp, 5, 0.);
-        circles.push_back(basicCircle);
-        CoordIt++;
+
+  if(!hasSelection)
+    return false;
+
+  if(edgeSelected){
+    coordinates=_layout->getEdgeValue(mEdge);
+    start=_layout->getNodeValue(_graph->source(mEdge));
+    end=_layout->getNodeValue(_graph->target(mEdge));
+    vector<Coord>::iterator CoordIt=coordinates.begin();
+    while(CoordIt!=coordinates.end()) {
+      tmp=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
+      tmp=glMainWidget->getScene()->getLayer("Main")->getCamera()->worldTo2DScreen(tmp);
+      //tmp[1] = (double)H - tmp[1];
+      //tmp[0] = (double)W - tmp[0];
+      basicCircle.set(tmp, 5, 0.);
+      circles.push_back(basicCircle);
+      CoordIt++;
+    }
+  }else{
+    int complexPolygonGlyphId=GlyphManager::getInst().glyphId("2D - Complex Polygon");
+    if(_shape->getNodeValue(mNode)==complexPolygonGlyphId && complexPolygonGlyphId!=0){
+      if(_coordsVectorProperty){
+        vector<Coord> baseCoordinates=_coordsVectorProperty->getNodeValue(mNode);
+        vector<Coord> coordinatesWithRotation;
+
+        Coord min,max;
+        min=baseCoordinates[0];
+        max=baseCoordinates[0];
+        for(vector<Coord>::const_iterator it=baseCoordinates.begin();it!=baseCoordinates.end();++it){
+          if((*it)[0]<min[0])
+            min[0]=(*it)[0];
+          if((*it)[0]>max[0])
+            max[0]=(*it)[0];
+          if((*it)[1]<min[1])
+            min[1]=(*it)[1];
+          if((*it)[1]>max[1])
+            max[1]=(*it)[1];
+        }
+        Size nodeSize=_sizes->getNodeValue(mNode);
+        double rotation=_rotation->getNodeValue(mNode)*M_PI/180;
+        for(vector<Coord>::const_iterator it=baseCoordinates.begin();it!=baseCoordinates.end();++it){
+          Coord tmp(Coord((((*it)[0]-min[0])/(max[0]-min[0]))*nodeSize[0]-nodeSize[0]/2.,(((*it)[1]-min[1])/(max[1]-min[1]))*nodeSize[1]-nodeSize[1]/2.,0));
+          coordinatesWithRotation.push_back(_layout->getNodeValue(mNode)+Coord(tmp[0]*cos(rotation)-tmp[1]*sin(rotation),tmp[0]*sin(rotation)+tmp[1]*cos(rotation),0));
+          coordinates.push_back(_layout->getNodeValue(mNode)+tmp);
+        }
+
+        vector<Coord>::iterator coordIt=coordinatesWithRotation.begin();
+        while(coordIt!=coordinatesWithRotation.end()){
+          Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera()->worldTo2DScreen(*coordIt));
+          basicCircle.set(tmp, 5, 0.);
+          circles.push_back(basicCircle);
+          coordIt++;
+        }
       }
     }
   }
-  delete itE;
+
+
+
   for(unsigned int i=0;i<circles.size();i++)
     circleString->addGlEntity(&circles[i], IntegerType::toString(i));
   return hasSelection;
