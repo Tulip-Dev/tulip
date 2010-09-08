@@ -155,14 +155,6 @@ ENDIF(MACPPC)
 ## -----------------------------------------------------------------------------------------------
 ## Windows, Apple and Linux
 ## -----------------------------------------------------------------------------------------------
-IF(WIN32)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DDLL_EXPORT -DQT_ASSISTANT='\"assistant_adp\"'")
-   SET(QT_ASSISTANT assistant_adp)
-ENDIF(WIN32)
-IF(APPLE)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__APPLE__ -DQT_ASSISTANT='\"Assistant_adp\"'")
-ENDIF(APPLE)
-
 EXEC_PROGRAM(uname OUTPUT_VARIABLE UNAME_OUT)
 STRING(COMPARE EQUAL "${UNAME_OUT}" "Linux" LINUX)
 IF(NOT LINUX)
@@ -170,6 +162,17 @@ IF(NOT LINUX)
 ENDIF(NOT LINUX)
 IF(LINUX)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_LINUX")
+ENDIF(LINUX)
+
+IF(WIN32)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DDLL_EXPORT -DQT_ASSISTANT='\"assistant_adp\"'")
+   SET(QT_ASSISTANT assistant_adp)
+ENDIF(WIN32)
+IF(APPLE)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__APPLE__ -DQT_ASSISTANT='\"Assistant_adp\"'")
+ENDIF(APPLE)
+IF(LINUX)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_ASSISTANT='\"assistant_adp\"'")
 ENDIF(LINUX)
 
 ## -----------------------------------------------------------------------------------------------
