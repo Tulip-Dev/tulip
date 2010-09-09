@@ -53,19 +53,19 @@ public:
    * Compute a rooted tree from the graph.
    * The algorithm is the following
    * - if the graph is a rooted tree, return the graph
-   * - if the graph is a free tree, return a rooted copy
-   * - if the graph is connected, make a copy
-   *   return a rooted spanning tree of that copy
-   * - if the graph is not connected, make a copy,
+   * - if the graph is a free tree, return a rooted clone subgraph
+   * - if the graph is connected, make a clone subgraph
+   *   return a rooted spanning tree of that clone
+   * - if the graph is not connected, make a clone subgraph,
    *   compute a tree for each of its connected components,
-   *   add a simple source and return the copy.
+   *   add a simple source and return the clone.
    */  
   static Graph *computeTree(Graph* graph, Graph* rootGraph = 0, bool isConnected=false,
 			    PluginProgress *pluginProgress = 0);
   
   /**
    * Clean the graph from a tree previously computed
-   * with the computeRootedTree function
+   * with the computeTree function
    */
   static void cleanComputedTree(Graph *graph, Graph *tree);
 
