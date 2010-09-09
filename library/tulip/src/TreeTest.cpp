@@ -110,8 +110,9 @@ void TreeTest::makeRootedTree (Graph *graph, node curRoot, node cameFrom) {
 }//end makeRootedTree
 
 //====================================================================
-Graph *TreeTest::computeTree(Graph *graph, Graph *rGraph, bool isConnected,
-			     PluginProgress *pluginProgress) {
+// this function is for internal purpose only
+static Graph* computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
+				  PluginProgress *pluginProgress) {
   // nothing todo if the graph is already
   if (TreeTest::isTree(graph))
     return graph;
@@ -145,11 +146,11 @@ Graph *TreeTest::computeTree(Graph *graph, Graph *rGraph, bool isConnected,
   // and make it rooted
   if (isConnected || ConnectedTest::isConnected(gClone)) {
     BooleanProperty treeSelection(gClone);
-    selectMinimumSpanningTree(gClone, &treeSelection, 0, pluginProgress);
+    selectSpanningTree(gClone, &treeSelection, pluginProgress);
     if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
       return 0;
-    return TreeTest::computeTree(gClone->addSubGraph(&treeSelection),
-				 rGraph, true, pluginProgress);
+    return computeTreeInternal(gClone->addSubGraph(&treeSelection),
+			       rGraph, true, pluginProgress);
   }
 
   // graph is not connected
@@ -175,7 +176,7 @@ Graph *TreeTest::computeTree(Graph *graph, Graph *rGraph, bool isConnected,
     // to our main tree
     // and connect the main root to each
     // subtree root
-    Graph *sTree = TreeTest::computeTree(gConn, rGraph, true, pluginProgress);
+    Graph *sTree = computeTreeInternal(gConn, rGraph, true, pluginProgress);
     if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
       return 0;
     node n;
@@ -191,6 +192,11 @@ Graph *TreeTest::computeTree(Graph *graph, Graph *rGraph, bool isConnected,
   assert (TreeTest::isTree(tree));
   return tree;
 }
+
+// the documented function
+Graph* TreeTest::computeTree(Graph *graph, PluginProgress *pluginProgress) {
+  return computeTreeInternal(graph, NULL, false, pluginProgress);
+} 
 
 void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
   if (graph == tree)
@@ -213,7 +219,6 @@ void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
 }
 
 //====================================================================
-
 bool TreeTest::compute(Graph *graph) { 
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) {
     return resultsBuffer[(unsigned long)graph];

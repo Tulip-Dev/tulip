@@ -59,7 +59,8 @@ class IntegerProperty;
    * It is an heuristic, thus it is not absolutely sure that this 
    * node is a graph center. Only works on connected graphs.
    */
-  TLP_SCOPE node graphCenterHeuristic(Graph * graph);
+  TLP_SCOPE node graphCenterHeuristic(Graph * graph,
+				      PluginProgress *pluginProgress = 0);
   /**
    * return a new node connected to all previously
    * existing nodes which had a null indegree
@@ -70,7 +71,7 @@ class IntegerProperty;
 			       TLP_HASH_MAP<edge,edge> &replacedEdges,
 			       IntegerProperty* edgeLength = 0);
 
-  /**
+/**
    * Select a spanning forest of the graph,
    * i.e for all graph elements (nodes or edges) belonging to that forest
    * the selectionProperty associated value is true. The value is false
@@ -78,6 +79,15 @@ class IntegerProperty;
    */
   TLP_SCOPE void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
 				      PluginProgress *pluginProgress = 0);
+
+  /**
+   * Select a spanning tree of a graph assuming it is connected;
+   * i.e for all graph elements (nodes or edges) belonging to that tree
+   * the selectionProperty associated value is true. The value is false
+   * for the other elements
+   */
+  TLP_SCOPE void selectSpanningTree(Graph* graph, BooleanProperty *selection,
+				    PluginProgress *pluginProgress = 0);
 
   /**
    * Select the minimum spanning tree (Kruskal algorithm) of a weighted graph,

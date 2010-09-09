@@ -91,7 +91,7 @@ bool TreeLeaf::run() {
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
-  Graph *tree = TreeTest::computeTree(graph, 0, false, pluginProgress);
+  Graph *tree = TreeTest::computeTree(graph, pluginProgress);
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
     return false;
 

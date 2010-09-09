@@ -136,7 +136,7 @@ public:
   bool run() {
     if (pluginProgress)
       pluginProgress->showPreview(false);
-    tree = TreeTest::computeTree(graph, 0, false, pluginProgress);
+    tree = TreeTest::computeTree(graph, pluginProgress);
     if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
       return false;
 
