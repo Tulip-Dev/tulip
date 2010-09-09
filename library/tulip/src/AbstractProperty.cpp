@@ -53,7 +53,8 @@ PropertyInterface::~PropertyInterface() {
   // check if the current property is not registered
   // as a property of a graph
   if (graph && !name.empty() &&
-      graph->existLocalProperty(name)) {
+      graph->existLocalProperty(name) &&
+      graph->getProperty(name) == this) {
     std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Serious bug; you have deleted a registered graph property named '"  << name.c_str() << "'" << std::endl;
     abort();
   }
