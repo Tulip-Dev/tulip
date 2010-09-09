@@ -16,11 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
-#if defined(__APPLE__)
-#include <OpenGL/glew.h>
+#include <GL/glew.h>
+#if defined(__APPLE_CC__) && __APPLE_CC__ < 5400
+// Tiger
 #include <OpenGL/glu.h>
 #else
-#include <GL/glew.h>
 #include <GL/glu.h>
 #endif
 
