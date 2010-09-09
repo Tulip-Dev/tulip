@@ -18,7 +18,7 @@
  */
 
 #include <tulip/MouseInteractors.h>
-#include <tulip/MouseEdgeSelector.h>
+#include <tulip/MouseSelector.h>
 #include <tulip/MouseEdgeBendEditor.h>
 
 #include "NodeLinkDiagramComponentInteractor.h"
@@ -55,7 +55,7 @@ public:
    */
   void construct(){
     pushInteractorComponent(new MousePanNZoomNavigator);
-    pushInteractorComponent(new MouseEdgeSelector);
+    pushInteractorComponent(new MouseSelector);
     pushInteractorComponent(new MouseEdgeBendEditor);
   }
 };
