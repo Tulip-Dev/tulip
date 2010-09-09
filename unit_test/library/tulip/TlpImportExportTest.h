@@ -21,7 +21,7 @@
 
 #include <string>
 #include <tulip/Graph.h>
-#include "../../../library/tulip/include/tulip/TlpTools.h"
+#include <tulip/TlpTools.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 

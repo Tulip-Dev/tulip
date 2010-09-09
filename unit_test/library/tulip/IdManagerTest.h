@@ -21,7 +21,7 @@
 
 #include <string>
 #include <tulip/Graph.h>
-#include "../../../library/tulip/include/tulip/IdManager.h"
+#include <tulip/IdManager.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
