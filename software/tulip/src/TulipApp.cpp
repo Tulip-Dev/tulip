@@ -251,7 +251,8 @@ void TulipApp::startTulip() {
 	  this, SLOT( windowsMenuActivated(QAction*)));
 
   std::string assistantPath(tlp::TulipLibDir);
-  assistantPath += string("../") + QT_ASSISTANT;
+  assistantPath += string("../");
+  assistantPath += QT_ASSISTANT;
 // In Qt > 4.6, QAssistant is removed
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) 
   assistantProcess= new QProcess(this);
