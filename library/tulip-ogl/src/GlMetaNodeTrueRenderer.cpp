@@ -169,6 +169,7 @@ namespace tlp {
     GlMetaNodeTrueRenderer::depth++;
 
     metaData.getMetaNodeRenderer()->setInputData(&metaData);
+    metaData.getGlVertexArrayManager()->pauseRendering(true);
     GlMetaNode glMetaNode(0);
     GlEdge glEdge(0);
     for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->nodesLODVector.begin();it!=layerLODUnit->nodesLODVector.end();++it){
@@ -183,6 +184,7 @@ namespace tlp {
         glMetaNode.draw((*it).lod,&metaData,activeCamera);
       }
     }
+    metaData.getGlVertexArrayManager()->pauseRendering(true);
     for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->edgesLODVector.begin();it!=layerLODUnit->edgesLODVector.end();++it){
       if((*it).lod<0)
         continue;
