@@ -232,6 +232,9 @@ bool QuotientClustering::run() {
     itC++;
   }
 
+  GraphProperty *metaInfo =
+    graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph");
+
   // orientation
   if (!oriented) {
     // for each edge 
@@ -239,10 +242,10 @@ bool QuotientClustering::run() {
     edge mE;
     forEach(mE, quotientGraph->getEdges()) {
       edge op = quotientGraph->existEdge(quotientGraph->target(mE),
-          quotientGraph->source(mE));
+					 quotientGraph->source(mE));
       if (op.isValid()) {
-  opProp->setEdgeValue(op, mE.id);
-  opProp->setEdgeValue(mE, op.id);
+	opProp->setEdgeValue(op, mE.id);
+	opProp->setEdgeValue(mE, op.id);
       }
     }
     set<edge> edgesToDel;
@@ -253,55 +256,66 @@ bool QuotientClustering::run() {
       edge mE = itE->next();
       edge op(opProp->getEdgeValue(mE));
       if (op.isValid() &&
-    edgesToDel.find(mE) == edgesToDel.end() &&
-    edgesToDel.find(op) == edgesToDel.end()) {
-  // if the opposite edge viewMetric associated value is greater
-  // than the mE associated value than we will keep it instead of mE
-  bool opOK =
-    viewMetric->getEdgeValue(mE) < viewMetric->getEdgeValue(op);
-  if (edgeFn != DoubleProperty::NO_CALC) {
-    forEach(pName, graph->getProperties()) {
-      PropertyInterface *property = graph->getProperty(pName);
-      if (dynamic_cast<DoubleProperty *>(property) &&
-    // try to avoid view... properties
-    (pName.find("view") != 0 || pName == "viewMetric")) {
-        DoubleProperty *metric = graph->getProperty<DoubleProperty>(pName);
-        double value = metric->getEdgeValue(mE);	    
-        switch(edgeFn) {
-          case DoubleProperty::AVG_CALC:
-            value = (value + metric->getEdgeValue(op))/2;
-            break;
-          case DoubleProperty::SUM_CALC:
-            value += metric->getEdgeValue(op);
-            break;
-          case DoubleProperty::MAX_CALC:
-            if (value < metric->getEdgeValue(op))
-              value = metric->getEdgeValue(op);
-            break;
-          case DoubleProperty::MIN_CALC:
-            if (value > metric->getEdgeValue(op))
-              value = metric->getEdgeValue(op);
-            break;
-          case DoubleProperty::NO_CALC:  
-            break;
-        }
-        if (opOK)
-          metric->setEdgeValue(op, value);
-        else
-          metric->setEdgeValue(mE, value);
-      }
-    }
-  }
-  // compute cardinaly if needed
-  if (cardProp) {
-    unsigned int card =
-      cardProp->getEdgeValue(mE) + cardProp->getEdgeValue(op);
-    if (opOK)
-      cardProp->setEdgeValue(op, card);
-    else
-      cardProp->setEdgeValue(mE, card);
-  }
-  edgesToDel.insert(opOK ? mE: op);
+	  edgesToDel.find(mE) == edgesToDel.end() &&
+	  edgesToDel.find(op) == edgesToDel.end()) {
+	// if the opposite edge viewMetric associated value is greater
+	// than the mE associated value than we will keep it instead of mE
+	bool opOK =
+	  viewMetric->getEdgeValue(mE) < viewMetric->getEdgeValue(op);
+	if (edgeFn != DoubleProperty::NO_CALC) {
+	  forEach(pName, graph->getProperties()) {
+	    PropertyInterface *property = graph->getProperty(pName);
+	    if (dynamic_cast<DoubleProperty *>(property) &&
+		// try to avoid view... properties
+		(pName.find("view") != 0 || pName == "viewMetric")) {
+	      DoubleProperty *metric = graph->getProperty<DoubleProperty>(pName);
+	      double value = metric->getEdgeValue(mE);	    
+	      switch(edgeFn) {
+	      case DoubleProperty::AVG_CALC:
+		value = (value + metric->getEdgeValue(op))/2;
+		break;
+	      case DoubleProperty::SUM_CALC:
+		value += metric->getEdgeValue(op);
+		break;
+	      case DoubleProperty::MAX_CALC:
+		if (value < metric->getEdgeValue(op))
+		  value = metric->getEdgeValue(op);
+		break;
+	      case DoubleProperty::MIN_CALC:
+		if (value > metric->getEdgeValue(op))
+		  value = metric->getEdgeValue(op);
+		break;
+	      case DoubleProperty::NO_CALC:  
+		break;
+	      }
+	      if (opOK)
+		metric->setEdgeValue(op, value);
+	      else
+		metric->setEdgeValue(mE, value);
+	    }
+	  }
+	}
+	// compute cardinaly if needed
+	if (cardProp) {
+	  unsigned int card =
+	    cardProp->getEdgeValue(mE) + cardProp->getEdgeValue(op);
+	  if (opOK)
+	    cardProp->setEdgeValue(op, card);
+	  else
+	    cardProp->setEdgeValue(mE, card);
+	}
+	// insert one of the opposite meta edges in edgesToDel
+	// and insert its undelying edges in the set of the remaining one
+	edge meToKeep(mE.id), meToDel(op.id);
+	if (opOK)
+	  meToKeep = op, meToDel = mE;
+	edgesToDel.insert(meToDel);
+	set<edge> se = metaInfo->getEdgeValue(meToKeep);
+	const set<edge>& nse = metaInfo->getEdgeValue(meToDel);
+	set<edge>::const_iterator itnse;
+	for(itnse = nse.begin(); itnse != nse.end(); ++itnse)
+	  se.insert(*itnse);
+	metaInfo->setEdgeValue(meToKeep, se);
       }
     } delete itE;
     set<edge>::const_iterator it;
@@ -321,7 +335,7 @@ bool QuotientClustering::run() {
     string errMsg;
     string layoutName;
     if (mNodes.size() > 300  ||
-  quotientGraph->numberOfEdges() == 0)
+	quotientGraph->numberOfEdges() == 0)
       layoutName = "Circular";
     else
       layoutName = "GEM (Frick)";
@@ -342,19 +356,17 @@ bool QuotientClustering::run() {
     dSet.set("meta-node label", metaLabel);
     dSet.set("use name of subgraph", useSubGraphName);
     dSet.set("layout quotient graph(s)", quotientLayout);
-    GraphProperty *metaInfo =
-      graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph");
     vector<node>::iterator itn = mNodes.begin();
     while(itn != mNodes.end()) {
       node mn = *itn;
       Graph* sg = quotientGraph->getNodeMetaInfo(mn);
       string eMsg;
       tlp::applyAlgorithm(sg, eMsg, &dSet, "Quotient Clustering",
-        pluginProgress);
+			  pluginProgress);
       // if a quotient graph has been computed
       // update metaInfo of current meta node
       if (dSet.getAndFree("quotientGraph", sg))
-  metaInfo->setNodeValue(mn, sg);
+	metaInfo->setNodeValue(mn, sg);
       itn++;
     }
   }
