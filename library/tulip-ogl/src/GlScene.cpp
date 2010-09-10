@@ -540,11 +540,16 @@ namespace tlp {
 
 
     if(!boundingBox.isValid()){
-      *center=Coord(0,0,0);
-      *sceneRadius=sqrt(300);
+      if(center)
+	*center=Coord(0,0,0);
 
-      *eye=Coord(0, 0, *sceneRadius);
-      *eye=*eye + *center;
+      if(sceneRadius)
+	*sceneRadius=sqrt(300);
+
+      if(eye && sceneRadius && center){
+	*eye=Coord(0, 0, *sceneRadius);
+	*eye=*eye + *center;
+      }
       return;
     }
 

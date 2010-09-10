@@ -199,6 +199,10 @@ namespace tlp {
       Graph *metaGraph = graph->getNodeMetaInfo(n);
 
       glMainWidget->setGraph(metaGraph);
+
+       if(!graph->getRoot()->isDescendantGraph(metaGraph))
+	 return;
+
       ((QtMetaNodeRenderer*)glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer())->setBackgroundColor(backgroundColor);
       GlGraphRenderingParameters param=glMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
       GlGraphRenderingParameters parentParam=parentGlMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
@@ -234,7 +238,7 @@ namespace tlp {
     lod=lod/2.;
 
     Graph *metaGraph=inputData->getGraph()->getNodeMetaInfo(n);
-    if(!metaGraph)
+    if(!metaGraph || !inputData->getGraph()->getRoot()->isDescendantGraph(metaGraph))
       return;
 
     stringstream str;
