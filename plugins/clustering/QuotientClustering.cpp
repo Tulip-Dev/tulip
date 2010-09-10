@@ -1,21 +1,21 @@
 /**
- *
- * This file is part of Tulip (www.tulip-software.org)
- *
- * Authors: David Auber and the Tulip development Team
- * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
- *
- * Tulip is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * Tulip is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
+*
+* This file is part of Tulip (www.tulip-software.org)
+*
+* Authors: David Auber and the Tulip development Team
+* from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+*
+* Tulip is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License
+* as published by the Free Software Foundation, either version 3
+* of the License, or (at your option) any later version.
+*
+* Tulip is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU General Public License for more details.
+*
+*/
 #include <set>
 #include <stdio.h>
 #include <math.h>
@@ -124,7 +124,7 @@ public:
     sgLabel(label), useSubGraphName(useSgName) {}
   
   void computeMetaValue(AbstractStringProperty* label, node mN, Graph* sg,
-			Graph*) {
+      Graph*) {
     if (sgLabel)
       label->setNodeValue(mN, label->getNodeValue(sg->getOneNode()));
     else if (useSubGraphName)
@@ -136,7 +136,7 @@ public:
 class EdgeCardinalityCalculator :public AbstractIntegerProperty::MetaValueCalculator {
 public:
   void computeMetaValue(AbstractIntegerProperty* card, edge mE,
-			Iterator<edge>* itE, Graph* g) {
+      Iterator<edge>* itE, Graph*) {
     unsigned int nbEdges = 0;
     while(itE->hasNext()) {
       itE->next();
@@ -232,6 +232,9 @@ bool QuotientClustering::run() {
     itC++;
   }
 
+  GraphProperty *metaInfo =
+    graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph");
+
   // orientation
   if (!oriented) {
     // for each edge 
@@ -282,6 +285,8 @@ bool QuotientClustering::run() {
 		if (value > metric->getEdgeValue(op))
 		  value = metric->getEdgeValue(op);
 		break;
+	      case DoubleProperty::NO_CALC:  
+		break;
 	      }
 	      if (opOK)
 		metric->setEdgeValue(op, value);
@@ -299,7 +304,18 @@ bool QuotientClustering::run() {
 	  else
 	    cardProp->setEdgeValue(mE, card);
 	}
-	edgesToDel.insert(opOK ? mE: op);
+	// insert one of the opposite meta edges in edgesToDel
+	// and insert its undelying edges in the set of the remaining one
+	edge meToKeep(mE.id), meToDel(op.id);
+	if (opOK)
+	  meToKeep = op, meToDel = mE;
+	edgesToDel.insert(meToDel);
+	set<edge> se = metaInfo->getEdgeValue(meToKeep);
+	const set<edge>& nse = metaInfo->getEdgeValue(meToDel);
+	set<edge>::const_iterator itnse;
+	for(itnse = nse.begin(); itnse != nse.end(); ++itnse)
+	  se.insert(*itnse);
+	metaInfo->setEdgeValue(meToKeep, se);
       }
     } delete itE;
     set<edge>::const_iterator it;
@@ -309,7 +325,7 @@ bool QuotientClustering::run() {
 
   if (opProp)
     delete opProp;
-	    
+      
   if (dataSet!=0) {
     dataSet->set("quotientGraph", quotientGraph);
   }
@@ -340,8 +356,6 @@ bool QuotientClustering::run() {
     dSet.set("meta-node label", metaLabel);
     dSet.set("use name of subgraph", useSubGraphName);
     dSet.set("layout quotient graph(s)", quotientLayout);
-    GraphProperty *metaInfo =
-      graph->getRoot()->getProperty<GraphProperty>("viewMetaGraph");
     vector<node>::iterator itn = mNodes.begin();
     while(itn != mNodes.end()) {
       node mn = *itn;
