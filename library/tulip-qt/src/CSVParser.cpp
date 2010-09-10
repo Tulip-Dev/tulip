@@ -23,6 +23,7 @@
 #include <fstream>
 #include <algorithm>
 #include <cassert>
+#include <iostream>
 using namespace std;
 using namespace tlp;
 
@@ -88,20 +89,37 @@ void CSVParser::tokenize(const string& str, vector<string>& tokens,
 			 const string& delimiters, unsigned int numberOfCol) {
   // Skip delimiters at beginning.
   string::size_type lastPos = 0;
+  string::size_type pos = 0;
+  //If the next token begin with a double quote search the ending double quote before searching the next delimiter.
+  if(str[pos]=='"'){
+    pos = str.find_first_of('"', pos+1);
+    //ensure there is a ending double quote.
+    assert(pos != string::npos);
+  }
   // Find first "non-delimiter".
-  string::size_type pos = str.find_first_of(delimiters, lastPos);
+   pos = str.find_first_of(delimiters, pos);
   while (string::npos != pos || string::npos != lastPos) {
     // Found a token, add it to the vector.
     tokens.push_back(str.substr(lastPos, pos - lastPos));
     if (tokens.size() == numberOfCol) {
       break;
     }
-    if (pos != string::npos)
-      lastPos = pos + 1;
-    else
+    if (pos != string::npos){
+      pos = pos +1;
+      lastPos = pos;
+    }
+    else{
       lastPos = string::npos;
+    }
     // Find next "non-delimiter"
-    pos = str.find_first_of(delimiters, lastPos);
+    //If the next token begin with a double quote search the ending double quote before searching the next delimiter.
+    if(str[pos]=='"'){
+        pos = str.find_first_of('"', pos+1);
+        //ensure there is a ending double quote.
+        assert(pos != string::npos);
+      }
+    //Find the next token
+    pos = str.find_first_of(delimiters, pos);
   }
 }
 
