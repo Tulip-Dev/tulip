@@ -568,11 +568,15 @@ namespace tlp {
 
 
     if(!boundingBox.isValid()){
-      *center=Coord(0,0,0);
-      *sceneRadius=sqrt(300);
+      if(center)
+        *center=Coord(0,0,0);
+      if(sceneRadius)
+        *sceneRadius=sqrt(300);
 
-      *eye=Coord(0, 0, *sceneRadius);
-      *eye=*eye + *center;
+      if(eye && center && sceneRadius){
+        *eye=Coord(0, 0, *sceneRadius);
+        *eye=*eye + *center;
+      }
       return;
     }
 
@@ -585,7 +589,7 @@ namespace tlp {
 
 	Coord centerTmp=(maxC + minC)/2.f;
 	if(center)
-      *center=centerTmp;
+    *center=centerTmp;
 
 	if ((dx==0) && (dy==0) && (dz==0))
       dx = dy = dz = 10.0;
