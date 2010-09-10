@@ -71,7 +71,11 @@ namespace tlp {
         if( !((subBox == _box[0]) || (subBox == _box[1]))){
             for (int i=0; i<4; ++i) {
                 if (getChildBox(i).isInside(box)) {
-                    getChild(i)->insert(box, id);
+                    QuadTreeNode *child=getChild(i);
+                    if(child)
+                      child->insert(box, id);
+                    else
+                      entities.push_back(id);
                     return;
                 }
             }
@@ -166,7 +170,8 @@ namespace tlp {
     QuadTreeNode* getChild(int i) {
       if (children[i] == 0) {
         Rectangle<float> box (getChildBox(i));
-        assert(!(box[0] ==_box[0] && box[1]==_box[1]));
+        if(box[0] ==_box[0] && box[1]==_box[1])
+          return NULL;
 
         children[i] = new QuadTreeNode<TYPE>(box);
       }
