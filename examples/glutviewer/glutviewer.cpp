@@ -44,7 +44,7 @@
 
 using namespace std;
 using namespace tlp;
-
+ 
 static int win;
 const unsigned int WIN_SIZE = 500;
 unsigned int frameCount = 3;
@@ -54,12 +54,13 @@ static GLint timer;
 static int rx = 0, ry = 0, rz = 0;
 static char strFrameRate[300] = {0};      
 GlScene scene;
+map<unsigned int, unsigned int> glyphMapFunction;
 
 
 using namespace tlp;
 //=============================================
 static void printMessage(const string &str, const bool b) {
-	cout << str << " => " << (b ? "On" : "Off") << endl;
+  cout << str << " => " << (b ? "On" : "Off") << endl;
 }
 bool drawElm = true;
 bool vbo = false;
@@ -70,85 +71,87 @@ Graph          *graph;
 LayoutProperty *layout;
 ColorProperty  *color;
 SizeProperty   *size;
+IntegerProperty *shape;
+
 string name;
 
 //=============================================
 static void changeOption(const int key) {
-	frame = 0;
-	frameCount = 3;
-	GlGraphRenderingParameters param = scene.getGlGraphComposite()->getRenderingParameters();
-	switch (key) {
-	case '1':
-		glutFullScreen();
-		break;
-	case 27:
-		exit(EXIT_SUCCESS);
-	case '+':
-		scene.zoom(2);
-		break;
-	case '-':
-		scene.zoom(-2);
-		break;
-	case 'x':
-		rx = (rx+1)%2;
-		break;
-	case 'y':
-		ry = (ry+1)%2;
-		break;
-	case 'z':
-		rz = (rz+1)%2;
-		break;
-	case 'e':
-		param.setEdge3D(!param.isEdge3D());
-		printMessage("3D edges", param.isEdge3D());
-		break;
-	case 'c':
-		param.setEdgeColorInterpolate(!param.isEdgeColorInterpolate());
-		printMessage("Edge color interpolate", param.isEdgeColorInterpolate());
-		break;
-	case 'a':
-		param.setViewArrow(!param.isViewArrow());
-		printMessage("Arrow ",param.isViewArrow());
-		break;
-	case 'o':
-		scene.setViewOrtho(!scene.isViewOrtho());
-		printMessage("Projection orthogonal", scene.isViewOrtho());
-		break;
-	case 'l':
-		param.setViewNodeLabel(!param.isViewNodeLabel());
-		printMessage("Labels", param.isViewNodeLabel());
-		param.setFontsType(1);
-		break;
-	case 'm':
-		param.setElementOrdered(!param.isElementOrdered());
-		printMessage("Metric ordering",param.isElementOrdered());
-		break;
-	case 'E':
-		param.setDisplayEdges(!param.isDisplayEdges());
-		printMessage("Edge displaying", param.isDisplayEdges());
-		break;
-	case 'f':
-		drawElm = !drawElm;
-		printMessage("Fast renddering", drawElm);
-		break;
-	case 'v':
-		vbo =! vbo;
-		buildVBO = true;
-		printMessage("rebuild VBO each time", vbo);
-		break;
-	case 'w':
-		size->scale(Size(2,2,1))	;
-		buildVBO = true;
-		break;
-	case 'd':
-		size->scale(Size(0.5,0.5,1));
-		buildVBO = true;
-		break;
+  frame = 0;
+  frameCount = 3;
+  GlGraphRenderingParameters param = scene.getGlGraphComposite()->getRenderingParameters();
+  switch (key) {
+  case '1':
+    glutFullScreen();
+    break;
+  case 27:
+    exit(EXIT_SUCCESS);
+  case '+':
+    scene.zoom(2);
+    break;
+  case '-':
+    scene.zoom(-2);
+    break;
+  case 'x':
+    rx = (rx+1)%2;
+    break;
+  case 'y':
+    ry = (ry+1)%2;
+    break;
+  case 'z':
+    rz = (rz+1)%2;
+    break;
+  case 'e':
+    param.setEdge3D(!param.isEdge3D());
+    printMessage("3D edges", param.isEdge3D());
+    break;
+  case 'c':
+    param.setEdgeColorInterpolate(!param.isEdgeColorInterpolate());
+    printMessage("Edge color interpolate", param.isEdgeColorInterpolate());
+    break;
+  case 'a':
+    param.setViewArrow(!param.isViewArrow());
+    printMessage("Arrow ",param.isViewArrow());
+    break;
+  case 'o':
+    scene.setViewOrtho(!scene.isViewOrtho());
+    printMessage("Projection orthogonal", scene.isViewOrtho());
+    break;
+  case 'l':
+    param.setViewNodeLabel(!param.isViewNodeLabel());
+    printMessage("Labels", param.isViewNodeLabel());
+    param.setFontsType(1);
+    break;
+  case 'm':
+    param.setElementOrdered(!param.isElementOrdered());
+    printMessage("Metric ordering",param.isElementOrdered());
+    break;
+  case 'E':
+    param.setDisplayEdges(!param.isDisplayEdges());
+    printMessage("Edge displaying", param.isDisplayEdges());
+    break;
+  case 'f':
+    drawElm = !drawElm;
+    printMessage("Fast renddering", drawElm);
+    break;
+  case 'v':
+    vbo =! vbo;
+    buildVBO = true;
+    printMessage("rebuild VBO each time", vbo);
+    break;
+  case 'w':
+    size->scale(Size(2,2,1))	;
+    buildVBO = true;
+    break;
+  case 'd':
+    size->scale(Size(0.5,0.5,1));
+    buildVBO = true;
+    break;
 
-	default:
-		return;
-	}
-	scene.getGlGraphComposite()->setRenderingParameters(param);
+  default:
+    return;
+  }
+  scene.getGlGraphComposite()->setRenderingParameters(param);
 }
 //=============================================
 static void Key(const unsigned char key, const int x, const int y) {
@@ -178,15 +181,15 @@ static void motionFunc(int x, int y) {
 }
 //=============================================
 void Reshape(int widt, int heigh) {
-	//cerr << __PRETTY_FUNCTION__ << endl;
-	width = widt;
-	height = heigh;
-	Vector<int, 4> viewport;
-	viewport[0] = 0;
-	viewport[1] = 0;
-	viewport[2] = width;
-	viewport[3] = height;
-	scene.setViewport(viewport);
+  //cerr << __PRETTY_FUNCTION__ << endl;
+  width = widt;
+  height = heigh;
+  Vector<int, 4> viewport;
+  viewport[0] = 0;
+  viewport[1] = 0;
+  viewport[2] = width;
+  viewport[3] = height;
+  scene.setViewport(viewport);
 }
 //====================================================
 vector<Vec2f>   points;
@@ -252,6 +255,21 @@ void initEdgesArray() {
 	}
 }
 //====================================================
+void initTexArray(unsigned int glyph, Vec2f tex[4]) {
+      glyph = glyphMapFunction[glyph];
+      double i = glyph % 3u;
+      double j = glyph / 3u;
+      
+      tex[0][0] = i * 1./3.;
+      tex[0][1] = j * 1./3.;
+      tex[1][0] = (i +1.) * 1./3.; //1;
+      tex[1][1] = j * 1./3.; // 0;
+      tex[2][0] = (i +1.) * 1./3.; // 1;
+      tex[2][1] = (j +1.) * 1./3.; //1;
+      tex[3][0] = i * 1./3.; //0;
+      tex[3][1] = (j +1.) * 1./3.; //1;                  
+}
+//====================================================
 void initNodesArray() {
 	size_t nbNodes= graph->numberOfNodes();
 	quad_points.resize(nbNodes * 4);
@@ -259,14 +277,6 @@ void initNodesArray() {
 	quad_colors.resize(nbNodes * 4);
 	quad_texc.resize(nbNodes * 4);
 	Vec2f tex[4];
-	tex[0][0] = 0;
-	tex[0][1] = 0;
-	tex[1][0] = 1;
-	tex[1][1] = 0;
-	tex[2][0] = 1;
-	tex[2][1] = 1;
-	tex[3][0] = 0;
-	tex[3][1] = 1;
 	// i % x  i%3
 	float tab1[4] = { -1,     1,  1, -1};
 	float tab2[4] = { -1,     -1,  1, 1};
@@ -280,6 +290,7 @@ void initNodesArray() {
 
 	node n;
 	forEach(n, graph->getNodes()) {
+		initTexArray(shape->getNodeValue(n), tex);
 		Coord p ( layout->getNodeValue(n));
 		Size  s ( size->getNodeValue(n) / 2.);
 		//Color c ( color->getNodeValue(n));
@@ -333,7 +344,7 @@ void Draw(void) {
 			cur += 64000;
 		}
 
-		GlTextureManager::getInst().activateTexture("circle.png");
+		GlTextureManager::getInst().activateTexture("textures.png");
 		glDisable(GL_BLEND);
 
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -444,8 +455,7 @@ int main (int argc, char **argv) {
 	layout = graph->getProperty<LayoutProperty>("viewLayout");
 	color = graph->getProperty<ColorProperty>("viewColor");
 	size = graph->getProperty<SizeProperty>("viewSize");
-
-
+	shape = graph->getProperty<IntegerProperty>("viewShape");
 
 	glutInit(&argc, argv);
 	glutInitWindowPosition(0, 0);
@@ -467,7 +477,16 @@ int main (int argc, char **argv) {
 	scene.getLayer("Main")->addGlEntity(graphComposite, "graph");
 	scene.centerScene();
 
-
+//TODO automatically generate the texture according to available tulip (renderToTexture of glyphs)
+  glyphMapFunction[4] = 0;  
+  glyphMapFunction[14] = 1;
+  glyphMapFunction[11] = 2;  
+  glyphMapFunction[12] = 3;
+  glyphMapFunction[13] = 4;  
+  glyphMapFunction[15] = 5;
+  glyphMapFunction[2] = 6;  
+  glyphMapFunction[28] = 7;
+  glyphMapFunction[6] = 8;
 
 	Reshape(500, 500);
 	OpenGlConfigManager::getInst().initGlew();
