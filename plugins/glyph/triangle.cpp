@@ -60,7 +60,7 @@ GLYPHPLUGIN(Triangle, "2D - Triangle", "David Auber", "09/07/2002", "Textured Tr
 //===================================================================================
 Triangle::Triangle(GlyphContext *gc): Glyph(gc){
   if(!triangle)
-    triangle = new GlTriangle(Coord(0,-0.17,0),Size(0.5,0.5,0));
+    triangle = new GlTriangle(Coord(0,0,0),Size(0.5,0.5,0));
 }
 //=====================================================
 Triangle::~Triangle() {
