@@ -75,12 +75,12 @@ EEGLYPHPLUGIN(Pentagone, "2D - Pentagone", "David Auber", "09/07/2002", "Texture
 Pentagone::Pentagone(GlyphContext *gc) :
 	Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
   if(!pentagon)
-    pentagon=new GlPentagon(Coord(0,-0.05,0),Size(.5,.5,0));
+    pentagon=new GlPentagon(Coord(0,0,0),Size(.5,.5,0));
 }
 Pentagone::Pentagone(EdgeExtremityGlyphContext *gc) :
 	Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
   if(!pentagon)
-    pentagon=new GlPentagon(Coord(0,-0.05,0),Size(.5,.5,0));
+    pentagon=new GlPentagon(Coord(0,0,0),Size(.5,.5,0));
 }
 //=====================================================
 Pentagone::~Pentagone() {
