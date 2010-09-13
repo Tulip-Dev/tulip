@@ -251,19 +251,19 @@ namespace tlp {
     const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
     const Size  &nodeSize  = data->elementSize->getNodeValue(n);
     int labelPos = data->elementLabelPosition->getNodeValue(n);
-    Coord nodePos(nodeCoord);
+    Coord nodePos(0,0,0);
     switch (labelPos) {
     case ON_TOP:
-      nodePos.setY(nodeCoord.getY() + nodeSize.getH()/2);
+      nodePos.setY(nodeSize.getH()/2);
       break;
     case ON_BOTTOM:
-      nodePos.setY(nodeCoord.getY() - nodeSize.getH()/2);
+      nodePos.setY(-nodeSize.getH()/2);
       break;
     case ON_LEFT:
-      nodePos.setX(nodeCoord.getX() - nodeSize.getW()/2);
+      nodePos.setX(-nodeSize.getW()/2);
       break;
     case ON_RIGHT:
-      nodePos.setX(nodeCoord.getX() + nodeSize.getW()/2);
+      nodePos.setX(nodeSize.getW()/2);
     default:
       break;
     }
@@ -289,6 +289,10 @@ namespace tlp {
 
       renderer->getBoundingBox(w_max, h, w);
       glPushMatrix();
+
+      glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
+      glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
+
       if(fontType==0){
         data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBB);
         if(includeBB[1][2]==0.)
@@ -299,7 +303,6 @@ namespace tlp {
         glTranslatef(nodePos[0], nodePos[1], nodePos[2]);
       }
 
-      glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
       div_w = nodeSize.getW()/w;
       div_h = nodeSize.getH()/h;
       if(div_h > div_w)
