@@ -79,6 +79,7 @@ namespace tlp {
     void endRendering();
 
     void pauseRendering(bool pause);
+    void activate(bool act);
 
     void addEdge(GlEdge *edge);
     void addNode(GlNode *node);
@@ -101,6 +102,7 @@ namespace tlp {
     GlGraphInputData *inputData;
     Graph *graph;
 
+    bool activated;
     bool isBegin;
     bool toCompute;
     bool vectorSizeInit;

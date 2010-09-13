@@ -33,6 +33,8 @@
 #include <tulip/GraphTools.h>
 #include <tulip/PlanarityTest.h>
 #include <tulip/OuterPlanarTest.h>
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/GlCPULODCalculator.h>
 
 #include "tulip/NodeLinkDiagramComponent.h"
 #include "tulip/QtProgress.h"
@@ -120,11 +122,16 @@ namespace tlp {
       tmp->setAllEdgeValue(dest->getEdgeDefaultValue());
       graph->push(false);
       bool updateLayout = (typeid(PROPERTY) == typeid(LayoutProperty) && nldc);
+      GlLODCalculator *oldLODCalculator;
       if (updateLayout) {
-	graph->setAttribute("viewLayout", tmp);
+        graph->setAttribute("viewLayout", tmp);
 
-	if(nldc)
-	  nldc->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+        if(nldc){
+          nldc->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+          oldLODCalculator=nldc->getGlMainWidget()->getScene()->getCalculator();
+          nldc->getGlMainWidget()->getScene()->setCalculator(new GlCPULODCalculator);
+          nldc->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getGlVertexArrayManager()->activate(false);
+        }
       }
       resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
       
@@ -137,8 +144,12 @@ namespace tlp {
       if (updateLayout) {
 	graph->removeAttribute("viewLayout");
 	
-	if(nldc)
+  if(nldc){
 	  nldc->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+    delete nldc->getGlMainWidget()->getScene()->getCalculator();
+    nldc->getGlMainWidget()->getScene()->setCalculator(oldLODCalculator);
+    nldc->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getGlVertexArrayManager()->activate(true);
+  }
       }
       if (!resultBool) {
         QMessageBox::critical(parent, "Tulip Algorithm Check Failed", QString((name + ":\n" + erreurMsg).c_str()) );

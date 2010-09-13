@@ -39,7 +39,7 @@ using namespace std;
 
 namespace tlp
 {
-  GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData):inputData(inputData),graph(inputData->getGraph()),isBegin(false),toCompute(true),vectorSizeInit(false){
+  GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData):inputData(inputData),graph(inputData->getGraph()),activated(true),isBegin(false),toCompute(true),vectorSizeInit(false){
     colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
   }
 
@@ -60,6 +60,9 @@ namespace tlp
   }
 
   void GlVertexArrayManager::beginRendering() {
+    if(!activated)
+      return;
+
     graph=inputData->getGraph();
 
     isBegin=true;
@@ -161,6 +164,10 @@ namespace tlp
       isBegin=false;
     else
       isBegin=true;
+  }
+
+  void GlVertexArrayManager::activate(bool act){
+    activated=act;
   }
 
   void GlVertexArrayManager::addEdge(GlEdge *edge){
