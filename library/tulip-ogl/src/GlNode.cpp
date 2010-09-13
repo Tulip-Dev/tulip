@@ -320,12 +320,29 @@ namespace tlp {
       }
 
       if(screenH < 15){
+        float wAlign=0;
+        float hAlign=0;
+        switch (labelPos) {
+        case ON_TOP:
+          hAlign=h/2.;
+          break;
+        case ON_BOTTOM:
+          hAlign=-(h/2.);
+          break;
+        case ON_LEFT:
+          wAlign = -(w/2.);
+          break;
+        case ON_RIGHT:
+          wAlign = w/2.;
+        default:
+          break;
+        }
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glLineWidth(screenH/5.);
         setColor(Color(fontColor[0],fontColor[1],fontColor[2],128));
         glBegin(GL_LINES);
-        glVertex3f(-w/2.,0,0);
-        glVertex3f(w/2.,0,0);
+        glVertex3f(-w/2.+wAlign,hAlign,0);
+        glVertex3f(w/2.+wAlign,hAlign,0);
         glEnd();
         glLineWidth(1);
       }else{
