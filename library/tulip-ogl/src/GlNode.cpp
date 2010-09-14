@@ -362,7 +362,7 @@ namespace tlp {
       glPopMatrix();
       break;
     case 1:
-      drawPixmapFont(test,renderer,data,tmp, fontColor, nodePos, labelPos, selected, nodeSize.getW());
+      drawPixmapFont(test,renderer,data,tmp, fontColor, nodePos+nodeCoord, labelPos, selected, nodeSize.getW());
       break;
     default:
       cerr << "GlGraph::DrawNodes unknown fonts" << endl;
