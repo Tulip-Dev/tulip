@@ -292,8 +292,6 @@ CONFIGURE_FILE("unit_test/plugins/pluginstest.cpp.in" "unit_test/plugins/plugins
 ## -----------------------------------------------------------------------------------------------
 INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config
         DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
-INSTALL(FILES UseTulip.cmake 
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipShareInstallDir}")
-INSTALL(FILES UseTulipPlugins.cmake 
+INSTALL(FILES FindTULIP.cmake 
         DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipShareInstallDir}")
 
