@@ -293,7 +293,7 @@ namespace tlp {
       glPopMatrix();
       break;
     case 1:
-      drawPixmapFont(test,renderer,data,tmp, fontColor, nodePos, labelPos, selected, nodeSize.getW());
+      drawPixmapFont(test,renderer,data,tmp, fontColor, nodeCoord + nodePos, labelPos, selected, nodeSize.getW());
       break;
     case 2:
       //if (projectSize(nodeCoord, nodeSize, camera->projectionMatrix, camera->modelviewMatrix, camera->getViewport()) < 8.0) return;
