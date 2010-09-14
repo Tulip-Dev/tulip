@@ -55,7 +55,7 @@ num							{inum}|{fnum}
 <qstring>["]				BEGIN(INITIAL); return STRING;
 <qstring>[\\][\n]			line_num++;
 <qstring>[^"\\]*			yylval.s += yytext;
-<qstring>[\\].				yylval.s += yytext+1;
+<qstring>[\\].				yylval.s += yytext;
 [<]							BEGIN(hstring); html_nest = 1; yylval.s.resize(0);
 <hstring>[>]				html_nest--; if(html_nest) yylval.s+=yytext; else {BEGIN(INITIAL); return STRING;}
 <hstring>[<]				html_nest++; yylval.s+=yytext;
