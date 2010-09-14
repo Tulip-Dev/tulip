@@ -329,6 +329,20 @@ struct DOT_YY {
     return bindEdge( inOp, nA, _nA );
   }
 
+  std::string doStringEscaping (const std::string &str) {
+    std::string nstr(str);
+    size_t bsPos = nstr.find('\\');
+    while (bsPos != std::string::npos) {
+      char c = nstr[bsPos + 1];
+      if (c == 'n' || c == 'l' || c == 'r') {
+	nstr.replace(bsPos, 2, 1, '\n');
+	bsPos = nstr.find('\\', bsPos + 1);
+      } else
+	bsPos = nstr.find('\\', bsPos + 2);
+    }
+    return nstr;
+  }
+
   // Setup nodes with a context of attributes
 
   void SetupNode( const NodeA & inA,
@@ -346,8 +360,9 @@ struct DOT_YY {
     if( (inAttr.mask & DOT_ATTR::LABEL) && inAttr.label.size() ) {
       StringProperty * stringP = sg->getProperty<StringProperty>(TLP_LABEL_PROXY_NAME);
       StringProperty * string2P = sg->getProperty<StringProperty>(TLP_EXTLABEL_PROXY_NAME);
+      std::string label = doStringEscaping(inAttr.label);
       for( unsigned int i = 0 ; i < inA.size() ; i++ ) {
-	stringP->setNodeValue( inA[i], inAttr.label );
+	stringP->setNodeValue( inA[i], label );
 	string2P->setNodeValue( inA[i], inAttr.label );
       }
     }
@@ -418,8 +433,9 @@ struct DOT_YY {
     if( (inAttr.mask & DOT_ATTR::LABEL) && inAttr.label.size() ) {
       StringProperty * stringP = sg->getProperty<StringProperty>(TLP_LABEL_PROXY_NAME);
       StringProperty * string2P = sg->getProperty<StringProperty>(TLP_EXTLABEL_PROXY_NAME);
+      std::string label = doStringEscaping(inAttr.label);
       for( unsigned int i = 0 ; i < inA.size() ; i++ ) {
-	stringP->setEdgeValue( inA[i], inAttr.label );
+	stringP->setEdgeValue( inA[i], label );
 	string2P->setEdgeValue( inA[i], inAttr.label );
       }
     }
