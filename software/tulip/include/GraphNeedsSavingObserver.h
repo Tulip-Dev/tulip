@@ -7,11 +7,18 @@
 #include <tulip/Graph.h>
 
 #include <QtGui/qtabwidget.h>
+#include <tulip/PropertyInterface.h>
 
 class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observer {
    public : 
-      GraphNeedsSavingObserver(QTabWidget* tabWidget, int graphIndex, bool = true) :_needsSaving(false), _tabIndex(graphIndex), _tabWidget(tabWidget) {
-        
+      GraphNeedsSavingObserver(QTabWidget* tabWidget, int graphIndex, tlp::Graph* graph, bool = true) :_needsSaving(false), _tabIndex(graphIndex), _tabWidget(tabWidget) {
+        tlp::Iterator<std::string>* it = graph->getProperties();
+        while(it->hasNext()) {
+          std::string propertyName = it->next();
+          tlp::PropertyInterface* property = graph->getProperty(propertyName);
+          property->addPropertyObserver(this);
+        }
+        delete it;
       }
       virtual ~GraphNeedsSavingObserver() {
         
@@ -45,8 +52,22 @@ class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::Property
       
       virtual void addSubGraph(tlp::Graph* , tlp::Graph* newSubGraph) {
         newSubGraph->addGraphObserver(this);
+        tlp::Iterator<std::string>* it = newSubGraph->getProperties();
+        while(it->hasNext()) {
+          std::string propertyName = it->next();
+          tlp::PropertyInterface* property = newSubGraph->getProperty(propertyName);
+          property->addPropertyObserver(this);
+        }
+        delete it;
       }
       virtual void delSubGraph(tlp::Graph* , tlp::Graph* newSubGraph) {
+        tlp::Iterator<std::string>* it = newSubGraph->getProperties();
+        while(it->hasNext()) {
+          std::string propertyName = it->next();
+          tlp::PropertyInterface* property = newSubGraph->getProperty(propertyName);
+          property->removePropertyObserver(this);
+        }
+        delete it;
         newSubGraph->removeGraphObserver(this);
       }
       
