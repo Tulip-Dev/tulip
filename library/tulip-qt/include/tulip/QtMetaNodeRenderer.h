@@ -45,7 +45,7 @@ namespace tlp {
     QtMetaNodeRenderer(QWidget *parent, GlMainWidget *widget,GlGraphInputData *inputData);
     ~QtMetaNodeRenderer();
 
-    void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end) {}
+    void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end);
     void observableDestroyed(Observable *) {}
 
     void addNode(Graph *graph,const node ){haveToRenderGraph[graph]=true;}
