@@ -401,7 +401,7 @@ void FTSimpleLayoutImpl::OutputWrapped(const wchar_t *buf, const int len,
 
 template <typename T>
 inline void FTSimpleLayoutImpl::RenderSpaceI(const T *string, const int len,
-                                             FTPoint position, int renderMode,
+                                             FTPoint, int renderMode,
                                              const float extraSpace)
 {
     float space = 0.0;
