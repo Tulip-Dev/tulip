@@ -75,7 +75,6 @@ void TextRenderer::initTextManager(const string &str){
     case '\n':
       f = new Paragraph(c, doc->getAlign());
       f->addString(s_local + " ",doc->getContext());
-      f->addString("", doc->getContext());
       s_local = "";
       doc->addFrame(f);
       break;
