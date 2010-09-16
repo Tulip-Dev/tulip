@@ -49,7 +49,7 @@ namespace tlp {
       return true;
   }
 
-  QString SpreadCalculator::calculate(SpreadTable *t, QString &formula) {
+  QString SpreadCalculator::calculate(SpreadTable*, QString &formula) {
     if (!isFormula(formula))
       return formula;
     formula = formula.toUpper();

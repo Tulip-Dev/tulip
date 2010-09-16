@@ -61,7 +61,7 @@ namespace tlp
     Iterator<string> *itS = ViewFactory::factory->availablePlugins();
     while (itS->hasNext()) {
       string viewPluginName=itS->next();
-      View *newViewPlugin = ViewFactory::factory->getPluginObject(viewPluginName, &ic);
+      ViewFactory::factory->getPluginObject(viewPluginName, &ic);
     } delete itS;
   }
   //====================================================
