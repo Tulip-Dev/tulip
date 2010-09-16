@@ -56,9 +56,6 @@ namespace tlp {
     clearObservers();
   }
 
-  void update(std::set<Observable *>::iterator, std::set<Observable *>::iterator) {
-  }
-
   void QtMetaNodeRenderer::clearObservers(){
     for(map<Graph *,node>::iterator it=graphToMetaNode.begin();it!=graphToMetaNode.end();++it){
       (*it).first->removeObserver(this);
