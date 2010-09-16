@@ -60,8 +60,8 @@ namespace tlp {
     // In the QWorkspace if the widget doesn't have a QGLWidget this widget pass below others widget
     QFrame *frame = new QFrame(widget);
     frame->setGeometry(QRect(0, 0, 0, 0));
-    QGridLayout *gridLayout_2 = new QGridLayout(frame);
-    QWidget *widget_2 = new QGLWidget(frame);
+    new QGridLayout(frame);
+    new QGLWidget(frame);
 
     //Build output image list
     exportImageMenu = new QMenu("&Save Picture as ");
