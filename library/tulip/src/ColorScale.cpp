@@ -25,8 +25,12 @@ namespace tlp {
 
 ColorScale::ColorScale() :
   gradient(true), colorScaleSet(false) {
-  colorMap[0.0f] = Color(255, 255, 255, 255);
-  colorMap[1.0f] = Color(255, 255, 255, 255);
+  colorMap[0.0f] = Color(255, 150, 150, 105);
+  colorMap[0.2f] = Color(255, 255, 150, 135);
+  colorMap[0.4f] = Color(150, 255, 150, 165);
+  colorMap[0.6f] = Color(150, 255, 255, 195);
+  colorMap[0.8f] = Color(150, 150, 255, 225);
+  colorMap[1.0f] = Color(255, 150, 255, 255);
 }
 
 ColorScale::ColorScale(const ColorScale& scale) {
