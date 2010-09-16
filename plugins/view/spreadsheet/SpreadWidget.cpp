@@ -57,7 +57,7 @@ SpreadWidget::SpreadWidget(SpreadView* view, QWidget*) :
 	connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 }
 
-void SpreadWidget::setData(Graph *graph, DataSet dataSet) {
+void SpreadWidget::setData(Graph *graph, DataSet) {
 	this->graph = graph;
 	spreadNodesTable->setGraph(graph);
 	spreadEdgesTable->setGraph(graph);
