@@ -53,6 +53,7 @@ SET(tulip-qt_LIB_SRCS
     SimpleStringsListSelectionWidget.cpp 
     DoubleStringsListSelectionWidget.cpp 
     ColorScaleConfigDialog.cpp 
+    ColorScaleWidget.cpp
     QtMetaNodeRenderer.cpp 
     QGlPixelBufferManager.cpp
     ListPropertyWidget.cpp

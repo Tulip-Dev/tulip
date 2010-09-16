@@ -31,6 +31,9 @@
 #include "tulip/ColorProperty.h"
 #include "tulip/SizeProperty.h"
 
+#include "tulip/ColorScaleWidget.h"
+#include "tulip/ColorScaleConfigDialog.h"
+
 #include <QtGui/qvalidator.h>
 #include <QtGui/qdialog.h>
 #include <QtGui/qframe.h>
@@ -62,6 +65,37 @@ namespace {
 #define	TN( T )		typeid(T).name()
 
   typedef vector<string> stringA;
+
+  class ColorScalePushButton : public QWidget {
+
+  public :
+
+    ColorScalePushButton(const QString &text, QWidget *parent):QWidget(parent){
+
+      QHBoxLayout *layout = new QHBoxLayout;
+      button=new QPushButton(text);
+      colorScaleWidget= new ColorScaleWidget;
+      colorScaleWidget->setColorScale(&colorScale);
+      layout->addWidget(colorScaleWidget);
+      layout->addWidget(button);
+      setLayout(layout);
+      layout->setMargin(0);
+
+      dialog=new ColorScaleConfigDialog(&colorScale,this);
+      connect(button,SIGNAL(clicked()),dialog,SLOT(exec()));
+      connect(dialog,SIGNAL(accepted()),colorScaleWidget,SLOT(repaint()));
+    }
+
+    ColorScale *getColorScale(){return &colorScale;}
+
+  protected :
+
+    ColorScaleWidget *colorScaleWidget;
+    QPushButton *button;
+    ColorScale colorScale;
+    ColorScaleConfigDialog *dialog;
+
+  };
 
   int getAllProperties(	stringA	&outA,
 			Graph *inG,
@@ -445,6 +479,8 @@ namespace {
 	// default offset
 	ip.offY.push_back(4);
 
+  cout << "type fi : " << ip.typeName << endl;
+
 	// bool
 	if(		ip.typeName == TN(bool) ) {
 	  QCheckBox * cb = new QCheckBox( this );
@@ -694,6 +730,12 @@ namespace {
 	  cb->setCurrentIndex(0);
 	  ip.wA.push_back( cb );       
 	}
+
+  // ColorScale
+  else if(ip.typeName == TN (ColorScale) ) {
+    ColorScalePushButton *button=new ColorScalePushButton("Color Scale",this);
+    ip.wA.push_back(button);
+  }
 	
 	if( ip.wA.size() )
 	  iparamA.push_back( ip );
@@ -922,6 +964,13 @@ namespace {
         StringCollection toto;
         outSet.get<StringCollection>( ip.name,toto);
 	}
+
+  // ColorScale
+  else if(ip.typeName == TN(ColorScale) ) {
+        ColorScalePushButton* colorScalePushButton = (ColorScalePushButton*) ip.wA[0];
+        ColorScale *colorScale=colorScalePushButton->getColorScale();
+        outSet.set<ColorScale>(ip.name,*colorScale);
+      }
       }
     }
 

@@ -1,29 +1,29 @@
-INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude})
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${CMAKE_CURRENT_BINARY_DIR} .)
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(MetricColorMapping_SRCS
-    MetricMapping.cpp
+SET(ColorMapping_SRCS
+    ColorMapping.cpp
+    DoubleStringsListRelationDialog.cpp
 )
 
-ADD_LIBRARY(MetricColorMapping-${TulipVersion} SHARED ${MetricColorMapping_SRCS})
-TARGET_LINK_LIBRARIES(MetricColorMapping-${TulipVersion} ${LibTulipName})
-TARGET_LINK_LIBRARIES(MetricColorMapping-${TulipVersion} ${LibTulipOglName})
-TARGET_LINK_LIBRARIES(MetricColorMapping-${TulipVersion} ${LibTulipQtName})
-ADD_DEPENDENCIES(MetricColorMapping-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
-
-##----------------------------------------------------------------------------------------------------------------------------
-SET(EnumColorValuesMapping_SRCS
-    EnumColorValuesMapping.cpp
+set(ColorMapping_UI
+    DoubleStringsListRelationDialog.ui
 )
 
-ADD_LIBRARY(EnumColorValuesMapping-${TulipVersion} SHARED ${EnumColorValuesMapping_SRCS})
-TARGET_LINK_LIBRARIES(EnumColorValuesMapping-${TulipVersion} ${LibTulipName})
-TARGET_LINK_LIBRARIES(EnumColorValuesMapping-${TulipVersion} ${LibTulipOglName})
-TARGET_LINK_LIBRARIES(EnumColorValuesMapping-${TulipVersion} ${LibTulipQtName})
-ADD_DEPENDENCIES(EnumColorValuesMapping-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
+set(ColorMapping_MOC
+    DoubleStringsListRelationDialog.h
+)
+
+TULIP_QT4_WRAP_UI(ColorMapping_UI_SRCS ${ColorMapping_UI})
+TULIP_QT4_WRAP_CPP(ColorMapping_MOC_SRCS ${ColorMapping_MOC})
+
+ADD_LIBRARY(ColorMapping-${TulipVersion} SHARED ${ColorMapping_SRCS} ${ColorMapping_UI_SRCS} ${ColorMapping_MOC_SRCS})
+TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipName})
+TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipOglName})
+TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipQtName})
+ADD_DEPENDENCIES(ColorMapping-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
-	MetricColorMapping-${TulipVersion}	
-	EnumColorValuesMapping-${TulipVersion}
+  ColorMapping-${TulipVersion}
 	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/)

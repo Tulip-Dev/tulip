@@ -1358,7 +1358,7 @@ namespace tlp {
   void MainController::changeMetric() {
     QAction *action=(QAction*)(sender());
     inAlgorithm=true;
-    bool result = ControllerAlgorithmTools::changeMetric(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewMetric",getCurrentView(),mapMetricAction->isChecked(),"Metric Mapping","viewColor");
+    bool result = ControllerAlgorithmTools::changeMetric(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewMetric",getCurrentView(),mapMetricAction->isChecked(),"Color Mapping","viewColor");
     inAlgorithm=false;
     if (result)
       afterChangeProperty();

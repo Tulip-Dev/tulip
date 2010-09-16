@@ -275,7 +275,7 @@ void BasicPluginsTest::testMetricColorMapping() {
 
   ColorProperty color(graph);
   ds.set("property", &metric);
-  result = graph->computeProperty("Metric Mapping", &color,
+  result = graph->computeProperty("Color Mapping", &color,
 				  errorMsg, NULL, &ds); 
   CPPUNIT_ASSERT(result);
 }

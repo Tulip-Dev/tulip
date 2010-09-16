@@ -53,6 +53,7 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/StringsListSelectionWidget.h 
 	tulip/ViewPluginsManager.h 
 	tulip/ColorScaleConfigDialog.h 
+  tulip/ColorScaleWidget.h
 	tulip/QtMetaNodeRenderer.h 
 	tulip/StringsListSelectionWidgetInterface.h 
 	tulip/SimpleStringsListSelectionWidget.h 
