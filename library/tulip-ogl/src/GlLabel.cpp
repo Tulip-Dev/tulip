@@ -113,7 +113,6 @@ namespace tlp {
     glPolygonMode(GL_FRONT, GL_FILL);
     glDisable(GL_LIGHTING);
     glDisable(GL_BLEND);
-    glDisable(GL_STENCIL_TEST);
 
     float w_max = 300;
     float w,h;
