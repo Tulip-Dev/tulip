@@ -33,16 +33,16 @@ OrientableLayout::OrientableLayout(LayoutProperty* layoutParam,
 void OrientableLayout::setOrientation(orientationType mask) {
     orientation = mask;
 
-    readX  = &OrientableCoord::getInvertedX;
+    readX  = &Coord::getX;
     readY  = &OrientableCoord::getInvertedY;
     readZ  = &Coord::getZ;
-    writeX = &OrientableCoord::setInvertedX;
+    writeX = &Coord::setX;
     writeY = &OrientableCoord::setInvertedY;
     writeZ = &Coord::setZ;
 
     if (orientation & ORI_INVERSION_HORIZONTAL) {
-        readX   = &Coord::getX;
-        writeX  = &Coord::setX;
+        readX   = &OrientableCoord::getInvertedX;
+        writeX  = &OrientableCoord::setInvertedX;
     }
         
     if (orientation & ORI_INVERSION_VERTICAL) {
