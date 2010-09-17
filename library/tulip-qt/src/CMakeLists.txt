@@ -83,6 +83,7 @@ set(tulip-qt_UI
      ../designer/DoubleStringsListSelectionWidget.ui
      ../designer/ListPropertyWidget.ui
      ../designer/ChooseFileNameDialog.ui
+     ../designer/TextEditDialog.ui
      ../designer/ImportCSVDataConfigurationWidget.ui
      ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui     
 )
@@ -136,6 +137,7 @@ set(tulip-qt_MOC
     ../include/tulip/QtGlSceneZoomAndPanAnimator.h
     ../include/tulip/Morphing.h
     ../include/tulip/GraphPropertiesTableWidget.h
+    ../include/tulip/TextEditDialog.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)

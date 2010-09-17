@@ -57,6 +57,7 @@
 
 #include "tulip/TlpQtTools.h"
 #include "tulip/TulipTableWidget.h"
+#include "tulip/TextEditDialog.h"
 #include <tulip/ListPropertyWidget.h>
 #include <QtGui/QDialogButtonBox>
 
@@ -71,6 +72,7 @@
 #define FILETABLEFONTITEM_RTTI  1009
 #define EDGEEXTREMITYGLYPHTABLEITEM_RTTI 1011
 #define LISTTABLEITEM_RTTI 1010
+#define LABELTABLEITEM_RTTI 1012
 
 #define ROW_HEIGHT 18
 
@@ -556,6 +558,64 @@ QWidget *CoordTableItem::createEditor(QTableWidget* table) const {
 void CoordTableItem::setContentFromEditor(QWidget *editor) {
   setCoord(((CoordEditor *) editor)->getCoord());
 }
+//================================================================================
+LabelEditor::LabelEditor(const QString &label, QWidget *parent) :
+  QWidget(parent),label(label) {
+  TextEditDialog *textEditDialog=new TextEditDialog(label);
+  if(textEditDialog->exec()){
+    this->label=textEditDialog->getText();
+  }
+  setFocusPolicy(Qt::StrongFocus);
+}
+
+LabelEditor::~LabelEditor() {
+}
+
+QString LabelEditor::getLabel() const {
+  return label;
+}
+//================================================================================
+class LabelTableItem: public TulipTableWidgetItem {
+private:
+  QString label;
+public:
+  LabelTableItem(const QString& label);
+  ~LabelTableItem();
+
+  QTableWidgetItem * clone() const {
+
+    return new LabelTableItem(label);
+  }
+
+  void setTextFromTulip(const std::string& data);
+
+  void setLabel(const QString &label);
+  QWidget *createEditor(QTableWidget *table) const;
+  void setContentFromEditor(QWidget *w);
+};
+
+LabelTableItem::LabelTableItem(const QString& label) :
+  TulipTableWidgetItem(LABELTABLEITEM_RTTI) {
+  setLabel(label);
+}
+LabelTableItem::~LabelTableItem() {
+}
+
+void LabelTableItem::setTextFromTulip(const std::string& data) {
+  setLabel(data.c_str());
+}
+
+void LabelTableItem::setLabel(const QString &label) {
+  this->label=label;
+  setText(label);
+}
+QWidget *LabelTableItem::createEditor(QTableWidget* table) const {
+  LabelEditor *w = new LabelEditor(label, table->viewport());
+  return w;
+}
+void LabelTableItem::setContentFromEditor(QWidget *editor) {
+  setLabel(((LabelEditor *) editor)->getLabel());
+}
 
 //================================================================================
 class IntFromListEditor: public QComboBox {
@@ -831,6 +891,8 @@ QWidget* TulipTableItemDelegate::createEditor(QWidget* p, const QStyleOptionView
     return ((ColorTableItem *) item)->createEditor(table);
   case COORDTABLEITEM_RTTI:
     return ((CoordTableItem *) item)->createEditor(table);
+  case LABELTABLEITEM_RTTI:
+    return ((LabelTableItem *) item)->createEditor(table);
   case EDGESHAPETABLEITEM_RTTI:
     return ((EdgeShapeTableItem *) item)->createEditor(table);
   case FILETABLEITEM_RTTI:
@@ -879,6 +941,9 @@ void TulipTableItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* m
     break;
   case COORDTABLEITEM_RTTI:
     ((CoordTableItem *) item)->setContentFromEditor(editor);
+    break;
+  case LABELTABLEITEM_RTTI:
+    ((LabelTableItem *) item)->setContentFromEditor(editor);
     break;
   case EDGESHAPETABLEITEM_RTTI:
     ((EdgeShapeTableItem *) item)->setContentFromEditor(editor);
@@ -1000,6 +1065,9 @@ void TulipTableWidget::setTulipNodeItem(const PropertyInterface *editedProperty,
         const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
   } else if (propertyName == "viewFont") {
     setItem(row, col, new FileTableFontItem(QString(
+        const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
+  } else if (propertyName == "viewLabel") {
+    setItem(row, col, new LabelTableItem(QString(
         const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
   } else if (typeid(*editedProperty) == typeid(BooleanProperty)) {
     setItem(row, col, new SelectionTableItem(
