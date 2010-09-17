@@ -124,8 +124,13 @@ bool SquarifiedTreeMap::run() {
   // ensure shapes updates will be kept after a pop
   preservePropertyUpdates(glyph);
 
-  glyph->setAllNodeValue(TEXTUREDGLYPHID);
-
+  { //change the glyph of all internal node to be a window
+    node n;
+    forEach(n, graph->getNodes()) {
+      if (graph->outdeg(n) != 0)
+      glyph->setNodeValue(n, TEXTUREDGLYPHID);
+    }
+  }
 
   Rectangle<double> initialSpace(0, 0, DEFAULT_WIDTH * aspectRatio, DEFAULT_HEIGHT);
 
@@ -153,7 +158,7 @@ tlp::Rectangle<double> SquarifiedTreeMap::adjustRectangle(const tlp::Rectangle<d
     //header size
     result[1][1] -= dist[1] * 0.1;
     //border size
-    result[1][1] -= dist[1] * 0.02 * 2.;
+    result[1][1] -= dist[1] * 0.02;
     result[1][0] -= dist[0] * 0.02;
     result[0][0] += dist[0] * 0.02;
     result[0][1] += dist[1] * 0.02;

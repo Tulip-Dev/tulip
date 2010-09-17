@@ -16,8 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #include "OrientableLayout.h"
 #include "OrientableCoord.h"
+
 
 
 //====================================================================
@@ -27,7 +29,7 @@ OrientableCoord::OrientableCoord(OrientableLayout* fatherParam, const float x,
     set(x, y, z);
 }
 //====================================================================
-OrientableCoord::OrientableCoord(OrientableLayout* fatherParam, const Coord& v)
+OrientableCoord::OrientableCoord(OrientableLayout* fatherParam, const tlp::Coord& v)
     :father(fatherParam) {
     set(v);
 }
@@ -38,10 +40,10 @@ void OrientableCoord::set(const float x, const float y, const float z) {
   setZ(z);
 }
 //====================================================================
-void OrientableCoord::set(const Coord& coord) {
-  Coord::setX(coord.getX());
-  Coord::setY(coord.getY());
-  Coord::setZ(coord.getZ());
+void OrientableCoord::set(const tlp::Coord& coord) {
+    tlp::Coord::setX(coord.getX());
+    tlp::Coord::setY(coord.getY());
+    tlp::Coord::setZ(coord.getZ());
 }
 //====================================================================
 void OrientableCoord::setX(float x) {		
@@ -69,26 +71,26 @@ float OrientableCoord::getZ() const {
 }
 //====================================================================
 void OrientableCoord::setInvertedX(float x) {       
-  Coord::setX(-x);
+    tlp::Coord::setX(-x);
 }
 //====================================================================
 void OrientableCoord::setInvertedY(float y) {
-  Coord::setY(-y);
+    tlp::Coord::setY(-y);
 }
 //====================================================================
 void OrientableCoord::setInvertedZ(float z) {
-  Coord::setZ(-z);
+    tlp::Coord::setZ(-z);
 }
 //====================================================================
 float OrientableCoord::getInvertedX() const {
-  return -Coord::getX();
+    return -tlp::Coord::getX();
 }
 //====================================================================
 float OrientableCoord::getInvertedY() const {
-  return -Coord::getY();
+    return -tlp::Coord::getY();
 }
 //====================================================================
 float OrientableCoord::getInvertedZ() const {
-  return -Coord::getZ();
+    return -tlp::Coord::getZ();
 }
 //====================================================================
