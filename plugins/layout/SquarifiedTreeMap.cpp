@@ -36,7 +36,7 @@ const double DEFAULT_RATIO = 1.4;
 const int DEFAULT_WIDTH   = 1024;
 const int DEFAULT_HEIGHT  = 1024;
 
-const int TEXTUREDGLYPHID = 16;
+const int TEXTUREDGLYPHID = 17;
 
 namespace 
 {
