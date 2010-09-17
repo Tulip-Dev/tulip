@@ -48,7 +48,7 @@ private:
 *------------*  -0.5,-0.5        0.5, -0.5
 */
 
-GLYPHPLUGIN(Window, "2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", 8);
+GLYPHPLUGIN(Window, "2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", 16);
 
 Window::Window(GlyphContext* context): 
 	Glyph(context), 
