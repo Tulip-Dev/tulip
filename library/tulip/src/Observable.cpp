@@ -27,12 +27,12 @@ using namespace tlp;
 
 #ifdef _WIN32 
 #ifdef DLL_EXPORT
-int Observable::holdCounter=0;
+unsigned int Observable::holdCounter=0;
 ObserverMap Observable::holdObserverMap;
 ObservableMap Observable::holdObservableMap;
 #endif
 #else
-int Observable::holdCounter=0;
+unsigned int Observable::holdCounter=0;
 ObserverMap Observable::holdObserverMap;
 ObservableMap Observable::holdObservableMap;
 #endif
@@ -147,9 +147,27 @@ void Observable::holdObservers() {
   holdCounter++;
 }
 //===============================================================
-void Observable::unholdObservers() {
+void Observable::unholdObservers(bool force) {
   assert(holdCounter>=0);
   //  cerr << __PRETTY_FUNCTION__ << " :=> " << holdCounter << endl;
+
+  if (force) {
+    unholdLock=true; 
+    holdObservableMap.clear();
+    ObserverMap tmp(holdObserverMap);
+    holdObserverMap.clear();
+    ObserverMap::iterator itMObs;
+    for (itMObs=tmp.begin();itMObs!=tmp.end();++itMObs) {
+      std::set<Observable *>::iterator begin = itMObs->second.begin();
+      std::set<Observable *>::iterator end = itMObs->second.end();
+      if (begin != end)
+	itMObs->first->update(begin, end);
+    }
+    unholdLock=false;
+    holdCounter = 0;
+  }
+    
+  if (holdCounter == 0) return;
   holdCounter--;
   if (unholdLock) return;
   unholdLock=true; 

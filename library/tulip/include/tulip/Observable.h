@@ -116,10 +116,15 @@ class TLP_SCOPE Observable {
   /**
    * UnQueue notifications.
    */
-  static void unholdObservers();
+  static void unholdObservers(bool force = false);
+  /**
+   * get counter
+   */
+  static unsigned int observersHoldCounter();
+  
 
  protected:
-  static int holdCounter;
+  static unsigned int holdCounter;
   static ObserverMap holdObserverMap;
   static ObservableMap holdObservableMap;
   stdext::slist<Observer*> observersList;
@@ -138,6 +143,10 @@ inline void Observable::removeObserver(Observer *item) {
 
 inline void Observable::removeOnlyObserver(Observer *item) {
   observersList.remove(item);
+}
+
+inline unsigned int Observable::observersHoldCounter() {
+   return holdCounter;
 }
 
 }
