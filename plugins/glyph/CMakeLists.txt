@@ -1,5 +1,15 @@
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${GLEW_INCLUDE_DIR})
 
+
+##----------------------------------------------------------------------------------------------------------------------------
+SET(Window_SRCS window.cpp)
+ADD_LIBRARY(Window-${TulipVersion} SHARED ${Window_SRCS})
+TARGET_LINK_LIBRARIES(Window-${TulipVersion} ${LibTulipName})
+TARGET_LINK_LIBRARIES(Window-${TulipVersion} ${LibTulipOglName})
+ADD_DEPENDENCIES(Window-${TulipVersion} ${LibTulipName} ${LibTulipOglName})
+
+
+
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(Circle_SRCS circle.cpp)
 ADD_LIBRARY(Circle-${TulipVersion} SHARED ${Circle_SRCS})
