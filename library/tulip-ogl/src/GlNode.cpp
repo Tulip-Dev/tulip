@@ -209,6 +209,9 @@ namespace tlp {
 
     node n=node(id);
 
+    if(data->glyphs.get(data->elementShape->getNodeValue(n))->renderLabel())
+      return;
+
     bool selected=data->elementSelected->getNodeValue(n);
 
     const Color& fontColor = selected ? colorSelect2 :
