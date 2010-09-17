@@ -148,6 +148,20 @@ private slots:
 	void changeZ(const QString &);
 };
 
+class LabelEditor: public QWidget {
+Q_OBJECT
+  ;
+
+private:
+  QString label;
+
+public:
+  LabelEditor(const QString&, QWidget *);
+  ~LabelEditor();
+  QString getLabel() const;
+
+};
+
 /* table items */
 class TLP_QT_SCOPE TulipTableWidgetItem: public QTableWidgetItem {
 public:

@@ -70,7 +70,8 @@ INCLUDES_H = \
 	tulip/QtGlSceneZoomAndPanAnimator.h \
 	tulip/Morphing.h \
 	tulip/GlCompositeHierarchyManager.h \
-	tulip/GraphPropertiesTableWidget.h
+  tulip/GraphPropertiesTableWidget.h \
+  tulip/TextEditDialog.h
 
 QT44_INCLUDES_H = \
 	tulip/BaseGraphicsViewComponent.h \
@@ -106,7 +107,8 @@ BUILT_SOURCES = \
 	tulip/ListPropertyWidgetData.h \
 	tulip/ChooseFileNameDialogData.h \
     tulip/ImportCSVDataConfigurationWidgetData.h \
-    tulip/QtOpenGlErrorViewerWithAskAgainDialogData.h
+    tulip/QtOpenGlErrorViewerWithAskAgainDialogData.h \
+  tulip/TextEditDialogData.h
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 

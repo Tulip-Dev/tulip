@@ -54,6 +54,7 @@
 
 #include "tulip/TlpQtTools.h"
 #include "tulip/PropertyWidget.h"
+#include "tulip/TextEditDialog.h"
 
 #define TABLEBUFSIZE 100
 
@@ -402,6 +403,16 @@ void PropertyWidget::setAllNodeValue() {
       ss << "(" << col.red() << "," << col.green() << "," << col.blue() << "," << col.alpha() << ")";
       tmpStr = ss.str();
     }
+  }
+  else if(editedPropertyName == "viewLabel"){
+    TextEditDialog textEditDialog("");
+    QString text;
+    if(textEditDialog.exec()){
+      text=textEditDialog.getText();
+      ok=true;
+    }
+    if (ok) tmpStr = text.toUtf8().data();
+    else ok = false;
   }
   else {
     QString text = QInputDialog::getText(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
