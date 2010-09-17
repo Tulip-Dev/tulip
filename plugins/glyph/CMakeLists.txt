@@ -8,8 +8,6 @@ TARGET_LINK_LIBRARIES(Window-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(Window-${TulipVersion} ${LibTulipOglName})
 ADD_DEPENDENCIES(Window-${TulipVersion} ${LibTulipName} ${LibTulipOglName})
 
-
-
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(Circle_SRCS circle.cpp)
 ADD_LIBRARY(Circle-${TulipVersion} SHARED ${Circle_SRCS})
@@ -124,5 +122,6 @@ INSTALL(TARGETS
 	Cylinder-${TulipVersion}
 	HalfCylinder-${TulipVersion}
 	ChristmasTree-${TulipVersion}
+	Window-${TulipVersion}
 	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/glyphs/)
 
