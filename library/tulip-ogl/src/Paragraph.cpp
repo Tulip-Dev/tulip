@@ -157,12 +157,12 @@ void Paragraph::draw(float w_max, float& w) const{
       cumul_s += renderer.getAdvance(s.c_str(), val); // on recherche sa longueur
 
       int length_s = s.size();
-      if(s[length_s-1] == ' ')
+      //if(s[length_s-1] == ' ')
 	do_test = true;
-      else{
+      /*else{
 	do_test = false;
 	taille++;
-      }
+      }*/
     }
     else
       do_test = true;
@@ -245,11 +245,12 @@ void Paragraph::getBoundingBox(float w_max, float& h, float& w) const{
     if(s != ""){
       cumul_s += renderer.getAdvance(s.c_str(), val); // on recherche sa longueur
       int length_s = s.size();
-      if(s[length_s-1] == ' ')	do_test = true;
+      do_test = true;
+      /*if(s[length_s-1] == ' ')	do_test = true;
       else{
 	do_test = false;
 	taille++;
-      }
+      }*/
     }
     else
       do_test = true;
