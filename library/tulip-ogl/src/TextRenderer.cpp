@@ -74,7 +74,7 @@ void TextRenderer::initTextManager(const string &str){
     switch(str[i]){
     case '\n':
       f = new Paragraph(c, doc->getAlign());
-      f->addString(s_local + " ",doc->getContext());
+      f->addString(s_local,doc->getContext());
       s_local = "";
       doc->addFrame(f);
       break;
@@ -88,7 +88,7 @@ void TextRenderer::initTextManager(const string &str){
   }
   if(s_local != ""){
     f = new Paragraph(c, doc->getAlign());
-    f->addString(s_local + " ", doc->getContext());
+    f->addString(s_local, doc->getContext());
     doc->addFrame(f);
   }
 }
@@ -99,7 +99,7 @@ void TextRenderer::draw(float w_max, float& w, int relPos) const{
   if(doc){
     doc->getBoundingBox(w_max, h, w);
     // Quick fix to center correctly text need more rigourus fix.
-    float dx = -(w-3.5)/2.;
+    float dx = -(w-1.5)/2.;
     float dy = (h-2.5)/2.;
 
     switch(relPos) {
