@@ -335,6 +335,9 @@ void ObservableGraphTest::testSubgraph() {
   g3->addGraphObserver(gObserver);
   g3->addObserver(observer);
   Observable::holdObservers();
+  // 2 hold more for testing purpose
+  Observable::holdObservers();
+  Observable::holdObservers();
   node n1 = g3->addNode();
   vector<Graph*>& graphs = gObserver->getObservedGraphs();
   CPPUNIT_ASSERT(graphs.size() == 3);
@@ -342,7 +345,18 @@ void ObservableGraphTest::testSubgraph() {
   CPPUNIT_ASSERT(graphs[1] == g2);
   CPPUNIT_ASSERT(graphs[2] == g3);
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT(Observable::observersHoldCounter() == 3);
+  // first unhold
   Observable::unholdObservers();
+  // nothing happens
+  CPPUNIT_ASSERT(Observable::observersHoldCounter() == 2);
+  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT(observer->found(graph) == false);
+  CPPUNIT_ASSERT(observer->found(g2) == false);
+  CPPUNIT_ASSERT(observer->found(g3) == false);
+  // force unhold
+  Observable::unholdObservers(true);
+  CPPUNIT_ASSERT(Observable::observersHoldCounter() == 0);
   CPPUNIT_ASSERT(observer->nbObservables() == 3);
   CPPUNIT_ASSERT(observer->found(graph));
   CPPUNIT_ASSERT(observer->found(g2));
