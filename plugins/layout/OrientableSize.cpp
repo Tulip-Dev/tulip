@@ -30,7 +30,7 @@ OrientableSize::OrientableSize(OrientableSizeProxy* fatherParam,
 
 //====================================================================
 OrientableSize::OrientableSize(OrientableSizeProxy* fatherParam,
-                               const Size& size)
+                               const tlp::Size& size)
     :father(fatherParam) {
     set(size);
 }
@@ -44,10 +44,10 @@ void OrientableSize::set(const float width, const float height,
 }
 
 //====================================================================
-void OrientableSize::set(const Size& size) {
-    Size::setW(size.getW());
-    Size::setH(size.getH());
-    Size::setD(size.getD());
+void OrientableSize::set(const tlp::Size& size) {
+    tlp::Size::setW(size.getW());
+    tlp::Size::setH(size.getH());
+    tlp::Size::setD(size.getD());
 }
 
 //====================================================================
