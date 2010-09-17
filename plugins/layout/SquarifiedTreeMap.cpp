@@ -31,12 +31,12 @@ LAYOUTPLUGINOFGROUP(SquarifiedTreeMap,"Squarified Tree Map",
                     "25/05/2010", "ok", "2.0", "Tree");
 //====================================================================
 
-const double SEPARATION_Z  = 150; 
-const double DEFAULT_RATIO = 1.;
+const double SEPARATION_Z  = 10; 
+const double DEFAULT_RATIO = 1.4;
 const int DEFAULT_WIDTH   = 1024;
 const int DEFAULT_HEIGHT  = 1024;
 
-const int TEXTUREDGLYPHID = 142;
+const int TEXTUREDGLYPHID = 8;
 
 namespace 
 {
