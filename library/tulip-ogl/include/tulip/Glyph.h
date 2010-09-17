@@ -73,6 +73,13 @@ namespace tlp {
     virtual Coord getAnchor(const Coord &nodeCenter, const Coord &from,
 			    const Size &scale, const double zRotation) const;
 
+    /**
+     * Return if the Glyph render its label (return true) of if GlNode have to render label (return false)
+     */
+    virtual bool renderLabel() {
+      return false;
+    }
+
  
   protected:
     GlGraphInputData *glGraphInputData;
