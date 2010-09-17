@@ -479,7 +479,7 @@ namespace {
 	// default offset
 	ip.offY.push_back(4);
 
-  cout << "type fi : " << ip.typeName << endl;
+	//cout << "type fi : " << ip.typeName << endl;
 
 	// bool
 	if(		ip.typeName == TN(bool) ) {
