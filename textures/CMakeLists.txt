@@ -3,4 +3,5 @@ INSTALL_FILES(${TulipBitmapInstallDir} FILES
               candiSprite.png
               edgeBlomSprite.png
 	      edgeSpring.png
+	      titlebarGradient.png
 )
