@@ -121,7 +121,6 @@ void Observable::notifyObservers() {
     return;
   }
   //  cerr << "Observable::notifyObservers" << endl;
-  assert(holdCounter>=0);
   if (holdCounter)
     for (;itlObs != itle; ++itlObs) {
       holdObserverMap[*itlObs].insert(this);
@@ -143,12 +142,10 @@ void Observable::notifyObservers() {
 //===============================================================
 void Observable::holdObservers() {
   //  cerr << __PRETTY_FUNCTION__ << " :=> " << holdCounter << endl;
-  assert(holdCounter>=0);
   holdCounter++;
 }
 //===============================================================
 void Observable::unholdObservers(bool force) {
-  assert(holdCounter>=0);
   //  cerr << __PRETTY_FUNCTION__ << " :=> " << holdCounter << endl;
 
   if (force) {
