@@ -155,8 +155,7 @@ void Paragraph::draw(float w_max, float& w) const{
 
     if(s != ""){
       cumul_s += renderer.getAdvance(s.c_str(), val); // on recherche sa longueur
-
-      int length_s = s.size();
+      //int length_s = s.size();
       //if(s[length_s-1] == ' ')
 	do_test = true;
       /*else{
@@ -244,9 +243,9 @@ void Paragraph::getBoundingBox(float w_max, float& h, float& w) const{
     s = myString.at(i).getString(); // on récupère le mot;
     if(s != ""){
       cumul_s += renderer.getAdvance(s.c_str(), val); // on recherche sa longueur
-      int length_s = s.size();
       do_test = true;
-      /*if(s[length_s-1] == ' ')	do_test = true;
+      /*int length_s = s.size();
+      if(s[length_s-1] == ' ')	do_test = true;
       else{
 	do_test = false;
 	taille++;
