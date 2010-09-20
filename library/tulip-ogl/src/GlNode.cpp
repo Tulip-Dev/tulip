@@ -281,7 +281,7 @@ namespace tlp {
 
     switch(fontType){
     case 0:
-    case 2:
+    case 2:{
       if(fontType==0)
         renderer->setMode(TLP_POLYGON);
       else
@@ -291,6 +291,11 @@ namespace tlp {
       renderer->setString(tmp, VERBATIM);
 
       renderer->getBoundingBox(w_max, h, w);
+
+      data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBB);
+      Vec3f centerBB = includeBB.center();
+      Vec3f sizeBB = includeBB[1]-includeBB[0];
+
       glPushMatrix();
 
       glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
@@ -305,6 +310,9 @@ namespace tlp {
       }else{
         glTranslatef(nodePos[0], nodePos[1], nodePos[2]);
       }
+
+      glTranslatef(centerBB[0]-0.5, centerBB[1]-0.5, 0.);
+      glScalef(sizeBB[0],sizeBB[1],1.);
 
       div_w = nodeSize.getW()/w;
       div_h = nodeSize.getH()/h;
@@ -364,6 +372,7 @@ namespace tlp {
       }
       glPopMatrix();
       break;
+    }
     case 1:
       drawPixmapFont(test,renderer,data,tmp, fontColor, nodePos+nodeCoord, labelPos, selected, nodeSize.getW());
       break;
