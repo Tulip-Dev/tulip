@@ -20,6 +20,7 @@
 #define MOUSEADDNODE_H
 
 #include <tulip/InteractorComponent.h>
+#include <QEvent>
 
 namespace tlp {
 
@@ -29,10 +30,13 @@ class TLP_QT_SCOPE MouseNodeBuilder:public InteractorComponent
 {
 
 public:
-  MouseNodeBuilder() {}
+  MouseNodeBuilder(QEvent::Type eventType = QEvent::MouseButtonPress):_eventType(eventType) {}
   ~MouseNodeBuilder() {}
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() { return new MouseNodeBuilder(); }};
+  InteractorComponent *clone() { return new MouseNodeBuilder(); }
+private:
+  QEvent::Type _eventType;
+};
 /*@}*/
 
 }

@@ -39,7 +39,7 @@ using namespace tlp;
 using namespace std;
 
 bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
-  if (e->type() == QEvent::MouseButtonPress) {
+  if (e->type() == _eventType) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     if (qMouseEv->button() == Qt::LeftButton) {
       GlMainWidget *glw = (GlMainWidget *) widget;
