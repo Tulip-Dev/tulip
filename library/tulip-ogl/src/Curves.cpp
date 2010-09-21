@@ -474,10 +474,22 @@ namespace tlp {
       Coord xv = vertices[i+1] - vertices[i];
       xu = xu ^ lookDir;
       xv = xv ^ (-lookDir);
-      xu /= xu.norm();
-      xv /= xv.norm();
+
+      float nrm = xu.norm();
+      if(nrm >0.00000001f){
+      xu /= nrm;
+      }
+
+      nrm = xv.norm();
+      if(nrm >0.00000001f){
+      xv /= nrm;
+      }
       Coord xu_xv=xu+xv;
+
+      nrm = xu_xv.norm();
+      if(nrm > 0.00000001f){
       xu_xv /= xu_xv.norm();
+      }
 
 
       float newSize=sizes[i];
