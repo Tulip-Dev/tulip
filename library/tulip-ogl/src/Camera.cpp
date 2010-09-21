@@ -135,9 +135,9 @@ namespace tlp {
     if(d3) {
       GLfloat pos[4];
       eyes.get(pos[0],pos[1],pos[2]);
-      pos[0]=pos[0] + ((eyes[0]-center[0])/zoomFactor);
-      pos[1]=pos[1] + ((eyes[1]-center[1])/zoomFactor);
-      pos[2]=pos[2] + ((eyes[2]-center[2])/zoomFactor);
+      pos[0]=pos[0] + ((eyes[0]-center[0])/zoomFactor) + (eyes[0]-center[0])*4;
+      pos[1]=pos[1] + ((eyes[1]-center[1])/zoomFactor) + (eyes[1]-center[1])*4;
+      pos[2]=pos[2] + ((eyes[2]-center[2])/zoomFactor) + (eyes[2]-center[2])*4;
       //cout << pos[0] << ":" << pos[1] << ":" << pos[2] << endl;
       /*for(int i=0;i<3;i++) 
 	pos[i] += (eyes[i]-center[i])/zoomFactor;*/
@@ -171,6 +171,17 @@ namespace tlp {
   void Camera::initProjection(const Vector<int, 4>& viewport,bool reset){
     glMatrixMode(GL_PROJECTION);
     if(reset) glLoadIdentity();
+
+    double near,far;
+    if(sceneBoundingBox.isValid()){
+      Coord diagCoord(sceneBoundingBox[1]-sceneBoundingBox[0]);
+      double diag=2*sqrt(diagCoord[0]*diagCoord[0]+diagCoord[1]*diagCoord[1]+diagCoord[2]*diagCoord[2]);
+      near=diag;
+      far=-diag;
+    }else{
+      near=sceneRadius;
+      far=-sceneRadius;
+    }
     
     if(d3) { 
       float ratio = double(viewport[2])/double(viewport[3]);
@@ -178,11 +189,11 @@ namespace tlp {
 	if (ratio>1)
 	  glOrtho(-ratio*sceneRadius/2.0/zoomFactor, ratio*sceneRadius/2.0/zoomFactor,
 		  -sceneRadius/2.0/zoomFactor, sceneRadius/2.0/zoomFactor,
-		  -sceneRadius*2.,sceneRadius*2.);
+      near,far);
 	else 
 	  glOrtho(-sceneRadius/2.0/zoomFactor, sceneRadius/2.0/zoomFactor,
 		  1./ratio * - sceneRadius/2.0/zoomFactor, 1./ratio * sceneRadius/2.0/zoomFactor,
-		  -sceneRadius*2.,sceneRadius*2.);
+      near,far);
       }else{
 	glFrustum(ratio*-1.0/zoomFactor, ratio*1.0/zoomFactor, 
 		  -1.0/zoomFactor, 1.0/zoomFactor, 1.0 , 
@@ -315,6 +326,10 @@ namespace tlp {
     GlXMLTools::getXML(dataNode,"zoomFactor",zoomFactor);
     GlXMLTools::getXML(dataNode,"sceneRadius",sceneRadius);
     GlXMLTools::getXML(dataNode,"d3",d3);
+    if(sceneBoundingBox.isValid()){
+      GlXMLTools::getXML(dataNode,"sceneBoundingBox0",Coord(sceneBoundingBox[0]));
+      GlXMLTools::getXML(dataNode,"sceneBoundingBox1",Coord(sceneBoundingBox[1]));
+    }
   }
    //====================================================
   void Camera::setWithXML(xmlNodePtr rootNode){
@@ -324,12 +339,18 @@ namespace tlp {
 
     if(dataNode) {
 
+      Coord bbTmp;
+
       GlXMLTools::setWithXML(dataNode,"center",center);
       GlXMLTools::setWithXML(dataNode,"eyes",eyes);
       GlXMLTools::setWithXML(dataNode,"up",up);
       GlXMLTools::setWithXML(dataNode,"zoomFactor",zoomFactor);
       GlXMLTools::setWithXML(dataNode,"sceneRadius",sceneRadius);
       GlXMLTools::setWithXML(dataNode,"d3",d3);
+      GlXMLTools::setWithXML(dataNode,"sceneBoundingBox0",bbTmp);
+      sceneBoundingBox.expand(bbTmp);
+      GlXMLTools::setWithXML(dataNode,"sceneBoundingBox1",bbTmp);
+      sceneBoundingBox.expand(bbTmp);
       
     }
   }

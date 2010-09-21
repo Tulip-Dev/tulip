@@ -26,6 +26,7 @@
 #include <tulip/Coord.h>
 #include <tulip/Vector.h>
 #include <tulip/Matrix.h>
+#include <tulip/BoundingBox.h>
 
 #include "tulip/GlXMLTools.h"
 
@@ -118,6 +119,15 @@ namespace tlp {
      * Return the scene radius
      */
     double getSceneRadius() {return sceneRadius;}
+
+    /**
+     * Set the scene bounding box
+     */
+    void setSceneBoundingBox(const BoundingBox &sceneBoundingBox) {this->sceneBoundingBox=sceneBoundingBox;}
+    /**
+     * Return the scene bounding box
+     */
+    BoundingBox getSceneBoundingBox() {return sceneBoundingBox;}
     
     /**
      * Set the zoom factor
@@ -224,6 +234,7 @@ namespace tlp {
     Coord center,eyes,up;
     double zoomFactor;
     double sceneRadius;
+    BoundingBox sceneBoundingBox;
     
     GlScene* scene;
 

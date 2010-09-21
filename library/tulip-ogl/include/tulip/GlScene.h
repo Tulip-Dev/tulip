@@ -88,7 +88,7 @@ namespace tlp {
     /**
      * Compute informations for ajustSceneToSize
      */
-    void computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor);
+    void computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,BoundingBox *sceneBoundingBox=NULL);
 
     /**
      * Ajust camera to have entities near borders
