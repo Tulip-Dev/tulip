@@ -11,7 +11,7 @@
 
 class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observer {
    public : 
-      GraphNeedsSavingObserver(QTabWidget* tabWidget, int graphIndex, tlp::Graph* graph, bool = true) :_needsSaving(false), _tabIndex(graphIndex), _tabWidget(tabWidget) {
+      GraphNeedsSavingObserver(QTabWidget* tabWidget, int graphIndex, tlp::Graph* graph, bool = true) :_needsSaving(false), _tabIndex(graphIndex), _tabWidget(tabWidget), _graph(graph) {
         tlp::Iterator<std::string>* it = graph->getProperties();
         while(it->hasNext()) {
           std::string propertyName = it->next();
@@ -71,16 +71,32 @@ class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::Property
         newSubGraph->removeGraphObserver(this);
       }
       
-      virtual void destroy(tlp::Graph* ) {}
-      virtual void destroy(tlp::PropertyInterface* ) {}
+      virtual void destroy(tlp::Graph* graph) {
+        graph->removeGraphObserver(this);
+      }
+      virtual void destroy(tlp::PropertyInterface* property) {
+        property->removePropertyObserver(this);
+      }
     
-      virtual void observableDestroyed(tlp::Observable* ) {}
+      virtual void observableDestroyed(tlp::Observable* o) {
+        o->removeObserver(this);
+      }
       virtual void update(std::set< tlp::Observable* >::iterator, std::set< tlp::Observable* >::iterator) { doNeedSaving(); }
       
-      bool needSaving() const { return _needsSaving; }
+      bool needSaving() const { 
+        return _needsSaving; 
+      }
+      
       void doNeedSaving() {
         if(!_needsSaving) {
           _tabWidget->setTabText(_tabIndex, _tabWidget->tabText(_tabIndex) + " *");
+          tlp::Iterator<tlp::Graph*>* it = _graph->getSubGraphs();
+          while(it->hasNext()) {
+            tlp::Graph* sub = it->next();
+            delSubGraph(_graph, sub);
+          }
+          delSubGraph(_graph, _graph);
+          delete it;
           _needsSaving = true;
         }
       }
@@ -88,6 +104,7 @@ class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::Property
     bool _needsSaving; 
     int _tabIndex;
     QTabWidget* _tabWidget;
+    tlp::Graph* _graph;
  };
 
  #endif //GRAPHNEEDSSAVINGOBSERVER_H
