@@ -45,6 +45,7 @@ class HalfCylinder : public Glyph {
 public:
   HalfCylinder(GlyphContext *gc=NULL);
   virtual ~HalfCylinder();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
   virtual void draw(node n,float lod);
   virtual Coord getAnchor(const Coord &vector) const;
 
@@ -57,6 +58,11 @@ HalfCylinder::HalfCylinder(GlyphContext *gc): Glyph(gc) {
 }
 //=================================================================================================
 HalfCylinder::~HalfCylinder() {
+}
+//=====================================================
+void HalfCylinder::getIncludeBoundingBox(BoundingBox &boundingBox) {
+        boundingBox[0] = Coord(-0.35, -0.35, 0);
+        boundingBox[1] = Coord(0.35, 0.35, 1);
 }
 //=================================================================================================
 void HalfCylinder::draw(node n,float) {

@@ -48,7 +48,6 @@ public:
 	Square(GlyphContext *gc = NULL);
 	Square(EdgeExtremityGlyphContext*gc = NULL);
 	virtual ~Square();
-	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
 	virtual void draw(node n, float lod);
 	virtual Coord getAnchor(const Coord &vector) const;
 	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
@@ -74,11 +73,6 @@ Square::Square(EdgeExtremityGlyphContext *gc) :
 }
 //=====================================================
 Square::~Square() {
-}
-//=====================================================
-void Square::getIncludeBoundingBox(BoundingBox &boundingBox) {
-    boundingBox[0] = Coord(0, 0, 0);
-        boundingBox[1] = Coord(1, 1, 0);
 }
 //=====================================================
 void Square::draw(node n, float lod) {

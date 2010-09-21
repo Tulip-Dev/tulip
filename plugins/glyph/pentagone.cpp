@@ -87,8 +87,8 @@ Pentagone::~Pentagone() {
 }
 //=====================================================
 void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
-        boundingBox[0] = Coord(0.20, 0.15, 0);
-        boundingBox[1] = Coord(0.80, 0.85, 0);
+        boundingBox[0] = Coord(-0.30, -0.35, 0);
+        boundingBox[1] = Coord(0.30, 0.35, 0);
 }
 //=====================================================
 void Pentagone::draw(node n, float lod) {
