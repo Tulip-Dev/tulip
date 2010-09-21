@@ -77,10 +77,10 @@ Window::Window(GlyphContext* context):
 	v[8].set( 0.5 - _borderWidth, 0.5 - _borderWidth - textheight *2.f, 0);
 	v[9].set(-0.5 + _borderWidth, 0.5 - _borderWidth - textheight *2.f, 0);
 
-	_bb.expand(v[8] + tmp);
-	_bb.expand(v[9] + tmp);
-	_bb.expand(v[6] + tmp);
-	_bb.expand(v[7] + tmp);
+	_bb.expand(v[8]);
+	_bb.expand(v[9]);
+	_bb.expand(v[6]);
+	_bb.expand(v[7]);
 	
 	 _border.addQuadEdge(v[0], v[4], _textColor);
 	 _border.addQuadEdge(v[1], v[5], _textColor);
