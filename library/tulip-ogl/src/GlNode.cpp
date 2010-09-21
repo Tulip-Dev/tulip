@@ -287,7 +287,7 @@ namespace tlp {
       else
         glTranslatef(nodePos[0], nodePos[1], nodePos[2]+nodeSize[2]/2.+0.01);
 
-      glTranslatef(centerBB[0]-0.5, centerBB[1]-0.5, 0.);
+      glTranslatef((centerBB[0]-0.5)*nodeSize[0], (centerBB[1]-0.5)*nodeSize[1], 0.);
       glScalef(sizeBB[0],sizeBB[1],1.);
 
       div_w = nodeSize.getW()/w;
@@ -324,7 +324,7 @@ namespace tlp {
 
       glTranslatef(nodePos[0], nodePos[1], nodePos[2]);
 
-      glTranslatef(centerBB[0]-0.5, centerBB[1]-0.5, 0.);
+      glTranslatef((centerBB[0]-0.5)*nodeSize[0], (centerBB[1]-0.5)*nodeSize[1], 0.);
       glScalef(sizeBB[0],sizeBB[1],1.);
 
       div_w = nodeSize.getW()/w;
