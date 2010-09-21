@@ -76,7 +76,7 @@ Window::Window(GlyphContext* context):
 	v[7].set(-0.5 + _borderWidth,-0.5 + _borderWidth, 0);
 	v[8].set( 0.5 - _borderWidth, 0.5 - _borderWidth - textheight *2.f, 0);
 	v[9].set(-0.5 + _borderWidth, 0.5 - _borderWidth - textheight *2.f, 0);
-	Coord tmp(0.5,0.5,0);
+
 	_bb.expand(v[8] + tmp);
 	_bb.expand(v[9] + tmp);
 	_bb.expand(v[6] + tmp);
