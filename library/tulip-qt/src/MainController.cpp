@@ -965,6 +965,8 @@ namespace tlp {
       tabWidgetDock->show();
       mWindow->tabifyDockWidget(tabWidgetDock,configWidgetDock);
       configWidgetDock->show();
+    }else{
+      tabWidgetDock->show();
     }
   }
   //==================================================
@@ -975,6 +977,8 @@ namespace tlp {
       configWidgetDock->show();
       tabWidgetDock->show();
       mWindow->tabifyDockWidget(tabWidgetDock,configWidgetDock);
+    }else{
+      configWidgetDock->show();
     }
   }
   //==================================================
