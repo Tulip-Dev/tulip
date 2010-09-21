@@ -311,7 +311,7 @@ namespace tlp {
         glTranslatef(nodePos[0], nodePos[1], nodePos[2]);
       }
 
-      glTranslatef(centerBB[0], centerBB[1], 0.);
+      glTranslatef(centerBB[0]*nodeSize[0], centerBB[1]*nodeSize[1], 0.);
       glScalef(sizeBB[0],sizeBB[1],1.);
 
       div_w = nodeSize.getW()/w;
