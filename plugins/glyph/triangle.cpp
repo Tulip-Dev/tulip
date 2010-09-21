@@ -67,8 +67,8 @@ Triangle::~Triangle() {
 }
 //=====================================================
 void Triangle::getIncludeBoundingBox(BoundingBox &boundingBox) {
-  boundingBox[0] = Coord(0.25,0,0);
-  boundingBox[1] = Coord(0.75,0.5,0);
+  boundingBox[0] = Coord(-0.25,-0.5,0);
+  boundingBox[1] = Coord(0.25,0,0);
 }
 //=====================================================
 void Triangle::draw(node n,float lod) {

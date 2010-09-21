@@ -67,8 +67,8 @@ Cylinder::~Cylinder() {
 }
 //=====================================================
 void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox) {
-        boundingBox[0] = Coord(0.15, 0.15, 0);
-        boundingBox[1] = Coord(0.85, 0.85, 1);
+        boundingBox[0] = Coord(-0.35, -0.35, 0);
+        boundingBox[1] = Coord(0.35, 0.35, 1);
 }
 //=================================================================================================
 void Cylinder::draw(node n, float) {

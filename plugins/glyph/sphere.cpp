@@ -75,8 +75,8 @@ Sphere::~Sphere() {
 }
 //=====================================================
 void Sphere::getIncludeBoundingBox(BoundingBox &boundingBox) {
-        boundingBox[0] = Coord(0.15, 0.15, 0.15);
-        boundingBox[1] = Coord(0.85, 0.85, 0.85);
+        boundingBox[0] = Coord(-0.35, -0.35, -0.35);
+        boundingBox[1] = Coord(0.35, 0.35, 0.35);
 }
 
 static GLuint buffers[] = { 0, 0, 0 };

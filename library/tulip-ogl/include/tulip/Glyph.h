@@ -61,8 +61,8 @@ namespace tlp {
     Glyph(GlyphContext *);
     virtual ~Glyph();
     virtual void getIncludeBoundingBox(BoundingBox &boundingBox) {
-      boundingBox[0] = Coord(0,0,0);
-      boundingBox[1] = Coord(1,1,1);
+      boundingBox[0] = Coord(-0.5,-0.5,-0.5);
+      boundingBox[1] = Coord(0.5,0.5,0.5);
     }
     virtual void draw(node,float)=0;
     /*

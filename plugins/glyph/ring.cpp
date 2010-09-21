@@ -81,8 +81,8 @@ Ring::~Ring() {
 }
 //=====================================================
 void Ring::getIncludeBoundingBox(BoundingBox &boundingBox) {
-        boundingBox[0] = Coord(0.15, 0.15, 0);
-        boundingBox[1] = Coord(0.85, 0.85, 0);
+        boundingBox[0] = Coord(-0.35, -0.35, 0);
+        boundingBox[1] = Coord(0.35, 0.35, 0);
 }
 //=====================================================
 void Ring::draw(node n, float lod) {
