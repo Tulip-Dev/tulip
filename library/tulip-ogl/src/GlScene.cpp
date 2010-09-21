@@ -546,7 +546,7 @@ namespace tlp {
     ajustSceneToSize(viewport[2], viewport[3]);
   }
 
-  void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor){
+  void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,BoundingBox *sceneBoundingBox){
 	if(xWhiteFactor)
       *xWhiteFactor=0.;
 	if(yWhiteFactor)
@@ -635,6 +635,11 @@ namespace tlp {
       *eye=*eye + centerTmp;
 	}
 
+  if(sceneBoundingBox){
+    *sceneBoundingBox=boundingBox;
+  }
+
+
   }
 
   void GlScene::ajustSceneToSize(int width, int height){
@@ -642,14 +647,16 @@ namespace tlp {
 	Coord center;
 	Coord eye;
 	float sceneRadius;
+  BoundingBox sceneBoundingBox;
 
-	computeAjustSceneToSize(width,height, &center, &eye, &sceneRadius,NULL,NULL);
+  computeAjustSceneToSize(width,height, &center, &eye, &sceneRadius,NULL,NULL,&sceneBoundingBox);
 
 	for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       Camera* camera=(*it).second->getCamera();
       camera->setCenter(center);
 
       camera->setSceneRadius(sceneRadius);
+      camera->setSceneBoundingBox(sceneBoundingBox);
 
       camera->setEyes(eye);
       camera->setUp(Coord(0, 1., 0));
