@@ -560,7 +560,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
   delete progress;
   
   tabWidget->setTabText(tabWidget->currentIndex(), QString::fromUtf8(filename.c_str()));
-  controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]].saved();
+  controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]]->saved();
   //setNavigateCaption(filename);
   //setGraphName(graph, QString(filename.c_str()));
   delete os;
@@ -731,6 +731,9 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     GraphNeedsSavingObserver* observer = new GraphNeedsSavingObserver(tabWidget, tabWidget->currentIndex(), newGraph);
     newGraph->addGraphObserver(observer);
     controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]] = observer;    
+    if (!noPlugin) {
+      observer->doNeedSaving();
+    }
     enableElements(true);
 
     if(noPlugin) {
