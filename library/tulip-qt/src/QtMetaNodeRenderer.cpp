@@ -250,7 +250,7 @@ namespace tlp {
     BoundingBox includeBoundingBox;
     inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
 
-    Coord newCenter = nodePos + ((includeBoundingBox[1] - includeBoundingBox[0])/2.f + includeBoundingBox[0] - 0.5f)*nodeSize;
+    Coord newCenter(((includeBoundingBox[1] - includeBoundingBox[0])/2.f + includeBoundingBox[0] - 0.5f)*nodeSize);
     //newCenter[2]+=nodeSize[2]/10.;
     Coord newSize( (includeBoundingBox[1] - includeBoundingBox[0])*nodeSize);
 
@@ -291,8 +291,9 @@ namespace tlp {
 
     setMaterial(Color(255,255,255,255));
     GlTextureManager::getInst().activateTexture(str.str());
-    glTranslatef(newCenter[0],newCenter[1],newCenter[2]);
+    glTranslatef(nodePos[0],nodePos[1],nodePos[2]);
     glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., 1.);
+    glTranslatef(newCenter[0],newCenter[1],newCenter[2]);
     glDisable(GL_LIGHTING);
     //glBlendFunc(GL_SRC_ALPHA_SATURATE,GL_ONE);
     glDisable(GL_BLEND);
@@ -310,8 +311,9 @@ namespace tlp {
     glEnable(GL_LIGHTING);
 
     GlTextureManager::getInst().desactivateTexture();
-    glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., -1.);
     glTranslatef(-newCenter[0],-newCenter[1],-newCenter[2]);
+    glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., -1.);
+    glTranslatef(-nodePos[0],-nodePos[1],-nodePos[2]);
   }
 
   void QtMetaNodeRenderer::setBackgroundColor(const Color &color){
