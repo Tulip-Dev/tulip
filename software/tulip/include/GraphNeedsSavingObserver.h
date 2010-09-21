@@ -12,13 +12,7 @@
 class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observer {
    public : 
       GraphNeedsSavingObserver(QTabWidget* tabWidget, int graphIndex, tlp::Graph* graph, bool = true) :_needsSaving(false), _tabIndex(graphIndex), _tabWidget(tabWidget), _graph(graph) {
-        tlp::Iterator<std::string>* it = graph->getProperties();
-        while(it->hasNext()) {
-          std::string propertyName = it->next();
-          tlp::PropertyInterface* property = graph->getProperty(propertyName);
-          property->addPropertyObserver(this);
-        }
-        delete it;
+        addObserver();
       }
       virtual ~GraphNeedsSavingObserver() {
         
@@ -83,6 +77,11 @@ class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::Property
       }
       virtual void update(std::set< tlp::Observable* >::iterator, std::set< tlp::Observable* >::iterator) { doNeedSaving(); }
       
+      void saved() {
+        _needsSaving = false;
+        addObserver();
+      }
+      
       bool needSaving() const { 
         return _needsSaving; 
       }
@@ -101,6 +100,16 @@ class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::Property
         }
       }
   private:
+    void addObserver() {
+      tlp::Iterator<std::string>* it = _graph->getProperties();
+      while(it->hasNext()) {
+        std::string propertyName = it->next();
+        tlp::PropertyInterface* property = _graph->getProperty(propertyName);
+        property->addPropertyObserver(this);
+      }
+      delete it;
+    }
+    
     bool _needsSaving; 
     int _tabIndex;
     QTabWidget* _tabWidget;
