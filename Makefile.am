@@ -15,7 +15,7 @@ EXTRA_DIST = gen-conf.sh gen-doc.sh \
 	     WriteEnvStr.nsh \
 	     CMakeLists.txt externalplugins/CMakeLists.txt \
 	     FindFTGL.cmake  FindGLEW.cmake  FindXML2.cmake \
-	     UseTulip.cmake UseTulipPlugins.cmake
+	     UseTulip.cmake FindTULIP3.cmake
 
 bin_SCRIPTS = tulip-config
 
