@@ -86,7 +86,7 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/bitmaps/welcomelogo.bmp
 %{prefix}/lib/tlp/bitmaps/logotulip.jpg
 %{prefix}/lib/tlp/bitmaps/logolabri.jpg
-%{prefix}/lib/tlp/bitmaps/*.png
+%{prefix}/lib/tlp/bitmaps/tex_back.png
 %{prefix}/lib/tlp/bitmaps/startup.gif
 %{prefix}/include
 %{prefix}/share/@PACKAGE@
@@ -167,7 +167,11 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/glyphs/lib*-%{version}.*
 %{prefix}/lib/tlp/libFitToLabels-%{version}.*
 %{prefix}/lib/tlp/bitmaps/*.ttf
-%{prefix}/lib/tlp/bitmaps/*.png
+%{prefix}/lib/tlp/bitmaps/arrowSprite.png
+%{prefix}/lib/tlp/bitmaps/cylinderTexture.png
+%{prefix}/lib/tlp/bitmaps/candiSprite.png
+%{prefix}/lib/tlp/bitmaps/edgeBlomSprite.png
+%{prefix}/lib/tlp/bitmaps/edgeSpring.png
 
 %files -n lib%{name}-qt4
 %defattr(-,root,root)
