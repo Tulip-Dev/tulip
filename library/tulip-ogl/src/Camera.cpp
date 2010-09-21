@@ -176,11 +176,11 @@ namespace tlp {
     if(sceneBoundingBox.isValid()){
       Coord diagCoord(sceneBoundingBox[1]-sceneBoundingBox[0]);
       double diag=2*sqrt(diagCoord[0]*diagCoord[0]+diagCoord[1]*diagCoord[1]+diagCoord[2]*diagCoord[2]);
-      near=diag;
-      far=-diag;
+      near=-diag;
+      far=diag;
     }else{
-      near=sceneRadius;
-      far=-sceneRadius;
+      near=-sceneRadius;
+      far=sceneRadius;
     }
     
     if(d3) { 
