@@ -312,6 +312,7 @@ namespace tlp {
     optionsMenu->setEnabled(true);
     graphMenu->setEnabled(true);
 
+    unsigned int holdCount=Observable::observersHoldCounter();
     Observable::holdObservers();
     Graph *newGraph=graph;
 
@@ -435,6 +436,12 @@ namespace tlp {
     eltProperties->setGraph(lastViewedGraph);
     propertiesWidget->setGraph(lastViewedGraph);
     updateCurrentGraphInfos();
+
+    assert(holdCount==Observable::observersHoldCounter());
+    if(holdCount!=Observable::observersHoldCounter()){
+      cerr << "hold/unhold observers error in MainController setData" << endl;
+    }
+
     initObservers();
   }
   //**********************************************************************
@@ -825,7 +832,14 @@ namespace tlp {
       newRect=QRect(QPoint((viewsNumber)*20,(viewsNumber)*20),QSize(0,0));
     }
     
+    unsigned int holdCount=Observable::observersHoldCounter();
+
     View *createdView=ControllerViewsManager::createView(name,graph,dataSet,forceWidgetSize,newRect,maximized);
+
+    assert(holdCount==Observable::observersHoldCounter());
+    if(holdCount!=Observable::observersHoldCounter()){
+      cerr << "hold/unhold observers error when the view " << name << " is created" << endl;
+    }
 
     connect(createdView, SIGNAL(elementSelected(unsigned int, bool)),this,SLOT(showElementProperties(unsigned int, bool)));
     connect(createdView, SIGNAL(requestChangeGraph(View *,Graph *)), this, SLOT(viewRequestChangeGraph(View *,Graph *)));
@@ -887,7 +901,14 @@ namespace tlp {
 
     clearObservers();
 
+    unsigned int holdCount=Observable::observersHoldCounter();
+
     ControllerViewsManager::changeGraph(graph);
+
+    assert(holdCount==Observable::observersHoldCounter());
+    if(holdCount!=Observable::observersHoldCounter()){
+      cerr << "hold/unhold observers error when changeGraph " << endl;
+    }
 
     clusterTreeWidget->setGraph(graph);
     eltProperties->setGraph(graph);
