@@ -39,7 +39,7 @@ using namespace std;
 
 namespace tlp
 {
-  GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData):inputData(inputData),graph(inputData->getGraph()),activated(true),isBegin(false),toCompute(true),vectorSizeInit(false){
+  GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData):inputData(inputData),graph(inputData->getGraph()),observersActivated(false),activated(true),isBegin(false),toCompute(true),vectorSizeInit(false){
     colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
   }
 
@@ -232,7 +232,7 @@ namespace tlp
 
   void GlVertexArrayManager::activatePointEdgeDisplay(GlEdge *edge,bool selected){
     unsigned int index=edgeToPointIndexVector[edge->id];
-    if(index==-1)
+    if(index==(unsigned int)(-1))
       return;
 
     if(!selected){
@@ -244,7 +244,7 @@ namespace tlp
 
   void GlVertexArrayManager::activatePointNodeDisplay(GlNode *node,bool onePixel,bool selected){
     unsigned int index=nodeToPointIndexVector[node->id];
-    if(index==-1)
+    if(index==(unsigned int)(-1))
       return;
 
     if(!selected){
@@ -297,14 +297,22 @@ namespace tlp
   }
 
   void GlVertexArrayManager::initObservers() {
+    if(observersActivated)
+      return;
+
+    observersActivated=true;
     graph->addGraphObserver(this);
     graph->getProperty(inputData->getElementLayoutPropName())->addPropertyObserver(this);
     graph->getProperty(inputData->getElementColorPropName())->addPropertyObserver(this);
   }
 
   void GlVertexArrayManager::clearObservers() {
+    if(!observersActivated)
+      return;
+
     graph->removeGraphObserver(this);
     graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
     graph->getProperty(inputData->getElementColorPropName())->removePropertyObserver(this);
+    observersActivated=false;
   }
 }

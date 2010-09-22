@@ -101,6 +101,7 @@ namespace tlp {
 
     GlGraphInputData *inputData;
     Graph *graph;
+    bool observersActivated;
 
     bool activated;
     bool isBegin;
