@@ -57,7 +57,7 @@ public :
     return nodeProperties.hasNonDefaultValue(n.id);
   }
   bool hasNonDefaultValue(const edge e) const  {
-    return nodeProperties.hasNonDefaultValue(e.id);
+    return !edgeProperties.get(e.id).empty();
   }
 
 private:
