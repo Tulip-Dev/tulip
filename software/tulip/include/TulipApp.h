@@ -23,6 +23,7 @@
 
 #include <vector>
 #include <QtGui/qdockwidget.h>
+#include <QtGui/qmessagebox.h>
 #include <QtGui/qsplitter.h>
 #include <QtCore/qstring.h>
 #include <QtGui/qmainwindow.h>
@@ -150,7 +151,14 @@ private:
   bool doFileSave(int);
   bool doFileSaveAs();
   bool doFileSave(tlp::Controller *controllerToSave,std::string plugin, std::string filename, std::string author, std::string comments);
-  bool askSaveGraph(const std::string &name,int index, bool activateNoToAll=false, bool *noToAll=NULL);
+  /**
+    * @brief Ask user to save a graph. If user select "Yes" automatically perform the saving of the graph.
+    * @param name The name of the graph to save.
+    * @param index The index of the controller containing the graph to save.
+    * @param activateNoToAll Allow user to select the "no to all" button.
+    * @return The button clicked by the user.
+    */
+   QMessageBox::StandardButton askSaveGraph(const std::string &name,int index, bool activateNoToAll=false );
   bool closeWin();
   void saveActions(QWidget *widget,tlp::Controller *controller,std::map<tlp::Controller *,std::vector<QAction *> > &mapToSave);
   void clearInterface();
