@@ -35,7 +35,6 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <QtGui/qmessagebox.h>
 #include <QtGui/qpushbutton.h>
 #include <QtGui/qapplication.h>
 #include <QtGui/qfiledialog.h>
@@ -405,8 +404,8 @@ void TulipApp::fileCloseTab(){
   Graph *graph=tabIndexToController[index]->getGraph();
   while(graph->getRoot()!=graph)
     graph=graph->getRoot();
-  bool cancle=askSaveGraph(graph->getAttribute<string>("name"),index);
-  if(!cancle){
+  QMessageBox::StandardButton answer =askSaveGraph(graph->getAttribute<string>("name"),index);
+    if(answer != QMessageBox::Cancel){
     Controller *controller=tabIndexToController[index];
     tabWidget->setCurrentIndex(index-1);
 
@@ -896,14 +895,9 @@ void TulipApp::windowsMenuAboutToShow() {
   }
 }
 //**********************************************************************
-/* returns true if user canceled */
-bool TulipApp::askSaveGraph(const std::string &name,int index,bool activateNoToAll,bool *noToAll) {
-  *noToAll=false;
-  if(!controllerToGraphObserver[tabIndexToController[index]]->needSaving()) {
-    return false;
-  }
+QMessageBox::StandardButton TulipApp::askSaveGraph(const std::string &name,int index,bool activateNoToAll) {
   string message = "Do you want to save this graph : " + name + " ?";
-  int answer;
+  QMessageBox::StandardButton answer;
   if(activateNoToAll) {
     answer = QMessageBox::question(this, "Save", QString::fromUtf8(message.c_str()),
     QMessageBox::Yes | QMessageBox::No | QMessageBox::NoToAll | QMessageBox::Cancel | QMessageBox::Escape
@@ -913,27 +907,29 @@ bool TulipApp::askSaveGraph(const std::string &name,int index,bool activateNoToA
     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape
     ,QMessageBox::Yes);
   }
-  switch(answer) {
-    case QMessageBox::Cancel : return true;
-    case QMessageBox::Yes: return !doFileSave(index);
-    case QMessageBox::NoToAll: *noToAll=true;return false;
-    default: return false;
+  //If the register step fail send the cancel button to stop the process.
+  if(answer == QMessageBox::Yes){
+    return doFileSave(index)?QMessageBox::Yes:QMessageBox::Cancel;
   }
+  return answer;
 }
 //**********************************************************************
 /* returns true if window agrees to be closed */
 bool TulipApp::closeWin() {
-  bool noToAll=false;
+  QMessageBox::StandardButton answer = QMessageBox::No;
   if(!controllerAutoLoad){
-    for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end() && noToAll!=true;++it){
+    for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end() && answer != QMessageBox::NoToAll;++it){
       if((*it).second){
         Graph *graph=((*it).second)->getGraph();
         assert(graph);
-        while(graph->getRoot()!=graph)
+        while(graph->getRoot()!=graph){
           graph=graph->getRoot();
-        bool canceled = askSaveGraph(graph->getAttribute<string>("name"),(*it).first,true,&noToAll);
-        if(canceled)
+        }
+        answer = askSaveGraph(graph->getAttribute<string>("name"),(*it).first,true);
+        //If user cancel or click on cancel stop the process
+        if(answer == QMessageBox::Cancel){
           return false;
+        }
       }
     }
 
