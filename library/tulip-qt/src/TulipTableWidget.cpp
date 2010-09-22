@@ -602,7 +602,7 @@ LabelTableItem::~LabelTableItem() {
 }
 
 void LabelTableItem::setTextFromTulip(const std::string& data) {
-  setLabel(data.c_str());
+  setLabel(QString::fromUtf8(data.c_str()));
 }
 
 void LabelTableItem::setLabel(const QString &label) {
@@ -1067,7 +1067,7 @@ void TulipTableWidget::setTulipNodeItem(const PropertyInterface *editedProperty,
     setItem(row, col, new FileTableFontItem(QString(
         const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
   } else if (propertyName == "viewLabel") {
-    setItem(row, col, new LabelTableItem(QString(
+    setItem(row, col, new LabelTableItem(QString::fromUtf8(
         const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
   } else if (typeid(*editedProperty) == typeid(BooleanProperty)) {
     setItem(row, col, new SelectionTableItem(
@@ -1136,6 +1136,9 @@ void TulipTableWidget::setTulipEdgeItem(
     setItem(row,col,new EdgeShapeTableItem(shapenum));
   } else if (propertyName == "viewFont") {
     setItem(row,col,new FileTableFontItem(QString(const_cast<PropertyInterface *> (editedProperty)->getEdgeStringValue(e).c_str())));
+  } else if (propertyName == "viewLabel") {
+        setItem(row, col, new LabelTableItem(QString::fromUtf8(
+            const_cast<PropertyInterface *> (editedProperty)->getEdgeStringValue(e).c_str())));
   } else if (propertyName == "viewTexture") {
     setItem(row, col, new FileTableItem(QString(
         const_cast<PropertyInterface *> (editedProperty)->getEdgeStringValue(e).c_str())));
