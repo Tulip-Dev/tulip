@@ -34,7 +34,7 @@ GlPolyQuad::GlPolyQuad(const vector<Coord> &polyQuadEdges, const vector<Color> &
 		const bool outlined, const int outlineWidth, const Color &outlineColor)
 : textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {
 
-	assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
+  assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
 
 	for (size_t i = 0 ; i < (polyQuadEdges.size() / 2) ; ++i) {
 		addQuadEdge(polyQuadEdges[2*i], polyQuadEdges[2*i + 1], polyQuadEdgesColors[i]);
@@ -45,7 +45,7 @@ GlPolyQuad::GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &pol
 		const bool outlined, const int outlineWidth, const Color &outlineColor)
 : textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {
 
-	assert(polyQuadEdges.size() % 2 == 0);
+  assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2);
 
 	for (size_t i = 0 ; i < (polyQuadEdges.size() / 2) ; ++i) {
 		addQuadEdge(polyQuadEdges[2*i], polyQuadEdges[2*i + 1], polyQuadColor);
@@ -62,7 +62,7 @@ void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const
 
 void GlPolyQuad::draw(float, Camera *) {
 
-	assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
+  assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
 
 	vector<Coord> vertexArray;
 	vector<float> texCoordsArray;
@@ -191,7 +191,7 @@ void GlPolyQuad::draw(float, Camera *) {
 		GlTextureManager::getInst().desactivateTexture();
 	}
 
-	if (outlined && textureName == "") {
+  if (outlined && textureName == "") {
 		glLineWidth(outlineWidth);
 		setMaterial(outlineColor);
 		if (nbSubdivisionsPerSegment > 1) {
@@ -202,12 +202,12 @@ void GlPolyQuad::draw(float, Camera *) {
 		if (outlineWidth != 1) {
 			glLineWidth(1);
 		}
-	}
+  }
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHTING);
 
 }
 
