@@ -50,9 +50,9 @@ void GraphPropertiesSelectionWidget::initWidget() {
 
 	while (it->hasNext()) {
 		propertyName = it->next();
-	    if (propertySelectable(propertyName)) {
-	    	inputProperties.push_back(propertyName);
-	    }
+    if (propertySelectable(propertyName)) {
+      inputProperties.push_back(propertyName);
+    }
 	}
 
 	setUnselectedStringsList(inputProperties);
@@ -69,7 +69,7 @@ bool GraphPropertiesSelectionWidget::propertySelectable(const std::string &prope
 		selectProperty = true;
 	}
 
-    if (selectProperty && !includeViewProperties && propertyName.find("view")==0) {
+  if (selectProperty && !includeViewProperties && propertyName.find("view")==0 && propertyName!="viewMetric") {
 		selectProperty = false;
 	}
 	return selectProperty;
