@@ -114,20 +114,11 @@ namespace tlp {
     /**
      * Set the scene radius
      */
-    void setSceneRadius(double sceneRadius) {this->sceneRadius=sceneRadius;matrixCoherent=false;}
+    void setSceneRadius(double sceneRadius,const BoundingBox sceneBoundingBox=BoundingBox()) {this->sceneRadius=sceneRadius;this->sceneBoundingBox=sceneBoundingBox;matrixCoherent=false;}
     /**
      * Return the scene radius
      */
     double getSceneRadius() {return sceneRadius;}
-
-    /**
-     * Set the scene bounding box
-     */
-    void setSceneBoundingBox(const BoundingBox &sceneBoundingBox) {this->sceneBoundingBox=sceneBoundingBox;}
-    /**
-     * Return the scene bounding box
-     */
-    BoundingBox getSceneBoundingBox() {return sceneBoundingBox;}
     
     /**
      * Set the zoom factor
