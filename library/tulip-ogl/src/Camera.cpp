@@ -173,7 +173,7 @@ namespace tlp {
     if(reset) glLoadIdentity();
 
     double near,far;
-    if(sceneBoundingBox.isValid()){
+    if(sceneBoundingBox.isValid() && sceneBoundingBox[0]!=sceneBoundingBox[1]){
       Coord diagCoord(sceneBoundingBox[1]-sceneBoundingBox[0]);
       double diag=2*sqrt(diagCoord[0]*diagCoord[0]+diagCoord[1]*diagCoord[1]+diagCoord[2]*diagCoord[2]);
       near=-diag;

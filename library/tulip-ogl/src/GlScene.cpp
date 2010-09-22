@@ -655,8 +655,7 @@ namespace tlp {
       Camera* camera=(*it).second->getCamera();
       camera->setCenter(center);
 
-      camera->setSceneRadius(sceneRadius);
-      camera->setSceneBoundingBox(sceneBoundingBox);
+      camera->setSceneRadius(sceneRadius,sceneBoundingBox);
 
       camera->setEyes(eye);
       camera->setUp(Coord(0, 1., 0));
