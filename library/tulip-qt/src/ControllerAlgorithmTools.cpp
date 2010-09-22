@@ -95,6 +95,7 @@ namespace tlp {
     if(view)
       nldc=dynamic_cast<NodeLinkDiagramComponent*>(view);
     
+    unsigned int holdCount=Observable::observersHoldCounter();
     Observable::holdObservers();
     
     QtProgress *myProgress=new QtProgress(parent, name,redraw ? view : 0);
@@ -170,6 +171,10 @@ namespace tlp {
       delete tmp;
     }
     Observable::unholdObservers();
+    assert(Observable::observersHoldCounter()==holdCount);
+    if(Observable::observersHoldCounter()!=holdCount){
+      cerr << "Algorithm hold/unhold observers error for " << name << " plugin" << endl;
+    }
     delete myProgress;
     return resultBool;
   }
