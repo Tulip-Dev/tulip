@@ -34,6 +34,16 @@ int main( int argc, char **argv ) {
   QProcess proc;
 #if defined(_WIN32)
   QString program = appDir.absoluteFilePath("tulip_app.exe");
+  // add tlp plugins dirs to PATH envt variable
+  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+  QString tlpPath = appDir.absoluteFilePath("tlp");
+  QString interactorsPath = QDir(tlpPath).absoluteFilePath("interactors");
+  QString viewPath = QDir(tlpPath).absoluteFilePath("view");
+  env.insert("PATH", QDir::toNativeSeparators(tlpPath) + ';'
+	     + QDir::toNativeSeparators(interactorsPath) + ';'
+	     + QDir::toNativeSeparators(viewPath) + ';'
+	     + env.value("Path"));
+  proc.setProcessEnvironment(env);
 #else
   QString program = appDir.absoluteFilePath("tulip_app");
 #endif
