@@ -69,7 +69,7 @@ bool GraphPropertiesSelectionWidget::propertySelectable(const std::string &prope
 		selectProperty = true;
 	}
 
-    if (selectProperty && !includeViewProperties && propertyName.find("view")==0) {
+    if (selectProperty && !includeViewProperties && propertyName.find("view")==0 && propertyName!="viewMetric") {
 		selectProperty = false;
 	}
 	return selectProperty;
