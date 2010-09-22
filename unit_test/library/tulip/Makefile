@@ -16,7 +16,8 @@ SRCS=   tuliplibtest.cpp \
 	ObservableGraphTest.cpp \
 	PushPopTest.cpp \
 	IntegerPropertyMinMaxSubgraphTest.cpp \
-	IntegerPropertyMinMaxUpdateTest.cpp
+	IntegerPropertyMinMaxUpdateTest.cpp \
+	IsMetaEdgeTest.cpp
 #	PlanarConMapTest.cpp
 
 TULIP_CONFIG=$(shell which tulip-config)
