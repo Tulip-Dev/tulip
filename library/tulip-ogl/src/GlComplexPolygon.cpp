@@ -74,8 +74,8 @@ void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData) {
 	Coord v(pointer[0], pointer[1], pointer[2]);
 	Color color(pointer[3], pointer[4], pointer[5], pointer[6]);
 	Vec2f texCoord;
-	texCoord[0] = pointer[0];
-	texCoord[1] = pointer[1];
+  texCoord[0] = pointer[0] / complexPolygon->getTextureZoom();
+  texCoord[1] = pointer[1] / complexPolygon->getTextureZoom();
 	complexPolygon->addVertex(v, color, texCoord);
 }
 
@@ -102,7 +102,8 @@ GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,int 
     												outlined(false),
     												fillColor(fcolor),
     												outlineSize(1),
-    												textureName(textureName){
+                            textureName(textureName),
+                            textureZoom(1.){
 	createPolygon(coords,polygonEdgesType);
 	runTesselation();
 }
@@ -113,7 +114,8 @@ GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,Colo
     												fillColor(fcolor),
     												outlineColor(ocolor),
     												outlineSize(1),
-    												textureName(textureName) {
+                            textureName(textureName),
+                            textureZoom(1.) {
 	createPolygon(coords,polygonEdgesType);
 	runTesselation();
 }
@@ -123,7 +125,8 @@ GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fco
     												outlined(false),
     												fillColor(fcolor),
     												outlineSize(1),
-    												textureName(textureName){
+                            textureName(textureName),
+                            textureZoom(1.){
 	for(unsigned int i=0;i<coords.size();++i) {
 		createPolygon(coords[i],polygonEdgesType);
 		beginNewHole();
@@ -137,7 +140,8 @@ GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fco
     												fillColor(fcolor),
     												outlineColor(ocolor),
     												outlineSize(1),
-    												textureName(textureName) {
+                            textureName(textureName),
+                            textureZoom(1.) {
 	for(unsigned int i=0;i<coords.size();++i) {
 		createPolygon(coords[i],polygonEdgesType);
 		beginNewHole();
@@ -197,6 +201,13 @@ void GlComplexPolygon::beginNewHole() {
 	currentVector++;
 }
 void GlComplexPolygon::runTesselation() {
+
+  primitivesSet.clear();
+  startIndicesMap.clear();
+  verticesCountMap.clear();
+  verticesMap.clear();
+  colorsMap.clear();
+  texCoordsMap.clear();
 
 	GLUtesselator *tobj;
 	tobj = gluNewTess();
@@ -329,6 +340,7 @@ void GlComplexPolygon::translate(const Coord& vec) {
 			(*it2) += vec;
 		}
 	}
+  runTesselation();
 }
 //===========================================================
 void GlComplexPolygon::getXML(xmlNodePtr rootNode) {

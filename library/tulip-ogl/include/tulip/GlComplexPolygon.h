@@ -127,17 +127,27 @@ namespace tlp {
     /**
      * Set fill color of GlComplexPolygon
      */
-    void setFillColor(const Color &color){fillColor=color;}
+    void setFillColor(const Color &color){fillColor=color;runTesselation();}
 
     /**
      * Get outline color of GlComplexPolygon
      */
-    Color getOutlineColor() {return outlineColor;}
+    Color getOutlineColor() {return outlineColor;runTesselation();}
 
     /**
      * Set outline color of GlComplexPolygon
      */
-    void setOutlineColor(const Color &color){outlineColor=color;}
+    void setOutlineColor(const Color &color){outlineColor=color;runTesselation();}
+
+    /**
+     * Get the texture zoom factor
+     */
+    float getTextureZoom(){return textureZoom;}
+
+    /**
+     * Set the texture zoom factor
+     */
+    void setTextureZoom(float zoom){textureZoom=zoom;runTesselation();}
 
     /**
      * Translate entity
@@ -186,6 +196,7 @@ namespace tlp {
     Color outlineColor;
     double outlineSize;
     std::string textureName;
+    float textureZoom;
   };
 }
 #endif
