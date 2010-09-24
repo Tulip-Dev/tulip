@@ -20,7 +20,7 @@
 #include "TreeReingoldAndTilfordExtended.h"
 #include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber","06/11/2002","Beta","1.0","Tree");
+LAYOUTPLUGINOFGROUP(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber and Romain Bourqui","24/09/2010","Beta","1.1","Tree");
 using namespace std;
 using namespace tlp;
 
@@ -54,6 +54,14 @@ namespace {
     HTML_HELP_DEF( "default", "false" )	 \
     HTML_HELP_BODY() \
     "Indicates if the node bounding objects are boxes or bounding circles." \
+
+    HTML_HELP_CLOSE(),
+   //compact layout
+    HTML_HELP_OPEN()				 \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "default", "true" )	 \
+    HTML_HELP_BODY() \
+    "Indicates if a compact layout is computed." \
     HTML_HELP_CLOSE()
   };
 }
@@ -69,6 +77,7 @@ TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const PropertyCon
   addParameter<bool>("orthogonal", paramHelp[2], "true" );
   addSpacingParameters(this);
   addParameter<bool>("bounding circles", paramHelp[3], "false");
+  addParameter<bool>("compact layout", paramHelp[4], "true");
 }
 //=============================================================================
 TreeReingoldAndTilfordExtended::~TreeReingoldAndTilfordExtended() {
@@ -296,7 +305,9 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, TLP_HASH_MAP<node,double
 						map<int,double> &maxLevelSize) {
   //cerr << "TreeReingoldAndTilfordExtended::calcLayout" << endl;
   Coord tmpCoord;
-  tmpCoord.set(x+(*p)[n], -y, 0);
+  if(!compactLayout)
+    tmpCoord.set(x+(*p)[n], -y, 0);
+  else tmpCoord.set(x+(*p)[n], - (y+maxLevelSize[level]/2.), 0);
   layoutResult->setNodeValue(n,tmpCoord);
   if (useLength) {
     edge ite;
@@ -306,7 +317,10 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, TLP_HASH_MAP<node,double
       int decalLevel = level;
       int tmp = lengthMetric->getEdgeValue(ite);
       while(tmp>0) {
-	decalY += spacing;
+	if(!compactLayout)
+	  decalY += spacing;
+	else
+	  decalY += maxLevelSize[decalLevel]+spacing;
 	decalLevel++;
 	tmp--;
       }
@@ -316,8 +330,12 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, TLP_HASH_MAP<node,double
   else {
     node itn;
     forEach(itn, tree->getOutNodes(n)) {
-      calcLayout(itn,p, x+(*p)[n], y + spacing, 
-		 level+1, maxLevelSize);
+      if(!compactLayout)
+	calcLayout(itn,p, x+(*p)[n], y + spacing, 
+		   level+1, maxLevelSize);
+      else 
+	calcLayout(itn,p, x+(*p)[n], y+maxLevelSize[level]+spacing, 
+		   level+1, maxLevelSize);
     }
   }
   //cerr << "TreeReingoldAndTilfordExtended::EndCalcLayout" << endl;
@@ -325,15 +343,18 @@ void TreeReingoldAndTilfordExtended::calcLayout(node n, TLP_HASH_MAP<node,double
 //===============================================================
 bool TreeReingoldAndTilfordExtended::run() {
   TLP_HASH_MAP<node,double> posRelative;
-
+  
   layoutResult->setAllEdgeValue(vector<Coord>(0));
   if (!getNodeSizePropertyParameter(dataSet, sizes))
     sizes = graph->getProperty<SizeProperty>("viewSize");
+  // ensure size updates will be kept after a pop
+  preservePropertyUpdates(sizes);
   getSpacingParameters(dataSet, nodeSpacing, spacing);
   orientation = "horizontal";
   lengthMetric = 0;
   ortho = true;
   useLength = false;
+  compactLayout = true;
   bool boundingCircles = false;
   if (dataSet!=0) {
     useLength = dataSet->get("edge length", lengthMetric);
@@ -343,6 +364,8 @@ bool TreeReingoldAndTilfordExtended::run() {
     if (dataSet->get("orientation", tmp)) {
       orientation = tmp.getCurrentString();
     }
+    if(!dataSet->get("compact layout", compactLayout))
+      compactLayout = true;
   }
 
   //use bounding circles if specified
@@ -359,8 +382,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   }//end if
 
   //=========================================================
-  //rotate size if needed
-  //will be undone at the end
+  //rotate size if necessary
   if (orientation == "horizontal") {
     node n;
     forEach(n, graph->getNodes()) {
@@ -384,10 +406,12 @@ bool TreeReingoldAndTilfordExtended::run() {
   TreeLevelSizing(startNode, maxSizeLevel, 0, levels);
   // check if the specified layer spacing is greater
   // than the max of the minimum layer spacing of the tree
-  for (unsigned int i = 0; i < maxSizeLevel.size() - 1;  ++i) {
-    float minLayerSpacing = (maxSizeLevel[i] + maxSizeLevel[i + 1]) / 2;
-    if (minLayerSpacing + nodeSpacing > spacing)
-      spacing = minLayerSpacing + spacing;
+  if(!compactLayout){
+    for (unsigned int i = 0; i < maxSizeLevel.size() - 1;  ++i) {
+      float minLayerSpacing = (maxSizeLevel[i] + maxSizeLevel[i + 1]) / 2;
+      if (minLayerSpacing + nodeSpacing > spacing)
+	spacing = minLayerSpacing + spacing;
+    }
   }
   
   list<LR> *tmpList = TreePlace(startNode,&posRelative);
@@ -406,12 +430,23 @@ bool TreeReingoldAndTilfordExtended::run() {
       levelCoord[i] = 0;
     }
     map<int,double>::iterator itas = maxSizeLevel.begin();
-    for (;itas!=maxSizeLevel.end(); ++itas) {
-      levelCoord[itas->first] = 0;
+    if(!compactLayout){
+      for (;itas!=maxSizeLevel.end(); ++itas) {
+        levelCoord[itas->first] = 0;
+      }
+      for (int i=1; i<itos->first; ++i) {
+        levelCoord[i] += levelCoord[i-1] + spacing;
+      }
     }
-    for (int i=1; i<itos->first; ++i) {
-      levelCoord[i] += levelCoord[i-1] + spacing;
+    else {
+      for (;itas!=maxSizeLevel.end(); ++itas) {
+        levelCoord[itas->first] = maxSizeLevel[0]/2.;//0;
+      }
+      for (int i=1; i<itos->first; ++i) {
+         levelCoord[i] += levelCoord[i-1] + spacing + maxSizeLevel[i];
+      }
     }
+
     //============================
     edge e;
     forEach(e, tree->getEdges()) {
@@ -437,16 +472,12 @@ bool TreeReingoldAndTilfordExtended::run() {
     }
   }
 
-  //rotate layout (and size if needed)
+  //rotate layout and size
   if (orientation == "horizontal") {
     node n;
     forEach(n, tree->getNodes()) {
-      // if not in tulip gui, ensure cleanup
-      LayoutProperty* elementLayout;
-      if (!graph->getAttribute("viewLayout", elementLayout)) {
-	const Size&  tmp = sizes->getNodeValue(n);
-	sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      }
+      const Size&  tmp = sizes->getNodeValue(n);
+      sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
       const Coord& tmpC = layoutResult->getNodeValue(n);
       layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
@@ -455,10 +486,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (boundingCircles)
     delete sizes;
 
-  // if not in tulip gui, ensure cleanup
-  LayoutProperty* elementLayout;
-  if (!graph->getAttribute("viewLayout", elementLayout))
-    TreeTest::cleanComputedTree(graph, tree);
+  TreeTest::cleanComputedTree(graph, tree);
 
   return true;
 }
