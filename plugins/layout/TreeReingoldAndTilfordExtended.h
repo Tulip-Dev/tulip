@@ -69,6 +69,7 @@ private:
   std::string orientation;
   float spacing;
   float nodeSpacing;
+  bool compactLayout;
 };
 /*@}*/
 #endif
