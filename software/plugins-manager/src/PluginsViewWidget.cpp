@@ -385,8 +385,32 @@ namespace tlp {
         twi->setTextColor(1, QColor(0,255,0));
         return true;
       }else{
+	
+      bool havePlugin=false;
+  #if defined(__APPLE__)
+  #if defined(MACPPC)
+        havePlugin=distPluginInfo->macVersion_ppc;
+  #else
+        havePlugin=distPluginInfo->macVersion_intel;
+  #endif
+  #elif defined(_WIN32)
+        havePlugin=distPluginInfo->windowsVersion;
+  #elif defined(I64)
+        havePlugin=distPluginInfo->linuxVersion_i64;
+  #else
+        havePlugin=distPluginInfo->linuxVersion;
+  #endif
+
+        if(!havePlugin){
+          twi->setText(1, QString("Unavailable"));
+        }
+
+        if(!isCompatible(distPluginInfo->version)){
+          twi->setText(1, QString("Not Compatible"));
+        }
+
         if(distPluginInfo->localVersion!=""){
-          twi->setText(1, QString(distPluginInfo->localVersion.c_str()));
+          twi->setText(1, twi->text(1)+QString(distPluginInfo->localVersion.c_str()));
           twi->setTextColor(1, QColor(0,0,255));
         }
         twi->setCheckState(0,Qt::Unchecked);
