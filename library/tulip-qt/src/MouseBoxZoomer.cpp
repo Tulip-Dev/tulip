@@ -121,7 +121,6 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
       cam->setZoomFactor(cam->getZoomFactor() * ((double) width / (double) w));
     else
       cam->setZoomFactor(cam->getZoomFactor() * ((double) height / (double) h));
-	}
 	glw->draw(false);
       }
     }
