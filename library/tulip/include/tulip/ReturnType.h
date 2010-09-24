@@ -29,7 +29,7 @@ namespace tlp {
   template <typename TYPE> 
     struct ReturnType {
       typedef const TYPE& ConstValue;
-      typedef TYPE &Value;
+      typedef TYPE& Value;
     };
 
  
@@ -37,7 +37,7 @@ namespace tlp {
 #define DECL_BASIC_RETURN(T)			\
   template <>					\
     struct ReturnType<T> {			\
-    typedef const T ConstValue;			\
+    typedef T ConstValue;			\
     typedef T Value;				\
   }
 
