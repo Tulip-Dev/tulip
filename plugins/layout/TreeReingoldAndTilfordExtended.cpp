@@ -421,33 +421,6 @@ bool TreeReingoldAndTilfordExtended::run() {
 
   if (ortho) {
     //Edge bends
-    //compute layer value 
-    map<int,double>::reverse_iterator itos = maxSizeLevel.rbegin();
-    //==========================
-    //compute the coordinate of each interval between layer.
-    vector<double> levelCoord(itos->first+1);
-    for (int i=0; i<itos->first; ++i) {
-      levelCoord[i] = 0;
-    }
-    map<int,double>::iterator itas = maxSizeLevel.begin();
-    if(!compactLayout){
-      for (;itas!=maxSizeLevel.end(); ++itas) {
-        levelCoord[itas->first] = 0;
-      }
-      for (int i=1; i<itos->first; ++i) {
-        levelCoord[i] += levelCoord[i-1] + spacing;
-      }
-    }
-    else {
-      for (;itas!=maxSizeLevel.end(); ++itas) {
-        levelCoord[itas->first] = maxSizeLevel[0]/2.;//0;
-      }
-      for (int i=1; i<itos->first; ++i) {
-         levelCoord[i] += levelCoord[i-1] + spacing + maxSizeLevel[i];
-      }
-    }
-
-    //============================
     edge e;
     forEach(e, tree->getEdges()) {
       LineType::RealType tmp;
@@ -455,12 +428,10 @@ bool TreeReingoldAndTilfordExtended::run() {
       node tgt = tree->target(e);
       const Coord& srcPos = layoutResult->getNodeValue(src);
       const Coord& tgtPos = layoutResult->getNodeValue(tgt);
-      double y = levelCoord[levels[tgt]-1];
-      tmp.push_back(Coord(srcPos[0], -y, 0));
-      tmp.push_back(Coord(tgtPos[0], -y, 0));
+      tmp.push_back(Coord(srcPos[0], srcPos[1], 0));
+      tmp.push_back(Coord(tgtPos[0], srcPos[1], 0));
       layoutResult->setEdgeValue(e, tmp);
     }
-    
     if (orientation == "horizontal") {
       forEach(e, tree->getEdges()) {
 	LineType::RealType tmp = layoutResult->getEdgeValue(e);
