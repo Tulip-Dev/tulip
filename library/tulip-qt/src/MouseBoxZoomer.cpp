@@ -29,6 +29,7 @@
 #include <tulip/GlTools.h>
 
 #include "tulip/MouseBoxZoomer.h"
+#include "tulip/QtGlSceneZoomAndPanAnimator.h"
 
 using namespace std;
 using namespace tlp;
@@ -46,8 +47,8 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 	(kModifier == Qt::NoModifier ||
 	 ((QMouseEvent *) e)->modifiers() & kModifier)) {
       if (!started) {
-	x = qMouseEv->x();
-	y =  glw->height() - qMouseEv->y();
+  x = (double) glw->width() - qMouseEv->x();
+  y = qMouseEv->y();
 	w = 0; h = 0;
 	started = true;
 	glw->setMouseTracking(true);
@@ -83,9 +84,9 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     }
     if (started){
       if ((qMouseEv->x() > 0) && (qMouseEv->x() < glw->width()))
-	w = qMouseEv->x() - x;
+  w = (double) glw->width()- qMouseEv->x() - x;
       if ((qMouseEv->y() > 0) && (qMouseEv->y() < glw->height()))
-	h = y - (glw->height() - qMouseEv->y());
+  h = qMouseEv->y() - y;
       glw->redraw();
     return true;
     }
@@ -103,25 +104,25 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     if (started) {
       started = false;
       if(!(w==0 && h==0)){
-	if (abs(w) < 10){
-	  w=10;
-	}
-	if(abs(h) < 10) {
-	  h=10;
-	}
-	//      cerr << __FUNCTION__ << ": " << this << "(x,y)=(" << e->x() << "," << e->y() << ")" << endl;
-	int width = glw->width();
-	int height = glw->height();
-	glw->getScene()->translateCamera(width/2 - (x+w/2), height/2 - (y-h/2), 0);
-	w = abs(w); h = abs(h);
-    Camera *cam = glw->getScene()->getCamera();
-	//we prevent zooming in a minimal square area less than 4x4: a least
-	//one of the 2 lengths must be higher than 3
-  if(((double) width / (double) w) < ((double) height / (double) h))
-    cam->setZoomFactor(cam->getZoomFactor() * ((double) width / (double) w));
-  else
-    cam->setZoomFactor(cam->getZoomFactor() * ((double) height / (double) h));
-	glw->draw(false);
+        if (abs(w) < 10){
+          w=10;
+        }
+        if(abs(h) < 10) {
+          h=10;
+        }
+
+        Coord point1(x,y,0);
+        Coord point2(x + w ,y + h,0);
+
+        cout << point1 << " # " << point2 << endl;
+
+        BoundingBox boundingBox;
+        boundingBox.expand(glw->getScene()->getCamera()->screenTo3DWorld(point1));
+        boundingBox.expand(glw->getScene()->getCamera()->screenTo3DWorld(point2));
+
+        QtGlSceneZoomAndPanAnimator navigator(glw,boundingBox);
+        navigator.animateZoomAndPan();
+        //glw->draw(false);
       }
     }
     return true;
@@ -153,10 +154,10 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   float col[4] = {0.8, 0.4, 0.4, 0.2};
   setColor(col);
   glBegin(GL_QUADS);
-  glVertex2f(x, y);
-  glVertex2f(x+w, y);
-  glVertex2f(x+w, y-h);
-  glVertex2f(x, y-h);
+  glVertex2f((double) glw->width()-x, glw->height()-y);
+  glVertex2f((double) glw->width()-x-w, glw->height()-y);
+  glVertex2f((double) glw->width()-x-w, glw->height()-y-h);
+  glVertex2f((double) glw->width()-x, glw->height()-y-h);
   glEnd();
   glDisable(GL_BLEND);
 
@@ -164,10 +165,10 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   glLineStipple(2, 0xAAAA);
   glEnable(GL_LINE_STIPPLE);
   glBegin(GL_LINE_LOOP);
-  glVertex2f(x, y);
-  glVertex2f(x+w, y);
-  glVertex2f(x+w, y-h);
-  glVertex2f(x, y-h);
+  glVertex2f((double) glw->width()-x, glw->height()-y);
+  glVertex2f((double) glw->width()-x-w, glw->height()-y);
+  glVertex2f((double) glw->width()-x-w, glw->height()-y-h);
+  glVertex2f((double) glw->width()-x, glw->height()-y-h);
   glEnd();
   /*
   glLineWidth(1);
