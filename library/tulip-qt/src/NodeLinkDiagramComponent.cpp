@@ -86,7 +86,13 @@ namespace tlp {
   	actionTrueMetaNodeOptions=optionsMenu->addAction("Textured meta node");
   	actionTrueMetaNodeOptions->setCheckable(true);
 
-  	if(canUseQGLPixelBuffer()){
+	/* This code is here to deactivate QtMetaNodeRendering on Mac for Tulip 3.4.1*/
+	bool withoutQtPictureOutput=false;
+#ifdef WITHOUT_QT_PICTURE_OUTPUT
+	withoutQtPictureOutput=true;
+#endif
+
+  	if(canUseQGLPixelBuffer() && !withoutQtPictureOutput){
   	  actionTrueMetaNodeOptions->setChecked(true);
   	}else{
   	  actionTrueMetaNodeOptions->setEnabled(false);
