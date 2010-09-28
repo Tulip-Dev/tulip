@@ -68,19 +68,9 @@ template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& val
   return false;
 }
 
-template<typename T>
-struct DataTypeContainer :public tlp::DataType {
-  DataTypeContainer(void *value, const std::string& str) :DataType(value, str) {}
-  ~DataTypeContainer() {
-    delete (T*) value;
-  }
-  DataType* clone() const {
-    return new DataTypeContainer<T>(new T(*(T*)value), typeName);
-  }
-};
-
-template<typename T> void tlp::DataSet::set(const std::string &str,const T& value) {
-  DataTypeContainer<T> dtc(new T(value), std::string(typeid(T).name()));
+template<typename T> void tlp::DataSet::set(const std::string &str,
+					    const T& value) {
+  TypedData<T> dtc(new T(value));
   setData(str, &dtc);
 }
 //=======================================================================

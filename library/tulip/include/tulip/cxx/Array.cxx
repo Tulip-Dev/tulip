@@ -47,17 +47,27 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
   char c;
   int pos = is.tellg();
   is.clear();
-  if( !(is >> c) || c!='(' ) {
+  // skip spaces
+  while((is >> c) && isspace(c)) {}
+  if(c!='(') {
     is.seekg(pos);
     is.setstate( std::ios::failbit );
     return is;  
   }
   for( unsigned int i=0;i<SIZE;++i ) {
-    if( i>0 && ( !(is >> c) || c!=',' ) ) {
-      is.seekg(pos);
-      is.setstate( std::ios::failbit );
-      return is;  
+    bool ok;
+    if (i>0 ) {
+      // skip spaces
+      while((ok = (is >> c)) && isspace(c)) {}
+      if (!ok || c!=',') {
+	is.seekg(pos);
+	is.setstate( std::ios::failbit );
+	return is;  
+      }
     }
+    // skip spaces
+    while((ok = (is >> c)) && isspace(c)) {}
+    is.unget();
     bool done = true;
     done = ( is >> outA.array[i] );
     if( !done ) {
@@ -66,7 +76,9 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
       return is;
     }
   }
-  if( !(is >> c) || c!=')' ) {
+  // skip spaces
+  while((is >> c) && isspace(c)) {}
+  if (c!=')' ) {
     is.seekg(pos);
     is.setstate( std::ios::failbit );
     return is;  

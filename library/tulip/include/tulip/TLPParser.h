@@ -147,6 +147,8 @@ struct TLPBuilder {
   virtual bool addString(const std::string &)=0;
   virtual bool addStruct(const std::string&,TLPBuilder*&)=0;  
   virtual bool close() =0;
+  virtual bool canRead() { return false; }
+  virtual bool read(std::istream&) { return false; }
 };
 
 struct TLPTrue:public TLPBuilder {
@@ -155,7 +157,7 @@ struct TLPTrue:public TLPBuilder {
   bool addRange(int, int) {return true;}
   bool addDouble(const double) {return true;}
   bool addString(const std::string &) {return true;}
-  bool addStruct(const std::string& structName,TLPBuilder*&newBuilder) {
+  bool addStruct(const std::string& /*structName*/, TLPBuilder*&newBuilder) {
     newBuilder=new TLPTrue();
     return true;
   }
@@ -168,7 +170,7 @@ struct TLPFalse:public TLPBuilder {
   bool addRange(int, int) {return false;}
   bool addDouble(const double) {return false;}
   bool addString(const std::string &) {return false;}
-  bool addStruct(const std::string& structName,TLPBuilder*&newBuilder) {
+  bool addStruct(const std::string& /*structName*/, TLPBuilder*&newBuilder) {
     newBuilder=new TLPFalse();
     return false;
   }
@@ -238,8 +240,11 @@ struct TLPParser {
 	    if (currentToken!=STRINGTOKEN)
 	      return formatError();//we can throw an exeption
 	    TLPBuilder *newBuilder;
-	    if (builderStack.front()->addStruct(currentValue.str,newBuilder)) {	      
+	    if (builderStack.front()->addStruct(currentValue.str, newBuilder)) {	      
 		builderStack.push_front(newBuilder);
+		if (newBuilder->canRead())
+		  if (!newBuilder->read(inputStream))
+		    return formatError();
 	      }
 	    else
 	      return formatError();

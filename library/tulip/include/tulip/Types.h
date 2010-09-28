@@ -68,6 +68,8 @@ public:
   static std::set<edge> defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 class TLP_SCOPE DoubleType {
@@ -77,6 +79,8 @@ public:
   static double defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 DECL_STORED_STRUCT(std::vector<double>);
@@ -88,6 +92,8 @@ public:
   static std::vector<double> defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 class TLP_SCOPE IntegerType
@@ -98,6 +104,8 @@ public:
   static int defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 DECL_STORED_STRUCT(std::vector<int>);
@@ -110,6 +118,8 @@ public:
   static std::vector<int> defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 class TLP_SCOPE BooleanType {
@@ -119,6 +129,8 @@ public:
   static bool defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 
@@ -131,6 +143,8 @@ public:
   static std::vector<bool> defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 DECL_STORED_STRUCT(std::vector<Coord>);
@@ -143,6 +157,8 @@ public:
   static std::vector<Coord> defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 class TLP_SCOPE PointType {
@@ -152,6 +168,8 @@ public:
   static Coord defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 DECL_STORED_STRUCT(Size);
@@ -163,6 +181,8 @@ public:
   static Size defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 DECL_STORED_STRUCT(std::vector<Size>);
@@ -174,6 +194,8 @@ public:
   static std::vector<Size> defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 DECL_STORED_STRUCT(std::string);
@@ -185,6 +207,8 @@ public:
   static std::string defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 DECL_STORED_STRUCT(std::vector<std::string>);
@@ -196,6 +220,8 @@ public:
   static std::vector<std::string> defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 class TLP_SCOPE ColorType {
@@ -205,6 +231,8 @@ public:
   static Color defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 DECL_STORED_STRUCT(std::vector<Color>);
@@ -216,6 +244,8 @@ public:
   static std::vector<Color> defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
 
 class TLP_SCOPE CoordVectorType {
@@ -225,7 +255,11 @@ public:
   static std::vector<Coord> defaultValue();
   static std::string toString( const RealType & v );
   static bool fromString( RealType & v, const std::string & s );
+  static void write(std::ostream&, const RealType &v);
+  static bool read(std::istream& istr, RealType& value);
 };
+
+extern TLP_SCOPE void initTypeSerializers();
 }
 /*@}*/
 #endif

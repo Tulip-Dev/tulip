@@ -29,6 +29,7 @@
 #include "thirdparty/gzstream/gzstream.h"
 
 #include "tulip/TlpTools.h"
+#include "tulip/Types.h"
 #include "tulip/LayoutProperty.h"
 #include "tulip/DoubleProperty.h"
 #include "tulip/StringProperty.h"
@@ -138,7 +139,7 @@ void tlp::initTulipLib(char* appDirPath) {
 
   TulipBitmapDir=TulipLibDir+"tlp/bitmaps/";
 
-  // intialize factories
+  // initialize factories
   SizeProperty::initFactory();
   IntegerProperty::initFactory();
   LayoutProperty::initFactory();
@@ -149,6 +150,9 @@ void tlp::initTulipLib(char* appDirPath) {
   AlgorithmFactory::initFactory();
   ImportModuleFactory::initFactory();
   ExportModuleFactory::initFactory();
+
+  // initialize serializers
+  initTypeSerializers();
 }
 //=========================================================
 istream *tlp::getIgzstream(const char *name, int open_mode) {
