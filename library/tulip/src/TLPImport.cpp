@@ -504,28 +504,22 @@ namespace tlp {
     struct TLPDataSetBuilder: public TLPFalse {
         TLPGraphBuilder *graphBuilder;
         DataSet dataSet;
-        DataSet *currentDataSet;
+        DataSet* currentDataSet;
         char* dataSetName;
-        string dataSetNameStr;
 
-        TLPDataSetBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),currentDataSet(graphBuilder->dataSet){
+        TLPDataSetBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),currentDataSet((DataSet *) &(graphBuilder->_graph->getAttributes())){
             dataSetName = (char *) 0;
-        }
+	}
         TLPDataSetBuilder(TLPGraphBuilder *graphBuilder, char* name):graphBuilder(graphBuilder),currentDataSet(graphBuilder->dataSet){
             dataSetName = name;
             graphBuilder->dataSet->get(dataSetName, dataSet);
+	    currentDataSet = &dataSet;
         }
         TLPDataSetBuilder(TLPGraphBuilder *graphBuilder,DataSet *currentDataSet):graphBuilder(graphBuilder),currentDataSet(currentDataSet){
         }
         virtual ~TLPDataSetBuilder(){
         }
-        bool addStruct(const string& structName, TLPBuilder*&newBuilder);
-        bool addString(const string &str) {
-            dataSetName = (char *) 0;
-            dataSetNameStr = str;
-            return true;
-        }
-        bool close(){
+        bool close() {
             if (dataSetName) {
                 // handle old displaying properties
                 // to ensure compatibility
@@ -563,16 +557,12 @@ namespace tlp {
                     dataSet.set("fontType", ui);
                 graphBuilder->dataSet->set<DataSet>(dataSetName, dataSet);
             }
-            if(dataSetNameStr!="") {
-                currentDataSet->set<DataSet>(dataSetNameStr.c_str(), dataSet);
-                Iterator< std::pair<std::string, DataType*> > *it=dataSet.getValues();
-                while(it->hasNext()) {
-                    pair<string, DataType*> p;
-                    p = it->next();
-                } delete it;
-            }
             return true;
         }
+      bool canRead() { return true; }
+      bool read(std::istream& is) {
+	return DataSet::read(is, *currentDataSet);
+      }
     };
     //================================================================================
     struct TLPFileInfoBuilder: public TLPFalse {
@@ -613,114 +603,6 @@ namespace tlp {
         bool close(){
             return true;
         }
-    };
-    //================================================================================
-    struct TLPDataBuilder : public TLPFalse
-    {
-        TLPDataSetBuilder *dataSetBuilder;
-        DataSet *dataSet;
-        string type, prop;
-        int token;
-        TLPDataBuilder(TLPDataSetBuilder *dataSetBuilder, const string& type): dataSetBuilder(dataSetBuilder),
-        type(type), prop(""),
-        token(0) {
-            if (dataSetBuilder->dataSetName || dataSetBuilder->dataSetNameStr!="")
-                dataSet = &(dataSetBuilder->dataSet);
-            else
-                dataSet = (DataSet *) &(dataSetBuilder->graphBuilder->_graph->getAttributes());
-        }
-
-        ~TLPDataBuilder(){}
-        bool addString(const string &val) {
-            switch(token++) {
-            case 0: prop = val; break;
-            case 1: {
-                    if (type==COLOR) {
-                        tlp::Color c;
-                        if ( ColorType::fromString(c,val) )
-                            dataSet->set(prop, c);
-                        else cerr << __PRETTY_FUNCTION__ << ": COLOR failed" << endl;
-                        //else return false;
-                    }
-                    else if (type==COORD) {
-                        Coord c;
-                        if ( PointType::fromString(c,val) )
-                            dataSet->set(prop, c);
-                        else cerr << __PRETTY_FUNCTION__ << ": COORD failed" << endl;
-                        //else return false;
-                    }
-                    else if (type==SIZE) {
-                        Size s;
-                        if ( SizeType::fromString(s, val) )
-                            dataSet->set(prop, s);
-                        else cerr << __PRETTY_FUNCTION__ << ": SIZE failed" << endl;
-                        //else return false;
-                    }else if (type==DOUBLE){
-                      double d;
-                      if(DoubleType::fromString(d,val))
-                        dataSet->set(prop,d);
-                      else cerr << __PRETTY_FUNCTION__ << ": DOUBLE failed" << endl;
-                    }
-                    else if (type==STRING)
-                        dataSet->set(prop, val);
-                    else {
-                        cerr << __PRETTY_FUNCTION__ << ": TYPE = " << type << ", " << prop << " = " << val << endl;
-                        return false;
-                    }
-                    break;
-                }
-            default: return false;
-            }
-            return true;
-        }
-        bool addBool(const bool val) {
-            if ((type==BOOL) && (token++ == 1)) dataSet->set(prop, val);
-            return true;
-        }
-
-        bool addInt(const int val) {
-            if ((type==INT) && (token == 1)) {
-                if (prop == "SupergraphId") {
-                    int v;
-                    if (dataSetBuilder->graphBuilder->clusterIndex.find(val) != dataSetBuilder->graphBuilder->clusterIndex.end()) {
-                        v=dataSetBuilder->graphBuilder->clusterIndex[val]->getId();
-                        dataSet->set<int>(prop, v);
-                    }
-                    else {
-                        //	  cerr << "Import TLP: Warning: no cluster #" << val << " defined." << endl;
-                    }
-                }
-                else {
-                    dataSet->set<int>(prop, val);
-                }
-            }
-            else if ((type==UINT) && (token == 1)) {
-                dataSet->set<unsigned int>(prop, val);
-            }
-            else if ((type==DOUBLE) && (token == 1)) {
-                dataSet->set<double>(prop, (double) val);
-            }
-            else if ((type==FLOAT) && (token == 1)) {
-                dataSet->set<float>(prop, (float) val);
-            }
-            token++;
-            return true;
-        }
-
-        bool addDouble(const double val) {
-            if ((type==DOUBLE) && (token == 1)) {
-                dataSet->set<double>(prop, val);
-                token++;
-                return true;
-            }
-            else if ((type==FLOAT) && (token == 1)) {
-                dataSet->set<float>(prop, (float) val);
-                token++;
-                return true;
-            }
-            else return false;
-        }
-        bool close() {return (token==2);}
     };
     //=================================================================================
     bool TLPClusterBuilder::addStruct(const string& structName, TLPBuilder*&newBuilder)   {
@@ -875,18 +757,6 @@ bool TLPGraphBuilder::addStruct(const string& structName,TLPBuilder*&newBuilder)
     }
     else
         newBuilder=new TLPFileInfoBuilder(this, structName);
-    return true;
-}
-//================================================================================
-bool TLPDataSetBuilder::addStruct(const string& structName,TLPBuilder*&newBuilder) {
-    if (structName==COORD || structName==COLOR || structName==BOOL ||
-        structName==INT || structName==UINT || structName==FLOAT ||
-        structName==DOUBLE || structName == SIZE || structName==STRING) {
-        newBuilder= new TLPDataBuilder(this, structName);
-    }else if(structName==DATASET) {
-        newBuilder = new TLPDataSetBuilder(this->graphBuilder,&this->dataSet);
-    }else
-        newBuilder= new TLPTrue();
     return true;
 }
 //================================================================================

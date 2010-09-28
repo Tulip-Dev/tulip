@@ -23,6 +23,7 @@
 #include <config.h>
 #endif
 #include <tulip/tulipconf.h>
+#include <tulip/tuliphash.h>
 #include <iostream>
 #include <string>
 #include <cassert>
@@ -39,17 +40,84 @@ struct Graph;
    virtual ~DataMem() {};
  };
 
+ // Basic class to embed a value of any type
  struct TLP_SCOPE DataType :public DataMem {
    DataType(){}
-   DataType(void *value,const std::string& typeName):value(value),typeName(typeName){}
+   DataType(void *value):value(value) {}
+   // return a deep copy of this
    virtual DataType *clone() const = 0;
+   // must return the typeid().name of the type of the embedded value
+   virtual std::string getTypeName() const = 0;
+   // pointer to the embedded value
    void *value;
-   std::string typeName;
+ };
+
+ // template class to embed value of know type
+ template<typename T>
+ struct TLP_SCOPE TypedData :public DataType {
+   TypedData(void *value) :DataType(value) {}
+   ~TypedData() {
+     delete (T*) value;
+   }
+   DataType* clone() const {
+     return new TypedData<T>(new T(*(T*)value));
+   }
+
+   std::string getTypeName() const {
+     return std::string(typeid(T).name());
+   }
+ };
+
+ // Basic class for serialization of DataType embedded value
+ struct TLP_SCOPE DataTypeSerializer {
+   // the readable type name the serializer is designed for
+   std::string outputTypeName;
+   DataTypeSerializer(const std::string& otn):outputTypeName(otn) {}
+   ~DataTypeSerializer() {}
+   // return a copy of this
+   virtual DataTypeSerializer* clone() const = 0;
+   // write the DataType embedded value into the output stream
+   virtual void writeData(std::ostream& os, const DataType *data)=0;
+   // build a DataType embedding value read from input stream
+   virtual DataType* readData(std::istream &is)=0;
+ };
+
+ // a template class designs to simplify the developer's work
+ // when writing a serializer class
+ template<typename T>
+   struct TLP_SCOPE TypedDataSerializer :public DataTypeSerializer {
+   TypedDataSerializer(const std::string& otn):DataTypeSerializer(otn) {}
+   // declare new serialization virtual functions
+   virtual void write(std::ostream& os, const T& value)=0;
+   // return true if the read of value succeed, false if not
+   virtual bool read(std::istream& is, T& value)=0;
+   // define virtually inherited functions using the previous ones
+   void writeData(std::ostream& os, const DataType* data) {
+     write(os, *((T*) data->value));
+   }
+   DataType* readData(std::istream& is) {
+     T value;
+     bool ok = read(is, value);
+     if (ok)
+       return new TypedData<T>(new T(value));
+     return NULL;
+   }
  };
 
 /*!  A container which allows insertion of different types.
      The inserted data must have a copy-constructor well done */
-struct TLP_SCOPE DataSet {
+class TLP_SCOPE DataSet {
+  /** the list of name value pairs */
+  std::list< std::pair<std::string, DataType*> > data;
+  /** management of data serialization
+      two hashmap to retrieve data serializer from their
+      type names and output type names
+      tnTodsts => typename to data type serializer
+      otnTodts => output type name to data type serializer */
+  static TLP_HASH_MAP<std::string, DataTypeSerializer*> tnTodts, otnTodts;
+  static void registerDataTypeSerializer(const std::string& typeName,
+					 DataTypeSerializer* dts);
+ public:
   DataSet() {}
   DataSet(const DataSet &set);
   DataSet& operator=(const DataSet &set);
@@ -65,6 +133,20 @@ struct TLP_SCOPE DataSet {
   template<typename T> bool getAndFree(const std::string &str, T& value);
   /** Set the value of the variable str.*/
   template<typename T> void set(const std::string &str, const T& value);
+  /** register a serializer for a known type */
+  template<typename T> static void registerDataTypeSerializer(const DataTypeSerializer &serializer) {
+    registerDataTypeSerializer(std::string(typeid(T).name()), serializer.clone());
+  }
+  /** write an embedded value */
+  void writeData(std::ostream& os, const std::string& prop,
+		 const DataType* dt) const;
+  /** static version used for serialization */
+  static void write(std::ostream& os, const DataSet& ds);
+  /** read an embedded value */
+  bool readData(std::istream& is, const std::string& prop,
+		const std::string& outputTypeName);
+  /** static version used for serialization */
+  static bool read(std::istream& is, DataSet& ds);
   /** return true if str exists else false.*/
   bool exist(const std::string &str) const;
   /** remove a named pair */
@@ -75,8 +157,6 @@ struct TLP_SCOPE DataSet {
   void setData(const std::string &str, const DataType* value);
   /** Return an iterator on all values */
   Iterator< std::pair<std::string, DataType*> > *getValues() const;
-private:
-  std::list< std::pair<std::string, DataType*> > data;
 };
 
 

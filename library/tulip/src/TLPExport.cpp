@@ -50,9 +50,6 @@ static string convert(const string & tmp) {
   return newStr;
 }
 
-static const char* boolTN, *colorTN, *coordTN, *doubleTN, *floatTN, *intTN, *sizeTN, *stringTN, *uintTN, *DataSetTN;
-static bool typesInited = false;
-
 namespace {
   static const char * paramHelp[] = {
     // name
@@ -352,119 +349,15 @@ public:
     delete itS;
   }
   //=====================================================
-  void initTypeNames() {
-    if (!typesInited) {
-      boolTN = typeid(typesInited).name();
-      Color color;
-      colorTN = typeid(color).name();
-      Coord coord;
-      coordTN = typeid(coord).name();
-      double d;
-      doubleTN = typeid(d).name();
-      float f;
-      floatTN = typeid(f).name();
-      int i;
-      intTN = typeid(i).name();
-      Size siz;
-      sizeTN = typeid(siz).name();
-      string s;
-      stringTN = typeid(s).name();
-      unsigned int ui;
-      uintTN = typeid(ui).name();
-      DataSet dataSet;
-      DataSetTN = typeid(dataSet).name();
-      typesInited = true;
-    }
-  }
-  //=====================================================
-  void saveDataSet(ostream &os, const DataSet &data) {
-    pluginProgress->setComment("Saving DataSet");
-    progress = 0;
-    int dataSetSize = 0;
-    initTypeNames();
-    // get iterator over pair attribute/value
-    Iterator< pair<string, DataType*> > *it = data.getValues();
-    //we count the number of things to save for the progress bar
-    while( it->hasNext() ) {
-      ++dataSetSize;
-      it->next();
-    }
-    
-    it = data.getValues();
-    while( it->hasNext() ) {
-      pluginProgress->progress(progress++, dataSetSize);
-      pair<string, DataType*> p;
-      p = it->next();
-      const string tn = p.second->typeName;
-       // get output type name
-      if (tn == boolTN)
-        os << '(' << "bool";
-      else if (tn == colorTN)
-        os << '(' << "color";
-      else if (tn == coordTN)
-        os << '(' << "coord";
-      else if (tn == doubleTN)
-        os << '(' << "double";
-      else if (tn == floatTN)
-        os << '(' << "float";
-      else if (tn == intTN)
-        os << '(' << "int";
-      else if (tn == sizeTN)
-        os << '(' << "size";
-      else if (tn == stringTN)
-        os << '(' << "string";
-      else if (tn == uintTN)
-        os << '(' << "uint";
-      else if (tn == DataSetTN)
-        os << '(' << "DataSet";
-      // general case do nothing
-      else continue;
-      // output attribute name
-      os << " \"" << p.first << "\" ";
-      // output value
-      // special cases
-      if (tn == boolTN)
-        os << ((*(bool*)p.second->value) ? "true" : "false");
-      else if (tn == colorTN) {
-        Color *color = (Color*) p.second->value;
-        //os << "\"(" << (int)color->getR() << ',' << (int)color->getG() << ',' << (int) color->getB() << ",0)\"";
-        os << "\"" << convert(ColorType::toString(*color)) << "\"";
-      } else if (tn == coordTN) {
-        Coord *coord =  (Coord*) p.second->value;
-        //os << "\"(" << coord->getX() << "," << coord->getY() << "," << coord->getZ() << ")\"";
-        os << "\"" << convert(PointType::toString(*coord)) << "\"";
-      } else if (tn == sizeTN) {
-        Size *size =  (Size*) p.second->value;
-        //os << "\"(" << size->getW() << "," << size->getH() << "," << size->getD() << ")\"";
-        os << "\"" << convert(SizeType::toString(*size)) << "\"";
-      }	else if (tn == DataSetTN) {
-        os << endl;
-        DataSet *dataSet = (DataSet*) p.second->value;
-        saveDataSet(os, *dataSet);
-      }else if (tn == doubleTN)
-        os << *(double*)p.second->value;
-      else if (tn == floatTN)
-        os << *(float*)p.second->value;
-      else if (tn == intTN)
-        os << *(int*)p.second->value;
-      else if (tn == stringTN)
-        os << '"' << *(string *)p.second->value << '"';
-      else if (tn == uintTN)
-        os << *(unsigned int *) p.second->value;
-      // output closed parenthesis
-      os << ')' << endl;
-    } delete it;
-  }
-  //=====================================================
   void saveAttributes(ostream &os, Graph *graph) {
-    os << "(attributes " << endl;
-    saveDataSet(os, graph->getAttributes());
+    os << "(attributes ";
+    DataSet::write(os, graph->getAttributes());
     os << ")" << endl;
   }
   //=====================================================
   void saveController(ostream &os, DataSet &data) {
-    os << "(controller " << endl;
-    saveDataSet(os, data);
+    os << "(controller ";
+    DataSet::write(os, data);
     os << ")" << endl;
   }
 
