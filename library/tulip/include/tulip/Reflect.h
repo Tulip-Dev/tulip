@@ -41,7 +41,7 @@ struct Graph;
  };
 
  // Basic class to embed a value of any type
- struct TLP_SCOPE DataType :public DataMem {
+ struct DataType :public DataMem {
    DataType(){}
    DataType(void *value):value(value) {}
    // return a deep copy of this
@@ -54,7 +54,7 @@ struct Graph;
 
  // template class to embed value of know type
  template<typename T>
- struct TLP_SCOPE TypedData :public DataType {
+ struct TypedData :public DataType {
    TypedData(void *value) :DataType(value) {}
    ~TypedData() {
      delete (T*) value;
@@ -69,7 +69,7 @@ struct Graph;
  };
 
  // Basic class for serialization of DataType embedded value
- struct TLP_SCOPE DataTypeSerializer {
+ struct DataTypeSerializer {
    // the readable type name the serializer is designed for
    std::string outputTypeName;
    DataTypeSerializer(const std::string& otn):outputTypeName(otn) {}
@@ -85,7 +85,7 @@ struct Graph;
  // a template class designs to simplify the developer's work
  // when writing a serializer class
  template<typename T>
-   struct TLP_SCOPE TypedDataSerializer :public DataTypeSerializer {
+   struct TypedDataSerializer :public DataTypeSerializer {
    TypedDataSerializer(const std::string& otn):DataTypeSerializer(otn) {}
    // declare new serialization virtual functions
    virtual void write(std::ostream& os, const T& value)=0;
