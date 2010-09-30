@@ -147,7 +147,7 @@ TODIST_SOURCES = \
 	ColorScaleConfigDialog.cpp \
   ColorScaleWidget.cpp \
 	QtMetaNodeRenderer.cpp \
-	QGlPixelBufferManager.cpp \
+  QGlBufferManager.cpp \
 	ListPropertyWidget.cpp \
     QtOpenGlErrorViewer.cpp \
 	ImportCSVDataDialog.cpp \

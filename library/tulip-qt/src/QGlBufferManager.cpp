@@ -16,9 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/QGlPixelBufferManager.h"
+#include "tulip/QGlBufferManager.h"
 
 #include <QtOpenGL/QGLPixelBuffer>
+#include <QtOpenGL/QGLFramebufferObject>
 
 #include "tulip/GlMainWidget.h"
 
@@ -27,10 +28,10 @@
 //====================================================
 #ifdef _WIN32
 #ifdef DLL_EXPORT
-tlp::QGlPixelBufferManager* tlp::QGlPixelBufferManager::inst=0;
+tlp::QGlBufferManager* tlp::QGlBufferManager::inst=0;
 #endif
 #else
-tlp::QGlPixelBufferManager* tlp::QGlPixelBufferManager::inst=0;
+tlp::QGlBufferManager* tlp::QGlBufferManager::inst=0;
 #endif
 
 using namespace std;
@@ -38,7 +39,7 @@ using namespace std;
 namespace tlp
 {
 
-  QGLPixelBuffer *QGlPixelBufferManager::getPixelBuffer(int width, int height){
+  QGLPixelBuffer *QGlBufferManager::getPixelBuffer(int width, int height){
     map<pair<int,int>,QGLPixelBuffer *>::iterator it=widthHeightToBuffer.find(pair<int,int>(width,height));
 
     if(it!=widthHeightToBuffer.end())
@@ -82,6 +83,50 @@ namespace tlp
     bufferToWidthHeight[glPixelBuffer]=pair<int,int>(width,height);
 
     return glPixelBuffer;
+  }
+
+  QGLFramebufferObject *QGlBufferManager::getFramebufferObject(int width, int height){
+    map<pair<int,int>,QGLFramebufferObject *>::iterator it=widthHeightToFramebuffer.find(pair<int,int>(width,height));
+
+    if(it!=widthHeightToFramebuffer.end())
+      return (*it).second;
+
+    QGLFramebufferObject *glFramebufferObject=new QGLFramebufferObject(width,height/*,QGLFramebufferObject::NoAttachment, GL_TEXTURE_2D, GL_RGBA32F_ARB*/);
+    if(!glFramebufferObject->isValid()){
+      while(!glFramebufferObject->isValid() && framebufferToWidthHeight.size()>0) {
+        int widthToRemove=0;
+        int heightToRemove=0;
+        QGLFramebufferObject *bufferToRemove;
+
+        for(it=widthHeightToFramebuffer.begin();it!=widthHeightToFramebuffer.end();++it){
+          if((((*it).first.first)*((*it).first.second))>widthToRemove*heightToRemove) {
+            widthToRemove=(*it).first.first;
+            heightToRemove=(*it).first.second;
+            bufferToRemove=(*it).second;
+          }
+        }
+
+        delete bufferToRemove;
+        widthHeightToFramebuffer.erase(pair<int,int>(widthToRemove,heightToRemove));
+        framebufferToWidthHeight.erase(bufferToRemove);
+
+        delete glFramebufferObject;
+        glFramebufferObject=new QGLFramebufferObject(width,height/*,QGLFramebufferObject::NoAttachment, GL_TEXTURE_2D, GL_RGBA32F_ARB*/);
+      }
+
+      while(!glFramebufferObject->isValid() && width>0 && height>0) {
+        width=width/2;
+        height=height/2;
+
+        delete glFramebufferObject;
+        glFramebufferObject=new QGLFramebufferObject(width,height/*,QGLFramebufferObject::NoAttachment, GL_TEXTURE_2D, GL_RGBA32F_ARB*/);
+      }
+    }
+
+    widthHeightToFramebuffer[pair<int,int>(width,height)]=glFramebufferObject;
+    framebufferToWidthHeight[glFramebufferObject]=pair<int,int>(width,height);
+
+    return glFramebufferObject;
   }
 
 }

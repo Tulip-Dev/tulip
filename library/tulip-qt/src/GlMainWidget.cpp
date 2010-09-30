@@ -16,6 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#include <GL/glew.h>
+
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
@@ -24,8 +27,8 @@
 #include <QtGui/qimage.h>
 #include <QtGui/qtooltip.h>
 #include <QtOpenGL/QGLPixelBuffer>
-#include <QtCore/QTime>
 #include <QtGui/QPainter>
+#include <QtOpenGL/QGLFramebufferObject>
 
 #include "tulip/GlMainWidget.h"
 
@@ -331,7 +334,7 @@ namespace tlp {
       computeInteractors();
       scene.prerenderMetaNodes();
       scene.draw();
-
+      
       glDisable(GL_TEXTURE_2D);
       glDisable(GL_DEPTH_TEST);
       glDisable(GL_STENCIL_TEST);
@@ -537,20 +540,38 @@ namespace tlp {
   }
   //=====================================================
   QGLFramebufferObject *GlMainWidget::createTexture(const string &textureName, int width, int height){
+
+    makeCurrent();
     scene.setViewport(0,0,width,height);
     scene.ajustSceneToSize(width,height);
 
     scene.prerenderMetaNodes();
 
-    QGLPixelBuffer *glFrameBuf=QGlPixelBufferManager::getInst().getPixelBuffer(width,height);
+    QGLFramebufferObject *glFrameBuf= QGlPixelBufferManager::getInst().getFramebufferObject(width,height);
+    assert(glFrameBuf->size()==QSize(width,height));
 
-    glFrameBuf->makeCurrent();
-
-    GLuint textureId=glFrameBuf->generateDynamicTexture();
-
+    glFrameBuf->bind();
     scene.draw();
+    glFrameBuf->release();
 
-    glFrameBuf->updateDynamicTexture(textureId);
+    GLuint textureId=0;
+    glGenTextures(1,&textureId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+    unsigned char* buff = new unsigned char[width*height*4];
+    glBindTexture(GL_TEXTURE_2D, glFrameBuf->texture());
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+
+    delete [] buff;
+
+    glFrameBuf->release();
 
     GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
 

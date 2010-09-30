@@ -19,56 +19,11 @@
 #ifndef Tulip_QGLPIXELBUFFERMANAGER_H
 #define Tulip_QGLPIXELBUFFERMANAGER_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <map>
-
-#include <tulip/tulipconf.h>
-
-class QGLPixelBuffer;
+#include "tulip/QGlBufferManager.h"
 
 namespace tlp {
 
-  /** \brief Class to manage QGlPixelBuffer
-   * Singleton class to manager QGlPixelBuffer
-   */
-  class TLP_QT_SCOPE QGlPixelBufferManager {
-
-  public:
-
-    /**
-     * Create the QGlPixelBuffer manager singleton
-     */
-    static void createInst();
-    /**
-     * Return the QGlPixelBuffer manager singleton, il singleton doesn't exist this function create it
-     */
-    static QGlPixelBufferManager &getInst() {
-      if(!inst)
-        inst=new QGlPixelBufferManager();
-      return *inst;
-    }
-    /**
-     * Return a QGlPixelBuffer with given size
-     */
-    QGLPixelBuffer *getPixelBuffer(int width, int height);
-
-  private:
-
-    /**
-     * empty private constructor for singleton
-     */
-    QGlPixelBufferManager() {}
-
-    static QGlPixelBufferManager* inst;
-
-    std::map<std::pair<int,int>,QGLPixelBuffer*> widthHeightToBuffer;
-    std::map<QGLPixelBuffer*,std::pair<int,int> > bufferToWidthHeight;
-
-  };
+  typedef QGlBufferManager QGlPixelBufferManager;
 
 }
-
 #endif // Tulip_QGLPIXELBUFFERMANAGER_H

@@ -55,7 +55,7 @@ SET(tulip-qt_LIB_SRCS
     ColorScaleConfigDialog.cpp 
     ColorScaleWidget.cpp
     QtMetaNodeRenderer.cpp 
-    QGlPixelBufferManager.cpp
+    QGlBufferManager.cpp
     ListPropertyWidget.cpp
     QtOpenGlErrorViewer.cpp
     CSVParser.cpp
