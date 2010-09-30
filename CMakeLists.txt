@@ -80,6 +80,29 @@ IF(NOT LIBXML2_FOUND)
 ENDIF(NOT LIBXML2_FOUND)
 
 ## -----------------------------------------------------------------------------------------------
+## OpenMP
+## -----------------------------------------------------------------------------------------------
+
+FIND_PACKAGE(OpenMP QUIET)
+IF(OPENMP_FOUND)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+ELSE(OPENMP_FOUND)
+IF(WIN32)
+   STRING(COMPARE NOTEQUAL "${OpenMP_C_FLAGS}" "" OMP_CFLAGS)
+   IF(OMP_CFLAGS)
+      ## HACK: do not know why OpenMP_CXX_FLAGS
+      ## is not set when running on window ?
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_C_FLAGS}")
+      SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_C_FLAGS}")
+   ELSE(OMP_CFLAGS)
+      MESSAGE("OpenMP not found: multithreaded code will not be used")
+   ENDIF(OMP_CFLAGS)
+ELSE(WIN32)
+MESSAGE("OpenMP not found: multithreaded code will not be used")
+ENDIF(WIN32)
+ENDIF(OPENMP_FOUND)
+
+## -----------------------------------------------------------------------------------------------
 ## Include file paths
 ## -----------------------------------------------------------------------------------------------
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
@@ -174,29 +197,6 @@ ENDIF(APPLE)
 IF(LINUX)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_ASSISTANT='\"assistant_adp\"'")
 ENDIF(LINUX)
-
-## -----------------------------------------------------------------------------------------------
-## OpenMP
-## -----------------------------------------------------------------------------------------------
-
-FIND_PACKAGE(OpenMP QUIET)
-IF(OPENMP_FOUND)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-ELSE(OPENMP_FOUND)
-IF(WIN32)
-   STRING(COMPARE NOTEQUAL "${OpenMP_C_FLAGS}" "" OMP_CFLAGS)
-   IF(OMP_CFLAGS)
-      ## HACK: do not know why OpenMP_CXX_FLAGS
-      ## is not set when running on window ?
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_C_FLAGS}")
-      SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_C_FLAGS}")
-   ELSE(OMP_CFLAGS)
-      MESSAGE("OpenMP not found: multithreaded code will not be used")
-   ENDIF(OMP_CFLAGS)
-ELSE(WIN32)
-MESSAGE("OpenMP not found: multithreaded code will not be used")
-ENDIF(WIN32)
-ENDIF(OPENMP_FOUND)
 
 ## -----------------------------------------------------------------------------------------------
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in
