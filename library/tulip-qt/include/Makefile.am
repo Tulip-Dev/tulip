@@ -59,6 +59,7 @@ INCLUDES_H = \
 	tulip/SimpleStringsListSelectionWidget.h \
 	tulip/DoubleStringsListSelectionWidget.h \
 	tulip/ListPropertyWidget.h \
+  tulip/QGlBufferManager.h \
 	tulip/QGlPixelBufferManager.h \
 	tulip/BaseGraphicsViewComponentMacro.h \
     tulip/QtOpenGlErrorViewer.h \
