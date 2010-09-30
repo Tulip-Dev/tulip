@@ -177,6 +177,7 @@ namespace tlp {
       if((*it).lod<0)
         continue;
 
+      metaData.getGlVertexArrayManager()->pauseRendering(true);
       if(!metaData.getGraph()->isMetaNode(node((*it).id))){
         glNode.id=(*it).id;
         glNode.draw((*it).lod,&metaData,activeCamera);
