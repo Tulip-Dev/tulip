@@ -289,6 +289,11 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 		glPopMatrix();
 	}
 
+  double lineWidth=data->elementBorderWidth->getEdgeValue(e);
+  if(lineWidth < 1e-6)
+    lineWidth=1e-6;
+  glLineWidth(lineWidth);
+
 	int startEdgeGlyph = data->elementSrcAnchorShape->getEdgeValue(e);
 	int endEdgeGlyph = data->elementTgtAnchorShape->getEdgeValue(e);
 
