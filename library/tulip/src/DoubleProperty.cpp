@@ -17,7 +17,7 @@
  *
  */
 
-#include <float.h>
+#include <limits.h>
 #include "tulip/ForEach.h"
 #include "tulip/DoubleProperty.h"
 #include "tulip/PluginContext.h"
@@ -292,15 +292,9 @@ double DoubleProperty::getEdgeMax(Graph *sg) {
 }
 //=========================================================
 void DoubleProperty::computeMinMaxNode(Graph *sg) {
-  double maxN2,minN2;
+  double maxN2 = DBL_MIN, minN2 = DBL_MAX;
   if (sg==0) sg=graph;
   Iterator<node> *itN=sg->getNodes();
-  if (itN->hasNext()) {
-    node itn=itN->next();
-    const double& tmp=getNodeValue(itn);
-    maxN2=tmp;
-    minN2=tmp;
-  }
   while (itN->hasNext()) {
     node itn=itN->next();
     const double& tmp=getNodeValue(itn);
@@ -316,15 +310,9 @@ void DoubleProperty::computeMinMaxNode(Graph *sg) {
 }
 //=========================================================
 void DoubleProperty::computeMinMaxEdge(Graph *sg) {
-  double maxE2,minE2;
+  double maxE2 = DBL_MIN, minE2 = DBL_MAX;
   if (sg==0) sg=graph;
   Iterator<edge> *itE=sg->getEdges();
-  if (itE->hasNext()) {
-    edge ite=itE->next();
-    const double& tmp=getEdgeValue(ite);
-    maxE2=tmp;
-    minE2=tmp;
-  }
   while (itE->hasNext()) {
     edge ite=itE->next();
     const double& tmp=getEdgeValue(ite);

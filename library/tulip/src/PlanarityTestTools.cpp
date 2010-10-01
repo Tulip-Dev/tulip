@@ -469,7 +469,10 @@ node PlanarityTestImpl::lastPNode(node n1, node n2) {
   if (n == NULL_NODE)
     return NULL_NODE;
   n = n2; //inutile
+
+#ifndef NDEBUG
   int count = 0;
+#endif
 
   while (isCNode(n)) {
     assert(++count<=2);

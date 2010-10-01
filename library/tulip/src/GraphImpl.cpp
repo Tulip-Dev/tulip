@@ -36,7 +36,7 @@ using namespace tlp;
 /* 
  * function to test if an edge e exist in the adjacency of a node
  */
-static bool existEdgeE(Graph *g, const node n1, const node, edge e) {
+/*static bool existEdgeE(Graph *g, const node n1, const node, edge e) {
   Iterator<edge> *it = g->getOutEdges(n1);
   while (it->hasNext()) {
     edge e1(it->next());
@@ -46,7 +46,7 @@ static bool existEdgeE(Graph *g, const node n1, const node, edge e) {
     }
   } delete it;
   return false;
-}
+  }*/
 /* 
  * function to test the integrity of the graph structure
  */
@@ -433,8 +433,8 @@ void GraphImpl::removeEdge(const edge e, node dontUpdateNode) {
 //----------------------------------------------------------------
 void GraphImpl::removeEdge(EdgeContainer &c, const edge e) {
   bool copy = false;
-  EdgeContainer::iterator previous;
-  for (EdgeContainer::iterator i=c.begin(); i!=c.end(); ++i) {
+  EdgeContainer::iterator previous = c.begin();
+  for (EdgeContainer::iterator i=previous; i!=c.end(); ++i) {
     edge e1 = *i;
     if (copy)
       *previous = e1;
