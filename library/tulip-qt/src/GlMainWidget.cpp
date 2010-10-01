@@ -17,8 +17,6 @@
  *
  */
 
-#include <GL/glew.h>
-
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
