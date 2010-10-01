@@ -16,6 +16,7 @@ set(pluginInstaller_SRCS
 INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${LIBXML2_INCLUDE_DIR} ${PROJECT_BINARY_DIR}/library/tulip-qt/include/tulip ${PROJECT_BINARY_DIR}/software/tulip/include ${TulipInclude} ${TulipQtInclude} ${TulipOGLInclude} ${TulipPluginsManagerInclude})
 
 ADD_EXECUTABLE(serverGenerator ${serverGenerator_SRCS})
+IF(QT_VERSION_MINOR LESS 7)
 TARGET_LINK_LIBRARIES(serverGenerator
                       ${FREETYPE_LIBRARY}
                       ${GZStreamLibrary}
@@ -32,9 +33,27 @@ TARGET_LINK_LIBRARIES(serverGenerator
                       ${LibTulipOglName}
                       ${LibTulipQtName}
                       ${LibTulipPluginsManagerName} )
+ELSE(QT_VERSION_MINOR LESS 7)                     
+TARGET_LINK_LIBRARIES(serverGenerator
+                      ${FREETYPE_LIBRARY}
+                      ${GZStreamLibrary}
+                      ${QT_LIBRARIES}
+                      ${QT_QTXML_LIBRARY}
+                      ${QT_QTOPENGL_LIBRARY}
+                      ${OPENGL_glu_LIBRARY}
+                      ${OPENGL_gl_LIBRARY}
+                      ${LIBXML2_LIBRARIES}
+                      ${JPEG_LIBRARY}
+                      ${LibTulipName}
+                      ${LibTulipOglName}
+                      ${LibTulipQtName}
+                      ${LibTulipPluginsManagerName} ) 
+ENDIF(QT_VERSION_MINOR LESS 7)
+                      
 ADD_DEPENDENCIES(serverGenerator ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
 
 ADD_EXECUTABLE(pluginInstaller ${pluginInstaller_SRCS})
+IF(QT_VERSION_MINOR LESS 7)
 TARGET_LINK_LIBRARIES(pluginInstaller
                       ${FREETYPE_LIBRARY}
                       ${GZStreamLibrary}
@@ -51,6 +70,23 @@ TARGET_LINK_LIBRARIES(pluginInstaller
                       ${LibTulipOglName}
                       ${LibTulipQtName}
                       ${LibTulipPluginsManagerName} )
+ELSE(QT_VERSION_MINOR LESS 7)
+TARGET_LINK_LIBRARIES(pluginInstaller
+                      ${FREETYPE_LIBRARY}
+                      ${GZStreamLibrary}
+                      ${QT_LIBRARIES}
+                      ${QT_QTXML_LIBRARY}
+                      ${QT_QTOPENGL_LIBRARY}
+                      ${OPENGL_glu_LIBRARY}
+                      ${OPENGL_gl_LIBRARY}
+                      ${LIBXML2_LIBRARIES}
+                      ${JPEG_LIBRARY}
+                      ${LibTulipName}
+                      ${LibTulipOglName}
+                      ${LibTulipQtName}
+                      ${LibTulipPluginsManagerName} )
+ENDIF(QT_VERSION_MINOR LESS 7)                      	
+                      
 ADD_DEPENDENCIES(pluginInstaller ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
 
 INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/generate_plugin_dirs.sh
