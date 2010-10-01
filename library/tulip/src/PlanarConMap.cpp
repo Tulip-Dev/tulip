@@ -324,7 +324,7 @@ void PlanarConMap::delEdgeMap(edge e, Face f){
     } delete itn;
 
     vector<Face>::iterator itf = faces.begin();
-    for(;*itf != f2; ++itf);
+    for(; *itf != f2; ++itf) {}
     faces.erase(itf);
     delEdge(e);
   }
@@ -782,7 +782,7 @@ void PlanarConMap::mergeFaces(Face f, Face g){
 
   // Search for the first edge to delete on vector toDel
   unsigned int cpt = 0;
-  for(;toDel[cpt]!=last && cpt < toDel.size();++cpt);
+  for(;toDel[cpt]!=last && cpt < toDel.size();++cpt) {}
   assert(cpt < toDel.size());
   cpt = (cpt+1)%toDel.size();
 

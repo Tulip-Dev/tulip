@@ -196,7 +196,7 @@ void tlp::reachableNodes(const Graph *graph, const node startNode,
   }
 }
 //=================================================
-static double clusterGetNodeValue(Graph *graph, const node n, unsigned int maxDepth) {
+/*static double clusterGetNodeValue(Graph *graph, const node n, unsigned int maxDepth) {
   set<node> reachables;
   reachableNodes(graph, n, reachables, maxDepth);
   double nbEdge=0; //e(N_v)*2$
@@ -220,7 +220,7 @@ static double clusterGetNodeValue(Graph *graph, const node n, unsigned int maxDe
   }
   else
     return 0;
-}
+    }*/
 //=================================================
 void tlp::clusteringCoefficient(const Graph *graph,
 				MutableContainer<double>& clusters,

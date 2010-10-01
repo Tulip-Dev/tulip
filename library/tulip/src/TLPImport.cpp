@@ -550,7 +550,7 @@ namespace tlp {
                     dataSet.set("edgeSizeInterpolation", b);
                 if (dataSet.get<bool>("_edge3D", b))
                     dataSet.set("edge3D", b);
-                unsigned int ui;
+                unsigned int ui = 0;
                 if (dataSet.get<unsigned int>("_viewOrtho", ui))
                     dataSet.set("orthogonalProjection", ui ? true : false);
                 if (dataSet.get<unsigned int>("_FontsType", ui))

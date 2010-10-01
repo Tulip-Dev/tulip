@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <float.h>
+#include <limits.h>
 #include "tulip/IntegerProperty.h"
 #include "tulip/PluginContext.h"
 #include "tulip/Observable.h"
@@ -74,15 +74,9 @@ int IntegerProperty::getEdgeMax(Graph *sg) {
 //========================================================================
 ///Calcul le min et le Max de la m�trique associ� au proxy
 void IntegerProperty::computeMinMaxNode(Graph *sg) {
-  int maxN2,minN2;
+  int maxN2 = INT_MIN, minN2 = INT_MAX;
   if (sg==0) sg=graph;
   Iterator<node> *itN=sg->getNodes();
-  if (itN->hasNext()) {
-    node itn=itN->next();
-    int tmp=getNodeValue(itn);
-    maxN2=tmp;
-    minN2=tmp;
-  }
   while (itN->hasNext()) {
     node itn=itN->next();
     int tmp=getNodeValue(itn);
@@ -98,15 +92,9 @@ void IntegerProperty::computeMinMaxNode(Graph *sg) {
 }
 //=========================================================
 void IntegerProperty::computeMinMaxEdge(Graph *sg) {
-  int maxE2,minE2;
+  int maxE2 = INT_MIN, minE2 = INT_MAX;
   if (sg==0) sg=graph;
   Iterator<edge> *itE=sg->getEdges();
-  if (itE->hasNext()) {
-    edge ite=itE->next();
-    int tmp=getEdgeValue(ite);
-    maxE2=tmp;
-    minE2=tmp;
-  }
   while (itE->hasNext()) {
     edge ite=itE->next();
     int tmp=getEdgeValue(ite);
