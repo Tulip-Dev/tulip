@@ -512,9 +512,21 @@ void Graph::openMetaNode(node metaNode) {
 	TLP_HASH_MAP<node, set<edge> >::iterator itnme = (*itme).second.begin();
 	TLP_HASH_MAP<node, set<edge> >::iterator itnmeEnd = (*itme).second.end();
 	while(itnme != itnmeEnd) {
-	  edge me = addEdge(src, (*itnme).first);
-	  metaInfo->setEdgeValue(me, (*itnme).second);
-	  graphColors->setEdgeValue(me, metaColor);
+	  Graph* graph = this;
+	  node tgt = (*itnme).first;
+	  // add edge in the right graph
+	  if (!isElement(src) || !isElement(tgt))
+	    graph = super;
+	  edge mE = graph->addEdge(src, tgt);
+	  metaInfo->setEdgeValue(mE, (*itnme).second);
+	  // compute meta edge values
+	  PropertyInterface *property;
+	  forEach(property, graph->getObjectProperties()) {
+	    Iterator<edge> *itE = getEdgeMetaInfo(mE);
+	    assert(itE->hasNext());
+	    property->computeMetaValue(mE, itE, graph);
+	    delete itE;
+	  }
 	  ++itnme;
 	}
 	++itme;
