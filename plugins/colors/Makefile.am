@@ -11,7 +11,7 @@ plugins_LTLIBRARIES = libColorMapping-@VERSION@.la
 
 pluginsdir = $(libdir)/tlp
 
-libColorMapping_@VERSION@_la_SOURCES = ColorMapping.cpp
+libColorMapping_@VERSION@_la_SOURCES = ColorMapping.cpp DoubleStringsListRelationDialog.cpp
 nodist_libColorMapping_@VERSION@_la_SOURCES = moc_DoubleStringsListRelationDialog.cpp
 
 BUILT_SOURCES = DoubleStringsListRelationDialogData.h
@@ -22,7 +22,7 @@ nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 
 INCLUDES = @TULIP_INCLUDE@ @TULIP_OGL_INCLUDE@ @TULIP_QT_INCLUDE@ @QT_INCLUDES@ @GL_INCLUDES@
 AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ 
-libEnumColorValuesMapping_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
+libColorMapping_@VERSION@_la_LDFLAGS = ${DLL_FLAGS} -avoid-version @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@ @TULIP_QT_LDFLAGS@ @QT_LDFLAGS@ @LIB_QT@
 AM_CPPFLAGS= @QT_CPPFLAGS@
 
 
