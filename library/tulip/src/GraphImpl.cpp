@@ -33,10 +33,11 @@
 using namespace std;
 using namespace tlp;
 
+#ifndef NDEBUG
 /* 
  * function to test if an edge e exist in the adjacency of a node
  */
-/*static bool existEdgeE(Graph *g, const node n1, const node, edge e) {
+static bool existEdgeE(Graph *g, const node n1, const node, edge e) {
   Iterator<edge> *it = g->getOutEdges(n1);
   while (it->hasNext()) {
     edge e1(it->next());
@@ -46,7 +47,8 @@ using namespace tlp;
     }
   } delete it;
   return false;
-  }*/
+}
+#endif
 /* 
  * function to test the integrity of the graph structure
  */
