@@ -23,6 +23,7 @@
 #include <tulip/PlanarityTest.h>
 #include <tulip/PlanarConMap.h>
 #include <tulip/ConnectedTest.h>
+#include <tulip/LayoutProperty.h>
 #include <tulip/ExtendedClusterOperation.h>
 #include "PlanarityTestTest.h"
 
@@ -51,6 +52,28 @@ void PlanarityTestTest::planarGraphs() {
   delete graph;
   graph = tlp::loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
   CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanar(graph));
+  delete graph;
+}
+//==========================================================
+/*
+ * TODO: move that function in LayoutProperty test.
+ * 
+ */
+void PlanarityTestTest::planarEmbeddingFromLayoutGraphs() {
+  graph = tlp::loadGraph(GRAPHPATH + "planar/planar30drawnFPP.tlp.gz");
+  LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
+  layout->computeEmbedding(graph); 
+  CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanarEmbedding(graph));
+  delete graph;
+  graph = tlp::loadGraph(GRAPHPATH + "planar/planar30drawnMM.tlp.gz");
+  layout = graph->getProperty<LayoutProperty>("viewLayout");
+  layout->computeEmbedding(graph); 
+  CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanarEmbedding(graph));
+  delete graph;  
+  graph = tlp::loadGraph(GRAPHPATH + "notplanar/k33lostInGrip.tlp.gz");
+  layout = graph->getProperty<LayoutProperty>("viewLayout");
+  layout->computeEmbedding(graph); 
+  CPPUNIT_ASSERT_EQUAL(false, PlanarityTest::isPlanarEmbedding(graph));
   delete graph;
 }
 //==========================================================
@@ -175,6 +198,8 @@ CppUnit::Test * PlanarityTestTest::suite() {
   								     &PlanarityTestTest::planarGraphsEmbedding ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding", 
   								     &PlanarityTestTest::planarMetaGraphsEmbedding ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding from a layout", 
+  								     &PlanarityTestTest::planarEmbeddingFromLayoutGraphs ) );
   
   return suiteOfTests;
 }
