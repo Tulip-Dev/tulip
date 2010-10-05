@@ -35,6 +35,8 @@ namespace tlp {
 
     TextEditDialog(const QString &text,QWidget *parent=NULL):QDialog(parent) {
       setupUi(this);
+      // don't break focus chain
+      textEdit->setTabChangesFocus(true);
       textEdit->setText(text);
     }
 
