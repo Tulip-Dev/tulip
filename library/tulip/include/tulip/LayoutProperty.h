@@ -105,6 +105,20 @@ public:
    * is omitted
    */
   std::vector<double> angularResolutions(const node n, const Graph *graph = 0) const;
+
+
+  /**
+   * Fix embedding of the graph according to the layout
+   * ie. sort edges around nodes according to their neighbors/bends position in the layout/
+   * Only work in 2D, the third coordinate is not taken into account.
+   */
+  void computeEmbedding(Graph *sg = 0);
+  /**
+   * Fix embedding of the node according to the layout
+   * ie. sort edges around the node according to its neighbors/bends position in the layout/
+   * Only work in 2D, the third coordinate is not taken into account.
+   */
+  void computeEmbedding(const node n, Graph *sg = 0);
   /**
    * Returns the number of crossings in the layout
    */
