@@ -392,7 +392,7 @@ PropertyInterface *ImportCSVDataWidget::getPropertyInterface(unsigned int row, u
     }
   }
 
-  string propertyName = propertiesWidget->getPropertyName(i).toStdString();
+  string propertyName = propertiesWidget->getPropertyName(i).toUtf8().data();
   if (getGraph()->existProperty(propertyName)) {
     if (existingPropertyIsCompatibleWithType(getGraph(), propertyName, propertyType)) {
       if (overwritePropertiesButton != QMessageBox::YesToAll && overwritePropertiesButton != QMessageBox::NoToAll) {
