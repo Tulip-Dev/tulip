@@ -385,7 +385,7 @@ void PropertyWidget::setAllNodeValue() {
     }
   }
   else if (typeid((*editedProperty)) == typeid(DoubleProperty)) {
-    double d = QInputDialog::getDouble(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
+    double d = QInputDialog::getDouble(this, QString::fromUtf8(string("Property \"" + editedPropertyName + "\": set all node value").c_str()),
                                        "Please enter your value",
                                        0, -2147483647, 2147483647, 10,
                                        &ok);
@@ -415,7 +415,7 @@ void PropertyWidget::setAllNodeValue() {
     else ok = false;
   }
   else {
-    QString text = QInputDialog::getText(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
+    QString text = QInputDialog::getText(this, QString::fromUtf8(string("Property \"" + editedPropertyName + "\": set all node value").c_str()),
                                          "Please enter your value",
                                          QLineEdit::Normal,QString::null, &ok);
     if (ok) tmpStr = text.toUtf8().data();
@@ -510,7 +510,7 @@ void  PropertyWidget::setAllEdgeValue() {
       ok=true;
     }
   } else {
-    QString text = QInputDialog::getText(this, string("Property \"" + editedPropertyName + "\": set all edge value").c_str(),
+    QString text = QInputDialog::getText(this, QString::fromUtf8(string("Property \"" + editedPropertyName + "\": set all edge value").c_str()),
                                          "Please enter your value",
                                          QLineEdit::Normal, QString::null, &ok);
     if (ok) tmpStr = text.toUtf8().data();

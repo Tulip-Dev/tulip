@@ -146,7 +146,7 @@ vector<string> GraphPropertiesTableWidget::getDisplayedPropertiesNames() const {
 
 string GraphPropertiesTableWidget::getPropertyNameForRow(int row) const {
   assert(rowCount()>row);
-  return item(row, 0)->text().toStdString();
+  return string(item(row, 0)->text().toUtf8().data());
 }
 
 void GraphPropertiesTableWidget::setPropertyTypeFilter(PropertyType typeFilter) {
