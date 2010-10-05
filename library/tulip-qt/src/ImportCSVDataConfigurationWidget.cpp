@@ -210,7 +210,7 @@ void ImportCSVDataConfigurationWidget::token(unsigned int row, unsigned int colu
   if (row == 0 && getPropertyOrientation() == Column) {
     QString propertyName = useFirstRowAsPropertyName() ? QString::fromStdString(token) : QString("Property")
         + QString::number(column);
-    addPropertyToPropertyList(propertyName.toStdString(), true);
+    addPropertyToPropertyList(propertyName.toUtf8().data(), true);
     previewWidget->setHorizontalHeaderItem(column, new QTableWidgetItem(propertyName));
     //The first row is empty hide them.
     if (useFirstRowAsPropertyName()) {
@@ -221,7 +221,7 @@ void ImportCSVDataConfigurationWidget::token(unsigned int row, unsigned int colu
   if (column == 0 && getPropertyOrientation() == Row) {
     QString propertyName = useFirstRowAsPropertyName() ? QString::fromStdString(token) : QString("Property")
         + QString::number(row);
-    addPropertyToPropertyList(propertyName.toStdString(), useFirstRowAsPropertyName());
+    addPropertyToPropertyList(propertyName.toUtf8().data(), useFirstRowAsPropertyName());
     previewWidget->setVerticalHeaderItem(row, new QTableWidgetItem(propertyName));
     //The first column is empty hide them.
     if (useFirstRowAsPropertyName()) {
