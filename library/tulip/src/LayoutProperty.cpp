@@ -22,6 +22,7 @@
 #include "tulip/LayoutProperty.h"
 #include "tulip/Coord.h"
 #include "tulip/PluginContext.h"
+#include "tulip/ForEach.h"
 
 using namespace std;
 using namespace tlp;
@@ -45,7 +46,7 @@ public:
     // between the min and max computed values
     layout->setNodeValue(mN,
 			 (((LayoutProperty *)layout)->getMax(sg) +
-			  ((LayoutProperty *)layout)->getMin(sg)) / 2.0);
+                          ((LayoutProperty *)layout)->getMin(sg)) / 2.0f);
     }
   }
 };
@@ -394,20 +395,77 @@ double LayoutProperty::averageAngularResolution(const Graph *sg) const {
 //=================================================================================
 #ifndef DOXYGEN_NOTFOR_DEVEL
 struct AngularOrder {
-  bool operator() (const Coord &c1, const Coord &c2) {
-    //if the vectors have not the same direction on y-coordiantes
-    //the result is direct.
-    if (c1[1]>=0 && c2[1]<0) return false;  
-    if (c2[1]>=0 && c1[1]<0) return true; 
-    //If the vectors have the same size on the y-coordinates, we compare
-    //their x-coordinates
-    if (c2[1]>=0 && c1[1]>=0) 
-      return c1[0]>c2[0];
-    else
-      return c1[0]<c2[0];
-  }
+    bool operator() (const Coord &c1, const Coord &c2) {
+        //if the vectors have not the same direction on y-coordiantes
+        //the result is direct.
+        if (c1[1]>=0 && c2[1]<0) return false;
+        if (c2[1]>=0 && c1[1]<0) return true;
+        //If the vectors have the same size on the y-coordinates, we compare
+        //their x-coordinates
+        if (c2[1]>=0 && c1[1]>=0)
+            return c1[0]>c2[0];
+        else
+            return c1[0]<c2[0];
+    }
+    bool operator() (const pair<Coord, edge> &c1, const pair<Coord, edge> &c2) {
+        return this->operator()(c1.first, c2.first);
+    }
 };
+
 #endif // DOXYGEN_NOTFOR_DEVEL
+
+/*
+ * TODO check code duplication with angularresolution function
+ */
+void LayoutProperty::computeEmbedding(Graph *sg) {
+    if (sg == 0) sg = graph;
+    node n;
+    forEach(n, sg->getNodes()) {
+        computeEmbedding(n, sg);
+    }
+}
+
+void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
+    if (sg == 0) sg = graph;
+    if (sg->deg(n) < 2) return;
+
+    //===========
+    typedef pair<Coord, edge> pCE;
+
+    list< pCE > adjCoord;
+    //Extract all adjacent edges, the bends are taken
+    //into account.
+    Iterator<edge> *itE=sg->getInOutEdges(n);
+    for (unsigned int i=0;itE->hasNext();++i) {
+      edge ite=itE->next();
+      if (getEdgeValue(ite).size()>0) {
+        if (sg->source(ite)==n)
+          adjCoord.push_back(pCE(getEdgeValue(ite).front(), ite));
+        else
+          adjCoord.push_back(pCE(getEdgeValue(ite).back(), ite) );
+      }
+      else {
+        adjCoord.push_back(pCE(getNodeValue(sg->opposite(ite,n)), ite) );
+      }
+    } delete itE;
+
+    //Compute normalized vectors associated to incident edges.
+    const Coord& center=getNodeValue(n);
+    list<pCE>::iterator it;
+    for (it=adjCoord.begin();it!=adjCoord.end();++it) {
+      it->first  -= center;
+      it->first /= it->first.norm();
+    }
+    //Sort the vector to compute angles between two edges
+    //Correctly.
+    adjCoord.sort(AngularOrder());
+    //Compute the angles
+    vector<edge> tmpOrder;
+    for (it = adjCoord.begin(); it != adjCoord.end(); ++it) {
+        tmpOrder.push_back(it->second);
+    }
+    sg->setEdgeOrder(n, tmpOrder);
+}
 //=================================================================================
 vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg) const {
   vector<double> result;
