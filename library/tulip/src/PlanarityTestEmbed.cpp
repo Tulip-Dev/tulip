@@ -691,7 +691,7 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
 /*
  * Algebric criteria to check the plane map...
  */
-void PlanarityTestImpl::checkEmbedding(Graph *sG) {
+bool PlanarityTestImpl::isPlanarEmbedding(Graph *sG) {
   unsigned int count = 0;
   MutableContainer<char> considered;
   MutableContainer<bool> sens;
@@ -731,7 +731,9 @@ void PlanarityTestImpl::checkEmbedding(Graph *sG) {
   int m = sG->numberOfEdges();
   int n = sG->numberOfNodes();
   if (fc != m - n + 2) {
-    cerr << __PRETTY_FUNCTION__ << " : not ok :( nb faces :" << fc << "!=" << m - n +2 << endl;
+    //cerr << __PRETTY_FUNCTION__ << " : not ok :( nb faces :" << fc << "!=" << m - n +2 << endl;
+    return false;
   }
+  return true;
 }
 //=================================================================

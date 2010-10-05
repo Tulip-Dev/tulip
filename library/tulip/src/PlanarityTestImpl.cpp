@@ -95,7 +95,7 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
   //  displayMap(sg);
 #ifndef NDEBUG
   if (planar && embedsg)
-    checkEmbedding(sg);
+    assert(isPlanarEmbedding(sg));
 #endif
   return planar;
 }

@@ -40,6 +40,9 @@ bool PlanarityTest::isPlanar(Graph *graph){
   Observable::unholdObservers();
   return result;
 }
+bool PlanarityTest::isPlanarEmbedding(Graph *graph) {
+    return PlanarityTestImpl::isPlanarEmbedding(graph);
+}
 //=================================================================
 bool PlanarityTest::planarEmbedding(Graph *graph) {
   if (!PlanarityTest::isPlanar(graph))

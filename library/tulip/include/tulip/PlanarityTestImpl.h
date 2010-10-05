@@ -44,6 +44,7 @@ class TLP_SCOPE PlanarityTestImpl {
 public:
   PlanarityTestImpl(Graph *sg);
   bool isPlanar(bool embedsg = false);
+  static bool isPlanarEmbedding(Graph *sG);
   std::list<edge> getObstructions();
 
 private:
@@ -119,7 +120,7 @@ private:
   int sortBackEdgesByDfs(Graph *sG, node w, node repr,
  			 std::list<edge>& listBackEdges,
  			 std::vector<edge>& backEdge);
-  void checkEmbedding(Graph *sG);
+
 //   void cleanPtrItem (node n,  tlp::BmdLink<node>* item);
 
   Graph *sg;

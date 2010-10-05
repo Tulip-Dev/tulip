@@ -41,8 +41,11 @@ PlanarConMap::PlanarConMap(Graph* s): GraphDecorator(s), facesEdges(), edgesFace
   assert(PlanarityTest::isPlanar(s) || s->numberOfNodes()==0);
 
   faceId = new IdManager();
-  if (!TreeTest::isFreeTree(s)) //all map of trees are valid (do not change the existing order)
-    PlanarityTest::planarEmbedding(s);
+  if (!TreeTest::isFreeTree(s)) {//all map of trees are valid (do not change the existing order)
+      if (!PlanarityTest::isPlanarEmbedding(s)) {
+          PlanarityTest::planarEmbedding(s);
+      }
+  }
   computeFaces();
 }
 
@@ -182,7 +185,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   v_edges2.push_back(e);
   isInVe2.set(e.id,true);
   
-  // initialize and update the list of faces and the two new faces adajcent edges
+  // initialize and update the list of faces and the two new faces adajcent edges
   facesEdges.insert(faceMapEntry(new_face,v_edges1));
   facesEdges[f] = v_edges2;
   faces.push_back(new_face);

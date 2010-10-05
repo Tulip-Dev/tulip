@@ -42,7 +42,19 @@ public:
     to avoid any possible invalidation of the iterator.
   */
   static bool isPlanar(Graph *graph);
+  /*
+   * Return true if the current embbeding of the graph is planar else false;
+   */
+  static bool isPlanarEmbedding(Graph *graph);
+  /*
+   * Change the order of edges around the graph in order to make the
+   * embedding planar (the graph must be planar for that.
+   */
   static bool planarEmbedding(Graph *graph);
+  /*
+   * Return a list of edges that prevents to make the graph planar
+   * ie. part of the minor of K3,3 or K5.
+   */
   static std::list<edge> getObstructionsEdges(Graph *graph);
   
 private:
