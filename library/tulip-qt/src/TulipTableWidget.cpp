@@ -561,7 +561,7 @@ void CoordTableItem::setContentFromEditor(QWidget *editor) {
 //================================================================================
 LabelEditor::LabelEditor(const QString &label, QWidget *parent) :
   QWidget(parent),label(label) {
-  TextEditDialog *textEditDialog=new TextEditDialog(label);
+  TextEditDialog *textEditDialog=new TextEditDialog(label, parent);
   if(textEditDialog->exec()){
     this->label=textEditDialog->getText();
   }
