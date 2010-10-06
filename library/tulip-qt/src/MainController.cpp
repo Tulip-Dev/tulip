@@ -350,10 +350,10 @@ namespace tlp {
           p = it->next();
           Iterator< std::pair<std::string, DataType*> > *it2=(*(DataSet*)p.second->value).getValues();
           pair<string, DataType*> v=it2->next();
-          int x,y,width,height;
+          int x = 0,y = 0,width = 0,height  = 0;
 
           if((*(DataSet*)p.second->value).exist("id")){
-            int id;
+            int id = 0;
             (*(DataSet*)p.second->value).get("id",id);
             if(id!=0){
 	      lastViewedGraph=newGraph->getDescendantGraph(id);
@@ -407,7 +407,7 @@ namespace tlp {
         }
         if(displayingData.exist("cameraEyes") && displayingData.exist("cameraCenter") && displayingData.exist("cameraUp") && displayingData.exist("cameraZoomFactor") && displayingData.exist("distCam")){
           Coord cameraEyes, cameraCenter, cameraUp;
-          double cameraZoomFactor, distCam;
+          double cameraZoomFactor = 0, distCam = 0;
           displayingData.get<Coord>("cameraEyes",cameraEyes);
           displayingData.get<Coord>("cameraCenter",cameraCenter);
           displayingData.get<Coord>("cameraUp",cameraUp);

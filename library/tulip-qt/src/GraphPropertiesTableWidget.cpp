@@ -76,7 +76,7 @@ void GraphPropertiesTableWidget::updateTable() {
     setHorizontalHeaderLabels(getHeaderList());
 
     //Fill the table.
-    for (int i = 0; i < propertiesName.size(); ++i) {
+    for (unsigned int i = 0; i < propertiesName.size(); ++i) {
       for (int j = 0; j < columnCount(); ++j) {
         setItem(i, j, createPropertyItem(graph->getProperty(propertiesName[i]), j));
       }

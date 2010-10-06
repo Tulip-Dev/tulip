@@ -109,7 +109,7 @@ static Graph *findGraphById(Graph *sg, const unsigned int id) {
 
 //This function should rewriten completly
 void GlGraphRenderingParameters::setParameters(const DataSet &data) {
-  bool b;
+  bool b = false;
   Color c;
   if (data.get<bool>("antialiased", b))
     setAntialiasing(b);
@@ -139,10 +139,10 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setEdgeSizeInterpolate(b);
   if (data.get<bool>("edge3D", b))
     setEdge3D(b);
-  unsigned int ui;
+  unsigned int ui = 0;
   if (data.get<unsigned int>("fontType", ui))
     _FontsType = ui;
-  int i;
+  int i  = 0;
   if (data.get<int>("selectedNodesStencil", i))
     setSelectedNodesStencil(i);
   if (data.get<int>("selectedMetaNodesStencil", i))

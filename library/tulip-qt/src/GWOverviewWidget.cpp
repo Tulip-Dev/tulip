@@ -89,8 +89,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
     if (_observedView == 0) return false;
     QMouseEvent *me = (QMouseEvent *) e;
     if (me->buttons()==Qt::LeftButton) {
-      GlMainWidget *glw = (GlMainWidget *) obj;
-      assert(glw == _view);
+      assert(((GlMainWidget *) obj) == _view);
       double mouseClicX = me->x();
       double mouseClicY = me->y();
       double widgetWidth = _view->width();

@@ -308,7 +308,7 @@ namespace tlp {
         }
       }
 
-      GLenum fillMode;
+      GLenum fillMode = GL_POLYGON;
       switch(polygonMode){
       case(POLYGON):{
           fillMode=GL_POLYGON;
