@@ -106,9 +106,9 @@ void GlOpenUniformCubicBSpline::drawCurve(std::vector<Coord> &controlPoints, con
 	}
 }
 
-static float clamp(float f, float minVal, float maxVal) {
+ /*static float clamp(float f, float minVal, float maxVal) {
 	return min(max(f, minVal), maxVal);
-}
+	}*/
 
 Coord GlOpenUniformCubicBSpline::computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) {
 	return computeOpenUniformBsplinePoint(controlPoints, t, curveDegree);

@@ -351,7 +351,7 @@ namespace tlp {
       GlTextureManager::getInst().activateTexture(textureName);
     }
 
-    float length;
+    float length = 0;
     glBegin(GL_QUAD_STRIP);
     for (unsigned int i = 0; i < size; ++i) {
       if(dec<decTab.size())
@@ -361,7 +361,6 @@ namespace tlp {
       glColor4ubv(((const GLubyte *)&colors[i-dec]));
 
       if(i==0){
-        length=0.;
         glTexCoord2f(0, 0.0f);
         glVertex3fv(&points[i*3]);
         glTexCoord2f(0, 1.0f);
@@ -529,12 +528,11 @@ namespace tlp {
     GlTextureManager::getInst().activateTexture(newTextureName1);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 
-    float length;
+    float length = 0;
     glBegin(GL_QUAD_STRIP);
     for (unsigned int i = 0; i < size; ++i) {
       glColor4ubv(((const GLubyte *)&colors[i]));
       if(i==0){
-        length=0.;
         glMultiTexCoord2f(GL_TEXTURE0,0, 1.0f);
         glMultiTexCoord2f(GL_TEXTURE1,0, 1.0f);
         glVertex3fv(&points[i*3]);

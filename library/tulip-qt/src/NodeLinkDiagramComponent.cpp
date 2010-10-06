@@ -324,7 +324,7 @@ namespace tlp {
           DataSet layerAndCompositeDataSet=(*it).second;
           toRemove.push_back((*it).first);
           string layerName;
-          long compositeLong;
+          long compositeLong = 0;
           layerAndCompositeDataSet.get("layer",layerName);
           layerAndCompositeDataSet.get("composite",compositeLong);
           mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
@@ -340,7 +340,7 @@ namespace tlp {
 
         DataSet newLayerAndCompositeDataSet=*((DataSet*)(infoData.second->value));
         string newLayerName;
-        long newCompositeLong;
+        long newCompositeLong = 0;
         newLayerAndCompositeDataSet.get("layer",newLayerName);
         newLayerAndCompositeDataSet.get("composite",newCompositeLong);
 
@@ -356,7 +356,7 @@ namespace tlp {
           //check integrity
           DataSet oldLayerAndCompositeDataSet=(*it).second;
           string oldLayerName;
-          long oldCompositeLong;
+          long oldCompositeLong = 0;
           oldLayerAndCompositeDataSet.get("layer",oldLayerName);
           oldLayerAndCompositeDataSet.get("composite",oldCompositeLong);
 
@@ -421,7 +421,7 @@ namespace tlp {
       for(map<string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
         DataSet layerAndCompositeDataSet=(*it).second;
         string layerName;
-        long compositeLong;
+        long compositeLong = 0;
         layerAndCompositeDataSet.get("layer",layerName);
         layerAndCompositeDataSet.get("composite",compositeLong);
         mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);

@@ -264,7 +264,7 @@ Coord computeOpenUniformBsplinePoint(const vector<Coord> &controlPoints, const f
 		}
 		float knotVal = (cpt * stepKnots);
 		coeffs[curveDegree] = 1.0;
-		for (int i = 1 ; i <= curveDegree ; ++i) {
+		for (unsigned int i = 1 ; i <= curveDegree ; ++i) {
 			coeffs[curveDegree-i] = (clamp(knotVal + stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + stepKnots, 0.0, 1.0) - clamp(knotVal + (-i+1) * stepKnots, 0.0, 1.0)) * coeffs[curveDegree-i+1];
 			int tabIdx = curveDegree-i+1;
 			for (int j = -i+1 ; j <= -1 ; ++j) {

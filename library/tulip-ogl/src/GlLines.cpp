@@ -35,9 +35,9 @@ extern "C" {
 using namespace std;
 using namespace tlp;
 
-static float (*buildColorArray(const Color &startColor, const Color &endColor, unsigned int steps, const bool gleColor=false))[3];
+/*static float (*buildColorArray(const Color &startColor, const Color &endColor, unsigned int steps, const bool gleColor=false))[3];
 static double *buildRadiusArray(const double startRadius, const double endRadius, unsigned int steps, const bool gleArray=false);
-static Coord gleComputeAngle(Coord point, const Coord &finalPoint, const Coord &target);
+static Coord gleComputeAngle(Coord point, const Coord &finalPoint, const Coord &target);*/
 
 //=============================================================
 void GlLines::glDrawLine(const Coord &startPoint, const Coord &endPoint, const double width, const unsigned int stippleType,
@@ -406,7 +406,7 @@ GLfloat *GlLines::buildCurvePoints(const Coord &p0,const Coord &p1,const Coord &
   return bendsCoordinates;
 }
 //=============================================================
-static float (*buildColorArray(const Color &startColor, const Color &endColor, unsigned int steps, const bool gleColor))[3] {
+/*static float (*buildColorArray(const Color &startColor, const Color &endColor, unsigned int steps, const bool gleColor))[3] {
   float (*colorArray)[3] =  new float[steps+1+(gleColor ? 2 : 0)][3];
   float (*tmp)[3] = (gleColor ? &(colorArray[1]) : colorArray);
 
@@ -429,9 +429,9 @@ static float (*buildColorArray(const Color &startColor, const Color &endColor, u
     }
   }
   return colorArray;
-}
+  }*/
 //=============================================================
-static double *buildRadiusArray(const double startRadius, const double endRadius, unsigned int steps, const bool gleArray) {
+/*static double *buildRadiusArray(const double startRadius, const double endRadius, unsigned int steps, const bool gleArray) {
   double *radius = new double[steps+1+(gleArray ? 2 : 0)];
   double *tmp = (gleArray ? &(radius[1]) : radius);
   double d = (endRadius - startRadius) / (double)steps;
@@ -445,9 +445,9 @@ static double *buildRadiusArray(const double startRadius, const double endRadius
     radius[steps+2] = radius[steps+1];
   }
   return radius;
-}
+  }*/
 //=============================================================
-static Coord gleComputeAngle(Coord point, const Coord &finalPoint, const Coord &target) {
+/*static Coord gleComputeAngle(Coord point, const Coord &finalPoint, const Coord &target) {
   //point is point b, finalPoint is point a, target is b
   Coord ab = point - finalPoint;
   Coord ac = target - finalPoint;
@@ -464,5 +464,5 @@ static Coord gleComputeAngle(Coord point, const Coord &finalPoint, const Coord &
   angle += finalPoint; //finally apply ab'' to a=finalPoint;
 
   return angle;
-}
+  }*/
 //=============================================================

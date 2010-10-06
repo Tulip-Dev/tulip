@@ -21,6 +21,7 @@
 #endif
 
 #include <cmath>
+#include <limits.h>
 
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
@@ -579,11 +580,11 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*){
 
   Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
   bool init=false;
-  float min,max;
+  float min = FLT_MIN,max = FLT_MAX;
   while (itN->hasNext()) {
     node n=itN->next();
 
-    float valueMin,valueMax;
+    float valueMin = FLT_MIN, valueMax = FLT_MAX;
     switch(operation){
     case ALIGN_TOP:
       valueMax=_layout->getNodeValue(n)[1]+_sizes->getNodeValue(n)[1]/2.;

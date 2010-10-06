@@ -254,7 +254,7 @@ namespace tlp {
   //**********************************************************************
   void ControllerViewsManager::checkViewsGraphsHierarchy() {
     for (map<View *, Graph*>::iterator itView = viewGraph.begin(); itView != viewGraph.end(); ++itView) {
-      Graph *newGraph;
+      Graph *newGraph = NULL;
       for (list<unsigned int>::iterator it = viewsGraphsHierarchy[(*itView).first].begin(); it
                                     != viewsGraphsHierarchy[(*itView).first].end(); ++it) {
         newGraph = currentGraph->getRoot()->getDescendantGraph(*it);

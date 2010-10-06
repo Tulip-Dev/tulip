@@ -123,7 +123,7 @@ namespace tlp {
       tmp->setAllEdgeValue(dest->getEdgeDefaultValue());
       graph->push(false);
       bool updateLayout = (typeid(PROPERTY) == typeid(LayoutProperty) && nldc);
-      GlLODCalculator *oldLODCalculator;
+      GlLODCalculator *oldLODCalculator = NULL;
       if (updateLayout) {
         graph->setAttribute("viewLayout", tmp);
 
