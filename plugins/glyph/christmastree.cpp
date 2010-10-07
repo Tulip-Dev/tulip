@@ -53,9 +53,7 @@ protected:
 };
 
 GLYPHPLUGIN(ChristmasTree, "3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0" , 28)
-;
-EEGLYPHPLUGIN(ChristmasTree,"3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0" , 29)
-;
+EEGLYPHPLUGIN(ChristmasTree,"3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0" , 28)
 
 //===================================================================================
 ChristmasTree::ChristmasTree(GlyphContext *gc) :

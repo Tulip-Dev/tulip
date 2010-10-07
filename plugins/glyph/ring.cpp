@@ -66,9 +66,7 @@ protected:
 };
 //=====================================================
 GLYPHPLUGIN(Ring, "2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 15)
-;
-EEGLYPHPLUGIN(Ring, "2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 16)
-;
+EEGLYPHPLUGIN(Ring, "2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 15)
 //===================================================================================
 Ring::Ring(GlyphContext *gc) :
 	Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {

@@ -66,9 +66,7 @@ GlCircle* Circle::circle=0;
 
 //=====================================================
 GLYPHPLUGIN(Circle, "2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", 14)
-;
-EEGLYPHPLUGIN(Circle,"2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", 15)
-;
+EEGLYPHPLUGIN(Circle,"2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", 14)
 //===================================================================================
 Circle::Circle(GlyphContext *gc) :
 	Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {

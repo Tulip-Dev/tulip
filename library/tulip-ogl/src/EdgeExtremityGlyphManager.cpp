@@ -34,15 +34,19 @@ namespace tlp {
 static TLP_HASH_MAP<int, std::string> eeglyphIdToName;
 static TLP_HASH_MAP<std::string, int> nameToEeGlyphId;
 
+const int EdgeExtremityGlyphManager::NoEdgeExtremetiesId = UINT_MAX;
+
 EdgeExtremityGlyphManager::EdgeExtremityGlyphManager() {
 	EdgeExtremityGlyphFactory::initFactory();
 }
 //====================================================
 string EdgeExtremityGlyphManager::glyphName(int id) {
-	if (id == 0)
+	if (id == NoEdgeExtremetiesId){
 		return string("NONE");
-	if (eeglyphIdToName.find(id) != eeglyphIdToName.end())
+	}
+	if (eeglyphIdToName.find(id) != eeglyphIdToName.end()){
 		return eeglyphIdToName[id];
+	}
 	else {
 		cerr << __PRETTY_FUNCTION__ << endl;
 		cerr << "Invalid glyph id" << endl;
@@ -51,10 +55,12 @@ string EdgeExtremityGlyphManager::glyphName(int id) {
 }
 //====================================================
 int EdgeExtremityGlyphManager::glyphId(string name) {
-	if (name.compare("NONE") == 0)
-		return 0;
-	if (nameToEeGlyphId.find(name) != nameToEeGlyphId.end())
+	if (name.compare("NONE") == 0){
+		return NoEdgeExtremetiesId;
+	}
+	if (nameToEeGlyphId.find(name) != nameToEeGlyphId.end()){
 		return nameToEeGlyphId[name];
+	}
 	else {
 		cerr << __PRETTY_FUNCTION__ << endl;
 		cerr << "Invalid glyph name" << endl;

@@ -59,9 +59,7 @@ private:
 };
 
 GLYPHPLUGIN(Sphere, "3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0", 2)
-;
-EEGLYPHPLUGIN(Sphere, "3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0", 3)
-;
+EEGLYPHPLUGIN(Sphere, "3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0", 2)
 
 //=========================================================================================
 Sphere::Sphere(GlyphContext *gc) :

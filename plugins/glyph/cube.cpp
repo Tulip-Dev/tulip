@@ -65,9 +65,7 @@ GlBox* Cube::box=0;
 #endif
 
 GLYPHPLUGIN(Cube, "3D - Cube", "Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
-;
-EEGLYPHPLUGIN(Cube,"3D - Cube","Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 1)
-;
+EEGLYPHPLUGIN(Cube,"3D - Cube","Bertrand Mathieu", "09/07/2002", "Textured cube", "1.0" , 0)
 //===================================================================================
 Cube::Cube(GlyphContext *gc) :
 	Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {

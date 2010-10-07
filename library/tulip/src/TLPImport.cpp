@@ -34,7 +34,7 @@
 #define TLP "tlp"
 #define AUTHOR "author"
 #define COMMENTS "comments"
-#define TLP_VERSION 2.1
+#define TLP_VERSION 2.2
 #define NODES "nodes"
 #define EDGE "edge"
 #define NB_NODES "nb_nodes"
@@ -106,7 +106,7 @@ namespace tlp {
             // only used to handle the version of tlp file format
             if (!version) {
                 version = (float) atof(str.c_str());
-                return version <= TLP_VERSION;
+                return version <= ((float)TLP_VERSION);
             }
             return false;
         }
@@ -254,8 +254,15 @@ namespace tlp {
                     return clusterIndex[clusterId]->getLocalProperty<SizeProperty>(propertyName)->setEdgeStringValue(e, value );
                 if (propertyType==COLOR)
                     return clusterIndex[clusterId]->getLocalProperty<ColorProperty>(propertyName)->setEdgeStringValue(e, value );
-                if (propertyType==INT)
+                if (propertyType==INT){
+                  //If we are in the old edge extremities id system we need to convert the ids in the file.
+                  if(version < 2.2){
+                    if(propertyName==string("viewSrcAnchorShape") || propertyName==string("viewTgtAnchorShape")){
+                      return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setEdgeStringValue(e, convertOldEdgeExtremitiesValueToNew(value) );
+                    }
+                  }
                     return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setEdgeStringValue(e, value );
+                }
                 if (propertyType==BOOL)
                     return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setEdgeStringValue(e, value );
                 if (propertyType==STRING) {
@@ -283,6 +290,43 @@ namespace tlp {
                     return clusterIndex[clusterId]->getLocalProperty<StringVectorProperty>(propertyName)->setEdgeStringValue(e, value );
             }
             return false;
+        }
+
+        /**
+         * @brief Convert the id of a edge extremity glyph from the old numeraotation system to the new numerotation system.
+         *
+         * We cannot set the new value automatically as one edge extremity id doesn't change.
+         * @param oldValue The old glyph value.
+         * @return The new glyph value or the old value if no change are needed.
+         */
+        string convertOldEdgeExtremitiesValueToNew(const std::string& oldValue){
+          if(oldValue == string("0")){
+            return "-1";
+          }else if(oldValue == string("1")){
+            return "0";
+          }else if(oldValue == string("3")){
+            return "2";
+          }else if(oldValue == string("4")){
+            return "3";
+          }else if(oldValue == string("5")){
+            return "4";
+          }else if(oldValue == string("7")){
+            return "6";
+          }else if(oldValue == string("10")){
+            return "9";
+          }else if(oldValue == string("13")){
+            return "12";
+          }else if(oldValue == string("14")){
+            return "13";
+          }else if(oldValue == string("15")){
+            return "14";
+          }else if(oldValue == string("16")){
+            return "15";
+          }else if(oldValue == string("29")){
+            return "28";
+          }else{
+            return oldValue;
+          }
         }
 
         bool setAllNodeValue(int clusterId, const string& propertyType, const string& propertyName, string& value) {
@@ -359,8 +403,15 @@ namespace tlp {
                     return clusterIndex[clusterId]->getLocalProperty<SizeProperty>(propertyName)->setAllEdgeStringValue( value );
                 if (propertyType==COLOR)
                     return clusterIndex[clusterId]->getLocalProperty<ColorProperty>(propertyName)->setAllEdgeStringValue( value );
-                if (propertyType==INT)
-                    return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setAllEdgeStringValue( value );
+                if (propertyType==INT){
+                  //If we are in the old edge extremities id system we need to convert the ids in the file.
+                  if(version < 2.2){
+                    if(propertyName==string("viewSrcAnchorShape") || propertyName==string("viewTgtAnchorShape")){
+                      return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setAllEdgeStringValue( convertOldEdgeExtremitiesValueToNew(value) );
+                    }
+                  }
+                   return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setAllEdgeStringValue( value );
+                }
                 if (propertyType==BOOL)
                     return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setAllEdgeStringValue( value );
                 if (propertyType==STRING) {

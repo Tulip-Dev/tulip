@@ -55,9 +55,7 @@ private:
 };
 //===========================================================
 GLYPHPLUGIN(Cone, "3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1.0", 3)
-;
-EEGLYPHPLUGIN(Cone, "3D - Cone", "Bertrand Mathieu", "09/07/2002", "Cone", "1.0", 4)
-;
+EEGLYPHPLUGIN(Cone, "3D - Cone", "Bertrand Mathieu", "09/07/2002", "Cone", "1.0", 3)
 //===================================================================================
 Cone::Cone(GlyphContext *gc) :
 	Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
