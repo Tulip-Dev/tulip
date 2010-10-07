@@ -66,9 +66,7 @@ GlHexagon* Hexagone::hexagon=0;
 
 //=====================================================
 GLYPHPLUGIN(Hexagone, "2D - Hexagone", "David Auber", "09/07/2002", "Textured Hexagone", "1.0", 13)
-;
-EEGLYPHPLUGIN(Hexagone,"2D - Hexagone", "David Auber", "09/07/2002", "Textured Hexagone", "1.0", 14)
-;
+EEGLYPHPLUGIN(Hexagone,"2D - Hexagone", "David Auber", "09/07/2002", "Textured Hexagone", "1.0", 13)
 //===================================================================================
 Hexagone::Hexagone(GlyphContext *gc) :
 	Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {

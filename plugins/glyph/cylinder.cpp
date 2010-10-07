@@ -52,9 +52,7 @@ private:
 	inline void drawCylinder();
 };
 GLYPHPLUGIN(Cylinder, "3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0", 6)
-;
-EEGLYPHPLUGIN(Cylinder,"3D - Cylinder","Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0", 7)
-;
+EEGLYPHPLUGIN(Cylinder,"3D - Cylinder","Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0", 6)
 //=================================================================================================
 Cylinder::Cylinder(GlyphContext *gc) :
 	Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {

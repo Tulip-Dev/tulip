@@ -22,8 +22,6 @@
 
 #include <string>
 #include <tulip/tulipconf.h>
-//#include <tulip/PluginLoader.h>
-//#include <tulip/GlGraphInputData.h>
 #include <tulip/MutableContainer.h>
 
 namespace tlp {
@@ -35,6 +33,8 @@ class Graph;
 class TLP_GL_SCOPE EdgeExtremityGlyphManager {
 
 public:
+
+
 
 	virtual ~EdgeExtremityGlyphManager() {
 	}
@@ -76,11 +76,15 @@ public:
 	void clearGlyphList(Graph **graph, GlGraphInputData* glGraphInputData,
 			MutableContainer<EdgeExtremityGlyph *>& glyphs);
 
+	static const int NoEdgeExtremetiesId;
+
 private:
 
 	EdgeExtremityGlyphManager();
 
 	static EdgeExtremityGlyphManager* eeinst;
+
+
 };
 }
 #endif /* EDGEEXTREMITYGLYPHMANAGER_H_ */

@@ -818,15 +818,11 @@ public:
 };
 
 QString EdgeExtremityGlyphTableItem::valueToText(int val) const {
-	if (val == 0)
-		return "NONE";
 	return QString(
 			tlp::EdgeExtremityGlyphManager::getInst().glyphName(val).c_str());
 }
 
 int EdgeExtremityGlyphTableItem::textToValue(const QString& s) const {
-	if (s.compare("NONE") == 0)
-		return 0;
 	return EdgeExtremityGlyphManager::getInst().glyphId(s.toUtf8().data());
 }
 

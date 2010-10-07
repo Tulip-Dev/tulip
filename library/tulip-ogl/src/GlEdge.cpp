@@ -297,14 +297,14 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	int startEdgeGlyph = data->elementSrcAnchorShape->getEdgeValue(e);
 	int endEdgeGlyph = data->elementTgtAnchorShape->getEdgeValue(e);
 
-	if (startEdgeGlyph != 0 && data->parameters->isViewArrow()) {
+	if (startEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
     displayArrow(data,e,source,edgeSize[0],srcCol,maxSrcSize,selected,startEdgeGlyph,endEdgeGlyph,
                  bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
 	} else {
 		beginLineAnchor = srcAnchor;
 	}
 
-	if (endEdgeGlyph != 0 && data->parameters->isViewArrow()) {
+	if (endEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
     displayArrow(data,e,target,edgeSize[1],tgtCol,maxTgtSize,selected,endEdgeGlyph,startEdgeGlyph,
                  bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
 	} else {
