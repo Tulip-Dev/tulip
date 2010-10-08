@@ -120,7 +120,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
           Qt::ControlModifier
 #endif
       ) {
-        if (mousePressModifier == Qt::ShiftModifier)
+        if (mousePressModifier == Qt::ShiftModifier && kModifier != Qt::ShiftModifier)
           boolVal = false;
         else {
           if(selection->getNodeDefaultValue()==true || selection->getEdgeDefaultValue()==true){
