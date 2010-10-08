@@ -465,7 +465,7 @@ void Graph::openMetaNode(node metaNode) {
   }
   bool hasSubEdges = super->isMetaEdge(metaEdges->next());
   delete metaEdges;
-  metaEdges = super->getInOutEdges(metaNode);
+  metaEdges = new StableIterator<edge>(super->getInOutEdges(metaNode));
   ColorProperty *graphColors = 
     getProperty<ColorProperty>(colorProperty);
   if (hasSubEdges) {
