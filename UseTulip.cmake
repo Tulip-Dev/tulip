@@ -47,8 +47,9 @@ MACRO (TULIP_WRAP_QT_PLUGINS_IN_INCLUDE_TULIP outfiles )
     GET_FILENAME_COMPONENT(infile ${it} ABSOLUTE)
     STRING(TOLOWER ${outfile} outfile_lower)
     SET(outfile_lower ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/${outfile_lower}.h)
+
     ADD_CUSTOM_COMMAND(OUTPUT ${outfile_lower}
-      COMMAND cp
+      COMMAND ${CMAKE_COMMAND} -E copy
       ARGS ${infile} ${outfile_lower}
       MAIN_DEPENDENCY ${infile})
     SET(${outfiles} ${${outfiles}} ${outfile_lower})
