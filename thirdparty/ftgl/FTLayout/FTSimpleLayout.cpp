@@ -194,6 +194,7 @@ inline void FTSimpleLayoutImpl::WrapTextI(const T *buf, const int len,
                                           FTPoint position, int renderMode,
                                           FTBBox *bounds)
 {
+    (void) len;
     FTUnicodeStringItr<T> breakItr(buf);          // points to the last break character
     FTUnicodeStringItr<T> lineStart(buf);         // points to the line start
     float nextStart = 0.0;     // total width of the current line
