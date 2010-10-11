@@ -337,7 +337,7 @@ bool GEMLayout::run() {
         std::vector<std::set<node> > components;
         string err;
         ConnectedTest::computeConnectedComponents(graph, components);
-        for (int i = 0; i < components.size(); ++i) {
+        for (size_t i = 0; i < components.size(); ++i) {
             Graph * tmp = graph->inducedSubGraph(components[i]);
             tmp->computeProperty("GEM (Frick)", layoutResult, err, pluginProgress, dataSet);
             graph->delAllSubGraphs(tmp);
