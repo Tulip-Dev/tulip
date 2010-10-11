@@ -75,7 +75,6 @@ namespace tlp {
   class GreatThanEdge {
   public:
     DoubleProperty *metric;
-    Graph *sp;
     bool operator() (pair<edge,float> e1,pair<edge,float> e2) {
       return (metric->getEdgeValue(e1.first) > metric->getEdgeValue(e2.first));
     }
