@@ -98,6 +98,8 @@ void connectedTest(const Graph * const graph, node n,
 	unsigned int i = 0;
 	vector<node> next_roots;
 	next_roots.push_back(n);
+	visited.set(n.id,true);
+	count++;
 	while(i < next_roots.size()) {
 		node r = next_roots[i];
 		Iterator<node> * itn = graph->getInOutNodes(r);
