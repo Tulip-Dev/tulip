@@ -8,7 +8,6 @@
 #include <tulip/SimpleTest.h>
 #include <tulip/ConnectedTest.h>
 #include <tulip/QClusteringQualityMeasure.h>
-#include <sys/time.h>
 
 using namespace tlp;
 using namespace std;
