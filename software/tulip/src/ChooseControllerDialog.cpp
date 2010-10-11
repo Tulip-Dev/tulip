@@ -62,7 +62,7 @@ void ChooseControllerDialog::setDefaultControllerName(const string &controllerNa
 
 string ChooseControllerDialog::getCheckedControllerName(){
   vector<QListWidgetItem *> checkedItems;
-  for(unsigned int i=0;i<listWidget->count();++i){
+  for(int i=0;i<listWidget->count();++i){
     QListWidgetItem *item=listWidget->item(i);
     if(item->checkState()==Qt::Checked)
       return item->text().toStdString();
