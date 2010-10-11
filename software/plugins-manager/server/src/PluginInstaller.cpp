@@ -111,7 +111,7 @@ int main(int argc,char **argv) {
   }
 
 
-  for(int i=0;i<plug.pluginsList.size();++i){
+  for(size_t i=0;i<plug.pluginsList.size();++i){
     for(vector<string>::iterator it=glyphsName.begin();it!=glyphsName.end();++it){
       if(plug.pluginsList[i].name==(*it)){
 	plug.pluginsList[i].type="Glyph";
@@ -134,7 +134,7 @@ int main(int argc,char **argv) {
   LocalPluginInfo pluginInfo;
   if(plug.pluginsList.size()>1)  {
     bool equal=true;
-    for(int i=0;i<plug.pluginsList.size()-1;++i){
+    for(size_t i=0;i<plug.pluginsList.size()-1;++i){
       if(plug.pluginsList[i].type!=plug.pluginsList[i+1].type){
 	equal=false;
 	break;
@@ -142,7 +142,7 @@ int main(int argc,char **argv) {
     }
 
     if(!equal){
-      for(int i=0;i<plug.pluginsList.size();++i){
+      for(size_t i=0;i<plug.pluginsList.size();++i){
 	if(plug.pluginsList[i].type=="View"){
 	  pluginInfo = plug.pluginsList[i];
 	  break;
