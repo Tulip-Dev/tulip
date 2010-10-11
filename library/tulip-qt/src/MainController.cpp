@@ -166,6 +166,7 @@ namespace tlp {
 		    EdgeA & inEdgeA, Graph * inG) {
     assert( outSel );
     assert( inG );
+    (void) inG; //to remove unused param warning
     outSel->setAllNodeValue( false );
     outSel->setAllEdgeValue( false );
     // Set edges
@@ -1005,6 +1006,7 @@ namespace tlp {
   //==================================================
   void MainController::viewRequestChangeGraph(View *view,Graph *graph) {
     assert(view==getCurrentView());
+    (void) view; //to remove unused param warning
     changeGraph(graph);
   }
   //**********************************************************************
