@@ -78,21 +78,24 @@ public:
     dataSet->get( "file::filename", fn );
     FILE * fd = fopen( fn.c_str(), "r" );
     if( !fd ) {
-      pluginProgress->setError(strerror(errno));
+      if (pluginProgress)
+	pluginProgress->setError(strerror(errno));
       return false;
     }
 
     // Create & Init YY global data 
-    DOT_YY _dotyy;
-    _dotyy.sg = graph;
-
+    DOT_YY _dotyy(fd, graph, pluginProgress);
+    if (pluginProgress) {
+      pluginProgress->showPreview(false);
+      pluginProgress->progress(1, 100000);
+    }
     dotyy = &_dotyy;
     yyrestart( fd );
     yyparse();
 
     fclose( fd );
 
-    return true;
+    return _dotyy.pStatus != TLP_CANCEL;
   }
 };
 /*@}*/
