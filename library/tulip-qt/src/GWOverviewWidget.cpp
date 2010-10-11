@@ -138,6 +138,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   assert( glG == _observedView);
+  (void) glG;
   if (isVisible() || drawIfNotVisible) {
   	if (_observedView != 0) {
   		if(_initialCamera && !graphChanged) {
@@ -214,6 +215,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
 //=============================================================================
 void GWOverviewWidget::observedViewDestroyed(QObject *glWidget) {
   assert(_observedView == glWidget);
+  (void) glWidget;
   _observedView = 0;
   _glDraw->setObservedView(0);
   _view->getScene()->getLayer("Main")->deleteGlEntity("overviewEntity");
