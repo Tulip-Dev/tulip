@@ -71,6 +71,7 @@ INCLUDE_DIRECTORIES(../include/ ${TulipInclude} ${TulipBuildInclude} ${PROJECT_B
 
 ADD_EXECUTABLE( tulip_check_pl ${tulip_check_pl_SRCS})
 TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipName} ${CMAKE_DL_LIBS})
+TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipQtName})
 ADD_DEPENDENCIES(tulip_check_pl ${LibTulipName})
 
 ADD_LIBRARY(${LibTulipPluginsManagerName} SHARED ${${LibTulipPluginsManagerName}_UI_SRCS} ${${LibTulipPluginsManagerName}_MOC_SRCS} ${${LibTulipPluginsManagerName}_LIB_SRCS})

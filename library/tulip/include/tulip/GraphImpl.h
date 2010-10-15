@@ -34,7 +34,7 @@ namespace tlp {
 
 class GraphView;
 class GraphUpdatesRecorder;
-template<class C>class Iterator;
+template<class C>struct Iterator;
 class Int;
 
 ///Implementation of the graph support of the Graph.

@@ -29,7 +29,7 @@ namespace tlp {
 
 #define GRAPH_SEQ std::vector<Graph *>
 
-template<class C>class Iterator;
+template<class C>struct Iterator;
 class PropertyManager;
 class GraphProperty;
 

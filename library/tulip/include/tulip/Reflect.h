@@ -33,7 +33,7 @@
 
 namespace tlp {
 
-struct Graph;
+class Graph;
 
  struct TLP_SCOPE DataMem {
    DataMem(){}

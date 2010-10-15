@@ -25,7 +25,7 @@
 
 namespace tlp {
 
-struct PropertyInterface;
+class PropertyInterface;
 class ObservableProperty;
 //=========================================================
 

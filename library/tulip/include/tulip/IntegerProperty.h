@@ -32,7 +32,7 @@ namespace tlp {
 class Graph;
 class PropertyContext;
 
-typedef AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> AbstractIntegerProperty;
+#define AbstractIntegerProperty AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> 
 /** \addtogroup properties */ 
 /*@{*/
 class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public PropertyObserver{ 

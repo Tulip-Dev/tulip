@@ -40,7 +40,7 @@
 namespace tlp {
 
 class BooleanProperty;
-template<class C>class Iterator;
+template<class C>struct Iterator;
 
   enum ElementType {NODE=0, EDGE};
   /**
