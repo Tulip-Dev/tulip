@@ -291,7 +291,6 @@ namespace tlp {
             return false;
         }
 
-<<<<<<< HEAD
         /**
          * @brief Convert the id of a edge extremity glyph from the old numeraotation system to the new numerotation system.
          *
