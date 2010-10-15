@@ -62,13 +62,16 @@ MouseEdgeBendEditor::~MouseEdgeBendEditor(){
 //========================================================================================
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
   
-  if(e->type() == QEvent::MouseButtonDblClick && ((QMouseEvent *) e)->button() == Qt::LeftButton && computeBendsCircles(glMainWidget)) {
-    operation = NEW_OP;
-    mMouseCreate(editPosition[0], editPosition[1], glMainWidget);
+  QMouseEvent * qMouseEv = (QMouseEvent *) e;
+  if(qMouseEv == NULL)
+    return false;
+  
+  if(e->type() == QEvent::MouseButtonDblClick &&  qMouseEv->button() == Qt::LeftButton && computeBendsCircles(glMainWidget)) {
+    operation = NEW_OP; 
+    mMouseCreate(qMouseEv->x(), qMouseEv->y(), glMainWidget);
     return true;
   }
   if (e->type() == QEvent::MouseButtonPress) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     initProxies(glMainWidget);
     bool hasSelection = computeBendsCircles(glMainWidget);
@@ -133,7 +136,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     return true;
   }
   if (e->type() == QEvent::MouseButtonRelease &&
-      ((QMouseEvent *) e)->button() == Qt::LeftButton &&
+      qMouseEv->button() == Qt::LeftButton &&
       operation != NONE_OP) {
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     stopEdition();
@@ -142,17 +145,14 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     return true;
   }
   if  (e->type() == QEvent::MouseMove &&
-      ((QMouseEvent *) e)->buttons() == Qt::LeftButton &&
+      qMouseEv->buttons() == Qt::LeftButton &&
       operation != NONE_OP) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
-    int newX = qMouseEv->x();
-    int newY = qMouseEv->y();
     //int i=0;
     //while(&circles[i] != select[0].second) i++;
     switch (operation) {
     case TRANSLATE_OP:
-      mMouseTranslate(newX, newY, glMainWidget);
+      mMouseTranslate(qMouseEv->x(), qMouseEv->y(), glMainWidget);
       return true;
     case NONE_OP:
       cerr << "[Error] : " <<__FUNCTION__ << " should not be call" << endl;
