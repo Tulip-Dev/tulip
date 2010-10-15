@@ -344,8 +344,9 @@ bool GEMLayout::run() {
         }
         // call connected component packing
         LayoutProperty tmpLayout(graph);
-        dataSet->set("coordinates", layoutResult);
-        graph->computeProperty("Connected Component Packing", &tmpLayout, err, pluginProgress, dataSet);
+	DataSet ds;
+        ds.set("coordinates", layoutResult);
+        graph->computeProperty("Connected Component Packing", &tmpLayout, err, pluginProgress, &ds);
         *layoutResult = tmpLayout;
         return true;
     }

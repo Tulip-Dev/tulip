@@ -328,7 +328,13 @@ void BasicPluginsTest::testDendrogram() {
 }
 //==========================================================
 void BasicPluginsTest::testGEMLayout() {
-  bool result = computeProperty<LayoutProperty>("GEM (Frick)");
+  DataSet ds;
+  ds.set("file::filename", string("unconnected.tlp"));
+  Graph* g = importGraph("tlp", ds, NULL, graph);
+  CPPUNIT_ASSERT(g == graph);  
+  LayoutProperty prop(graph);
+  string errorMsg;
+  bool result = graph->computeProperty("GEM (Frick)", &prop, errorMsg);
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
