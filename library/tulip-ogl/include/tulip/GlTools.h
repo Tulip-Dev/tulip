@@ -68,9 +68,5 @@ namespace tlp {
   TLP_GL_SCOPE MatrixGL makeArrowMatrix(const Coord &A, const Coord &B);
 }
 
-
-GLfloat tlp::sqr(const GLfloat f) {
-  return f*f;
-}
 #endif //DOXYGEN_NOTFOR_DEVEL
 #endif
