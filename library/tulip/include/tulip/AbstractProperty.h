@@ -34,6 +34,52 @@ namespace tlp {
 
 class GraphView;
 
+//==============================================================
+// define template iterator class to iterate over graph elts
+// belonging to a given graph instance
+template <typename ELT_TYPE>
+class GraphEltIterator :public tlp::Iterator<ELT_TYPE> {
+private:
+  tlp::Iterator<ELT_TYPE> *it;
+  const tlp::Graph* graph;
+  ELT_TYPE curElt;
+  bool _hasnext;
+
+public:
+  ELT_TYPE next() {
+    ELT_TYPE tmp = curElt;
+    if ((_hasnext = it->hasNext())) {
+      curElt = it->next();
+      while (!(_hasnext = (!graph || graph->isElement(curElt)))) {
+  if (!it->hasNext()) break;
+  curElt=it->next();
+      }
+    }
+    return tmp;
+  }
+  GraphEltIterator(const tlp::Graph* g, tlp::Iterator<ELT_TYPE>* itN)
+    :it(itN), graph(g), curElt(ELT_TYPE()), _hasnext(false) {
+    next();
+  }
+
+  bool hasNext() {
+    return (_hasnext);
+  }
+  ~GraphEltIterator() {
+    delete it;
+  }
+};
+
+template<typename T>
+struct PropertyValueContainer :public tlp::DataMem {
+  T value;
+  PropertyValueContainer(const T& val) : value(val) {
+    value = val;
+  }
+  ~PropertyValueContainer() {
+  }
+};
+
 /**
  * \defgroup properties
  */ 
@@ -100,9 +146,9 @@ public:
    */
   void setAllEdgeValue(const typename Tedge::RealType &v);
   //=================================================================================
-  virtual void erase(const node n);
+  virtual void erase(const node n) { setNodeValue(n, nodeDefaultValue); }
   //=================================================================================
-  virtual void erase(const edge e);
+  virtual void erase(const edge e) { setEdgeValue(e, edgeDefaultValue); }
   //=================================================================================
   // Because of compilation pb on Windows platform (g++ bug ???)
   // we include the code of the method below instead of having it
@@ -164,22 +210,76 @@ public:
   return *this;
   }
   //=================================================================================
-  virtual std::string getTypename() const;
+  virtual std::string getTypename() const { return tlp::PropertyInterface::getTypename( this ); }
   // Untyped accessors
-  virtual std::string getNodeDefaultStringValue() const;
-  virtual std::string getEdgeDefaultStringValue() const;
-  virtual std::string getNodeStringValue( const node n ) const;
-  virtual std::string getEdgeStringValue( const edge e ) const;
-  virtual bool setNodeStringValue( const node n, const std::string & v );
-  virtual bool setEdgeStringValue( const edge e, const std::string & v );
-  virtual bool setAllNodeStringValue( const std::string & v );
-  virtual bool setAllEdgeStringValue( const std::string & v );
+  virtual std::string getNodeDefaultStringValue() const {
+    typename Tnode::RealType v = getNodeDefaultValue();
+    return Tnode::toString( v );
+  }
+  virtual std::string getEdgeDefaultStringValue() const {
+    typename Tedge::RealType v = getEdgeDefaultValue();
+    return Tedge::toString( v );
+  }
+  virtual std::string getNodeStringValue( const node n ) const {
+    typename Tnode::RealType v = getNodeValue( n );
+    return Tnode::toString( v );
+  }
+  virtual std::string getEdgeStringValue( const edge e ) const {
+    typename Tedge::RealType v = getEdgeValue( e );
+    return Tedge::toString( v );
+  }
+  virtual bool setNodeStringValue( const node inN, const std::string & inV ) {
+    typename Tnode::RealType v;
+    if( !Tnode::fromString(v,inV) )
+      return false;
+    setNodeValue( inN, v );
+    return true;
+  }
+  virtual bool setEdgeStringValue( const edge inE, const std::string & inV ) {
+    typename Tedge::RealType v;
+    if( !Tedge::fromString(v,inV) )
+      return false;
+    setEdgeValue( inE, v );
+    return true;
+  }
+  virtual bool setAllNodeStringValue( const std::string & inV ) {
+    typename Tnode::RealType v;
+    if( !Tnode::fromString(v,inV) )
+      return false;
+    setAllNodeValue( v );
+    return true;
+  }
+  virtual bool setAllEdgeStringValue( const std::string & inV ) {
+    typename Tedge::RealType v;
+    if( !Tedge::fromString(v,inV) )
+      return false;
+    setAllEdgeValue( v );
+    return true;
+  }
   // returns an iterator on all nodes (belonging to g) whose value is different
   // from the default value
-  virtual Iterator<node>* getNonDefaultValuatedNodes(const Graph* g = NULL) const;
+  virtual Iterator<node>* getNonDefaultValuatedNodes(const Graph* g = NULL) const {
+    tlp::Iterator<tlp::node> *it =
+      new tlp::UINTIterator<tlp::node>(nodeProperties.findAll(nodeDefaultValue, false));
+    if (name.empty())
+      // we always need to check that nodes belong to graph
+      // for non registered properties, because deleted nodes are not erased
+      // from them
+      return new GraphEltIterator<tlp::node>(g != NULL ? g : graph, it);
+    return ((g == NULL) || (g == graph)) ? it : new GraphEltIterator<tlp::node>(g, it);
+  }
   // returns an iterator on all edges (belonging to g) whose value is different
   // from the default value
-  virtual Iterator<edge>* getNonDefaultValuatedEdges(const Graph* g = NULL) const;
+  virtual Iterator<edge>* getNonDefaultValuatedEdges(const Graph* g = NULL) const {
+    Iterator<tlp::edge>* it =
+      new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
+    if (name.empty())
+      // we always need to check that edges belong to graph
+      // for non registered properties, because deleted edges are not erased
+      // from them
+      return new GraphEltIterator<tlp::edge>(g != NULL ? g : graph, it);
+    return ((g == NULL) || (g == graph)) ? it : new GraphEltIterator<tlp::edge>(g, it);
+  }
   /**
    * Set the value of a node (first argument) in the current property (this)
    * with the value of the node (second argument) defined in prop (third argument).
@@ -187,7 +287,19 @@ public:
    * it is not the default value.
    */
   virtual void copy(const node dst, const node src, PropertyInterface *prop,
-		    bool ifNotDefault = false);
+		    bool ifNotDefault = false) {
+          if (prop == NULL)
+            return;
+          tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* tp =
+            dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(prop);
+          assert(tp);
+          bool notDefault;
+          typename ReturnType<typename Tnode::RealType>::Value value =
+            tp->nodeProperties.get(src.id, notDefault);
+          if (ifNotDefault && !notDefault)
+            return;
+          setNodeValue(dst, value);
+        }
   /**
    * Set the value of an edge (first argument) in the current property (this)
    * with the value of the edge (second argument) defined in prop (third argument).
@@ -195,27 +307,80 @@ public:
    * it is not the default value.
    */
   virtual void copy(const edge dst, const edge src, PropertyInterface *prop,
-		    bool ifNotDefault = false);
+		    bool ifNotDefault = false) {
+          if (prop == NULL)
+            return;
+          tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* tp =
+            dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(prop);
+          assert(tp);
+          bool notDefault;
+          typename ReturnType<typename Tedge::RealType>::Value value =
+            tp->edgeProperties.get(src.id, notDefault);
+          if (ifNotDefault && !notDefault)
+            return;
+          setEdgeValue(dst, value);
+        }
   // for performance reason and use in GraphUpdatesRecorder
-  virtual DataMem* getNodeDefaultDataMemValue() const;
-  virtual DataMem* getEdgeDefaultDataMemValue() const;
-  virtual DataMem* getNodeDataMemValue(const node n) const;
-  virtual DataMem* getEdgeDataMemValue(const edge e) const;
-  virtual DataMem* getNonDefaultDataMemValue( const node n ) const;
-  virtual DataMem* getNonDefaultDataMemValue( const edge e ) const;
-  virtual void setNodeDataMemValue( const node n, const DataMem* v);
-  virtual void setEdgeDataMemValue( const edge e, const DataMem* v);
-  virtual void setAllNodeDataMemValue(const DataMem* v);
-  virtual void setAllEdgeDataMemValue(const DataMem* v);
+  virtual DataMem* getNodeDefaultDataMemValue() const {
+    return new PropertyValueContainer<typename Tnode::RealType>(getNodeDefaultValue());
+  }
+  virtual DataMem* getEdgeDefaultDataMemValue() const {
+    return new PropertyValueContainer<typename Tedge::RealType>(getEdgeDefaultValue());
+  }
+  virtual DataMem* getNodeDataMemValue(const node n) const {
+    return new PropertyValueContainer<typename Tnode::RealType>(getNodeValue(n));
+  }
+  virtual DataMem* getEdgeDataMemValue(const edge e) const {
+    return new PropertyValueContainer<typename Tedge::RealType>(getEdgeValue(e));
+  }
+  virtual DataMem* getNonDefaultDataMemValue( const node n ) const {
+    bool notDefault;
+    typename ReturnType<typename Tnode::RealType>::Value value = nodeProperties.get(n.id, notDefault);
+    if (notDefault)
+      return new PropertyValueContainer<typename Tnode::RealType>(value);
+    return NULL;
+  }
+  virtual DataMem* getNonDefaultDataMemValue( const edge e ) const {
+    bool notDefault;
+    typename ReturnType<typename Tedge::RealType>::Value value = edgeProperties.get(e.id, notDefault);
+    if (notDefault)
+      return new PropertyValueContainer<typename Tedge::RealType>(value);
+    return NULL;
+  }
+  virtual void setNodeDataMemValue( const node n, const DataMem* v) {
+    setNodeValue(n, ((PropertyValueContainer<typename Tnode::RealType> *) v)->value);
+  }
+  virtual void setEdgeDataMemValue( const edge e, const DataMem* v) {
+    setEdgeValue(e, ((PropertyValueContainer<typename Tedge::RealType> *) v)->value);
+  }
+  virtual void setAllNodeDataMemValue(const DataMem* v) {
+    setAllNodeValue(((PropertyValueContainer<typename Tnode::RealType> *) v)->value);
+  }
+  virtual void setAllEdgeDataMemValue(const DataMem* v) {
+    setAllEdgeValue(((PropertyValueContainer<typename Tedge::RealType> *) v)->value);
+  }
 
   // PropertyInterface methods
   // mN is the meta node, sg is the corresponding subgraph
   // and mg is the graph owning mN
-  virtual void computeMetaValue(node mN, Graph* sg, Graph* mg);
+  virtual void computeMetaValue(node n, Graph* sg, Graph* mg) {
+    if (metaValueCalculator)
+      ((typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::MetaValueCalculator *) 
+      metaValueCalculator)->computeMetaValue(this, n, sg, mg);
+  }
   // mE is the meta edge, itE is an iterator on the underlying edges
   // mg is the graph owning mE
-  virtual void computeMetaValue(edge mE, Iterator<edge>* itE, Graph* mg);
-  virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *mvCalc);
+  virtual void computeMetaValue(edge e, Iterator<edge>* itE, Graph* mg) {
+    if (metaValueCalculator)
+    ((typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::MetaValueCalculator *)metaValueCalculator)->computeMetaValue(this, e, itE, mg);
+  }
+  virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *mvCalc) {
+    if (mvCalc && !dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::MetaValueCalculator *>(mvCalc)) {
+      std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... invalid conversion of " << typeid(mvCalc).name() << "into " << typeid(typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::MetaValueCalculator *).name() << std::endl;
+      abort();
+    }
+    metaValueCalculator = mvCalc;
+  }
 
   // This class is used to delegate the computation of the values associated
   // to meta nodes or edges
@@ -250,7 +415,6 @@ protected:
   typename Tedge::RealType edgeDefaultValue;
 };
 /*@}*/
-
 }
 #include "./cxx/AbstractProperty.cxx"
 #endif
