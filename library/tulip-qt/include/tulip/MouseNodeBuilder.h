@@ -38,6 +38,5 @@ private:
   QEvent::Type _eventType;
 };
 /*@}*/
-
 }
 #endif
