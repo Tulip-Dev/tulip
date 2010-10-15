@@ -43,8 +43,6 @@
 #include "tulip/TlpQtTools.h"
 #include "tulip/BaseGraphicsViewComponentMacro.h"
 
-using namespace std;
-
 namespace tlp {
 
   VIEWPLUGIN(NodeLinkDiagramComponent, "Node Link Diagram view", "Tulip Team", "16/04/2008", "Node link diagram", "1.0");
@@ -150,10 +148,10 @@ namespace tlp {
     setGraph(graph,true);
   }
   //==================================================
-  list<pair<QWidget *,string> > NodeLinkDiagramComponent::getConfigurationWidget() {
-    list<pair<QWidget *,string> > widgetList;
-    widgetList.push_back(pair<QWidget*,string>(renderingParametersDialog,"Rendering Parameters"));
-    widgetList.push_back(pair<QWidget*,string>(layerManagerWidget,"Layer Manager"));
+  std::list<std::pair<QWidget *,std::string> > NodeLinkDiagramComponent::getConfigurationWidget() {
+    std::list<std::pair<QWidget *,std::string> > widgetList;
+    widgetList.push_back(std::pair<QWidget*,std::string>(renderingParametersDialog,"Rendering Parameters"));
+    widgetList.push_back(std::pair<QWidget*,std::string>(layerManagerWidget,"Layer Manager"));
     return widgetList;
   }
 
@@ -228,7 +226,7 @@ namespace tlp {
   	// Display a context menu
   	isNode = type == NODE;
   	itemId = isNode ? tmpNode.id : tmpEdge.id;
-  	stringstream sstr;
+  	std::stringstream sstr;
   	sstr << (isNode ? "Node " : "Edge ") << itemId;
   	contextMenu->addAction(tr(sstr.str().c_str()))->setEnabled(false);
   	contextMenu->addSeparator();
@@ -318,33 +316,33 @@ namespace tlp {
       graph->getAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);
 
       //remove old info
-      list<string> toRemove;
-      for(map<string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
+      std::list<std::string> toRemove;
+      for(std::map<std::string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
         if(!nodeLinkDiagramComponentDataSet.exist((*it).first)){
           DataSet layerAndCompositeDataSet=(*it).second;
           toRemove.push_back((*it).first);
-          string layerName;
-          long compositeLong = 0;
+          std::string layerName;
+          long compositeLong;
           layerAndCompositeDataSet.get("layer",layerName);
           layerAndCompositeDataSet.get("composite",compositeLong);
           mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
         }
       }
-      for(list<string>::iterator it=toRemove.begin();it!=toRemove.end();++it)
+      for(std::list<std::string>::iterator it=toRemove.begin();it!=toRemove.end();++it)
         algorithmInfoDataSet.erase(*it);
 
       Iterator< std::pair<std::string, DataType*> > *infoDataSetIt=nodeLinkDiagramComponentDataSet.getValues();
       while(infoDataSetIt->hasNext()) {
-        pair<string, DataType*> infoData;
+        std::pair<std::string, DataType*> infoData;
         infoData = infoDataSetIt->next();
 
         DataSet newLayerAndCompositeDataSet=*((DataSet*)(infoData.second->value));
-        string newLayerName;
-        long newCompositeLong = 0;
+        std::string newLayerName;
+        long newCompositeLong;
         newLayerAndCompositeDataSet.get("layer",newLayerName);
         newLayerAndCompositeDataSet.get("composite",newCompositeLong);
 
-        map<string,DataSet>::iterator it=algorithmInfoDataSet.find(infoData.first);
+        std::map<std::string,DataSet>::iterator it=algorithmInfoDataSet.find(infoData.first);
         if(it==algorithmInfoDataSet.end()){
           //add new info
           algorithmInfoDataSet[infoData.first]=newLayerAndCompositeDataSet;
@@ -355,8 +353,8 @@ namespace tlp {
         }else{
           //check integrity
           DataSet oldLayerAndCompositeDataSet=(*it).second;
-          string oldLayerName;
-          long oldCompositeLong = 0;
+          std::string oldLayerName;
+          long oldCompositeLong;
           oldLayerAndCompositeDataSet.get("layer",oldLayerName);
           oldLayerAndCompositeDataSet.get("composite",oldCompositeLong);
 
@@ -371,9 +369,9 @@ namespace tlp {
           }
         }
       }
-      for(map<string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
+      for(std::map<std::string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
         DataSet oldLayerAndCompositeDataSet=(*it).second;
-        string oldLayerName;
+        std::string oldLayerName;
         long oldCompositeLong;
         oldLayerAndCompositeDataSet.get("layer",oldLayerName);
         oldLayerAndCompositeDataSet.get("composite",oldCompositeLong);
@@ -418,10 +416,10 @@ namespace tlp {
       }
       graph->setAttribute("NodeLinkDiagramComponent",nodeLinkDiagramComponentDataSet);*/
     }else{
-      for(map<string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
+      for(std::map<std::string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
         DataSet layerAndCompositeDataSet=(*it).second;
-        string layerName;
-        long compositeLong = 0;
+        std::string layerName;
+        long compositeLong;
         layerAndCompositeDataSet.get("layer",layerName);
         layerAndCompositeDataSet.get("composite",compositeLong);
         mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
@@ -461,8 +459,8 @@ namespace tlp {
   }
   //==================================================
   void NodeLinkDiagramComponent::init() {
-    for(map<string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
-      string layerName;
+    for(std::map<std::string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
+      std::string layerName;
       (*it).second.get("layer",layerName);
       mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((*it).first);
     }
@@ -479,19 +477,19 @@ namespace tlp {
   void NodeLinkDiagramComponent::showDialog(QAction* action){
     GlMainView::showDialog(action);
 
-    string name(action->text().toStdString());
+    std::string name(action->text().toStdString());
 
     if(name =="Augmented Display") {
       Graph *graph=mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
       AugmentedDisplayDialog dialog(widget,graph,"NodeLinkDiagramComponent");
       if(dialog.exec()==QDialog::Accepted){
-        vector<string> toRemove;
+        std::vector<std::string> toRemove;
         dialog.getRemovedList(toRemove);
         DataSet nldcDataSet;
         graph->getAttribute("NodeLinkDiagramComponent",nldcDataSet);
-        for(vector<string>::iterator it=toRemove.begin();it!=toRemove.end();++it){
+        for(std::vector<std::string>::iterator it=toRemove.begin();it!=toRemove.end();++it){
           DataSet data=algorithmInfoDataSet[*it];
-          string layerName;
+          std::string layerName;
           data.get("layer",layerName);
           mainWidget->getScene()->getLayer(layerName)->deleteGlEntity(*it);
           algorithmInfoDataSet.erase(*it);

@@ -535,7 +535,7 @@ namespace tlp {
     scene.computeAjustSceneToSize(textureRealWidth, textureRealHeight,NULL,NULL,NULL, &xTextureShift, &yTextureShift);
   }
   //=====================================================
-  QGLFramebufferObject *GlMainWidget::createTexture(const string &textureName, int width, int height){
+  QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName, int width, int height){
 
     makeCurrent();
     scene.setViewport(0,0,width,height);
