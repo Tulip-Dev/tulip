@@ -27,7 +27,7 @@
 
 namespace tlp {
 
-  class OcclusionTest;
+  struct OcclusionTest;
   class TextRenderer;
   class GlGraphInputData;
   class Camera;
