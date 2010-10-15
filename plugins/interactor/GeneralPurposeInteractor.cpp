@@ -107,15 +107,17 @@ class TLP_QT_SCOPE CustomMouseEdgeBuilder : public InteractorComponent {
         
         bool result = _mainWidget->doSelect(qMouseEv->x(),qMouseEv->y(),type,tmpNode,tmpEdge);
         if(result && type == NODE) {
-          if(_currentNode.isValid()) {
-            Graph* graph = _mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-            if(!graph->existEdge(_currentNode, tmpNode, false).isValid())
-              graph->addEdge(_currentNode, tmpNode);
-            _currentNode = tmpNode;
-            
-          }
-          else {
-            _currentNode = tmpNode;
+          if(_currentNode != tmpNode) {
+            if(_currentNode.isValid()) {
+              Graph* graph = _mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+              if(!graph->existEdge(_currentNode, tmpNode, false).isValid()) {
+                graph->addEdge(_currentNode, tmpNode);
+              }
+              _currentNode = tmpNode;
+            }
+            else {
+              _currentNode = tmpNode;
+            }
           }
         }
         
@@ -341,9 +343,10 @@ public:
   GeneralPurposeInteractor():NodeLinkDiagramComponentInteractor(":/i_open.png","general purpose"){
     setPriority(1);
     setConfigurationWidgetText(QString("<h3>general purpose interactor</h3>")+
+                   "<br>Lots of simple operations can be performed using this interactor :" +
                    "<br><b>Mouse left</b> double-click to add a node in the graph" + 
                    "<br><b>Alt + Mouse Left + Move Mouse</b> click and drag to create edges." + 
-                   "<br><b>zoom and pan interactions</b>");
+                   "<br><b>Shift + Mouse Left + Mouse Move</b> select nodes.");
   }
 
   /**
