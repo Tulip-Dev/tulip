@@ -254,7 +254,7 @@ Coord computeOpenUniformBsplinePoint(const vector<Coord> &controlPoints, const f
 	} else if (t >= 1.0) {
 		return controlPoints[controlPoints.size() - 1];
 	} else {
-		float coeffs[curveDegree + 1];
+		float* coeffs = new float[curveDegree + 1];
 		memset(coeffs, 0, (curveDegree + 1) * sizeof(float));
 		int k = curveDegree;
 		int cpt = 0;
