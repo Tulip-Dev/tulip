@@ -107,7 +107,8 @@ class TLP_QT_SCOPE CustomMouseEdgeBuilder:public InteractorComponent {
         if(result && type == NODE) {
           if(_currentNode.isValid()) {
             Graph* graph = _mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-            graph->addEdge(_currentNode, tmpNode);
+            if(!graph->existEdge(_currentNode, tmpNode, false))
+              graph->addEdge(_currentNode, tmpNode);
             _currentNode = tmpNode;
             
           }
