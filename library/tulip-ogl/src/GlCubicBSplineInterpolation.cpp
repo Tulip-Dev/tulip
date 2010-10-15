@@ -28,9 +28,9 @@ GlCubicBSplineInterpolation::GlCubicBSplineInterpolation(const vector<Coord> &po
 
 
 vector<Coord> GlCubicBSplineInterpolation::constructInterpolatingCubicBSpline(const vector<Coord> &pointsToInterpolate) {
-	Coord Ai[pointsToInterpolate.size()];
-	float Bi[pointsToInterpolate.size()];
-	Coord di[pointsToInterpolate.size()];
+	vector<Coord> Ai(pointsToInterpolate.size());
+	vector<float> Bi(pointsToInterpolate.size());
+	vector<Coord> di(pointsToInterpolate.size());
 	di[0] = (pointsToInterpolate[1] - pointsToInterpolate[0]) / 3.0f;
 	di[pointsToInterpolate.size() - 1] = (pointsToInterpolate[pointsToInterpolate.size()-1] - pointsToInterpolate[pointsToInterpolate.size()-2]) / 3.0f;
 	Bi[1] = -0.25f;
