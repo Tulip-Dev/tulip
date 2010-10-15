@@ -61,6 +61,12 @@ MouseEdgeBendEditor::~MouseEdgeBendEditor(){
 }
 //========================================================================================
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
+  
+  if(e->type() == QEvent::MouseButtonDblClick && ((QMouseEvent *) e)->button() == Qt::LeftButton && computeBendsCircles(glMainWidget)) {
+    operation = NEW_OP;
+    mMouseCreate(editPosition[0], editPosition[1], glMainWidget);
+    return true;
+  }
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
@@ -89,40 +95,32 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
         operation = NONE_OP;
         return false;
       }
-      if (qMouseEv->modifiers() & Qt::ShiftModifier){//vérifier que le lieu du clic est sur l'arête
-        operation = NEW_OP;
-        //int newX = qMouseEv->x();
-        //int newY = qMouseEv->y();
-        //cout << "C R E A T E   C A L L : " << endl;
-        //cout << "===================================" << endl;
-        mMouseCreate(editPosition[0], editPosition[1], glMainWidget);
-      } else {
-        bool circleSelected =
-          glMainWidget->selectGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, layer);
-        if (circleSelected) {
-          theCircle=circleString->findKey((GlSimpleEntity*)(select[0]));
-          if (qMouseEv->modifiers() &
+      bool circleSelected =
+        glMainWidget->selectGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, layer);
+      if (circleSelected) {
+        theCircle=circleString->findKey((GlSimpleEntity*)(select[0]));
+        if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
-              Qt::AltModifier
+            Qt::AltModifier
 #else
-              Qt::ControlModifier
+            Qt::ControlModifier
 #endif
-          ){
-            operation = DELETE_OP;
-            mMouseDelete();
-          }
-          else
-          {
-            operation = TRANSLATE_OP;
-            glMainWidget->setCursor(QCursor(Qt::SizeAllCursor));
-            initEdition();
-            mode = COORD;
-          }
-        } else{
-          operation = NONE_OP;
-          return false;
+        ){
+          operation = DELETE_OP;
+          mMouseDelete();
         }
+        else
+        {
+          operation = TRANSLATE_OP;
+          glMainWidget->setCursor(QCursor(Qt::SizeAllCursor));
+          initEdition();
+          mode = COORD;
+        }
+      } else{
+        operation = NONE_OP;
+        return false;
       }
+      
       break;
     }
     case Qt::MidButton :
