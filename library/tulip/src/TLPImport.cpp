@@ -329,7 +329,7 @@ namespace tlp {
           }
         }
 
-        bool setAllNodeValue(int clusterId, const string& propertyType, const string& propertyName, string& value) {
+        bool setAllNodeValue(int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
             if (clusterIndex[clusterId]) {
                 //cerr << "set all node value ....." ;
                 if (propertyType==GRAPH || propertyType==METAGRAPH) { // METAGRAPH was used in Tulip 2
@@ -557,6 +557,7 @@ namespace tlp {
         DataSet dataSet;
         DataSet* currentDataSet;
         char* dataSetName;
+
         TLPDataSetBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),currentDataSet((DataSet *) &(graphBuilder->_graph->getAttributes())){
             dataSetName = (char *) 0;
 	}
@@ -654,7 +655,6 @@ namespace tlp {
             return true;
         }
     };
-
     //=================================================================================
     bool TLPClusterBuilder::addStruct(const std::string& structName, TLPBuilder*&newBuilder)   {
         if (structName==CLUSTERNODES) {
