@@ -645,15 +645,15 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
     while(bmItn.hasNext())
       isInD[bmItn.next()] = false;
     list<edge> el;
-    StableIterator<edge> it(D->getOutEdges(nodeInD[v]));
-    while (it.hasNext()) {
-      edge e = it.next();
+    StableIterator<edge> stableEdgeIt(D->getOutEdges(nodeInD[v]));
+    while (stableEdgeIt.hasNext()) {
+      edge e = stableEdgeIt.next();
       isInD[nodeInG[D->target(e)]] = true;
       el.push_back(e);
     }
     //D.del_edges(el);
-    for (list<edge>::iterator it = el.begin() ; it != el.end() ; ++it)
-      D->delEdge(*it);
+    for (list<edge>::iterator edgeIt = el.begin() ; edgeIt != el.end() ; ++edgeIt)
+      D->delEdge(*edgeIt);
 
     BmdListRevIt<node> itR(RBC[v]);
     while (itR.hasNext()) {
