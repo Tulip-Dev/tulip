@@ -38,43 +38,6 @@ using namespace tlp;
  *
  */
 
-class TLP_QT_SCOPE CustomMouseNodeBuilder : public InteractorComponent {
-
-public:
-  CustomMouseNodeBuilder() {}
-  ~CustomMouseNodeBuilder() {}
-  
-  bool eventFilter(QObject* widget, QEvent* e) {
-    if (e->type() == QEvent::MouseButtonDblClick) {
-      QMouseEvent * qMouseEv = (QMouseEvent *) e;
-      if (qMouseEv->button() == Qt::LeftButton) {
-        GlMainWidget *glw = (GlMainWidget *) widget;
-
-        Graph*_graph=glw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-        LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>(glw->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
-        // allow to undo
-        _graph->push();
-        Observable::holdObservers();
-        node newNode;
-        newNode = _graph->addNode();
-        Coord point((double) glw->width() - (double) qMouseEv->x(),
-        (double) qMouseEv->y(),
-        0);
-        point = glw->getScene()->getCamera()->screenTo3DWorld(point);
-        mLayout->setNodeValue(newNode, point);
-        Observable::unholdObservers();
-        NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view;
-        nodeLinkView->elementSelectedSlot(newNode.id, true);
-        //glw->redraw();
-        return true;
-      }
-    }
-    return false;
-  }
-  
-  InteractorComponent *clone() { return new CustomMouseNodeBuilder(); }
-};
-
 class TLP_QT_SCOPE CustomMouseEdgeBuilder : public InteractorComponent {
   public:
     CustomMouseEdgeBuilder() :_isDragging(false), _currentNode(UINT_MAX), _mainWidget(NULL), _camera(NULL) {}
@@ -357,7 +320,7 @@ public:
     pushInteractorComponent(new MouseSelectionEditor);
     pushInteractorComponent(new CustomMouseSelection);
     pushInteractorComponent(new CustomMouseEdgeBuilder());
-    pushInteractorComponent(new CustomMouseNodeBuilder);
+    pushInteractorComponent(new MouseNodeBuilder(QEvent::MouseButtonDblClick));
   }
 };
 
