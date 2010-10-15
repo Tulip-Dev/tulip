@@ -29,6 +29,8 @@
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/MouseSelector.h>
+#include <tulip/GlTools.h>
+#include <tulip/MouseSelectionEditor.h>
 
 using namespace tlp;
 
@@ -73,7 +75,7 @@ public:
   InteractorComponent *clone() { return new CustomMouseNodeBuilder(); }
 };
 
-class TLP_QT_SCOPE CustomMouseEdgeBuilder:public InteractorComponent {
+class TLP_QT_SCOPE CustomMouseEdgeBuilder : public InteractorComponent {
   public:
     CustomMouseEdgeBuilder() :_isDragging(false), _currentNode(UINT_MAX), _mainWidget(NULL), _camera(NULL) {}
     ~CustomMouseEdgeBuilder() {}
@@ -107,7 +109,7 @@ class TLP_QT_SCOPE CustomMouseEdgeBuilder:public InteractorComponent {
         if(result && type == NODE) {
           if(_currentNode.isValid()) {
             Graph* graph = _mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-            if(!graph->existEdge(_currentNode, tmpNode, false))
+            if(!graph->existEdge(_currentNode, tmpNode, false).isValid())
               graph->addEdge(_currentNode, tmpNode);
             _currentNode = tmpNode;
             
@@ -155,6 +157,180 @@ class TLP_QT_SCOPE CustomMouseEdgeBuilder:public InteractorComponent {
     std::vector<Coord> _polygon;
 };
 
+class TLP_QT_SCOPE CustomMouseSelection : public InteractorComponent {
+  public:
+    CustomMouseSelection() :_started(false) {}
+    ~CustomMouseSelection() {}
+    
+    bool eventFilter(QObject* widget, QEvent* e) {
+      if (e->type() == QEvent::MouseButtonPress && ((QMouseEvent *) e)->modifiers() == Qt::ShiftModifier) {
+        QMouseEvent * qMouseEv = (QMouseEvent *) e;
+        GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+        if (qMouseEv->buttons()== Qt::LeftButton) {
+          if (!_started) {
+            x = qMouseEv->x();
+            y = qMouseEv->y();
+            w = 0;
+            h = 0;
+            _started = true;
+            glMainWidget->setMouseTracking(true);
+            _graph=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+          }
+          else {
+            if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() != _graph) {
+              _graph = 0;
+              _started = false;
+              glMainWidget->setMouseTracking(false);
+              return false;
+            }
+          }
+          return true;
+        }
+      }
+      if  (e->type() == QEvent::MouseMove && ((((QMouseEvent *) e)->buttons() & Qt::LeftButton))) {
+        QMouseEvent * qMouseEv = (QMouseEvent *) e;
+        GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+        if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() != _graph) {
+          _graph=0;
+          _started=false;
+          glMainWidget->setMouseTracking(false);
+        }
+        if (_started) {
+          if ((qMouseEv->x()>0) && (qMouseEv->x()<glMainWidget->width()))
+            w = qMouseEv->x() - x;
+          if ((qMouseEv->y()>0) && (qMouseEv->y()<glMainWidget->height()))
+            h = qMouseEv->y() - y;
+          glMainWidget->redraw();
+          return true;
+        }
+        return false;
+      }
+      if  (e->type() == QEvent::MouseButtonRelease) {
+        GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+        if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph() != _graph) {
+          _graph=0;
+          _started=false;
+          glMainWidget->setMouseTracking(false);
+          return false;
+        }
+        
+        if (_started) {
+          glMainWidget->setMouseTracking(false);
+          Observable::holdObservers();
+          
+          //unselect previously selected nodes and edges
+          BooleanProperty* selection=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<BooleanProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementSelectedPropName());
+          selection->setAllNodeValue(false);
+          selection->setAllEdgeValue(false);
+          
+          if ((w==0) && (h==0)) {
+            node tmpNode;
+            edge tmpEdge;
+            ElementType type;
+            bool result = glMainWidget->doSelect(x, y, type, tmpNode, tmpEdge);
+            if (result) {
+              switch(type) {
+              case NODE:
+                result = selection->getNodeValue(tmpNode);
+                  selection->setNodeValue(tmpNode, !result);
+                break;
+              case EDGE:
+                result = selection->getEdgeValue(tmpEdge);
+                  selection->setEdgeValue(tmpEdge, !result);
+                break;
+              }
+            }
+          } else {
+            std::vector<node> tmpSetNode;
+            std::vector<edge> tmpSetEdge;
+            if (w < 0) {
+              w *= -1;
+              x -= w;
+            }
+            if (h<0) {
+              h *= -1;
+              y -= h;
+            }
+            glMainWidget->doSelect(x, y, w, h, tmpSetNode, tmpSetEdge);
+            
+            std::vector<node>::const_iterator it;
+            for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
+              selection->setNodeValue(*it, true);
+            }
+            std::vector<edge>::const_iterator ite;
+            for (ite=tmpSetEdge.begin(); ite!=tmpSetEdge.end(); ++ite) {
+              selection->setEdgeValue(*ite, true);
+            }
+            
+          }
+          _started = false;
+          glMainWidget->draw();
+          Observable::unholdObservers();
+          return true;
+        }
+      }
+      return false;
+    }
+    
+    bool draw(GlMainWidget *glMainWidget){
+      if (!_started) return false;
+      if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=_graph) {
+        _graph = 0;
+        _started = false;
+        glMainWidget->setMouseTracking(false);
+      }
+      float yy = glMainWidget->height() - y;
+      glPushAttrib(GL_ALL_ATTRIB_BITS);
+      glMatrixMode (GL_PROJECTION);
+      glPushMatrix();
+      glLoadIdentity ();
+      gluOrtho2D (0.0, (GLdouble) glMainWidget->width(), 0.0, (GLdouble) glMainWidget->height());
+      glMatrixMode(GL_MODELVIEW);
+      glPushMatrix();
+      glLoadIdentity();
+      glDisable(GL_LIGHTING);
+      glDisable(GL_CULL_FACE);
+      glDisable(GL_DEPTH_TEST);
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA,GL_SRC_COLOR);
+      float col[4]={0,0,0,0.2};
+      col[0]=0.8;
+      col[1]=0.8;
+      col[2]=0.7;
+      setColor(col);
+      glBegin(GL_QUADS);
+      glVertex2f(x, yy);
+      glVertex2f(x+w, yy);
+      glVertex2f(x+w, yy-h);
+      glVertex2f(x, yy-h);
+      glEnd();
+      glDisable(GL_BLEND);
+      glLineWidth(2);
+      glLineStipple(2, 0xAAAA);
+      glEnable(GL_LINE_STIPPLE);
+      glBegin(GL_LINE_LOOP);
+      glVertex2f(x, yy);
+      glVertex2f(x+w, yy);
+      glVertex2f(x+w, yy-h);
+      glVertex2f(x, yy-h);
+      glEnd();
+      glLineWidth(1);
+      glPopMatrix();
+      glMatrixMode (GL_PROJECTION);
+      glPopMatrix();
+      glMatrixMode (GL_MODELVIEW);
+      glPopAttrib();
+      return true;
+    }
+    
+    InteractorComponent *clone() { return new CustomMouseSelection(); }
+   
+  private:
+    int x,y,w,h;
+    bool _started;
+    Graph* _graph;
+};
+
 class GeneralPurposeInteractor  : public NodeLinkDiagramComponentInteractor {
 
 public:
@@ -175,6 +351,8 @@ public:
    */
   void construct(){
     pushInteractorComponent(new MouseNKeysNavigator);
+    pushInteractorComponent(new MouseSelectionEditor);
+    pushInteractorComponent(new CustomMouseSelection);
     pushInteractorComponent(new CustomMouseEdgeBuilder());
     pushInteractorComponent(new CustomMouseNodeBuilder);
   }
