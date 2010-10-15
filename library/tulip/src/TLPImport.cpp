@@ -76,7 +76,6 @@
 #define VIEWS "views"
 #define CONTROLLER "controller"
 
-using namespace std;
 using namespace tlp;
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -85,9 +84,9 @@ namespace tlp {
     //=================================================================================
     struct TLPGraphBuilder:public TLPTrue {
         Graph *_graph;
-        map<int,node> nodeIndex;
-        map<int,edge> edgeIndex;
-        map<int,Graph *> clusterIndex;
+        std::map<int,node> nodeIndex;
+        std::map<int,edge> edgeIndex;
+        std::map<int,Graph *> clusterIndex;
         DataSet *dataSet;
         bool inTLP;
         float version;
@@ -102,7 +101,7 @@ namespace tlp {
         virtual ~TLPGraphBuilder(){
         }
 
-        bool addString(const string& str) {
+        bool addString(const std::string& str) {
             // only used to handle the version of tlp file format
             if (!version) {
                 version = (float) atof(str.c_str());
@@ -172,7 +171,7 @@ namespace tlp {
             }
             return false;
         }
-        bool setNodeValue(int nodeId, int clusterId, const string& propertyType, const string& propertyName, string& value) {
+        bool setNodeValue(int nodeId, int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
             node n(nodeId);
             if (version < 2.1)
                 n = nodeIndex[nodeId];
@@ -204,10 +203,10 @@ namespace tlp {
                 if (propertyType==BOOL)
                     return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setNodeStringValue(n, value );
                 if (propertyType==STRING) {
-                    if (propertyName == string("viewFont")) {
+                    if (propertyName == std::string("viewFont")) {
                         // if needed replace symbolic path by real path
                         size_t pos = value.find("TulipBitmapDir/");
-                        if (pos!=string::npos)
+                        if (pos!=std::string::npos)
                             value.replace(pos, 15, TulipBitmapDir);
                     }
                     return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setNodeStringValue(n, value );
@@ -231,7 +230,7 @@ namespace tlp {
             //cer << "..ok" << endl;
         }
 
-        bool setEdgeValue(int edgeId, int clusterId, const string& propertyType, const string& propertyName, string& value) {
+        bool setEdgeValue(int edgeId, int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
             edge e(edgeId);
             if (version < 2.1)
                 e = edgeIndex[edgeId];
@@ -240,7 +239,7 @@ namespace tlp {
                 bool result=false;
 
                 if (propertyType==GRAPH || propertyType==METAGRAPH)  { // METAGRAPH was used in Tulip 2
-                    set<edge> v;
+                    std::set<edge> v;
                     result = EdgeSetType::fromString(v, value);
                     if (result)
                         clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setEdgeValue(e, v);
@@ -266,10 +265,10 @@ namespace tlp {
                 if (propertyType==BOOL)
                     return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setEdgeStringValue(e, value );
                 if (propertyType==STRING) {
-                    if (propertyName == string("viewFont")) {
+                    if (propertyName == std::string("viewFont")) {
                         // if needed replace symbolic path by real path
                         size_t pos = value.find("TulipBitmapDir/");
-                        if (pos!=string::npos)
+                        if (pos!=std::string::npos)
                             value.replace(pos, 15, TulipBitmapDir);
                     }
                     return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setEdgeStringValue(e, value );
@@ -292,6 +291,7 @@ namespace tlp {
             return false;
         }
 
+<<<<<<< HEAD
         /**
          * @brief Convert the id of a edge extremity glyph from the old numeraotation system to the new numerotation system.
          *
@@ -357,10 +357,10 @@ namespace tlp {
                 if (propertyType==BOOL)
                     return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setAllNodeStringValue( value );
                 if (propertyType==STRING) {
-                    if (propertyName == string("viewFont")) {
+                    if (propertyName == std::string("viewFont")) {
                         // if needed replace symbolic path by real path
                         size_t pos = value.find("TulipBitmapDir/");
-                        if (pos!=string::npos)
+                        if (pos!=std::string::npos)
                             value.replace(pos, 15, TulipBitmapDir);
                     }
                     return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setAllNodeStringValue( value );
@@ -383,13 +383,13 @@ namespace tlp {
             return false;
             //cer << "..ok" << endl;
         }
-        bool setAllEdgeValue(int clusterId, const string& propertyType, const string& propertyName, string& value) {
+        bool setAllEdgeValue(int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
             if (clusterIndex[clusterId]) {
                 //cerr << "setAllEdgeValue.." << endl;
                 bool result=false;
 
                 if (propertyType==GRAPH|| propertyType==METAGRAPH)  { // METAGRAPH was used in Tulip 2
-                    set<edge> v;
+                    std::set<edge> v;
                     result = EdgeSetType::fromString(v, value);
                     if (result)
                         clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setAllEdgeValue(v);
@@ -415,10 +415,10 @@ namespace tlp {
                 if (propertyType==BOOL)
                     return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setAllEdgeStringValue( value );
                 if (propertyType==STRING) {
-                    if (propertyName == string("viewFont")) {
+                    if (propertyName == std::string("viewFont")) {
                         // if needed replace symbolic path by real path
                         size_t pos = value.find("TulipBitmapDir/");
-                        if (pos!=string::npos)
+                        if (pos!=std::string::npos)
                             value.replace(pos, 15, TulipBitmapDir);
                     }
                     return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setAllEdgeStringValue( value );
@@ -440,7 +440,7 @@ namespace tlp {
             }
             return false;
         }
-        bool addCluster(int id, const string& name, int supergraphId=0) {
+        bool addCluster(int id, const std::string& name, int supergraphId=0) {
             if (clusterIndex[supergraphId]) {
                 BooleanProperty sel(clusterIndex[supergraphId]);
                 sel.setAllNodeValue(false);
@@ -451,7 +451,7 @@ namespace tlp {
             }
             return false;
         }
-        bool addStruct(const string& structName,TLPBuilder*&newBuilder) ;
+        bool addStruct(const std::string& structName,TLPBuilder*&newBuilder) ;
     };
     //=================================================================================
     struct TLPNodeBuilder:public TLPFalse {
@@ -509,10 +509,10 @@ namespace tlp {
             clusterId = id;
             return true;
         }
-        bool addString(const string& str) {
+        bool addString(const std::string& str) {
             return graphBuilder->addCluster(clusterId , str, supergraphId);
         }
-        bool addStruct(const string& structName, TLPBuilder*&newBuilder);
+        bool addStruct(const std::string& structName, TLPBuilder*&newBuilder);
         bool addNode (int nodeId) {
             return graphBuilder->addClusterNode(clusterId,nodeId);
         }
@@ -557,7 +557,6 @@ namespace tlp {
         DataSet dataSet;
         DataSet* currentDataSet;
         char* dataSetName;
-
         TLPDataSetBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),currentDataSet((DataSet *) &(graphBuilder->_graph->getAttributes())){
             dataSetName = (char *) 0;
 	}
@@ -618,19 +617,19 @@ namespace tlp {
     //================================================================================
     struct TLPFileInfoBuilder: public TLPFalse {
         TLPGraphBuilder *graphBuilder;
-        string name;
+        std::string name;
 
-        TLPFileInfoBuilder(TLPGraphBuilder *graphBuilder, string infoName):
+        TLPFileInfoBuilder(TLPGraphBuilder *graphBuilder, std::string infoName):
                 graphBuilder(graphBuilder), name(infoName){
         }
         virtual ~TLPFileInfoBuilder(){
         }
 
-        bool addString(const string &str) {
+        bool addString(const std::string &str) {
             if (name == AUTHOR)
-                graphBuilder->dataSet->set<string>(AUTHOR, str);
+                graphBuilder->dataSet->set<std::string>(AUTHOR, str);
             else if (name == COMMENTS)
-                graphBuilder->dataSet->set<string>("text::comments", str);
+                graphBuilder->dataSet->set<std::string>("text::comments", str);
             return true;
         }
         bool close(){
@@ -647,16 +646,17 @@ namespace tlp {
         virtual ~TLPSceneBuilder(){
         }
 
-        bool addString(const string &str) {
-            graphBuilder->dataSet->set<string>(SCENE, str);
+        bool addString(const std::string &str) {
+            graphBuilder->dataSet->set<std::string>(SCENE, str);
             return true;
         }
         bool close(){
             return true;
         }
     };
+
     //=================================================================================
-    bool TLPClusterBuilder::addStruct(const string& structName, TLPBuilder*&newBuilder)   {
+    bool TLPClusterBuilder::addStruct(const std::string& structName, TLPBuilder*&newBuilder)   {
         if (structName==CLUSTERNODES) {
             newBuilder=new TLPClusterNodeBuilder(this);
         }
@@ -678,7 +678,7 @@ namespace tlp {
     struct TLPPropertyBuilder:public TLPFalse {
         TLPGraphBuilder *graphBuilder;
         int clusterId;
-        string propertyType,propertyName;
+        std::string propertyType,propertyName;
         bool typeOk,nameOk;
         virtual ~TLPPropertyBuilder() {}
         TLPPropertyBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder),typeOk(false),nameOk(false){}
@@ -686,7 +686,7 @@ namespace tlp {
             clusterId = id;
             return true;
         }
-        bool addString(const string &str)
+        bool addString(const std::string &str)
         {
             if (!typeOk)
             {propertyType=str;typeOk=true;}
@@ -697,19 +697,19 @@ namespace tlp {
                 return false;
             return true;
         }
-        bool setNodeValue(int nodeId, const string& value)  {
-            return graphBuilder->setNodeValue(nodeId,clusterId,propertyType,propertyName, (string&) value);
+        bool setNodeValue(int nodeId, const std::string& value)  {
+            return graphBuilder->setNodeValue(nodeId,clusterId,propertyType,propertyName, (std::string&) value);
         }
-        bool setEdgeValue(int edgeId, const string& value)  {
-            return graphBuilder->setEdgeValue(edgeId,clusterId,propertyType,propertyName, (string&) value);
+        bool setEdgeValue(int edgeId, const std::string& value)  {
+            return graphBuilder->setEdgeValue(edgeId,clusterId,propertyType,propertyName, (std::string&) value);
         }
-        bool setAllNodeValue(const string& value)  {
-            return graphBuilder->setAllNodeValue(clusterId,propertyType,propertyName, (string&) value);
+        bool setAllNodeValue(const std::string& value)  {
+            return graphBuilder->setAllNodeValue(clusterId,propertyType,propertyName, (std::string&) value);
         }
-        bool setAllEdgeValue(const string value)  {
-            return graphBuilder->setAllEdgeValue(clusterId,propertyType,propertyName, (string&) value);
+        bool setAllEdgeValue(const std::string value)  {
+            return graphBuilder->setAllEdgeValue(clusterId,propertyType,propertyName, (std::string&) value);
         }
-        bool addStruct(const string& structName,TLPBuilder*&newBuilder);
+        bool addStruct(const std::string& structName,TLPBuilder*&newBuilder);
         bool close(){return true;}
     };
     //=================================================================================
@@ -719,7 +719,7 @@ namespace tlp {
         TLPNodePropertyBuilder(TLPPropertyBuilder *propertyBuilder):propertyBuilder(propertyBuilder){}
         bool addInt(const int id)
         {nodeId=id;return true;}
-        bool addString(const string&val)
+        bool addString(const std::string&val)
         {return propertyBuilder->setNodeValue(nodeId,val);}
         bool close(){return true;}
     };
@@ -727,23 +727,23 @@ namespace tlp {
     struct TLPEdgePropertyBuilder:public TLPFalse {
         TLPPropertyBuilder *propertyBuilder;
         int edgeId;
-        string nodeValue;
+        std::string nodeValue;
         TLPEdgePropertyBuilder(TLPPropertyBuilder *propertyBuilder):propertyBuilder(propertyBuilder){}
         virtual ~TLPEdgePropertyBuilder(){}
         bool addInt(const int id)
         {edgeId=id;return true;}
-        bool addString(const string &val)
+        bool addString(const std::string &val)
         {return propertyBuilder->setEdgeValue(edgeId,val);}
         bool close(){return true;}
     };
     struct TLPDefaultPropertyBuilder:public TLPFalse {
         TLPPropertyBuilder *propertyBuilder;
         int edgeId;
-        string nodeValue;
+        std::string nodeValue;
         int i;
         TLPDefaultPropertyBuilder(TLPPropertyBuilder *propertyBuilder):propertyBuilder(propertyBuilder),i(0){}
         virtual ~TLPDefaultPropertyBuilder(){}
-        bool addString(const string &val)
+        bool addString(const std::string &val)
         {
             if (i==0) {i++;return propertyBuilder->setAllNodeValue(val);}
             if (i==1) {i++;return propertyBuilder->setAllEdgeValue(val);}
@@ -754,7 +754,7 @@ namespace tlp {
 
 } // namespace tlp
 //=================================================================================
-bool TLPPropertyBuilder::addStruct(const string& structName,TLPBuilder*&newBuilder) {
+bool TLPPropertyBuilder::addStruct(const std::string& structName,TLPBuilder*&newBuilder) {
     if (structName==DEFAULTVALUE) {
         newBuilder= new TLPDefaultPropertyBuilder(this);
         return true;
@@ -772,7 +772,7 @@ bool TLPPropertyBuilder::addStruct(const string& structName,TLPBuilder*&newBuild
     return false;
 }
 //=================================================================================
-bool TLPGraphBuilder::addStruct(const string& structName,TLPBuilder*&newBuilder) {
+bool TLPGraphBuilder::addStruct(const std::string& structName,TLPBuilder*&newBuilder) {
     if (structName==TLP) {
         inTLP = true;
         newBuilder=this;
@@ -841,20 +841,20 @@ namespace tlp {
     class TLPImport:public ImportModule {
     public:
         TLPImport(AlgorithmContext context):ImportModule(context) {
-            addParameter<string>("file::filename", paramHelp[0]);
+            addParameter<std::string>("file::filename", paramHelp[0]);
             addParameter<DataSet>(DISPLAYING);
         }
         ~TLPImport(){}
-        bool import(const string&) {
-            string filename;
-            string data;
-            stringstream *tmpss=NULL;
+        bool import(const std::string&) {
+            std::string filename;
+            std::string data;
+            std::stringstream *tmpss=NULL;
             int size;
-            istream *input;
+            std::istream *input;
             bool result;
 
             if(dataSet->exist("file::filename")){
-                dataSet->get<string>("file::filename", filename);
+                dataSet->get<std::string>("file::filename", filename);
                 struct stat infoEntry;
                 result = (stat(filename.c_str(),&infoEntry) == 0);
                 if (!result) {
@@ -870,17 +870,17 @@ namespace tlp {
                     size *= 4;
                 }
                 else
-                    input = new ifstream(filename.c_str());
+                    input = new std::ifstream(filename.c_str());
             }else{
-                dataSet->get<string>("file::data", data);
+                dataSet->get<std::string>("file::data", data);
                 size=data.size();
-                stringstream *tmpss=new stringstream;
+                std::stringstream *tmpss=new std::stringstream;
                 (*tmpss) << data;
                 input = tmpss;
             }
 
             pluginProgress->showPreview(false);
-            pluginProgress->setComment(string("Loading ") + filename + "...");
+            pluginProgress->setComment(std::string("Loading ") + filename + "...");
             TLPParser<false> myParser(*input, new TLPGraphBuilder(graph, dataSet), pluginProgress, size);
             result = myParser.parse();
             if (!result) {
