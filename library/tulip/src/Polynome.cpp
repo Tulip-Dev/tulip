@@ -21,7 +21,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-using namespace std;
 using namespace tlp;
 
 #define PI 3.14159265
