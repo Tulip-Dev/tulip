@@ -256,7 +256,7 @@ namespace tlp {
                 if (propertyType==INT){
                   //If we are in the old edge extremities id system we need to convert the ids in the file.
                   if(version < 2.2){
-                    if(propertyName==string("viewSrcAnchorShape") || propertyName==string("viewTgtAnchorShape")){
+                    if(propertyName==std::string("viewSrcAnchorShape") || propertyName==std::string("viewTgtAnchorShape")){
                       return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setEdgeStringValue(e, convertOldEdgeExtremitiesValueToNew(value) );
                     }
                   }
@@ -299,30 +299,30 @@ namespace tlp {
          * @param oldValue The old glyph value.
          * @return The new glyph value or the old value if no change are needed.
          */
-        string convertOldEdgeExtremitiesValueToNew(const std::string& oldValue){
-          if(oldValue == string("0")){
+        std::string convertOldEdgeExtremitiesValueToNew(const std::string& oldValue){
+          if(oldValue == std::string("0")){
             return "-1";
-          }else if(oldValue == string("1")){
+          }else if(oldValue == std::string("1")){
             return "0";
-          }else if(oldValue == string("3")){
+          }else if(oldValue == std::string("3")){
             return "2";
-          }else if(oldValue == string("4")){
+          }else if(oldValue == std::string("4")){
             return "3";
-          }else if(oldValue == string("5")){
+          }else if(oldValue == std::string("5")){
             return "4";
-          }else if(oldValue == string("7")){
+          }else if(oldValue == std::string("7")){
             return "6";
-          }else if(oldValue == string("10")){
+          }else if(oldValue == std::string("10")){
             return "9";
-          }else if(oldValue == string("13")){
+          }else if(oldValue == std::string("13")){
             return "12";
-          }else if(oldValue == string("14")){
+          }else if(oldValue == std::string("14")){
             return "13";
-          }else if(oldValue == string("15")){
+          }else if(oldValue == std::string("15")){
             return "14";
-          }else if(oldValue == string("16")){
+          }else if(oldValue == std::string("16")){
             return "15";
-          }else if(oldValue == string("29")){
+          }else if(oldValue == std::string("29")){
             return "28";
           }else{
             return oldValue;
@@ -406,7 +406,7 @@ namespace tlp {
                 if (propertyType==INT){
                   //If we are in the old edge extremities id system we need to convert the ids in the file.
                   if(version < 2.2){
-                    if(propertyName==string("viewSrcAnchorShape") || propertyName==string("viewTgtAnchorShape")){
+                    if(propertyName==std::string("viewSrcAnchorShape") || propertyName==std::string("viewTgtAnchorShape")){
                       return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setAllEdgeStringValue( convertOldEdgeExtremitiesValueToNew(value) );
                     }
                   }
