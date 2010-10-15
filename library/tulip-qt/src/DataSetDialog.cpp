@@ -49,7 +49,6 @@
 #include <QtGui/qevent.h>
 
 
-using namespace std;
 using namespace tlp;
 
 
@@ -64,7 +63,7 @@ namespace {
 #undef TN
 #define	TN( T )		typeid(T).name()
 
-  typedef vector<string> stringA;
+  typedef std::vector<std::string> stringA;
 
   class ColorScalePushButton : public QWidget {
 
@@ -105,7 +104,7 @@ namespace {
     Iterator< std::string > * propIt = inG->getProperties();
     int curIdx = -1;
     while( propIt->hasNext() ) {
-      string s = propIt->next();
+      std::string s = propIt->next();
       PropertyInterface * proxy = inG->getProperty( s );
       if( inCurrent && proxy == inCurrent )
 	curIdx = outA.size();
@@ -117,14 +116,14 @@ namespace {
 
   int getPropertyOf(stringA &outA,
 		    Graph *inG,
-		    string inTypeName,
+		    std::string inTypeName,
 		    PropertyInterface *inCurrent = 0) {
     assert( inG );
     outA.clear();
     Iterator< std::string > * propIt = inG->getProperties();
     int curIdx = -1;
     while( propIt->hasNext() ) {
-      string s = propIt->next();
+      std::string s = propIt->next();
       PropertyInterface * proxy = inG->getProperty( s );
       if( typeid((*proxy)).name() == inTypeName ) {
 	if( inCurrent && proxy == inCurrent )
@@ -150,18 +149,18 @@ namespace {
 
 
   struct  IParam;
-  typedef vector<IParam> IParamA;
-  typedef vector<QWidget*> QWidgetA;
+  typedef std::vector<IParam> IParamA;
+  typedef std::vector<QWidget*> QWidgetA;
 
   struct IParam {
-    string name;
-    string typeName;
+    std::string name;
+    std::string typeName;
     void* value;
     QLabel* label; // Label widget
     QWidgetA wA;   // Input widgets
-    vector<int> offY;
+    std::vector<int> offY;
     QWidget* opt;
-    string helpText;
+    std::string helpText;
   };
 
 
@@ -208,8 +207,8 @@ namespace {
 	}
 
 	// string
-	else if(ip.typeName == TN(string)) {
-	  if (ip.name.find("text::") != string::npos) {
+	else if(ip.typeName == TN(std::string)) {
+	  if (ip.name.find("text::") != std::string::npos) {
 	    QTextEdit *te = (QTextEdit *) ip.wA[0];
 	    inDef->setDefValue(ip.name, te->toPlainText().toUtf8().data());
 	  } else {
@@ -253,7 +252,7 @@ namespace {
 		 || ip.typeName == TN(SizeProperty)
 		 || ip.typeName == TN(ColorProperty)) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  string value = cb->currentText().toUtf8().data();
+	  std::string value = cb->currentText().toUtf8().data();
 	  if (value != NONE_PROP)
 	    inDef->setDefValue(ip.name, value);
 	}
@@ -261,8 +260,8 @@ namespace {
 	// StringCollection
 	else if (ip.typeName == TN(StringCollection)) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  string current = cb->currentText().toUtf8().data();
-	  string value(current);
+	  std::string current = cb->currentText().toUtf8().data();
+	  std::string value(current);
 	  for ( int i = 0; i < cb->count(); i++)
 	    if (current != cb->itemText(i).toUtf8().data()){
 	      value += ";";
@@ -297,8 +296,8 @@ namespace {
 	}
 
 	// string
-	else if(ip.typeName == TN(string)) {
-	  if (ip.name.find("text::") != string::npos) {
+	else if(ip.typeName == TN(std::string)) {
+	  if (ip.name.find("text::") != std::string::npos) {
 	    QTextEdit *te = (QTextEdit *) ip.wA[0];
 	    te->setText(QString::fromUtf8(sysDef->getDefValue(ip.name).c_str()));
 	  } else {
@@ -346,7 +345,7 @@ namespace {
 		 || ip.typeName == TN(SizeProperty)
 		 || ip.typeName == TN(ColorProperty)) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  string value = sysDef->getDefValue(ip.name);
+	  std::string value = sysDef->getDefValue(ip.name);
 	  if (sysDef->isMandatory(ip.name))
 	    cb->setCurrentIndex(0);
 	  else {
@@ -365,7 +364,7 @@ namespace {
 	else if (ip.typeName == TN(StringCollection)) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
 	  StringCollection coll(sysDef->getDefValue(ip.name));
-	  string current = coll.getCurrentString();
+	  std::string current = coll.getCurrentString();
 	  for ( int i = 0; i < cb->count(); i++)
 	    if (current == cb->itemText(i).toUtf8().data()){
 	      cb->setCurrentIndex(i);
@@ -436,7 +435,7 @@ namespace {
     palette.setColor(QPalette::Button, color);
 	  ((QWidget *)obj)->setPalette(palette);
 	  return false;
-	} else if( ip->typeName == TN(string) ) {
+	} else if( ip->typeName == TN(std::string) ) {
 	  QString s;
 	  if (ip->name.find("file::") == 0)
 	    s = QFileDialog::getOpenFileName();
@@ -467,8 +466,8 @@ namespace {
 	ip.helpText = inDef->getHelp(ip.name);
 	// first part of the parameter name may be used
 	// to indicate a subtype
-	string::size_type pos = def.first.find("::");
-	if (pos != string::npos)
+	std::string::size_type pos = def.first.find("::");
+	if (pos != std::string::npos)
 	  ip.label = new QLabel(def.first.substr(pos + 2, def.first.length() - pos - 2).c_str(), this);
 	else
 	  ip.label    = new QLabel( ip.name.c_str(), this );
@@ -529,7 +528,7 @@ namespace {
 	  le->setValidator( fpValidator );
 	  ip.wA.push_back( le );
 	  if( inSet ) {
-	    stringstream tmp;
+	    std::stringstream tmp;
 	    if (ip.typeName == TN(float)) {
 	      float v;
 	      if( inSet->get(ip.name,v) ) {
@@ -546,15 +545,15 @@ namespace {
 	  }
 	}
 	// string
-	else if( ip.typeName == TN(string) ) {
+	else if( ip.typeName == TN(std::string) ) {
 	  // if text prefixed than create a QTextEdit
-	  if (ip.name.find("text::") != string::npos) {
+	  if (ip.name.find("text::") != std::string::npos) {
 	    QTextEdit *te = new QTextEdit(QString(""),
 					  this);
 	    te->resize(te->width() * 3, te->height()*3);
 	    ip.wA.push_back(te);
 	    if( inSet ) {
-	      string v;
+	      std::string v;
 	      if( inSet->get
 		  (ip.name, v) )
 		te->setText(QString::fromUtf8(v.c_str()));
@@ -566,7 +565,7 @@ namespace {
 	    // no offset
 	    ip.offY[ip.offY.size() - 1] = 0;
 	    if( inSet ) {
-	      string v;
+	      std::string v;
 	      if( inSet->get
 		  (ip.name, v) )
 		le->setText(QString::fromUtf8(v.c_str()));
@@ -721,7 +720,7 @@ namespace {
 	}
 	// StringCollection
 	else if(ip.typeName == TN (StringCollection) ) {
-	  string valueCollection =  inDef->getDefValue(ip.name);
+	  std::string valueCollection =  inDef->getDefValue(ip.name);
 	  StringCollection stringCol(valueCollection);
 	  QComboBox * cb = new QComboBox( this );
 	  for(unsigned int i=0; i < stringCol.size(); i++ ) {
@@ -897,13 +896,13 @@ namespace {
 	}
 
 	// string
-	else if(	ip.typeName == TN(string)	) {
-	  if (ip.name.find("text::") != string::npos) {
+	else if(	ip.typeName == TN(std::string)	) {
+	  if (ip.name.find("text::") != std::string::npos) {
 	    QTextEdit *te = (QTextEdit *) ip.wA[0];
-	    outSet.set<string>(ip.name, te->toPlainText().toUtf8().data());
+	    outSet.set<std::string>(ip.name, te->toPlainText().toUtf8().data());
 	  } else {
 	    QLineEdit * le = (QLineEdit *) ip.wA[0];
-	    outSet.set<string>( ip.name, le->text().toUtf8().data() );
+	    outSet.set<std::string>( ip.name, le->text().toUtf8().data() );
 	  }
 	}
 
@@ -943,7 +942,7 @@ namespace {
 		  || ip.typeName == TN(SizeProperty)
 		  || ip.typeName == TN(ColorProperty))) {
 	  QComboBox * cb = (QComboBox*) ip.wA[0];
-	  string propName(cb->currentText().toUtf8().data());
+	  std::string propName(cb->currentText().toUtf8().data());
 	  if (propName != NONE_PROP)
 	    outSet.set<PropertyInterface*>( ip.name, inG->getProperty(propName) );
 	  else {
@@ -955,7 +954,7 @@ namespace {
 	// StringCollection
 	else if(ip.typeName == TN(StringCollection) ) {
         QComboBox * cb = (QComboBox*) ip.wA[0];
-        std::vector<string> vectorTemp;
+        std::vector<std::string> vectorTemp;
         for ( int i = 0; i < cb->count(); i++) {
             vectorTemp.push_back(cb->itemText(i).toUtf8().data());
         }
