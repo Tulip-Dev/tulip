@@ -36,7 +36,7 @@
 
 namespace tlp {
 
-  class OcclusionTest;
+  struct OcclusionTest;
   class TextRenderer;
 
   /**
