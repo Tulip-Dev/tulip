@@ -278,7 +278,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture,string &errorMs
   texture->height   = png_get_image_height( png_ptr, info_ptr );
   int linestride = texture->width * (texture->hasAlpha ? 4 : 3);
   texture->data = new unsigned char[linestride * texture->height];
-  png_bytep row_pointers[texture->height];
+  png_bytep* row_pointers = new png_bytep[texture->height];
   for (unsigned int i=0; i < texture->height; ++i)
     row_pointers[i] = (png_bytep) &(texture->data[linestride*(texture->height-1-i)]);
 
@@ -423,7 +423,7 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
     }
   }
 
-  GLuint textureNum[spriteNumber];
+  GLuint* textureNum = new GLuint[spriteNumber];
 
   glTexture.width=width;
   glTexture.height=height;
