@@ -27,7 +27,7 @@
 
 namespace tlp {
 
-class Face;
+struct Face;
 class IdManager;
 
 /** 

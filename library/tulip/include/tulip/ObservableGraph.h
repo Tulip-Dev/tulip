@@ -24,9 +24,9 @@
 
 namespace tlp {
 
-struct Graph;
- struct PropertyInterface;
- class ObservableGraph;
+class Graph;
+class PropertyInterface;
+class ObservableGraph;
 //=========================================================
 
 /** \addtogroup graphs */ 
