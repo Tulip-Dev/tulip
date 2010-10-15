@@ -506,3 +506,7 @@ namespace tlp {
     return matrix;
   }
 }
+
+GLfloat tlp::sqr(const GLfloat f) {
+  return f*f;
+}
