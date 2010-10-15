@@ -20,7 +20,6 @@
 #include <cassert>
 #include <string.h>
 
-using namespace std;
 using namespace tlp;
 
 Parser::Parser(const char* str){
