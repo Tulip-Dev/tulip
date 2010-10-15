@@ -25,8 +25,8 @@
 namespace tlp {
 
 class Graph;
-class edge;
-class node;
+struct edge;
+struct node;
 
 /** \addtogroup graph_test */ 
 /*@{*/

@@ -35,7 +35,7 @@ namespace tlp {
 class PropertyContext;
 class Graph;
 
-#define AbstractLayoutProperty AbstractProperty<PointType, LineType, LayoutAlgorithm>
+typedef AbstractProperty<PointType, LineType, LayoutAlgorithm> AbstractLayoutProperty;
 
 /** \addtogroup properties */ 
 /*@{*/
