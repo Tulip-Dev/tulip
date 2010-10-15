@@ -116,7 +116,7 @@ namespace tlp {
        * Returns a new vector equal to the most influent eigenvector of the
        * matrix
        */
-      inline Vector<Obj,SIZE> powerIteration(const int nIterations) const;
+      inline Vector<Obj,SIZE> powerIteration(const unsigned int nIterations) const;
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
       /**

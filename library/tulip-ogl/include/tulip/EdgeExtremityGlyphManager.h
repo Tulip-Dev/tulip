@@ -25,7 +25,7 @@
 #include <tulip/MutableContainer.h>
 
 namespace tlp {
-class PluginLoader;
+struct PluginLoader;
 class GlGraphInputData;
 class EdgeExtremityGlyph;
 class Graph;

@@ -245,7 +245,7 @@ template<typename Obj,unsigned int SIZE>
 
 //=====================================================================================
 template<typename Obj, unsigned int SIZE>
-tlp::Vector<Obj, SIZE> MATRIXTLPGEO::powerIteration(const int nIterations) const
+tlp::Vector<Obj, SIZE> MATRIXTLPGEO::powerIteration(const unsigned int nIterations) const
 {
   tlp::Vector<Obj, SIZE> iteration;
 

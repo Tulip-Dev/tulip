@@ -35,7 +35,7 @@ namespace tlp {
   class GlGraph;
 
   class GlMainWidget;
-  class RectPosition;
+  struct RectPosition;
   class GWOverviewWidget;
 
 /** \addtogroup Tulip_Widgets */
