@@ -86,7 +86,7 @@ namespace tlp {
       }else{
 	dataBuffer.push_back(*data);
 	if(dataBuffer.size()>=12) {
-	  GLfloat tmp[dataBuffer.size()];
+	  GLfloat* tmp = new GLfloat[dataBuffer.size()];
 	  for(unsigned int i=0;i<dataBuffer.size();i++)
 	    tmp[i]=dataBuffer[i];
 	  colorInfo(tmp);
