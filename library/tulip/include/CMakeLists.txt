@@ -1,4 +1,4 @@
-INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES 
+INSTALL(FILES
   tulip/ClusteringAlgorithmBase.h
   tulip/ClusteringQualityMeasure.h
   tulip/QClusteringQualityMeasure.h
@@ -89,13 +89,15 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
 	tulip/MapIterator.h 
 	tulip/BoundingBox.h 
 	tulip/ColorScale.h
-	tulip/TulipRelease.h
+  ${CMAKE_CURRENT_BINARY_DIR}/tulip/TulipRelease.h
 	tulip/PreferenceManager.h
-    tulip/QuadTree.h
+  tulip/QuadTree.h
+DESTINATION ${TulipIncludeInstallDir}/tulip/
+COMPONENT libtulip_dev
 )
 
-INSTALL_FILES(${TulipIncludeInstallDir}/tulip/cxx/ FILES
-        tulip/cxx/Array.cxx
+INSTALL(FILES
+    tulip/cxx/Array.cxx
   	tulip/cxx/Vector.cxx
   	tulip/cxx/Matrix.cxx
   	tulip/cxx/Circle.cxx
@@ -103,4 +105,6 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/cxx/ FILES
   	tulip/cxx/TemplateFactory.cxx
   	tulip/cxx/Reflect.cxx
   	tulip/cxx/Graph.cxx 
+DESTINATION ${TulipIncludeInstallDir}/tulip/cxx/
+COMPONENT libtulip_dev
 )

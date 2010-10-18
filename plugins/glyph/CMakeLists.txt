@@ -123,5 +123,6 @@ INSTALL(TARGETS
 	HalfCylinder-${TulipVersion}
 	ChristmasTree-${TulipVersion}
 	Window-${TulipVersion}
-	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/glyphs/)
+  DESTINATION ${TulipLibInstallDir}tlp/glyphs/
+  COMPONENT tulip_plugins_glyphs)
 

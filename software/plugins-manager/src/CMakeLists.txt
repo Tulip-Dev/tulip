@@ -71,8 +71,6 @@ INCLUDE_DIRECTORIES(../include/ ${TulipInclude} ${TulipBuildInclude} ${PROJECT_B
 
 ADD_EXECUTABLE( tulip_check_pl ${tulip_check_pl_SRCS})
 TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipName} ${CMAKE_DL_LIBS})
-TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipQtName})
-TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipOglName})
 ADD_DEPENDENCIES(tulip_check_pl ${LibTulipName})
 
 ADD_LIBRARY(${LibTulipPluginsManagerName} SHARED ${${LibTulipPluginsManagerName}_UI_SRCS} ${${LibTulipPluginsManagerName}_MOC_SRCS} ${${LibTulipPluginsManagerName}_LIB_SRCS})
@@ -87,17 +85,17 @@ ADD_DEPENDENCIES(${LibTulipPluginsManagerName} ${LibTulipName} ${LibTulipOglName
 
 IF(WIN32)
 INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl.exe 
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 
+        DESTINATION ${TulipBinInstallDir}
+        COMPONENT tulip_pluginsmanager
+)
+ELSE(WIN32)
+INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl
+        DESTINATION ${TulipBinInstallDir}
+        COMPONENT tulip_pluginsmanager
 )
 ENDIF(WIN32)
-IF(APPLE)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}/tulip.app/Contents/MacOS" 
-)
-ENDIF(APPLE)
-IF(LINUX)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 
-)
-ENDIF(LINUX)
-INSTALL_TARGETS(${TulipLibInstallDir} ${LibTulipPluginsManagerName})
+INSTALL(TARGETS ${LibTulipPluginsManagerName}
+       RUNTIME DESTINATION ${TulipBinInstallDir}
+       LIBRARY DESTINATION ${TulipLibInstallDir}
+       ARCHIVE DESTINATION ${TulipLibInstallDir}
+       COMPONENT tulip_pluginsmanager)

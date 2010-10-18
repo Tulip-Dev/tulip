@@ -76,4 +76,5 @@ INSTALL(TARGETS StrengthClustering-${TulipVersion}
 		ConvolutionClustering-${TulipVersion}
 		EqualValueClustering-${TulipVersion}
 		QuotientClustering-${TulipVersion}
-		DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/)
+    DESTINATION ${TulipLibInstallDir}tlp/
+    COMPONENT tulip_plugins_clustering)

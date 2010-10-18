@@ -110,4 +110,5 @@ INSTALL(TARGETS
 	SmallWorldGraph-${TulipVersion}
 	FileSystem-${TulipVersion}
 	WebImport-${TulipVersion}
-	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/)
+  DESTINATION ${TulipLibInstallDir}tlp/
+  COMPONENT tulip_plugins_import)

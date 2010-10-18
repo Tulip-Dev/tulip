@@ -1,4 +1,4 @@
-INSTALL_FILES(${TulipBitmapInstallDir} FILES 
+INSTALL(FILES
               startup.gif
 	      headerlogo.bmp
 	      logo32x32.bmp
@@ -8,4 +8,6 @@ INSTALL_FILES(${TulipBitmapInstallDir} FILES
 	      logotulip.jpg
 	      logolabri.jpg
 	      tex_back.png
+DESTINATION ${TulipBitmapInstallDir}
+COMPONENT tulip
 )

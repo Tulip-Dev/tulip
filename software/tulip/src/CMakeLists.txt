@@ -39,21 +39,18 @@ INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${PR
 
 IF(WIN32)
 ADD_EXECUTABLE( tulip TulipLauncher.cpp)
-SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}")
+SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH ${TulipLibInstallDir})
 TARGET_LINK_LIBRARIES( tulip -mwindows )
 TARGET_LINK_LIBRARIES( tulip ${QT_LIBRARIES} )
 ENDIF(WIN32)
 
 ADD_EXECUTABLE( tulip_need_restart TulipNeedRestart.cpp)
-SET_TARGET_PROPERTIES(tulip_need_restart PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}")
+SET_TARGET_PROPERTIES(tulip_need_restart PROPERTIES INSTALL_RPATH ${TulipLibInstallDir})
 TARGET_LINK_LIBRARIES( tulip_need_restart ${QT_LIBRARIES} )
-TARGET_LINK_LIBRARIES(tulip_need_restart ${LibTulipName})
-TARGET_LINK_LIBRARIES(tulip_need_restart ${LibTulipQtName})
-TARGET_LINK_LIBRARIES(tulip_need_restart ${LibTulipOglName})
 ADD_DEPENDENCIES(tulip_need_restart tulip_app)
 
 ADD_EXECUTABLE( tulip_app ${tulip_UI_SRCS} ${tulip_MOC_SRCS} ${tulip_SRCS} ${tulip_RCC_SRCS})
-SET_TARGET_PROPERTIES(tulip_app PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}")
+SET_TARGET_PROPERTIES(tulip_app PROPERTIES INSTALL_RPATH ${TulipLibInstallDir})
 IF(WIN32)
 TARGET_LINK_LIBRARIES( tulip_app -mwindows )
 ENDIF(WIN32)
@@ -78,27 +75,22 @@ ADD_DEPENDENCIES(tulip_app ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} 
 
 IF(WIN32)
 INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip.exe
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
+        DESTINATION ${TulipBinInstallDir}
+        COMPONENT tulip)
 INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app.exe
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
+        DESTINATION ${TulipBinInstallDir}
+        COMPONENT tulip)
+ELSE(WIN32)
+INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sh
+        DESTINATION ${TulipBinInstallDir}
+  RENAME tulip
+  COMPONENT tulip)
+INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app
+        DESTINATION ${TulipBinInstallDir}
+        COMPONENT tulip)
+INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_need_restart
+        DESTINATION ${TulipBinInstallDir}
+        COMPONENT tulip)
 ENDIF(WIN32)
-IF(APPLE)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sh
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}/tulip.app/Contents/MacOS"
-	RENAME tulip)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}/tulip.app/Contents/MacOS")
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_need_restart
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}/tulip.app/Contents/MacOS")
-ENDIF(APPLE)
- IF(LINUX)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sh
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
-	RENAME tulip)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_need_restart
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
-ENDIF(LINUX)
 
 
