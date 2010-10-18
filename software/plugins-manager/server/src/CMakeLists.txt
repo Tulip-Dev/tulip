@@ -90,6 +90,8 @@ ENDIF(QT_VERSION_MINOR LESS 7)
 ADD_DEPENDENCIES(pluginInstaller ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
 
 INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/generate_plugin_dirs.sh
-        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
+        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/"
+        COMPONENT tulip_pluginsmanager)
 INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/generate_plugin_doc.sh
-        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
+        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/"
+        COMPONENT tulip_pluginsmanager)

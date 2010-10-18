@@ -9,7 +9,9 @@ ADD_CUSTOM_TARGET(dev_pdf ALL pdfxmltex --output-directory="pdf/" devHandbook.fo
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
 		  ${CMAKE_CURRENT_BINARY_DIR}/images 
-	DESTINATION share/tulip/developerHandbook)
+  DESTINATION share/tulip/developerHandbook
+  COMPONENT tulip_doc)
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/pdf/devHandbook.pdf
-	DESTINATION share/tulip/developerHandbook)
+  DESTINATION share/tulip/developerHandbook
+  COMPONENT tulip_doc)

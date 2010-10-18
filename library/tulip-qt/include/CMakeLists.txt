@@ -1,6 +1,6 @@
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tulip)
 
-INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
+INSTALL(FILES
 	tulip/TulipTableWidget.h 
 	tulip/GlMainWidget.h 
 	tulip/TabWidget.h 
@@ -72,14 +72,18 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
     tulip/Morphing.h
     tulip/GraphPropertiesTableWidget.h
   tulip/TextEditDialog.h
+DESTINATION ${TulipIncludeInstallDir}/tulip/
+COMPONENT libtulip_qt_dev
 )
 
 IF(QT_VERSION_MINOR GREATER 3)
-INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
+INSTALL(FILES
         tulip/BaseGraphicsViewComponent.h
 	tulip/GlMainWidgetGraphicsView.h
 	tulip/GlMainWidgetItem.h
 	tulip/TabWidgetHidableMenuGraphicsProxy.h	
 	tulip/GraphicsWidgetBase.h
+DESTINATION ${TulipIncludeInstallDir}/tulip/
+COMPONENT libtulip_qt_dev
 )
 ENDIF(QT_VERSION_MINOR GREATER 3)

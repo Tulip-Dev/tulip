@@ -1,4 +1,4 @@
-INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES 
+INSTALL(FILES
 	tulip/Camera.h
 	tulip/GlComposite.h 
 	tulip/GlGraphComposite.h 
@@ -77,4 +77,6 @@ INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES
   	tulip/GlSceneZoomAndPan.h
   	tulip/ParametricCurves.h
 	tulip/GlVertexArrayManager.h
+DESTINATION ${TulipIncludeInstallDir}/tulip/
+COMPONENT libtulip_ogl_dev
 )

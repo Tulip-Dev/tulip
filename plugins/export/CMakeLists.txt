@@ -12,4 +12,5 @@ ADD_DEPENDENCIES(GMLExport-${TulipVersion} ${LibTulipName})
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
 	GMLExport-${TulipVersion}	
-	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/)
+  DESTINATION ${TulipLibInstallDir}tlp/
+  COMPONENT tulip_plugins_export)

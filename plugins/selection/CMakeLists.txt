@@ -51,4 +51,5 @@ INSTALL(TARGETS
 	LoopSelection-${TulipVersion}
 	MultipleSelection-${TulipVersion}
 	Kruskal-${TulipVersion}
-	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/)
+  DESTINATION ${TulipLibInstallDir}tlp/
+  COMPONENT tulip_plugins_selection)
