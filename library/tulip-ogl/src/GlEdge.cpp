@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/OpenGlConfigManager.h"
 #include "tulip/GlEdge.h"
 
 #include <tulip/Coord.h>

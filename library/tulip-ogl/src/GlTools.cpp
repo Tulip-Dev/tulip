@@ -16,17 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
-#if defined(__APPLE__)
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
+
+#include "tulip/OpenGlConfigManager.h"
 
 #include <tulip/Rectangle.h>
 #include "tulip/GlTools.h"
 #include "tulip/Matrix.h"
 #include "tulip/BoundingBox.h"
 #include <iostream>
+#include <string>
 
 using namespace std;
 namespace tlp {

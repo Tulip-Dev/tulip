@@ -20,15 +20,7 @@
 #ifndef GLCOMPLEXPOLYGON_H
 #define GLCOMPLEXPOLYGON_H
 
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
-
-#ifdef WIN32
-#include <windows.h>
-#endif
+#include "tulip/OpenGlConfigManager.h"
 
 #ifndef CALLBACK
 #define CALLBACK

@@ -17,12 +17,6 @@
  *
  */
 #include <GL/glew.h>
-#if defined(__APPLE_CC__) && __APPLE_CC__ < 5400
-// Tiger
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
 
 #include "tulip/GlComplexPolygon.h"
 #include "tulip/GlTools.h"
