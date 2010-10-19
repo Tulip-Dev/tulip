@@ -194,7 +194,7 @@ bool MixedModel::run() {
       } delete ite;
       //===================================================
       
-      graphMap = new PlanarConMap(G);
+      graphMap = computePlanarConMap(G);
       vector<edge> re_added = getPlanarSubGraph(graphMap, unplanar_edges);
       
       for (unsigned int ui = 0; ui < re_added.size() ; ++ui){
@@ -222,7 +222,7 @@ bool MixedModel::run() {
     if(!BiconnectedTest::isBiconnected(G))    
       BiconnectedTest::makeBiconnected(G,added_edges);
     assert(BiconnectedTest::isBiconnected(G));
-    carte = new PlanarConMap(G);
+    carte = computePlanarConMap(G);
     assert(BiconnectedTest::isBiconnected(G));
     assert(BiconnectedTest::isBiconnected(carte));
 
