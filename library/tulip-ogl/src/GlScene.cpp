@@ -16,10 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
+#include "GL/glew.h"
 #include "tulip/OpenGlConfigManager.h"
-
 #include "tulip/GlScene.h"
 
+#include <algorithm>
 #include <iostream>
 #include <cstdlib>
 #include <climits>
@@ -431,7 +432,7 @@ namespace tlp {
         }
 
         // Draw
-        for(set<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin();it!=entitiesSet.end();++it){
+        for(multiset<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin();it!=entitiesSet.end();++it){
           if(!(*it).isComplexEntity){
             // Simple entities
             GlSimpleEntity *entity=(GlSimpleEntity*)(((SimpleEntityLODUnit*)((*it).entity))->id);
@@ -570,7 +571,7 @@ namespace tlp {
       if(center)
         *center=Coord(0,0,0);
       if(sceneRadius)
-        *sceneRadius=sqrt(300);
+        *sceneRadius=sqrt(300.0);
 
       if(eye && center && sceneRadius){
         *eye=Coord(0, 0, *sceneRadius);
