@@ -117,13 +117,7 @@ namespace tlp {
       antialiased=glGraphComposite->getInputData()->parameters->isAntialiased();
 	}
 
-	if(antialiased) {
-      glEnable(GL_LINE_SMOOTH);
-      glHint(GL_LINE_SMOOTH_HINT,GL_DONT_CARE);
-      glShadeModel(GL_SMOOTH);
-	}else{
-      glDisable(GL_LINE_SMOOTH);
-	}
+	OpenGlConfigManager::getInst().setAntiAliasing(antialiased);
 
 	glDisable(GL_POINT_SMOOTH);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -133,7 +127,7 @@ namespace tlp {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
 	glEnable(GL_NORMALIZE);
-  glEnable(GL_MULTISAMPLE);
+	glShadeModel(GL_SMOOTH);
 	glDepthFunc(GL_LEQUAL );
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glColorMask(1, 1, 1, 1);

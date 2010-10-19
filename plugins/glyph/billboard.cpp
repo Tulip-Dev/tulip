@@ -28,7 +28,7 @@
 #include <tulip/Glyph.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
-
+#include <tulip/OpenGlConfigManager.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
 
@@ -99,7 +99,9 @@ void Billboard::draw(node n,float) {
   glLoadMatrixf( mdlM );
   glEnable(GL_ALPHA_TEST);
   glAlphaFunc(GL_GREATER, 0.5);
+  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
   GlDisplayListManager::getInst().callDisplayList("Billboard_billboard");
+  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
   glDisable(GL_ALPHA_TEST);
   glPopMatrix();
   GlTextureManager::getInst().desactivateTexture();

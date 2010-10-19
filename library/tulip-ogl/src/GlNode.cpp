@@ -152,6 +152,7 @@ namespace tlp {
           size=2;
         const Color& color = selected ? colorSelect2 : fillColor;
 
+        OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
         glDisable(GL_LIGHTING);
         setColor(color);
         glPointSize(size);
@@ -159,6 +160,7 @@ namespace tlp {
         glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]/2.);
         glEnd();
         glEnable(GL_LIGHTING);
+        OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
       }
       return;
 
@@ -174,7 +176,9 @@ namespace tlp {
     if (selected) {
       //glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
       setColor(colorSelect2);
+      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
       GlDisplayListManager::getInst().callDisplayList("selection");
+      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
     }
     glPopMatrix();
 
@@ -354,10 +358,12 @@ namespace tlp {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glLineWidth(screenH/5.);
         setColor(Color(fontColor[0],fontColor[1],fontColor[2],128));
+        OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
         glBegin(GL_LINES);
         glVertex3f(-w/2.+wAlign,hAlign,0);
         glVertex3f(w/2.+wAlign,hAlign,0);
         glEnd();
+        OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
         glLineWidth(1);
       }else{
         if(fontType==0){

@@ -84,6 +84,8 @@ namespace tlp {
 
     void addEdge(Graph *,const edge);
     void beforeSetNodeValue(PropertyInterface*, const node);
+    void beforeSetEdgeValue(PropertyInterface*, const edge);
+
     void destroy(Graph *);
     void destroy(PropertyInterface*);
 

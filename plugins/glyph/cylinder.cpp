@@ -22,7 +22,7 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
-
+#include <tulip/OpenGlConfigManager.h>
 #include <tulip/Graph.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
@@ -80,8 +80,9 @@ void Cylinder::draw(node n, float) {
 		string texturePath = glGraphInputData->parameters->getTexturePath();
 		GlTextureManager::getInst().activateTexture(texturePath + texFile);
 	}
-
+	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 	GlDisplayListManager::getInst().callDisplayList("Cylinder_cylinder");
+	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 	GlTextureManager::getInst().desactivateTexture();
 }
 //=================================================================================================
@@ -117,7 +118,9 @@ void Cylinder::draw(edge, node n, const Color& glyphColor, const Color&, float) 
 				edgeExtGlGraphInputData->parameters->getTexturePath();
 		GlTextureManager::getInst().activateTexture(texturePath + texFile);
 	}
+	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 	GlDisplayListManager::getInst().callDisplayList("Cylinder_cylinder");
+	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 	GlTextureManager::getInst().desactivateTexture();
 }
 

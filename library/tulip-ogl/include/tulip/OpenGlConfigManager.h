@@ -97,6 +97,15 @@ namespace tlp {
       return glewIsOk;
     }
 
+    void setAntiAliasing(const bool antialiasing) {antialiased = antialiasing;}
+
+    void activateLineAndPointAntiAliasing();
+    void desactivateLineAndPointAntiAliasing();
+
+    void activatePolygonAntiAliasing();
+    void desactivatePolygonAntiAliasing();
+
+
   private:
 
     /**
@@ -111,6 +120,7 @@ namespace tlp {
     bool glewIsChecked;
     bool driversAreChecked;
     bool glewIsOk;
+    bool antialiased;
 
   };
 
