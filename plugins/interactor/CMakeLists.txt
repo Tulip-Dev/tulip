@@ -91,15 +91,6 @@ TARGET_LINK_LIBRARIES(InteractorEditEdgeBends-${TulipVersion} ${LibTulipName} ${
 ADD_DEPENDENCIES(InteractorEditEdgeBends-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(GeneralPurposeInteractor_SRCS
-    GeneralPurposeInteractor.cpp
-)
-
-ADD_LIBRARY(GeneralPurposeInteractor-${TulipVersion} SHARED ${GeneralPurposeInteractor_SRCS})
-TARGET_LINK_LIBRARIES(GeneralPurposeInteractor-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
-ADD_DEPENDENCIES(GeneralPurposeInteractor-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
-
-##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
         InteractorNavigation-${TulipVersion}	
         InteractorGetInformation-${TulipVersion}
@@ -111,5 +102,4 @@ INSTALL(TARGETS
         InteractorAddNode-${TulipVersion}
         InteractorAddEdge-${TulipVersion}
         InteractorEditEdgeBends-${TulipVersion}
-        GeneralPurposeInteractor-${TulipVersion}
         DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/interactors/)
