@@ -42,7 +42,7 @@ void PlanarConMapTest::build(){
   edges.push_back(graph->addEdge(nodes[3], nodes[0])); 
   
   delete carte;
-  carte = new PlanarConMap(graph);
+  carte = computePlanarConMap(graph);
 }
 
 //============================================================
@@ -56,7 +56,7 @@ void PlanarConMapTest::build2(){
     edges.push_back(graph->addEdge(nodes[0], nodes[i])); 
 
   delete carte;
-  carte = new PlanarConMap(graph);
+  carte = computePlanarConMap(graph);
 }
 
 //============================================================
@@ -73,7 +73,7 @@ void PlanarConMapTest::build3(){
   edges.push_back(graph->addEdge(nodes[1], nodes[3])); 
 
   delete carte;
-  carte = new PlanarConMap(graph);
+  carte = computePlanarConMap(graph);
 }
 
 //============================================================
@@ -93,7 +93,7 @@ void PlanarConMapTest::build4() {
   edges.push_back(graph->addEdge(nodes[4], nodes[9])); 
 
   delete carte;
-  carte = new PlanarConMap(graph);
+  carte = computePlanarConMap(graph);
 }
 
 //============================================================

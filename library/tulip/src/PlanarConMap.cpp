@@ -472,7 +472,7 @@ node PlanarConMap::predCycleNode(const node v, const node w) const{
 //============================================================
 void PlanarConMap::update(){
   assert(SimpleTest::isSimple(this));
-  assert(ConnectedTest::isConnected(this));
+  //assert(ConnectedTest::isConnected(this));
   assert(PlanarityTest::isPlanar(this));
 
   PlanarityTest::planarEmbedding(this);
@@ -910,4 +910,9 @@ ostream & operator << (ostream &os, PlanarConMap *sp) {
 
   os << endl;
   return os;
+}
+
+tlp::PlanarConMap* tlp::computePlanarConMap(tlp::Graph* graph) {
+  return (graph && ConnectedTest::isConnected(graph))
+    ? new PlanarConMap(graph) : NULL;
 }

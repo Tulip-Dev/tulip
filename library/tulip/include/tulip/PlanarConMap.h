@@ -54,13 +54,17 @@ class TLP_SCOPE PlanarConMap : public GraphDecorator {
   friend class FaceAdjIterator;
   friend class NodeFaceIterator;
   friend class EdgeFaceIterator;
-  
- public:
 
+  friend PlanarConMap* computePlanarConMap(Graph* graph);
+  
   /** Constructor
    * Warning, the graph must be planar, connected and simple.
    */
   PlanarConMap(Graph* s);                                                   
+
+  
+ public:
+
   //Destructor.
   virtual ~PlanarConMap();
 
@@ -184,6 +188,10 @@ private:
   IdManager *faceId;  
     
 };
+
+// Compute a PlanarConMap from a graph.
+// return a NULL value if the graph is not connected
+TLP_SCOPE PlanarConMap* computePlanarConMap(Graph* graph);
 
 }
 
