@@ -29,6 +29,7 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
+#include <tulip/OpenGlConfigManager.h>
 
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
@@ -69,18 +70,18 @@ GLYPHPLUGIN(Ring, "2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.
 EEGLYPHPLUGIN(Ring, "2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 15)
 //===================================================================================
 Ring::Ring(GlyphContext *gc) :
-	Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
+Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
 }
 Ring::Ring(EdgeExtremityGlyphContext *gc) :
-	Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
+			Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
 }
 //=====================================================
 Ring::~Ring() {
 }
 //=====================================================
 void Ring::getIncludeBoundingBox(BoundingBox &boundingBox) {
-        boundingBox[0] = Coord(-0.35, -0.35, 0);
-        boundingBox[1] = Coord(0.35, 0.35, 0);
+	boundingBox[0] = Coord(-0.35, -0.35, 0);
+	boundingBox[1] = Coord(0.35, 0.35, 0);
 }
 //=====================================================
 void Ring::draw(node n, float lod) {
@@ -132,7 +133,7 @@ void Ring::draw(node n, float lod) {
 
 }
 void Ring::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
-  glDisable(GL_LIGHTING);
+	glDisable(GL_LIGHTING);
 	drawGlyph(glyphColor,
 			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
 			edgeExtGlGraphInputData->parameters->getTexturePath(),
@@ -191,7 +192,9 @@ void Ring::drawGlyph(const Color& glyohColor, const string& texture,
 		GlTextureManager::getInst().activateTexture(texturePath + texture);
 	}
 
+	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 	GlDisplayListManager::getInst().callDisplayList("Ring_ring");
+	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
 	GlTextureManager::getInst().desactivateTexture();
 
@@ -203,6 +206,8 @@ void Ring::drawGlyph(const Color& glyohColor, const string& texture,
 	}
 	glDisable(GL_LIGHTING);
 	setColor(borderColor);
+	OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 	GlDisplayListManager::getInst().callDisplayList("Ring_ringborder");
+	OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 	glEnable(GL_LIGHTING);
 }

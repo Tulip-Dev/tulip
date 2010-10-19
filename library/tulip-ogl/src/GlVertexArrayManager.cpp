@@ -98,6 +98,8 @@ namespace tlp
       return;
     isBegin=false;
 
+    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+
     glDisable(GL_LIGHTING);
 
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -157,6 +159,9 @@ namespace tlp
 
     glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
+
+    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+
   }
 
   void GlVertexArrayManager::pauseRendering(bool pause){
@@ -268,6 +273,11 @@ namespace tlp
   void GlVertexArrayManager::beforeSetNodeValue(PropertyInterface*, const node){
     clearData();
     clearObservers();
+  }
+
+  void GlVertexArrayManager::beforeSetEdgeValue(PropertyInterface*, const edge){
+      clearData();
+      clearObservers();
   }
 
   void GlVertexArrayManager::destroy(Graph *){

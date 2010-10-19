@@ -27,6 +27,7 @@
 #include "tulip/GlTextureManager.h"
 #include "tulip/GlXMLTools.h"
 #include "tulip/GlTools.h"
+#include "tulip/OpenGlConfigManager.h"
 
 using namespace std;
 
@@ -132,6 +133,7 @@ void GlQuad::draw(float, Camera *)
     GlTextureManager::getInst().activateTexture(textureName);
   }
 
+  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
   glDisable(GL_CULL_FACE);
   glBegin(GL_QUADS);
   glNormal3f(0.0f, 0.0f, 1.0f);
@@ -150,6 +152,8 @@ void GlQuad::draw(float, Camera *)
 
   glEnd();
   glEnable(GL_CULL_FACE);
+
+  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
   GlTextureManager::getInst().desactivateTexture();
 

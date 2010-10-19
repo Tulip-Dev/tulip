@@ -31,6 +31,7 @@
 #include <tulip/GlTools.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 using namespace tlp;
@@ -79,6 +80,7 @@ void Square::draw(node n, float lod) {
 			glGraphInputData->parameters->getTexturePath(),
 			glGraphInputData->elementBorderWidth->getNodeValue(n),
 			glGraphInputData->elementBorderColor->getNodeValue(n), lod);
+
 }
 
 void Square::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
@@ -120,7 +122,10 @@ void Square::drawGlyph(const Color& glyphColor, const string& texture,
 	if (texture != "") {
 		GlTextureManager::getInst().activateTexture(texturePath + texture);
 	}
+
+	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 	GlDisplayListManager::getInst().callDisplayList("Square_square");
+	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
 	GlTextureManager::getInst().desactivateTexture();
 
@@ -133,7 +138,10 @@ void Square::drawGlyph(const Color& glyphColor, const string& texture,
 
 		glDisable(GL_LIGHTING);
 		setColor(borderColor);
+		OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 		GlDisplayListManager::getInst().callDisplayList("Square_squareborder");
+		OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+
 		glEnable(GL_LIGHTING);
 	}
 }
