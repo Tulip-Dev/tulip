@@ -20,14 +20,7 @@
 #define Tulip_GLEDGE_H
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
-
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
+#include "tulip/OpenGlConfigManager.h"
 
 #include <tulip/Types.h>
 

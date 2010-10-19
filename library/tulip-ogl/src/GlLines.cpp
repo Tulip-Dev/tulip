@@ -23,11 +23,7 @@
 #include <iostream>
 #include <cmath>
 extern "C" {
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "tulip/OpenGlConfigManager.h"
 }
 #include "tulip/GlLines.h"
 #include "tulip/GlTools.h"
