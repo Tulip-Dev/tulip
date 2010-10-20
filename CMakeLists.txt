@@ -412,8 +412,7 @@ IF(LINUX)
 
   SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "auber@labri.fr")
   SET(CPACK_DEBIAN_PACKAGE_SECTION "science")
-  #SET(CPACK_GENERATOR "STGZ;TGZ;")
-SET(CPACK_GENERATOR "")
+  SET(CPACK_GENERATOR "STGZ;TGZ;")
   # Note: With CMake 2.8, we must introduce a hack to force generation of one deb per component. See CPackOptions.cmake for additional informations.
   FOREACH(ITC ${CPACK_COMPONENTS_ALL})
     SET(CPACK_GENERATOR "${CPACK_GENERATOR}DEB;")
