@@ -3,8 +3,10 @@ SET(VERSION ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPAC
 
 # Build the package file name from the component base name
 MACRO(GET_PACKAGE_NAME basename)
+  # Replacing occurences of _ in package name (not supported in debian web repositories) by -
+  STRING(REPLACE "_" "-" FILE_PREFIX ${basename})
   STRING(TOUPPER ${basename} BN)
-  SET(${BN}_PACKAGE "${basename}-${VERSION}_${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")
+  SET(${BN}_PACKAGE "${FILE_PREFIX}-${VERSION}_${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}")
 ENDMACRO()
 
 # Get the CMake package build informations
@@ -28,13 +30,12 @@ MACRO(PREPARE_DEB basename deps)
   ENDIF()
 ENDMACRO()
 
-# Check what kind of CPack generator we are using libtulip (=3.5.0)
+# Check what kind of CPack generator we are using
 IF("${CPACK_GENERATOR}" STREQUAL "DEB")
   SET(CURRENT_COMPONENT "ALL")
 
   FOREACH(ITC ${CPACK_COMPONENTS_ALL})
     STRING(TOUPPER ${ITC} CN)
-    #STRING(REPLACE " " ";" TMP "")
     SET(DEPS "")
     FOREACH(ITD ${CPACK_COMPONENT_${CN}_DEPENDS})
       SET(DEPS "${DEPS} ${ITD} (=${VERSION})")
@@ -48,6 +49,9 @@ IF("${CPACK_GENERATOR}" STREQUAL "DEB")
   ENDIF()
 
   SET(CPACK_INSTALL_CMAKE_PROJECTS "${BUILD_DIR};${CURRENT_COMPONENT};${CURRENT_COMPONENT};${PACKAGE_DIR}")
+
+  # Replacing occurences of _ in package name (not supported in debian web repositories) by -
+  STRING(REPLACE "_" "-" CURRENT_COMPONENT ${CURRENT_COMPONENT})
   SET(CPACK_PACKAGE_NAME ${CURRENT_COMPONENT})
   SET(CPACK_PACKAGE_FILE_NAME ${CURRENT_PACKAGE})
 ENDIF()
