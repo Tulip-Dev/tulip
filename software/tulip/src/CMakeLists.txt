@@ -74,23 +74,29 @@ TARGET_LINK_LIBRARIES( tulip_app ${LibTulipPluginsManagerName})
 ADD_DEPENDENCIES(tulip_app ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
 
 IF(WIN32)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip.exe
-        DESTINATION ${TulipBinInstallDir}
-        COMPONENT tulip)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app.exe
-        DESTINATION ${TulipBinInstallDir}
-        COMPONENT tulip)
+INSTALL(PROGRAMS
+  ${CMAKE_CURRENT_BINARY_DIR}/tulip.exe
+  DESTINATION ${TulipBinInstallDir}
+  COMPONENT tulip)
+INSTALL(PROGRAMS
+  ${CMAKE_CURRENT_BINARY_DIR}/tulip_app.exe
+  DESTINATION ${TulipBinInstallDir}
+  COMPONENT tulip)
+
 ELSE(WIN32)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sh
-        DESTINATION ${TulipBinInstallDir}
+INSTALL(PROGRAMS
+  ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sh
+  DESTINATION ${TulipBinInstallDir}
   RENAME tulip
   COMPONENT tulip)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app
-        DESTINATION ${TulipBinInstallDir}
-        COMPONENT tulip)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_need_restart
-        DESTINATION ${TulipBinInstallDir}
-        COMPONENT tulip)
+INSTALL(PROGRAMS
+  ${CMAKE_CURRENT_BINARY_DIR}/tulip_app
+  DESTINATION ${TulipBinInstallDir}
+  COMPONENT tulip)
+INSTALL(PROGRAMS
+  ${CMAKE_CURRENT_BINARY_DIR}/tulip_need_restart
+  DESTINATION ${TulipBinInstallDir}
+  COMPONENT tulip)
 ENDIF(WIN32)
 
 

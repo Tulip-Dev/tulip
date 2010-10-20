@@ -7,11 +7,13 @@ ADD_CUSTOM_COMMAND(OUTPUT devHandbook.fo COMMAND java ARGS -cp "${PROJECT_SOURCE
 
 ADD_CUSTOM_TARGET(dev_pdf ALL pdfxmltex --output-directory="pdf/" devHandbook.fo DEPENDS images pdf devHandbook.fo)
 
-INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
-		  ${CMAKE_CURRENT_BINARY_DIR}/images 
-  DESTINATION share/tulip/developerHandbook
-  COMPONENT tulip_doc)
+INSTALL(DIRECTORY
+  ${CMAKE_CURRENT_BINARY_DIR}/html
+  ${CMAKE_CURRENT_BINARY_DIR}/images
+DESTINATION share/tulip/developerHandbook
+COMPONENT tulip_doc)
 
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/pdf/devHandbook.pdf
-  DESTINATION share/tulip/developerHandbook
-  COMPONENT tulip_doc)
+INSTALL(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/pdf/devHandbook.pdf
+DESTINATION share/tulip/developerHandbook
+COMPONENT tulip_doc)
