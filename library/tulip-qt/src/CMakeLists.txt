@@ -86,13 +86,6 @@ set(tulip-qt_UI
      ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui     
 )
 
-set(tulip-qt_PLUGINS
-     ../include/tulip/SGHierarchyWidget.h
-     ../include/tulip/GlMainWidget.h
-     ../include/tulip/ElementPropertiesWidget.h
-     ../include/tulip/GWOverviewWidget.h
-     ../include/tulip/PropertyWidget.h)
-
 set(tulip-qt_MOC
     ../include/tulip/TulipTableWidget.h
     ../include/tulip/GlMainWidget.h
@@ -159,7 +152,6 @@ set(tulip-qt_RCC
     ../designer/TulipQtResource.qrc )
 
 TULIP_QT4_WRAP_UI_IN_INCLUDE_TULIP(tulip-qt_UI_SRCS ${tulip-qt_UI})
-TULIP_WRAP_QT_PLUGINS_IN_INCLUDE_TULIP(tulip-qt_PLUGINS_SRCS ${tulip-qt_PLUGINS})
 TULIP_QT4_WRAP_CPP(tulip-qt_MOC_SRCS ${tulip-qt_MOC} OPTIONS "-DQT_MINOR_REL=${QT_VERSION_MINOR}")
 QT4_ADD_RESOURCES(tulip-qt_RCC_SRCS ${tulip-qt_RCC})
 
@@ -167,7 +159,7 @@ ADD_DEFINITIONS(-DQT_DLL)
 ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
 
 INCLUDE_DIRECTORIES(../include/ ../include/tulip ${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtBuildInclude} ${PROJECT_BINARY_DIR}/library/tulip-qt/include/tulip/)
-ADD_LIBRARY(${LibTulipQtName} SHARED ${tulip-qt_PLUGINS_SRCS} ${tulip-qt_UI_SRCS} ${tulip-qt_MOC_SRCS} ${tulip-qt_RCC_SRCS} ${tulip-qt_LIB_SRCS})
+ADD_LIBRARY(${LibTulipQtName} SHARED ${tulip-qt_UI_SRCS} ${tulip-qt_MOC_SRCS} ${tulip-qt_RCC_SRCS} ${tulip-qt_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${QT_QTCORE_LIBRARY})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${QT_QTGUI_LIBRARY})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${QT_QTOPENGL_LIBRARY})
