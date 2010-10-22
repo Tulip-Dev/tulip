@@ -95,7 +95,6 @@ INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl
 )
 ENDIF(WIN32)
 INSTALL(TARGETS ${LibTulipPluginsManagerName}
-       RUNTIME DESTINATION ${TulipBinInstallDir}
-       LIBRARY DESTINATION ${TulipLibInstallDir}
-       ARCHIVE DESTINATION ${TulipLibInstallDir}
-       COMPONENT tulip_pluginsmanager)
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_pluginsmanager
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_pluginsmanager
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_pluginsmanager)
