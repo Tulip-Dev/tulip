@@ -34,6 +34,12 @@ ENDMACRO()
 
 # Check what kind of CPack generator we are using
 IF("${CPACK_GENERATOR}" STREQUAL "DEB")
+  # Set external dependencies for deb packages
+  SET(LIBTULIP_EXTERNAL_DEB_DEPS "libc6")
+  SET(LIBTULIP_OGL_EXTERNAL_DEB_DEPS "libxdmcp6,libglew1.5,libjpeg62,libpng12-0")
+  SET(LIBTULIP_QT_EXTERNAL_DEB_DEPS "libpcre3,libqt4-core,libqt4-gui,libqt4-opengl,libqt4-webkit,libqt4-xml")
+  SET(TULIP_PLUGINSMANAGER_EXTERNAL_DEB_DEPS "libssl0.9.8,libcrypto++8")
+
   SET(CURRENT_COMPONENT "ALL")
 
   FOREACH(ITC ${CPACK_COMPONENTS_ALL})
@@ -44,6 +50,14 @@ IF("${CPACK_GENERATOR}" STREQUAL "DEB")
       SET(DEPS "${DEPS} ${DEP_NAME} (=${VERSION})")
     ENDFOREACH()
     STRING(REPLACE ") " "), " DEB_DEPS "${DEPS}")
+
+    IF(NOT ${DEB_DEPS} STREQUAL "" AND ${CN}_EXTERNAL_DEB_DEPS)
+      SET(DEB_DEPS "${DEB_DEPS}, ")
+    ENDIF()
+    IF(${CN}_EXTERNAL_DEB_DEPS)
+      SET(DEB_DEPS "${DEB_DEPS}${${CN}_EXTERNAL_DEB_DEPS}")
+    ENDIF()
+
     PREPARE_DEB("${ITC}" "${DEB_DEPS}")
   ENDFOREACH()
 
