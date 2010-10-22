@@ -22,6 +22,10 @@
 
 #include "tulip/OpenGlConfigManager.h"
 
+#ifdef WIN32 	 
+#include <windows.h> 	 
+#endif
+ 
 #ifndef CALLBACK
 #define CALLBACK
 #endif
