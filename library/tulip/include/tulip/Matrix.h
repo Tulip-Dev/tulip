@@ -53,11 +53,11 @@ namespace tlp {
    * \version 0.0.2 27/04/2005 
    */
   template<typename Obj,unsigned int SIZE>
-    class Matrix:public Vector< Vector<Obj,SIZE> , SIZE > {
+    class Matrix:public Array< Vector<Obj,SIZE> , SIZE > {
   public:
     Matrix(){}
     Matrix(const Vector< Vector<Obj,SIZE> , SIZE > &a) :
-      Vector< Vector<Obj,SIZE> , SIZE >(a) {
+      Array< Vector<Obj,SIZE> , SIZE >(a) {
     };
       
       // Builds a correlation matrix from a covariance matrix !
