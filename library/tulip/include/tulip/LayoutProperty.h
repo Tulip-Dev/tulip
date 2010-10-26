@@ -35,7 +35,7 @@ namespace tlp {
 class PropertyContext;
 class Graph;
 
-typedef AbstractProperty<PointType, LineType, LayoutAlgorithm> AbstractLayoutProperty;
+typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> AbstractLayoutProperty;
 
 /** \addtogroup properties */ 
 /*@{*/
@@ -143,7 +143,7 @@ private:
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
 };
 
-class TLP_SCOPE CoordVectorProperty:public AbstractProperty<CoordVectorType,CoordVectorType> { 
+class TLP_SCOPE CoordVectorProperty:public AbstractProperty<tlp::CoordVectorType, tlp::CoordVectorType> { 
 public :
   CoordVectorProperty(Graph *g, std::string n=""):AbstractProperty<CoordVectorType, CoordVectorType>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string&);

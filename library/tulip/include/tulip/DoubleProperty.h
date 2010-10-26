@@ -32,7 +32,7 @@ namespace tlp {
 
 class PropertyContext;
 
-typedef AbstractProperty<DoubleType, DoubleType, DoubleAlgorithm> AbstractDoubleProperty;
+typedef AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> AbstractDoubleProperty;
 /** \addtogroup properties */ 
 /*\@{*/
   class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, public PropertyObserver { 
@@ -72,7 +72,7 @@ private:
   void computeMinMaxEdge(Graph *sg=0);
 };
 
-class TLP_SCOPE DoubleVectorProperty:public AbstractProperty<DoubleVectorType,DoubleVectorType> { 
+class TLP_SCOPE DoubleVectorProperty:public AbstractProperty<tlp::DoubleVectorType, tlp::DoubleVectorType> { 
 public :
   DoubleVectorProperty(Graph *g, std::string n=""):AbstractProperty<DoubleVectorType, DoubleVectorType>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string& );

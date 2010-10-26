@@ -122,13 +122,13 @@ public:
    * If there is no value it returns the default value
    * depending of the type.
    */
-  typename ReturnType<typename Tnode::RealType>::ConstValue getNodeValue(const node n ) const;
+  typename tlp::ReturnType<typename Tnode::RealType>::ConstValue getNodeValue(const node n ) const;
   /**
    * Returns the value associated to the edge e in this property.
    * If there is no value , it returns the default value
    * depending of the type.
    */
-  typename ReturnType<typename Tedge::RealType>::ConstValue getEdgeValue(const edge e) const;
+  typename tlp::ReturnType<typename Tedge::RealType>::ConstValue getEdgeValue(const edge e) const;
   /**
    * Set the value of a node n and notify the observers of a modification.
    */
@@ -258,7 +258,7 @@ public:
   }
   // returns an iterator on all nodes (belonging to g) whose value is different
   // from the default value
-  virtual Iterator<node>* getNonDefaultValuatedNodes(const Graph* g = NULL) const {
+  virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* g = NULL) const {
     tlp::Iterator<tlp::node> *it =
       new tlp::UINTIterator<tlp::node>(nodeProperties.findAll(nodeDefaultValue, false));
     if (name.empty())
@@ -270,8 +270,8 @@ public:
   }
   // returns an iterator on all edges (belonging to g) whose value is different
   // from the default value
-  virtual Iterator<edge>* getNonDefaultValuatedEdges(const Graph* g = NULL) const {
-    Iterator<tlp::edge>* it =
+  virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* g = NULL) const {
+    tlp::Iterator<tlp::edge>* it =
       new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
     if (name.empty())
       // we always need to check that edges belong to graph
@@ -370,7 +370,7 @@ public:
   }
   // mE is the meta edge, itE is an iterator on the underlying edges
   // mg is the graph owning mE
-  virtual void computeMetaValue(edge e, Iterator<edge>* itE, Graph* mg) {
+  virtual void computeMetaValue(edge e, tlp::Iterator<edge>* itE, Graph* mg) {
     if (metaValueCalculator)
     ((typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::MetaValueCalculator *)metaValueCalculator)->computeMetaValue(this, e, itE, mg);
   }
@@ -398,7 +398,7 @@ public:
     // The method do not have to delete the iterator
     virtual void computeMetaValue(AbstractProperty<Tnode, Tedge,
 				  TPROPERTY>*,
-				  edge, Iterator<edge>*,
+				  edge, tlp::Iterator<edge>*,
 				  Graph*) {}
   };
 

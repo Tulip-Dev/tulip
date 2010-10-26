@@ -31,7 +31,7 @@ namespace tlp {
 
 class PropertyContext;
 
-  typedef AbstractProperty<StringType,StringType, StringAlgorithm> AbstractStringProperty;
+  typedef AbstractProperty<tlp::StringType, tlp::StringType, tlp::StringAlgorithm> AbstractStringProperty;
 /** \addtogroup properties */ 
 /*\@{*/
 class TLP_SCOPE StringProperty:public AbstractStringProperty{ 
@@ -44,7 +44,7 @@ public :
   PropertyInterface* clonePrototype(Graph *, const std::string&);
 };
 
-class TLP_SCOPE StringVectorProperty:public AbstractProperty<StringVectorType,StringVectorType>{ 
+class TLP_SCOPE StringVectorProperty:public AbstractProperty<tlp::StringVectorType, tlp::StringVectorType>{ 
 public :
   StringVectorProperty(Graph *g, std::string n=""):AbstractProperty<StringVectorType, StringVectorType>(g, n) {}
 
