@@ -156,7 +156,7 @@ class TLP_SCOPE DataSet {
   /** set from an untyped value */
   void setData(const std::string &str, const DataType* value);
   /** Return an iterator on all values */
-  Iterator< std::pair<std::string, DataType*> > *getValues() const;
+  tlp::Iterator< std::pair<std::string, DataType*> > *getValues() const;
 };
 
 
@@ -173,7 +173,7 @@ struct TLP_SCOPE StructDef {
   bool hasField(std::string);
 
   ///Get iterator on structure fields
-  Iterator< std::pair<std::string,std::string> >* getField() const;
+  tlp::Iterator< std::pair<std::string,std::string> >* getField() const;
 
   ///Get field help & default string-value (see also XXXType in Types.h)
   std::string getHelp( std::string str ) const;

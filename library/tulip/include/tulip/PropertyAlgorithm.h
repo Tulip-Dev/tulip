@@ -50,7 +50,7 @@ namespace tlp {
 class TLP_SCOPE PropertyAlgorithm: public WithParameter, public WithDependency {
 public :
   ///
-  PropertyAlgorithm(const PropertyContext & context) :
+  PropertyAlgorithm(const tlp::PropertyContext & context) :
     graph(context.graph),
     pluginProgress(context.pluginProgress),
     dataSet(context.dataSet) {
