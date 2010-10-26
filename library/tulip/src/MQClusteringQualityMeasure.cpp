@@ -15,11 +15,14 @@ double MQClusteringQualityMeasure::getQuality() {
   double size = double(_clusteringAlgorithm->getPartitionSize());
 //   std::cout << "partitionsize: " << size << std::endl; 
   double positive = _positive / size;
-  if(size == 1) 
-    return positive;
+  if(size == 1) {
+    std::cout << "Quality MQ : " << positive << " => " << size << std::endl;
+   return positive;
+  }
   double negative = _negative / (double(size*(size-1)) / 2.0);
 //   std::cout << positive << "\t" << negative << std::endl;
 //   std::cout << "(+: " << positive << ";" << _positive << ")" << "(-:" << negative << ";" << _negative << ")" << "(size:" << size << ")" << std::endl; 
+//  std::cout << "Quality MQ : " << "(" << positive << " - "<< negative <<" ) = "<< positive - negative << " => " << size << std::endl;
   return positive - negative;
 }
 
@@ -139,8 +142,10 @@ double MQClusteringQualityMeasure::getQualityIfMerged(node n1, node n2) {
   _clusteringAlgorithm->orderByPartitionId(n1, n2);
   double tmpneg = _negative;
   double tmppos = _positive;
-  removePositive(n1, n2, tmpneg);
-  removeNegative(n1, n2, tmppos);
+ /*  removePositive(n1, n2, tmpneg);
+     removeNegative(n1, n2, tmppos);*/
+  removePositive(n1, n2, tmppos);
+  removeNegative(n1, n2, tmpneg);
   //=====================================================
   unsigned int newPartSize;
   newPartSize = _clusteringAlgorithm->getPartitionSize(_clusteringAlgorithm->getPartitionId(n1)) 
@@ -172,7 +177,7 @@ double MQClusteringQualityMeasure::getQualityIfMerged(node n1, node n2) {
   if(partSize <=1)
     return tmppos;
   tmpneg  /= partSize*(partSize-1) / 2.0;
-  //  cerr  << __FUNCTION__ << "pos : " << tmppos << " neg: " << tmpneg << endl;
+  //std::cerr  << __FUNCTION__ << " pos : " << tmppos << " neg: " << tmpneg << std::endl;
   return tmppos - tmpneg;
 }
 
@@ -190,7 +195,7 @@ void MQClusteringQualityMeasure::initialize() {
   } delete itN;
   _positive = positive;
   double partitionSize = _clusteringAlgorithm->getPartitionSize();
-//   std::cout << "pos : " << positive << "/" << partitionSize << std::endl;
+  //std::cout << "pos : " << positive << "/" << partitionSize << std::endl;
   positive /= partitionSize;
 
   //compute negative part of MQ
@@ -203,14 +208,14 @@ void MQClusteringQualityMeasure::initialize() {
     unsigned int p1 = _clusteringAlgorithm->getPartitionId(n1);
     unsigned int p2 = _clusteringAlgorithm->getPartitionId(n2);
     if ( (_clusteringAlgorithm->getPartitionSize(p1)!=0) && (_clusteringAlgorithm->getPartitionSize(p2)!=0)) {
-  //       std::cout << _clusteringAlgorithm->getExtraEdges().get(e.id) << "/(" << _clusteringAlgorithm->getPartition()[p1].size() << "*" << _clusteringAlgorithm->getPartition()[p2].size() << std::endl;
+      //std::cout << _clusteringAlgorithm->getExtraEdges(e) << "/(" << _clusteringAlgorithm->getPartitionSize(p1) << "*" << _clusteringAlgorithm->getPartitionSize(p2) << std::endl;
       negative += _clusteringAlgorithm->getExtraEdges(e) / double(_clusteringAlgorithm->getPartitionSize(p1) * _clusteringAlgorithm->getPartitionSize(p2));
     }
   } delete itE;
   _negative = negative;
   if (partitionSize > 1)
     negative /= double(partitionSize*(partitionSize-1)) / 2.0;
-//   std::cout << "neg : " << negative << "/" << double(partitionSize*(partitionSize-1)) / 2.0 << std::endl;
+  //  std::cout << "neg : " << negative << "/" << double(partitionSize*(partitionSize-1)) / 2.0 << std::endl;
 //   std::cout << "pos : " << _positive << " neg:" << _negative << std::endl;
 //   double nbNodes = double(_clusteringAlgorithm->getOriginalGraph()->numberOfNodes());
 //   double nbEdges = double(_clusteringAlgorithm->getOriginalGraph()->numberOfEdges());
