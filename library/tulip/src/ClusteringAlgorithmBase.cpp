@@ -110,7 +110,7 @@ AgglomerativeClusteringBase::AgglomerativeClusteringBase(AlgorithmContext contex
         ++i;
     } delete it;
     
-    _partitions.push_back(_partition);
+    _hierarchy.push_back(_partition);
   }
 }
 

@@ -32,7 +32,7 @@ namespace tlp {
       tlp::Graph* _quotientGraph;
       
       std::vector<std::set<node> > _partition; //partition of nodes
-      std::vector<std::vector<std::set<node > > > _partitions;
+      std::vector<std::vector<std::set<node > > > _hierarchy; //the hierarchy of partitions
       MutableContainer<unsigned int> _partitionId;  //node of the Quotient Graph -> partition id
       MutableContainer<node> _partitionNode;        //partition id -> node in the quotient graph
       
