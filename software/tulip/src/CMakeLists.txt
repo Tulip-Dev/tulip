@@ -77,26 +77,26 @@ IF(WIN32)
 INSTALL(PROGRAMS
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.exe
   DESTINATION ${TulipBinInstallDir}
-  COMPONENT tulip)
+  COMPONENT tulip_app)
 INSTALL(PROGRAMS
   ${CMAKE_CURRENT_BINARY_DIR}/tulip_app.exe
   DESTINATION ${TulipBinInstallDir}
-  COMPONENT tulip)
+  COMPONENT tulip_app)
 
 ELSE(WIN32)
 INSTALL(PROGRAMS
   ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sh
   DESTINATION ${TulipBinInstallDir}
   RENAME tulip
-  COMPONENT tulip)
+  COMPONENT tulip_app)
 INSTALL(PROGRAMS
   ${CMAKE_CURRENT_BINARY_DIR}/tulip_app
   DESTINATION ${TulipBinInstallDir}
-  COMPONENT tulip)
+  COMPONENT tulip_app)
 INSTALL(PROGRAMS
   ${CMAKE_CURRENT_BINARY_DIR}/tulip_need_restart
   DESTINATION ${TulipBinInstallDir}
-  COMPONENT tulip)
+  COMPONENT tulip_app)
 ENDIF(WIN32)
 
 
