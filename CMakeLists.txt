@@ -273,23 +273,6 @@ CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 CONFIGURE_FILE("unit_test/plugins/pluginstest.cpp.in" "unit_test/plugins/pluginstest.cpp" @ONLY)
 
 ## -----------------------------------------------------------------------------------------------
-## Create tulip.nsi script
-## -----------------------------------------------------------------------------------------------
-#IF(WIN32)
-  EXEC_PROGRAM(grep ARGS "mingw /etc/fstab"  OUTPUT_VARIABLE MINDIR)
-  STRING(REGEX REPLACE "[ \t]+/mingw" "" MINDIR "${MINDIR}")
-  SET(qt_libraries ${QT_LIBRARY_DIR})
-  SET(WIN_EXE_VERSION ${TulipMajorVersion}_${TulipMinorVersion}_${TulipReleaseVersion})
-  CONFIGURE_FILE("tulip.nsi.in" "tulip-${VERSION}.nsi" @ONLY)
-  ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_BINARY_DIR}/COPYING.LESSER
-		DEPENDS ${PROJECT_SOURCE_DIR}/COPYING.LESSER
-		COMMAND ${CMAKE_COMMAND}
-		ARGS -E copy_if_different ${PROJECT_SOURCE_DIR}/COPYING.LESSER ${PROJECT_BINARY_DIR}/COPYING.LESSER)
-  ADD_CUSTOM_TARGET(wininst makensis.exe "tulip-${VERSION}.nsi"
-		DEPENDS ${PROJECT_BINARY_DIR}/COPYING.LESSER)
-#ENDIF(WIN32)
-
-## -----------------------------------------------------------------------------------------------
 ## Installation of files
 ## -----------------------------------------------------------------------------------------------
 INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config
@@ -345,7 +328,7 @@ tulip # Meta package containing tulip_app, libraries and plugins
 MACRO(DEF_COMP comp display_name desc deps group)
   STRING(TOUPPER ${comp} CN)
   SET(CPACK_COMPONENT_${CN}_DISPLAY_NAME ${display_name})
-  SET(CPACK_COMPONENT_${CN}_DESCRIPTION "${desc} Tulip is a free software, you can visit http://tulip.labri.fr to get more informations, news and extra content for Tulip.")
+  SET(CPACK_COMPONENT_${CN}_DESCRIPTION "${desc}.\n Tulip is a free software, you can visit http://tulip.labri.fr to get more informations, news and extra content for Tulip.")
   IF(NOT "${deps}" STREQUAL "")
     SET(CPACK_COMPONENT_${CN}_DEPENDS ${deps})
   ENDIF()
