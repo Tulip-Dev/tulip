@@ -9,5 +9,5 @@ INSTALL(FILES
   logolabri.jpg
   tex_back.png
 DESTINATION ${TulipBitmapInstallDir}
-COMPONENT tulip
+COMPONENT tulip_app
 )

@@ -336,8 +336,9 @@ tulip_plugins_sizes # Sizes base plugins
 tulip_plugins_spreadsheetview # Spreadsheet view plugin
 tulip_pluginsmanager # Plugins manager software
 #tlprender # TLP renderer (not included in normal install)
-tulip # Tulip software
+tulip_app # Tulip software
 tulip_textures # Additional textures
+tulip # Meta package containing tulip_app, libraries and plugins
 )
 
 # Defines software component attributes (display name, description, dependencies, group)
@@ -393,11 +394,14 @@ DEF_COMP(tulip_plugins_spreadsheetview "Tulip - Spreadsheet view" "Spreadsheet v
 
 # software/pluginsmanager
 DEF_COMP(tulip_pluginsmanager "Tulip - Plugins manager" "A software to manage plugins installation from external sources." "libtulip;libtulip_ogl;libtulip_qt" ${SOFTWARE_GROUP_NAME})
-DEF_COMP(tulip "Tulip software" "The main Tulip software. Provides a complete interface and a set of tools to easily create, manage and visualize huge graphs in 3D scenes." "libtulip;libtulip_ogl;libtulip_qt;tulip_pluginsmanager" ${SOFTWARE_GROUP_NAME})
+DEF_COMP(tulip_app "Tulip software" "The main Tulip software. Provides a complete interface and a set of tools to easily create, manage and visualize huge graphs in 3D scenes." "libtulip;libtulip_ogl;libtulip_qt;tulip_pluginsmanager" ${SOFTWARE_GROUP_NAME})
 DEF_COMP(tulip_textures "Tulip - Additional textures" "Additional textures for the Tulip software" "" ${EXTRAS_GROUP_NAME})
 
 # doc/*
 DEF_COMP(tulip_doc "Tulip - Documentation" "Manuals and doxygen for the Tulip framework." "" ${EXTRAS_GROUP_NAME})
+
+# meta package
+DEF_COMP(tulip "Tulip - Meta package" "Meta package containing tulip application, libraries, documentation and base plugins" "libtulip;libtulip_ogl;libtulip_qt;tulip_app;tulip_pluginsmanager;tulip_doc;tulip_textures;tulip_plugins_clustering;tulip_plugins_colors;tulip_plugins_export;tulip_plugins_glyphs;tulip_plugins_interactors;tulip_plugins_import;tulip_plugins_layout;tulip_plugins_metric;tulip_plugins_selection;tulip_plugins_sizes;tulip_plugins_spreadsheetview" ${EXTRAS_GROUP_NAME})
 
 #SET(CPACK_COMPONENTS_ALL_IN_ONE_PACKAGE 1)
 SET(CPACK_COMPONENTS_ALL_GROUPS_IN_ONE_PACKAGE 1)

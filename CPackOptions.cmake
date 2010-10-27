@@ -35,10 +35,11 @@ ENDMACRO()
 # Check what kind of CPack generator we are using
 IF("${CPACK_GENERATOR}" STREQUAL "DEB")
   # Set external dependencies for deb packages
-  SET(LIBTULIP_EXTERNAL_DEB_DEPS "libc6")
-  SET(LIBTULIP_OGL_EXTERNAL_DEB_DEPS "libxdmcp6,libglew1.5,libjpeg8,libpng12-0")
-  SET(LIBTULIP_QT_EXTERNAL_DEB_DEPS "libpcre3,libqt4-core,libqt4-gui,libqt4-opengl,libqt4-webkit,libqt4-xml")
-  SET(TULIP_PLUGINSMANAGER_EXTERNAL_DEB_DEPS "libssl0.9.8,libcrypto++8")
+  SET(LIBTULIP_EXTERNAL_DEB_DEPS "zlib1g, libstdc++6, libc6, libgomp1, libgcc1")
+  SET(LIBTULIP_OGL_EXTERNAL_DEB_DEPS "libglew1.5, libglu1-mesa, libgl1-mesa-glx, libxml2, libjpeg62, libpng12-0, libfreetype6, zlib1g, libstdc++6, libc6, libgomp1, libgcc1, libxmu6, libxi6, libxext6, libx11-6, libxt6, libxcb1, libsm6, libice6, libxau6, libxdmcp6, libuuid1")
+  SET(LIBTULIP_QT_EXTERNAL_DEB_DEPS "libqtcore4, libqtgui4, libqt4-opengl, zlib1g, libglew1.5, libglu1-mesa, libgl1-mesa-glx, libxml2, libjpeg62, libpng12-0, libfreetype6, libstdc++6, libc6, libgomp1, libgcc1, libglib2.0-0, libqt4-dbus, libfontconfig1, libaudio2, libglib2.0-0, libsm6, libice6, libxrender1, libxext6, libx11-6, libxmu6, libxi6, libpcre3, libqt4-xml, libexpat1, libxt6, libxau6, libuuid1, libxcb1, libxdmcp6")
+  SET(TULIP_PLUGINSMANAGER_EXTERNAL_DEB_DEPS "libqtcore4, libqtgui4, libqt4-xml, libqt4-network, zlib1g, libglew1.5, libglu1-mesa, libgl1-mesa-glx, libxml2, libjpeg62, libpng12-0, libfreetype6, libqt4-opengl, libstdc++6, libc6, libgomp1, libgcc1, libglib2.0-0, libqt4-dbus, libfontconfig1, libaudio2, libglib2.0-0, libsm6, libice6, libxrender1, libxext6, libx11-6, libxmu6, libxi6, libc6, libpcre3, libexpat1, libxt6, libxau6, libuuid1, libxcb1, libxdmcp6")
+  SET(TULIP_APP_EXTERNAL_DEB_DEPS "libfreetype6, libqtgui4, libqtcore4, libqt4-xml, libqt4-opengl, libglu1-mesa, libgl1-mesa-glx, libxml2, libjpeg62, zlib1g, libglew1.5, libpng12-0, libqt4-network, libstdc++6, libc6, libgomp1, libgcc1, libqt4-dbus, libfontconfig1, libaudio2, libglib2.0-0, libsm6, libice6, libxrender1, libxext6, libx11-6, libglib2.0-0, libxmu6, libxi6, libexpat1, libxt6, libxau6, libpcre3, libuuid1, libxcb1, libxdmcp6")
 
   SET(CURRENT_COMPONENT "ALL")
 
