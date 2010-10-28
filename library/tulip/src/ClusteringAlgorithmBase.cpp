@@ -7,21 +7,36 @@
 #include <tulip/ExtendedClusterOperation.h>
 #include <tulip/SimpleTest.h>
 #include <tulip/ConnectedTest.h>
-#include <tulip/QClusteringQualityMeasure.h>
+#include <tulip/ClusteringQualityMeasure.h>
 
 using namespace tlp;
 using namespace std;
+
+std::string ClusteringAlgorithmBase::useSubGraphs = "Use SubGraphs as initial clustering";
+const char * paramHelp[] = {
+  // Q/MQ
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Boolean" ) \
+  HTML_HELP_BODY() \
+  "Whether to use the subgraphs as an initial clustering." \
+  HTML_HELP_CLOSE()
+};
 
 ClusteringAlgorithmBase::ClusteringAlgorithmBase(AlgorithmContext context)
   : Algorithm(context), 
   _quotientGraph(tlp::newGraph()), 
   _intraEdges(_quotientGraph->getProperty<DoubleProperty>("intraEdges")), 
   _extraEdges(_quotientGraph->getProperty<DoubleProperty>("extraEdges")),
-  _qualityMeasure(NULL){
+  _qualityMeasure(NULL),
+  _useSubGraphsAsInitialClustering(false) {
     //use default values for the intra and extra edges
     _intraEdges->setAllEdgeValue(0);
     _extraEdges->setAllEdgeValue(1);
     _extraEdges->setAllNodeValue(0);
+    addParameter<bool>(ClusteringAlgorithmBase::useSubGraphs.c_str(), paramHelp[0], "false");
+    if(dataSet != 0 && dataSet->exist(ClusteringAlgorithmBase::useSubGraphs)) {
+      context.dataSet->get<bool>(ClusteringAlgorithmBase::useSubGraphs, _useSubGraphsAsInitialClustering);
+    }
 }
 
 ClusteringAlgorithmBase::~ClusteringAlgorithmBase() {
@@ -29,9 +44,50 @@ ClusteringAlgorithmBase::~ClusteringAlgorithmBase() {
 }
 
 bool ClusteringAlgorithmBase::run() {
+  if(_useSubGraphsAsInitialClustering) {
+    SubGraphsCheck result = checkSubGraphsForDuplicateOrMissingNodes();
+    if(result == OK) {
+      initializeFromSubGraphs();
+    }
+    else {
+      stringstream ss;
+      ss << "The subgraphs ";
+      if(result == MissingNodes) {
+        ss << "are missing nodes.";
+      }
+      else if(result == DuplicateNodes) {
+        ss << "contain duplicate nodes.";
+      }
+      cannotInitializeFromSubGraphs(ss.str());
+    }
+  }
   _qualityMeasure = getQualityMeasure();
   _qualityMeasure->initialize();
   return runClustering();
+}
+
+SubGraphsCheck ClusteringAlgorithmBase::checkSubGraphsForDuplicateOrMissingNodes() {
+  set<node> nodes;
+  Iterator<Graph*>* graphIt = graph->getSubGraphs();
+  while(graphIt->hasNext()) {
+    Graph* sub = graphIt->next();
+
+    Iterator<node>* nodeIt = sub->getNodes();
+    while(nodeIt->hasNext()) {
+      node n = nodeIt->next();
+      //if the current node has already been added to the set, it's a duplicate.
+      if(nodes.find(n) != nodes.end()) {
+        return DuplicateNodes;
+      }
+
+      nodes.insert(n);
+    }
+    delete nodeIt;
+  }
+
+  delete graphIt;
+  //if the set contains the same number of nodes as the graph, all of them are in the subgraphs
+  return nodes.size() == graph->numberOfNodes() ? OK : MissingNodes;
 }
 
 const Graph* ClusteringAlgorithmBase::getOriginalGraph() const {

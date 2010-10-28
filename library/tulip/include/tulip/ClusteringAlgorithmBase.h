@@ -8,7 +8,13 @@ namespace tlp {
   class DoubleProperty;
   class ClusteringQualityMeasure;
 
-  class ClusteringAlgorithmBase : public tlp::Algorithm {
+  enum SubGraphsCheck {
+    OK = 0,
+    MissingNodes = 1,
+    DuplicateNodes = 2
+  };
+
+  class TLP_SCOPE ClusteringAlgorithmBase : public tlp::Algorithm {
     public:
       ClusteringAlgorithmBase(AlgorithmContext context);
       virtual ~ClusteringAlgorithmBase();
@@ -29,6 +35,9 @@ namespace tlp {
       
       void orderByPartitionId(node &n1, node &n2) const;
     protected:
+      virtual void initializeFromSubGraphs() = 0;
+      virtual void cannotInitializeFromSubGraphs(const std::string& message) = 0;
+      SubGraphsCheck checkSubGraphsForDuplicateOrMissingNodes();
       tlp::Graph* _quotientGraph;
       
       std::vector<std::set<node> > _partition; //partition of nodes
@@ -45,11 +54,13 @@ namespace tlp {
       DoubleProperty* _metric;
       
       tlp::ClusteringQualityMeasure* _qualityMeasure;
+      bool _useSubGraphsAsInitialClustering;
+      static std::string useSubGraphs;
     private:
       bool run();
   };
   
-  class AgglomerativeClusteringBase : public ClusteringAlgorithmBase {
+  class TLP_SCOPE AgglomerativeClusteringBase : public ClusteringAlgorithmBase {
     public:
       AgglomerativeClusteringBase(tlp::AlgorithmContext);
       virtual bool runClustering() = 0;
@@ -66,7 +77,7 @@ namespace tlp {
       void buildHierarchy(tlp::Graph* graph, std::vector<std::vector<std::set<node > > >& partitions, int best_ind = -1);
   };
    
-  class DivisiveClusteringBase : public ClusteringAlgorithmBase {
+  class TLP_SCOPE DivisiveClusteringBase : public ClusteringAlgorithmBase {
     public:
       DivisiveClusteringBase(tlp::AlgorithmContext context);
       virtual bool runClustering() = 0;
