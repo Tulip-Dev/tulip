@@ -156,6 +156,8 @@ edge GraphView::addEdgeInternal(edge e) {
 }
 //----------------------------------------------------------------
 edge GraphView::restoreEdge(edge e, const node n1,const node n2) {
+  (void) n1; //fixes unused parameter warning in release builds
+  (void) n2; //fixes unused parameter warning in release builds
   assert(isElement(n1));
   assert(isElement(n2));
   return addEdgeInternal(e);
