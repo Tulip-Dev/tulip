@@ -47,7 +47,9 @@ class Graph;
 /*@{*/
 
 ///
+#ifndef SWIG
 DECL_STORED_STRUCT(std::set<node>);
+#endif
 
 class TLP_SCOPE GraphType {
 public:
@@ -58,7 +60,9 @@ public:
   static bool fromString(RealType & v, const std::string & s );
 };
 
+#ifndef SWIG
 DECL_STORED_STRUCT(std::set<edge>);
+#endif
 
 class TLP_SCOPE EdgeSetType
 {
@@ -83,7 +87,9 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
+#ifndef SWIG
 DECL_STORED_STRUCT(std::vector<double>);
+#endif
 
 class TLP_SCOPE DoubleVectorType {
 public:
@@ -108,7 +114,9 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
+#ifndef SWIG
 DECL_STORED_STRUCT(std::vector<int>);
+#endif
 
 class TLP_SCOPE IntegerVectorType
 {
@@ -134,7 +142,9 @@ public:
 };
 
 
+#ifndef SWIG
 DECL_STORED_STRUCT(std::vector<bool>);
+#endif
 
 class TLP_SCOPE BooleanVectorType {
 public:
@@ -147,7 +157,9 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
+#ifndef SWIG
 DECL_STORED_STRUCT(std::vector<Coord>);
+#endif
 
 class TLP_SCOPE LineType
 {
@@ -172,7 +184,9 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
+#ifndef SWIG
 DECL_STORED_STRUCT(Size);
+#endif
 
 class TLP_SCOPE SizeType {
 public:
@@ -185,7 +199,9 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
+#ifndef SWIG
 DECL_STORED_STRUCT(std::vector<Size>);
+#endif
 
 class TLP_SCOPE SizeVectorType {
 public:
@@ -198,7 +214,9 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
+#ifndef SWIG
 DECL_STORED_STRUCT(std::string);
+#endif
 
 class TLP_SCOPE StringType {
 public:
@@ -211,7 +229,9 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
+#ifndef SWIG
 DECL_STORED_STRUCT(std::vector<std::string>);
+#endif
 
 class TLP_SCOPE StringVectorType {
 public:
@@ -235,7 +255,9 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
+#ifndef SWIG
 DECL_STORED_STRUCT(std::vector<Color>);
+#endif
 
 class TLP_SCOPE ColorVectorType {
 public:
