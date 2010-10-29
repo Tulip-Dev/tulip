@@ -61,6 +61,9 @@ void PlanarityTestImpl::extractBoundaryCycle(Graph *sG, node cNode,
   e = el[u].front();
   listEdges.push_back(e);
   u = sG->target(e);
+#ifndef NDEBUG
+  unsigned int count = 0;
+#endif
   while (u != parent.get(cNode.id)) {
     assert(++count <= numberOfNodesInG);
     e = el[u].front();
