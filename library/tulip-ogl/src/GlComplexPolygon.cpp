@@ -17,13 +17,8 @@
  *
  */
 
-#ifdef __APPLE_CC__
-#include <OpenGL/glew.h>
-#include <OpenGL/glu.h>
-#else
 #include <GL/glew.h> 
 #include <GL/glu.h> 
-#endif
 
 #include "tulip/GlComplexPolygon.h"
 #include "tulip/GlTools.h"

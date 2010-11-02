@@ -22,9 +22,6 @@
 
 #include <iostream>
 #include <cmath>
-extern "C" {
-#include "tulip/OpenGlConfigManager.h"
-}
 #include "tulip/GlLines.h"
 #include "tulip/GlTools.h"
 #include "tulip/OpenGlConfigManager.h"
