@@ -133,7 +133,14 @@ TulipApp::TulipApp(QWidget* parent): QMainWindow(parent),currentTabIndex(-1)  {
   // initialize needRestart setting
   disableRestart();
   setupUi(this);
+
   tabWidget=centralTabWidget;
+
+#if QT_MINOR_REL >= 5
+  tabWidget->setTabsClosable(true);
+  connect(tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(closeTab(int)));
+#endif
+
 }
 
 //**********************************************************************
@@ -402,6 +409,16 @@ void TulipApp::fileCloseTab(){
   if(controllerAutoLoad)
     return;
   int index=tabWidget->currentIndex();
+  closeTab(index);
+}
+//**********************************************************************
+void TulipApp::closeTab(int index){
+  if(controllerAutoLoad)
+    return;
+
+  if(index!=tabWidget->currentIndex())
+    tabWidget->setCurrentIndex(index);
+
   Graph *graph=tabIndexToController[index]->getGraph();
   while(graph->getRoot()!=graph)
     graph=graph->getRoot();
@@ -427,7 +444,13 @@ void TulipApp::fileCloseTab(){
 
     currentTabIndex=-1;
 
+    int newIndex=tabWidget->currentIndex();
+    if(index<tabWidget->currentIndex())
+      newIndex--;
+
     tabWidget->removeTab(index);
+    //tabChanged(newIndex);
+
     if(tabWidget->count()==0)
       tabWidget->setCurrentIndex(-1);
 
