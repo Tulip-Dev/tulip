@@ -366,6 +366,9 @@ namespace tlp {
         OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
         glLineWidth(1);
       }else{
+        // this line is here to center the label : without this line the label is just a little too far right
+        glTranslatef(-1.5,0.,0.);
+
         if(fontType==0){
           renderer->draw(w,w, labelPos);
         }else{
