@@ -383,13 +383,13 @@ DEF_COMP(tulip_textures "Tulip - Additional textures" "Additional textures for t
 # doc/*
 DEF_COMP(tulip_doc "Tulip - Documentation" "Manuals and doxygen for the Tulip framework." "" ${EXTRAS_GROUP_NAME})
 
-# meta package
-DEF_COMP(tulip "Tulip - Meta package" "Meta package containing tulip application, libraries, documentation and base plugins" "libtulip;libtulip_ogl;libtulip_qt;tulip_app;tulip_pluginsmanager;tulip_doc;tulip_textures;tulip_plugins_clustering;tulip_plugins_colors;tulip_plugins_export;tulip_plugins_glyphs;tulip_plugins_interactors;tulip_plugins_import;tulip_plugins_layout;tulip_plugins_metric;tulip_plugins_selection;tulip_plugins_sizes;tulip_plugins_spreadsheetview" ${EXTRAS_GROUP_NAME})
-
 # Force grouping of components in a single package (CMake 2.9)
 SET(CPACK_COMPONENTS_ALL_GROUPS_IN_ONE_PACKAGE 1)
 
 IF(LINUX)
+  # meta package (Linux only)
+  DEF_COMP(tulip "Tulip - Meta package" "Meta package containing tulip application, libraries, documentation and base plugins" "libtulip;libtulip_ogl;libtulip_qt;tulip_app;tulip_pluginsmanager;tulip_doc;tulip_textures;tulip_plugins_clustering;tulip_plugins_colors;tulip_plugins_export;tulip_plugins_glyphs;tulip_plugins_interactors;tulip_plugins_import;tulip_plugins_layout;tulip_plugins_metric;tulip_plugins_selection;tulip_plugins_sizes;tulip_plugins_spreadsheetview" ${EXTRAS_GROUP_NAME})
+
   IF(I64)
     SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
   ELSE()
