@@ -219,6 +219,8 @@ private:
   tlp::GlScene scene;
   QRegion _visibleArea;
   AbstractView *view;
+  int widthStored;
+  int heightStored;
   char *renderingStore;
   std::vector<ForegroundEntity *> foregroundEntity;
 	GlCompositeHierarchyManager* manager;

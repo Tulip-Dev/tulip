@@ -290,6 +290,12 @@ namespace tlp {
   //==================================================
   void GlMainWidget::redraw() {
     if (isVisible()) {
+
+      if(widthStored!=width() || heightStored!=height()){
+        draw(false);
+        return;
+      }
+
       checkIfGlAuxBufferAvailable();
       
       makeCurrent();
@@ -302,7 +308,6 @@ namespace tlp {
 
 
       glDrawBuffer(GL_BACK);
-
 
       if (!_glAuxBufferAvailable) {
         glDrawPixels(width(),height(),GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
@@ -354,6 +359,8 @@ namespace tlp {
         glReadPixels(0,0,width(),height(),GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
         glFlush();
       }
+      widthStored=width();
+      heightStored=height();
       glTest(__PRETTY_FUNCTION__);
 
       glEnable(GL_DEPTH_TEST);
