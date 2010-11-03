@@ -306,7 +306,7 @@ libtulip_ogl # libtulip-ogl.so
 libtulip_ogl_dev # tulip-ogl headers
 libtulip_qt # libtulip-qt.so
 libtulip_qt_dev # libtulip-qt headers
-tulip_plugins_clustering # Clustering base plugins
+tulip_plugins_general # Clustering base plugins
 tulip_plugins_colors # Colors base plugins
 tulip_plugins_export # Export base plugins
 tulip_plugins_glyphs # Glyphs base plugins
@@ -363,7 +363,7 @@ DEF_COMP(libtulip_qt "Tulip framework - Qt bindings" "Tulip-qt provides binding 
 DEF_COMP(libtulip_qt_dev "Tulip framework - Qt bindings - Development files" "Tulip-qt provides binding for the Qt4 framework. Helping user to design user interfaces to integrate Tulip 3D visualizations into a GUI." "libtulip_qt" ${HEADERS_GROUP_NAME})
 
 # plugins/*
-DEF_COMP(tulip_plugins_clustering "Tulip - Clustering plugins" "Graph clustering plugins for the Tulip framework" "libtulip" ${PLUGINS_GROUP_NAME})
+DEF_COMP(tulip_plugins_general "Tulip - Clustering plugins" "Graph clustering plugins for the Tulip framework" "libtulip" ${PLUGINS_GROUP_NAME})
 DEF_COMP(tulip_plugins_colors "Tulip - Colors plugins" "Colors plugins for the Tulip framework" "libtulip;libtulip_ogl;libtulip_qt" ${PLUGINS_GROUP_NAME})
 DEF_COMP(tulip_plugins_export "Tulip - Export plugins" "Export plugins for the Tulip framework" "libtulip" ${PLUGINS_GROUP_NAME})
 DEF_COMP(tulip_plugins_glyphs "Tulip - Glyphs plugins" "Glyphs plugins for the Tulip framework" "libtulip;libtulip_ogl" ${PLUGINS_GROUP_NAME})
@@ -388,7 +388,7 @@ SET(CPACK_COMPONENTS_ALL_GROUPS_IN_ONE_PACKAGE 1)
 
 IF(LINUX)
   # meta package (Linux only)
-  DEF_COMP(tulip "Tulip - Meta package" "Meta package containing tulip application, libraries, documentation and base plugins" "libtulip;libtulip_ogl;libtulip_qt;tulip_app;tulip_pluginsmanager;tulip_doc;tulip_textures;tulip_plugins_clustering;tulip_plugins_colors;tulip_plugins_export;tulip_plugins_glyphs;tulip_plugins_interactors;tulip_plugins_import;tulip_plugins_layout;tulip_plugins_metric;tulip_plugins_selection;tulip_plugins_sizes;tulip_plugins_spreadsheetview" ${EXTRAS_GROUP_NAME})
+  DEF_COMP(tulip "Tulip - Meta package" "Meta package containing tulip application, libraries, documentation and base plugins" "libtulip;libtulip_ogl;libtulip_qt;tulip_app;tulip_pluginsmanager;tulip_doc;tulip_textures;tulip_plugins_general;tulip_plugins_colors;tulip_plugins_export;tulip_plugins_glyphs;tulip_plugins_interactors;tulip_plugins_import;tulip_plugins_layout;tulip_plugins_metric;tulip_plugins_selection;tulip_plugins_sizes;tulip_plugins_spreadsheetview" ${EXTRAS_GROUP_NAME})
 
   IF(I64)
     SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
