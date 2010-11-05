@@ -345,8 +345,9 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
       composite = new GlComposite(false);
       layer->addGlEntity(composite,"selectionComposite");
     }
+
     composite->addGlEntity(&centerRect, "CenterRectangle");
-    composite->addGlEntity(&advRect, "AdvRectangle");
+
     composite->addGlEntity(&_controls[0], "left");
     composite->addGlEntity(&_controls[1], "top-left");
     composite->addGlEntity(&_controls[2], "top");
@@ -355,12 +356,35 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
     composite->addGlEntity(&_controls[5], "bottom-right");
     composite->addGlEntity(&_controls[6], "bottom");
     composite->addGlEntity(&_controls[7], "bottom-left");
-    composite->addGlEntity(&_advControls[0], "center-top");
-    composite->addGlEntity(&_advControls[1], "center-bottom");
-    composite->addGlEntity(&_advControls[2], "center-right");
-    composite->addGlEntity(&_advControls[3], "center-left");
-    composite->addGlEntity(&_advControls[4], "center-horizontally");
-    composite->addGlEntity(&_advControls[5], "center-vertically");
+
+    Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
+    int moreThanOneNode=0;
+    while(itN->hasNext()){
+      if(moreThanOneNode>=2)
+        break;
+      moreThanOneNode++;
+      itN->next();
+    }
+    delete itN;
+    if(moreThanOneNode>=2){
+      composite->addGlEntity(&advRect, "AdvRectangle");
+
+      composite->addGlEntity(&_advControls[0], "center-top");
+      composite->addGlEntity(&_advControls[1], "center-bottom");
+      composite->addGlEntity(&_advControls[2], "center-right");
+      composite->addGlEntity(&_advControls[3], "center-left");
+      composite->addGlEntity(&_advControls[4], "center-horizontally");
+      composite->addGlEntity(&_advControls[5], "center-vertically");
+    }else{
+      composite->deleteGlEntity("AdvRectangle");
+
+      composite->deleteGlEntity("center-top");
+      composite->deleteGlEntity("center-bottom");
+      composite->deleteGlEntity("center-right");
+      composite->deleteGlEntity("center-left");
+      composite->deleteGlEntity("center-horizontally");
+      composite->deleteGlEntity("center-vertically");
+    }
     this->glMainWidget=glMainWidget;
     return true;
   }else{
