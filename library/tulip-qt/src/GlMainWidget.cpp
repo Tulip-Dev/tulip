@@ -27,6 +27,8 @@
 #include <QtOpenGL/QGLPixelBuffer>
 #include <QtGui/QPainter>
 #include <QtOpenGL/QGLFramebufferObject>
+#include <QtOpenGL/QGLFormat>
+#include <QtCore/QTime>
 
 #include "tulip/GlMainWidget.h"
 
@@ -114,7 +116,7 @@ namespace tlp {
 
   //==================================================
   GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
-    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), _hasHulls(false){
+    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), _hasHulls(false),glFrameBuf(NULL){
     //setObjectName(name);
     //  std::cerr << __PRETTY_FUNCTION__ << std::endl;
     setFocusPolicy(Qt::StrongFocus);
@@ -288,35 +290,51 @@ namespace tlp {
     //  std::cerr << __PRETTY_FUNCTION__ << std::endl;
   }
   //==================================================
+  bool GlMainWidget::createRenderingStore(int width, int height){
+    if(glFrameBuf){
+      delete glFrameBuf;
+      delete[] renderingStore;
+    }
+
+    QGLFormat format=QGLFormat::defaultFormat();
+    format.setAlpha(true);
+    glFrameBuf=new QGLFramebufferObject(width,height);
+    renderingStore=new char[width*height*4];
+    return glFrameBuf->isValid();
+  }
+  //==================================================
   void GlMainWidget::redraw() {
     if (isVisible()) {
 
-      if(widthStored!=width() || heightStored!=height()){
+      int width = contentsRect().width();
+      int height = contentsRect().height();
+
+      if(widthStored!=width || heightStored!=height){
         draw(false);
         return;
       }
 
-      checkIfGlAuxBufferAvailable();
-      
       makeCurrent();
-      
+
       glDisable(GL_TEXTURE_2D);
       glDisable(GL_DEPTH_TEST);
       glDisable(GL_STENCIL_TEST);
       glDisable(GL_BLEND);
       glDisable(GL_LIGHTING);
 
+      setRasterPosition(0,0);
 
-      glDrawBuffer(GL_BACK);
+      if(frameBufferStored){
+        glBindTexture(GL_TEXTURE_2D, glFrameBuf->texture());
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, renderingStore);
 
-      if (!_glAuxBufferAvailable) {
-        glDrawPixels(width(),height(),GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+        glDrawBuffer(GL_BACK);
+        glDrawPixels(width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
       }else{
-        glReadBuffer(GL_AUX0);
-        setRasterPosition(0,0);
-        //Restore the graph image
-        glCopyPixels(0,0,width(), height(), GL_COLOR);
+        glDrawBuffer(GL_BACK);
+        glDrawPixels(width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
       }
+
       drawInteractors();
       drawForegroundEntities();
 
@@ -331,37 +349,81 @@ namespace tlp {
 
       makeCurrent();
 
-      checkIfGlAuxBufferAvailable();
-      computeInteractors();
-      scene.prerenderMetaNodes();
-      scene.draw();
-      
-      glDisable(GL_TEXTURE_2D);
-      glDisable(GL_DEPTH_TEST);
-      glDisable(GL_STENCIL_TEST);
-      glDisable(GL_BLEND);
-      glDisable(GL_LIGHTING);
+      int width = contentsRect().width();
+      int height = contentsRect().height();
 
-      //save the drawing of the graph in order to prevent redrawing during
-      //Interactor draw
-      if (_glAuxBufferAvailable) {
-        glReadBuffer(GL_BACK);
-        glDrawBuffer(GL_AUX0);
-        glClear(GL_COLOR_BUFFER_BIT);
-        setRasterPosition(0,0);
-        glCopyPixels(0,0,width(), height(), GL_COLOR);
-        glFlush();
-        glDrawBuffer(GL_BACK);
+      widthStored=width;
+      heightStored=height;
+
+      bool useFramebufferObject;
+
+      if(QGlBufferManager::getInst().canUseFramebufferObject()){
+        bool created;
+        if(!glFrameBuf)
+          createRenderingStore(width,height);
+
+        created=glFrameBuf->isValid();
+
+        if(glFrameBuf->isValid() && (glFrameBuf->size().width()!=width || glFrameBuf->size().height()!=height)){
+          created=createRenderingStore(width,height);
+        }
+        useFramebufferObject=created;
       }else{
-        glReadBuffer(GL_BACK);
-        if(!renderingStore)
-          renderingStore=new char[4*height()*width()];
-        glReadPixels(0,0,width(),height(),GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-        glFlush();
+        useFramebufferObject=false;
       }
-      widthStored=width();
-      heightStored=height();
-      glTest(__PRETTY_FUNCTION__);
+
+      if(useFramebufferObject){
+        glFrameBuf->bind();
+
+        computeInteractors();
+        scene.prerenderMetaNodes();
+        scene.draw();
+
+        glFrameBuf->release();
+
+        glBindTexture(GL_TEXTURE_2D, glFrameBuf->texture());
+        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, renderingStore);
+
+        glFrameBuf->release();
+        widthStored=width;
+        heightStored=height;
+
+        glDisable(GL_TEXTURE_2D);
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_STENCIL_TEST);
+        glDisable(GL_BLEND);
+        glDisable(GL_LIGHTING);
+
+        glDrawBuffer(GL_BACK);
+        setRasterPosition(0,0);
+        glDrawPixels(width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+
+        frameBufferStored=true;
+      }else{
+        glDrawBuffer(GL_BACK);
+
+        computeInteractors();
+        scene.prerenderMetaNodes();
+        scene.draw();
+
+        glDisable(GL_TEXTURE_2D);
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_STENCIL_TEST);
+        glDisable(GL_BLEND);
+        glDisable(GL_LIGHTING);
+
+        glReadBuffer(GL_BACK);
+        if(heightStored!=height || widthStored != width){
+          delete renderingStore;
+          renderingStore=NULL;
+        }
+        if(!renderingStore)
+          renderingStore=new char[4*height*width];
+        glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+        glFlush();
+
+        frameBufferStored=false;
+      }
 
       glEnable(GL_DEPTH_TEST);
       glEnable(GL_BLEND);
@@ -419,9 +481,18 @@ namespace tlp {
       std::cerr << "warning: GlMainWidget::resizeGL(" << w << ", " << h << ")" <<  std::endl;
       return ;
     }
-    delete renderingStore;
-    renderingStore=new char[4*h*w];
-    scene.setViewport(0,0,w,h);
+
+    int width = contentsRect().width();
+    int height = contentsRect().height();
+
+    if(glFrameBuf){
+      delete glFrameBuf;
+      glFrameBuf=NULL;
+      delete[] renderingStore;
+      renderingStore=NULL;
+    }
+
+    scene.setViewport(0,0,width,height);
   }
   //==================================================
   void GlMainWidget::makeCurrent() {
