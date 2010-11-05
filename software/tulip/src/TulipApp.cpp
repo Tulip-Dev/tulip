@@ -149,6 +149,7 @@ void TulipApp::enableElements(bool enabled) {
   fileSaveAsAction->setEnabled(enabled);
   filePrintAction->setEnabled(enabled);
   mouseActionGroup->setEnabled(enabled);
+  exportGraphMenu.menuAction()->setEnabled(enabled);
 }
 //**********************************************************************
 ///Destructor of viewGl
@@ -522,6 +523,8 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
   DataSet controllerData;
   Graph *graph;
   controllerToSave->getData(&graph,&controllerData);
+  if (graph == NULL)
+    return false;
   controller.set<DataSet>(controllerToControllerName[controllerToSave],controllerData);
   dataSet.set<DataSet>("controller",controller);
 
