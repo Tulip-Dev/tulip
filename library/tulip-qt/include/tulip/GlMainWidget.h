@@ -39,6 +39,7 @@
 #include <QtOpenGL/qgl.h>
 #include <QtCore/qpoint.h>
 #include <QtGui/qaction.h>
+#include <QtOpenGL/QGLFramebufferObject>
 
 #include "tulip/AbstractView.h"
 #include "tulip/ForegroundEntity.h"
@@ -215,6 +216,7 @@ private:
   void  paintGL();
   void  setupOpenGlContext();
   void  initializeGL();
+  bool createRenderingStore(int width, int height);
 
   tlp::GlScene scene;
   QRegion _visibleArea;
@@ -222,9 +224,11 @@ private:
   int widthStored;
   int heightStored;
   char *renderingStore;
+  bool frameBufferStored;
   std::vector<ForegroundEntity *> foregroundEntity;
 	GlCompositeHierarchyManager* manager;
 	bool _hasHulls;
+  QGLFramebufferObject *glFrameBuf;
 	
 public slots:
   /**
