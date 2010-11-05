@@ -160,7 +160,13 @@ namespace tlp {
       ((QWidget*) (createdWidget->parent()))->showMaximized();
 
     createdWidget->setMaximumSize(32767, 32767);
+
+    // block signals in order to not execute windowActivated slot before data are set
+    mainWindowFacade.getWorkspace()->blockSignals(true);
     createdWidget->show();
+    mainWindowFacade.getWorkspace()->blockSignals(false);
+
+    createdView->setData(graph,dataSet);
 
     windowActivated(createdWidget);
 
