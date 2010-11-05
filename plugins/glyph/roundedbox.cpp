@@ -1,3 +1,5 @@
+#include <GL/glew.h>
+
 #include <tulip/Glyph.h>
 #include <tulip/GlPolygon.h>
 #include <tulip/GlShaderProgram.h>
