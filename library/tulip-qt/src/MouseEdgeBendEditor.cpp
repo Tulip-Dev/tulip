@@ -128,7 +128,6 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     }
     case Qt::MidButton :
       undoEdition();
-      glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
       break;
     default: return false;
     }
@@ -140,7 +139,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       operation != NONE_OP) {
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     stopEdition();
-    glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
+    glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
     glMainWidget->redraw();
     return true;
   }
@@ -165,6 +164,9 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 //========================================================================================
 bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
   if (computeBendsCircles(glMainWidget)) {
+    if(operation == NONE_OP)
+      glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
+
     if(!layer){
       layer=new GlLayer("edgeBendEditorLayer",true);
       layer->setCamera(Camera(glMainWidget->getScene(),false));
@@ -175,6 +177,8 @@ bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
     }
     this->glMainWidget=glMainWidget;
     return true;
+  }else{
+    glMainWidget->setCursor(QCursor(Qt::CrossCursor));
   }
   return false;
 }
