@@ -208,6 +208,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::MouseButtonPress) {
     if (((QMouseEvent *) e)->buttons() == Qt::LeftButton) {
+      oldCursor=((QWidget*)widget)->cursor();
       InteractorComponent *currentMouse;
       // give focus so we can catch key events
       ((GlMainWidget *)widget)->setFocus();
@@ -221,8 +222,10 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
         currentMouse = new MouseZoomRotZ();
       else if (((QMouseEvent *) e)->modifiers() & Qt::ShiftModifier)
         currentMouse = new MouseRotXRotY();
-      else
+      else{
         currentMouse = new MouseMove();
+        ((QWidget*)widget)->setCursor(QCursor(Qt::ClosedHandCursor));
+      }
       bool result = currentMouse->eventFilter(widget, e);
 
       currentSpecInteractorComponent=currentMouse;
@@ -233,6 +236,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
     return false;
   }
   if (e->type() == QEvent::MouseButtonRelease) {
+    ((QWidget*)widget)->setCursor(oldCursor);
     delete currentSpecInteractorComponent;
     currentSpecInteractorComponent=NULL;
     return true;
