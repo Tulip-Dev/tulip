@@ -46,6 +46,8 @@ public:
     pushInteractorComponent(new MousePanNZoomNavigator);
     pushInteractorComponent(new MouseElementDeleter);
   }
+
+  QCursor getCursor(){return QCursor(Qt::PointingHandCursor);}
 };
 
 INTERACTORPLUGIN(InteractorDeleteElement, "InteractorDeleteElement", "Tulip Team", "01/04/2009", "Delete Element Interactor", "1.0");
