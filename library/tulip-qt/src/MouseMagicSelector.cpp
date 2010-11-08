@@ -53,8 +53,7 @@ bool MouseMagicSelector::eventFilter(QObject *widget, QEvent *e) {
       ElementType type;
       node tmpNode;
       edge tmpEdge;
-      glMainWidget->doSelect(x, y, type, tmpNode, tmpEdge);
-      if (type != NODE) {
+      if (!glMainWidget->doSelect(x, y, type, tmpNode, tmpEdge) || type != NODE) {
 	//cerr << __PRETTY_FUNCTION__ << ": type != NODE" << endl;
 	return true;
       }
