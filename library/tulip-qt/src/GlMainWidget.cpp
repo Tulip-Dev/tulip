@@ -298,7 +298,7 @@ namespace tlp {
 
     QGLFormat format=QGLFormat::defaultFormat();
     format.setAlpha(true);
-    glFrameBuf=new QGLFramebufferObject(width,height);
+    glFrameBuf=new QGLFramebufferObject(width,height,QGLFramebufferObject::CombinedDepthStencil);
     renderingStore=new char[width*height*4];
     return glFrameBuf->isValid();
   }
