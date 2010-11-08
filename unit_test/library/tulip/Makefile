@@ -17,6 +17,7 @@ SRCS=   tuliplibtest.cpp \
 	PushPopTest.cpp \
 	IntegerPropertyMinMaxSubgraphTest.cpp \
 	IntegerPropertyMinMaxUpdateTest.cpp \
+	TestPropertiesMinMaxAfterAddNode.cpp \
 	IsMetaEdgeTest.cpp\
 	PlanarityTestTest.cpp
 #	PlanarConMapTest.cpp

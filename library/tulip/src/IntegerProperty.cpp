@@ -33,7 +33,9 @@ IntegerProperty::IntegerProperty (Graph *sg, std::string n):AbstractProperty<Int
   // the property observes itself; see afterSet... methods
   addPropertyObserver(this);
   // but do not need to be in observables
-  removeObservable(this);
+  PropertyObserver::removeObservable(this);
+  // the property observes the graph
+  sg->addGraphObserver(this);
 }
 //====================================================================
 ///Renvoie le minimum de la m�trique associ� aux noeuds du IntegerProperty
@@ -141,6 +143,12 @@ void IntegerProperty::beforeSetAllNodeValue(PropertyInterface*) {
   minMaxOkNode.clear();
 }
 void IntegerProperty::beforeSetAllEdgeValue(PropertyInterface*) {
+  minMaxOkEdge.clear();
+}
+void IntegerProperty::addNode(Graph*, const node) {
+  minMaxOkNode.clear();
+}
+void IntegerProperty::addEdge(Graph*, const edge) {
   minMaxOkEdge.clear();
 }
 //=================================================================================
