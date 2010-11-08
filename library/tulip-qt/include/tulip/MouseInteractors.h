@@ -60,6 +60,8 @@ class TLP_QT_SCOPE MouseNKeysNavigator: public MousePanNZoomNavigator {
 private:
   InteractorComponent *currentSpecInteractorComponent;
 
+  QCursor oldCursor;
+
 public:
   MouseNKeysNavigator() : currentSpecInteractorComponent(NULL){}
   ~MouseNKeysNavigator(){}
