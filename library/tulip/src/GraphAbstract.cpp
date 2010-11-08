@@ -300,8 +300,7 @@ node GraphAbstract::opposite(const edge e, const node n) const {
 }
 //=========================================================================
 void GraphAbstract::reverse(const edge e) {
-  notifyReverseEdge(this, e);
-  getSuperGraph()->reverse(e);
+  root->reverse(e);
 }
 //=========================================================================
 edge GraphAbstract::existEdge(const node n1, const node n2,
