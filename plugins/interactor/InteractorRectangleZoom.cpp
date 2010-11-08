@@ -47,6 +47,8 @@ public:
     pushInteractorComponent(new MousePanNZoomNavigator);
     pushInteractorComponent(new MouseBoxZoomer);
   }
+
+  QCursor getCursor(){return QCursor(Qt::CrossCursor);}
 };
 
 INTERACTORPLUGIN(InteractorRectangleZoom, "InteractorRectangleZoom", "Tulip Team", "01/04/2009", "Rectangle Zoom Interactor", "1.0");
