@@ -83,8 +83,11 @@ namespace tlp {
     void activatePointNodeDisplay(GlNode *node, bool onePixel, bool selected);
 
     void addEdge(Graph *,const edge);
+    void beforeSetAllNodeValue(PropertyInterface*);
+    void beforeSetAllEdgeValue(PropertyInterface*);
     void beforeSetNodeValue(PropertyInterface*, const node);
     void beforeSetEdgeValue(PropertyInterface*, const edge);
+
 
     void destroy(Graph *);
     void destroy(PropertyInterface*);

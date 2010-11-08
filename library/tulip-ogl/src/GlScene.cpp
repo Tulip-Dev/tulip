@@ -299,13 +299,20 @@ namespace tlp {
       VertexArray compute
     **********************************************************************/
 
+
     if(glGraphComposite){
       GlVertexArrayManager *vertexArrayManager=glGraphComposite->getInputData()->getGlVertexArrayManager();
+      static bool lastDisplayEdge = glGraphComposite->isDisplayEdges();
+      if (!lastDisplayEdge && lastDisplayEdge != glGraphComposite->isDisplayEdges()) {
+    	  vertexArrayManager->setHaveToCompute(true);
+      }
+
       if(vertexArrayManager->haveToCompute()){
         GlVertexArrayVisitor vertexArrayVisitor(glGraphComposite->getInputData());
         glGraphComposite->acceptVisitor(&vertexArrayVisitor);
         vertexArrayManager->setHaveToCompute(false);
       }
+      lastDisplayEdge = glGraphComposite->isDisplayEdges();
     }
 
     TextRenderer fontRenderer;
