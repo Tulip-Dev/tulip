@@ -31,7 +31,7 @@ using namespace std;
 namespace tlp {
 
 ControllerViewsManager::ControllerViewsManager() :
-    		  currentGraph(NULL), currentView(NULL) {
+    		  currentView(NULL), currentGraph(NULL) {
 }
 //**********************************************************************
 void ControllerViewsManager::attachMainWindow(MainWindowFacade facade) {

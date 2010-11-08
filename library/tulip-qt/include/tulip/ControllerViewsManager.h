@@ -225,16 +225,17 @@ namespace tlp {
        */
       virtual void widgetWillBeClosed(QObject *object);
 
+    protected:
+      View *currentView;
+      std::map<View *, QAction *> lastInteractorOnView;
     private :
       
       Graph *currentGraph;
-      View *currentView;
       
       std::map<View *,std::string> viewNames;
       std::map<QWidget *,View*> viewWidget;
       std::map<View *,Graph* > viewGraph;
       
-      std::map<View *, QAction *> lastInteractorOnView;
       std::map<View *, QWidget *> lastInteractorConfigurationWidgetOnView;
       std::map<View *,std::list<unsigned int> > viewsGraphsHierarchy;
       
