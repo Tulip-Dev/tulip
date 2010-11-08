@@ -151,6 +151,10 @@ IF(NOT TULIP_USE_QT_PICTURE_OUTPUT)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITHOUT_QT_PICTURE_OUTPUT")
 ENDIF(NOT TULIP_USE_QT_PICTURE_OUTPUT)
 
+## -----------------------------------------------------------------------------------------------
+## Enable process to make generation of plugins informations for server (for developpers)
+## -----------------------------------------------------------------------------------------------
+SET(TULIP_SERVER_GENERATION OFF CACHE BOOL "Enable process to make generation of plugins informations for server (for developpers)")
 
 ## -----------------------------------------------------------------------------------------------
 ## Define NDEBUG when we are in release mode
