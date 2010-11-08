@@ -282,7 +282,7 @@ void ObservableGraphTest::testReverse() {
   for (unsigned int i=0; i< NB_NODES; ++i) {
     edges.push_back(graph->addEdge(nodes[i],
 				   (i == NB_NODES - 1)
-				   ? nodes[0] : nodes[i]));
+				   ? nodes[0] : nodes[i + 1]));
   }
   for (unsigned int i=0; i< NB_NODES; ++i) {
     gObserver->reset();
@@ -293,6 +293,22 @@ void ObservableGraphTest::testReverse() {
     CPPUNIT_ASSERT(observer->nbObservables() == 1);
     CPPUNIT_ASSERT(observer->found(graph));
   }
+  // sub graph test
+  Graph* g1 = graph->addSubGraph();
+  g1->addNode(nodes[0]);
+  g1->addNode(nodes[1]);
+  g1->addEdge(edges[0]);
+  gObserver->reset();
+  observer->reset();
+  g1->addGraphObserver(gObserver);
+  g1->addObserver(observer);
+  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT(gObserver->getObservedGraphs().size() == 0);
+  g1->reverse(edges[0]);
+  // 2 calls only to reverseEdge & update
+  CPPUNIT_ASSERT(gObserver->getObservedEdges().size() == 2);
+  CPPUNIT_ASSERT(gObserver->getObservedGraphs().size() == 2);
+  CPPUNIT_ASSERT(observer->nbObservables() == 2);
 }
 //==========================================================
 void ObservableGraphTest::testSubgraph() {
