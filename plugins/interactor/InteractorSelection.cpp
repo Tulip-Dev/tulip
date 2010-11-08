@@ -53,6 +53,8 @@ public:
     pushInteractorComponent(new MousePanNZoomNavigator);
     pushInteractorComponent(new MouseSelector);
   }
+
+  QCursor getCursor(){return QCursor(Qt::CrossCursor);}
 };
 
 INTERACTORPLUGIN(InteractorSelection, "InteractorSelection", "Tulip Team", "01/04/2009", "Selection Interactor", "1.0");
