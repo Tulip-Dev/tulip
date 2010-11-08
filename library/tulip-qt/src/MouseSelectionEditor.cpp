@@ -200,8 +200,10 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
         // so from now we delegate the job to a MouseSelector object
         // which should intercept the event
         operation = NONE;
+        glMainWidget->setCursor(QCursor(Qt::CrossCursor));
         return false;
       }
+      glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
 
       int shapeId=-1;
       bool advShape=false;
@@ -347,7 +349,6 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
     }
 
     composite->addGlEntity(&centerRect, "CenterRectangle");
-
     composite->addGlEntity(&_controls[0], "left");
     composite->addGlEntity(&_controls[1], "top-left");
     composite->addGlEntity(&_controls[2], "top");
@@ -734,6 +735,8 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   BoundingBox boundingBox = tlp::computeBoundingBox(_graph, _layout, _sizes, _rotation, _selection);
 
   if (!boundingBox.isValid()) return false;
+  if(operation==NONE)
+    glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
   Coord min2D, max2D;
   _layoutCenter = Coord(boundingBox.center());
 
