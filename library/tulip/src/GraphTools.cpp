@@ -272,6 +272,52 @@ namespace tlp {
   }
 
   //======================================================================
+  void selectSpanningTree(Graph* graph, BooleanProperty *selection,
+			  PluginProgress *pluginProgress) {
+    assert(ConnectedTest::isConnected(graph));
+    selection->setAllNodeValue(false);
+    selection->setAllEdgeValue(false);
+
+    node root = graphCenterHeuristic(graph);
+    unsigned int size = graph->numberOfNodes();
+    unsigned int nbNodes = 1, edgeCount = 0;
+    vector<node> roots;
+    unsigned int i = 0;
+    selection->setNodeValue(root, true);
+    roots.push_back(root);
+    while(nbNodes != size) {
+      root = roots[i];
+      Iterator<edge> * ite = graph->getInOutEdges(root);
+      while(ite->hasNext()) {
+	edge e = ite->next();
+	if(!selection->getEdgeValue(e)) {
+	  node neighbour = graph->opposite(e, root);
+	  if(!selection->getNodeValue(neighbour)) {
+	    selection->setNodeValue(neighbour, true);
+	    roots.push_back(neighbour);
+	    nbNodes++;
+	    selection->setEdgeValue(e, true);
+	    if (pluginProgress) {
+	      pluginProgress->setComment("Computing spanning tree...");
+	      ++edgeCount;
+	      if (edgeCount % 200  == 0) {
+		if (pluginProgress->progress(edgeCount, graph->numberOfEdges()) != TLP_CONTINUE)
+		  return;
+	      }
+	    }	  
+	  }
+	}
+      } delete ite;
+      i++;
+    }
+    if (pluginProgress) {
+      pluginProgress->setComment("Spanning tree computed");
+      pluginProgress->progress(100, 100);
+    }
+
+  }
+
+  //======================================================================
   struct ltEdge {
     DoubleProperty *m;
     ltEdge(DoubleProperty *metric) : m(metric) {}
@@ -285,6 +331,10 @@ namespace tlp {
 				 DoubleProperty *edgeWeight,
 				 PluginProgress *pluginProgress) {
     assert(ConnectedTest::isConnected(graph));
+    if (!edgeWeight)
+      // no weight return a spanning tree
+      return selectSpanningTree(graph, selection, pluginProgress);
+
     selection->setAllNodeValue(true);
     selection->setAllEdgeValue(false);
 
@@ -308,8 +358,7 @@ namespace tlp {
       sortedEdges.push_back(e);
     } delete itE;
 
-    if (edgeWeight)
-      sortedEdges.sort<ltEdge>(ltEdge(edgeWeight));
+    sortedEdges.sort<ltEdge>(ltEdge(edgeWeight));
     while(numClasses > 1) {
       edge cur;
       pair<node, node> curEnds;
@@ -320,9 +369,7 @@ namespace tlp {
     
       selection->setEdgeValue(cur, true);
       if (pluginProgress) {
-	pluginProgress->setComment(edgeWeight ?
-				   "Computing minimum spanning tree..." :
-				   "Computing spanning tree...");
+	pluginProgress->setComment("Computing minimum spanning tree...");
 	++edgeCount;
 	if (edgeCount == 200 ) {
 	  if (pluginProgress->progress((maxCount - numClasses)*100/maxCount, 100) != TLP_CONTINUE)
