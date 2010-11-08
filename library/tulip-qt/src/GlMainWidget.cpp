@@ -295,9 +295,8 @@ namespace tlp {
       delete glFrameBuf;
       delete[] renderingStore;
     }
-
-    QGLFormat format=QGLFormat::defaultFormat();
-    format.setAlpha(true);
+	
+	makeCurrent();
     glFrameBuf=new QGLFramebufferObject(width,height,QGLFramebufferObject::CombinedDepthStencil);
     renderingStore=new char[width*height*4];
     return glFrameBuf->isValid();
