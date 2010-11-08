@@ -35,7 +35,7 @@ class PropertyContext;
 typedef AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> AbstractIntegerProperty;
 /** \addtogroup properties */ 
 /*@{*/
-class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public PropertyObserver{ 
+ class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public PropertyObserver, public GraphObserver { 
 
   friend class IntegerAlgorithm;
 
@@ -52,6 +52,10 @@ public :
   virtual void beforeSetEdgeValue(PropertyInterface* prop, const edge e);
   virtual void beforeSetAllNodeValue(PropertyInterface* prop);
   virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
+
+  // redefinition of GraphObserver methods
+  virtual void addNode(Graph* graph, const node n);
+  virtual void addEdge(Graph* graph, const edge e);
 
 protected:
   void clone_handler(AbstractProperty<IntegerType,IntegerType> &);
