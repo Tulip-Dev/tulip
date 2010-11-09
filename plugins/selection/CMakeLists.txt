@@ -52,4 +52,4 @@ INSTALL(TARGETS
 	MultipleSelection-${TulipVersion}
 	Kruskal-${TulipVersion}
   DESTINATION ${TulipLibInstallDir}tlp/
-  COMPONENT tulip_plugins_selection)
+  COMPONENT libtulip_plugins)

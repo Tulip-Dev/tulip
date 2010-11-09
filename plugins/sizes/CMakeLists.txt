@@ -25,4 +25,4 @@ INSTALL(TARGETS
 	AutoSize-${TulipVersion}
 	FitToLabels-${TulipVersion}
   DESTINATION ${TulipLibInstallDir}tlp/
-  COMPONENT tulip_plugins_sizes)
+  COMPONENT libtulip_ogl_plugins)

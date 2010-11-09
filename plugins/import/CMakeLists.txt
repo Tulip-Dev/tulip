@@ -111,4 +111,4 @@ INSTALL(TARGETS
 	FileSystem-${TulipVersion}
 	WebImport-${TulipVersion}
   DESTINATION ${TulipLibInstallDir}tlp/
-  COMPONENT tulip_plugins_import)
+  COMPONENT libtulip_plugins)

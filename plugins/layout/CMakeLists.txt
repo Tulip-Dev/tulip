@@ -169,4 +169,4 @@ INSTALL(TARGETS
 	ImprovedWalker-${TulipVersion}
 	SquarifiedTreeMap-${TulipVersion}
   DESTINATION ${TulipLibInstallDir}tlp/
-  COMPONENT tulip_plugins_layout)
+  COMPONENT libtulip_plugins)

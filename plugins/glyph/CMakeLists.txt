@@ -124,5 +124,5 @@ INSTALL(TARGETS
 	ChristmasTree-${TulipVersion}
 	Window-${TulipVersion}
   DESTINATION ${TulipLibInstallDir}tlp/glyphs/
-  COMPONENT tulip_plugins_glyphs)
+  COMPONENT libtulip_ogl_plugins)
 

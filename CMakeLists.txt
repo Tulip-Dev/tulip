@@ -213,8 +213,9 @@ ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)
 ADD_SUBDIRECTORY(software)
 ADD_SUBDIRECTORY(plugins)
-ADD_SUBDIRECTORY(externalplugins)
 ADD_SUBDIRECTORY(textures)
+ADD_SUBDIRECTORY(externalplugins)
+
 FIND_PACKAGE(Doxygen QUIET)
 if (DOXYGEN_FOUND)
   OPTION(GENERATE_DOC "Do you want to generate the documentation ? [OFF|ON]")
@@ -279,7 +280,5 @@ INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config
         DESTINATION ${TulipBinInstallDir})
 INSTALL(FILES FindTULIP3.cmake 
         DESTINATION ${TulipShareInstallDir})
-
-INCLUDE(CPackComponents.cmake)
 
 INCLUDE(CPack)
