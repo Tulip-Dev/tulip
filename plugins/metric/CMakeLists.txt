@@ -115,5 +115,5 @@ INSTALL(TARGETS
 	RandomMetric-${TulipVersion}
 	BetweennessCentrality-${TulipVersion}
   DESTINATION ${TulipLibInstallDir}tlp/
-  COMPONENT tulip_plugins_metric
+  COMPONENT libtulip_plugins
   )
