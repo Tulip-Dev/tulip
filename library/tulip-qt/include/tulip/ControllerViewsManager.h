@@ -97,7 +97,10 @@ namespace tlp {
        * Set the graph associated with the given view
        */
       virtual void setGraphOfView(View *view,Graph *graph);
-      
+      /**
+        * Set the data of the given view.
+        */
+       virtual void setDataOfView(tlp::View* view, tlp::Graph* graph, const tlp::DataSet& dataSet);
       /**
        * Get the view associated with the given widget
        */
