@@ -285,7 +285,8 @@ INSTALL(FILES FindTULIP3.cmake
 ## CPack packaging directives
 ## -----------------------------------------------------------------------------------------------
 
-# Defines software component attributes (display name, description, dependencies, group)
+# A macro that defines a software component (see COMPONENT directive for the INSTALL command in CMake documentation)
+# This defines the required CPack variables to set the component name, group, description and dependencies.
 MACRO(DEFINE_COMPONENT comp display_name desc deps group)
   SET(CPACK_COMPONENTS_ALL
   ${CPACK_COMPONENTS_ALL}
@@ -299,6 +300,10 @@ MACRO(DEFINE_COMPONENT comp display_name desc deps group)
   SET(CPACK_COMPONENT_${CN}_GROUP ${group})
 ENDMACRO()
 
+# You can create your own installer by creating a setting the CPACK_CUSTOM_INSTALLER to true.
+# If this variable is not set, directives in the CPackInstaller.cmake file will be used to set the project licence, maintainer etc.
+# When making your own installer, please be sure to set at least all the variables present in the CPackInstaller.cmake file.
+# Consult CPack documentation for additional information.
 IF(NOT CPACK_CUSTOM_INSTALLER)
   INCLUDE(CPackInstaller.cmake)
   SET(LIBS_GROUP_NAME "Libraries")
@@ -307,6 +312,7 @@ IF(NOT CPACK_CUSTOM_INSTALLER)
   SET(PLUGINS_GROUP_NAME "Plugins")
   SET(EXTRAS_GROUP_NAME "Extras")
 ELSE()
+  # In case a custom installer is set, all the base tulip software components will be in the same group.
   SET(LIBS_GROUP_NAME "Tulip software")
   SET(HEADERS_GROUP_NAME "Tulip software")
   SET(SOFTWARE_GROUP_NAME "Tulip software")
@@ -314,11 +320,13 @@ ELSE()
   SET(EXTRAS_GROUP_NAME "Tulip software")
 ENDIF()
 
+# Defines specific software components from tulip.
 INCLUDE(CPackComponents.cmake)
 
 # Force grouping of components in a single package (CMake 2.9)
 SET(CPACK_COMPONENTS_ALL_GROUPS_IN_ONE_PACKAGE 1)
 
+# Defines plateform-specific generators to be used
 IF(LINUX)
   IF(I64)
     SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
@@ -333,14 +341,6 @@ IF(LINUX)
   ENDFOREACH()
 ELSEIF(WIN32)
     SET(CPACK_GENERATOR "NSIS")
-    SET(TULIP_ICO "${PROJECT_SOURCE_DIR}/software/tulip/bitmaps/logo32x32.ico")
-    SET(CPACK_NSIS_MUI_ICON ${TULIP_ICO})
-    SET(CPACK_NSIS_MUI_UNIICON ${TULIP_ICO})
-    SET(CPACK_NSIS_DISPLAY_NAME "Tulip ${TulipVersion}")
-    SET(CPACK_NSIS_INSTALLED_ICON_NAME ${TULIP_ICO})
-    SET(CPACK_NSIS_HELP_LINK "http://tulip.labri.fr")
-    SET(CPACK_NSIS_URL_INFO_ABOUT "http://tulip.labri.fr")
-    SET(CPACK_NSIS_CONTACT "auber@labri.fr")
 ENDIF()
 
 INCLUDE(CPack)
