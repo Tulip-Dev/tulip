@@ -77,7 +77,7 @@ void ControllerViewsManager::setGraphOfView(View *view, Graph *graph) {
 	viewGraph[view] = graph;
 }
 //**********************************************************************
-void setDataOfView(View* view, Graph* graph, const DataSet& dataSet){
+void ControllerViewsManager::setDataOfView(View* view, Graph* graph, const DataSet& dataSet){
     view->setData(graph,dataSet);
     viewGraph[view]= graph;
 }
