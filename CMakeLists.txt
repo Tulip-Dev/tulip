@@ -281,4 +281,66 @@ INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config
 INSTALL(FILES FindTULIP3.cmake 
         DESTINATION ${TulipShareInstallDir})
 
+## -----------------------------------------------------------------------------------------------
+## CPack packaging directives
+## -----------------------------------------------------------------------------------------------
+
+# Defines software component attributes (display name, description, dependencies, group)
+MACRO(DEFINE_COMPONENT comp display_name desc deps group)
+  SET(CPACK_COMPONENTS_ALL
+  ${CPACK_COMPONENTS_ALL}
+  ${comp})
+  STRING(TOUPPER ${comp} CN)
+  SET(CPACK_COMPONENT_${CN}_DISPLAY_NAME ${display_name})
+  SET(CPACK_COMPONENT_${CN}_DESCRIPTION "${desc}.")
+  IF(NOT "${deps}" STREQUAL "")
+    SET(CPACK_COMPONENT_${CN}_DEPENDS ${deps})
+  ENDIF()
+  SET(CPACK_COMPONENT_${CN}_GROUP ${group})
+ENDMACRO()
+
+IF(NOT CPACK_CUSTOM_INSTALLER)
+  INCLUDE(CPackInstaller.cmake)
+  SET(LIBS_GROUP_NAME "Libraries")
+  SET(HEADERS_GROUP_NAME "Headers")
+  SET(SOFTWARE_GROUP_NAME "Runtime")
+  SET(PLUGINS_GROUP_NAME "Plugins")
+  SET(EXTRAS_GROUP_NAME "Extras")
+ELSE()
+  SET(LIBS_GROUP_NAME "Tulip software")
+  SET(HEADERS_GROUP_NAME "Tulip software")
+  SET(SOFTWARE_GROUP_NAME "Tulip software")
+  SET(PLUGINS_GROUP_NAME "Tulip software")
+  SET(EXTRAS_GROUP_NAME "Tulip software")
+ENDIF()
+
+INCLUDE(CPackComponents.cmake)
+
+# Force grouping of components in a single package (CMake 2.9)
+SET(CPACK_COMPONENTS_ALL_GROUPS_IN_ONE_PACKAGE 1)
+
+IF(LINUX)
+  IF(I64)
+    SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
+  ELSE()
+    SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "i386")
+  ENDIF()
+
+  SET(CPACK_GENERATOR ";")
+  # Note: With CMake 2.8, we must introduce a hack to force generation of one deb per component. See CPackOptions.cmake for additional informations.
+  FOREACH(ITC ${CPACK_COMPONENTS_ALL})
+    SET(CPACK_GENERATOR "${CPACK_GENERATOR}DEB;")
+  ENDFOREACH()
+ELSEIF(WIN32)
+    SET(CPACK_GENERATOR "NSIS")
+    SET(TULIP_ICO "${PROJECT_SOURCE_DIR}/software/tulip/bitmaps/logo32x32.ico")
+    SET(CPACK_NSIS_MUI_ICON ${TULIP_ICO})
+    SET(CPACK_NSIS_MUI_UNIICON ${TULIP_ICO})
+    SET(CPACK_NSIS_DISPLAY_NAME "Tulip ${TulipVersion}")
+    SET(CPACK_NSIS_INSTALLED_ICON_NAME ${TULIP_ICO})
+    SET(CPACK_NSIS_HELP_LINK "http://tulip.labri.fr")
+    SET(CPACK_NSIS_URL_INFO_ABOUT "http://tulip.labri.fr")
+    SET(CPACK_NSIS_CONTACT "auber@labri.fr")
+ENDIF()
+
 INCLUDE(CPack)
