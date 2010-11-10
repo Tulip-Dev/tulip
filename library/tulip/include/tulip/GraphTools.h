@@ -80,6 +80,15 @@ class IntegerProperty;
 				      PluginProgress *pluginProgress = 0);
 
   /**
+   * Select a spanning tree of a graph assuming it is connected;
+   * i.e for all graph elements (nodes or edges) belonging to that tree
+   * the selectionProperty associated value is true. The value is false
+   * for the other elements
+   */
+  TLP_SCOPE void selectSpanningTree(Graph* graph, BooleanProperty *selection,
+				    PluginProgress *pluginProgress = 0);
+
+  /**
    * Select the minimum spanning tree (Kruskal algorithm) of a weighted graph,
    * i.e for all graph elements (nodes or edges) belonging to that tree
    * the selectionProperty associated value is true. The value is false
