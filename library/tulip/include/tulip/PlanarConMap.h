@@ -57,6 +57,7 @@ class TLP_SCOPE PlanarConMap : public GraphDecorator {
 
   friend PlanarConMap* computePlanarConMap(Graph* graph);
   
+ protected:
   /** Constructor
    * Warning, the graph must be planar, connected and simple.
    */
