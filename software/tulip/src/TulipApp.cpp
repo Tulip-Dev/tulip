@@ -298,6 +298,7 @@ void TulipApp::startTulip() {
     controllerAutoLoad=false;
     createController(name,newName());
     currentTabIndex=0;
+    Controller::currentActiveController(tabIndexToController[currentTabIndex]);
     controllerAutoLoad=true;
   }else{
     controllerAutoLoad=false;
@@ -454,6 +455,7 @@ void TulipApp::closeTab(int index){
 
     if(tabWidget->count()==0)
       tabWidget->setCurrentIndex(-1);
+
 
     delete controller;
   }
@@ -1156,6 +1158,7 @@ void TulipApp::tabChanged(int index){
   loadInterface(index);
 
   currentTabIndex=index;
+  Controller::currentActiveController(tabIndexToController[currentTabIndex]);
 }
 //==============================================================
 void TulipApp::helpAbout() {
