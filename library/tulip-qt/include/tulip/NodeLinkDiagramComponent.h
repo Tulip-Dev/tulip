@@ -63,7 +63,6 @@ namespace tlp {
     QAction *actionsGridOptions;
     QAction *actionZOrderingOptions;
     QAction *actionAntialiasingOptions;
-    QAction *actionTrueMetaNodeOptions;
     QAction *augmentedDisplayDialogAction;
     QAction* addRemoveAction;
     QAction* selectAction;
