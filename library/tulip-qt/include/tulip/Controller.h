@@ -175,6 +175,20 @@ namespace tlp {
       return &mainWindowFacade;
     }
 
+    /**
+     * Set the current active controller
+     */
+    static void currentActiveController(Controller *controller){
+      currentController=controller;
+    }
+
+    /**
+     * Return the current active controller
+     */
+    static Controller *getCurrentController() {
+      return currentController;
+    }
+
   signals:
 
     void willBeClosed();
@@ -182,6 +196,8 @@ namespace tlp {
   protected :
 
     MainWindowFacade mainWindowFacade;
+
+    static Controller *currentController;
 
   };
 
