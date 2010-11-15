@@ -80,6 +80,30 @@ namespace tlp {
        */
       MATRIX& inverse();
       /**
+       * return the sum of two matrices
+       */
+      inline MATRIX & operator+(const MATRIX &mat) const;
+      /**
+       * add another matrix to the current one and return "&(*this)"
+       */
+      inline MATRIX & operator+=(const MATRIX &mat);
+      /**
+       * return the difference of two matrices
+       */
+      inline MATRIX & operator-(const MATRIX &mat) const;
+      /**
+       * substract another matrix from the current and return "&(*this)"
+       */
+      inline MATRIX & operator-=(const MATRIX &mat);
+      /**
+       * Check equality of two Matrices
+       */
+      inline bool operator==(const MATRIX &) const;
+      /**
+       * Check non equality of two Matrices
+       */
+      inline bool operator!=(const MATRIX &) const;
+      /**
        * Multiply the matrix by another matrix and return "&(*this)"
        */
       inline MATRIX & operator*=(const MATRIX &mat);
