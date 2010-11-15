@@ -253,6 +253,12 @@ public:
    * Swap two edges in the adjacent list of a node.
    */
   virtual void swapEdgeOrder(const node,const edge , const edge )=0;
+  /// Set the source of an existing edge
+  virtual void setSource(const edge, const node) = 0;
+  /// Set the target of an existing edge
+  virtual void setTarget(const edge, const node) = 0;
+  /// Set both the source and target of an existing edge
+  virtual void setEnds(const edge, const node source, const node target) = 0;
   /**
    *  Reverse the direction of an edge, the source becomes the target and the target.
    *  becomes the source.

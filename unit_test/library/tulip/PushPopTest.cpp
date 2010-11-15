@@ -122,6 +122,90 @@ void PushPopTest::testAddDel() {
 }
 
 //==========================================================
+void PushPopTest::testSetEnds() {
+  node n0 = graph->addNode();
+  node n1 = graph->addNode();
+
+  edge e0 = graph->addEdge(n0, n1);
+
+  graph->push();
+  node n2 = graph->addNode();
+  node n3 = graph->addNode();
+
+  graph->setEnds(e0, n2, n3);
+  CPPUNIT_ASSERT(graph->existEdge(n2, n3) == e0);
+
+  graph->reverse(e0);
+  CPPUNIT_ASSERT(graph->existEdge(n3, n2) == e0);
+
+  graph->pop();
+
+  CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
+
+  graph->unpop();
+
+  CPPUNIT_ASSERT(graph->existEdge(n3, n2) == e0);
+
+  graph->delEdge(e0);
+  CPPUNIT_ASSERT(graph->isElement(e0) == false);
+  CPPUNIT_ASSERT(graph->existEdge(n3, n2).isValid() == false);
+  
+  graph->pop();
+  CPPUNIT_ASSERT(graph->isElement(e0));
+  CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
+
+  Graph* g1 = graph->addSubGraph();
+  g1->addNode(n0);
+  g1->addNode(n1);
+  g1->addEdge(e0);
+
+  graph->push();
+
+  g1->reverse(e0);
+  CPPUNIT_ASSERT(graph->isElement(e0));
+  CPPUNIT_ASSERT(graph->existEdge(n1, n0) == e0);
+
+  n2 = g1->addNode();
+  g1->setTarget(e0, n2);
+  CPPUNIT_ASSERT(graph->isElement(e0));
+  CPPUNIT_ASSERT(graph->existEdge(n1, n2) == e0);
+  
+  graph->pop();
+  CPPUNIT_ASSERT(graph->isElement(e0));
+  CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
+ 
+  graph->unpop();
+  CPPUNIT_ASSERT(graph->isElement(e0));
+  CPPUNIT_ASSERT(graph->existEdge(n1, n2) == e0);
+
+  g1->setSource(e0, n0);
+  CPPUNIT_ASSERT(graph->isElement(e0));
+  CPPUNIT_ASSERT(graph->existEdge(n0, n2) == e0);
+
+  g1->delEdge(e0);
+
+  graph->pop();
+  CPPUNIT_ASSERT(graph->isElement(e0));
+  CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
+  
+  graph->unpop();
+  CPPUNIT_ASSERT(graph->isElement(e0));
+  CPPUNIT_ASSERT(graph->existEdge(n0, n2) == e0);
+
+  g1->addEdge(e0);
+  CPPUNIT_ASSERT(g1->isElement(e0));
+  CPPUNIT_ASSERT(g1->existEdge(n0, n2) == e0);
+
+  g1->setEnds(e0, n2, n1);
+  CPPUNIT_ASSERT(g1->existEdge(n2, n1) == e0);
+  CPPUNIT_ASSERT(graph->existEdge(n2, n1) == e0);
+
+  graph->pop();
+  CPPUNIT_ASSERT(graph->isElement(e0));
+  CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
+}
+
+//==========================================================
 void PushPopTest::testSetValue() {
   node n0 = graph->addNode();
   node n1 = graph->addNode();
@@ -576,6 +660,8 @@ CppUnit::Test * PushPopTest::suite() {
 								  &PushPopTest::testAddDel) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetNode/EdgeValue operations", 
 								  &PushPopTest::testSetValue) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetEnds operations", 
+								  &PushPopTest::testSetEnds) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Copy Prop operations", 
 								  &PushPopTest::testCopyProperty) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraph operations", 

@@ -45,8 +45,10 @@ class  TLP_SCOPE GraphObserver {
   GraphObserver(bool manageObservables = true)
    :updateObservables(manageObservables) {}
   virtual ~GraphObserver();
-  virtual void addNode(Graph *,const node ){}
-  virtual void addEdge(Graph *,const edge ){}
+  virtual void addNode(Graph *, const node ){}
+  virtual void addEdge(Graph *, const edge ){}
+  virtual void beforeSetEnds(Graph *, const edge){}
+  virtual void afterSetEnds(Graph *, const edge){}
   virtual void delNode(Graph *,const node ){}
   virtual void delEdge(Graph *,const edge ){}
   virtual void reverseEdge(Graph *,const edge ){}
@@ -108,6 +110,8 @@ class  TLP_SCOPE ObservableGraph {
  protected:
   void notifyAddNode(Graph *,const node n);
   void notifyAddEdge(Graph *,const edge e);
+  void notifyBeforeSetEnds(Graph *, const edge e);
+  void notifyAfterSetEnds(Graph *,const edge e);
   void notifyDelNode(Graph *,const node n);
   void notifyDelEdge(Graph *,const edge e);
   void notifyReverseEdge(Graph *,const edge e);

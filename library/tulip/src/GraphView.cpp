@@ -121,6 +121,27 @@ void GraphView::reverse(const edge e, const node src, const node tgt) {
   }
 }
 //----------------------------------------------------------------
+void GraphView::setEnds(const edge e, const node src, const node tgt,
+			const node newSrc, const node newTgt) {
+  if (isElement(e)) {
+    notifyBeforeSetEnds(this, e);
+    outDegree.set(src.id, outDegree.get(src.id)-1);
+    outDegree.set(newSrc.id, outDegree.get(src.id) + 1);
+    inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
+    inDegree.set(newTgt.id, inDegree.get(newTgt.id)+1);
+
+    // notification
+    notifyAfterSetEnds(this, e);
+    notifyObservers();
+
+    // propagate edge ends update on subgraphs
+    Graph* sg;
+    forEach(sg, getSubGraphs()) {
+      ((GraphView*) sg)->setEnds(e, src, tgt, newSrc, newTgt);
+    }
+  }
+}
+//----------------------------------------------------------------
 node GraphView::addNode() {
   node tmp = getSuperGraph()->addNode();
   return restoreNode(tmp);
@@ -155,11 +176,7 @@ edge GraphView::addEdgeInternal(edge e) {
   return e;
 }
 //----------------------------------------------------------------
-edge GraphView::restoreEdge(edge e, const node n1,const node n2) {
-  (void) n1; //fixes unused parameter warning in release builds
-  (void) n2; //fixes unused parameter warning in release builds
-  assert(isElement(n1));
-  assert(isElement(n2));
+edge GraphView::restoreEdge(edge e, const node,const node) {
   return addEdgeInternal(e);
 }
 //----------------------------------------------------------------
