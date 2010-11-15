@@ -287,12 +287,27 @@ node GraphAbstract::source(const edge e) const {
   return root->source(e);
 }
 //=========================================================================
+void GraphAbstract::setSource(const edge e, const node newSrc) {
+  assert(isElement(e));
+  root->setEnds(e, newSrc, node());
+}
+//=========================================================================
 node GraphAbstract::target(const edge e) const {
   return root->target(e);
 }
 //=========================================================================
+void GraphAbstract::setTarget(const edge e, const node newTgt) {
+  assert(isElement(e));
+  root->setEnds(e, node(), newTgt);
+}
+//=========================================================================
 const std::pair<node, node>& GraphAbstract::ends(const edge e) const {
   return root->ends(e);
+}
+//=========================================================================
+void GraphAbstract::setEnds(const edge e, const node newSrc, const node newTgt) {
+  assert(isElement(e));
+  root->setEnds(e, newSrc, newTgt);
 }
 //=========================================================================
 node GraphAbstract::opposite(const edge e, const node n) const {
@@ -300,6 +315,7 @@ node GraphAbstract::opposite(const edge e, const node n) const {
 }
 //=========================================================================
 void GraphAbstract::reverse(const edge e) {
+  assert(isElement(e));
   root->reverse(e);
 }
 //=========================================================================

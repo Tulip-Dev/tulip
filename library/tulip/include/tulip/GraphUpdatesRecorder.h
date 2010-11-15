@@ -90,16 +90,20 @@ namespace tlp {
     bool restartAllowed;
     bool newValuesRecorded;
 
-    // one set of Graph* par added node
+    // one set of Graph* per added node
     TLP_HASH_MAP<node, std::set<Graph*> > addedNodes;
-    // source + target + set of Graph* par added edge
+    // source + target + set of Graph* per added edge
     TLP_HASH_MAP<edge, EdgeRecord> addedEdges;
     // one set of Graph* par deleted node
     TLP_HASH_MAP<node, std::set<Graph*> >  deletedNodes;
-    // source + target + set of Graph* par deleted edge
+    // source + target + set of Graph* per deleted edge
     TLP_HASH_MAP<edge, EdgeRecord> deletedEdges;
-    // one set of reverted edges per graph
+    // one set of reverted edges
     std::set<edge> revertedEdges;
+    // source + target per updated edge
+    TLP_HASH_MAP<edge, std::pair<node, node> > oldEdgeEnds;
+    // source + target per updated edge
+    TLP_HASH_MAP<edge, std::pair<node, node> > newEdgeEnds;
     // one set for old edge containers
     TLP_HASH_MAP<node, std::vector<edge> > oldContainers;
     // one set for new edge containers
@@ -209,7 +213,13 @@ namespace tlp {
     void delEdge(Graph* g, edge e);
 
     // revertedEdges
-    void reverseEdge(Graph* g,  edge e);
+    void reverseEdge(Graph* g, edge e);
+
+    // oldEdgeEnds
+    void beforeSetEnds(Graph* g, edge e);
+
+    // newEdgeEnds
+    void afterSetEnds(Graph* g, edge e);
 
     // addedSubGraphs
     void addSubGraph(Graph* g, Graph* sg);
