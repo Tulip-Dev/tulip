@@ -47,8 +47,6 @@ public:
     pushInteractorComponent(new MousePanNZoomNavigator);
     pushInteractorComponent(new MouseMagicSelector);
   }
-
-  QCursor getCursor(){return QCursor(Qt::PointingHandCursor);}
 };
 
 INTERACTORPLUGIN(InteractorMagicSelection, "InteractorMagicSelection", "Tulip Team", "01/04/2009", "Magic Selection Interactor", "1.0");
