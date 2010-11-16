@@ -22,4 +22,39 @@ using namespace std;
 
 namespace tlp {
 
+bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent *e) {
+  QMouseEvent *qMouseEv = (QMouseEvent *) e;
+  if(e != NULL) {
+    node tmpNode;
+    edge tmpEdge;
+    ElementType type;
+    GlMainWidget *g = (GlMainWidget *) widget;
+    if(e->type() == QEvent::MouseMove) {    
+      if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
+        g->setCursor(Qt::WhatsThisCursor);
+      }
+      else {
+        g->setCursor(QCursor());
+      }
+      return false;
+    }
+    else if (e->type() == QEvent::MouseButtonPress && ((QMouseEvent *) e)->button()==Qt::LeftButton) {
+      NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view;
+      if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
+        switch(type) {
+        case NODE: nodeLinkView->elementSelectedSlot(tmpNode.id, true); break;
+        case EDGE: nodeLinkView->elementSelectedSlot(tmpEdge.id, false); break;
+        }
+        return true;
+      }
+    }
+  }
+  
+  return false;
+}
+  
+InteractorComponent* MouseShowElementInfos::clone() {
+  return new MouseShowElementInfos();
+}  
+
 }
