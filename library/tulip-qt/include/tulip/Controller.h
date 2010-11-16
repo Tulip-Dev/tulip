@@ -114,6 +114,10 @@ namespace tlp {
 		void setCorner(Qt::Corner corner, Qt::DockWidgetArea area) {
 			mainWindow->setCorner(corner, area);
 		}
+		
+		void setDockOptions(QMainWindow::DockOptions options) {
+      mainWindow->setDockOptions(options);
+		}
 
 	private:
 
