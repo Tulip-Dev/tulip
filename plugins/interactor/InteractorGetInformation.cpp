@@ -47,9 +47,6 @@ public:
     pushInteractorComponent(new MousePanNZoomNavigator);
     pushInteractorComponent(new MouseShowElementInfos);
   }
-
-  QCursor getCursor(){return QCursor(Qt::WhatsThisCursor);}
-
 };
 
 INTERACTORPLUGIN(InteractorGetInformation, "InteractorGetInformation", "Tulip Team", "01/04/2009", "Get Information Interactor", "1.0");
