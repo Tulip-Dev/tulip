@@ -54,7 +54,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 //===============================================================
 bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent *qMouseEv = (QMouseEvent *) e;
-  if(e != NULL) {
+  if(qMouseEv != NULL) {
     node tmpNode;
     edge tmpEdge;
     ElementType type;
