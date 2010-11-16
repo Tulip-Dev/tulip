@@ -34,6 +34,7 @@ namespace tlp {
     QtProgress(QWidget* parent, std::string text, View *view=0);
     virtual ~QtProgress();
     void progress_handler(int i,int j);
+    void preview_handler(bool b);
     void setComment(std::string msg);
     void showPreview(bool);
   public slots:
