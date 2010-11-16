@@ -30,7 +30,6 @@
 #include <QtGui/qtablewidget.h>
 #include <QtGui/qmessagebox.h>
 #include <QtCore/qsettings.h>
-#include <QtAssistant/qassistantclient.h>
 #include <string>
 #include <tulip/Reflect.h>
 #include <tulip/Graph.h>
@@ -40,6 +39,12 @@
 #include <PluginsUpdateChecker.h>
 #include "TulipPluginLoader.h"
 #include "TulipData.h"
+
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+#include <QtCore/QProcess>
+#else
+#include <QtAssistant/qassistantclient.h>
+#endif
 
 namespace tlp {
   class Controller;
@@ -163,9 +168,13 @@ private:
   QTabWidget *tabWidget;
   unsigned int mouseClicX,mouseClicY;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+  QProcess *assistantProcess;
+  QString assistantProcessApp;
+#else
   QAssistantClient* assistant;
-	/*std::string currentControllerName;
-  tlp::Controller *currentController;*/
+#endif
+
   bool controllerAutoLoad;
   int currentTabIndex;
   std::map<int,tlp::Controller *> tabIndexToController;
