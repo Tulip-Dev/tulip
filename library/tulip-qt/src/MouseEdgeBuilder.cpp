@@ -64,7 +64,6 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
           started=true;
           initObserver(_graph);
           source=tmpNode;
-          glMainWidget->setMouseTracking(true);
           curPos=startPos=mLayout->getNodeValue(source);
           return true;
         }
@@ -76,7 +75,6 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
           Observable::holdObservers();
           started=false;
           clearObserver();
-          glMainWidget->setMouseTracking(false);
           // allow to undo
           _graph->push();
           edge newEdge = _graph->addEdge(source, tmpNode);
@@ -99,7 +97,6 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     }
     if (qMouseEv->buttons()==Qt::MidButton) {
       bends.clear();
-      glMainWidget->setMouseTracking(false);
       started=false;
       clearObserver();
       glMainWidget->draw();
@@ -161,7 +158,6 @@ void MouseEdgeBuilder::delNode(Graph*,const node n){
   if(n==source){
     GlMainWidget *glMainWidget=((GlMainView*)view)->getGlMainWidget();
     bends.clear();
-    glMainWidget->setMouseTracking(false);
     started=false;
     clearObserver();
   }

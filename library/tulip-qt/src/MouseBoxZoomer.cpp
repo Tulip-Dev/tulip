@@ -52,21 +52,18 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 				y =  glw->height() - qMouseEv->y();
 				w = 0; h = 0;
 				started = true;
-				glw->setMouseTracking(true);
 				graph = glw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 			}
 			else {
 				if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
 					graph = NULL;
 					started = false;
-					glw->setMouseTracking(false);
 				}
 			}
 			return true;
 		}
 		if (qMouseEv->buttons()==Qt::MidButton){
 			started = false;
-			glw->setMouseTracking(false);
 			glw->redraw();
 			return true;
 		}
@@ -80,7 +77,6 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 			if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
 				graph = NULL;
 				started = false;
-				glw->setMouseTracking(false);
 			}
 			if (started){
 				if ((qMouseEv->x() > 0) && (qMouseEv->x() < glw->width()))
@@ -109,7 +105,6 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 			if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
 				graph = NULL;
 				started = false;
-				glw->setMouseTracking(false);
 			}
 			if (started) {
 				started = false;
@@ -155,7 +150,6 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
 	if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
 		graph = NULL;
 		started = false;
-		glw->setMouseTracking(false);
 	}
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	glMatrixMode (GL_PROJECTION);
