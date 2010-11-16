@@ -62,6 +62,6 @@ ProgressState PluginProgress::state() const {
 void PluginProgress::progress_handler(int, int) {
 }
 //====================================================
-void preview_handler(bool) {
+void PluginProgress::preview_handler(bool) {
 }
 //====================================================
