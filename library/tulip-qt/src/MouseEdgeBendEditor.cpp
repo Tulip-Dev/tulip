@@ -65,7 +65,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent * qMouseEv = (QMouseEvent *) e;
   if(qMouseEv == NULL)
     return false;
-  
+    
   if(e->type() == QEvent::MouseButtonDblClick &&  qMouseEv->button() == Qt::LeftButton && computeBendsCircles(glMainWidget)) {
     operation = NEW_OP; 
     mMouseCreate(qMouseEv->x(), qMouseEv->y(), glMainWidget);
@@ -143,19 +143,33 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     glMainWidget->redraw();
     return true;
   }
-  if  (e->type() == QEvent::MouseMove &&
-      qMouseEv->buttons() == Qt::LeftButton &&
+  if  (e->type() == QEvent::MouseMove) {
+    if(qMouseEv->buttons() == Qt::LeftButton &&
       operation != NONE_OP) {
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
-    //int i=0;
-    //while(&circles[i] != select[0].second) i++;
-    switch (operation) {
-    case TRANSLATE_OP:
-      mMouseTranslate(qMouseEv->x(), qMouseEv->y(), glMainWidget);
-      return true;
-    case NONE_OP:
-      cerr << "[Error] : " <<__FUNCTION__ << " should not be call" << endl;
-    default:
+      GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+      //int i=0;
+      //while(&circles[i] != select[0].second) i++;
+      switch (operation) {
+      case TRANSLATE_OP:
+        mMouseTranslate(qMouseEv->x(), qMouseEv->y(), glMainWidget);
+        return true;
+      case NONE_OP:
+        cerr << "[Error] : " <<__FUNCTION__ << " should not be call" << endl;
+      default:
+        return false;
+      }
+    }
+    else if(qMouseEv->buttons() == Qt::NoButton){
+      node tmpNode;
+      edge tmpEdge;
+      ElementType type;
+      GlMainWidget *g = (GlMainWidget *) widget;
+      if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == EDGE) {
+        g->setCursor(Qt::CrossCursor);
+      }
+      else {
+        g->setCursor(Qt::ArrowCursor);
+      }
       return false;
     }
   }
