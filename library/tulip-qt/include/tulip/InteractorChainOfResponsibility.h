@@ -85,7 +85,7 @@ namespace tlp {
     /**
      * This function return a QCursor if Interactor have a specific mouse cursor
      */
-    virtual QCursor getCursor() {return QCursor();}
+    virtual QCursor getCursor() {return Qt::ArrowCursor;}
 
   protected :
 
