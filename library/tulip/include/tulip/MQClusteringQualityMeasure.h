@@ -6,7 +6,7 @@
 namespace tlp {
   class ClusteringAlgorithmBase;
 
-  class MQClusteringQualityMeasure : public ClusteringQualityMeasure {
+  class TLP_SCOPE MQClusteringQualityMeasure : public ClusteringQualityMeasure {
     public:
       MQClusteringQualityMeasure(const tlp::ClusteringAlgorithmBase* const clustering);
       virtual double getQuality();

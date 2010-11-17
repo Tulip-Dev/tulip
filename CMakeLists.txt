@@ -153,6 +153,10 @@ IF(NOT TULIP_USE_QT_PICTURE_OUTPUT)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITHOUT_QT_PICTURE_OUTPUT")
 ENDIF(NOT TULIP_USE_QT_PICTURE_OUTPUT)
 
+## -----------------------------------------------------------------------------------------------
+## Enable process to make generation of plugins informations for server (for developpers)
+## -----------------------------------------------------------------------------------------------
+SET(TULIP_SERVER_GENERATION OFF CACHE BOOL "Enable process to make generation of plugins informations for server (for developpers)")
 
 ## -----------------------------------------------------------------------------------------------
 ## Define NDEBUG when we are in release mode
@@ -192,6 +196,11 @@ ENDIF(LINUX)
 IF(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DDLL_EXPORT -DQT_ASSISTANT='\"assistant_adp\"'")
    SET(QT_ASSISTANT assistant_adp)
+   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
+      #recommended for now, vc++ spits out too many warnings, and renders the whole output unreadable
+      #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_MATH_DEFINES -DNOMINMAX")
+   ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
 ENDIF(WIN32)
 IF(APPLE)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__APPLE__ -DQT_ASSISTANT='\"Assistant_adp\"'")

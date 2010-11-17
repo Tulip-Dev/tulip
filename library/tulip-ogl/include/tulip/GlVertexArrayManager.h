@@ -21,13 +21,7 @@
 
 #include <cassert>
 #include <iostream>
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
+#include "tulip/OpenGlConfigManager.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -89,7 +83,12 @@ namespace tlp {
     void activatePointNodeDisplay(GlNode *node, bool onePixel, bool selected);
 
     void addEdge(Graph *,const edge);
+    void beforeSetAllNodeValue(PropertyInterface*);
+    void beforeSetAllEdgeValue(PropertyInterface*);
     void beforeSetNodeValue(PropertyInterface*, const node);
+    void beforeSetEdgeValue(PropertyInterface*, const edge);
+
+
     void destroy(Graph *);
     void destroy(PropertyInterface*);
 

@@ -28,11 +28,7 @@
 #include <tulip/tulipconf.h>
 
 #include <cassert>
-#if defined(__APPLE__)
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
+#include "tulip/OpenGlConfigManager.h"
 #include <string>
 #include <set>
 #include <iostream>

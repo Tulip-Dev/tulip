@@ -38,7 +38,7 @@ private :
   
 public :
   void setUp(){
-    carte = new PlanarConMap(tlp::newGraph());
+    carte = computePlanarConMap(tlp::newGraph());
     edges.clear();
     nodes.clear();
   }

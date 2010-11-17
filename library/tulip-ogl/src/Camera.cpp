@@ -172,15 +172,16 @@ namespace tlp {
     glMatrixMode(GL_PROJECTION);
     if(reset) glLoadIdentity();
 
-    double near,far;
+    double _near;
+	double _far;
     if(sceneBoundingBox.isValid() && sceneBoundingBox[0]!=sceneBoundingBox[1]){
       Coord diagCoord(sceneBoundingBox[1]-sceneBoundingBox[0]);
       double diag=2*sqrt(diagCoord[0]*diagCoord[0]+diagCoord[1]*diagCoord[1]+diagCoord[2]*diagCoord[2]);
-      near=-diag;
-      far=diag;
+      _near=-diag;
+      _far=diag;
     }else{
-      near=-sceneRadius;
-      far=sceneRadius;
+      _near=-sceneRadius;
+      _far=sceneRadius;
     }
     
     if(d3) { 
@@ -189,11 +190,11 @@ namespace tlp {
 	if (ratio>1)
 	  glOrtho(-ratio*sceneRadius/2.0/zoomFactor, ratio*sceneRadius/2.0/zoomFactor,
 		  -sceneRadius/2.0/zoomFactor, sceneRadius/2.0/zoomFactor,
-      near,far);
+      _near,_far);
 	else 
 	  glOrtho(-sceneRadius/2.0/zoomFactor, sceneRadius/2.0/zoomFactor,
 		  1./ratio * - sceneRadius/2.0/zoomFactor, 1./ratio * sceneRadius/2.0/zoomFactor,
-      near,far);
+      _near,_far);
       }else{
 	glFrustum(ratio*-1.0/zoomFactor, ratio*1.0/zoomFactor, 
 		  -1.0/zoomFactor, 1.0/zoomFactor, 1.0 , 

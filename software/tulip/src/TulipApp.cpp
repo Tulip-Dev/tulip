@@ -133,7 +133,14 @@ TulipApp::TulipApp(QWidget* parent): QMainWindow(parent),currentTabIndex(-1)  {
   // initialize needRestart setting
   disableRestart();
   setupUi(this);
+
   tabWidget=centralTabWidget;
+
+#if QT_MINOR_REL >= 5
+  tabWidget->setTabsClosable(true);
+  connect(tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(closeTab(int)));
+#endif
+
 }
 
 //**********************************************************************
@@ -142,6 +149,7 @@ void TulipApp::enableElements(bool enabled) {
   fileSaveAsAction->setEnabled(enabled);
   filePrintAction->setEnabled(enabled);
   mouseActionGroup->setEnabled(enabled);
+  exportGraphMenu.menuAction()->setEnabled(enabled);
 }
 //**********************************************************************
 ///Destructor of viewGl
@@ -290,6 +298,7 @@ void TulipApp::startTulip() {
     controllerAutoLoad=false;
     createController(name,newName());
     currentTabIndex=0;
+    Controller::currentActiveController(tabIndexToController[currentTabIndex]);
     controllerAutoLoad=true;
   }else{
     controllerAutoLoad=false;
@@ -402,6 +411,16 @@ void TulipApp::fileCloseTab(){
   if(controllerAutoLoad)
     return;
   int index=tabWidget->currentIndex();
+  closeTab(index);
+}
+//**********************************************************************
+void TulipApp::closeTab(int index){
+  if(controllerAutoLoad)
+    return;
+
+  if(index!=tabWidget->currentIndex())
+    tabWidget->setCurrentIndex(index);
+
   Graph *graph=tabIndexToController[index]->getGraph();
   while(graph->getRoot()!=graph)
     graph=graph->getRoot();
@@ -427,9 +446,16 @@ void TulipApp::fileCloseTab(){
 
     currentTabIndex=-1;
 
+    int newIndex=tabWidget->currentIndex();
+    if(index<tabWidget->currentIndex())
+      newIndex--;
+
     tabWidget->removeTab(index);
+    //tabChanged(newIndex);
+
     if(tabWidget->count()==0)
       tabWidget->setCurrentIndex(-1);
+
 
     delete controller;
   }
@@ -499,6 +525,8 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
   DataSet controllerData;
   Graph *graph;
   controllerToSave->getData(&graph,&controllerData);
+  if (graph == NULL)
+    return false;
   controller.set<DataSet>(controllerToControllerName[controllerToSave],controllerData);
   dataSet.set<DataSet>("controller",controller);
 
@@ -1130,6 +1158,7 @@ void TulipApp::tabChanged(int index){
   loadInterface(index);
 
   currentTabIndex=index;
+  Controller::currentActiveController(tabIndexToController[currentTabIndex]);
 }
 //==============================================================
 void TulipApp::helpAbout() {

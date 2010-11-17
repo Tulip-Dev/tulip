@@ -81,16 +81,6 @@ namespace tlp {
   	actionAntialiasingOptions=optionsMenu->addAction("Antialiasing");
   	actionAntialiasingOptions->setCheckable(true);
   	actionAntialiasingOptions->setChecked(true);
-  	actionTrueMetaNodeOptions=optionsMenu->addAction("Textured meta node");
-  	actionTrueMetaNodeOptions->setCheckable(true);
-
-  	if(canUseQGLPixelBuffer()){
-  	  actionTrueMetaNodeOptions->setChecked(true);
-  	}else{
-  	  actionTrueMetaNodeOptions->setEnabled(false);
-  	  actionTrueMetaNodeOptions->setChecked(false);
-  	  qtMetaNode=false;
-  	}
 
   	return widget;
   }
@@ -107,16 +97,9 @@ namespace tlp {
     mainWidget->setData(graph,data);
 
     delete currentMetaNodeRenderer;
-
-    if(qtMetaNode){
-      currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
-      ((QtMetaNodeRenderer*)currentMetaNodeRenderer)->setBackgroundColor(getGlMainWidget()->getScene()->getBackgroundColor());
-    }else
-      currentMetaNodeRenderer = new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
 		
 		getGlMainWidget()->useHulls(true);
 		
-    mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
     renderingParametersDialog->setGlMainView(this);
     layerManagerWidget->setGlMainView(this);
     overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
@@ -131,15 +114,8 @@ namespace tlp {
   void NodeLinkDiagramComponent::setGraph(Graph *graph,bool initView) {
     mainWidget->setGraph(graph);
     overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
-    /*if(currentMetaNodeRenderer)
-      delete currentMetaNodeRenderer;
-    if(qtMetaNode){
-      currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
-      ((QtMetaNodeRenderer*)currentMetaNodeRenderer)->setBackgroundColor(getGlMainWidget()->getScene()->getBackgroundColor());
-    }else
-      currentMetaNodeRenderer = new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());*/
 
-    //mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
+    mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()));
     if(initView)
       init();
   }
@@ -284,25 +260,6 @@ namespace tlp {
     GlGraphRenderingParameters param=mainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
     param.setElementZOrdered(actionZOrderingOptions->isChecked());
     param.setAntialiasing(actionAntialiasingOptions->isChecked());
-    if(!actionTrueMetaNodeOptions->isChecked() && qtMetaNode){
-      qtMetaNode=false;
-
-      delete currentMetaNodeRenderer;
-
-      currentMetaNodeRenderer = new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
-      mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
-      draw();
-    }
-    if(actionTrueMetaNodeOptions->isChecked() && !qtMetaNode){
-      qtMetaNode=true;
-
-      delete currentMetaNodeRenderer;
-
-      currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
-      ((QtMetaNodeRenderer*)currentMetaNodeRenderer)->setBackgroundColor(getGlMainWidget()->getScene()->getBackgroundColor());
-      mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
-      draw();
-    }
     mainWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
     Observable::unholdObservers();
   }

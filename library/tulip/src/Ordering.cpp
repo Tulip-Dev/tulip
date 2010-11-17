@@ -1163,7 +1163,7 @@ bool Ordering::isSelectable(node n) {
 //==========================================================
 Ordering::Ordering(PlanarConMap * G, PluginProgress* pluginProgress,
 		   int minProgress, int deltaProgress, int maxProgress) 
-  :  Gp(new PlanarConMap(tlp::newCloneSubGraph(G))), oute(),
+  :  Gp(computePlanarConMap(tlp::newCloneSubGraph(G))), oute(),
      outv(),visitedNodes(), visitedFaces(), seqP(), isOuterFace(),
      contour(), is_selectable(), is_selectable_visited(),
      is_selectable_face(), is_selectable_visited_face(),

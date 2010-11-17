@@ -114,6 +114,10 @@ namespace tlp {
 		void setCorner(Qt::Corner corner, Qt::DockWidgetArea area) {
 			mainWindow->setCorner(corner, area);
 		}
+		
+		void setDockOptions(QMainWindow::DockOptions options) {
+      mainWindow->setDockOptions(options);
+		}
 
 	private:
 
@@ -175,6 +179,20 @@ namespace tlp {
       return &mainWindowFacade;
     }
 
+    /**
+     * Set the current active controller
+     */
+    static void currentActiveController(Controller *controller){
+      currentController=controller;
+    }
+
+    /**
+     * Return the current active controller
+     */
+    static Controller *getCurrentController() {
+      return currentController;
+    }
+
   signals:
 
     void willBeClosed();
@@ -182,6 +200,8 @@ namespace tlp {
   protected :
 
     MainWindowFacade mainWindowFacade;
+
+    static Controller *currentController;
 
   };
 

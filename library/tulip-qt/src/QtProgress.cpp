@@ -42,6 +42,11 @@ namespace tlp {
   QtProgress::~QtProgress() {
   }
   //=====================================
+  void QtProgress::preview_handler(bool b) {
+      if (preview->isChecked() == b) return;
+      preview->setChecked(b);
+  }
+  //=====================================
   void QtProgress::progress_handler(int i,int j) {
     //  cerr << __PRETTY_FUNCTION__ << endl;
     progressBar->setMaximum(j);
@@ -52,7 +57,7 @@ namespace tlp {
     qApp->processEvents();
     if (firstCall) show();
     firstCall=false;
-    if (view!=0 && preview->isChecked()) {
+    if (view!=0 && isPreviewMode()) {
       view->init();
     }
   }

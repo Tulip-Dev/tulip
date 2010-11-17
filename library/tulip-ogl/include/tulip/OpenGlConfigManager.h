@@ -21,6 +21,11 @@
 
 #include <cassert>
 #include <iostream>
+
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
 #if defined(__APPLE__)
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -92,6 +97,15 @@ namespace tlp {
       return glewIsOk;
     }
 
+    void setAntiAliasing(const bool antialiasing) {antialiased = antialiasing;}
+
+    void activateLineAndPointAntiAliasing();
+    void desactivateLineAndPointAntiAliasing();
+
+    void activatePolygonAntiAliasing();
+    void desactivatePolygonAntiAliasing();
+
+
   private:
 
     /**
@@ -106,6 +120,7 @@ namespace tlp {
     bool glewIsChecked;
     bool driversAreChecked;
     bool glewIsOk;
+    bool antialiased;
 
   };
 

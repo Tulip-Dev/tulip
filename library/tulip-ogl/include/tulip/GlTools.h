@@ -19,11 +19,7 @@
 #ifndef GLTOOLS_H
 #define GLTOOLS_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "tulip/OpenGlConfigManager.h"
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 #include <tulip/Size.h>

@@ -31,6 +31,9 @@ struct edge {
   unsigned int id;
   edge():id(UINT_MAX){}
   explicit edge(unsigned int j):id(j){}
+  operator unsigned int() {
+    return id;
+  }
   bool operator==(const edge e) const{return id==e.id;}
   bool operator!=(const edge e) const{return id!=e.id;}
   bool isValid() const {return id!=UINT_MAX;}

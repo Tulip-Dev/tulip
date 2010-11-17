@@ -51,6 +51,21 @@ namespace tlp {
         inst=new QGlBufferManager();
       return *inst;
     }
+
+    /**
+     * Return if QGlPixelBuffer can be used
+     */
+    bool canUsePixelBuffer() {
+      return pixelBufferWork;
+    }
+
+    /**
+     * Return if QGlFramebufferObject can be used
+     */
+    bool canUseFramebufferObject() {
+      return framebufferObjectWork;
+    }
+
     /**
      * Return a QGlPixelBuffer with given size
      */
@@ -66,7 +81,7 @@ namespace tlp {
     /**
      * empty private constructor for singleton
      */
-    QGlBufferManager() {}
+    QGlBufferManager();
 
     static QGlBufferManager* inst;
 
@@ -74,6 +89,9 @@ namespace tlp {
     std::map<QGLPixelBuffer*,std::pair<int,int> > bufferToWidthHeight;
     std::map<std::pair<int,int>,QGLFramebufferObject*> widthHeightToFramebuffer;
     std::map<QGLFramebufferObject*,std::pair<int,int> > framebufferToWidthHeight;
+
+    bool pixelBufferWork;
+    bool framebufferObjectWork;
 
   };
 

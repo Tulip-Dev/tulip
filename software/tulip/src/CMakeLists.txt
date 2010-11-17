@@ -32,10 +32,12 @@ SET(tulip_RCC
 )
 
 TULIP_QT4_WRAP_UI_IN_INCLUDE(tulip_UI_SRCS ${tulip_UI})
-TULIP_QT4_WRAP_CPP(tulip_MOC_SRCS ${tulip_MOC})
+TULIP_QT4_WRAP_CPP(tulip_MOC_SRCS ${tulip_MOC} OPTIONS "-DQT_MINOR_REL=${QT_VERSION_MINOR}")
 QT4_ADD_RESOURCES(tulip_RCC_SRCS ${tulip_RCC})
 
 INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${PROJECT_BINARY_DIR}/library/tulip-qt/include/tulip ${PROJECT_BINARY_DIR}/software/tulip/include ${TulipInclude} ${TulipQtInclude} ${TulipOGLInclude} ${TulipPluginsManagerInclude})
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_MINOR_REL=${QT_VERSION_MINOR}")
 
 IF(WIN32)
 ADD_EXECUTABLE( tulip TulipLauncher.cpp)

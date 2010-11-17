@@ -58,8 +58,11 @@ public:
   virtual bool isMetaNode(const node) const;
   virtual Graph* getNodeMetaInfo(const node) const;
   virtual node source(const edge) const;
+  virtual void setSource(const edge, const node);
   virtual node target(const edge) const;
+  virtual void setTarget(const edge, const node);
   virtual const std::pair<node, node>& ends(const edge) const;
+  virtual void setEnds(const edge, const node, const node);
   virtual node opposite(const edge, const node)const;
   virtual edge existEdge(const node , const node, bool)const;
   virtual void reverse(const edge);

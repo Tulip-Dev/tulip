@@ -161,7 +161,8 @@ node GraphImpl::restoreNode(node newNode) {
   while (nodes.size() <= newNode.id){
     nodes.push_back(EdgeContainer());
   }
-  assert(nodes[newNode.id].empty());
+  //assert(nodes[newNode.id].empty());
+  nodes[newNode.id].clear();
   nbNodes++;
   notifyAddNode(this, newNode);
   notifyObservers();
@@ -379,12 +380,12 @@ node GraphImpl::target(const edge e)const {
   assert(isElement(e));
   return edges[e.id].second;
 }
-//=========================================================================
+//----------------------------------------------------------------
 const std::pair<node, node>& GraphImpl::ends(const edge e) const {
   assert(isElement(e));
   return edges[e.id];
 }
-//=========================================================================
+//----------------------------------------------------------------
 node GraphImpl::opposite(const edge e, const node n) const {
   assert(isElement(e));
   const std::pair<node, node>& eEnds = edges[e.id];
@@ -408,6 +409,52 @@ void GraphImpl::reverse(const edge e) {
   Graph* sg;
   forEach(sg, getSubGraphs()) {
     ((GraphView*) sg)->reverse(e, src, tgt);
+  }
+}
+//----------------------------------------------------------------
+void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
+  assert(isElement(e));
+  // not allowed on meta edge
+  if (isMetaEdge(e)) {
+    cerr << "Warning: invoking Graph::setEnds on meta edge " << e.id << endl;
+    return;
+  }
+
+  node src = edges[e.id].first;
+  node tgt = edges[e.id].second;
+  // nothing to do if same ends
+  if (src == newSrc && tgt == newTgt)
+    return;
+  node nSrc = newSrc;
+  node nTgt = newTgt;
+
+  // notification
+  notifyBeforeSetEnds(this, e);
+
+  if (newSrc.isValid() && src != newSrc) {
+    assert(isElement(newSrc));
+    edges[e.id].first  = newSrc;
+    outDegree.set(src.id, outDegree.get(src.id) - 1);
+    outDegree.set(newSrc.id, outDegree.get(newSrc.id) + 1);
+    nodes[newSrc.id].push_back(e);
+    removeEdge(nodes[src.id], e);
+  } else
+    nSrc = src;
+  if (newTgt.isValid() && tgt != newTgt) {
+    assert(isElement(newTgt));
+    edges[e.id].second = newTgt;
+    nodes[newTgt.id].push_back(e);
+    removeEdge(nodes[tgt.id], e);
+  } else
+    nTgt = tgt;
+  // notification
+  notifyAfterSetEnds(this, e);
+  notifyObservers();
+
+  // propagate edge reversal on subgraphs
+  Graph* sg;
+  forEach(sg, getSubGraphs()) {
+    ((GraphView*) sg)->setEnds(e, src, tgt, nSrc, nTgt);
   }
 }
 //----------------------------------------------------------------

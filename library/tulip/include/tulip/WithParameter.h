@@ -31,7 +31,7 @@ namespace tlp {
 /*@{*/
 struct TLP_SCOPE WithParameter {
   ///
-  StructDef getParameters();
+  tlp::StructDef getParameters();
   ///
   template<typename Ty> void addParameter(const char* str,
 					  const char* inHelp=0,

@@ -176,7 +176,9 @@ DoubleProperty::DoubleProperty (Graph *sg, std::string n):AbstractProperty<Doubl
   // the property observes itself; see beforeSet... methods
   addPropertyObserver(this);
   // but do not need to be in observables
-  removeObservable(this);
+  PropertyObserver::removeObservable(this);
+  // the property observes the graph
+  sg->addGraphObserver(this);
   // the computed meta value will be the average value
   setMetaValueCalculator(&avgCalculator);
 }
@@ -347,6 +349,14 @@ void DoubleProperty::beforeSetAllNodeValue(PropertyInterface*) {
   minMaxOkNode.clear();
 }
 void DoubleProperty::beforeSetAllEdgeValue(PropertyInterface*) {
+  minMaxOkEdge.clear();
+}
+
+void DoubleProperty::addNode(Graph*, const node) {
+  minMaxOkNode.clear();
+}
+
+void DoubleProperty::addEdge(Graph*, const edge) {
   minMaxOkEdge.clear();
 }
 //=================================================================================

@@ -61,7 +61,9 @@ void PlanarityTestImpl::extractBoundaryCycle(Graph *sG, node cNode,
   e = el[u].front();
   listEdges.push_back(e);
   u = sG->target(e);
+#ifndef NDEBUG
   unsigned int count = 0;
+#endif
   while (u != parent.get(cNode.id)) {
     assert(++count <= numberOfNodesInG);
     e = el[u].front();
@@ -71,6 +73,7 @@ void PlanarityTestImpl::extractBoundaryCycle(Graph *sG, node cNode,
 }
 //=================================================================
 void PlanarityTestImpl::obstrEdgesTerminal(Graph* G, node w, node t, node u) {
+  (void)u; //fixes unused parameter warning in release builds
   node mm = lcaBetween(nodeLabelB.get(t.id), neighborWTerminal.get(t.id), p0);
   assert((listEdgesUpwardT0(nodeLabelB.get(t.id), mm)));
   assert(listEdgesUpwardT0(neighborWTerminal.get(t.id), mm));
@@ -130,6 +133,7 @@ void PlanarityTestImpl::sortByLabelB(node &n1, node &n2, node &n3) {
 }
 //=================================================================
 void PlanarityTestImpl::obstrEdgesPNode(Graph *sG, node p, node u) {
+  (void)u;//fixes unused aprameter in release builds
   assert(listEdgesUpwardT0(nodeLabelB.get(p.id), u));
   edge e = sG->existEdge(nodeLabelB.get(p.id), nodeWithDfsPos.get(labelB.get(p.id)));
   assert(e.isValid());

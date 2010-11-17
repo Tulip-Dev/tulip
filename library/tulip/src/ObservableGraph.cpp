@@ -108,6 +108,32 @@ void ObservableGraph::notifyAddEdge(Graph *sg, const edge e) {
   }
 }
 
+void ObservableGraph::notifyBeforeSetEnds(Graph *sg, const edge e) {
+  slist<GraphObserver*>::iterator itObs = observers.begin();
+  slist<GraphObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    GraphObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->beforeSetEnds(sg, e);
+  }
+}
+
+void ObservableGraph::notifyAfterSetEnds(Graph *sg, const edge e) {
+  slist<GraphObserver*>::iterator itObs = observers.begin();
+  slist<GraphObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    GraphObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->afterSetEnds(sg, e);
+  }
+}
+
 void ObservableGraph::notifyDelEdge(Graph *sg, const edge e) {
   slist<GraphObserver*>::iterator itObs = observers.begin();
   slist<GraphObserver*>::iterator ite = observers.end();

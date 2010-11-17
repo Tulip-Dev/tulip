@@ -40,22 +40,6 @@ MACRO (TULIP_QT4_WRAP_UI_IN_INCLUDE_TULIP outfiles )
   ENDFOREACH (it)
 ENDMACRO (TULIP_QT4_WRAP_UI_IN_INCLUDE_TULIP)
 
-MACRO (TULIP_WRAP_QT_PLUGINS_IN_INCLUDE_TULIP outfiles )
-  QT4_EXTRACT_OPTIONS(ui_files ui_options ${ARGN})
-  FOREACH (it ${ui_files})
-    GET_FILENAME_COMPONENT(outfile ${it} NAME_WE)
-    GET_FILENAME_COMPONENT(infile ${it} ABSOLUTE)
-    STRING(TOLOWER ${outfile} outfile_lower)
-    SET(outfile_lower ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/${outfile_lower}.h)
-
-    ADD_CUSTOM_COMMAND(OUTPUT ${outfile_lower}
-      COMMAND ${CMAKE_COMMAND} -E copy
-      ARGS ${infile} ${outfile_lower}
-      MAIN_DEPENDENCY ${infile})
-    SET(${outfiles} ${${outfiles}} ${outfile_lower})
-  ENDFOREACH (it)
-ENDMACRO (TULIP_WRAP_QT_PLUGINS_IN_INCLUDE_TULIP)
-
 MACRO (TULIP_QT4_WRAP_CPP outfiles )
   QT4_GET_MOC_FLAGS(moc_flags)
   QT4_EXTRACT_OPTIONS(moc_files moc_options ${ARGN})

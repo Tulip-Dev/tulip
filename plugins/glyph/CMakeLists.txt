@@ -107,6 +107,13 @@ TARGET_LINK_LIBRARIES(ChristmasTree-${TulipVersion} ${LibTulipOglName})
 ADD_DEPENDENCIES(ChristmasTree-${TulipVersion} ${LibTulipName} ${LibTulipOglName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+SET(RoundedBox_SRCS roundedbox.cpp)
+ADD_LIBRARY(RoundedBox-${TulipVersion} SHARED ${RoundedBox_SRCS})
+TARGET_LINK_LIBRARIES(RoundedBox-${TulipVersion} ${LibTulipName})
+TARGET_LINK_LIBRARIES(RoundedBox-${TulipVersion} ${LibTulipOglName})
+ADD_DEPENDENCIES(RoundedBox-${TulipVersion} ${LibTulipName} ${LibTulipOglName})
+##----------------------------------------------------------------------------------------------------------------------------
+
 INSTALL(TARGETS 
 	Circle-${TulipVersion}
 	Hexagone-${TulipVersion}
@@ -123,6 +130,6 @@ INSTALL(TARGETS
 	HalfCylinder-${TulipVersion}
 	ChristmasTree-${TulipVersion}
 	Window-${TulipVersion}
+	RoundedBox-${TulipVersion}
   DESTINATION ${TulipLibInstallDir}tlp/glyphs/
   COMPONENT libtulip_ogl_plugins)
-

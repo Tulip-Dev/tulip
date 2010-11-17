@@ -45,6 +45,7 @@ void InteractorChainOfResponsibility::install(QWidget *widget) {
     installedInteractorComponents.push_back(newInteractor);
     newInteractor->setID(++id);
     widget->installEventFilter(newInteractor);
+    widget->setCursor(getCursor());
   }
 }
 

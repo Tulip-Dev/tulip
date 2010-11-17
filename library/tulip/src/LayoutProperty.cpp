@@ -369,6 +369,7 @@ void LayoutProperty::beforeSetAllEdgeValue(PropertyInterface*) {
 }
 //================================================================================
 void LayoutProperty::reverseEdge(Graph *sg, const edge e) {
+  (void)sg; //fixes unused parameter warning in release builds
   assert(sg == graph);
   std::vector<Coord> bends = getEdgeValue(e);
   // reverse bends if needed

@@ -43,51 +43,65 @@ MouseMagicSelector::MouseMagicSelector():
 {}
 
 bool MouseMagicSelector::eventFilter(QObject *widget, QEvent *e) {
-  if (e->type() == QEvent::MouseButtonPress) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    if (qMouseEv->button()==Qt::LeftButton) {
-      QMouseEvent * qMouseEv = (QMouseEvent *) e;
-      GlMainWidget *glMainWidget = (GlMainWidget *) widget;
-      x=qMouseEv->x();
-      y=qMouseEv->y();
-      ElementType type;
-      node tmpNode;
-      edge tmpEdge;
-      glMainWidget->doSelect(x, y, type, tmpNode, tmpEdge);
-      if (type != NODE) {
-	//cerr << __PRETTY_FUNCTION__ << ": type != NODE" << endl;
-	return true;
+  QMouseEvent *qMouseEv = (QMouseEvent *) e;
+  if(e != NULL) {
+    node tmpNode;
+    edge tmpEdge;
+    ElementType type;
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    if(e->type() == QEvent::MouseMove) {    
+      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
+        glMainWidget->setCursor(QCursor(QPixmap(":/i_magic.png")));
+        std::cout << "using magic wand! " << std::endl; 
       }
-      Observable::holdObservers();
-      GlGraphInputData *inputData=glMainWidget->getScene()->getGlGraphComposite()->getInputData();
-      graph=inputData->getGraph();
-      BooleanProperty* selection=graph->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
-      BooleanProperty* visited=graph->getProperty<BooleanProperty>("tmpVisited");
-      DoubleProperty* metric=graph->getProperty<DoubleProperty>("viewMetric");
-      visited->setAllNodeValue(false);
-      visited->setAllEdgeValue(false);
-      selection->setAllNodeValue(false);
-      selection->setAllEdgeValue(false);
-      double initValue = metric->getNodeValue(tmpNode);
-      list <node> bfsFifo;
-      bfsFifo.push_back(tmpNode);
-      while(!bfsFifo.empty()) {
-      node itn = bfsFifo.front();
-      bfsFifo.pop_front();
-      selection->setNodeValue(itn,true);
-      visited->setNodeValue(itn,true);
-      Iterator<node> *itN = graph->getInOutNodes(itn);
-	while (itN->hasNext()) {
-	  node itv = itN->next();
-	  double curValue = metric->getNodeValue(itv);
-	  if ( curValue == initValue && (!visited->getNodeValue(itv)) ) {
-	    bfsFifo.push_back(itv);
-	  }
-	} delete itN;
+      else {
+        glMainWidget->setCursor(Qt::ArrowCursor);
       }
-      Observable::unholdObservers();
-      return true;
     }
+    if (e->type() == QEvent::MouseButtonPress) {
+      if (qMouseEv->button()==Qt::LeftButton) {
+        QMouseEvent * qMouseEv = (QMouseEvent *) e;
+        GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+        x=qMouseEv->x();
+        y=qMouseEv->y();
+        ElementType type;
+        node tmpNode;
+        edge tmpEdge;
+        if (!glMainWidget->doSelect(x, y, type, tmpNode, tmpEdge) || type != NODE) {
+    //cerr << __PRETTY_FUNCTION__ << ": type != NODE" << endl;
+    return true;
+        }
+        Observable::holdObservers();
+        GlGraphInputData *inputData=glMainWidget->getScene()->getGlGraphComposite()->getInputData();
+        graph=inputData->getGraph();
+        BooleanProperty* selection=graph->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
+        BooleanProperty* visited=graph->getProperty<BooleanProperty>("tmpVisited");
+        DoubleProperty* metric=graph->getProperty<DoubleProperty>("viewMetric");
+        visited->setAllNodeValue(false);
+        visited->setAllEdgeValue(false);
+        selection->setAllNodeValue(false);
+        selection->setAllEdgeValue(false);
+        double initValue = metric->getNodeValue(tmpNode);
+        list <node> bfsFifo;
+        bfsFifo.push_back(tmpNode);
+        while(!bfsFifo.empty()) {
+        node itn = bfsFifo.front();
+        bfsFifo.pop_front();
+        selection->setNodeValue(itn,true);
+        visited->setNodeValue(itn,true);
+        Iterator<node> *itN = graph->getInOutNodes(itn);
+    while (itN->hasNext()) {
+      node itv = itN->next();
+      double curValue = metric->getNodeValue(itv);
+      if ( curValue == initValue && (!visited->getNodeValue(itv)) ) {
+        bfsFifo.push_back(itv);
+      }
+    } delete itN;
+        }
+        Observable::unholdObservers();
+        return true;
+      }
+    } 
   }
   return false;
 }

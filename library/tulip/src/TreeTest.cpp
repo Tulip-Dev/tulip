@@ -94,6 +94,8 @@ bool TreeTest::isFreeTree (Graph *graph, node curRoot, node cameFrom,
   return true;
 }//end isFreeTree 
 
+// keep track of reversed edges
+vector<edge>* reversedEdges = NULL;
 //====================================================================
 //given that graph is topologically a tree, The function turns graph
 //into a directed tree.
@@ -102,8 +104,11 @@ void TreeTest::makeRootedTree (Graph *graph, node curRoot, node cameFrom) {
   forEach (curEdge, graph->getInOutEdges(curRoot)) {
     node opposite = graph->opposite(curEdge, curRoot);
     if (opposite != cameFrom) {
-      if (graph->target (curEdge) == curRoot)
+      if (graph->target (curEdge) == curRoot) {
 	graph->reverse(curEdge);
+	if (reversedEdges)
+	  reversedEdges->push_back(curEdge);
+      }
       makeRootedTree (graph, opposite, curRoot);
     }//end if
   }//end forEach
@@ -126,13 +131,14 @@ static Graph* computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
 #define CLONE_ROOT "CloneRoot"
     rGraph = gClone = tlp::newCloneSubGraph(graph, CLONE_NAME);
     rGraph->setAttribute(CLONE_ROOT, node());
+    reversedEdges = new vector<edge>;
   }
 
   // add a node for an empty graph
   if (graph->numberOfNodes() == 0) {
     rGraph->setAttribute(CLONE_ROOT, rGraph->addNode());
     return rGraph;
-  }  
+  }
 
   // if the graph is topologically a tree, make it rooted
   // using a 'center' of the graph as root
@@ -204,18 +210,30 @@ void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
   // get the subgraph clone
   Graph *sg = tree;
   string nameAtt("name");
-  string name = sg->getAttribute<string>(nameAtt);
+  string name;
+  sg->getAttribute<string>(nameAtt, name);
   while(name != CLONE_NAME) {
     sg = sg->getSuperGraph();
-    name = sg->getAttribute<string>(nameAtt);
+    sg->getAttribute<string>(nameAtt, name);
   }
+  Graph* rg = graph->getRoot();
   // get its added root
-  node root = sg->getAttribute<node>(CLONE_ROOT);
+  node root;
+  sg->getAttribute<node>(CLONE_ROOT, root);
   // delete it if needed
   if (root.isValid())
-    graph->getRoot()->delNode(root);
+    rg->delNode(root);
   // delete the clone
   graph->delAllSubGraphs(sg);
+  // reverse the reversed edges
+  if (reversedEdges) {
+    for(vector<edge>::iterator ite = reversedEdges->begin();
+	ite != reversedEdges->end(); ++ite) {
+      rg->reverse(*ite);
+    }
+    delete reversedEdges;
+    reversedEdges = NULL;
+  }    
 }
 
 //====================================================================

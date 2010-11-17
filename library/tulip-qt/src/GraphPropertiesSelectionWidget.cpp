@@ -19,6 +19,8 @@
 
 #include "tulip/GraphPropertiesSelectionWidget.h"
 
+#include <algorithm>
+
 using namespace std;
 
 namespace tlp {

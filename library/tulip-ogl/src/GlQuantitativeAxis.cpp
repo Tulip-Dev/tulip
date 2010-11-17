@@ -88,11 +88,11 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 		maxV = max;
 	} else {
 		if (min >= 1) {
-			minV = minLog = log(min) / log(logBase);
-			maxV = maxLog = log(max) / log(logBase);
+			minV = minLog = log(min) / log((double)logBase);
+			maxV = maxLog = log(max) / log((double)logBase);
 		} else {
 			minV = minLog = 0;
-			maxV = maxLog = log(max - min) / log(logBase);
+			maxV = maxLog = log(max - min) / log((double)logBase);
 		}
 	}
 
@@ -169,7 +169,7 @@ Coord GlQuantitativeAxis::getAxisPointCoordForValue(double value) const {
 		if (min < 1) {
 			val += (1 - min);
 		}
-		val = log(val) / log(logBase);
+		val = log(val) / log((double)logBase);
 	}
 	if (ascendingOrder) {
 		 offset = (val - minV) * scale;

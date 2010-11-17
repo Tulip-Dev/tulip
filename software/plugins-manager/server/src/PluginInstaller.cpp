@@ -162,16 +162,16 @@ int main(int argc,char **argv) {
   if(pluginInfo.displayType == "Glyph")
     pluginInfo.type = "Glyph";
 
+  QString path= pluginInfo.fileName.c_str()+QString(".")+(QString(pluginInfo.version.c_str()).split(" "))[1];
+  
   QDir dir;
   dir.mkpath(targetPath);
   dir.mkpath(targetPath+"/plugins/");
-
-  QString path= pluginInfo.fileName.c_str()+QString(".")+(QString(pluginInfo.version.c_str()).split(" "))[1];
-
+  dir.mkpath(targetPath+"/plugins/"+path);
+  dir.mkpath(targetPath+"/plugins/"+path+"/"+subDir);
+  
   QDir dstDir(targetPath+"/plugins/"+path);
-  dstDir.mkpath(targetPath+"/plugins/"+path);
   QDir dstSubDir(targetPath+"/plugins/"+path+"/"+subDir);
-  dstSubDir.mkpath(targetPath+"/plugins/"+path+"/"+subDir);
 
   if(generateDoc)
     if (!generatePluginInfoFile(pluginInfo, dstDir))

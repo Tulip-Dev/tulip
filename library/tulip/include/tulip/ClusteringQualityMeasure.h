@@ -7,7 +7,7 @@ namespace tlp {
   class DoubleProperty;
   class ClusteringAlgorithmBase;
 
-  class ClusteringQualityMeasure {
+  class TLP_SCOPE ClusteringQualityMeasure {
     public:
       ClusteringQualityMeasure(const tlp::ClusteringAlgorithmBase* const clustering);
       virtual double getQuality() = 0;

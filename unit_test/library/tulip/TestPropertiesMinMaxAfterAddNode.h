@@ -16,42 +16,23 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifndef TLPPUSHPOPTEST
-#define TLPPUSHPOPTEST
-
+#include <string>
 #include <tulip/Graph.h>
-#include <tulip/TlpTools.h>
 #include <cppunit/TestFixture.h>
-//#include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestSuite.h>
 
-class PushPopTest : public CppUnit::TestFixture {
-private:
-  tlp::Graph *graph;
+class TestPropertiesMinMaxAfterAddNode : public CppUnit::TestFixture {
 
-public:
+ public:
+
   void setUp();
   void tearDown();
+  void testDoublePropertyMinMaxAfterAddNode();
+  void testIntegerPropertyMinMaxAfterAddNode();
 
-  void testAddDel();
-  void testSetValue();
-  void testSetEnds();
-  void testCopyProperty();
-  void testSubgraph();
-  void testTests();
-  void testAddDelProps();
-  void testMetaNode();
-  /*void testOrderEdgeAndSwap();
-  void testSubgraphId();
-  void testDeleteSubgraph();
-  void testInheritance();
-  void testIterators();
-  void testPropertiesIteration();
-  void testDegree(); */
+  static CppUnit::Test *suite();	
 
-  static CppUnit::Test *suite();
  private:
-  void build(unsigned int, unsigned int);
+	
+  tlp::Graph *graph;
 };
-
-#endif

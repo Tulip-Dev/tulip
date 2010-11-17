@@ -32,10 +32,10 @@ namespace tlp {
 
 class PropertyContext;
 
-typedef AbstractProperty<DoubleType, DoubleType, DoubleAlgorithm> AbstractDoubleProperty;
+typedef AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> AbstractDoubleProperty;
 /** \addtogroup properties */ 
 /*\@{*/
-  class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, public PropertyObserver { 
+ class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, public PropertyObserver, public GraphObserver { 
 
   friend class DoubleAlgorithm;
 
@@ -56,6 +56,10 @@ public :
   virtual void beforeSetAllNodeValue(PropertyInterface* prop);
   virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
 
+  // redefinition of GraphObserver methods
+  virtual void addNode(Graph* graph, const node n);
+  virtual void addEdge(Graph* graph, const edge e);
+
   enum PredefinedMetaValueCalculator {NO_CALC = 0, AVG_CALC = 1, SUM_CALC = 2,
 				      MAX_CALC = 3, MIN_CALC = 4};
 
@@ -72,7 +76,7 @@ private:
   void computeMinMaxEdge(Graph *sg=0);
 };
 
-class TLP_SCOPE DoubleVectorProperty:public AbstractProperty<DoubleVectorType,DoubleVectorType> { 
+class TLP_SCOPE DoubleVectorProperty:public AbstractProperty<tlp::DoubleVectorType, tlp::DoubleVectorType> { 
 public :
   DoubleVectorProperty(Graph *g, std::string n=""):AbstractProperty<DoubleVectorType, DoubleVectorType>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string& );

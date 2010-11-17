@@ -97,7 +97,7 @@ unsigned int eulerIdentity(Graph *graph) {
 void PlanarityTestTest::planarGraphsEmbedding() {
   cerr << "==================================" << endl;
   graph = tlp::loadGraph(GRAPHPATH + "planar/grid1010.tlp");
-  PlanarConMap *graphMap = new PlanarConMap(graph);
+  PlanarConMap *graphMap = computePlanarConMap(graph);
   //  graphMap->makePlanar();
   CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
   delete graphMap;
@@ -105,21 +105,16 @@ void PlanarityTestTest::planarGraphsEmbedding() {
   cerr << "==================================" << endl;
   graph = tlp::loadGraph(GRAPHPATH + "planar/unconnected.tlp");
   graph->setAttribute("name", string("unconnected"));
-  graphMap = new PlanarConMap(graph);
-  cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
-  //  graphMap->makePlanar();
-  /* 
-   * The number of faces must be adapted because the Planarity Test split the 
-   * external face into several faces (one by connected componnent).
-   */
-  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces() - (ConnectedTest::numberOfConnectedComponents(graph) - 1));  
-  delete graphMap;
+  // no planar connected map computed
+  // beacause is not connected
+  graphMap = computePlanarConMap(graph);
+  CPPUNIT_ASSERT(graphMap == NULL);
   delete graph;
   cerr << "==================================" << endl;
   cerr << "unbiconnected" << endl;
   graph = tlp::loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
 
-  graphMap = new PlanarConMap(graph);
+  graphMap = computePlanarConMap(graph);
 
   //  graphMap->makePlanar();
   CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
@@ -149,7 +144,7 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
   node meta3 = g->createMetaNode(toGroup);
   toGroup.clear();
 
-  PlanarConMap *graphMap = new PlanarConMap(g);
+  PlanarConMap *graphMap = computePlanarConMap(g);
   //  graphMap->makePlanar();
   CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanar(g));//eulerIdentity(g), graphMap->nbFaces());  
   CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanar(graphMap));//eulerIdentity(g), graphMap->nbFaces());  

@@ -31,7 +31,7 @@ namespace tlp {
 
 class PropertyContext;
 
-typedef AbstractProperty<ColorType, ColorType, ColorAlgorithm> AbstractColorProperty;
+typedef AbstractProperty<tlp::ColorType, tlp::ColorType, tlp::ColorAlgorithm> AbstractColorProperty;
 
 /** \addtogroup properties */ 
 /*@{*/
@@ -42,7 +42,7 @@ public :
   PropertyInterface* clonePrototype(Graph *, const std::string&);
 };
 
-class TLP_SCOPE ColorVectorProperty:public AbstractProperty<ColorVectorType,ColorVectorType> { 
+class TLP_SCOPE ColorVectorProperty:public AbstractProperty<tlp::ColorVectorType, tlp::ColorVectorType> { 
 public :
   ColorVectorProperty(Graph *g, std::string n="") :AbstractProperty<ColorVectorType, ColorVectorType>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string&);

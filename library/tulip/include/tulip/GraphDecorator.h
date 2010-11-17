@@ -48,10 +48,13 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
 
   //============================================================
   virtual node source(const edge e)const;
+  virtual void setSource(const edge, const node);
   virtual node target(const edge e)const;
+  virtual void setTarget(const edge, const node);
   virtual node opposite(const edge e, const node n)const;
   virtual edge existEdge(const node n, const node m, bool directed = true)const;
   virtual const std::pair<node, node>& ends(const edge e) const;
+  virtual void setEnds(const edge, const node, const node);
   virtual void reverse(const edge e);
   virtual unsigned int deg(const node n)const;
   virtual unsigned int indeg(const node n)const;

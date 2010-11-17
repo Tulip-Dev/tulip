@@ -133,6 +133,7 @@ protected slots:
   void fileNew(QAction *action);
   bool fileNew(bool);
   void fileCloseTab();
+  void closeTab(int index);
   bool createController(const std::string &name,const std::string &graphName);
   void fileOpen();
   void filePrint();

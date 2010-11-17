@@ -22,11 +22,7 @@
 //====================================================
 #include <stdio.h>
 #include <tulip/Color.h>
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "tulip/OpenGlConfigManager.h"
 
 namespace tlp {
 
