@@ -480,8 +480,7 @@ void Graph::openMetaNode(node metaNode) {
     // compute mapping for neighbour nodes
     // and their sub nodes
     forEach(mn, super->getInOutNodes(metaNode)) {
-      if (isElement(mn))
-	mappingM.set(mn.id, mn);
+      mappingM.set(mn.id, mn);
       Graph *mnGraph = metaInfo->getNodeValue(mn);
       if (mnGraph != 0) {
 	Iterator<node> *it = mnGraph->getNodes();
