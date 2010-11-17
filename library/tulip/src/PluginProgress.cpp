@@ -47,7 +47,9 @@ bool PluginProgress::isPreviewMode() const {
 }
 //====================================================
 void PluginProgress::setPreviewMode(bool b) {
-  _preview = b;
+    if (b == _preview) return;
+    _preview = b;
+    preview_handler(_preview);
 }
 //====================================================
 void PluginProgress::showPreview(bool) {
@@ -58,5 +60,8 @@ ProgressState PluginProgress::state() const {
 }
 //====================================================
 void PluginProgress::progress_handler(int, int) {
+}
+//====================================================
+void PluginProgress::preview_handler(bool) {
 }
 //====================================================

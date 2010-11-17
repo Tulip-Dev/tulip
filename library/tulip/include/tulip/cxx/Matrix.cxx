@@ -53,6 +53,48 @@ MATRIXTLPGEO & MATRIXTLPGEO::fill(Obj obj) {
     (*this)[i].fill(obj);
   return (*this);
 }
+//======================================================
+template<typename Obj,unsigned int SIZE>
+MATRIXTLPGEO&  MATRIXTLPGEO::operator+=(const MATRIXTLPGEO &mat) {
+  for (unsigned int i=0;i<SIZE;++i)
+    (*this)[i] += mat[i];
+  return (*this);
+}
+//======================================================
+template<typename Obj,unsigned int SIZE>
+MATRIXTLPGEO&  MATRIXTLPGEO::operator+(const MATRIXTLPGEO &mat) const{
+  return MATRIXTLPGEO(*this) += mat;
+}
+//======================================================
+template<typename Obj,unsigned int SIZE>
+MATRIXTLPGEO&  MATRIXTLPGEO::operator-=(const MATRIXTLPGEO &mat) {
+  for (unsigned int i=0;i<SIZE;++i)
+    (*this)[i] -= mat[i];
+  return (*this);
+}
+//======================================================
+template<typename Obj,unsigned int SIZE>
+MATRIXTLPGEO&  MATRIXTLPGEO::operator-(const MATRIXTLPGEO &mat) const{
+  return MATRIXTLPGEO(*this) -= mat;
+}
+//======================================================
+template<typename Obj,unsigned int SIZE>
+bool MATRIXTLPGEO::operator==(const MATRIXTLPGEO &mat) const {
+  for (unsigned int i=0;i<SIZE;++i) {
+    if (((*this)[i] != mat[i]))
+      return false;
+  }
+  return true;
+}
+//======================================================
+template<typename Obj,unsigned int SIZE>
+bool MATRIXTLPGEO::operator!=(const MATRIXTLPGEO &mat) const {
+  for (unsigned int i=0;i<SIZE;++i) {
+    if (((*this)[i] != mat[i]))
+      return true;
+  }
+  return false;
+}
 //===================================================================
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::operator*=(const MATRIXTLPGEO &mat) {

@@ -119,10 +119,10 @@ public:
   virtual void computeMetaValue(node mN, Graph* sg, Graph* mg)=0;
   // mE is the meta edge, itE is an iterator on the underlying edges
   // mg is the graph owning mE
-  virtual void computeMetaValue(edge mE, Iterator<edge>* itE, Graph* mg)=0;
+  virtual void computeMetaValue(edge mE, tlp::Iterator<edge>* itE, Graph* mg)=0;
   // the ones below are used by GraphUpdatesRecorder
-  virtual Iterator<node>* getNonDefaultValuatedNodes(const Graph* = NULL) const = 0;
-  virtual Iterator<edge>* getNonDefaultValuatedEdges(const Graph* = NULL) const = 0;
+  virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* = NULL) const = 0;
+  virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* = NULL) const = 0;
   virtual DataMem* getNodeDefaultDataMemValue() const = 0;
   virtual DataMem* getEdgeDefaultDataMemValue() const = 0;
   virtual DataMem* getNodeDataMemValue( const node n ) const = 0;

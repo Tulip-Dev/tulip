@@ -33,6 +33,9 @@ struct node {
   unsigned int id;
   node():id(UINT_MAX){}
   explicit node(unsigned int j):id(j){}
+  operator unsigned int() {
+    return id;
+  }
   bool operator!=(const node n) const {return id!=n.id;}
   bool operator==(const node n) const {return id==n.id;}
   bool isValid() const {return id!=UINT_MAX;}

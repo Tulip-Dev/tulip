@@ -18,6 +18,7 @@
  */
 #include <tulip/TlpTools.h>
 #include "tulip/TextRenderer.h"
+#include "tulip/OpenGlConfigManager.h"
 #include "tulip/Renderer.h"
 #include "tulip/GlRenderer.h"
 #include "tulip/Document.h"
@@ -116,7 +117,9 @@ void TextRenderer::draw(float w_max, float& w, int relPos) const{
       dx += w/2.;
     }
     c.getRenderer().translate(dx, dy, 0);
+    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
     doc->draw(w_max, w);
+    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
     if(w<w_max) w = w_max;
   }
 }

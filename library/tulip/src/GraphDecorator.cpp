@@ -110,8 +110,18 @@ node GraphDecorator::source(const edge e)const{
 }
 
 //============================================================
+void GraphDecorator::setSource(const edge e, const node n) {
+  graph_component->setSource(e, n);
+}
+
+//============================================================
 node GraphDecorator::target(const edge e)const {
   return graph_component->target(e);
+}
+
+//============================================================
+void GraphDecorator::setTarget(const edge e, const node n) {
+  graph_component->setTarget(e, n);
 }
 
 //============================================================
@@ -129,6 +139,12 @@ edge GraphDecorator::existEdge(const node n, const node m,
 const std::pair<node, node>& GraphDecorator::ends(const edge e) const {
   return graph_component->ends(e);
 }
+
+//============================================================
+void GraphDecorator::setEnds(const edge e, const node src, const node tgt) {
+  graph_component->setEnds(e, src, tgt);
+}
+
 //============================================================
 void GraphDecorator::reverse(const edge e){
   notifyReverseEdge(this, e);

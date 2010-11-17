@@ -20,11 +20,7 @@
 #ifndef GL_SHADER_PROGRAM
 #define GL_SHADER_PROGRAM
 
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "tulip/OpenGlConfigManager.h"
 
 #include <string>
 #include <map>

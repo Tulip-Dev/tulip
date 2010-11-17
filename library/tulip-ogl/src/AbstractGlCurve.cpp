@@ -1,4 +1,4 @@
-  /**
+/**
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -18,6 +18,7 @@
  */
 #include <GL/glew.h>
 
+#include "tulip/OpenGlConfigManager.h"
 #include "tulip/AbstractGlCurve.h"
 #include "tulip/GlTextureManager.h"
 #include "tulip/Curves.h"
@@ -191,8 +192,8 @@ GlShader *AbstractGlCurve::curveVertexShaderNormalMain(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderBillboardMain(NULL);
 
 AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &curveSpecificShaderCode) :
-				curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
-				outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
+								curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
+								outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
 	initShader(shaderProgramName, curveSpecificShaderCode);
 }
 
@@ -384,12 +385,14 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 		}
 
 		if (startSize == 1 && endSize == 1) {
+			OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 			if (vboOk) {
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
 				glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
 			} else {
 				glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][1]);
 			}
+			OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 		} else {
 			if (texture != "") {
 				glActiveTexture(GL_TEXTURE0);
@@ -404,12 +407,16 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 				GlTextureManager::getInst().activateTexture(TulipBitmapDir+"cylinderTexture.png");
 			}
+
+			OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 			if (vboOk) {
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[1]);
 				glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, 0);
 			} else {
 				glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][0]);
 			}
+			OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
+
 			if (billboardCurve) {
 				glActiveTexture(GL_TEXTURE1);
 				GlTextureManager::getInst().desactivateTexture();
@@ -423,7 +430,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 				curveShaderProgram->setUniformColor("startColor", outlineColor);
 				curveShaderProgram->setUniformColor("endColor", outlineColor);
 			}
-
+			OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 			if (vboOk) {
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
 				glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, 0);
@@ -437,7 +444,9 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 			} else {
 				glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][3]);
 			}
+			OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 		}
+
 
 		if (vboOk) {
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -463,7 +472,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 			polyQuad(curvePoints, startColor, endColor, startSize, endSize, Coord(2.f*curvePoints[0] - curvePoints[1]), Coord(2.f*curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]),!outlined,outlineColor,texture);
 		} else {
 			simpleQuad(curvePoints, startColor, endColor, startSize, endSize, Coord(2.f*curvePoints[0] - curvePoints[1]),
-					 Coord(2.f*curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]), lookDir, !outlined,outlineColor,texture);
+					Coord(2.f*curvePoints[curvePoints.size() - 1] - curvePoints[curvePoints.size() - 2]), lookDir, !outlined,outlineColor,texture);
 		}
 	}
 

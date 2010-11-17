@@ -39,6 +39,17 @@ using namespace std;
 namespace tlp
 {
 
+  QGlBufferManager::QGlBufferManager() {
+    QGLFramebufferObject *glFramebufferObject=new QGLFramebufferObject(2,2);
+    framebufferObjectWork=glFramebufferObject->isValid();
+    delete glFramebufferObject;
+
+    QGLFormat format=QGLFormat::defaultFormat();
+    QGLPixelBuffer *glPixelBuffer=new QGLPixelBuffer(2,2,format,GlMainWidget::getFirstQGLWidget());
+    pixelBufferWork=glPixelBuffer->isValid();
+    delete glPixelBuffer;
+  }
+
   QGLPixelBuffer *QGlBufferManager::getPixelBuffer(int width, int height){
     map<pair<int,int>,QGLPixelBuffer *>::iterator it=widthHeightToBuffer.find(pair<int,int>(width,height));
 

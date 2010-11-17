@@ -28,6 +28,7 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
+#include <tulip/OpenGlConfigManager.h>
 
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
@@ -57,31 +58,34 @@ EEGLYPHPLUGIN(ChristmasTree,"3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008
 
 //===================================================================================
 ChristmasTree::ChristmasTree(GlyphContext *gc) :
-	Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
+Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
 }
 ChristmasTree::ChristmasTree(EdgeExtremityGlyphContext *gc) :
-	Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
+			Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
 }
 //=======================================================
 void ChristmasTree::draw(node n, float) {
-
 	drawTree();
 	glRotatef(-90., 1., 0., 0.);
+	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_tree");
 	setMaterial(glGraphInputData->elementColor->getNodeValue(n));
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_sphere");
 	setMaterial(Color(255, 255, 255, 50));
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_outsphere");
+	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 }
 
 void ChristmasTree::draw(edge, node, const Color& glyphColor,const Color&, float) {
-  glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 	drawTree();
+	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_tree");
 	setMaterial(glyphColor);
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_sphere");
 	setMaterial(Color(255, 255, 255, 50));
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_outsphere");
+	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 }
 
 void ChristmasTree::drawTree() {

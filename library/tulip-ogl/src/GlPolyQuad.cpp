@@ -21,6 +21,7 @@
 
 #include "tulip/GlPolyQuad.h"
 #include "tulip/Vector.h"
+#include "tulip/OpenGlConfigManager.h"
 #include "tulip/GlShaderProgram.h"
 
 using namespace std;
@@ -34,7 +35,7 @@ GlPolyQuad::GlPolyQuad(const vector<Coord> &polyQuadEdges, const vector<Color> &
 		const bool outlined, const int outlineWidth, const Color &outlineColor)
 : textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {
 
-  assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
+	assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
 
 	for (size_t i = 0 ; i < (polyQuadEdges.size() / 2) ; ++i) {
 		addQuadEdge(polyQuadEdges[2*i], polyQuadEdges[2*i + 1], polyQuadEdgesColors[i]);
@@ -45,7 +46,7 @@ GlPolyQuad::GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &pol
 		const bool outlined, const int outlineWidth, const Color &outlineColor)
 : textureName(textureName), outlined(outlined), outlineWidth(outlineWidth), outlineColor(outlineColor) {
 
-  assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2);
+	assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2);
 
 	for (size_t i = 0 ; i < (polyQuadEdges.size() / 2) ; ++i) {
 		addQuadEdge(polyQuadEdges[2*i], polyQuadEdges[2*i + 1], polyQuadColor);
@@ -62,7 +63,7 @@ void GlPolyQuad::addQuadEdge(const Coord &startEdge, const Coord &endEdge, const
 
 void GlPolyQuad::draw(float, Camera *) {
 
-  assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
+	assert(polyQuadEdges.size() % 2 == 0 && polyQuadEdges.size() > 2 && polyQuadEdgesColors.size() == (polyQuadEdges.size() / 2));
 
 	vector<Coord> vertexArray;
 	vector<float> texCoordsArray;
@@ -178,11 +179,14 @@ void GlPolyQuad::draw(float, Camera *) {
 	glTexCoordPointer(2, GL_FLOAT, 2 * sizeof(float), &texCoordsArray[0]);
 	glColorPointer(4, GL_FLOAT, 4 * sizeof(float), &colorsArray[0][0]);
 
+
+	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 	if (nbSubdivisionsPerSegment > 1) {
 		glDrawElements(GL_QUAD_STRIP, vertexArray.size(), GL_UNSIGNED_SHORT, &quadIndices[0]);
 	} else {
 		glDrawElements(GL_QUAD_STRIP, polyQuadEdges.size(), GL_UNSIGNED_SHORT, &quadIndices[0]);
 	}
+	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
@@ -191,7 +195,8 @@ void GlPolyQuad::draw(float, Camera *) {
 		GlTextureManager::getInst().desactivateTexture();
 	}
 
-  if (outlined && textureName == "") {
+	if (outlined) {
+		OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 		glLineWidth(outlineWidth);
 		setMaterial(outlineColor);
 		if (nbSubdivisionsPerSegment > 1) {
@@ -202,12 +207,13 @@ void GlPolyQuad::draw(float, Camera *) {
 		if (outlineWidth != 1) {
 			glLineWidth(1);
 		}
-  }
+		OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+	}
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 
 	glEnable(GL_CULL_FACE);
-  glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 
 }
 

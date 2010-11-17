@@ -32,7 +32,7 @@ namespace tlp {
 class PropertyContext;
 /** \addtogroup properties */ 
 /*@{*/
-class TLP_SCOPE BooleanProperty:public AbstractProperty<BooleanType,BooleanType, BooleanAlgorithm> { 
+class TLP_SCOPE BooleanProperty:public AbstractProperty<tlp::BooleanType, tlp::BooleanType, tlp::BooleanAlgorithm> { 
   friend class BooleanAlgorithm;
 
 public :
@@ -45,7 +45,7 @@ public :
   Iterator<edge> *getEdgesEqualTo(const bool val, Graph * = 0);
 };
 
-class TLP_SCOPE BooleanVectorProperty:public AbstractProperty<BooleanVectorType,BooleanVectorType> { 
+class TLP_SCOPE BooleanVectorProperty:public AbstractProperty<tlp::BooleanVectorType, tlp::BooleanVectorType> { 
 public :
   BooleanVectorProperty(Graph *g, std::string n="") :AbstractProperty<BooleanVectorType, BooleanVectorType>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string&);

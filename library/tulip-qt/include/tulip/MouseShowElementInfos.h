@@ -26,6 +26,7 @@
 
 #include "tulip/GlMainWidget.h"
 #include "tulip/NodeLinkDiagramComponent.h"
+#include <QWidget>
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
@@ -38,26 +39,8 @@ namespace tlp {
 class TLP_QT_SCOPE MouseShowElementInfos : public InteractorComponent {
 public:
   ~MouseShowElementInfos(){}
-  bool eventFilter(QObject *widget, QEvent *e) {
-    if (e->type() == QEvent::MouseButtonPress &&
-	((QMouseEvent *) e)->button()==Qt::LeftButton) {
-      QMouseEvent *qMouseEv = (QMouseEvent *) e;
-      GlMainWidget *g = (GlMainWidget *) widget;
-      node tmpNode;
-      edge tmpEdge;
-      ElementType type;
-      NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view;
-      if (g->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
-        switch(type) {
-        case NODE: nodeLinkView->elementSelectedSlot(tmpNode.id, true); break;
-        case EDGE: nodeLinkView->elementSelectedSlot(tmpEdge.id, false); break;
-        }
-        return true;
-      }
-    }
-    return false;
-  }
-  InteractorComponent *clone() { MouseShowElementInfos *interactor =new MouseShowElementInfos();return interactor;}
+  bool eventFilter(QObject *widget, QEvent *e);
+  InteractorComponent *clone();
 };
 
 }

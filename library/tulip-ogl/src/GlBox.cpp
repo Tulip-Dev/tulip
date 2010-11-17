@@ -242,13 +242,17 @@ namespace tlp {
         }
       }
 
+      OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+
       if(canUseGlew){
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
         glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
       }else{
         glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, cubeIndices);
       }
-        
+
+      OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
+
       glDisableClientState(GL_NORMAL_ARRAY);
       if(textureName!=""){
         GlTextureManager::getInst().desactivateTexture();
@@ -263,12 +267,16 @@ namespace tlp {
         glColor4ub(outlineColors[0][0],outlineColors[0][1],outlineColors[0][2],outlineColors[0][3]);
         glLineWidth(outlineSize);
 
+        OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+
         if(canUseGlew){
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[4]);
           glDrawElements(GL_LINES, 24, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
         }else{
           glDrawElements(GL_LINES, 24, GL_UNSIGNED_BYTE, cubeOutlineIndices);
         }
+
+        OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
         glEnable(GL_LIGHTING);
       }

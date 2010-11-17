@@ -21,6 +21,8 @@
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
+#include "tulip/OpenGlConfigManager.h"
+
 #include <string>
 using namespace tlp;
 using namespace std;
@@ -64,7 +66,9 @@ void GlArrow2DEdgeExtremity::draw(edge e, node, const Color& glyphColor, const C
 	}
 	setMaterial(glyphColor);
 	glDisable(GL_CULL_FACE);
+	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 	GlDisplayListManager::getInst().callDisplayList("Arrow 2D");
+	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 	glEnable(GL_CULL_FACE);
 
 	double width = edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e);
@@ -76,6 +80,8 @@ void GlArrow2DEdgeExtremity::draw(edge e, node, const Color& glyphColor, const C
 
 
 		setColor(borderColor);
+		OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 		GlDisplayListManager::getInst().callDisplayList("Arrow 2D Border");
+		OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 	}
 }

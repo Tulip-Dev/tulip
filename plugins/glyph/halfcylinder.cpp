@@ -22,7 +22,7 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
-
+#include <tulip/OpenGlConfigManager.h>
 #include <tulip/Graph.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlTools.h>
@@ -88,8 +88,9 @@ void HalfCylinder::draw(node n,float) {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     GlTextureManager::getInst().activateTexture(texturePath+texFile);
   }
-
+  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
   GlDisplayListManager::getInst().callDisplayList("Halfcylinder_halfcylinder");
+  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
   GlTextureManager::getInst().desactivateTexture();
 }
 //=================================================================================================

@@ -26,7 +26,7 @@
 #include <tulip/tulipconf.h>
 
 #include <iostream>
-
+#include <string>
 
 namespace tlp {
 

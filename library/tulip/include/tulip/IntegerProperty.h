@@ -32,10 +32,10 @@ namespace tlp {
 class Graph;
 class PropertyContext;
 
-typedef AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> AbstractIntegerProperty;
+typedef AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> AbstractIntegerProperty;
 /** \addtogroup properties */ 
 /*@{*/
-class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public PropertyObserver{ 
+ class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public PropertyObserver, public GraphObserver { 
 
   friend class IntegerAlgorithm;
 
@@ -53,6 +53,10 @@ public :
   virtual void beforeSetAllNodeValue(PropertyInterface* prop);
   virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
 
+  // redefinition of GraphObserver methods
+  virtual void addNode(Graph* graph, const node n);
+  virtual void addEdge(Graph* graph, const edge e);
+
 protected:
   void clone_handler(AbstractProperty<IntegerType,IntegerType> &);
 
@@ -64,7 +68,7 @@ private:
   void computeMinMaxEdge(Graph *sg=0);
 };
 
-class TLP_SCOPE IntegerVectorProperty:public AbstractProperty<IntegerVectorType,IntegerVectorType> { 
+class TLP_SCOPE IntegerVectorProperty:public AbstractProperty<tlp::IntegerVectorType, tlp::IntegerVectorType> { 
 public :
   IntegerVectorProperty(Graph *g, std::string n =""):AbstractProperty<IntegerVectorType, IntegerVectorType>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string&);

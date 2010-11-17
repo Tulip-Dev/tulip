@@ -33,7 +33,7 @@ class GraphAbstract;
 
 /** \addtogroup properties */ 
 /*@{*/
-  class TLP_SCOPE GraphProperty:public AbstractProperty<GraphType,EdgeSetType>, public GraphObserver, public PropertyObserver { 
+  class TLP_SCOPE GraphProperty:public AbstractProperty<tlp::GraphType, tlp::EdgeSetType>, public GraphObserver, public PropertyObserver { 
   friend class GraphAbstract;
 
 public :

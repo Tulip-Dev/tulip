@@ -16,10 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
+#include "GL/glew.h"
 #include "tulip/OpenGlConfigManager.h"
-
 #include "tulip/GlScene.h"
 
+#include <algorithm>
 #include <iostream>
 #include <cstdlib>
 #include <climits>
@@ -116,13 +117,7 @@ namespace tlp {
       antialiased=glGraphComposite->getInputData()->parameters->isAntialiased();
 	}
 
-	if(antialiased) {
-      glEnable(GL_LINE_SMOOTH);
-      glHint(GL_LINE_SMOOTH_HINT,GL_DONT_CARE);
-      glShadeModel(GL_SMOOTH);
-	}else{
-      glDisable(GL_LINE_SMOOTH);
-	}
+	OpenGlConfigManager::getInst().setAntiAliasing(antialiased);
 
 	glDisable(GL_POINT_SMOOTH);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -132,7 +127,7 @@ namespace tlp {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_STENCIL_TEST);
 	glEnable(GL_NORMALIZE);
-  glEnable(GL_MULTISAMPLE);
+	glShadeModel(GL_SMOOTH);
 	glDepthFunc(GL_LEQUAL );
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glColorMask(1, 1, 1, 1);
@@ -304,13 +299,20 @@ namespace tlp {
       VertexArray compute
     **********************************************************************/
 
+
     if(glGraphComposite){
       GlVertexArrayManager *vertexArrayManager=glGraphComposite->getInputData()->getGlVertexArrayManager();
+      static bool lastDisplayEdge = glGraphComposite->isDisplayEdges();
+      if (!lastDisplayEdge && lastDisplayEdge != glGraphComposite->isDisplayEdges()) {
+    	  vertexArrayManager->setHaveToCompute(true);
+      }
+
       if(vertexArrayManager->haveToCompute()){
         GlVertexArrayVisitor vertexArrayVisitor(glGraphComposite->getInputData());
         glGraphComposite->acceptVisitor(&vertexArrayVisitor);
         vertexArrayManager->setHaveToCompute(false);
       }
+      lastDisplayEdge = glGraphComposite->isDisplayEdges();
     }
 
     TextRenderer fontRenderer;
@@ -431,7 +433,7 @@ namespace tlp {
         }
 
         // Draw
-        for(set<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin();it!=entitiesSet.end();++it){
+        for(multiset<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin();it!=entitiesSet.end();++it){
           if(!(*it).isComplexEntity){
             // Simple entities
             GlSimpleEntity *entity=(GlSimpleEntity*)(((SimpleEntityLODUnit*)((*it).entity))->id);
@@ -570,7 +572,7 @@ namespace tlp {
       if(center)
         *center=Coord(0,0,0);
       if(sceneRadius)
-        *sceneRadius=sqrt(300);
+        *sceneRadius=sqrt(300.0);
 
       if(eye && center && sceneRadius){
         *eye=Coord(0, 0, *sceneRadius);

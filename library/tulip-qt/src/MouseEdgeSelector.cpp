@@ -53,14 +53,12 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
 	w = 0;
 	h = 0;
 	started = true;
-	glMainWidget->setMouseTracking(true);
 	graph=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
       }
       else {
 	if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
 	  graph = 0;
 	  started = false;
-	  glMainWidget->setMouseTracking(false);
 	  return false;
 	}
       }
@@ -68,7 +66,6 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
     }
     if (qMouseEv->button()==Qt::MidButton){
       started = false;
-      glMainWidget->setMouseTracking(false);
       glMainWidget->redraw();
       return true;
     }
@@ -79,7 +76,6 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;
       started=false;
-      glMainWidget->setMouseTracking(false);
     }
     if (started){
       if ((qMouseEv->x()>0) && (qMouseEv->x()<glMainWidget->width()))
@@ -96,11 +92,9 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;
       started=false;
-      glMainWidget->setMouseTracking(false);
       return false;
     }
     if (started) {
-      glMainWidget->setMouseTracking(false);
       Observable::holdObservers();
       BooleanProperty* selection=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<BooleanProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementSelectedPropName());
       selection->setAllNodeValue(false);
@@ -154,7 +148,6 @@ bool MouseEdgeSelector::draw(GlMainWidget *glMainWidget){
   if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
     graph = 0;
     started = false;
-    glMainWidget->setMouseTracking(false);
   }
   float yy = glMainWidget->height() - y;
   glPushAttrib(GL_ALL_ATTRIB_BITS);

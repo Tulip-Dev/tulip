@@ -39,28 +39,44 @@ using namespace tlp;
 using namespace std;
 
 bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
-  if (e->type() == _eventType) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    if (qMouseEv->button() == Qt::LeftButton) {
-      GlMainWidget *glw = (GlMainWidget *) widget;
-
-      Graph*_graph=glw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-      LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>(glw->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
-      // allow to undo
-      _graph->push();
-      Observable::holdObservers();
-      node newNode;
-      newNode = _graph->addNode();
-      Coord point((double) glw->width() - (double) qMouseEv->x(),
-		  (double) qMouseEv->y(),
-		  0);
-      point = glw->getScene()->getCamera()->screenTo3DWorld(point);
-      mLayout->setNodeValue(newNode, point);
-      Observable::unholdObservers();
-      NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view;
-      nodeLinkView->elementSelectedSlot(newNode.id, true);
-      //glw->redraw();
-      return true;
+  QMouseEvent * qMouseEv = (QMouseEvent *) e;
+  if(qMouseEv != NULL) {
+    node tmpNode;
+    edge tmpEdge;
+    ElementType type;
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    if(e->type() == QEvent::MouseMove) {    
+      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE) {
+        glMainWidget->setCursor(Qt::ForbiddenCursor);
+      }
+      else {
+        glMainWidget->setCursor(Qt::ArrowCursor);
+      }
+      return false;
+    }
+    if (e->type() == _eventType) {
+      if (qMouseEv->button() == Qt::LeftButton) {
+        if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE) {
+          return true;
+        }
+        Graph*_graph=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+        LayoutProperty* mLayout=_graph->getProperty<LayoutProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementLayoutPropName());
+        // allow to undo
+        _graph->push();
+        Observable::holdObservers();
+        node newNode;
+        newNode = _graph->addNode();
+        Coord point((double) glMainWidget->width() - (double) qMouseEv->x(),
+        (double) qMouseEv->y(),
+        0);
+        point = glMainWidget->getScene()->getCamera()->screenTo3DWorld(point);
+        mLayout->setNodeValue(newNode, point);
+        Observable::unholdObservers();
+        NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view;
+        nodeLinkView->elementSelectedSlot(newNode.id, true);
+        //glMainWidget->redraw();
+        return true;
+      }
     }
   }
   return false;

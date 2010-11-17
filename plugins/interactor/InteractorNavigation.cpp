@@ -56,6 +56,8 @@ public:
     pushInteractorComponent(new MouseNKeysNavigator);
   }
 
+  QCursor getCursor(){return QCursor(Qt::OpenHandCursor);}
+
 };
 
 INTERACTORPLUGIN(InteractorNavigation, "InteractorNavigation", "Tulip Team", "01/04/2009", "Navigation Interactor", "1.0");

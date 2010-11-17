@@ -23,6 +23,7 @@
 #include "tulip/GlDisplayListManager.h"
 #include "tulip/GlTextureManager.h"
 #include "tulip/GlTools.h"
+#include "tulip/OpenGlConfigManager.h"
 
 using namespace std;
 
@@ -54,12 +55,16 @@ namespace tlp {
     
     setMaterial(color);
 
+    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+
     GLUquadricObj *quadratic;
     quadratic = gluNewQuadric();
     gluQuadricNormals(quadratic, GLU_SMOOTH);
     gluQuadricTexture(quadratic, GL_TRUE);  
     gluSphere(quadratic, radius , 30, 30);
     gluDeleteQuadric(quadratic);
+
+    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
     GlTextureManager::getInst().desactivateTexture();
     glPopMatrix();

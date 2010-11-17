@@ -70,7 +70,18 @@ namespace tlp {
   inline Color QColorToColor(const QColor& color) {
      return Color(color.red(), color.green(), color.blue(), color.alpha());
    }
-
+  /**
+    * @brief Convert a string from Tulip to QString.
+    **/
+  inline std::string QStringToTlpString(const QString& toConvert){
+      return std::string(toConvert.toUtf8());
+  }
+  /**
+    * @brief Convert a QString to tulip string.
+    **/
+  inline QString tlpStringToQString(const std::string& toConvert){
+      return QString::fromUtf8(toConvert.c_str());
+  }
 }
 
 #endif

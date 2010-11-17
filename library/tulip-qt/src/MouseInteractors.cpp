@@ -53,27 +53,36 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 
 //===============================================================
 bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
-  if (e->type() == QEvent::MouseButtonPress &&
-      ((QMouseEvent *) e)->buttons()==Qt::LeftButton) {
-    QMouseEvent *qMouseEv = (QMouseEvent *) e;
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
-    ElementType type;
+  QMouseEvent *qMouseEv = (QMouseEvent *) e;
+  if(qMouseEv != NULL) {
     node tmpNode;
     edge tmpEdge;
-    bool result = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge);
-    if(result == true) {
-      Observable::holdObservers();
-      Graph* graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
-      // allow to undo
-      graph->push();
-      switch(type) {
-	case NODE: graph->delNode(tmpNode); break;
-	case EDGE: graph->delEdge(tmpEdge); break;
+    ElementType type;
+    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    if(e->type() == QEvent::MouseMove) {    
+      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
+        glMainWidget->setCursor(QCursor(QPixmap(":/i_del.png")));
       }
-      glMainWidget->redraw();
-      Observable::unholdObservers();
+      else {
+        glMainWidget->setCursor(Qt::ArrowCursor);
+      }
+      return false;
     }
-    return true;
+    else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button()==Qt::LeftButton) {
+      if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
+        Observable::holdObservers();
+        Graph* graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+        // allow to undo
+        graph->push();
+        switch(type) {
+          case NODE: graph->delNode(tmpNode); break;
+          case EDGE: graph->delEdge(tmpEdge); break;
+        }
+        glMainWidget->redraw();
+        Observable::unholdObservers();
+        return true;
+      }
+    }
   }
   return false;
 }
@@ -208,6 +217,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::MouseButtonPress) {
     if (((QMouseEvent *) e)->buttons() == Qt::LeftButton) {
+      oldCursor=((QWidget*)widget)->cursor();
       InteractorComponent *currentMouse;
       // give focus so we can catch key events
       ((GlMainWidget *)widget)->setFocus();
@@ -221,8 +231,10 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
         currentMouse = new MouseZoomRotZ();
       else if (((QMouseEvent *) e)->modifiers() & Qt::ShiftModifier)
         currentMouse = new MouseRotXRotY();
-      else
+      else{
         currentMouse = new MouseMove();
+        ((QWidget*)widget)->setCursor(QCursor(Qt::ClosedHandCursor));
+      }
       bool result = currentMouse->eventFilter(widget, e);
 
       currentSpecInteractorComponent=currentMouse;
@@ -233,6 +245,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
     return false;
   }
   if (e->type() == QEvent::MouseButtonRelease) {
+    ((QWidget*)widget)->setCursor(oldCursor);
     delete currentSpecInteractorComponent;
     currentSpecInteractorComponent=NULL;
     return true;

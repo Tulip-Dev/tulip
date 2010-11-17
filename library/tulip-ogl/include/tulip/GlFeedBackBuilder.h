@@ -22,11 +22,7 @@
 #include <tulip/tulipconf.h>
 
 #include <string>
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "tulip/OpenGlConfigManager.h"
 
 #include <tulip/Vector.h>
 

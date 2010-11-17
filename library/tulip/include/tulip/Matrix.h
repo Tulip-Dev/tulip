@@ -53,11 +53,11 @@ namespace tlp {
    * \version 0.0.2 27/04/2005 
    */
   template<typename Obj,unsigned int SIZE>
-    class Matrix:public Vector< Vector<Obj,SIZE> , SIZE > {
+    class Matrix:public Array< Vector<Obj,SIZE> , SIZE > {
   public:
     Matrix(){}
     Matrix(const Vector< Vector<Obj,SIZE> , SIZE > &a) :
-      Vector< Vector<Obj,SIZE> , SIZE >(a) {
+      Array< Vector<Obj,SIZE> , SIZE >(a) {
     };
       
       // Builds a correlation matrix from a covariance matrix !
@@ -79,6 +79,30 @@ namespace tlp {
        * Inverse the matrix and return "&(*this)"
        */
       MATRIX& inverse();
+      /**
+       * return the sum of two matrices
+       */
+      inline MATRIX & operator+(const MATRIX &mat) const;
+      /**
+       * add another matrix to the current one and return "&(*this)"
+       */
+      inline MATRIX & operator+=(const MATRIX &mat);
+      /**
+       * return the difference of two matrices
+       */
+      inline MATRIX & operator-(const MATRIX &mat) const;
+      /**
+       * substract another matrix from the current and return "&(*this)"
+       */
+      inline MATRIX & operator-=(const MATRIX &mat);
+      /**
+       * Check equality of two Matrices
+       */
+      inline bool operator==(const MATRIX &) const;
+      /**
+       * Check non equality of two Matrices
+       */
+      inline bool operator!=(const MATRIX &) const;
       /**
        * Multiply the matrix by another matrix and return "&(*this)"
        */

@@ -97,7 +97,10 @@ namespace tlp {
        * Set the graph associated with the given view
        */
       virtual void setGraphOfView(View *view,Graph *graph);
-      
+      /**
+        * Set the data of the given view.
+        */
+       virtual void setDataOfView(tlp::View* view, tlp::Graph* graph, const tlp::DataSet& dataSet);
       /**
        * Get the view associated with the given widget
        */
@@ -225,16 +228,17 @@ namespace tlp {
        */
       virtual void widgetWillBeClosed(QObject *object);
 
+    protected:
+      View *currentView;
+      std::map<View *, QAction *> lastInteractorOnView;
     private :
       
       Graph *currentGraph;
-      View *currentView;
       
       std::map<View *,std::string> viewNames;
       std::map<QWidget *,View*> viewWidget;
       std::map<View *,Graph* > viewGraph;
       
-      std::map<View *, QAction *> lastInteractorOnView;
       std::map<View *, QWidget *> lastInteractorConfigurationWidgetOnView;
       std::map<View *,std::list<unsigned int> > viewsGraphsHierarchy;
       

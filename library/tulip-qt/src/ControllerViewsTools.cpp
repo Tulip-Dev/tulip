@@ -66,7 +66,6 @@ QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
 
     QWidget *widget;
     widget=newView->construct(parent);
-    newView->setData(graph,dataSet);
     widget->setObjectName(QString("ViewMainWidget p:")+QString::number((long)widget));
     widget->setAttribute(Qt::WA_DeleteOnClose,true);
 

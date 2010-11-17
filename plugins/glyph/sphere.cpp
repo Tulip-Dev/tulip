@@ -63,18 +63,18 @@ EEGLYPHPLUGIN(Sphere, "3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured
 
 //=========================================================================================
 Sphere::Sphere(GlyphContext *gc) :
-	Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
+Glyph(gc), EdgeExtremityGlyphFrom3DGlyph(NULL) {
 }
 Sphere::Sphere(EdgeExtremityGlyphContext *gc) :
-	Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
+			Glyph(NULL), EdgeExtremityGlyphFrom3DGlyph(gc) {
 }
 
 Sphere::~Sphere() {
 }
 //=====================================================
 void Sphere::getIncludeBoundingBox(BoundingBox &boundingBox) {
-        boundingBox[0] = Coord(-0.35, -0.35, -0.35);
-        boundingBox[1] = Coord(0.35, 0.35, 0.35);
+	boundingBox[0] = Coord(-0.35, -0.35, -0.35);
+	boundingBox[1] = Coord(0.35, 0.35, 0.35);
 }
 
 static GLuint buffers[] = { 0, 0, 0 };
@@ -90,7 +90,7 @@ void Sphere::draw(node n, float lod) {
 }
 
 void Sphere::draw(edge e, node, const Color& glyphColor, const Color&, float lod) {
-  glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 	drawGlyph(glyphColor,
 			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
 			edgeExtGlGraphInputData->parameters->getTexturePath(), lod);
@@ -135,55 +135,55 @@ void Sphere::generateBuffers(int space) {
 			n++;
 
 			vertex[n*3] = sin((i) / 180 * PI) * sin((j + space) / 180 * PI) /2.;
-      vertex[n*3+1] = cos((i) / 180 * PI) * sin((j + space) / 180 * PI) /2.;
-      vertex[n*3+2] = -cos((j + space) / 180 * PI) /2.;
-      vertex[(vertexCount+n)*3]=vertex[n*3];
-      vertex[(vertexCount+n)*3+1]=vertex[n*3+1];
-      vertex[(vertexCount+n)*3+2]=-vertex[n*3+2];
-      texturesCoord[n*2] = 1-(i) / 360;
-      texturesCoord[n*2+1] = (2 * (j + space)) / 360;
-      texturesCoord[(vertexCount+n)*2] = texturesCoord[n*2];
-      texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
-      n++;
+			vertex[n*3+1] = cos((i) / 180 * PI) * sin((j + space) / 180 * PI) /2.;
+			vertex[n*3+2] = -cos((j + space) / 180 * PI) /2.;
+			vertex[(vertexCount+n)*3]=vertex[n*3];
+			vertex[(vertexCount+n)*3+1]=vertex[n*3+1];
+			vertex[(vertexCount+n)*3+2]=-vertex[n*3+2];
+			texturesCoord[n*2] = 1-(i) / 360;
+			texturesCoord[n*2+1] = (2 * (j + space)) / 360;
+			texturesCoord[(vertexCount+n)*2] = texturesCoord[n*2];
+			texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
+			n++;
 
-      vertex[n*3] = sin((i + space) / 180 * PI) * sin((j) / 180 * PI) /2.;
-      vertex[n*3+1] = cos((i + space) / 180 * PI) * sin((j) / 180 * PI) /2.;
-      vertex[n*3+2] = -cos((j) / 180 * PI) /2.;
-      vertex[(vertexCount+n)*3]=vertex[n*3];
-      vertex[(vertexCount+n)*3+1]=vertex[n*3+1];
-      vertex[(vertexCount+n)*3+2]=-vertex[n*3+2];
-      texturesCoord[n*2] = 1-(i + space) / 360;
-      texturesCoord[n*2+1] = (2 * j) / 360;
-      texturesCoord[(vertexCount+n)*2] = texturesCoord[n*2];
-      texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
-      n++;
+			vertex[n*3] = sin((i + space) / 180 * PI) * sin((j) / 180 * PI) /2.;
+			vertex[n*3+1] = cos((i + space) / 180 * PI) * sin((j) / 180 * PI) /2.;
+			vertex[n*3+2] = -cos((j) / 180 * PI) /2.;
+			vertex[(vertexCount+n)*3]=vertex[n*3];
+			vertex[(vertexCount+n)*3+1]=vertex[n*3+1];
+			vertex[(vertexCount+n)*3+2]=-vertex[n*3+2];
+			texturesCoord[n*2] = 1-(i + space) / 360;
+			texturesCoord[n*2+1] = (2 * j) / 360;
+			texturesCoord[(vertexCount+n)*2] = texturesCoord[n*2];
+			texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
+			n++;
 
-      vertex[n*3] = sin((i + space) / 180 * PI) * sin((j + space) / 180 * PI) /2.;
-      vertex[n*3+1] = cos((i + space) / 180 * PI) * sin((j + space) / 180 * PI) /2.;
-      vertex[n*3+2] = -cos((j + space) / 180 * PI) /2.;
-      vertex[(vertexCount+n)*3]=vertex[n*3];
-      vertex[(vertexCount+n)*3+1]=vertex[n*3+1];
-      vertex[(vertexCount+n)*3+2]=-vertex[n*3+2];
-      texturesCoord[n*2] = 1-(i + space) / 360;
-      texturesCoord[n*2+1] = (2 * (j + space)) / 360;
-      texturesCoord[(vertexCount+n)*2] = texturesCoord[n*2];
-      texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
-      n++;
-    }
-  }
+			vertex[n*3] = sin((i + space) / 180 * PI) * sin((j + space) / 180 * PI) /2.;
+			vertex[n*3+1] = cos((i + space) / 180 * PI) * sin((j + space) / 180 * PI) /2.;
+			vertex[n*3+2] = -cos((j + space) / 180 * PI) /2.;
+			vertex[(vertexCount+n)*3]=vertex[n*3];
+			vertex[(vertexCount+n)*3+1]=vertex[n*3+1];
+			vertex[(vertexCount+n)*3+2]=-vertex[n*3+2];
+			texturesCoord[n*2] = 1-(i + space) / 360;
+			texturesCoord[n*2+1] = (2 * (j + space)) / 360;
+			texturesCoord[(vertexCount+n)*2] = texturesCoord[n*2];
+			texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
+			n++;
+		}
+	}
 
 
-  glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-  glBufferData(GL_ARRAY_BUFFER, vertexCount*3*2*sizeof(GLfloat),vertex, GL_STATIC_DRAW);
-  glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-  glBufferData(GL_ARRAY_BUFFER, vertexCount*2*2*sizeof(GLfloat),texturesCoord, GL_STATIC_DRAW);
-  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexCount*2*sizeof(GLushort), indices, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+	glBufferData(GL_ARRAY_BUFFER, vertexCount*3*2*sizeof(GLfloat),vertex, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+	glBufferData(GL_ARRAY_BUFFER, vertexCount*2*2*sizeof(GLfloat),texturesCoord, GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexCount*2*sizeof(GLushort), indices, GL_STATIC_DRAW);
 }
-	/*@}*/
+/*@}*/
 void Sphere::drawGlyph(const Color& glyphColor, const string& texture,
 		const string& texturePath, float) {
-    bool canUseGlew = OpenGlConfigManager::getInst().canUseGlew();
+	bool canUseGlew = OpenGlConfigManager::getInst().canUseGlew();
 
 	int space = 9;
 	int vertexCount = (90 / space) * (360 / space) * 4;
@@ -208,6 +208,8 @@ void Sphere::drawGlyph(const Color& glyphColor, const string& texture,
 	if (texture.size() != 0) {
 		GlTextureManager::getInst().activateTexture(texturePath + texture);
 	}
+
+	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 
 	if (canUseGlew) {
 		glEnableClientState(GL_VERTEX_ARRAY);
@@ -236,6 +238,8 @@ void Sphere::drawGlyph(const Color& glyphColor, const string& texture,
 	} else {
 		GlDisplayListManager::getInst().callDisplayList("Sphere_sphere");
 	}
+
+	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
 	GlTextureManager::getInst().desactivateTexture();
 }

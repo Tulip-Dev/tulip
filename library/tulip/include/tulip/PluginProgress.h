@@ -44,6 +44,8 @@ class TLP_SCOPE PluginProgress {
   void setError(std::string error) { _error = error; }
   virtual void setComment(std::string) {}
   virtual void progress_handler(int step, int max_step);
+  //call when the _preview variable change.
+  virtual void preview_handler(bool);
  private:
   ProgressState _state;
   bool _preview;
