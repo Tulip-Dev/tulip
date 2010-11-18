@@ -223,6 +223,8 @@ private:
   std::vector<ForegroundEntity *> foregroundEntity;
 	GlCompositeHierarchyManager* manager;
 	bool _hasHulls;
+
+	static bool inRendering;
 	
 public slots:
   /**

@@ -54,9 +54,11 @@ namespace tlp {
 #ifdef _WIN32
 #ifdef DLL_EXPORT
   QGLWidget* GlMainWidget::firstQGLWidget=NULL;
+  bool GlMainWidget::inRendering=false;
 #endif
 #else
   QGLWidget* GlMainWidget::firstQGLWidget=NULL;
+	bool GlMainWidget::inRendering=false;
 #endif
 
   // indicates if we can deal with GL_AUX* buffers
@@ -289,7 +291,9 @@ namespace tlp {
   }
   //==================================================
   void GlMainWidget::redraw() {
-    if (isVisible()) {
+    if (isVisible() && !inRendering) {
+      inRendering=true;
+
       checkIfGlAuxBufferAvailable();
       
       makeCurrent();
@@ -317,12 +321,14 @@ namespace tlp {
 
       swapBuffers();
 
+      inRendering=false;
     }
     emit viewRedrawn(this);
   }
   //==================================================
   void GlMainWidget::draw(bool graphChanged) {
-    if (isVisible()) {
+    if (isVisible() && !inRendering) {
+      inRendering=true;
 
       makeCurrent();
 
@@ -363,6 +369,8 @@ namespace tlp {
       drawInteractors();
 
       swapBuffers();
+
+      inRendering=false;
     }
     emit viewDrawn(this,graphChanged);
   }
