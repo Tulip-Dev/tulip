@@ -37,13 +37,7 @@ TARGET_LINK_LIBRARIES(InteractorSelectionModifier-${TulipVersion} ${LibTulipName
 ADD_DEPENDENCIES(InteractorSelectionModifier-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(InteractorMagicSelection_SRCS
-    InteractorMagicSelection.cpp
-)
-
-ADD_LIBRARY(InteractorMagicSelection-${TulipVersion} SHARED ${InteractorMagicSelection_SRCS})
-TARGET_LINK_LIBRARIES(InteractorMagicSelection-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
-ADD_DEPENDENCIES(InteractorMagicSelection-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
+ADD_SUBDIRECTORY(MagicWand)
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(InteractorRectangleZoom_SRCS
@@ -96,7 +90,6 @@ INSTALL(TARGETS
         InteractorGetInformation-${TulipVersion}
         InteractorSelection-${TulipVersion}
         InteractorSelectionModifier-${TulipVersion}
-        InteractorMagicSelection-${TulipVersion}
         InteractorRectangleZoom-${TulipVersion}
         InteractorDeleteElement-${TulipVersion}
         InteractorAddNode-${TulipVersion}
