@@ -59,6 +59,7 @@
 #include <QtGui/qprintdialog.h>
 #include <QtGui/qmenudata.h>
 #include <QtGui/qtextedit.h>
+#include <QtGui/qtoolbar.h>
 
 #include <tulip/tuliphash.h>
 #include <tulip/TlpTools.h>
@@ -443,6 +444,7 @@ void TulipApp::closeTab(int index){
     controllerToToolBar.erase(controller);
     controllerToGraphToolBar.erase(controller);
     controllerToDockWidget.erase(controller);
+    controllerToCustomToolBar.erase(controller);
 
     currentTabIndex=-1;
 
@@ -1032,6 +1034,13 @@ void TulipApp::clearInterface() {
       removeDockWidget(widget);
       widget->hide();
     }
+
+    QToolBar *tb = dynamic_cast<QToolBar *>(*it);
+    if (tb && tb != toolBar && tb != graphToolBar) {
+      removeToolBar(tb);
+      tb->hide();
+      tb->setParent(0);
+    }
   }
 
   menuBar()->clear();
@@ -1046,6 +1055,7 @@ void TulipApp::saveInterface(int index) {
   saveActions(toolBar,controller,controllerToToolBar);
 
   controllerToDockWidget[controller].clear();
+  controllerToCustomToolBar[controller].clear();
   QObjectList objectList=this->children();
   for(QObjectList::iterator it=objectList.begin();it!=objectList.end();++it){
     QDockWidget *widget=dynamic_cast<QDockWidget *>(*it);
@@ -1055,7 +1065,14 @@ void TulipApp::saveInterface(int index) {
         controllerToDockWidget[controller].push_back(pair<Qt::DockWidgetArea,QDockWidget *>(area,widget));
       }
     }
+
+    QToolBar *tb = dynamic_cast<QToolBar *>(*it);
+    if (tb && tb != toolBar && tb != graphToolBar) {
+      Qt::ToolBarArea area = toolBarArea(tb);
+      controllerToCustomToolBar[controller].push_back(pair<Qt::ToolBarArea, QToolBar *>(area, tb));
+    }
   }
+
 
   pair<string,string > tmp(statusBar()->currentMessage().toStdString(),string());
   objectList=statusBar()->children();
@@ -1103,6 +1120,16 @@ void TulipApp::loadInterface(int index){
       }
     }
 #endif
+  }
+
+  if(controllerToCustomToolBar.count(controller)!=0){
+    vector<pair<Qt::ToolBarArea, QToolBar *> > toolBarsToAdd = controllerToCustomToolBar[controller];
+    if (!toolBarsToAdd.empty()) {
+      for (vector<pair<Qt::ToolBarArea, QToolBar *> >::iterator it = toolBarsToAdd.begin(); it != toolBarsToAdd.end(); ++it) {
+        addToolBar(it->first, it->second);
+        it->second->show();
+      }
+    }
   }
 
   if(controllerToMenu.count(controller)!=0){
