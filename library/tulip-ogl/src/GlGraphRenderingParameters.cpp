@@ -60,6 +60,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _edgesMaxSizeToNodesSize = true;
   _feedbackRender=false;
   _selectionColor=PreferenceManager::getInst().getSelectionColor();
+	_displayFilteringProperty=NULL;
 }
 //This function should rewriten completly
 DataSet GlGraphRenderingParameters::getParameters() const {
