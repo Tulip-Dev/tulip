@@ -89,7 +89,7 @@ namespace tlp {
   GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
 #endif
 
-  GlScene::GlScene(GlLODCalculator *calculator):backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
+	GlScene::GlScene(GlLODCalculator *calculator):backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
     Camera camera(this,false);
 
 	if(calculator!=NULL)
@@ -110,6 +110,8 @@ namespace tlp {
     OpenGlConfigManager::getInst().checkDrivers();
     if(!OpenGlConfigManager::getInst().glewIsInit())
       OpenGlConfigManager::getInst().initGlew();
+
+
 
 	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 	bool antialiased = true;
@@ -280,7 +282,7 @@ namespace tlp {
     /*
       If LOD Calculator need entities to compute LOD, we use visitor system
     */
-    if(lodCalculator->needEntities()){
+		if(lodCalculator->needEntities()){
       GlLODSceneVisitor *lodVisitor;
       if(glGraphComposite)
         lodVisitor=new GlLODSceneVisitor(lodCalculator,glGraphComposite->getInputData());
@@ -290,10 +292,10 @@ namespace tlp {
       for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
         (*it).second->acceptVisitor(lodVisitor);
       }
-      delete lodVisitor;
-    }
+			delete lodVisitor;
+		}
     lodCalculator->compute(viewport,viewport);
-    LayersLODVector *layersLODVector=lodCalculator->getResult();
+		LayersLODVector *layersLODVector=lodCalculator->getResult();
 
     /**********************************************************************
       VertexArray compute
@@ -347,23 +349,30 @@ namespace tlp {
       if(glGraphComposite)
         zOrdering=glGraphComposite->getRenderingParameters().isElementZOrdered();
 
+			BooleanProperty *filteringProperty=glGraphComposite->getRenderingParameters().getDisplayFilteringProperty();
+
       if(!zOrdering){
         // If elements are not zOrdered
 
         // Draw simple entities
         for(vector<SimpleEntityLODUnit>::iterator it=(*itLayer).simpleEntitiesLODVector.begin();it!=(*itLayer).simpleEntitiesLODVector.end();++it) {
           if((*it).lod<0)
-            continue;
+						continue;
 
           glStencilFunc(GL_LEQUAL,((GlSimpleEntity*)((*it).id))->getStencil(),0xFFFF);
           ((GlSimpleEntity*)((*it).id))->draw((*it).lod,camera);
         }
 
         // Draw complex entities
-        if(glGraphComposite){
+				if(glGraphComposite){
           for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).nodesLODVector.begin();it!=(*itLayer).nodesLODVector.end();++it) {
-            if((*it).lod<=0)
+						if((*it).lod<=0)
               continue;
+
+						if(filteringProperty){
+							if(filteringProperty->getNodeValue(node((*it).id)))
+								continue;
+						}
 
             if(!graph->isMetaNode(node((*it).id))){
               glNode.id=(*it).id;
@@ -372,14 +381,19 @@ namespace tlp {
               glMetaNode.id=(*it).id;
               glMetaNode.draw((*it).lod,glGraphComposite->getInputData(),camera);
             }
-          }
+					}
           for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).edgesLODVector.begin();it!=(*itLayer).edgesLODVector.end();++it) {
             if((*it).lod<=0)
               continue;
 
+						if(filteringProperty){
+							if(filteringProperty->getEdgeValue(edge((*it).id)))
+								continue;
+						}
+
             glEdge.id=(*it).id;
             glEdge.draw((*it).lod,glGraphComposite->getInputData(),camera);
-          }
+					}
         }
 
       }else{
@@ -411,6 +425,11 @@ namespace tlp {
             if((*it).lod<0)
               continue;
 
+						if(filteringProperty){
+							if(filteringProperty->getNodeValue(node((*it).id)))
+								continue;
+						}
+
             bb=(*it).boundingBox;
             Coord middle((bb[1]+bb[0])/2.f);
             /*dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
@@ -422,6 +441,11 @@ namespace tlp {
           for(vector<ComplexEntityLODUnit>::iterator it=(*itLayer).edgesLODVector.begin();it!=(*itLayer).edgesLODVector.end();++it) {
             if((*it).lod<0)
               continue;
+
+						if(filteringProperty){
+							if(filteringProperty->getEdgeValue(edge((*it).id)))
+								continue;
+						}
 
             bb = (*it).boundingBox;
             Coord middle((bb[0] + bb[1])/2.f);
@@ -459,8 +483,8 @@ namespace tlp {
       }
 
 
-      if(glGraphComposite)
-        glGraphComposite->getInputData()->getGlVertexArrayManager()->endRendering();
+			if(glGraphComposite)
+				glGraphComposite->getInputData()->getGlVertexArrayManager()->endRendering();
 
       // End rendering of GlPointManager
       //GlPointManager::getInst().endRendering();
@@ -483,7 +507,7 @@ namespace tlp {
 
         glPopAttrib();
       }
-  }
+	}
   }
 
   void GlScene::addLayer(GlLayer *layer) {
