@@ -34,7 +34,7 @@ namespace tlp {
   //=====================================
   QtProgress::QtProgress(QWidget* parent,string text,View *view):
     QDialog(parent),
-    firstCall(true),label(text), parent(parent),view(view) {
+    firstCall(true),label(text), parent(parent),view(view), refreshCount(0) {
     setupUi(this);
     setModal(true);
   }
@@ -54,7 +54,10 @@ namespace tlp {
     if (state()!=TLP_CONTINUE) { 
       return;
     }
-    qApp->processEvents();
+    refreshCount++;
+    refreshCount%=20;
+    if (refreshCount == 0)
+      qApp->processEvents();
     if (firstCall) show();
     firstCall=false;
     if (view!=0 && isPreviewMode()) {
