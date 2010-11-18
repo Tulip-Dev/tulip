@@ -126,6 +126,10 @@ namespace tlp {
           mainWindow->addToolBar(area, toolBar);
         }
 
+        Qt::DockWidgetArea dockWidgetArea(QDockWidget *dock) {
+          return mainWindow->dockWidgetArea(dock);
+        }
+
 	private:
 
         QMainWindow *mainWindow;
