@@ -202,7 +202,7 @@ void Camera::initProjection(const Vector<int, 4>& viewport,bool reset){
 						1.0 , sceneRadius*2.0);
 			else
 				glFrustum(-0.5/zoomFactor, 0.5/zoomFactor,
-						-1.0/(ratio/0.5/zoomFactor), 1.0/(ratio/0.5*zoomFactor),
+						-1.0/(ratio/0.5*zoomFactor), 1.0/(ratio/0.5*zoomFactor),
 						1.0 , sceneRadius*2.0);
 		}
 		glEnable(GL_DEPTH_TEST);
