@@ -118,7 +118,7 @@ namespace tlp {
 #pragma omp parallel for
 #endif
     for(size_t i=0;i<nb;++i){
-      layerLODUnit->nodesLODVector[i].lod=calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
+			layerLODUnit->nodesLODVector[i].lod=10.;
     }
     nb=layerLODUnit->edgesLODVector.size();
 #ifdef _OPENMP
