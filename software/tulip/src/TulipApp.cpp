@@ -445,6 +445,7 @@ void TulipApp::closeTab(int index){
     controllerToGraphToolBar.erase(controller);
     controllerToDockWidget.erase(controller);
     controllerToCustomToolBar.erase(controller);
+    controllerToWidgetVisible.erase(controller);
 
     currentTabIndex=-1;
 
@@ -1056,6 +1057,7 @@ void TulipApp::saveInterface(int index) {
 
   controllerToDockWidget[controller].clear();
   controllerToCustomToolBar[controller].clear();
+  controllerToWidgetVisible[controller].clear();
   QObjectList objectList=this->children();
   for(QObjectList::iterator it=objectList.begin();it!=objectList.end();++it){
     QDockWidget *widget=dynamic_cast<QDockWidget *>(*it);
@@ -1063,6 +1065,7 @@ void TulipApp::saveInterface(int index) {
       Qt::DockWidgetArea area=dockWidgetArea(widget);
       if(area!=Qt::NoDockWidgetArea){
         controllerToDockWidget[controller].push_back(pair<Qt::DockWidgetArea,QDockWidget *>(area,widget));
+        controllerToWidgetVisible[controller].push_back(pair<QWidget *, bool>(widget, widget->isVisible()));
       }
     }
 
@@ -1070,6 +1073,7 @@ void TulipApp::saveInterface(int index) {
     if (tb && tb != toolBar && tb != graphToolBar) {
       Qt::ToolBarArea area = toolBarArea(tb);
       controllerToCustomToolBar[controller].push_back(pair<Qt::ToolBarArea, QToolBar *>(area, tb));
+      controllerToWidgetVisible[controller].push_back(pair<QWidget *, bool>(tb, tb->isVisible()));
     }
   }
 
@@ -1170,6 +1174,12 @@ void TulipApp::loadInterface(int index){
       if(widget)
         widget->setText(controllerToStatusBar[controller].second.c_str());
     }
+  }
+
+  if (controllerToWidgetVisible.count(controller) != 0) {
+    vector<pair<QWidget *,bool> > tmp = controllerToWidgetVisible[controller];
+    for(vector<pair<QWidget *,bool> >::iterator it = tmp.begin(); it != tmp.end(); ++it)
+      it->first->setVisible(it->second);
   }
 }
 //==============================================================

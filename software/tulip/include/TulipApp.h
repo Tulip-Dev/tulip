@@ -191,6 +191,7 @@ private:
   std::map<tlp::Controller *,std::vector<QAction *> > controllerToGraphToolBar;
   std::map<tlp::Controller *,std::vector<std::pair<Qt::DockWidgetArea,QDockWidget *> > > controllerToDockWidget;
   std::map<tlp::Controller *,std::vector<std::pair<Qt::ToolBarArea, QToolBar *> > > controllerToCustomToolBar;
+  std::map<tlp::Controller *,std::vector<std::pair<QWidget *, bool> > > controllerToWidgetVisible;
   std::map<tlp::Controller *,std::pair<std::string,std::string > > controllerToStatusBar;
   std::map<tlp::Controller *,FileInfo> openFiles;
  };
