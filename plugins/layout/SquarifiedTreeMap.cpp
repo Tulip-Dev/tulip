@@ -17,7 +17,6 @@
  *
  */
 #include <cmath>
-#include <float.h>
 #include <algorithm>
 #include <tulip/TreeTest.h>
 #include "SquarifiedTreeMap.h"
@@ -52,7 +51,7 @@ namespace
       HTML_HELP_CLOSE(),
       // aspect ratio
       HTML_HELP_OPEN()				 \
-      HTML_HELP_DEF( "type", "float" ) \
+      HTML_HELP_DEF( "type", "double" ) \
       HTML_HELP_DEF( "default", "1." )	 \
       HTML_HELP_BODY() \
       "This parameter enables to set up the aspect ratio (height/width) for the rectangle corresponding to the root node." \
