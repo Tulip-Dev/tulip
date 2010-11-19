@@ -59,6 +59,7 @@
 #include <QtGui/qprintdialog.h>
 #include <QtGui/qmenudata.h>
 #include <QtGui/qtextedit.h>
+#include <QtGui/qtoolbar.h>
 
 #include <tulip/tuliphash.h>
 #include <tulip/TlpTools.h>
@@ -443,6 +444,8 @@ void TulipApp::closeTab(int index){
     controllerToToolBar.erase(controller);
     controllerToGraphToolBar.erase(controller);
     controllerToDockWidget.erase(controller);
+    controllerToCustomToolBar.erase(controller);
+    controllerToWidgetVisible.erase(controller);
 
     currentTabIndex=-1;
 
@@ -1032,6 +1035,13 @@ void TulipApp::clearInterface() {
       removeDockWidget(widget);
       widget->hide();
     }
+
+    QToolBar *tb = dynamic_cast<QToolBar *>(*it);
+    if (tb && tb != toolBar && tb != graphToolBar) {
+      removeToolBar(tb);
+      tb->hide();
+      tb->setParent(0);
+    }
   }
 
   menuBar()->clear();
@@ -1046,6 +1056,8 @@ void TulipApp::saveInterface(int index) {
   saveActions(toolBar,controller,controllerToToolBar);
 
   controllerToDockWidget[controller].clear();
+  controllerToCustomToolBar[controller].clear();
+  controllerToWidgetVisible[controller].clear();
   QObjectList objectList=this->children();
   for(QObjectList::iterator it=objectList.begin();it!=objectList.end();++it){
     QDockWidget *widget=dynamic_cast<QDockWidget *>(*it);
@@ -1053,9 +1065,18 @@ void TulipApp::saveInterface(int index) {
       Qt::DockWidgetArea area=dockWidgetArea(widget);
       if(area!=Qt::NoDockWidgetArea){
         controllerToDockWidget[controller].push_back(pair<Qt::DockWidgetArea,QDockWidget *>(area,widget));
+        controllerToWidgetVisible[controller].push_back(pair<QWidget *, bool>(widget, widget->isVisible()));
       }
     }
+
+    QToolBar *tb = dynamic_cast<QToolBar *>(*it);
+    if (tb && tb != toolBar && tb != graphToolBar) {
+      Qt::ToolBarArea area = toolBarArea(tb);
+      controllerToCustomToolBar[controller].push_back(pair<Qt::ToolBarArea, QToolBar *>(area, tb));
+      controllerToWidgetVisible[controller].push_back(pair<QWidget *, bool>(tb, tb->isVisible()));
+    }
   }
+
 
   pair<string,string > tmp(statusBar()->currentMessage().toStdString(),string());
   objectList=statusBar()->children();
@@ -1105,6 +1126,16 @@ void TulipApp::loadInterface(int index){
 #endif
   }
 
+  if(controllerToCustomToolBar.count(controller)!=0){
+    vector<pair<Qt::ToolBarArea, QToolBar *> > toolBarsToAdd = controllerToCustomToolBar[controller];
+    if (!toolBarsToAdd.empty()) {
+      for (vector<pair<Qt::ToolBarArea, QToolBar *> >::iterator it = toolBarsToAdd.begin(); it != toolBarsToAdd.end(); ++it) {
+        addToolBar(it->first, it->second);
+        it->second->show();
+      }
+    }
+  }
+
   if(controllerToMenu.count(controller)!=0){
     vector<QAction *> actionsToAdd=controllerToMenu[controller];
     if(!actionsToAdd.empty()){
@@ -1143,6 +1174,12 @@ void TulipApp::loadInterface(int index){
       if(widget)
         widget->setText(controllerToStatusBar[controller].second.c_str());
     }
+  }
+
+  if (controllerToWidgetVisible.count(controller) != 0) {
+    vector<pair<QWidget *,bool> > tmp = controllerToWidgetVisible[controller];
+    for(vector<pair<QWidget *,bool> >::iterator it = tmp.begin(); it != tmp.end(); ++it)
+      it->first->setVisible(it->second);
   }
 }
 //==============================================================

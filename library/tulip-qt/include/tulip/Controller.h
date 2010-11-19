@@ -119,9 +119,20 @@ namespace tlp {
       mainWindow->setDockOptions(options);
 		}
 
+        /**
+          * Add a new custom toolbar on a side of the main Window.
+          */
+        void addToolBar(Qt::ToolBarArea area, QToolBar *toolBar) {
+          mainWindow->addToolBar(area, toolBar);
+        }
+
+        Qt::DockWidgetArea dockWidgetArea(QDockWidget *dock) {
+          return mainWindow->dockWidgetArea(dock);
+        }
+
 	private:
 
-		QMainWindow *mainWindow;
+        QMainWindow *mainWindow;
 		QMenuBar *menuBar;
 		QToolBar *toolBar;
 		QToolBar *interactorsToolBar;

@@ -135,6 +135,7 @@ public:
 	~RoundedBox() {}
 	void draw(node n, float lod);
 	Coord getAnchor(const Coord &vector) const;
+	void getIncludeBoundingBox(BoundingBox &boundingBox);
 
 private:
 
@@ -156,6 +157,11 @@ RoundedBox::RoundedBox(GlyphContext *gc) : Glyph(gc) {}
 
 void RoundedBox::initRoundedSquare() {
 	roundedSquare = createRoundedRect(Size(1,1,1));
+}
+
+void RoundedBox::getIncludeBoundingBox(BoundingBox &boundingBox) {
+        boundingBox[0] = Coord(-0.35, -0.35, 0);
+        boundingBox[1] = Coord(0.35, 0.35, 0);
 }
 
 GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
@@ -259,7 +265,7 @@ void RoundedBox::draw(node n, float lod) {
 	float outlineWidth = glGraphInputData->elementBorderWidth->getNodeValue(n);
 	const string &texture = glGraphInputData->elementTexture->getNodeValue(n);
 
-	if (roundedBoxShader == NULL || !roundedBoxShader->isLinked() || !roundedBoxOutlineShader->isLinked()) {
+	if (roundedBoxShader == NULL || !roundedBoxShader->isLinked() || !roundedBoxOutlineShader->isLinked() || (GlShaderProgram::getCurrentActiveShader() && GlShaderProgram::getCurrentActiveShader()->getName() == "fisheye")) {
 		if (roundedSquare == NULL)
 			initRoundedSquare();
 		GlPolygon *polygon = roundedSquare;

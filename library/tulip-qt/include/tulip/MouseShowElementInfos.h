@@ -26,7 +26,7 @@
 
 #include "tulip/GlMainWidget.h"
 #include "tulip/NodeLinkDiagramComponent.h"
-#include <QWidget>
+#include <QtGui/QWidget>
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
