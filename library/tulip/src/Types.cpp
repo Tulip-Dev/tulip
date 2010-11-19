@@ -383,13 +383,13 @@ bool BooleanVectorType::read(istream& is,  RealType & v) {
     if (c == ',') {
       if (firstVal)
 	return false;
-      bool val;
-      if (!BooleanType::read(is, val))
-	return false;
-      v.push_back(val);
-      firstVal = false;
     } else
+      is.unget();
+    bool val;
+    if (!BooleanType::read(is, val))
       return false;
+    v.push_back(val);
+    firstVal = false;
   }
 }
 
