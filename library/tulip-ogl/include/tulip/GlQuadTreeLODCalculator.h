@@ -96,8 +96,6 @@ namespace tlp {
 
     std::vector<QuadTreeNode<unsigned int> *> nodesQuadTree;
     std::vector<QuadTreeNode<unsigned int> *> edgesQuadTree;
-    std::vector<QuadTreeNode<unsigned int> *> nodesSelectedQuadTree;
-    std::vector<QuadTreeNode<unsigned int> *> edgesSelectedQuadTree;
     std::vector<QuadTreeNode<unsigned long> *> entitiesQuadTree;
     std::vector<std::vector<SimpleEntityLODUnit> > simpleEntities;
 
