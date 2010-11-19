@@ -122,12 +122,6 @@ namespace tlp {
       for(vector<QuadTreeNode<unsigned int> *>::iterator it=edgesQuadTree.begin();it!=edgesQuadTree.end();++it)
         delete (*it);
       edgesQuadTree.clear();
-      for(vector<QuadTreeNode<unsigned int> *>::iterator it=nodesSelectedQuadTree.begin();it!=nodesSelectedQuadTree.end();++it)
-        delete (*it);
-      nodesSelectedQuadTree.clear();
-      for(vector<QuadTreeNode<unsigned int> *>::iterator it=edgesSelectedQuadTree.begin();it!=edgesSelectedQuadTree.end();++it)
-        delete (*it);
-      edgesSelectedQuadTree.clear();
       for(vector<QuadTreeNode<unsigned long> *>::iterator it=entitiesQuadTree.begin();it!=entitiesQuadTree.end();++it)
         delete (*it);
       entitiesQuadTree.clear();
@@ -195,6 +189,7 @@ namespace tlp {
                                                    const Matrix<float, 4> transformMatrix,
                                                    const Vector<int,4>& globalViewport,
                                                    const Vector<int,4>& currentViewport) {
+
     BooleanProperty *selectedProperty=NULL;
     if(inputData)
       selectedProperty=inputData->getGraph()->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
@@ -213,18 +208,14 @@ namespace tlp {
 
       if(nodesGlobalBoundingBox.isValid()){
         nodesQuadTree.push_back(new QuadTreeNode<unsigned int>(nodesGlobalBoundingBox));
-        nodesSelectedQuadTree.push_back(new QuadTreeNode<unsigned int>(nodesGlobalBoundingBox));
       }else{
         nodesQuadTree.push_back(NULL);
-        nodesSelectedQuadTree.push_back(NULL);
       }
 
       if(edgesGlobalBoundingBox.isValid()){
         edgesQuadTree.push_back(new QuadTreeNode<unsigned int>(edgesGlobalBoundingBox));
-        edgesSelectedQuadTree.push_back(new QuadTreeNode<unsigned int>(edgesGlobalBoundingBox));
       }else{
         edgesQuadTree.push_back(NULL);
-        edgesSelectedQuadTree.push_back(NULL);
       }
 
       // Add entities in quadtrees
@@ -248,14 +239,7 @@ namespace tlp {
 #endif
         {
           for(size_t i=0;i<nbNodes;++i){
-            assert(selectedProperty);
-            QuadTreeNode<unsigned int> *quadTree;
-            if(selectedProperty->getNodeValue(node(layerLODUnit->nodesLODVector[i].id)))
-              quadTree=nodesSelectedQuadTree[quadTreesVectorPosition];
-            else
-              quadTree=nodesQuadTree[quadTreesVectorPosition];
-
-            quadTree->insert(layerLODUnit->nodesLODVector[i].boundingBox,layerLODUnit->nodesLODVector[i].id);
+						nodesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->nodesLODVector[i].boundingBox,layerLODUnit->nodesLODVector[i].id);
           }
         }
 #ifdef _OPENMP
@@ -263,14 +247,7 @@ namespace tlp {
 #endif
         {
           for(size_t i=0;i<nbEdges;++i){
-            assert(selectedProperty);
-            QuadTreeNode<unsigned int> *quadTree;
-            if(selectedProperty->getEdgeValue(edge(layerLODUnit->edgesLODVector[i].id)))
-              quadTree=edgesSelectedQuadTree[quadTreesVectorPosition];
-            else
-              quadTree=edgesQuadTree[quadTreesVectorPosition];
-
-            quadTree->insert(layerLODUnit->edgesLODVector[i].boundingBox,layerLODUnit->edgesLODVector[i].id);
+						edgesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->edgesLODVector[i].boundingBox,layerLODUnit->edgesLODVector[i].id);
           }
         }
       }
@@ -324,19 +301,13 @@ namespace tlp {
             if((renderingEntitiesFlag & RenderingWithoutRemove)==0){
               if(nodesQuadTree[quadTreesVectorPosition])
                 nodesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resNodes,ratio);
-              if(nodesSelectedQuadTree[quadTreesVectorPosition])
-                nodesSelectedQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resNodes,ratio);
             }else{
               if(nodesQuadTree[quadTreesVectorPosition])
                 nodesQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resNodes);
-              if(nodesSelectedQuadTree[quadTreesVectorPosition])
-                nodesSelectedQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resNodes);
             }
           }else{
             if(nodesQuadTree[quadTreesVectorPosition])
               nodesQuadTree[quadTreesVectorPosition]->getElements(resNodes);
-            if(nodesSelectedQuadTree[quadTreesVectorPosition])
-              nodesSelectedQuadTree[quadTreesVectorPosition]->getElements(resNodes);
           }
 
           GlNode glNode(0);
@@ -356,19 +327,13 @@ namespace tlp {
             if((renderingEntitiesFlag & RenderingWithoutRemove)==0){
               if(edgesQuadTree[quadTreesVectorPosition])
                 edgesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resEdges,ratio);
-              if(edgesSelectedQuadTree[quadTreesVectorPosition])
-                edgesSelectedQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resEdges,ratio);
             }else{
               if(edgesQuadTree[quadTreesVectorPosition])
-                edgesQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resEdges);
-              if(edgesSelectedQuadTree[quadTreesVectorPosition])
-              edgesSelectedQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resEdges);
+								edgesQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resEdges);
             }
           }else{
             if(edgesQuadTree[quadTreesVectorPosition])
-              edgesQuadTree[quadTreesVectorPosition]->getElements(resEdges);
-            if(edgesSelectedQuadTree[quadTreesVectorPosition])
-              edgesSelectedQuadTree[quadTreesVectorPosition]->getElements(resEdges);
+							edgesQuadTree[quadTreesVectorPosition]->getElements(resEdges);
           }
 
           GlEdge glEdge(0);
@@ -444,8 +409,18 @@ namespace tlp {
     }
   }
 
-  void GlQuadTreeLODCalculator::update(std::set<Observable *>::iterator,std::set<Observable *>::iterator){
-    setHaveToCompute();
+	void GlQuadTreeLODCalculator::update(std::set<Observable *>::iterator it,std::set<Observable *>::iterator itEnd){
+		bool needCompute=false;
+		while(it!=itEnd){
+			if((*it)==inputData->elementLayout || (*it)==inputData->elementSize){
+				needCompute=true;
+				break;
+			}
+			++it;
+		}
+
+		if(needCompute)
+			setHaveToCompute();
   }
 
   void GlQuadTreeLODCalculator::addLocalProperty(Graph*, const std::string &name){
