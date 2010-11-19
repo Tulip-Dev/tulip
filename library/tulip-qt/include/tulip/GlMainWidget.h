@@ -230,6 +230,7 @@ private:
 	bool _hasHulls;
 	bool useFramebufferObject;
 	QGLFramebufferObject *glFrameBuf;
+  static bool inRendering;
 
 public slots:
 /**

@@ -55,9 +55,11 @@ namespace tlp {
 #ifdef _WIN32
 #ifdef DLL_EXPORT
 QGLWidget* GlMainWidget::firstQGLWidget=NULL;
+  bool GlMainWidget::inRendering=false;
 #endif
 #else
 QGLWidget* GlMainWidget::firstQGLWidget=NULL;
+  bool GlMainWidget::inRendering=false;
 #endif
 
 //==================================================
@@ -286,7 +288,8 @@ void GlMainWidget::createRenderingStore(int width, int height){
 }
 //==================================================
 void GlMainWidget::redraw() {
-	if (isVisible()) {
+    if (isVisible() && !inRendering) {
+      inRendering=true;
 
 		int width = contentsRect().width();
 		int height = contentsRect().height();
@@ -321,12 +324,15 @@ void GlMainWidget::redraw() {
 
 		swapBuffers();
 
+      inRendering=false;
 	}
 	emit viewRedrawn(this);
 }
 //==================================================
 void GlMainWidget::draw(bool graphChanged) {
-	if (isVisible()) {
+
+    if (isVisible() && !inRendering) {
+      inRendering=true;
 
 		makeCurrent();
 
@@ -376,6 +382,7 @@ void GlMainWidget::draw(bool graphChanged) {
 		drawInteractors();
 
 		swapBuffers();
+      inRendering=false;
 	}
 	emit viewDrawn(this,graphChanged);
 }

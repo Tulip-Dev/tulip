@@ -281,6 +281,21 @@ namespace tlp {
      */
     Color getSelectionColor();
 
+		/**
+		 * This property is use to filter nodes/edges display, for a node/edge if this property is false : the node/edge will not be diplayed
+		 * Warning : this property will not be saved in DataSet
+		 */
+		void setDisplayFilteringProperty(BooleanProperty *filteringProperty) {
+			_displayFilteringProperty=filteringProperty;
+		}
+
+		/**
+		 * Get the boolean property use to filtering displaying of nodes/edges
+		 */
+		BooleanProperty * getDisplayFilteringProperty() const {
+			return _displayFilteringProperty;
+		}
+
   private:
 
     bool _antialiased;
@@ -313,6 +328,8 @@ namespace tlp {
     bool _edgesMaxSizeToNodesSize;
     bool _feedbackRender;
     Color _selectionColor;
+		BooleanProperty *_displayFilteringProperty;
+
   };
 }
 

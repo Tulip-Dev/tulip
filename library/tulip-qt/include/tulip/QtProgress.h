@@ -47,6 +47,9 @@ namespace tlp {
     std::string label;
     QWidget* parent;
     View *view;
+
+  private:
+    short refreshCount;
   };
 }
 

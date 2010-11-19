@@ -278,6 +278,7 @@ Coord computeOpenUniformBsplinePoint(const vector<Coord> &controlPoints, const f
 		for (unsigned int i = 0 ; i <= curveDegree ; ++i) {
 			curvePoint += coeffs[i] * controlPoints[startIdx + i];
 		}
+		delete [] coeffs;
 		return curvePoint;
 	}
 }
