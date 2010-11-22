@@ -89,7 +89,7 @@ namespace tlp {
   GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
 #endif
 
-	GlScene::GlScene(GlLODCalculator *calculator):backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
+  GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
     Camera camera(this,false);
 
 	if(calculator!=NULL)
@@ -111,9 +111,13 @@ namespace tlp {
     if(!OpenGlConfigManager::getInst().glewIsInit())
       OpenGlConfigManager::getInst().initGlew();
 
+    int zoomTmp=1;
+    for(int i=0;i<viewportZoom-1;++i){
+      zoomTmp=zoomTmp*2;
+    }
 
+    glViewport(viewport[0]-viewport[2]*xDecViewport,viewport[1]-viewport[3]*yDecViewport,viewport[2]*zoomTmp,viewport[3]*zoomTmp);
 
-	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 	bool antialiased = true;
 	if(glGraphComposite) {
       antialiased=glGraphComposite->getInputData()->parameters->isAntialiased();
@@ -1133,6 +1137,12 @@ namespace tlp {
 
 	getLayer("Main")->addGlEntity(glGraphComposite,"graph");
 	addGlGraphCompositeInfo(getLayer("Main"),glGraphComposite);
+  }
+
+  void GlScene::setViewportZoom(int zoom,int xDec, int yDec){
+    viewportZoom=zoom;
+    xDecViewport=xDec;
+    yDecViewport=yDec;
   }
 
 }
