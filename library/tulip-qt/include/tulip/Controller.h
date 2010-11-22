@@ -118,6 +118,10 @@ namespace tlp {
 		void setDockOptions(QMainWindow::DockOptions options) {
       mainWindow->setDockOptions(options);
 		}
+		
+		QWidget* centralWidget() const {
+      return mainWindow->centralWidget();
+    }
 
         /**
           * Add a new custom toolbar on a side of the main Window.
