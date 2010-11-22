@@ -89,7 +89,8 @@ namespace tlp {
       includeSize[0]*=nodeSize[1]/includeSize[1];
       includeSize[1]*=nodeSize[1]/includeSize[1];
     }
-    includeSize[2]*=nodeSize[2]/includeSize[2];
+    if(includeSize[2]!=0)
+      includeSize[2]*=nodeSize[2]/includeSize[2];
 
     glScalef(includeSize[0], includeSize[1], includeSize[2]);
 
