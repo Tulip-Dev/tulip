@@ -96,7 +96,7 @@ namespace tlp {
     }
     mainWidget->setData(graph,data);
 
-    delete currentMetaNodeRenderer;
+		mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()));
 		
 		getGlMainWidget()->useHulls(true);
 		
