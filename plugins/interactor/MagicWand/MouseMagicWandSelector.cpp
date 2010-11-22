@@ -1,7 +1,7 @@
 #include "MouseMagicWandSelector.h"
 
 #include <iostream>
-#include <QMouseEvent>
+#include <QtGui/QMouseEvent>
 #include <tulip/GlMainWidget.h>
 #include "MagicSelectionInteractorConfigWidget.h"
 
