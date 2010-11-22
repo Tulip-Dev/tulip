@@ -126,7 +126,12 @@ namespace tlp {
     Coord includeScale(includeBoundingBox[1] - includeBoundingBox[0]);
     Coord size ((maxC + minC)/-1.f);
     Coord translate( (maxC+minC)/-2.f - (maxC-minC) + (includeBoundingBox[0]+Coord(.5,.5,.5)) * ((maxC-minC)*2.f) +(maxC-minC)*includeScale );
-    double dept   = (maxC[2] - minC[2]) / includeScale[2];
+    double dept;
+    if(includeScale[2]==0)
+      dept=0;
+    else
+      dept=(maxC[2] - minC[2]) / includeScale[2];
+
     double width  = (maxC[0] - minC[0]) / includeScale[0];
     double height = (maxC[1] - minC[1]) / includeScale[1];
     Coord includeSize( bboxes[1] - bboxes[0]);
