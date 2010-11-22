@@ -250,6 +250,11 @@ namespace tlp {
       calculator->setScene(this);
     }
 
+    /**
+     * Set a zoom level and a xDec/yDec, this parameters change viewport of the scene
+     */
+    void setViewportZoom(int zoom=1,int xDec=0, int yDec=0);
+
     //************************************************************
     /* To Remove */
     void addGlGraphCompositeInfo(GlLayer* layer,GlGraphComposite *glGraphComposite) {
@@ -269,6 +274,9 @@ namespace tlp {
     std::vector<std::pair<std::string,GlLayer *> > layersList;
     GlLODCalculator *lodCalculator;
     Vector<int, 4> viewport;
+    int viewportZoom;
+    int xDecViewport;
+    int yDecViewport;
     Color backgroundColor;
     bool viewLabel;
     bool viewOrtho;
