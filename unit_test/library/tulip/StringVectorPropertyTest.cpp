@@ -119,6 +119,7 @@ void StringVectorPropertyTest::complexTest() {
 void StringVectorPropertyTest::complexDavidTest() {
   node n = graph->addNode();
   StringVectorProperty *stP = graph->getProperty<StringVectorProperty>("stp");
+  vector<string> expectedValues;
   vector<string> tmp;
   for (unsigned int i=0; i<5000; ++i) {
     stringstream tmpstr;
@@ -126,13 +127,14 @@ void StringVectorPropertyTest::complexDavidTest() {
     tmp = stP->getNodeValue(n);
     CPPUNIT_ASSERT(tmp.size() == i);
     tmp.push_back(tmpstr.str());
+    expectedValues.push_back(tmpstr.str());
     stP->setNodeValue(n, tmp);
   }
 
   const vector<string>& value = stP->getNodeValue(n);
-  CPPUNIT_ASSERT(value.size() == 5000);
+  CPPUNIT_ASSERT(value.size() == expectedValues.size());
   for(unsigned int i=0; i< value.size(); ++i) {
-    CPPUNIT_ASSERT(tmp[i] == value[i]);
+    CPPUNIT_ASSERT(expectedValues[i] == value[i]);
   }
 }
 
