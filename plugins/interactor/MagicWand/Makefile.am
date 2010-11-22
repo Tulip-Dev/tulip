@@ -8,19 +8,20 @@ EXTRA_DIST = CMakeLists.txt
 
 plugins_LTLIBRARIES = libInteractorMagicSelection-@VERSION@.la
 
-pluginsdir = $(libdir)/tlp/interactor
+pluginsdir = $(libdir)/tlp/interactors
 
 libInteractorMagicSelection_@VERSION@_la_SOURCES = \
 	InteractorMagicSelection.cpp \
 	MagicSelectionInteractorConfigWidget.h \
 	MagicSelectionInteractorConfigWidget.cpp \
-    	MouseMagicWandSelector.cpp
+	MouseMagicWandSelector.h \
+	MouseMagicWandSelector.cpp
 
 nodist_libInteractorMagicSelection_@VERSION@_la_SOURCES = \
 	moc_MagicSelectionInteractorConfigWidget.cpp
 
 BUILT_SOURCES = MagicSelectionInteractorConfigWidgetData.h
- 
+
 dist_noinst_DATA = MagicSelectionInteractorConfigWidget.ui
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
