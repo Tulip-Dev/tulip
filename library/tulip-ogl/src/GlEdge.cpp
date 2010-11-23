@@ -298,8 +298,8 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 		lineWidth=1e-6;
 	glLineWidth(lineWidth);
 
-	int startEdgeGlyph = data->elementSrcAnchorShape->getEdgeValue(e);
-	int endEdgeGlyph = data->elementTgtAnchorShape->getEdgeValue(e);
+	unsigned int startEdgeGlyph = data->elementSrcAnchorShape->getEdgeValue(e);
+	unsigned int endEdgeGlyph = data->elementTgtAnchorShape->getEdgeValue(e);
 
 	if (startEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
 		displayArrow(data,e,source,edgeSize[0],srcCol,maxSrcSize,selected,startEdgeGlyph,endEdgeGlyph,
@@ -563,7 +563,7 @@ void GlEdge::getVertices(GlGraphInputData *data,
 }
 
 void GlEdge::getColors(GlGraphInputData *data,
-		const vector<Coord> &vertices,
+		const Coord *vertices,unsigned int numberOfVertices,
 		std::vector<Color> &linesColorsArray) {
 
 	edge e = edge(id);
@@ -582,12 +582,19 @@ void GlEdge::getColors(GlGraphInputData *data,
 	}
 
 	vector<Color> colors;
-	tlp::getColors(vertices,srcCol,tgtCol,colors);
+	tlp::getColors(vertices,numberOfVertices,srcCol,tgtCol,colors);
 
 	size_t numberOfColors=colors.size();
 	for(size_t i=0;i<numberOfColors;++i){
 		linesColorsArray.push_back(colors[i]);
 	}
+}
+
+void GlEdge::getColors(GlGraphInputData *data,
+		const vector<Coord> &vertices,
+		std::vector<Color> &linesColorsArray) {
+
+	getColors(data,&vertices[0],vertices.size(),linesColorsArray);
 }
 
 

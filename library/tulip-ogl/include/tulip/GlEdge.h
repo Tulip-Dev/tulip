@@ -86,6 +86,10 @@ namespace tlp {
     /**
      * This function is used by the engine to get line colors of the edge
      */
+    void getColors(GlGraphInputData *data,const Coord *vertices,unsigned int numberOfVertices,std::vector<Color> &linesColorsArray);
+    /**
+     * This function is used by the engine to get line colors of the edge
+     */
     void getColors(GlGraphInputData *data,const std::vector<Coord> &vertices,std::vector<Color> &linesColorsArray);
 
     /**

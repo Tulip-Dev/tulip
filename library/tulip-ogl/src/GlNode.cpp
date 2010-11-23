@@ -433,4 +433,10 @@ namespace tlp {
     pointsCoordsArray.push_back(nodeCoord);
     pointsColorsArray.push_back(fillColor);
   }
+
+  void GlNode::getColor(GlGraphInputData *inputData,std::vector<Color> &pointsColorsArray){
+    node n=node(id);
+    const Color& fillColor = inputData->elementColor->getNodeValue(n);
+    pointsColorsArray.push_back(fillColor);
+  }
 }

@@ -46,24 +46,36 @@ float lineLength(const vector<Coord> &line) {
 	return result;
 }
 //================================================
-void getColors(const vector<Coord> &line, const Color &c1, const Color &c2, vector<Color> &result) {
+float lineLength(const Coord *line,unsigned int lineSize) {
+	float result = 0;
+	for (unsigned int i = 1; i < lineSize; ++i) {
+		result += sqrnorm(line[i-1] - line[i]);
+	}
+	return result;
+}
+//================================================
+void getColors(const Coord *line,const unsigned int lineSize, const Color &c1, const Color &c2, vector<Color> &result) {
 	tlp::Vector<float, 4> _c1, _c2;
 	for (unsigned int i=0; i<4; ++i) {
 		_c1[i] = c1[i];
 		_c2[i] = c2[i];
 	}
-	result.resize(line.size());
+	result.resize(lineSize);
 	result[0] = c1;
-	result[line.size()-1] = c2;
-	if(line.size()==2)
+	result[lineSize-1] = c2;
+	if(lineSize==2)
 		return;
 	_c2 -= _c1;
-	_c2 /= lineLength(line);
-	for (unsigned int i = 1; i < line.size() - 1; ++i) {
+	_c2 /= lineLength(line,lineSize);
+	for (unsigned int i = 1; i < lineSize - 1; ++i) {
 		float delta = sqrnorm(line[i-1] - line[i]);
 		_c1 += _c2 * delta;
 		result[i] = Color((unsigned char)_c1[0], (unsigned char)_c1[1], (unsigned char)_c1[2], (unsigned char)_c1[3]);
 	}
+}
+//================================================
+void getColors(const vector<Coord> &line, const Color &c1, const Color &c2, vector<Color> &result) {
+	getColors(&line[0],line.size(),c1,c2,result);
 }
 //================================================
 vector<Color> getColors(const vector<Coord> &line, const Color &c1, const Color &c2) {
