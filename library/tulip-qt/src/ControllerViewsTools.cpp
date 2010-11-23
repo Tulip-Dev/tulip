@@ -41,7 +41,7 @@ QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
 QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
 #endif
 
-  void ControllerViewsTools::createView(const string &name,Graph *graph,DataSet dataSet,QWidget *parent,string *createdViewName, View **createdView, QWidget **createdWidget){
+  void ControllerViewsTools::createView(const string &name,Graph *,DataSet,QWidget *parent,string *createdViewName, View **createdView, QWidget **createdWidget){
     string verifiedName=name;
     View *newView=ViewPluginsManager::getInst().createView(name);
 

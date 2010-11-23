@@ -149,7 +149,7 @@ public:
 	/**
 	 * Take a snapshot of the Widget and put it in a picture
 	 */
-	void createPicture(const std::string &pictureName,int width, int height,bool center=true);
+	void createPicture(const std::string &pictureName,int width, int height,bool center=true, int zoom=1, int xDec=0, int yDec=0);
 
 	/**
 	 * Function to do picking on entities.  It just calls

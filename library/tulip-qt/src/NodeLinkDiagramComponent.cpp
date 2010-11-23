@@ -96,7 +96,7 @@ namespace tlp {
     }
     mainWidget->setData(graph,data);
 
-    delete currentMetaNodeRenderer;
+		mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()));
 		
 		getGlMainWidget()->useHulls(true);
 		
@@ -388,16 +388,6 @@ namespace tlp {
   // GUI functions
   //==================================================
   void NodeLinkDiagramComponent::drawAfterRenderingParametersChange(){
-    if(qtMetaNode){
-      if(currentMetaNodeRenderer) {
-        delete currentMetaNodeRenderer;
-        currentMetaNodeRenderer = NULL;
-      }
-
-      currentMetaNodeRenderer = new QtMetaNodeRenderer(NULL,getGlMainWidget(),getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData());
-      ((QtMetaNodeRenderer*)currentMetaNodeRenderer)->setBackgroundColor(getGlMainWidget()->getScene()->getBackgroundColor());
-      mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(currentMetaNodeRenderer);
-    }
     draw();
   }
   //==================================================

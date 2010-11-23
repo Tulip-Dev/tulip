@@ -19,6 +19,7 @@ SRCS=   tuliplibtest.cpp \
 	IntegerPropertyMinMaxUpdateTest.cpp \
 	TestPropertiesMinMaxAfterAddNode.cpp \
 	IsMetaEdgeTest.cpp\
+	StringVectorPropertyTest.cpp \
 	PlanarityTestTest.cpp
 #	PlanarConMapTest.cpp
 

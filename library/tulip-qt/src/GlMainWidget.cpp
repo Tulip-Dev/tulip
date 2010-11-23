@@ -44,11 +44,15 @@
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
 
+
 #include "tulip/QGlPixelBufferManager.h"
 #include "tulip/Interactor.h"
 #include "tulip/InteractorManager.h"
 #include "tulip/QtMetaNodeRenderer.h"
 #include <tulip/GlCompositeHierarchyManager.h>
+#include "tulip/GlVertexArrayManager.h"
+
+using namespace std;
 
 namespace tlp {
 
@@ -217,6 +221,12 @@ void GlMainWidget::setGraph(Graph *graph){
 	metaNodeRenderer->setInputData(graphComposite->getInputData());
 
 	graphComposite->getInputData()->setMetaNodeRenderer(metaNodeRenderer);
+	if(oldGraphComposite->getInputData()->graph==graph){
+		oldGraphComposite->getInputData()->deleteGlVertexArrayManagerInDestructor(false);
+		delete graphComposite->getInputData()->getGlVertexArrayManager();
+		graphComposite->getInputData()->setGlVertexArrayManager(oldGraphComposite->getInputData()->getGlVertexArrayManager());
+		graphComposite->getInputData()->getGlVertexArrayManager()->setInputData(graphComposite->getInputData());
+	}
 	scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
 	scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
 	delete oldGraphComposite;
@@ -289,7 +299,6 @@ void GlMainWidget::createRenderingStore(int width, int height){
 //==================================================
 void GlMainWidget::redraw() {
     if (isVisible() && !inRendering) {
-      inRendering=true;
 
 		int width = contentsRect().width();
 		int height = contentsRect().height();
@@ -298,6 +307,8 @@ void GlMainWidget::redraw() {
 			draw(false);
 			return;
 		}
+
+		inRendering=true;
 
 		makeCurrent();
 
@@ -603,11 +614,13 @@ QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName
 	return NULL;
 }
 //=====================================================
-void GlMainWidget::createPicture(const std::string &pictureName, int width, int height,bool center){
+void GlMainWidget::createPicture(const std::string &pictureName, int width, int height,bool center, int zoom, int xDec, int yDec){
 #ifndef WITHOUT_QT_PICTURE_OUTPUT   
 	scene.setViewport(0,0,width,height);
 	if(center)
 		scene.ajustSceneToSize(width,height);
+
+	scene.setViewportZoom(zoom,xDec,yDec);
 
 	scene.prerenderMetaNodes();
 

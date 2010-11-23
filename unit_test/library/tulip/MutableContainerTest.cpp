@@ -110,17 +110,25 @@ void MutableContainerTest::testFindAll() {
   itB = mutBool->findAll(true);
   itD = mutDouble->findAll(13.0);
   itS = mutString->findAll("Sophie");
-  
+  CPPUNIT_ASSERT( itB->hasNext());
   CPPUNIT_ASSERT( itB->next() == 10 );
+  CPPUNIT_ASSERT( itD->hasNext());
   CPPUNIT_ASSERT( itD->next() == 10 );
+  CPPUNIT_ASSERT( itS->hasNext());
   CPPUNIT_ASSERT( itS->next() == 10 );
-  
+
+  CPPUNIT_ASSERT( itB->hasNext());
   CPPUNIT_ASSERT( itB->next() == 15 );
+  CPPUNIT_ASSERT( itD->hasNext());
   CPPUNIT_ASSERT( itD->next() == 15 );
+  CPPUNIT_ASSERT( itS->hasNext());  
   CPPUNIT_ASSERT( itS->next() == 15 );
 
+  CPPUNIT_ASSERT( itB->hasNext());
   CPPUNIT_ASSERT( itB->next() == 17 );
+  CPPUNIT_ASSERT( itD->hasNext());
   CPPUNIT_ASSERT( itD->next() == 17 );
+  CPPUNIT_ASSERT( itS->hasNext());
   CPPUNIT_ASSERT( itS->next() == 17 );
 
   delete itB;

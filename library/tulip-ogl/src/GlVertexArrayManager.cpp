@@ -39,7 +39,19 @@ using namespace std;
 
 namespace tlp
 {
-GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData):inputData(inputData),graph(inputData->getGraph()),observersActivated(false),activated(true),isBegin(false),toCompute(true),vectorSizeInit(false){
+GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData)
+	:inputData(inputData),
+	graph(inputData->getGraph()),
+	observersActivated(false),
+	activated(true),
+	isBegin(false),
+	toComputeAll(true),
+	toComputeLayout(true),
+	toComputeColor(true),
+	vectorLayoutSizeInit(false),
+	vectorColorSizeInit(false),
+	vectorIndexSizeInit(false)
+{
 	colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
 }
 
@@ -48,15 +60,42 @@ GlVertexArrayManager::~GlVertexArrayManager(){
 	clearData();
 }
 
+void GlVertexArrayManager::setInputData(GlGraphInputData *inputData){
+	clearObservers();
+	this->inputData=inputData;
+	initObservers();
+}
+
 bool GlVertexArrayManager::haveToCompute(){
-	if(toCompute)
+	if(toComputeAll || toComputeLayout || toComputeColor){
 		return true;
+	}
 	if(inputData->parameters->isEdgeColorInterpolate()!=colorInterpolate){
 		colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
+		clearColorData();
 		return true;
 	}
 
 	return false;
+}
+
+void GlVertexArrayManager::setHaveToComputeAll(bool compute){
+  if(compute)
+    clearObservers();
+  if(!compute)
+    initObservers();
+
+  toComputeAll=compute;
+  toComputeLayout=compute;
+  toComputeColor=compute;
+}
+
+void GlVertexArrayManager::setHaveToComputeLayout(bool compute){
+  toComputeLayout=compute;
+}
+
+void GlVertexArrayManager::setHaveToComputeColor(bool compute){
+  toComputeColor=compute;
 }
 
 void GlVertexArrayManager::beginRendering() {
@@ -80,16 +119,25 @@ void GlVertexArrayManager::beginRendering() {
 	points2PRenderingIndexArray.reserve(graph->numberOfNodes()+graph->numberOfEdges());
 	points2PSelectedRenderingIndexArray.reserve(graph->numberOfNodes()+graph->numberOfEdges());
 
-	if(!vectorSizeInit){
+	if(!vectorLayoutSizeInit){
 		linesCoordsArray.reserve(graph->numberOfEdges()*2);
+		pointsCoordsArray.reserve(graph->numberOfEdges()+graph->numberOfNodes());
+
+		vectorLayoutSizeInit=true;
+	}
+
+	if(!vectorColorSizeInit){
 		linesColorsArray.reserve(graph->numberOfEdges()*2);
+		pointsColorsArray.reserve(graph->numberOfEdges()+graph->numberOfNodes());
+
+		vectorColorSizeInit=true;
+	}
+
+	if(!vectorIndexSizeInit){
 		linesIndexArray.reserve(graph->numberOfEdges()*2);
 		linesIndexCountArray.reserve(graph->numberOfEdges());
 
-		pointsCoordsArray.reserve(graph->numberOfEdges()+graph->numberOfNodes());
-		pointsColorsArray.reserve(graph->numberOfEdges()+graph->numberOfNodes());
-
-		vectorSizeInit=true;
+		vectorIndexSizeInit=true;
 	}
 }
 
@@ -176,43 +224,59 @@ void GlVertexArrayManager::activate(bool act){
 }
 
 void GlVertexArrayManager::addEdge(GlEdge *edge){
-	size_t lastIndex=linesCoordsArray.size();
-	edge->getVertices(inputData,linesCoordsArray);
-	size_t numberOfVertices=linesCoordsArray.size()-lastIndex;
+	if(toComputeAll || toComputeLayout){
 
-	if(edgeToLineIndexVector.size()<edge->id+1)
-		edgeToLineIndexVector.resize(edge->id+1);
+		size_t lastIndex=linesCoordsArray.size();
+		edge->getVertices(inputData,linesCoordsArray);
+		size_t numberOfVertices=linesCoordsArray.size()-lastIndex;
 
-	edgeToLineIndexVector[edge->id]=pair<unsigned int,unsigned int>(linesIndexArray.size(),linesIndexCountArray.size());
+		if(edgeToLineIndexVector.size()<edge->id+1)
+			edgeToLineIndexVector.resize(edge->id+1);
 
-	if(edgeToPointIndexVector.size()<edge->id+1)
-		edgeToPointIndexVector.resize(edge->id+1);
+		edgeToLineIndexVector[edge->id]=pair<unsigned int,unsigned int>(linesIndexArray.size(),linesIndexCountArray.size());
 
-	vector<Coord> vertices;
-	if(numberOfVertices!=0){
-		linesIndexArray.push_back(lastIndex);
-		for(size_t i=0;i<numberOfVertices;++i){
-			vertices.push_back(linesCoordsArray[lastIndex+i]);
+		if(edgeToPointIndexVector.size()<edge->id+1)
+			edgeToPointIndexVector.resize(edge->id+1);
+
+		vector<Coord> vertices;
+		if(numberOfVertices!=0){
+			linesIndexArray.push_back(lastIndex);
+			for(size_t i=0;i<numberOfVertices;++i){
+				vertices.push_back(linesCoordsArray[lastIndex+i]);
+			}
+			edge->getColors(inputData,vertices,linesColorsArray);
+			linesIndexCountArray.push_back(numberOfVertices);
+
+			pointsCoordsArray.push_back(linesCoordsArray[lastIndex]);
+			pointsColorsArray.push_back(linesColorsArray[lastIndex]);
+
+			edgeToPointIndexVector[edge->id]=pointsCoordsArray.size()-1;
+		}else{
+			linesIndexCountArray.push_back(0);
+			edgeToPointIndexVector[edge->id]=-1;
 		}
-		edge->getColors(inputData,vertices,linesColorsArray);
-		linesIndexCountArray.push_back(numberOfVertices);
-
-		pointsCoordsArray.push_back(linesCoordsArray[lastIndex]);
-		pointsColorsArray.push_back(linesColorsArray[lastIndex]);
-
-		edgeToPointIndexVector[edge->id]=pointsCoordsArray.size()-1;
 	}else{
-		linesIndexCountArray.push_back(0);
-		edgeToPointIndexVector[edge->id]=-1;
+		size_t lastIndex=linesColorsArray.size();
+
+		pair<unsigned int,unsigned int> index=edgeToLineIndexVector[edge->id];
+		GLsizei numberOfVertices=linesIndexCountArray[index.second];
+		if(numberOfVertices!=0){
+			edge->getColors(inputData,&linesCoordsArray[linesIndexArray[index.first]],numberOfVertices,linesColorsArray);
+			pointsColorsArray.push_back(linesColorsArray[lastIndex]);
+		}
 	}
 }
 
 void GlVertexArrayManager::addNode(GlNode *node){
-	node->getPointAndColor(inputData,pointsCoordsArray,pointsColorsArray);
+	if(toComputeAll || toComputeLayout){
+		node->getPointAndColor(inputData,pointsCoordsArray,pointsColorsArray);
 
-	if(nodeToPointIndexVector.size()<node->id+1)
-		nodeToPointIndexVector.resize(node->id+1);
-	nodeToPointIndexVector[node->id]=pointsCoordsArray.size()-1;
+		if(nodeToPointIndexVector.size()<node->id+1)
+			nodeToPointIndexVector.resize(node->id+1);
+		nodeToPointIndexVector[node->id]=pointsCoordsArray.size()-1;
+	}else{
+		node->getColor(inputData,pointsColorsArray);
+	}
 }
 
 void GlVertexArrayManager::activateLineEdgeDisplay(GlEdge *edge,bool selected){
@@ -270,24 +334,33 @@ void GlVertexArrayManager::addEdge(Graph *,const edge){
 	clearObservers();
 }
 
-void GlVertexArrayManager::beforeSetAllNodeValue(PropertyInterface*) {
-	clearData();
+void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property){
+	if(graph->getProperty(inputData->getElementLayoutPropName())==property){
+		setHaveToComputeLayout(true);
+		clearLayoutData();
+	}
+	if(graph->getProperty(inputData->getElementColorPropName())==property){
+		setHaveToComputeColor(true);
+		clearColorData();
+	}
+
 	clearObservers();
 }
 
-void GlVertexArrayManager::beforeSetAllEdgeValue(PropertyInterface*) {
-	clearData();
-	clearObservers();
+void GlVertexArrayManager::beforeSetAllNodeValue(PropertyInterface *property) {
+	propertyValueChanged(property);
 }
 
-void GlVertexArrayManager::beforeSetNodeValue(PropertyInterface*, const node){
-	clearData();
-	clearObservers();
+void GlVertexArrayManager::beforeSetAllEdgeValue(PropertyInterface *property) {
+	propertyValueChanged(property);
 }
 
-void GlVertexArrayManager::beforeSetEdgeValue(PropertyInterface*, const edge){
-	clearData();
-	clearObservers();
+void GlVertexArrayManager::beforeSetNodeValue(PropertyInterface *property, const node){
+	propertyValueChanged(property);
+}
+
+void GlVertexArrayManager::beforeSetEdgeValue(PropertyInterface *property, const edge){
+	propertyValueChanged(property);
 }
 
 void GlVertexArrayManager::destroy(Graph *){
@@ -300,8 +373,27 @@ void GlVertexArrayManager::destroy(PropertyInterface*){
 	clearObservers();
 }
 
+void GlVertexArrayManager::clearLayoutData() {
+	toComputeLayout=true;
+
+	linesCoordsArray.clear();
+	pointsCoordsArray.clear();
+
+	vectorLayoutSizeInit=false;
+}
+
+void GlVertexArrayManager::clearColorData() {
+	toComputeColor=true;
+
+	linesColorsArray.clear();
+	pointsColorsArray.clear();
+
+	vectorColorSizeInit=false;
+}
+
 void GlVertexArrayManager::clearData() {
-	toCompute=true;
+	toComputeAll=true;
+
 	linesCoordsArray.clear();
 	linesColorsArray.clear();
 	linesIndexArray.clear();
@@ -313,7 +405,9 @@ void GlVertexArrayManager::clearData() {
 	edgeToPointIndexVector.clear();
 	nodeToPointIndexVector.clear();
 
-	vectorSizeInit=false;
+	vectorLayoutSizeInit=false;
+	vectorColorSizeInit=false;
+	vectorIndexSizeInit=false;
 }
 
 void GlVertexArrayManager::initObservers() {

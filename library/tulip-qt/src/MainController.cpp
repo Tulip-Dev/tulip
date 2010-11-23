@@ -618,6 +618,7 @@ namespace tlp {
     //+++++++++++++++++++++++++++
     //Create Data information editor (Hierarchy, Element info, Property Info)
     tabWidgetDock = new QDockWidget("Data manipulation", mainWindowFacade.getParentWidget());
+    tabWidgetDock->setObjectName(QString("dataManipulationDockWidget"));
     tabWidgetDock->hide();
     tabWidgetDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     tabWidgetDock->setWindowTitle("Graph Editor");
@@ -647,6 +648,7 @@ namespace tlp {
     eltProperties = tabWidget->elementInfo;
 
     configWidgetDock = new QDockWidget("Data manipulation", mainWindowFacade.getParentWidget());
+    configWidgetDock->setObjectName(QString("configDockWidget"));
     configWidgetTab = new QTabWidget(configWidgetDock);
     configWidgetTab->setFocusPolicy(Qt::StrongFocus);
 
