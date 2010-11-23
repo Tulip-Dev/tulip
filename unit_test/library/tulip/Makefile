@@ -29,8 +29,8 @@ ifeq ($?, 1)
 TULIP_CONFIG=../../../tulip-config
 endif
 
-CXXFLAGS =  -g -Wall -I../../../library/tulip/include/ `${TULIP_CONFIG} --cxxflags` ${TULIP_INTERNAL_INCLUDES} `cppunit-config --cflags`
-#CXXFLAGS = -O2 -DNO_THREAD -DNDEBUG `${TULIP_CONFIG} --cxxflags` `cppunit-config --cflags`
+#CXXFLAGS =  -g -Wall -I../../../library/tulip/include/ `${TULIP_CONFIG} --cxxflags` ${TULIP_INTERNAL_INCLUDES} `cppunit-config --cflags`
+CXXFLAGS = -O2 -DNO_THREAD -DNDEBUG `${TULIP_CONFIG} --cxxflags` ${TULIP_INTERNAL_INCLUDES} `cppunit-config --cflags`
 CXX=g++
 LDFLAGS= `${TULIP_CONFIG} --lib_tulip` `cppunit-config --libs`
 
