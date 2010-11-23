@@ -44,11 +44,15 @@
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
 
+
 #include "tulip/QGlPixelBufferManager.h"
 #include "tulip/Interactor.h"
 #include "tulip/InteractorManager.h"
 #include "tulip/QtMetaNodeRenderer.h"
 #include <tulip/GlCompositeHierarchyManager.h>
+#include "tulip/GlVertexArrayManager.h"
+
+using namespace std;
 
 namespace tlp {
 
@@ -217,6 +221,12 @@ void GlMainWidget::setGraph(Graph *graph){
 	metaNodeRenderer->setInputData(graphComposite->getInputData());
 
 	graphComposite->getInputData()->setMetaNodeRenderer(metaNodeRenderer);
+	if(oldGraphComposite->getInputData()->graph==graph){
+		oldGraphComposite->getInputData()->deleteGlVertexArrayManagerInDestructor(false);
+		delete graphComposite->getInputData()->getGlVertexArrayManager();
+		graphComposite->getInputData()->setGlVertexArrayManager(oldGraphComposite->getInputData()->getGlVertexArrayManager());
+		graphComposite->getInputData()->getGlVertexArrayManager()->setInputData(graphComposite->getInputData());
+	}
 	scene.addGlGraphCompositeInfo(scene.getLayer("Main"),graphComposite);
 	scene.getLayer("Main")->addGlEntity(graphComposite,"graph");
 	delete oldGraphComposite;

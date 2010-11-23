@@ -326,6 +326,20 @@ public:
     return glVertexArrayManager;
   }
 
+  /**
+   * Set glEdgeDisplayManager
+   */
+  void setGlVertexArrayManager(GlVertexArrayManager * manager){
+    glVertexArrayManager=manager;
+  }
+
+  /**
+   * Set if GlVertexArrayManager must be deleted in destructor
+   */
+  void deleteGlVertexArrayManagerInDestructor(bool del){
+    deleteGlVertexArrayManager=del;
+  }
+
 public:
 
   ColorProperty *elementColor;
@@ -356,6 +370,8 @@ public:
   MutableContainer<EdgeExtremityGlyph *> extremityGlyphs;
 
 protected:
+
+  bool deleteGlVertexArrayManager;
 
   std::string elementColorPropName;
   std::string elementLabelColorPropName;
