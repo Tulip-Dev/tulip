@@ -129,6 +129,7 @@ namespace tlp {
 		  const Color &);          /* end color */
   //====================================================================
   TLP_GL_SCOPE std::vector<Color> getColors(const std::vector<Coord> &line, const Color &c1, const Color &c2);
+  TLP_GL_SCOPE void getColors(const Coord *line,unsigned int lineSize, const Color &c1, const Color &c2,std::vector<Color> &);
   TLP_GL_SCOPE void getColors(const std::vector<Coord> &line, const Color &c1, const Color &c2,std::vector<Color> &);
   TLP_GL_SCOPE std::vector<float> getSizes(const std::vector<Coord> &line, float s1, float s2);
   TLP_GL_SCOPE GLfloat* buildCurvePoints (const std::vector<Coord> &vertices,
