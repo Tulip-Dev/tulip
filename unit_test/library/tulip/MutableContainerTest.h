@@ -21,6 +21,8 @@
 
 #include <string>
 #include <tulip/MutableContainer.h>
+// needed by MutableContainer<std::string>
+#include <tulip/Types.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
