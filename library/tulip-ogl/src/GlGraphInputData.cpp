@@ -28,6 +28,7 @@
 
 namespace tlp {
   GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer):
+    deleteGlVertexArrayManager(true),
     elementAnimationFrame(new IntegerProperty(graph,"viewAnimationFrame")),
     graph(graph),
     parameters(parameters),
@@ -54,7 +55,8 @@ namespace tlp {
   }
 
 GlGraphInputData::~GlGraphInputData() {
-  delete glVertexArrayManager;
+	if(deleteGlVertexArrayManager)
+		delete glVertexArrayManager;
 	GlyphManager::getInst().clearGlyphList(&this->graph, this, glyphs);
 	EdgeExtremityGlyphManager::getInst().clearGlyphList(&this->graph, this,
 			extremityGlyphs);

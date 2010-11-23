@@ -4,6 +4,7 @@ else
 DLL_FLAGS = -Wl,-headerpad_max_install_names
 endif
 
+SUBDIRS = MagicWand
 EXTRA_DIST = CMakeLists.txt NodeLinkDiagramComponentInteractor.h
 
 if HAVE_TULIP_QT
@@ -12,7 +13,6 @@ pluginsqt_LTLIBRARIES = \
 	libInteractorGetInformation-@VERSION@.la \
 	libInteractorSelection-@VERSION@.la \
 	libInteractorSelectionModifier-@VERSION@.la \
-	libInteractorMagicSelection-@VERSION@.la \
 	libInteractorRectangleZoom-@VERSION@.la \
 	libInteractorDeleteElement-@VERSION@.la \
 	libInteractorAddNode-@VERSION@.la \
@@ -25,7 +25,6 @@ libInteractorNavigation_@VERSION@_la_SOURCES = InteractorNavigation.cpp
 libInteractorGetInformation_@VERSION@_la_SOURCES = InteractorGetInformation.cpp
 libInteractorSelection_@VERSION@_la_SOURCES = InteractorSelection.cpp
 libInteractorSelectionModifier_@VERSION@_la_SOURCES = InteractorSelectionModifier.cpp
-libInteractorMagicSelection_@VERSION@_la_SOURCES = InteractorMagicSelection.cpp
 libInteractorRectangleZoom_@VERSION@_la_SOURCES = InteractorRectangleZoom.cpp
 libInteractorDeleteElement_@VERSION@_la_SOURCES = InteractorDeleteElement.cpp
 libInteractorAddNode_@VERSION@_la_SOURCES = InteractorAddNode.cpp

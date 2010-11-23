@@ -83,7 +83,7 @@ inline bool hit (const Coord &v1Tail, const Coord &v1Head,
   //  Coord tmp = *(Coord *)&(operator-<float, 3u, Coord>(v1Head, v1Tail)*s);
   //  Coord tmp = v1Head - v1Tail;
   //  Coord tmp = operator-<float, 3u, Coord>(v1Head, v1Tail);
-  Coord tmp = v1Head.operator-(v1Tail);
+  Coord tmp(v1Head - v1Tail);
   tmp *= s;
 
   intersection = v1Tail + tmp;

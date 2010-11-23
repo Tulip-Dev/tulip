@@ -106,7 +106,13 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
   if  (e->type() == QEvent::MouseMove) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
-    if (!started) return false;
+    
+    node tmpNode;
+    edge tmpEdge;
+    ElementType type;
+    bool hoveringOverNode = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE;
+    if (!started && !hoveringOverNode)
+      return false;
 
     Coord point((double) glMainWidget->width() - (double) qMouseEv->x(),
         (double) qMouseEv->y(),
@@ -156,7 +162,6 @@ void MouseEdgeBuilder::clearObserver(){
 
 void MouseEdgeBuilder::delNode(Graph*,const node n){
   if(n==source){
-    GlMainWidget *glMainWidget=((GlMainView*)view)->getGlMainWidget();
     bends.clear();
     started=false;
     clearObserver();

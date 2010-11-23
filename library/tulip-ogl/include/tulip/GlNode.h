@@ -87,6 +87,11 @@ namespace tlp {
      */
     void getPointAndColor(GlGraphInputData *inputData,std::vector<Coord> &pointsCoordsArray,std::vector<Color> &pointsColorsArray);
 
+    /**
+     * This function is used by the engine to get color of the node
+     */
+    void getColor(GlGraphInputData *inputData,std::vector<Color> &pointsColorsArray);
+
   };
 
 }
