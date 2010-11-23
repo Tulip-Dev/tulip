@@ -310,13 +310,13 @@ namespace tlp {
       GlVertexArrayManager *vertexArrayManager=glGraphComposite->getInputData()->getGlVertexArrayManager();
       static bool lastDisplayEdge = glGraphComposite->isDisplayEdges();
       if (!lastDisplayEdge && lastDisplayEdge != glGraphComposite->isDisplayEdges()) {
-    	  vertexArrayManager->setHaveToCompute(true);
+        vertexArrayManager->setHaveToComputeAll(true);
       }
 
       if(vertexArrayManager->haveToCompute()){
         GlVertexArrayVisitor vertexArrayVisitor(glGraphComposite->getInputData());
         glGraphComposite->acceptVisitor(&vertexArrayVisitor);
-        vertexArrayManager->setHaveToCompute(false);
+        vertexArrayManager->setHaveToComputeAll(false);
       }
       lastDisplayEdge = glGraphComposite->isDisplayEdges();
     }

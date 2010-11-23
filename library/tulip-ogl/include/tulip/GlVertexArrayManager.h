@@ -54,20 +54,17 @@ namespace tlp {
 
     ~GlVertexArrayManager();
 
+    void setInputData(GlGraphInputData *inputData);
+
     inline bool renderingIsBegin(){
       return isBegin;
     }
 
     bool haveToCompute();
 
-    inline void setHaveToCompute(bool compute){
-      if(compute)
-        clearObservers();
-      if(!compute)
-        initObservers();
-
-      toCompute=compute;
-    }
+		void setHaveToComputeAll(bool compute);
+		void setHaveToComputeLayout(bool compute);
+		void setHaveToComputeColor(bool compute);
 
     void beginRendering();
     void endRendering();
@@ -82,6 +79,8 @@ namespace tlp {
     void activatePointEdgeDisplay(GlEdge *edge, bool selected);
     void activatePointNodeDisplay(GlNode *node, bool onePixel, bool selected);
 
+    void propertyValueChanged(PropertyInterface *property);
+
     void addEdge(Graph *,const edge);
     void beforeSetAllNodeValue(PropertyInterface*);
     void beforeSetAllEdgeValue(PropertyInterface*);
@@ -94,6 +93,8 @@ namespace tlp {
 
   protected:
 
+    void clearLayoutData();
+    void clearColorData();
     void clearData();
     void initObservers();
     void clearObservers();
@@ -104,8 +105,13 @@ namespace tlp {
 
     bool activated;
     bool isBegin;
-    bool toCompute;
-    bool vectorSizeInit;
+    bool toComputeAll;
+    bool toComputeLayout;
+    bool toComputeColor;
+
+    bool vectorLayoutSizeInit;
+    bool vectorColorSizeInit;
+    bool vectorIndexSizeInit;
 
     bool colorInterpolate;
 
