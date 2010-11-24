@@ -205,6 +205,7 @@ namespace tlp {
     bool filled;
     bool outlined;
     bool lighting;
+    bool invertYTexture;
     std::string textureName;
     float outlineSize;
     float hideOutlineLod;
