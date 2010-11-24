@@ -338,13 +338,13 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property){
 	if(graph->getProperty(inputData->getElementLayoutPropName())==property){
 		setHaveToComputeLayout(true);
 		clearLayoutData();
+		graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
 	}
 	if(graph->getProperty(inputData->getElementColorPropName())==property){
 		setHaveToComputeColor(true);
 		clearColorData();
+		graph->getProperty(inputData->getElementColorPropName())->removePropertyObserver(this);
 	}
-
-	clearObservers();
 }
 
 void GlVertexArrayManager::beforeSetAllNodeValue(PropertyInterface *property) {
