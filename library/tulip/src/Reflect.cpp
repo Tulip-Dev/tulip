@@ -125,7 +125,7 @@ void DataSet::registerDataTypeSerializer(const std::string& typeName,
   if (it != tnTodts.end())
     std::cerr << "Warning: a data type serializer is already registered for mangled type " << typeName << endl;
   it = otnTodts.find(dts->outputTypeName);
-  if (it != tnTodts.end())
+  if (it != otnTodts.end())
     std::cerr << "Warning: a data type serializer is already registered for read type " << dts->outputTypeName << endl;
   tnTodts[typeName] = otnTodts[dts->outputTypeName] = dts;
 }
