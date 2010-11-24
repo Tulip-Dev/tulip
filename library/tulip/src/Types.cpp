@@ -614,7 +614,14 @@ string StringType::defaultValue() {
 }
 
 void StringType::write(ostream& os, const RealType & v ) {
-  os << '"' << v.c_str() << '"';
+  os << '"';
+  for(char* str = (char *) v.c_str(); *str; ++str) {
+    char c = *str;
+    if (c == '\\' || c == '"')
+      os << '\\';
+    os << c;
+  }
+  os << '"';
 }
 
 string StringType::toString( const RealType & v ) {
@@ -639,7 +646,7 @@ bool StringType::read(istream& is, RealType & v) {
       if (c == '\\')
 	bslashFound = true;
       else {
-	if (c == '\"')
+	if (c == '"')
 	  break;
 	str.push_back(c);
       }
@@ -711,7 +718,7 @@ bool StringVectorType::read(istream& is, RealType & v) {
 	return false;
       sepFound = true;
     } else {
-      if ((firstVal || sepFound) && c == '\"') {
+      if ((firstVal || sepFound) && c == '"') {
 	string str;
 	is.unget();
 	if (!StringType::read(is, str))
