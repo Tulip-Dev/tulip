@@ -353,7 +353,9 @@ namespace tlp {
       if(glGraphComposite)
         zOrdering=glGraphComposite->getRenderingParameters().isElementZOrdered();
 
-			BooleanProperty *filteringProperty=glGraphComposite->getRenderingParameters().getDisplayFilteringProperty();
+			BooleanProperty *filteringProperty=NULL;
+			if(glGraphComposite)
+				filteringProperty=glGraphComposite->getRenderingParameters().getDisplayFilteringProperty();
 
       if(!zOrdering){
         // If elements are not zOrdered
