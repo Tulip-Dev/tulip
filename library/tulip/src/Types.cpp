@@ -614,14 +614,7 @@ string StringType::defaultValue() {
 }
 
 void StringType::write(ostream& os, const RealType & v ) {
-  os << '"';
-  for(char* str = (char *) v.c_str(); *str; ++str) {
-    char c = *str;
-    if (c == '\\' || c == '"')
-      os << '\\';
-    os << c;
-  }
-  os << '"';
+  os << '"' << v.c_str() << '"';
 }
 
 string StringType::toString( const RealType & v ) {
