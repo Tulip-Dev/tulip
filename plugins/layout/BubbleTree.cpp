@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <algorithm>
 #include <tulip/Circle.h>
 #include "BubbleTree.h"
 #include "DatasetTools.h"
