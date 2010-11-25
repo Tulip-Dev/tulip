@@ -1055,14 +1055,6 @@ namespace tlp {
 	xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
 	out.append((char *)xmlbuff);
 
-	int lastPos=0;
-	int current=out.find("\"",lastPos);
-	while(current!=-1){
-      out.replace(current,1,"\\\"");
-      lastPos=current+2;
-      current=out.find("\"",lastPos);
-	}
-
 	xmlFree(xmlbuff);
 
 	/*free the document */
