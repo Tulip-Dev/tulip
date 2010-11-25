@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <algorithm>
 #include <tulip/TulipPlugin.h>
 
 #include <tulip/MapIterator.h>
