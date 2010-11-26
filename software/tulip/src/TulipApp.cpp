@@ -24,7 +24,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <unistd.h>
 #include <limits.h>
 #include <string>
 #include <map>
@@ -114,6 +113,8 @@
 
 #define UNNAMED "unnamed"
 #define STRINGIFY(PARAM) #PARAM
+#define STRINGIFY(PARAM) #PARAM
+
 using namespace std;
 using namespace tlp;
 

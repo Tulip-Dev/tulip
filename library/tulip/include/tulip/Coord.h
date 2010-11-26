@@ -63,6 +63,11 @@ namespace tlp {
       xx=(*this)[0];yy=(*this)[1];zz=(*this)[2];
     }
   };
+
+#ifdef _MSC_VER //visual studio needs to export all uses of the dllExport stuff
+  template class TLP_SCOPE VectorCast<float, 3, Coord>;
+  template class TLP_SCOPE Array<tlp::Coord,4>;
+#endif
 }
 
 #endif

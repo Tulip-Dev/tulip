@@ -45,6 +45,11 @@ void PropertyObserver::addObservable(ObservableProperty *property){
 void PropertyObserver::removeObservable(ObservableProperty *property) {
   if (!updateObservables)
     return;
+#ifdef _MSC_VER
+	if (observables.empty()) //with VC++, if the list is empty, there is an "incompatible list iterators" error, no idea why.
+
+		return;
+#endif
   std::list<ObservableProperty*>::iterator itObs = observables.begin();
   std::list<ObservableProperty*>::iterator ite = observables.end();
   while(itObs!=ite){

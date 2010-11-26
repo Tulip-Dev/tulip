@@ -86,9 +86,13 @@ TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${LibTulipQtName})
 ADD_DEPENDENCIES(${LibTulipPluginsManagerName} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
 IF(WIN32)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl.exe 
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 
-)
+	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
+		INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip_check_pl.exe 
+			DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
+	ELSE(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+		INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl.exe 
+			DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" )
+	ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
 ENDIF(WIN32)
 IF(APPLE)
 INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl
