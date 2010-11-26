@@ -39,8 +39,7 @@ Application::Application(int& argc, char ** argv): QApplication(argc,argv)
   tlp::initTulipLib((char *) QApplication::applicationDirPath().toAscii().data());
 
   //add local plugins installation path
-  QString localPluginsDir=tlp::PluginInfo::pluginsDirName.c_str();
-  tlp::TulipPluginsPath=localPluginsDir.toStdString()+tlp::PATH_DELIMITER+tlp::TulipPluginsPath;
+  tlp::TulipPluginsPath = tlp::PluginInfo::pluginsDirName + tlp::PATH_DELIMITER + tlp::TulipPluginsPath;
 
   string::const_iterator begin=tlp::TulipPluginsPath.begin();
   string::const_iterator end=begin;
