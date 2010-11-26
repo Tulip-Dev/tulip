@@ -24,7 +24,6 @@
 #include <cmath>
 #include "tulip/GlLines.h"
 #include "tulip/GlTools.h"
-#include "tulip/OpenGlConfigManager.h"
 
 using namespace std;
 using namespace tlp;

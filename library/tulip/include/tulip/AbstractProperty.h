@@ -102,7 +102,7 @@ class TLP_SCOPE AbstractProperty : public PropertyInterface {
   friend class GraphView;
 
 public:
-  static TLP_SCOPE TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext > *factory;
+  static TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext > *factory;
   static void initFactory() {
     if (!factory) {
       factory = new TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext >;
@@ -417,5 +417,7 @@ protected:
 };
 /*@}*/
 }
-#include "./cxx/AbstractProperty.cxx"
+#if !defined(_MSC_VER) || defined(DLL_TULIP) //When using VC++, we only want to include this when we are in the TULIP dll. With any other compiler, include it all the time
+#	include "./cxx/AbstractProperty.cxx"
+#endif
 #endif

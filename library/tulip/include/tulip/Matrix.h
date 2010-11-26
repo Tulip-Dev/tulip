@@ -56,7 +56,7 @@ namespace tlp {
     class Matrix:public Array< Vector<Obj,SIZE> , SIZE > {
   public:
     Matrix(){}
-    Matrix(const Vector< Vector<Obj,SIZE> , SIZE > &a) :
+    Matrix(const Array< Vector<Obj,SIZE> , SIZE > &a) :
       Array< Vector<Obj,SIZE> , SIZE >(a) {
     };
       

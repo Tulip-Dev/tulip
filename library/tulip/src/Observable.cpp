@@ -22,7 +22,6 @@
 
 
 using namespace std;
-using namespace stdext;
 using namespace tlp;
 
 #ifdef _WIN32 

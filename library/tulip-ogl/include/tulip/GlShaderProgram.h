@@ -406,15 +406,15 @@ public :
 	void setUniformFloatArray(const std::string &variableName, const unsigned int fCount, const float *f);
 
 	template <unsigned int SIZE>
-	void setUniformVec2FloatArray(const std::string &variableName, const Vector<Vector<float, 2>, SIZE> &vecvec2f);
+	void setUniformVec2FloatArray(const std::string &variableName, const Array<Vector<float, 2>, SIZE> &vecvec2f);
 	void setUniformVec2FloatArray(const std::string &variableName, const unsigned int vec2fCount, const float *f);
 
 	template <unsigned int SIZE>
-	void setUniformVec3FloatArray(const std::string &variableName, const Vector<Vector<float, 3>, SIZE> &vecvec3f);
+	void setUniformVec3FloatArray(const std::string &variableName, const Array<Vector<float, 3>, SIZE> &vecvec3f);
 	void setUniformVec3FloatArray(const std::string &variableName, const unsigned int vec3fCount, const float *f);
 
 	template <unsigned int SIZE>
-	void setUniformVec4FloatArray(const std::string &variableName, const Vector<Vector<float, 4>, SIZE> &vecvec4f);
+	void setUniformVec4FloatArray(const std::string &variableName, const Array<Vector<float, 4>, SIZE> &vecvec4f);
 	void setUniformVec4FloatArray(const std::string &variableName, const unsigned int vec4fCount, const float *f);
 
 	template <unsigned int SIZE>
@@ -434,15 +434,15 @@ public :
 	void setUniformIntArray(const std::string &variableName, const unsigned int iCount, const int *i);
 
 	template <unsigned int SIZE>
-	void setUniformVec2IntArray(const std::string &variableName, const Vector<Vector<int, 2>, SIZE> &vecvec2i);
+	void setUniformVec2IntArray(const std::string &variableName, const Array<Vector<int, 2>, SIZE> &vecvec2i);
 	void setUniformVec2IntArray(const std::string &variableName, const unsigned int vec2iCount, const int *i);
 
 	template <unsigned int SIZE>
-	void setUniformVec3IntArray(const std::string &variableName, const Vector<Vector<int, 3>, SIZE> &vecvec3i);
+	void setUniformVec3IntArray(const std::string &variableName, const Array<Vector<int, 3>, SIZE> &vecvec3i);
 	void setUniformVec3IntArray(const std::string &variableName, const unsigned int vec3iCount, const int *i);
 
 	template <unsigned int SIZE>
-	void setUniformVec4IntArray(const std::string &variableName, const Vector<Vector<int, 4>, SIZE> &vecvec4i);
+	void setUniformVec4IntArray(const std::string &variableName, const Array<Vector<int, 4>, SIZE> &vecvec4i);
 	void setUniformVec4IntArray(const std::string &variableName, const unsigned int vec4iCount, const int *i);
 
 	template <unsigned int SIZE>
@@ -450,15 +450,15 @@ public :
 	void setUniformBoolArray(const std::string &variableName, const unsigned int bCount, const bool *b);
 
 	template <unsigned int SIZE>
-	void setUniformVec2BoolArray(const std::string &variableName, const Vector<Vector<bool, 2>, SIZE> &vecvec2b);
+	void setUniformVec2BoolArray(const std::string &variableName, const Array<Vector<bool, 2>, SIZE> &vecvec2b);
 	void setUniformVec2BoolArray(const std::string &variableName, const unsigned int vec2bCount, const bool *b);
 
 	template <unsigned int SIZE>
-	void setUniformVec3BoolArray(const std::string &variableName, const Vector<Vector<bool, 3>, SIZE> &vecvec3b);
+	void setUniformVec3BoolArray(const std::string &variableName, const Array<Vector<bool, 3>, SIZE> &vecvec3b);
 	void setUniformVec3BoolArray(const std::string &variableName, const unsigned int vec3bCount, const bool *b);
 
 	template <unsigned int SIZE>
-	void setUniformVec4BoolArray(const std::string &variableName, const Vector<Vector<bool, 4>, SIZE> &vecvec4b);
+	void setUniformVec4BoolArray(const std::string &variableName, const Array<Vector<bool, 4>, SIZE> &vecvec4b);
 	void setUniformVec4BoolArray(const std::string &variableName, const unsigned int vec4bCount, const bool *b);
 
 	void getUniformFloatVariableValue(const std::string &variableName, float *value);

@@ -36,7 +36,7 @@ class TLP_SCOPE PluginLibraryLoader {
   PluginLibraryLoader(std::string pluginPath, PluginLoader *loader);
   bool hasPluginLibraryToLoad() { return n >= 0; }
   bool loadNextPluginLibrary(PluginLoader *loader);
-  static TLP_SCOPE bool loadPluginLibrary(const std::string & filename,
+  static bool loadPluginLibrary(const std::string & filename,
 					  PluginLoader *loader = 0);
 
  private:

@@ -21,11 +21,7 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 #include <vector>
 
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "tulip/OpenGlConfigManager.h"
 
 #include <tulip/Size.h>
 #include <tulip/Coord.h>

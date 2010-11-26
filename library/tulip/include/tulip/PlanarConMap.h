@@ -55,7 +55,7 @@ class TLP_SCOPE PlanarConMap : public GraphDecorator {
   friend class NodeFaceIterator;
   friend class EdgeFaceIterator;
 
-  friend PlanarConMap* computePlanarConMap(Graph* graph);
+  friend TLP_SCOPE PlanarConMap* computePlanarConMap(Graph* graph);
   
  protected:
   /** Constructor
