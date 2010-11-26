@@ -38,7 +38,7 @@ class Triangle : public Glyph {
 public:
   Triangle(GlyphContext *gc=NULL);
   virtual ~Triangle();
-  virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n,float lod);
 
 protected:
@@ -66,7 +66,7 @@ Triangle::Triangle(GlyphContext *gc): Glyph(gc){
 Triangle::~Triangle() {
 }
 //=====================================================
-void Triangle::getIncludeBoundingBox(BoundingBox &boundingBox) {
+void Triangle::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
   boundingBox[0] = Coord(-0.25,-0.5,0);
   boundingBox[1] = Coord(0.25,0,0);
 }

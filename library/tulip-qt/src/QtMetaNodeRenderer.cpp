@@ -247,7 +247,7 @@ namespace tlp {
     const Size &nodeSize = inputData->elementSize->getNodeValue(n);
 
     BoundingBox includeBoundingBox;
-    inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
+    inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox,n);
 
     Coord newCenter(((includeBoundingBox[1] - includeBoundingBox[0])/2.f + includeBoundingBox[0])*nodeSize);
     //newCenter[2]+=nodeSize[2]/10.;
