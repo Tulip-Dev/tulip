@@ -18,7 +18,7 @@ class Window : public Glyph
 {
 public:
     Window(GlyphContext* context);
-    virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
+    virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
     virtual void draw(node n, float lod);
     virtual Coord getAnchor(const Coord &vector) const;
     bool renderLabel() {
@@ -95,7 +95,7 @@ Window::Window(GlyphContext* context):
 	 _center.addQuadEdge(v[5], v[6], _rectColor);
  
 	}
- void Window::getIncludeBoundingBox(BoundingBox &boundingBox) {
+ void Window::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
   boundingBox = _bb;
 }
 

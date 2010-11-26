@@ -46,7 +46,7 @@ public:
 	Cone(GlyphContext *gc = NULL);
 	Cone(EdgeExtremityGlyphContext *gc = NULL);
 	virtual ~Cone();
-	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
+	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
 	virtual void draw(node n, float lod);
 	virtual Coord getAnchor(const Coord &vector) const;
 	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
@@ -68,7 +68,7 @@ Cone::Cone(EdgeExtremityGlyphContext *gc) :
 Cone::~Cone() {
 }
 //===========================================================
-void Cone::getIncludeBoundingBox(BoundingBox& boundingBox) {
+void Cone::getIncludeBoundingBox(BoundingBox& boundingBox,node) {
     boundingBox[0] = Coord(-0.25, -0.25, 0);
     boundingBox[1] = Coord(0.25, 0.25, 0.5);
 }

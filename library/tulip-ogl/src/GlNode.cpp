@@ -296,7 +296,7 @@ namespace tlp {
 
       renderer->getBoundingBox(w_max, h, w);
 
-      data->glyphs.get(data->elementShape->getNodeValue(n))->getTextBoundingBox(includeBB);
+      data->glyphs.get(data->elementShape->getNodeValue(n))->getTextBoundingBox(includeBB,n);
       Vec3f centerBB = includeBB.center();
       Vec3f sizeBB = includeBB[1]-includeBB[0];
 
