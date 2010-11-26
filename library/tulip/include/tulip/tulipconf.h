@@ -18,8 +18,15 @@
  */
 #ifndef TULIPCONF_H
 #define TULIPCONF_H
-
-#if (__GNUC__ < 3)
+ 
+#if _MSC_VER
+#  define _DEPRECATED __attribute__ ((deprecated))
+#  define __PRETTY_FUNCTION__ __FUNCTION__ //workaround
+#  define strcasecmp stricmp  //strcasecmp does not exists for VC, workaround
+#  define cbrt(arg) pow((double)arg, 1.0/3) //VC does not have cbrt, little workaround
+#  define isnan(x) ((x) != (x)) //you guessed it, this is a C99 feature, and VC++ does not support C99. workaroud this.
+#  define rint(arg) arg > 0 ? (int)std::floor((double)arg) : (int)std::ceil((double)arg)
+#elif (__GNUC__ < 3)
 #  define stdext std
 #  define _DEPRECATED
 #  include <stl_hash_fun.h>
@@ -44,7 +51,7 @@
 # 	endif
 #endif
 #ifndef TLP_SCOPE
-#define TLP_SCOPE           
+#define TLP_SCOPE 
 #endif
 
 #ifdef _WIN32

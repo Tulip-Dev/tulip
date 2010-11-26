@@ -54,7 +54,7 @@ namespace tlp {
   bool SoapResponseReader::getFunctionName(string &functionName){
     if(doc.isNull())
       return false;
-    string s(doc.documentElement().firstChild().firstChild().toElement().tagName().toAscii());
+    string s(doc.documentElement().firstChild().firstChild().toElement().tagName().toStdString());
     functionName=s.substr(0,s.find(':'));
     return true;
   }

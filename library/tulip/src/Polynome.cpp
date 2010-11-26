@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/Polynome.h>
+#include <tulip/tulipconf.h>
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>

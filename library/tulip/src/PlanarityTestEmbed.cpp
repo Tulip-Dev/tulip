@@ -405,7 +405,7 @@ list<node> PlanarityTestImpl::embedUpwardT(bool embBackEdgesOutW,
 				       node w,
 				       map<node , list<edge> > &bEdgesRepres,
 				       list<node>& traversedNodes,
-				       BmdList<edge>& embList)
+				       tlp::BmdList<edge>& embList)
 {
   list<node> toEmbedLater;
   node u = t1, predU = NULL_NODE;
@@ -461,7 +461,7 @@ void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW,
 					   map<node, list<edge> >& bEdgesRepres,
 					   list<node>& traversedNodes,
 					   list<node>& toEmbedLater,
-					   BmdList<edge>& embList) {
+					   tlp::BmdList<edge>& embList) {
   
   BmdLink<node> *it  = RBC[oldCNode].firstItem();
   BmdLink<node> *itl = RBC[oldCNode].cyclicPred(it, 0);
@@ -535,7 +535,7 @@ void PlanarityTestImpl::embedBackEdges(bool embBackEdgesOutW,
 				   node repr,
 				   list<node>& traversedNodes,
 				   list<edge>& listBackEdges,
-				   BmdList<edge>& embList) {
+				   tlp::BmdList<edge>& embList) {
   if (listBackEdges.empty())
     return;
   edge e;

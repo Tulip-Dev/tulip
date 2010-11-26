@@ -312,7 +312,7 @@ void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode,
 					   node n,
 					   node n1,
 					   node n2,
-					   BmdList<node>& nodeList) {
+					   tlp::BmdList<node>& nodeList) {
   // compress RBC[oldCNode]:
   // removes all nodes v in RBC[oldCNode] s.t. label_b[v] < dfspos_num[n]
   // or v = parent[oldCNode].
@@ -414,7 +414,7 @@ void PlanarityTestImpl::calcNewRBCFromTerminalNode(node newCNode,
 					       node n,
 					       node n1,
 					       node n2,
-					       BmdList<node>& nodeList) {
+					       tlp::BmdList<node>& nodeList) {
   node t = n1;
   node predT = NULL_NODE;
   node parentT = NULL_NODE;
