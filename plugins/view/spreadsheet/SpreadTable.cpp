@@ -632,7 +632,7 @@ void SpreadTable::sort(SpreadTableSort tableSort) {
 	tableSort.setTable(this);
 	qStableSort(rowsOrColumns.begin(), rowsOrColumns.end(), tableSort);
 
-	QTableWidgetItem *cells[range.rowCount()][range.columnCount()];
+	vector<vector<QTableWidgetItem*> > cells;
 	for (int i = 0; i < range.rowCount(); i++)
 		for (int j = 0; j < range.columnCount(); j++)
 			cells[i][j] = takeItem(i + range.topRow(), j + range.leftColumn());

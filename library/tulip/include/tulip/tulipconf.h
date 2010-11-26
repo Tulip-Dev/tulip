@@ -18,9 +18,11 @@
  */
 #ifndef TULIPCONF_H
 #define TULIPCONF_H
- 
+
+#define STRINGIFY(PARAM) #PARAM
+
 #if _MSC_VER
-#  define _DEPRECATED __attribute__ ((deprecated))
+#  define _DEPRECATED __declspec(deprecated)
 #  define __PRETTY_FUNCTION__ __FUNCTION__ //workaround
 #  define strcasecmp stricmp  //strcasecmp does not exists for VC, workaround
 #  define cbrt(arg) pow((double)arg, 1.0/3) //VC does not have cbrt, little workaround

@@ -211,7 +211,7 @@ struct TLPParser {
     while (!builderStack.empty()) {
       TLPBuilder *builder = builderStack.front();
       builderStack.pop_front();
-      if (builder != builderStack.front())
+      if (!builderStack.empty() && builder != builderStack.front())
 	delete builder;
     }
   }

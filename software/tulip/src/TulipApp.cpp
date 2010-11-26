@@ -98,6 +98,7 @@
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/QtOpenGlErrorViewer.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/tulipconf.h>
 
 #include <PluginsHelp.h>
 #include <PluginsManagerDialog.h>
@@ -112,8 +113,6 @@
 #include "ChooseControllerDialog.h"
 
 #define UNNAMED "unnamed"
-#define STRINGIFY(PARAM) #PARAM
-#define STRINGIFY(PARAM) #PARAM
 
 using namespace std;
 using namespace tlp;
