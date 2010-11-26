@@ -12,9 +12,6 @@ TARGET_LINK_LIBRARIES(PlanarGraph-${TulipVersion} ${LibTulipName})
 ADD_DEPENDENCIES(PlanarGraph-${TulipVersion} ${LibTulipName})
 
 ##------------0----------------------------------------------------------------------------------------------------------------
-IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not have unistd.h
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DYY_NO_UNISTD_H")
-ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
 SET(DotImport_SRCS dotImport.cpp dotImportCLUT.h dotImportLexer.h dotImportParser.h)
 ADD_LIBRARY(DotImport-${TulipVersion} SHARED ${DotImport_SRCS})
 TARGET_LINK_LIBRARIES(DotImport-${TulipVersion} ${LibTulipName})
