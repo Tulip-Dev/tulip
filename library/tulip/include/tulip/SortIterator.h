@@ -19,6 +19,7 @@
 #ifndef TULIP_SORTITERATOR_H
 #define TULIP_SORTITERATOR_H
 #include <vector>
+#include <algorithm>
 #include <tulip/Iterator.h>
 #include <tulip/StableIterator.h>
 #include <tulip/DoubleProperty.h>
