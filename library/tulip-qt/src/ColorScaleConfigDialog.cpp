@@ -25,6 +25,7 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QInputDialog>
 
+#include <algorithm>
 #include <vector>
 
 #include "tulip/TlpQtTools.h"

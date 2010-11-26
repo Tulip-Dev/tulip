@@ -44,7 +44,7 @@ Observer::~Observer(){
   if(observables.size()!=0)
     std::cerr << "Delete an observer without remove it from observable list" << std::endl;
 #endif*/
-  for(slist<Observable *>::iterator it=observables.begin();it!=observables.end();++it){
+  for(std::list<Observable *>::iterator it=observables.begin();it!=observables.end();++it){
     (*it)->removeOnlyObserver(this);
   }
 }
@@ -55,8 +55,8 @@ void Observer::addObservable(Observable *observable){
 }
 
 void Observer::removeObservable(Observable *observable){
-  slist<Observable*>::iterator itObs = observables.begin();
-  slist<Observable*>::iterator ite = observables.end();
+  std::list<Observable*>::iterator itObs = observables.begin();
+  std::list<Observable*>::iterator ite = observables.end();
   while(itObs!=ite){
     if(observable == (*itObs)){
       observables.erase(itObs);
@@ -68,8 +68,8 @@ void Observer::removeObservable(Observable *observable){
 
 void Observable::addObserver(Observer *obs) {
   // ensure obs does not already exists in observersList
-  slist<Observer*>::iterator itlObs = observersList.begin();
-  slist<Observer*>::iterator itle = observersList.end();
+  std::list<Observer*>::iterator itlObs = observersList.begin();
+  std::list<Observer*>::iterator itle = observersList.end();
   while (itlObs != itle) {
     if (obs == (*itlObs))
       return;
@@ -81,8 +81,8 @@ void Observable::addObserver(Observer *obs) {
 //===============================================================
 void Observable::notifyDestroy() {
   //  cerr << "Observable::notifyObservers" << endl;
-  slist<Observer*>::iterator itlObs = observersList.begin();
-  slist<Observer*>::iterator itle = observersList.end();
+  std::list<Observer*>::iterator itlObs = observersList.begin();
+  std::list<Observer*>::iterator itle = observersList.end();
   while (itlObs != itle) {
     Observer* observer = *itlObs;
     // iterator is incremented before
@@ -111,8 +111,8 @@ void Observable::notifyDestroy() {
 }
 //===============================================================
 void Observable::notifyObservers() {
-  slist<Observer*>::iterator itlObs = observersList.begin();
-  slist<Observer*>::iterator itle = observersList.end();
+  std::list<Observer*>::iterator itlObs = observersList.begin();
+  std::list<Observer*>::iterator itle = observersList.end();
   if (itlObs == itle)
     return;
 
@@ -184,7 +184,7 @@ void Observable::unholdObservers(bool force) {
 }
 //===============================================================
 void Observable::removeObservers() { 
-  for(stdext::slist<Observer*>::iterator it=observersList.begin();it!=observersList.end();++it){
+  for(std::list<Observer*>::iterator it=observersList.begin();it!=observersList.end();++it){
     (*it)->removeObservable(this);
   }
   observersList.clear(); 

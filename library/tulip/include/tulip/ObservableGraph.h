@@ -18,7 +18,7 @@
  */
 #ifndef GRAPHOBSERVABLE_H
 #define GRAPHOBSERVABLE_H
-#include <ext/slist>
+#include <list>
 #include "tulip/Node.h"
 #include "tulip/Edge.h"
 
@@ -39,7 +39,7 @@ class ObservableGraph;
  * object.
  */
 class  TLP_SCOPE GraphObserver {
-   stdext::slist<ObservableGraph *> observables;
+   std::list<ObservableGraph *> observables;
   bool updateObservables;
  public:
   GraphObserver(bool manageObservables = true)
@@ -124,7 +124,7 @@ class  TLP_SCOPE ObservableGraph {
   void notifyRemoveAttribute(Graph*, const std::string&);
   void notifyDestroy(Graph*);
   void removeOnlyGraphObserver(GraphObserver *) const;
-  mutable stdext::slist<GraphObserver*> observers;
+  mutable std::list<GraphObserver*> observers;
 };
 /*@}*/
 

@@ -16,6 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#include <algorithm>
+
 #include <tulip/ConnectedTest.h>
 #include <tulip/PlanarityTest.h>
 #include <tulip/SimpleTest.h>
