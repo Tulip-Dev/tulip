@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <algorithm>
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 
