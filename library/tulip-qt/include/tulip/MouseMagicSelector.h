@@ -27,7 +27,7 @@ namespace tlp {
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
-class __attribute__ ((deprecated)) TLP_QT_SCOPE MouseMagicSelector:public InteractorComponent
+class _DEPRECATED TLP_QT_SCOPE MouseMagicSelector:public InteractorComponent
 {
 private:
   unsigned int x,y;
