@@ -64,6 +64,11 @@ namespace tlp {
       boundingBox[0] = Coord(-0.5,-0.5,-0.5);
       boundingBox[1] = Coord(0.5,0.5,0.5);
     }
+
+    virtual void getTextBoundingBox(BoundingBox &boundingBox){
+      getIncludeBoundingBox(boundingBox);
+    }
+
     virtual void draw(node,float)=0;
     /*
      * return a point where an edge coming from "from" can be attached
