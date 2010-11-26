@@ -207,6 +207,7 @@ namespace tlp {
 #endif
 }
 
+#ifdef _MSC_VER
   static double sqrt(int i) {
 	  return sqrt((double)i);
   }
@@ -214,6 +215,7 @@ namespace tlp {
   static double sqrt(tlp::Vector<float, 5>& v) {
 	  return sqrt((double)v[0]);
   }
+#endif
 
 #include "./cxx/Vector.cxx"
 #endif
