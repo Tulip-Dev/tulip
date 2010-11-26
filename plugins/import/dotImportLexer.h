@@ -566,6 +566,12 @@ int html_nest = 0;
  */
 #include <unistd.h>
 #endif
+/* Visual Studio does not have unistd.h, but io.h
+ * If we compile with Visual Studio, use io.h :)
+ */
+#if defined(_MSC_VER)
+#include <io.h>
+#endif
 
 #ifndef YY_EXTRA_TYPE
 #define YY_EXTRA_TYPE void *
