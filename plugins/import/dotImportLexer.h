@@ -559,18 +559,17 @@ int html_nest = 0;
 #define qstring 2
 #define hstring 3
 
-#ifndef YY_NO_UNISTD_H
+#if defined(_MSC_VER)
+/* Visual Studio does not have unistd.h, but io.h
+ * If we compile with Visual Studio, use io.h :)
+ */
+#include <io.h>
+#elif YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
  * down here because we want the user's section 1 to have been scanned first.
  * The user has a chance to override it with an option.
  */
 #include <unistd.h>
-#endif
-/* Visual Studio does not have unistd.h, but io.h
- * If we compile with Visual Studio, use io.h :)
- */
-#if defined(_MSC_VER)
-#include <io.h>
 #endif
 
 #ifndef YY_EXTRA_TYPE
