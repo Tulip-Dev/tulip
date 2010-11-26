@@ -24,7 +24,7 @@
 #include <set>
 
 #include <vector>
-#include <ext/slist>
+#include <list>
 #include "tulip/GraphAbstract.h"
 #include "tulip/IdManager.h"
 #include "tulip/SimpleVector.h"
@@ -149,10 +149,10 @@ private :
   IdManager edgeIds;
   unsigned int nbNodes;
   unsigned int nbEdges;
-  stdext::slist<GraphUpdatesRecorder*> previousRecorders;
-  stdext::slist<Graph *> observedGraphs;
-  stdext::slist<PropertyInterface*> observedProps;
-  stdext::slist<GraphUpdatesRecorder*> recorders;
+  std::list<GraphUpdatesRecorder*> previousRecorders;
+  std::list<Graph *> observedGraphs;
+  std::list<PropertyInterface*> observedProps;
+  std::list<GraphUpdatesRecorder*> recorders;
 
   // methods used in push/pop implementation
   static void removeEdge(EdgeContainer &, const edge);

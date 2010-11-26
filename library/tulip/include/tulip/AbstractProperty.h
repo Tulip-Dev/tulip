@@ -20,6 +20,7 @@
 #define ABSTRACT_PROPERTY_H
 
 #include <string>
+#include <cstdlib>
 #include "tulip/tulipconf.h"
 #include "tulip/PropertyInterface.h"
 #include "tulip/Iterator.h"
