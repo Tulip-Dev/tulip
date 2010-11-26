@@ -19,8 +19,6 @@
 #ifndef MOUSEMAGICSELECTION_H
 #define MOUSEMAGICSELECTION_H
 
-#warning MouseMagicSelector is obsolete, please use plugins/interactor/MagicWand/MouseMagicWandSelector from now on.
-
 #include <vector>
 #include <tulip/Graph.h>
 #include <tulip/Coord.h>
@@ -29,7 +27,7 @@ namespace tlp {
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseMagicSelector:public InteractorComponent
+class __attribute__ ((deprecated)) TLP_QT_SCOPE MouseMagicSelector:public InteractorComponent
 {
 private:
   unsigned int x,y;
