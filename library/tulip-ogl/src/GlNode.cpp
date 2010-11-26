@@ -296,7 +296,7 @@ namespace tlp {
 
       renderer->getBoundingBox(w_max, h, w);
 
-      data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBB);
+      data->glyphs.get(data->elementShape->getNodeValue(n))->getTextBoundingBox(includeBB);
       Vec3f centerBB = includeBB.center();
       Vec3f sizeBB = includeBB[1]-includeBB[0];
 
@@ -306,7 +306,6 @@ namespace tlp {
       glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
 
       if(fontType==0){
-        data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBB);
         if(includeBB[1][2]==0.)
           glTranslatef(nodePos[0], nodePos[1], nodePos[2]+0.01);
         else
