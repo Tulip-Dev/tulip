@@ -20,6 +20,8 @@
 #ifndef _Tulip_TPWFONCTOR_H_
 #define _Tulip_TPWFONCTOR_H_
 
+#include <algorithm>
+
 namespace tlp {
   static const int POSITION_VERTOR_SIZE = 8;
 
