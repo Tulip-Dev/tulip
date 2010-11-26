@@ -67,4 +67,7 @@ void Size::setH(const float height) {array[1]=height;}
 void Size::setD(const float depth) {array[2]=depth;}
 
 }
+#ifdef _MSC_VER
+template class tlp::VectorCast<float,3, tlp::Size>;
+#endif
 #endif
