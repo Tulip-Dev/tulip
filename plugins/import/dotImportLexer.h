@@ -564,7 +564,7 @@ int html_nest = 0;
  * If we compile with Visual Studio, use io.h :)
  */
 #include <io.h>
-#elif YY_NO_UNISTD_H
+#elif !defined(YY_NO_UNISTD_H)
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
  * down here because we want the user's section 1 to have been scanned first.
  * The user has a chance to override it with an option.
