@@ -334,6 +334,11 @@ void GlVertexArrayManager::addEdge(Graph *,const edge){
 	clearObservers();
 }
 
+void GlVertexArrayManager::addNode(Graph *,const node){
+	clearData();
+	clearObservers();
+}
+
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property){
 	if(graph->getProperty(inputData->getElementLayoutPropName())==property){
 		setHaveToComputeLayout(true);

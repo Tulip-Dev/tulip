@@ -82,6 +82,7 @@ namespace tlp {
     void propertyValueChanged(PropertyInterface *property);
 
     void addEdge(Graph *,const edge);
+    void addNode(Graph *,const node);
     void beforeSetAllNodeValue(PropertyInterface*);
     void beforeSetAllEdgeValue(PropertyInterface*);
     void beforeSetNodeValue(PropertyInterface*, const node);
