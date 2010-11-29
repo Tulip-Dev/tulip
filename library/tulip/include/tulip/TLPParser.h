@@ -176,21 +176,6 @@ struct TLPFalse:public TLPBuilder {
   }
   bool close(){return true;}
 };
-
-struct TLPWriter:public TLPBuilder {
-  bool addBool(const bool boolean)  {std::cout << "bool::" << boolean << std::endl;return true;}
-  bool addInt(const int integer)  {std::cout << "int::" << integer << std::endl;return true;}
-  bool addRange(int first, int second)  {std::cout << "range::" << first << ".." << second << std::endl;return true;}
-  bool addDouble(const double real) {std::cout.flags(std::ios::scientific); std::cout << "real::" << real << std::endl;return true;}
-  bool addString(const std::string &str)  {std::cout << "string::" << str << std::endl;return true;}
-  bool addStruct(const std::string& structName,TLPBuilder*&newBuilder) 
-  {
-    std::cout << "struct::" << structName << std::endl;
-    newBuilder=new TLPWriter();
-    return true;
-  }
-  bool close() {std::cout << "EndStruct::"<< std::endl;return true;}
-};
 //=====================================================================================
 template <bool displayComment> 
 struct TLPParser {

@@ -31,7 +31,7 @@ struct edge {
   unsigned int id;
   edge():id(UINT_MAX){}
   explicit edge(unsigned int j):id(j){}
-  operator unsigned int() {
+  operator unsigned int() const {
     return id;
   }
   bool operator==(const edge e) const{return id==e.id;}
