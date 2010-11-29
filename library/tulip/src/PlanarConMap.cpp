@@ -625,7 +625,7 @@ Face PlanarConMap::splitFace(Face f, const edge e){
 
 //============================================================
 Face PlanarConMap::splitFace(Face f, const node v, const node w, node n){
-  assert(find(faces.begin(), faces.end(),f) != faces.end());
+  assert(std::find(faces.begin(), faces.end(),f) != faces.end());
   assert(containNode(f,v) && containNode(f,w));
 
   edge e1, e2, e_tmp, e_tmp2;
