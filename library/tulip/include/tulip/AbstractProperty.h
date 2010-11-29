@@ -415,6 +415,32 @@ protected:
   typename Tnode::RealType nodeDefaultValue;
   typename Tedge::RealType edgeDefaultValue;
 };
+
+ template <typename vectType,typename eltType > 
+   class TLP_SCOPE AbstractVectorProperty : public AbstractProperty<vectType, vectType> {
+ public:
+  AbstractVectorProperty(Graph *, std::string name = "");
+  /**
+   * Set the value of the elt i of the vector associated to node n
+   * and notify the observers of a modification.
+   */
+  void setNodeEltValue(const node n, unsigned int i, const eltType &v);
+  /**
+   * append a new value at the end of the vector associated to node n
+   * and notify the observers of a modification.
+   */
+  void pushBackNodeEltValue(const node n, const eltType &v);
+  /**
+   * Set the value of the elt i of the value associated to edge
+   * and notify the observers of a modification.
+   */
+  void setEdgeEltValue(const edge e, unsigned int i, const eltType &v);
+  /**
+   * append a new value at the end of the vector associated to edge e
+   * and notify the observers of a modification.
+   */
+  void pushBackEdgeEltValue(const edge e, const eltType &v);
+ };
 /*@}*/
 }
 #if !defined(_MSC_VER) || defined(DLL_TULIP) //When using VC++, we only want to include this when we are in the TULIP dll. With any other compiler, include it all the time

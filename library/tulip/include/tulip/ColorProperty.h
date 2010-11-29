@@ -42,9 +42,9 @@ public :
   PropertyInterface* clonePrototype(Graph *, const std::string&);
 };
 
-class TLP_SCOPE ColorVectorProperty:public AbstractProperty<tlp::ColorVectorType, tlp::ColorVectorType> { 
+class TLP_SCOPE ColorVectorProperty:public AbstractVectorProperty<tlp::ColorVectorType, tlp::Color> { 
 public :
-  ColorVectorProperty(Graph *g, std::string n="") :AbstractProperty<ColorVectorType, ColorVectorType>(g, n) {}
+ ColorVectorProperty(Graph *g, std::string n="") :AbstractVectorProperty<ColorVectorType, tlp::Color>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string&);
 };
 /*@}*/

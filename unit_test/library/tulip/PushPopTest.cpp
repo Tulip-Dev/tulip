@@ -278,6 +278,100 @@ void PushPopTest::testSetValue() {
 }
 
 //==========================================================
+void PushPopTest::testSetEltValue() {
+  node n0 = graph->addNode();
+  node n1 = graph->addNode();
+
+  edge e0 = graph->addEdge(n0, n1);
+
+  DoubleVectorProperty* prop =
+    graph->getProperty<DoubleVectorProperty>("prop");
+
+  vector<double> vv;
+  vv.push_back(1.0);
+  vv.push_back(1.0);
+
+  prop->setNodeValue(n1, vv);
+  prop->setEdgeValue(e0, vv);
+
+  graph->push();
+  node n2 = graph->addNode();
+  edge e1 = graph->addEdge(n0, n2);
+
+  prop->setNodeValue(n2, vv);
+  prop->setEdgeValue(e1, vv);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0)[0] == 1.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n2)[0] == 1.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1)[1] == 1.0);
+
+  prop->setNodeEltValue(n1, 1, 2.0);
+  prop->setEdgeEltValue(e0, 1, 2.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1)[1] == 2.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0)[1] == 2.0);
+
+  graph->push();
+  vector<double> dv;
+  dv.push_back(3.0);
+  prop->setAllNodeValue(dv);
+  prop->pushBackNodeEltValue(n1, 3.0);
+  prop->pushBackNodeEltValue(n2, 3.0);
+  prop->pushBackNodeEltValue(n2, 3.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 1);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0)[0] == 3.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1).size() == 2);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1)[1] == 3.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n2).size() == 3);
+  CPPUNIT_ASSERT(prop->getNodeValue(n2)[2] == 3.0);
+
+  graph->pop();
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1)[1] == 2.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n2)[1] == 1.0);
+  
+  graph->unpop();
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 1);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0)[0] == 3.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1).size() == 2);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1)[1] == 3.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n2).size() == 3);
+  CPPUNIT_ASSERT(prop->getNodeValue(n2)[2] == 3.0);
+
+  prop->setAllEdgeValue(dv);
+  prop->pushBackEdgeEltValue(e1, 3.0);
+  prop->pushBackEdgeEltValue(e1, 3.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0).size() == 1);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0)[0] == 3.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1).size() == 3);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1)[1] == 3.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1)[2] == 3.0);
+
+  graph->delNode(n1);
+  CPPUNIT_ASSERT(graph->isElement(n1) == false);
+  CPPUNIT_ASSERT(graph->isElement(e0) == false);
+
+  graph->pop();
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1)[1] == 2.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n2)[1] == 1.0);
+  
+  graph->unpop();
+  CPPUNIT_ASSERT(prop->getNodeValue(n0)[0] == 3.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0)[0] == 3.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1)[1] == 3.0);
+
+  prop->pushBackNodeEltValue(n0, 3.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0)[1] == 3.0);
+  prop->pushBackEdgeEltValue(e0, 3.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0)[1] == 3.0);
+
+  graph->pop();
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1)[1] == 2.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0)[1] == 2.0);  
+}
+
+//==========================================================
 void PushPopTest::testCopyProperty() {
   node n0 = graph->addNode();
   node n1 = graph->addNode();
@@ -660,6 +754,8 @@ CppUnit::Test * PushPopTest::suite() {
 								  &PushPopTest::testAddDel) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetNode/EdgeValue operations", 
 								  &PushPopTest::testSetValue) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetNode/EdgeEltValue operations", 
+								  &PushPopTest::testSetEltValue) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetEnds operations", 
 								  &PushPopTest::testSetEnds) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Copy Prop operations", 

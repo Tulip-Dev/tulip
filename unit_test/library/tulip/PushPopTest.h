@@ -35,6 +35,7 @@ public:
 
   void testAddDel();
   void testSetValue();
+  void testSetEltValue();
   void testSetEnds();
   void testCopyProperty();
   void testSubgraph();
