@@ -28,7 +28,6 @@ SET(TulipVersionSeparator .)
 IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options
    SET(TulipVersionSeparator _)
 ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
-message("-DVERSION_SEPARATOR=${TulipVersionSeparator}")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVERSION_SEPARATOR=${TulipVersionSeparator}")
 SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
