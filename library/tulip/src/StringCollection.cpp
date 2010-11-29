@@ -27,7 +27,7 @@ StringCollection::StringCollection() {
 }
     
 StringCollection::StringCollection(const vector<string> &vectorParam) 
-  : vector<string>(vectorParam)  {     
+  : _data(vectorParam)  {     
   current = 0;
 }
 
@@ -36,7 +36,7 @@ StringCollection::StringCollection(const string param) {
   string::const_iterator itChar = param.begin();
   while (itChar != param.end()) {
     if ( *itChar == ';') {
-      this->push_back(temp);
+      _data.push_back(temp);
       temp = "";
     }
     else 
@@ -44,14 +44,14 @@ StringCollection::StringCollection(const string param) {
     itChar++;        
   }
   if (temp.size())
-    this->push_back(temp);
+    _data.push_back(temp);
   current = 0;
 } 
      
 StringCollection::StringCollection(const vector<string>&  vectorParam, 
 				   int currentParam)
-  : vector<string>(vectorParam) {
-  if (currentParam < int(size())) 
+  : _data(vectorParam) {
+  if (currentParam < int(_data.size())) 
     current = currentParam;
   else 
     current = 0;
@@ -59,10 +59,10 @@ StringCollection::StringCollection(const vector<string>&  vectorParam,
 
 StringCollection::StringCollection(const vector<string>& vectorParam, 
                         string currentString) 
-  : vector<string>(vectorParam) {
+  : _data(vectorParam) {
   current = 0;
-  for (vector<string>::const_iterator itS = begin();
-       itS != end(); ++itS, ++current) {
+  for (vector<string>::const_iterator itS = _data.begin();
+       itS != _data.end(); ++itS, ++current) {
     if ((*itS) == currentString)
       return;
   }
@@ -71,14 +71,14 @@ StringCollection::StringCollection(const vector<string>& vectorParam,
 
     
 string StringCollection::getCurrentString() {
-  if (current < size())
-    return at(current);
+  if (current < _data.size())
+    return _data.at(current);
   return string();
 }
 
 
 bool StringCollection::setCurrent(unsigned int param) {
-  if (param < size()) {
+  if (param < _data.size()) {
     current =  param;
     return true;
   }
@@ -86,8 +86,8 @@ bool StringCollection::setCurrent(unsigned int param) {
 }
 
 bool StringCollection::setCurrent(string param) {
-  for (unsigned int i = 0; i< size(); i++) {
-    if (at(i) == param ) {
+  for (unsigned int i = 0; i< _data.size(); i++) {
+    if (_data.at(i) == param ) {
       current = i;
       return true;
     }

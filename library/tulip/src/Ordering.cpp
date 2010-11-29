@@ -722,7 +722,7 @@ void Ordering::selectAndUpdate(node n) {
   node n1;
 
   res.push_back(n);
-  push_back(res);
+  _data.push_back(res);
 
   node next = right.get(n.id);
   node v = left.get(n.id);
@@ -1002,7 +1002,7 @@ void Ordering::selectAndUpdate(Face f){
     n1 = n2;
     n2 = right.get(n1.id);
   }
-  push_back(noeuds);     
+  _data.push_back(noeuds);     
   
   
   // test if face f is marked and if it is the "minimal" one
@@ -1282,11 +1282,11 @@ Ordering::Ordering(PlanarConMap * G, PluginProgress* pluginProgress,
     n = n2;
     n2 = right.get(n.id);
   }
-  push_back(nodes);
+  _data.push_back(nodes);
   vector<node> res;
   for(unsigned int k = v1.size() ; k>=1 ;--k)
     res.push_back(v1[k-1]);
-  push_back(res);
+  _data.push_back(res);
   
 }
 
@@ -1498,5 +1498,3 @@ void Ordering::init(){
 Ordering::~Ordering() {
   delete Gp;
 }
-
-
