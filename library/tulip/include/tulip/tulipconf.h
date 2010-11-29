@@ -19,7 +19,8 @@
 #ifndef TULIPCONF_H
 #define TULIPCONF_H
 
-#define STRINGIFY(PARAM) #PARAM
+#define STRINGIFY(PARAM) STRINGIFY_INTERNAL(PARAM)
+#define STRINGIFY_INTERNAL(PARAM) #PARAM
 
 #if _MSC_VER
 #  define _DEPRECATED __declspec(deprecated)
