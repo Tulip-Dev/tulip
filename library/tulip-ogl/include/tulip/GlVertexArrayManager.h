@@ -102,7 +102,9 @@ namespace tlp {
 
     GlGraphInputData *inputData;
     Graph *graph;
-    bool observersActivated;
+    bool graphObserverActivated;
+    bool layoutObserverActivated;
+    bool colorObserverActivated;
 
     bool activated;
     bool isBegin;

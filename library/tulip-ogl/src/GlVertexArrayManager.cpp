@@ -42,7 +42,9 @@ namespace tlp
 GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData)
 	:inputData(inputData),
 	graph(inputData->getGraph()),
-	observersActivated(false),
+	graphObserverActivated(false),
+	layoutObserverActivated(false),
+	colorObserverActivated(false),
 	activated(true),
 	isBegin(false),
 	toComputeAll(true),
@@ -67,6 +69,7 @@ void GlVertexArrayManager::setInputData(GlGraphInputData *inputData){
 }
 
 bool GlVertexArrayManager::haveToCompute(){
+
 	if(toComputeAll || toComputeLayout || toComputeColor){
 		return true;
 	}
@@ -344,11 +347,13 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property){
 		setHaveToComputeLayout(true);
 		clearLayoutData();
 		graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
+		layoutObserverActivated=false;
 	}
 	if(graph->getProperty(inputData->getElementColorPropName())==property){
 		setHaveToComputeColor(true);
 		clearColorData();
 		graph->getProperty(inputData->getElementColorPropName())->removePropertyObserver(this);
+		colorObserverActivated=false;
 	}
 }
 
@@ -416,22 +421,34 @@ void GlVertexArrayManager::clearData() {
 }
 
 void GlVertexArrayManager::initObservers() {
-	if(observersActivated)
-		return;
-
-	observersActivated=true;
-	graph->addGraphObserver(this);
-	graph->getProperty(inputData->getElementLayoutPropName())->addPropertyObserver(this);
-	graph->getProperty(inputData->getElementColorPropName())->addPropertyObserver(this);
+	if(!graphObserverActivated){
+		graph->addGraphObserver(this);
+		graphObserverActivated=true;
+	}
+	if(!layoutObserverActivated){
+		graph->getProperty(inputData->getElementLayoutPropName())->addPropertyObserver(this);
+		layoutObserverActivated=true;
+	}
+	if(!colorObserverActivated){
+		graph->getProperty(inputData->getElementColorPropName())->addPropertyObserver(this);
+		colorObserverActivated=true;
+	}
 }
 
 void GlVertexArrayManager::clearObservers() {
-	if(!observersActivated)
-		return;
 
-	graph->removeGraphObserver(this);
-	graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
-	graph->getProperty(inputData->getElementColorPropName())->removePropertyObserver(this);
-	observersActivated=false;
+
+	if(graphObserverActivated){
+		graph->removeGraphObserver(this);
+		graphObserverActivated=false;
+	}
+	if(layoutObserverActivated){
+		graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
+		layoutObserverActivated=false;
+	}
+	if(colorObserverActivated){
+		graph->getProperty(inputData->getElementColorPropName())->removePropertyObserver(this);
+		colorObserverActivated=false;
+	}
 }
 }
