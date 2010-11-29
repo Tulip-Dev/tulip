@@ -32,7 +32,7 @@
 #  define TLP_BEGIN_HASH_NAMESPACE namespace std 
 #  define TLP_END_HASH_NAMESPACE
 #  include <forward_list>
-#elif  (__GNUC__ < 4 || __GNUC_MINOR__ < 1 )
+#elif  (__GNUC__ < 4 || __GNUC_MINOR__ < 1 || __clang__)
 #  include <tulip/tulipconf.h>
 #  if (__GNUC__ < 3 || __clang__)
 #    include <hash_map>
@@ -49,7 +49,7 @@
 #  include <string>
 
 namespace stdext {
-  template<> struct hash_value<const std::string>{
+  template<> struct hash<const std::string>{
     size_t operator()(const std::string &s) const {return hash<const char *>()(s.c_str()); }
   };
   template<> struct hash<std::string>{
