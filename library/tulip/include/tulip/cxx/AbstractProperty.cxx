@@ -87,3 +87,62 @@ void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllEdgeValue(const typenam
   edgeProperties.setAll(v);
   notifyAfterSetAllEdgeValue(this);
 }
+//============================================================
+template <typename vectType, typename eltType>
+tlp::AbstractVectorProperty<vectType, eltType>::AbstractVectorProperty(tlp::Graph* g, std::string name) :AbstractProperty<vectType, vectType>(g, name) {}
+//============================================================
+template <typename vectType, typename eltType>
+void tlp::AbstractVectorProperty<vectType, eltType>::setNodeEltValue(const node n, unsigned int i, const eltType &v) {
+  bool isNotDefault;
+  typename vectType::RealType& vect =
+    AbstractProperty<vectType, vectType>::nodeProperties.get(n, isNotDefault);
+  assert(isNotDefault);
+  assert(vect.size() > i);
+  notifyBeforeSetNodeValue(this, n);
+  vect[i] = v;
+  notifyAfterSetNodeValue(this, n);
+}
+//============================================================
+template <typename vectType, typename eltType>
+void tlp::AbstractVectorProperty<vectType, eltType>::pushBackNodeEltValue(const node n, const eltType &v) {
+  bool isNotDefault;
+  typename vectType::RealType& vect =
+    AbstractProperty<vectType, vectType>::nodeProperties.get(n, isNotDefault);
+  notifyBeforeSetNodeValue(this, n);
+  if (isNotDefault)
+    vect.push_back(v);
+  else {
+    typename vectType::RealType tmp(vect);
+    tmp.push_back(v);
+    AbstractProperty<vectType, vectType>::nodeProperties.set(n, tmp);
+  }
+  notifyAfterSetNodeValue(this, n);
+}
+//============================================================
+template <typename vectType, typename eltType>
+void tlp::AbstractVectorProperty<vectType, eltType>::setEdgeEltValue(const edge e, unsigned int i, const eltType &v) {
+  bool isNotDefault;
+  typename vectType::RealType& vect =
+    AbstractProperty<vectType, vectType>::edgeProperties.get(e, isNotDefault);
+  assert(isNotDefault);
+  assert(vect.size() > i);
+  notifyBeforeSetEdgeValue(this, e);
+  vect[i] = v;
+  notifyAfterSetEdgeValue(this, e);
+}
+//============================================================
+template <typename vectType, typename eltType>
+void tlp::AbstractVectorProperty<vectType, eltType>::pushBackEdgeEltValue(const edge e, const eltType &v) {
+  bool isNotDefault;
+  typename vectType::RealType& vect =
+    AbstractProperty<vectType, vectType>::edgeProperties.get(e, isNotDefault);
+  notifyBeforeSetEdgeValue(this, e);
+  if (isNotDefault)
+    vect.push_back(v);
+  else {
+    typename vectType::RealType tmp(vect);
+    tmp.push_back(v);
+    AbstractProperty<vectType, vectType>::edgeProperties.set(e, tmp);
+  }    
+  notifyAfterSetEdgeValue(this, e);
+}

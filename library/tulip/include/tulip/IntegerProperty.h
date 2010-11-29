@@ -68,9 +68,9 @@ private:
   void computeMinMaxEdge(Graph *sg=0);
 };
 
-class TLP_SCOPE IntegerVectorProperty:public AbstractProperty<tlp::IntegerVectorType, tlp::IntegerVectorType> { 
+class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, int> { 
 public :
-  IntegerVectorProperty(Graph *g, std::string n =""):AbstractProperty<IntegerVectorType, IntegerVectorType>(g, n) {}
+  IntegerVectorProperty(Graph *g, std::string n =""):AbstractVectorProperty<IntegerVectorType, int>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string&);
 };
 /*@}*/
