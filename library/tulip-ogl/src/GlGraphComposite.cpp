@@ -70,7 +70,7 @@ namespace tlp {
   }
 
   void GlGraphComposite::acceptVisitorForEdges(Graph *graph,GlSceneVisitor *visitor){
-    if(isDisplayEdges() || parameters.isViewEdgeLabel()) {
+    if(isDisplayEdges()) {
       visitor->reserveMemoryForEdges(graph->numberOfEdges());
 
       GlEdge glEdge(0);
@@ -136,6 +136,10 @@ namespace tlp {
     }else{
       parameters = parameter;
     }
+  }
+  //===================================================================
+  GlGraphRenderingParameters* GlGraphComposite::getRenderingParametersPointer() {
+    return &parameters;
   }
   //===================================================================
   GlGraphInputData* GlGraphComposite::getInputData() {
