@@ -337,6 +337,7 @@ namespace tlp {
       }
 
       if(screenH < 15){
+        // Draw in line mode (for better performances)
         float wAlign=0;
         float hAlign=0;
         switch (labelPos) {
