@@ -1139,4 +1139,10 @@ namespace tlp {
     yDecViewport=yDec;
   }
 
+  void GlScene::getViewportZoom(int &zoom,int &xDec, int &yDec){
+    zoom=viewportZoom;
+    xDec=xDecViewport;
+    yDec=yDecViewport;
+  }
+
 }
