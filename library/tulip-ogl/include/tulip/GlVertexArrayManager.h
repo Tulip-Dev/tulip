@@ -87,7 +87,8 @@ namespace tlp {
     void beforeSetAllEdgeValue(PropertyInterface*);
     void beforeSetNodeValue(PropertyInterface*, const node);
     void beforeSetEdgeValue(PropertyInterface*, const edge);
-
+    void addLocalProperty(Graph*, const std::string&);
+    void delLocalProperty(Graph*, const std::string&);
 
     void destroy(Graph *);
     void destroy(PropertyInterface*);
