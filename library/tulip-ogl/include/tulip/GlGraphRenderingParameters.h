@@ -69,6 +69,14 @@ namespace tlp {
      */
     bool isViewEdgeLabel() const;
     /**
+     * activate or deactivate displaying of labels outside the screen.
+     */
+    void setViewOutScreenLabel(const bool state);
+    /**
+     * return true if drawing of outscreen labels is activated.
+     */
+    bool isViewOutScreenLabel() const;
+    /**
      *activate or deactivate interpolation of nodes colors along edge
      */
     void setEdgeColorInterpolate(const bool state);
@@ -303,6 +311,7 @@ namespace tlp {
     bool _viewNodeLabel;
     bool _viewEdgeLabel;
     bool _viewMetaLabel;
+    bool _viewOutScreenLabel;
     bool _elementOrdered;
     bool _incrementalRendering;
     bool _edgeColorInterpolate;

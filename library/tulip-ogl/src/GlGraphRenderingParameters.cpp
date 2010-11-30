@@ -35,6 +35,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _viewNodeLabel(true),
   _viewEdgeLabel(false),
   _viewMetaLabel(false),
+  _viewOutScreenLabel(false),
   _elementOrdered(false),
   _incrementalRendering(true),
   _edgeColorInterpolate(true),
@@ -74,6 +75,7 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("nodeLabel", _viewNodeLabel);
   data.set("edgeLabel", _viewEdgeLabel);
   data.set("metaLabel", _viewMetaLabel);
+  data.set("outScreenLabel", _viewOutScreenLabel);
   data.set("elementOrdered", _elementOrdered);
   data.set("elementZOrdered", _elementZOrdered);
   data.set("incrementalRendering", _incrementalRendering);
@@ -128,6 +130,8 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setViewEdgeLabel(b);
   if (data.get<bool>("metaLabel", b))
     setViewMetaLabel(b);
+  if (data.get<bool>("outScreenLabel", b))
+    setViewOutScreenLabel(b);
   if (data.get<bool>("elementOrdered", b))
     setElementOrdered(b);
   if (data.get<bool>("elementZOrdered", b))
@@ -278,6 +282,13 @@ bool GlGraphRenderingParameters::isViewEdgeLabel()const {
 }
 void GlGraphRenderingParameters::setViewEdgeLabel(const bool b) {
   _viewEdgeLabel=b;
+}
+//====================================================
+void GlGraphRenderingParameters::setViewOutScreenLabel(const bool state){
+  _viewOutScreenLabel=state;
+}
+bool GlGraphRenderingParameters::isViewOutScreenLabel() const {
+  return _viewOutScreenLabel;
 }
 //====================================================
 void GlGraphRenderingParameters::setSelectedNodesStencil(const int stencil) {
