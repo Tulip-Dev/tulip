@@ -159,6 +159,12 @@ namespace tlp {
        * Return new created view
        */
       virtual View* createView(const std::string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize,const QRect &rect,bool maximized);
+
+      /**
+       * Initialize an already created view and set it into the workspace with the specified position, size, etc
+       * See ControllerViewsManager::createView() for details.
+       */
+      void addView(View *view, Graph *graph, DataSet dataSet, bool forceWidgetSize, const QRect &rect, bool maximized, const std::string &viewName, QWidget *viewWidget);
       
       /**
        * Put interactors of the given view in graphToolBar
