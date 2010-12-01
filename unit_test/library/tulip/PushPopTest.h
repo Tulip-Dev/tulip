@@ -36,20 +36,14 @@ public:
   void testAddDel();
   void testSetValue();
   void testSetEltValue();
+  void testVectorValue();
   void testSetEnds();
   void testCopyProperty();
   void testSubgraph();
   void testTests();
   void testAddDelProps();
   void testMetaNode();
-  /*void testOrderEdgeAndSwap();
-  void testSubgraphId();
-  void testDeleteSubgraph();
-  void testInheritance();
-  void testIterators();
-  void testPropertiesIteration();
-  void testDegree(); */
-
+ 
   static CppUnit::Test *suite();
  private:
   void build(unsigned int, unsigned int);

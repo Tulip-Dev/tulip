@@ -426,20 +426,50 @@ protected:
    */
   void setNodeEltValue(const node n, unsigned int i, const eltType &v);
   /**
+   * get the value of the elt i of the vector associated to node n
+   * and notify the observers of a modification.
+   */
+  const eltType& getNodeEltValue(const node n, unsigned int i) const;
+  /**
    * append a new value at the end of the vector associated to node n
    * and notify the observers of a modification.
    */
   void pushBackNodeEltValue(const node n, const eltType &v);
+  /**
+   * remove the value at the end of the vector associated to node n
+   * and notify the observers of a modification.
+   */
+  void popBackNodeEltValue(const node n);
+  /**
+   * resize the vector associated to node n
+   * and notify the observers of a modification.
+   */
+  void resizeNodeValue(const node n, size_t size, eltType elt = eltType());
   /**
    * Set the value of the elt i of the value associated to edge
    * and notify the observers of a modification.
    */
   void setEdgeEltValue(const edge e, unsigned int i, const eltType &v);
   /**
+   * get the value of the elt i of the vector associated to edge e
+   * and notify the observers of a modification.
+   */
+  const eltType& getEdgeEltValue(const edge n, unsigned int i) const;
+  /**
    * append a new value at the end of the vector associated to edge e
    * and notify the observers of a modification.
    */
   void pushBackEdgeEltValue(const edge e, const eltType &v);
+  /**
+   * remove the value at the end of the vector associated to edge e
+   * and notify the observers of a modification.
+   */
+  void popBackEdgeEltValue(const edge e);
+  /**
+   * resize the vector associated to edgee e
+   * and notify the observers of a modification.
+   */
+  void resizeEdgeValue(const edge e, size_t size, eltType elt = eltType());
  };
 /*@}*/
 }
