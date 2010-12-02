@@ -5,6 +5,7 @@
 #include <tulip/GlRect.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlPolyQuad.h>
+#include <tulip/GlTextureManager.h>
 
 using namespace tlp;
 using namespace std;
@@ -19,12 +20,10 @@ class Window : public Glyph
 public:
     Window(GlyphContext* context);
     virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+    virtual void getTextBoundingBox(BoundingBox &boundingBox,node);
     virtual void draw(node n, float lod);
     virtual Coord getAnchor(const Coord &vector) const;
-    bool renderLabel() {
-      return true;
-    }
-protected:
+
 private:
     Color _rectColor;
     Color _textColor;
@@ -34,7 +33,8 @@ private:
     GlPolyQuad _center;
     GlPolyQuad _titleRec;
     BoundingBox _bb;
-    GlLabel *_title;
+    BoundingBox _textbb;
+  //  GlLabel *_title;
 };
 
 /*
@@ -62,8 +62,8 @@ Window::Window(GlyphContext* context):
 	{
 	
 	const float textheight = 0.05;
-	Coord textCenter(-0.5 + _borderWidth, 0.5 - textheight- _borderWidth , 0.0);
-	_title = new GlLabel(textCenter, Coord(1. - (2.f * _borderWidth), _titleBarSize, 0.0), _textColor, true);
+	//Coord textCenter(-0.5 + _borderWidth, 0.5 - textheight- _borderWidth , 0.0);
+	//_title = new GlLabel(textCenter, Coord(1. - (2.f * _borderWidth), _titleBarSize, 0.0), _textColor, true);
 	
 	Coord v[10];
 	v[0].set(-0.5, 0.5, 0);
@@ -90,35 +90,45 @@ Window::Window(GlyphContext* context):
 	 
 	 _titleRec.addQuadEdge(v[4], v[9], _rectColor);
 	 _titleRec.addQuadEdge(v[5], v[8], _rectColor);
-
+	 
+	_textbb.expand(v[4]);
+	_textbb.expand(v[9]);
+	_textbb.expand(v[5]);
+	_textbb.expand(v[8]);
+	 
 	 _center.addQuadEdge(v[4], v[7], _rectColor);
 	 _center.addQuadEdge(v[5], v[6], _rectColor);
  
 	}
- void Window::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+
+void Window::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
   boundingBox = _bb;
 }
 
+void Window::getTextBoundingBox(BoundingBox &boundingBox,node) {
+  boundingBox = _textbb;
+}
+
 void Window::draw(node n, float lod) {
-	
-        StringProperty* prop = glGraphInputData->elementLabel;
-        ColorProperty* color = glGraphInputData->elementColor;
+	ColorProperty* color = glGraphInputData->elementColor;
 	ColorProperty* colorBorder = glGraphInputData->elementBorderColor;
 
 	_rectColor = color->getNodeValue(n);
 	_border.setColor(colorBorder->getNodeValue(n));	
 	_center.setColor(_rectColor);	
 	_titleRec.setColor(_rectColor);	
-	_title->setText(prop->getNodeValue(n));
-        _title->setColor(glGraphInputData->elementLabelColor->getNodeValue(n));
-
-	_border.draw(lod, NULL);
+//	_title->setText(prop->getNodeValue(n));
+//        _title->setColor(glGraphInputData->elementLabelColor->getNodeValue(n));
 	_center.draw(lod, NULL);
+	 GlTextureManager::getInst().activateTexture(gradient);
 	_titleRec.draw(lod, NULL);
-        if (lod > 20) {
+	GlTextureManager::getInst().activateTexture(texture);
+	_border.draw(lod, NULL);
+/*
+ *        if (lod > 20) {
             _title->draw(lod, NULL);
 	}
-
+*/
   
 }
 
