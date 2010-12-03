@@ -1264,7 +1264,7 @@
 (node 211 "(28,31,1)")
 )
 (property  0 int "viewSrcAnchorShape"
-(default "0" "0")
+(default "0" "-1")
 )
 (property  0 size "viewSrcAnchorSize"
 (default "(1,1,0)" "(0.25,0.25,0.25)")
