@@ -121,8 +121,15 @@ void ColorScaleConfigDialog::setColorScaleFromImage(
 }
 
 void ColorScaleConfigDialog::pressButtonBrowse() {
+    QString parentDirectory="./";
+    QFileInfo colorscaleDirectory(tlpStringToQString(TulipBitmapDir)+QString("colorscales"));
+    if(colorscaleDirectory.exists() && colorscaleDirectory.isDir()){
+        parentDirectory = colorscaleDirectory.absoluteFilePath();
+    }else{
+        parentDirectory = "./";
+    }
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Image File"),
-			"./", tr("Image Files (*.png *.jpg *.bmp)"));
+                        parentDirectory, tr("Image Files (*.png *.jpg *.bmp)"));
 	userGradientFile->setText(fileName);
 	displaySavedGradientPreview();
 }
