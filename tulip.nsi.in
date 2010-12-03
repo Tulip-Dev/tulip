@@ -123,6 +123,8 @@ setOutPath $INSTDIR\imageformats
 File "@qt_libraries@\..\plugins\imageformats\*.dll"
 setOutPath $INSTDIR\lib\tlp\bitmaps
 File @prefix@\lib\tlp\bitmaps\*
+setOutPath $INSTDIR\lib\tlp\bitmaps\colorscales
+File @prefix@\lib\tlp\bitmaps\colorscales\*
 SectionEnd
 
 Section "-Install Plugins and Docs"

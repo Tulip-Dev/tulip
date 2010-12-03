@@ -9,3 +9,5 @@ INSTALL_FILES(${TulipBitmapInstallDir} FILES
 	      logolabri.jpg
 	      tex_back.png
 )
+
+ADD_SUBDIRECTORY(colorscales)
