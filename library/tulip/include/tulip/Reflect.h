@@ -73,7 +73,7 @@ class Graph;
    // the readable type name the serializer is designed for
    std::string outputTypeName;
    DataTypeSerializer(const std::string& otn):outputTypeName(otn) {}
-   ~DataTypeSerializer() {}
+   virtual ~DataTypeSerializer() {}
    // return a copy of this
    virtual DataTypeSerializer* clone() const = 0;
    // write the DataType embedded value into the output stream
