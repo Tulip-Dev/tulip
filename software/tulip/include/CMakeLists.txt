@@ -20,7 +20,6 @@ include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
 #	ElementInfoToolTip.h \
 #	Application.h\
 #	AppStartUp.h\
-#	geometrie2D.h\
 #	InfoDialog.h\
 #	viewGl.h
 #

@@ -14,7 +14,6 @@ noinst_HEADERS = \
 	ElementInfoToolTip.h \
 	Application.h\
 	AppStartUp.h\
-	geometrie2D.h\
 	InfoDialog.h\
 	PreferenceDialog.h\
 	ChooseControllerDialog.h\
