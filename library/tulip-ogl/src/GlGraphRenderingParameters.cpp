@@ -54,7 +54,8 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _nodesLabelStencil(0xFFFF),
   _metaNodesLabelStencil(0xFFFF),
   _edgesLabelStencil(0xFFFF),
-  _FontsType(1),
+  _labelScaled(false),
+  _labelOverlaped(false),
   _labelsBorder(2) {
   _fontsPath = tlp::TulipLibDir + "tlp/bitmaps/";
   _texturePath = "";
@@ -82,8 +83,8 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("edgeColorInterpolation", _edgeColorInterpolate);
   data.set("edgeSizeInterpolation", _edgeSizeInterpolate);
   data.set("edge3D", _edge3D);
-  //unsigned int
-  data.set("fontType", _FontsType);
+  data.set("labelScaled", _labelScaled);
+  data.set("labelOverlaped", _labelOverlaped);
   //int
   data.set("selectedNodesStencil", _selectedNodesStencil);
   data.set("selectedMetaNodesStencil", _selectedMetaNodesStencil);
@@ -144,9 +145,13 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setEdgeSizeInterpolate(b);
   if (data.get<bool>("edge3D", b))
     setEdge3D(b);
+  if (data.get<bool>("labelScaled", b))
+    setLabelScaled(b);
+  if (data.get<bool>("labelOverlaped", b))
+    setLabelOverlaped(b);
   unsigned int ui = 0;
   if (data.get<unsigned int>("fontType", ui))
-    _FontsType = ui;
+    setFontsType(ui);
   int i  = 0;
   if (data.get<int>("selectedNodesStencil", i))
     setSelectedNodesStencil(i);
@@ -187,10 +192,16 @@ void GlGraphRenderingParameters::setViewMetaLabel(bool b){
 }
 //====================================================
 unsigned int GlGraphRenderingParameters::getFontsType()const {
-  return (_FontsType);
+  if(_labelScaled)
+    return 0;
+  else
+    return 1;
 }
 void GlGraphRenderingParameters::setFontsType(unsigned int i) {
-  _FontsType = i;
+  if(i==1)
+    _labelOverlaped=true;
+  else
+    _labelScaled=true;
 }
 //====================================================
 void GlGraphRenderingParameters::setFontsPath(const std::string &path) {
@@ -389,4 +400,20 @@ void GlGraphRenderingParameters::setSelectionColor(const Color &color){
 //====================================================
 Color GlGraphRenderingParameters::getSelectionColor(){
 return _selectionColor;
+}
+//====================================================
+bool GlGraphRenderingParameters::isLabelScaled(){
+  return _labelScaled;
+}
+//====================================================
+void GlGraphRenderingParameters::setLabelScaled(bool state){
+  _labelScaled=state;
+}
+//====================================================
+bool GlGraphRenderingParameters::isLabelOverlaped(){
+  return _labelOverlaped;
+}
+//====================================================
+void GlGraphRenderingParameters::setLabelOverlaped(bool state){
+  _labelOverlaped=state;
 }

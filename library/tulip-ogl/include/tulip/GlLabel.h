@@ -23,6 +23,7 @@
 
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
+#include <tulip/Size.h>
 
 #include "tulip/GlSimpleEntity.h"
 
@@ -30,6 +31,7 @@ namespace tlp {
 
   class Camera;
   class TextRenderer;
+  class OcclusionTest;
 
   /**
    * Create a entity Label
@@ -57,14 +59,48 @@ namespace tlp {
     ~GlLabel();
 
     /**
+     * Set default parameters of GlLabel
+     */
+    void init();
+
+    /**
      * Set the text of the label
      */
     void setText(const std::string& text);
 
     /**
+     * Set the position used to render the label
+     */
+    void setPosition(const Coord &position);
+
+    /**
+     * Return the position of the label
+     */
+    Coord getPosition();
+
+    /**
+     * Set the translation used after rotation of the label
+     */
+    virtual void setTranslationAfterRotation(Coord translation){
+      translationAfterRotation=translation;
+    }
+
+    /**
+     * Set the alignment of the label : ON_CENTER, ON_TOP, ON_BOTTOM, ON_LEFT, ON_RIGHT
+     */
+    virtual void setAlignment(int alignment){
+      this->alignment=alignment;
+    }
+
+    /**
      * Return the bounding box of the label
      */
     virtual BoundingBox getBoundingBox();
+
+    /**
+     * Set the size of the label
+     */
+    virtual void setSize(const Coord &size);
 
     /**
      * return the size of the text
@@ -86,9 +122,28 @@ namespace tlp {
     }
 
     /**
+     * Enable/disable the depth test for the label (default depth test is enable)
+     */
+    virtual void enableDepthTest(bool state){
+      depthTestEnabled=state;
+    }
+
+    /**
+     * Enable/disable if label is scaled to size
+     */
+    virtual void setScaleToSize(bool state){
+      scaleToSize=state;
+    }
+
+    /**
+     * Set the stencil and draw the Label, this function is usefull when we directly call draw without tulip engine
+     */
+    void drawWithStencil(float lod, Camera *camera=NULL);
+
+    /**
      * Draw the Label
      */
-    virtual void draw(float lod, Camera *camera);
+    virtual void draw(float lod, Camera *camera=NULL);
 
     /**
      * Translate entity
@@ -121,22 +176,47 @@ namespace tlp {
     virtual void setPlainFont();
 
     /**
+     * Change font name
+     */
+    virtual void setFontName(const std::string &name);
+
+    /**
+     * Change font name, size and color of the text
+     */
+    virtual void setFontNameSizeAndColor(const std::string &name, const int &size, const Color &color);
+
+    /**
      * Switch rendering mode to polygon- or texture-based rendering
      */
     virtual void setRenderingMode(int mode);
+
+    /**
+     * Set the occlusion tester
+     *  If occlusionTester is NULL : deactivate occlusion test
+     */
+    virtual void setOcclusionTester(OcclusionTest *tester){
+      occlusionTester=tester;
+    }
 
 
   private :
 
     std::string text;
+    std::string fontName;
+    int renderingMode;
     static TextRenderer *renderer;
     Coord centerPosition;
+    Coord translationAfterRotation;
     Coord size;
     Color color;
+    int alignment;
+    bool scaleToSize;
+    bool depthTestEnabled;
     bool leftAlign;
     float xRot;
     float yRot;
     float zRot;
+    OcclusionTest *occlusionTester;
   };
 }
 #endif

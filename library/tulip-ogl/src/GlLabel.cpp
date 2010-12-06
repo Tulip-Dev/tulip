@@ -33,6 +33,8 @@
 #include "tulip/OcclusionTest.h"
 #include "tulip/TextRenderer.h"
 #include "tulip/GlTLPFeedBackBuilder.h"
+#include "tulip/GlRenderer.h"
+#include "tulip/OcclusionTest.h"
 
 #include <iostream>
 
@@ -50,25 +52,47 @@ tlp::TextRenderer *tlp::GlLabel::renderer=0;
 namespace tlp {
 
   GlLabel::GlLabel() {
+    init();
     if(!renderer){
       renderer=new TextRenderer;
-      renderer->setContext(TulipBitmapDir + "font.ttf", 20, 0, 0, 255);
+      renderer->setContext(fontName, 20, 0, 0, 255);
       renderer->setMode(TLP_TEXTURE);
     }
   }
-  GlLabel::GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign),xRot(0),yRot(0),zRot(0) {
-    GlLabel();
+  GlLabel::GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign) {
+    init();
   }
 
-  GlLabel::GlLabel(const string &,Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign),xRot(0),yRot(0),zRot(0){
-    GlLabel();
+  GlLabel::GlLabel(const string &,Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign){
+    init();
   }
 
   GlLabel::~GlLabel() {
   }
   //============================================================
+  void GlLabel::init(){
+    fontName=TulipBitmapDir + "font.ttf";
+    renderingMode=0;
+    translationAfterRotation=Coord(0,0,0);
+    alignment=ON_CENTER;
+    scaleToSize=true;
+    depthTestEnabled=true;
+    occlusionTester=NULL;
+    xRot=0;
+    yRot=0;
+    zRot=0;
+  }
+  //============================================================
   void GlLabel::setText(const string& text) {
     this->text=text;
+  }
+  //============================================================
+  void GlLabel::setPosition(const Coord &position) {
+    centerPosition=position;
+  }
+  //============================================================
+  Coord GlLabel::getPosition() {
+    return centerPosition;
   }
   //============================================================
   BoundingBox GlLabel::getBoundingBox() {
@@ -78,10 +102,13 @@ namespace tlp {
       return BoundingBox(centerPosition-Coord(0,size[1]/2.f,0),centerPosition+Coord(size[0],size[1]/2.f,0));
   }
   //============================================================
+  void GlLabel::setSize(const Coord &size) {
+    this->size=size;
+  }
+  //============================================================
   Coord GlLabel::getSize() {
     return size;
   }
-
   //============================================================
   void GlLabel::setBoldFont() {
     renderer->setContext(TulipBitmapDir + "fontb.ttf", 20, 0, 0, 255);
@@ -90,26 +117,43 @@ namespace tlp {
   void GlLabel::setPlainFont() {
     renderer->setContext(TulipBitmapDir + "font.ttf", 20, 0, 0, 255);
   }
-  void GlLabel::setRenderingMode(int mode) {
-    switch (mode) {
-    case TEXTURE_MODE:
-      renderer->setMode(TLP_TEXTURE);
-      break;
-    case POLYGON_MODE:
-      renderer->setMode(TLP_POLYGON);
-      break;
-    default:
-      renderer->setMode(TLP_TEXTURE);
-    }
-  }
-
   //============================================================
-  void GlLabel::draw(float, Camera *) {
+  void GlLabel::setFontName(const std::string &name){
+    if(GlRenderer::checkFont(name))
+      fontName=name;
+  }
+  //============================================================
+  void GlLabel::setFontNameSizeAndColor(const std::string &name, const int &size, const Color &color){
+    if(GlRenderer::checkFont(name))
+      fontName=name;
+
+    renderer->setContext(fontName,size,color[0],color[1],color[2]);
+    this->color=color;
+  }
+  //============================================================
+  void GlLabel::setRenderingMode(int mode) {
+    renderingMode=mode;
+  }
+  //============================================================
+  void GlLabel::drawWithStencil(float lod, Camera *camera){
+    glStencilFunc(GL_LEQUAL,stencil,0xFFFF);
+    draw(lod,camera);
+  }
+  //============================================================
+  void GlLabel::draw(float lod, Camera *camera) {
+
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+    if(depthTestEnabled)
+      glEnable(GL_DEPTH_TEST);
+    else
+      glDisable(GL_DEPTH_TEST);
 
     renderer->setColor(color[0], color[1], color[2]);
     renderer->setString(text, VERBATIM);
 
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    renderer->setMode(TLP_POLYGON);
+
     glPolygonMode(GL_FRONT, GL_FILL);
     glDisable(GL_LIGHTING);
     glDisable(GL_BLEND);
@@ -120,21 +164,86 @@ namespace tlp {
 
     renderer->getBoundingBox(w_max, h, w);
 
-    glPushMatrix();
-
     div_w = size[0]/w;
     div_h = size[1]/h;
-    
-    if(!leftAlign) {
-      glTranslatef(centerPosition[0],centerPosition[1], centerPosition[2]);
-    }else{
-      glTranslatef(centerPosition[0]+size[0]/2,centerPosition[1], centerPosition[2]);
+
+    if(occlusionTester && camera){
+      BoundingBox labelBoundingBox;
+      Coord baseCoord=centerPosition;
+
+      switch(alignment) {
+      case ON_CENTER:break;
+      case ON_LEFT:baseCoord[0]-=size[0];break;
+      case ON_RIGHT:baseCoord[0]+=size[0];break;
+      case ON_TOP:baseCoord[1]+=size[1];break;
+      case ON_BOTTOM:baseCoord[1]-=size[1];break;
+      default:break;
+      }
+
+      Size occlusionSize;
+      if(!scaleToSize){
+        occlusionSize=Size(w*0.005,h*0.005,0);
+      }else{
+        if(div_h * w > size[0]){
+          occlusionSize=Size(w*div_w*0.5,h*div_w*0.5,0);
+        }else{
+          occlusionSize=Size(w*div_h*0.5,h*div_h*0.5,0);
+        }
+      }
+
+      cout << "text : " << text << endl;
+
+      float angle=M_PI*zRot/180;
+
+      if(zRot!=0){
+        BoundingBox tmpBB;
+        float size0Cos=occlusionSize[0]*cos(angle);
+        float size0Sin=occlusionSize[0]*sin(angle);
+        float size1Cos=occlusionSize[1]*cos(angle);
+        float size1Sin=occlusionSize[1]*sin(angle);
+        tmpBB.expand(Coord(size0Cos-size1Sin,size0Sin+size1Cos,0));
+        tmpBB.expand(Coord(size0Cos+size1Sin,size0Sin-size1Cos,0));
+        tmpBB.expand(Coord(-size0Cos+size1Sin,-size0Sin-size1Cos,0));
+        tmpBB.expand(Coord(-size0Cos-size1Sin,-size0Sin+size1Cos,0));
+
+        occlusionSize[0]=tmpBB[1][0];
+        occlusionSize[1]=tmpBB[1][1];
+      }
+
+      baseCoord[0]+=translationAfterRotation[0]*cos(angle)-translationAfterRotation[1]*sin(angle);
+      baseCoord[1]+=translationAfterRotation[0]*sin(angle)+translationAfterRotation[1]*cos(angle);
+
+      Matrix<float, 4> modelviewMatrix, projectionMatrix, transformMatrix;
+
+      glGetFloatv (GL_MODELVIEW_MATRIX, (GLfloat*)&modelviewMatrix);
+      glGetFloatv (GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
+
+      glMatrixMode(GL_MODELVIEW);
+      glPushMatrix();
+      glLoadIdentity();
+      glMultMatrixf((GLfloat*)&projectionMatrix);
+      glMultMatrixf((GLfloat*)&modelviewMatrix);
+      glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat*)&transformMatrix);
+      glPopMatrix();
+
+      labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]+occlusionSize[0],baseCoord[1]+occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
+      labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]+occlusionSize[0],baseCoord[1]-occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
+      labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]-occlusionSize[0],baseCoord[1]-occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
+      labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]-occlusionSize[0],baseCoord[1]+occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
+
+      cout << "label boundingbox : " << labelBoundingBox[0] << " # " << labelBoundingBox[1] << endl;
+
+      if(occlusionTester->testRectangle(RectangleInt2D(labelBoundingBox[0][0],labelBoundingBox[0][1],labelBoundingBox[1][0],labelBoundingBox[1][1]))){
+        glPopAttrib();
+        return;
+      }
+
+      occlusionTester->addRectangle(RectangleInt2D(labelBoundingBox[0][0],labelBoundingBox[0][1],labelBoundingBox[1][0],labelBoundingBox[1][1]));
     }
-    if(div_h * w > size[0])        // too wide, so make it fit and maintain aspect ratio
-      glScalef(div_w, div_w, 1);
-    else
-      glScalef(div_h, div_h, 1);
-    
+
+    glPushMatrix();
+
+    glTranslatef(centerPosition[0],centerPosition[1], centerPosition[2]);
 
     if(xRot!=0.)
       glRotatef(xRot,1.,0.,0.);
@@ -143,10 +252,73 @@ namespace tlp {
     if(zRot!=0.)
       glRotatef(zRot,0.,0.,1.);
 
-    //glEnable( GL_TEXTURE_2D);
-    glBlendFunc(GL_ONE_MINUS_DST_COLOR,GL_ONE_MINUS_SRC_COLOR);
-    renderer->draw(w, w, 0);
-    //glDisable( GL_TEXTURE_2D);
+    switch(alignment) {
+    case ON_CENTER:
+      break;
+    case ON_LEFT:
+      glTranslatef(-size[0]/2,0,0);
+      break;
+    case ON_RIGHT:
+      glTranslatef(size[0]/2,0,0);
+      break;
+    case ON_TOP:
+      glTranslatef(0,size[1]/2,0);
+      break;
+    case ON_BOTTOM:
+      glTranslatef(0,-size[1]/2,0);
+      break;
+    default:
+      break;
+    }
+
+    glTranslatef(translationAfterRotation[0],translationAfterRotation[1],translationAfterRotation[2]);
+
+    if(scaleToSize){
+      if(div_h * w > size[0])        // too wide, so make it fit and maintain aspect ratio
+        glScalef(div_w, div_w, 1);
+      else
+        glScalef(div_h, div_h, 1);
+    }else{
+      glScalef(0.01,0.01,1);
+    }
+
+    float screenH=size[1]/(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
+    if(scaleToSize){
+      float sizeRatio=size[0]/size[1];
+      float fontRatio=w/h;
+      if(fontRatio>sizeRatio){
+        screenH=screenH/(fontRatio/sizeRatio);
+      }
+    }
+
+    if(screenH < 15){
+      float wAlign=0;
+      float hAlign=0;
+
+      switch (alignment) {
+      case ON_TOP:hAlign=h/2.;break;
+      case ON_BOTTOM:hAlign=-(h/2.);break;
+      case ON_LEFT:wAlign = -(w/2.);break;
+      case ON_RIGHT:wAlign = w/2.;break;
+      default:break;
+      }
+
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glLineWidth(screenH/5.);
+      setMaterial(Color(color[0],color[1],color[2],128));
+      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+      glBegin(GL_LINES);
+      glVertex3f(-w/2.+wAlign,hAlign,0);
+      glVertex3f(w/2.+wAlign,hAlign,0);
+      glEnd();
+      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+      glLineWidth(1);
+    }else{
+      glDisable(GL_DEPTH_TEST);
+      glTranslatef(-0.75,0.,0.);
+      glBlendFunc(GL_ONE_MINUS_DST_COLOR,GL_ONE_MINUS_SRC_COLOR);
+      renderer->draw(w, w, alignment);
+    }
     glPopMatrix();
     glPopAttrib();
   }
@@ -169,9 +341,15 @@ namespace tlp {
     GlXMLTools::getDataNode(rootNode,dataNode);
 
     GlXMLTools::getXML(dataNode,"text",text);
+    GlXMLTools::getXML(dataNode,"renderingMode",renderingMode);
+    GlXMLTools::getXML(dataNode,"fontName",fontName);
     GlXMLTools::getXML(dataNode,"centerPosition",centerPosition);
+    GlXMLTools::getXML(dataNode,"translationAfterRotation",translationAfterRotation);
     GlXMLTools::getXML(dataNode,"size",size);
     GlXMLTools::getXML(dataNode,"color",color);
+    GlXMLTools::getXML(dataNode,"alignment",alignment);
+    GlXMLTools::getXML(dataNode,"scaleToSize",scaleToSize);
+    GlXMLTools::getXML(dataNode,"depthTestEnabled",depthTestEnabled);
     GlXMLTools::getXML(dataNode,"leftAlign",leftAlign);
     GlXMLTools::getXML(dataNode,"xRot",xRot);
     GlXMLTools::getXML(dataNode,"yRot",yRot);
@@ -186,9 +364,15 @@ namespace tlp {
     // Parse Data
     if(dataNode) {
       GlXMLTools::setWithXML(dataNode,"text",text);
+      GlXMLTools::setWithXML(dataNode,"renderingMode",renderingMode);
+      GlXMLTools::setWithXML(dataNode,"fontName",fontName);
       GlXMLTools::setWithXML(dataNode,"centerPosition",centerPosition);
+      GlXMLTools::setWithXML(dataNode,"translationAfterRotation",translationAfterRotation);
       GlXMLTools::setWithXML(dataNode, "size", size);
       GlXMLTools::setWithXML(dataNode,"color",color);
+      GlXMLTools::setWithXML(dataNode,"alignment",alignment);
+      GlXMLTools::setWithXML(dataNode,"scaleToSize",scaleToSize);
+      GlXMLTools::setWithXML(dataNode,"depthTestEnabled",depthTestEnabled);
       GlXMLTools::setWithXML(dataNode,"leftAlign",leftAlign);
       GlXMLTools::setWithXML(dataNode,"xRot",xRot);
       GlXMLTools::setWithXML(dataNode,"yRot",yRot);
