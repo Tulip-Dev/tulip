@@ -191,8 +191,6 @@ namespace tlp {
         }
       }
 
-      cout << "text : " << text << endl;
-
       float angle=M_PI*zRot/180;
 
       if(zRot!=0){
@@ -230,8 +228,6 @@ namespace tlp {
       labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]+occlusionSize[0],baseCoord[1]-occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
       labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]-occlusionSize[0],baseCoord[1]-occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
       labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]-occlusionSize[0],baseCoord[1]+occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
-
-      cout << "label boundingbox : " << labelBoundingBox[0] << " # " << labelBoundingBox[1] << endl;
 
       if(occlusionTester->testRectangle(RectangleInt2D(labelBoundingBox[0][0],labelBoundingBox[0][1],labelBoundingBox[1][0],labelBoundingBox[1][1]))){
         glPopAttrib();
