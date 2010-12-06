@@ -287,7 +287,7 @@ void GlMainWidget::createRenderingStore(int width, int height){
 	if (useFramebufferObject && (!glFrameBuf || glFrameBuf->size().width()!=width || glFrameBuf->size().height()!=height)) {
 			makeCurrent();
 			delete glFrameBuf;
-			glFrameBuf=new QGLFramebufferObject(width,height,QGLFramebufferObject::CombinedDepthStencil);
+			glFrameBuf=new QGLFramebufferObject(width,height);
 			useFramebufferObject=glFrameBuf->isValid();
 	}
 
@@ -318,11 +318,11 @@ void GlMainWidget::redraw() {
 		glDisable(GL_BLEND);
 		glDisable(GL_LIGHTING);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-		if (useFramebufferObject) {
-			QGLFramebufferObject::blitFramebuffer(0, QRect(0,0,width, height), glFrameBuf, QRect(0,0,width, height));
-		}
-#endif
+//#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+//		if (useFramebufferObject) {
+//			QGLFramebufferObject::blitFramebuffer(0, QRect(0,0,width, height), glFrameBuf, QRect(0,0,width, height));
+//		}
+//#endif
 
 		if (!frameBufferStored) {
 			glDrawBuffer(GL_BACK);
@@ -350,11 +350,11 @@ void GlMainWidget::draw(bool graphChanged) {
 		int width = contentsRect().width();
 		int height = contentsRect().height();
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-		if(QGlBufferManager::getInst().canUseFramebufferObject() && QGLFramebufferObject::hasOpenGLFramebufferBlit()){
-			useFramebufferObject = true;
-		}
-#endif
+//#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+//		if(QGlBufferManager::getInst().canUseFramebufferObject() && QGLFramebufferObject::hasOpenGLFramebufferBlit()){
+//			useFramebufferObject = true;
+//		}
+//#endif
 
 		createRenderingStore(width,height);
 
@@ -373,12 +373,12 @@ void GlMainWidget::draw(bool graphChanged) {
 
 		frameBufferStored=false;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-		if(useFramebufferObject){
-			QGLFramebufferObject::blitFramebuffer(glFrameBuf, QRect(0,0,width, height), 0, QRect(0,0,width, height));
-			frameBufferStored=true;
-		}
-#endif
+//#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+//		if(useFramebufferObject){
+//			QGLFramebufferObject::blitFramebuffer(glFrameBuf, QRect(0,0,width, height), 0, QRect(0,0,width, height));
+//			frameBufferStored=true;
+//		}
+//#endif
 
 		if (!frameBufferStored) {
 			glReadBuffer(GL_BACK);
