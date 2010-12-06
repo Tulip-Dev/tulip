@@ -41,12 +41,27 @@
 #include "tulip/GlRenderer.h"
 #include "tulip/GlTextureManager.h"
 #include "tulip/GlVertexArrayManager.h"
+#include "tulip/GlLabel.h"
 
 #include <iostream>
+
+//====================================================
+#ifdef _WIN32
+#ifdef DLL_EXPORT
+tlp::GlLabel* tlp::GlNode::label=0;
+#endif
+#else
+tlp::GlLabel* tlp::GlNode::label=0;
+#endif
 
 using namespace std;
 
 namespace tlp {
+
+  GlNode::GlNode(unsigned int id):id(id) {
+    if(!label)
+      label=new GlLabel();
+  }
 
   BoundingBox GlNode::getBoundingBox(GlGraphInputData* data) {
     node n=node(id);
@@ -205,225 +220,74 @@ namespace tlp {
   }
 
   void GlNode::drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
-    GlNode::drawLabel(test,renderer,data,0.);
+    GlNode::drawLabel(test,renderer,data,1000.);
   }
 
-  void GlNode::drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod) {
-    const Color& colorSelect2=data->parameters->getSelectionColor();
+  void GlNode::drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod, Camera *camera) {
 
     node n=node(id);
 
+    // If glyph can't render label : return
     if(data->glyphs.get(data->elementShape->getNodeValue(n))->renderLabel())
       return;
 
+    // node is selected
     bool selected=data->elementSelected->getNodeValue(n);
+    // Color of the label : selected or not
+    const Color& fontColor = selected ? data->parameters->getSelectionColor() :data->elementLabelColor->getNodeValue(n);
+    // Size of the node
+    Size size=data->elementSize->getNodeValue(n);
 
-    const Color& fontColor = selected ? colorSelect2 :
-      data->elementLabelColor->getNodeValue(n);
-
+    // If we have transparent label : return
     if(fontColor.getA()==0)
       return;
 
+    // Node text
     const string &tmp = data->elementLabel->getNodeValue(n);
-    if (tmp.length() < 1) {
+    if (tmp.length() < 1)
       return;
-    }
-
-    Size size=data->elementSize->getNodeValue(n);
 
     if(!data->getGraph()->isMetaNode(n)){
-      if(selected)
-        glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil() ,0xFFFF);
-      else
-        glStencilFunc(GL_LEQUAL,data->parameters->getNodesLabelStencil(),0xFFFF);
+      if(selected) label->setStencil(data->parameters->getSelectedNodesStencil());
+      else label->setStencil(data->parameters->getNodesLabelStencil());
     }else{
-      if(selected)
-        glStencilFunc(GL_LEQUAL,data->parameters->getSelectedMetaNodesStencil() ,0xFFFF);
-      else
-        glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesLabelStencil(),0xFFFF);
+      if(selected) label->setStencil(data->parameters->getSelectedMetaNodesStencil());
+      else label->setStencil(data->parameters->getMetaNodesLabelStencil());
     }
 
-    string fontName=data->elementFont->getNodeValue(n);
     int fontSize=data->elementFontSize->getNodeValue(n);
-    if(!GlRenderer::checkFont(fontName))
-        fontName=data->parameters->getFontsPath()+"font.ttf";
-    if(fontSize==0)
-      fontSize=18;
-
     if(selected)
-      renderer->setContext(fontName, fontSize+2, 0, 0, 255);
-    else
-      renderer->setContext(fontName, fontSize, 255, 255, 255);
+      fontSize+=2;
 
     const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
     const Size  &nodeSize  = data->elementSize->getNodeValue(n);
     int labelPos = data->elementLabelPosition->getNodeValue(n);
-    Coord nodePos(0,0,0);
-    switch (labelPos) {
-    case ON_TOP:
-      nodePos.setY(nodeSize.getH()/2);
-      break;
-    case ON_BOTTOM:
-      nodePos.setY(-nodeSize.getH()/2);
-      break;
-    case ON_LEFT:
-      nodePos.setX(-nodeSize.getW()/2);
-      break;
-    case ON_RIGHT:
-      nodePos.setX(nodeSize.getW()/2);
-    default:
-      break;
-    }
-    //if (elementSelected->getNodeValue(n) != mode) return;
 
-    float w_max = 300;
-    float w,h;
-    float div_w, div_h;
-    float screenH=20.;
+
     BoundingBox includeBB;
-    int fontType=data->parameters->getFontsType();
+    data->glyphs.get(data->elementShape->getNodeValue(n))->getTextBoundingBox(includeBB,n);
+    Coord centerBB(includeBB.center());
+    Vec3f sizeBB = includeBB[1]-includeBB[0];
 
-    switch(fontType){
-    case 0:
-    case 2:{
-      if(fontType==0)
-        renderer->setMode(TLP_POLYGON);
-      else
-        renderer->setMode(TLP_TEXTURE);
+    label->setText(tmp);
+    label->setFontNameSizeAndColor(data->elementFont->getNodeValue(n),fontSize,fontColor);
+    label->setRenderingMode(GlLabel::POLYGON_MODE);
+    label->setTranslationAfterRotation(centerBB*nodeSize);
+    label->setSize(Coord(nodeSize[0]*sizeBB[0],nodeSize[1]*sizeBB[1],0));
+    label->rotate(0,0,data->elementRotation->getNodeValue(n));
+    label->setAlignment(labelPos);
+    label->setScaleToSize(data->parameters->isLabelScaled());
+    if(!data->parameters->isLabelOverlaped())
+      label->setOcclusionTester(test);
+    else
+      label->setOcclusionTester(NULL);
 
-      renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
-      renderer->setString(tmp, VERBATIM);
+    if(includeBB[1][2]!=0)
+      label->setPosition(Coord(nodeCoord[0],nodeCoord[1],nodeCoord[2]+nodeSize[2]/2.));
+    else
+      label->setPosition(Coord(nodeCoord[0],nodeCoord[1],nodeCoord[2]));
 
-      renderer->getBoundingBox(w_max, h, w);
-
-      data->glyphs.get(data->elementShape->getNodeValue(n))->getTextBoundingBox(includeBB,n);
-      Vec3f centerBB = includeBB.center();
-      Vec3f sizeBB = includeBB[1]-includeBB[0];
-
-      glPushMatrix();
-
-      glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
-      glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
-
-      if(fontType==0){
-        if(includeBB[1][2]==0.)
-          glTranslatef(nodePos[0], nodePos[1], nodePos[2]+0.01);
-        else
-          glTranslatef(nodePos[0], nodePos[1], nodePos[2]+nodeSize[2]/2.+0.01);
-      }else{
-        glTranslatef(nodePos[0], nodePos[1], nodePos[2]);
-      }
-
-      glTranslatef(centerBB[0]*nodeSize[0], centerBB[1]*nodeSize[1], 0.);
-      glScalef(sizeBB[0],sizeBB[1],1.);
-
-      div_w = nodeSize.getW()/w;
-      div_h = nodeSize.getH()/h;
-      if(div_h > div_w)
-        glScalef(div_w, div_w, 1);
-      else
-        glScalef(div_h, div_h, 1);
-
-      if(fontType==0)
-        glDepthFunc(GL_LEQUAL );
-
-      if(lod!=0){
-        screenH=size[1]/(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
-        float sizeRatio=size[0]/size[1];
-        float fontRatio=w/h;
-        if(fontRatio>sizeRatio){
-          screenH=screenH/(fontRatio/sizeRatio);
-        }
-      }
-
-      if(screenH < 15){
-        // Draw in line mode (for better performances)
-        float wAlign=0;
-        float hAlign=0;
-        switch (labelPos) {
-        case ON_TOP:
-          hAlign=h/2.;
-          break;
-        case ON_BOTTOM:
-          hAlign=-(h/2.);
-          break;
-        case ON_LEFT:
-          wAlign = -(w/2.);
-          break;
-        case ON_RIGHT:
-          wAlign = w/2.;
-        default:
-          break;
-        }
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glLineWidth(screenH/5.);
-        setColor(Color(fontColor[0],fontColor[1],fontColor[2],128));
-        OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-        glBegin(GL_LINES);
-        glVertex3f(-w/2.+wAlign,hAlign,0);
-        glVertex3f(w/2.+wAlign,hAlign,0);
-        glEnd();
-        OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
-        glLineWidth(1);
-      }else{
-        // this line is here to center the label : without this line the label is just a little too far right
-        glTranslatef(-1.5,0.,0.);
-
-        if(fontType==0){
-          renderer->draw(w,w, labelPos);
-        }else{
-          glEnable( GL_TEXTURE_2D);
-          glBlendFunc(GL_ONE_MINUS_DST_COLOR,GL_ONE_MINUS_SRC_COLOR);
-          renderer->draw(w, w, labelPos);
-          glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-          glDisable( GL_TEXTURE_2D);
-        }
-      }
-      glPopMatrix();
-      break;
-    }
-    case 1:
-      drawPixmapFont(test,renderer,data,tmp, fontColor, nodePos+nodeCoord, labelPos, selected, nodeSize.getW());
-      break;
-    default:
-      cerr << "GlGraph::DrawNodes unknown fonts" << endl;
-      break;
-    }
-  }
-
-  void GlNode::drawPixmapFont(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,const string &str, const Color &col,  const Coord &position,
-			      int labelPos, bool, float) {
-    int rastPos[4];
-    float w_max = 300;
-    float w,h;
-    unsigned int labelsBorder = data->parameters->getLabelsBorder();
-    //need to be done before glRasterPos3f to set GL_RASTER_COLOR correctly
-    //Gl_RASTER_COLOR is used by FTGL in BITMAP and PIXMAP mode instead of GL_COLOR
-    setColor(Color(col[0],col[1],col[2],255));
-
-    glRasterPos3f(position[0], position[1], position[2]);
-
-    glGetIntegerv(GL_CURRENT_RASTER_POSITION, (GLint *) rastPos);
-    if(test->testRectangle(RectangleInt2D(rastPos[0] - labelsBorder - 5,
-					  rastPos[1]  - labelsBorder - 5,
-					  rastPos[0]  + labelsBorder + 5,
-					  rastPos[1]  + labelsBorder + 5)))
-      return;
-
-    renderer->setMode(TLP_PIXMAP);
-    renderer->setString(str, VERBATIM);
-    //renderer->setString(str, XML);
-
-    renderer->setColor(col[0], col[1], col[2]);
-    //  w_max = width;
-    renderer->getBoundingBox(w_max, h, w);
-
-    if(!test->addRectangle(RectangleInt2D(rastPos[0]-(int)(w/2.0) - labelsBorder,
-					  rastPos[1]-(int)(h/2.0) - labelsBorder,
-					  rastPos[0]+(int)(w/2.0) + labelsBorder,
-					  rastPos[1]+(int)(h/2.0) + labelsBorder))) {
-      renderer->draw(w, w, labelPos);
-    }
+    label->drawWithStencil(lod,camera);
   }
 
   void GlNode::getPointAndColor(GlGraphInputData *inputData,std::vector<Coord> &pointsCoordsArray,std::vector<Color> &pointsColorsArray){

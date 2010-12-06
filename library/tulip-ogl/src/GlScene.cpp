@@ -216,10 +216,10 @@ namespace tlp {
             // Not metric ordered
             if(!graph->isMetaNode(n)){
               glNode.id=n.id;
-              glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod);
+              glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit->camera));
             }else{
               glMetaNode.id=n.id;
-              glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod);
+              glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit->camera));
             }
           }else{
             // Metric ordered
@@ -236,10 +236,10 @@ namespace tlp {
         for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin();it!=nodesMetricOrdered.end();++it){
           if(!graph->isMetaNode((*it).first)){
             glNode.id=(*it).first.id;
-            glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second);
+            glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit->camera));
           }else{
             glMetaNode.id=(*it).first.id;
-            glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second);
+            glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit->camera));
           }
         }
       }
