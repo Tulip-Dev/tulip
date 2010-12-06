@@ -20,7 +20,6 @@ set(tulip_MOC
 set(tulip_SRCS 
     TulipApp.cpp
     Application.cpp
-    geometrie2D.cpp
     InfoDialog.cpp
     AppStartUp.cpp
     PreferenceDialog.cpp
