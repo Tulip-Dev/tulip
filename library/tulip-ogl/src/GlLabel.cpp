@@ -81,6 +81,7 @@ namespace tlp {
     xRot=0;
     yRot=0;
     zRot=0;
+    useLOD=false;
     occlusionBorderSize=0;
   }
   //============================================================
@@ -299,7 +300,7 @@ namespace tlp {
       }
     }
 
-    if(screenH < 15){
+    if(screenH < 15 && useLOD){
       float wAlign=0;
       float hAlign=0;
 

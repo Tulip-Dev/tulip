@@ -210,6 +210,20 @@ namespace tlp {
     }
 
     /**
+     * Set if the label is otimized with the lod
+     */
+    virtual void setUseLODOptimisation(bool state){
+      useLOD=state;
+    }
+
+    /**
+     * Return label border for occlusion test
+     */
+    virtual bool getUseLODOptimisation(){
+      return useLOD;
+    }
+
+    /**
      * Set label border for occlusion test
      */
     virtual void setLabelOcclusionBorder(unsigned int size){
@@ -242,6 +256,7 @@ namespace tlp {
     float xRot;
     float yRot;
     float zRot;
+    bool useLOD;
     unsigned int occlusionBorderSize;
     OcclusionTest *occlusionTester;
   };
