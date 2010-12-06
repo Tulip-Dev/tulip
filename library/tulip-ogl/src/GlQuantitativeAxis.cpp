@@ -25,7 +25,7 @@
 #include "tulip/GlQuantitativeAxis.h"
 
 template <typename T>
-std::string getStringFromNumber(T number, unsigned int precision = 5) {
+std::string getStringFromNumber(T number, unsigned int precision = 4) {
   std::ostringstream oss;
   oss.precision(precision);
   oss << number;
@@ -88,11 +88,11 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 		maxV = max;
 	} else {
 		if (min >= 1) {
-			minV = minLog = log(min) / log((double)logBase);
-			maxV = maxLog = log(max) / log((double)logBase);
+			minV = minLog = log(min) / log(static_cast<double>(logBase));
+			maxV = maxLog = log(max) / log(static_cast<double>(logBase));
 		} else {
 			minV = minLog = 0;
-			maxV = maxLog = log(max - min) / log((double)logBase);
+			maxV = maxLog = log(1 + max - min) / log(static_cast<double>(logBase));
 		}
 	}
 
@@ -113,14 +113,14 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 	axisLabels.push_back(minStr);
 	for (double i = minV + increment ; i < maxV ; i += increment) {
 
-		if (!integerScale && axisLabels.size() == nbGraduations - 1)
+		if (axisLabels.size() == nbGraduations - 1)
 			break;
 
 		string gradLabel;
 		if (!logScale) {
 			gradLabel = getStringFromNumber(i);
 		} else {
-			double labelValue = pow(logBase, i);
+			double labelValue = pow(static_cast<double>(logBase), i);
 			if (min < 1) {
 				labelValue -= (1 - min);
 			}
@@ -169,7 +169,7 @@ Coord GlQuantitativeAxis::getAxisPointCoordForValue(double value) const {
 		if (min < 1) {
 			val += (1 - min);
 		}
-		val = log(val) / log((double)logBase);
+		val = log(val) / log(static_cast<double>(logBase));
 	}
 	if (ascendingOrder) {
 		 offset = (val - minV) * scale;
@@ -207,7 +207,7 @@ double GlQuantitativeAxis::getValueForAxisPoint(const Coord &axisPointCoord) {
 		value = maxV - (offset / scale);
 	}
 	if (logScale) {
-		value = pow(logBase, value);
+		value = pow(static_cast<double>(logBase), value);
 		if (min < 1) {
 			value -= (1 - min);
 		}
