@@ -47,6 +47,8 @@ public :
   DoubleType::RealType  getEdgeMax(Graph *sg=0);
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   void uniformQuantification(unsigned int);
+  void nodesUniformQuantification(unsigned int);
+  void edgesUniformQuantification(unsigned int);
 
   void clone_handler(AbstractProperty<DoubleType,DoubleType> &);
 
