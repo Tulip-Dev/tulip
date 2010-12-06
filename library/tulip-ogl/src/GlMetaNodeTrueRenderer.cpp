@@ -73,7 +73,7 @@ namespace tlp {
     Coord maxC(bboxes[1]);
     Coord minC(bboxes[0]);
     BoundingBox includeBoundingBox;
-    inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
+    inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox,n);
     Coord includeScale(includeBoundingBox[1] - includeBoundingBox[0]);
     Coord size = (maxC + minC)/-1.f;
     Coord translate( (maxC+minC)/-2.f - (maxC-minC) + (includeBoundingBox[0]+Coord(.5,.5,.5))*((maxC-minC)*2.f) +(maxC-minC)*includeScale) ;

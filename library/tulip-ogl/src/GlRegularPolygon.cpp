@@ -40,6 +40,8 @@ namespace tlp {
   {
     computePolygon();
 
+    invertYTexture=false;
+
     setFillColor(fillColor);
     setOutlineColor(outlineColor);
     setFillMode(filled);

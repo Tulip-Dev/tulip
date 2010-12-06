@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <dirent.h>
+
 #include <string.h>
 #include <locale.h>
 
@@ -26,6 +26,12 @@
 #include <unistd.h>
 #endif
 
+#if _MSC_VER
+#include "windows.h"
+#include "Dbghelp.h"
+#else
+#include <dirent.h>
+#endif
 #include "thirdparty/gzstream/gzstream.h"
 
 #include "tulip/TlpTools.h"
@@ -286,6 +292,25 @@ std::string tlp::demangleTlpClassName(const char* className) {
 		      &length, &status);
   // skip tlp::
   return std::string(demangleBuffer + 5);
+}
+#elif _MSC_VER
+
+//extern "C" {
+//  char* _unDName(char* outputString, const char* name, int maxStringLength, void* (*pAlloc)(size_t), void (*pFree)(void*), unsigned short disableFlags);
+//}
+std::string tlp::demangleTlpClassName(const char* className) {
+	std::string result;
+
+	//UnDecorateSymbolName
+//	 __in   PCTSTR DecoratedName,
+//  __out  PTSTR UnDecoratedName,
+//  __in   DWORD UndecoratedLength,
+//  __in   DWORD Flags
+//);
+	static char demangleBuffer[256];
+	UnDecorateSymbolName(className, demangleBuffer, 256, UNDNAME_32_BIT_DECODE);
+	result = std::string(demangleBuffer);
+	return result;
 }
 #else
 #error define symbols demangling function

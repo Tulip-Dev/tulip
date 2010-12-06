@@ -42,7 +42,9 @@ namespace tlp
 GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData)
 	:inputData(inputData),
 	graph(inputData->getGraph()),
-	observersActivated(false),
+	graphObserverActivated(false),
+	layoutObserverActivated(false),
+	colorObserverActivated(false),
 	activated(true),
 	isBegin(false),
 	toComputeAll(true),
@@ -63,10 +65,12 @@ GlVertexArrayManager::~GlVertexArrayManager(){
 void GlVertexArrayManager::setInputData(GlGraphInputData *inputData){
 	clearObservers();
 	this->inputData=inputData;
+	graph=inputData->getGraph();
 	initObservers();
 }
 
 bool GlVertexArrayManager::haveToCompute(){
+
 	if(toComputeAll || toComputeLayout || toComputeColor){
 		return true;
 	}
@@ -334,17 +338,24 @@ void GlVertexArrayManager::addEdge(Graph *,const edge){
 	clearObservers();
 }
 
+void GlVertexArrayManager::addNode(Graph *,const node){
+	clearData();
+	clearObservers();
+}
+
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property){
 	if(graph->getProperty(inputData->getElementLayoutPropName())==property){
 		setHaveToComputeLayout(true);
 		clearLayoutData();
+		graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
+		layoutObserverActivated=false;
 	}
 	if(graph->getProperty(inputData->getElementColorPropName())==property){
 		setHaveToComputeColor(true);
 		clearColorData();
+		graph->getProperty(inputData->getElementColorPropName())->removePropertyObserver(this);
+		colorObserverActivated=false;
 	}
-
-	clearObservers();
 }
 
 void GlVertexArrayManager::beforeSetAllNodeValue(PropertyInterface *property) {
@@ -371,6 +382,20 @@ void GlVertexArrayManager::destroy(Graph *){
 void GlVertexArrayManager::destroy(PropertyInterface*){
 	clearData();
 	clearObservers();
+}
+
+void GlVertexArrayManager::addLocalProperty(Graph *graph, const std::string &name){
+	if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName()){
+		clearData();
+		clearObservers();
+	}
+}
+
+void GlVertexArrayManager::delLocalProperty(Graph *graph, const std::string &name){
+	if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName()){
+		clearData();
+		clearObservers();
+	}
 }
 
 void GlVertexArrayManager::clearLayoutData() {
@@ -411,22 +436,34 @@ void GlVertexArrayManager::clearData() {
 }
 
 void GlVertexArrayManager::initObservers() {
-	if(observersActivated)
-		return;
-
-	observersActivated=true;
-	graph->addGraphObserver(this);
-	graph->getProperty(inputData->getElementLayoutPropName())->addPropertyObserver(this);
-	graph->getProperty(inputData->getElementColorPropName())->addPropertyObserver(this);
+	if(!graphObserverActivated){
+		graph->addGraphObserver(this);
+		graphObserverActivated=true;
+	}
+	if(!layoutObserverActivated){
+		graph->getProperty(inputData->getElementLayoutPropName())->addPropertyObserver(this);
+		layoutObserverActivated=true;
+	}
+	if(!colorObserverActivated){
+		graph->getProperty(inputData->getElementColorPropName())->addPropertyObserver(this);
+		colorObserverActivated=true;
+	}
 }
 
 void GlVertexArrayManager::clearObservers() {
-	if(!observersActivated)
-		return;
 
-	graph->removeGraphObserver(this);
-	graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
-	graph->getProperty(inputData->getElementColorPropName())->removePropertyObserver(this);
-	observersActivated=false;
+
+	if(graphObserverActivated){
+		graph->removeGraphObserver(this);
+		graphObserverActivated=false;
+	}
+	if(layoutObserverActivated){
+		graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
+		layoutObserverActivated=false;
+	}
+	if(colorObserverActivated){
+		graph->getProperty(inputData->getElementColorPropName())->removePropertyObserver(this);
+		colorObserverActivated=false;
+	}
 }
 }

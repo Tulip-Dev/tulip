@@ -40,7 +40,7 @@ namespace tlp {
      * \version 0.0.1 24/01/2003 
      */
     template<typename Obj>
-    struct TLP_SCOPE Circle : public Vector<Obj,2> {
+    struct Circle : public Vector<Obj,2> {
       Circle(){}
       Circle(const Vector<Obj,2> &pos, Obj radius):Vector<Obj,2>(pos),radius(radius) {}
       Circle(const Circle &c):Vector<Obj,2>(c),radius(c.radius) {}

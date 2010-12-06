@@ -176,9 +176,9 @@ namespace tlp {
           */
         Obj aspectRatio() const {
             assert(isValid());
-            if (std::min(height(), width()) < std::numeric_limits<Obj>::epsilon())
+            if (std::max(height(), width()) < std::numeric_limits<Obj>::epsilon())
                 return 0.;
-            return std::max(height(), width()) / std::min(height(), width());
+            return std::min(height(), width()) / std::max(height(), width());
         }
         /**
           * Return the aspect ratio of the reactangle

@@ -46,7 +46,7 @@ public:
 	Circle(GlyphContext *gc = NULL);
 	Circle(EdgeExtremityGlyphContext *gc = NULL);
 	virtual ~Circle();
-	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
+	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
 	virtual void draw(node n, float lod);
 	virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod);
   virtual void draw(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod);
@@ -82,7 +82,7 @@ Circle::Circle(EdgeExtremityGlyphContext  *gc) :
 Circle::~Circle() {
 }
 //=====================================================
-void Circle::getIncludeBoundingBox(BoundingBox &boundingBox) {
+void Circle::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
         boundingBox[0] = Coord(-0.35, -0.35, 0);
         boundingBox[1] = Coord(0.35, 0.35, 0);
 }

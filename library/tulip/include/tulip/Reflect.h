@@ -73,7 +73,7 @@ class Graph;
    // the readable type name the serializer is designed for
    std::string outputTypeName;
    DataTypeSerializer(const std::string& otn):outputTypeName(otn) {}
-   ~DataTypeSerializer() {}
+   virtual ~DataTypeSerializer() {}
    // return a copy of this
    virtual DataTypeSerializer* clone() const = 0;
    // write the DataType embedded value into the output stream
@@ -114,7 +114,8 @@ class TLP_SCOPE DataSet {
       type names and output type names
       tnTodsts => typename to data type serializer
       otnTodts => output type name to data type serializer */
-  static TLP_HASH_MAP<std::string, DataTypeSerializer*> tnTodts, otnTodts;
+  static TLP_HASH_MAP<std::string, DataTypeSerializer*> tnTodts;
+  static TLP_HASH_MAP<std::string, DataTypeSerializer*> otnTodts;
   static void registerDataTypeSerializer(const std::string& typeName,
 					 DataTypeSerializer* dts);
  public:

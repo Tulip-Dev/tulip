@@ -60,7 +60,6 @@ dist_tulip_need_restart_SOURCES = TulipNeedRestart.cpp
 dist_tulip_app_SOURCES = \
 	TulipApp.cpp \
 	Application.cpp \
-	geometrie2D.cpp \
 	InfoDialog.cpp \
 	AppStartUp.cpp \
 	PreferenceDialog.cpp \

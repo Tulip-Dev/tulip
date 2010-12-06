@@ -20,7 +20,6 @@ set(tulip_MOC
 set(tulip_SRCS 
     TulipApp.cpp
     Application.cpp
-    geometrie2D.cpp
     InfoDialog.cpp
     AppStartUp.cpp
     PreferenceDialog.cpp
@@ -70,35 +69,41 @@ TARGET_LINK_LIBRARIES( tulip_app ${OPENGL_gl_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${LIBXML2_LIBRARIES} )
 TARGET_LINK_LIBRARIES( tulip_app ${JPEG_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipName})
+TARGET_LINK_LIBRARIES( tulip_app ${LibTulipName} ${CMAKE_DL_LIBS})
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipOglName})
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipQtName})
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipPluginsManagerName})
 ADD_DEPENDENCIES(tulip_app ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
 
 IF(WIN32)
-INSTALL(PROGRAMS
-  ${CMAKE_CURRENT_BINARY_DIR}/tulip.exe
-  DESTINATION ${TulipBinInstallDir}
-  COMPONENT tulip_app)
-INSTALL(PROGRAMS
-  ${CMAKE_CURRENT_BINARY_DIR}/tulip_app.exe
-  DESTINATION ${TulipBinInstallDir}
-  COMPONENT tulip_app)
-
-ELSE(WIN32)
-INSTALL(PROGRAMS
-  ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sh
-  DESTINATION ${TulipBinInstallDir}
-  RENAME tulip
-  COMPONENT tulip_app)
-INSTALL(PROGRAMS
-  ${CMAKE_CURRENT_BINARY_DIR}/tulip_app
-  DESTINATION ${TulipBinInstallDir}
-  COMPONENT tulip_app)
-INSTALL(PROGRAMS
-  ${CMAKE_CURRENT_BINARY_DIR}/tulip_need_restart
-  DESTINATION ${TulipBinInstallDir}
-  COMPONENT tulip_app)
-ENDIF(WIN32)
-
+  IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
+    INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip.exe
+            DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
+            COMPONENT tulip_app)
+    INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip_app.exe
+            DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
+            COMPONENT tulip_app)
+  ELSE()
+    INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip.exe
+            DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
+            COMPONENT tulip_app)
+    INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app.exe
+            DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
+            COMPONENT tulip_app)
+  ENDIF()
+ELSE()
+  INSTALL(PROGRAMS
+    ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sh
+    DESTINATION ${TulipBinInstallDir}
+    RENAME tulip
+    COMPONENT tulip_app)
+  INSTALL(PROGRAMS
+    ${CMAKE_CURRENT_BINARY_DIR}/tulip_app
+    DESTINATION ${TulipBinInstallDir}
+    COMPONENT tulip_app)
+  INSTALL(PROGRAMS
+    ${CMAKE_CURRENT_BINARY_DIR}/tulip_need_restart
+    DESTINATION ${TulipBinInstallDir}
+    COMPONENT tulip_app)
+ENDIF()
 

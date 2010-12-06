@@ -315,13 +315,13 @@ namespace tlp {
   }
 
   void UpdatePlugin::installWhenRestartTulip() {
-    string srcPath = QDir::toNativeSeparators((PluginInfo::pluginsDirName+"toInstall/").c_str()).toStdString();
-    string dstPath = QDir::toNativeSeparators((PluginInfo::pluginsDirName).c_str()).toStdString();
+	QString srcPath = QDir::toNativeSeparators(QString::fromStdString(PluginInfo::pluginsDirName)+"toInstall/");
+    QString dstPath = QDir::toNativeSeparators(QString::fromStdString(PluginInfo::pluginsDirName));
 
-    QDir srcDir(srcPath.c_str());
-    QDir dstDir(dstPath.c_str());
+	QDir srcDir(srcPath);
+    QDir dstDir(dstPath);
 
-    QFile removeFile(QString(srcPath.c_str())+"toRemove.dat");
+	QFile removeFile(srcPath+"toRemove.dat");
     if(removeFile.open(QIODevice::ReadOnly | QIODevice::Text)){
       QTextStream removeStream(&removeFile);
       while(!removeStream.atEnd()) {
@@ -342,7 +342,7 @@ namespace tlp {
       homeDir.mkpath(newPath.c_str());
     }
 
-    QFile installFile(QString(srcPath.c_str())+"toInstall.dat");
+	QFile installFile(srcPath+"toInstall.dat");
     if(installFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
       QTextStream installStream(&installFile);
       while(!installStream.atEnd()) {
@@ -370,13 +370,13 @@ namespace tlp {
 
   bool UpdatePlugin::isInstallDirWritable() {
     std::string installDir(PluginInfo::pluginsDirName);
-    return QFileInfo(installDir.c_str()).isWritable();
+    return QFileInfo(QString::fromStdString(installDir)).isWritable();
   }
 
   bool UpdatePlugin::pluginUpdatesPending() {
     std::string installChangeDir(PluginInfo::pluginsDirName);
     installChangeDir += "/toInstall/";
-    return QFileInfo(QString(installChangeDir.c_str()) + "toInstall.dat").exists()
-      || QFileInfo(QString(installChangeDir.c_str()) + "toRemove.dat").exists();
+    return QFileInfo(QString::fromStdString(installChangeDir) + "toInstall.dat").exists()
+      || QFileInfo(QString::fromStdString(installChangeDir) + "toRemove.dat").exists();
   }
 }

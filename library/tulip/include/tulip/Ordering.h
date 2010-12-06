@@ -32,8 +32,7 @@
 
 namespace tlp {
 
-class TLP_SCOPE Ordering : public std::vector<std::vector<node> > {
-  
+class TLP_SCOPE Ordering {
  public :
 
   typedef struct FaceAndPos_ {
@@ -47,10 +46,13 @@ class TLP_SCOPE Ordering : public std::vector<std::vector<node> > {
   Ordering(PlanarConMap * G, PluginProgress* pluginProgress = 0,
 	   int minProgress = 0, int deltaProgress = 0, int maxProgress = 0);
   ~Ordering();
- 
+//   inline void push_back(std::vector<node> nodeVector) { 
+  inline size_t size() { return _data.size(); }
+  inline std::vector<node> operator[](const unsigned int i) const { return _data[i]; }
+  inline std::vector<node>& operator[](const unsigned int i) { return _data[i];}
 
  private :
- 
+  std::vector<std::vector<node> > _data;
   PlanarConMap * Gp;
   MutableContainer<int> oute;
   MutableContainer<int> outv;

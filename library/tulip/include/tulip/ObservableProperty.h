@@ -18,7 +18,7 @@
  */
 #ifndef PROPERTYOBSERVABLE_H
 #define PROPERTYOBSERVABLE_H
-#include <ext/slist>
+#include <list>
 #include "tulip/tulipconf.h"
 #include "tulip/Node.h"
 #include "tulip/Edge.h"
@@ -39,7 +39,7 @@ class ObservableProperty;
  * object.
  */
 class  TLP_SCOPE PropertyObserver {
-  stdext::slist<ObservableProperty *> observables;
+  std::list<ObservableProperty *> observables;
   bool updateObservables;
  public:
  PropertyObserver(bool manageObservables = true)
@@ -101,7 +101,7 @@ class  TLP_SCOPE ObservableProperty {
   void notifyAfterSetAllEdgeValue(PropertyInterface*);
   void notifyDestroy(PropertyInterface*);
   void removeOnlyPropertyObserver(PropertyObserver *) const;
-  mutable stdext::slist<PropertyObserver*> observers;
+  mutable std::list<PropertyObserver*> observers;
 };
 /*@}*/
 

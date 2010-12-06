@@ -18,6 +18,7 @@
  */
 #include "tulip/PluginLibraryLoader.h"
 #include "tulip/TulipRelease.h"
+#include "tulip/tulipconf.h"
 #include <string.h>
 #include <set>
 
@@ -130,7 +131,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
     unsigned long idx = lib.rfind('-', lib.rfind('.') - 1);
     if (idx != std::string::npos) {
       std::string tulip_release(TULIP_RELEASE);
-      tulip_release = tulip_release.substr(0, tulip_release.rfind('.') + 1);
+      tulip_release = tulip_release.substr(0, tulip_release.rfind(STRINGIFY(VERSION_SEPARATOR)) + 1);
       if (lib.find(tulip_release, idx) == idx + 1) {
         if(!isPreviouslyLoaded(lib)){
           if (loader)

@@ -255,6 +255,11 @@ namespace tlp {
      */
     void setViewportZoom(int zoom=1,int xDec=0, int yDec=0);
 
+    /**
+     * Get a zoom level and a xDec/yDec, this parameters change viewport of the scene
+     */
+    void getViewportZoom(int &zoom, int &xDec, int &yDec);
+
     //************************************************************
     /* To Remove */
     void addGlGraphCompositeInfo(GlLayer* layer,GlGraphComposite *glGraphComposite) {

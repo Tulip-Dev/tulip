@@ -145,8 +145,77 @@ namespace tlp {
     */
   typedef Vector<float,  4> Vec4f;
   /*@}*/
+
+#ifdef _MSC_VER
+  template class Array<float, 1>;
+  template class Array<float, 2>;
+  template class Array<float, 3>;
+  template class Array<float, 4>;
+  template class Array<float, 5>;
+  template class Vector<float, 1>;
+  template class Vector<float, 2>;
+  template class Vector<float, 3>;
+  template class Vector<float, 4>;
+  template class Vector<float, 5>;
+
+  template class Array<int, 1>;
+  template class Array<int, 2>;
+  template class Array<int, 3>;
+  template class Array<int, 4>;
+  template class Array<int, 5>;
+  template class Vector<int, 1>;
+  template class Vector<int, 2>;
+  template class Vector<int, 3>;
+  template class Vector<int, 4>;
+  template class Vector<int, 5>;
+  
+  template class Array<bool, 1>;
+  template class Array<bool, 2>;
+  template class Array<bool, 3>;
+  template class Array<bool, 4>;
+  template class Array<bool, 5>;
+  template class Vector<bool, 1>;
+  template class Vector<bool, 2>;
+  template class Vector<bool, 3>;
+  template class Vector<bool, 4>;
+  template class Vector<bool, 5>;
+  
+  template class Array<double, 1>;
+  template class Array<double, 2>;
+  template class Array<double, 3>;
+  template class Array<double, 4>;
+  template class Array<double, 5>;
+  template class Vector<double, 1>;
+  template class Vector<double, 2>;
+  template class Vector<double, 3>;
+  template class Vector<double, 4>;
+  template class Vector<double, 5>;
+
+  template class Array<tlp::Vector<double,1>,1>;
+  template class Array<tlp::Vector<double,2>,2>;
+  template class Array<tlp::Vector<double,3>,3>;
+  template class Array<tlp::Vector<double,4>,4>;
+
+  template class Array<tlp::Vector<float,1>,1>;
+  template class Array<tlp::Vector<float,2>,2>;
+  template class Array<tlp::Vector<float,3>,3>;
+  template class Array<tlp::Vector<float,4>,4>;
+  
+  template class Array<tlp::Vector<int,2>,2>;
+
+  template class tlp::Vector<unsigned char ,4>;
+#endif
 }
 
+#ifdef _MSC_VER
+  static double sqrt(int i) {
+	  return sqrt((double)i);
+  }
+  //template<unsigned int SIZE>
+  static double sqrt(tlp::Vector<float, 5>& v) {
+	  return sqrt((double)v[0]);
+  }
+#endif
 
 #include "./cxx/Vector.cxx"
 #endif

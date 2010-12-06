@@ -24,7 +24,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <unistd.h>
 #include <limits.h>
 #include <string>
 #include <map>
@@ -99,6 +98,7 @@
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/QtOpenGlErrorViewer.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/tulipconf.h>
 
 #include <PluginsHelp.h>
 #include <PluginsManagerDialog.h>
@@ -261,7 +261,7 @@ void TulipApp::startTulip() {
 
   std::string assistantPath(tlp::TulipLibDir);
   assistantPath += string("../");
-  assistantPath += QT_ASSISTANT;
+  assistantPath += STRINGIFY(QT_ASSISTANT);
 // In Qt > 4.6, QAssistant is removed
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) 
   assistantProcess= new QProcess(this);

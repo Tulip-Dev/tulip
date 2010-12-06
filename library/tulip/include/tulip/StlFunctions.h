@@ -23,8 +23,8 @@
 namespace tlp {
 
 class DoubleProperty;
-class node;
-class edge;
+struct node;
+struct edge;
 /**
    This class enables to compare nodes and edges according to a metric,
    instances of this class are useful for using stl sort function.

@@ -51,7 +51,7 @@ public:
 	Ring(GlyphContext *gc = NULL);
 	Ring(EdgeExtremityGlyphContext *gc = NULL);
 	virtual ~Ring();
-	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
+	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
 	virtual string getName() {
 		return string("Ring");
 	}
@@ -79,7 +79,7 @@ Ring::Ring(EdgeExtremityGlyphContext *gc) :
 Ring::~Ring() {
 }
 //=====================================================
-void Ring::getIncludeBoundingBox(BoundingBox &boundingBox) {
+void Ring::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
 	boundingBox[0] = Coord(-0.35, -0.35, 0);
 	boundingBox[1] = Coord(0.35, 0.35, 0);
 }

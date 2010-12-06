@@ -59,6 +59,11 @@ namespace tlp {
     void setRenderingParameters(const GlGraphRenderingParameters &parameter);
 
     /**
+     * Return a pointer on rendering parameters used for rendering
+     */
+    GlGraphRenderingParameters* getRenderingParametersPointer();
+
+    /**
      * Return the inputData use by the composite
      */
     GlGraphInputData* getInputData();
