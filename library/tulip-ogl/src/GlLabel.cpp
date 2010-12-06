@@ -81,6 +81,7 @@ namespace tlp {
     xRot=0;
     yRot=0;
     zRot=0;
+    occlusionBorderSize=0;
   }
   //============================================================
   void GlLabel::setText(const string& text) {
@@ -179,6 +180,9 @@ namespace tlp {
       case ON_BOTTOM:baseCoord[1]-=size[1];break;
       default:break;
       }
+
+      w+=occlusionBorderSize;
+      h+=occlusionBorderSize;
 
       Size occlusionSize;
       if(!scaleToSize){
