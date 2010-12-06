@@ -61,7 +61,6 @@ public:
     return (*allFactories)[factoryName]->pluginExists(pluginName);
   }
 };
-
 template<class ObjectFactory, class ObjectType, class Context> class TemplateFactory: public TemplateFactoryInterface {
 public:
   TemplateFactory() {
