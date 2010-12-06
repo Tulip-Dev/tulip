@@ -184,6 +184,9 @@ DoubleProperty::DoubleProperty (Graph *sg, std::string n):AbstractProperty<Doubl
 }
 
 void DoubleProperty::uniformQuantification(unsigned int k) {
+  if (k > graph->numberOfNodes())
+    k=graph->numberOfNodes();
+
   std::map<double,double> nodeMapping;
   std::map<double,double> edgeMapping;
 
