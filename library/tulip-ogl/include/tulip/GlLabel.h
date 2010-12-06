@@ -198,6 +198,20 @@ namespace tlp {
       occlusionTester=tester;
     }
 
+    /**
+     * Set label border for occlusion test
+     */
+    virtual void setLabelOcclusionBorder(unsigned int size){
+      occlusionBorderSize=size;
+    }
+
+    /**
+     * Return label border for occlusion test
+     */
+    virtual unsigned int getLabelOcclusionBorder(){
+      return occlusionBorderSize;
+    }
+
 
   private :
 
@@ -216,6 +230,7 @@ namespace tlp {
     float xRot;
     float yRot;
     float zRot;
+    unsigned int occlusionBorderSize;
     OcclusionTest *occlusionTester;
   };
 }

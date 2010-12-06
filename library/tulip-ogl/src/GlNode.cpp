@@ -277,6 +277,7 @@ namespace tlp {
     label->rotate(0,0,data->elementRotation->getNodeValue(n));
     label->setAlignment(labelPos);
     label->setScaleToSize(data->parameters->isLabelScaled());
+    label->setLabelOcclusionBorder(data->parameters->getLabelsBorder());
     if(!data->parameters->isLabelOverlaped())
       label->setOcclusionTester(test);
     else
