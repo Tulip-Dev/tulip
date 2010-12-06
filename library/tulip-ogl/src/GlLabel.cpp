@@ -105,10 +105,19 @@ namespace tlp {
   //============================================================
   void GlLabel::setSize(const Coord &size) {
     this->size=size;
+    this->sizeForOutAlign=size;
   }
   //============================================================
   Coord GlLabel::getSize() {
     return size;
+  }
+  //============================================================
+  void GlLabel::setSizeForOutAlign(const Coord &size) {
+    this->sizeForOutAlign=size;
+  }
+  //============================================================
+  Coord GlLabel::getSizeForOutAlign() {
+    return sizeForOutAlign;
   }
   //============================================================
   void GlLabel::setBoldFont() {
@@ -174,10 +183,10 @@ namespace tlp {
 
       switch(alignment) {
       case ON_CENTER:break;
-      case ON_LEFT:baseCoord[0]-=size[0];break;
-      case ON_RIGHT:baseCoord[0]+=size[0];break;
-      case ON_TOP:baseCoord[1]+=size[1];break;
-      case ON_BOTTOM:baseCoord[1]-=size[1];break;
+      case ON_LEFT:baseCoord[0]-=sizeForOutAlign[0];break;
+      case ON_RIGHT:baseCoord[0]+=sizeForOutAlign[0];break;
+      case ON_TOP:baseCoord[1]+=sizeForOutAlign[1];break;
+      case ON_BOTTOM:baseCoord[1]-=sizeForOutAlign[1];break;
       default:break;
       }
 
@@ -254,24 +263,23 @@ namespace tlp {
 
     switch(alignment) {
     case ON_CENTER:
+      glTranslatef(translationAfterRotation[0],translationAfterRotation[1],translationAfterRotation[2]);
       break;
     case ON_LEFT:
-      glTranslatef(-size[0]/2,0,0);
+      glTranslatef(-sizeForOutAlign[0]/2,0,0);
       break;
     case ON_RIGHT:
-      glTranslatef(size[0]/2,0,0);
+      glTranslatef(sizeForOutAlign[0]/2,0,0);
       break;
     case ON_TOP:
-      glTranslatef(0,size[1]/2,0);
+      glTranslatef(0,sizeForOutAlign[1]/2,0);
       break;
     case ON_BOTTOM:
-      glTranslatef(0,-size[1]/2,0);
+      glTranslatef(0,-sizeForOutAlign[1]/2,0);
       break;
     default:
       break;
     }
-
-    glTranslatef(translationAfterRotation[0],translationAfterRotation[1],translationAfterRotation[2]);
 
     if(scaleToSize){
       if(div_h * w > size[0])        // too wide, so make it fit and maintain aspect ratio

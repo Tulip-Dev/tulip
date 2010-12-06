@@ -274,6 +274,7 @@ namespace tlp {
     label->setRenderingMode(GlLabel::POLYGON_MODE);
     label->setTranslationAfterRotation(centerBB*nodeSize);
     label->setSize(Coord(nodeSize[0]*sizeBB[0],nodeSize[1]*sizeBB[1],0));
+    label->setSizeForOutAlign(Coord(nodeSize[0],nodeSize[1],0));
     label->rotate(0,0,data->elementRotation->getNodeValue(n));
     label->setAlignment(labelPos);
     label->setScaleToSize(data->parameters->isLabelScaled());

@@ -108,6 +108,17 @@ namespace tlp {
     virtual Coord getSize();
 
     /**
+     * Set the size for alignment outside (left/right/top/bottom)
+     *  Warning : this size is reinit when you call setSize
+     */
+    virtual void setSizeForOutAlign(const Coord &size);
+
+    /**
+     * return the size for alignment outside (left/right/top/bottom)
+     */
+    virtual Coord getSizeForOutAlign();
+
+    /**
      * Set color of label
      */
     virtual void setColor(const Color &color) {
@@ -222,6 +233,7 @@ namespace tlp {
     Coord centerPosition;
     Coord translationAfterRotation;
     Coord size;
+    Coord sizeForOutAlign;
     Color color;
     int alignment;
     bool scaleToSize;
