@@ -285,6 +285,7 @@ namespace tlp {
     Color backgroundColor;
     bool viewLabel;
     bool viewOrtho;
+    bool displayEdgesInLastRendering;
 
     GlGraphComposite *glGraphComposite;
     GlLayer *graphLayer;
