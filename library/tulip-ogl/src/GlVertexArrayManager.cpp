@@ -84,8 +84,10 @@ bool GlVertexArrayManager::haveToCompute(){
 }
 
 void GlVertexArrayManager::setHaveToComputeAll(bool compute){
-  if(compute)
+  if(compute){
     clearObservers();
+    clearData();
+  }
   if(!compute)
     initObservers();
 

@@ -312,8 +312,8 @@ namespace tlp {
 
     if(glGraphComposite){
       GlVertexArrayManager *vertexArrayManager=glGraphComposite->getInputData()->getGlVertexArrayManager();
-      static bool lastDisplayEdge = glGraphComposite->isDisplayEdges();
-      if (!lastDisplayEdge && lastDisplayEdge != glGraphComposite->isDisplayEdges()) {
+      bool lastDisplayEdge = glGraphComposite->isDisplayEdges();
+      if (!displayEdgesInLastRendering && lastDisplayEdge != displayEdgesInLastRendering) {
         vertexArrayManager->setHaveToComputeAll(true);
       }
 
@@ -322,7 +322,7 @@ namespace tlp {
         glGraphComposite->acceptVisitor(&vertexArrayVisitor);
         vertexArrayManager->setHaveToComputeAll(false);
       }
-      lastDisplayEdge = glGraphComposite->isDisplayEdges();
+      displayEdgesInLastRendering = lastDisplayEdge;
     }
 
     TextRenderer fontRenderer;
