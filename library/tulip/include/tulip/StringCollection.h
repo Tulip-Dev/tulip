@@ -26,13 +26,15 @@
 #include <string>
 
 #include "tulipconf.h"
+#include <vector>
 
 namespace tlp {
 
-struct TLP_SCOPE StringCollection : public std::vector<std::string> {
+struct TLP_SCOPE StringCollection {
 
 private:
   size_t current;
+  std::vector<std::string> _data;
 
 public:
   StringCollection();
@@ -44,6 +46,12 @@ public:
   bool        setCurrent(unsigned int param);
   bool        setCurrent(std::string param);
   int         getCurrent();
+  void push_back(const std::string& element) { _data.push_back(element); };
+  inline bool empty() { return _data.empty(); }
+  inline std::string at(size_t index) { return _data.at(index); }
+  inline size_t size() { return _data.size(); }
+  inline std::string operator[](const unsigned int i) const { return _data[i]; }
+  inline std::string& operator[](const unsigned int i) { return _data[i];}
 };
 
 }

@@ -25,6 +25,7 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QInputDialog>
 
+#include <algorithm>
 #include <vector>
 
 #include "tulip/TlpQtTools.h"
@@ -120,8 +121,15 @@ void ColorScaleConfigDialog::setColorScaleFromImage(
 }
 
 void ColorScaleConfigDialog::pressButtonBrowse() {
+    QString parentDirectory="./";
+    QFileInfo colorscaleDirectory(tlpStringToQString(TulipBitmapDir)+QString("colorscales"));
+    if(colorscaleDirectory.exists() && colorscaleDirectory.isDir()){
+        parentDirectory = colorscaleDirectory.absoluteFilePath();
+    }else{
+        parentDirectory = "./";
+    }
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open Image File"),
-			"./", tr("Image Files (*.png *.jpg *.bmp)"));
+                        parentDirectory, tr("Image Files (*.png *.jpg *.bmp)"));
 	userGradientFile->setText(fileName);
 	displaySavedGradientPreview();
 }
@@ -357,29 +365,34 @@ void ColorScaleConfigDialog::setColorScale(ColorScale *colorScale) {
 		}
 
 	} else {
+
 		//init dialog with default colors
-		colorsTable->setRowCount(5);
+		colorsTable->setRowCount(6);
 		QTableWidgetItem *item1 = new QTableWidgetItem();
-		item1->setBackgroundColor(QColor(0, 255, 0, 40));
+		item1->setBackgroundColor(QColor(255, 150, 255, 255));
 		item1->setFlags(Qt::ItemIsEnabled);
 		QTableWidgetItem *item2 = new QTableWidgetItem();
-		item2->setBackgroundColor(QColor(0, 0, 255, 40));
+		item2->setBackgroundColor(QColor(150, 150, 255, 225));
 		item2->setFlags(Qt::ItemIsEnabled);
 		QTableWidgetItem *item3 = new QTableWidgetItem();
-		item3->setBackgroundColor(QColor(255, 255, 0, 40));
+		item3->setBackgroundColor(QColor(150, 255, 255, 195));
 		item3->setFlags(Qt::ItemIsEnabled);
 		QTableWidgetItem *item4 = new QTableWidgetItem();
-		item4->setBackgroundColor(QColor(255, 0, 0, 40));
+		item4->setBackgroundColor(QColor(150, 255, 150, 165));
 		item4->setFlags(Qt::ItemIsEnabled);
 		QTableWidgetItem *item5 = new QTableWidgetItem();
-		item5->setBackgroundColor(QColor(85, 0, 0, 40));
+		item5->setBackgroundColor(QColor(255, 255, 150, 135));
 		item5->setFlags(Qt::ItemIsEnabled);
+		QTableWidgetItem *item6 = new QTableWidgetItem();
+		item6->setBackgroundColor(QColor(255, 150, 150, 105));
+		item6->setFlags(Qt::ItemIsEnabled);
 		colorsTable->setItem(0, 0, item1);
 		colorsTable->setItem(1, 0, item2);
 		colorsTable->setItem(2, 0, item3);
 		colorsTable->setItem(3, 0, item4);
 		colorsTable->setItem(4, 0, item5);
-		nbColors->setValue(5);
+		colorsTable->setItem(5, 0, item6);
+		nbColors->setValue(6);
 		gradientCB->setChecked(true);
 	}
 	connect(nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));

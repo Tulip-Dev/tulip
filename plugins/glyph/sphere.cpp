@@ -48,7 +48,7 @@ public:
 	Sphere(GlyphContext *gc = NULL);
 	Sphere(EdgeExtremityGlyphContext *gc = NULL);
 	virtual ~Sphere();
-	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
+	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
 	virtual void draw(node n, float lod);
 	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
 
@@ -72,7 +72,7 @@ Sphere::Sphere(EdgeExtremityGlyphContext *gc) :
 Sphere::~Sphere() {
 }
 //=====================================================
-void Sphere::getIncludeBoundingBox(BoundingBox &boundingBox) {
+void Sphere::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
 	boundingBox[0] = Coord(-0.35, -0.35, -0.35);
 	boundingBox[1] = Coord(0.35, 0.35, 0.35);
 }

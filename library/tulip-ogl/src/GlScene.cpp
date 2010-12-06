@@ -118,6 +118,9 @@ namespace tlp {
 
     glViewport(viewport[0]-viewport[2]*xDecViewport,viewport[1]-viewport[3]*yDecViewport,viewport[2]*zoomTmp,viewport[3]*zoomTmp);
 
+		int newViewport[4];
+		glGetIntegerv(GL_VIEWPORT,newViewport);
+
 	bool antialiased = true;
 	if(glGraphComposite) {
       antialiased=glGraphComposite->getInputData()->parameters->isAntialiased();
@@ -184,6 +187,7 @@ namespace tlp {
                                     OcclusionTest *occlusionTest,LayerLODUnit *layerLODUnit){
     Graph *graph=glGraphComposite->getInputData()->getGraph();
     BooleanProperty *selectionProperty=glGraphComposite->getInputData()->elementSelected;
+    bool viewOutScreenLabel=glGraphComposite->getRenderingParameters().isViewOutScreenLabel();
     DoubleProperty *metric=NULL;
     if(graph->existProperty("viewMetric"))
       metric=graph->getProperty<DoubleProperty>("viewMetric");
@@ -202,7 +206,7 @@ namespace tlp {
     if(glGraphComposite->getInputData()->parameters->isViewNodeLabel() && !nodeLabelEmpty) {
       node n;
       for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->nodesLODVector.begin();it!=layerLODUnit->nodesLODVector.end();++it) {
-        if((*it).lod<0)
+        if((*it).lod<0 && !viewOutScreenLabel)
           continue;
 
         n.id=(*it).id;
@@ -212,10 +216,10 @@ namespace tlp {
             // Not metric ordered
             if(!graph->isMetaNode(n)){
               glNode.id=n.id;
-              glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod);
+              glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit->camera));
             }else{
               glMetaNode.id=n.id;
-              glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod);
+              glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit->camera));
             }
           }else{
             // Metric ordered
@@ -232,10 +236,10 @@ namespace tlp {
         for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin();it!=nodesMetricOrdered.end();++it){
           if(!graph->isMetaNode((*it).first)){
             glNode.id=(*it).first.id;
-            glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second);
+            glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit->camera));
           }else{
             glMetaNode.id=(*it).first.id;
-            glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second);
+            glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit->camera));
           }
         }
       }
@@ -244,7 +248,7 @@ namespace tlp {
     if(glGraphComposite->getInputData()->parameters->isViewEdgeLabel() && !edgeLabelEmpty) {
       edge e;
       for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->edgesLODVector.begin();it!=layerLODUnit->edgesLODVector.end();++it) {
-        if((*it).lod<0)
+        if((*it).lod<0 && !viewOutScreenLabel)
           continue;
 
         e.id=(*it).id;
@@ -353,7 +357,16 @@ namespace tlp {
       if(glGraphComposite)
         zOrdering=glGraphComposite->getRenderingParameters().isElementZOrdered();
 
-			BooleanProperty *filteringProperty=glGraphComposite->getRenderingParameters().getDisplayFilteringProperty();
+			BooleanProperty *filteringProperty=NULL;
+			bool displayNodes=true;
+			bool displayMetaNodes=true;
+			bool displayEdges=true;
+			if(glGraphComposite){
+				filteringProperty=glGraphComposite->getRenderingParameters().getDisplayFilteringProperty();
+				displayNodes=glGraphComposite->getRenderingParameters().isDisplayNodes();
+				displayMetaNodes=glGraphComposite->getRenderingParameters().isDisplayMetaNodes();
+				displayEdges=glGraphComposite->getRenderingParameters().isDisplayEdges();
+			}
 
       if(!zOrdering){
         // If elements are not zOrdered
@@ -379,9 +392,13 @@ namespace tlp {
 						}
 
             if(!graph->isMetaNode(node((*it).id))){
+              if(!displayNodes)
+                continue;
               glNode.id=(*it).id;
               glNode.draw((*it).lod,glGraphComposite->getInputData(),camera);
             }else{
+              if(!displayMetaNodes)
+                continue;
               glMetaNode.id=(*it).id;
               glMetaNode.draw((*it).lod,glGraphComposite->getInputData(),camera);
             }
@@ -394,6 +411,9 @@ namespace tlp {
 							if(filteringProperty->getEdgeValue(edge((*it).id)))
 								continue;
 						}
+
+            if(!displayEdges)
+              continue;
 
             glEdge.id=(*it).id;
             glEdge.draw((*it).lod,glGraphComposite->getInputData(),camera);
@@ -472,13 +492,19 @@ namespace tlp {
             ComplexEntityLODUnit *entity=(ComplexEntityLODUnit*)((*it).entity);
             if((*it).isNode){
               if(!graph->isMetaNode(node(entity->id))){
+                if(!displayNodes)
+                  continue;
                 glNode.id=entity->id;
                 glNode.draw(entity->lod,glGraphComposite->getInputData(),camera);
               }else{
+                if(!displayMetaNodes)
+                  continue;
                 glMetaNode.id=entity->id;
                 glMetaNode.draw(entity->lod,glGraphComposite->getInputData(),camera);
               }
             }else{
+              if(!displayEdges)
+                continue;
               glEdge.id=entity->id;
               glEdge.draw(entity->lod,glGraphComposite->getInputData(),camera);
             }
@@ -617,8 +643,9 @@ namespace tlp {
 	double dz = maxC[2] - minC[2];
 
 	Coord centerTmp=(maxC + minC)/2.f;
-	if(center)
+	if(center){
     *center=centerTmp;
+  }
 
 	if ((dx==0) && (dy==0) && (dz==0))
       dx = dy = dz = 10.0;
@@ -656,8 +683,9 @@ namespace tlp {
       }
 	}
 
-	if(sceneRadius)
+  if(sceneRadius){
       *sceneRadius=sceneRadiusTmp;
+    }
 
 	if(eye){
       *eye=Coord(0, 0, sceneRadiusTmp);
@@ -1053,14 +1081,6 @@ namespace tlp {
 	xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
 	out.append((char *)xmlbuff);
 
-	int lastPos=0;
-	int current=out.find("\"",lastPos);
-	while(current!=-1){
-      out.replace(current,1,"\\\"");
-      lastPos=current+2;
-      current=out.find("\"",lastPos);
-	}
-
 	xmlFree(xmlbuff);
 
 	/*free the document */
@@ -1143,6 +1163,12 @@ namespace tlp {
     viewportZoom=zoom;
     xDecViewport=xDec;
     yDecViewport=yDec;
+  }
+
+  void GlScene::getViewportZoom(int &zoom,int &xDec, int &yDec){
+    zoom=viewportZoom;
+    xDec=xDecViewport;
+    yDec=yDecViewport;
   }
 
 }

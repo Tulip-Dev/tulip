@@ -636,7 +636,7 @@ void RectanglePacking::optimalPositionOfNewRectangleLimPos(vector<Rectangle<floa
   list<RectangleRelativePosition>::iterator itBestPositionInFirstSequence;
   int numberOfLastTestedPosition;
   int quotient;
-  bool testedPositions[numberOfPositionnedRectangles+1];
+  vector<bool> testedPositions(numberOfPositionnedRectangles+1);
   
   newRectangleLeftAbscissa = 0;  
   newRectangleLowOrdinate = 0;

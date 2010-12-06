@@ -25,7 +25,7 @@
 
 #include <tulip/tulipconf.h>
 
-#include <ext/slist>
+#include <list>
 #include <map>
 #include <set>
 
@@ -41,7 +41,7 @@ class Observable;
  * of Design Patterns by Gamma, Helm, Johnson, and Vlissides.
  */
 class TLP_SCOPE Observer {
-  stdext::slist<Observable *> observables;
+  std::list<Observable *> observables;
   bool updateObservables;
  public:
   Observer(bool manageObservables = true)
@@ -127,7 +127,7 @@ class TLP_SCOPE Observable {
   static unsigned int holdCounter;
   static ObserverMap holdObserverMap;
   static ObservableMap holdObservableMap;
-  stdext::slist<Observer*> observersList;
+  std::list<Observer*> observersList;
   void removeOnlyObserver(Observer *);
 };
 

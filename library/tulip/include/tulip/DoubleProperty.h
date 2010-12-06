@@ -47,6 +47,8 @@ public :
   DoubleType::RealType  getEdgeMax(Graph *sg=0);
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   void uniformQuantification(unsigned int);
+  void nodesUniformQuantification(unsigned int);
+  void edgesUniformQuantification(unsigned int);
 
   void clone_handler(AbstractProperty<DoubleType,DoubleType> &);
 
@@ -76,9 +78,9 @@ private:
   void computeMinMaxEdge(Graph *sg=0);
 };
 
-class TLP_SCOPE DoubleVectorProperty:public AbstractProperty<tlp::DoubleVectorType, tlp::DoubleVectorType> { 
+ class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVectorType, double> { 
 public :
-  DoubleVectorProperty(Graph *g, std::string n=""):AbstractProperty<DoubleVectorType, DoubleVectorType>(g, n) {}
+ DoubleVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<DoubleVectorType, double>(g, n) {}
   PropertyInterface* clonePrototype(Graph *, const std::string& );
 };
 /*@}*/

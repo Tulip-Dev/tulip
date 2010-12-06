@@ -109,7 +109,7 @@ GraphImpl::~GraphImpl() {
   // delete recorders
   if (!recorders.empty()) {
     recorders.front()->stopRecording(this);
-    stdext::slist<GraphUpdatesRecorder*>::iterator it = recorders.begin();
+    std::list<GraphUpdatesRecorder*>::iterator it = recorders.begin();
     while(it != recorders.end()) {
       delete (*it);
       it++;
@@ -504,7 +504,7 @@ bool GraphImpl::canUnpop() {
 }
 //----------------------------------------------------------------
 void GraphImpl::delPreviousRecorders() {
-  stdext::slist<GraphUpdatesRecorder*>::iterator it =
+  std::list<GraphUpdatesRecorder*>::iterator it =
     previousRecorders.begin();
   while(it != previousRecorders.end()) {
     delete (*it);
@@ -578,7 +578,7 @@ void GraphImpl::push(bool unpopAllowed) {
 
   // delete first pushed recorder if needed
   int nb = 0;
-  stdext::slist<GraphUpdatesRecorder*>::iterator it = recorders.begin();
+  std::list<GraphUpdatesRecorder*>::iterator it = recorders.begin();
   while(it != recorders.end()) {
     if (nb == NB_MAX_RECORDERS) {
       GraphUpdatesRecorder* recorder = (*it);
@@ -644,7 +644,7 @@ bool GraphImpl::nextPopKeepPropertyUpdates(PropertyInterface* prop) {
     bool isAddedProp =
       recorders.front()->isAddedOrDeletedProperty(prop->getGraph(), prop);
     if (recorders.front()->dontObserveProperty(prop)) {
-      stdext::slist<GraphUpdatesRecorder*>::iterator it = recorders.begin();
+      std::list<GraphUpdatesRecorder*>::iterator it = recorders.begin();
       if (++it != recorders.end()) {
 	// allow the previous recorder to record
 	// the next property updates

@@ -44,7 +44,7 @@ VECTORTLP & VECTORTLP::operator*=(const VECTORTLP &vecto) {
 //======================================================
 template <typename TYPE,unsigned int SIZE>
 VECTORTLP & VECTORTLP::operator/=(const TYPE &scalaire) {
-  assert(scalaire!=0);
+  assert(scalaire!=(TYPE)0);
   for (unsigned int i=0;i<SIZE;++i)
     VECTORTLP::array[i]/=scalaire;
   return (*this);
@@ -53,7 +53,7 @@ VECTORTLP & VECTORTLP::operator/=(const TYPE &scalaire) {
 template <typename TYPE,unsigned int SIZE>
 VECTORTLP & VECTORTLP::operator/=(const VECTORTLP &vecto) {
   for (unsigned int i=0;i<SIZE;++i) {
-    assert(vecto[i]!=0);
+    assert(vecto[i]!=(TYPE)0);
     VECTORTLP::array[i]/=vecto[i];
   }
   return (*this);

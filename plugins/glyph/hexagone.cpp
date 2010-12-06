@@ -47,7 +47,7 @@ public:
 	Hexagone(GlyphContext *gc = NULL);
 	Hexagone(EdgeExtremityGlyphContext *gc);
 	virtual ~Hexagone();
-	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
+	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
 	virtual void draw(node n, float lod);
 	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
   virtual void draw(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod);
@@ -82,7 +82,7 @@ Hexagone::Hexagone(EdgeExtremityGlyphContext *gc) :
 Hexagone::~Hexagone() {
 }
 //=====================================================
-void Hexagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
+void Hexagone::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
         boundingBox[0] = Coord(-0.35, -0.35, 0);
         boundingBox[1] = Coord(0.35, 0.35, 0);
 }

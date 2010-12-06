@@ -68,11 +68,11 @@ namespace tlp {
     drawLabel(test,renderer,data,0.);
   }
 
-  void GlMetaNode::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data, float lod){
+  void GlMetaNode::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data, float lod, Camera *camera){
 
     node n=node(id);
 
-    GlNode::drawLabel(test,renderer,data,lod);
+    GlNode::drawLabel(test,renderer,data,lod,camera);
 
     if(!data->getMetaNodeRenderer()->glMetaNodeHaveToRenderLabels())
       return;
@@ -122,7 +122,7 @@ namespace tlp {
     Coord maxC(bboxes[1]);
     Coord minC(bboxes[0]);
     BoundingBox includeBoundingBox;
-    data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox);
+    data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox,n);
     Coord includeScale(includeBoundingBox[1] - includeBoundingBox[0]);
     Coord size ((maxC + minC)/-1.f);
     Coord translate( (maxC+minC)/-2.f - (maxC-minC) + (includeBoundingBox[0]+Coord(.5,.5,.5)) * ((maxC-minC)*2.f) +(maxC-minC)*includeScale );
@@ -149,15 +149,21 @@ namespace tlp {
     if (height<0.0001) height=1;
     if (dept<0.0001) dept=1;
 
+    Coord scale(1/width,1/height,1/dept);
     glScalef(1.0/width, 1.0/height, 1.0/dept);
     glTranslatef(translate[0],translate[1],translate[2]);
 
+    vector<Coord> objectScale, objectTranslate, objectCoord;
+    Camera *activeCamera=new Camera(*camera);
+    activeCamera->addObjectTransformation(nodeCoord+translate, Coord(includeSize*scale), nodeCoord);
+    activeCamera->getObjectTransformation(objectTranslate, objectScale, objectCoord);
+
     for(vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
-      (*it).drawLabel(test,renderer,&metaData);
+      (*it).drawLabel(test,renderer,&metaData,1000,camera);
     }
 
     for(vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
-      (*it).drawLabel(test,renderer,&metaData);
+      (*it).drawLabel(test,renderer,&metaData,1000,camera);
     }
 
     for(vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {

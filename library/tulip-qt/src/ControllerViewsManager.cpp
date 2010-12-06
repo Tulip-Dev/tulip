@@ -130,6 +130,48 @@ QWidget *ControllerViewsManager::getInteractorConfigurationWidgetOfView(View *vi
 // Main functions
 //**********************************************************************
 //**********************************************************************
+void ControllerViewsManager::addView(View *createdView, Graph *graph, DataSet dataSet, bool forceWidgetSize, const QRect &rect, bool maximized, const string &createdViewName, QWidget *createdWidget) {
+  connect(createdWidget, SIGNAL(destroyed(QObject *)), this,
+          SLOT(widgetWillBeClosed(QObject *)));
+
+  viewGraph[createdView] = graph;
+  viewNames[createdView] = createdViewName;
+  viewWidget[createdWidget] = createdView;
+
+  mainWindowFacade.getWorkspace()->addWindow(createdWidget);
+
+  string windowTitle = createdViewName + " : " + graph->getAttribute<string> ("name");
+  createdWidget->setWindowTitle(QString::fromUtf8(windowTitle.c_str()));
+
+  if (forceWidgetSize) {
+      ((QWidget*) (createdWidget->parent()))->setGeometry(rect);
+  } else {
+      QRect newRect = rect;
+      if (createdWidget->size().height() < 10 || createdWidget->size().width() < 10) {
+          newRect.setSize(QSize(500, 500));
+      } else {
+          newRect.setSize(createdWidget->size());
+      }
+      ((QWidget*) (createdWidget->parent()))->setGeometry(newRect);
+  }
+
+
+
+  createdWidget->setMaximumSize(32767, 32767);
+
+  // block signals in order to not execute windowActivated slot before data are set
+  mainWindowFacade.getWorkspace()->blockSignals(true);
+  if (maximized)
+      ((QWidget*) (createdWidget->parent()))->showMaximized();
+  else
+      createdWidget->show();
+  mainWindowFacade.getWorkspace()->blockSignals(false);
+
+  createdView->setData(graph,dataSet);
+
+  windowActivated(createdWidget);
+}
+
 View* ControllerViewsManager::createView(const string &name, Graph *graph, DataSet dataSet,
 		bool forceWidgetSize, const QRect &rect, bool maximized) {
 	string createdViewName;
@@ -138,45 +180,7 @@ View* ControllerViewsManager::createView(const string &name, Graph *graph, DataS
 	ControllerViewsTools::createView(name, graph, dataSet, mainWindowFacade.getWorkspace(),
 			&createdViewName, &createdView, &createdWidget);
 
-	connect(createdWidget, SIGNAL(destroyed(QObject *)), this,
-			SLOT(widgetWillBeClosed(QObject *)));
-
-	viewGraph[createdView] = graph;
-	viewNames[createdView] = createdViewName;
-	viewWidget[createdWidget] = createdView;
-
-	mainWindowFacade.getWorkspace()->addWindow(createdWidget);
-
-	string windowTitle = createdViewName + " : " + graph->getAttribute<string> ("name");
-	createdWidget->setWindowTitle(QString::fromUtf8(windowTitle.c_str()));
-
-	if (forceWidgetSize) {
-		((QWidget*) (createdWidget->parent()))->setGeometry(rect);
-	} else {
-		QRect newRect = rect;
-		if (createdWidget->size().height() < 10 || createdWidget->size().width() < 10) {
-			newRect.setSize(QSize(500, 500));
-		} else {
-			newRect.setSize(createdWidget->size());
-		}
-		((QWidget*) (createdWidget->parent()))->setGeometry(newRect);
-	}
-
-
-
-	createdWidget->setMaximumSize(32767, 32767);
-
-	// block signals in order to not execute windowActivated slot before data are set
-	mainWindowFacade.getWorkspace()->blockSignals(true);
-	if (maximized)
-		((QWidget*) (createdWidget->parent()))->showMaximized();
-	else
-		createdWidget->show();
-	mainWindowFacade.getWorkspace()->blockSignals(false);
-
-	createdView->setData(graph,dataSet);
-
-	windowActivated(createdWidget);
+    addView(createdView, graph, dataSet, forceWidgetSize, rect, maximized, createdViewName, createdWidget);
 
 	return createdView;
 }

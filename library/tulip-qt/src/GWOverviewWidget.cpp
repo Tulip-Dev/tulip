@@ -236,7 +236,7 @@ void RectPosition::draw(GlMainWidget*) {
   }
 
   //_observedView->makeCurrent();
-  Vector<Coord, 4> points;
+  Array<Coord, 4> points;
   Vector<int,   4> viewport = _observedView->getScene()->getViewport();
   points[0] = Coord(viewport[0]              , viewport[1], 0);
   points[1] = Coord(viewport[0] + viewport[2], viewport[1], 0);
@@ -247,7 +247,7 @@ void RectPosition::draw(GlMainWidget*) {
 
   //_view->makeCurrent();
   viewport = _view->getScene()->getViewport();
-  Vector<Coord, 4> points2;
+  Array<Coord, 4> points2;
   points2[0] = Coord(viewport[0]              , viewport[1], 0);
   points2[1] = Coord(viewport[0] + viewport[2], viewport[1], 0);
   points2[2] = Coord(viewport[0] + viewport[2], viewport[1] + viewport[3], 0.0);

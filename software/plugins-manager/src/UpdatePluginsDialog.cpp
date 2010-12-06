@@ -36,7 +36,7 @@ namespace tlp {
     }
 
     string typeName="";
-    for(set<DistPluginInfo>::iterator it=pluginsOutOfDateSorted.begin();it!=pluginsOutOfDateSorted.end();++it){
+    for(set<DistPluginInfo,PluginTypeCmp>::iterator it=pluginsOutOfDateSorted.begin();it!=pluginsOutOfDateSorted.end();++it){
       if(typeName!=(*it).displayType){
         typeName=(*it).displayType;
         QListWidgetItem *item=new QListWidgetItem(QString("-- ")+typeName.c_str()+" --");

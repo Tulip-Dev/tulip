@@ -198,7 +198,7 @@ namespace tlp {
 
   void PluginsViewWidget::setItemCheckability(const PluginInfo *pluginInfo,bool created, QTreeWidgetItem *twi) {
     if (!pluginsDirIsWritable) {
-      twi->setFlags(twi->flags() & (!Qt::ItemIsUserCheckable));
+      twi->setFlags(twi->flags() & ((int) !Qt::ItemIsUserCheckable));
       return;
     }
     if(!pluginInfo->local && ((twi->flags() & Qt::ItemIsUserCheckable) == Qt::ItemIsUserCheckable)) {
@@ -221,7 +221,7 @@ namespace tlp {
         if(havePlugin) {
           twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);
         }else{
-          twi->setFlags(twi->flags() & (!Qt::ItemIsUserCheckable));
+          twi->setFlags(twi->flags() & ((int)!Qt::ItemIsUserCheckable));
         }
       }else{
         if(havePlugin) {
@@ -267,7 +267,7 @@ namespace tlp {
           }
         }else{
           if(!isCompatible((*it)->text(0).toStdString())){
-            (*it)->setFlags((*it)->flags()&(!Qt::ItemIsUserCheckable));
+            (*it)->setFlags((*it)->flags()&((int)!Qt::ItemIsUserCheckable));
           }
         }
 
@@ -361,7 +361,7 @@ namespace tlp {
     twi->setText(1, QString(""));
     if(pluginInfo->local) {
       if(!((LocalPluginInfo*)pluginInfo)->isInstalledInHome()){
-        twi->setFlags(twi->flags() & (!Qt::ItemIsUserCheckable));
+        twi->setFlags(twi->flags() & ((int)!Qt::ItemIsUserCheckable));
         twi->setFlags(twi->flags() | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
       }else{
         twi->setFlags(twi->flags() | Qt::ItemIsUserCheckable);

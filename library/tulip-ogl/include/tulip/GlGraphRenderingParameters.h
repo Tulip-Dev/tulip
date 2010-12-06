@@ -69,6 +69,14 @@ namespace tlp {
      */
     bool isViewEdgeLabel() const;
     /**
+     * activate or deactivate displaying of labels outside the screen.
+     */
+    void setViewOutScreenLabel(const bool state);
+    /**
+     * return true if drawing of outscreen labels is activated.
+     */
+    bool isViewOutScreenLabel() const;
+    /**
      *activate or deactivate interpolation of nodes colors along edge
      */
     void setEdgeColorInterpolate(const bool state);
@@ -280,6 +288,22 @@ namespace tlp {
      * return the selection color
      */
     Color getSelectionColor();
+    /**
+     * return if labels are scaled to node size
+     */
+    bool isLabelScaled();
+    /**
+     * Set if labels are scaled to node size
+     */
+    void setLabelScaled(bool state);
+    /**
+     * return if labels can be overlaped
+     */
+    bool isLabelOverlaped();
+    /**
+     * Set if labels can be overlaped
+     */
+    void setLabelOverlaped(bool state);
 
 		/**
 		 * This property is use to filter nodes/edges display, for a node/edge if this property is false : the node/edge will not be diplayed
@@ -303,6 +327,7 @@ namespace tlp {
     bool _viewNodeLabel;
     bool _viewEdgeLabel;
     bool _viewMetaLabel;
+    bool _viewOutScreenLabel;
     bool _elementOrdered;
     bool _incrementalRendering;
     bool _edgeColorInterpolate;
@@ -321,7 +346,8 @@ namespace tlp {
     int _nodesLabelStencil;
     int _metaNodesLabelStencil;
     int _edgesLabelStencil;
-    unsigned int _FontsType;
+    bool _labelScaled;
+    bool _labelOverlaped;
     unsigned int _labelsBorder;
     std::string _fontsPath;
     std::string _texturePath;

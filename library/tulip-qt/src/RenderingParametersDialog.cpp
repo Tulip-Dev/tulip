@@ -55,7 +55,9 @@ namespace tlp {
     setButtonColor(QColor(backgroundC[0],backgroundC[1],backgroundC[2]),background);
     Color selectionC = param.getSelectionColor();
     setButtonColor(QColor(selectionC[0],selectionC[1],selectionC[2]),selection);
-    fonts->setCurrentIndex(param.getFontsType());
+    scaled->setChecked(param.isLabelScaled());
+    overlap->setChecked(!param.isLabelOverlaped());
+    frame->setEnabled(!param.isLabelOverlaped());
     density->setValue(param.getLabelsBorder());
     blockEdgeSizeCheckBox->setChecked(param.getEdgesMaxSizeToNodesSize());
 
@@ -74,7 +76,8 @@ namespace tlp {
     param.setElementOrdered(ordering->isChecked());
     mainView->getGlMainWidget()->getScene()->setViewOrtho(orthogonal->isChecked());
     param.setEdge3D(edge3D->isChecked());
-    param.setFontsType(fonts->currentIndex());
+    param.setLabelScaled(scaled->isChecked());
+    param.setLabelOverlaped(!overlap->isChecked());
     QColor backgroundC = background->palette().color(QPalette::Button);
     mainView->getGlMainWidget()->getScene()->setBackgroundColor(Color(backgroundC.red(),backgroundC.green(),backgroundC.blue()));
     QColor selectionC = selection->palette().color(QPalette::Button);

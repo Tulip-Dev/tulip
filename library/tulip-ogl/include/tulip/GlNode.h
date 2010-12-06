@@ -30,6 +30,7 @@ namespace tlp {
   struct OcclusionTest;
   class TextRenderer;
   class GlSceneVisitor;
+  class GlLabel;
 
   /**
    * Class to represent a node of a graph
@@ -42,7 +43,7 @@ namespace tlp {
      * Default constructor with id
      * id must be the id of the node in graph
      */
-    GlNode(unsigned int id):id(id) {}
+    GlNode(unsigned int id);
 
     /**
      * Virtual function to accept GlSceneVisitor on this class
@@ -75,12 +76,9 @@ namespace tlp {
      * Draw the label of the node if drawEdgesLabel is true
      * Use TextRenderer : renderer to draw the label
      */
-    virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod);
+    virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod, Camera *camera=NULL);
 
     unsigned int id;
-
-    virtual void drawPixmapFont(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,
-        const std::string &str, const Color &col,  const Coord &position, int labelPos, bool selected, float width);
 
     /**
      * This function is used by the engine to get point coordinate and color of the node
@@ -91,6 +89,10 @@ namespace tlp {
      * This function is used by the engine to get color of the node
      */
     void getColor(GlGraphInputData *inputData,std::vector<Color> &pointsColorsArray);
+
+  protected :
+
+    static GlLabel *label;
 
   };
 

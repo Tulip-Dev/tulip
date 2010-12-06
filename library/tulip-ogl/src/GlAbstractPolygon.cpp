@@ -33,6 +33,7 @@ namespace tlp {
       filled(true),
       outlined(true),
       lighting(true),
+      invertYTexture(true),
       textureName(""),
       outlineSize(1.),
       hideOutlineLod(0.),
@@ -212,7 +213,10 @@ namespace tlp {
       for(size_t i=0;i<size;++i){
         if(filled){
           texArray[i*2]=(points[i][0]-boundingBox[0][0])/(boundingBox[1][0]-boundingBox[0][0]);
-					texArray[i*2+1]=(points[i][1]-boundingBox[0][1])/(boundingBox[1][1]-boundingBox[0][1]);
+          if(!invertYTexture)
+            texArray[i*2+1]=(points[i][1]-boundingBox[0][1])/(boundingBox[1][1]-boundingBox[0][1]);
+          else
+            texArray[i*2+1]=1-(points[i][1]-boundingBox[0][1])/(boundingBox[1][1]-boundingBox[0][1]);
         }
         indices[i]=i;
         if(polygonMode==QUAD_STRIP){

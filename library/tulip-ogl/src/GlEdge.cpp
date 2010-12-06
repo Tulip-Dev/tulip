@@ -285,11 +285,19 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	getEdgeAnchor(data,source,target,bends,srcCoord,tgtCoord,srcSize,tgtSize,srcAnchor,tgtAnchor);
 
 	if (selected) {
+		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+
 		Coord p1=camera->screenTo3DWorld(Coord(0,0,0));
 		Coord p2=camera->screenTo3DWorld(Coord(2,0,0));
 		edgeSize[0] += (p2-p1).norm();
 		edgeSize[1] += (p2-p1).norm();
+
+		glMatrixMode(GL_PROJECTION);
+		glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
 		glPopMatrix();
 	}
 
@@ -302,14 +310,14 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	unsigned int endEdgeGlyph = data->elementTgtAnchorShape->getEdgeValue(e);
 
 	if (startEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
-		displayArrow(data,e,source,edgeSize[0],srcCol,maxSrcSize,selected,startEdgeGlyph,endEdgeGlyph,
+                displayArrow(data,e,source,data->elementSrcAnchorSize->getEdgeValue(e),edgeSize[0],srcCol,maxSrcSize,selected,startEdgeGlyph,endEdgeGlyph,
 				bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
 	} else {
 		beginLineAnchor = srcAnchor;
 	}
 
 	if (endEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
-		displayArrow(data,e,target,edgeSize[1],tgtCol,maxTgtSize,selected,endEdgeGlyph,startEdgeGlyph,
+                displayArrow(data,e,target,data->elementTgtAnchorSize->getEdgeValue(e),edgeSize[1],tgtCol,maxTgtSize,selected,endEdgeGlyph,startEdgeGlyph,
 				bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
 	} else {
 		endLineAnchor = tgtAnchor;
@@ -697,6 +705,7 @@ float GlEdge::getEdgeWidthLod(const Coord &edgeCoord,
 void GlEdge::displayArrow(GlGraphInputData *data,
 		edge e,
 		node source,
+                const Size& sizeRatio,
 		float edgeSize,
 		const Color &color,
 		float maxSize,
@@ -709,7 +718,7 @@ void GlEdge::displayArrow(GlGraphInputData *data,
 		const Coord &srcAnchor,
 		const Coord &tgtAnchor,
 		Coord &lineAnchor){
-	const Size &sizeRatio = data->elementSrcAnchorSize->getEdgeValue(e);
+//	 = data->elementSrcAnchorSize->getEdgeValue(e);
 
 	//Correct begin tmp Anchor
 	Coord beginTmpAnchor = anchor;

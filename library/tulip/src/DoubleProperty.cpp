@@ -184,23 +184,24 @@ DoubleProperty::DoubleProperty (Graph *sg, std::string n):AbstractProperty<Doubl
 }
 
 void DoubleProperty::uniformQuantification(unsigned int k) {
+  nodesUniformQuantification(k);
+  edgesUniformQuantification(k);
+}
+//===============================================================
+void DoubleProperty::nodesUniformQuantification(unsigned int k) {
   std::map<double,double> nodeMapping;
-  std::map<double,double> edgeMapping;
 
-  //===============================================================
-  //build the histogram of node values
-  {
+  { //build the histogram of node values
     map<double,int> histogram;
     Iterator<node> *itN=graph->getNodes();
     while (itN->hasNext()) {
-	  node itn=itN->next();
+      node itn=itN->next();
       const double& nodeValue=getNodeValue(itn);
-      if (histogram.find(nodeValue)==histogram.end()) 
-	histogram[nodeValue]=1;
+      if (histogram.find(nodeValue)==histogram.end())
+    histogram[nodeValue]=1;
       else
-	histogram[nodeValue]+=1;
+    histogram[nodeValue]+=1;
     } delete itN;
-    //===============================================================
     //Build the color map
     map<double,int>::iterator it;
     double sum=0;
@@ -212,18 +213,26 @@ void DoubleProperty::uniformQuantification(unsigned int k) {
       while (sum>cK*double(k2+1)) ++k2;
     }
   }
-  //===============================================================
-  //build the histogram of edges values
-  {
+
+  Iterator<node> *itN=graph->getNodes();
+  while(itN->hasNext()) {
+    node itn=itN->next();
+    setNodeValue(itn,nodeMapping[getNodeValue(itn)]);
+  } delete itN;
+}
+//===============================================================
+void DoubleProperty::edgesUniformQuantification(unsigned int k) {
+  std::map<double,double> edgeMapping;
+  { //build the histogram of edges values
     map<double,int> histogram;
     Iterator<edge> *itE=graph->getEdges();
     while (itE->hasNext()) {
       edge ite=itE->next();
       const double& value=getEdgeValue(ite);
-      if (histogram.find(value)==histogram.end()) 
-	histogram[value]=1;
+      if (histogram.find(value)==histogram.end())
+    histogram[value]=1;
       else
-	histogram[value]+=1;
+    histogram[value]+=1;
     } delete itE;
     //===============================================================
     //Build the color map
@@ -238,18 +247,12 @@ void DoubleProperty::uniformQuantification(unsigned int k) {
     }
   }
 
-  Iterator<node> *itN=graph->getNodes();
-  while(itN->hasNext()) {
-    node itn=itN->next();
-    setNodeValue(itn,nodeMapping[getNodeValue(itn)]);
-  } delete itN;
   Iterator<edge> *itE=graph->getEdges();
   while(itE->hasNext()) {
     edge ite=itE->next();
     setEdgeValue(ite,edgeMapping[getEdgeValue(ite)]);
   } delete itE;
 }
-
 //====================================================================
 ///Renvoie le minimum de la metrique associe aux noeuds du DoubleProperty
 double DoubleProperty::getNodeMin(Graph *sg) {

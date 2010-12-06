@@ -13,6 +13,11 @@ set(pluginInstaller_SRCS
     PluginInstaller.cpp
 )
 
+set(pluginPusher_SRCS
+    PluginGenerate.cpp
+    PushToPluginServer.cpp
+)
+
 INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${LIBXML2_INCLUDE_DIR} ${PROJECT_BINARY_DIR}/library/tulip-qt/include/tulip ${PROJECT_BINARY_DIR}/software/tulip/include ${TulipInclude} ${TulipQtInclude} ${TulipOGLInclude} ${TulipPluginsManagerInclude})
 
 ADD_EXECUTABLE(serverGenerator ${serverGenerator_SRCS})
@@ -88,6 +93,16 @@ TARGET_LINK_LIBRARIES(pluginInstaller
 ENDIF(QT_VERSION_MINOR LESS 7)                      	
                       
 ADD_DEPENDENCIES(pluginInstaller ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
+
+QT4_WRAP_CPP(pluginPusher_MOC_SRCS PushToPluginServer.h)
+ADD_EXECUTABLE(pluginPusher ${pluginPusher_SRCS} ${pluginPusher_MOC_SRCS})
+target_link_libraries(pluginPusher ${QT_LIBRARIES} 
+                      ${LibTulipName}
+                      ${LibTulipOglName}
+                      ${LibTulipQtName}
+                      ${LibTulipPluginsManagerName} 
+                      ${LIBXML2_LIBRARIES})
+
 
 INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/generate_plugin_dirs.sh
         DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")

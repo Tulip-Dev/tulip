@@ -24,7 +24,7 @@
 //Specialisation
 namespace tlp {
     template<typename Obj>
-    class Matrix<Obj,1>:public Vector<Vector<Obj,1>,1> {
+    class Matrix<Obj,1>:public Array<Vector<Obj,1>,1> {
     public:
       Obj determinant() {return (*this)[0][0];}
       //      Matrix<Obj,1>& fill(Obj obj) {return *this;}

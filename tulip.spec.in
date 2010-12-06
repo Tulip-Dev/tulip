@@ -88,6 +88,23 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/bitmaps/logolabri.jpg
 %{prefix}/lib/tlp/bitmaps/tex_back.png
 %{prefix}/lib/tlp/bitmaps/startup.gif
+%{prefix}/lib/tlp/bitmaps/colorscales/BiologicalHeatMap.png
+%{prefix}/lib/tlp/bitmaps/colorscales/BlackPink.png
+%{prefix}/lib/tlp/bitmaps/colorscales/BlackRedYellowWhite.png
+%{prefix}/lib/tlp/bitmaps/colorscales/BlueGreenYellow.png
+%{prefix}/lib/tlp/bitmaps/colorscales/Blue.png
+%{prefix}/lib/tlp/bitmaps/colorscales/BrownCyan.png
+%{prefix}/lib/tlp/bitmaps/colorscales/Brown.png
+%{prefix}/lib/tlp/bitmaps/colorscales/CMYK.png
+%{prefix}/lib/tlp/bitmaps/colorscales/GreenRed.png
+%{prefix}/lib/tlp/bitmaps/colorscales/MentheGrenadine.png
+%{prefix}/lib/tlp/bitmaps/colorscales/OrangeBlue.png
+%{prefix}/lib/tlp/bitmaps/colorscales/Pink.png
+%{prefix}/lib/tlp/bitmaps/colorscales/Rainbow.png
+%{prefix}/lib/tlp/bitmaps/colorscales/RedBlue.png
+%{prefix}/lib/tlp/bitmaps/colorscales/Red.png
+%{prefix}/lib/tlp/bitmaps/colorscales/RedYellow.png
+%{prefix}/lib/tlp/bitmaps/colorscales/Temperature.png
 %{prefix}/include
 %{prefix}/share/@PACKAGE@
 

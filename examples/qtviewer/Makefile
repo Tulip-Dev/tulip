@@ -1,6 +1,6 @@
 SHELL=sh
 TARGET= qtviewer
-SRCS=   qtviewer.cpp
+SRCS=   qtviewer.cpp mainwindow.cpp
 
 CXXFLAGS = -DNDEBUG -O3 -funroll-loops -Wall `tulip-config --glincludes` `tulip-config --qtincludes` `tulip-config --cxxflags` -D_REENTRANT -DQT_THREAD_SUPPORT -DQT_PLUGIN -DQT_SHARED
 
@@ -10,10 +10,13 @@ CXXFLAGS = -DNDEBUG -O3 -funroll-loops -Wall `tulip-config --glincludes` `tulip-
 CXX=g++
 LDFLAGS=`tulip-config --libs` `tulip-config --qtlibs` `tulip-config --gllibs`
 
-OBJS=$(SRCS:.cpp=.o)
+
 
 DEPS=$(SRCS:.cpp=.d)
 
+MOCS= moc_mainwindow.cpp
+
+OBJS=$(SRCS:.cpp=.o) $(MOCS:.cpp=.o) 
 
 all: $(TARGET)
 
@@ -22,6 +25,10 @@ $(TARGET): $(OBJS)
 
 clean :
 	-rm -f $(TARGET) *.o *.d
+
+moc_%.cpp: %.h 
+	moc -o $@ $<
+
 
 %.d: %.cpp
 	@$(SHELL) -ec '$(CXX) -M $(CXXFLAGS) $< \

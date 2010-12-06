@@ -20,6 +20,7 @@
 #define ABSTRACT_PROPERTY_H
 
 #include <string>
+#include <cstdlib>
 #include "tulip/tulipconf.h"
 #include "tulip/PropertyInterface.h"
 #include "tulip/Iterator.h"
@@ -101,7 +102,7 @@ class TLP_SCOPE AbstractProperty : public PropertyInterface {
   friend class GraphView;
 
 public:
-  static TLP_SCOPE TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext > *factory;
+  static TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext > *factory;
   static void initFactory() {
     if (!factory) {
       factory = new TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext >;
@@ -414,7 +415,65 @@ protected:
   typename Tnode::RealType nodeDefaultValue;
   typename Tedge::RealType edgeDefaultValue;
 };
+
+ template <typename vectType,typename eltType > 
+   class TLP_SCOPE AbstractVectorProperty : public AbstractProperty<vectType, vectType> {
+ public:
+  AbstractVectorProperty(Graph *, std::string name = "");
+  /**
+   * Set the value of the elt i of the vector associated to node n
+   * and notify the observers of a modification.
+   */
+  void setNodeEltValue(const node n, unsigned int i, const eltType &v);
+  /**
+   * get the value of the elt i of the vector associated to node n
+   * and notify the observers of a modification.
+   */
+  const eltType& getNodeEltValue(const node n, unsigned int i) const;
+  /**
+   * append a new value at the end of the vector associated to node n
+   * and notify the observers of a modification.
+   */
+  void pushBackNodeEltValue(const node n, const eltType &v);
+  /**
+   * remove the value at the end of the vector associated to node n
+   * and notify the observers of a modification.
+   */
+  void popBackNodeEltValue(const node n);
+  /**
+   * resize the vector associated to node n
+   * and notify the observers of a modification.
+   */
+  void resizeNodeValue(const node n, size_t size, eltType elt = eltType());
+  /**
+   * Set the value of the elt i of the value associated to edge
+   * and notify the observers of a modification.
+   */
+  void setEdgeEltValue(const edge e, unsigned int i, const eltType &v);
+  /**
+   * get the value of the elt i of the vector associated to edge e
+   * and notify the observers of a modification.
+   */
+  const eltType& getEdgeEltValue(const edge n, unsigned int i) const;
+  /**
+   * append a new value at the end of the vector associated to edge e
+   * and notify the observers of a modification.
+   */
+  void pushBackEdgeEltValue(const edge e, const eltType &v);
+  /**
+   * remove the value at the end of the vector associated to edge e
+   * and notify the observers of a modification.
+   */
+  void popBackEdgeEltValue(const edge e);
+  /**
+   * resize the vector associated to edgee e
+   * and notify the observers of a modification.
+   */
+  void resizeEdgeValue(const edge e, size_t size, eltType elt = eltType());
+ };
 /*@}*/
 }
-#include "./cxx/AbstractProperty.cxx"
+#if !defined(_MSC_VER) || defined(DLL_TULIP) //When using VC++, we only want to include this when we are in the TULIP dll. With any other compiler, include it all the time
+#	include "./cxx/AbstractProperty.cxx"
+#endif
 #endif

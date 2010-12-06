@@ -17,12 +17,13 @@
  *
  */
 #include "PluginInfo.h"
+#include "tulip/tulipconf.h"
 
 #include <QtCore/QDir>
 
 using namespace std;
 
-const QString TulipSimpleVersion=(QString(TULIP_RELEASE).split("."))[0]+"."+(QString(TULIP_RELEASE).split("."))[1];
+const QString TulipSimpleVersion=(QString(TULIP_RELEASE).split(QString(STRINGIFY(VERSION_SEPARATOR))))[0]+QString(STRINGIFY(VERSION_SEPARATOR))+(QString(TULIP_RELEASE).split(QString(STRINGIFY(VERSION_SEPARATOR))))[1];
 
 //====================================================
 #ifdef _WIN32

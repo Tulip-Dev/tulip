@@ -47,7 +47,7 @@ public:
 	Pentagone(GlyphContext *gc = NULL);
 	Pentagone(EdgeExtremityGlyphContext *gc);
 	virtual ~Pentagone();
-	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
+	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
 	virtual void draw(node n, float lod);
 	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
   virtual void draw(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod);
@@ -84,7 +84,7 @@ Pentagone::Pentagone(EdgeExtremityGlyphContext *gc) :
 Pentagone::~Pentagone() {
 }
 //=====================================================
-void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox) {
+void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
         boundingBox[0] = Coord(-0.30, -0.35, 0);
         boundingBox[1] = Coord(0.30, 0.35, 0);
 }

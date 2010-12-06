@@ -82,11 +82,13 @@ namespace tlp {
     void propertyValueChanged(PropertyInterface *property);
 
     void addEdge(Graph *,const edge);
+    void addNode(Graph *,const node);
     void beforeSetAllNodeValue(PropertyInterface*);
     void beforeSetAllEdgeValue(PropertyInterface*);
     void beforeSetNodeValue(PropertyInterface*, const node);
     void beforeSetEdgeValue(PropertyInterface*, const edge);
-
+    void addLocalProperty(Graph*, const std::string&);
+    void delLocalProperty(Graph*, const std::string&);
 
     void destroy(Graph *);
     void destroy(PropertyInterface*);
@@ -101,7 +103,9 @@ namespace tlp {
 
     GlGraphInputData *inputData;
     Graph *graph;
-    bool observersActivated;
+    bool graphObserverActivated;
+    bool layoutObserverActivated;
+    bool colorObserverActivated;
 
     bool activated;
     bool isBegin;

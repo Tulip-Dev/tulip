@@ -43,7 +43,7 @@ public:
 	Cylinder(GlyphContext *gc = NULL);
 	Cylinder(EdgeExtremityGlyphContext *gc = NULL);
 	virtual ~Cylinder();
-	virtual void getIncludeBoundingBox(BoundingBox &boundingBox);
+	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
 	virtual void draw(node n, float lod);
 	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
 	virtual Coord getAnchor(const Coord &vector) const;
@@ -64,7 +64,7 @@ Cylinder::Cylinder(EdgeExtremityGlyphContext *gc) :
 Cylinder::~Cylinder() {
 }
 //=====================================================
-void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox) {
+void Cylinder::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
         boundingBox[0] = Coord(-0.35, -0.35, 0);
         boundingBox[1] = Coord(0.35, 0.35, 1);
 }

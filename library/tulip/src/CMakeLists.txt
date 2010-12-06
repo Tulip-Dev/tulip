@@ -5,6 +5,11 @@ INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${PROJECT_SOURCE_DIR} ${ZLI
 
 ADD_LIBRARY (${LibTulipName} SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)
 TARGET_LINK_LIBRARIES(${LibTulipName} gzstream )
+IF(WIN32)
+	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
+		TARGET_LINK_LIBRARIES(${LibTulipName} Dbghelp)
+	ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+ENDIF(WIN32)
 
 INSTALL(TARGETS ${LibTulipName}
        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip
