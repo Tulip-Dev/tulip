@@ -63,11 +63,13 @@ INSTALL(FILES
 	tulip/GlCompositeHierarchyManager.h
 	tulip/BaseGraphicsViewComponentMacro.h
     tulip/QtOpenGlErrorViewer.h
-    tulip/CSVParser.h
-    tulip/ImportCSVDataWidget.h
-    tulip/ImportCSVDataConfigurationWidget.h
-    tulip/ImportCSVDataDialog.h
     tulip/CSVContentHandler.h
+    tulip/CSVGraphImport.h
+    tulip/CSVGraphMappingConfigurationWidget.h
+    tulip/CSVImportConfigurationWidget.h
+    tulip/CSVImportWidget.h
+    tulip/CSVParser.h    
+    tulip/CSVParserConfigurationWidget.h
     tulip/QtGlSceneZoomAndPanAnimator.h
     tulip/Morphing.h
     tulip/GraphPropertiesTableWidget.h

@@ -24,44 +24,91 @@
 #include <vector>
 #include <limits.h>
 
+#include <QtCore/QTextCodec>
+#include <QtCore/QString>
+#include "tulip/CSVContentHandler.h"
 namespace tlp {
 
-class CSVContentHandler;
-class PluginProgress;
+    class PluginProgress;
 
-/*
+
+    /*
+    * @brief Interface for CSV data parser.
+    *
+    * Send the found tokens to the CSVContentHandler interface.    
+    */
+    class TLP_QT_SCOPE CSVParser {
+    public:        
+        virtual ~CSVParser(){}
+
+        /**
+          * @brief Parse the data and send the tokens found to the CSVContentHandler.
+          *
+          * Notify the progression of the parsing with the progress object.
+          **/
+        virtual bool parse(CSVContentHandler * handler,tlp::PluginProgress* progress=NULL) = 0;
+    };
+
+ /*
  * @brief Parse a csv data and send each tokens to the given CSVContentHandler object.
+ *
  * Parse a csv data and send each tokens to the given CSVContentHandler object. Get each line of the file and parse them.
  * Send the found tokens to the CSVContentHandler interface.
  * \code
- * CSVParser parser;
- * \/\/Automatically remove quotes.
- * parser.setRemoveQuotes(true);
- * string filename = "fileName.csv";
+ * CSVParser parser(fileName,";","\"","UTF-8",true);
+ * \/\/Automatically remove quotes. 
  * CSVContentHandler * handler ;
- * parser.parse(filename,";",handler);
+ * parser.parse(handler);
  * \endcode
  */
-class TLP_QT_SCOPE CSVParser {
-public:
-  CSVParser();
-  virtual ~CSVParser();
+    class TLP_QT_SCOPE CSVSimpleParser : public CSVParser {
+    public:
+        CSVSimpleParser(const std::string& fileName,const std::string& separator=std::string(";"),char='"',const std::string& fileEncoding=std::string("UTF-8"),bool removeQuotes=true);
+        virtual ~CSVSimpleParser();
 
-  void setRemoveQuotes(bool removeQuotes) {
-    this->removeQuotes = removeQuotes;
-  }
-  virtual void parse(const std::string& fileName, const std::string& separator,
-		     CSVContentHandler * handler,
-		     tlp::PluginProgress* progress=NULL);
+//        virtual void parse(const std::string& fileName, const std::string& separator,
+//                           CSVContentHandler * handler,
+//                           tlp::PluginProgress* progress=NULL,const std::string& fileEncoding="UTF-8");
 
-protected:
-  virtual std::string treatToken(const std::string& token, int row, int column);
+        bool parse(CSVContentHandler * handler,tlp::PluginProgress* progress=NULL);
 
-private:
-  void tokenize(const std::string& str, std::vector<std::string>& tokens,
-		const std::string& delimiters, unsigned int numberOfCol);
-  std::string removeQuotesIfAny(const std::string &s);
-  bool removeQuotes;
-};
+    protected:
+        virtual std::string treatToken(const std::string& token, int row, int column);
+
+    private:
+        void tokenize(const std::string& str, std::vector<std::string>& tokens,
+                      const std::string& delimiters,char textDelimiter, unsigned int numberOfCol);
+        inline std::string convertStringEncoding(const std::string& toConvert,QTextCodec* encoder){
+           return std::string(encoder->toUnicode ( toConvert.c_str() ).toUtf8().data());
+        }
+
+        std::string removeQuotesIfAny(const std::string &s);
+        std::string fileName;
+        std::string separator;
+        char textDelimiter;
+        std::string fileEncoding;
+        bool removeQuotes;
+
+    };
+
+    /**
+      *@brief CSV parser used to treat rows as columns.
+      **/
+    class TLP_QT_SCOPE CSVInvertMatrixParser : public tlp::CSVParser , public tlp::CSVContentHandler{
+    public:
+        CSVInvertMatrixParser(CSVParser* parser);
+        virtual ~CSVInvertMatrixParser();
+
+        bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress=NULL);
+
+        void begin();
+
+        void token(unsigned int row, unsigned int column, const std::string &token);
+
+        void end(unsigned int rowNumber, unsigned int columnNumber);
+    private:
+        CSVParser *parser;
+        CSVContentHandler *handler;
+    };
 }
 #endif /* CSVDATALOADER_H_ */

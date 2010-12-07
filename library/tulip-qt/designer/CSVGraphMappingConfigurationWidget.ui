@@ -1,0 +1,160 @@
+<ui version="4.0" >
+ <class>CSVGraphMappingConfigurationWidget</class>
+ <widget class="QWidget" name="CSVGraphMappingConfigurationWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>227</width>
+    <height>157</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" >
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QTabWidget" name="mappingTypeTabWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="nodesTab" >
+      <property name="sizePolicy" >
+       <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <attribute name="title" >
+       <string>Nodes</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5" >
+       <property name="spacing" >
+        <number>0</number>
+       </property>
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="useNodeMappingGroupBox" >
+         <property name="title" >
+          <string>Import on existing nodes</string>
+         </property>
+         <property name="checkable" >
+          <bool>true</bool>
+         </property>
+         <property name="checked" >
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2" >
+          <item>
+           <widget class="tlp::CSVColumnToGraphPropertyMappingWidget" native="1" name="nodeColumnToPropertyMappingwidget" />
+          </item>
+          <item>
+           <widget class="QCheckBox" name="createMissingNodesCheckBox" >
+            <property name="text" >
+             <string>Create missing indexes</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer" >
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="edgesSrcAndTgtTab" >
+      <attribute name="title" >
+       <string>Edges from source and target</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_6" >
+       <property name="spacing" >
+        <number>0</number>
+       </property>
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>Source id</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="tlp::CSVColumnToGraphPropertyMappingWidget" native="1" name="EdgeSourceMappingwidget" />
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2" >
+         <property name="text" >
+          <string>Target id</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="tlp::CSVColumnToGraphPropertyMappingWidget" native="1" name="EdgeTargetMappingwidget" />
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="edgesIdTab" >
+      <attribute name="title" >
+       <string>Edges from id</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3" >
+       <property name="spacing" >
+        <number>0</number>
+       </property>
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="tlp::CSVColumnToGraphPropertyMappingWidget" native="1" name="edgeIdMappingwidget" />
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2" >
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::CSVColumnToGraphPropertyMappingWidget</class>
+   <extends>QWidget</extends>
+   <header location="global" >CSVGraphMappingConfigurationWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
