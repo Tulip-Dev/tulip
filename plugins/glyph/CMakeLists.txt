@@ -131,5 +131,5 @@ INSTALL(TARGETS
 	ChristmasTree-${TulipVersion}
 	Window-${TulipVersion}
 	RoundedBox-${TulipVersion}
-	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/glyphs/)
-
+  DESTINATION ${TulipLibInstallDir}tlp/glyphs/
+  COMPONENT libtulip_ogl_plugins)

@@ -4,67 +4,67 @@ INCLUDE( ${QT_USE_FILE} )
 INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")	
 
 SET(tulip-qt_LIB_SRCS
-    TulipTableWidget.cpp 
-    GlMainWidget.cpp 
-    GlMainView.cpp 
-    NodeLinkDiagramComponent.cpp 
-    PropertyDialog.cpp 
-    CopyPropertyDialog.cpp 
-    PropertyWidget.cpp 
-    ElementPropertiesWidgetUI.cpp 
-    ElementPropertiesWidget.cpp 
-    FindSelectionWidget.cpp 
-    SGHierarchyWidget.cpp 
-    GWOverviewWidget.cpp 
-    Morphing.cpp 
-    GraphState.cpp 
-    MouseSelector.cpp 
-    MouseBoxZoomer.cpp 
-    MouseEdgeBuilder.cpp 
-    MouseInteractors.cpp 
-    MouseMagicSelector.cpp 
-    MouseNodeBuilder.cpp 
-    MouseSelectionEditor.cpp 
-    MouseEdgeSelector.cpp 
-    MouseEdgeBendEditor.cpp 
-    MouseShowElementInfos.cpp 
-    DataSetDialog.cpp 
-    TlpQtTools.cpp
-    InteractorManager.cpp 
-    Interactor.cpp 
-    InteractorChainOfResponsibility.cpp
-    QtProgress.cpp 
-    Controller.cpp 
-    ControllerAlgorithmTools.cpp
-    ControllerViewsTools.cpp
-    ControllerViewsManager.cpp
-    MainController.cpp 
-    View.cpp 
-    AbstractView.cpp 
-    ControllerPluginsManager.cpp 
-    ViewPluginsManager.cpp 
-    RenderingParametersDialog.cpp 
-    LayerManagerWidget.cpp 
-    AugmentedDisplayDialog.cpp 
-    GridOptionsWidget.cpp 
-    GraphPropertiesSelectionWidget.cpp 
-    ItemsListWidget.cpp 
-    StringsListSelectionWidget.cpp 
-    SimpleStringsListSelectionWidget.cpp 
-    DoubleStringsListSelectionWidget.cpp 
-    ColorScaleConfigDialog.cpp 
-    ColorScaleWidget.cpp
-    QtMetaNodeRenderer.cpp 
-    QGlBufferManager.cpp
-    ListPropertyWidget.cpp
-    QtOpenGlErrorViewer.cpp
-    CSVParser.cpp
-    ImportCSVDataDialog.cpp
-    ImportCSVDataWidget.cpp
-    ImportCSVDataConfigurationWidget.cpp
-    QtGlSceneZoomAndPanAnimator.cpp
-    GlCompositeHierarchyManager.cpp
-    GraphPropertiesTableWidget.cpp
+TulipTableWidget.cpp
+GlMainWidget.cpp
+GlMainView.cpp
+NodeLinkDiagramComponent.cpp
+PropertyDialog.cpp
+CopyPropertyDialog.cpp
+PropertyWidget.cpp
+ElementPropertiesWidgetUI.cpp
+ElementPropertiesWidget.cpp
+FindSelectionWidget.cpp
+SGHierarchyWidget.cpp
+GWOverviewWidget.cpp
+Morphing.cpp
+GraphState.cpp
+MouseSelector.cpp
+MouseBoxZoomer.cpp
+MouseEdgeBuilder.cpp
+MouseInteractors.cpp
+MouseMagicSelector.cpp
+MouseNodeBuilder.cpp
+MouseSelectionEditor.cpp
+MouseEdgeSelector.cpp
+MouseEdgeBendEditor.cpp
+MouseShowElementInfos.cpp
+DataSetDialog.cpp
+TlpQtTools.cpp
+InteractorManager.cpp
+Interactor.cpp
+InteractorChainOfResponsibility.cpp
+QtProgress.cpp
+Controller.cpp
+ControllerAlgorithmTools.cpp
+ControllerViewsTools.cpp
+ControllerViewsManager.cpp
+MainController.cpp
+View.cpp
+AbstractView.cpp
+ControllerPluginsManager.cpp
+ViewPluginsManager.cpp
+RenderingParametersDialog.cpp
+LayerManagerWidget.cpp
+AugmentedDisplayDialog.cpp
+GridOptionsWidget.cpp
+GraphPropertiesSelectionWidget.cpp
+ItemsListWidget.cpp
+StringsListSelectionWidget.cpp
+SimpleStringsListSelectionWidget.cpp
+DoubleStringsListSelectionWidget.cpp
+ColorScaleConfigDialog.cpp
+ColorScaleWidget.cpp
+QtMetaNodeRenderer.cpp
+QGlBufferManager.cpp
+ListPropertyWidget.cpp
+QtOpenGlErrorViewer.cpp
+CSVParser.cpp
+ImportCSVDataDialog.cpp
+ImportCSVDataWidget.cpp
+ImportCSVDataConfigurationWidget.cpp
+QtGlSceneZoomAndPanAnimator.cpp
+GlCompositeHierarchyManager.cpp
+GraphPropertiesTableWidget.cpp
 )
 
 set(tulip-qt_UI
@@ -170,5 +170,8 @@ TARGET_LINK_LIBRARIES(${LibTulipQtName} ${LibTulipName})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${LibTulipOglName})
 ADD_DEPENDENCIES(${LibTulipQtName} ${LibTulipName} ${LibTulipOglName})
 
-INSTALL_TARGETS(${TulipLibInstallDir} ${LibTulipQtName})
-INSTALL_FILES(${TulipIncludeInstallDir}/tulip/ FILES ${tulip-qt_UI_SRCS})
+INSTALL(TARGETS ${LibTulipQtName}
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_qt
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_qt
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_qt)
+INSTALL(FILES ${tulip-qt_UI_SRCS} DESTINATION ${TulipIncludeInstallDir}/tulip/)

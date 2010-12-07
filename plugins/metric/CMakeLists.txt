@@ -114,4 +114,6 @@ INSTALL(TARGETS
 	StrahlerMetric-${TulipVersion}
 	RandomMetric-${TulipVersion}
 	BetweennessCentrality-${TulipVersion}
-	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/)
+  DESTINATION ${TulipLibInstallDir}tlp/
+  COMPONENT libtulip_plugins
+  )

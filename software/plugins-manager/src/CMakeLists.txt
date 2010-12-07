@@ -71,8 +71,7 @@ INCLUDE_DIRECTORIES(../include/ ${TulipInclude} ${TulipBuildInclude} ${PROJECT_B
 
 ADD_EXECUTABLE( tulip_check_pl ${tulip_check_pl_SRCS})
 TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipName} ${CMAKE_DL_LIBS})
-TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipQtName})
-TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipOglName})
+TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipPluginsManagerName})
 TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipPluginsManagerName})
 ADD_DEPENDENCIES(tulip_check_pl ${LibTulipName})
 
@@ -87,22 +86,30 @@ TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${LibTulipQtName})
 ADD_DEPENDENCIES(${LibTulipPluginsManagerName} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
 IF(WIN32)
-	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
-		INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip_check_pl.exe 
-			DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
-	ELSE(${CMAKE_GENERATOR} MATCHES "Visual Studio")
-		INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl.exe 
-			DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" )
-	ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+  IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
+    INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip_check_pl.exe 
+            DESTINATION "${TulipBinInstallDir}"
+            COMPONENT tulip_pluginsmanager)
+  ELSE()
+    INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl.exe 
+            DESTINATION "${TulipBinInstallDir}"
+            COMPONENT tulip_pluginsmanager)
+  ENDIF()
 ENDIF(WIN32)
+
 IF(APPLE)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}/tulip.app/Contents/MacOS" 
-)
+  INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl
+          DESTINATION "${TulipBinInstallDir}/tulip.app/Contents/MacOS"
+          COMPONENT tulip_pluginsmanager)
 ENDIF(APPLE)
+
 IF(LINUX)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}" 
-)
+  INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl
+          DESTINATION "${TulipBinInstallDir}"
+          COMPONENT tulip_pluginsmanager)
 ENDIF(LINUX)
-INSTALL_TARGETS(${TulipLibInstallDir} ${LibTulipPluginsManagerName})
+
+INSTALL(TARGETS ${LibTulipPluginsManagerName}
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_pluginsmanager
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_pluginsmanager
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_pluginsmanager)

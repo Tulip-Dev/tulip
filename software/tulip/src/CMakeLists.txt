@@ -40,21 +40,18 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_MINOR_REL=${QT_VERSION_MINOR}")
 
 IF(WIN32)
 ADD_EXECUTABLE( tulip TulipLauncher.cpp)
-SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}")
+SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH ${TulipLibInstallDir})
 TARGET_LINK_LIBRARIES( tulip -mwindows )
 TARGET_LINK_LIBRARIES( tulip ${QT_LIBRARIES} )
 ENDIF(WIN32)
 
 ADD_EXECUTABLE( tulip_need_restart TulipNeedRestart.cpp)
-SET_TARGET_PROPERTIES(tulip_need_restart PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}")
+SET_TARGET_PROPERTIES(tulip_need_restart PROPERTIES INSTALL_RPATH ${TulipLibInstallDir})
 TARGET_LINK_LIBRARIES( tulip_need_restart ${QT_LIBRARIES} )
-TARGET_LINK_LIBRARIES(tulip_need_restart ${LibTulipName})
-TARGET_LINK_LIBRARIES(tulip_need_restart ${LibTulipQtName})
-TARGET_LINK_LIBRARIES(tulip_need_restart ${LibTulipOglName})
 ADD_DEPENDENCIES(tulip_need_restart tulip_app)
 
 ADD_EXECUTABLE( tulip_app ${tulip_UI_SRCS} ${tulip_MOC_SRCS} ${tulip_SRCS} ${tulip_RCC_SRCS})
-SET_TARGET_PROPERTIES(tulip_app PROPERTIES INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}")
+SET_TARGET_PROPERTIES(tulip_app PROPERTIES INSTALL_RPATH ${TulipLibInstallDir})
 IF(WIN32)
 TARGET_LINK_LIBRARIES( tulip_app -mwindows )
 ENDIF(WIN32)
@@ -79,35 +76,34 @@ TARGET_LINK_LIBRARIES( tulip_app ${LibTulipPluginsManagerName})
 ADD_DEPENDENCIES(tulip_app ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
 
 IF(WIN32)
-	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
-		INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip.exe
-				DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
-		INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip_app.exe
-				DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
-	ELSE(${CMAKE_GENERATOR} MATCHES "Visual Studio")
-		INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip.exe
-				DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
-		INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app.exe
-				DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
-	ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+  IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
+    INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip.exe
+            DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
+            COMPONENT tulip_app)
+    INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip_app.exe
+            DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
+            COMPONENT tulip_app)
+  ELSE()
+    INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip.exe
+            DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
+            COMPONENT tulip_app)
+    INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app.exe
+            DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
+            COMPONENT tulip_app)
+  ENDIF()
+ELSE(WIN32)
+  INSTALL(PROGRAMS
+    ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sh
+    DESTINATION ${TulipBinInstallDir}
+    RENAME tulip
+    COMPONENT tulip_app)
+  INSTALL(PROGRAMS
+    ${CMAKE_CURRENT_BINARY_DIR}/tulip_app
+    DESTINATION ${TulipBinInstallDir}
+    COMPONENT tulip_app)
+  INSTALL(PROGRAMS
+    ${CMAKE_CURRENT_BINARY_DIR}/tulip_need_restart
+    DESTINATION ${TulipBinInstallDir}
+    COMPONENT tulip_app)
 ENDIF(WIN32)
-IF(APPLE)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sh
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}/tulip.app/Contents/MacOS"
-	RENAME tulip)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}/tulip.app/Contents/MacOS")
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_need_restart
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}/tulip.app/Contents/MacOS")
-ENDIF(APPLE)
- IF(LINUX)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/tulip.sh
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
-	RENAME tulip)
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
-INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_need_restart
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
-ENDIF(LINUX)
-
 

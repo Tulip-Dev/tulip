@@ -10,7 +10,7 @@ kde4_add_executable(@CONFIGURE_tlprender@ ${@CONFIGURE_tlprender@_SRCS})
 
 target_link_libraries(@CONFIGURE_tlprender@ ${KDE4_KDECORE_LIBS})
 
-install(TARGETS @CONFIGURE_tlprender@ ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS @CONFIGURE_tlprender@ ${INSTALL_TARGETS_DEFAULT_ARGS} COMPONENT tlprender)
 
 
 ########### next target ###############

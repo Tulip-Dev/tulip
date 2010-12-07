@@ -95,4 +95,5 @@ INSTALL(TARGETS
         InteractorAddNode-${TulipVersion}
         InteractorAddEdge-${TulipVersion}
         InteractorEditEdgeBends-${TulipVersion}
-        DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/interactors/)
+        DESTINATION ${TulipLibInstallDir}tlp/interactors/
+        COMPONENT libtulip_qt_plugins)

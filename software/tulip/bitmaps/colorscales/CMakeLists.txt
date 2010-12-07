@@ -1,5 +1,5 @@
 FILE(GLOB COLORSCALES *.png)
 
-INSTALL_FILES(${TulipBitmapInstallDir}/colorscales FILES 
-              ${COLORSCALES}
-)
+INSTALL(FILES ${COLORSCALES}
+        DESTINATION ${TulipBitmapInstallDir}/colorscales
+        COMPONENT tulip_app)
