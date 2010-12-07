@@ -29,7 +29,6 @@
 namespace tlp {
   GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer):
     deleteGlVertexArrayManager(true),
-    elementAnimationFrame(new IntegerProperty(graph,"viewAnimationFrame")),
     graph(graph),
     parameters(parameters),
     elementColorPropName("viewColor"), elementLabelColorPropName("viewLabelColor"), elementSizePropName("viewSize"),
@@ -38,7 +37,8 @@ namespace tlp {
     elementLabelPropName("viewLabel"), elementTexturePropName("viewTexture"),
     elementBorderColorPropName("viewBorderColor"), elementBorderWidthPropName("viewBorderWidth"), elementLayoutPropName(""),
     elementSrcAnchorShapePropName("viewSrcAnchorShape"),elementSrcAnchorSizePropName("viewSrcAnchorSize"),
-    elementTgtAnchorShapePropName("viewTgtAnchorShape"),elementTgtAnchorSizePropName("viewTgtAnchorSize")
+    elementTgtAnchorShapePropName("viewTgtAnchorShape"),elementTgtAnchorSizePropName("viewTgtAnchorSize"),
+    elementAnimationFrame(new IntegerProperty(graph,"viewAnimationFrame"))
     {
 
     reloadAllProperties();

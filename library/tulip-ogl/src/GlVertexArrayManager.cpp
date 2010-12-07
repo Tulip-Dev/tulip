@@ -386,14 +386,14 @@ void GlVertexArrayManager::destroy(PropertyInterface*){
 	clearObservers();
 }
 
-void GlVertexArrayManager::addLocalProperty(Graph *graph, const std::string &name){
+void GlVertexArrayManager::addLocalProperty(Graph *, const std::string &name){
 	if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName()){
 		clearData();
 		clearObservers();
 	}
 }
 
-void GlVertexArrayManager::delLocalProperty(Graph *graph, const std::string &name){
+void GlVertexArrayManager::delLocalProperty(Graph *, const std::string &name){
 	if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName()){
 		clearData();
 		clearObservers();
