@@ -240,7 +240,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
         }
         if (isNumber && suffix.size() > idx + 1) {
           suffix = suffix.substr(idx + 1);
-          idx = suffix.find('.');
+          idx = suffix.find(STRINGIFY(VERSION_SEPARATOR));
           if (idx != std::string::npos) {
             for (unsigned long i = 0; i < idx; ++i) {
               if (!isdigit(suffix[i])) {
