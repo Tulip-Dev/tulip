@@ -111,7 +111,7 @@ GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
 //==================================================
 GlMainWidget::~GlMainWidget() {
 	delete glFrameBuf;
-	delete renderingStore;
+	delete [] renderingStore;
 }
 //==================================================
 void GlMainWidget::setData(Graph *graph,DataSet dataSet) {
