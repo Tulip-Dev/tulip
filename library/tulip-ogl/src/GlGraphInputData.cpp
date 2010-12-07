@@ -28,17 +28,17 @@
 
 namespace tlp {
   GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer):
-    deleteGlVertexArrayManager(true),
+    elementAnimationFrame(new IntegerProperty(graph,"viewAnimationFrame")),
     graph(graph),
     parameters(parameters),
+    deleteGlVertexArrayManager(true),
     elementColorPropName("viewColor"), elementLabelColorPropName("viewLabelColor"), elementSizePropName("viewSize"),
     elementLabelPositionPropName("viewLabelPosition"),elementShapePropName("viewShape"), elementRotationPropName("viewRotation"),
     elementSelectedPropName("viewSelection"),elementFontPropName("viewFont"),elementFontSizePropName("viewFontSize"),
     elementLabelPropName("viewLabel"), elementTexturePropName("viewTexture"),
     elementBorderColorPropName("viewBorderColor"), elementBorderWidthPropName("viewBorderWidth"), elementLayoutPropName(""),
     elementSrcAnchorShapePropName("viewSrcAnchorShape"),elementSrcAnchorSizePropName("viewSrcAnchorSize"),
-    elementTgtAnchorShapePropName("viewTgtAnchorShape"),elementTgtAnchorSizePropName("viewTgtAnchorSize"),
-    elementAnimationFrame(new IntegerProperty(graph,"viewAnimationFrame"))
+    elementTgtAnchorShapePropName("viewTgtAnchorShape"),elementTgtAnchorSizePropName("viewTgtAnchorSize")
     {
 
     reloadAllProperties();
