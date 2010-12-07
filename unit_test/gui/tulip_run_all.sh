@@ -3,13 +3,13 @@
 # This script allows the run of all previously recorded tests
 
 TYPE=$1
-TLP_DIFF_SCENE=$2
+TLP_DIFF_CONTROLLER=$2
 
-# check if diff on scene part in tlp files is excluded (used in tlp_diff.sh)
-if [ "$TLP_DIFF_SCENE" = "no_scene_diff" ]; then
-  export TLP_DIFF_SCENE=NO
+# check if diff on controller part in tlp files is excluded (used in tlp_diff.sh)
+if [ "$TLP_DIFF_CONTROLLER" = "no_controller_diff" ]; then
+  export TLP_DIFF_CONTROLLER=NO
 else
-  unset TLP_DIFF_SCENE
+  unset TLP_DIFF_CONTROLLER
 fi
 
 # clean up log file
