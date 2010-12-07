@@ -111,10 +111,11 @@ struct RandomSimpleGraph:public ImportModule {
 	tmp.source=rand()%nbNodes;
 	tmp.target=rand()%nbNodes;
       }
-      if (myGraph.find(tmp)!=myGraph.end())
-	myGraph.erase(tmp);
-      else 
-	if (myGraph.size()<nbEdges) myGraph.insert(tmp);
+      if (myGraph.find(tmp)==myGraph.end()) {
+	myGraph.insert(tmp);
+	if (myGraph.size() == nbEdges)
+	  break;
+      }
       ite--;
     }
     vector<node> tmpVect(nbNodes);
