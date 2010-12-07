@@ -95,7 +95,7 @@ void HttpContext::finished(int id, bool error) {
 }
 
 void HttpContext::headerReceived(const QHttpResponseHeader & resp) {
-  if (isHtml = resp.isValid()) {
+  if ((isHtml = resp.isValid())) {
     int code = resp.statusCode();
     if (code > 399) /* error codes */
       isHtml = false;
@@ -469,7 +469,7 @@ struct WebImport:public ImportModule {
     // stop adding edge
     if (!sNode.isValid() || !tNode.isValid())
       return false;
-    if (sAdded || tAdded || (sNode != tNode) && !graph->existEdge(sNode, tNode).isValid()) {
+    if (sAdded || tAdded || ((sNode != tNode) && !graph->existEdge(sNode, tNode).isValid())) {
       edge e = graph->addEdge(sNode, tNode);
       if (type)
 	labels->setEdgeValue(e, type);
