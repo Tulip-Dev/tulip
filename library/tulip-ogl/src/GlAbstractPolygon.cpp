@@ -399,8 +399,10 @@ namespace tlp {
 
     glDisableClientState(GL_VERTEX_ARRAY);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    if(canUseGlew) { 
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+      glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    }
 
     glTest(__PRETTY_FUNCTION__);
   }
