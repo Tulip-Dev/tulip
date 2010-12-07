@@ -168,4 +168,5 @@ INSTALL(TARGETS
 	Dendrogram-${TulipVersion}
 	ImprovedWalker-${TulipVersion}
 	SquarifiedTreeMap-${TulipVersion}
-	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/)
+  DESTINATION ${TulipLibInstallDir}tlp/
+  COMPONENT libtulip_plugins)

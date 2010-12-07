@@ -24,4 +24,5 @@ INSTALL(TARGETS
 	MetricSizeMapping-${TulipVersion}
 	AutoSize-${TulipVersion}
 	FitToLabels-${TulipVersion}
-	DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/)
+  DESTINATION ${TulipLibInstallDir}tlp/
+  COMPONENT libtulip_ogl_plugins)

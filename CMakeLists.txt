@@ -10,6 +10,8 @@
 ## ***********************************************************************************************
 ## -----------------------------------------------------------------------------------------------
 
+PROJECT(tulip)
+
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options
@@ -56,7 +58,7 @@ ELSE(DEFINED CMAKE_VERSION)
      FOREACH(_current ${_inc_DIRS})
         SET(${_moc_flags} ${${_moc_flags}} "-I${_current}")
      ENDFOREACH(_current ${_inc_DIRS})
-     
+
      GET_DIRECTORY_PROPERTY(_defines COMPILE_DEFINITIONS)
      FOREACH(_current ${_defines})
         SET(${_moc_flags} ${${_moc_flags}} "-D${_current}")
@@ -125,11 +127,11 @@ SET(TulipPluginsManagerInclude ${PROJECT_SOURCE_DIR}/software/plugins-manager/in
 ## -----------------------------------------------------------------------------------------------
 ## Install paths
 ## -----------------------------------------------------------------------------------------------
-SET(TulipLibInstallDir /lib/)
-SET(TulipBinInstallDir /bin/)
-SET(TulipIncludeInstallDir /include/)
-SET(TulipShareInstallDir /share/)
-SET(TulipBitmapInstallDir /lib/tlp/bitmaps/)
+SET(TulipLibInstallDir lib/)
+SET(TulipBinInstallDir bin/)
+SET(TulipIncludeInstallDir include/)
+SET(TulipShareInstallDir share/)
+SET(TulipBitmapInstallDir lib/tlp/bitmaps/)
 
 ## -----------------------------------------------------------------------------------------------
 ## Set UseTulip file name
@@ -234,8 +236,9 @@ ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)
 ADD_SUBDIRECTORY(software)
 ADD_SUBDIRECTORY(plugins)
-ADD_SUBDIRECTORY(externalplugins)
 ADD_SUBDIRECTORY(textures)
+ADD_SUBDIRECTORY(externalplugins)
+
 FIND_PACKAGE(Doxygen QUIET)
 if (DOXYGEN_FOUND)
   OPTION(GENERATE_DOC "Do you want to generate the documentation ? [OFF|ON]")
@@ -294,27 +297,73 @@ CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 CONFIGURE_FILE("unit_test/plugins/pluginstest.cpp.in" "unit_test/plugins/pluginstest.cpp" @ONLY)
 
 ## -----------------------------------------------------------------------------------------------
-## Create tulip.nsi script
-## -----------------------------------------------------------------------------------------------
-#IF(WIN32)
-  EXEC_PROGRAM(grep ARGS "mingw /etc/fstab"  OUTPUT_VARIABLE MINDIR)
-  STRING(REGEX REPLACE "[ \t]+/mingw" "" MINDIR "${MINDIR}")
-  SET(qt_libraries ${QT_LIBRARY_DIR})
-  SET(WIN_EXE_VERSION ${TulipMajorVersion}_${TulipMinorVersion}_${TulipReleaseVersion})
-  CONFIGURE_FILE("tulip.nsi.in" "tulip-${VERSION}.nsi" @ONLY)
-  ADD_CUSTOM_COMMAND(OUTPUT ${PROJECT_BINARY_DIR}/COPYING.LESSER
-		DEPENDS ${PROJECT_SOURCE_DIR}/COPYING.LESSER
-		COMMAND ${CMAKE_COMMAND}
-		ARGS -E copy_if_different ${PROJECT_SOURCE_DIR}/COPYING.LESSER ${PROJECT_BINARY_DIR}/COPYING.LESSER)
-  ADD_CUSTOM_TARGET(wininst makensis.exe "tulip-${VERSION}.nsi"
-		DEPENDS ${PROJECT_BINARY_DIR}/COPYING.LESSER)
-#ENDIF(WIN32)
-
-## -----------------------------------------------------------------------------------------------
 ## Installation of files
 ## -----------------------------------------------------------------------------------------------
 INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}")
+        DESTINATION ${TulipBinInstallDir})
 INSTALL(FILES FindTULIP3.cmake 
-        DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipShareInstallDir}")
+        DESTINATION ${TulipShareInstallDir})
 
+## -----------------------------------------------------------------------------------------------
+## CPack packaging directives
+## -----------------------------------------------------------------------------------------------
+
+# A macro that defines a software component (see COMPONENT directive for the INSTALL command in CMake documentation)
+# This defines the required CPack variables to set the component name, group, description and dependencies.
+MACRO(DEFINE_COMPONENT comp display_name desc deps group)
+  SET(CPACK_COMPONENTS_ALL
+  ${CPACK_COMPONENTS_ALL}
+  ${comp})
+  STRING(TOUPPER ${comp} CN)
+  SET(CPACK_COMPONENT_${CN}_DISPLAY_NAME ${display_name})
+  SET(CPACK_COMPONENT_${CN}_DESCRIPTION "${desc}.")
+  IF(NOT "${deps}" STREQUAL "")
+    SET(CPACK_COMPONENT_${CN}_DEPENDS ${deps})
+  ENDIF()
+  SET(CPACK_COMPONENT_${CN}_GROUP ${group})
+ENDMACRO()
+
+# You can create your own installer by creating a setting the CPACK_CUSTOM_INSTALLER to true.
+# If this variable is not set, directives in the CPackInstaller.cmake file will be used to set the project licence, maintainer etc.
+# When making your own installer, please be sure to set at least all the variables present in the CPackInstaller.cmake file.
+# Consult CPack documentation for additional information.
+IF(NOT CPACK_CUSTOM_INSTALLER)
+  INCLUDE(CPackInstaller.cmake)
+  SET(LIBS_GROUP_NAME "Libraries")
+  SET(HEADERS_GROUP_NAME "Headers")
+  SET(SOFTWARE_GROUP_NAME "Runtime")
+  SET(PLUGINS_GROUP_NAME "Plugins")
+  SET(EXTRAS_GROUP_NAME "Extras")
+ELSE()
+  # In case a custom installer is set, all the base tulip software components will be in the same group.
+  SET(LIBS_GROUP_NAME "Tulip software")
+  SET(HEADERS_GROUP_NAME "Tulip software")
+  SET(SOFTWARE_GROUP_NAME "Tulip software")
+  SET(PLUGINS_GROUP_NAME "Tulip software")
+  SET(EXTRAS_GROUP_NAME "Tulip software")
+ENDIF()
+
+# Defines specific software components from tulip.
+INCLUDE(CPackComponents.cmake)
+
+# Force grouping of components in a single package (CMake 2.9)
+SET(CPACK_COMPONENTS_ALL_GROUPS_IN_ONE_PACKAGE 1)
+
+# Defines plateform-specific generators to be used
+IF(LINUX)
+  IF(I64)
+    SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
+  ELSE()
+    SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "i386")
+  ENDIF()
+
+  SET(CPACK_GENERATOR ";")
+  # Note: With CMake 2.8, we must introduce a hack to force generation of one deb per component. See CPackOptions.cmake for additional informations.
+  FOREACH(ITC ${CPACK_COMPONENTS_ALL})
+    SET(CPACK_GENERATOR "${CPACK_GENERATOR}DEB;")
+  ENDFOREACH()
+ELSEIF(WIN32)
+    SET(CPACK_GENERATOR "NSIS")
+ENDIF()
+
+INCLUDE(CPack)

@@ -14,4 +14,6 @@ ADD_LIBRARY(InteractorMagicSelection-${TulipVersion} SHARED ${InteractorMagicSel
 TARGET_LINK_LIBRARIES(InteractorMagicSelection-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 ADD_DEPENDENCIES(InteractorMagicSelection-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
-INSTALL(TARGETS InteractorMagicSelection-${TulipVersion} DESTINATION ${CMAKE_INSTALL_PREFIX}${TulipLibInstallDir}tlp/interactors/)
+INSTALL(TARGETS InteractorMagicSelection-${TulipVersion}
+        DESTINATION ${TulipLibInstallDir}/tlp/interactors/
+        COMPONENT libtulip_qt_plugins)
