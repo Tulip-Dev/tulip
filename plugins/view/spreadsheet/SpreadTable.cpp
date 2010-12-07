@@ -182,7 +182,7 @@ void SpreadTable::reloadView() {
 	} else
 		selectedProperties = linkedView->getSelectedProperties();
 
-	unsigned int numberOfRow;
+	int numberOfRow;
 	if (view == NodesView)
 		numberOfRow = graph->numberOfNodes();
 	else
@@ -209,13 +209,13 @@ void SpreadTable::reloadView() {
 		PropertyInterface *currentProperty = graph->getProperty(propName);
     Iterator<node> *itN=graph->getNodes();
     Iterator<edge> *itE=graph->getEdges();
-    for(unsigned int i=0;i<verticalBufferBegin;++i){
+    for(int i=0;i<verticalBufferBegin;++i){
       if (view == NodesView)
         itN->next();
       else
         itE->next();
     }
-		for (unsigned int i = verticalBufferBegin; i < verticalBufferBegin + TABLEHEIGHTBUFSIZE
+		for (int i = verticalBufferBegin; i < verticalBufferBegin + TABLEHEIGHTBUFSIZE
 				&& i < numberOfRow; ++i) {
 			SpreadCell *curCell = new SpreadCell;
       node n;
@@ -267,7 +267,7 @@ void SpreadTable::loadCell(int minRow, int maxRow, int minColumn, int maxColumn)
 	for (int i = minColumn; i <= maxColumn; ++i) {
 		string propName = it->next();
 		PropertyInterface *currentProperty = graph->getProperty(propName);
-		for (unsigned int j = minRow; j <= maxRow; ++j) {
+		for (int j = minRow; j <= maxRow; ++j) {
 			SpreadCell *curCell = new SpreadCell;
 			if (view == NodesView)
 				curCell->setData(Qt::EditRole, currentProperty->getNodeStringValue(node(j)).c_str());
@@ -288,7 +288,7 @@ void SpreadTable::verticalScroll(int id) {
 		reloadView();
 	}
 
-	unsigned int numberOfRow;
+	int numberOfRow;
 	if (view == NodesView)
 		numberOfRow = graph->numberOfNodes();
 	else
