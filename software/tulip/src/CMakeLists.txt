@@ -78,17 +78,17 @@ ADD_DEPENDENCIES(tulip_app ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} 
 IF(WIN32)
   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip.exe
-            DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
+            DESTINATION "${TulipBinInstallDir}"
             COMPONENT tulip_app)
     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip_app.exe
-            DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
+            DESTINATION "${TulipBinInstallDir}"
             COMPONENT tulip_app)
   ELSE()
     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip.exe
-            DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
+            DESTINATION "${TulipBinInstallDir}"
             COMPONENT tulip_app)
     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_app.exe
-            DESTINATION "${CMAKE_INSTALL_PREFIX}${TulipBinInstallDir}"
+            DESTINATION "${TulipBinInstallDir}"
             COMPONENT tulip_app)
   ENDIF()
 ELSE(WIN32)
