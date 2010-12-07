@@ -39,153 +39,165 @@ ObservableMap Observable::holdObservableMap;
 static bool unholdLock=false;
 
 Observer::~Observer(){
-/*#ifndef NDEBUG
+	/*#ifndef NDEBUG
   if(observables.size()!=0)
     std::cerr << "Delete an observer without remove it from observable list" << std::endl;
 #endif*/
-  for(std::list<Observable *>::iterator it=observables.begin();it!=observables.end();++it){
-    (*it)->removeOnlyObserver(this);
-  }
+	if (!observables.empty()) {
+		for(std::list<Observable *>::iterator it=observables.begin();it!=observables.end();++it){
+			(*it)->removeOnlyObserver(this);
+		}
+	}
 }
 
-void Observer::addObservable(Observable *observable){
-  if (updateObservables)
-    observables.push_front(observable);
+void Observer::addObservable(Observable *observable) {
+	if (updateObservables)
+		observables.push_front(observable);
 }
 
 void Observer::removeObservable(Observable *observable){
-  std::list<Observable*>::iterator itObs = observables.begin();
-  std::list<Observable*>::iterator ite = observables.end();
-  while(itObs!=ite){
-    if(observable == (*itObs)){
-      observables.erase(itObs);
-      return;
-    }
-    ++itObs;
-  }
+	if (observables.empty())
+		return;
+	std::list<Observable*>::iterator itObs = observables.begin();
+	std::list<Observable*>::iterator ite = observables.end();
+	while(itObs!=ite){
+		if(observable == (*itObs)){
+			observables.erase(itObs);
+			return;
+		}
+		++itObs;
+	}
 }
 
 void Observable::addObserver(Observer *obs) {
-  // ensure obs does not already exists in observersList
-  std::list<Observer*>::iterator itlObs = observersList.begin();
-  std::list<Observer*>::iterator itle = observersList.end();
-  while (itlObs != itle) {
-    if (obs == (*itlObs))
-      return;
-    ++itlObs;
-  }  
-  observersList.push_front(obs);
+	if (!observersList.empty()) {
+		// ensure obs does not already exists in observersList
+		std::list<Observer*>::iterator itlObs = observersList.begin();
+		std::list<Observer*>::iterator itle = observersList.end();
+		while (itlObs != itle) {
+			if (obs == (*itlObs))
+				return;
+			++itlObs;
+		}
+	}
+	observersList.push_front(obs);
 }
 
 //===============================================================
 void Observable::notifyDestroy() {
-  //  cerr << "Observable::notifyObservers" << endl;
-  std::list<Observer*>::iterator itlObs = observersList.begin();
-  std::list<Observer*>::iterator itle = observersList.end();
-  while (itlObs != itle) {
-    Observer* observer = *itlObs;
-    // iterator is incremented before
-    // to ensure it will not be invalidated
-    // during the call to the observableDestroyed method
-    ++itlObs;
-    observer->observableDestroyed(this);
-    if (holdCounter) {
-      // remove this from registered sets of Observable in holdObserverMap
-      ObservableMap::iterator ito = holdObservableMap.find(this);
-      if (ito != holdObservableMap.end()) {
-	set<Observer*>::iterator itob = (*ito).second.begin();
-	set<Observer*>::iterator itoe = (*ito).second.end();
-	while(itob != itoe) {
+	//  cerr << "Observable::notifyObservers" << endl;
+	if (observersList.empty())
+		return;
+	std::list<Observer*>::iterator itlObs = observersList.begin();
+	std::list<Observer*>::iterator itle = observersList.end();
+	while (itlObs != itle) {
+		Observer* observer = *itlObs;
+		// iterator is incremented before
+		// to ensure it will not be invalidated
+		// during the call to the observableDestroyed method
+		++itlObs;
+		observer->observableDestroyed(this);
+		if (holdCounter) {
+			// remove this from registered sets of Observable in holdObserverMap
+			ObservableMap::iterator ito = holdObservableMap.find(this);
+			if (ito != holdObservableMap.end()) {
+				set<Observer*>::iterator itob = (*ito).second.begin();
+				set<Observer*>::iterator itoe = (*ito).second.end();
+				while(itob != itoe) {
 #ifdef NDEBUG
-	  holdObserverMap[*itob].erase(this);
+					holdObserverMap[*itob].erase(this);
 #else
-	  assert(holdObserverMap[*itob].erase(this) == 1);
+					assert(holdObserverMap[*itob].erase(this) == 1);
 #endif
-	  ++itob;
+					++itob;
+				}
+				holdObservableMap.erase(ito);
+			}
+		}
 	}
-	holdObservableMap.erase(ito);
-      }
-    }
-  }
 }
 //===============================================================
 void Observable::notifyObservers() {
-  std::list<Observer*>::iterator itlObs = observersList.begin();
-  std::list<Observer*>::iterator itle = observersList.end();
-  if (itlObs == itle)
-    return;
+	if (observersList.empty())
+		return;
+	std::list<Observer*>::iterator itlObs = observersList.begin();
+	std::list<Observer*>::iterator itle = observersList.end();
+	if (itlObs == itle)
+		return;
 
-  if (unholdLock) {
-    cerr << "Cannot notifyObservers during unholdings" << endl;
-    return;
-  }
-  //  cerr << "Observable::notifyObservers" << endl;
-  if (holdCounter)
-    for (;itlObs != itle; ++itlObs) {
-      holdObserverMap[*itlObs].insert(this);
-      holdObservableMap[this].insert(*itlObs);
-    }
-  else {
-    set<Observable *> tmpSet;
-    tmpSet.insert(this);
-    while(itlObs != itle) {
-      Observer* observer = *itlObs;
-      // iterator is incremented before
-      // to ensure it will not be invalidated
-      // during the call to the update method
-      ++itlObs;
-      observer->update(tmpSet.begin(),tmpSet.end());
-    }
-  }
+	if (unholdLock) {
+		cerr << "Cannot notifyObservers during unholdings" << endl;
+		return;
+	}
+	//  cerr << "Observable::notifyObservers" << endl;
+	if (holdCounter)
+		for (;itlObs != itle; ++itlObs) {
+			holdObserverMap[*itlObs].insert(this);
+			holdObservableMap[this].insert(*itlObs);
+		}
+	else {
+		set<Observable *> tmpSet;
+		tmpSet.insert(this);
+		while(itlObs != itle) {
+			Observer* observer = *itlObs;
+			// iterator is incremented before
+			// to ensure it will not be invalidated
+			// during the call to the update method
+			++itlObs;
+			observer->update(tmpSet.begin(),tmpSet.end());
+		}
+	}
 }
 //===============================================================
 void Observable::holdObservers() {
-  //  cerr << __PRETTY_FUNCTION__ << " :=> " << holdCounter << endl;
-  holdCounter++;
+	//  cerr << __PRETTY_FUNCTION__ << " :=> " << holdCounter << endl;
+	holdCounter++;
 }
 //===============================================================
 void Observable::unholdObservers(bool force) {
-  //  cerr << __PRETTY_FUNCTION__ << " :=> " << holdCounter << endl;
+	//  cerr << __PRETTY_FUNCTION__ << " :=> " << holdCounter << endl;
 
-  if (force) {
-    unholdLock=true; 
-    holdObservableMap.clear();
-    ObserverMap tmp(holdObserverMap);
-    holdObserverMap.clear();
-    ObserverMap::iterator itMObs;
-    for (itMObs=tmp.begin();itMObs!=tmp.end();++itMObs) {
-      std::set<Observable *>::iterator begin = itMObs->second.begin();
-      std::set<Observable *>::iterator end = itMObs->second.end();
-      if (begin != end)
-	itMObs->first->update(begin, end);
-    }
-    unholdLock=false;
-    holdCounter = 0;
-  }
-    
-  if (holdCounter == 0) return;
-  holdCounter--;
-  if (unholdLock) return;
-  unholdLock=true; 
-  if (holdCounter==0) {
-    holdObservableMap.clear();
-    ObserverMap tmp(holdObserverMap);
-    holdObserverMap.clear();
-    ObserverMap::iterator itMObs;
-    for (itMObs=tmp.begin();itMObs!=tmp.end();++itMObs) {
-      std::set<Observable *>::iterator begin = itMObs->second.begin();
-      std::set<Observable *>::iterator end = itMObs->second.end();
-      if (begin != end)
-	itMObs->first->update(begin, end);
-    }
-  }
-  unholdLock=false;
+	if (force) {
+		unholdLock=true;
+		holdObservableMap.clear();
+		ObserverMap tmp(holdObserverMap);
+		holdObserverMap.clear();
+		ObserverMap::iterator itMObs;
+		for (itMObs=tmp.begin();itMObs!=tmp.end();++itMObs) {
+			std::set<Observable *>::iterator begin = itMObs->second.begin();
+			std::set<Observable *>::iterator end = itMObs->second.end();
+			if (begin != end)
+				itMObs->first->update(begin, end);
+		}
+		unholdLock=false;
+		holdCounter = 0;
+	}
+
+	if (holdCounter == 0) return;
+	holdCounter--;
+	if (unholdLock) return;
+	unholdLock=true;
+	if (holdCounter==0) {
+		holdObservableMap.clear();
+		ObserverMap tmp(holdObserverMap);
+		holdObserverMap.clear();
+		ObserverMap::iterator itMObs;
+		for (itMObs=tmp.begin();itMObs!=tmp.end();++itMObs) {
+			std::set<Observable *>::iterator begin = itMObs->second.begin();
+			std::set<Observable *>::iterator end = itMObs->second.end();
+			if (begin != end)
+				itMObs->first->update(begin, end);
+		}
+	}
+	unholdLock=false;
 }
 //===============================================================
-void Observable::removeObservers() { 
-  for(std::list<Observer*>::iterator it=observersList.begin();it!=observersList.end();++it){
-    (*it)->removeObservable(this);
-  }
-  observersList.clear(); 
+void Observable::removeObservers() {
+	if (observersList.empty())
+		return;
+	for(std::list<Observer*>::iterator it=observersList.begin();it!=observersList.end();++it){
+		(*it)->removeObservable(this);
+	}
+	observersList.clear();
 }
 
