@@ -223,7 +223,7 @@ namespace tlp {
     GlNode::drawLabel(test,renderer,data,1000.);
   }
 
-  void GlNode::drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod, Camera *camera) {
+  void GlNode::drawLabel(OcclusionTest* test,TextRenderer* ,GlGraphInputData* data,float lod, Camera *camera) {
 
     node n=node(id);
 
