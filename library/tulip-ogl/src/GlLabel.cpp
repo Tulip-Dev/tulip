@@ -298,6 +298,8 @@ namespace tlp {
       if(fontRatio>sizeRatio){
         screenH=screenH/(fontRatio/sizeRatio);
       }
+    }else{
+      screenH*=((w*0.01)/size[0]);
     }
 
     if(screenH < 15 && useLOD){
