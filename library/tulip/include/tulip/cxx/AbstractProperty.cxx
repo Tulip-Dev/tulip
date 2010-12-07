@@ -105,7 +105,6 @@ void tlp::AbstractVectorProperty<vectType, eltType>::setNodeEltValue(const node 
 //============================================================
 template <typename vectType, typename eltType>
 const eltType& tlp::AbstractVectorProperty<vectType, eltType>::getNodeEltValue(const node n, unsigned int i) const {
-  bool isNotDefault;
   const typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::nodeProperties.get(n);
   assert(vect.size() > i);
@@ -164,7 +163,6 @@ void tlp::AbstractVectorProperty<vectType, eltType>::setEdgeEltValue(const edge 
 //============================================================
 template <typename vectType, typename eltType>
 const eltType& tlp::AbstractVectorProperty<vectType, eltType>::getEdgeEltValue(const edge e, unsigned int i) const {
-  bool isNotDefault;
   const typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::edgeProperties.get(e);
   assert(vect.size() > i);
