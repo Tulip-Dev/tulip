@@ -31,7 +31,7 @@ namespace tlp {
 
   class Camera;
   class TextRenderer;
-  class OcclusionTest;
+  struct OcclusionTest;
 
   /**
    * Create a entity Label
