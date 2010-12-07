@@ -253,10 +253,10 @@ private:
 	QUndoStack *undoStack;
 	Graphic *selectZone;
 	QTableWidgetItem *firstSelectedItem;
-	unsigned int firstSelectedItemRow;
-	unsigned int firstSelectedItemColumn;
-	unsigned int verticalBufferBegin;
-	unsigned int horizontalBufferBegin;
+	int firstSelectedItemRow;
+	int firstSelectedItemColumn;
+	int verticalBufferBegin;
+	int horizontalBufferBegin;
 	QTableWidgetItem *lastCell;
 	QString lastFormule;
 	SpreadView *linkedView;
