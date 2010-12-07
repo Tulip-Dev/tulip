@@ -59,12 +59,14 @@ QGlBufferManager.cpp
 ListPropertyWidget.cpp
 QtOpenGlErrorViewer.cpp
 CSVParser.cpp
-ImportCSVDataDialog.cpp
-ImportCSVDataWidget.cpp
-ImportCSVDataConfigurationWidget.cpp
 QtGlSceneZoomAndPanAnimator.cpp
 GlCompositeHierarchyManager.cpp
 GraphPropertiesTableWidget.cpp
+CSVGraphImport.cpp    
+CSVParserConfigurationWidget.cpp
+CSVGraphMappingConfigurationWidget.cpp
+CSVImportConfigurationWidget.cpp
+CSVImportWidget.cpp
 )
 
 set(tulip-qt_UI
@@ -83,9 +85,12 @@ set(tulip-qt_UI
      ../designer/DoubleStringsListSelectionWidget.ui
      ../designer/ListPropertyWidget.ui
      ../designer/ChooseFileNameDialog.ui
-     ../designer/TextEditDialog.ui
-     ../designer/ImportCSVDataConfigurationWidget.ui
-     ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui     
+     ../designer/TextEditDialog.ui     
+     ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui
+     ../designer/CSVGraphMappingConfigurationWidget.ui
+     ../designer/CSVImportConfigurationWidget.ui
+     ../designer/CSVImportWidget.ui
+     ../designer/CSVParserConfigurationWidget.ui
 )
 
 set(tulip-qt_MOC
@@ -123,14 +128,15 @@ set(tulip-qt_MOC
     ../include/tulip/SimpleStringsListSelectionWidget.h
     ../include/tulip/DoubleStringsListSelectionWidget.h
     ../include/tulip/ColorScaleConfigDialog.h
-    ../include/tulip/ListPropertyWidget.h
-    ../include/tulip/ImportCSVDataDialog.h
-    ../include/tulip/ImportCSVDataWidget.h
-    ../include/tulip/ImportCSVDataConfigurationWidget.h
+    ../include/tulip/ListPropertyWidget.h    
     ../include/tulip/QtGlSceneZoomAndPanAnimator.h
     ../include/tulip/Morphing.h
     ../include/tulip/GraphPropertiesTableWidget.h
     ../include/tulip/TextEditDialog.h
+    ../include/tulip/CSVGraphMappingConfigurationWidget.h
+    ../include/tulip/CSVImportConfigurationWidget.h
+    ../include/tulip/CSVImportWidget.h
+    ../include/tulip/CSVParserConfigurationWidget.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)

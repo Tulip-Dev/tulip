@@ -55,8 +55,7 @@
 
 #include "tulip/PropertyDialog.h"
 #include "tulip/CopyPropertyDialog.h"
-#include "tulip/ImportCSVDataWidget.h"
-#include "tulip/ImportCSVDataDialog.h"
+#include "tulip/CSVImportWidget.h"
 
 using namespace std;
 
@@ -502,22 +501,33 @@ void PropertyDialog::cloneProperty() {
 void PropertyDialog::importCSVData() {
   if (graph
       != NULL) {
-    ImportCSVDataDialog
-    dialog(
-        new ImportCSVDataWidget(),
-        graph,
-        this);
-    dialog.setWindowTitle(
-        tr(
-            "Import CSV data"));
-    graph->push();
-    Observable::holdObservers();
-    if (dialog.exec()
-        == QDialog::Rejected) {
-      graph->pop(
-          false);
+    QDialog *dialog = new QDialog(this);
+    dialog->setLayout(new QVBoxLayout());
+    dialog->setWindowTitle(tr("Import CSV data"));
+
+    //CSV import widget
+    CSVImportWidget* importWidget = new CSVImportWidget(dialog);
+    dialog->layout()->addWidget(importWidget);
+    importWidget->setGraph(graph);
+    QDialogButtonBox *bbox = new QDialogButtonBox(dialog);
+    bbox->addButton(tr("Import"),QDialogButtonBox::AcceptRole);
+    bbox->addButton(QDialogButtonBox::Cancel);
+    connect(bbox,SIGNAL(accepted()),dialog,SLOT(accept()));
+    connect(bbox,SIGNAL(rejected()),dialog,SLOT(reject()));
+    dialog->layout()->addWidget(bbox);
+
+
+    if(dialog->exec() == QDialog::Accepted){
+        graph->push();
+        //Import data
+        std::cout<<__PRETTY_FUNCTION__<<":"<<__LINE__<<std::endl;
+        Observable::holdObservers();
+        importWidget->import();
+        Observable::unholdObservers();
     }
-    Observable::unholdObservers();
+
+    dialog->deleteLater();
+
   }
 }
 //=================================================
