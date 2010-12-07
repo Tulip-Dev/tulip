@@ -118,6 +118,8 @@ namespace tlp {
     mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()));
     if(initView)
       init();
+    else
+      draw();
   }
   //==================================================
   void NodeLinkDiagramComponent::setGraph(Graph *graph) {
