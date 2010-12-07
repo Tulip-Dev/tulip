@@ -503,10 +503,11 @@ namespace tlp {
     if(graphToReload){
       // enter here if a property is add/delete on the graph
       Graph *graph=graphToReload;
-      graphToReload=NULL;
       
       updateViewsOfGraph(graph);
       updateViewsOfSubGraphs(graph);
+
+      graphToReload=NULL;
     }else{
       drawViews();
     }
@@ -1338,7 +1339,7 @@ namespace tlp {
     undoAction->setEnabled(true);
     editUndoAction->setEnabled(true);          
     propertiesWidget->setGraph(getCurrentGraph());
-    drawViews(true);
+    drawViews(false);
   }
   //**********************************************************************
   GraphState *MainController::constructGraphState() {
@@ -1435,7 +1436,7 @@ namespace tlp {
       if( morphingAction->isChecked() && g0) {
         applyMorphing(g0);
       }
-      drawViews(true);
+      drawViews(false);
     }
 
     delete g0;
@@ -1454,7 +1455,7 @@ namespace tlp {
       if( morphingAction->isChecked() && g0) {
         applyMorphing(g0);
       }
-      drawViews(true);
+      drawViews(false);
     }
 
     delete g0;
@@ -1566,7 +1567,7 @@ namespace tlp {
         interactor->undoIsDone();
     }
 
-    drawViews(true);
+    drawViews(false);
     updateCurrentGraphInfos();
     updateUndoRedoInfos();
   }
@@ -1587,7 +1588,7 @@ namespace tlp {
     propertiesWidget->setGraph(newGraph);
     eltProperties->setGraph(newGraph,false);
 
-    drawViews(true);
+    drawViews(false);
     updateCurrentGraphInfos();
     updateUndoRedoInfos();
   }

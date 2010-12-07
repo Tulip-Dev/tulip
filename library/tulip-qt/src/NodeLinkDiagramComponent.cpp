@@ -121,7 +121,10 @@ namespace tlp {
   }
   //==================================================
   void NodeLinkDiagramComponent::setGraph(Graph *graph) {
-    setGraph(graph,true);
+    if(mainWidget->getScene()->getGlGraphComposite()!=NULL && mainWidget->getGraph()==graph)
+      setGraph(graph,false);
+    else
+      setGraph(graph,true);
   }
   //==================================================
   std::list<std::pair<QWidget *,std::string> > NodeLinkDiagramComponent::getConfigurationWidget() {
