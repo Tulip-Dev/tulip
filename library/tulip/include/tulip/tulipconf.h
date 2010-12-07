@@ -23,6 +23,10 @@
 #define STRINGIFY_INTERNAL(PARAM) #PARAM
 
 #if _MSC_VER
+  //MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does not.
+  static double sqrt(int i) {
+    return sqrt((double)i);
+  }
 #  define _DEPRECATED __declspec(deprecated)
 #  define __PRETTY_FUNCTION__ __FUNCTION__ //workaround
 #  define strcasecmp stricmp  //strcasecmp does not exists for VC, workaround

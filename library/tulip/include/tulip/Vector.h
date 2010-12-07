@@ -208,9 +208,6 @@ namespace tlp {
 }
 
 #ifdef _MSC_VER
-  static double sqrt(int i) {
-	  return sqrt((double)i);
-  }
   //template<unsigned int SIZE>
   static double sqrt(tlp::Vector<float, 5>& v) {
 	  return sqrt((double)v[0]);
