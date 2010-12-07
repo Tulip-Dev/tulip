@@ -38,8 +38,8 @@ class ObservableGraph;
  * framework for handling state dependency between observer and observed 
  * object.
  */
-class  TLP_SCOPE GraphObserver {
-   std::list<ObservableGraph *> observables;
+class TLP_SCOPE GraphObserver {
+  std::list<ObservableGraph *> observables;
   bool updateObservables;
  public:
   GraphObserver(bool manageObservables = true)
@@ -133,12 +133,16 @@ inline unsigned int ObservableGraph::countGraphObservers() {
 }
 
 inline void ObservableGraph::removeGraphObserver(GraphObserver *item) const {
-  observers.remove(item);
-  item->removeObservable((ObservableGraph*)this);
+  if (!observers.empty() && std::find(observers.begin(), observers.end(), item) != observers.end()) {
+	  observers.remove(item);
+	  item->removeObservable((ObservableGraph*)this);
+  }
 }
 
 inline void ObservableGraph::removeOnlyGraphObserver(GraphObserver *item) const {
-  observers.remove(item);
+	if (!observers.empty() && std::find(observers.begin(), observers.end(), item) != observers.end()) {
+		observers.remove(item);
+	}
 }
 
 }

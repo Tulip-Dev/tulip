@@ -39,24 +39,24 @@ class ObservableProperty;
  * object.
  */
 class  TLP_SCOPE PropertyObserver {
-  std::list<ObservableProperty *> observables;
-  bool updateObservables;
- public:
- PropertyObserver(bool manageObservables = true)
-   :updateObservables(manageObservables) {}
-  virtual ~PropertyObserver();
-  virtual void beforeSetNodeValue(PropertyInterface*, const node){}
-  virtual void afterSetNodeValue(PropertyInterface*, const node){}
-  virtual void beforeSetEdgeValue(PropertyInterface*, const edge){}
-  virtual void afterSetEdgeValue(PropertyInterface*, const edge){}
-  virtual void beforeSetAllNodeValue(PropertyInterface*){}
-  virtual void afterSetAllNodeValue(PropertyInterface*){}
-  virtual void beforeSetAllEdgeValue(PropertyInterface*){}
-  virtual void afterSetAllEdgeValue(PropertyInterface*){}
-  virtual void destroy(PropertyInterface*){}
+	std::list<ObservableProperty *> observables;
+	bool updateObservables;
+public:
+	PropertyObserver(bool manageObservables = true)
+	:updateObservables(manageObservables) {}
+	virtual ~PropertyObserver();
+	virtual void beforeSetNodeValue(PropertyInterface*, const node){}
+	virtual void afterSetNodeValue(PropertyInterface*, const node){}
+	virtual void beforeSetEdgeValue(PropertyInterface*, const edge){}
+	virtual void afterSetEdgeValue(PropertyInterface*, const edge){}
+	virtual void beforeSetAllNodeValue(PropertyInterface*){}
+	virtual void afterSetAllNodeValue(PropertyInterface*){}
+	virtual void beforeSetAllEdgeValue(PropertyInterface*){}
+	virtual void afterSetAllEdgeValue(PropertyInterface*){}
+	virtual void destroy(PropertyInterface*){}
 
-  void addObservable(ObservableProperty *);
-  void removeObservable(ObservableProperty *);
+	void addObservable(ObservableProperty *);
+	void removeObservable(ObservableProperty *);
 };
 /*@}*/
 }
@@ -69,53 +69,57 @@ namespace tlp {
  */
 /// Observable object for Property
 class  TLP_SCOPE ObservableProperty {
-  friend class PropertyObserver;
+	friend class PropertyObserver;
 
- public:
-  virtual ~ObservableProperty() {removePropertyObservers();}
-  /**
-   * Register a new observer
-   */
-  void addPropertyObserver(PropertyObserver *) const;
-  /**
-   * Returns the number of observers
-   */
-  unsigned int countPropertyObservers();
-  /**
-   * Remove an observer
-   */
-  void removePropertyObserver(PropertyObserver *) const;
-  /**
-   * Remove all observers
-   */
-  void removePropertyObservers();
+public:
+	virtual ~ObservableProperty() {removePropertyObservers();}
+	/**
+	 * Register a new observer
+	 */
+	void addPropertyObserver(PropertyObserver *) const;
+	/**
+	 * Returns the number of observers
+	 */
+	unsigned int countPropertyObservers();
+	/**
+	 * Remove an observer
+	 */
+	void removePropertyObserver(PropertyObserver *) const;
+	/**
+	 * Remove all observers
+	 */
+	void removePropertyObservers();
 
- protected:
-  void notifyBeforeSetNodeValue(PropertyInterface*,const node n);
-  void notifyAfterSetNodeValue(PropertyInterface*,const node n);
-  void notifyBeforeSetEdgeValue(PropertyInterface*,const edge e);
-  void notifyAfterSetEdgeValue(PropertyInterface*,const edge e);
-  void notifyBeforeSetAllNodeValue(PropertyInterface*);
-  void notifyAfterSetAllNodeValue(PropertyInterface*);
-  void notifyBeforeSetAllEdgeValue(PropertyInterface*);
-  void notifyAfterSetAllEdgeValue(PropertyInterface*);
-  void notifyDestroy(PropertyInterface*);
-  void removeOnlyPropertyObserver(PropertyObserver *) const;
-  mutable std::list<PropertyObserver*> observers;
+protected:
+	void notifyBeforeSetNodeValue(PropertyInterface*,const node n);
+	void notifyAfterSetNodeValue(PropertyInterface*,const node n);
+	void notifyBeforeSetEdgeValue(PropertyInterface*,const edge e);
+	void notifyAfterSetEdgeValue(PropertyInterface*,const edge e);
+	void notifyBeforeSetAllNodeValue(PropertyInterface*);
+	void notifyAfterSetAllNodeValue(PropertyInterface*);
+	void notifyBeforeSetAllEdgeValue(PropertyInterface*);
+	void notifyAfterSetAllEdgeValue(PropertyInterface*);
+	void notifyDestroy(PropertyInterface*);
+	void removeOnlyPropertyObserver(PropertyObserver *) const;
+	mutable std::list<PropertyObserver*> observers;
 };
 /*@}*/
 
 inline unsigned int ObservableProperty::countPropertyObservers() { 
-  return observers.size(); 
+	return observers.size();
 }
 
-inline void ObservableProperty::removePropertyObserver(PropertyObserver *item) const{  
-  observers.remove(item);
-  item->removeObservable((ObservableProperty*)this);
+inline void ObservableProperty::removePropertyObserver(PropertyObserver *item) const{
+	if (!observers.empty() && std::find(observers.begin(), observers.end(), item) != observers.end()) {
+		observers.remove(item);
+		item->removeObservable((ObservableProperty*)this);
+	}
 }
 
 inline void ObservableProperty::removeOnlyPropertyObserver(PropertyObserver *item) const{
-  observers.remove(item);
+	if (!observers.empty() && std::find(observers.begin(), observers.end(), item) != observers.end()) {
+		observers.remove(item);
+	}
 }
 
 }
