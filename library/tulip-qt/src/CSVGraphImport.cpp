@@ -1,4 +1,4 @@
-#include "CSVGraphImport.h"
+#include "tulip/CSVGraphImport.h"
 #include <tulip/Graph.h>
 #include <tulip/PropertyInterface.h>
 #include <tulip/ForEach.h>

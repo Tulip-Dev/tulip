@@ -105,19 +105,19 @@
   <customwidget>
    <class>tlp::CSVImportConfigurationWidget</class>
    <extends>QWidget</extends>
-   <header location="global" >CSVImportConfigurationWidget.h</header>
+   <header location="global" >tulip/CSVImportConfigurationWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>tlp::CSVGraphMappingConfigurationWidget</class>
    <extends>QWidget</extends>
-   <header location="global" >CSVGraphMappingConfigurationWidget.h</header>
+   <header location="global" >tulip/CSVGraphMappingConfigurationWidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>tlp::CSVParserConfigurationWidget</class>
    <extends>QWidget</extends>
-   <header location="global" >CSVParserConfigurationWidget.h</header>
+   <header location="global" >tulip/CSVParserConfigurationWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

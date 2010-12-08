@@ -148,6 +148,11 @@ TODIST_SOURCES = \
 	ListPropertyWidget.cpp \
     QtOpenGlErrorViewer.cpp \
 	CSVParser.cpp \
+	CSVGraphImport.cpp \ 
+	CSVParserConfigurationWidget.cpp \
+	CSVGraphMappingConfigurationWidget.cpp \
+	CSVImportConfigurationWidget.cpp \
+	CSVImportWidget.cpp \
 	QtGlSceneZoomAndPanAnimator.cpp \
 	GlCompositeHierarchyManager.cpp \
   GraphPropertiesTableWidget.cpp

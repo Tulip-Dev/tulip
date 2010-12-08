@@ -1,9 +1,10 @@
 #ifndef CSVPARSERCONFIGURATIONWIDGET_H
 #define CSVPARSERCONFIGURATIONWIDGET_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 #include <tulip/CSVParser.h>
 #include <tulip/CSVContentHandler.h>
+
 namespace Ui {
     class CSVParserConfigurationWidget;
 }

@@ -1,5 +1,5 @@
-#include "CSVImportWidget.h"
-#include "CSVImportWidgetData.h"
+#include "tulip/CSVImportWidget.h"
+#include "tulip/CSVImportWidgetData.h"
 #include "tulip/CSVGraphImport.h"
 #include <tulip/TlpQtTools.h>
 #include "tulip/QtProgress.h"

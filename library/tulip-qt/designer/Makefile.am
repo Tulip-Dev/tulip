@@ -12,7 +12,11 @@ dist_noinst_DATA = FindSelection.ui \
 	SimpleStringsListSelectionWidget.ui \
 	DoubleStringsListSelectionWidget.ui \
 	ChooseFileNameDialog.ui \
-    QtOpenGlErrorViewerWithAskAgainDialog.ui \
+	QtOpenGlErrorViewerWithAskAgainDialog.ui \
+	CSVGraphMappingConfigurationWidget.ui \
+	CSVImportConfigurationWidget.ui \
+	CSVImportWidget.ui \
+	CSVParserConfigurationWidget.ui \
 	i_addedge.png \
 	i_addnode.png \
 	i_bends.png \

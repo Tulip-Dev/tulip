@@ -1,7 +1,7 @@
 #ifndef CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 #define CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 
-#include <QWidget>
+#include <QtGui/QWidget>
 #include <tulip/tuliphash.h>
 #include <tulip/CSVGraphImport.h>
 class CSVGraphImport;

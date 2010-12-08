@@ -1,11 +1,12 @@
-#include "CSVParserConfigurationWidget.h"
-#include "CSVParserConfigurationWidgetData.h"
-
 #include <tulip/TlpQtTools.h>
 
 #include <QtCore/QTextCodec>
 #include <QtGui/QFileDialog>
-#include <CSVParser.h>
+
+#include "tulip/CSVParserConfigurationWidget.h"
+#include "tulip/CSVParserConfigurationWidgetData.h"
+#include "tulip/CSVParser.h"
+
 using namespace tlp;
 using namespace std;
 CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent) :

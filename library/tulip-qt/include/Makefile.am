@@ -65,10 +65,15 @@ INCLUDES_H = \
     tulip/QtOpenGlErrorViewer.h \
 	tulip/CSVParser.h \
 	tulip/CSVContentHandler.h \
+	tulip/CSVGraphImport.h \
+	tulip/CSVGraphMappingConfigurationWidget.h \
+	tulip/CSVImportConfigurationWidget.h \
+	tulip/CSVImportWidget.h \
+	tulip/CSVParserConfigurationWidget.h
 	tulip/QtGlSceneZoomAndPanAnimator.h \
 	tulip/Morphing.h \
 	tulip/GlCompositeHierarchyManager.h \
-  tulip/GraphPropertiesTableWidget.h \
+	tulip/GraphPropertiesTableWidget.h \
   tulip/TextEditDialog.h
 
 QT44_INCLUDES_H = \
@@ -104,8 +109,12 @@ BUILT_SOURCES = \
 	tulip/DoubleStringsListSelectionWidgetData.h \
 	tulip/ListPropertyWidgetData.h \
 	tulip/ChooseFileNameDialogData.h \
-    tulip/QtOpenGlErrorViewerWithAskAgainDialogData.h \
-  tulip/TextEditDialogData.h
+        tulip/QtOpenGlErrorViewerWithAskAgainDialogData.h \
+	tulip/CSVParserConfigurationWidgetData.h \
+	tulip/CSVGraphMappingConfigurationWidgetData.h \
+	tulip/CSVImportConfigurationWidgetData.h \
+	tulip/CSVImportWidgetData.h \
+        tulip/TextEditDialogData.h
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 

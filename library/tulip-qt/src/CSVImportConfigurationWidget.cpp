@@ -1,5 +1,5 @@
-#include "CSVImportConfigurationWidget.h"
-#include "CSVImportConfigurationWidgetData.h"
+#include "tulip/CSVImportConfigurationWidget.h"
+#include "tulip/CSVImportConfigurationWidgetData.h"
 #include <tulip/TlpQtTools.h>
 #include <tulip/QtProgress.h>
 #include <QtGui/QComboBox>

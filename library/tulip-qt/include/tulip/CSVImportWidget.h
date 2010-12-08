@@ -4,7 +4,7 @@
 #include <tulip/CSVContentHandler.h>
 #include <tulip/CSVParser.h>
 #include <tulip/CSVGraphImport.h>
-#include <QWidget>
+#include <QtGui/QWidget>
 #include <QtGui/QTableWidget>
 #include <string>
 namespace Ui {
