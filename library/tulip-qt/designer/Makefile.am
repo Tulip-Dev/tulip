@@ -30,7 +30,6 @@ dist_noinst_DATA = FindSelection.ui \
 	up.png \
 	right.png \
 	TulipQtResource.qrc \
-	ImportCSVDataConfigurationWidget.ui \
 	ListPropertyWidget.ui
 
 SOURCES = FindSelection.ui GWOverviewWidget.ui RenderingParametersDialog.ui AugmentedDisplayDialog.ui TabWidget.ui PropertyDialog.ui CopyPropertyDialog.ui GridOptions.ui QtProgress.ui elementtable.xpm GlMainWidget.xpm gwoverviewwidget.xpm sghierarchywidget.xpm ListPropertyWidget.ui ChooseFileNameDialog.ui QtOpenGlErrorViewerWithAskAgainDialog.ui

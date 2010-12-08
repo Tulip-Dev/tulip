@@ -64,9 +64,6 @@ INCLUDES_H = \
 	tulip/BaseGraphicsViewComponentMacro.h \
     tulip/QtOpenGlErrorViewer.h \
 	tulip/CSVParser.h \
-	tulip/ImportCSVDataWidget.h \
-	tulip/ImportCSVDataConfigurationWidget.h \
-	tulip/ImportCSVDataDialog.h \
 	tulip/CSVContentHandler.h \
 	tulip/QtGlSceneZoomAndPanAnimator.h \
 	tulip/Morphing.h \
