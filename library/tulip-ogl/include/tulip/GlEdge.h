@@ -31,6 +31,7 @@ namespace tlp {
 
   struct OcclusionTest;
   class TextRenderer;
+  class GlLabel;
 
   /**
    * Class to represent an edge of a graph
@@ -43,7 +44,7 @@ namespace tlp {
      * Build an edge with the id : id
      * id must be the id of the edge in graph
      */
-    GlEdge(unsigned int id):id(id) {}
+    GlEdge(unsigned int id);
 
     /**
      * Virtual function to accept GlSceneVisitor on this class
@@ -76,7 +77,7 @@ namespace tlp {
      * Draw the label of the edge if drawEdgesLabel is true
      * Use TextRenderer : renderer to draw the label
      */
-    void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data, float lod);
+    void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data, float lod, Camera *camera=NULL);
 
     /**
      * This function is used by the engine to get line coordinates of the edge
@@ -105,6 +106,7 @@ namespace tlp {
 
   private :
 
+    static GlLabel *label;
     static bool haveToComputeEdgeWidthBaseLod;
     static bool orthoProjection;
     static float edgeWidthBaseLod;

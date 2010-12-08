@@ -46,16 +46,19 @@
 #include "tulip/GlOpenUniformCubicBSpline.h"
 #include "tulip/GlTextureManager.h"
 #include "tulip/GlVertexArrayManager.h"
+#include "tulip/GlLabel.h"
 
 #include <iostream>
 
 #ifdef _WIN32
 #ifdef DLL_EXPORT
+tlp::GlLabel* tlp::GlEdge::label=0;
 bool tlp::GlEdge::haveToComputeEdgeWidthBaseLod=true;
 bool tlp::GlEdge::orthoProjection=false;
 float tlp::GlEdge::edgeWidthBaseLod=0.;
 #endif
 #else
+tlp::GlLabel* tlp::GlEdge::label=0;
 bool tlp::GlEdge::haveToComputeEdgeWidthBaseLod=true;
 bool tlp::GlEdge::orthoProjection=false;
 float tlp::GlEdge::edgeWidthBaseLod=0.;
@@ -65,30 +68,10 @@ using namespace std;
 
 namespace tlp {
 
-/*BoundingBox GlEdge::eeGlyphBoundingBox(const Coord& anchor, const Coord& tgt, float glyphNrm,
-		const MatrixGL& transformation, const MatrixGL& size) {
-
-	Coord vect = tgt - anchor;
-	float nrm = vect.norm();
-	if (fabs(nrm) > 1E-6)
-		vect /= nrm;
-
-	Coord mid = anchor + vect * glyphNrm * .5f;
-
-	Coord vAB(transformation[0][0], transformation[0][1], transformation[0][2]);
-	Coord vV(transformation[0][1], transformation[1][1], transformation[2][1]);
-	Coord vW(transformation[0][2], transformation[1][2], transformation[2][2]);
-
-	BoundingBox box;
-	box.expand(mid + vAB * (-size[0][0]) * .5f);
-	box.expand(mid + vAB * (size[0][0]) * .5f);
-	box.expand(mid + vV * (-size[1][1]) * .5f);
-	box.expand(mid + vV * (size[1][1]) * .5f);
-	box.expand(mid + vW * (-size[2][2]) * .5f);
-	box.expand(mid + vW * (size[2][2]) * .5f);
-
-	return box;
-}*/
+  GlEdge::GlEdge(unsigned int id):id(id) {
+    if(!label)
+      label=new GlLabel();
+  }
 
 BoundingBox GlEdge::getBoundingBox(GlGraphInputData* data) {
 	edge e = edge(id);
@@ -447,7 +430,7 @@ void GlEdge::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInput
 	drawLabel(test,renderer,data,0.);
 }
 
-void GlEdge::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data, float) {
+void GlEdge::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data, float lod, Camera *camera) {
 
 	edge e = edge(id);
 
@@ -464,72 +447,101 @@ void GlEdge::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInput
 	else {
 		fontColor = data->elementLabelColor->getEdgeValue(e);
 	}
-
 	if(fontColor.getA()==0)
 		return;
 
-	if(select)
-		glStencilFunc(GL_LEQUAL,data->parameters->getSelectedEdgesStencil() ,0xFFFF);
-	else
-		glStencilFunc(GL_LEQUAL,data->parameters->getEdgesLabelStencil(),0xFFFF);
-
-	string fontName=data->elementFont->getEdgeValue(e);
 	int fontSize=data->elementFontSize->getEdgeValue(e);
-	if(!GlRenderer::checkFont(fontName))
-		fontName=data->parameters->getFontsPath()+"font.ttf";
-	if(fontSize==0)
-		fontSize=18;
+	if(select)
+		fontSize+=2;
 
-	if (select)
-		renderer->setContext(fontName, fontSize+2, 0, 0, 255);
+	if(select)
+		label->setStencil(data->parameters->getSelectedEdgesStencil());
 	else
-		renderer->setContext(fontName, fontSize, 255, 255, 255);
+		label->setStencil(data->parameters->getEdgesLabelStencil());
+
+	label->setText(tmp);
+	label->setFontNameSizeAndColor(data->elementFont->getEdgeValue(e),fontSize,fontColor);
+	label->setRenderingMode(GlLabel::POLYGON_MODE);
 
 	const std::pair<node, node>& eEnds = data->graph->ends(e);
 	const node source = eEnds.first;
 	const node target = eEnds.second;
+
+	const Size &srcSize = data->elementSize->getNodeValue(source);
+	const Size &tgtSize = data->elementSize->getNodeValue(target);
+	Size edgeSize;
+	float maxSrcSize, maxTgtSize;
+	if(srcSize[0]>=srcSize[1])
+		maxSrcSize=srcSize[0];
+	else
+		maxSrcSize=srcSize[1];
+	if(tgtSize[0]>=tgtSize[1])
+		maxTgtSize=tgtSize[0];
+	else
+		maxTgtSize=tgtSize[1];
+
+	getEdgeSize(data,e,srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
+
+	if(edgeSize[0]>edgeSize[1])
+		label->setTranslationAfterRotation(Coord(0,edgeSize[0]*2,0));
+	else
+		label->setTranslationAfterRotation(Coord(0,edgeSize[1]*2,0));
+
 	const Coord & srcCoord = data->elementLayout->getNodeValue(source);
 	const Coord & tgtCoord = data->elementLayout->getNodeValue(target);
 	const LineType::RealType &bends = data->elementLayout->getEdgeValue(e);
 	Coord position;
+	float angle;
 	if (bends.empty()) {
 		position = (srcCoord + tgtCoord) / 2.f;
+		angle=atan((tgtCoord[1]-srcCoord[1])/(tgtCoord[0]-srcCoord[0]))*(180./M_PI);
 	} else {
-		if (bends.size() % 2 == 0)
+		if (bends.size() % 2 == 0){
 			position = (bends[bends.size() / 2 - 1] + bends[bends.size() / 2]) / 2.f;
-		else
+			angle=atan((bends[bends.size() / 2][1]-bends[bends.size() / 2 - 1][1])/(bends[bends.size() / 2][0]-bends[bends.size() / 2 - 1][0]))*(180./M_PI);
+		}else{
 			position = bends[bends.size() / 2];
+			Coord firstVector;
+			Coord secondVector;
+
+			if(bends.size()>1){
+				firstVector=bends[bends.size() / 2]-bends[bends.size() / 2 - 1];
+				secondVector=bends[bends.size() / 2]-bends[bends.size() / 2+1];
+			}else{
+				firstVector=bends[bends.size() / 2]-srcCoord;
+				secondVector=bends[bends.size() / 2]-tgtCoord;
+			}
+
+			float firstAngle=atan(firstVector[1]/firstVector[0])*(180./M_PI);
+			float secondAngle=atan(secondVector[1]/secondVector[0])*(180./M_PI);
+
+			Coord textDirection=firstVector+secondVector;
+			if(textDirection[1]<0)
+				label->setTranslationAfterRotation(Coord(0,-label->getTranslationAfterRotation()[1],0));
+
+			angle=(firstAngle+secondAngle)/2.;
+			if(firstVector[0] *secondVector[0]>=0)
+				angle+=90;
+
+			if(angle>=90)
+				angle=-180+angle;
+
+		}
 	}
 
-	float w_max = 300;
-	float w, h;
-	int rastPos[4];
-	unsigned int labelsBorder = data->parameters->getLabelsBorder();
+	label->setSize(Coord(1,1,0));
+	label->rotate(0,0,angle);
+	label->setAlignment(ON_CENTER);
+	label->setScaleToSize(false);
+	label->setLabelOcclusionBorder(data->parameters->getLabelsBorder());
+	if(!data->parameters->isLabelOverlaped())
+		label->setOcclusionTester(test);
+	else
+		label->setOcclusionTester(NULL);
+	label->setPosition(position);
+	label->setUseLODOptimisation(false);
 
-	setColor(Color(fontColor[0], fontColor[1], fontColor[2], 255));
-
-	glRasterPos3f(position[0], position[1], position[2]);
-
-	glGetIntegerv(GL_CURRENT_RASTER_POSITION, (GLint *) rastPos);
-
-	if (test->testRectangle(RectangleInt2D(rastPos[0] - labelsBorder - 5, rastPos[1] - labelsBorder
-			- 5, rastPos[0] + labelsBorder + 5, rastPos[1] + labelsBorder + 5))) {
-		return;
-	}
-
-	renderer->setMode(TLP_PIXMAP);
-	renderer->setString(tmp, VERBATIM);
-	//fontRenderer->setString(str, XML);
-
-	renderer->setColor(fontColor[0], fontColor[1], fontColor[2]);
-	//  w_max = width;
-	renderer->getBoundingBox(w_max, h, w);
-
-	if (!test->addRectangle(RectangleInt2D(rastPos[0] - (int) (w / 2.0) - labelsBorder, rastPos[1]
-	                                                                                            - (int) (h / 2.0) - labelsBorder, rastPos[0] + (int) (w / 2.0) + labelsBorder,
-	                                                                                            rastPos[1] + (int) (h / 2.0) + labelsBorder))) {
-		renderer->draw(w, w, ON_CENTER);
-	}
+	label->drawWithStencil(lod,camera);
 }
 
 void GlEdge::getVertices(GlGraphInputData *data,

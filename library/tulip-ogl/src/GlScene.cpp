@@ -256,7 +256,7 @@ namespace tlp {
           if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric){
             // Not metric ordered
             glEdge.id=e.id;
-            glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod);
+            glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit->camera));
           }else{
             // Metric ordered
             edgesMetricOrdered.push_back(pair<edge,float>(e,(*it).lod));
@@ -271,7 +271,7 @@ namespace tlp {
         sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
         for(vector<pair<edge,float> >::iterator it=edgesMetricOrdered.begin();it!=edgesMetricOrdered.end();++it){
           glEdge.id=(*it).first.id;
-          glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second);
+          glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit->camera));
         }
       }
     }
