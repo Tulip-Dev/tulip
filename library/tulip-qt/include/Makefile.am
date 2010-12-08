@@ -104,7 +104,6 @@ BUILT_SOURCES = \
 	tulip/DoubleStringsListSelectionWidgetData.h \
 	tulip/ListPropertyWidgetData.h \
 	tulip/ChooseFileNameDialogData.h \
-    tulip/ImportCSVDataConfigurationWidgetData.h \
     tulip/QtOpenGlErrorViewerWithAskAgainDialogData.h \
   tulip/TextEditDialogData.h
 
