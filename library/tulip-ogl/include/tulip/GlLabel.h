@@ -86,6 +86,13 @@ namespace tlp {
     }
 
     /**
+     * return the translation used after rotation of the label
+     */
+    virtual Coord getTranslationAfterRotation(){
+      return translationAfterRotation;
+    }
+
+    /**
      * Set the alignment of the label : ON_CENTER, ON_TOP, ON_BOTTOM, ON_LEFT, ON_RIGHT
      */
     virtual void setAlignment(int alignment){
