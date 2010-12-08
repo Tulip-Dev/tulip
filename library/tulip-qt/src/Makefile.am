@@ -81,9 +81,6 @@ BUILT_SOURCES = \
 	moc_DoubleStringsListSelectionWidget.cpp \
 	moc_ColorScaleConfigDialog.cpp \
 	moc_ListPropertyWidget.cpp \
-	moc_ImportCSVDataDialog.cpp \
-	moc_ImportCSVDataWidget.cpp \
-	moc_ImportCSVDataConfigurationWidget.cpp \
 	moc_QtGlSceneZoomAndPanAnimator.cpp \
 	moc_Morphing.cpp \
   moc_GraphPropertiesTableWidget.cpp \
@@ -150,9 +147,6 @@ TODIST_SOURCES = \
   QGlBufferManager.cpp \
 	ListPropertyWidget.cpp \
     QtOpenGlErrorViewer.cpp \
-	ImportCSVDataDialog.cpp \
-	ImportCSVDataWidget.cpp \
-	ImportCSVDataConfigurationWidget.cpp \
 	CSVParser.cpp \
 	QtGlSceneZoomAndPanAnimator.cpp \
 	GlCompositeHierarchyManager.cpp \
