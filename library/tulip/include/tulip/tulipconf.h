@@ -24,8 +24,26 @@
 
 #if _MSC_VER
   //MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does not.
+  #include <math.h>
   static double sqrt(int i) {
     return sqrt((double)i);
+  }
+  static double sqrt(unsigned int i) {
+    return sqrt((double)i);
+  }
+  
+  static double log(int i) {
+    return log((double)i);
+  }
+  static double log(unsigned int i) {
+    return log((double)i);
+  }
+  
+  static double floor(int i) {
+    return floor((double)i);
+  }
+  static double floor(unsigned int i) {
+    return floor((double)i);
   }
 #  define _DEPRECATED __declspec(deprecated)
 #  define __PRETTY_FUNCTION__ __FUNCTION__ //workaround
