@@ -128,7 +128,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
     n++;
     std::string tmpStr = pluginPath +"/"+ _infos->FindData.cFileName;
     std::string lib(_infos->FindData.cFileName);
-    unsigned long idx = lib.rfind('-', lib.rfind('.') - 1);
+    unsigned long idx = lib.rfind('-', lib.rfind(STRINGIFY(VERSION_SEPARATOR)) - 1);
     if (idx != std::string::npos) {
       std::string tulip_release(TULIP_RELEASE);
       tulip_release = tulip_release.substr(0, tulip_release.rfind(STRINGIFY(VERSION_SEPARATOR)) + 1);

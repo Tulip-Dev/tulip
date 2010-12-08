@@ -21,6 +21,7 @@
 #include <list>
 #include "tulip/Node.h"
 #include "tulip/Edge.h"
+#include <algorithm>
 
 namespace tlp {
 

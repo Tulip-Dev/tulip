@@ -169,7 +169,7 @@ SET(TULIP_SERVER_GENERATION OFF CACHE BOOL "Enable process to make generation of
 ## -----------------------------------------------------------------------------------------------
 ## Define NDEBUG when we are in release mode
 ## -----------------------------------------------------------------------------------------------
-SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -DNDEBUG -funroll-loops -pipe")
+SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 
 ## -----------------------------------------------------------------------------------------------
 ## Check 64 bits

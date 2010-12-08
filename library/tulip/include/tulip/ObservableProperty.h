@@ -22,7 +22,7 @@
 #include "tulip/tulipconf.h"
 #include "tulip/Node.h"
 #include "tulip/Edge.h"
-
+#include <algorithm>
 namespace tlp {
 
 class PropertyInterface;
