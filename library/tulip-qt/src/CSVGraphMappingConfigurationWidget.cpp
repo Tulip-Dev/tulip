@@ -1,5 +1,5 @@
-#include "CSVGraphMappingConfigurationWidget.h"
-#include "CSVGraphMappingConfigurationWidgetData.h"
+#include "tulip/CSVGraphMappingConfigurationWidget.h"
+#include "tulip/CSVGraphMappingConfigurationWidgetData.h"
 #include "tulip/CSVGraphImport.h"
 #include <tulip/Graph.h>
 #include <tulip/ForEach.h>

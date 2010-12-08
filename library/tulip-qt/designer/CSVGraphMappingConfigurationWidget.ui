@@ -151,7 +151,7 @@
   <customwidget>
    <class>tlp::CSVColumnToGraphPropertyMappingWidget</class>
    <extends>QWidget</extends>
-   <header location="global" >CSVGraphMappingConfigurationWidget.h</header>
+   <header location="global" >tulip/CSVGraphMappingConfigurationWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
