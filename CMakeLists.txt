@@ -37,10 +37,10 @@ SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVers
 ## -----------------------------------------------------------------------------------------------
 ## Lib names
 ## -----------------------------------------------------------------------------------------------
-SET(LibTulipName "tulip-${TulipVersion}")
-SET(LibTulipOglName "tulip-ogl-${TulipVersion}")
-SET(LibTulipQtName "tulip-qt4-${TulipVersion}")
-SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipVersion}")
+SET(LibTulipName "tulip-${TulipMMVersion}")
+SET(LibTulipOglName "tulip-ogl-${TulipMMVersion}")
+SET(LibTulipQtName "tulip-qt4-${TulipMMVersion}")
+SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipMMVersion}")
 
 ## -----------------------------------------------------------------------------------------------
 ## Find need packages
