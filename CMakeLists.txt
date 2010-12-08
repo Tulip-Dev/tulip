@@ -37,10 +37,10 @@ SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVers
 ## -----------------------------------------------------------------------------------------------
 ## Lib names
 ## -----------------------------------------------------------------------------------------------
-SET(LibTulipName "tulip-${TulipMMVersion}")
-SET(LibTulipOglName "tulip-ogl-${TulipMMVersion}")
-SET(LibTulipQtName "tulip-qt4-${TulipMMVersion}")
-SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipMMVersion}")
+SET(LibTulipName "tulip-${TulipVersion}")
+SET(LibTulipOglName "tulip-ogl-${TulipVersion}")
+SET(LibTulipQtName "tulip-qt4-${TulipVersion}")
+SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipVersion}")
 
 ## -----------------------------------------------------------------------------------------------
 ## Find need packages
@@ -269,8 +269,8 @@ endif(DOXYGEN_FOUND)
 ## -----------------------------------------------------------------------------------------------
 SET(prefix "${CMAKE_INSTALL_PREFIX}")
 SET(exec_prefix "\${prefix}")
-SET(includedir "\${prefix}${TulipIncludeInstallDir}")
-SET(libdir "\${prefix}${TulipLibInstallDir}")
+SET(includedir "\${prefix}/${TulipIncludeInstallDir}")
+SET(libdir "\${prefix}/${TulipLibInstallDir}")
 SET(libversion "${TulipMMVersion}")
 SET(VERSION "${TulipVersion}")
 SET(WIN_VERSION "${TulipMajorVersion}.${TulipMinorVersion}")
