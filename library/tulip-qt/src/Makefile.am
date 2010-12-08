@@ -83,6 +83,10 @@ BUILT_SOURCES = \
 	moc_ListPropertyWidget.cpp \
 	moc_QtGlSceneZoomAndPanAnimator.cpp \
 	moc_Morphing.cpp \
+        moc_CSVGraphMappingConfigurationWidget.cpp \
+        moc_CSVImportConfigurationWidget.cpp \
+	moc_CSVImportWidget.cpp \
+	moc_CSVParserConfigurationWidget.cpp \
   moc_GraphPropertiesTableWidget.cpp \
   moc_TextEditDialog.cpp
 
