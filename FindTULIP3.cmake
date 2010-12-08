@@ -32,21 +32,26 @@ ELSEIF(NOT TULIP_DIR AND NOT TULIP_INCLUDE_DIR)
   FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h)
 ENDIF()
 
+SET(TulipVersionSeparator .)
+IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options
+   SET(TulipVersionSeparator _)
+ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+
 # Tulip version
 IF(NOT TULIP_VERSION AND TULIP_INCLUDE_DIR)
 FILE(STRINGS ${TULIP_INCLUDE_DIR}/tulip/TulipRelease.h
      TEMPVAR
-     REGEX "[0-9]*\\.[0-9]*"
+     REGEX "[0-9]*\\${TulipVersionSeparator}[0-9]*"
      NO_HEX_CONVERSION)
 
-STRING(REGEX MATCH "[0-9]*\\.[0-9]*\\.[0-9]*"
+STRING(REGEX MATCH "[0-9]*\\${TulipVersionSeparator}[0-9]*\\${TulipVersionSeparator}[0-9]*"
        TULIP_PLUGIN_VERSION
        ${TEMPVAR})
 ENDIF()
 
 # Plugin version
 IF(NOT TULIP_VERSION AND TULIP_PLUGIN_VERSION)
-STRING(REGEX MATCH "[0-9]*\\.[0-9]*"
+STRING(REGEX MATCH "[0-9]*\\${TulipVersionSeparator}[0-9]*"
        TULIP_VERSION
        ${TULIP_PLUGIN_VERSION})
 ENDIF()
