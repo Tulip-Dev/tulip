@@ -32,9 +32,9 @@ using namespace std;
 namespace tlp {
 
   //=====================================
-  QtProgress::QtProgress(QWidget* parent,string text,View *view):
+  QtProgress::QtProgress(QWidget* parent,string text,View *view,int updateInterval):
     QDialog(parent),
-    firstCall(true),label(text), parent(parent),view(view), refreshCount(0) {
+    firstCall(true),label(text), parent(parent),view(view),updateIterval(updateInterval),time(QTime::currentTime()) {
     setupUi(this);
     setModal(true);
   }
@@ -47,17 +47,16 @@ namespace tlp {
       preview->setChecked(b);
   }
   //=====================================
-  void QtProgress::progress_handler(int i,int j) {
-    //  cerr << __PRETTY_FUNCTION__ << endl;
-    progressBar->setMaximum(j);
-    progressBar->setValue(i);
+  void QtProgress::progress_handler(int i,int j) {    
     if (state()!=TLP_CONTINUE) { 
       return;
+  }    
+    if(time.msecsTo(QTime::currentTime())> updateIterval){
+        progressBar->setMaximum(j);
+        progressBar->setValue(i);
+        qApp->processEvents();
+        time = QTime::currentTime();
     }
-    refreshCount++;
-    refreshCount%=20;
-    if (refreshCount == 0)
-      qApp->processEvents();
     if (firstCall) show();
     firstCall=false;
     if (view!=0 && isPreviewMode()) {

@@ -23,6 +23,7 @@
 #include <tulip/View.h>
 #include "tulip/QtProgressData.h"
 
+#include <QtCore/QTime>
 
 namespace tlp {
 
@@ -31,7 +32,7 @@ namespace tlp {
     Q_OBJECT
       
   public:
-    QtProgress(QWidget* parent, std::string text, View *view=0);
+    QtProgress(QWidget* parent, std::string text, View *view=0,int updateInterval=200);
     virtual ~QtProgress();
     void progress_handler(int i,int j);
     void preview_handler(bool b);
@@ -49,7 +50,8 @@ namespace tlp {
     View *view;
 
   private:
-    short refreshCount;
+    int updateIterval;
+    QTime time;
   };
 }
 
