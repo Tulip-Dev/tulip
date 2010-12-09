@@ -159,8 +159,7 @@ void ListItem::updateText() {
 ColorButton::ColorButton(const QRgb &c, QWidget *parent, const char*, Qt::WFlags) :
   QPushButton(parent), color(c) {
   connect(this, SIGNAL(pressed()), SLOT(colorDialog()));
-  emit
-  pressed();
+  emit pressed(); // ugly but it works
   setFocusPolicy(Qt::StrongFocus);
 }
 ColorButton::~ColorButton() {
@@ -972,6 +971,8 @@ ListItemPushButton::ListItemPushButton(DynamicTypeHandlerInterface* handler,
     TulipTableWidgetItem *orig, QWidget* parent, const QString& text) :
       QPushButton(text, parent), orig(orig), handler(handler) {
   connect(this, SIGNAL(pressed()), SLOT(showListDialog()));
+  emit pressed(); // ugly but it works
+  setFlat(true);
   setFocusPolicy(Qt::StrongFocus);
 }
 ListItemPushButton::~ListItemPushButton() {
@@ -996,7 +997,8 @@ void ListItemPushButton::showListDialog() {
   if (dialog->exec() == QDialog::Accepted) {
     lw->updateData();
   }
-
+  // show new value
+  setText(QString::fromUtf8(handler->getString().c_str()));
   delete dialog;
 }
 
