@@ -86,8 +86,7 @@ void tlp::initTulipLib(char* appDirPath) {
   if (getEnvTlp==0) {
     if (appDirPath) {
 #ifdef _WIN32
-      // no bin directory on Windows
-      TulipLibDir = std::string(appDirPath) + "/lib";
+      TulipLibDir = std::string(appDirPath) + "/../lib";
 #else
       // one dir up to initialize the lib dir
       TulipLibDir.append(appDirPath,
