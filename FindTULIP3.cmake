@@ -63,24 +63,30 @@ ENDIF()
 
 # From now on, TULIP_DIR must be set
 IF(TULIP_DIR)
+  IF(WIN32)
+    SET(LIBDIR ${TULIP_DIR}/bin)
+  ELSE()
+    SET(LIBDIR ${TULIP_DIR}/lib)
+  ENDIF()
+
   IF(NOT TULIP_LIBRARY)
     FIND_LIBRARY(TULIP_LIBRARY "tulip-${TULIP_VERSION}"
-                 PATHS ${TULIP_DIR}/lib
+                 PATHS ${LIBDIR}
                  NO_DEFAULT_PATH)
   ENDIF()
   IF(NOT TULIP_OGL_LIBRARY)
     FIND_LIBRARY(TULIP_OGL_LIBRARY "tulip-ogl-${TULIP_VERSION}"
-                 PATHS ${TULIP_DIR}/lib
+                 PATHS ${LIBDIR}
                  NO_DEFAULT_PATH)
   ENDIF()
   IF(NOT TULIP_QT4_LIBRARY)
     FIND_LIBRARY(TULIP_QT4_LIBRARY "tulip-qt4-${TULIP_VERSION}"
-                 PATHS ${TULIP_DIR}/lib
+                 PATHS ${LIBDIR}
                  NO_DEFAULT_PATH)
   ENDIF()
   IF(NOT TULIP_PLUGINS_MANAGER_LIBRARY)
     FIND_LIBRARY(TULIP_PLUGINS_MANAGER_LIBRARY "tulip-pluginsmanager-${TULIP_VERSION}"
-                 PATHS ${TULIP_DIR}/lib
+                 PATHS ${LIBDIR}
                  NO_DEFAULT_PATH)
   ENDIF()
 
