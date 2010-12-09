@@ -39,7 +39,6 @@ SET(TulipVersionSeparator .)
 IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options
    SET(TulipVersionSeparator _)
 ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DVERSION_SEPARATOR=${TulipVersionSeparator}")
 SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
 
@@ -240,6 +239,7 @@ ENDIF(LINUX)
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in
 ## -----------------------------------------------------------------------------------------------
 SET(VERSION "${TulipVersion}")
+SET(MM_VERSION "${TulipMMVersion}")
 CONFIGURE_FILE("library/tulip/include/tulip/TulipRelease.h.in" "library/tulip/include/tulip/TulipRelease.h")
 
 ## -----------------------------------------------------------------------------------------------

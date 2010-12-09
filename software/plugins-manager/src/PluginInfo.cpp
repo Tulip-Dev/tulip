@@ -23,7 +23,7 @@
 
 using namespace std;
 
-const QString TulipSimpleVersion=(QString(TULIP_RELEASE).split(QString(STRINGIFY(VERSION_SEPARATOR))))[0]+QString(STRINGIFY(VERSION_SEPARATOR))+(QString(TULIP_RELEASE).split(QString(STRINGIFY(VERSION_SEPARATOR))))[1];
+const QString TulipSimpleVersion=QString(TULIP_MM_RELEASE);
 
 //====================================================
 #ifdef _WIN32
