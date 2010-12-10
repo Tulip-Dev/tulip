@@ -122,9 +122,9 @@ GraphImpl::~GraphImpl() {
   StableIterator<Graph *> itS(getSubGraphs());
   while(itS.hasNext())
     delAllSubGraphsInternal(itS.next(), true);
-  delete propertyContainer; //must be done here because Property proxy needs to access to the graph structure
   removeGraphObservers();
   removeObservers();
+  delete propertyContainer; //must be done here because Property proxy needs to access to the graph structure
   for (Nodes::iterator i=nodes.begin();i!=nodes.end();++i) {
     i->deallocateAll();
   }
