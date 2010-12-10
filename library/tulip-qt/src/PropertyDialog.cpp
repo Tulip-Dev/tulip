@@ -520,7 +520,6 @@ void PropertyDialog::importCSVData() {
     if(dialog->exec() == QDialog::Accepted){
         graph->push();
         //Import data
-        std::cout<<__PRETTY_FUNCTION__<<":"<<__LINE__<<std::endl;
         Observable::holdObservers();
         importWidget->import();
         Observable::unholdObservers();
