@@ -202,7 +202,7 @@ unsigned int CSVImportConfigurationWidget::columnCount()const{
 }
 void CSVImportConfigurationWidget::updateTableHeaders(){
     QStringList itemsLabels;
-    for(int i=0 ; i< columnCount();++i){
+    for(unsigned int i=0 ; i< columnCount();++i){
         QString columnName = genrateColumnName(i);
         itemsLabels<<columnName;
         propertyWidgets[i]->getNameLineEdit()->setText(columnName);
@@ -211,7 +211,7 @@ void CSVImportConfigurationWidget::updateTableHeaders(){
     itemsLabels.clear();
     //Ensure that the first visible row has the number 1.
     unsigned int currentRow = useFirstLineAsPropertyName()?0:1;
-    for(int i = 0 ; i< rowCount(); ++i){
+    for(unsigned int i = 0 ; i< rowCount(); ++i){
         itemsLabels<<QString::number(currentRow);
         ++currentRow;
     }
