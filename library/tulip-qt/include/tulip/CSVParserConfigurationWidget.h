@@ -11,7 +11,7 @@ namespace Ui {
 
 namespace tlp{
 
-class CSVParserConfigurationWidget : public QWidget {
+class TLP_QT_SCOPE CSVParserConfigurationWidget : public QWidget {
     Q_OBJECT
 public:
     CSVParserConfigurationWidget(QWidget *parent = 0);

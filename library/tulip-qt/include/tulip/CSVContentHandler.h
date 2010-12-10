@@ -19,11 +19,12 @@
 #ifndef CSVCONTENTHANDLER_H_
 #define CSVCONTENTHANDLER_H_
 #include <string>
+#include <tulip/tulipconf.h>
 namespace tlp {
 /**
  * @brief Interface to inherit to get and treat data from csv files with CSVParser object.
  */
-class CSVContentHandler {
+class TLP_QT_SCOPE CSVContentHandler {
 public:
  virtual ~CSVContentHandler() {
 
