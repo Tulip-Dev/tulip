@@ -244,6 +244,41 @@ SET(MM_VERSION "${TulipMMVersion}")
 CONFIGURE_FILE("library/tulip/include/tulip/TulipRelease.h.in" "library/tulip/include/tulip/TulipRelease.h")
 
 ## -----------------------------------------------------------------------------------------------
+## On windows, macros used to retrieve libraries that will later be used at runtime and should thusly be installed in the bin folder
+## -----------------------------------------------------------------------------------------------
+#
+IF(WIN32)
+  # Look for a library matching pattern in CMake library paths
+  # Resulting variables will contain libraries used by Tulip. Library will be separately installed within each component CMakelists in the bin folder.
+  # Note: if a library is not found on the system's directories, corresponding variable will be empty or VAR-NOTFOUND
+  MACRO(FIND_LIBRARY_GLOB out_var pattern)
+    FOREACH(ITP $ENV{CMAKE_LIBRARY_PATH})
+      STRING(REPLACE "\\" "/" P "${ITP}")
+      FILE(GLOB RES "${P}/${pattern}")
+      IF(RES)
+        SET(${out_var} ${RES})
+      ENDIF()
+    ENDFOREACH()
+  IF(NOT ${out_var})
+    SET(${out_var} "${out_var}-NOTFOUND")
+  ENDIF()
+  ENDMACRO()
+
+  # Given one of the variables defined below, add an install rule to copy the corresponding dll into the bin folder
+  MACRO(WIN32_INSTALL_EXTERNAL_LIB var_name component)
+    IF(WIN32)
+    IF(${var_name})
+      FOREACH(ITL ${${var_name}})
+        INSTALL(FILES ${ITL} DESTINATION ${TulipBinInstallDir} COMPONENT ${component})
+      ENDFOREACH()
+    ELSE()
+      MESSAGE("${var_name} could not be located and will not be installed with package")
+    ENDIF()
+    ENDIF()
+  ENDMACRO()
+ENDIF()
+
+## -----------------------------------------------------------------------------------------------
 ## Sub dir (no comment)
 ## -----------------------------------------------------------------------------------------------
 ADD_SUBDIRECTORY(thirdparty)
@@ -377,7 +412,13 @@ IF(LINUX)
     SET(CPACK_GENERATOR "${CPACK_GENERATOR}DEB;")
   ENDFOREACH()
 ELSEIF(WIN32)
+    CMAKE_POLICY(SET CMP0010 OLD)
     SET(CPACK_GENERATOR "NSIS")
+    SET(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\software\\tulip\\bitmaps\\logo32x32.ico")
+    SET(CPACK_NSIS_MUI_UNICON "${CMAKE_CURRENT_SOURCE_DIR}\\software\\tulip\\bitmaps\\logo32x32.ico")
+    SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\software\\tulip\\bitmaps\\welcomelogo.bmp")
+    SET(CPACK_NSIS_DISPLAY_NAME "Tulip ${TulipVersion}")
+    SET(CPACK_NSIS_HELP_LINK  "http://tulip.labri.fr/")
 ENDIF()
 
 INCLUDE(CPack)
