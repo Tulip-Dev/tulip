@@ -69,11 +69,10 @@ void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData) {
 	const GLdouble *pointer = static_cast<GLdouble *>(vertex);
 	GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
 	Coord v(pointer[0], pointer[1], pointer[2]);
-	Color color(pointer[3], pointer[4], pointer[5], pointer[6]);
 	Vec2f texCoord;
 	texCoord[0] = pointer[0] / complexPolygon->getTextureZoom();
 	texCoord[1] = pointer[1] / complexPolygon->getTextureZoom();
-	complexPolygon->addVertex(v, color, texCoord);
+	complexPolygon->addVertex(v, texCoord);
 }
 
 void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut, GLvoid *polygonData) {
@@ -203,7 +202,6 @@ void GlComplexPolygon::runTesselation() {
 	startIndicesMap.clear();
 	verticesCountMap.clear();
 	verticesMap.clear();
-	colorsMap.clear();
 	texCoordsMap.clear();
 
 	GLUtesselator *tobj;
@@ -222,6 +220,7 @@ void GlComplexPolygon::runTesselation() {
 	}
 
 	GLdouble *pointsData = new GLdouble[7*numberOfPoints];
+	memset(pointsData, 0, 7*numberOfPoints*sizeof(GLdouble));
 
 	unsigned int pointNumber=0;
 	gluTessBeginPolygon(tobj, static_cast<void *>(this));
@@ -231,10 +230,6 @@ void GlComplexPolygon::runTesselation() {
 			pointsData[pointNumber*7]=points[v][i][0];
 			pointsData[pointNumber*7+1]=points[v][i][1];
 			pointsData[pointNumber*7+2]=points[v][i][2];
-			pointsData[pointNumber*7+3]=fillColor[0];
-			pointsData[pointNumber*7+4]=fillColor[1];
-			pointsData[pointNumber*7+5]=fillColor[2];
-			pointsData[pointNumber*7+6]=fillColor[3];
 			gluTessVertex(tobj,&pointsData[pointNumber*7],&pointsData[pointNumber*7]);
 			pointNumber++;
 		}
@@ -262,9 +257,8 @@ void GlComplexPolygon::endPrimitive() {
 	verticesCountMap[currentPrimitive].push_back(nbPrimitiveVertices);
 }
 //=====================================================	
-void GlComplexPolygon::addVertex(const Coord &vertexCoord, const Color &vertexColor, const Vec2f &vertexTexCoord) {
+void GlComplexPolygon::addVertex(const Coord &vertexCoord, const Vec2f &vertexTexCoord) {
 	verticesMap[currentPrimitive].push_back(vertexCoord);
-	colorsMap[currentPrimitive].push_back(vertexColor);
 	texCoordsMap[currentPrimitive].push_back(vertexTexCoord);
 	++nbPrimitiveVertices;
 }
@@ -296,21 +290,20 @@ void GlComplexPolygon::draw(float,Camera *) {
 	glNormal3f(0.0f, 0.0f, 1.0f);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 
+	setMaterial(fillColor);
 	for (set<GLenum>::iterator it = primitivesSet.begin() ; it != primitivesSet.end() ; ++it) {
 		glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), &verticesMap[*it][0][0]);
-		glColorPointer(4,GL_UNSIGNED_BYTE, 4*sizeof(GLubyte), &colorsMap[*it][0][0]);
 		glTexCoordPointer(2, GL_FLOAT, 2*sizeof(GLfloat), &texCoordsMap[*it][0]);
 		glMultiDrawArrays(*it, (GLint *) &startIndicesMap[*it][0], (GLsizei *) &verticesCountMap[*it][0], verticesCountMap[*it].size());
 	}
 
 	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
-	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	if(textureName!="") {

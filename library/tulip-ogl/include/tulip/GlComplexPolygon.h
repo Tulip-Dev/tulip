@@ -123,17 +123,17 @@ namespace tlp {
     /**
      * Set fill color of GlComplexPolygon
      */
-    void setFillColor(const Color &color){fillColor=color;runTesselation();}
+    void setFillColor(const Color &color){fillColor=color;}
 
     /**
      * Get outline color of GlComplexPolygon
      */
-    Color getOutlineColor() {return outlineColor;runTesselation();}
+    Color getOutlineColor() {return outlineColor;}
 
     /**
      * Set outline color of GlComplexPolygon
      */
-    void setOutlineColor(const Color &color){outlineColor=color;runTesselation();}
+    void setOutlineColor(const Color &color){outlineColor=color;}
 
     /**
      * Get the texture zoom factor
@@ -170,16 +170,14 @@ namespace tlp {
 	
     void runTesselation();
     void createPolygon(const std::vector<Coord> &coords,int polygonEdgesType);
-
 	void startPrimitive(GLenum primitive);
 	void endPrimitive();
-	void addVertex(const Coord &vertexCoord, const Color &vertexColor, const Vec2f &vertexTexCoord);
+	void addVertex(const Coord &vertexCoord, const Vec2f &vertexTexCoord);
 	VERTEX *allocateNewVertex();
 	
     std::vector<std::vector<Coord> > points;
     std::set<GLenum> primitivesSet;
     std::map<GLenum, std::vector<Coord> > verticesMap;
-    std::map<GLenum, std::vector<Color> > colorsMap;
     std::map<GLenum, std::vector<Vec2f> > texCoordsMap;
     std::map<GLenum, std::vector<int> >startIndicesMap;
     std::map<GLenum, std::vector<int> >verticesCountMap;
