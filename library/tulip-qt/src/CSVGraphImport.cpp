@@ -9,21 +9,21 @@ using namespace std;
 const char minusChar = '-';
 
 string PropertyTools::getPropertyTypeLabel(const string& typeName){
-if(typeName.compare("graph")==0)return "Graph";
-if(typeName.compare("double")==0)return "Metric";
-if(typeName.compare("layout")==0)return "Layout";
-if(typeName.compare("string")==0)return "String";
-if(typeName.compare("int")==0)return "Integer";
-if(typeName.compare("color")==0)return "Color";
-if(typeName.compare("size")==0)return "Size";
-if(typeName.compare("bool")==0)return "Selection";
-if(typeName.compare("vector<double>")==0)return "DoubleVector";
-if(typeName.compare("vector<string>")==0)return "StringVector";
-if(typeName.compare("vector<int>")==0)return "IntegerVector";
-if(typeName.compare("vector<coord>")==0)return "CoordVector";
-if(typeName.compare("vector<color>")==0)return "ColorVector";
-if(typeName.compare("vector<size>")==0)return "SizeVector";
-if(typeName.compare("vector<bool>")==0)return "BooleanVector";
+    if(typeName.compare("graph")==0)return "Graph";
+    if(typeName.compare("double")==0)return "Metric";
+    if(typeName.compare("layout")==0)return "Layout";
+    if(typeName.compare("string")==0)return "String";
+    if(typeName.compare("int")==0)return "Integer";
+    if(typeName.compare("color")==0)return "Color";
+    if(typeName.compare("size")==0)return "Size";
+    if(typeName.compare("bool")==0)return "Selection";
+    if(typeName.compare("vector<double>")==0)return "DoubleVector";
+    if(typeName.compare("vector<string>")==0)return "StringVector";
+    if(typeName.compare("vector<int>")==0)return "IntegerVector";
+    if(typeName.compare("vector<coord>")==0)return "CoordVector";
+    if(typeName.compare("vector<color>")==0)return "ColorVector";
+    if(typeName.compare("vector<size>")==0)return "SizeVector";
+    if(typeName.compare("vector<bool>")==0)return "BooleanVector";
     return "";
 }
 
@@ -43,57 +43,57 @@ string PropertyTools::getPropertyTypeFromPropertyTypeLabel(const string& typeNam
     if(typeNameLabel.compare("ColorVector")==0)return "vector<color>";
     if(typeNameLabel.compare("SizeVector")==0)return "vector<size>";
     if(typeNameLabel.compare("BooleanVector")==0)return "vector<bool>";
-        return "";
+    return "";
 }
 
 QStringList PropertyTools::getPropertyTypeLabelsList(){
     QStringList lst;
     lst << "Color" << "Integer" << "Layout" << "Metric" << "Selection" << "Size" << "String" << "BooleanVector"
-        << "ColorVector" << "CoordVector" << "DoubleVector" << "IntegerVector" << "SizeVector" << "StringVector";
+            << "ColorVector" << "CoordVector" << "DoubleVector" << "IntegerVector" << "SizeVector" << "StringVector";
     return lst;
 }
 
 string PropertyTools::guessDataType(const string& data, const string& decimalSeparator) {
-  bool stringValue = false;
-  bool intValue = false;
-  bool doubleValue = false;
-  for (unsigned int j = 0; j < data.length(); ++j) {
-    if (isalpha(data[j])) {
-      stringValue = true;
+    bool stringValue = false;
+    bool intValue = false;
+    bool doubleValue = false;
+    for (unsigned int j = 0; j < data.length(); ++j) {
+        if (isalpha(data[j])) {
+            stringValue = true;
+        }
+        else if (isdigit(data[j]) && !stringValue) {
+            if (!doubleValue) {
+                intValue = true;
+            }
+            else {
+                doubleValue = true;
+            }
+        }
+        else if (decimalSeparator.find_first_of(data[j]) != string::npos && intValue) {
+            doubleValue = true;
+            intValue = false;
+        }
+        else if (j == 0 && data[j] == minusChar) {
+            intValue = true;
+        }
+        else {
+            stringValue = true;
+            intValue = false;
+            doubleValue = false;
+        }
     }
-    else if (isdigit(data[j]) && !stringValue) {
-      if (!doubleValue) {
-        intValue = true;
-      }
-      else {
-        doubleValue = true;
-      }
+    if (stringValue) {
+        return "string";
     }
-    else if (decimalSeparator.find_first_of(data[j]) != string::npos && intValue) {
-      doubleValue = true;
-      intValue = false;
+    else if (intValue) {
+        return "int";
     }
-    else if (j == 0 && data[j] == minusChar) {
-      intValue = true;
+    else if (doubleValue) {
+        return "double";
     }
     else {
-      stringValue = true;
-      intValue = false;
-      doubleValue = false;
+        return "";
     }
-  }
-  if (stringValue) {
-      return "string";
-  }
-  else if (intValue) {
-    return "int";
-  }
-  else if (doubleValue) {
-    return "double";
-  }
-  else {
-    return "";
-  }
 }
 
 bool  PropertyTools::existingPropertyIsCompatibleWithType(Graph* graph, const string& propertyName,
@@ -105,53 +105,53 @@ bool  PropertyTools::existingPropertyIsCompatibleWithType(Graph* graph, const st
 }
 
 PropertyInterface *PropertyTools::getProperty(Graph* graph, const string& propertyName,
-    const std::string& propertyType) {
+                                              const std::string& propertyType) {
 
-  if (propertyType.compare("double") == 0) {
-    return graph->getProperty<DoubleProperty> (propertyName);
-  }
-  else if (propertyType.compare("layout")==0) {
-    return graph->getProperty<LayoutProperty> (propertyName);
-  }
-  else if (propertyType.compare("string")==0) {
-    return graph->getProperty<StringProperty> (propertyName);
-  }
-  else if (propertyType.compare("int")==0) {
-    return graph->getProperty<IntegerProperty> (propertyName);
-  }
-  else if (propertyType.compare("color")==0) {
-    return graph->getProperty<ColorProperty> (propertyName);
-  }
-  else if (propertyType.compare("size")==0) {
-    return graph->getProperty<SizeProperty> (propertyName);
-  }
-  else if (propertyType.compare("bool")==0) {
-    return graph->getProperty<BooleanProperty> (propertyName);
-  }
-  else if (propertyType.compare("vector<double>")==0) {
-    return graph->getProperty<DoubleVectorProperty> (propertyName);
-  }
-  else if (propertyType.compare("vector<string>")==0) {
-    return graph->getProperty<StringVectorProperty> (propertyName);
-  }
-  else if (propertyType.compare("vector<int>")==0) {
-    return graph->getProperty<IntegerVectorProperty> (propertyName);
-  }
-  else if (propertyType.compare("vector<coord>")==0) {
-    return graph->getProperty<CoordVectorProperty> (propertyName);
-  }
-  else if (propertyType.compare("vector<color>")==0) {
-    return graph->getProperty<ColorVectorProperty> (propertyName);
-  }
-  else if (propertyType.compare("BooleanVector")==0) {
-    return graph->getProperty<BooleanVectorProperty> (propertyName);
-  }
-  else if (propertyType.compare("SizeVector")==0) {
-    return graph->getProperty<SizeVectorProperty> (propertyName);
-  }
-  else {
-    return NULL;
-  }
+    if (propertyType.compare("double") == 0) {
+        return graph->getProperty<DoubleProperty> (propertyName);
+    }
+    else if (propertyType.compare("layout")==0) {
+        return graph->getProperty<LayoutProperty> (propertyName);
+    }
+    else if (propertyType.compare("string")==0) {
+        return graph->getProperty<StringProperty> (propertyName);
+    }
+    else if (propertyType.compare("int")==0) {
+        return graph->getProperty<IntegerProperty> (propertyName);
+    }
+    else if (propertyType.compare("color")==0) {
+        return graph->getProperty<ColorProperty> (propertyName);
+    }
+    else if (propertyType.compare("size")==0) {
+        return graph->getProperty<SizeProperty> (propertyName);
+    }
+    else if (propertyType.compare("bool")==0) {
+        return graph->getProperty<BooleanProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<double>")==0) {
+        return graph->getProperty<DoubleVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<string>")==0) {
+        return graph->getProperty<StringVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<int>")==0) {
+        return graph->getProperty<IntegerVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<coord>")==0) {
+        return graph->getProperty<CoordVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<color>")==0) {
+        return graph->getProperty<ColorVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("BooleanVector")==0) {
+        return graph->getProperty<BooleanVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("SizeVector")==0) {
+        return graph->getProperty<SizeVectorProperty> (propertyName);
+    }
+    else {
+        return NULL;
+    }
 }
 
 
@@ -162,7 +162,7 @@ CSVImportParameters::~CSVImportParameters(){
 }
 
 unsigned int CSVImportParameters::columnNumber()const{
-return columns.size();
+    return columns.size();
 }
 bool CSVImportParameters::importColumn(unsigned int column)const{
     if(column < columns.size()){
@@ -239,7 +239,7 @@ CSVToNewNodeIdMapping::CSVToNewNodeIdMapping(Graph* graph):graph(graph){
 pair<ElementType,unsigned int> CSVToNewNodeIdMapping::getElementForRow(unsigned int row){
     map<unsigned int, unsigned int>::const_iterator it = rowToGraphId.find(row);
     if(it != rowToGraphId.end()){
-    return make_pair(NODE,it->second);
+        return make_pair(NODE,it->second);
     }else{
         unsigned int newId = graph->addNode().id;
         rowToGraphId[row] = newId;
@@ -294,13 +294,8 @@ bool CSVToGraphEdgeIdMapping::buildIndexForRow(unsigned int row,const string& in
     return false;
 }
 
-CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& srcPropertyName,const std::string& tgtPropertyName,unsigned int firstRow,unsigned int lastRow):graph(graph),src(CSVToGraphNodeIdMapping(graph,srcColumnIndex,srcPropertyName,firstRow,lastRow,false)),tgt(CSVToGraphNodeIdMapping(graph,tgtColumnIndex,tgtPropertyName,firstRow,lastRow,false)){
+CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& srcPropertyName,const std::string& tgtPropertyName,unsigned int firstRow,unsigned int lastRow,bool createMissinNodes):graph(graph),src(CSVToGraphNodeIdMapping(graph,srcColumnIndex,srcPropertyName,firstRow,lastRow,createMissinNodes)),tgt(CSVToGraphNodeIdMapping(graph,tgtColumnIndex,tgtPropertyName,firstRow,lastRow,createMissinNodes)),buildEdgge(createMissinNodes){
 }
-bool CSVToGraphEdgeSrcTgtMapping::buildIndexForRow(unsigned int,const std::string&){
-    //Never called.
-    return false;
-}
-
 
 std::pair<tlp::ElementType,unsigned int> CSVToGraphEdgeSrcTgtMapping::getElementForRow(unsigned int row){
 
@@ -323,6 +318,14 @@ void CSVToGraphEdgeSrcTgtMapping::begin(){
 void CSVToGraphEdgeSrcTgtMapping::token(unsigned int row, unsigned int column, const std::string& token){
     src.token(row,column,token);
     tgt.token(row,column,token);
+    if(buildEdgge){
+        //If the edge don't exist and user want to create missing elements create a new one.
+        node srcNode = node(src.getElementForRow(row).second);
+        node tgtNode = node(tgt.getElementForRow(row).second);
+        if( graph->isElement(srcNode) && graph->isElement(tgtNode) && !graph->existEdge(srcNode,tgtNode,true).isValid() ){
+            graph->addEdge(srcNode,tgtNode);
+        }
+    }
 }
 void CSVToGraphEdgeSrcTgtMapping::end(unsigned int rowNumber, unsigned int columnNumber){
     src.end(rowNumber,columnNumber);

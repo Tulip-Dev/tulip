@@ -66,10 +66,6 @@ namespace tlp {
         CSVSimpleParser(const std::string& fileName,const std::string& separator=std::string(";"),char='"',const std::string& fileEncoding=std::string("UTF-8"),bool removeQuotes=true);
         virtual ~CSVSimpleParser();
 
-//        virtual void parse(const std::string& fileName, const std::string& separator,
-//                           CSVContentHandler * handler,
-//                           tlp::PluginProgress* progress=NULL,const std::string& fileEncoding="UTF-8");
-
         bool parse(CSVContentHandler * handler,tlp::PluginProgress* progress=NULL);
 
     protected:
