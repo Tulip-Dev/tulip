@@ -546,7 +546,10 @@ else
       then
         LIB_QT_ASSISTANT="-F$ac_qt_libraries -framework QtAssistant"
       else
-        LIB_QT_ASSISTANT="-framework QtAssistant"
+        if test -d /Library/FrameWorks/QtAssitant.framework
+        then
+          LIB_QT_ASSISTANT="-framework QtAssistant"
+        fi
       fi
     fi
   else
@@ -697,7 +700,11 @@ dnl set QtAssistant exe name
    if test $QT_MINOR_VERSION -ge 4; then
      if test ${VAR_MACOSX} = 1
      then
-       QT_ASSISTANT="Assistant_adp"
+       if test $QT_MINOR_VERSION -ge 7; then
+         QT_ASSISTANT="Assistant"
+       else
+         QT_ASSISTANT="Assistant_adp"
+       fi
      else
        QT_ASSISTANT="assistant_adp"
      fi
