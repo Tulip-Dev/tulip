@@ -51,5 +51,8 @@ ELSEIF(WIN32)
     SET(CPACK_NSIS_MUI_UNIICON ${TULIP_ICO})
     SET(CPACK_NSIS_INSTALLED_ICON_NAME ${TULIP_ICO})
     SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\\\software\\\\tulip\\\\bitmaps\\\\headerlogo.bmp")
-    SET(CPACK_NSIS_CREATE_ICONS_EXTRA "CreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Tulip.lnk\\\" \\\"$INSTDIR\\\\bin\\\\tulip.exe\\\" \\\"\\\" \\\"$INSTDIR\\\\lib\\\\tlp\\\\bitmaps\\\\logo32x32.ico\\\"")
+    SET(CPACK_NSIS_CREATE_ICONS_EXTRA "
+    CreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Tulip ${TulipVersion}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\tulip.exe\\\" \\\"\\\" \\\"$INSTDIR\\\\lib\\\\tlp\\\\bitmaps\\\\logo32x32.ico\\\"
+    CreateShortCut \\\"$DESKTOP\\\\Tulip ${TulipVersion}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\tulip.exe\\\" \\\"\\\" \\\"$INSTDIR\\\\lib\\\\tlp\\\\bitmaps\\\\logo32x32.ico\\\"
+    ")
 ENDIF()
