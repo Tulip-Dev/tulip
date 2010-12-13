@@ -394,30 +394,4 @@ ENDIF()
 # Defines specific software components from tulip.
 INCLUDE(CPackComponents.cmake)
 
-# Force grouping of components in a single package (CMake 2.9)
-SET(CPACK_COMPONENTS_ALL_GROUPS_IN_ONE_PACKAGE 1)
-
-# Defines plateform-specific generators to be used
-IF(LINUX)
-  IF(I64)
-    SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
-  ELSE()
-    SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "i386")
-  ENDIF()
-
-  SET(CPACK_GENERATOR ";")
-  # Note: With CMake 2.8, we must introduce a hack to force generation of one deb per component. See CPackOptions.cmake for additional informations.
-  FOREACH(ITC ${CPACK_COMPONENTS_ALL})
-    SET(CPACK_GENERATOR "${CPACK_GENERATOR}DEB;")
-  ENDFOREACH()
-ELSEIF(WIN32)
-    CMAKE_POLICY(SET CMP0010 OLD)
-    SET(CPACK_GENERATOR "NSIS")
-    SET(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\software\\tulip\\bitmaps\\logo32x32.ico")
-    SET(CPACK_NSIS_MUI_UNICON "${CMAKE_CURRENT_SOURCE_DIR}\\software\\tulip\\bitmaps\\logo32x32.ico")
-    SET(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}\\software\\tulip\\bitmaps\\welcomelogo.bmp")
-    SET(CPACK_NSIS_DISPLAY_NAME "Tulip ${TulipVersion}")
-    SET(CPACK_NSIS_HELP_LINK  "http://tulip.labri.fr/")
-ENDIF()
-
 INCLUDE(CPack)
