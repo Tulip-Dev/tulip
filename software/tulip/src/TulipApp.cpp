@@ -261,7 +261,7 @@ void TulipApp::startTulip() {
 
   std::string assistantPath(tlp::TulipLibDir);
   assistantPath += string("../");
-  assistantPath += STRINGIFY(QT_ASSISTANT);
+  assistantPath += string(QT_ASSISTANT);
 // In Qt > 4.6, QAssistant is removed
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) 
   assistantProcess= new QProcess(this);
@@ -269,6 +269,9 @@ void TulipApp::startTulip() {
   assistantProcessApp = QLibraryInfo::location(QLibraryInfo::BinariesPath)+ QLatin1String(QT_ASSISTANT);
 #else
   assistantProcessApp = assistantPath.c_str();
+#if defined(__APPLE__)
+  assistantProcessApp.append(".app/Contents/MacOS/Assistant");
+#endif
 #endif
 #else
 // initialization of Qt Assistant, the path should be in $PATH
