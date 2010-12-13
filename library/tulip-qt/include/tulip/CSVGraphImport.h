@@ -198,8 +198,7 @@ public:
   **/
 class TLP_QT_SCOPE CSVToGraphEdgeSrcTgtMapping: public CSVToGraphDataMapping{
 public:
-    CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& srcPropertyName,const std::string& tgtPropertyName,unsigned int firstRow,unsigned int lastRow);
-    bool buildIndexForRow(unsigned int row,const std::string& indexKey);
+    CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& srcPropertyName,const std::string& tgtPropertyName,unsigned int firstRow,unsigned int lastRow,bool createMissinElements=false);
     std::pair<tlp::ElementType,unsigned int> getElementForRow(unsigned int row);
     void begin();
     void token(unsigned int row, unsigned int column, const std::string& token);
@@ -208,6 +207,7 @@ private:
     tlp::Graph* graph;
     CSVToGraphNodeIdMapping src;
     CSVToGraphNodeIdMapping tgt;
+    bool buildEdgge;
 };
 
 /**
