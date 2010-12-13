@@ -42,6 +42,7 @@ namespace {
 
     class HullBuilder {
     public:
+        virtual ~HullBuilder(){}
         virtual void addPoint(const Coord &) = 0;
     };
 
