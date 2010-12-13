@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include "tulip/TulipRelease.h"
 #include "PluginInfo.h"
-#include "tulip/tulipconf.h"
 
 #include <QtCore/QDir>
 
