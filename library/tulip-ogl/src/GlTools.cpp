@@ -318,7 +318,7 @@ namespace tlp {
       dst[i][1] = globalViewport[3] - dst[i][1];
     }
     bool inScreen=false;
-    float bbBox[4];
+    float bbBox[4] = {0.f, 0.f, 0.f, 0.f};
     for(int i=0;i<num;i++) {
       if((dst[i][0]>= currentViewport[0]) && (dst[i][0]<=currentViewport[0]+currentViewport[2]) && (dst[i][1] >= currentViewport[1]) && (dst[i][1]<=currentViewport[1]+currentViewport[3])){
         inScreen=true;

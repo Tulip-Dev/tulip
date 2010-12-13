@@ -638,7 +638,7 @@ void MixedModel::assignInOutPoints(){  // on considère qu'il n'y a pas d'arc do
 	}
       }
       
-      int out_l = 0, out_r = 0, dl, dr;
+      int out_l = 0, out_r = 0, dl = 0, dr = 0;
       // determinate the coords out-in points
       
       float dtmp = (nbOut-1.)/2.;
@@ -833,7 +833,7 @@ void MixedModel::computeCoords(){
   assert(V.size() != 0);
   
   vector<node> C;  // chemin courant
-  double out_r_moins1;
+  double out_r_moins1 = 0.0;
   
   //-------------  initialisation --------------------------
   for(unsigned int i = 0; i<V[0].size(); i++){
@@ -936,7 +936,7 @@ void MixedModel::computeCoords(){
       }
     }
     else{
-      int out_l, out_r, out_r_moins1;
+      int out_l = 0, out_r = 0, out_r_moins1 = 0;
       float somme = 0;
       
       // assign x(zi)
