@@ -78,7 +78,7 @@ int getNumIterators() {
 
 //============================================================
 SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val)
- :FactorNodeIterator(sG,filter), sg(sG), _hasnext(true), value(val) {
+ :FactorNodeIterator(sG,filter), sg(sG), value(val) {
   it=_parentGraph->getNodes();
 #ifndef NDEBUG
 #ifdef _OPENMP
@@ -90,7 +90,8 @@ SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<b
 #endif
   _parentGraph->addGraphObserver(this);
 #endif
-  next();
+  // anticipate first iteration
+  prepareNext();
 }
 SGraphNodeIterator::~SGraphNodeIterator() {
 #ifndef NDEBUG
@@ -102,23 +103,26 @@ SGraphNodeIterator::~SGraphNodeIterator() {
 #endif
   delete it;
 }
-node SGraphNodeIterator::next() {
-  assert(_hasnext);
-  // we are already pointing to the next
-  node tmp=curNode;
-  // anticipate next iteration
-  if ((_hasnext = it->hasNext())) {
-    curNode=it->next();
-    while (!(_hasnext = !(_filter.get(curNode.id)!= value ||
-			  !sg->isElement(curNode)))) {
-      if (!it->hasNext()) break;
-      curNode=it->next();
-    }
+void SGraphNodeIterator::prepareNext() {
+  while(it->hasNext()) {
+    curNode = it->next();
+    if (_filter.get(curNode) == value &&
+	sg->isElement(curNode))
+      return;
   }
+  // set curNode as invalid
+  curNode = node();
+}
+node SGraphNodeIterator::next() {
+  assert(curNode.isValid());
+  // we are already pointing to the next
+  node tmp = curNode;
+  // anticipate next iteration
+  prepareNext();
   return tmp;
 }
 bool SGraphNodeIterator::hasNext(){ 
-  return (_hasnext);
+  return (curNode.isValid());
 }
 //===================================================================
 OutNodesIterator::OutNodesIterator(const Graph *sG, const MutableContainer<bool>& filter,node n):FactorNodeIterator(sG,filter) {
@@ -225,7 +229,7 @@ bool InOutNodesIterator::hasNext() {
   return (it->hasNext());
 }
 //===============================================================
-SGraphEdgeIterator::SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val):FactorEdgeIterator(sG,filter), sg(sG), _hasnext(true), value(val) {
+SGraphEdgeIterator::SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val):FactorEdgeIterator(sG,filter), sg(sG), value(val) {
   it=_parentGraph->getEdges();
 #ifndef NDEBUG
 #ifdef _OPENMP
@@ -234,9 +238,8 @@ SGraphEdgeIterator::SGraphEdgeIterator(const Graph *sG, const MutableContainer<b
 #endif
   _parentGraph->addGraphObserver(this);
 #endif
-  // _hasnext is initially set to true to avoid failure when asserting
-  // in the first call of next() below
-  next();
+  // anticipate first iteration
+  prepareNext();
 }
 SGraphEdgeIterator::~SGraphEdgeIterator() {
 #ifndef NDEBUG
@@ -248,26 +251,29 @@ SGraphEdgeIterator::~SGraphEdgeIterator() {
 #endif
   delete it;
 }
+void SGraphEdgeIterator::prepareNext() {
+  while(it->hasNext()) {
+    curEdge=it->next();
+    if (_filter.get(curEdge.id) == value &&
+	sg->isElement(curEdge))
+      return;
+  }
+  // set curEdge as invalid
+  curEdge = edge();
+}
 edge SGraphEdgeIterator::next() {
-  assert(_hasnext);
+  assert(curEdge.isValid());
   // we are already pointing to the next
   edge tmp=curEdge;
   // anticipating the next iteration
-  if ((_hasnext = it->hasNext())){
-    curEdge=it->next();
-    while (!(_hasnext = !(_filter.get(curEdge.id)!= value ||
-			  !sg->isElement(curEdge))) &&
-	   it->hasNext()) {
-      curEdge=it->next();
-    }
-  }
+  prepareNext();
   return tmp;
 }
 bool SGraphEdgeIterator::hasNext() {
-  return (_hasnext);
+  return (curEdge.isValid());
 }
 //===================================================================
-OutEdgesIterator::OutEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter,node n):FactorEdgeIterator(sG,filter), _hasnext(true) {
+OutEdgesIterator::OutEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter,node n):FactorEdgeIterator(sG,filter) {
   assert(sG->isElement(n));
   it=_parentGraph->getOutEdges(n);
 #ifndef NDEBUG
@@ -277,9 +283,8 @@ OutEdgesIterator::OutEdgesIterator(const Graph *sG, const MutableContainer<bool>
 #endif
   _parentGraph->addGraphObserver(this);
 #endif
-  // _hasnext is initially set to true to avoid failure when asserting
-  // in the first call of next() below
-  next();
+  // anticipate first iteration
+  prepareNext();
 }
 OutEdgesIterator::~OutEdgesIterator() {
 #ifndef NDEBUG
@@ -291,26 +296,28 @@ OutEdgesIterator::~OutEdgesIterator() {
 #endif
   delete it;
 }
+void OutEdgesIterator::prepareNext() {
+  while(it->hasNext()) {
+    curEdge=it->next();
+    if (_filter.get(curEdge.id))
+      return;
+  }
+  // set curEdge as invalid
+  curEdge = edge();
+}
 edge OutEdgesIterator::next() {
-  assert(_hasnext);
+  assert(curEdge.isValid());
   // we are already pointing to the next
   edge tmp=curEdge;
   // anticipating the next iteration
-  if ((_hasnext = it->hasNext())) {
-      curEdge=it->next();
-      while (!(_hasnext = _filter.get(curEdge.id)) &&
-	     it->hasNext()) {
-	  if (!it->hasNext()) break;
-	  curEdge=it->next();
-	}
-    }
+  prepareNext();
   return tmp;
 }
 bool OutEdgesIterator::hasNext() {
-  return (_hasnext);
+  return (curEdge.isValid());
 }
 //===================================================================
-  InEdgesIterator::InEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n):FactorEdgeIterator(sG,filter), _hasnext(true) {
+  InEdgesIterator::InEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n):FactorEdgeIterator(sG,filter) {
   assert(sG->isElement(n));
   it=_parentGraph->getInEdges(n);
 #ifndef NDEBUG
@@ -320,9 +327,8 @@ bool OutEdgesIterator::hasNext() {
 #endif
   _parentGraph->addGraphObserver(this);
 #endif
-  // _hasnext is initially set to true to avoid failure when asserting
-  // in the first call of next() below
-  next();
+  // anticipate first iteration
+  prepareNext();
 }
 InEdgesIterator::~InEdgesIterator() {
 #ifndef NDEBUG
@@ -334,25 +340,28 @@ InEdgesIterator::~InEdgesIterator() {
 #endif
   delete it;
 }
+void InEdgesIterator::prepareNext() {
+  while (it->hasNext()) {
+    curEdge=it->next();
+    if (_filter.get(curEdge.id))
+      return;
+  }
+  // set curEdge as invalid
+  curEdge = edge();
+}
 edge InEdgesIterator::next() {
-  assert(_hasnext);
+  assert(curEdge.isValid());
   // we are already pointing to the next
   edge tmp=curEdge;
   // anticipating the next iteration
-  if ((_hasnext = it->hasNext())) {
-    curEdge=it->next();
-    while (!(_hasnext = _filter.get(curEdge.id)) &&
-	   it->hasNext()) {
-      curEdge=it->next();
-    }
-  }  
+  prepareNext();
   return tmp;
 }
 bool InEdgesIterator::hasNext() {
-  return (_hasnext);
+  return (curEdge.isValid());
 }
 //===================================================================
-  InOutEdgesIterator::InOutEdgesIterator(const Graph *sG,const MutableContainer<bool>& filter, node n):FactorEdgeIterator(sG,filter), _hasnext(true) {
+  InOutEdgesIterator::InOutEdgesIterator(const Graph *sG,const MutableContainer<bool>& filter, node n):FactorEdgeIterator(sG,filter) {
   assert(sG->isElement(n));
   it=_parentGraph->getInOutEdges(n);
 #ifndef NDEBUG
@@ -362,9 +371,8 @@ bool InEdgesIterator::hasNext() {
 #endif
   _parentGraph->addGraphObserver(this);
 #endif
-  // _hasnext is initially set to true to avoid failure when asserting
-  // in the first call of next() below
-  next();
+  // anticipate first iteration
+  prepareNext();
 }
 InOutEdgesIterator::~InOutEdgesIterator() {
 #ifndef NDEBUG
@@ -376,22 +384,25 @@ InOutEdgesIterator::~InOutEdgesIterator() {
 #endif
   delete it;
 }
+void InOutEdgesIterator::prepareNext() {
+  while(it->hasNext()) {
+    curEdge=it->next();
+    if (_filter.get(curEdge.id))
+      return;
+  }
+  // set curEdge as invalid
+  curEdge = edge();
+}
 edge InOutEdgesIterator::next() {
-  assert(_hasnext);
+  assert(curEdge.isValid());
   // we are already pointing to the next
   edge tmp=curEdge;
   // anticipating the next iteration
-  if ((_hasnext = it->hasNext())) {
-    curEdge=it->next();
-    while (!(_hasnext = _filter.get(curEdge.id)) &&
-	   it->hasNext()) {
-      curEdge=it->next();
-    }
-  }
+  prepareNext();
   return tmp;
 }
 bool InOutEdgesIterator::hasNext() {
-  return (_hasnext);
+  return (curEdge.isValid());
 }
 //============================================================
 //************************************************************
@@ -544,10 +555,7 @@ bool xSGraphEdgeIterator::hasNext() {
 //===================================================================
 xOutEdgesIterator::xOutEdgesIterator(const Graph *sG,const node n):
   it(((GraphImpl *)sG)->nodes[n.id].begin()),
-  itEnd(((GraphImpl *)sG)->nodes[n.id].end()),
-  // curEdge(0) is needed to avoid failure when asserting
-  // in the first call of next() below
-  n(n), curEdge(0), spG((GraphImpl *)sG) {
+  itEnd(((GraphImpl *)sG)->nodes[n.id].end()), n(n), spG((GraphImpl *)sG) {
 #ifndef NDEBUG
 #ifdef _OPENMP
   // see explanation above
@@ -555,7 +563,8 @@ xOutEdgesIterator::xOutEdgesIterator(const Graph *sG,const node n):
 #endif
   spG->addGraphObserver(this);
 #endif
-  next();
+  // anticipate first iteration
+  prepareNext();
 }
 xOutEdgesIterator::~xOutEdgesIterator() {
 #ifndef NDEBUG
@@ -566,45 +575,32 @@ xOutEdgesIterator::~xOutEdgesIterator() {
   spG->removeGraphObserver(this);
 #endif
 }
+void xOutEdgesIterator::prepareNext() {
+  for (;it != itEnd; ++it) {
+    curEdge = *it;
+    if (spG->edges[curEdge.id].first!=n)
+      continue;
+    if (spG->edges[curEdge.id].second == n) {
+      if (loop.find(curEdge)==loop.end()) {
+	loop.insert(curEdge);
+	++it;
+	return;
+      }
+    } else {
+      ++it;
+      return;
+    }
+  }
+  // set curEdge as invalid
+  curEdge = edge();
+}
 edge xOutEdgesIterator::next() {
   // check hasNext()
   assert(curEdge.isValid());
   // we are already pointing to the next
   edge tmp=curEdge;
   // anticipating the next iteration
-  if (it!=itEnd) {
-    curEdge=*it;
-    while(1) {
-      while (spG->edges[curEdge.id].first!=n) {
-	++it;
-	if (it==itEnd) {
-	  // curEdge no longer valid => hasNext == false
-	  curEdge = edge();
-	  return tmp;
-	}
-	curEdge=*it;
-      }
-      if (spG->edges[curEdge.id].second == n) {
-	if (loop.find(curEdge)==loop.end()) {
-	  loop.insert(curEdge);
-	  break;
-	}
-	else {
-	  ++it;
-	  if (it==itEnd) {
-	    // curEdge no longer valid => hasNext == false
-	    curEdge = edge();
-	    return tmp;
-	  }
-	  curEdge=*it;
-	}
-      }
-      else break;
-    }
-    ++it;
-  } else
-    // curEdge no longer valid => hasNext == false
-    curEdge = edge();
+  prepareNext();
   return tmp;
 }
 bool xOutEdgesIterator::hasNext() {
@@ -613,10 +609,7 @@ bool xOutEdgesIterator::hasNext() {
 //===================================================================
 xInEdgesIterator::xInEdgesIterator(const Graph *sG,const node n):
   it(((GraphImpl *)sG)->nodes[n.id].begin()),
-  itEnd(((GraphImpl *)sG)->nodes[n.id].end()),
-  // curEdge(0) is needed to avoid failure when asserting
-  // in the first call of next() below
-  n(n), curEdge(0), spG((GraphImpl *)sG) {
+  itEnd(((GraphImpl *)sG)->nodes[n.id].end()), n(n), spG((GraphImpl *)sG) {
 #ifndef NDEBUG
 #ifdef _OPENMP
   // see explanation above
@@ -624,7 +617,8 @@ xInEdgesIterator::xInEdgesIterator(const Graph *sG,const node n):
 #endif
   spG->addGraphObserver(this);
 #endif
-  next();
+  // anticipate first iteration
+  prepareNext();
 }
 xInEdgesIterator::~xInEdgesIterator() {
 #ifndef NDEBUG
@@ -635,45 +629,30 @@ xInEdgesIterator::~xInEdgesIterator() {
   spG->removeGraphObserver(this);
 #endif
 }
+void xInEdgesIterator::prepareNext() {
+  for(;it!=itEnd; ++it) {
+    curEdge=*it;
+    if (spG->edges[curEdge.id].second != n)
+      continue;
+    if (spG->edges[curEdge.id].first == n) {
+      if (loop.find(curEdge)==loop.end()) {
+	loop.insert(curEdge);
+	continue;
+      }
+    }
+    ++it;
+    return;
+  }
+  // set curEdge as invalid
+  curEdge = edge();
+}
 edge xInEdgesIterator::next() {
   // check hasNext()
   assert(curEdge.isValid());
   // we are already pointing to the next
   edge tmp=curEdge;
   // anticipating the next iteration
-  if (it!=itEnd) {
-    curEdge=*it;
-    while(1) {
-      while (spG->edges[curEdge.id].second!=n) {
-	++it;
-	if (it==itEnd) {
-	  // curEdge no longer valid => hasNext == false
-	  curEdge = edge();
-	  return tmp;
-	}
-	curEdge=*it;
-      }
-      if (spG->edges[curEdge.id].first == n) {
-	if (loop.find(curEdge)==loop.end()) {
-	  loop.insert(curEdge);
-	  ++it;
-	  if (it==itEnd) {
-	    // curEdge no longer valid => hasNext == false
-	    curEdge = edge();
-	    return tmp;
-	  }
-	  curEdge=*it;
-	}
-	else {
-	  break;
-	}
-      }
-      else break;
-    }
-    ++it;
-  } else
-    // curEdge no longer valid => hasNext == false
-    curEdge = edge();
+  prepareNext();
   return tmp;
 }
 bool xInEdgesIterator::hasNext() {
