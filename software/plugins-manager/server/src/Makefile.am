@@ -8,7 +8,7 @@ endif
 
 EXTRA_DIST = CMakeLists.txt generate_plugin_dirs.sh generate_plugin_doc.sh
 
-bin_PROGRAMS = serverGenerator pluginInstaller
+bin_PROGRAMS = serverGenerator pluginInstaller pluginPusher
 
 tulip_CXXFLAGS = -DQT_THREAD_SUPPORT -D_REENTRANT
 
@@ -42,6 +42,10 @@ dist_serverGenerator_SOURCES = \
 dist_pluginInstaller_SOURCES = \
 	PluginGenerate.cpp \
 	PluginInstaller.cpp
+
+dist_pluginPusher_SOURCES = \
+	PluginGenerate.cpp \
+	PushToPluginServer.cpp
 
 moc_%.cpp: ../include/%.h
 	$(MOC) ${AM_CPPFLAGS} -o $@ $<

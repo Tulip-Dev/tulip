@@ -147,7 +147,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libKruskal-%{version}.*
 %{prefix}/lib/tlp/libLeafMetric-%{version}.*
 %{prefix}/lib/tlp/libLoopSelection-%{version}.*
-%{prefix}/lib/tlp/libMetricColorMapping-%{version}.*
 %{prefix}/lib/tlp/libMetricSizeMapping-%{version}.*
 %{prefix}/lib/tlp/libMixedModel-%{version}.*
 %{prefix}/lib/tlp/libMultipleSelection-%{version}.*
@@ -196,7 +195,7 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/libtulip-qt4.so
 %{prefix}/lib/libtulip-qt4-%{tulip_version}.so*
 %{prefix}/lib/tlp/libConvolutionClustering-%{version}.*
-%{prefix}/lib/tlp/libEnumColorValuesMapping-%{version}.*
+%{prefix}/lib/tlp/libColorMapping-%{version}.*
 %{prefix}/lib/tlp/libFileSystem-%{version}.*
 %{prefix}/lib/tlp/libWebImport-%{version}.*
 %{prefix}/lib/tlp/designer/lib*.*

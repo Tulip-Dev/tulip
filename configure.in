@@ -423,6 +423,7 @@ software/tulip/Makefile
 software/tulip/include/Makefile
 software/tulip/src/Makefile
 software/tulip/bitmaps/Makefile
+software/tulip/bitmaps/colorscales/Makefile
 software/tulip/designer/Makefile
 software/tlprender/Makefile
 software/tlprender/src/Makefile

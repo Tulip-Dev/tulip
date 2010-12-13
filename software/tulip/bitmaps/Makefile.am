@@ -1,3 +1,6 @@
+SUBDIRS = colorscales
+DIST_SUBDIRS = colorscales
+
 EXTRA_DIST = CMakeLists.txt
 
 dist_default_DATA = startup.gif \
@@ -8,24 +11,7 @@ dist_default_DATA = startup.gif \
 	welcomelogo.bmp \
 	logotulip.jpg \
 	logolabri.jpg \
-        tex_back.png \
-        colorscales/BiologicalHeatMap.png \
-        colorscales/BlackPink.png \
-        colorscales/BlackRedYellowWhite.png \
-        colorscales/BlueGreenYellow.png \
-        colorscales/Blue.png \
-        colorscales/BrownCyan.png \
-        colorscales/Brown.png \
-        colorscales/CMYK.png \
-        colorscales/GreenRed.png \
-        colorscales/MentheGrenadine.png \
-        colorscales/OrangeBlue.png \
-        colorscales/Pink.png \
-        colorscales/Rainbow.png \
-        colorscales/RedBlue.png \
-        colorscales/Red.png \
-        colorscales/RedYellow.png \
-        colorscales/Temperature.png
+        tex_back.png
 
 dist_noinst_DATA = startup.gif \
 	addedge.bmp \
