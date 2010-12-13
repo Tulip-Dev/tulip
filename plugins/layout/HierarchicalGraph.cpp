@@ -255,6 +255,10 @@ void HierarchicalGraph::computeEdgeBends(const Graph *mySGraph, LayoutProperty &
     //we take the first and last point of the replaced edges
     while (graph->target(end) != graph->target(toUpdate)) {
       Iterator<edge> *itE = mySGraph->getOutEdges(graph->target(end));
+      if (!itE->hasNext()) {
+	delete itE;
+	break;
+      }
       end = itE->next();
       delete itE;
     }
