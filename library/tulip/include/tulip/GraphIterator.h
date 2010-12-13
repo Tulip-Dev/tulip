@@ -92,7 +92,6 @@ class SGraphNodeIterator:public FactorNodeIterator {
   const Graph* sg;
   Iterator<node> *it;
   node curNode;
-  bool _hasnext;
   bool value;
 
  public:
@@ -101,6 +100,8 @@ class SGraphNodeIterator:public FactorNodeIterator {
   ~SGraphNodeIterator();
   node next();
   bool hasNext();
+  protected:
+  void prepareNext();
 };
 //============================================================
 ///Out node iterator for GraphView
@@ -153,7 +154,6 @@ class SGraphEdgeIterator:public FactorEdgeIterator
   const Graph* sg;
   Iterator<edge> *it;
   edge curEdge;
-  bool _hasnext;
   bool value;
 
  public:
@@ -162,6 +162,8 @@ class SGraphEdgeIterator:public FactorEdgeIterator
   ~SGraphEdgeIterator();
   edge next();
   bool hasNext();
+ protected:
+  void prepareNext();
 };
 //============================================================
 ///Out edge iterator for GraphView
@@ -169,13 +171,14 @@ class OutEdgesIterator:public FactorEdgeIterator {
  private:
   Iterator<edge> *it;
   edge curEdge;
-  bool _hasnext;
 
  public:
   OutEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n);
   ~OutEdgesIterator();
   edge next();
   bool hasNext();
+  protected:
+  void prepareNext();
 };
 //============================================================
 ///In edge iterator for GraphView
@@ -183,13 +186,14 @@ class InEdgesIterator:public FactorEdgeIterator {
  private:
   Iterator<edge> *it;
   edge curEdge;
-  bool _hasnext;
 
  public:
   InEdgesIterator(const Graph *sG,const MutableContainer<bool>& filter,node n);
   ~InEdgesIterator();
   edge next();
   bool hasNext();
+  protected:
+  void prepareNext();
 };
 //============================================================
 ///In Out edge iterator for GraphView
@@ -197,13 +201,14 @@ class InOutEdgesIterator:public FactorEdgeIterator {
  private:
   Iterator<edge> *it;
   edge curEdge;
-  bool _hasnext;
 
  public:
   InOutEdgesIterator(const Graph *sG, const MutableContainer<bool>& filter, node n);
   ~InOutEdgesIterator();
   edge next();
   bool hasNext();
+  protected:
+  void prepareNext();
 };
 
 
@@ -324,6 +329,8 @@ class xOutEdgesIterator
   ~xOutEdgesIterator();
   edge next();
   bool hasNext();
+ protected:
+  void prepareNext();
 };
 //============================================================
 ///In edge iterator for data sg
@@ -344,6 +351,8 @@ class xInEdgesIterator
   ~xInEdgesIterator();
   edge next();
   bool hasNext();
+ protected:
+  void prepareNext();
 };
 //============================================================
 ///In out edge iterator for data sg
