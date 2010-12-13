@@ -17,6 +17,7 @@ noinst_HEADERS = \
 	InfoDialog.h\
 	PreferenceDialog.h\
 	ChooseControllerDialog.h\
+	GraphNeedsSavingObserver.h\
 	TulipApp.h
 
 CLEANFILES = $(BUILT_SOURCES)

@@ -16,7 +16,7 @@ nodist_libColorMapping_@VERSION@_la_SOURCES = moc_DoubleStringsListRelationDialo
 
 BUILT_SOURCES = DoubleStringsListRelationDialogData.h
 
-dist_noinst_DATA = DoubleStringsListRelationDialog.ui
+dist_noinst_DATA = DoubleStringsListRelationDialog.ui DoubleStringsListRelationDialog.h
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 

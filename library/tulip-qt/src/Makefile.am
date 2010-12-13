@@ -152,7 +152,7 @@ TODIST_SOURCES = \
 	ListPropertyWidget.cpp \
     QtOpenGlErrorViewer.cpp \
 	CSVParser.cpp \
-	CSVGraphImport.cpp \ 
+	CSVGraphImport.cpp \
 	CSVParserConfigurationWidget.cpp \
 	CSVGraphMappingConfigurationWidget.cpp \
 	CSVImportConfigurationWidget.cpp \

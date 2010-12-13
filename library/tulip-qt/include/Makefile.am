@@ -69,7 +69,7 @@ INCLUDES_H = \
 	tulip/CSVGraphMappingConfigurationWidget.h \
 	tulip/CSVImportConfigurationWidget.h \
 	tulip/CSVImportWidget.h \
-	tulip/CSVParserConfigurationWidget.h
+	tulip/CSVParserConfigurationWidget.h \
 	tulip/QtGlSceneZoomAndPanAnimator.h \
 	tulip/Morphing.h \
 	tulip/GlCompositeHierarchyManager.h \
