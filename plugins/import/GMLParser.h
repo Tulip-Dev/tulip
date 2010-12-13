@@ -119,7 +119,7 @@ struct GMLTrue:public GMLBuilder
   bool addInt(const std::string &,const int) {return true;}
   bool addDouble(const std::string &,const double) {return true;}
   bool addString(const std::string &,const std::string &) {return true;}
-  bool addStruct(const std::string& structName,GMLBuilder*&newBuilder) {
+  bool addStruct(const std::string&,GMLBuilder*&newBuilder) {
     newBuilder=new GMLTrue();
     return true;
   }
@@ -132,7 +132,7 @@ struct GMLFalse:public GMLBuilder
   bool addInt(const std::string &,const int) {return false;}
   bool addDouble(const std::string &,const double) {return false;}
   bool addString(const std::string &,const std::string &) {return false;}
-  bool addStruct(const std::string& structName,GMLBuilder*&newBuilder) {
+  bool addStruct(const std::string&,GMLBuilder*&newBuilder) {
     newBuilder=new GMLFalse();
     return false;
   }

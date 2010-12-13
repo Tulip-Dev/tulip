@@ -430,7 +430,7 @@ void GlEdge::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInput
 	drawLabel(test,renderer,data,0.);
 }
 
-void GlEdge::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data, float lod, Camera *camera) {
+void GlEdge::drawLabel(OcclusionTest* test, TextRenderer*, GlGraphInputData* data, float lod, Camera *camera) {
 
 	edge e = edge(id);
 
