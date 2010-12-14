@@ -21,6 +21,7 @@
 #include "tulip/Iterator.h"
 #include "tulip/Graph.h"
 #include "tulip/GraphImpl.h"
+#include "tulip/memorypool.h"
 #include <set>
 
 #include "tulip/tulipconf.h"
@@ -87,7 +88,7 @@ class FactorEdgeIterator
 };
 //============================================================
 ///Node iterator for GraphView
-class SGraphNodeIterator:public FactorNodeIterator {
+class SGraphNodeIterator:public FactorNodeIterator, public MemoryPool<SGraphNodeIterator> {
  private:
   const Graph* sg;
   Iterator<node> *it;
@@ -105,7 +106,7 @@ class SGraphNodeIterator:public FactorNodeIterator {
 };
 //============================================================
 ///Out node iterator for GraphView
-class OutNodesIterator:public FactorNodeIterator {
+class OutNodesIterator:public FactorNodeIterator, public MemoryPool<OutNodesIterator> {
  private:
   Iterator<edge> *it;
   #ifndef NDEBUG
@@ -119,7 +120,7 @@ class OutNodesIterator:public FactorNodeIterator {
 };
 //============================================================
 ///In node iterator for GraphView
-class InNodesIterator:public FactorNodeIterator {
+class InNodesIterator:public FactorNodeIterator, public MemoryPool<InNodesIterator> {
  private:
   Iterator<edge> *it;
   #ifndef NDEBUG
@@ -133,7 +134,7 @@ class InNodesIterator:public FactorNodeIterator {
 };
 //============================================================
 ///In Out node iterator for GraphView
-class InOutNodesIterator:public FactorNodeIterator {
+class InOutNodesIterator:public FactorNodeIterator, public MemoryPool<InOutNodesIterator> {
  private:
   Iterator<edge> *it;
   node n;
@@ -148,7 +149,7 @@ class InOutNodesIterator:public FactorNodeIterator {
 };
 //=============================================================
 ///Edge iterator for GraphView
-class SGraphEdgeIterator:public FactorEdgeIterator
+class SGraphEdgeIterator:public FactorEdgeIterator, public MemoryPool<SGraphEdgeIterator>
 {
  private:
   const Graph* sg;
@@ -167,7 +168,7 @@ class SGraphEdgeIterator:public FactorEdgeIterator
 };
 //============================================================
 ///Out edge iterator for GraphView
-class OutEdgesIterator:public FactorEdgeIterator {
+class OutEdgesIterator:public FactorEdgeIterator, public MemoryPool<OutEdgesIterator> {
  private:
   Iterator<edge> *it;
   edge curEdge;
@@ -182,7 +183,7 @@ class OutEdgesIterator:public FactorEdgeIterator {
 };
 //============================================================
 ///In edge iterator for GraphView
-class InEdgesIterator:public FactorEdgeIterator {
+class InEdgesIterator:public FactorEdgeIterator, public MemoryPool<InEdgesIterator> {
  private:
   Iterator<edge> *it;
   edge curEdge;
@@ -197,7 +198,7 @@ class InEdgesIterator:public FactorEdgeIterator {
 };
 //============================================================
 ///In Out edge iterator for GraphView
-class InOutEdgesIterator:public FactorEdgeIterator {
+class InOutEdgesIterator:public FactorEdgeIterator, public MemoryPool<InOutEdgesIterator> {
  private:
   Iterator<edge> *it;
   edge curEdge;
@@ -219,7 +220,7 @@ class InOutEdgesIterator:public FactorEdgeIterator {
 ///Node iterator for data sg
 class xSGraphNodeIterator
 #ifdef NDEBUG
-  :public NodeIterator
+  :public NodeIterator, public MemoryPool<xSGraphNodeIterator>
 #else
   :public NodeIteratorObserver
 #endif
@@ -239,7 +240,7 @@ class xSGraphNodeIterator
 ///Out Node iterator for data sg
 class xOutNodesIterator
 #ifdef NDEBUG
-  :public NodeIterator
+  :public NodeIterator, public MemoryPool<xOutNodesIterator>
 #else
   :public NodeIteratorObserver
 #endif
@@ -257,7 +258,7 @@ class xOutNodesIterator
 ///In Node iterator for data sg
 class xInNodesIterator
 #ifdef NDEBUG
-  :public NodeIterator
+  :public NodeIterator, public MemoryPool<xInNodesIterator>
 #else
   :public NodeIteratorObserver
 #endif
@@ -275,7 +276,7 @@ class xInNodesIterator
 ///In Out Node iterator for data sg
 class xInOutNodesIterator
 #ifdef NDEBUG
-  :public NodeIterator
+  :public NodeIterator, public MemoryPool<xInOutNodesIterator>
 #else
   :public NodeIteratorObserver
 #endif
@@ -293,7 +294,7 @@ class xInOutNodesIterator
 ///Edge iterator for data sg
 class xSGraphEdgeIterator
 #ifdef NDEBUG
-  :public EdgeIterator
+  :public EdgeIterator, public MemoryPool<xSGraphEdgeIterator>
 #else
   :public EdgeIteratorObserver
 #endif
@@ -313,7 +314,7 @@ class xSGraphEdgeIterator
 ///Out edge iterator for data sg
 class xOutEdgesIterator
 #ifdef NDEBUG
-  :public EdgeIterator
+  :public EdgeIterator, public MemoryPool<xOutEdgesIterator>
 #else
   :public EdgeIteratorObserver
 #endif
@@ -336,7 +337,7 @@ class xOutEdgesIterator
 ///In edge iterator for data sg
 class xInEdgesIterator
 #ifdef NDEBUG
-  :public EdgeIterator
+  :public EdgeIterator, public MemoryPool<xInEdgesIterator>
 #else
   :public EdgeIteratorObserver
 #endif
@@ -358,7 +359,7 @@ class xInEdgesIterator
 ///In out edge iterator for data sg
 class xInOutEdgesIterator
 #ifdef NDEBUG
-  :public EdgeIterator
+  :public EdgeIterator, public MemoryPool<xInOutEdgesIterator>
 #else
   :public EdgeIteratorObserver
 #endif
