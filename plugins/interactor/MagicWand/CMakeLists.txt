@@ -15,5 +15,5 @@ TARGET_LINK_LIBRARIES(InteractorMagicSelection-${TulipVersion} ${LibTulipName} $
 ADD_DEPENDENCIES(InteractorMagicSelection-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
 INSTALL(TARGETS InteractorMagicSelection-${TulipVersion}
-        DESTINATION ${TulipLibInstallDir}/tlp/interactors/
+        DESTINATION ${TulipPluginsInstallDir}/interactors/
         COMPONENT libtulip_qt_plugins)

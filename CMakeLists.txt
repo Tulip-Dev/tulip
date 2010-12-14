@@ -139,11 +139,23 @@ SET(TulipPluginsManagerInclude ${PROJECT_SOURCE_DIR}/software/plugins-manager/in
 ## -----------------------------------------------------------------------------------------------
 ## Install paths
 ## -----------------------------------------------------------------------------------------------
+IF(APPLE)
+SET(TulipAppleContentsDir Tulip-${TulipVersion}.app/Contents/)
+SET(TulipBinInstallDir ${TulipAppleContentsDir}MacOS/)
+SET(TulipLibInstallDir ${TulipAppleContentsDir}Frameworks/)
+SET(TulipIncludeInstallDir ${TulipAppleContentsDir}include/)
+SET(TulipShareInstallDir ${TulipAppleContentsDir}share/)
+SET(TulipPluginsInstallDir ${TulipAppleContentsDir}lib/tlp/)
+SET(TulipBitmapInstallDir ${TulipAppleContentsDir}lib/tlp/bitmaps/)
+SET(TulipAppleResourcesDir ${TulipAppleContentsDir}Resources/)
+ELSE()
 SET(TulipLibInstallDir lib/)
+SET(TulipPluginsInstallDir ${TulipLibInstallDir}/tlp/)
 SET(TulipBinInstallDir bin/)
 SET(TulipIncludeInstallDir include/)
 SET(TulipShareInstallDir share/)
 SET(TulipBitmapInstallDir lib/tlp/bitmaps/)
+ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
 ## Set UseTulip file name
@@ -246,12 +258,13 @@ CONFIGURE_FILE("library/tulip/include/tulip/TulipRelease.h.in" "library/tulip/in
 ## On windows, macros used to retrieve libraries that will later be used at runtime and should thusly be installed in the bin folder
 ## -----------------------------------------------------------------------------------------------
 #
-IF(WIN32)
-  # Look for a library matching pattern in CMake library paths
+
+  # Look for a library matching pattern in CMake library paths and a given directory list.
   # Resulting variables will contain libraries used by Tulip. Library will be separately installed within each component CMakelists in the bin folder.
   # Note: if a library is not found on the system's directories, corresponding variable will be empty or VAR-NOTFOUND
-  MACRO(FIND_LIBRARY_GLOB out_var pattern)
-    FOREACH(ITP $ENV{CMAKE_LIBRARY_PATH})
+  MACRO(FIND_LIBRARY_GLOB_DIR out_var pattern dir)
+    SET(SEARCH_DIRS $ENV{CMAKE_LIBRARY_PATH} ${dir})
+    FOREACH(ITP ${SEARCH_DIRS})
       STRING(REPLACE "\\" "/" P "${ITP}")
       FILE(GLOB RES "${P}/${pattern}")
       IF(RES)
@@ -263,17 +276,51 @@ IF(WIN32)
   ENDIF()
   ENDMACRO()
 
+  # Look for a library matching pattern in CMake library paths
+  # Resulting variables will contain libraries used by Tulip. Library will be separately installed within each component CMakelists in the bin folder.
+  # Note: if a library is not found on the system's directories, corresponding variable will be empty or VAR-NOTFOUND
+  MACRO(FIND_LIBRARY_GLOB out_var pattern)
+    FIND_LIBRARY_GLOB_DIR(${out_var} ${pattern} "")
+  ENDMACRO()
+
   # Given one of the variables defined below, add an install rule to copy the corresponding dll into the bin folder
-  MACRO(WIN32_INSTALL_EXTERNAL_LIB var_name component)
-    IF(WIN32)
+  MACRO(INSTALL_EXTERNAL_LIB var_name component)
     IF(${var_name})
       FOREACH(ITL ${${var_name}})
-        INSTALL(FILES ${ITL} DESTINATION ${TulipBinInstallDir} COMPONENT ${component})
+          IF(WIN32)
+            INSTALL(FILES ${ITL} DESTINATION ${TulipBinInstallDir} COMPONENT ${component})
+          ELSEIF(APPLE)
+            INSTALL(FILES ${ITL} DESTINATION ${TulipLibInstallDir} COMPONENT ${component})
+          ENDIF()
       ENDFOREACH()
     ELSE()
       MESSAGE("${var_name} could not be located and will not be installed with package")
     ENDIF()
-    ENDIF()
+  ENDMACRO()
+
+IF(APPLE)
+  MACRO(FIND_LIBRARY_DEPANDANCIES out_var library)
+        EXECUTE_PROCESS(COMMAND otool -L ${library} COMMAND grep "dylib \\|/4/Qt" COMMAND awk "{print $1}" OUTPUT_VARIABLE OUTPUT RESULT_VARIABLE RESULT)
+        #Transform the output to list
+        STRING(REPLACE "\n" ";" DEP_LIST ${OUTPUT})
+        #ADD filter on system var and try to locate the lib.
+        #The list of uninstalled libraries.
+        SET(UNINSTALLED_LIBS_REGEXP "(.*libSystem.*dylib)|(.*libobjc.*dylib)|(.*libgcc_s.*dylib)|(.*libicucore.*dylib)|(.*libstdc\\+\\+.*dylib)|(.*libxml2.*dylib)|(.*libtulip.*)|^(@executable_path/../Frameworks)")
+        FOREACH(ITL ${DEP_LIST})
+            STRING(REGEX MATCH ${UNINSTALLED_LIBS_REGEXP} OUT ${ITL})
+            #IF(OUT)
+            #    LIST(REMOVE_ITEM DEP_LIST ${ITL})
+            #ELSE()
+            IF(NOT OUT)
+                #try to find the library before copying it
+                FIND_LIBRARY_GLOB_DIR( FILE_PATH ${ITL} "/;/Library/Frameworks/;")
+                IF(FILE_PATH)
+                    SET(FILTERED_DEPS ${FILTERED_DEPS} ${FILE_PATH})
+                ENDIF()
+            ENDIF()
+        ENDFOREACH()
+        LIST(REMOVE_DUPLICATES FILTERED_DEPS)
+        SET(${out_var} ${FILTERED_DEPS})
   ENDMACRO()
 ENDIF()
 

@@ -26,5 +26,5 @@ ADD_DEPENDENCIES(ColorMapping-${TulipVersion} ${LibTulipName} ${LibTulipOglName}
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
   ColorMapping-${TulipVersion}
-  DESTINATION ${TulipLibInstallDir}tlp/
+  DESTINATION ${TulipPluginsInstallDir}/
   COMPONENT libtulip_qt_plugins)

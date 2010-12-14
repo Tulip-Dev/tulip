@@ -51,5 +51,5 @@ INSTALL(TARGETS
 	LoopSelection-${TulipVersion}
 	MultipleSelection-${TulipVersion}
 	Kruskal-${TulipVersion}
-  DESTINATION ${TulipLibInstallDir}tlp/
+  DESTINATION ${TulipPluginsInstallDir}/
   COMPONENT libtulip_plugins)

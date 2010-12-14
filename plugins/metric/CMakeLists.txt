@@ -114,6 +114,6 @@ INSTALL(TARGETS
 	StrahlerMetric-${TulipVersion}
 	RandomMetric-${TulipVersion}
 	BetweennessCentrality-${TulipVersion}
-  DESTINATION ${TulipLibInstallDir}tlp/
+  DESTINATION ${TulipPluginsInstallDir}/
   COMPONENT libtulip_plugins
   )

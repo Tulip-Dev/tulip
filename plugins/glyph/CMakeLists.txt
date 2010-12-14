@@ -131,5 +131,5 @@ INSTALL(TARGETS
 	ChristmasTree-${TulipVersion}
 	Window-${TulipVersion}
 	RoundedBox-${TulipVersion}
-  DESTINATION ${TulipLibInstallDir}tlp/glyphs/
+  DESTINATION ${TulipPluginsInstallDir}/glyphs/
   COMPONENT libtulip_ogl_plugins)

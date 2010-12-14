@@ -168,5 +168,5 @@ INSTALL(TARGETS
 	Dendrogram-${TulipVersion}
 	ImprovedWalker-${TulipVersion}
 	SquarifiedTreeMap-${TulipVersion}
-  DESTINATION ${TulipLibInstallDir}tlp/
+  DESTINATION ${TulipPluginsInstallDir}/
   COMPONENT libtulip_plugins)
