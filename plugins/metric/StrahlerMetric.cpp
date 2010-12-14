@@ -75,7 +75,7 @@ struct GreaterStackEval {
   }
 };
 
-Strahler StrahlerMetric::topSortStrahler(node n, int &curPref,
+Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref,
 					 TLP_HASH_MAP<node,int> &tofree,
 					 TLP_HASH_MAP<node,int> &prefix,
 					 TLP_HASH_MAP<node,bool> &visited,
@@ -197,7 +197,7 @@ namespace {
 #define REGISTERS 1
 #define STACKS 2
 //==============================================================================
-StrahlerMetric::StrahlerMetric(const PropertyContext &context):DoubleAlgorithm(context) {
+StrahlerMetric::StrahlerMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
    addParameter<bool>("All nodes", paramHelp[0], "false");
    addParameter<StringCollection>(COMPUTATION_TYPE, paramHelp[1], COMPUTATION_TYPES);
 }
@@ -277,7 +277,7 @@ bool StrahlerMetric::run() {
   return pluginProgress->state()!=TLP_CANCEL;
 }
 
-bool StrahlerMetric::check(string &erreurMsg) {
+bool StrahlerMetric::check(std::string &erreurMsg) {
   erreurMsg="";
   return true;
 }

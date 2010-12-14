@@ -23,10 +23,10 @@ DOUBLEPLUGINOFGROUP(DepthMetric,"Depth","David Auber","15/02/2001","Alpha","1.0"
 using namespace std;
 using namespace tlp;
 
-DepthMetric::DepthMetric(const PropertyContext &context):DoubleAlgorithm(context) {}
+DepthMetric::DepthMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {}
 
 //=================================================
-double DepthMetric::getNodeValue(const node n) {
+double DepthMetric::getNodeValue(const tlp::node n) {
   if (graph->outdeg(n)==0) return 0.0;
   if (doubleResult->getNodeValue(n) > 0.1)
     return doubleResult->getNodeValue(n);
@@ -47,7 +47,7 @@ bool DepthMetric::run() {
   return true;
 }
 //=================================================
-bool DepthMetric::check(string &erreurMsg) {
+bool DepthMetric::check(std::string &erreurMsg) {
   if (AcyclicTest::isAcyclic(graph))
     return true;
   else {

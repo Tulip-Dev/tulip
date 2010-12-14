@@ -24,9 +24,9 @@ using namespace std;
 using namespace tlp;
 
 //=======================================================================
-LeafMetric::LeafMetric(const PropertyContext &context):DoubleAlgorithm(context) {}
+LeafMetric::LeafMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {}
 //=======================================================================
-double LeafMetric::getNodeValue(const node n) {
+double LeafMetric::getNodeValue(const tlp::node n) {
   if (doubleResult->getNodeValue(n) != 0) 
     return doubleResult->getNodeValue(n);
   double result=0;
@@ -47,7 +47,7 @@ bool LeafMetric::run() {
   return true;
 }
 //=======================================================================
-bool LeafMetric::check(string &erreurMsg) {
+bool LeafMetric::check(std::string &erreurMsg) {
   if (AcyclicTest::isAcyclic(graph))
     return true;
   else {

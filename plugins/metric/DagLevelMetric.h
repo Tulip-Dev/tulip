@@ -32,7 +32,7 @@ public:
   DagLevelMetric(const tlp::PropertyContext &);
   ~DagLevelMetric();
   bool run();
-  bool check(std::string &);
+  bool check(std::string& erreurMsg);
 };
 /*@}*/
 #endif

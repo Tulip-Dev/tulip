@@ -37,7 +37,7 @@ namespace {
   };
 }
 
-EccentricityMetric::EccentricityMetric(const PropertyContext &context):DoubleAlgorithm(context) {
+EccentricityMetric::EccentricityMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
   addParameter<bool>("all paths",paramHelp[0],"false");
 }
 

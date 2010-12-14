@@ -24,10 +24,10 @@ using namespace std;
 using namespace tlp;
 
 //====================================================================
-NodeMetric::NodeMetric(const PropertyContext &context):DoubleAlgorithm(context) 
+NodeMetric::NodeMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) 
 {}
 //====================================================================
-double NodeMetric::getNodeValue(const node n) {
+double NodeMetric::getNodeValue(const tlp::node n) {
   if (doubleResult->getNodeValue(n)!=0)
     return doubleResult->getNodeValue(n);
   double result = 1;
@@ -47,7 +47,7 @@ bool NodeMetric::run() {
   return true;
 }
 //====================================================================
-bool NodeMetric::check(string &erreurMsg) {
+bool NodeMetric::check(std::string &erreurMsg) {
   if (AcyclicTest::isAcyclic(graph)) {
     erreurMsg="";
     return true;

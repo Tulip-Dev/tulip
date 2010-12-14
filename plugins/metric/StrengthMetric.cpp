@@ -23,11 +23,11 @@ DOUBLEPLUGINOFGROUP(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha"
 using namespace std;
 using namespace tlp;
 
-StrengthMetric::StrengthMetric(const PropertyContext &context):DoubleAlgorithm(context) {}
+StrengthMetric::StrengthMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {}
 
 StrengthMetric::~StrengthMetric() {}
 //=============================================================
-double StrengthMetric::e(TLP_HASH_SET<node> &U,TLP_HASH_SET<node> &V) {
+double StrengthMetric::e(TLP_HASH_SET<tlp::node> &U,TLP_HASH_SET<tlp::node> &V) {
   TLP_HASH_SET<node>::const_iterator itU;
   double result=0;
   TLP_HASH_SET<node> *A, *B;
@@ -47,7 +47,7 @@ double StrengthMetric::e(TLP_HASH_SET<node> &U,TLP_HASH_SET<node> &V) {
   return result;
 }
 //=============================================================
-double StrengthMetric::e(const TLP_HASH_SET<node> &U) {
+double StrengthMetric::e(const TLP_HASH_SET<tlp::node> &U) {
   TLP_HASH_SET<node>::const_iterator itU;
   double result=0.0;
   for (itU=U.begin();itU!=U.end();++itU) {
@@ -60,17 +60,17 @@ double StrengthMetric::e(const TLP_HASH_SET<node> &U) {
   return result/2.0;
 }
 //=============================================================
-double StrengthMetric::s(TLP_HASH_SET<node> &U, TLP_HASH_SET<node> &V) {
+double StrengthMetric::s(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V) {
   if ((U.size()==0) || (V.size()==0)) return 0;
   return (e(U,V) / double(U.size()*V.size()));
 }
 //=============================================================
-double StrengthMetric::s(const TLP_HASH_SET<node> &U) {
+double StrengthMetric::s(const TLP_HASH_SET<tlp::node> &U) {
   if (U.size()<2) return 0.0;
   return  (e(U)) * 2.0 / double(U.size()*(U.size()-1));
 }
 //=============================================================
-double StrengthMetric::getEdgeValue(const edge ee ) {
+double StrengthMetric::getEdgeValue(const tlp::edge ee ) {
   node u=graph->source(ee);
   node v=graph->target(ee);
   TLP_HASH_SET<node> Nu,Nv,Wuv;
@@ -135,7 +135,7 @@ double StrengthMetric::getEdgeValue(const edge ee ) {
   return gamma;
 }
 //=============================================================
-double StrengthMetric::getNodeValue(const node n ) {
+double StrengthMetric::getNodeValue(const tlp::node n ) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (graph->deg(n)==0) return 0;
   double result=0;

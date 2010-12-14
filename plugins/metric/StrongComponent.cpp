@@ -25,12 +25,12 @@ DOUBLEPLUGINOFGROUP(StrongComponent,"Strongly Connected Component","David Auber"
 using namespace std;
 using namespace tlp;
 
-int StrongComponent::attachNumerotation(node n,
-					TLP_HASH_MAP<node,bool> &visited,
-					TLP_HASH_MAP<node,bool> &finished,
-					TLP_HASH_MAP<node,int> &minAttach,
+int StrongComponent::attachNumerotation(tlp::node n,
+					TLP_HASH_MAP<tlp::node,bool> &visited,
+					TLP_HASH_MAP<tlp::node,bool> &finished,
+					TLP_HASH_MAP<tlp::node,int> &minAttach,
 					int &id,
-					stack<node> &renum,
+					std::stack<tlp::node> &renum,
 					int &curComponent
 					)
 {
@@ -66,7 +66,7 @@ int StrongComponent::attachNumerotation(node n,
   return result;
 }
 
-StrongComponent::StrongComponent(const PropertyContext &context):DoubleAlgorithm(context) {}
+StrongComponent::StrongComponent(const tlp::PropertyContext &context):DoubleAlgorithm(context) {}
 
 StrongComponent::~StrongComponent() {}
 
@@ -99,7 +99,7 @@ bool StrongComponent::run() {
   return true;
 }
 
-bool StrongComponent::check(string &erreurMsg) {
+bool StrongComponent::check(std::string &erreurMsg) {
   erreurMsg="";
   return true;
 }

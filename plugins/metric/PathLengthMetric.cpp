@@ -24,12 +24,12 @@ using namespace std;
 using namespace tlp;
 
 //=======================================
-PathLengthMetric::PathLengthMetric(const PropertyContext &context):DoubleAlgorithm(context) {
+PathLengthMetric::PathLengthMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
   // Leaf metric needed
   addDependency<DoubleAlgorithm>("Leaf", "1.0");
 }
 //=======================================
-double PathLengthMetric::getNodeValue(const node n) {
+double PathLengthMetric::getNodeValue(const tlp::node n) {
   if (graph->outdeg(n)==0) return 0.0;
   if (doubleResult->getNodeValue(n) > 0.1)
     return doubleResult->getNodeValue(n);
@@ -59,7 +59,7 @@ bool PathLengthMetric::run() {
   return true;
 }
 //=======================================
-bool PathLengthMetric::check(string &erreurMsg) {
+bool PathLengthMetric::check(std::string &erreurMsg) {
   if (AcyclicTest::isAcyclic(graph))
     return true;
   else {
