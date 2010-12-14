@@ -141,12 +141,15 @@ protected:
     void addPropertyToPropertyList(const std::string& propertyName, bool isEditable, const std::string& propertyType =std::string("Auto detect"));
 
     /**
-     * Build the property configuration widget from given parameters.
-     * @param propertyNumber the property number.
-     * @param propertyName
-     * @param isEditable Is the property name editable?
-     * @param defaultPropertyType the default property type.
-     */
+     * @brief Creates a property configuration widget.
+     *
+     * @param propertyNumber The property number.
+     * @param propertyName The name of the property.
+     * @param propertyNameIsEditable Whether the property's name is editable.
+     * @param propertyType The type of the property.
+     * @param parent This widget's parent.
+     * @return :PropertyConfigurationWidget*
+     **/
     virtual PropertyConfigurationWidget *createPropertyConfigurationWidget(unsigned int propertyNumber,
                                                                            const QString& propertyName, bool propertyNameIsEditable, const std::string& propertyType, QWidget* parent);
 
