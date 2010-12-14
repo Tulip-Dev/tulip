@@ -130,3 +130,5 @@ Coord CubeOutLinedTransparent::getAnchor(const Coord & vector) const {
 	else
 		return vector;
 }
+
+/*@}*/

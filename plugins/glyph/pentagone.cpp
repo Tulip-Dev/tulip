@@ -130,3 +130,5 @@ void Pentagone::draw(const Color &fillColor,
   pentagon->setTextureName(textureName);
   pentagon->draw(lod,NULL);
 }
+
+/*@}*/

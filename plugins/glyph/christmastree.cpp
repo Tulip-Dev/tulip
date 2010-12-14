@@ -164,3 +164,5 @@ void ChristmasTree::drawTree() {
 		gluDeleteQuadric(quadratic);
 	}
 }
+
+/*@}*/

@@ -199,3 +199,5 @@ struct Grid: public ImportModule {
   }
 };
 IMPORTPLUGINOFGROUP(Grid,"Grid","Jonathan Dubois","02/12/2003","","2.0","Graphs")
+
+/*@}*/
