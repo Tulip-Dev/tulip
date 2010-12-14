@@ -34,7 +34,7 @@
  */
 class InducedSubGraphSelection:public tlp::BooleanAlgorithm { 
 public:
-  InducedSubGraphSelection(const tlp::PropertyContext &);
+  InducedSubGraphSelection(const tlp::PropertyContext& context);
   bool run();
 };
 /*@}*/

@@ -34,7 +34,7 @@ namespace {
   };
 }
 //======================================================
-Kruskal::Kruskal(const PropertyContext &context):BooleanAlgorithm(context) {
+Kruskal::Kruskal(const tlp::PropertyContext &context):BooleanAlgorithm(context) {
   addParameter<DoubleProperty> ("edge weight", paramHelp[0], "viewMetric");
 }
 //======================================================
@@ -42,7 +42,7 @@ Kruskal::~Kruskal() {
 }
 //======================================================
 #include <tulip/ConnectedTest.h>
-bool Kruskal::check(string &erreurMsg) {
+bool Kruskal::check(std::string &erreurMsg) {
   if (ConnectedTest::isConnected(graph)) {
     erreurMsg = "";
     return true;

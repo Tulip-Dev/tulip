@@ -37,7 +37,7 @@ namespace {
   };
 }
 //=================================================================================
-InducedSubGraphSelection::InducedSubGraphSelection(const PropertyContext &context):
+InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PropertyContext &context):
   BooleanAlgorithm(context) {
   addParameter<BooleanProperty>("Nodes", paramHelp[0], "viewSelection");
 }

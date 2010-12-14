@@ -24,7 +24,7 @@ BOOLEANPLUGIN(LoopSelection,"Loop Selection","David Auber","20/01/2003","Alpha",
 using namespace std;
 using namespace tlp;
 
-LoopSelection::LoopSelection(const PropertyContext &context):BooleanAlgorithm(context) {}
+LoopSelection::LoopSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) {}
 //============================================
 bool LoopSelection::run() {
   booleanResult->setAllNodeValue(false);

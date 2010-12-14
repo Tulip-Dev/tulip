@@ -39,7 +39,7 @@
 class Kruskal:public tlp::BooleanAlgorithm { 
   
 public:
-  Kruskal(const tlp::PropertyContext &);
+  Kruskal(const tlp::PropertyContext& context);
   ~Kruskal();
   bool run();
   bool check(std::string &);

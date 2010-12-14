@@ -129,7 +129,7 @@ UrlElement::UrlElement(const UrlElement &c):
   data(""),serverport(c.serverport),server(c.server),url(c.url),clean_url(c.clean_url),context(0) {
 }
 
-void UrlElement::setUrl(const string& theUrl) {
+void UrlElement::setUrl(const std::string& theUrl) {
   url = theUrl;
   size_t len = theUrl.find_first_of("?", 0);
   if (len != string::npos)
@@ -138,7 +138,7 @@ void UrlElement::setUrl(const string& theUrl) {
     clean_url.clear();
 }
 
-void UrlElement::fill(string &result) {
+void UrlElement::fill(std::string &result) {
   if (context->bytesAvailable() > 0)
     result += context->readAll().data();
 }
@@ -178,7 +178,7 @@ bool UrlElement::isHtmlPage() {
   return context->isHtml;
 }
 
-bool UrlElement::siteconnect(const string &server, const string &url,const int serverport, bool headonly) {
+bool UrlElement::siteconnect(const std::string &server, const std::string &url,const int serverport, bool headonly) {
   // check that we actually got data..
   if (server.empty()) return -1;
 
@@ -216,7 +216,7 @@ static const char * rejected_protocols[] = {
   0 /* must be the last */
 };
 
-UrlElement UrlElement::parseUrl (const string &href) {
+UrlElement UrlElement::parseUrl (const std::string &href) {
   UrlElement newUrl;
   string lowercase(href);
   size_t i, len = lowercase.length();

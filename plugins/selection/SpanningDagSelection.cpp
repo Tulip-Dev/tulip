@@ -29,7 +29,7 @@ using namespace std;
 using namespace tlp;
 
 //=================================================================
-SpanningDagSelection::SpanningDagSelection(const PropertyContext &context):BooleanAlgorithm(context) {}
+SpanningDagSelection::SpanningDagSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) {}
 //=================================================================
 bool SpanningDagSelection::run() {
   booleanResult->setAllNodeValue(true);
