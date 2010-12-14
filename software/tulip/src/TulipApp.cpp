@@ -261,7 +261,7 @@ void TulipApp::startTulip() {
 
   std::string assistantPath(tlp::TulipLibDir);
   assistantPath += string("../");
-  assistantPath += string(QT_ASSISTANT);
+  assistantPath += string(STRINGIFY(QT_ASSISTANT));
 // In Qt > 4.6, QAssistant is removed
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) 
   assistantProcess= new QProcess(this);
