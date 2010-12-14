@@ -14,7 +14,7 @@ BIN_BUNDLE_DIR=$APP_DIR/Contents/MacOS
 LIBS_BUNDLE_DIR=$APP_DIR/Contents/Frameworks
 RESOURCES_BUNDLE_DIR=$APP_DIR/Contents/Resources
 BUNDLE_LIB_PATH=@executable_path/../Frameworks
-SHLIBS_REGEXP="dylib \|/4/Qt"
+SHLIBS_REGEXP="dylib \|/Versions/4"
 
 # the first parameter $slib is a library
 # the third parameter $bbin depends on
@@ -151,7 +151,7 @@ mv tulip.app $APP_DIR
 # create the tulip shared libs bundle directory
 mkdir -p $LIBS_BUNDLE_DIR
 # package every binary in the bundle
-for BIN_BUNDLE in tulip_app tulip_check_pl
+for BIN_BUNDLE in tulip_app tulip_check_pl tulip_need_restart
 do
 # look for shared libs
   SHARED_LIBS=$(otool -L $BIN_BUNDLE_DIR/$BIN_BUNDLE | grep "$SHLIBS_REGEXP" | awk '{print $1}')
