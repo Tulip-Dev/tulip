@@ -49,7 +49,7 @@
  */
 class ConeTreeExtended:public tlp::LayoutAlgorithm { 
 public:
-  ConeTreeExtended(const tlp::PropertyContext &);
+  ConeTreeExtended(const tlp::PropertyContext& context);
   ~ConeTreeExtended();
   bool run();
 private:
@@ -58,8 +58,8 @@ private:
   void calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node,double> *px,
 		  TLP_HASH_MAP<tlp::node,double> *py,
 		  double x, double y, int level);
-  void computeLayerSize(tlp::node , unsigned int);
-  void computeYCoodinates(tlp::node);
+  void computeLayerSize(tlp::node n, unsigned int level);
+  void computeYCoodinates(tlp::node root);
   tlp::Graph *tree;
   tlp::SizeProperty * nodeSize;
   std::vector<float> yCoordinates;

@@ -47,7 +47,7 @@ namespace {
 //================================================================================
 #define ORIENTATION "horizontal;vertical;"
 //================================================================================
-HierarchicalGraph::HierarchicalGraph(const PropertyContext &context):LayoutAlgorithm(context) {
+HierarchicalGraph::HierarchicalGraph(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addSpacingParameters(this);
@@ -66,7 +66,7 @@ public:
   }
 };
 //================================================================================
-void HierarchicalGraph::buildGrid(Graph *sg){
+void HierarchicalGraph::buildGrid(tlp::Graph *sg){
   //  cerr << __PRETTY_FUNCTION__  << endl;
   string erreurMsg;
   DoubleProperty dagLevel(sg);
@@ -84,7 +84,7 @@ void HierarchicalGraph::buildGrid(Graph *sg){
   //  cerr << __PRETTY_FUNCTION__  << endl;
 }
 //================================================================================
-unsigned int HierarchicalGraph::degree(Graph *sg,node n,bool sense) {
+unsigned int HierarchicalGraph::degree(tlp::Graph *sg, tlp::node n,bool sense) {
   if (sense)
     return (sg->outdeg(n));
   else
@@ -94,7 +94,7 @@ unsigned int HierarchicalGraph::degree(Graph *sg,node n,bool sense) {
 //If sense==true fixed_layer is freeLayer+1 else freeLayer-1
 //Compute barycenter heuristique
 
-void HierarchicalGraph::twoLayerCrossReduction(Graph *sg,unsigned int freeLayer,bool){
+void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg,unsigned int freeLayer,bool){
   vector<node>::const_iterator it;
   for (it = grid[freeLayer].begin(); it!=grid[freeLayer].end(); ++it) {
     node n = *it;
@@ -148,7 +148,7 @@ void HierarchicalGraph::twoLayerCrossReduction(Graph *sg,unsigned int freeLayer,
 */
 //================================================================================
 //Set initial position using a DFS
-void HierarchicalGraph::initCross(Graph *sg, node n, MutableContainer<bool> &visited, int id) {
+void HierarchicalGraph::initCross(tlp::Graph *sg, tlp::node n, tlp::MutableContainer<bool> &visited, int id) {
   if (visited.get(n.id)) return;
   visited.set(n.id, true);
   embedding->setNodeValue(n, id);
@@ -159,7 +159,7 @@ void HierarchicalGraph::initCross(Graph *sg, node n, MutableContainer<bool> &vis
 }
 //================================================================================
 // Do layer by layer sweep to reduce crossings in K-Layer graph
-void HierarchicalGraph::crossReduction(Graph *sg){
+void HierarchicalGraph::crossReduction(tlp::Graph *sg){
 
   node tmp = sg->addNode();
   embedding->setNodeValue(tmp, 0);
@@ -213,7 +213,7 @@ void HierarchicalGraph::crossReduction(Graph *sg){
   //  cerr << __PRETTY_FUNCTION__  << endl;
 }
 //================================================================================
-void HierarchicalGraph::DagLevelSpanningTree(Graph* sg, DoubleProperty *embedding) {
+void HierarchicalGraph::DagLevelSpanningTree(tlp::Graph* sg, tlp::DoubleProperty *embedding) {
   //  cerr << __PRETTY_FUNCTION__  << endl;
   assert(AcyclicTest::isAcyclic(sg));
   LessThanEdge tmpL;
@@ -239,8 +239,8 @@ void HierarchicalGraph::DagLevelSpanningTree(Graph* sg, DoubleProperty *embeddin
   //  cerr << __PRETTY_FUNCTION__  << endl;
 }
 //==============================================================================================================
-void HierarchicalGraph::computeEdgeBends(const Graph *mySGraph, LayoutProperty &tmpLayout, 
-					 const TLP_HASH_MAP<edge,edge> &replacedEdges, const vector<edge> &reversedEdges) {
+void HierarchicalGraph::computeEdgeBends(const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout, 
+					 const TLP_HASH_MAP<tlp::edge,tlp::edge> &replacedEdges, const std::vector<tlp::edge> &reversedEdges) {
   //  cerr << "we compute bends on splitted edges" << endl;
   MutableContainer<bool> isReversed;
   isReversed.setAll(false);
@@ -284,7 +284,7 @@ void HierarchicalGraph::computeEdgeBends(const Graph *mySGraph, LayoutProperty &
   }
 }
 //=======================================================================
-void HierarchicalGraph::computeSelfLoops(Graph *mySGraph, LayoutProperty &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops) {
+void HierarchicalGraph::computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops) {
   //cerr << "We compute self loops" << endl;
   while (!listSelfLoops.empty()) {
     tlp::SelfLoops tmp = listSelfLoops.back();

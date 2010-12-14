@@ -42,7 +42,7 @@ class OrientableSizeProxy;
  **/
 class Dendrogram: public tlp::LayoutAlgorithm {
  public:
-  Dendrogram(const tlp::PropertyContext&);
+  Dendrogram(const tlp::PropertyContext& context);
   ~Dendrogram();
   
   bool run();
