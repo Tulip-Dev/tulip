@@ -21,7 +21,7 @@
 using namespace tlp;
 
 //====================================================================
-OrientableSizeProxy::OrientableSizeProxy(SizeProperty* sizesProxyParam,
+OrientableSizeProxy::OrientableSizeProxy(tlp::SizeProperty* sizesProxyParam,
                                          orientationType mask) : 
     sizesProxy(sizesProxyParam) {
     setOrientation(mask);
@@ -53,7 +53,7 @@ OrientableSize OrientableSizeProxy::createSize(const float width,
 }
 
 //====================================================================
-OrientableSize OrientableSizeProxy::createSize(const Size& v) {
+OrientableSize OrientableSizeProxy::createSize(const tlp::Size& v) {
     return OrientableSize(this, v);
 }
 
@@ -63,12 +63,12 @@ void OrientableSizeProxy::setAllNodeValue(const PointType& v) {
 }
 
 //====================================================================
-void OrientableSizeProxy::setNodeValue(node n, const PointType& v) {
+void OrientableSizeProxy::setNodeValue(tlp::node n, const PointType& v) {
     sizesProxy->setNodeValue(n, v);
 }
 
 //====================================================================
-OrientableSizeProxy::PointType OrientableSizeProxy::getNodeValue(const node n) {
+OrientableSizeProxy::PointType OrientableSizeProxy::getNodeValue(const tlp::node n) {
     return OrientableSize(this, sizesProxy->getNodeValue(n));
 }
 
@@ -83,12 +83,12 @@ void OrientableSizeProxy::setAllEdgeValue(const LineType& v) {
 }
 
 //====================================================================
-void OrientableSizeProxy::setEdgeValue(const edge e, const LineType& v) {
+void OrientableSizeProxy::setEdgeValue(const tlp::edge e, const LineType& v) {
     sizesProxy->setEdgeValue(e, v);
 }
 
 //====================================================================
-OrientableSizeProxy::LineType OrientableSizeProxy::getEdgeValue(const edge e) {
+OrientableSizeProxy::LineType OrientableSizeProxy::getEdgeValue(const tlp::edge e) {
     return OrientableSize(this, sizesProxy->getEdgeValue(e));
 }
 

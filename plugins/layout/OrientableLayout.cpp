@@ -23,7 +23,7 @@
 using namespace tlp;
 
 //====================================================================
-OrientableLayout::OrientableLayout(LayoutProperty* layoutParam,
+OrientableLayout::OrientableLayout(tlp::LayoutProperty* layoutParam,
                                    orientationType mask) {
     layout = layoutParam;
     setOrientation(mask);
@@ -68,13 +68,13 @@ OrientableCoord OrientableLayout::createCoord(const float x, const float y,
 }
 
 //====================================================================
-OrientableCoord OrientableLayout::createCoord(const Coord& v) {
+OrientableCoord OrientableLayout::createCoord(const tlp::Coord& v) {
     return OrientableCoord(this, v);
 }
 
 //====================================================================
 std::vector<OrientableCoord> OrientableLayout::
-                             convertEdgeLinetype(const std::vector<Coord>& v) {
+                             convertEdgeLinetype(const std::vector<tlp::Coord>& v) {
     std::vector<OrientableCoord>  orientableLine;
     CoordLineType::const_iterator itCoordLineType = v.begin();
     for ( ; itCoordLineType < v.end() ; itCoordLineType++ )  {
@@ -90,12 +90,12 @@ void OrientableLayout::setAllNodeValue(const PointType& v) {
 }
 
 //====================================================================
-void OrientableLayout::setNodeValue(node n, const PointType& v) {
+void OrientableLayout::setNodeValue(tlp::node n, const PointType& v) {
     layout->setNodeValue(n, v);
 }
 
 //====================================================================
-OrientableLayout::PointType OrientableLayout::getNodeValue(const node n) {
+OrientableLayout::PointType OrientableLayout::getNodeValue(const tlp::node n) {
     return OrientableCoord(this, layout->getNodeValue(n));
 }
 
@@ -111,13 +111,13 @@ void OrientableLayout::setAllEdgeValue(const LineType& v) {
 }
 
 //====================================================================
-void OrientableLayout::setEdgeValue(const edge e, const LineType& v) {
+void OrientableLayout::setEdgeValue(const tlp::edge e, const LineType& v) {
     CoordLineType vecCoord(v.begin(), v.end());
     layout->setEdgeValue(e, vecCoord);
 }
 
 //====================================================================
-OrientableLayout::LineType OrientableLayout::getEdgeValue(const edge e) {
+OrientableLayout::LineType OrientableLayout::getEdgeValue(const tlp::edge e) {
     return convertEdgeLinetype(layout->getEdgeValue(e));
 }
 

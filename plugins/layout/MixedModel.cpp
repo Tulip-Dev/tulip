@@ -65,7 +65,7 @@ namespace {
 }
 #define ORIENTATION "vertical;horizontal;"
 //====================================================
-MixedModel::MixedModel(const PropertyContext &context):LayoutAlgorithm(context)  {
+MixedModel::MixedModel(const tlp::PropertyContext &context):LayoutAlgorithm(context)  {
   addNodeSizePropertyParameter(this);
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addParameter<float> ("y node-node spacing",paramHelp[1],"2");
@@ -327,7 +327,7 @@ bool MixedModel::run() {
 
 
 //====================================================
-bool MixedModel::check(string &err) {  
+bool MixedModel::check(std::string &err) {  
   bool result = true ;
   err = "The graph must be ";
   if(!SimpleTest::isSimple(graph)){
@@ -339,7 +339,7 @@ bool MixedModel::check(string &err) {
 
       
 //====================================================
-vector<edge> MixedModel::getPlanarSubGraph(PlanarConMap *sg, vector<edge> unplanar_edges){
+vector<edge> MixedModel::getPlanarSubGraph(tlp::PlanarConMap *sg, std::vector<tlp::edge> unplanar_edges){
   vector<edge> res;
   for(unsigned int ui = 0; ui < unplanar_edges.size() ; ++ui){
     edge e = unplanar_edges[ui];
@@ -448,7 +448,7 @@ void MixedModel::initPartition(){
 }
 
 //====================================================
-void afficheCycle(PlanarConMap* m){
+void afficheCycle(tlp::PlanarConMap* m){
   assert(m);
   cout<<"Cycles :"<<endl;
   Iterator<node>* itn = m->getNodes();

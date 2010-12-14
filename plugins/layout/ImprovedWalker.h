@@ -80,7 +80,7 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
   nodeToFloatType         shiftDelta;
   nodeToNodeType          ancestor;
 
-  int                     initializeAllNodes(tlp::node);
+  int                     initializeAllNodes(tlp::node root);
   int                     initializeNode(tlp::node root, unsigned int depth);
   int                     countSibling(tlp::node from, tlp::node to);
   ImprovedWalkerIterator* iterateSibling(tlp::node from, tlp::node to);
