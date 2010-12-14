@@ -49,7 +49,7 @@ namespace {
 #define IN 1
 #define OUT 2
 //==============================================================================
-ArityMetric::ArityMetric(const PropertyContext &context):DoubleAlgorithm(context) {
+ArityMetric::ArityMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
    addParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
    addParameter<DoubleProperty>("metric", paramHelp[1], 0, false);
 }

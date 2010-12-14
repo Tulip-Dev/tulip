@@ -24,7 +24,7 @@ DOUBLEPLUGINOFGROUP(DagLevelMetric,"Dag Level","David Auber","10/03/2000","Alpha
 using namespace std;
 using namespace tlp;
 
-DagLevelMetric::DagLevelMetric(const PropertyContext &context):DoubleAlgorithm(context) {}
+DagLevelMetric::DagLevelMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {}
 
 DagLevelMetric::~DagLevelMetric() {}
 //====================================================== 
@@ -37,7 +37,7 @@ bool DagLevelMetric::run() {
   return true;
 }
 //====================================================== 
-bool DagLevelMetric::check(string &erreurMsg) {
+bool DagLevelMetric::check(std::string &erreurMsg) {
   if (AcyclicTest::isAcyclic(graph)) {
     erreurMsg="";
     return true;

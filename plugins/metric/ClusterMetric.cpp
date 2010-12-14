@@ -37,7 +37,7 @@ namespace {
   };
 }
 //=================================================
-ClusterMetric::ClusterMetric(const PropertyContext &context):DoubleAlgorithm(context) {
+ClusterMetric::ClusterMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
   addParameter<unsigned int>("depth",paramHelp[0],"1");
 }
 //=================================================
