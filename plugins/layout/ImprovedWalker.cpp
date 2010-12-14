@@ -68,7 +68,7 @@ public:
   }
 };
 //====================================================================
-ImprovedWalker::ImprovedWalker(const PropertyContext& context) :
+ImprovedWalker::ImprovedWalker(const tlp::PropertyContext& context) :
     LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addOrientationParameters(this);
@@ -121,11 +121,11 @@ bool ImprovedWalker::run() {
   return true;
 }
 //====================================================================
-int ImprovedWalker::initializeAllNodes(node root) {    
+int ImprovedWalker::initializeAllNodes(tlp::node root) {    
   return initializeNode(root, 0);
 }
 //====================================================================
-int ImprovedWalker::initializeNode(node n, unsigned int depth) {    
+int ImprovedWalker::initializeNode(tlp::node n, unsigned int depth) {    
   if (maxYbyLevel.size() == depth) {
     maxYbyLevel.push_back(0);   
   }
@@ -156,11 +156,11 @@ int ImprovedWalker::initializeNode(node n, unsigned int depth) {
   return maxDepth + 1;
 }
 //====================================================================    
-int ImprovedWalker::countSibling(node from, node to) {
+int ImprovedWalker::countSibling(tlp::node from, tlp::node to) {
   return abs(order[from] - order[to]);
 }
 //====================================================================
-ImprovedWalkerIterator* ImprovedWalker::iterateSibling(node from, node to) {
+ImprovedWalkerIterator* ImprovedWalker::iterateSibling(tlp::node from, tlp::node to) {
   int modifier = (order[from] > order[to] ? 1 : -1 );
   node father  = tree->getInNode(from,1);
   
@@ -168,17 +168,17 @@ ImprovedWalkerIterator* ImprovedWalker::iterateSibling(node from, node to) {
 				    order[to]+modifier);
 }
 //====================================================================
-Iterator<node>* ImprovedWalker::getChildren(node n) {    
+Iterator<node>* ImprovedWalker::getChildren(tlp::node n) {    
     return tree->getOutNodes(n);
 }
 //====================================================================
-ImprovedWalkerIterator* ImprovedWalker::getReversedChildren(node n) {
+ImprovedWalkerIterator* ImprovedWalker::getReversedChildren(tlp::node n) {
   int nbChildren = tree->outdeg(n);
   return new ImprovedWalkerIterator(tree, n, nbChildren, 0);
 }
 
 //==================================================================== 
-void ImprovedWalker::firstWalk(node v) {       
+void ImprovedWalker::firstWalk(tlp::node v) {       
   if (isLeaf(tree, v)) {   
     prelimX[v]        = 0;
     node vleftSibling = leftSibling(v);
@@ -213,7 +213,7 @@ void ImprovedWalker::firstWalk(node v) {
   }     
 }
 //====================================================================
-void ImprovedWalker::secondWalk(node v, float modifierX, int depth) {   
+void ImprovedWalker::secondWalk(tlp::node v, float modifierX, int depth) {   
     OrientableCoord coord  = oriLayout->createCoord(prelimX[v]+modifierX,
                                                    depth * spacing, 0);        
     oriLayout->setNodeValue(v,coord);
@@ -223,7 +223,7 @@ void ImprovedWalker::secondWalk(node v, float modifierX, int depth) {
     delete itNode;
 }   
 //====================================================================
-void ImprovedWalker::combineSubtree(node v, node* defaultAncestor) {
+void ImprovedWalker::combineSubtree(tlp::node v, tlp::node* defaultAncestor) {
   node leftBrother = leftSibling(v);
   if (leftBrother != BADNODE) {
     node nodeInsideRight; 
@@ -292,7 +292,7 @@ void ImprovedWalker::combineSubtree(node v, node* defaultAncestor) {
   }
 }
 //====================================================================
-void ImprovedWalker::moveSubtree(node fromNode, node toNode, float rightShift) {
+void ImprovedWalker::moveSubtree(tlp::node fromNode, tlp::node toNode, float rightShift) {
     int nbElementSubtree  = countSibling(toNode,fromNode);
     float shiftByElem     = rightShift/nbElementSubtree;
 
@@ -304,7 +304,7 @@ void ImprovedWalker::moveSubtree(node fromNode, node toNode, float rightShift) {
     modChildX[toNode]     += rightShift;   
 }
 //====================================================================
-void ImprovedWalker::executeShifts(node v) {   
+void ImprovedWalker::executeShifts(tlp::node v) {   
                 
    float shift = 0;
    float delta = 0;   
