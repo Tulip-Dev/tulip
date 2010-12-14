@@ -22,6 +22,10 @@
 #define STRINGIFY(PARAM) STRINGIFY_INTERNAL(PARAM)
 #define STRINGIFY_INTERNAL(PARAM) #PARAM
 
+#if !_MSC_VER
+#  define TYPEOF typeof
+#endif
+
 #if _MSC_VER
   //MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does not.
   #include <math.h>
@@ -51,6 +55,7 @@
 #  define cbrt(arg) pow((double)arg, 1.0/3) //VC does not have cbrt, little workaround
 #  define isnan(x) ((x) != (x)) //you guessed it, this is a C99 feature, and VC++ does not support C99. workaroud this.
 #  define rint(arg) arg > 0 ? (int)std::floor((double)arg) : (int)std::ceil((double)arg)
+#  define TYPEOF decltype
 #elif (__GNUC__ < 3)
 #  define stdext std
 #  define _DEPRECATED

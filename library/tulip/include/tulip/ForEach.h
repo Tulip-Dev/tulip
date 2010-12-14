@@ -23,6 +23,7 @@
 #include <tulip/Iterator.h>
 #include <tulip/StableIterator.h>
 #include "tulip/memorypool.h"
+#include <tulip/tulipconf.h>
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
@@ -51,10 +52,10 @@ namespace tlp {
 #endif //DOXYGEN_NOTFOR_DEVEL
 
 #define forEach(A, B) \
-for(_TLP_IT<typeof(A)> _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
+for(_TLP_IT<TYPEOF(A)> _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
 
 #define stableForEach(A, B)  \
-  for(_TLP_IT<typeof(A)> _it_foreach(new StableIterator<typeof(A)>(B));  tlp::_tlp_if_test(A, _it_foreach);)
+  for(_TLP_IT<TYPEOF(A)> _it_foreach(new StableIterator<TYPEOF(A)>(B));  tlp::_tlp_if_test(A, _it_foreach);)
 
       //@deprecated no more useful
 #define breakForEach {break;}
