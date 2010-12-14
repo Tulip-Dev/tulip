@@ -24,5 +24,5 @@ INSTALL(TARGETS
 	MetricSizeMapping-${TulipVersion}
 	AutoSize-${TulipVersion}
 	FitToLabels-${TulipVersion}
-  DESTINATION ${TulipLibInstallDir}tlp/
+  DESTINATION ${TulipPluginsInstallDir}/
   COMPONENT libtulip_ogl_plugins)

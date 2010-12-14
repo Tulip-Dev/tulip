@@ -99,7 +99,7 @@ ENDIF(WIN32)
 
 IF(APPLE)
   INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/tulip_check_pl
-          DESTINATION "${TulipBinInstallDir}/tulip.app/Contents/MacOS"
+          DESTINATION "${TulipBinInstallDir}"
           COMPONENT tulip_pluginsmanager)
 ENDIF(APPLE)
 

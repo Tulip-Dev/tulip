@@ -12,5 +12,5 @@ ADD_DEPENDENCIES(GMLExport-${TulipVersion} ${LibTulipName})
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
 	GMLExport-${TulipVersion}	
-  DESTINATION ${TulipLibInstallDir}tlp/
+  DESTINATION ${TulipPluginsInstallDir}/
   COMPONENT libtulip_plugins)

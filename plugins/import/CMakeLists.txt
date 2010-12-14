@@ -110,5 +110,5 @@ INSTALL(TARGETS
 	SmallWorldGraph-${TulipVersion}
 	FileSystem-${TulipVersion}
 	WebImport-${TulipVersion}
-  DESTINATION ${TulipLibInstallDir}tlp/
+  DESTINATION ${TulipPluginsInstallDir}/
   COMPONENT libtulip_plugins)

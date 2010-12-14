@@ -52,4 +52,4 @@ TARGET_LINK_LIBRARIES(SpreadSheet-${TulipVersion} ${LibTulipOglName})
 TARGET_LINK_LIBRARIES(SpreadSheet-${TulipVersion} ${LibTulipQtName})
 ADD_DEPENDENCIES(SpreadSheet-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
-INSTALL(TARGETS SpreadSheet-${TulipVersion} DESTINATION ${TulipLibInstallDir}tlp/view/ COMPONENT tulip_plugins_spreadsheetview)
+INSTALL(TARGETS SpreadSheet-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}/view/ COMPONENT tulip_plugins_spreadsheetview)
