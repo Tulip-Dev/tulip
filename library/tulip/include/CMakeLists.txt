@@ -92,6 +92,7 @@ INSTALL(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/tulip/TulipRelease.h
 	tulip/PreferenceManager.h
   tulip/QuadTree.h
+  tulip/memorypool.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_dev
 )
