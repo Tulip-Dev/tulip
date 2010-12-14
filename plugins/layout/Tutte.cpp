@@ -28,7 +28,7 @@ LAYOUTPLUGINOFGROUP(Tutte,"3-Connected (Tutte)","David Auber","06/11/2002","Beta
 using namespace std;
 using namespace tlp;
 //====================================================
-Tutte::Tutte(const PropertyContext &context):LayoutAlgorithm(context) 
+Tutte::Tutte(const tlp::PropertyContext &context):LayoutAlgorithm(context) 
 {}
 //====================================================
 Tutte::~Tutte() {}
@@ -148,7 +148,7 @@ bool Tutte::run() {
   return true;
 }
 //====================================================
-bool Tutte::check(string &erreurMsg) {
+bool Tutte::check(std::string &erreurMsg) {
   bool result=true;
   if (!TriconnectedTest::isTriconnected(graph))
     result=false;

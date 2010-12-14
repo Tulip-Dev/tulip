@@ -68,7 +68,7 @@ namespace
     };
 }
 //====================================================================
-SquarifiedTreeMap::SquarifiedTreeMap(const PropertyContext& context) :LayoutAlgorithm(context){
+SquarifiedTreeMap::SquarifiedTreeMap(const tlp::PropertyContext& context) :LayoutAlgorithm(context){
   aspectRatio = DEFAULT_RATIO;
   addParameter<DoubleProperty>("metric", paramHelp[0], 0, false);
   addParameter<double>("Aspect Ratio", paramHelp[1], "1.");
@@ -80,7 +80,7 @@ SquarifiedTreeMap::~SquarifiedTreeMap() {
 }
 
 //====================================================================
-bool SquarifiedTreeMap::check(string& errorMsg) {
+bool SquarifiedTreeMap::check(std::string& errorMsg) {
   if (!TreeTest::isTree(graph)) {
     errorMsg = "The Graph must be a Tree";
     return false;
@@ -166,7 +166,7 @@ tlp::Rectangle<double> SquarifiedTreeMap::adjustRectangle(const tlp::Rectangle<d
     return result;
 }
 //====================================================================
-void SquarifiedTreeMap::layoutRow(const vector<node> &row, const int depth, const Rectangle<double> &rectArea) {
+void SquarifiedTreeMap::layoutRow(const std::vector<tlp::node> &row, const int depth, const tlp::Rectangle<double> &rectArea) {
     assert(rectArea.isValid());
     assert(!row.empty());
     vector<node>::const_iterator  it;
@@ -210,7 +210,7 @@ public:
     const tlp::MutableContainer<double> &measure;
 };
 //======================================
-vector<node> SquarifiedTreeMap::orderedChildren(const node n) const {
+vector<node> SquarifiedTreeMap::orderedChildren(const tlp::node n) const {
     //sort children of n and store it in result
     //======================================
     vector<node> result;
@@ -224,7 +224,7 @@ vector<node> SquarifiedTreeMap::orderedChildren(const node n) const {
     return result;
 }
 //==========================================================
-double SquarifiedTreeMap::evaluateRow(const vector<node> &row, node n, double width, double length, double surface) {
+double SquarifiedTreeMap::evaluateRow(const std::vector<tlp::node> &row, tlp::node n, double width, double length, double surface) {
 
     double sumOfNodesSurface = nodesSize.get(n.id);
     vector<node>::const_iterator  it;
@@ -258,7 +258,7 @@ double SquarifiedTreeMap::evaluateRow(const vector<node> &row, node n, double wi
 }
 
 //====================================================================
-void SquarifiedTreeMap::squarify(const vector<node> &toTreat, const Rectangle<double> &rectArea, const int depth) {
+void SquarifiedTreeMap::squarify(const std::vector<tlp::node> &toTreat, const tlp::Rectangle<double> &rectArea, const int depth) {
   assert(rectArea.isValid());
   assert(!toTreat.empty());
 
@@ -329,7 +329,7 @@ void SquarifiedTreeMap::squarify(const vector<node> &toTreat, const Rectangle<do
 
 }
 //====================================================================
-void SquarifiedTreeMap::computeNodesSize(const node n) {
+void SquarifiedTreeMap::computeNodesSize(const tlp::node n) {
 
     if (graph->outdeg(n) == 0) { //the node is a leaf of the tree
         double leafValue = 1.;
