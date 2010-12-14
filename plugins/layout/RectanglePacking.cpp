@@ -131,7 +131,6 @@ list<RectangleRelativePosition>::iterator RectanglePacking::testOfPositionOfNewR
 }
 
 
-
 list<RectangleRelativePosition>::iterator RectanglePacking::positionOfNewRectangle(int positionInFirstSequence, int positionInSecondSequence){
 
   list<RectangleRelativePosition>::iterator itRectLeftOrBelowOfNewRect = firstSequence->begin();
@@ -156,7 +155,6 @@ list<RectangleRelativePosition>::iterator RectanglePacking::positionOfNewRectang
 
   return  itRectLeftOrBelowOfNewRect;
 } 
-
 
 
 void RectanglePacking::repositionOfRectanglesRightOrAboveNewRectangle(list<RectangleRelativePosition>::iterator itFirstRectangleRightOrAboveOfNewRectangle, int positionInFirstSequence, int positionInSecondSequence){				
@@ -189,8 +187,7 @@ void RectanglePacking::repositionOfRectanglesRightOrAboveNewRectangle(list<Recta
     
   }
 }				
-				
-		
+
 
 void RectanglePacking::modificationOfSequencePair(vector<Rectangle<float> >::iterator itNewRect, list<RectangleRelativePosition>::iterator itBestPositionInFirstSequence){
 
@@ -224,7 +221,6 @@ void RectanglePacking::modificationOfSequencePair(vector<Rectangle<float> >::ite
 }
 
 
-
 float RectanglePacking::calculateRatio(){
 
   if(maxHeightOfBoundingBox > maxWidthOfBoundingBox){
@@ -235,7 +231,6 @@ float RectanglePacking::calculateRatio(){
     return(maxWidthOfBoundingBox/maxHeightOfBoundingBox);
   }
 }
-
 
 
 void RectanglePacking::coordinatesOfNewRectangle(list<RectangleRelativePosition>::iterator itRectLeftOrBelowOfNewRect, int, int positionInSecondSequence){
@@ -289,7 +284,6 @@ void RectanglePacking::dimensionsBoundingBoxOfNewRectangleAndRectanglesLeftOrBel
 }
 
 
-
 void RectanglePacking::modificationCoordinatesRectanglesRightOrAboveNewRectangleInFonctionNewRectangle(list<RectangleRelativePosition>::iterator itRectOfSequenceToReposition, int positionInSecondSequence){
 
   float rightAbscissa;
@@ -309,7 +303,6 @@ void RectanglePacking::modificationCoordinatesRectanglesRightOrAboveNewRectangle
     }
   }
 }
-
 
 
 void RectanglePacking::modificationCoordinatesRectanglesRightOrAboveNewRectangleInFonctionAlreadyRepositionnedRectangles(list<RectangleRelativePosition>::iterator itFirstRectangleRightOrAboveOfNewRectangle, list<RectangleRelativePosition>::iterator itRectOfSequenceToReposition){
@@ -337,7 +330,6 @@ void RectanglePacking::modificationCoordinatesRectanglesRightOrAboveNewRectangle
     
   }
 }
-
 
 
 void RectanglePacking::dimensionsBoundingBoxOfAllOptimalPositionnedRectangles(list<RectangleRelativePosition>::iterator itRectOfSequenceToReposition){
@@ -618,9 +610,6 @@ void RectanglePacking::continueColumn(vector<Rectangle<float> >::iterator itr, f
     
   }
 }
-
-
-
 
 
 void RectanglePacking::optimalPositionOfNewRectangleLimPos(vector<Rectangle<float> >::iterator itNewRect, int numberTestedPositions){

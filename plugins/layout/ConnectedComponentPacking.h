@@ -24,7 +24,7 @@
 
 class ConnectedComponentPacking: public tlp::LayoutAlgorithm {
 public:
-    ConnectedComponentPacking(const tlp::PropertyContext&);
+    ConnectedComponentPacking(const tlp::PropertyContext& context);
     bool run();
 
 private: 

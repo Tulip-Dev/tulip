@@ -38,11 +38,11 @@
 class Random:public tlp::LayoutAlgorithm
 { 
 public:
-  Random(const tlp::PropertyContext &);
+  Random(const tlp::PropertyContext& context);
   ~Random();
   
   bool run();
-  bool check(std::string &);
+  bool check(std::string& erreurMsg);
 };
 
 #endif

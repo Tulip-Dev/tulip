@@ -59,7 +59,7 @@ HTML_HELP_CLOSE()};
 }                     
 
 //====================================================================
-ConnectedComponentPacking::ConnectedComponentPacking(const PropertyContext& context)
+ConnectedComponentPacking::ConnectedComponentPacking(const tlp::PropertyContext& context)
     : LayoutAlgorithm(context) {
   addParameter<LayoutProperty> ("coordinates",paramHelp[0],"viewLayout");
   addNodeSizePropertyParameter(this);

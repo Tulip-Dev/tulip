@@ -80,7 +80,7 @@ using namespace stdext;
 class GEMLayout : public tlp::LayoutAlgorithm
 { 
 public:
-    GEMLayout(const tlp::PropertyContext &);
+    GEMLayout(const tlp::PropertyContext &context);
     ~GEMLayout();
     bool run();
 
