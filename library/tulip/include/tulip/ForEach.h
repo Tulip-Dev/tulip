@@ -22,7 +22,6 @@
 #include <assert.h>
 #include <tulip/Iterator.h>
 #include <tulip/StableIterator.h>
-#include "tulip/memorypool.h"
 #include <tulip/tulipconf.h>
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
