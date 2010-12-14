@@ -48,7 +48,7 @@
  */
 class Circular:public tlp::LayoutAlgorithm { 
 public:
-  Circular(const tlp::PropertyContext &);
+  Circular(const tlp::PropertyContext &context);
   bool run();
 };
 /*@}*/

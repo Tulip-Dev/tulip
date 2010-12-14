@@ -37,7 +37,7 @@ namespace {
   };
 }
 
-Circular::Circular(const PropertyContext &context):LayoutAlgorithm(context){
+Circular::Circular(const tlp::PropertyContext &context):LayoutAlgorithm(context){
   addNodeSizePropertyParameter(this);
   addParameter<bool>("search cycle", paramHelp[0], "false");
 }

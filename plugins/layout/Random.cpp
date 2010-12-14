@@ -33,7 +33,7 @@ LAYOUTPLUGINOFGROUP(Random,"Random","David Auber","01/12/1999","Ok","1.1","Basic
 using namespace std;
 using namespace tlp;
 
-Random::Random(const PropertyContext &context):LayoutAlgorithm(context){
+Random::Random(const tlp::PropertyContext &context):LayoutAlgorithm(context){
   addParameter<bool>("3D layout", paramHelp[0], "true");
 }
 
@@ -58,7 +58,7 @@ bool Random::run() {
   return true;
 }
 
-bool Random::check(string &erreurMsg) {
+bool Random::check(std::string &erreurMsg) {
   erreurMsg="";
   return (true);
 }
