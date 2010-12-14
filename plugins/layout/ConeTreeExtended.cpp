@@ -35,7 +35,7 @@ float minRadius(float radius1,float alpha1,float radius2,float alpha2) {
   return sqrt(sqr(radius1+radius2)/(sqr(cos(alpha1)-cos(alpha2)) + sqr(sin(alpha1)-sin(alpha2)))); 
 }
 //===============================================================
-void ConeTreeExtended::computeLayerSize(node tlp::n, unsigned int level) {
+void ConeTreeExtended::computeLayerSize(tlp::node n, unsigned int level) {
   if (levelSize.size() < level+1 )
     levelSize.push_back(0);
   levelSize[level] = std::max(levelSize[level], nodeSize->getNodeValue(n)[1]); 
