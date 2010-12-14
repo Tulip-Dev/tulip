@@ -26,7 +26,7 @@ BOOLEANPLUGIN(MultipleEdgeSelection,"Multiple Edge","David Auber","20/01/2003","
 using namespace std;
 using namespace tlp;
 
-MultipleEdgeSelection::MultipleEdgeSelection(const PropertyContext &context):BooleanAlgorithm(context) {}
+MultipleEdgeSelection::MultipleEdgeSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) {}
 
 bool MultipleEdgeSelection::run() {
   vector<edge> multipleEdges;
