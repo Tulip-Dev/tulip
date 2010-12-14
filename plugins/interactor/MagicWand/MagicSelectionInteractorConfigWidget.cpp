@@ -131,6 +131,6 @@ double MagicSelectionInteractorConfigWidget::upperBound() const {
   return overValue->value();
 }
 
-void MagicSelectionInteractorConfigWidget::update(std::set< Observable* >::iterator, std::set< Observable* >::iterator) {
+void MagicSelectionInteractorConfigWidget::update(std::set< tlp::Observable* >::iterator, std::set< tlp::Observable* >::iterator) {
   updateAvailableProperties();
 }

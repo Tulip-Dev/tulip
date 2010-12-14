@@ -7,7 +7,7 @@
 
 namespace tlp {
   class Graph;
-class PropertyInterface;
+  class PropertyInterface;
 }
 
 enum Selectionbehavior {
@@ -25,7 +25,7 @@ class MagicSelectionInteractorConfigWidget : public QWidget, public Ui_MagicSele
     void setGraph(tlp::Graph* graph);
     
     virtual void observableDestroyed(tlp::Observable* ) {}
-    virtual void update(std::set< tlp::Observable* >::iterator begin, std::set< tlp::Observable* >::iterator end);
+    virtual void update(std::set< tlp::Observable* >::iterator, std::set< tlp::Observable* >::iterator);
     
     QString propertyName() const;
     Selectionbehavior selectionBehavior() const;

@@ -168,7 +168,7 @@ double BubbleTree::computeRelativePosition(tlp::node n, TLP_HASH_MAP<tlp::node, 
   return circleH.radius;
 }
 
-void BubbleTree::calcLayout2(node n, TLP_HASH_MAP<tlp::node,tlp::Vector<double, 5 > > *relativePosition,
+void BubbleTree::calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node,tlp::Vector<double, 5 > > *relativePosition,
 				 const tlp::Vector<double,3> &enclosingCircleCenter, 
 				 const tlp::Vector<double,3> &originNodePosition) {
   /*
@@ -238,7 +238,7 @@ void BubbleTree::calcLayout2(node n, TLP_HASH_MAP<tlp::node,tlp::Vector<double, 
   } delete it;
 }
 
-void BubbleTree::calcLayout(tlp::node n, tr1::unordered_map< tlp::node, tlp::Vector< double, 5 > >* relativePosition) {
+void BubbleTree::calcLayout(tlp::node n, TLP_HASH_MAP< tlp::node, tlp::Vector< double, 5 > >* relativePosition) {
   /*
    * Make the recursive call, to place the children of n.
    */
