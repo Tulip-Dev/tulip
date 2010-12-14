@@ -49,7 +49,7 @@ std::vector<std::string> SpreadConfigurationWidget::getSelectedProperties() {
 	return graphPropertiesSelectionWidget->getSelectedProperties();
 }
 
-void SpreadConfigurationWidget::setSelectedProperties(const vector<string>& properties) {
+void SpreadConfigurationWidget::setSelectedProperties(const std::vector<std::string>& properties) {
 	vector<string> copy = graphPropertiesSelectionWidget->getCompleteStringsList();
 	graphPropertiesSelectionWidget->setInputPropertiesList(copy);
 	copy = properties;

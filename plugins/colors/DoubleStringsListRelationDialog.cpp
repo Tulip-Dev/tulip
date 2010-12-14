@@ -25,7 +25,7 @@ using namespace std;
 
 namespace tlp {
 
-DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(const vector<string> &firstValues,const vector<Color> &secondValues,QWidget *parent) : QDialog(parent) {
+DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(const std::vector<std::string> &firstValues,const std::vector<Color> &secondValues,QWidget *parent) : QDialog(parent) {
 	setupUi(this);
   for(vector<string>::const_iterator it=firstValues.begin();it!=firstValues.end();++it){
     firstListWidget->addItem((*it).c_str());
@@ -44,7 +44,7 @@ DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(const vector<st
   connect(((QAbstractSlider*)(secondListWidget->verticalScrollBar())),SIGNAL(valueChanged(int)),this,SLOT(scrollBarValueChanged(int)));
 }
 
-void DoubleStringsListRelationDialog::getResult(vector<pair<string,Color> > &result){
+void DoubleStringsListRelationDialog::getResult(std::vector<std::pair<std::string,Color> > &result){
   for(int i=0;i<firstListWidget->count();++i){
     QColor color=secondListWidget->item(i)->background().color();
     result.push_back(pair<string,Color>(firstListWidget->item(i)->text().toStdString(),Color(color.red(),color.green(),color.blue(),color.alpha())));

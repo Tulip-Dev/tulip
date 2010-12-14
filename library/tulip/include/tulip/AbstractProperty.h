@@ -82,7 +82,7 @@ struct PropertyValueContainer :public tlp::DataMem {
 };
 
 /**
- * \defgroup properties
+ * \defgroup properties Properties
  */ 
 /*@{*/
 /**
