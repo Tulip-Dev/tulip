@@ -131,3 +131,5 @@ void Hexagone::draw(const Color &fillColor,
   hexagon->setTextureName(textureName);
   hexagon->draw(lod,NULL);
 }
+
+/*@}*/

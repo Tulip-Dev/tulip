@@ -130,3 +130,4 @@ void Circle::draw(const Color &fillColor,
   circle->draw(lod,NULL);
 }
 
+/*@}*/
