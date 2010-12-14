@@ -49,35 +49,45 @@ public:
         inline void *operator new( size_t ) {
 #endif
             assert(sizeof(TYPE) == sizeofObj); //to prevent inheritance with different size of object
-            return (TYPE *) getObject();
+            TYPE * t;
+#ifdef _OPENMP
+#pragma omp critical
+#endif
+            t = getObject();
+            return t;
         }
 
         inline void operator delete( void *p ) {
+#ifdef _OPENMP
+#pragma omp critical
+#endif
+            {
                 _freeObject.push_back(p);
+            }
         }
 private:
         static std::vector<void * > _freeObject;
 
         static TYPE* getObject() {
+            TYPE *result;
             if (_freeObject.empty()) {
                 TYPE * p = (TYPE *)malloc(BUFFOBJ * sizeof(TYPE));
                 for (size_t j=0; j< BUFFOBJ - 1; ++j) {
                     _freeObject.push_back((void *)p);
                     p += 1;
                 }
-                return (TYPE*)p;
+                result = p;
             }
             else {
-                TYPE * tmp = (TYPE *)_freeObject.back();
+                result = (TYPE *)_freeObject.back();
                 _freeObject.pop_back();
-                return tmp;
             }
+            return result;
         }
-
 };
-
 
 template <typename  TYPE >
 std::vector<void * > MemoryPool<TYPE>::_freeObject = std::vector<void * >();
+
 }
 #endif // MEMORYPOOL_H
