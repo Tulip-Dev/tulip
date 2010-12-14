@@ -50,19 +50,15 @@ namespace tlp {
 }
 #endif //DOXYGEN_NOTFOR_DEVEL
 
-
-/**
- * Warning, do not use break or return inside a for each block;
- * it causes a memory leak; use breakForEach pr returnForEachInstead
- */
 #define forEach(A, B) \
 for(_TLP_IT<typeof(A)> _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
 
 #define stableForEach(A, B)  \
   for(_TLP_IT<typeof(A)> _it_foreach(new StableIterator<typeof(A)>(B));  tlp::_tlp_if_test(A, _it_foreach);)
 
+      //@deprecated no more useful
 #define breakForEach {break;}
-
+      //@deprecated no more useful
 #define returnForEach(VAL) {return VAL;}
 
 #endif
