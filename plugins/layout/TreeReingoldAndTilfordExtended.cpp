@@ -68,7 +68,7 @@ namespace {
 //=============================================================================
 #define ORIENTATION "vertical;horizontal;"
 //=============================================================================
-TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const PropertyContext &context):
+TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const tlp::PropertyContext &context):
   LayoutAlgorithm(context),
   lengthMetric(0) {
   addNodeSizePropertyParameter(this);
@@ -83,7 +83,7 @@ TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const PropertyCon
 TreeReingoldAndTilfordExtended::~TreeReingoldAndTilfordExtended() {
 }
 //=============================================================================
-double TreeReingoldAndTilfordExtended::calcDecal(const list<LR> &arbreG, const list<LR> &arbreD) {
+double TreeReingoldAndTilfordExtended::calcDecal(const std::list<LR> &arbreG, const std::list<LR> &arbreD) {
   list<LR>::const_iterator itG,itD;
   double decal=0;
   int iG=0,iD=0;
@@ -113,7 +113,7 @@ double TreeReingoldAndTilfordExtended::calcDecal(const list<LR> &arbreG, const l
   return decal;
 }
 //=============================================================================
-list<LR> * TreeReingoldAndTilfordExtended::mergeLRList(list<LR>*L, list<LR>*R, double decal) {
+list<LR> * TreeReingoldAndTilfordExtended::mergeLRList(std::list<LR>*L, std::list<LR>*R, double decal) {
   assert (L!=NULL);assert (R!=NULL);
   list<LR>::iterator itL,itR;
   int iL=0,iR=0;
@@ -194,7 +194,7 @@ list<LR> * TreeReingoldAndTilfordExtended::mergeLRList(list<LR>*L, list<LR>*R, d
   return L;
 }
 //=============================================================================
-list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, TLP_HASH_MAP<node,double> *p) {
+list<LR> * TreeReingoldAndTilfordExtended::TreePlace(tlp::node n, TLP_HASH_MAP<tlp::node,double> *p) {
   //cerr << "TreeReingoldAndTilfordExtended::TreePlace n id:" << n.id() << endl;
   if (tree->outdeg(n)==0){
     list<LR> *result = new list<LR>();
@@ -275,7 +275,7 @@ list<LR> * TreeReingoldAndTilfordExtended::TreePlace(node n, TLP_HASH_MAP<node,d
   }
 }
 //=============================================================================
-void TreeReingoldAndTilfordExtended::TreeLevelSizing(node n, map<int,double> &maxSize,int level, map<node,int> &levels) {
+void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n, std::map<int,double> &maxSize,int level, std::map<tlp::node,int> &levels) {
   levels[n] = level;
   if (maxSize.find(level)!=maxSize.end()) {
     if (maxSize[level] < sizes->getNodeValue(n).getH()) {
@@ -300,7 +300,7 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(node n, map<int,double> &ma
   }
 }
 //=============================================================================
-void TreeReingoldAndTilfordExtended::calcLayout(node n, TLP_HASH_MAP<node,double> *p,
+void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node,double> *p,
 						double x, double y, int level,
 						map<int,double> &maxLevelSize) {
   //cerr << "TreeReingoldAndTilfordExtended::calcLayout" << endl;

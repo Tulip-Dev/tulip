@@ -28,7 +28,7 @@ using namespace std;
 using namespace tlp;
 
 
-void TreeLeaf::computeLevelHeights(Graph *tree, node n, unsigned int depth,
+void TreeLeaf::computeLevelHeights(tlp::Graph *tree, tlp::node n, unsigned int depth,
 				   OrientableSizeProxy *oriSize) {
   if (levelHeights.size() == depth)
     levelHeights.push_back(0);
@@ -40,7 +40,7 @@ void TreeLeaf::computeLevelHeights(Graph *tree, node n, unsigned int depth,
     computeLevelHeights(tree, on, depth + 1, oriSize);
 }
   
-float TreeLeaf::dfsPlacement(Graph* tree, node n, float x, float y, unsigned int depth,
+float TreeLeaf::dfsPlacement(tlp::Graph* tree, tlp::node n, float x, float y, unsigned int depth,
 			     OrientableLayout *oriLayout, OrientableSizeProxy *oriSize) {
   float minX = 0;
   float maxX = 0;
@@ -72,7 +72,7 @@ float TreeLeaf::dfsPlacement(Graph* tree, node n, float x, float y, unsigned int
   return maxX;
 }
 
-TreeLeaf::TreeLeaf(const PropertyContext &context):LayoutAlgorithm(context){
+TreeLeaf::TreeLeaf(const tlp::PropertyContext &context):LayoutAlgorithm(context){
   addNodeSizePropertyParameter(this);
   addOrientationParameters(this);
   addSpacingParameters(this);
