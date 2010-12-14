@@ -43,22 +43,22 @@ public:
 class HierarchicalGraph:public tlp::LayoutAlgorithm { 
 
 public:
-  HierarchicalGraph(const tlp::PropertyContext &);
+  HierarchicalGraph(const tlp::PropertyContext& context);
   ~HierarchicalGraph();
   bool run();
 
 private:
-  void DagLevelSpanningTree(tlp::Graph* ,tlp::DoubleProperty *);
+  void DagLevelSpanningTree(tlp::Graph* sg, tlp::DoubleProperty* embedding);
   std::vector< std::vector<tlp::node> > grid;
   tlp::DoubleProperty *embedding;
-  void twoLayerCrossReduction(tlp::Graph*,unsigned int freeLayer,bool sense);
-  void crossReduction(tlp::Graph*);
+  void twoLayerCrossReduction(tlp::Graph* sg, unsigned int freeLayer, bool);
+  void crossReduction(tlp::Graph* sg);
   void computeEdgeBends(const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout, 
 			const TLP_HASH_MAP<tlp::edge,tlp::edge> &replacedEdges, const std::vector<tlp::edge> &reversedEdges);
   void computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops);
   void buildGrid(tlp::Graph*);
-  unsigned int degree(tlp::Graph*, tlp::node, bool);
-  void initCross(tlp::Graph*graph, tlp::node n, tlp::MutableContainer<bool> &visited,int id);
+  unsigned int degree(tlp::Graph* sg, tlp::node n, bool sense);
+  void initCross(tlp::Graph* sg, tlp::node n, tlp::MutableContainer< bool >& visited, int id);
 
   LessThanNode2 lessNode;
   tlp::SizeProperty *nodeSize;

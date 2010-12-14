@@ -35,7 +35,7 @@ LAYOUTPLUGINOFGROUP(Dendrogram, "Dendrogram",
 	     "03/12/04", "ok", "1.0","Tree");
 
 //====================================================================
-Dendrogram::Dendrogram(const PropertyContext& context)
+Dendrogram::Dendrogram(const tlp::PropertyContext& context)
     :LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addOrientationParameters(this);
@@ -46,7 +46,7 @@ Dendrogram::Dendrogram(const PropertyContext& context)
 Dendrogram::~Dendrogram() {
 }
 //====================================================================
-void Dendrogram::computeLevelHeights(Graph *tree, node n, unsigned int depth,
+void Dendrogram::computeLevelHeights(tlp::Graph *tree, tlp::node n, unsigned int depth,
 				     OrientableSizeProxy *oriSize) {
   if (levelHeights.size() == depth)
     levelHeights.push_back(0);
@@ -93,7 +93,7 @@ bool Dendrogram::run() {
 }
 
 //====================================================================
-float Dendrogram::setAllNodesCoordX(node n, float rightMargin,
+float Dendrogram::setAllNodesCoordX(tlp::node n, float rightMargin,
 				    OrientableLayout *oriLayout, OrientableSizeProxy *oriSize) {
   float leftMargin       = rightMargin;
 
@@ -146,7 +146,7 @@ void Dendrogram::setAllNodesCoordY(OrientableLayout *oriLayout,
 }
 
 //====================================================================
-float Dendrogram::computeFatherXPosition(node father, OrientableLayout *oriLayout) {
+float Dendrogram::computeFatherXPosition(tlp::node father, OrientableLayout *oriLayout) {
   float minX             =  FLT_MAX;
   float maxX             = -FLT_MAX;
     
@@ -163,7 +163,7 @@ float Dendrogram::computeFatherXPosition(node father, OrientableLayout *oriLayou
 }   
 
 //====================================================================
-void Dendrogram::shiftAllNodes(node n, float shift, OrientableLayout *oriLayout) {
+void Dendrogram::shiftAllNodes(tlp::node n, float shift, OrientableLayout *oriLayout) {
   OrientableCoord coord   =  oriLayout->getNodeValue(n);
   shift                  +=  leftshift[n];
   float coordX            =  coord.getX();
@@ -178,14 +178,14 @@ void Dendrogram::shiftAllNodes(node n, float shift, OrientableLayout *oriLayout)
 }
 
 //====================================================================
-inline void Dendrogram::setNodePosition(node n, float x, float y, 
+inline void Dendrogram::setNodePosition(tlp::node n, float x, float y, 
 					float z, OrientableLayout *oriLayout) {
   OrientableCoord coord = oriLayout->createCoord(x, y, z);
   oriLayout->setNodeValue(n, coord);
 }
 
 //====================================================================
-void Dendrogram::setCoordY(node n, float* maxYLeaf,
+void Dendrogram::setCoordY(tlp::node n, float* maxYLeaf,
 			   OrientableLayout *oriLayout, OrientableSizeProxy *oriSize) {
   float nodeY;
   if (tree->indeg(n) != 0) {

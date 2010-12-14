@@ -34,7 +34,7 @@ struct greaterRadius {
   }
 };
 
-double BubbleTree::computeRelativePosition(node n, TLP_HASH_MAP<node,Vector<double, 5 > > *relativePosition) {
+double BubbleTree::computeRelativePosition(tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5 > > *relativePosition) {
 
   Size tmpSizeFather = nodeSize->getNodeValue(n);
   tmpSizeFather[2] = 0.; //remove z-coordiantes because the drawing is 2D
@@ -168,9 +168,9 @@ double BubbleTree::computeRelativePosition(node n, TLP_HASH_MAP<node,Vector<doub
   return circleH.radius;
 }
 
-void BubbleTree::calcLayout2(node n, TLP_HASH_MAP<node,Vector<double, 5 > > *relativePosition,
-				 const Vector<double,3> &enclosingCircleCenter, 
-				 const Vector<double,3> &originNodePosition) {
+void BubbleTree::calcLayout2(node n, TLP_HASH_MAP<tlp::node,tlp::Vector<double, 5 > > *relativePosition,
+				 const tlp::Vector<double,3> &enclosingCircleCenter, 
+				 const tlp::Vector<double,3> &originNodePosition) {
   /*
    * Make rotation around the center of the enclosing circle in order to align :
    * the virtual node, the enclosing circle' center and the grand father of the node. 
@@ -238,7 +238,7 @@ void BubbleTree::calcLayout2(node n, TLP_HASH_MAP<node,Vector<double, 5 > > *rel
   } delete it;
 }
 
-void BubbleTree::calcLayout(node n, TLP_HASH_MAP<node, Vector<double, 5 > > *relativePosition) {
+void BubbleTree::calcLayout(tlp::node n, tr1::unordered_map< tlp::node, tlp::Vector< double, 5 > >* relativePosition) {
   /*
    * Make the recursive call, to place the children of n.
    */
@@ -270,7 +270,7 @@ namespace {
   };
 }
 
-BubbleTree::BubbleTree(const PropertyContext &context):LayoutAlgorithm(context) {
+BubbleTree::BubbleTree(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addParameter<bool>("complexity",paramHelp[0],"true");
   addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");

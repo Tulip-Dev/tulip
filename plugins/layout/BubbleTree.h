@@ -53,11 +53,11 @@
  */
 class BubbleTree:public tlp::LayoutAlgorithm { 
 public:
-  BubbleTree(const tlp::PropertyContext &);
+  BubbleTree(const tlp::PropertyContext& context);
   ~BubbleTree();
   bool run();
 private:
-  double computeRelativePosition(tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
+  double computeRelativePosition(tlp::node n, std::tr1::unordered_map< tlp::node, tlp::Vector< double, 5 > >* relativePosition);
   void calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5 > > *relativePosition);
   void calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node, tlp::Vector<double, 5 > > *relativePosition,
 		   const tlp::Vector<double, 3 > &,const tlp::Vector<double, 3 > &);

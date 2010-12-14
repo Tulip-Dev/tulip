@@ -35,7 +35,7 @@ float minRadius(float radius1,float alpha1,float radius2,float alpha2) {
   return sqrt(sqr(radius1+radius2)/(sqr(cos(alpha1)-cos(alpha2)) + sqr(sin(alpha1)-sin(alpha2)))); 
 }
 //===============================================================
-void ConeTreeExtended::computeLayerSize(node n, unsigned int level) {
+void ConeTreeExtended::computeLayerSize(node tlp::n, unsigned int level) {
   if (levelSize.size() < level+1 )
     levelSize.push_back(0);
   levelSize[level] = std::max(levelSize[level], nodeSize->getNodeValue(n)[1]); 
@@ -45,7 +45,7 @@ void ConeTreeExtended::computeLayerSize(node n, unsigned int level) {
   }
 }
 //===============================================================
-void ConeTreeExtended::computeYCoodinates(node root) {
+void ConeTreeExtended::computeYCoodinates(tlp::node root) {
   levelSize.clear();
   yCoordinates.clear();
   computeLayerSize(root, 0);
@@ -56,9 +56,9 @@ void ConeTreeExtended::computeYCoodinates(node root) {
   }
 }
 //===============================================================
-double ConeTreeExtended::treePlace3D(node n, 
-				     TLP_HASH_MAP<node,double> *posRelX, 
-				     TLP_HASH_MAP<node,double> *posRelY) {
+double ConeTreeExtended::treePlace3D(tlp::node n, 
+				     TLP_HASH_MAP<tlp::node,double> *posRelX, 
+				     TLP_HASH_MAP<tlp::node,double> *posRelY) {
   (*posRelX)[n]=0;
   (*posRelY)[n]=0;
   if (tree->outdeg(n)==0) {
@@ -125,8 +125,8 @@ double ConeTreeExtended::treePlace3D(node n,
   return circleH.radius;
 }
 //===============================================================
-void ConeTreeExtended::calcLayout(node n, TLP_HASH_MAP<node,double> *px,
-				  TLP_HASH_MAP<node,double> *py,
+void ConeTreeExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node,double> *px,
+				  TLP_HASH_MAP<tlp::node,double> *py,
 			double x, double y, int level) {
   layoutResult->setNodeValue(n,Coord(x+(*px)[n], - yCoordinates[level],y+(*py)[n]));
   node itn;
@@ -148,7 +148,7 @@ namespace {
 }
 #define ORIENTATION "vertical;horizontal;"
 //===============================================================
-ConeTreeExtended::ConeTreeExtended(const PropertyContext &context):LayoutAlgorithm(context) {
+ConeTreeExtended::ConeTreeExtended(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
 }
