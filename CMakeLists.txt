@@ -344,13 +344,13 @@ INSTALL(FILES FindTULIP3.cmake
 # If this variable is not set, directives in the CPackInstaller.cmake file will be used to set the project licence, maintainer etc.
 # When making your own installer, please be sure to set at least all the variables present in the CPackInstaller.cmake file.
 # Consult CPack documentation for additional information.
+
 IF(NOT CPACK_CUSTOM_INSTALLER)
   SET(LIBS_GROUP_NAME "Libraries")
   SET(HEADERS_GROUP_NAME "Headers")
   SET(SOFTWARE_GROUP_NAME "Runtime")
   SET(PLUGINS_GROUP_NAME "Plugins")
   SET(EXTRAS_GROUP_NAME "Extras")
-  INCLUDE(CPackInstaller.cmake)
 ELSE()
   # In case a custom installer is set, all the base tulip software components will be in the same group.
   SET(LIBS_GROUP_NAME "Tulip software")
@@ -362,5 +362,10 @@ ENDIF()
 
 # Defines specific software components from tulip.
 INCLUDE(CPackComponents.cmake)
+
+IF(NOT CPACK_CUSTOM_INSTALLER)
+  INCLUDE(CPackInstaller.cmake)
+ENDIF()
+
 
 INCLUDE(CPack)
