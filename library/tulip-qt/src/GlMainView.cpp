@@ -69,7 +69,11 @@ QWidget *GlMainView::construct(QWidget *parent) {
 	return widget;
 }
 //==================================================
-void GlMainView::createPicture(const std::string &pictureName, int width, int height) {
+void GlMainView::createPicture(const std::string &pictureName, int width, int height){
+	createPicture(pictureName,width,height,false);
+}
+//==================================================
+bool GlMainView::createPicture(const std::string &pictureName, int width, int height, bool center, int zoom, int xOffset, int yOffset) {
 
 	string extension = pictureName.substr(pictureName.find_last_of('.') + 1);
 
@@ -77,19 +81,25 @@ void GlMainView::createPicture(const std::string &pictureName, int width, int he
 		extension[i] = tolower(extension[i]);
 
 	if (extension.compare("eps") == 0) {
-		if (!mainWidget->outputEPS(64000000, true, pictureName.c_str()))
+		if (!mainWidget->outputEPS(64000000, true, pictureName.c_str())){
 			QMessageBox::critical(0, "Save Picture Failed", "The file has not been saved.");
-		return;
+			return false;
+		}
+		return true;
 	} else if (extension.compare("svg") == 0) {
-		if (!mainWidget->outputSVG(64000000, pictureName.c_str()))
+		if (!mainWidget->outputSVG(64000000, pictureName.c_str())){
 			QMessageBox::critical(0, "Save Picture Failed", "The file has not been saved.");
-		return;
+			return false;
+		}
+		return true;
 	}
 
 	if (width == 0 && height == 0)
-        mainWidget->createPicture(pictureName, mainWidget->width(), mainWidget->height(),false);
+				mainWidget->createPicture(pictureName, mainWidget->width(), mainWidget->height(),center,zoom,xOffset,yOffset);
 	else
-        mainWidget->createPicture(pictureName, width, height,false);
+				mainWidget->createPicture(pictureName, width, height,center,zoom,xOffset,yOffset);
+
+	return true;
 }
 
 //==================================================

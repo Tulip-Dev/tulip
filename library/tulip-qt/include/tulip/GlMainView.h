@@ -84,14 +84,28 @@ namespace tlp {
      */
     Graph *getGraph();
     /**
-     * get GlMainWidget use by this view
-     * \return the GlMainWidget use in this view
+     * You can call this function if you want to have the GlMainWidget of this view
+     *   If this view doesn't use GlMainWidget : this function return NULL
+     *   This function is use to export a view to a picture
      */
-    GlMainWidget *getGlMainWidget();
+    virtual GlMainWidget *getGlMainWidget();
     /**
      * Take a snapshot of the view and put it in a picture
+     * \deprecated In Tulip 4.x.y this function will be replace by void createPicture(const string &pictureName,int width, int height, bool center, int zoom, int xOffset, int yOffset)
      */
     virtual void createPicture(const std::string &pictureName,int width=0, int height=0);
+
+    /**
+     * Take a snapshot of the view like old createPicture function but we add some parameters
+     * \param pictureName : name of the picture with extension, extension is used to encode the picture
+     * \param width : width of the picture
+     * \param height : height of the picture
+     * \param center : if we do a center view before create picture or use the current zoom and pan
+     * \param zoom : create a picture of a sub part of the view : with zoom=0 : create only one picture with entire view, with zoom=N : the view is cut into 2^N part in width and height
+     * \param xOffset : this parameters is used to know the part of the view to render if zoom!=0 : xOffset must be : 0 <= xOffset < 2^zoom
+     * \param yOffset : this parameters is used to know the part of the view to render if zoom!=0 : yOffset must be : 0 <= yOffset < 2^zoom
+     */
+    virtual bool createPicture(const std::string &pictureName,int width, int height,bool center, int zoom=1, int xOffset=0, int yOffset=0);
 
     /**
      * Build context menu for this view
