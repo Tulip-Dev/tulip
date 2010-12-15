@@ -196,7 +196,7 @@ namespace tlp {
 
       Size occlusionSize;
       if(!scaleToSize){
-        occlusionSize=Size(w*0.005,h*0.005,0);
+        occlusionSize=Size(w*0.025,h*0.025,0);
       }else{
         if(div_h * w > size[0]){
           occlusionSize=Size(w*div_w*0.5,h*div_w*0.5,0);
@@ -288,7 +288,7 @@ namespace tlp {
       else
         glScalef(div_h, div_h, 1);
     }else{
-      glScalef(0.01,0.01,1);
+      glScalef(0.05,0.05,1);
     }
 
     float screenH=size[1]/(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
@@ -299,7 +299,7 @@ namespace tlp {
         screenH=screenH/(fontRatio/sizeRatio);
       }
     }else{
-      screenH*=((w*0.01)/size[0]);
+      screenH*=((w*0.05)/size[0]);
     }
 
     if(screenH < 15 && useLOD){
