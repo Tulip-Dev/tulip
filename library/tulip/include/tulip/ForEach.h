@@ -51,10 +51,10 @@ namespace tlp {
 #endif //DOXYGEN_NOTFOR_DEVEL
 
 #define forEach(A, B) \
-for(_TLP_IT<TYPEOF(A)> _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
+for(tlp::_TLP_IT<TYPEOF(A)> _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
 
 #define stableForEach(A, B)  \
-  for(_TLP_IT<TYPEOF(A)> _it_foreach(new StableIterator<TYPEOF(A)>(B));  tlp::_tlp_if_test(A, _it_foreach);)
+  for(tlp::_TLP_IT<TYPEOF(A)> _it_foreach(new StableIterator<TYPEOF(A)>(B));  tlp::_tlp_if_test(A, _it_foreach);)
 
       //@deprecated no more useful
 #define breakForEach {break;}
