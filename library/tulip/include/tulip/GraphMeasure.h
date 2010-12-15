@@ -64,7 +64,7 @@ namespace tlp {
    * This quantifies how close its neighbors are to being a clique.
    * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details
    */
-  TLP_SCOPE void clusteringCoefficient(const Graph *g, MutableContainer<double> &result, unsigned int maxDepth = UINT_MAX, PluginProgress* = NULL);
+  TLP_SCOPE void clusteringCoefficient(const Graph *g, MutableContainer<double> &result, unsigned int maxDepth = 1, PluginProgress* = NULL);
   /*
    * assigns to each node of a Directed Acyclic Graph a level such that
    * if the edge e(u,v) exists level(u) < level(v) the algorithm ensure that
