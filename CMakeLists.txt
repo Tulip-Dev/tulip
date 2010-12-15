@@ -263,7 +263,7 @@ CONFIGURE_FILE("library/tulip/include/tulip/TulipRelease.h.in" "library/tulip/in
   # Resulting variables will contain libraries used by Tulip. Library will be separately installed within each component CMakelists in the bin folder.
   # Note: if a library is not found on the system's directories, corresponding variable will be empty or VAR-NOTFOUND
   MACRO(FIND_LIBRARY_GLOB_DIR out_var pattern dir)
-    SET(SEARCH_DIRS $ENV{CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR} ${dir})
+    SET(SEARCH_DIRS $ENV{CMAKE_LIBRARY_PATH} ${dir} ${CMAKE_SYSTEM_LIBRARY_PATH})
     FOREACH(ITP ${SEARCH_DIRS})
       STRING(REPLACE "\\" "/" P "${ITP}")
       FILE(GLOB RES "${P}/${pattern}")
@@ -290,7 +290,12 @@ CONFIGURE_FILE("library/tulip/include/tulip/TulipRelease.h.in" "library/tulip/in
           IF(WIN32)
             INSTALL(FILES ${ITL} DESTINATION ${TulipBinInstallDir} COMPONENT ${component})
           ELSEIF(APPLE)
-            INSTALL(FILES ${ITL} DESTINATION ${TulipLibInstallDir} COMPONENT ${component})
+            IF(IS_SYMLINK ${ITL})
+                GET_FILENAME_COMPONENT(REAL_LIB ${ITL} REALPATH)                
+                INSTALL(FILES ${REAL_LIB} DESTINATION ${TulipLibInstallDir} COMPONENT ${component})
+            ELSE()
+                INSTALL(FILES ${ITL} DESTINATION ${TulipLibInstallDir} COMPONENT ${component})
+            ENDIF()
           ENDIF()
       ENDFOREACH()
     ELSE()
@@ -298,8 +303,8 @@ CONFIGURE_FILE("library/tulip/include/tulip/TulipRelease.h.in" "library/tulip/in
     ENDIF()
   ENDMACRO()
 
-IF(APPLE)
-  MACRO(FIND_LIBRARY_DEPANDANCIES out_var library)
+IF(APPLE)  
+  MACRO(FIND_LIBRARY_DEPENDANCIES out_var library)
         EXECUTE_PROCESS(COMMAND otool -L ${library} COMMAND grep "dylib \\|/4/Qt" COMMAND awk "{print $1}" OUTPUT_VARIABLE OUTPUT RESULT_VARIABLE RESULT)
         #Transform the output to list
         STRING(REPLACE "\n" ";" DEP_LIST ${OUTPUT})

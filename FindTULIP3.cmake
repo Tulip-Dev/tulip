@@ -25,11 +25,21 @@
 
 # Include and root directories
 IF(TULIP_DIR AND NOT TULIP_INCLUDE_DIR)
-  FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h
-            PATHS ${TULIP_DIR}/include
-            NO_DEFAULT_PATH)
+  IF(APPLE)
+    FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h
+              PATHS ${TULIP_DIR}/Contents/include
+              NO_DEFAULT_PATH)
+  ELSE()
+    FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h
+              PATHS ${TULIP_DIR}/include
+              NO_DEFAULT_PATH)
+  ENDIF()
 ELSEIF(NOT TULIP_DIR AND NOT TULIP_INCLUDE_DIR)
-  FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h)
+  IF(APPLE)
+    FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h)
+  ELSE()
+    FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h)
+  ENDIF()
 ENDIF()
 
 SET(TulipVersionSeparator .)
@@ -65,6 +75,8 @@ ENDIF()
 IF(TULIP_DIR)
   IF(WIN32)
     SET(LIBDIR ${TULIP_DIR}/bin)
+  ELSEIF(APPLE)
+    SET(LIBDIR ${TULIP_DIR}/Frameworks)
   ELSE()
     SET(LIBDIR ${TULIP_DIR}/lib)
   ENDIF()
