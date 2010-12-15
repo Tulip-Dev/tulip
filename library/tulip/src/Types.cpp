@@ -479,7 +479,7 @@ bool LineType::fromString( RealType & v, const string & s ) {
 // PointType
 Coord PointType::undefinedValue() {
   Coord tmp;
-  tmp.set(-DBL_MAX,-DBL_MAX,-DBL_MAX);
+  tmp.set(-FLT_MAX,-FLT_MAX,-FLT_MAX);
   return tmp;
 }
 
