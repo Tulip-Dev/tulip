@@ -231,26 +231,26 @@ void tlp::clusteringCoefficient(const Graph *graph,
     set<node> reachables;
     reachableNodes(graph, n, reachables, maxDepth);
     double nbEdge=0; //e(N_v)*2$
-    for (set<node>::iterator itSN=reachables.begin();
-	 itSN!=reachables.end();++itSN) {
-      node itn=*itSN;
-      Iterator<edge> *itE=graph->getInOutEdges(itn);
+    set<node>::iterator itSN=reachables.begin();
+    for (;itSN !=reachables.end(); ++itSN) {
+      node itn = *itSN;
+      Iterator<edge> *itE = graph->getInOutEdges(itn);
       while (itE->hasNext()) {
 	pair<node, node> eEnds = graph->ends(itE->next());
 	if ( (reachables.find(eEnds.first)!=reachables.end()) && 
 	     (reachables.find(eEnds.second)!=reachables.end())) {
-	  nbEdge++;
+          ++nbEdge;
 	}
       } delete itE;
     }
   
-    double nNode= reachables.size(); //$|N_v|$
+    double nNode = reachables.size(); //$|N_v|$
     if (reachables.size()>1) {
       //$e(N_v)/(\frac{k*(k-1)}{2}}$
       clusters.set(n.id, double(nbEdge)/(nNode*(nNode-1)));
     }
     else
-      clusters.set(n.id, UINT_MAX);
+      clusters.set(n.id, 0.);
   }
 }
 //==================================================
