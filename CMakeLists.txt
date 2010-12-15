@@ -19,12 +19,14 @@ IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recog
 ENDIF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio")
 
 IF(WIN32)
- # Dynamic ling against libstdc++ on win32
- SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++_s")
  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_DLL")
- SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-multiple-definition")
- SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-multiple-definition")
- SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-multiple-definition")
+ IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options 
+   # Dynamic ling against libstdc++ on win32/MinGW
+   SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++_s")
+   SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-multiple-definition")
+   SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-multiple-definition")
+   SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-multiple-definition")
+ ENDIF()
 ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
@@ -230,7 +232,7 @@ IF(WIN32)
    SET(QT_ASSISTANT assistant_adp)
    IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
       #recommended for now, vc++ spits out too many warnings, and renders the whole output unreadable
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0 /MP")
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 	  #makes VS define M_PI
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_MATH_DEFINES")
 	  #prevents VS to define min and max macros (name clash with std::min and std::max)
