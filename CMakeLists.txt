@@ -263,7 +263,7 @@ CONFIGURE_FILE("library/tulip/include/tulip/TulipRelease.h.in" "library/tulip/in
   # Resulting variables will contain libraries used by Tulip. Library will be separately installed within each component CMakelists in the bin folder.
   # Note: if a library is not found on the system's directories, corresponding variable will be empty or VAR-NOTFOUND
   MACRO(FIND_LIBRARY_GLOB_DIR out_var pattern dir)
-    SET(SEARCH_DIRS $ENV{CMAKE_LIBRARY_PATH} ${dir})
+    SET(SEARCH_DIRS $ENV{CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR} ${dir})
     FOREACH(ITP ${SEARCH_DIRS})
       STRING(REPLACE "\\" "/" P "${ITP}")
       FILE(GLOB RES "${P}/${pattern}")
