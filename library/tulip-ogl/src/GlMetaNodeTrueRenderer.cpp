@@ -50,7 +50,7 @@ namespace tlp {
   }
 
   void GlMetaNodeTrueRenderer::render(node n,float lod,Camera* camera){
-    if(GlMetaNodeTrueRenderer::depth>=3)
+    if(GlMetaNodeTrueRenderer::depth>=10000)
       return;
     if(lod<10)
       return;
@@ -74,7 +74,6 @@ namespace tlp {
     Coord minC(bboxes[0]);
     BoundingBox includeBoundingBox;
     inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox,n);
-    cout << includeBoundingBox[0] << " # " << includeBoundingBox[1] << endl;
     Coord includeScale(includeBoundingBox[1] - includeBoundingBox[0]);
     Coord size = (maxC + minC)/-1.f;
     Coord translate( (maxC+minC)/-2.f);
