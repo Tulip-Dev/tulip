@@ -158,6 +158,8 @@ class TLP_SCOPE DataSet {
   void setData(const std::string &str, const DataType* value);
   /** Return an iterator on all values */
   tlp::Iterator< std::pair<std::string, DataType*> > *getValues() const;
+  /** Return the data type serializer associated to the given typename. Returns NULL if no serializer is found */
+  static DataTypeSerializer *typenameToSerializer(const std::string &name);
 };
 
 
