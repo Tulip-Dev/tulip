@@ -45,6 +45,7 @@ public:
   EccentricityMetric(const tlp::PropertyContext &);
   ~EccentricityMetric();
   bool run();
+  bool check(std::string &);
 };
 /*@}*/
 #endif

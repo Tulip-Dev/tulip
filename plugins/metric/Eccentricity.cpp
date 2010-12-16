@@ -17,6 +17,7 @@
  *
  */
 #include <deque>
+#include <tulip/ConnectedTest.h>
 #include "Eccentricity.h"
 
 DOUBLEPLUGINOFGROUP(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","1.0","Graph");
@@ -38,39 +39,65 @@ namespace {
 }
 
 EccentricityMetric::EccentricityMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
-  addParameter<bool>("all paths",paramHelp[0],"false");
+  addParameter<bool>("closeness centrality",paramHelp[0],"false");
+  addParameter<bool>("norm",paramHelp[0],"true");
+  addParameter<bool>("directed",paramHelp[0],"false");  
 }
 
 EccentricityMetric::~EccentricityMetric() {
 }
-
+bool EccentricityMetric::check(string &err) {
+    return true;
+}
 bool EccentricityMetric::run() {
   bool allPaths = false;
-  if (dataSet!=0) dataSet->get("all paths", allPaths);
-  double maxV = 0;
-  double minV = DBL_MAX;
+  bool norm = true;
+  bool directed = false;
+  
+  if (dataSet!=0) {
+    dataSet->get("closeness centrality", allPaths);
+    dataSet->get("norm", norm);
+    dataSet->get("directed", directed);    
+  }
+  
+  MutableContainer<double> nbAccessible;
+  nbAccessible.setAll(0);
+  
   Iterator<node> *itN= graph->getNodes();
   for (unsigned int i=0; itN->hasNext(); ++i) {
     if (pluginProgress->progress(i,graph->numberOfNodes())!=TLP_CONTINUE) break;
     node n = itN->next();
     MutableContainer<unsigned int> distance;
-    double val = tlp::maxDistance(graph, n, distance, UNDIRECTED);
-    if (allPaths) {
-      node n2;
-      val = 0;
-      forEach(n2, graph->getNodes()) 
-	val += double(distance.get(n2.id)) / double(graph->numberOfNodes()) ;
+    distance.setAll(0);
+    double val;
+    if (directed)
+      val = tlp::maxDistance(graph, n, distance, DIRECTED);
+    else
+      val = tlp::maxDistance(graph, n, distance, UNDIRECTED);
+
+    node n2;
+    forEach(n2, graph->getNodes()) {
+      if (distance.get(n2) < graph->numberOfNodes())
+	nbAccessible.set(n, nbAccessible.get(n) + 1); 
     }
+    
+    if (allPaths) {
+      val = 0;
+      node n2;
+      forEach(n2, graph->getNodes()) {
+	if (distance.get(n2) < graph->numberOfNodes() && n2 != n)
+	  val += double( distance.get(n2.id)) / (nbAccessible.get(n) - 1 ) ;
+      }
+    }
+    
     doubleResult->setNodeValue(n, val);
-    maxV = std::max(maxV, val);
-    minV = std::min(minV, val);
   } delete itN;
-  if (maxV>0) {
+
+  if (norm) {
     node n;
     forEach(n, graph->getNodes()) {
-      double val = maxV - doubleResult->getNodeValue(n); //shift to zero
-      double newMax = maxV - minV;
-      doubleResult->setNodeValue(n, val / newMax);
+      double val = doubleResult->getNodeValue(n);
+      doubleResult->setNodeValue(n, val / (nbAccessible.get(n) - 1 ));
     }
   }
   return pluginProgress->state()!=TLP_CANCEL;
