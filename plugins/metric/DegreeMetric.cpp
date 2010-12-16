@@ -102,7 +102,7 @@ bool DegreeMetric::run() {
       double sum = 0;
       edge e;
       forEach(e, graph->getEdges())
-	sum += weights->getEdgeValue(e);
+	sum += fabs(weights->getEdgeValue(e));
       normalization = (sum / double(graph->numberOfEdges())) * double(graph->numberOfNodes() - 1);
       if (fabs(normalization) < 1E-9) normalization = 1.0;
     }
