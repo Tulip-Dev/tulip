@@ -27,6 +27,13 @@
 using namespace std;
 using namespace tlp;
 
+static const char * paramHelp[] = {
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_BODY() \
+  "indicate if the graph should be considered as directed or not" \
+  HTML_HELP_CLOSE()
+};
 
 /** \addtogroup metric */
 /*@{*/
@@ -38,9 +45,16 @@ using namespace tlp;
  */
 class BetweennessCentrality:public DoubleAlgorithm { 
 public:
-  BetweennessCentrality(const PropertyContext &context):DoubleAlgorithm(context){};
+  BetweennessCentrality(const PropertyContext &context):DoubleAlgorithm(context){
+  addParameter<bool>("directed", paramHelp[0], "false");  
+  };
   bool run() {
     doubleResult->setAllNodeValue(0.0);
+    bool directed = false;
+    if ( dataSet!=0 ) {
+      dataSet->get("directed",directed);
+    }
+
     Iterator<node> *it = graph->getNodes();
     unsigned int count = 0;
     while(it->hasNext()) {
@@ -60,7 +74,11 @@ public:
 	node v = Q.front();
 	Q.pop();
 	S.push(v);
-	Iterator<node> *it2 = graph->getInOutNodes(v);
+	Iterator<node> *it2;
+	if (directed)
+	  it2 = graph->getOutNodes(v);
+	else 
+	  it2 = graph->getInOutNodes(v);
 	while (it2->hasNext()) {
 	  node w = it2->next();
 	  if (d.get(w.id)<0) {

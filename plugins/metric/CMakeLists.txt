@@ -7,10 +7,10 @@ TARGET_LINK_LIBRARIES(Eccentricity-${TulipVersion} ${LibTulipName})
 ADD_DEPENDENCIES(Eccentricity-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(ArityMetric_SRCS ArityMetric.cpp ArityMetric.h)
-ADD_LIBRARY(ArityMetric-${TulipVersion} SHARED ${ArityMetric_SRCS})
-TARGET_LINK_LIBRARIES(ArityMetric-${TulipVersion} ${LibTulipName})
-ADD_DEPENDENCIES(ArityMetric-${TulipVersion} ${LibTulipName})
+SET(DegreeMetric_SRCS DegreeMetric.cpp DegreeMetric.h)
+ADD_LIBRARY(DegreeMetric-${TulipVersion} SHARED ${DegreeMetric_SRCS})
+TARGET_LINK_LIBRARIES(DegreeMetric-${TulipVersion} ${LibTulipName})
+ADD_DEPENDENCIES(DegreeMetric-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(ClusterMetric_SRCS ClusterMetric.cpp ClusterMetric.h)
@@ -99,7 +99,7 @@ ADD_DEPENDENCIES(BetweennessCentrality-${TulipVersion} ${LibTulipName})
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
 	Eccentricity-${TulipVersion}
-	ArityMetric-${TulipVersion}
+	DegreeMetric-${TulipVersion}
 	ClusterMetric-${TulipVersion}
 	StrengthMetric-${TulipVersion}
 	BiconnectedComponent-${TulipVersion}

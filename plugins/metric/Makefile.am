@@ -8,7 +8,7 @@ EXTRA_DIST = CMakeLists.txt
 
 plugins_LTLIBRARIES = \
 	libDepthMetric-@VERSION@.la \
-	libArityMetric-@VERSION@.la \
+	libDegreeMetric-@VERSION@.la \
 	libClusterMetric-@VERSION@.la \
 	libStrengthMetric-@VERSION@.la \
 	libBiconnectedComponent-@VERSION@.la \
@@ -27,7 +27,7 @@ plugins_LTLIBRARIES = \
 pluginsdir = $(libdir)/tlp
 
 libEccentricity_@VERSION@_la_SOURCES = Eccentricity.h Eccentricity.cpp
-libArityMetric_@VERSION@_la_SOURCES = ArityMetric.cpp ArityMetric.h
+libDegreeMetric_@VERSION@_la_SOURCES = DegreeMetric.cpp DegreeMetric.h
 libClusterMetric_@VERSION@_la_SOURCES = ClusterMetric.cpp ClusterMetric.h
 libStrengthMetric_@VERSION@_la_SOURCES = StrengthMetric.cpp StrengthMetric.h
 libBiconnectedComponent_@VERSION@_la_SOURCES =  BiconnectedComponent.cpp

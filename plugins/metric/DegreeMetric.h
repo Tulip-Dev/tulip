@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifndef _ARITYMETRIC_H
-#define _ARITYMETRIC_H
+#ifndef _DEGREEMETRIC_H
+#define _DEGREEMETRIC_H
 
 #include <tulip/TulipPlugin.h>
 
@@ -31,9 +31,9 @@
  *  available in each graph.
  *
  */
-class ArityMetric:public tlp::DoubleAlgorithm { 
+class DegreeMetric:public tlp::DoubleAlgorithm { 
 public:
-  ArityMetric(const tlp::PropertyContext &);
+  DegreeMetric(const tlp::PropertyContext &);
   bool run();
 };
 /*@}*/
