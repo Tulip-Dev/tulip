@@ -1076,7 +1076,7 @@ void TulipApp::saveInterface(int index) {
     if (tb && tb != toolBar && tb != graphToolBar) {
       Qt::ToolBarArea area = toolBarArea(tb);
       controllerToCustomToolBar[controller].push_back(pair<Qt::ToolBarArea, QToolBar *>(area, tb));
-      controllerToWidgetVisible[controller].push_back(pair<QWidget *, bool>(widget, widget->isVisible()));
+      controllerToWidgetVisible[controller].push_back(pair<QWidget *, bool>(tb, tb->isVisible()));
     }
   }
   controllerToWidgetVisible[controller].push_back(pair<QWidget *, bool>(graphToolBar, graphToolBar->isVisible()));
