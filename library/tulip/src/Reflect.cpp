@@ -426,3 +426,9 @@ void StructDef::buildDefaultDataSet(DataSet &ioDataSet, Graph *inG) {
   }
   delete defIt;
 }
+
+DataTypeSerializer *DataSet::typenameToSerializer(const std::string &name) {
+  if (tnTodts.count(name) == 0)
+    return NULL;
+  return tnTodts[name];
+}
