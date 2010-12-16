@@ -74,9 +74,14 @@ namespace tlp {
     Coord minC(bboxes[0]);
     BoundingBox includeBoundingBox;
     inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox,n);
+    cout << includeBoundingBox[0] << " # " << includeBoundingBox[1] << endl;
     Coord includeScale(includeBoundingBox[1] - includeBoundingBox[0]);
     Coord size = (maxC + minC)/-1.f;
-    Coord translate( (maxC+minC)/-2.f - (maxC-minC) + (includeBoundingBox[0]+Coord(.5,.5,.5))*((maxC-minC)*2.f) +(maxC-minC)*includeScale) ;
+    Coord translate( (maxC+minC)/-2.f);
+    for(int i=0;i<3;i++){
+      if(includeScale[i]!=0)
+        translate[i]-= includeBoundingBox.center()[i]/includeScale[i]*size[i];
+    }
     double dept;
     if(includeScale[2]==0)
       dept=0;
