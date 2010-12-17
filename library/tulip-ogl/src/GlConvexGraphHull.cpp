@@ -34,82 +34,42 @@ using namespace std;
 namespace tlp {
 
 int GlConvexGraphHull::bezierValue = 1;
-	
-GlConvexGraphHull::GlConvexGraphHull(GlComposite* parent, const std::string& name, const Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation) :
-  _parent(parent), _name(name), _fcolor(fcolor), _polygon(NULL), graph(graph), layout(layout), size(size), rotation(rotation) {
-	if(graph->numberOfNodes() > 0) {
-		_polygon = new GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, 0), fcolor, GlConvexGraphHull::bezierValue);
-		_parent->addGlEntity(_polygon, _name);
-	}
-	graph->addGraphObserver(this);
-	layout->addPropertyObserver(this);
-#ifndef NDEBUG
+
+GlConvexGraphHull::GlConvexGraphHull(GlComposite* parent, const std::string& name, const tlp::Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation)       :
+      _parent(parent), _name(name), _fcolor(fcolor), _polygon(NULL), graph(graph), layout(layout), size(size), rotation(rotation) {
   assert(graph);
-  assert(layout);
-  assert(size);
-  assert(rotation);
-  size->addPropertyObserver(this);
-  rotation->addPropertyObserver(this);
-#endif /* NDEBUG */
+  if (graph->numberOfNodes() > 0) {
+    _polygon = new GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, 0), fcolor, GlConvexGraphHull::bezierValue);
+    _parent->addGlEntity(_polygon, _name);
+  }
 }
 
-void GlConvexGraphHull::setVisible(bool visible) {
-	if(_polygon)
-		_polygon->setVisible(visible);
-}
-
-bool GlConvexGraphHull::isVisible() {
-	return _polygon && _polygon->isVisible();
-}
-
-void GlConvexGraphHull::translate(const Coord& mouvement) {
-#ifndef NDEBUG
-  assert(graph);
-#endif /* NDEBUG */
-  layout->translate(mouvement, graph);
-}
-
-// TODO: optimize this to update control points at redraw only if one the properties has been modified
-void GlConvexGraphHull::draw(float lod, Camera *camera) {
-#ifndef NDEBUG
-  assert(graph);
-#endif /* NDEBUG */
-	if(_polygon) {
-		_polygon->draw(lod, camera);
-	}
+GlConvexGraphHull::~GlConvexGraphHull() {
+  delete _polygon;
+  _polygon = NULL;
 }
 
 void GlConvexGraphHull::updateHull() {
-	if(!isVisible())
-		return;
-	
-	if(_polygon) {
-		_parent->deleteGlEntity(_polygon);
-		delete _polygon;
-	}
-	
+  if (!isVisible())
+    return;
+
+  if (_polygon) {
+    _parent->deleteGlEntity(_polygon);
+    delete _polygon;
+  }
+
   _polygon = new GlComplexPolygon(computeConvexHull(graph, layout, size, rotation, 0), _fcolor, GlConvexGraphHull::bezierValue);
-	_parent->addGlEntity(_polygon, _name);
+  _parent->addGlEntity(_polygon, _name);
 }
 
-void GlConvexGraphHull::addNode(tlp::Graph*, tlp::node) {
-	updateHull();
+bool GlConvexGraphHull::isVisible() {
+  return _polygon && _polygon->isVisible();
 }
 
-void GlConvexGraphHull::afterSetNodeValue(PropertyInterface*, const node) {
-	updateHull();
+void GlConvexGraphHull::setVisible(bool visible) {
+  if (_polygon)
+    _polygon->setVisible(visible);
 }
 
-#ifndef NDEBUG
-void GlConvexGraphHull::destroy(Graph *) {
-  graph = 0;
-  cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " The graph linked to this entity has been destroyed. This situation should not happen." << endl;
-}
-void GlConvexGraphHull::destroy(PropertyInterface *prop) {
-  graph = 0;
-  cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " The property " << prop->getName()
-      << " linked to this entity has been destroyed. This situation should not happen." << endl;
-}
-#endif /* NDEBUG */
-
+  
 }

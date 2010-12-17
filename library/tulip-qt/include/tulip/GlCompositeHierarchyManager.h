@@ -47,7 +47,7 @@ class GlConvexGraphHull;
    * Create a GlComposite item for each and every graph and subgraph.
 	 * This class observes the graph to update said hierarchy when a subgraph is added or deleted.
    */
-  class TLP_QT_SCOPE GlCompositeHierarchyManager : public GraphObserver {
+  class TLP_QT_SCOPE GlCompositeHierarchyManager : public GraphObserver, Observer {
 
   public:
 		GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty* layout, SizeProperty* size, 
@@ -58,6 +58,11 @@ class GlConvexGraphHull;
 		virtual void delSubGraph(Graph *, Graph *);
 		virtual void afterSetAttribute(Graph*, const std::string&);
 		virtual void beforeSetAttribute(Graph*, const std::string&);
+		virtual void addNode(Graph* , const tlp::node );
+    
+		
+		virtual void update(std::set< Observable* >::iterator begin, std::set< Observable* >::iterator end);
+		virtual void observableDestroyed(Observable* );
 		
 		void setGraph(tlp::Graph* graph);
 		DataSet getData();
@@ -69,7 +74,7 @@ class GlConvexGraphHull;
 		bool isVisible() const;
 		
 	private:
-		
+		bool _shouldRecreate;
 		const tlp::Color getColor();
 		int _currentColor;
 		

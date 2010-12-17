@@ -45,53 +45,41 @@ class GlComplexPolygon;
  * @warning The graph or any of the properties linked to a GlConvexGraphHull should never be deleted before the entity. Such a thing should be
  * reported to the user in debug mode, raising an assertion.
  */
-class TLP_GL_SCOPE GlConvexGraphHull: public GraphObserver, public PropertyObserver {
-public:
-  /**
-   * @param fcolor The color used to fill the hull.
-   * @param graph The graph whose elements should be inside the hull.
-   * @param layout The property used to layout the elements in the graph.
-   * @param size The property defining the graph's elements' sizes.
-   * @param rotation The property defining the graph's elements' rotation.
-   */
-  GlConvexGraphHull(GlComposite* parent, const std::string& name, const tlp::Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation);
-  /**
-   * Translate entity
-   */
-  virtual void translate(const Coord& mouvement);
+class TLP_GL_SCOPE GlConvexGraphHull {
+  public:
+    
+    /**
+     * @brief ...
+     *
+     * @param parent ...
+     * @param name ...
+     * @param fcolor The color used to fill the hull.
+     * @param graph The graph whose elements should be inside the hull.
+     * @param layout The property used to layout the elements in the graph.
+     * @param size The property defining the graph's elements' sizes.
+     * @param rotation The property defining the graph's elements' rotation.
+     **/
+    GlConvexGraphHull(GlComposite* parent, const std::string& name, const tlp::Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation);
 
-	/**
-	 * Recomputes the whole Hull
-	 */
-	void updateHull();
-	
-	void setVisible(bool visible);
-	bool isVisible();
-	
-  /**
-   * Draw the complex polygon
-   */
-  virtual void draw(float lod, Camera *camera);
+    ~GlConvexGraphHull();
 
-	virtual void addNode(tlp::Graph* graph, tlp::node n);
-	
-	virtual void afterSetNodeValue(PropertyInterface* property, const node n);
-	
-#ifndef NDEBUG
-  virtual void destroy(Graph *);
-  virtual void destroy(PropertyInterface*);
-#endif /* NDEBUG */
+    /**
+    * Recomputes the whole Hull
+    */
+    void updateHull();
 
-private:
-	GlComposite* _parent;
-	std::string _name;
-  Color _fcolor;
-	GlComplexPolygon* _polygon;
-  Graph *graph;
-  LayoutProperty *layout;
-  SizeProperty *size;
-  DoubleProperty *rotation;
-	static int bezierValue;
+    void setVisible(bool visible);
+    bool isVisible();
+  private:
+    GlComposite* _parent;
+    std::string _name;
+    Color _fcolor;
+    GlComplexPolygon* _polygon;
+    Graph *graph;
+    LayoutProperty *layout;
+    SizeProperty *size;
+    DoubleProperty *rotation;
+    static int bezierValue;
 };
 }
 
