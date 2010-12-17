@@ -30,7 +30,7 @@ namespace tlp {
      *
      * Enables to both create and manipulate a 3D Axis Aligned box
      *
-     * Author : <a href="www.tulip-software.org>Tulip team</a>
+     * Author : <a href="www.tulip-software.org">Tulip team</a>
      */
   struct BoundingBox : public Array<Vec3f, 2> {
   

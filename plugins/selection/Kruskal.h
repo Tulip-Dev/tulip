@@ -32,7 +32,7 @@
  * This only works on undirected graphs, (ie. the orientation of edges is omitted).
  *
  * It takes one parameter :
- * - <DoubleProperty> edge weight, this parameter defines the weight of each edge in the graph. 
+ * - DoubleProperty edge weight, this parameter defines the weight of each edge in the graph. 
  *
  *  \author Anthony Don, LaBRI University Bordeaux I France: 
  */
