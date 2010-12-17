@@ -344,6 +344,12 @@ INSTALL(FILES FindTULIP3.cmake
 # When making your own installer, please be sure to set at least all the variables present in the CPackInstaller.cmake file.
 # Consult CPack documentation for additional information.
 
+# Include external plugins configuration file.
+# Note: this is done before setting group names variables. User can set the CPACK_CUSTOM_INSTALLER to true and setup its own installer in this file.
+IF(EXISTS externalplugins/ExternalPlugins.cmake)
+  INCLUDE(externalplugins/ExternalPlugins.cmake)
+ENDIF()
+
 IF(NOT CPACK_CUSTOM_INSTALLER)
   SET(LIBS_GROUP_NAME "Libraries")
   SET(HEADERS_GROUP_NAME "Headers")
