@@ -33,11 +33,12 @@ namespace tlp {
 	const std::string GlCompositeHierarchyManager::temporaryPropertyValue = "temporaryPropertyFromGlCompositeHierarchyManager";
 	
 	GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty *layout, 
-																													 SizeProperty *size, DoubleProperty *rotation, bool visible, std::string namingProperty, std::string subCompositeSuffix) 
-		:_currentColor(0), _graph(graph), _layer(layer), _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size), _rotation(rotation), _layerName(layerName), 
+								  SizeProperty *size, DoubleProperty *rotation, bool visible, std::string namingProperty, std::string subCompositeSuffix) 
+		:_shouldRecreate(false), _currentColor(0), _graph(graph), _layer(layer), _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size), _rotation(rotation), _layerName(layerName), 
 		 _isVisible(visible), _subCompositesSuffix(subCompositeSuffix), _property(namingProperty) {
 		this->_layer->addGlEntity(this->_composite, this->_layerName);
 		this->_composite->setVisible(_isVisible);
+		_layout->addObserver(this);
 		
 		_fillColors.push_back(Color(255, 148, 169, 100));
     _fillColors.push_back(Color(153, 250, 255, 100));
@@ -84,11 +85,12 @@ namespace tlp {
   }
   
   void GlCompositeHierarchyManager::addSubGraph(Graph *, Graph*) {
-		createComposite();
+		_shouldRecreate = true;
 	}
 	
-	void GlCompositeHierarchyManager::delSubGraph(Graph*, Graph*) {
-		createComposite();
+	void GlCompositeHierarchyManager::delSubGraph(Graph*, Graph*subGraph) {
+	      subGraph->removeGraphObserver(this);
+		_shouldRecreate = true;
 	}
 	
 	void GlCompositeHierarchyManager::beforeSetAttribute(Graph* graph, const std::string& property) {
@@ -99,7 +101,17 @@ namespace tlp {
 			graph->setAttribute<string>(GlCompositeHierarchyManager::temporaryPropertyValue, propertyValue);
 		}
 	}
-	
+
+void GlCompositeHierarchyManager::addNode(tlp::Graph* source, tlp::node) {
+  if(_graphsComposites[source].second) { 
+    _graphsComposites[source].second->updateHull();
+  }
+}
+
+// void GlCompositeHierarchyManager::afterSetNodeValue(PropertyInterface*, const node) {
+//   updateHull();
+// }
+
 	void GlCompositeHierarchyManager::afterSetAttribute(Graph* graph, const std::string& property) {
 		if(property == _property) {
 			string propertyValue;
@@ -114,6 +126,21 @@ namespace tlp {
 				composite->addGlEntity(temporaryEntity, propertyValue);
 			}
 		}
+	}
+	
+	void GlCompositeHierarchyManager::update(std::set< Observable* >::iterator, std::set< Observable* >::iterator) {
+	  if(_shouldRecreate) {
+	    createComposite();
+	  }
+	  else {
+	    for(std::map<tlp::Graph*, std::pair<tlp::GlComposite*, tlp::GlConvexGraphHull*> >::const_iterator it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
+	      it->second.second->updateHull();
+	    }
+	  }
+	  _shouldRecreate = false;
+	}
+		
+	void GlCompositeHierarchyManager::observableDestroyed(Observable* ){
 	}
 	
 	void GlCompositeHierarchyManager::setGraph(tlp::Graph* graph) {
