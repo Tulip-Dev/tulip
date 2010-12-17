@@ -28,9 +28,9 @@ check :
 	$(XMLLINT) --valid -noout $(srcdir)/index.docbook
 
 clean :
-	rm -rf html pdf profile.dcf *~
+	rm -rf html pdf *.dcf *~
 
-html : html/index.html profile.dcf
+html : html/index.html toc.dcf keywords.dcf
 
 html/index.html : $(DOCBOOK_SRC) $(srcdir)/../common/tulip-html.xsl $(srcdir)/../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_srcdir)/thirdparty/saxon/saxon653.jar:$(top_srcdir)/thirdparty/saxon/saxon.jar:$(srcdir)/../common:$(top_srcdir)/thirdparty/xml-commons/resolver.jar" \
@@ -54,11 +54,10 @@ pdf/devHandbook.pdf : pdf/devHandbook.fo
 	$(PDFXMLTEX) --output-directory="pdf/" pdf/devHandbook.fo
 
 
-profile.dcf : $(srcdir)/../common/tulip-profile.xsl $(DOCBOOK_SRC) $(srcdir)/../common/CatalogManager.properties
+%.dcf : $(srcdir)/../common/tulip-%.xsl $(DOCBOOK_SRC) $(srcdir)/../common/CatalogManager.properties
 	$(JAVA) -cp "$(top_srcdir)/thirdparty/saxon/saxon653.jar:$(top_srcdir)/thirdparty/saxon/saxon.jar:$(srcdir)/../common:$(top_srcdir)/thirdparty/xml-commons/resolver.jar" \
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
-	-r org.apache.xml.resolver.tools.CatalogResolver -u \
-	-o profile.dcf $(srcdir)/index.docbook  $(srcdir)/../common/tulip-profile.xsl install.path="developerHandbook/html/"
+	-r org.apache.xml.resolver.tools.CatalogResolver -o $@ $(srcdir)/index.docbook  $< install.path="developerHandbook/html/"
 
