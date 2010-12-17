@@ -41,7 +41,7 @@ struct Strahler {
  *  Extended to graphs in :
  *
  *  D. Auber, \n
- *  "Using Strahler numbers for real time visual exploration of huge graphs, \n
+ *  Using Strahler numbers for real time visual exploration of huge graphs, \n
  *  ICCVG, International Conference on Computer Vision and Graphics, \n
  *  pages 56-69, \n
  *  2002, September.
