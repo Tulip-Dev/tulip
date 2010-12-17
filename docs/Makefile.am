@@ -1,7 +1,7 @@
 SUBDIRS = developerHandbook userHandbook doxygen devTeamDoxygen
 DIST_SUBDIRS = developerHandbook userHandbook doxygen devTeamDoxygen
 
-EXTRA_DIST = gen-profile.sh \
+EXTRA_DIST = gen-tulipqhp.sh \
 	common/*.png \
 	common/*.gif \
 	common/*.css \
@@ -20,15 +20,24 @@ EXTRA_DIST = gen-profile.sh \
 	common/dtd/ent/README \
 	README \
 	common/CMakeLists.txt \
+	tulip.qhcp \
 	CMakeLists.txt
 
 all :
 
 clean-am :
-	rm -f profile.adp *~ common/*~
+	rm -f tulip.qhc tulip.qhp tulip.qch *~ common/*~
 
-html-am :
-	sh gen-profile.sh
+html-am : tulip.qhc
+
+tulip.qhc : tulip.qch tulip.qhcp
+	qcollectiongenerator tulip.qhcp -o $@
+
+tulip.qch : tulip.qhp
+	qhelpgenerator tulip.qhp -o $@
+
+tulip.qhp : 
+	sh gen-tulipqhp.sh
 
 install-data-am :
 if MACOSX
@@ -37,13 +46,11 @@ if MACOSX
 		ln -s $(pkgdatadir) $(DESTDIR)$(exec_prefix)/bin/tulip.app/Contents/share/tulip ;\
 	fi;
 endif
-	if test -f profile.adp ; then \
-		cp profile.adp $(DESTDIR)$(pkgdatadir)/.; \
-		mkdir -p $(DESTDIR)$(pkgdatadir)/common ;\
-		cp -r $(srcdir)/common/*.png $(srcdir)/common/*.gif $(srcdir)/common/*.css $(srcdir)/common/favicon.ico $(DESTDIR)$(pkgdatadir)/common/. ;\
+	if test -f tulip.qhc ; then \
+		cp tulip.qhc $(DESTDIR)$(pkgdatadir)/.; \
 	fi;
 
 uninstall-am:
-	rm -rf $(DESTDIR)$(pkgdatadir)/common $(DESTDIR)$(pkgdatadir)/profile.adp
+	rm -rf $(DESTDIR)$(pkgdatadir)/common $(DESTDIR)$(pkgdatadir)/tulip.qhc
 
 

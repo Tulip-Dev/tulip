@@ -38,6 +38,7 @@
 #include <QtGui/qapplication.h>
 #include <QtGui/qfiledialog.h>
 #include <QtCore/qfileinfo.h>
+#include <QtCore/qlibraryinfo.h>
 #include <QtCore/qdir.h>
 #include <QtGui/qinputdialog.h>
 #include <QtGui/qworkspace.h>
@@ -262,27 +263,15 @@ void TulipApp::startTulip() {
   std::string assistantPath(tlp::TulipLibDir);
   assistantPath += string("../");
   assistantPath += string(STRINGIFY(QT_ASSISTANT));
-// In Qt > 4.6, QAssistant is removed
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) 
   assistantProcess= new QProcess(this);
-#if defined(LINUX)
-  assistantProcessApp = QLibraryInfo::location(QLibraryInfo::BinariesPath)+ QLatin1String(QT_ASSISTANT);
+#if defined(__linux__)
+  assistantProcessApp = QLibraryInfo::location(QLibraryInfo::BinariesPath)+ '/' + QLatin1String(QT_ASSISTANT);
 #else
   assistantProcessApp = assistantPath.c_str();
 #if defined(__APPLE__)
   assistantProcessApp.append(".app/Contents/MacOS/Assistant");
 #endif
 #endif
-#else
-// initialization of Qt Assistant, the path should be in $PATH
-#if defined(__APPLE__)
-  assistant = new QAssistantClient(assistantPath.c_str(), this);
-#else
-  assistant = new QAssistantClient("", this);
-#endif
-  connect(assistant, SIGNAL(error(const QString&)), SLOT(helpAssistantError(const QString&)));
-#endif
-
   /*saveActions(menuBar(),NULL,controllerToMenu);
   saveActions(toolBar,NULL,controllerToToolBar);*/
   tabIndexToController[-1]=NULL;
@@ -1230,59 +1219,15 @@ void TulipApp::preference() {
   }
 }
 //==============================================================
-void TulipApp::helpIndex() {
-  PluginsHelp::checkViewHelp();
-
-
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+void TulipApp::helpDocumentation() {
   QStringList args;
-  args << "-profile" << tlp::TulipDocProfile.c_str() << QString("-file") << QLatin1String(tlp::TulipUserHandBookIndex.c_str());
+  args << "-collectionFile" << tlp::TulipDocProfile.c_str();
   assistantProcess->start(assistantProcessApp, args);
   if (!assistantProcess->waitForStarted()) {
     QMessageBox::critical(this, tr("Remote Control"),
                           tr("Could not start Qt Assistant from %1.").arg(assistantProcessApp));
     return;
   }
-
-#else
-  QStringList cmdList;
-  cmdList << "-profile"
-	  << QString( (tlp::TulipDocProfile).c_str());
-
-  assistant->setArguments(cmdList);
-  if ( !assistant->isOpen() ){
-    assistant->showPage(QString( (tlp::TulipUserHandBookIndex).c_str()));
-    assistant->openAssistant();
-  }
-  else
-    assistant->showPage(QString( (tlp::TulipUserHandBookIndex).c_str()));
-#endif
-}
-//==============================================================
-void TulipApp::helpContents() {
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-  QStringList args;
-  args << "-profile" << tlp::TulipDocProfile.c_str() << QString("-file") << QLatin1String(tlp::TulipUserHandBookIndex.c_str());
-  assistantProcess->start(assistantProcessApp, args);
-  if (!assistantProcess->waitForStarted()) {
-    QMessageBox::critical(this, tr("Remote Control"),
-                          tr("Could not start Qt Assistant from %1.").arg(assistantProcessApp));
-    return;
-  }
-
-#else
-  QStringList cmdList;
-  cmdList << "-profile"
-	  << QString( (tlp::TulipDocProfile).c_str());
-
-  assistant->setArguments(cmdList);
-  if ( !assistant->isOpen() ){
-    assistant->showPage(QString( (tlp::TulipUserHandBookIndex).c_str()));
-    assistant->openAssistant();
-  }
-  else
-    assistant->showPage(QString( (tlp::TulipUserHandBookIndex).c_str()));
-#endif
 }
 //==============================================================
 void TulipApp::helpAssistantError(const QString &msg) {

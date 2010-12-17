@@ -1,9 +1,9 @@
 EXTRA_DIST = header.html.in footer.html.in general general-html general-man tulip.html.in \
-	     dox-html.xsl dox-profile.xsl dox-plugins.xsl CMakeLists.txt tulip-lib.doxygen.in tulip-plugins.doxygen.in header-allPlugins.html.in
+	     dox-html.xsl dox-toc.xsl dox-keywords.xsl dox-plugins.xsl CMakeLists.txt tulip-lib.doxygen.in tulip-plugins.doxygen.in header-allPlugins.html.in
 
 all : 
 
-html: tulip-lib tulip-ogl-lib tulip-qt-lib tulipdoc.html profile.dcf allPluginsBody.html allPlugins.html tulipPlugins.html man
+html: tulip-lib tulip-ogl-lib tulip-qt-lib tulipdoc.html toc.dcf keywords.dcf allPluginsBody.html allPlugins.html tulipPlugins.html man
 
 tulipdoc.html: ../common/gen-index.sh
 	sh ../common/gen-index.sh
@@ -94,13 +94,13 @@ man-plugins.doxygen: general general-man
 	echo "MAN_OUTPUT = tulip-man" >> $@
 	cat general-man >> $@
 
-profile.dcf: ../common/CatalogManager.properties dox-profile.xsl tulip-plugins.tag
+%.dcf: dox-%.xsl  ../common/CatalogManager.properties tulip-plugins.tag
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar" \
 	com.icl.saxon.StyleSheet \
 	-x org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-y org.apache.xml.resolver.tools.ResolvingXMLReader \
 	-r org.apache.xml.resolver.tools.CatalogResolver \
-	-o $@ tulip-plugins.tag  dox-profile.xsl
+	-o $@ tulip-plugins.tag  $<
 
 tulipPlugins.html: ../common/CatalogManager.properties dox-plugins.xsl tulip-plugins.tag
 	$(JAVA) -cp "$(top_builddir)/thirdparty/saxon/saxon653.jar:$(top_builddir)/thirdparty/saxon/saxon.jar:../common:$(top_builddir)/thirdparty/xml-commons/resolver.jar" \
@@ -124,7 +124,7 @@ allPlugins.html: allPluginsBody.html
 	echo "</BODY>" >> $@	
 
 clean:
-	rm -rf tulip-man profile.dcf xml allPluginsBody.html allPlugins.html tulipPlugins.html
+	rm -rf tulip-man *.dcf xml allPluginsBody.html allPlugins.html tulipPlugins.html
 	rm -rf tulipdoc.html *~ tulip-plugins.tag *.doxygen
 	rm -rf tulip-libogl tulip-libqt tulip-lib
 

@@ -139,7 +139,7 @@ void tlp::initTulipLib(char* appDirPath) {
   pos = TulipLibDir.length() - 2;
   pos = TulipLibDir.rfind("/", pos);
   tulipDocDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/";
-  TulipDocProfile=tulipDocDir+"profile.adp";
+  TulipDocProfile=tulipDocDir+"tulip.qhc";
   TulipUserHandBookIndex=tulipDocDir+"userHandbook/html/index.html";
 
   TulipBitmapDir=TulipLibDir+"tlp/bitmaps/";

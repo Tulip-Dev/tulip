@@ -31,11 +31,7 @@
 #include <QtGui/QTabWidget>
 #include <QtCore/QSettings>
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 #include <QtCore/QProcess>
-#else
-#include <QtAssistant/qassistantclient.h>
-#endif
 
 #include <string>
 #include <tulip/Reflect.h>
@@ -120,8 +116,7 @@ public slots:
   void closeEvent(QCloseEvent *e);
 
 protected slots:
-  void helpIndex();
-  void helpContents();
+  void helpDocumentation();
   void helpAbout();
   void preference();
   void plugins();
@@ -171,12 +166,8 @@ private:
   QTabWidget *tabWidget;
   unsigned int mouseClicX,mouseClicY;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
   QProcess *assistantProcess;
   QString assistantProcessApp;
-#else
-  QAssistantClient* assistant;
-#endif
 
 	/*std::string currentControllerName;
   tlp::Controller *currentController;*/
