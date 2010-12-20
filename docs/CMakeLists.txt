@@ -6,9 +6,23 @@ add_subdirectory(doxygen)
 add_subdirectory(userHandbook)
 add_subdirectory(developerHandbook)
 
-########### install files ###############
+ADD_CUSTOM_TARGET(tulip_qhcp ALL ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/tulip.qhcp ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhcp)
 
+ADD_CUSTOM_TARGET(tulip_qhp ALL sh ${PROJECT_SOURCE_DIR}/docs/gen-tulipqhp.sh ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhp)
 
+ADD_DEPENDENCIES(tulip_qhp common_copy dev_toc dev_keywords dox_toc dox_keywords user_toc user_keywords)
+
+ADD_CUSTOM_TARGET(tulip_qch ALL qhelpgenerator ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhp -o ${CMAKE_CURRENT_BINARY_DIR}/tulip.qch)
+
+ADD_DEPENDENCIES(tulip_qch tulip_qhp)
+
+ADD_CUSTOM_TARGET(tulip_qhc qcollectiongenerator tulip.qhcp -o ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhc WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}) 
+
+ADD_DEPENDENCIES(tulip_qhc tulip_qch tulip_qhcp)
+
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhc
+  DESTINATION share/tulip/
+  COMPONENT tulip_doc)
 
 
 #original Makefile.am contents follow:
