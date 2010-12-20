@@ -66,7 +66,7 @@ CSVGraphImport.cpp
 CSVParserConfigurationWidget.cpp
 CSVGraphMappingConfigurationWidget.cpp
 CSVImportConfigurationWidget.cpp
-CSVImportWidget.cpp
+CSVImportDialog.cpp
 )
 
 set(tulip-qt_UI
@@ -89,8 +89,8 @@ set(tulip-qt_UI
      ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui
      ../designer/CSVGraphMappingConfigurationWidget.ui
      ../designer/CSVImportConfigurationWidget.ui
-     ../designer/CSVImportWidget.ui
      ../designer/CSVParserConfigurationWidget.ui
+     ../designer/CSVImportDialog.ui
 )
 
 set(tulip-qt_MOC
@@ -135,8 +135,8 @@ set(tulip-qt_MOC
     ../include/tulip/TextEditDialog.h
     ../include/tulip/CSVGraphMappingConfigurationWidget.h
     ../include/tulip/CSVImportConfigurationWidget.h
-    ../include/tulip/CSVImportWidget.h
     ../include/tulip/CSVParserConfigurationWidget.h
+    ../include/tulip/CSVImportDialog.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)
