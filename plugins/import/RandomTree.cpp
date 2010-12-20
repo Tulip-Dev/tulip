@@ -47,7 +47,15 @@ namespace {
     };
 }
 
-struct RandomTree:public ImportModule {
+/** \addtogroup import */
+/*@{*/
+/// Random Tree - Import of a random tree
+/** This plugin enables to create a random tree
+ *
+ *  User can specify the minimal/maximal numbers of nodes used to build of the tree.
+ */
+class RandomTree:public ImportModule {
+public:
   RandomTree(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("minsize",paramHelp[0],"100");
     addParameter<int>("maxsize",paramHelp[1],"1000");
@@ -96,4 +104,5 @@ struct RandomTree:public ImportModule {
     return pluginProgress->progress(100,100)!=TLP_CANCEL;
   }
 };
+/*@}*/
 IMPORTPLUGINOFGROUP(RandomTree,"Uniform Random Binary Tree","Auber","16/02/2001","","1.0","Graphs")

@@ -61,7 +61,15 @@ namespace {
 }
 
 
-struct RandomGraph:public ImportModule {
+/** \addtogroup import */
+/*@{*/
+/// Random Graph - Import of a random graph
+/** This plugin enables to create a random graph
+ *
+ *  User can specify the number of nodes and the number of edges of the graph.
+ */
+class RandomGraph:public ImportModule {
+public:
   RandomGraph(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("nodes",paramHelp[0],"5");
     addParameter<int>("edges",paramHelp[1],"9");
@@ -109,4 +117,5 @@ struct RandomGraph:public ImportModule {
     return true;
   }
 };
+/*@}*/
 IMPORTPLUGINOFGROUP(RandomGraph,"Random General Graph","Auber","16/06/2002","","1.0","Graphs")

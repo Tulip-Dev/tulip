@@ -59,7 +59,15 @@ namespace {
  * Use a quadtree in order to change the complexity from n*n to n*log(n)
  */
 
-struct SmallWorldGraph:public ImportModule {
+/** \addtogroup import */
+/*@{*/
+/// Grid Approximation - Import of a grid approximation
+/** This plugin enables to create a gride approximation
+ *
+ *  User can specify the number of nodes and their average degree.
+ */
+class SmallWorldGraph:public ImportModule {
+public:
   SmallWorldGraph(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("nodes",paramHelp[0],"200");
     addParameter<int>("degree",paramHelp[1],"10");
@@ -116,5 +124,5 @@ struct SmallWorldGraph:public ImportModule {
     return  pluginProgress->state()!=TLP_CANCEL;
   }
 };
-
+/*@}*/
 IMPORTPLUGINOFGROUP(SmallWorldGraph,"Grid Approximation","Auber","25/06/2002","","1.0","Graphs")

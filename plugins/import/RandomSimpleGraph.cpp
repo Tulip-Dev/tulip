@@ -78,7 +78,16 @@ namespace
 }
 
 
-struct RandomSimpleGraph:public ImportModule {
+
+/** \addtogroup import */
+/*@{*/
+/// Random Simple Graph - Import of a random simple graph
+/** This plugin enables to create a random simple graph
+ *
+ *  User can specify the number of nodes and the number of edges of the graph.
+ */
+class RandomSimpleGraph:public ImportModule {
+public:
   RandomSimpleGraph(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("nodes",paramHelp[0],"5");
     addParameter<int>("edges",paramHelp[1],"9");
@@ -129,4 +138,5 @@ struct RandomSimpleGraph:public ImportModule {
     return true;
   }
 };
+/*@}*/
 IMPORTPLUGINOFGROUP(RandomSimpleGraph,"Random Simple Graph","Auber","16/06/2002","","1.0","Graphs")

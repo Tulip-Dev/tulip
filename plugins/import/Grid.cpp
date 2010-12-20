@@ -65,12 +65,13 @@ const char
 }
 /** \addtogroup import */
 /*@{*/
-/// Grid.cpp - Import a grid.
+/// Grid - Import a grid.
 /** This plugin enables to create a grid.
  *
  *  User can specify the connectivity of each nodes in the grid, spacing between nodes and if opposite nodes are connected.
  */
-struct Grid: public ImportModule {
+class Grid: public ImportModule {
+ public:
   Grid(AlgorithmContext context) :
     ImportModule(context) {
     addParameter<int> ("width", paramHelp[0], "10");
@@ -198,6 +199,5 @@ struct Grid: public ImportModule {
     return true;
   }
 };
-IMPORTPLUGINOFGROUP(Grid,"Grid","Jonathan Dubois","02/12/2003","","2.0","Graphs")
-
 /*@}*/
+IMPORTPLUGINOFGROUP(Grid,"Grid","Jonathan Dubois","02/12/2003","","2.0","Graphs")
