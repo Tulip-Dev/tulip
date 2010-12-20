@@ -160,25 +160,25 @@ namespace tlp {
 
   /**
    * Returns a new matrix equal to the multiplication of the matrix by 
-   * obj"
+   * obj
    */
   template<typename Obj, unsigned int SIZE>
     inline MATRIX operator*(const MATRIX &mat, const Obj &obj);
   /**
    * Returns a new matrix equal to the multiplication of the matrix by 
-   * another matrix"
+   * another matrix
    */
   template<typename Obj, unsigned int SIZE>
     inline MATRIX operator*(const MATRIX &mat1, const MATRIX &mat2);
   /**
    * Returns a new vector equal to the multiplication of the vector by 
-   * a matrix,(the vector is automatically transposed to do the multiplication)"
+   * a matrix,(the vector is automatically transposed to do the multiplication)
    */
   template<typename Obj, unsigned int SIZE>
     inline Vector<Obj,SIZE> operator*(const Vector<Obj,SIZE> &vec, const tlp::Matrix<Obj, SIZE> &);
   /**
    * Returns a new vector equal to the multiplication of the matrix by 
-   * a vector"
+   * a vector
    */
   template<typename Obj, unsigned int SIZE>
     inline Vector<Obj,SIZE> operator*( const Matrix<Obj, SIZE> &, const Vector<Obj,SIZE> &vec);
