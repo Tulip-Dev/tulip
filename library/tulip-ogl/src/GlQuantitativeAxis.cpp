@@ -67,7 +67,10 @@ void GlQuantitativeAxis::setAxisParameters(const int minV, const int maxV, const
 	integerScale = true;
 	min = minV;
 	int maxVCp = maxV;
-	while (((maxVCp - minV)%incrementStepV) != 0) ++maxVCp;
+
+  if (incrementStepV)
+    while (((maxVCp - minV)%incrementStepV) != 0) ++maxVCp;
+
 	max = maxVCp;
 	incrementStep = incrementStepV;
 	if (min == max) {
@@ -76,7 +79,7 @@ void GlQuantitativeAxis::setAxisParameters(const int minV, const int maxV, const
 	axisGradsLabelsPosition = axisGradsLabelsPos;
 	drawFistLabel = firstLabel;
 	minMaxSet = true;
-	nbGraduations = (maxV - minV) / incrementStepV + 1;
+  nbGraduations = (maxV - minV) / (incrementStepV > 0 ? incrementStepV : 1) + 1;
 }
 
 void GlQuantitativeAxis::buildAxisGraduations() {
