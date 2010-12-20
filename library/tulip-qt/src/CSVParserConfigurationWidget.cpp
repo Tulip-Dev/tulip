@@ -2,6 +2,7 @@
 
 #include <QtCore/QTextCodec>
 #include <QtGui/QFileDialog>
+#include <QtGui/QKeyEvent>
 
 #include "tulip/CSVParserConfigurationWidget.h"
 #include "tulip/CSVParserConfigurationWidgetData.h"
@@ -9,6 +10,22 @@
 
 using namespace tlp;
 using namespace std;
+
+CSVParserConfigurationWidgetEditableComboBox::CSVParserConfigurationWidgetEditableComboBox(QWidget * parent ):QComboBox(parent){
+
+}
+
+void CSVParserConfigurationWidgetEditableComboBox::keyPressEvent(QKeyEvent *e){
+    //Qt workaround avoiding QDialog to close automatically
+    // let base class handle the event
+    QComboBox::keyPressEvent(e);
+    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
+    {
+        // accept enter/return events so they won't
+        // be ever propagated to the parent dialog..
+        e->accept();
+    }
+}
 CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent) :
         QWidget(parent),
         ui(new Ui::CSVParserConfigurationWidget)
@@ -29,6 +46,7 @@ CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent) :
     //Separator and text delimiters.
     connect(ui->separatorComboBox,SIGNAL(currentIndexChanged ( int)),this,SIGNAL(parserChanged()));
     connect(ui->textDelimiterComboBox,SIGNAL(currentIndexChanged ( int)),this,SIGNAL(parserChanged()));
+
 }
 
 CSVParserConfigurationWidget::~CSVParserConfigurationWidget()
@@ -50,7 +68,7 @@ void CSVParserConfigurationWidget::changeEvent(QEvent *e)
 
 CSVParser * CSVParserConfigurationWidget::buildParser()const{
     CSVParser *parser = NULL;
-    if(fileIsValid()){
+    if(isValid()){
         parser = new CSVSimpleParser(getFile(),getSeparator(),getTextSeparator(),getEncoding(),true);
         if(invertMatrix()){
             parser = new CSVInvertMatrixParser(parser);
@@ -94,7 +112,6 @@ void CSVParserConfigurationWidget::setFileToOpen(const QString& fileToOpen){
     }
 }
 
-
 void CSVParserConfigurationWidget::encodingChanged(){
     emit parserChanged();
 }
@@ -102,7 +119,7 @@ void CSVParserConfigurationWidget::encodingChanged(){
 string CSVParserConfigurationWidget::getFile()const{
     return QStringToTlpString(ui->fileLineEdit->text());
 }
-bool CSVParserConfigurationWidget::fileIsValid()const{
+bool CSVParserConfigurationWidget::isValid()const{
     return QFile::exists(ui->fileLineEdit->text());
 }
 string CSVParserConfigurationWidget::getEncoding()const{

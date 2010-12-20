@@ -20,16 +20,16 @@ namespace tlp{
         static std::string getPropertyTypeFromPropertyTypeLabel(const std::string& typeNameLabel);
         static QStringList getPropertyTypeLabelsList();
         /**
-           * Try to find the type from a string.
+           * @brief Try to find the type from a string.
            */
         static std::string guessDataType(const std::string& data,const std::string& decimalSeparator);
         /**
-           * Test if a property is compatible with the given type.
+           * @brief Test if a property is compatible with the given type.
            */
         static bool existingPropertyIsCompatibleWithType(Graph* graph,const std::string& propertyName,
                                                   const std::string& propertyType);
         /**
-           * Find or create a property in the graph.
+           * @brief Find or create a property in the graph.
            */
         static PropertyInterface *getProperty(Graph* graph, const std::string& propertyName,
                                             const std::string& propertyType);
@@ -37,6 +37,8 @@ namespace tlp{
 
     /**
       * @brief Store import parameters for a CSV file column.
+      *
+      * Contains all the parameters defined by user for a given CSV column (the name of the column, its data type and if user want to import it).
       **/
     class TLP_QT_SCOPE CSVColumn {
     public:
@@ -118,6 +120,16 @@ namespace tlp{
 
 /**
   * @brief Interface to map CSV rows to graph elements.
+  *
+  * To build the mapping user had to parse the CSV file.
+  * @code
+  * CSVParser *parser;
+  * CSVToGraphDataMapping *mapping;
+  * parser->parse(mapping);
+  * //Now the mapping has been built.
+  * //Get the element for the first row.
+  * pair<tlp::ElementType,unsigned int> element = mapping->getElementForRow(0);
+  * @endcode
   **/
 class TLP_QT_SCOPE CSVToGraphDataMapping : public tlp::CSVContentHandler {
 public:
@@ -131,6 +143,7 @@ public:
 /**
   * @brief Abstract class handling node or edge mapping between a CSV column and a graph property.
   *
+  * Be sure there is a property with the given name in the graph or an error will occur.
   * Automatically handle CSV file parsing just implements the buildIndexForRow function to fill the rowToGraphId map with the right graph element.
   **/
 class TLP_QT_SCOPE AbstractCSVToGraphDataMapping : public CSVToGraphDataMapping {
@@ -174,9 +187,19 @@ private:
 
 /**
   * @brief Try to map CSV file rows to nodes according to value between a CSV column and a graph property.
+  *
+  * Be sure there is a property with the given name in the graph before using it.
   **/
 class TLP_QT_SCOPE CSVToGraphNodeIdMapping: public AbstractCSVToGraphDataMapping{
 public:
+    /**
+      * @param graph The graph where the nodes will be searched.
+      * @param columnIndex The index of the column with the ids in the CSV file.
+      * @param propertyName The name of the property to search ids.
+      * @param firstRow The first row to search ids.
+      * @param lastRow The last row to search ids.
+      * @param createNode If set to true if there is no node for an id in the CSV file a new node will be created for this id.
+      **/
     CSVToGraphNodeIdMapping(tlp::Graph* graph,unsigned int columnIndex,const std::string& propertyName,unsigned int firstRow,unsigned int lastRow,bool createNode=false);
     bool buildIndexForRow(unsigned int row,const std::string& indexKey);    
 private:
@@ -184,9 +207,18 @@ private:
 };
 /**
   * @brief Try to map CSV file rows to edges according to value between a CSV column and a graph property.
+  *
+  * Be sure there is a property with the given name in the graph before using it.
   **/
 class TLP_QT_SCOPE CSVToGraphEdgeIdMapping: public AbstractCSVToGraphDataMapping{
 public:
+    /**
+    * @param graph The graph where the edges will be searched.
+    * @param columnIndex The index of the column with the ids in the CSV file.
+    * @param propertyName The name of the property to search ids.
+    * @param firstRow The first row to search ids.
+    * @param lastRow The last row to search ids.    
+    **/
     CSVToGraphEdgeIdMapping(tlp::Graph* graph,unsigned int columnIndex,const std::string& propertyName,unsigned int firstRow,unsigned int lastRow);
     bool buildIndexForRow(unsigned int row,const std::string& indexKey);
 };
@@ -198,6 +230,16 @@ public:
   **/
 class TLP_QT_SCOPE CSVToGraphEdgeSrcTgtMapping: public CSVToGraphDataMapping{
 public:
+    /**
+    * @param graph The graph where the edges will be searched.
+    * @param srcColumnIndex The index of the column with the source node id in the CSV file.
+    * @param tgtColumnIndex The index of the column with the taret node id in the CSV file.
+    * @param srcPropertyName The name of the property to search source node id.
+    * @param tgtPropertyName The name of the property to search target node id.
+    * @param firstRow The first row to search ids.
+    * @param lastRow The last row to search ids.
+    * @param createMissinElements If true create source node, destination node and edge if one of them is not found in the graph.
+    **/
     CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& srcPropertyName,const std::string& tgtPropertyName,unsigned int firstRow,unsigned int lastRow,bool createMissinElements=false);
     std::pair<tlp::ElementType,unsigned int> getElementForRow(unsigned int row);
     void begin();
@@ -212,6 +254,7 @@ private:
 
 /**
   * @brief Interface to perform mapping between CSV columns and graph properties during the CSV import process.
+  *
   **/
 class TLP_QT_SCOPE CSVImportColumnToGraphPropertyMapping{
 public:    
@@ -229,6 +272,7 @@ public:
 /**
   * @brief Proxy to handle all the properties operations like access, creation, data type detection during the CSV parsing process.
   *
+  * Try to guess the type of the property in function of the first token if user don't tell which type the property is.
   **/
 class TLP_QT_SCOPE CSVImportColumnToGraphPropertyMappingProxy : public CSVImportColumnToGraphPropertyMapping{
 public:

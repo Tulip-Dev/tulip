@@ -2,10 +2,11 @@
 #define CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 
 #include <QtGui/QWidget>
+#include <QtGui/QComboBox>
 #include <tulip/tuliphash.h>
 #include <tulip/CSVGraphImport.h>
 class CSVGraphImport;
-class QComboBox;
+
 namespace Ui {
     class CSVGraphMappingConfigurationWidget;
 }
@@ -14,31 +15,57 @@ namespace tlp{
 
     class Graph;
 
-    /**
-      * @brief Widget used to link a CSV column to a graph property.
-      **/
-class TLP_QT_SCOPE CSVColumnToGraphPropertyMappingWidget : public QWidget{
-
-public:
-    CSVColumnToGraphPropertyMappingWidget(QWidget* parent=NULL);
 
     /**
-      * @brief Fill the graph property list and CSV column combo box. Erase previous selection.
+      * @brief Combo box used to select a CSV column.
       **/
-      void setData(tlp::Graph* graph,const CSVImportParameters& csvProperties);
-      /**
-        * @brief Return the index of the selected CSV column.
-        **/
-      unsigned int getSelectedColumnIndex()const;
-      /**
-        * @brief Return the name of the selected graph property.
-        **/
-      std::string getSelectedGraphProperty()const;
+    class TLP_QT_SCOPE CSVColumnComboBox : public QComboBox{
+    public:
+        CSVColumnComboBox(QWidget* parent=NULL);
+        /**
+          * @brief Fill the combobox with the CSV parameters.
+          *
+          * The first item is not a valid choice it's just a label.
+          **/
+        void setCsvProperties(const CSVImportParameters& csvProperties);
+        /**
+          * @brief Get column selected by user or UINT_MAX if no valid column is selected.
+          * @return The column selected by the user.
+          *
+          **/
+        unsigned int getSelectedColumnIndex()const;
+    };
 
-private:
-    QComboBox *graphPropertyComboBox;
-    QComboBox *columnComboBox;    
-};
+    /**
+      * @brief Combo box for property selection and creation in a graph.
+      *
+      * If the combo box is editable and if user enter the name of a property that doesn't exists this will create it.
+      * A popup will querry user for the type of the property to create.
+      * There is no way to delete a created property in this widget.
+      **/
+    class TLP_QT_SCOPE GraphPropertiesSelectionComboBox : public QComboBox{
+        Q_OBJECT
+    public:
+        GraphPropertiesSelectionComboBox(QWidget* parent=NULL);
+        /**
+          * @brief Fill the combobox with the properties in the given graph.
+          **/
+        void setGraph(tlp::Graph*);
+        /**
+          * @brief return the name of the property selected by the user. If the label is selected an empty string will be returned.
+          * @return The name of the selected property or an empty string if no valid property is selected.
+          **/
+        std::string getSelectedGraphProperty()const;
+    protected:
+
+        void keyPressEvent(QKeyEvent *e);
+    private:
+        tlp::Graph *currentGraph;
+
+    private slots:
+        void newGraphPropertySelected(const QString& propertyName);
+    };
+
 
 /**
   * @brief Widget generating the CSVToGraphDataMapping object.
@@ -60,6 +87,12 @@ public:
       **/
     CSVToGraphDataMapping *buildMappingObject(const CSVImportParameters& importParameters)const;
 
+    /**
+      * @brief Check if the values entered by user are valid.
+      *
+      * If return true you are sure that buildMappingObject never return a NULL object.
+      **/
+    bool isValid()const;
 
 protected:
     void changeEvent(QEvent *e);
@@ -67,6 +100,9 @@ protected:
 
 private:
     Ui::CSVGraphMappingConfigurationWidget *ui;
+
+signals:
+    void mappingChanged();
 };
 }
 #endif // CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H

@@ -34,7 +34,7 @@ public:
     QString getPropertyName() const;
     bool getPropertyUsed() const;
     /**
-   * Set the property name validator. Use to chek if entered graph name is valid.
+   *  @brief Set the property name validator. Use to chek if entered graph name is valid.
    */
     void setPropertyNameValidator(QValidator* validator);
     unsigned int getPropertyNumber() const;
