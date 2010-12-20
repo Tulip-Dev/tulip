@@ -63,13 +63,13 @@ WARN_LOGFILE           =
 RECURSIVE              = YES
 
 EXCLUDE_SYMLINKS       = NO
-EXCLUDE_PATTERNS = *Data.h moc_*
+EXCLUDE_PATTERNS       = *Data.h moc_* */.svn */.svn/*
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = 
 EXAMPLE_RECURSIVE      = NO
 IMAGE_PATH             = 
 INPUT_FILTER           = 
-FILE_PATTERNS        = *.h *.cpp mainpage.dox
+FILE_PATTERNS          = *.h *.cpp mainpage.dox
 FILTER_SOURCE_FILES    = NO
 
 SOURCE_BROWSER         = NO
