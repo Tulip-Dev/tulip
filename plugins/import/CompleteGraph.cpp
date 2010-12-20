@@ -22,7 +22,7 @@ using namespace std;
 using namespace tlp;
 
 /**
- * @TODO Add documentation
+ * TODO Add documentation
  **/
 
 namespace
@@ -49,8 +49,8 @@ namespace
 }
 
 
-struct CompleteGraph:public ImportModule {
-
+class CompleteGraph:public ImportModule {
+public:
   CompleteGraph(AlgorithmContext context):ImportModule(context) {
     addParameter<unsigned int>("nodes",paramHelp[0],"5");
     addParameter<bool>("undirected",paramHelp[1],"true");

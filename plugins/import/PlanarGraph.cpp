@@ -33,7 +33,7 @@ namespace {
     HTML_HELP_DEF( "type", "int" ) \
     HTML_HELP_DEF( "default", "30" ) \
     HTML_HELP_BODY() \
-    "This parameter defines the number of nodes used to build the planr graph graph." \
+    "This parameter defines the number of nodes used to build the planar graph." \
     HTML_HELP_CLOSE(),
   };
 }
@@ -46,7 +46,15 @@ struct Triangle {
 };
 }
 //=============================================================
-struct PlanarGraph:public ImportModule {
+/** \addtogroup import */
+/*@{*/
+/// Planar Graph - Import of planer graph
+/** This plugin enables to create a planar graph
+ *
+ *  User can specify the number of nodes.
+ */
+class PlanarGraph:public ImportModule {
+public:
   PlanarGraph(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("nodes", paramHelp[0], "30");
   }
@@ -104,5 +112,5 @@ struct PlanarGraph:public ImportModule {
     return  pluginProgress->state()!=TLP_CANCEL;
   }
 };
-
+/*@}*/
 IMPORTPLUGINOFGROUP(PlanarGraph,"Planar Graph","Auber","25/06/2005","","1.0","Graphs")

@@ -55,7 +55,15 @@ namespace {
 
 
 
-struct RandomTreeGeneral:public ImportModule {
+/** \addtogroup import */
+/*@{*/
+/// Random General Tree - Import of a random general tree
+/** This plugin enables to create a random general tree
+ *
+ *  User can specify the minimal/maximal number of nodes and the maximal degree.
+ */
+class RandomTreeGeneral:public ImportModule {
+public:
   RandomTreeGeneral(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("minsize",paramHelp[0],"10");
     addParameter<int>("maxsize",paramHelp[1],"100");
@@ -109,4 +117,5 @@ struct RandomTreeGeneral:public ImportModule {
     return pluginProgress->progress(100,100)!=TLP_CANCEL;
   }
 };
+/*@}*/
 IMPORTPLUGINOFGROUP(RandomTreeGeneral,"Random General Tree","Auber","16/02/2001","","1.0","Graphs")

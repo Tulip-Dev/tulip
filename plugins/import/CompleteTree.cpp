@@ -49,7 +49,15 @@ namespace
 
 
 
-struct CompleteTree:public ImportModule {
+/** \addtogroup import */
+/*@{*/
+/// Complete Tree - Import of a complete tree
+/** This plugin enables to create a complete tree
+ *
+ *  User can specify the depth and the degree of the tree.
+ */
+class CompleteTree:public ImportModule {
+public:
   CompleteTree(AlgorithmContext context):ImportModule(context) {
     addParameter<int>("depth",paramHelp[0],"5");
     addParameter<int>("degree",paramHelp[1],"2");
@@ -76,4 +84,5 @@ struct CompleteTree:public ImportModule {
     return true;
   }
 };
+/*@}*/
 IMPORTPLUGINOFGROUP(CompleteTree,"Complete Tree","Auber","08/09/2002","","1.0","Graphs")
