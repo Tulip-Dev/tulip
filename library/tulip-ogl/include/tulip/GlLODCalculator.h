@@ -150,6 +150,8 @@ namespace tlp {
       layersLODVector.clear();
     }
 
+    virtual BoundingBox getSceneBoundingBox()=0;
+
   protected :
 
     RenderingEntitiesFlag renderingEntitiesFlag;

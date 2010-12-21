@@ -77,7 +77,11 @@ namespace tlp {
 
     virtual void computeFor2DCamera(LayerLODUnit *layerLODUnit,const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
+    virtual BoundingBox getSceneBoundingBox() {return sceneBoundingBox;}
+
   protected:
+
+    BoundingBox sceneBoundingBox;
 
     LayerLODUnit *currentLayerLODUnit;
 

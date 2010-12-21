@@ -47,18 +47,30 @@ namespace tlp {
 
   void GlCPULODCalculator::addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb) {
     assert(bb.isValid());
+
+    sceneBoundingBox.expand(bb[0]);
+    sceneBoundingBox.expand(bb[1]);
+
     // check if we have to render simple entities
     if((renderingEntitiesFlag & RenderingSimpleEntities) !=0)
       currentLayerLODUnit->simpleEntitiesLODVector.push_back(SimpleEntityLODUnit(entity,bb));
   }
   void GlCPULODCalculator::addNodeBoundingBox(unsigned int id,const BoundingBox& bb) {
     assert(bb.isValid());
+
+    sceneBoundingBox.expand(bb[0]);
+    sceneBoundingBox.expand(bb[1]);
+
     // check if we have to render nodes
     if((renderingEntitiesFlag & RenderingNodes) !=0)
       currentLayerLODUnit->nodesLODVector.push_back(ComplexEntityLODUnit(id,bb));
   }
   void GlCPULODCalculator::addEdgeBoundingBox(unsigned int id,const BoundingBox& bb) {
     assert(bb.isValid());
+
+    sceneBoundingBox.expand(bb[0]);
+    sceneBoundingBox.expand(bb[1]);
+
     // check if we have to render edges
     if((renderingEntitiesFlag & RenderingEdges) !=0)
       currentLayerLODUnit->edgesLODVector.push_back(ComplexEntityLODUnit(id,bb));

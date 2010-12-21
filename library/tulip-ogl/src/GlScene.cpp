@@ -304,6 +304,7 @@ namespace tlp {
 		}
     lodCalculator->compute(viewport,viewport);
     LayersLODVector *layersLODVector=lodCalculator->getResult();
+    BoundingBox sceneBoundingBox=lodCalculator->getSceneBoundingBox();
 
     /**********************************************************************
       VertexArray compute
@@ -342,6 +343,7 @@ namespace tlp {
     Camera *oldCamera=NULL;
     for(vector<LayerLODUnit>::iterator itLayer=layersLODVector->begin();itLayer!=layersLODVector->end();++itLayer){
       camera=(Camera*)((*itLayer).camera);
+      camera->setSceneRadius(camera->getSceneRadius(),sceneBoundingBox);
       if(camera!=oldCamera){
         camera->initGl();
         oldCamera=camera;
