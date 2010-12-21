@@ -66,7 +66,6 @@ public :
     return graph->nextPopKeepPropertyUpdates(prop);
   }
 
-protected:
   Graph *graph;
   PluginProgress *pluginProgress;
   DataSet *dataSet;

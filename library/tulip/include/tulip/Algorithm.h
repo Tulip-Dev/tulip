@@ -46,7 +46,6 @@ public :
   virtual bool check(std::string &) {return true;}
   virtual void reset() {}  
 
-protected:
   Graph *graph;
   PluginProgress *pluginProgress;
   DataSet *dataSet;

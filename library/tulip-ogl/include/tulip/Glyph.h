@@ -85,8 +85,6 @@ namespace tlp {
       return false;
     }
 
- 
-  protected:
     GlGraphInputData *glGraphInputData;
   
   protected:
