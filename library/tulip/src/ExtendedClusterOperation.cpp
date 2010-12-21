@@ -426,7 +426,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   return metaNode;
 }
 //====================================================================================
-void Graph::openMetaNode(node metaNode) {
+void Graph::openMetaNode(node metaNode, bool updateProperties) {
   if (getRoot() == this) {
     cerr << __PRETTY_FUNCTION__ << endl;
     cerr << "\t Error: Could not ungroup a meta node in the root graph" << endl;
@@ -451,7 +451,8 @@ void Graph::openMetaNode(node metaNode) {
     stableForEach(e, metaGraph->getEdges())
       addEdge(e);
   }
-  updatePropertiesUngroup(this, metaNode, metaInfo);
+  if (updateProperties)
+    updatePropertiesUngroup(this, metaNode, metaInfo);
 
   // check for edges from or to the meta node
   Graph* super = getSuperGraph();

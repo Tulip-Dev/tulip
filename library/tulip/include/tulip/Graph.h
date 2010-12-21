@@ -524,9 +524,10 @@ public:
   /**
    * Method to open a metanode and replace all edges between that
    * meta node and other nodes in the graph.
+   * @param updateProperties If set to true, open meta node will update inner nodes layout, color, size, etc
    * Warning: this method will failed when called on the root graph.
    */
-  void openMetaNode(node n);
+  void openMetaNode(node n, bool updateProperties=true);
 
 protected:
   virtual DataSet &getNonConstAttributes() = 0;
