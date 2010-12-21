@@ -180,6 +180,29 @@ class Grid: public ImportModule {
     } else
       conn = 8;
 
+    // graph is predimensioned according the parameters
+    graph->reserveNodes(height * width);
+
+    // compute nb edges
+    unsigned int nbEdges = height * (width - 1);
+    if (isTore)
+      nbEdges += height;
+    // add the between rows connections to the in rows connections
+    nbEdges += width * (height - 1);
+    // more between rows connections
+    if (conn >= 6) {
+      nbEdges += (height - 1) * (width - 1);
+      if (isTore)
+	nbEdges += height - 1;
+    }
+    // more between row connections
+    if (conn == 8) {
+      nbEdges += (height - 1) * (width - 1);
+      if (isTore)
+	nbEdges += height - 1;
+    }
+    graph->reserveEdges(nbEdges);
+ 
     vector<vector<node> > grid;
     grid.resize(height);
 

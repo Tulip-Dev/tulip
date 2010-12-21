@@ -70,6 +70,11 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
   virtual unsigned int numberOfNodes()const;
   virtual unsigned int numberOfEdges()const;
 
+  //=========================================================================
+
+  virtual void reserveNodes(unsigned int nbNodes);
+  virtual void reserveEdges(unsigned int nbEdges);
+
   //============================================================
   virtual bool isElement(const node n) const;
   virtual bool isMetaNode(const node n) const;

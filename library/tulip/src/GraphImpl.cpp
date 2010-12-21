@@ -177,8 +177,8 @@ void GraphImpl::addNode(const node) {
   cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << endl;
 }
 //----------------------------------------------------------------
-void GraphImpl::reserveNodes(unsigned int nbNodes) {
-  if (nbNodes)
+void GraphImpl::reserveNodes(unsigned int nb) {
+  if (nb > nbNodes)
     nodes.reserve(nbNodes);
 }
 //----------------------------------------------------------------
@@ -221,8 +221,8 @@ void GraphImpl::addEdge(const edge e) {
   cerr << "\t Trying to add edge " << e.id << " (" << source(e).id << "," << target(e).id << ")" << endl;
 }
 //----------------------------------------------------------------
-void GraphImpl::reserveEdges(unsigned int nbEdges) {
-  if (nbEdges)
+void GraphImpl::reserveEdges(unsigned int nb) {
+  if (nb > nbEdges)
     edges.reserve(nbEdges);
 }
 //----------------------------------------------------------------
