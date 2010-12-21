@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# first ensure that pdf directory exits
+if [ ! -d pdf ]; then
+  mkdir pdf
+fi
+
+# then generate pdf/devHandbook.fo
+java -cp "@PROJECT_SOURCE_DIR@/thirdparty/saxon/saxon653.jar:@PROJECT_SOURCE_DIR@/thirdparty/saxon/saxon.jar:@PROJECT_SOURCE_DIR@/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -u  -o pdf/devHandbook.fo @PROJECT_SOURCE_DIR@/docs/developerHandbook/index.docbook @PROJECT_SOURCE_DIR@/docs/common/tulip-pdf.xsl
+
+# finally generate pdf/devHandBook.pdf
+pdfxmltex --output-directory="pdf/" pdf/devHandbook.fo
