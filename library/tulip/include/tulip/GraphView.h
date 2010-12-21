@@ -78,6 +78,10 @@ public:
   Iterator<edge>* getOutEdges(const node) const;
   Iterator<edge>* getInOutEdges(const node) const;
   //=========================================================================
+  // only implemented on a root graph
+  virtual void reserveNodes(unsigned int nbNodes);
+  virtual void reserveEdges(unsigned int nbEdges);
+  //=========================================================================
   // updates management
   virtual void push(bool unpopAllowed = true);
   virtual void pop(bool unpopAllowed = true);

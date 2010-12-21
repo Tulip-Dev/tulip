@@ -38,7 +38,7 @@ template<class C>struct Iterator;
 class Int;
 
 ///Implementation of the graph support of the Graph.
-class GraphImpl:public GraphAbstract, public Observer {
+class TLP_SCOPE GraphImpl:public GraphAbstract, public Observer {
 
   friend class xSGraphNodeIterator;
   friend class xSGraphEdgeIterator;
@@ -108,8 +108,9 @@ public:
 
   // to improve memory allocation
   // attempt to reserve enough space to store nodes/edges
-  void reserveNodes(unsigned int nbNodes);
-  void reserveEdges(unsigned int nbEdges);
+  virtual void reserveNodes(unsigned int nbNodes);
+  virtual void reserveEdges(unsigned int nbEdges);
+
   // indicate fragmented space of nodes/edges
   bool hasFragmentedNodeIds() const {
     return nodeIds.hasFreeIds();

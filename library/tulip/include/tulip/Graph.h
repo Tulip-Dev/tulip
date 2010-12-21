@@ -266,6 +266,12 @@ public:
    *  The ordering of a graph you change the ordering of the hierarchy.
    */
   virtual void reverse(const edge)=0;
+  // attempt to reserve enough space to store nodes
+  // only defined on root graph
+  virtual void reserveNodes(unsigned int nbNodes) = 0;
+  // attempt to reserve enough space to store edges
+  // only defined on root graph
+  virtual void reserveEdges(unsigned int nbEdges) = 0;
   //================================================================================
   //Iterators on the graph structure.
   //================================================================================

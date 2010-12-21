@@ -196,8 +196,18 @@ unsigned int GraphDecorator::numberOfNodes()const{
 }
 
 //============================================================
+void GraphDecorator::reserveNodes(unsigned int nbNodes) {
+  return graph_component->reserveNodes(nbNodes);
+}
+
+//============================================================
 unsigned int GraphDecorator::numberOfEdges()const{
   return graph_component->numberOfEdges();
+}
+
+//============================================================
+void GraphDecorator::reserveEdges(unsigned int nbEdges) {
+  return graph_component->reserveEdges(nbEdges);
 }
 
 //============================================================

@@ -28,7 +28,6 @@
 #include <tulip/Coord.h>
 #include <tulip/TlpTools.h>
 #include <tulip/AbstractProperty.h>
-#include <tulip/GraphImpl.h>
 #include <tulip/TLPParser.h>
 
 #define TLP "tlp"
@@ -132,11 +131,11 @@ namespace tlp {
             return true;
         }
         bool reserveNodes(int nbNodes) {
-            ((GraphImpl *) _graph)->reserveNodes(nbNodes);
+            _graph->reserveNodes(nbNodes);
             return true;
         }
         bool reserveEdges(int nbEdges) {
-            ((GraphImpl *) _graph)->reserveEdges(nbEdges);
+            _graph->reserveEdges(nbEdges);
             return true;
         }
         bool addClusterNode(int id, int nodeId) {

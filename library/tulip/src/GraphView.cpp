@@ -332,8 +332,16 @@ unsigned int GraphView::numberOfNodes()const {
   return nNodes;
 }
 //----------------------------------------------------------------
+void GraphView::reserveNodes(unsigned int) {
+  cerr << "{Warning ] : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on a Sub Graph" << endl;
+}
+//----------------------------------------------------------------
 unsigned int GraphView::numberOfEdges() const {
   return nEdges;
+}
+//----------------------------------------------------------------
+void GraphView::reserveEdges(unsigned int) {
+  cerr << "{Warning ] : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on a Sub Graph" << endl;
 }
 //----------------------------------------------------------------
 bool GraphView::canPop() {
