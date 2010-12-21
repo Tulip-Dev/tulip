@@ -124,6 +124,13 @@ void GlCatmullRomCurve::setCurveVertexShaderRenderingSpecificParameters() {
 
 void GlCatmullRomCurve::drawCurve(vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
 
+// seems there is an issue on Windows with the Catmull-Rom shader, don't really knwo why yet
+// force CPU rendering until finding a fix 
+#ifdef WIN32
+	curveShaderProgramNormal = NULL;
+	curveShaderProgramBillboard = NULL;
+#endif
+	
 	vector<Coord> controlPointsCp;
 	vector<Coord> *controlPointsP = &controlPoints;
 
