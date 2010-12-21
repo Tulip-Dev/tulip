@@ -18,7 +18,7 @@ Source:		%{name}-%{version}.tar.bz2
 License:	GPL
 Group:		Applications/Engineering
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
-Requires:	@QT_PACKAGE@ >= 4.2
+Requires:	@QT_PACKAGE@ >= 4.4
 
 %description
 Tulip software is a system dedicated to the visualization of huge graphs. It manages graphs with a number of elements(nodes and edges) up to 500.000 on a personal computer(PIII 600, with 256mo). Its graph technology architecture enables to do the following things :
@@ -117,7 +117,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/libtulip.so
 %{prefix}/lib/libtulip-%{tulip_version}.so*
 %{prefix}/lib/tlp/libAdjacencyMatrixImport-%{version}.*
-%{prefix}/lib/tlp/libArityMetric-%{version}.*
 %{prefix}/lib/tlp/libAutoSize-%{version}.*
 %{prefix}/lib/tlp/libBetweennessCentrality-%{version}.*
 %{prefix}/lib/tlp/libBiconnectedComponent-%{version}.*
@@ -131,6 +130,7 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/tlp/libConnectedComponentPacking-%{version}.*
 %{prefix}/lib/tlp/libDagLevelMetric-%{version}.*
 %{prefix}/lib/tlp/libDendrogram-%{version}.*
+%{prefix}/lib/tlp/libDegreeMetric-%{version}.*
 %{prefix}/lib/tlp/libDepthMetric-%{version}.*
 %{prefix}/lib/tlp/libDotImport-%{version}.*
 %{prefix}/lib/tlp/libEccentricity-%{version}.*
