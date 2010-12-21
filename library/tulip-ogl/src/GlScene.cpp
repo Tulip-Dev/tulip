@@ -46,24 +46,24 @@ using namespace std;
 
 namespace tlp {
 
-    struct entityWithDistanceCompare {
-	static GlGraphInputData *inputData;
-        bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2 ) const{
-            if(e1.distance>e2.distance)
-                return true;
-            if(e1.distance<e2.distance)
-                return false;
+  struct entityWithDistanceCompare {
+    static GlGraphInputData *inputData;
+    bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2 ) const{
+      if(e1.distance>e2.distance)
+        return true;
+      if(e1.distance<e2.distance)
+        return false;
 
-            BoundingBox &bb1 = e1.entity->boundingBox;
-            BoundingBox &bb2 = e2.entity->boundingBox;
+      BoundingBox &bb1 = e1.entity->boundingBox;
+      BoundingBox &bb2 = e2.entity->boundingBox;
 
-            if(bb1[1][0] - bb1[0][0] > bb2[1][0] - bb2[0][0])
-                return false;
-            else
-                return true;
+      if(bb1[1][0] - bb1[0][0] > bb2[1][0] - bb2[0][0])
+        return false;
+      else
+        return true;
 
-	}
-    };
+    }
+  };
   //====================================================
   class GreatThanNode {
   public:
@@ -92,9 +92,9 @@ namespace tlp {
   GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
     Camera camera(this,false);
 
-	if(calculator!=NULL)
+    if(calculator!=NULL)
       lodCalculator=calculator;
-	else
+    else
       lodCalculator=new GlCPULODCalculator();
     lodCalculator->setScene(this);
   }
@@ -121,55 +121,55 @@ namespace tlp {
 		int newViewport[4];
 		glGetIntegerv(GL_VIEWPORT,newViewport);
 
-	bool antialiased = true;
-	if(glGraphComposite) {
+    bool antialiased = true;
+    if(glGraphComposite) {
       antialiased=glGraphComposite->getInputData()->parameters->isAntialiased();
-	}
+    }
 
-	OpenGlConfigManager::getInst().setAntiAliasing(antialiased);
+    OpenGlConfigManager::getInst().setAntiAliasing(antialiased);
 
-	glDisable(GL_POINT_SMOOTH);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glLineWidth(1.0);
-	glPointSize(1.0);
-	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_STENCIL_TEST);
-	glEnable(GL_NORMALIZE);
-	glShadeModel(GL_SMOOTH);
-	glDepthFunc(GL_LEQUAL );
-	glPolygonMode(GL_FRONT, GL_FILL);
-	glColorMask(1, 1, 1, 1);
-	glEnable(GL_BLEND);
-	glIndexMask(UINT_MAX);
-	glClearColor(backgroundColor.getRGL(), backgroundColor.getGGL(), backgroundColor.getBGL(), backgroundColor.getAGL());
-	glClearStencil(0xFFFF);
-	glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-	glDisable(GL_TEXTURE_2D);
+    glDisable(GL_POINT_SMOOTH);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glLineWidth(1.0);
+    glPointSize(1.0);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
+    glEnable(GL_NORMALIZE);
+    glShadeModel(GL_SMOOTH);
+    glDepthFunc(GL_LEQUAL );
+    glPolygonMode(GL_FRONT, GL_FILL);
+    glColorMask(1, 1, 1, 1);
+    glEnable(GL_BLEND);
+    glIndexMask(UINT_MAX);
+    glClearColor(backgroundColor.getRGL(), backgroundColor.getGGL(), backgroundColor.getBGL(), backgroundColor.getAGL());
+    glClearStencil(0xFFFF);
+    glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glDisable(GL_TEXTURE_2D);
 
-	GLenum error = glGetError();
-	if ( error != GL_NO_ERROR)
+    GLenum error = glGetError();
+    if ( error != GL_NO_ERROR)
       cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
   }
 
   void GlScene::prerenderMetaNodes(){
-	if(!glGraphComposite)
+    if(!glGraphComposite)
       return;
-	//prerender metanodes if need
-	set<node> metaNodes=glGraphComposite->getMetaNodes();
-	if(!metaNodes.empty() && glGraphComposite->getInputData()->getMetaNodeRenderer()->havePrerender()){
+    //prerender metanodes if need
+    set<node> metaNodes=glGraphComposite->getMetaNodes();
+    if(!metaNodes.empty() && glGraphComposite->getInputData()->getMetaNodeRenderer()->havePrerender()){
 
-	  initGlParameters();
+      initGlParameters();
 
-	  GlLODCalculator *newLodCalculator=lodCalculator->clone();
+      GlLODCalculator *newLodCalculator=lodCalculator->clone();
       newLodCalculator->setRenderingEntitiesFlag(RenderingAll);
-	  newLodCalculator->beginNewCamera(getLayer("Main")->getCamera());
-	  GlNode glNode(0);
-	  for(set<node>::iterator it=metaNodes.begin();it!=metaNodes.end();++it){
-	    glNode.id=(*it).id;
-	    newLodCalculator->addNodeBoundingBox((*it).id,glNode.getBoundingBox(glGraphComposite->getInputData()));
-	  }
+      newLodCalculator->beginNewCamera(getLayer("Main")->getCamera());
+      GlNode glNode(0);
+      for(set<node>::iterator it=metaNodes.begin();it!=metaNodes.end();++it){
+        glNode.id=(*it).id;
+        newLodCalculator->addNodeBoundingBox((*it).id,glNode.getBoundingBox(glGraphComposite->getInputData()));
+      }
       newLodCalculator->compute(viewport,viewport);
 
       LayersLODVector *layersLODVector=newLodCalculator->getResult();
@@ -178,9 +178,9 @@ namespace tlp {
       for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->nodesLODVector.begin();it!=layerLODUnit->nodesLODVector.end();++it) {
         if((*it).lod>=0)
           glGraphComposite->getInputData()->getMetaNodeRenderer()->prerender(node((*it).id),(*it).lod,getLayer("Main")->getCamera());
-	  }
-	  delete newLodCalculator;
-	}
+      }
+      delete newLodCalculator;
+    }
   }
 
   void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphComposite,TextRenderer *fontRenderer,
@@ -303,7 +303,7 @@ namespace tlp {
 			delete lodVisitor;
 		}
     lodCalculator->compute(viewport,viewport);
-		LayersLODVector *layersLODVector=lodCalculator->getResult();
+    LayersLODVector *layersLODVector=lodCalculator->getResult();
 
     /**********************************************************************
       VertexArray compute
@@ -537,13 +537,13 @@ namespace tlp {
 
         glPopAttrib();
       }
-	}
+    }
   }
 
   void GlScene::addLayer(GlLayer *layer) {
-	layersList.push_back(std::pair<std::string,GlLayer*>(layer->getName(),layer));
-	layer->setScene(this);
-	notifyAddLayer(this,layer->getName(),layer);
+    layersList.push_back(std::pair<std::string,GlLayer*>(layer->getName(),layer));
+    layer->setScene(this);
+    notifyAddLayer(this,layer->getName(),layer);
   }
 
   bool GlScene::insertLayerBefore(GlLayer *layer,const string &name) {
@@ -602,21 +602,21 @@ namespace tlp {
   }
 
   void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,BoundingBox *sceneBoundingBox){
-	if(xWhiteFactor)
+    if(xWhiteFactor)
       *xWhiteFactor=0.;
-	if(yWhiteFactor)
+    if(yWhiteFactor)
       *yWhiteFactor=0.;
 
-	GlBoundingBoxSceneVisitor *visitor;
-	if(glGraphComposite)
+    GlBoundingBoxSceneVisitor *visitor;
+    if(glGraphComposite)
       visitor=new GlBoundingBoxSceneVisitor(glGraphComposite->getInputData());
-	else
+    else
       visitor=new GlBoundingBoxSceneVisitor(NULL);
 
-	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera()))
         (*it).second->acceptVisitor(visitor);
-	}
+    }
 
     BoundingBox boundingBox(visitor->getBoundingBox());
     delete visitor;
@@ -638,23 +638,23 @@ namespace tlp {
     Coord maxC(boundingBox[1]);
     Coord minC(boundingBox[0]);
 
-	double dx = maxC[0] - minC[0];
-	double dy = maxC[1] - minC[1];
-	double dz = maxC[2] - minC[2];
+    double dx = maxC[0] - minC[0];
+    double dy = maxC[1] - minC[1];
+    double dz = maxC[2] - minC[2];
 
-	Coord centerTmp=(maxC + minC)/2.f;
-	if(center){
-    *center=centerTmp;
-  }
+    Coord centerTmp=(maxC + minC)/2.f;
+    if(center){
+      *center=centerTmp;
+    }
 
-	if ((dx==0) && (dy==0) && (dz==0))
+    if ((dx==0) && (dy==0) && (dz==0))
       dx = dy = dz = 10.0;
 
-	double wdx=width/dx;
-	double hdy=height/dy;
+    double wdx=width/dx;
+    double hdy=height/dy;
 
-	float sceneRadiusTmp;
-	if(dx<dy){
+    float sceneRadiusTmp;
+    if(dx<dy){
       if(wdx<hdy){
         sceneRadiusTmp=dx;
         if(yWhiteFactor)
@@ -668,7 +668,7 @@ namespace tlp {
           *xWhiteFactor=(1.-(dx/sceneRadiusTmp))/2.;
         }
       }
-	}else{
+    }else{
       if(wdx>hdy){
         sceneRadiusTmp=dy;
         if(xWhiteFactor)
@@ -681,34 +681,34 @@ namespace tlp {
         if(yWhiteFactor)
           *yWhiteFactor=(1.-(dy/sceneRadiusTmp))/2.;
       }
-	}
+    }
 
-  if(sceneRadius){
+    if(sceneRadius){
       *sceneRadius=sceneRadiusTmp;
     }
 
-	if(eye){
+    if(eye){
       *eye=Coord(0, 0, sceneRadiusTmp);
       *eye=*eye + centerTmp;
-	}
+    }
 
-  if(sceneBoundingBox){
-    *sceneBoundingBox=boundingBox;
-  }
+    if(sceneBoundingBox){
+      *sceneBoundingBox=boundingBox;
+    }
 
 
   }
 
   void GlScene::ajustSceneToSize(int width, int height){
 
-	Coord center;
-	Coord eye;
-	float sceneRadius;
-  BoundingBox sceneBoundingBox;
+    Coord center;
+    Coord eye;
+    float sceneRadius;
+    BoundingBox sceneBoundingBox;
 
-  computeAjustSceneToSize(width,height, &center, &eye, &sceneRadius,NULL,NULL,&sceneBoundingBox);
+    computeAjustSceneToSize(width,height, &center, &eye, &sceneRadius,NULL,NULL,&sceneBoundingBox);
 
-	for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+    for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       Camera* camera=(*it).second->getCamera();
       camera->setCenter(center);
 
@@ -717,32 +717,32 @@ namespace tlp {
       camera->setEyes(eye);
       camera->setUp(Coord(0, 1., 0));
       camera->setZoomFactor(1.);
-	}
+    }
   }
 
   void GlScene::zoomXY(int step, const int x, const int y) {
 
-	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera()))
         (*it).second->getCamera()->setZoomFactor((*it).second->getCamera()->getZoomFactor() * pow(1.1,step));
-	}
-	if (step < 0) step *= -1;
-	int factX = (int)(step*(double(viewport[2])/2.0-x)/ 7.0);
-	int factY = (int)(step*(double(viewport[3])/2.0-y)/ 7.0);
-	translateCamera(factX,-factY,0);
+    }
+    if (step < 0) step *= -1;
+    int factX = (int)(step*(double(viewport[2])/2.0-x)/ 7.0);
+    int factY = (int)(step*(double(viewport[3])/2.0-y)/ 7.0);
+    translateCamera(factX,-factY,0);
   }
 
   void GlScene::zoom(float,const Coord& dest) {
-	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
         (*it).second->getCamera()->setEyes(dest + ((*it).second->getCamera()->getEyes() - (*it).second->getCamera()->getCenter()));
         (*it).second->getCamera()->setCenter(dest);
       }
-	}
+    }
   }
 
   void GlScene::translateCamera(const int x, const int y, const int z) {
-	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
         Coord v1(0, 0, 0);
         Coord v2(x, y, z);
@@ -752,31 +752,31 @@ namespace tlp {
         (*it).second->getCamera()->setEyes((*it).second->getCamera()->getEyes() + move);
         (*it).second->getCamera()->setCenter((*it).second->getCamera()->getCenter() + move);
       }
-	}
+    }
   }
 
   void GlScene::zoom(int step) {
-	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
         (*it).second->getCamera()->setZoomFactor((*it).second->getCamera()->getZoomFactor() * pow(1.1, step));
       }
-	}
+    }
   }
 
   void GlScene::rotateScene(const int x, const int y, const int z) {
-	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
         (*it).second->getCamera()->rotate(float(x)/360.0 * M_PI, 1.0, 0, 0);
         (*it).second->getCamera()->rotate(float(y)/360.0 * M_PI, 0, 1.0, 0);
         (*it).second->getCamera()->rotate(float(z)/360.0 * M_PI, 0, 0, 1.0);
       }
-	}
+    }
   }
 
   bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int h, GlLayer* layer, vector<unsigned long>& selectedEntities) {
-	if(w==0)
+    if(w==0)
       w=1;
-	if(h==0)
+    if(h==0)
       h=1;
 
     GlLODCalculator *selectLODCalculator;
@@ -817,13 +817,13 @@ namespace tlp {
     }
     delete lodVisitor;
 
-	Vector<int,4> selectionViewport;
-	selectionViewport[0]=x;
-	selectionViewport[1]=y;
-	selectionViewport[2]=w;
-	selectionViewport[3]=h;
+    Vector<int,4> selectionViewport;
+    selectionViewport[0]=x;
+    selectionViewport[1]=y;
+    selectionViewport[2]=w;
+    selectionViewport[3]=h;
 
-	glViewport(selectionViewport[0],selectionViewport[1],selectionViewport[2],selectionViewport[3]);
+    glViewport(selectionViewport[0],selectionViewport[1],selectionViewport[2],selectionViewport[3]);
 
     selectLODCalculator->compute(viewport,selectionViewport);
 
@@ -939,43 +939,43 @@ namespace tlp {
       glPopAttrib();
 
       delete[] selectBuf;
-	}
+    }
 
     selectLODCalculator->clear();
     if(selectLODCalculator!=lodCalculator)
       delete selectLODCalculator;
-	glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
-	return (selectedEntities.size()!=0);
+    glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
+    return (selectedEntities.size()!=0);
   }
   //====================================================
   void GlScene::outputSVG(unsigned int size,const string& filename) {
-	if(!glGraphComposite)
+    if(!glGraphComposite)
       return;
 
-	GLint returned;
-	GLfloat clearColor[4];
-	GLfloat lineWidth;
-	GLfloat pointSize;
-	GLfloat* buffer = (GLfloat *)calloc(size, sizeof(GLfloat));
-	glFeedbackBuffer(size, GL_3D_COLOR, buffer);
-	glRenderMode(GL_FEEDBACK);
-	glGraphComposite->getInputData()->parameters->setFeedbackRender(true);
-	draw();
-	glGraphComposite->getInputData()->parameters->setFeedbackRender(false);
-	glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
-	glGetFloatv(GL_LINE_WIDTH, &lineWidth);
-	glGetFloatv(GL_POINT_SIZE, &pointSize);
+    GLint returned;
+    GLfloat clearColor[4];
+    GLfloat lineWidth;
+    GLfloat pointSize;
+    GLfloat* buffer = (GLfloat *)calloc(size, sizeof(GLfloat));
+    glFeedbackBuffer(size, GL_3D_COLOR, buffer);
+    glRenderMode(GL_FEEDBACK);
+    glGraphComposite->getInputData()->parameters->setFeedbackRender(true);
+    draw();
+    glGraphComposite->getInputData()->parameters->setFeedbackRender(false);
+    glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
+    glGetFloatv(GL_LINE_WIDTH, &lineWidth);
+    glGetFloatv(GL_POINT_SIZE, &pointSize);
 
-	glFlush();
-	glFinish();
-	returned = glRenderMode(GL_RENDER);
-	GlSVGFeedBackBuilder builder;
-	GlFeedBackRecorder recorder(&builder);
-	builder.begin(viewport,clearColor,pointSize,lineWidth);
-	recorder.record(false,returned,buffer,layersList[0].second->getCamera()->getViewport());
-	string str;
-	builder.getResult(&str);
-	if(!filename.empty()) {
+    glFlush();
+    glFinish();
+    returned = glRenderMode(GL_RENDER);
+    GlSVGFeedBackBuilder builder;
+    GlFeedBackRecorder recorder(&builder);
+    builder.begin(viewport,clearColor,pointSize,lineWidth);
+    recorder.record(false,returned,buffer,layersList[0].second->getCamera()->getViewport());
+    string str;
+    builder.getResult(&str);
+    if(!filename.empty()) {
       /* subgraphs drawing disabled
 	 initMapsSVG(_renderingParameters.getGraph(), &ge); */
       FILE* file = fopen(filename.c_str(), "w");
@@ -985,38 +985,38 @@ namespace tlp {
       } else {
         perror(filename.c_str());
       }
-	}
+    }
   }
   //====================================================
   void GlScene::outputEPS(unsigned int size,const string& filename) {
-	if(!glGraphComposite)
+    if(!glGraphComposite)
       return;
 
-	GLint returned;
-	GLfloat clearColor[4];
-	GLfloat lineWidth;
-	GLfloat pointSize;
-	GLfloat* buffer = (GLfloat *)calloc(size, sizeof(GLfloat));
-	glFeedbackBuffer(size, GL_3D_COLOR, buffer);
-	glRenderMode(GL_FEEDBACK);
-	glGraphComposite->getInputData()->parameters->setFeedbackRender(true);
-	draw();
-	glGraphComposite->getInputData()->parameters->setFeedbackRender(false);
+    GLint returned;
+    GLfloat clearColor[4];
+    GLfloat lineWidth;
+    GLfloat pointSize;
+    GLfloat* buffer = (GLfloat *)calloc(size, sizeof(GLfloat));
+    glFeedbackBuffer(size, GL_3D_COLOR, buffer);
+    glRenderMode(GL_FEEDBACK);
+    glGraphComposite->getInputData()->parameters->setFeedbackRender(true);
+    draw();
+    glGraphComposite->getInputData()->parameters->setFeedbackRender(false);
 
-	glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
-	glGetFloatv(GL_LINE_WIDTH, &lineWidth);
-	glGetFloatv(GL_POINT_SIZE, &pointSize);
+    glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
+    glGetFloatv(GL_LINE_WIDTH, &lineWidth);
+    glGetFloatv(GL_POINT_SIZE, &pointSize);
 
-	glFlush();
-	glFinish();
-	returned = glRenderMode(GL_RENDER);
-	GlEPSFeedBackBuilder builder;
-	GlFeedBackRecorder recorder(&builder);
-	builder.begin(viewport,clearColor,pointSize,lineWidth);
-	recorder.record(false,returned,buffer,layersList[0].second->getCamera()->getViewport());
-	string str;
-	builder.getResult(&str);
-	if(!filename.empty()) {
+    glFlush();
+    glFinish();
+    returned = glRenderMode(GL_RENDER);
+    GlEPSFeedBackBuilder builder;
+    GlFeedBackRecorder recorder(&builder);
+    builder.begin(viewport,clearColor,pointSize,lineWidth);
+    recorder.record(false,returned,buffer,layersList[0].second->getCamera()->getViewport());
+    string str;
+    builder.getResult(&str);
+    if(!filename.empty()) {
       FILE* file = fopen(filename.c_str(), "w");
       if (file) {
         fprintf(file, "%s", str.c_str());
@@ -1024,44 +1024,44 @@ namespace tlp {
       } else {
         perror(filename.c_str());
       }
-	}
+    }
   }
   //====================================================
   unsigned char * GlScene::getImage() {
-	unsigned char *image = (unsigned char *)malloc(viewport[2]*viewport[3]*3*sizeof(unsigned char));
-	draw();
-	glFlush();
-	glFinish();
-	glPixelStorei(GL_PACK_ALIGNMENT,1);
-	glReadPixels(viewport[0],viewport[1],viewport[2],viewport[3],GL_RGB,GL_UNSIGNED_BYTE,image);
-	return image;
+    unsigned char *image = (unsigned char *)malloc(viewport[2]*viewport[3]*3*sizeof(unsigned char));
+    draw();
+    glFlush();
+    glFinish();
+    glPixelStorei(GL_PACK_ALIGNMENT,1);
+    glReadPixels(viewport[0],viewport[1],viewport[2],viewport[3],GL_RGB,GL_UNSIGNED_BYTE,image);
+    return image;
   }
   //====================================================
   GlLayer* GlScene::getLayer(const std::string& name) {
-	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).first==name)
         return (*it).second;
-	}
-	return NULL;
+    }
+    return NULL;
   }
   //====================================================
   void GlScene::getXML(string &out) {
-	xmlDocPtr doc = NULL;       /* document pointer */
-	xmlNodePtr node = NULL;
-	xmlNodePtr rootNode = NULL;
-	xmlNodePtr dataNode= NULL;
-	xmlNodePtr childrenNode = NULL;/* node pointers */
+    xmlDocPtr doc = NULL;       /* document pointer */
+    xmlNodePtr node = NULL;
+    xmlNodePtr rootNode = NULL;
+    xmlNodePtr dataNode= NULL;
+    xmlNodePtr childrenNode = NULL;/* node pointers */
 
-	doc = xmlNewDoc(BAD_CAST "1.0");
-	rootNode = xmlNewNode(NULL, BAD_CAST "scene");
-	xmlDocSetRootElement(doc, rootNode);
+    doc = xmlNewDoc(BAD_CAST "1.0");
+    rootNode = xmlNewNode(NULL, BAD_CAST "scene");
+    xmlDocSetRootElement(doc, rootNode);
 
-	GlXMLTools::createDataAndChildrenNodes(rootNode, dataNode, childrenNode);
+    GlXMLTools::createDataAndChildrenNodes(rootNode, dataNode, childrenNode);
 
-	GlXMLTools::getXML(dataNode,"viewport",viewport);
-	GlXMLTools::getXML(dataNode,"background",backgroundColor);
+    GlXMLTools::getXML(dataNode,"viewport",viewport);
+    GlXMLTools::getXML(dataNode,"background",backgroundColor);
 
-	for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
+    for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
 
       // Don't save working layers
       if((*it).second->isAWorkingLayer())
@@ -1070,64 +1070,64 @@ namespace tlp {
       GlXMLTools::createChild(childrenNode, "GlLayer", node);
       GlXMLTools::createProperty(node, "name", (*it).first);
       (*it).second->getXML(node);
-	}
+    }
 
-	/*
+    /*
 	 * Dumping document to stdio or file
 	 */
-	xmlChar *xmlbuff;
-	int buffersize;
+    xmlChar *xmlbuff;
+    int buffersize;
 
-	xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
-	out.append((char *)xmlbuff);
+    xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
+    out.append((char *)xmlbuff);
 
-	xmlFree(xmlbuff);
+    xmlFree(xmlbuff);
 
-	/*free the document */
-	xmlFreeDoc(doc);
+    /*free the document */
+    xmlFreeDoc(doc);
 
-	/*
+    /*
 	 *Free the global variables that may
 	 *have been allocated by the parser.
 	 */
-	xmlCleanupParser();
+    xmlCleanupParser();
 
-	/*
+    /*
 	 * this is to debug memory for regression tests
 	 */
-	xmlMemoryDump();
+    xmlMemoryDump();
   }
   //====================================================
   void GlScene::setWithXML(string &in, Graph *graph) {
-	xmlDocPtr doc;
-	xmlNodePtr rootNode = NULL;
-	xmlNodePtr dataNode= NULL;
-	xmlNodePtr childrenNode = NULL;
-	xmlNodePtr node = NULL;/* node pointers */
+    xmlDocPtr doc;
+    xmlNodePtr rootNode = NULL;
+    xmlNodePtr dataNode= NULL;
+    xmlNodePtr childrenNode = NULL;
+    xmlNodePtr node = NULL;/* node pointers */
 
-	glGraphComposite=new GlGraphComposite(graph);
+    glGraphComposite=new GlGraphComposite(graph);
 
-	doc = xmlReadMemory(&in[0], in.length(), "noname.xml", NULL, 0);
+    doc = xmlReadMemory(&in[0], in.length(), "noname.xml", NULL, 0);
 
-	rootNode = xmlDocGetRootElement(doc);
+    rootNode = xmlDocGetRootElement(doc);
 
-	string name;
+    string name;
 
-	name=((char*)rootNode->name);
-	if (rootNode->type == XML_ELEMENT_NODE && name=="scene") {
+    name=((char*)rootNode->name);
+    if (rootNode->type == XML_ELEMENT_NODE && name=="scene") {
       GlXMLTools::getDataAndChildrenNodes(rootNode,dataNode,childrenNode);
-	}else{
+    }else{
       assert(false);
-	}
+    }
 
-	// Parse data
-	if(dataNode) {
+    // Parse data
+    if(dataNode) {
       GlXMLTools::setWithXML(dataNode,"viewport",viewport);
       GlXMLTools::setWithXML(dataNode,"background",backgroundColor);
-	}
+    }
 
-	// Parse children
-	for (node = childrenNode->children; node; node = node->next) {
+    // Parse children
+    for (node = childrenNode->children; node; node = node->next) {
       if(node->type == XML_ELEMENT_NODE) {
         if(string((char*)node->name)=="GlLayer") {
           //New version
@@ -1153,10 +1153,10 @@ namespace tlp {
           }
         }
       }
-	}
+    }
 
-	getLayer("Main")->addGlEntity(glGraphComposite,"graph");
-	addGlGraphCompositeInfo(getLayer("Main"),glGraphComposite);
+    getLayer("Main")->addGlEntity(glGraphComposite,"graph");
+    addGlGraphCompositeInfo(getLayer("Main"),glGraphComposite);
   }
 
   void GlScene::setViewportZoom(int zoom,int xDec, int yDec){
