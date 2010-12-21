@@ -157,6 +157,10 @@ namespace tlp {
      * Hide the overview
      */
     virtual void hideOverview(bool);
+    
+    virtual void displayOverview(bool display) {
+      hideOverview(!display);
+    }
 
     /**
      * This slot is call when a QAction in dialog sub menu of context menu is toggle
