@@ -493,6 +493,7 @@ bool TulipApp::createController(const string &name,const string &graphName) {
     controllerAutoLoad=false;
     tabWidget->setTabText(0, QString::fromUtf8(graphName.c_str()));
   }
+  Controller::currentActiveController(tabIndexToController[tabWidget->currentIndex()]);
   return true;
 }
 //**********************************************************************
