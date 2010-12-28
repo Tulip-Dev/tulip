@@ -346,7 +346,7 @@ void GlVertexArrayManager::addNode(Graph *,const node){
 }
 
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property){
-	if(graph->getProperty(inputData->getElementLayoutPropName())==property){
+	if(graph->getProperty(inputData->getElementLayoutPropName())==property || graph->getProperty(inputData->getElementSizePropName())==property){
 		setHaveToComputeLayout(true);
 		clearLayoutData();
 		graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
@@ -387,14 +387,14 @@ void GlVertexArrayManager::destroy(PropertyInterface*){
 }
 
 void GlVertexArrayManager::addLocalProperty(Graph *, const std::string &name){
-	if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName()){
+	if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName()){
 		clearData();
 		clearObservers();
 	}
 }
 
 void GlVertexArrayManager::delLocalProperty(Graph *, const std::string &name){
-	if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName()){
+	if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName()){
 		clearData();
 		clearObservers();
 	}
@@ -444,6 +444,7 @@ void GlVertexArrayManager::initObservers() {
 	}
 	if(!layoutObserverActivated){
 		graph->getProperty(inputData->getElementLayoutPropName())->addPropertyObserver(this);
+		graph->getProperty(inputData->getElementSizePropName())->addPropertyObserver(this);
 		layoutObserverActivated=true;
 	}
 	if(!colorObserverActivated){
@@ -454,13 +455,13 @@ void GlVertexArrayManager::initObservers() {
 
 void GlVertexArrayManager::clearObservers() {
 
-
 	if(graphObserverActivated){
 		graph->removeGraphObserver(this);
 		graphObserverActivated=false;
 	}
 	if(layoutObserverActivated){
 		graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
+		graph->getProperty(inputData->getElementSizePropName())->removePropertyObserver(this);
 		layoutObserverActivated=false;
 	}
 	if(colorObserverActivated){
