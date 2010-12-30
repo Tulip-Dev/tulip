@@ -71,21 +71,35 @@ namespace tlp {
 
     /**
      * Set the layer's camera with a pointer to a camera
+     * @TODO: add doc to know what happen if sharedCamera is true !!! else it is unsuable
      */
-    void setCamera(Camera *camera) {this->camera=new Camera(*camera);}
+    void setCamera(Camera *camera) {
+        if (!sharedCamera) delete this->camera;
+        sharedCamera = false;
+        this->camera=new Camera(*camera);
+    }
 
     /**
      * Set the layer's camera
+     * @TODO: add doc to know what happen if sharedCamera is true !!! else it is unsuable
      */
-    void setCamera(const Camera& camera) {this->camera=new Camera(camera);}
-
+    void setCamera(const Camera& camera) {
+        if (!sharedCamera) delete this->camera;
+        sharedCamera = false;
+        this->camera=new Camera(camera);
+    }
     /**
      * Replace the layer's camera with a new 2D one
+     * @TODO: add doc to know what happen if sharedCamera is true !!! else it is unsuable
      */
-    void set2DMode() {this->camera=new Camera(NULL,false);}
-
+    void set2DMode() {
+        if (!sharedCamera) delete this->camera;
+        sharedCamera = false;
+        this->camera=new Camera(NULL,false);
+    }
     /**
      * Return the layer's camera
+     * @TODO: add doc because the returned pointer could be deleted !!!
      */
     Camera *getCamera() {return camera;}
 
