@@ -70,7 +70,6 @@ INCLUDES_H = \
 	tulip/CSVImportDialog.h \
 	tulip/CSVParser.h \
 	tulip/CSVParserConfigurationWidget.h \
-	tulip/CSVImportDialog.h \
 	tulip/QtGlSceneZoomAndPanAnimator.h \
 	tulip/Morphing.h \
 	tulip/GlCompositeHierarchyManager.h \
