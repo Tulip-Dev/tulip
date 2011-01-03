@@ -353,6 +353,17 @@ bool ControllerViewsManager::changeInteractor(QAction* action, QWidget **configu
 	return true;
 }
 //**********************************************************************
+void ControllerViewsManager::changeWindowTitle(Graph *graph){
+	for(std::map<View *,Graph* >::iterator it=viewGraph.begin();it!=viewGraph.end();++it){
+		if((*it).second==graph){
+			string windowTitle = viewNames[(*it).first] + " : " + graph->getAttribute<string> ("name");
+
+			QWidget *widget = getWidgetOfView((*it).first);
+			widget->setWindowTitle(QString::fromUtf8(windowTitle.c_str()));
+		}
+	}
+}
+//**********************************************************************
 bool ControllerViewsManager::changeGraph(Graph *graph) {
 	if (currentGraph == graph)
 		return false;
