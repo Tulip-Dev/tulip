@@ -43,8 +43,9 @@ namespace tlp {
     /**
      * Constructor 
      */
-    Camera(GlScene* scene,Coord center=Coord(0,0,0),Coord eyes=Coord(0,0,10), Coord up=Coord(0,-1,0), double zoomFactor=0.5, double sceneRadius=10);
-    
+    Camera(GlScene* scene,Coord center=Coord(0,0,0),
+           Coord eyes=Coord(0,0,10), Coord up=Coord(0,-1,0),
+           double zoomFactor=0.5, double sceneRadius=10);
     /**
      * Constructor : use for 2D camera 
      */
@@ -199,7 +200,7 @@ namespace tlp {
     void getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix);
 
     /**
-     * Return the 3D world coordinate for the givedn screen point
+     * Return the 3D world coordinate for the given screen point
      */
     Coord screenTo3DWorld(const Coord &point);
     

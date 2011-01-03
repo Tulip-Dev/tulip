@@ -50,7 +50,7 @@ namespace tlp {
     bool needEntities();
     void setNeedEntities(bool);
 
-    void addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb);
+    void addSimpleEntityBoundingBox(GlSimpleEntity * entity,const BoundingBox& bb);
     void addNodeBoundingBox(unsigned int id,const BoundingBox& bb);
     void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb);
 
@@ -96,7 +96,7 @@ namespace tlp {
 
     std::vector<QuadTreeNode<unsigned int> *> nodesQuadTree;
     std::vector<QuadTreeNode<unsigned int> *> edgesQuadTree;
-    std::vector<QuadTreeNode<unsigned long> *> entitiesQuadTree;
+    std::vector<QuadTreeNode<GlSimpleEntity *> *> entitiesQuadTree;
     std::vector<std::vector<SimpleEntityLODUnit> > simpleEntities;
 
     bool haveToCompute;

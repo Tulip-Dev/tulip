@@ -29,46 +29,44 @@ namespace tlp {
 
   class Camera;
   class GlEntity;
+  class GlSimpleEntity;
   class GlScene;
   class GlGraphInputData;
 
   enum RenderingEntitiesFlag {
-    RenderingSimpleEntities=1,
-    RenderingNodes=2,
-    RenderingEdges=4,
-    RenderingAll=7,
-    RenderingWithoutRemove=8
+    RenderingSimpleEntities =1,
+    RenderingNodes = 2,
+    RenderingEdges = 4,
+    RenderingAll = 7,
+    RenderingWithoutRemove = 8
   };
 
   struct EntityLODUnit {  
-
     EntityLODUnit(const BoundingBox &boundingBox):boundingBox(boundingBox),lod(-1){}
-
     BoundingBox boundingBox;
     float lod;
   };
 
   // struct to store simple entity lod
   struct SimpleEntityLODUnit : public EntityLODUnit{
-
-    SimpleEntityLODUnit(unsigned long id,const BoundingBox &boundingBox):EntityLODUnit(boundingBox),id(id){}
-
-    unsigned long id;
+    SimpleEntityLODUnit(GlSimpleEntity *entity, const BoundingBox &boundingBox):
+            EntityLODUnit(boundingBox),
+            entity(entity) {
+    }
+    GlSimpleEntity *entity;
   };
 
   // struct to store complex entity (nodes/edges) lod
   struct ComplexEntityLODUnit : public EntityLODUnit{
-
     ComplexEntityLODUnit(unsigned int id,const BoundingBox &boundingBox):EntityLODUnit(boundingBox),id(id){}
-
     unsigned int id;
   };
 
   struct LayerLODUnit{
-    std::vector<SimpleEntityLODUnit> simpleEntitiesLODVector;
+    std::vector<SimpleEntityLODUnit>  simpleEntitiesLODVector;
     std::vector<ComplexEntityLODUnit> nodesLODVector;
     std::vector<ComplexEntityLODUnit> edgesLODVector;
-    unsigned long camera;
+    Camera * camera;
   };
 
   typedef std::vector<LayerLODUnit> LayersLODVector;
@@ -113,7 +111,7 @@ namespace tlp {
     /**
      * Record a new simple entity in current camera context
      */
-    virtual void addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb)=0;
+    virtual void addSimpleEntityBoundingBox(GlSimpleEntity *entity,const BoundingBox& bb)=0;
     /**
      * Record a new node in current camera context
      */
@@ -136,7 +134,7 @@ namespace tlp {
     /**
      * Compute all lod
      */
-    virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport)=0;
+    virtual void compute(const Vector<int,4>& globalViewport, const Vector<int,4>& currentViewport)=0;
 
     /**
      * Return a pointer on LOD result

@@ -92,7 +92,7 @@ namespace tlp {
     /**
      * Translate entity
      */
-    virtual void translate(const Coord& mouvement);
+    virtual void translate(const Coord& vec);
 
     /**
      * Function to export data in XML

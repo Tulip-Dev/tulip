@@ -34,7 +34,7 @@ namespace tlp {
 
   void GlLODSceneVisitor::visit(GlSimpleEntity *entity) {
     if(entity->isVisible())
-      calculator->addSimpleEntityBoundingBox((unsigned long)entity,entity->getBoundingBox());
+      calculator->addSimpleEntityBoundingBox(entity, entity->getBoundingBox());
   }
 
   void GlLODSceneVisitor::visit(GlNode *glNode) {
