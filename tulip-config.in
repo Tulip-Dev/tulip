@@ -78,6 +78,7 @@ if test $# -eq 0; then
 	usage 1 1>&2
 fi
 
+OUTPUT=
 while test $# -gt 0; do
   case "$1" in
   -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
@@ -86,46 +87,46 @@ while test $# -gt 0; do
 
   case $1 in
     --version)
-      echo @VERSION@
+      OUTPUT=`echo ${OUTPUT} @VERSION@`
       ;;
     --cxxflags)
-      echo -I${includedir} @QT_CPPFLAGS@
+      OUTPUT=`echo ${OUTPUT} -I${includedir} @QT_CPPFLAGS@`
       ;;
     --glincludes)
-      echo @GL_INCLUDES@
+      OUTPUT=`echo ${OUTPUT} @GL_INCLUDES@`
       ;;
     --gllibs)
-      echo @GL_LDFLAGS@ @LIB_GL@
+      OUTPUT=`echo ${OUTPUT} @GL_LDFLAGS@ @LIB_GL@`
       ;;
     --libs)
-      echo ${libdir}/libtulip-${libversion}.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/libtulip-qt4-${libversion}.${libextension} @OPENMP_CXXFLAGS@
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-${libversion}.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/libtulip-qt4-${libversion}.${libextension} @OPENMP_CXXFLAGS@`
       ;;
     --lib_tulip)
-      echo ${libdir}/libtulip-${libversion}.${libextension} @OPENMP_CXXFLAGS@
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-${libversion}.${libextension} @OPENMP_CXXFLAGS@`
       ;;
     --lib_ogl)
-      echo ${libdir}/libtulip-ogl-${libversion}.${libextension}
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-ogl-${libversion}.${libextension}`
       ;;
     --plugincxxflags)
-      echo ${plugincxxflags}
+      OUTPUT=`echo ${OUTPUT} ${plugincxxflags}`
       ;;
     --pluginldflags)
-      echo ${pluginldflags}
+      OUTPUT=`echo ${OUTPUT} ${pluginldflags}`
       ;;
     --pluginextension)
-      echo ${libextension}
+      OUTPUT=`echo ${OUTPUT} ${libextension}`
       ;;
     --pluginpath)
-      echo ${pluginpath}
+      OUTPUT=`echo ${OUTPUT} ${pluginpath}`
       ;;
     --qtlibs)
-      echo @QT_LDFLAGS@ @LIB_QT@
+      OUTPUT=`echo ${OUTPUT} @QT_LDFLAGS@ @LIB_QT@`
       ;;
     --qtincludes)
-      echo @QT_INCLUDES@
+      OUTPUT=`echo ${OUTPUT} @QT_INCLUDES@`
       ;;
     --sharepath)
-      echo ${sharedir}
+      OUTPUT=`echo ${OUTPUT} ${sharedir}`
       ;;
     *)
       usage
@@ -133,5 +134,7 @@ while test $# -gt 0; do
   esac
   shift
 done
+
+echo ${OUTPUT}
 
 exit 0
