@@ -153,12 +153,9 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       _view->getScene()->centerScene();
       _initialCamera = _view->getScene()->getCamera();
       Camera cam = *_observedView->getScene()->getCamera();
-      cam.setScene(_initialCamera->getScene());
-      cam.setZoomFactor(1);
-      cam.setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
-      cam.setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
-      cam.setSceneRadius(_initialCamera->getSceneRadius());
-      _view->getScene()->setCamera(&cam);
+      _initialCamera->setZoomFactor(1);
+      _initialCamera->setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
+      _initialCamera->setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
       _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
   	}
   	GlMetaNodeRenderer *oldMetaNodeRenderer;
