@@ -28,7 +28,7 @@ namespace tlp {
 
   void GlSelectSceneVisitor::visit(GlSimpleEntity *entity) {
     if(selectionFlag==SelectSimpleEntities)
-      calculator->addSimpleEntityBoundingBox((unsigned long)entity,entity->getBoundingBox());
+      calculator->addSimpleEntityBoundingBox(entity,entity->getBoundingBox());
   }
 
   void GlSelectSceneVisitor::visit(GlNode *glNode) {

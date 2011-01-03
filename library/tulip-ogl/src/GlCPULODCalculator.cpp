@@ -41,11 +41,11 @@ namespace tlp {
   void GlCPULODCalculator::beginNewCamera(Camera* camera) {
     // add a new layerLODUnit add set camera pointer
     layersLODVector.push_back(LayerLODUnit());
-    currentLayerLODUnit=&layersLODVector.back();
-    currentLayerLODUnit->camera=(unsigned long)camera;
+    currentLayerLODUnit = &layersLODVector.back();
+    currentLayerLODUnit->camera = camera;
   }
 
-  void GlCPULODCalculator::addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb) {
+  void GlCPULODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity * entity,const BoundingBox& bb) {
     assert(bb.isValid());
 
     sceneBoundingBox.expand(bb[0]);

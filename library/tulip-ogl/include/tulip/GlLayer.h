@@ -86,7 +86,7 @@ namespace tlp {
     void setCamera(const Camera& camera) {
         if (!sharedCamera) delete this->camera;
         sharedCamera = false;
-        this->camera=new Camera(camera);
+        this->camera = new Camera(camera);
     }
     /**
      * Replace the layer's camera with a new 2D one
@@ -95,7 +95,7 @@ namespace tlp {
     void set2DMode() {
         if (!sharedCamera) delete this->camera;
         sharedCamera = false;
-        this->camera=new Camera(NULL,false);
+        this->camera = new Camera(NULL,false);
     }
     /**
      * Return the layer's camera

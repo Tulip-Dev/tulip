@@ -28,7 +28,7 @@
 #include "tulip/GlLODCalculator.h"
 
 namespace tlp {
-
+  class GlSimpleEntity;
   class Camera;
 
   /**
@@ -48,7 +48,7 @@ namespace tlp {
     /**
      * Add a bounding box for a simple entity
      */
-    virtual void addSimpleEntityBoundingBox(unsigned long entity,const BoundingBox& bb);
+    virtual void addSimpleEntityBoundingBox(GlSimpleEntity * entity, const BoundingBox& bb);
     /**
      * Add a bounding box for a node
      */
