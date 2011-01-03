@@ -53,28 +53,29 @@ INCLUDES_H = \
 	tulip/StringsListSelectionWidget.h \
 	tulip/ViewPluginsManager.h \
 	tulip/ColorScaleConfigDialog.h \
-  tulip/ColorScaleWidget.h \
+	tulip/ColorScaleWidget.h \
 	tulip/QtMetaNodeRenderer.h \
 	tulip/StringsListSelectionWidgetInterface.h \
 	tulip/SimpleStringsListSelectionWidget.h \
 	tulip/DoubleStringsListSelectionWidget.h \
 	tulip/ListPropertyWidget.h \
-  tulip/QGlBufferManager.h \
+	tulip/QGlBufferManager.h \
 	tulip/QGlPixelBufferManager.h \
 	tulip/BaseGraphicsViewComponentMacro.h \
-    tulip/QtOpenGlErrorViewer.h \
-	tulip/CSVParser.h \
+	tulip/QtOpenGlErrorViewer.h \
 	tulip/CSVContentHandler.h \
 	tulip/CSVGraphImport.h \
 	tulip/CSVGraphMappingConfigurationWidget.h \
 	tulip/CSVImportConfigurationWidget.h \
-	tulip/CSVImportWidget.h \
+	tulip/CSVImportDialog.h \
+	tulip/CSVParser.h \
 	tulip/CSVParserConfigurationWidget.h \
+	tulip/CSVImportDialog.h \
 	tulip/QtGlSceneZoomAndPanAnimator.h \
 	tulip/Morphing.h \
 	tulip/GlCompositeHierarchyManager.h \
 	tulip/GraphPropertiesTableWidget.h \
-  tulip/TextEditDialog.h
+	tulip/TextEditDialog.h
 
 QT44_INCLUDES_H = \
 	tulip/BaseGraphicsViewComponent.h \
@@ -113,7 +114,7 @@ BUILT_SOURCES = \
 	tulip/CSVParserConfigurationWidgetData.h \
 	tulip/CSVGraphMappingConfigurationWidgetData.h \
 	tulip/CSVImportConfigurationWidgetData.h \
-	tulip/CSVImportWidgetData.h \
+	tulip/CSVImportDialogData.h \
         tulip/TextEditDialogData.h
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
