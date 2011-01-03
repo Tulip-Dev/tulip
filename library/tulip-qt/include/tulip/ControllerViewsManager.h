@@ -135,6 +135,13 @@ namespace tlp {
        * Get the configuration widget of interactor activated for this view
        */
       virtual QWidget *getInteractorConfigurationWidgetOfView(View *view);
+
+      /**
+       * \brief Change the title of views of graph : graph
+       * Through all opened views and change window title of view that visualize the graph
+       * Window title is : view name + visualized graph name
+       */
+      virtual void changeWindowTitle(Graph *graph);
       
       /**
        * Close all the views.

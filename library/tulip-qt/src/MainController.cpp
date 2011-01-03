@@ -606,10 +606,12 @@ namespace tlp {
     }
   }
   //**********************************************************************
-  void MainController::afterSetAttribute(Graph*, const std::string &name){
+  void MainController::afterSetAttribute(Graph *graph, const std::string &name){
     // In this function we only do threatment if graph name is changed (attribute "name" is changed)
-    if(name=="name")
+    if(name=="name"){
       clusterTreeWidget->update();
+      changeWindowTitle(graph);
+    }
   }
   //**********************************************************************
   void MainController::loadGUI() {
