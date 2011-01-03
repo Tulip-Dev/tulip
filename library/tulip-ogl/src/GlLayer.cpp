@@ -44,6 +44,30 @@ namespace tlp {
       delete camera;
   }
 
+  void GlLayer::setCamera(const Camera& camera) {
+    if (!sharedCamera)
+      delete this->camera;
+
+    sharedCamera = false;
+    this->camera = new Camera(camera);
+  }
+
+  void GlLayer::setSharedCamera(Camera *camera) {
+    if (!sharedCamera)
+      delete this->camera;
+
+    sharedCamera = true;
+    this->camera = camera;
+  }
+
+  void GlLayer::set2DMode() {
+    if (!sharedCamera)
+      delete this->camera;
+
+    sharedCamera = false;
+    this->camera = new Camera(NULL,false);
+  }
+
   void GlLayer::acceptVisitor(GlSceneVisitor *visitor) {
     if(composite.isVisible()) {
       visitor->visit(this);

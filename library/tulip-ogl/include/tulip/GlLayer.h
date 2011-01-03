@@ -34,6 +34,11 @@ namespace tlp {
 
   /**
    * Layer class
+   * A layer is an entity with a camera and a GlComposite
+   * Layers are used with GlScene : you can add a layer to a scene and a scene can have many layers
+   * You have two constructor for GlLayer : one with a camera pointer and one without
+   *  The constructor without camera pointer create a layer with a new camera and delete this camera at the destruction
+   *  The constructor with camera pointer create a layer and use the camera pointer but you have the responsibility of camera destruction
    */
   class TLP_GL_SCOPE GlLayer {
 
@@ -41,11 +46,13 @@ namespace tlp {
 
     /**
      * Layer constructor : construct a layer with his name
+     *  A new camera is created for this layer and this camera will be deleted in the GlLayer destructor
      */
     GlLayer(const std::string& name,bool workingLayer=false);
 
     /**
      * Layer constructor : construct a layer with his name and use the camera : camera
+     *  You have the responsibility of camera destruction
      */
     GlLayer(const std::string& name,Camera *camera,bool workingLayer=false);
 
@@ -70,33 +77,22 @@ namespace tlp {
     std::string getName() {return name;}
 
     /**
-     * Set the layer's camera with a pointer to a camera
-     * @TODO: add doc to know what happen if sharedCamera is true !!! else it is unsuable
+     * Set the layer's camera
+     * GlLayer now use a copy of the camera parameters
      */
-    void setCamera(Camera *camera) {
-        if (!sharedCamera) delete this->camera;
-        sharedCamera = false;
-        this->camera=new Camera(*camera);
-    }
+    void setCamera(const Camera& camera);
 
     /**
      * Set the layer's camera
-     * @TODO: add doc to know what happen if sharedCamera is true !!! else it is unsuable
+     * GlLayer now use camera parameters and you have the resposibility of camera destruction
      */
-    void setCamera(const Camera& camera) {
-        if (!sharedCamera) delete this->camera;
-        sharedCamera = false;
-        this->camera = new Camera(camera);
-    }
+    void setSharedCamera(Camera *camera);
+
     /**
      * Replace the layer's camera with a new 2D one
-     * @TODO: add doc to know what happen if sharedCamera is true !!! else it is unsuable
      */
-    void set2DMode() {
-        if (!sharedCamera) delete this->camera;
-        sharedCamera = false;
-        this->camera = new Camera(NULL,false);
-    }
+    void set2DMode();
+
     /**
      * Return the layer's camera
      * @TODO: add doc because the returned pointer could be deleted !!!
