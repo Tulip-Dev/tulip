@@ -29,7 +29,8 @@
 
 namespace tlp {
 
-  /** \brief GlSimpleEntity used to agregate other GlEntity
+  /** \addtogroup GlEntities
+   * \brief GlSimpleEntity used to agregate other GlEntity
    *
    * GlSimpleEntity used to agregate other GlEntity
    * This class provide basic function to manage other entity

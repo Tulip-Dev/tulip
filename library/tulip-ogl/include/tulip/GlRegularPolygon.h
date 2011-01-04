@@ -22,7 +22,7 @@
 #include "tulip/GlPolygon.h"
 
 namespace tlp {
-  /**
+  /** \addtogroup GlEntities
    * class to create a regular polygon
    */
   class TLP_GL_SCOPE GlRegularPolygon : public GlPolygon {

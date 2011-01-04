@@ -31,7 +31,8 @@
 #include "tulip/GlSimpleEntity.h"
 
 namespace tlp {
-  /** \brief This is a general class to render an OpenGL laine
+  /** \addtogroup GlEntities
+   * \brief This is a general class to render an OpenGL laine
    * This class is use to render an OpenGl line
    */
   class TLP_GL_SCOPE GlLine : public GlSimpleEntity {

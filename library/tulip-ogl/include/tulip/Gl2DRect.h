@@ -24,8 +24,9 @@
 #include "tulip/GlRect.h"
 
 namespace tlp {
-  /**
-   * Create a 2D rectangle
+  /** \addtogroup GlEntities
+   * \brief Create a 2D rectangle
+   *
    * This rect add screen percentage system (for example you can create a rectangle that start on (10%,10%) and finish on (90%90%)
    * If you whan a simple 2D rectangle with normal coordinates use GlRect class
    */

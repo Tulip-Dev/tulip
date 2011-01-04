@@ -33,7 +33,8 @@ using namespace std;
 
 namespace tlp {
 
-  /** \brief General class used to render a connected group of quadrilaterals (textured or not) that shares edges as GlEntity
+  /** \addtogroup GlEntities
+   * \brief General class used to render a connected group of quadrilaterals (textured or not) that shares edges as GlEntity
    *
    * This generic class is used  to render a connected group of quadrilaterals (textured or not) that shares edges as GlEntity
    */

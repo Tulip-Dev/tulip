@@ -28,7 +28,7 @@ const float MAGIG_FACTOR = (1. / (1.3));
 
 namespace tlp {
 
-/**
+/** \addtogroup GlEntities
  * \brief A base class to draw an axis with graduations
  *
  * This class allow to render an axis with graduations. This class is there for code factorisation
