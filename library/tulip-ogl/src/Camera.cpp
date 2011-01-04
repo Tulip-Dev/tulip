@@ -178,8 +178,8 @@ void Camera::initProjection(const Vector<int, 4>& viewport,bool reset){
     sceneBoundingBox.expand(eyes);
     Coord diagCoord(sceneBoundingBox[1]-sceneBoundingBox[0]);
 		double diag=2*sqrt(diagCoord[0]*diagCoord[0]+diagCoord[1]*diagCoord[1]+diagCoord[2]*diagCoord[2]);
-    _near=diag;
-    _far=-diag;
+		_near=-diag;
+		_far=diag;
 	}else{
 		_near=-sceneRadius;
 		_far=sceneRadius;
