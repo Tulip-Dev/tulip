@@ -1438,7 +1438,6 @@ namespace tlp {
       if( morphingAction->isChecked() && g0) {
         applyMorphing(g0);
       }
-      drawViews(false);
     }
 
     delete g0;
@@ -1457,7 +1456,6 @@ namespace tlp {
       if( morphingAction->isChecked() && g0) {
         applyMorphing(g0);
       }
-      drawViews(false);
     }
 
     delete g0;
