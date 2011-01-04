@@ -139,7 +139,7 @@ namespace tlp {
     /**
      * Return a pointer on LOD result
      */
-    LayersLODVector *getResult(){return &layersLODVector;}
+    LayersLODVector &getResult(){return layersLODVector;}
 
     /**
      * Clear class data
