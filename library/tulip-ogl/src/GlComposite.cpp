@@ -83,6 +83,7 @@ namespace tlp {
   }
   //============================================================
   void GlComposite::addGlEntity(GlSimpleEntity *entity, const string &key) {
+    assert(entity!=NULL);
     if(elements.find(key)==elements.end()) {
       elements[key] = entity;
       _sortedElements.push_back(entity);
