@@ -61,7 +61,7 @@ View *ControllerViewsManager::getCurrentView() {
 	return currentView;
 }
 //**********************************************************************
-unsigned int ControllerViewsManager::getViewsNumber() {
+unsigned int ControllerViewsManager::getViewsNumber()const {
 	return viewWidget.size();
 }
 //**********************************************************************
@@ -108,11 +108,13 @@ void ControllerViewsManager::getViews(vector<View *> &views){
 	}
 }
 //**********************************************************************
-string ControllerViewsManager::getNameOfView(View *view) {
-	if (viewNames.count(view) != 0)
-		return viewNames[view];
-
-	return "";
+string ControllerViewsManager::getNameOfView(View *view) const{
+    map<View *,string>::const_iterator it = viewNames.find(view);
+    if(it!=viewNames.end()){
+        return it->second;
+    }else{
+        return "";
+    }
 }
 //**********************************************************************
 void ControllerViewsManager::setNameOfView(View *view, const string &name) {
