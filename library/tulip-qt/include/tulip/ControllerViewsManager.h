@@ -81,7 +81,7 @@ namespace tlp {
       /**
        * Return the number of opened view
        */
-      virtual unsigned int getViewsNumber();
+      virtual unsigned int getViewsNumber()const;
       
       /**
        * Get the graph associated with the given view
@@ -124,7 +124,7 @@ namespace tlp {
       /**
        * Get the name of the given view
        */
-      virtual std::string getNameOfView(View *view);
+      virtual std::string getNameOfView(View *view) const;
       
       /**
        * Set the name of the given view
@@ -244,8 +244,7 @@ namespace tlp {
     protected:
       View *currentView;
       std::map<View *, QAction *> lastInteractorOnView;
-    private :
-      
+
       Graph *currentGraph;
       
       std::map<View *,std::string> viewNames;
