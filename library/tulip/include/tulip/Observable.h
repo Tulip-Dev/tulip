@@ -24,6 +24,7 @@
 #endif
 
 #include <tulip/tulipconf.h>
+#include <tulip/tuliphash.h>
 
 #include <list>
 #include <algorithm>
@@ -129,6 +130,7 @@ protected:
 	static ObserverMap holdObserverMap;
 	static ObservableMap holdObservableMap;
 	std::list<Observer*> observersList;
+	TLP_HASH_SET<Observer*> observersSet;
 	void removeOnlyObserver(Observer *);
 };
 
@@ -138,15 +140,17 @@ inline unsigned int Observable::countObservers() {
 }
 
 inline void Observable::removeObserver(Observer *item) {
-	if (!observersList.empty() && std::find(observersList.begin(), observersList.end(), item) != observersList.end()) {
+	if (!observersList.empty() && observersSet.find(item) != observersSet.end()) {
 		observersList.remove(item);
-		item->removeObservable((Observable*)this);
+		observersSet.erase(item);
+		item->removeObservable(const_cast<Observable*>(this));
 	}
 }
 
 inline void Observable::removeOnlyObserver(Observer *item) {
-	if (!observersList.empty() && std::find(observersList.begin(), observersList.end(), item) != observersList.end()) {
+	if (!observersList.empty() && observersSet.find(item) != observersSet.end()) {
 		observersList.remove(item);
+		observersSet.erase(item);
 	}
 }
 

@@ -51,36 +51,24 @@ Observer::~Observer(){
 }
 
 void Observer::addObservable(Observable *observable) {
-	if (updateObservables)
+	if (updateObservables) {
 		observables.push_front(observable);
+	}
 }
 
 void Observer::removeObservable(Observable *observable){
-	if (observables.empty())
-		return;
-	std::list<Observable*>::iterator itObs = observables.begin();
-	std::list<Observable*>::iterator ite = observables.end();
-	while(itObs!=ite){
-		if(observable == (*itObs)){
-			observables.erase(itObs);
-			return;
-		}
-		++itObs;
+	if (updateObservables) {
+		observables.remove(observable);
 	}
 }
 
 void Observable::addObserver(Observer *obs) {
-	if (!observersList.empty()) {
-		// ensure obs does not already exists in observersList
-		std::list<Observer*>::iterator itlObs = observersList.begin();
-		std::list<Observer*>::iterator itle = observersList.end();
-		while (itlObs != itle) {
-			if (obs == (*itlObs))
-				return;
-			++itlObs;
-		}
+	// ensure obs does not already exists in observersList
+	if (observersSet.find(obs) == observersSet.end()) {
+		observersList.push_front(obs);
+		observersSet.insert(obs);
+		obs->addObservable(const_cast<Observable*>(this));
 	}
-	observersList.push_front(obs);
 }
 
 //===============================================================
@@ -199,5 +187,6 @@ void Observable::removeObservers() {
 		(*it)->removeObservable(this);
 	}
 	observersList.clear();
+	observersSet.clear();
 }
 

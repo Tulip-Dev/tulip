@@ -40,39 +40,24 @@ GraphObserver::~GraphObserver(){
 }
 
 void GraphObserver::addObservable(ObservableGraph *graph){
-	if (updateObservables)
+	if (updateObservables) {
 		observables.push_front(graph);
+	}
 }
 
 void GraphObserver::removeObservable(ObservableGraph *graph) {
-	if (!updateObservables || observables.empty())
-		return;
-
-	std::list<ObservableGraph*>::iterator itObs = observables.begin();
-	std::list<ObservableGraph*>::iterator ite = observables.end();
-
-	while(itObs!=ite){
-		if(graph == (*itObs)){
-			observables.erase(itObs);
-			return;
-		}
-		++itObs;
+	if (updateObservables) {
+		observables.remove(graph);
 	}
 }
 
 void ObservableGraph::addGraphObserver(GraphObserver *obs) const {
-	if (!observers.empty()) {
-		// ensure obs does not already exists in observers
-		std::list<GraphObserver*>::iterator itObs = observers.begin();
-		std::list<GraphObserver*>::iterator ite = observers.end();
-		while (itObs != ite) {
-			if (obs == (*itObs))
-				return;
-			++itObs;
-		}
+	// ensure obs does not already exists in observers
+	if (observersSet.find(obs) == observersSet.end()) {
+		observers.push_front(obs);
+		observersSet.insert(obs);
+		obs->addObservable(const_cast<ObservableGraph*>(this));
 	}
-	observers.push_front(obs);
-	obs->addObservable((ObservableGraph *)this);
 }
 
 void ObservableGraph::notifyAddNode(Graph *sg, const node n) {
@@ -306,4 +291,5 @@ void ObservableGraph::removeGraphObservers() {
 		(*it)->removeObservable(this);
 	}
 	observers.clear();
+	observersSet.clear();
 }

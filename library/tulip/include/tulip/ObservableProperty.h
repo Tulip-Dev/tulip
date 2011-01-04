@@ -102,6 +102,7 @@ protected:
 	void notifyDestroy(PropertyInterface*);
 	void removeOnlyPropertyObserver(PropertyObserver *) const;
 	mutable std::list<PropertyObserver*> observers;
+	mutable TLP_HASH_SET<PropertyObserver*> observersSet;
 };
 /*@}*/
 
@@ -110,15 +111,17 @@ inline unsigned int ObservableProperty::countPropertyObservers() {
 }
 
 inline void ObservableProperty::removePropertyObserver(PropertyObserver *item) const{
-	if (!observers.empty() && std::find(observers.begin(), observers.end(), item) != observers.end()) {
+	if (!observers.empty() && observersSet.find(item) != observersSet.end()) {
 		observers.remove(item);
-		item->removeObservable((ObservableProperty*)this);
+		observersSet.erase(item);
+		item->removeObservable(const_cast<ObservableProperty *>(this));
 	}
 }
 
 inline void ObservableProperty::removeOnlyPropertyObserver(PropertyObserver *item) const{
-	if (!observers.empty() && std::find(observers.begin(), observers.end(), item) != observers.end()) {
+	if (!observers.empty() && observersSet.find(item) != observersSet.end()) {
 		observers.remove(item);
+		observersSet.erase(item);
 	}
 }
 
