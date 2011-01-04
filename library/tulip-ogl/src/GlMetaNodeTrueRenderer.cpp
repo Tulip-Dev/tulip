@@ -166,8 +166,8 @@ namespace tlp {
 
     calculator.compute(camera->getViewport(),camera->getViewport());
 
-    LayersLODVector *layersLODVector=calculator.getResult();
-    LayerLODUnit *layerLODUnit=&(layersLODVector->front());
+    LayersLODVector &layersLODVector=calculator.getResult();
+    LayerLODUnit &layerLODUnit=layersLODVector.front();
 
     glPushMatrix();
     glScalef(scale[0],scale[1],scale[2]);
@@ -179,7 +179,7 @@ namespace tlp {
     metaData.getGlVertexArrayManager()->pauseRendering(true);
     GlMetaNode glMetaNode(0);
     GlEdge glEdge(0);
-    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->nodesLODVector.begin();it!=layerLODUnit->nodesLODVector.end();++it){
+    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit.nodesLODVector.begin();it!=layerLODUnit.nodesLODVector.end();++it){
       if((*it).lod<0)
         continue;
 
@@ -193,7 +193,7 @@ namespace tlp {
       }
     }
     metaData.getGlVertexArrayManager()->pauseRendering(true);
-    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->edgesLODVector.begin();it!=layerLODUnit->edgesLODVector.end();++it){
+    for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit.edgesLODVector.begin();it!=layerLODUnit.edgesLODVector.end();++it){
       if((*it).lod<0)
         continue;
 
