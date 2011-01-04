@@ -99,6 +99,16 @@ public:
       dataSet->get("maxsize", sizeMax);
       dataSet->get("maxdegree", arityMax);
     }
+    if (arityMax < 1) {
+      if (pluginProgress)
+	pluginProgress->setError("maxdegree must be a strictly positive integer");
+      return false;
+    }
+    if (sizeMax < 1) {
+      if (pluginProgress)
+	pluginProgress->setError("maxsize must be a strictly positive integer");
+      return false;
+    }
     bool ok=true;
     int i=0;
     unsigned int nbTest=0;
