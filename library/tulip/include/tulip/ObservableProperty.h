@@ -102,7 +102,7 @@ protected:
 	void notifyDestroy(PropertyInterface*);
 	void removeOnlyPropertyObserver(PropertyObserver *) const;
 	mutable std::list<PropertyObserver*> observers;
-	mutable TLP_HASH_SET<PropertyObserver*> observersSet;
+	mutable TLP_HASH_MAP<PropertyObserver*, std::list<PropertyObserver*>::iterator> observersSet;
 };
 /*@}*/
 
@@ -111,17 +111,19 @@ inline unsigned int ObservableProperty::countPropertyObservers() {
 }
 
 inline void ObservableProperty::removePropertyObserver(PropertyObserver *item) const{
-	if (!observers.empty() && observersSet.find(item) != observersSet.end()) {
-		observers.remove(item);
-		observersSet.erase(item);
+	TLP_HASH_MAP<PropertyObserver*, std::list<PropertyObserver*>::iterator>::iterator it = observersSet.find(item);
+	if (it != observersSet.end()) {
+		observers.erase(it->second);
+		observersSet.erase(it);
 		item->removeObservable(const_cast<ObservableProperty *>(this));
 	}
 }
 
-inline void ObservableProperty::removeOnlyPropertyObserver(PropertyObserver *item) const{
-	if (!observers.empty() && observersSet.find(item) != observersSet.end()) {
-		observers.remove(item);
-		observersSet.erase(item);
+inline void ObservableProperty::removeOnlyPropertyObserver(PropertyObserver *item) const {
+	TLP_HASH_MAP<PropertyObserver*, std::list<PropertyObserver*>::iterator>::iterator it = observersSet.find(item);
+	if (it != observersSet.end()) {
+		observers.erase(it->second);
+		observersSet.erase(it);
 	}
 }
 

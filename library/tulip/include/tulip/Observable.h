@@ -130,7 +130,7 @@ protected:
 	static ObserverMap holdObserverMap;
 	static ObservableMap holdObservableMap;
 	std::list<Observer*> observersList;
-	TLP_HASH_SET<Observer*> observersSet;
+	TLP_HASH_MAP<Observer*, std::list<Observer*>::iterator> observersSet;
 	void removeOnlyObserver(Observer *);
 };
 
@@ -140,17 +140,19 @@ inline unsigned int Observable::countObservers() {
 }
 
 inline void Observable::removeObserver(Observer *item) {
-	if (!observersList.empty() && observersSet.find(item) != observersSet.end()) {
-		observersList.remove(item);
-		observersSet.erase(item);
+	TLP_HASH_MAP<Observer*, std::list<Observer*>::iterator>::iterator it = observersSet.find(item);
+	if (it != observersSet.end()) {
+		observersList.erase(it->second);
+		observersSet.erase(it);
 		item->removeObservable(const_cast<Observable*>(this));
 	}
 }
 
 inline void Observable::removeOnlyObserver(Observer *item) {
-	if (!observersList.empty() && observersSet.find(item) != observersSet.end()) {
-		observersList.remove(item);
-		observersSet.erase(item);
+	TLP_HASH_MAP<Observer*, std::list<Observer*>::iterator>::iterator it = observersSet.find(item);
+	if (it != observersSet.end()) {
+		observersList.erase(it->second);
+		observersSet.erase(it);
 	}
 }
 
