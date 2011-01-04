@@ -25,7 +25,8 @@
 #define N_RECT_POINTS 4
 
 namespace tlp {
-/** \brief This is a general class for the rendering of 2D rectangles.
+/** \addtogroup GlEntities
+ * \brief This is a general class for the rendering of 2D rectangles.
  *
  * This class is used as a 2D HUD for the rendering of 2D rectangles.
  */

@@ -33,7 +33,7 @@ namespace tlp {
   class TextRenderer;
   struct OcclusionTest;
 
-  /**
+  /** \addtogroup GlEntities
    * Create a entity Label
    */
   class TLP_GL_SCOPE GlLabel : public GlSimpleEntity

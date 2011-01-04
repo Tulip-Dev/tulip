@@ -27,7 +27,9 @@
 #include "tulip/GlTextureManager.h"
 
 namespace tlp {
-/** \brief General class used to render boxes as GlEntity.
+/** \addtogroup GlEntities
+ *
+ *\brief General class used to render boxes as GlEntity.
  *
  * This class is a generic class to render boxes as GlEntity.
  */

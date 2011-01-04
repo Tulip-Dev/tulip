@@ -27,7 +27,8 @@
 
 namespace tlp {
 
-  /** \brief General class used to render circles as GlEntity.
+  /** \addtogroup GlEntities
+   * \brief General class used to render circles as GlEntity.
    *
    * This class is a generic class to render circles as GlEntity.
    */

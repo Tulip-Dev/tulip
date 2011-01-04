@@ -23,7 +23,7 @@
 #include "tulip/Gl2DRect.h"
 
 namespace tlp {
-  /**
+  /** \addtogroup GlEntities
    * Create a rectangle with a texture
    */
   class TLP_GL_SCOPE GlRectTextured : public Gl2DRect {

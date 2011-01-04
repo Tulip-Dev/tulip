@@ -22,7 +22,7 @@
 #include "tulip/GlRegularPolygon.h"
 
 namespace tlp {
-  /**
+  /** \addtogroup GlEntities
    * class to create a triangle
    */
   class TLP_GL_SCOPE GlTriangle : public GlRegularPolygon {
