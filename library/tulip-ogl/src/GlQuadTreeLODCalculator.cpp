@@ -47,18 +47,31 @@ namespace tlp {
         return BoundingBox(center-size,center+size);
     }
 
-    GlQuadTreeLODCalculator::GlQuadTreeLODCalculator() : scene(NULL),haveToCompute(true),inputData(NULL),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
+    GlQuadTreeLODCalculator::GlQuadTreeLODCalculator() : haveToCompute(true),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
     }
 
     GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
         setHaveToCompute();
     }
 
-    void GlQuadTreeLODCalculator::setScene(GlScene *scene){
+    void GlQuadTreeLODCalculator::setScene(GlScene &scene){
         // If we change scene, whe have to remove observer on the graph and the scene
         // in the next rendering, we have to compute quadtree
         setHaveToCompute();
-        this->scene=scene;
+        GlLODCalculator::setScene(scene);
+    }
+
+    void GlQuadTreeLODCalculator::setInputData(GlGraphInputData *newInputData){
+        setHaveToCompute();
+        if (newInputData == NULL) {
+            currentCamera = NULL;
+            currentGraph = NULL;
+            layoutProperty = NULL;
+            sizeProperty = NULL;
+            selectionProperty = NULL;
+        }
+
+        GlLODCalculator::setInputData(newInputData);
     }
 
     bool GlQuadTreeLODCalculator::needEntities(){
@@ -379,7 +392,7 @@ namespace tlp {
             if(selectionProperty)
                 selectionProperty->removeObserver(this);
         }
-        scene->removeObserver(this);
+        glScene->removeObserver(this);
     }
 
     void GlQuadTreeLODCalculator::addObservers() {
@@ -393,20 +406,7 @@ namespace tlp {
             selectionProperty=currentGraph->getProperty(inputData->getElementSelectedPropName());
             selectionProperty->addObserver(this);
         }
-        scene->addObserver(this);
-    }
-
-    void GlQuadTreeLODCalculator::setInputData(GlGraphInputData *newInputData){
-        setHaveToCompute();
-
-        inputData=newInputData;
-        if (newInputData == NULL) {
-            currentCamera = NULL;
-            currentGraph = NULL;
-            layoutProperty = NULL;
-            sizeProperty = NULL;
-            selectionProperty = NULL;
-        }
+        glScene->addObserver(this);
     }
 
     void GlQuadTreeLODCalculator::update(std::set<Observable *>::iterator it,std::set<Observable *>::iterator itEnd){
@@ -449,7 +449,7 @@ namespace tlp {
 
         if(!inputData)
             return;
-        if(!scene)
+        if(!glScene)
             return;
 
         removeObservers();

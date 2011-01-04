@@ -45,7 +45,7 @@ namespace tlp {
     GlQuadTreeLODCalculator();
     ~GlQuadTreeLODCalculator();
 
-    void setScene(GlScene *scene);
+    void setScene(GlScene &scene);
 
     bool needEntities();
     void setNeedEntities(bool);
@@ -83,7 +83,7 @@ namespace tlp {
 
     virtual GlLODCalculator *clone() {
       GlQuadTreeLODCalculator *newCalculator=new GlQuadTreeLODCalculator();
-      newCalculator->setScene(scene);
+      newCalculator->setScene(*glScene);
       newCalculator->setInputData(inputData);
       return newCalculator;
     }
@@ -92,16 +92,12 @@ namespace tlp {
 
     void setHaveToCompute();
 
-    GlScene *scene;
-
     std::vector<QuadTreeNode<unsigned int> *> nodesQuadTree;
     std::vector<QuadTreeNode<unsigned int> *> edgesQuadTree;
     std::vector<QuadTreeNode<GlSimpleEntity *> *> entitiesQuadTree;
     std::vector<std::vector<SimpleEntityLODUnit> > simpleEntities;
 
     bool haveToCompute;
-
-    GlGraphInputData *inputData;
 
     BoundingBox nodesGlobalBoundingBox;
     BoundingBox edgesGlobalBoundingBox;

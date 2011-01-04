@@ -78,18 +78,19 @@ namespace tlp {
 
   public:
 
+    GlLODCalculator():glScene(NULL),inputData(NULL) {}
     virtual ~GlLODCalculator() {}
     virtual GlLODCalculator *clone()=0;
 
     /**
      * Set scene use by this LOD calculator
      */
-    virtual void setScene(GlScene *){}
+    virtual void setScene(GlScene &scene){glScene=&scene;}
 
     /**
      * Set input data use to render
      */
-    virtual void setInputData(GlGraphInputData *) {}
+    virtual void setInputData(GlGraphInputData *inputData) {this->inputData=inputData;}
 
     /**
      * Set RenderingEntitiesFlag to : RenderingSimpleEntities,RenderingNodes,RenderingEdges,RenderingAll,RenderingWithoutRemove
@@ -151,6 +152,9 @@ namespace tlp {
     virtual BoundingBox getSceneBoundingBox()=0;
 
   protected :
+
+    GlScene *glScene;
+    GlGraphInputData *inputData;
 
     RenderingEntitiesFlag renderingEntitiesFlag;
 
