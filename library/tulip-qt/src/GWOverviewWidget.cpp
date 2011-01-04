@@ -50,7 +50,7 @@ private :
 };
 
 //=============================================================================
-  GWOverviewWidget::GWOverviewWidget(QWidget* parent,bool drawIfNotVisible) : QWidget(parent),_initialCameraIsInit(false),_initialCamera(0),drawIfNotVisible(drawIfNotVisible){
+  GWOverviewWidget::GWOverviewWidget(QWidget* parent,bool drawIfNotVisible) : QWidget(parent),_initialCamera(NULL),drawIfNotVisible(drawIfNotVisible){
   setupUi(this);
   _observedView = 0;
   _glDraw = 0;
@@ -138,26 +138,23 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   assert( glG == _observedView);
-  (void) glG;
   if (isVisible() || drawIfNotVisible) {
   	if (_observedView != 0) {
-      if(_initialCameraIsInit && !graphChanged) {
+      if(_initialCamera && !graphChanged) {
         Camera currentCamera=_observedView->getScene()->getCamera();
-        if((currentCamera.getUp()==_initialCamera.getUp())) {
-          if((currentCamera.getCenter()-currentCamera.getEyes())==(_initialCamera.getCenter()-_initialCamera.getEyes())) {
+        if((currentCamera.getUp()==_initialCamera->getUp())) {
+          if((currentCamera.getCenter()-currentCamera.getEyes())==(_initialCamera->getCenter()-_initialCamera->getEyes())) {
   					_view->redraw();
   					return;
   				}
   			}
       }
       _view->getScene()->centerScene();
-      _initialCamera = _view->getScene()->getCamera();
-      _initialCameraIsInit=true;
+      _initialCamera = &_view->getScene()->getCamera();
       Camera cam = _observedView->getScene()->getCamera();
-      _initialCamera.setZoomFactor(1);
-      _initialCamera.setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera.getCenter()));
-      _initialCamera.setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera.getCenter()));
-      _view->getScene()->setCamera(_initialCamera);
+      _initialCamera->setZoomFactor(1);
+      _initialCamera->setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
+      _initialCamera->setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
       _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
   	}
   	GlMetaNodeRenderer *oldMetaNodeRenderer;
