@@ -40,38 +40,24 @@ PropertyObserver::~PropertyObserver(){
 }
 
 void PropertyObserver::addObservable(ObservableProperty *property){
-	if (updateObservables)
+	if (updateObservables) {
 		observables.push_front(property);
+	}
 }
 
 void PropertyObserver::removeObservable(ObservableProperty *property) {
-	if (!updateObservables || observables.empty())
-		return;
-
-	std::list<ObservableProperty*>::iterator itObs = observables.begin();
-	std::list<ObservableProperty*>::iterator ite = observables.end();
-	while(itObs!=ite){
-		if(property == (*itObs)){
-			observables.erase(itObs);
-			return;
-		}
-		++itObs;
+	if (updateObservables) {
+		observables.remove(property);
 	}
 }
 
 void ObservableProperty::addPropertyObserver(PropertyObserver *obs) const {
 	// ensure obs does not already exists in observers
-	if (!observers.empty()) {
-		std::list<PropertyObserver*>::iterator itObs = observers.begin();
-		std::list<PropertyObserver*>::iterator ite = observers.end();
-		while (itObs != ite) {
-			if (obs == (*itObs))
-				return;
-			++itObs;
-		}
+	if (observersSet.find(obs) == observersSet.end()) {
+		observers.push_front(obs);
+		observersSet.insert(obs);
+		obs->addObservable((ObservableProperty*)this);
 	}
-	observers.push_front(obs);
-	obs->addObservable((ObservableProperty*)this);
 }
 
 void ObservableProperty::notifyBeforeSetNodeValue(PropertyInterface* p,
@@ -219,6 +205,7 @@ void ObservableProperty::removePropertyObservers() {
 		(*it)->removeObservable(this);
 	}
 	observers.clear();
+	observersSet.clear();
 }
 
 
