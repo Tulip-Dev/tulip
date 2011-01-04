@@ -96,7 +96,7 @@ namespace tlp {
       lodCalculator=calculator;
     else
       lodCalculator=new GlCPULODCalculator();
-    lodCalculator->setScene(this);
+    lodCalculator->setScene(*this);
   }
 
   GlScene::~GlScene(){

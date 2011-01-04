@@ -247,7 +247,7 @@ namespace tlp {
      */
     void setCalculator(GlLODCalculator *calculator) {
       lodCalculator=calculator;
-      calculator->setScene(this);
+      calculator->setScene(*this);
     }
 
     /**
