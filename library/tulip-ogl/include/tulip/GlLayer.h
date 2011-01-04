@@ -95,9 +95,8 @@ namespace tlp {
 
     /**
      * Return the layer's camera
-     * @TODO: add doc because the returned pointer could be deleted !!!
      */
-    Camera *getCamera() {return camera;}
+    Camera &getCamera() {return *camera;}
 
     /**
      * Set if the layer is visible

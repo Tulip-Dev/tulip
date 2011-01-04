@@ -69,7 +69,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
         Coord point((double) glMainWidget->width() - (double) qMouseEv->x(),
         (double) qMouseEv->y(),
         0);
-        point = glMainWidget->getScene()->getCamera()->screenTo3DWorld(point);
+        point = glMainWidget->getScene()->getCamera().screenTo3DWorld(point);
         mLayout->setNodeValue(newNode, point);
         Observable::unholdObservers();
         NodeLinkDiagramComponent *nodeLinkView=(NodeLinkDiagramComponent *)view;

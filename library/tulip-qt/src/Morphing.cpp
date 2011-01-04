@@ -240,12 +240,12 @@ void Morphing::interpolate( GlMainWidget * outGlgw, float inT) {
 	Coord cam_up     = g0->camera->getUp() + (g1->camera->getUp() - g0->camera->getUp()) * inT;
 	float zoomf      = g0->camera->getZoomFactor() + (g1->camera->getZoomFactor() - g0->camera->getZoomFactor()) * inT;
 	float radius     = g0->camera->getSceneRadius() + (g1->camera->getSceneRadius() - g0->camera->getSceneRadius()) * inT;
-	Camera *c=outGlgw->getScene()->getCamera();
-	c->setCenter(cam_center);
-	c->setEyes(cam_eyes);
-	c->setUp(cam_up);
-	c->setZoomFactor(zoomf);
-	c->setSceneRadius(radius);
+	Camera &c=outGlgw->getScene()->getCamera();
+	c.setCenter(cam_center);
+	c.setEyes(cam_eyes);
+	c.setUp(cam_up);
+	c.setZoomFactor(zoomf);
+	c.setSceneRadius(radius);
 
 	/*GlGraphRenderingParameters newParam = outGlgw->getScene()->setCamera(->getGlGraphComposite()->getRenderingParameters();
     newParam.setCamera(Camera(cam_center,cam_eyes,cam_up,zoomf,radius) );

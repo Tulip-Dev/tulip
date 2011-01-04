@@ -89,7 +89,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
           Coord point((double) glMainWidget->width() - (double) qMouseEv->x(),
               (double) qMouseEv->y(),
               0);
-          bends.push_back(glMainWidget->getScene()->getCamera()->screenTo3DWorld(point));
+          bends.push_back(glMainWidget->getScene()->getCamera().screenTo3DWorld(point));
           glMainWidget->draw();
         }
       }
@@ -117,7 +117,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     Coord point((double) glMainWidget->width() - (double) qMouseEv->x(),
         (double) qMouseEv->y(),
         0);
-    point = glMainWidget->getScene()->getCamera()->screenTo3DWorld(point);
+    point = glMainWidget->getScene()->getCamera().screenTo3DWorld(point);
     curPos.set(point[0], point[1], point[2]);
     glMainWidget->draw();
     return true;
@@ -129,7 +129,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 bool MouseEdgeBuilder::draw(GlMainWidget *glMainWidget) {
   if (!started) return false;
   glStencilFunc(GL_LEQUAL,0,0xFFFF);
-  glMainWidget->getScene()->getCamera()->initGl();
+  glMainWidget->getScene()->getCamera().initGl();
   glDisable(GL_LIGHTING);
   vector<Coord>::iterator lCoordIt=bends.begin();
   setColor(Color(255,0,0,255));
