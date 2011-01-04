@@ -100,7 +100,7 @@ public :
 
 protected :
 
-	Camera *camera;
+	Camera &camera;
 	Vector<int, 4> viewport;
 	int nbAnimationSteps;
 	bool optimalPath;

@@ -414,12 +414,12 @@ namespace tlp {
           displayingData.get<Coord>("cameraUp",cameraUp);
           displayingData.get<double>("cameraZoomFactor",cameraZoomFactor);
           displayingData.get<double>("distCam",distCam);
-          Camera *camera=glW->getScene()->getLayer("Main")->getCamera();
-          camera->setEyes(cameraEyes);
-          camera->setCenter(cameraCenter);
-          camera->setUp(cameraUp);
-          camera->setZoomFactor(cameraZoomFactor);
-          camera->setSceneRadius(distCam);
+          Camera &camera=glW->getScene()->getLayer("Main")->getCamera();
+          camera.setEyes(cameraEyes);
+          camera.setCenter(cameraCenter);
+          camera.setUp(cameraUp);
+          camera.setZoomFactor(cameraZoomFactor);
+          camera.setSceneRadius(distCam);
         }
         // show current subgraph if any
         int id = 0;

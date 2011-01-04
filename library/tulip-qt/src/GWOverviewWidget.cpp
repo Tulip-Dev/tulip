@@ -50,7 +50,7 @@ private :
 };
 
 //=============================================================================
-  GWOverviewWidget::GWOverviewWidget(QWidget* parent,bool drawIfNotVisible) : QWidget(parent),_initialCamera(NULL),drawIfNotVisible(drawIfNotVisible){
+  GWOverviewWidget::GWOverviewWidget(QWidget* parent,bool drawIfNotVisible) : QWidget(parent),_initialCameraIsInit(false),_initialCamera(0),drawIfNotVisible(drawIfNotVisible){
   setupUi(this);
   _observedView = 0;
   _glDraw = 0;
@@ -101,10 +101,10 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
 			     0);
       Coord middle = (upperLeftCorner + lowerRightCorner) / 2.f;
       middle[2] = 0.;
-      middle = _observedView->getScene()->getCamera()->screenTo3DWorld(middle);
-      Camera cover  = *_view->getScene()->getCamera();
-      Camera cview  = *_observedView->getScene()->getCamera();
-      middle = _view->getScene()->getCamera()->worldTo2DScreen(middle);
+      middle = _observedView->getScene()->getCamera().screenTo3DWorld(middle);
+      Camera cover  = _view->getScene()->getCamera();
+      Camera cview  = _observedView->getScene()->getCamera();
+      middle = _view->getScene()->getCamera().worldTo2DScreen(middle);
       //      cerr << "Square center: " << Coord(x, y, z) << endl;
       float dx, dy, dz;
       int resultViewport;
@@ -141,10 +141,10 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   (void) glG;
   if (isVisible() || drawIfNotVisible) {
   	if (_observedView != 0) {
-  		if(_initialCamera && !graphChanged) {
-  			Camera *currentCamera=_observedView->getScene()->getCamera();
-  			if((currentCamera->getUp()==_initialCamera->getUp())) {
-  				if((currentCamera->getCenter()-currentCamera->getEyes())==(_initialCamera->getCenter()-_initialCamera->getEyes())) {
+      if(_initialCameraIsInit && !graphChanged) {
+        Camera currentCamera=_observedView->getScene()->getCamera();
+        if((currentCamera.getUp()==_initialCamera.getUp())) {
+          if((currentCamera.getCenter()-currentCamera.getEyes())==(_initialCamera.getCenter()-_initialCamera.getEyes())) {
   					_view->redraw();
   					return;
   				}
@@ -152,10 +152,12 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       }
       _view->getScene()->centerScene();
       _initialCamera = _view->getScene()->getCamera();
-      Camera cam = *_observedView->getScene()->getCamera();
-      _initialCamera->setZoomFactor(1);
-      _initialCamera->setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
-      _initialCamera->setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
+      _initialCameraIsInit=true;
+      Camera cam = _observedView->getScene()->getCamera();
+      _initialCamera.setZoomFactor(1);
+      _initialCamera.setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera.getCenter()));
+      _initialCamera.setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera.getCenter()));
+      _view->getScene()->setCamera(_initialCamera);
       _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
   	}
   	GlMetaNodeRenderer *oldMetaNodeRenderer;
@@ -240,7 +242,7 @@ void RectPosition::draw(GlMainWidget*) {
   points[2] = Coord(viewport[0] + viewport[2], viewport[1] + viewport[3], 0.0);
   points[3] = Coord(viewport[0]              , viewport[1] + viewport[3], 0.0);
   for (int i=0;i<4;++i)
-    points[i] = _observedView->getScene()->getCamera()->screenTo3DWorld(points[i]);
+    points[i] = _observedView->getScene()->getCamera().screenTo3DWorld(points[i]);
 
   //_view->makeCurrent();
   viewport = _view->getScene()->getViewport();
@@ -250,7 +252,7 @@ void RectPosition::draw(GlMainWidget*) {
   points2[2] = Coord(viewport[0] + viewport[2], viewport[1] + viewport[3], 0.0);
   points2[3] = Coord(viewport[0]              , viewport[1] + viewport[3], 0.0);
   for (int i=0;i<4;++i)
-    points2[i] = _view->getScene()->getCamera()->screenTo3DWorld(points2[i]);
+    points2[i] = _view->getScene()->getCamera().screenTo3DWorld(points2[i]);
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glDisable(GL_LIGHTING);

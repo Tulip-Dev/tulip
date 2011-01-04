@@ -78,7 +78,7 @@ GraphState::GraphState( GlMainWidget * glgw ) {
   *size = *( g->getProperty<SizeProperty>("viewSize") );
   color = new ColorProperty( g );
   *color = *( g->getProperty<ColorProperty>("viewColor") );
-  camera = new Camera(*glgw->getScene()->getCamera());
+  camera = new Camera(glgw->getScene()->getCamera());
 }
 //====================================================
 GraphState::GraphState(Graph *graph, LayoutProperty *l, SizeProperty *s, ColorProperty *c, Camera *cam) {

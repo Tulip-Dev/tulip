@@ -78,7 +78,8 @@ private :
   GlMainWidget *_view;
   bool _synchronizing;
   RectPosition *_glDraw;
-  tlp::Camera *_initialCamera;
+  bool _initialCameraIsInit;
+  tlp::Camera _initialCamera;
   GlMetaNodeRenderer metaNodeRenderer;
   bool drawIfNotVisible;
   //void setBackgroundColor(QColor);

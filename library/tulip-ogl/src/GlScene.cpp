@@ -164,7 +164,7 @@ namespace tlp {
 
       GlLODCalculator *newLodCalculator=lodCalculator->clone();
       newLodCalculator->setRenderingEntitiesFlag(RenderingAll);
-      newLodCalculator->beginNewCamera(getLayer("Main")->getCamera());
+      newLodCalculator->beginNewCamera(&getLayer("Main")->getCamera());
       GlNode glNode(0);
       for(set<node>::iterator it=metaNodes.begin();it!=metaNodes.end();++it){
         glNode.id=(*it).id;
@@ -177,7 +177,7 @@ namespace tlp {
 
       for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit->nodesLODVector.begin();it!=layerLODUnit->nodesLODVector.end();++it) {
         if((*it).lod>=0)
-          glGraphComposite->getInputData()->getMetaNodeRenderer()->prerender(node((*it).id),(*it).lod,getLayer("Main")->getCamera());
+          glGraphComposite->getInputData()->getMetaNodeRenderer()->prerender(node((*it).id),(*it).lod,&getLayer("Main")->getCamera());
       }
       delete newLodCalculator;
     }
@@ -621,7 +621,7 @@ namespace tlp {
       visitor=new GlBoundingBoxSceneVisitor(NULL);
 
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera()))
+      if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera()))
         (*it).second->acceptVisitor(visitor);
     }
 
@@ -716,22 +716,22 @@ namespace tlp {
     computeAjustSceneToSize(width,height, &center, &eye, &sceneRadius,NULL,NULL,&sceneBoundingBox);
 
     for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      Camera* camera=(*it).second->getCamera();
-      camera->setCenter(center);
+      Camera &camera=(*it).second->getCamera();
+      camera.setCenter(center);
 
-      camera->setSceneRadius(sceneRadius,sceneBoundingBox);
+      camera.setSceneRadius(sceneRadius,sceneBoundingBox);
 
-      camera->setEyes(eye);
-      camera->setUp(Coord(0, 1., 0));
-      camera->setZoomFactor(1.);
+      camera.setEyes(eye);
+      camera.setUp(Coord(0, 1., 0));
+      camera.setZoomFactor(1.);
     }
   }
 
   void GlScene::zoomXY(int step, const int x, const int y) {
 
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera()))
-        (*it).second->getCamera()->setZoomFactor((*it).second->getCamera()->getZoomFactor() * pow(1.1,step));
+      if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera()))
+        (*it).second->getCamera().setZoomFactor((*it).second->getCamera().getZoomFactor() * pow(1.1,step));
     }
     if (step < 0) step *= -1;
     int factX = (int)(step*(double(viewport[2])/2.0-x)/ 7.0);
@@ -741,41 +741,41 @@ namespace tlp {
 
   void GlScene::zoom(float,const Coord& dest) {
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
-        (*it).second->getCamera()->setEyes(dest + ((*it).second->getCamera()->getEyes() - (*it).second->getCamera()->getCenter()));
-        (*it).second->getCamera()->setCenter(dest);
+      if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera())) {
+        (*it).second->getCamera().setEyes(dest + ((*it).second->getCamera().getEyes() - (*it).second->getCamera().getCenter()));
+        (*it).second->getCamera().setCenter(dest);
       }
     }
   }
 
   void GlScene::translateCamera(const int x, const int y, const int z) {
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
+      if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera())) {
         Coord v1(0, 0, 0);
         Coord v2(x, y, z);
-        v1 = (*it).second->getCamera()->screenTo3DWorld(v1);
-        v2 = (*it).second->getCamera()->screenTo3DWorld(v2);
+        v1 = (*it).second->getCamera().screenTo3DWorld(v1);
+        v2 = (*it).second->getCamera().screenTo3DWorld(v2);
         Coord move = v2 - v1;
-        (*it).second->getCamera()->setEyes((*it).second->getCamera()->getEyes() + move);
-        (*it).second->getCamera()->setCenter((*it).second->getCamera()->getCenter() + move);
+        (*it).second->getCamera().setEyes((*it).second->getCamera().getEyes() + move);
+        (*it).second->getCamera().setCenter((*it).second->getCamera().getCenter() + move);
       }
     }
   }
 
   void GlScene::zoom(int step) {
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
-        (*it).second->getCamera()->setZoomFactor((*it).second->getCamera()->getZoomFactor() * pow(1.1, step));
+      if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera())) {
+        (*it).second->getCamera().setZoomFactor((*it).second->getCamera().getZoomFactor() * pow(1.1, step));
       }
     }
   }
 
   void GlScene::rotateScene(const int x, const int y, const int z) {
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
-      if((*it).second->getCamera()->is3D() && (!(*it).second->useSharedCamera())) {
-        (*it).second->getCamera()->rotate(float(x)/360.0 * M_PI, 1.0, 0, 0);
-        (*it).second->getCamera()->rotate(float(y)/360.0 * M_PI, 0, 1.0, 0);
-        (*it).second->getCamera()->rotate(float(z)/360.0 * M_PI, 0, 0, 1.0);
+      if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera())) {
+        (*it).second->getCamera().rotate(float(x)/360.0 * M_PI, 1.0, 0, 0);
+        (*it).second->getCamera().rotate(float(y)/360.0 * M_PI, 0, 1.0, 0);
+        (*it).second->getCamera().rotate(float(z)/360.0 * M_PI, 0, 0, 1.0);
       }
     }
   }
@@ -982,7 +982,7 @@ namespace tlp {
     GlSVGFeedBackBuilder builder;
     GlFeedBackRecorder recorder(&builder);
     builder.begin(viewport,clearColor,pointSize,lineWidth);
-    recorder.record(false,returned,buffer,layersList[0].second->getCamera()->getViewport());
+    recorder.record(false,returned,buffer,layersList[0].second->getCamera().getViewport());
     string str;
     builder.getResult(&str);
     if(!filename.empty()) {
@@ -1023,7 +1023,7 @@ namespace tlp {
     GlEPSFeedBackBuilder builder;
     GlFeedBackRecorder recorder(&builder);
     builder.begin(viewport,clearColor,pointSize,lineWidth);
-    recorder.record(false,returned,buffer,layersList[0].second->getCamera()->getViewport());
+    recorder.record(false,returned,buffer,layersList[0].second->getCamera().getViewport());
     string str;
     builder.getResult(&str);
     if(!filename.empty()) {

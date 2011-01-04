@@ -271,8 +271,8 @@ namespace tlp {
     GlGraphComposite* getGlGraphComposite() {return glGraphComposite;}
     GlLayer* getGraphLayer() {return graphLayer;}
 
-    Camera* getCamera() {return getLayer("Main")->getCamera();}
-    void setCamera(Camera* camera) {getLayer("Main")->setCamera(*camera);}
+    Camera& getCamera() {return getLayer("Main")->getCamera();}
+    void setCamera(const Camera& camera) {getLayer("Main")->setCamera(camera);}
 
   private:
 

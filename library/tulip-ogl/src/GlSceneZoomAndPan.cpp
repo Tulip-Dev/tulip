@@ -25,16 +25,15 @@ using namespace std;
 namespace tlp {
 
 GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundingBox, const int nbAnimationSteps, const bool optimalPath, const double p) :
-	nbAnimationSteps(nbAnimationSteps), optimalPath(optimalPath), p(p), additionalAnimation(NULL) {
+	camera(glScene->getLayer("Main")->getCamera()),nbAnimationSteps(nbAnimationSteps), optimalPath(optimalPath), p(p), additionalAnimation(NULL) {
 
-	camera = glScene->getLayer("Main")->getCamera();
 	viewport = glScene->getViewport();
 
-	camCenterStart = camera->getCenter();
+	camCenterStart = camera.getCenter();
 	camCenterEnd = Coord(boundingBox.center());
 
-	Coord blScene(camera->screenTo3DWorld(Coord(0, 0, 0)));
-	Coord trScene(camera->screenTo3DWorld(Coord(viewport[2], viewport[3], 0)));
+	Coord blScene(camera.screenTo3DWorld(Coord(0, 0, 0)));
+	Coord trScene(camera.screenTo3DWorld(Coord(viewport[2], viewport[3], 0)));
 
 	w0 = min(abs(trScene.getX() - blScene.getX()), abs(trScene.getY() - blScene.getY()));
 	w1 = max(boundingBox[1][0] - boundingBox[0][0], boundingBox[1][1] - boundingBox[0][1]);
@@ -108,16 +107,16 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
 				f = 0;
 			}
 		}
-		camera->setCenter(camCenterStart + (camCenterEnd - camCenterStart) *f);
-		camera->setEyes(Coord(0, 0, camera->getSceneRadius()));
-		camera->setEyes(camera->getEyes() + camera->getCenter());
-		camera->setUp(Coord(0, 1., 0));
+		camera.setCenter(camCenterStart + (camCenterEnd - camCenterStart) *f);
+		camera.setEyes(Coord(0, 0, camera.getSceneRadius()));
+		camera.setEyes(camera.getEyes() + camera.getCenter());
+		camera.setUp(Coord(0, 1., 0));
 
-		Coord bbScreenFirst = camera->worldTo2DScreen(camera->getCenter() - Coord(w/2, w/2, 0));
-		Coord bbScreenSecond = camera->worldTo2DScreen(camera->getCenter() + Coord(w/2, w/2, 0));
+		Coord bbScreenFirst = camera.worldTo2DScreen(camera.getCenter() - Coord(w/2, w/2, 0));
+		Coord bbScreenSecond = camera.worldTo2DScreen(camera.getCenter() + Coord(w/2, w/2, 0));
 		float bbWidthScreen = bbScreenSecond.getX() - bbScreenFirst.getX();
 		double newZoomFactor = min(viewport[2], viewport[3]) / bbWidthScreen;
-		camera->setZoomFactor(camera->getZoomFactor() * newZoomFactor);
+		camera.setZoomFactor(camera.getZoomFactor() * newZoomFactor);
 	}
 	if (additionalAnimation != NULL) {
 		additionalAnimation->animationStep(animationStep);
