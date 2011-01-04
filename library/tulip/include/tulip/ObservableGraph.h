@@ -152,7 +152,7 @@ protected:
 	void notifyDestroy(Graph*);
 	void removeOnlyGraphObserver(GraphObserver *) const;
 	mutable std::list<GraphObserver*> observers;
-	mutable TLP_HASH_SET<GraphObserver*> observersSet;
+	mutable TLP_HASH_MAP<GraphObserver*, std::list<GraphObserver*>::iterator> observersSet;
 };
 
 inline unsigned int ObservableGraph::countGraphObservers() {
@@ -161,17 +161,19 @@ inline unsigned int ObservableGraph::countGraphObservers() {
 
 
 inline void ObservableGraph::removeGraphObserver(GraphObserver *item) const {
-	if (!observers.empty() && observersSet.find(item) != observersSet.end()) {
-		observers.remove(item);
-		observersSet.erase(item);
+	TLP_HASH_MAP<GraphObserver*, std::list<GraphObserver*>::iterator>::iterator it = observersSet.find(item);
+	if (it != observersSet.end()) {
+		observers.erase(it->second);
+		observersSet.erase(it);
 		item->removeObservable(const_cast<ObservableGraph*>(this));
 	}
 }
 
 inline void ObservableGraph::removeOnlyGraphObserver(GraphObserver *item) const {
-	if (!observers.empty() && observersSet.find(item) != observersSet.end()) {
-		observers.remove(item);
-		observersSet.erase(item);
+	TLP_HASH_MAP<GraphObserver*, std::list<GraphObserver*>::iterator>::iterator it = observersSet.find(item);
+	if (it != observersSet.end()) {
+		observers.erase(it->second);
+		observersSet.erase(it);
 	}
 }
 

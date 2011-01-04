@@ -66,7 +66,7 @@ void Observable::addObserver(Observer *obs) {
 	// ensure obs does not already exists in observersList
 	if (observersSet.find(obs) == observersSet.end()) {
 		observersList.push_front(obs);
-		observersSet.insert(obs);
+		observersSet[obs] = observersList.begin();
 		obs->addObservable(const_cast<Observable*>(this));
 	}
 }

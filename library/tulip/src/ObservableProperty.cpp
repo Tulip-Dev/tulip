@@ -55,7 +55,7 @@ void ObservableProperty::addPropertyObserver(PropertyObserver *obs) const {
 	// ensure obs does not already exists in observers
 	if (observersSet.find(obs) == observersSet.end()) {
 		observers.push_front(obs);
-		observersSet.insert(obs);
+		observersSet[obs] = observers.begin();
 		obs->addObservable((ObservableProperty*)this);
 	}
 }
