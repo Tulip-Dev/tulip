@@ -50,26 +50,30 @@ private :
 };
 
 //=============================================================================
-  GWOverviewWidget::GWOverviewWidget(QWidget* parent,bool drawIfNotVisible) : QWidget(parent),_initialCamera(NULL),drawIfNotVisible(drawIfNotVisible){
+  GWOverviewWidget::GWOverviewWidget(QWidget* parent,bool drawIfNotVisible) : QWidget(parent),_observedView(NULL),_initialCamera(NULL),drawIfNotVisible(drawIfNotVisible){
   setupUi(this);
-  _observedView = 0;
-  _glDraw = 0;
+
+  // Setup the internal view of the overview
+  //  This view is a GlMainWidget with only one layer : "Main"
   _view = new GlMainWidget(frame);
   _view->setViewLabel(false);
   GlLayer* layer=new GlLayer("Main");
   layer->getComposite()->setDeleteComponentsInDestructor(false);
   _view->getScene()->addLayer(layer);
+  // Add the visible rectangle on the overview
+  _glDraw = new RectPosition(_view, 0);
+  _view->addForegroundEntity(_glDraw);
+
+  // Add the view to the overview widget
   QGridLayout* gridLayout = new QGridLayout(frame);
   gridLayout->setMargin(0);
   gridLayout->setSpacing(0);
   gridLayout->addWidget( _view, 0, 0, 1, 1);
   _view->installEventFilter(this);
-  _glDraw = new RectPosition(_view, 0);
-  _view->addForegroundEntity(_glDraw);
 }
 //=============================================================================
 GWOverviewWidget::~GWOverviewWidget() {
-  if (_observedView != 0) {
+  if (_observedView) {
     disconnect(this, 0, 0, 0);
   }
 }
@@ -138,9 +142,13 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   assert( glG == _observedView);
+
   if (isVisible() || drawIfNotVisible) {
-  	if (_observedView != 0) {
+
+    if (_observedView != 0) {
+      // If we have an observed view
       if(_initialCamera && !graphChanged) {
+        // Check if the camera changed. If no, only redraw overview
         Camera currentCamera=_observedView->getScene()->getCamera();
         if((currentCamera.getUp()==_initialCamera->getUp())) {
           if((currentCamera.getCenter()-currentCamera.getEyes())==(_initialCamera->getCenter()-_initialCamera->getEyes())) {
@@ -149,23 +157,37 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   				}
   			}
       }
+
+      // Draw the overview
       _view->getScene()->centerScene();
+
+      // Init camera and background color
       _initialCamera = &_view->getScene()->getCamera();
       Camera cam = _observedView->getScene()->getCamera();
       _initialCamera->setZoomFactor(1);
       _initialCamera->setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
       _initialCamera->setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
       _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
-  	}
-  	GlMetaNodeRenderer *oldMetaNodeRenderer;
-  	if(_view->getScene()->getGlGraphComposite()){
-  	  oldMetaNodeRenderer=_view->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer();
-  	  _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(&metaNodeRenderer);
-  	}
-    _view->draw();
-    if(_view->getScene()->getGlGraphComposite())
-      _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(oldMetaNodeRenderer);
+
+      // The overview use the observed view inputData but we don't want to see inside metanodes in overview, so :
+      //  - Store old MetaNodeRenderer
+      //  - Put a new default MetaNodeRenderer
+      //  - Put the old MetaNodeRenderer after draw
+      GlMetaNodeRenderer *oldMetaNodeRenderer;
+      if(_view->getScene()->getGlGraphComposite()){
+        oldMetaNodeRenderer=_view->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer();
+        _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(&metaNodeRenderer);
+      }
+      _view->draw();
+      if(_view->getScene()->getGlGraphComposite())
+        _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(oldMetaNodeRenderer);
+
+    }else{
+      // We don't have any observed view : only draw the view
+      _view->draw();
+    }
   }
+
 }
 //=============================================================================
   void GWOverviewWidget::setObservedView(GlMainWidget *glWidget,GlSimpleEntity *observedEntity){
@@ -173,37 +195,39 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   cerr << __PRETTY_FUNCTION__ << glWidget << endl << flush;
 #endif
   if (_observedView != 0) {
+    // Signal deconnection
     disconnect(_observedView, SIGNAL(graphRedrawn(GlMainWidget *,bool)),
 	       this, SLOT(draw(GlMainWidget *,bool)));
     disconnect(_observedView, SIGNAL(destroyed(QObject *)),
 	       this, SLOT(observedViewDestroyed(QObject *)));
     _observedView = 0;
   }
+
+  // ToolTip activation if we have an observed view
   if (glWidget)
     _view->setToolTip(QString("Click Left to center the view on the selected point"));
   else
     _view->setToolTip(QString());
+
   _observedView = glWidget;
   _glDraw->setObservedView(_observedView);
 
   if (_observedView != 0) {
+    // If we have an observed view : initialise the "Main" layer
     _view->getScene()->getLayer("Main")->deleteGlEntity("overviewEntity");
     _view->getScene()->getLayer("Main")->addGlEntity(observedEntity,"overviewEntity");
 
     GlGraphComposite *p_subclass = dynamic_cast<GlGraphComposite *>( observedEntity );
     if(p_subclass)
       _view->getScene()->addGlGraphCompositeInfo(_view->getScene()->getGraphLayer(),p_subclass);
-    _view->getScene()->centerScene();
-    _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
 
-    if(isVisible())
-      _glDraw->draw(_view);
-
+    // Connect signals
     connect(_observedView, SIGNAL(graphRedrawn(GlMainWidget *,bool)),
 	   this, SLOT(draw(GlMainWidget *,bool)));
     connect(_observedView, SIGNAL(destroyed(QObject *)),
 	    this, SLOT(observedViewDestroyed(QObject *)));
   } else {
+    // If we don't have any observed view : clear "Main" layer
     _view->getScene()->addGlGraphCompositeInfo(0,0);
     _view->getScene()->getLayer("Main")->deleteGlEntity("overviewEntity");
   }
