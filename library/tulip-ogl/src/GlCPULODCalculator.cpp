@@ -48,8 +48,15 @@ namespace tlp {
   void GlCPULODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity * entity,const BoundingBox& bb) {
     assert(bb.isValid());
 
-    sceneBoundingBox.expand(bb[0]);
-    sceneBoundingBox.expand(bb[1]);
+    // This code is here to prevent adding entities in percent
+    //  If you look the Gl2DRect, you can see an option inPercent,
+    //   if this entitie is inPercent we can't compute bounding box , so we create the bigest possible bounding box
+    //   and here we don't add this false bounding box to the scene bounding box
+    //   TODO : See if we can change the bounding box compute in Gl2DRect
+    if(bb[0][0]!=numeric_limits<float>::min()){
+      sceneBoundingBox.expand(bb[0]);
+      sceneBoundingBox.expand(bb[1]);
+    }
 
     // check if we have to render simple entities
     if((renderingEntitiesFlag & RenderingSimpleEntities) !=0)
