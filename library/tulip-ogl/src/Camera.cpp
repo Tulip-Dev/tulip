@@ -44,6 +44,10 @@ Camera::Camera(GlScene* scene,Coord center,Coord eyes, Coord up, double zoomFact
 Camera::Camera(GlScene* scene,bool d3) :
     						matrixCoherent(false),scene(scene),d3(d3) {
 }
+//====================================================
+Camera::~Camera() {
+  notifyDestroy((Camera*)this);
+}
 //===================================================
 void Camera::setScene(GlScene* scene) {
 	this->scene=scene;

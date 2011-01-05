@@ -28,6 +28,7 @@
 #include <tulip/Matrix.h>
 #include <tulip/BoundingBox.h>
 
+#include "tulip/CameraObserver.h"
 #include "tulip/GlXMLTools.h"
 
 namespace tlp {
@@ -37,7 +38,7 @@ namespace tlp {
    */
   class GlScene;
 
-  class TLP_GL_SCOPE Camera {
+  class TLP_GL_SCOPE Camera : public ObservableCamera {
   public:
     
     /**
@@ -50,6 +51,11 @@ namespace tlp {
      * Constructor : use for 2D camera 
      */
     Camera(GlScene* scene,bool d3);
+
+    /**
+     * Destructor
+     */
+    ~Camera();
 
     /**
      * Set the camera's scene : the viewport is store in the scene, so we must attach camera to a scene

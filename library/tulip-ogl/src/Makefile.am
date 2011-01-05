@@ -38,6 +38,7 @@ libtulip_ogl_la_SOURCES = \
 	Glyph.cpp \
 	CubeOutLined.cpp \
 	Camera.cpp \
+	CameraObserver.cpp \
 	GlGraphStaticData.cpp \
 	GlGrid.cpp \
 	GlLabel.cpp \

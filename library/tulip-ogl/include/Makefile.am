@@ -2,6 +2,7 @@ EXTRA_DIST = CMakeLists.txt
 
 nobase_include_HEADERS = \
 	tulip/Camera.h\
+	tulip/CameraObserver.h\
 	tulip/GlComposite.h \
 	tulip/GlGraphComposite.h \
 	tulip/GlGrid.h \
