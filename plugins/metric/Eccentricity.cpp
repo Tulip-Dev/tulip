@@ -17,6 +17,7 @@
  *
  */
 #include <deque>
+#include <omp.h>
 #include <tulip/ConnectedTest.h>
 #include "Eccentricity.h"
 
@@ -43,33 +44,20 @@ EccentricityMetric::EccentricityMetric(const tlp::PropertyContext &context):Doub
   addParameter<bool>("norm",paramHelp[0],"true");
   addParameter<bool>("directed",paramHelp[0],"false");  
 }
-
+//====================================================================
 EccentricityMetric::~EccentricityMetric() {
 }
+//====================================================================
 bool EccentricityMetric::check(string &err) {
     return true;
 }
-bool EccentricityMetric::run() {
-  bool allPaths = false;
-  bool norm = true;
-  bool directed = false;
-  
-  if (dataSet!=0) {
-    dataSet->get("closeness centrality", allPaths);
-    dataSet->get("norm", norm);
-    dataSet->get("directed", directed);    
-  }
-  
-  MutableContainer<double> nbAccessible;
-  nbAccessible.setAll(0);
-  
-  Iterator<node> *itN= graph->getNodes();
-  for (unsigned int i=0; itN->hasNext(); ++i) {
-    if (pluginProgress->progress(i,graph->numberOfNodes())!=TLP_CONTINUE) break;
-    node n = itN->next();
+//====================================================================
+double EccentricityMetric::compute(node n) {
+//    cout << "t_" << omp_get_thread_num() << "[" << n.id << "] start" << flush << endl;
     MutableContainer<unsigned int> distance;
     distance.setAll(0);
     double val;
+    double nbAcc = 0.;    
     if (directed)
       val = tlp::maxDistance(graph, n, distance, DIRECTED);
     else
@@ -78,27 +66,70 @@ bool EccentricityMetric::run() {
     node n2;
     forEach(n2, graph->getNodes()) {
       if (distance.get(n2) < graph->numberOfNodes())
-	nbAccessible.set(n, nbAccessible.get(n) + 1); 
+	nbAcc += 1.;
     }
     
     if (allPaths) {
-      val = 0;
+      val = 0.;
       node n2;
       forEach(n2, graph->getNodes()) {
 	if (distance.get(n2) < graph->numberOfNodes() && n2 != n)
-	  val += double( distance.get(n2.id)) / (nbAccessible.get(n) - 1 ) ;
+	  val += double( distance.get(n2.id) ) / (nbAcc - 1 ) ;
       }
     }
-    
-    doubleResult->setNodeValue(n, val);
-  } delete itN;
+  if (norm) val /= nbAcc;
+//    cout << "t_" << omp_get_thread_num() << "[" << n.id << "] end" << flush << endl;
 
-  if (norm) {
-    node n;
-    forEach(n, graph->getNodes()) {
-      double val = doubleResult->getNodeValue(n);
-      doubleResult->setNodeValue(n, val / (nbAccessible.get(n) - 1 ));
-    }
+  return val;
+}
+//====================================================================
+bool EccentricityMetric::run() {
+  allPaths = false;
+  norm     = true;
+  directed = false;
+    if (dataSet!=0) {
+    dataSet->get("closeness centrality", allPaths);
+    dataSet->get("norm", norm);
+    dataSet->get("directed", directed);    
   }
+
+  node n;
+  size_t i = 0;
+  vector<node> vecNodes(graph->numberOfNodes());
+  vector<double> res(graph->numberOfNodes());
+  forEach(n, graph->getNodes()) {
+    vecNodes[i] = n;
+    ++i;
+  }
+//  omp_set_num_threads(4);
+  
+  size_t nbElem = vecNodes.size();
+
+  double t1 = omp_get_wtime();
+#pragma omp parallel for
+  for (size_t ni = 0; ni < nbElem; ++ni) {
+    res[ni] = compute(vecNodes[ni]);
+  }
+  for (size_t ni = 0; ni < nbElem; ++ni) {
+    doubleResult->setNodeValue(vecNodes[ni], res[ni]);
+  }
+
+  double t2 = omp_get_wtime();
+  for (size_t ni = 0; ni < nbElem; ++ni) {
+    double val = compute(vecNodes[ni]);
+    doubleResult->setNodeValue(vecNodes[ni], val);    
+  }
+  double t3 = omp_get_wtime();
+  cout << "omp : " << t2 - t1 << "s" << endl << flush;
+  cout << "sng : " << t3 - t2 << "s" << endl << flush;
+
+  /*
+  Iterator<node> *itN = graph->getNodes();
+  for (unsigned int i=0; itN->hasNext(); ++i) {
+    if (pluginProgress->progress(i, graph->numberOfNodes())!=TLP_CONTINUE) break;
+    node n = itN->next();
+    doubleResult->setNodeValue(n, compute(n));
+  }
+  */
   return pluginProgress->state()!=TLP_CANCEL;
 }

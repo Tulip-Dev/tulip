@@ -45,7 +45,13 @@ public:
   EccentricityMetric(const tlp::PropertyContext &);
   ~EccentricityMetric();
   bool run();
+  double compute(tlp::node n);	
   bool check(std::string &);
+private:
+  bool allPaths;
+  bool norm;
+  bool directed;
+
 };
 /*@}*/
 #endif
