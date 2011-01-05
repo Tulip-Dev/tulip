@@ -27,6 +27,7 @@
 #include <tulip/Matrix.h>
 #include <tulip/Vector.h>
 #include <tulip/GlSceneObserver.h>
+#include <tulip/CameraObserver.h>
 #include <tulip/GlCPULODCalculator.h>
 
 namespace tlp {
@@ -38,7 +39,7 @@ namespace tlp {
   /**
    * Class use to compute bounding boxs of a vector of GlEntity
    */
-  class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, public GraphObserver, public Observer, public GlSceneObserver {
+  class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, public GraphObserver, public Observer, public GlSceneObserver, public CameraObserver {
 
   public:
 
@@ -75,6 +76,10 @@ namespace tlp {
     void addLocalProperty(Graph*, const std::string &name);
     void delLocalProperty(Graph*, const std::string &name);
     void destroy(Graph *);
+    void destroy(Camera *);
+
+    void initCamerasObservers();
+    void clearCamerasObservers();
 
     void addLayer(GlScene*, const std::string&, GlLayer*){setHaveToCompute();}
     void delLayer(GlScene*, const std::string&, GlLayer*){setHaveToCompute();}
