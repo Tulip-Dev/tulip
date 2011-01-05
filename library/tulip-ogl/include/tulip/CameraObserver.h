@@ -78,7 +78,6 @@ namespace tlp {
   };
 
   inline void ObservableCamera::addObserver(CameraObserver *obs) const {
-    std::cout << "this : " << this << std::endl;
     observers.insert(obs);
   }
 
