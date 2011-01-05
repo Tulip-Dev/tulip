@@ -105,7 +105,7 @@ bool EccentricityMetric::run() {
   
   size_t nbElem = vecNodes.size();
 
-  double t1 = omp_get_wtime();
+//  double t1 = omp_get_wtime();
 #pragma omp parallel for
   for (size_t ni = 0; ni < nbElem; ++ni) {
     res[ni] = compute(vecNodes[ni]);
@@ -113,7 +113,7 @@ bool EccentricityMetric::run() {
   for (size_t ni = 0; ni < nbElem; ++ni) {
     doubleResult->setNodeValue(vecNodes[ni], res[ni]);
   }
-
+/*
   double t2 = omp_get_wtime();
   for (size_t ni = 0; ni < nbElem; ++ni) {
     double val = compute(vecNodes[ni]);
@@ -122,7 +122,7 @@ bool EccentricityMetric::run() {
   double t3 = omp_get_wtime();
   cout << "omp : " << t2 - t1 << "s" << endl << flush;
   cout << "sng : " << t3 - t2 << "s" << endl << flush;
-
+*/
   /*
   Iterator<node> *itN = graph->getNodes();
   for (unsigned int i=0; itN->hasNext(); ++i) {
