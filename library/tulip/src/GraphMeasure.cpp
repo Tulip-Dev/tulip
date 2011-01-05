@@ -71,10 +71,6 @@ unsigned int tlp::maxDistance(const Graph *sg, const node n,
 	maxDist = std::max(maxDist, nDist);
       }
     }
- #ifdef _OPENMP
-    // same as creation
-    #pragma omp critical(maxDistanceIterator)
-#endif
     delete itn;
   }
   return maxDist;

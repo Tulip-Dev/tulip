@@ -3,8 +3,10 @@
 #include <vector>
 #include <iostream>
 #include <cstdlib>
+#include <omp.h>
 
-static const size_t BUFFOBJ = 20;
+static const size_t BUFFOBJ      = 20;
+static const size_t MAXNBTHREADS = 128;
 
 namespace tlp {
 /**
@@ -50,44 +52,36 @@ public:
 #endif
             assert(sizeof(TYPE) == sizeofObj); //to prevent inheritance with different size of object
             TYPE * t;
-#ifdef _OPENMP
-#pragma omp critical
-#endif
-            t = getObject();
+            t = getObject(omp_get_thread_num());
             return t;
         }
 
         inline void operator delete( void *p ) {
-#ifdef _OPENMP
-#pragma omp critical
-#endif
-            {
-                _freeObject.push_back(p);
-            }
+            _freeObject[omp_get_thread_num()].push_back(p);
         }
 private:
-        static std::vector<void * > _freeObject;
+        static std::vector<void * > _freeObject[MAXNBTHREADS];
 
-        static TYPE* getObject() {
+        static TYPE* getObject(size_t threadId) {
             TYPE *result;
-            if (_freeObject.empty()) {
+            if (_freeObject[threadId].empty()) {
                 TYPE * p = (TYPE *)malloc(BUFFOBJ * sizeof(TYPE));
                 for (size_t j=0; j< BUFFOBJ - 1; ++j) {
-                    _freeObject.push_back((void *)p);
+                    _freeObject[threadId].push_back((void *)p);
                     p += 1;
                 }
                 result = p;
             }
             else {
-                result = (TYPE *)_freeObject.back();
-                _freeObject.pop_back();
+                result = (TYPE *)_freeObject[threadId].back();
+                _freeObject[threadId].pop_back();
             }
             return result;
         }
 };
 
 template <typename  TYPE >
-std::vector<void * > MemoryPool<TYPE>::_freeObject = std::vector<void * >();
+std::vector<void * > MemoryPool<TYPE>::_freeObject[MAXNBTHREADS];
 
 }
 #endif // MEMORYPOOL_H
