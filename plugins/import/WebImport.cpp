@@ -36,7 +36,7 @@ public:
 
   UrlElement();
   UrlElement(const UrlElement &c);
-  void load();
+  bool load();
   void clear();
   bool isHtmlPage();
   UrlElement parseUrl(const std::string &href);
@@ -64,6 +64,9 @@ private:
 
   UrlElement getRedirection() {
     return parseUrl(context->newLocation);
+  }
+  int getCode() {
+    return context->code;
   }
 };
 
@@ -96,7 +99,7 @@ void HttpContext::finished(int id, bool error) {
 
 void HttpContext::headerReceived(const QHttpResponseHeader & resp) {
   if ((isHtml = resp.isValid())) {
-    int code = resp.statusCode();
+    code = resp.statusCode();
     if (code > 399) /* error codes */
       isHtml = false;
     else if ((code > 299) &&
@@ -153,10 +156,11 @@ void UrlElement::clear() {
 }
 
 
-void UrlElement::load() {
+bool UrlElement::load() {
   if (!siteconnect(server,url,serverport,false))
-    return;
+    return false;
   fill(data);
+  return true;
 }
 
 static const char* not_html_extensions[] = {
@@ -208,7 +212,7 @@ bool UrlElement::siteconnect(const std::string &server, const std::string &url,c
     QCoreApplication::processEvents();
   }
   timer.stop();
-  return context->status;
+  return context->status && context->code < 400;
 } /* end, siteconnect */
 
 static const char * rejected_protocols[] = {
@@ -670,6 +674,14 @@ struct WebImport:public ImportModule {
 
     graph->getProperty<IntegerProperty>("viewShape")
       ->setAllNodeValue(14); // GlyphManager::getInst().glyphId("2D - Circle")
+    if (!mySite.load()) {
+      if (pluginProgress) {
+	stringstream sstr;
+	sstr << "Unable to access http://" << mySite.server << mySite.url << " (ERROR " << mySite.getCode() << ')';
+	pluginProgress->setError(sstr.str());
+      }
+      return false;
+    }
     node n;
     toVisit.push_back(mySite);
     addNode(mySite, n);
