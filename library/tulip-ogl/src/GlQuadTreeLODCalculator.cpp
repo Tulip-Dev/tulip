@@ -125,6 +125,8 @@ namespace tlp {
 
             addObservers();
 
+            clearCamerasObservers();
+
             // Clear all vectors
             cameras.clear();
             simpleEntities.clear();
@@ -162,6 +164,8 @@ namespace tlp {
                 glMatrixMode(GL_MODELVIEW);
             }
 
+            initCamerasObservers();
+
             haveToCompute = false;
 
         }else{
@@ -171,7 +175,7 @@ namespace tlp {
 
             quadTreesVectorPosition=0;
             simpleEntitiesVectorPosition=0;
-            for(vector<pair<Camera*,Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
+            for(vector<pair<Camera*, Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
 
                 Camera *camera=(*it).first;
                 layersLODVector.push_back(LayerLODUnit());
@@ -437,8 +441,33 @@ namespace tlp {
     }
 
     void GlQuadTreeLODCalculator::destroy(Graph *) {
-        clear();
-        setInputData(NULL);
+      clear();
+      setInputData(NULL);
+    }
+
+    void GlQuadTreeLODCalculator::destroy(Camera *camera) {
+      std::vector<std::pair<std::string, GlLayer*> > *layerList=glScene->getLayersList();
+
+      clearCamerasObservers();
+      std::vector<std::pair<Camera *,Camera> >::iterator itCameras=cameras.begin();
+      for(std::vector<std::pair<std::string, GlLayer*> >::iterator it=layerList->begin();it!=layerList->end();++it){
+        (*itCameras).first=&(*it).second->getCamera();
+        ++itCameras;
+      }
+
+      initCamerasObservers();
+    }
+
+    void GlQuadTreeLODCalculator::initCamerasObservers() {
+      for(vector<pair<Camera *, Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
+        (*it).first->addObserver(this);
+      }
+    }
+
+    void GlQuadTreeLODCalculator::clearCamerasObservers(){
+      for(vector<pair<Camera *, Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
+        (*it).first->removeObserver(this);
+      }
     }
 
     void GlQuadTreeLODCalculator::setHaveToCompute(){
