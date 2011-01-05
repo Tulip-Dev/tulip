@@ -25,6 +25,7 @@ class HttpContext :public QHttp {
   Q_OBJECT
 public:
   bool status;
+  int code;
   int rqid;
   bool processed;
   bool redirected;
