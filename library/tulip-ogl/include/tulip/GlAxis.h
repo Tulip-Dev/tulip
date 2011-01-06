@@ -28,13 +28,17 @@ const float MAGIG_FACTOR = (1. / (1.3));
 
 namespace tlp {
 
-/** \addtogroup GlEntities
- * \brief A base class to draw an axis with graduations
- *
- * This class allow to render an axis with graduations. This class is there for code factorisation
- * and should not be used directly. Use derivated classes instead : GlQuantitativeAxis for a numerical
- * graduated axis and GlNominativeAxis for a string graduated axis
- */
+  /**
+   * \addtogroup GlEntities
+   */
+  /*@{*/
+  /**
+   * \brief A base class to draw an axis with graduations
+   *
+   * This class allow to render an axis with graduations. This class is there for code factorisation
+   * and should not be used directly. Use derivated classes instead : GlQuantitativeAxis for a numerical
+   * graduated axis and GlNominativeAxis for a string graduated axis
+   */
 class TLP_GL_SCOPE GlAxis : public GlComposite {
 
 public :
@@ -191,7 +195,7 @@ protected :
 	float maxCaptionWidth;
 	float maxGraduationLabelWidth;
 };
-
+/*@}*/
 }
 
 #endif /* GLAXIS_H_ */

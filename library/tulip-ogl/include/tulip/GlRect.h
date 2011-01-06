@@ -25,7 +25,11 @@
 #define N_RECT_POINTS 4
 
 namespace tlp {
-/** \addtogroup GlEntities
+/**
+ * \addtogroup GlEntities
+ */
+/*@{*/
+/**
  * \brief This is a general class for the rendering of 2D rectangles.
  *
  * This class is used as a 2D HUD for the rendering of 2D rectangles.
@@ -116,5 +120,6 @@ class TLP_GL_SCOPE GlRect : public GlPolygon {
   virtual void draw(float lod,Camera *camera);
 
 };
+/*@}*/
 }
 #endif

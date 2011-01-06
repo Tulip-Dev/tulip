@@ -27,7 +27,11 @@
 #define N_QUAD_POINTS 4 /**< Constant indicating the number of points in a quad (stupid isn't it ? :D) */
 
 namespace tlp {
-/** \addtogroup GlEntities
+/**
+ * \addtogroup GlEntities
+ */
+/*@{*/
+/**
  * \brief General class to render quads as augmented displays.
  *
  * This class is a generic class to render quads as augmented displays.
@@ -138,5 +142,6 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
   virtual void setWithXML(xmlNodePtr rootNode);
   
 };
+/*@}*/
 }
 #endif

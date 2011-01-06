@@ -52,7 +52,11 @@ namespace tlp {
 	void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData);
 	void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut, GLvoid *polygonData);
 
-  /** \addtogroup GlEntities
+  /**
+   * \addtogroup GlEntities
+   */
+  /*@{*/
+  /**
    * class to create a complex polygon (concave polygon or polygon with hole)
    */
   class TLP_GL_SCOPE GlComplexPolygon : public GlSimpleEntity {
@@ -192,5 +196,6 @@ namespace tlp {
     std::string textureName;
     float textureZoom;
   };
+  /*@}*/
 }
 #endif

@@ -33,7 +33,11 @@ namespace tlp {
   class TextRenderer;
   struct OcclusionTest;
 
-  /** \addtogroup GlEntities
+  /**
+   * \addtogroup GlEntities
+   */
+  /*@{*/
+  /**
    * Create a entity Label
    */
   class TLP_GL_SCOPE GlLabel : public GlSimpleEntity
@@ -267,5 +271,6 @@ namespace tlp {
     unsigned int occlusionBorderSize;
     OcclusionTest *occlusionTester;
   };
+  /*@}*/
 }
 #endif

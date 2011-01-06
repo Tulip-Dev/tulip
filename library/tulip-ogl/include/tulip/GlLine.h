@@ -31,7 +31,11 @@
 #include "tulip/GlSimpleEntity.h"
 
 namespace tlp {
-  /** \addtogroup GlEntities
+  /**
+   * \addtogroup GlEntities
+   */
+  /*@{*/
+  /**
    * \brief This is a general class to render an OpenGL laine
    * This class is use to render an OpenGl line
    */
@@ -112,6 +116,7 @@ namespace tlp {
     unsigned char factor;
     unsigned int pattern;
   };
+  /*@}*/
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

@@ -33,7 +33,11 @@ using namespace std;
 
 namespace tlp {
 
-  /** \addtogroup GlEntities
+  /**
+   * \addtogroup GlEntities
+   */
+  /*@{*/
+  /**
    * \brief General class used to render a connected group of quadrilaterals (textured or not) that shares edges as GlEntity
    *
    * This generic class is used  to render a connected group of quadrilaterals (textured or not) that shares edges as GlEntity
@@ -144,6 +148,7 @@ namespace tlp {
 	  Color outlineColor;
 
   };
+  /*@}*/
 
 }
 #endif /* GLPOLYQUAD_H_ */

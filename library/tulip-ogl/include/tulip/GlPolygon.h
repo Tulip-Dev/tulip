@@ -29,7 +29,11 @@
 #include "tulip/GlAbstractPolygon.h"
 
 namespace tlp {
-  /** \addtogroup GlEntities
+  /**
+   * \addtogroup GlEntities
+   */
+  /*@{*/
+  /**
    * class to create a polygon
    */
   class TLP_GL_SCOPE GlPolygon : public GlAbstractPolygon {
@@ -81,5 +85,6 @@ namespace tlp {
      */
     virtual Coord& point(const unsigned int i);
   };
+  /*@}*/
 }
 #endif
