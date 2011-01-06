@@ -93,7 +93,9 @@ double tlp::averagePathLength(const Graph *graph,
     ++i;
   }
   bool stopfor = false;
-  #pragma omp parallel for private(i) schedule(dynamic, 1)
+#ifdef _OPENMP
+#pragma omp parallel for private(i) schedule(dynamic, 1)
+#endif
   for (i = 0; i < nbNodes; ++i) {
     if (stopfor) continue;
     // check if we are in the main thread.
