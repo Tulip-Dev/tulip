@@ -3,10 +3,19 @@
 #include <vector>
 #include <iostream>
 #include <cstdlib>
+#ifdef _OPENMP
 #include <omp.h>
+#endif
+
+#ifdef _OPENMP
+#define THREAD_NUMBER  omp_get_thread_num()
+static const size_t MAXNBTHREADS = 128;
+#else
+#define THREAD_NUMBER 0
+static const size_t MAXNBTHREADS = 1;
+#endif
 
 static const size_t BUFFOBJ      = 20;
-static const size_t MAXNBTHREADS = 128;
 
 namespace tlp {
 /**
@@ -52,12 +61,12 @@ public:
 #endif
             assert(sizeof(TYPE) == sizeofObj); //to prevent inheritance with different size of object
             TYPE * t;
-            t = getObject(omp_get_thread_num());
+            t = getObject(THREAD_NUMBER);
             return t;
         }
 
         inline void operator delete( void *p ) {
-            _freeObject[omp_get_thread_num()].push_back(p);
+            _freeObject[THREAD_NUMBER].push_back(p);
         }
 private:
         static std::vector<void * > _freeObject[MAXNBTHREADS];
