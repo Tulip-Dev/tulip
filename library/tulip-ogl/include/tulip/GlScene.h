@@ -80,7 +80,9 @@ namespace tlp {
   class TLP_GL_SCOPE GlScene : public GlObservableScene {
 
   public:
-
+    /** \brief Constructor
+     * By default GlScene use a GlQuadTreeLODCalculator to compute LOD but you can change this default lod calculator, to do that : put your calculator in constructor parameters
+     */
     GlScene(GlLODCalculator *calculator=NULL);
 
     ~GlScene();
