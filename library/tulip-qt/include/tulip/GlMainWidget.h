@@ -55,6 +55,21 @@ class GlCompositeHierarchyManager;
 
 /** \addtogroup Tulip_Widgets */
 /*@{*/
+/** \brief Widget of visualisation
+ *
+ * This widget provide a simple system to display visualisation
+ * If you only want to visualise a graph, you can call the setGraph function
+ * But in other cases you can directly use the GlScene of the GlMainWidget
+ * \see GlMainWidget
+ *
+ * After scene construction you can perform some operation on GlMainWidgte :
+ * - Selection with doSelect() and selectGlEntities()
+ * - Image output with getImage(), createPicture(), outputSVG() and outputEPS()
+ * - Texture output with createTexture()
+ * - others operation on GlScene and QGlWidget
+ *
+ */
+
 class TLP_QT_SIMPLE_SCOPE GlMainWidget : public QGLWidget {
 	Q_OBJECT;
 
