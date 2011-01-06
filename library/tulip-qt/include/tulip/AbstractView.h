@@ -40,17 +40,17 @@ namespace tlp {
      * Basic constructor
      */
     AbstractView();
-    /*
+    /**
      * Basic destructor
      */
     virtual ~AbstractView();
 
-    /*
+    /**
      * Construct the abstract view
      * \warning If you want to inherit from it, you must call AbstractView::construct(QWidget *) in your new construct function
      */
     virtual QWidget *construct(QWidget *parent);
-    /*
+    /**
      * get the widget who will be add to workspace by the controller
      * \return the widget of the abstract view
      */
