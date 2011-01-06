@@ -135,7 +135,7 @@ public:
 	~RoundedBox() {}
 	void draw(node n, float lod);
 	Coord getAnchor(const Coord &vector) const;
-	void getIncludeBoundingBox(BoundingBox &boundingBox);
+	void getIncludeBoundingBox(BoundingBox &boundingBox, node);
 
 private:
 
@@ -159,7 +159,7 @@ void RoundedBox::initRoundedSquare() {
 	roundedSquare = createRoundedRect(Size(1,1,1));
 }
 
-void RoundedBox::getIncludeBoundingBox(BoundingBox &boundingBox) {
+void RoundedBox::getIncludeBoundingBox(BoundingBox &boundingBox,node ) {
         boundingBox[0] = Coord(-0.35, -0.35, 0);
         boundingBox[1] = Coord(0.35, 0.35, 0);
 }
