@@ -48,7 +48,7 @@ namespace tlp {
           * Create a new rectangle with
           * (*this)[0] = min = (xmin, ymin);
           * (*this)[1] = max = (xmax, ymax);
-          * Validity is tested in debug mode;
+          * \warning the rectangle must be valid (tested in debug mode)
           */
         Rectangle(const Obj xmin, const Obj ymin, const Obj xmax, const Obj ymax) {
             (*this)[0][0] = xmin;
@@ -59,7 +59,7 @@ namespace tlp {
         }
         /**
           * Create a new Rectangle from a Bounding Box correct conversion from 3D -> 2D
-          * validity of the new Rectangle is tested in debug mode
+          * \warning the rectangle must be valid (tested in debug mode)
           */
         Rectangle(const tlp::BoundingBox &b) {
             (*this)[0][0] = b[0][0];
@@ -71,7 +71,7 @@ namespace tlp {
 
        /**
        * create a new Rectangle
-       * Validity is checked in debug mode
+       * \warning the rectangle must be valid (tested in debug mode)
        */
         Rectangle(const Vector<Obj,2> &min, const Vector<Obj,2> &max) {
             (*this)[0] = min;
@@ -80,6 +80,7 @@ namespace tlp {
         }
         /**
        * @return true if r intersect "this".
+       * \warning the rectangle must be valid (tested in debug mode)
        */
 	bool intersect(const Rectangle &r) const {
             assert(this->isValid());
@@ -93,7 +94,8 @@ namespace tlp {
             return true;
 	}
 	/**
-       * @return the true if there is an intersection else false, the intersection parameter is used to stored the Rectangle pf intersection (if it exists). 
+       * @return the true if there is an intersection else false, the intersection parameter is used to stored the Rectangle pf intersection (if it exists).
+       * \warning the rectangle must be valid (tested in debug mode)
        */
 	bool intersect(const Rectangle &r, Rectangle &intersection) const {
             assert(this->isValid());
@@ -115,7 +117,7 @@ namespace tlp {
 	}
         /**
         * Return true if point is stricly inside the AARectangle
-        * validity of the current rectangle is tested in debug mode
+        * \warning the rectangle must be valid (tested in debug mode)
         */
         bool isInside(const Vector<Obj, 2> &p) const {
             assert(isValid());
@@ -127,7 +129,7 @@ namespace tlp {
         }
         /**
         * @return true if r is inside or equal to the AARectangle
-        * Validity of Rectangles is tested in debug mode
+        * \warning the rectangle must be valid (tested in debug mode)
         */
         bool isInside(const Rectangle &r) const{
             assert(isValid());
@@ -139,7 +141,7 @@ namespace tlp {
 
         /**
         * Translate "this" by vector v
-        * validity of the Rectangle is tested in debubg
+        * \warning the rectangle must be valid (tested in debug mode)
         */
         void translate(const tlp::Vector<Obj,2> &v) {
             assert(isValid());
@@ -148,7 +150,7 @@ namespace tlp {
         }
         /**
           * Return the width of the rectangle
-          * The Rectangle must be valid (tested in debug)
+          * \warning the rectangle must be valid (tested in debug mode)
           */
         Obj width() const {
             assert(isValid());
@@ -156,7 +158,7 @@ namespace tlp {
         }
         /**
           * Return the height of the rectangle
-          * The Rectangle must be valid (tested in debug)
+          * \warning the rectangle must be valid (tested in debug mode)
           */
         Obj height() const {
             assert(isValid());
@@ -164,7 +166,7 @@ namespace tlp {
         }
         /**
           * Return the surface of the rectangle
-          * The Rectangle must be valid (tested in debug)
+          * \warning the rectangle must be valid (tested in debug mode)
           */
         Obj surface() const {
             assert(isValid());
@@ -173,6 +175,7 @@ namespace tlp {
         /**
           * Return the aspect ratio of the reactangle
           * a value between [0..1]
+          * \warning the rectangle must be valid (tested in debug mode)
           */
         Obj aspectRatio() const {
             assert(isValid());
@@ -181,8 +184,8 @@ namespace tlp {
             return std::min(height(), width()) / std::max(height(), width());
         }
         /**
-          * Return the aspect ratio of the reactangle
-          * a value between [0..1]
+          * Return the center of a rectangle
+          * \warning the rectangle must be valid (tested in debug mode)
           */
         Vector<Obj, 2> center() const {
             assert(isValid());
