@@ -28,7 +28,7 @@ const char
     * paramHelp[] = {
     // width
         HTML_HELP_OPEN()
-        HTML_HELP_DEF( "type", "int" )
+        HTML_HELP_DEF( "type", "unsigned int" )
         HTML_HELP_DEF( "default", "10" )
         HTML_HELP_BODY()
         "This parameter defines the grid's node width."
@@ -36,7 +36,7 @@ const char
 
         // height
         HTML_HELP_OPEN()
-        HTML_HELP_DEF( "type", "int" )
+        HTML_HELP_DEF( "type", "unsigned int" )
         HTML_HELP_DEF( "default", "10" )
         HTML_HELP_BODY()
         "This parameter defines the grid's node height."
@@ -74,8 +74,8 @@ class Grid: public ImportModule {
  public:
   Grid(AlgorithmContext context) :
     ImportModule(context) {
-    addParameter<int> ("width", paramHelp[0], "10");
-    addParameter<int> ("height", paramHelp[1], "10");
+    addParameter<unsigned int> ("width", paramHelp[0], "10");
+    addParameter<unsigned int> ("height", paramHelp[1], "10");
     addParameter<StringCollection> ("connectivity", paramHelp[2], "4;6;8");
     addParameter<bool> ("oppositeNodesConnected", paramHelp[3], false);
     addParameter<double> ("spacing", paramHelp[4], "1.0");
@@ -83,10 +83,10 @@ class Grid: public ImportModule {
   ~Grid() {
   }
 
-  void buildRow(vector<node> &row, int height, int conn, bool isTore,
+  void buildRow(vector<node> &row, unsigned int height, int conn, bool isTore,
       double spacing) {
     LayoutProperty *layout = graph->getProperty<LayoutProperty> ("viewLayout");
-    int width = row.size();
+    unsigned int width = row.size();
 
     //Used for conn == 6
     double r = 0.5;
@@ -99,7 +99,7 @@ class Grid: public ImportModule {
     } else {
       shift += 0;
     }
-    for (int i = 0; i < width; ++i) {
+    for (unsigned int i = 0; i < width; ++i) {
       row[i] = graph->addNode();
       if (conn == 6) {
 
@@ -110,7 +110,7 @@ class Grid: public ImportModule {
             + spacing), 0));
     }
     //At this time the first edge is alway the good
-    for (int i = 0; i < width - 1; ++i)
+    for (unsigned int i = 0; i < width - 1; ++i)
       graph->addEdge(row[i], row[i + 1]);
 
     if (isTore)
@@ -120,8 +120,8 @@ class Grid: public ImportModule {
   void connectRow(vector<node> &row1, unsigned int row1H, vector<node> &row2,
       unsigned int, int conn, bool isTore) {
     assert(row1.size()==row2.size());
-    int width = row1.size();
-    for (int i = 0; i < width; ++i) {
+    unsigned int width = row1.size();
+    for (unsigned int i = 0; i < width; ++i) {
       graph->addEdge(row1[i], row2[i]);
 
       if (conn == 8) {
@@ -156,8 +156,8 @@ class Grid: public ImportModule {
 
 
   bool import(const string &) {
-    int width = 10;
-    int height = 10;
+    unsigned int width = 10;
+    unsigned int height = 10;
     bool isTore = false;
     int conn = 4;
     StringCollection connectivity;
@@ -169,12 +169,33 @@ class Grid: public ImportModule {
       dataSet->get("spacing", spacing);
       dataSet->get("connectivity", connectivity);
     }
+    if (width == 0) {
+      if (pluginProgress)
+	pluginProgress->setError(string("Error: width cannot be null"));
+      return false;
+    }
+
+    if (height == 0) {
+      if (pluginProgress)
+	pluginProgress->setError(string("Error: height cannot be null"));
+      return false;
+    }
+
+    if (spacing <= 0.0) {
+      if (pluginProgress)
+	pluginProgress->setError(string("Error: spacing must be strictly positive"));
+      return false;
+    }
+
     if (connectivity.getCurrentString().compare("4") == 0)
       conn = 4;
     else if (connectivity.getCurrentString().compare("6") == 0) {
       conn = 6;
       if(isTore && height%2 == 1){
-        std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " Error : cannot connect opposite nodes in an hexagonal grid with odd height"  <<std::endl;
+	if (pluginProgress)
+	  pluginProgress->setError("Error : cannot connect opposite nodes in an hexagonal grid with odd height");
+	else
+	  std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " Error : cannot connect opposite nodes in an hexagonal grid with odd height"  <<std::endl;
         return false;
       }
     } else
@@ -208,7 +229,7 @@ class Grid: public ImportModule {
 
     grid[0].resize(width);
     buildRow(grid[0], 0, conn, isTore, spacing);
-    for (int i = 1; i < height; ++i) {
+    for (unsigned int i = 1; i < height; ++i) {
       grid[i].resize(width);
 
       buildRow(grid[i], i, conn, isTore, spacing);

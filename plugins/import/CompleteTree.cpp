@@ -30,7 +30,7 @@ namespace
 	{
 		// depth
 		HTML_HELP_OPEN() \
-		HTML_HELP_DEF( "type", "int" ) \
+		HTML_HELP_DEF( "type", "unsigned int" ) \
 		HTML_HELP_DEF( "default", "5" ) \
 		HTML_HELP_BODY() \
 		"This parameter defines the tree's depth to build." \
@@ -38,7 +38,7 @@ namespace
 
 		// degree
 		HTML_HELP_OPEN() \
-		HTML_HELP_DEF( "type", "int" ) \
+		HTML_HELP_DEF( "type", "unsigned int" ) \
 		HTML_HELP_DEF( "default", "2" ) \
 		HTML_HELP_BODY() \
 		"This parameter defines the tree's degree to build." \
@@ -59,8 +59,8 @@ namespace
 class CompleteTree:public ImportModule {
 public:
   CompleteTree(AlgorithmContext context):ImportModule(context) {
-    addParameter<int>("depth",paramHelp[0],"5");
-    addParameter<int>("degree",paramHelp[1],"2");
+    addParameter<unsigned int>("depth",paramHelp[0],"5");
+    addParameter<unsigned int>("degree",paramHelp[1],"2");
   }
   ~CompleteTree(){
   }
@@ -73,8 +73,8 @@ public:
     }
   }
   bool import(const string &) {
-    int degree  = 2;
-    int depth   = 5;
+    unsigned int degree  = 2;
+    unsigned int depth   = 5;
     if (dataSet!=0) {
       dataSet->get("depth", depth);
       dataSet->get("degree", degree);

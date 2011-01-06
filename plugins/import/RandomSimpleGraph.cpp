@@ -60,7 +60,7 @@ namespace
 	{
 		// nodes
 		HTML_HELP_OPEN() \
-		HTML_HELP_DEF( "type", "int" ) \
+		HTML_HELP_DEF( "type", "unsigned int" ) \
 		HTML_HELP_DEF( "default", "5" ) \
 		HTML_HELP_BODY() \
 		"This parameter defines the amount of node used to build the randomized graph." \
@@ -68,7 +68,7 @@ namespace
 
 		// edges
 		HTML_HELP_OPEN() \
-		HTML_HELP_DEF( "type", "int" ) \
+		HTML_HELP_DEF( "type", "unsigned int" ) \
 		HTML_HELP_DEF( "default", "9" ) \
 		HTML_HELP_BODY() \
 		"This parameter defines the amount of edge used to build the randomized graph." \
@@ -89,8 +89,8 @@ namespace
 class RandomSimpleGraph:public ImportModule {
 public:
   RandomSimpleGraph(AlgorithmContext context):ImportModule(context) {
-    addParameter<int>("nodes",paramHelp[0],"5");
-    addParameter<int>("edges",paramHelp[1],"9");
+    addParameter<unsigned int>("nodes",paramHelp[0],"5");
+    addParameter<unsigned int>("edges",paramHelp[1],"9");
   }
   ~RandomSimpleGraph(){}
   
@@ -101,6 +101,12 @@ public:
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("edges", nbEdges);
+    }
+
+    if (nbNodes == 0) {
+      if (pluginProgress)
+	pluginProgress->setError(string("Error: the number of nodes cannot be null"));
+      return false;
     }
 
     int ite = nbNodes*nbEdges;
