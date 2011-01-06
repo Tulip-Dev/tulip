@@ -35,7 +35,7 @@
 
 namespace tlp {
 
-  /** /brief Storage class for Z ordering
+  /** \brief Storage class for Z ordering
    *
    */
   struct EntityWithDistance {
@@ -53,9 +53,13 @@ namespace tlp {
     bool isNode;
   };
 
-  /** /brief Tulip scene class
+  /** \brief Tulip scene class
    *
-   * Tulip scene class
+   * The GlScene class is the core of the tulip rendering system
+   * This class is used to render entities and graph in OpenGL
+   * If you want to render entities and graph, you have to use GlLayer system. You just have to create GlLayer and add entities in.
+   * GlScene work with only one graph, if you add a GlGraphComposite you have to call the addGlGraphCompositeInfo(GlLayer *, GlGraphComposite *)
+   * After adding layers you can do a centerScene() and a draw()
    */
   class TLP_GL_SCOPE GlScene : public GlObservableScene {
 
@@ -87,6 +91,14 @@ namespace tlp {
 
     /**
      * Compute informations for ajustSceneToSize
+     * \param width : request width
+     * \param height : request height
+     * \param center : the result center will be stored in (if center != NULL)
+     * \param eye : the result eye will be stored in (if eye != NULL)
+     * \param sceneRadius : the result sceneRadius will be stored in (if sceneRadius != NULL)
+     * \param xWhiteFactor : xWhiteFactor is the white part on x borders (left and right), the result xWhiteFactor will be stored in (if xWhiteFactor != NULL)
+     * \param yWhiteFactor : yWhiteFactor is the white part on y borders (top and bottom), the result yWhiteFactor will be stored in (if yWhiteFactor != NULL)
+     * \param sceneBoundingBox : the result sceneBoundingBox will be stored in (if sceneBoundingBox != NULL)
      */
     void computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,BoundingBox *sceneBoundingBox=NULL);
 
@@ -134,7 +146,7 @@ namespace tlp {
     void outputSVG(unsigned int size,const std::string& filename);
 
     /**
-     * Output the scene in SVG
+     * Output the scene in EPS
      */
     void outputEPS(unsigned int size,const std::string& filename);
 
@@ -146,7 +158,7 @@ namespace tlp {
     /**
      * Set the viewport of the scene with a vector
      */
-    void setViewport(Vector<int, 4> newViewport) {viewport=newViewport;}
+    void setViewport(Vector<int, 4> &newViewport) {viewport=newViewport;}
 
     /**
      * Set the viewport of the scene with 4 int
