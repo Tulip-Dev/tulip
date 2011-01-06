@@ -127,8 +127,10 @@ bool EccentricityMetric::run() {
 #endif
            stopfor = true;
          }
+#ifdef _OPENMP
       }
-      res[ni] = compute(vecNodes[ni]);
+#endif
+    res[ni] = compute(vecNodes[ni]);
   }
   for (size_t ni = 0; ni < nbElem; ++ni) {
     doubleResult->setNodeValue(vecNodes[ni], res[ni]);
