@@ -33,11 +33,15 @@ extern TLP_SCOPE int getNumIterators();
 template<class itType> struct Iterator {
   ///
   Iterator(){
+#ifndef NDEBUG
     incrNumIterators();
+#endif
 }
   ///
   virtual ~Iterator() {
+#ifndef NDEBUG
     decrNumIterators();
+#endif
   }
   ///Return the next element
   virtual itType next()=0;
