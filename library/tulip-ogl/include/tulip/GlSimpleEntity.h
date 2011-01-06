@@ -105,9 +105,9 @@ namespace tlp {
     void removeParent(GlComposite *composite);
 
     /**
-     * virtual fucntion : Translate entity
+     * virtual fucntion : Translate entity of vector translation
      */
-    virtual void translate(const Coord &){};
+    virtual void translate(const Coord &translation){};
 
     /**
      * Save the entity in Xml
