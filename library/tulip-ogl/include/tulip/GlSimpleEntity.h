@@ -107,7 +107,7 @@ namespace tlp {
     /**
      * virtual fucntion : Translate entity of vector translation
      */
-    virtual void translate(const Coord &translation){};
+    virtual void translate(const Coord &){};
 
     /**
      * Save the entity in Xml
