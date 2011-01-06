@@ -17,7 +17,9 @@
  *
  */
 #include <deque>
+#ifdef _OPENMP
 #include <omp.h>
+#endif
 #include <tulip/ConnectedTest.h>
 #include "Eccentricity.h"
 
@@ -104,11 +106,29 @@ bool EccentricityMetric::run() {
 //  omp_set_num_threads(4);
   
   size_t nbElem = vecNodes.size();
+  unsigned int nbThreads = 1;
+#ifdef _OPENMP
+  nbThreads = omp_get_num_procs();
+#endif
 
 //  double t1 = omp_get_wtime();
+   bool stopfor = false;
+#ifdef _OPENMP
 #pragma omp parallel for
+#endif
   for (size_t ni = 0; ni < nbElem; ++ni) {
-    res[ni] = compute(vecNodes[ni]);
+      if (stopfor) continue;
+#ifdef _OPENMP
+    if (omp_get_thread_num() == 0) {
+#endif
+      if (pluginProgress->progress(ni , graph->numberOfNodes() / nbThreads )!=TLP_CONTINUE) {
+#ifdef _OPENMP
+           #pragma omp critical(STOPFOR)
+#endif
+           stopfor = true;
+         }
+      }
+      res[ni] = compute(vecNodes[ni]);
   }
   for (size_t ni = 0; ni < nbElem; ++ni) {
     doubleResult->setNodeValue(vecNodes[ni], res[ni]);
