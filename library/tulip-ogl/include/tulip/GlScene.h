@@ -58,8 +58,23 @@ namespace tlp {
    * The GlScene class is the core of the tulip rendering system
    * This class is used to render entities and graph in OpenGL
    * If you want to render entities and graph, you have to use GlLayer system. You just have to create GlLayer and add entities in.
-   * GlScene work with only one graph, if you add a GlGraphComposite you have to call the addGlGraphCompositeInfo(GlLayer *, GlGraphComposite *)
+   * \warning GlScene work with only one graph, if you add a GlGraphComposite you have to call the addGlGraphCompositeInfo(GlLayer *, GlGraphComposite *)
    * After adding layers you can do a centerScene() and a draw()
+   *
+   * \code
+   * GlLayer *mainLayer=new GlLayer("Main");
+   * GlGraphComposite *graphComposite=new GlGraphComposite(graph);
+   * mainLayer->addGlEntity(graphComposite,"graph");
+   * GlLayer *otherLayer=new GlLayer("Other");
+   * GlCircle *circle=new GlCircle();
+   * otherLayer->addGlEntity(circle,"circle");
+   * glScene.addLayer(mainLayer);
+   * glScene.addLayer(otherLayer);
+   * glScene.centerScene();
+   * glScene.draw();
+   * \endcode
+   *
+   * If you want to create a widget with a visualisation is better to use GlMainWidget class (this class use a GlScene inside)
    */
   class TLP_GL_SCOPE GlScene : public GlObservableScene {
 
