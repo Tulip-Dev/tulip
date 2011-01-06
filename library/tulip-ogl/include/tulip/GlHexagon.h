@@ -22,7 +22,11 @@
 #include "tulip/GlRegularPolygon.h"
 
 namespace tlp {
-  /** \addtogroup GlEntities
+  /**
+   * \addtogroup GlEntities
+   */
+  /*@{*/
+  /**
    * class to create an hexagon
    */
   class TLP_GL_SCOPE GlHexagon : public GlRegularPolygon {
@@ -44,5 +48,6 @@ namespace tlp {
     virtual ~GlHexagon();
 
   };
+  /*@}*/
 }
 #endif

@@ -27,12 +27,16 @@
 #include "tulip/GlTextureManager.h"
 
 namespace tlp {
-/** \addtogroup GlEntities
- *
- *\brief General class used to render boxes as GlEntity.
- *
- * This class is a generic class to render boxes as GlEntity.
- */
+  /**
+   * \addtogroup GlEntities
+   */
+  /*@{*/
+  /**
+   *
+   *\brief General class used to render boxes as GlEntity.
+   *
+   * This class is a generic class to render boxes as GlEntity.
+   */
 class TLP_GL_SCOPE GlBox : public GlSimpleEntity
 {
 
@@ -160,5 +164,6 @@ protected:
   bool generated;
   GLuint buffers[5];
 };
+/*@}*/
 }
 #endif

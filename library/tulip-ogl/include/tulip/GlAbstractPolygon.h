@@ -30,7 +30,11 @@
 #include "tulip/GlTools.h"
 
 namespace tlp {
-  /** \addtogroup GlEntities
+  /**
+   * \addtogroup GlEntities
+   */
+  /*@{*/
+  /**
    * class to create a abstract polygon
    */
   class TLP_GL_SCOPE GlAbstractPolygon : public GlSimpleEntity {
@@ -260,5 +264,6 @@ namespace tlp {
      */
     virtual void setOColor(const unsigned int i,const Color &color);
   };
+  /*@}*/
 }
 #endif

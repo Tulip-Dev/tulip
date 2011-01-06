@@ -27,7 +27,11 @@
 
 namespace tlp {
 
-  /** \addtogroup GlEntities
+  /**
+   * \addtogroup GlEntities
+   */
+  /*@{*/
+  /**
    * \brief General class used to render circles as GlEntity.
    *
    * This class is a generic class to render circles as GlEntity.
@@ -78,6 +82,7 @@ namespace tlp {
      */
     virtual void getXML(xmlNodePtr rootNode);
   };
+  /*@}*/
 }
 
 #endif

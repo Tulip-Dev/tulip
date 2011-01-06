@@ -29,7 +29,11 @@
 
 namespace tlp {
 
-  /** \addtogroup GlEntities
+  /**
+   * \addtogroup GlEntities
+   */
+  /*@{*/
+  /**
    * \brief GlSimpleEntity used to agregate other GlEntity
    *
    * GlSimpleEntity used to agregate other GlEntity
@@ -158,5 +162,6 @@ namespace tlp {
     std::vector<GlLayer *> layerParents;
     bool deleteComponentsInDestructor;
   };
+  /*@}*/
 }
 #endif

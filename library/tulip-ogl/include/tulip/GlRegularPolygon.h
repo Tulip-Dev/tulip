@@ -22,7 +22,11 @@
 #include "tulip/GlPolygon.h"
 
 namespace tlp {
-  /** \addtogroup GlEntities
+  /**
+   * \addtogroup GlEntities
+   */
+  /*@{*/
+  /**
    * class to create a regular polygon
    */
   class TLP_GL_SCOPE GlRegularPolygon : public GlPolygon {
@@ -75,5 +79,6 @@ namespace tlp {
     float startAngle;
 
   };
+  /*@}*/
 }
 #endif
