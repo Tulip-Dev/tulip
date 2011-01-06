@@ -65,7 +65,12 @@ public:
       dataSet->get("nodes", nbNodes);
       dataSet->get("undirected", undirected);      
     }
-    
+
+    if (nbNodes == 0) {
+      if (pluginProgress)
+	pluginProgress->setError(string("Error: number of nodes cannot be null"));
+      return false;
+    }
     if (pluginProgress)
       pluginProgress->showPreview(false);
 

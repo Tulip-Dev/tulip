@@ -31,7 +31,7 @@ namespace {
     {
       // minsize
       HTML_HELP_OPEN() \
-      HTML_HELP_DEF( "type", "int" ) \
+      HTML_HELP_DEF( "type", "unsigned int" ) \
       HTML_HELP_DEF( "default", "100" ) \
       HTML_HELP_BODY() \
       "This parameter defines the minimal amount of node used to build the randomized tree." \
@@ -39,7 +39,7 @@ namespace {
 
       // maxsize
       HTML_HELP_OPEN() \
-      HTML_HELP_DEF( "type", "int" ) \
+      HTML_HELP_DEF( "type", "unsigned int" ) \
       HTML_HELP_DEF( "default", "1000" ) \
       HTML_HELP_BODY() \
       "This parameter defines the maximal amount of node used to build the randomized tree." \
@@ -57,8 +57,8 @@ namespace {
 class RandomTree:public ImportModule {
 public:
   RandomTree(AlgorithmContext context):ImportModule(context) {
-    addParameter<int>("minsize",paramHelp[0],"100");
-    addParameter<int>("maxsize",paramHelp[1],"1000");
+    addParameter<unsigned int>("minsize",paramHelp[0],"100");
+    addParameter<unsigned int>("maxsize",paramHelp[1],"1000");
   }
   ~RandomTree() {
   }
@@ -86,6 +86,18 @@ public:
     if (dataSet!=0) {
       dataSet->get("minsize", minSize);
       dataSet->get("maxsize", maxSize);
+    }
+
+    if (maxSize == 0) {
+      if (pluginProgress)
+	pluginProgress->setError(string("Error: maxsize cannot be null"));
+      return false;
+    }
+
+    if (minSize > maxSize) {
+      if (pluginProgress)
+	pluginProgress->setError(string("Error: maxsize must be greater than minsize"));
+      return false;
     }
 
     if (pluginProgress)

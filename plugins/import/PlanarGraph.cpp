@@ -30,7 +30,7 @@ namespace {
   const char * paramHelp[] = {
     // nodes
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "int" ) \
+    HTML_HELP_DEF( "type", "unsigned int" ) \
     HTML_HELP_DEF( "default", "30" ) \
     HTML_HELP_BODY() \
     "This parameter defines the number of nodes used to build the planar graph." \
@@ -56,7 +56,7 @@ struct Triangle {
 class PlanarGraph:public ImportModule {
 public:
   PlanarGraph(AlgorithmContext context):ImportModule(context) {
-    addParameter<int>("nodes", paramHelp[0], "30");
+    addParameter<unsigned int>("nodes", paramHelp[0], "30");
   }
   ~PlanarGraph(){}
   

@@ -30,7 +30,7 @@ namespace {
   const char * paramHelp[] = {
     // nodes
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "int" ) \
+    HTML_HELP_DEF( "type", "unsigned int" ) \
     HTML_HELP_DEF( "default", "100" ) \
     HTML_HELP_BODY() \
     "This parameter defines the amount of node used to build the small-world graph." \
@@ -38,7 +38,7 @@ namespace {
 
     // degree
     HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "int" ) \
+    HTML_HELP_DEF( "type", "unsigned int" ) \
     HTML_HELP_DEF( "default", "10" ) \
     HTML_HELP_BODY() \
     "This parameter defines the average degree of node used to build the small-world graph." \
@@ -69,21 +69,33 @@ namespace {
 class SmallWorldGraph:public ImportModule {
 public:
   SmallWorldGraph(AlgorithmContext context):ImportModule(context) {
-    addParameter<int>("nodes",paramHelp[0],"200");
-    addParameter<int>("degree",paramHelp[1],"10");
+    addParameter<unsigned int>("nodes",paramHelp[0],"200");
+    addParameter<unsigned int>("degree",paramHelp[1],"10");
     addParameter<bool>("long edge",paramHelp[2],"false");
   }
   ~SmallWorldGraph(){}
   
   bool import(const string &) {
-    int nbNodes  = 200;
-    int avgDegree = 10;
+    unsigned int nbNodes  = 200;
+    unsigned int avgDegree = 10;
     bool enableLongEdge = false;
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("degree", avgDegree);
       dataSet->get("long edge", enableLongEdge);
     }
+    if (nbNodes == 0) {
+      if (pluginProgress)
+	pluginProgress->setError(string("Error: the number of nodes cannot be null"));
+      return false;
+    }
+
+    if (avgDegree == 0) {
+      if (pluginProgress)
+	pluginProgress->setError(string("Error: the average degree cannot be null"));
+      return false;
+    }
+
     double maxDistance = sqrt(double(avgDegree)*double(WIDTH)*double(HEIGHT)
 			      / (double (nbNodes) * M_PI));
     srand(clock()); 
@@ -92,17 +104,17 @@ public:
 
     pluginProgress->showPreview(false);
 
-    for (int i=0; i<nbNodes;++i) {
+    for (unsigned int i=0; i<nbNodes;++i) {
       sg[i]=graph->addNode();
       newLayout->setNodeValue(sg[i],Coord(rand()%WIDTH, rand()%HEIGHT, 0));
     }
     unsigned int count = 0;
     unsigned int iterations = nbNodes*(nbNodes-1)/2;
     double minSize = DBL_MAX;
-    for (int i=0;i<nbNodes-1;++i) {
+    for (unsigned int i=0;i<nbNodes-1;++i) {
       bool longEdge =false;
       if (pluginProgress->progress(count,iterations)!=TLP_CONTINUE) break;
-      for (int j=i+1;j<nbNodes;++j) {
+      for (unsigned int j=i+1;j<nbNodes;++j) {
 	++count;
 	if (i!=j) {
 	  double distance = newLayout->getNodeValue(sg[i]).dist(newLayout->getNodeValue(sg[j]));
