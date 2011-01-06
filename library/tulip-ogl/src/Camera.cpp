@@ -59,6 +59,7 @@ void Camera::move(float speed) {
 	eyes += move;
 	center += move;
 	matrixCoherent=false;
+	notifyPointOfViewModified(this);
 }
 //====================================================
 void Camera::rotate(float angle, float x, float y, float z) {
@@ -108,6 +109,7 @@ void Camera::rotate(float angle, float x, float y, float z) {
 	eyes = center + vNewEyes;
 	up   = vNewUp;
 	matrixCoherent=false;
+	notifyPointOfViewModified(this);
 }
 //====================================================
 void Camera::strafeLeftRight(float speed) {
@@ -116,6 +118,7 @@ void Camera::strafeLeftRight(float speed) {
 	center += strafeVector;
 	eyes   += strafeVector;
 	matrixCoherent=false;
+	notifyPointOfViewModified(this);
 }
 //====================================================
 void Camera::strafeUpDown(float speed) {
@@ -124,6 +127,7 @@ void Camera::strafeUpDown(float speed) {
 	center += strafeVector;
 	eyes   += strafeVector;
 	matrixCoherent=false;
+	notifyPointOfViewModified(this);
 }
 //====================================================
 void Camera::initGl() {
@@ -250,6 +254,40 @@ void Camera::initModelView() {
 	GLenum error = glGetError();
 	if ( error != GL_NO_ERROR)
 		cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+}
+//====================================================
+void Camera::setSceneRadius(double sceneRadius,const BoundingBox sceneBoundingBox) {
+	this->sceneRadius=sceneRadius;
+	this->sceneBoundingBox=sceneBoundingBox;
+	matrixCoherent=false;
+	notifyPointOfViewModified(this);
+}
+//====================================================
+void Camera::setZoomFactor(double zoomFactor) {
+	if(zoomFactor>1E10)
+		return;
+
+	this->zoomFactor=zoomFactor;
+	matrixCoherent=false;
+	notifyPointOfViewModified(this);
+}
+//====================================================
+void Camera::setEyes(const Coord& eyes) {
+	this->eyes=eyes;
+	matrixCoherent=false;
+	notifyPointOfViewModified(this);
+}
+//====================================================
+void Camera::setCenter(const Coord& center) {
+	this->center=center;
+	matrixCoherent=false;
+	notifyPointOfViewModified(this);
+}
+//====================================================
+void Camera::setUp(const Coord& up) {
+	this->up=up;
+	matrixCoherent=false;
+	notifyPointOfViewModified(this);
 }
 //====================================================
 void Camera::addObjectTransformation(const Coord &translation,const Coord &scale,const Coord &baseCoord ) {
