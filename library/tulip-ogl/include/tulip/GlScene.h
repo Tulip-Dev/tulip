@@ -70,6 +70,7 @@ namespace tlp {
    * otherLayer->addGlEntity(circle,"circle");
    * glScene.addLayer(mainLayer);
    * glScene.addLayer(otherLayer);
+   * glScene.addGlGraphCompositeInfo(mainLayer,graphComposite);
    * glScene.centerScene();
    * glScene.draw();
    * \endcode
