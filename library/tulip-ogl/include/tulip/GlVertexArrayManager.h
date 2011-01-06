@@ -123,15 +123,19 @@ namespace tlp {
     std::vector<Color> linesColorsArray;
     std::vector<GLint> linesIndexArray;
     std::vector<GLsizei> linesIndexCountArray;
-    std::vector<GLint> linesRenderingIndexArray;
-    std::vector<GLint> linesSelectedRenderingIndexArray;
+    std::vector<GLuint> linesRenderingIndexArray;
+    std::vector<GLuint> linesSelectedRenderingIndexArray;
 
     std::vector<Coord> pointsCoordsArray;
     std::vector<Color> pointsColorsArray;
-    std::vector<GLint> points1PRenderingIndexArray;
-    std::vector<GLint> points1PSelectedRenderingIndexArray;
-    std::vector<GLint> points2PRenderingIndexArray;
-    std::vector<GLint> points2PSelectedRenderingIndexArray;
+
+    std::vector<GLuint> points1PNodesRenderingIndexArray;
+    std::vector<GLuint> points1PNodesSelectedRenderingIndexArray;
+    std::vector<GLuint> points2PNodesRenderingIndexArray;
+    std::vector<GLuint> points2PNodesSelectedRenderingIndexArray;
+
+    std::vector<GLuint> points1PEdgesRenderingIndexArray;
+    std::vector<GLuint> points1PEdgesSelectedRenderingIndexArray;
 
 
     std::vector<std::pair<unsigned int,unsigned int> > edgeToLineIndexVector;

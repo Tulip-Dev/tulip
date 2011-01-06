@@ -113,17 +113,22 @@ void GlVertexArrayManager::beginRendering() {
 	isBegin=true;
 	linesRenderingIndexArray.clear();
 	linesSelectedRenderingIndexArray.clear();
-	points1PRenderingIndexArray.clear();
-	points1PSelectedRenderingIndexArray.clear();
-	points2PRenderingIndexArray.clear();
-	points2PSelectedRenderingIndexArray.clear();
+	points1PNodesRenderingIndexArray.clear();
+	points1PNodesSelectedRenderingIndexArray.clear();
+	points2PNodesRenderingIndexArray.clear();
+	points2PNodesSelectedRenderingIndexArray.clear();
+	points1PEdgesRenderingIndexArray.clear();
+	points1PEdgesSelectedRenderingIndexArray.clear();
 
 	linesRenderingIndexArray.reserve(graph->numberOfEdges()*2);
 	linesSelectedRenderingIndexArray.reserve(graph->numberOfEdges()*2);
-	points1PRenderingIndexArray.reserve(graph->numberOfNodes()+graph->numberOfEdges());
-	points1PSelectedRenderingIndexArray.reserve(graph->numberOfNodes()+graph->numberOfEdges());
-	points2PRenderingIndexArray.reserve(graph->numberOfNodes()+graph->numberOfEdges());
-	points2PSelectedRenderingIndexArray.reserve(graph->numberOfNodes()+graph->numberOfEdges());
+	points1PNodesRenderingIndexArray.reserve(graph->numberOfNodes());
+	points1PNodesSelectedRenderingIndexArray.reserve(graph->numberOfNodes());
+	points2PNodesRenderingIndexArray.reserve(graph->numberOfNodes());
+	points2PNodesSelectedRenderingIndexArray.reserve(graph->numberOfNodes());
+
+	points1PEdgesRenderingIndexArray.reserve(graph->numberOfEdges());
+	points1PEdgesSelectedRenderingIndexArray.reserve(graph->numberOfEdges());
 
 	if(!vectorLayoutSizeInit){
 		linesCoordsArray.reserve(graph->numberOfEdges()*2);
@@ -158,52 +163,73 @@ void GlVertexArrayManager::endRendering() {
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 
+	//============ Selected graph elements rendering ============================
+
+	Color selectionColor=inputData->parameters->getSelectionColor();
+	glColor4ubv(reinterpret_cast<const GLubyte *>(&selectionColor));
 
 	glDisable(GL_DEPTH_TEST);
+
+	// Selected edges point rendering
 	glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
-	Color selectionColor=inputData->parameters->getSelectionColor();
-	glColor4ubv(((const GLubyte *)(&selectionColor)));
-	glLineWidth(4);
-
-	glPointSize(1);
-	if(points1PSelectedRenderingIndexArray.size()!=0){
-		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
-		glDrawElements(GL_POINTS, points1PSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points1PSelectedRenderingIndexArray));
-	}
-
 	glPointSize(2);
-	if(points2PSelectedRenderingIndexArray.size()!=0){
+	if(points1PEdgesSelectedRenderingIndexArray.size()!=0){
 		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
-		glDrawElements(GL_POINTS, points2PSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points2PSelectedRenderingIndexArray));
+		glDrawElements(GL_POINTS, points1PEdgesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points1PEdgesSelectedRenderingIndexArray));
 	}
 
-	glPointSize(1);
+	// Selected nodes point rendering
+	glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedNodesStencil(), 0xFFFF);
+	glPointSize(2);
+	if(points1PNodesSelectedRenderingIndexArray.size()!=0){
+		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
+		glDrawElements(GL_POINTS, points1PNodesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points1PNodesSelectedRenderingIndexArray));
+	}
+	glPointSize(4);
+	if(points2PNodesSelectedRenderingIndexArray.size()!=0){
+		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
+		glDrawElements(GL_POINTS, points2PNodesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points2PNodesSelectedRenderingIndexArray));
+	}
 
-	if(linesSelectedRenderingIndexArray.size()!=0){
+	// Selected edges polyline rendering
+	glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
+	glLineWidth(4);
+	if(linesSelectedRenderingIndexArray.size()!=0) {
 		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
 		glDrawElements(GL_LINES, linesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(linesSelectedRenderingIndexArray));
 	}
 
+	//============ Graph elements rendering ============================
+
 	glEnableClientState(GL_COLOR_ARRAY);
-
 	glEnable(GL_DEPTH_TEST);
+
+	// Edges point rendering
 	glStencilFunc(GL_LEQUAL, inputData->parameters->getEdgesStencil(), 0xFFFF);
-	glLineWidth(1);
-
-	glPointSize(1);
-	if(points1PRenderingIndexArray.size()!=0){
-		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
-		glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(pointsColorsArray));
-		glDrawElements(GL_POINTS, points1PRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points1PRenderingIndexArray));
-	}
 	glPointSize(2);
-	if(points2PRenderingIndexArray.size()!=0){
+	if(points1PEdgesRenderingIndexArray.size()!=0){
 		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(pointsColorsArray));
-		glDrawElements(GL_POINTS, points2PRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points2PRenderingIndexArray));
+		glDrawElements(GL_POINTS, points1PEdgesRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points1PEdgesRenderingIndexArray));
 	}
-	glPointSize(1);
 
+	// Nodes point rendering
+	glStencilFunc(GL_LEQUAL, inputData->parameters->getNodesStencil(), 0xFFFF);
+	if(points1PNodesRenderingIndexArray.size()!=0){
+		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
+		glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(pointsColorsArray));
+		glDrawElements(GL_POINTS, points1PNodesRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points1PNodesRenderingIndexArray));
+	}
+	glPointSize(4);
+	if(points2PNodesRenderingIndexArray.size()!=0){
+		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
+		glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(pointsColorsArray));
+		glDrawElements(GL_POINTS, points2PNodesRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points2PNodesRenderingIndexArray));
+	}
+
+	// Edges polyline rendering
+	glStencilFunc(GL_LEQUAL, inputData->parameters->getEdgesStencil(), 0xFFFF);
+	glLineWidth(1.4);
 	if(linesRenderingIndexArray.size()!=0){
 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(linesColorsArray));
 		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
@@ -211,8 +237,12 @@ void GlVertexArrayManager::endRendering() {
 		glDrawElements(GL_LINES, linesRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(linesRenderingIndexArray));
 	}
 
+	glPointSize(1);
+	glLineWidth(1);
+
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+
 
 	OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
@@ -311,9 +341,9 @@ void GlVertexArrayManager::activatePointEdgeDisplay(GlEdge *edge,bool selected){
 		return;
 
 	if(!selected){
-		points1PRenderingIndexArray.push_back(index);
+		points1PEdgesRenderingIndexArray.push_back(index);
 	}else{
-		points1PSelectedRenderingIndexArray.push_back(index);
+		points1PEdgesSelectedRenderingIndexArray.push_back(index);
 	}
 }
 
@@ -324,14 +354,14 @@ void GlVertexArrayManager::activatePointNodeDisplay(GlNode *node,bool onePixel,b
 
 	if(!selected){
 		if(onePixel)
-			points1PRenderingIndexArray.push_back(index);
+			points1PNodesRenderingIndexArray.push_back(index);
 		else
-			points2PRenderingIndexArray.push_back(index);
+			points2PNodesRenderingIndexArray.push_back(index);
 	}else{
 		if(onePixel)
-			points1PSelectedRenderingIndexArray.push_back(index);
+			points1PNodesSelectedRenderingIndexArray.push_back(index);
 		else
-			points2PSelectedRenderingIndexArray.push_back(index);
+			points2PNodesSelectedRenderingIndexArray.push_back(index);
 	}
 }
 
@@ -346,16 +376,16 @@ void GlVertexArrayManager::addNode(Graph *,const node){
 }
 
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property){
-	if(graph->getProperty(inputData->getElementLayoutPropName())==property || graph->getProperty(inputData->getElementSizePropName())==property){
+	if(inputData->elementLayout==property || inputData->elementSize==property){
 		setHaveToComputeLayout(true);
 		clearLayoutData();
-		graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
+		inputData->elementLayout->removePropertyObserver(this);
 		layoutObserverActivated=false;
 	}
-	if(graph->getProperty(inputData->getElementColorPropName())==property){
+	if(inputData->elementColor==property){
 		setHaveToComputeColor(true);
 		clearColorData();
-		graph->getProperty(inputData->getElementColorPropName())->removePropertyObserver(this);
+		inputData->elementColor->removePropertyObserver(this);
 		colorObserverActivated=false;
 	}
 }
@@ -443,12 +473,12 @@ void GlVertexArrayManager::initObservers() {
 		graphObserverActivated=true;
 	}
 	if(!layoutObserverActivated){
-		graph->getProperty(inputData->getElementLayoutPropName())->addPropertyObserver(this);
-		graph->getProperty(inputData->getElementSizePropName())->addPropertyObserver(this);
+		inputData->elementLayout->addPropertyObserver(this);
+		inputData->elementSize->addPropertyObserver(this);
 		layoutObserverActivated=true;
 	}
 	if(!colorObserverActivated){
-		graph->getProperty(inputData->getElementColorPropName())->addPropertyObserver(this);
+		inputData->elementColor->addPropertyObserver(this);
 		colorObserverActivated=true;
 	}
 }
@@ -460,12 +490,12 @@ void GlVertexArrayManager::clearObservers() {
 		graphObserverActivated=false;
 	}
 	if(layoutObserverActivated){
-		graph->getProperty(inputData->getElementLayoutPropName())->removePropertyObserver(this);
-		graph->getProperty(inputData->getElementSizePropName())->removePropertyObserver(this);
+		inputData->elementLayout->removePropertyObserver(this);
+		inputData->elementSize->removePropertyObserver(this);
 		layoutObserverActivated=false;
 	}
 	if(colorObserverActivated){
-		graph->getProperty(inputData->getElementColorPropName())->removePropertyObserver(this);
+		inputData->elementColor->removePropertyObserver(this);
 		colorObserverActivated=false;
 	}
 }
