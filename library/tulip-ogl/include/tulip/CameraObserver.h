@@ -36,15 +36,23 @@ namespace tlp {
   /** \brief An observer to the camera
    * This class is used to observe camera object
    *  - If the camera is deleted : destroy is call
-   * \TODO : Add functions if we need to observe camera properties (center, eye, up ...)
+   *  - If a parameter of camera is changed : pointOfViewModified is call
+   * If you want to desactivate/activate the call of pointOfViewModified, you can call the setCameraTracking(bool) function (by default the camera is tracked)
    */
   class TLP_GL_SCOPE CameraObserver {
   public:
+
     virtual ~CameraObserver() {}
     /**
      * This function is call when we delete the camera (call in camera destructor)
      */
     virtual void destroy(Camera *){}
+
+    /**
+     * This function is call when the point of view of camera is modified
+     */
+    virtual void pointOfViewModified(Camera *){}
+
   };
 
   /**
@@ -52,6 +60,7 @@ namespace tlp {
    */
   class TLP_GL_SCOPE ObservableCamera {
   public:
+    ObservableCamera();
     virtual ~ObservableCamera() {}
     /**
      * Register a new observer
@@ -72,7 +81,22 @@ namespace tlp {
 
     void notifyDestroy(Camera *camera);
 
+    void notifyPointOfViewModified(Camera *);
+
+    /**
+     * Call this function if you want to activate/desactivate the call of pointOfViewModified
+     */
+    void setCameraTracking(bool tracked);
+
+    /**
+     * return true if the camera is tracked
+     */
+    bool isTracked() {return tracked;}
+
+
   protected:
+
+    bool tracked;
 
     mutable std::set<CameraObserver*> observers;
   };

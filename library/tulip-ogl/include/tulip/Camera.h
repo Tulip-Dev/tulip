@@ -121,7 +121,7 @@ namespace tlp {
     /**
      * Set the scene radius
      */
-    void setSceneRadius(double sceneRadius,const BoundingBox sceneBoundingBox=BoundingBox()) {this->sceneRadius=sceneRadius;this->sceneBoundingBox=sceneBoundingBox;matrixCoherent=false;}
+    void setSceneRadius(double sceneRadius,const BoundingBox sceneBoundingBox=BoundingBox());
     /**
      * Return the scene radius
      */
@@ -130,7 +130,7 @@ namespace tlp {
     /**
      * Set the zoom factor
      */
-    void setZoomFactor(double zoomFactor) {if(zoomFactor>1E10){return;}this->zoomFactor=zoomFactor;matrixCoherent=false;}
+    void setZoomFactor(double zoomFactor);
     /**
      * Return the zoom factor
      */
@@ -139,7 +139,7 @@ namespace tlp {
     /**
      * Set the eye
      */
-    void setEyes(const Coord& eyes) {this->eyes=eyes;matrixCoherent=false;}
+    void setEyes(const Coord& eyes);
     /**
      * Return the eyes
      */
@@ -148,7 +148,7 @@ namespace tlp {
     /**
      * Set the center
      */
-    void setCenter(const Coord& center) {this->center=center;matrixCoherent=false;}
+    void setCenter(const Coord& center);
     /**
      * Return the center
      */
@@ -157,7 +157,7 @@ namespace tlp {
     /**
      * Set the up vector
      */
-    void setUp(const Coord& up) {this->up=up;matrixCoherent=false;}
+    void setUp(const Coord& up);
     /**
      * Return the up vector
      */

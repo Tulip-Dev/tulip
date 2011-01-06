@@ -23,15 +23,32 @@
 #include <cassert>
 #include <iostream>
 #include "tulip/CameraObserver.h"
+#include "tulip/Camera.h"
 
 using namespace std;
 
 namespace tlp {
 
+  ObservableCamera::ObservableCamera():tracked(true){
+  }
+
+  void ObservableCamera::setCameraTracking(bool tracked){
+    this->tracked=tracked;
+  }
+
   void ObservableCamera::notifyDestroy(Camera *camera) {
     set<CameraObserver *> copy(observers); //Used to preserve iteratros
     for (set<CameraObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
       (*itlObs)->destroy(camera);
+  }
+
+  void ObservableCamera::notifyPointOfViewModified(Camera *camera) {
+    if(!tracked)
+      return;
+
+    set<CameraObserver *> copy(observers); //Used to preserve iteratros
+    for (set<CameraObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
+      (*itlObs)->pointOfViewModified(camera);
   }
 }
 
