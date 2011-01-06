@@ -19,6 +19,7 @@
 #ifndef GRAPHOBSERVABLE_H
 #define GRAPHOBSERVABLE_H
 #include <list>
+#include <map>
 #include <algorithm>
 
 #include "tulip/Node.h"
@@ -152,7 +153,7 @@ protected:
 	void notifyDestroy(Graph*);
 	void removeOnlyGraphObserver(GraphObserver *) const;
 	mutable std::list<GraphObserver*> observers;
-	mutable TLP_HASH_MAP<GraphObserver*, std::list<GraphObserver*>::iterator> observersSet;
+	mutable std::map<GraphObserver*, std::list<GraphObserver*>::iterator> observersSet;
 };
 
 inline unsigned int ObservableGraph::countGraphObservers() {
@@ -161,7 +162,7 @@ inline unsigned int ObservableGraph::countGraphObservers() {
 
 
 inline void ObservableGraph::removeGraphObserver(GraphObserver *item) const {
-	TLP_HASH_MAP<GraphObserver*, std::list<GraphObserver*>::iterator>::iterator it = observersSet.find(item);
+	std::map<GraphObserver*, std::list<GraphObserver*>::iterator>::iterator it = observersSet.find(item);
 	if (it != observersSet.end()) {
 		observers.erase(it->second);
 		observersSet.erase(it);
@@ -170,7 +171,7 @@ inline void ObservableGraph::removeGraphObserver(GraphObserver *item) const {
 }
 
 inline void ObservableGraph::removeOnlyGraphObserver(GraphObserver *item) const {
-	TLP_HASH_MAP<GraphObserver*, std::list<GraphObserver*>::iterator>::iterator it = observersSet.find(item);
+	std::map<GraphObserver*, std::list<GraphObserver*>::iterator>::iterator it = observersSet.find(item);
 	if (it != observersSet.end()) {
 		observers.erase(it->second);
 		observersSet.erase(it);
