@@ -164,12 +164,9 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       // Init camera and background color
       _initialCamera = &_view->getScene()->getCamera();
       Camera cam = _observedView->getScene()->getCamera();
-      cam.setScene(_initialCamera->getScene());
-      cam.setZoomFactor(1);
-      cam.setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
-      cam.setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
-      cam.setSceneRadius(_initialCamera->getSceneRadius());
-      _view->getScene()->setCamera(cam);
+      _initialCamera->setZoomFactor(1);
+      _initialCamera->setEyes(cam.getEyes() - (cam.getCenter() - _initialCamera->getCenter()));
+      _initialCamera->setCenter(cam.getCenter() - (cam.getCenter() - _initialCamera->getCenter()));
       _view->getScene()->setBackgroundColor(_observedView->getScene()->getBackgroundColor() );
 
       // The overview use the observed view inputData but we don't want to see inside metanodes in overview, so :

@@ -446,7 +446,7 @@ namespace tlp {
     }
 
     void GlQuadTreeLODCalculator::destroy(Camera *camera) {
-      std::vector<std::pair<std::string, GlLayer*> > *layerList=glScene->getLayersList();
+      /*std::vector<std::pair<std::string, GlLayer*> > *layerList=glScene->getLayersList();
 
       clearCamerasObservers();
       std::vector<std::pair<Camera *,Camera> >::iterator itCameras=cameras.begin();
@@ -455,19 +455,19 @@ namespace tlp {
         ++itCameras;
       }
 
-      initCamerasObservers();
+      initCamerasObservers();*/
     }
 
     void GlQuadTreeLODCalculator::initCamerasObservers() {
-      for(vector<pair<Camera *, Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
+      /*for(vector<pair<Camera *, Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
         (*it).first->addObserver(this);
-      }
+      }*/
     }
 
     void GlQuadTreeLODCalculator::clearCamerasObservers(){
-      for(vector<pair<Camera *, Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
+      /*for(vector<pair<Camera *, Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
         (*it).first->removeObserver(this);
-      }
+      }*/
     }
 
     void GlQuadTreeLODCalculator::setHaveToCompute(){
