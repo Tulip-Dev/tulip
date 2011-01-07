@@ -108,7 +108,8 @@ namespace tlp {
     BoundingBox edgesGlobalBoundingBox;
     BoundingBox entitiesGlobalBoundingBox;
 
-    std::vector<std::pair<Camera*,Camera> > cameras;
+    std::vector<Camera *> cameras;
+    std::map<GlLayer*,std::pair<Camera*, Camera> > layerToCamera;
     Camera *currentCamera;
     Graph *currentGraph;
     PropertyInterface *layoutProperty;

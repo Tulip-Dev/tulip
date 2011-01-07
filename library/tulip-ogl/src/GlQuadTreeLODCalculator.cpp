@@ -52,6 +52,7 @@ namespace tlp {
 
     GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
         setHaveToCompute();
+        clearCamerasObservers();
     }
 
     void GlQuadTreeLODCalculator::setScene(GlScene &scene){
@@ -80,13 +81,13 @@ namespace tlp {
             return true;
 
         // Check if a camera have changed (diff between old backup camera and current camera)
-        for(vector<pair<Camera *, Camera> >::iterator it=cameras.begin(); it!=cameras.end(); ++it){
-            if(((*it).first)->is3D()) {
-                Camera *camera      = (*it).first;
-                Camera *oldCamera   = &(*it).second;
-                Coord unitCamera    = camera->getEyes() - camera->getCenter();
+        for(map<GlLayer *,pair<Camera*, Camera> >::iterator it=layerToCamera.begin(); it!=layerToCamera.end(); ++it){
+            if(((*it).first->getCamera()).is3D()) {
+                Camera camera      = (*it).first->getCamera();
+                Camera oldCamera   = (*it).second.second;
+                Coord unitCamera    = camera.getEyes() - camera.getCenter();
                 unitCamera          = unitCamera/unitCamera.norm();
-                Coord unitOldCamera = oldCamera->getEyes()-oldCamera->getCenter();
+                Coord unitOldCamera = oldCamera.getEyes()-oldCamera.getCenter();
                 unitOldCamera  = unitOldCamera/unitOldCamera.norm();
                 if(unitCamera != unitOldCamera){
                     haveToCompute = true;
@@ -129,6 +130,7 @@ namespace tlp {
 
             // Clear all vectors
             cameras.clear();
+            layerToCamera.clear();
             simpleEntities.clear();
 
             for(vector<QuadTreeNode<unsigned int> *>::iterator it=nodesQuadTree.begin();it!=nodesQuadTree.end();++it)
@@ -142,10 +144,21 @@ namespace tlp {
             entitiesQuadTree.clear();
 
             quadTreesVectorPosition=0;
+            vector<pair<std::string, GlLayer*> > *layersVector=glScene->getLayersList();
             for(vector<LayerLODUnit>::iterator it=layersLODVector.begin();it!=layersLODVector.end();++it){
                 Camera *camera= ((*it).camera);
 
-                cameras.push_back(pair<Camera*,Camera>(camera,*camera));
+                GlLayer *currentLayer=NULL;
+                for(vector<pair<std::string, GlLayer*> >::iterator itL=layersVector->begin();itL!=layersVector->end();++itL){
+                  if(&(*itL).second->getCamera()==camera){
+                    currentLayer=(*itL).second;
+                    break;
+                  }
+                }
+                assert(currentLayer!=NULL);
+
+                cameras.push_back(camera);
+                layerToCamera.insert(pair<GlLayer*,pair<Camera*,Camera> >(currentLayer,pair<Camera *,Camera>(camera,*camera)));
 
                 Matrix<float,4> transformMatrix;
                 camera->getTransformMatrix(globalViewport,transformMatrix);
@@ -175,9 +188,9 @@ namespace tlp {
 
             quadTreesVectorPosition=0;
             simpleEntitiesVectorPosition=0;
-            for(vector<pair<Camera*, Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
+            for(vector<Camera*>::iterator it=cameras.begin();it!=cameras.end();++it){
 
-                Camera *camera=(*it).first;
+                Camera *camera=*it;
                 layersLODVector.push_back(LayerLODUnit());
                 LayerLODUnit *layerLODUnit=&(layersLODVector.back());
                 layerLODUnit->camera = camera;
@@ -446,28 +459,32 @@ namespace tlp {
     }
 
     void GlQuadTreeLODCalculator::destroy(Camera *camera) {
-      /*std::vector<std::pair<std::string, GlLayer*> > *layerList=glScene->getLayersList();
+      std::vector<std::pair<std::string, GlLayer*> > *layerList=glScene->getLayersList();
 
       clearCamerasObservers();
-      std::vector<std::pair<Camera *,Camera> >::iterator itCameras=cameras.begin();
+
+      cameras.clear();
+
       for(std::vector<std::pair<std::string, GlLayer*> >::iterator it=layerList->begin();it!=layerList->end();++it){
-        (*itCameras).first=&(*it).second->getCamera();
-        ++itCameras;
+        if(layerToCamera.find((*it).second)==layerToCamera.end())
+          continue;
+        (*layerToCamera.find((*it).second)).second.first=&(*it).second->getCamera();
+        cameras.push_back(&(*it).second->getCamera());
       }
 
-      initCamerasObservers();*/
+      initCamerasObservers();
     }
 
     void GlQuadTreeLODCalculator::initCamerasObservers() {
-      /*for(vector<pair<Camera *, Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
-        (*it).first->addObserver(this);
-      }*/
+      for(vector<Camera *>::iterator it=cameras.begin();it!=cameras.end();++it){
+        (*it)->addObserver(this);
+      }
     }
 
     void GlQuadTreeLODCalculator::clearCamerasObservers(){
-      /*for(vector<pair<Camera *, Camera> >::iterator it=cameras.begin();it!=cameras.end();++it){
-        (*it).first->removeObserver(this);
-      }*/
+      for(vector<Camera *>::iterator it=cameras.begin();it!=cameras.end();++it){
+        (*it)->removeObserver(this);
+      }
     }
 
     void GlQuadTreeLODCalculator::setHaveToCompute(){
