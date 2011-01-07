@@ -362,8 +362,17 @@ void GlMainWidget::draw(bool graphChanged) {
 		heightStored=height;
 
 		computeInteractors();
+
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+    QTime beginTime=QTime::currentTime();
+#endif
+
 		scene.prerenderMetaNodes();
 		scene.draw();
+
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+    cout << "rendering time : " << beginTime.msecsTo(QTime::currentTime()) << endl;
+#endif
 
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_DEPTH_TEST);
