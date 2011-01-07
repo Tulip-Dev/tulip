@@ -210,6 +210,11 @@ SET(TULIP_SERVER_GENERATION OFF CACHE BOOL "Enable process to make generation of
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 
 ## -----------------------------------------------------------------------------------------------
+## Enable output of rendering time
+## -----------------------------------------------------------------------------------------------
+SET(ENABLE_RENDERING_TIME_DISPLAY ON CACHE BOOL "Do you want to disable the rendering time display ? [OFF|ON]")
+
+## -----------------------------------------------------------------------------------------------
 ## Check 64 bits
 ## -----------------------------------------------------------------------------------------------
 EXEC_PROGRAM(uname ARGS "-m" OUTPUT_VARIABLE UNAME_OUT)
