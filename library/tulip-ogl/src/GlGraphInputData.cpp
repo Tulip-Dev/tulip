@@ -38,7 +38,8 @@ namespace tlp {
     elementLabelPropName("viewLabel"), elementTexturePropName("viewTexture"),
     elementBorderColorPropName("viewBorderColor"), elementBorderWidthPropName("viewBorderWidth"), elementLayoutPropName(""),
     elementSrcAnchorShapePropName("viewSrcAnchorShape"),elementSrcAnchorSizePropName("viewSrcAnchorSize"),
-    elementTgtAnchorShapePropName("viewTgtAnchorShape"),elementTgtAnchorSizePropName("viewTgtAnchorSize")
+    elementTgtAnchorShapePropName("viewTgtAnchorShape"),elementTgtAnchorSizePropName("viewTgtAnchorSize"),
+    deleteMetaNodeRendererAtDestructor(true)
     {
 
     reloadAllProperties();
@@ -60,6 +61,8 @@ GlGraphInputData::~GlGraphInputData() {
 	GlyphManager::getInst().clearGlyphList(&this->graph, this, glyphs);
 	EdgeExtremityGlyphManager::getInst().clearGlyphList(&this->graph, this,
 			extremityGlyphs);
+	if(deleteMetaNodeRendererAtDestructor)
+		delete metaNodeRenderer;
 }
 
 void GlGraphInputData::reloadLayoutProperty() {

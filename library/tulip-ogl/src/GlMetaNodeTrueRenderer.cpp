@@ -69,6 +69,7 @@ namespace tlp {
     GlGraphRenderingParameters metaParameters = *inputData->parameters;
     GlGraphInputData metaData(metaGraph,&metaParameters);
     metaData.setMetaNodeRenderer(inputData->getMetaNodeRenderer());
+    metaData.setDeleteMetaNodeRendererAtDestructor(false);
     BoundingBox bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.elementLayout, metaData.elementSize, metaData.elementRotation);
     Coord maxC(bboxes[1]);
     Coord minC(bboxes[0]);

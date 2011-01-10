@@ -214,7 +214,7 @@ void GlMainWidget::setGraph(Graph *graph){
 
 	GlGraphRenderingParameters param=oldGraphComposite->getRenderingParameters();
 	GlMetaNodeRenderer *metaNodeRenderer=oldGraphComposite->getInputData()->getMetaNodeRenderer();
-	oldGraphComposite->getInputData()->setMetaNodeRenderer(NULL);
+	oldGraphComposite->getInputData()->setMetaNodeRenderer(NULL,false);
 	GlGraphComposite* graphComposite=new GlGraphComposite(graph);
 	graphComposite->setRenderingParameters(param);
 
