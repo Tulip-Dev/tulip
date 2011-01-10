@@ -85,7 +85,7 @@ public:
     /**
       * @brief Build the mapping object between the CSV columns and the graph elements.
       **/
-    CSVToGraphDataMapping *buildMappingObject(const CSVImportParameters& importParameters)const;
+    CSVToGraphDataMapping *buildMappingObject() const;
 
     /**
       * @brief Check if the values entered by user are valid.
@@ -99,6 +99,7 @@ protected:
     tlp::Graph* graph;
 
 private:
+    CSVImportParameters importParameters;
     Ui::CSVGraphMappingConfigurationWidget *ui;
 
 signals:

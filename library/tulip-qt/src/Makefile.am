@@ -85,7 +85,7 @@ BUILT_SOURCES = \
 	moc_Morphing.cpp \
         moc_CSVGraphMappingConfigurationWidget.cpp \
         moc_CSVImportConfigurationWidget.cpp \
-        moc_CSVImportDialog.cpp \
+        moc_CSVImportWizard.cpp \
 	moc_CSVParserConfigurationWidget.cpp \
   moc_GraphPropertiesTableWidget.cpp \
   moc_TextEditDialog.cpp
@@ -156,7 +156,7 @@ TODIST_SOURCES = \
 	CSVParserConfigurationWidget.cpp \
 	CSVGraphMappingConfigurationWidget.cpp \
 	CSVImportConfigurationWidget.cpp \
-        CSVImportDialog.cpp \
+        CSVImportWizard.cpp \
 	QtGlSceneZoomAndPanAnimator.cpp \
 	GlCompositeHierarchyManager.cpp \
   GraphPropertiesTableWidget.cpp
