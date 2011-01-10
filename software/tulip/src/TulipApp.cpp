@@ -771,9 +771,9 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     enableElements(true);
 
     // synchronize overview display parameters
-  } else {
+  } /*else {
     qWarning("Canceled  Open/import");
-    }
+    }*/
 }
 //**********************************************************************
 void TulipApp::importGraph() {
