@@ -101,12 +101,12 @@ public:
     }
     if (arityMax < 1) {
       if (pluginProgress)
-	pluginProgress->setError("maxdegree must be a strictly positive integer");
+	pluginProgress->setError("Error: maxdegree must be a strictly positive integer");
       return false;
     }
     if (sizeMax < 1) {
       if (pluginProgress)
-	pluginProgress->setError("maxsize must be a strictly positive integer");
+	pluginProgress->setError("Error: maxsize must be a strictly positive integer");
       return false;
     }
     bool ok=true;
