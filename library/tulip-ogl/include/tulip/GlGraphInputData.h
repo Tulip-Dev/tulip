@@ -307,9 +307,19 @@ public:
 
 	/**
 	 * Set metaNode renderer
+	 * If deleteOldMetaNodeRenderer==true : this function delete old meta node renderer
 	 */
-	void setMetaNodeRenderer(GlMetaNodeRenderer *renderer) {
+	void setMetaNodeRenderer(GlMetaNodeRenderer *renderer,bool deleteOldMetaNodeRenderer=true) {
+		if(deleteOldMetaNodeRenderer)
+			delete metaNodeRenderer;
 		metaNodeRenderer = renderer;
+	}
+
+	/**
+	 * Set if the meta node renderer must be deleted at destructor
+	 */
+	void setDeleteMetaNodeRendererAtDestructor(bool deleteAtDestructor){
+		deleteMetaNodeRendererAtDestructor=deleteAtDestructor;
 	}
 
 	/**
@@ -392,6 +402,7 @@ protected:
   std::string elementTgtAnchorShapePropName;
   std::string elementTgtAnchorSizePropName;
 
+  bool deleteMetaNodeRendererAtDestructor;
   GlMetaNodeRenderer *metaNodeRenderer;
   GlVertexArrayManager *glVertexArrayManager;
 

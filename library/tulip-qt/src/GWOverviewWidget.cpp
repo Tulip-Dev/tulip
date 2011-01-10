@@ -179,11 +179,11 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       GlMetaNodeRenderer *oldMetaNodeRenderer;
       if(_view->getScene()->getGlGraphComposite()){
         oldMetaNodeRenderer=_view->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer();
-        _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(&metaNodeRenderer);
+        _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(&metaNodeRenderer,false);
       }
       _view->draw();
       if(_view->getScene()->getGlGraphComposite())
-        _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(oldMetaNodeRenderer);
+        _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(oldMetaNodeRenderer,false);
 
     }else{
       // We don't have any observed view : only draw the view
