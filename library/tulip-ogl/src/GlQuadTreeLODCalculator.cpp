@@ -155,10 +155,10 @@ namespace tlp {
                     break;
                   }
                 }
-                assert(currentLayer!=NULL);
 
                 cameras.push_back(camera);
-                layerToCamera.insert(pair<GlLayer*,pair<Camera*,Camera> >(currentLayer,pair<Camera *,Camera>(camera,*camera)));
+                if(currentLayer!=NULL)
+                  layerToCamera.insert(pair<GlLayer*,pair<Camera*,Camera> >(currentLayer,pair<Camera *,Camera>(camera,*camera)));
 
                 Matrix<float,4> transformMatrix;
                 camera->getTransformMatrix(globalViewport,transformMatrix);
