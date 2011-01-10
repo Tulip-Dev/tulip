@@ -193,9 +193,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       }
       if (!hasSelection ||
           (!glMainWidget->selectGlEntities((int)editPosition[0]-3, (int)editPosition[1]-3,
-              6, 6, select,layer) &&
-              !centerRect.inRect((double) qMouseEv->x(),
-                  (double)qMouseEv->y()))) {
+              6, 6, select,layer))) {
         // event occurs outside the selection rectangle
         // so from now we delegate the job to a MouseSelector object
         // which should intercept the event
