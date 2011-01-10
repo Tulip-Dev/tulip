@@ -868,7 +868,12 @@ namespace tlp {
                     size *= 4;
                 }
                 else
-                    input = new std::ifstream(filename.c_str());
+		  input = new std::ifstream(filename.c_str(),
+					    std::ifstream::in |
+					    // consider file has binary
+					    // to avoid pb using tellg
+					    // on the input stream
+					    std::ifstream::binary );
             }else{
                 dataSet->get<std::string>("file::data", data);
                 size=data.size();
