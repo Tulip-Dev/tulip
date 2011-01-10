@@ -5,6 +5,7 @@
 #include <QtGui/QComboBox>
 #include <QtGui/QLineEdit>
 #include <QtGui/QScrollBar>
+#include <limits.h>
 
 using namespace tlp;
 using namespace std;
@@ -32,7 +33,6 @@ QWidget(parent), propertyNameLineEdit(new QLineEdit(this)), propertyTypeComboBox
     propertyTypeComboBox->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
     layout()->addWidget(propertyTypeComboBox);
     layout()->setAlignment(propertyTypeComboBox, Qt::AlignHCenter);
-
 }
 
 void PropertyConfigurationWidget::fillPropertyTypeComboBox() {
@@ -80,7 +80,7 @@ void PropertyConfigurationWidget::setPropertyNameValidator(QValidator* validator
 }
 
 
-CSVTableWidget::CSVTableWidget(QWidget* parent):QTableWidget(parent){
+CSVTableWidget::CSVTableWidget(QWidget* parent):QTableWidget(parent),maxLineNumber(UINT_MAX){
 
 }
 
@@ -91,11 +91,10 @@ void CSVTableWidget::begin(){
 }
 
 void CSVTableWidget::token(unsigned int row, unsigned int column, const string& token){
-    //If the maximum line number is reach ignore the token.
-    if(rowCount() >= maxLineNumber)
-        return;
-
     if(rowCount() <= row){
+        //If the maximum line number is reach ignore the token.
+        if(rowCount() >= maxLineNumber)
+            return;
         insertRow(row);
     }
     if(columnCount () <= column){
@@ -122,6 +121,12 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
     connect(ui->useFirstLineAsPropertyNamecheckBox,SIGNAL(clicked(bool)),this,SLOT(useFirstLineAsHeaderUpdated()));
     connect(ui->limitPreviewLineNumberCheckBox,SIGNAL(clicked(bool)),this,SLOT(filterPreviewLineNumber(bool)));
     connect(ui->previewLineNumberSpinBox,SIGNAL(valueChanged(int)),this,SLOT(previewLineNumberChanged(int)));
+    //Init the preview line number with the right value.
+    if(ui->limitPreviewLineNumberCheckBox->isChecked()){
+        ui->previewTableWidget->setMaxPreviewLineNumber(ui->previewLineNumberSpinBox->value());
+    }else{
+    ui->previewTableWidget->setMaxPreviewLineNumber(UINT_MAX);
+    }
 }
 
 CSVImportConfigurationWidget::~CSVImportConfigurationWidget()
@@ -163,27 +168,13 @@ void CSVImportConfigurationWidget::updateWidget(){
 }
 
 void CSVImportConfigurationWidget::begin(){
-    ui->previewTableWidget->clear();
-    ui->previewTableWidget->setColumnCount(0);
-    ui->previewTableWidget->setRowCount(0);
+    ui->previewTableWidget->begin();
     clearPropertiesTypeList();
 }
 
 void CSVImportConfigurationWidget::token(unsigned int row, unsigned int column, const string& token){
 
-    //If user want only an overview of the CSV file parse only a small part.
-    if(ui->limitPreviewLineNumberCheckBox->isChecked() &&  row >= ui->previewLineNumberSpinBox->value()){
-        return;
-    }
-    if(ui->previewTableWidget->rowCount() <= row){
-        ui->previewTableWidget->insertRow(row);
-    }
-    if(ui->previewTableWidget->columnCount () <= column){
-        ui->previewTableWidget->insertColumn(column);
-        //Set the column name
-
-    }   
-    ui->previewTableWidget->setItem(row,column,new QTableWidgetItem(tlpStringToQString(token)));
+    ui->previewTableWidget->token(row,column,token);
     //A new column was created set its label and it's configuration widget.
     if(row == 0){
         QString columnName = genrateColumnName(column);
@@ -203,11 +194,17 @@ void CSVImportConfigurationWidget::end(unsigned int rowNumber, unsigned int){
     ui->previewLineNumberSpinBox->blockSignals(false);
 }
 
-void CSVImportConfigurationWidget::filterPreviewLineNumber(bool){
+void CSVImportConfigurationWidget::filterPreviewLineNumber(bool checked){
+    if(checked){
+        ui->previewTableWidget->setMaxPreviewLineNumber(ui->previewLineNumberSpinBox->value());
+    }else{
+        ui->previewTableWidget->setMaxPreviewLineNumber(UINT_MAX);
+    }
     updateWidget();
 }
 
-void CSVImportConfigurationWidget::previewLineNumberChanged(int){
+void CSVImportConfigurationWidget::previewLineNumberChanged(int maxLineNumber){
+    ui->previewTableWidget->setMaxPreviewLineNumber(maxLineNumber);
     updateWidget();
 }
 
