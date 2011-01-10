@@ -49,18 +49,16 @@ std::ostream& tlp::operator<<(std::ostream &os,const tlp::Color &a) {
 std::istream & tlp::operator>> (std::istream &is, tlp::Color & outA) {
   const unsigned int SIZE =4;
   char c;
-  // remove pos management
-  // because of buggy windows
-  //int pos = is.tellg();
+  int pos = is.tellg();
   is.clear();
   if( !(is >> c) || c!='(' ) {
-    //is.seekg(pos);
+    is.seekg(pos);
     is.setstate( std::ios::failbit );
     return is;  
   }
   for( unsigned int i=0;i<SIZE;++i ) {
     if( i>0 && ( !(is >> c) || c!=',' ) ) {
-      //is.seekg(pos);
+      is.seekg(pos);
       is.setstate( std::ios::failbit );
       return is;  
     }
@@ -69,13 +67,13 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Color & outA) {
     done = ( is >> vi );
     outA.array[i] = vi;
     if( !done ) {
-      //is.seekg(pos);
+      is.seekg(pos);
       is.setstate( std::ios::failbit );
       return is;
     }
   }
   if( !(is >> c) || c!=')' ) {
-    //is.seekg(pos);
+    is.seekg(pos);
     is.setstate( std::ios::failbit );
     return is;  
   }
