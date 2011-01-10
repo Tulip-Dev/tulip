@@ -28,14 +28,35 @@
 
 namespace tlp {
 
-/** \addtogroup graphs */ 
+/** \addtogroup iterators */
 /*@{*/
 
-TLP_SCOPE edge nextFaceEdge(Graph* g, edge e, node n);
+/**
+  * That function enables to obtain the next edge on a face of the embedding. It uses
+  * the EdgeMapIterators.
+  *
+  * @see NodeMapIterator
+  * @see EdgeMapIterator
+  * @see PlanarConMap
+  */
+TLP_SCOPE edge nextFaceEdge(Graph* g, edge source, node target);
 
 /**
- *
- */
+  * @class NodeMapIterator
+  * @ingroup Iterators
+  * @brief Iterator that enables to traverse the graph taking into account the ordering of edges aroung nodes
+  * @param sg the considered graph
+  * @param source the node from witch one arrives on target
+  * @param target the node the considered node (one will obtain an iterator on the neighboors of that node)
+  *
+  * Since Tulip enables to order the edges around nodes, it is possible to traverse the nodes according
+  * to that ordering. It is necessary to use that function if one wants to take into account the embedding
+  * of the graph. Such functionnality is really useful when dealing with planar graphs. However if one wants
+  * more efficient data structure for planar graphs one should consider using PlanarConMap.
+  *
+  * @see EdgeMapIterator
+  * @see PlanarConMap
+  */
 struct TLP_SCOPE NodeMapIterator : public Iterator<node> {
   ///
   NodeMapIterator(Graph *sg, node source, node target);
@@ -51,8 +72,21 @@ private :
 };
 
 /**
- *
- */
+  * @class EdgeMapIterator
+  * @ingroup Iterators
+  * @brief Iterator that enables to traverse the graph taking into account the ordering of edges aroung nodes
+  * @param sg the considered graph
+  * @param source the edge from witch one arrives on target
+  * @param target the node the considered node (one will obtain an iterator on the neighboors of that node)
+  *
+  * Since Tulip enables to order the edges around nodes, it is possible to traverse the nodes according
+  * to that ordering. It is necessary to use that function if one wants to take into account the embedding
+  * of the graph. Such functionnality is really useful when dealing with planar graphs. However if one wants
+  * more efficient data structure for planar graphs one should consider using PlanarConMap.
+  *
+  * @see EdgeMapIterator
+  * @see PlanarConMap
+  */
 struct TLP_SCOPE EdgeMapIterator : public Iterator<edge> {
   ///
   EdgeMapIterator(Graph *sg, edge source, node target);
