@@ -67,7 +67,7 @@ INCLUDES_H = \
 	tulip/CSVGraphImport.h \
 	tulip/CSVGraphMappingConfigurationWidget.h \
 	tulip/CSVImportConfigurationWidget.h \
-	tulip/CSVImportDialog.h \
+        tulip/CSVImportWizard.h \
 	tulip/CSVParser.h \
 	tulip/CSVParserConfigurationWidget.h \
 	tulip/QtGlSceneZoomAndPanAnimator.h \
@@ -113,7 +113,7 @@ BUILT_SOURCES = \
 	tulip/CSVParserConfigurationWidgetData.h \
 	tulip/CSVGraphMappingConfigurationWidgetData.h \
 	tulip/CSVImportConfigurationWidgetData.h \
-	tulip/CSVImportDialogData.h \
+        tulip/CSVImportWizardData.h \
         tulip/TextEditDialogData.h
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)

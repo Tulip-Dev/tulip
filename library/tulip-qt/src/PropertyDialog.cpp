@@ -55,7 +55,7 @@
 
 #include "tulip/PropertyDialog.h"
 #include "tulip/CopyPropertyDialog.h"
-#include "tulip/CSVImportDialog.h"
+#include "tulip/CSVImportWizard.h"
 
 using namespace std;
 
@@ -501,19 +501,12 @@ namespace tlp {
     void PropertyDialog::importCSVData() {
         if (graph
             != NULL) {
-            CSVImportDialog *dialog =new CSVImportDialog(this);
-            dialog->setGraph(graph);            
-
-            if(dialog->exec() == QDialog::Accepted){
-                graph->push();
-                //Import data
-                Observable::holdObservers();
-                dialog->import();
-                Observable::unholdObservers();
-            }
-
-            dialog->deleteLater();
-
+            CSVImportWizard *wizard = new CSVImportWizard(this);
+            wizard->setGraph(graph);
+            Observable::holdObservers();
+            wizard->exec();
+            Observable::unholdObservers();
+            wizard->deleteLater();
         }
     }
     //=================================================

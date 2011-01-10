@@ -3,6 +3,7 @@
 
 #include <QtGui/QWidget>
 #include <QtGui/QValidator>
+#include <QtGui/QTableWidget>
 #include <tulip/CSVGraphImport.h>
 #include <tulip/CSVContentHandler.h>
 #include <vector>
@@ -89,12 +90,40 @@ private:
 };
 
 /**
+* @brief Simple table preview of CSV file. Load in a QTableWidget the data send by a CSVContentHandler.
+**/
+  class TLP_QT_SCOPE CSVTableWidget : public QTableWidget, public CSVContentHandler{
+  public:
+      CSVTableWidget(QWidget* parent=NULL);
+      void begin();
+      void token(unsigned int row, unsigned int column, const std::string& token);
+      void end(unsigned int rowNumber, unsigned int columnNumber);
+      /**
+        * @brief Limit the line number of the preview. Need to parse the file again to take this limit in account.
+        **/
+      void setMaxPreviewLineNumber(unsigned int lineNumber){
+          maxLineNumber = lineNumber;
+      }
+
+      /**
+        * @brief Get the preview line number.
+        **/
+      unsigned int getMaxPreviewLineNumber()const{
+          return maxLineNumber;
+      }
+
+  private:
+      unsigned int maxLineNumber;
+  };
+
+
+/**
   * @brief Widget generating a CSVImportParameters object configuring the CSV import process.
   *
   * Use a CSV parser to fill this widget with previews and CSV file statistics like number of rows and columns.
   **/
-class TLP_QT_SCOPE CSVImportConfigurationWidget : public QWidget, public tlp::CSVContentHandler {
-    Q_OBJECT
+class TLP_QT_SCOPE CSVImportConfigurationWidget : public QWidget, public CSVContentHandler {
+    Q_OBJECT        
 public:
     CSVImportConfigurationWidget(QWidget *parent = 0);
     ~CSVImportConfigurationWidget();

@@ -23,7 +23,7 @@ namespace tlp{
     };
 
 class TLP_QT_SCOPE CSVParserConfigurationWidget : public QWidget {
-    Q_OBJECT
+    Q_OBJECT    
 public:
     CSVParserConfigurationWidget(QWidget *parent = 0);
     ~CSVParserConfigurationWidget();    

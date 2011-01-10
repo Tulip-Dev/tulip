@@ -22,37 +22,22 @@
    </property>
    <item>
     <widget class="QGroupBox" name="groupBox">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="title">
-      <string>Import</string>
+      <string>File</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="spacing">
-       <number>0</number>
+       <number>3</number>
       </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>6</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
+      <property name="margin">
+       <number>3</number>
       </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QLabel" name="fileLabel">
           <property name="text">
-           <string>File</string>
+           <string>Location</string>
           </property>
          </widget>
         </item>
@@ -66,7 +51,7 @@
         <item>
          <widget class="QPushButton" name="fileChooserPushButton">
           <property name="text">
-           <string>Change file</string>
+           <string>...</string>
           </property>
          </widget>
         </item>
@@ -111,30 +96,15 @@
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
      <property name="title">
       <string>Delimiters</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <property name="spacing">
-       <number>0</number>
+       <number>3</number>
       </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>6</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
+      <property name="margin">
+       <number>3</number>
       </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">

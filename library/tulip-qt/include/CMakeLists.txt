@@ -66,10 +66,10 @@ INSTALL(FILES
     tulip/CSVContentHandler.h
     tulip/CSVGraphImport.h
     tulip/CSVGraphMappingConfigurationWidget.h
-    tulip/CSVImportConfigurationWidget.h
-    tulip/CSVImportDialog.h
+    tulip/CSVImportConfigurationWidget.h    
     tulip/CSVParser.h    
     tulip/CSVParserConfigurationWidget.h
+    tulip/CSVImportWizard.h
     tulip/QtGlSceneZoomAndPanAnimator.h
     tulip/Morphing.h
     tulip/GraphPropertiesTableWidget.h

@@ -40,7 +40,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
         return false;
     }
     handler->begin();
-    ifstream csvFile(fileName.c_str());
+    ifstream csvFile(fileName.c_str(),ifstream::in|ifstream::binary);
 
     unsigned int row = 0;
     unsigned int columnMax = 0;
@@ -77,6 +77,10 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
                     progress->progress(readSize, fileSize);
                 }
             }
+            //If the line is empty continue.
+            if(line.empty()){
+                continue;
+            }
             //Correct the encoding of the line.
             line = convertStringEncoding(line,codec);
             tokens.clear();
@@ -100,66 +104,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
     }
 }
 
-//void CSVParser::parse(const string& fileName, const string& separator,
-//                      CSVContentHandler* handler, PluginProgress* progress,const string& fileEncoding) {
-//    assert(handler);
-//    handler->begin();
-//    ifstream csvFile(fileName.c_str());
-//
-//    unsigned int row = 0;
-//    unsigned int columnMax = 0;
-//    if (csvFile) {
-//        csvFile.seekg(0, std::ios_base::end);
-//        // get position = file size
-//        unsigned long fileSize = csvFile.tellg(), readSize = 0;
-//        // reset position
-//        csvFile.seekg(0, std::ios_base::beg);
-//        string line;
-//        vector<string> tokens;
-//
-//        unsigned int displayProgressEachLineNumber = 10;
-//
-//        QTextCodec * codec = QTextCodec::codecForName ( fileEncoding.c_str());
-//        if(codec == NULL){
-//            std::cerr << __PRETTY_FUNCTION__<<":"<<__LINE__<<" Cannot found the convertion codec to convert from "<<fileEncoding<<" string will be treated as utf8."<<std::endl;
-//            codec = QTextCodec::codecForName("UTF-8");
-//        }
-//
-//        if (progress) {
-//            progress->progress(0, 100);
-//        }
-//        while (getline(csvFile, line)) {
-//
-//            if (progress) {
-//                readSize += line.size();
-//                if (progress->state() != TLP_CONTINUE) {
-//                    break;
-//                }
-//                //Each displayProgressEachLineNumber display progression
-//                if (row % displayProgressEachLineNumber == 0) {
-//                    // compute progression in function of read size and file size.
-//                    progress->progress(readSize, fileSize);
-//                }
-//            }
-//            //Correct the encoding of the line.
-//            line = convertStringEncoding(line,codec);
-//            tokens.clear();
-//            tokenize(line, tokens, separator,'"', 0);
-//            unsigned int column = 0;
-//            for (column = 0; column < tokens.size(); ++column) {
-//                if (progress) {
-//                    if (progress->state() != TLP_CONTINUE) {
-//                        break;
-//                    }
-//                }
-//                handler->token(row, column, treatToken(tokens[column], row, column));
-//            }
-//            columnMax = max(columnMax, column);
-//            ++row;
-//        }
-//    }
-//    handler->end(row, columnMax);
-//}
+
 void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
                          const string& delimiters,char textDelimiter, unsigned int numberOfCol) {
     // Skip delimiters at beginning.

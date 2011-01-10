@@ -79,6 +79,37 @@ void PropertyConfigurationWidget::setPropertyNameValidator(QValidator* validator
     propertyNameLineEdit->setValidator(validator);
 }
 
+
+CSVTableWidget::CSVTableWidget(QWidget* parent):QTableWidget(parent){
+
+}
+
+void CSVTableWidget::begin(){
+    clear();
+    setColumnCount(0);
+    setRowCount(0);
+}
+
+void CSVTableWidget::token(unsigned int row, unsigned int column, const string& token){
+    //If the maximum line number is reach ignore the token.
+    if(rowCount() >= maxLineNumber)
+        return;
+
+    if(rowCount() <= row){
+        insertRow(row);
+    }
+    if(columnCount () <= column){
+        insertColumn(column);
+        //Set the column name
+
+    }
+    setItem(row,column,new QTableWidgetItem(tlpStringToQString(token)));
+}
+
+void CSVTableWidget::end(unsigned int rowNumber, unsigned int columnNumber){
+
+}
+
 CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
         QWidget(parent),
         ui(new Ui::CSVImportConifgurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(NULL)
