@@ -49,7 +49,7 @@ CSVImportConfigurationQWizardPage::CSVImportConfigurationQWizardPage ( QWidget *
 }
 void CSVImportConfigurationQWizardPage::initializePage(){
     CSVImportWizard* csvWizard= qobject_cast<CSVImportWizard*>(wizard());
-    assert(wizard!=NULL);
+    assert(csvWizard!=NULL);
     importConfigurationWidget->setNewParser(csvWizard->getParsingConfigurationPage()->buildParser());
 }
 
@@ -65,7 +65,7 @@ bool CSVGraphMappingConfigurationQWizardPage::isComplete() const{
 
 void CSVGraphMappingConfigurationQWizardPage::initializePage(){
     CSVImportWizard* csvWizard= qobject_cast<CSVImportWizard*>(wizard());
-    assert(wizard!=NULL);
+    assert(csvWizard!=NULL);
     graphMappingConfigurationWidget->updateWidget(csvWizard->getGraph(),csvWizard->getImportConfigurationPage()->getImportParameters());
 }
 
