@@ -59,10 +59,10 @@ namespace tlp {
     inputData->getGlVertexArrayManager()->pauseRendering(true);
 
     glPushMatrix();
-    const Coord &nodeCoord = inputData->elementLayout->getNodeValue(n);
-    const Size &nodeSize = inputData->elementSize->getNodeValue(n);
+    const Coord &nodeCoord = inputData->getElementLayout()->getNodeValue(n);
+    const Size &nodeSize = inputData->getElementSize()->getNodeValue(n);
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
-    glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., 1.);
+    glRotatef(inputData->getElementRotation()->getNodeValue(n), 0., 0., 1.);
     // We remove nodeSize[N]/100. to be sure that includes nodes are in meta node
 
     Graph *metaGraph = inputData->getGraph()->getNodeMetaInfo(n);
@@ -70,11 +70,11 @@ namespace tlp {
     GlGraphInputData metaData(metaGraph,&metaParameters);
     metaData.setMetaNodeRenderer(inputData->getMetaNodeRenderer());
     metaData.setDeleteMetaNodeRendererAtDestructor(false);
-    BoundingBox bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.elementLayout, metaData.elementSize, metaData.elementRotation);
+    BoundingBox bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.getElementLayout(), metaData.getElementSize(), metaData.getElementRotation());
     Coord maxC(bboxes[1]);
     Coord minC(bboxes[0]);
     BoundingBox includeBoundingBox;
-    inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox,n);
+    inputData->glyphs.get(inputData->getElementShape()->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox,n);
     Coord includeScale(includeBoundingBox[1] - includeBoundingBox[0]);
     Coord size = (maxC + minC)/-1.f;
     Coord translate( (maxC+minC)/-2.f);

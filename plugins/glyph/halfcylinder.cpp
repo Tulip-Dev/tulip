@@ -82,8 +82,8 @@ void HalfCylinder::draw(node n,float) {
     gluDeleteQuadric(quadratic);
   }
 
-  setMaterial(glGraphInputData->elementColor->getNodeValue(n));
-  string texFile = glGraphInputData->elementTexture->getNodeValue(n);
+  setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
+  string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     GlTextureManager::getInst().activateTexture(texturePath+texFile);

@@ -125,19 +125,19 @@ void Ring::draw(node n, float lod) {
 	//		GlDisplayListManager::getInst().callDisplayList("Ring_ringborder");
 	//		glEnable(GL_LIGHTING);
 	//	}
-	drawGlyph(glGraphInputData->elementColor->getNodeValue(n),
-			glGraphInputData->elementTexture->getNodeValue(n),
+	drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
+			glGraphInputData->getElementTexture()->getNodeValue(n),
 			glGraphInputData->parameters->getTexturePath(),
-			glGraphInputData->elementBorderWidth->getNodeValue(n),
-			glGraphInputData->elementBorderColor->getNodeValue(n), lod);
+			glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+			glGraphInputData->getElementBorderColor()->getNodeValue(n), lod);
 
 }
 void Ring::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
 	glDisable(GL_LIGHTING);
 	drawGlyph(glyphColor,
-			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
+			edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
 			edgeExtGlGraphInputData->parameters->getTexturePath(),
-			edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
+			edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
 			borderColor, lod);
 }
 

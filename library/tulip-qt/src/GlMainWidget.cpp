@@ -680,9 +680,9 @@ void GlMainWidget::useHulls(bool hasHulls) {
 		manager = new GlCompositeHierarchyManager(scene.getGlGraphComposite()->getInputData()->getGraph(),
 				scene.getLayer("Main"),
 				"Hulls",
-				this->getScene()->getGlGraphComposite()->getInputData()->elementLayout,
-				this->getScene()->getGlGraphComposite()->getInputData()->elementSize,
-				this->getScene()->getGlGraphComposite()->getInputData()->elementRotation);
+				this->getScene()->getGlGraphComposite()->getInputData()->getElementLayout(),
+				this->getScene()->getGlGraphComposite()->getInputData()->getElementSize(),
+				this->getScene()->getGlGraphComposite()->getInputData()->getElementRotation());
 		// Now we remove and add GlGraphComposite to be sure of the order (first Hulls and after GraphComposite)
 		// This code doesn't affect the behavior of tulip but the tlp file is modified
 		scene.getLayer("Main")->deleteGlEntity(this->getScene()->getGlGraphComposite());

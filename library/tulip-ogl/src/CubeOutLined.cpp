@@ -73,16 +73,16 @@ namespace tlp {
 
   void CubeOutLined::draw(node n, float lod) {
 
-    const string& texFile = glGraphInputData->elementTexture->getNodeValue(n);
+    const string& texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
     if (texFile.size() != 0){
       const string& texturePath=glGraphInputData->parameters->getTexturePath();
       box->setTextureName(texturePath+texFile);
     }else
       box->setTextureName("");
 
-    box->setFillColor(glGraphInputData->elementColor->getNodeValue(n));
-    box->setOutlineColor(glGraphInputData->elementBorderColor->getNodeValue(n));
-    double lineWidth=glGraphInputData->elementBorderWidth->getNodeValue(n);
+    box->setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
+    box->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
+    double lineWidth=glGraphInputData->getElementBorderWidth()->getNodeValue(n);
     if(lineWidth < 1e-6)
       lineWidth=1e-6;
     box->setOutlineSize(lineWidth);

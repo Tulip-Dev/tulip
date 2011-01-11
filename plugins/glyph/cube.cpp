@@ -83,15 +83,15 @@ Cube::~Cube() {
 }
 //=======================================================
 void Cube::draw(node n, float lod) {
-  draw(glGraphInputData->elementColor->getNodeValue(n),
-       glGraphInputData->elementTexture->getNodeValue(n),
+  draw(glGraphInputData->getElementColor()->getNodeValue(n),
+       glGraphInputData->getElementTexture()->getNodeValue(n),
        lod);
 }
 
 void Cube::draw(edge, node n, const Color& glyphColor,const Color&, float lod) {
   glEnable(GL_LIGHTING);
   draw(glyphColor,
-       edgeExtGlGraphInputData->elementTexture->getNodeValue(n),
+       edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n),
        lod);
 }
 

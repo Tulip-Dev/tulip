@@ -75,20 +75,20 @@ Square::~Square() {
 }
 //=====================================================
 void Square::draw(node n, float lod) {
-	drawGlyph(glGraphInputData->elementColor->getNodeValue(n),
-			glGraphInputData->elementTexture->getNodeValue(n),
+	drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
+			glGraphInputData->getElementTexture()->getNodeValue(n),
 			glGraphInputData->parameters->getTexturePath(),
-			glGraphInputData->elementBorderWidth->getNodeValue(n),
-			glGraphInputData->elementBorderColor->getNodeValue(n), lod);
+			glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+			glGraphInputData->getElementBorderColor()->getNodeValue(n), lod);
 
 }
 
 void Square::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
   glDisable(GL_LIGHTING);
 	drawGlyph(glyphColor,
-			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
+			edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
 			edgeExtGlGraphInputData->parameters->getTexturePath(),
-			edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
+			edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
 			borderColor, lod);
 }
 

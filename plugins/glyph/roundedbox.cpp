@@ -261,9 +261,9 @@ void RoundedBox::draw(node n, float lod) {
 	}
 
 
-	const Size &size = glGraphInputData->elementSize->getNodeValue(n);
-	float outlineWidth = glGraphInputData->elementBorderWidth->getNodeValue(n);
-	const string &texture = glGraphInputData->elementTexture->getNodeValue(n);
+	const Size &size = glGraphInputData->getElementSize()->getNodeValue(n);
+	float outlineWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
+	const string &texture = glGraphInputData->getElementTexture()->getNodeValue(n);
 
 	if (roundedBoxShader == NULL || !roundedBoxShader->isLinked() || !roundedBoxOutlineShader->isLinked() || (GlShaderProgram::getCurrentActiveShader() && GlShaderProgram::getCurrentActiveShader()->getName() == "fisheye")) {
 		if (roundedSquare == NULL)
@@ -272,8 +272,8 @@ void RoundedBox::draw(node n, float lod) {
 		if (size[0] != size[1]) {
 			polygon = createRoundedRect(size);
 		}
-		polygon->setFillColor(glGraphInputData->elementColor->getNodeValue(n));
-		polygon->setOutlineColor(glGraphInputData->elementBorderColor->getNodeValue(n));
+		polygon->setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
+		polygon->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
 		polygon->setOutlineSize(outlineWidth);
 		polygon->setTextureName(texture);
 		polygon->draw(lod,NULL);
@@ -288,7 +288,7 @@ void RoundedBox::draw(node n, float lod) {
 		glTexCoordPointer(2, GL_FLOAT, 7 * sizeof(float), &squareVerticesData[2]);
 		glNormalPointer(GL_FLOAT, 7 * sizeof(float), &squareVerticesData[4]);
 
-		setMaterial(glGraphInputData->elementColor->getNodeValue(n));
+		setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
 		if (texture != "") {
 			GlTextureManager::getInst().activateTexture(texture);
 		}
@@ -309,10 +309,10 @@ void RoundedBox::draw(node n, float lod) {
 
 		if (outlineWidth == 0) {
 			glLineWidth(1.0);
-			setMaterial(glGraphInputData->elementColor->getNodeValue(n));
+			setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
 		} else {
 			glLineWidth(outlineWidth);
-			setMaterial(glGraphInputData->elementBorderColor->getNodeValue(n));
+			setMaterial(glGraphInputData->getElementBorderColor()->getNodeValue(n));
 		}
 
 		glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), outlineVeticesData);

@@ -65,16 +65,16 @@ namespace tlp {
 
   BoundingBox GlNode::getBoundingBox(GlGraphInputData* data) {
     node n=node(id);
-    if(data->elementRotation->getNodeValue(n)==0){
+    if(data->getElementRotation()->getNodeValue(n)==0){
       BoundingBox box;
-      box.expand(data->elementLayout->getNodeValue(n)-data->elementSize->getNodeValue(n)/2.f);
-      box.expand(data->elementLayout->getNodeValue(n)+data->elementSize->getNodeValue(n)/2.f);
+      box.expand(data->getElementLayout()->getNodeValue(n)-data->getElementSize()->getNodeValue(n)/2.f);
+      box.expand(data->getElementLayout()->getNodeValue(n)+data->getElementSize()->getNodeValue(n)/2.f);
       assert(box.isValid());
       return box;
     }else{
-      float cosAngle=cos((float)data->elementRotation->getNodeValue(n)/180.*M_PI);
-      float sinAngle=sin((float)data->elementRotation->getNodeValue(n)/180.*M_PI);
-      Coord tmp1(data->elementSize->getNodeValue(n)/2.f);
+      float cosAngle=cos((float)data->getElementRotation()->getNodeValue(n)/180.*M_PI);
+      float sinAngle=sin((float)data->getElementRotation()->getNodeValue(n)/180.*M_PI);
+      Coord tmp1(data->getElementSize()->getNodeValue(n)/2.f);
       Coord tmp2(tmp1[0] ,-tmp1[1], tmp1[2]);
       Coord tmp3(-tmp1[0],-tmp1[1],-tmp1[2]);
       Coord tmp4(-tmp1[0], tmp1[1],-tmp1[2]);
@@ -83,10 +83,10 @@ namespace tlp {
       tmp3=Coord(tmp3[0]*cosAngle-tmp3[1]*sinAngle,tmp3[0]*sinAngle+tmp3[1]*cosAngle,tmp3[2]);
       tmp4=Coord(tmp4[0]*cosAngle-tmp4[1]*sinAngle,tmp4[0]*sinAngle+tmp4[1]*cosAngle,tmp4[2]);
       BoundingBox bb;
-      bb.expand(data->elementLayout->getNodeValue(n)+tmp1);
-      bb.expand(data->elementLayout->getNodeValue(n)+tmp2);
-      bb.expand(data->elementLayout->getNodeValue(n)+tmp3);
-      bb.expand(data->elementLayout->getNodeValue(n)+tmp4);
+      bb.expand(data->getElementLayout()->getNodeValue(n)+tmp1);
+      bb.expand(data->getElementLayout()->getNodeValue(n)+tmp2);
+      bb.expand(data->getElementLayout()->getNodeValue(n)+tmp3);
+      bb.expand(data->getElementLayout()->getNodeValue(n)+tmp4);
       return bb;
     }
   }
@@ -118,7 +118,7 @@ namespace tlp {
       }
     }*/
 
-    if (data->elementSelected->getNodeValue(n)) {
+    if (data->getElementSelected()->getNodeValue(n)) {
       glDisable(GL_DEPTH_TEST);
       if(data->getGraph()->isMetaNode(n)) {
 	glStencilFunc(GL_LEQUAL,data->parameters->getSelectedMetaNodesStencil(),0xFFFF);
@@ -134,13 +134,13 @@ namespace tlp {
       }
     }
 
-    const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
-    const Size &nodeSize = data->elementSize->getNodeValue(n);
+    const Coord &nodeCoord = data->getElementLayout()->getNodeValue(n);
+    const Size &nodeSize = data->getElementSize()->getNodeValue(n);
 
-    const Color& fillColor = data->elementColor->getNodeValue(n);
-    const Color& strokeColor = data->elementBorderColor->getNodeValue(n);
-    const Color& textColor = data->elementLabelColor->getNodeValue(n);
-    GlTextureManager::getInst().setAnimationFrame(data->elementAnimationFrame->getNodeValue(n));
+    const Color& fillColor = data->getElementColor()->getNodeValue(n);
+    const Color& strokeColor = data->getElementBorderColor()->getNodeValue(n);
+    const Color& textColor = data->getElementLabelColor()->getNodeValue(n);
+    GlTextureManager::getInst().setAnimationFrame(data->getElementAnimationFrame()->getNodeValue(n));
 
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_COLOR_INFO);
@@ -152,7 +152,7 @@ namespace tlp {
       glPassThrough(id); //id of the node for the feed back mode
     }
 
-    bool selected = data->elementSelected->getNodeValue(n);
+    bool selected = data->getElementSelected()->getNodeValue(n);
     if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
       if (lod < 1) lod = 1;
       int size= sqrt(lod);
@@ -183,10 +183,10 @@ namespace tlp {
     //draw a glyph or make recursive call for meta nodes
     glPushMatrix();
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
-    glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
+    glRotatef(data->getElementRotation()->getNodeValue(n), 0., 0., 1.);
     glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
 
-    data->glyphs.get(data->elementShape->getNodeValue(n))->draw(n,lod);
+    data->glyphs.get(data->getElementShape()->getNodeValue(n))->draw(n,lod);
 
     if (selected) {
       //glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
@@ -212,7 +212,7 @@ namespace tlp {
 
   void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod) {
     node n=node(id);
-    bool selected=data->elementSelected->getNodeValue(n);
+    bool selected=data->getElementSelected()->getNodeValue(n);
     if(drawSelect!=selected)
       return;
 
@@ -228,22 +228,22 @@ namespace tlp {
     node n=node(id);
 
     // If glyph can't render label : return
-    if(data->glyphs.get(data->elementShape->getNodeValue(n))->renderLabel())
+    if(data->glyphs.get(data->getElementShape()->getNodeValue(n))->renderLabel())
       return;
 
     // node is selected
-    bool selected=data->elementSelected->getNodeValue(n);
+    bool selected=data->getElementSelected()->getNodeValue(n);
     // Color of the label : selected or not
-    const Color& fontColor = selected ? data->parameters->getSelectionColor() :data->elementLabelColor->getNodeValue(n);
+    const Color& fontColor = selected ? data->parameters->getSelectionColor() :data->getElementLabelColor()->getNodeValue(n);
     // Size of the node
-    Size size=data->elementSize->getNodeValue(n);
+    Size size=data->getElementSize()->getNodeValue(n);
 
     // If we have transparent label : return
     if(fontColor.getA()==0)
       return;
 
     // Node text
-    const string &tmp = data->elementLabel->getNodeValue(n);
+    const string &tmp = data->getElementLabel()->getNodeValue(n);
     if (tmp.length() < 1)
       return;
 
@@ -255,27 +255,27 @@ namespace tlp {
       else label->setStencil(data->parameters->getMetaNodesLabelStencil());
     }
 
-    int fontSize=data->elementFontSize->getNodeValue(n);
+    int fontSize=data->getElementFontSize()->getNodeValue(n);
     if(selected)
       fontSize+=2;
 
-    const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
-    const Size  &nodeSize  = data->elementSize->getNodeValue(n);
-    int labelPos = data->elementLabelPosition->getNodeValue(n);
+    const Coord &nodeCoord = data->getElementLayout()->getNodeValue(n);
+    const Size  &nodeSize  = data->getElementSize()->getNodeValue(n);
+    int labelPos = data->getElementLabelPosition()->getNodeValue(n);
 
 
     BoundingBox includeBB;
-    data->glyphs.get(data->elementShape->getNodeValue(n))->getTextBoundingBox(includeBB,n);
+    data->glyphs.get(data->getElementShape()->getNodeValue(n))->getTextBoundingBox(includeBB,n);
     Coord centerBB(includeBB.center());
     Vec3f sizeBB = includeBB[1]-includeBB[0];
 
     label->setText(tmp);
-    label->setFontNameSizeAndColor(data->elementFont->getNodeValue(n),fontSize,fontColor);
+    label->setFontNameSizeAndColor(data->getElementFont()->getNodeValue(n),fontSize,fontColor);
     label->setRenderingMode(GlLabel::POLYGON_MODE);
     label->setTranslationAfterRotation(centerBB*nodeSize);
     label->setSize(Coord(nodeSize[0]*sizeBB[0],nodeSize[1]*sizeBB[1],0));
     label->setSizeForOutAlign(Coord(nodeSize[0],nodeSize[1],0));
-    label->rotate(0,0,data->elementRotation->getNodeValue(n));
+    label->rotate(0,0,data->getElementRotation()->getNodeValue(n));
     label->setAlignment(labelPos);
     label->setScaleToSize(data->parameters->isLabelScaled());
     label->setUseLODOptimisation(true);
@@ -295,15 +295,15 @@ namespace tlp {
 
   void GlNode::getPointAndColor(GlGraphInputData *inputData,std::vector<Coord> &pointsCoordsArray,std::vector<Color> &pointsColorsArray){
     node n=node(id);
-    const Coord &nodeCoord = inputData->elementLayout->getNodeValue(n);
-    const Color& fillColor = inputData->elementColor->getNodeValue(n);
+    const Coord &nodeCoord = inputData->getElementLayout()->getNodeValue(n);
+    const Color& fillColor = inputData->getElementColor()->getNodeValue(n);
     pointsCoordsArray.push_back(nodeCoord);
     pointsColorsArray.push_back(fillColor);
   }
 
   void GlNode::getColor(GlGraphInputData *inputData,std::vector<Color> &pointsColorsArray){
     node n=node(id);
-    const Color& fillColor = inputData->elementColor->getNodeValue(n);
+    const Color& fillColor = inputData->getElementColor()->getNodeValue(n);
     pointsColorsArray.push_back(fillColor);
   }
 }

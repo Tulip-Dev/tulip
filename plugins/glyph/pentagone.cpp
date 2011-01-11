@@ -91,26 +91,26 @@ void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
 //=====================================================
 void Pentagone::draw(node n, float lod) {
   pentagon->setLightingMode(true);
-  string textureName=glGraphInputData->elementTexture->getNodeValue(n);
+  string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
   if(textureName!="")
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
-  draw(glGraphInputData->elementColor->getNodeValue(n),
-       glGraphInputData->elementBorderColor->getNodeValue(n),
-       glGraphInputData->elementBorderWidth->getNodeValue(n),
+  draw(glGraphInputData->getElementColor()->getNodeValue(n),
+       glGraphInputData->getElementBorderColor()->getNodeValue(n),
+       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
        textureName,
        lod);
 }
 
 void Pentagone::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
   pentagon->setLightingMode(false);
-  string textureName=edgeExtGlGraphInputData->elementTexture->getEdgeValue(e);
+  string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
   if(textureName!="")
     textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
   draw(glyphColor,
        borderColor,
-       edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
+       edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
        textureName,
        lod);
 }

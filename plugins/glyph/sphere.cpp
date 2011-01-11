@@ -84,15 +84,15 @@ static GLfloat *texturesCoord;
 static GLushort *indices;
 //=====================================================
 void Sphere::draw(node n, float lod) {
-	drawGlyph(glGraphInputData->elementColor->getNodeValue(n),
-			glGraphInputData->elementTexture->getNodeValue(n),
+	drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
+			glGraphInputData->getElementTexture()->getNodeValue(n),
 			glGraphInputData->parameters->getTexturePath(), lod);
 }
 
 void Sphere::draw(edge e, node, const Color& glyphColor, const Color&, float lod) {
 	glEnable(GL_LIGHTING);
 	drawGlyph(glyphColor,
-			edgeExtGlGraphInputData->elementTexture->getEdgeValue(e),
+			edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
 			edgeExtGlGraphInputData->parameters->getTexturePath(), lod);
 }
 

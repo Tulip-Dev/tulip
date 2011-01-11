@@ -89,13 +89,13 @@ void Hexagone::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
 //=====================================================
 void Hexagone::draw(node n, float lod) {
   hexagon->setLightingMode(true);
-  string textureName=glGraphInputData->elementTexture->getNodeValue(n);
+  string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
   if(textureName!="")
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
-  draw(glGraphInputData->elementColor->getNodeValue(n),
-       glGraphInputData->elementBorderColor->getNodeValue(n),
-       glGraphInputData->elementBorderWidth->getNodeValue(n),
+  draw(glGraphInputData->getElementColor()->getNodeValue(n),
+       glGraphInputData->getElementBorderColor()->getNodeValue(n),
+       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
        textureName,
        lod);
 }
@@ -106,13 +106,13 @@ void Hexagone::draw(edge e,
                     const Color &borderColor,
                     float lod) {
   hexagon->setLightingMode(false);
-  string textureName=edgeExtGlGraphInputData->elementTexture->getEdgeValue(e);
+  string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
   if(textureName!="")
     textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
   draw(glyphColor,
        borderColor,
-       edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
+       edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
        textureName,
        lod);
 }

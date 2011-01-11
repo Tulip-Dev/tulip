@@ -376,16 +376,16 @@ void GlVertexArrayManager::addNode(Graph *,const node){
 }
 
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property){
-	if(inputData->elementLayout==property || inputData->elementSize==property){
+	if(inputData->getElementLayout()==property || inputData->getElementSize()==property){
 		setHaveToComputeLayout(true);
 		clearLayoutData();
-		inputData->elementLayout->removePropertyObserver(this);
+		inputData->getElementLayout()->removePropertyObserver(this);
 		layoutObserverActivated=false;
 	}
-	if(inputData->elementColor==property){
+	if(inputData->getElementColor()==property){
 		setHaveToComputeColor(true);
 		clearColorData();
-		inputData->elementColor->removePropertyObserver(this);
+		inputData->getElementColor()->removePropertyObserver(this);
 		colorObserverActivated=false;
 	}
 }
@@ -473,12 +473,12 @@ void GlVertexArrayManager::initObservers() {
 		graphObserverActivated=true;
 	}
 	if(!layoutObserverActivated){
-		inputData->elementLayout->addPropertyObserver(this);
-		inputData->elementSize->addPropertyObserver(this);
+		inputData->getElementLayout()->addPropertyObserver(this);
+		inputData->getElementSize()->addPropertyObserver(this);
 		layoutObserverActivated=true;
 	}
 	if(!colorObserverActivated){
-		inputData->elementColor->addPropertyObserver(this);
+		inputData->getElementColor()->addPropertyObserver(this);
 		colorObserverActivated=true;
 	}
 }
@@ -490,12 +490,12 @@ void GlVertexArrayManager::clearObservers() {
 		graphObserverActivated=false;
 	}
 	if(layoutObserverActivated){
-		inputData->elementLayout->removePropertyObserver(this);
-		inputData->elementSize->removePropertyObserver(this);
+		inputData->getElementLayout()->removePropertyObserver(this);
+		inputData->getElementSize()->removePropertyObserver(this);
 		layoutObserverActivated=false;
 	}
 	if(colorObserverActivated){
-		inputData->elementColor->removePropertyObserver(this);
+		inputData->getElementColor()->removePropertyObserver(this);
 		colorObserverActivated=false;
 	}
 }

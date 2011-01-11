@@ -272,35 +272,51 @@ public:
 		else
 			return elementLayoutPropName;
 	}
-
+	/**
+	 * Get property name for elementSourceAnchorShape
+	 */
 	std::string getElementSourceAnchorShapePropName() {
 		return elementSrcAnchorShapePropName;
 	}
-
+	/**
+	 * Set property name for elementSourceAnchorShape
+	 */
 	void setElementSourceAnchorShapePropName(const std::string &name) {
 		elementSrcAnchorShapePropName = name;
 	}
-
+	/**
+	 * Get property name for elementSourceAnchorSize
+	 */
 	std::string getElementSourceAnchorSizePropName() {
 		return elementSrcAnchorSizePropName;
 	}
-
+	/**
+	 * Set property name for elementSourceAnchorSize
+	 */
 	void setElementSourceAnchorSizePropName(const std::string& name) {
 		elementSrcAnchorSizePropName = name;
 	}
-
+	/**
+	 * Get property name for elementTargetAnchorShape
+	 */
 	std::string getElementTargetAnchorShapePropName() {
 		return elementTgtAnchorShapePropName;
 	}
-
+	/**
+	 * Set property name for elementTargetAnchorShape
+	 */
 	void setElementTargetAnchorShapePropName(const std::string &name) {
 		elementTgtAnchorShapePropName = name;
 	}
-
+	/**
+	 * Get property name for elementTargetAnchorSize
+	 */
 	std::string getElementTargetAnchorSizePropName() {
 		return elementTgtAnchorSizePropName;
 	}
-
+	/**
+	 * Set property name for elementTargetAnchorSize
+	 */
 	void setElementTargetAnchorSizePropName(const std::string& name) {
 		elementTgtAnchorSizePropName = name;
 	}
@@ -350,7 +366,239 @@ public:
     deleteGlVertexArrayManager=del;
   }
 
-public:
+  /**
+   * Return a pointer on the property used to elementColor
+   */
+  ColorProperty * getElementColor() {
+    return elementColor;
+  }
+  /**
+   * Set the pointer on the property used to elementColor
+   */
+  void setElementColor(ColorProperty *property) {
+     elementColor=property;
+  }
+  /**
+   * Return a pointer on the property used to elementLabelColor
+   */
+  ColorProperty *getElementLabelColor() {
+    return elementLabelColor;
+  }
+  /**
+   * Set the pointer on the property used to elementLabelColor
+   */
+  void setElementLabelColor(ColorProperty *property) {
+    elementLabelColor=property;
+  }
+  /**
+   * Return a pointer on the property used to elementSize
+   */
+  SizeProperty *getElementSize() {
+    return elementSize;
+  }
+  /**
+   * Set the pointer on the property used to elementSize
+   */
+  void setElementSize(SizeProperty *property) {
+    elementSize=property;
+  }
+  /**
+   * Return a pointer on the property used to elementLabelPosition
+   */
+  IntegerProperty *getElementLabelPosition() {
+    return elementLabelPosition;
+  }
+  /**
+   * Set the pointer on the property used to elementLabelPosition
+   */
+  void setElementLabelPosition(IntegerProperty *property) {
+    elementLabelPosition=property;
+  }
+  /**
+   * Return a pointer on the property used to elementShape
+   */
+  IntegerProperty *getElementShape() {
+    return elementShape;
+  }
+  /**
+   * Set the pointer on the property used to elementShape
+   */
+  void setElementShape(IntegerProperty *property) {
+    elementShape=property;
+  }
+  /**
+   * Return a pointer on the property used to elementRotation
+   */
+  DoubleProperty *getElementRotation() {
+    return elementRotation;
+  }
+  /**
+   * Set the pointer on the property used to elementRotation
+   */
+  void setElementRotation(DoubleProperty *property) {
+    elementRotation=property;
+  }
+  /**
+   * Return a pointer on the property used to elementSelected
+   */
+  BooleanProperty *getElementSelected() {
+    return elementSelected;
+  }
+  /**
+   * Set the pointer on the property used to elementSelected
+   */
+  void setElementSelected(BooleanProperty *property) {
+    elementSelected=property;
+  }
+  /**
+   * Return a pointer on the property used to elementFont
+   */
+  StringProperty   *getElementFont() {
+    return elementFont;
+  }
+  /**
+   * Set the pointer on the property used to elementFont
+   */
+  void setElementFont(StringProperty *property) {
+    elementFont=property;
+  }
+  /**
+   * Return a pointer on the property used to elementFontSize
+   */
+  IntegerProperty  *getElementFontSize() {
+    return elementFontSize;
+  }
+  /**
+   * Set the pointer on the property used to elementFontSize
+   */
+  void setElementFontSize(IntegerProperty *property) {
+    elementFontSize=property;
+  }
+  /**
+   * Return a pointer on the property used to elementLabel
+   */
+  StringProperty *getElementLabel() {
+    return elementLabel;
+  }
+  /**
+   * Set the pointer on the property used to elementLabel
+   */
+  void setElementLabel(StringProperty *property) {
+    elementLabel=property;
+  }
+  /**
+   * Return a pointer on the property used to elementLayout
+   */
+  LayoutProperty *getElementLayout() {
+    return elementLayout;
+  }
+  /**
+   * Set the pointer on the property used to elementLayout
+   */
+  void setElementLayout(LayoutProperty *property) {
+    elementLayout=property;
+  }
+  /**
+   * Return a pointer on the property used to elementTexture
+   */
+  StringProperty *getElementTexture() {
+    return elementTexture;
+  }
+  /**
+   * Set the pointer on the property used to elementTexture
+   */
+  void setElementTexture(StringProperty *property) {
+    elementTexture=property;
+  }
+  /**
+   * Return a pointer on the property used to elementBorderColor
+   */
+  ColorProperty *getElementBorderColor() {
+    return elementBorderColor;
+  }
+  /**
+   * Set the pointer on the property used to elementBorderColor
+   */
+  void setElementBorderColor(ColorProperty *property) {
+    elementBorderColor=property;
+  }
+  /**
+   * Return a pointer on the property used to elementBorderWidth
+   */
+  DoubleProperty *getElementBorderWidth() {
+    return elementBorderWidth;
+  }
+  /**
+   * Set the pointer on the property used to elementBorderWidth
+   */
+  void setElementBorderWidth(DoubleProperty *property) {
+    elementBorderWidth=property;
+  }
+  /**
+   * Return a pointer on the property used to elementSrcAnchorShape
+   */
+  IntegerProperty *getElementSrcAnchorShape() {
+    return elementSrcAnchorShape;
+  }
+  /**
+   * Set the pointer on the property used to elementSrcAnchorShape
+   */
+  void setElementSrcAnchorShape(IntegerProperty *property) {
+    elementSrcAnchorShape=property;
+  }
+  /**
+   * Return a pointer on the property used to elementSrcAnchorSize
+   */
+  SizeProperty *getElementSrcAnchorSize() {
+    return elementSrcAnchorSize;
+  }
+  /**
+   * Set the pointer on the property used to elementSrcAnchorSize
+   */
+  void setElementSrcAnchorSize(SizeProperty *property) {
+    elementSrcAnchorSize=property;
+  }
+  /**
+   * Return a pointer on the property used to elementTgtAnchorShape
+   */
+  IntegerProperty *getElementTgtAnchorShape() {
+    return elementTgtAnchorShape;
+  }
+  /**
+   * Set the pointer on the property used to elementTgtAnchorShape
+   */
+  void setElementTgtAnchorShape(IntegerProperty *property) {
+    elementTgtAnchorShape=property;
+  }
+  /**
+   * Return a pointer on the property used to elementTgtAnchorSize
+   */
+  SizeProperty *getElementTgtAnchorSize() {
+    return elementTgtAnchorSize;
+  }
+  /**
+   * Set the property name for elementSourceAnchorSize
+   */
+  void setElementTgtAnchorSize(SizeProperty *property) {
+    elementTgtAnchorSize=property;
+  }
+  /**
+   * Return a pointer on the property used to elementAnimationFrame
+   */
+  IntegerProperty *getElementAnimationFrame() {
+    return elementAnimationFrame;
+  }
+  /**
+   * Set the pointer on the property used to elementAnimationFrame
+   */
+  void setElementAnimationFrame(IntegerProperty *property) {
+    elementAnimationFrame=property;
+  }
+
+
+
+
+protected:
 
   ColorProperty *elementColor;
   ColorProperty *elementLabelColor;
@@ -371,6 +619,9 @@ public:
   IntegerProperty *elementTgtAnchorShape;
   SizeProperty *elementTgtAnchorSize;
   IntegerProperty *elementAnimationFrame;
+
+
+public :
 
   Graph* graph;
 

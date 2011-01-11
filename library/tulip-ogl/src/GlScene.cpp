@@ -186,7 +186,7 @@ namespace tlp {
   void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphComposite,TextRenderer *fontRenderer,
                                     OcclusionTest *occlusionTest,LayerLODUnit &layerLODUnit){
     Graph *graph=glGraphComposite->getInputData()->getGraph();
-    BooleanProperty *selectionProperty=glGraphComposite->getInputData()->elementSelected;
+    BooleanProperty *selectionProperty=glGraphComposite->getInputData()->getElementSelected();
     bool viewOutScreenLabel=glGraphComposite->getRenderingParameters().isViewOutScreenLabel();
     DoubleProperty *metric=NULL;
     if(graph->existProperty("viewMetric"))
@@ -197,10 +197,10 @@ namespace tlp {
     GlEdge glEdge(0);
     GlMetaNode glMetaNode(0);
 
-    bool nodeLabelEmpty=(!glGraphComposite->getInputData()->elementLabel->getNonDefaultValuatedNodes()->hasNext())
-                        && glGraphComposite->getInputData()->elementLabel->getNodeDefaultStringValue()=="";
-    bool edgeLabelEmpty=(!glGraphComposite->getInputData()->elementLabel->getNonDefaultValuatedEdges()->hasNext())
-                        && glGraphComposite->getInputData()->elementLabel->getEdgeDefaultStringValue()=="";
+    bool nodeLabelEmpty=(!glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedNodes()->hasNext())
+                        && glGraphComposite->getInputData()->getElementLabel()->getNodeDefaultStringValue()=="";
+    bool edgeLabelEmpty=(!glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedEdges()->hasNext())
+                        && glGraphComposite->getInputData()->getElementLabel()->getEdgeDefaultStringValue()=="";
 
     // Draw Labels for Nodes
     if(glGraphComposite->getInputData()->parameters->isViewNodeLabel() && !nodeLabelEmpty) {
