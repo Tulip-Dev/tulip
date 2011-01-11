@@ -74,6 +74,9 @@ INSTALL(FILES
     tulip/Morphing.h
     tulip/GraphPropertiesTableWidget.h
   tulip/TextEditDialog.h
+  tulip/SmallMultiplesView.h
+  tulip/AbstractSmallMultiplesModel.h
+  tulip/SmallMultiplesNavigatorComponent.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_qt_dev
 )

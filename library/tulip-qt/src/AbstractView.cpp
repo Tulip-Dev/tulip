@@ -99,9 +99,16 @@ namespace tlp {
   }
 
   void AbstractView::setCentralWidget(QWidget *widget) {
+    if (centralWidget) {
+      mainLayout->removeWidget(centralWidget);
+      centralWidget->setParent(0);
+    }
     widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     mainLayout->addWidget(widget);
     centralWidget = widget;
+    if (activeInteractor)
+      setActiveInteractor(activeInteractor);
+    centralWidget->activateWindow();
   }
 
   bool AbstractView::eventFilter(QObject *object, QEvent *event) {
