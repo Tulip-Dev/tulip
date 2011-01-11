@@ -73,9 +73,9 @@ void Triangle::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
 //=====================================================
 void Triangle::draw(node n,float lod) {
 
-  triangle->setFillColor(glGraphInputData->elementColor->getNodeValue(n));
+  triangle->setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
 
-  string texFile = glGraphInputData->elementTexture->getNodeValue(n);
+  string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     triangle->setTextureName(texturePath+texFile);

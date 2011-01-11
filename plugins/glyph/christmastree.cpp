@@ -69,7 +69,7 @@ void ChristmasTree::draw(node n, float) {
 	glRotatef(-90., 1., 0., 0.);
 	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_tree");
-	setMaterial(glGraphInputData->elementColor->getNodeValue(n));
+	setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_sphere");
 	setMaterial(Color(255, 255, 255, 50));
 	GlDisplayListManager::getInst().callDisplayList("ChristmasTree_outsphere");

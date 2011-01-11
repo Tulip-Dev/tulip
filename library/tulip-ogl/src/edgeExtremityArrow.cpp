@@ -71,7 +71,7 @@ void GlArrow2DEdgeExtremity::draw(edge e, node, const Color& glyphColor, const C
 	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 	glEnable(GL_CULL_FACE);
 
-	double width = edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e);
+	double width = edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e);
 	if (lod > 20) {
 		if (width < 1e-6)
 			glLineWidth(1e-6); //no negative borders

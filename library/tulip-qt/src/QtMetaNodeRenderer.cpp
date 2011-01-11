@@ -136,7 +136,7 @@ namespace tlp {
     stringstream str;
     str << this << "metaNode" << n.id ;
 
-    const Size &nodeSize = inputData->elementSize->getNodeValue(n);
+    const Size &nodeSize = inputData->getElementSize()->getNodeValue(n);
 
     float diagonal=sqrt(nodeSize[0]*nodeSize[0]+nodeSize[1]*nodeSize[1]);
     int newWidth=(int)(nodeSize[0]*(lod/diagonal));
@@ -243,11 +243,11 @@ namespace tlp {
     stringstream str;
     str << this << "metaNode" << n.id;
 
-    const Coord &nodePos = inputData->elementLayout->getNodeValue(n);
-    const Size &nodeSize = inputData->elementSize->getNodeValue(n);
+    const Coord &nodePos = inputData->getElementLayout()->getNodeValue(n);
+    const Size &nodeSize = inputData->getElementSize()->getNodeValue(n);
 
     BoundingBox includeBoundingBox;
-    inputData->glyphs.get(inputData->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox,n);
+    inputData->glyphs.get(inputData->getElementShape()->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox,n);
 
     Coord newCenter(((includeBoundingBox[1] - includeBoundingBox[0])/2.f + includeBoundingBox[0])*nodeSize);
     //newCenter[2]+=nodeSize[2]/10.;
@@ -291,7 +291,7 @@ namespace tlp {
     setMaterial(Color(255,255,255,255));
     GlTextureManager::getInst().activateTexture(str.str());
     glTranslatef(nodePos[0],nodePos[1],nodePos[2]);
-    glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., 1.);
+    glRotatef(inputData->getElementRotation()->getNodeValue(n), 0., 0., 1.);
     glTranslatef(newCenter[0],newCenter[1],newCenter[2]);
     glDisable(GL_LIGHTING);
     //glBlendFunc(GL_SRC_ALPHA_SATURATE,GL_ONE);
@@ -311,7 +311,7 @@ namespace tlp {
 
     GlTextureManager::getInst().desactivateTexture();
     glTranslatef(-newCenter[0],-newCenter[1],-newCenter[2]);
-    glRotatef(inputData->elementRotation->getNodeValue(n), 0., 0., -1.);
+    glRotatef(inputData->getElementRotation()->getNodeValue(n), 0., 0., -1.);
     glTranslatef(-nodePos[0],-nodePos[1],-nodePos[2]);
   }
 

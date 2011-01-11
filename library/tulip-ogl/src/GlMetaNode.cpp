@@ -49,13 +49,13 @@ namespace tlp {
   void GlMetaNode::draw(float lod,GlGraphInputData* data,Camera* camera) {
     node n=node(id);
 
-    if (data->elementSelected->getNodeValue(n)) {
+    if (data->getElementSelected()->getNodeValue(n)) {
       glStencilFunc(GL_LEQUAL,data->parameters->getSelectedMetaNodesStencil(),0xFFFF);
     }else{
       glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesStencil(),0xFFFF);
     }
 
-    if(!(((data->elementColor->getNodeValue(n))[3]==255) && (data->parameters->getNodesStencil()==0xFFFF)))
+    if(!(((data->getElementColor()->getNodeValue(n))[3]==255) && (data->parameters->getNodesStencil()==0xFFFF)))
       data->getMetaNodeRenderer()->render(n,lod,camera);
 
     if(lod>=20)
@@ -80,7 +80,7 @@ namespace tlp {
     if(!data->parameters->isViewMetaLabel())
       return;
 
-    if((data->elementColor->getNodeValue(n))[3]==255){
+    if((data->getElementColor()->getNodeValue(n))[3]==255){
       return;
     }
 
@@ -112,17 +112,17 @@ namespace tlp {
     }
 
     glPushMatrix();
-    const Coord &nodeCoord = data->elementLayout->getNodeValue(n);
-    const Size &nodeSize = data->elementSize->getNodeValue(n);
+    const Coord &nodeCoord = data->getElementLayout()->getNodeValue(n);
+    const Size &nodeSize = data->getElementSize()->getNodeValue(n);
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
-    glRotatef(data->elementRotation->getNodeValue(n), 0., 0., 1.);
+    glRotatef(data->getElementRotation()->getNodeValue(n), 0., 0., 1.);
 
-    BoundingBox bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.elementLayout, metaData.elementSize, metaData.elementRotation);
+    BoundingBox bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.getElementLayout(), metaData.getElementSize(), metaData.getElementRotation());
 
     Coord maxC(bboxes[1]);
     Coord minC(bboxes[0]);
     BoundingBox includeBoundingBox;
-    data->glyphs.get(data->elementShape->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox,n);
+    data->glyphs.get(data->getElementShape()->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox,n);
     Coord includeScale(includeBoundingBox[1] - includeBoundingBox[0]);
     Coord size ((maxC + minC)/-1.f);
     Coord translate( (maxC+minC)/-2.f);

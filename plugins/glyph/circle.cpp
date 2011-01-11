@@ -89,13 +89,13 @@ void Circle::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
 //=====================================================
 void Circle::draw(edge e, node, const Color& glyphColor,const Color &borderColor, float lod) {
   circle->setLightingMode(false);
-  string textureName=edgeExtGlGraphInputData->elementTexture->getEdgeValue(e);
+  string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
   if(textureName!="")
     textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
   draw(glyphColor,
        borderColor,
-       edgeExtGlGraphInputData->elementBorderWidth->getEdgeValue(e),
+       edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
        textureName,
        lod);
 }
@@ -103,14 +103,14 @@ void Circle::draw(edge e, node, const Color& glyphColor,const Color &borderColor
 //=====================================================
 void Circle::draw(node n, float lod) {
   circle->setLightingMode(true);
-  string textureName=glGraphInputData->elementTexture->getNodeValue(n);
+  string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
   if(textureName!="")
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
 
-  draw(Glyph::glGraphInputData->elementColor->getNodeValue(n),
-       Glyph::glGraphInputData->elementBorderColor->getNodeValue(n),
-       Glyph::glGraphInputData->elementBorderWidth->getNodeValue(n),
+  draw(Glyph::glGraphInputData->getElementColor()->getNodeValue(n),
+       Glyph::glGraphInputData->getElementBorderColor()->getNodeValue(n),
+       Glyph::glGraphInputData->getElementBorderWidth()->getNodeValue(n),
        textureName,
        lod);
 }

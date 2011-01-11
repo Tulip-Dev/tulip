@@ -74,8 +74,8 @@ void Cylinder::draw(node n, float) {
 		drawCylinder();
     GlDisplayListManager::getInst().endNewDisplayList();
 	}
-	setMaterial(glGraphInputData->elementColor->getNodeValue(n));
-	string texFile = glGraphInputData->elementTexture->getNodeValue(n);
+	setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
+	string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
 	if (texFile != "") {
 		string texturePath = glGraphInputData->parameters->getTexturePath();
 		GlTextureManager::getInst().activateTexture(texturePath + texFile);
@@ -112,7 +112,7 @@ void Cylinder::draw(edge, node n, const Color& glyphColor, const Color&, float) 
     GlDisplayListManager::getInst().endNewDisplayList();
 	}
 	setMaterial(glyphColor);
-	string texFile = edgeExtGlGraphInputData->elementTexture->getNodeValue(n);
+	string texFile = edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n);
 	if (texFile != "") {
 		string texturePath =
 				edgeExtGlGraphInputData->parameters->getTexturePath();

@@ -110,8 +110,8 @@ void Window::getTextBoundingBox(BoundingBox &boundingBox,node) {
 }
 //=====================================================
 void Window::draw(node n, float lod) {
-	ColorProperty* color = glGraphInputData->elementColor;
-	ColorProperty* colorBorder = glGraphInputData->elementBorderColor;
+	ColorProperty* color = glGraphInputData->getElementColor();
+	ColorProperty* colorBorder = glGraphInputData->getElementBorderColor();
 
 	_rectColor = color->getNodeValue(n);
 	_border.setColor(colorBorder->getNodeValue(n));	

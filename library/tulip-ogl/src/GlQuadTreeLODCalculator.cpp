@@ -429,7 +429,7 @@ namespace tlp {
     void GlQuadTreeLODCalculator::update(std::set<Observable *>::iterator it,std::set<Observable *>::iterator itEnd){
         bool needCompute=false;
         while(it!=itEnd){
-            if((*it)==inputData->elementLayout || (*it)==inputData->elementSize){
+            if((*it)==inputData->getElementLayout() || (*it)==inputData->getElementSize()){
                 needCompute=true;
                 break;
             }

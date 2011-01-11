@@ -71,8 +71,8 @@ void Billboard::draw(node n,float) {
     GlDisplayListManager::getInst().endNewDisplayList();
   }
 
-  setMaterial(glGraphInputData->elementColor->getNodeValue(n));
-  string texFile = glGraphInputData->elementTexture->getNodeValue(n);
+  setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
+  string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     GlTextureManager::getInst().activateTexture(texturePath+texFile);
@@ -85,8 +85,8 @@ void Billboard::draw(node n,float) {
   glMatrixMode( GL_MODELVIEW );
   glPushMatrix();
   Size sz(1,1,1);
-  if( glGraphInputData->elementSize )
-    sz = glGraphInputData->elementSize->getNodeValue(n);
+  if( glGraphInputData->getElementSize() )
+    sz = glGraphInputData->getElementSize()->getNodeValue(n);
   float nx = sz.getW();
   float ny = sz.getH();
   float nz = sz.getD();
