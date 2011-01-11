@@ -32,6 +32,18 @@
 
 class QWidget;
 
+//Declare tulip type compatible with QVariant
+Q_DECLARE_METATYPE(tlp::Color)
+Q_DECLARE_METATYPE(tlp::Coord)
+Q_DECLARE_METATYPE(tlp::Size)
+Q_DECLARE_METATYPE(std::vector<bool>)
+Q_DECLARE_METATYPE(std::vector<tlp::Color>)
+Q_DECLARE_METATYPE(std::vector<tlp::Coord>)
+Q_DECLARE_METATYPE(std::vector<double>)
+Q_DECLARE_METATYPE(std::vector<int>)
+Q_DECLARE_METATYPE(std::vector<tlp::Size>)
+Q_DECLARE_METATYPE(std::vector<std::string>)
+
 namespace tlp {
 
   /**

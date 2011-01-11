@@ -73,6 +73,10 @@ namespace tlp {
      * return current interactor
      */
     Interactor *getActiveInteractor(){return activeInteractor;}
+    /**
+      * @return the central widget of the abstract view
+      */
+    QWidget *getCentralWidget() const { return centralWidget; }
 
   protected:
     /**

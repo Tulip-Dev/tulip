@@ -74,7 +74,9 @@ INCLUDES_H = \
 	tulip/Morphing.h \
 	tulip/GlCompositeHierarchyManager.h \
 	tulip/GraphPropertiesTableWidget.h \
-	tulip/TextEditDialog.h
+  tulip/TextEditDialog.h \
+  tulip/SmallMultiplesView.h \
+  tulip/AbstractSmallMultiplesModel.h
 
 QT44_INCLUDES_H = \
 	tulip/BaseGraphicsViewComponent.h \
@@ -109,12 +111,12 @@ BUILT_SOURCES = \
 	tulip/DoubleStringsListSelectionWidgetData.h \
 	tulip/ListPropertyWidgetData.h \
 	tulip/ChooseFileNameDialogData.h \
-        tulip/QtOpenGlErrorViewerWithAskAgainDialogData.h \
+  tulip/QtOpenGlErrorViewerWithAskAgainDialogData.h \
 	tulip/CSVParserConfigurationWidgetData.h \
 	tulip/CSVGraphMappingConfigurationWidgetData.h \
 	tulip/CSVImportConfigurationWidgetData.h \
         tulip/CSVImportWizardData.h \
-        tulip/TextEditDialogData.h
+  tulip/TextEditDialogData.h
 
 nobase_nodist_include_HEADERS = $(BUILT_SOURCES)
 

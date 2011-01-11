@@ -71,6 +71,9 @@ CSVParserConfigurationWidget.cpp
 CSVGraphMappingConfigurationWidget.cpp
 CSVImportConfigurationWidget.cpp
 CSVImportWizard.cpp
+SmallMultiplesView.cpp
+AbstractSmallMultiplesModel.cpp
+SmallMultiplesNavigatorComponent.cpp
 )
 
 set(tulip-qt_UI
@@ -141,6 +144,8 @@ set(tulip-qt_MOC
     ../include/tulip/CSVImportConfigurationWidget.h
     ../include/tulip/CSVParserConfigurationWidget.h    
     ../include/tulip/CSVImportWizard.h
+    ../include/tulip/AbstractSmallMultiplesModel.h
+    ../include/tulip/SmallMultiplesView.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)
