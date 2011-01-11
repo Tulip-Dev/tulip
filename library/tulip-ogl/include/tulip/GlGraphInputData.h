@@ -598,7 +598,7 @@ public:
 
 
 
-protected:
+public:
 
   ColorProperty *elementColor;
   ColorProperty *elementLabelColor;
