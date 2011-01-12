@@ -180,7 +180,7 @@ namespace tlp {
     }
   }
 
-  void NodeLinkDiagramComponent::buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) {
+  void NodeLinkDiagramComponent::buildContextMenu(QObject *object,QContextMenuEvent *event,QMenu *contextMenu) {
   	contextMenu->addMenu(viewMenu);
   	contextMenu->addMenu(optionsMenu);
 

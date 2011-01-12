@@ -113,7 +113,7 @@ GlMainWidget *GlMainView::getGlMainWidget() {
 	return mainWidget;
 }
 //==================================================
-void GlMainView::buildContextMenu(QObject *object, QMouseEvent *event, QMenu *contextMenu) {
+void GlMainView::buildContextMenu(QObject* object, QContextMenuEvent* event, QMenu* contextMenu) {
 	AbstractView::buildContextMenu(object, event, contextMenu);
 	contextMenu->addMenu(dialogMenu);
 }

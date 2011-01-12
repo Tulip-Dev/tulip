@@ -48,7 +48,7 @@ namespace tlp {
     virtual std::list<std::pair<QWidget *,std::string> > getConfigurationWidget();
 
     virtual void specificEventFilter(QObject *object,QEvent *event);
-    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
+    virtual void buildContextMenu(QObject* object, QContextMenuEvent* event, QMenu* contextMenu);
     virtual void computeContextMenuAction(QAction *action);
 
     void emitRequestChangeGraph(Graph *graph){
