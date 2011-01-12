@@ -109,6 +109,7 @@ namespace tlp {
     if (activeInteractor)
       setActiveInteractor(activeInteractor);
     centralWidget->activateWindow();
+    centralWidget->setFocus();
   }
 
   bool AbstractView::eventFilter(QObject *object, QEvent *event) {
