@@ -84,22 +84,28 @@ namespace tlp {
   //============================================================
   void GlComposite::addGlEntity(GlSimpleEntity *entity, const string &key) {
     assert(entity!=NULL);
+
+    bool doSceneTreatment=false;
+
     if(elements.find(key)==elements.end()) {
       elements[key] = entity;
       _sortedElements.push_back(entity);
-
-      entity->addParent(this);
-      for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it) {
-        entity->addLayerParent(*it);
-        if((*it)->getScene())
-          (*it)->getScene()->notifyModifyLayer((*it)->getScene(),(*it)->getName(),(*it));
-      }
-
+      doSceneTreatment=true;
     }else{
       if(elements[key]!=entity) {
         _sortedElements.remove(elements[key]);
         _sortedElements.push_back(entity);
         elements[key] = entity;
+        doSceneTreatment=true;
+      }
+    }
+
+    if(doSceneTreatment){
+      entity->addParent(this);
+      for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it) {
+        entity->addLayerParent(*it);
+        if((*it)->getScene())
+          (*it)->getScene()->notifyModifyLayer((*it)->getScene(),(*it)->getName(),(*it));
       }
     }
   }
