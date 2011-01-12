@@ -181,7 +181,7 @@ class Grid: public ImportModule {
       return false;
     }
 
-    if (spacing <= 0.0) {
+    if (spacing < 0.0) {
       if (pluginProgress)
 	pluginProgress->setError(string("Error: spacing must be strictly positive"));
       return false;
