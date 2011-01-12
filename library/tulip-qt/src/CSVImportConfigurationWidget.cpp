@@ -105,7 +105,7 @@ void CSVTableWidget::token(unsigned int row, unsigned int column, const string& 
     setItem(row,column,new QTableWidgetItem(tlpStringToQString(token)));
 }
 
-void CSVTableWidget::end(unsigned int rowNumber, unsigned int columnNumber){
+void CSVTableWidget::end(unsigned int, unsigned int){
 
 }
 

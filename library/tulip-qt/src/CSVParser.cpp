@@ -64,7 +64,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
         if (progress) {
             progress->progress(0, 100);
         }
-        while (getline(csvFile, line)) {
+        while (multiplatformgetline(csvFile, line)) {
 
             if (progress) {
                 readSize += line.size();
@@ -104,6 +104,32 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
     }
 }
 
+bool CSVSimpleParser::multiplatformgetline ( istream& is, string& str ){
+    //nothing new to read.
+    if(is.eof())
+        return false;
+    str.clear();
+    str.reserve(2048);
+    char c;
+    while(is.get(c)){
+        //Carriage return Windows and mac
+        if(c=='\r'){
+            //Check if the next character is /n and remove it.
+            if(is.get(c) && c != '\n'){
+                is.unget();
+            }
+            break;
+        }else
+            if(c=='\n'){
+            break;
+        }else{
+            //Push the character
+            str.push_back(c);
+        }
+    }
+    //End of line reading.
+    return true;
+}
 
 void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
                          const string& delimiters,char textDelimiter, unsigned int numberOfCol) {

@@ -78,6 +78,11 @@ namespace tlp {
            return std::string(encoder->toUnicode ( toConvert.c_str() ).toUtf8().data());
         }
 
+        /**
+          * @brief Function to extract a line from a istream. Can handle Linux,Mac and Windows end of line pattern.
+          **/
+        bool multiplatformgetline ( std::istream& is, std::string& str );
+
         std::string removeQuotesIfAny(const std::string &s);
         std::string fileName;
         std::string separator;
