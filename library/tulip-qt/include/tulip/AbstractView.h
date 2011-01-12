@@ -86,7 +86,7 @@ namespace tlp {
     /**
      * empty function : implement this function if you want a context menu when you right click the mouse
      */
-    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu) ;
+    virtual void buildContextMenu(QObject*, QContextMenuEvent*, QMenu* contextMenu) ;
 
     virtual void buildOutputImagesFormatsList(std::set<std::string>& outputFormats);
     /**

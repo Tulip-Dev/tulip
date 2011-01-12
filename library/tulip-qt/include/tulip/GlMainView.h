@@ -110,7 +110,7 @@ namespace tlp {
     /**
      * Build context menu for this view
      */
-    virtual void buildContextMenu(QObject *object,QMouseEvent *event,QMenu *contextMenu);
+    virtual void buildContextMenu(QObject *object,QContextMenuEvent *event,QMenu *contextMenu);
 
     /**
      * Return the overview widget use by this view

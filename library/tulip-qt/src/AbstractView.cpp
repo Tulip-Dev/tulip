@@ -115,16 +115,14 @@ namespace tlp {
   bool AbstractView::eventFilter(QObject *object, QEvent *event) {
     specificEventFilter(object, event);
 
-    if (event->type() == QEvent::MouseButtonPress) {
-      QMouseEvent *me = (QMouseEvent *) event;
-      if (me->button() == Qt::RightButton) {
-        QMenu contextMenu(getWidget());
-        buildContextMenu(object, me, &contextMenu);
-        if (!contextMenu.actions().isEmpty()) {
-          QAction* menuAction = contextMenu.exec(me->globalPos());
-          if (menuAction)
-            computeContextMenuAction(menuAction);
-        }
+    if (event->type() == QEvent::ContextMenu) {
+      QContextMenuEvent *me = (QContextMenuEvent*) event;
+      QMenu contextMenu(getWidget());
+      buildContextMenu(object, me, &contextMenu);
+      if (!contextMenu.actions().isEmpty()) {
+	QAction* menuAction = contextMenu.exec(me->globalPos());
+	if (menuAction)
+	  computeContextMenuAction(menuAction);
       }
     }
     return false;
@@ -166,7 +164,7 @@ void AbstractView::exportImage(QAction* action) {
   createPicture(s.toStdString());
 }
 
-void AbstractView::buildContextMenu(QObject *, QMouseEvent *, QMenu *contextMenu) {
+void AbstractView::buildContextMenu(QObject *, QContextMenuEvent *, QMenu *contextMenu) {
   if (!exportImageMenu->isEmpty())
   contextMenu->addMenu(exportImageMenu);
 }
