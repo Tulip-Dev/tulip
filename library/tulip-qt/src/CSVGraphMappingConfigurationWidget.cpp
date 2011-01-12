@@ -13,27 +13,45 @@
 using namespace tlp;
 using namespace std;
 
-CSVColumnComboBox::CSVColumnComboBox(QWidget* parent):QComboBox(parent){    
+CSVColumnComboBox::CSVColumnComboBox(QWidget* parent):QComboBox(parent),defaultText("Choose a csv column."){
+    addItem(defaultText,QVariant(UINT_MAX));
+    setEnabled(false);
+}
+
+void CSVColumnComboBox::setDefaultText(const QString& newDefaultText){
+    defaultText=newDefaultText;
+    //Update the text.
+    setItemText(findData(QVariant(UINT_MAX)),newDefaultText);
 }
 
 void CSVColumnComboBox::setCsvProperties(const CSVImportParameters& csvProperties){
     clear();
-    addItem("Choose a csv column.");
-    for(unsigned int i = 0 ; i< csvProperties.columnNumber(); ++i){
-        addItem(tlpStringToQString(csvProperties.getColumnName(i)),QVariant(i));
+    addItem(defaultText,QVariant(UINT_MAX));
+    if(csvProperties.columnNumber()==0){
+        setEnabled(false);
+    }else{
+        setEnabled(true);
+        for(unsigned int i = 0 ; i< csvProperties.columnNumber(); ++i){
+            addItem(tlpStringToQString(csvProperties.getColumnName(i)),QVariant(i));
+        }
     }
+
 }
 
 unsigned int CSVColumnComboBox::getSelectedColumnIndex()const{
-    if(currentIndex()==0){
-        return UINT_MAX;
-    }else{
-        return itemData(currentIndex()).toUInt();
-    }
+    return itemData(currentIndex()).toUInt();
 }
 
-GraphPropertiesSelectionComboBox::GraphPropertiesSelectionComboBox(QWidget* parent):QComboBox(parent),currentGraph(NULL){
+GraphPropertiesSelectionComboBox::GraphPropertiesSelectionComboBox(QWidget* parent):QComboBox(parent),currentGraph(NULL),defaultText("Choose an existing property."){
     connect(this,SIGNAL(activated( const QString &)),this,SLOT(newGraphPropertySelected(const QString&)));
+    addItem(defaultText);
+    //Avoid user to handle it when no graph is given.
+    setEnabled(false);
+}
+
+void GraphPropertiesSelectionComboBox::setDefaultText(const QString& newDefaultText){
+    defaultText = newDefaultText;
+    setItemText(0,newDefaultText);
 }
 
 void GraphPropertiesSelectionComboBox::setGraph(Graph* graph){
@@ -41,16 +59,16 @@ void GraphPropertiesSelectionComboBox::setGraph(Graph* graph){
     clear();
     if(graph!=NULL){
         QStringList labels;
-        if(isEditable()){
-            labels<<QString("Choose an existing property or enter a new one.");
-        }else{
-            labels<<QString("Choose an existing property.");
-        }
+        labels<<defaultText;
         string propertyName;
         forEach(propertyName,currentGraph->getProperties()){
             labels<<tlpStringToQString(propertyName);
         }
         addItems(labels);
+        //Enable the combobox.
+        setEnabled(true);
+    }else{
+        setEnabled(false);
     }
 }
 

@@ -21,7 +21,7 @@ namespace tlp{
       **/
     class TLP_QT_SCOPE CSVColumnComboBox : public QComboBox{
     public:
-        CSVColumnComboBox(QWidget* parent=NULL);
+        CSVColumnComboBox(QWidget* parent=NULL);                
         /**
           * @brief Fill the combobox with the CSV parameters.
           *
@@ -34,6 +34,12 @@ namespace tlp{
           *
           **/
         unsigned int getSelectedColumnIndex()const;
+        /**
+          * @brief Allow user to define it's default text.
+          **/
+        void setDefaultText(const QString& newDefaultText);
+    private:
+        QString defaultText;
     };
 
     /**
@@ -56,11 +62,16 @@ namespace tlp{
           * @return The name of the selected property or an empty string if no valid property is selected.
           **/
         std::string getSelectedGraphProperty()const;
+        /**
+          * @brief Allow user to define it's default text.
+          **/
+        void setDefaultText(const QString& newDefaultText);
     protected:
 
         void keyPressEvent(QKeyEvent *e);
     private:
         tlp::Graph *currentGraph;
+        QString defaultText;
 
     private slots:
         void newGraphPropertySelected(const QString& propertyName);
