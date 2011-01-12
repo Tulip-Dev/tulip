@@ -39,7 +39,7 @@ public:
     * @param id The id of the item.
     * @param role The display role
     */
-  virtual QVariant data(int id, SmallMultiplesDataRole role)=0;
+  virtual QVariant data(int id, SmallMultiplesDataRole role);
 
   /**
     * @return The number of items that should be displayed in the overview.
