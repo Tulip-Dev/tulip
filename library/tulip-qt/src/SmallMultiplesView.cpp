@@ -26,7 +26,7 @@ void zoomOnScreenRegion(tlp::GlMainWidget *glWidget, const tlp::BoundingBox &bou
 namespace tlp {
 
 SmallMultiplesView::SmallMultiplesView(AbstractSmallMultiplesModel *model)
-  :AbstractView(), _model(model), _overview(new GlMainWidget(0)), _zoomAnimationActivated(true) {
+  :AbstractView(), _model(model), _overview(new GlMainWidget(0)), _zoomAnimationActivated(true), _autoDisableConfigurationWidget(true), _autoDisableInteractors(true) {
   Observable::holdObservers();
   assert(model);
   connect(_model, SIGNAL(dataChanged(int)), this, SLOT(dataChanged(int)));
@@ -51,7 +51,7 @@ SmallMultiplesView::~SmallMultiplesView() {
 
 QWidget *SmallMultiplesView::construct(QWidget *parent) {
   QWidget *centralWidget = AbstractView::construct(parent);
-  setCentralWidget(_overview);
+  switchToOverview();
   return centralWidget;
 }
 
@@ -143,11 +143,25 @@ void SmallMultiplesView::switchToOverview(bool destroyOldWidget) {
   if (destroyOldWidget)
     delete w;
 
+  if (_autoDisableConfigurationWidget)
+    for (uint i=0; i<_togglableConfigWidgets.size(); ++i)
+      _togglableConfigWidgets[i]->setEnabled(true);
+
+  if (_autoDisableInteractors)
+    toggleInteractors(false);
+
   GlGraphInputData *inputData = _overview->getScene()->getGlGraphComposite()->getInputData();
   zoomOnScreenRegion(_overview, computeBoundingBox(_overview->getGraph(), inputData->elementLayout, inputData->elementSize, inputData->elementRotation));
 }
 
 void SmallMultiplesView::switchToWidget(QWidget *w) {
+  if (_autoDisableConfigurationWidget)
+    for (uint i=0; i<_togglableConfigWidgets.size(); ++i)
+      _togglableConfigWidgets[i]->setEnabled(false);
+
+  if (_autoDisableInteractors)
+    toggleInteractors(true);
+
   setCentralWidget(w);
 }
 
@@ -157,7 +171,8 @@ void SmallMultiplesView::toggleInteractors(bool f) {
   for (list<Interactor *>::iterator it = interactors.begin(); it != interactors.end(); ++it) {
     if (i++ > 0) { // FIXME: Find another way to detect the SmallMultiplesView navigation interactor.
       (*it)->getAction()->setEnabled(f);
-      (*it)->getAction()->setChecked(f);
+      if (!f)
+        (*it)->getAction()->setChecked(f);
     }
     else if (!f)// When we disable interactors, check the SmallMultiplesView navigation interactor.
       (*it)->getAction()->setChecked(true);
@@ -173,6 +188,10 @@ int SmallMultiplesView::nodeItemId(node n) {
 
 void SmallMultiplesView::centerOverview() {
   _overview->getScene()->centerScene();
+}
+
+void SmallMultiplesView::setTogglableConfigurationWidget(const std::vector<QWidget *> &v) {
+  _togglableConfigWidgets = v;
 }
 
 }

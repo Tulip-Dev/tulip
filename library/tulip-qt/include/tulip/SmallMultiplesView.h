@@ -80,6 +80,39 @@ public:
     */
   void setZoomAnimationActivated(bool f) { _zoomAnimationActivated = f; }
 
+  /**
+    * @return true if interactors specific to this view shold be automatically disabled when switching to overview
+    * @see setAutoDisableInteractors
+    */
+  bool isAutoDisableInteractors() const { return _autoDisableInteractors; }
+
+  /**
+    * @brief Toggle automatic disabling of interactors when switching to overview.
+    * @warning The SmallMultiplesView navigation interactor should always be the one with the highest priority.
+    * @warning This behaviour is only insured when using the switchToOverview method.
+    * @see switchToOverview
+    */
+  void setAutoDisableInteractors(bool f) { _autoDisableInteractors = f; }
+
+  /**
+    * @return true if widgets specified with the setTogglableConfigurationWidget method should be automatically disabled when switching to a specific view.
+    * @see setTogglableConfigurationWidget
+    */
+  bool isAutoDisableConfigurationWidget() const { return _autoDisableConfigurationWidget; }
+
+  /**
+    * @brief Toggle automatic disabling of widgets specified with the setTogglableConfigurationWidget method when switching to a specific view.
+    * @see setTogglableConfigurationWidget
+    */
+  void setAutoDisableConfigurationWidget(bool f) { _autoDisableConfigurationWidget = f; }
+
+  /**
+    * @brief Defines a list of widgets that should be automatically toggled on/off when the view switches to the overview/specific mode.
+    * When using SmallMultiplesView, user may want to give access to view-wise configuration widgets only on overview mode.
+    * @warning When defining this behavior, user MUST always use the switchToOverview and switchToWidget methods.
+    */
+  void setTogglableConfigurationWidget(const std::vector<QWidget *> &);
+
 public slots:
   /**
     * @brief Switchs to the data sets overview.
@@ -121,6 +154,9 @@ private:
   GlMainWidget *_overview;
   QVector<node> _items;
   bool _zoomAnimationActivated;
+  bool _autoDisableConfigurationWidget;
+  bool _autoDisableInteractors;
+  std::vector<QWidget *> _togglableConfigWidgets;
 
   void refreshItemsCount();
 };
