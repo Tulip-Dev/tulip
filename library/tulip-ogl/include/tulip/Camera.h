@@ -33,11 +33,17 @@
 
 namespace tlp {
 
-  /**
-   * Class use to store OpenGl camera 
-   */
   class GlScene;
 
+  /**
+   * \brief Tulip OpenGL camera object
+   *
+   * This camera can be a 2D or 3D camera
+   * After setup you can do some basic operation :
+   *  - Move, rotate, strafeLeftRight and strafeUpDown to modify poitn of view
+   *  - You can directly modify camera infor mation with setSceneRadius, setZoomFactor, setEyes, setCenter and setUp
+   *  - You can transform screen coordinates to 3D world coordinates with screenTo3DWorld function and vise versa with worldTo2DScreen function
+   */
   class TLP_GL_SCOPE Camera : public ObservableCamera {
   public:
     
@@ -207,11 +213,13 @@ namespace tlp {
 
     /**
      * Return the 3D world coordinate for the given screen point
+     * \warning This function set up the projection and modelview matrix
      */
     Coord screenTo3DWorld(const Coord &point);
     
     /**
      * Return the screen position for the given 3D coordinate
+     * \warning This function set up the projection and modelview matrix
      */
     Coord worldTo2DScreen(const Coord &obj);
     

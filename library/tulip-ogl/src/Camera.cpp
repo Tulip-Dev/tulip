@@ -146,9 +146,6 @@ void Camera::initLight() {
 		pos[0]=pos[0] + ((eyes[0]-center[0])/zoomFactor) + (eyes[0]-center[0])*4;
 		pos[1]=pos[1] + ((eyes[1]-center[1])/zoomFactor) + (eyes[1]-center[1])*4;
 		pos[2]=pos[2] + ((eyes[2]-center[2])/zoomFactor) + (eyes[2]-center[2])*4;
-		//cout << pos[0] << ":" << pos[1] << ":" << pos[2] << endl;
-		/*for(int i=0;i<3;i++)
-	pos[i] += (eyes[i]-center[i])/zoomFactor;*/
 		pos[3]=1;
 		GLfloat amb[4] = {0.3,0.3 , 0.3 ,0.3};
 		GLfloat dif[4] = {0.5,0.5,0.5,1};
@@ -248,7 +245,6 @@ void Camera::initModelView() {
 		glMultMatrixf((GLfloat*)&modelviewMatrix);
 		glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat*)&transformMatrix);
 		glPopMatrix();
-		//transformMatrix = modelviewMatrix * projectionMatrix;
 		matrixCoherent=true;
 	}
 	GLenum error = glGetError();
