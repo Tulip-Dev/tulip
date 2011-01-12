@@ -50,6 +50,11 @@ public:
   GlMainWidget *overview() const;
 
   /**
+    * @brief Centers the overview scene.
+    */
+  void centerOverview();
+
+  /**
     * @return true if the SmallMultiplesView is currently displaying the overview. To get the currently displayed widget, use getCentralWidget instead
     * @see AbstractView::getCentralWidget
     */

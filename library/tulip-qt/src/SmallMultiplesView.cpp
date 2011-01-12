@@ -37,7 +37,9 @@ SmallMultiplesView::SmallMultiplesView(AbstractSmallMultiplesModel *model)
   inputData->elementColor->setAllNodeValue(scene->getBackgroundColor());
   inputData->elementShape->setAllNodeValue(4);
   inputData->elementLabelPosition->setAllNodeValue(2);
+  inputData->elementFontSize->setAllNodeValue(5);
   _overview->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setFontsType(1);
+  _overview->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setLabelScaled(true);
   Observable::unholdObservers();
 }
 
@@ -50,7 +52,6 @@ SmallMultiplesView::~SmallMultiplesView() {
 QWidget *SmallMultiplesView::construct(QWidget *parent) {
   QWidget *centralWidget = AbstractView::construct(parent);
   setCentralWidget(_overview);
-  toggleInteractors(false);
   return centralWidget;
 }
 
@@ -168,6 +169,10 @@ int SmallMultiplesView::nodeItemId(node n) {
     if (_items[i] == n)
       return i;
   return -1;
+}
+
+void SmallMultiplesView::centerOverview() {
+  _overview->getScene()->centerScene();
 }
 
 }
