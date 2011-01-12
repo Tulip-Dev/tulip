@@ -64,12 +64,12 @@ namespace tlp {
 		 * \return the menu bar
 		 */
 		QMenuBar *getMenuBar() {return menuBar;}
-		/*
+		/**
 		 * get tools bar
 		 * \return the tool bar
 		 */
 		QToolBar *getToolBar() {return toolBar;}
-		/*
+		/**
 		 * get interators tool bar
 		 * \return the interactors tool bar
 		 */
