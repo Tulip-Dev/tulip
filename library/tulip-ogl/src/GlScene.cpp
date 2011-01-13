@@ -25,6 +25,10 @@
 #include <cstdlib>
 #include <climits>
 
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+#include <omp.h>
+#endif
+
 #include "tulip/GlLODSceneVisitor.h"
 #include "tulip/TextRenderer.h"
 #include "tulip/OcclusionTest.h"
@@ -287,6 +291,10 @@ namespace tlp {
       lodCalculator->clear();
       lodCalculator->setRenderingEntitiesFlag(RenderingAll);
 
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+      double lastTime=omp_get_wtime();
+#endif
+
       /**
       * If LOD Calculator need entities to compute LOD, we use visitor system
       */
@@ -302,9 +310,20 @@ namespace tlp {
           }
           delete lodVisitor;
       }
+
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+    cout << "scene visitor time             : " << (int)((omp_get_wtime()-lastTime)*1000) << " ms" << endl;
+    lastTime=omp_get_wtime();
+#endif
+
       lodCalculator->compute(viewport, viewport);
       LayersLODVector &layersLODVector = lodCalculator->getResult();
       BoundingBox sceneBoundingBox = lodCalculator->getSceneBoundingBox();
+
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+    cout << "lod time                       : " << (int)((omp_get_wtime()-lastTime)*1000) << " ms" << endl;
+    lastTime=omp_get_wtime();
+#endif
 
       /**
        *  VertexArray compute
@@ -323,7 +342,11 @@ namespace tlp {
           }
           displayEdgesInLastRendering = lastDisplayEdge;
       }
-      //*******
+
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+    cout << "vertex array construction time : " << (int)((omp_get_wtime()-lastTime)*1000) << " ms" << endl;
+    lastTime=omp_get_wtime();
+#endif
 
       TextRenderer fontRenderer;
       OcclusionTest occlusionTest;
@@ -519,7 +542,6 @@ namespace tlp {
               }
           }
 
-
           if(glGraphComposite)
               glGraphComposite->getInputData()->getGlVertexArrayManager()->endRendering();
 
@@ -545,6 +567,11 @@ namespace tlp {
               glPopAttrib();
           }
       }
+
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+    cout << "draw time                      : " << (int)((omp_get_wtime()-lastTime)*1000) << " ms" << endl;
+#endif
+
   }
 
   void GlScene::addLayer(GlLayer *layer) {
