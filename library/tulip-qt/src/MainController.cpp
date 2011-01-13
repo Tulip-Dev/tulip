@@ -1551,6 +1551,7 @@ namespace tlp {
     checkViewsGraphsHierarchy();
     Graph *newGraph=getGraphOfView(getCurrentView());
 
+    updateViewsOfGraph(newGraph);
     updateViewsOfSubGraphs(newGraph->getRoot());
     // force clusterTreeWidget to update
     clusterTreeWidget->update();
