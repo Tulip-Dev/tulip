@@ -92,6 +92,12 @@ namespace tlp {
 		void addDockWidget( Qt::DockWidgetArea area, QDockWidget * dockWidget) {
 			mainWindow->addDockWidget(area,dockWidget);
 		}
+                /**
+                * @brief Remove a dock widget from the QMainWindow.
+                **/
+                void removeDockWidget(QDockWidget* dockWidet){
+                    mainWindow->removeDockWidget(dockWidet);
+                }
 
 		/**
 		 * Moves second dock widget on top of first dock widget, creating a tabbed docked area

@@ -47,10 +47,13 @@
        </property>
        <item>
         <property name="text">
-         <string>Create entities (nodes)</string>
+         <string>Import entities (nodes)</string>
+        </property>
+        <property name="toolTip">
+         <string extracomment="Create a new entity (node) for each row in the CSV file and import data on it."/>
         </property>
         <property name="statusTip">
-         <string extracomment="Create a new entity (node) for each row in the CSV file."/>
+         <string/>
         </property>
         <property name="flags">
          <set>ItemIsSelectable|ItemIsEnabled</set>
@@ -58,10 +61,10 @@
        </item>
        <item>
         <property name="text">
-         <string>Create relation (edge) between entities(nodes)</string>
+         <string>Import relation (edge) from source and destination entities (nodes)</string>
         </property>
         <property name="toolTip">
-         <string extracomment="Add data (properties) on relation (edge) between two entities (nodes). You can create missing relations and entities."/>
+         <string extracomment="Import data (properties) from existing CSV file on relation (edge)."/>
         </property>
        </item>
        <item>
@@ -69,7 +72,7 @@
          <string>Add data (properties) to existing entities (nodes)</string>
         </property>
         <property name="toolTip">
-         <string extracomment="Import data (properties) from CSV file to existing graph entities (nodes). You can choose to create missing entities."/>
+         <string extracomment="Import data (properties) from file to graph entities (nodes)."/>
         </property>
        </item>
        <item>
@@ -96,9 +99,9 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Create entities (nodes)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Import entities (nodes)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:14pt; font-weight:600;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Create a new entity (node) for each row in the CSV file.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Create a new entity (node) for each row in the CSV file and import data on it.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
@@ -126,9 +129,11 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Create relation (edge) between entities (nodes)&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Import relation (edge) from source and destination entities (nodes)&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:14pt; font-weight:600;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Add data (properties) on relation (edge) between two entities (nodes). You can create missing relations and entities.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Import data (properties) from existing CSV file on relation (edge).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;For each row take the values of the source entities id column and the target entities id column and compare them to values of the graph id property to found source entities and destination entities. The relation between the source entity and the target entity is associated to the row and the rest of the row CSV data will be set on &lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;in a different properties for each column.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="wordWrap">
@@ -138,57 +143,41 @@ p, li { white-space: pre-wrap; }
          </item>
          <item>
           <layout class="QGridLayout" name="gridLayout_5">
+           <property name="horizontalSpacing">
+            <number>3</number>
+           </property>
+           <property name="verticalSpacing">
+            <number>9</number>
+           </property>
            <property name="margin">
             <number>0</number>
            </property>
-           <property name="spacing">
-            <number>3</number>
-           </property>
            <item row="0" column="0">
-            <widget class="QLabel" name="label_9">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Source entities column</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLabel" name="label_10">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Taret entities column</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
             <widget class="tlp::CSVColumnComboBox" name="sourceColumnComboBox"/>
            </item>
-           <item row="1" column="1">
+           <item row="0" column="1">
             <widget class="tlp::CSVColumnComboBox" name="targetColumnComboBox"/>
+           </item>
+           <item row="1" column="0" colspan="2">
+            <widget class="tlp::GraphPropertiesSelectionComboBox" name="graphIndexPropertiesComboBox">
+             <property name="editable">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
          <item>
-          <widget class="tlp::GraphPropertiesSelectionComboBox" name="graphIndexPropertiesComboBox">
-           <property name="editable">
-            <bool>true</bool>
+          <widget class="QCheckBox" name="addMissingEdgeAndNodeCheckBox">
+           <property name="text">
+            <string>Add missing elements (entities and relations)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="addMissingEdgeAndNodeCheckBox">
+          <widget class="QCheckBox" name="respectOrientationCheckBox">
            <property name="text">
-            <string>Add missing elements (entities and relation)</string>
+            <string>Respect relation orientation</string>
            </property>
           </widget>
          </item>
@@ -218,11 +207,9 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:600;&quot;&gt;Add data (properties) to existing entities (nodes)&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:14pt; font-weight:600;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Import data (properties) from CSV file to existing graph entities (nodes). You can choose to create missing entities.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Import data (properties) from file to graph entities (nodes).&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;If you want to create a new property in the graph just type it's name in the &amp;quot;Graph property&amp;quot; combobox press &amp;quot;enter&amp;quot; key and select it's type in the dialog.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;If &amp;quot;Create missing entities&amp;quot; is checked each CSV row with no corresponding entity a new entity will be created.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;For each row take the value of the CSV id column and compare it to values of the graph id property. The first matching entity is associated to the row and the rest of the row CSV data will be set on in a different properties for each column.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="textFormat">
@@ -247,7 +234,7 @@ p, li { white-space: pre-wrap; }
               </sizepolicy>
              </property>
              <property name="text">
-              <string>CSV column</string>
+              <string>CSV id column</string>
              </property>
             </widget>
            </item>
@@ -260,7 +247,7 @@ p, li { white-space: pre-wrap; }
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Graph property</string>
+              <string>Graph id property</string>
              </property>
             </widget>
            </item>
@@ -268,11 +255,7 @@ p, li { white-space: pre-wrap; }
             <widget class="tlp::CSVColumnComboBox" name="nodeMappingColumncomboBox"/>
            </item>
            <item row="1" column="1">
-            <widget class="tlp::GraphPropertiesSelectionComboBox" name="nodeMappingPropertycomboBox">
-             <property name="editable">
-              <bool>true</bool>
-             </property>
-            </widget>
+            <widget class="tlp::GraphPropertiesSelectionComboBox" name="nodeMappingPropertycomboBox"/>
            </item>
           </layout>
          </item>
@@ -311,7 +294,7 @@ p, li { white-space: pre-wrap; }
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:14pt; font-weight:600;&quot;&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Import data (properties) from CSV file to existing graph relation (edges).&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;Select the CSV column containing the relations id in the &amp;quot;CSV column&amp;quot; field and select the graph property to compare with in the &amp;quot;Graph property&amp;quot; field.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;For each row take the value of the CSV id column and compare it to values of the graph id property. The first matching relation is associated to the row and the rest of the row CSV data will be set on in a different properties for each column.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="wordWrap">
@@ -333,7 +316,7 @@ p, li { white-space: pre-wrap; }
               </sizepolicy>
              </property>
              <property name="text">
-              <string>CSV column</string>
+              <string>CSV id column</string>
              </property>
             </widget>
            </item>
@@ -346,7 +329,7 @@ p, li { white-space: pre-wrap; }
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Graph property</string>
+              <string>Graph id property</string>
              </property>
             </widget>
            </item>

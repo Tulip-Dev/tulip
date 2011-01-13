@@ -97,7 +97,7 @@ string PropertyTools::guessDataType(const string& data, const string& decimalSep
 }
 
 bool  PropertyTools::existingPropertyIsCompatibleWithType(Graph* graph, const string& propertyName,
-                                                          const std::string& propertyType) {
+                                                          const string& propertyType) {
     if(!graph->existProperty(propertyName)){
         return false;
     }
@@ -105,7 +105,7 @@ bool  PropertyTools::existingPropertyIsCompatibleWithType(Graph* graph, const st
 }
 
 PropertyInterface *PropertyTools::getProperty(Graph* graph, const string& propertyName,
-                                              const std::string& propertyType) {
+                                              const string& propertyType) {
 
     if (propertyType.compare("double") == 0) {
         return graph->getProperty<DoubleProperty> (propertyName);
@@ -198,7 +198,7 @@ unsigned int CSVImportParameters::getLastLineIndex()const{
     return toLine;
 }
 
-AbstractCSVToGraphDataMapping::AbstractCSVToGraphDataMapping(Graph* graph,tlp::ElementType type,unsigned int columnIndex,const string& propertyName,unsigned int firstRow,unsigned int lastRow):graph(graph),type(type),columnIndex(columnIndex),keyProperty(NULL),firstRow(firstRow),lastRow(lastRow){
+AbstractCSVToGraphDataMapping::AbstractCSVToGraphDataMapping(Graph* graph,ElementType type,unsigned int columnIndex,const string& propertyName,unsigned int firstRow,unsigned int lastRow):graph(graph),type(type),columnIndex(columnIndex),keyProperty(NULL),firstRow(firstRow),lastRow(lastRow){
     assert(graph!=NULL);
     assert(graph->existProperty(propertyName));
     keyProperty = graph->getProperty(propertyName);
@@ -213,7 +213,7 @@ void AbstractCSVToGraphDataMapping::begin(){
     rowToGraphId.clear();
 }
 
-void AbstractCSVToGraphDataMapping::token(unsigned int row, unsigned int column, const std::string& token){
+void AbstractCSVToGraphDataMapping::token(unsigned int row, unsigned int column, const string& token){
     if(importRow(row) && column == columnIndex){
         if(!buildIndexForRow(row,token)){
         }
@@ -294,10 +294,17 @@ bool CSVToGraphEdgeIdMapping::buildIndexForRow(unsigned int row,const string& in
     return false;
 }
 
-CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& srcPropertyName,const std::string& tgtPropertyName,unsigned int firstRow,unsigned int lastRow,bool createMissinNodes):graph(graph),src(CSVToGraphNodeIdMapping(graph,srcColumnIndex,srcPropertyName,firstRow,lastRow,createMissinNodes)),tgt(CSVToGraphNodeIdMapping(graph,tgtColumnIndex,tgtPropertyName,firstRow,lastRow,createMissinNodes)),buildEdgge(createMissinNodes){
+CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(Graph* graph,
+                                                         unsigned int srcColumnIndex,unsigned int tgtColumnIndex,
+                                                         const string& srcPropertyName,const string& tgtPropertyName,
+                                                         unsigned int firstRow,unsigned int lastRow,
+                                                         bool createMissinNodes,bool respectEdgeOrientation):
+                                                            graph(graph),src(CSVToGraphNodeIdMapping(graph,srcColumnIndex,srcPropertyName,firstRow,lastRow,createMissinNodes)),
+                                                            tgt(CSVToGraphNodeIdMapping(graph,tgtColumnIndex,tgtPropertyName,firstRow,lastRow,createMissinNodes)),
+                                                            buildEdgge(createMissinNodes),respectEdgeOrientation(respectEdgeOrientation){
 }
 
-std::pair<tlp::ElementType,unsigned int> CSVToGraphEdgeSrcTgtMapping::getElementForRow(unsigned int row){
+pair<ElementType,unsigned int> CSVToGraphEdgeSrcTgtMapping::getElementForRow(unsigned int row){
 
     node srcNode = node(src.getElementForRow(row).second);
     node tgtNode = node(tgt.getElementForRow(row).second);
@@ -305,7 +312,7 @@ std::pair<tlp::ElementType,unsigned int> CSVToGraphEdgeSrcTgtMapping::getElement
     if(!graph->isElement(srcNode) || !graph->isElement(tgtNode)){
         return make_pair(EDGE,UINT_MAX);
     }else{
-        edge e = graph->existEdge(srcNode,tgtNode,true);
+        edge e = graph->existEdge(srcNode,tgtNode,respectEdgeOrientation);
         return make_pair(EDGE,e.id);
     }
 }
@@ -315,14 +322,14 @@ void CSVToGraphEdgeSrcTgtMapping::begin(){
     tgt.begin();
 }
 
-void CSVToGraphEdgeSrcTgtMapping::token(unsigned int row, unsigned int column, const std::string& token){
+void CSVToGraphEdgeSrcTgtMapping::token(unsigned int row, unsigned int column, const string& token){
     src.token(row,column,token);
     tgt.token(row,column,token);
     if(buildEdgge){
         //If the edge don't exist and user want to create missing elements create a new one.
         node srcNode = node(src.getElementForRow(row).second);
         node tgtNode = node(tgt.getElementForRow(row).second);
-        if( graph->isElement(srcNode) && graph->isElement(tgtNode) && !graph->existEdge(srcNode,tgtNode,true).isValid() ){
+        if( graph->isElement(srcNode) && graph->isElement(tgtNode) && !graph->existEdge(srcNode,tgtNode,respectEdgeOrientation).isValid() ){
             graph->addEdge(srcNode,tgtNode);
         }
     }
@@ -332,12 +339,12 @@ void CSVToGraphEdgeSrcTgtMapping::end(unsigned int rowNumber, unsigned int colum
     tgt.end(rowNumber,columnNumber);
 }
 
-CSVImportColumnToGraphPropertyMappingProxy::CSVImportColumnToGraphPropertyMappingProxy(tlp::Graph* graph,const CSVImportParameters& importParameters,QWidget* parent):graph(graph),importParameters(importParameters),parent(parent){
+CSVImportColumnToGraphPropertyMappingProxy::CSVImportColumnToGraphPropertyMappingProxy(Graph* graph,const CSVImportParameters& importParameters,QWidget* parent):graph(graph),importParameters(importParameters),parent(parent){
 
 }
 
-PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int column,const std::string& token){
-    TLP_HASH_MAP<unsigned int,tlp::PropertyInterface*>::iterator it = propertiesBuffer.find(column);
+PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterface(unsigned int column,const string& token){
+    TLP_HASH_MAP<unsigned int,PropertyInterface*>::iterator it = propertiesBuffer.find(column);
     //No properties
     if(it==propertiesBuffer.end()){
         string propertyType = importParameters.getColumnDataType(column);
@@ -388,7 +395,7 @@ CSVGraphImport::CSVGraphImport(CSVToGraphDataMapping* mapping,CSVImportColumnToG
 CSVGraphImport::~CSVGraphImport(){}
 void CSVGraphImport::begin(){
 }
-void CSVGraphImport::token(unsigned int row, unsigned int column, const std::string& token){
+void CSVGraphImport::token(unsigned int row, unsigned int column, const string& token){
     if(!importParameters.importRow(row) || !importParameters.importColumn(column)){
         return;
     }
