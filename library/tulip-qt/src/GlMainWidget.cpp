@@ -237,7 +237,10 @@ void GlMainWidget::setGraph(Graph *graph){
 }
 //==================================================
 Graph *GlMainWidget::getGraph() {
-	return scene.getGlGraphComposite()->getInputData()->getGraph();
+	if(scene.getGlGraphComposite()!=NULL)
+		return scene.getGlGraphComposite()->getInputData()->getGraph();
+
+	return NULL;
 }
 //==================================================
 void GlMainWidget::paintEvent( QPaintEvent*) {
