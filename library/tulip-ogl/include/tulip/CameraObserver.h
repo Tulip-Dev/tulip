@@ -98,22 +98,32 @@ namespace tlp {
 
     bool tracked;
 
+    bool inDestruction;
+
     mutable std::set<CameraObserver*> observers;
   };
 
   inline void ObservableCamera::addObserver(CameraObserver *obs) const {
+    if(inDestruction)
+      return;
     observers.insert(obs);
   }
 
   inline unsigned int ObservableCamera::countObservers() {
+    if(inDestruction)
+      return 0;
     return observers.size();
   }
 
   inline void ObservableCamera::removeObserver(CameraObserver *item) const{
+    if(inDestruction)
+      return;
     observers.erase(item);
   }
 
   inline void ObservableCamera::removeObservers() {
+    if(inDestruction)
+      return;
     observers.clear();
   }
 }
