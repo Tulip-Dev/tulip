@@ -211,8 +211,9 @@ SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 
 ## -----------------------------------------------------------------------------------------------
 ## Enable output of rendering time
+## Warning : You must have OpenMP
 ## -----------------------------------------------------------------------------------------------
-SET(ENABLE_RENDERING_TIME_DISPLAY OFF CACHE BOOL "Do you want to disable the rendering time display ? [OFF|ON]")
+SET(ENABLE_RENDERING_TIME_DISPLAY OFF CACHE BOOL "Do you want to disable the rendering time display ? (Warning : You must have OpenMP) [OFF|ON]")
 
 ## -----------------------------------------------------------------------------------------------
 ## Check 64 bits

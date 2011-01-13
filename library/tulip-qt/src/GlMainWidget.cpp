@@ -30,6 +30,10 @@
 #include <QtOpenGL/QGLFormat>
 #include <QtCore/QTime>
 
+#ifdef ENABLE_RENDERING_TIME_DISPLAY
+#include <omp.h>
+#endif
+
 #include "tulip/GlMainWidget.h"
 
 #include <tulip/Graph.h>
@@ -364,14 +368,14 @@ void GlMainWidget::draw(bool graphChanged) {
 		computeInteractors();
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
-    QTime beginTime=QTime::currentTime();
+		double beginTime=omp_get_wtime();
 #endif
 
 		scene.prerenderMetaNodes();
 		scene.draw();
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
-    cout << "rendering time : " << beginTime.msecsTo(QTime::currentTime()) << endl;
+		cout << "rendering time : " << (int)((omp_get_wtime()-beginTime)*1000) << " ms" << endl;
 #endif
 
 		glDisable(GL_TEXTURE_2D);
