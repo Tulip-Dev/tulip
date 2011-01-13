@@ -144,6 +144,17 @@ CSVGraphMappingConfigurationWidget::CSVGraphMappingConfigurationWidget(QWidget *
     connect(ui->graphIndexPropertiesComboBox,SIGNAL(currentIndexChanged(int)),this,SIGNAL(mappingChanged()));
     connect(ui->edgeMappingColumncomboBox,SIGNAL(currentIndexChanged(int)),this,SIGNAL(mappingChanged()));
     connect(ui->edgeMappingPropertycomboBox,SIGNAL(currentIndexChanged(int)),this,SIGNAL(mappingChanged()));
+
+    ui->graphIndexPropertiesComboBox->setDefaultText(tr("Choose graph entities id property"));
+    ui->sourceColumnComboBox->setDefaultText(tr("Choose CSV source entities id column"));
+    ui->targetColumnComboBox->setDefaultText(tr("Choose CSV target entities id column"));
+
+    ui->nodeMappingColumncomboBox->setDefaultText(tr("Choose CSV entities id column"));
+    ui->nodeMappingPropertycomboBox->setDefaultText(tr("Choose graph entities id property"));
+
+    ui->edgeMappingColumncomboBox->setDefaultText(tr("Choose CSV relations id column"));
+    ui->edgeMappingPropertycomboBox->setDefaultText(tr("Choose graph relations id property"));
+
 }
 
 CSVGraphMappingConfigurationWidget::~CSVGraphMappingConfigurationWidget()
@@ -208,7 +219,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
             return NULL;
         }
         bool createMissingElement = ui->addMissingEdgeAndNodeCheckBox->isChecked();
-        return new CSVToGraphEdgeSrcTgtMapping(graph,srcColumnId,tgtColumnId,idPropertyName,idPropertyName,importParameters.getFirstLineIndex(),importParameters.getLastLineIndex(),createMissingElement);
+        return new CSVToGraphEdgeSrcTgtMapping(graph,srcColumnId,tgtColumnId,idPropertyName,idPropertyName,importParameters.getFirstLineIndex(),importParameters.getLastLineIndex(),createMissingElement,ui->respectOrientationCheckBox->isChecked());
     }else{
         return NULL;
     }

@@ -239,8 +239,9 @@ public:
     * @param firstRow The first row to search ids.
     * @param lastRow The last row to search ids.
     * @param createMissinElements If true create source node, destination node and edge if one of them is not found in the graph.
+    * @param respectEdgeOrientation If true the edge oriention will be taken in account when searching an edge between source and destination.
     **/
-    CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& srcPropertyName,const std::string& tgtPropertyName,unsigned int firstRow,unsigned int lastRow,bool createMissinElements=false);
+    CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& srcPropertyName,const std::string& tgtPropertyName,unsigned int firstRow,unsigned int lastRow,bool createMissinElements=false,bool respectEdgeOrientation=true);
     std::pair<tlp::ElementType,unsigned int> getElementForRow(unsigned int row);
     void begin();
     void token(unsigned int row, unsigned int column, const std::string& token);
@@ -250,6 +251,7 @@ private:
     CSVToGraphNodeIdMapping src;
     CSVToGraphNodeIdMapping tgt;
     bool buildEdgge;
+    bool respectEdgeOrientation;
 };
 
 /**
