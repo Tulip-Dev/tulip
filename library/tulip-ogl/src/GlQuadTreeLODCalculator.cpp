@@ -458,7 +458,7 @@ namespace tlp {
       setInputData(NULL);
     }
 
-    void GlQuadTreeLODCalculator::destroy(Camera *camera) {
+    void GlQuadTreeLODCalculator::destroy(Camera *) {
       std::vector<std::pair<std::string, GlLayer*> > *layerList=glScene->getLayersList();
 
       clearCamerasObservers();
