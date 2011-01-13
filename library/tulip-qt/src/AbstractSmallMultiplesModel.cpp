@@ -1,6 +1,8 @@
 #include "tulip/AbstractSmallMultiplesModel.h"
 #include "tulip/Coord.h"
 #include "tulip/TlpQtTools.h"
+
+#include <tulip/tulipconf.h>
 #include <math.h>
 
 namespace tlp {

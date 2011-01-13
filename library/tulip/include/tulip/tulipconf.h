@@ -49,6 +49,11 @@
   static double floor(unsigned int i) {
     return floor((double)i);
   }
+
+  static double round(double d) {
+	  return floor(d + 0.5);
+  }
+
 #  define _DEPRECATED __declspec(deprecated)
 #  define __PRETTY_FUNCTION__ __FUNCTION__ //workaround
 #  define strcasecmp stricmp  //strcasecmp does not exists for VC, workaround
