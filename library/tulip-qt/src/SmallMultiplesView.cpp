@@ -1,6 +1,5 @@
 #include "tulip/SmallMultiplesView.h"
 
-#include "tulip/AbstractSmallMultiplesModel.h"
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlGraphInputData.h"
 #include "tulip/ForEach.h"
@@ -25,19 +24,22 @@ void zoomOnScreenRegion(tlp::GlMainWidget *glWidget, const tlp::BoundingBox &bou
 
 namespace tlp {
 
+//===========================================
+//            VIEW FUNCTIONS
+//===========================================
 SmallMultiplesView::SmallMultiplesView(AbstractSmallMultiplesModel *model)
   :AbstractView(), _model(model), _overview(new GlMainWidget(0)), _zoomAnimationActivated(true), _autoDisableConfigurationWidget(true), _autoDisableInteractors(true) {
   Observable::holdObservers();
   assert(model);
-  connect(_model, SIGNAL(dataChanged(int)), this, SLOT(dataChanged(int)));
-  connect(_model, SIGNAL(dataChanged()), this, SLOT(dataChanged()));
+  connect(_model, SIGNAL(dataChanged(int,int,AbstractSmallMultiplesModel::Roles)), this, SLOT(dataChanged(int,int,AbstractSmallMultiplesModel::Roles)));
+  connect(_model, SIGNAL(reverseItems(int,int)), this, SLOT(reverseItems(int,int)));
   _overview->setData(newGraph(), DataSet());
   GlScene *scene = _overview->getScene();
   GlGraphInputData *inputData = _overview->getScene()->getGlGraphComposite()->getInputData();
-  inputData->elementColor->setAllNodeValue(scene->getBackgroundColor());
-  inputData->elementShape->setAllNodeValue(4);
-  inputData->elementLabelPosition->setAllNodeValue(2);
-  inputData->elementFontSize->setAllNodeValue(5);
+  inputData->getElementColor()->setAllNodeValue(scene->getBackgroundColor());
+  inputData->getElementShape()->setAllNodeValue(4);
+  inputData->getElementLabelPosition()->setAllNodeValue(2);
+  inputData->getElementFontSize()->setAllNodeValue(5);
   _overview->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setFontsType(1);
   _overview->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setLabelScaled(true);
   Observable::unholdObservers();
@@ -55,47 +57,71 @@ QWidget *SmallMultiplesView::construct(QWidget *parent) {
   return centralWidget;
 }
 
-GlMainWidget *SmallMultiplesView::overview() const {
-  return _overview;
+//===========================================
+//            DATA UPDATING
+//===========================================
+void SmallMultiplesView::dataChanged(int from, int to, AbstractSmallMultiplesModel::Roles dataRoles) {
+  refreshItems();
+  for (int i=from; i <= to; ++i) {
+    if (i >= _items.size())
+      return;
+    dataChanged(i, dataRoles);
+  }
 }
 
-void SmallMultiplesView::dataChanged() {
-  Observable::holdObservers();
-  refreshItemsCount();
-  for (int i=0; i < _items.size(); ++i)
-    dataChanged(i);
-  Observable::unholdObservers();
+template<typename T, typename Proptype>
+void applyVariant(QVariant v, Proptype *prop, tlp::node n) {
+  if (!v.isValid() || v.isNull())
+    return;
+  T val = v.value<T>();
+  prop->setNodeValue(n, val);
 }
 
-void SmallMultiplesView::dataChanged(int id) {
-  Observable::holdObservers();
+template<>
+void applyVariant<QString, StringProperty>(QVariant v, StringProperty *prop, tlp::node n) {
+  if (!v.isValid() || v.isNull())
+    return;
+  prop->setNodeValue(n, v.toString().toStdString());
+}
 
+void SmallMultiplesView::dataChanged(int id, AbstractSmallMultiplesModel::Roles dataRoles) {
   if (id >= _items.size())
     return;
+  Observable::holdObservers();
   node n = _items[id];
+
   GlGraphInputData *inputData = _overview->getScene()->getGlGraphComposite()->getInputData();
+  if (dataRoles.testFlag(AbstractSmallMultiplesModel::Texture))
+    applyVariant<QString, StringProperty>(_model->data(id, AbstractSmallMultiplesModel::Texture), inputData->getElementTexture(), n);
 
-  // Texture
-  QVariant textureVariant = _model->data(id, AbstractSmallMultiplesModel::Texture);
-  inputData->elementTexture->setNodeValue(n, (textureVariant.isValid() ? textureVariant.toString().toStdString() : ""));
+  if (dataRoles.testFlag(AbstractSmallMultiplesModel::Label))
+    applyVariant<QString, StringProperty>(_model->data(id, AbstractSmallMultiplesModel::Label), inputData->getElementLabel(), n);
 
-  // Label
-  QVariant labelVariant = _model->data(id, AbstractSmallMultiplesModel::Label);
-  inputData->elementLabel->setNodeValue(n, (labelVariant.isValid() ? labelVariant.toString().toStdString() : ""));
+  if (dataRoles.testFlag(AbstractSmallMultiplesModel::Position))
+    applyVariant<tlp::Coord, LayoutProperty>(_model->data(id, AbstractSmallMultiplesModel::Position), inputData->getElementLayout(), n);
+  Observable::unholdObservers();
+}
 
-  // Position
-  QVariant positionVariant = _model->data(id, AbstractSmallMultiplesModel::Position);
-  if (positionVariant.isValid())
-    inputData->elementLayout->setNodeValue(n,positionVariant.value<Coord>());
+void SmallMultiplesView::refreshItems() {
+  Observable::holdObservers();
+  int itemsCount = _model->countItems();
+  int nodesCount = _overview->getGraph()->numberOfNodes();
+
+  for (int i=itemsCount; i < nodesCount; ++i)
+    delItem(_items.size()-1);
+  for (int i=itemsCount; i > nodesCount; --i)
+    addItem();
 
   Observable::unholdObservers();
 }
 
-void SmallMultiplesView::itemAdded() {
+void SmallMultiplesView::addItem() {
+  Observable::holdObservers();
   _items.push_back(_overview->getGraph()->addNode());
+  Observable::unholdObservers();
 }
 
-void SmallMultiplesView::itemDeleted(int id) {
+void SmallMultiplesView::delItem(int id) {
   Observable::holdObservers();
   if (id >= _items.size())
     return;
@@ -105,36 +131,34 @@ void SmallMultiplesView::itemDeleted(int id) {
   Observable::unholdObservers();
 }
 
+int SmallMultiplesView::nodeItemId(node n) {
+  for (int i=0; i < _items.size(); ++i)
+    if (_items[i] == n)
+      return i;
+  return -1;
+}
+
+void SmallMultiplesView::reverseItems(int a, int b) {
+  if (a >= _items.size() || b >= _items.size())
+    return;
+  node na = _items[a];
+  _items[a] = _items[b];
+  _items[b] = na;
+  dataChanged(a, AbstractSmallMultiplesModel::Position);
+  dataChanged(b, AbstractSmallMultiplesModel::Position);
+}
+
+//===========================================
+//            OVERVIEW FUNCTIONS
+//===========================================
 void SmallMultiplesView::selectItem(int i) {
   if (i > _items.size())
     return;
-
   if (_zoomAnimationActivated) {
     GlNode glNode(_items[i]);
     zoomOnScreenRegion(_overview, glNode.getBoundingBox(_overview->getScene()->getGlGraphComposite()->getInputData()));
   }
-
   itemSelected(i);
-}
-
-void SmallMultiplesView::refreshItemsCount() {
-  Observable::holdObservers();
-  node n;
-  stableForEach (n, _overview->getGraph()->getNodes())
-      _overview->getGraph()->delNode(n);
-  _items.clear();
-  int itemCount = _model->countItems();
-  for (int i=0; i < itemCount; ++i)
-    itemAdded();
-  Observable::unholdObservers();
-}
-
-AbstractSmallMultiplesModel *SmallMultiplesView::model() {
-  return _model;
-}
-
-bool SmallMultiplesView::isOverview() const {
-  return centralWidget == _overview;
 }
 
 void SmallMultiplesView::switchToOverview(bool destroyOldWidget) {
@@ -165,6 +189,29 @@ void SmallMultiplesView::switchToWidget(QWidget *w) {
   setCentralWidget(w);
 }
 
+GlMainWidget *SmallMultiplesView::overview() const {
+  return _overview;
+}
+
+bool SmallMultiplesView::isOverview() const {
+  return centralWidget == _overview;
+}
+
+void SmallMultiplesView::centerOverview() {
+  _overview->getScene()->centerScene();
+}
+
+//===========================================
+//               MODEL
+//===========================================
+AbstractSmallMultiplesModel *SmallMultiplesView::model() {
+  return _model;
+}
+
+//===========================================
+//               TOGGLABLES
+//===========================================
+
 void SmallMultiplesView::toggleInteractors(bool f) {
   list<Interactor *> interactors = getInteractors();
   int i=0;
@@ -179,26 +226,15 @@ void SmallMultiplesView::toggleInteractors(bool f) {
   }
 }
 
-int SmallMultiplesView::nodeItemId(node n) {
-  for (int i=0; i < _items.size(); ++i)
-    if (_items[i] == n)
-      return i;
-  return -1;
-}
-
-void SmallMultiplesView::centerOverview() {
-  _overview->getScene()->centerScene();
-}
-
 void SmallMultiplesView::setTogglableConfigurationWidget(const std::vector<QWidget *> &v) {
   _togglableConfigWidgets = v;
 }
 
 }
 
-/*
- * Default interactor for small multiples views
- */
+//===========================================
+//               INTERACTORS
+//===========================================
 using namespace tlp;
 
 class SmallMultiplesNavigationInteractor: public InteractorChainOfResponsibility {

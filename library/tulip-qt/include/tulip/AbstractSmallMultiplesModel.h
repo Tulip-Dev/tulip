@@ -26,10 +26,12 @@ public:
     * @see GlTextureManager
     */
   enum SmallMultiplesDataRole {
-    Label, // QString
-    Texture, // QImage
-    Position // tlp::Coord
+    Label     = 0b001, // QString
+    Texture   = 0b010, // QImage
+    Position  = 0b100, // tlp::Coord
+    AllRoles  = 0b111
   };
+  Q_DECLARE_FLAGS(Roles, SmallMultiplesDataRole)
 
   AbstractSmallMultiplesModel();
   virtual ~AbstractSmallMultiplesModel();
@@ -47,9 +49,20 @@ public:
   virtual int countItems() = 0;
 
 signals:
-  void dataChanged(int id);
-  void dataChanged();
+  /**
+    * @brief Refresh data for specified roles on a given item.
+    */
+  void dataChanged(int fromId, int toId, AbstractSmallMultiplesModel::Roles dataRoles = AllRoles);
+
+  /**
+    * @brief Reverse two items.
+    * This will reverse a and b id and call data method for a and b with the Position role.
+    */
+  void reverseItems(int a,int b);
+
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractSmallMultiplesModel::Roles)
 
 }
 #endif // ABSTRACTSMALLMULTIPLESMODEL_H
