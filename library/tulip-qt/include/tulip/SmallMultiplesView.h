@@ -2,6 +2,7 @@
 #define SMALLMULTIPLESVIEW_H
 
 #include "tulip/AbstractView.h"
+#include "tulip/AbstractSmallMultiplesModel.h"
 #include <QtCore/QVector>
 
 namespace tlp {
@@ -144,10 +145,12 @@ protected:
   virtual void itemSelected(int) {}
 
 protected slots:
-  void dataChanged();
-  void dataChanged(int);
-  void itemAdded();
-  void itemDeleted(int);
+  void dataChanged(int from, int to, AbstractSmallMultiplesModel::Roles dataRoles = AbstractSmallMultiplesModel::AllRoles);
+  void dataChanged(int id, AbstractSmallMultiplesModel::Roles dataRoles = AbstractSmallMultiplesModel::AllRoles);
+  void refreshItems();
+  void addItem();
+  void delItem(int);
+  void reverseItems(int,int);
 
 private:
   AbstractSmallMultiplesModel *_model;
@@ -157,8 +160,6 @@ private:
   bool _autoDisableConfigurationWidget;
   bool _autoDisableInteractors;
   std::vector<QWidget *> _togglableConfigWidgets;
-
-  void refreshItemsCount();
 };
 }
 
