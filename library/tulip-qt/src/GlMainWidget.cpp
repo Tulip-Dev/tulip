@@ -375,7 +375,7 @@ void GlMainWidget::draw(bool graphChanged) {
 		scene.draw();
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
-		cout << "rendering time : " << (int)((omp_get_wtime()-beginTime)*1000) << " ms" << endl;
+		cout << ">>> rendering time : " << (int)((omp_get_wtime()-beginTime)*1000) << " ms" << endl << endl;
 #endif
 
 		glDisable(GL_TEXTURE_2D);
