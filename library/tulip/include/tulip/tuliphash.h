@@ -31,7 +31,6 @@
 #  define TLP_HASH_SET std::unordered_set
 #  define TLP_BEGIN_HASH_NAMESPACE namespace std 
 #  define TLP_END_HASH_NAMESPACE
-#  include <forward_list>
 #elif  (__GNUC__ < 4 || __GNUC_MINOR__ < 1 || __clang__)
 #  include <tulip/tulipconf.h>
 #  if (__GNUC__ < 3 || __clang__)
