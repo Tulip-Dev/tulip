@@ -63,8 +63,6 @@ namespace tlp {
     const Size &nodeSize = inputData->getElementSize()->getNodeValue(n);
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
     glRotatef(inputData->getElementRotation()->getNodeValue(n), 0., 0., 1.);
-    // We remove nodeSize[N]/100. to be sure that includes nodes are in meta node
-
     Graph *metaGraph = inputData->getGraph()->getNodeMetaInfo(n);
     GlGraphRenderingParameters metaParameters = *inputData->parameters;
     GlGraphInputData metaData(metaGraph,&metaParameters);
