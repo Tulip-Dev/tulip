@@ -29,7 +29,7 @@ using namespace std;
 
 namespace tlp {
 
-  ObservableCamera::ObservableCamera():tracked(true){
+  ObservableCamera::ObservableCamera():tracked(true), inDestruction(false){
   }
 
   void ObservableCamera::setCameraTracking(bool tracked){
@@ -37,6 +37,7 @@ namespace tlp {
   }
 
   void ObservableCamera::notifyDestroy(Camera *camera) {
+    inDestruction=true;
     set<CameraObserver *> copy(observers); //Used to preserve iteratros
     for (set<CameraObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
       (*itlObs)->destroy(camera);
