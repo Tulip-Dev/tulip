@@ -74,9 +74,10 @@ INCLUDES_H = \
 	tulip/Morphing.h \
 	tulip/GlCompositeHierarchyManager.h \
 	tulip/GraphPropertiesTableWidget.h \
-  tulip/TextEditDialog.h \
-  tulip/SmallMultiplesView.h \
-  tulip/AbstractSmallMultiplesModel.h
+	tulip/TextEditDialog.h \
+	tulip/SmallMultiplesView.h \
+	tulip/AbstractSmallMultiplesModel.h \
+	tulip/SmallMultiplesNavigatorComponent.h
 
 QT44_INCLUDES_H = \
 	tulip/BaseGraphicsViewComponent.h \
