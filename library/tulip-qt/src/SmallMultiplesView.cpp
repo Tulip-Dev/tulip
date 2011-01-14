@@ -112,6 +112,9 @@ void SmallMultiplesView::refreshItems() {
   for (int i=itemsCount; i > nodesCount; --i)
     addItem();
 
+  if (itemsCount != nodesCount && _items.size() == 1) // Item count changed and we only have one item left
+    emit itemSelected(0);
+
   Observable::unholdObservers();
 }
 
@@ -158,7 +161,7 @@ void SmallMultiplesView::selectItem(int i) {
     GlNode glNode(_items[i]);
     zoomOnScreenRegion(_overview, glNode.getBoundingBox(_overview->getScene()->getGlGraphComposite()->getInputData()));
   }
-  itemSelected(i);
+  emit itemSelected(i);
 }
 
 void SmallMultiplesView::switchToOverview(bool destroyOldWidget) {
