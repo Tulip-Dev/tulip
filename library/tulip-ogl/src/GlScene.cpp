@@ -93,7 +93,7 @@ namespace tlp {
   GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
 #endif
 
-  GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL) {
+  GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL), noClearBackground(false) {
     Camera camera(this,false);
 
     if(calculator!=NULL)
@@ -146,10 +146,14 @@ namespace tlp {
     glColorMask(1, 1, 1, 1);
     glEnable(GL_BLEND);
     glIndexMask(UINT_MAX);
-    glClearColor(backgroundColor.getRGL(), backgroundColor.getGGL(), backgroundColor.getBGL(), backgroundColor.getAGL());
     glClearStencil(0xFFFF);
     glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    if (!noClearBackground) {
+    	glClearColor(backgroundColor.getRGL(), backgroundColor.getGGL(), backgroundColor.getBGL(), backgroundColor.getAGL());
+    	glClear(GL_COLOR_BUFFER_BIT);
+    }
+
+    glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glDisable(GL_TEXTURE_2D);
 
     GLenum error = glGetError();
