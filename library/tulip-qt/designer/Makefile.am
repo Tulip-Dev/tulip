@@ -16,7 +16,7 @@ dist_noinst_DATA = FindSelection.ui \
 	QtOpenGlErrorViewerWithAskAgainDialog.ui \
 	CSVGraphMappingConfigurationWidget.ui \
 	CSVImportConfigurationWidget.ui \
-        CSVImportDialog.ui \
+        CSVImportWizard.ui \
 	CSVParserConfigurationWidget.ui \
 	i_addedge.png \
 	i_addnode.png \
