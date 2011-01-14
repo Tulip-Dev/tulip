@@ -1,5 +1,5 @@
 #include "tulip/CSVImportWizard.h"
-#include "CSVImportWizardData.h"
+#include "tulip/CSVImportWizardData.h"
 #include <tulip/QtProgress.h>
 #include <QtGui/QVBoxLayout>
 using namespace tlp;
