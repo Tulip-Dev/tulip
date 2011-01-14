@@ -57,6 +57,7 @@ namespace tlp {
     void selectionColor();
     void selectionSaveAtDefaultColor();
     void setButtonColor(QColor tmp,QPushButton *button);
+    void labelSizeChanged(int);
 
   signals :
 

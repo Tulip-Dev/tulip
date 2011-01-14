@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>356</width>
-    <height>440</height>
+    <height>501</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -43,28 +43,14 @@
       <item row="3" column="0" >
        <layout class="QVBoxLayout" name="verticalLayout" >
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4" >
-          <item>
-           <widget class="QCheckBox" name="scaled" >
-            <property name="toolTip" >
-             <string>Fit to node size</string>
-            </property>
-            <property name="text" >
-             <string>Scaled</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="overlap" >
-            <property name="toolTip" >
-             <string>Enable/disable overlap of labels</string>
-            </property>
-            <property name="text" >
-             <string>Remove overlap</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QCheckBox" name="overlap" >
+          <property name="toolTip" >
+           <string>Enable/disable overlap of labels</string>
+          </property>
+          <property name="text" >
+           <string>Remove overlap</string>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QFrame" name="frame" >
@@ -124,6 +110,115 @@
               </layout>
              </item>
             </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="scaled" >
+          <property name="toolTip" >
+           <string>Fit to node size</string>
+          </property>
+          <property name="text" >
+           <string>Scale labels to fit nodes sizes</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="frame_2" >
+          <property name="frameShape" >
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow" >
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2" >
+           <property name="horizontalSpacing" >
+            <number>0</number>
+           </property>
+           <property name="verticalSpacing" >
+            <number>2</number>
+           </property>
+           <item row="1" column="0" >
+            <layout class="QHBoxLayout" name="horizontalLayout" >
+             <item>
+              <widget class="QLabel" name="label" >
+               <property name="text" >
+                <string>Min size : </string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="minSizeSpinBox" >
+               <property name="maximum" >
+                <number>100</number>
+               </property>
+               <property name="value" >
+                <number>0</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_4" >
+               <property name="text" >
+                <string>px</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer" >
+               <property name="orientation" >
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0" >
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_2" >
+               <property name="text" >
+                <string>Max size :</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="maxSizeSpinBox" >
+               <property name="minimum" >
+                <number>0</number>
+               </property>
+               <property name="maximum" >
+                <number>100</number>
+               </property>
+               <property name="value" >
+                <number>100</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_5" >
+               <property name="text" >
+                <string>px</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="0" column="0" >
+            <widget class="QLabel" name="label_3" >
+             <property name="font" >
+              <font>
+               <pointsize>7</pointsize>
+               <italic>true</italic>
+              </font>
+             </property>
+             <property name="text" >
+              <string>Limit rendered labels size (when not in scaled mode)</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -613,6 +708,54 @@
     <hint type="destinationlabel" >
      <x>177</x>
      <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>scaled</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>frame_2</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>177</x>
+     <y>152</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>177</x>
+     <y>189</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>minSizeSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>RenderingParametersDialogData</receiver>
+   <slot>labelSizeChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>116</x>
+     <y>189</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>177</x>
+     <y>242</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>maxSizeSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>RenderingParametersDialogData</receiver>
+   <slot>labelSizeChanged(int)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>301</x>
+     <y>189</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>177</x>
+     <y>242</y>
     </hint>
    </hints>
   </connection>

@@ -304,6 +304,22 @@ namespace tlp {
      * Set if labels can be overlaped
      */
     void setLabelOverlaped(bool state);
+    /**
+     * return min size of label : this min size is only used if labels aren't be scaled
+     */
+    int getMinSizeOfLabel();
+    /**
+     * Set min size of label : this min size is only used if labels aren't be scaled
+     */
+    void setMinSizeOfLabel(int size);
+    /**
+     * return max size of label : this max size is only used if labels aren't be scaled
+     */
+    int getMaxSizeOfLabel();
+    /**
+     * Set max size of label : this max size is only used if labels aren't be scaled
+     */
+    void setMaxSizeOfLabel(int size);
 
 		/**
 		 * This property is use to filter nodes/edges display, for a node/edge if this property is false : the node/edge will not be diplayed
@@ -348,6 +364,8 @@ namespace tlp {
     int _edgesLabelStencil;
     bool _labelScaled;
     bool _labelOverlaped;
+    int _labelMinSize;
+    int _labelMaxSize;
     unsigned int _labelsBorder;
     std::string _fontsPath;
     std::string _texturePath;
