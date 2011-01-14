@@ -103,6 +103,7 @@ namespace tlp {
     string erreurMsg;
     bool   resultBool=true;
     if (query) {
+      // plugin parameters dialog
       StructDef *params = ControllerAlgorithmTools::getPluginParameters(PROPERTY::factory, name);
       StructDef sysDef = PROPERTY::factory->getPluginParameters(name);
       params->buildDefaultDataSet(dataSet, graph );
@@ -114,19 +115,25 @@ namespace tlp {
     if (resultBool) {
       PROPERTY* tmp = new PROPERTY(graph);
       if (push)
-	graph->push();
+        graph->push();
       // must be done after push because destination property
       // may not exist and thus the getLocalProperty call may create it
       // and so it must be deleted at pop time
-      PROPERTY* dest = graph->template getLocalProperty<PROPERTY>(destination);
-      tmp->setAllNodeValue(dest->getNodeDefaultValue());
-      tmp->setAllEdgeValue(dest->getEdgeDefaultValue());
+      PROPERTY* dest = NULL;
+      if(graph->existLocalProperty(destination)){
+        // if destination property exist : use it to initialize result property (tmp)
+        dest = graph->template getLocalProperty<PROPERTY>(destination);
+        tmp->setAllNodeValue(dest->getNodeDefaultValue());
+        tmp->setAllEdgeValue(dest->getEdgeDefaultValue());
+      }
+
       graph->push(false);
+
+      // If property is a layout property : we change the LOD Calculator to optimise morphing rendering
       bool updateLayout = (typeid(PROPERTY) == typeid(LayoutProperty) && nldc);
       GlLODCalculator *oldLODCalculator = NULL;
       if (updateLayout) {
         graph->setAttribute("viewLayout", tmp);
-
         if(nldc){
           nldc->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
           oldLODCalculator=nldc->getGlMainWidget()->getScene()->getCalculator();
@@ -134,35 +141,31 @@ namespace tlp {
           nldc->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getGlVertexArrayManager()->activate(false);
         }
       }
+
+      // The algorithm is apply
       resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
       
-      /*bool hasNdldc = false;
-      DataSet nodeLinkDiagramComponentDataSet;
-      if ((typeid(PROPERTY) == typeid(ColorProperty) &&
-	   viewNames[currentView]=="Node Link Diagram view"))
-	hasNdldc = graph->getAttribute("NodeLinkDiagramComponent", nodeLinkDiagramComponentDataSet);*/
       graph->pop();
       if (updateLayout) {
-	graph->removeAttribute("viewLayout");
-	
-  if(nldc){
-	  nldc->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
-    delete nldc->getGlMainWidget()->getScene()->getCalculator();
-    nldc->getGlMainWidget()->getScene()->setCalculator(oldLODCalculator);
-    nldc->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getGlVertexArrayManager()->activate(true);
-  }
+        graph->removeAttribute("viewLayout");
+
+        if(nldc){
+          nldc->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->reloadLayoutProperty();
+          delete nldc->getGlMainWidget()->getScene()->getCalculator();
+          nldc->getGlMainWidget()->getScene()->setCalculator(oldLODCalculator);
+          nldc->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getGlVertexArrayManager()->activate(true);
+        }
       }
       if (!resultBool) {
         QMessageBox::critical(parent, "Tulip Algorithm Check Failed", QString((name + ":\n" + erreurMsg).c_str()) );
-	graph->pop();
+        graph->pop();
       }else{
         switch(myProgress->state()){
         case TLP_CONTINUE:
         case TLP_STOP:
-	  /*if (hasNdldc)
-	    graph->setAttribute("NodeLinkDiagramComponent", nodeLinkDiagramComponentDataSet);*/
-	  *dest = *tmp;
-
+          if(!dest)
+            dest = graph->template getLocalProperty<PROPERTY>(destination);
+          *dest = *tmp;
           break;
         case TLP_CANCEL:
           resultBool=false;
@@ -215,12 +218,12 @@ namespace tlp {
   void ControllerAlgorithmTools::isAcyclic(Graph *graph,QWidget *parent) {
     if(AcyclicTest::isAcyclic(graph))
       QMessageBox::information( parent, "Tulip test",
-				"The graph is acyclic"
-				);
+                                "The graph is acyclic"
+                                );
     else
       QMessageBox::information( parent, "Tulip test",
-				"The graph is not acyclic"
-				);
+                                "The graph is not acyclic"
+                                );
   }
   //**********************************************************************
   void ControllerAlgorithmTools::makeAcyclic(Graph *graph,bool pushGraph) {
@@ -239,12 +242,12 @@ namespace tlp {
     //if (glWidget == 0) return;
     if (SimpleTest::isSimple(graph))
       QMessageBox::information( parent, "Tulip test",
-				"The graph is simple"
-				);
+                                "The graph is simple"
+                                );
     else
       QMessageBox::information( parent, "Tulip test",
-				"The graph is not simple"
-				);
+                                "The graph is not simple"
+                                );
   }
   //**********************************************************************
   void ControllerAlgorithmTools::makeSimple(Graph *graph,bool pushGraph) {
