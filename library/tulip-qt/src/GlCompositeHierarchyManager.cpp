@@ -134,7 +134,13 @@ void GlCompositeHierarchyManager::addNode(tlp::Graph* source, tlp::node) {
 	  }
 	  else {
 	    for(std::map<tlp::Graph*, std::pair<tlp::GlComposite*, tlp::GlConvexGraphHull*> >::const_iterator it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
-	      it->second.second->updateHull();
+	      if(it->first->numberOfNodes() != 0) {
+		it->second.second->setVisible(true);
+		it->second.second->updateHull();
+	      }
+	      else {
+		it->second.second->setVisible(false);
+	      }
 	    }
 	  }
 	  _shouldRecreate = false;
