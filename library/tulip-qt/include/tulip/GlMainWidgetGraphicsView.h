@@ -94,7 +94,7 @@ protected slots :
 private:
 
   TabWidgetHidableMenuGraphicsProxy *tabWidgetProxy;
-  GlMainWidgetGraphicsWidget *glSceneItem;
+  GlMainWidgetItem *glSceneItem;
   GlMainWidgetItem *overviewItem;
   GlMainWidget *glMainWidget;
   QGLWidget *glWidget;

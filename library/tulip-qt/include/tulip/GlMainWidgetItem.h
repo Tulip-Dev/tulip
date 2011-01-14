@@ -28,12 +28,14 @@
 #define Tulip_GRAPHICSITEM_H_
 
 #include <QtGui/QGraphicsWidget>
+#include <QtGui/QGraphicsScene>
 
-#include "tulip/GlMainWidgetGraphicsView.h"
 
 #include <tulip/GlScene.h>
+#include <tulip/GlMainWidget.h>
 #include <QtOpenGL/QGLFramebufferObject>
 #include <QtGui/QGraphicsSceneResizeEvent>
+#include <QtGui/QCheckBox>
 
 namespace tlp {
 
@@ -59,10 +61,9 @@ public :
    * \param glMainWidgte glMainWidget use by this item
    * \param width size on scene
    * \param height size of scene
-   * \param parentItem use this if you want to construct this item with a parent item
    * \param decorate true if you want an item with border
    */
-  GlMainWidgetItem(GlMainWidgetGraphicsView *parent,GlMainWidget *glMainWidget, int width, int height,QGraphicsItem *parentItem=NULL,bool decorate=false);
+  GlMainWidgetItem(GlMainWidget *glMainWidget, int width, int height, bool decorate=false, float borderWidth=20.f);
 
   /**
    * \brief Default destructor
@@ -82,25 +83,18 @@ public :
   QRectF boundingRect() const;
 
   /**
-   * Set width of this item
+   * Resize the GlMainWidget item
    */
-  void setWidth(int width){
-    this->width=width;
-  }
-
-  /**
-   * Set height of this item
-   */
-  void setHeight(int height){
-    this->height=height;
-  }
+  void resize(int width, int height);
 
   /**
    * Set if during repaint we have to render GlMainWidget
    */
-  void setRedrawNeed(bool redrawNeed){
-    this->redrawNeed=redrawNeed;
+  void setRedrawNeeded(bool redrawNeeded){
+    this->redrawNeeded=redrawNeeded;
   }
+
+  GlMainWidget *getGlMainWidget() { return glMainWidget;}
 
 protected :
 
@@ -118,64 +112,16 @@ protected slots:
 
 private :
 
-  GlMainWidgetGraphicsView *parent;
   GlMainWidget *glMainWidget;
+  QCheckBox *lockedCB;
 
-  bool redrawNeed;
-
+  bool redrawNeeded;
   bool decorate;
-  QGLFramebufferObject *fbo1, *fbo2;
 
   int width, height;
-  int vpWidth, vpHeight;
-  int x, y;
-};
+  float borderWidth;
 
-/** \brief Class use to render a GlMainWidget in a QGraphicsItemWidget
- *
- * Use this class if you want to add a GlMainWidget in the form of QGraphicsItemWidget
- *
- */
-class TLP_QT_SCOPE GlMainWidgetGraphicsWidget : public QGraphicsWidget {
-
-protected:
-  GlMainWidgetGraphicsView *parent;
-  GlMainWidgetItem glMainWidgetItem;
-
-public :
-  /**
-     * \brief Main constructor
-     * \param parent GraphicsView parent class
-     * \param glMainWidgte glMainWidget use by this item
-     * \param width size on scene
-     * \param height size of scene
-     * \param parentItem use this if you want to construct this item with a parent item
-     */
-  GlMainWidgetGraphicsWidget(GlMainWidgetGraphicsView *parent,GlMainWidget *glMainWidget, int width, int height,QGraphicsItem * =NULL,Qt::WindowFlags flags=Qt::Widget):
-    QGraphicsWidget(NULL,flags),parent(parent),glMainWidgetItem(parent,glMainWidget,width,height,this){
-    glMainWidgetItem.setPos(width/2,height/2);
-    resize(width,height);
-  }
-
-  /**
-   * This fuction is use when the size of the widget modified
-   * Change size of the GlMainWidgetItem
-   */
-  void resizeEvent ( QGraphicsSceneResizeEvent * event ){
-    glMainWidgetItem.setWidth(event->newSize().width());
-    glMainWidgetItem.setHeight(event->newSize().height());
-    glMainWidgetItem.setPos(event->newSize().width()/2,event->newSize().height()/2);
-    glMainWidgetItem.setRedrawNeed(true);
-    parent->scene()->update();
-
-  }
-
-  /**
-   * Return the GlMainWidgetItem use
-   */
-  GlMainWidgetItem *getGlMainWidgetItem() {
-    return &glMainWidgetItem;
-  }
+  unsigned char *renderingStore;
 
 };
 

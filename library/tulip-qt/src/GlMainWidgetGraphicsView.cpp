@@ -41,42 +41,29 @@ namespace tlp {
 
 //==================================================
 static QGLFormat GlInit() {
-  QGLFormat tmpFormat;
-  tmpFormat.setDirectRendering(true);
-  tmpFormat.setDoubleBuffer(true);
-  tmpFormat.setAccum(false);
-  tmpFormat.setStencil(true);
-  tmpFormat.setOverlay(false);
-  tmpFormat.setDepth(true);
-  tmpFormat.setRgba(true);
-  tmpFormat.setAlpha(true);
-  tmpFormat.setOverlay(false);
-  tmpFormat.setStereo(false);
-  tmpFormat.setSampleBuffers(true);
-  return tmpFormat;
+	QGLFormat tmpFormat;
+	tmpFormat.setDirectRendering(true);
+	tmpFormat.setDoubleBuffer(true);
+	tmpFormat.setAccum(false);
+	tmpFormat.setStencil(true);
+	tmpFormat.setOverlay(false);
+	tmpFormat.setDepth(true);
+	tmpFormat.setRgba(true);
+	tmpFormat.setAlpha(true);
+	tmpFormat.setOverlay(false);
+	tmpFormat.setStereo(false);
+	tmpFormat.setSampleBuffers(true);
+	return tmpFormat;
 }
 
-class GlWidget : public QGLWidget {
-
-public :
-
-	GlWidget(QWidget *parent = 0) : QGLWidget(GlInit(), parent, GlMainWidget::getFirstQGLWidget()) {}
-
-	void makeCurrent() {
-		QGLWidget::makeCurrent();
-		GlDisplayListManager::getInst().changeContext((unsigned long)GlMainWidget::getFirstQGLWidget());
-		GlTextureManager::getInst().changeContext((unsigned long)GlMainWidget::getFirstQGLWidget());
-	}
-
-};
-
 GlMainWidgetGraphicsView::GlMainWidgetGraphicsView(AbstractView *tulipView, QWidget *widget,GlMainWidget *glMainWidget,GWOverviewWidget *overviewWidget,QAction *overviewAction,bool fullWindow) : QGraphicsView(new QGraphicsScene(widget)),
-glMainWidget(glMainWidget), tulipView(tulipView), drawNeeded(true){
+		glMainWidget(glMainWidget), tulipView(tulipView), drawNeeded(true){
 	setRenderHints(QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
-	glWidget = new GlWidget();
+	glWidget = new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget());
 	setViewport(glWidget);
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 	setFrameStyle(QFrame::NoFrame);
+	scene()->setBackgroundBrush(Qt::white);
 
 	tabWidgetProxy = new TabWidgetHidableMenuGraphicsProxy(30);
 	/*QToolBar *toolBar=new QToolBar;
@@ -91,41 +78,44 @@ glMainWidget(glMainWidget), tulipView(tulipView), drawNeeded(true){
 	}
 
 	QGraphicsProxyWidget *proxy = scene()->addWidget(toolBar);*/
-	tabWidgetProxy->translate(0,0);
+	tabWidgetProxy->setPos(0,0);
 	tabWidgetProxy->resize(370, 370);
 	tabWidgetProxy->scale(0.8,0.8);
 	tabWidgetProxy->hideTabWidget();
 	tabWidgetProxy->setZValue(1);
-	//proxy->setZValue(1);
+	scene()->addItem(tabWidgetProxy);
 
 	if(fullWindow){
-	  glSceneItem=new GlMainWidgetGraphicsWidget(this,glMainWidget,width(),height(),NULL,Qt::Window);
-	  glSceneItem->setPos(0,0);
-	  tabWidgetProxy->setParentItem(glSceneItem);
+		glSceneItem=new GlMainWidgetItem(glMainWidget,width(),height());
+		scene()->addItem(glSceneItem);
+		glSceneItem->setPos(0,0);
 	}else{
-	  glSceneItem=new GlMainWidgetGraphicsWidget(this,glMainWidget,256,256,NULL,Qt::Window);
-	  glSceneItem->setPos(64,64);
-	  scene()->addItem(tabWidgetProxy);
+		glSceneItem=new GlMainWidgetItem(glMainWidget,256,256);
+		scene()->addItem(glSceneItem);
+		glSceneItem->setPos(64,64);
 	}
 
 	glSceneItem->setZValue(0);
-	scene()->addItem(glSceneItem);
 
+
+	overviewItem = NULL;
 	if(overviewWidget){
-	  overviewWidget->setDrawIfNotVisible(true);
-	  overviewItem=new GlMainWidgetItem(this,overviewWidget->getView(),100,100,glSceneItem,true);
-	  overviewItem->setPos(50,50);
-	  scene()->addItem(overviewItem);
-	  connect(overviewWidget, SIGNAL(hideOverview(bool)), this, SLOT(hideOverview(bool)));
-	  connect(overviewAction, SIGNAL(triggered(bool)), this, SLOT(setVisibleOverview(bool)));
-	  if(fullWindow){
-	    tabWidgetProxy->translate(0,128);
-	  }
+		overviewWidget->setDrawIfNotVisible(true);
+		overviewItem=new GlMainWidgetItem(overviewWidget->getView(),100,100,true);
+		overviewItem->setPos(0,0);
+		overviewItem->setZValue(1);
+		scene()->addItem(overviewItem);
+
+		connect(overviewWidget, SIGNAL(hideOverview(bool)), this, SLOT(hideOverview(bool)));
+		connect(overviewAction, SIGNAL(triggered(bool)), this, SLOT(setVisibleOverview(bool)));
+		if(fullWindow){
+			tabWidgetProxy->translate(0,overviewItem->boundingRect().height()+40);
+		}
 	}
 }
 
 void GlMainWidgetGraphicsView::draw(bool) {
-	glSceneItem->getGlMainWidgetItem()->setRedrawNeed(true);
+	glSceneItem->setRedrawNeeded(true);
 	scene()->update();
 }
 
@@ -134,30 +124,33 @@ void GlMainWidgetGraphicsView::redraw() {
 }
 
 void GlMainWidgetGraphicsView::addToTabWidget(const std::string &name, QWidget *widget){
-  tabWidgetProxy->addTab(widget,name.c_str());
+	tabWidgetProxy->addTab(widget,name.c_str());
 }
 
 void GlMainWidgetGraphicsView::resizeEvent(QResizeEvent *event) {
 	QGraphicsView::resizeEvent(event);
-	glMainWidget->resizeGL(size().width(),size().height());
 	if (scene()) {
 		scene()->setSceneRect(QRect(QPoint(0, 0), size()));
 	}
-	glSceneItem->resize(size().width(),size().height());
+	glSceneItem->resize(width(),height());
+	overviewItem->setRedrawNeeded(true);
+	if (scene()) {
+		scene()->update();
+	}
 }
 
 void GlMainWidgetGraphicsView::hideOverview(bool hide){
-  if(hide){
-    overviewItem->setVisible(false);
-    tabWidgetProxy->translate(0,-128);
-  }else{
-    overviewItem->setVisible(true);
-    tabWidgetProxy->translate(0,128);
-  }
+	if(hide){
+		overviewItem->setVisible(false);
+		tabWidgetProxy->translate(0,-(overviewItem->boundingRect().height()+40));
+	}else{
+		overviewItem->setVisible(true);
+		tabWidgetProxy->translate(0,overviewItem->boundingRect().height()+40);
+	}
 }
 
 void GlMainWidgetGraphicsView::setVisibleOverview(bool visible){
-  hideOverview(!visible);
+	hideOverview(!visible);
 }
 
 }
