@@ -26,10 +26,10 @@ public:
     * @see GlTextureManager
     */
   enum SmallMultiplesDataRole {
-    Label     = 0b001, // QString
-    Texture   = 0b010, // QImage
-    Position  = 0b100, // tlp::Coord
-    AllRoles  = 0b111
+    Label     = 1, // 0b001 QString
+    Texture   = 2, // 0b010 QImage
+    Position  = 4, // 0b100 tlp::Coord
+    AllRoles  = 7
   };
   Q_DECLARE_FLAGS(Roles, SmallMultiplesDataRole)
 
