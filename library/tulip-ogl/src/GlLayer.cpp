@@ -66,7 +66,7 @@ namespace tlp {
 
   void GlLayer::set2DMode() {
     Camera *oldCamera=this->camera;
-    this->camera = new Camera(NULL,false);
+    this->camera = new Camera(oldCamera->getScene(),false);
 
     if (!sharedCamera)
       delete oldCamera;
