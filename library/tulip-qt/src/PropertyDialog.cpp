@@ -503,8 +503,13 @@ namespace tlp {
             != NULL) {
             CSVImportWizard *wizard = new CSVImportWizard(this);
             wizard->setGraph(graph);
-            Observable::holdObservers();
-            wizard->exec();
+            graph->push();
+            Observable::holdObservers();            
+            int result = wizard->exec();
+            //If user cancel cancel push.
+            if(result == QDialog::Rejected){
+                graph->pop(false);
+            }
             Observable::unholdObservers();
             wizard->deleteLater();
         }

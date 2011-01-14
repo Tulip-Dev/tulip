@@ -90,7 +90,7 @@ CSVImportConfigurationQWizardPage* CSVImportWizard::getImportConfigurationPage()
 CSVGraphMappingConfigurationQWizardPage* CSVImportWizard::getMappingConfigurationPage()const{
     return qobject_cast<CSVGraphMappingConfigurationQWizardPage*>(page(2));
 }
-void CSVImportWizard::accept(){
+void CSVImportWizard::accept(){    
     bool processIsValid=false;
     if(graph != NULL){
         CSVParser* parser = getParsingConfigurationPage()->buildParser();

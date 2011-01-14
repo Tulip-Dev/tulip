@@ -226,7 +226,7 @@ public:
 /**
   * @brief Try to map CSV file rows to edges according to edge source and destination.
   *
-  * Try to find in the graph an edge from a source and a destination nodes. Find source node by comparing id in the source CSV column and destination node by comparing id in the destination CSV column.  
+  * For each row in the CSV file create an edge in the graph between source and destination nodes. Find source node by comparing id in the source CSV column and destination node by comparing id in the destination CSV column.
   **/
 class TLP_QT_SCOPE CSVToGraphEdgeSrcTgtMapping: public CSVToGraphDataMapping{
 public:
@@ -238,10 +238,9 @@ public:
     * @param tgtPropertyName The name of the property to search target node id.
     * @param firstRow The first row to search ids.
     * @param lastRow The last row to search ids.
-    * @param createMissinElements If true create source node, destination node and edge if one of them is not found in the graph.
-    * @param respectEdgeOrientation If true the edge oriention will be taken in account when searching an edge between source and destination.
+    * @param createMissinElements If true create source node, destination node if one of them is not found in the graph.
     **/
-    CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& srcPropertyName,const std::string& tgtPropertyName,unsigned int firstRow,unsigned int lastRow,bool createMissinElements=false,bool respectEdgeOrientation=true);
+    CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& srcPropertyName,const std::string& tgtPropertyName,unsigned int firstRow,unsigned int lastRow,bool createMissinElements=false);
     std::pair<tlp::ElementType,unsigned int> getElementForRow(unsigned int row);
     void begin();
     void token(unsigned int row, unsigned int column, const std::string& token);
@@ -250,8 +249,8 @@ private:
     tlp::Graph* graph;
     CSVToGraphNodeIdMapping src;
     CSVToGraphNodeIdMapping tgt;
-    bool buildEdgge;
-    bool respectEdgeOrientation;
+    bool buildMissingElements;
+    std::map<unsigned int,edge> rowToEdge;
 };
 
 /**

@@ -298,40 +298,43 @@ CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(Graph* graph,
                                                          unsigned int srcColumnIndex,unsigned int tgtColumnIndex,
                                                          const string& srcPropertyName,const string& tgtPropertyName,
                                                          unsigned int firstRow,unsigned int lastRow,
-                                                         bool createMissinNodes,bool respectEdgeOrientation):
-                                                            graph(graph),src(CSVToGraphNodeIdMapping(graph,srcColumnIndex,srcPropertyName,firstRow,lastRow,createMissinNodes)),
-                                                            tgt(CSVToGraphNodeIdMapping(graph,tgtColumnIndex,tgtPropertyName,firstRow,lastRow,createMissinNodes)),
-                                                            buildEdgge(createMissinNodes),respectEdgeOrientation(respectEdgeOrientation){
+                                                         bool createMissinNodes):
+graph(graph),src(CSVToGraphNodeIdMapping(graph,srcColumnIndex,srcPropertyName,firstRow,lastRow,createMissinNodes)),
+tgt(CSVToGraphNodeIdMapping(graph,tgtColumnIndex,tgtPropertyName,firstRow,lastRow,createMissinNodes)),
+buildMissingElements(createMissinNodes){
 }
 
 pair<ElementType,unsigned int> CSVToGraphEdgeSrcTgtMapping::getElementForRow(unsigned int row){
-
     node srcNode = node(src.getElementForRow(row).second);
     node tgtNode = node(tgt.getElementForRow(row).second);
-
     if(!graph->isElement(srcNode) || !graph->isElement(tgtNode)){
         return make_pair(EDGE,UINT_MAX);
     }else{
-        edge e = graph->existEdge(srcNode,tgtNode,respectEdgeOrientation);
-        return make_pair(EDGE,e.id);
+        //Search if an edge was registered for this node and this couple of nodes.
+        map<unsigned int,edge>::iterator it = rowToEdge.find(row);
+        if(it!=rowToEdge.end()){
+            return make_pair(EDGE,it->second.id);
+        }else{
+            return make_pair(EDGE,UINT_MAX);
+        }
     }
 }
 
 void CSVToGraphEdgeSrcTgtMapping::begin(){
     src.begin();
     tgt.begin();
+    rowToEdge.clear();
 }
 
 void CSVToGraphEdgeSrcTgtMapping::token(unsigned int row, unsigned int column, const string& token){
+    //Found nodes in the graph.
     src.token(row,column,token);
     tgt.token(row,column,token);
-    if(buildEdgge){
-        //If the edge don't exist and user want to create missing elements create a new one.
-        node srcNode = node(src.getElementForRow(row).second);
-        node tgtNode = node(tgt.getElementForRow(row).second);
-        if( graph->isElement(srcNode) && graph->isElement(tgtNode) && !graph->existEdge(srcNode,tgtNode,respectEdgeOrientation).isValid() ){
-            graph->addEdge(srcNode,tgtNode);
-        }
+    node srcNode = node(src.getElementForRow(row).second);
+    node tgtNode = node(tgt.getElementForRow(row).second);
+    //If nodes are found create a new edge and no previous mapping was done.
+    if( graph->isElement(srcNode) && graph->isElement(tgtNode) && rowToEdge.find(row)==rowToEdge.end()){
+        rowToEdge[row]=graph->addEdge(srcNode,tgtNode);
     }
 }
 void CSVToGraphEdgeSrcTgtMapping::end(unsigned int rowNumber, unsigned int columnNumber){
