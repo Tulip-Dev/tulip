@@ -99,6 +99,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       double widgetWidth = _view->width();
       double widgetHeight = _view->height();
       Vector<int, 4> viewport = _observedView->getScene()->getViewport();
+      viewport[0] = viewport[1] = 0;
       Coord upperLeftCorner(viewport[0], viewport[1],0);
       Coord lowerRightCorner(viewport[0] + viewport[2],
 			     viewport[1] + viewport[3],
@@ -262,6 +263,7 @@ void RectPosition::draw(GlMainWidget*) {
   //_observedView->makeCurrent();
   Array<Coord, 4> points;
   Vector<int,   4> viewport = _observedView->getScene()->getViewport();
+  viewport[0] = viewport[1] = 0;
   points[0] = Coord(viewport[0]              , viewport[1], 0);
   points[1] = Coord(viewport[0] + viewport[2], viewport[1], 0);
   points[2] = Coord(viewport[0] + viewport[2], viewport[1] + viewport[3], 0.0);
@@ -271,6 +273,7 @@ void RectPosition::draw(GlMainWidget*) {
 
   //_view->makeCurrent();
   viewport = _view->getScene()->getViewport();
+  viewport[0] = viewport[1] = 0;
   Array<Coord, 4> points2;
   points2[0] = Coord(viewport[0]              , viewport[1], 0);
   points2[1] = Coord(viewport[0] + viewport[2], viewport[1], 0);
