@@ -30,23 +30,21 @@ using namespace std;
 namespace tlp {
 //====================================================
 Camera::Camera(GlScene* scene,Coord center,Coord eyes, Coord up, double zoomFactor, double sceneRadius):
-    						matrixCoherent(false),
-    						center(center),
-    						eyes(eyes),
-    						up(up),
-    						zoomFactor(zoomFactor),
-    						sceneRadius(sceneRadius),
-    						scene(scene),
-    						objectTransformation(false),
-    						d3(true){
-}
+    				matrixCoherent(false),
+    				center(center),
+    				eyes(eyes),
+    				up(up),
+    				zoomFactor(zoomFactor),
+    				sceneRadius(sceneRadius),
+    				scene(scene),
+    				objectTransformation(false),
+    				d3(true) {}
 //====================================================
 Camera::Camera(GlScene* scene,bool d3) :
-    						matrixCoherent(false),scene(scene),d3(d3) {
-}
+    				matrixCoherent(false),scene(scene),d3(d3) {}
 //====================================================
 Camera::~Camera() {
-  notifyDestroy((Camera*)this);
+	notifyDestroy((Camera*)this);
 }
 //===================================================
 void Camera::setScene(GlScene* scene) {
@@ -140,34 +138,38 @@ void Camera::initLight() {
 	GLuint error = glGetError();
 	if ( error != GL_NO_ERROR)
 		cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << " begin" << endl;
+	GLfloat pos[4];
 	if(d3) {
-		GLfloat pos[4];
+		// set positional light for 3D camera
 		eyes.get(pos[0],pos[1],pos[2]);
 		pos[0]=pos[0] + ((eyes[0]-center[0])/zoomFactor) + (eyes[0]-center[0])*4;
 		pos[1]=pos[1] + ((eyes[1]-center[1])/zoomFactor) + (eyes[1]-center[1])*4;
 		pos[2]=pos[2] + ((eyes[2]-center[2])/zoomFactor) + (eyes[2]-center[2])*4;
 		pos[3]=1;
-		GLfloat amb[4] = {0.3,0.3 , 0.3 ,0.3};
-		GLfloat dif[4] = {0.5,0.5,0.5,1};
-		GLfloat specular[4] = {0,0,0,1};
-		GLfloat attC[3] = {1.,1.,1.};
-		GLfloat attL[3] = {0,0,0};
-		GLfloat attQ[3] = {0,0,0};
-
-		glEnable( GL_LIGHTING );
-		glEnable( GL_LIGHT0 );
-
-		glLightfv( GL_LIGHT0, GL_POSITION, pos );
-		glLightfv( GL_LIGHT0, GL_AMBIENT, amb );
-		glLightfv( GL_LIGHT0, GL_DIFFUSE, dif );
-		glLightfv( GL_LIGHT0, GL_CONSTANT_ATTENUATION, attC );
-		glLightfv( GL_LIGHT0, GL_LINEAR_ATTENUATION, attL );
-		glLightfv( GL_LIGHT0, GL_QUADRATIC_ATTENUATION, attQ );
-		glLightfv( GL_LIGHT0, GL_SPECULAR , specular);
 	}else{
-		glDisable( GL_LIGHTING );
-		glDisable( GL_LIGHT0 );
+		// set directional light for 2D camera
+		pos[0]=0;
+		pos[1]=0;
+		pos[2]=100;
+		pos[3]=0;
 	}
+	GLfloat amb[4] = {0.3,0.3 , 0.3 ,0.3};
+	GLfloat dif[4] = {0.5,0.5,0.5,1};
+	GLfloat specular[4] = {0,0,0,1};
+	GLfloat attC[3] = {1.,1.,1.};
+	GLfloat attL[3] = {0,0,0};
+	GLfloat attQ[3] = {0,0,0};
+
+	glEnable( GL_LIGHTING );
+	glEnable( GL_LIGHT0 );
+
+	glLightfv( GL_LIGHT0, GL_POSITION, pos );
+	glLightfv( GL_LIGHT0, GL_AMBIENT, amb );
+	glLightfv( GL_LIGHT0, GL_DIFFUSE, dif );
+	glLightfv( GL_LIGHT0, GL_CONSTANT_ATTENUATION, attC );
+	glLightfv( GL_LIGHT0, GL_LINEAR_ATTENUATION, attL );
+	glLightfv( GL_LIGHT0, GL_QUADRATIC_ATTENUATION, attQ );
+	glLightfv( GL_LIGHT0, GL_SPECULAR , specular);
 	error = glGetError();
 	if ( error != GL_NO_ERROR)
 		cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << "end" << endl;
@@ -180,8 +182,8 @@ void Camera::initProjection(const Vector<int, 4>& viewport,bool reset){
 	double _near;
 	double _far;
 	if(sceneBoundingBox.isValid() && sceneBoundingBox[0]!=sceneBoundingBox[1]){
-    sceneBoundingBox.expand(eyes);
-    Coord diagCoord(sceneBoundingBox[1]-sceneBoundingBox[0]);
+		sceneBoundingBox.expand(eyes);
+		Coord diagCoord(sceneBoundingBox[1]-sceneBoundingBox[0]);
 		double diag=2*sqrt(diagCoord[0]*diagCoord[0]+diagCoord[1]*diagCoord[1]+diagCoord[2]*diagCoord[2]);
 		_near=-diag;
 		_far=diag;
@@ -213,9 +215,10 @@ void Camera::initProjection(const Vector<int, 4>& viewport,bool reset){
 		}
 		glEnable(GL_DEPTH_TEST);
 	}else{
-		gluOrtho2D(viewport[0],viewport[0]+viewport[2],viewport[1],viewport[1]+viewport[3]);
+		glOrtho(0,viewport[2],0,viewport[3], -100, 100);
 		glDisable(GL_DEPTH_TEST);
 	}
+
 	GLenum error = glGetError();
 	if ( error != GL_NO_ERROR)
 		cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
@@ -234,19 +237,18 @@ void Camera::initModelView() {
 				center[0], center[1], center[2],
 				up[0], up[1], up[2]);
 
-
-		glGetFloatv (GL_MODELVIEW_MATRIX, (GLfloat*)&modelviewMatrix);
-		glGetFloatv (GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
-
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-		glMultMatrixf((GLfloat*)&projectionMatrix);
-		glMultMatrixf((GLfloat*)&modelviewMatrix);
-		glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat*)&transformMatrix);
-		glPopMatrix();
-		matrixCoherent=true;
 	}
+	glGetFloatv (GL_MODELVIEW_MATRIX, (GLfloat*)&modelviewMatrix);
+	glGetFloatv (GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+	glMultMatrixf((GLfloat*)&projectionMatrix);
+	glMultMatrixf((GLfloat*)&modelviewMatrix);
+	glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat*)&transformMatrix);
+	glPopMatrix();
+	matrixCoherent=true;
 	GLenum error = glGetError();
 	if ( error != GL_NO_ERROR)
 		cerr << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
@@ -338,10 +340,13 @@ Coord Camera::screenTo3DWorld(const Coord &point) {
 	initModelView();
 
 	Vector<int, 4> viewport = getViewport();
+
 	//Try to find a good z-coordinate for reverse projection
 	Coord pScr = projectPoint(Coord(0,0,0), transformMatrix, viewport);
-	pScr[0] = (float)viewport[2] - point[0];
-	pScr[1] = (float)viewport[3] - point[1] - 1.0;
+
+	pScr[0] = viewport[0] + viewport[2] - point[0];
+	pScr[1] = viewport[1] + viewport[3] - point[1];
+
 	MatrixGL tmp(transformMatrix);
 	tmp.inverse();
 	return unprojectPoint(pScr, tmp, viewport);
@@ -352,7 +357,7 @@ Coord Camera::worldTo2DScreen(const Coord &obj) {
 	initModelView();
 
 	Vector<int, 4> viewport = getViewport();
-	return projectPoint(obj, transformMatrix, viewport);
+	return projectPoint(obj, transformMatrix, viewport) - Coord(viewport[0], viewport[1]);
 }
 //====================================================
 Vector<int, 4> Camera::getViewport() {
