@@ -50,7 +50,7 @@ EccentricityMetric::EccentricityMetric(const tlp::PropertyContext &context):Doub
 EccentricityMetric::~EccentricityMetric() {
 }
 //====================================================================
-bool EccentricityMetric::check(string &err) {
+bool EccentricityMetric::check(string &/*err*/) {
     return true;
 }
 //====================================================================
