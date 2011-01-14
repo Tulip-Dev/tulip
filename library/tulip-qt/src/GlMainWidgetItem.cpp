@@ -19,6 +19,8 @@
 #include <QtOpenGL/QGLFramebufferObject>
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QApplication>
+#include <QtGui/QGraphicsProxyWidget>
+
 
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlQuad.h>
@@ -30,202 +32,248 @@
 
 using namespace std;
 
+static void setRasterPosition(unsigned int x, unsigned int y) {
+	//  std::cerr << __PRETTY_FUNCTION__ << std::endl;
+	float val[4];
+	unsigned char tmp[10];
+	glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
+	glBitmap(0,0,0,0,-val[0] + x, -val[1] + y, tmp);
+	glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
+	tlp::glTest(__PRETTY_FUNCTION__);
+}
+
 namespace tlp {
 
-GlMainWidgetItem::GlMainWidgetItem(GlMainWidgetGraphicsView *parent,GlMainWidget *glMainWidget, int width, int height,QGraphicsItem *parentItem,bool decorate) :
-	QGraphicsItem(parentItem),parent(parent),glMainWidget(glMainWidget),redrawNeed(true),decorate(decorate),fbo1(NULL),fbo2(NULL),width(width),height(height) {
+GlMainWidgetItem::GlMainWidgetItem(GlMainWidget *glMainWidget, int width, int height,bool decorate,float borderWidth) : QGraphicsItem(),
+		glMainWidget(glMainWidget),redrawNeeded(true),decorate(decorate), borderWidth(borderWidth),renderingStore(NULL) {
 	setFlag(QGraphicsItem::ItemIsMovable, true);
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
 	setAcceptHoverEvents(true);
 
+	lockedCB = new QCheckBox("locked");
+	lockedCB->setChecked(true);
+	if (decorate) {
+		lockedCB->resize(60, borderWidth);
+		QGraphicsProxyWidget *cbProxy = new QGraphicsProxyWidget(this);
+		cbProxy->setWidget(lockedCB);
+	}
+
 	QObject::connect(glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(glMainWidgetDraw(GlMainWidget *,bool)));
 	QObject::connect(glMainWidget,SIGNAL(viewRedrawn(GlMainWidget *)),this,SLOT(glMainWidgetRedraw(GlMainWidget *)));
+
+	resize(width, height);
 }
 
 GlMainWidgetItem::~GlMainWidgetItem() {
-  delete fbo1;
-  delete fbo2;
+	delete [] renderingStore;
 }
 
-const float offset = 2;
-
 QRectF GlMainWidgetItem::boundingRect() const {
-  return QRectF(-width / 2.0f, -height / 2.0f, width, height);
+	if (decorate) {
+		return QRectF(0, 0, width + 2* borderWidth, height+ 2* borderWidth);
+	} else {
+		return QRectF(0, 0, width, height);
+	}
+}
+
+void GlMainWidgetItem::resize(int width, int height) {
+	this->width = width;
+	this->height = height;
+	glMainWidget->resize(width,height);
+	glMainWidget->resizeGL(width,height);
+	redrawNeeded = true;
+	nbDrawAfterResize = 3;
+	delete [] renderingStore;
+	renderingStore = new unsigned char[width*height*4];
+	prepareGeometryChange();
 }
 
 void GlMainWidgetItem::glMainWidgetDraw(GlMainWidget *,bool){
-  redrawNeed=true;
-  parent->scene()->update();
+	redrawNeeded=true;
+	if (scene())
+		scene()->update();
 }
 
 void GlMainWidgetItem::glMainWidgetRedraw(GlMainWidget *){
-  parent->scene()->update();
+	if (scene())
+		scene()->update();
 }
 
 
 void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
-  QRectF rect = boundingRect().translated(pos());
+	QRectF rect = boundingRect();
 
-  float left = 2.0f * float(rect.left()) / width - 1.0f;
-  float top = 1.0f - 2.0f * float(rect.top()) / height;
+	if (pos().x() < 0 || pos().x()+rect.width() > scene()->width() || pos().y() < 0 || pos().y()+rect.height() > scene()->height()) {
+		redrawNeeded = true;
+	}
 
-  ostringstream oss1;
-  oss1 << "fbo1#" << (unsigned long) this;
-  ostringstream oss2;
-  oss2 << "fbo2#" << (unsigned long) this;
+	if(decorate){
+		QPainterPath path;
+		path.addRect(rect.x(),rect.y(),rect.width(),rect.height());
+		painter->setBrush(Qt::white);
+		painter->setRenderHint(QPainter::Antialiasing, true);
+		painter->drawPath(path);
+		painter->setRenderHint(QPainter::Antialiasing, false);
+	}
 
-  if (fbo1 && (fbo1->width() != width || fbo1->height() != height)){
-    delete fbo1;
-    fbo1=NULL;
-  }
-  if(!fbo1)
-    fbo1 = new QGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
+	QPainterPath path;
+	if (decorate) {
+		path.addRect(rect.x()+borderWidth,rect.y()+borderWidth,rect.width()-2*borderWidth,rect.height()-2*borderWidth);
+	} else {
+		path.addRect(rect.x(),rect.y(),rect.width(),rect.height());
+	}
+	Color backgroundColor = glMainWidget->getScene()->getBackgroundColor();
 
-  if (fbo2 && (fbo2->width() != width || fbo2->height() != height)){
-    delete fbo2;
-    fbo2=NULL;
-  }
-  if(!fbo2)
-    fbo2 = new QGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
-
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-        painter->beginNativePainting();
-#endif
-
-  glMainWidget->getScene()->setViewport(0,0,width, height);
-  glMainWidget->resize(width,height);
-
-  glPushAttrib(GL_ALL_ATTRIB_BITS);
-
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
-
-  if(redrawNeed){
-
-    fbo1->bind();
-    glMainWidget->getScene()->initGlParameters();
-    glMainWidget->computeInteractors();
-    glMainWidget->getScene()->draw();
-    fbo1->release();
-
-    GlTextureManager::getInst().registerExternalTexture(oss1.str(), fbo1->texture());
-
-    redrawNeed=false;
-  }
-
-  fbo2->bind();
-  glMainWidget->getScene()->initGlParameters();
-  Camera newCamera(glMainWidget->getScene(),false);
-  newCamera.initGl();
-  glClearColor(255, 255, 255, 0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-  glDisable(GL_BLEND);
-  setMaterial(Color(255,255,255,255));
-
-  GlTextureManager::getInst().activateTexture(oss1.str());
-  glBegin(GL_QUADS);
-  glNormal3f(0.0f, 0.0f, 1.0f);
-  glTexCoord2f(0.0f, 0.0f);
-  glVertex3f(rect.left(), rect.top(), 0);
-  glTexCoord2f(1.0f, 0.0f);
-  glVertex3f(rect.right(), rect.top(), 0);
-  glTexCoord2f(1.0f, 1.0f);
-  glVertex3f(rect.right(), rect.bottom(), 0);
-  glTexCoord2f(0.0f, 1.0f);
-  glVertex3f(rect.left(), rect.bottom(), 0);
-  glEnd();
-  GlTextureManager::getInst().desactivateTexture();
-  glEnable(GL_BLEND);
-
-  glMainWidget->drawForegroundEntities();
-  glMainWidget->drawInteractors();
-  fbo2->release();
-
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
-
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
-
-  glPopAttrib();
-
-  GlTextureManager::getInst().registerExternalTexture(oss2.str(), fbo2->texture());
+	painter->setBrush(QColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]));
+	painter->setRenderHint(QPainter::Antialiasing, true);
+	painter->drawPath(path);
+	painter->setRenderHint(QPainter::Antialiasing, false);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-        painter->endNativePainting();
+	painter->beginNativePainting();
 #endif
 
-  rect = QRectF(left - width / 2.0f, top - height / 2.0f, width, height);
 
-  if(decorate){
-    QPainterPath path;
-    path.addRect(rect.x()-offset,rect.y()-offset,rect.width()+offset*2,rect.height()+offset*2);
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
 
-    painter->setBrush(Qt::black);
-    painter->setRenderHint(QPainter::Antialiasing, true);
-    painter->drawPath(path);
-    painter->setRenderHint(QPainter::Antialiasing, false);
-  }
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+
+	rect = rect.translated(pos());
+
+	float vpX = rect.x();
+	float vpY = scene()->height() - (rect.y() + rect.height());
+	float vpW = rect.width();
+	float vpH = rect.height();
+
+
+	if (decorate) {
+		vpX += borderWidth;
+		vpY += borderWidth;
+		vpW -= 2*borderWidth;
+		vpH -= 2*borderWidth;
+	}
+
+	glMainWidget->getScene()->setViewport(vpX,vpY,vpW,vpH);
+	glMainWidget->getScene()->setNoClearBackground(true);
+	glMainWidget->getScene()->initGlParameters();
+
+	if(redrawNeeded){
+
+		glMainWidget->computeInteractors();
+		glMainWidget->getScene()->draw();
+
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_STENCIL_TEST);
+		glDisable(GL_BLEND);
+		glDisable(GL_LIGHTING);
+
+		glReadBuffer(GL_BACK);
+		glReadPixels(vpX,vpY,vpW,vpH,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+		glFlush();
+
+		redrawNeeded=false;
+	} else {
+
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_STENCIL_TEST);
+		glDisable(GL_BLEND);
+		glDisable(GL_LIGHTING);
+
+		glDrawBuffer(GL_BACK);
+		setRasterPosition(vpX,vpY);
+		glDrawPixels(vpW,vpH,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+		glFlush();
+	}
+
+	glMainWidget->drawForegroundEntities();
+	glMainWidget->drawInteractors();
+
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+
+	glPopAttrib();
 
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-        painter->beginNativePainting();
+	painter->endNativePainting();
 #endif
 
-  glDisable(GL_BLEND);
-  setMaterial(Color(255,255,255,255));
-  GlTextureManager::getInst().activateTexture(oss2.str());
-  glBegin(GL_QUADS);
-  glNormal3f(0.0f, 0.0f, 1.0f);
-  glTexCoord2f(0.0f, 1.0f);
-  glVertex3f(rect.left(), rect.top(), 0);
-  glTexCoord2f(1.0f, 1.0f);
-  glVertex3f(rect.right(), rect.top(), 0);
-  glTexCoord2f(1.0f, 0.0f);
-  glVertex3f(rect.right(), rect.bottom(), 0);
-  glTexCoord2f(0.0f, 0.0f);
-  glVertex3f(rect.left(), rect.bottom(), 0);
-  glEnd();
-  glEnable(GL_BLEND);
-  GlTextureManager::getInst().desactivateTexture();
-
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-        painter->endNativePainting();
-#endif
 }
 
 void GlMainWidgetItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x()+((float)width)/2.,event->pos().y()+((float)height)/2.), Qt::NoButton, event->buttons(), event->modifiers());
-  QApplication::sendEvent(glMainWidget,eventModif);
+	float offset = 0;
+	if (decorate) {
+		offset = -borderWidth;
+	}
+	if (lockedCB->isChecked()) {
+		QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x()+offset,event->pos().y()+offset), Qt::NoButton, event->buttons(), event->modifiers());
+		QApplication::sendEvent(glMainWidget,eventModif);
+	} else {
+		QGraphicsItem::mouseMoveEvent(event);
+	}
 }
 
 void GlMainWidgetItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonPress,QPoint(event->pos().x()+((float)width)/2.,event->pos().y()+((float)height)/2.), event->button(), event->buttons(), event->modifiers());
-  QApplication::sendEvent(glMainWidget,eventModif);
+	float offset = 0;
+	if (decorate) {
+		offset = -borderWidth;
+	}
+	if (lockedCB->isChecked()) {
+		QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonPress,QPoint(event->pos().x()+offset,event->pos().y()+offset), event->button(), event->buttons(), event->modifiers());
+		QApplication::sendEvent(glMainWidget,eventModif);
+	} else {
+		QGraphicsItem::mousePressEvent(event);
+	}
 }
 
 void GlMainWidgetItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
-	QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonDblClick,QPoint(event->pos().x()+((float)width)/2.,event->pos().y()+((float)height)/2.), event->button(), event->buttons(), event->modifiers());
+	float offset = 0;
+	if (decorate) {
+		offset = -borderWidth;
+	}
+	QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonDblClick,QPoint(event->pos().x()+offset,event->pos().y()+offset), event->button(), event->buttons(), event->modifiers());
 	QApplication::sendEvent(glMainWidget,eventModif);
+
 }
 
 void GlMainWidgetItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonRelease,QPoint(event->pos().x()+((float)width)/2.,event->pos().y()+((float)height)/2.), event->button(), event->buttons(), event->modifiers());
-  QApplication::sendEvent(glMainWidget,eventModif);
+	float offset = 0;
+	if (decorate) {
+		offset = -borderWidth;
+	}
+	if (lockedCB->isChecked()) {
+		QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonRelease,QPoint(event->pos().x()+offset,event->pos().y()+offset), event->button(), event->buttons(), event->modifiers());
+		QApplication::sendEvent(glMainWidget,eventModif);
+	} else {
+		QGraphicsItem::mouseReleaseEvent(event);
+	}
 }
 
 void GlMainWidgetItem::wheelEvent(QGraphicsSceneWheelEvent *event) {
-  QWheelEvent *eventModif=new QWheelEvent(QPoint(event->pos().x()+width/2,event->pos().y()+height/2), event->delta(),event->buttons(), event->modifiers(),event->orientation());
-  QApplication::sendEvent(glMainWidget,eventModif);
+	float offset = 0;
+	if (decorate) {
+		offset = -borderWidth;
+	}
+	QWheelEvent *eventModif=new QWheelEvent(QPoint(event->pos().x()+offset,event->pos().y()+offset), event->delta(),event->buttons(), event->modifiers(),event->orientation());
+	QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 void GlMainWidgetItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event){
-  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x()+((float)width)/2.,event->pos().y()+((float)height)/2.), Qt::NoButton, Qt::NoButton, event->modifiers());
-  QApplication::sendEvent(glMainWidget,eventModif);
+	float offset = 0;
+	if (decorate) {
+		offset = -borderWidth;
+	}
+	QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x()+offset,event->pos().y()+offset), Qt::NoButton, Qt::NoButton, event->modifiers());
+	QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 }

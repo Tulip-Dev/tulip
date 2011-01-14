@@ -64,6 +64,7 @@ namespace tlp {
     widget->resize(512, 512);
 
     graphicsView = new GlMainWidgetGraphicsView(this,widget,((GlMainView*)baseView)->getGlMainWidget(),((GlMainView *)baseView)->getOverviewWidget(),((GlMainView *)baseView)->getOverviewAction());
+    graphicsView->resize(512, 512);
 
     setCentralWidget(graphicsView);
 
@@ -73,7 +74,7 @@ namespace tlp {
       graphicsView->addToTabWidget((*it).second,(*it).first);
     }
 
-    return widget;
+    return graphicsView;
 
   }
   void BaseGraphicsViewComponent::draw() {
