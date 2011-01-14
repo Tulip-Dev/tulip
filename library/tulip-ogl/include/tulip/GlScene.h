@@ -304,6 +304,14 @@ namespace tlp {
     Camera& getCamera() {return getLayer("Main")->getCamera();}
     void setCamera(const Camera& camera) {getLayer("Main")->setCamera(camera);}
 
+    /**
+     * If true, color buffer will not be cleared before drawing the scene.
+     */
+    void setNoClearBackground(bool clear) {noClearBackground = clear;}
+
+
+    bool getNoClearBackground() const {return noClearBackground;}
+
   private:
 
     std::vector<std::pair<std::string,GlLayer *> > layersList;
@@ -319,6 +327,8 @@ namespace tlp {
 
     GlGraphComposite *glGraphComposite;
     GlLayer *graphLayer;
+
+    bool noClearBackground;
 
   };
 
