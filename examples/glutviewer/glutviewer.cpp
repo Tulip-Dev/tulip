@@ -20,7 +20,8 @@
 
 #include <stdio.h>
 #include <GL/glew.h>
-
+#include <fstream>
+#include <iostream>
 #if defined(__APPLE__)
 #include <OpenGL/gl.h>
 #include <OpenGL/glut.h>
@@ -292,7 +293,7 @@ void initNodesArray() {
 	forEach(n, graph->getNodes()) {
 		initTexArray(shape->getNodeValue(n), tex);
 		Coord p ( layout->getNodeValue(n));
-		Size  s ( size->getNodeValue(n) / 2.);
+		Size  s ( size->getNodeValue(n) / 2.f);
 		//Color c ( color->getNodeValue(n));
 		Color c(255,255,255,255);
 		for (int i =0; i<4; ++i) {
@@ -311,6 +312,53 @@ void initNodesArray() {
 
 }
 //=============================================
+template<class TYPE>
+void jsonVec(ostream &os, const string &varName, const TYPE& vec, size_t SIZE) {
+    os << "\"" << varName << "\" : [";
+    for(size_t i = 0; i < vec.size(); ++i) {
+        for (size_t j = 0; j < SIZE; ++j) {
+            os << double(vec[i][j]);
+            if (j < SIZE - 1) os << ',';
+        }
+        if (i < vec.size() -1) os << ',';
+    }
+    os << endl << "]";
+}
+
+template<class TYPE>
+void jsonVecI(ostream &os, const string &varName, const TYPE& vec) {
+    os << "\"" << varName << "\" : [";
+    for(size_t i = 0; i < vec.size(); ++i) {
+        os << double(vec[i]);
+
+        if (i < vec.size() -1) os << ',';
+    }
+    os << endl << "]";
+}
+
+void generateJSON(ostream &os) {
+  os << "{" << endl;
+  jsonVec(os, string("edgeVertexPosition"), points, 2u);
+  os << endl;
+  jsonVec(os, "edgeVertexColors", colors, 4u);
+  os << endl;
+  jsonVecI(os, "edgeIndices", indices);
+  os << endl;
+
+  jsonVec(os, "nodeVertexPosition", quad_points, 2u);
+  os << endl;
+  jsonVec(os, "nodeVertexColors", quad_colors, 4u);
+  os << endl;
+  jsonVec(os, "nodeTexCoords", quad_texc, 2u);
+  os << endl;
+  jsonVecI(os, "nodeIndices", quad_indices);
+  os << endl;
+
+  os << "}";
+
+}
+
+//=============================================
 void Draw(void) {
 	//      bool canUseGlew=OpenGlConfigManager::getInst().canUseGlew();
 
@@ -319,13 +367,16 @@ void Draw(void) {
 	}
 	else {
 		scene.initGlParameters();
-		scene.getCamera()->initGl();
-
+		scene.getCamera().initGl();
 		if (buildVBO || vbo) {
 			initEdgesArray();
 			initNodesArray();
 			buildVBO = false;
-		}
+                        //cout << "radius:" << scene.getCamera()->getSceneRadius() << scene.getCamera()->
+                        ofstream osf("lgl.json");
+                        generateJSON(osf);
+
+                    }
 		glDisable(GL_CULL_FACE);
 		glDisable(GL_LIGHTING);
 		glDisable(GL_DEPTH_TEST);
