@@ -76,6 +76,8 @@ namespace tlp {
     translationAfterRotation=Coord(0,0,0);
     alignment=ON_CENTER;
     scaleToSize=true;
+    minSize=10;
+    maxSize=30;
     depthTestEnabled=true;
     occlusionTester=NULL;
     xRot=0;
@@ -175,6 +177,13 @@ namespace tlp {
 
     renderer->getBoundingBox(w_max, h, w);
 
+    float screenH=size[1]/(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
+    float sizeScale=1.;
+    if(!scaleToSize && screenH<minSize)
+      sizeScale=minSize/screenH;
+    if(!scaleToSize && screenH>maxSize)
+      sizeScale=maxSize/screenH;
+
     div_w = size[0]/w;
     div_h = size[1]/h;
 
@@ -196,7 +205,7 @@ namespace tlp {
 
       Size occlusionSize;
       if(!scaleToSize){
-        occlusionSize=Size(w*0.025,h*0.025,0);
+        occlusionSize=Size(w*0.025*sizeScale,h*0.025*sizeScale,0);
       }else{
         if(div_h * w > size[0]){
           occlusionSize=Size(w*div_w*0.5,h*div_w*0.5,0);
@@ -288,10 +297,10 @@ namespace tlp {
       else
         glScalef(div_h, div_h, 1);
     }else{
-      glScalef(0.05,0.05,1);
+      glScalef(0.05*sizeScale,0.05*sizeScale,1);
     }
 
-    float screenH=size[1]/(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
+
     if(scaleToSize){
       float sizeRatio=size[0]/size[1];
       float fontRatio=w/h;
@@ -299,7 +308,7 @@ namespace tlp {
         screenH=screenH/(fontRatio/sizeRatio);
       }
     }else{
-      screenH*=((w*0.05)/size[0]);
+      screenH*=((w*0.05*sizeScale)/size[0]);
     }
 
     if(screenH < 15 && useLOD){
@@ -360,6 +369,8 @@ namespace tlp {
     GlXMLTools::getXML(dataNode,"color",color);
     GlXMLTools::getXML(dataNode,"alignment",alignment);
     GlXMLTools::getXML(dataNode,"scaleToSize",scaleToSize);
+    GlXMLTools::getXML(dataNode,"minSize",minSize);
+    GlXMLTools::getXML(dataNode,"maxSize",maxSize);
     GlXMLTools::getXML(dataNode,"depthTestEnabled",depthTestEnabled);
     GlXMLTools::getXML(dataNode,"leftAlign",leftAlign);
     GlXMLTools::getXML(dataNode,"xRot",xRot);
@@ -383,6 +394,8 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode,"color",color);
       GlXMLTools::setWithXML(dataNode,"alignment",alignment);
       GlXMLTools::setWithXML(dataNode,"scaleToSize",scaleToSize);
+      GlXMLTools::setWithXML(dataNode,"minSize",minSize);
+      GlXMLTools::setWithXML(dataNode,"maxSize",maxSize);
       GlXMLTools::setWithXML(dataNode,"depthTestEnabled",depthTestEnabled);
       GlXMLTools::setWithXML(dataNode,"leftAlign",leftAlign);
       GlXMLTools::setWithXML(dataNode,"xRot",xRot);

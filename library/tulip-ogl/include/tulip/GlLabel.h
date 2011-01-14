@@ -248,6 +248,35 @@ namespace tlp {
       return occlusionBorderSize;
     }
 
+    /**
+     * Set min screen size (in pixel) of the label : this size is used in not scaled mode
+     */
+    void setMinSize(int size){
+      minSize=size;
+    }
+
+    /**
+     * Get min screen size (in pixel) of the label : this size is used in not scaled mode
+     */
+    int getMinSize(){
+      return minSize;
+    }
+
+    /**
+     * Set max screen size (in pixel) of the label : this size is used in not scaled mode
+     */
+    void setMaxSize(int size){
+      maxSize=size;
+    }
+
+    /**
+     * Get max screen size (in pixel) of the label : this size is used in not scaled mode
+     */
+    int getMaxSize(){
+      return maxSize;
+    }
+
+
 
   private :
 
@@ -262,6 +291,8 @@ namespace tlp {
     Color color;
     int alignment;
     bool scaleToSize;
+    int minSize;
+    int maxSize;
     bool depthTestEnabled;
     bool leftAlign;
     float xRot;

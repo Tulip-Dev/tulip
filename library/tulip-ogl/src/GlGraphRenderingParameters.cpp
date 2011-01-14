@@ -56,6 +56,8 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _edgesLabelStencil(0xFFFF),
   _labelScaled(false),
   _labelOverlaped(false),
+  _labelMinSize(10),
+  _labelMaxSize(30),
   _labelsBorder(2) {
   _fontsPath = tlp::TulipLibDir + "tlp/bitmaps/";
   _texturePath = "";
@@ -86,6 +88,8 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("labelScaled", _labelScaled);
   data.set("labelOverlaped", _labelOverlaped);
   //int
+  data.set("labelMinSize", _labelMinSize);
+  data.set("labelMaxSize", _labelMaxSize);
   data.set("selectedNodesStencil", _selectedNodesStencil);
   data.set("selectedMetaNodesStencil", _selectedMetaNodesStencil);
   data.set("selectedEdgesStencil", _selectedEdgesStencil);
@@ -153,6 +157,10 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
   if (data.get<unsigned int>("fontType", ui))
     setFontsType(ui);
   int i  = 0;
+  if (data.get<int>("labelMinSize", i))
+    setMinSizeOfLabel(i);
+  if (data.get<int>("labelMaxSize", i))
+    setMaxSizeOfLabel(i);
   if (data.get<int>("selectedNodesStencil", i))
     setSelectedNodesStencil(i);
   if (data.get<int>("selectedMetaNodesStencil", i))
@@ -416,4 +424,20 @@ bool GlGraphRenderingParameters::isLabelOverlaped(){
 //====================================================
 void GlGraphRenderingParameters::setLabelOverlaped(bool state){
   _labelOverlaped=state;
+}
+//====================================================
+int GlGraphRenderingParameters::getMinSizeOfLabel(){
+  return _labelMinSize;
+}
+//====================================================
+void GlGraphRenderingParameters::setMinSizeOfLabel(int size){
+  _labelMinSize=size;
+}
+//====================================================
+int GlGraphRenderingParameters::getMaxSizeOfLabel(){
+  return _labelMaxSize;
+}
+//====================================================
+void GlGraphRenderingParameters::setMaxSizeOfLabel(int size){
+  _labelMaxSize=size;
 }

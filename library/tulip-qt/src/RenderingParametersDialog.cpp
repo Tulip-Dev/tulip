@@ -60,6 +60,10 @@ namespace tlp {
     frame->setEnabled(!param.isLabelOverlaped());
     density->setValue(param.getLabelsBorder());
     blockEdgeSizeCheckBox->setChecked(param.getEdgesMaxSizeToNodesSize());
+    minSizeSpinBox->setValue(param.getMinSizeOfLabel());
+    maxSizeSpinBox->setValue(param.getMaxSizeOfLabel());
+    minSizeSpinBox->setMaximum(maxSizeSpinBox->value());
+    maxSizeSpinBox->setMinimum(minSizeSpinBox->value());
 
     holdUpdateView=false;
   }
@@ -84,6 +88,8 @@ namespace tlp {
     param.setSelectionColor(Color(selectionC.red(),selectionC.green(),selectionC.blue()));
     param.setLabelsBorder(density->value());
     param.setEdgesMaxSizeToNodesSize(blockEdgeSizeCheckBox->isChecked());
+    param.setMinSizeOfLabel(minSizeSpinBox->value());
+    param.setMaxSizeOfLabel(maxSizeSpinBox->value());
 
     mainView->getGlMainWidget()->getScene()->getGlGraphComposite()->setRenderingParameters(param);
     emit viewNeedDraw();
@@ -148,5 +154,12 @@ namespace tlp {
 
       button->setStyleSheet("QPushButton { background-color: #"+colorStr+"; color: #"+textColor+" }");
     }
+  }
+
+  void RenderingParametersDialog::labelSizeChanged(int){
+    minSizeSpinBox->setMaximum(maxSizeSpinBox->value());
+    maxSizeSpinBox->setMinimum(minSizeSpinBox->value());
+
+    updateView();
   }
 }
