@@ -98,14 +98,14 @@ namespace tlp {
 
   void RenderingParametersDialog::backColor() {
     QColor col=background->palette().color(QPalette::Button);
-    if(getColorDialog(col,this,"Color chooser",col))
+    if(getColorDialog(col,0,"Color chooser",col))
       setButtonColor(col,background);
     updateView();
   }
 
   void RenderingParametersDialog::selectionColor() {
     QColor col=background->palette().color(QPalette::Button);
-    if(getColorDialog(col,this,"Color chooser",col))
+    if(getColorDialog(col,0,"Color chooser",col))
       setButtonColor(col,selection);
     updateView();
   }
