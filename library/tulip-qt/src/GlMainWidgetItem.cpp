@@ -83,7 +83,6 @@ void GlMainWidgetItem::resize(int width, int height) {
 	glMainWidget->resize(width,height);
 	glMainWidget->resizeGL(width,height);
 	redrawNeeded = true;
-	nbDrawAfterResize = 3;
 	delete [] renderingStore;
 	renderingStore = new unsigned char[width*height*4];
 	prepareGeometryChange();
