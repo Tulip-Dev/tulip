@@ -27,6 +27,7 @@
 #ifndef Tulip_GRAPHICSITEM_H_
 #define Tulip_GRAPHICSITEM_H_
 
+#include <QtGui/QPainter>
 #include <QtGui/QGraphicsWidget>
 #include <QtGui/QGraphicsScene>
 
