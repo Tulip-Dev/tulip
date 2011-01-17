@@ -282,6 +282,7 @@ namespace tlp {
 
     std::string text;
     std::string fontName;
+    int fontSize;
     int renderingMode;
     static TextRenderer *renderer;
     Coord centerPosition;

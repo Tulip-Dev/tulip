@@ -72,6 +72,7 @@ namespace tlp {
   //============================================================
   void GlLabel::init(){
     fontName=TulipBitmapDir + "font.ttf";
+    fontSize=20;
     renderingMode=0;
     translationAfterRotation=Coord(0,0,0);
     alignment=ON_CENTER;
@@ -125,10 +126,12 @@ namespace tlp {
   //============================================================
   void GlLabel::setBoldFont() {
     renderer->setContext(TulipBitmapDir + "fontb.ttf", 20, 0, 0, 255);
+    fontSize=20;
   }
   //============================================================
   void GlLabel::setPlainFont() {
     renderer->setContext(TulipBitmapDir + "font.ttf", 20, 0, 0, 255);
+    fontSize=20;
   }
   //============================================================
   void GlLabel::setFontName(const std::string &name){
@@ -139,6 +142,8 @@ namespace tlp {
   void GlLabel::setFontNameSizeAndColor(const std::string &name, const int &size, const Color &color){
     if(GlRenderer::checkFont(name))
       fontName=name;
+
+    fontSize=size;
 
     renderer->setContext(fontName,size,color[0],color[1],color[2]);
     this->color=color;
@@ -177,11 +182,11 @@ namespace tlp {
 
     renderer->getBoundingBox(w_max, h, w);
 
+    float screenH=(size[1]/(sqrt(size[0]*size[0]+size[1]*size[1])/lod));
 
-
-    float screenH=size[1]/(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
-
-    float labelSize=(screenH/size[1])/2.5;
+    if(!scaleToSize)
+      screenH*=(fontSize/18.);
+    float labelSize=((screenH/size[1])/2.5);
     if(labelSize<0)
       labelSize=-labelSize;
 
