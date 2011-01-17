@@ -41,14 +41,13 @@ namespace tlp {
   class TLP_QT_SCOPE RenderingParametersDialog : public QWidget, public Ui::RenderingParametersDialogData {
     Q_OBJECT
 
-    GlMainView *mainView;
-    GlMainWidget* observedMainWidget;
+    GlMainWidget* glWidget;
     bool holdUpdateView;
 
   public:
     RenderingParametersDialog(QWidget* parent=0);
 
-    void setGlMainView(GlMainView *view);
+    void setGlMainWidget(GlMainWidget *glWidget);
 
   public slots:
 
