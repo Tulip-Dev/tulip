@@ -63,11 +63,11 @@ namespace tlp {
 #ifdef _WIN32
 #ifdef DLL_EXPORT
 QGLWidget* GlMainWidget::firstQGLWidget=NULL;
-  bool GlMainWidget::inRendering=false;
+bool GlMainWidget::inRendering=false;
 #endif
 #else
 QGLWidget* GlMainWidget::firstQGLWidget=NULL;
-  bool GlMainWidget::inRendering=false;
+bool GlMainWidget::inRendering=false;
 #endif
 
 //==================================================
@@ -106,9 +106,9 @@ QGLWidget* GlMainWidget::getFirstQGLWidget() {
 
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
-    		QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), _hasHulls(false), useFramebufferObject(false), glFrameBuf(NULL){
+    								QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), _hasHulls(false), useFramebufferObject(false), glFrameBuf(NULL){
 	setFocusPolicy(Qt::StrongFocus);
-  setMouseTracking(true);
+	setMouseTracking(true);
 	renderingStore=NULL;
 	connect(this,SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(viewDrawnSlot(GlMainWidget *,bool)));
 }
@@ -292,10 +292,10 @@ void GlMainWidget::initializeGL() {
 void GlMainWidget::createRenderingStore(int width, int height){
 
 	if (useFramebufferObject && (!glFrameBuf || glFrameBuf->size().width()!=width || glFrameBuf->size().height()!=height)) {
-			makeCurrent();
-			delete glFrameBuf;
-			glFrameBuf=new QGLFramebufferObject(width,height);
-			useFramebufferObject=glFrameBuf->isValid();
+		makeCurrent();
+		delete glFrameBuf;
+		glFrameBuf=new QGLFramebufferObject(width,height);
+		useFramebufferObject=glFrameBuf->isValid();
 	}
 
 	if (!useFramebufferObject && (!renderingStore || width != widthStored || height != heightStored)) {
@@ -305,7 +305,7 @@ void GlMainWidget::createRenderingStore(int width, int height){
 }
 //==================================================
 void GlMainWidget::redraw() {
-    if (isVisible() && !inRendering) {
+	if (isVisible() && !inRendering) {
 
 		int width = contentsRect().width();
 		int height = contentsRect().height();
@@ -325,11 +325,11 @@ void GlMainWidget::redraw() {
 		glDisable(GL_BLEND);
 		glDisable(GL_LIGHTING);
 
-//#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-//		if (useFramebufferObject) {
-//			QGLFramebufferObject::blitFramebuffer(0, QRect(0,0,width, height), glFrameBuf, QRect(0,0,width, height));
-//		}
-//#endif
+		//#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+		//		if (useFramebufferObject) {
+		//			QGLFramebufferObject::blitFramebuffer(0, QRect(0,0,width, height), glFrameBuf, QRect(0,0,width, height));
+		//		}
+		//#endif
 
 		if (!frameBufferStored) {
 			glDrawBuffer(GL_BACK);
@@ -342,26 +342,26 @@ void GlMainWidget::redraw() {
 
 		swapBuffers();
 
-      inRendering=false;
+		inRendering=false;
 	}
 	emit viewRedrawn(this);
 }
 //==================================================
 void GlMainWidget::draw(bool graphChanged) {
 
-    if (isVisible() && !inRendering) {
-      inRendering=true;
+	if (isVisible() && !inRendering) {
+		inRendering=true;
 
 		makeCurrent();
 
 		int width = contentsRect().width();
 		int height = contentsRect().height();
 
-//#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-//		if(QGlBufferManager::getInst().canUseFramebufferObject() && QGLFramebufferObject::hasOpenGLFramebufferBlit()){
-//			useFramebufferObject = true;
-//		}
-//#endif
+		//#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+		//		if(QGlBufferManager::getInst().canUseFramebufferObject() && QGLFramebufferObject::hasOpenGLFramebufferBlit()){
+		//			useFramebufferObject = true;
+		//		}
+		//#endif
 
 		createRenderingStore(width,height);
 
@@ -389,12 +389,12 @@ void GlMainWidget::draw(bool graphChanged) {
 
 		frameBufferStored=false;
 
-//#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-//		if(useFramebufferObject){
-//			QGLFramebufferObject::blitFramebuffer(glFrameBuf, QRect(0,0,width, height), 0, QRect(0,0,width, height));
-//			frameBufferStored=true;
-//		}
-//#endif
+		//#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+		//		if(useFramebufferObject){
+		//			QGLFramebufferObject::blitFramebuffer(glFrameBuf, QRect(0,0,width, height), 0, QRect(0,0,width, height));
+		//			frameBufferStored=true;
+		//		}
+		//#endif
 
 		if (!frameBufferStored) {
 			glReadBuffer(GL_BACK);
@@ -409,7 +409,7 @@ void GlMainWidget::draw(bool graphChanged) {
 		drawInteractors();
 
 		swapBuffers();
-      inRendering=false;
+		inRendering=false;
 	}
 	emit viewDrawn(this,graphChanged);
 }
@@ -474,11 +474,13 @@ void GlMainWidget::resizeGL(int w, int h) {
 }
 //==================================================
 void GlMainWidget::makeCurrent() {
-	QGLWidget::makeCurrent();
-	GlDisplayListManager::getInst().changeContext((unsigned long)GlMainWidget::firstQGLWidget);
-	GlTextureManager::getInst().changeContext((unsigned long)GlMainWidget::firstQGLWidget);
-	QRect rect=contentsRect();
-	scene.setViewport(0,0,rect.width(),rect.height());
+	if (isVisible()) {
+		QGLWidget::makeCurrent();
+		GlDisplayListManager::getInst().changeContext((unsigned long)GlMainWidget::firstQGLWidget);
+		GlTextureManager::getInst().changeContext((unsigned long)GlMainWidget::firstQGLWidget);
+		QRect rect=contentsRect();
+		scene.setViewport(0,0,rect.width(),rect.height());
+	}
 }
 //==================================================
 bool GlMainWidget::selectGlEntities(const int x, const int y,
@@ -508,19 +510,19 @@ void GlMainWidget::doSelect(const int x, const int y,
 		std::vector<node> &sNode, std::vector<edge> &sEdge,
 		GlLayer* layer) {
 #ifndef NDEBUG
-std::cerr << __PRETTY_FUNCTION__ << " x:" << x << ", y:" <<y <<", wi:"<<width<<", height:" << height << std::endl;
+	std::cerr << __PRETTY_FUNCTION__ << " x:" << x << ", y:" <<y <<", wi:"<<width<<", height:" << height << std::endl;
 #endif
-makeCurrent();
-std::vector<unsigned long> selectedElements;
-scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x, y, width, height, layer, selectedElements);
-for(std::vector<unsigned long>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
-	sNode.push_back(node((unsigned int)(*it)));
-}
-selectedElements.clear();
-scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x, y, width, height, layer, selectedElements);
-for(std::vector<unsigned long>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
-	sEdge.push_back(edge((unsigned int)(*it)));
-}
+	makeCurrent();
+	std::vector<unsigned long> selectedElements;
+	scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x, y, width, height, layer, selectedElements);
+	for(std::vector<unsigned long>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
+		sNode.push_back(node((unsigned int)(*it)));
+	}
+	selectedElements.clear();
+	scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x, y, width, height, layer, selectedElements);
+	for(std::vector<unsigned long>::iterator it=selectedElements.begin();it!=selectedElements.end();++it) {
+		sEdge.push_back(edge((unsigned int)(*it)));
+	}
 }
 //=====================================================
 bool GlMainWidget::doSelect(const int x, const int y,tlp::ElementType &type ,node &n,edge &e, GlLayer* layer) {
