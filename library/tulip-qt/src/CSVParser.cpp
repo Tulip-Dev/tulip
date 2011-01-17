@@ -29,7 +29,9 @@
 using namespace std;
 using namespace tlp;
 
-CSVSimpleParser::CSVSimpleParser(const string& fileName,const string& separator,char textDelimiter,const string& fileEncoding,bool removeQuotes):fileName(fileName),separator(separator),textDelimiter(textDelimiter),fileEncoding(fileEncoding),removeQuotes(removeQuotes){
+const string defaultRejectedChars = " \r\n";
+const string spaceChars = " \t\r\n";
+CSVSimpleParser::CSVSimpleParser(const string& fileName,const string& separator,char textDelimiter,const string& fileEncoding):fileName(fileName),separator(separator),textDelimiter(textDelimiter),fileEncoding(fileEncoding){
 }
 
 CSVSimpleParser::~CSVSimpleParser() {
@@ -132,7 +134,7 @@ bool CSVSimpleParser::multiplatformgetline ( istream& is, string& str ){
 }
 
 void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
-                         const string& delimiters,char textDelimiter, unsigned int numberOfCol) {
+                               const string& delimiters,char textDelimiter, unsigned int numberOfCol) {
     // Skip delimiters at beginning.
     string::size_type lastPos = 0;
     string::size_type pos = 0;
@@ -158,7 +160,7 @@ void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
             lastPos = string::npos;
         }
         // Find next "non-delimiter"
-        //If the next token begin with a double quote search the ending double quote before searching the next delimiter.
+        //If the next token begin with the text delimiter char search the ending double quote before searching the next delimiter.
         if(str[pos]== textDelimiter){
             pos = str.find_first_of(textDelimiter, pos+1);
             //ensure there is a ending double quote.
@@ -169,7 +171,7 @@ void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
     }
 }
 
-const string spaceChars = " \t\r\n";
+
 string CSVSimpleParser::treatToken(const string& token, int, int) {
     string currentToken = token;
     // erase space chars at the beginning/end of the value
@@ -197,19 +199,16 @@ string CSVSimpleParser::treatToken(const string& token, int, int) {
             beginPos = currentToken.find_first_of(spaceChars, beginPos + 1);
         }
     }
-
-    if (removeQuotes) {
-        return removeQuotesIfAny(currentToken);
-    }
-    else {
-        return currentToken;
-    }
+    //Treat string to remove special characters from it's beginning and its end.
+    string rejectedChars = defaultRejectedChars;
+    rejectedChars.push_back(textDelimiter);
+    return removeQuotesIfAny(currentToken,rejectedChars);
 }
 
-const string rejectedChars = "\"\r";
-string CSVSimpleParser::removeQuotesIfAny(const string &s) {
+
+string CSVSimpleParser::removeQuotesIfAny(const string &s,const std::string& rejectedChars) {
     string::size_type beginPos = s.find_first_not_of(rejectedChars);
-    string::size_type endPos = s.find_last_not_of(rejectedChars);
+    string::size_type endPos = s.find_last_not_of(rejectedChars);    
     if (beginPos != string::npos && endPos != string::npos)
         return s.substr(beginPos, endPos - beginPos + 1);
     else

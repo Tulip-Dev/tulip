@@ -63,7 +63,7 @@ namespace tlp {
  */
     class TLP_QT_SCOPE CSVSimpleParser : public CSVParser {
     public:
-        CSVSimpleParser(const std::string& fileName,const std::string& separator=std::string(";"),char='"',const std::string& fileEncoding=std::string("UTF-8"),bool removeQuotes=true);
+        CSVSimpleParser(const std::string& fileName,const std::string& separator=std::string(";"),char='"',const std::string& fileEncoding=std::string("UTF-8"));
         virtual ~CSVSimpleParser();
 
         bool parse(CSVContentHandler * handler,tlp::PluginProgress* progress=NULL);
@@ -83,12 +83,11 @@ namespace tlp {
           **/
         bool multiplatformgetline ( std::istream& is, std::string& str );
 
-        std::string removeQuotesIfAny(const std::string &s);
+        std::string removeQuotesIfAny(const std::string &s,const std::string& rejectedChars);
         std::string fileName;
         std::string separator;
         char textDelimiter;
-        std::string fileEncoding;
-        bool removeQuotes;
+        std::string fileEncoding;        
 
     };
 
