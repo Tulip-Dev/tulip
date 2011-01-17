@@ -179,8 +179,8 @@ namespace tlp {
 
 
 
-    float labelSize=1./(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
-    float screenH=size[1]*labelSize;
+    float screenH=size[1]/(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
+    float labelSize=(screenH/size[1])/2.5;
     float sizeScale=1.;
     if(!scaleToSize && labelSize<minSize)
       sizeScale=minSize/labelSize;
