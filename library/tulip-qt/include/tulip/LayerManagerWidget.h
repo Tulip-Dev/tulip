@@ -48,7 +48,6 @@ namespace tlp {
   public:
     LayerManagerWidget(QWidget* parent=0);
 
-    void setGlMainView(GlMainView *view);
     void attachMainWidget(GlMainWidget *graphWidget);
 
     void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);

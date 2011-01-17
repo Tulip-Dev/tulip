@@ -36,9 +36,6 @@ namespace tlp {
     treeWidget->header()->resizeSection(2,70);
   }
 
-  void LayerManagerWidget::setGlMainView(GlMainView *view){
-    attachMainWidget(view->getGlMainWidget());
-  }
   //=============================================================================
   void LayerManagerWidget::attachMainWidget(GlMainWidget* graphWidget) {
     treeWidget->invisibleRootItem()->takeChildren();

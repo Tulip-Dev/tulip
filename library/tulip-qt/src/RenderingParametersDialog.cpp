@@ -32,26 +32,27 @@ using namespace std;
 
 namespace tlp {
 
-  RenderingParametersDialog::RenderingParametersDialog(QWidget* parent) : QWidget(parent) {
+  RenderingParametersDialog::RenderingParametersDialog(QWidget* parent) : QWidget(parent), glWidget(NULL) {
     setupUi(this);
 
     holdUpdateView=false;
 
   }
 
-  void RenderingParametersDialog::setGlMainView(GlMainView *view){
-    mainView=view;
+  void RenderingParametersDialog::setGlMainWidget(GlMainWidget *glWidget) {
 
-    GlGraphRenderingParameters param = mainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParameters();
+	this->glWidget = glWidget;
+
+    GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
 
     holdUpdateView=true;
     arrows->setChecked( param.isViewArrow());
     colorInterpolation->setChecked( param.isEdgeColorInterpolate());
     sizeInterpolation->setChecked( param.isEdgeSizeInterpolate());
     ordering->setChecked( param.isElementOrdered());
-    orthogonal->setChecked(mainView->getGlMainWidget()->getScene()->isViewOrtho());
+    orthogonal->setChecked(glWidget->getScene()->isViewOrtho());
     edge3D->setChecked( param.isEdge3D());
-    Color backgroundC = mainView->getGlMainWidget()->getScene()->getBackgroundColor();
+    Color backgroundC = glWidget->getScene()->getBackgroundColor();
     setButtonColor(QColor(backgroundC[0],backgroundC[1],backgroundC[2]),background);
     Color selectionC = param.getSelectionColor();
     setButtonColor(QColor(selectionC[0],selectionC[1],selectionC[2]),selection);
@@ -72,18 +73,18 @@ namespace tlp {
     if(holdUpdateView)
       return;
 
-    GlGraphRenderingParameters param = mainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParameters();
+    GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
 
     param.setViewArrow(arrows->isChecked());
     param.setEdgeColorInterpolate(colorInterpolation->isChecked());
     param.setEdgeSizeInterpolate(sizeInterpolation->isChecked());
     param.setElementOrdered(ordering->isChecked());
-    mainView->getGlMainWidget()->getScene()->setViewOrtho(orthogonal->isChecked());
+    glWidget->getScene()->setViewOrtho(orthogonal->isChecked());
     param.setEdge3D(edge3D->isChecked());
     param.setLabelScaled(scaled->isChecked());
     param.setLabelOverlaped(!overlap->isChecked());
     QColor backgroundC = background->palette().color(QPalette::Button);
-    mainView->getGlMainWidget()->getScene()->setBackgroundColor(Color(backgroundC.red(),backgroundC.green(),backgroundC.blue()));
+    glWidget->getScene()->setBackgroundColor(Color(backgroundC.red(),backgroundC.green(),backgroundC.blue()));
     QColor selectionC = selection->palette().color(QPalette::Button);
     param.setSelectionColor(Color(selectionC.red(),selectionC.green(),selectionC.blue()));
     param.setLabelsBorder(density->value());
@@ -91,9 +92,9 @@ namespace tlp {
     param.setMinSizeOfLabel(minSizeSpinBox->value());
     param.setMaxSizeOfLabel(maxSizeSpinBox->value());
 
-    mainView->getGlMainWidget()->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+    glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
     emit viewNeedDraw();
-    //mainView->getGlMainWidget()->draw(true);
+    //glWidget->draw(true);
   }
 
   void RenderingParametersDialog::backColor() {

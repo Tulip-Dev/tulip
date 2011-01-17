@@ -100,8 +100,8 @@ namespace tlp {
 		
 		getGlMainWidget()->useHulls(true);
 		
-    renderingParametersDialog->setGlMainView(this);
-    layerManagerWidget->setGlMainView(this);
+    renderingParametersDialog->setGlMainWidget(mainWidget);
+    layerManagerWidget->attachMainWidget(mainWidget);
     overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
     draw();
   }
@@ -284,7 +284,7 @@ namespace tlp {
           DataSet layerAndCompositeDataSet=(*it).second;
           toRemove.push_back((*it).first);
           std::string layerName;
-          long compositeLong;
+          long compositeLong = 0;
           layerAndCompositeDataSet.get("layer",layerName);
           layerAndCompositeDataSet.get("composite",compositeLong);
           mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
@@ -300,7 +300,7 @@ namespace tlp {
 
         DataSet newLayerAndCompositeDataSet=*((DataSet*)(infoData.second->value));
         std::string newLayerName;
-        long newCompositeLong;
+        long newCompositeLong = 0;
         newLayerAndCompositeDataSet.get("layer",newLayerName);
         newLayerAndCompositeDataSet.get("composite",newCompositeLong);
 
@@ -316,7 +316,7 @@ namespace tlp {
           //check integrity
           DataSet oldLayerAndCompositeDataSet=(*it).second;
           std::string oldLayerName;
-          long oldCompositeLong;
+          long oldCompositeLong = 0;
           oldLayerAndCompositeDataSet.get("layer",oldLayerName);
           oldLayerAndCompositeDataSet.get("composite",oldCompositeLong);
 
@@ -381,7 +381,7 @@ namespace tlp {
       for(std::map<std::string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
         DataSet layerAndCompositeDataSet=(*it).second;
         std::string layerName;
-        long compositeLong;
+        long compositeLong = 0;
         layerAndCompositeDataSet.get("layer",layerName);
         layerAndCompositeDataSet.get("composite",compositeLong);
         mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
@@ -402,7 +402,7 @@ namespace tlp {
     GlMainView::draw();
     if (gridOptionsWidget !=0)
       gridOptionsWidget->validateGrid();
-    layerManagerWidget->setGlMainView(this);
+    layerManagerWidget->attachMainWidget(mainWidget);
     //overviewWidget->updateView();
   }
   //==================================================
