@@ -243,7 +243,7 @@ pair<ElementType,unsigned int> CSVToNewNodeIdMapping::getElementForRow(unsigned 
     }else{
         unsigned int newId = graph->addNode().id;
         rowToGraphId[row] = newId;
-        return make_pair(NODE,row);
+        return make_pair(NODE,newId);
     }
 }
 
@@ -403,12 +403,16 @@ void CSVGraphImport::token(unsigned int row, unsigned int column, const string& 
         return;
     }
     pair<ElementType,unsigned int> element = mapping->getElementForRow(row);
-    PropertyInterface *interf = propertiesManager->getPropertyInterface(column,token);
-    if(element.second != UINT_MAX && interf != NULL){
-        if(element.first == NODE){
-            interf->setNodeStringValue(node(element.second),token);
+    PropertyInterface *interf = propertiesManager->getPropertyInterface(column,token);    
+    if(element.second != UINT_MAX && interf != NULL){        
+        if(element.first == NODE){            
+            if(!interf->setNodeStringValue(node(element.second),token)){
+                std::cerr<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<token<<"\" in property \""<<interf->getName()<<"\" of type \""<<interf->getTypename()<<"\""<<std::endl;
+            }
         }else{
-            interf->setEdgeStringValue(edge(element.second),token);
+            if(!interf->setEdgeStringValue(edge(element.second),token)){
+                std::cerr<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<token<<"\" in property \""<<interf->getName()<<"\" of type \""<<interf->getTypename()<<"\""<<std::endl;
+            }
         }
     }
 }
