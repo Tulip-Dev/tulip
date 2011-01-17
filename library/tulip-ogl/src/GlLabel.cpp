@@ -180,7 +180,11 @@ namespace tlp {
 
 
     float screenH=size[1]/(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
+
     float labelSize=(screenH/size[1])/2.5;
+    if(labelSize<0)
+      labelSize=-labelSize;
+
     float sizeScale=1.;
     if(!scaleToSize && labelSize<minSize)
       sizeScale=minSize/labelSize;
@@ -313,6 +317,9 @@ namespace tlp {
     }else{
       screenH*=((w*0.05*sizeScale)/size[0]);
     }
+
+    if(screenH<0)
+      screenH=-screenH;
 
     if(screenH < 15 && useLOD){
       float wAlign=0;
