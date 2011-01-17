@@ -1244,7 +1244,7 @@ void TulipApp::filePrint() {
   Graph *graph= tabIndexToController[tabWidget->currentIndex()]->getGraph();
   if (graph==0) return;
 
-  NodeLinkDiagramComponent *nldc;
+  NodeLinkDiagramComponent *nldc = NULL;
   QWidget *widget=tabWidget->widget(tabWidget->currentIndex());
   QObjectList tmp=widget->children();
   for(QObjectList::iterator it=tmp.begin();it!=tmp.end();++it){
