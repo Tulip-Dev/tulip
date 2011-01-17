@@ -179,12 +179,13 @@ namespace tlp {
 
 
 
-    float screenH=1./(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
+    float labelSize=1./(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
+    float screenH=size[1]*labelSize;
     float sizeScale=1.;
-    if(!scaleToSize && screenH<minSize)
-      sizeScale=minSize/screenH;
-    if(!scaleToSize && screenH>maxSize)
-      sizeScale=maxSize/screenH;
+    if(!scaleToSize && labelSize<minSize)
+      sizeScale=minSize/labelSize;
+    if(!scaleToSize && labelSize>maxSize)
+      sizeScale=maxSize/labelSize;
 
     div_w = size[0]/w;
     div_h = size[1]/h;
