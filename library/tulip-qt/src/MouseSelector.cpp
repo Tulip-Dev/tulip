@@ -85,10 +85,19 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       started=false;
     }
     if (started){
-      if ((qMouseEv->x()>0) && (qMouseEv->x()<glMainWidget->width()))
-        w = qMouseEv->x() - x;
-      if ((qMouseEv->y()>0) && (qMouseEv->y()<glMainWidget->height()))
-        h = qMouseEv->y() - y;
+      int clampedX=qMouseEv->x();
+      int clampedY=qMouseEv->y();
+      if(clampedX<0)
+        clampedX=0;
+      if(clampedY<0)
+        clampedY=0;
+      if(clampedX>glMainWidget->width())
+        clampedX=glMainWidget->width();
+      if(clampedY>glMainWidget->height())
+        clampedY=glMainWidget->height();
+
+      w = clampedX - x;
+      h = clampedY - y;
       glMainWidget->redraw();
       return true;
     }
