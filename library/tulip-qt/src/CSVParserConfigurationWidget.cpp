@@ -69,7 +69,7 @@ void CSVParserConfigurationWidget::changeEvent(QEvent *e)
 CSVParser * CSVParserConfigurationWidget::buildParser()const{
     CSVParser *parser = NULL;
     if(isValid()){
-        parser = new CSVSimpleParser(getFile(),getSeparator(),getTextSeparator(),getEncoding(),true);
+        parser = new CSVSimpleParser(getFile(),getSeparator(),getTextSeparator(),getEncoding());
         if(invertMatrix()){
             parser = new CSVInvertMatrixParser(parser);
         }
@@ -101,7 +101,7 @@ string CSVParserConfigurationWidget::getSeparator()const{
 }
 void CSVParserConfigurationWidget::changeFileNameButtonPressed(){
     QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CSV file"), QString(), tr(
-            "CSV files (*.txt *.csv)"));
+            "CSV files (*.csv);;Text files (*.txt);;All files (*)"));
     setFileToOpen(fileName);
 }
 
