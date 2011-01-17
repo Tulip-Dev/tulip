@@ -177,7 +177,9 @@ namespace tlp {
 
     renderer->getBoundingBox(w_max, h, w);
 
-    float screenH=size[1]/(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
+
+
+    float screenH=1./(sqrt(size[0]*size[0]+size[1]*size[1])/lod);
     float sizeScale=1.;
     if(!scaleToSize && screenH<minSize)
       sizeScale=minSize/screenH;
