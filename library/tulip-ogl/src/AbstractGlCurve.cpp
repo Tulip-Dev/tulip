@@ -320,6 +320,8 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 	glDisable(GL_LIGHTING);
 	glDisable(GL_CULL_FACE);
 
+	glLineWidth(1.4);
+
 	if (texture != "") {
 		unsigned int i = nbCurvePoints / 2;
 		Coord firstCurvePoint(computeCurvePointOnCPU(controlPoints, i / static_cast<float>(nbCurvePoints - 1)));
