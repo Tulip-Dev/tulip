@@ -29,6 +29,7 @@
 #include <tulip/GlTools.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
 
 #include "tulip/MouseBoxZoomer.h"
 
@@ -42,6 +43,7 @@ MouseBoxZoomer::~MouseBoxZoomer() {}
 //=====================================================================
 bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 	GlMainWidget *glw = static_cast<GlMainWidget *>(widget);
+	GlGraphInputData *inputData = glw->getScene()->getGlGraphComposite()->getInputData();
 	if (e->type() == QEvent::MouseButtonPress) {
 		QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
 		if (qMouseEv->buttons() == mButton &&
@@ -52,10 +54,10 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 				y =  glw->height() - qMouseEv->y();
 				w = 0; h = 0;
 				started = true;
-				graph = glw->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+				graph = inputData->getGraph();
 			}
 			else {
-				if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
+				if (inputData->getGraph() != graph) {
 					graph = NULL;
 					started = false;
 				}
@@ -74,7 +76,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 		if ((qMouseEv->buttons() & mButton) &&
 				(kModifier == Qt::NoModifier ||
 						qMouseEv->modifiers() & kModifier)) {
-			if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
+			if (inputData->getGraph() != graph) {
 				graph = NULL;
 				started = false;
 			}
@@ -89,10 +91,9 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 		}
 	}
 	if (e->type() == QEvent::MouseButtonDblClick) {
-		BoundingBox graphBB = computeBoundingBox(graph,graph->getProperty<LayoutProperty>("viewLayout"),
-				graph->getProperty<SizeProperty>("viewSize"),
-				graph->getProperty<DoubleProperty>("viewRotation"));
-		QtGlSceneZoomAndPanAnimator zoomAnPan(glw, graphBB);
+		GlBoundingBoxSceneVisitor bbVisitor(inputData);
+		glw->getScene()->getLayer("Main")->acceptVisitor(&bbVisitor);
+		QtGlSceneZoomAndPanAnimator zoomAnPan(glw, bbVisitor.getBoundingBox());
 		zoomAnPan.animateZoomAndPan();
 		return true;
 	}
@@ -102,7 +103,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 		if ((qMouseEv->button() == mButton &&
 				(kModifier == Qt::NoModifier ||
 						qMouseEv->modifiers() & kModifier))) {
-			if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
+			if (inputData->getGraph() != graph) {
 				graph = NULL;
 				started = false;
 			}
