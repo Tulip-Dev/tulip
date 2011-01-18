@@ -52,7 +52,8 @@ GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData)
 	toComputeColor(true),
 	vectorLayoutSizeInit(false),
 	vectorColorSizeInit(false),
-	vectorIndexSizeInit(false)
+	vectorIndexSizeInit(false),
+	edgesModified(false)
 {
 	colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
 }
@@ -382,12 +383,13 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property){
 		inputData->getElementLayout()->removePropertyObserver(this);
 		layoutObserverActivated=false;
 	}
-	if(inputData->getElementColor()==property){
+	if(edgesModified || inputData->getElementColor()==property){
 		setHaveToComputeColor(true);
 		clearColorData();
 		inputData->getElementColor()->removePropertyObserver(this);
 		colorObserverActivated=false;
 	}
+	edgesModified = false;
 }
 
 void GlVertexArrayManager::beforeSetAllNodeValue(PropertyInterface *property) {
@@ -395,6 +397,9 @@ void GlVertexArrayManager::beforeSetAllNodeValue(PropertyInterface *property) {
 }
 
 void GlVertexArrayManager::beforeSetAllEdgeValue(PropertyInterface *property) {
+	if (inputData->getElementLayout()==property) {
+		edgesModified = true;
+	}
 	propertyValueChanged(property);
 }
 
@@ -403,6 +408,9 @@ void GlVertexArrayManager::beforeSetNodeValue(PropertyInterface *property, const
 }
 
 void GlVertexArrayManager::beforeSetEdgeValue(PropertyInterface *property, const edge){
+	if (inputData->getElementLayout()==property) {
+		edgesModified = true;
+	}
 	propertyValueChanged(property);
 }
 
