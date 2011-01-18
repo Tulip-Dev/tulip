@@ -20,6 +20,7 @@
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QApplication>
 #include <QtGui/QGraphicsProxyWidget>
+#include <QtGui/QContextMenuEvent>
 
 
 #include <tulip/GlTextureManager.h>
@@ -44,8 +45,8 @@ static void setRasterPosition(unsigned int x, unsigned int y) {
 
 namespace tlp {
 
-GlMainWidgetItem::GlMainWidgetItem(GlMainWidget *glMainWidget, int width, int height,bool decorate,float borderWidth) : QGraphicsItem(),
-		glMainWidget(glMainWidget),redrawNeeded(true),decorate(decorate), borderWidth(borderWidth),renderingStore(NULL) {
+GlMainWidgetItem::GlMainWidgetItem(GlMainWidget *glMainWidget, int width, int height,bool decorate,const QColor &frameColor, float borderWidth) : QGraphicsItem(),
+		glMainWidget(glMainWidget), frameColor(frameColor), redrawNeeded(true),decorate(decorate), borderWidth(borderWidth),renderingStore(NULL) {
 	setFlag(QGraphicsItem::ItemIsMovable, true);
 	setFlag(QGraphicsItem::ItemIsSelectable, true);
 	setFlag(QGraphicsItem::ItemIsFocusable, true);
@@ -54,7 +55,9 @@ GlMainWidgetItem::GlMainWidgetItem(GlMainWidget *glMainWidget, int width, int he
 	lockedCB = new QCheckBox("locked");
 	lockedCB->setChecked(true);
 	if (decorate) {
-		lockedCB->resize(60, borderWidth);
+		lockedCB->resize(60, borderWidth - 2);
+		lockedCB->move(1, 1);
+		lockedCB->setPalette(frameColor);
 		QGraphicsProxyWidget *cbProxy = new QGraphicsProxyWidget(this);
 		cbProxy->setWidget(lockedCB);
 	}
@@ -63,10 +66,14 @@ GlMainWidgetItem::GlMainWidgetItem(GlMainWidget *glMainWidget, int width, int he
 	QObject::connect(glMainWidget,SIGNAL(viewRedrawn(GlMainWidget *)),this,SLOT(glMainWidgetRedraw(GlMainWidget *)));
 
 	resize(width, height);
+
+	glMainWidget->installEventFilter(this);
 }
 
 GlMainWidgetItem::~GlMainWidgetItem() {
+	delete lockedCB;
 	delete [] renderingStore;
+	glMainWidget->removeEventFilter(this);
 }
 
 QRectF GlMainWidgetItem::boundingRect() const {
@@ -110,7 +117,7 @@ void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 	if(decorate){
 		QPainterPath path;
 		path.addRect(rect.x(),rect.y(),rect.width(),rect.height());
-		painter->setBrush(Qt::white);
+		painter->setBrush(frameColor);
 		painter->setRenderHint(QPainter::Antialiasing, true);
 		painter->drawPath(path);
 		painter->setRenderHint(QPainter::Antialiasing, false);
@@ -214,8 +221,11 @@ void GlMainWidgetItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
 		offset = -borderWidth;
 	}
 	if (lockedCB->isChecked()) {
-		QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x()+offset,event->pos().y()+offset), Qt::NoButton, event->buttons(), event->modifiers());
-		QApplication::sendEvent(glMainWidget,eventModif);
+		QPoint point(event->pos().x()+offset,event->pos().y()+offset);
+		if (! (point.x() < 0 || point.x() > width || point.y() < 0 || point.y() > height)) {
+			QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x()+offset,event->pos().y()+offset), Qt::NoButton, event->buttons(), event->modifiers());
+			QApplication::sendEvent(glMainWidget,eventModif);
+		}
 	} else {
 		QGraphicsItem::mouseMoveEvent(event);
 	}
@@ -227,8 +237,11 @@ void GlMainWidgetItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 		offset = -borderWidth;
 	}
 	if (lockedCB->isChecked()) {
-		QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonPress,QPoint(event->pos().x()+offset,event->pos().y()+offset), event->button(), event->buttons(), event->modifiers());
-		QApplication::sendEvent(glMainWidget,eventModif);
+		QPoint point(event->pos().x()+offset,event->pos().y()+offset);
+		if (! (point.x() < 0 || point.x() > width || point.y() < 0 || point.y() > height)) {
+			QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonPress,QPoint(event->pos().x()+offset,event->pos().y()+offset), event->button(), event->buttons(), event->modifiers());
+			QApplication::sendEvent(glMainWidget,eventModif);
+		}
 	} else {
 		QGraphicsItem::mousePressEvent(event);
 	}
@@ -239,9 +252,14 @@ void GlMainWidgetItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
 	if (decorate) {
 		offset = -borderWidth;
 	}
-	QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonDblClick,QPoint(event->pos().x()+offset,event->pos().y()+offset), event->button(), event->buttons(), event->modifiers());
-	QApplication::sendEvent(glMainWidget,eventModif);
 
+	if (lockedCB->isChecked()) {
+		QPoint point(event->pos().x()+offset,event->pos().y()+offset);
+		if (! (point.x() < 0 || point.x() > width || point.y() < 0 || point.y() > height)) {
+			QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonDblClick,QPoint(event->pos().x()+offset,event->pos().y()+offset), event->button(), event->buttons(), event->modifiers());
+			QApplication::sendEvent(glMainWidget,eventModif);
+		}
+	}
 }
 
 void GlMainWidgetItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
@@ -250,8 +268,11 @@ void GlMainWidgetItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
 		offset = -borderWidth;
 	}
 	if (lockedCB->isChecked()) {
-		QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonRelease,QPoint(event->pos().x()+offset,event->pos().y()+offset), event->button(), event->buttons(), event->modifiers());
-		QApplication::sendEvent(glMainWidget,eventModif);
+		QPoint point(event->pos().x()+offset,event->pos().y()+offset);
+		if (! (point.x() < 0 || point.x() > width || point.y() < 0 || point.y() > height)) {
+			QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonRelease,QPoint(event->pos().x()+offset,event->pos().y()+offset), event->button(), event->buttons(), event->modifiers());
+			QApplication::sendEvent(glMainWidget,eventModif);
+		}
 	} else {
 		QGraphicsItem::mouseReleaseEvent(event);
 	}
@@ -274,5 +295,22 @@ void GlMainWidgetItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event){
 	QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x()+offset,event->pos().y()+offset), Qt::NoButton, Qt::NoButton, event->modifiers());
 	QApplication::sendEvent(glMainWidget,eventModif);
 }
+
+void GlMainWidgetItem::contextMenuEvent(QGraphicsSceneContextMenuEvent * event) {
+	float offset = 0;
+	if (decorate) {
+		offset = -borderWidth;
+	}
+	QContextMenuEvent *eventModif = new QContextMenuEvent(static_cast<QContextMenuEvent::Reason>(event->reason()), QPoint(event->pos().x()+offset,event->pos().y()+offset));
+	QApplication::sendEvent(glMainWidget,eventModif);
+}
+
+bool GlMainWidgetItem::eventFilter(QObject *, QEvent *evt) {
+	if (evt->type() == QEvent::CursorChange) {
+		setCursor(glMainWidget->cursor());
+	}
+	return false;
+}
+
 
 }

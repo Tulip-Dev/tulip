@@ -27,7 +27,9 @@ class QFrame;
 namespace tlp {
 
   class GlMainWidgetGraphicsView;
+  class GlMainWidgetItem;
   class GWOverviewWidget;
+  class TabWidgetHidableMenuGraphicsProxy;
 
 class TLP_QT_SCOPE BaseGraphicsViewComponent : public AbstractView{
 
@@ -71,9 +73,15 @@ public slots:
 
   virtual void elementSelectedSlot(unsigned int,bool);
 
+protected slots :
+
+  void hideOverview(bool);
+  void setVisibleOverview(bool);
+
 protected :
 
-  GWOverviewWidget *overviewWidget;
+  TabWidgetHidableMenuGraphicsProxy *tabWidgetProxy;
+  GlMainWidgetItem *overviewItem;
   QFrame *overviewFrame;
   std::string realViewName;
   GlMainWidgetGraphicsView *graphicsView;

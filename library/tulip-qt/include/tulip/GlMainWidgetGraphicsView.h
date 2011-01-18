@@ -42,7 +42,6 @@
 
 namespace tlp {
 
-class TabWidgetHidableMenuGraphicsProxy;
 class GlMainWidgetItem;
 class GlMainWidgetGraphicsWidget;
 class GWOverviewWidget;
@@ -60,12 +59,12 @@ public:
 
   /**
    * Main constructor
-   * \param tulipView AbstractView use to display this QGraphicsView
-   * \param displayWidget widget where this view dis render
+   * \param parent widget
    * \param glMainWidget GlMainWidget who will be add on this view
-   * \param overviewGlMainWidget overview GlMainWidget who will be add on this view
    */
-  GlMainWidgetGraphicsView(AbstractView *tulipView, QWidget *displayWidget, GlMainWidget *glMainWidget,GWOverviewWidget *overviewWidget=0,QAction *overviewAction=0, bool fullWindow=true) ;
+  GlMainWidgetGraphicsView(QWidget *parent, GlMainWidget *glMainWidget) ;
+
+  ~GlMainWidgetGraphicsView();
 
   /**
    * This function is call when controller need to draw this view
@@ -77,29 +76,17 @@ public:
    */
   void redraw();
 
-  /**
-   * This function is use to add tab to integrate Tab display
-   */
-  void addToTabWidget(const std::string &name, QWidget *widget);
+  QGLWidget * getViewportWidget() const {return viewportWidet;}
+
+  GlMainWidgetItem *getGlMainWidgetItem() const {return glSceneItem;}
 
 protected:
 
   void resizeEvent(QResizeEvent *event);
 
-protected slots :
-
-  void hideOverview(bool);
-  void setVisibleOverview(bool);
-
-private:
-
-  TabWidgetHidableMenuGraphicsProxy *tabWidgetProxy;
   GlMainWidgetItem *glSceneItem;
-  GlMainWidgetItem *overviewItem;
   GlMainWidget *glMainWidget;
-  QGLWidget *glWidget;
-  AbstractView *tulipView;
-  QRectF lastSceneRect;
+  QGLWidget *viewportWidet;
   bool drawNeeded;
 };
 

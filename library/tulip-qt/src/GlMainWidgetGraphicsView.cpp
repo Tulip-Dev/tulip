@@ -17,6 +17,7 @@
  *
  */
 
+#include <QtGui/QApplication>
 #include <QtGui/QDialog>
 #include <QtGui/QMenu>
 #include <QtGui/QResizeEvent>
@@ -31,9 +32,7 @@
 #include <tulip/Interactor.h>
 #include <tulip/QGlPixelBufferManager.h>
 #include "tulip/GlMainWidgetGraphicsView.h"
-#include "tulip/TabWidgetHidableMenuGraphicsProxy.h"
 #include "tulip/GlMainWidgetItem.h"
-#include "tulip/GWOverviewWidget.h"
 
 using namespace std;
 
@@ -56,62 +55,22 @@ static QGLFormat GlInit() {
 	return tmpFormat;
 }
 
-GlMainWidgetGraphicsView::GlMainWidgetGraphicsView(AbstractView *tulipView, QWidget *widget,GlMainWidget *glMainWidget,GWOverviewWidget *overviewWidget,QAction *overviewAction,bool fullWindow) : QGraphicsView(new QGraphicsScene(widget)),
-		glMainWidget(glMainWidget), tulipView(tulipView), drawNeeded(true){
-	setRenderHints(QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
-	glWidget = new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget());
-	setViewport(glWidget);
+GlMainWidgetGraphicsView::GlMainWidgetGraphicsView(QWidget *parent,GlMainWidget *glMainWidget) : QGraphicsView(new QGraphicsScene(), parent),
+		glMainWidget(glMainWidget), drawNeeded(true){
+	setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
+	viewportWidet = new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget());
+	setViewport(viewportWidet);
 	setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 	setFrameStyle(QFrame::NoFrame);
 	scene()->setBackgroundBrush(Qt::white);
-
-	tabWidgetProxy = new TabWidgetHidableMenuGraphicsProxy(30);
-	/*QToolBar *toolBar=new QToolBar;
-	list<Interactor *> interactorsList=tulipView->getInteractors();
-	list<QAction *> interactorsActionList;
-	for(list<Interactor *>::iterator it=interactorsList.begin();it!=interactorsList.end();++it){
-	  interactorsActionList.push_back((*it)->getAction());
-	}
-
-	for(list<QAction *>::iterator it=interactorsActionList.begin();it!=interactorsActionList.end();++it) {
-	  toolBar->addAction(*it);
-	}
-
-	QGraphicsProxyWidget *proxy = scene()->addWidget(toolBar);*/
-	tabWidgetProxy->setPos(0,0);
-	tabWidgetProxy->resize(370, 370);
-	tabWidgetProxy->scale(0.8,0.8);
-	tabWidgetProxy->hideTabWidget();
-	tabWidgetProxy->setZValue(1);
-	scene()->addItem(tabWidgetProxy);
-
-	if(fullWindow){
-		glSceneItem=new GlMainWidgetItem(glMainWidget,width(),height());
-		scene()->addItem(glSceneItem);
-		glSceneItem->setPos(0,0);
-	}else{
-		glSceneItem=new GlMainWidgetItem(glMainWidget,256,256);
-		scene()->addItem(glSceneItem);
-		glSceneItem->setPos(64,64);
-	}
-
+	glSceneItem=new GlMainWidgetItem(glMainWidget,width(),height());
+	scene()->addItem(glSceneItem);
+	glSceneItem->setPos(0,0);
 	glSceneItem->setZValue(0);
+}
 
-
-	overviewItem = NULL;
-	if(overviewWidget){
-		overviewWidget->setDrawIfNotVisible(true);
-		overviewItem=new GlMainWidgetItem(overviewWidget->getView(),100,100,true);
-		overviewItem->setPos(0,0);
-		overviewItem->setZValue(1);
-		scene()->addItem(overviewItem);
-
-		connect(overviewWidget, SIGNAL(hideOverview(bool)), this, SLOT(hideOverview(bool)));
-		connect(overviewAction, SIGNAL(triggered(bool)), this, SLOT(setVisibleOverview(bool)));
-		if(fullWindow){
-			tabWidgetProxy->translate(0,overviewItem->boundingRect().height()+40);
-		}
-	}
+GlMainWidgetGraphicsView::~GlMainWidgetGraphicsView() {
+	delete viewportWidet;
 }
 
 void GlMainWidgetGraphicsView::draw(bool) {
@@ -123,9 +82,6 @@ void GlMainWidgetGraphicsView::redraw() {
 	scene()->update();
 }
 
-void GlMainWidgetGraphicsView::addToTabWidget(const std::string &name, QWidget *widget){
-	tabWidgetProxy->addTab(widget,name.c_str());
-}
 
 void GlMainWidgetGraphicsView::resizeEvent(QResizeEvent *event) {
 	QGraphicsView::resizeEvent(event);
@@ -133,24 +89,12 @@ void GlMainWidgetGraphicsView::resizeEvent(QResizeEvent *event) {
 		scene()->setSceneRect(QRect(QPoint(0, 0), size()));
 	}
 	glSceneItem->resize(width(),height());
-	overviewItem->setRedrawNeeded(true);
 	if (scene()) {
 		scene()->update();
 	}
-}
-
-void GlMainWidgetGraphicsView::hideOverview(bool hide){
-	if(hide){
-		overviewItem->setVisible(false);
-		tabWidgetProxy->translate(0,-(overviewItem->boundingRect().height()+40));
-	}else{
-		overviewItem->setVisible(true);
-		tabWidgetProxy->translate(0,overviewItem->boundingRect().height()+40);
-	}
-}
-
-void GlMainWidgetGraphicsView::setVisibleOverview(bool visible){
-	hideOverview(!visible);
+	// Hack : send a mouse event to force redraw of the scene (otherwise artifacts was displayed when maximizing or minimizing the graphics view)
+	QMouseEvent *eventModif = new QMouseEvent(QEvent::MouseMove,QPoint(size().width()/2, size().height()/2), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+	QApplication::sendEvent(this, eventModif);
 }
 
 }
