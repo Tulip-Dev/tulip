@@ -164,7 +164,8 @@ TODIST_SOURCES = \
   GraphPropertiesTableWidget.cpp \
   AbstractSmallMultiplesModel.cpp \
   SmallMultiplesView.cpp \
-  SmallMultiplesNavigatorComponent.cpp
+  SmallMultiplesNavigatorComponent.cpp \
+  GlOffscreenRenderer.cpp
 
 QT44_SOURCES = \
 	GlMainWidgetGraphicsView.cpp \

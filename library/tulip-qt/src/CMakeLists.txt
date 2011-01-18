@@ -74,6 +74,7 @@ CSVImportWizard.cpp
 SmallMultiplesView.cpp
 AbstractSmallMultiplesModel.cpp
 SmallMultiplesNavigatorComponent.cpp
+GlOffscreenRenderer.cpp
 )
 
 set(tulip-qt_UI
