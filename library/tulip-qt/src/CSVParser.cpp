@@ -19,6 +19,7 @@
 #include "tulip/CSVParser.h"
 #include <tulip/PluginProgress.h>
 #include <QtGui/QApplication>
+#include <stdexcept>
 
 #include <iostream>
 
@@ -138,36 +139,40 @@ void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
     // Skip delimiters at beginning.
     string::size_type lastPos = 0;
     string::size_type pos = 0;
-    //If the next token begin with a double quote search the ending double quote before searching the next delimiter.
-    if(str[pos]=='"'){
-        pos = str.find_first_of('"', pos+1);
-        //ensure there is a ending double quote.
-        assert(pos != string::npos);
-    }
-    // Find first "non-delimiter".
-    pos = str.find_first_of(delimiters, pos);
-    while (string::npos != pos || string::npos != lastPos) {
-        // Found a token, add it to the vector.
-        tokens.push_back(str.substr(lastPos, pos - lastPos));
-        if (tokens.size() == numberOfCol) {
-            break;
-        }
-        if (pos != string::npos){
-            pos = pos +1;
-            lastPos = pos;
-        }
-        else{
-            lastPos = string::npos;
-        }
-        // Find next "non-delimiter"
-        //If the next token begin with the text delimiter char search the ending double quote before searching the next delimiter.
-        if(str[pos]== textDelimiter){
+    bool quit = false;
+    while(!quit){
+        //Don't search tokens in chars sourrounded by text delimiters.
+        assert(pos!=string::npos);
+        assert(pos < str.size());
+
+        if(str[pos]==textDelimiter){
+            //Go the the next text delimiter .
             pos = str.find_first_of(textDelimiter, pos+1);
-            //ensure there is a ending double quote.
-            assert(pos != string::npos);
         }
-        //Find the next token
+        //Find the delimiter
         pos = str.find_first_of(delimiters, pos);
+        //Extracting tokens.
+        assert(lastPos!=string::npos);
+        size_t nbExtractedChars=string::npos;
+
+        if(pos == string::npos){
+            //If no delimiter found extract the rest of the line.
+            nbExtractedChars = pos;
+        }else{
+            //Compute the extracted char number
+            nbExtractedChars = pos - lastPos;
+        }
+        tokens.push_back(str.substr(lastPos, nbExtractedChars));
+        //Go to the begin of the next token.
+        if(pos != string::npos && pos +1 < str.size()){
+            //Skip the delimiter.
+            ++pos;
+            //Store the begin position of the next token
+            lastPos=pos;
+        }else{
+            //End of line found quit
+            quit = true;
+        }
     }
 }
 
@@ -208,9 +213,14 @@ string CSVSimpleParser::treatToken(const string& token, int, int) {
 
 string CSVSimpleParser::removeQuotesIfAny(const string &s,const std::string& rejectedChars) {
     string::size_type beginPos = s.find_first_not_of(rejectedChars);
-    string::size_type endPos = s.find_last_not_of(rejectedChars);    
-    if (beginPos != string::npos && endPos != string::npos)
-        return s.substr(beginPos, endPos - beginPos + 1);
+    string::size_type endPos = s.find_last_not_of(rejectedChars);
+    if (beginPos != string::npos && endPos != string::npos){
+        try {
+            // code here
+            return s.substr(beginPos, endPos - beginPos + 1);
+        }
+        catch (...) { cout <<__PRETTY_FUNCTION__<<" "<<__LINE__<< "exception"<<std::endl;return ""; }
+    }
     else
         return s;
 }
