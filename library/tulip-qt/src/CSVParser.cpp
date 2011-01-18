@@ -162,7 +162,12 @@ void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
             //Compute the extracted char number
             nbExtractedChars = pos - lastPos;
         }
+        try {
         tokens.push_back(str.substr(lastPos, nbExtractedChars));
+        }catch (...) {
+            //An error occur quit the line parsing.
+            break;
+        }
         //Go to the begin of the next token.
         if(pos != string::npos && pos +1 < str.size()){
             //Skip the delimiter.
@@ -216,13 +221,12 @@ string CSVSimpleParser::removeQuotesIfAny(const string &s,const std::string& rej
     string::size_type endPos = s.find_last_not_of(rejectedChars);
     if (beginPos != string::npos && endPos != string::npos){
         try {
-            // code here
-            return s.substr(beginPos, endPos - beginPos + 1);
-        }
-        catch (...) { cout <<__PRETTY_FUNCTION__<<" "<<__LINE__<< "exception"<<std::endl;return ""; }
+            return s.substr(beginPos, endPos - beginPos + 1);                            
+        }catch (...) {return s;}
     }
-    else
+    else{
         return s;
+    }
 }
 
 CSVInvertMatrixParser::CSVInvertMatrixParser(CSVParser* parser):parser(parser){
