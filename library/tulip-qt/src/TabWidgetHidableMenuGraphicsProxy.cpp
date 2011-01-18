@@ -29,12 +29,12 @@ using namespace std;
 
 namespace tlp {
 TabWidgetHidableMenuGraphicsProxy::TabWidgetHidableMenuGraphicsProxy(const unsigned int offsetWhenHiding) :
-	hidden(false), offsetWhenHiding(offsetWhenHiding) {
+			hidden(false), offsetWhenHiding(offsetWhenHiding) {
 	tabWidget = new QTabWidget();
 	tabWidget->setTabPosition(QTabWidget::East);
 	setWidget(tabWidget);
 	setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-	tabWidget->setToolTip("Double click to show Options Panel");
+	tabWidget->setToolTip("Double click to show Options Panel\nUse mouse wheel to scale the panel\nUse Ctrl + mouse wheel to change opacity");
 }
 
 void TabWidgetHidableMenuGraphicsProxy::wheelEvent(QGraphicsSceneWheelEvent * event) {
@@ -57,15 +57,17 @@ void TabWidgetHidableMenuGraphicsProxy::hideTabWidget() {
 }
 
 void TabWidgetHidableMenuGraphicsProxy::mouseDoubleClickEvent(
-		QGraphicsSceneMouseEvent *) {
+		QGraphicsSceneMouseEvent *event) {
 	double dx = sceneBoundingRect().width() - transform().m11() * offsetWhenHiding;
 	xStart = scenePos().x();
 	if (hidden) {
 		xEnd = xStart + dx;
-		tabWidget->setToolTip("Double click to hide Options Panel");
+		tabWidget->setToolTip("Double click to hide Options Panel\nUse mouse wheel to scale the panel\nUse Ctrl + mouse wheel to change opacity");
 	} else {
+		if (event->scenePos().x() < scenePos().x() + dx)
+			return;
 		xEnd = xStart - dx;
-		tabWidget->setToolTip("Double click to show Options Panel");
+		tabWidget->setToolTip("Double click to show Options Panel\nUse mouse wheel to scale the panel\nUse Ctrl + mouse wheel to change opacity");
 	}
 
 	QTimeLine timeLine;

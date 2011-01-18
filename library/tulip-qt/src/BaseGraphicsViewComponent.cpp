@@ -47,6 +47,7 @@
 #include "tulip/NodeLinkDiagramComponent.h"
 #include "tulip/ViewPluginsManager.h"
 #include "tulip/TabWidgetHidableMenuGraphicsProxy.h"
+#include "tulip/GlMainWidgetItem.h"
 
 using namespace std;
 
@@ -63,15 +64,39 @@ namespace tlp {
 
     widget->resize(512, 512);
 
-    graphicsView = new GlMainWidgetGraphicsView(this,widget,((GlMainView*)baseView)->getGlMainWidget(),((GlMainView *)baseView)->getOverviewWidget(),((GlMainView *)baseView)->getOverviewAction());
+    GWOverviewWidget *overviewWidget = static_cast<GlMainView *>(baseView)->getOverviewWidget();
+    QAction *overviewAction = static_cast<GlMainView *>(baseView)->getOverviewAction();
+
+    graphicsView = new GlMainWidgetGraphicsView(widget,static_cast<GlMainView *>(baseView)->getGlMainWidget());
     graphicsView->resize(512, 512);
 
     setCentralWidget(graphicsView);
 
+    tabWidgetProxy = new TabWidgetHidableMenuGraphicsProxy(30);
+    tabWidgetProxy->setPos(0,0);
+    tabWidgetProxy->resize(370, 370);
+    tabWidgetProxy->scale(0.8,0.8);
+    tabWidgetProxy->hideTabWidget();
+    tabWidgetProxy->setZValue(10);
     list<pair<QWidget *,string> > configWidgets=baseView->getConfigurationWidget();
-
     for(list<pair<QWidget *,string> >::iterator it=configWidgets.begin();it!=configWidgets.end();++it){
-      graphicsView->addToTabWidget((*it).second,(*it).first);
+    	tabWidgetProxy->addTab((*it).first, (*it).second.c_str());
+    }
+
+    graphicsView->scene()->addItem(tabWidgetProxy);
+
+    overviewItem = NULL;
+    if(overviewWidget){
+    	overviewWidget->setDrawIfNotVisible(true);
+    	overviewItem=new GlMainWidgetItem(overviewWidget->getView(),100,100,true);
+    	overviewItem->setPos(0,0);
+    	overviewItem->setZValue(1);
+    	graphicsView->scene()->addItem(overviewItem);
+
+    	connect(overviewWidget, SIGNAL(hideOverview(bool)), this, SLOT(hideOverview(bool)));
+    	connect(overviewAction, SIGNAL(triggered(bool)), this, SLOT(setVisibleOverview(bool)));
+
+    	tabWidgetProxy->translate(0,overviewItem->boundingRect().height()+40);
     }
 
     return graphicsView;
@@ -98,6 +123,18 @@ namespace tlp {
 
   string BaseGraphicsViewComponent::getRealViewName() {
     return realViewName;
+  }
+
+  void BaseGraphicsViewComponent::hideOverview(bool hide){
+  	if(hide){
+  		overviewItem->setVisible(false);
+  	}else{
+  		overviewItem->setVisible(true);
+  	}
+  }
+
+  void BaseGraphicsViewComponent::setVisibleOverview(bool visible){
+  	hideOverview(!visible);
   }
 
 

@@ -64,7 +64,7 @@ public :
    * \param height size of scene
    * \param decorate true if you want an item with border
    */
-  GlMainWidgetItem(GlMainWidget *glMainWidget, int width, int height, bool decorate=false, float borderWidth=20.f);
+  GlMainWidgetItem(GlMainWidget *glMainWidget, int width, int height, bool decorate=false, const QColor &frameColor = QColor(191,191,191), float borderWidth=18.f);
 
   /**
    * \brief Default destructor
@@ -97,6 +97,8 @@ public :
 
   GlMainWidget *getGlMainWidget() { return glMainWidget;}
 
+  bool eventFilter(QObject *, QEvent *evt);
+
 protected :
 
   void wheelEvent(QGraphicsSceneWheelEvent *event);
@@ -105,6 +107,9 @@ protected :
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
   void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
   void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
+  void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
+
+
 
 protected slots:
 
@@ -115,6 +120,7 @@ private :
 
   GlMainWidget *glMainWidget;
   QCheckBox *lockedCB;
+  QColor frameColor;
 
   bool redrawNeeded;
   bool decorate;
