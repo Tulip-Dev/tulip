@@ -125,9 +125,10 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
 class MouseZoomRotZ:public InteractorComponent
 {
  public:
-  MouseZoomRotZ(){}
+  MouseZoomRotZ():inRotation(false),inZoom(false){}
   ~MouseZoomRotZ(){}
   int x,y;
+  bool inRotation, inZoom;
   bool eventFilter(QObject *, QEvent *);
   InteractorComponent *clone() { return this; }};
 
@@ -135,43 +136,42 @@ bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     x = ((QMouseEvent *) e)->x();
     y = ((QMouseEvent *) e)->y();
+    inRotation=false;
+    inZoom=false;
     return true;
   }
   if (e->type() == QEvent::MouseMove) {
     QMouseEvent *qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
-#define NO_ZOOM -1
-#define NO_ROTATION -1
     int deltaX,deltaY;
-    if (x == NO_ROTATION) {
+
+    if(!inRotation && !inZoom){
+      deltaX = qMouseEv->x() - x;
+      deltaY= qMouseEv->y() - y;
+      if (deltaY && abs(deltaX) >= 3 * abs(deltaY)) {
+        inRotation=true;
+        inZoom=false;
+      }else if (deltaX && abs(deltaY) >=  3 * abs(deltaX)) {
+        inZoom=true;
+        inRotation=false;
+      }else{
+
+      }
+      x = qMouseEv->x();
+      y = qMouseEv->y();
+    }
+
+    if (inZoom) {
       // Zoom
       deltaY = qMouseEv->y() - y;
       glMainWidget->getScene()->zoom(-deltaY/2);
       y = qMouseEv->y();
     }
-    else {
+    if(inRotation) {
+      // Rotation
       deltaX = qMouseEv->x() - x;
-      if (y == NO_ZOOM) {
-	// Rotation
-	glMainWidget->getScene()->rotateScene(0,0,deltaX);
-	x = qMouseEv->x();
-      }
-      else {
-	deltaY= qMouseEv->y() - y;
-	// at this step deltaX and deltaY cumulate the move
-	// on both axis since the previous mPressEvent call,
-	// in order we can find the main axis of the move.
-	if (deltaY && abs(deltaX) >= 3 * abs(deltaY)) {
-	  // X axis => rotation
-	  y = NO_ZOOM;
-	  x = qMouseEv->x();
-	}
-	else if (deltaX && abs(deltaY) >=  3 * abs(deltaX)) {
-	  // Y axis => zoom
-	  x = NO_ROTATION;
-	  y = qMouseEv->y();
-	}
-      }
+      glMainWidget->getScene()->rotateScene(0,0,deltaX);
+      x = qMouseEv->x();
     }
     glMainWidget->draw();
     return true;
