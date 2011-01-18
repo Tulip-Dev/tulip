@@ -126,7 +126,7 @@ public:
   void computeMetaValue(AbstractStringProperty* label, node mN, Graph* sg,
       Graph*) {
     if (sgLabel)
-      label->setNodeValue(mN, label->getNodeValue(sg->getOneNode()));
+      label->setNodeValue(mN, sgLabel->getNodeValue(sg->getOneNode()));
     else if (useSubGraphName)
       label->setNodeValue(mN, sg->getAttribute<string>("name"));
   }
