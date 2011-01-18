@@ -298,7 +298,7 @@ namespace tlp {
 
         // Project camera bondinx box to know visible part of the quadtree
         pSrc[0] = transformedViewport[0];
-        pSrc[1] = (globalViewport[1] + globalViewport[3]) - transformedViewport[1];
+        pSrc[1] = (globalViewport[1] + globalViewport[3]) - (transformedViewport[1] + transformedViewport[3]);
         cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
         pSrc[1] = transformedViewport[1]+transformedViewport[3];
         cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
