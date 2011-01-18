@@ -135,7 +135,7 @@ bool CSVSimpleParser::multiplatformgetline ( istream& is, string& str ){
 }
 
 void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
-                               const string& delimiters,char textDelimiter, unsigned int numberOfCol) {
+                               const string& delimiters,char textDelimiter, unsigned int) {
     // Skip delimiters at beginning.
     string::size_type lastPos = 0;
     string::size_type pos = 0;
