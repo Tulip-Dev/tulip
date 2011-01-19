@@ -276,6 +276,20 @@ namespace tlp {
       return maxSize;
     }
 
+    /**
+     * Set if the label use min/max screen size in not scaled mode
+     */
+    void setUseMinMaxSize(bool state){
+      useMinMaxSize=state;
+    }
+
+    /**
+     * Return if the label using min/max screen size in not scaled mode
+     */
+    bool isUsingMinMaxSize(){
+      return useMinMaxSize;
+    }
+
 
 
   private :
@@ -292,6 +306,7 @@ namespace tlp {
     Color color;
     int alignment;
     bool scaleToSize;
+    bool useMinMaxSize;
     int minSize;
     int maxSize;
     bool depthTestEnabled;
