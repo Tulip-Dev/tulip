@@ -54,13 +54,7 @@ if [ "$TLP_INPUT_FILE" != "" ]; then
   echo $TEST_NAME.tlp created
 else
 # test_gui.tlp must be an empty graph
-  if [ "$(grep '(date ' empty_graph.tlp)" = "$(grep '(date ' test_gui.tlp)" ]; then
-    NB_DIFFS=0
-  else
-    NB_DIFFS=4
-  fi
-# the 2 files may only have different dates
-  if [ $(diff empty_graph.tlp test_gui.tlp | wc -l) -gt $NB_DIFFS ]; then
+  if [ $(sh tlp_diff.sh empty_graph.tlp test_gui.tlp | wc -l) -gt 0 ]; then
     echo "test recording failed: test_gui.tlp is different from empty_graph.tlp"
     exit
   else
