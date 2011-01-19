@@ -297,7 +297,7 @@ double DoubleProperty::getEdgeMax(Graph *sg) {
 }
 //=========================================================
 void DoubleProperty::computeMinMaxNode(Graph *sg) {
-  double maxN2 = DBL_MIN, minN2 = DBL_MAX;
+  double maxN2 = -DBL_MAX, minN2 = DBL_MAX;
   if (sg==0) sg=graph;
   Iterator<node> *itN=sg->getNodes();
   while (itN->hasNext()) {
@@ -315,7 +315,7 @@ void DoubleProperty::computeMinMaxNode(Graph *sg) {
 }
 //=========================================================
 void DoubleProperty::computeMinMaxEdge(Graph *sg) {
-  double maxE2 = DBL_MIN, minE2 = DBL_MAX;
+  double maxE2 = -DBL_MAX, minE2 = DBL_MAX;
   if (sg==0) sg=graph;
   Iterator<edge> *itE=sg->getEdges();
   while (itE->hasNext()) {
