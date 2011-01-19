@@ -2,7 +2,6 @@
 #include "tulip/Coord.h"
 #include "tulip/TlpQtTools.h"
 #include "tulip/SmallMultiplesView.h"
-#include "tulip/TextRenderer.h"
 
 #include <tulip/tulipconf.h>
 #include <math.h>
