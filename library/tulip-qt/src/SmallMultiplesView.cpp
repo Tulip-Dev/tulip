@@ -27,19 +27,16 @@ namespace tlp {
 //===========================================
 //            VIEW FUNCTIONS
 //===========================================
-SmallMultiplesView::SmallMultiplesView(AbstractSmallMultiplesModel *model)
-  :AbstractView(), _model(model), _overview(new GlMainWidget(0)), _zoomAnimationActivated(true), _autoDisableConfigurationWidget(true), _autoDisableInteractors(true) {
+SmallMultiplesView::SmallMultiplesView()
+  :AbstractView(), _overview(new GlMainWidget(0)), _zoomAnimationActivated(true), _autoDisableInteractors(true), _maxLabelSize(-1), _model(0) {
   Observable::holdObservers();
-  assert(model);
-  connect(_model, SIGNAL(dataChanged(int,int,AbstractSmallMultiplesModel::Roles)), this, SLOT(dataChanged(int,int,AbstractSmallMultiplesModel::Roles)));
-  connect(_model, SIGNAL(reverseItems(int,int)), this, SLOT(reverseItems(int,int)));
   _overview->setData(newGraph(), DataSet());
   GlScene *scene = _overview->getScene();
   GlGraphInputData *inputData = _overview->getScene()->getGlGraphComposite()->getInputData();
   inputData->getElementColor()->setAllNodeValue(scene->getBackgroundColor());
   inputData->getElementShape()->setAllNodeValue(4);
   inputData->getElementLabelPosition()->setAllNodeValue(2);
-  inputData->getElementFontSize()->setAllNodeValue(5);
+  inputData->getElementFontSize()->setAllNodeValue(2);
   _overview->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setFontsType(1);
   _overview->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setLabelScaled(true);
   Observable::unholdObservers();
@@ -94,8 +91,17 @@ void SmallMultiplesView::dataChanged(int id, AbstractSmallMultiplesModel::Roles 
   if (dataRoles.testFlag(AbstractSmallMultiplesModel::Texture))
     applyVariant<QString, StringProperty>(_model->data(id, AbstractSmallMultiplesModel::Texture), inputData->getElementTexture(), n);
 
-  if (dataRoles.testFlag(AbstractSmallMultiplesModel::Label))
-    applyVariant<QString, StringProperty>(_model->data(id, AbstractSmallMultiplesModel::Label), inputData->getElementLabel(), n);
+  if (dataRoles.testFlag(AbstractSmallMultiplesModel::Label)) {
+    QVariant v = _model->data(id, AbstractSmallMultiplesModel::Label);
+    if (v.isValid() && !v.isNull()) {
+      QString str = v.toString();
+      if (_maxLabelSize != -1 && str.size() > _maxLabelSize) {
+        str.resize(_maxLabelSize);
+        str.append("...");
+      }
+      inputData->getElementLabel()->setNodeValue(n, str.toStdString());
+    }
+  }
 
   if (dataRoles.testFlag(AbstractSmallMultiplesModel::Position))
     applyVariant<tlp::Coord, LayoutProperty>(_model->data(id, AbstractSmallMultiplesModel::Position), inputData->getElementLayout(), n);
@@ -170,22 +176,15 @@ void SmallMultiplesView::switchToOverview(bool destroyOldWidget) {
   if (destroyOldWidget)
     delete w;
 
-  if (_autoDisableConfigurationWidget)
-    for (uint i=0; i<_togglableConfigWidgets.size(); ++i)
-      _togglableConfigWidgets[i]->setEnabled(true);
-
   if (_autoDisableInteractors)
     toggleInteractors(false);
 
   GlGraphInputData *inputData = _overview->getScene()->getGlGraphComposite()->getInputData();
   zoomOnScreenRegion(_overview, computeBoundingBox(_overview->getGraph(), inputData->elementLayout, inputData->elementSize, inputData->elementRotation));
+  overviewSelected();
 }
 
 void SmallMultiplesView::switchToWidget(QWidget *w) {
-  if (_autoDisableConfigurationWidget)
-    for (uint i=0; i<_togglableConfigWidgets.size(); ++i)
-      _togglableConfigWidgets[i]->setEnabled(false);
-
   if (_autoDisableInteractors)
     toggleInteractors(true);
 
@@ -211,6 +210,18 @@ AbstractSmallMultiplesModel *SmallMultiplesView::model() {
   return _model;
 }
 
+void SmallMultiplesView::setModel(AbstractSmallMultiplesModel *model) {
+  assert(model);
+  if (_model) {
+    disconnect(_model, SIGNAL(dataChanged(int,int,AbstractSmallMultiplesModel::Roles)), this, SLOT(dataChanged(int,int,AbstractSmallMultiplesModel::Roles)));
+    disconnect(_model, SIGNAL(reverseItems(int,int)), this, SLOT(reverseItems(int,int)));
+  }
+  _model = model;
+  _model->setParent(this);
+  connect(_model, SIGNAL(dataChanged(int,int,AbstractSmallMultiplesModel::Roles)), this, SLOT(dataChanged(int,int,AbstractSmallMultiplesModel::Roles)));
+  connect(_model, SIGNAL(reverseItems(int,int)), this, SLOT(reverseItems(int,int)));
+}
+
 //===========================================
 //               TOGGLABLES
 //===========================================
@@ -229,8 +240,19 @@ void SmallMultiplesView::toggleInteractors(bool f) {
   }
 }
 
-void SmallMultiplesView::setTogglableConfigurationWidget(const std::vector<QWidget *> &v) {
-  _togglableConfigWidgets = v;
+//===========================================
+//               PROGRESS BARS
+//===========================================
+PluginProgress *SmallMultiplesView::overviewProgress() {
+}
+
+void SmallMultiplesView::deleteOverviewProgress() {
+}
+
+PluginProgress *SmallMultiplesView::itemProgress(int id) {
+}
+
+void SmallMultiplesView::deleteItemProgress(int id) {
 }
 
 }
