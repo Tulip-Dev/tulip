@@ -603,11 +603,11 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*){
 
   Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
   bool init=false;
-  float min = FLT_MIN,max = FLT_MAX;
+  float min = -FLT_MAX, max = FLT_MAX;
   while (itN->hasNext()) {
     node n=itN->next();
 
-    float valueMin = FLT_MIN, valueMax = FLT_MAX;
+    float valueMin = -FLT_MAX, valueMax = FLT_MAX;
     switch(operation){
     case ALIGN_TOP:
       valueMax=_layout->getNodeValue(n)[1]+_sizes->getNodeValue(n)[1]/2.;
