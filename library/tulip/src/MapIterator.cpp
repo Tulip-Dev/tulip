@@ -66,28 +66,29 @@ bool NodeMapIterator::hasNext() {
 }
 
 //=========================================
-
 EdgeMapIterator::EdgeMapIterator(Graph *sg, edge source, node target) {
   adj.resize(sg->deg(target));
   finished = false;
-  treat =0;
-  pos = 0;
+  treat = 0;
+  pos   = 0;
   Iterator<edge> *it=sg->getInOutEdges(target);
   while (it->hasNext()) {
     edge e = it->next();
-    if (e == source) pos = treat + 1;
+    if (e == source)
+        pos = treat + 1;
     adj[treat++] = e;
   } delete it;
 }
-
+//=========================================
 EdgeMapIterator::~EdgeMapIterator(){}
-
+//=========================================
 edge EdgeMapIterator::next() {
   --treat;
   pos %= adj.size();
   return adj[pos++];
 }
-
+//=========================================
 bool EdgeMapIterator::hasNext() {
-  return (treat>0);
+  return (treat > 0);
 }
+//=========================================
