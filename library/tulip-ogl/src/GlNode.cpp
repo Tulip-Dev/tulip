@@ -280,6 +280,7 @@ namespace tlp {
     label->setScaleToSize(data->parameters->isLabelScaled());
     label->setUseLODOptimisation(true);
     label->setLabelOcclusionBorder(data->parameters->getLabelsBorder());
+    label->setUseMinMaxSize(true);
     label->setMinSize(data->parameters->getMinSizeOfLabel());
     label->setMaxSize(data->parameters->getMaxSizeOfLabel());
     if(!data->parameters->isLabelOverlaped())

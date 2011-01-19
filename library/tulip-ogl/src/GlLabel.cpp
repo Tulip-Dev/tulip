@@ -77,6 +77,7 @@ namespace tlp {
     translationAfterRotation=Coord(0,0,0);
     alignment=ON_CENTER;
     scaleToSize=true;
+    useMinMaxSize=false;
     minSize=10;
     maxSize=30;
     depthTestEnabled=true;
@@ -191,10 +192,12 @@ namespace tlp {
       labelSize=-labelSize;
 
     float sizeScale=1.;
-    if(!scaleToSize && labelSize<minSize)
-      sizeScale=minSize/labelSize;
-    if(!scaleToSize && labelSize>maxSize)
+    if(useMinMaxSize){
+      if(!scaleToSize && labelSize<minSize)
+        sizeScale=minSize/labelSize;
+      if(!scaleToSize && labelSize>maxSize)
       sizeScale=maxSize/labelSize;
+    }
 
     div_w = size[0]/w;
     div_h = size[1]/h;
@@ -384,6 +387,7 @@ namespace tlp {
     GlXMLTools::getXML(dataNode,"color",color);
     GlXMLTools::getXML(dataNode,"alignment",alignment);
     GlXMLTools::getXML(dataNode,"scaleToSize",scaleToSize);
+    GlXMLTools::getXML(dataNode,"useMinMaxSize",useMinMaxSize);
     GlXMLTools::getXML(dataNode,"minSize",minSize);
     GlXMLTools::getXML(dataNode,"maxSize",maxSize);
     GlXMLTools::getXML(dataNode,"depthTestEnabled",depthTestEnabled);
@@ -409,6 +413,7 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode,"color",color);
       GlXMLTools::setWithXML(dataNode,"alignment",alignment);
       GlXMLTools::setWithXML(dataNode,"scaleToSize",scaleToSize);
+      GlXMLTools::setWithXML(dataNode,"useMinMaxSize",useMinMaxSize);
       GlXMLTools::setWithXML(dataNode,"minSize",minSize);
       GlXMLTools::setWithXML(dataNode,"maxSize",maxSize);
       GlXMLTools::setWithXML(dataNode,"depthTestEnabled",depthTestEnabled);
