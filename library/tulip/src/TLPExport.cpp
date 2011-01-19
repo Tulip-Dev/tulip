@@ -144,10 +144,13 @@ public:
       os << "(cluster " << graph->getId() << " \"" << convert(graph->getAttribute<string>("name")) << "\"" << endl;
       Iterator<node> *itN = graph->getNodes();
       node beginNode, previousNode;
+      unsigned int progupdate = graph->numberOfEdges() + graph->numberOfNodes() / 100;
       if (itN->hasNext()) {
         os << "(nodes";
         while (itN->hasNext()) {
-          pluginProgress->progress(progress++, graph->numberOfEdges() + graph->numberOfNodes());
+            if (progress % progupdate == 0)
+                pluginProgress->progress(progress, graph->numberOfEdges() + graph->numberOfNodes());
+          ++progress;
           node current = getNode(itN->next());
           if (useOldFormat) {
             os << " " << current.id;
@@ -181,7 +184,9 @@ public:
       if (itE->hasNext()) {
         os << "(edges";
         while (itE->hasNext()) {
-          pluginProgress->progress(progress++, graph->numberOfEdges() + graph->numberOfNodes());
+            if (progress % progupdate == 0)
+                pluginProgress->progress(progress, graph->numberOfEdges() + graph->numberOfNodes());
+            ++progress;
           edge current = getEdge(itE->next());
           if (useOldFormat) {
             os << " " << current.id;
@@ -243,11 +248,13 @@ public:
         os << "(nb_edges " << nbElts << ")" << endl;
       }
       os << ";(edge <edge_id> <source_id> <target_id>)" << endl;
-
+      unsigned int progupdate = graph->numberOfEdges() /100;
       Iterator<edge> *ite = graph->getEdges();
       unsigned int id = 0;
       for (;ite->hasNext();) {
-        pluginProgress->progress(progress++, graph->numberOfEdges());
+          if (progress % progupdate == 0)
+        pluginProgress->progress(progress, graph->numberOfEdges());
+          ++progress;
         edge e = ite->next();
         const pair<node, node>& ends = graph->ends(e);
         os << "(edge " << id << " " << getNode(ends.first).id << " " << getNode(ends.second).id << ")";
@@ -268,13 +275,14 @@ public:
   void saveLocalProperties(ostream &os, Graph *graph) {
     pluginProgress->setComment("Saving Graph Properties");
     progress = 0;
-    Iterator<PropertyInterface *> *itP=graph->getLocalObjectProperties();
+    Iterator<PropertyInterface *> *itP = graph->getLocalObjectProperties();
     //we count the properties for the progress bar
 //     int propertiesNumber = 0;
     int nonDefaultvaluatedElementCount = 0;
     while (itP->hasNext()) {
 //       ++propertiesNumber;
       PropertyInterface *prop = itP->next();
+
       Iterator<node> *itN = prop->getNonDefaultValuatedNodes(graph);
       while (itN->hasNext()) {
         ++nonDefaultvaluatedElementCount;
@@ -291,6 +299,10 @@ public:
     PropertyInterface *prop;
     while (itP->hasNext()) {
       prop = itP->next();
+      stringstream tmp;
+      tmp << "Saving Property [" << prop->getName() << "]";
+      pluginProgress->setComment(tmp.str());
+
       if (graph->getSuperGraph()==graph)
         os << "(property " << " 0 " << prop->getTypename() << " " ;
       else
@@ -318,7 +330,9 @@ public:
       os <<"(default \"" << convert(nDefault) << "\" \"" << convert(eDefault) << "\")" << endl;
       Iterator<node> *itN = prop->getNonDefaultValuatedNodes(graph);
       while (itN->hasNext()) {
-        pluginProgress->progress(progress++, nonDefaultvaluatedElementCount);
+          if (progress % (nonDefaultvaluatedElementCount / 100) == 0)
+        pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
+          ++progress;
         node itn = itN->next();
         string tmp = prop->getNodeStringValue(itn);
         // replace real path with symbolic one using TulipBitmapDir
@@ -333,7 +347,10 @@ public:
       
       Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(graph);
       while (itE->hasNext()) {
-        pluginProgress->progress(progress++, nonDefaultvaluatedElementCount);
+          if (progress % (nonDefaultvaluatedElementCount / 100) == 0)
+
+        pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
+          ++progress;
         edge ite = itE->next();
         // replace real path with symbolic one using TulipBitmapDir
         string tmp = prop->getEdgeStringValue(ite);
