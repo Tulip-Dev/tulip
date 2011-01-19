@@ -4,6 +4,7 @@
 #include "tulip/AbstractView.h"
 #include "tulip/AbstractSmallMultiplesModel.h"
 #include <QtCore/QVector>
+#include <QtGui/QGraphicsView>
 
 namespace tlp {
 
@@ -31,10 +32,19 @@ public:
     * @brief Construct a SmallMultiplesView using a specific model.
     * @param The model used to retreive data sets previews, names and positions in the overview.
     */
-  SmallMultiplesView(AbstractSmallMultiplesModel *model);
+  SmallMultiplesView();
 
   virtual ~SmallMultiplesView();
+
+  /**
+    * @return The model associated to this view
+    */
   AbstractSmallMultiplesModel *model();
+
+  /**
+    * @brief Sets the model associated to this view
+    */
+  void setModel(AbstractSmallMultiplesModel *model);
 
   /**
     * @brief Constructs the view UI.
@@ -96,23 +106,38 @@ public:
   void setAutoDisableInteractors(bool f) { _autoDisableInteractors = f; }
 
   /**
-    * @return true if widgets specified with the setTogglableConfigurationWidget method should be automatically disabled when switching to a specific view.
-    * @see setTogglableConfigurationWidget
+    * @brief Returns the maximum label size (default value for this property is -1)
+    * Labels displayed in the overview will be wrapped if they have more characters than the max size.
+    * If the max size is -1, then labels will never be wrapped.
     */
-  bool isAutoDisableConfigurationWidget() const { return _autoDisableConfigurationWidget; }
+  int maxLabelSize() const { return _maxLabelSize; }
 
   /**
-    * @brief Toggle automatic disabling of widgets specified with the setTogglableConfigurationWidget method when switching to a specific view.
-    * @see setTogglableConfigurationWidget
+    * @brief Changes the max label size
+    * @see maxLabelSize
     */
-  void setAutoDisableConfigurationWidget(bool f) { _autoDisableConfigurationWidget = f; }
+  void setMaxLabelSize(int s) { _maxLabelSize = s; }
 
   /**
-    * @brief Defines a list of widgets that should be automatically toggled on/off when the view switches to the overview/specific mode.
-    * When using SmallMultiplesView, user may want to give access to view-wise configuration widgets only on overview mode.
-    * @warning When defining this behavior, user MUST always use the switchToOverview and switchToWidget methods.
+    * @brief This method is part of the view's progress bar management. Use it to retrieve a progress bar on the whole overview.
     */
-  void setTogglableConfigurationWidget(const std::vector<QWidget *> &);
+  PluginProgress *overviewProgress();
+
+  /**
+    * @brief Deletes the progress bar associated to the overview.
+    */
+  void deleteOverviewProgress();
+
+  /**
+    * @brief Associate a progress bar to a specific item
+    * You can use this function to indicate that only a part of the data is reloading
+    */
+  PluginProgress *itemProgress(int);
+
+  /**
+    * @brief Deletes the progress bar associated to an item.
+    */
+  void deleteItemProgress(int);
 
 public slots:
   /**
@@ -144,6 +169,11 @@ protected:
     */
   virtual void itemSelected(int) {}
 
+  /**
+    * @brief Called when switched to the overview
+    */
+  virtual void overviewSelected() {}
+
 protected slots:
   void dataChanged(int from, int to, AbstractSmallMultiplesModel::Roles dataRoles = AbstractSmallMultiplesModel::AllRoles);
   void dataChanged(int id, AbstractSmallMultiplesModel::Roles dataRoles = AbstractSmallMultiplesModel::AllRoles);
@@ -157,8 +187,8 @@ private:
   GlMainWidget *_overview;
   QVector<node> _items;
   bool _zoomAnimationActivated;
-  bool _autoDisableConfigurationWidget;
   bool _autoDisableInteractors;
+  int _maxLabelSize;
   std::vector<QWidget *> _togglableConfigWidgets;
 };
 }

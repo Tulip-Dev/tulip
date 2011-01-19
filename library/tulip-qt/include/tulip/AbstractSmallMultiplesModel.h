@@ -8,6 +8,8 @@
 
 namespace tlp {
 
+class GlMainWidget;
+
 /**
   * @brief The AbstractSmallMultiplesModel provides a way for a SmallMultiplesView to retrieve data displayed to preview each data set.
   * An AbstractSmallMultiplesModel implementation controls the position, the texture and the name of data sets previews. For each of those,
@@ -48,6 +50,18 @@ public:
     */
   virtual int countItems() = 0;
 
+  /**
+    * @brief Returns the spacing bewteen small multiples items.
+    * This will only work when you're using the default implementation of AbstractSmallMultiplesModel::data for the Position Role
+    */
+  double spacing() const { return _spacing; }
+
+  /**
+    * @brief Sets the spacing between small multiples items
+    * @see spacing
+    */
+  void setSpacing(double s) { _spacing = s; }
+
 signals:
   /**
     * @brief Refresh data for specified roles on a given item.
@@ -60,6 +74,10 @@ signals:
     */
   void reverseItems(int a,int b);
 
+private:
+  tlp::GlMainWidget *_overview;
+  double _spacing;
+  void setOverview(tlp::GlMainWidget *);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(AbstractSmallMultiplesModel::Roles)
