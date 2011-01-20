@@ -247,7 +247,7 @@ namespace tlp {
     /**
      * This slot is call when a view want to change its graph
      */
-    void viewRequestChangeGraph(View *view, Graph *graph);
+    void viewRequestChangeGraph(tlp::View *view,tlp::Graph *graph);
     /**
      * This slot is call went a view will be closed
      */

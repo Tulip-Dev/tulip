@@ -149,7 +149,7 @@ namespace tlp {
     /**
      * This signal is emit when the view want to change its graph
      */
-    void requestChangeGraph(View *,Graph *);
+    void requestChangeGraph(tlp::View*,tlp::Graph*);
 
   };
 
