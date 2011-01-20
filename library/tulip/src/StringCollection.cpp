@@ -34,19 +34,41 @@ StringCollection::StringCollection(const vector<string> &vectorParam)
 StringCollection::StringCollection(const string param) {
   string temp;
   string::const_iterator itChar = param.begin();
+  bool escapeChar = false;
   while (itChar != param.end()) {
-    if ( *itChar == ';') {
+    if (escapeChar) {
+      // when it escaped
+      // semi colon can be added to the string
+      if (*itChar == ';') {
+	temp += *itChar;
+	escapeChar = false;
+	itChar++;
+	continue;
+      }
+      else {
+	escapeChar = false;
+	temp += '\\';
+      }
+    }
+    // check string separator
+    if (*itChar == ';') {
+      escapeChar = false;
       _data.push_back(temp);
       temp = "";
+      itChar++;
+      continue;
     }
-    else 
+    // check escape char
+    if (*itChar == '\\')
+      escapeChar = true;
+    else
       temp += *itChar;
     itChar++;        
   }
   if (temp.size())
     _data.push_back(temp);
   current = 0;
-} 
+}
      
 StringCollection::StringCollection(const vector<string>&  vectorParam, 
 				   int currentParam)
