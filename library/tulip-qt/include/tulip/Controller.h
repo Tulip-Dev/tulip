@@ -140,6 +140,14 @@ namespace tlp {
           return mainWindow->dockWidgetArea(dock);
         }
 
+        QByteArray saveState(int version = 0) {
+          return mainWindow->saveState(version);
+        }
+
+        bool restoreState(const QByteArray& state, int version = 0) {
+          return mainWindow->restoreState(state, version);
+        }
+
 	private:
 
         QMainWindow *mainWindow;
