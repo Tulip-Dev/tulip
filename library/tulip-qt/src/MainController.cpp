@@ -848,7 +848,7 @@ namespace tlp {
     }
 
     connect(createdView, SIGNAL(elementSelected(unsigned int, bool)),this,SLOT(showElementProperties(unsigned int, bool)));
-    connect(createdView, SIGNAL(requestChangeGraph(View *,Graph *)), this, SLOT(viewRequestChangeGraph(View *,Graph *)));
+    connect(createdView, SIGNAL(requestChangeGraph(tlp::View*,tlp::Graph*)), this, SLOT(viewRequestChangeGraph(tlp::View*,tlp::Graph*)));
 
     return createdView;
   }
