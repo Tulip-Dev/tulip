@@ -19,7 +19,7 @@
 #include <assert.h>
 #include "Random.h"
 
-const char * paramHelp[] = {
+static const char * paramHelp[] = {
   // 3D
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "Boolean" ) \
