@@ -98,7 +98,7 @@ protected:
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);
-  virtual void removeEdge(const edge, const node= node());
+  virtual void removeEdge(const edge);
 
 private:
   MutableContainer<bool> nodeAdaptativeFilter;

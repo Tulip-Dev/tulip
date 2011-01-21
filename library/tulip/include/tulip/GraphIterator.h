@@ -217,161 +217,41 @@ class InOutEdgesIterator:public FactorEdgeIterator, public MemoryPool<InOutEdges
 //============================================================
 //Iterator for the GraphImpl
 //============================================================
-///Node iterator for data sg
-class xSGraphNodeIterator
+class GraphImplNodeIterator
 #ifdef NDEBUG
-  :public NodeIterator, public MemoryPool<xSGraphNodeIterator>
+  :public NodeIterator, public MemoryPool<GraphImplNodeIterator>
 #else
   :public NodeIteratorObserver
 #endif
  {
  private:
 #ifndef NDEBUG
-  GraphImpl *spG;
+  GraphImpl *graph;
 #endif
-  Iterator<unsigned int> *itId;
+  Iterator<node> *itId;
  public:
-  xSGraphNodeIterator(const Graph *sG);
-  ~xSGraphNodeIterator();
-  node next();
-  bool hasNext();
-};
-//============================================================
-///Out Node iterator for data sg
-class xOutNodesIterator
-#ifdef NDEBUG
-  :public NodeIterator, public MemoryPool<xOutNodesIterator>
-#else
-  :public NodeIteratorObserver
-#endif
- {
- private:
-  Iterator<edge> *it;
-  GraphImpl *spG;
- public:
-  xOutNodesIterator(const Graph *sG,const node n);
-  ~xOutNodesIterator();
-  node next();
-  bool hasNext();
-};
-//============================================================
-///In Node iterator for data sg
-class xInNodesIterator
-#ifdef NDEBUG
-  :public NodeIterator, public MemoryPool<xInNodesIterator>
-#else
-  :public NodeIteratorObserver
-#endif
- {
- private:
-  Iterator<edge> *it;
-  const GraphImpl *spG;
- public:
-  xInNodesIterator(const Graph *sG,const node n);
-  ~xInNodesIterator();
-  node next();
-  bool hasNext();
-};
-//============================================================
-///In Out Node iterator for data sg
-class xInOutNodesIterator
-#ifdef NDEBUG
-  :public NodeIterator, public MemoryPool<xInOutNodesIterator>
-#else
-  :public NodeIteratorObserver
-#endif
- {
-  GraphImpl::EdgeContainer::iterator it,itEnd;
-  node n;
-  const GraphImpl *spG;
- public:
-  xInOutNodesIterator(const Graph *sG,const node n);
-  ~xInOutNodesIterator();
+  GraphImplNodeIterator(const Graph *g, Iterator<node>* it);
+  ~GraphImplNodeIterator();
   node next();
   bool hasNext();
 };
 //=============================================================
 ///Edge iterator for data sg
-class xSGraphEdgeIterator
+class GraphImplEdgeIterator
 #ifdef NDEBUG
-  :public EdgeIterator, public MemoryPool<xSGraphEdgeIterator>
+  :public EdgeIterator, public MemoryPool<GraphImplEdgeIterator>
 #else
   :public EdgeIteratorObserver
 #endif
  {
  private:
 #ifndef NDEBUG
-  GraphImpl *spG;
+  GraphImpl *graph;
 #endif
-  Iterator<unsigned int> *itId;
+  Iterator<edge> *itId;
  public:
-  xSGraphEdgeIterator(const Graph *sG);
-  ~xSGraphEdgeIterator();
-  edge next();
-  bool hasNext();
-};
-//============================================================
-///Out edge iterator for data sg
-class xOutEdgesIterator
-#ifdef NDEBUG
-  :public EdgeIterator, public MemoryPool<xOutEdgesIterator>
-#else
-  :public EdgeIteratorObserver
-#endif
- {
- private:
-  GraphImpl::EdgeContainer::iterator it,itEnd;
-  node n;
-  edge curEdge;
-  GraphImpl *spG;
-  std::set<edge> loop;
- public:
-  xOutEdgesIterator(const Graph *sG,const node n);
-  ~xOutEdgesIterator();
-  edge next();
-  bool hasNext();
- protected:
-  void prepareNext();
-};
-//============================================================
-///In edge iterator for data sg
-class xInEdgesIterator
-#ifdef NDEBUG
-  :public EdgeIterator, public MemoryPool<xInEdgesIterator>
-#else
-  :public EdgeIteratorObserver
-#endif
- {
-  GraphImpl::EdgeContainer::iterator it,itEnd;
-  node n;
-  edge curEdge;
-  GraphImpl *spG;
-  std::set<edge> loop;
- public:
-  xInEdgesIterator(const Graph *sG,const node n);
-  ~xInEdgesIterator();
-  edge next();
-  bool hasNext();
- protected:
-  void prepareNext();
-};
-//============================================================
-///In out edge iterator for data sg
-class xInOutEdgesIterator
-#ifdef NDEBUG
-  :public EdgeIterator, public MemoryPool<xInOutEdgesIterator>
-#else
-  :public EdgeIteratorObserver
-#endif
- {
-  GraphImpl::EdgeContainer::iterator it,itEnd;
-#ifndef NDEBUG
-private:
-  GraphImpl *spG;
-#endif
-public:
-  xInOutEdgesIterator(const Graph *sG,const node n);
-  ~xInOutEdgesIterator();
+  GraphImplEdgeIterator(const Graph *g, Iterator<edge>* it);
+  ~GraphImplEdgeIterator();
   edge next();
   bool hasNext();
 };

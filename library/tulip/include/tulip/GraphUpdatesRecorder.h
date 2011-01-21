@@ -109,14 +109,14 @@ namespace tlp {
     // one set for new edge containers
     TLP_HASH_MAP<node, std::vector<edge> > newContainers;
 
-    // copy of nodeIds at start time
-    IdManager oldNodeIdManager;
-    // copy of edgeIds at start time
-    IdManager oldEdgeIdManager;
-    // copy of nodeIds at stop time
-    IdManager newNodeIdManager;
-    // copy of edgeIds at stop time
-    IdManager newEdgeIdManager;
+    // copy of nodes id manager infos at start time
+    IdManagerInfos oldNodeIdManager;
+    // copy of edges id manager infos at start time
+    IdManagerInfos oldEdgeIdManager;
+    // copy of nodes id manager infos at stop time
+    IdManagerInfos newNodeIdManager;
+    // copy of edges id manager infos at stop time
+    IdManagerInfos newEdgeIdManager;
 
     // one set of added sub graphs per graph
     TLP_HASH_MAP<unsigned long, std::set<Graph*> > addedSubGraphs;

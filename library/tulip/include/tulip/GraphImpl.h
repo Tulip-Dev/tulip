@@ -26,28 +26,19 @@
 #include <vector>
 #include <list>
 #include "tulip/GraphAbstract.h"
-#include "tulip/IdManager.h"
-#include "tulip/SimpleVector.h"
-#include "tulip/MutableContainer.h"
+#include "tulip/Iterator.h"
+#include "tulip/GraphStorage.h"
 
 namespace tlp {
 
 class GraphView;
 class GraphUpdatesRecorder;
-template<class C>struct Iterator;
-class Int;
 
 ///Implementation of the graph support of the Graph.
 class TLP_SCOPE GraphImpl:public GraphAbstract, public Observer {
 
-  friend class xSGraphNodeIterator;
-  friend class xSGraphEdgeIterator;
-  friend class xInOutEdgesIterator;
-  friend class xOutEdgesIterator;
-  friend class xInEdgesIterator;
-  friend class xInOutNodesIterator;
   friend class GraphUpdatesRecorder;
-  
+  friend class TLPExport;  
 
 public:
   GraphImpl();
@@ -111,21 +102,6 @@ public:
   virtual void reserveNodes(unsigned int nbNodes);
   virtual void reserveEdges(unsigned int nbEdges);
 
-  // indicate fragmented space of nodes/edges
-  bool hasFragmentedNodeIds() const {
-    return nodeIds.hasFreeIds();
-  }
-  bool hasFragmentedEdgeIds() const {
-      return edgeIds.hasFreeIds();
-  }
-  // return first node or edge id
-  unsigned int getFirstNodeId() const {
-    return nodeIds.getFirstId();
-  }
-  unsigned int getFirstEdgeId() const {
-    return edgeIds.getFirstId();
-  }
-
 protected:
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder
@@ -134,33 +110,19 @@ protected:
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);
-  virtual void removeEdge(const edge, const node = node());
+  virtual void removeEdge(const edge);
   // used by PropertyManager
   virtual bool canDeleteProperty(Graph* g, PropertyInterface *prop);
 
 private :
-  typedef SimpleVector<edge> EdgeContainer;
-  typedef std::vector<EdgeContainer> Nodes;
-  typedef std::vector<std::pair< node , node > > Edges;
-  MutableContainer<unsigned int> outDegree;
-  mutable Edges edges;
-  mutable Nodes nodes;
+  GraphStorage storage;
   IdManager graphIds;
-  IdManager nodeIds;
-  IdManager edgeIds;
-  unsigned int nbNodes;
-  unsigned int nbEdges;
   std::list<GraphUpdatesRecorder*> previousRecorders;
   std::list<Graph *> observedGraphs;
   std::list<PropertyInterface*> observedProps;
   std::list<GraphUpdatesRecorder*> recorders;
 
-  // methods used in push/pop implementation
-  static void removeEdge(EdgeContainer &, const edge);
-  edge addEdgeInternal(edge, node source, node target,
-		       bool updateContainers);
-  void delNodeInternal(const node);
-  void restoreContainer(node, std::vector<edge>&);
+  void restoreAdj(node, std::vector<edge>&);
   void observeUpdates(Graph*);
   void unobserveUpdates();
   void delPreviousRecorders();

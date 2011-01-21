@@ -274,7 +274,7 @@ edge GraphDecorator::restoreEdge(edge e, node, node){
 }
 
 //============================================================
-void GraphDecorator::removeEdge(const edge, const node){
+void GraphDecorator::removeEdge(const edge){
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
