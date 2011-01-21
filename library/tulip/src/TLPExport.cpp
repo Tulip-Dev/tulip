@@ -431,7 +431,7 @@ public:
     string format(TLP_FILE_VERSION);
 
     // reindex nodes/edges if needed
-    if (((GraphImpl *) graph)->hasFragmentedNodeIds()) {
+    if (((GraphImpl *) graph)->storage.hasFragmentedNodeIds()) {
       nodeIndex = new TLP_HASH_MAP<unsigned int, node>;
       unsigned int i = 0;
       node n;
@@ -441,8 +441,8 @@ public:
       }
     } else
       // no map needed, id translation only
-      firstNodeId = ((GraphImpl *) graph)->getFirstNodeId();
-    if (((GraphImpl *) graph)->hasFragmentedEdgeIds()) {
+      firstNodeId = ((GraphImpl *) graph)->storage.getFirstNodeId();
+    if (((GraphImpl *) graph)->storage.hasFragmentedEdgeIds()) {
       edgeIndex = new TLP_HASH_MAP<unsigned int, edge>;
       unsigned int i = 0;
       edge e;
@@ -452,7 +452,7 @@ public:
       }
     } else
       // no map needed, id translation only
-      firstEdgeId = ((GraphImpl *) graph)->getFirstEdgeId();
+      firstEdgeId = ((GraphImpl *) graph)->storage.getFirstEdgeId();
     
     string name;
     string author;

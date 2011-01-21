@@ -408,287 +408,70 @@ bool InOutEdgesIterator::hasNext() {
 //************************************************************
 //************************************************************
 //============================================================
-xSGraphNodeIterator::xSGraphNodeIterator(const Graph *sG):
-  itId(((GraphImpl *)sG)->nodeIds.getIds()) {
+  GraphImplNodeIterator::GraphImplNodeIterator(const Graph*
 #ifndef NDEBUG
-  spG = (GraphImpl *)sG;
+					       g
+#endif
+					       , Iterator<node>* it):
+  itId(it) {
+#ifndef NDEBUG
+  graph = (GraphImpl *) g;
 #ifdef _OPENMP
   // see explanation above
   #pragma omp critical(addRemoveObserver)
 #endif
-  spG->addGraphObserver(this);
+  graph->addGraphObserver(this);
 #endif
 }
-xSGraphNodeIterator::~xSGraphNodeIterator(){
+GraphImplNodeIterator::~GraphImplNodeIterator(){
 #ifndef NDEBUG
 #ifdef _OPENMP
   // see explanation above
   #pragma omp critical(addRemoveObserver)
 #endif
-  spG->removeGraphObserver(this);
+  graph->removeGraphObserver(this);
 #endif
   delete itId;
 }
-node xSGraphNodeIterator::next() {
+node GraphImplNodeIterator::next() {
   assert(itId->hasNext());
-  return node(itId->next());
+  return itId->next();
 }
-bool xSGraphNodeIterator::hasNext() {
+bool GraphImplNodeIterator::hasNext() {
   return (itId->hasNext());
 }
-//===================================================================
-xOutNodesIterator::xOutNodesIterator(const Graph *sG,const node n):
-  it(new xOutEdgesIterator((GraphImpl *)sG,n)), spG((GraphImpl *)sG) {
-#ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-  spG->addGraphObserver(this);
-#endif
-}
-xOutNodesIterator::~xOutNodesIterator() {
-#ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-  spG->removeGraphObserver(this);
-#endif
-  delete it;
-}
-node xOutNodesIterator::next() {
-  assert(it->hasNext());
-  return spG->target(it->next());
-}
-bool xOutNodesIterator::hasNext() {
-  return (it->hasNext());
-}
-//===================================================================
-xInNodesIterator::xInNodesIterator(const Graph *sG,const node n): 
-  it(new xInEdgesIterator(sG,n)), spG((GraphImpl *)sG) {
-#ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-  spG->addGraphObserver(this);
-#endif
-}
-xInNodesIterator::~xInNodesIterator() {
-#ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-  spG->removeGraphObserver(this);
-#endif
-  delete it;
-}
-node xInNodesIterator:: next() {
-  assert(it->hasNext());
-  return spG->source(it->next());
-}
-bool xInNodesIterator::hasNext() {
-  return (it->hasNext());
-}
-//===================================================================
-xInOutNodesIterator::xInOutNodesIterator(const Graph *sG,const node n):
-  it(((GraphImpl *)sG)->nodes[n.id].begin()),
-  itEnd(((GraphImpl *)sG)->nodes[n.id].end()),
-  n(n), spG((GraphImpl *)sG) {
-#ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-  spG->addGraphObserver(this);
-#endif
-}
-xInOutNodesIterator::~xInOutNodesIterator() {
-#ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-  spG->removeGraphObserver(this);
-#endif
-}
-node xInOutNodesIterator::next() {
-  assert(it!=itEnd);
-  edge tmp=(*it);
-  it++;
-  return spG->opposite(tmp,n);
-}
-bool xInOutNodesIterator::hasNext() {
-  return (it!=itEnd);
-}
 //===============================================================
-xSGraphEdgeIterator::xSGraphEdgeIterator(const Graph *sG):
-  itId(((GraphImpl *)sG)->edgeIds.getIds()) {
+GraphImplEdgeIterator::GraphImplEdgeIterator(const Graph*
 #ifndef NDEBUG
-  spG = (GraphImpl *)sG;
+					       g
+#endif
+					     , Iterator<edge>* it):
+  itId(it) {
+#ifndef NDEBUG
+  graph = (GraphImpl *) g;
 #ifdef _OPENMP
   // see explanation above
   #pragma omp critical(addRemoveObserver)
 #endif
-  spG->addGraphObserver(this);
+  graph->addGraphObserver(this);
 #endif
 }
-xSGraphEdgeIterator::~xSGraphEdgeIterator(){
+GraphImplEdgeIterator::~GraphImplEdgeIterator(){
 #ifndef NDEBUG
 #ifdef _OPENMP
   // see explanation above
   #pragma omp critical(addRemoveObserver)
 #endif
-  spG->removeGraphObserver(this);
+  graph->removeGraphObserver(this);
 #endif
   delete itId;
 }
-edge xSGraphEdgeIterator::next() {
+edge GraphImplEdgeIterator::next() {
   assert(itId->hasNext());
-  return edge(itId->next());
+  return itId->next();
 }
-bool xSGraphEdgeIterator::hasNext() {
+bool GraphImplEdgeIterator::hasNext() {
   return itId->hasNext();
-}
-//===================================================================
-xOutEdgesIterator::xOutEdgesIterator(const Graph *sG,const node n):
-  it(((GraphImpl *)sG)->nodes[n.id].begin()),
-  itEnd(((GraphImpl *)sG)->nodes[n.id].end()), n(n), spG((GraphImpl *)sG) {
-#ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-  spG->addGraphObserver(this);
-#endif
-  // anticipate first iteration
-  prepareNext();
-}
-xOutEdgesIterator::~xOutEdgesIterator() {
-#ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-  spG->removeGraphObserver(this);
-#endif
-}
-void xOutEdgesIterator::prepareNext() {
-  for (;it != itEnd; ++it) {
-    curEdge = *it;
-    if (spG->edges[curEdge.id].first!=n)
-      continue;
-    if (spG->edges[curEdge.id].second == n) {
-      if (loop.find(curEdge)==loop.end()) {
-	loop.insert(curEdge);
-	++it;
-	return;
-      }
-    } else {
-      ++it;
-      return;
-    }
-  }
-  // set curEdge as invalid
-  curEdge = edge();
-}
-edge xOutEdgesIterator::next() {
-  // check hasNext()
-  assert(curEdge.isValid());
-  // we are already pointing to the next
-  edge tmp=curEdge;
-  // anticipating the next iteration
-  prepareNext();
-  return tmp;
-}
-bool xOutEdgesIterator::hasNext() {
-  return (curEdge.isValid());
-}
-//===================================================================
-xInEdgesIterator::xInEdgesIterator(const Graph *sG,const node n):
-  it(((GraphImpl *)sG)->nodes[n.id].begin()),
-  itEnd(((GraphImpl *)sG)->nodes[n.id].end()), n(n), spG((GraphImpl *)sG) {
-#ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-  spG->addGraphObserver(this);
-#endif
-  // anticipate first iteration
-  prepareNext();
-}
-xInEdgesIterator::~xInEdgesIterator() {
-#ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-  spG->removeGraphObserver(this);
-#endif
-}
-void xInEdgesIterator::prepareNext() {
-  for(;it!=itEnd; ++it) {
-    curEdge=*it;
-    if (spG->edges[curEdge.id].second != n)
-      continue;
-    if (spG->edges[curEdge.id].first == n) {
-      if (loop.find(curEdge)==loop.end()) {
-	loop.insert(curEdge);
-	continue;
-      }
-    }
-    ++it;
-    return;
-  }
-  // set curEdge as invalid
-  curEdge = edge();
-}
-edge xInEdgesIterator::next() {
-  // check hasNext()
-  assert(curEdge.isValid());
-  // we are already pointing to the next
-  edge tmp=curEdge;
-  // anticipating the next iteration
-  prepareNext();
-  return tmp;
-}
-bool xInEdgesIterator::hasNext() {
-  return (curEdge.isValid());
-}
-//===================================================================
-xInOutEdgesIterator::xInOutEdgesIterator(const Graph *sG, const node n): 
-  it(((GraphImpl *)sG)->nodes[n.id].begin()),
-  itEnd(((GraphImpl *)sG)->nodes[n.id].end()){
-#ifndef NDEBUG
-  spG = (GraphImpl *)sG;
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-  spG->addGraphObserver(this);
-#endif
-}
-xInOutEdgesIterator::~xInOutEdgesIterator(){
-#ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-  spG->removeGraphObserver(this);
-#endif
-}
-edge xInOutEdgesIterator::next() {
-  // check hasNext()
-  assert(it != itEnd);
-  edge tmp=(*it);
-  ++it;
-  return tmp;
-}
-bool xInOutEdgesIterator::hasNext() {
-  return (it!=itEnd);
 }
 //===================================================================
 } // namespace tpl

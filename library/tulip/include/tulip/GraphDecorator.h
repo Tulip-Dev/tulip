@@ -132,7 +132,7 @@ protected:
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);
-  virtual void removeEdge(const edge, const node = node());
+  virtual void removeEdge(const edge);
   // to deal with sub graph deletion
   virtual void removeSubGraph(Graph*, bool = false);
   virtual void clearSubGraphs();

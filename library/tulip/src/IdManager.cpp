@@ -27,23 +27,6 @@ using namespace std;
 
 namespace tlp {
 
-class IdManagerIterator:public Iterator<unsigned int>  {
-public:
-  IdManagerIterator(const IdManager &idMan);
-  ~IdManagerIterator();
-  unsigned int next();
-  bool hasNext();
-private:
-  unsigned int current;
-  std::set<unsigned int>::const_iterator it;
-  unsigned int last;
-  const IdManager &idManager;
-};
-
-IdManager::IdManager():
-  nextId(0),
-  firstId(0) {
-}
 //-----------------------------------------------------------
 bool IdManager::is_free(const unsigned int id) const {
   if (id < firstId) return true;
@@ -90,40 +73,8 @@ void IdManager::getFreeId(unsigned int id) {
   }
 }
 //-----------------------------------------------------------
-Iterator<unsigned int>* IdManager::getIds() const{
-  return new IdManagerIterator(*this);
-}
-//-----------------------------------------------------------
 bool IdManager::hasFreeIds() const {
   return !freeIds.empty();
-}
-//-----------------------------------------------------------
-IdManagerIterator::IdManagerIterator(const IdManager &idMan):
-  current(idMan.firstId), it(idMan.freeIds.begin()), last(idMan.nextId), idManager(idMan)
-{
-  set<unsigned int>::reverse_iterator it;
-  it = idMan.freeIds.rbegin();
-  while(it != idMan.freeIds.rend() && (*it) == last - 1) {
-    --last;
-    ++it;
-  }
-}
-//-----------------------------------------------------------
-IdManagerIterator::~IdManagerIterator(){};
-//-----------------------------------------------------------
-unsigned  int IdManagerIterator:: next() {
-  unsigned int tmp = current;
-  ++current;
-  while( it != idManager.freeIds.end()) {
-    if (current < *it) return tmp;
-    ++current;
-    ++it;
-  }
-  return tmp;
-}
-//-----------------------------------------------------------
-bool IdManagerIterator::hasNext() {
-  return (current < last);
 }
 //-----------------------------------------------------------
 

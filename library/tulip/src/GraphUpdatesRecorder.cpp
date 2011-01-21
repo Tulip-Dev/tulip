@@ -120,11 +120,12 @@ void GraphUpdatesRecorder::recordEdgeContainer(TLP_HASH_MAP<node, vector<edge> >
   TLP_HASH_MAP<node, vector<edge> >::iterator itc =
     containers.find(n);
   if (itc == containers.end()) {
-    // record edges container of n
+    // record edges of n
     vector<edge> vEdges;
-    GraphImpl::EdgeContainer& edges = g->nodes[n.id];
-    for (unsigned int i = 0; i < edges.size(); ++i)
-      vEdges.push_back(edges[i]);
+    Iterator<edge>* it = g->storage.getInOutEdges(n);
+    while(it->hasNext()) {
+      vEdges.push_back(it->next());
+    } delete it;
     containers[n] = vEdges;
   }
 }
@@ -153,8 +154,8 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
 
     // record nodeIds & edgeIds
     GraphImpl* root = (GraphImpl*) g;
-    newNodeIdManager = root->nodeIds;
-    newEdgeIdManager = root->edgeIds;
+    newNodeIdManager = root->storage.getNodeIdManagerInfos();
+    newEdgeIdManager = root->storage.getEdgeIdManagerInfos();
     // record new edges containers
     TLP_HASH_MAP<edge, EdgeRecord>::iterator itae = addedEdges.begin();
     while(itae != addedEdges.end()) {
@@ -369,8 +370,8 @@ void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface* p) {
 void GraphUpdatesRecorder::startRecording(GraphImpl* g) {
   if (g->getSuperGraph() == g) {
     GraphImpl* root = (GraphImpl*) g;
-    oldNodeIdManager = root->nodeIds;
-    oldEdgeIdManager = root->edgeIds;
+    oldNodeIdManager = root->storage.getNodeIdManagerInfos();
+    oldEdgeIdManager = root->storage.getEdgeIdManagerInfos();
   }
   restartRecording(g);
 }
@@ -539,8 +540,10 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   // this is done before the loop on the edges to add
   // because of some assertion in debug mode
   // while calling the restoreEdge method
-  g->nodeIds = undo ? oldNodeIdManager : newNodeIdManager;
-  g->edgeIds = undo ? oldEdgeIdManager : newEdgeIdManager;
+  g->storage.restoreNodeIdManagerInfos(undo
+				       ? oldNodeIdManager : newNodeIdManager);
+  g->storage.restoreEdgeIdManagerInfos(undo ?
+				       oldEdgeIdManager : newEdgeIdManager);
 
   // loop on revertedEdges
   set<edge>::iterator itre = revertedEdges.begin();
@@ -563,7 +566,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     undo ? oldContainers : newContainers;
   TLP_HASH_MAP<node, vector<edge> >::iterator itc = containers.begin();
   while(itc != containers.end()) {
-    g->restoreContainer((*itc).first, (*itc).second);
+    g->storage.restoreAdj((*itc).first, (*itc).second);
     ++itc;
   }
 

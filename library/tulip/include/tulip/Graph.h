@@ -544,7 +544,7 @@ protected:
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node)=0;
-  virtual void removeEdge(const edge, const node=node())=0;
+  virtual void removeEdge(const edge)=0;
 
   // to check if a property can be deleted
   // used by PropertyManager

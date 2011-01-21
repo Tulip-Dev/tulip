@@ -52,9 +52,9 @@ class IteratorValue: public Iterator<unsigned int> {
   virtual unsigned int nextValue(AnyValueContainer&) = 0;
 };
 template <typename TYPE> 
-class IteratorVector : public IteratorValue {
+class IteratorVect : public IteratorValue {
  public:
- IteratorVector(const TYPE &value, bool equal, std::deque<typename StoredValueType<TYPE>::Value> *vData, unsigned int minIndex):
+ IteratorVect(const TYPE &value, bool equal, std::deque<typename StoredValueType<TYPE>::Value> *vData, unsigned int minIndex):
    _value(value),
      _equal(equal),
      _pos(minIndex),
@@ -323,7 +323,7 @@ template <typename TYPE>
   else {
     switch (state) {
     case VECT: 
-      return new IteratorVector<TYPE>(value, equal, vData, minIndex);
+      return new IteratorVect<TYPE>(value, equal, vData, minIndex);
       break;
     case HASH:
       return new IteratorHash<TYPE>(value, equal, hData);

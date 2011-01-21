@@ -255,7 +255,7 @@ void GraphView::delEdgeInternal(const edge e) {
   inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
 }
 //----------------------------------------------------------------
-void GraphView::removeEdge(const edge e, const node) {
+void GraphView::removeEdge(const edge e) {
   assert(isElement(e));
   notifyDelEdge(this,e);
   delEdgeInternal(e);

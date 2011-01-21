@@ -98,10 +98,9 @@ static bool integrityTest(Graph *graph) {
 */
 //----------------------------------------------------------------
 GraphImpl::GraphImpl():
-  GraphAbstract(this),Observer(false),nbNodes(0), nbEdges(0) {
+  GraphAbstract(this),Observer(false) {
   // id 0 is for the root
   graphIds.get();
-  outDegree.setAll(0);
 }
 //----------------------------------------------------------------
 GraphImpl::~GraphImpl() {
@@ -124,25 +123,20 @@ GraphImpl::~GraphImpl() {
     delAllSubGraphsInternal(itS.next(), true);
   removeGraphObservers();
   removeObservers();
-  delete propertyContainer; //must be done here because Property proxy needs to access to the graph structure
-  for (Nodes::iterator i=nodes.begin();i!=nodes.end();++i) {
-    i->deallocateAll();
-  }
+  //must be done here because Property proxy needs to access to the graph structure  delete propertyContainer;
 }
 //----------------------------------------------------------------
 void GraphImpl::clear() {
   GraphAbstract::clear();
-  nbNodes=0;
-  nbEdges=0;
-  outDegree.setAll(0);
+  storage.clear();
 }
 //----------------------------------------------------------------
 bool GraphImpl::isElement(const node n) const {
-  return !nodeIds.is_free(n.id);
+  return storage.isElement(n);
 }
 //----------------------------------------------------------------
 bool GraphImpl::isElement(const edge e) const {
-  return !edgeIds.is_free(e.id);
+  return storage.isElement(e);
 }
 //----------------------------------------------------------------
 unsigned int GraphImpl::getSubGraphId(unsigned int id) {
@@ -157,20 +151,17 @@ void GraphImpl::freeSubGraphId(unsigned int id) {
 }
 //----------------------------------------------------------------
 node GraphImpl::restoreNode(node newNode) {
-  outDegree.set(newNode.id, 0);
-  while (nodes.size() <= newNode.id){
-    nodes.push_back(EdgeContainer());
-  }
-  //assert(nodes[newNode.id].empty());
-  nodes[newNode.id].clear();
-  nbNodes++;
+  storage.addNode(newNode);
   notifyAddNode(this, newNode);
   notifyObservers();
   return newNode;
 }
 //----------------------------------------------------------------
 node GraphImpl::addNode() {
-  return restoreNode(node(nodeIds.get()));
+  node newNode = storage.addNode();
+  notifyAddNode(this, newNode);
+  notifyObservers();
+  return newNode;
 }
 //----------------------------------------------------------------
 void GraphImpl::addNode(const node) {
@@ -178,42 +169,25 @@ void GraphImpl::addNode(const node) {
 }
 //----------------------------------------------------------------
 void GraphImpl::reserveNodes(unsigned int nb) {
-  if (nb > nbNodes)
-    nodes.reserve(nbNodes);
+  storage.reserveNodes(nb);
 }
 //----------------------------------------------------------------
-edge GraphImpl::addEdgeInternal(edge newEdge, const node s,
-				const node t, bool updateContainers) {
-  assert(isElement(s) && isElement(t));
-  pair< node , node > tmp(s,t);
-  outDegree.set(s.id, outDegree.get(s.id) + 1);
-  while (edges.size()<=newEdge.id){
-    edges.push_back(tmp);
-  }
-  edges[newEdge.id] = tmp;
-  if (updateContainers) {
-    nodes[s.id].push_back(newEdge);
-    nodes[t.id].push_back(newEdge);
-  }
-  nbEdges++;
+void GraphImpl::restoreAdj(node n, vector<edge>& edges) {
+  storage.restoreAdj(n, edges);
+}
+//----------------------------------------------------------------
+edge GraphImpl::restoreEdge(edge newEdge, const node src, const node tgt) {
+  storage.addEdge(src, tgt, newEdge, false);
   notifyAddEdge(this, newEdge);
   notifyObservers();
   return newEdge;
 }
 //----------------------------------------------------------------
-void GraphImpl::restoreContainer(node n, vector<edge>& edges) {
-  EdgeContainer& container = nodes[n.id];
-  container.clear();
-  for(unsigned int i = 0; i < edges.size(); ++i)
-    container.push_back(edges[i]);
-}
-//----------------------------------------------------------------
-edge GraphImpl::restoreEdge(edge newEdge, const node s,const node t) {
-  return addEdgeInternal(newEdge, s, t, false);
-}
-//----------------------------------------------------------------
-edge GraphImpl::addEdge(const node s,const node t) {
-  return addEdgeInternal(edge(edgeIds.get()), s, t, true);
+edge GraphImpl::addEdge(const node src, const node tgt) {
+  edge newEdge = storage.addEdge(src, tgt);
+  notifyAddEdge(this, newEdge);
+  notifyObservers();
+  return newEdge;
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdge(const edge e) {
@@ -222,21 +196,15 @@ void GraphImpl::addEdge(const edge e) {
 }
 //----------------------------------------------------------------
 void GraphImpl::reserveEdges(unsigned int nb) {
-  if (nb > nbEdges)
-    edges.reserve(nbEdges);
-}
-//----------------------------------------------------------------
-void GraphImpl::delNodeInternal(const node n) {
-  propertyContainer->erase(n);
-  nodes[n.id].clear();
-  nodeIds.free(n.id);
-  nbNodes--;
+  storage.reserveEdges(nb);
 }
 //----------------------------------------------------------------
 void GraphImpl::removeNode(const node n) {
-  assert (isElement(n));
+  assert(isElement(n));
   notifyDelNode(this, n);
-  delNodeInternal(n);
+  // remove from storage and propertyContainer
+  storage.removeFromNodes(n);
+  propertyContainer->erase(n);
   notifyObservers();
 }
 //----------------------------------------------------------------
@@ -251,27 +219,36 @@ void GraphImpl::delNode(const node n) {
     if (subgraph->isElement(n))
       subgraph->delNode(n);
   } delete itS;
+
+  // loop on inout edges of n
+  // for notification and removal from propertyContainer
+  Iterator<edge>* edges = storage.getInOutEdges(n);
   set<edge> loops;
-  bool haveLoops = false;
-  for(EdgeContainer::iterator i=nodes[n.id].begin(); i!=nodes[n.id].end(); ++i) {
-    node s = opposite(*i, n);
-    if (s!=n) {
-      if (source(*i) == s)
-	outDegree.set(s.id, outDegree.get(s.id) - 1);
-      removeEdge(*i, n);
-    }
-    else {
-      loops.insert(*i);
-      haveLoops = true;
-    }
-  }
-  if (haveLoops) {
+  while(edges->hasNext()) {
+    edge e = edges->next();
+    node s = opposite(e, n);
+    if (s != n) {
+      notifyDelEdge(this, e);
+      propertyContainer->erase(e);
+    } else
+      loops.insert(e);
+  } delete edges;
+  if (!loops.empty()) {
     set<edge>::const_iterator it;
-    for ( it = loops.begin(); it!=loops.end(); ++it) {
-      removeEdge(*it, n);
-    }
+    for (it = loops.begin(); it!=loops.end(); ++it) {
+      edge e = *it;
+      notifyDelEdge(this, e);
+      propertyContainer->erase(e);
+   }
   }
-  delNodeInternal(n);
+
+  // delete n from storage
+  storage.delNode(n);
+
+  // remove from propertyContainer
+  propertyContainer->erase(n);
+
+  // notification
   notifyObservers();
 }
 //----------------------------------------------------------------
@@ -280,10 +257,7 @@ void GraphImpl::delEdge(const edge e) {
   if (!isElement(e)) {
     return;
   }
-  //Warning, the current implementation doesn't manage the updating of 
-  //properties for upper_subgraph in the case of Super Graph Implementation
-  unsigned srcId = source(e).id;
-  outDegree.set(srcId, outDegree.get(srcId)-1);
+  // propagate to subgraphs
   Iterator<Graph *>*itS=getSubGraphs();
   while (itS->hasNext()) {
     Graph *subgraph = itS->next();
@@ -291,6 +265,7 @@ void GraphImpl::delEdge(const edge e) {
     if (subgraph->isElement(e))
       subgraph->delEdge(e);
   } delete itS;
+
   removeEdge(e);
 }
 //----------------------------------------------------------------
@@ -298,117 +273,93 @@ void GraphImpl::delAllNode(const node n){delNode(n);}
 //----------------------------------------------------------------
 void GraphImpl::delAllEdge(const edge e){delEdge(e);}
 //----------------------------------------------------------------
-void GraphImpl::setEdgeOrder(const node n,const vector<edge> &v ) {
-  //  cerr << __PRETTY_FUNCTION__ << "not tested function" << endl;
-  if (v.size()==0) return;
-  MutableContainer<int> isEle;
-  isEle.setAll(0); 
-  for (vector<edge>::const_iterator it=v.begin();it!=v.end();++it) {
-    isEle.set(it->id, isEle.get(it->id)+1);
-  }
-  vector<edge>::const_iterator it2=v.begin();
-  EdgeContainer currentOrder = nodes[n.id];
-  for (unsigned int i=0; i<currentOrder.size(); ++i) {
-    if ( isEle.get(currentOrder[i].id)>0 ) {
-      isEle.set(currentOrder[i].id, isEle.get(currentOrder[i].id) -1);
-      currentOrder[i] = *it2;
-      ++it2;
-    }
-  }
+void GraphImpl::setEdgeOrder(const node n, const vector<edge> &v) {
+  storage.setEdgeOrder(n, v);
 }
 //----------------------------------------------------------------
-void GraphImpl::swapEdgeOrder(const node n,const edge e1 , const edge e2) {
-  //  cerr << __PRETTY_FUNCTION__ << " not tested function" << endl;
-  if (e1==e2) return;
-  EdgeContainer adjacency=nodes[n.id];
-  unsigned int e1Pos=UINT_MAX,e2Pos=UINT_MAX;
-  for (unsigned int i=0;i<deg(n);++i) {
-    if (adjacency[i]==e1) e1Pos=i;
-    if (adjacency[i]==e2) e2Pos=i;
-    if (e1Pos!=UINT_MAX && e2Pos!=UINT_MAX) break;
-  }
-  assert(e1Pos!=UINT_MAX && e2Pos!=UINT_MAX);
-  adjacency[e1Pos]=e2;
-  adjacency[e2Pos]=e1;
+void GraphImpl::swapEdgeOrder(const node n, const edge e1 , const edge e2) {
+  storage.swapEdgeOrder(n, e1, e2);
 }
 //----------------------------------------------------------------
-Iterator<node>* GraphImpl::getNodes()const
-{return (new xSGraphNodeIterator(this));}
+Iterator<node>* GraphImpl::getNodes() const {
+  return new GraphImplNodeIterator(this, storage.getNodes());
+}
 //----------------------------------------------------------------
-Iterator<node>* GraphImpl::getInNodes(const node n)const
-{return (new xInNodesIterator(this,n));}
+Iterator<node>* GraphImpl::getInNodes(const node n) const {
+  return new GraphImplNodeIterator(this, storage.getInNodes(n));
+}
 //----------------------------------------------------------------
-Iterator<node>* GraphImpl::getOutNodes(const node n)const
-{return (new xOutNodesIterator(this,n));}
+Iterator<node>* GraphImpl::getOutNodes(const node n) const {
+  return new GraphImplNodeIterator(this, storage.getOutNodes(n));
+}
 //----------------------------------------------------------------
-Iterator<node>* GraphImpl::getInOutNodes(const node n)const
-{return (new xInOutNodesIterator(this,n));}
+Iterator<node>* GraphImpl::getInOutNodes(const node n) const {
+  return new GraphImplNodeIterator(this, storage.getInOutNodes(n));
+}
 //----------------------------------------------------------------
-Iterator<edge>* GraphImpl::getEdges()const
-{return (new xSGraphEdgeIterator(this));}
+Iterator<edge>* GraphImpl::getEdges() const {
+  return new GraphImplEdgeIterator(this, storage.getEdges());
+}
 //----------------------------------------------------------------
-Iterator<edge>* GraphImpl::getInEdges(const node n)const
-{return (new xInEdgesIterator(this,n));}
+Iterator<edge>* GraphImpl::getInEdges(const node n) const {
+  return new GraphImplEdgeIterator(this, storage.getInEdges(n));
+}
 //----------------------------------------------------------------
-Iterator<edge>* GraphImpl::getOutEdges(const node n)const
-{return (new xOutEdgesIterator(this,n));}
+Iterator<edge>* GraphImpl::getOutEdges(const node n) const {
+  return new GraphImplEdgeIterator(this, storage.getOutEdges(n));
+}
 //----------------------------------------------------------------
-Iterator<edge>* GraphImpl::getInOutEdges(const node n)const
-{return (new xInOutEdgesIterator(this,n));}
+Iterator<edge>* GraphImpl::getInOutEdges(const node n) const {
+  return new GraphImplEdgeIterator(this, storage.getInOutEdges(n));
+}
 //----------------------------------------------------------------
 unsigned int GraphImpl::deg(const node n) const {
-  assert(isElement(n));
-  return nodes[n.id].size();
+  return storage.deg(n);
 }
 //----------------------------------------------------------------
 unsigned int GraphImpl::indeg(const node n) const {
   assert(isElement(n));
-  return nodes[n.id].size()-outDegree.get(n.id);
+  return storage.indeg(n);
 }
 //----------------------------------------------------------------
 unsigned int GraphImpl::outdeg(const node n) const {
   assert(isElement(n));
-  return outDegree.get(n.id);
+  return storage.outdeg(n);
 }
 //----------------------------------------------------------------
 node GraphImpl::source(const edge e)const {
   assert(isElement(e));
-  return edges[e.id].first;
+  return storage.source(e);
 }
 //----------------------------------------------------------------
-node GraphImpl::target(const edge e)const {
+node GraphImpl::target(const edge e) const {
   assert(isElement(e));
-  return edges[e.id].second;
+  return storage.target(e);
 }
 //----------------------------------------------------------------
 const std::pair<node, node>& GraphImpl::ends(const edge e) const {
-  assert(isElement(e));
-  return edges[e.id];
+  return storage.ends(e);
 }
 //----------------------------------------------------------------
 node GraphImpl::opposite(const edge e, const node n) const {
   assert(isElement(e));
-  const std::pair<node, node>& eEnds = edges[e.id];
-  assert((eEnds.first == n) || (eEnds.second == n));
-  return (eEnds.first == n) ? eEnds.second : eEnds.first;
+  return storage.opposite(e, n);
 }
 //----------------------------------------------------------------
 void GraphImpl::reverse(const edge e) {
   assert(isElement(e));
-  node src = edges[e.id].first;
-  node tgt = edges[e.id].second;
-  edges[e.id].first  = tgt;
-  edges[e.id].second = src;
-  outDegree.set(src.id, outDegree.get(src.id) - 1);
-  outDegree.set(tgt.id, outDegree.get(tgt.id) + 1);
+  std::pair<node, node> eEnds = storage.ends(e);
+
+  storage.reverse(e);
+
   // notification
-  notifyReverseEdge(this,e);
+  notifyReverseEdge(this, e);
   notifyObservers();
 
   // propagate edge reversal on subgraphs
   Graph* sg;
   forEach(sg, getSubGraphs()) {
-    ((GraphView*) sg)->reverse(e, src, tgt);
+    ((GraphView*) sg)->reverse(e, eEnds.first, eEnds.second);
   }
 }
 //----------------------------------------------------------------
@@ -420,79 +371,51 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
     return;
   }
 
-  node src = edges[e.id].first;
-  node tgt = edges[e.id].second;
+  // be aware that newSrc or newTgt may not be valid
+  // to indicate that only one of the ends has to be changed
+  std::pair<node, node> eEnds = storage.ends(e);
+  node src = eEnds.first;
+  node tgt = eEnds.second;
   // nothing to do if same ends
   if (src == newSrc && tgt == newTgt)
     return;
-  node nSrc = newSrc;
-  node nTgt = newTgt;
 
   // notification
   notifyBeforeSetEnds(this, e);
 
-  if (newSrc.isValid() && src != newSrc) {
-    assert(isElement(newSrc));
-    edges[e.id].first  = newSrc;
-    outDegree.set(src.id, outDegree.get(src.id) - 1);
-    outDegree.set(newSrc.id, outDegree.get(newSrc.id) + 1);
-    nodes[newSrc.id].push_back(e);
-    removeEdge(nodes[src.id], e);
-  } else
-    nSrc = src;
-  if (newTgt.isValid() && tgt != newTgt) {
-    assert(isElement(newTgt));
-    edges[e.id].second = newTgt;
-    nodes[newTgt.id].push_back(e);
-    removeEdge(nodes[tgt.id], e);
-  } else
-    nTgt = tgt;
+  storage.setEnds(e, newSrc, newTgt);
+
   // notification
   notifyAfterSetEnds(this, e);
   notifyObservers();
 
   // propagate edge reversal on subgraphs
   Graph* sg;
+  eEnds = storage.ends(e);
+  node nSrc = eEnds.first;
+  node nTgt = eEnds.second;
+  
   forEach(sg, getSubGraphs()) {
     ((GraphView*) sg)->setEnds(e, src, tgt, nSrc, nTgt);
   }
 }
 //----------------------------------------------------------------
-unsigned int GraphImpl::numberOfEdges()const{return nbEdges;}
-//----------------------------------------------------------------
-unsigned int GraphImpl::numberOfNodes()const{return nbNodes;}
-//----------------------------------------------------------------
-void GraphImpl::removeEdge(const edge e, node dontUpdateNode) {
-  assert(isElement(e));
-  notifyDelEdge(this,e);
-  propertyContainer->erase(e);
-  edgeIds.free(e.id);
-  nbEdges--;
-  pair<node, node>edgeNodes = edges[e.id];
-  // remove from source's edges
-  node n = edgeNodes.first;
-  if (n != dontUpdateNode)
-    removeEdge(nodes[n.id], e);
-  // remove from target's edges
-  n = edgeNodes.second;
-  if (n != dontUpdateNode)
-    removeEdge(nodes[n.id], e);
-  notifyObservers();
+unsigned int GraphImpl::numberOfEdges() const {
+  return storage.numberOfEdges();
 }
 //----------------------------------------------------------------
-void GraphImpl::removeEdge(EdgeContainer &c, const edge e) {
-  bool copy = false;
-  EdgeContainer::iterator previous = c.begin();
-  for (EdgeContainer::iterator i=previous; i!=c.end(); ++i) {
-    edge e1 = *i;
-    if (copy)
-      *previous = e1;
-    previous = i;
-    if (e1 == e)  
-      copy = true;
-  }
-  if (copy)
-    c.pop_back();
+unsigned int GraphImpl::numberOfNodes()const {
+  return storage.numberOfNodes();
+}
+//----------------------------------------------------------------
+void GraphImpl::removeEdge(const edge e) {
+  assert(isElement(e));
+  notifyDelEdge(this,e);
+  // remove from propertyContainer and storage
+  propertyContainer->erase(e);
+  storage.delEdge(e);
+
+  notifyObservers();
 }
 //----------------------------------------------------------------
 bool GraphImpl::canPop() {
