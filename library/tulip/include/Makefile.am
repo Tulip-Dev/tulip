@@ -117,6 +117,7 @@ noinst_HEADERS = tulip/TLPParser.h \
 	tulip/GraphIterator.h \
 	tulip/GraphImpl.h \
 	tulip/GraphView.h \
+	tulip/GraphStorage.h \
 	tulip/SimpleVector.h \
 	tulip/IdManager.h \
 	tulip/PropertyManager.h \
