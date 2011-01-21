@@ -33,7 +33,6 @@ INSTALL(FILES
 	tulip/Node.h 
 	tulip/Edge.h 
 	tulip/Graph.h 
-	tulip/GraphStorage.h 
 	tulip/Types.h 
 	tulip/Color.h 
 	tulip/MethodFactory.h 
