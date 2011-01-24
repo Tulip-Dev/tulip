@@ -79,6 +79,7 @@ namespace std {
 
 namespace tlp {
   class GraphImpl;
+  class GraphStorageIdsMemento;
 
   class GraphUpdatesRecorder :public GraphObserver, public PropertyObserver {
     friend class GraphImpl;
@@ -109,14 +110,10 @@ namespace tlp {
     // one set for new edge containers
     TLP_HASH_MAP<node, std::vector<edge> > newContainers;
 
-    // copy of nodes id manager infos at start time
-    IdManagerInfos oldNodeIdManager;
-    // copy of edges id manager infos at start time
-    IdManagerInfos oldEdgeIdManager;
-    // copy of nodes id manager infos at stop time
-    IdManagerInfos newNodeIdManager;
-    // copy of edges id manager infos at stop time
-    IdManagerInfos newEdgeIdManager;
+    // copy of nodes/edges id manager state at start time
+    const GraphStorageIdsMemento* oldIdsState;
+    // copy of nodes/edges id manager state at stop time
+    const GraphStorageIdsMemento* newIdsState;
 
     // one set of added sub graphs per graph
     TLP_HASH_MAP<unsigned long, std::set<Graph*> > addedSubGraphs;
