@@ -76,7 +76,7 @@ class GraphStorage {
   };
 
   // define some values for further template specializations
-  enum IO_TYPE {IN = 0, OUT = 1, INOUT = 2};
+  enum IO_TYPE {IO_IN = 0, IO_OUT = 1, IO_INOUT = 2};
 
   // define a template class to iterate on in or out edges of a given node
   template<IO_TYPE io_type>
@@ -140,7 +140,7 @@ class GraphStorage {
     Iterator<edge>* it;
 
     IONodesIterator(node n, EdgeContainer& nEdges, Edges& edges):n(n), edges(edges) {
-      if (io_type == INOUT)
+      if (io_type == IO_INOUT)
 	it = new EdgeContainerIterator(nEdges);
       else
 	it = new IOEdgeContainerIterator<io_type>(n, nEdges, edges);
@@ -158,9 +158,9 @@ class GraphStorage {
       // check hasNext()
       assert(it->hasNext());
       const pair<node, node>& ends = edges[it->next()];
-      if (io_type == OUT)
+      if (io_type == IO_OUT)
 	return ends.second;
-      if (io_type == IN)
+      if (io_type == IO_IN)
 	return ends.first;
       return (ends.first == n) ? ends.second : ends.first;
     }
@@ -419,7 +419,7 @@ class GraphStorage {
    * @complexity: o(1)
    */
    Iterator<edge>* getOutEdges(node n) const {
-     return new IOEdgeContainerIterator<OUT>(n, nodes[n.id], edges);
+     return new IOEdgeContainerIterator<IO_OUT>(n, nodes[n.id], edges);
    }
   //=======================================================
   /**
@@ -428,7 +428,7 @@ class GraphStorage {
    * @complexity: o(1)
    */
    Iterator<edge>* getInEdges(node n) const {
-     return new IOEdgeContainerIterator<IN>(n, nodes[n.id], edges);
+     return new IOEdgeContainerIterator<IO_IN>(n, nodes[n.id], edges);
    }
      
   //=======================================================
@@ -438,7 +438,7 @@ class GraphStorage {
    * @complexity: o(1)
    */
   Iterator<node>* getInOutNodes(node n) const {
-    return new IONodesIterator<INOUT>(n, nodes[n.id], edges);
+    return new IONodesIterator<IO_INOUT>(n, nodes[n.id], edges);
   }
   //=======================================================
   /**
@@ -448,7 +448,7 @@ class GraphStorage {
    */
   //=======================================================
   Iterator<node>* getInNodes(node n) const {
-    return new IONodesIterator<IN>(n, nodes[n.id], edges);
+    return new IONodesIterator<IO_IN>(n, nodes[n.id], edges);
   }
     
   /**
@@ -458,7 +458,7 @@ class GraphStorage {
    */
   //=======================================================
   Iterator<node>* getOutNodes(node n) const  {
-    return new IONodesIterator<OUT>(n, nodes[n.id], edges);
+    return new IONodesIterator<IO_OUT>(n, nodes[n.id], edges);
   }
   //=======================================================
   /**
