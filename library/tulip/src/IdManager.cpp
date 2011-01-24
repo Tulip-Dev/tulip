@@ -29,64 +29,58 @@ namespace tlp {
 
 //-----------------------------------------------------------
 bool IdManager::is_free(const unsigned int id) const {
-  if (id < firstId) return true;
-  if (id >= nextId) return true;
-  if (freeIds.find(id)!=freeIds.end()) return true;
+  if (id < state.firstId) return true;
+  if (id >= state.nextId) return true;
+  if (state.freeIds.find(id)!=state.freeIds.end()) return true;
   return false;
 }
 //-----------------------------------------------------------
 void IdManager::free(const unsigned int id) {
-  if (id<firstId) return;
-  if (id>= nextId) return;
-  if (freeIds.find(id)!=freeIds.end()) return;
+  if (id<state.firstId) return;
+  if (id>= state.nextId) return;
+  if (state.freeIds.find(id)!=state.freeIds.end()) return;
 
-  if (firstId == nextId)
+  if (state.firstId == state.nextId)
     return;
-  if (id == firstId) {
+  if (id == state.firstId) {
     for(;;) {
-      set<unsigned int>::iterator it = freeIds.find(++firstId);
-      if (it == freeIds.end())
+      set<unsigned int>::iterator it = state.freeIds.find(++state.firstId);
+      if (it == state.freeIds.end())
 	break;
-      freeIds.erase(it);
+      state.freeIds.erase(it);
     }
   } else
-    freeIds.insert(id);
+    state.freeIds.insert(id);
 }
 //-----------------------------------------------------------
 unsigned int IdManager::get() {
-  return nextId++;
+  return state.nextId++;
 }
 //-----------------------------------------------------------
 void IdManager::getFreeId(unsigned int id) {
-  assert(id > firstId);
-  if (id >= nextId) {
-    if (firstId == nextId)
-      firstId = id;
+  assert(id > state.firstId);
+  if (id >= state.nextId) {
+    if (state.firstId == state.nextId)
+      state.firstId = id;
     else {
-      for (; nextId < id; ++nextId)
-	freeIds.insert(nextId);
+      for (; state.nextId < id; ++state.nextId)
+	state.freeIds.insert(state.nextId);
     }
-    nextId = id + 1;
+    state.nextId = id + 1;
   } else {
-    assert(freeIds.find(id) != freeIds.end());
-    freeIds.erase(freeIds.find(id));
+    assert(state.freeIds.find(id) != state.freeIds.end());
+    state.freeIds.erase(state.freeIds.find(id));
   }
 }
-//-----------------------------------------------------------
-bool IdManager::hasFreeIds() const {
-  return !freeIds.empty();
-}
-//-----------------------------------------------------------
-
 }
 
 //-----------------------------------------------------------
 ostream& tlp::operator<<(ostream &os,const tlp::IdManager &idM) {
   os << endl << "--------------------------------------" << endl;
   os << "Id Manager Information :" << endl;
-  os << "Minimum index :" << idM.firstId<< endl;
-  os << "Maximum index :" << idM.nextId - 1 << endl;
-  os << "Size          :" << idM.freeIds.size() << endl;
-  os << "Fragmentation :" << (double)idM.freeIds.size() / (1+idM.nextId - idM.firstId) << endl;
+  os << "Minimum index :" << idM.state.firstId<< endl;
+  os << "Maximum index :" << idM.state.nextId - 1 << endl;
+  os << "Size          :" << idM.state.freeIds.size() << endl;
+  os << "Fragmentation :" << (double)idM.state.freeIds.size() / (1+idM.state.nextId - idM.state.firstId) << endl;
   return os;
 }

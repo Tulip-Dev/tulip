@@ -106,15 +106,12 @@ class TLPExport:public ExportModule {
 public:
   DataSet controller;
   bool useOldFormat;
-  TLP_HASH_MAP<unsigned int, node>* nodeIndex;
-  TLP_HASH_MAP<unsigned int, edge>* edgeIndex;
-  unsigned int firstNodeId;
-  unsigned int firstEdgeId;
+  MutableContainer<node> nodeIndex;
+  MutableContainer<edge> edgeIndex;
   int progress;
 
   TLPExport(AlgorithmContext context):ExportModule(context),
-				      useOldFormat(false),
-				      nodeIndex(NULL), edgeIndex(NULL), progress(0) {
+				      useOldFormat(false),progress(0) {
     addParameter<StringCollection>("format", paramHelp[3], "2.2;2.0");
     addParameter<string>("name", paramHelp[0]);
     addParameter<string>("author", paramHelp[1]);
@@ -123,18 +120,14 @@ public:
   }
   //=====================================================
   ~TLPExport() {
-    if (nodeIndex)
-      delete nodeIndex;
-    if (edgeIndex)
-      delete edgeIndex;
   }
   //====================================================
   node getNode(node n) {
-    return nodeIndex ? (*nodeIndex)[n.id] : node(n.id - firstNodeId);
+    return nodeIndex.get(n.id);
   }
   //====================================================
   edge getEdge(edge e) {
-    return edgeIndex ? (*edgeIndex)[e.id] : edge(e.id - firstEdgeId);
+    return edgeIndex.get(e.id);
   }
   //=====================================================
   void saveGraphElements(ostream &os, Graph *graph) {
@@ -425,34 +418,22 @@ public:
   }
 
   bool exportGraph(ostream &os,Graph *currentGraph) {
-    nodeIndex = NULL;
-    edgeIndex = NULL;
     graph=currentGraph->getRoot();
     string format(TLP_FILE_VERSION);
 
-    // reindex nodes/edges if needed
-    if (((GraphImpl *) graph)->storage.hasFragmentedNodeIds()) {
-      nodeIndex = new TLP_HASH_MAP<unsigned int, node>;
-      unsigned int i = 0;
-      node n;
-      forEach(n, graph->getNodes()) {
-        (*nodeIndex)[n.id] = node(i);
-        i++;
-      }
-    } else
-      // no map needed, id translation only
-      firstNodeId = ((GraphImpl *) graph)->storage.getFirstNodeId();
-    if (((GraphImpl *) graph)->storage.hasFragmentedEdgeIds()) {
-      edgeIndex = new TLP_HASH_MAP<unsigned int, edge>;
-      unsigned int i = 0;
-      edge e;
-      forEach(e, graph->getEdges()) {
-        (*edgeIndex)[e.id] = edge(i);
-        i++;
-      }
-    } else
-      // no map needed, id translation only
-      firstEdgeId = ((GraphImpl *) graph)->storage.getFirstEdgeId();
+    // reindex nodes/edges
+    unsigned int i = 0;
+    node n;
+    forEach(n, graph->getNodes()) {
+      nodeIndex.set(n.id, node(i));
+      ++i;
+    }
+    i = 0;
+    edge e;
+    forEach(e, graph->getEdges()) {
+      edgeIndex.set(e.id, edge(i));
+      ++i;
+    }
     
     string name;
     string author;
@@ -505,14 +486,6 @@ public:
       saveController(os, controller);
 
     os << ')' << endl; // end of (tlp ...
-    if (nodeIndex) {
-      delete nodeIndex;
-      nodeIndex = NULL;
-    }
-    if (edgeIndex) {
-      delete edgeIndex;
-      edgeIndex = NULL;
-    }
     return true;
   }
 };

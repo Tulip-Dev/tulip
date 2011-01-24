@@ -26,8 +26,8 @@
 
 namespace tlp {
 
-// define a minimal structure to hold the infos manage by an id manager
-struct IdManagerInfos {
+// define a minimal structure to hold the state of an id manager
+struct IdManagerState {
   // the first id in use
   unsigned int firstId;
   // the next id to use
@@ -35,10 +35,11 @@ struct IdManagerInfos {
   // the unused ids between the first and the next
   std::set<unsigned int> freeIds;
 
-  IdManagerInfos(): firstId(0), nextId(0) {}
+  IdManagerState(): firstId(0), nextId(0) {}
 };
   
-// define a class to iterate through the allocated ids
+// define a class to iterate through the non free ids
+// of an IdManagerState
 template <typename TYPE>
 class IdManagerIterator:public Iterator<TYPE> {
 
@@ -50,7 +51,7 @@ private:
 
  public:
   
- IdManagerIterator(const IdManagerInfos& infos):
+ IdManagerIterator(const IdManagerState& infos):
   current(infos.firstId), last(infos.nextId), freeIds(infos.freeIds), it(freeIds.begin()) {
     std::set<unsigned int>::const_reverse_iterator itr;
     itr = freeIds.rbegin();
@@ -78,10 +79,13 @@ private:
 };
 
 /// class for the management of the identifiers : node, edge
-class TLP_SCOPE IdManager: public IdManagerInfos {
+class TLP_SCOPE IdManager {
+
+  // the current state
+  IdManagerState state;
 
 public:
- IdManager() {}
+  IdManager() {}
   /**
    * Returns true if the id is not used else false.
    */
@@ -103,25 +107,17 @@ public:
    */
   void getFreeId(unsigned int id);
   /**
-   * indicates if space of ids is fragmented
-   *
+   * return the current state of the Id manager
    */
-  bool hasFreeIds() const;
-  /**
-   * returns first used id
-   */
-  unsigned int getFirstId() const {
-    return firstId;
+  const IdManagerState& getState() {
+    return state;
   }
   /**
-   * restore infos, used by push/pop
+   * restore a saved state, used by push/pop
    */
-  void restoreInfos(const IdManagerInfos& infos) {
-    firstId = infos.firstId;
-    nextId = infos.nextId;
-    freeIds = infos.freeIds;
+  void restoreState(const IdManagerState& infos) {
+    state = infos;
   }
-
   /**
    * Returns an iterator on all the used ids. Warning, if
    * the idManager is modified (free, get) this iterator 
@@ -129,13 +125,13 @@ public:
    */
   template<typename TYPE>
     Iterator<TYPE>* getIds() const {
-    return new IdManagerIterator<TYPE>(*this);
+    return new IdManagerIterator<TYPE>(state);
   }
 
   friend std::ostream& operator<<(std::ostream &, const IdManager &);
   friend class IdManagerTest;
-
 };
+
 std::ostream& operator<<(std::ostream &,const IdManager &);
 
 }

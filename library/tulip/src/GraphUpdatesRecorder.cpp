@@ -31,7 +31,7 @@ GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart) : GraphObserver(fa
 #endif
   updatesReverted(false),
   restartAllowed(allowRestart),
-  newValuesRecorded(false)
+  newValuesRecorded(false), oldIdsState(NULL), newIdsState(NULL)
 {}
 
 GraphUpdatesRecorder::~GraphUpdatesRecorder() {
@@ -44,6 +44,10 @@ GraphUpdatesRecorder::~GraphUpdatesRecorder() {
   deleteDefaultValues(newNodeDefaultValues);
   deleteDefaultValues(oldEdgeDefaultValues);
   deleteDefaultValues(newEdgeDefaultValues);
+  if (oldIdsState)
+    delete oldIdsState;
+  if (newIdsState)
+    delete newIdsState;  
 }
 
 // delete the objects collected as to be deleted
@@ -152,10 +156,10 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
     // from now on it will be done
     newValuesRecorded = true;
 
-    // record nodeIds & edgeIds
+    // get ids memento
     GraphImpl* root = (GraphImpl*) g;
-    newNodeIdManager = root->storage.getNodeIdManagerInfos();
-    newEdgeIdManager = root->storage.getEdgeIdManagerInfos();
+    assert(newIdsState == NULL);
+    newIdsState = root->storage.getIdsMemento();
     // record new edges containers
     TLP_HASH_MAP<edge, EdgeRecord>::iterator itae = addedEdges.begin();
     while(itae != addedEdges.end()) {
@@ -369,9 +373,8 @@ void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface* p) {
 
 void GraphUpdatesRecorder::startRecording(GraphImpl* g) {
   if (g->getSuperGraph() == g) {
-    GraphImpl* root = (GraphImpl*) g;
-    oldNodeIdManager = root->storage.getNodeIdManagerInfos();
-    oldEdgeIdManager = root->storage.getEdgeIdManagerInfos();
+    assert(oldIdsState == NULL);
+    oldIdsState = ((GraphImpl*) g)->storage.getIdsMemento();
   }
   restartRecording(g);
 }
@@ -388,6 +391,9 @@ void GraphUpdatesRecorder::restartRecording(Graph* g) {
     deleteValues(newEdgeValues);
     deleteDefaultValues(newNodeDefaultValues);
     deleteDefaultValues(newEdgeDefaultValues);
+    assert(newIdsState != NULL);
+    delete newIdsState;
+    newIdsState = NULL;
     newValuesRecorded = false;
   }
 
@@ -536,14 +542,11 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++itn;
   }
   
-  // now restore ids manager
+  // now restore ids manager state
   // this is done before the loop on the edges to add
   // because of some assertion in debug mode
   // while calling the restoreEdge method
-  g->storage.restoreNodeIdManagerInfos(undo
-				       ? oldNodeIdManager : newNodeIdManager);
-  g->storage.restoreEdgeIdManagerInfos(undo ?
-				       oldEdgeIdManager : newEdgeIdManager);
+  g->storage.restoreIdsMemento(undo? oldIdsState : newIdsState);
 
   // loop on revertedEdges
   set<edge>::iterator itre = revertedEdges.begin();
