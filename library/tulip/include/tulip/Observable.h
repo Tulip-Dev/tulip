@@ -42,8 +42,8 @@ class Observable;
  * of Design Patterns by Gamma, Helm, Johnson, and Vlissides.
  */
 class TLP_SCOPE Observer {
-	std::list<Observable *> observables;
-	bool updateObservables;
+  friend class Observable;
+
 public:
 	Observer(bool manageObservables = true)
 	:updateObservables(manageObservables) {}
@@ -62,6 +62,7 @@ public:
 	 */
 	virtual void observableDestroyed(Observable *) = 0;
 
+protected:
 	/**
 	 * This method is called when this observer is added to an observable.
 	 */
@@ -71,6 +72,9 @@ public:
 	 * This method is called when this observer is removeed from an observable.
 	 */
 	void removeObservable(Observable *);
+private:
+	std::list<Observable *> observables;
+	bool updateObservables;
 };
 
 typedef std::map<Observer *,std::set<Observable *> > ObserverMap;

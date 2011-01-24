@@ -42,8 +42,8 @@ class ObservableProperty;
  * object.
  */
 class  TLP_SCOPE PropertyObserver {
-	std::list<ObservableProperty *> observables;
-	bool updateObservables;
+  friend class ObservableProperty;
+
 public:
 	PropertyObserver(bool manageObservables = true)
 	:updateObservables(manageObservables) {}
@@ -57,9 +57,12 @@ public:
 	virtual void beforeSetAllEdgeValue(PropertyInterface*){}
 	virtual void afterSetAllEdgeValue(PropertyInterface*){}
 	virtual void destroy(PropertyInterface*){}
-
+protected:
 	void addObservable(ObservableProperty *);
 	void removeObservable(ObservableProperty *);
+private:
+	std::list<ObservableProperty *> observables;
+	bool updateObservables;
 };
 /*@}*/
 }
