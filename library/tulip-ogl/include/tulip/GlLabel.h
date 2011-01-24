@@ -290,7 +290,15 @@ namespace tlp {
       return useMinMaxSize;
     }
 
+    /**
+     * @return the font size
+     */
+    int getFontSize() const { return fontSize; }
 
+    /**
+     * @brief Sets the font size used when rendering the label.
+     */
+    void setfontSize(int size) { fontSize = size; }
 
   private :
 
