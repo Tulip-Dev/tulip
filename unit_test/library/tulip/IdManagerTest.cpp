@@ -85,7 +85,7 @@ void IdManagerTest::testIterate() {
   for (unsigned int i = 0; i <1000; ++i) {
      idManager->get();
   }
-  Iterator<unsigned int>* it = idManager->getIds();
+  Iterator<unsigned int>* it = idManager->getIds<unsigned int>();
   unsigned int id = 0;
   while(it->hasNext()) {
     CPPUNIT_ASSERT(it->next() == id);
@@ -94,7 +94,7 @@ void IdManagerTest::testIterate() {
   for (unsigned int i = 0; i <500; ++i) {
     idManager->free(i*2);
   }
-  it = idManager->getIds();
+  it = idManager->getIds<unsigned int>();
   id = 0;
   while(it->hasNext()) {
     CPPUNIT_ASSERT(it->next() == 2 * id + 1);
