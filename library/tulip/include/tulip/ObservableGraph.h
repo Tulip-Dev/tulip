@@ -71,6 +71,8 @@ class ObservableGraph;
  * \endcode
  */
 class TLP_SCOPE GraphObserver {
+  friend class ObservableGraph;
+
 public:
 	GraphObserver(bool manageObservables = true)
 	:updateObservables(manageObservables) {}
@@ -90,7 +92,7 @@ public:
 	virtual void beforeSetAttribute(Graph*, const std::string&) {}
 	virtual void afterSetAttribute(Graph*, const std::string&) {}
 	virtual void removeAttribute(Graph*, const std::string&) {}
-
+protected:
 	void addObservable(ObservableGraph *);
 	void removeObservable(ObservableGraph *);
 private:
