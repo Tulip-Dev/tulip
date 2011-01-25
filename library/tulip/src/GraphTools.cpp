@@ -404,17 +404,9 @@ namespace tlp {
   }
 
   //=======================================================================
-  // should be removed in 3.1
   bool computeEqualValueClustering(Graph *graph, PropertyInterface* property,
-				   bool onNodes,
+				   bool onNodes, bool connected,
 				   PluginProgress *pluginProgress) {
-    return computeEqualValueClustering(graph, property, onNodes, false, pluginProgress);
-  }
-
-  //=======================================================================
-  bool computeEqualValueClustering(Graph *graph, PropertyInterface* property,
-					bool onNodes, bool connected,
-					PluginProgress *pluginProgress) {
     StableIterator<node> itN(graph->getNodes());
     StableIterator<edge> itE(graph->getEdges());
     int step = 0, maxSteps = graph->numberOfNodes();
@@ -445,7 +437,7 @@ namespace tlp {
 	  } else
 	    sg = partitions[tmp];
 	  sg->addNode(n);
-	  if ((++step % (maxSteps/100)) == 0) {
+	  if (pluginProgress && ((++step % (maxSteps/100)) == 0)) {
 	    pluginProgress->progress(step, maxSteps);
 	    if (pluginProgress->state() !=TLP_CONTINUE)
 	      return pluginProgress->state()!= TLP_CANCEL;
@@ -456,7 +448,8 @@ namespace tlp {
 	maxSteps = graph->numberOfEdges();
 	if (maxSteps < 100)
 	  maxSteps = 100;
-	pluginProgress->setComment("Partitioning edges...");
+	if (pluginProgress)
+	  pluginProgress->setComment("Partitioning edges...");
 	while(itE.hasNext()) {
 	  edge ite = itE.next();
 	  pair<node, node> eEnds = graph->ends(ite);
@@ -464,7 +457,7 @@ namespace tlp {
 	  if (tmp == metric->getNodeValue(eEnds.second)) {
 	    partitions[tmp]->addEdge(ite);
 	  }
-	  if ((++step % (maxSteps/100)) == 0) {
+	  if (pluginProgress && ((++step % (maxSteps/100)) == 0)) {
 	    pluginProgress->progress(step, maxSteps);
 	    if (pluginProgress->state() !=TLP_CONTINUE)
 	      return pluginProgress->state()!= TLP_CANCEL;
@@ -488,7 +481,7 @@ namespace tlp {
 	  sg->addNode(eEnds.first);
 	  sg->addNode(eEnds.second);
 	  sg->addEdge(e);
-	  if ((++step % (maxSteps/100)) == 0) {
+	  if (pluginProgress && ((++step % (maxSteps/100)) == 0)) {
 	    pluginProgress->progress(step, maxSteps);
 	    if (pluginProgress->state() !=TLP_CONTINUE)
 	      return pluginProgress->state()!= TLP_CANCEL;
@@ -510,7 +503,7 @@ namespace tlp {
 	  } else
 	    sg = partitions[tmp];
 	  sg->addNode(n);
-	  if ((++step % (maxSteps/100)) == 0) {
+	  if (pluginProgress && ((++step % (maxSteps/100)) == 0)) {
 	    pluginProgress->progress(step, maxSteps);
 	    if (pluginProgress->state() !=TLP_CONTINUE)
 	      return pluginProgress->state()!= TLP_CANCEL;
@@ -521,7 +514,8 @@ namespace tlp {
 	maxSteps = graph->numberOfEdges();
 	if (maxSteps < 100)
 	  maxSteps = 100;
-	pluginProgress->setComment("Partitioning edges...");
+	if (pluginProgress)
+	  pluginProgress->setComment("Partitioning edges...");
 	while(itE.hasNext()) {
 	  edge ite = itE.next();
 	  pair<node, node> eEnds = graph->ends(ite);
@@ -529,7 +523,7 @@ namespace tlp {
 	  if (tmp == property->getNodeStringValue(eEnds.second)) {
 	    partitions[tmp]->addEdge(ite);
 	  }
-	  if ((++step % (maxSteps/100)) == 0) {
+	  if (pluginProgress && ((++step % (maxSteps/100)) == 0)) {
 	    pluginProgress->progress(step, maxSteps);
 	    if (pluginProgress->state() !=TLP_CONTINUE)
 	      return pluginProgress->state()!= TLP_CANCEL;
@@ -551,7 +545,7 @@ namespace tlp {
 	  sg->addNode(eEnds.first);
 	  sg->addNode(eEnds.second);
 	  sg->addEdge(e);
-	  if ((++step % (maxSteps/100)) == 0) {
+	  if (pluginProgress && ((++step % (maxSteps/100)) == 0)) {
 	    pluginProgress->progress(step, maxSteps);
 	    if (pluginProgress->state() !=TLP_CONTINUE)
 	      return pluginProgress->state()!= TLP_CANCEL;
