@@ -113,7 +113,7 @@ namespace tlp {
     /**
      * Return the real view name (if "" the real name is the name give by plugin)
      */
-    virtual std::string getRealViewName() {return "";}
+    virtual std::string getRealViewName() const {return "";}
 
     /**
      * This function is call when an undo is perform by the controller
