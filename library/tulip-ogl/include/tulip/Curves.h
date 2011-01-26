@@ -30,8 +30,6 @@
 namespace tlp {
   template<typename T, unsigned int N>
     class Matrix;
-  TLP_GL_SCOPE void curveVisibility(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
-		       const Size &size, bool &polygon, bool &line, const Matrix<float,4> &projectionMatrix, const Matrix<float,4> &modelviewMatrix, const tlp::Vector<int, 4>&viewportArray);
   //====================================================================
   //return vertices, update startN and endN to prevent bad edge drawing
   TLP_GL_SCOPE std::vector<Coord> computeCleanVertices(const std::vector<Coord> &bends,
