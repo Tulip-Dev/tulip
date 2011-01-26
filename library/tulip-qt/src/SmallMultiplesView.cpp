@@ -18,8 +18,10 @@
 using namespace std;
 
 void zoomOnScreenRegion(tlp::GlMainWidget *glWidget, const tlp::BoundingBox &boundingBox, const bool optimalPath = true, const double velocity = 1.1, const double p = sqrt(1.6)) {
+  if(boundingBox.isValid()){
     tlp::QtGlSceneZoomAndPanAnimator animator(glWidget, boundingBox, optimalPath, velocity, p);
     animator.animateZoomAndPan();
+  }
 }
 
 namespace tlp {
