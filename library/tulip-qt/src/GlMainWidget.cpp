@@ -350,6 +350,8 @@ void GlMainWidget::redraw() {
 void GlMainWidget::draw(bool graphChanged) {
 
 	if (isVisible() && !inRendering) {
+		assert(contentsRect().width()!=0 && contentsRect().height()!=0);
+
 		inRendering=true;
 
 		makeCurrent();
