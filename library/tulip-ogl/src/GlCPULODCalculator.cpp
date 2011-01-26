@@ -35,6 +35,10 @@ using namespace std;
 
 namespace tlp {
 
+  GlCPULODCalculator::GlCPULODCalculator():computeEdgesLOD(false){
+
+  }
+
   GlCPULODCalculator::~GlCPULODCalculator() {
   }
 
@@ -140,12 +144,21 @@ namespace tlp {
 			layerLODUnit->nodesLODVector[i].lod=calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
     }
     nb=layerLODUnit->edgesLODVector.size();
+    if(computeEdgesLOD){
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for(size_t i=0;i<nb;++i){
-			layerLODUnit->edgesLODVector[i].lod=10;
-    }
+			for(size_t i=0;i<nb;++i){
+				layerLODUnit->edgesLODVector[i].lod=calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
+			}
+		}else{
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+			for(size_t i=0;i<nb;++i){
+				layerLODUnit->edgesLODVector[i].lod=10;
+			}
+		}
   }
 
   void GlCPULODCalculator::computeFor2DCamera(LayerLODUnit *layerLODUnit,
