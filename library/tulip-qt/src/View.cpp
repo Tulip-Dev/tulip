@@ -24,4 +24,6 @@ namespace tlp {
 
   TemplateFactory<ViewFactory,View, ViewContext *> *ViewFactory::factory;
 
+  void View::createPicture(const std::string &,int, int) {};
+
 }

@@ -95,7 +95,7 @@ namespace tlp {
      * Take a snapshot of the view and put it in a picture
      * \deprecated In Tulip 4.x.y this function will be replace by void createPicture(const string &pictureName,int width, int height, bool center, int zoom, int xOffset, int yOffset)
      */
-    virtual void _DEPRECATED createPicture(const std::string &pictureName,int width=0, int height=0) {};
+    virtual void _DEPRECATED createPicture(const std::string &pictureName,int width=0, int height=0);
 
     /**
      * Take a snapshot of the view like old createPicture function but we add some parameters
