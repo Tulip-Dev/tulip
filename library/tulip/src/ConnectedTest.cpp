@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <list>
 #include "tulip/Graph.h"
 #include "tulip/ConnectedTest.h"
 #include "tulip/MutableContainer.h"
@@ -68,26 +69,43 @@ unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph* const 
 	return result;
 }
 //======================================================================
-static void dfsAddNodesToComponent(Graph *graph, node n, MutableContainer<bool> &flag,
-		std::set<node>& component) {
-	if (flag.get(n.id)) return;
-	flag.set(n.id, true);
-	component.insert(n);
-	node itn;
-	forEach(itn, graph->getInOutNodes(n))
-	dfsAddNodesToComponent(graph, itn, flag, component);
-}
-
 void ConnectedTest::computeConnectedComponents(Graph *graph, std::vector<std::set<node> >& components) {
-	MutableContainer<bool> flag;
-	flag.setAll(false);
-	node itn;
-	forEach(itn, graph->getNodes()) {
-		if (!flag.get(itn.id)) {
-			components.push_back(std::set<node>());
-			dfsAddNodesToComponent(graph, itn, flag, components.back());
-		}
-	}
+  MutableContainer<bool> visited;
+  visited.setAll(false);
+  // do a bfs traversal for each node
+  node curNode;
+  forEach(curNode, graph->getNodes()) {
+    // check if curNode has been already visited
+    if (!visited.get(curNode.id)) {
+      // add a new component
+      components.push_back(std::set<node>());
+      std::set<node>& component = components.back();
+      // and initialize it with current node
+      component.insert(curNode);
+      // do a bfs traversal this node
+      list<node> nodesToVisit;
+      visited.set(curNode.id, true);
+      nodesToVisit.push_front(curNode);
+      while(!nodesToVisit.empty()) {
+	curNode = nodesToVisit.front();
+	nodesToVisit.pop_front();
+	// loop on all neighbours
+	Iterator<node> *itn = graph->getInOutNodes(curNode);
+	while(itn->hasNext()) {
+	  node neighbour = itn->next();
+	  // check if neighbour has been visited
+	  if (!visited.get(neighbour.id)) {
+	    // mark neighbour as already visited
+	    visited.set(neighbour.id, true);
+	    // insert it in current component
+	    component.insert(neighbour);
+	    // push it for further deeper exploration
+	    nodesToVisit.push_back(neighbour);
+	  }
+	} delete itn;
+      }
+    }
+  }
 }
 
 //=================================================================
