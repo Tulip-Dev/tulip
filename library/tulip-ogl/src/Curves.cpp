@@ -239,21 +239,6 @@ vector<Coord> splineCurve(const vector<Coord> &vertices) {
 	curve.push_back(vertices.back());
 	return curve;
 }
-bool visible(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
-		const MatrixGL &transformMatrix, const Vector<int, 4> &viewport) {
-	if (bends.size() == 0)
-		return segmentVisible(startPoint, endPoint, transformMatrix, viewport) > 0.;
-
-	//first point
-	if (segmentVisible(startPoint, bends[0], transformMatrix, viewport)>0.)
-		return true;
-	for (unsigned int i=1; i<bends.size(); ++i)
-		if (segmentVisible(bends[i-1], bends[i], transformMatrix, viewport)>0.)
-			return true;
-	if (segmentVisible(endPoint, bends.back(), transformMatrix, viewport)>0.)
-		return true;
-	return false;
-}
 
 void computeCleanVertices(const vector<Coord> &bends,
 		const Coord &startPoint, const Coord& endPoint,
@@ -309,26 +294,6 @@ vector<Coord> computeCleanVertices(const vector<Coord> &bends,
 	vector<Coord> result;
 	computeCleanVertices(bends,startPoint,endPoint,startN,endN,result);
 	return result;
-}
-//=============================================
-void curveVisibility(const Coord &startPoint,const std::vector<Coord> &bends, const Coord &endPoint,
-		const Size &size, bool &drawPoly, bool &drawLine, const MatrixGL &projectionMatrix,
-		const MatrixGL &modelviewMatrix, const Vector<int, 4> &viewport) {
-	float s1 = projectSize(startPoint, Size(size[0], size[0], size[0]),
-			projectionMatrix, modelviewMatrix, viewport);
-	float s2 = projectSize(endPoint, Size(size[1], size[1], size[1]),
-			projectionMatrix, modelviewMatrix, viewport);
-	//    cerr << startPoint<< "/" << endPoint << "/" << size << "/" << s1 << "/" << s2 << endl;
-	drawLine = drawPoly = (s1 > 0.) || (s2 > 0.) ||
-			visible(startPoint, bends, endPoint,  modelviewMatrix * projectionMatrix, viewport);
-	if (drawLine) {
-		s1 = fabs(s1);
-		s2 = fabs(s2);
-		if (s1 < 2. && s2 < 2.)
-			drawPoly = false;
-		if (s1 > 2. && s2 > 2.)
-			drawLine = false;
-	}
 }
 //=============================================
 void polyLine(const vector<Coord> & vertices,
