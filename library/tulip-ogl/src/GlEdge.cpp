@@ -529,9 +529,12 @@ void GlEdge::drawLabel(OcclusionTest* test, TextRenderer*, GlGraphInputData* dat
 		}
 	}
 
-	label->setSize(Coord(1,1,0));
+	BoundingBox bb=getBoundingBox(data);
+	float labelLOD=(lod/sqrt((bb[1][0]-bb[0][0])*(bb[1][0]-bb[0][0])+(bb[1][1]-bb[0][1])*(bb[1][1]-bb[0][1])))*sqrt(2)*0.001;
+
+	label->setSize(Coord(0.001,0.001,0));
 	label->rotate(0,0,angle);
-	label->setAlignment(ON_CENTER);
+	label->setAlignment(ON_TOP);
 	label->setScaleToSize(false);
 	label->setLabelOcclusionBorder(data->parameters->getLabelsBorder());
 	if(!data->parameters->isLabelOverlaped())
@@ -539,9 +542,13 @@ void GlEdge::drawLabel(OcclusionTest* test, TextRenderer*, GlGraphInputData* dat
 	else
 		label->setOcclusionTester(NULL);
 	label->setPosition(position);
-	label->setUseLODOptimisation(false);
 
-	label->drawWithStencil(lod,camera);
+	label->setUseLODOptimisation(true);
+	label->setUseMinMaxSize(true);
+	label->setMinSize(data->parameters->getMinSizeOfLabel());
+	label->setMaxSize(data->parameters->getMaxSizeOfLabel());
+
+	label->drawWithStencil(labelLOD,camera);
 }
 
 void GlEdge::getVertices(GlGraphInputData *data,
