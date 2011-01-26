@@ -66,11 +66,13 @@ namespace tlp {
      */
     void addGlEntity(GlSimpleEntity *entity, const std::string &key);
     /**
-     * Delete entity with name : key
+     * Remove entity with name : key
+     * The entity is not deleted
      */
     void deleteGlEntity(const std::string &key,bool informTheEntity=true);
     /**
-     * Detele given entity
+     * Remove given entity
+     * The entity is not deleted
      */
     void deleteGlEntity(GlSimpleEntity *entity,bool informTheEntity=true);
     /**

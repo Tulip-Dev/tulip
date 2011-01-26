@@ -114,12 +114,14 @@ namespace tlp {
     void addGlEntity(GlSimpleEntity *entity,const std::string& name);
 
     /**
-     * Delete entity with name : key
+     * Remove entity with name : key
+     * This entity is not deleted
      */
     void deleteGlEntity(const std::string &key);
 
     /**
-     * Delete entity
+     * Remove entity
+     * This entity is not deleted
      */
     void deleteGlEntity(GlSimpleEntity *entity);
 
@@ -145,6 +147,7 @@ namespace tlp {
 
     /**
      * Remove all entities of the layer
+     * Entities are not deleted
      */
     void clear() {composite.reset(false);}
 
