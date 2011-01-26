@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <stack>
 #include "tulip/Graph.h"
 #include "tulip/AcyclicTest.h"
 #include "tulip/BooleanProperty.h"
@@ -81,37 +82,6 @@ void AcyclicTest::makeAcyclic(Graph* graph,vector<edge> &reversed, vector<tlp::S
 
   assert(AcyclicTest::isAcyclic(graph));
  }
-
-//=================================================================
-bool AcyclicTest::dfsAcyclicTest(const Graph *graph, const node n, 
-				 MutableContainer<bool> &visited, 
-				 MutableContainer<bool> &finished,
-				 vector<edge> *obstructionEdges) {
-  visited.set(n.id,true);
-  bool result = true;
-  Iterator<edge> *it = graph->getOutEdges(n);
-  while (it->hasNext()) {
-    edge tmp = it->next();
-    node nextNode = graph->target(tmp);
-    if (visited.get(nextNode.id)) {
-      if (!finished.get(nextNode.id)) {
-	result = false;
-	if (obstructionEdges != 0)
-	  obstructionEdges->push_back(tmp);
-	else {
-	  break;
-	}
-      }
-    }
-    else {
-      bool tmp = dfsAcyclicTest(graph, nextNode, visited, finished, obstructionEdges);
-      result = tmp && result;
-      if ((!result) && (obstructionEdges==0)) break;
-    }
-  } delete it;
-  finished.set(n.id,true);
-  return result;
-}
 //**********************************************************************
 bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges) {
   MutableContainer<bool> visited;
@@ -119,15 +89,71 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
   visited.setAll(false);
   finished.setAll(false);
   bool result = true;
+  // do a dfs traversal
   Iterator<node> *it = graph->getNodes();
   while (it->hasNext()) {
-    node curNode=it->next();
+    node curNode = it->next();
     if (!visited.get(curNode.id)) {
-      if (!dfsAcyclicTest(graph, curNode, visited, finished, obstructionEdges)) {
-	result = false;
-	if (obstructionEdges == 0) {
-	  break;
+      stack<node> nodesToVisit;
+      nodesToVisit.push(curNode);
+      stack<Iterator<edge>*> neighboursToVisit;
+      neighboursToVisit.push(graph->getOutEdges(curNode));
+      while(!nodesToVisit.empty()) {
+	curNode = nodesToVisit.top();
+	Iterator<edge> *ite = neighboursToVisit.top();
+	// check if dfs traversal of curNode neighbours is finished
+	if (!ite->hasNext()) {
+	  // unstack curNode
+	  nodesToVisit.pop();
+	  // delete & unstack neightbours iterator
+	  delete neighboursToVisit.top();
+	  neighboursToVisit.pop();
+	  // mark curNode as to be skipped
+	  // during further exploration
+	  finished.set(curNode.id, true);
+	} else {
+	  visited.set(curNode.id, true);
+	  // loop on remaining neighbours
+	  while (ite->hasNext()) {
+	    edge tmp = ite->next();
+	    node neighbour = graph->target(tmp);
+	    // check if we are already in the exploration
+	    // of the neighbours of neighbour
+	    if (visited.get(neighbour.id)) {
+	      if (!finished.get(neighbour.id)) {
+		// found a cycle
+		result = false;
+		if (obstructionEdges != NULL)
+		  obstructionEdges->push_back(tmp);
+		else {
+		  // it is finished if we don't need
+		  // to collect obstruction edges
+		  break;
+		}
+	      }
+	    } else {
+	      // found a new neighbour to explore
+	      // go deeper in our dfs traversal
+	      nodesToVisit.push(neighbour);
+	      neighboursToVisit.push(graph->getOutEdges(neighbour));
+	      break;
+	    }
+	  }
+	  // it may be finished if we don't need
+	  // to collect obstruction edges
+	  if ((!result) && (obstructionEdges == NULL))
+	    break;
 	}
+      }
+      // it may be finished if we don't need
+      // to collect obstruction edges
+      if ((!result) && (obstructionEdges == NULL)) {
+	// don't froget to delete remaining iterators
+	while(!neighboursToVisit.empty()) {
+	  delete neighboursToVisit.top();
+	    neighboursToVisit.pop();
+	}
+	break;
       }
     }
   } delete it;

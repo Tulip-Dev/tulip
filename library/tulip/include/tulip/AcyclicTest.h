@@ -68,10 +68,7 @@ public:
 
 private:
 
-  static bool dfsAcyclicTest(const Graph *graph, const node n, 
-			     MutableContainer<bool> &visited, 
-			     MutableContainer<bool> &finished,
-			     std::vector<edge> *obstructionEdges = 0);
+  // overload of GraphObserver methods
   void addEdge(Graph *,const edge);
   void delEdge(Graph *,const edge);
   void reverseEdge(Graph *,const edge);
