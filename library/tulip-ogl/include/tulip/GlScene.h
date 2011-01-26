@@ -281,6 +281,12 @@ namespace tlp {
     }
 
     /**
+     * Return the bouding box of the scene
+     * \warning This bounding box is compute in rendering, so if you add an entity in a layer the bounding box include this entity if a draw is call
+     */
+    BoundingBox getBoundingBox();
+
+    /**
      * Set a zoom level and a xDec/yDec, this parameters change viewport of the scene
      */
     void setViewportZoom(int zoom=1,int xDec=0, int yDec=0);

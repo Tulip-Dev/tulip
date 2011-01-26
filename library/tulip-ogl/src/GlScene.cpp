@@ -1212,4 +1212,8 @@ namespace tlp {
     yDec=yDecViewport;
   }
 
+  BoundingBox GlScene::getBoundingBox() {
+    return lodCalculator->getSceneBoundingBox();
+  }
+
 }
