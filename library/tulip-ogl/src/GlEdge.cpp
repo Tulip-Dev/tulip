@@ -443,7 +443,7 @@ void GlEdge::drawLabel(OcclusionTest* test, TextRenderer*, GlGraphInputData* dat
 
 	Color fontColor;
 	if (data->getElementSelected()->getEdgeValue(e))
-		fontColor.set(255, 0, 0, 255);
+		fontColor= data->parameters->getSelectionColor();
 	else {
 		fontColor = data->getElementLabelColor()->getEdgeValue(e);
 	}
