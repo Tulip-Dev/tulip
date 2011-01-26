@@ -226,6 +226,7 @@ void Camera::initProjection(const Vector<int, 4>& viewport,bool reset){
 //====================================================
 void Camera::initProjection(bool reset) {
 	Vector<int, 4> viewport=scene->getViewport();
+	assert(viewport[2]!=0 && viewport[3]!=0);
 	initProjection(viewport,reset);
 }
 //====================================================
