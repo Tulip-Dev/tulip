@@ -78,14 +78,8 @@ void getColors(const vector<Coord> &line, const Color &c1, const Color &c2, vect
 	getColors(&line[0],line.size(),c1,c2,result);
 }
 //================================================
-vector<Color> getColors(const vector<Coord> &line, const Color &c1, const Color &c2) {
-	vector<Color> result;
-	getColors(line,c1,c2,result);
-	return result;
-}
-//================================================
-vector<float> getSizes(const vector<Coord> &line, float s1, float s2) {
-	vector<float> result(line.size());
+void getSizes(const vector<Coord> &line, float s1, float s2,vector<float> &result) {
+	result.resize(line.size());
 	result[0] = s1;
 	result[line.size()-1] = s2;
 	s2 -= s1;
@@ -95,7 +89,6 @@ vector<float> getSizes(const vector<Coord> &line, float s1, float s2) {
 		s1 += s2 * delta;
 		result[i] = s1;
 	}
-	return result;
 }
 //===============================================
 struct CurvePoints {
@@ -287,17 +280,13 @@ void computeCleanVertices(const vector<Coord> &bends,
 		return;
 	}
 }
-
-vector<Coord> computeCleanVertices(const vector<Coord> &bends,
-		const Coord &startPoint, const Coord& endPoint,
-		Coord &startN, Coord &endN) {
-	vector<Coord> result;
-	computeCleanVertices(bends,startPoint,endPoint,startN,endN,result);
-	return result;
-}
 //=============================================
-void polyLine(const vector<Coord> & vertices,
-		const vector<Color> & colors) {
+void polyLine(const vector<Coord> &vertices,
+		const Color &c1, const Color &c2) {
+
+	vector<Color> colors;
+	getColors(vertices,c1,c2,colors);
+
 	OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 	glBegin(GL_LINE_STRIP);
 	for (unsigned int i = 0; i < vertices.size(); ++i) {
@@ -307,17 +296,20 @@ void polyLine(const vector<Coord> & vertices,
 	glEnd();
 	OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 }
-void polyLine(const vector<Coord> &vertices,
-		const Color &c1, const Color &c2) {
-	polyLine(vertices, getColors(vertices, c1, c2));
-}
 //=============================================
 void polyQuad(const vector<Coord> &vertices,
-		const vector<Color> &colors,
-		const vector<float> &sizes,
-		const Coord & startN, const Coord &endN,
+		const Color &c1, const Color &c2,
+		float s1, float s2,
+		const Coord &startN, const Coord &endN,
 		bool colorInterpolate,const Color &borderColor,
 		const string &textureName) {
+
+	vector<Color> colors;
+	getColors(vertices, c1, c2,colors);
+
+	vector<float> sizes;
+	getSizes(vertices, s1, s2,sizes);
+
 	unsigned int size;
 	vector<unsigned int> decTab;
 	unsigned int dec=0;
@@ -398,39 +390,6 @@ void polyQuad(const vector<Coord> &vertices,
 	delete [] points;
 }
 //=============================================
-void polyQuad(const vector<Coord> &vertices,
-		const vector<Color> &colors,
-		const vector<float> &sizes,
-		const Coord & startN, const Coord &endN,
-		const string &textureName){
-	polyQuad(vertices,colors,sizes,startN,endN,true,Color(0,0,0,0),textureName);
-}
-//=============================================
-void polyQuad(const vector<Coord> &vertices,
-		const Color &c1, const Color &c2,
-		float s1, float s2,
-		const Coord &startN, const Coord &endN,
-		bool colorInterpolate,const Color &borderColor,
-		const string &textureName) {
-	polyQuad(vertices,
-			getColors(vertices, c1, c2),
-			getSizes(vertices, s1, s2),
-			startN, endN,
-			colorInterpolate,borderColor,
-			textureName);
-}
-//=============================================
-void polyQuad(const vector<Coord> &vertices,
-		const Color &c1, const Color &c2,
-		float s1, float s2,
-		const Coord &startN, const Coord &endN,
-		const string &textureName) {
-	polyQuad(vertices,
-			getColors(vertices, c1, c2),
-			getSizes(vertices, s1, s2),
-			startN, endN,textureName);
-}
-//=============================================
 void simpleQuad(const vector<Coord> &vertices,
 		const Color &c1, const Color &c2,
 		float s1, float s2,
@@ -438,8 +397,10 @@ void simpleQuad(const vector<Coord> &vertices,
 		bool colorInterpolate,const Color &borderColor,
 		const string &textureName) {
 
-	vector<Color> colors=getColors(vertices, c1, c2);
-	vector<float> sizes=getSizes(vertices, s1, s2);
+	vector<Color> colors;
+	getColors(vertices, c1, c2,colors);
+	vector<float> sizes;
+	getSizes(vertices, s1, s2, sizes);
 
 	CurvePoints result(vertices.size());
 	//start point
@@ -584,13 +545,13 @@ void bezierCylinder(const vector<Coord> &,
 		float, float,
 		const Coord &, const Coord &) {
 	/* gleCoord  *point_array  = new gleCoord [30 + 2];
-    gleColor  *color_array  = new gleColor [30 + 2];
-    gleDouble *radius_array = new gleDouble[30 + 2];
+		gleColor  *color_array  = new gleColor [30 + 2];
+		gleDouble *radius_array = new gleDouble[30 + 2];
 
       for (unsigned int i = 0; i < 30; ++i) {
       Bezier(double (&p)[3], const double (*points)[3], unsigned int size, double mu);
     }
-	 */
+   */
 }
 void bezierQuad(const vector<Coord> &vertices,
 		const Color &c1, const Color &c2,
@@ -598,8 +559,10 @@ void bezierQuad(const vector<Coord> &vertices,
 		const Coord &startN, const Coord &endN) {
 	unsigned int MAX_BENDS = 8;
 	if (vertices.size()>MAX_BENDS) {
-		vector<float> sizes = getSizes(vertices, s1, s2);
-		vector<Color> colors = getColors(vertices, c1, c2);
+		vector<float> sizes;
+		getSizes(vertices, s1, s2,sizes);
+		vector<Color> colors;
+		getColors(vertices, c1, c2, colors);
 		vector<Coord> points(MAX_BENDS);
 		for (unsigned int i=0;i<MAX_BENDS;++i)
 			points[i]=vertices[i];
@@ -626,7 +589,9 @@ void bezierQuad(const vector<Coord> &vertices,
 	}
 	delta /= steps;
 	unsigned int size;
-	GLfloat *points    = buildCurvePoints(vertices, getSizes(vertices, s1, s2), startN, endN,size);
+	vector<float> sizes;
+	getSizes(vertices, s1, s2,sizes);
+	GLfloat *points    = buildCurvePoints(vertices, sizes, startN, endN,size);
 	GLfloat *pointsIt  = points;
 	glMap2f(GL_MAP2_VERTEX_3, 0., 1.0, 3, size , 0.0, 1.0,
 			size*3, 2, pointsIt );
@@ -686,7 +651,8 @@ void bezierLine(const vector<Coord> &vertices,
 	unsigned int MAX_BENDS = 8;
 	if (vertices.size()>MAX_BENDS) {
 		vector<Coord> points(MAX_BENDS);
-		vector<Color> colors = getColors(vertices, c1, c2);
+		vector<Color> colors;
+		getColors(vertices, c1, c2,colors);
 		for (unsigned int i=0;i<MAX_BENDS;++i)
 			points[i]=vertices[i];
 		bezierLine(points, c1, colors[MAX_BENDS - 1]);

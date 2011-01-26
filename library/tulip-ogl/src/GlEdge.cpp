@@ -108,8 +108,8 @@ BoundingBox GlEdge::getBoundingBox(GlGraphInputData* data) {
 		tmpAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
 		tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
 
-		vector<Coord> tmp = tlp::computeCleanVertices(bends, srcCoord, tgtCoord, srcAnchor,
-				tgtAnchor);
+		vector<Coord> tmp;
+		tlp::computeCleanVertices(bends, srcCoord, tgtCoord, srcAnchor,tgtAnchor, tmp);
 
 		for (vector<Coord>::iterator it = tmp.begin(); it != tmp.end(); ++it)
 			bb.expand(*it);
