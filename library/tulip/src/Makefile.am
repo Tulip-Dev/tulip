@@ -69,7 +69,7 @@ libtulip_la_SOURCES = \
 	GraphView.cpp \
 	TlpTools.cpp \
 	WithParameter.cpp \
-	PluginProgress.cpp \
+        SimplePluginProgress.cpp \
 	GraphMeasure.cpp \
 	PluginLibraryLoader.cpp \
 	StlFunctions.cpp \

@@ -40,6 +40,7 @@ INSTALL(FILES
 	tulip/GWOverviewWidgetPlugin.h 
 	tulip/PropertyWidgetPlugin.h 
 	tulip/QtProgress.h 
+        tulip/PluginProgressWidget.h
 	tulip/Controller.h 
 	tulip/ControllerAlgorithmTools.h
     tulip/ControllerViewsTools.h

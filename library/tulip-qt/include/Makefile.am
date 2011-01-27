@@ -39,6 +39,7 @@ INCLUDES_H = \
 	tulip/ElementPropertiesWidgetPlugin.h \
 	tulip/GWOverviewWidgetPlugin.h \
 	tulip/PropertyWidgetPlugin.h \
+        tulip/PluginProgressWidget.h \
 	tulip/QtProgress.h \
 	tulip/Controller.h \
 	tulip/ControllerAlgorithmTools.h \
@@ -106,8 +107,8 @@ BUILT_SOURCES = \
 	tulip/LayerManagerWidgetData.h \
 	tulip/AugmentedDisplayDialogData.h \
 	tulip/GWOverviewWidgetData.h \
-	tulip/GridOptionsData.h \
-	tulip/QtProgressData.h \
+        tulip/GridOptionsData.h \
+        tulip/PluginProgressWidgetData.h \
 	tulip/ColorScaleConfigDialogData.h \
 	tulip/SimpleStringsListSelectionWidgetData.h \
 	tulip/DoubleStringsListSelectionWidgetData.h \

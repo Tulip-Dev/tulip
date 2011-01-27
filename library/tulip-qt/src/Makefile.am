@@ -67,6 +67,7 @@ BUILT_SOURCES = \
 	moc_RenderingParametersDialogData.cpp \
 	moc_GridOptionsWidget.cpp \
 	moc_GridOptionsData.cpp \
+        moc_PluginProgressWidget.cpp \
 	moc_QtProgress.cpp \
 	moc_Controller.cpp \
 	moc_ControllerViewsManager.cpp \
@@ -128,6 +129,7 @@ TODIST_SOURCES = \
 	InteractorManager.cpp \
 	Interactor.cpp \
 	InteractorChainOfResponsibility.cpp \
+        PluginProgressWidget.cpp \
 	QtProgress.cpp \
 	Controller.cpp \
 	ControllerAlgorithmTools.cpp \

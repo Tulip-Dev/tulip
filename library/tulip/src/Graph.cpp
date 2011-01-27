@@ -28,6 +28,7 @@
 #include "tulip/ExportModule.h"
 #include "tulip/Algorithm.h"
 #include "tulip/ImportModule.h"
+#include "tulip/SimplePluginProgress.h"
 
 using namespace std;
 using namespace tlp;
@@ -127,7 +128,7 @@ Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *pl
   PluginProgress *tmpProgress;
   bool deletePluginProgress=false;
   if (plugProgress==0) {
-    tmpProgress=new PluginProgress();
+    tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
   else tmpProgress=plugProgress;
@@ -162,7 +163,7 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
   tmp.dataSet=&dataSet;
   PluginProgress *tmpProgress=NULL;
   if (plugProgress==0) {
-    tmpProgress=new PluginProgress();
+    tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
   else tmpProgress=plugProgress;
@@ -191,7 +192,7 @@ bool tlp::applyAlgorithm(Graph *sg,string &errorMsg,DataSet *dataSet,
   tmp.dataSet=dataSet;
   PluginProgress *tmpProgress;
   if (plugProgress==0) {
-    tmpProgress=new PluginProgress();
+    tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
   else tmpProgress=plugProgress;

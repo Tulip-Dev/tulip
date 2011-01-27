@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-
+#include "tulip/SimplePluginProgress.h"
 //================================================================================
 template<typename ATTRIBUTETYPE>
 ATTRIBUTETYPE tlp::Graph::getAttribute(const std::string &name) const {
@@ -102,7 +102,7 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
 
   tlp::PluginProgress *tmpProgress;
   if (progress==0) 
-    tmpProgress=new tlp::PluginProgress();
+    tmpProgress=new tlp::SimplePluginProgress();
   else 
     tmpProgress=progress;
 
