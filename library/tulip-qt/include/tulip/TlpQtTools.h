@@ -34,6 +34,7 @@
 class QWidget;
 
 //Declare tulip type compatible with QVariant
+Q_DECLARE_METATYPE(tlp::Graph*)
 Q_DECLARE_METATYPE(tlp::DataSet)
 Q_DECLARE_METATYPE(tlp::Color)
 Q_DECLARE_METATYPE(tlp::Coord)
