@@ -72,6 +72,7 @@ nobase_include_HEADERS = \
 	tulip/WithParameter.h \
 	tulip/WithDependency.h \
 	tulip/PluginProgress.h \
+        tulip/SimplePluginProgress.h \
 	tulip/Iterator.h \
 	tulip/StlIterator.h \
 	tulip/StableIterator.h \

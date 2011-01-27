@@ -37,6 +37,7 @@ TlpQtTools.cpp
 InteractorManager.cpp
 Interactor.cpp
 InteractorChainOfResponsibility.cpp
+PluginProgressWidget.cpp
 QtProgress.cpp
 Controller.cpp
 ControllerAlgorithmTools.cpp
@@ -87,7 +88,7 @@ set(tulip-qt_UI
      ../designer/AugmentedDisplayDialog.ui
      ../designer/GWOverviewWidget.ui
      ../designer/GridOptions.ui
-     ../designer/QtProgress.ui
+     ../designer/PluginProgressWidget.ui
      ../designer/ColorScaleConfigDialog.ui
      ../designer/SimpleStringsListSelectionWidget.ui
      ../designer/DoubleStringsListSelectionWidget.ui
@@ -123,6 +124,7 @@ set(tulip-qt_MOC
     ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/RenderingParametersDialogData.h
     ../include/tulip/GridOptionsWidget.h
     ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/GridOptionsData.h
+    ../include/tulip/PluginProgressWidget.h
     ../include/tulip/QtProgress.h
     ../include/tulip/Controller.h
     ../include/tulip/ControllerViewsManager.h

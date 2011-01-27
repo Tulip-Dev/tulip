@@ -17,80 +17,79 @@
  *
  */
 #include "tulip/QtProgress.h"
+#include "tulip/PluginProgressWidget.h"
+#include "tulip/TlpQtTools.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-#include <QtGui/qapplication.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qlabel.h>
-#include <tulip/GlMainWidget.h>
-#include <QtGui/qprogressbar.h>
-
+#include <QtGui/QVBoxLayout>
 using namespace std;
 
 namespace tlp {
 
-  //=====================================
-  QtProgress::QtProgress(QWidget* parent,string text,View *view,int updateInterval):
-    QDialog(parent),
-    firstCall(true),label(text), parent(parent),view(view),updateIterval(updateInterval),time(QTime::currentTime()) {
-    setupUi(this);
-    setModal(true);
-  }
-  //=====================================
-  QtProgress::~QtProgress() {
-  }
-  //=====================================
-  void QtProgress::preview_handler(bool b) {
-      if (preview->isChecked() == b) return;
-      preview->setChecked(b);
-  }
-  //=====================================
-  void QtProgress::progress_handler(int i,int j) {    
-    if (state()!=TLP_CONTINUE) { 
-      return;
-  }    
-    if(time.msecsTo(QTime::currentTime())> updateIterval){
-        progressBar->setMaximum(j);
-        progressBar->setValue(i);
-        qApp->processEvents();
-        time = QTime::currentTime();
+    //=====================================
+    QtProgress::QtProgress(QWidget* parent,string text,View *view,int updateInterval):
+            QDialog(parent),progressWidget(new PluginProgressWidget(view,updateInterval,parent)),firstCall(true){
+        resize(QSize(417,92));
+        setWindowTitle(tlpStringToQString(text));
+        setModal(true);
+        QVBoxLayout *vblayout = new QVBoxLayout(this);
+        vblayout->setMargin(0);
+        setLayout(vblayout);
+        vblayout->addWidget(progressWidget);
     }
-    if (firstCall) show();
-    firstCall=false;
-    if (view!=0 && isPreviewMode()) {
-      view->init();
+    //=====================================
+    QtProgress::~QtProgress() {
     }
-  }
-  //=====================================
-  void QtProgress::setComment(string msg) {
-    comment->setText(QString::fromUtf8(msg.c_str()));
-    if (firstCall) show();
-    firstCall=false;
-    qApp->processEvents();
-  }
-  //=====================================
-  void QtProgress::showPreview(bool flag) {
-    if (flag)
-      preview->show();
-    else
-      preview->hide();
-  }
-  //=====================================
-  void QtProgress::stopCompute(){
-    //  cerr << __PRETTY_FUNCTION__ << endl;
-    PluginProgress::stop();
-  }
-  //=====================================
-  void QtProgress::cancelCompute(){
-    //  cerr << __PRETTY_FUNCTION__ << endl;
-    PluginProgress::cancel();
-  }
-  //=====================================
-  void QtProgress::changePreview(bool b){
-    // cerr << __PRETTY_FUNCTION__ << endl;
-    PluginProgress::setPreviewMode(b);
-  }
-  
+    ProgressState QtProgress::progress(int step, int max_step){
+        if (firstCall){
+            show();
+        }
+        firstCall=false;
+        return progressWidget->progress(step,max_step);
+    }
+
+    //=====================================
+
+    void QtProgress::cancel(){
+        progressWidget->cancel();
+    }
+    //=====================================
+    void QtProgress::stop(){
+        progressWidget->stop();
+    }
+    //=====================================
+    bool QtProgress::isPreviewMode() const {
+        return progressWidget->isPreviewMode();
+    }
+    //=====================================
+    void QtProgress::setPreviewMode(bool mode){
+        progressWidget->setPreviewMode(mode);
+    }
+
+    //=====================================
+    void QtProgress::showPreview(bool show){
+        progressWidget->showPreview(show);
+    }
+    //=====================================
+    ProgressState QtProgress::state() const{
+        return progressWidget->state();
+    }
+    //=====================================
+    string QtProgress::getError(){
+        return progressWidget->getError();
+    }
+    //=====================================
+    void QtProgress::setError(string error){
+        progressWidget->setError(error);
+    }
+    //=====================================
+    void QtProgress::setComment(string msg) {
+        if (firstCall) {
+            show();
+        }
+        firstCall=false;
+        progressWidget->setComment(msg);
+    }
 }

@@ -21,7 +21,7 @@
 #define GLPROGRESSBAR_H_
 
 #include "tulip/GlComposite.h"
-#include <tulip/PluginProgress.h>
+#include <tulip/SimplePluginProgress.h>
 
 const std::string SLIDER_TEXTURE_NAME = "cylinderTexture.png";
 
@@ -29,7 +29,7 @@ namespace tlp {
 /**
  * 	This class allows to display a progress bar in OpenGL
  */
-class TLP_GL_SCOPE GlProgressBar : public GlComposite, public PluginProgress {
+class TLP_GL_SCOPE GlProgressBar : public GlComposite, public SimplePluginProgress {
 
 public :
 
@@ -48,7 +48,8 @@ public :
 	 * \param msg the text of the comment to display
 	 */
 	void setComment(const std::string& msg) {comment = msg;}
-	void progress_handler(int step, int max_step);
+    protected:
+        void progress_handler(int step, int max_step);
 
 private :
 

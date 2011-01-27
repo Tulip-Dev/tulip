@@ -29,27 +29,70 @@ namespace tlp {
 
 enum ProgressState{TLP_CONTINUE, TLP_CANCEL , TLP_STOP };
 
+/**
+  * @brief Interface to notify and control the progression of a process.
+  *
+  * To notify the progression use the progress function. You can ask
+  * @code
+  * PluginProgress *progress;
+  * progress->setComment("First step");
+  * for(int i = 0 ; i<50 ;++i){
+  * //Perform some actions
+  * //.....
+  *
+  * //Check internal state
+  * if(progress->state()!=TLP_CONTINUE){
+  * //User want to stop the process
+  * break;
+  * }
+  *
+  * //Notify progression.
+  * progress->progress(i,50);
+  * }
+  *
+  * @endcode
+  **/
 class TLP_SCOPE PluginProgress {
- public:
-  PluginProgress();
-  virtual ~PluginProgress();
-  ProgressState progress(int step, int max_step);
-  void cancel();
-  void stop();
-  bool isPreviewMode() const ;
-  void setPreviewMode(bool);
-  virtual void showPreview(bool);
-  ProgressState state() const;
-  std::string getError() { return _error; }
-  void setError(std::string error) { _error = error; }
-  virtual void setComment(std::string) {}
-  virtual void progress_handler(int step, int max_step);
-  //call when the _preview variable change.
-  virtual void preview_handler(bool);
- private:
-  ProgressState _state;
-  bool _preview;
-  std::string _error;
+ public:  
+     virtual ~PluginProgress(){}
+  /**
+    * @brief Notify the progression of the process.
+    * @brief The current step number.
+    * @brief The maximum step number.
+    **/
+  virtual ProgressState progress(int step, int max_step)=0;
+  /**
+    * @brief Set the state flag to cancel to notify to the process that user want to cancel it.
+    *
+    * Canceling a process must stop it and revert all the changes performed since its start.
+    **/
+  virtual void cancel()=0;
+  /**
+    * @brief Set the state flag to stop to notify to the process that user want to stop it.
+    *
+    * Stopping a process dont revert changes.
+    **/
+  virtual void stop()=0;
+  virtual bool isPreviewMode() const =0;
+  virtual void setPreviewMode(bool)=0;
+  virtual void showPreview(bool)=0;
+  /**
+    * @brief Get the internal state of the PluginProgress.
+    **/
+  virtual ProgressState state() const=0;
+  /**
+    * @brief Return a message describing the error encountered during the process.
+    **/
+  virtual std::string getError()=0;
+  /**
+    * @brief Set the message describing the error encountered during the process.
+    **/
+  virtual void setError(std::string error)=0;
+  /**
+    * @brief Change the comment about the process progression.
+    **/
+  virtual void setComment(std::string)=0;
+
 };
 
 }

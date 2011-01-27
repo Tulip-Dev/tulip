@@ -66,6 +66,7 @@ INSTALL(FILES
 	tulip/WithParameter.h 
 	tulip/WithDependency.h 
 	tulip/PluginProgress.h 
+        tulip/SimplePluginProgress.h
 	tulip/Iterator.h 
 	tulip/StlIterator.h 
 	tulip/StableIterator.h 

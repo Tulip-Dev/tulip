@@ -27,12 +27,14 @@
 #include "tulip/Reflect.h"
 #include "tulip/Graph.h"
 #include "tulip/GlMainWidget.h"
+#include "tulip/DataSet.h"
 
 #include <QtGui/QColor>
 
 class QWidget;
 
 //Declare tulip type compatible with QVariant
+Q_DECLARE_METATYPE(tlp::DataSet)
 Q_DECLARE_METATYPE(tlp::Color)
 Q_DECLARE_METATYPE(tlp::Coord)
 Q_DECLARE_METATYPE(tlp::Size)

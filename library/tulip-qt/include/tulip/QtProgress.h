@@ -21,38 +21,34 @@
 #include <string>
 #include <tulip/PluginProgress.h>
 #include <tulip/View.h>
-#include "tulip/QtProgressData.h"
-
-#include <QtCore/QTime>
+#include <QtGui/QDialog>
 
 namespace tlp {
-
-  class TLP_QT_SCOPE QtProgress : public QDialog, public Ui::QtProgressData, public tlp::PluginProgress {
-    
-    Q_OBJECT
-      
-  public:
-    QtProgress(QWidget* parent, std::string text, View *view=0,int updateInterval=200);
-    virtual ~QtProgress();
-    void progress_handler(int i,int j);
-    void preview_handler(bool b);
-    void setComment(std::string msg);
-    void showPreview(bool);
-  public slots:
-    void stopCompute();
-    void cancelCompute();
-    void changePreview(bool);
-
-  public:
-    bool firstCall;
-    std::string label;
-    QWidget* parent;
-    View *view;
-
-  private:
-    int updateIterval;
-    QTime time;
-  };
+    class PluginProgressWidget;
+    /**
+      * @brief QDialog wrapping a PluginProgressWidget. See the PluginProgressWidget and PluginProgress documentation for more information.
+      *
+      * Display and control a PluginProgress widget inside a QDialog.
+      **/
+    class TLP_QT_SCOPE QtProgress : public QDialog, public tlp::PluginProgress{
+        Q_OBJECT
+    public:
+        QtProgress(QWidget* parent, std::string text, View *view=NULL,int updateInterval=200);
+        virtual ~QtProgress();
+        ProgressState progress(int step, int max_step);
+        void cancel();
+        void stop();
+        bool isPreviewMode() const ;
+        void setPreviewMode(bool);
+        void showPreview(bool);
+        ProgressState state() const;
+        std::string getError();
+        void setError(std::string error);
+        void setComment(std::string);
+    private:
+        PluginProgressWidget* progressWidget;
+        bool firstCall;
+    };
 }
 
 #endif

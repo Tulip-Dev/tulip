@@ -27,6 +27,8 @@ namespace tlp {
       * @code
       * //Get the renderer
       * glOffscreenRenderer *glOffscreenRenderer = GlOffscreenRenderer::getInstance();
+      * //Define the viewport size. Needed to initialize the offscreen rederer.
+      * glOffscreenRenderer->setViewPortSize(200,200);
       * //Erase old elements
       * glOffscreenRenderer->clearScene();
       * //Change the background color of the scene to white
