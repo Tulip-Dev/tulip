@@ -86,7 +86,10 @@ bool TreeTest::isFreeTree (Graph *graph, node curRoot, node cameFrom,
   if (visited.get (curRoot.id)) return false;
   visited.set (curRoot.id, true);
   node curNode;
-  forEach (curNode, graph->getInOutNodes(curRoot)) { 
+  forEach (curNode, graph->getInOutNodes(curRoot)) {
+    // check self loop
+    if (curNode == curRoot)
+      return false;
     if (curNode != cameFrom)
       if (!isFreeTree (graph, curNode, curRoot, visited))
 	returnForEach(false);

@@ -35,6 +35,7 @@ public:
   void setUp();
   void tearDown();
   void testSimple();
+  void testFreeTree();
   void testTree();
   void testAcyclic();
   void testConnected();
