@@ -395,7 +395,9 @@ namespace tlp {
         }
 
         // If edge labels are rendered we have to compute the edges LOD because label rendering use LOD
-        computeEdgesLOD=inputData->parameters->isViewEdgeLabel();
+        computeEdgesLOD=false;
+        if(inputData)
+          inputData->parameters->isViewEdgeLabel();
 
 
         GlCPULODCalculator::computeFor3DCamera(layerLODUnit,eye,transformMatrix,globalViewport,currentViewport);
