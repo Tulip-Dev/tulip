@@ -51,6 +51,39 @@ void TestAlgorithmTest::testSimple() {
   cerr << __FUNCTION__ << " : not implemented" << endl;
 }
 //==========================================================
+void TestAlgorithmTest::testFreeTree() {
+  node n1 = graph->addNode();
+  edge e = graph->addEdge(n1, n1);
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(graph) == false);
+  graph->delEdge(e);
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(graph) == true);
+  node n2 = graph->addNode();
+  node n3 = graph->addNode();
+  CPPUNIT_ASSERT(!TreeTest::isTree(graph));
+  edge e0 = graph->addEdge(n1, n2);
+  edge e1 = graph->addEdge(n3, n1);
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
+  node n4 = graph->addNode();
+  CPPUNIT_ASSERT(!TreeTest::isFreeTree(graph));
+  edge e2 = graph->addEdge(n4, n1);
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
+  CPPUNIT_ASSERT(TreeTest::isTree(graph) == false);
+  Graph* clone = tlp::newCloneSubGraph(graph);
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(clone));
+  clone->reverse(e1);
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(clone));
+  clone->reverse(e0);
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(clone));
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
+  clone->delEdge(e1);
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(clone) == false);
+  clone->delNode(n3);
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(graph));
+  CPPUNIT_ASSERT(TreeTest::isFreeTree(clone));
+}
+//==========================================================
 void TestAlgorithmTest::testTree() {
   graph->clear();
   node n1 = graph->addNode();
@@ -205,6 +238,8 @@ CppUnit::Test * TestAlgorithmTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph Test" );
   suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Simple test", 
 								     &TestAlgorithmTest::testSimple ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Free Tree test", 
+								     &TestAlgorithmTest::testFreeTree ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Tree test", 
 								     &TestAlgorithmTest::testTree ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Acyclic test", 
