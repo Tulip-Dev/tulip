@@ -23,6 +23,7 @@ class TLP_QT_SCOPE PluginProgressWidget : public QWidget, public tlp::SimplePlug
     Q_OBJECT
 
 public:
+    PluginProgressWidget(QWidget *parent = 0);
     /**
       * @brief Create a PluginProgressWidget.
       * @param view The view to update if the preview mode is enabled. Can be NULL if you don't want to update a view.
@@ -30,6 +31,7 @@ public:
       * @parma parent The parent widget.
       **/
     PluginProgressWidget(View *view=NULL,int updateInterval=200,QWidget *parent = 0);
+
     ~PluginProgressWidget();
     /**
      * @brief Show or hide the preview check box in the widget.
