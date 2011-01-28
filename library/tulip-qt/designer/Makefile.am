@@ -7,7 +7,7 @@ dist_noinst_DATA = FindSelection.ui \
 	PropertyDialog.ui \
 	CopyPropertyDialog.ui \
 	GridOptions.ui \
-	QtProgress.ui \
+        SimpleStringsListSelectionWidget.ui \
 	ColorScaleConfigDialog.ui \
 	SimpleStringsListSelectionWidget.ui \
 	DoubleStringsListSelectionWidget.ui \
