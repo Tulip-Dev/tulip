@@ -4,7 +4,7 @@
 #include <tulip/tulipconf.h>
 #include <tulip/SimplePluginProgress.h>
 #include <tulip/View.h>
-#include <QWidget>
+#include <QtGui/QWidget>
 #include <QtCore/QTime>
 #include <string>
 namespace Ui {
