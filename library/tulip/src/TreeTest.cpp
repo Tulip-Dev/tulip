@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <stack>
 #include "tulip/Graph.h"
 #include "tulip/ConnectedTest.h"
 #include "tulip/TreeTest.h"
@@ -45,15 +46,12 @@ bool TreeTest::isTree(Graph *graph) {
 
 //====================================================================
 //Determines if a graph is a topological tree.  This means that
-//if the graph were undirected, there would be no cycles.
+//if the graph was undirected, there would be no cycles.
 bool TreeTest::isFreeTree(Graph *graph) {
   if (instance==0) instance = new TreeTest();
-  MutableContainer<bool> visited;
-  visited.setAll (false);
   node firstNode = graph->getOneNode();
   return (firstNode.isValid() &&
-	  instance->isFreeTree (graph, firstNode, firstNode,
-				visited))
+	  instance->isFreeTree (graph, firstNode))
     ? ConnectedTest::isConnected(graph)
     : false;
 }//isFreeTree
@@ -79,21 +77,63 @@ void TreeTest::makeRootedTree(Graph *graph, node root) {
 }//end makeRootedTree
 
 //====================================================================
-//Determines if the passed graph is topologically a tree.  The 
-//passed mutable container returns if we have visited a node
-bool TreeTest::isFreeTree (Graph *graph, node curRoot, node cameFrom,
-			   MutableContainer<bool> &visited) {
-  if (visited.get (curRoot.id)) return false;
-  visited.set (curRoot.id, true);
-  node curNode;
-  forEach (curNode, graph->getInOutNodes(curRoot)) {
-    // check self loop
-    if (curNode == curRoot)
-      return false;
-    if (curNode != cameFrom)
-      if (!isFreeTree (graph, curNode, curRoot, visited))
-	returnForEach(false);
-  }//end forEach
+// simple structure to implement
+// the further isFreeTree dfs loop
+struct dfsFreeTreeStruct {
+  node curRoot;
+  node cameFrom;
+  Iterator<node>* neighbours;
+
+  dfsFreeTreeStruct() {}
+  dfsFreeTreeStruct(node root, node from, Iterator<node>* it):
+    curRoot(root), cameFrom(from), neighbours(it) {}
+  ~dfsFreeTreeStruct() {
+    if (neighbours)
+      delete neighbours;
+  }
+ };
+
+//Determines if the given graph is topologically a tree
+bool TreeTest::isFreeTree (Graph *graph, node curRoot) {
+  // do a dfs traversal from curRoot;
+  MutableContainer<bool> visited;
+  visited.setAll (false);
+  stack<dfsFreeTreeStruct> dfsLevels;
+  dfsFreeTreeStruct curParams(curRoot, curRoot, graph->getInOutNodes(curRoot));
+  dfsLevels.push(curParams);
+  while (!dfsLevels.empty()) {
+    curParams = dfsLevels.top();
+    curRoot = curParams.curRoot;
+    node cameFrom = curParams.cameFrom;
+    Iterator<node> *neighbours = curParams.neighbours;
+    // set neighbours member to NULL
+    // to avoid twice deletion on exit
+    curParams.neighbours = NULL;
+    if (!neighbours->hasNext()) {
+      dfsLevels.pop();
+    } else {
+      visited.set (curRoot.id, true);
+      // loop on remaining neighbours
+      while (neighbours->hasNext()) {
+	node curNode = neighbours->next();
+	// check self loop
+	if (curNode == curRoot) {
+	  return false;
+	}
+	if (curNode != cameFrom) {
+	  if (visited.get(curNode.id)) {
+	    return false;
+	  }
+	  // go deeper in the dfs exploration
+	  curParams.curRoot = curNode;
+	  curParams.cameFrom = curRoot;
+	  curParams.neighbours = graph->getInOutNodes(curNode);
+	  dfsLevels.push(curParams);
+	  break;
+	}
+      }
+    }
+  }
   return true;
 }//end isFreeTree 
 
