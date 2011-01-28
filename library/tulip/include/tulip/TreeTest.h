@@ -78,8 +78,7 @@ private:
   void destroy(Graph *);
   TreeTest();
   static TreeTest * instance;
-  bool isFreeTree (Graph *graph, node curRoot, node cameFrom,
-		   MutableContainer<bool> &visited);
+  bool isFreeTree (Graph *graph, node curRoot);
   void makeRootedTree (Graph *graph, node curRoot, node cameFrom);
   TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
 };
