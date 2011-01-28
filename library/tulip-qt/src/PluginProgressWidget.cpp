@@ -1,5 +1,5 @@
 #include "tulip/PluginProgressWidget.h"
-#include "PluginProgressWidgetData.h"
+#include "tulip/PluginProgressWidgetData.h"
 
 using namespace tlp;
 using namespace std;
