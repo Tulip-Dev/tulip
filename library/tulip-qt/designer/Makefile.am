@@ -35,6 +35,7 @@ dist_noinst_DATA = FindSelection.ui \
 	up.png \
 	right.png \
 	TulipQtResource.qrc \
+	PluginProgressWidget.ui \
 	ListPropertyWidget.ui
 
 SOURCES = elementtable.xpm GlMainWidget.xpm gwoverviewwidget.xpm sghierarchywidget.xpm
