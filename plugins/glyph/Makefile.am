@@ -22,8 +22,9 @@ plugins_LTLIBRARIES = \
 	libBillboard-@VERSION@.la \
 	libCylinder-@VERSION@.la \
 	libHalfCylinder-@VERSION@.la \
-	libChristmasTree-@VERSION@.la 
-#	libSquareBorder-@VERSION@.la
+	libChristmasTree-@VERSION@.la \
+	libRoundedBox-@VERSION@.la \
+	libWindow-@VERSION@.la
 
 pluginsdir = $(libdir)/tlp/glyphs
 
@@ -41,6 +42,8 @@ libCone_@VERSION@_la_SOURCES = cone.cpp
 libCylinder_@VERSION@_la_SOURCES = cylinder.cpp 
 libHalfCylinder_@VERSION@_la_SOURCES = halfcylinder.cpp 
 libChristmasTree_@VERSION@_la_SOURCES = christmastree.cpp
+libRoundedBox_@VERSION@_la_SOURCES = roundedbox.cpp
+libWindow_@VERSION@_la_SOURCES = window.cpp
 
 AM_LDFLAGS = ${DLL_FLAGS} -avoid-version @GL_LDFLAGS@ @LIB_GL@ @TULIP_LDFLAGS@ @TULIP_OGL_LDFLAGS@
 
