@@ -74,8 +74,8 @@ namespace tlp {
 
     tabWidgetProxy = new TabWidgetHidableMenuGraphicsProxy(30);
     tabWidgetProxy->setPos(0,0);
-    tabWidgetProxy->resize(370, 370);
-    tabWidgetProxy->scale(0.8,0.8);
+    tabWidgetProxy->resize(370, 470);
+    tabWidgetProxy->scale(0.7,0.7);
     tabWidgetProxy->hideTabWidget();
     tabWidgetProxy->setZValue(10);
     list<pair<QWidget *,string> > configWidgets=baseView->getConfigurationWidget();
@@ -96,7 +96,7 @@ namespace tlp {
     	connect(overviewWidget, SIGNAL(hideOverview(bool)), this, SLOT(hideOverview(bool)));
     	connect(overviewAction, SIGNAL(triggered(bool)), this, SLOT(setVisibleOverview(bool)));
 
-    	tabWidgetProxy->translate(0,overviewItem->boundingRect().height()+40);
+    	tabWidgetProxy->translate(0,overviewItem->boundingRect().height()+60);
     }
 
     return graphicsView;
@@ -121,7 +121,7 @@ namespace tlp {
     emit elementSelected(id,node);
   }
 
-  string BaseGraphicsViewComponent::getRealViewName() {
+  string BaseGraphicsViewComponent::getRealViewName() const {
     return realViewName;
   }
 
