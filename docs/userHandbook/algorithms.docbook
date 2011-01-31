@@ -83,7 +83,7 @@
                 </sect3>
 </sect2>
 <sect2 id="color-algos"><title>Color Algorithms :</title>
-        <sect3 id="mertric-mapping"><title>Metric Mapping :</title>
+        <sect3 id="metric-mapping"><title>Metric Mapping :</title>
 		<para>The metric mapping algorithm can be used to re-color the nodes of the graph after using a measure ( <xref linkend="Measure" /> ) algorithm.</para>
 		<para>This Algorithm takes 5 parameters :</para>
 		<itemizedlist>
