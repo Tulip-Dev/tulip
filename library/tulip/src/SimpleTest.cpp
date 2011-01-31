@@ -20,6 +20,7 @@
 #include <vector>
 #include "tulip/Graph.h"
 #include "tulip/SimpleTest.h"
+#include "tulip/ConnectedTest.h"
 #include "tulip/MutableContainer.h"
 #include "tulip/BooleanProperty.h"
 #include "tulip/StableIterator.h"
@@ -65,7 +66,9 @@ bool SimpleTest::simpleTest(Graph *graph, vector<edge> *multipleEdges, vector<ed
  bool computeAll = (loops != 0) || (multipleEdges != 0);
  Iterator<node> *itNode = graph->getNodes();
  MutableContainer<bool> inserted;
+ MutableContainer<bool> visited;
  inserted.setAll(false);
+ visited.setAll(false);
  while (itNode->hasNext ()) {
    node current = itNode->next ();
    //Search for multiple edges and loops
@@ -74,6 +77,11 @@ bool SimpleTest::simpleTest(Graph *graph, vector<edge> *multipleEdges, vector<ed
    targeted.setAll(false);
    while (itEdge->hasNext ()) {
      edge e = itEdge->next();
+     // check if edge has already been visited
+     if (visited.get(e.id))
+       continue;
+     // mark edge as already visited
+     visited.set(e.id, true);
      node target = graph->opposite(e, current);
      if (target == current) { //loop 
        if (!computeAll) {
