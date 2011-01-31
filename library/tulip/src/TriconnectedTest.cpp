@@ -24,13 +24,7 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-#ifdef _WIN32 
-#ifdef DLL_EXPORT
 TriconnectedTest * TriconnectedTest::instance=0;
-#endif
-#else
-TriconnectedTest * TriconnectedTest::instance=0;
-#endif
 //=================================================================
 TriconnectedTest::TriconnectedTest(){
 }

@@ -25,14 +25,7 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-#ifdef _WIN32 
-#ifdef DLL_EXPORT
 BiconnectedTest * BiconnectedTest::instance=0;
-#endif
-#else
-BiconnectedTest * BiconnectedTest::instance=0;
-#endif
-
 //=================================================================
 bool BiconnectedTest::isBiconnected(Graph *graph) {
   if (instance==0)

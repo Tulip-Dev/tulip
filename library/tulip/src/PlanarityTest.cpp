@@ -24,13 +24,7 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-#ifdef _WIN32 
-#ifdef DLL_EXPORT
 PlanarityTest * PlanarityTest::instance=0;
-#endif
-#else
-PlanarityTest * PlanarityTest::instance=0;
-#endif
 //=================================================================
 bool PlanarityTest::isPlanar(Graph *graph){
   if(instance==0)

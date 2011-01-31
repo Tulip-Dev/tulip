@@ -24,13 +24,7 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-#ifdef _WIN32 
-#ifdef DLL_EXPORT
 OuterPlanarTest * OuterPlanarTest::instance=0;
-#endif
-#else
-OuterPlanarTest * OuterPlanarTest::instance=0;
-#endif
 //=================================================================
 bool OuterPlanarTest::isOuterPlanar(Graph *graph){
   if(instance==0)

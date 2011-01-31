@@ -28,13 +28,8 @@
 
 using namespace std;
 using namespace tlp;
-#ifdef _WIN32 
-#ifdef DLL_EXPORT
 TreeTest * TreeTest::instance=0;
-#endif
-#else
-TreeTest * TreeTest::instance=0;
-#endif
+
 TreeTest::TreeTest(){
 }
 
@@ -305,7 +300,7 @@ void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
   if (root.isValid())
     rg->delNode(root);
   // delete the reversed edges if any
-  vector<edge>* reversedEdges;
+  vector<edge>* reversedEdges = NULL;
   if (sg->getAttribute<vector<edge>*>(REVERSED_EDGES, reversedEdges)) {
     sg->removeAttribute(REVERSED_EDGES);
     for(vector<edge>::iterator ite = reversedEdges->begin();
