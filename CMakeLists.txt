@@ -16,7 +16,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-ENDIF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio")
+ENDIF()
 
 IF(WIN32)
  IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options 
@@ -50,7 +50,12 @@ SET(TulipMajorVersion 3)
 SET(TulipMinorVersion 5)
 SET(TulipReleaseVersion 0)
 SET(TulipVersionSeparator .)
-IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options
+IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #specific options for Visual Studio
+	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9") #visual studio 2008 needs boost
+		find_package(BOOST REQUIRED)
+		include_directories(${Boost_INCLUDE_DIRS})
+		include_directories(${Boost_INCLUDE_DIRS}/boost/tr1)
+	ENDIF()
    SET(TulipVersionSeparator _)
 ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
 SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
@@ -249,6 +254,8 @@ IF(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DDLL_EXPORT -DQT_ASSISTANT='\"assistant\"'")
    IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
       #recommended for now, vc++ spits out too many warnings, and renders the whole output unreadable
+	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
+	  #tells VS to use multiple threads to compile
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 	  #makes VS define M_PI
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_MATH_DEFINES")

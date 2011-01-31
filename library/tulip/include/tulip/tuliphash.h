@@ -24,14 +24,14 @@
 #  define TLP_SLIST stdext::slist
 #endif
 
-#if(_MSC_VER)
+#if(_MSC_VER > 1500) //for VS2010 and later; vs2008 uses boost's tr1 implementation
 #  include <unordered_map>
 #  include <unordered_set>
 #  define TLP_HASH_MAP std::unordered_map
 #  define TLP_HASH_SET std::unordered_set
 #  define TLP_BEGIN_HASH_NAMESPACE namespace std 
 #  define TLP_END_HASH_NAMESPACE
-#elif  (__GNUC__ < 4 || __GNUC_MINOR__ < 1 || __clang__)
+#elif  (!_MSC_VER && (__GNUC__ < 4 || __GNUC_MINOR__ < 1 || __clang__))
 #  include <tulip/tulipconf.h>
 #  if (__GNUC__ < 3 || __clang__)
 #    include <hash_map>
