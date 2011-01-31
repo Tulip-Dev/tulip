@@ -27,6 +27,14 @@
 #endif
 
 #if _MSC_VER
+#  if _MSC_VER >= 1600
+#    define _DEPRECATED __declspec(deprecated)
+#    define TYPEOF decltype
+#  else
+#    include "boost/typeof/typeof.hpp"
+#    define TYPEOF BOOST_TYPEOF
+#  endif
+
   //MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does not.
   #include <math.h>
   static double sqrt(int i) {
@@ -54,13 +62,11 @@
 	  return floor(d + 0.5);
   }
 
-#  define _DEPRECATED __declspec(deprecated)
 #  define __PRETTY_FUNCTION__ __FUNCTION__ //workaround
 #  define strcasecmp stricmp  //strcasecmp does not exists for VC, workaround
 #  define cbrt(arg) pow((double)arg, 1.0/3) //VC does not have cbrt, little workaround
 #  define isnan(x) ((x) != (x)) //you guessed it, this is a C99 feature, and VC++ does not support C99. workaroud this.
 #  define rint(arg) arg > 0 ? (int)std::floor((double)arg) : (int)std::ceil((double)arg)
-#  define TYPEOF decltype
 #elif (__GNUC__ < 3)
 #  define stdext std
 #  define _DEPRECATED

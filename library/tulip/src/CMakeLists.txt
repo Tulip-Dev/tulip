@@ -8,6 +8,9 @@ TARGET_LINK_LIBRARIES(${LibTulipName} gzstream )
 IF(WIN32)
 	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
 		TARGET_LINK_LIBRARIES(${LibTulipName} Dbghelp)
+		IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9")
+			SET_TARGET_PROPERTIES(${LibTulipName} PROPERTIES LINK_FLAGS " /NODEFAULTLIB:LIBCMT.lib ")
+		ENDIF()
 	ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
 ENDIF(WIN32)
 
