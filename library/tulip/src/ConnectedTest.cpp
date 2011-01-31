@@ -25,13 +25,7 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-#ifdef _WIN32 
-#ifdef DLL_EXPORT
 ConnectedTest * ConnectedTest::instance=0;
-#endif
-#else
-ConnectedTest * ConnectedTest::instance=0;
-#endif
 //=================================================================
 bool ConnectedTest::isConnected(const tlp::Graph*const graph) {
 	if (instance==0)

@@ -25,13 +25,7 @@
 using namespace std;
 using namespace tlp;
 
-#ifdef _WIN32 
-#ifdef DLL_EXPORT
 AcyclicTest * AcyclicTest::instance=0;
-#endif
-#else
-AcyclicTest * AcyclicTest::instance=0;
-#endif
 //**********************************************************************
 AcyclicTest::AcyclicTest(){
 }

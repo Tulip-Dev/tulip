@@ -28,13 +28,7 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-#ifdef _WIN32 
-#ifdef DLL_EXPORT
 SimpleTest * SimpleTest::instance=0;
-#endif
-#else
-SimpleTest * SimpleTest::instance=0;
-#endif
 //=================================================================
 SimpleTest::SimpleTest () {
 }
