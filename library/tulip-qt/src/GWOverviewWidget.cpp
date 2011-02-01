@@ -140,7 +140,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   return false;
 }
 //=============================================================================
-  void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
+  void GWOverviewWidget::draw(GlMainWidget *,bool graphChanged) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   assert( glG == _observedView);
 

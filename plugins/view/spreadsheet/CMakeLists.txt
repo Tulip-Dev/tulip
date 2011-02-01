@@ -34,11 +34,7 @@ set(spreadsheet_MOC
     SpreadView.h
     SpreadWidget.h
     SpreadTable.h
-    SpreadCell.h
-    SpreadCalculator.h
-    SpreadValue.h
     SpreadItemDelegate.h
-    SpreadCommands.h
     SpreadLineEdit.h
     SpreadConfigurationWidget.h
 )

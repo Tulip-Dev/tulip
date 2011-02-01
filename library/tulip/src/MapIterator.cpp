@@ -80,8 +80,7 @@ EdgeMapIterator::EdgeMapIterator(Graph *sg, edge source, node target) {
   } delete it;
 }
 //=========================================
-EdgeMapIterator::~EdgeMapIterator(){}
-//=========================================
+
 edge EdgeMapIterator::next() {
   --treat;
   pos %= adj.size();

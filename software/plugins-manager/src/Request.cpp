@@ -35,8 +35,7 @@ namespace tlp {
   }
 
   void GetRequest::applyRequestFinish() const { 
-    bool noRequestFinish = (requestFinish == 0);
-    assert(!noRequestFinish);
+    assert(requestFinish != NULL); //we check the requestFinish is not null
     (*requestFinish)();
   }
 

@@ -118,11 +118,7 @@ set(tulip-qt_MOC
     ../include/tulip/SGHierarchyWidget.h
     ../include/tulip/GWOverviewWidget.h
     ../include/tulip/Interactor.h
-    ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/PropertyDialogData.h
-    ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/CopyPropertyDialogData.h
-    ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/RenderingParametersDialogData.h
     ../include/tulip/GridOptionsWidget.h
-    ${CMAKE_CURRENT_BINARY_DIR}/../include/tulip/GridOptionsData.h
     ../include/tulip/PluginProgressWidget.h
     ../include/tulip/QtProgress.h
     ../include/tulip/Controller.h
