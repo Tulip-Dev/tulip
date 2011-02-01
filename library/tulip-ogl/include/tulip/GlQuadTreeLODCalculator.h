@@ -39,7 +39,7 @@ namespace tlp {
   /**
    * Class use to compute bounding boxs of a vector of GlEntity
    */
-  class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, public GraphObserver, public Observer, public GlSceneObserver, public CameraObserver {
+  class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, public GraphObserver, public PropertyObserver, public GlSceneObserver, public CameraObserver {
 
   public:
 
@@ -67,8 +67,12 @@ namespace tlp {
 
     void setInputData(GlGraphInputData *newInputData);
 
-    void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end);
+    void update(PropertyInterface *property);
     void observableDestroyed(Observable *){}
+    void afterSetNodeValue(PropertyInterface*,const node n);
+    void afterSetEdgeValue(PropertyInterface*,const edge e);
+    void afterSetAllNodeValue(PropertyInterface*);
+    void afterSetAllEdgeValue(PropertyInterface*);
     void addNode(Graph *,const node ){setHaveToCompute();}
     void addEdge(Graph *,const edge ){setHaveToCompute();}
     void delNode(Graph *,const node ){setHaveToCompute();}
