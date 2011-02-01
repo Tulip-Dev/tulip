@@ -586,22 +586,26 @@ namespace tlp {
       graphToReload=NULL;
   }
   //**********************************************************************
-  void  MainController::addLocalProperty(Graph *graph, const std::string&){
+  void  MainController::addLocalProperty(Graph *graph, const std::string &propertyName){
     graphToReload=graph;
 
     if(graph==getCurrentGraph()){
       eltProperties->setGraph(graph);
       propertiesWidget->setGraph(graph);
     }
+
+    graph->getProperty(propertyName)->addObserver(this);
   }
   //**********************************************************************
-  void  MainController::delLocalProperty(Graph *graph, const std::string&){
+  void  MainController::delLocalProperty(Graph *graph, const std::string &propertyName){
     graphToReload=graph;
 
     if(graph==getCurrentGraph()){
       eltProperties->setGraph(graph);
       propertiesWidget->setGraph(graph);
     }
+
+    graph->getProperty(propertyName)->removeObserver(this);
   }
   //**********************************************************************
   void MainController::afterSetAttribute(Graph *graph, const std::string &name){
@@ -1399,7 +1403,7 @@ namespace tlp {
     GraphState * g0=NULL;
     if(morphingAction->isChecked())
       g0=constructGraphState();
-    
+
     inAlgorithm=true;
     bool result = ControllerAlgorithmTools::changeLayout(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(), "viewLayout",getCurrentView());
     inAlgorithm=false;
@@ -1411,6 +1415,7 @@ namespace tlp {
         applyMorphing(g0);
       }
     }
+
     drawViews(true);
   }
   //**********************************************************************
