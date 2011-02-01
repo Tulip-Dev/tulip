@@ -397,7 +397,7 @@ namespace tlp {
         // If edge labels are rendered we have to compute the edges LOD because label rendering use LOD
         computeEdgesLOD=false;
         if(inputData)
-          inputData->parameters->isViewEdgeLabel();
+          setComputeEdgesLOD(inputData->parameters->isViewEdgeLabel());
 
 
         GlCPULODCalculator::computeFor3DCamera(layerLODUnit,eye,transformMatrix,globalViewport,currentViewport);
@@ -409,11 +409,11 @@ namespace tlp {
             if(currentGraph)
                 currentGraph->removeGraphObserver(this);
             if(layoutProperty)
-                layoutProperty->removeObserver(this);
+                layoutProperty->removePropertyObserver(this);
             if(sizeProperty)
-                sizeProperty->removeObserver(this);
+                sizeProperty->removePropertyObserver(this);
             if(selectionProperty)
-                selectionProperty->removeObserver(this);
+                selectionProperty->removePropertyObserver(this);
         }
         glScene->removeObserver(this);
     }
@@ -423,27 +423,37 @@ namespace tlp {
             currentGraph=inputData->getGraph();
             currentGraph->addGraphObserver(this);
             layoutProperty=currentGraph->getProperty(inputData->getElementLayoutPropName());
-            layoutProperty->addObserver(this);
+            layoutProperty->addPropertyObserver(this);
             sizeProperty=currentGraph->getProperty(inputData->getElementSizePropName());
-            sizeProperty->addObserver(this);
+            sizeProperty->addPropertyObserver(this);
             selectionProperty=currentGraph->getProperty(inputData->getElementSelectedPropName());
-            selectionProperty->addObserver(this);
+            selectionProperty->addPropertyObserver(this);
         }
         glScene->addObserver(this);
     }
 
-    void GlQuadTreeLODCalculator::update(std::set<Observable *>::iterator it,std::set<Observable *>::iterator itEnd){
+    void GlQuadTreeLODCalculator::update(PropertyInterface *property){
         bool needCompute=false;
-        while(it!=itEnd){
-            if((*it)==inputData->getElementLayout() || (*it)==inputData->getElementSize()){
-                needCompute=true;
-                break;
-            }
-            ++it;
+        if(property==inputData->getElementLayout() || property==inputData->getElementSize()){
+          needCompute=true;
+
         }
 
         if(needCompute)
             setHaveToCompute();
+    }
+
+    void GlQuadTreeLODCalculator::afterSetNodeValue(PropertyInterface *property,const node){
+      update(property);
+    }
+    void GlQuadTreeLODCalculator::afterSetEdgeValue(PropertyInterface *property,const edge){
+      update(property);
+    }
+    void GlQuadTreeLODCalculator::afterSetAllNodeValue(PropertyInterface *property){
+      update(property);
+    }
+    void GlQuadTreeLODCalculator::afterSetAllEdgeValue(PropertyInterface *property){
+      update(property);
     }
 
     void GlQuadTreeLODCalculator::addLocalProperty(Graph*, const std::string &name){
