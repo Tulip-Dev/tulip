@@ -76,7 +76,6 @@ INSTALL(FILES
     tulip/GraphPropertiesTableWidget.h
   tulip/TextEditDialog.h
   tulip/SmallMultiplesView.h
-  tulip/AbstractSmallMultiplesModel.h
   tulip/SmallMultiplesNavigatorComponent.h
   tulip/GlOffscreenRenderer.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/

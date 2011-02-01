@@ -3,7 +3,6 @@
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlGraphInputData.h"
 #include "tulip/ForEach.h"
-#include "tulip/AbstractSmallMultiplesModel.h"
 #include "tulip/TlpQtTools.h"
 #include "tulip/Interactor.h"
 #include "tulip/InteractorChainOfResponsibility.h"
@@ -30,7 +29,7 @@ namespace tlp {
 //            VIEW FUNCTIONS
 //===========================================
 SmallMultiplesView::SmallMultiplesView()
-  :AbstractView(), _overview(new GlMainWidget(0)), _zoomAnimationActivated(true), _autoDisableInteractors(true), _maxLabelSize(-1), _model(0) {
+  :AbstractView(), _overview(new GlMainWidget(0)), _zoomAnimationActivated(true), _autoDisableInteractors(true), _maxLabelSize(-1), _spacing(1.7) {
   Observable::holdObservers();
   _overview->setData(newGraph(), DataSet());
   GlScene *scene = _overview->getScene();
@@ -42,10 +41,12 @@ SmallMultiplesView::SmallMultiplesView()
   _overview->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setFontsType(1);
   _overview->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setLabelScaled(true);
   Observable::unholdObservers();
+
+  connect(this, SIGNAL(changeData(int,int,SmallMultiplesView::Roles)), this, SLOT(dataChanged(int,int,SmallMultiplesView::Roles)));
+  connect(this,SIGNAL(reverseItems(int,int)), this, SLOT(itemsReversed(int,int)));
 }
 
 SmallMultiplesView::~SmallMultiplesView() {
-  delete _model;
   if (!isOverview()) // Otherwise it's deleted along with the view's widget.
     delete _overview;
 }
@@ -59,7 +60,7 @@ QWidget *SmallMultiplesView::construct(QWidget *parent) {
 //===========================================
 //            DATA UPDATING
 //===========================================
-void SmallMultiplesView::dataChanged(int from, int to, AbstractSmallMultiplesModel::Roles dataRoles) {
+void SmallMultiplesView::dataChanged(int from, int to, Roles dataRoles) {
   refreshItems();
   for (int i=from; i <= to; ++i) {
     if (i >= _items.size())
@@ -83,18 +84,18 @@ void applyVariant<QString, StringProperty>(QVariant v, StringProperty *prop, tlp
   prop->setNodeValue(n, v.toString().toStdString());
 }
 
-void SmallMultiplesView::dataChanged(int id, AbstractSmallMultiplesModel::Roles dataRoles) {
+void SmallMultiplesView::dataChanged(int id, SmallMultiplesView::Roles dataRoles) {
   if (id >= _items.size())
     return;
   Observable::holdObservers();
   node n = _items[id];
 
   GlGraphInputData *inputData = _overview->getScene()->getGlGraphComposite()->getInputData();
-  if (dataRoles.testFlag(AbstractSmallMultiplesModel::Texture))
-    applyVariant<QString, StringProperty>(_model->data(id, AbstractSmallMultiplesModel::Texture), inputData->getElementTexture(), n);
+  if (dataRoles.testFlag(SmallMultiplesView::Texture))
+    applyVariant<QString, StringProperty>(data(id, SmallMultiplesView::Texture), inputData->getElementTexture(), n);
 
-  if (dataRoles.testFlag(AbstractSmallMultiplesModel::Label)) {
-    QVariant v = _model->data(id, AbstractSmallMultiplesModel::Label);
+  if (dataRoles.testFlag(SmallMultiplesView::Label)) {
+    QVariant v = data(id, SmallMultiplesView::Label);
     if (v.isValid() && !v.isNull()) {
       QString str = v.toString();
       if (_maxLabelSize != -1 && str.size() > _maxLabelSize) {
@@ -105,14 +106,14 @@ void SmallMultiplesView::dataChanged(int id, AbstractSmallMultiplesModel::Roles 
     }
   }
 
-  if (dataRoles.testFlag(AbstractSmallMultiplesModel::Position))
-    applyVariant<tlp::Coord, LayoutProperty>(_model->data(id, AbstractSmallMultiplesModel::Position), inputData->getElementLayout(), n);
+  if (dataRoles.testFlag(SmallMultiplesView::Position))
+    applyVariant<tlp::Coord, LayoutProperty>(data(id, SmallMultiplesView::Position), inputData->getElementLayout(), n);
   Observable::unholdObservers();
 }
 
 void SmallMultiplesView::refreshItems() {
   Observable::holdObservers();
-  int itemsCount = _model->countItems();
+  int itemsCount = countItems();
   int nodesCount = _overview->getGraph()->numberOfNodes();
 
   for (int i=itemsCount; i < nodesCount; ++i)
@@ -149,14 +150,14 @@ int SmallMultiplesView::nodeItemId(node n) {
   return -1;
 }
 
-void SmallMultiplesView::reverseItems(int a, int b) {
+void SmallMultiplesView::itemsReversed(int a, int b) {
   if (a >= _items.size() || b >= _items.size())
     return;
   node na = _items[a];
   _items[a] = _items[b];
   _items[b] = na;
-  dataChanged(a, AbstractSmallMultiplesModel::Position);
-  dataChanged(b, AbstractSmallMultiplesModel::Position);
+  dataChanged(a, SmallMultiplesView::Position);
+  dataChanged(b, SmallMultiplesView::Position);
 }
 
 //===========================================
@@ -181,8 +182,8 @@ void SmallMultiplesView::switchToOverview(bool destroyOldWidget) {
   if (_autoDisableInteractors)
     toggleInteractors(false);
 
-  GlGraphInputData *inputData = _overview->getScene()->getGlGraphComposite()->getInputData();
-  zoomOnScreenRegion(_overview, computeBoundingBox(_overview->getGraph(), inputData->elementLayout, inputData->elementSize, inputData->elementRotation));
+  if (_zoomAnimationActivated)
+    zoomOnScreenRegion(_overview, _overview->getScene()->getBoundingBox());
   overviewSelected();
 }
 
@@ -208,20 +209,19 @@ void SmallMultiplesView::centerOverview() {
 //===========================================
 //               MODEL
 //===========================================
-AbstractSmallMultiplesModel *SmallMultiplesView::model() {
-  return _model;
-}
+QVariant SmallMultiplesView::data(int id, SmallMultiplesDataRole role) {
+  if (role == Position) {
+    QVariant v;
+    int w = round(sqrt(countItems()));
+    int row = abs(id / w);
+    int col = id % w;
 
-void SmallMultiplesView::setModel(AbstractSmallMultiplesModel *model) {
-  assert(model);
-  if (_model) {
-    disconnect(_model, SIGNAL(dataChanged(int,int,AbstractSmallMultiplesModel::Roles)), this, SLOT(dataChanged(int,int,AbstractSmallMultiplesModel::Roles)));
-    disconnect(_model, SIGNAL(reverseItems(int,int)), this, SLOT(reverseItems(int,int)));
+    // Compute spacing
+    Coord c(col * _spacing, -1. * _spacing * row, 0);
+    v.setValue<Coord>(c);
+    return v;
   }
-  _model = model;
-  _model->setParent(this);
-  connect(_model, SIGNAL(dataChanged(int,int,AbstractSmallMultiplesModel::Roles)), this, SLOT(dataChanged(int,int,AbstractSmallMultiplesModel::Roles)));
-  connect(_model, SIGNAL(reverseItems(int,int)), this, SLOT(reverseItems(int,int)));
+  return QVariant();
 }
 
 //===========================================
@@ -240,21 +240,6 @@ void SmallMultiplesView::toggleInteractors(bool f) {
     else if (!f)// When we disable interactors, check the SmallMultiplesView navigation interactor.
       (*it)->getAction()->setChecked(true);
   }
-}
-
-//===========================================
-//               PROGRESS BARS
-//===========================================
-PluginProgress *SmallMultiplesView::overviewProgress() {
-}
-
-void SmallMultiplesView::deleteOverviewProgress() {
-}
-
-PluginProgress *SmallMultiplesView::itemProgress(int id) {
-}
-
-void SmallMultiplesView::deleteItemProgress(int id) {
 }
 
 }

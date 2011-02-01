@@ -90,7 +90,6 @@ BUILT_SOURCES = \
 	moc_CSVParserConfigurationWidget.cpp \
   moc_GraphPropertiesTableWidget.cpp \
   moc_TextEditDialog.cpp \
-  moc_AbstractSmallMultiplesModel.cpp \
   moc_SmallMultiplesView.cpp
 
 QT44_BUILT_SOURCES = \
@@ -164,7 +163,6 @@ TODIST_SOURCES = \
 	QtGlSceneZoomAndPanAnimator.cpp \
 	GlCompositeHierarchyManager.cpp \
   GraphPropertiesTableWidget.cpp \
-  AbstractSmallMultiplesModel.cpp \
   SmallMultiplesView.cpp \
   SmallMultiplesNavigatorComponent.cpp \
   GlOffscreenRenderer.cpp
