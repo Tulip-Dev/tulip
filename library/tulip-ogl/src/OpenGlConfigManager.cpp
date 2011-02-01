@@ -25,13 +25,7 @@
 #include <iostream>
 
 //====================================================
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 tlp::OpenGlConfigManager* tlp::OpenGlConfigManager::inst=0;
-#endif
-#else
-tlp::OpenGlConfigManager* tlp::OpenGlConfigManager::inst=0;
-#endif
 
 using namespace std;
 

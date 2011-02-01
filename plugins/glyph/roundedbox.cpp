@@ -145,13 +145,7 @@ private:
 	static GlPolygon *roundedSquare;
 };
 
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 GlPolygon* RoundedBox::roundedSquare=0;
-#endif
-#else
-GlPolygon* RoundedBox::roundedSquare=0;
-#endif
 
 RoundedBox::RoundedBox(GlyphContext *gc) : Glyph(gc) {}
 

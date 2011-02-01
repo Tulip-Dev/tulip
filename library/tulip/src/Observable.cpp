@@ -24,17 +24,9 @@
 using namespace std;
 using namespace tlp;
 
-#ifdef _WIN32 
-#ifdef DLL_EXPORT
 unsigned int Observable::holdCounter=0;
 ObserverMap Observable::holdObserverMap;
 ObservableMap Observable::holdObservableMap;
-#endif
-#else
-unsigned int Observable::holdCounter=0;
-ObserverMap Observable::holdObserverMap;
-ObservableMap Observable::holdObservableMap;
-#endif
 
 static bool unholdLock=false;
 

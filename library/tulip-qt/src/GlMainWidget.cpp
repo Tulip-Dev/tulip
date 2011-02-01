@@ -60,15 +60,8 @@ using namespace std;
 
 namespace tlp {
 
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 QGLWidget* GlMainWidget::firstQGLWidget=NULL;
 bool GlMainWidget::inRendering=false;
-#endif
-#else
-QGLWidget* GlMainWidget::firstQGLWidget=NULL;
-bool GlMainWidget::inRendering=false;
-#endif
 
 //==================================================
 static void setRasterPosition(unsigned int x, unsigned int y) {

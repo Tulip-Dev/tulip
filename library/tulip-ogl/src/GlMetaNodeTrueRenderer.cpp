@@ -35,13 +35,7 @@
 using namespace std;
 
 //====================================================
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 unsigned int tlp::GlMetaNodeTrueRenderer::depth=0;
-#endif
-#else
-unsigned int tlp::GlMetaNodeTrueRenderer::depth=0;
-#endif
 
 namespace tlp {
 

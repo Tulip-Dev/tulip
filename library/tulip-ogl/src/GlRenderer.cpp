@@ -41,15 +41,7 @@ using namespace std;
 using namespace tlp;
 
 //====================================================
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 map<string,bool> GlRenderer::checkedFonts=map<string,bool>();
-#endif
-#else
-map<string,bool> GlRenderer::checkedFonts=map<string,bool>();
-#endif
-
-
 //***************************************************************************
 // CLASSE t_GlFonts
 //***************************************************************************

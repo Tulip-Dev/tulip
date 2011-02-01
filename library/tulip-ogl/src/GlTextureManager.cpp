@@ -35,13 +35,7 @@ extern "C" {
 };
 
 //====================================================
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 tlp::GlTextureManager* tlp::GlTextureManager::inst=0;
-#endif
-#else
-tlp::GlTextureManager* tlp::GlTextureManager::inst=0;
-#endif
 
 using namespace std;
 

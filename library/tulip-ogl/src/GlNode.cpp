@@ -46,13 +46,7 @@
 #include <iostream>
 
 //====================================================
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 tlp::GlLabel* tlp::GlNode::label=0;
-#endif
-#else
-tlp::GlLabel* tlp::GlNode::label=0;
-#endif
 
 using namespace std;
 

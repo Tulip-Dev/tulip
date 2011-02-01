@@ -33,13 +33,7 @@ namespace tlp {
   
   static const string mainViewName="Node Link Diagram view";
   
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
-#endif
-#else
-QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
-#endif
 
   void ControllerViewsTools::createView(const string &name,Graph *,DataSet,QWidget *parent,string *createdViewName, View **createdView, QWidget **createdWidget){
     string verifiedName=name;

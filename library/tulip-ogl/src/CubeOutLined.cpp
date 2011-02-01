@@ -50,13 +50,7 @@ namespace tlp {
   };
 }
 
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 tlp::GlBox* tlp::CubeOutLined::box=0;
-#endif
-#else
-tlp::GlBox* tlp::CubeOutLined::box=0;
-#endif
 
 namespace tlp {
   GLYPHPLUGIN(CubeOutLined, "3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 1);
