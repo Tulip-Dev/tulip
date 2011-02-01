@@ -21,13 +21,7 @@
 #include <iostream>
 
 //====================================================
-#ifdef _WIN32 
-#ifdef DLL_EXPORT
 tlp::GlDisplayListManager* tlp::GlDisplayListManager::inst=0;
-#endif
-#else
-tlp::GlDisplayListManager* tlp::GlDisplayListManager::inst=0;
-#endif
 
 using namespace std;
 

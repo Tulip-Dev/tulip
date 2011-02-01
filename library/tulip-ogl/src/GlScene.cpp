@@ -85,13 +85,7 @@ namespace tlp {
     }
   };
   //====================================================
-#ifdef _WIN32
-#ifdef DLL_EXPORT
   GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
-#endif
-#else
-  GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
-#endif
 
   GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL), noClearBackground(false) {
     Camera camera(this,false);

@@ -56,13 +56,7 @@ protected :
   static GlHexagon *hexagon;
 };
 
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 GlHexagon* Hexagone::hexagon=0;
-#endif
-#else
-GlHexagon* Hexagone::hexagon=0;
-#endif
 
 //=====================================================
 GLYPHPLUGIN(Hexagone, "2D - Hexagone", "David Auber", "09/07/2002", "Textured Hexagone", "1.0", 13)

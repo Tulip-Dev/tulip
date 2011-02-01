@@ -56,13 +56,7 @@ protected:
   static GlCircle *circle;
 };
 
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 GlCircle* Circle::circle=0;
-#endif
-#else
-GlCircle* Circle::circle=0;
-#endif
 
 //=====================================================
 GLYPHPLUGIN(Circle, "2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", 14)

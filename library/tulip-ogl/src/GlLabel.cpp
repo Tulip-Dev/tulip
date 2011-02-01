@@ -41,13 +41,7 @@
 using namespace std;
 
 //====================================================
-#ifdef _WIN32
-#ifdef DLL_EXPORT
-tlp::TextRenderer* tlp::GlLabel::renderer=0;
-#endif
-#else
 tlp::TextRenderer *tlp::GlLabel::renderer=0;
-#endif
 
 namespace tlp {
 

@@ -20,13 +20,7 @@
 #include "tulip/TlpQtTools.h"
 
 //====================================================
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 tlp::ControllerPluginsManager* tlp::ControllerPluginsManager::inst=0;
-#endif
-#else
-tlp::ControllerPluginsManager* tlp::ControllerPluginsManager::inst=0;
-#endif
 
 using namespace std;
 

@@ -22,13 +22,7 @@
 
 
 //====================================================
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 tlp::InteractorManager* tlp::InteractorManager::inst=0;
-#endif
-#else
-tlp::InteractorManager* tlp::InteractorManager::inst=0;
-#endif
 
 using namespace std;
 

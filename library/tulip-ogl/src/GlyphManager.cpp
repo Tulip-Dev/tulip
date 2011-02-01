@@ -23,13 +23,7 @@
 #include "tulip/Glyph.h"
 
 //====================================================
-#ifdef _WIN32 
-#ifdef DLL_EXPORT
 tlp::GlyphManager* tlp::GlyphManager::inst=0;
-#endif
-#else
-tlp::GlyphManager* tlp::GlyphManager::inst=0;
-#endif
 
 using namespace std;
 

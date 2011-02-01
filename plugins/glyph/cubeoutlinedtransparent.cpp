@@ -53,13 +53,7 @@ protected:
 
 };
 
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 GlBox* CubeOutLinedTransparent::box=0;
-#endif
-#else
-GlBox* CubeOutLinedTransparent::box=0;
-#endif
 
 GLYPHPLUGIN(CubeOutLinedTransparent, "3D - Cube OutLined Transparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 9)
 EEGLYPHPLUGIN(CubeOutLinedTransparent, "3D - Cube OutLined Transparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 9)

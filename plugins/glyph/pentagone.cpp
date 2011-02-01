@@ -58,13 +58,7 @@ protected:
 
 };
 
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 GlPentagon* Pentagone::pentagon=0;
-#endif
-#else
-GlPentagon* Pentagone::pentagon=0;
-#endif
 
 //=====================================================
 GLYPHPLUGIN(Pentagone, "2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12)

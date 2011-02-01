@@ -20,13 +20,7 @@
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/tuliphash.h>
 
-#ifdef _WIN32
-#ifdef DLL_EXPORT
-tlp::EdgeExtremityGlyphManager* tlp::EdgeExtremityGlyphManager::eeinst=0;
-#endif
-#else
 tlp::EdgeExtremityGlyphManager* tlp::EdgeExtremityGlyphManager::eeinst = 0;
-#endif
 
 using namespace std;
 

@@ -21,13 +21,7 @@
 using namespace std;
 
 //====================================================
-#ifdef _WIN32
-#ifdef DLL_EXPORT
 tlp::Controller* tlp::Controller::currentController=0;
-#endif
-#else
-tlp::Controller* tlp::Controller::currentController=0;
-#endif
 
 namespace tlp {
 
