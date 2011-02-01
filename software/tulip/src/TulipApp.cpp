@@ -921,6 +921,10 @@ void TulipApp::windowsMenuAboutToShow() {
 }
 //**********************************************************************
 QMessageBox::StandardButton TulipApp::askSaveGraph(const std::string &name,int index,bool activateNoToAll) {
+  
+  if(!controllerToGraphObserver[tabIndexToController[index]]->needSaving()) {
+    return QMessageBox::No;
+  }
   string message = "Do you want to save this graph : " + name + " ?";
   QMessageBox::StandardButton answer;
   if(activateNoToAll) {
