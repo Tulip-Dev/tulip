@@ -49,10 +49,6 @@ static SizeMetaValueCalculator mvSizeCalculator;
 //==============================
 SizeProperty::SizeProperty (Graph *sg, std::string n):
   AbstractProperty<SizeType,SizeType, SizeAlgorithm>(sg, n) {
-  // the property observes itself; see beforeSet... methods
-  addPropertyObserver(this);
-  // but do not need to be in observables
-  removeObservable(this);
   // the computed meta value will be the average value
   setMetaValueCalculator(&mvSizeCalculator);
 }
@@ -131,21 +127,31 @@ void SizeProperty::resetMinMax() {
   min.clear();
   max.clear();
 }
-//=============================================================================
-void SizeProperty::beforeSetNodeValue(PropertyInterface*, const node) {
-  resetMinMax();
+//=================================================================================
+void SizeProperty::setNodeValue(const node n, const Size &v) {
+  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOk.begin();
+  if (it != minMaxOk.end()) {
+    const Size& oldV = getNodeValue(n);
+    if (v != oldV) {
+      // loop on subgraph min/max
+      for(; it != minMaxOk.end(); ++it) {
+	unsigned int gid = (*it).first;
+	const Size& minV = min[gid];
+	const Size& maxV = max[gid];
+	// check if min or max has to be updated
+	if ((v < minV) || (v > maxV) || (oldV == minV) || (oldV == maxV)) {
+	  resetMinMax();
+	  break;
+	}
+      }
+    }
+  }
+  AbstractSizeProperty::setNodeValue(n, v);
 }
-//=============================================================================
-void SizeProperty::beforeSetEdgeValue(PropertyInterface*, const edge) {
+//=================================================================================
+void SizeProperty::setAllNodeValue(const Size &v) {
   resetMinMax();
-}
-//=============================================================================
-void SizeProperty::beforeSetAllNodeValue(PropertyInterface*) {
-  resetMinMax();
-}
-//=============================================================================
-void SizeProperty::beforeSetAllEdgeValue(PropertyInterface*) {
-  resetMinMax();
+  AbstractSizeProperty::setAllNodeValue(v);
 }
 //=============================================================================
 PropertyInterface* SizeProperty::clonePrototype(Graph * g, const std::string& n) {

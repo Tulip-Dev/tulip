@@ -236,17 +236,7 @@ void ObservablePropertyTest::testAddObserver() {
   CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
   for (unsigned int i = 0; i < 7; ++i) {
     CPPUNIT_ASSERT(props[i]->countObservers() == 1);
-    switch(i) {
-    case DOUBLE_PROP:
-    case INTEGER_PROP:
-    case LAYOUT_PROP:
-    case SIZE_PROP:
-      // some properties are self-observed
-      CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 2);
-      break;
-    default:
-      CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 1);
-    }
+    CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 1);
   }
 }
 //==========================================================
@@ -396,17 +386,7 @@ void ObservablePropertyTest::testRemoveObserver() {
     props[i]->removeObserver(observer);
     props[i]->removePropertyObserver(pObserver);
     CPPUNIT_ASSERT(props[i]->countObservers() == 0);
-    switch(i) {
-    case DOUBLE_PROP:
-    case INTEGER_PROP:
-    case LAYOUT_PROP:
-    case SIZE_PROP:
-      // some properties are self-observed
-      CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 1);
-      break;
-    default:
-      CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 0);
-    }
+    CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 0);
   }
 // no more notification
   setNodeValue(props[0], "true", true, false, false);

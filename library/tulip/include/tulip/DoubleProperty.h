@@ -35,7 +35,7 @@ class PropertyContext;
 typedef AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> AbstractDoubleProperty;
 /** \addtogroup properties */ 
 /*\@{*/
- class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, public PropertyObserver, public GraphObserver { 
+ class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, public GraphObserver { 
 
   friend class DoubleAlgorithm;
 
@@ -52,11 +52,11 @@ public :
 
   void clone_handler(AbstractProperty<DoubleType,DoubleType> &);
 
-  // redefinition of some PropertyObserver methods 
-  virtual void beforeSetNodeValue(PropertyInterface* prop, const node n);
-  virtual void beforeSetEdgeValue(PropertyInterface* prop, const edge e);
-  virtual void beforeSetAllNodeValue(PropertyInterface* prop);
-  virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
+  // redefinition of some AbstractProperty methods 
+  virtual void setNodeValue(const node n, const double &v);
+  virtual void setEdgeValue(const edge e, const double &v);
+  virtual void setAllNodeValue(const double &v);
+  virtual void setAllEdgeValue(const double &v);
 
   // redefinition of GraphObserver methods
   virtual void addNode(Graph* graph, const node n);
