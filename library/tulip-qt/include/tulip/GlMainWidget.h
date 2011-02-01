@@ -60,7 +60,7 @@ class GlCompositeHierarchyManager;
  * This widget provide a simple system to display visualisation
  * If you only want to visualise a graph, you can call the setGraph function
  * But in other cases you can directly use the GlScene of the GlMainWidget
- * \see GlMainWidget
+ * \see GlScene
  *
  * After scene construction you can perform some operation on GlMainWidgte :
  * - Selection with doSelect() and selectGlEntities()
