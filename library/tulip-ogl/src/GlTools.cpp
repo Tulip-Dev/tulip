@@ -325,7 +325,7 @@ float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<floa
 	}
 }
 //====================================================
-float calculate2DLod(const BoundingBox& bb,const Vector<int, 4>& globalViewport,const Vector<int, 4>& currentViewport) {
+float calculate2DLod(const BoundingBox& bb,const Vector<int, 4>&,const Vector<int, 4>&) {
 	return (bb[1][0] - bb[0][0]) * (bb[1][1] - bb[0][1]);
 }
 //====================================================
