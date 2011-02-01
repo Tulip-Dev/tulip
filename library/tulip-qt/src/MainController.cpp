@@ -543,11 +543,9 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::addSubGraph(Graph *g, Graph *sg){
-    if(getCurrentGraph()!=g)
-      return;
-
     if(!inAlgorithm){
       sg->addObserver(this);
+      sg->addGraphObserver(this);
       clusterTreeWidget->update();
     }
   }
