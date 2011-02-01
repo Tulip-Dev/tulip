@@ -56,10 +56,6 @@ static LayoutMetaValueCalculator mvLayoutCalculator;
 //======================================================
 LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeReversal):AbstractLayoutProperty(sg, n) {
   minMaxOk[(unsigned long)graph]=false;
-  // the property observes itself; see beforeSet... methods
-  addPropertyObserver(this);
-  // but do not need to be in observables
-  PropertyObserver::removeObservable(this);
   // if needed the property observes the graph (see reverseEdge)
   if (updateOnEdgeReversal)
     graph->addGraphObserver(this);
@@ -326,8 +322,9 @@ void LayoutProperty::computeMinMax(Graph *sg) {
   Iterator<edge> *itE=sg->getEdges();
   while (itE->hasNext()) {
     edge ite=itE->next();
+    const LineType::RealType& value = getEdgeValue(ite);
     LineType::RealType::const_iterator itCoord;
-    for (itCoord=getEdgeValue(ite).begin();itCoord!=getEdgeValue(ite).end();++itCoord) {
+    for (itCoord=value.begin();itCoord!=value.end();++itCoord) {
       const Coord& tmpCoord = *itCoord;
       maxV(maxT, tmpCoord);
       minV(minT, tmpCoord);
@@ -355,17 +352,92 @@ void LayoutProperty::resetBoundingBox() {
   max.clear();
 }
 //================================================================================
-void LayoutProperty::beforeSetNodeValue(PropertyInterface*, const node) {
-  resetBoundingBox();
+void LayoutProperty::setNodeValue(const node n, const Coord& v) {
+  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOk.begin();
+  if (it != minMaxOk.end()) {
+    const Coord& oldV = getNodeValue(n);
+    if (v != oldV) {
+      // loop on subgraph min/max
+      for(; it != minMaxOk.end(); ++it) {
+	unsigned int gid = (*it).first;
+	const Coord& minV = min[gid];
+	const Coord& maxV = max[gid];
+	// check if min or max have to be updated
+	if ((v < minV) || (v > maxV) ||
+	    ((v != oldV) && ((oldV == minV) || (oldV == maxV)))) {
+	  resetBoundingBox();
+	  break;
+	}
+      }
+    }
+  }
+  AbstractLayoutProperty::setNodeValue(n, v);
 }
-void LayoutProperty::beforeSetEdgeValue(PropertyInterface*, const edge) {
-  resetBoundingBox();
+//================================================================================
+void LayoutProperty::setEdgeValue(const edge e, const std::vector<Coord>& v) {
+  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOk.begin();
+  if (it != minMaxOk.end()) {
+    const std::vector<Coord>& oldV = getEdgeValue(e);
+    if (v != oldV) {
+      // loop on subgraph min/max
+      for(; it != minMaxOk.end(); ++it) {
+	unsigned int gid = (*it).first;
+	const Coord& minV = min[gid];
+	const Coord& maxV = max[gid];
+	bool reset = false;
+	// check if min has to be updated
+	for(unsigned i = 0; i < v.size(); ++i) {
+	  if (minV > v[i]) {
+	    reset = true;
+	    break;
+	  }
+	}
+	if (!reset) {
+	  // check if max has to be updated
+	  for(unsigned i = 0; i < v.size(); ++i) {
+	    if (maxV < v[i]) {
+	      reset = true;
+	      break;
+	    }
+	  }
+	}
+	if (!reset) {
+	  // check if minV belongs to oldV
+	  for(unsigned i = 0; i < oldV.size(); ++i) {
+	    if (minV == oldV[i]) {
+	      reset = false;
+	      break;
+	    }
+	  }
+	}
+	if (!reset) {
+	  // check if maxV belongs to oldV
+	  for(unsigned i = 0; i < oldV.size(); ++i) {
+	    if (maxV == oldV[i]) {
+	      reset = false;
+	      break;
+	    }
+	  }
+	}
+	// reset bounding box if needed
+	if (reset) {
+	  resetBoundingBox();
+	  break;
+	}
+      }
+    }
+  }
+  AbstractLayoutProperty::setEdgeValue(e, v);
 }
-void LayoutProperty::beforeSetAllNodeValue(PropertyInterface*) {
+//=================================================================================
+void LayoutProperty::setAllNodeValue(const Coord &v) {
   resetBoundingBox();
+  AbstractLayoutProperty::setAllNodeValue(v);
 }
-void LayoutProperty::beforeSetAllEdgeValue(PropertyInterface*) {
+//=================================================================================
+void LayoutProperty::setAllEdgeValue(const std::vector<Coord> &v) {
   resetBoundingBox();
+  AbstractLayoutProperty::setAllEdgeValue(v);
 }
 //================================================================================
 void LayoutProperty::reverseEdge(Graph *sg, const edge e) {

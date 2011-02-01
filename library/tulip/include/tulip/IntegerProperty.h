@@ -23,6 +23,7 @@
 #include <config.h>
 #endif
 
+#include "tulip/tuliphash.h"
 #include "tulip/AbstractProperty.h"
 #include "tulip/TemplateFactory.h"
 #include "tulip/IntegerAlgorithm.h"
@@ -35,7 +36,7 @@ class PropertyContext;
 typedef AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> AbstractIntegerProperty;
 /** \addtogroup properties */ 
 /*@{*/
- class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public PropertyObserver, public GraphObserver { 
+ class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public GraphObserver { 
 
   friend class IntegerAlgorithm;
 
@@ -47,11 +48,11 @@ public :
   IntegerType::RealType  getEdgeMax(Graph *sg=0);
   PropertyInterface* clonePrototype(Graph *, const std::string&);
 
-  // redefinition of some PropertyObserver methods 
-  virtual void beforeSetNodeValue(PropertyInterface* prop, const node n);
-  virtual void beforeSetEdgeValue(PropertyInterface* prop, const edge e);
-  virtual void beforeSetAllNodeValue(PropertyInterface* prop);
-  virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
+  // redefinition of some AbstractProperty methods 
+  virtual void setNodeValue(const node n, const int &v);
+  virtual void setEdgeValue(const edge e, const int &v);
+  virtual void setAllNodeValue(const int &v);
+  virtual void setAllEdgeValue(const int &v);
 
   // redefinition of GraphObserver methods
   virtual void addNode(Graph* graph, const node n);
@@ -63,7 +64,7 @@ protected:
 private:
   TLP_HASH_MAP<unsigned int, int> maxN,minN,maxE,minE;
   TLP_HASH_MAP<unsigned int, bool> minMaxOkNode;
-  TLP_HASH_MAP<unsigned long, bool> minMaxOkEdge;
+  TLP_HASH_MAP<unsigned int, bool> minMaxOkEdge;
   void computeMinMaxNode(Graph *sg=0);
   void computeMinMaxEdge(Graph *sg=0);
 };

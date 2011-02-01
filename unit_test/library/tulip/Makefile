@@ -21,6 +21,7 @@ SRCS=   tuliplibtest.cpp \
 	IsMetaEdgeTest.cpp\
 	StringVectorPropertyTest.cpp \
 	GraphToolsTest.cpp \
+	DoublePropertyTest.cpp \
 	PlanarityTestTest.cpp
 #	PlanarConMapTest.cpp
 

@@ -39,7 +39,7 @@ typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> Ab
 
 /** \addtogroup properties */ 
 /*@{*/
-  class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, public PropertyObserver, public GraphObserver {
+  class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, public GraphObserver {
   friend class LayoutAlgorithm;
 
 public:
@@ -124,11 +124,11 @@ public:
    */
   unsigned int crossingNumber() const;
 
-  // redefinition of some PropertyObserver methods 
-  virtual void beforeSetNodeValue(PropertyInterface* prop, const node n);
-  virtual void beforeSetEdgeValue(PropertyInterface* prop, const edge e);
-  virtual void beforeSetAllNodeValue(PropertyInterface* prop);
-  virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
+  // redefinition of some AbstractProperty methods
+  virtual void setNodeValue(const node, const Coord &v);
+  virtual void setEdgeValue(const edge, const std::vector<Coord> &v);
+  virtual void setAllNodeValue(const Coord &v);
+  virtual void setAllEdgeValue(const std::vector<Coord> &v);
 
   // redefinition of a GraphObserver method
   virtual void reverseEdge(Graph *, const edge);

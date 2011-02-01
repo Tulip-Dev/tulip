@@ -173,10 +173,6 @@ static DoublePropertyPredefinedCalculator avgCalculator;
 ///Constructeur d'un DoubleProperty
 DoubleProperty::DoubleProperty (Graph *sg, std::string n):AbstractProperty<DoubleType,DoubleType,DoubleAlgorithm>(sg, n),
   minMaxOkNode(false),minMaxOkEdge(false) {
-  // the property observes itself; see beforeSet... methods
-  addPropertyObserver(this);
-  // but do not need to be in observables
-  PropertyObserver::removeObservable(this);
   // the property observes the graph
   sg->addGraphObserver(this);
   // the computed meta value will be the average value
@@ -342,23 +338,62 @@ void DoubleProperty::clone_handler(AbstractProperty<DoubleType,DoubleType> &prox
   maxE=proxy->maxE;
 }
 //=================================================================================
-void DoubleProperty::beforeSetNodeValue(PropertyInterface*, const node) {
+void DoubleProperty::setNodeValue(const node n, const double &v) {
+  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.begin();
+  if (it != minMaxOkNode.end()) {
+    double oldV = getNodeValue(n);
+    if (v != oldV) {
+      // loop on subgraph min/max
+      for(; it != minMaxOkNode.end(); ++it) {
+	unsigned int gid = (*it).first;
+	double minV = minN[gid];
+	double maxV = maxN[gid];
+	// check if min or max has to be updated
+	if ((v < minV) || (v > maxV) || (oldV == minV) || (oldV == maxV)) {
+	  minMaxOkNode.clear();
+	  break;
+	}
+      }
+    }
+  }
+  AbstractDoubleProperty::setNodeValue(n, v);
+}
+//=================================================================================
+void DoubleProperty::setEdgeValue(const edge e, const double &v) {
+  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.begin();
+  if (it != minMaxOkEdge.end()) {
+    double oldV = getEdgeValue(e);
+    if (v != oldV) {
+      // loop on subgraph min/max
+      for(; it != minMaxOkEdge.end(); ++it) {
+	unsigned int gid = (*it).first;
+	double minV = minE[gid];
+	double maxV = maxE[gid];
+	// check if min or max has to be updated
+	if ((v < minV) || (v > maxV) || (oldV == minV) || (oldV == maxV)) {
+	  minMaxOkEdge.clear();
+	  break;
+	}
+      }
+    }
+  }
+  AbstractDoubleProperty::setEdgeValue(e, v);
+}
+//=================================================================================
+void DoubleProperty::setAllNodeValue(const double &v) {
   minMaxOkNode.clear();
+  AbstractDoubleProperty::setAllNodeValue(v);
 }
-void DoubleProperty::beforeSetEdgeValue(PropertyInterface*, const edge) {
+//=================================================================================
+void DoubleProperty::setAllEdgeValue(const double &v) {
   minMaxOkEdge.clear();
+  AbstractDoubleProperty::setAllEdgeValue(v);
 }
-void DoubleProperty::beforeSetAllNodeValue(PropertyInterface*) {
-  minMaxOkNode.clear();
-}
-void DoubleProperty::beforeSetAllEdgeValue(PropertyInterface*) {
-  minMaxOkEdge.clear();
-}
-
+//=================================================================================
 void DoubleProperty::addNode(Graph*, const node) {
   minMaxOkNode.clear();
 }
-
+//=================================================================================
 void DoubleProperty::addEdge(Graph*, const edge) {
   minMaxOkEdge.clear();
 }

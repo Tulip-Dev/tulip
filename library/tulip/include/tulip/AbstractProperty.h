@@ -133,19 +133,19 @@ public:
   /**
    * Set the value of a node n and notify the observers of a modification.
    */
-  void setNodeValue(const node n, const typename Tnode::RealType &v);
+  virtual void setNodeValue(const node n, const typename Tnode::RealType &v);
   /**
    * Set the value of an edge and notify the observers of a modification.
    */
-  void setEdgeValue(const edge e, const typename Tedge::RealType &v);
+  virtual void setEdgeValue(const edge e, const typename Tedge::RealType &v);
   /**
    * Set the value of all nodes and notify the observers
    */
-  void setAllNodeValue(const typename Tnode::RealType &v);
+  virtual void setAllNodeValue(const typename Tnode::RealType &v);
   /**
    * Set the value of all edges and notify the observers
    */
-  void setAllEdgeValue(const typename Tedge::RealType &v);
+  virtual void setAllEdgeValue(const typename Tedge::RealType &v);
   //=================================================================================
   virtual void erase(const node n) { setNodeValue(n, nodeDefaultValue); }
   //=================================================================================

@@ -38,8 +38,7 @@ class PropertyContext;
  * \addtogroup properties
  */ 
 /*@{*/
-  class TLP_SCOPE SizeProperty:public AbstractSizeProperty,
-  public PropertyObserver { 
+  class TLP_SCOPE SizeProperty:public AbstractSizeProperty { 
 
   friend class SizeAlgorithm;
 
@@ -52,11 +51,9 @@ public :
   void scale( const tlp::Vector<float,3>&, Graph *sg=0 );
   void scale( const tlp::Vector<float,3>&, Iterator<node> *, Iterator<edge> *);
 
-  // redefinition of some PropertyObserver methods 
-  virtual void beforeSetNodeValue(PropertyInterface* prop, const node n);
-  virtual void beforeSetEdgeValue(PropertyInterface* prop, const edge e);
-  virtual void beforeSetAllNodeValue(PropertyInterface* prop);
-  virtual void beforeSetAllEdgeValue(PropertyInterface* prop);
+  // redefinition of some AbstractProperty methods
+  virtual void setNodeValue(const node n, const Size &v);
+  virtual void setAllNodeValue(const Size &v);
 
 protected:
   void resetMinMax();

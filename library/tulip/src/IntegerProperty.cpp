@@ -30,10 +30,6 @@ using namespace tlp;
 ///Constructeur d'un IntegerProperty
 IntegerProperty::IntegerProperty (Graph *sg, std::string n):AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>(sg, n),
   minMaxOkNode(false),minMaxOkEdge(false) {
-  // the property observes itself; see afterSet... methods
-  addPropertyObserver(this);
-  // but do not need to be in observables
-  PropertyObserver::removeObservable(this);
   // the property observes the graph
   sg->addGraphObserver(this);
 }
@@ -132,22 +128,63 @@ PropertyInterface* IntegerProperty::clonePrototype(Graph * g, const std::string&
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
  }
-//===============================================================
-void IntegerProperty::beforeSetNodeValue(PropertyInterface*, const node) {
+//=================================================================================
+void IntegerProperty::setNodeValue(const node n, const int &v) {
+  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.begin();
+  if (it != minMaxOkNode.end()) {
+    int oldV = getNodeValue(n);
+    if (v != oldV) {
+      // loop on subgraph min/max
+      for(; it != minMaxOkNode.end(); ++it) {
+	unsigned int gid = (*it).first;
+	int minV = minN[gid];
+	int maxV = maxN[gid];
+	// check if min or max has to be updated
+	if ((v < minV) || (v > maxV) || (oldV == minV) || (oldV == maxV)) {
+	  minMaxOkNode.clear();
+	  break;
+	}
+      }
+    }
+  }
+  AbstractIntegerProperty::setNodeValue(n, v);
+}
+//=================================================================================
+void IntegerProperty::setEdgeValue(const edge e, const int &v) {
+  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.begin();
+  if (it != minMaxOkEdge.end()) {
+    int oldV = getEdgeValue(e);
+    if (v != oldV) {
+      // loop on subgraph min/max
+      for(; it != minMaxOkEdge.end(); ++it) {
+	unsigned int gid = (*it).first;
+	int minV = minE[gid];
+	int maxV = maxE[gid];
+	// check if min or max has to be updated
+	if ((v < minV) || (v > maxV) || (oldV == minV) || (oldV == maxV)) {
+	  minMaxOkEdge.clear();
+	  break;
+	}
+      }
+    }
+  }
+  AbstractIntegerProperty::setEdgeValue(e, v);
+}
+//=================================================================================
+void IntegerProperty::setAllNodeValue(const int &v) {
   minMaxOkNode.clear();
+  AbstractIntegerProperty::setAllNodeValue(v);
 }
-void IntegerProperty::beforeSetEdgeValue(PropertyInterface*, const edge) {
+//=================================================================================
+void IntegerProperty::setAllEdgeValue(const int &v) {
   minMaxOkEdge.clear();
+  AbstractIntegerProperty::setAllEdgeValue(v);
 }
-void IntegerProperty::beforeSetAllNodeValue(PropertyInterface*) {
-  minMaxOkNode.clear();
-}
-void IntegerProperty::beforeSetAllEdgeValue(PropertyInterface*) {
-  minMaxOkEdge.clear();
-}
+//=================================================================================
 void IntegerProperty::addNode(Graph*, const node) {
   minMaxOkNode.clear();
 }
+//=================================================================================
 void IntegerProperty::addEdge(Graph*, const edge) {
   minMaxOkEdge.clear();
 }
