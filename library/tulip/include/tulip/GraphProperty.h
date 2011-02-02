@@ -31,9 +31,12 @@ namespace tlp {
 class PropertyContext;
 class GraphAbstract;
 
+typedef AbstractProperty<tlp::GraphType, tlp::EdgeSetType> AbstractGraphProperty;
+
 /** \addtogroup properties */ 
 /*@{*/
-  class TLP_SCOPE GraphProperty:public AbstractProperty<tlp::GraphType, tlp::EdgeSetType>, public GraphObserver, public PropertyObserver { 
+  class TLP_SCOPE GraphProperty:public AbstractGraphProperty,
+  public GraphObserver { 
   friend class GraphAbstract;
 
 public :
@@ -46,11 +49,9 @@ public :
   bool setEdgeStringValue( const edge e, const std::string & v);
   bool setAllEdgeStringValue(const std::string & v);
 
-  // redefinition of some PropertyObserver methods 
-  virtual void beforeSetNodeValue(PropertyInterface* prop, const node n);
-  virtual void afterSetNodeValue(PropertyInterface* prop, const node n);
-  virtual void beforeSetAllNodeValue(PropertyInterface* prop);
-  virtual void afterSetAllNodeValue(PropertyInterface* prop);
+  // redefinition of some AbstractProperty methods 
+  virtual void setNodeValue(const node n, const GraphType::RealType& g);
+  virtual void setAllNodeValue(const GraphType::RealType& g);
 
   // for optimizations purpose
   bool hasNonDefaultValue(const node n) const {
@@ -63,9 +64,6 @@ public :
 private:
   MutableContainer<std::set<node> > referencedGraph;
   const std::set<edge>& getReferencedEdges(const edge) const;
-  // the current node pointing to a graph being removed
-  node currentNode;
-  
 };
 /*@}*/
 
