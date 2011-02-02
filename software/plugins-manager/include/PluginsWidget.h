@@ -29,9 +29,6 @@
 
 #include "MultiServerManager.h"
 
-class QBoxLayout;
-class QPushButton;
-
 namespace tlp {
 
   class PluginsViewWidget;
