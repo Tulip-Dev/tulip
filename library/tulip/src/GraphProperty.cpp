@@ -29,10 +29,6 @@ using namespace tlp;
 GraphProperty::GraphProperty (Graph *sg, std::string n) : 
   AbstractProperty<GraphType, EdgeSetType>(sg, n) {
   setAllNodeValue(0);
-  // the property observes itself; see beforeSet... methods
-  addPropertyObserver(this);
-  // but do not need to be in observables
-  PropertyObserver::removeObservable(this);
 }
 //==============================
 GraphProperty::~GraphProperty() {
@@ -50,35 +46,27 @@ GraphProperty::~GraphProperty() {
   notifyDestroy(this);
 }
 //==============================
-void GraphProperty::beforeSetAllNodeValue(PropertyInterface*) {
-  //remove all observed graphs
-  Iterator<node> *it = graph->getNodes();
+void GraphProperty::setAllNodeValue(const GraphType::RealType& g) {
+  //remove all observed graphs if any
+  Iterator<node> *it = getNonDefaultValuatedNodes();
   while(it->hasNext()) {
     node n = it->next();
-    if (getNodeValue(n) != 0)
-      getNodeValue(n)->removeGraphObserver(this);
+    getNodeValue(n)->removeGraphObserver(this);
   } delete it;
   set<node> emptySet;
   referencedGraph.setAll(emptySet);
   if (getNodeDefaultValue() != 0) {
     getNodeDefaultValue()->removeGraphObserver(this);
   }
-}
-void GraphProperty::afterSetAllNodeValue(PropertyInterface*) {
-  if (getNodeDefaultValue() != 0) {
-    getNodeDefaultValue()->addGraphObserver(this);
-  }
+  AbstractGraphProperty::setAllNodeValue(g);
+  if (g != NULL)
+    g->addGraphObserver(this);
 }
 //==============================
-void GraphProperty::beforeSetNodeValue(PropertyInterface*, const node n) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  // nothing to do if n points to a graph being removed
-  // see destroy
-  if (n == currentNode)
-    return;
+void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
   //gestion désabonnement
   Graph * oldGraph = getNodeValue(n); 
-  if (oldGraph != NULL) {
+  if (oldGraph != NULL && oldGraph != sg) {
     //gestion du désabonnement
     bool notDefault;
     set<node> &refs = referencedGraph.get(oldGraph->getId(), notDefault);
@@ -92,18 +80,12 @@ void GraphProperty::beforeSetNodeValue(PropertyInterface*, const node n) {
     } else if (oldGraph != getNodeDefaultValue())
       oldGraph->removeGraphObserver(this);
   }
-}
-void GraphProperty::afterSetNodeValue(PropertyInterface*, const node n) {
-  // nothing to do if n points to a graph being removed
-  // see destroy
-  if (n == currentNode)
-    return;
-  Graph* sg = getNodeValue(n);
-  if (sg == NULL)
+  AbstractGraphProperty::setNodeValue(n, sg);
+  if (sg == NULL || oldGraph == sg)
     return;
   //Gestion de l'abonnement
   sg->addGraphObserver(this);
-  if ( sg != getNodeDefaultValue() ) {
+  if (sg != getNodeDefaultValue()) {
     bool notDefault;
     set<node> &refs = referencedGraph.get(sg->getId(), notDefault);
     if (notDefault)
@@ -145,13 +127,8 @@ void GraphProperty::destroy(Graph *sg) {
     // don't change values if this non longer exists (when undoing)
     if (graph->existProperty(name)) {
       for (; it!=refs.end(); ++it) {
-	// set current node to allow
-	// a call to setNodeValue (needed by undo/redo mechanism)
-	// and do nothing in (before/after)SetNodeValue
-	currentNode = (*it);
-	setNodeValue(currentNode, 0);
+	AbstractGraphProperty::setNodeValue((*it), 0);
       }
-      currentNode = node();
     }
     referencedGraph.set(sg->getId(), set<node>());
     sg->removeGraphObserver(this);

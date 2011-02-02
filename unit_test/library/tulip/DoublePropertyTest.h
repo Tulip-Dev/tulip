@@ -32,6 +32,10 @@ class DoublePropertyTest : public CppUnit::TestFixture {
   void tearDown();
   void testDoublePropertyMinUpdate();
   void testDoublePropertyMaxUpdate();
+  void testDoublePropertyMinUpdateFromString();
+  void testDoublePropertyMaxUpdateFromString();
+  void testDoublePropertySubGraphMin();
+  void testDoublePropertySubGraphMax();
 
   static CppUnit::Test *suite();
 

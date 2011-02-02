@@ -32,7 +32,9 @@ const int originalMin = 5;
 const int originalMax = 10;
 
 const int newMin = 1;
+const string newStringMin = "1";
 const int newMax = 15;
+const string newStringMax = "15";
 
 #include <cppunit/extensions/HelperMacros.h>
 CPPUNIT_TEST_SUITE_REGISTRATION( IntegerPropertyMinMaxUpdateTest );
@@ -80,12 +82,36 @@ void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdate() {
 	CPPUNIT_ASSERT_MESSAGE("test IntegerProperty max value after update", maxNode == newMax);
 }
 
+void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMinUpdateFromString() {
+	int minNode;
+
+	minNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMin();
+	CPPUNIT_ASSERT_MESSAGE("test IntegerProperty min value before update", minNode == originalMin);
+
+	graph->getLocalProperty<IntegerProperty>(integerPropertyName)->setNodeStringValue(n1, newStringMin);
+	minNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMin();
+	CPPUNIT_ASSERT_MESSAGE("test IntegerProperty min value after update", minNode == newMin);
+}
+
+void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdateFromString() {
+	int maxNode;
+
+	maxNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMax();
+	CPPUNIT_ASSERT_MESSAGE("test IntegerProperty max value before update", maxNode == originalMax);
+
+	graph->getLocalProperty<IntegerProperty>(integerPropertyName)->setNodeStringValue(n4, newStringMax);
+	maxNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMax();
+	CPPUNIT_ASSERT_MESSAGE("test IntegerProperty max value after update", maxNode == newMax);
+}
+
 //==========================================================
 CppUnit::Test * IntegerPropertyMinMaxUpdateTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Integer Property" );
 
   suiteOfTests->addTest(new CppUnit::TestCaller<IntegerPropertyMinMaxUpdateTest>(" Min update", &IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMinUpdate));
   suiteOfTests->addTest(new CppUnit::TestCaller<IntegerPropertyMinMaxUpdateTest>(" Max update", &IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdate));
+  suiteOfTests->addTest(new CppUnit::TestCaller<IntegerPropertyMinMaxUpdateTest>(" Min update from string", &IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMinUpdateFromString));
+  suiteOfTests->addTest(new CppUnit::TestCaller<IntegerPropertyMinMaxUpdateTest>(" Max update from string", &IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdateFromString));
 
   return suiteOfTests;
 }

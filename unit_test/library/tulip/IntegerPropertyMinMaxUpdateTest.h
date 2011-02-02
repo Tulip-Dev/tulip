@@ -32,6 +32,8 @@ public:
 	void tearDown();
 	void testIntegerPropertyMinUpdate();
 	void testIntegerPropertyMaxUpdate();
+	void testIntegerPropertyMinUpdateFromString();
+	void testIntegerPropertyMaxUpdateFromString();
 
 	static CppUnit::Test *suite();
 
