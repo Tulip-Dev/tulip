@@ -38,35 +38,21 @@ namespace tlp {
   class PluginsInfoWidget;
   class ServersOptionDialog;
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginsWidget : public QWidget{
-
+  class TLP_PLUGINSMANAGER_SCOPE PluginsWidget : public QWidget {
     Q_OBJECT
       
   protected:
-    
     PluginsViewWidget* pluginsList;
     PluginsInfoWidget* pluginsInfo;
     MultiServerManager* serverManager;
-    QBoxLayout* boxLayout;
     ServersOptionDialog* serverDialog;
-    QPushButton* applyChangeButton;
-    QPushButton* restoreButton;
-    QPushButton* serverViewButton;
-    QPushButton* groupViewButton;
-    QPushButton* pluginViewButton;
-    
-    //virtual void closeEvent( QCloseEvent * event );
-    //void initPW(const string &serverAddr1="",const QString &serverAddr2="");
     
   public :
- 
     void createWidget(QWidget *parent);
-    PluginsWidget(std::vector<LocalPluginInfo> &plugins,QWidget *parent=0);
     PluginsWidget(MultiServerManager *msm,QWidget *parent=0);
     virtual ~PluginsWidget();
     void addServer(const std::string &serverAddr);
     void modifyTreeView(int viewNumber, bool lastVersion, bool compatibleVersion, bool notinstalledVersion);
-    
     
   public slots :
     virtual void updatePluginsTree();
@@ -82,8 +68,6 @@ namespace tlp {
   signals:
     void pluginsViewIsUpdated();
 };
-  
-
 }
 
 #endif

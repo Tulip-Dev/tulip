@@ -54,25 +54,6 @@ namespace tlp {
     serverView();
   }
 
-  PluginsManagerMainWindow::PluginsManagerMainWindow(std::vector<LocalPluginInfo> &plugins,QWidget *parent):QDialog(parent){
-    //Read setting
-    QSettings settings("TulipSoftware","Tulip");
-    settings.beginGroup("PluginsManager");
-    int serverNumber = settings.value("serverNumber_v2",0).toInt();
-    vector<string> serversAddr;
-    for(int i = 0; i<serverNumber; i++) {
-      serversAddr.push_back(settings.value("server_v2_"+QString::number(i),"").toString().toStdString());
-    }
-    settings.endGroup();
-
-    pluginsWidget = new PluginsWidget(plugins,this);
-
-    for(vector<string>::iterator it=serversAddr.begin();it!=serversAddr.end();++it)
-      pluginsWidget->addServer(*it);
-
-    createWidget();
-  }
-
   PluginsManagerMainWindow::PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent):QDialog(parent){
     pluginsWidget = new PluginsWidget(msm,this);
     createWidget();
