@@ -61,9 +61,6 @@ namespace tlp {
     void restore();
     //void configPluginPathIsModified();
     void clickOnPluginSlot(const PluginInfo *pi);
-
-  signals:
-    void pluginsViewIsUpdated();
 };
 }
 

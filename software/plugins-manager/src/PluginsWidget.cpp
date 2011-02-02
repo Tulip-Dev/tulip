@@ -77,7 +77,6 @@ namespace tlp {
   void PluginsWidget::updatePluginsTree(){
     pluginsList->changeList();
     repaint();
-    emit pluginsViewIsUpdated();
   }
 
 
