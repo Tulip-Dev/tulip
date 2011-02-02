@@ -17,6 +17,7 @@
  *
  */
 #include <math.h>
+#include <stack>
 #include <tulip/TulipPlugin.h>
 #include "DatasetTools.h"
 
@@ -39,6 +40,8 @@ public:
   vector<float> lRadii;
   vector<vector <node> > bfs;
 
+  /* the original code using dfs recursive calls
+     is easier to understand but may result in stack overflow
   void dfsComputeNodeRadii(node n, unsigned depth, SizeProperty *sizes) {
     node on;
     float radius = sizes->getNodeValue(n).getW()/2;
@@ -52,8 +55,60 @@ public:
     forEach(on, tree->getOutNodes(n)) {
       dfsComputeNodeRadii(on, depth + 1, sizes);
     }
-  }
+    }*/
 
+  // simple structure to implement
+  // the dfs loop for node radii computation below
+  struct dfsNodeRadiiStruct {
+    node current;
+    float radius;
+    unsigned int depth;
+    Iterator<node>* neighbours;
+
+    dfsNodeRadiiStruct() {}
+    dfsNodeRadiiStruct(node n, float r, unsigned int d, Iterator<node>* it):
+      current(n), radius(r), depth(d), neighbours(it) {}
+  };
+
+  void dfsComputeNodeRadii(node n, SizeProperty *sizes) {
+    MutableContainer<bool> visited;
+    visited.setAll(false);
+    stack<dfsNodeRadiiStruct> dfsLevels;
+    dfsNodeRadiiStruct dfsParams(n, sizes->getNodeValue(n).getW()/2, 0,
+				 tree->getOutNodes(n));
+    dfsLevels.push(dfsParams);
+    while(!dfsLevels.empty()) {
+      dfsParams = dfsLevels.top();
+      n = dfsParams.current;
+      float radius = dfsParams.radius;
+      unsigned int depth = dfsParams.depth;
+      Iterator<node>* it = dfsParams.neighbours;
+      if (!visited.get(n.id)) {
+	if (bfs.size() == depth) {
+	  bfs.push_back(vector<node>());
+	  nRadii.push_back(radius);
+	} else if (radius > nRadii[depth]) {
+	  nRadii[depth] = radius;
+	}
+	bfs[depth].push_back(n);
+	visited.set(n.id, true);
+      }
+      if (it->hasNext()) {
+	// go deeper in the dfs loop
+	n = it->next();
+	dfsParams.current = n;
+	dfsParams.radius = sizes->getNodeValue(n).getW()/2;
+	dfsParams.depth = depth + 1;
+	dfsParams.neighbours = tree->getOutNodes(n);
+	dfsLevels.push(dfsParams);
+      } else {
+	// go back in the dfs levels
+	dfsLevels.pop();
+	delete it;
+      }
+    }
+  }
+    
   void bfsComputeLayerRadii(float lSpacing, float nSpacing, SizeProperty *) {
     if (bfs.size() < 2) return;
     
@@ -77,8 +132,9 @@ public:
       lRadii[i] = lRadius;
     }
   }
-    
 
+  /* the original code using dfs recursive calls
+     is easier to understand but may result in stack overflow
   double dfsComputeAngularSpread(node n, unsigned int depth,
 				 SizeProperty *sizes, DoubleProperty *angles) {
     node on;
@@ -97,8 +153,63 @@ public:
     // affect the greater of the two computed angular spreads
     angles->setNodeValue(n, cAngle);
     return cAngle;
+    }*/
+
+  // simple structure to implement
+  // the dfs loop for node radii computation below
+  struct dfsAngularSpreadStruct {
+    node current;
+    double cAngle;
+    unsigned int depth;
+    Iterator<node>* neighbours;
+
+    dfsAngularSpreadStruct() {}
+    dfsAngularSpreadStruct(node n, unsigned int d, Iterator<node>* it):
+      current(n), cAngle(0), depth(d), neighbours(it) {}
+  };
+
+  void dfsComputeAngularSpread(node n, SizeProperty *sizes,
+			       MutableContainer<double>& angles) {
+    // we dont use recursive call to avoid a possible stack overflow
+    stack<dfsAngularSpreadStruct> dfsLevels;
+    dfsAngularSpreadStruct dfsParams(n, 0, tree->getOutNodes(n));
+    dfsLevels.push(dfsParams);
+    while(!dfsLevels.empty()) {
+      dfsParams = dfsLevels.top();
+      n = dfsParams.current;
+      unsigned int depth = dfsParams.depth;
+      Iterator<node>* it = dfsParams.neighbours;
+      if (it->hasNext()) {
+	// go deeper in the dfs levels
+	n = it->next();
+	dfsParams.current = n;
+	dfsParams.cAngle = 0;
+	dfsParams.depth = depth + 1;
+	dfsParams.neighbours = tree->getOutNodes(n);
+	dfsLevels.push(dfsParams);
+      } else {
+	delete it;
+	dfsLevels.pop();
+	double cAngle = dfsParams.cAngle;
+	if (depth > 0) {
+	  // compute the node angular spread
+	  double nAngle = 2 * atan(sizes->getNodeValue(n).getW()/(2. * lRadii[depth]));
+	  // check if it is not greater than the sum
+	  if (nAngle > cAngle)
+	    cAngle = nAngle;
+	}
+	// gives the greater of the two computed angular spreads
+	angles.set(n.id, cAngle);
+	if (depth > 0) {
+	  dfsAngularSpreadStruct& upParams = dfsLevels.top();
+	  upParams.cAngle += cAngle;
+	}
+      }
+    }
   }
 
+  /* the original code using dfs recursive calls
+     is easier to understand but may result in stack overflow
   void doLayout(node n, unsigned int depth, double startAngle, double endAngle,
 		DoubleProperty *angles, bool checkAngle = false) {
     double sAngle = endAngle - startAngle;
@@ -125,7 +236,85 @@ public:
       checkAngle = true;
       startAngle = endAngle;
     }
+    }*/
+
+  // simple structure to implement
+  // the dfs loop for node radii computation below
+  struct dfsDoLayoutStruct {
+    node current;
+    double startAngle;
+    double endAngle;
+    double sAngle;
+    double nSpread;
+    bool checkAngle;
+    unsigned int depth;
+    Iterator<node>* neighbours;
+
+    dfsDoLayoutStruct() {}
+    dfsDoLayoutStruct(node n, double bAngle, double eAngle, double spread,
+		      bool flag, unsigned int d, Iterator<node>* it):
+      current(n), startAngle(bAngle), endAngle(eAngle),
+      sAngle(eAngle - bAngle), nSpread(spread),
+      checkAngle(flag), depth(d), neighbours(it) {}
+  };
+
+  void doLayout(node n, MutableContainer<double>& angles) {
+    MutableContainer<bool> visited;
+    visited.setAll(false);
+    stack<dfsDoLayoutStruct> dfsLevels;
+    dfsDoLayoutStruct dfsParams(n, 0, 2 * M_PI, angles.get(n.id), false,
+				0, tree->getOutNodes(n));
+    dfsLevels.push(dfsParams);
+    while(!dfsLevels.empty()) {
+      dfsParams = dfsLevels.top();
+      n = dfsParams.current;
+      double startAngle = dfsParams.startAngle;
+      double endAngle = dfsParams.endAngle;
+      double sAngle = dfsParams.sAngle;
+      unsigned int depth = dfsParams.depth;
+      bool checkAngle = visited.get(n.id);
+      if (!visited.get(n.id)) {
+	// this will avoid crossing between the egdes from n to its children
+	// and the edge from its ancestor to n
+	if (dfsParams.checkAngle && sAngle > M_PI) {
+	  endAngle = startAngle + M_PI;
+	  sAngle = M_PI;
+	  dfsLevels.top().sAngle = sAngle;
+	}
+	if (depth > 0) {
+	  // layout the node in the middle of the sector
+	  double nAngle = (startAngle + endAngle)/2.0;
+	  layoutResult->setNodeValue(n, Coord(lRadii[depth] * cos(nAngle),
+					      lRadii[depth] * sin(nAngle),
+					      0));
+	} else
+	  layoutResult->setNodeValue(n, Coord(0, 0, 0));
+	visited.set(n.id, true);
+      }
+      Iterator<node>* it = dfsParams.neighbours;
+      double nSpread = dfsParams.nSpread;
+      if (it->hasNext()) {
+	// go deeper in the dfs levels
+	n = it->next();
+	double angle = angles.get(n.id);
+	endAngle = startAngle + (sAngle * (angle/nSpread));
+	dfsLevels.top().startAngle = endAngle;
+	dfsParams.current = n;
+	dfsParams.endAngle = endAngle;
+	dfsParams.sAngle = endAngle - startAngle,
+	dfsParams.nSpread = angle;
+	dfsParams.checkAngle = checkAngle;
+	dfsParams.depth = depth + 1;
+	dfsParams.neighbours = tree->getOutNodes(n);
+	dfsLevels.push(dfsParams);
+      } else {
+	// go back in the dfs levels
+	delete it;
+	dfsLevels.pop();
+      }
+    }
   }
+
 
   TreeRadial(const PropertyContext &context):LayoutAlgorithm(context) {
     addNodeSizePropertyParameter(this);
@@ -163,11 +352,12 @@ public:
     resultBool = tlp::getSource(tree, root);
     assert(resultBool);
 
-    dfsComputeNodeRadii(root, 0, sizes);
+    dfsComputeNodeRadii(root, sizes);
     bfsComputeLayerRadii(lSpacing, nSpacing, sizes);
-    DoubleProperty angles(tree);
-    dfsComputeAngularSpread(root, 0, sizes, &angles);
-    doLayout(root, 0, 0., 2 * M_PI, &angles);
+    MutableContainer<double> angles;
+    angles.setAll(0.);
+    dfsComputeAngularSpread(root, sizes, angles);
+    doLayout(root, angles);
 
     delete sizes;
 
