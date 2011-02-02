@@ -35,7 +35,7 @@ using namespace std;
 
 namespace tlp {
 
-  PluginsManagerMainWindow::PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent): QDialog(parent), serverManager(msm) {
+  PluginsManager::PluginsManager(MultiServerManager *msm,QWidget *parent): QDialog(parent), serverManager(msm) {
     setWindowTitle("Plugins Manager");
     setMinimumSize(800, 600);
     QVBoxLayout* layout= new QVBoxLayout(this);
@@ -72,11 +72,11 @@ namespace tlp {
     serverView();
   }
   
-  PluginsManagerMainWindow::~PluginsManagerMainWindow() {
+  PluginsManager::~PluginsManager() {
     delete serverManager;
   }
 
-  void PluginsManagerMainWindow::createMenus(){
+  void PluginsManager::createMenus(){
     /* --- file menu --- */
     QMenu* fileMenu = menuBar->addMenu(tr("&File"));
     
@@ -126,22 +126,22 @@ namespace tlp {
     notinstalledPluginsAct->setCheckable(true);
   }
 
-  void PluginsManagerMainWindow::serverView(){
+  void PluginsManager::serverView(){
     currentView = VIEW_BY_SERVER;
     modifyTreeView();
   }
 
-  void PluginsManagerMainWindow::groupView(){
+  void PluginsManager::groupView(){
     currentView = VIEW_BY_TYPE;
     modifyTreeView();
   }
 
-  void PluginsManagerMainWindow::pluginView(){
+  void PluginsManager::pluginView(){
     currentView = VIEW_BY_NAME;
     modifyTreeView();
   }
 
-  void PluginsManagerMainWindow::proxy(){
+  void PluginsManager::proxy(){
     ProxyConfigurationDialog proxyDialog(this);
     int result=proxyDialog.exec();
     if(result==QDialog::Accepted){
@@ -153,7 +153,7 @@ namespace tlp {
     }
   }
 
-  void PluginsManagerMainWindow::clicked(QAbstractButton* button) {
+  void PluginsManager::clicked(QAbstractButton* button) {
     if(buttons->standardButton(button) == QDialogButtonBox::Reset) {
       pluginsList->restore();
       updatePluginsTree();
@@ -163,13 +163,13 @@ namespace tlp {
     }
   }
   
-  void PluginsManagerMainWindow::updatePluginsTree(){
+  void PluginsManager::updatePluginsTree(){
     pluginsList->changeList();
     repaint();
   }
 
 
-  void PluginsManagerMainWindow::serverPopup(){
+  void PluginsManager::serverPopup(){
     if(serverDialog->isVisible()){
       serverDialog->raise();
     }
@@ -180,7 +180,7 @@ namespace tlp {
     updatePluginsTree();
   }
 
-  void PluginsManagerMainWindow::modifyTreeView(){
+  void PluginsManager::modifyTreeView(){
     serverManager->modifyTreeView(currentView);
     pluginsList->setLastVersion(lastPluginsAct->isChecked());
     pluginsList->setCompatiblesVersion(compatiblesPluginsAct->isChecked());
@@ -188,7 +188,7 @@ namespace tlp {
     pluginsList->changeList();
   }
   
-  void PluginsManagerMainWindow::clickOnPluginSlot(const PluginInfo *pi){
+  void PluginsManager::clickOnPluginSlot(const PluginInfo *pi){
     string addr;
     serverManager->getAddr(pi->server,addr);
     pluginsInfo->setPluginInfo(pi,addr);

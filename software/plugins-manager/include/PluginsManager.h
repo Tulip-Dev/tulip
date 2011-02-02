@@ -39,12 +39,12 @@ namespace tlp {
   class ServersOptionDialog;
   class PluginsViewWidget;
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginsManagerMainWindow : public QDialog {
+  class TLP_PLUGINSMANAGER_SCOPE PluginsManager : public QDialog {
     Q_OBJECT
 
   public:
-    PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent=0);
-    virtual ~PluginsManagerMainWindow();
+    PluginsManager(MultiServerManager *msm,QWidget *parent=0);
+    virtual ~PluginsManager();
     
   protected:
     void createActions(QWidget *parent);
