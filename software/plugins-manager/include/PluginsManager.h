@@ -43,7 +43,6 @@ namespace tlp {
     Q_OBJECT
 
   public:
-    void createWidget();
     PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent=0);
     virtual ~PluginsManagerMainWindow();
     

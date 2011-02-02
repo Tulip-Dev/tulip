@@ -36,14 +36,6 @@ using namespace std;
 namespace tlp {
 
   PluginsManagerMainWindow::PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent): QDialog(parent), serverManager(msm) {
-    createWidget();
-  }
-  
-  PluginsManagerMainWindow::~PluginsManagerMainWindow() {
-    delete serverManager;
-  }
-  
-  void PluginsManagerMainWindow::createWidget(){
     setWindowTitle("Plugins Manager");
     setMinimumSize(800, 600);
     QVBoxLayout* layout= new QVBoxLayout(this);
@@ -78,6 +70,10 @@ namespace tlp {
     updatePluginsTree();
     createMenus();
     serverView();
+  }
+  
+  PluginsManagerMainWindow::~PluginsManagerMainWindow() {
+    delete serverManager;
   }
 
   void PluginsManagerMainWindow::createMenus(){
