@@ -71,18 +71,16 @@ namespace tlp {
   public slots :
     virtual void updatePluginsTree();
     virtual void serverPopup();
-    void applyChangeSlot();
-    void restoreSlot();
-    void serverViewSlot();
-    void groupViewSlot();
-    void pluginViewSlot();
+    void applyChange();
+    void restore();
+    void serverView();
+    void groupView();
+    void pluginView();
     //void configPluginPathIsModified();
     void clickOnPluginSlot(const PluginInfo *pi);
-  
 
   signals:
     void pluginsViewIsUpdated();
-
 };
   
 
