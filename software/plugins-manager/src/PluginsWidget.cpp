@@ -100,18 +100,6 @@ namespace tlp {
     pluginsList->changeList();
   }
   
-  void PluginsWidget::serverView(){
-    modifyTreeView(VIEW_BY_SERVER, true, true, true);
-  }
-
-  void PluginsWidget::groupView(){
-    modifyTreeView(VIEW_BY_TYPE, true, true, true);
-  }
-
-  void PluginsWidget::pluginView(){
-    modifyTreeView(VIEW_BY_NAME, true, true, true);
-  }
-
   void PluginsWidget::clickOnPluginSlot(const PluginInfo *pi){
     string addr;
     serverManager->getAddr(pi->server,addr);

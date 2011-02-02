@@ -59,9 +59,6 @@ namespace tlp {
     virtual void serverPopup();
     void applyChange();
     void restore();
-    void serverView();
-    void groupView();
-    void pluginView();
     //void configPluginPathIsModified();
     void clickOnPluginSlot(const PluginInfo *pi);
 
