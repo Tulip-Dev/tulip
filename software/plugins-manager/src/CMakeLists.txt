@@ -12,8 +12,7 @@ set(${LibTulipPluginsManagerName}_UI
 )
 
 set(${LibTulipPluginsManagerName}_MOC
-    ../include/PluginsManagerMainWindow.h
-    ../include/PluginsManagerDialog.h
+    ../include/PluginsManager.h
     ../include/PluginsWidget.h
     ../include/PluginsViewWidget.h
     ../include/Server.h
@@ -35,8 +34,7 @@ set(${LibTulipPluginsManagerName}_MOC
 )
 
 set(${LibTulipPluginsManagerName}_LIB_SRCS 
-    PluginsManagerMainWindow.cpp 
-    PluginsManagerDialog.cpp 
+    PluginsManager.cpp 
     PluginsWidget.cpp 
     PluginsViewWidget.cpp 
     Server.cpp 

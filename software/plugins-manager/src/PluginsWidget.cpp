@@ -37,7 +37,7 @@ using namespace std;
 
 namespace tlp {
 
-  void PluginsWidget::createWidget(QWidget *parent){
+  void PluginsWidget::createWidget(QWidget *parent) {
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     setLayout(mainLayout);
 
@@ -59,13 +59,13 @@ namespace tlp {
     serverDialog=new ServersOptionDialog(serverManager,parent);
   }
   
-  PluginsWidget::PluginsWidget(vector<LocalPluginInfo> &plugins,QWidget *parent):QDialog(parent){
+  PluginsWidget::PluginsWidget(vector<LocalPluginInfo> &plugins,QWidget *parent):QWidget(parent){
     serverManager = new MultiServerManager(plugins);
    
     createWidget(parent);
   }
 
-  PluginsWidget::PluginsWidget(MultiServerManager *msm,QWidget *parent):QDialog(parent){
+  PluginsWidget::PluginsWidget(MultiServerManager *msm,QWidget *parent):QWidget(parent){
     serverManager = msm;
 
     createWidget(parent);
