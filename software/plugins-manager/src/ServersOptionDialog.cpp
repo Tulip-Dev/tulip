@@ -22,8 +22,6 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QVBoxLayout>
-#include "PluginsWidget.h"
-#include <iostream>
 
 using namespace std;
 

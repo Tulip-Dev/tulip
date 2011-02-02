@@ -26,18 +26,20 @@
 
 #include <tulip/tulipconf.h>
 
-#include <QtGui/QMainWindow>
+#include <QtGui/QDialog>
 
-#include "PluginsWidget.h"
-
+class QMenuBar;
 class QAbstractButton;
 class QDialogButtonBox;
-class QActionGroup;
-class QVBoxLayout;
 
 namespace tlp {
+  class PluginInfo;
+  class MultiServerManager;
+  class PluginsInfoWidget;
+  class ServersOptionDialog;
+  class PluginsViewWidget;
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginsManagerMainWindow : public QDialog{
+  class TLP_PLUGINSMANAGER_SCOPE PluginsManagerMainWindow : public QDialog {
     Q_OBJECT
 
   protected:
@@ -47,29 +49,29 @@ namespace tlp {
 
     QMenuBar* menuBar;
     QDialogButtonBox* buttons;
-    PluginsWidget* pluginsWidget;
+    QWidget* pluginsWidget;
     QAction* lastPluginsAct;
     QAction* compatiblesPluginsAct;
     QAction* notinstalledPluginsAct;
     int currentView;
     
-    PluginsViewWidget* pluginsList;
     PluginsInfoWidget* pluginsInfo;
+    PluginsViewWidget* pluginsList;
     MultiServerManager* serverManager;
     ServersOptionDialog* serverDialog;
   public:
     void createWidget();
     PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent=0);
-
-  signals:
-    void closeSignal();
-
+    
   private slots:
+    void modifyTreeView();
+    virtual void updatePluginsTree();
+    virtual void serverPopup();
+    void clickOnPluginSlot(const PluginInfo* pi);
+    
     void serverView();
     void groupView();
     void pluginView();
-    void showPluginsModeChanged();
-    void servers();
     void proxy();
     void clicked (QAbstractButton*);
   };

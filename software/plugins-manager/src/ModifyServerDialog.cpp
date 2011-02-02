@@ -16,13 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-
-#include "PluginsWidget.h"
 #include "ModifyServerDialog.h"
 
-#include <iostream>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QVBoxLayout>
 
 using namespace std;
 
