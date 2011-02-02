@@ -77,40 +77,31 @@ namespace tlp {
     /* --- file menu --- */
     QMenu* fileMenu = menuBar->addMenu(tr("&File"));
     
-    QAction* applyAct = fileMenu->addAction(tr("&Apply Changes"), this, SLOT(applyChange()), QKeySequence(Qt::CTRL & Qt::Key_A));
-    applyAct->setStatusTip(tr("Apply the changes"));
+    fileMenu->addAction(tr("&Apply Changes"), this, SLOT(applyChange()), QKeySequence(Qt::CTRL & Qt::Key_A));
     
-    QAction* restoreAct = fileMenu->addAction(tr("&Restore"), this, SLOT(restore()), QKeySequence(Qt::CTRL & Qt::Key_R));
-    restoreAct->setStatusTip(tr("Restore"));
+    fileMenu->addAction(tr("&Restore"), this, SLOT(restore()), QKeySequence(Qt::CTRL & Qt::Key_R));
     
     fileMenu->addSeparator();
     
-    QAction* exitAct = fileMenu->addAction(tr("E&xit"), this, SLOT(close()), QKeySequence(Qt::CTRL & Qt::Key_X));
-    exitAct->setStatusTip(tr("Exit the window"));
+    fileMenu->addAction(tr("E&xit"), this, SLOT(close()), QKeySequence(Qt::CTRL & Qt::Key_X));
 
     /* --- configure menu --- */
     QMenu* configureMenu = menuBar->addMenu(tr("&Configure"));
     
-    QAction* serverAct = configureMenu->addAction(tr("&Servers"), this, SLOT(servers()), QKeySequence(Qt::CTRL & Qt::Key_S));
-    serverAct->setStatusTip(tr("Open the Servers configuration window"));
-
-    QAction* proxyAct = configureMenu->addAction(tr("&Http proxy"), this, SLOT(proxy()));
-    proxyAct->setStatusTip(tr("Open the http proxy configuration window"));
+    configureMenu->addAction(tr("&Servers"), this, SLOT(servers()), QKeySequence(Qt::CTRL & Qt::Key_S));
+    configureMenu->addAction(tr("&Http proxy"), this, SLOT(proxy()));
 
     /* --- view menu --- */
     QMenu* viewMenu = menuBar->addMenu(tr("&View"));
     
     QAction* serverViewAct = viewMenu->addAction(tr("Sort by S&erver"), this, SLOT(serverView()), QKeySequence(Qt::CTRL & Qt::Key_E));
-    serverViewAct->setStatusTip(tr("Display plugins by server"));
     serverViewAct->setCheckable(true);
     serverViewAct->setChecked(true);
 
     QAction* groupViewAct = viewMenu->addAction(tr("Sort by Gro&up"), this, SLOT(groupView()), QKeySequence(Qt::CTRL & Qt::Key_U));
-    groupViewAct->setStatusTip(tr("Display plugins by group"));
     groupViewAct->setCheckable(true);
 
     QAction* pluginViewAct = viewMenu->addAction(tr("Sort by Plug&in"), this, SLOT(pluginView()), QKeySequence(Qt::CTRL & Qt::Key_P));
-    pluginViewAct->setStatusTip(tr("Display plugins by name"));
     pluginViewAct->setCheckable(true);
     
     QActionGroup* sortActionGroup = new QActionGroup(this);
@@ -122,15 +113,12 @@ namespace tlp {
     viewMenu->addSeparator();
     
     lastPluginsAct = viewMenu->addAction(tr("Show only &latest plugins"), this, SLOT(showLatestPlugins()), QKeySequence(Qt::CTRL & Qt::Key_L));
-    lastPluginsAct->setStatusTip(tr("Enable/Disable the display of the more recent plugins"));
     lastPluginsAct->setCheckable(true);
 
     compatiblesPluginsAct = viewMenu->addAction(tr("Show only &compatibles plugins"), this, SLOT(showCompatiblesPlugins()), QKeySequence(Qt::CTRL & Qt::Key_C));
-    compatiblesPluginsAct->setStatusTip(tr("Enable/Disable the display of compatibles plugins"));
     compatiblesPluginsAct->setCheckable(true);
 
     notinstalledPluginsAct = viewMenu->addAction(tr("Show not installed plugins"), this, SLOT(showNotinstalledPlugins()), QKeySequence(Qt::CTRL & Qt::Key_C));
-    notinstalledPluginsAct->setStatusTip(tr("Enable/Disable the display of not installed plugins"));
     notinstalledPluginsAct->setCheckable(true);
   }
 
