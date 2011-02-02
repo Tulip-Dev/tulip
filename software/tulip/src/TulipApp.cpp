@@ -712,7 +712,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
           chooseControllerDialog.setDefaultCheckedControllerName(defaultControllerName);
           chooseControllerDialog.setControllersAvailable(controllersName);
           if(chooseControllerDialog.exec()==QDialog::Rejected){
-            errorMessage="Cancel by user";
+            return;
           }else{
             controllerName = chooseControllerDialog.getCheckedControllerName();
           }
