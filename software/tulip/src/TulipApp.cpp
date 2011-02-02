@@ -987,7 +987,7 @@ void TulipApp::plugins() {
 
   PluginsHelp::checkViewHelp();
 
-  PluginsManagerMainWindow *pluginsManager=new PluginsManagerMainWindow(multiServerManager,this);
+  PluginsManager *pluginsManager=new PluginsManager(multiServerManager,this);
 
   pluginsManager->show();
   if (UpdatePlugin::pluginUpdatesPending()) {
