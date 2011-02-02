@@ -106,15 +106,15 @@ namespace tlp {
     pluginsList->changeList();
   }
   
-  void PluginsWidget::serverViewSlot(){
+  void PluginsWidget::serverView(){
     modifyTreeView(VIEW_BY_SERVER, true, true, true);
   }
 
-  void PluginsWidget::groupViewSlot(){
+  void PluginsWidget::groupView(){
     modifyTreeView(VIEW_BY_TYPE, true, true, true);
   }
 
-  void PluginsWidget::pluginViewSlot(){
+  void PluginsWidget::pluginView(){
     modifyTreeView(VIEW_BY_NAME, true, true, true);
   }
 
@@ -124,11 +124,11 @@ namespace tlp {
     pluginsInfo->setPluginInfo(pi,addr);
   }
   
-  void PluginsWidget::applyChangeSlot(){
+  void PluginsWidget::applyChange(){
     pluginsList->applyChange();  
   }
   
-  void PluginsWidget::restoreSlot(){
+  void PluginsWidget::restore(){
     pluginsList->restore();
     updatePluginsTree();  
   }

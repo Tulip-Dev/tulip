@@ -82,9 +82,9 @@ namespace tlp {
     /* --- file menu --- */
     QMenu* fileMenu = menuBar->addMenu(tr("&File"));
     
-    fileMenu->addAction(tr("&Apply Changes"), pluginsWidget, SLOT(applyChangeSlot()), QKeySequence(Qt::CTRL | Qt::Key_A));
+    fileMenu->addAction(tr("&Apply Changes"), pluginsWidget, SLOT(applyChange()), QKeySequence(Qt::CTRL | Qt::Key_A));
     
-    fileMenu->addAction(tr("&Restore"), pluginsWidget, SLOT(restoreSlot()), QKeySequence(Qt::CTRL | Qt::Key_R));
+    fileMenu->addAction(tr("&Restore"), pluginsWidget, SLOT(restore()), QKeySequence(Qt::CTRL | Qt::Key_R));
     
     fileMenu->addSeparator();
     
@@ -164,10 +164,10 @@ namespace tlp {
   
   void PluginsManagerMainWindow::clicked(QAbstractButton* button) {
     if(buttons->standardButton(button) == QDialogButtonBox::Reset) {
-      pluginsWidget->restoreSlot();
+      pluginsWidget->restore();
     }
     else if(buttons->standardButton(button) == QDialogButtonBox::Apply) {
-      pluginsWidget->applyChangeSlot();
+      pluginsWidget->applyChange();
     }
   }
 }
