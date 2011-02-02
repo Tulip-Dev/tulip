@@ -38,17 +38,22 @@ ChooseControllerDialog::ChooseControllerDialog( QWidget* parent)
   PreferenceManager &preferenceManager=PreferenceManager::getInst();
   bool autoLoadController=preferenceManager.getAutoLoadController();
   askAgain->setChecked(autoLoadController);
+  
+  listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 
 void ChooseControllerDialog::setControllersAvailable(const vector<string> &controllersName){
   for(vector<string>::const_iterator it=controllersName.begin();it!=controllersName.end();++it){
     QListWidgetItem *item=new QListWidgetItem((*it).c_str());
-    if((*it)!=defaultControllerName)
-      item->setCheckState(Qt::Unchecked);
-    else
-      item->setCheckState(Qt::Checked);
+    item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     listWidget->addItem(item);
-    connect(listWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(itemClicked(QListWidgetItem *)));
+    if((*it)==defaultControllerName) {
+      QFont f = item->font();
+      f.setWeight(QFont::Bold);
+      item->setFont(f);
+      listWidget->setItemSelected(item, true);
+      listWidget->setCurrentItem(item);
+    }
   }
 }
 
@@ -61,33 +66,7 @@ void ChooseControllerDialog::setDefaultControllerName(const string &controllerNa
 }
 
 string ChooseControllerDialog::getCheckedControllerName(){
-  vector<QListWidgetItem *> checkedItems;
-  for(int i=0;i<listWidget->count();++i){
-    QListWidgetItem *item=listWidget->item(i);
-    if(item->checkState()==Qt::Checked)
-      return item->text().toStdString();
-  }
-}
-
-void ChooseControllerDialog::itemClicked(QListWidgetItem *item){
-  vector<QListWidgetItem *> checkedItems;
-  for(int i=0;i<listWidget->count();++i){
-    QListWidgetItem *item=listWidget->item(i);
-    if(item->checkState()==Qt::Checked)
-      checkedItems.push_back(item);
-  }
-
-  if(checkedItems.empty())
-    buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-  else
-    buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
-
-  if(checkedItems.size()>1){
-    for(vector<QListWidgetItem *>::iterator it=checkedItems.begin();it!=checkedItems.end();++it){
-      if((*it)!=item)
-        (*it)->setCheckState(Qt::Unchecked);
-    }
-  }
+  return listWidget->selectedItems().front()->text().toStdString();
 }
 
 void ChooseControllerDialog::accept() {

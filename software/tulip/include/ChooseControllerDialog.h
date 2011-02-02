@@ -33,15 +33,9 @@ public:
   std::string getCheckedControllerName();
 
 public slots:
-
   void accept();
 
-protected slots:
-
-  void itemClicked(QListWidgetItem *);
-
 private :
-
   std::string defaultControllerName;
 
 };
