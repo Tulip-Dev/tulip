@@ -41,17 +41,13 @@ namespace tlp {
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     setLayout(mainLayout);
 
-    QHBoxLayout* boxLayout = new QHBoxLayout();
-    boxLayout->setParent(mainLayout);
-    mainLayout->addItem(boxLayout);
-
     connect(serverManager, SIGNAL(newPluginList()), this, SLOT(updatePluginsTree()));
 
     pluginsList = new PluginsViewWidget(serverManager,this);
-    boxLayout->addWidget(pluginsList);
+    mainLayout->addWidget(pluginsList);
     
     pluginsInfo = new PluginsInfoWidget(serverManager,this);
-    boxLayout->addWidget(pluginsInfo);
+    mainLayout->addWidget(pluginsInfo);
     connect(pluginsList, SIGNAL(pluginInfoSignal(const PluginInfo*)), this, SLOT(clickOnPluginSlot(const PluginInfo *)));
 
     updatePluginsTree();
