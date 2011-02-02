@@ -53,9 +53,9 @@ namespace tlp {
     //Read setting
     QSettings settings("TulipSoftware","Tulip");
     settings.beginGroup("PluginsManager");
-    int serverNumber=settings.value("serverNumber_v2",0).toInt();
+    int serverNumber = settings.value("serverNumber_v2",0).toInt();
     vector<string> serversAddr;
-    for(int i=0;i<serverNumber;i++) {
+    for(int i = 0; i<serverNumber; i++) {
       serversAddr.push_back(settings.value("server_v2_"+QString::number(i),"").toString().toStdString());
     }
     settings.endGroup();
@@ -77,9 +77,9 @@ namespace tlp {
     /* --- file menu --- */
     QMenu* fileMenu = menuBar->addMenu(tr("&File"));
     
-    fileMenu->addAction(tr("&Apply Changes"), this, SLOT(applyChange()), QKeySequence(Qt::CTRL & Qt::Key_A));
+    fileMenu->addAction(tr("&Apply Changes"), pluginsWidget, SLOT(applyChangeSlot()), QKeySequence(Qt::CTRL & Qt::Key_A));
     
-    fileMenu->addAction(tr("&Restore"), this, SLOT(restore()), QKeySequence(Qt::CTRL & Qt::Key_R));
+    fileMenu->addAction(tr("&Restore"), pluginsWidget, SLOT(restoreSlot()), QKeySequence(Qt::CTRL & Qt::Key_R));
     
     fileMenu->addSeparator();
     
@@ -112,37 +112,29 @@ namespace tlp {
     
     viewMenu->addSeparator();
     
-    lastPluginsAct = viewMenu->addAction(tr("Show only &latest plugins"), this, SLOT(showLatestPlugins()), QKeySequence(Qt::CTRL & Qt::Key_L));
+    lastPluginsAct = viewMenu->addAction(tr("Show only &latest plugins"), this, SLOT(showPluginsModeChanged()), QKeySequence(Qt::CTRL & Qt::Key_L));
     lastPluginsAct->setCheckable(true);
 
-    compatiblesPluginsAct = viewMenu->addAction(tr("Show only &compatibles plugins"), this, SLOT(showCompatiblesPlugins()), QKeySequence(Qt::CTRL & Qt::Key_C));
+    compatiblesPluginsAct = viewMenu->addAction(tr("Show only &compatibles plugins"), this, SLOT(showPluginsModeChanged()), QKeySequence(Qt::CTRL & Qt::Key_C));
     compatiblesPluginsAct->setCheckable(true);
 
-    notinstalledPluginsAct = viewMenu->addAction(tr("Show not installed plugins"), this, SLOT(showNotinstalledPlugins()), QKeySequence(Qt::CTRL & Qt::Key_C));
+    notinstalledPluginsAct = viewMenu->addAction(tr("Show not installed plugins"), this, SLOT(showPluginsModeChanged()), QKeySequence(Qt::CTRL & Qt::Key_C));
     notinstalledPluginsAct->setCheckable(true);
   }
 
   void PluginsManagerMainWindow::serverView(){
     currentView = VIEW_BY_SERVER;
-    pluginsWidget->modifyTreeView(currentView, lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
+    showPluginsModeChanged();
   }
 
   void PluginsManagerMainWindow::groupView(){
     currentView = VIEW_BY_TYPE;
-    pluginsWidget->modifyTreeView(currentView, lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
+    showPluginsModeChanged();
   }
 
   void PluginsManagerMainWindow::pluginView(){
     currentView = VIEW_BY_NAME;
-    pluginsWidget->modifyTreeView(currentView, lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
-  }
-
-  void PluginsManagerMainWindow::applyChange(){
-    pluginsWidget->applyChangeSlot();
-  }
-
-  void PluginsManagerMainWindow::restore(){
-    pluginsWidget->restoreSlot();
+    showPluginsModeChanged();
   }
 
   void PluginsManagerMainWindow::servers(){
@@ -161,15 +153,7 @@ namespace tlp {
     }
   }
 
-  void PluginsManagerMainWindow::showCompatiblesPlugins(){
-    pluginsWidget->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
-  }
-
-  void PluginsManagerMainWindow::showLatestPlugins(){
-    pluginsWidget->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
-  }
-
-  void PluginsManagerMainWindow::showNotinstalledPlugins(){
+  void PluginsManagerMainWindow::showPluginsModeChanged(){
     pluginsWidget->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
   }
 
