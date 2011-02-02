@@ -27,6 +27,9 @@
 #include <iostream>
 
 #include "ProxyConfigurationDialog.h"
+#include <PluginsViewWidget.h>
+#include <PluginsInfoWidget.h>
+#include <ServersOptionDialog.h>
 
 using namespace std;
 
@@ -47,15 +50,29 @@ namespace tlp {
     connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
     
     layout->setMenuBar(menuBar);
+    
+    pluginsWidget = new QWidget();
+    pluginsWidget->setLayout(new QHBoxLayout());
+
+    pluginsList = new PluginsViewWidget(serverManager,this);
+    pluginsWidget->layout()->addWidget(pluginsList);
+    
+    pluginsInfo = new PluginsInfoWidget(serverManager,this);
+    pluginsWidget->layout()->addWidget(pluginsInfo);
+    
     layout->addWidget(pluginsWidget);
     layout->addWidget(buttons);
     
+    serverDialog = new ServersOptionDialog(serverManager, this);
+    
+    connect(pluginsList, SIGNAL(pluginInfoSignal(const PluginInfo*)), this, SLOT(clickOnPluginSlot(const PluginInfo *)));
+    connect(serverManager, SIGNAL(newPluginList()), this, SLOT(updatePluginsTree()));
+    updatePluginsTree();
     createMenus();
     serverView();
   }
 
-  PluginsManagerMainWindow::PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent):QDialog(parent){
-    pluginsWidget = new PluginsWidget(msm,this);
+  PluginsManagerMainWindow::PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent): QDialog(parent), serverManager(msm) {
     createWidget();
   }
 
@@ -63,9 +80,10 @@ namespace tlp {
     /* --- file menu --- */
     QMenu* fileMenu = menuBar->addMenu(tr("&File"));
     
-    fileMenu->addAction(tr("&Apply Changes"), pluginsWidget, SLOT(applyChange()), QKeySequence(Qt::CTRL | Qt::Key_A));
+    fileMenu->addAction(tr("&Apply Changes"), pluginsList, SLOT(applyChange()), QKeySequence(Qt::CTRL | Qt::Key_A));
     
-    fileMenu->addAction(tr("&Restore"), pluginsWidget, SLOT(restore()), QKeySequence(Qt::CTRL | Qt::Key_R));
+    QAction* restore = fileMenu->addAction(tr("&Restore"), pluginsList, SLOT(restore()), QKeySequence(Qt::CTRL | Qt::Key_R));
+    connect(restore, SIGNAL(triggered(bool)), SLOT(updatePluginsTree()));
     
     fileMenu->addSeparator();
     
@@ -74,7 +92,7 @@ namespace tlp {
     /* --- configure menu --- */
     QMenu* configureMenu = menuBar->addMenu(tr("&Configure"));
     
-    configureMenu->addAction(tr("&Servers"), this, SLOT(servers()), QKeySequence(Qt::CTRL | Qt::Key_S));
+    configureMenu->addAction(tr("&Servers"), this, SLOT(serverPopup()), QKeySequence(Qt::CTRL | Qt::Key_S));
     configureMenu->addAction(tr("&Http proxy"), this, SLOT(proxy()));
 
     /* --- view menu --- */
@@ -98,33 +116,29 @@ namespace tlp {
     
     viewMenu->addSeparator();
     
-    lastPluginsAct = viewMenu->addAction(tr("Show only &latest plugins"), this, SLOT(showPluginsModeChanged()), QKeySequence(Qt::CTRL | Qt::Key_L));
+    lastPluginsAct = viewMenu->addAction(tr("Show only &latest plugins"), this, SLOT(modifyTreeView()), QKeySequence(Qt::CTRL | Qt::Key_L));
     lastPluginsAct->setCheckable(true);
 
-    compatiblesPluginsAct = viewMenu->addAction(tr("Show only &compatibles plugins"), this, SLOT(showPluginsModeChanged()), QKeySequence(Qt::CTRL | Qt::Key_C));
+    compatiblesPluginsAct = viewMenu->addAction(tr("Show only &compatibles plugins"), this, SLOT(modifyTreeView()), QKeySequence(Qt::CTRL | Qt::Key_C));
     compatiblesPluginsAct->setCheckable(true);
 
-    notinstalledPluginsAct = viewMenu->addAction(tr("Show &not installed plugins"), this, SLOT(showPluginsModeChanged()), QKeySequence(Qt::CTRL | Qt::Key_N));
+    notinstalledPluginsAct = viewMenu->addAction(tr("Show &not installed plugins"), this, SLOT(modifyTreeView()), QKeySequence(Qt::CTRL | Qt::Key_N));
     notinstalledPluginsAct->setCheckable(true);
   }
 
   void PluginsManagerMainWindow::serverView(){
     currentView = VIEW_BY_SERVER;
-    showPluginsModeChanged();
+    modifyTreeView();
   }
 
   void PluginsManagerMainWindow::groupView(){
     currentView = VIEW_BY_TYPE;
-    showPluginsModeChanged();
+    modifyTreeView();
   }
 
   void PluginsManagerMainWindow::pluginView(){
     currentView = VIEW_BY_NAME;
-    showPluginsModeChanged();
-  }
-
-  void PluginsManagerMainWindow::servers(){
-    pluginsWidget->serverPopup();
+    modifyTreeView();
   }
 
   void PluginsManagerMainWindow::proxy(){
@@ -139,16 +153,45 @@ namespace tlp {
     }
   }
 
-  void PluginsManagerMainWindow::showPluginsModeChanged(){
-    pluginsWidget->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
-  }
-  
   void PluginsManagerMainWindow::clicked(QAbstractButton* button) {
     if(buttons->standardButton(button) == QDialogButtonBox::Reset) {
-      pluginsWidget->restore();
+      pluginsList->restore();
+      updatePluginsTree();
     }
     else if(buttons->standardButton(button) == QDialogButtonBox::Apply) {
-      pluginsWidget->applyChange();
+      pluginsList->applyChange();
     }
   }
+  
+  void PluginsManagerMainWindow::updatePluginsTree(){
+    pluginsList->changeList();
+    repaint();
+  }
+
+
+  void PluginsManagerMainWindow::serverPopup(){
+    if(serverDialog->isVisible()){
+      serverDialog->raise();
+    }
+    else {
+      serverDialog->setVisible(true);
+      serverDialog->exec();
+    }
+    updatePluginsTree();
+  }
+
+  void PluginsManagerMainWindow::modifyTreeView(){
+    serverManager->modifyTreeView(currentView);
+    pluginsList->setLastVersion(lastPluginsAct->isChecked());
+    pluginsList->setCompatiblesVersion(compatiblesPluginsAct->isChecked());
+    pluginsList->setNotinstalledVersion(notinstalledPluginsAct->isChecked());
+    pluginsList->changeList();
+  }
+  
+  void PluginsManagerMainWindow::clickOnPluginSlot(const PluginInfo *pi){
+    string addr;
+    serverManager->getAddr(pi->server,addr);
+    pluginsInfo->setPluginInfo(pi,addr);
+  }
+  
 }

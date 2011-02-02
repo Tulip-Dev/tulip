@@ -13,7 +13,6 @@ set(${LibTulipPluginsManagerName}_UI
 
 set(${LibTulipPluginsManagerName}_MOC
     ../include/PluginsManager.h
-    ../include/PluginsWidget.h
     ../include/PluginsViewWidget.h
     ../include/Server.h
     ../include/MultiServerManager.h
@@ -35,7 +34,6 @@ set(${LibTulipPluginsManagerName}_MOC
 
 set(${LibTulipPluginsManagerName}_LIB_SRCS 
     PluginsManager.cpp 
-    PluginsWidget.cpp 
     PluginsViewWidget.cpp 
     Server.cpp 
     MultiServerManager.cpp 
