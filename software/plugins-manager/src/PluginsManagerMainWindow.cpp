@@ -56,7 +56,6 @@ namespace tlp {
 
   PluginsManagerMainWindow::PluginsManagerMainWindow(std::vector<LocalPluginInfo> &plugins,QWidget *parent):QMainWindow(parent){
     //Read setting
-
     QSettings settings("TulipSoftware","Tulip");
     settings.beginGroup("PluginsManager");
     int serverNumber=settings.value("serverNumber_v2",0).toInt();
@@ -130,9 +129,9 @@ namespace tlp {
     notinstalledPluginsAct->setCheckable(true);
     connect(notinstalledPluginsAct, SIGNAL(triggered()), this, SLOT(showNotinstalledPlugins()));
 
-    applyAct = new QAction(tr("&Apply Change"), vbox);
+    applyAct = new QAction(tr("&Apply Changes"), vbox);
     applyAct->setShortcut(tr("Ctrl+A"));
-    applyAct->setStatusTip(tr("Apply the change"));
+    applyAct->setStatusTip(tr("Apply the changes"));
     connect(applyAct, SIGNAL(triggered()), this, SLOT(applyChange()));
 
     restoreAct = new QAction(tr("&Restore"), vbox);
@@ -142,11 +141,11 @@ namespace tlp {
 
     serverAct = new QAction(tr("&Servers"), vbox);
     serverAct->setShortcut(tr("Ctrl+S"));
-    serverAct->setStatusTip(tr("Open the Servers configuration windows"));
+    serverAct->setStatusTip(tr("Open the Servers configuration window"));
     connect(serverAct, SIGNAL(triggered()), this, SLOT(servers()));
 
     proxyAct = new QAction(tr("&Http proxy"), vbox);
-    proxyAct->setStatusTip(tr("Open the http proxy configuration windows"));
+    proxyAct->setStatusTip(tr("Open the http proxy configuration window"));
     connect(proxyAct, SIGNAL(triggered()), this, SLOT(proxy()));
   }
 
