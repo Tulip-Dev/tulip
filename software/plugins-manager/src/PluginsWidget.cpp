@@ -59,12 +59,6 @@ namespace tlp {
     serverDialog=new ServersOptionDialog(serverManager,parent);
   }
   
-  PluginsWidget::PluginsWidget(vector<LocalPluginInfo> &plugins,QWidget *parent):QWidget(parent){
-    serverManager = new MultiServerManager(plugins);
-   
-    createWidget(parent);
-  }
-
   PluginsWidget::PluginsWidget(MultiServerManager *msm,QWidget *parent):QWidget(parent){
     serverManager = msm;
 
@@ -132,6 +126,4 @@ namespace tlp {
     pluginsList->restore();
     updatePluginsTree();  
   }
-
-  
 }
