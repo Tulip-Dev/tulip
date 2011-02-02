@@ -65,10 +65,6 @@ namespace tlp {
     createWidget(parent);
   }
 
-  void PluginsWidget::addServer(const string &serverAddr) {
-    serverManager->addServer(serverAddr);
-  }
-
   PluginsWidget::~PluginsWidget(){
     delete serverManager;
   }

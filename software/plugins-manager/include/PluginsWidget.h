@@ -51,7 +51,6 @@ namespace tlp {
     void createWidget(QWidget *parent);
     PluginsWidget(MultiServerManager *msm,QWidget *parent=0);
     virtual ~PluginsWidget();
-    void addServer(const std::string &serverAddr);
     void modifyTreeView(int viewNumber, bool lastVersion, bool compatibleVersion, bool notinstalledVersion);
     
   public slots :
