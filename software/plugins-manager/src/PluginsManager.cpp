@@ -41,9 +41,14 @@ namespace tlp {
 #if QT_MINOR_REL >= 6
     menuBar->setNativeMenuBar(false);
 #endif
+    buttons = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Reset | QDialogButtonBox::Close, Qt::Horizontal, this);
+    
+    connect(buttons, SIGNAL(clicked(QAbstractButton*)), SLOT(clicked(QAbstractButton*)));
+    connect(buttons, SIGNAL(rejected()), this, SLOT(reject()));
     
     layout->setMenuBar(menuBar);
     layout->addWidget(pluginsWidget);
+    layout->addWidget(buttons);
     
     createMenus();
     serverView();
@@ -77,31 +82,31 @@ namespace tlp {
     /* --- file menu --- */
     QMenu* fileMenu = menuBar->addMenu(tr("&File"));
     
-    fileMenu->addAction(tr("&Apply Changes"), pluginsWidget, SLOT(applyChangeSlot()), QKeySequence(Qt::CTRL & Qt::Key_A));
+    fileMenu->addAction(tr("&Apply Changes"), pluginsWidget, SLOT(applyChangeSlot()), QKeySequence(Qt::CTRL | Qt::Key_A));
     
-    fileMenu->addAction(tr("&Restore"), pluginsWidget, SLOT(restoreSlot()), QKeySequence(Qt::CTRL & Qt::Key_R));
+    fileMenu->addAction(tr("&Restore"), pluginsWidget, SLOT(restoreSlot()), QKeySequence(Qt::CTRL | Qt::Key_R));
     
     fileMenu->addSeparator();
     
-    fileMenu->addAction(tr("E&xit"), this, SLOT(close()), QKeySequence(Qt::CTRL & Qt::Key_X));
+    fileMenu->addAction(tr("E&xit"), this, SLOT(reject()), QKeySequence(Qt::CTRL | Qt::Key_X));
 
     /* --- configure menu --- */
     QMenu* configureMenu = menuBar->addMenu(tr("&Configure"));
     
-    configureMenu->addAction(tr("&Servers"), this, SLOT(servers()), QKeySequence(Qt::CTRL & Qt::Key_S));
+    configureMenu->addAction(tr("&Servers"), this, SLOT(servers()), QKeySequence(Qt::CTRL | Qt::Key_S));
     configureMenu->addAction(tr("&Http proxy"), this, SLOT(proxy()));
 
     /* --- view menu --- */
     QMenu* viewMenu = menuBar->addMenu(tr("&View"));
     
-    QAction* serverViewAct = viewMenu->addAction(tr("Sort by S&erver"), this, SLOT(serverView()), QKeySequence(Qt::CTRL & Qt::Key_E));
+    QAction* serverViewAct = viewMenu->addAction(tr("Sort by S&erver"), this, SLOT(serverView()), QKeySequence(Qt::CTRL | Qt::Key_E));
     serverViewAct->setCheckable(true);
     serverViewAct->setChecked(true);
 
-    QAction* groupViewAct = viewMenu->addAction(tr("Sort by Gro&up"), this, SLOT(groupView()), QKeySequence(Qt::CTRL & Qt::Key_U));
+    QAction* groupViewAct = viewMenu->addAction(tr("Sort by Gro&up"), this, SLOT(groupView()), QKeySequence(Qt::CTRL | Qt::Key_U));
     groupViewAct->setCheckable(true);
 
-    QAction* pluginViewAct = viewMenu->addAction(tr("Sort by Plug&in"), this, SLOT(pluginView()), QKeySequence(Qt::CTRL & Qt::Key_P));
+    QAction* pluginViewAct = viewMenu->addAction(tr("Sort by Plug&in"), this, SLOT(pluginView()), QKeySequence(Qt::CTRL | Qt::Key_P));
     pluginViewAct->setCheckable(true);
     
     QActionGroup* sortActionGroup = new QActionGroup(this);
@@ -112,13 +117,13 @@ namespace tlp {
     
     viewMenu->addSeparator();
     
-    lastPluginsAct = viewMenu->addAction(tr("Show only &latest plugins"), this, SLOT(showPluginsModeChanged()), QKeySequence(Qt::CTRL & Qt::Key_L));
+    lastPluginsAct = viewMenu->addAction(tr("Show only &latest plugins"), this, SLOT(showPluginsModeChanged()), QKeySequence(Qt::CTRL | Qt::Key_L));
     lastPluginsAct->setCheckable(true);
 
-    compatiblesPluginsAct = viewMenu->addAction(tr("Show only &compatibles plugins"), this, SLOT(showPluginsModeChanged()), QKeySequence(Qt::CTRL & Qt::Key_C));
+    compatiblesPluginsAct = viewMenu->addAction(tr("Show only &compatibles plugins"), this, SLOT(showPluginsModeChanged()), QKeySequence(Qt::CTRL | Qt::Key_C));
     compatiblesPluginsAct->setCheckable(true);
 
-    notinstalledPluginsAct = viewMenu->addAction(tr("Show not installed plugins"), this, SLOT(showPluginsModeChanged()), QKeySequence(Qt::CTRL & Qt::Key_C));
+    notinstalledPluginsAct = viewMenu->addAction(tr("Show &not installed plugins"), this, SLOT(showPluginsModeChanged()), QKeySequence(Qt::CTRL | Qt::Key_N));
     notinstalledPluginsAct->setCheckable(true);
   }
 
@@ -156,8 +161,13 @@ namespace tlp {
   void PluginsManagerMainWindow::showPluginsModeChanged(){
     pluginsWidget->modifyTreeView(currentView,lastPluginsAct->isChecked(), compatiblesPluginsAct->isChecked(),notinstalledPluginsAct->isChecked());
   }
-
-  void PluginsManagerMainWindow::close() {
-    emit closeSignal();
+  
+  void PluginsManagerMainWindow::clicked(QAbstractButton* button) {
+    if(buttons->standardButton(button) == QDialogButtonBox::Reset) {
+      pluginsWidget->restoreSlot();
+    }
+    else if(buttons->standardButton(button) == QDialogButtonBox::Apply) {
+      pluginsWidget->applyChangeSlot();
+    }
   }
 }
