@@ -42,8 +42,12 @@ namespace tlp {
   class TLP_PLUGINSMANAGER_SCOPE PluginsManagerMainWindow : public QDialog {
     Q_OBJECT
 
+  public:
+    void createWidget();
+    PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent=0);
+    virtual ~PluginsManagerMainWindow();
+    
   protected:
-
     void createActions(QWidget *parent);
     void createMenus();
 
@@ -59,10 +63,7 @@ namespace tlp {
     PluginsViewWidget* pluginsList;
     MultiServerManager* serverManager;
     ServersOptionDialog* serverDialog;
-  public:
-    void createWidget();
-    PluginsManagerMainWindow(MultiServerManager *msm,QWidget *parent=0);
-    
+ 
   private slots:
     void modifyTreeView();
     virtual void updatePluginsTree();
