@@ -102,7 +102,7 @@
 #include <tulip/tulipconf.h>
 
 #include <PluginsHelp.h>
-#include <PluginsManagerDialog.h>
+#include <PluginsManager.h>
 #include <UpdatePlugin.h>
 
 #include "TulipApp.h"
@@ -987,10 +987,10 @@ void TulipApp::plugins() {
 
   PluginsHelp::checkViewHelp();
 
-  PluginsManagerDialog *pluginsManager=new PluginsManagerDialog(multiServerManager,this);
+  PluginsManagerMainWindow *pluginsManager=new PluginsManagerMainWindow(multiServerManager,this);
 
-  pluginsManager->exec();
-  if (pluginsManager->pluginUpdatesPending()) {
+  pluginsManager->show();
+  if (UpdatePlugin::pluginUpdatesPending()) {
     displayRestartForPlugins();
   }
 }

@@ -38,7 +38,7 @@ namespace tlp {
   class PluginsInfoWidget;
   class ServersOptionDialog;
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginsWidget : public QDialog{
+  class TLP_PLUGINSMANAGER_SCOPE PluginsWidget : public QWidget{
 
     Q_OBJECT
       
