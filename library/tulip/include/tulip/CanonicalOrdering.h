@@ -26,12 +26,11 @@
 #include <map>
 #include <stdio.h>
 #include <tulip/MutableContainer.h>
-#include <tulip/PluginProgress.h>
 
 #ifndef DOXYGEN_NOTFOR_USER
 
 class TLP_SCOPE Ordering : public std::vector<std::vector<node> > {
-  
+ class PluginProgress;  
  public :
 
   typedef struct FaceAndPos_ {

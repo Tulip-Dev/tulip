@@ -24,14 +24,13 @@
 #include "tulip/WithParameter.h"
 #include "tulip/WithDependency.h"
 #include "tulip/Reflect.h"
-#include "tulip/PluginProgress.h"
 #include "tulip/Plugin.h"
 #include "tulip/TemplateFactory.h"
 
 
 /** \addtogroup plugins */ 
 namespace tlp {
-
+class PluginProgress;
 /*@{*/
 /// Interface for importModule plug-ins
 class ImportModule :public WithParameter, public WithDependency
