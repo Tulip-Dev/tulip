@@ -367,32 +367,28 @@ void ColorScaleConfigDialog::setColorScale(ColorScale *colorScale) {
 	} else {
 
 		//init dialog with default colors
-		colorsTable->setRowCount(6);
+		colorsTable->setRowCount(5);
 		QTableWidgetItem *item1 = new QTableWidgetItem();
-		item1->setBackgroundColor(QColor(255, 150, 255, 255));
+		item1->setBackgroundColor(QColor(229, 40, 0, 200));
 		item1->setFlags(Qt::ItemIsEnabled);
 		QTableWidgetItem *item2 = new QTableWidgetItem();
-		item2->setBackgroundColor(QColor(150, 150, 255, 225));
+		item2->setBackgroundColor(QColor(255, 170, 0, 200));
 		item2->setFlags(Qt::ItemIsEnabled);
 		QTableWidgetItem *item3 = new QTableWidgetItem();
-		item3->setBackgroundColor(QColor(150, 255, 255, 195));
+		item3->setBackgroundColor(QColor(255, 255, 127, 200));
 		item3->setFlags(Qt::ItemIsEnabled);
 		QTableWidgetItem *item4 = new QTableWidgetItem();
-		item4->setBackgroundColor(QColor(150, 255, 150, 165));
+		item4->setBackgroundColor(QColor(156, 161, 255, 200));
 		item4->setFlags(Qt::ItemIsEnabled);
 		QTableWidgetItem *item5 = new QTableWidgetItem();
-		item5->setBackgroundColor(QColor(255, 255, 150, 135));
+		item5->setBackgroundColor(QColor(75, 75, 255, 200));
 		item5->setFlags(Qt::ItemIsEnabled);
-		QTableWidgetItem *item6 = new QTableWidgetItem();
-		item6->setBackgroundColor(QColor(255, 150, 150, 105));
-		item6->setFlags(Qt::ItemIsEnabled);
 		colorsTable->setItem(0, 0, item1);
 		colorsTable->setItem(1, 0, item2);
 		colorsTable->setItem(2, 0, item3);
 		colorsTable->setItem(3, 0, item4);
 		colorsTable->setItem(4, 0, item5);
-		colorsTable->setItem(5, 0, item6);
-		nbColors->setValue(6);
+		nbColors->setValue(5);
 		gradientCB->setChecked(true);
 	}
 	connect(nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));

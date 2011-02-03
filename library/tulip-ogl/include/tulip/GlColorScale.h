@@ -61,6 +61,8 @@ public:
 
   ColorScale *getColorScale() {return colorScale;}
 
+protected :
+
   void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end);
 
   void observableDestroyed(Observable *) {}
