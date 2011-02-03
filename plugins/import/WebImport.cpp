@@ -73,7 +73,7 @@ private:
 namespace std {
 template <>
   struct less<UrlElement> {
-    bool operator()(const UrlElement &lhs, const UrlElement &rhs) {
+    bool operator()(const UrlElement &lhs, const UrlElement &rhs) const {
       if (lhs.server.compare(rhs.server) < 0 ) return true;
       if (lhs.server.compare(rhs.server) > 0 ) return false;
       return lhs.getUrl().compare(rhs.getUrl()) < 0;
