@@ -22,6 +22,7 @@
 
 #include <cassert>
 #include "tulip/Graph.h"
+#include "tulip/GraphImpl.h"
 #include "tulip/GraphIterator.h"
 #include "tulip/BooleanProperty.h"
 
