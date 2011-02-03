@@ -1,30 +1,30 @@
-ADD_CUSTOM_TARGET(tulip-doc-html ALL sh ${PROJECT_SOURCE_DIR}/docs/common/gen-index.sh)
+ADD_CUSTOM_TARGET(tulip-doc-html sh ${PROJECT_SOURCE_DIR}/docs/common/gen-index.sh)
 
-ADD_CUSTOM_TARGET(tulip-lib-doc ALL doxygen tulip-lib.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+ADD_CUSTOM_TARGET(tulip-lib-doc doxygen tulip-lib.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
-ADD_CUSTOM_TARGET(tulip-libogl-doc ALL doxygen tulip-ogl-lib.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+ADD_CUSTOM_TARGET(tulip-libogl-doc doxygen tulip-ogl-lib.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
-ADD_CUSTOM_TARGET(tulip-libqt-doc ALL doxygen tulip-qt-lib.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+ADD_CUSTOM_TARGET(tulip-libqt-doc doxygen tulip-qt-lib.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
-ADD_CUSTOM_TARGET(tulip-plugins-doc ALL doxygen tulip-plugins.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+ADD_CUSTOM_TARGET(tulip-plugins-doc doxygen tulip-plugins.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
-ADD_CUSTOM_TARGET(tulipPlugins-html ALL java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o tulipPlugins.html tulip-plugins.tag  ${PROJECT_SOURCE_DIR}/docs/doxygen/dox-plugins.xsl)
+ADD_CUSTOM_TARGET(tulipPlugins-html java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o tulipPlugins.html tulip-plugins.tag  ${PROJECT_SOURCE_DIR}/docs/doxygen/dox-plugins.xsl)
 
 ADD_DEPENDENCIES(tulipPlugins-html tulip-plugins-doc)
 
-ADD_CUSTOM_TARGET(allPluginsBody-html ALL java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o allPluginsBody.html tulip-plugins.tag ${PROJECT_SOURCE_DIR}/docs/doxygen/dox-html.xsl)
+ADD_CUSTOM_TARGET(allPluginsBody-html java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o allPluginsBody.html tulip-plugins.tag ${PROJECT_SOURCE_DIR}/docs/doxygen/dox-html.xsl)
 
 ADD_DEPENDENCIES(allPluginsBody-html tulip-plugins-doc)
 
-ADD_CUSTOM_TARGET(allPlugins-html ALL sh ${PROJECT_SOURCE_DIR}/docs/doxygen/gen-allPlugins.sh)
+ADD_CUSTOM_TARGET(allPlugins-html sh ${PROJECT_SOURCE_DIR}/docs/doxygen/gen-allPlugins.sh)
 
 ADD_DEPENDENCIES(allPlugins-html allPluginsBody-html)
 
-ADD_CUSTOM_TARGET(dox_toc ALL java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o toc.dcf tulip-plugins.tag ${PROJECT_SOURCE_DIR}/docs/doxygen/dox-toc.xsl)
+ADD_CUSTOM_TARGET(dox_toc java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o toc.dcf tulip-plugins.tag ${PROJECT_SOURCE_DIR}/docs/doxygen/dox-toc.xsl)
 
 ADD_DEPENDENCIES(dox_toc tulipPlugins-html)
 
-ADD_CUSTOM_TARGET(dox_keywords ALL java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o keywords.dcf tulip-plugins.tag ${PROJECT_SOURCE_DIR}/docs/doxygen/dox-keywords.xsl)
+ADD_CUSTOM_TARGET(dox_keywords java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o keywords.dcf tulip-plugins.tag ${PROJECT_SOURCE_DIR}/docs/doxygen/dox-keywords.xsl)
 
 ADD_DEPENDENCIES(dox_keywords tulipPlugins-html)
 
