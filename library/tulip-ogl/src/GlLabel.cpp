@@ -155,6 +155,9 @@ namespace tlp {
   //============================================================
   void GlLabel::draw(float lod, Camera *camera) {
 
+    if(fontSize<=0)
+      return;
+
     glPushAttrib(GL_ALL_ATTRIB_BITS);
 
     if(depthTestEnabled)

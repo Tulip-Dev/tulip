@@ -250,6 +250,8 @@ namespace tlp {
     }
 
     int fontSize=data->getElementFontSize()->getNodeValue(n);
+    if(fontSize<=0)
+      return;
     if(selected)
       fontSize+=2;
 
