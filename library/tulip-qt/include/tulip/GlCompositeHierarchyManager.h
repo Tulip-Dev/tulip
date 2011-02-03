@@ -54,24 +54,24 @@ class GlConvexGraphHull;
 																DoubleProperty* rotation, bool visible = false, std::string namingProperty = "name", std::string subCompositeSuffix = " sub-hulls");
 		~GlCompositeHierarchyManager();
 		
+		void setGraph(tlp::Graph* graph);
+		DataSet getData();
+		void setData(DataSet dataSet);
+
+		void createComposite();
+
+		void setVisible(bool visible);
+		bool isVisible() const;
+
+	protected :
 		virtual void addSubGraph(Graph *, Graph *);
 		virtual void delSubGraph(Graph *, Graph *);
 		virtual void afterSetAttribute(Graph*, const std::string&);
 		virtual void beforeSetAttribute(Graph*, const std::string&);
 		virtual void addNode(Graph* , const tlp::node );
     
-		
 		virtual void update(std::set< Observable* >::iterator begin, std::set< Observable* >::iterator end);
 		virtual void observableDestroyed(Observable* );
-		
-		void setGraph(tlp::Graph* graph);
-		DataSet getData();
-		void setData(DataSet dataSet);
-		
-		void createComposite();
-		
-		void setVisible(bool visible);
-		bool isVisible() const;
 		
 	private:
 		bool _shouldRecreate;

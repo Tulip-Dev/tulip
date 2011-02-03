@@ -29,7 +29,8 @@
 // This Controller use implementation of ControllerViewsManager
 // And observe graph and properties of graph
 class ControllerPluginExample: public tlp::ControllerViewsManager, public tlp::Observer {
- public:
+
+public:
 
   virtual ~ControllerPluginExample();
 
@@ -45,7 +46,9 @@ class ControllerPluginExample: public tlp::ControllerViewsManager, public tlp::O
   // Return the current graph of this controller
   virtual tlp::Graph *getGraph();
 
-  // This function is call by Observable 
+protected :
+
+  // This function is call by Observable
   // In setData, we add this controller to graph observer and properties observer
   // So this function is call when the graph is modified or when a property is modified
   virtual void update( std::set< tlp::Observable * >::iterator begin, std::set< tlp::Observable * >::iterator end);
