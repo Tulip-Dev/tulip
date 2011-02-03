@@ -19,7 +19,6 @@
 #include "tulip/FindSelectionWidget.h"
 
 #include <tulip/Graph.h>
-#include <tulip/AbstractProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>

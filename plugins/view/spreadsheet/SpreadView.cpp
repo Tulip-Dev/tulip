@@ -19,6 +19,7 @@
 #include "SpreadView.h"
 
 #include <iostream>
+#include <sstream>
 
 #include <tulip/Graph.h>
 #include "SpreadConfigurationWidget.h"
