@@ -25,12 +25,12 @@
 
 #include "tulip/Node.h"
 #include "tulip/MutableContainer.h"
-#include "tulip/PluginProgress.h"
 #include "tulip/DoubleProperty.h"
 
 namespace tlp {
 
   class Graph;
+  class PluginProgress;
   enum EDGE_TYPE {DIRECTED = 0, INV_DIRECTED = 1, UNDIRECTED = 2};
   /**
    * returns the average path lengh of a graph, that is the sum

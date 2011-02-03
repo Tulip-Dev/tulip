@@ -31,7 +31,6 @@
 #include "tulip/tulipconf.h"
 #include "tulip/Reflect.h"
 #include "tulip/PluginContext.h"
-#include "tulip/PluginProgress.h"
 #include "tulip/Node.h"
 #include "tulip/Edge.h"
 #include "tulip/Observable.h"
@@ -40,6 +39,7 @@
 namespace tlp {
 
 class BooleanProperty;
+class PluginProgress;
 template<class C>struct Iterator;
 
   enum ElementType {NODE=0, EDGE};

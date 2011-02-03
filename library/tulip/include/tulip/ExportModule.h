@@ -25,15 +25,13 @@
 #include "tulip/WithParameter.h"
 #include "tulip/WithDependency.h"
 #include "tulip/Reflect.h"
-#include "tulip/PluginProgress.h"
 #include "tulip/Plugin.h"
 #include "tulip/TemplateFactory.h"
-
 
 /** \addtogroup plugins */ 
 
 namespace tlp {
-
+class PluginProgress;
 /*@{*/
 /// Interface for exportModule plug-ins
 class ExportModule:public WithParameter, public WithDependency

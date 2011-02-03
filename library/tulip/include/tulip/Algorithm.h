@@ -21,11 +21,8 @@
 
 #include <list>
 #include <string>
-#include "tulip/Graph.h"
-#include "tulip/Reflect.h"
 #include "tulip/WithParameter.h"
 #include "tulip/WithDependency.h"
-#include "tulip/PluginProgress.h"
 #include "tulip/Plugin.h"
 #include "tulip/TemplateFactory.h"
 #include "tulip/MethodFactory.h"
@@ -35,6 +32,10 @@
  */ 
 namespace tlp {
 
+  class PluginProgress;
+  class Graph;
+  class DataSet;
+  
 /*@{*/
 ///Interface for general algorithm plug-ins
 class Algorithm : public WithParameter, public WithDependency

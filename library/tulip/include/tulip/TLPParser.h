@@ -23,10 +23,11 @@
 #include <string>
 #include <list>
 
-#include <tulip/PluginProgress.h>
 
 namespace tlp {
 
+  class PluginProgress;
+  
 struct ParserError {
   ParserError(int err=0,int lin=0,int cha=0):errorNumber(err),lineInFile(lin),charInLine(cha){}
   int errorNumber;
