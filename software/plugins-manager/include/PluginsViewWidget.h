@@ -94,12 +94,14 @@ namespace tlp {
     void setCompatiblesVersion(bool version);
     void setNotinstalledVersion(bool version);
     bool setPluginDisplayInTree(const PluginInfo *pluginInfo,QTreeWidgetItem *twi);
-    void applyChange();
-    void restore();
-
+    
     //void installAllDependencies(std::vector<DistPluginInfo> depNoInstall);
     bool isAVersionItem(QTreeWidgetItem *item);
 
+  public slots:
+    void applyChange();
+    void restore();
+    
   protected slots :
     void pluginInstalledSlot();
     void pluginUninstalledSlot();
