@@ -46,8 +46,6 @@ protected :
 private slots :
 
 	void accept();
-	void predefinedColorScaleRbToggled(bool toggled);
-	void userColorScaleImageRbToggled(bool toggled);
 	void pressButtonBrowse();
 	void nbColorsValueChanged(int value);
 	void colorTableItemDoubleClicked(QTableWidgetItem *item);
@@ -56,10 +54,13 @@ private slots :
 	void saveCurrentColorScale();
 	void deleteSavedColorScale();
 	void reeditSaveColorScale(QListWidgetItem *savedColorScaleItem);
+	void importColorScaleFromImageFile();
+	void invertEditedColorScale();
 
 private :
 
 	void setColorScaleFromImage(const QString &imageFilePath);
+
 	void loadUserSavedColorScales();
 	void displayGradientPreview(const QList<QColor> &colorsVector, bool gradient, QLabel *displayLabel);
 
@@ -67,6 +68,9 @@ private :
 	std::string gradientsImageDirectory;
 
 
+	static std::map<QString, std::vector<Color> > tulipImageColorScales;
+	static void loadTulipImageColorScales();
+	static std::vector<Color> getColorScaleFromImage(const QString &imageFilePath);
 };
 
 }

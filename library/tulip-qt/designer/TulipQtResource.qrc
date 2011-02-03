@@ -1,20 +1,21 @@
 <RCC>
-    <qresource prefix="/" >
-        <file>i_addedge.png</file>
-        <file>i_addnode.png</file>
-        <file>i_bends.png</file>
-        <file>i_del.png</file>
-        <file>i_magic.png</file>
-        <file>i_move.png</file>
-        <file>i_navigation.png</file>
-        <file>i_select.png</file>
-        <file>i_selection.png</file>
-        <file>i_zoom.png</file>
-        <file>i_redo.png</file>
-        <file>i_undo.png</file>
-        <file>up.png</file>
-    	<file>right.png</file>
-    	<file>left.png</file>
-    	<file>down.png</file>
-    </qresource>
+  <qresource prefix="/">
+    <file>arrow_two_head.png</file>
+    <file>i_addedge.png</file>
+    <file>i_addnode.png</file>
+    <file>i_bends.png</file>
+    <file>i_del.png</file>
+    <file>i_magic.png</file>
+    <file>i_move.png</file>
+    <file>i_navigation.png</file>
+    <file>i_select.png</file>
+    <file>i_selection.png</file>
+    <file>i_zoom.png</file>
+    <file>i_redo.png</file>
+    <file>i_undo.png</file>
+    <file>up.png</file>
+    <file>right.png</file>
+    <file>left.png</file>
+    <file>down.png</file>
+  </qresource>
 </RCC>
