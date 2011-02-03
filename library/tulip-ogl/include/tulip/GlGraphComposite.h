@@ -74,40 +74,6 @@ namespace tlp {
     virtual void acceptVisitor(GlSceneVisitor *visitor);
 
     /**
-     * Function use by the GraphObserver when a node is create in the graph
-     */
-    virtual void addNode(Graph *,const node){
-      nodesModified=true;
-      haveToSort=true;
-    }
-    /**
-     * Function use by the GraphObserver when an edge is create in the graph
-     */
-    virtual void addEdge(Graph *,const edge ){
-      haveToSort=true;
-    }
-    /**
-     * Function use by the GraphObserver when a node is delete in the graph
-     */
-    virtual void delNode(Graph *,const node){
-      nodesModified=true;
-      haveToSort=true;
-    }
-    /**
-     * Function use by the GraphObserver when an edge is delete in the graph
-     */
-    virtual void delEdge(Graph *,const edge ){
-      haveToSort=true;
-    }
-    virtual void afterSetNodeValue(PropertyInterface*, const node){
-      nodesModified=true;
-    }
-    /**
-     * Function use by the GraphObserver when the graph is delete
-     */
-    virtual void destroy(Graph *);
-
-    /**
      * Return set of metaNodes
      */
     std::set<node> &getMetaNodes() {
@@ -172,6 +138,40 @@ namespace tlp {
     int getEdgesLabelStencil() {return parameters.getEdgesLabelStencil();}
 
   protected:
+
+    /**
+     * Function use by the GraphObserver when a node is create in the graph
+     */
+    virtual void addNode(Graph *,const node){
+      nodesModified=true;
+      haveToSort=true;
+    }
+    /**
+     * Function use by the GraphObserver when an edge is create in the graph
+     */
+    virtual void addEdge(Graph *,const edge ){
+      haveToSort=true;
+    }
+    /**
+     * Function use by the GraphObserver when a node is delete in the graph
+     */
+    virtual void delNode(Graph *,const node){
+      nodesModified=true;
+      haveToSort=true;
+    }
+    /**
+     * Function use by the GraphObserver when an edge is delete in the graph
+     */
+    virtual void delEdge(Graph *,const edge ){
+      haveToSort=true;
+    }
+    virtual void afterSetNodeValue(PropertyInterface*, const node){
+      nodesModified=true;
+    }
+    /**
+     * Function use by the GraphObserver when the graph is delete
+     */
+    virtual void destroy(Graph *);
 
     void buildSortedList();
     void acceptVisitorForNodes(Graph *graph,GlSceneVisitor *visitor);

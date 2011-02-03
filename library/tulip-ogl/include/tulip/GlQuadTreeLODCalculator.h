@@ -62,10 +62,16 @@ namespace tlp {
                             const Vector<int,4>& globalViewport,
                             const Vector<int,4>& currentViewport);
 
-    void removeObservers();
-    void addObservers();
-
     void setInputData(GlGraphInputData *newInputData);
+
+    virtual GlLODCalculator *clone() {
+      GlQuadTreeLODCalculator *newCalculator=new GlQuadTreeLODCalculator();
+      newCalculator->setScene(*glScene);
+      newCalculator->setInputData(inputData);
+      return newCalculator;
+    }
+
+  protected :
 
     void update(PropertyInterface *property);
     void observableDestroyed(Observable *){}
@@ -82,22 +88,16 @@ namespace tlp {
     void destroy(Graph *);
     void destroy(Camera *);
 
-    void initCamerasObservers();
-    void clearCamerasObservers();
-
     void addLayer(GlScene*, const std::string&, GlLayer*){setHaveToCompute();}
     void delLayer(GlScene*, const std::string&, GlLayer*){setHaveToCompute();}
     void modifyLayer(GlScene*, const std::string&, GlLayer*){setHaveToCompute();}
     void modifyEntity(GlScene *,GlSimpleEntity *){setHaveToCompute();}
 
-    virtual GlLODCalculator *clone() {
-      GlQuadTreeLODCalculator *newCalculator=new GlQuadTreeLODCalculator();
-      newCalculator->setScene(*glScene);
-      newCalculator->setInputData(inputData);
-      return newCalculator;
-    }
+    void removeObservers();
+    void addObservers();
 
-  protected :
+    void initCamerasObservers();
+    void clearCamerasObservers();
 
     void setHaveToCompute();
 

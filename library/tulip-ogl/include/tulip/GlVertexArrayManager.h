@@ -69,15 +69,17 @@ public:
 	void beginRendering();
 	void endRendering();
 
-	void pauseRendering(bool pause);
-	void activate(bool act);
-
 	void addEdge(GlEdge *edge);
 	void addNode(GlNode *node);
+
+	void pauseRendering(bool pause);
+	void activate(bool act);
 
 	void activateLineEdgeDisplay(GlEdge *edge, bool selected);
 	void activatePointEdgeDisplay(GlEdge *edge, bool selected);
 	void activatePointNodeDisplay(GlNode *node, bool onePixel, bool selected);
+
+protected:
 
 	void propertyValueChanged(PropertyInterface *property);
 
@@ -92,8 +94,6 @@ public:
 
 	void destroy(Graph *);
 	void destroy(PropertyInterface*);
-
-protected:
 
 	void clearLayoutData();
 	void clearColorData();

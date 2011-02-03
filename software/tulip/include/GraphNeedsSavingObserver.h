@@ -11,6 +11,7 @@
 
 class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observer {
    public : 
+
       GraphNeedsSavingObserver(QTabWidget* tabWidget, int graphIndex, tlp::Graph* graph, bool = true) :_needsSaving(false), _tabIndex(graphIndex), _tabWidget(tabWidget), _graph(graph) {
         addObserver();
       }
@@ -18,6 +19,8 @@ class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::Property
         
       }
       
+    protected :
+
       virtual void addEdge(tlp::Graph* , const tlp::edge ) { doNeedSaving(); }
       virtual void addNode(tlp::Graph* , const tlp::node ) { doNeedSaving(); }
       virtual void afterSetAllEdgeValue(tlp::PropertyInterface* ) { doNeedSaving(); }
@@ -77,6 +80,8 @@ class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::Property
       }
       virtual void update(std::set< tlp::Observable* >::iterator, std::set< tlp::Observable* >::iterator) { doNeedSaving(); }
       
+    public :
+
       void saved() {
         _needsSaving = false;
         addObserver();
