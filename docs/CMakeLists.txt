@@ -6,7 +6,7 @@ add_subdirectory(doxygen)
 add_subdirectory(userHandbook)
 add_subdirectory(developerHandbook)
 
-ADD_CUSTOM_TARGET(tulip_qhcp ALL ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/tulip.qhcp ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhcp)
+ADD_CUSTOM_TARGET(tulip_qhcp ALL ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/tulip.qhcp ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhcp)
 
 ADD_CUSTOM_TARGET(tulip_qhp ALL sh ${PROJECT_SOURCE_DIR}/docs/gen-tulipqhp.sh ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhp)
 
