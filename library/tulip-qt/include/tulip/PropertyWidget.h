@@ -28,7 +28,7 @@
 #include <QtGui/qwidget.h>
 #include <QtGui/QFileDialog>
 
-#include <tulip/Graph.h>
+#include <tulip/tuliphash.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/TulipTableWidget.h>
@@ -39,7 +39,8 @@ namespace tlp {
 
 typedef TLP_HASH_MAP<int, std::string> GlyphTableString;
 class PropertyInterface;
-
+class BooleanProperty;
+class Graph;
 }
 
 /** \addtogroup Tulip_Widgets */ 

@@ -17,8 +17,8 @@
  *
  */
 #include <tulip/Iterator.h>
-#include <tulip/Graph.h>
 #include <tulip/tulipconf.h>
+#include <tulip/Edge.h>
 #include <list>
 #include <vector>
 
@@ -27,6 +27,9 @@
 #define TULIP_NODEMAPITERATOR_H
 
 namespace tlp {
+
+struct node;
+class Graph;
 
 /** \addtogroup iterators */
 /*@{*/

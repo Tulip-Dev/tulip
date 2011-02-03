@@ -35,7 +35,6 @@
 
 #include <string>
 #include <tulip/Reflect.h>
-#include <tulip/Graph.h>
 #include <tulip/GlScene.h>
 #include <tulip/Observable.h>
 #include <tulip/GlSceneObserver.h>
@@ -46,6 +45,7 @@
 
 namespace tlp {
   class Controller;
+  class Graph;
 }
 
 //class QWorkspace;

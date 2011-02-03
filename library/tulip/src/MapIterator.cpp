@@ -21,7 +21,7 @@
 #endif
 
 #include "tulip/MapIterator.h"
-
+#include "tulip/Graph.h"
 using namespace std;
 using namespace tlp;
 

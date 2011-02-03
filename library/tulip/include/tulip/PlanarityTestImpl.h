@@ -27,14 +27,14 @@
 #endif
 
 #include <list>
+#include <vector>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Edge.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/BmdList.h>
-#include <tulip/Graph.h>
 
 namespace tlp {
-
+  class Graph;
   enum { NOT_VISITED, VISITED, TERMINAL, VISITED_IN_RBC };
   static const node NULL_NODE = node(); 
   static const edge NULL_EDGE = edge();

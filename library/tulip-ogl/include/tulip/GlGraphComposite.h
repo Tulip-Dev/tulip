@@ -23,7 +23,6 @@
 
 #include <vector>
 
-#include <tulip/Graph.h>
 #include <tulip/ObservableGraph.h>
 
 #include "tulip/GlGraphRenderingParameters.h"
@@ -34,12 +33,13 @@
 
 namespace tlp {
 
+  class Graph;
+
   /** \brief Class use to represent a graph
    *
    * GlComposite use to represent a graph with nodes, metanodes and edges
    */
   class TLP_GL_SCOPE GlGraphComposite : public GlComposite, public GraphObserver, public PropertyObserver {
-
 
   public:
 

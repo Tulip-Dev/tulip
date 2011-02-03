@@ -24,8 +24,7 @@
 #include "tulip/GlEdge.h"
 #include "tulip/GlNode.h"
 #include "tulip/GlGraphInputData.h"
-
-#include <iostream>
+#include "tulip/Graph.h"
 
 using namespace std;
 

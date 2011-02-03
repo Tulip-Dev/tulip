@@ -36,7 +36,7 @@
 
 #include <tulip/Reflect.h>
 #include <tulip/Observable.h>
-#include <tulip/Graph.h>
+#include <tulip/ObservableGraph.h>
 
 #include "tulip/ControllerViewsManager.h"
 

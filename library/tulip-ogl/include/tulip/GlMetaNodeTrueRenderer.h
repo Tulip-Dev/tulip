@@ -20,7 +20,6 @@
 #define Tulip_GLMETANODETRUERENDERER_H
 
 #include <tulip/tulipconf.h>
-#include <tulip/Graph.h>
 
 #include "tulip/GlMetaNodeRenderer.h"
 

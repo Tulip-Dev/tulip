@@ -30,7 +30,6 @@
 #include <QtGui/qheaderview.h>
 #endif
 
-#include <tulip/Graph.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 
@@ -41,6 +40,9 @@ class QPaintEvent;
 
 namespace tlp {
 
+struct edge;
+struct node;
+class Graph;
 class PropertyInterface;
 
 #ifndef DOXYGEN_NOTFOR_USER

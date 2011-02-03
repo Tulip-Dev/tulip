@@ -23,9 +23,9 @@
 #include <tulip/Iterator.h>
 #include <tulip/StableIterator.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/Graph.h>
 
 namespace tlp {
+class Graph;
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 struct LessThan {

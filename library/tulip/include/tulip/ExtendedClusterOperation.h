@@ -27,10 +27,10 @@
 #include <vector>
 #include <string>
 #include <tulip/Node.h>
-#include <tulip/Graph.h>
 #include <tulip/GraphProperty.h>
 
 namespace tlp {
+  class Graph;
   /**
    * Function to open a metanode and replace all edges between that
    * meta node and other nodes in the graph.
