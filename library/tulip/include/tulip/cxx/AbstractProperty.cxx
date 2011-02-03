@@ -18,7 +18,6 @@
  */
 #include <iostream>
 #include <stdlib.h>
-#include "tulip/Iterator.h"
 
 // This is not the right place to do the initialization below
 // because this file is include in many cpp files

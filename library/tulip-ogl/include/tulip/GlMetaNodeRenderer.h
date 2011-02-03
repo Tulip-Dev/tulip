@@ -22,6 +22,13 @@
 #include <tulip/tulipconf.h>
 #include <tulip/Graph.h>
 
+#include <tulip/LayoutProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/ColorProperty.h>
 namespace tlp {
 
   class GlGraphInputData;

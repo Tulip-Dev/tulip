@@ -20,12 +20,15 @@
 #define TLPSELECTIONPROXYTEST
 
 #include <string>
-#include <tulip/BooleanProperty.h>
 #include <tulip/Graph.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
 // Warning SelectionProxy has been renamed in BooleanAlgorithm
+
+namespace tlp {
+  class BooleanProperty;
+}
 
 class SelectionProxyTest : public CppUnit::TestFixture {
 private:

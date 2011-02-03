@@ -16,10 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/ColorProperty.h>
-#include <tulip/StringProperty.h>
-#include <tulip/DoubleProperty.h>
-
 #include "tulip/Glyph.h"
 #include "tulip/Graph.h"
 #include "tulip/GlBox.h"
