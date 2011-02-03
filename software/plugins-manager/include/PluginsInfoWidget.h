@@ -20,8 +20,6 @@
 #ifndef _Tulip_PLUGINSINFOWIDGET_H_
 #define _Tulip_PLUGINSINFOWIDGET_H_
 
-
-#include <iostream>
 #include <QtGui/QTextBrowser>
 #include <QtXml/QDomDocument>
 #include <QtCore/QFile>
@@ -40,11 +38,9 @@ namespace tlp {
   class MultiServerManager;
 
   class TLP_PLUGINSMANAGER_SCOPE PluginsInfoWidget : public QWidget, public Ui::PluginsInfoWidgetData {
-
     Q_OBJECT
 
   protected:
-
     void initPIW();
     void addPluginInfoXML(std::string xml);
     void addPluginDocXML(std::string xml);
@@ -54,9 +50,7 @@ namespace tlp {
     std::string pluginDocXML;
     MultiServerManager *multiServerManager;
 
-
   public :
-
     friend class GetPluginInfoTreatment;
     friend class GetPluginDocTreatment;
 
@@ -65,13 +59,9 @@ namespace tlp {
 
     static bool haveInfo(const PluginInfo *pluginInfo);
 
-
   private:
-
     std::string formatXMLDoc(QDomElement elt);
-
   };
-
 
   class TLP_PLUGINSMANAGER_SCOPE GetPluginInfoTreatment : public ResponseTreatment {
 
@@ -79,7 +69,6 @@ namespace tlp {
     PluginsInfoWidget *piw;
 
   public :
-
     GetPluginInfoTreatment(PluginsInfoWidget *p):piw(p){
     }
 
@@ -87,7 +76,6 @@ namespace tlp {
       piw->addPluginInfoXML(data);
       piw->textBrowser->setText((htmlBegin+piw->pluginInfoXML+htmlEnd).c_str());
     }
-
   };
 
   class TLP_PLUGINSMANAGER_SCOPE GetPluginDocTreatment : public ResponseTreatment {
@@ -106,7 +94,6 @@ namespace tlp {
     }
 
   };
-
 }
 
 #endif //_PLUGINSINFOWIDGET_H_
