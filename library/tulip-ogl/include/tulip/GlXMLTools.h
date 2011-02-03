@@ -26,7 +26,6 @@
 #include <sstream>
 #include <vector>
 
-#include <tulip/Array.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 
