@@ -267,7 +267,7 @@ namespace tlp {
           }
         }else{
           if(!isCompatible((*it)->text(0).toStdString())){
-            (*it)->setFlags((*it)->flags()&((int)!Qt::ItemIsUserCheckable));
+//             (*it)->setFlags((*it)->flags()&((int)!Qt::ItemIsUserCheckable));
           }
         }
 
@@ -315,7 +315,6 @@ namespace tlp {
     }
   };
 
-
   bool PluginsViewWidget::isCompatible(const string & version){
     QStringList list = QString(version.c_str()).split(' ');
     QString tulipCompatibilityNumber(TULIP_RELEASE);
@@ -354,7 +353,6 @@ namespace tlp {
 
     return false;
   }
-
 
   bool PluginsViewWidget::setPluginDisplayInTree(const PluginInfo *pluginInfo,QTreeWidgetItem *twi){
 
@@ -498,8 +496,6 @@ namespace tlp {
     }
   }
 
-
-
   void PluginsViewWidget::updateCheckBox(QTreeWidgetItem *it,string name,string type,string version,Qt::CheckState state, int namePosition, int typePosition){
 
     if( it->parent()!=NULL ){
@@ -531,7 +527,6 @@ namespace tlp {
       updateCheckBox(it->child(i),name,type,version,state,namePosition,typePosition);
     }
   }
-
 
   void PluginsViewWidget::updateToInstallList(QTreeWidgetItem *it){
 
@@ -638,16 +633,12 @@ namespace tlp {
     }
   }
 
-
-
-
   QTreeWidgetItem *PluginsViewWidget::getNthParent(QTreeWidgetItem *twi,int n){
     for(int i=0;i<n;i++){
       twi=twi->parent();
     }
     return twi;
   }
-
 
   void PluginsViewWidget::serverNameReceived(MultiServerManager*, string, string){
     changeList();

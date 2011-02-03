@@ -38,12 +38,15 @@ namespace tlp {
   void PluginsInfoWidget::setPluginInfo(const PluginInfo *plugin, string addrWS){
     //poll the webservice for plugin info
     if(plugin->local){
+      std::cout << plugin->name << std::endl;
+      std::cout << plugin->displayType << std::endl;
       LocalPluginInfo *localPlugin=(LocalPluginInfo*)plugin;
-      //TODOproblem with local plginName, check pluginInfo
+      //TODOproblem with local pluginName, check pluginInfo
       QString pluginFileNameQStr=localPlugin->fileName.c_str();
 
       string pluginInfoPath(string(tlp::TulipLibDir+"tlp/")+pluginFileNameQStr.split("/").last().toStdString()+".doc");
       QFile pluginInfoFile(pluginInfoPath.c_str());
+      
 
       if (!pluginInfoFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
         CompletePluginsList pluginsList;
@@ -83,6 +86,7 @@ namespace tlp {
       GetPluginDocRequest* docReq = new GetPluginDocRequest(distPlugin->fileName,versionStr,docTreat);
       sm->send(docReq);
     }
+    std::cout << pluginInfoXML << std::endl;
   }
 
   bool PluginsInfoWidget::haveInfo(const PluginInfo *plugin) {
