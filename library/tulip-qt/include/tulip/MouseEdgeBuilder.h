@@ -19,13 +19,13 @@
 #ifndef MOUSEADDEDGE_H
 #define MOUSEADDEDGE_H
 #include <vector>
-#include <tulip/Graph.h>
 #include <tulip/Coord.h>
 #include <tulip/InteractorComponent.h>
 #include <tulip/ObservableProperty.h>
 #include <tulip/LayoutProperty.h>
 
 namespace tlp {
+class Graph;
 
 /** \addtogroup Mouse_interactor */
 /*@{*/

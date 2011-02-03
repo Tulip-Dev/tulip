@@ -21,9 +21,10 @@
 //#define Bfs_H
 
 #include <tulip/MutableContainer.h>
-#include <tulip/Graph.h>
 
 namespace tlp {
+class Graph;
+class BooleanProperty;
 class TLP_SCOPE Bfs {
  public :
   

@@ -20,9 +20,9 @@
 #define CLUSTERTREEPLUGIN_H
 
 #include <customwidget.h>
-#include "tulip/Graph.h"
 
 namespace tlp {
+class Graph;
 
 class SGHierarchyWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface
 {

@@ -20,7 +20,6 @@
 #ifndef _IMPORTMODULE_H
 #define _IMPORTMODULE_H
 
-#include "tulip/Graph.h"
 #include "tulip/WithParameter.h"
 #include "tulip/WithDependency.h"
 #include "tulip/Reflect.h"
@@ -31,6 +30,7 @@
 /** \addtogroup plugins */ 
 namespace tlp {
 class PluginProgress;
+class Graph;
 /*@{*/
 /// Interface for importModule plug-ins
 class ImportModule :public WithParameter, public WithDependency

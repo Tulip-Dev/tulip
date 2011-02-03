@@ -24,15 +24,12 @@
 #endif
 
 #include <tulip/tulipconf.h>
+#include <tulip/View.h>
 
 #include <QtGui/QWidget>
 
-#include <tulip/Graph.h>
-#include <tulip/View.h>
-
-
 namespace tlp {
-  
+  class Graph;
   /** \brief Views manager tools for Controller 
    *
    * This class contain tools to use views in Controllers

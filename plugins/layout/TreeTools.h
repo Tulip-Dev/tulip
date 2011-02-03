@@ -20,9 +20,12 @@
 #define TREETOOLS_H
 
 #include <tulip/Node.h>
-#include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
+
+namespace tlp {
+  class Graph;
+}
 
 //====================================================================
 inline bool isLeaf (const tlp::Graph* tree, tlp::node n) {

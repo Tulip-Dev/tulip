@@ -17,6 +17,7 @@
  *
  */
 #include "tulip/GraphUpdatesRecorder.h"
+#include "tulip/Graph.h"
 #include "tulip/ForEach.h"
 #include "tulip/GraphImpl.h"
 #include "tulip/GraphProperty.h"

@@ -24,7 +24,6 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <tulip/Graph.h>
 #include <tulip/Observable.h>
 
 #include "PropertyDialogData.h"
@@ -33,6 +32,7 @@ class QStringList;
 class QScrollBar;
 
 namespace tlp {
+class Graph;
 class GlMainWidget;
 class PropertyInterface;
 

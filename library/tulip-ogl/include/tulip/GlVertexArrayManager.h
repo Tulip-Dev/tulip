@@ -31,13 +31,15 @@
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 #include <tulip/Size.h>
-#include <tulip/Graph.h>
 #include <tulip/tuliphash.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/ObservableProperty.h>
 
+#include <vector>
+
 namespace tlp {
 
+class Graph;
 class GlEdge;
 class GlNode;
 class GlGraphInputData;

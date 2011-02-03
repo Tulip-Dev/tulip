@@ -21,7 +21,6 @@
 #define _EXPORTMODULE_H
 
 #include <iostream>
-#include "tulip/Graph.h"
 #include "tulip/WithParameter.h"
 #include "tulip/WithDependency.h"
 #include "tulip/Reflect.h"
@@ -31,6 +30,7 @@
 /** \addtogroup plugins */ 
 
 namespace tlp {
+class Graph;
 class PluginProgress;
 /*@{*/
 /// Interface for exportModule plug-ins

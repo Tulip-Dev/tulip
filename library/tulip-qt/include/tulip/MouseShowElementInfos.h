@@ -22,7 +22,6 @@
 #include <QtGui/QMouseEvent>
 
 #include <tulip/InteractorComponent.h>
-#include <tulip/Graph.h>
 
 #include "tulip/GlMainWidget.h"
 #include "tulip/NodeLinkDiagramComponent.h"
@@ -32,6 +31,7 @@
 /*@{*/
 
 namespace tlp {
+class Graph;
 
 /**
  * We define a specific interactor to show element graph infos in eltProperties

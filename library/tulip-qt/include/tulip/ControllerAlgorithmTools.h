@@ -29,11 +29,10 @@
 
 #include <tulip/Reflect.h>
 #include <tulip/TemplateFactory.h>
-#include <tulip/Graph.h>
-
 #include "tulip/View.h"
 
 namespace tlp {
+  class Graph;
   
   /** \brief Algorithm tools for Controller 
    *

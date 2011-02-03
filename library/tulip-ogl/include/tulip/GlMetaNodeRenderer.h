@@ -20,7 +20,6 @@
 #define Tulip_GLMETANODERENDERER_H
 
 #include <tulip/tulipconf.h>
-#include <tulip/Graph.h>
 
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>
