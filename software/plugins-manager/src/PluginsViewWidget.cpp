@@ -450,18 +450,12 @@ namespace tlp {
   }
 
   bool PluginsViewWidget::isAVersionItem(QTreeWidgetItem *item){
-
     int versionPosition = (_msm->getListPosition())[VERSION_POSITION_IN_V];
     if(versionPosition==3){
-      if(item->childCount()==0){
-	return true;
-      }else return false;
+      return item->childCount()==0;
     }
     else if(versionPosition==2){
-      if( item->childCount()>0 && item->child(0)->childCount()==0 ){
-	return true;
-      }
-      else return false;
+      return item->childCount() > 0 && item->child(0)->childCount() == 0;
     }
     return false;
   }
