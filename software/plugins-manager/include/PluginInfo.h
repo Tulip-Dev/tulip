@@ -228,7 +228,7 @@ namespace tlp {
 
   class TLP_PLUGINSMANAGER_SCOPE PluginCmp {
   public :
-    bool operator()(const PluginInfo& p1,const PluginInfo &p2) {
+    bool operator()(const PluginInfo& p1,const PluginInfo &p2) const {
       if(p1.name!=p2.name)
 	return p1.name.compare(p2.name) < 0;
       if(p1.type!=p2.type)
