@@ -31,7 +31,7 @@
 #include "tulip/ObservableGraph.h"
 #include "tulip/ObservableProperty.h"
 #include "tulip/Graph.h"
-#include "tulip/AbstractProperty.h"
+#include "MutableContainer.h"
 #include "tulip/IdManager.h"
 
 namespace std {

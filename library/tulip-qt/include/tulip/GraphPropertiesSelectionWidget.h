@@ -20,12 +20,11 @@
 #ifndef GRAPHPROPERTYSELECTIONWIDGET_H_
 #define GRAPHPROPERTYSELECTIONWIDGET_H_
 
-#include <tulip/AbstractProperty.h>
-
 #include "StringsListSelectionWidget.h"
 
 namespace tlp {
 
+  class Graph;
 /** \brief A widget which allows the user to select a subset of graph properties
  *
  *  This widget allows the user to select a subset of graph properties. The properties

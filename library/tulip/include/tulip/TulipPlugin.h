@@ -19,7 +19,6 @@
 #ifndef __TULIPPLUGININCLUDE_H
 #define __TULIPPLUGININCLUDE_H
 
-#include "tulip/AbstractProperty.h"
 #include "tulip/DoubleProperty.h"
 #include "tulip/LayoutProperty.h"
 #include "tulip/BooleanProperty.h"
