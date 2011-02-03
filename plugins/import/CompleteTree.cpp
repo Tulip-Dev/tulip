@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <list>
 #include <tulip/TulipPlugin.h>
 
 using namespace std;
@@ -64,14 +65,7 @@ public:
   }
   ~CompleteTree(){
   }
-  void buildNode(node n,unsigned int degree,int depth) {
-    if (depth<1) return;
-    for (unsigned int i=0;i<degree;++i) {
-      node n1=graph->addNode();
-      graph->addEdge(n,n1);
-      buildNode(n1,degree,depth - 1);
-    }
-  }
+
   bool import(const string &) {
     unsigned int degree  = 2;
     unsigned int depth   = 5;
@@ -79,8 +73,26 @@ public:
       dataSet->get("depth", depth);
       dataSet->get("degree", degree);
     }
-    node n=graph->addNode();
-    buildNode(n,degree,depth);
+    // reserve enough memory for nodes/edges to add
+    unsigned int total = 0, previous = 1;
+    for(unsigned int i = 0; i < depth; ++i) {
+      previous *= degree;
+      total += previous;
+    }
+    graph->reserveEdges(total);
+    graph->reserveNodes(total + 1);
+    node n = graph->addNode();
+    list<node> nodes;
+    nodes.push_front(n);
+    while(total) {
+      n = nodes.front();
+      nodes.pop_front();
+      for (unsigned int i = 0; i < degree; ++i, --total) {
+	node n1 = graph->addNode();
+	graph->addEdge(n, n1);
+	nodes.push_back(n1);
+      }
+    }
     return true;
   }
 };
