@@ -36,10 +36,10 @@ namespace tlp {
   }
 
   void PluginsInfoWidget::setPluginInfo(const PluginInfo *plugin, string addrWS){
-    //interrogation du ws pour recup�rer infos plugin
+    //poll the webservice for plugin info
     if(plugin->local){
       LocalPluginInfo *localPlugin=(LocalPluginInfo*)plugin;
-      //probleme pluginName vide en local verif pluginInfo
+      //TODOproblem with local plginName, check pluginInfo
       QString pluginFileNameQStr=localPlugin->fileName.c_str();
 
       string pluginInfoPath(string(tlp::TulipLibDir+"tlp/")+pluginFileNameQStr.split("/").last().toStdString()+".doc");
