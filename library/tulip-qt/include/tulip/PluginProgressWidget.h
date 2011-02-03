@@ -12,7 +12,7 @@ namespace Ui {
 }
 namespace tlp{
     /**
-      * @brief Display the progression of a process and allow user to stop or cancel it.
+      * @brief Displays the progression of a process and allow user to stop or cancel it.
       *
       * Use the stop or cancel buttons to control the process.
       * If user give a View and if the preview check box is checked each time the progress_handler function is called the init function of the view is called.
@@ -30,7 +30,7 @@ public:
       * @param updateInterval The minimum time interval (in msec) between two update the progress bar. Avoid to perform too many call to progressBar redraw function that can slow down the process.
       * @parma parent The parent widget.
       **/
-    PluginProgressWidget(View *view=NULL,int updateInterval=200,QWidget *parent = 0);
+    PluginProgressWidget(View *view,int updateInterval=200,QWidget *parent = 0);
 
     ~PluginProgressWidget();
     /**
