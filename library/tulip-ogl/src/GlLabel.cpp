@@ -205,10 +205,10 @@ namespace tlp {
 
       switch(alignment) {
       case ON_CENTER:break;
-      case ON_LEFT:baseCoord[0]-=sizeForOutAlign[0];break;
-      case ON_RIGHT:baseCoord[0]+=sizeForOutAlign[0];break;
-      case ON_TOP:baseCoord[1]+=sizeForOutAlign[1];break;
-      case ON_BOTTOM:baseCoord[1]-=sizeForOutAlign[1];break;
+      case ON_LEFT:baseCoord[0]-=sizeForOutAlign[0]/2.;break;
+      case ON_RIGHT:baseCoord[0]+=sizeForOutAlign[0]/2.;break;
+      case ON_TOP:baseCoord[1]+=sizeForOutAlign[1]/2.;break;
+      case ON_BOTTOM:baseCoord[1]-=sizeForOutAlign[1]/2.;break;
       default:break;
       }
 
