@@ -102,6 +102,7 @@ void GlMainWidgetItem::glMainWidgetDraw(GlMainWidget *,bool){
 }
 
 void GlMainWidgetItem::glMainWidgetRedraw(GlMainWidget *){
+  redrawNeeded=true;
 	if (scene())
 		scene()->update();
 }

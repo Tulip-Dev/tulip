@@ -24,8 +24,8 @@
 
 namespace tlp {
 
-QtGlSceneZoomAndPanAnimator::QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const bool optimalPath, const double velocity, const double p) :
-	GlSceneZoomAndPan(glWidget->getScene(), boundingBox, 0, optimalPath, p), glWidget(glWidget), animationDurationMsec(1000) {
+QtGlSceneZoomAndPanAnimator::QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const std::string &layerName, const bool optimalPath, const double velocity, const double p) :
+  GlSceneZoomAndPan(glWidget->getScene(), boundingBox, layerName, 0, optimalPath, p), glWidget(glWidget), animationDurationMsec(1000) {
 	if (doZoomAndPan) {
 		animationDurationMsec *= S/velocity;
 	}

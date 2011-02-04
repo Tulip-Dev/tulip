@@ -3,12 +3,14 @@
 
 #include "tulip/AbstractView.h"
 #include <QtCore/QVector>
-#include <QtGui/QGraphicsView>
+class QGraphicsView;
+class QGraphicsItem;
 
 namespace tlp {
 
-class GlMainWidgetItem;
+class GlMainWidgetGraphicsView;
 class GlMainWidget;
+class GlLayer;
 
 class TLP_QT_SCOPE SmallMultiplesView: public AbstractView {
   Q_OBJECT
@@ -30,7 +32,6 @@ public:
 
   GlMainWidget *overview() const;
   void centerOverview();
-  bool isOverview() const;
 
   int nodeItemId(node);
 
@@ -38,6 +39,15 @@ public:
   bool isAutoDisableInteractors() const { return _autoDisableInteractors; }
   int maxLabelSize() const { return _maxLabelSize; }
   double spacing() const { return _spacing; }
+
+  virtual void setActiveInteractor(Interactor *interactor);
+
+  void setOverviewVisible(bool);
+  GlLayer *overviewLayer() const;
+  virtual bool isOverviewVisible() const;
+
+  virtual void itemSelected(int) {}
+  virtual void overviewSelected() {}
 
 signals:
   void changeData(int fromId, int toId, SmallMultiplesView::Roles dataRoles = SmallMultiplesView::AllRoles);
@@ -49,14 +59,8 @@ public slots:
   void setMaxLabelSize(int s) { _maxLabelSize = s; }
   void setSpacing(double s) { _spacing = s; }
 
-  void switchToOverview(bool destroyOldWidget=false);
-  void switchToWidget(QWidget *);
   void toggleInteractors(bool);
   void selectItem(int);
-
-protected:
-  virtual void itemSelected(int) {}
-  virtual void overviewSelected() {}
 
 protected slots:
   void dataChanged(int from, int to, SmallMultiplesView::Roles dataRoles = SmallMultiplesView::AllRoles);
@@ -67,7 +71,7 @@ protected slots:
   void itemsReversed(int,int);
 
 private:
-  GlMainWidget *_overview;
+  GlMainWidget *_glMainWidget;
   QVector<node> _items;
   bool _zoomAnimationActivated;
   bool _autoDisableInteractors;

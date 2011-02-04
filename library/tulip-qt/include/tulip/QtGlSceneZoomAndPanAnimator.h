@@ -48,10 +48,11 @@ public :
 	 * * \param boundingBox the bounding box in scene coordinates on which the Tulip OpenGL scene has to be zoomed and panned.
 	 * 					    At the end of the animation, the viewport will be zoomed and centered on the content of that bounding box.
 	 * \param optimalPath if true zooming and panning will be combined at each step of the animation, if false the scene will be zoomed out/in, panned then zoomed in/out
+   * \param layerName name of the layer zoom animation should be done on
 	 * \param velocity animation speed parameter, adjust it according to your needs
 	 * \param p zoom/pan trade-off parameter, adjust it according to your needs
 	 */
-	QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const bool optimalPath = true, const double velocity = 1.1, const double p = sqrt(1.6));
+  QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const std::string &layerName = "Main", const bool optimalPath = true, const double velocity = 1.1, const double p = sqrt(1.6));
 
 	/**
 	 * Method to call to start the Zoom and Pan animation

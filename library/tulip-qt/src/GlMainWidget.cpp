@@ -298,8 +298,8 @@ void GlMainWidget::createRenderingStore(int width, int height){
 }
 //==================================================
 void GlMainWidget::redraw() {
-	if (isVisible() && !inRendering) {
-
+//	if (isVisible() && !inRendering) {
+  if (!inRendering) {
 		int width = contentsRect().width();
 		int height = contentsRect().height();
 

@@ -320,7 +320,10 @@ GlTexture GlTextureManager::getTextureInfo(const string& filename) {
   else
     return GlTexture();
 }
-
+//====================================================================
+bool GlTextureManager::existsTexture(const string& filename) {
+  return (texturesMap[currentContext].find(filename) != texturesMap[currentContext].end());
+}
 //====================================================================
 bool GlTextureManager::loadTexture(const string& filename)
 {
