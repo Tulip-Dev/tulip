@@ -36,7 +36,7 @@ namespace tlp {
 //            VIEW FUNCTIONS
 //===========================================
 SmallMultiplesView::SmallMultiplesView()
-  :AbstractView(), _glMainWidget(new GlMainWidget(0)), _zoomAnimationActivated(true), _autoDisableInteractors(true), _maxLabelSize(-1), _spacing(1.7) {
+  :AbstractView(), _glMainWidget(new GlMainWidget(0)), _zoomAnimationActivated(true), _maxLabelSize(-1), _spacing(1.7) {
   Observable::holdObservers();
   _glMainWidget->setData(newGraph(), DataSet());
   GlScene *scene = _glMainWidget->getScene();
@@ -67,8 +67,7 @@ SmallMultiplesView::~SmallMultiplesView() {
 QWidget *SmallMultiplesView::construct(QWidget *parent) {
   QWidget *centralWidget = AbstractView::construct(parent);
   setCentralWidget(_glMainWidget);
-  if (_autoDisableInteractors)
-    toggleInteractors(false);
+  toggleInteractors(false);
   return centralWidget;
 }
 
