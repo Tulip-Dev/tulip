@@ -411,6 +411,13 @@ namespace tlp {
     StableIterator<edge> itE(graph->getEdges());
     int step = 0, maxSteps = graph->numberOfNodes();
 
+    //@todo find a faster way to have that information, when there is a lot of properties it cost a lot.
+    string pName;
+    forEach (pName, graph->getProperties()) {
+        if (graph->getProperty(pName) == property)
+            break;
+    }
+
     if (maxSteps < 100)
       maxSteps = 100;
     if (pluginProgress)
@@ -430,7 +437,7 @@ namespace tlp {
 	  if (partitions.find(tmp) == partitions.end()) {
 	    sg = graph->addSubGraph();
 	    stringstream sstr;
-	    sstr << "value = " << tmp;
+            sstr << pName << ": " << tmp;
 	    sg->setAttribute("name", sstr.str());
 	    partitions[tmp]=sg;
 	    subGraphs.push_back(sg);
@@ -471,8 +478,8 @@ namespace tlp {
 	  if (partitions.find(tmp) == partitions.end()) {
 	    sg = graph->addSubGraph();
 	    stringstream sstr;
-	    sstr << "value = " << tmp;
-	    sg->setAttribute("name", sstr.str());
+            sstr << pName << ": " << tmp;
+            sg->setAttribute("name", sstr.str());
 	    partitions[tmp]=sg;
 	    subGraphs.push_back(sg);
 	  } else
@@ -497,8 +504,10 @@ namespace tlp {
 	  string tmp=property->getNodeStringValue(n);
 	  if (partitions.find(tmp)==partitions.end()) {
 	    sg = graph->addSubGraph();
-	    sg->setAttribute("name", string("value = ") + tmp);
-	    partitions[tmp]=sg;
+            stringstream sstr;
+            sstr << pName << ": " << tmp;
+            sg->setAttribute("name", sstr.str());
+            partitions[tmp]=sg;
 	    subGraphs.push_back(sg);
 	  } else
 	    sg = partitions[tmp];
@@ -536,8 +545,10 @@ namespace tlp {
 	  string tmp = property->getEdgeStringValue(e);
 	  if (partitions.find(tmp) == partitions.end()) {
 	    sg = graph->addSubGraph();
-	    sg->setAttribute("name", string("value = ") + tmp);
-	    partitions[tmp]=sg;
+            stringstream sstr;
+            sstr << pName << ": " << tmp;
+            sg->setAttribute("name", sstr.str());
+            partitions[tmp]=sg;
 	    subGraphs.push_back(sg);
 	  } else
 	    sg = partitions[tmp];
