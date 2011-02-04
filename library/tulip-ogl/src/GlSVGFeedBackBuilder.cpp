@@ -55,30 +55,46 @@ namespace tlp {
     textColor[0]=(unsigned char)data[8];textColor[1]=(unsigned char)data[9];textColor[2]=(unsigned char)data[10];textColor[3]=(unsigned char)data[11];
   }
   void GlSVGFeedBackBuilder::beginGlEntity(GLfloat data) {
+    if(inGlEntity)
+      endGlEntity();
     stream_out << "<e id=\"" << data << "\"><!-- Entity " << data << "-->" << endl;
+    inGlEntity=true;
   }
 
   void GlSVGFeedBackBuilder::endGlEntity() {
+    inGlEntity=false;
   }
 
   void GlSVGFeedBackBuilder::beginGlGraph(GLfloat data) {
+    if(inGlGraph)
+      endGlGraph();
     stream_out << "<g id=\"g" << data << "\"><!-- Graph " << data << "-->" << endl;
+    inGlGraph=true;
   }
 
   void GlSVGFeedBackBuilder::endGlGraph() {
+    inGlGraph=false;
   }
 
   void GlSVGFeedBackBuilder::beginNode(GLfloat data) {
+    if(inNode)
+      endNode();
     stream_out << "\t<g id=\"n"<< data << "\"><!-- Node " << data << "-->" << endl;
+    inNode=true;
   }
   void GlSVGFeedBackBuilder::endNode() {
+    inNode=false;
     stream_out << "</g>" << endl;
   }
 
   void GlSVGFeedBackBuilder::beginEdge(GLfloat data) {
+    if(inEdge)
+      endEdge();
     stream_out << "\t<g id=\"e"<< data << "\"><!-- Edge " << data << "-->" << endl;
+    inEdge=true;
   }
   void GlSVGFeedBackBuilder::endEdge() {
+    inEdge=false;
     stream_out << "</g>" << endl;
   }
   void GlSVGFeedBackBuilder::pointToken(GLfloat *data) {
@@ -103,7 +119,11 @@ namespace tlp {
 	       << "\" y1=\"" << height-vertex1->y
 	       << "\" x2=\"" << vertex2->x
 	       << "\" y2=\"" << height-vertex2->y
-	       << "\" fill=\"none\" stroke=\"rgb(" << (int)strokeColor.getR()
+				 << "\" fill=\"rgb(" << (int)fillColor.getR()
+				 << ", " << (int)fillColor.getG()
+				 << ", " << (int)fillColor.getB()
+				 << ")\" fill-opacity=\"" << fillColor.getA()/255.
+				 << "\" stroke=\"rgb(" << (int)strokeColor.getR()
 	       << ", " << (int)strokeColor.getG()
 	       << ", " << (int)strokeColor.getB()
 	       << ")\" stroke-opacity=\"" << strokeColor.getA()/255.

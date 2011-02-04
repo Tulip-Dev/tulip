@@ -32,7 +32,7 @@ namespace tlp {
   public:
   
     GlSVGFeedBackBuilder() 
-      :stream_out(std::stringstream::in | std::stringstream::out) {}
+      :stream_out(std::stringstream::in | std::stringstream::out),inGlEntity(false),inGlGraph(false),inNode(false),inEdge(false) {}
 
     virtual void begin(const Vector<int, 4> &viewport,GLfloat *clearColor,GLfloat pointSize,GLfloat lineWidth);
     virtual void colorInfo(GLfloat *data);
@@ -66,6 +66,11 @@ namespace tlp {
     Color fillColor;
     Color strokeColor;
     Color textColor;
+
+    bool inGlEntity;
+    bool inGlGraph;
+    bool inNode;
+    bool inEdge;
 
     int width;
     int height;
