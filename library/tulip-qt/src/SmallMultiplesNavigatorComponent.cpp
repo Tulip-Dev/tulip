@@ -31,7 +31,7 @@ bool SmallMultiplesNavigatorComponent::eventFilter(QObject *o, QEvent *e) {
     return false;
 
   if (e->type() == QEvent::MouseButtonDblClick) {
-    if (smView->isOverviewVisible()) {
+    if (smView->isOverview()) {
       QMouseEvent *mouseEv = static_cast<QMouseEvent *>(e);
       GlScene *scene = smView->overview()->getScene();
       vector<ulong> entities;
