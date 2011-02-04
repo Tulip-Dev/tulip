@@ -1,54 +1,52 @@
 How to build Tulip on windows platform
 --------------------------------------
 
-2- Install MinGW and MSYS
+2- Install MinGW and MSYS - Or use Visual Studio 2008 or later (express version included)
 -------------------------
 Download the latest versions of MinGW-*.exe, MSYS-*.exe, msysDTK-*.exe
 from http://prdownloads.sourceforge.net/mingw. Install them as listed above,
 and accept the proposed mount point during the installation process of MSYS.
 
-2- Build the Qt 4.3.X Windows Open Source Edition
+2- Install Qt 4.Y.Z Windows Open Source Edition
 ----------------------------------------------------------
-You first have to download the corresponding Qt source code
-from http://www.trolltech.com/download/qt/windows.html.
-Then install it using the following configuration options:
-configure.exe -release -qt-libjpeg -qt-libpng -qt-zlib
+You have to download and install Qt from the official website:
+http://qt.nokia.com/products/platform/qt-for-windows/
+
+You can alternatively compile Qt yourself.
 
 3- Install the needed librairies
 --------------------------------
-In order to build and run Tulip, you have to install the following libraries:
-- freetype, jpeg, png, zlib have to be downloaded from 
-http://prdownloads.sourceforge.net/gnuwin32; the binaries (*-bin.zip) and
-developer (*-lib.zip) packages (freetype-*-[bin|lib].zip, jpeg-*-[bin|lib].zip,
-libpng-*-[bin|lib].zip, and zlib-*-[bin|lib].zip) have to be installed
-using the MinGW installation directory as the root installation directory.
-- iconv (iconv-*.win32.zip) and xml2 (libxml2-*.win32.zip) libraries have to be
-downloaded from http://www.zlatkovic.com/pub/libxml/ and installed using the
-MinGW installation as root installation directory for the contents of the
-bin, include and lib directories of the .win32 directory contained in the zip archive.
+To simplify compiling Tulip on Windows, we provide a zip archive on our website containing all the necessary dependencies, binaries and includes.
+
+Alternatively, you can hunt them yourself on the gnuwin32 sourceforge project:
+http://prdownloads.sourceforge.net/gnuwin32.
+
+The complete list is: 
+freetype, jpeg, png, zlib, 
+iconv and xml2 can be downloaded from
+http://www.zlatkovic.com/pub/libxml/
+
+You can install them in the MinGW directory, or in an independent directory,
+though you will have to tell CMake where to find these using CMAKE_LIBRARY_PATH and CMAKE_INCLUDE_PATH
+if you choose the latter.
 
 4- Configure Tulip
 ------------------
-Using an MSYS command shell, 
-set the current directory to the tulip directory
-> cd <tulip source installation directory>
-copy the local file libxml.m4 in /usr/share/aclocal
-> cp libxml.m4 /usr/share/aclocal
+Using the CMake GUI, find the tulip source directory, create a build directory, and hit configure.
+You will be rpesented with a dialog asking what kind of generator you want to use.
+Choose MSYS makefiles or Visual Studio, depending on what toolchain you are using.
 
-> sh gen-conf.sh
-and
-> ./configure  --prefix=<tulip binary and libs installation path> --with-qt-dir=<Qt installation path>
-
-Be careful to use / as path separator instead of \ when specifying the paths
-More configuration flags are available; use ./configure --help to see them.
-
-5- Build Tulip
+5a- Build Tulip with MinGW
 -------------
 run
 
 > make
 then
 > make install
+
+5b- Build Tulip with Visual Studio
+----------------------------------
+Open the tulip.sln file with visual studio, then generate the solution by right clicking on the solution and clicking 'generate solution'.
 
 6- Build windows installer for Tulip
 ------------------------------------
@@ -59,5 +57,6 @@ installation directory in order to find the makensis.exe program needed
 to build the Tulip windows installer.
 Then run
 
-> make wininst
+> make package
 
+Using Visual Studio, right-click on the 'package' project, and click 'generate'.
