@@ -190,12 +190,14 @@ void LayoutProperty::scale(const tlp::Vector<float,3>& v, Graph *sg) {
 //=================================================================================
 void LayoutProperty::translate(const tlp::Vector<float,3>& v, Iterator<node> *itN, Iterator<edge> *itE) {
   Observable::holdObservers();
+  if (itN != 0)
   while (itN->hasNext()) {
     node itn = itN->next();
     Coord tmpCoord(getNodeValue(itn));
     tmpCoord += *(Coord*)&v;
     setNodeValue(itn,tmpCoord);
   }
+  if (itE != 0)
   while (itE->hasNext()) {
     edge ite=itE->next();
     if (!getEdgeValue(ite).empty()) {
@@ -209,8 +211,10 @@ void LayoutProperty::translate(const tlp::Vector<float,3>& v, Iterator<node> *it
       setEdgeValue(ite,tmp);
     }
   }
-  resetBoundingBox();
-  notifyObservers();
+  if (itE != 0 || itN != 0) {
+      resetBoundingBox();
+      notifyObservers();
+  }
   Observable::unholdObservers();
 }
 //=================================================================================
