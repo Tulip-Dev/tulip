@@ -69,11 +69,12 @@ public :
 	 * \param glScene the Tulip OpenGL scene on which to perform zooming and panning
 	 * \param boundingBox the bounding box in scene coordinates on which the Tulip OpenGL scene has to be zoomed and panned.
 	 * 					  At the end of the animation, the viewport will be zoomed and centered on the content of that bounding box.
+   * \param layerName The name of the layer animation should be done on
 	 * \param nbAnimationSteps the number of steps to perform during the animation
 	 * \param optimalPath if true zooming and panning will be combined at each step of the animation, if false the scene will be zoomed out/in, panned then zoomed in/out
 	 * \param p zoom/pan trade-off parameter, adjust it according to your needs
 	 */
-	GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundingBox, const int nbAnimationSteps = 50, const bool optimalPath = true, const double p = sqrt(1.6));
+  GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundingBox, const std::string &layerName="Main", const int nbAnimationSteps = 50, const bool optimalPath = true, const double p = sqrt(1.6));
 
 	/**
 	 * Method to add an additional scene animation while zooming and panning

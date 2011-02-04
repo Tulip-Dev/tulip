@@ -24,8 +24,8 @@ using namespace std;
 
 namespace tlp {
 
-GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundingBox, const int nbAnimationSteps, const bool optimalPath, const double p) :
-	camera(glScene->getLayer("Main")->getCamera()),nbAnimationSteps(nbAnimationSteps), optimalPath(optimalPath), p(p), additionalAnimation(NULL) {
+GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundingBox, const std::string &layerName, const int nbAnimationSteps, const bool optimalPath, const double p) :
+  camera(glScene->getLayer(layerName)->getCamera()),nbAnimationSteps(nbAnimationSteps), optimalPath(optimalPath), p(p), additionalAnimation(NULL) {
 
 	viewport = glScene->getViewport();
 

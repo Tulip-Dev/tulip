@@ -96,6 +96,12 @@ namespace tlp {
      * Return texture info (id, width and height) for the given name
      */
     GlTexture getTextureInfo(const std::string&);
+
+    /**
+     * Check if a texture fo the given name exists in the current context
+     */
+    bool existsTexture(const std::string& filename);
+
     /**
      * Load texture with textureName from Raw data
      */

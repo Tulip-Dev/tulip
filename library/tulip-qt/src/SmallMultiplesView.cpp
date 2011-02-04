@@ -11,14 +11,21 @@
 #include "tulip/QtGlSceneZoomAndPanAnimator.h"
 #include "tulip/GlNode.h"
 #include "tulip/DrawingTools.h"
+#include "tulip/GlMainWidgetGraphicsView.h"
+#include "tulip/GlMainWidgetItem.h"
+
 #include <QtGui/QLabel>
 #include <QtGui/QImage>
+#include <QtGui/QGraphicsView>
+#include <QtGui/QGraphicsProxyWidget>
+
+#include <iostream>
 
 using namespace std;
 
-void zoomOnScreenRegion(tlp::GlMainWidget *glWidget, const tlp::BoundingBox &boundingBox, const bool optimalPath = true, const double velocity = 1.1, const double p = sqrt(1.6)) {
+void zoomOnScreenRegion(tlp::GlMainWidget *glWidget, const tlp::BoundingBox &boundingBox, const std::string &layerName="Main", const bool optimalPath = true, const double velocity = 1.1, const double p = sqrt(1.6)) {
   if(boundingBox.isValid()){
-    tlp::QtGlSceneZoomAndPanAnimator animator(glWidget, boundingBox, optimalPath, velocity, p);
+    tlp::QtGlSceneZoomAndPanAnimator animator(glWidget, boundingBox, layerName, optimalPath, velocity, p);
     animator.animateZoomAndPan();
   }
 }
@@ -29,32 +36,47 @@ namespace tlp {
 //            VIEW FUNCTIONS
 //===========================================
 SmallMultiplesView::SmallMultiplesView()
-  :AbstractView(), _overview(new GlMainWidget(0)), _zoomAnimationActivated(true), _autoDisableInteractors(true), _maxLabelSize(-1), _spacing(1.7) {
+  :AbstractView(), _glMainWidget(new GlMainWidget(0)), _zoomAnimationActivated(true), _autoDisableInteractors(true), _maxLabelSize(-1), _spacing(1.7) {
   Observable::holdObservers();
-  _overview->setData(newGraph(), DataSet());
-  GlScene *scene = _overview->getScene();
-  GlGraphInputData *inputData = _overview->getScene()->getGlGraphComposite()->getInputData();
+  _glMainWidget->setData(newGraph(), DataSet());
+  GlScene *scene = _glMainWidget->getScene();
+  GlGraphInputData *inputData = _glMainWidget->getScene()->getGlGraphComposite()->getInputData();
   inputData->getElementColor()->setAllNodeValue(scene->getBackgroundColor());
   inputData->getElementShape()->setAllNodeValue(4);
   inputData->getElementLabelPosition()->setAllNodeValue(2);
   inputData->getElementFontSize()->setAllNodeValue(2);
-  _overview->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setFontsType(1);
-  _overview->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setLabelScaled(true);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setFontsType(1);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setLabelScaled(true);
   Observable::unholdObservers();
+
+  // Move the graph composite from main layer to overview layer
+  scene->addLayer(new GlLayer("overview",true));
+  GlGraphComposite *graphComposite = scene->getGlGraphComposite();
+  scene->getLayer("Main")->clear();
+  scene->getLayer("overview")->addGlEntity(graphComposite,"overviewGraph");
+  scene->addGlGraphCompositeInfo(scene->getLayer("overview"), graphComposite);
+  scene->centerScene();
 
   connect(this, SIGNAL(changeData(int,int,SmallMultiplesView::Roles)), this, SLOT(dataChanged(int,int,SmallMultiplesView::Roles)));
   connect(this,SIGNAL(reverseItems(int,int)), this, SLOT(itemsReversed(int,int)));
 }
 
 SmallMultiplesView::~SmallMultiplesView() {
-  if (!isOverview()) // Otherwise it's deleted along with the view's widget.
-    delete _overview;
 }
 
 QWidget *SmallMultiplesView::construct(QWidget *parent) {
   QWidget *centralWidget = AbstractView::construct(parent);
-  switchToOverview();
+  setCentralWidget(_glMainWidget);
+  if (_autoDisableInteractors)
+    toggleInteractors(false);
   return centralWidget;
+}
+
+void SmallMultiplesView::setActiveInteractor(Interactor *interactor) {
+  if (activeInteractor)
+    activeInteractor->remove();
+  interactor->install(_glMainWidget);
+  activeInteractor = interactor;
 }
 
 //===========================================
@@ -90,7 +112,7 @@ void SmallMultiplesView::dataChanged(int id, SmallMultiplesView::Roles dataRoles
   Observable::holdObservers();
   node n = _items[id];
 
-  GlGraphInputData *inputData = _overview->getScene()->getGlGraphComposite()->getInputData();
+  GlGraphInputData *inputData = _glMainWidget->getScene()->getGlGraphComposite()->getInputData();
   if (dataRoles.testFlag(SmallMultiplesView::Texture))
     applyVariant<QString, StringProperty>(data(id, SmallMultiplesView::Texture), inputData->getElementTexture(), n);
 
@@ -114,22 +136,19 @@ void SmallMultiplesView::dataChanged(int id, SmallMultiplesView::Roles dataRoles
 void SmallMultiplesView::refreshItems() {
   Observable::holdObservers();
   int itemsCount = countItems();
-  int nodesCount = _overview->getGraph()->numberOfNodes();
+  int nodesCount = _glMainWidget->getGraph()->numberOfNodes();
 
   for (int i=itemsCount; i < nodesCount; ++i)
     delItem(_items.size()-1);
   for (int i=itemsCount; i > nodesCount; --i)
     addItem();
 
-  if (itemsCount != nodesCount && _items.size() == 1) // Item count changed and we only have one item left
-    emit itemSelected(0);
-
   Observable::unholdObservers();
 }
 
 void SmallMultiplesView::addItem() {
   Observable::holdObservers();
-  _items.push_back(_overview->getGraph()->addNode());
+  _items.push_back(_glMainWidget->getGraph()->addNode());
   Observable::unholdObservers();
 }
 
@@ -139,7 +158,7 @@ void SmallMultiplesView::delItem(int id) {
     return;
   node n = _items[id];
   _items.erase(_items.begin() + id);
-  _overview->getGraph()->delNode(n);
+  _glMainWidget->getGraph()->delNode(n);
   Observable::unholdObservers();
 }
 
@@ -168,42 +187,34 @@ void SmallMultiplesView::selectItem(int i) {
     return;
   if (_zoomAnimationActivated) {
     GlNode glNode(_items[i]);
-    zoomOnScreenRegion(_overview, glNode.getBoundingBox(_overview->getScene()->getGlGraphComposite()->getInputData()));
+    zoomOnScreenRegion(_glMainWidget, glNode.getBoundingBox(_glMainWidget->getScene()->getGlGraphComposite()->getInputData()), "overview");
   }
   emit itemSelected(i);
 }
 
-void SmallMultiplesView::switchToOverview(bool destroyOldWidget) {
-  QWidget *w = centralWidget;
-  setCentralWidget(_overview);
-  if (destroyOldWidget)
-    delete w;
-
-  if (_autoDisableInteractors)
-    toggleInteractors(false);
-
-  if (_zoomAnimationActivated)
-    zoomOnScreenRegion(_overview, _overview->getScene()->getBoundingBox());
-  overviewSelected();
-}
-
-void SmallMultiplesView::switchToWidget(QWidget *w) {
-  if (_autoDisableInteractors)
-    toggleInteractors(true);
-
-  setCentralWidget(w);
-}
-
 GlMainWidget *SmallMultiplesView::overview() const {
-  return _overview;
-}
-
-bool SmallMultiplesView::isOverview() const {
-  return centralWidget == _overview;
+  return _glMainWidget;
 }
 
 void SmallMultiplesView::centerOverview() {
-  _overview->getScene()->centerScene();
+  if (_zoomAnimationActivated) {
+    GlGraphInputData *inputData = _glMainWidget->getScene()->getGlGraphComposite()->getInputData();
+    zoomOnScreenRegion(_glMainWidget, computeBoundingBox(_glMainWidget->getGraph(),inputData->getElementLayout(),inputData->getElementSize(), inputData->getElementRotation()), "overview");
+  }
+  else
+    _glMainWidget->getScene()->centerScene();
+}
+
+void SmallMultiplesView::setOverviewVisible(bool f) {
+  _glMainWidget->getScene()->getLayer("overview")->setVisible(f);
+}
+
+GlLayer *SmallMultiplesView::overviewLayer() const {
+  return _glMainWidget->getScene()->getLayer("overview");
+}
+
+bool SmallMultiplesView::isOverviewVisible() const {
+  return _glMainWidget->getScene()->getLayer("overview")->isVisible();
 }
 
 //===========================================
@@ -251,7 +262,7 @@ using namespace tlp;
 
 class SmallMultiplesNavigationInteractor: public InteractorChainOfResponsibility {
 public:
-  SmallMultiplesNavigationInteractor(): InteractorChainOfResponsibility(":/i_select.png", "test") {
+  SmallMultiplesNavigationInteractor(): InteractorChainOfResponsibility(":/i_select.png", "Navigator") {
     setPriority(1);
     setConfigurationWidgetText(trUtf8("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
     "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
