@@ -411,12 +411,8 @@ namespace tlp {
     StableIterator<edge> itE(graph->getEdges());
     int step = 0, maxSteps = graph->numberOfNodes();
 
-    //@todo find a faster way to have that information, when there is a lot of properties it cost a lot.
-    string pName;
-    forEach (pName, graph->getProperties()) {
-        if (graph->getProperty(pName) == property)
-            break;
-    }
+    // property name is used when naming created sub graphs
+    string pName = property->getName();
 
     if (maxSteps < 100)
       maxSteps = 100;
