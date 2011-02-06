@@ -12,7 +12,7 @@ using namespace std;
 
 
 
-const string texture(TulipBitmapDir + "cylinderTexture.png");
+const string texture(TulipBitmapDir + "halfCylinderTexture.png");
 const string gradient(TulipBitmapDir + "titlebarGradient.png");
 
 class Window : public Glyph
@@ -30,7 +30,7 @@ private:
     const float _titleBarSize;
     const float _borderWidth;
     GlPolyQuad _border;
-    GlPolyQuad _center;
+      GlPolyQuad _center;
     GlPolyQuad _titleRec;
     BoundingBox _bb;
     BoundingBox _textbb;
@@ -39,13 +39,15 @@ private:
 
 /*
  * 
-*----------- -* -0.5, 0.5      0.5, 0.5
-|\          / |  
-| *--------*  |-0.5 + _borderWith   0.5, 0.5-bo
-| |        |  |
-| *--------*  |
-|/          \ |
-*------------*  -0.5,-0.5        0.5, -0.5
+0------------1 -0.5, 0.5      0.5, 0.5
+|\          /|  
+| 4--------5 |
+| |  TXT   | |  
+| 9--------8 |-0.5 + _borderWith   0.5, 0.5-bo
+| |  FREE  | |
+| 7--------6 |
+|/          \|
+3------------2  -0.5,-0.5        0.5, -0.5
 */
 
 GLYPHPLUGIN(Window, "2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", 17);
@@ -57,7 +59,6 @@ Window::Window(GlyphContext* context):
   _titleBarSize(0.1), 
   _borderWidth(0.02), 
   _border(texture),
-  _center(texture),
   _titleRec(gradient)
 {
   
@@ -77,9 +78,9 @@ Window::Window(GlyphContext* context):
   v[8].set( 0.5 - _borderWidth, 0.5 - _borderWidth - textheight *2.f, 0);
   v[9].set(-0.5 + _borderWidth, 0.5 - _borderWidth - textheight *2.f, 0);
 
-  _bb.expand(v[8]);
-  _bb.expand(v[9]);
   _bb.expand(v[6]);
+  _bb.expand(v[9]);
+  _bb.expand(v[8]);
   _bb.expand(v[7]);
 	
   _border.addQuadEdge(v[0], v[4], _textColor);
@@ -92,12 +93,12 @@ Window::Window(GlyphContext* context):
   _titleRec.addQuadEdge(v[5], v[8], _rectColor);
 	 
   _textbb.expand(v[4]);
-  _textbb.expand(v[9]);
-  _textbb.expand(v[5]);
   _textbb.expand(v[8]);
+  _textbb.expand(v[5]);
+  _textbb.expand(v[9]);
 	 
-  _center.addQuadEdge(v[4], v[7], _rectColor);
-  _center.addQuadEdge(v[5], v[6], _rectColor);
+  _center.addQuadEdge(v[9], v[7], _rectColor);
+  _center.addQuadEdge(v[8], v[6], _rectColor);
  
 }
 //=====================================================
@@ -116,7 +117,8 @@ void Window::draw(node n, float lod) {
 	_rectColor = color->getNodeValue(n);
 	_border.setColor(colorBorder->getNodeValue(n));	
 	_center.setColor(_rectColor);	
-	_titleRec.setColor(_rectColor);	
+	//	_titleRec.setColor(_rectColor);	
+	_titleRec.setColor(colorBorder->getNodeValue(n));	
 
 	_center.draw(lod, NULL);
 	 GlTextureManager::getInst().activateTexture(gradient);
