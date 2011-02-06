@@ -21,6 +21,7 @@
 
 #include <string>
 #include <tulip/Graph.h>
+#include <tulip/BooleanProperty.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
