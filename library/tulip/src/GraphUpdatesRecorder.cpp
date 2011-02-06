@@ -225,7 +225,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
     }
     // loop on oldEdgeDefaultValues
     itdv = oldEdgeDefaultValues.begin();
-    while(itdv != oldNodeDefaultValues.end()) {
+    while(itdv != oldEdgeDefaultValues.end()) {
       PropertyInterface* p = (PropertyInterface *) (*itdv).first;
       newEdgeDefaultValues[(unsigned long) p] =
 	p->getEdgeDefaultDataMemValue();
