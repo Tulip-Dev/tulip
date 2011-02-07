@@ -67,8 +67,6 @@ namespace tlp {
       currentLayerLODUnit->simpleEntitiesLODVector.push_back(SimpleEntityLODUnit(entity,bb));
   }
   void GlCPULODCalculator::addNodeBoundingBox(unsigned int id,const BoundingBox& bb) {
-    assert(bb.isValid());
-
     sceneBoundingBox.expand(bb[0]);
     sceneBoundingBox.expand(bb[1]);
 
@@ -77,8 +75,6 @@ namespace tlp {
       currentLayerLODUnit->nodesLODVector.push_back(ComplexEntityLODUnit(id,bb));
   }
   void GlCPULODCalculator::addEdgeBoundingBox(unsigned int id,const BoundingBox& bb) {
-    assert(bb.isValid());
-
     sceneBoundingBox.expand(bb[0]);
     sceneBoundingBox.expand(bb[1]);
 
