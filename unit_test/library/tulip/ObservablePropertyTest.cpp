@@ -156,11 +156,12 @@ void ObservablePropertyTest::setUp() {
 
 //==========================================================
 void ObservablePropertyTest::tearDown() {
-  delete graph;
   for (unsigned int i = 0; i < 7; ++i) {
     if (props[i])
       delete props[i];
   }
+
+  delete graph;
 
   delete observer;
   delete pObserver;
