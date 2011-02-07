@@ -54,14 +54,14 @@ class IteratorValue: public Iterator<unsigned int> {
 template <typename TYPE> 
 class IteratorVect : public IteratorValue {
  public:
- IteratorVect(const TYPE &value, bool equal, std::deque<typename StoredValueType<TYPE>::Value> *vData, unsigned int minIndex):
+ IteratorVect(const TYPE &value, bool equal, std::deque<typename StoredType<TYPE>::Value> *vData, unsigned int minIndex):
    _value(value),
      _equal(equal),
      _pos(minIndex),
      vData(vData),
      it(vData->begin()) {
      while (it!=(*vData).end() &&
-	    StoredValueType<TYPE>::equal((*it), _value) != _equal) {
+	    StoredType<TYPE>::equal((*it), _value) != _equal) {
        ++it;
        ++_pos;
      }
@@ -75,37 +75,37 @@ class IteratorVect : public IteratorValue {
       ++it;
       ++_pos;
     } while (it!=(*vData).end() &&
-	     StoredValueType<TYPE>::equal((*it), _value) != _equal);
+	     StoredType<TYPE>::equal((*it), _value) != _equal);
     return tmp;
   }
   unsigned int nextValue(AnyValueContainer& val) {
-    ((TypedValueContainer<TYPE>&) val).value = StoredValueType<TYPE>::get(*it);
+    ((TypedValueContainer<TYPE>&) val).value = StoredType<TYPE>::get(*it);
     unsigned int pos = _pos;
     do {
       ++it;
       ++_pos;
     } while (it!=(*vData).end() &&
-	     StoredValueType<TYPE>::equal((*it), _value) != _equal);
+	     StoredType<TYPE>::equal((*it), _value) != _equal);
     return pos;
   }
  private:
   const TYPE _value;
   bool _equal;
   unsigned int _pos;
-  std::deque<typename StoredValueType<TYPE>::Value> *vData;
-  typename std::deque<typename StoredValueType<TYPE>::Value>::const_iterator it;
+  std::deque<typename StoredType<TYPE>::Value> *vData;
+  typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it;
 };
 //===================================================================
 template <typename TYPE> 
 class IteratorHash : public IteratorValue {
  public:
-  IteratorHash(const TYPE &value, bool equal, TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value> *hData):
+  IteratorHash(const TYPE &value, bool equal, TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData):
     _value(value),
     _equal(equal),
     hData(hData) {
     it=(*hData).begin();
     while (it!=(*hData).end() &&
-	   StoredValueType<TYPE>::equal((*it).second,_value) != _equal)
+	   StoredType<TYPE>::equal((*it).second,_value) != _equal)
       ++it;
   }
   bool hasNext() {
@@ -116,24 +116,24 @@ class IteratorHash : public IteratorValue {
     do {
       ++it;
     } while (it!=(*hData).end() &&
-	     StoredValueType<TYPE>::equal((*it).second,_value) != _equal);
+	     StoredType<TYPE>::equal((*it).second,_value) != _equal);
     return tmp;
   }
   unsigned int nextValue(AnyValueContainer& val) {
     ((TypedValueContainer<TYPE>&) val).value =
-      StoredValueType<TYPE>::get((*it).second);
+      StoredType<TYPE>::get((*it).second);
     unsigned int pos = (*it).first;
     do {
       ++it;
     } while (it!=(*hData).end() &&
-	     StoredValueType<TYPE>::equal((*it).second,_value) != _equal);
+	     StoredType<TYPE>::equal((*it).second,_value) != _equal);
     return pos;
   }
  private:
   const TYPE _value;
   bool _equal;
-  TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value> *hData;
-  typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it;
+  TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData;
+  typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
 };
 #endif
 //===================================================================
@@ -148,11 +148,11 @@ public:
   /**
    * get the value associated to i 
    */
-  typename ReturnType<TYPE>::ConstValue get(const unsigned int i) const;
+  typename StoredType<TYPE>::ReturnedConstValue get(const unsigned int i) const;
   /**
    * get the value associated to i and indicates if it not the default one
    */
-  typename ReturnType<TYPE>::Value get(const unsigned int i, bool& isNotDefault) const;
+  typename StoredType<TYPE>::ReturnedValue get(const unsigned int i, bool& isNotDefault) const;
   /**
    * return is the value associated to i is not the default
    */
@@ -170,94 +170,48 @@ private:
   void vecttohash();
   void hashtovect();
   void compress(unsigned int min, unsigned int max, unsigned int nbElements);
-  void vectset(const unsigned int i, typename StoredValueType<TYPE>::Value value);
+  void vectset(const unsigned int i, typename StoredType<TYPE>::Value value);
  private:
-  std::deque<typename StoredValueType<TYPE>::Value> *vData;
-  TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value> *hData;
+  std::deque<typename StoredType<TYPE>::Value> *vData;
+  TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData;
   unsigned int minIndex,maxIndex;
-  typename StoredValueType<TYPE>::Value defaultValue;
+  typename StoredType<TYPE>::Value defaultValue;
   State state;
   unsigned int elementInserted;
   double ratio;
   bool compressing;
 };
 //===================================================================
-// define a template function to hold default value
-template <typename TYPE> inline TYPE defaultTypeValue() {
-  return TYPE();
-}
-
-// macro for basic types instantiation
-#define DECL_DEFAULT_TYPE_VALUE(T)					\
-template<> inline T defaultTypeValue<T>() {				\
-  return (T) 0;								\
-}
-
-DECL_DEFAULT_TYPE_VALUE(void)
-
-DECL_DEFAULT_TYPE_VALUE(bool)
-DECL_DEFAULT_TYPE_VALUE(char)
-DECL_DEFAULT_TYPE_VALUE(signed char)
-DECL_DEFAULT_TYPE_VALUE(unsigned char)
-DECL_DEFAULT_TYPE_VALUE(wchar_t)
-
-DECL_DEFAULT_TYPE_VALUE(signed short)
-DECL_DEFAULT_TYPE_VALUE(unsigned short)
-DECL_DEFAULT_TYPE_VALUE(signed int)
-DECL_DEFAULT_TYPE_VALUE(unsigned int)
-DECL_DEFAULT_TYPE_VALUE(signed long)
-DECL_DEFAULT_TYPE_VALUE(unsigned long)
-#if LONGLONG_EXISTS
-  DECL_DEFAULT_TYPE_VALUE(signed long long)
-  DECL_DEFAULT_TYPE_VALUE(unsigned long long)
-#endif  // LONGLONG_EXISTS
-
-DECL_DEFAULT_TYPE_VALUE(float)
-DECL_DEFAULT_TYPE_VALUE(double)
-DECL_DEFAULT_TYPE_VALUE(long double)
-//===================================================================
 template<typename TYPE> 
-  MutableContainer<TYPE>::MutableContainer(): vData(new std::deque<typename StoredValueType<TYPE>::Value>()),
-  hData(NULL), minIndex(UINT_MAX), maxIndex(UINT_MAX), defaultValue(StoredValueType<TYPE>::copy(defaultTypeValue<TYPE>())), state(VECT), elementInserted(0),
+  MutableContainer<TYPE>::MutableContainer(): vData(new std::deque<typename StoredType<TYPE>::Value>()),
+  hData(NULL), minIndex(UINT_MAX), maxIndex(UINT_MAX), defaultValue(StoredType<TYPE>::defaultValue()), state(VECT), elementInserted(0),
    ratio(double(sizeof(TYPE)) / (3.0*double(sizeof(void *))+double(sizeof(TYPE)))),
-   compressing(false)
-     {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
-  /* state = VECT;
-  vData = new std::deque<TYPE>();
-  hData = 0;
-  maxIndex = UINT_MAX;
-  minIndex = UINT_MAX;
-  elementInserted = 0;
-  unsigned int phiP = sizeof(void *);
-  unsigned int phi = sizeof(TYPE);
-  ratio = double(phi) / (3.0*double(phiP)+double(phi));
-  compressing = false; */
-}
+   compressing(false) {
+ }
 //===================================================================
 template <typename TYPE> 
 MutableContainer<TYPE>::~MutableContainer() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   switch (state) {
   case VECT: 
-    if (StoredValueType<TYPE>::isPointer) {
+    if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename std::deque<typename StoredValueType<TYPE>::Value>::const_iterator it =
+      typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it =
 	vData->begin();
       while (it!= vData->end()) {
 	if ((*it) != defaultValue)
-	  StoredValueType<TYPE>::destroy(*it);
+	  StoredType<TYPE>::destroy(*it);
 	++it;
       }
     }
     delete vData; vData=0;
     break;
   case HASH:
-    if (StoredValueType<TYPE>::isPointer) {
+    if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it = hData->begin();
+      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it = hData->begin();
       while (it!= hData->end()) {
-	StoredValueType<TYPE>::destroy((*it).second);
+	StoredType<TYPE>::destroy((*it).second);
 	++it;
       }
     }
@@ -268,7 +222,7 @@ MutableContainer<TYPE>::~MutableContainer() {
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     break;  
   }
-  StoredValueType<TYPE>::destroy(defaultValue);
+  StoredType<TYPE>::destroy(defaultValue);
 }
 //===================================================================
 template <typename TYPE> 
@@ -276,37 +230,37 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   switch (state) {
   case VECT:
-    if (StoredValueType<TYPE>::isPointer) {
+    if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename std::deque<typename StoredValueType<TYPE>::Value>::const_iterator it =
+      typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it =
 	vData->begin();
       while (it!= vData->end()) {
 	if ((*it) != defaultValue)
-	  StoredValueType<TYPE>::destroy(*it);
+	  StoredType<TYPE>::destroy(*it);
 	++it;
       }
     }
     vData->clear();
     break;
   case HASH:
-    if (StoredValueType<TYPE>::isPointer) {
+    if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it = hData->begin();
+      typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it = hData->begin();
       while (it!= hData->end()) {
-	StoredValueType<TYPE>::destroy((*it).second);
+	StoredType<TYPE>::destroy((*it).second);
 	++it;
       }
     }
     delete hData;hData=0;
-    vData = new std::deque<typename StoredValueType<TYPE>::Value>();
+    vData = new std::deque<typename StoredType<TYPE>::Value>();
     break;
   default:
     assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     break; 
   }
-  StoredValueType<TYPE>::destroy(defaultValue);
-  defaultValue = StoredValueType<TYPE>::copy(value);
+  StoredType<TYPE>::destroy(defaultValue);
+  defaultValue = StoredType<TYPE>::clone(value);
   state = VECT;
   maxIndex = UINT_MAX;
   minIndex = UINT_MAX;
@@ -317,7 +271,7 @@ template <typename TYPE>
   IteratorValue* MutableContainer<TYPE>::findAll(const TYPE &value,
 						 bool equal) const {
   if (equal &&
-      StoredValueType<TYPE>::equal(defaultValue, value))
+      StoredType<TYPE>::equal(defaultValue, value))
     // error
     return NULL;
   else {
@@ -343,28 +297,28 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 
   //Test if after insertion we need to resize
   if (!compressing &&
-      !StoredValueType<TYPE>::equal(defaultValue, value)) {
+      !StoredType<TYPE>::equal(defaultValue, value)) {
     compressing = true;
     compress (std::min(i,minIndex), std::max(i,maxIndex), elementInserted);
     compressing = false;
   }
   
-  if (StoredValueType<TYPE>::equal(defaultValue, value)) {
-    typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
+  if (StoredType<TYPE>::equal(defaultValue, value)) {
+    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
     switch (state) {
     case VECT : 
       if (i<=maxIndex && i>=minIndex) {
-	typename StoredValueType<TYPE>::Value val = (*vData)[i - minIndex];
+	typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
 	if (val != defaultValue) {
 	  (*vData)[i - minIndex]= defaultValue;
-	  StoredValueType<TYPE>::destroy(val);
+	  StoredType<TYPE>::destroy(val);
 	  --elementInserted;
 	}
       }
       break;
     case HASH :
       if ((it=hData->find(i)) != hData->end()) {
-	StoredValueType<TYPE>::destroy((*it).second);
+	StoredType<TYPE>::destroy((*it).second);
 	hData->erase(i);
 	--elementInserted;
       }
@@ -376,9 +330,9 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
     }
   }
   else {
-    typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
-    typename StoredValueType<TYPE>::Value newVal =
-      StoredValueType<TYPE>::copy(value);
+    typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
+    typename StoredType<TYPE>::Value newVal =
+      StoredType<TYPE>::clone(value);
    switch (state) {
     case VECT :
       if (minIndex == UINT_MAX) {
@@ -400,17 +354,17 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 	  (*vData).push_front(defaultValue);
 	  --minIndex;
 	}
-	typename StoredValueType<TYPE>::Value val = (*vData)[i - minIndex];
+	typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
 	(*vData)[i - minIndex] = newVal;
 	if (val != defaultValue)
-	  StoredValueType<TYPE>::destroy(val);
+	  StoredType<TYPE>::destroy(val);
 	else
 	  ++elementInserted;
       }
       break;
     case HASH :
       if ((it=hData->find(i)) != hData->end())
-	StoredValueType<TYPE>::destroy((*it).second);
+	StoredType<TYPE>::destroy((*it).second);
       else
 	++elementInserted;
       (*hData)[i]= newVal;
@@ -427,7 +381,7 @@ void MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 //===================================================================
 template <typename TYPE> 
 void MutableContainer<TYPE>::vectset(const unsigned int i,
-				     typename StoredValueType<TYPE>::Value value) {
+				     typename StoredType<TYPE>::Value value) {
   assert(value != defaultValue);
 
   if (minIndex == UINT_MAX) {
@@ -445,10 +399,10 @@ void MutableContainer<TYPE>::vectset(const unsigned int i,
       (*vData).push_front(defaultValue);
       --minIndex;
     }
-    typename StoredValueType<TYPE>::Value val = (*vData)[i - minIndex];
+    typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
     (*vData)[i - minIndex] = value;
     if (val != defaultValue)
-      StoredValueType<TYPE>::destroy(val);
+      StoredType<TYPE>::destroy(val);
     else
       ++elementInserted;
   }
@@ -458,27 +412,27 @@ void MutableContainer<TYPE>::vectset(const unsigned int i,
 //===================================================================
 //const TYPE &  MutableContainer<TYPE>::get(unsigned int i) const {
 template <typename TYPE>   
-typename ReturnType<TYPE>::ConstValue MutableContainer<TYPE>::get(const unsigned int i) const {
+typename StoredType<TYPE>::ReturnedConstValue MutableContainer<TYPE>::get(const unsigned int i) const {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (maxIndex == UINT_MAX) return StoredValueType<TYPE>::get(defaultValue);
-  typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
+  if (maxIndex == UINT_MAX) return StoredType<TYPE>::get(defaultValue);
+  typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
   switch (state) {
   case VECT:
     if (i>maxIndex || i<minIndex) 
-      return StoredValueType<TYPE>::get(defaultValue);
+      return StoredType<TYPE>::get(defaultValue);
     else
-      return StoredValueType<TYPE>::get((*vData)[i - minIndex]);
+      return StoredType<TYPE>::get((*vData)[i - minIndex]);
     break;
   case HASH:
     if ((it=hData->find(i))!=hData->end())
-      return StoredValueType<TYPE>::get((*it).second);
+      return StoredType<TYPE>::get((*it).second);
     else
-      return StoredValueType<TYPE>::get(defaultValue);
+      return StoredType<TYPE>::get(defaultValue);
     break;
   default:
     assert(false);
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
-    return StoredValueType<TYPE>::get(defaultValue);
+    return StoredType<TYPE>::get(defaultValue);
     break;
   }
 }
@@ -489,7 +443,7 @@ typename ReturnType<TYPE>::ConstValue MutableContainer<TYPE>::get(const unsigned
   switch (state) {
   case VECT:
     return (i<=maxIndex && i>=minIndex && 
-	    (StoredValueType<TYPE>::get((*vData)[i - minIndex]) != defaultValue));
+	    (((*vData)[i - minIndex]) != defaultValue));
   case HASH:
     return ((hData->find(i))!=hData->end());
   default:
@@ -500,42 +454,43 @@ typename ReturnType<TYPE>::ConstValue MutableContainer<TYPE>::get(const unsigned
 }
 //===================================================================
 template <typename TYPE>   
-  typename ReturnType<TYPE>::Value MutableContainer<TYPE>::get(const unsigned int i, bool& notDefault) const {
+  typename StoredType<TYPE>::ReturnedValue MutableContainer<TYPE>::get(const unsigned int i, bool& notDefault) const {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (maxIndex == UINT_MAX) {
     notDefault = false;
-    return StoredValueType<TYPE>::get(defaultValue);
+    return StoredType<TYPE>::get(defaultValue);
   }
-  typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::iterator it;
+  typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it;
   switch (state) {
   case VECT:
     if (i>maxIndex || i<minIndex) {
       notDefault = false;
-      return StoredValueType<TYPE>::get(defaultValue);
+      return StoredType<TYPE>::get(defaultValue);
     } else {
-      notDefault = true;
-      return StoredValueType<TYPE>::get((*vData)[i - minIndex]);
+      typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
+      notDefault = val != defaultValue;
+      return StoredType<TYPE>::get(val);
     }
   case HASH:
     if ((it=hData->find(i))!=hData->end()) {
       notDefault = true;
-      return StoredValueType<TYPE>::get((*it).second);
+      return StoredType<TYPE>::get((*it).second);
     } else {
       notDefault = false;
-      return StoredValueType<TYPE>::get(defaultValue);
+      return StoredType<TYPE>::get(defaultValue);
     }
   default:
     assert(false);
     notDefault = false;
     std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
-    return StoredValueType<TYPE>::get(defaultValue);
+    return StoredType<TYPE>::get(defaultValue);
   }
 }
 //===================================================================
 template <typename TYPE> 
 void MutableContainer<TYPE>::vecttohash() {
   //  std::cerr << __FUNCTION__ << std::endl << std::flush;
-  hData=new TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>(elementInserted);
+  hData=new TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>(elementInserted);
 
   unsigned int newMaxIndex = 0;
   unsigned int newMinIndex = UINT_MAX;
@@ -557,12 +512,12 @@ void MutableContainer<TYPE>::vecttohash() {
 template <typename TYPE> 
 void MutableContainer<TYPE>::hashtovect() {
   //  std::cerr << __FUNCTION__ << std::endl << std::flush;
-  vData = new std::deque<typename StoredValueType<TYPE>::Value>();
+  vData = new std::deque<typename StoredType<TYPE>::Value>();
   minIndex = UINT_MAX;
   maxIndex = UINT_MAX;
   elementInserted = 0;
   state=VECT;
-  typename TLP_HASH_MAP<unsigned int, typename StoredValueType<TYPE>::Value>::const_iterator it;
+  typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
   for (it=hData->begin(); it!=hData->end(); ++it) {
     if (it->second  != defaultValue)
       vectset(it->first, it->second);

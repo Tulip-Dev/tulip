@@ -123,13 +123,13 @@ public:
    * If there is no value it returns the default value
    * depending of the type.
    */
-  typename tlp::ReturnType<typename Tnode::RealType>::ConstValue getNodeValue(const node n ) const;
+  typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue getNodeValue(const node n ) const;
   /**
    * Returns the value associated to the edge e in this property.
    * If there is no value , it returns the default value
    * depending of the type.
    */
-  typename tlp::ReturnType<typename Tedge::RealType>::ConstValue getEdgeValue(const edge e) const;
+  typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue getEdgeValue(const edge e) const;
   /**
    * Set the value of a node n and notify the observers of a modification.
    */
@@ -295,7 +295,7 @@ public:
             dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(prop);
           assert(tp);
           bool notDefault;
-          typename ReturnType<typename Tnode::RealType>::Value value =
+          typename StoredType<typename Tnode::RealType>::ReturnedValue value =
             tp->nodeProperties.get(src.id, notDefault);
           if (ifNotDefault && !notDefault)
             return;
@@ -315,7 +315,7 @@ public:
             dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(prop);
           assert(tp);
           bool notDefault;
-          typename ReturnType<typename Tedge::RealType>::Value value =
+          typename StoredType<typename Tedge::RealType>::ReturnedValue value =
             tp->edgeProperties.get(src.id, notDefault);
           if (ifNotDefault && !notDefault)
             return;
@@ -336,14 +336,14 @@ public:
   }
   virtual DataMem* getNonDefaultDataMemValue( const node n ) const {
     bool notDefault;
-    typename ReturnType<typename Tnode::RealType>::Value value = nodeProperties.get(n.id, notDefault);
+    typename StoredType<typename Tnode::RealType>::ReturnedValue value = nodeProperties.get(n.id, notDefault);
     if (notDefault)
       return new PropertyValueContainer<typename Tnode::RealType>(value);
     return NULL;
   }
   virtual DataMem* getNonDefaultDataMemValue( const edge e ) const {
     bool notDefault;
-    typename ReturnType<typename Tedge::RealType>::Value value = edgeProperties.get(e.id, notDefault);
+    typename StoredType<typename Tedge::RealType>::ReturnedValue value = edgeProperties.get(e.id, notDefault);
     if (notDefault)
       return new PropertyValueContainer<typename Tedge::RealType>(value);
     return NULL;

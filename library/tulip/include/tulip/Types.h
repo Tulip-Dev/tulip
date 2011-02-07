@@ -173,6 +173,8 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
+ DECL_STORED_STRUCT(Coord);
+
 class TLP_SCOPE PointType {
 public:
   typedef Coord RealType;

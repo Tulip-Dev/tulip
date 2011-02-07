@@ -26,58 +26,50 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
 
+  // the template below defines how are returned and stored
+  // the types of value a MutableContainer can managed
+  // basically a type is returned and stored by value
   template <typename TYPE> 
-    struct ReturnType {
-      typedef const TYPE& ConstValue;
-      typedef TYPE& Value;
-    };
-
- 
-  // macro for basic types declaration
-#define DECL_BASIC_RETURN(T)			\
-  template <>					\
-    struct ReturnType<T> {			\
-    typedef T ConstValue;			\
-    typedef T Value;				\
-  }
-
-  DECL_BASIC_RETURN(char);
-  DECL_BASIC_RETURN(bool);
-  DECL_BASIC_RETURN(node);
-  DECL_BASIC_RETURN(edge);
-  DECL_BASIC_RETURN(Color);
-  DECL_BASIC_RETURN(int);
-  DECL_BASIC_RETURN(long);
-  DECL_BASIC_RETURN(unsigned int);
-  DECL_BASIC_RETURN(unsigned long);
-  DECL_BASIC_RETURN(float);
-  DECL_BASIC_RETURN(void*);
-
-  template <typename TYPE> 
-    struct StoredValueType {
+    struct StoredType {
+      // the type of the stored value
       typedef TYPE Value;
-
+      // the type of the returned value
+      typedef TYPE ReturnedValue;
+      // the type of a returned const value
+      typedef TYPE ReturnedConstValue;
+      // indicates if a pointer to the value is stored
       enum {isPointer=0};
+      // simply get
       inline static TYPE& get(const TYPE& val) {
 	return (TYPE&) val;
       }
-
+      // equallity test
       inline static bool equal(const TYPE& val1, const TYPE& val2) {
 	return val2 == val1;
       }
-
-      inline static TYPE copy(const TYPE& val) {
+      // cloning before storage
+      inline static Value clone(const TYPE& val) {
 	return val;
       }
-
-      inline static void destroy(TYPE) {}
+      // destruction of stored value
+      inline static void destroy(Value) {}
+      // the default value of that type
+      inline static Value defaultValue() {
+	return (Value) 0;
+      }
     };
 
-  // macro for structure types declaration
+// non basic types are returned by reference
+// and stored by pointer
+// This last point enables a better management of the default value
+// which can simply be flagged in storing a null pointer
+// the macro below must be used to enable thies type of management
 #define DECL_STORED_STRUCT(T)					\
   template <>							\
-    struct StoredValueType<T> {					\
+    struct StoredType<T> {					\
     typedef T *Value;						\
+    typedef T& ReturnedValue;					\
+    typedef const T& ReturnedConstValue;			\
 								\
     enum {isPointer=1};						\
 								\
@@ -89,12 +81,19 @@ namespace tlp {
       return val2 == *val1;					\
     }								\
 								\
-    inline static Value copy(const T& val) {			\
+    inline static bool equal(const T& val2, Value val1) {	\
+      return val2 == *val1;					\
+    }								\
+								\
+    inline static Value clone(const T& val) {			\
       return new T(val);					\
     }								\
 								\
     inline static void destroy(Value val) {			\
       delete val;						\
+    }								\
+    inline static Value defaultValue() {			\
+      return new T();						\
     }								\
   }
 }
