@@ -214,6 +214,16 @@ void MutableContainerTest::testSetGet() {
     mutBool->set(rando, false);
     CPPUNIT_ASSERT( mutBool->get(rando) == false );
   }
+  for (unsigned int i=0;i<NBTEST*10;++i) {
+    unsigned int rando=rand()%NBTEST;
+    bool isNotDefault = true;
+    mutBool->set(rando, true);
+    CPPUNIT_ASSERT(mutBool->get(rando, isNotDefault) == true);
+    CPPUNIT_ASSERT(isNotDefault == false);
+    mutString->set(rando, string("Sophie"));
+    CPPUNIT_ASSERT(mutString->get(rando, isNotDefault) == string("Sophie"));
+    CPPUNIT_ASSERT(isNotDefault == false);
+  }
 }
 //==========================================================
 CppUnit::Test * MutableContainerTest::suite() {
