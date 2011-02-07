@@ -68,12 +68,8 @@ namespace tlp {
     BoundingBox includeBoundingBox;
     inputData->glyphs.get(inputData->getElementShape()->getNodeValue(n))->getIncludeBoundingBox(includeBoundingBox,n);
     Coord includeScale(includeBoundingBox[1] - includeBoundingBox[0]);
-    Coord size = (maxC + minC)/-1.f;
+    Coord includeTranslate(includeBoundingBox.center());
     Coord translate( (maxC+minC)/-2.f);
-    for(int i=0;i<3;i++){
-      if(includeScale[i]!=0)
-        translate[i]-= includeBoundingBox.center()[i]/includeScale[i]*size[i];
-    }
     double dept;
     if(includeScale[2]==0)
       dept=0;
@@ -95,6 +91,7 @@ namespace tlp {
       includeSize[2]*=nodeSize[2]/includeSize[2];
 
     glScalef(includeSize[0], includeSize[1], includeSize[2]);
+    glTranslatef(includeTranslate[0],includeTranslate[1],includeTranslate[2]-width/1000.);
 
     if (width<0.0001) width=1;
     if (height<0.0001) height=1;
