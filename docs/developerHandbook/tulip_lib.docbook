@@ -1510,7 +1510,7 @@ private:
         	<programlisting>
 <![CDATA[  //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   GraphObserverTest graphObserverTest;
-  graph->addObserver(&graphObserverTest);
+  graph->addGraphObserver(&graphObserverTest);
   //- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -]]>
         	</programlisting>
         	<para> We add the instance of our class GraphObserverTest with the function <code> Graph::addObserver </code>.
