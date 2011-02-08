@@ -95,7 +95,7 @@ namespace tlp {
     inline static Value defaultValue() {			\
       return new T();						\
     }								\
-  }
+  };
 }
 #endif
 #endif
