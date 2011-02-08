@@ -64,7 +64,7 @@ class ObservableGraph;
  * int main() {
  *   Graph *g = tlp::newGraph();
  *   PrintObs obs;
- *   g->addObserver(&obs);
+ *   g->addGraphObserver(&obs);
  *   g->addNode(); //output node 0 added in 0x
  *   g->addNode(); //output node 0 added in 0x
  * }
