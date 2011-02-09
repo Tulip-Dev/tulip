@@ -178,34 +178,34 @@ namespace tlp {
             if (ok) {
                 string erreurMsg;
                 graph->push();
-                char* resChars = res.toUtf8().data();
-                if (strcmp(resChars, "Selection") == 0)
+
+                if (res == trUtf8("Selection"))
                     graph->getLocalProperty<BooleanProperty> (textString);
-                if (strcmp(resChars, "Metric") == 0)
+                if (res == trUtf8("Metric"))
                     graph->getLocalProperty<DoubleProperty> (textString);
-                if (strcmp(resChars, "Layout") == 0)
+                if (res == trUtf8("Layout"))
                     graph->getLocalProperty<LayoutProperty> (textString);
-                if (strcmp(resChars, "String") == 0)
+                if (res == trUtf8("String"))
                     graph->getLocalProperty<StringProperty> (textString);
-                if (strcmp(resChars, "Integer") == 0)
+                if (res == trUtf8("Integer"))
                     graph->getLocalProperty<IntegerProperty> (textString);
-                if (strcmp(resChars, "Size") == 0)
+                if (res == trUtf8("Size"))
                     graph->getLocalProperty<SizeProperty> (textString);
-                if (strcmp(resChars, "Color") == 0)
+                if (res == trUtf8("Color"))
                     graph->getLocalProperty<ColorProperty> (textString);
-                if (strcmp(resChars, "BooleanVector") == 0)
+                if (res == trUtf8("BooleanVector"))
                     graph->getLocalProperty<BooleanVectorProperty> (textString);
-                if (strcmp(resChars, "DoubleVector") == 0)
+                if (res == trUtf8("DoubleVector"))
                     graph->getLocalProperty<DoubleVectorProperty> (textString);
-                if (strcmp(resChars, "CoordVector") == 0)
+                if (res == trUtf8("CoordVector"))
                     graph->getLocalProperty<CoordVectorProperty> (textString);
-                if (strcmp(resChars, "StringVector") == 0)
+                if (res == trUtf8("StringVector"))
                     graph->getLocalProperty<StringVectorProperty> (textString);
-                if (strcmp(resChars, "IntegerVector") == 0)
+                if (res == trUtf8("IntegerVector"))
                     graph->getLocalProperty<IntegerVectorProperty> (textString);
-                if (strcmp(resChars, "SizeVector") == 0)
+                if (res == trUtf8("SizeVector"))
                     graph->getLocalProperty<SizeVectorProperty> (textString);
-                if (strcmp(resChars, "ColorVector") == 0)
+                if (res == trUtf8("ColorVector"))
                     graph->getLocalProperty<ColorVectorProperty> (textString);
                 setGraph(graph);
                 emit newPropertySignal(graph, textString);
