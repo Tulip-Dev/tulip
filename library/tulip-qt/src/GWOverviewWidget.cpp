@@ -255,6 +255,10 @@ void GWOverviewWidget::updateView() {
   }
 }
 //=============================================================================
+void GWOverviewWidget::show(){
+  updateView();
+}
+//=============================================================================
 void RectPosition::draw(GlMainWidget*) {
   //assert (_view == target);
   if(_observedView == 0) {

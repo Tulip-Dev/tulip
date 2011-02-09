@@ -64,6 +64,8 @@ public slots:
   /*void backColor(); //background color button
   void showRenderingParametersDialog();*/
 
+  void show();
+
 private slots:
   //Used to catch graphRedrawn signal from view of which
   //we are showing an overview

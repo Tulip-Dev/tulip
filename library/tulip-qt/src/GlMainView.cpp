@@ -143,10 +143,12 @@ void GlMainView::showDialog(QAction* action){
   string name(action->text().toStdString());
 
   if (name=="3D &Overview") {
-    if(overviewFrame->isVisible())
+    if(overviewFrame->isVisible()){
       overviewFrame->hide();
-    else
+    }else{
       overviewFrame->show();
+      overviewWidget->show();
+    }
   }
 }
 }
