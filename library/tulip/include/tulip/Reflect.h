@@ -35,13 +35,24 @@ namespace tlp {
 
 class Graph;
 
- struct TLP_SCOPE DataMem {
+// basic interface to embed a data of any type
+struct TLP_SCOPE DataMem {
    DataMem(){}
    virtual ~DataMem() {};
- };
+};
 
- // Basic class to embed a value of any type
- struct DataType :public DataMem {
+// basic template to embed a value of a known type
+template<typename TYPE> struct TypedValueContainer: public DataMem {
+   TYPE value;
+   TypedValueContainer() {}
+   TypedValueContainer(const TYPE& val) : value(val) {}
+   ~TypedValueContainer() {
+  }
+};
+
+// Basic class to embed a value of any type
+// in a data set
+struct DataType :public DataMem {
    DataType(){}
    DataType(void *value):value(value) {}
    // return a deep copy of this
@@ -52,7 +63,7 @@ class Graph;
    void *value;
  };
 
- // template class to embed value of know type
+ // template class to embed value of known type
  template<typename T>
  struct TypedData :public DataType {
    TypedData(void *value) :DataType(value) {}

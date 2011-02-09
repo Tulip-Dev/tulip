@@ -20,9 +20,10 @@
 #define TULIP_METRIC_H
 
 #include "tulip/tuliphash.h"
+#include "tulip/PropertyTypes.h"
 #include "tulip/AbstractProperty.h"
-#include "tulip/TemplateFactory.h"
 #include "tulip/DoubleAlgorithm.h"
+#include "tulip/ObservableGraph.h"
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

@@ -17,11 +17,8 @@
  *
  */
 
+#include "tulip/Graph.h"
 #include "tulip/StringProperty.h"
-#include "tulip/PluginContext.h"
-#include "tulip/Observable.h"
-#include "tulip/StringAlgorithm.h"
-#include "tulip/AbstractProperty.h"
 
 using namespace std;
 using namespace tlp;

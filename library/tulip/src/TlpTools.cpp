@@ -35,7 +35,7 @@
 #include "thirdparty/gzstream/gzstream.h"
 
 #include "tulip/TlpTools.h"
-#include "tulip/Types.h"
+#include "tulip/PropertyTypes.h"
 #include "tulip/LayoutProperty.h"
 #include "tulip/DoubleProperty.h"
 #include "tulip/StringProperty.h"

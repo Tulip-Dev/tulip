@@ -22,12 +22,11 @@
 #include <string>
 #include <cstdlib>
 #include "tulip/tulipconf.h"
+#include "tulip/StoredType.h"
+#include "tulip/MutableContainer.h"
 #include "tulip/PropertyInterface.h"
 #include "tulip/Iterator.h"
-#include "tulip/Types.h"
 #include "tulip/PropertyAlgorithm.h"
-#include "tulip/MutableContainer.h"
-#include "tulip/ReturnType.h"
 #include "tulip/TemplateFactory.h"
 #include "tulip/Reflect.h"
 
@@ -52,8 +51,8 @@ public:
     if ((_hasnext = it->hasNext())) {
       curElt = it->next();
       while (!(_hasnext = (!graph || graph->isElement(curElt)))) {
-  if (!it->hasNext()) break;
-  curElt=it->next();
+	if (!it->hasNext()) break;
+	curElt=it->next();
       }
     }
     return tmp;
@@ -68,16 +67,6 @@ public:
   }
   ~GraphEltIterator() {
     delete it;
-  }
-};
-
-template<typename T>
-struct PropertyValueContainer :public tlp::DataMem {
-  T value;
-  PropertyValueContainer(const T& val) : value(val) {
-    value = val;
-  }
-  ~PropertyValueContainer() {
   }
 };
 
@@ -323,42 +312,42 @@ public:
         }
   // for performance reason and use in GraphUpdatesRecorder
   virtual DataMem* getNodeDefaultDataMemValue() const {
-    return new PropertyValueContainer<typename Tnode::RealType>(getNodeDefaultValue());
+    return new TypedValueContainer<typename Tnode::RealType>(getNodeDefaultValue());
   }
   virtual DataMem* getEdgeDefaultDataMemValue() const {
-    return new PropertyValueContainer<typename Tedge::RealType>(getEdgeDefaultValue());
+    return new TypedValueContainer<typename Tedge::RealType>(getEdgeDefaultValue());
   }
   virtual DataMem* getNodeDataMemValue(const node n) const {
-    return new PropertyValueContainer<typename Tnode::RealType>(getNodeValue(n));
+    return new TypedValueContainer<typename Tnode::RealType>(getNodeValue(n));
   }
   virtual DataMem* getEdgeDataMemValue(const edge e) const {
-    return new PropertyValueContainer<typename Tedge::RealType>(getEdgeValue(e));
+    return new TypedValueContainer<typename Tedge::RealType>(getEdgeValue(e));
   }
   virtual DataMem* getNonDefaultDataMemValue( const node n ) const {
     bool notDefault;
     typename StoredType<typename Tnode::RealType>::ReturnedValue value = nodeProperties.get(n.id, notDefault);
     if (notDefault)
-      return new PropertyValueContainer<typename Tnode::RealType>(value);
+      return new TypedValueContainer<typename Tnode::RealType>(value);
     return NULL;
   }
   virtual DataMem* getNonDefaultDataMemValue( const edge e ) const {
     bool notDefault;
     typename StoredType<typename Tedge::RealType>::ReturnedValue value = edgeProperties.get(e.id, notDefault);
     if (notDefault)
-      return new PropertyValueContainer<typename Tedge::RealType>(value);
+      return new TypedValueContainer<typename Tedge::RealType>(value);
     return NULL;
   }
   virtual void setNodeDataMemValue( const node n, const DataMem* v) {
-    setNodeValue(n, ((PropertyValueContainer<typename Tnode::RealType> *) v)->value);
+    setNodeValue(n, ((TypedValueContainer<typename Tnode::RealType> *) v)->value);
   }
   virtual void setEdgeDataMemValue( const edge e, const DataMem* v) {
-    setEdgeValue(e, ((PropertyValueContainer<typename Tedge::RealType> *) v)->value);
+    setEdgeValue(e, ((TypedValueContainer<typename Tedge::RealType> *) v)->value);
   }
   virtual void setAllNodeDataMemValue(const DataMem* v) {
-    setAllNodeValue(((PropertyValueContainer<typename Tnode::RealType> *) v)->value);
+    setAllNodeValue(((TypedValueContainer<typename Tnode::RealType> *) v)->value);
   }
   virtual void setAllEdgeDataMemValue(const DataMem* v) {
-    setAllEdgeValue(((PropertyValueContainer<typename Tedge::RealType> *) v)->value);
+    setAllEdgeValue(((TypedValueContainer<typename Tedge::RealType> *) v)->value);
   }
 
   // PropertyInterface methods

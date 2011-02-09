@@ -24,7 +24,6 @@
 #include <config.h>
 #endif
 
-#include "tulip/Types.h"
 #include "tulip/PropertyAlgorithm.h"
 
 namespace tlp {

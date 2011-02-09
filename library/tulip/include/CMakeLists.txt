@@ -33,7 +33,7 @@ INSTALL(FILES
 	tulip/Node.h 
 	tulip/Edge.h 
 	tulip/Graph.h 
-	tulip/Types.h 
+	tulip/PropertyTypes.h 
 	tulip/Color.h 
 	tulip/MethodFactory.h 
 	tulip/PluginLoaderTxt.h 
@@ -73,7 +73,7 @@ INSTALL(FILES
 	tulip/SortIterator.h 
 	tulip/GraphMeasure.h 
 	tulip/ConcatIterator.h 
-	tulip/ReturnType.h 
+	tulip/StoredType.h 
 	tulip/MutableContainer.h 
 	tulip/PluginLibraryLoader.h 
 	tulip/StlFunctions.h 
