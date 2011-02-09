@@ -24,11 +24,10 @@
 #endif
 
 #include "tulip/tuliphash.h"
+#include "tulip/PropertyTypes.h"
 #include "tulip/ObservableGraph.h"
 #include "tulip/AbstractProperty.h"
-#include "tulip/TemplateFactory.h"
 #include "tulip/LayoutAlgorithm.h"
-#include "tulip/Types.h"
 
 namespace tlp {
 

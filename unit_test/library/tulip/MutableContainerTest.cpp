@@ -44,38 +44,38 @@ void MutableContainerTest::tearDown() {
 //==========================================================
 void MutableContainerTest::testCompression() {
   mutDouble->setAll(10.0);
-  CPPUNIT_ASSERT_EQUAL(VECT, mutDouble->state);
+  CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
   CPPUNIT_ASSERT_EQUAL(unsigned(0)   , mutDouble->elementInserted);
   for (unsigned int i=0; i<1000; ++i) {
     mutDouble->set(100+i,13.0);
-    CPPUNIT_ASSERT_EQUAL(VECT, mutDouble->state);
+    CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
     CPPUNIT_ASSERT_EQUAL(i+1 , mutDouble->elementInserted);
   }
   mutDouble->setAll(10.0);
-  CPPUNIT_ASSERT_EQUAL(VECT, mutDouble->state);
+  CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
   CPPUNIT_ASSERT_EQUAL(unsigned(0)   , mutDouble->elementInserted);
   for (unsigned int i=0; i<1000; ++i) {
     mutDouble->set(10000+i*2,13.0);
-    CPPUNIT_ASSERT_EQUAL(VECT, mutDouble->state);
+    CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
     CPPUNIT_ASSERT_EQUAL(i+1 , mutDouble->elementInserted);
   }
   for (unsigned int i=0; i<1000; ++i) {
     mutDouble->set(10000+i*2,13.0);
-    CPPUNIT_ASSERT_EQUAL(VECT, mutDouble->state);
+    CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
     CPPUNIT_ASSERT_EQUAL(unsigned(1000) , mutDouble->elementInserted);
   }
   mutDouble->setAll(10.0);
-  CPPUNIT_ASSERT_EQUAL(VECT, mutDouble->state);
+  CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
   CPPUNIT_ASSERT_EQUAL(unsigned(0)   , mutDouble->elementInserted);
   mutDouble->set(1000, 345);
   mutDouble->set(10000, 345);
-  CPPUNIT_ASSERT_EQUAL(HASH, mutDouble->state);
+  CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::HASH, mutDouble->state);
   CPPUNIT_ASSERT_EQUAL(unsigned(2)   , mutDouble->elementInserted);
   for (unsigned int i=1001; i<10000; ++i) {
     mutDouble->set(i, 345);
     CPPUNIT_ASSERT_EQUAL(unsigned(i+2-1000) , mutDouble->elementInserted);
   }
-  CPPUNIT_ASSERT_EQUAL(VECT, mutDouble->state);
+  CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
   mutDouble->setAll(-1);
   std::ifstream in("sillyMutableData.txt");
   unsigned int id;

@@ -30,7 +30,7 @@
 #include <iostream>
 #include <sstream>
 #include <float.h>
-#include <tulip/ReturnType.h>
+#include <tulip/StoredType.h>
 #include "tulip/Coord.h"
 #include "tulip/Size.h"
 #include "tulip/Color.h"
@@ -287,9 +287,3 @@ extern TLP_SCOPE void initTypeSerializers();
 }
 /*@}*/
 #endif
-
-
-
-
-
-

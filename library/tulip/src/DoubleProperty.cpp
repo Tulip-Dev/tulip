@@ -21,7 +21,6 @@
 #include "tulip/ForEach.h"
 #include "tulip/DoubleProperty.h"
 #include "tulip/PluginContext.h"
-#include "tulip/Observable.h"
 #include "tulip/DoubleAlgorithm.h"
 #include "tulip/AbstractProperty.h"
 

@@ -19,9 +19,7 @@
 #include <limits.h>
 #include "tulip/IntegerProperty.h"
 #include "tulip/PluginContext.h"
-#include "tulip/Observable.h"
 #include "tulip/IntegerAlgorithm.h"
-#include "tulip/AbstractProperty.h"
 
 using namespace std;
 using namespace tlp;

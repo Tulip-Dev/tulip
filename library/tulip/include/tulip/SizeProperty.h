@@ -24,8 +24,8 @@
 #endif
 
 #include "tulip/tuliphash.h"
+#include "tulip/PropertyTypes.h"
 #include "tulip/AbstractProperty.h"
-#include "tulip/TemplateFactory.h"
 #include "tulip/SizeAlgorithm.h"
 
 namespace tlp {

@@ -22,7 +22,7 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 #include "tulip/OpenGlConfigManager.h"
 
-#include <tulip/Types.h>
+#include <tulip/PropertyTypes.h>
 
 #include "tulip/GlComplexeEntity.h"
 #include "tulip/EdgeExtremityGlyph.h"

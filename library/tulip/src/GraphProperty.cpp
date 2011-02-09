@@ -19,8 +19,6 @@
 #include <float.h>
 #include "tulip/GraphProperty.h"
 #include "tulip/PluginContext.h"
-#include "tulip/Observable.h"
-#include "tulip/AbstractProperty.h"
 
 using namespace std;
 using namespace tlp;

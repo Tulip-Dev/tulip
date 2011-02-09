@@ -99,7 +99,7 @@ void GraphUpdatesRecorder::deleteValues(TLP_HASH_MAP<unsigned long,
 
 // delete all the DataMem referenced by a MutableContainer
 void GraphUpdatesRecorder::deleteValues(MutableContainer<DataMem*>* values) {
-  IteratorValue* itv = values->findAll(NULL, false);
+  IteratorValue* itv = values->findAllValues(NULL, false);
   while(itv->hasNext()) {
     TypedValueContainer<DataMem*> tVal;
     itv->nextValue(tVal);
@@ -313,7 +313,7 @@ void GraphUpdatesRecorder::recordNewNodeValues(PropertyInterface* p) {
       oldNodeValues.find((unsigned long) p);
     if (itp != oldNodeValues.end()) {
       MutableContainer<DataMem*>* opv = (*itp).second;
-      IteratorValue* itov = opv->findAll(NULL, false);
+      IteratorValue* itov = opv->findAllValues(NULL, false);
       while(itov->hasNext()) {
 	node n(itov->next());
 	DataMem* value = p->getNonDefaultDataMemValue(n);
@@ -353,7 +353,7 @@ void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface* p) {
       oldEdgeValues.find((unsigned long) p);
     if (itp != oldEdgeValues.end()) {
       MutableContainer<DataMem*>* opv = (*itp).second;
-      IteratorValue* itov = opv->findAll(NULL, false);
+      IteratorValue* itov = opv->findAllValues(NULL, false);
       while(itov->hasNext()) {
 	edge e(itov->next());
 	DataMem* value = p->getNonDefaultDataMemValue(e);
@@ -632,7 +632,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     nodeValues.begin();
   while(itnv != nodeValues.end()) {
     PropertyInterface* prop = (PropertyInterface *) (*itnv).first;
-    IteratorValue* itv = (*itnv).second->findAll(NULL, false);
+    IteratorValue* itv = (*itnv).second->findAllValues(NULL, false);
     while(itv->hasNext()) {
       TypedValueContainer<DataMem*> tVal;
       node n(itv->nextValue(tVal));
@@ -648,7 +648,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     edgeValues.begin();
   while(itev != edgeValues.end()) {
     PropertyInterface* prop = (PropertyInterface *) (*itev).first;
-    IteratorValue* itv = (*itev).second->findAll(NULL, false);
+    IteratorValue* itv = (*itev).second->findAllValues(NULL, false);
     while(itv->hasNext()) {
       TypedValueContainer<DataMem*> tVal;
       edge e(itv->nextValue(tVal));

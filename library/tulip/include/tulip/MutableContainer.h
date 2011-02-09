@@ -25,121 +25,29 @@
 #include <cassert>
 #include <tulip/tulipconf.h>
 #include <tulip/tuliphash.h>
-#include <tulip/ReturnType.h>
+#include <tulip/StoredType.h>
+#include <tulip/Reflect.h>
 #include <tulip/Iterator.h>
 
 namespace tlp {
 
-enum State { VECT=0, HASH=1 };
-
 #ifndef DOXYGEN_NOTFOR_DEVEL
 //===================================================================
- struct AnyValueContainer {
-   AnyValueContainer() {}
- };
-
- template<typename TYPE> struct TypedValueContainer: public AnyValueContainer {
-   TYPE value;
-   TypedValueContainer() {}
-   TypedValueContainer(const TYPE& val) : value(val) {}
- };
-   
-// add class to allow iteration on values
+// we first define an interface
+// to make easier the iteration on values
+// stored in a MutableContainer for the GraphUpdatesRecorder
 class IteratorValue: public Iterator<unsigned int> {
  public:
   IteratorValue() {}
   virtual ~IteratorValue() {}
-  virtual unsigned int nextValue(AnyValueContainer&) = 0;
+  virtual unsigned int nextValue(DataMem&) = 0;
 };
-template <typename TYPE> 
-class IteratorVect : public IteratorValue {
- public:
- IteratorVect(const TYPE &value, bool equal, std::deque<typename StoredType<TYPE>::Value> *vData, unsigned int minIndex):
-   _value(value),
-     _equal(equal),
-     _pos(minIndex),
-     vData(vData),
-     it(vData->begin()) {
-     while (it!=(*vData).end() &&
-	    StoredType<TYPE>::equal((*it), _value) != _equal) {
-       ++it;
-       ++_pos;
-     }
-   }
-   bool hasNext() {
-    return (_pos<UINT_MAX && it!=(*vData).end());
-  }
-  unsigned int next() {
-    unsigned int tmp = _pos;
-    do {
-      ++it;
-      ++_pos;
-    } while (it!=(*vData).end() &&
-	     StoredType<TYPE>::equal((*it), _value) != _equal);
-    return tmp;
-  }
-  unsigned int nextValue(AnyValueContainer& val) {
-    ((TypedValueContainer<TYPE>&) val).value = StoredType<TYPE>::get(*it);
-    unsigned int pos = _pos;
-    do {
-      ++it;
-      ++_pos;
-    } while (it!=(*vData).end() &&
-	     StoredType<TYPE>::equal((*it), _value) != _equal);
-    return pos;
-  }
- private:
-  const TYPE _value;
-  bool _equal;
-  unsigned int _pos;
-  std::deque<typename StoredType<TYPE>::Value> *vData;
-  typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it;
-};
-//===================================================================
-template <typename TYPE> 
-class IteratorHash : public IteratorValue {
- public:
-  IteratorHash(const TYPE &value, bool equal, TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData):
-    _value(value),
-    _equal(equal),
-    hData(hData) {
-    it=(*hData).begin();
-    while (it!=(*hData).end() &&
-	   StoredType<TYPE>::equal((*it).second,_value) != _equal)
-      ++it;
-  }
-  bool hasNext() {
-    return (it!=(*hData).end());
-  }
-  unsigned int next() {
-    unsigned int tmp = (*it).first;
-    do {
-      ++it;
-    } while (it!=(*hData).end() &&
-	     StoredType<TYPE>::equal((*it).second,_value) != _equal);
-    return tmp;
-  }
-  unsigned int nextValue(AnyValueContainer& val) {
-    ((TypedValueContainer<TYPE>&) val).value =
-      StoredType<TYPE>::get((*it).second);
-    unsigned int pos = (*it).first;
-    do {
-      ++it;
-    } while (it!=(*hData).end() &&
-	     StoredType<TYPE>::equal((*it).second,_value) != _equal);
-    return pos;
-  }
- private:
-  const TYPE _value;
-  bool _equal;
-  TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData;
-  typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
-};
-#endif
+#endif // DOXYGEN_NOTFOR_DEVEL
 //===================================================================
 template <typename TYPE> 
 class MutableContainer {
   friend class MutableContainerTest;
+  friend class GraphUpdatesRecorder;
 public:
   MutableContainer();
   ~MutableContainer();
@@ -163,7 +71,7 @@ public:
    * A null pointer is returned in case of an iteration on all the elements
    * whose value is equal to the default value.
    */
-  IteratorValue* findAll(const TYPE &value, bool equal = true) const;
+  Iterator<unsigned int>* findAll(const TYPE &value, bool equal = true) const;
 private:
   MutableContainer(const MutableContainer<TYPE> &){}
   void operator=(const MutableContainer<TYPE> &){}
@@ -171,16 +79,19 @@ private:
   void hashtovect();
   void compress(unsigned int min, unsigned int max, unsigned int nbElements);
   void vectset(const unsigned int i, typename StoredType<TYPE>::Value value);
+  IteratorValue* findAllValues(const TYPE &value, bool equal = true) const;
  private:
   std::deque<typename StoredType<TYPE>::Value> *vData;
   TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData;
   unsigned int minIndex,maxIndex;
   typename StoredType<TYPE>::Value defaultValue;
+  enum State { VECT=0, HASH=1 };
   State state;
   unsigned int elementInserted;
   double ratio;
   bool compressing;
 };
+#ifndef DOXYGEN_NOTFOR_DEVEL
 //===================================================================
 template<typename TYPE> 
   MutableContainer<TYPE>::MutableContainer(): vData(new std::deque<typename StoredType<TYPE>::Value>()),
@@ -267,9 +178,100 @@ void MutableContainer<TYPE>::setAll(const TYPE &value) {
   elementInserted = 0;
 }
 //===================================================================
+// we implement 2 templates with IteratorValue as parent class
+// for the two kinds of storage used in a MutableContainer
+// one for vector storage
 template <typename TYPE> 
-  IteratorValue* MutableContainer<TYPE>::findAll(const TYPE &value,
-						 bool equal) const {
+class IteratorVect : public IteratorValue {
+ public:
+ IteratorVect(const TYPE &value, bool equal, std::deque<typename StoredType<TYPE>::Value> *vData, unsigned int minIndex):
+   _value(value),
+     _equal(equal),
+     _pos(minIndex),
+     vData(vData),
+     it(vData->begin()) {
+     while (it!=(*vData).end() &&
+	    StoredType<TYPE>::equal((*it), _value) != _equal) {
+       ++it;
+       ++_pos;
+     }
+   }
+   bool hasNext() {
+    return (_pos<UINT_MAX && it!=(*vData).end());
+  }
+  unsigned int next() {
+    unsigned int tmp = _pos;
+    do {
+      ++it;
+      ++_pos;
+    } while (it!=(*vData).end() &&
+	     StoredType<TYPE>::equal((*it), _value) != _equal);
+    return tmp;
+  }
+  unsigned int nextValue(DataMem& val) {
+    ((TypedValueContainer<TYPE>&) val).value = StoredType<TYPE>::get(*it);
+    unsigned int pos = _pos;
+    do {
+      ++it;
+      ++_pos;
+    } while (it!=(*vData).end() &&
+	     StoredType<TYPE>::equal((*it), _value) != _equal);
+    return pos;
+  }
+ private:
+  const TYPE _value;
+  bool _equal;
+  unsigned int _pos;
+  std::deque<typename StoredType<TYPE>::Value> *vData;
+  typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it;
+};
+
+// one for hash storage
+template <typename TYPE> 
+class IteratorHash : public IteratorValue {
+ public:
+  IteratorHash(const TYPE &value, bool equal, TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData):
+    _value(value),
+    _equal(equal),
+    hData(hData) {
+    it=(*hData).begin();
+    while (it!=(*hData).end() &&
+	   StoredType<TYPE>::equal((*it).second,_value) != _equal)
+      ++it;
+  }
+  bool hasNext() {
+    return (it!=(*hData).end());
+  }
+  unsigned int next() {
+    unsigned int tmp = (*it).first;
+    do {
+      ++it;
+    } while (it!=(*hData).end() &&
+	     StoredType<TYPE>::equal((*it).second,_value) != _equal);
+    return tmp;
+  }
+  unsigned int nextValue(DataMem& val) {
+    ((TypedValueContainer<TYPE>&) val).value =
+      StoredType<TYPE>::get((*it).second);
+    unsigned int pos = (*it).first;
+    do {
+      ++it;
+    } while (it!=(*hData).end() &&
+	     StoredType<TYPE>::equal((*it).second,_value) != _equal);
+    return pos;
+  }
+ private:
+  const TYPE _value;
+  bool _equal;
+  TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData;
+  typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
+};
+//===================================================================
+// this method is private and used as is by GraphUpdatesRecorder class
+// it is also used to implement findAll
+template <typename TYPE> 
+  IteratorValue* MutableContainer<TYPE>::findAllValues(const TYPE &value,
+						       bool equal) const {
   if (equal &&
       StoredType<TYPE>::equal(defaultValue, value))
     // error
@@ -286,9 +288,15 @@ template <typename TYPE>
       assert(false);
       std::cerr << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
       return 0;
-      break; 
     }
   }
+}
+ //===================================================================
+ // this method is visible for any class
+template <typename TYPE> 
+  Iterator<unsigned int>* MutableContainer<TYPE>::findAll(const TYPE &value,
+							  bool equal) const {
+  return findAllValues(value, equal);
 }
 //===================================================================
 template <typename TYPE> 
@@ -574,7 +582,7 @@ void MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, unsign
     break; 
   }
 }
-//===================================================================
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 }
 #endif

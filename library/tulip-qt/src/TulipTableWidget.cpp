@@ -39,6 +39,7 @@
 #include <QtGui/qitemeditorfactory.h>
 
 #include <tulip/Graph.h>
+#include <tulip/PropertyTypes.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>
@@ -50,7 +51,6 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/Glyph.h>
-#include <tulip/Types.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GlTextureManager.h>

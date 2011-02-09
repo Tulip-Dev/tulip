@@ -23,8 +23,8 @@
 #include <config.h>
 #endif
 
+#include "tulip/PropertyTypes.h"
 #include "tulip/AbstractProperty.h"
-#include "tulip/TemplateFactory.h"
 #include "tulip/ColorAlgorithm.h"
 
 namespace tlp {
