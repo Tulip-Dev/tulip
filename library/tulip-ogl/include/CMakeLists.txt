@@ -73,11 +73,12 @@ INSTALL(FILES
 	tulip/OpenGlConfigManager.h
 	tulip/OpenGlErrorViewer.h
 	tulip/AbstractGlCurve.h
-  tulip/GlCPULODCalculator.h
-  tulip/GlQuadTreeLODCalculator.h
-  tulip/GlSceneZoomAndPan.h
-  tulip/ParametricCurves.h
+    tulip/GlCPULODCalculator.h
+    tulip/GlQuadTreeLODCalculator.h
+    tulip/GlSceneZoomAndPan.h
+    tulip/ParametricCurves.h
 	tulip/GlVertexArrayManager.h
+	tulip/GlVertexArrayVisitor.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_ogl_dev
 )
