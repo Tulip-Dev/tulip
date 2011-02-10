@@ -365,7 +365,8 @@ INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config
         DESTINATION ${TulipBinInstallDir})
 INSTALL(FILES FindTULIP3.cmake 
         DESTINATION ${TulipShareInstallDir})
-
+INSTALL(FILES FindGLEW.cmake 
+        DESTINATION ${TulipShareInstallDir})
 ## -----------------------------------------------------------------------------------------------
 ## CPack packaging directives
 ## -----------------------------------------------------------------------------------------------
