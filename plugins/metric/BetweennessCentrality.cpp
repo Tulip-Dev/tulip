@@ -32,28 +32,50 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_BODY() \
   "indicate if the graph should be considered as directed or not" \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()				 \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "default", "false" )	 \
+  HTML_HELP_BODY() \
+  "If true the mesure will be normalized unweight not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2) "	\
+  "If true the mesure will be normalized unweight directed     : m(n) = c(n) / (#V - 1)(#V - 2) " \
   HTML_HELP_CLOSE()
 };
 
 /** \addtogroup metric */
 /*@{*/
 /** This plugin is an implementation of betweeness centrality parameter.
- *  algorithm published by:
+ *  (see http://en.wikipedia.org/wiki/Centrality#Betweenness_centrality for more details)
  *
- *  U. Brandes,
+ *  Algorithm published by:
+ *
+ *  U. Brandes, \n
+ *  "A Faster Algorithm for Betweenness Centrality", \n
+ *  "Journal of Mathematical Sociology" \n
+ *  "2001", \n
+ *  volume 25, \n
+ *  pages 163-177
+ *
+ *  \note The complexity of the algorithm is O(|V| * |E|) in time
  *
  */
 class BetweennessCentrality:public DoubleAlgorithm { 
 public:
   BetweennessCentrality(const PropertyContext &context):DoubleAlgorithm(context){
   addParameter<bool>("directed", paramHelp[0], "false");  
+  addParameter<bool>("norm", paramHelp[1], "false", false);
   };
   bool run() {
     doubleResult->setAllNodeValue(0.0);
     bool directed = false;
+    bool norm = false;
     if ( dataSet!=0 ) {
       dataSet->get("directed",directed);
+      dataSet->get("norm", norm);
     }
+
+    //Metric is 0 in this case
+    if(graph->numberOfNodes()<=2) return true;
 
     Iterator<node> *it = graph->getNodes();
     unsigned int count = 0;
@@ -101,9 +123,24 @@ public:
 	  node v = *itn;
 	  delta.set(v.id, delta.get(v.id) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
 	}
-	if (w != s) doubleResult->setNodeValue(w, doubleResult->getNodeValue(w) + delta.get(w.id)); 
+        if (w != s) doubleResult->setNodeValue(w, doubleResult->getNodeValue(w) + delta.get(w.id));
       }
-    } delete it;
+    }
+    //Normalization
+    if(norm || !directed){
+      double n = graph->numberOfNodes();
+      it = graph->getNodes();
+      while(it->hasNext()){
+        node s = it->next();
+        //In the undirected case, the metric must be divided by two, then
+        if(norm)
+          doubleResult->setNodeValue(s,doubleResult->getNodeValue(s)/((n-1.0)*(n-2.0)));
+        else{
+          if(!directed) doubleResult->setNodeValue(s,doubleResult->getNodeValue(s)/2.0);
+        }
+      }
+    }
+    delete it;
     return pluginProgress->state()!=TLP_CANCEL;
   }
 };
