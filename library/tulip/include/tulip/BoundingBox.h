@@ -26,44 +26,81 @@
 
 namespace tlp {
     /**
-     * \brief class for 3D BoundingBox
+     * \brief This class represents the 3D bounding box of an object.
+     * It is mostly used to determine whether or not two object are in a state of collision.
      *
-     * Enables to both create and manipulate a 3D Axis Aligned box
+     * It is composed of two voxels, the first one (A) being the lowest point, the second (B) being the highest.
+     * As a bounding box is a mathematical entity describing the lowest and highest points, whether these points are in the top-left corner or 
+     * lower-right corner depends on the axes we use.
+     * Below is a crude ASCII-art description of tthe axes we use in our 3D world and the points where the min and max are thus positioned.
+     * Through the rest of this class's documentation, it will be assumed that this is the convention.
+     * 
+     *     y
+     *    |
+     *    |
+     *    |_____ x
+     *   /
+     *  /
+     * z
+     * 
+     *    _________ B
+     *   /        /|
+     *  /        / |
+     * /________/  |
+     * |        |  |
+     * |        |  |
+     * |        | / 
+     * |________|/
+     * A
+     * 
      *
      * Author : <a href="www.tulip-software.org">Tulip team</a>
      */
   struct BoundingBox : public Array<Vec3f, 2> {
   
-      /**
-        * create an invalid boundig box
-        */
-      BoundingBox() {
+      
+    /**
+     * @brief Creates an invalid boundig box.
+     * The minimum is in (1, 1, 1) and the maximum in (-1, -1, -1).
+     *
+     **/
+    BoundingBox() {
           (*this)[0].fill(1);
           (*this)[1].fill(-1);
           assert(!isValid());
-      }
-      /**
-       * create a valid bounding
-       * validity is test in debug mode
-       */
-      BoundingBox(const tlp::Vec3f& min, const tlp::Vec3f& max) {
+    }
+             
+    /**
+    * @brief Creates a bounding box that must be valid. 
+    * Validity is checked in debug mode by an assert.
+    *
+    * @param min The lower left closest point of the box.
+    * @param max The higher left most farther point of the box.
+    **/
+    BoundingBox(const tlp::Vec3f& min, const tlp::Vec3f& max) {
         (*this)[0] = min;
         (*this)[1] = max;
         assert(isValid());
-     }
+    }
+      
       /**
-      * assertion is raised in debug if the BoundingBox is not Valid
-      * @return center of the bounding
-      */
+       * @brief gets the geometrical center of the bounding box.
+       * An assertion is raised in debug mode if the BoundingBox is not valid.
+       *
+       * @return The center of the bounding box :Vec3f
+       **/
       Vec3f center() const {
           assert(isValid());
           return ((*this)[0] + (*this)[1]) / 2.f;
-      }
+    }
 
     /**
-      * @brief recompute the current Bounding to ensure that coord belongs to it
-      *
-      */
+     * @brief Expands the bounding box to one containing the vector passed as param.
+     * If the parameter is inside the bounding box, it remains unchanged.
+     *
+     * @param coord A point in the 3D space we want the bounding box to encompass.
+     * @return void
+     **/
     void expand(const tlp::Vec3f& coord) {
       if(!isValid()) {
           (*this)[0] = coord;
@@ -73,24 +110,56 @@ namespace tlp {
           (*this)[1] = tlp::maxVector((*this)[1], coord);
       }
     }
+    
     /**
-      * @brief translate the bounding
-      *
-      */
+     * @brief Translates the bounding box of the distance given by the parameter vector.
+     *
+     * @param vec The distance in 3D space to translate this bounding box by.
+     * @return void
+     **/
     void translate(const tlp::Vec3f& vec) {
         (*this)[0] += vec;
         (*this)[1] += vec;
     }
+    
     /**
-    * @return true if the Rectangle is well define [0] min corner, [1] max corner.
-    */
+     * @brief Checks whether this bounding box's lowest point is less than it's highest point.
+     * "Less Than" means axis-by-axis comparison, e.g. x1 < x2 && y1 < y2 && z1 < z3.
+     *
+     * @return bool Whether this bounding box is valid.
+     **/
     bool isValid() const {
         return (*this)[0][0] <= (*this)[1][0] && (*this)[0][1] <= (*this)[1][1] && (*this)[0][2] <= (*this)[1][2];
     }
+    
     /**
-      * Build the 8 points of the bounding box
-      */
-    void getCompleteBB(Vec3f bb[8]) const{
+     * @brief The vector passed as param is modified to contain the 8 points of the bounding box.
+     * The points are, in order :
+     * 0: lower leftmost closest point (the bounding box's minimum)
+     * 1: lower rightmost closest point
+     * 2: highest rightmost closest point
+     * 3: highest leftmost closest point
+     * 4: lower rightmost farthest point
+     * 5: lower rightmost farthest point
+     * 6: highest rightmost farthest point
+     * 7: highest leftmost farthest point
+     * 
+     * Crude ASCII art again, sorry for your eyes.
+     * 
+     *   6_________ 7
+     *   /|       /|
+     *  / |      / |
+     *3/__|_____/2 |
+     * |  |_____|__|
+     * |  /4    |  /5
+     * | /      | / 
+     * |/_______|/
+     * 0        1
+     * 
+     * @param bb A vector in which to put the points of the bounding box.
+     * @return void
+     **/
+    void getCompleteBB(Vec3f bb[8]) const {
       bb[0] = (*this)[0];
       bb[1] = (*this)[0];
       bb[1][0] = (*this)[1][0];
@@ -107,7 +176,6 @@ namespace tlp {
       bb[7] = bb[3];
       bb[7][2] = (*this)[1][2];
     }
-
 };
   
 }
