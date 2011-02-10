@@ -199,7 +199,7 @@ void GlCompositeHierarchyManager::addNode(tlp::Graph* source, tlp::node) {
 			stringstream graph;
 			graph << it->first->getId();
 			if(dataSet.exist(graph.str())) {
-				unsigned int visibility;
+				unsigned int visibility = 0;
 				dataSet.get<unsigned int>(graph.str(), visibility);
 				bool firstVisibility = visibility-1 > 0;
 				it->second.first->setVisible(firstVisibility);
