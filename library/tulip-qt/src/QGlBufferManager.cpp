@@ -57,7 +57,7 @@ namespace tlp
       while(!glPixelBuffer->isValid() && bufferToWidthHeight.size()>0) {
 	int widthToRemove=0;
 	int heightToRemove=0;
-	QGLPixelBuffer *bufferToRemove;
+	QGLPixelBuffer *bufferToRemove = NULL;
 
 	for(it=widthHeightToBuffer.begin();it!=widthHeightToBuffer.end();++it){
 	  if((((*it).first.first)*((*it).first.second))>widthToRemove*heightToRemove) {
@@ -101,7 +101,7 @@ namespace tlp
       while(!glFramebufferObject->isValid() && framebufferToWidthHeight.size()>0) {
         int widthToRemove=0;
         int heightToRemove=0;
-        QGLFramebufferObject *bufferToRemove;
+        QGLFramebufferObject *bufferToRemove = NULL;
 
         for(it=widthHeightToFramebuffer.begin();it!=widthHeightToFramebuffer.end();++it){
           if((((*it).first.first)*((*it).first.second))>widthToRemove*heightToRemove) {
