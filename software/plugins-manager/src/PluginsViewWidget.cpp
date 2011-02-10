@@ -73,7 +73,7 @@ namespace tlp {
     CompletePluginsList list;
     _msm->getPluginsList(list);
 
-    QTreeWidgetItem *root;
+    QTreeWidgetItem *root = NULL;
 
     //Hide all
     if(topLevelItemCount()!=0){
