@@ -542,7 +542,7 @@ namespace tlp {
     } delete it;
   }
   //**********************************************************************
-  void MainController::addSubGraph(Graph *g, Graph *sg){
+  void MainController::addSubGraph(Graph*, Graph *sg){
     if(!inAlgorithm){
       sg->addObserver(this);
       sg->addGraphObserver(this);
