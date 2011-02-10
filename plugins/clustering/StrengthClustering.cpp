@@ -280,7 +280,7 @@ Graph* StrengthClustering::buildQuotientGraph(Graph *sg) {
   if (!tlp::applyAlgorithm(sg, errMsg, &tmpData, "Quotient Clustering",
 			   pluginProgress))
     return 0;
-  Graph *quotientGraph;
+  Graph *quotientGraph = NULL;
   tmpData.get<Graph *>("quotientGraph", quotientGraph);
   vector<edge> toRemoved;
   SimpleTest::makeSimple(quotientGraph, toRemoved);
@@ -342,7 +342,7 @@ bool StrengthClustering::run() {
   if (!graph->computeProperty("Strength", values, errMsg, pluginProgress))
     return false;
   
-  DoubleProperty *metric;
+  DoubleProperty *metric = NULL;
   bool multi = false;
   subgraphsLayout = true;
   quotientLayout = true;
