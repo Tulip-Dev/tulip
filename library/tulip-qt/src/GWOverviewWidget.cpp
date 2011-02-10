@@ -179,7 +179,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       //  - Store old MetaNodeRenderer
       //  - Put a new default MetaNodeRenderer
       //  - Put the old MetaNodeRenderer after draw
-      GlMetaNodeRenderer *oldMetaNodeRenderer;
+      GlMetaNodeRenderer *oldMetaNodeRenderer = NULL;
       if(_view->getScene()->getGlGraphComposite()){
         oldMetaNodeRenderer=_view->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer();
         _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(&metaNodeRenderer,false);
