@@ -367,6 +367,8 @@ INSTALL(FILES FindTULIP3.cmake
         DESTINATION ${TulipShareInstallDir})
 INSTALL(FILES FindGLEW.cmake 
         DESTINATION ${TulipShareInstallDir})
+INSTALL(FILES FindXML2.cmake 
+        DESTINATION ${TulipShareInstallDir})
 ## -----------------------------------------------------------------------------------------------
 ## CPack packaging directives
 ## -----------------------------------------------------------------------------------------------
