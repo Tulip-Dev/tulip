@@ -35,55 +35,21 @@ namespace tlp {
 class GraphView;
 
 //==============================================================
-// define template iterator class to iterate over graph elts
-// belonging to a given graph instance
-template <typename ELT_TYPE>
-class GraphEltIterator :public tlp::Iterator<ELT_TYPE> {
-private:
-  tlp::Iterator<ELT_TYPE> *it;
-  const tlp::Graph* graph;
-  ELT_TYPE curElt;
-  bool _hasnext;
-
-public:
-  ELT_TYPE next() {
-    ELT_TYPE tmp = curElt;
-    if ((_hasnext = it->hasNext())) {
-      curElt = it->next();
-      while (!(_hasnext = (!graph || graph->isElement(curElt)))) {
-	if (!it->hasNext()) break;
-	curElt=it->next();
-      }
-    }
-    return tmp;
-  }
-  GraphEltIterator(const tlp::Graph* g, tlp::Iterator<ELT_TYPE>* itN)
-    :it(itN), graph(g), curElt(ELT_TYPE()), _hasnext(false) {
-    next();
-  }
-
-  bool hasNext() {
-    return (_hasnext);
-  }
-  ~GraphEltIterator() {
-    delete it;
-  }
-};
-
 /**
  * \defgroup properties Properties
  */ 
 /*@{*/
 /**
  * This class is used to store a property of a graph.
- * A property is a couple of two functions:
- * - One from the set of nodes to a set of Tnode value
- * - One from the set of edges to a set of Tedge value
+ * It implements PropertyInterface and add new methods
+ * to deal with two distint type of values :
+ * - Tnode value for the nodes
+ * - Tedge value for the edges
  *
  * A AbstractProperty can be connected or not to a PropertyAlgorithm.
  * In the first case it can be seen as buffer beetween the property and the user.
  * In the second case it is only a memory area for storing data.
- * A AbstractProperty is an observable, so it can be observed by others objects.
+ * An AbstractProperty is an observable, so it can be observed by others objects.
  */
 template <class Tnode, class Tedge, class TPROPERTY = PropertyAlgorithm > 
 class TLP_SCOPE AbstractProperty : public PropertyInterface {
@@ -136,13 +102,16 @@ public:
    */
   virtual void setAllEdgeValue(const typename Tedge::RealType &v);
   //=================================================================================
+  /**
+   * Set the value associated to a node to the registered default value
+   */
   virtual void erase(const node n) { setNodeValue(n, nodeDefaultValue); }
   //=================================================================================
+  /**
+   * Set the value associated to a edge to the registered default value
+   */
   virtual void erase(const edge e) { setEdgeValue(e, edgeDefaultValue); }
   //=================================================================================
-  // Because of compilation pb on Windows platform (g++ bug ???)
-  // we include the code of the method below instead of having it
-  // included in AbstractProperty.cpp
   virtual AbstractProperty<Tnode,Tedge,TPROPERTY>& operator =(AbstractProperty<Tnode,Tedge,TPROPERTY> &prop) {
       if (this!= &prop) {
     //=============================================================
@@ -200,8 +169,7 @@ public:
   return *this;
   }
   //=================================================================================
-  virtual std::string getTypename() const { return tlp::PropertyInterface::getTypename( this ); }
-  // Untyped accessors
+  // Untyped accessors inherited from PropertyInterface 
   virtual std::string getNodeDefaultStringValue() const {
     typename Tnode::RealType v = getNodeDefaultValue();
     return Tnode::toString( v );
@@ -246,30 +214,20 @@ public:
     setAllEdgeValue( v );
     return true;
   }
-  // returns an iterator on all nodes (belonging to g) whose value is different
-  // from the default value
-  virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* g = NULL) const {
-    tlp::Iterator<tlp::node> *it =
-      new tlp::UINTIterator<tlp::node>(nodeProperties.findAll(nodeDefaultValue, false));
-    if (name.empty())
-      // we always need to check that nodes belong to graph
-      // for non registered properties, because deleted nodes are not erased
-      // from them
-      return new GraphEltIterator<tlp::node>(g != NULL ? g : graph, it);
-    return ((g == NULL) || (g == graph)) ? it : new GraphEltIterator<tlp::node>(g, it);
-  }
-  // returns an iterator on all edges (belonging to g) whose value is different
-  // from the default value
-  virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* g = NULL) const {
-    tlp::Iterator<tlp::edge>* it =
-      new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
-    if (name.empty())
-      // we always need to check that edges belong to graph
-      // for non registered properties, because deleted edges are not erased
-      // from them
-      return new GraphEltIterator<tlp::edge>(g != NULL ? g : graph, it);
-    return ((g == NULL) || (g == graph)) ? it : new GraphEltIterator<tlp::edge>(g, it);
-  }
+  /**
+   * Returns an iterator on all nodes whose value is different
+   * from the default value. When the pointer to the graph is not NULL
+   * only the nodes owned by this graph are returned by the iterator.
+   * WARNING: it is of the caller responsability to delete the returned iterator
+   */
+  virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* g = NULL) const;
+  /**
+   * Returns an iterator on all edges whose value is different
+   * from the default value. When the pointer to the graph is not NULL
+   * only the edges owned by this graph are returned by the iterator.
+   * WARNING: it is of the caller responsability to delete the returned iterator
+   */
+  virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* g = NULL) const;
   /**
    * Set the value of a node (first argument) in the current property (this)
    * with the value of the node (second argument) defined in prop (third argument).

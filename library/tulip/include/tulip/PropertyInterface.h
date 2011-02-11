@@ -81,11 +81,6 @@ public:
     * i.e. "graph", "double", "layout", "string", "integer", "color", "size", ...
     */
   virtual std::string getTypename() const = 0;
-  /**
-    * Returns a string describing the type a property (first parameter).
-    * i.e. "graph", "double", "layout", "string", "integer", "color", "size", ...
-    */
-  static  std::string getTypename(const PropertyInterface *);
 
   /**
     * Return the name of the property
@@ -194,7 +189,7 @@ public:
   /**
    * Returns an iterator on all nodes whose value is different
    * from the default value. When the pointer to the graph is not NULL
-   * only the edges owned by this graph are returned by the iterator.
+   * only the nodes owned by this graph are returned by the iterator.
    * WARNING: it is of the caller responsability to delete the returned iterator
    */
   virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* = NULL) const = 0;

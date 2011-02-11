@@ -46,12 +46,17 @@ public :
   DoubleType::RealType  getNodeMax(Graph *sg=0);
   DoubleType::RealType  getEdgeMin(Graph *sg=0);
   DoubleType::RealType  getEdgeMax(Graph *sg=0);
-  PropertyInterface* clonePrototype(Graph *, const std::string& );
   void uniformQuantification(unsigned int);
   void nodesUniformQuantification(unsigned int);
   void edgesUniformQuantification(unsigned int);
 
   void clone_handler(AbstractProperty<DoubleType,DoubleType> &);
+
+  // redefinition of some PropertyInterface methods
+  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  std::string getTypename() const {
+    return "double";
+  }
 
   // redefinition of some AbstractProperty methods 
   virtual void setNodeValue(const node n, const double &v);
@@ -82,7 +87,11 @@ private:
  class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVectorType, double> { 
 public :
  DoubleVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<DoubleVectorType, double>(g, n) {}
+  // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
+  std::string getTypename() const {
+    return "vector<double>";
+  }
 };
 /*@}*/
 

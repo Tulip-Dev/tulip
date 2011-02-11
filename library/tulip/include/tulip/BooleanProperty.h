@@ -37,18 +37,43 @@ class TLP_SCOPE BooleanProperty:public AbstractProperty<tlp::BooleanType, tlp::B
 
 public :
   BooleanProperty (Graph *g, std::string n="") :AbstractProperty<BooleanType,BooleanType, BooleanAlgorithm>(g, n) {}
+  // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
+  std::string getTypename() const {
+    return "bool";
+  }
+  /*
+   * Reverse all values aasociated to graph elements
+   * i.e true => false, false => true
+   */
   void reverse();
-  ///reverse all the direction of edges of the visible graph which are true in this BooleanProperty
+  /*
+   * Reverse all the direction of edges of the visible graph
+   * which are true in this BooleanProperty
+   */
   void reverseEdgeDirection();
-  Iterator<node> *getNodesEqualTo(const bool val, Graph * = 0);
-  Iterator<edge> *getEdgesEqualTo(const bool val, Graph * = 0);
+  /*
+   * Return an iterator through all nodes belonging to g
+   * whose associated value is equal to val
+   * if g is NULL, the graph given when creating the property is considered
+   */
+  Iterator<node> *getNodesEqualTo(const bool val, Graph *g = 0);
+  /*
+   * Return an iterator through all edges belonging to g
+   * whose associated value is equal to val
+   * if g is NULL, the graph given when creating the property is considered
+   */
+  Iterator<edge> *getEdgesEqualTo(const bool val, Graph *g = 0);
 };
 
 class TLP_SCOPE BooleanVectorProperty:public AbstractVectorProperty<tlp::BooleanVectorType, bool> { 
 public :
   BooleanVectorProperty(Graph *g, std::string n="") :AbstractVectorProperty<BooleanVectorType, bool>(g, n) {}
+  // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
+  std::string getTypename() const {
+    return "vector<bool>";
+  }
 };
 
 }

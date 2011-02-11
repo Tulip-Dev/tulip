@@ -48,7 +48,12 @@ public :
   IntegerType::RealType  getNodeMax(Graph *sg=0);
   IntegerType::RealType  getEdgeMin(Graph *sg=0);
   IntegerType::RealType  getEdgeMax(Graph *sg=0);
-  PropertyInterface* clonePrototype(Graph *, const std::string&);
+
+  // redefinition of some PropertyInterface methods
+  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  std::string getTypename() const {
+    return "int";
+  }
 
   // redefinition of some AbstractProperty methods 
   virtual void setNodeValue(const node n, const int &v);
@@ -74,7 +79,11 @@ private:
 class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, int> { 
 public :
   IntegerVectorProperty(Graph *g, std::string n =""):AbstractVectorProperty<IntegerVectorType, int>(g, n) {}
-  PropertyInterface* clonePrototype(Graph *, const std::string&);
+  // redefinition of some PropertyInterface methods
+  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  std::string getTypename() const {
+    return "vector<int>";
+  }
 };
 /*@}*/
 

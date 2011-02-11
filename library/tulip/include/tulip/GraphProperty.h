@@ -43,12 +43,17 @@ typedef AbstractProperty<tlp::GraphType, tlp::EdgeSetType> AbstractGraphProperty
 public :
   GraphProperty (Graph *, std::string n="");
   virtual ~GraphProperty();
-  PropertyInterface* clonePrototype(Graph *, const std::string&);
   void destroy(Graph *);
+
+  // redefinition of some PropertyInterface methods
+  PropertyInterface* clonePrototype(Graph *, const std::string& );
   bool setNodeStringValue(const node n, const std::string & v);
   bool setAllNodeStringValue(const std::string & v);
   bool setEdgeStringValue( const edge e, const std::string & v);
   bool setAllEdgeStringValue(const std::string & v);
+  std::string getTypename() const {
+    return "graph";
+  }
 
   // redefinition of some AbstractProperty methods 
   virtual void setNodeValue(const node n, const GraphType::RealType& g);
