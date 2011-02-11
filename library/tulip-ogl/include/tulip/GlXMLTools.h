@@ -21,11 +21,10 @@
 #ifndef Tulip_GLXMLTOOLS_H
 #define Tulip_GLXMLTOOLS_H
 
-#include <tulip/tulipconf.h>
-
 #include <sstream>
 #include <vector>
 
+#include <tulip/tulipconf.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 

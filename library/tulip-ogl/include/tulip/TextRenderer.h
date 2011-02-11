@@ -21,12 +21,13 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <string>
-#include <libxml/parser.h>
 #include <tulip/tulipconf.h>
 #include <tulip/Context.h>
 #include <tulip/Fonts.h>
+#include <tulip/GlXMLTools.h>
 
 enum TextMode{XML,VERBATIM};
+
 
 namespace tlp {
 
@@ -54,7 +55,7 @@ class TLP_GL_SCOPE TextRenderer {
   Document* doc;
   void initTextManager(const std::string & str);
   Paragraph* textXMLManager(Document* d, Paragraph* f, char* text);
-  void initTextXMLManager(Parser* P, xmlNodePtr courant, Document* d);
+  void initTextXMLManager(Parser* P, xmlNode *courant, Document* d);
   void finalTextXMLManager(Paragraph* f);
 };
 
