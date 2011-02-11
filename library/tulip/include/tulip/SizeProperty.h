@@ -47,9 +47,14 @@ public :
 
   Size getMax(Graph *sg=0);
   Size getMin(Graph *sg=0);
-  PropertyInterface* clonePrototype(Graph *, const std::string&);
   void scale( const tlp::Vector<float,3>&, Graph *sg=0 );
   void scale( const tlp::Vector<float,3>&, Iterator<node> *, Iterator<edge> *);
+
+  // redefinition of some PropertyInterface methods
+  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  std::string getTypename() const {
+    return "size";
+  }
 
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node n, const Size &v);
@@ -68,7 +73,11 @@ class TLP_SCOPE SizeVectorProperty:public AbstractVectorProperty<tlp::SizeVector
 public :
   SizeVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<SizeVectorType, Size>(g, n) {}
 
-  PropertyInterface* clonePrototype(Graph *, const std::string&);
+  // redefinition of some PropertyInterface methods
+  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  std::string getTypename() const {
+    return "vector<size>";
+  }
 };
 /*@}*/
 

@@ -45,7 +45,11 @@ public:
   LayoutProperty(Graph *, std::string n="", bool updateOnEdgeReversal = true);
   ~LayoutProperty();
 
-  PropertyInterface* clonePrototype(Graph *, const std::string&);
+  // redefinition of some PropertyInterface methods
+  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  std::string getTypename() const {
+    return "layout";
+  }
 
   //=======================================
   //Functions for extra layout information
@@ -145,7 +149,11 @@ private:
 class TLP_SCOPE CoordVectorProperty:public AbstractVectorProperty<tlp::CoordVectorType, tlp::Coord> { 
 public :
  CoordVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<CoordVectorType, tlp::Coord>(g, n) {}
-  PropertyInterface* clonePrototype(Graph *, const std::string&);
+  // redefinition of some PropertyInterface methods
+  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  std::string getTypename() const {
+    return "vector<coord>";
+  }
 };
 
 /*@}*/

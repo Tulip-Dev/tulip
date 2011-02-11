@@ -19,13 +19,6 @@
 #include <iostream>
 #include <stdlib.h>
 
-// This is not the right place to do the initialization below
-// because this file is include in many cpp files
-// The initialization has to take place in only one cpp file
-// TlpTools.cpp seems to be a good choice to do this
-/*template <class Tnode, class Tedge, class TPROPERTY>
-  TemplateFactory<PropertyFactory<TPROPERTY >, TPROPERTY, PropertyContext > AbstractProperty<Tnode,Tedge,TPROPERTY>::factory;*/
-
 template <class Tnode, class Tedge, class TPROPERTY>
 tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::AbstractProperty(tlp::Graph *sg, std::string n) {
   graph = sg;
@@ -89,6 +82,68 @@ void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllEdgeValue(const typenam
   edgeDefaultValue = v;
   edgeProperties.setAll(v);
   notifyAfterSetAllEdgeValue(this);
+}
+//============================================================
+// define template iterator class to iterate over graph elts
+// belonging to a given graph instance
+// used by the two methods below
+#ifndef DOXYGEN_NOTFOR_DEVEL
+template <typename ELT_TYPE>
+class GraphEltIterator :public tlp::Iterator<ELT_TYPE> {
+public:
+  ELT_TYPE next() {
+    ELT_TYPE tmp = curElt;
+    if ((_hasnext = it->hasNext())) {
+      curElt = it->next();
+      while (!(_hasnext = (!graph || graph->isElement(curElt)))) {
+	if (!it->hasNext()) break;
+	curElt=it->next();
+      }
+    }
+    return tmp;
+  }
+  GraphEltIterator(const tlp::Graph* g, tlp::Iterator<ELT_TYPE>* itN)
+    :it(itN), graph(g), curElt(ELT_TYPE()), _hasnext(false) {
+    next();
+  }
+
+  bool hasNext() {
+    return (_hasnext);
+  }
+  ~GraphEltIterator() {
+    delete it;
+  }
+
+private:
+  tlp::Iterator<ELT_TYPE> *it;
+  const tlp::Graph* graph;
+  ELT_TYPE curElt;
+  bool _hasnext;
+};
+#endif // DOXYGEN_NOTFOR_DEVEL
+//============================================================
+template <class Tnode, class Tedge, class TPROPERTY>
+tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultValuatedNodes(const Graph* g) const {
+  tlp::Iterator<tlp::node> *it =
+    new tlp::UINTIterator<tlp::node>(nodeProperties.findAll(nodeDefaultValue, false));
+  if (name.empty())
+    // we always need to check that nodes belong to graph
+    // for non registered properties, because deleted nodes are not erased
+    // from them
+    return new GraphEltIterator<tlp::node>(g != NULL ? g : graph, it);
+  return ((g == NULL) || (g == graph)) ? it : new GraphEltIterator<tlp::node>(g, it);
+}
+//============================================================
+template <class Tnode, class Tedge, class TPROPERTY>
+tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultValuatedEdges(const Graph* g) const {
+  tlp::Iterator<tlp::edge>* it =
+    new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
+  if (name.empty())
+    // we always need to check that edges belong to graph
+    // for non registered properties, because deleted edges are not erased
+    // from them
+    return new GraphEltIterator<tlp::edge>(g != NULL ? g : graph, it);
+  return ((g == NULL) || (g == graph)) ? it : new GraphEltIterator<tlp::edge>(g, it);
 }
 //============================================================
 template <typename vectType, typename eltType>

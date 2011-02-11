@@ -48,7 +48,7 @@ Iterator<edge>* BooleanProperty::getEdgesEqualTo(const bool val, Graph *sg) {
   return (new UINTIterator<edge>(it));
 }
 //=================================================================================
-//Fonctionnalit� suppl�mentaire ajout� au seletion 
+//Fonctionnalite supplementaire ajoute au selection 
 void BooleanProperty::reverse() {
   Observable::holdObservers();
   Iterator<node> *itN=graph->getNodes();
