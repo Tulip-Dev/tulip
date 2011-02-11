@@ -188,7 +188,8 @@ namespace tlp {
                     return true;
                 }
                 if (propertyType==STRING) {
-                    if (propertyName == std::string("viewFont")) {
+                    if (propertyName == std::string("viewFont") ||
+			propertyName == std::string("viewTexture")) {
                         // if needed replace symbolic path by real path
                         size_t pos = value.find("TulipBitmapDir/");
                         if (pos!=std::string::npos)
@@ -225,7 +226,8 @@ namespace tlp {
                   }
                 }
                 if (propertyType==STRING) {
-                    if (propertyName == std::string("viewFont")) {
+                    if (propertyName == std::string("viewFont") ||
+			propertyName == std::string("viewTexture")) {
                         // if needed replace symbolic path by real path
                         size_t pos = value.find("TulipBitmapDir/");
                         if (pos!=std::string::npos)
@@ -302,7 +304,8 @@ namespace tlp {
                 if (propertyType==BOOL)
                     return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setAllNodeStringValue( value );
                 if (propertyType==STRING) {
-                    if (propertyName == std::string("viewFont")) {
+                    if (propertyName == std::string("viewFont") ||
+			propertyName == std::string("viewTexture")) {
                         // if needed replace symbolic path by real path
                         size_t pos = value.find("TulipBitmapDir/");
                         if (pos!=std::string::npos)
@@ -360,7 +363,8 @@ namespace tlp {
                 if (propertyType==BOOL)
                     return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setAllEdgeStringValue( value );
                 if (propertyType==STRING) {
-                    if (propertyName == std::string("viewFont")) {
+                    if (propertyName == std::string("viewFont") ||
+			propertyName == std::string("viewTexture")) {
                         // if needed replace symbolic path by real path
                         size_t pos = value.find("TulipBitmapDir/");
                         if (pos!=std::string::npos)

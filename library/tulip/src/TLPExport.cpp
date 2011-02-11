@@ -304,7 +304,8 @@ public:
       string nDefault = prop->getNodeDefaultStringValue();
       string eDefault = prop->getEdgeDefaultStringValue();
       // replace real path with symbolic one using TulipBitmapDir
-      if (prop->getName() == string("viewFont")) {
+      if (prop->getName() == string("viewFont") ||
+	  prop->getName() == string("viewTexture")) {
         size_t pos = nDefault.find(TulipBitmapDir);
         if(pos != string::npos)
           nDefault.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
@@ -329,7 +330,8 @@ public:
         node itn = itN->next();
         string tmp = prop->getNodeStringValue(itn);
         // replace real path with symbolic one using TulipBitmapDir
-        if (prop->getName() == string("viewFont")) {
+        if (prop->getName() == string("viewFont") ||
+	    prop->getName() == std::string("viewTexture")) {
           size_t pos = tmp.find(TulipBitmapDir);
           if (pos != string::npos)
             tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
@@ -347,7 +349,8 @@ public:
         edge ite = itE->next();
         // replace real path with symbolic one using TulipBitmapDir
         string tmp = prop->getEdgeStringValue(ite);
-        if (prop->getName() == string("viewFont")) {
+        if (prop->getName() == string("viewFont") ||
+	    prop->getName() == std::string("viewTexture")) {
           size_t pos = tmp.find(TulipBitmapDir);
           if (pos != string::npos)
             tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
