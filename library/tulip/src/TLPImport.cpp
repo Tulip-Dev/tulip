@@ -187,18 +187,6 @@ namespace tlp {
                         clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setNodeValue(n, clusterIndex[result]);
                     return true;
                 }
-                if (propertyType==DOUBLE || propertyType==METRIC) // METRIC was used in Tulip 2
-                    return clusterIndex[clusterId]->getLocalProperty<DoubleProperty>(propertyName)->setNodeStringValue(n, value );
-                if (propertyType==LAYOUT)
-                    return clusterIndex[clusterId]->getLocalProperty<LayoutProperty>(propertyName)->setNodeStringValue(n, value );
-                if (propertyType==SIZE)
-                    return clusterIndex[clusterId]->getLocalProperty<SizeProperty>(propertyName)->setNodeStringValue(n, value );
-                if (propertyType==COLOR)
-                    return clusterIndex[clusterId]->getLocalProperty<ColorProperty>(propertyName)->setNodeStringValue(n, value );
-                if (propertyType==INT)
-                    return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setNodeStringValue(n, value );
-                if (propertyType==BOOL)
-                    return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setNodeStringValue(n, value );
                 if (propertyType==STRING) {
                     if (propertyName == std::string("viewFont")) {
                         // if needed replace symbolic path by real path
@@ -206,22 +194,8 @@ namespace tlp {
                         if (pos!=std::string::npos)
                             value.replace(pos, 15, TulipBitmapDir);
                     }
-                    return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setNodeStringValue(n, value );
-                }
-                if (propertyType==SIZE_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<SizeVectorProperty>(propertyName)->setNodeStringValue(n, value );
-                if (propertyType==COLOR_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<ColorVectorProperty>(propertyName)->setNodeStringValue(n, value );
-                if (propertyType==COORD_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<CoordVectorProperty>(propertyName)->setNodeStringValue(n, value );
-                if (propertyType==DOUBLE_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<DoubleVectorProperty>(propertyName)->setNodeStringValue(n, value );
-                if (propertyType==INT_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<IntegerVectorProperty>(propertyName)->setNodeStringValue(n, value );
-                if (propertyType==BOOL_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<BooleanVectorProperty>(propertyName)->setNodeStringValue(n, value );
-                if (propertyType==STRING_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<StringVectorProperty>(propertyName)->setNodeStringValue(n, value );
+		}
+		return clusterIndex[clusterId]->getProperty(propertyName)->setNodeStringValue(n, value );
             }
             return false;
             //cer << "..ok" << endl;
@@ -242,14 +216,6 @@ namespace tlp {
                         clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setEdgeValue(e, v);
                     return result;
                 }
-                if (propertyType==DOUBLE || propertyType==METRIC) // METRIC was used in Tulip 2
-                    return clusterIndex[clusterId]->getLocalProperty<DoubleProperty>(propertyName)->setEdgeStringValue(e, value );
-                if (propertyType==LAYOUT)
-                    return clusterIndex[clusterId]->getLocalProperty<LayoutProperty>(propertyName)->setEdgeStringValue(e, value );
-                if (propertyType==SIZE)
-                    return clusterIndex[clusterId]->getLocalProperty<SizeProperty>(propertyName)->setEdgeStringValue(e, value );
-                if (propertyType==COLOR)
-                    return clusterIndex[clusterId]->getLocalProperty<ColorProperty>(propertyName)->setEdgeStringValue(e, value );
                 if (propertyType==INT){
                   //If we are in the old edge extremities id system we need to convert the ids in the file.
                   if(version < 2.2){
@@ -257,10 +223,7 @@ namespace tlp {
                       return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setEdgeStringValue(e, convertOldEdgeExtremitiesValueToNew(value) );
                     }
                   }
-                    return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setEdgeStringValue(e, value );
                 }
-                if (propertyType==BOOL)
-                    return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setEdgeStringValue(e, value );
                 if (propertyType==STRING) {
                     if (propertyName == std::string("viewFont")) {
                         // if needed replace symbolic path by real path
@@ -268,22 +231,8 @@ namespace tlp {
                         if (pos!=std::string::npos)
                             value.replace(pos, 15, TulipBitmapDir);
                     }
-                    return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setEdgeStringValue(e, value );
-                }
-                if (propertyType==SIZE_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<SizeVectorProperty>(propertyName)->setEdgeStringValue(e, value );
-                if (propertyType==COLOR_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<ColorVectorProperty>(propertyName)->setEdgeStringValue(e, value );
-                if (propertyType==COORD_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<CoordVectorProperty>(propertyName)->setEdgeStringValue(e, value );
-                if (propertyType==DOUBLE_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<DoubleVectorProperty>(propertyName)->setEdgeStringValue(e, value );
-                if (propertyType==INT_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<IntegerVectorProperty>(propertyName)->setEdgeStringValue(e, value );
-                if (propertyType==BOOL_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<BooleanVectorProperty>(propertyName)->setEdgeStringValue(e, value );
-                if (propertyType==STRING_VECTOR)
-                    return clusterIndex[clusterId]->getLocalProperty<StringVectorProperty>(propertyName)->setEdgeStringValue(e, value );
+		}
+		return clusterIndex[clusterId]->getProperty(propertyName)->setEdgeStringValue(e, value );
             }
             return false;
         }
