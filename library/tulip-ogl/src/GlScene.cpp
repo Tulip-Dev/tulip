@@ -16,14 +16,16 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "GL/glew.h"
-#include "tulip/OpenGlConfigManager.h"
-#include "tulip/GlScene.h"
-
+#include <GL/glew.h>
+#include <libxml/parser.h>
 #include <algorithm>
 #include <iostream>
 #include <cstdlib>
 #include <climits>
+
+
+#include "tulip/OpenGlConfigManager.h"
+#include "tulip/GlScene.h"
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
 #include <omp.h>

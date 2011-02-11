@@ -16,8 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlLabel.h"
+#include <libxml/parser.h>
+#include <iostream>
 
+#include "tulip/GlLabel.h"
 #include <tulip/Coord.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -36,7 +38,6 @@
 #include "tulip/GlRenderer.h"
 #include "tulip/OcclusionTest.h"
 
-#include <iostream>
 
 using namespace std;
 

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <libxml/parser.h>
+
 #include <tulip/TlpTools.h>
 #include "tulip/TextRenderer.h"
 #include "tulip/OpenGlConfigManager.h"
@@ -32,7 +34,7 @@
 #include <stack>
 #include <string.h>
 
-using namespace std;
+using namespace std;	
 using namespace tlp;
 
 const FontMode DEFAULT_FONTMODE = TLP_POLYGON;
@@ -70,7 +72,7 @@ TextRenderer::~TextRenderer() {
 //---------------------------------------------------------------------------
 void TextRenderer::initTextManager(const string &str){
 	string s_local = "";
-	Paragraph* f;
+	Paragraph* f;	
 	for(unsigned int i=0; i<str.size(); ++i){
 		switch(str[i]){
 		case '\n':
@@ -231,7 +233,7 @@ void TextRenderer::finalTextXMLManager(Paragraph* f){
 }
 
 //---------------------------------------------------------------------------
-void TextRenderer::initTextXMLManager(Parser* P, xmlNodePtr courant, Document* d){
+void TextRenderer::initTextXMLManager(Parser* P, xmlNode *courant, Document* d){
 	assert(d && P);
 	if(courant != 0){
 		char* tmp = (char*)P->getName(courant); // on récupère le nom du noeud
