@@ -22,26 +22,26 @@ do
   echo "     </${section}>" >> ${QHP}
 done;
 echo "    <files>" >> ${QHP}
-echo "      <file>common/favicon.ico</file>" >> ${QHP} ;
-echo "      <file>common/tulip-default.css</file>" >> ${QHP} ;
-echo "      <file>common/tulip-doxygen.css</file>" >> ${QHP} ;
-echo "      <file>common/closed.gif</file>" >> ${QHP} ;
-echo "      <file>common/opened.gif</file>" >> ${QHP} ;
+echo "      <file>./common/favicon.ico</file>" >> ${QHP} ;
+echo "      <file>./common/tulip-default.css</file>" >> ${QHP} ;
+echo "      <file>./common/tulip-doxygen.css</file>" >> ${QHP} ;
+echo "      <file>./common/closed.gif</file>" >> ${QHP} ;
+echo "      <file>./common/opened.gif</file>" >> ${QHP} ;
 for doc_dir in common developerHandbook/images doxygen/tulip-lib doxygen/tulip-ogl-lib doxygen/tulip-qt-lib userHandbook/images
 do
   for file in $(ls ${doc_dir}/*.png)
   do
-    echo "      <file>${file}</file>" >> ${QHP} ;
+    echo "      <file>./${file}</file>" >> ${QHP} ;
   done ;
 done;
 for doc_dir in developerHandbook/html doxygen/tulip-lib doxygen/tulip-ogl-lib doxygen/tulip-qt-lib userHandbook/html
 do
   for file in $(ls ${doc_dir}/*.html)
   do
-    echo "      <file>${file}</file>" >> ${QHP} ;
+    echo "      <file>./${file}</file>" >> ${QHP} ;
   done ;
 done;
-echo "      <file>doxygen/allPlugins.html</file>" >> ${QHP} ;
+echo "      <file>./doxygen/allPlugins.html</file>" >> ${QHP} ;
 echo "    </files>" >> ${QHP}
 echo "  </filterSection>" >> ${QHP}
 echo "</QtHelpProject>" >> ${QHP}
