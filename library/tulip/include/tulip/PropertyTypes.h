@@ -48,7 +48,7 @@ class Graph;
 
 ///
 #ifndef SWIG
-DECL_STORED_STRUCT(std::set<node>);
+ DECL_STORED_STRUCT(std::set<tlp::node>);
 #endif
 
 class TLP_SCOPE GraphType {
@@ -61,7 +61,7 @@ public:
 };
 
 #ifndef SWIG
-DECL_STORED_STRUCT(std::set<edge>);
+ DECL_STORED_STRUCT(std::set<tlp::edge>);
 #endif
 
 class TLP_SCOPE EdgeSetType
@@ -158,7 +158,7 @@ public:
 };
 
 #ifndef SWIG
-DECL_STORED_STRUCT(std::vector<Coord>);
+ DECL_STORED_STRUCT(std::vector<tlp::Coord>);
 #endif
 
 class TLP_SCOPE LineType
@@ -173,7 +173,7 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
- DECL_STORED_STRUCT(Coord);
+ DECL_STORED_STRUCT(tlp::Coord);
 
 class TLP_SCOPE PointType {
 public:
@@ -187,7 +187,7 @@ public:
 };
 
 #ifndef SWIG
-DECL_STORED_STRUCT(Size);
+ DECL_STORED_STRUCT(tlp::Size);
 #endif
 
 class TLP_SCOPE SizeType {
@@ -202,7 +202,7 @@ public:
 };
 
 #ifndef SWIG
-DECL_STORED_STRUCT(std::vector<Size>);
+ DECL_STORED_STRUCT(std::vector<tlp::Size>);
 #endif
 
 class TLP_SCOPE SizeVectorType {
@@ -258,7 +258,7 @@ public:
 };
 
 #ifndef SWIG
-DECL_STORED_STRUCT(std::vector<Color>);
+ DECL_STORED_STRUCT(std::vector<tlp::Color>);
 #endif
 
 class TLP_SCOPE ColorVectorType {
