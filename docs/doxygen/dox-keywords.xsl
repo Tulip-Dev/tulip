@@ -8,11 +8,8 @@
 
 <xsl:template match="compound[@kind = 'group']">
      <xsl:for-each select="class">
-         &lt;keyword name="<xsl:value-of select="current()"/>" ref="doxygen/allPlugins.html#<xsl:value-of select="current()"/>" id="<xsl:value-of select="current()"/>"/>
+         &lt;keyword name="<xsl:value-of select="current()"/>" ref="./doxygen/allPlugins.html#<xsl:value-of select="current()"/>" id="<xsl:value-of select="current()"/>"/>
         </xsl:for-each>
 </xsl:template>
 
 </xsl:stylesheet>
-
-
-
