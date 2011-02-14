@@ -46,18 +46,19 @@ TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipOglName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipQtName})
 
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${SIP_LIB})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} qscintilla2)
+
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibStlPythonName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipPythonName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipOglPythonName})
-
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${SIP_LIB})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} qscintilla2)
 
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTCORE_LIBRARY})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTGUI_LIBRARY})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTOPENGL_LIBRARY})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
+
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
 ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibStlPythonName} ${LibTulipPythonName} ${LibTulipOglPythonName} qscintilla2)
 
