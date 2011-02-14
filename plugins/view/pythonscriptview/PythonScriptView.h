@@ -121,6 +121,7 @@ private :
 	int fontZoom;
 
 	tlp::SGHierarchyWidget *clusterTreeWidget;
+	bool scriptStopped;
 
 };
 
