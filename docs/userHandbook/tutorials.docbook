@@ -1,45 +1,69 @@
 <!--<!DOCTYPE chapter SYSTEM "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">-->
 <chapter id="tutorial"><title>Tutorials</title>
     <sect1 id="first-step"><title>First Step</title>
-        <para> In this part, the goal is to help you to simply make a graph and to save your work.</para>
-        <sect2 id="first-dis"><title>First graph display</title>
-            <sect3 id="import"><title>Importation of a graph</title>
+        <para> The goal of this part is to make a graph and to save your work.</para>
+        <sect2 id="first-dis"><title>Displaying your first graph</title>
+            <sect3 id="import"><title>Importing a graph</title>
                 <para>
 		<itemizedlist>
 		    <listitem><para>Select the <code>File->Import</code> item.</para>
 		    </listitem>
-		    <listitem><para>Select a method of importation : <code>Grid approximation</code>, for example.</para></listitem>
+		    <listitem><para>Select an import method. For instance, <code>Grid approximation</code>.</para></listitem>
 		</itemizedlist>
-		Do not modify the default parameters. Here is displayed the graph with nodes (red) and edges (black). With the wheel of the mouse, you can zoom on the graph to see a specific node. In moving the mouse with its left button pressed, you can translate the graph in the plane of the view, pressing the key <keycap>SHIFT</keycap> for rotation and the key <keycap>Ctrl</keycap> (<keycap>Alt</keycap> key on Mac) to rotate around the z axis and zoom. In order to come back to the oldest view, Select <code>View->Center view</code> from the menu bar.
+		Accept with the default parameters. 
+		A graph with nodes and edges is now displayed. 
+		With the mousewheel, you can zoom on the graph to see a specific node. 
+		By moving the mouse with the left button pressed, you can translate the graph in the plane of the view. 
+		Pressing the <keycap>SHIFT</keycap> key allows to rotate the graph, and the <keycap>Ctrl</keycap> key (<keycap>Alt</keycap> on Mac) allows to rotate around the z axis and zoom. 
+		In order to come back to the first and default point of view, Select <code>View->Center view</code> from the contextual menu.
 		<itemizedlist>
-		    <listitem><para>Select <code>Algorithm->Measure->Misc->Id</code> from the menu bar, to compute a value (metric) for each node and edge of the graph. </para></listitem>
+		    <listitem><para>Select <code>Algorithm->Measure->Misc->Id</code> from the menu, to compute a value (metric) for each node and edge of the graph. </para></listitem>
 		</itemizedlist>
-		The graph is now displayed with colors depending of the metric. You can change the colors with the menu : <code>Algorithm->Color->Metric Mapping</code>. This plugin computes an interpolation between the two selected colors.
+		The graph is now displayed with colors depending on the metric. 
+		You can change the colors with the menu : <code>Algorithm->Color->Metric Mapping</code>. 
+		This plugin allows you to choose any number of colors, and computes an interpolation to fill in the blanks if needed (or you can force colors to some values by using the enumerated mode).
                 </para>
             </sect3>
             <sect3 id="create"><title>Creation of a graph</title>
-                <para>In this section, we learn how to create its own graph, element by element.
+                <para>In this section, we will learn how to create a new graph, element by element.
                 <itemizedlist>
                     <listitem>
-                        <para>Select the <code>File->New</code> from the menu bar to create a new graph.</para>
+                        <para>Select <code>File->New</code> from the menu to create a new graph.</para>
                     </listitem>
                     <listitem>
-                        <para>Create a graph adding nodes and edges. For a node, select the <inlinegraphic fileref="images/i_addnode.png"/> mouse toolbar operation and click on the position you have chosen. To insert an edge, select the <inlinegraphic fileref="images/i_addedge.png"/> mouse toolbar operation. Click on the source node, then on the target node. You can display or hide them with <code>Edges</code> checkbox in the <code>Overview</code> subwindow. In the same way, you can display or hide the arrows checking <code>Arrows</code>.</para>
+                        <para>Create a graph by adding nodes and edges. 
+			  To add a node, select the <inlinegraphic fileref="images/i_addnode.png"/> tool and click Where you want to add a node.
+			  To add an edge, select the <inlinegraphic fileref="images/i_addedge.png"/> tool. 
+			  Click on the source node, then on the target node. 
+			  You can control whether to display or hide edges with the <code>Edges</code> checkbox in the <code>Layer Manager</code> tab, located in the <code>View Editor</code> tab, in the left-hand dock.
+			  There are several other checkboxes here, most notable are options to display or not nodes, node labels and edge labels.
+			  In the same way, you can display or hide the arrows indicating the edge direction in the <code>Rendering Parameters> tab, by checking the <code>Arrows</code> checkbox in the <code>Edges</code> section.</para>
                     </listitem>
                     <listitem>
-                        <para>Delete elements of the graph. Select the <inlinegraphic fileref="images/i_del.png"/> mouse toolbar operation, then click on the element you want to delete.</para>
+                        <para>To delete elements of the graph. Select the <inlinegraphic fileref="images/i_del.png"/> tool, then click on the element you want to delete.</para>
                     </listitem>
                 </itemizedlist>
                 </para>
             </sect3>
         </sect2>
-	<sect2 id="save"><title>Save options</title>
-	    <para>To save your work, you just have to select <code>File->Save</code> or <code>Save as</code>: a dialog appears allowing to enter the author of the graph and some comments; then after clicking on the 'OK' button, just type the file name and choose its location.</para>
-            <para>The second way to make a save is to export the graph in a special format : GML or TLP (equivalent to <code>Save as</code>). Select <code>File->Export</code> and the format of your choice, then choose the file name and location.</para>
+	<sect2 id="save"><title>Saving</title>
+	  <para>To save your work, you just have to select <code>File->Save</code> or <code>File->Save as</code>.
+	    A dialog will appear allowing to enter the author of the graph and some comments; then after clicking on the 'OK' button, type the file name and choose its location.</para>
+	  <para>The second way to save is to export the graph in one of the formats Tulip supports. 
+	    By default, only GML and TLP exports are installed. 
+	    To install more, look at the <code>Plugins Management</code> section of this help.
+	    Select <code>File->Export</code> and the format of your choice, then choose the file name and location.</para>
 	</sect2>
         <sect2 id="algos"><title>Algorithms</title>
-	    <para>This part explains how to apply an algorithm to a graph. Previously, you have created or imported a graph. Select <code>Algorithm->Layout</code> (for example) and an algorithm : <code>Hierarchical->Hierarchical Graph</code> for example.</para>
-            <para>In this case, we use an algorithm dealing with the layout of the nodes and the edges. It is possible to apply all other kinds of algorithm. Some <code>layout</code> algorithms may not apply to your graph if it does not belong to the right category of graphs. With the <code>Bubble Tree</code> layout, you can not display a grid. If it is not valid, a pop-up message will displayed explaining the problem.</para>
+	    <para>This part explains how to apply an algorithm to a graph. 
+	      You need an open graph to apply an algorithm on (you can create or import one).
+	      All the algorithms you can apply on graphs are located in the <code>Algorithm</code> menu.
+	      There are Layout algorithms, Measures, Selection, Clustering (in <code>General</code>) and more !
+	      For instance, select a layout algorithm by navigating to <code>Algorithm->Layout</code>, and then select <code>Hierarchical->Hierarchical Graph</code>.</para>
+            <para>this algorithm deals with the layout of the nodes and the edges. 
+	      Some <code>layout</code> algorithms may not apply to your graph if it does not belong to the right category of graphs. 
+	      Trying to apply the <code>Bubble Tree</code> to a grid is not possible, as this algorithms needs a tree-like graph to be applied.
+	      In these cases, a pop-up message will display an explanation of the problem.</para>
 	</sect2>
     </sect1>
     <sect1 id="improve-layout"><title>Improving a layout</title>
