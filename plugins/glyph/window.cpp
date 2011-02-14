@@ -5,6 +5,7 @@
 #include <tulip/GlRect.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlPolyQuad.h>
+#include <tulip/GlQuad.h>
 #include <tulip/GlTextureManager.h>
 
 using namespace tlp;
@@ -30,11 +31,10 @@ private:
     const float _titleBarSize;
     const float _borderWidth;
     GlPolyQuad _border;
-      GlPolyQuad _center;
-    GlPolyQuad _titleRec;
+    GlQuad _center;
+    GlQuad _titleRec;
     BoundingBox _bb;
     BoundingBox _textbb;
-  //  GlLabel *_title;
 };
 
 /*
@@ -58,13 +58,10 @@ Window::Window(GlyphContext* context):
   _textColor(205, 205, 205, 255), 
   _titleBarSize(0.1), 
   _borderWidth(0.02), 
-  _border(texture),
-  _titleRec(gradient)
+  _border(texture)
 {
   
   const float textheight = 0.05;
-  //Coord textCenter(-0.5 + _borderWidth, 0.5 - textheight- _borderWidth , 0.0);
-  //_title = new GlLabel(textCenter, Coord(1. - (2.f * _borderWidth), _titleBarSize, 0.0), _textColor, true);
   
   Coord v[10];
   v[0].set(-0.5, 0.5, 0);
@@ -89,16 +86,23 @@ Window::Window(GlyphContext* context):
   _border.addQuadEdge(v[3], v[7], _textColor);
   _border.addQuadEdge(v[0], v[4], _textColor);
 	 
-  _titleRec.addQuadEdge(v[4], v[9], _rectColor);
-  _titleRec.addQuadEdge(v[5], v[8], _rectColor);
+  _titleRec.setPosition(0, v[4]);
+  _titleRec.setPosition(1, v[5]);
+  _titleRec.setPosition(2, v[8]);
+  _titleRec.setPosition(3, v[9]);
+  _titleRec.setTextureName(gradient);
+  
 	 
   _textbb.expand(v[4]);
   _textbb.expand(v[8]);
   _textbb.expand(v[5]);
   _textbb.expand(v[9]);
-	 
-  _center.addQuadEdge(v[9], v[7], _rectColor);
-  _center.addQuadEdge(v[8], v[6], _rectColor);
+	
+  _center.setPosition(0, v[9]);
+  _center.setPosition(1, v[8]);
+  _center.setPosition(2, v[6]);
+  _center.setPosition(3, v[7]);
+
  
 }
 //=====================================================
@@ -113,17 +117,17 @@ void Window::getTextBoundingBox(BoundingBox &boundingBox,node) {
 void Window::draw(node n, float lod) {
 	ColorProperty* color = glGraphInputData->getElementColor();
 	ColorProperty* colorBorder = glGraphInputData->getElementBorderColor();
+	string textureName = glGraphInputData->getElementTexture()->getNodeValue(n);
+	if(textureName!="")
+	  textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
-	_rectColor = color->getNodeValue(n);
 	_border.setColor(colorBorder->getNodeValue(n));	
-	_center.setColor(_rectColor);	
-	//	_titleRec.setColor(_rectColor);	
 	_titleRec.setColor(colorBorder->getNodeValue(n));	
 
+	_center.setFillColor(color->getNodeValue(n));
+	_center.setTextureName(textureName);	
 	_center.draw(lod, NULL);
-	 GlTextureManager::getInst().activateTexture(gradient);
 	_titleRec.draw(lod, NULL);
-	GlTextureManager::getInst().activateTexture(texture);
 	_border.draw(lod, NULL);
 }
 //=====================================================
