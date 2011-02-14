@@ -1,0 +1,111 @@
+v2.4.6 23rd December 2010
+  - Added support for indicators to the high-level API, i.e. added the
+    IndicatorStyle enum, the clearIndicatorRange(), fillIndicatorRange(),
+    indicatorDefine(), indicatorDrawUnder(), setIndicatorDrawUnder() and
+    setIndicatorForegroundColor methods, and the indicatorClicked() and
+    indicatorReleased() signals to QsciScintilla.
+  - Added support for the Key style in QsciLexerProperties.
+  - Added an API file for Python v2.7.
+  - Added the --no-timestamp command line option to the Python bindings'
+    configure.py.
+
+v2.4.5 31st August 2010
+  - A bug fix release.
+
+v2.4.4 12th July 2010
+  - Added the canInsertFromMimeData(), fromMimeData() and toMimeData() methods
+    to QsciScintillaBase.
+  - QsciScintilla::markerDefine() now allows existing markers to be redefined.
+
+v2.4.3 17th March 2010
+  - Added clearFolds() to QsciScintilla.
+
+v2.4.2 20th January 2010
+  - Updated Spanish translations from Jaime Seuma.
+  - Fixed compilation problems with Qt v3 and Qt v4 prior to v4.5.
+
+v2.4.1 14th January 2010
+  - Added the QsciLexerSpice and QsciLexerVerilog classes.
+  - Significant performance improvements when handling long lines.
+  - The Python bindings include automatically generated docstrings by default.
+  - Added an API file for Python v3.
+
+v2.4 5th June 2009
+  - Based on Scintilla v1.78.
+  - Added the QsciLexerCustom, QsciStyle and QsciStyledText classes.
+  - Added annotate(), annotation(), clearAnnotations(), setAnnotationDisplay()
+    and annotationDisplay() to QsciScintilla.
+  - Added setMarginText(), clearMarginText(), setMarginType() and marginType()
+    to QsciScintilla.
+  - Added QsciLexer::lexerId() so that container lexers can be implemented.
+  - Added editor() and styleBitsNeeded() to QsciLexer.
+  - Added setDollarsAllowed() and dollarsAllowed() to QsciLexerCPP.
+  - Added setFoldScriptComments(), foldScriptComments(),
+    setFoldScriptHeredocs() and foldScriptHeredocs() to QsciLexerHTML.
+  - Added setSmartHighlighting() and smartHighlighting() to QsciLexerPascal.
+    (Note that the Scintilla Pascal lexer has changed so that any saved colour
+    and font settings will not be properly restored.)
+  - Added setFoldPackages(), foldPackages(), setFoldPODBlocks() and
+    foldPODBlocks() to QsciLexerPerl.
+  - Added setV2UnicodeAllowed(), v2UnicodeAllowed(), setV3BinaryOctalAllowed(),
+    v3BinaryOctalAllowed(), setV3BytesAllowed and v3BytesAllowed() to
+    QsciLexerPython.
+  - Added setScriptsStyled() and scriptsStyled() to QsciLexerXML.
+  - Added Spanish translations from Jaime Seuma.
+
+v2.3.2 17th November 2008
+  - A bug fix release.
+
+v2.3.1 6th November 2008
+  - Based on Scintilla v1.77.
+  - Added the read() and write() methods to QsciScintilla to allow a file to be
+    read and written while minimising the conversions.
+  - Added the positionFromLineIndex() and lineIndexFromPosition() methods to
+    QsciScintilla to convert between a Scintilla character address and a
+    QScintilla character address.
+  - Added QsciScintilla::wordAtPoint() to return the word at the given screen
+    coordinates.
+  - QSciScintilla::setSelection() now allows the carat to be left at either the
+    start or the end of the selection.
+  - 'with' is now treated as a keyword by the Python lexer.
+
+v2.3 20th September 2008
+  - Based on Scintilla v1.76.
+  - The new QsciAbstractAPIs class allows applications to replace the default
+    implementation of the language APIs used for auto-completion lists and call
+    tips.
+  - Added QsciScintilla::apiContext() to allow applications to determine the
+    context used for auto-completion and call tips.
+  - Added the QsciLexerFortran, QsciLexerFortran77, QsciLexerPascal,
+    QsciLexerPostScript, QsciLexerTCL, QsciLexerXML and QsciLexerYAML classes.
+  - QsciScintilla::setFolding() will now accept an optional margin number.
+
+v2.2 27th February 2008
+  - Based on Scintilla v1.75.
+  - A lexer's default colour, paper and font are now written to and read from
+    the settings.
+  - Windows64 is now supported.
+  - The signature of the QsciScintillaBase::SCN_MACRORECORD() signal has
+    changed slightly.
+  - Changed the licensing to match the current Qt licenses, including GPL v3.
+
+v2.1 1st June 2007
+  - A slightly revised API, incompatible with QScintilla v2.0.
+  - Lexers now remember their style settings.  A lexer no longer has to be the
+    current lexer when changing a style's color, end-of-line fill, font or
+    paper.
+  - The color(), eolFill(), font() and paper() methods of QsciLexer now return
+    the current values for a style rather than the default values.
+  - The setDefaultColor(), setDefaultFont() and setDefaultPaper() methods of
+    QsciLexer are no longer slots and no longer virtual.
+  - The defaultColor(), defaultFont() and defaultPaper() methods of QsciLexer
+    are no longer virtual.
+  - The color(), eolFill(), font() and paper() methods of all QsciLexer derived
+    classes (except for QsciLexer itself) have been renamed defaultColor(),
+    defaultEolFill(), defaultFont() and defaultPaper() respectively.
+
+v2.0 26th May 2007
+  - A revised API, incompatible with QScintilla v1.
+  - Hugely improved autocompletion and call tips support.
+  - Supports both Qt v3 and Qt v4.
+  - Includes Python bindings.

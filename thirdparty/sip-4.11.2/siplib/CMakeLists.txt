@@ -1,0 +1,23 @@
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
+
+IF(UNIX)
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+ENDIF(UNIX)
+
+SET(siplib_SRCS
+    apiversions.c
+    bool.cpp
+    descriptors.c
+    objmap.c
+    qtlib.c
+    siplib.c
+    threads.c
+    voidptr.c
+)
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -DSIP_STATIC_MODULE")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w -DSIP_STATIC_MODULE")
+
+ADD_LIBRARY(${SIP_LIB} STATIC ${siplib_SRCS})
+
