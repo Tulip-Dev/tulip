@@ -28,10 +28,7 @@
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/Graph.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlDisplayListManager.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlRect.h>
 
 using namespace std;
 using namespace tlp;
@@ -57,18 +54,25 @@ protected:
 	inline void drawGlyph(const Color& glyphColor, const string& texture,
 			const string& texturePath, double borderWidth,
 			const Color& borderColor, float lod);
-	inline void drawSquare();
-	inline void drawSquareBorder();
+
+	static GlRect *rect;
 };
+
+GlRect* Square::rect=0;
+
 //=====================================================
 GLYPHPLUGIN(Square, "2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0", 4)
 EEGLYPHPLUGIN(Square,"2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0", 4)
 //===================================================================================
 Square::Square(GlyphContext *gc) :
 	Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
+	if(!rect)
+		rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
 }
 Square::Square(EdgeExtremityGlyphContext *gc) :
 	Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
+	if(!rect)
+		rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
 }
 //=====================================================
 Square::~Square() {
@@ -108,77 +112,12 @@ Coord Square::getAnchor(const Coord &vector) const {
 void Square::drawGlyph(const Color& glyphColor, const string& texture,
 		const string& texturePath, double borderWidth,
 		const Color& borderColor, float lod) {
-	if (GlDisplayListManager::getInst().beginNewDisplayList("Square_square")) {
-		drawSquare();
-		GlDisplayListManager::getInst().endNewDisplayList();
-	}
-	if (GlDisplayListManager::getInst().beginNewDisplayList(
-			"Square_squareborder")) {
-		drawSquareBorder();
-		GlDisplayListManager::getInst().endNewDisplayList();
-	}
-
-	setMaterial(glyphColor);
-	if (texture != "") {
-		GlTextureManager::getInst().activateTexture(texturePath + texture);
-	}
-
-	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-	GlDisplayListManager::getInst().callDisplayList("Square_square");
-	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-
-	GlTextureManager::getInst().desactivateTexture();
-
-	if (lod > 20) {
-
-		if (borderWidth < 1e-6)
-			glLineWidth(1e-6); //no negative borders
-		else
-			glLineWidth(borderWidth);
-
-		glDisable(GL_LIGHTING);
-		setColor(borderColor);
-		OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-		GlDisplayListManager::getInst().callDisplayList("Square_squareborder");
-		OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
-
-		glEnable(GL_LIGHTING);
-	}
-}
-
-//=====================================================
-void Square::drawSquare() {
-	glBegin(GL_QUADS);
-	/* front face */
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex2f(-0.5f, -0.5f);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex2f(0.5f, -0.5f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex2f(0.5f, 0.5f);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex2f(-0.5f, 0.5f);
-	/* back face */
-	glNormal3f(0.0f, 0.0f, -1.0f);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex2f(-0.5f, -0.5f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex2f(-0.5f, 0.5f);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex2f(0.5f, 0.5f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex2f(0.5f, -0.5f);
-	glEnd();
-}
-//=====================================================
-void Square::drawSquareBorder() {
-	glBegin(GL_LINE_LOOP);
-	/* front face */
-	glVertex2f(-0.5f, -0.5f);
-	glVertex2f(0.5f, -0.5f);
-	glVertex2f(0.5f, 0.5f);
-	glVertex2f(-0.5f, 0.5f);
-	glEnd();
+	rect->setFillColor(glyphColor);
+	rect->setOutlineColor(borderColor);
+	rect->setTextureName(texturePath+texture);
+	if (borderWidth < 1e-6)
+		borderWidth=1e-6;
+	rect->setOutlineSize(borderWidth);
+	rect->draw(lod,NULL);
 }
 /*@}*/

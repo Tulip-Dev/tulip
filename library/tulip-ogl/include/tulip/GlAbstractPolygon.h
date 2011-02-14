@@ -183,6 +183,11 @@ namespace tlp {
     virtual void setPoints(const std::vector<Coord> &points);
 
     /**
+     * set ith Coord of the polygon
+     */
+    virtual void setPoint(unsigned int index, const Coord &point);
+
+    /**
      * set fill colors of the polygon
      */
     virtual void setFillColors(const std::vector<Color> &colors);

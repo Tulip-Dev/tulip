@@ -42,6 +42,21 @@ namespace tlp {
     setFillColor(3, bottomRightCol);
   }
   //=====================================================
+  GlRect::GlRect(const Coord &center, const Size &size, const Color &fillColor, const Color &outlineColor):
+    GlPolygon(4u, 4u, 4u, true, true) {
+    vector<Coord> coords;
+    coords.push_back(center+Coord(size[0]/2.,size[1]/2.,0));
+    coords.push_back(center+Coord(size[0]/2.,-size[1]/2.,0));
+    coords.push_back(center+Coord(-size[0]/2.,-size[1]/2.,0));
+    coords.push_back(center+Coord(-size[0]/2.,size[1]/2.0));
+    setPoints(coords);
+
+    setFillColor(fillColor);
+
+    setOutlineColor(outlineColor);
+  }
+
+  //=====================================================
   GlRect::GlRect(bool filled, bool outlined) :
     GlPolygon(4u, 4u, 4u, filled, outlined) {
   }
@@ -51,6 +66,13 @@ namespace tlp {
   //=====================================================
   Coord GlRect::getCenter() {
     return (point(0) + point(2)) / 2.f;
+  }
+  //=====================================================
+  void GlRect::setCenterAndSize(const Coord &center, const Size &size) {
+    points[0]=center+Coord(size[0]/2.,size[1]/2.,0);
+    points[1]=center+Coord(size[0]/2.,-size[1]/2.,0);
+    points[2]=center+Coord(-size[0]/2.,-size[1]/2.,0);
+    points[3]=center+Coord(-size[0]/2.,size[1]/2.,0);
   }
   //=====================================================
   Coord GlRect::getTopLeftPos() {
