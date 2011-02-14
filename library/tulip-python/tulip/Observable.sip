@@ -99,8 +99,6 @@ public:
 
 	void removeObserver(tlp::Observer *);
 
-	void removeObservers();
-
 	void notifyObservers();
 
 	void notifyDestroy();
