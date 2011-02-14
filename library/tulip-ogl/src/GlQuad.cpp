@@ -33,104 +33,70 @@ using namespace std;
 
 namespace tlp {
 
-GlQuad::GlQuad():textureName("")
-{
+GlQuad::GlQuad():_textureName("") {
   // No default constructor :)
 }
 
-void GlQuad::setPosition(const Coord&)
-{
+void GlQuad::setPosition(const Coord&) {
   // No setPosition
 }
 
-void GlQuad::setColor(const Color& color)
-{
-  for(int i=0; i < N_QUAD_POINTS; i++) {
-    *(this->colors[i]) = color;
+void GlQuad::setColor(const Color& color) {
+  for(int i=0; i < 4; ++i) {
+    _colors[i] = color;
   }
 }
 
-GlQuad::GlQuad(Coord positions[N_QUAD_POINTS], const Color &color)
-{
-  for(int i=0; i < N_QUAD_POINTS; i++)
-    {
-      this->positions[i] = new Coord(positions[i]);
-      this->colors[i]    = new Color(color);
-      boundingBox.expand(*this->positions[i]);
+GlQuad::GlQuad(const Coord positions[4], const Color &color) {
+  for(int i=0; i < 4; ++i) {
+      _positions[i] = positions[i];
+      _colors[i]    = color;
+      boundingBox.expand(_positions[i]);
     }
 }
 
-GlQuad::GlQuad(Coord positions[N_QUAD_POINTS], Color colors[N_QUAD_POINTS])
-{
-  for(int i=0; i < N_QUAD_POINTS; i++) {
-    this->positions[i] = new Coord(positions[i]);
-    this->colors[i]    = new Color(colors[i]);
-
-    boundingBox.expand(*this->positions[i]);
+GlQuad::GlQuad(const Coord positions[4], const Color colors[4]){
+  for(int i=0; i < 4; ++i) {
+    _positions[i] = positions[i];
+    _colors[i]    = colors[i];
+    boundingBox.expand(_positions[i]);
   }
 }
 
-GlQuad::~GlQuad()
-{
-  for(int i=0; i < N_QUAD_POINTS; i++)
-    {
-      delete positions[i];
-      delete colors[i];
-    }
+GlQuad::~GlQuad() {
 }
 
-void GlQuad::setPosition(int idPosition, const Coord &position)
-{
-  if (idPosition < 0 || idPosition >= N_QUAD_POINTS)
-    return;
-
-  delete this->positions[idPosition];
-
-  this->positions[idPosition] = new Coord(position);
-  boundingBox=BoundingBox();
-  for(int i=0;i<N_QUAD_POINTS;++i)
-    boundingBox.expand(*positions[i]);
+void GlQuad::setPosition(const int idPosition, const Coord &position) {
+  _positions[idPosition] = position;
+  boundingBox = BoundingBox();
+  for(int i=0; i<4; ++i)
+    boundingBox.expand(_positions[i]);
 }
 
-void GlQuad::setColor(int idColor, const Color &color)
-{
-  if (idColor < 0 || idColor >= N_QUAD_POINTS)
-    return;
-
-  delete this->colors[idColor];
-
-  this->colors[idColor] = new Color(color);
+void GlQuad::setColor(const int idColor, const Color &color) {
+  _colors[idColor] = color;
 }
 
-Coord* GlQuad::getPosition(int idPosition) const
-{
-  if (idPosition < 0 || idPosition >= N_QUAD_POINTS)
-    return NULL;
-
-  return positions[idPosition];
+const Coord& GlQuad::getPosition(const int idPosition) const {
+  return  (*(const_cast< Array<Coord, 4> * > (&_positions)))[idPosition];
 }
 
-Color* GlQuad::getColor(int idColor) const
-{
-  if (idColor < 0 || idColor >= N_QUAD_POINTS)
-    return NULL;
-
-  return colors[idColor];
+const Color& GlQuad::getColor(const int idColor) const {
+  return (*(const_cast< Array<Color, 4> * > (&_colors)))[idColor];
 }
 
 void GlQuad::setTextureName(const string &name) {
-  textureName=name;
+  _textureName = name;
 }
 
-string GlQuad::getTextureName() const {
-  return textureName;
+const string& GlQuad::getTextureName() const {
+  return _textureName;
 }
 
-void GlQuad::draw(float, Camera *)
-{
-
-  if(textureName!="") {
-    GlTextureManager::getInst().activateTexture(textureName);
+void GlQuad::draw(float, Camera *) {
+  
+  if(_textureName!="") {
+    GlTextureManager::getInst().activateTexture(_textureName);
   }
 
   OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
@@ -138,17 +104,17 @@ void GlQuad::draw(float, Camera *)
   glBegin(GL_QUADS);
   glNormal3f(0.0f, 0.0f, 1.0f);
   glTexCoord2f(0.0f, 0.0f);
-  setMaterial(*colors[0]);
-  glVertex3f(positions[0]->getX(), positions[0]->getY(), positions[0]->getZ());
+  setMaterial(_colors[0]);
+  glVertex3f(_positions[0][0], _positions[0][1], _positions[0][2]);
   glTexCoord2f(1.0f, 0.0f);
-  setMaterial(*colors[1]);
-  glVertex3f(positions[1]->getX(), positions[1]->getY(), positions[1]->getZ());
+  setMaterial(_colors[1]);
+  glVertex3f(_positions[1][0], _positions[1][1], _positions[1][2]);
   glTexCoord2f(1.0f, 1.0f);
-  setMaterial(*colors[2]);
-  glVertex3f(positions[2]->getX(), positions[2]->getY(), positions[2]->getZ());
+  setMaterial(_colors[2]);
+  glVertex3f(_positions[2][0], _positions[2][1], _positions[2][2]);
   glTexCoord2f(0.0f, 1.0f);
-  setMaterial(*colors[3]);
-  glVertex3f(positions[3]->getX(), positions[3]->getY(), positions[3]->getZ());
+  setMaterial(_colors[3]);
+  glVertex3f(_positions[3][0], _positions[3][1], _positions[3][2]);
 
   glEnd();
   glEnable(GL_CULL_FACE);
@@ -161,9 +127,8 @@ void GlQuad::draw(float, Camera *)
 //===========================================================
 void GlQuad::translate(const Coord& mouvement) {
   boundingBox.translate(mouvement);
-
-  for(int i=0; i < N_QUAD_POINTS; i++) {
-    *positions[i]+=mouvement;
+  for(int i=0; i < 4; ++i) {
+    _positions[i] += mouvement;
   }
 }
 //===========================================================
@@ -174,14 +139,14 @@ void GlQuad::getXML(xmlNodePtr rootNode) {
 
   GlXMLTools::getDataNode(rootNode,dataNode);
 
-  GlXMLTools::getXML(dataNode,"position0",positions[0]);
-  GlXMLTools::getXML(dataNode,"position1",positions[1]);
-  GlXMLTools::getXML(dataNode,"position2",positions[2]);
-  GlXMLTools::getXML(dataNode,"position3",positions[3]);
-  GlXMLTools::getXML(dataNode,"color0",colors[0]);
-  GlXMLTools::getXML(dataNode,"color1",colors[1]);
-  GlXMLTools::getXML(dataNode,"color2",colors[2]);
-  GlXMLTools::getXML(dataNode,"color3",colors[3]);
+  GlXMLTools::getXML(dataNode,"position0",_positions[0]);
+  GlXMLTools::getXML(dataNode,"position1",_positions[1]);
+  GlXMLTools::getXML(dataNode,"position2",_positions[2]);
+  GlXMLTools::getXML(dataNode,"position3",_positions[3]);
+  GlXMLTools::getXML(dataNode,"color0",_colors[0]);
+  GlXMLTools::getXML(dataNode,"color1",_colors[1]);
+  GlXMLTools::getXML(dataNode,"color2",_colors[2]);
+  GlXMLTools::getXML(dataNode,"color3",_colors[3]);
 
 
   }
@@ -193,21 +158,17 @@ void GlQuad::getXML(xmlNodePtr rootNode) {
 
     // Parse Data
     if(dataNode) {
-      for(int i=0; i < N_QUAD_POINTS; i++) {
-	positions[i]=new Coord();
-	colors[i]=new Color();
-      }
-      GlXMLTools::setWithXML(dataNode,"position0",*positions[0]);
-      GlXMLTools::setWithXML(dataNode,"position1",*positions[1]);
-      GlXMLTools::setWithXML(dataNode,"position2",*positions[2]);
-      GlXMLTools::setWithXML(dataNode,"position3",*positions[3]);
-      GlXMLTools::setWithXML(dataNode,"color0",*colors[0]);
-      GlXMLTools::setWithXML(dataNode,"color1",*colors[1]);
-      GlXMLTools::setWithXML(dataNode,"color2",*colors[2]);
-      GlXMLTools::setWithXML(dataNode,"color3",*colors[3]);
+      GlXMLTools::setWithXML(dataNode,"position0",_positions[0]);
+      GlXMLTools::setWithXML(dataNode,"position1",_positions[1]);
+      GlXMLTools::setWithXML(dataNode,"position2",_positions[2]);
+      GlXMLTools::setWithXML(dataNode,"position3",_positions[3]);
+      GlXMLTools::setWithXML(dataNode,"color0",_colors[0]);
+      GlXMLTools::setWithXML(dataNode,"color1",_colors[1]);
+      GlXMLTools::setWithXML(dataNode,"color2",_colors[2]);
+      GlXMLTools::setWithXML(dataNode,"color3",_colors[3]);
 
-      for(int i=0; i < N_QUAD_POINTS; i++) {
-        boundingBox.expand(*this->positions[i]);
+      for(int i=0; i < 4; ++i) {
+        boundingBox.expand(_positions[i]);
       }
     }
   }
