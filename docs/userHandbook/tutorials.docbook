@@ -12,7 +12,7 @@
 		</itemizedlist>
 		Accept with the default parameters. 
 		A graph with nodes and edges is now displayed. 
-		With the mousewheel, you can zoom on the graph to see a specific node. 
+		With the mouse wheel, you can zoom on the graph to see a specific node. 
 		By moving the mouse with the left button pressed, you can translate the graph in the plane of the view. 
 		Pressing the <keycap>SHIFT</keycap> key allows to rotate the graph, and the <keycap>Ctrl</keycap> key (<keycap>Alt</keycap> on Mac) allows to rotate around the z axis and zoom. 
 		In order to come back to the first and default point of view, Select <code>View->Center view</code> from the contextual menu.
@@ -21,7 +21,7 @@
 		</itemizedlist>
 		The graph is now displayed with colors depending on the metric. 
 		You can change the colors with the menu : <code>Algorithm->Color->Metric Mapping</code>. 
-		This plugin allows you to choose any number of colors, and computes an interpolation to fill in the blanks if needed (or you can force colors to some values by using the enumerated mode).
+		This plug-in allows you to choose any number of colors, and computes an interpolation to fill in the blanks if needed (or you can force colors to some values by using the enumerated mode).
                 </para>
             </sect3>
             <sect3 id="create"><title>Creation of a graph</title>
@@ -35,7 +35,8 @@
 			  To add a node, select the <inlinegraphic fileref="images/i_addnode.png"/> tool and click Where you want to add a node.
 			  To add an edge, select the <inlinegraphic fileref="images/i_addedge.png"/> tool. 
 			  Click on the source node, then on the target node. 
-			  You can control whether to display or hide edges with the <code>Edges</code> checkbox in the <code>Layer Manager</code> tab, located in the <code>View Editor</code> tab, in the left-hand dock.
+			  You can control whether to display or hide edges with the <code>Edges</code> visibility checkbox in the <code>Layer Manager</code> tab, located in the <code>View Editor</code> tab, in the left-hand dock.
+			  Visibility checkboxes are in the first column, the second column contains stencil checkboxes (When one layer has the stencil, it is displayed on top of layers who do not have it).
 			  There are several other checkboxes here, most notable are options to display or not nodes, node labels and edge labels.
 			  In the same way, you can display or hide the arrows indicating the edge direction in the <code>Rendering Parameters> tab, by checking the <code>Arrows</code> checkbox in the <code>Edges</code> section.</para>
                     </listitem>
@@ -51,7 +52,7 @@
 	    A dialog will appear allowing to enter the author of the graph and some comments; then after clicking on the 'OK' button, type the file name and choose its location.</para>
 	  <para>The second way to save is to export the graph in one of the formats Tulip supports. 
 	    By default, only GML and TLP exports are installed. 
-	    To install more, look at the <code>Plugins Management</code> section of this help.
+	    To install more, look at the <code>Plug-ins Management</code> section of this help.
 	    Select <code>File->Export</code> and the format of your choice, then choose the file name and location.</para>
 	</sect2>
         <sect2 id="algos"><title>Algorithms</title>
@@ -68,30 +69,37 @@
     </sect1>
     <sect1 id="improve-layout"><title>Improving a layout</title>
     	<sect2 id="improve-layout-intro"><title>Introduction</title>
-    		<para>In this tutorial, we will show you how to use, layouts algorithms, and graph properties to obtain a nice an clear graph. To do so, we will first import a file-system structure, and then use the graph properties to find specific files. (*.cpp or *.hpp ...)</para>
+    		<para>In this tutorial, we will show you how to use layouts algorithms and graph properties to obtain a nice an clear graph. 
+		  To do so, we will first import a file system structure, and then use the graph properties to find specific files. (*.cpp, *.hpp, ...)</para>
     	</sect2>
-    	<sect2 id="improve-layout-import"><title>File-system importation</title>
-    		<para>To import a file-system we need to select the <code>File System Directory</code> importation tool which is in the menu <code>File->Import->Misc</code>.
+    	<sect2 id="improve-layout-import"><title>File system import</title>
+    		<para>To create a graph from a file system, we have to select the <code>File System Directory</code> import tool which is in the <code>File->Import->Misc</code> menu.
     		</para>
-    		<para>A "file browser dialog" will pop-up to select the root directory that you want. On this dialog, you just need to select a directory for instance, your documents (On Windows : My Documents).
+    		<para>A "file browser dialog" will pop-up for you to select the root directory from which to create the graph. 
+		  On this dialog, you just need to select a directory, e.g. Home (On Windows : My Documents).
+		  Each folder and file will be represented as a node, and an edge will link a node to its parent folder.
     		</para>
     		<para>
-    			The importation plug in will work for some time, and a tree graph will appear representing the file system chosen.
+    			The import plug-in will work for some time, and a tree graph will appear representing the chosen file system.
     		</para>
     		<graphic fileref="images/tutorials_improvelayout_1.png" />
-     	<remark>To follow the rest of this tutorial you need to download this tulip graph file : <ulink url="http://www.labri.fr/perso/auber/projects/tulip/samples/filesystem.tlp.gz">Graph</ulink>. Load this compressed tulip file into the software (<code>File->Open</code>).</remark>
+     	<remark>To follow the rest of this tutorial you need to download and load (<code>File->Open</code>) this tulip compressed graph file : <ulink url="http://www.labri.fr/perso/auber/projects/tulip/samples/filesystem.tlp.gz">Graph</ulink>.</remark>
      	</sect2>
-     	<sect2 id="improve-layout-newlayout"><title>Using other Layouts :</title>
+     	<sect2 id="improve-layout-newlayout"><title>Using other Layouts</title>
      		<sect3 id="tuto-Bubble-Tree-layout"><title><code>Bubble Tree Layout</code> :</title>
      			<para>This layout algorithm can be found in the menu <code>Algorithm->Layout->Tree</code>.
-     			The bubble tree layout is very useful to notice directories that have the same structure.
+     			The bubble tree layout is very useful to notice directories that have a similar structure.
      			In this section, we will try to locate those directories.</para>
-     			<para>To have a better view on the tree, we will create a new NodeLinkDiagramComponent. Menu : View->NodeLinkDiagramComponent. When the new view is created, we need to re-organize the windows. Menu : Windows->Tile.</para>
-     			<para>Now that we can see the both views at the same time, we will zoom in (right window). Select the magnifying glass tool, and draw a bounding box on the left side of the graph. Just like this :</para>
+			<para>To have a better view on the tree, we will create a new Node Link Diagram View. <code>View->Node Link Diagram View</code>. 
+			  When the new view is created, we need to re-organize the windows. <code>Windows->Tile </code></para>
+     			<para>Now that we can see both views at the same time, we will zoom in on the right window.
+			  Select the magnifying glass tool, and draw a bounding box on the left side of the graph. Just like this :</para>
      			<graphic fileref="images/tutorials_improvelayout_bubble_1.png" />
-     			<para>As you can see, two nodes looks very alike. By using the "Get Information " tool, we can get there ids : Node 1965 and node 2009. Indeed, those to directories have the same structure since they both contains plug-ins source files.</para>
+			<para>As you can see, two nodes looks very alike. By using the <code>Get Information</code> tool, we can get their ids : Node 1965 and node 2009. 
+			It makes sense that these two directories have the same structure, since they both contain plug-ins source files.</para>
      			<para>We will now re-center the view (<code>View->Center View</code> or <keycap>Ctrl+Shift+C</keycap>). </para>
-			<para>Let's say that we now want to study our graph without the plug-in directory. To delete it we have first to select it, and then select all its sub directories.</para>
+			<para>Let's say that we now want to study our graph without the plug-in directory. 
+			  To easily delete the whole directory, we have to select it, and then select all its sub directories.</para>
 			<itemizedlist>
 				<listitem>
 					<para>Select the plug-in directory : Use the Find tool, (<code>Edit->Find</code> or <keycap>Ctrl+F</keycap>) with the field <code>Input property</code> set to "name", filter function set to "=" and filter value set to "plugins".</para>
@@ -103,7 +111,7 @@
 					<para>Delete all the selection : press <keycap>Del</keycap></para>
 				</listitem>
 				<listitem>
-					<para>Re-draw the bubble layout <code>Algorithm->Layout->Tree->Bubble Tree</code>.</para>
+					<para>Re-run the bubble layout <code>Algorithm->Layout->Tree->Bubble Tree</code>.</para>
 				</listitem>
 			</itemizedlist>
 			<para>Following is what you should see :</para>
@@ -111,11 +119,11 @@
      			
      		<para>As you can see, the bubble tree layout can be quite useful.</para>
      		</sect3>
-     		<sect3 id="improve-layout-treemap"><title><code>The Tree Map layout </code>:</title>
-     		<para>This Layout algorithm can be found in the menu <code>Algorithm->Layout->Tree</code>.
+     		<sect3 id="improve-layout-treemap"><title><code>The Tree Map layout</code></title>
+     		<para>This Layout algorithm can be found in <code>Algorithm->Layout->Tree</code>.
      		      The treemap layout is very useful to notice large disk usage files.
      		      This section will show you how to use the tree map layout</para>
-     		<para>First, make sure that you have unchecked the <code>Force Ratio</code> option that you can access via the menu <code>Options</code>.</para>
+		      <para>First, make sure that the <code>Options -> Force Ratio</code> item is not checked.</para>
      		<para>Apply the layout algorithm <code>Algorithm->Layout->Tree->Squarified Tree Map</code> with the following parameters :
      		</para>
      			<itemizedlist>
@@ -123,15 +131,18 @@
      				</para></listitem>
      				<listitem><para>Aspect Ratio : set to 1
      				</para></listitem>
-     				<listitem><para>Texture? : checked
+     				<listitem><para>TreeMap Type? : checked
      				</para></listitem>
      			</itemizedlist>
-     		 <para>Do not forget to refresh the views (<keycap>Ctrl+Shift+R</keycap>). Following is what you should see :</para>
+     		 <para>Following is what you should see :</para>
      		<graphic fileref="images/tutorials_improvelayout_treemap_1.png" />
-     		<para>As you can see, we easily get a global information on the size of files. Which is the biggest, or, which is the smallest ? But, we can also see the structure of directories, since files and directories are nested nodes. See <ulink url="http://en.wikipedia.org/wiki/Tree_map">Wikipedia : Tree Maps </ulink> for more information. </para>
+     		<para>As you can see, we easily get a global information on the size of files. 
+		  Which is the biggest and which is the smallest. 
+		  But we can also see the structure of directories, since files and directories are nested nodes. 
+		  See <ulink url="http://en.wikipedia.org/wiki/Tree_map">Wikipedia : Tree Maps </ulink> for more information. </para>
      		</sect3>
      		<sect3 id="improve-layout-improvewalker"><title><code> Improved Walker layout </code>:</title>
-     		<para> This layout can be find in the <code>Algorithm->Layout->Tree->Improve Walker</code>.</para>
+     		<para> This layout can be found in the <code>Algorithm->Layout->Tree->Improved Walker</code>.</para>
      		<para>Use the following parameters :</para>
      		<itemizedlist>
      			<listitem><para>Node Size : viewSize
@@ -148,24 +159,26 @@
      		<para>You should see a tree looking like this :</para>
      		<graphic fileref="images/tutorials_improvelayout_2.png" />
      		
-     		<para>As you can see, the improve walker layout, is just a hierarchical layout. It is very useful to understand the tree structure of a file system.</para>
+     		<para>As you can see, the improved walker layout, is just a hierarchical layout. It is very useful in order to understand the tree structure of a file system.</para>
      		</sect3>
      	</sect2>
      	<sect2 id="improve-layout-labels"><title>Showing Labels</title>
-     		<para>First, right click on the view and select Dialog->Rendering parameters. In the <code>Rendering Parameters</code> dialog go in Layers tab and check the <code>Nodes Label</code> <code>visibles</code> box</para>
+	<para>First, navigate to the <code>View Editor</code> tab in the left-hand dock.
+	  Then, go into the <code>Layer Manager</code> tab, and check the <code>Nodes Label</code> box in the first column.
      		<para>We will now try to add labels to the nodes. To do so, select the node property called "name" in the info editor window, click on the button <code>To Labels</code>.</para>
      		<para>You should now see a graph looking like that :</para>
      		<graphic fileref="images/tutorials_improvelayout_3.png" />
-     		<para>As you can see, the labels, don't fit in nodes and it is very hard to read the graph. To fix this problem go on rendering parameters dialog and in the Labels box, the field <code>Type</code> must be equal to "3D". Then, apply the <code>Algorithm->Size->Fit To Label</code> algorithm.</para>
+     		<para>As you can see, the labels don't fit in nodes and it is very hard to read the graph. 
+		  To fix this go in the <code>Rendering Parameters</code> tab, and check the <code>Scale labels to fit node sizes</code> box.</para>
      		
      		<para>You should obtain something like this.</para>
      		<graphic fileref="images/tutorials_improvelayout_4.png" />
      		<para>By zooming in we can see the labels :</para>
      		<graphic fileref="images/tutorials_improvelayout_5.png" />
-     		<para>If you want to display the big file (high disc space) with big nodes, use the <code>Algorithm->Size->Metric Mapping</code> algorithm with the parameter called "property" set to "size". </para>
+     		<para>If you want to display the big file (high disk space) with big nodes, use the <code>Algorithm->Size->Metric Mapping</code> algorithm with the parameter called "property" set to "size". </para>
      	</sect2>
      	<sect2 id="improve-layout-ext"><title>Showing a specific kind of file.</title>
-     		<para>Now that our graph as a nice and clear layout, we would like to locate all of our Source files (*.cpp). To do so, we will use the Find tool (Edit->Find or <keycap>Ctrl+F</keycap>).</para>
+     		<para>Now that our graph has a nice and clear layout, we would like to locate all of our Source files (*.cpp). To do so, we will use the Find tool (Edit->Find or <keycap>Ctrl+F</keycap>).</para>
      		<para>Use the following parameters :</para>
      		<itemizedlist>
      			<listitem><para>Input Property : name
@@ -176,13 +189,14 @@
      			</para></listitem>
      		</itemizedlist>
      		<para>Now that our source files are selected, we will apply a different color to them.</para>
-     		<para>In the info editor window, select the node property called "viewColor", check the <code>selected only</code> option. Now that we only see the "viewColor" property of the selected nodes, click on the button <code>Set all</code> and choose the color that you want. (We choosed green)</para>
-     		<para>You should see a graph like the one following :</para>
+     		<para>In the info editor window, select the node property called "viewColor", check the <code>selected only</code> option. 
+		Now that we only see the "viewColor" property of the selected nodes, click on the button <code>Set all</code> and choose the color that you want. (We choose green)</para>
+     		<para>You should see a graph like the following :</para>
      		<graphic fileref="images/tutorials_improvelayout_6.png" />
      		<graphic fileref="images/tutorials_improvelayout_treemap_6.png" />
      	</sect2>
      	<sect2 id="improve-layout-conclusion"><title>Conclusion</title>
-     		<para>As you could have seen, tulip implements powerful layouts and tools, to make a simple and understandable graph from a complex one.  </para>
+     		<para>As you have seen, tulip implements powerful layouts and tools, to make a complex graph into a simple and understandable one.</para>
      	</sect2>
     </sect1>
     <sect1 id="infovis"><title>People in InfoVis</title>
