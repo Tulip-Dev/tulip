@@ -133,13 +133,6 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
   Array<Color, 4> _colors; /**< Use tlp array to have out of bound check in debug mode, The colors of the points of the Quad */
   std::string _textureName;
 
-  /**
-   * Accessor in writing to the basic position of GlAugmentedDisplay
-   *
-   * \attention As you can see, this function is forbidden to the user to avoid him setting an unused parameter.
-   */
-  void setPosition(const Coord& position);
-
   
 };
 /*@}*/
