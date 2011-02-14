@@ -147,6 +147,19 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
 
   if (isVisible() || drawIfNotVisible) {
 
+#ifdef __APPLE__
+      // This code is here to bug fix not visible overview problem on MACOSX with Qt 4.7
+      // We have to test with next version of Qt to check if the problem exist
+      // Or we have to create a new system to display overview : QGraphicsView for example
+      if(isVisible()){
+        ((QWidget*)parent())->hide();
+        ((QWidget*)parent())->show();
+      }
+#if (QT_VERSION > QT_VERSION_CHECK(4, 7, 1))
+#warning Qt fix must be tested with this version of Qt, see GWOverviewWidget l.150
+#endif
+#endif
+
     if (_observedView != 0) {
       // If we have an observed view
       if(_initialCamera && !graphChanged) {

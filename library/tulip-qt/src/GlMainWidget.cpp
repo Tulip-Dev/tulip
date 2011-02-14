@@ -103,6 +103,15 @@ GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
 	setFocusPolicy(Qt::StrongFocus);
 	setMouseTracking(true);
 	renderingStore=NULL;
+#ifdef __APPLE__
+	// This code is here to bug fix black screen problem on MACOSX with Qt 4.7
+	// When we do the first redraw we don't use frame backup but we draw the view
+	// We have to test with next version of Qt to check if the problem exist
+	renderingNumber=0;
+#if (QT_VERSION > QT_VERSION_CHECK(4, 7, 1))
+#warning Qt fix must be tested with this version of Qt, see GlMainWidget.cpp l.106
+#endif
+#endif 
 	connect(this,SIGNAL(viewDrawn(GlMainWidget*,bool)),this,SLOT(viewDrawnSlot(GlMainWidget *,bool)));
 }
 //==================================================
@@ -298,8 +307,16 @@ void GlMainWidget::createRenderingStore(int width, int height){
 }
 //==================================================
 void GlMainWidget::redraw() {
-//	if (isVisible() && !inRendering) {
-  if (!inRendering) {
+	if (isVisible() && !inRendering) {
+
+#ifdef __APPLE__
+	  // This code is here to bug fix black screen problem on MACOSX with Qt 4.7
+	  // When we do the first redraw we don't use frame backup but we draw the view
+	  // We have to test with next version of Qt to check if the problem exist
+	  if(renderingNumber<=4){
+	     return draw(false);
+	  }
+#endif 
 		int width = contentsRect().width();
 		int height = contentsRect().height();
 
@@ -405,6 +422,16 @@ void GlMainWidget::draw(bool graphChanged) {
 
 		swapBuffers();
 		inRendering=false;
+
+#ifdef __APPLE__
+		// This code is here to bug fix black screen problem on MACOSX with Qt 4.7
+		// When we do the first redraw we don't use frame backup but we draw the view
+		// We have to test with next version of Qt to check if the problem exist
+		if(renderingNumber<=4)
+		  renderingNumber++;
+#endif 
+
+
 	}
 	emit viewDrawn(this,graphChanged);
 }
