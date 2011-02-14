@@ -85,46 +85,6 @@ void Ring::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
 }
 //=====================================================
 void Ring::draw(node n, float lod) {
-	//	if (GlDisplayListManager::getInst().beginNewDisplayList("Ring_ring")) {
-	//		drawRing();
-	//		GlDisplayListManager::getInst().endNewDisplayList();
-	//	}
-	//	if (GlDisplayListManager::getInst().beginNewDisplayList("Ring_ringborder")) {
-	//		drawRingBorder();
-	//		GlDisplayListManager::getInst().endNewDisplayList();
-	//	}
-	//	setMaterial(glGraphInputData->elementColor->getNodeValue(n));
-	//	string texFile = glGraphInputData->elementTexture->getNodeValue(n);
-	//	if (texFile != "") {
-	//		string texturePath = glGraphInputData->parameters->getTexturePath();
-	//		GlTextureManager::getInst().activateTexture(texturePath + texFile);
-	//	}
-	//
-	//	GlDisplayListManager::getInst().callDisplayList("Ring_ring");
-	//
-	//	GlTextureManager::getInst().desactivateTexture();
-	//
-	//	if (lod > 20) {
-	//		ColorProperty *borderColor = glGraphInputData->getGraph()->getProperty<
-	//				ColorProperty> ("viewBorderColor");
-	//		DoubleProperty *borderWidth = 0;
-	//		if (glGraphInputData->getGraph()->existProperty("viewBorderWidth"))
-	//			borderWidth = glGraphInputData->getGraph()->getProperty<
-	//					DoubleProperty> ("viewBorderWidth");
-	//		if (borderWidth == 0)
-	//			glLineWidth(2);
-	//		else {
-	//			double lineWidth = borderWidth->getNodeValue(n);
-	//			if (lineWidth < 1e-6)
-	//				glLineWidth(1e-6); //no negative borders
-	//			else
-	//				glLineWidth(lineWidth);
-	//		}
-	//		glDisable(GL_LIGHTING);
-	//		setColor(borderColor->getNodeValue(n));
-	//		GlDisplayListManager::getInst().callDisplayList("Ring_ringborder");
-	//		glEnable(GL_LIGHTING);
-	//	}
 	drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
 			glGraphInputData->getElementTexture()->getNodeValue(n),
 			glGraphInputData->parameters->getTexturePath(),
