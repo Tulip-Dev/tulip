@@ -79,7 +79,7 @@ GraphView::~GraphView() {
     delAllSubGraphsInternal(itS.next(), true);
   delete propertyContainer; //must be done here because Property proxy needs to access to the graph structure
   removeGraphObservers();
-  removeObservers();
+  //removeObservers();
   ((GraphImpl *) getRoot())->freeSubGraphId(id);
 }
 //----------------------------------------------------------------
