@@ -24,8 +24,6 @@
 
 #include "tulip/GlSimpleEntity.h"
 
-#define N_QUAD_POINTS 4 /**< Constant indicating the number of points in a quad (stupid isn't it ? :D) */
-
 namespace tlp {
 /**
  * \addtogroup GlEntities
@@ -40,18 +38,7 @@ namespace tlp {
  */
 class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
 {
- protected:
-  Coord* positions[N_QUAD_POINTS]; /**< The position of the points of the Quad */
-  Color* colors[N_QUAD_POINTS]; /**< The colors of the points of the Quad */
-  std::string textureName;
-
-  /**
-   * Accessor in writing to the basic position of GlAugmentedDisplay
-   *
-   * \attention As you can see, this function is forbidden to the user to avoid him setting an unused parameter.
-   */
-  void setPosition(const Coord& position);
-
+ 
  public:
 
   /**
@@ -65,7 +52,7 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
    * \param positions Array indicating the position of the points. The first point is the top-left one. The next points are winding in clockwise order.
    * \param color A single color indicating the color for every point of the Quad.
    */
-  GlQuad(Coord positions[N_QUAD_POINTS], const Color &color);
+  GlQuad(const Coord positions[4], const Color &color);
 
   /**
    * Constructor
@@ -73,7 +60,7 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
    * \param positions Array indicating the position of the points. The first point is the top-left one. The next points are winding in clockwise order.
    * \param colors Array indicating the color of the points. The order is the same as for the positions.
    */
-  GlQuad(Coord positions[N_QUAD_POINTS], Color colors[N_QUAD_POINTS]);
+  GlQuad(const Coord positions[4], const Color colors[4]);
 
   /**
    * Destructor
@@ -89,13 +76,13 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
    * Accessor in writing to the position.
    * \param idPosition Indicates which point we want to move.
    */
-  void setPosition(int idPosition, const Coord &position);
+  void setPosition(const int idPosition, const Coord &position);
 
   /**
    * Accessor in writing to the color.
    * \param idColor Indicates which point we want to colorize.
    */
-  void setColor(int idColor, const Color &color);
+  void setColor(const int idColor, const Color &color);
 
   /**
    * Accessor in writing to the basic color of GlAugmentedDisplay
@@ -108,13 +95,13 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
    * Accessor in reading to the position.
    * \param idPosition Indicates which point we want to get the position.
    */
-  Coord* getPosition(int idPosition) const;
+  const Coord& getPosition(const int idPosition) const;
 
   /**
    * Accessor in reading to the color.
    * \param idColor Indicates which point we want to get the color.
-   */
-  Color* getColor(int idColor) const;
+   */	
+  const Color& getColor(const int idColor) const;
 
   /**
    * Accessor in reading to the texture.
@@ -124,7 +111,7 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
   /**
    * Accessor in reading to the texture.
    */
-  std::string getTextureName() const;
+  const std::string& getTextureName() const;
 
   /**
    * Translate entity
@@ -140,6 +127,19 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
    * Function to set data with XML
    */
   virtual void setWithXML(xmlNodePtr rootNode);
+  
+  protected:
+  Array<Coord, 4> _positions; /**< Use tlp array to have out of bound check in debug mode, The position of the points of the Quad */
+  Array<Color, 4> _colors; /**< Use tlp array to have out of bound check in debug mode, The colors of the points of the Quad */
+  std::string _textureName;
+
+  /**
+   * Accessor in writing to the basic position of GlAugmentedDisplay
+   *
+   * \attention As you can see, this function is forbidden to the user to avoid him setting an unused parameter.
+   */
+  void setPosition(const Coord& position);
+
   
 };
 /*@}*/
