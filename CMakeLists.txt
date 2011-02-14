@@ -72,6 +72,9 @@ SET(LibTulipName "tulip-${TulipMMVersion}")
 SET(LibTulipOglName "tulip-ogl-${TulipMMVersion}")
 SET(LibTulipQtName "tulip-qt4-${TulipMMVersion}")
 SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipMMVersion}")
+SET(LibStlPythonName "stlpython")
+SET(LibTulipPythonName "tulippython")
+SET(LibTulipOglPythonName "tulipoglpython")
 
 ## -----------------------------------------------------------------------------------------------
 ## Find need packages
@@ -148,10 +151,35 @@ ELSE(OPENMP_FOUND)
 ENDIF(OPENMP_FOUND)
 
 ## -----------------------------------------------------------------------------------------------
+## Python (not required)
+## -----------------------------------------------------------------------------------------------
+
+# Try to find Python in first place
+
+# If Python is present, compile SIP before launching the whole Tulip build  
+# because we need it later in the configure process 
+
+FIND_PACKAGE(PythonLibs)
+IF(PYTHONLIBS_FOUND)
+TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/ ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.11.2/ sip)
+IF(SIP_OK)
+SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/sipgen/sipgen)
+IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio")
+SET(SIP_LIB ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/siplib/libsip.a)
+ELSE()
+SET(SIP_LIB ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/siplib/sip.lib)
+ENDIF()
+SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.11.2/siplib/)
+ENDIF(SIP_OK)
+ENDIF(PYTHONLIBS_FOUND)
+
+
+## -----------------------------------------------------------------------------------------------
 ## Include file paths
 ## -----------------------------------------------------------------------------------------------
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
 SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
+SET(qscintilla2Include ${PROJECT_SOURCE_DIR}/thirdparty/QScintilla-gpl-2.4.6/Qt4/)
 SET(TulipInclude ${PROJECT_SOURCE_DIR}/library/tulip/include/)
 SET(TulipBuildInclude ${PROJECT_BINARY_DIR}/library/tulip/include/)
 SET(TulipOGLInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogl/include/)
