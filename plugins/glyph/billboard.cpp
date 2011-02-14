@@ -26,11 +26,8 @@
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
-#include <tulip/GlDisplayListManager.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/Graph.h>
-#include <tulip/GlTools.h>
+#include <tulip/GlRect.h>
 
 using namespace std;
 using namespace tlp;
@@ -53,31 +50,39 @@ public:
   virtual Coord getAnchor(const Coord &vector) const;
 
 protected:
-  void drawBillboard();
+
+  static GlRect *rect;
 };
+
+GlRect* Billboard::rect=0;
 
 GLYPHPLUGIN(Billboard, "2D - Billboard", "Gerald Gainant", "08/03/2004", "Textured billboard", "1.0", 7);
 
 //===================================================================================
 Billboard::Billboard(GlyphContext *gc): Glyph(gc){
+	if(!rect)
+		rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
 }
 //========================================================
 Billboard::~Billboard() {
 }
 //========================================================
-void Billboard::draw(node n,float) {
-  if(GlDisplayListManager::getInst().beginNewDisplayList("Billboard_billboard")) {
-    drawBillboard();
-    GlDisplayListManager::getInst().endNewDisplayList();
-  }
+void Billboard::draw(node n,float lod) {
 
-  setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
+  rect->setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
+  rect->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
+
   string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
-    GlTextureManager::getInst().activateTexture(texturePath+texFile);
+    rect->setTextureName(texturePath+texFile);
+  }else{
+    rect->setTextureName("");
   }
-  
+  double borderWidth=glGraphInputData->getElementBorderWidth()->getNodeValue(n);
+  if (borderWidth < 1e-6)
+    borderWidth=1e-6;
+  rect->setOutlineSize(borderWidth);
   
   // setup orientation
   float mdlM[16];
@@ -97,14 +102,8 @@ void Billboard::draw(node n,float) {
   mdlM[4] = mdlM[6] = 0.0f;
   mdlM[8] = mdlM[9] = 0.0f;
   glLoadMatrixf( mdlM );
-  glEnable(GL_ALPHA_TEST);
-  glAlphaFunc(GL_GREATER, 0.5);
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-  GlDisplayListManager::getInst().callDisplayList("Billboard_billboard");
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-  glDisable(GL_ALPHA_TEST);
+  rect->draw(lod,NULL);
   glPopMatrix();
-  GlTextureManager::getInst().desactivateTexture();
 }
 //========================================================
 Coord Billboard::getAnchor(const Coord & vector ) const {
@@ -117,20 +116,6 @@ Coord Billboard::getAnchor(const Coord & vector ) const {
     return v * (0.5f/fmax);
   else
     return v;
-}
-//========================================================
-void Billboard::drawBillboard() {
-  glBegin(GL_QUADS);
-  glNormal3f(0.0f, 0.0f, 1.0f);
-  glTexCoord2f(0.0f, 0.0f);
-  glVertex2f(-0.5f, -0.5f); 
-  glTexCoord2f(1.0f, 0.0f);
-  glVertex2f(0.5f, -0.5f);
-  glTexCoord2f(1.0f, 1.0f);
-  glVertex2f(0.5f, 0.5f);
-  glTexCoord2f(0.0f, 1.0f);
-  glVertex2f(-0.5f, 0.5f);
-  glEnd();
 }
 //========================================================
 /*@}*/
