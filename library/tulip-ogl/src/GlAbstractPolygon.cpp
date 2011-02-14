@@ -468,6 +468,13 @@ namespace tlp {
     recomputeBoundingBox();
   }
   //============================================================
+  void GlAbstractPolygon::setPoint(unsigned int index, const Coord &point){
+    assert(points.size()>index);
+
+    this->points[index]=point;
+    recomputeBoundingBox();
+  }
+  //============================================================
   void GlAbstractPolygon::setFillColors(const std::vector<Color> &colors){
     fillColors=colors;
   }

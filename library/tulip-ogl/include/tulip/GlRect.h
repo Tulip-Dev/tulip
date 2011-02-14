@@ -22,8 +22,6 @@
 
 #include <tulip/GlPolygon.h>
 
-#define N_RECT_POINTS 4
-
 namespace tlp {
 /**
  * \addtogroup GlEntities
@@ -45,6 +43,11 @@ class TLP_GL_SCOPE GlRect : public GlPolygon {
   GlRect(const Coord &topLeftPos, const Coord &bottomRightPos, const Color &topLeftCol, const Color &bottomRightCol, bool filled=true, bool outlined=false);
 
   /**
+   * Constructor : with center coords and size, fill color and outline color
+   */
+  GlRect(const Coord &center, const Size &size, const Color &fillColor, const Color &outlineColor);
+
+  /**
    * Constructor : with GlRect is filled/outlined
    */
   GlRect(bool filled=true, bool outlined=false);
@@ -58,6 +61,11 @@ class TLP_GL_SCOPE GlRect : public GlPolygon {
    * Accessor in reading to the Top Left Corner of the rectangle
    */
   virtual Coord getCenter();
+
+  /**
+   * Set the center and the size of the GlRect
+   */
+  void setCenterAndSize(const Coord &center, const Size &size);
 
   /**
    * Accessor in reading to the Top Left Corner of the rectangle
