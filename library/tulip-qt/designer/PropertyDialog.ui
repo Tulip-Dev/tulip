@@ -218,5 +218,70 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+ <connection>
+       <sender>CheckBox1</sender>
+       <signal>toggled(bool)</signal>
+       <receiver>PropertyDialogData</receiver>
+       <slot>filterSelection(bool)</slot>
+       <hints>
+        <hint type="sourcelabel" >
+         <x>20</x>
+         <y>20</y>
+        </hint>
+        <hint type="destinationlabel" >
+         <x>20</x>
+         <y>20</y>
+        </hint>
+       </hints>
+      </connection>
+      <connection>
+       <sender>removeButton_2</sender>
+       <signal>clicked()</signal>
+       <receiver>PropertyDialogData</receiver>
+       <slot>toStringProperty()</slot>
+       <hints>
+        <hint type="sourcelabel" >
+         <x>20</x>
+         <y>20</y>
+        </hint>
+        <hint type="destinationlabel" >
+         <x>20</x>
+         <y>20</y>
+        </hint>
+       </hints>
+      </connection>
+      <connection>
+       <sender>setAllButton</sender>
+       <signal>clicked()</signal>
+       <receiver>PropertyDialogData</receiver>
+       <slot>setAllValue()</slot>
+       <hints>
+        <hint type="sourcelabel" >
+         <x>20</x>
+         <y>20</y>
+        </hint>
+        <hint type="destinationlabel" >
+         <x>20</x>
+         <y>20</y>
+        </hint>
+       </hints>
+      </connection>
+      <connection>
+       <sender>importCSVPushButton</sender>
+       <signal>clicked()</signal>
+       <receiver>PropertyDialogData</receiver>
+       <slot>importCSVData()</slot>
+       <hints>
+        <hint type="sourcelabel" >
+         <x>133</x>
+         <y>437</y>
+        </hint>
+        <hint type="destinationlabel" >
+         <x>164</x>
+         <y>239</y>
+        </hint>
+       </hints>
+      </connection>
+      </connections>
 </ui>
