@@ -1,16 +1,17 @@
-ADD_CUSTOM_TARGET(tulip-doc-html sh ${PROJECT_SOURCE_DIR}/docs/common/gen-index.sh)
+ADD_CUSTOM_TARGET(tulip-libs-html sh ${PROJECT_SOURCE_DIR}/docs/common/gen-index.sh)
 
-ADD_CUSTOM_TARGET(tulip-lib-doc doxygen tulip-lib.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+ADD_CUSTOM_TARGET(tulip-lib-html doxygen tulip-lib.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
-ADD_CUSTOM_TARGET(tulip-libogl-doc doxygen tulip-ogl-lib.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+ADD_CUSTOM_TARGET(tulip-libogl-html doxygen tulip-ogl-lib.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
-ADD_CUSTOM_TARGET(tulip-libqt-doc doxygen tulip-qt-lib.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+ADD_CUSTOM_TARGET(tulip-libqt-html doxygen tulip-qt-lib.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 ADD_CUSTOM_TARGET(tulip-plugins-doc doxygen tulip-plugins.doxygen WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 ADD_CUSTOM_TARGET(tulipPlugins-html java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o tulipPlugins.html tulip-plugins.tag  ${PROJECT_SOURCE_DIR}/docs/doxygen/dox-plugins.xsl)
 
 ADD_DEPENDENCIES(tulipPlugins-html tulip-plugins-doc)
+ADD_DEPENDENCIES(tulip-libs-html tulip-lib-html tulip-libogl-html tulip-libqt-html)
 
 ADD_CUSTOM_TARGET(allPluginsBody-html java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o allPluginsBody.html tulip-plugins.tag ${PROJECT_SOURCE_DIR}/docs/doxygen/dox-html.xsl)
 

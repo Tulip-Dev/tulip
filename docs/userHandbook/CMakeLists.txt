@@ -4,13 +4,13 @@ ADD_CUSTOM_TARGET(user_html java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/sax
 
 ADD_DEPENDENCIES(user_html user_images)
 
-ADD_CUSTOM_TARGET(user_toc java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o toc.dcf ${PROJECT_SOURCE_DIR}/docs/developerHandbook/index.docbook ${PROJECT_SOURCE_DIR}/docs/common/tulip-toc.xsl install.path="userHandbook/html/")
+ADD_CUSTOM_TARGET(user_toc java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o toc.dcf ${PROJECT_SOURCE_DIR}/docs/userHandbook/index.docbook ${PROJECT_SOURCE_DIR}/docs/common/tulip-toc.xsl install.path="./userHandbook/html/")
 
-ADD_DEPENDENCIES(user_toc user_html) 
+ADD_DEPENDENCIES(user_toc user_html)
 
-ADD_CUSTOM_TARGET(user_keywords java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o keywords.dcf ${PROJECT_SOURCE_DIR}/docs/developerHandbook/index.docbook ${PROJECT_SOURCE_DIR}/docs/common/tulip-keywords.xsl install.path="userHandbook/html/")
+ADD_CUSTOM_TARGET(user_keywords java -cp "${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon653.jar:${PROJECT_SOURCE_DIR}/thirdparty/saxon/saxon.jar:${PROJECT_SOURCE_DIR}/docs/common:${PROJECT_SOURCE_DIR}/thirdparty/xml-commons/resolver.jar" com.icl.saxon.StyleSheet -x org.apache.xml.resolver.tools.ResolvingXMLReader -y org.apache.xml.resolver.tools.ResolvingXMLReader -r org.apache.xml.resolver.tools.CatalogResolver -o keywords.dcf ${PROJECT_SOURCE_DIR}/docs/userHandbook/index.docbook ${PROJECT_SOURCE_DIR}/docs/common/tulip-keywords.xsl install.path="./userHandbook/html/")
 
-ADD_DEPENDENCIES(user_keywords user_html) 
+ADD_DEPENDENCIES(user_keywords user_html)
 
 #INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
 #		  ${CMAKE_CURRENT_BINARY_DIR}/images 
