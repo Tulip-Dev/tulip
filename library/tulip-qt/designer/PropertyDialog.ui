@@ -153,8 +153,8 @@
    </item>
    <item>
     <widget class="QLineEdit" name="propertiesNameFilterLineEdit">
-     <property name="placeholderText">
-      <string>Input a filter on properties name here...</string>
+     <property name="toolTip" >
+      <string>Enter a filter on properties name here...</string>
      </property>
     </widget>
    </item>
