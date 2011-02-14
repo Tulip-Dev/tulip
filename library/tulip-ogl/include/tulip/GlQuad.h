@@ -22,7 +22,7 @@
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 
-#include "tulip/GlSimpleEntity.h"
+#include "tulip/GlPolygon.h"
 
 namespace tlp {
 /**
@@ -30,13 +30,11 @@ namespace tlp {
  */
 /*@{*/
 /**
- * \brief General class to render quads as augmented displays.
+ * \brief General class to render quads .
  *
- * This class is a generic class to render quads as augmented displays.
- * It doens't uses the basic parameters of the GlAugmentedDisplay(position and color)
- * but it's own set of positions and colors.
+ * This class is a generic class to render quadsl.
  */
-class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
+class TLP_GL_SCOPE GlQuad : public GlPolygon
 {
  
  public:
@@ -68,11 +66,6 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
   virtual ~GlQuad();
 
   /**
-   * Virtual function used to draw the quad.
-   */
-  virtual void draw(float lod,Camera *camera);
-
-  /**
    * Accessor in writing to the position.
    * \param idPosition Indicates which point we want to move.
    */
@@ -86,8 +79,6 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
 
   /**
    * Accessor in writing to the basic color of GlAugmentedDisplay
-   *
-   * \attention As you can see, this function is forbidden to the user to avoid him setting an unused parameter.
    */
   void setColor(const Color& color);
 
@@ -100,23 +91,8 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
   /**
    * Accessor in reading to the color.
    * \param idColor Indicates which point we want to get the color.
-   */	
+   */
   const Color& getColor(const int idColor) const;
-
-  /**
-   * Accessor in reading to the texture.
-   */
-  void setTextureName(const std::string &name);
-
-  /**
-   * Accessor in reading to the texture.
-   */
-  const std::string& getTextureName() const;
-
-  /**
-   * Translate entity
-   */
-  virtual void translate(const Coord& mouvement);
 
   /**
    * Function to export data in XML
@@ -127,11 +103,6 @@ class TLP_GL_SCOPE GlQuad : public GlSimpleEntity
    * Function to set data with XML
    */
   virtual void setWithXML(xmlNodePtr rootNode);
-  
-  protected:
-  Array<Coord, 4> _positions; /**< Use tlp array to have out of bound check in debug mode, The position of the points of the Quad */
-  Array<Color, 4> _colors; /**< Use tlp array to have out of bound check in debug mode, The colors of the points of the Quad */
-  std::string _textureName;
 
   
 };
