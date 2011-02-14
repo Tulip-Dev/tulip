@@ -37,7 +37,8 @@ namespace tlp {
 
   /** \brief Tulip view interface class
    *
-   * View class provide the skeleton of a view
+   * The View class provides the skeleton of a view.
+   * You normally never have to construct a View object yourself, the Controller takes care of this (and manages the interactors, etc...).
    */
   class TLP_QT_SCOPE View : public QObject,public WithParameter, public WithDependency{
 
@@ -49,113 +50,197 @@ namespace tlp {
      * empty destructor : for inheritance
      */
     virtual ~View() {}
+    
     /**
-     * Construct GUI of the view
-     * \return QWidget is the main widget of the view (in MainController this widget will be add to workspace)
-     */
+     * @brief Construct GUI of the view
+     * @param parent The parent widget of this view.
+     * @return QWidget* the main widget of the view (in MainController this widget will be added to the workspace).
+     **/
     virtual QWidget *construct(QWidget *parent) = 0;
+    
     /**
-     * Return the widget of this view
-     */
+     * @brief A getter on the main widget of the view.
+     *
+     * @return QWidget* the main widget of this view.
+     **/
     virtual QWidget *getWidget() =0;
+    
     /**
-     * Set the graph and data to the view
-     */
+     * @brief Set the View's Graph and DataSet.
+     *
+     * @param graph The view's new Graph.
+     * @param dataSet The view's new DataSet.
+     * @return void
+     **/
     virtual void setData(Graph *graph,DataSet dataSet) = 0;
+    
     /**
-     * Get the graph and data of the view
-     */
+     * @brief Gets the Graph and DataSet of the view.
+     *
+     * @param graph A pointer whose value will be modified to point to the Graph* of the view.
+     * @param dataSet A pointer whose value will be modified to point to the DataSet of the view.
+     * @return void
+     **/
     virtual void getData(Graph **graph,DataSet *dataSet) = 0;
+    
     /**
-     * get Graph attached to this view
-     */
+     * @brief A getter on this view's Graph.
+     *
+     * @return :Graph* The Graph this View displays.
+     **/
     virtual Graph *getGraph() = 0;
+    
     /**
-     * Return configuration widget used, this widget will be add on left of the MainController
-     */
+     * @brief Returns the configuration widgets this view should use.
+     * These widgets will be displayed in the left dock of the MainController, in the View Editor tab.
+     * Each widget will be in a tab whose text is the string of the pair.
+     *
+     * @return :list< std::pair<QWidget* , std::string > > Each element of this list is a pair of configuration widget and widget title.
+     **/
     virtual std::list<std::pair<QWidget *,std::string> > getConfigurationWidget() {return std::list<std::pair<QWidget *,std::string> >();}
+    
     /**
-     * Set all interactors available forthis view
-     * Interactors are create (allocate) but now view have responsibility of her destruction
-     */
+     * @brief Set the interactors on this view.
+     * The Interactors are created, but now the View has ownership on them (responsibility for their destruction).
+     *
+     * @param interactors The interactors that can be used with this View.
+     * @return void
+     **/
     virtual void setInteractors(const std::list<Interactor *> &interactors) = 0;
+    
     /**
-     * Return interactors of this view
-     */
+     * @brief Returns the interactors this view uses.
+     *
+     * @return :list< tlp::Interactor* > the interactors of this View
+     **/
     virtual std::list<Interactor *> getInteractors() = 0;
+    
     /**
-     * Set active interactor on this view
-     */
+     * @brief Sets the active interactor on this view.
+     * The interactor must be in the interactors list of this View.
+     *
+     * @param interactor The Interactor to render active.
+     * @return void
+     **/
     virtual void setActiveInteractor(Interactor *interactor) = 0;
+    
     /**
-     * Get active interactor on this view
-     */
+     * @brief Gets the active interactor of this view.
+     *
+     * @return :Interactor* The active Interactor of this View.
+     **/
     virtual Interactor *getActiveInteractor() = 0;
+    
     /**
-     * Take a snapshot of the view and put it in a picture
-     * \deprecated In Tulip 4.x.y this function will be replace by void createPicture(const string &pictureName,int width, int height, bool center, int zoom, int xOffset, int yOffset)
-     */
+     * @brief Take a snapshot of the view and put it in a picture
+     * 
+     * @deprecated In Tulip 4.x.y this function will be replaced by void createPicture(const string &pictureName,int width, int height, bool center, int zoom, int xOffset, int yOffset)
+     *
+     * @param pictureName filename to use for the picture, with extension (extension is used to infer image type).
+     * @param width width of the picture Defaults to 0.
+     * @param height height of the picture Defaults to 0.
+     * @return void
+     **/
     virtual void _DEPRECATED createPicture(const std::string &pictureName,int width=0, int height=0);
 
     /**
-     * Take a snapshot of the view like old createPicture function but we add some parameters
-     * \param pictureName : name of the picture with extension, extension is used to encode the picture
+     * @brief Take a snapshot of the view, and save it to a picture on disk.
+     * \param pictureName : filename to use for the picture, with extension (extension is used to infer image type).
      * \param width : width of the picture
      * \param height : height of the picture
-     * \param center : if we do a center view before create picture or use the current zoom and pan
-     * \param zoom : create a picture of a sub part of the view : with zoom=1 : create only one picture with entire view, with zoom=N : the view is cut into 2^(N-1) part in width and height
-     * \param xOffset : this parameters is used to know the part of the view to render if zoom!=1 : xOffset must be : 0 <= xOffset < 2^(zoom-1)
-     * \param yOffset : this parameters is used to know the part of the view to render if zoom!=1 : yOffset must be : 0 <= yOffset < 2^(zoom-1)
-     * \return false : picture can't be created, true : picture is created
+     * \param center : whether we should center the view before creating the picture, or use the current zoom and pan.
+     * \param zoom : creates a picture of a sub part of the view. With zoom=1 creates only one picture with entire view; with zoom=N : the view is cut into 2^(N-1) part in width and height. Defaults to 1.
+     * \param xOffset : which part of the view to render if zoom!=1. xOffset must be 0 <= xOffset < 2^(zoom-1). Defaults to 0.
+     * \param yOffset : which part of the view to render if zoom!=1. yOffset must be 0 <= yOffset < 2^(zoom-1). Defaults to 0.
+     * \return bool : Whether the picture can be created or not.
      */
-    virtual bool createPicture(const std::string &,int , int ,bool , int =1, int =0, int =0) {return false;}
+    virtual bool createPicture(const std::string& pictureName, int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0) {return false;}
 
+    
     /**
-     * Return the real view name (if "" the real name is the name give by plugin)
-     */
+     * @brief Return the real view name (if "" the real name is the name given by the plugin).
+     *
+     * @return :string the View's real name.
+     **/
     virtual std::string getRealViewName() const {return "";}
 
+    
     /**
-     * This function is call when an undo is perform by the controller
-     */
+     * @brief This function is called when an undo is performed by the controller.
+     *
+     * @return void
+     **/
     virtual void undoIsDone() {}
 
   public slots:
 
+    
     /**
-     * Change the graph
-     */
+     * @brief Sets the Graph on this View.
+     *
+     * @param graph the new Graph to be displayed by this View.
+     * @return void
+     **/
     virtual void setGraph(Graph *graph) = 0;
 
+    
     /**
-     * Draw the view
-     */
+     * @brief Draws the View from scratch, i.e. reading the Graph, and drawind all the nodes and edges depending on their position, colors, etc...
+     * This drawing is then stored to be re-used when a refresh is all you need.
+     * Then, the interactors are drawn.
+     * This is pretty resource-hungry, if you just need to redraw the interactors or only the selection changed, use refresh.
+     *
+     * @return void
+     **/
     virtual void draw() = 0;
+    
     /**
-     * Refresh the view (data don't be modified)
-     */
+     * @brief Refreshes the view, using the backed up drawing that draw stored.
+     * Then the interactors are drawn.
+     * This is usefull when the selection changed, but nothing else in the Graph changed (color, size, layout, ...), or when an interactor changed and needs re-drawing.
+     * This is way less resource-hungry than draw().
+     *
+     * @return void
+     **/
+    
     virtual void refresh() = 0;
+    
     /**
-     * Reinit the view and draw
-     */
+     * @brief Centers and draws the view.
+     * Calls centerview() [where applicable], then draw().
+     * This might be removed in a future version (3.6 or later) as all this does is calling centerview on the GlMainWidget if this is a GlMainView.
+     * Adding a centerView function in View would allow to remove this function.
+     *
+     * @return void
+     **/
     virtual void init() = 0;
 
   signals:
     /**
-     * This signal is emit when a specific element is selected in the view
-     */
+     * @brief This signal is emitted when a specific element is selected in the view
+     *
+     * @param eltId The identifier of the selected element.
+     * @param isNode Whether or not the selected element is a node. It can only be a node or an edge.
+     * @return void
+     **/
     void elementSelected(unsigned int eltId, bool isNode);
 
     /**
-     * This signal is emit when the view want to change its graph
-     */
-    void requestChangeGraph(tlp::View*,tlp::Graph*);
-
+     * @brief This signal is emitted when the view wants to change its graph.
+     *
+     * @param view ...
+     * @param graph ...
+     * @return void
+     **/
+    void requestChangeGraph(tlp::View* view,tlp::Graph* graph);
   };
 
   class TLP_QT_SCOPE ViewContext {
   };
 
+  /**
+   * @brief This class should only be used by the plugin macros.
+   **/
   class TLP_QT_SCOPE ViewFactory: public Plugin {
   public:
     virtual ~ViewFactory() {}
