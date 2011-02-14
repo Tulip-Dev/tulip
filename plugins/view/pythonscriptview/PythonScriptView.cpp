@@ -75,6 +75,28 @@ const string updateVisualizationFunc =
 		"\n"
 		"\n";
 
+const std::string cleanPropertyName(const std::string &propertyName) {
+	std::string ret(propertyName);
+	std::replace(ret.begin(), ret.end(), ' ', '_');
+	ret.erase(std::remove(ret.begin(), ret.end(), '#'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '%'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '/'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '+'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '-'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '&'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '*'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '<'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '>'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '|'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '~'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '^'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '='), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '!'), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '\''), ret.end());
+	ret.erase(std::remove(ret.begin(), ret.end(), '\"'), ret.end());
+	return ret;
+}
+
 const std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph) {
 	ostringstream oss;
 
@@ -101,46 +123,46 @@ const std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph
 	while (itProps->hasNext()) {
 		PropertyInterface *prop = itProps->next();
 		if (dynamic_cast<DoubleProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getDoubleProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getDoubleProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<LayoutProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getLayoutProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getLayoutProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<IntegerProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getIntegerProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getIntegerProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<StringProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getStringProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getStringProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<SizeProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getSizeProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getSizeProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<BooleanProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getBooleanProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getBooleanProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<ColorProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getColorProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getColorProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<GraphProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getGraphProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getGraphProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<DoubleVectorProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getDoubleVectorProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getDoubleVectorProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<CoordVectorProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getCoordVectorProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getCoordVectorProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<IntegerVectorProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getIntegerVectorProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getIntegerVectorProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<SizeVectorProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getSizeVectorProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getSizeVectorProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<BooleanVectorProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getBooleanVectorProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getBooleanVectorProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 		if (dynamic_cast<ColorVectorProperty *>(prop)) {
-			oss << "\t"<< prop->getName() << " =  graph.getColorVectorProperty(\"" << prop->getName() << "\")" << endl;
+			oss << "\t"<< cleanPropertyName(prop->getName()) << " =  graph.getColorVectorProperty(\"" << cleanPropertyName(prop->getName()) << "\")" << endl;
 		}
 	}
 	oss << "\n\tfor n in graph.getNodes():" << endl;
@@ -150,7 +172,7 @@ const std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph
 
 VIEWPLUGIN(PythonScriptView, "Python Script view", "Antoine Lambert", "04/2010", "Python Script View", "0.7");
 
-PythonScriptView::PythonScriptView() : pythonInterpreter(NULL), fontZoom(0) {}
+PythonScriptView::PythonScriptView() : pythonInterpreter(NULL), fontZoom(0), scriptStopped(false) {}
 
 PythonScriptView::~PythonScriptView() {}
 
@@ -352,39 +374,40 @@ void PythonScriptView::executeCurrentScript() {
 		} else {
 
 			viewWidget->scriptStatusLabel->setText("Script execution has failed");
-			QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
 
+			if (!scriptStopped) {
+				QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
 
-			map<string, vector<int> > errorLines;
-			QString consoleOutput = viewWidget->consoleOutputWidget->toPlainText();
-			QStringList outputLines = consoleOutput.split("\n");
+				map<string, vector<int> > errorLines;
+				QString consoleOutput = viewWidget->consoleOutputWidget->toPlainText();
+				QStringList outputLines = consoleOutput.split("\n");
 
-			for (int i = 0 ; i < outputLines.count() - 1 ; ++i) {
-				int pos = 0;
-				while ((pos = rx.indexIn(outputLines[i], pos)) != -1) {
-					string file = rx.cap(1).toStdString();
-					int line = rx.cap(2).toInt();
-					errorLines[file].push_back(line);
-					pos += rx.matchedLength();
+				for (int i = 0 ; i < outputLines.count() - 1 ; ++i) {
+					int pos = 0;
+					while ((pos = rx.indexIn(outputLines[i], pos)) != -1) {
+						string file = rx.cap(1).toStdString();
+						int line = rx.cap(2).toInt();
+						errorLines[file].push_back(line);
+						pos += rx.matchedLength();
+					}
+
+				}
+				for (size_t i = 0 ; i < errorLines["<string>"].size() ; ++i) {
+					if (errorLines["<string>"][i] > 1) {
+						viewWidget->pythonCodeWidget->indicateScriptCurrentError(errorLines["<string>"][i]-1);
+					}
 				}
 
-			}
-			for (size_t i = 0 ; i < errorLines["<string>"].size() ; ++i) {
-				if (errorLines["<string>"][i] > 1) {
-					viewWidget->pythonCodeWidget->indicateScriptCurrentError(errorLines["<string>"][i]-1);
-				}
-			}
-
-			for (it = editedModules.begin() ; it != editedModules.end() ; ++it) {
-				if (errorLines.find(it->second) != errorLines.end()) {
-					const vector<int> &linesErrorNumbers = errorLines[it->second];
-					PythonCodeEditor *codeEditor = static_cast<PythonCodeEditor *>(viewWidget->modulesTabWidget->widget(it->first));
-					for (size_t i = 0 ; i < linesErrorNumbers.size() ; ++i) {
-						codeEditor->indicateScriptCurrentError(linesErrorNumbers[i]-1);
+				for (it = editedModules.begin() ; it != editedModules.end() ; ++it) {
+					if (errorLines.find(it->second) != errorLines.end()) {
+						const vector<int> &linesErrorNumbers = errorLines[it->second];
+						PythonCodeEditor *codeEditor = static_cast<PythonCodeEditor *>(viewWidget->modulesTabWidget->widget(it->first));
+						for (size_t i = 0 ; i < linesErrorNumbers.size() ; ++i) {
+							codeEditor->indicateScriptCurrentError(linesErrorNumbers[i]-1);
+						}
 					}
 				}
 			}
-
 			graph->pop();
 		}
 		viewWidget->progressBar->setRange(0,100);
@@ -394,6 +417,8 @@ void PythonScriptView::executeCurrentScript() {
 
 		Observable::unholdObservers(true);
 
+		scriptStopped = false;
+
 	} else {
 		QMessageBox::information(viewWidget->pythonCodeWidget, "Script execution not allowed", "The Python interpreter already execute a script. You must wait for its termination or stop its execution before running a new script.");
 	}
@@ -401,6 +426,7 @@ void PythonScriptView::executeCurrentScript() {
 
 
 void PythonScriptView::stopCurrentScript() {
+	scriptStopped = true;
 	pythonInterpreter->stopCurrentScript();
 }
 
