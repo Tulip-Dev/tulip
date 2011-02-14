@@ -102,10 +102,6 @@ public:
 	 */
 	void removeObserver(Observer *);
 	/**
-	 * Remove all observers.
-	 */
-	void removeObservers();
-	/**
 	 * Notify all the observers.
 	 */
 	void notifyObservers();
@@ -135,6 +131,11 @@ protected:
 	std::list<Observer*> observersList;
 	std::map<Observer*, std::list<Observer*>::iterator> observersSet;
 	void removeOnlyObserver(Observer *);
+private:
+	/**
+	 * Remove all observers.
+	 */
+	void removeObservers();
 };
 
 
