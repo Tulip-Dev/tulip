@@ -37,10 +37,6 @@ GlQuad::GlQuad():_textureName("") {
   // No default constructor :)
 }
 
-void GlQuad::setPosition(const Coord&) {
-  // No setPosition
-}
-
 void GlQuad::setColor(const Color& color) {
   for(int i=0; i < 4; ++i) {
     _colors[i] = color;
