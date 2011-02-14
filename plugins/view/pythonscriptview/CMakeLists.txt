@@ -3,7 +3,7 @@ IF(SIP_OK)
 
 INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
 
-INCLUDE_DIRECTORIES(${qscintilla2Include} ${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${SIP_INCLUDE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
+INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 
 SET(QT_USE_QTWEBKIT true)
 
@@ -39,7 +39,8 @@ QT4_ADD_RESOURCES(pythonscriptview_RCC_SRCS ${pythonscriptview_RCC})
 
 EXECUTE_PROCESS(COMMAND ${SIP_EXE} -a ${CMAKE_CURRENT_SOURCE_DIR}/tulip.api ${CMAKE_SOURCE_DIR}/library/tulip-python/tulip/Module.sip)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w")
+# Force to use SIP and QScintilla headers located in thirdparty and not those installed in the system
+SET(CMAKE_CXX_FLAGS "-I${qscintilla2Include} -I${SIP_INCLUDE_DIR} ${CMAKE_CXX_FLAGS} -w")
 
 ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${pythonscriptview_UI_SRCS} ${pythonscriptview_MOC_SRCS} ${pythonscriptview_LIB_SRCS} ${pythonscriptview_RCC_SRCS})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipName})
