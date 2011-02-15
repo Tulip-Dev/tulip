@@ -32,6 +32,11 @@ namespace tlp {
   ObservableCamera::ObservableCamera():tracked(true), inDestruction(false){
   }
 
+  ObservableCamera::ObservableCamera(const ObservableCamera &camera){
+    inDestruction=camera.isInDestruction();
+    tracked=camera.isTracked();
+  }
+
   void ObservableCamera::setCameraTracking(bool tracked){
     this->tracked=tracked;
   }
