@@ -195,8 +195,6 @@ public:
     eltTypes.setCurrent(LINEAR_ELT);
     targetType.setCurrent(NODES_TARGET);
     DoubleProperty* metricS = graph->getProperty<DoubleProperty>("viewMetric");
-    ColorProperty* color= graph->getProperty<ColorProperty>("viewColor");
-    *colorResult=*color;
 
     PropertyInterface *metric = graph->getProperty("viewMetric");
     if ( dataSet!=0 ) {
