@@ -42,8 +42,12 @@ namespace tlp {
     View *view;
 
   public:
-    /*
-     * Defaulkt destructor
+    /**
+      * @brief Default constructor.
+      **/
+    InteractorComponent():id(invalidID),view(NULL){}
+    /**
+     * Default destructor
      */
     virtual ~InteractorComponent() {}
 
