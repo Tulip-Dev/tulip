@@ -1127,12 +1127,14 @@ namespace tlp {
     // allow to undo
     graph->push();
     int nbItemsFound = sel->exec();
-    if (nbItemsFound > - 1)
+    if (nbItemsFound > -1)
       currentProperty = sel->getCurrentProperty();
     delete sel;
     switch(nbItemsFound) {
     case 0:
       mainWindowFacade.getStatusBar()->showMessage("No item found.");
+      //no item found does not mean we want to undo.
+      break;
     case -1:
       // forget the current graph state
       graph->pop(false);
