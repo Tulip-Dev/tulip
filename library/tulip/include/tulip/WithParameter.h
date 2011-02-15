@@ -29,17 +29,22 @@ namespace tlp {
 
 /** \addtogroup plugins */ 
 /*@{*/
+/// This class enables to embed self described parameters of any type
+/// parameters are stored in a protected instance of the StrucDef class
 struct TLP_SCOPE WithParameter {
-  ///
+  /// Return the parameters
   tlp::StructDef getParameters();
-  ///
-  template<typename Ty> void addParameter(const char* str,
-					  const char* inHelp=0,
-					  const char* inDefValue = 0,
-					  bool isMandatory = true)
-  { parameters.template add<Ty>(str,inHelp,inDefValue,isMandatory); }
+  /// Add a parameter of type T with name str
+  /// inHelp is the description of the parameter
+  /// inDefValue is a string representation of the parameter default value
+  /// isMandatory indicates if a value is needed for the parameter
+  template<typename T> void addParameter(const char* str,
+					 const char* inHelp=0,
+					 const char* inDefValue = 0,
+					 bool isMandatory = true)
+  { parameters.template add<T>(str,inHelp,inDefValue,isMandatory); }
 protected:
-  ///
+  /// the structure holding the parameters
   StructDef parameters;
 };
 /*@}*/
