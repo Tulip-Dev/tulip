@@ -628,7 +628,6 @@ extern int yywrap (void );
 #endif
 #endif
 
-    static void yyunput (int c,char *buf_ptr  );
     
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char *,yyconst char *,int );
