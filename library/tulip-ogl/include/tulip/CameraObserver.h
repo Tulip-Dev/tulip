@@ -62,6 +62,9 @@ namespace tlp {
   public:
     ObservableCamera();
     virtual ~ObservableCamera() {}
+
+    ObservableCamera(const ObservableCamera &);
+
     /**
      * Register a new observer
      */
@@ -89,9 +92,14 @@ namespace tlp {
     void setCameraTracking(bool tracked);
 
     /**
+     * Return if the ObservableCamera is in destruction
+     */
+    bool isInDestruction() const {return inDestruction;}
+
+    /**
      * return true if the camera is tracked
      */
-    bool isTracked() {return tracked;}
+    bool isTracked() const {return tracked;}
 
 
   protected:

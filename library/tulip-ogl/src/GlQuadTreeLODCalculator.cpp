@@ -158,9 +158,7 @@ namespace tlp {
 
                 cameras.push_back(camera);
                 if(currentLayer!=NULL){
-                  Camera copyCamera=*camera;
-                  copyCamera.removeObservers();
-                  layerToCamera.insert(pair<GlLayer*,pair<Camera*,Camera> >(currentLayer,pair<Camera *,Camera>(camera,copyCamera)));
+                  layerToCamera.insert(pair<GlLayer*,pair<Camera*,Camera> >(currentLayer,pair<Camera *,Camera>(camera,*camera)));
                 }
 
                 Matrix<float,4> transformMatrix;
