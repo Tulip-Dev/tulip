@@ -154,7 +154,7 @@ namespace tlp {
      * \param yOffset : which part of the view to render if zoom!=1. yOffset must be 0 <= yOffset < 2^(zoom-1). Defaults to 0.
      * \return bool : Whether the picture can be created or not.
      */
-    virtual bool createPicture(const std::string& pictureName, int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0) {return false;}
+    virtual bool createPicture(const std::string& pictureName, int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
 
     
     /**

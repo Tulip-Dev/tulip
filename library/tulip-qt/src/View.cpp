@@ -26,4 +26,8 @@ namespace tlp {
 
   void View::createPicture(const std::string &,int, int) {};
 
+  bool View::createPicture(const std::string&, int, int, bool, int, int, int) {
+	  return false;
+  }
+
 }
