@@ -128,7 +128,6 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
     result=false;
   }
   circularCalls.erase(prop);
-  notifyObservers();
   tlp::Observable::unholdObservers();
 
   if (progress==0) delete tmpProgress;
