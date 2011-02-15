@@ -201,7 +201,6 @@ void FindSelectionWidget::evalNodes(PropertyInterface *p, int mode,
     if (v)
       ++nbItemsFound;
     if( operation == 0 ) {
-      std::cout << n.id << " " << v <<"(" << nbItemsFound <<")"<< std::endl;
       selection->setNodeValue( n, v );
     } else if( operation == 1 ) {
       if( v )
