@@ -155,7 +155,6 @@ namespace tlp {
      * \return bool : Whether the picture can be created or not.
      */
     virtual bool createPicture(const std::string& pictureName, int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
-
     
     /**
      * @brief Return the real view name (if "" the real name is the name given by the plugin).

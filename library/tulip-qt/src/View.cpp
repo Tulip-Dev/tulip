@@ -25,6 +25,10 @@ namespace tlp {
   TemplateFactory<ViewFactory,View, ViewContext *> *ViewFactory::factory;
 
   void View::createPicture(const std::string &,int, int) {};
+  
+  bool View::createPicture(const std::string&, int, int, bool, int, int, int) {
+    return false;
+  }
 
   bool View::createPicture(const std::string&, int, int, bool, int, int, int) {
 	  return false;
