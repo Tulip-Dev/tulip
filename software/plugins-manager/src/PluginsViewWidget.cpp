@@ -267,7 +267,7 @@ namespace tlp {
           }
         }else{
           if(!isCompatible((*it)->text(0).toStdString())){
-//             (*it)->setFlags((*it)->flags()&((int)!Qt::ItemIsUserCheckable));
+            (*it)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
           }
         }
 
