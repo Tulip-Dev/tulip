@@ -178,7 +178,13 @@ namespace tlp {
     glPushMatrix();
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
     glRotatef(data->getElementRotation()->getNodeValue(n), 0., 0., 1.);
-    glScalef(nodeSize[0], nodeSize[1], nodeSize[2]);
+
+    // If node size in z is equal to 0 we have to scale with FLT_EPSILON to preserve normal
+    // (because if we do a scale of (x,y,0) and if we have a normal like (0,0,1) the new normal after scale will be (0,0,0) and we will have light problem)
+    if(nodeSize[2]==0)
+      glScalef(nodeSize[0], nodeSize[1],FLT_EPSILON);
+    else
+      glScalef(nodeSize[0], nodeSize[1],nodeSize[2]);
 
     data->glyphs.get(data->getElementShape()->getNodeValue(n))->draw(n,lod);
 
