@@ -124,6 +124,12 @@ scriptengine_ConsoleOutput_enableConsoleOutput(PyObject *self, PyObject *o) {
 	Py_RETURN_NONE;
 }
 
+// T_BOOL is not defined for older versions of Python (2.5 for instance)
+// define it as T_INT in that case
+#ifndef T_BOOL
+#define T_BOOL T_INT
+#endif
+
 static PyMemberDef scriptengine_ConsoleOutput_members[] = {
 		{const_cast<char*>("stderrflag"), T_BOOL, offsetof(scriptengine_ConsoleOutput, stderrflag), 0, const_cast<char *>("flag for stderrflag")},
 		{const_cast<char*>("writeToConsole"), T_BOOL, offsetof(scriptengine_ConsoleOutput, writeToConsole), 0, const_cast<char *>("flag for enabling/disabling console output")},
