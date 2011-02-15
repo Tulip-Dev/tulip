@@ -17,6 +17,10 @@
  *
  */
 
+#if defined(__GNUC__) && __GNUC__ >= 4 && ((__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >= 1) || (__GNUC_MINOR__ >= 3))
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#endif
+
 #include <tulip/PlanarityTestImpl.h>
 #include <tulip/StableIterator.h>
 #include <tulip/Graph.h>
