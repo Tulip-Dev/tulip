@@ -126,10 +126,7 @@ set(tulip-qt_MOC
     ../include/tulip/MainController.h
     ../include/tulip/View.h
     ../include/tulip/AbstractView.h
-    ../include/tulip/GraphPropertiesSelectionWidget.h
     ../include/tulip/ItemsListWidget.h
-    ../include/tulip/StringsListSelectionWidgetInterface.h
-    ../include/tulip/StringsListSelectionWidget.h
     ../include/tulip/SimpleStringsListSelectionWidget.h
     ../include/tulip/DoubleStringsListSelectionWidget.h
     ../include/tulip/ColorScaleConfigDialog.h
