@@ -51,8 +51,8 @@ struct TLP_QT_SCOPE GItem {
 
 static bool EvalProxy( PropertyInterface *p, const GItem &gi, std::string value, int mode) {
   assert( IsEvaluableProxy(p) );
-  DoubleProperty *    metp = dynamic_cast<DoubleProperty*>(p);
-  StringProperty *    strp = dynamic_cast<StringProperty*>(p);
+  DoubleProperty  * metp = dynamic_cast<DoubleProperty*>(p);
+  StringProperty  * strp = dynamic_cast<StringProperty*>(p);
   BooleanProperty * selp = dynamic_cast<BooleanProperty*>(p);
   IntegerProperty * intp = dynamic_cast<IntegerProperty*>(p);
   
@@ -100,7 +100,6 @@ static bool EvalProxy( PropertyInterface *p, const GItem &gi, std::string value,
   
   return false;
 }
-
 
 void FindSelectionWidget::propertyChanged(int) {
   PropertyInterface * p = getProperty();
@@ -162,8 +161,8 @@ PropertyInterface * FindSelectionWidget::getProperty() {
 }
 
 int FindSelectionWidget::getOperation() {
-  if(setToSelectionOpt->isChecked())		return 0;
-  if(addToSelectionOpt->isChecked())		return 1;
+  if(setToSelectionOpt->isChecked())	return 0;
+  if(addToSelectionOpt->isChecked())	return 1;
   if(rmvFromSelectionOpt->isChecked())	return 2;
   return 3;
 }
@@ -193,50 +192,51 @@ int FindSelectionWidget::exec() {
 }
 
 void FindSelectionWidget::evalNodes(PropertyInterface *p, int mode,
-				    std::string fv, int op,
-				    BooleanProperty *selP) {
+				    std::string fv, int operation,
+				    BooleanProperty *selection) {
   Iterator<node> * nodeIt = graph->getNodes();
   while( nodeIt->hasNext() ) {
     node n = nodeIt->next();
     bool v = EvalProxy( p, GItem(n), fv, mode );
     if (v)
       ++nbItemsFound;
-    if( op == 0 ) {
-      selP->setNodeValue( n, v );
-    } else if( op == 1 ) {
+    if( operation == 0 ) {
+      std::cout << n.id << " " << v <<"(" << nbItemsFound <<")"<< std::endl;
+      selection->setNodeValue( n, v );
+    } else if( operation == 1 ) {
       if( v )
-	selP->setNodeValue( n, true );
-    } else if( op == 2 )  {
+	selection->setNodeValue( n, true );
+    } else if( operation == 2 )  {
       if( v )
-	selP->setNodeValue( n, false );
+	selection->setNodeValue( n, false );
     } else {
       if( !v )
-	selP->setNodeValue( n, false );
+	selection->setNodeValue( n, false );
     }
   }
   delete nodeIt;
 }
 
 void FindSelectionWidget::evalEdges(PropertyInterface *p, int mode,
-				    std::string fv, int op, 
-				    BooleanProperty *selP) {
+				    std::string fv, int operation, 
+				    BooleanProperty *selection) {
   Iterator<edge> * edgeIt = graph->getEdges();
   while( edgeIt->hasNext() ) {
     edge e = edgeIt->next();
     bool v = EvalProxy( p, GItem(e), fv, mode );
     if (v)
       ++nbItemsFound;
-      if( op == 0 ) {
-	selP->setEdgeValue( e, v );
-      } else if( op == 1 ) {
+      if( operation == 0 ) {
+	selection->setEdgeValue( e, v );
+      } else if( operation == 1 ) {
 	if( v )
-	  selP->setEdgeValue( e, true );
-      } else if( op == 2 ) {
+	  selection->setEdgeValue( e, true );
+      } else if( operation == 2 ) {
 	if( v )
-	  selP->setEdgeValue( e, false );
+	  selection->setEdgeValue( e, false );
       } else {
 	if( !v )
-	  selP->setEdgeValue( e, false );
+	  selection->setEdgeValue( e, false );
       }
   }
   delete edgeIt;

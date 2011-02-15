@@ -48,8 +48,8 @@ private:
   int getOperation();
   int getSource();
   int getMode();
-  void evalNodes(PropertyInterface *, int, std::string, int, BooleanProperty *);
-  void evalEdges(PropertyInterface *, int, std::string, int, BooleanProperty *);
+  void evalNodes(PropertyInterface *property, int mode, std::string fv, int op, BooleanProperty *selection);
+  void evalEdges(PropertyInterface *property, int mode, std::string fv, int op, BooleanProperty *selection);
 
   PropertyInterface *getProperty();
   void find(BooleanProperty *);
