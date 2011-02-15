@@ -30,8 +30,4 @@ namespace tlp {
     return false;
   }
 
-  bool View::createPicture(const std::string&, int, int, bool, int, int, int) {
-	  return false;
-  }
-
 }
