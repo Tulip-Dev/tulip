@@ -21,8 +21,8 @@
 // | Tulip Python Bindings                                                   |
 // | Original Bindings by the Booggie project developpment team              |
 // | (http://booggie.org/)                                                   |
-// | Improved and maintained by Antoine Lambert 			                 |
-// | Contact:  antoine.lambert@labri.fr 								     |
+// | Improved and maintained by Antoine Lambert                              |
+// | Contact:  antoine.lambert@labri.fr                                      |
 // +-------------------------------------------------------------------------+
 // | License:                                                                |
 // |                                                                         |

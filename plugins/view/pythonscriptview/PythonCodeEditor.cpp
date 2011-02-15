@@ -19,8 +19,8 @@
 
 // +-------------------------------------------------------------------------+
 // | Tulip Python View                                                       |
-// | Author:  Antoine Lambert 												 |
-// | Contact:  antoine.lambert@labri.fr 								     |
+// | Author:  Antoine Lambert                                                |
+// | Contact:  antoine.lambert@labri.fr                                      |
 // +-------------------------------------------------------------------------+
 // | License:                                                                |
 // |                                                                         |
