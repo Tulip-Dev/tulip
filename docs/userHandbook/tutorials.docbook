@@ -183,14 +183,16 @@
      		<itemizedlist>
      			<listitem><para>Input Property : name
      			</para></listitem>
-     			<listitem><para>Filter :  filter function set to "=" and filter value set to ".*cpp or .*hpp". For more details on regular expressions, follow this link : <ulink url="http://en.wikipedia.org/wiki/Regular_expression">WikiPedia : Regex </ulink>
+     			<listitem><para>Filter :  filter function set to "=" and filter value set to ".*cpp or .*hpp". 
+			  The filter supports regular expressions, and in regular expressions '.' means any character, and '*' means any number of times, so '.*' means any character, any number of times.
+			  Not to be mistaken with wildcard characters. For more details on regular expressions, follow this link : <ulink url="http://en.wikipedia.org/wiki/Regular_expression">WikiPedia : Regex </ulink>
      			</para></listitem>
      			<listitem><para>Options : check the <code>Replace</code> radio button and select <code>On nodes</code>.
      			</para></listitem>
      		</itemizedlist>
      		<para>Now that our source files are selected, we will apply a different color to them.</para>
      		<para>In the info editor window, select the node property called "viewColor", check the <code>selected only</code> option. 
-		Now that we only see the "viewColor" property of the selected nodes, click on the button <code>Set all</code> and choose the color that you want. (We choose green)</para>
+		Now that we only see the "viewColor" property of the selected nodes, click on the button <code>Set all</code> and choose the color that you want. (We chose green)</para>
      		<para>You should see a graph like the following :</para>
      		<graphic fileref="images/tutorials_improvelayout_6.png" />
      		<graphic fileref="images/tutorials_improvelayout_treemap_6.png" />
@@ -200,29 +202,55 @@
      	</sect2>
     </sect1>
     <sect1 id="infovis"><title>People in InfoVis</title>
-    	<sect2 id="people-in-infovis"><title>Analyzing an author.</title>
-    		<para>Before anything, download, and open this <ulink url="http://tulip.labri.fr/samples/GRCite.tlp.gz">tulip graph file</ulink>. Click on the tab Hierarchy (in the info editor window) and select the subgraph GRCite. You need to delete the other sub graphs by doing a right click on there name, and then "remove". </para>
+    	<sect2 id="people-in-infovis"><title>Analyzing an author</title>
+    		<para>First, download and open this <ulink url="http://tulip.labri.fr/samples/GRCite.tlp.gz">tulip graph file</ulink>.</para>
     		<para>This graph represent the relations between authors, conferences and papers. To distinguish paper, conferences and authors, we will re-color them : </para>
     		<itemizedlist>
-    			<listitem> <para>Select all papers : Press on <keycap>Ctrl+F</keycap> to display the find tool. In the Input Property field, select the property "type". And on the line below, set the filter function to "=" and the filter value to 0, before clicking on the Find button.</para>
+    			<listitem> <para>Select all papers : Press <keycap>Ctrl+F</keycap> to display the find tool. 
+			  In the Input Property field, select the property "type". Set the filter to "=", and the filter value to '0', then click on the Find button.</para>
     			</listitem>
-    			<listitem> <para>Re-color the nodes in red : Select the tab Property (in the info editor). Check the "selected only" option. Select the property viewColor, and, by clicking on the button "Set all" choose the red color.</para>
+    			<listitem> <para>Re-color the nodes in red : Select the Property tab (in the Graph Editor tab in the left dock). 
+			  Select the 'viewColor' property, and check the "selected only" option to only consider selected nodes.
+			  Then, click on the "Set all" button to define a new color for these nodes (e.g. red).</para>
     			</listitem>
     		</itemizedlist>
-    		<para>Repeat the actions above, for authors (type = 2 ) and conferences (type = 1) with other color (blue , yellow).</para>
+		<para>To find a property more easily, you can enter the first letters of the property name in the text box just above the list of properties.</para>
+    		<para>Repeat the actions above, for authors (type = 2 ) and conferences (type = 1) with other colors (e.g. blue and yellow).</para>
     		<para>You should obtain something like this :</para>
     		<graphic fileref="images/tutorials_peopleinfovis_1.png" />
     		<para><code>Select an author :</code></para>
-    		<para>Let's pick a single author to investigate, in this case George Robertson. First, we interactively select that node by hitting <keycap>Ctrl+F</keycap> for the find tool, choosing the "titleshort" property, the "=" as filter fuction, and the regular expression "G.*Rob.*" as filter value. We then quickly check to see how he is connected to the entire graph by temporarily moving that node away from the others to see roughly how many edges are attached to it.</para>
+    		<para>Let's look at a single author more closely, for instance George Robertson. 
+		  First, let's select that node by hitting <keycap>Ctrl+F</keycap> for the find tool, choosing the "titleshort" property, the "=" as filtering function, and the regular expression "G.*Rob.*" as filter value. 
+		  We can have a rough estimate of how connected he is by moving him away from the center of the graph temporarily.</para>
     		<para>Following is what you should get :</para>
     		<graphic fileref="images/tutorials_peopleinfovis_2.png" />
     		<para><code>Go deeper :</code></para>
-    		<para>We then select the menu item <code>Algorithm->Selection->Reachable Sub-Graph</code>, type 1 for the distance into the popup panel and 0 for the direction of the edges (outgoing). We then select the menu item Edit->Create Subgraph to save this selection for further manipulation, naming it GR.1hop.outgoing. We then select this new subgraph in the hierarchy tab, and lay out this subgraph using a hierarchical drawing algorithm (<code>Algorithm->Layout->Hierarchical->Hierarchical graph</code>).</para>
-    		<para> We can see simply from the drawing which papers were published first, as they are cited by the later ones. Robertson has published 11 papers in this database. The coloring by the number of citations (<code>Algorithm->Color->Metric Mapping</code>, with field property set to "arityOut" ) shows that "Cone Trees" is his most influential work.</para>
+    		<para>We then select <code>Algorithm->Selection->Reachable Sub-Graph</code>, leaving direction to 0 (outgoing edges), startingNodes to viewSelection (nodes selected, in our case simply Mr Robertson),
+		  and a distance of 1. 
+		  We then select <code>Edit->Create Subgraph</code> to save this selection for further manipulation, naming it "GR.1hop.outgoing". 
+		  We then select this new subgraph in the hierarchy tab. 
+		  We can deselect the nodes now, either using the selection interactor and clicking away from any node or edge, either by selection 'viewSelection' and setting all the values to false.
+		  To render this graph readable, we will first apply the <code>Algorithm->Size->Auto Sizing</code> algorithm, then change the layout for <code>Algorithm->Layout->Hierarchical->Hierarchical Graph</code>. 
+		    Now, this layout is better, but there is an even better one you can find on the Tulip plug-ins server (<code>Help->Plugins->LaBRI Universite Bordeaux 1->Layout->Sugiyama (OGDF)</code>). 
+		    Once this is installed, you can find it in <code>Algorithm->Layout->Hierarchical->Sugiyama (OGDF)</code>
+		  </para>
+    		<para>We can see which papers were published first, as they are cited by the later ones.
+		  Robertson has 11 papers referenced in this database. 
+		  If we apply a coloring by the number of citations (<code>Algorithm->Color->Metric Mapping</code>, with field property set to "arityOut" ) 
+		  we can clearly see that "Cone Trees" is his most influential work.</para>
     		<graphic fileref="images/tutorials_peopleinfovis_3.png" />
-    		<para>Finally, we select all papers by hitting <keycap>Ctrl+F</keycap> for the find tool, choosing the  type property, the "=" filter, and the value 0 for papers. We explicitly add Robertson to the selection using the selection tool to select its edges too (see below), and save this whole set to a new subgraph that we name GRCitesub:</para>
+    		<para>We then return to the main graph, and make sure the Robertson node is away from the others.
+		  We then select all the papers nodes by hitting <keycap>Ctrl+F</keycap> for the find tool, choosing the  type property, the "=" filter, and the value 0 for papers. 
+		  We want to add Robertson and all the edges going from or to this node to our selection.
+		  To do so, we need the selection tool, and by pressing the <keycap>Ctrl</keycap> key while drawing a rectangle encompassing the node and all of its edges, we add to our current selection.
+		  We then save this selection to a new subgraph that we name GRCitesub.</para>
     		<graphic fileref="images/tutorials_peopleinfovis_4.png" />
-    		<para>In the new subgraph, we then select the Robertson node. Again as above, use the <code>Algorithm->Selection->Reachable Sub-Graph</code> algorithm, pick a depth of 2 to find all papers that cite a paper written by Robertson, and save the resulting subgraph using the Edit->Create Subgraph menu. The final image shows the result of using the <code>Algorithm->Layout->Hierarchical Graph</code> layout.</para>
+    		<para>In the new subgraph, we then select the Robertson node. 
+		  We use the <code>Algorithm->Selection->Reachable Sub-Graph</code> algorithm again, pick a depth of 2 to find all papers that cite a paper written by Robertson.
+		    Now we want to remove any node or edge that is not selected. 
+		    We can invert the selection (<code>Edit->Invert Selection</code> or <keycap>Ctrl + I</keycap>) and delete (<keycap>Del</keycap>) the resulting selection.
+		    This leaves us with Robertson and all his papers, and the papers citing his papers.
+		    Applying a hierarchical layout will look like the image below.</para>
     		<graphic fileref="images/tutorials_peopleinfovis_5.png" />
     	<para>You can now close this graph since we are going to use an other one for the following of this tutorial.
   	The next graph is similar to the this one but, has coauthorship edges linking authors who write papers together.
