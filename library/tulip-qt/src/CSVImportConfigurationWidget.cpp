@@ -91,13 +91,13 @@ void CSVTableWidget::begin(){
 }
 
 void CSVTableWidget::token(unsigned int row, unsigned int column, const string& token){
-    if(rowCount() <= row){
+    if(static_cast<unsigned int>(rowCount()) <= row){
         //If the maximum line number is reach ignore the token.
-        if(rowCount() >= maxLineNumber)
+        if(static_cast<unsigned>(rowCount()) >= maxLineNumber)
             return;
         insertRow(row);
     }
-    if(columnCount () <= column){
+    if(static_cast<unsigned int>(columnCount()) <= column){
         insertColumn(column);
         //Set the column name
 
