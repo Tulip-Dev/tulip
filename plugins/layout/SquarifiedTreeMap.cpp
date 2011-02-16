@@ -213,17 +213,25 @@ public:
 vector<node> SquarifiedTreeMap::orderedChildren(const tlp::node n) const {
     //sort children of n and store it in result
     //======================================
-    vector<node> result;
+    vector<node> result(graph->outdeg(n));
     //build a list of pair <node, size>
+    size_t i=0;
     node child;
     forEach(child, graph->getOutNodes(n)) {
-        result.push_back(child);
+        result[i++] = child;
     }
     IsGreater sortFunctor(nodesSize);
     sort(result.begin(), result.end(), sortFunctor);
     return result;
 }
 //==========================================================
+/*
+class Row {
+    const std::vector<tlp::node> &row;
+    double sumOfNodesSurface;
+
+};
+*/
 double SquarifiedTreeMap::evaluateRow(const std::vector<tlp::node> &row, tlp::node n, double width, double length, double surface) {
 
     double sumOfNodesSurface = nodesSize.get(n.id);
@@ -277,6 +285,7 @@ void SquarifiedTreeMap::squarify(const std::vector<tlp::node> &toTreat, const tl
   double ratio = evaluateRow(rowNodes, *it, width, length, surface);
   rowNodes.push_back(*it);
   ++it;
+
   //build the new row
   while (it != toTreat.end()) { //add node in the current row while condition is ok
       if (shneidermanTreeMap) {
@@ -285,7 +294,7 @@ void SquarifiedTreeMap::squarify(const std::vector<tlp::node> &toTreat, const tl
       else {
           double newRatio = evaluateRow(rowNodes, *it, width, length, surface);
           if (newRatio < ratio) {  //we finish to build that row
-              //break;
+              break;
               unTreated.push_back(*it);
               unTreatedSurface += nodesSize.get(it->id);
           }
@@ -300,7 +309,7 @@ void SquarifiedTreeMap::squarify(const std::vector<tlp::node> &toTreat, const tl
   //Compute measure on unTreated nodes to do a recursive call
   while (it != toTreat.end()) {
       unTreated.push_back(*it);
-       unTreatedSurface += nodesSize.get(it->id);
+      unTreatedSurface += nodesSize.get(it->id);
       ++it;
   }
   assert(unTreated.size() + rowNodes.size() == toTreat.size());
