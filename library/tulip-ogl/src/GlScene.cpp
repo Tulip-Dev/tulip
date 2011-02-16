@@ -89,7 +89,7 @@ namespace tlp {
   //====================================================
   GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
 
-  GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),glGraphComposite(NULL), noClearBackground(false) {
+  GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),displayEdgesInLastRendering(true),glGraphComposite(NULL), noClearBackground(false) {
     Camera camera(this,false);
 
     if(calculator!=NULL)
