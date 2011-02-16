@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>AppStartUpData</class>
- <widget class="QDialog" name="AppStartUpData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="AppStartUpData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,11 +10,11 @@
     <height>414</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Tulip</string>
   </property>
-  <widget class="Line" name="line" >
-   <property name="geometry" >
+  <widget class="Line" name="line">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>250</y>
@@ -21,12 +22,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="orientation" >
+   <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QLabel" name="label" >
-   <property name="geometry" >
+  <widget class="QLabel" name="label">
+   <property name="geometry">
     <rect>
      <x>5</x>
      <y>260</y>
@@ -34,21 +35,21 @@
      <height>20</height>
     </rect>
    </property>
-   <property name="font" >
+   <property name="font">
     <font>
      <weight>75</weight>
      <bold>true</bold>
     </font>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>did you know ?</string>
    </property>
-   <property name="alignment" >
+   <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="Line" name="line_2" >
-   <property name="geometry" >
+  <widget class="Line" name="line_2">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>380</y>
@@ -56,12 +57,12 @@
      <height>16</height>
     </rect>
    </property>
-   <property name="orientation" >
+   <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QTextBrowser" name="textBrowser" >
-   <property name="geometry" >
+  <widget class="QTextBrowser" name="textBrowser">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>280</y>
@@ -69,12 +70,12 @@
      <height>101</height>
     </rect>
    </property>
-   <property name="documentTitle" >
+   <property name="documentTitle">
     <string/>
    </property>
   </widget>
-  <widget class="QPushButton" name="closeButton" >
-   <property name="geometry" >
+  <widget class="QPushButton" name="closeButton">
+   <property name="geometry">
     <rect>
      <x>434</x>
      <y>390</y>
@@ -82,15 +83,15 @@
      <height>23</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Close</string>
    </property>
-   <property name="default" >
+   <property name="default">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="nextButton" >
-   <property name="geometry" >
+  <widget class="QPushButton" name="nextButton">
+   <property name="geometry">
     <rect>
      <x>364</x>
      <y>390</y>
@@ -98,12 +99,12 @@
      <height>23</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Next</string>
    </property>
   </widget>
-  <widget class="QLabel" name="PixmapLabel1" >
-   <property name="geometry" >
+  <widget class="QLabel" name="PixmapLabel1">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
@@ -111,27 +112,24 @@
      <height>255</height>
     </rect>
    </property>
-   <property name="frameShape" >
+   <property name="frameShape">
     <enum>QFrame::NoFrame</enum>
    </property>
-   <property name="frameShadow" >
+   <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <property name="pixmap" >
-    <pixmap/>
-   </property>
-   <property name="scaledContents" >
+   <property name="scaledContents">
     <bool>false</bool>
    </property>
-   <property name="alignment" >
+   <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>
-   <property name="wordWrap" >
+   <property name="wordWrap">
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QProgressBar" name="progressBar" >
-   <property name="geometry" >
+  <widget class="QProgressBar" name="progressBar">
+   <property name="geometry">
     <rect>
      <x>70</x>
      <y>210</y>
@@ -139,18 +137,18 @@
      <height>23</height>
     </rect>
    </property>
-   <property name="value" >
+   <property name="value">
     <number>24</number>
    </property>
-   <property name="alignment" >
+   <property name="alignment">
     <set>Qt::AlignHCenter</set>
    </property>
-   <property name="orientation" >
+   <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
   </widget>
-  <widget class="QCheckBox" name="showAgain" >
-   <property name="geometry" >
+  <widget class="QCheckBox" name="showAgain">
+   <property name="geometry">
     <rect>
      <x>0</x>
      <y>390</y>
@@ -158,17 +156,17 @@
      <height>18</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Show again ?</string>
    </property>
-   <property name="checked" >
+   <property name="checked">
     <bool>true</bool>
    </property>
   </widget>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="TulipResource.qrc" />
+  <include location="TulipResource.qrc"/>
  </resources>
  <connections/>
 </ui>
