@@ -523,7 +523,7 @@ namespace tlp {
             if (dataSetName) {
                 // handle old displaying properties
                 // to ensure compatibility
-                bool b;
+                bool b = false;
                 if (dataSet.get<bool>("_viewArrow", b))
                     dataSet.set("arrow", b);
                 if (dataSet.get<bool>("_viewLabel", b)) {
