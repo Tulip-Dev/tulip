@@ -260,17 +260,18 @@ void TulipApp::startTulip() {
   connect(windowsMenu, SIGNAL(triggered(QAction*)),
 	  this, SLOT( windowsMenuActivated(QAction*)));
 
-  std::string assistantPath(tlp::TulipLibDir);
-  assistantPath += string("../");
-  assistantPath += string(STRINGIFY(QT_ASSISTANT));
   assistantProcess= new QProcess(this);
 #if defined(__linux__)
-  assistantProcessApp = QLibraryInfo::location(QLibraryInfo::BinariesPath)+ '/' + QLatin1String(QT_ASSISTANT);
+  assistantProcessApp = QLibraryInfo::location(QLibraryInfo::BinariesPath)+ "/assistant";
 #else
-  assistantProcessApp = assistantPath.c_str();
-#if defined(__APPLE__)
-  assistantProcessApp.append(".app/Contents/MacOS/Assistant");
+  std::string assistantPath(tlp::TulipLibDir);
+  assistantPath += string("../");
+#if defined(_WIN32)
+  assistantPath.append("assistant.exe");
+#else
+  assistantPath.append("Assistant.app/Contents/MacOS/Assistant");
 #endif
+  assistantProcessApp = assistantPath.c_str();
 #endif
   /*saveActions(menuBar(),NULL,controllerToMenu);
   saveActions(toolBar,NULL,controllerToToolBar);*/
