@@ -39,6 +39,10 @@
 // |                                                                         |
 // +-------------------------------------------------------------------------+
 
+#include "PythonInterpreter.h"
+#include "ConsoleOutputModule.h"
+#include "TulipUtilsModule.h"
+
 #include <iostream>
 #include <sstream>
 
@@ -48,9 +52,7 @@
 #include <QtCore/QDir>
 #include <QtGui/QVBoxLayout>
 
-#include "PythonInterpreter.h"
-#include "ConsoleOutputModule.h"
-#include "TulipUtilsModule.h"
+
 
 #include <sip.h>
 

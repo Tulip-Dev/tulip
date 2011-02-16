@@ -39,7 +39,10 @@
 // |                                                                         |
 // +-------------------------------------------------------------------------+
 
-
+#if defined(__GNUC__) && __GNUC__ >= 4 && ((__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >= 1) || (__GNUC_MINOR__ >= 3))
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#endif
 
 #ifndef CONSOLEOUTPUTMODULE_H_
 #define CONSOLEOUTPUTMODULE_H_
@@ -66,16 +69,16 @@ scriptengine_ConsoleOutput_dealloc(scriptengine_ConsoleOutput* self) {
 }
 
 static PyObject *
-scriptengine_ConsoleOutput_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
+scriptengine_ConsoleOutput_new(PyTypeObject *type, PyObject *, PyObject *) {
 	scriptengine_ConsoleOutput *self;
-	self = (scriptengine_ConsoleOutput *)type->tp_alloc(type, 0);
+	self = reinterpret_cast<scriptengine_ConsoleOutput *>(type->tp_alloc(type, 0));
 	self->stderrflag = false;
 	self->writeToConsole = true;
-	return (PyObject *)self;
+	return reinterpret_cast<PyObject *>(self);
 }
 
 static int
-scriptengine_ConsoleOutput_init(scriptengine_ConsoleOutput *self, PyObject *args, PyObject *kwds) {
+scriptengine_ConsoleOutput_init(scriptengine_ConsoleOutput *self, PyObject *args, PyObject *) {
 	int i;
 	if (!PyArg_ParseTuple(args, "|i", &i))
 		return -1;

@@ -44,7 +44,7 @@
 
 #include "PythonScriptViewWidget.h"
 
-PythonScriptViewWidget::PythonScriptViewWidget(QWidget *parent) {
+PythonScriptViewWidget::PythonScriptViewWidget(QWidget *parent) : QWidget(parent) {
 	setupUi(this);
 	QToolBar *mainScriptToolBar = new QToolBar(mainScriptToolBarWidget);
 	mainScriptToolBar->resize(mainScriptToolBarWidget->size());
