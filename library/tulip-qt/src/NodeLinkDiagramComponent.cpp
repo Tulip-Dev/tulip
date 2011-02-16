@@ -88,13 +88,57 @@ namespace tlp {
   // Accessor and set
   //==================================================
   void NodeLinkDiagramComponent::setData(Graph *graph,DataSet dataSet) {
-    DataSet data;
+
     if(dataSet.exist("data")){
+      // Last version of tlp file
+      DataSet data;
       dataSet.get("data",data);
+      mainWidget->setData(graph,data);
+    }else if(dataSet.exist("scene")){
+      // Old version of tlp file
+      mainWidget->setData(graph,dataSet);
+    }else if(dataSet.exist("displaying")){
+      // Very old tlp file format
+      mainWidget->setData(graph,DataSet());
+
+      GlGraphRenderingParameters param = mainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+      DataSet displayingData;
+      dataSet.get<DataSet>("displaying", displayingData);
+
+      param.setParameters(displayingData);
+      mainWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
+      if(displayingData.exist("backgroundColor")){
+        Color backgroundColor;
+        displayingData.get<Color>("backgroundColor",backgroundColor);
+        mainWidget->getScene()->setBackgroundColor(backgroundColor);
+      }
+      if(displayingData.exist("cameraEyes") && displayingData.exist("cameraCenter") && displayingData.exist("cameraUp") && displayingData.exist("cameraZoomFactor") && displayingData.exist("distCam")){
+        Coord cameraEyes, cameraCenter, cameraUp;
+        double cameraZoomFactor = 0, distCam = 0;
+        displayingData.get<Coord>("cameraEyes",cameraEyes);
+        displayingData.get<Coord>("cameraCenter",cameraCenter);
+        displayingData.get<Coord>("cameraUp",cameraUp);
+        displayingData.get<double>("cameraZoomFactor",cameraZoomFactor);
+        displayingData.get<double>("distCam",distCam);
+        Camera &camera=mainWidget->getScene()->getLayer("Main")->getCamera();
+        camera.setEyes(cameraEyes);
+        camera.setCenter(cameraCenter);
+        camera.setUp(cameraUp);
+        camera.setZoomFactor(cameraZoomFactor);
+        camera.setSceneRadius(distCam);
+      }
+      // show current subgraph if any
+      int id = 0;
+      if (displayingData.get<int>("SupergraphId", id) && id) {
+        Graph *subGraph = graph->getDescendantGraph(id);
+        if (subGraph){
+          mainWidget->setGraph(subGraph);
+        }
+      }
     }else{
-      data=dataSet;
+      // Unknow file format load default
+      mainWidget->setData(graph,DataSet());
     }
-    mainWidget->setData(graph,data);
 
 		mainWidget->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new GlMetaNodeTrueRenderer(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()));
 		

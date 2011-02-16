@@ -149,6 +149,8 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setEdgeSizeInterpolate(b);
   if (data.get<bool>("edge3D", b))
     setEdge3D(b);
+  if (data.get<bool>("autoScale",b))
+    setLabelScaled(b);
   if (data.get<bool>("labelScaled", b))
     setLabelScaled(b);
   if (data.get<bool>("labelOverlaped", b))

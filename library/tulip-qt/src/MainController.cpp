@@ -386,51 +386,8 @@ namespace tlp {
         }
       }
     }else{
-      NodeLinkDiagramComponent *view;
-      if(dataSet.exist("scene")) {
-        view=(NodeLinkDiagramComponent*)initMainView(dataSet);
-      }else{
-        view=(NodeLinkDiagramComponent*)initMainView(DataSet());
-      }
-
-      if(dataSet.exist("displaying")) {
-        GlMainWidget *glW=view->getGlMainWidget();
-        GlGraphRenderingParameters param = glW->getScene()->getGlGraphComposite()->getRenderingParameters();
-        DataSet displayingData;
-        dataSet.get<DataSet>("displaying", displayingData);
-
-        param.setParameters(displayingData);
-        glW->getScene()->getGlGraphComposite()->setRenderingParameters(param);
-        if(displayingData.exist("backgroundColor")){
-          Color backgroundColor;
-          displayingData.get<Color>("backgroundColor",backgroundColor);
-          glW->getScene()->setBackgroundColor(backgroundColor);
-        }
-        if(displayingData.exist("cameraEyes") && displayingData.exist("cameraCenter") && displayingData.exist("cameraUp") && displayingData.exist("cameraZoomFactor") && displayingData.exist("distCam")){
-          Coord cameraEyes, cameraCenter, cameraUp;
-          double cameraZoomFactor = 0, distCam = 0;
-          displayingData.get<Coord>("cameraEyes",cameraEyes);
-          displayingData.get<Coord>("cameraCenter",cameraCenter);
-          displayingData.get<Coord>("cameraUp",cameraUp);
-          displayingData.get<double>("cameraZoomFactor",cameraZoomFactor);
-          displayingData.get<double>("distCam",distCam);
-          Camera &camera=glW->getScene()->getLayer("Main")->getCamera();
-          camera.setEyes(cameraEyes);
-          camera.setCenter(cameraCenter);
-          camera.setUp(cameraUp);
-          camera.setZoomFactor(cameraZoomFactor);
-          camera.setSceneRadius(distCam);
-        }
-        // show current subgraph if any
-        int id = 0;
-        if (displayingData.get<int>("SupergraphId", id) && id) {
-          Graph *subGraph = newGraph->getDescendantGraph(id);
-          if (subGraph){
-            setGraphOfView(view,subGraph);
-          }
-        }
-      }
-
+      View *view=initMainView(dataSet);
+      lastViewedGraph=view->getGraph();
     }
 
     clusterTreeWidget->setGraph(lastViewedGraph);
