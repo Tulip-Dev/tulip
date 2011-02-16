@@ -44,6 +44,14 @@ namespace {
       HTML_HELP_BODY() \
       "This parameter defines the maximal amount of node used to build the randomized tree." \
       HTML_HELP_CLOSE(),
+
+      // tree layout
+      HTML_HELP_OPEN() \
+      HTML_HELP_DEF( "type", "bool" ) \
+      HTML_HELP_DEF( "default", "false" ) \
+      HTML_HELP_BODY() \
+      "This parameter indicates if the generated tree has to be drawn with a tree layout algorithm." \
+      HTML_HELP_CLOSE(),
     };
 }
 
@@ -59,6 +67,8 @@ public:
   RandomTree(AlgorithmContext context):ImportModule(context) {
     addParameter<unsigned int>("minsize",paramHelp[0],"100");
     addParameter<unsigned int>("maxsize",paramHelp[1],"1000");
+    addParameter<bool>("tree layout",paramHelp[2],"false");
+    addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
   }
   ~RandomTree() {
   }
@@ -83,9 +93,11 @@ public:
     srand(clock()); 
     unsigned int minSize  = 100;
     unsigned int maxSize  = 1000;
-    if (dataSet!=0) {
+    bool needLayout = false;
+   if (dataSet!=0) {
       dataSet->get("minsize", minSize);
       dataSet->get("maxsize", maxSize);
+      dataSet->get("tree layout", needLayout);
     }
 
     if (maxSize == 0) {
@@ -113,8 +125,18 @@ public:
       ok = !buildNode(n,maxSize);
       if (graph->numberOfNodes()<minSize-2) ok=true;
     }
-    return pluginProgress->progress(100,100)!=TLP_CANCEL;
+    if (pluginProgress->progress(100,100)==TLP_CANCEL)
+      return false;
+    if (needLayout) {
+      // apply Tree Leaf
+      DataSet dSet;
+      string errMsg;
+      LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
+      return graph->computeProperty("Tree Leaf", layout, errMsg,
+				    pluginProgress, &dSet);
+    }
+    return true;
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(RandomTree,"Uniform Random Binary Tree","Auber","16/02/2001","","1.0","Graphs")
+IMPORTPLUGINOFGROUP(RandomTree,"Uniform Random Binary Tree","Auber","16/02/2001","","1.1","Graphs")
