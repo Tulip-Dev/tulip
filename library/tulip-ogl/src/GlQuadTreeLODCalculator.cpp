@@ -416,7 +416,8 @@ namespace tlp {
             if(selectionProperty)
                 selectionProperty->removePropertyObserver(this);
         }
-        glScene->removeObserver(this);
+        if(glScene)
+          glScene->removeObserver(this);
     }
 
     void GlQuadTreeLODCalculator::addObservers() {
@@ -430,7 +431,8 @@ namespace tlp {
             selectionProperty=currentGraph->getProperty(inputData->getElementSelectedPropName());
             selectionProperty->addPropertyObserver(this);
         }
-        glScene->addObserver(this);
+        if(glScene)
+          glScene->addObserver(this);
     }
 
     void GlQuadTreeLODCalculator::update(PropertyInterface *property){
@@ -509,11 +511,6 @@ namespace tlp {
             return;
 
         haveToCompute=true;
-
-        if(!inputData)
-            return;
-        if(!glScene)
-            return;
 
         removeObservers();
     }
