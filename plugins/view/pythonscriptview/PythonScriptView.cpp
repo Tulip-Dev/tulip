@@ -309,7 +309,7 @@ void PythonScriptView::getData(Graph **graph,DataSet *dataSet) {
 
 QTime timer;
 
-int tracefunc(PyObject *obj, PyFrameObject *frame, int what, PyObject *arg) {
+int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
 	if (what == PyTrace_LINE) {
 		if (timer.elapsed() >= 50) {

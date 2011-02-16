@@ -50,7 +50,7 @@
 
 
 static PyObject *
-tuliputils_updateVisualization(PyObject *self, PyObject *args)
+tuliputils_updateVisualization(PyObject *, PyObject *args)
 {
 	int i;
 	if (!PyArg_ParseTuple(args, "|i", &i))

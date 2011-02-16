@@ -39,6 +39,9 @@
 // |                                                                         |
 // +-------------------------------------------------------------------------+
 
+#include "PythonInterpreter.h"
+#include "PythonCodeEditor.h"
+
 #include <iostream>
 #include <sstream>
 
@@ -48,10 +51,6 @@
 
 #include <Qsci/qscilexerpython.h>
 #include <Qsci/qsciapis.h>
-
-#include "PythonCodeEditor.h"
-#include "PythonInterpreter.h"
-
 
 using namespace std;
 
@@ -73,8 +72,7 @@ class GragKeyboardFocusEventFilter : public QObject{
 
 public :
 
-	bool eventFilter(QObject *obj, QEvent *event) {
-		QsciScintilla *codeEditorWidget = dynamic_cast<QsciScintilla *>(obj);
+	bool eventFilter(QObject *, QEvent *event) {
 		if (event->type() == QEvent::ShortcutOverride) {
 			event->accept();
 			return true;

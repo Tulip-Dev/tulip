@@ -42,10 +42,11 @@
 #ifndef PYTHONINTERPRETER_H_
 #define PYTHONINTERPRETER_H_
 
+#include <Python.h>
+
 #include <QtGui/QDialog>
 #include <QtGui/QPlainTextEdit>
 
-#include <Python.h>
 #include <frameobject.h>
 #include <structmember.h>
 #include <import.h>
