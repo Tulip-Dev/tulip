@@ -1,108 +1,109 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>RenderingParametersDialogData</class>
- <widget class="QWidget" name="RenderingParametersDialogData" >
-  <property name="geometry" >
+ <widget class="QWidget" name="RenderingParametersDialogData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>356</width>
+    <width>357</width>
     <height>501</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="spacing" >
+  <layout class="QVBoxLayout" name="mainLayout">
+   <property name="spacing">
     <number>6</number>
    </property>
-   <property name="margin" >
+   <property name="margin">
     <number>9</number>
    </property>
    <item>
-    <widget class="QGroupBox" name="labels" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+    <widget class="QGroupBox" name="labels">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="title" >
+     <property name="title">
       <string>Labels</string>
      </property>
-     <property name="flat" >
+     <property name="flat">
       <bool>false</bool>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
+     <layout class="QGridLayout" name="labelsLayout">
+      <property name="margin">
        <number>0</number>
       </property>
-      <property name="spacing" >
+      <property name="spacing">
        <number>6</number>
       </property>
-      <item row="3" column="0" >
-       <layout class="QVBoxLayout" name="verticalLayout" >
+      <item row="3" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QCheckBox" name="overlap" >
-          <property name="toolTip" >
+         <widget class="QCheckBox" name="overlap">
+          <property name="toolTip">
            <string>Enable/disable overlap of labels</string>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>Remove overlap</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QFrame" name="frame" >
-          <property name="enabled" >
+         <widget class="QFrame" name="frame">
+          <property name="enabled">
            <bool>false</bool>
           </property>
-          <property name="frameShape" >
+          <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
           </property>
-          <property name="frameShadow" >
+          <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <layout class="QGridLayout" name="gridLayout" >
-           <item row="0" column="0" >
-            <layout class="QVBoxLayout" name="verticalLayout_2" >
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="0">
+            <layout class="QVBoxLayout" name="verticalLayout_2">
              <item>
-              <widget class="QCheckBox" name="ordering" >
-               <property name="focusPolicy" >
+              <widget class="QCheckBox" name="ordering">
+               <property name="focusPolicy">
                 <enum>Qt::StrongFocus</enum>
                </property>
-               <property name="toolTip" >
+               <property name="toolTip">
                 <string>Use viewMetric decreasing order as display order</string>
                </property>
-               <property name="text" >
+               <property name="text">
                 <string>metric ordering</string>
                </property>
               </widget>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_3" >
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QLabel" name="labelDensity" >
-                 <property name="text" >
+                <widget class="QLabel" name="labelDensity">
+                 <property name="text">
                   <string>Density: </string>
                  </property>
-                 <property name="wordWrap" >
+                 <property name="wordWrap">
                   <bool>false</bool>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QSlider" name="density" >
-                 <property name="sizePolicy" >
-                  <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+                <widget class="QSlider" name="density">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
-                 <property name="value" >
+                 <property name="value">
                   <number>99</number>
                  </property>
-                 <property name="orientation" >
+                 <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
                 </widget>
@@ -115,62 +116,62 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="scaled" >
-          <property name="toolTip" >
+         <widget class="QCheckBox" name="scaled">
+          <property name="toolTip">
            <string>Fit to node size</string>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>Scale labels to fit nodes sizes</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QFrame" name="frame_2" >
-          <property name="frameShape" >
+         <widget class="QFrame" name="frame_2">
+          <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
           </property>
-          <property name="frameShadow" >
+          <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <layout class="QGridLayout" name="gridLayout_2" >
-           <property name="horizontalSpacing" >
+          <layout class="QGridLayout" name="gridLayout_2">
+           <property name="horizontalSpacing">
             <number>0</number>
            </property>
-           <property name="verticalSpacing" >
+           <property name="verticalSpacing">
             <number>2</number>
            </property>
-           <item row="1" column="0" >
-            <layout class="QHBoxLayout" name="horizontalLayout" >
+           <item row="1" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
-              <widget class="QLabel" name="label" >
-               <property name="text" >
+              <widget class="QLabel" name="label">
+               <property name="text">
                 <string>Min size : </string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="minSizeSpinBox" >
-               <property name="maximum" >
+              <widget class="QSpinBox" name="minSizeSpinBox">
+               <property name="maximum">
                 <number>100</number>
                </property>
-               <property name="value" >
+               <property name="value">
                 <number>0</number>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_4" >
-               <property name="text" >
+              <widget class="QLabel" name="label_4">
+               <property name="text">
                 <string>px</string>
                </property>
               </widget>
              </item>
              <item>
-              <spacer name="horizontalSpacer" >
-               <property name="orientation" >
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
-               <property name="sizeHint" stdset="0" >
+               <property name="sizeHint" stdset="0">
                 <size>
                  <width>40</width>
                  <height>20</height>
@@ -179,43 +180,43 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="label_2" >
-               <property name="text" >
+              <widget class="QLabel" name="label_2">
+               <property name="text">
                 <string>Max size :</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="maxSizeSpinBox" >
-               <property name="minimum" >
+              <widget class="QSpinBox" name="maxSizeSpinBox">
+               <property name="minimum">
                 <number>0</number>
                </property>
-               <property name="maximum" >
+               <property name="maximum">
                 <number>100</number>
                </property>
-               <property name="value" >
+               <property name="value">
                 <number>100</number>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_5" >
-               <property name="text" >
+              <widget class="QLabel" name="label_5">
+               <property name="text">
                 <string>px</string>
                </property>
               </widget>
              </item>
             </layout>
            </item>
-           <item row="0" column="0" >
-            <widget class="QLabel" name="label_3" >
-             <property name="font" >
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_3">
+             <property name="font">
               <font>
                <pointsize>7</pointsize>
                <italic>true</italic>
               </font>
              </property>
-             <property name="text" >
+             <property name="text">
               <string>Limit rendered labels size (when not in scaled mode)</string>
              </property>
             </widget>
@@ -229,61 +230,61 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="edgesGroup" >
-     <property name="sizePolicy" >
-      <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+    <widget class="QGroupBox" name="edges">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="title" >
+     <property name="title">
       <string>Edges</string>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
+     <layout class="QGridLayout" name="edgesLayout">
+      <property name="margin">
        <number>0</number>
       </property>
-      <property name="spacing" >
+      <property name="spacing">
        <number>6</number>
       </property>
-      <item row="0" column="0" >
-       <layout class="QVBoxLayout" >
-        <property name="spacing" >
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="vLayout1">
+        <property name="spacing">
          <number>6</number>
         </property>
-        <property name="margin" >
+        <property name="margin">
          <number>2</number>
         </property>
         <item>
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
+         <layout class="QHBoxLayout" name="hLayout1">
+          <property name="spacing">
            <number>6</number>
           </property>
-          <property name="margin" >
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
-           <widget class="QCheckBox" name="arrows" >
-            <property name="focusPolicy" >
+           <widget class="QCheckBox" name="arrows">
+            <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
             </property>
-            <property name="toolTip" >
+            <property name="toolTip">
              <string>show/hide arrow on edges</string>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>arrows</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="edge3D" >
-            <property name="focusPolicy" >
+           <widget class="QCheckBox" name="edge3D">
+            <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
             </property>
-            <property name="toolTip" >
+            <property name="toolTip">
              <string>enable/disable 3D rendering of edges</string>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>3D</string>
             </property>
            </widget>
@@ -291,41 +292,41 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
+         <layout class="QHBoxLayout" name="hLayout2">
+          <property name="spacing">
            <number>6</number>
           </property>
-          <property name="margin" >
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
-           <widget class="QCheckBox" name="colorInterpolation" >
-            <property name="focusPolicy" >
+           <widget class="QCheckBox" name="colorInterpolation">
+            <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
             </property>
-            <property name="toolTip" >
+            <property name="toolTip">
              <string>Interpolate edge color from the colors of its nodes</string>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>Color interpolation</string>
             </property>
-            <property name="checked" >
+            <property name="checked">
              <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="sizeInterpolation" >
-            <property name="focusPolicy" >
+           <widget class="QCheckBox" name="sizeInterpolation">
+            <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
             </property>
-            <property name="toolTip" >
+            <property name="toolTip">
              <string>Interpolate edge size from the sizes of its nodes</string>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>Size interpolation</string>
             </property>
-            <property name="checked" >
+            <property name="checked">
              <bool>true</bool>
             </property>
            </widget>
@@ -333,25 +334,25 @@
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" >
-          <property name="spacing" >
+         <layout class="QHBoxLayout" name="hLayout3">
+          <property name="spacing">
            <number>6</number>
           </property>
-          <property name="margin" >
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
-           <widget class="QCheckBox" name="blockEdgeSizeCheckBox" >
-            <property name="focusPolicy" >
+           <widget class="QCheckBox" name="blockEdgeSizeCheckBox">
+            <property name="focusPolicy">
              <enum>Qt::StrongFocus</enum>
             </property>
-            <property name="toolTip" >
+            <property name="toolTip">
              <string>With this option edge size can't be greater than node size</string>
             </property>
-            <property name="text" >
+            <property name="text">
              <string>Block max edge size to node size</string>
             </property>
-            <property name="checked" >
+            <property name="checked">
              <bool>true</bool>
             </property>
            </widget>
@@ -364,63 +365,63 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
+    <widget class="QGroupBox" name="others">
+     <property name="title">
       <string>Others</string>
      </property>
-     <layout class="QVBoxLayout" >
-      <property name="spacing" >
+     <layout class="QVBoxLayout" name="othersLayout">
+      <property name="spacing">
        <number>6</number>
       </property>
-      <property name="margin" >
+      <property name="margin">
        <number>9</number>
       </property>
       <item>
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
+       <layout class="QHBoxLayout" name="hLayout5">
+        <property name="spacing">
          <number>6</number>
         </property>
-        <property name="margin" >
+        <property name="margin">
          <number>0</number>
         </property>
         <item>
-         <widget class="QCheckBox" name="orthogonal" >
-          <property name="focusPolicy" >
+         <widget class="QCheckBox" name="orthogonal">
+          <property name="focusPolicy">
            <enum>Qt::StrongFocus</enum>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>Orthogonal projection</string>
           </property>
-          <property name="checked" >
+          <property name="checked">
            <bool>true</bool>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="background" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+         <widget class="QPushButton" name="background">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="focusPolicy" >
+          <property name="focusPolicy">
            <enum>Qt::StrongFocus</enum>
           </property>
-          <property name="autoFillBackground" >
+          <property name="autoFillBackground">
            <bool>true</bool>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>Background color</string>
           </property>
          </widget>
         </item>
         <item>
-         <spacer>
-          <property name="orientation" >
+         <spacer name="spacer3">
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeHint" stdset="0" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>40</width>
             <height>20</height>
@@ -431,33 +432,33 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
+       <layout class="QHBoxLayout" name="hLayout4">
+        <property name="spacing">
          <number>6</number>
         </property>
-        <property name="margin" >
+        <property name="margin">
          <number>0</number>
         </property>
         <item>
-         <widget class="QPushButton" name="selection" >
-          <property name="text" >
+         <widget class="QPushButton" name="selection">
+          <property name="text">
            <string>Selection color</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="selectionSaveAtDefault" >
-          <property name="text" >
+         <widget class="QPushButton" name="selectionSaveAtDefault">
+          <property name="text">
            <string>Save as default</string>
           </property>
          </widget>
         </item>
         <item>
-         <spacer>
-          <property name="orientation" >
+         <spacer name="spacer2">
+          <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
-          <property name="sizeHint" stdset="0" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>40</width>
             <height>20</height>
@@ -471,11 +472,11 @@
     </widget>
    </item>
    <item>
-    <spacer>
-     <property name="orientation" >
+    <spacer name="spacer">
+     <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeHint" stdset="0" >
+     <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
        <height>40</height>
@@ -493,11 +494,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>updateView()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>86</x>
      <y>126</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>162</x>
      <y>179</y>
     </hint>
@@ -509,11 +510,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>updateView()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>86</x>
      <y>157</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>162</x>
      <y>179</y>
     </hint>
@@ -525,11 +526,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>updateView()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>86</x>
      <y>157</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>162</x>
      <y>179</y>
     </hint>
@@ -541,11 +542,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>updateView()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>238</x>
      <y>126</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>162</x>
      <y>179</y>
     </hint>
@@ -557,11 +558,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>updateView()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>90</x>
      <y>213</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>162</x>
      <y>179</y>
     </hint>
@@ -573,11 +574,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>updateView()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>238</x>
      <y>157</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>162</x>
      <y>179</y>
     </hint>
@@ -589,11 +590,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>backColor()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>232</x>
      <y>213</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>162</x>
      <y>179</y>
     </hint>
@@ -605,11 +606,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>selectionColor()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>66</x>
      <y>285</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>170</x>
      <y>207</y>
     </hint>
@@ -621,11 +622,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>selectionSaveAtDefaultColor()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>151</x>
      <y>285</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>170</x>
      <y>207</y>
     </hint>
@@ -637,11 +638,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>updateView()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>192</x>
      <y>74</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>162</x>
      <y>179</y>
     </hint>
@@ -653,11 +654,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>updateView()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>214</x>
      <y>45</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>162</x>
      <y>179</y>
     </hint>
@@ -669,11 +670,11 @@
    <receiver>frame</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>259</x>
      <y>52</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>177</x>
      <y>103</y>
     </hint>
@@ -685,11 +686,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>updateView()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>259</x>
      <y>52</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>177</x>
      <y>219</y>
     </hint>
@@ -701,11 +702,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>updateView()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>95</x>
      <y>52</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>177</x>
      <y>219</y>
     </hint>
@@ -717,11 +718,11 @@
    <receiver>frame_2</receiver>
    <slot>setDisabled(bool)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>177</x>
      <y>152</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>177</x>
      <y>189</y>
     </hint>
@@ -733,11 +734,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>labelSizeChanged(int)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>116</x>
      <y>189</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>177</x>
      <y>242</y>
     </hint>
@@ -749,11 +750,11 @@
    <receiver>RenderingParametersDialogData</receiver>
    <slot>labelSizeChanged(int)</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>301</x>
      <y>189</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>177</x>
      <y>242</y>
     </hint>
