@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <iostream>
+
 #include <stack>
 #include <queue>
 #include <tulip/tuliphash.h>
@@ -30,6 +30,7 @@ using namespace tlp;
 static const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "default", "false" )	 \
   HTML_HELP_BODY() \
   "indicate if the graph should be considered as directed or not" \
   HTML_HELP_CLOSE(),
@@ -37,8 +38,10 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )	 \
   HTML_HELP_BODY() \
-  "If true the mesure will be normalized unweight not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2) "	\
-  "If true the mesure will be normalized unweight directed     : m(n) = c(n) / (#V - 1)(#V - 2) " \
+  "If true the node mesure will be normalized unweight not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2) "	\
+  "If true the node mesure will be normalized unweight directed     : m(n) = c(n) / (#V - 1)(#V - 2) " \
+  "If true the edge mesure will be normalized unweight not directed : m(e) = 2*c(n) / (#V / 2)(#V / 2) "	\
+  "If true the edge mesure will be normalized unweight directed     : m(n) = c(n) / (#V / 2)(#V / 2) " \
   HTML_HELP_CLOSE()
 };
 
@@ -56,7 +59,21 @@ static const char * paramHelp[] = {
  *  volume 25, \n
  *  pages 163-177
  *
+ *  The edge betweeness centrality is also computed, it is described in :
+ *
+ *  Newman, M. E. J. and Girvan, M. \n
+ *  "Finding and evaluating community structure in networks",  \n
+ *  "Physics Reviews E",  \n
+ *  "2004",  \n
+ *  volume 69
+ *
+ *
  *  \note The complexity of the algorithm is O(|V| * |E|) in time
+ *  <b>HISTORY</b>
+ *
+ *  - 16/02/11 Version 1.2: Edge betweeness computation added
+ *  - 08/02/11 Version 1.1: Normalisation option added
+ *  - 03/01/05 Version 1.0: Initial release
  *
  */
 class BetweennessCentrality:public DoubleAlgorithm { 
@@ -67,6 +84,7 @@ public:
   };
   bool run() {
     doubleResult->setAllNodeValue(0.0);
+    doubleResult->setAllEdgeValue(0.0);
     bool directed = false;
     bool norm = false;
     if ( dataSet!=0 ) {
@@ -122,6 +140,9 @@ public:
 	for (;itn!=P[w].end();++itn){
 	  node v = *itn;
 	  delta.set(v.id, delta.get(v.id) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
+          edge e  = graph->existEdge(v,w,directed);
+          if(e.isValid())
+              doubleResult->setEdgeValue(e, doubleResult->getEdgeValue(e) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
 	}
         if (w != s) doubleResult->setNodeValue(w, doubleResult->getNodeValue(w) + delta.get(w.id));
       }
@@ -139,10 +160,24 @@ public:
           if(!directed) doubleResult->setNodeValue(s,doubleResult->getNodeValue(s)/2.0);
         }
       }
+
+      Iterator<edge> *itE = graph->getEdges();
+      while(itE->hasNext()){
+          edge e = itE->next();          
+          if(norm){
+              if(directed)
+                doubleResult->setEdgeValue(e,4.0*doubleResult->getEdgeValue(e)/(n*n));
+              else
+                doubleResult->setEdgeValue(e,2.0*doubleResult->getEdgeValue(e)/(n*n));
+          }else
+            if(!directed) doubleResult->setEdgeValue(e,doubleResult->getEdgeValue(e)/(2.0));
+      }
+      delete itE;
     }
     delete it;
+
     return pluginProgress->state()!=TLP_CANCEL;
   }
 };
 /*@}*/
-DOUBLEPLUGINOFGROUP(BetweennessCentrality,"Betweenness Centrality","David Auber","03/01/2005","Alpha","1.0","Graph");
+DOUBLEPLUGINOFGROUP(BetweennessCentrality,"Betweenness Centrality","David Auber","03/01/2005","Alpha","1.2","Graph");
