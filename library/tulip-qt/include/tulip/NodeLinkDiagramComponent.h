@@ -82,8 +82,6 @@ namespace tlp {
 
     GlMetaNodeRenderer *currentMetaNodeRenderer;
 
-    void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
-    void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
     void checkAlgorithmResult();
 
   protected slots:

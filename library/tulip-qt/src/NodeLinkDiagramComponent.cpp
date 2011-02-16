@@ -504,13 +504,5 @@ namespace tlp {
     gridOptionsWidget->setCurrentRenderingParametersDialog(renderingParametersDialog);
     gridOptionsWidget->show();
   }
-  //==================================================
-  // GlSceneObserver interface
-  void NodeLinkDiagramComponent::addLayer(GlScene*, const std::string&, GlLayer*) {
-    //renderingParametersDialog->addLayer(scene,name,layer);
-  }
-  void NodeLinkDiagramComponent::modifyLayer(GlScene*, const std::string&, GlLayer*){
-    //renderingParametersDialog->updateLayer(name,layer);
-  }
 }
 

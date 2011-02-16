@@ -34,8 +34,6 @@
 #include <config.h>
 #endif
 
-#include "tulip/GlSceneObserver.h"
-
 #include "tulip/AbstractView.h"
 
 #include <QtGui/QMainWindow>
@@ -61,7 +59,7 @@ namespace tlp {
    * This class provide an abstract view with OpenGl rendering and overview
    * To do this rendering GlMainView class is use
    */
-  class TLP_QT_SCOPE GlMainView : public AbstractView, public GlSceneObserver {
+  class TLP_QT_SCOPE GlMainView : public AbstractView {
 
     Q_OBJECT;
 
@@ -123,15 +121,6 @@ namespace tlp {
     QAction *getOverviewAction() {return overviewAction;}
 
   protected :
-
-    /**
-     * function call by GlSceneObserver
-     */
-    virtual void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*) {}
-    /**
-     * function call by GlSceneObserver
-     */
-    virtual void modifyLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*) {}
 
     GlMainWidget *mainWidget;
     QDockWidget *overviewDock;
