@@ -50,6 +50,13 @@ namespace {
       HTML_HELP_BODY() \
       "This parameter defines the maximal degree of node used to build the randomized tree." \
       HTML_HELP_CLOSE(),
+      // tree layout
+      HTML_HELP_OPEN() \
+      HTML_HELP_DEF( "type", "bool" ) \
+      HTML_HELP_DEF( "default", "false" ) \
+      HTML_HELP_BODY() \
+      "This parameter indicates if the generated tree has to be drawn with a tree layout algorithm." \
+      HTML_HELP_CLOSE(),
     };
 }
 
@@ -68,7 +75,9 @@ public:
     addParameter<int>("minsize",paramHelp[0],"10");
     addParameter<int>("maxsize",paramHelp[1],"100");
     addParameter<int>("maxdegree",paramHelp[2],"5");
-  }
+    addParameter<bool>("tree layout",paramHelp[3],"false");
+    addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
+ }
   ~RandomTreeGeneral() {
   }
   bool buildNode(node n,unsigned int sizeM,int arityMax) {
@@ -94,10 +103,12 @@ public:
     unsigned int sizeMin  = 10;
     unsigned int sizeMax  = 100;
     unsigned int arityMax = 5;
+    bool needLayout = false;
     if (dataSet!=0) {
       dataSet->get("minsize", sizeMin);   
       dataSet->get("maxsize", sizeMax);
       dataSet->get("maxdegree", arityMax);
+      dataSet->get("tree layout", needLayout);
     }
     if (arityMax < 1) {
       if (pluginProgress)
@@ -124,8 +135,18 @@ public:
       ok=false;
       if (graph->numberOfNodes()<sizeMin) ok=true;
     }
-    return pluginProgress->progress(100,100)!=TLP_CANCEL;
+    if (pluginProgress->progress(100,100)==TLP_CANCEL)
+      return false;
+    if (needLayout) {
+      // apply Tree Leaf
+      DataSet dSet;
+      string errMsg;
+      LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
+      return graph->computeProperty("Tree Leaf", layout, errMsg,
+				    pluginProgress, &dSet);
+    }
+    return true;
   }
 };
 /*@}*/
-IMPORTPLUGINOFGROUP(RandomTreeGeneral,"Random General Tree","Auber","16/02/2001","","1.0","Graphs")
+IMPORTPLUGINOFGROUP(RandomTreeGeneral,"Random General Tree","Auber","16/02/2001","","1.1","Graphs")
