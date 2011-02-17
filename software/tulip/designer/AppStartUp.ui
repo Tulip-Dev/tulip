@@ -42,7 +42,7 @@
     </font>
    </property>
    <property name="text">
-    <string>did you know ?</string>
+    <string>Do you know?</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
