@@ -29,22 +29,40 @@ namespace tlp {
 
 /** \addtogroup plugins */ 
 /*@{*/
-/// This class enables to embed self described parameters of any type
-/// parameters are stored in a protected instance of the StrucDef class
+
+/**
+ * @brief This class describes parameters on a plug-in.
+ * These parameters can be of any type, and are used to generate a GUI that will be shown when the plug-in in invoked by the user.
+ * It is mainly used by algorithms to display options to the user, e.g. a clustering algorithm can let the user choose which measure to use.
+ **/
 struct TLP_SCOPE WithParameter {
-  /// Return the parameters
+  
+  /**
+   * @brief Retrieves the parameters.
+   *
+   * @return :StructDef the parameters of the plug-in.
+   **/
   tlp::StructDef getParameters();
-  /// Add a parameter of type T with name str
-  /// inHelp is the description of the parameter
-  /// inDefValue is a string representation of the parameter default value
-  /// isMandatory indicates if a value is needed for the parameter
+  
+  /**
+   * @brief Adds a parameter to the plug-in.
+   *
+   * @param str The name of the parameter to add.
+   * @param inHelp A description of the parameter, that will de displayed to the user. Defaults to 0.
+   * @param inDefValue The default value the parameter should take, to be the initial value in the GUI. Defaults to 0.
+   * @param isMandatory Whether this parameter requires a value or not. Defaults to true.
+   * @return void
+   **/
   template<typename T> void addParameter(const char* str,
 					 const char* inHelp=0,
 					 const char* inDefValue = 0,
 					 bool isMandatory = true)
   { parameters.template add<T>(str,inHelp,inDefValue,isMandatory); }
 protected:
-  /// the structure holding the parameters
+  
+  /**
+   * @brief The internal structure storing the parameters.
+   **/
   StructDef parameters;
 };
 /*@}*/
