@@ -18,10 +18,8 @@
  */
 
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/GlDisplayListManager.h>
-#include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
-#include "tulip/OpenGlConfigManager.h"
+#include "tulip/GlTriangle.h"
 
 #include <string>
 using namespace tlp;
@@ -32,14 +30,23 @@ public:
 	virtual ~GlArrow2DEdgeExtremity();
 
 	void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
+
+protected :
+
+	static GlTriangle *triangle;
 };
 
-EEGLYPHPLUGIN(GlArrow2DEdgeExtremity,"2D - Arrow","Jonathan Dubois","09/04/09","Edge Extremity with 2D arrow","1.0",50)
-;
+EEGLYPHPLUGIN(GlArrow2DEdgeExtremity,"2D - Arrow","Jonathan Dubois","09/04/09","Edge Extremity with 2D arrow","1.0",50);
+
+GlTriangle* GlArrow2DEdgeExtremity::triangle=0;
 
 GlArrow2DEdgeExtremity::GlArrow2DEdgeExtremity(EdgeExtremityGlyphContext *gc) :
 	EdgeExtremityGlyphFrom2DGlyph(gc) {
-
+	if(!triangle){
+		triangle=new GlTriangle(Coord(0,0,0),Size(0.5,0.5,0.5));
+		triangle->setLightingMode(false);
+		triangle->setStartAngle(0);
+	}
 }
 
 GlArrow2DEdgeExtremity::~GlArrow2DEdgeExtremity() {
@@ -47,41 +54,13 @@ GlArrow2DEdgeExtremity::~GlArrow2DEdgeExtremity() {
 
 void GlArrow2DEdgeExtremity::draw(edge e, node, const Color& glyphColor, const Color &borderColor,
 		float lod) {
-  glDisable(GL_LIGHTING);
-	if (GlDisplayListManager::getInst().beginNewDisplayList("Arrow 2D")) {
-		glBegin(GL_TRIANGLES);
-		glVertex3f(.5, 0, 0);
-		glVertex3f(-.5, -.5, 0);
-		glVertex3f(-.5, .5, 0);
-		glEnd();
-		GlDisplayListManager::getInst().endNewDisplayList();
-	}
-	if (GlDisplayListManager::getInst().beginNewDisplayList("Arrow 2D Border")) {
-		glBegin(GL_LINE_LOOP);
-		glVertex3f(.5, 0, 0);
-		glVertex3f(-.5, -.5, 0);
-		glVertex3f(-.5, .5, 0);
-		glEnd();
-		GlDisplayListManager::getInst().endNewDisplayList();
-	}
-	setMaterial(glyphColor);
-	glDisable(GL_CULL_FACE);
-	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-	GlDisplayListManager::getInst().callDisplayList("Arrow 2D");
-	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-	glEnable(GL_CULL_FACE);
 
 	double width = edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e);
-	if (lod > 20) {
-		if (width < 1e-6)
-			glLineWidth(1e-6); //no negative borders
-		else
-			glLineWidth(width);
+	if (width < 1e-6)
+		width=1e-6;
 
-
-		setColor(borderColor);
-		OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-		GlDisplayListManager::getInst().callDisplayList("Arrow 2D Border");
-		OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
-	}
+  triangle->setFillColor(glyphColor);
+  triangle->setOutlineSize(width);
+  triangle->setOutlineColor(borderColor);
+  triangle->draw(lod,NULL);
 }
