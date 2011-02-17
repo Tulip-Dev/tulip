@@ -40,16 +40,16 @@ class GraphView;
  */ 
 /*@{*/
 /**
- * This class is used to store a property of a graph.
+ * @brief This class is used to store a property of a graph.
  * It implements PropertyInterface and add new methods
- * to deal with two distint type of values :
- * - Tnode value for the nodes
- * - Tedge value for the edges
+ * to deal with two distinct type of values :
+ * - Tnode node value
+ * - Tedge edge value
  *
- * A AbstractProperty can be connected or not to a PropertyAlgorithm.
+ * An AbstractProperty can be connected or not to a PropertyAlgorithm.
  * In the first case it can be seen as buffer beetween the property and the user.
  * In the second case it is only a memory area for storing data.
- * An AbstractProperty is an observable, so it can be observed by others objects.
+ * An AbstractProperty is an Observable (through PropertyInterface), so it can be observed by others objects.
  */
 template <class Tnode, class Tedge, class TPROPERTY = PropertyAlgorithm > 
 class TLP_SCOPE AbstractProperty : public PropertyInterface {
@@ -65,51 +65,89 @@ public:
   }
   AbstractProperty(Graph *, std::string n = "");
 
-  /** 
-   * Returns the node default value of the property
-   */
+  
+  /**
+   * @brief Returns the default node value of the property.
+   *
+   * @return :RealType The default value applied to nodes.
+   **/
   typename Tnode::RealType getNodeDefaultValue() const;
-  /** 
-   * Returns the edge default value of the property
-   */
+  
+  /**
+   * @brief Returns the default edge value of the property.
+   *
+   * @return :RealType The default value applied to edges.
+   **/
   typename Tedge::RealType getEdgeDefaultValue() const;
+
   /**
-   * Returns the value associated to the node n in this property.
-   * If there is no value it returns the default value
-   * depending of the type.
-   */
+   * @brief Returns the value associated with the node n in this property.
+   * If there is no value, it returns the default ndoe value.
+   *
+   * @param n The node for which we want to get the value of the property.
+   * @return :StoredType< Tnode::RealType >::ReturnedConstValue The value of the property for this node.
+   **/
   typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue getNodeValue(const node n ) const;
+  
   /**
-   * Returns the value associated to the edge e in this property.
-   * If there is no value , it returns the default value
-   * depending of the type.
-   */
+   * @brief Returns the value associated to the edge e in this property.
+   * If there is no value, it returns the default edge value.
+   *
+   * @param e The edge for which we want to get the value of the property.
+   * @return :StoredType< Tedge::RealType >::ReturnedConstValue The value of the property for this edge.
+   **/
   typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue getEdgeValue(const edge e) const;
+  
   /**
-   * Set the value of a node n and notify the observers of a modification.
-   */
+   * @brief Sets the value of a node and notify the observers of a modification.
+   *
+   * @param n The node to set the value of.
+   * @param v The value to affect for this node.
+   * @return void
+   **/
   virtual void setNodeValue(const node n, const typename Tnode::RealType &v);
+  
   /**
-   * Set the value of an edge and notify the observers of a modification.
-   */
+   * @brief Set the value of an edge and notify the observers of a modification.
+   *
+   * @param e The edge to set the value of.
+   * @param v The value to affect for this edge.
+   * @return void
+   **/
   virtual void setEdgeValue(const edge e, const typename Tedge::RealType &v);
+  
   /**
-   * Set the value of all nodes and notify the observers
-   */
+   * @brief Sets the value of all nodes and notify the observers.
+   *
+   * @param v The value to set to all nodes.
+   * @return void
+   **/
   virtual void setAllNodeValue(const typename Tnode::RealType &v);
+  
   /**
-   * Set the value of all edges and notify the observers
-   */
+   * @brief Sets the value of all edges and notify the observers.
+   *
+   * @param v The value to set to all edges.
+   * @return void
+   **/
   virtual void setAllEdgeValue(const typename Tedge::RealType &v);
   //=================================================================================
+  
   /**
-   * Set the value associated to a node to the registered default value
-   */
+   * @brief Resets the value of a node to the default value.
+   *
+   * @param n The node to reset the value of.
+   * @return void
+   **/
   virtual void erase(const node n) { setNodeValue(n, nodeDefaultValue); }
   //=================================================================================
+  
   /**
-   * Set the value associated to a edge to the registered default value
-   */
+   * @brief Resets the value of an edge to the default value.
+   *
+   * @param e The edge to reset the value of.
+   * @return void
+   **/
   virtual void erase(const edge e) { setEdgeValue(e, edgeDefaultValue); }
   //=================================================================================
   virtual AbstractProperty<Tnode,Tedge,TPROPERTY>& operator =(AbstractProperty<Tnode,Tedge,TPROPERTY> &prop) {
@@ -215,58 +253,68 @@ public:
     return true;
   }
   /**
-   * Returns an iterator on all nodes whose value is different
-   * from the default value. When the pointer to the graph is not NULL
-   * only the nodes owned by this graph are returned by the iterator.
-   * WARNING: it is of the caller responsability to delete the returned iterator
-   */
+   * @brief Returns an iterator on all nodes whose value is different from the default value. 
+   * When the pointer to the graph is not NULL, only the nodes owned by this graph are returned by the iterator.
+   * @warning Ownership of the iterator belongs to the caller, i.e. the caller must delete the operator.
+   *
+   * @param g If not NULL, only iterate on nodes from this Graph. Defaults to NULL.
+   * @return :Iterator< tlp::node >* A new Iterator on nodes whose value is not default.
+   **/
   virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* g = NULL) const;
   /**
-   * Returns an iterator on all edges whose value is different
-   * from the default value. When the pointer to the graph is not NULL
-   * only the edges owned by this graph are returned by the iterator.
-   * WARNING: it is of the caller responsability to delete the returned iterator
-   */
+   * @brief Returns an iterator on all edges whose value is different from the default value. 
+   * When the pointer to the graph is not NULL, only the edges owned by this graph are returned by the iterator.
+   * @warning Ownership of the iterator belongs to the caller, i.e. the caller must delete the operator.
+   *
+   * @param g If not NULL, only iterate on edges from this Graph. Defaults to NULL.
+   * @return :Iterator< tlp::node >* A new Iterator on edges whose value is not default.
+   **/
   virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* g = NULL) const;
   /**
-   * Set the value of a node (first argument) in the current property (this)
-   * with the value of the node (second argument) defined in prop (third argument).
-   * If the fourth argument is set to true, the value will be copied only if
-   * it is not the default value.
-   */
-  virtual void copy(const node dst, const node src, PropertyInterface *prop,
+   * @brief Copies the value help by a property on a node to another node on this property.
+   *
+   * @param destination The node to copy the value to.
+   * @param source The node to copy the value from.
+   * @param property The property holding the value to copy.
+   * @param ifNotDefault Whether to ignore default-valuated nodes or not. Defaults to false.
+   * @return void
+   **/
+  virtual void copy(const node destination, const node source, PropertyInterface *property,
 		    bool ifNotDefault = false) {
-          if (prop == NULL)
+          if (property == NULL)
             return;
           tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* tp =
-            dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(prop);
+            dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(property);
           assert(tp);
           bool notDefault;
           typename StoredType<typename Tnode::RealType>::ReturnedValue value =
-            tp->nodeProperties.get(src.id, notDefault);
+            tp->nodeProperties.get(source.id, notDefault);
           if (ifNotDefault && !notDefault)
             return;
-          setNodeValue(dst, value);
+          setNodeValue(destination, value);
         }
   /**
-   * Set the value of an edge (first argument) in the current property (this)
-   * with the value of the edge (second argument) defined in prop (third argument).
-   * If the fourth argument is set to true, the value will be copied only if
-   * it is not the default value.
-   */
-  virtual void copy(const edge dst, const edge src, PropertyInterface *prop,
+   * @brief Copies the value help by a property on an edge to another edge on this property.
+   *
+   * @param destination The edge to copy the value to.
+   * @param source The edge to copy the value from.
+   * @param property The property holding the value to copy.
+   * @param ifNotDefault Whether to ignore default-valuated nodes or not. Defaults to false.
+   * @return void
+   **/
+  virtual void copy(const edge destination, const edge source, PropertyInterface *property,
 		    bool ifNotDefault = false) {
-          if (prop == NULL)
+          if (property == NULL)
             return;
           tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* tp =
-            dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(prop);
+            dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(property);
           assert(tp);
           bool notDefault;
           typename StoredType<typename Tedge::RealType>::ReturnedValue value =
-            tp->edgeProperties.get(src.id, notDefault);
+            tp->edgeProperties.get(source.id, notDefault);
           if (ifNotDefault && !notDefault)
             return;
-          setEdgeValue(dst, value);
+          setEdgeValue(destination, value);
         }
   // for performance reason and use in GraphUpdatesRecorder
   virtual DataMem* getNodeDefaultDataMemValue() const {
@@ -330,8 +378,9 @@ public:
     metaValueCalculator = mvCalc;
   }
 
-  // This class is used to delegate the computation of the values associated
-  // to meta nodes or edges
+  /**
+   * @brief This class is used to delegate the computation of the values associated to meta nodes or edges.
+   **/
   class MetaValueCalculator :public PropertyInterface::MetaValueCalculator {
   public:
     // computes the value of the meta node mN of the graph mg
@@ -367,55 +416,88 @@ protected:
    class TLP_SCOPE AbstractVectorProperty : public AbstractProperty<vectType, vectType> {
  public:
   AbstractVectorProperty(Graph *, std::string name = "");
+  
   /**
-   * Set the value of the elt i of the vector associated to node n
-   * and notify the observers of a modification.
-   */
+   * @brief Sets the value for node n, at index i, to v, and notify the observers of a modification.
+   *
+   * @param n The node to set a value of.
+   * @param i The index at which the value should be set.
+   * @param v The value to set.
+   * @return void
+   **/
   void setNodeEltValue(const node n, unsigned int i, const eltType &v);
   /**
-   * get the value of the elt i of the vector associated to node n
-   * and notify the observers of a modification.
-   */
+   * @brief Gets the value associated to node n, at index i.
+   *
+   * @param n The node to set a value of.
+   * @param i The index at which to set the value.
+   * @return const eltType& The value at index i in the vector for node n.
+   **/
   const eltType& getNodeEltValue(const node n, unsigned int i) const;
   /**
-   * append a new value at the end of the vector associated to node n
-   * and notify the observers of a modification.
-   */
+   * @brief Appends a new value at the end of the vector associated to node n, and notify the observers of a modification.
+   *
+   * @param n The node to add a value to.
+   * @param v The value to append at the end of the vector.
+   * @return void
+   **/
   void pushBackNodeEltValue(const node n, const eltType &v);
   /**
-   * remove the value at the end of the vector associated to node n
-   * and notify the observers of a modification.
-   */
+   * @brief Removes the value at the end of the vector associated to node n, and notify the observers of a modification.
+   *
+   * @param n The node to remove a value from.
+   * @return void
+   **/
   void popBackNodeEltValue(const node n);
   /**
-   * resize the vector associated to node n
-   * and notify the observers of a modification.
-   */
+   * @brief Resizes the vector associated to node n, and notify the observers of a modification.
+   *
+   * @param n The node associated to the vector to resize.
+   * @param size The new size of the vector.
+   * @param elt The default value to set at indices where there was no value before. Defaults to eltType().
+   * @return void
+   **/
   void resizeNodeValue(const node n, size_t size, eltType elt = eltType());
   /**
-   * Set the value of the elt i of the value associated to edge
-   * and notify the observers of a modification.
-   */
+   * @brief Sets the value for edge e, at index i, to v, and notify the observers of a modification.
+   *
+   * @param e The edge to set the value of.
+   * @param i The index at which the value should be set.
+   * @param v The value to set.
+   * @return void
+   **/
   void setEdgeEltValue(const edge e, unsigned int i, const eltType &v);
   /**
-   * get the value of the elt i of the vector associated to edge e
-   * and notify the observers of a modification.
-   */
+   * @brief Gets the value associated to edge e, at index i.
+   *
+   * @param e The edge to set a value of.
+   * @param i The index at which to set the value.
+   * @return const eltType& The value at index i in the vector for node n.
+   **/
   const eltType& getEdgeEltValue(const edge n, unsigned int i) const;
   /**
-   * append a new value at the end of the vector associated to edge e
-   * and notify the observers of a modification.
-   */
+   * @brief Appends a new value at the end of the vector associated to edge e, and notify the observers of a modification.
+   *
+   * @param e The node to add a value to.
+   * @param v The value to append at the end of the vector.
+   * @return void
+   **/
   void pushBackEdgeEltValue(const edge e, const eltType &v);
-  /**
-   * remove the value at the end of the vector associated to edge e
-   * and notify the observers of a modification.
-   */
+    /**
+   * @brief Removes the value at the end of the vector associated to edge e, and notify the observers of a modification.
+   *
+   * @param e The edge to remove a value from.
+   * @return void
+   **/
   void popBackEdgeEltValue(const edge e);
   /**
-   * resize the vector associated to edgee e
-   * and notify the observers of a modification.
-   */
+   * @brief Resizes the vector associated to edge e, and notify the observers of a modification.
+   *
+   * @param e The edge associated to the vector to resize.
+   * @param size The new size of the vector.
+   * @param elt The default value to set at indices where there was no value before. Defaults to eltType().
+   * @return void
+   **/
   void resizeEdgeValue(const edge e, size_t size, eltType elt = eltType());
  };
 /*@}*/
