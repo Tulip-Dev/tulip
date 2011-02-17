@@ -20,40 +20,94 @@
 #ifndef TULIPPLUGIN_H
 #define TULIPPLUGIN_H
 #include <string>
-
+/**
+ * \addtogroup plugins
+ */ 
 namespace tlp {
-
-/** Common interface for plug-ins.*/
+/*@{*/
+//TODO This class should be renamed to make obvious the fact it is abstract, and is not a base for plug-ins. (AbstractPluginInfo ?)
+/**
+ * @brief Base interface for plug-in description.
+ * This class is not intented to be subclassed by plug-ins themselves, but by the factories who create the plug-ins.
+ * This class holds user informations, such as the author, date of creation, and miscellaneous informations.
+ * It also holds informations for the Tulip plug-in system, such as the version (used to know when there is an update for a plug-in),
+ * the name (used as unique identifier to register the plug-in),
+ * the Tulip version the plug-in was built with (to know whether the plug-in is compatible with the currently running version of TUlip),
+ * and the group this plug-in belongs to (e.g. trees).
+ */
 class Plugin {
 public:
   virtual ~Plugin(){}
-  /**Return the name of the plug-in, be careful, 
-     this name must be unique, if two plug-ins have the same name
-     only the latest loaded will be available*/
+  /**
+   * @brief Returns the name of the plug-in, as registered in the Tulip plug-in system.
+   * This name must be unique, and if multiple plug-ins have the same name,
+   * only the latest encountered will be considered.
+   * @return string the name of the plug-in.
+   */
   virtual  std::string getName() const=0;
-  /* Returns the group name of the plug-in,
-     a string with subgroup names separated by ::
-     ex: trees::planar trees */
+  /**
+   * @brief Returns the name of the group this plug-in belongs to.
+   * Groups and sub-groups are separated by two colons.
+   * e.g. trees::planar trees
+   * @return the group name of this plug-in.
+   */
   virtual std::string getGroup() const=0;
-  /**Return the author of the plug-in*/
+  /**
+   * @brief The name of the author of this plug-in.
+   *
+   * @return the name of the author.
+   */
   virtual  std::string getAuthor() const=0;
-  /**Return the date of creation of the plug-in*/
+  /**
+   * @brief The creation date of the plug-in.
+   * This date is in a free format, but most Tulip plug-ins use a DD/MM/YYYY
+   *
+   * @return the creation date.
+   */
   virtual  std::string getDate() const=0;
-  /**Return free information about the plug-in*/  
+  /**
+   * @brief Informations about the plug-in, from the plug-in author.
+   * These informations can contains anything, and the developer is completely free to put anything here.
+   * Most plug-ins by the Tulip team use an html format to generate help from these informations.
+   * @return string The informations associated with this plug-in.
+   */
   virtual  std::string getInfo() const=0;
-  /**Return the whole release number of the plug-in*/ 
+  /**
+   * @brief The release version of the plug-in, including major and minor.
+   * The version should be X.Y, X being the major, and Y the minor.
+   * @return string The release version.
+   */
   virtual  std::string getRelease() const=0;
-  /**Return the major release number of the plug-in*/ 
+  /**
+   * @brief Only the major of the plug-in version.
+   * A version should be X.Y, X being the major.
+   *
+   * @return The major part of the plug-in version.
+   */
   virtual  std::string getMajor() const=0;
-  /**Return the minor release number of the plug-in*/ 
+  /**
+   * @brief Only the minor of the plug-in version.
+   * A version should be X.Y, Y being the major.
+   *
+   * @return The minor part of the plug-in version.
+   */
   virtual  std::string getMinor() const=0;
-  /**Return the whole Tulip release number the plug-in is build with*/ 
+  /**
+   * @brief The version of Tulip this plug-in was built with.
+   * Tulip versions are X.Y.Z, X eing the major, Y the minor, and Z the patch.
+   *
+   * @return The Tulip version the plug-in was built with.
+   */
   virtual  std::string getTulipRelease() const=0;
-  /**Return the major Tulip release number the plug-in is build with*/ 
+  /**
+   * @return The major Tulip version the plug-in was built with.
+   */
   virtual  std::string getTulipMajor() const=0;
-  /**Return the major Tulip release number the plug-in is build with*/ 
+  /**
+   * @return Return the minor Tulip version this plug-in was built with.
+   */
   virtual  std::string getTulipMinor() const=0;
 };
-
+/*@}*/
 }
 #endif
