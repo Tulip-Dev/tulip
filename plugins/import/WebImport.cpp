@@ -398,7 +398,7 @@ struct WebImport:public ImportModule {
     addParameter<Color>("page color",paramHelp[6],"(240, 0, 120, 128)");
     addParameter<Color>("link color",paramHelp[7],"(96,96,191,128)");
     addParameter<Color>("redirection color",paramHelp[8],"(191,175,96,128)");
-    addDependency<LayoutAlgorithm>("GEM (Frick)", "1.0");
+    addDependency<LayoutAlgorithm>("GEM (Frick)", "1.1");
   }
 
   string urlDecode(const string& url) { 
