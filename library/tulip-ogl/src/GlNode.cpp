@@ -47,6 +47,7 @@
 
 //====================================================
 tlp::GlLabel* tlp::GlNode::label=0;
+tlp::GlBox* tlp::GlNode::selectionBox=0;
 
 using namespace std;
 
@@ -55,6 +56,10 @@ namespace tlp {
   GlNode::GlNode(unsigned int id):id(id) {
     if(!label)
       label=new GlLabel();
+    if(!selectionBox){
+      selectionBox=new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,255,255),Color(0,255,0,255),false,true);
+      selectionBox->setOutlineSize(3);
+    }
   }
 
   BoundingBox GlNode::getBoundingBox(GlGraphInputData* data) {
@@ -189,12 +194,13 @@ namespace tlp {
     data->glyphs.get(data->getElementShape()->getNodeValue(n))->draw(n,lod);
 
     if (selected) {
-      //glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil()-1,0xFFFF);
-      setColor(colorSelect2);
       OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-      GlDisplayListManager::getInst().callDisplayList("selection");
+      selectionBox->setStencil(data->parameters->getSelectedNodesStencil()-1);
+      selectionBox->setOutlineColor(colorSelect2);
+      selectionBox->draw(10,NULL);
       OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
     }
+
     glPopMatrix();
 
     if (selected) {
