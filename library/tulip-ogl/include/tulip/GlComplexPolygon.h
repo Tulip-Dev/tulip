@@ -150,6 +150,21 @@ namespace tlp {
     void setTextureZoom(float zoom){textureZoom=zoom;runTesselation();}
 
     /**
+     * Draw a thick (textured) border around the polygon.
+     * The graphic card must support geometry shader to make this feature to work.
+     * The position parameter determines the way the border is drawn :
+     *     - 0 : the border is drawn outside the polygon
+     *     - 1 : the border is centered on the polygon outline
+     *     - 2 : the border is drawn inside the polygon
+     */
+    void activateQuadBorder(const float borderWidth, const Color &color, const std::string &texture = "", const int position = 1);
+
+    /**
+     * Desactivate the textured quad border
+     */
+    void desactivateQuadBorder();
+
+    /**
      * Translate entity
      */
     virtual void translate(const Coord& mouvement);
@@ -180,6 +195,7 @@ namespace tlp {
 	VERTEX *allocateNewVertex();
 	
     std::vector<std::vector<Coord> > points;
+    std::vector<std::vector<GLfloat> > pointsIdx;
     std::set<GLenum> primitivesSet;
     std::map<GLenum, std::vector<Coord> > verticesMap;
     std::map<GLenum, std::vector<Vec2f> > texCoordsMap;
@@ -195,6 +211,11 @@ namespace tlp {
     double outlineSize;
     std::string textureName;
     float textureZoom;
+    bool quadBorderActivated;
+    float quadBorderWidth;
+    Color quadBorderColor;
+    std::string quadBorderTexture;
+    int quadBorderPosition;
   };
   /*@}*/
 }
