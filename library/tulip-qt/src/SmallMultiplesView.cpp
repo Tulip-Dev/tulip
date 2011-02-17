@@ -185,10 +185,16 @@ void SmallMultiplesView::selectItem(int i) {
   if (i > _items.size())
     return;
   if (_zoomAnimationActivated) {
-    GlNode glNode(_items[i]);
-    zoomOnScreenRegion(_glMainWidget, glNode.getBoundingBox(_glMainWidget->getScene()->getGlGraphComposite()->getInputData()), "overview");
+    zoomOnItem(i);
   }
   emit itemSelected(i);
+}
+
+void SmallMultiplesView::zoomOnItem(int i){
+    if (i > _items.size())
+      return;
+    GlNode glNode(_items[i]);
+    zoomOnScreenRegion(_glMainWidget, glNode.getBoundingBox(_glMainWidget->getScene()->getGlGraphComposite()->getInputData()), "overview");
 }
 
 GlMainWidget *SmallMultiplesView::overview() const {

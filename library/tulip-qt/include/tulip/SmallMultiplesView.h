@@ -212,6 +212,10 @@ public slots:
     * If the zoomAnimationActivated flag is set, a smooth animation will be run to zoom on the given item
     */
   void selectItem(int);
+  /**
+    * @brief Zoom on an item in overview mode.
+    */
+  void zoomOnItem(int);
 
 protected slots:
   void dataChanged(int from, int to, SmallMultiplesView::Roles dataRoles = SmallMultiplesView::AllRoles);
