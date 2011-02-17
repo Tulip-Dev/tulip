@@ -98,24 +98,8 @@ namespace tlp {
     const Color& colorSelect2=data->parameters->getSelectionColor();
 
     glEnable(GL_CULL_FACE);
-    GLenum error = glGetError();
-    if(GlDisplayListManager::getInst().beginNewDisplayList("selection")) {
-      glPushAttrib(GL_ALL_ATTRIB_BITS);
-      glDisable(GL_LIGHTING);
-      glDepthFunc(GL_LEQUAL);
-      glLineWidth(3);
-      tlp::cube(GL_LINE_LOOP);
-      glPopAttrib();
-      GlDisplayListManager::getInst().endNewDisplayList();
-    }
 
     node n=node(id);
-    /*if(data->parameters->isElementZOrdered()){
-      if(data->elementColor->getNodeValue(n)[3]!=255){
-        GlPointManager::getInst().endRendering();
-        GlPointManager::getInst().beginRendering();
-      }
-    }*/
 
     if (data->getElementSelected()->getNodeValue(n)) {
       glDisable(GL_DEPTH_TEST);
@@ -212,8 +196,6 @@ namespace tlp {
     if(data->parameters->getFeedbackRender()) {
       glPassThrough(TLP_FB_END_NODE);
     }
-    if ( error != GL_NO_ERROR)
-    cerr << "end [OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
   }
 
   void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod) {

@@ -58,10 +58,6 @@ namespace tlp {
 		      const MatrixGL &, const MatrixGL &,const Vector<int, 4> &viewport);
   TLP_GL_SCOPE float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<float, 4>& transformMatrix,const Vector<int, 4>& globalViewport,const Vector<int, 4>& currentViewport);
   TLP_GL_SCOPE float calculate2DLod(const BoundingBox& bb,const Vector<int, 4>& globalViewport,const Vector<int, 4>& currentViewport);
-  TLP_GL_SCOPE void cube(GLenum type);
-  TLP_GL_SCOPE void solidCone();
-
-  TLP_GL_SCOPE MatrixGL makeArrowMatrix(const Coord &A, const Coord &B);
 }
 
 #endif //DOXYGEN_NOTFOR_DEVEL
