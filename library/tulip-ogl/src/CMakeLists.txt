@@ -38,7 +38,8 @@ IF(WIN32)
   INSTALL_EXTERNAL_LIB(PNG_INSTALL_PATH libtulip_ogl)
 ELSEIF(APPLE)
 #Search and install external libraries
-INSTALL_EXTERNAL_LIB(LIBXML2_LIBRARIES libtulip)
+#no need of libxml2 which already exists on standard installation
+#INSTALL_EXTERNAL_LIB(LIBXML2_LIBRARIES libtulip)
 INSTALL_EXTERNAL_LIB(FREETYPE_LIBRARY libtulip_ogl)
 INSTALL_EXTERNAL_LIB(GLEW_LIBRARY libtulip_ogl)
 INSTALL_EXTERNAL_LIB(JPEG_LIBRARY libtulip_ogl)
