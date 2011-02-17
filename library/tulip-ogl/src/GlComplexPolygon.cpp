@@ -30,6 +30,7 @@
 #include "tulip/GlTextureManager.h"
 #include "tulip/ParametricCurves.h"
 #include "tulip/OpenGlConfigManager.h"
+#include "tulip/GlShaderProgram.h"
 
 #include <tulip/TlpTools.h>
 
@@ -51,6 +52,116 @@ typedef void (CALLBACK*GLUTesselatorFunction)(void);
 
 
 using namespace std;
+
+static const string outlineExtrusionVertexShaderSrc =
+		"#version 120\n"
+		"attribute float indice;"
+
+		"void main() {"
+		"	gl_Position = vec4(gl_Vertex.xyz, indice);"
+		"	gl_FrontColor = gl_Color;"
+		"}"
+		;
+
+static const string outlineExtrusionGeometryShaderSrc =
+		"#version 120\n"
+		"#extension GL_EXT_geometry_shader4 : enable\n"
+
+		"uniform float size;"
+		"uniform int nbVertices;"
+
+		"uniform int outlinePos;"
+
+
+		"void main() {"
+		"	vec3 tangent, normal;"
+
+		"	gl_TexCoord[0].z = 0.0;"
+		"	gl_TexCoord[0].w = 1.0;"
+
+		"	if (int(gl_PositionIn[0].w) == 0) {"
+		"		gl_FrontColor = gl_FrontColorIn[0];"
+		"		tangent = normalize(gl_PositionIn[1].xyz - gl_PositionIn[0].xyz);"
+		"		normal = tangent;"
+		"		normal.x = -tangent.y;"
+		"		normal.y = tangent.x;"
+		"		if (outlinePos <= 1) {"
+		"			gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[0].xyz - normal * size, 1.0);"
+		"		} else {"
+		"			gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[0].xyz, 1.0);"
+		"		}"
+		"		gl_TexCoord[0].st = vec2(gl_PositionIn[0].w, 0.0);"
+		"		EmitVertex();"
+		"		if (outlinePos == 0) {"
+		"			gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[0].xyz, 1.0);"
+		"		} else {"
+		"			gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[0].xyz + normal * size, 1.0);"
+		"		}"
+		"		gl_TexCoord[0].st = vec2(gl_PositionIn[0].w, 1.0);"
+		"		EmitVertex();"
+		"	}"
+
+		"	gl_FrontColor = gl_FrontColorIn[1];"
+		"	tangent = normalize(gl_PositionIn[2].xyz - gl_PositionIn[1].xyz);"
+		"	normal = tangent;"
+		"	normal.x = -tangent.y;"
+		"	normal.y = tangent.x;"
+		"	if (outlinePos <= 1) {"
+		"		gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[1].xyz - normal * size, 1.0);"
+		"	} else {"
+		"		gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[1].xyz, 1.0);"
+		"	}"
+		"	gl_TexCoord[0].st = vec2(gl_PositionIn[1].w, 0.0);"
+		"	EmitVertex();"
+		"	if (outlinePos == 0) {"
+		"		gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[1].xyz, 1.0);"
+		"	} else {"
+		"		gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[1].xyz + normal * size, 1.0);"
+		"	}"
+		"	gl_TexCoord[0].st = vec2(gl_PositionIn[1].w, 1.0);"
+		"	EmitVertex();"
+
+		"	gl_FrontColor = gl_FrontColorIn[2];"
+		"	tangent = normalize(gl_PositionIn[3].xyz - gl_PositionIn[2].xyz);"
+		"	normal = tangent;"
+		"	normal.x = -tangent.y;"
+		"	normal.y = tangent.x;"
+		"	if (outlinePos <= 1) {"
+		"		gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[2].xyz - normal * size, 1.0);"
+		"	} else {"
+		"		gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[2].xyz, 1.0);"
+		"	}"
+		"	gl_TexCoord[0].st = vec2(gl_PositionIn[2].w, 0.0);"
+		"	EmitVertex();"
+		"	if (outlinePos == 0) {"
+		"		gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[2].xyz, 1.0);"
+		"	} else {"
+		"		gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[2].xyz + normal * size, 1.0);"
+		"	}"
+		"	gl_TexCoord[0].st = vec2(gl_PositionIn[2].w, 1.0);"
+		"	EmitVertex();"
+
+		"	if (int(gl_PositionIn[3].w) == (nbVertices - 1)) {"
+		"		gl_FrontColor = gl_FrontColorIn[3];"
+		"		if (outlinePos <= 1) {"
+		"			gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[3].xyz - normal * size, 1.0);"
+		"		} else {"
+		"			gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[3].xyz, 1.0);"
+		"		}"
+		"		gl_TexCoord[0].st = vec2(gl_PositionIn[3].w, 0.0);"
+		"		EmitVertex();"
+		"		if (outlinePos == 0) {"
+		"			gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[3].xyz, 1.0);"
+		"		} else {"
+		"			gl_Position = gl_ModelViewProjectionMatrix * vec4(gl_PositionIn[3].xyz + normal * size, 1.0);"
+		"		}"
+		"		gl_TexCoord[0].st = vec2(gl_PositionIn[3].w, 1.0);"
+		"		EmitVertex();"
+		"	}"
+		"	EndPrimitive();"
+		"}"
+
+		;
 
 namespace tlp {
 
@@ -98,35 +209,38 @@ void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VE
 }
 
 GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,int polygonEdgesType,const string &textureName):
-    														currentVector(0),
-    														outlined(false),
-    														fillColor(fcolor),
-    														outlineSize(1),
-    														textureName(textureName),
-    														textureZoom(1.){
+    																						currentVector(0),
+    																						outlined(false),
+    																						fillColor(fcolor),
+    																						outlineSize(1),
+    																						textureName(textureName),
+    																						textureZoom(1.),
+    																						quadBorderActivated(false) {
 	createPolygon(coords,polygonEdgesType);
 	runTesselation();
 }
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,Color ocolor,int polygonEdgesType,const string &textureName):
-    														currentVector(0),
-    														outlined(true),
-    														fillColor(fcolor),
-    														outlineColor(ocolor),
-    														outlineSize(1),
-    														textureName(textureName),
-    														textureZoom(1.) {
+    																						currentVector(0),
+    																						outlined(true),
+    																						fillColor(fcolor),
+    																						outlineColor(ocolor),
+    																						outlineSize(1),
+    																						textureName(textureName),
+    																						textureZoom(1.),
+    																						quadBorderActivated(false) {
 	createPolygon(coords,polygonEdgesType);
 	runTesselation();
 }
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fcolor,int polygonEdgesType,const string &textureName):
-    														currentVector(0),
-    														outlined(false),
-    														fillColor(fcolor),
-    														outlineSize(1),
-    														textureName(textureName),
-    														textureZoom(1.){
+    																						currentVector(0),
+    																						outlined(false),
+    																						fillColor(fcolor),
+    																						outlineSize(1),
+    																						textureName(textureName),
+    																						textureZoom(1.),
+    																						quadBorderActivated(false) {
 	for(unsigned int i=0;i<coords.size();++i) {
 		createPolygon(coords[i],polygonEdgesType);
 		beginNewHole();
@@ -135,13 +249,14 @@ GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fco
 }
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fcolor,Color ocolor,int polygonEdgesType,const string &textureName):
-    														currentVector(0),
-    														outlined(true),
-    														fillColor(fcolor),
-    														outlineColor(ocolor),
-    														outlineSize(1),
-    														textureName(textureName),
-    														textureZoom(1.) {
+    																						currentVector(0),
+    																						outlined(true),
+    																						fillColor(fcolor),
+    																						outlineColor(ocolor),
+    																						outlineSize(1),
+    																						textureName(textureName),
+    																						textureZoom(1.),
+    																						quadBorderActivated(false) {
 	for(unsigned int i=0;i<coords.size();++i) {
 		createPolygon(coords[i],polygonEdgesType);
 		beginNewHole();
@@ -182,6 +297,15 @@ void GlComplexPolygon::createPolygon(const vector<Coord> &coords,int polygonEdge
 			addPoint(*it);
 		}
 	}
+
+	for (size_t i = 0 ; i < points.size() ; ++i) {
+		vector<GLfloat> indices;
+		for (size_t j = 0 ; j < points[i].size() ; ++j) {
+			indices.push_back(j);
+		}
+		pointsIdx.push_back(indices);
+	}
+
 }
 //=====================================================
 void GlComplexPolygon::setOutlineMode(const bool outlined) {
@@ -273,6 +397,18 @@ VERTEX *GlComplexPolygon::allocateNewVertex() {
 	return vertex;
 }
 //=====================================================
+void GlComplexPolygon::activateQuadBorder(const float borderWidth, const Color &color, const string &texture, const int position) {
+	quadBorderActivated = true;
+	quadBorderWidth = borderWidth;
+	quadBorderColor = color;
+	quadBorderTexture = texture;
+	quadBorderPosition = position;
+}
+//=====================================================
+void GlComplexPolygon::desactivateQuadBorder() {
+	quadBorderActivated = false;
+}
+//=====================================================
 void GlComplexPolygon::draw(float,Camera *) {
 
 	if(cameraIs3D()){
@@ -283,8 +419,6 @@ void GlComplexPolygon::draw(float,Camera *) {
 
 	glDisable(GL_CULL_FACE);
 	glEnable(GL_COLOR_MATERIAL);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	if(textureName!=""){
 		if(GlTextureManager::getInst().activateTexture(textureName))
@@ -307,7 +441,6 @@ void GlComplexPolygon::draw(float,Camera *) {
 
 	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
-	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	if(textureName!="") {
@@ -329,6 +462,51 @@ void GlComplexPolygon::draw(float,Camera *) {
 		}
 
 		OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+	}
+
+	if (quadBorderActivated && GlShaderProgram::shaderProgramsSupported() && GlShaderProgram::geometryShaderSupported()) {
+
+		static GlShaderProgram *outlineExtrusionShader = NULL;
+		if (!outlineExtrusionShader) {
+			outlineExtrusionShader = new GlShaderProgram();
+			outlineExtrusionShader->addShaderFromSourceCode(Vertex, outlineExtrusionVertexShaderSrc);
+			outlineExtrusionShader->addGeometryShaderFromSourceCode(outlineExtrusionGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_TRIANGLE_STRIP);
+			outlineExtrusionShader->link();
+		}
+
+		if (outlineExtrusionShader->isLinked()) {
+
+			if (quadBorderTexture != "") {
+				GlTextureManager::getInst().activateTexture(quadBorderTexture);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			}
+			OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+
+			setMaterial(quadBorderColor);
+
+			outlineExtrusionShader->activate();
+			outlineExtrusionShader->setUniformInt("outlinePos", quadBorderPosition);
+			outlineExtrusionShader->setUniformFloat("size", quadBorderWidth);
+
+			GLint vertexPosLoc = glGetAttribLocation(outlineExtrusionShader->getShaderProgramId(),"indice");
+			glEnableVertexAttribArray(vertexPosLoc);
+
+			for (size_t v = 0 ; v < points.size() ; ++v) {
+				glVertexPointer(3, GL_FLOAT, 3 * sizeof(GLfloat), &points[v][0]);
+				glVertexAttribPointer(vertexPosLoc, 1, GL_FLOAT, GL_FALSE, 1 * sizeof(float), &pointsIdx[v][0]);
+				outlineExtrusionShader->setUniformInt("nbVertices", points[v].size());
+				glDrawArrays(GL_LINE_STRIP_ADJACENCY_EXT, 0, points[v].size());
+			}
+
+			outlineExtrusionShader->desactivate();
+
+			OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
+
+			if (quadBorderTexture != "") {
+				GlTextureManager::getInst().desactivateTexture();
+			}
+		}
+
 	}
 
 	glDisableClientState(GL_VERTEX_ARRAY);
