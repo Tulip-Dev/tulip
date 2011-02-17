@@ -115,10 +115,13 @@ struct DataType :public DataMem {
    }
  };
 
-/*!  A container which allows insertion of different types.
-     The inserted data must have a copy-constructor well done */
+/**
+ * @brief A container which can store data of any type, as long as it has a well-defined copy constructor.
+ **/
 class TLP_SCOPE DataSet {
-  /** the list of name value pairs */
+  /**
+   * @brief Internal list of key-value pairs.
+   **/
   std::list< std::pair<std::string, DataType*> > data;
   /** management of data serialization
       two hashmap to retrieve data serializer from their
@@ -134,17 +137,39 @@ class TLP_SCOPE DataSet {
   DataSet(const DataSet &set);
   DataSet& operator=(const DataSet &set);
   ~DataSet();
-  /** Returns a copy of the value of the variable with name str.
-     Type are checked in Debug Mode.
-     If the variable str doesn't exist return false else true. */
-  template<typename T> bool get(const std::string &str, T& value) const;
+  /**
+   * @brief Returns the stored value associated with the given key. 
+   * The stored value is a copy of the original value that was set.
+   * If there is no value associated with the given key, the input value is left untouched.
+   *
+   * @param key The key with which the data we want to retrieve is associated.
+   * @param value A variable wich will be overwritten with the value to retrieve.
+   * @return bool Whether there is a value associated with given key or not.
+   **/
+  template<typename T> bool get(const std::string &key, T& value) const;
   /** Returns a copy of the value of the variable with name str.
      Type are checked in Debug Mode.
      If the variable str doesn't exist return false else true.
      The data is removed after the call. */
-  template<typename T> bool getAndFree(const std::string &str, T& value);
-  /** Set the value of the variable str.*/
-  template<typename T> void set(const std::string &str, const T& value);
+  /**
+   * @brief Returns the stored value, and deletes the stored copy.
+   * If no value is found, nothing is deleted.
+   * 
+   * @param key The key with which the data we want to retrieve is associated.
+   * @param value A variable wich will be overwritten with the value to retrieve.
+   * @return bool Whether there is a value associated with given key or not.
+   **/
+  template<typename T> bool getAndFree(const std::string &key, T& value);
+  
+  /**
+   * @brief Stores a copy of the given param, associated with the key.
+   * The value must have a well-formed copy constructor.
+   *
+   * @param key The key which can be used to retrieve the data.
+   * @param value The data to store.
+   * @return void
+   **/
+  template<typename T> void set(const std::string &key, const T& value);
   /** register a serializer for a known type */
   template<typename T> static void registerDataTypeSerializer(const DataTypeSerializer &serializer) {
     registerDataTypeSerializer(std::string(typeid(T).name()), serializer.clone());
@@ -172,8 +197,6 @@ class TLP_SCOPE DataSet {
   /** Return the data type serializer associated to the given typename. Returns NULL if no serializer is found */
   static DataTypeSerializer *typenameToSerializer(const std::string &name);
 };
-
-
 
 ///This class enables to define a structure
 struct TLP_SCOPE StructDef {
@@ -208,8 +231,6 @@ private:
   std::map<std::string,std::string> defValue;
   std::map<std::string,bool> mandatory;
 };
-
-
 
 
 //
