@@ -254,7 +254,6 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
     }
   } while (depsNeedCheck);
 }
-  
 
 //=========================================================
 void tlp::loadPlugins(PluginLoader *plug) {
@@ -294,18 +293,8 @@ std::string tlp::demangleTlpClassName(const char* className) {
 }
 #elif _MSC_VER
 
-//extern "C" {
-//  char* _unDName(char* outputString, const char* name, int maxStringLength, void* (*pAlloc)(size_t), void (*pFree)(void*), unsigned short disableFlags);
-//}
 std::string tlp::demangleTlpClassName(const char* className) {
 	std::string result;
-
-	//UnDecorateSymbolName
-//	 __in   PCTSTR DecoratedName,
-//  __out  PTSTR UnDecoratedName,
-//  __in   DWORD UndecoratedLength,
-//  __in   DWORD Flags
-//);
 	static char demangleBuffer[256];
 	UnDecorateSymbolName(className, demangleBuffer, 256, UNDNAME_32_BIT_DECODE);
 	result = std::string(demangleBuffer);
@@ -328,6 +317,6 @@ std::string tlp::getMinor(const std::string& v) {
     return string("0");
   unsigned int rpos = v.rfind('.');
   if (pos == rpos)
-    return v.substr(0, pos);
+    return v.substr(pos+1);
   return v.substr(pos + 1, rpos - pos - 1);
 }
