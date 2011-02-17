@@ -37,40 +37,102 @@ namespace tlp {
   class DataSet;
   
 /*@{*/
-///Interface for general algorithm plug-ins
+/**
+ * @brief This abstract class describes a basic algorithm plugin.
+ * It inherits on WithParameter and WithDependency for convenience.
+ * Basic functionality consists in checking the algorithm can run on the current Graph (e.g. is the graph simple ?),
+ * running the algorithm and resetting the algorithm to re-apply it.
+ * The algorithm can and should report progress and which task it is performing if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, ...).
+ */
 class Algorithm : public WithParameter, public WithDependency
 { 
 public :
+  /**
+   * @brief Constructs an algorithm and initializes members from the AlgorithmContext.
+   *
+   * @param context The context this algorithm runs in, containing the graph, a dataSet for the arameters, and a pluginProgress
+   * to give feedback to the user about the tasks the algorithm is performing.
+   */
   Algorithm (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet){}
   virtual ~Algorithm() {}
+  /**
+   * @brief Runs the algorithm on the context that was specified during construction.
+   *
+   * @return bool Whether the algorithm was sucessfull or not.
+   */
   virtual bool run() = 0;
+  /**
+   * @brief Checks if the algorithm can run on the context it was gieven.
+   *
+   * @return Whether the algorithm can be applied or not.
+   */
   virtual bool check(std::string &) {return true;}
   virtual void reset() {}  
 
+  /**
+   * @brief The Graph this algorithm will be run on. Retrieved from the context at construction.
+   */
   Graph *graph;
+  /**
+   * @brief A pluginProgress to give feedback to the user, retrieved from the context. It can be a NULL pointer, so use with caution.
+   */
   PluginProgress *pluginProgress;
+  /**
+   * @brief A DataSet containing parameters for this algorithm, if any. Retrived from the context at construction.
+   */
   DataSet *dataSet;
 };
 
+/**
+ * @brief A base class for algorithm plug-ins factory.
+ * Each plug-in declares (through a macro) its own factory.
+ * The factory the registers itself in the Tulip plug-in system (through the static initFactory() method when the library is loaded..
+ * The actual registration is delegated to a TemplateFactory to factorize code.
+ */
 class AlgorithmFactory:public Plugin{
 public:
+  /**
+   * @brief A static factory that is initialized when the library is loaded.
+   */
   static TLP_SCOPE TemplateFactory<AlgorithmFactory, Algorithm,AlgorithmContext > *factory;
+  /**
+   * @brief This static initilization is called when the plug-in library is loaded, and registers the new plug-in in the
+   * Tulip plug-in system.
+   */
   static void initFactory() {
     if (!factory) {
       factory = new TemplateFactory<AlgorithmFactory, Algorithm,AlgorithmContext >;
     }
   }
   virtual ~AlgorithmFactory() {}
-  virtual Algorithm * createPluginObject(AlgorithmContext)=0;
+  /**
+   * @brief Creates a new Algorithm object.
+   *
+   * @return Algorithm A newly created algorithm plug-in.
+   */
+  virtual Algorithm * createPluginObject(AlgorithmContext context)=0;
+
+  /**
+   * @inheritdoc
+   */
   virtual  std::string getMajor() const {
     return tlp::getMajor(getRelease());
   }
+  /**
+   * @inheritdoc
+   */
   virtual  std::string getMinor() const  {
     return tlp::getMinor(getRelease());
   }
+  /**
+   * @inheritdoc
+   */
   virtual  std::string getTulipMajor() const {
     return tlp::getMajor(getTulipRelease());
   }
+  /**
+   * @inheritdoc
+   */
   virtual  std::string getTulipMinor() const  {
     return tlp::getMinor(getTulipRelease());
   }
@@ -79,9 +141,3 @@ public:
 
 }
 #endif
-
-
-
-
-
-
