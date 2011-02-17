@@ -30,18 +30,15 @@
 
 namespace tlp {
   /**
-   * \addtogroup basic
+   * @addtogroup basic
    */ 
   /*@{*/
   /**
-   * \brief class for array encapsulation
-   *
-   * Enables to create an Array of Obj with a
-   * limited size. Out of bound accesses are only checked
-   * in debug mode.
+   * @brief Fixed-size array encapsulation.
+   * In debug mode, a bound check is performed at each access.
    * 
-   * \author : David Auber auber@tulip-software.org
-   * \version 0.0.1 24/01/2003 
+   * @author : David Auber auber@tulip-software.org
+   * @version 0.0.1 24/01/2003 
    */
   template <typename Obj,unsigned int SIZE>
   struct TLP_SCOPE Array {
@@ -49,11 +46,9 @@ namespace tlp {
     inline Obj  operator[](const unsigned int i) const;
     inline Obj& operator[](const unsigned int i);
   };
-  /**
-   * Write array in a stream
-   */
+  
   template <typename Obj,unsigned int SIZE>
-  std::ostream& operator<<(std::ostream &os,const Array<Obj,SIZE> &);
+  std::ostream& operator<<(std::ostream &os,const Array<Obj,SIZE> &array);
   template <typename Obj,unsigned int SIZE>
   std::istream& operator>>(std::istream &is, Array<Obj,SIZE> &);
 
@@ -63,5 +58,3 @@ namespace tlp {
 #include "./cxx/Array.cxx"
 
 #endif
-
-
