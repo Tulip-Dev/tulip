@@ -100,7 +100,7 @@ namespace {
 //================================================================================
 QuotientClustering::QuotientClustering(AlgorithmContext context):Algorithm(context) {
   addDependency<LayoutAlgorithm>("Circular", "1.1");
-  addDependency<LayoutAlgorithm>("GEM (Frick)", "1.0");
+  addDependency<LayoutAlgorithm>("GEM (Frick)", "1.1");
   addDependency<SizeAlgorithm>("Auto Sizing", "1.0");
   addParameter<bool>("oriented", paramHelp[0], "true");
   addParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS);
