@@ -63,7 +63,7 @@ using namespace tlp;
 
 //================================================================================
 PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
-  TulipTableWidget(parent, name), graph(0), vScrollPos(0),inUpdate(false){
+  TulipTableWidget(parent, name), graph(0), vScrollPos(0),displayNode(true),inUpdate(false){
   resetBackColor1();
   resetBackColor2();
   editedProperty=0;
