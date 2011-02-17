@@ -22,10 +22,11 @@
 #include <tulip/Coord.h>
 #include <tulip/InteractorComponent.h>
 #include <tulip/ObservableProperty.h>
-#include <tulip/LayoutProperty.h>
+#include <tulip/ObservableGraph.h>
 
 namespace tlp {
 class Graph;
+class LayoutProperty;
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
