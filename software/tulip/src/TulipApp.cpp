@@ -261,11 +261,18 @@ void TulipApp::startTulip() {
 	  this, SLOT( windowsMenuActivated(QAction*)));
 
   assistantProcess= new QProcess(this);
-#if defined(__linux__)
-  assistantProcessApp = QLibraryInfo::location(QLibraryInfo::BinariesPath)+ "/assistant";
-#else
   std::string assistantPath(tlp::TulipLibDir);
   assistantPath += string("../");
+#if defined(__linux__)
+  assistantPath += string("bin");
+  // check if we are in a bundle
+  if (QDir(assistantPath.c_str()).exists("assistant"))
+    // assistant is in the bundle bin directory
+    assistantProcessApp = QString(assistantPath.c_str()) + "/assistant";
+  else
+    // assistant is in the Qt binaries install directory
+    assistantProcessApp = QLibraryInfo::location(QLibraryInfo::BinariesPath)+ "/assistant";
+#else
 #if defined(_WIN32)
   assistantPath.append("assistant.exe");
 #else
