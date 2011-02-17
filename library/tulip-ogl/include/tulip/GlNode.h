@@ -23,6 +23,7 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include "tulip/GlBox.h"
 #include "tulip/GlComplexeEntity.h"
 
 namespace tlp {
@@ -93,6 +94,7 @@ namespace tlp {
   protected :
 
     static GlLabel *label;
+    static GlBox* selectionBox;
 
   };
 
