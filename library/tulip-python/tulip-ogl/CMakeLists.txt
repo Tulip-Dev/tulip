@@ -1,6 +1,10 @@
 IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
+# Force to use SIP headers located in thirdparty
+# instead of those installed in the system
+INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
+
 SET(TULIPOGL_SIP_FILES
     Camera.sip
     GlGraphInputData.sip
