@@ -38,7 +38,7 @@
 			  You can control whether to display or hide edges with the <code>Edges</code> visibility checkbox in the <code>Layer Manager</code> tab, located in the <code>View Editor</code> tab, in the left-hand dock.
 			  Visibility checkboxes are in the first column, the second column contains stencil checkboxes (When one layer has the stencil, it is displayed on top of layers who do not have it).
 			  There are several other checkboxes here, most notable are options to display or not nodes, node labels and edge labels.
-			  In the same way, you can display or hide the arrows indicating the edge direction in the <code>Rendering Parameters> tab, by checking the <code>Arrows</code> checkbox in the <code>Edges</code> section.</para>
+			  In the same way, you can display or hide the arrows indicating the edge direction in the <code>Rendering Parameters</code> tab, by checking the <code>Arrows</code> checkbox in the <code>Edges</code> section.</para>
                     </listitem>
                     <listitem>
                         <para>To delete elements of the graph. Select the <inlinegraphic fileref="images/i_del.png"/> tool, then click on the element you want to delete.</para>
@@ -176,6 +176,7 @@
      		<para>By zooming in we can see the labels :</para>
      		<graphic fileref="images/tutorials_improvelayout_5.png" />
      		<para>If you want to display the big file (high disk space) with big nodes, use the <code>Algorithm->Size->Metric Mapping</code> algorithm with the parameter called "property" set to "size". </para>
+	</para>
      	</sect2>
      	<sect2 id="improve-layout-ext"><title>Showing a specific kind of file.</title>
      		<para>Now that our graph has a nice and clear layout, we would like to locate all of our Source files (*.cpp). To do so, we will use the Find tool (Edit->Find or <keycap>Ctrl+F</keycap>).</para>
