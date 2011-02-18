@@ -1,6 +1,10 @@
 IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
+# Force to use SIP and headers located in thirdparty
+# instead of those installed in the system
+INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
+
 SET(STL_SIP_FILES
     list.sip
     map.sip
