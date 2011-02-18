@@ -39,7 +39,7 @@
 using namespace std;
 using namespace tlp;
 
-MouseEdgeBuilder::MouseEdgeBuilder():started(false),graph(NULL),layoutProperty(NULL){}
+MouseEdgeBuilder::MouseEdgeBuilder():source(node()),started(false),graph(NULL),layoutProperty(NULL){}
 
 MouseEdgeBuilder::~MouseEdgeBuilder(){
   if(graph)
