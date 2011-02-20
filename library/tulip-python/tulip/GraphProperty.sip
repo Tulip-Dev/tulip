@@ -112,5 +112,33 @@ tlp.GraphProperty.setAllEdgeValue(list of tlp.edge)
 	
 	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
 	
+	tlp::Graph* __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = sipCpp->getNodeValue(*a0);
+%End
+
+	void __setitem__(const tlp::node n, tlp::Graph* g) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, a1);
+%End
+
+	std::set<tlp::edge> __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = new std::set<tlp::edge>(sipCpp->getEdgeValue(*a0));
+%End
+
+	void __setitem__(const tlp::edge e, const std::set<tlp::edge> &se) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, *a1);
+%End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<graph property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
+	
 };
 };

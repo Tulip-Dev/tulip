@@ -1,8 +1,5 @@
 IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
-# Force to use SIP headers located in thirdparty
-# instead of those installed in the system
-INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 
 SET(TULIP_SIP_FILES
     AcyclicTest.sip
@@ -75,8 +72,15 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 ENDIF(UNIX)
 
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${SIP_INCLUDE_DIR} ${TulipInclude} ${TulipBuildInclude})
+# Force to use SIP headers located in thirdparty
+# instead of those installed in the system
+INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${TulipInclude} ${TulipBuildInclude})
+
+SET_SOURCE_FILES_PROPERTIES(siptuliptlpIteratorGraph.cpp
+                            PROPERTIES COMPILE_DEFINITIONS ITERATOR_NO_COPY)
+                       
 ADD_LIBRARY(${LibTulipPythonName} STATIC ${TULIP_PYTHON_BINDINGS_SRC})
 
 ENDIF(SIP_OK)
