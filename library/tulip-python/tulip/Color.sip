@@ -103,5 +103,15 @@ public:
 	else
 		sipIsErr = 1;	
 %End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+		std::ostringstream oss;
+		oss << *sipCpp;
+		std::string s = oss.str();
+		s[0] = '[';
+		s[s.size() - 1] = ']';
+        sipRes = PyString_FromString(s.c_str());
+%End
 };
 };

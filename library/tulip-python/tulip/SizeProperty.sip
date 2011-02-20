@@ -114,6 +114,35 @@ public :
   	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
 	
 	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
+	
+	tlp::Size __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = new tlp::Size(sipCpp->getNodeValue(*a0));
+%End
+
+	void __setitem__(const tlp::node n, const tlp::Size &s) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, *a1);
+%End
+
+	tlp::Size __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = new tlp::Size(sipCpp->getEdgeValue(*a0));
+%End
+
+	void __setitem__(const tlp::edge e, const tlp::Size &s) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, *a1);
+%End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<size property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
+
 };
 
 class SizeVectorProperty :  tlp::PropertyInterface /NoDefaultCtors/ {
@@ -221,5 +250,34 @@ tlp.SizeVectorProperty.setAllEdgeValue(list of tlp.Size)
     void popBackEdgeEltValue(const tlp::edge e);
   
     void resizeEdgeValue(const tlp::edge e, unsigned int size, tlp::Size elt = tlp::Size());
+    
+    std::vector<tlp::Size> __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = new std::vector<tlp::Size>(sipCpp->getNodeValue(*a0));
+%End
+
+	void __setitem__(const tlp::node n, const std::vector<tlp::Size> &s) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, *a1);
+%End
+
+	std::vector<tlp::Size> __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = new std::vector<tlp::Size>(sipCpp->getEdgeValue(*a0));
+%End
+
+	void __setitem__(const tlp::edge e, const std::vector<tlp::Size> &s) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, *a1);
+%End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<size vector property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
+
 };
 };
