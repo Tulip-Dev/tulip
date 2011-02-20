@@ -106,6 +106,34 @@ public :
   	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
 	
 	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
+	
+	tlp::Color __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = new tlp::Color(sipCpp->getNodeValue(*a0));
+%End
+
+	void __setitem__(const tlp::node n, const tlp::Color &color) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, *a1);
+%End
+
+	tlp::Color __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = new tlp::Color(sipCpp->getEdgeValue(*a0));
+%End
+
+	void __setitem__(const tlp::edge e, const tlp::Color &color) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, *a1);
+%End
+	
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<color property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+       sipRes = PyString_FromString(s.c_str());
+%End
 };
 
 class ColorVectorProperty : tlp::PropertyInterface /NoDefaultCtors/ {
@@ -213,5 +241,34 @@ tlp.ColorVectorProperty.setAllEdgeValue(list of tlp.Color)
     void popBackEdgeEltValue(const tlp::edge e);
   
     void resizeEdgeValue(const tlp::edge e, unsigned int size, tlp::Color elt = tlp::Color());
+    
+    std::vector<tlp::Color> __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = new std::vector<tlp::Color>(sipCpp->getNodeValue(*a0));
+%End
+
+	void __setitem__(const tlp::node n, const std::vector<tlp::Color> &color) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, *a1);
+%End
+
+	std::vector<tlp::Color> __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = new std::vector<tlp::Color>(sipCpp->getEdgeValue(*a0));
+%End
+
+	void __setitem__(const tlp::edge e, const std::vector<tlp::Color> &color) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, *a1);
+%End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+		std::ostringstream oss;
+		oss << "<color vector property " << sipCpp->getName() << ">";
+		std::string s = oss.str();
+        sipRes = PyString_FromString(s.c_str());
+%End
+
 };
 };

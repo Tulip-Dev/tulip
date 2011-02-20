@@ -113,6 +113,35 @@ public :
   	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
 	
 	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
+	
+	bool __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = sipCpp->getNodeValue(*a0);
+%End
+
+	void __setitem__(const tlp::node n, const bool b) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, a1);
+%End
+
+	bool __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = sipCpp->getEdgeValue(*a0);
+%End
+
+	void __setitem__(const tlp::edge e, const bool b) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, a1);
+%End
+	
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<boolean property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
+
 };
 
 class BooleanVectorProperty : tlp:: PropertyInterface /NoDefaultCtors/ {
@@ -206,19 +235,47 @@ tlp.BooleanVectorProperty.setAllEdgeValue(list of bool)
   
   	void pushBackNodeEltValue(const tlp::node n, const bool& v);
  
-    	void popBackNodeEltValue(const tlp::node n);
+    void popBackNodeEltValue(const tlp::node n);
   
-    	void resizeNodeValue(const tlp::node n, unsigned int size, bool elt = false);
+    void resizeNodeValue(const tlp::node n, unsigned int size, bool elt = false);
   
  	void setEdgeEltValue(const tlp::edge e, unsigned int i, const bool &v);
   
-    	const bool& getEdgeEltValue(const tlp::edge n, unsigned int i) const;
+    const bool& getEdgeEltValue(const tlp::edge n, unsigned int i) const;
   
-    	void pushBackEdgeEltValue(const tlp::edge e, const bool &v);
+    void pushBackEdgeEltValue(const tlp::edge e, const bool &v);
   
-    	void popBackEdgeEltValue(const tlp::edge e);
+    void popBackEdgeEltValue(const tlp::edge e);
   
-    	void resizeEdgeValue(const tlp::edge e, unsigned int size, bool elt = false);
+    void resizeEdgeValue(const tlp::edge e, unsigned int size, bool elt = false);
+    
+    std::vector<bool> __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = new std::vector<bool>(sipCpp->getNodeValue(*a0));
+%End
+
+	void __setitem__(const tlp::node n, const std::vector<bool> &color) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, *a1);
+%End
+
+	std::vector<bool> __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = new std::vector<bool>(sipCpp->getEdgeValue(*a0));
+%End
+
+	void __setitem__(const tlp::edge e, const std::vector<bool> &color) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, *a1);
+%End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+		std::ostringstream oss;
+		oss << "<boolean vector property " << sipCpp->getName() << ">";
+		std::string s = oss.str();
+        sipRes = PyString_FromString(s.c_str());
+%End
 };
 };
 

@@ -203,25 +203,6 @@ tlp.Graph.setEdgeOrder(tlp.node, list of tlp.edge)
 	bool isMetaEdge(const tlp::edge ) const ;
 
 	tlp::edge existEdge(const tlp::node , const tlp::node) const ;
-	
-	const tlp::DataSet & getAttributes();
-	 
-	std::string getStringAttribute(const std::string &name);
-%MethodCode
-	std::string s;
-	sipCpp->getAttribute(*a0, s);
-	sipRes = new std::string(s);
-%End
-
-	
-	void setStringAttribute(const std::string &name, const std::string &value);
-%MethodCode
-	sipCpp->setAttribute<std::string>(*a0, *a1);
-%End			 
-	 
-	void removeAttribute(const std::string &name);
-
-	bool attributeExist(const std::string &name);
 
 	tlp::BooleanProperty *getBooleanProperty(const std::string &name);
 %MethodCode
@@ -443,6 +424,54 @@ tlp.Graph.createMetaNodes(tlp.IteratorGraph, tlp.Graph) -> list of tlp.node
 	tlp::node createMetaNode(tlp::Graph* subGraph, bool multiEdges = true, bool delAllEdge = true);
 
 	void openMetaNode(tlp::node n);
+	
+	SIP_PYOBJECT __getitem__(const std::string &attributeName) const;
+%MethodCode
+        tlp::Iterator<std::string> *graphProperties = sipCpp->getProperties();
+        bool found = false;
+        while (graphProperties->hasNext()) {
+        	std::string p = graphProperties->next();
+        	if (p == *a0) {
+        		found = true;
+        		sipRes = sipConvertFromType(sipCpp->getProperty(p), sipType_tlp_PropertyInterface, NULL);
+        		break;
+        	}
+        }
+        delete graphProperties;
+        if (!found) {
+        	std::ostringstream oss;
+        	oss << "graph attribute \"" << *a0 << "\" does not exist.";
+        	PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
+        }
+%End
+	
+	std::string getName() const;
+%MethodCode
+	std::string graphName;
+	sipCpp->getAttribute("name", graphName);
+	sipRes = new std::string(graphName);
+%End
+
+	void setName(const std::string &s) const;
+%MethodCode
+	sipCpp->setAttribute("name", *a0);
+%End	
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+		std::string graphName;
+		sipCpp->getAttribute("name", graphName);
+		std::ostringstream oss;
+		oss << "<graph " << graphName << ">";
+		std::string s = oss.str();
+        sipRes = PyString_FromString(s.c_str());
+%End
+
+	long __hash__() const;
+%MethodCode
+        return static_cast<long>(sipCpp->getId());
+%End
+
 };
 
 };

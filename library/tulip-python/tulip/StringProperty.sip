@@ -103,6 +103,34 @@ public :
   	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
 	
 	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
+	
+	std::string __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = new std::string(sipCpp->getNodeValue(*a0));
+%End
+
+	void __setitem__(const tlp::node n, const std::string &s) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, *a1);
+%End
+
+	std::string __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = new std::string(sipCpp->getEdgeValue(*a0));
+%End
+
+	void __setitem__(const tlp::edge e, const std::string &s) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, *a1);
+%End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<string property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
 };
 
 class StringVectorProperty :  tlp::PropertyInterface /NoDefaultCtors/ {
@@ -209,5 +237,33 @@ tlp.StringVectorProperty.setAllEdgeValue(list of string)
     void popBackEdgeEltValue(const tlp::edge e);
   
     void resizeEdgeValue(const tlp::edge e, unsigned int size, std::string elt = 0);
+    
+    std::vector<std::string> __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = new std::vector<std::string>(sipCpp->getNodeValue(*a0));
+%End
+
+	void __setitem__(const tlp::node n, const std::vector<std::string> &s) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, *a1);
+%End
+
+	std::vector<std::string> __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = new std::vector<std::string>(sipCpp->getEdgeValue(*a0));
+%End
+
+	void __setitem__(const tlp::edge e, const std::vector<std::string> &s) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, *a1);
+%End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<string vector property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
 };
 };

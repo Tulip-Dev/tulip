@@ -91,6 +91,8 @@ public:
     tlp::Vec3f & operator-=(const tlp::Vec3f &);
     tlp::Vec3f & operator^=(const tlp::Vec3f &);
 
+	tlp::Vec3f operator*(const  tlp::Vec3f &) const;
+	tlp::Vec3f operator*(const float &) const;
 	tlp::Vec3f operator+(const  tlp::Vec3f &) const;
 	tlp::Vec3f operator+(const float &) const;
 	tlp::Vec3f operator-(const  tlp::Vec3f &) const;
@@ -168,6 +170,8 @@ public:
     tlp::Vec4f & operator-=(const tlp::Vec4f &);
     tlp::Vec4f & operator^=(const tlp::Vec4f &);
 
+	tlp::Vec4f operator*(const  tlp::Vec4f &) const;
+	tlp::Vec4f operator*(const float &) const;
 	tlp::Vec4f operator+(const  tlp::Vec4f &) const;
 	tlp::Vec4f operator+(const float &) const;
 	tlp::Vec4f operator-(const  tlp::Vec4f &) const;
@@ -191,6 +195,8 @@ public:
 		std::ostringstream oss;
 		oss << *sipCpp;
 		std::string s = oss.str();
+		s[0] = '[';
+		s[s.size() - 1] = ']';
         sipRes = PyString_FromString(s.c_str());
 %End
 

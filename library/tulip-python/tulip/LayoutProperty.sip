@@ -163,6 +163,34 @@ tlp.LayoutProperty.setAllEdgeValue(list of tlp.Coord)
 	
 	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
 	
+	tlp::Coord __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = new tlp::Coord(sipCpp->getNodeValue(*a0));
+%End
+
+	void __setitem__(const tlp::node n, const tlp::Coord &c) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, *a1);
+%End
+
+	std::vector<tlp::Coord> __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = new std::vector<tlp::Coord>(sipCpp->getEdgeValue(*a0));
+%End
+
+	void __setitem__(const tlp::edge e, const std::vector<tlp::Coord> &vc) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, *a1);
+%End
+	
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<layout property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
+
 private:
 
 	LayoutProperty(const tlp::LayoutProperty &);
@@ -275,6 +303,34 @@ tlp.CoordVectorProperty.setAllEdgeValue(list of tlp.Coord)
   
     void resizeEdgeValue(const tlp::edge e, unsigned int size, tlp::Coord elt = tlp::Coord());
     
+    std::vector<tlp::Coord> __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = new std::vector<tlp::Coord>(sipCpp->getNodeValue(*a0));
+%End
+
+	void __setitem__(const tlp::node n, const std::vector<tlp::Coord> &vc) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, *a1);
+%End
+    
+    std::vector<tlp::Coord> __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = new std::vector<tlp::Coord>(sipCpp->getEdgeValue(*a0));
+%End
+
+	void __setitem__(const tlp::edge e, const std::vector<tlp::Coord> &vc) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, *a1);
+%End
+    
+    SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<coord vector property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
+
 private:
 
 	CoordVectorProperty(const tlp::CoordVectorProperty &);

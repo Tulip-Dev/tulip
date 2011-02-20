@@ -54,5 +54,19 @@ public:
 	bool __eq__(const tlp::node);
 	bool __ne__(const tlp::node);
 	bool isValid();
+	
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+		std::ostringstream oss;
+		oss << "<node " << sipCpp->id << ">";
+		std::string s = oss.str();
+        sipRes = PyString_FromString(s.c_str());
+%End
+
+	long __hash__() const;
+%MethodCode
+        return static_cast<long>(sipCpp->id);
+%End
+
 };
 };

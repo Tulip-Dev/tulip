@@ -41,26 +41,6 @@
 // |                                                                         |
 // +-------------------------------------------------------------------------+
 
-%ModuleHeaderCode
-#include <tulip/Graph.h>
-static void *getPointer(tlp::Graph *p) {
-	return p;
-}
-
-static void *getPointer(tlp::node n) {
-	return &n;
-}
-
-static void *getPointer(std::string s) {
-	return &s;
-}
-
-static void *getPointer(tlp::edge e) {
-	return &e;
-}
-
-%End
-
 namespace tlp {
 
 template<TYPE> 
@@ -81,23 +61,24 @@ public:
     sipRes = sipCpp;
 %End
 
-    SIP_PYOBJECT __next__();
+    TYPE __next__();
 %MethodCode
-	#define sipType_tlp_GraphPointer sipType_tlp_Graph
     if (sipCpp->hasNext()) {
-    	if ("TYPE" == "tlp::GraphPointer") {
-    		sipRes = sipConvertFromType(getPointer(sipCpp->next()), sipType_TYPE, NULL);
-    	} else {
-    		sipRes = sipConvertFromNewType(new TYPE(sipCpp->next()), sipType_TYPE, NULL);
-    	}
+// if iterator is on base types (int, double, pointers, ...),
+// ITERATOR_NO_COPY has to be defined when compiling the generated bindings file    
+#ifdef ITERATOR_NO_COPY
+    	sipRes = sipCpp->next();
+#else
+    	sipRes = new TYPE(sipCpp->next());
+#endif
     } else {
         PyErr_SetNone(PyExc_StopIteration);
+        return NULL;
     }
 %End
 
+
+
 };
 
-
-
 };
-

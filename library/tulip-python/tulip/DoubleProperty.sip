@@ -116,6 +116,34 @@ public :
 	
 	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
 	
+	double __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = sipCpp->getNodeValue(*a0);
+%End
+
+	void __setitem__(const tlp::node n, const double d) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, a1);
+%End
+
+	double __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = sipCpp->getEdgeValue(*a0);
+%End
+
+	void __setitem__(const tlp::edge e, const double d) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, a1);
+%End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<double property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
+	
 };
 
 class DoubleVectorProperty : tlp::PropertyInterface /NoDefaultCtors/ {
@@ -223,6 +251,34 @@ tlp.DoubleVectorProperty.setAllEdgeValue(list of float)
     void popBackEdgeEltValue(const tlp::edge e);
   
     void resizeEdgeValue(const tlp::edge e, unsigned int size, double elt = 0);
+    
+    std::vector<double> __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = new std::vector<double>(sipCpp->getNodeValue(*a0));
+%End
+
+	void __setitem__(const tlp::node n, const std::vector<double> &vd) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, *a1);
+%End
+
+	std::vector<double> __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = new std::vector<double>(sipCpp->getEdgeValue(*a0));
+%End
+
+	void __setitem__(const tlp::edge e, const std::vector<double> &vd) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, *a1);
+%End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<double vector property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
 	
 };
 };
