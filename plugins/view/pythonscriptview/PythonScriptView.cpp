@@ -109,9 +109,7 @@ const std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph
 	oss << "#   * Ctrl + Shift + D  : uncomment selected lines." << endl;
 	oss << "#   * Ctrl + Space  : run script." << endl << endl;
 
-	oss << "from tulip import *" << endl;
-	oss << "from math import *" << endl;
-	oss << "from random import *" << endl << endl;
+	oss << "from tulip import *" << endl << endl;;
 
 	oss << "# the updateVisualization(centerViews = True) function can be called" << endl;
 	oss << "# during script execution to update the opened views" << endl << endl;
@@ -166,7 +164,7 @@ const std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph
 		}
 	}
 	oss << "\n\tfor n in graph.getNodes():" << endl;
-	oss << "\t\tprint n.id" << endl;
+	oss << "\t\tprint n" << endl;
 	return oss.str();
 }	
 
