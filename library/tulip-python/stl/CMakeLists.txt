@@ -1,10 +1,6 @@
 IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
-# Force to use SIP and headers located in thirdparty
-# instead of those installed in the system
-INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
-
 SET(STL_SIP_FILES
     list.sip
     map.sip
@@ -34,7 +30,11 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 ENDIF(UNIX)
 
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${SIP_INCLUDE_DIR})
+# Force to use SIP and headers located in thirdparty
+# instead of those installed in the system
+INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
+
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 
 ADD_LIBRARY(${LibStlPythonName} STATIC ${STL_PYTHON_BINDINGS_SRC})
 
