@@ -193,6 +193,7 @@ void ColorScaleConfigDialog::displayUserGradientPreview() {
 
 	QList<QColor> colorsVector;
 	for (int i = 0; i < colorsTable->rowCount(); ++i) {
+	  QTableWidgetItem *item = colorsTable->item(i, 0);
 		colorsVector.push_back(colorsTable->item(i, 0)->backgroundColor());
 	}
 	displayGradientPreview(colorsVector, gradientCB->isChecked(), userGradientPreview);
@@ -245,10 +246,12 @@ void ColorScaleConfigDialog::nbColorsValueChanged(int value) {
 	int lastCount = colorsTable->rowCount();
 	colorsTable->setRowCount(value);
 	if (lastCount < value) {
+	    for(int j = 0; j <= value - lastCount; ++j) {
 		QTableWidgetItem *item = new QTableWidgetItem();
 		item->setBackgroundColor(QColor(255, 255, 255, 255));
 		item->setFlags(Qt::ItemIsEnabled);
-		colorsTable->setItem(0, value - 1, item);
+		colorsTable->setItem(0, lastCount + j - 1, item);
+	    }
 	}
 	displayUserGradientPreview();
 }
