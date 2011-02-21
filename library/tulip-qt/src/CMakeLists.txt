@@ -238,7 +238,11 @@ ELSEIF(APPLE)
   FIND_LIBRARY_GLOB(QTXML_INSTALL_PATH "QtXml.framework/QtXml")
   INSTALL_EXTERNAL_LIB(QTXML_INSTALL_PATH libtulip_qt)
 
-  #Copy QtAssistant apps.
+  #Copy QtAssistant apps
+  FIND_LIBRARY_GLOB(QTASSISTANT_INSTALL_PATH "QtAssistant.framework/QtAssistant")
+  IF(QTASSISTANT_INSTALL_PATH)
+  INSTALL_EXTERNAL_LIB(QTASSISTANT_INSTALL_PATH libtulip_qt)
+  ENDIF()
   INSTALL(DIRECTORY "/Developer/Applications/Qt/Assistant.app" DESTINATION ${TulipAppleContentsDir} COMPONENT libtulip_qt OPTIONAL)
 
   FIND_LIBRARY_GLOB(QTSCRIPT_INSTALL_PATH "QtScript.framework/QtScript")
