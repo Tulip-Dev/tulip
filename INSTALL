@@ -1,3 +1,10 @@
+
+Dependencies List - Ubuntu
+==========================
+libqt4-dev libfreetype6-dev zlib1g-dev libglew-dev libjpeg-dev libpng12-dev build-essential cmake doxygen libxml2-dev 
+
+optional: python2.5-dev, python2.6-dev or python2.7-dev
+
 Basic Installation
 ==================
 
