@@ -3,7 +3,7 @@ Dependencies List - Ubuntu
 ==========================
 libqt4-dev libfreetype6-dev zlib1g-dev libglew-dev libjpeg-dev libpng12-dev build-essential cmake doxygen libxml2-dev 
 
-optional: python2.5-dev, python2.6-dev or python2.7-dev
+optional: python2.5-dev, python2.6-dev or python2.7-dev, as well as python-qt4-dev
 
 Basic Installation
 ==================
@@ -16,6 +16,9 @@ The simplest way to compile this package is:
 
   1. `cd' to the directory containing the package's source code, and create a `build` directory.
      Enter this `build` folder, and type `cmake ..`. This will check for all of Tulip's dependencies, and warn if some are missing.
+    If you want to build with debug information, or with optimisations, you need to tell CMake to do so.
+    You can either use `cmake -i`, which will ask you what kind of build you want (Debug/Release), or invoke cmake like this: 
+    `cmake .. -DCMAKE_BUILD_TYPE=Release` (or Debug).
 
   2. Type `make' to compile the package. (if you have more than one core, use `-jX` where X is your number of cores + 1.
 
