@@ -167,7 +167,7 @@ IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio")
 SET(SIP_LIB ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/siplib/libsip.a)
 SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/sipgen/sipgen)
 ELSE()
-SET(SIP_LIB ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/siplib/sip.lib)
+SET(SIP_LIB ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/siplib/Debug/sip.lib)
 SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/sipgen/Debug/sipgen.exe)
 ENDIF()
 SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.11.2/siplib/)
@@ -288,6 +288,8 @@ IF(WIN32)
    IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
       #recommended for now, vc++ spits out too many warnings, and renders the whole output unreadable
 	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
+	  #allows for link time optimization
+	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
 	  #tells VS to use multiple threads to compile
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 	  #makes VS define M_PI
@@ -296,7 +298,11 @@ IF(WIN32)
 	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOMINMAX")
 	  #forces ftgl static compilation (prevents link errors with tulip-ogl, functions always defined without dllimport
 	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFTGL_LIBRARY_STATIC")
+	  #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
 	  SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /NODEFAULTLIB:MSVCRT")
+	  #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /MACHINE:X86")
+	  #link time optimization
+	  SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /LTCG")
    ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
 ENDIF(WIN32)
 IF(APPLE)
