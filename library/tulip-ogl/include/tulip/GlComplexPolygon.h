@@ -152,17 +152,21 @@ namespace tlp {
     /**
      * Draw a thick (textured) border around the polygon.
      * The graphic card must support geometry shader to make this feature to work.
-     * The position parameter determines the way the border is drawn :
-     *     - 0 : the border is drawn outside the polygon
+     * The position parameter determines the way the border is drawn (depending on the polygon points ordering):
+     *     - 0 : the border is drawn outside (or inside) the polygon
      *     - 1 : the border is centered on the polygon outline
-     *     - 2 : the border is drawn inside the polygon
+     *     - 2 : the border is drawn inside (or outside) the polygon
+     *
+     * The texCoordFactor parameter determines the way the texture is applied : if < 1, the texture will be expanded and > 1, the texture will be compressed
+     * The polygonId parameter determines on which contour of the polygon, the border will be applied
      */
-    void activateQuadBorder(const float borderWidth, const Color &color, const std::string &texture = "", const int position = 1);
+    void activateQuadBorder(const float borderWidth, const Color &color, const std::string &texture = "", const int position = 1,
+    		                const float texCoordFactor = 1.f, const int polygonId = 0);
 
     /**
      * Desactivate the textured quad border
      */
-    void desactivateQuadBorder();
+    void desactivateQuadBorder(const int polygonId = 0);
 
     /**
      * Translate entity
@@ -211,11 +215,12 @@ namespace tlp {
     double outlineSize;
     std::string textureName;
     float textureZoom;
-    bool quadBorderActivated;
-    float quadBorderWidth;
-    Color quadBorderColor;
-    std::string quadBorderTexture;
-    int quadBorderPosition;
+    std::vector<bool> quadBorderActivated;
+    std::vector<float> quadBorderWidth;
+    std::vector<Color> quadBorderColor;
+    std::vector<std::string> quadBorderTexture;
+    std::vector<int> quadBorderPosition;
+    std::vector<float> quadBorderTexFactor;
   };
   /*@}*/
 }
