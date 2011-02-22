@@ -169,7 +169,7 @@ QRgb ColorButton::getColor() const {
 }
 void ColorButton::colorDialog() {
   QColor col;
-  if (getColorDialog(color,parentWidget(),"Color chooser",col))
+  if (getColorDialog(QColor(qRed(color), qGreen(color), qBlue(color), qAlpha(color)),parentWidget(),"Color chooser",col))
     color = col.rgba();
 }
 void ColorButton::paintEvent(QPaintEvent *qpe) {
