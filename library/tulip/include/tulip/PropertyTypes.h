@@ -36,6 +36,7 @@
 #include "tulip/Color.h"
 #include "tulip/StringCollection.h"
 #include "tulip/Edge.h"
+#include "tulip/AbstractProperty.h"
 
 namespace tlp {
 
@@ -284,6 +285,16 @@ public:
 };
 
 extern TLP_SCOPE void initTypeSerializers();
+#ifdef _MSC_VER
+	template class AbstractVectorProperty<DoubleVectorType, double>;
+	template class AbstractVectorProperty<IntegerVectorType, int>;
+	template class AbstractVectorProperty<BooleanVectorType, bool>;
+	template class AbstractVectorProperty<StringVectorType, std::string>;
+	template class AbstractVectorProperty<ColorVectorType, tlp::Color>;
+	template class AbstractVectorProperty<SizeVectorType, tlp::Size>;
+	template class AbstractVectorProperty<CoordVectorType, tlp::Coord>;
+#endif
 }
+
 /*@}*/
 #endif
