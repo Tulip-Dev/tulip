@@ -193,7 +193,6 @@ void ColorScaleConfigDialog::displayUserGradientPreview() {
 
 	QList<QColor> colorsVector;
 	for (int i = 0; i < colorsTable->rowCount(); ++i) {
-	  QTableWidgetItem *item = colorsTable->item(i, 0);
 		colorsVector.push_back(colorsTable->item(i, 0)->backgroundColor());
 	}
 	displayGradientPreview(colorsVector, gradientCB->isChecked(), userGradientPreview);
