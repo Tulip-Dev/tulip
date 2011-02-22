@@ -397,7 +397,7 @@ void GlComplexPolygon::createPolygon(const vector<Coord> &coords,int polygonEdge
 		pointsIdx.push_back(indices);
 	}
 
-}
+}	
 //=====================================================
 void GlComplexPolygon::setOutlineMode(const bool outlined) {
 	this->outlined = outlined;
@@ -414,6 +414,7 @@ void GlComplexPolygon::addPoint(const Coord& point) {
 //=====================================================
 void GlComplexPolygon::beginNewHole() {
 	currentVector++;
+	points.push_back(vector<Coord>());
 }
 void GlComplexPolygon::runTesselation() {
 
@@ -524,6 +525,7 @@ void GlComplexPolygon::draw(float,Camera *) {
 	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 
 	setMaterial(fillColor);
+
 	for (set<GLenum>::iterator it = primitivesSet.begin() ; it != primitivesSet.end() ; ++it) {
 		glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), &verticesMap[*it][0][0]);
 		glTexCoordPointer(2, GL_FLOAT, 2*sizeof(GLfloat), &texCoordsMap[*it][0]);
