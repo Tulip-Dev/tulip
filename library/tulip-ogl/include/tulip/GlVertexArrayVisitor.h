@@ -30,7 +30,7 @@ namespace tlp {
    *
    * Visitor to collect edges/nodes vertex array data
    */
-  class GlVertexArrayVisitor : public GlSceneVisitor{
+  class TLP_GL_SCOPE GlVertexArrayVisitor : public GlSceneVisitor{
     
   public:
     
