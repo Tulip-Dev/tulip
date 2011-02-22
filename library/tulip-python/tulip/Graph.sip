@@ -43,6 +43,15 @@
 
 %ModuleHeaderCode
 #include <tulip/StableIterator.h>
+#include <tulip/PropertyInterface.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
 typedef tlp::Graph* GraphPointer;
@@ -432,9 +441,68 @@ tlp.Graph.createMetaNodes(tlp.IteratorGraph, tlp.Graph) -> list of tlp.node
         while (graphProperties->hasNext()) {
         	std::string p = graphProperties->next();
         	if (p == *a0) {
-        		found = true;
-        		sipRes = sipConvertFromType(sipCpp->getProperty(p), sipType_tlp_PropertyInterface, NULL);
-        		break;
+        		tlp::PropertyInterface *prop = sipCpp->getProperty(p);
+        		if (dynamic_cast<tlp::BooleanProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::BooleanProperty *>(prop), sipType_tlp_BooleanProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::BooleanVectorProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::BooleanVectorProperty *>(prop), sipType_tlp_BooleanVectorProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::ColorProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::ColorProperty *>(prop), sipType_tlp_ColorProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::ColorVectorProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::ColorVectorProperty *>(prop), sipType_tlp_ColorVectorProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::DoubleProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::DoubleProperty *>(prop), sipType_tlp_DoubleProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::DoubleVectorProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::DoubleVectorProperty *>(prop), sipType_tlp_DoubleVectorProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::IntegerProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::IntegerProperty *>(prop), sipType_tlp_IntegerProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::IntegerVectorProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::IntegerVectorProperty *>(prop), sipType_tlp_IntegerVectorProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::SizeProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::SizeProperty *>(prop), sipType_tlp_SizeProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::SizeVectorProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::SizeVectorProperty *>(prop), sipType_tlp_SizeVectorProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::StringProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::StringProperty *>(prop), sipType_tlp_StringProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::StringVectorProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::StringVectorProperty *>(prop), sipType_tlp_StringVectorProperty, NULL);
+        			found = true;
+        			break;
+        		} if (dynamic_cast<tlp::LayoutProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::LayoutProperty *>(prop), sipType_tlp_LayoutProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::CoordVectorProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::CoordVectorProperty *>(prop), sipType_tlp_CoordVectorProperty, NULL);
+        			found = true;
+        			break;
+        		} else if (dynamic_cast<tlp::GraphProperty *>(prop)) {
+        			sipRes = sipConvertFromType(dynamic_cast<tlp::GraphProperty *>(prop), sipType_tlp_GraphProperty, NULL);
+        			found = true;
+        			break;
+        		} 
         	}
         }
         delete graphProperties;
