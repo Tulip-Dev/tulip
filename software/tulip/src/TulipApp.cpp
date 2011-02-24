@@ -65,7 +65,6 @@
 #include <tulip/TlpTools.h>
 #include <tulip/Reflect.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/ElementPropertiesWidget.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
