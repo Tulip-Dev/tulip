@@ -92,8 +92,10 @@ namespace tlp {
   }
 
   void AbstractView::setActiveInteractor(Interactor *interactor) {
-    if (activeInteractor)
-      activeInteractor->remove();
+	Interactor *currentInteractor = activeInteractor;
+	activeInteractor = NULL;
+    if (currentInteractor)
+    	currentInteractor->remove();
     interactor->install(centralWidget);
     activeInteractor = interactor;
   }
