@@ -20,6 +20,8 @@
 #define TULIP_ITERATOR_H
 
 #include <tulip/tulipconf.h>
+#include <tulip/Edge.h>
+#include <tulip/Node.h>
 
 namespace tlp {
   
@@ -68,6 +70,11 @@ private:
   Iterator<unsigned int> *it;
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
+
+#ifdef _MSC_VER
+  template class Iterator<edge>;
+  template class Iterator<node>;
+#endif
 
 }
 #endif
