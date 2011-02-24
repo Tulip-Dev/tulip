@@ -4,8 +4,4 @@ PROJECT(sip)
 
 FIND_PACKAGE(PythonLibs REQUIRED)
 
-SET(SIP_EXE "sipgen")
-SET(SIP_LIB "sip")
-
-ADD_SUBDIRECTORY(sipgen)
 ADD_SUBDIRECTORY(siplib)
