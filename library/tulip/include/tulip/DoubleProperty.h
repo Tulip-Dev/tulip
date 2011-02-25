@@ -50,7 +50,7 @@ public :
   void nodesUniformQuantification(unsigned int);
   void edgesUniformQuantification(unsigned int);
 
-  void clone_handler(AbstractProperty<DoubleType,DoubleType> &);
+  void clone_handler(AbstractProperty<DoubleType,DoubleType, DoubleAlgorithm> &);
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
@@ -72,7 +72,7 @@ public :
 				      MAX_CALC = 3, MIN_CALC = 4};
 
   // setMetaValueCalculator overloading
-  virtual void setMetaValueCalculator(MetaValueCalculator* calc);
+  virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator* calc);
   void setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc = AVG_CALC,
 			      PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
 
