@@ -499,12 +499,13 @@ namespace tlp {
     } delete it;
   }
   //**********************************************************************
-  void MainController::addSubGraph(Graph*, Graph *sg){
-    if(!inAlgorithm){
-      sg->addObserver(this);
-      sg->addGraphObserver(this);
-      clusterTreeWidget->update();
-    }
+  void MainController::addSubGraph(Graph*g, Graph *sg){
+    if(getCurrentGraph()!=g)
+	  	return;
+	if(!inAlgorithm){
+		sg->addObserver(this);
+	  	clusterTreeWidget->update();
+	}
   }
   //**********************************************************************
   void MainController::delSubGraph(Graph *g, Graph *sg){
