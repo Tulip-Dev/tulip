@@ -64,5 +64,10 @@ ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipOglN
 
 INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}/view/ COMPONENT tulip_plugins_pythonscriptview)
 
+IF(WIN32)
+	FIND_LIBRARY_GLOB(PYTHON_INSTALL_PATH "python2*.dll")
+	INSTALL_EXTERNAL_LIB(PYTHON_INSTALL_PATH tulip_plugins_pythonscriptview)
+ENDIF()
+
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)
