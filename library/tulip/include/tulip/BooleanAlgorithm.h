@@ -41,8 +41,9 @@ class TLP_SCOPE BooleanAlgorithm:public PropertyAlgorithm {
   ///
   friend class BooleanProperty;
 public:
-  /** This Boolean is the one associated to the algorithm,
-      The data should be store in it*/
+  /**
+   * @brief The result of the algorithm is stored in this member.
+   **/
   BooleanProperty *booleanResult;
   ///
   virtual ~BooleanAlgorithm(){}
