@@ -105,7 +105,7 @@ void IntegerProperty::computeMinMaxEdge(Graph *sg) {
   maxE[sgi]=maxE2;
 }
 //=================================================================================
-void IntegerProperty::clone_handler(AbstractProperty<IntegerType,IntegerType> &proxyC) {
+void IntegerProperty::clone_handler(AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> &proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     IntegerProperty *proxy=(IntegerProperty *)&proxyC;
     minMaxOkNode=proxy->minMaxOkNode;

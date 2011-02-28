@@ -36,28 +36,27 @@ class ObservableGraph;
 /*@{*/
 /**
  * \class GraphObserver
- * \brief That class enables to receive a message (call back/handler function)
+ * \brief That class receives a message (call back/handler function)
  * after each modification of a Graph.
  *
- * To receive a call back from an ObservableGraph, the GraphObserver must
- * first connect to the ObservableGraph by calling the addGraphObserver
- * function of an ObservableGraph
+ * To receive a notification from an ObservableGraph, the GraphObserver must
+ * first be connected to the ObservableGraph.
+ * This is done by calling ObservableGraph::addGraphObserver.
  *
- * One must implement necessary function in his/her class that inherits
- * from GraphObserver according to which message one wants to receive.
+ * Depending on which messages you want to receive, you need to override different functions of GraphObserver.
  *
  * If manageObservables is set to true, the GraphObserver will automatically
  * unregister from an ObservableGraph when deleted. (ie, unregistering is done
  * automatically)
  *
- * The Observer pattern is described pp293-304 of Design Patterns Book by Gamma, Helm, Johnson, and Vlissides.
+ * The Observer pattern is described pp293-304 of the book 'Design Patterns' by Gamma, Helm, Johnson, and Vlissides.
  *
- * \example This is a small example of an observer that display a message on the standard output each time a
- * a node is added in a graph.
+ * \example PrintObserver This is a small example of an observer that displays a message on the standard output each time a
+ * a node is added to a graph.
  * \code
  * class PrintObs : public GraphObserver {
  *    void addNode(Graph *g, const node n) {
- *       cout << "node " << n.id << " added in" << g << endl << flush;
+ *       cout << "node " << n.id << " added in " << g << endl << flush;
  *    }
  * };
  *
@@ -112,8 +111,8 @@ namespace tlp {
  *        Observable graph.
  *
  * That class is used internally in Tulip to factorize the code of
- * Observable for all the graph implementation. End user can use it
- * if he/she wants to implement a new Graph Implementation (almost never).
+ * Observable for all the implementations of Graph.
+ * It can be used for new Graph implementations (almost never a good idea).
  */
 class  TLP_SCOPE ObservableGraph {
 	friend class GraphObserver;

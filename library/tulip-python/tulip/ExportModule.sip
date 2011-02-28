@@ -50,7 +50,7 @@ public :
 		ExportModule(context){}
 	
 	bool exportGraph(std::ostream &,Graph *g) {
-		exportGraph(g);
+		return exportGraph(g);
 	}
 	
 	virtual bool exportGraph(Graph *g) = 0;

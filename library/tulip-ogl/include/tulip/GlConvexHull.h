@@ -29,7 +29,7 @@
 
 namespace tlp {
 
-  class ConvexHullItem;
+  struct ConvexHullItem;
 
   /** \brief Class used to represent ConvexHull
    *

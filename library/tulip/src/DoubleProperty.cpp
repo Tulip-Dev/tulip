@@ -327,7 +327,7 @@ void DoubleProperty::computeMinMaxEdge(Graph *sg) {
   maxE[sgi]=maxE2;
 }
 //=================================================================================
-void DoubleProperty::clone_handler(AbstractProperty<DoubleType,DoubleType> &proxyC) {
+void DoubleProperty::clone_handler(AbstractProperty<DoubleType,DoubleType, DoubleAlgorithm> &proxyC) {
   DoubleProperty *proxy=(DoubleProperty *)&proxyC;
   minMaxOkNode=proxy->minMaxOkNode;
   minMaxOkEdge=proxy->minMaxOkEdge;
@@ -420,7 +420,7 @@ void DoubleProperty::setMetaValueCalculator(PredefinedMetaValueCalculator nodeCa
   setMetaValueCalculator(new DoublePropertyPredefinedCalculator(nodeCalc, edgeCalc));
 }
 //=============================================================
-void DoubleProperty::setMetaValueCalculator(MetaValueCalculator* calc) {
+void DoubleProperty::setMetaValueCalculator(PropertyInterface::MetaValueCalculator* calc) {
   if (metaValueCalculator && metaValueCalculator != &avgCalculator &&
       typeid(metaValueCalculator) == typeid(DoublePropertyPredefinedCalculator))
     delete metaValueCalculator;

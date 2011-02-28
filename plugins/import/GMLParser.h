@@ -32,9 +32,6 @@ struct ParserError {
   int charInLine;
 };
 
-#define LEXICALPARSERERROR 0
-#define GRAMMARPARSERERROR 1
-
 struct GMLValue {
   std::string str;
   long integer;

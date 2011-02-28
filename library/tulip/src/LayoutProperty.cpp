@@ -341,7 +341,7 @@ void LayoutProperty::computeMinMax(Graph *sg) {
   //  cerr << "LayoutProperty::computeMinMax end" << endl;
 }
 //=================================================================================
-void LayoutProperty::clone_handler(AbstractProperty<PointType,LineType> &proxyC) {
+void LayoutProperty::clone_handler(AbstractProperty<PointType,LineType, LayoutAlgorithm> &proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     LayoutProperty *proxy=(LayoutProperty *)&proxyC;
     minMaxOk = proxy->minMaxOk;
