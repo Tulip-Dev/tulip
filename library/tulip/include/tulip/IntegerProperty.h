@@ -66,7 +66,7 @@ public :
   virtual void addEdge(Graph* graph, const edge e);
 
 protected:
-  void clone_handler(AbstractProperty<IntegerType,IntegerType> &);
+  virtual void clone_handler(AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> &);
 
 private:
   TLP_HASH_MAP<unsigned int, int> maxN,minN,maxE,minE;

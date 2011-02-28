@@ -21,6 +21,7 @@ DEFINE_COMPONENT(libtulip_plugins "Core plugins" "Plugins for Tulip core" "libtu
 DEFINE_COMPONENT(libtulip_ogl_plugins "OpenGL plugins" "Plugins for Tulip OpenGL" "libtulip;libtulip_ogl" ${PLUGINS_GROUP_NAME})
 DEFINE_COMPONENT(libtulip_qt_plugins "Qt plugins" "Plugins for Tulip Qt" "libtulip;libtulip_ogl;libtulip_qt" ${PLUGINS_GROUP_NAME})
 DEFINE_COMPONENT(tulip_plugins_spreadsheetview "Spreadsheet view" "Spreadsheet view plugin" "libtulip;libtulip_ogl;libtulip_qt" ${PLUGINS_GROUP_NAME})
+DEFINE_COMPONENT(tulip_plugins_pythonscriptview "Python view" "Python view plugin" "libtulip;libtulip_ogl;libtulip_qt" ${PLUGINS_GROUP_NAME})
 
 # software/pluginsmanager
 DEFINE_COMPONENT(tulip_pluginsmanager "Plugins manager" "A software to manage plugins installation from external sources." "libtulip;libtulip_ogl;libtulip_qt" ${SOFTWARE_GROUP_NAME})

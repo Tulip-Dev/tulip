@@ -38,7 +38,7 @@ class GlConvexGraphHull;
 	class LayoutProperty;
 	class DoubleProperty;
 	class SizeProperty;
-	class ConvexHullItem;
+	struct ConvexHullItem;
 	class GlConvexHull;
 	class Graph;
 	class GlLayer;

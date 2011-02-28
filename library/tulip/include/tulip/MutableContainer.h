@@ -58,16 +58,16 @@ public:
    */
   typename StoredType<TYPE>::ReturnedConstValue get(const unsigned int i) const;
   /**
-   * get the value associated to i and indicates if it not the default one
+   * get the value associated to i and indicates if it is not the default one
    */
   typename StoredType<TYPE>::ReturnedValue get(const unsigned int i, bool& isNotDefault) const;
   /**
-   * return is the value associated to i is not the default
+   * return if the value associated to i is not the default one
    */
   bool hasNonDefaultValue(const unsigned int i) const;
   /**
    * return a pointer on an iterator for all the elements whose associated value
-   * if equal to a given value or different from the default value.
+   * is equal to a given value or different from the default value.
    * A null pointer is returned in case of an iteration on all the elements
    * whose value is equal to the default value.
    */

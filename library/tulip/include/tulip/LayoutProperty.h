@@ -137,7 +137,7 @@ public:
   virtual void reverseEdge(Graph *, const edge);
 
 protected:
-  void clone_handler(AbstractProperty<PointType,LineType> &);
+  virtual void clone_handler(AbstractProperty<PointType,LineType, LayoutAlgorithm> &);
 
 private:
   TLP_HASH_MAP<unsigned int, Coord> max,min;

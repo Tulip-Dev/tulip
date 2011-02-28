@@ -47,9 +47,16 @@ namespace tlp {
  */ 
 /*@{*/
 ///
+/**
+ * @brief This base class describes plug-ins who only modify one property, e.g. selection.
+ **/
 class TLP_SCOPE PropertyAlgorithm: public WithParameter, public WithDependency {
 public :
-  ///
+  /**
+   * @brief Builds a new plug-in that modifies a single property.
+   *
+   * @param context The context containing the Graph and PropertyInterface this plug-in has access to,a s well as a PluginProgress.
+   **/
   PropertyAlgorithm(const tlp::PropertyContext & context) :
     graph(context.graph),
     pluginProgress(context.pluginProgress),
@@ -57,10 +64,25 @@ public :
   }
   ///
   virtual ~PropertyAlgorithm(){}
-  ///
+  
+  /**
+   * @brief Runs the algorithm.
+   * It is a good practice to report progress through the PluginProgress, Even if your algorithm is very fast.
+   * Keep in mind that Tulip can handle very large graphs.
+   * The PluginProgress should also be used to report errors, if any.
+   * 
+   * @return bool Whether the algorithm execution was sucessfull or not.
+   **/
   virtual bool run() {return true;}
-  ///
-  virtual bool check(std::string &) {return true;}
+  
+  /**
+   * @brief Checks whether the algorithm can ru on this Graph or not.
+   * If not, the reason why should be reported through the PluginProgress.
+   *
+   * @param errorMessage A string whose value will be modified to an error message, if the check fails.
+   * @return bool Whether the plug-in can run on this Graph.
+   **/
+  virtual bool check(std::string &errorMessage) { (void)errorMessage; return true;}
   ///
   bool preservePropertyUpdates(PropertyInterface* prop) {
     return graph->nextPopKeepPropertyUpdates(prop);

@@ -13,18 +13,21 @@ Requirements :
 - glew 1.4 or higher
 - gcc, g++ >= 3.4.2
 
+Complete list of dependencies for Ubuntu >= 8.04
+libqt4-dev libfreetype6-dev zlib1g-dev libglew-dev libjpeg-dev libpng12-dev build-essential cmake doxygen libxml2-dev 
+
+The optional Python plug-in requires python >= 2.5 (package: python2.5-dev)
+
 The installation procedure is described in the files :
 INSTALL, INSTALL.mac, INSTALL.win
 
 tar jxvf tulip-*.tar.bz2
 cd tulip-*
-sh gen-conf.sh
-./configure [--prefix=<install_path>]    (Default=/usr/local/)
-make
+mkdir build
+cd build
+cmake .. [-DCMAKE_INSTALL_PREFIX=<install_path>]  (Default=/usr/local/)
+make [-jX, X being the number of cores/processors +1]
 make install
-
-The tlprender tool is built only if you specified
-the --enable-tlprender option; it needs the OSmesa library.
 
 Join the Tulip Team:
 

@@ -19,18 +19,24 @@
 #ifndef TLP_HASH_H
 #define TLP_HASH_H
 
-#ifndef _MSC_VER
-#  include <ext/slist>
-#  define TLP_SLIST stdext::slist
-#endif
+/**
+ * @brief This file defines what class is used to provide a hashmap.
+ * The TLP_HASH_MAP macro defines which implementation is used for hash maps.
+ * The TLP_HASH_SET macro defines which implementation is used for hash sets.
+ *
+ * TLP_BEGIN_HASH_NAMESPACE is defined to open the namespace in which the hash classes are defined, to define new hashes (e.g. for Edge).
+ * TLP_END_HASH_NAMESPACE is definde to close the namespace (only used when using std::tr1)
+ */
 
-#if(_MSC_VER > 1500) //for VS2010 and later; vs2008 uses boost's tr1 implementation
+//VS2010 and later can use C++0x's unordered_map; vs2008 uses boost's tr1 implementation
+#if(_MSC_VER > 1500) 
 #  include <unordered_map>
 #  include <unordered_set>
 #  define TLP_HASH_MAP std::unordered_map
 #  define TLP_HASH_SET std::unordered_set
 #  define TLP_BEGIN_HASH_NAMESPACE namespace std 
 #  define TLP_END_HASH_NAMESPACE
+//clang, and GCC versions prior to the 4.x series do not have tr1; using ext
 #elif  (!_MSC_VER && (__GNUC__ < 4 || __GNUC_MINOR__ < 1 || __clang__))
 #  include <tulip/tulipconf.h>
 #  if (__GNUC__ < 3 || __clang__)
@@ -59,6 +65,7 @@ namespace stdext {
       size_t operator()(const double s) const { return (size_t) s; }
     };
 }
+//MSVC < 2010 use tr1 from boost, and GCC 4.X provides tr1 too.
 #else
 #  include <tr1/unordered_map>
 #  include <tr1/unordered_set>

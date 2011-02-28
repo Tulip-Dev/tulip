@@ -245,10 +245,12 @@ void ColorScaleConfigDialog::nbColorsValueChanged(int value) {
 	int lastCount = colorsTable->rowCount();
 	colorsTable->setRowCount(value);
 	if (lastCount < value) {
+	    for(int j = 0; j <= value - lastCount; ++j) {
 		QTableWidgetItem *item = new QTableWidgetItem();
 		item->setBackgroundColor(QColor(255, 255, 255, 255));
 		item->setFlags(Qt::ItemIsEnabled);
-		colorsTable->setItem(0, value - 1, item);
+		colorsTable->setItem(0, lastCount + j - 1, item);
+	    }
 	}
 	displayUserGradientPreview();
 }
