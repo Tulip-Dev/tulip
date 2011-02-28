@@ -191,10 +191,11 @@ void SuperGraphTest::testDegree() {
   node n1 = graph->addNode();
   node n2 = graph->addNode();
   node n3 = graph->addNode();
+  edge e = graph->addEdge(n1, n2);
   gr2->addNode(n1);
   gr2->addNode(n2);
   gr2->addNode(n3);
-  gr2->addEdge(graph->addEdge(n1, n2));
+  gr2->addEdge(e);
   gr2->addEdge(graph->addEdge(n1, n3));
   gr2->delNode(n3);
   CPPUNIT_ASSERT_EQUAL(3u, graph->numberOfNodes());
@@ -225,7 +226,32 @@ void SuperGraphTest::testDegree() {
   CPPUNIT_ASSERT_EQUAL(0u, gr2->outdeg(n2));
   CPPUNIT_ASSERT_EQUAL(1u, gr2->deg(n1));
   CPPUNIT_ASSERT_EQUAL(1u, gr2->deg(n2));
-
+  graph->setEnds(e, n3, n1);
+  CPPUNIT_ASSERT_EQUAL(3u, graph->numberOfNodes());
+  CPPUNIT_ASSERT_EQUAL(2u, graph->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL(3u, gr1->numberOfNodes());
+  CPPUNIT_ASSERT_EQUAL(2u, gr1->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL(2u, gr2->numberOfNodes());
+  CPPUNIT_ASSERT_EQUAL(0u, gr2->numberOfEdges());
+  CPPUNIT_ASSERT(graph->isElement(e));
+  CPPUNIT_ASSERT(gr1->isElement(e));
+  CPPUNIT_ASSERT(gr2->isElement(e) == false);
+  CPPUNIT_ASSERT_EQUAL(1u, graph->indeg(n1));
+  CPPUNIT_ASSERT_EQUAL(0u, graph->indeg(n2));
+  CPPUNIT_ASSERT_EQUAL(1u, graph->indeg(n3));
+  CPPUNIT_ASSERT_EQUAL(1u, graph->outdeg(n1));
+  CPPUNIT_ASSERT_EQUAL(0u, graph->outdeg(n2));
+  CPPUNIT_ASSERT_EQUAL(2u, graph->deg(n1));
+  CPPUNIT_ASSERT_EQUAL(0u, graph->deg(n2));
+  CPPUNIT_ASSERT_EQUAL(2u, graph->deg(n3));
+  CPPUNIT_ASSERT_EQUAL(1u, gr1->indeg(n1));
+  CPPUNIT_ASSERT_EQUAL(0u, gr1->indeg(n2));
+  CPPUNIT_ASSERT_EQUAL(1u, gr1->indeg(n3));
+  CPPUNIT_ASSERT_EQUAL(1u, gr1->outdeg(n1));
+  CPPUNIT_ASSERT_EQUAL(0u, gr1->outdeg(n2));
+  CPPUNIT_ASSERT_EQUAL(2u, gr1->deg(n1));
+  CPPUNIT_ASSERT_EQUAL(0u, gr1->deg(n2));
+  CPPUNIT_ASSERT_EQUAL(2u, gr1->deg(n3));
 }
 //==========================================================
 void SuperGraphTest::testAddDel() {
