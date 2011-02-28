@@ -82,7 +82,7 @@ public :
    * @param errorMessage A string whose value will be modified to an error message, if the check fails.
    * @return bool Whether the plug-in can run on this Graph.
    **/
-  virtual bool check(std::string &errorMessage) {return true;}
+  virtual bool check(std::string &errorMessage) { (void)errorMessage; return true;}
   ///
   bool preservePropertyUpdates(PropertyInterface* prop) {
     return graph->nextPopKeepPropertyUpdates(prop);
