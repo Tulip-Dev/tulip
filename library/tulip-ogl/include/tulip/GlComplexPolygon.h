@@ -57,7 +57,48 @@ namespace tlp {
    */
   /*@{*/
   /**
-   * class to create a complex polygon (concave polygon or polygon with hole)
+   * Class to create a complex polygon (concave polygon or polygon with hole)
+   * If you want to create a complex polygon you have 4 constructors :
+   * Constructors with vector of coords : to create a complex polygon without hole
+   *   - In this case you have two constructor : with and without outline color
+   *   - You can create a polygon like this :
+   * \code
+   *     vector <Coord> coords;
+   *     coords.push_back(Coord(0,0,0));
+   *     coords.push_back(Coord(10,0,0));
+   *     coords.push_back(Coord(10,10,0));
+   *     coords.push_back(Coord(0,10,0));
+   *     GlComplexPolygon *complexPolygon=new GlComplexPolygon(coords,Color(255,0,0,255));
+   *     layer->addGlEntity(complexPolygon,"complexPolygon");
+   * \endcode
+   *
+   * Constructors with vector of vector of Coords : to create a complex polygon with hole
+   *   - In this case you have two constructor : with and without outline color
+   *   - The first vector of coords is the polygon and others vector are holes
+   *   - You can create a polygon with hole like this :
+   * \code
+   *     vector <vector <Coord> > coords;
+   *     vector <Coord> polygon;
+   *     vector <Coord> hole;
+   *     polygon.push_back(Coord(0,0,0));
+   *     polygon.push_back(Coord(10,0,0));
+   *     polygon.push_back(Coord(10,10,0));
+   *     polygon.push_back(Coord(0,10,0));
+   *     hole.push_back(Coord(4,4,0));
+   *     hole.push_back(Coord(6,4,0));
+   *     hole.push_back(Coord(6,6,0));
+   *     hole.push_back(Coord(4,6,0));
+   *     coords.push_back(polygon);
+   *     coords.push_back(hole);
+   *     GlComplexPolygon *complexPolygon=new GlComplexPolygon(coords,Color(255,0,0,255));
+   *     layer->addGlEntity(complexPolygon,"complexPolygon");
+   * \endcode
+   *
+   * In constructors you can specify the polygon border style : polygonEdgesType parameter (0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves)
+   * You can also specify the texture name if you want to create a textured complex polygon
+   *
+   * In complex polygon you can add a smooth border : see activateQuadBorder(..) function
+   * And you can specify the texture zoom : see setTextureZoom(...) function
    */
   class TLP_GL_SCOPE GlComplexPolygon : public GlSimpleEntity {
   
@@ -70,6 +111,7 @@ namespace tlp {
   public:
     /**
      * Default constructor
+     * \warning don't use this constructor if you want to create a complex polygon, see others constructors
      */
     GlComplexPolygon() {}
     /**
@@ -99,15 +141,6 @@ namespace tlp {
      * Draw the complex polygon
      */
     virtual void draw(float lod,Camera *camera);
-
-    /**
-     * Add a new point in polygon
-     */
-    virtual void addPoint(const Coord& point);
-    /**
-     * Begin a new hole in the polygon
-     */
-    virtual void beginNewHole();
 
     /**
      * Set if the polygon is outlined or not
@@ -146,6 +179,9 @@ namespace tlp {
 
     /**
      * Set the texture zoom factor
+     * By default if you have a polygon with a size bigger than (1,1,0) the texture will be repeated
+     * If you want to don't have this texture repeat you have to modify texture zoom
+     * For example if you have a polygon with coords ((0,0,0),(5,0,0),(5,5,0),(0,5,0)) you can set texture zoom to 5. to don't have texture repeat
      */
     void setTextureZoom(float zoom){textureZoom=zoom;runTesselation();}
 
@@ -187,11 +223,20 @@ namespace tlp {
      * Function to set data with XML
      */
     virtual void setWithXML(xmlNodePtr rootNode);
-	
+
 		
   protected:
+
+    /**
+     * Add a new point in polygon
+     */
+    virtual void addPoint(const Coord& point);
+    /**
+     * Begin a new hole in the polygon
+     */
+    virtual void beginNewHole();
 	
-    void runTesselation();
+		void runTesselation();
     void createPolygon(const std::vector<Coord> &coords,int polygonEdgesType);
 	void startPrimitive(GLenum primitive);
 	void endPrimitive();
