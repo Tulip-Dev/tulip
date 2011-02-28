@@ -297,7 +297,7 @@ std::string tlp::demangleTlpClassName(const char* className) {
 	std::string result;
 	static char demangleBuffer[256];
 	UnDecorateSymbolName(className, demangleBuffer, 256, UNDNAME_32_BIT_DECODE);
-	result = std::string(demangleBuffer);
+	result = std::string(demangleBuffer + 5);
 	return result;
 }
 #else
