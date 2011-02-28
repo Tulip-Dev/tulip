@@ -427,9 +427,13 @@ bool GraphImpl::canUnpop() {
 }
 //----------------------------------------------------------------
 void GraphImpl::delPreviousRecorders() {
-  std::list<GraphUpdatesRecorder*>::iterator it =
-    previousRecorders.begin();
-  while(it != previousRecorders.end()) {
+  std::list<GraphUpdatesRecorder*>::reverse_iterator it =
+    previousRecorders.rbegin();
+  // we delete previous recorders in reverse order
+  // because they are pushed in front of previousRecorders
+  // when they are popped from recorders,
+  // so the lasts created are back in previousRecorders
+  while(it != previousRecorders.rend()) {
     delete (*it);
     it++;
   }
