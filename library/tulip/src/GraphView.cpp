@@ -124,21 +124,29 @@ void GraphView::reverse(const edge e, const node src, const node tgt) {
 void GraphView::setEnds(const edge e, const node src, const node tgt,
 			const node newSrc, const node newTgt) {
   if (isElement(e)) {
-    notifyBeforeSetEnds(this, e);
-    outDegree.set(src.id, outDegree.get(src.id)-1);
-    outDegree.set(newSrc.id, outDegree.get(src.id) + 1);
-    inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
-    inDegree.set(newTgt.id, inDegree.get(newTgt.id)+1);
-
-    // notification
-    notifyAfterSetEnds(this, e);
-    notifyObservers();
-
-    // propagate edge ends update on subgraphs
-    Graph* sg;
-    forEach(sg, getSubGraphs()) {
-      ((GraphView*) sg)->setEnds(e, src, tgt, newSrc, newTgt);
+    if (isElement(newSrc) && isElement(newTgt)) {
+      notifyBeforeSetEnds(this, e);
+      if (src != newSrc) {
+	outDegree.set(src.id, outDegree.get(src.id)-1);
+	outDegree.set(newSrc.id, outDegree.get(newSrc.id) + 1);
+      }
+      if (tgt != newTgt) {
+	inDegree.set(tgt.id, inDegree.get(tgt.id)-1);
+	inDegree.set(newTgt.id, inDegree.get(newTgt.id)+1);
+      }
+      // notification
+      notifyAfterSetEnds(this, e);
+      notifyObservers();
+      
+      // propagate edge ends update on subgraphs
+      Graph* sg;
+      forEach(sg, getSubGraphs()) {
+	((GraphView*) sg)->setEnds(e, src, tgt, newSrc, newTgt);
+      }
     }
+    else
+      // delete edge if new edge ends do no belong to the graph
+      delEdge(e);
   }
 }
 //----------------------------------------------------------------
