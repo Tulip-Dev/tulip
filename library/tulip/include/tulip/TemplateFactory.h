@@ -34,7 +34,20 @@
 
 namespace tlp {
 
-/** \addtogroup plugins */ 
+/** @addtogroup plugins
+ * @brief The Tulip plug-in system allows plug-ins to be loaded dynamically at run-time, and can check dependencies on other plug-ins, as well as multiple definitions.
+ *
+ * The Tulip plug-in system can be decomposed in 4 layers:
+ *
+ * 1: Tulip, who knows about TemplateFactories
+ *
+ * 2: TemplateFactories, who know about Plugin subclasses, usually called factories.
+ *
+ * 3: Plugin subclasses, who know about the plugin itself
+ *
+ * 4: The plugin itself, a subclass of Algorithm (more likely IntegerAlgorithm, DoubleAlgorithm, ...), View, ControllerViewsManager, ...
+ */
+
 /*@{*/
 
 /**
