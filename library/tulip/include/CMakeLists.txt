@@ -97,6 +97,7 @@ INSTALL(FILES
   tulip/conversioniterator.h
   tulip/filteriterator.h
   tulip/uniqueiterator.h
+  tulip/stlfilteriterator.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_dev
 )
