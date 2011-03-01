@@ -94,6 +94,9 @@ INSTALL(FILES
 	tulip/PreferenceManager.h
   tulip/QuadTree.h
   tulip/memorypool.h
+  tulip/conversioniterator.h
+  tulip/filteriterator.h
+  tulip/uniqueiterator.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_dev
 )
