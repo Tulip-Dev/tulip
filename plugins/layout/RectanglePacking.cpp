@@ -18,7 +18,6 @@
  */
 #include "RectanglePacking.h"
 
-
 using namespace std;
 using namespace tlp;
 
@@ -28,7 +27,6 @@ RectanglePacking::RectanglePacking(int numberRects){
   numberOfPositionnedRectangles = 0;
   numberOfRectangles = numberRects;
   placesOfRectanglesInSecondSequence = new int[numberOfRectangles];
-
 }
 
 RectanglePacking::~RectanglePacking(){
