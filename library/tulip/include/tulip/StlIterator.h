@@ -19,7 +19,8 @@
 #ifndef TULIP_STLITERATOR_H
 #define TULIP_STLITERATOR_H
 #include <map>
-#include "tulip/Iterator.h"
+#include <tulip/Iterator.h>
+#include <tulip/memorypool.h>
 
 namespace tlp {
 
@@ -53,7 +54,8 @@ namespace tlp {
                          public MemoryPool<MPStlIterator<VALUE, ITERATOR> > {
   MPStlIterator(const ITERATOR &startIt, const ITERATOR &endIt):
           StlIterator<VALUE, ITERATOR>(startIt, endIt) {
-  }
+	  }
+  };
   //=================================================
   template<typename KEY, typename VALUE> 
   struct StlMapIterator:public Iterator< std::pair<KEY,VALUE> > {
