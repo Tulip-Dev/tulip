@@ -23,7 +23,6 @@
 #include <list>
 #include <tulip/Rectangle.h>
 
-
 /** 
  *This structure enables the stocking of the datas corresponding to the search
  *of the optimal position of the rectangle designated by the field 
