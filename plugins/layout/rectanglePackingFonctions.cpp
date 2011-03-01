@@ -19,6 +19,9 @@
 #include "rectanglePackingFonctions.h"
 #include <stdlib.h>
 
+using namespace std;
+using namespace tlp;
+
 vector<Rectangle<float> > & RectanglePackingLimitRectangles(vector<Rectangle<float> > & v, const char * quality, PluginProgress * progress){
 
   
