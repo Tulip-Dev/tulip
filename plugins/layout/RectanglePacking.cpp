@@ -32,15 +32,11 @@ RectanglePacking::RectanglePacking(int numberRects){
 }
 
 RectanglePacking::~RectanglePacking(){
-
   delete firstSequence;
   delete [] placesOfRectanglesInSecondSequence;
-
 }
 
-
 void RectanglePacking::optimalPositionOfNewRectangle(vector<Rectangle<float> >::iterator itNewRect){
-  
   float ratio;
   Number bestRatio(Number::infini);
   float perimeterOfBoundingRectangle;
@@ -49,35 +45,22 @@ void RectanglePacking::optimalPositionOfNewRectangle(vector<Rectangle<float> >::
   list<RectangleRelativePosition>::iterator itPositionInFirstSequence;
   list<RectangleRelativePosition>::iterator itBestPositionInFirstSequence;
   
- 
-  
-
   newRectangleWidth = (*itNewRect)[1][0]-(*itNewRect)[0][0];
   newRectangleHeight = (*itNewRect)[1][1]-(*itNewRect)[0][1];
-
  
   for(positionInFirstSequence = 1; positionInFirstSequence<=numberOfPositionnedRectangles+1;positionInFirstSequence++){
-    
-    
     for(positionInSecondSequence = 1; positionInSecondSequence<=numberOfPositionnedRectangles+1;positionInSecondSequence++){ 
-
-
       newRectangleLeftAbscissa = 0;
       newRectangleLowOrdinate = 0;
       maxWidthOfBoundingBox = 0;
       maxHeightOfBoundingBox = 0;
 
-
       itPositionInFirstSequence = testOfPositionOfNewRectangle(positionInFirstSequence,positionInSecondSequence);
-	           
      
       ratio = calculateRatio(); 
       perimeterOfBoundingRectangle = maxWidthOfBoundingBox+maxHeightOfBoundingBox;
       
-      
-      
       if( ((ratio<=1.2)&&((bestRatio>1.2)||(bestPerimeterOfBoundingRectangle>perimeterOfBoundingRectangle))) || ((1.2<ratio)&&(bestRatio>ratio) )){
-	
 	bestRatio.value = ratio;
 	bestPerimeterOfBoundingRectangle.value = perimeterOfBoundingRectangle;
 	bestPlaceInFirstSequence = positionInFirstSequence;
@@ -88,46 +71,30 @@ void RectanglePacking::optimalPositionOfNewRectangle(vector<Rectangle<float> >::
 	bestRectangleLowOrdinate = newRectangleLowOrdinate;
 	itBestPositionInFirstSequence = itPositionInFirstSequence;
 	firstSequence->stockOfTemporaryBestCoordinates(bestPlaceInFirstSequence);
-	
       }
-      
-      
-      
-      
     }
   }
-  
- 
- 
   modificationOfSequencePair(itNewRect, itBestPositionInFirstSequence);    
-  
 }
 
 list<RectangleRelativePosition>::iterator RectanglePacking::testOfPositionOfNewRectangle(int positionInFirstSequence, int positionInSecondSequence){
 
   list<RectangleRelativePosition>::iterator itFirstRectangleRightOrAboveOfNewRectangle;
-
  
   if(positionInFirstSequence>=2){
     itFirstRectangleRightOrAboveOfNewRectangle = positionOfNewRectangle(positionInFirstSequence, positionInSecondSequence);
   }
- 
-  else { itFirstRectangleRightOrAboveOfNewRectangle = firstSequence->begin();}
- 
- 
+  else {
+    itFirstRectangleRightOrAboveOfNewRectangle = firstSequence->begin();
+  }
 
- 
   dimensionsBoundingBoxOfNewRectangleAndRectanglesLeftOrBelow();
-  
-  
- 
   
   if(positionInFirstSequence<=numberOfPositionnedRectangles){
     repositionOfRectanglesRightOrAboveNewRectangle(itFirstRectangleRightOrAboveOfNewRectangle, positionInFirstSequence, positionInSecondSequence);
   }
   
   return itFirstRectangleRightOrAboveOfNewRectangle;
-
 }
 
 
@@ -136,22 +103,11 @@ list<RectangleRelativePosition>::iterator RectanglePacking::positionOfNewRectang
   list<RectangleRelativePosition>::iterator itRectLeftOrBelowOfNewRect = firstSequence->begin();
   int positionRectLeftOrBelowOfNewRect;
 
- 
-  
-
   for(positionRectLeftOrBelowOfNewRect = 1; positionRectLeftOrBelowOfNewRect < positionInFirstSequence; positionRectLeftOrBelowOfNewRect++){
-    
-	  
-    
     coordinatesOfNewRectangle(itRectLeftOrBelowOfNewRect, positionInFirstSequence, positionInSecondSequence);
-    
-    
     dimensionsBoundingBoxOfRectanglesLeftOrBelowNewRectangle(itRectLeftOrBelowOfNewRect);
-
     itRectLeftOrBelowOfNewRect++;
- 
   }
-
 
   return  itRectLeftOrBelowOfNewRect;
 } 
@@ -160,40 +116,27 @@ list<RectangleRelativePosition>::iterator RectanglePacking::positionOfNewRectang
 void RectanglePacking::repositionOfRectanglesRightOrAboveNewRectangle(list<RectangleRelativePosition>::iterator itFirstRectangleRightOrAboveOfNewRectangle, int positionInFirstSequence, int positionInSecondSequence){				
 
   list<RectangleRelativePosition>::iterator itRectOfSequenceToReposition;
-  
   int positionRectangleToReposition = positionInFirstSequence;
-
-
   
   for(itRectOfSequenceToReposition = itFirstRectangleRightOrAboveOfNewRectangle; itRectOfSequenceToReposition != firstSequence->end(); ++itRectOfSequenceToReposition){
-  
     itRectOfSequenceToReposition->rectangleTemporaryLeftAbscissa = itRectOfSequenceToReposition->rectangleLeftAbscissa;
     itRectOfSequenceToReposition->rectangleTemporaryLowOrdinate = itRectOfSequenceToReposition->rectangleLowOrdinate;
     
-    
     modificationCoordinatesRectanglesRightOrAboveNewRectangleInFonctionNewRectangle(itRectOfSequenceToReposition, positionInSecondSequence);
     
-
-    
     if(positionInFirstSequence<positionRectangleToReposition){
-      
       modificationCoordinatesRectanglesRightOrAboveNewRectangleInFonctionAlreadyRepositionnedRectangles(itFirstRectangleRightOrAboveOfNewRectangle, itRectOfSequenceToReposition);
     }
-    
-    
+
     dimensionsBoundingBoxOfAllOptimalPositionnedRectangles(itRectOfSequenceToReposition);
 
     positionRectangleToReposition++;
-    
   }
-}				
-
+}
 
 void RectanglePacking::modificationOfSequencePair(vector<Rectangle<float> >::iterator itNewRect, list<RectangleRelativePosition>::iterator itBestPositionInFirstSequence){
 
-
   list<RectangleRelativePosition>::iterator itRectToReposition;
-
  
   for(int k=0; k<numberOfPositionnedRectangles; k++){
     if(placesOfRectanglesInSecondSequence[k] >= bestPlaceInSecondSequence){
@@ -204,13 +147,8 @@ void RectanglePacking::modificationOfSequencePair(vector<Rectangle<float> >::ite
   placesOfRectanglesInSecondSequence[numberOfPositionnedRectangles] = bestPlaceInSecondSequence;	
   
   numberOfPositionnedRectangles++;
-  
  
   firstSequence->addRectangleRelativePosition(itNewRect, numberOfPositionnedRectangles , newRectangleWidth, newRectangleHeight, bestRectangleLeftAbscissa, bestRectangleLowOrdinate, itBestPositionInFirstSequence);
-  
-  
-
-
  
   if(bestPlaceInFirstSequence < numberOfPositionnedRectangles){
     for(itRectToReposition=itBestPositionInFirstSequence; itRectToReposition!=firstSequence->end(); ++itRectToReposition){
@@ -219,7 +157,6 @@ void RectanglePacking::modificationOfSequencePair(vector<Rectangle<float> >::ite
     }
   }
 }
-
 
 float RectanglePacking::calculateRatio(){
 
@@ -237,22 +174,18 @@ void RectanglePacking::coordinatesOfNewRectangle(list<RectangleRelativePosition>
 
   float rightAbscissa;
   float highOrdinate;
-
  
   if(placesOfRectanglesInSecondSequence[itRectLeftOrBelowOfNewRect->rectangleNumber-1] >= positionInSecondSequence){
     if((highOrdinate = itRectLeftOrBelowOfNewRect->rectangleLowOrdinate + itRectLeftOrBelowOfNewRect->rectangleHeight) > newRectangleLowOrdinate){
       newRectangleLowOrdinate = highOrdinate ;
     }
   }
-    
-  
   else{
     if((rightAbscissa= itRectLeftOrBelowOfNewRect->rectangleLeftAbscissa + itRectLeftOrBelowOfNewRect->rectangleWidth) > newRectangleLeftAbscissa){
       newRectangleLeftAbscissa = rightAbscissa;
     }
   }
 }
-
 
 void RectanglePacking::dimensionsBoundingBoxOfRectanglesLeftOrBelowNewRectangle(list<RectangleRelativePosition>::iterator itRectLeftOrBelowOfNewRect){
 
@@ -266,7 +199,6 @@ void RectanglePacking::dimensionsBoundingBoxOfRectanglesLeftOrBelowNewRectangle(
   if((rightAbscissa = itRectLeftOrBelowOfNewRect->rectangleLeftAbscissa + itRectLeftOrBelowOfNewRect->rectangleWidth) > maxWidthOfBoundingBox){
     maxWidthOfBoundingBox = rightAbscissa;
   }
-
 }
 
 void RectanglePacking::dimensionsBoundingBoxOfNewRectangleAndRectanglesLeftOrBelow(){
@@ -288,15 +220,12 @@ void RectanglePacking::modificationCoordinatesRectanglesRightOrAboveNewRectangle
 
   float rightAbscissa;
   float highOrdinate;
-
  
   if(placesOfRectanglesInSecondSequence[itRectOfSequenceToReposition->rectangleNumber-1] < positionInSecondSequence ){
     if((highOrdinate = newRectangleLowOrdinate + newRectangleHeight) > itRectOfSequenceToReposition->rectangleTemporaryLowOrdinate){
       itRectOfSequenceToReposition->rectangleTemporaryLowOrdinate = highOrdinate;
     }
   }
-  
- 
   else{
     if((rightAbscissa = newRectangleLeftAbscissa + newRectangleWidth) > itRectOfSequenceToReposition->rectangleTemporaryLeftAbscissa){
       itRectOfSequenceToReposition->rectangleTemporaryLeftAbscissa = rightAbscissa;
@@ -311,26 +240,19 @@ void RectanglePacking::modificationCoordinatesRectanglesRightOrAboveNewRectangle
   float rightAbscissa;
   float highOrdinate;
 
- 
   for(itRectOfSequenceAlreadyRepositionned=itFirstRectangleRightOrAboveOfNewRectangle; itRectOfSequenceAlreadyRepositionned!=itRectOfSequenceToReposition;++itRectOfSequenceAlreadyRepositionned){
-    
-    
     if(placesOfRectanglesInSecondSequence[itRectOfSequenceAlreadyRepositionned->rectangleNumber-1]  >=  placesOfRectanglesInSecondSequence[itRectOfSequenceToReposition->rectangleNumber-1]){
       if((highOrdinate = itRectOfSequenceAlreadyRepositionned->rectangleTemporaryLowOrdinate + itRectOfSequenceAlreadyRepositionned->rectangleHeight) > itRectOfSequenceToReposition->rectangleTemporaryLowOrdinate){
 	itRectOfSequenceToReposition->rectangleTemporaryLowOrdinate = highOrdinate;
       }
     }
-    
-    
     else{
       if((rightAbscissa = itRectOfSequenceAlreadyRepositionned->rectangleTemporaryLeftAbscissa + itRectOfSequenceAlreadyRepositionned->rectangleWidth) > itRectOfSequenceToReposition->rectangleTemporaryLeftAbscissa){
 	itRectOfSequenceToReposition->rectangleTemporaryLeftAbscissa = rightAbscissa;
       }
     } 
-    
   }
 }
-
 
 void RectanglePacking::dimensionsBoundingBoxOfAllOptimalPositionnedRectangles(list<RectangleRelativePosition>::iterator itRectOfSequenceToReposition){
 
@@ -387,38 +309,23 @@ void RectanglePacking::defaultPositionRestOfRectangles(vector<Rectangle<float> >
   bool boolHeight;
   float heightTemp = 0;
   float widthTemp = 0;
-  
-  
  
   lineOrColumnToStart(boolWidth, boolHeight);
-
-  
   
   for(itr=itlim; itr!=itend;++itr){
     newRectangleWidth = (*itr)[1][0] - (*itr)[0][0];
     newRectangleHeight = (*itr)[1][1] - (*itr)[0][1];
 
-    
-
     if((boolWidth) && (widthTemp>0) && (widthTemp+newRectangleWidth>bestWidthOfBoundingBox)){
       endOfLine(heightTemp, widthTemp, boolWidth, boolHeight);
-      
     }
-
     if((boolHeight) && (heightTemp>0) && (heightTemp+newRectangleHeight>bestHeightOfBoundingBox)){
       endOfColumn(widthTemp, heightTemp, boolWidth, boolHeight);
-      
     }
-
-    
-
-
     if(boolWidth){
       continueLine(itr, widthTemp, heightTemp, boolWidth, boolHeight);
       continue;
     }
-
-
     if(boolHeight){
       continueColumn(itr, widthTemp, heightTemp, boolWidth, boolHeight);
       continue;
@@ -437,7 +344,6 @@ void RectanglePacking::defaultPositionRestOfRectangles(vector<Rectangle<float> >
   */
 }
 
-
 void RectanglePacking::lineOrColumnToStart(bool & boolWidth, bool & boolHeight){
 
   float ratio;
@@ -446,7 +352,6 @@ void RectanglePacking::lineOrColumnToStart(bool & boolWidth, bool & boolHeight){
     ratio = bestHeightOfBoundingBox/bestWidthOfBoundingBox;
   else
     ratio = bestWidthOfBoundingBox/bestHeightOfBoundingBox;
-
 
   if((ratio>1.1) && (bestHeightOfBoundingBox>=bestWidthOfBoundingBox)){
     boolWidth = 0;
@@ -464,9 +369,6 @@ void RectanglePacking::lineOrColumnToStart(bool & boolWidth, bool & boolHeight){
     boolWidth = 1;
     boolHeight = 0;
   }
-
-  
-
 } 
 
 void RectanglePacking::endOfLine(float & heightTemp, float & widthTemp, bool & boolWidth, bool & boolHeight){
@@ -482,19 +384,15 @@ void RectanglePacking::endOfLine(float & heightTemp, float & widthTemp, bool & b
   else
     ratio = bestWidthOfBoundingBox/bestHeightOfBoundingBox;
 
-  
   if((ratio>1.1) && (bestWidthOfBoundingBox>bestHeightOfBoundingBox)){
     boolWidth = 1;
     boolHeight = 0;
   }
-  
   else{
     boolWidth = 0;
     boolHeight = 1;
   }
-  
 }
-
 
 void RectanglePacking::endOfColumn(float & widthTemp, float & heightTemp, bool & boolWidth, bool & boolHeight){
 
@@ -509,13 +407,10 @@ void RectanglePacking::endOfColumn(float & widthTemp, float & heightTemp, bool &
   else
     ratio = bestWidthOfBoundingBox/bestHeightOfBoundingBox;
   
-  
   if((ratio>1.1) && (bestHeightOfBoundingBox>bestWidthOfBoundingBox)){ 
     boolWidth = 0;
     boolHeight = 1;
   }
-
-  
   else{
     boolWidth = 1;
     boolHeight = 0;
@@ -539,18 +434,14 @@ void RectanglePacking::continueLine(vector<Rectangle<float> >::iterator itr, flo
     else
       ratio = bestWidthOfBoundingBox/bestHeightOfBoundingBox;
     
-    
     if((ratio>1.1) && (bestWidthOfBoundingBox>bestHeightOfBoundingBox)){
       boolWidth = 1;
       boolHeight = 0;
     }
-
     else{
       boolWidth = 0;
       boolHeight = 1;
     }
-    
-    
   }
   
   else{
@@ -561,11 +452,8 @@ void RectanglePacking::continueLine(vector<Rectangle<float> >::iterator itr, flo
     widthTemp += newRectangleWidth;
     if(newRectangleHeight>heightTemp)
       heightTemp = newRectangleHeight;
-    
-    
   }
 }
-
 
 void RectanglePacking::continueColumn(vector<Rectangle<float> >::iterator itr, float & widthTemp,float & heightTemp, bool & boolWidth, bool & boolHeight){
 
@@ -583,22 +471,16 @@ void RectanglePacking::continueColumn(vector<Rectangle<float> >::iterator itr, f
       ratio = bestHeightOfBoundingBox/bestWidthOfBoundingBox;
     else
       ratio = bestWidthOfBoundingBox/bestHeightOfBoundingBox;
-
-
     
     if((ratio>1.1) && (bestHeightOfBoundingBox>bestWidthOfBoundingBox)){
       boolWidth = 0;
       boolHeight = 1;
     }
-    
     else{
       boolWidth = 1;
       boolHeight = 0;
     }
-     
   }
-  
-  
   else{ 
     (*itr)[0][0] = bestWidthOfBoundingBox;
     (*itr)[1][0] = bestWidthOfBoundingBox+newRectangleWidth;
@@ -611,11 +493,7 @@ void RectanglePacking::continueColumn(vector<Rectangle<float> >::iterator itr, f
   }
 }
 
-
 void RectanglePacking::optimalPositionOfNewRectangleLimPos(vector<Rectangle<float> >::iterator itNewRect, int numberTestedPositions){
-  
-  
-  
   float ratio;
   Number bestRatio(Number::infini);
   float perimeterOfBoundingRectangle;
@@ -635,10 +513,6 @@ void RectanglePacking::optimalPositionOfNewRectangleLimPos(vector<Rectangle<floa
   newRectangleWidth = (*itNewRect)[1][0]-(*itNewRect)[0][0];
   newRectangleHeight = (*itNewRect)[1][1]-(*itNewRect)[0][1];
 
-  
-
-
-
   if(numberOfPositionnedRectangles >= numberTestedPositions){
     numberOfLastTestedPosition=numberOfPositionnedRectangles -  numberTestedPositions + 2;
     quotient = (numberOfPositionnedRectangles+1)/numberTestedPositions;
@@ -652,35 +526,19 @@ void RectanglePacking::optimalPositionOfNewRectangleLimPos(vector<Rectangle<floa
     for(int i=numberTestedPositions*quotient; i<=numberOfPositionnedRectangles; i++){
       testedPositions[i] = false;
     }
-    
-    
-    
   }
-
   else{ 
     numberOfLastTestedPosition=1; 
   }
-
   
   for(positionInFirstSequence = numberOfPositionnedRectangles+1; positionInFirstSequence>=numberOfLastTestedPosition;positionInFirstSequence--){
-  
- 
-   
     for(positionInSecondSequence = 1; positionInSecondSequence<=numberOfPositionnedRectangles+1; positionInSecondSequence++){
-
       if((testedPositions[positionInSecondSequence-1])||(numberOfLastTestedPosition==1 )){
-	
-	
 	itPositionInFirstSequence = testOfPositionOfNewRectangle(positionInFirstSequence, positionInSecondSequence);
-	
-	
 	ratio = calculateRatio(); 
 	perimeterOfBoundingRectangle = maxWidthOfBoundingBox+maxHeightOfBoundingBox;
 	
-	
-	
 	if( ((ratio<=1.2)&&((bestRatio>1.2)||(bestPerimeterOfBoundingRectangle>perimeterOfBoundingRectangle))) || ((1.2<ratio)&&(bestRatio>ratio) )){
-	  
 	  bestRatio.value = ratio;
 	  bestPerimeterOfBoundingRectangle.value = perimeterOfBoundingRectangle;
 	  bestPlaceInFirstSequence = positionInFirstSequence;
@@ -691,24 +549,16 @@ void RectanglePacking::optimalPositionOfNewRectangleLimPos(vector<Rectangle<floa
 	  bestRectangleLowOrdinate = newRectangleLowOrdinate;
 	  itBestPositionInFirstSequence = itPositionInFirstSequence;
 	  firstSequence->stockOfTemporaryBestCoordinates(bestPlaceInFirstSequence);
-	  
 	}
-	
 	
 	newRectangleLeftAbscissa = 0;
 	newRectangleLowOrdinate = 0;
 	maxWidthOfBoundingBox = 0;
 	maxHeightOfBoundingBox = 0;
-	
-	
       }
     }
   }
-  
-  
-  
   modificationOfSequencePair(itNewRect, itBestPositionInFirstSequence);    
-   
 }
 
 
@@ -732,9 +582,5 @@ int RectanglePacking::calculNumberOfTestedPositions(const char * quality){
   else if(!strcmp(quality,"n2logn"))
     return (int)floor(sqrt((double)log((float)numberOfRectangles)));
    
- 
-   
   return 0;
 }
-
-
