@@ -42,6 +42,7 @@ public:
   void testSubgraph();
   void testTests();
   void testAddDelProps();
+  void testAddSubgraphProp();
   void testMetaNode();
  
   static CppUnit::Test *suite();
