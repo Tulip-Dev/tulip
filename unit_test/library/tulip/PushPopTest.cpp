@@ -782,6 +782,74 @@ void PushPopTest::testAddDelProps() {
   CPPUNIT_ASSERT(graph->getProperty<BooleanProperty>("boolean") == bProp);
 }
 
+void PushPopTest::testAddSubgraphProp() {
+  Graph *sg;
+
+  Iterator<Graph *> *it = graph->getSubGraphs();
+  CPPUNIT_ASSERT(!it->hasNext());
+  delete it;
+
+  graph->push();
+  sg = graph->addSubGraph();
+
+  it = graph->getSubGraphs();
+  CPPUNIT_ASSERT(it->hasNext());
+  CPPUNIT_ASSERT(sg == it->next());
+  delete it;
+
+  sg->push();
+  DoubleProperty* prop = sg->getLocalProperty<DoubleProperty>("test");
+  CPPUNIT_ASSERT(sg->existProperty("test"));
+  
+  sg->pop();
+  CPPUNIT_ASSERT(!sg->existProperty("test"));
+  
+  sg->unpop();
+  CPPUNIT_ASSERT(sg->existProperty("test"));
+  
+  sg->pop();
+  CPPUNIT_ASSERT(!sg->existProperty("test"));
+  it = graph->getSubGraphs();
+  CPPUNIT_ASSERT(it->hasNext());
+  CPPUNIT_ASSERT(sg == it->next());
+  delete it;
+  
+  graph->pop();
+  it = graph->getSubGraphs();
+  CPPUNIT_ASSERT(!it->hasNext());
+  delete it;
+
+  graph->unpop();
+  it = graph->getSubGraphs();
+  CPPUNIT_ASSERT(it->hasNext());
+  CPPUNIT_ASSERT(sg == it->next());
+  delete it;
+ 
+  sg->unpop();
+  CPPUNIT_ASSERT(sg->existProperty("test"));
+
+  sg->pop();
+  CPPUNIT_ASSERT(!sg->existProperty("test"));
+  it = graph->getSubGraphs();
+  CPPUNIT_ASSERT(it->hasNext());
+  CPPUNIT_ASSERT(sg == it->next());
+  delete it;
+  
+  graph->pop();
+  it = graph->getSubGraphs();
+  CPPUNIT_ASSERT(!it->hasNext());
+  delete it;
+  CPPUNIT_ASSERT(!graph->canPop());
+  CPPUNIT_ASSERT(graph->canUnpop());
+
+  graph->push();
+  it = graph->getSubGraphs();
+  CPPUNIT_ASSERT(!it->hasNext());
+  delete it;
+  CPPUNIT_ASSERT(graph->canPop());
+  CPPUNIT_ASSERT(!graph->canUnpop());
+}
+
 void PushPopTest::testMetaNode() {
   node n0 = graph->addNode();
   LayoutProperty* layout = graph->getProperty<LayoutProperty>("viewLayout");
@@ -835,6 +903,8 @@ CppUnit::Test * PushPopTest::suite() {
 								  &PushPopTest::testCopyProperty) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraph operations", 
 								  &PushPopTest::testSubgraph) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraphProp operations", 
+								  &PushPopTest::testAddSubgraphProp) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Tests operations", 
 								  &PushPopTest::testTests) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Properties operations", 
