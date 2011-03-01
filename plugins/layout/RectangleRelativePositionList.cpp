@@ -49,7 +49,7 @@ void RectangleRelativePositionList::allocateCoordinates(){
 
 void RectangleRelativePositionList::stockOfTemporaryBestCoordinates(int bestPlaceInFirstSequence){
   
-  list<RectangleRelativePosition>::reverse_iterator itRectToReposition = this->rend();
+  list<RectangleRelativePosition>::reverse_iterator itRectToReposition = this->rbegin();
   int positionRectToReposition;
 
 
