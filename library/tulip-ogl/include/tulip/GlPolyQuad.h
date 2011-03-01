@@ -29,8 +29,6 @@
 #include <vector>
 #include <string>
 
-using namespace std;
-
 namespace tlp {
 
   /**
@@ -54,7 +52,7 @@ namespace tlp {
 	   *
 	   *
 	   */
-	  GlPolyQuad(const string &textureName = "", const bool outlined = false, const int outlineWidth = 1, const Color &outlineColor = Color(0,0,0));
+	  GlPolyQuad(const std::string &textureName = "", const bool outlined = false, const int outlineWidth = 1, const Color &outlineColor = Color(0,0,0));
 
 	  /**
 	   * Constructor for building a polyquad with spefific colors for each edges
@@ -75,7 +73,7 @@ namespace tlp {
 	   * \param polyQuadEdgesColor A vector containing the edges's colors, its size must be equal to the number of edges defined by the polyQuadEdges vector
 	   * \param  textureName The absolute path of the texture image file to use
 	   */
-	  GlPolyQuad(const vector<Coord> &polyQuadEdges, const vector<Color> &polyQuadEdgesColor, const string &textureName = "",
+          GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const std::vector<Color> &polyQuadEdgesColor, const std::string &textureName = "",
 				 const bool outlined = false, const int outlineWidth = 1, const Color &outlineColor = Color(0,0,0));
 
 	  /**
@@ -85,7 +83,7 @@ namespace tlp {
 	   * \param polyQuadColor The polyquad color
 	   * \param  textureName The absolute path of the texture image file to use
 	   */
-	  GlPolyQuad(const vector<Coord> &polyQuadEdges, const Color &polyQuadColor, const string &textureName = "",
+          GlPolyQuad(const std::vector<Coord> &polyQuadEdges, const Color &polyQuadColor, const std::string &textureName = "",
 			     const bool outlined = false, const int outlineWidth = 1, const Color &outlineColor = Color(0,0,0));
 
 	  /**
@@ -139,14 +137,12 @@ namespace tlp {
 	  void setWithXML(xmlNodePtr rootNode);
 
   private :
-
-	  vector<Coord> polyQuadEdges; // vector which contains polyquad edges, an edge being defined by a pair of Coord
-	  vector<Color> polyQuadEdgesColors; // vector which contains polyquad edges colors
-	  string textureName;
-	  bool outlined;
-	  int outlineWidth;
-	  Color outlineColor;
-
+          std::vector<Coord> polyQuadEdges; // vector which contains polyquad edges, an edge being defined by a pair of Coord
+          std::vector<Color> polyQuadEdgesColors; // vector which contains polyquad edges colors
+          std::string textureName;
+          bool outlined;
+          int outlineWidth;
+          Color outlineColor;
   };
   /*@}*/
 
