@@ -49,9 +49,9 @@ void RectangleRelativePositionList::stockOfTemporaryBestCoordinates(int bestPlac
   list<RectangleRelativePosition>::reverse_iterator itRectToReposition = this->rbegin();
   int positionRectToReposition;
 
-  for(positionRectToReposition = this->size(); positionRectToReposition>=bestPlaceInFirstSequence; --positionRectToReposition){
-    itRectToReposition++; 
+  for(positionRectToReposition = this->size(); positionRectToReposition>=bestPlaceInFirstSequence && itRectToReposition != this->rend(); --positionRectToReposition){
     itRectToReposition->rectangleTemporaryBestLeftAbscissa = itRectToReposition->rectangleTemporaryLeftAbscissa;
     itRectToReposition->rectangleTemporaryBestLowOrdinate = itRectToReposition->rectangleTemporaryLowOrdinate;
+    itRectToReposition++;
   }
 }
