@@ -8,6 +8,6 @@ TARGET_LINK_LIBRARIES(${OGDFLibrary} psapi)
 ENDIF(WIN32)
 
 INSTALL(TARGETS ${OGDFLibrary}
-       RUNTIME DESTINATION ${TulipBinInstallDir}
-       LIBRARY DESTINATION ${TulipLibInstallDir}
-       ARCHIVE DESTINATION ${TulipLibInstallDir} )
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_ogdf
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_ogdf
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_ogdf)
