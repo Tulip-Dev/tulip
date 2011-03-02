@@ -1,0 +1,13 @@
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipInclude} ${TulipBuildInclude} ${OGDFInclude} ${TulipOGDFInclude})
+message("lib: ${LibTulipOGDFName}")
+FILE(GLOB PLUGINS_SRCS "*.cpp")
+
+FOREACH(OGDFPlugin ${PLUGINS_SRCS})
+  STRING(REGEX REPLACE ".cpp" "" PLUGIN_NAME ${OGDFPlugin})
+  STRING(REGEX REPLACE ".*/" "" PLUGIN_NAME ${PLUGIN_NAME})
+  STRING(TOLOWER ${PLUGIN_NAME} PLUGIN_NAME)
+  ADD_LIBRARY(${PLUGIN_NAME}-${TulipVersion} SHARED ${OGDFPlugin})
+  TARGET_LINK_LIBRARIES(${PLUGIN_NAME}-${TulipVersion} ${TulipLibName} ${LibTulipOGDFName} ${OGDF_LIBRARY})
+
+  INSTALL(TARGETS ${PLUGIN_NAME}-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT libtulip_plugins)
+ENDFOREACH()
