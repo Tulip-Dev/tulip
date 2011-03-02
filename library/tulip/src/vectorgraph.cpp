@@ -17,7 +17,7 @@
  *
  */
 
-#include "vectorgraph.h"
+#include "tulip/vectorgraph.h"
 
 #include <vector>
 #include <omp.h>
