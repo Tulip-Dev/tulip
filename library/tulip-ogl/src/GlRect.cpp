@@ -26,6 +26,8 @@ namespace tlp {
       bool outlined) :
     GlPolygon(4u, 4u, 4u, filled, outlined) {
 
+    invertYTexture=false;
+
     vector<Coord> coords;
     coords.push_back(topLeftPos);
     coords.push_back(topLeftPos);
@@ -44,6 +46,9 @@ namespace tlp {
   //=====================================================
   GlRect::GlRect(const Coord &center, const Size &size, const Color &fillColor, const Color &outlineColor):
     GlPolygon(4u, 4u, 4u, true, true) {
+
+    invertYTexture=false;
+
     vector<Coord> coords;
     coords.push_back(center+Coord(size[0]/2.,size[1]/2.,0));
     coords.push_back(center+Coord(size[0]/2.,-size[1]/2.,0));
