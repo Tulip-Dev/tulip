@@ -8,6 +8,6 @@ ADD_LIBRARY(${LibTulipOGDFName} SHARED ${TulipToOGDF_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipOGDFName} ${TulipLibName})
 TARGET_LINK_LIBRARIES(${LibTulipOGDFName} ${OGDFLibrary})
 INSTALL(TARGETS ${LibTulipOGDFName}
-       RUNTIME DESTINATION ${TulipBinInstallDir} 
-       LIBRARY DESTINATION ${TulipLibInstallDir} 
-       ARCHIVE DESTINATION ${TulipLibInstallDir} )
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_ogdf
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_ogdf
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_ogdf)

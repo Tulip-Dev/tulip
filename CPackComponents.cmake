@@ -16,12 +16,16 @@ DEFINE_COMPONENT(libtulip_ogl_dev "OpenGL bindings - Development files" "Tulip O
 DEFINE_COMPONENT(libtulip_qt "Qt bindings" "Tulip Qt provides binding for the Qt4 framework. Helping user to design user interfaces to integrate Tulip 3D visualizations into a GUI." "libtulip;libtulip_ogl" ${LIBS_GROUP_NAME})
 DEFINE_COMPONENT(libtulip_qt_dev "Qt bindings - Development files" "Tulip-qt provides binding for the Qt4 framework. Helping user to design user interfaces to integrate Tulip 3D visualizations into a GUI." "libtulip_qt" ${HEADERS_GROUP_NAME})
 
+#library/tulip-ogdf
+DEFINE_COMPONENT(libtulip_ogdf "OGDF library bridge" "Tulip OGDF provides a bridge to use the powerful OGDF library inside of Tulip." "" ${LIBS_GROUP_NAME})
+
 # plugins/*
 DEFINE_COMPONENT(libtulip_plugins "Core plugins" "Plugins for Tulip core" "libtulip" ${PLUGINS_GROUP_NAME})
 DEFINE_COMPONENT(libtulip_ogl_plugins "OpenGL plugins" "Plugins for Tulip OpenGL" "libtulip;libtulip_ogl" ${PLUGINS_GROUP_NAME})
 DEFINE_COMPONENT(libtulip_qt_plugins "Qt plugins" "Plugins for Tulip Qt" "libtulip;libtulip_ogl;libtulip_qt" ${PLUGINS_GROUP_NAME})
 DEFINE_COMPONENT(tulip_plugins_spreadsheetview "Spreadsheet view" "Spreadsheet view plugin" "libtulip;libtulip_ogl;libtulip_qt" ${PLUGINS_GROUP_NAME})
 DEFINE_COMPONENT(tulip_plugins_pythonscriptview "Python view" "Python view plugin" "libtulip;libtulip_ogl;libtulip_qt" ${PLUGINS_GROUP_NAME})
+DEFINE_COMPONENT(libtulip_ogdf_plugins "OGDF plugins" "Plugins using the Tulip OGDF bridge" "libtulip" ${PLUGINS_GROUP_NAME})
 
 # software/pluginsmanager
 DEFINE_COMPONENT(tulip_pluginsmanager "Plugins manager" "A software to manage plugins installation from external sources." "libtulip;libtulip_ogl;libtulip_qt" ${SOFTWARE_GROUP_NAME})
