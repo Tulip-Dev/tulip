@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "OGDFLayoutPluginBase.h"
+#include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
 #include <vector>
 #include <tulip/DrawingTools.h>
