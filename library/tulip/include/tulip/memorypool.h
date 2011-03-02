@@ -21,7 +21,7 @@
 #include <vector>
 #include <iostream>
 #include <cstdlib>
-#include <assert.h>
+#include <cassert>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
