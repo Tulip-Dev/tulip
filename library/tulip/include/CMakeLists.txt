@@ -98,6 +98,8 @@ INSTALL(FILES
   tulip/filteriterator.h
   tulip/uniqueiterator.h
   tulip/stlfilteriterator.h
+  tulip/vectorgraph.h
+  tulip/vectorgraphproperty.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_dev
 )
