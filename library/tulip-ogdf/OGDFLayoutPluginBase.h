@@ -11,26 +11,21 @@
 #include "TulipToOGDF.h"
 
 class OGDFLayoutPluginBase: public tlp::LayoutAlgorithm {
+  public:
+    OGDFLayoutPluginBase(const tlp::PropertyContext &context, ogdf::LayoutModule *ogdfLayoutAlgo);
+    virtual ~OGDFLayoutPluginBase();
 
-public:
+    virtual bool run();
 
-	OGDFLayoutPluginBase(const tlp::PropertyContext &context, ogdf::LayoutModule *ogdfLayoutAlgo);
-	virtual ~OGDFLayoutPluginBase();
+  protected:
+    virtual void beforeCall(TulipToOGDF *, ogdf::LayoutModule *) {}
+    virtual void afterCall(TulipToOGDF *, ogdf::LayoutModule *) {}
 
-	virtual bool run();
+    void transposeLayoutVertically();
 
-protected:
-
-	virtual void beforeCall(TulipToOGDF *, ogdf::LayoutModule *) {}
-
-	virtual void afterCall(TulipToOGDF *, ogdf::LayoutModule *) {}
-
-	void transposeLayoutVertically();
-
-private:
-	TulipToOGDF *tlpToOGDF;
-	ogdf::LayoutModule *ogdfLayoutAlgo;
-
+  private:
+    TulipToOGDF *tlpToOGDF;
+    ogdf::LayoutModule *ogdfLayoutAlgo;
 };
 
 #endif // OGDF_LAYOUT_PLUGIN_BASE
