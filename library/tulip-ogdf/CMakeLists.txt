@@ -1,9 +1,13 @@
-include_directories(${OGDFInclude} ${TulipInclude} ${TulipBuildInclude})
+INCLUDE_DIRECTORIES(${OGDFInclude} ${TulipInclude} ${TulipBuildInclude})
 
 SET(TulipToOGDF_SRCS
   TulipToOGDF.cpp
   OGDFLayoutPluginBase.cpp)
 
-add_library(tulipOGDFBridge SHARED ${TulipToOGDF_SRCS})
-target_link_libraries(tulipOGDFBridge ${TulipLibName})
-target_link_libraries(tulipOGDFBridge ${OGDF_LIBRARY})
+ADD_LIBRARY(${LibTulipOGDFName} SHARED ${TulipToOGDF_SRCS})
+TARGET_LINK_LIBRARIES(${LibTulipOGDFName} ${TulipLibName})
+TARGET_LINK_LIBRARIES(${LibTulipOGDFName} ${OGDFLibrary})
+INSTALL(TARGETS ${LibTulipOGDFName}
+       RUNTIME DESTINATION ${TulipBinInstallDir} 
+       LIBRARY DESTINATION ${TulipLibInstallDir} 
+       ARCHIVE DESTINATION ${TulipLibInstallDir} )
