@@ -285,7 +285,7 @@ bool CSVToGraphNodeIdMapping::buildIndexForRow(unsigned int row,const string& in
     forEach(n,graph->getNodes()){
         if(keyProperty->getNodeStringValue(n).compare(indexKey)==0){
             rowToGraphId[row] = n.id;
-            returnForEach(true);
+            return true;
         }
     }
     if(createMissingNodes){
@@ -306,7 +306,7 @@ bool CSVToGraphEdgeIdMapping::buildIndexForRow(unsigned int row,const string& in
     forEach(e,graph->getEdges()){
         if(keyProperty->getEdgeStringValue(e).compare(indexKey)==0){
             rowToGraphId[row] = e.id;
-            returnForEach(true);
+            return true;
         }
     }    
     return false;
