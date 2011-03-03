@@ -17,7 +17,6 @@
  *
  */
 
-#include <tulip/vectorgraph.h>
 
 #include <vector>
 #include <omp.h>
@@ -26,6 +25,7 @@
 #include <cassert>
 #include <iostream>
 
+#include <tulip/vectorgraph.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/ForEach.h>
@@ -408,8 +408,10 @@ namespace tlp {
         vector<edge>::iterator it(tmpEdges.begin());
         vector<edge>::iterator itEnd(tmpEdges.end());
         for(; it != itEnd; ++it) {
-            if (source(*it) != target(*it)) //not a loop
+            if (!isElement(*it)) continue;
+            if (source(*it) != target(*it)) {//not a loop
                 partialDelEdge(opposite(*it, n), *it);
+            }
             if (source(*it) != n)
                 _nData[source(*it)]._outdeg -= 1;
             removeEdge(*it);
@@ -575,12 +577,12 @@ namespace tlp {
     }
     //=======================================================
     const vector<node>& VectorGraph::adj(const node n) const {
-        assert(n.id < _adjn.size());
+        assert(isElement(n));
         return _nData[n]._adjn;
     }
     //=======================================================
     const vector<edge>& VectorGraph::star(const node n) const {
-        assert(n.id < _adje.size());
+        assert(isElement(n));
         return _nData[n]._adje;
     }
     //=======================================================
