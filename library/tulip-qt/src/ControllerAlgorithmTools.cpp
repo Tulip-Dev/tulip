@@ -346,7 +346,7 @@ namespace tlp {
     forEach(n, graph->getProperty<BooleanProperty>("viewSelection")->getNodesEqualTo(true)) {
       if (root.isValid()) {
         QMessageBox::critical(parent, "Make Rooted","Only one root node must be selected.");
-        breakForEach;
+        break;
       }
       root = n;
     }
