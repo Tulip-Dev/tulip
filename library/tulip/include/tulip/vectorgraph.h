@@ -29,7 +29,7 @@
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/Iterator.h>
-#include "vectorgraphproperty.h"
+#include <tulip/vectorgraphproperty.h>
 
 namespace tlp {
     //===========================================
@@ -567,7 +567,7 @@ namespace tlp {
         /**
       * output the graph in a very simple way for debugging
       */
-        void dump();
+        void dump() const;
         //=============================================================
         /**
       * internal function to test the integrity of the graph

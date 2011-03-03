@@ -17,7 +17,7 @@
  *
  */
 
-#include "tulip/vectorgraph.h"
+#include <tulip/vectorgraph.h>
 
 #include <vector>
 #include <omp.h>
@@ -592,7 +592,7 @@ namespace tlp {
         return _edges;
     }
     //=======================================================
-    void VectorGraph::dump() {
+    void VectorGraph::dump() const {
         cout << "nodes : ";
         node n;
         forEach(n, getNodes())
