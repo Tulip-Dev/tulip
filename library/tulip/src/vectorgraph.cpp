@@ -20,7 +20,6 @@
 
 #include <vector>
 #include <omp.h>
-#include <parallel/algorithm>
 #include <set>
 #include <cassert>
 #include <iostream>
