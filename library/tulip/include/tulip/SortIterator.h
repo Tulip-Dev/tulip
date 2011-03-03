@@ -25,10 +25,16 @@
 #include <tulip/DoubleProperty.h>
 
 namespace tlp {
+/**
+ * @addtogroup iterators
+ */
+/*@{*/
 class Graph;
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 struct LessThan {
+  LessThan(DoubleProperty* m): metric(m) {
+  }
   DoubleProperty* metric;
   bool operator() (node n1,node n2) {
     return (metric->getNodeValue(n1) < metric->getNodeValue(n2));
@@ -48,30 +54,34 @@ private:
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
 
-///Interface of Sortiterator,
+
+/**
+* @brief This Iterator sorts the nodes in a sequence based on their values in a DoubleProperty.
+**/
 struct SortNodeIterator : public StableIterator<node> {
   ///
   SortNodeIterator(Iterator<node> *itIn, DoubleProperty* metric):StableIterator<node>(itIn) {
-    LessThan tmp;
-    tmp.metric=metric;
-    sort(cloneIt.begin(),cloneIt.end(),tmp);
-    itStl=cloneIt.begin();
+    LessThan tmp(metric);
+    sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
+    copyIterator=sequenceCopy.begin();
   }
   ///
   ~SortNodeIterator(){};
 };
 
-///Interface of Sortiterator,
+/**
+* @brief This Iterator sorts the edges based on the values of their target nodes in a DoubleProperty.
+**/
 struct SortTargetEdgeIterator : public StableIterator<edge> {
   ///
   SortTargetEdgeIterator(Iterator<edge> *itIn, Graph* sg, DoubleProperty* metric):StableIterator<edge>(itIn) {
     LessThanEdgeTargetMetric tmp(sg,metric);
-    sort(cloneIt.begin(),cloneIt.end(),tmp);
-    itStl=cloneIt.begin();
+    sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
+    copyIterator=sequenceCopy.begin();
   }
   ///
   ~SortTargetEdgeIterator(){};
 };
-
+/*@}*/
 }
 #endif

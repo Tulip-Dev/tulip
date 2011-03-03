@@ -112,27 +112,15 @@ public:
    */
   virtual Algorithm * createPluginObject(AlgorithmContext context)=0;
 
-  /**
-   * @inheritdoc
-   */
   virtual  std::string getMajor() const {
     return tlp::getMajor(getRelease());
   }
-  /**
-   * @inheritdoc
-   */
   virtual  std::string getMinor() const  {
     return tlp::getMinor(getRelease());
   }
-  /**
-   * @inheritdoc
-   */
   virtual  std::string getTulipMajor() const {
     return tlp::getMajor(getTulipRelease());
   }
-  /**
-   * @inheritdoc
-   */
   virtual  std::string getTulipMinor() const  {
     return tlp::getMinor(getTulipRelease());
   }
