@@ -29,7 +29,7 @@
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/Iterator.h>
-#include <tulip/vectorgraphproperty.h>
+#include "vectorgraphproperty.h"
 
 namespace tlp {
     //===========================================
@@ -656,16 +656,16 @@ namespace tlp {
 #ifndef NDEBUG //these two function are used to insure that property has been allocated in debug mode
     template <typename TYPE>
             bool NodeProperty<TYPE>::isValid() const {
-        if (_graph == 0) return false;
-        if (_array == 0) return false;
-        return _graph->isNodeAttr(_array);
+        if (this->_graph == 0) return false;
+        if (this->_array == 0) return false;
+        return this->_graph->isNodeAttr(this->_array);
     }
 
     template <typename TYPE>
             bool EdgeProperty<TYPE>::isValid() const {
-        if (_graph == 0) return false;
-        if (_array == 0) return false;
-        return _graph->isEdgeAttr(_array);
+        if (this->_graph == 0) return false;
+        if (this->_array == 0) return false;
+        return this->_graph->isEdgeAttr(this->_array);
     }
 #endif
 }
