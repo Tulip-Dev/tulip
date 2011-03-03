@@ -20,8 +20,8 @@
 #ifndef VECTORGRAPH_H
 #define VECTORGRAPH_H
 #include <vector>
-#include <omp.h>
-#include <parallel/algorithm>
+#include <algorithm>
+
 #include <set>
 #include <cassert>
 #include <iostream>
