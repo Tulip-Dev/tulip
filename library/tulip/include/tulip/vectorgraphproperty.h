@@ -104,18 +104,18 @@ namespace tlp {
         const TYPE & get(const size_t id) const {
             return (*this)[id];
         }
+#ifndef NDEBUG
+    virtual bool isValid() const = 0;
+#endif
 
     protected:
         VectorGraphProperty():_array(0), _graph(0) {
         }
         VectorGraphProperty(const VectorGraphProperty &obj): _array(obj._array), _graph(obj._graph) {
         }
-    #ifndef NDEBUG
-        bool isValid() const;
-    #endif
         VectorGraphProperty(ValArray<TYPE> *array, VectorGraph *graph):_array(array), _graph(graph){
         }
-    private:
+    protected:
         ValArray<TYPE> *_array; /**< TODO */
         VectorGraph *_graph; /**< TODO */
     };
@@ -161,6 +161,10 @@ namespace tlp {
            public:
        EdgeProperty():VectorGraphProperty<TYPE>() {}
        EdgeProperty(const EdgeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
+#ifndef NDEBUG
+    bool isValid() const;
+#endif
+
    private:
        EdgeProperty(ValArray<TYPE> *array, VectorGraph *graph):VectorGraphProperty<TYPE>(array, graph) {}
 
@@ -205,6 +209,10 @@ namespace tlp {
        public:
        NodeProperty():VectorGraphProperty<TYPE>() {}
        NodeProperty(const NodeProperty &obj): VectorGraphProperty<TYPE>(obj) {}
+#ifndef NDEBUG
+    bool isValid() const;
+#endif
+
    private:
        NodeProperty(ValArray<TYPE> *array, VectorGraph *graph):VectorGraphProperty<TYPE>(array, graph) {}
        };
