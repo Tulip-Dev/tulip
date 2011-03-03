@@ -71,7 +71,7 @@ SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVers
 SET(LibTulipName "tulip-${TulipMMVersion}")
 SET(LibTulipOglName "tulip-ogl-${TulipMMVersion}")
 SET(LibTulipQtName "tulip-qt4-${TulipMMVersion}")
-SET(LibTulipOGDFName "tulipogdf-${TulipMMVersion}")
+SET(LibTulipOGDFName "tulip-ogdf-${TulipMMVersion}")
 SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipMMVersion}")
 SET(LibStlPythonName "stlpython")
 SET(LibTulipPythonName "tulippython")
