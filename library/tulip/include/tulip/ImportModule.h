@@ -22,31 +22,54 @@
 
 #include "tulip/WithParameter.h"
 #include "tulip/WithDependency.h"
-#include "tulip/Reflect.h"
 #include "tulip/Plugin.h"
 #include "tulip/TemplateFactory.h"
-
 
 /** \addtogroup plugins */ 
 namespace tlp {
 class PluginProgress;
 class Graph;
+class DataSet;
 /*@{*/
-/// Interface for importModule plug-ins
+
+/**
+* @brief Base class for import plug-ins.
+* 
+**/
 class ImportModule :public WithParameter, public WithDependency
 {
 public:
-  DataSet *dataSet;
-  ///
-  ImportModule (AlgorithmContext context) : dataSet(context.dataSet),
-    graph(context.graph),pluginProgress(context.pluginProgress) {}
+  /**
+  * @brief Initializes the DataSet to the one passed in the context.
+  *
+  * @param context THe context this import plug-in runs into.
+  **/
+  ImportModule (AlgorithmContext context) : 
+    graph(context.graph),pluginProgress(context.pluginProgress), dataSet(context.dataSet) {}
   virtual ~ImportModule(){};
-  ///
+  
+  /**
+  * @brief The import operations should take place here.
+  *
+  * @param  unused, deprecated parameter
+  * @return bool Whether the import was sucessful or not.
+  **/
   virtual bool import(const std::string &)=0;
-  /** It is the Graph where the plug-ins should build the imported graph*/
+  
+  /**
+  * @brief The Graph in which to write the data to import.
+  **/
   Graph *graph;
-  ///
+  
+  /**
+  * @brief A means to report progress to the user.
+  **/
   PluginProgress *pluginProgress;
+
+  /**
+  * @brief A container for the parameters of this import plug-in.
+  **/
+  DataSet *dataSet;
 };
 
 class ImportModuleFactory:public Plugin{

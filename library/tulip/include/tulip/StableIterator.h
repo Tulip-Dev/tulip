@@ -23,72 +23,88 @@
 #include <vector>
 
 namespace tlp {
-    /**
-     * \addtogroup iterators
-     */
-    /*@{*/
 /**
-  *\class StableIterator
-  *\brief That class enables to store elements of an iterator and to iterate on a copy.
+ * @addtogroup iterators
+ */
+/*@{*/
+/**
+  * @class StableIterator
+  * @brief Stores the elements of an iterator and iterates on a copy.
   *
-  * That iterator store all elements accessible by the input iterator into an internal data
-  * structure (created at the construction) and then only use that structure for the iteration.
-  * Order of iteration is the same. If one knows the number of elements that will be iterated
-  * one could give give it in paremeters to speed up the duplication process.
+  * THis Iterator stores all the elements accessible by another Iterator into an internal data
+  * structure (created at the construction), and then uses this structure for the iteration.
+  * Iteration order is the same.
   *
-  * \warning By default StableIterator manage the destruction of the iterator given in parameter, (ie,
-  * delete will be call on the input iterator).
+  * @warning By default StableIterator takes ownership of the iterator given in parameter, (ie,
+  * delete will be called on the input iterator). The deletion takes place when constructing the StableIterator.
   *
-  * That class is really useful when one need to modify the graph during an iteration. For
+  * This class is really useful when one needs to modify the graph during an iteration. For
   * instance the following code remove all nodes that match the function myfunc().
   * Using standard iterators for that operations is not possible since we modify the graph.
   *
-  * \code
+  * @code
   * StableIterator<node> it(graph->getNodes());
   * while(it.hasNext()) {
   *  node n = it.next();
   *  if (myfunc(n))
   *     graph->delNode(n);
   * }
-  * \endcode
+  * @endcode
   *
-  * \see stableForEach
+  * @see stableForEach
   */
 template<class itType>
 struct StableIterator : public Iterator<itType> {
     //=============================
-    StableIterator(Iterator<itType> *itIn, size_t nbElements = 0, bool deleteIterator = true) {
-        cloneIt.reserve(nbElements);
-        for (;itIn->hasNext();) {
-            cloneIt.push_back(itIn->next());
+    /**
+    * @brief Creates a stable Iterator, that allows to delete elements from a graph while iterating on them.
+    *
+    * @param inputIterator Input Iterator, which defines the sequence on which this Iterator will iterate.
+    * @param nbElements The number of elements the iteration will take place on. Defaults to 0.
+    * @param deleteIterator Whether or not to delete the Iterator given as first parameter. Defaults to true.
+    **/
+    StableIterator(Iterator<itType> *inputIterator, size_t nbElements = 0, bool deleteIterator = true) {
+        sequenceCopy.reserve(nbElements);
+        for (;inputIterator->hasNext();) {
+            sequenceCopy.push_back(inputIterator->next());
         }
         if (deleteIterator)
-            delete itIn;
-        itStl = cloneIt.begin();
+            delete inputIterator;
+        copyIterator = sequenceCopy.begin();
     }
     //=============================
     ~StableIterator(){};
     //=============================
     itType next() {
-        itType tmp(*itStl);
-        ++itStl;
+        itType tmp(*copyIterator);
+        ++copyIterator;
         return tmp;
     }
     //=============================
     bool hasNext() {
-        return (itStl != cloneIt.end());
+        return (copyIterator != sequenceCopy.end());
     };
     //=============================
+    
     /**
-    * Enables to restart the iteration at the begining.
-    */
+    * @brief Restarts the iteration by moving the Iterator to the beginning of the sequence.
+    *
+    * @return void
+    **/
     void restart() {
-        itStl = cloneIt.begin();
+        copyIterator = sequenceCopy.begin();
     }
     //=============================
-protected :
-        std::vector<itType> cloneIt;
-        typename std::vector<itType>::const_iterator itStl;
+  protected :
+    /**
+    * @brief A copy of the sequence of elements to iterate on.
+    **/
+    std::vector<itType> sequenceCopy;
+    
+    /**
+    * @brief STL const_iterator on the cloned sequence.
+    **/
+    typename std::vector<itType>::const_iterator copyIterator;
 };
 /*@}*/
 }
