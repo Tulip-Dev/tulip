@@ -70,7 +70,7 @@ namespace tlp {
     forEach(sg, graph->getSubGraphs()) {
       Graph *csg = getCurrentSubGraph(sg, name);
       if (csg)
-        returnForEach(csg);
+        return csg;
     }
     return (Graph *) 0;
   }

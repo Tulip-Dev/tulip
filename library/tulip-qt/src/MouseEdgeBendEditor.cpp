@@ -89,7 +89,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       edge ed;
       forEach(ed, _selection->getEdgesEqualTo(true, _graph)) {
 	hasSelection = true;
-	breakForEach;
+	break;
 	}*/
       if (!hasSelection) {
         // event occurs outside the selection rectangle

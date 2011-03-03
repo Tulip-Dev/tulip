@@ -182,13 +182,13 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       node no;
       forEach(no, _selection->getNodesEqualTo(true, _graph)) {
         hasSelection = true;
-        breakForEach;
+        break;
       }
       if (!hasSelection) {
         edge ed;
         forEach(ed, _selection->getEdgesEqualTo(true, _graph)) {
           hasSelection = true;
-          breakForEach;
+          break;
         }
       }
       if (!hasSelection ||
