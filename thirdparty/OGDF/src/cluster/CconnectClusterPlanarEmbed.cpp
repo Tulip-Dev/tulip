@@ -504,7 +504,7 @@ void CconnectClusterPlanarEmbed::copyEmbedding(ClusterGraph &Ccopy,
 
 // Deallocates all memory, if the cluster graph is not cluster planar
 
-void CconnectClusterPlanarEmbed::nonPlanarCleanup(ClusterGraph &Ccopy,Graph &Gcopy)
+void CconnectClusterPlanarEmbed::nonPlanarCleanup(ClusterGraph &,Graph &Gcopy)
 {
 
 	while (!m_callStack.empty())
@@ -1701,9 +1701,9 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 									NodeArray<int>  &numbering,			
 									cluster &origCluster,
 									node superSink,
-									Graph &subGraph,
+									Graph &,
 									EdgeArray<edge> &tableEdgesBiComp2SubGraph,
-									EdgeArray<edge> &tableEdgesSubGraph2BiComp,
+									EdgeArray<edge> &,
 									NodeArray<node> &tableNodesBiComp2SubGraph)
 {
 	node v;
@@ -2076,7 +2076,7 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 												cluster &origOfAct,
 												EmbedPQTree* T,
 												EdgeArray<node> &outgoingTable,
-												node superSink)
+												node)
 {
 		
 	OGDF_ASSERT(Ccopy.consistencyCheck());

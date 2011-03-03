@@ -101,7 +101,7 @@ class OGDF_EXPORT BalloonLayout : public LayoutModule
  	/** Call using special parameter settings for fractal model
  	 * takes radius ratio < 0.5 as parameter.
  	 */
- 	virtual void callFractal(GraphAttributes & AG, double ratio = 0.3)
+ 	virtual void callFractal(GraphAttributes & AG, double = 0.3)
  	{
  		bool even = getEvenAngles();
  		setEvenAngles(true);

@@ -70,7 +70,7 @@ GraphAttributes::GraphAttributes() : m_pGraph(0), m_directed(true) { }
 
 
 GraphAttributes::GraphAttributes(const Graph &G, long initAttr) :
-	m_pGraph(&G), m_attributes(0), m_directed(true)
+	m_pGraph(&G), m_directed(true), m_attributes(0)
 {
 	initAttributes(m_attributes = initAttr);
 }

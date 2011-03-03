@@ -378,8 +378,6 @@ bool SolarMerger::buildOneLevel(MultilevelGraph &MLG)
 
 bool SolarMerger::collapsSolarSystem(MultilevelGraph &MLG, node sun, int level)
 {
-	Graph &G = MLG.getGraph();
-
 	bool retVal = false;
 
 	std::vector<node> systemNodes;

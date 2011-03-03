@@ -78,7 +78,7 @@ public:
 
 		const LinearQuadtree& tree;
 
-		forall_tree_nodes_functor(const LinearQuadtree& t, F f, NodeID b, __uint32 num) : tree(t), func(f), begin(b), numNodes(num) {};
+                forall_tree_nodes_functor(const LinearQuadtree& t, F f, NodeID b, __uint32 num) : func(f), begin(b), numNodes(num), tree(t) {};
 
 		inline void operator()() 
 		{	
@@ -105,7 +105,7 @@ public:
 		F func;
 		const LinearQuadtree& tree;
 
-		forall_children_functor(const LinearQuadtree& t, F f) : tree(t), func(f) {};
+                forall_children_functor(const LinearQuadtree& t, F f) : func(f), tree(t) {};
 
 		inline void operator()(NodeID u)
 		{
@@ -154,7 +154,7 @@ public:
 		F func;
 		const LinearQuadtree& tree;
 
-		forall_ordered_pairs_of_children_functor(const LinearQuadtree& t, F f) : tree(t), func(f) {};
+                forall_ordered_pairs_of_children_functor(const LinearQuadtree& t, F f) : func(f), tree(t) {};
 
 		inline void operator()(NodeID u)
 		{
@@ -180,8 +180,8 @@ public:
 		CondType cond;
 		const LinearQuadtree& tree;
 
-		top_down_traversal_functor(const LinearQuadtree& t, F f) : tree(t), func(f) {};
-		top_down_traversal_functor(const LinearQuadtree& t, F f, CondType c) : tree(t), func(f), cond(c) {};
+                top_down_traversal_functor(const LinearQuadtree& t, F f) : func(f), tree(t) {};
+                top_down_traversal_functor(const LinearQuadtree& t, F f, CondType c) : func(f), cond(c), tree(t) {};
 
 		inline void operator()(NodeID u) 
 		{	
@@ -212,8 +212,8 @@ public:
 		CondType cond;
 		const LinearQuadtree& tree;
 
-		bottom_up_traversal_functor(const LinearQuadtree& t, F f) : tree(t), func(f) {};
-		bottom_up_traversal_functor(const LinearQuadtree& t, F f, CondType c) : tree(t), func(f), cond(c) {};
+                bottom_up_traversal_functor(const LinearQuadtree& t, F f) : func(f), tree(t) {};
+                bottom_up_traversal_functor(const LinearQuadtree& t, F f, CondType c) : func(f), cond(c), tree(t) {};
 
 		inline void operator()(NodeID u) 
 		{	
@@ -245,9 +245,9 @@ public:
 		BranchCondType BranchCondFunction;
 		const LinearQuadtree& tree;
 
-		wspd_functor(const LinearQuadtree& t, WSPairFuncType& wsf, DPairFuncType& dpf, DNodeFuncType& dnf) : tree(t), WSFunction(wsf),  DPairFunction(dpf),  DNodeFunction(dnf) {};
+                wspd_functor(const LinearQuadtree& t, WSPairFuncType& wsf, DPairFuncType& dpf, DNodeFuncType& dnf) : WSFunction(wsf),  DPairFunction(dpf),  DNodeFunction(dnf), tree(t) {};
 
-		wspd_functor(const LinearQuadtree& t, WSPairFuncType& wsf, DPairFuncType& dpf, DNodeFuncType& dnf, BranchCondType& bc) : tree(t), WSFunction(wsf),  DPairFunction(dpf),  DNodeFunction(dnf), BranchCondFunction(bc) {};
+                wspd_functor(const LinearQuadtree& t, WSPairFuncType& wsf, DPairFuncType& dpf, DNodeFuncType& dnf, BranchCondType& bc) : WSFunction(wsf),  DPairFunction(dpf),  DNodeFunction(dnf), BranchCondFunction(bc), tree(t) {};
 
 		inline void operator()(NodeID u)
 		{

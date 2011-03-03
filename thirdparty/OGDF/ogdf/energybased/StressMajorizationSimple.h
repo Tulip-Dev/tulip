@@ -128,15 +128,16 @@ public:
 							m_desLength(0.0),
 							m_distFactor(2.0),
 							m_useLayout(false),
-							m_radiiStyle(0),m_radiusFactor(1.1),
-							m_baseRadius(50.0),
+							m_constraints(cUpward),
 							m_radial(false),
-							m_gItBaseVal(50),
-							m_gItFactor(16),
+							m_upward(false),
+							m_radiiStyle(0),
+							m_baseRadius(50.0),
 							m_numSteps(300),
 							m_itFac(0.0),
-							m_constraints(cUpward),
-							m_upward(false)
+							m_radiusFactor(1.1),
+							m_gItBaseVal(50),
+							m_gItFactor(16)
 						 {
 						 	m_maxLocalIt = m_maxGlobalIt = maxVal;
 						 }

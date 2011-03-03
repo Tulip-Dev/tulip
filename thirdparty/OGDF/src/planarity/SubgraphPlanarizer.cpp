@@ -215,7 +215,7 @@ void SubgraphPlanarizer::CrossingStructure::init(PlanRep &PG, int weightedCrossi
 	}	
 }
 
-void SubgraphPlanarizer::CrossingStructure::restore(PlanRep &PG, int cc)
+void SubgraphPlanarizer::CrossingStructure::restore(PlanRep &PG, int)
 {
 	//PG.initCC(cc);
 	

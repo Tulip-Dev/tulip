@@ -95,7 +95,7 @@ void RandomPlacer::placeOneLevel(MultilevelGraph &MLG)
 }
 
 
-void RandomPlacer::placeOneNode(MultilevelGraph &MLG, DPoint center, double radius)
+void RandomPlacer::placeOneNode(MultilevelGraph &MLG, DPoint, double radius)
 {
 	node merged = MLG.undoLastMerge();
 	float angle = (float)randomDouble(0.0, 2 * pi);

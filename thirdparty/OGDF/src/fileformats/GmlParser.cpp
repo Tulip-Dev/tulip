@@ -852,6 +852,7 @@ bool GmlParser::read(Graph &G, GraphAttributes &AG)
 bool GmlParser::readAttributedCluster(Graph &G, ClusterGraph& CG,
 									   ClusterGraphAttributes& ACG)
 {
+        (void)G;
 	OGDF_ASSERT(&CG.getGraph() == &G)
 
 
@@ -880,6 +881,7 @@ bool GmlParser::readAttributedCluster(Graph &G, ClusterGraph& CG,
 //no clusters other then root cluster may exist, which holds all nodes
 bool GmlParser::readCluster(Graph &G, ClusterGraph& CG)
 {
+        (void)G;
 	OGDF_ASSERT(&CG.getGraph() == &G)
 
 	//now we need the cluster object

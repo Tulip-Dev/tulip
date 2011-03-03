@@ -1174,7 +1174,7 @@ bool isTriconnected(const Graph &G, node &s1, node &s2)
 //                       debugging stuff
 //----------------------------------------------------------
 
-void TricComp::printOs(edge e)
+void TricComp::printOs(edge)
 {
 #ifdef TRIC_COMP_OUTPUT
 	cout << " (" << m_pGC->original(e->source()) << "," <<

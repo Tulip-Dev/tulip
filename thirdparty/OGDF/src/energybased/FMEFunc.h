@@ -276,7 +276,6 @@ struct l2p_functor
 
 	inline void operator()(LinearQuadtree::NodeID nodeIndex, LinearQuadtree::PointID pointIndex)
 	{
-		const LinearQuadtree::LQPoint& p = tree.point(pointIndex);
 		expansions.L2P(nodeIndex, pointIndex, fx[pointIndex], fy[pointIndex]);
 	};
 

@@ -140,7 +140,7 @@ void FUPSSimple::computeFUPS(UpwardPlanRep &UPR, List<edge> &delEdges)
 
 
 			/*
-			//*************************** debug ********************************		
+			// *************************** debug ********************************		
 			cout << endl << "FUPS : " << endl;			
 			face ff;
 			forall_faces(ff, Beta) {

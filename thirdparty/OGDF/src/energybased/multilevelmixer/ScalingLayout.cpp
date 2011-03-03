@@ -59,9 +59,8 @@
 namespace ogdf {
 
 ScalingLayout::ScalingLayout()
-: m_extraScalingSteps(0), m_maxScaling(2.0), m_minScaling(1.0), 
-m_scalingType(st_relativeToDrawing), m_secondaryLayoutModule(0), m_mmm(0), 
-m_layoutRepeats(1), m_desEdgeLength(1.0)
+: m_secondaryLayoutModule(0), m_minScaling(1.0), m_maxScaling(2.0), m_mmm(0),
+m_desEdgeLength(1.0), m_extraScalingSteps(0), m_layoutRepeats(1), m_scalingType(st_relativeToDrawing)
 {
 }
 

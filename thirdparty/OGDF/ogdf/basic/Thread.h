@@ -178,7 +178,7 @@ public:
 	//	return SetThreadAffinityMask(m_handle, (DWORD_PTR)mask);
 	//}
 
-	void start(State state = tsRunning) {
+	void start(State = tsRunning) {
 		OGDF_ASSERT(m_pt == 0);
 		pthread_create(&m_pt, NULL, threadProc, this);
 	}

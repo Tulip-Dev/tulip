@@ -81,7 +81,6 @@ void CirclePlacer::setNodeSelection(NodeSelection nodeSel)
 
 void CirclePlacer::placeOneLevel(MultilevelGraph &MLG)
 {
-	int level = MLG.getLevel();
 	DPoint center(0.0, 0.0);
 	float radius = 0.0;
 
