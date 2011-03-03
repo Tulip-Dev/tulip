@@ -62,7 +62,7 @@ namespace tlp {
     virtual void aborted(const std::string &filename,const  std::string &errormsg) {
       progress++;
       std::string msg("Error when loading ");
-      msg += filename + '\n' + errormsg;
+      msg += tlp::getCurrentPluginFileName() + ":\n" + filename + '\n' + errormsg;
       appStartUp->addErrorMsg(msg);
       appStartUp->setLabel("Error");
       appStartUp->setProgress(progress);
