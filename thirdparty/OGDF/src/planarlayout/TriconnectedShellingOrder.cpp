@@ -240,7 +240,7 @@ ComputeTricOrder::ComputeTricOrder(
 	const Graph& G, 					// the graph
 	ConstCombinatorialEmbedding &E, 	// embedding of the graph
 	face outerFace,                   	// the outer face
-	double baseRatio,          			// size of base (baseRatio * size(extFace))
+	double ,          			// size of base (baseRatio * size(extFace))
 	bool preferNodes) 					// boolean value if nodes are prefered to faces
 {
 	m_pGraph = &G;

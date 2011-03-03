@@ -753,7 +753,7 @@ cluster ClusterGraph::commonClusterAncestorsPath(node v,
 }//commonclusterlastAncestors
 
 void ClusterGraph::copyLCA(const ClusterGraph &C, 
-						   ClusterArray<cluster>* clusterCopy)
+						   ClusterArray<cluster>*)
 {
 	if (m_lcaSearch) 
 	{

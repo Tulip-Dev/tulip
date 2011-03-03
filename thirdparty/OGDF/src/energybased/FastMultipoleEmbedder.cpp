@@ -428,8 +428,6 @@ void FastMultipoleMultilevelEmbedder::initCurrentLevel()
 	{
 		v = e->source();
 		w = e->target();
-		GalaxyMultilevel::LevelNodeInfo& nodeInfoA = (*(m_pCurrentLevel->m_pNodeInfo))[v]; 
-		GalaxyMultilevel::LevelNodeInfo& nodeInfoB = (*(m_pCurrentLevel->m_pNodeInfo))[w]; 
 		GalaxyMultilevel::LevelEdgeInfo& edgeInfo = (*(m_pCurrentLevel->m_pEdgeInfo))[e]; 
 		(*m_pCurrentEdgeLength)[e] = edgeInfo.length*0.25f;
 	}

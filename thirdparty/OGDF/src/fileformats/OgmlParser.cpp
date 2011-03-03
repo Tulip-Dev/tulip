@@ -966,7 +966,7 @@ ostream& operator<<(ostream& os, const OgmlTag& ot) {
 // p r i n t V a l i d i t y I n f o
 //
 // ***********************************************************
-void OgmlParser::printValidityInfo(const OgmlTag & ot, const XmlTagObject & xto, int valStatus, int line)
+void OgmlParser::printValidityInfo(const OgmlTag & ot, const XmlTagObject & xto, int valStatus, int)
 {
 	String ogmlTagName = ot.getName();
 
@@ -1294,7 +1294,7 @@ int OgmlParser::getLineTypeAsInt(String s){
 }
 
 // Mapping ArrowStyles to Integer
-int OgmlParser::getArrowStyleAsInt(String s, String sot){
+int OgmlParser::getArrowStyleAsInt(String s, String){
 	// sot = "source" or "target", actually not necessary
 	// TODO: Complete, if new arrow styles are implemented in ogdf
 	if (s == "none")

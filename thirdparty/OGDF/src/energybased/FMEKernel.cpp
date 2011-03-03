@@ -697,7 +697,7 @@ inline __w64 int align_16_end(T* ptr, const N n)
 
 
 void fast_multipole_l2p(double* localCoeffiecients, __uint32 numCoeffiecients, double centerX, double centerY, 
-				float x, float y, float q, float& fx, float&fy)
+				float x, float y, float, float& fx, float&fy)
 {
 	double* source_coeff = localCoeffiecients; //+ source*(m_numCoeff << 1);
 	ComplexDouble ak;

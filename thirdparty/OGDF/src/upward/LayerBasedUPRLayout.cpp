@@ -1134,8 +1134,6 @@ void LayerBasedUPRLayout::callSimple(GraphAttributes &GA, adjEntry adj)
 			stRank[eSt->source()] = ++r;
 			st2GC[eSt->source()] = (*it)->source();
 
-			node v = eSt->source();
-			node vGC = (*it)->source();
 			OGDF_ASSERT(stRank[eSt->source()] == H.rank((*it)->source()));
 		}
 	}

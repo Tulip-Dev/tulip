@@ -95,7 +95,7 @@ private:
 	//! constructs for every cluster a graph representing its
 	//! main structure (children & their connections)
 	//! only insert nodes here 
-	void constructRepresentationGraphNodes(const ClusterGraph& CG,
+	void constructRepresentationGraphNodes(const ClusterGraph&,
 										   Graph& g, 
 									       cluster c
 										   )

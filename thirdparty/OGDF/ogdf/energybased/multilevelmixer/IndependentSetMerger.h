@@ -66,7 +66,7 @@ private:
 	float m_base;
 
 	std::vector<node> prebuildLevel(const Graph &G, const std::vector<node> &oldLevelNodes, int level);
-	bool buildOneLevel(MultilevelGraph &MLG){return false;};
+	bool buildOneLevel(MultilevelGraph &){return false;};
 	bool buildOneLevel(MultilevelGraph &MLG, std::vector<node> &levelNodes);
 
 public:

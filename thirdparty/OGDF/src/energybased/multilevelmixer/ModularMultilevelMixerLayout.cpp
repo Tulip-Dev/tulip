@@ -65,11 +65,11 @@
 namespace ogdf {
 
 ModularMultilevelMixer::ModularMultilevelMixer()
-: m_multilevelBuilder(0), m_initialPlacement(0), m_oneLevelLayoutModule(0),
-m_finalLayoutModule(0), m_postLayoutModule(0), m_times(1), m_fixedEdgeLength(-1.0f), 
+: m_oneLevelLayoutModule(0), m_postLayoutModule(0), m_finalLayoutModule(0),
+m_multilevelBuilder(0), m_initialPlacement(0),
+m_times(1), m_fixedEdgeLength(-1.0f),
 m_fixedNodeSize(-1.0f), m_postIterations(-1), m_postTimeFactor(-1.0f),
-m_coarseningRatio(1.0),
-m_postAfterEveryStep(false), m_levelBound(false), m_randomize(false)
+m_postAfterEveryStep(false), m_coarseningRatio(1.0), m_levelBound(false), m_randomize(false)
 {
 
 }

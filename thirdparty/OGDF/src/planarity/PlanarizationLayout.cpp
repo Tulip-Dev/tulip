@@ -89,7 +89,7 @@ PlanarizationLayout::PlanarizationLayout()
 }
 
 
-void PlanarizationLayout::reembed(PlanRepUML &PG, int ccNumber, bool l_align,
+void PlanarizationLayout::reembed(PlanRepUML &PG, int, bool l_align,
 	bool l_gensExist)
 {
 	//TODO: update by reinitialization?

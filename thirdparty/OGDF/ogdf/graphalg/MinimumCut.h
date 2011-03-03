@@ -84,7 +84,7 @@ public:
 	// returns list of nodes belonging to one side of the bipartition in list \a nodes.
 	void partition(List<node> &nodes);
 	
-	double const minCutValue() {return m_minCut;}
+	double minCutValue() {return m_minCut;}
 	
 private:
 

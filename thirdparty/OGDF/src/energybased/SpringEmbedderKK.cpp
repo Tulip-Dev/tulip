@@ -59,7 +59,7 @@ const double SpringEmbedderKK::minVal = DBL_MIN;
 const double SpringEmbedderKK::desMinLength = 0.0001;
 
 void SpringEmbedderKK::initialize(GraphAttributes& GA,
-								  NodeArray<dpair>& partialDer, 
+								  NodeArray<dpair>&, 
 								  const EdgeArray<double>& eLength,
 								  NodeArray< NodeArray<double> >& oLength,
 								  NodeArray< NodeArray<double> >& sstrength,
@@ -182,7 +182,7 @@ void SpringEmbedderKK::mainStep(GraphAttributes& GA,
 								NodeArray<dpair>& partialDer, 
 								NodeArray< NodeArray<double> >& oLength,
 								NodeArray< NodeArray<double> >& sstrength,
-								const double maxDist)
+								const double)
 {
 	const Graph &G = GA.constGraph();
 	node v;
@@ -385,7 +385,7 @@ void SpringEmbedderKK::adaptLengths(const Graph& G,
 	}
 }//adaptLengths
 
-void SpringEmbedderKK::shufflePositions(GraphAttributes& GA)
+void SpringEmbedderKK::shufflePositions(GraphAttributes&)
 {
 //first check if degenerated or
 //just position all on a circle or random layout?

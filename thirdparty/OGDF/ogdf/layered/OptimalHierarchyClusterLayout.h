@@ -108,7 +108,7 @@ class OGDF_EXPORT OptimalHierarchyClusterLayout : public HierarchyClusterLayoutM
 {
 #ifndef OGDF_LP_SOLVER
 protected:
-	void doCall(const ExtendedNestingGraph& H,ClusterGraphCopyAttributes &ACGC) {
+	void doCall(const ExtendedNestingGraph&,ClusterGraphCopyAttributes&) {
 		OGDF_THROW_PARAM(LibraryNotSupportedException, lnscCoin);
 	}
 

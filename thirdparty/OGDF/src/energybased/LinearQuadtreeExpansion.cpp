@@ -110,7 +110,6 @@ void LinearQuadtreeExpansion::P2M(__uint32 point, __uint32 receiver)
 void LinearQuadtreeExpansion::L2P(__uint32 source, __uint32 point, float& fx, float& fy)
 {	
 	const double* source_coeff = m_localExp + source*(m_numCoeff << 1);
-	const double q = (double)m_tree.pointSize(point);
 	const double x = (double)m_tree.pointX(point);
 	const double y = (double)m_tree.pointY(point);
 	const double centerX = (double)m_tree.nodeX(source);

@@ -128,8 +128,6 @@ void FMEMultipoleKernel::quadtreeConstruction(ArrayPartition& pointPartition)
 			endPoint_plus_one = tree.numberOfPoints();
 		else // find the left point of the next thread
 			endPoint_plus_one = tree.findFirstPointInCell(pointPartition.end+1);
-		// and calculate the number of points to prepare
-		__uint32 numPointsToPrepare = endPoint_plus_one - beginPoint;
 
 		// now we can prepare the snapped interval
 		LinearQuadtreeBuilder builder(tree);
@@ -504,11 +502,9 @@ void FMEMultipoleKernel::operator()(FMEGlobalContext* globalContext)
 {
 	__uint32					maxNumIterations    =  globalContext->pOptions->maxNumIterations;
 	__uint32					minNumIterations    =  globalContext->pOptions->minNumIterations;
-	__uint32					numPoints			=  globalContext->pQuadtree->numberOfPoints();
 	ArrayGraph&					graph				= *globalContext->pGraph;
 	LinearQuadtree&				tree				= *globalContext->pQuadtree;
 	LinearQuadtreeExpansion&	treeExp				= *globalContext->pExpansion;
-	WSPD&						wspd				= *globalContext->pWSPD;
 	FMELocalContext*			localContext		= globalContext->pLocalContext[threadNr()];
 	FMEGlobalOptions*			options				= globalContext->pOptions;
 	float*						threadsForceArrayX	= localContext->forceX;

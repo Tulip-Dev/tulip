@@ -130,7 +130,6 @@ double diameter)
     node v, w;
     double minMax = DBL_MAX;
     node center = 0;
-    node closenesscenter = 0;
     int numCentralNodes = 0;
     double maxCloseness = 0.0;
     double minCloseness = DBL_MAX;
@@ -181,7 +180,7 @@ double diameter)
 void  StressMajorization::mainStep(GraphAttributes& GA,
 				NodeArray< NodeArray<double> >& oLength,
 				NodeArray< NodeArray<double> >& weights,
-				const double maxDist)
+				const double)
 {
 	const Graph &G = GA.constGraph();
 	node v;
@@ -417,7 +416,7 @@ void  StressMajorization::adaptLengths(const Graph& G,
 	}
 }//adaptLengths
 
-void  StressMajorization::shufflePositions(GraphAttributes& GA)
+void  StressMajorization::shufflePositions(GraphAttributes&)
 {
     //random layout? FMMM? classical MDS? see Paper of Pich and Brandes
     //just hope that we have low sigma values (distance error)

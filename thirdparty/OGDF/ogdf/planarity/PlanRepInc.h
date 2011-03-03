@@ -137,7 +137,7 @@ public:
 
 	bool& treeEdge(edge e) {return m_treeEdge[e];}
 	//only valid if m_eTreeArray initialized, should be replaced later
-	const edge  treeEdge(int i, int j) const 
+	edge  treeEdge(int i, int j) const
 		{
 			if (m_treeInit) return m_eTreeArray(i, j);
 			else return 0;
