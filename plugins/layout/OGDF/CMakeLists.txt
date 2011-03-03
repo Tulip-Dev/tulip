@@ -1,5 +1,4 @@
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipInclude} ${TulipBuildInclude} ${OGDFInclude} ${TulipOGDFInclude})
-message("lib: ${LibTulipOGDFName}")
 FILE(GLOB PLUGINS_SRCS "*.cpp")
 
 FOREACH(OGDFPlugin ${PLUGINS_SRCS})
