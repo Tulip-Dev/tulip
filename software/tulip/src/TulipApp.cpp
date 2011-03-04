@@ -287,9 +287,6 @@ void TulipApp::startTulip() {
   OpenGlErrorViewer *oldViewer=GlTextureManager::getInst().setErrorViewer(new QtOpenGlErrorViewer(this));
   delete oldViewer;
 
-  // if we have only one controller : auto load it
-  MutableContainer<Controller *> controllers;
-  ControllerPluginsManager::getInst().initControllerPluginsList(controllers);
   TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
   it=ControllerFactory::factory->objMap.begin();
   string name=(*it).first;
@@ -386,8 +383,6 @@ void TulipApp::fileNew(QAction *action) {
 }
 //**********************************************************************
 bool TulipApp::fileNew(bool) {
-  MutableContainer<Controller *> controllers;
-  ControllerPluginsManager::getInst().initControllerPluginsList(controllers);
   TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
   it=ControllerFactory::factory->objMap.begin();
   string name=(*it).first;
@@ -835,7 +830,10 @@ void TulipApp::importGraph(QAction* action) {
       }
     }
     //cout << subMenu->name() << "->" << itemName << endl;
-    QAction *action=subMenu->addAction(itemName.c_str());
+    
+    QAction *action = new QAction(itemName.c_str(), subMenu);
+    action->setObjectName(itemName.c_str());
+    subMenu->addAction(action);
     QObject::connect(action,SIGNAL(triggered()),receiver,slot);
   }
 //**********************************************************************
@@ -878,6 +876,8 @@ void TulipApp::buildMenus() {
   //connect(&importGraphMenu, SIGNAL(triggered(QAction*)), SLOT(importGraph(QAction*)));
   if (importGraphMenu.actions().count()>0) {
     importGraphMenu.setTitle("&Import");
+    importGraphMenu.setObjectName("Import");
+//     importGraphMenu.setParent(fileMenu);
     fileMenu->insertMenu(filePrintAction,&importGraphMenu);
   }
   if (exportGraphMenu.actions().count()>0) {
