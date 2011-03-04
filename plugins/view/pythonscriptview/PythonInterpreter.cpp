@@ -631,16 +631,14 @@ const sipAPIDef *get_sip_api(){
 }
 
 
-
-
 PythonInterpreter::PythonInterpreter() : runningScript(false) {
 	int argc=1;
 	char *argv[1];
 	argv[0] = const_cast<char *>("");
 	Py_OptimizeFlag = 1;
+	Py_NoSiteFlag = 1;
 	Py_InitializeEx(0);
 	PySys_SetArgv(argc, argv);
-
 
 	runString("import sys");
 	PyObject *pName = PyString_FromString("__main__");
@@ -651,7 +649,12 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 	pythonVersion = string(PyString_AsString(pVersion));
 	// hack for linux in order to be able to load dynamic python modules installed on the system (like numpy, matplotlib and other cool stuffs)		
 #ifndef WIN32	
-	string libPythonName = string("libpython") + pythonVersion + string(".so");
+	string libPythonName = string("libpython") + pythonVersion;
+#ifdef __APPLE__
+	libPythonName += string(".dylib");
+#else
+	libPythonName += string(".so");
+#endif
 	dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
 #endif	
 
