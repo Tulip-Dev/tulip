@@ -48,20 +48,6 @@ namespace tlp
     }
   }
   //====================================================
-  void ControllerPluginsManager::initControllerPluginsList(MutableContainer<Controller *> &controllers) {
-    ControllerContext ic;
-    controllers.setAll(0);
-
-    Iterator<string> *itS = ControllerFactory::factory->availablePlugins();
-    unsigned int i = 0;
-    while (itS->hasNext()) {
-      string controllerPluginName=itS->next();
-      Controller *newControllerPlugin = ControllerFactory::factory->getPluginObject(controllerPluginName, &ic);
-      controllers.set(i, newControllerPlugin);
-      ++i;
-    } delete itS;
-  }
-  //====================================================
   Controller* ControllerPluginsManager::createController(const string &name) {
     ControllerContext ic;
     return ControllerFactory::factory->getPluginObject(name, &ic);
