@@ -664,8 +664,6 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       delete progressBar;
       QApplication::restoreOverrideCursor();
 
-      MutableContainer<Controller *> controllers;
-      ControllerPluginsManager::getInst().initControllerPluginsList(controllers);
       TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
       vector<string> controllersName;
       for (it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
@@ -845,11 +843,8 @@ template <typename TFACTORY, typename TMODULE>
   }
 //**********************************************************************
 void TulipApp::buildMenus() {
-  MutableContainer<Controller *> controllers;
-  ControllerPluginsManager::getInst().initControllerPluginsList(controllers);
   TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
 
-  // if we have only one controller : auto load it
   // In this case doesn't add sub menu in new menu
   it=ControllerFactory::factory->objMap.begin();
   ++it;
