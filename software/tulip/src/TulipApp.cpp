@@ -831,9 +831,7 @@ void TulipApp::importGraph(QAction* action) {
     }
     //cout << subMenu->name() << "->" << itemName << endl;
     
-    QAction *action = new QAction(itemName.c_str(), subMenu);
-    action->setObjectName(itemName.c_str());
-    subMenu->addAction(action);
+    QAction *action = subMenu->addAction(itemName.c_str());
     QObject::connect(action,SIGNAL(triggered()),receiver,slot);
   }
 //**********************************************************************
@@ -876,8 +874,6 @@ void TulipApp::buildMenus() {
   //connect(&importGraphMenu, SIGNAL(triggered(QAction*)), SLOT(importGraph(QAction*)));
   if (importGraphMenu.actions().count()>0) {
     importGraphMenu.setTitle("&Import");
-    importGraphMenu.setObjectName("Import");
-//     importGraphMenu.setParent(fileMenu);
     fileMenu->insertMenu(filePrintAction,&importGraphMenu);
   }
   if (exportGraphMenu.actions().count()>0) {
