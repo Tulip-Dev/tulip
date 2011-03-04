@@ -51,7 +51,7 @@ ENDIF()
 ## TulipMMVersion : Ma.Mi
 ## -----------------------------------------------------------------------------------------------
 SET(TulipMajorVersion 3)
-SET(TulipMinorVersion 5)
+SET(TulipMinorVersion 6)
 SET(TulipReleaseVersion 0)
 SET(TulipVersionSeparator .)
 IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #specific options for Visual Studio
