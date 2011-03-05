@@ -1019,6 +1019,7 @@ namespace tlp {
     stringstream tmpss;
     DataSet dataSet;
     tlp::exportGraph(newGraph, tmpss, "tlp", dataSet, NULL);
+    delete newGraph;
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(tmpss.str().c_str());
     graph->push();
@@ -1049,6 +1050,7 @@ namespace tlp {
     tlp::exportGraph(newGraph, tmpss, "tlp", dataSet, NULL);
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(QString::fromUtf8(tmpss.str().c_str()));
+    delete newGraph;
     Observable::unholdObservers();
   }
   //==============================================================
@@ -1068,6 +1070,7 @@ namespace tlp {
     dataSet.set<string>("file::data", clipboard->text().toUtf8().data());
     tlp::importGraph("tlp", dataSet, NULL ,newGraph);
     tlp::copyToGraph( graph, newGraph, 0, selP );
+    delete newGraph;
     Observable::unholdObservers();
     graph->addObserver(this);
     
