@@ -223,6 +223,8 @@ namespace tlp {
       delete eltProperties;
 
       delete tabWidgetDock;
+      
+      delete currentGraph;
     }
   }
   //**********************************************************************
