@@ -327,8 +327,6 @@ namespace tlp {
       ControllerAlgorithmTools::changeProperty<LayoutProperty>(newGraph,mainWindowFacade.getParentWidget(),"Random","viewLayout",dataSet,NULL,false,false,false);
     } delete itn;
 
-    newGraph->addObserver(this);
-    newGraph->addGraphObserver(this);
     Graph *lastViewedGraph=newGraph;
     Observable::unholdObservers();
     setCurrentGraph(newGraph);
@@ -391,6 +389,9 @@ namespace tlp {
       View *view=initMainView(dataSet);
       lastViewedGraph=view->getGraph();
     }
+
+    newGraph->addObserver(this);
+    newGraph->addGraphObserver(this);
 
     clusterTreeWidget->setGraph(lastViewedGraph);
     eltProperties->setGraph(lastViewedGraph);

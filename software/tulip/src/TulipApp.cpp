@@ -413,6 +413,8 @@ void TulipApp::closeTab(int index){
   if(controllerAutoLoad)
     return;
 
+  QWidget *currentWidget=tabWidget->widget(index);
+
   if(index!=tabWidget->currentIndex())
     tabWidget->setCurrentIndex(index);
 
@@ -453,7 +455,7 @@ void TulipApp::closeTab(int index){
     if(tabWidget->count()==0)
       tabWidget->setCurrentIndex(-1);
 
-
+    delete currentWidget;
     delete controller;
   }
 }
