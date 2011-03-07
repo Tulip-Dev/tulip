@@ -40,7 +40,6 @@ IF(LINUX)
   ENDFOREACH()
 ELSEIF(WIN32)
   SET(CPACK_GENERATOR "NSIS")
-  CMAKE_POLICY(SET CMP0010 OLD) # Disable some warnings
   SET(CPACK_NSIS_DISPLAY_NAME "Tulip ${TulipVersion}")
   SET(CPACK_NSIS_HELP_LINK "http://tulip.labri.fr")
   SET(CPACK_NSIS_URL_INFO_ABOUT "http://tulip.labri.fr")
