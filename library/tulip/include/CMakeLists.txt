@@ -1,8 +1,4 @@
 INSTALL(FILES
-  tulip/ClusteringAlgorithmBase.h
-  tulip/ClusteringQualityMeasure.h
-  tulip/QClusteringQualityMeasure.h
-  tulip/MQClusteringQualityMeasure.h
 	tulip/Bfs.h
 	tulip/Ordering.h 
 	tulip/ConvexHull.h 
