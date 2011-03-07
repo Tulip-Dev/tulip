@@ -33,6 +33,11 @@ namespace tlp {
 ControllerViewsManager::ControllerViewsManager() :
     		  currentView(NULL), currentGraph(NULL) {
 }
+ControllerViewsManager::~ControllerViewsManager() {
+  for(map<QWidget *,View*>::iterator it=viewWidget.begin();it!=viewWidget.end();++it){
+    delete (*it).second;
+  }
+}
 //**********************************************************************
 void ControllerViewsManager::attachMainWindow(MainWindowFacade facade) {
 	Controller::attachMainWindow(facade);
@@ -404,7 +409,8 @@ void ControllerViewsManager::widgetWillBeClosed(QObject *object) {
 //**********************************************************************
 
 void ControllerViewsManager::closeAllViews() {
-	mainWindowFacade.getWorkspace()->closeAllWindows();
+	if(mainWindowFacade.getWorkspace())
+		mainWindowFacade.getWorkspace()->closeAllWindows();
 }
 
 //**********************************************************************

@@ -49,7 +49,7 @@ namespace tlp {
     public :
       
       ControllerViewsManager();
-      virtual ~ControllerViewsManager() {}
+      virtual ~ControllerViewsManager();
       
       /**
        * Attach the QMainWindow to the controller
