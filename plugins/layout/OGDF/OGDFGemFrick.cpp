@@ -170,8 +170,8 @@ OGDFGemFrick::~OGDFGemFrick() {
 void OGDFGemFrick::beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
 	ogdf::GEMLayout *gem = static_cast<ogdf::GEMLayout*>(ogdfLayoutAlgo);
 	if (dataSet != 0) {
-		int ival;
-		double dval;
+		int ival = 0;
+		double dval = 0;
 		StringCollection sc;
 		if (dataSet->get("number of rounds", ival)) {
 			gem->numberOfRounds(ival);

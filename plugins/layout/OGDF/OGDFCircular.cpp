@@ -88,7 +88,7 @@ public:
 	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
 		ogdf::CircularLayout *circular = static_cast<ogdf::CircularLayout*>(ogdfLayoutAlgo);
 		if (dataSet != 0) {
-			double val;
+			double val = 0;
 			if (dataSet->get("minDistCircle", val))
 				circular->minDistCircle(val);
 			if (dataSet->get("minDistLevel", val))

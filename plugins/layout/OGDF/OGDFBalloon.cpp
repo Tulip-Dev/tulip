@@ -71,7 +71,7 @@ class OGDFBalloon : public OGDFLayoutPluginBase {
   void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
   		ogdf::BalloonLayout *balloon = static_cast<ogdf::BalloonLayout*>(ogdfLayoutAlgo);
   		if (dataSet != 0) {
-  			bool val;
+  			bool val = false;
   			if (dataSet->get("Even angles", val))
   				balloon->setEvenAngles(val);
   		}

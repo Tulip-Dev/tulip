@@ -335,10 +335,10 @@ void OGDFFm3::beforeCall(TulipToOGDF *tlpToOGDF,
 	ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout*> (ogdfLayoutAlgo);
 	if (dataSet != 0) {
 		fmmm->useHighLevelOptions(true);
-		SizeProperty * size;
+		SizeProperty * size = NULL;
 		if (dataSet->get("Node Size", size))
 			tlpToOGDF->copyTlpNodeSizeToOGDF(size);
-		DoubleProperty * length;
+		DoubleProperty * length = NULL;
 		if (dataSet->get("Edge Length", length))
 			tlpToOGDF->copyTlpDoublePropertyToOGDFEdgeLength(length);
 
@@ -346,18 +346,18 @@ void OGDFFm3::beforeCall(TulipToOGDF *tlpToOGDF,
 		if (dataSet->get("Unit edge length", edgeLenth))
 			fmmm->unitEdgeLength(edgeLenth);
 
-		bool bval;
+		bool bval = false;
 		if (dataSet->get("New initial placement", bval)) {
 			fmmm->newInitialPlacement(bval);
 		}
 
 
-		int ival;
+		int ival = 0;
 		if (dataSet->get("Fixed iterations", ival)) {
 			fmmm->fixedIterations(ival);
 		}
 
-		double dval;
+		double dval = 0;
 		if (dataSet->get("Threshold", dval)) {
 			fmmm->threshold(dval);
 		}

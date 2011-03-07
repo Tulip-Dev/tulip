@@ -67,7 +67,7 @@ public:
 
 	void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
 		if (dataSet != 0) {
-			bool bval;
+			bool bval = false;
 			if (dataSet->get("transpose", bval)) {
 				if (bval) {
 					transposeLayoutVertically();

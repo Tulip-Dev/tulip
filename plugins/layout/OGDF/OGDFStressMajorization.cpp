@@ -110,9 +110,9 @@ public:
 	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
 		ogdf::StressMajorization *stressm = static_cast<ogdf::StressMajorization*>(ogdfLayoutAlgo);
 		if (dataSet != 0) {
-			double dval;
-			int ival;
-			bool bval;
+			double dval = 0;
+			int ival = 0;
+			bool bval = false;
 			if (dataSet->get("iterations", ival))
 				stressm->setIterations(ival);
 			if (dataSet->get("stop tolerance", dval))

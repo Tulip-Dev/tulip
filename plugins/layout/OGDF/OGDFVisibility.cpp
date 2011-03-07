@@ -76,7 +76,7 @@ public:
 	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
 		ogdf::VisibilityLayout *visibility = static_cast<ogdf::VisibilityLayout*>(ogdfLayoutAlgo);
 		if (dataSet != 0) {
-			int ival;
+			int ival = 0;
 			if (dataSet->get("minimum grid distance", ival))
 				visibility->setMinGridDistance(ival);
 		}
@@ -84,7 +84,7 @@ public:
 
 	void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
 		if (dataSet != 0) {
-			bool bval;
+			bool bval = false;
 			if (dataSet->get("transpose", bval)) {
 				if (bval) {
 					transposeLayoutVertically();

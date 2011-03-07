@@ -104,9 +104,9 @@ public:
 	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
 		ogdf::SpringEmbedderKK *kamada = static_cast<ogdf::SpringEmbedderKK*>(ogdfLayoutAlgo);
 		if (dataSet != 0) {
-			double dval;
-			int ival;
-			bool bval;
+			double dval = 0;
+			int ival = 0;
+			bool bval = false;
 			if (dataSet->get("stop tolerance", dval))
 				kamada->setStopTolerance(dval);
 			if (dataSet->get("use layout", bval))
