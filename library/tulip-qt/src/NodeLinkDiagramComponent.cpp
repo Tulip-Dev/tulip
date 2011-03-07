@@ -39,7 +39,6 @@
 #include "tulip/AugmentedDisplayDialog.h"
 #include "tulip/GridOptionsWidget.h"
 #include "tulip/InteractorManager.h"
-#include "tulip/QtMetaNodeRenderer.h"
 #include "tulip/TlpQtTools.h"
 #include "tulip/BaseGraphicsViewComponentMacro.h"
 
