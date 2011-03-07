@@ -23,11 +23,12 @@
 
 /** \addtogroup metric */
 /*@{*/
-/** This plugin compute the eccentricity of each node, 
+/** This plugin compute the eccentricity/closeness centrality of each node
  *
  * Eccentricity is the maximum distance to go from a node to all others.
- * In this version the value is normalized (1 means that a node is in the center 
- * of the network, 0 means that a node is the more eccentric in the network). 
+ * In this version the Eccentricity value can be normalized
+ * (1 means that a node is one of the most eccentric in the network,
+ * 0 means that a node is on the centers of the network).
  *
  * More information  about the use of eccentricity metric can be found in :
  *
@@ -36,6 +37,11 @@
  * Authors : Ulrik Brandes and Dorothea Wagner. \n
  * "2004", \n
  * pages 321-340.
+ *
+ *
+ * Closeness Centrality is the mean of shortest-paths lengths from a node to others.
+ * The normalized values are computed using the reciprocal of the sum of these distances 
+ * (see "http://en.wikipedia.org/wiki/Closeness_(graph_theory)#Closeness_centrality" for more details).
  *  
  *  \note The complexity of the algorithm is O(|V| * |E|) time and O(1) space.  
  *
