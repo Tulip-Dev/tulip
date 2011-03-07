@@ -23,28 +23,50 @@
 #include <tulip/ConnectedTest.h>
 #include "Eccentricity.h"
 
-DOUBLEPLUGINOFGROUP(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","1.0","Graph");
+
+
+DOUBLEPLUGINOFGROUP(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","2.0","Graph");
+
 
 using namespace std;
 using namespace tlp;
 
 namespace {
-  const char * paramHelp[] = {
+const char * paramHelp[] = {
     // property
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "bool" ) \
     HTML_HELP_DEF( "values", "[true , false]" ) \
     HTML_HELP_DEF( "default", "false" ) \
     HTML_HELP_BODY() \
-    "If true the eccentricity will be computed using all path between a node to the other (not only the maximum one, ie radiality)"\
+    "If true the closeness centrality will be computed (i.e. the mean of shortest-paths lengths from a node to others)"\
     HTML_HELP_CLOSE(),
-  };
+    // norm
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "values", "[true , false]" ) \
+    HTML_HELP_DEF( "default", "false" ) \
+    HTML_HELP_BODY() \
+    "If true the returned values are normalized. " \
+    "For the closeness centrality, the reciprocal of the sum of distances is returned. " \   
+    "The eccentricity values is divided by the graph diameter. " \
+    "<b> Warning : </b> The normalized eccentricity values sould be computed on a (strongly) connected graph."
+    HTML_HELP_CLOSE(),
+    // directed
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "values", "[true , false]" ) \
+    HTML_HELP_DEF( "default", "false" ) \
+    HTML_HELP_BODY() \
+    "Indicates if the graph should be considered as directed or not."\
+    HTML_HELP_CLOSE(),
+};
 }
 
 EccentricityMetric::EccentricityMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
   addParameter<bool>("closeness centrality",paramHelp[0],"false");
-  addParameter<bool>("norm",paramHelp[0],"true");
-  addParameter<bool>("directed",paramHelp[0],"false");  
+  addParameter<bool>("norm",paramHelp[1],"true");
+  addParameter<bool>("directed",paramHelp[2],"false");
 }
 //====================================================================
 EccentricityMetric::~EccentricityMetric() {
@@ -55,34 +77,32 @@ bool EccentricityMetric::check(string &/*err*/) {
 }
 //====================================================================
 double EccentricityMetric::compute(node n) {
-//    cout << "t_" << omp_get_thread_num() << "[" << n.id << "] start" << flush << endl;
+
     MutableContainer<unsigned int> distance;
     distance.setAll(0);
     double val;
-    double nbAcc = 0.;    
     if (directed)
-      val = tlp::maxDistance(graph, n, distance, DIRECTED);
+        val = tlp::maxDistance(graph, n, distance, DIRECTED);
     else
-      val = tlp::maxDistance(graph, n, distance, UNDIRECTED);
+        val = tlp::maxDistance(graph, n, distance, UNDIRECTED);
+    if(!allPaths)
+        return val;
 
+    double nbAcc = 0.;
     node n2;
+    val = 0.;
     forEach(n2, graph->getNodes()) {
-      if (distance.get(n2) < graph->numberOfNodes())
-	nbAcc += 1.;
+        if (distance.get(n2.id) < graph->numberOfNodes()){
+            nbAcc += 1.;
+            if(n2!=n)
+                val += double(distance.get(n2.id)) ;
+        }
     }
-    
-    if (allPaths) {
-      val = 0.;
-      node n2;
-      forEach(n2, graph->getNodes()) {
-	if (distance.get(n2) < graph->numberOfNodes() && n2 != n)
-	  val += double( distance.get(n2.id) ) / (nbAcc - 1 ) ;
-      }
-    }
-  if (norm) val /= nbAcc;
-//    cout << "t_" << omp_get_thread_num() << "[" << n.id << "] end" << flush << endl;
 
-  return val;
+    if(nbAcc<2.0) return 0.0;
+    if (norm) val=1.0/val;
+    else val/=(nbAcc-1.0);
+    return val;
 }
 //====================================================================
 bool EccentricityMetric::run() {
@@ -112,6 +132,7 @@ bool EccentricityMetric::run() {
 #endif
 
 //  double t1 = omp_get_wtime();
+  double diameter = 1.0;
    bool stopfor = false;
 #ifdef _OPENMP
 #pragma omp parallel for
@@ -131,9 +152,16 @@ bool EccentricityMetric::run() {
       }
 #endif
     res[ni] = compute(vecNodes[ni]);
+    if(!allPaths && norm){
+        if(diameter<res[ni])
+            diameter=res[ni];
+    }
   }
   for (size_t ni = 0; ni < nbElem; ++ni) {
-    doubleResult->setNodeValue(vecNodes[ni], res[ni]);
+    if(!allPaths && norm)
+        doubleResult->setNodeValue(vecNodes[ni], res[ni]/diameter);
+    else
+        doubleResult->setNodeValue(vecNodes[ni], res[ni]);
   }
 /*
   double t2 = omp_get_wtime();
