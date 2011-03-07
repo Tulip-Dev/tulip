@@ -135,7 +135,7 @@ public:
 					davidson->setSpeed(ogdf::DavidsonHarelLayout::sppHQ);
 				}
 			}
-			double val;
+			double val = 0;
 			if (dataSet->get("preferredEdgeLength", val))
 				davidson->setPreferredEdgeLength(val);
 			if (dataSet->get("preferredEdgeLengthMultiplier", val))

@@ -146,9 +146,9 @@ public:
 	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
 		ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
 		if (dataSet != 0) {
-			int ival;
-			double dval;
-			bool bval;
+			int ival = 0;
+			double dval = 0;
+			bool bval = false;
 			StringCollection sc;
 			if (dataSet->get("fails", ival))
 				sugiyama->fails(ival);
@@ -185,7 +185,7 @@ public:
 
 	void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
 		if (dataSet != 0) {
-		bool bval;
+		bool bval = false;
 		if (dataSet->get("transpose", bval)) {
 			if (bval) {
 				transposeLayoutVertically();

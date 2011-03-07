@@ -100,9 +100,9 @@ public:
 	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
 		ogdf::FastMultipoleEmbedder *fme = static_cast<ogdf::FastMultipoleEmbedder*>(ogdfLayoutAlgo);
 		if (dataSet != 0) {
-			double dval;
-			int ival;
-			bool bval;
+			double dval = 0;
+			int ival = 0;
+			bool bval = 0;
 			if (dataSet->get("number of iterations", ival))
 				fme->setNumIterations(ival);
 			if (dataSet->get("number of coefficients", ival))

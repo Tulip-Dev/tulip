@@ -75,7 +75,7 @@ public:
 	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
 		ogdf::DominanceLayout *dominance = static_cast<ogdf::DominanceLayout*>(ogdfLayoutAlgo);
 		if (dataSet != 0) {
-			int ival;
+			int ival = 0;
 			if (dataSet->get("minimum grid distance", ival))
 				dominance->setMinGridDistance(ival);
 		}
@@ -83,7 +83,7 @@ public:
 
 	void afterCall(TulipToOGDF*, ogdf::LayoutModule*) {
 		if (dataSet != 0) {
-			bool bval;
+			bool bval = false;
 			if (dataSet->get("transpose", bval)) {
 				if (bval) {
 					transposeLayoutVertically();

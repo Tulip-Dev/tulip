@@ -123,8 +123,8 @@ public:
 	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
 		ogdf::TreeLayout *tree = static_cast<ogdf::TreeLayout*>(ogdfLayoutAlgo);
 		if (dataSet != 0) {
-			double dval;
-			bool bval;
+			double dval = 0;
+			bool bval = false;
 			StringCollection sc;
 			if (dataSet->get("siblings distance", dval))
 				tree->siblingDistance(dval);

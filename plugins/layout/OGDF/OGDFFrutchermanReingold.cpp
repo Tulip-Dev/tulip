@@ -154,9 +154,9 @@ OGDFFrutchermanReingold::~OGDFFrutchermanReingold() {}
 void OGDFFrutchermanReingold::beforeCall(TulipToOGDF *tlpToOGDF, ogdf::LayoutModule *ogdfLayoutAlgo) {
 	ogdf::SpringEmbedderFRExact *sefr = static_cast<ogdf::SpringEmbedderFRExact*>(ogdfLayoutAlgo);
 	if (dataSet != 0) {
-		int ival;
-		double dval;
-		bool bval;
+		int ival = 0;
+		double dval = 0;
+		bool bval = false;
 		StringCollection sc;
 		DoubleProperty *metric = NULL;
 		if (dataSet->get("iterations", ival))

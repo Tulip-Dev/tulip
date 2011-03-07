@@ -69,7 +69,7 @@ public:
 	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
 		ogdf::FastMultipoleMultilevelEmbedder *fmme = static_cast<ogdf::FastMultipoleMultilevelEmbedder*>(ogdfLayoutAlgo);
 		if (dataSet != 0) {
-			int ival;
+			int ival = 0;
 			if (dataSet->get("number of threads", ival))
 				fmme->maxNumThreads(ival);
 

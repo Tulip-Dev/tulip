@@ -101,7 +101,7 @@ public:
 	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
 		ogdf::PlanarizationGridLayout *pgl = static_cast<ogdf::PlanarizationGridLayout*>(ogdfLayoutAlgo);
 		if (dataSet != 0) {
-			double dval;
+			double dval = 0;
 			StringCollection sc;
 			if (dataSet->get("page ratio", dval))
 				pgl->pageRatio(dval);
