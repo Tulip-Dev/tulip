@@ -52,7 +52,6 @@
 #include "tulip/QGlPixelBufferManager.h"
 #include "tulip/Interactor.h"
 #include "tulip/InteractorManager.h"
-#include "tulip/QtMetaNodeRenderer.h"
 #include <tulip/GlCompositeHierarchyManager.h>
 #include "tulip/GlVertexArrayManager.h"
 
