@@ -122,8 +122,9 @@ GraphImpl::~GraphImpl() {
   while(itS.hasNext())
     delAllSubGraphsInternal(itS.next(), true);
   removeGraphObservers();
-//  removeObservers();
-  //must be done here because Property proxy needs to access to the graph structure  delete propertyContainer;
+  //removeObservers();
+  //must be done here because Property proxy needs to access to the graph structure
+  delete propertyContainer;
 }
 //----------------------------------------------------------------
 void GraphImpl::clear() {
