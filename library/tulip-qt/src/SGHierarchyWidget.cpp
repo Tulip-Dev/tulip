@@ -150,6 +150,7 @@ namespace tlp {
       Graph *subGraph=subGraphsIt->next();
       updateCurrentGraphInfos(subGraph);
     }
+    delete subGraphsIt;
   }
   //=======================================================
   //Cluster Tree Structure modification
