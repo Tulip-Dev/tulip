@@ -95,7 +95,6 @@ GlProgressBar::~GlProgressBar() {
 }
 
 void GlProgressBar::progress_handler(int step, int max_step) {
-
 	currentPercent = (unsigned int) (((double) ((double) step / (double) max_step)) * 100.);
 
 	GlSimpleEntity *previousBar = findGlEntity(PROGRESS_BAR_ID);
@@ -118,6 +117,9 @@ void GlProgressBar::progress_handler(int step, int max_step) {
 	}
 
 	float progressBarWidth =  (currentPercent * progressBarMaxWidth) / 100.;
+
+  if (progressBarWidth == 0)
+    progressBarWidth = 1; // Avoid assert in GlAbstractPolygon::draw
 
 	Coord progressBarCoords[4];
 	progressBarCoords[0] = progressBarTLCorner;
