@@ -19,6 +19,7 @@
 #include <cassert>
 #include <iostream>
 #include "tulip/Observable.h"
+#include "tulip/StlIterator.h"
 
 
 using namespace std;
@@ -52,6 +53,10 @@ void Observer::removeObservable(Observable *observable){
 	if (updateObservables) {
 		observables.remove(observable);
 	}
+}
+
+tlp::Iterator<Observable *> *Observer::getObservables() const {
+  return new StlIterator<Observable *, list<Observable *>::const_iterator>(observables.begin(), observables.end());
 }
 
 void Observable::addObserver(Observer *obs) {

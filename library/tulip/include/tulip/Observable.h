@@ -30,9 +30,12 @@
 #include <map>
 #include <set>
 
+
 namespace tlp {
 
 class Observable;
+
+template<class itType> struct Iterator;
 
 //=========================================================
 /**
@@ -72,6 +75,12 @@ protected:
 	 * This method is called when this observer is removeed from an observable.
 	 */
 	void removeObservable(Observable *);
+
+  /**
+    * This method returns the list of observed objects.
+    * @note This list is copyied to ensure that an Observer cannot modify its internal Observables list
+    */
+  tlp::Iterator<Observable *> *getObservables() const;
 private:
 	std::list<Observable *> observables;
 	bool updateObservables;
