@@ -55,7 +55,6 @@ INCLUDES_H = \
 	tulip/ViewPluginsManager.h \
 	tulip/ColorScaleConfigDialog.h \
 	tulip/ColorScaleWidget.h \
-	tulip/QtMetaNodeRenderer.h \
 	tulip/StringsListSelectionWidgetInterface.h \
 	tulip/SimpleStringsListSelectionWidget.h \
 	tulip/DoubleStringsListSelectionWidget.h \

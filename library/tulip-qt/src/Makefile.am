@@ -150,7 +150,6 @@ TODIST_SOURCES = \
 	DoubleStringsListSelectionWidget.cpp \
 	ColorScaleConfigDialog.cpp \
   ColorScaleWidget.cpp \
-	QtMetaNodeRenderer.cpp \
   QGlBufferManager.cpp \
 	ListPropertyWidget.cpp \
     QtOpenGlErrorViewer.cpp \
