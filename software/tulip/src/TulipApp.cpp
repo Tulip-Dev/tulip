@@ -287,9 +287,6 @@ void TulipApp::startTulip() {
   OpenGlErrorViewer *oldViewer=GlTextureManager::getInst().setErrorViewer(new QtOpenGlErrorViewer(this));
   delete oldViewer;
 
-  // if we have only one controller : auto load it
-  MutableContainer<Controller *> controllers;
-  ControllerPluginsManager::getInst().initControllerPluginsList(controllers);
   TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
   it=ControllerFactory::factory->objMap.begin();
   string name=(*it).first;
@@ -386,8 +383,6 @@ void TulipApp::fileNew(QAction *action) {
 }
 //**********************************************************************
 bool TulipApp::fileNew(bool) {
-  MutableContainer<Controller *> controllers;
-  ControllerPluginsManager::getInst().initControllerPluginsList(controllers);
   TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
   it=ControllerFactory::factory->objMap.begin();
   string name=(*it).first;
@@ -417,6 +412,8 @@ void TulipApp::fileCloseTab(){
 void TulipApp::closeTab(int index){
   if(controllerAutoLoad)
     return;
+
+  QWidget *currentWidget=tabWidget->widget(index);
 
   if(index!=tabWidget->currentIndex())
     tabWidget->setCurrentIndex(index);
@@ -458,7 +455,7 @@ void TulipApp::closeTab(int index){
     if(tabWidget->count()==0)
       tabWidget->setCurrentIndex(-1);
 
-
+    delete currentWidget;
     delete controller;
   }
 }
@@ -669,8 +666,6 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       delete progressBar;
       QApplication::restoreOverrideCursor();
 
-      MutableContainer<Controller *> controllers;
-      ControllerPluginsManager::getInst().initControllerPluginsList(controllers);
       TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
       vector<string> controllersName;
       for (it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
@@ -835,7 +830,8 @@ void TulipApp::importGraph(QAction* action) {
       }
     }
     //cout << subMenu->name() << "->" << itemName << endl;
-    QAction *action=subMenu->addAction(itemName.c_str());
+    
+    QAction *action = subMenu->addAction(itemName.c_str());
     QObject::connect(action,SIGNAL(triggered()),receiver,slot);
   }
 //**********************************************************************
@@ -849,11 +845,8 @@ template <typename TFACTORY, typename TMODULE>
   }
 //**********************************************************************
 void TulipApp::buildMenus() {
-  MutableContainer<Controller *> controllers;
-  ControllerPluginsManager::getInst().initControllerPluginsList(controllers);
   TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
 
-  // if we have only one controller : auto load it
   // In this case doesn't add sub menu in new menu
   it=ControllerFactory::factory->objMap.begin();
   ++it;
