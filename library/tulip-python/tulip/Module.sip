@@ -85,7 +85,6 @@
 %Include Plugin.sip
 %Include WithParameter.sip
 %Include WithDependency.sip
-%Include Observable.sip
 %Include PluginProgress.sip
 %Include Graph.sip
 %Include PluginLoader.sip

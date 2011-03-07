@@ -30,7 +30,6 @@ SET(TULIP_SIP_FILES
     MapIterator.sip
     Module.sip
     Node.sip
-    Observable.sip
     OuterPlanarTest.sip
     PlanarityTest.sip
     PluginContext.sip
