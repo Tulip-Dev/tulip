@@ -96,6 +96,7 @@ INSTALL(FILES
   tulip/stlfilteriterator.h
   tulip/vectorgraph.h
   tulip/vectorgraphproperty.h
+  tulip/observer.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_dev
 )
