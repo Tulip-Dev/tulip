@@ -17,7 +17,7 @@
  *
  */
 #include "ConnectedComponent.h"
-#include "tulip/ConnectedTest.h"
+#include <tulip/ConnectedTest.h>
 
 using namespace tlp;
 
@@ -34,10 +34,8 @@ bool ConnectedComponent::run() {
   unsigned int curComponent = 0;
   for (; curComponent < components.size(); curComponent++) {
     std::set<node>& component = components[curComponent];
-    std::set<node>::const_iterator itNode = component.begin();
-    double value = curComponent;
-    for(; itNode!=component.end(); ++itNode) {
-      doubleResult->setNodeValue(*itNode, value);
+    for(std::set<node>::const_iterator itNode = component.begin(); itNode!=component.end(); ++itNode) {
+      doubleResult->setNodeValue(*itNode, curComponent);
     }
   }
   // propagate nodes computed value to edges
