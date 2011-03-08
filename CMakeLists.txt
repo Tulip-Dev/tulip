@@ -287,7 +287,7 @@ IF(LINUX)
 ENDIF(LINUX)
 
 IF(WIN32)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DDLL_EXPORT -DQT_ASSISTANT='\"assistant\"'")
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DQT_ASSISTANT='\"assistant\"'")
    IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
       #recommended for now, vc++ spits out too many warnings, and renders the whole output unreadable
 	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
