@@ -38,15 +38,12 @@ namespace tlp {
         vblayout->setMargin(0);
         setLayout(vblayout);
         vblayout->addWidget(progressWidget);
+        show();
     }
     //=====================================
     QtProgress::~QtProgress() {
     }
     ProgressState QtProgress::progress(int step, int max_step){
-        if (firstCall){
-            show();
-        }
-        firstCall=false;
         return progressWidget->progress(step,max_step);
     }
 
