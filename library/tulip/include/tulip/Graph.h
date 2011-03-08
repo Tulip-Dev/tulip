@@ -492,6 +492,10 @@ public:
    * Returns true if some previously undone updates can be replayed.
    */
   virtual bool canUnpop()=0;
+  /*
+   * Returns true if the current state updates can be undone then replayed.
+   */
+  virtual bool canPopThenUnpop()=0;
 
   // meta nodes management
   /**

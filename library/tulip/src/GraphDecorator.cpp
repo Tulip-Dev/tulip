@@ -428,6 +428,9 @@ bool GraphDecorator::canPop() {
 bool GraphDecorator::canUnpop() {
   return graph_component->canUnpop();
 }
+bool GraphDecorator::canPopThenUnpop() {
+  return graph_component->canPopThenUnpop();
+}
 //----------------------------------------------------------------
 void GraphDecorator::push(bool unpopAllowed) {
   return graph_component->push(unpopAllowed);

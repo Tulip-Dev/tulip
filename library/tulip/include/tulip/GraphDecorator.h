@@ -120,6 +120,7 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
   virtual void unpop();
   virtual bool canPop();
   virtual bool canUnpop();
+  virtual bool canPopThenUnpop();
   //============================================================
 
 protected:

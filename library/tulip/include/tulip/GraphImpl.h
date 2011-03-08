@@ -89,6 +89,7 @@ public:
   virtual void unpop();
   virtual bool canPop();
   virtual bool canUnpop();
+  virtual bool canPopThenUnpop();
 
   // observer interface
   void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end);
