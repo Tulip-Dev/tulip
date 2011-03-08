@@ -4,12 +4,7 @@
 #include <tulip/ForEach.h>
 #include <tulip/vectorgraph.h>
 
-//define to make code compile due to first intergration of Observable in the namesapce tlpext
-//@TODO: replace tlpext by tlp in all the code with etgas (it doesn't work in utf8 on my ubuntu ...)
-// and then remove that crazy define
-#define tlpext tlp
-
-namespace tlp {
+namespace tlpext {
     /**
       * \addtogroup observable
       */
