@@ -110,27 +110,11 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 			if (started) {
 				started = false;
 				if(!(w==0 && h==0)){
-					//				if (abs(w) < 10){
-					//					w=10;
-					//				}
-					//				if(abs(h) < 10) {
-					//					h=10;
-					//				}
-					//      cerr << __FUNCTION__ << ": " << this << "(x,y)=(" << e->x() << "," << e->y() << ")" << endl;
 					int width = glw->width();
 					int height = glw->height();
-					//	glw->getScene()->translateCamera(width/2 - (x+w/2), height/2 - (y-h/2), 0);
-					//	w = abs(w); h = abs(h);
-					//    Camera *cam = glw->getScene()->getCamera();
-					//	//we prevent zooming in a minimal square area less than 4x4: a least
-					//	//one of the 2 lengths must be higher than 3
-					//  if(((double) width / (double) w) < ((double) height / (double) h))
-					//    cam->setZoomFactor(cam->getZoomFactor() * ((double) width / (double) w));
-					//  else
-					//    cam->setZoomFactor(cam->getZoomFactor() * ((double) height / (double) h));
-					//	glw->draw(false);
-					Coord bbMin(width-x, height - y+h);
-					Coord bbMax(width-(x+w), height - y);
+
+					Coord bbMin(width-min(x, x+w), height - y+h);
+					Coord bbMax(width-max(x, x+w), height - y);
 
 					BoundingBox sceneBB;
 					sceneBB[0] = glw->getScene()->getCamera().screenTo3DWorld(bbMin);
@@ -185,13 +169,7 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
 	glVertex2f(x+w, y-h);
 	glVertex2f(x, y-h);
 	glEnd();
-	/*
-  glLineWidth(1);
-  glDisable(GL_LINE_STIPPLE);
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);
-  glEnable(GL_LIGHTING);
-	 */
+
 	glPopMatrix();
 	glMatrixMode (GL_PROJECTION);
 	glPopMatrix();
