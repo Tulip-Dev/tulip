@@ -360,6 +360,10 @@ bool GraphView::canUnpop() {
   return getRoot()->canUnpop();
 }
 //----------------------------------------------------------------
+bool GraphView::canPopThenUnpop() {
+  return getRoot()->canPopThenUnpop();
+}
+//----------------------------------------------------------------
 void GraphView::push(bool unpopAllowed) {
   getRoot()->push(unpopAllowed);
 }
