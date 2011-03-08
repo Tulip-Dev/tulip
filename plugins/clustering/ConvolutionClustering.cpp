@@ -16,13 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <stdio.h>
-#include <math.h>
-#include <sstream>
-#include <QtGui/qinputdialog.h>
-#include <tulip/Graph.h>
-#include <tulip/BooleanProperty.h>
-#include <fstream>
 
 #include "ConvolutionClustering.h"
 #include "ConvolutionClusteringSetup.h"
@@ -191,11 +184,11 @@ vector<double> *ConvolutionClustering::getHistogram() {
 void ConvolutionClustering::buildSubGraphs(const vector<int>& ranges){
   //  cerr << __PRETTY_FUNCTION__ << "...." << flush;
   //build the empty graphs 
-  char str[100];
   vector<Graph *> newGraphs(ranges.size()-1);
   for (unsigned int i=0; i< ranges.size()-1; ++i) {
-    sprintf(str,"Cluster_%05i",i);
-    newGraphs[i] = tlp::newSubGraph(graph,string(str));
+    stringstream sstr;
+    sstr << "Cluster_" << i;
+    newGraphs[i] = tlp::newSubGraph(graph,sstr.str());
   }
   
   //Fill the graphs with nodes

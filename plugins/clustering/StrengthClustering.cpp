@@ -16,20 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <math.h>
-#include <stdio.h>
-#include <sstream>
-#include <string>
-#include <list>
-#include <map>
-#include <iostream>
-#include <tulip/StableIterator.h>
-#include "StrengthClustering.h"
 
+#include "StrengthClustering.h"
 
 using namespace std;
 using namespace tlp;
-using namespace stdext;
 
 ALGORITHMPLUGIN(StrengthClustering, "Strength Clustering", "David Auber", "27/01/2003", "Alpha", "1.1");
 

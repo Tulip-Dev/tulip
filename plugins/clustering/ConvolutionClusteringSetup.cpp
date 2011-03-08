@@ -17,14 +17,7 @@
  *
  */
 #include "ConvolutionClusteringSetup.h"
-#include <iostream>
-#include <QtGui/qpainter.h>
-#include <QtGui/qpaintdevice.h>
-#include <QtGui/qlayout.h>
-#include <vector>
-#include <cstdlib>
-#include <QtGui/qslider.h>
-#include <cmath>
+#include <QPainter>
 
 using namespace std;
 using namespace tlp;
@@ -63,7 +56,7 @@ public:
     painter.setFont( f );
     painter.setPen( Qt::black );
 
-    //les 20 de plus permetront de placer des légendes sur les axes.
+    //les 20 de plus permetront de placer des lï¿½gendes sur les axes.
     double scale = double(histogram.size())/64.0;
     int legendWidth = (int)(20.0*scale);
     int borderWidth = (int)(10.0*scale);
