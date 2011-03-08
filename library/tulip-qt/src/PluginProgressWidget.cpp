@@ -35,6 +35,8 @@ PluginProgressWidget::PluginProgressWidget(View *view,int updateInterval,QWidget
     ui(new Ui::PluginProgressWidget)
 {
     ui->setupUi(this);
+    ui->progressBar->setMinimum(0);
+    ui->progressBar->setMaximum(0);
     connect(ui->stopPushButton,SIGNAL(clicked(bool)),this,SLOT(stopCompute()));
     connect(ui->cancelPushButton,SIGNAL(clicked(bool)),this,SLOT(cancelCompute()));
     connect(ui->preview,SIGNAL(toggled(bool)),this,SLOT(changePreview(bool)));

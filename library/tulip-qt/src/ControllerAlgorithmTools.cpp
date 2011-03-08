@@ -99,8 +99,6 @@ namespace tlp {
     unsigned int holdCount=Observable::observersHoldCounter();
     Observable::holdObservers();
     
-    QtProgress *myProgress=new QtProgress(parent, name,redraw ? view : 0);
-
     string erreurMsg;
     bool   resultBool=true;
     if (query) {
@@ -112,6 +110,8 @@ namespace tlp {
       resultBool = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
 					  title.c_str(), graph, parent);
     }
+
+    QtProgress *myProgress=new QtProgress(parent, name,redraw ? view : 0);
 
     if (resultBool) {
       PROPERTY* tmp = new PROPERTY(graph);
@@ -143,7 +143,7 @@ namespace tlp {
         }
       }
 
-      // The algorithm is apply
+      // The algorithm is applied
       resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
       
       graph->pop();
