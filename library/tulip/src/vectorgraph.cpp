@@ -19,10 +19,11 @@
 
 
 #include <vector>
-#include <omp.h>
 #include <set>
 #include <cassert>
 #include <iostream>
+#include <fstream>
+#include <string>
 
 #include <tulip/vectorgraph.h>
 #include <tulip/Node.h>
@@ -530,7 +531,6 @@ namespace tlp {
     void VectorGraph::shuffleNodes() {
         random_shuffle(_nodes.begin(), _nodes.end());
         //recompute indices of nodes
-#pragma omp parallel  for
         for (unsigned int i = 0; i < _nodes.size(); ++i) {
             _nData[_nodes[i]]._nodesId = i;
         }
@@ -539,7 +539,6 @@ namespace tlp {
     void VectorGraph::shuffleEdges() {
         random_shuffle(_edges.begin(), _edges.end());
         //recompute indices of edges
-#pragma omp parallel  for
         for (unsigned int i = 0; i < _edges.size(); ++i) {
             _eData[_edges[i]]._edgesId = i;
         }
