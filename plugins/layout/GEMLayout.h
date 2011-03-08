@@ -19,7 +19,6 @@
 #ifndef Tulip_GEMLayout_H
 #define Tulip_GEMLayout_H
 
-#include <queue>
 #include <vector>
 
 #include <tulip/TulipPlugin.h>
