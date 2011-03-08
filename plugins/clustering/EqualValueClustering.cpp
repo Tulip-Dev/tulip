@@ -16,11 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <stdio.h>
-#include <math.h>
-#include <sstream>
 
-#include <tulip/Graph.h>
 #include "EqualValueClustering.h"
 
 //================================================================================
