@@ -89,6 +89,7 @@ public:
   virtual void unpop();
   virtual bool canPop();
   virtual bool canUnpop();
+  virtual bool canPopThenUnpop();
 
 protected:
   // designed to reassign an id to a previously deleted elt

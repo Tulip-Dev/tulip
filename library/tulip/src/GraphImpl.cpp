@@ -423,6 +423,10 @@ bool GraphImpl::canPop() {
   return (!recorders.empty());
 }
 //----------------------------------------------------------------
+bool GraphImpl::canPopThenUnpop() {
+  return (!recorders.empty() && recorders.front()->restartAllowed);
+}
+//----------------------------------------------------------------
 bool GraphImpl::canUnpop() {
   return (!previousRecorders.empty());
 }
