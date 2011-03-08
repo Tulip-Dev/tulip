@@ -147,7 +147,9 @@ void GraphAbstract::delAllSubGraphsInternal(Graph * toRemove,
 }
 //=========================================================================
 void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
-  delAllSubGraphsInternal(toRemove, !canPop());
+  // toRemove will be really deleted only if the current
+  // graph state is not redoable
+  delAllSubGraphsInternal(toRemove, !canPopThenUnpop());
 }
 //=========================================================================
 void GraphAbstract::clearSubGraphs() {
