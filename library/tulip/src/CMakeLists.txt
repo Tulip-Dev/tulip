@@ -11,7 +11,6 @@ ColorScale.cpp
 ConnectedTest.cpp
 ConvexHull.cpp
 Coord.cpp
-debugNew.cpp
 Delaunay.cpp
 DoubleAlgorithm.cpp
 DoubleProperty.cpp
