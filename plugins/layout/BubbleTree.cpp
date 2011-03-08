@@ -284,17 +284,20 @@ bool BubbleTree::run() {
         // for each component draw
         std::vector<std::set<node> > components;
         string err;
-        ConnectedTest::computeConnectedComponents(graph, components);
+	// push a temporary graph state (not redoable)
+        graph->push(false);
+	ConnectedTest::computeConnectedComponents(graph, components);
         for (unsigned int i = 0; i < components.size(); ++i) {
             Graph * tmp = graph->inducedSubGraph(components[i]);
             tmp->computeProperty("Bubble Tree", layoutResult, err, pluginProgress, dataSet);
-            graph->delAllSubGraphs(tmp);
         }
         // call connected componnent packing
         LayoutProperty tmpLayout(graph);
 	DataSet tmpdataSet;
 	tmpdataSet.set("coordinates", layoutResult);
         graph->computeProperty("Connected Component Packing", &tmpLayout, err, pluginProgress, &tmpdataSet);
+	// forget last temporary graph state 
+	graph->pop();
         *layoutResult = tmpLayout;
         return true;
     }
@@ -316,19 +319,21 @@ bool BubbleTree::run() {
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
+  // push a temporary graph state (not redoable)
+  graph->push(false);
   tree = TreeTest::computeTree(graph, pluginProgress);
-  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
+    graph->pop();
     return false;
-
+  }
   node startNode;
   tlp::getSource(tree, startNode);
   TLP_HASH_MAP<node,Vector<double,5> > relativePosition;
   computeRelativePosition(startNode, &relativePosition);
   calcLayout(startNode, &relativePosition);
 
-  // if not in tulip gui, ensure cleanup
-  LayoutProperty* elementLayout;
-  if (!graph->getAttribute("viewLayout", elementLayout))
-    TreeTest::cleanComputedTree(graph, tree);
+  // forget last temporary graph state 
+  graph->pop();
+
   return true;
 }
