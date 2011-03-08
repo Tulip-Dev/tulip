@@ -53,6 +53,13 @@ namespace tlp {
     GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
         setHaveToCompute();
         clearCamerasObservers();
+
+        for(vector<QuadTreeNode<unsigned int> *>::iterator it=nodesQuadTree.begin();it!=nodesQuadTree.end();++it)
+            delete (*it);
+        for(vector<QuadTreeNode<unsigned int> *>::iterator it=edgesQuadTree.begin();it!=edgesQuadTree.end();++it)
+            delete (*it);
+        for(vector<QuadTreeNode<GlSimpleEntity *> *>::iterator it=entitiesQuadTree.begin();it!=entitiesQuadTree.end();++it)
+            delete (*it);
     }
 
     void GlQuadTreeLODCalculator::setScene(GlScene &scene){
