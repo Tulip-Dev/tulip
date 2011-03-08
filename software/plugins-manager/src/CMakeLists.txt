@@ -70,12 +70,8 @@ TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipName} ${CMAKE_DL_LIBS})
 TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipQtName} )
 TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipPluginsManagerName})
 
-ADD_LIBRARY(${LibTulipPluginsManagerName} SHARED ${${LibTulipPluginsManagerName}_UI_SRCS} ${${LibTulipPluginsManagerName}_MOC_SRCS} ${${LibTulipPluginsManagerName}_LIB_SRCS})
-TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTCORE_LIBRARY})
-TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTGUI_LIBRARY})
-TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTXML_LIBRARY})
+ADD_LIBRARY(${LibTulipPluginsManagerName} STATIC ${${LibTulipPluginsManagerName}_UI_SRCS} ${${LibTulipPluginsManagerName}_MOC_SRCS} ${${LibTulipPluginsManagerName}_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTNETWORK_LIBRARY})
-TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${LibTulipName})
 
 IF(WIN32)
   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
@@ -100,8 +96,3 @@ IF(LINUX)
           DESTINATION "${TulipBinInstallDir}"
           COMPONENT tulip_pluginsmanager)
 ENDIF(LINUX)
-
-INSTALL(TARGETS ${LibTulipPluginsManagerName}
-       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_pluginsmanager
-       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_pluginsmanager
-       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_pluginsmanager)
