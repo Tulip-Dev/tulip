@@ -18,8 +18,9 @@
  */
 #ifndef _ConnectedComponent_H
 #define _ConnectedComponent_H
+
 #include <tulip/TulipPlugin.h>
-#include <tulip/MutableContainer.h>
+
 /** \addtogroup metric */
 /*@{*/
 /** This plugin is an implementation of the connected component decompostion algorithm. each 
