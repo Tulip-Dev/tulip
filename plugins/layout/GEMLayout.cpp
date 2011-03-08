@@ -16,15 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <string>
-#include <math.h> 
 
 #include "GEMLayout.h"
 // An implementation of the GEM3D layout algorithm, based on
-// code by Arne Frick placed in the public domain.  See the
-// GEM3D.h file for further details.
+// code by Arne Frick placed in the public domain.  See GEMLayout.h for further details.
 
-//Auber 07/03/2002: Fix some memory leack due to operators
 
 using namespace std;
 using namespace tlp;
