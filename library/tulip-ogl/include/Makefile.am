@@ -84,14 +84,6 @@ nobase_include_HEADERS = \
 noinst_HEADERS = \
 	tulip/GlRenderer.h\
 	tulip/EpsFunction.h\
-	tulip/Document.h \
-	tulip/Hline.h \
-	tulip/Table.h \
-	tulip/Parser.h \
-	tulip/Paragraph.h \
-	tulip/FLayout.h \
-	tulip/Frame.h \
-	tulip/Renderer.h \
 	tulip/GlXMLTools.h \
 	tulip/TLPPixmapFont.h\
 	tulip/TLPPixmapGlyph.h\

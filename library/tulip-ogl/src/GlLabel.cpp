@@ -19,6 +19,8 @@
 #include <libxml/parser.h>
 #include <iostream>
 
+#include <FTGL/ftgl.h>
+
 #include "tulip/GlLabel.h"
 #include <tulip/Coord.h>
 #include <tulip/LayoutProperty.h>
@@ -33,26 +35,17 @@
 #include "tulip/GlyphManager.h"
 #include "tulip/GlDisplayListManager.h"
 #include "tulip/OcclusionTest.h"
-#include "tulip/TextRenderer.h"
 #include "tulip/GlTLPFeedBackBuilder.h"
-#include "tulip/GlRenderer.h"
 #include "tulip/OcclusionTest.h"
+#include "tulip/GlTextureManager.h"
 
 
 using namespace std;
-
-//====================================================
-tlp::TextRenderer *tlp::GlLabel::renderer=0;
 
 namespace tlp {
 
   GlLabel::GlLabel() {
     init();
-    if(!renderer){
-      renderer=new TextRenderer;
-      renderer->setContext(fontName, 20, 0, 0, 255);
-      renderer->setMode(TLP_TEXTURE);
-    }
   }
   GlLabel::GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign) {
     init();
@@ -63,14 +56,20 @@ namespace tlp {
   }
 
   GlLabel::~GlLabel() {
+    delete font;
+    delete borderFont;
   }
   //============================================================
   void GlLabel::init(){
     fontName=TulipBitmapDir + "font.ttf";
+    font=new FTPolygonFont(fontName.c_str());
+    borderFont=new FTGLOutlineFont(fontName.c_str());
     fontSize=20;
+    font->FaceSize(fontSize);
+    borderFont->FaceSize(fontSize);
     renderingMode=0;
     translationAfterRotation=Coord(0,0,0);
-    alignment=ON_CENTER;
+    //alignment=ON_CENTER;
     scaleToSize=true;
     useMinMaxSize=false;
     minSize=10;
@@ -86,6 +85,39 @@ namespace tlp {
   //============================================================
   void GlLabel::setText(const string& text) {
     this->text=text;
+
+    if(font->FaceSize()!=(unsigned int)fontSize){
+      font->FaceSize(fontSize);
+      borderFont->FaceSize(fontSize);
+    }
+
+    textVector.clear();
+    textWidthVector.clear();
+    size_t lastPos=0;
+    size_t pos=text.find_first_of("\n");
+    while(pos!=string::npos){
+      textVector.push_back(text.substr(lastPos,pos-lastPos));
+      lastPos=pos+1;
+      pos=text.find_first_of("\n",pos+1);
+    }
+    textVector.push_back(text.substr(lastPos));
+
+    textBoundingBox=BoundingBox();
+    float x1,y1,z1,x2,y2,z2;
+    for(vector<string>::iterator it=textVector.begin();it!=textVector.end();++it){
+      font->BBox((*it).c_str(),x1,y1,z1,x2,y2,z2);
+      textWidthVector.push_back(x2-x1);
+      if(it==textVector.begin()){
+        textBoundingBox.expand(Coord(0,y1,z1));
+        textBoundingBox.expand(Coord(x2-x1,y2,z2));
+      }else{
+        font->BBox((*it).c_str(),x1,y1,z1,x2,y2,z2);
+        if(x2-x1>textBoundingBox[1][0])
+          textBoundingBox[1][0]=(x2-x1);
+
+        textBoundingBox[0][1]-=fontSize+5;
+      }
+    }
   }
   //============================================================
   void GlLabel::setPosition(const Coord &position) {
@@ -101,6 +133,10 @@ namespace tlp {
       return BoundingBox(centerPosition-size/2.f,centerPosition+size/2.f);
     else
       return BoundingBox(centerPosition-Coord(0,size[1]/2.f,0),centerPosition+Coord(size[0],size[1]/2.f,0));
+  }
+  //============================================================
+  BoundingBox GlLabel::getTextBoundingBox() {
+    return textBoundingBox;
   }
   //============================================================
   void GlLabel::setSize(const Coord &size) {
@@ -121,27 +157,30 @@ namespace tlp {
   }
   //============================================================
   void GlLabel::setBoldFont() {
-    renderer->setContext(TulipBitmapDir + "fontb.ttf", 20, 0, 0, 255);
-    fontSize=20;
+    setFontName(TulipBitmapDir + "fontb.ttf");
+    fontSize=18;
   }
   //============================================================
   void GlLabel::setPlainFont() {
-    renderer->setContext(TulipBitmapDir + "font.ttf", 20, 0, 0, 255);
-    fontSize=20;
+    setFontName(TulipBitmapDir + "font.ttf");
+    fontSize=18;
   }
   //============================================================
   void GlLabel::setFontName(const std::string &name){
-    if(GlRenderer::checkFont(name))
-      fontName=name;
+    if(fontName==name)
+      return;
+
+    fontName=name;
+
+    delete font;
+    delete borderFont;
+    font=new FTGLPolygonFont(fontName.c_str());
+    borderFont=new FTOutlineFont(fontName.c_str());
   }
   //============================================================
   void GlLabel::setFontNameSizeAndColor(const std::string &name, const int &size, const Color &color){
-    if(GlRenderer::checkFont(name))
-      fontName=name;
-
+    setFontName(name);
     fontSize=size;
-
-    renderer->setContext(fontName,size,color[0],color[1],color[2]);
     this->color=color;
   }
   //============================================================
@@ -166,39 +205,39 @@ namespace tlp {
     else
       glDisable(GL_DEPTH_TEST);
 
-    renderer->setColor(color[0], color[1], color[2]);
-    renderer->setString(text, VERBATIM);
-
-    renderer->setMode(TLP_POLYGON);
-
     glPolygonMode(GL_FRONT, GL_FILL);
     glDisable(GL_LIGHTING);
     glDisable(GL_BLEND);
 
-    float w_max = 300;
-    float w,h;
+    float w=textBoundingBox[1][0]-textBoundingBox[0][0];
+    float h=textBoundingBox[1][1]-textBoundingBox[0][1];
+
     float div_w, div_h;
-
-    renderer->getBoundingBox(w_max, h, w);
-
-    float screenH=(size[1]/(sqrt(size[0]*size[0]+size[1]*size[1])/lod));
-
-    if(!scaleToSize)
-      screenH*=(fontSize/18.);
-    float labelSize=((screenH/size[1])/2.5);
-    if(labelSize<0)
-      labelSize=-labelSize;
-
-    float sizeScale=1.;
-    if(useMinMaxSize){
-      if(!scaleToSize && labelSize<minSize)
-        sizeScale=minSize/labelSize;
-      if(!scaleToSize && labelSize>maxSize)
-      sizeScale=maxSize/labelSize;
-    }
-
     div_w = size[0]/w;
     div_h = size[1]/h;
+
+    float screenH=(h*(lod/sqrt((lodBoundingBox[1][0]-lodBoundingBox[0][0])*(lodBoundingBox[1][0]-lodBoundingBox[0][0])
+                               +(lodBoundingBox[1][1]-lodBoundingBox[0][1])*(lodBoundingBox[1][1]-lodBoundingBox[0][1]))))/2.;
+    float scaleToApply=1.;
+
+    if(scaleToSize){
+      if(div_h * w > size[0]){
+        scaleToApply=div_w;
+      }else{
+        scaleToApply=div_h;
+      }
+    }else{
+      scaleToApply=0.05;
+      float tmpScreenH=screenH*0.05;
+      if(useMinMaxSize){
+        if(tmpScreenH<minSize){
+          scaleToApply*=minSize/tmpScreenH;
+        }
+        if(tmpScreenH>maxSize){
+          scaleToApply*=maxSize/tmpScreenH;
+        }
+      }
+    }
 
     if(occlusionTester && camera){
       BoundingBox labelBoundingBox;
@@ -216,16 +255,7 @@ namespace tlp {
       w+=occlusionBorderSize;
       h+=occlusionBorderSize;
 
-      Size occlusionSize;
-      if(!scaleToSize){
-        occlusionSize=Size(w*0.025*sizeScale,h*0.025*sizeScale,0);
-      }else{
-        if(div_h * w > size[0]){
-          occlusionSize=Size(w*div_w*0.5,h*div_w*0.5,0);
-        }else{
-          occlusionSize=Size(w*div_h*0.5,h*div_h*0.5,0);
-        }
-      }
+      Size occlusionSize(w*scaleToApply/2.,h*scaleToApply/2.,0);
 
       float angle=M_PI*zRot/180;
 
@@ -304,30 +334,13 @@ namespace tlp {
       break;
     }
 
-    if(scaleToSize){
-      if(div_h * w > size[0])        // too wide, so make it fit and maintain aspect ratio
-        glScalef(div_w, div_w, 1);
-      else
-        glScalef(div_h, div_h, 1);
-    }else{
-      glScalef(0.05*sizeScale,0.05*sizeScale,1);
-    }
-
-
-    if(scaleToSize){
-      float sizeRatio=size[0]/size[1];
-      float fontRatio=w/h;
-      if(fontRatio>sizeRatio){
-        screenH=screenH/(fontRatio/sizeRatio);
-      }
-    }else{
-      screenH*=((w*0.05*sizeScale)/size[0]);
-    }
+    glScalef(scaleToApply,scaleToApply,1);
+    screenH*=scaleToApply;
 
     if(screenH<0)
       screenH=-screenH;
 
-    if(screenH < 15 && useLOD){
+    if(screenH < 4 && useLOD){
       float wAlign=0;
       float hAlign=0;
 
@@ -340,7 +353,7 @@ namespace tlp {
       }
 
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-      glLineWidth(screenH/5.);
+      glLineWidth(screenH);
       setMaterial(Color(color[0],color[1],color[2],128));
       OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
       glBegin(GL_LINES);
@@ -351,12 +364,52 @@ namespace tlp {
       glLineWidth(1);
     }else{
       glDisable(GL_DEPTH_TEST);
-      glTranslatef(-0.75,0.,0.);
       glBlendFunc(GL_ONE_MINUS_DST_COLOR,GL_ONE_MINUS_SRC_COLOR);
-      renderer->draw(w, w, alignment);
+
+      // For left and right alignment
+      float xAlignFactor=.5;
+      switch (alignment) {
+      case ON_LEFT:xAlignFactor = 1.;break;
+      case ON_RIGHT:xAlignFactor = .0;break;
+      default:break;
+      }
+
+      // Label shift when we have an alignement
+      float xShiftFactor=0.;
+      float yShiftFactor=0.;
+      switch (alignment) {
+      case ON_LEFT:xShiftFactor = -0.5;break;
+      case ON_RIGHT:xShiftFactor = 0.5;break;
+      case ON_TOP:yShiftFactor = 0.5;break;
+      case ON_BOTTOM:yShiftFactor = -0.5;break;
+      default:break;
+      }
+
+      // space between lines
+      float yShift=0.;
+
+      float x1,y1,z1,x2,y2,z2;
+      vector<float>::iterator itW=textWidthVector.begin();
+
+      for(vector<string>::iterator it=textVector.begin();it!=textVector.end();++it){
+        font->BBox((*it).c_str(),x1,y1,z1,x2,y2,z2);
+
+        FTPoint shift(-(textBoundingBox[1][0]-textBoundingBox[0][0])/2.-x1+((textBoundingBox[1][0]-textBoundingBox[0][0])-(*itW))*xAlignFactor+(textBoundingBox[1][0]-textBoundingBox[0][0])*xShiftFactor,
+                      -textBoundingBox[1][1]+(textBoundingBox[1][1]-textBoundingBox[0][1])/2.+yShift+(textBoundingBox[1][1]-textBoundingBox[0][1])*yShiftFactor);
+
+        setMaterial(color);
+        font->Render((*it).c_str(),-1,shift);
+        if(screenH > 25 && useLOD){
+          setMaterial(Color(0,0,0,255));
+        }
+        borderFont->Render((*it).c_str(),-1,shift);
+        yShift-=fontSize+5;
+        itW++;
+      }
     }
     glPopMatrix();
     glPopAttrib();
+
   }
   //===========================================================
   void GlLabel::translate(const Coord& mouvement){

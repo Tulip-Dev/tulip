@@ -64,15 +64,15 @@ namespace tlp {
       GlNode::draw(20,data,camera);
   }
 
-  void GlMetaNode::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data){
-    drawLabel(test,renderer,data,0.);
+  void GlMetaNode::drawLabel(OcclusionTest* test, GlGraphInputData* data){
+    drawLabel(test,data,0.);
   }
 
-  void GlMetaNode::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data, float lod, Camera *camera){
+  void GlMetaNode::drawLabel(OcclusionTest* test, GlGraphInputData* data, float lod, Camera *camera){
 
     node n=node(id);
 
-    GlNode::drawLabel(test,renderer,data,lod,camera);
+    GlNode::drawLabel(test,data,lod,camera);
 
     if(!data->getMetaNodeRenderer()->glMetaNodeHaveToRenderLabels())
       return;
@@ -160,15 +160,15 @@ namespace tlp {
     activeCamera->getObjectTransformation(objectTranslate, objectScale, objectCoord);
 
     for(vector<GlNode>::iterator it=nodes.begin();it!=nodes.end();++it) {
-      (*it).drawLabel(test,renderer,&metaData,1000,camera);
+      (*it).drawLabel(test,&metaData,1000,camera);
     }
 
     for(vector<GlMetaNode>::iterator it=metaNodes.begin();it!=metaNodes.end();++it) {
-      (*it).drawLabel(test,renderer,&metaData,1000,camera);
+      (*it).drawLabel(test,&metaData,1000,camera);
     }
 
     for(vector<GlEdge>::iterator it=edges.begin();it!=edges.end();++it) {
-      (*it).drawLabel(test,renderer,&metaData);
+      (*it).drawLabel(test,&metaData);
     }
 
     glPopMatrix();

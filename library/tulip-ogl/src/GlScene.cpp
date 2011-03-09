@@ -32,7 +32,6 @@
 #endif
 
 #include "tulip/GlLODSceneVisitor.h"
-#include "tulip/TextRenderer.h"
 #include "tulip/OcclusionTest.h"
 #include "tulip/GlCPULODCalculator.h"
 #include "tulip/GlBoundingBoxSceneVisitor.h"
@@ -187,7 +186,7 @@ namespace tlp {
     }
   }
 
-  void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphComposite,TextRenderer *fontRenderer,
+  void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphComposite,
                                     OcclusionTest *occlusionTest,LayerLODUnit &layerLODUnit){
     Graph *graph=glGraphComposite->getInputData()->getGraph();
     BooleanProperty *selectionProperty=glGraphComposite->getInputData()->getElementSelected();
@@ -220,10 +219,10 @@ namespace tlp {
             // Not metric ordered
             if(!graph->isMetaNode(n)){
               glNode.id=n.id;
-              glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
+              glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
             }else{
               glMetaNode.id=n.id;
-              glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
+              glMetaNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
             }
           }else{
             // Metric ordered
@@ -240,10 +239,10 @@ namespace tlp {
         for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin();it!=nodesMetricOrdered.end();++it){
           if(!graph->isMetaNode((*it).first)){
             glNode.id=(*it).first.id;
-            glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
+            glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
           }else{
             glMetaNode.id=(*it).first.id;
-            glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
+            glMetaNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
           }
         }
       }
@@ -260,7 +259,7 @@ namespace tlp {
           if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric){
             // Not metric ordered
             glEdge.id=e.id;
-            glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
+            glEdge.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
           }else{
             // Metric ordered
             edgesMetricOrdered.push_back(pair<edge,float>(e,(*it).lod));
@@ -275,7 +274,7 @@ namespace tlp {
         sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
         for(vector<pair<edge,float> >::iterator it=edgesMetricOrdered.begin();it!=edgesMetricOrdered.end();++it){
           glEdge.id=(*it).first.id;
-          glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
+          glEdge.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
         }
       }
     }
@@ -348,7 +347,6 @@ namespace tlp {
     lastTime=omp_get_wtime();
 #endif
 
-      TextRenderer fontRenderer;
       OcclusionTest occlusionTest;
 
       Camera *camera;
@@ -559,10 +557,10 @@ namespace tlp {
               glDisable(GL_COLOR_MATERIAL);
 
               // Draw Labels for selected entities
-              drawLabelsForComplexEntities(true,glGraphComposite,&fontRenderer,&occlusionTest,*itLayer);
+              drawLabelsForComplexEntities(true,glGraphComposite,&occlusionTest,*itLayer);
 
               // Draw Labels for unselected entities
-              drawLabelsForComplexEntities(false,glGraphComposite,&fontRenderer,&occlusionTest,*itLayer);
+              drawLabelsForComplexEntities(false,glGraphComposite,&occlusionTest,*itLayer);
 
               glPopAttrib();
           }

@@ -26,15 +26,6 @@ libtulip_ogl_la_SOURCES = \
 	GlGraphRenderingParameters.cpp\
 	GlTools.cpp \
 	Curves.cpp \
-	Hline.cpp \
-	Parser.cpp \
-	Paragraph.cpp \
-	Renderer.cpp \
-	GlRenderer.cpp \
-	TextRenderer.cpp \
-	Table.cpp \
-	Context.cpp \
-	Document.cpp \
 	Glyph.cpp \
 	CubeOutLined.cpp \
 	Camera.cpp \
