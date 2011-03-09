@@ -336,17 +336,20 @@ bool GEMLayout::run() {
         // for each component draw
         std::vector<std::set<node> > components;
         string err;
+	// push a temporary graph state (not redoable)
+        graph->push(false);
         ConnectedTest::computeConnectedComponents(graph, components);
         for (size_t i = 0; i < components.size(); ++i) {
             Graph * tmp = graph->inducedSubGraph(components[i]);
             tmp->computeProperty("GEM (Frick)", layoutResult, err, pluginProgress, dataSet);
-            graph->delAllSubGraphs(tmp);
         }
         // call connected component packing
         LayoutProperty tmpLayout(graph);
 	DataSet ds;
         ds.set("coordinates", layoutResult);
         graph->computeProperty("Connected Component Packing", &tmpLayout, err, pluginProgress, &ds);
+	// forget last temporary graph state 
+	graph->pop();
         *layoutResult = tmpLayout;
         return true;
     }

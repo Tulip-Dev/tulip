@@ -69,10 +69,13 @@ bool Dendrogram::run() {
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
+  // push a temporary graph state (not redoable)
+  graph->push(false);
   tree = TreeTest::computeTree(graph, pluginProgress);
-  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
+    graph->pop();
     return false;
-
+  }
   tlp::getSource(tree, root);
   computeLevelHeights(tree, root, 0, &oriSize);
   // check if the specified layer spacing is greater
@@ -88,7 +91,9 @@ bool Dendrogram::run() {
   setAllNodesCoordY(&oriLayout, &oriSize);
   setOrthogonalEdge(&oriLayout, graph, spacing);
 
-  TreeTest::cleanComputedTree(graph, tree);
+  // forget last temporary graph state 
+  graph->pop();
+
   return true;
 }
 
