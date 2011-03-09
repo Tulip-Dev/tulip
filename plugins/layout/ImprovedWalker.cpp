@@ -82,9 +82,15 @@ ImprovedWalker::~ImprovedWalker() {
 bool ImprovedWalker::run() {
   if (pluginProgress)
     pluginProgress->showPreview(false);
+
+  // push a temporary graph state (not redoable)
+  graph->push(false);
+
   tree = TreeTest::computeTree(graph, pluginProgress);
-  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
+    graph->pop();
     return false;
+  }
 
   node root;
   tlp::getSource(tree, root);
@@ -114,7 +120,8 @@ bool ImprovedWalker::run() {
   if (hasOrthogonalEdge(dataSet))
     setOrthogonalEdge(oriLayout, tree, spacing);
     
-  TreeTest::cleanComputedTree(graph, tree);
+  // forget last temporary graph state 
+  graph->pop();
 
   delete oriLayout;
   delete oriSize;

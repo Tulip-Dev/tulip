@@ -325,9 +325,15 @@ public:
   bool run() {
     if (pluginProgress)
       pluginProgress->showPreview(false);
+
+    // push a temporary graph state (not redoable)
+    graph->push(false);
+
     tree = TreeTest::computeTree(graph, pluginProgress);
-    if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
+    if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
+      graph->pop();
       return false;
+    }
 
     float nSpacing, lSpacing;
     SizeProperty* sizes;
@@ -361,10 +367,8 @@ public:
 
     delete sizes;
 
-    // if not in tulip gui, ensure cleanup
-    LayoutProperty* elementLayout;
-    if (!graph->getAttribute("viewLayout", elementLayout))
-      TreeTest::cleanComputedTree(graph, tree);
+    // forget last temporary graph state 
+    graph->pop();
 
     return true;
   }
