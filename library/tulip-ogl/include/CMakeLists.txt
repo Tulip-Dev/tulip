@@ -63,9 +63,6 @@ INSTALL(FILES
 	tulip/EdgeExtremityGlyph.h
 	tulip/EdgeExtremityGlyphManager.h
 	tulip/OcclusionTest.h
-	tulip/TextRenderer.h	
-	tulip/Context.h
-	tulip/Fonts.h
 	tulip/Curves.h
 	tulip/GlShaderProgram.h
 	tulip/GlOpenUniformCubicBSpline.h

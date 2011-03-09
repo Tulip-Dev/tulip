@@ -27,11 +27,15 @@
 
 #include "tulip/GlSimpleEntity.h"
 
+class FTGLPolygonFont;
+class FTOutlineFont;
+
 namespace tlp {
 
   class Camera;
-  class TextRenderer;
   struct OcclusionTest;
+
+  enum LabelPosition {ON_CENTER = 0, ON_TOP = 1, ON_BOTTOM = 2, ON_LEFT = 3, ON_RIGHT = 4};
 
   /**
    * \addtogroup GlEntities
@@ -43,9 +47,6 @@ namespace tlp {
   class TLP_GL_SCOPE GlLabel : public GlSimpleEntity
   {
   public :
-
-    static const int TEXTURE_MODE = 0;
-    static const int POLYGON_MODE = 1;
 
     GlLabel();
 
@@ -107,6 +108,11 @@ namespace tlp {
      * Return the bounding box of the label
      */
     virtual BoundingBox getBoundingBox();
+
+    /**
+     * Return the bounding box of the text of the label
+     */
+    virtual BoundingBox getTextBoundingBox();
 
     /**
      * Set the size of the label
@@ -223,8 +229,9 @@ namespace tlp {
     /**
      * Set if the label is otimized with the lod
      */
-    virtual void setUseLODOptimisation(bool state){
+    virtual void setUseLODOptimisation(bool state,BoundingBox bb=BoundingBox()){
       useLOD=state;
+      lodBoundingBox=bb;
     }
 
     /**
@@ -306,7 +313,8 @@ namespace tlp {
     std::string fontName;
     int fontSize;
     int renderingMode;
-    static TextRenderer *renderer;
+    FTGLPolygonFont *font;
+    FTOutlineFont *borderFont;
     Coord centerPosition;
     Coord translationAfterRotation;
     Coord size;
@@ -323,8 +331,13 @@ namespace tlp {
     float yRot;
     float zRot;
     bool useLOD;
+    BoundingBox lodBoundingBox;
     unsigned int occlusionBorderSize;
     OcclusionTest *occlusionTester;
+
+    std::vector<std::string> textVector;
+    std::vector<float> textWidthVector;
+    BoundingBox textBoundingBox;
   };
   /*@}*/
 }

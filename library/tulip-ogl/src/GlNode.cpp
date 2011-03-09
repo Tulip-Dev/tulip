@@ -34,11 +34,9 @@
 #include "tulip/GlyphManager.h"
 #include "tulip/GlDisplayListManager.h"
 #include "tulip/OcclusionTest.h"
-#include "tulip/TextRenderer.h"
 #include "tulip/GlTLPFeedBackBuilder.h"
 #include "tulip/GlSceneVisitor.h"
 #include "tulip/GlGraphRenderingParameters.h"
-#include "tulip/GlRenderer.h"
 #include "tulip/GlTextureManager.h"
 #include "tulip/GlVertexArrayManager.h"
 #include "tulip/GlLabel.h"
@@ -198,20 +196,20 @@ namespace tlp {
     }
   }
 
-  void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod) {
+  void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,GlGraphInputData* data,float lod) {
     node n=node(id);
     bool selected=data->getElementSelected()->getNodeValue(n);
     if(drawSelect!=selected)
       return;
 
-    drawLabel(test,renderer,data,lod);
+    drawLabel(test,data,lod);
   }
 
-  void GlNode::drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) {
-    GlNode::drawLabel(test,renderer,data,1000.);
+  void GlNode::drawLabel(OcclusionTest* test,GlGraphInputData* data) {
+    GlNode::drawLabel(test,data,1000.);
   }
 
-  void GlNode::drawLabel(OcclusionTest* test,TextRenderer* ,GlGraphInputData* data,float lod, Camera *camera) {
+  void GlNode::drawLabel(OcclusionTest* test,GlGraphInputData* data,float lod, Camera *camera) {
 
     node n=node(id);
 
@@ -259,16 +257,15 @@ namespace tlp {
     Coord centerBB(includeBB.center());
     Vec3f sizeBB = includeBB[1]-includeBB[0];
 
-    label->setText(tmp);
     label->setFontNameSizeAndColor(data->getElementFont()->getNodeValue(n),fontSize,fontColor);
-    label->setRenderingMode(GlLabel::POLYGON_MODE);
+    label->setText(tmp);
     label->setTranslationAfterRotation(centerBB*nodeSize);
     label->setSize(Coord(nodeSize[0]*sizeBB[0],nodeSize[1]*sizeBB[1],0));
     label->setSizeForOutAlign(Coord(nodeSize[0],nodeSize[1],0));
     label->rotate(0,0,data->getElementRotation()->getNodeValue(n));
     label->setAlignment(labelPos);
     label->setScaleToSize(data->parameters->isLabelScaled());
-    label->setUseLODOptimisation(true);
+    label->setUseLODOptimisation(true,this->getBoundingBox(data));
     label->setLabelOcclusionBorder(data->parameters->getLabelsBorder());
     label->setUseMinMaxSize(true);
     label->setMinSize(data->parameters->getMinSizeOfLabel());
