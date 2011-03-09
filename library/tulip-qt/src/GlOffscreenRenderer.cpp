@@ -18,11 +18,10 @@
  */
 
 #include <sstream>
+
 #include "tulip/GlOffscreenRenderer.h"
 #include "tulip/GlMainWidget.h"
-
-#include <tulip/OpenGlConfigManager.h>
-#include <tulip/GlVertexArrayManager.h>
+#include "tulip/GlVertexArrayManager.h"
 
 using namespace std;
 
@@ -38,10 +37,8 @@ GlOffscreenRenderer *GlOffscreenRenderer::getInstance() {
 }
 
 GlOffscreenRenderer::GlOffscreenRenderer()
-: lastVPWidth(0), lastVPHeight(0), glFrameBuf(NULL), mainLayer(new GlLayer("Main")),
+: lastVPWidth(0), lastVPHeight(0), glFrameBuf(NULL), glFrameBuf2(NULL), mainLayer(new GlLayer("Main")),
   entitiesCpt(0), zoomFactor(DBL_MAX), cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
-	GlGraphComposite *glGraphComposite = new GlGraphComposite(tlp::newGraph());
-	mainLayer->addGlEntity(glGraphComposite, "graph");
 	GlLayer *backgroundLayer=new GlLayer("Background");
 	backgroundLayer->setVisible(true);
 	GlLayer *foregroundLayer=new GlLayer("Foreground");
@@ -51,13 +48,13 @@ GlOffscreenRenderer::GlOffscreenRenderer()
 	scene.addLayer(backgroundLayer);
 	scene.addLayer(mainLayer);
 	scene.addLayer(foregroundLayer);
-	scene.addGlGraphCompositeInfo(mainLayer, glGraphComposite);
+
+	antialiasedFbo = QGLFramebufferObject::hasOpenGLFramebufferBlit();
 }
 
 GlOffscreenRenderer::~GlOffscreenRenderer() {
-	if (glFrameBuf != NULL) {
-		delete glFrameBuf;
-	}
+	delete glFrameBuf;
+	delete glFrameBuf2;
 	clearScene();
 	delete mainLayer;
 }
@@ -66,9 +63,18 @@ void GlOffscreenRenderer::setViewPortSize(const unsigned int viewPortWidth, cons
 	if (glFrameBuf != NULL && (lastVPWidth != viewPortWidth || lastVPHeight != viewPortHeight)) {
 		delete glFrameBuf;
 		glFrameBuf = NULL;
+		delete glFrameBuf2;
+		glFrameBuf2 = NULL;
 	}
 	if (glFrameBuf == NULL) {
-		glFrameBuf = new QGLFramebufferObject(viewPortWidth, viewPortHeight, QGLFramebufferObject::CombinedDepthStencil);
+		QGLFramebufferObjectFormat fboFmt;
+		fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
+		if (antialiasedFbo)
+			fboFmt.setSamples(8);
+		glFrameBuf = new QGLFramebufferObject(viewPortWidth, viewPortHeight, fboFmt);
+	}
+	if (antialiasedFbo && glFrameBuf2 == NULL) {
+		glFrameBuf2 = new QGLFramebufferObject(viewPortWidth, viewPortHeight);
 	}
 	scene.setViewport(0,0,viewPortWidth, viewPortHeight);
 	lastVPWidth = viewPortWidth;
@@ -133,9 +139,8 @@ void GlOffscreenRenderer::renderScene(const bool centerScene) {
 
 	Camera &camera = scene.getCamera();
 	glFrameBuf->bind();
-	scene.centerScene();
 	if (centerScene) {
-		scene.ajustSceneToSize(glFrameBuf->width(), glFrameBuf->height());
+		scene.centerScene();
 	}
 	if (cameraCenter != Coord(FLT_MAX, FLT_MAX, FLT_MAX)) {
 		camera.setCenter(cameraCenter);
@@ -149,6 +154,9 @@ void GlOffscreenRenderer::renderScene(const bool centerScene) {
 	scene.draw();
 	glFrameBuf->release();
 
+	if (antialiasedFbo)
+		QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
+
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
 
@@ -159,7 +167,10 @@ void GlOffscreenRenderer::renderScene(const bool centerScene) {
 }
 
 QImage GlOffscreenRenderer::getImage() {
-	return glFrameBuf->toImage();
+	if (!antialiasedFbo)
+		return glFrameBuf->toImage();
+	else
+		return glFrameBuf2->toImage();
 }
 
 GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
@@ -179,7 +190,10 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	unsigned char* buff = new unsigned char[getViewportWidth()*getViewportHeight()*4];
-	glBindTexture(GL_TEXTURE_2D, glFrameBuf->texture());
+	if (!antialiasedFbo)
+		glBindTexture(GL_TEXTURE_2D, glFrameBuf->texture());
+	else
+		glBindTexture(GL_TEXTURE_2D, glFrameBuf2->texture());
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
 
 	glBindTexture(GL_TEXTURE_2D, textureId);
