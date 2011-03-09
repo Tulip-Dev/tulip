@@ -48,8 +48,10 @@ GlOffscreenRenderer::GlOffscreenRenderer()
 	scene.addLayer(backgroundLayer);
 	scene.addLayer(mainLayer);
 	scene.addLayer(foregroundLayer);
-
+	antialiasedFbo = false;
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 	antialiasedFbo = QGLFramebufferObject::hasOpenGLFramebufferBlit();
+#endif
 }
 
 GlOffscreenRenderer::~GlOffscreenRenderer() {
@@ -67,6 +69,7 @@ void GlOffscreenRenderer::setViewPortSize(const unsigned int viewPortWidth, cons
 		glFrameBuf2 = NULL;
 	}
 	if (glFrameBuf == NULL) {
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 		QGLFramebufferObjectFormat fboFmt;
 		fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 		if (antialiasedFbo)
@@ -76,6 +79,9 @@ void GlOffscreenRenderer::setViewPortSize(const unsigned int viewPortWidth, cons
 	if (antialiasedFbo && glFrameBuf2 == NULL) {
 		glFrameBuf2 = new QGLFramebufferObject(viewPortWidth, viewPortHeight);
 	}
+#else
+	glFrameBuf = new QGLFramebufferObject(viewPortWidth, viewPortHeight, QGLFramebufferObject::CombinedDepthStencil);
+#endif
 	scene.setViewport(0,0,viewPortWidth, viewPortHeight);
 	lastVPWidth = viewPortWidth;
 	lastVPHeight = viewPortHeight;
@@ -154,8 +160,10 @@ void GlOffscreenRenderer::renderScene(const bool centerScene) {
 	scene.draw();
 	glFrameBuf->release();
 
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 	if (antialiasedFbo)
 		QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
+#endif
 
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
