@@ -352,9 +352,6 @@ bool HierarchicalGraph::run() {
   }
   */    
   //=======================================================================
-  // Build a clone of this graph
-  Graph *mySGraph = tlp::newCloneSubGraph(graph,"tmp clone");
-
   nodeSize = graph->getProperty<SizeProperty>("viewSize");
   orientation = "horizontal";
   spacing = 64.0;
@@ -378,7 +375,14 @@ bool HierarchicalGraph::run() {
       nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
   }
+
+  // push a temporary graph state (not redoable)
+  graph->push(false);
+
   //========================================================================
+  // Build a clone of this graph
+  Graph *mySGraph = tlp::newCloneSubGraph(graph,"tmp clone");
+
   //if the graph is not acyclic we reverse edges to make it acyclic
   vector<tlp::SelfLoops> listSelfLoops;
   vector<edge> reversedEdges;
@@ -449,7 +453,7 @@ bool HierarchicalGraph::run() {
   computeEdgeBends(mySGraph, tmpLayout, replacedEdges, reversedEdges);
   computeSelfLoops(mySGraph, tmpLayout, listSelfLoops);
   
-  for (vector<edge>::const_iterator it=reversedEdges.begin(); it!=reversedEdges.end(); ++it) {
+  /*for (vector<edge>::const_iterator it=reversedEdges.begin(); it!=reversedEdges.end(); ++it) {
     graph->reverse(*it);
   }
   mySGraph->delAllNode(startNode);
@@ -457,7 +461,10 @@ bool HierarchicalGraph::run() {
     mySGraph->delAllNode(properAddedNodes.back());
     properAddedNodes.pop_back();
   }
-  graph->delSubGraph(mySGraph);
+  graph->delSubGraph(mySGraph);*/
+
+  // forget last temporary graph state 
+  graph->pop();
 
   //post processing 
   //Prevent edge node overlaping
