@@ -1,1 +1,1 @@
-sh tulip_run_test.sh copy_new_props remove_props.tlp
+sh tulip_run_test.sh copy_new_props copy_new_props_input.tlp
