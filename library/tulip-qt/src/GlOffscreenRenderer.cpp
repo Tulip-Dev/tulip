@@ -17,8 +17,6 @@
  *
  */
 
-#include <GL/glew.h>
-
 #include <sstream>
 
 #include "tulip/GlOffscreenRenderer.h"
@@ -51,8 +49,7 @@ GlOffscreenRenderer::GlOffscreenRenderer()
 	scene.addLayer(mainLayer);
 	scene.addLayer(foregroundLayer);
 
-	antialiasedFbo = QGLFramebufferObject::hasOpenGLFramebufferBlit() && glewIsSupported("GL_EXT_framebuffer_multisample");
-
+	antialiasedFbo = QGLFramebufferObject::hasOpenGLFramebufferBlit();
 }
 
 GlOffscreenRenderer::~GlOffscreenRenderer() {
