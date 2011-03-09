@@ -394,10 +394,15 @@ bool TreeReingoldAndTilfordExtended::run() {
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
-  tree = TreeTest::computeTree(graph, pluginProgress);
-  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE)
-    return false;
 
+  // push a temporary graph state (not redoable)
+  graph->push(false);
+
+  tree = TreeTest::computeTree(graph, pluginProgress);
+  if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
+    graph->pop();
+    return false;
+  }
   node startNode;
   tlp::getSource(tree, startNode);
 
@@ -457,7 +462,8 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (boundingCircles)
     delete sizes;
 
-  TreeTest::cleanComputedTree(graph, tree);
+  // forget last temporary graph state 
+  graph->pop();
 
   return true;
 }
