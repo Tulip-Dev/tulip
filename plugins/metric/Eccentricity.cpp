@@ -48,7 +48,7 @@ const char * paramHelp[] = {
     HTML_HELP_DEF( "default", "false" ) \
     HTML_HELP_BODY() \
     "If true the returned values are normalized. " \
-    "For the closeness centrality, the reciprocal of the sum of distances is returned. " \   
+    "For the closeness centrality, the reciprocal of the sum of distances is returned. " \
     "The eccentricity values is divided by the graph diameter. " \
     "<b> Warning : </b> The normalized eccentricity values sould be computed on a (strongly) connected graph."
     HTML_HELP_CLOSE(),
