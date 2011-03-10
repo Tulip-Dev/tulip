@@ -177,7 +177,11 @@ namespace tlp {
     font=new FTGLPolygonFont(fontName.c_str());
     borderFont=new FTOutlineFont(fontName.c_str());
     if(font->Error() || borderFont->Error()){
-      cout << "Error in font loading : " << fontName << endl;
+      if(fontName=="")
+        cout << "Error in font loading : no font name" << endl;
+      else
+        cout << "Erro in font loading : " << fontName << " can't be loaded" << endl;
+
       delete font;
       delete borderFont;
 
