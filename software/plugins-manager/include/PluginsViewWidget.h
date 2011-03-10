@@ -47,7 +47,7 @@ namespace tlp {
   };
 
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginsViewWidget : public QTreeWidget {
+  class PluginsViewWidget : public QTreeWidget {
 
     Q_OBJECT
 

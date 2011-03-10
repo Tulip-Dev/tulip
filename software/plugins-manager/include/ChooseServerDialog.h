@@ -30,7 +30,7 @@
 
 namespace tlp {
 
-  class TLP_PLUGINSMANAGER_SCOPE ChooseServerDialog : public QDialog{
+  class ChooseServerDialog : public QDialog{
     Q_OBJECT
     
     public:

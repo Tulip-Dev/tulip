@@ -34,7 +34,7 @@
 
 namespace tlp {
 
-  class TLP_PLUGINSMANAGER_SCOPE InstallPluginDialog : public QDialog, public Ui::InstallPluginDialogData  {
+  class InstallPluginDialog : public QDialog, public Ui::InstallPluginDialogData  {
     Q_OBJECT
 
   public:

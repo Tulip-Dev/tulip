@@ -28,14 +28,14 @@
 
 namespace tlp {
 
-  class TLP_PLUGINSMANAGER_SCOPE  ResponseTreatment {  
+  class  ResponseTreatment {  
 
   public:
     virtual ~ResponseTreatment(){};
     virtual void operator()(const std::string &data)= 0;
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE  RequestFinish {
+  class RequestFinish {
    
   public :
     virtual ~RequestFinish(){};

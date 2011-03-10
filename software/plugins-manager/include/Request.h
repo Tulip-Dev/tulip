@@ -30,7 +30,7 @@
 
 namespace tlp {
 
-  class TLP_PLUGINSMANAGER_SCOPE  Request {
+  class Request {
 
   public : 
     virtual ~Request() {}
@@ -42,7 +42,7 @@ namespace tlp {
 
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE  GetRequest : public Request {
+  class GetRequest : public Request {
 
   protected :
 
@@ -58,7 +58,7 @@ namespace tlp {
 
   };
   
-  class TLP_PLUGINSMANAGER_SCOPE  SOAPRequest : public Request{
+  class  SOAPRequest : public Request{
     
   protected :
     ResponseTreatment* respTreatment;
@@ -74,7 +74,7 @@ namespace tlp {
     
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE  DownloadPluginRequest : public SOAPRequest{
+  class DownloadPluginRequest : public SOAPRequest{
     
     std::string name;
 
@@ -85,7 +85,7 @@ namespace tlp {
     
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE  ConnectServerRequest : public SOAPRequest{
+  class ConnectServerRequest : public SOAPRequest{
 
   public:   
     
@@ -93,7 +93,7 @@ namespace tlp {
     
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE  GetServerNameRequest: public SOAPRequest{
+  class GetServerNameRequest: public SOAPRequest{
 
   public: 
     
@@ -104,7 +104,7 @@ namespace tlp {
   };
   
   
-  class TLP_PLUGINSMANAGER_SCOPE  ServerNameTreatment : public QObject, public ResponseTreatment{
+  class ServerNameTreatment : public QObject, public ResponseTreatment{
     Q_OBJECT
     
   private:
@@ -120,7 +120,7 @@ namespace tlp {
     
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE  GetTulipLastVersionNumberRequest: public SOAPRequest{
+  class GetTulipLastVersionNumberRequest: public SOAPRequest{
 
   public:
 
@@ -131,7 +131,7 @@ namespace tlp {
   };
 
 
-  class TLP_PLUGINSMANAGER_SCOPE  TulipLastVersionNumberTreatment : public QObject, public ResponseTreatment{
+  class TulipLastVersionNumberTreatment : public QObject, public ResponseTreatment{
     Q_OBJECT
 
   public :
@@ -144,7 +144,7 @@ namespace tlp {
 
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE  GetPluginsListRequest: public SOAPRequest{
+  class GetPluginsListRequest: public SOAPRequest{
     
   public:   
     GetPluginsListRequest(ResponseTreatment* respT);
@@ -153,7 +153,7 @@ namespace tlp {
     
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE  GetPluginRequest: public GetRequest {
+  class GetPluginRequest: public GetRequest {
   
   public: 
     
@@ -162,7 +162,7 @@ namespace tlp {
     
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE GetPluginInfoRequest: public SOAPRequest {
+  class GetPluginInfoRequest: public SOAPRequest {
   
   public: 
     
@@ -190,7 +190,7 @@ namespace tlp {
     
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE GetPluginDocRequest: public SOAPRequest {
+  class GetPluginDocRequest: public SOAPRequest {
   
   public: 
     

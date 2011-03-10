@@ -33,7 +33,7 @@ namespace tlp {
 
   class MultiServerManager;
  
-  class TLP_PLUGINSMANAGER_SCOPE CheckUpdate : public QObject {
+  class CheckUpdate : public QObject {
 
     Q_OBJECT
 
