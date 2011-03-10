@@ -70,6 +70,7 @@ public:
       **/
     void changePreview(bool);
     void setComment(std::string msg);
+    ProgressState progress(int step, int max_step);
 protected:
     void progress_handler(int i,int j);
     void preview_handler(bool b);

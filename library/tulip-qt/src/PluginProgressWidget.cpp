@@ -47,6 +47,11 @@ PluginProgressWidget::~PluginProgressWidget()
     delete ui;
 }
 
+ProgressState PluginProgressWidget::progress(int step, int max_step) {
+  progress_handler(step, max_step);
+  return state();
+}
+
 //=====================================
 void PluginProgressWidget::preview_handler(bool b) {
     if (ui->preview->isChecked() == b) return;
