@@ -1,5 +1,7 @@
 INCLUDE_DIRECTORIES(${OGDFInclude} ${TulipInclude} ${TulipBuildInclude})
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDLL_TULIP_OGDF -DOGDF_DLL")
+
 SET(TulipToOGDF_SRCS
   TulipToOGDF.cpp
   OGDFLayoutPluginBase.cpp)

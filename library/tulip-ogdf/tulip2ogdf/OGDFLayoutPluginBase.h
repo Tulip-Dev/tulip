@@ -19,6 +19,7 @@
 #ifndef OGDF_LAYOUT_PLUGIN_BASE
 #define OGDF_LAYOUT_PLUGIN_BASE
 
+#include <tulip/tulipconf.h>
 #include <tulip/TulipPlugin.h>
 #include <tulip/LayoutAlgorithm.h>
 
@@ -28,7 +29,7 @@
 
 #include "TulipToOGDF.h"
 
-class OGDFLayoutPluginBase: public tlp::LayoutAlgorithm {
+class TLP_OGDF_SCOPE OGDFLayoutPluginBase: public tlp::LayoutAlgorithm {
   public:
     OGDFLayoutPluginBase(const tlp::PropertyContext &context, ogdf::LayoutModule *ogdfLayoutAlgo);
     virtual ~OGDFLayoutPluginBase();
