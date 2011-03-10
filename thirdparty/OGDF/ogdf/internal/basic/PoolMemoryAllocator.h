@@ -118,45 +118,18 @@ public:
 	//! Initializes the memory manager.
 	static OGDF_EXPORT void init();
 
-	static OGDF_EXPORT void initThread() {
-#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
-		pthread_setspecific(s_tpKey,calloc(eTableSize,sizeof(MemElemPtr)));
-#endif
-	}
+	static OGDF_EXPORT void initThread();
 
 	//! Frees all memory blocks allocated by the memory manager.
 	static OGDF_EXPORT void cleanup();
 
-	static OGDF_EXPORT bool checkSize(size_t nBytes) {
-		return nBytes < eTableSize;
-	}
+	static OGDF_EXPORT bool checkSize(size_t nBytes);
 
 	//! Allocates memory of size \a nBytes.
-	static OGDF_EXPORT void *allocate(size_t nBytes) {
-#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
-		MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
-#else
-		MemElemPtr *pFreeBytes = s_tp+nBytes;
-#endif
-		if (OGDF_LIKELY(*pFreeBytes != 0)) {
-			MemElemPtr p = *pFreeBytes;
-			*pFreeBytes = p->m_next;
-			return p;
-		} else {
-			return fillPool(*pFreeBytes,__uint16(nBytes));
-		}
-	}
+	static OGDF_EXPORT void *allocate(size_t nBytes);
 
 	//! Deallocates memory at address \a p which is of size \a nBytes.
-	static OGDF_EXPORT void deallocate(size_t nBytes, void *p) {
-#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
-		MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
-#else
-		MemElemPtr *pFreeBytes = s_tp+nBytes;
-#endif
-		MemElemPtr(p)->m_next = *pFreeBytes;
-		*pFreeBytes = MemElemPtr(p);
-	}
+	static OGDF_EXPORT void deallocate(size_t nBytes, void *p);
 
 	//! Deallocate a complete list starting at \a pHead and ending at \a pTail.
 	/**
@@ -165,15 +138,7 @@ public:
 	 * each element separately, since the whole chain can be concatenated with the
 	 * free list, requiring only constant effort.
 	 */
-	static OGDF_EXPORT void deallocateList(size_t nBytes, void *pHead, void *pTail) {
-#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
-		MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
-#else
-		MemElemPtr *pFreeBytes = s_tp+nBytes;
-#endif
-		MemElemPtr(pTail)->m_next = *pFreeBytes;
-		*pFreeBytes = MemElemPtr(pHead);
-	}
+	static OGDF_EXPORT void deallocateList(size_t nBytes, void *pHead, void *pTail);
 
 	static OGDF_EXPORT void flushPool();
 	static OGDF_EXPORT void flushPool(__uint16 nBytes);

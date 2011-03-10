@@ -71,7 +71,7 @@
 namespace ogdf {
 
 
-class VisibilityLayout : public LayoutModule
+class OGDF_EXPORT VisibilityLayout : public LayoutModule
 {
 public:
 

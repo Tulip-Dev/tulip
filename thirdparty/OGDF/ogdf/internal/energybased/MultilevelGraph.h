@@ -86,7 +86,7 @@ struct NodeMerge {
 };
 
 
-class MultilevelGraph
+class OGDF_EXPORT MultilevelGraph
 {
 private:
 	bool m_createdGraph;

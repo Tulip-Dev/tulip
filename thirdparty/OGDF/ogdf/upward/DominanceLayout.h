@@ -72,7 +72,7 @@
 namespace ogdf {
 
 
-class DominanceLayout : public LayoutModule
+class OGDF_EXPORT DominanceLayout : public LayoutModule
 {
 public:
 
