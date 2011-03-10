@@ -29,7 +29,7 @@
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/Iterator.h>
-#include "vectorgraphproperty.h"
+#include <tulip/vectorgraphproperty.h>
 
 namespace tlp {
     //===========================================
@@ -393,7 +393,6 @@ namespace tlp {
             else
                 sort(_edges.begin(), _edges.end(), cmp);
             //recompute indices of edges
-#pragma omp parallel  for
             for (unsigned int i = 0; i < _edges.size(); ++i) {
                 _eData[_edges[i]]._edgesId = i;
             }
@@ -419,7 +418,6 @@ namespace tlp {
             else
                 sort(_nodes.begin(), _nodes.end(), cmp);
             //recompute indices of edges
-#pragma omp parallel  for
             for (unsigned int i = 0; i < _nodes.size(); ++i) {
                 _nData[_nodes[i]]._nodesId = i;
             }
@@ -595,9 +593,9 @@ namespace tlp {
 
             unsigned int _nodesId; /** index of a node in the _nodes vector*/
             unsigned int _outdeg;  /** out degree of nodes */
-            std::vector<bool> _adjt;
-            std::vector<node> _adjn;
-            std::vector<edge> _adje;
+            std::vector<bool> _adjt; /** orientation of the edge, used to separate in and out edges/nodes */
+            std::vector<node> _adjn; /** inout nodes*/
+            std::vector<edge> _adje; /** inout edges*/
         };
 
         struct _iEdges {
@@ -606,8 +604,8 @@ namespace tlp {
             std::pair<unsigned int, unsigned int> _edgeExtremitiesPos; /** source and target of an edge */
         };
 
-        std::vector<_iNodes> _nData;
-        std::vector<_iEdges> _eData;
+        std::vector<_iNodes> _nData; /** internal storage of nodes */
+        std::vector<_iEdges> _eData; /** internal storage of edges */
 
         std::vector< node > _nodes; /** vector of nodes element of the graph */
         std::vector< edge > _edges; /** vector of edges element of the graph */

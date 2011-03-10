@@ -22,8 +22,6 @@
 #include <set>
 #include <cassert>
 #include <iostream>
-#include <fstream>
-#include <string>
 
 #include <tulip/vectorgraph.h>
 #include <tulip/Node.h>
@@ -420,7 +418,7 @@ namespace tlp {
     }
     //=======================================================
     void VectorGraph::delAllEdges() {
-        _freeEdges.resize(0);
+        _freeEdges.insert(_freeEdges.end(), _edges.rbegin(), _edges.rend());
         for(size_t i=0; i<_edges.size(); ++i) {
             _eData[_edges[i]]._edgesId = UINT_MAX;
         }
@@ -431,13 +429,13 @@ namespace tlp {
     }
     //=======================================================
     void VectorGraph::delAllNodes() {
-        _freeEdges.resize(0);
+        _freeEdges.insert(_freeEdges.end(),_edges.rbegin(), _edges.rend());
         for(size_t i=0; i<_edges.size(); ++i) {
             _eData[_edges[i]]._edgesId = UINT_MAX;
         }
         _edges.resize(0);
 
-        _freeNodes.resize(0);
+        _freeNodes.insert(_freeNodes.end(),_nodes.rbegin(), _nodes.rend());
         for(size_t i=0; i<_nodes.size(); ++i) {
             _nData[_nodes[i]]._nodesId = UINT_MAX;
         }
@@ -531,7 +529,7 @@ namespace tlp {
     void VectorGraph::shuffleNodes() {
         random_shuffle(_nodes.begin(), _nodes.end());
         //recompute indices of nodes
-        for (unsigned int i = 0; i < _nodes.size(); ++i) {
+        for (size_t i = 0; i < _nodes.size(); ++i) {
             _nData[_nodes[i]]._nodesId = i;
         }
     }
@@ -539,7 +537,7 @@ namespace tlp {
     void VectorGraph::shuffleEdges() {
         random_shuffle(_edges.begin(), _edges.end());
         //recompute indices of edges
-        for (unsigned int i = 0; i < _edges.size(); ++i) {
+        for (size_t i = 0; i < _edges.size(); ++i) {
             _eData[_edges[i]]._edgesId = i;
         }
     }
