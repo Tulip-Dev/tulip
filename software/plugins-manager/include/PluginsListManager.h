@@ -41,7 +41,7 @@ namespace tlp {
   };
 
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginsListManager {
+  class PluginsListManager {
 
     ArrangementMethod arrangementMethod;
 

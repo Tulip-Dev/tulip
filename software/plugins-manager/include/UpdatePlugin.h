@@ -32,7 +32,7 @@ namespace tlp {
   class MultiServerManager;
   class InstallPluginDialog;
 
-  class TLP_PLUGINSMANAGER_SCOPE UpdatePlugin : public QObject {
+  class UpdatePlugin : public QObject {
 
     Q_OBJECT
 
@@ -88,7 +88,7 @@ namespace tlp {
 
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginDownloadFinish : public RequestFinish {
+  class PluginDownloadFinish : public RequestFinish {
     UpdatePlugin* up;
 
   public :
@@ -99,7 +99,7 @@ namespace tlp {
     }
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE EndPluginDownloadFinish : public RequestFinish {
+  class EndPluginDownloadFinish : public RequestFinish {
     UpdatePlugin* up;
 
   public :

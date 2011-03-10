@@ -32,7 +32,7 @@
 
 namespace tlp {
 
-  class TLP_PLUGINSMANAGER_SCOPE UpdatePluginsDialog : public QDialog, public Ui::UpdatePluginsDialogData {
+  class UpdatePluginsDialog : public QDialog, public Ui::UpdatePluginsDialogData {
 
     Q_OBJECT
 

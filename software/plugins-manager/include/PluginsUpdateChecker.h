@@ -37,7 +37,7 @@ namespace tlp {
 
   class MultiServerManager;
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginsUpdateChecker : public QObject {
+  class PluginsUpdateChecker : public QObject {
 
     Q_OBJECT
 

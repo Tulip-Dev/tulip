@@ -42,7 +42,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsListClearLocalVersion
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE PluginsListClearLocalVersion{
+  class PluginsListClearLocalVersion{
 
   protected:
 
@@ -67,7 +67,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsListTransformer
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE PluginsListTransformer{
+  class PluginsListTransformer{
 
   protected :
     
@@ -85,7 +85,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsListTransformerByName
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE PluginsListTransformerByName : public PluginsListTransformer{
+  class PluginsListTransformerByName : public PluginsListTransformer{
   public :
 
     PluginsListTransformerByName(CompletePluginsList *pluginsList)
@@ -113,7 +113,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsListTransformerByType
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE PluginsListTransformerByType : public PluginsListTransformer{
+  class PluginsListTransformerByType : public PluginsListTransformer{
     
   public:
     
@@ -143,7 +143,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsListTransformerByServer
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE PluginsListTransformerByServer : public PluginsListTransformer{
+  class PluginsListTransformerByServer : public PluginsListTransformer{
   public :
 
     PluginsListTransformerByServer(CompletePluginsList *pluginsList)
@@ -172,7 +172,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsMatchNamePred
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE  PluginMatchNamePred {
+  class PluginMatchNamePred {
 
     std::string pluginName;
 
@@ -188,7 +188,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsMatchNameAndVersionPred
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE PluginMatchNameAndVersionPred
+  class PluginMatchNameAndVersionPred
   {
     std::string pluginName;
     std::string pluginVersion;
@@ -203,7 +203,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsMatchNameAndTypePred
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE  PluginMatchNameAndTypePred {
+  class PluginMatchNameAndTypePred {
 
     std::string pluginName;
     std::string pluginType;
@@ -220,7 +220,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsMatchNameTypeAndVersionPred
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE  PluginMatchNameTypeAndVersionPred {
+  class PluginMatchNameTypeAndVersionPred {
 
     std::string pluginName;
     std::string pluginType;
@@ -241,7 +241,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsMatchNameTypeVersionAndServerPred
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE  PluginMatchNameTypeVersionAndServerPred {
+  class PluginMatchNameTypeVersionAndServerPred {
 
     std::string pluginName;
     std::string pluginType;
@@ -260,7 +260,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsMatchServerNamePred
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE  PluginMatchServerNamePred {
+  class PluginMatchServerNamePred {
 
     std::string serverName;
 
@@ -276,7 +276,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsMatchServerInPluginsList
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE PluginMatchServerInPluginsList{
+  class PluginMatchServerInPluginsList{
 	
     std::string serverName;
 	
@@ -293,7 +293,7 @@ namespace tlp {
   // ***********************************************************************************************
   // ModifyPluginWithInstalledVersion
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE ModifyPluginWithInstalledVersion {
+  class ModifyPluginWithInstalledVersion {
   
     std::vector<LocalPluginInfo*> *localList;
 
@@ -313,7 +313,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsDefaultOrder
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE  PluginsDefaultOrder {
+  class PluginsDefaultOrder {
 
   public :
     
@@ -340,7 +340,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsGlobalOrder
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE  PluginsGlobalOrder {	
+  class PluginsGlobalOrder {	
     
   public :
     
@@ -368,7 +368,7 @@ namespace tlp {
   // ***********************************************************************************************
   // PluginsNameDefaultOrder
   // ***********************************************************************************************
-  class TLP_PLUGINSMANAGER_SCOPE  PluginsNameDefaultOrder {
+  class PluginsNameDefaultOrder {
 
   public :
     

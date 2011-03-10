@@ -152,17 +152,6 @@
 #endif
 
 #ifdef _WIN32
-# 	ifdef DLL_TULIP_PLUGINSMANAGER
-#		define TLP_PLUGINSMANAGER_SCOPE         __declspec(dllexport)
-# 	else
-#		define TLP_PLUGINSMANAGER_SCOPE       __declspec(dllimport)
-# 	endif
-#endif
-#ifndef TLP_PLUGINSMANAGER_SCOPE
-#define TLP_PLUGINSMANAGER_SCOPE           
-#endif
-
-#ifdef _WIN32
 # 	ifdef DLL_TULIP_OGDF
 #		define TLP_OGDF_SCOPE         __declspec(dllexport)
 # 	else

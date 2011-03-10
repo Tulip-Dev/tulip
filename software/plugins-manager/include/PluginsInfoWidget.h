@@ -37,7 +37,7 @@ namespace tlp {
 
   class MultiServerManager;
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginsInfoWidget : public QWidget, public Ui::PluginsInfoWidgetData {
+  class PluginsInfoWidget : public QWidget, public Ui::PluginsInfoWidgetData {
     Q_OBJECT
 
   protected:
@@ -63,7 +63,7 @@ namespace tlp {
     std::string formatXMLDoc(QDomElement elt);
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE GetPluginInfoTreatment : public ResponseTreatment {
+  class GetPluginInfoTreatment : public ResponseTreatment {
 
   private:
     PluginsInfoWidget *piw;
@@ -78,7 +78,7 @@ namespace tlp {
     }
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE GetPluginDocTreatment : public ResponseTreatment {
+  class GetPluginDocTreatment : public ResponseTreatment {
 
   private:
     PluginsInfoWidget *piw;

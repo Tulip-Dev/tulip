@@ -26,7 +26,7 @@
 
 namespace tlp {
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginsHelp {
+  class PluginsHelp {
 
   public :
 

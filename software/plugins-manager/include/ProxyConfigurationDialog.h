@@ -31,7 +31,7 @@
 
 namespace tlp {
 
-  class TLP_PLUGINSMANAGER_SCOPE ProxyConfigurationDialog : public QDialog, public Ui::ProxyConfigurationDialogData {
+  class ProxyConfigurationDialog : public QDialog, public Ui::ProxyConfigurationDialogData {
 
     Q_OBJECT
 

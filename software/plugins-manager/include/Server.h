@@ -46,7 +46,7 @@ namespace tlp {
 
   class Request;
   
-  class TLP_PLUGINSMANAGER_SCOPE  Server : public QObject {  
+  class Server : public QObject {  
   
     Q_OBJECT
 

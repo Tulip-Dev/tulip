@@ -31,7 +31,7 @@
 
 namespace tlp {
 
-  class TLP_PLUGINSMANAGER_SCOPE NewTulipVersionAvailableDialog : public QDialog, public Ui::NewTulipVersionAvailableDialogData {
+  class NewTulipVersionAvailableDialog : public QDialog, public Ui::NewTulipVersionAvailableDialogData {
 
     Q_OBJECT
 
