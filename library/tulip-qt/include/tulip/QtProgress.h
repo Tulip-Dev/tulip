@@ -35,6 +35,7 @@ namespace tlp {
     public:
         QtProgress(QWidget* parent, std::string text, View *view=NULL,int updateInterval=200);
         virtual ~QtProgress();
+    public slots:
         ProgressState progress(int step, int max_step);
         void cancel();
         void stop();
