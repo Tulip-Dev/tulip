@@ -40,6 +40,8 @@
 #include "tulip/QtProgress.h"
 #include "tulip/TlpQtTools.h"
 
+#include "tulip/ThreadedComputeProperty.h"
+
 using namespace std;
 
 namespace tlp {
@@ -144,7 +146,13 @@ namespace tlp {
       }
 
       // The algorithm is applied
-      resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
+      AbstractComputeProperty* param = new ComputePropertyTemplate<PROPERTY>(graph, name, tmp, erreurMsg, myProgress, &dataSet);
+      ComputePropertyThread* thread = new ComputePropertyThread(param);
+      
+      resultBool = thread->computeProperty();
+
+      delete param;
+      delete thread;
       
       graph->pop();
       if (updateLayout) {
