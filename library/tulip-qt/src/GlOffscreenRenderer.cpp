@@ -81,6 +81,7 @@ void GlOffscreenRenderer::setViewPortSize(const unsigned int viewPortWidth, cons
 	}
 #else
 	glFrameBuf = new QGLFramebufferObject(viewPortWidth, viewPortHeight, QGLFramebufferObject::CombinedDepthStencil);
+	}
 #endif
 	scene.setViewport(0,0,viewPortWidth, viewPortHeight);
 	lastVPWidth = viewPortWidth;
