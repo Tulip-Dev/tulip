@@ -1,76 +1,54 @@
 
-include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
+MESSAGE("docs")
 
-add_subdirectory(common)
-add_subdirectory(doxygen)
-add_subdirectory(userHandbook)
-add_subdirectory(developerHandbook)
+IF(UNIX)
+  FIND_PACKAGE(Doxygen REQUIRED)
+  IF(DOXYGEN_FOUND)
+    SET(TULIP_LIB_DESC "Tulip Graph Library")
+    SET(TULIP_LIB_NAME "tulip")
+    CONFIGURE_FILE("doxygen/tulip-lib.doxygen.in" "doxygen/tulip-lib.doxygen")
+    SET(TULIP_LIB_DESC "Tulip Open GL Library")
+    SET(TULIP_LIB_NAME "tulip-ogl")
+    CONFIGURE_FILE("doxygen/tulip-lib.doxygen.in" "doxygen/tulip-ogl-lib.doxygen")
+    SET(TULIP_LIB_DESC "Tulip Qt Library")
+    SET(TULIP_LIB_NAME "tulip-qt")
+    CONFIGURE_FILE("doxygen/tulip-lib.doxygen.in" "doxygen/tulip-qt-lib.doxygen")
+    EXEC_PROGRAM(date ARGS "+%Y" OUTPUT_VARIABLE THIS_YEAR)
+    CONFIGURE_FILE("doxygen/tulip.html.in" "doxygen/tulip.html")
+    CONFIGURE_FILE("doxygen/header.html.in" "doxygen/header.html")
+    CONFIGURE_FILE("doxygen/footer.html.in" "doxygen/footer.html")
+    CONFIGURE_FILE("doxygen/header-allPlugins.html.in" "doxygen/header-allPlugins.html")
+    CONFIGURE_FILE("doxygen/tulip-plugins.doxygen.in" "doxygen/tulip-plugins.doxygen")
+    CONFIGURE_FILE("developerHandbook/gen-devPdf.sh.in" "developerHandbook/gen-devPdf.sh")
+    CONFIGURE_FILE("userHandbook/gen-userPdf.sh.in" "userHandbook/gen-userPdf.sh")
 
-ADD_CUSTOM_TARGET(tulip_qhcp ALL ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/tulip.qhcp ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhcp)
+    include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
 
-ADD_CUSTOM_TARGET(tulip_qhp ALL sh ${PROJECT_SOURCE_DIR}/docs/gen-tulipqhp.sh ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhp)
+    add_subdirectory(common)
+    add_subdirectory(doxygen)
+    add_subdirectory(userHandbook)
+    add_subdirectory(developerHandbook)
 
-ADD_DEPENDENCIES(tulip_qhp ALL common_copy dev_toc dev_keywords dox_toc dox_keywords user_toc user_keywords allPlugins-html tulip-libs-html)
+    ADD_CUSTOM_TARGET(tulip_qhcp ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/tulip.qhcp ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhcp)
+    ADD_CUSTOM_TARGET(tulip_qhp sh ${PROJECT_SOURCE_DIR}/docs/gen-tulipqhp.sh ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhp)
+    ADD_CUSTOM_TARGET(tulip_qch qhelpgenerator ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhp -o ${CMAKE_CURRENT_BINARY_DIR}/tulip.qch)
+    ADD_CUSTOM_TARGET(doc qcollectiongenerator ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhcp -o ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhc WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
-ADD_CUSTOM_TARGET(tulip_qch ALL qhelpgenerator ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhp -o ${CMAKE_CURRENT_BINARY_DIR}/tulip.qch)
+    ADD_DEPENDENCIES(tulip_qhp common_copy dev_toc dev_keywords dox_toc dox_keywords user_toc user_keywords allPlugins-html tulip-libs-html)
+    ADD_DEPENDENCIES(tulip_qch tulip_qhp)
+    ADD_DEPENDENCIES(doc tulip_qch tulip_qhcp)
+  ENDIF()
+ELSE(UNIX)
+  MESSAGE("Doxygen not found: unable to generate documentation")
+ENDIF(UNIX)
 
-ADD_DEPENDENCIES(tulip_qch ALL tulip_qhp)
 
-ADD_CUSTOM_TARGET(tulip_qhc ALL qcollectiongenerator ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhcp -o ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhc WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+ADD_CUSTOM_TARGET(doc_generation ALL
+${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhc
+COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/tulip.qch
+COMMENT "Cheking if documentation files are present")
 
-ADD_DEPENDENCIES(tulip_qhc ALL tulip_qch tulip_qhcp)
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhc ${CMAKE_CURRENT_BINARY_DIR}/tulip.qch
   DESTINATION share/tulip/
   COMPONENT tulip_doc)
-
-
-#original Makefile.am contents follow:
-
-#SUBDIRS = developerHandbook userHandbook doxygen devTeamDoxygen
-#DIST_SUBDIRS = developerHandbook userHandbook doxygen devTeamDoxygen
-#
-#EXTRA_DIST = gen-profile.sh \
-#	common/*.png \
-#	common/*.gif \
-#	common/*.css \
-#	common/*.xsl \
-#	common/favicon.ico \
-#	common/CatalogManager.properties \
-#	common/gen-index.sh \
-#	common/dtd/*.dtd \
-#	common/dtd/*.mod \
-#	common/dtd/README \
-#	common/dtd/docbook-xml-4.4.zip \
-#	common/dtd/docbook.cat \
-#	common/dtd/ChangeLog \
-#	common/dtd/catalog.xml \
-#	common/dtd/ent/*.ent \
-#	common/dtd/ent/README \
-#	README
-#
-#all :
-#
-#clean-am :
-#	rm -f profile.adp *~ common/*~
-#
-#html-am :
-#	sh gen-profile.sh
-#
-#install-data-am :
-#if MACOSX
-#	if test ! -h  $(DESTDIR)$(exec_prefix)/bin/tulip.app/Contents/share/tulip; then \
-#		mkdir -p $(DESTDIR)$(exec_prefix)/bin/tulip.app/Contents/share ;\
-#		ln -s $(pkgdatadir) $(DESTDIR)$(exec_prefix)/bin/tulip.app/Contents/share/tulip ;\
-#	fi;
-#endif
-#	if test -f profile.adp ; then \
-#		cp profile.adp $(DESTDIR)$(pkgdatadir)/.; \
-#		mkdir -p $(DESTDIR)$(pkgdatadir)/common ;\
-#		cp -r $(srcdir)/common/*.png $(srcdir)/common/*.gif $(srcdir)/common/*.css $(srcdir)/common/favicon.ico $(DESTDIR)$(pkgdatadir)/common/. ;\
-#	fi;
-#
-#uninstall-am:
-#	rm -rf $(DESTDIR)$(pkgdatadir)/common $(DESTDIR)$(pkgdatadir)/profile.adp
-#
-#
