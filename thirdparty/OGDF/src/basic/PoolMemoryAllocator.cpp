@@ -122,7 +122,51 @@ void PoolMemoryAllocator::cleanup()
 #endif
 }
 
+void PoolMemoryAllocator::initThread() {
+#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+	pthread_setspecific(s_tpKey,calloc(eTableSize,sizeof(MemElemPtr)));
+#endif
+}
 
+bool PoolMemoryAllocator::checkSize(size_t nBytes) {
+	return nBytes < eTableSize;
+}
+
+void *PoolMemoryAllocator::allocate(size_t nBytes) {
+#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+	MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
+#else
+	MemElemPtr *pFreeBytes = s_tp+nBytes;
+#endif
+	if (OGDF_LIKELY(*pFreeBytes != 0)) {
+		MemElemPtr p = *pFreeBytes;
+		*pFreeBytes = p->m_next;
+		return p;
+	} else {
+		return fillPool(*pFreeBytes,__uint16(nBytes));
+	}
+}
+
+void PoolMemoryAllocator::deallocateList(size_t nBytes, void *pHead, void *pTail) {
+#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+	MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
+#else
+	MemElemPtr *pFreeBytes = s_tp+nBytes;
+#endif
+	MemElemPtr(pTail)->m_next = *pFreeBytes;
+	*pFreeBytes = MemElemPtr(pHead);
+}
+
+void PoolMemoryAllocator::deallocate(size_t nBytes, void *p) {
+#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+	MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
+#else
+	MemElemPtr *pFreeBytes = s_tp+nBytes;
+#endif
+	MemElemPtr(p)->m_next = *pFreeBytes;
+	*pFreeBytes = MemElemPtr(p);
+}
+	
 PoolMemoryAllocator::MemElemExPtr
 PoolMemoryAllocator::collectGroups(
 	__uint16 nBytes,

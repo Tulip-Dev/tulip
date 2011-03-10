@@ -63,8 +63,8 @@
 
 namespace ogdf {
 
-	class OGDF_EXPORT GraphCopy;
-	class OGDF_EXPORT PlanRep;
+	class GraphCopy;
+	class PlanRep;
 
 
 /**
