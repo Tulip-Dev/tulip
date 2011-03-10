@@ -28,6 +28,7 @@
 #include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/fileformats/GmlParser.h>
 
+#include <tulip/tulipconf.h>
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/StringProperty.h>
@@ -47,7 +48,7 @@ namespace tlp {
   class SizeProperty;
 }
 
-class TulipToOGDF {
+class TLP_OGDF_SCOPE TulipToOGDF {
 public:
 
     TulipToOGDF(tlp::Graph *g);
