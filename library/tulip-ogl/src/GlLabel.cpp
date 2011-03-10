@@ -176,6 +176,15 @@ namespace tlp {
     delete borderFont;
     font=new FTGLPolygonFont(fontName.c_str());
     borderFont=new FTOutlineFont(fontName.c_str());
+    if(font->Error() || borderFont->Error()){
+      cout << "Error in font loading : " << fontName << endl;
+      delete font;
+      delete borderFont;
+
+      fontName=TulipBitmapDir + "font.ttf";
+      font=new FTPolygonFont(fontName.c_str());
+      borderFont=new FTGLOutlineFont(fontName.c_str());
+    }
   }
   //============================================================
   void GlLabel::setFontNameSizeAndColor(const std::string &name, const int &size, const Color &color){
