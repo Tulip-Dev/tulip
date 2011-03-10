@@ -1,7 +1,7 @@
 
 MESSAGE("docs")
 
-IF(UNIX)
+IF(LINUX)
   FIND_PACKAGE(Doxygen REQUIRED)
   IF(DOXYGEN_FOUND)
     SET(TULIP_LIB_DESC "Tulip Graph Library")
@@ -38,9 +38,9 @@ IF(UNIX)
     ADD_DEPENDENCIES(tulip_qch tulip_qhp)
     ADD_DEPENDENCIES(doc tulip_qch tulip_qhcp)
   ENDIF()
-ELSE(UNIX)
+ELSE(LINUX)
   MESSAGE("Doxygen not found: unable to generate documentation")
-ENDIF(UNIX)
+ENDIF(LINUX)
 
 
 ADD_CUSTOM_TARGET(doc_generation ALL
