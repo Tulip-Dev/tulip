@@ -78,6 +78,7 @@ CSVImportWizard.cpp
 SmallMultiplesView.cpp
 SmallMultiplesNavigatorComponent.cpp
 GlOffscreenRenderer.cpp
+ThreadedComputeProperty.cpp
 )
 
 set(tulip-qt_UI
@@ -143,6 +144,7 @@ set(tulip-qt_MOC
     ../include/tulip/CSVParserConfigurationWidget.h    
     ../include/tulip/CSVImportWizard.h
     ../include/tulip/SmallMultiplesView.h
+    ../include/tulip/ThreadedComputeProperty.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)
