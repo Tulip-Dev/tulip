@@ -305,7 +305,37 @@ namespace tlp {
     /**
      * @brief Sets the font size used when rendering the label.
      */
-    void setfontSize(int size) { fontSize = size; }
+    void setFontSize(int size) { fontSize = size; }
+
+    /**
+     * @return the outline color
+     */
+    Color getOutlineColor() const { return outlineColor; }
+
+    /**
+     * @brief Sets the outline color used when rendering the label.
+     */
+    void setOutlineColor(const Color &color) { outlineColor = color; }
+
+    /**
+     * @return the outline size
+     */
+    float getOutlineSize() const { return outlineSize; }
+
+    /**
+     * @brief Sets the outline size used when rendering the label.
+     */
+    void setOutlineSize(float size) { outlineSize = size; }
+
+    /**
+     * @return the texture name used to render the label
+     */
+    std::string getTextureName() const { return textureName; }
+
+    /**
+     * @brief Sets the texture name used when rendering the label.
+     */
+    void setTextureName(const std::string &name) { textureName=name; }
 
   private :
 
@@ -320,6 +350,9 @@ namespace tlp {
     Coord size;
     Coord sizeForOutAlign;
     Color color;
+    Color outlineColor;
+    float outlineSize;
+    std::string textureName;
     int alignment;
     bool scaleToSize;
     bool useMinMaxSize;
