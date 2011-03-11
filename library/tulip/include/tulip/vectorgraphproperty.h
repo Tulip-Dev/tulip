@@ -1,5 +1,6 @@
 #ifndef VECTORGRAPHPROPERTY_H
 #define VECTORGRAPHPROPERTY_H
+#include <algorithm>
 
 namespace tlp {
     class VectorGraph;
@@ -84,9 +85,7 @@ namespace tlp {
           * @see MutableContainer
           */
         void setAll(const TYPE &obj) {
-            size_t curSize = _array->_data.size();
-            _array->_data.resize(0);
-            _array->_data.resize(curSize, obj);
+            fill(_array->_data.begin(), _array->_data.end(), obj);
         }
         /**
           * @brief write accessor
@@ -101,7 +100,7 @@ namespace tlp {
           *
           * return the value of the ith element.
           */
-        const TYPE & get(const size_t id) const {
+        typename std::vector<TYPE>::const_reference get(const size_t id) const {
             return (*this)[id];
         }
 #ifndef NDEBUG
