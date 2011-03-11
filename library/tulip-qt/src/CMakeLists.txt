@@ -223,9 +223,6 @@ ELSEIF(APPLE)
   FIND_LIBRARY_GLOB_DIR(QTLUCENE_INSTALL_PATH "libQtCLucene.4.dylib" "/usr/lib")
   INSTALL_EXTERNAL_LIB(QTLUCENE_INSTALL_PATH libtulip_qt)  
 
-  #Copy QtAssistant apps
-  INSTALL(DIRECTORY "/Developer/Applications/Qt/Assistant.app" DESTINATION ${TulipAppleContentsDir} USE_SOURCE_PERMISSIONS COMPONENT libtulip_qt OPTIONAL)
-
   #Copy Qt image plugins.
   INSTALL(DIRECTORY "${QT_PLUGINS_DIR}/imageformats" DESTINATION ${TulipAppleContentsDir} COMPONENT libtulip_qt)
   #Copy Qt image plugins dependancies

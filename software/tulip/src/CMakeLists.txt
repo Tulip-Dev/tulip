@@ -109,3 +109,16 @@ ELSE(WIN32)
     COMPONENT tulip_app)
 ENDIF(WIN32)
 
+#Copy QtAssistant apps
+IF(APPLE)
+  FIND_LIBRARY_GLOB(QTASSISTANT_INSTALL_PATH "QtAssistant.framework/QtAssistant")
+  IF(QTASSISTANT_INSTALL_PATH)
+    INSTALL_EXTERNAL_LIB(QTASSISTANT_INSTALL_PATH tulip_app)
+  ENDIF()
+  INSTALL(DIRECTORY "/Developer/Applications/Qt/Assistant.app" DESTINATION ${TulipAppleContentsDir} USE_SOURCE_PERMISSIONS COMPONENT tulip_app OPTIONAL)
+
+ELSEIF(WIN32)
+  INSTALL(FILES ${QT_BINARY_DIR}/assistant.exe DESTINATION "${TulipBinInstallDir}" COMPONENT tulip_app)
+ENDIF()
+
+
