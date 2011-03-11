@@ -465,7 +465,7 @@ namespace tlp {
   //==================================================
   void NodeLinkDiagramComponent::centerView() {
     mainWidget->getScene()->centerScene();
-    overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
+    overviewWidget->getView()->getScene()->centerScene();
     draw();
   }
   //==================================================
