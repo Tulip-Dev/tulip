@@ -80,7 +80,8 @@ SET(LibTulipOglPythonName "tulipoglpython")
 ## Find need packages
 ## -----------------------------------------------------------------------------------------------
 FIND_PACKAGE(Freetype REQUIRED)
-FIND_PACKAGE(Qt4  REQUIRED)
+FIND_PACKAGE(Qt4 4.4.0 REQUIRED)
+
 INCLUDE(${QT_USE_FILE})
 IF(DEFINED CMAKE_VERSION)
   SET(HAVE_QT4_GET_MOC_FLAGS TRUE)
