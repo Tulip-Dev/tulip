@@ -22,6 +22,7 @@
 #include <set>
 #include <cassert>
 #include <iostream>
+#include <string>
 
 #include <tulip/vectorgraph.h>
 #include <tulip/Node.h>

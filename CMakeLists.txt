@@ -14,12 +14,12 @@ PROJECT(tulip)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options
+IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio" AND NOT ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #visual studio does not recognize these options
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused")
 ENDIF()
 
 IF(WIN32)
- IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options 
+ IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio" AND NOT ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #visual studio does not recognize these options 
    # Dynamic ling against libstdc++ on win32/MinGW   
    IF (CMAKE_COMPILER_IS_GNUCXX)
 		EXECUTE_PROCESS(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
@@ -54,14 +54,14 @@ SET(TulipMajorVersion 3)
 SET(TulipMinorVersion 6)
 SET(TulipReleaseVersion 0)
 SET(TulipVersionSeparator .)
-IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #specific options for Visual Studio
-	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9") #visual studio 2008 needs boost
+IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #specific options for Visual Studio
+	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #visual studio 2008 needs boost
 		find_package(BOOST REQUIRED)
 		include_directories(${Boost_INCLUDE_DIRS})
 		include_directories(${Boost_INCLUDE_DIRS}/boost/tr1)
 	ENDIF()
    SET(TulipVersionSeparator _)
-ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+ENDIF()
 SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
 
@@ -288,9 +288,11 @@ ENDIF(LINUX)
 
 IF(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DQT_ASSISTANT='\"assistant\"'")
-   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
+   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #if generating for visual studio, we assume the compiler will be vc++
       #recommended for now, vc++ spits out too many warnings, and renders the whole output unreadable
-	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
+    IF(NOT ${CMAKE_GENERATOR} MATCHES "NMake Makefiles")
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
+    ENDIF()
 	  #allows for link time optimization
 	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
 	  #tells VS to use multiple threads to compile
@@ -302,11 +304,11 @@ IF(WIN32)
 	  #forces ftgl static compilation (prevents link errors with tulip-ogl, functions always defined without dllimport
 	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFTGL_LIBRARY_STATIC")
 	  #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
-	  SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /NODEFAULTLIB:MSVCRT")
+	  #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /NODEFAULTLIB:MSVCRT")
 	  #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /MACHINE:X86")
 	  #link time optimization
 	  SET(CMAKE_SHARED_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /LTCG")
-   ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+   ENDIF()
 ENDIF(WIN32)
 IF(APPLE)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__APPLE__ -DQT_ASSISTANT='\"Assistant\"'")

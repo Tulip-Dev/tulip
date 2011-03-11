@@ -43,9 +43,9 @@ ELSEIF(NOT TULIP_DIR AND NOT TULIP_INCLUDE_DIR)
 ENDIF()
 
 SET(TulipVersionSeparator .)
-IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options
+IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #visual studio does not recognize these options
    SET(TulipVersionSeparator _)
-ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+ENDIF()
 
 # Tulip version
 IF(NOT TULIP_VERSION AND TULIP_INCLUDE_DIR)
