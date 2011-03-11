@@ -78,12 +78,12 @@ INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${PROJECT_SOURCE_DIR} ${ZLI
 ADD_LIBRARY (${LibTulipName} SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)
 TARGET_LINK_LIBRARIES(${LibTulipName} gzstream )
 IF(WIN32)
-	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
+	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #if generating for visual studio, we assume the compiler will be vc++
 		TARGET_LINK_LIBRARIES(${LibTulipName} Dbghelp)
-		IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9")
+		IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles")
 			SET_TARGET_PROPERTIES(${LibTulipName} PROPERTIES LINK_FLAGS " /NODEFAULTLIB:LIBCMT.lib ")
 		ENDIF()
-	ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+	ENDIF()
 ENDIF(WIN32)
 
 INSTALL(TARGETS ${LibTulipName}
