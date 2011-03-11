@@ -67,6 +67,8 @@ namespace tlp {
     fontSize=20;
     font->FaceSize(fontSize);
     borderFont->FaceSize(fontSize);
+    outlineColor=Color(0,0,0,255);
+    outlineSize=1.;
     renderingMode=0;
     translationAfterRotation=Coord(0,0,0);
     //alignment=ON_CENTER;
@@ -409,11 +411,18 @@ namespace tlp {
 
         FTPoint shift(-(textBoundingBox[1][0]-textBoundingBox[0][0])/2.-x1+((textBoundingBox[1][0]-textBoundingBox[0][0])-(*itW))*xAlignFactor+(textBoundingBox[1][0]-textBoundingBox[0][0])*xShiftFactor,
                       -textBoundingBox[1][1]+(textBoundingBox[1][1]-textBoundingBox[0][1])/2.+yShift+(textBoundingBox[1][1]-textBoundingBox[0][1])*yShiftFactor);
-
+        if(textureName!="")
+          GlTextureManager::getInst().activateTexture(textureName);
         setMaterial(color);
+
         font->Render((*it).c_str(),-1,shift);
+
+        if(textureName!="")
+          GlTextureManager::getInst().desactivateTexture();
+
         if(screenH > 25 && useLOD){
-          setMaterial(Color(0,0,0,255));
+          glLineWidth(outlineSize);
+          setMaterial(outlineColor);
         }
         borderFont->Render((*it).c_str(),-1,shift);
         yShift-=fontSize+5;
@@ -459,6 +468,9 @@ namespace tlp {
     GlXMLTools::getXML(dataNode,"xRot",xRot);
     GlXMLTools::getXML(dataNode,"yRot",yRot);
     GlXMLTools::getXML(dataNode,"zRot",zRot);
+    GlXMLTools::getXML(dataNode,"outlineColor",outlineColor);
+    GlXMLTools::getXML(dataNode,"outlineSize",outlineSize);
+    GlXMLTools::getXML(dataNode,"textureName",textureName);
   }
   //============================================================
   void GlLabel::setWithXML(xmlNodePtr rootNode) {
@@ -485,6 +497,9 @@ namespace tlp {
       GlXMLTools::setWithXML(dataNode,"xRot",xRot);
       GlXMLTools::setWithXML(dataNode,"yRot",yRot);
       GlXMLTools::setWithXML(dataNode,"zRot",zRot);
+      GlXMLTools::setWithXML(dataNode,"outlineColor",outlineColor);
+      GlXMLTools::setWithXML(dataNode,"outlineSize",outlineSize);
+      GlXMLTools::setWithXML(dataNode,"textureName",textureName);
     }
   }
 
