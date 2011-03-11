@@ -229,11 +229,21 @@ bool AbstractCSVToGraphDataMapping::importRow(unsigned int row)const{
 void AbstractCSVToGraphDataMapping::begin(){
     //Clean old informations.
     rowToGraphId.clear();
+    valueToNode.clear();
 }
 
 void AbstractCSVToGraphDataMapping::token(unsigned int row, unsigned int column, const string& token){
     if(importRow(row) && column == columnIndex){
-        if(!buildIndexForRow(row,token)){
+        //If we not found the token before search it.
+        if(valueToNode.find(token) == valueToNode.end()){
+            unsigned int id = buildIndexForRow(row,token,graph,keyProperty);
+            //Store the id corresponding to the token.
+            if(id!=UINT_MAX){
+                valueToNode[token] = id;
+            }
+        }else{
+            //Use the las found id.
+            rowToGraphId[row]=valueToNode[token];
         }
     }
 }
@@ -280,36 +290,33 @@ void CSVToNewNodeIdMapping::end(unsigned int, unsigned int){
 CSVToGraphNodeIdMapping::CSVToGraphNodeIdMapping(Graph* graph,unsigned int columnIndex,const string& propertyName,unsigned int firstRow,unsigned int lastRow,bool createNode):AbstractCSVToGraphDataMapping(graph,NODE,columnIndex,propertyName,firstRow,lastRow),createMissingNodes(createNode){
 }
 
-bool CSVToGraphNodeIdMapping::buildIndexForRow(unsigned int row,const string& indexKey){
+unsigned int CSVToGraphNodeIdMapping::buildIndexForRow(unsigned int,const string& indexKey,Graph* graph,PropertyInterface* keyProperty){
     node n;
     forEach(n,graph->getNodes()){
         if(keyProperty->getNodeStringValue(n).compare(indexKey)==0){
-            rowToGraphId[row] = n.id;
-            returnForEach(true);
+            return n.id;
         }
     }
     if(createMissingNodes){
         node newNode = graph->addNode();
-        rowToGraphId[row] = newNode.id;
         keyProperty->setNodeStringValue(newNode,indexKey);
-        return true;
+        return newNode.id;
     }else{
-        return false;
+        return UINT_MAX;
     }
 }
 
 CSVToGraphEdgeIdMapping::CSVToGraphEdgeIdMapping(Graph* graph,unsigned int columnIndex,const string& propertyName,unsigned int firstRow,unsigned int lastRow):AbstractCSVToGraphDataMapping(graph,EDGE,columnIndex,propertyName,firstRow,lastRow){
 }
 
-bool CSVToGraphEdgeIdMapping::buildIndexForRow(unsigned int row,const string& indexKey){
+unsigned int CSVToGraphEdgeIdMapping::buildIndexForRow(unsigned int ,const string& indexKey,Graph* graph,PropertyInterface* keyProperty){
     edge e;
     forEach(e,graph->getEdges()){
-        if(keyProperty->getEdgeStringValue(e).compare(indexKey)==0){
-            rowToGraphId[row] = e.id;
-            returnForEach(true);
+        if(keyProperty->getEdgeStringValue(e).compare(indexKey)==0){            
+            return e.id;
         }
     }    
-    return false;
+    return UINT_MAX;
 }
 
 CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(Graph* graph,
