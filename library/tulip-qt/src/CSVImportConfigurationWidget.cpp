@@ -143,7 +143,7 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
     if(ui->limitPreviewLineNumberCheckBox->isChecked()){
         ui->previewTableWidget->setMaxPreviewLineNumber(ui->previewLineNumberSpinBox->value());
     }else{
-    ui->previewTableWidget->setMaxPreviewLineNumber(UINT_MAX);
+        ui->previewTableWidget->setMaxPreviewLineNumber(UINT_MAX);
     }
 }
 
@@ -194,7 +194,8 @@ void CSVImportConfigurationWidget::token(unsigned int row, unsigned int column, 
 
     ui->previewTableWidget->token(row,column,token);
     //A new column was created set its label and it's configuration widget.
-    if(row == 0){
+//    if(row == 0){
+    if(propertyWidgets.size()<=column){
         QString columnName = genrateColumnName(column);
         ui->previewTableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(columnName));
         addPropertyToPropertyList(QStringToTlpString(columnName),true);
@@ -265,7 +266,12 @@ void CSVImportConfigurationWidget::updateTableHeaders(){
 }
 QString CSVImportConfigurationWidget::genrateColumnName(unsigned int col)const{
     if(useFirstLineAsPropertyName()){
-        return ui->previewTableWidget->item(0,col)->text();
+        QTableWidgetItem *item = ui->previewTableWidget->item(0,col);
+        if(item!=NULL){
+            return item->text();
+        }else{
+            return QString();
+        }
     }else{
         return QString("Property_")+QString::number(col);
     }
