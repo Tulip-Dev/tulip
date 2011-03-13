@@ -460,7 +460,7 @@ namespace tlp {
       */
         template<typename TYPE>
         void alloc(NodeProperty<TYPE> &prop) {
-            ValArray<TYPE> *array = new ValArray<TYPE>(_nodes.size(), _nodes.capacity());
+            ValArray<TYPE> *array = new ValArray<TYPE>(_nodes.size() + _freeNodes.size(), _nodes.capacity());
             _nodeArrays.insert(array);
             prop = NodeProperty<TYPE>(array, this);
         }
@@ -487,7 +487,7 @@ namespace tlp {
     */
         template<typename TYPE>
         void alloc(EdgeProperty<TYPE> &prop) {
-            ValArray<TYPE> *array = new ValArray<TYPE>(_edges.size(), _edges.capacity());
+            ValArray<TYPE> *array = new ValArray<TYPE>(_edges.size() + _freeEdges.size(), _edges.capacity());
             _edgeArrays.insert(array);
             prop = EdgeProperty<TYPE>(array, this);
         }
