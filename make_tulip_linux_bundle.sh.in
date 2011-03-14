@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This script is Linux specific:
 # it intends to create a tulip bundle
@@ -39,13 +39,15 @@ echo @prefix@/share copied in $BUNDLE_DIR
 rm $BUNDLE_BIN_DIR/tulip-config
 rm $BUNDLE_DIR/share/Find*.*
 
-function copy_tulip_app_linked_lib() {
-  LIB_TO_COPY=$(ldd $BUNDLE_BIN_DIR/tulip_app | grep $1 | awk '{print $3}')
+function copy_linked_lib() {
+  LIB_TO_COPY=$(ldd $2 | grep $1 | awk '{print $3}')
   if [ "$LIB_TO_COPY" == "" ]; then
       echo no library found for $1
   else
-      cp $LIB_TO_COPY $BUNDLE_LIB_DIR
-      echo $LIB_TO_COPY copied in $BUNDLE_LIB_DIR
+      if [ ! -f $BUNDLE_LIB_DIR/$(basename $LIB_TO_COPY) ]; then
+         cp $LIB_TO_COPY $BUNDLE_LIB_DIR
+         echo $LIB_TO_COPY copied in $BUNDLE_LIB_DIR
+      fi
   fi
 }
 
@@ -58,23 +60,23 @@ echo @QT_LIBRARY_DIR@/libphonon.so.4 copied in $BUNDLE_LIB_DIR
 
 # Qt3Support is not needed
 rm $BUNDLE_LIB_DIR/libQt3Support*.*
-# other needed libs
-for LIB in libcrypto freetype GLEW GLU gomp jpeg png12 ssl stdc++ xml2
+# other tulip_app needed libs
+for LIB in libaudio libcrypto libk5crypto libgssapi_krb5 libkrb5 libssl freetype GLEW GLU gomp jpeg png12 stdc++ xml2
 do
-    copy_tulip_app_linked_lib $LIB
+    copy_linked_lib $LIB $BUNDLE_BIN_DIR/tulip_app
 done;
-# add python lib
-LIB_PYTHON=$(ldd $BUNDLE_LIB_DIR/tlp/view/libpython* | grep libpython | awk '{print $3}')
-cp $LIB_PYTHON $BUNDLE_LIB_DIR
-echo $LIB_PYTHON copied in $BUNDLE_LIB_DIR
+# add python needed libs
+LIB_PYTHON_SCRIPT_VIEW=$(ls $BUNDLE_LIB_DIR/tlp/view/libpython*)
+for LIB in libcrypto libk5crypto libgssapi_krb5 libkrb5 libssl libpython
+do
+    copy_linked_lib $LIB $LIB_PYTHON_SCRIPT_VIEW
+done;
 
 # copy Qt assistant
 cp -p @QT_BINARY_DIR@/assistant $BUNDLE_BIN_DIR
 echo @QT_BINARY_DIR@/assistant copied in $BUNDLE_BIN_DIR
 # copy sqlite3 needed by assistant
-LIB_SQLITE=$(ldd $BUNDLE_BIN_DIR/assistant | grep sqlite3 | awk '{print $3}')
-cp $LIB_SQLITE $BUNDLE_LIB_DIR
-echo $LIB_SQLITE copied in $BUNDLE_LIB_DIR
+copy_linked_lib sqlite3 $BUNDLE_BIN_DIR/assistant
 # add qt plugins directory
 mkdir $BUNDLE_BIN_DIR/plugins
 # copy sqldrivers (needed by assistant)
@@ -82,6 +84,10 @@ cp -Rp @QT_PLUGINS_DIR@/sqldrivers $BUNDLE_BIN_DIR/plugins
 echo @QT_PLUGINS_DIR@/sqldrivers copied in $BUNDLE_BIN_DIR/plugins
 
 # build bundle tarball
-cd $OUTPUT_DIR
-tar zcvf $OUTPUT_DIR/Tulip-@TulipVersion@-bundle.tar.gz Tulip-@TulipVersion@
-echo linux bundle $OUTPUT_DIR/Tulip-@TulipVersion@-bundle.tar.gz built
+cd $OUTPUT_DIR/Tulip-@TulipVersion@
+# add toplevel link
+ln -s ./bin/tulip tulip
+cd ..
+PROC_TYPE=$(uname -m)
+tar zcvf $OUTPUT_DIR/Tulip-@TulipVersion@-${PROC_TYPE}-bundle.tar.gz Tulip-@TulipVersion@
+echo linux bundle $OUTPUT_DIR/Tulip-@TulipVersion@-${PROC_TYPE}-bundle.tar.gz built
