@@ -13,8 +13,12 @@ case "`uname -s`" in
 	;;
     *Linux*|*GNU/kFreeBSD*)
 	export LD_LIBRARY_PATH=${THISDIR}/../lib:${THISDIR}/../lib/tlp:${THISDIR}/../lib/tlp/interactors:${THISDIR}/../lib/tlp/view:${LD_LIBRARY_PATH}
+	# define PYTHONHOME if we are in the bundle (Qt libs in ../lib)
+	QT_LIBS=$(ls ${THISDIR}/../lib/libQt*.*)
+	if [ $? -eq 0 ]; then
+	  export PYTHONHOME=${THISDIR}/../lib
+	fi
 	;;
-
 esac
 
 export LC_NUMERIC=C

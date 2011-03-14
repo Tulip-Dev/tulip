@@ -1,0 +1,87 @@
+#!/bin/sh
+
+# This script is Linux specific:
+# it intends to create a tulip bundle
+# runable on most linux distributions
+# its only optional parameter is the directory
+# where the bundle directory have to be created
+
+# if $1 is given it is the parent directory
+# of the created bundle dir
+if [ $# -eq 1 ]; then
+  OUTPUT_DIR=$1
+else
+  OUTPUT_DIR=/tmp
+fi
+
+BUNDLE_DIR=$OUTPUT_DIR/Tulip-@TulipVersion@
+
+# if BUNDLE_DIR already exist
+# remove it
+if [ -d $BUNDLE_DIR ]; then
+  rm -rf $BUNDLE_DIR
+fi
+
+# create BUNDLE_DIR
+mkdir $BUNDLE_DIR
+BUNDLE_BIN_DIR=$BUNDLE_DIR/bin
+BUNDLE_LIB_DIR=$BUNDLE_DIR/lib
+
+# copy all installed files (no include)
+cp -Rp @prefix@/bin $BUNDLE_DIR
+echo @prefix@/bin copied in $BUNDLE_DIR
+cp -Rp @prefix@/lib $BUNDLE_DIR
+echo @prefix@/lib copied in $BUNDLE_DIR
+cp -Rp @prefix@/share $BUNDLE_DIR
+echo @prefix@/share copied in $BUNDLE_DIR
+
+# remove not needed files
+rm $BUNDLE_BIN_DIR/tulip-config
+rm $BUNDLE_DIR/share/Find*.*
+
+function copy_tulip_app_linked_lib() {
+  LIB_TO_COPY=$(ldd $BUNDLE_BIN_DIR/tulip_app | grep $1 | awk '{print $3}')
+  if [ "$LIB_TO_COPY" == "" ]; then
+      echo no library found for $1
+  else
+      cp $LIB_TO_COPY $BUNDLE_LIB_DIR
+      echo $LIB_TO_COPY copied in $BUNDLE_LIB_DIR
+  fi
+}
+
+# retrieve libs to copy
+# first Qt libs
+cp @QT_LIBRARY_DIR@/libQt*.so.4 $BUNDLE_LIB_DIR
+echo '@QT_LIBRARY_DIR@/libQt*.so.4' copied in $BUNDLE_LIB_DIR
+cp @QT_LIBRARY_DIR@/libphonon.so.4 $BUNDLE_LIB_DIR
+echo @QT_LIBRARY_DIR@/libphonon.so.4 copied in $BUNDLE_LIB_DIR
+
+# Qt3Support is not needed
+rm $BUNDLE_LIB_DIR/libQt3Support*.*
+# other needed libs
+for LIB in libcrypto freetype GLEW GLU gomp jpeg png12 ssl stdc++ xml2
+do
+    copy_tulip_app_linked_lib $LIB
+done;
+# add python lib
+LIB_PYTHON=$(ldd $BUNDLE_LIB_DIR/tlp/view/libpython* | grep libpython | awk '{print $3}')
+cp $LIB_PYTHON $BUNDLE_LIB_DIR
+echo $LIB_PYTHON copied in $BUNDLE_LIB_DIR
+
+# copy Qt assistant
+cp -p @QT_BINARY_DIR@/assistant $BUNDLE_BIN_DIR
+echo @QT_BINARY_DIR@/assistant copied in $BUNDLE_BIN_DIR
+# copy sqlite3 needed by assistant
+LIB_SQLITE=$(ldd $BUNDLE_BIN_DIR/assistant | grep sqlite3 | awk '{print $3}')
+cp $LIB_SQLITE $BUNDLE_LIB_DIR
+echo $LIB_SQLITE copied in $BUNDLE_LIB_DIR
+# add qt plugins directory
+mkdir $BUNDLE_BIN_DIR/plugins
+# copy sqldrivers (needed by assistant)
+cp -Rp @QT_PLUGINS_DIR@/sqldrivers $BUNDLE_BIN_DIR/plugins
+echo @QT_PLUGINS_DIR@/sqldrivers copied in $BUNDLE_BIN_DIR/plugins
+
+# build bundle tarball
+cd $OUTPUT_DIR
+tar zcvf $OUTPUT_DIR/Tulip-@TulipVersion@-bundle.tar.gz Tulip-@TulipVersion@
+echo linux bundle $OUTPUT_DIR/Tulip-@TulipVersion@-bundle.tar.gz built

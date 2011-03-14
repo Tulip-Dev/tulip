@@ -380,6 +380,11 @@ INSTALL(FILES FindGLEW.cmake
 INSTALL(FILES FindXML2.cmake 
         DESTINATION ${TulipShareInstallDir})
 ## -----------------------------------------------------------------------------------------------
+## Script for linux Tulip bundle building
+IF(LINUX)
+CONFIGURE_FILE("make_tulip_linux_bundle.sh.in" "make_tulip_linux_bundle.sh" @ONLY)
+ENDIF(LINUX)
+## -----------------------------------------------------------------------------------------------
 ## CPack packaging directives
 ## -----------------------------------------------------------------------------------------------
 
