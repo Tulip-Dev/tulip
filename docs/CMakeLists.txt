@@ -2,7 +2,7 @@
 MESSAGE("docs")
 
 IF(LINUX)
-  FIND_PACKAGE(Doxygen REQUIRED)
+  FIND_PACKAGE(Doxygen)
   IF(DOXYGEN_FOUND)
     SET(TULIP_LIB_DESC "Tulip Graph Library")
     SET(TULIP_LIB_NAME "tulip")
