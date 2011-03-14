@@ -113,15 +113,18 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 					int width = glw->width();
 					int height = glw->height();
 
-					Coord bbMin(width-min(x, x+w), height - y+h);
-					Coord bbMax(width-max(x, x+w), height - y);
+					Coord bbMin(width-x, height - y+h);
+					Coord bbMax(width-(x+w), height - y);
 
-					BoundingBox sceneBB;
-					sceneBB.expand(glw->getScene()->getCamera().screenTo3DWorld(bbMin));
-					sceneBB.expand(glw->getScene()->getCamera().screenTo3DWorld(bbMax));
+					if (abs(bbMax[0] - bbMin[0]) > 1 && abs(bbMax[1] - bbMin[1]) > 1) {
 
-					QtGlSceneZoomAndPanAnimator zoomAnPan(glw, sceneBB);
-					zoomAnPan.animateZoomAndPan();
+						BoundingBox sceneBB;
+						sceneBB.expand(glw->getScene()->getCamera().screenTo3DWorld(bbMin));
+						sceneBB.expand(glw->getScene()->getCamera().screenTo3DWorld(bbMax));
+
+						QtGlSceneZoomAndPanAnimator zoomAnPan(glw, sceneBB);
+						zoomAnPan.animateZoomAndPan();
+					}
 				}
 			}
 			return true;

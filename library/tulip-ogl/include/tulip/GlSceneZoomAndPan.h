@@ -109,6 +109,7 @@ protected :
 	Coord camCenterStart, camCenterEnd;
 	double w0, w1, u0, u1, b0, b1, r0, r1, S, sA, sB, wm;
 	AdditionalGlSceneAnimation *additionalAnimation;
+	float zoomAreaWidth, zoomAreaHeight;
 	bool doZoomAndPan;
 
 };
