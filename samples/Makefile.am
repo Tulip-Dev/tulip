@@ -1,1 +1,0 @@
-SUBDIRS = gml matrix tlp
