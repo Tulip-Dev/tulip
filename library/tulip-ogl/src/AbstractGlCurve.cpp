@@ -70,7 +70,7 @@ static string genCommonUniformVariables(const unsigned int maxNbControlPoints) {
 
 	oss << "#version 120" << endl;
 	oss << "uniform vec3 controlPoints[" << maxNbControlPoints << "];" << endl;
-	oss << "uniform int nbControlPoints;" << endl;
+	oss << "uniform float nbControlPoints;" << endl;
 
 	return oss.str();
 }
@@ -355,7 +355,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
 		curveShaderProgram->activate();
 		curveShaderProgram->setUniformVec3FloatArray("controlPoints", controlPoints.size(), &controlPoints[0][0]);
-		curveShaderProgram->setUniformInt("nbControlPoints", controlPoints.size());
+		curveShaderProgram->setUniformFloat("nbControlPoints", controlPoints.size());
 		curveShaderProgram->setUniformInt("nbCurvePoints", nbCurvePoints);
 		curveShaderProgram->setUniformFloat("startSize", startSize);
 		curveShaderProgram->setUniformFloat("endSize", endSize);
