@@ -1,2 +1,0 @@
-
-INCLUDES = -I../../library/include/
