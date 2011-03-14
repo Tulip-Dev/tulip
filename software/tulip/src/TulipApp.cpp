@@ -959,6 +959,8 @@ bool TulipApp::closeWin() {
         if(answer == QMessageBox::Cancel){
           return false;
         }
+        if (answer == QMessageBox::NoToAll)
+          return true;
       }
     }
 
