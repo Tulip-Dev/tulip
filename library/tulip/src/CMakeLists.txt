@@ -33,7 +33,6 @@ IntegerAlgorithm.cpp
 IntegerProperty.cpp
 LayoutAlgorithm.cpp
 LayoutProperty.cpp
-Makefile.am
 MapIterator.cpp
 Observable.cpp
 ObservableGraph.cpp
