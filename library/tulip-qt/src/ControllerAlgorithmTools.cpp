@@ -146,13 +146,14 @@ namespace tlp {
       }
 
       // The algorithm is applied
-      AbstractComputeProperty* param = new ComputePropertyTemplate<PROPERTY>(graph, name, tmp, erreurMsg, myProgress, &dataSet);
-      ComputePropertyThread* thread = new ComputePropertyThread(param);
-      
-      resultBool = thread->computeProperty();
-
-      delete param;
-      delete thread;
+//       AbstractComputeProperty* param = new ComputePropertyTemplate<PROPERTY>(graph, name, tmp, erreurMsg, myProgress, &dataSet);
+//       ComputePropertyThread* thread = new ComputePropertyThread(param);
+//       
+//       resultBool = thread->computeProperty();
+// 
+//       delete param;
+//       delete thread;
+      resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
       
       graph->pop();
       if (updateLayout) {
