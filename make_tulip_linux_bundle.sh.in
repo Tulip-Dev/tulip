@@ -1,0 +1,93 @@
+#!/bin/bash
+
+# This script is Linux specific:
+# it intends to create a tulip bundle
+# runable on most linux distributions
+# its only optional parameter is the directory
+# where the bundle directory have to be created
+
+# if $1 is given it is the parent directory
+# of the created bundle dir
+if [ $# -eq 1 ]; then
+  OUTPUT_DIR=$1
+else
+  OUTPUT_DIR=/tmp
+fi
+
+BUNDLE_DIR=$OUTPUT_DIR/Tulip-@TulipVersion@
+
+# if BUNDLE_DIR already exist
+# remove it
+if [ -d $BUNDLE_DIR ]; then
+  rm -rf $BUNDLE_DIR
+fi
+
+# create BUNDLE_DIR
+mkdir $BUNDLE_DIR
+BUNDLE_BIN_DIR=$BUNDLE_DIR/bin
+BUNDLE_LIB_DIR=$BUNDLE_DIR/lib
+
+# copy all installed files (no include)
+cp -Rp @prefix@/bin $BUNDLE_DIR
+echo @prefix@/bin copied in $BUNDLE_DIR
+cp -Rp @prefix@/lib $BUNDLE_DIR
+echo @prefix@/lib copied in $BUNDLE_DIR
+cp -Rp @prefix@/share $BUNDLE_DIR
+echo @prefix@/share copied in $BUNDLE_DIR
+
+# remove not needed files
+rm $BUNDLE_BIN_DIR/tulip-config
+rm $BUNDLE_DIR/share/Find*.*
+
+function copy_linked_lib() {
+  LIB_TO_COPY=$(ldd $2 | grep $1 | awk '{print $3}')
+  if [ "$LIB_TO_COPY" == "" ]; then
+      echo no library found for $1
+  else
+      if [ ! -f $BUNDLE_LIB_DIR/$(basename $LIB_TO_COPY) ]; then
+         cp $LIB_TO_COPY $BUNDLE_LIB_DIR
+         echo $LIB_TO_COPY copied in $BUNDLE_LIB_DIR
+      fi
+  fi
+}
+
+# retrieve libs to copy
+# first Qt libs
+cp @QT_LIBRARY_DIR@/libQt*.so.4 $BUNDLE_LIB_DIR
+echo '@QT_LIBRARY_DIR@/libQt*.so.4' copied in $BUNDLE_LIB_DIR
+cp @QT_LIBRARY_DIR@/libphonon.so.4 $BUNDLE_LIB_DIR
+echo @QT_LIBRARY_DIR@/libphonon.so.4 copied in $BUNDLE_LIB_DIR
+
+# Qt3Support is not needed
+rm $BUNDLE_LIB_DIR/libQt3Support*.*
+# other tulip_app needed libs
+for LIB in libaudio libcrypto libk5crypto libgssapi_krb5 libkrb5 libssl freetype GLEW GLU gomp jpeg png12 stdc++ xml2
+do
+    copy_linked_lib $LIB $BUNDLE_BIN_DIR/tulip_app
+done;
+# add python needed libs
+LIB_PYTHON_SCRIPT_VIEW=$(ls $BUNDLE_LIB_DIR/tlp/view/libpython*)
+for LIB in libcrypto libk5crypto libgssapi_krb5 libkrb5 libssl libpython
+do
+    copy_linked_lib $LIB $LIB_PYTHON_SCRIPT_VIEW
+done;
+
+# copy Qt assistant
+cp -p @QT_BINARY_DIR@/assistant $BUNDLE_BIN_DIR
+echo @QT_BINARY_DIR@/assistant copied in $BUNDLE_BIN_DIR
+# copy sqlite3 needed by assistant
+copy_linked_lib sqlite3 $BUNDLE_BIN_DIR/assistant
+# add qt plugins directory
+mkdir $BUNDLE_BIN_DIR/plugins
+# copy sqldrivers (needed by assistant)
+cp -Rp @QT_PLUGINS_DIR@/sqldrivers $BUNDLE_BIN_DIR/plugins
+echo @QT_PLUGINS_DIR@/sqldrivers copied in $BUNDLE_BIN_DIR/plugins
+
+# build bundle tarball
+cd $OUTPUT_DIR/Tulip-@TulipVersion@
+# add toplevel link
+ln -s ./bin/tulip tulip
+cd ..
+PROC_TYPE=$(uname -m)
+tar zcvf $OUTPUT_DIR/Tulip-@TulipVersion@-${PROC_TYPE}-bundle.tar.gz Tulip-@TulipVersion@
+echo linux bundle $OUTPUT_DIR/Tulip-@TulipVersion@-${PROC_TYPE}-bundle.tar.gz built
