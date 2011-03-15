@@ -55,10 +55,9 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _metaNodesLabelStencil(0xFFFF),
   _edgesLabelStencil(0xFFFF),
   _labelScaled(false),
-  _labelOverlaped(false),
   _labelMinSize(10),
   _labelMaxSize(30),
-  _labelsBorder(2) {
+  _labelsDensity(105) {
   _fontsPath = tlp::TulipLibDir + "tlp/bitmaps/";
   _texturePath = "";
   _edgesMaxSizeToNodesSize = true;
@@ -86,7 +85,6 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("edgeSizeInterpolation", _edgeSizeInterpolate);
   data.set("edge3D", _edge3D);
   data.set("labelScaled", _labelScaled);
-  data.set("labelOverlaped", _labelOverlaped);
   //int
   data.set("labelMinSize", _labelMinSize);
   data.set("labelMaxSize", _labelMaxSize);
@@ -181,6 +179,8 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setMetaNodesLabelStencil(i);
   if (data.get<int>("edgesLabelStencil", i))
     setEdgesLabelStencil(i);
+  if (data.get<int>("labelsDensity", i))
+    setLabelsDensity(i);
   if (data.get<bool>("edgesMaxSizeToNodesSize", b))
     setEdgesMaxSizeToNodesSize(b);
   if(data.get<Color>("selectionColor", c))
@@ -188,10 +188,13 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
 }
 //====================================================
 unsigned int GlGraphRenderingParameters::getLabelsBorder() const {
-  return _labelsBorder;
+  if(_labelsDensity<0)
+    return 0;
+  else
+    return _labelsDensity;
 }
 void GlGraphRenderingParameters::setLabelsBorder(const unsigned int border) {
-  _labelsBorder = border;
+  _labelsDensity = border;
 }
 //====================================================
 bool GlGraphRenderingParameters::isViewMetaLabel()const {
@@ -209,7 +212,7 @@ unsigned int GlGraphRenderingParameters::getFontsType()const {
 }
 void GlGraphRenderingParameters::setFontsType(unsigned int i) {
   if(i==1)
-    _labelOverlaped=true;
+    _labelsDensity=-99;
   else
     _labelScaled=true;
 }
@@ -421,11 +424,22 @@ void GlGraphRenderingParameters::setLabelScaled(bool state){
 }
 //====================================================
 bool GlGraphRenderingParameters::isLabelOverlaped(){
-  return _labelOverlaped;
+  return _labelsDensity==100;
 }
 //====================================================
 void GlGraphRenderingParameters::setLabelOverlaped(bool state){
-  _labelOverlaped=state;
+  if(state)
+    _labelsDensity=100;
+  else
+    _labelsDensity=0;
+}
+//====================================================
+int GlGraphRenderingParameters::getLabelsDensity(){
+  return _labelsDensity;
+}
+//====================================================
+void GlGraphRenderingParameters::setLabelsDensity(int density){
+  _labelsDensity=density;
 }
 //====================================================
 int GlGraphRenderingParameters::getMinSizeOfLabel(){

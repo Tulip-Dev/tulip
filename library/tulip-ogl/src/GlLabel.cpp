@@ -82,7 +82,7 @@ namespace tlp {
     yRot=0;
     zRot=0;
     useLOD=false;
-    occlusionBorderSize=0;
+    labelsDensity=100;
   }
   //============================================================
   void GlLabel::setText(const string& text) {
@@ -267,8 +267,13 @@ namespace tlp {
       default:break;
       }
 
-      w+=occlusionBorderSize;
-      h+=occlusionBorderSize;
+      if(labelsDensity<=0){
+        w-=labelsDensity;
+        h-=labelsDensity;
+      }else{
+        w=w-w*(((float)labelsDensity)/(100.));
+        h=h-h*(((float)labelsDensity)/(100.));
+      }
 
       Size occlusionSize(w*scaleToApply/2.,h*scaleToApply/2.,0);
 

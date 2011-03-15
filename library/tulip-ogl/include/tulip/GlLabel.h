@@ -243,16 +243,39 @@ namespace tlp {
 
     /**
      * Set label border for occlusion test
+     * \deprecated Use setLabelsDensity instead
      */
-    virtual void setLabelOcclusionBorder(unsigned int size){
-      occlusionBorderSize=size;
+    virtual void setLabelOcclusionBorder(int size){
+      labelsDensity=-size;
     }
 
     /**
      * Return label border for occlusion test
+     * \deprecated Use getLabelsDensity instead
      */
-    virtual unsigned int getLabelOcclusionBorder(){
-      return occlusionBorderSize;
+    virtual int getLabelOcclusionBorder(){
+      return -labelsDensity;
+    }
+
+    /**
+     * Set labels density of occlusion test
+     * This density must be in interval -100 100
+     */
+    virtual void setLabelsDensity(int density){
+      if(density<-100)
+        labelsDensity=-100;
+      else if(density>100)
+        labelsDensity=100;
+      else
+        labelsDensity=density;
+    }
+
+    /**
+     * Return label density of occlusion test
+     * This density must be in interval -100 100
+     */
+    virtual int getLabelDensity(){
+      return labelsDensity;
     }
 
     /**
@@ -365,7 +388,7 @@ namespace tlp {
     float zRot;
     bool useLOD;
     BoundingBox lodBoundingBox;
-    unsigned int occlusionBorderSize;
+    int labelsDensity;
     OcclusionTest *occlusionTester;
 
     std::vector<std::string> textVector;
