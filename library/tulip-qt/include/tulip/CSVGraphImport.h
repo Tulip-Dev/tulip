@@ -175,16 +175,21 @@ public:
     std::pair<tlp::ElementType,unsigned int> getElementForRow(unsigned int row);
 protected:
     /**
-      * @brief Search into the propety for the first element with the indexKey and return the right graph element id.
-      * @return Return the graph element id or UINT_MAX if no elements are found.
+      * @brief Create a new element if no elements for the given row was found.
+      * @return Return the graph element id or UINT_MAX if no new element is created.
       **/
     virtual unsigned int buildIndexForRow(unsigned int row,const std::string& indexKey,tlp::Graph* graph,tlp::PropertyInterface* keyProperty)=0;
+
+    /**
+      * @brief Fill the value map to speed up the research in graph.
+      **/
+    virtual void fillValuesMap(tlp::ElementType type,tlp::Graph* graph,tlp::PropertyInterface* keyProperty,std::map<std::string,unsigned int>& valuesToId);
 
     bool importRow(unsigned int row)const;
 
 private:
     std::map<unsigned int,unsigned int> rowToGraphId;
-    std::map<std::string,unsigned int> valueToNode;
+    std::map<std::string,unsigned int> valueToId;
     tlp::Graph* graph;
     tlp::ElementType type;
     unsigned int columnIndex;
@@ -265,17 +270,22 @@ public:
     * @param lastRow The last row to search ids.
     * @param createMissinElements If true create source node, destination node if one of them is not found in the graph.
     **/
-    CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& srcPropertyName,const std::string& tgtPropertyName,unsigned int firstRow,unsigned int lastRow,bool createMissinElements=false);
+    CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& propertyName,unsigned int firstRow,unsigned int lastRow,bool createMissinElements=false);
     std::pair<tlp::ElementType,unsigned int> getElementForRow(unsigned int row);
     void begin();
     void token(unsigned int row, unsigned int column, const std::string& token);
     void end(unsigned int rowNumber, unsigned int columnNumber);
 private:    
-    tlp::Graph* graph;
-    CSVToGraphNodeIdMapping src;
-    CSVToGraphNodeIdMapping tgt;
-    bool buildMissingElements;
+    tlp::Graph* graph;    
+    std::map<std::string,unsigned int> valueToId;
+    unsigned int srcColumnIndex;
+    unsigned int tgtColumnIndex;
+    tlp::PropertyInterface* keyProperty;
+    unsigned int firstRow;
+    unsigned int lastRow;
     std::map<unsigned int,edge> rowToEdge;
+    std::map<unsigned int,std::pair<tlp::node,tlp::node> > rowToNodes;
+    bool buildMissingElements;
 };
 
 /**

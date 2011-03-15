@@ -229,21 +229,35 @@ bool AbstractCSVToGraphDataMapping::importRow(unsigned int row)const{
 void AbstractCSVToGraphDataMapping::begin(){
     //Clean old informations.
     rowToGraphId.clear();
-    valueToNode.clear();
+    valueToId.clear();
+    //Fill map with graph values.
+    fillValuesMap(type,graph,keyProperty,valueToId);
+}
+void AbstractCSVToGraphDataMapping::fillValuesMap(tlp::ElementType type,Graph* graph,tlp::PropertyInterface* keyProperty,map<string,unsigned int>& valuesToId){
+    if(type == NODE){
+        node n;
+        forEach(n,graph->getNodes()){
+            valuesToId[keyProperty->getNodeStringValue(n)]=n.id;
+        }
+    }else{
+        edge e;
+        forEach(e,graph->getEdges()){
+            valuesToId[keyProperty->getEdgeStringValue(e)]=e.id;
+        }
+    }
 }
 
 void AbstractCSVToGraphDataMapping::token(unsigned int row, unsigned int column, const string& token){
-    if(importRow(row) && column == columnIndex){
-        //If we not found the token before search it.
-        if(valueToNode.find(token) == valueToNode.end()){
+    if(importRow(row) && column == columnIndex){        
+        if(valueToId.find(token) == valueToId.end()){
             unsigned int id = buildIndexForRow(row,token,graph,keyProperty);
             //Store the id corresponding to the token.
             if(id!=UINT_MAX){
-                valueToNode[token] = id;
+                valueToId[token] = id;
             }
         }else{
             //Use the las found id.
-            rowToGraphId[row]=valueToNode[token];
+            rowToGraphId[row]=valueToId[token];
         }
     }
 }
@@ -291,12 +305,6 @@ CSVToGraphNodeIdMapping::CSVToGraphNodeIdMapping(Graph* graph,unsigned int colum
 }
 
 unsigned int CSVToGraphNodeIdMapping::buildIndexForRow(unsigned int,const string& indexKey,Graph* graph,PropertyInterface* keyProperty){
-    node n;
-    forEach(n,graph->getNodes()){
-        if(keyProperty->getNodeStringValue(n).compare(indexKey)==0){
-            return n.id;
-        }
-    }
     if(createMissingNodes){
         node newNode = graph->addNode();
         keyProperty->setNodeStringValue(newNode,indexKey);
@@ -309,62 +317,73 @@ unsigned int CSVToGraphNodeIdMapping::buildIndexForRow(unsigned int,const string
 CSVToGraphEdgeIdMapping::CSVToGraphEdgeIdMapping(Graph* graph,unsigned int columnIndex,const string& propertyName,unsigned int firstRow,unsigned int lastRow):AbstractCSVToGraphDataMapping(graph,EDGE,columnIndex,propertyName,firstRow,lastRow){
 }
 
-unsigned int CSVToGraphEdgeIdMapping::buildIndexForRow(unsigned int ,const string& indexKey,Graph* graph,PropertyInterface* keyProperty){
-    edge e;
-    forEach(e,graph->getEdges()){
-        if(keyProperty->getEdgeStringValue(e).compare(indexKey)==0){            
-            return e.id;
-        }
-    }    
+unsigned int CSVToGraphEdgeIdMapping::buildIndexForRow(unsigned int ,const string& ,Graph* ,PropertyInterface* ){
     return UINT_MAX;
 }
 
 CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(Graph* graph,
-                                                         unsigned int srcColumnIndex,unsigned int tgtColumnIndex,
-                                                         const string& srcPropertyName,const string& tgtPropertyName,
+                                                         unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const string& propertyName,
                                                          unsigned int firstRow,unsigned int lastRow,
                                                          bool createMissinNodes):
-graph(graph),src(CSVToGraphNodeIdMapping(graph,srcColumnIndex,srcPropertyName,firstRow,lastRow,createMissinNodes)),
-tgt(CSVToGraphNodeIdMapping(graph,tgtColumnIndex,tgtPropertyName,firstRow,lastRow,createMissinNodes)),
+graph(graph),srcColumnIndex(srcColumnIndex),tgtColumnIndex(tgtColumnIndex),keyProperty(graph->getProperty(propertyName)),firstRow(firstRow),lastRow(lastRow),
 buildMissingElements(createMissinNodes){
 }
 
 pair<ElementType,unsigned int> CSVToGraphEdgeSrcTgtMapping::getElementForRow(unsigned int row){
-    node srcNode = node(src.getElementForRow(row).second);
-    node tgtNode = node(tgt.getElementForRow(row).second);
-    if(!graph->isElement(srcNode) || !graph->isElement(tgtNode)){
-        return make_pair(EDGE,UINT_MAX);
+    //Search if an edge was registered for this row and this couple of nodes.
+    map<unsigned int,edge>::iterator it = rowToEdge.find(row);
+    if(it!=rowToEdge.end()){
+        return make_pair(EDGE,it->second.id);
     }else{
-        //Search if an edge was registered for this node and this couple of nodes.
-        map<unsigned int,edge>::iterator it = rowToEdge.find(row);
-        if(it!=rowToEdge.end()){
-            return make_pair(EDGE,it->second.id);
-        }else{
-            return make_pair(EDGE,UINT_MAX);
-        }
+        return make_pair(EDGE,UINT_MAX);
     }
 }
 
 void CSVToGraphEdgeSrcTgtMapping::begin(){
-    src.begin();
-    tgt.begin();
+    valueToId.clear();
     rowToEdge.clear();
+    rowToNodes.clear();
+    node n;
+    forEach(n,graph->getNodes()){
+        valueToId[keyProperty->getNodeStringValue(n)]=n.id;
+    }
 }
 
 void CSVToGraphEdgeSrcTgtMapping::token(unsigned int row, unsigned int column, const string& token){
-    //Found nodes in the graph.
-    src.token(row,column,token);
-    tgt.token(row,column,token);
-    node srcNode = node(src.getElementForRow(row).second);
-    node tgtNode = node(tgt.getElementForRow(row).second);
-    //If nodes are found create a new edge and no previous mapping was done.
-    if( graph->isElement(srcNode) && graph->isElement(tgtNode) && rowToEdge.find(row)==rowToEdge.end()){
-        rowToEdge[row]=graph->addEdge(srcNode,tgtNode);
+    if(firstRow <= row && lastRow>= row){
+        if(column == srcColumnIndex){
+            map<string,unsigned int>::iterator it = valueToId.find(token);
+            //token exists in the map
+            node n;
+            if(it != valueToId.end()){
+                n = node(it->second);
+            }else if(buildMissingElements){
+                n = graph->addNode();
+                keyProperty->setNodeStringValue(n,token);
+                valueToId[token] = n.id;
+            }
+            rowToNodes[row].first = n;
+        }else if(column == tgtColumnIndex){
+            map<string,unsigned int>::iterator it = valueToId.find(token);
+            //token exists in the map
+            node n;
+            if(it != valueToId.end()){
+                n =node(it->second);
+            }else if(buildMissingElements){
+                n = graph->addNode();
+                keyProperty->setNodeStringValue(n,token);
+                valueToId[token] = n.id;
+            }
+            rowToNodes[row].second= n;
+        }
+        //If nodes are found create a new edge.
+        pair<node,node> nodes = rowToNodes[row];
+        if( graph->isElement(nodes.first) && graph->isElement(nodes.second) && rowToEdge.find(row)==rowToEdge.end()){
+            rowToEdge[row]=graph->addEdge(nodes.first,nodes.second);
+        }
     }
 }
-void CSVToGraphEdgeSrcTgtMapping::end(unsigned int rowNumber, unsigned int columnNumber){
-    src.end(rowNumber,columnNumber);
-    tgt.end(rowNumber,columnNumber);
+void CSVToGraphEdgeSrcTgtMapping::end(unsigned int , unsigned int ){
 }
 
 CSVImportColumnToGraphPropertyMappingProxy::CSVImportColumnToGraphPropertyMappingProxy(Graph* graph,const CSVImportParameters& importParameters,QWidget* parent):graph(graph),importParameters(importParameters),parent(parent){
