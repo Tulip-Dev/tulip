@@ -266,14 +266,11 @@ namespace tlp {
     label->setAlignment(labelPos);
     label->setScaleToSize(data->parameters->isLabelScaled());
     label->setUseLODOptimisation(true,this->getBoundingBox(data));
-    label->setLabelOcclusionBorder(data->parameters->getLabelsBorder());
+    label->setLabelsDensity(data->parameters->getLabelsDensity());
     label->setUseMinMaxSize(true);
     label->setMinSize(data->parameters->getMinSizeOfLabel());
     label->setMaxSize(data->parameters->getMaxSizeOfLabel());
-    if(!data->parameters->isLabelOverlaped())
-      label->setOcclusionTester(test);
-    else
-      label->setOcclusionTester(NULL);
+    label->setOcclusionTester(test);
 
     if(includeBB[1][2]!=0)
       label->setPosition(Coord(nodeCoord[0],nodeCoord[1],nodeCoord[2]+nodeSize[2]/2.));

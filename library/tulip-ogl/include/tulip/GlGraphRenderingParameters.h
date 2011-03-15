@@ -255,6 +255,7 @@ namespace tlp {
     /**
      * Get the size of the border that is added to any label when
      * using bitmap fonts.
+     * \deprecated Use getLabelsDensity instead
      */
     unsigned int getLabelsBorder() const;
     /**
@@ -262,6 +263,7 @@ namespace tlp {
      * using bitmap fonts. Setting this parameter to a high value
      * enables de reduce the label density in the final drawing.
      * Default value is set to 2 which enables readable labels.
+     * \deprecated Use setLabelsDensity instead
      */
     void setLabelsBorder(const unsigned int);
     /**
@@ -298,12 +300,30 @@ namespace tlp {
     void setLabelScaled(bool state);
     /**
      * return if labels can be overlaped
+     * \deprecated Use getLabelsDensity instead
      */
     bool isLabelOverlaped();
     /**
      * Set if labels can be overlaped
+     * \deprecated Use setLabelsDensity instead
      */
     void setLabelOverlaped(bool state);
+    /**
+     * Return labels density
+     * This density must be in interval -100 100
+     * -100 : No labels
+     * 0    : No overlap
+     * 100  : All labels
+     */
+    int getLabelsDensity();
+    /**
+     * Set labels density
+     * This density must be in interval -100 100
+     * -100 : No labels
+     * 0    : No overlap
+     * 100  : All labels
+     */
+    void setLabelsDensity(int density);
     /**
      * return min size of label : this min size is only used if labels aren't be scaled
      */
@@ -363,10 +383,9 @@ namespace tlp {
     int _metaNodesLabelStencil;
     int _edgesLabelStencil;
     bool _labelScaled;
-    bool _labelOverlaped;
     int _labelMinSize;
     int _labelMaxSize;
-    unsigned int _labelsBorder;
+    int _labelsDensity;
     std::string _fontsPath;
     std::string _texturePath;
     bool _edgesMaxSizeToNodesSize;

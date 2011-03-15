@@ -547,9 +547,15 @@ namespace tlp {
           //GlPointManager::getInst().endRendering();
 
           /*
-        Label draw
-      */
-          if(viewLabel && glGraphComposite) {
+            Label draw
+          */
+
+          bool labelDensityAtZero=true;
+          if(glGraphComposite){
+            if(glGraphComposite->getInputData()->parameters->getLabelsDensity()!=-100)
+              labelDensityAtZero=false;
+          }
+          if(viewLabel && glGraphComposite && !labelDensityAtZero) {
               glPushAttrib(GL_ALL_ATTRIB_BITS);
               glDisable(GL_LIGHTING);
               glDepthFunc(GL_ALWAYS );

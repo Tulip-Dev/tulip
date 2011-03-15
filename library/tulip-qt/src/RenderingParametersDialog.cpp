@@ -36,7 +36,7 @@ namespace tlp {
     setupUi(this);
 
     holdUpdateView=false;
-
+    updateDensityLabels();
   }
 
   void RenderingParametersDialog::setGlMainWidget(GlMainWidget *glWidget) {
@@ -57,9 +57,15 @@ namespace tlp {
     Color selectionC = param.getSelectionColor();
     setButtonColor(QColor(selectionC[0],selectionC[1],selectionC[2]),selection);
     scaled->setChecked(param.isLabelScaled());
-    overlap->setChecked(!param.isLabelOverlaped());
-    frame->setEnabled(!param.isLabelOverlaped());
-    density->setValue(param.getLabelsBorder());
+
+    if(param.getLabelsDensity()>0)
+      density->setValue(param.getLabelsDensity()+5);
+    else if(param.getLabelsDensity()<0)
+      density->setValue(param.getLabelsDensity()-5);
+    else
+      density->setValue(0);
+
+    updateDensityLabels();
     blockEdgeSizeCheckBox->setChecked(param.getEdgesMaxSizeToNodesSize());
     minSizeSpinBox->setValue(param.getMinSizeOfLabel());
     maxSizeSpinBox->setValue(param.getMaxSizeOfLabel());
@@ -82,12 +88,19 @@ namespace tlp {
     glWidget->getScene()->setViewOrtho(orthogonal->isChecked());
     param.setEdge3D(edge3D->isChecked());
     param.setLabelScaled(scaled->isChecked());
-    param.setLabelOverlaped(!overlap->isChecked());
     QColor backgroundC = background->palette().color(QPalette::Button);
     glWidget->getScene()->setBackgroundColor(Color(backgroundC.red(),backgroundC.green(),backgroundC.blue()));
     QColor selectionC = selection->palette().color(QPalette::Button);
     param.setSelectionColor(Color(selectionC.red(),selectionC.green(),selectionC.blue()));
-    param.setLabelsBorder(density->value());
+
+    if(density->value()>5)
+      param.setLabelsDensity(density->value()-5);
+    else if(density->value()<-5)
+      param.setLabelsDensity(density->value()+5);
+    else
+      param.setLabelsDensity(0);
+
+    updateDensityLabels();
     param.setEdgesMaxSizeToNodesSize(blockEdgeSizeCheckBox->isChecked());
     param.setMinSizeOfLabel(minSizeSpinBox->value());
     param.setMaxSizeOfLabel(maxSizeSpinBox->value());
@@ -155,6 +168,24 @@ namespace tlp {
 
       button->setStyleSheet("QPushButton { background-color: #"+colorStr+"; color: #"+textColor+" }");
     }
+  }
+
+  void RenderingParametersDialog::updateDensityLabels(){
+    QFont newFont=allLabels->font();
+    newFont.setBold(false);
+
+    allLabels->setFont(newFont);
+    noOverlap->setFont(newFont);
+    noLabels->setFont(newFont);
+
+    newFont.setBold(true);
+
+    if(density->value()<5 && density->value()>-5)
+      noOverlap->setFont(newFont);
+    else if(density->value()==-105)
+      noLabels->setFont(newFont);
+    else if(density->value()==105)
+      allLabels->setFont(newFont);
   }
 
   void RenderingParametersDialog::labelSizeChanged(int){
