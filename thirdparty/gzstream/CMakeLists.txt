@@ -9,5 +9,10 @@ IF(UNIX)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 ENDIF(UNIX)
 
-ADD_LIBRARY(gzstream STATIC ${gzstream_SRCS})
+ADD_LIBRARY(gzstream SHARED ${gzstream_SRCS})
 TARGET_LINK_LIBRARIES(gzstream ${ZLIB_LIBRARY})
+
+INSTALL(TARGETS gzstream
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT gzstream
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT gzstream
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT gzstream)

@@ -76,7 +76,7 @@ namespace tlp {
         connect(radioView, SIGNAL(clicked()), SLOT(propertyTypeFilterChanged()));
         connect(propertiesNameFilterLineEdit, SIGNAL(textChanged ( const QString &)), this,
                 SLOT(nameFilterChanged(const QString &)));
-#if QT_MINOR_REL > 6
+#if QT_MINOR_REL > 7
 	propertiesNameFilterLineEdit->setPlaceHolderText("Enter a filter on properties name here...");
 #endif
         propertiesWidget->setSortingEnabled(true);

@@ -339,32 +339,7 @@ ADD_SUBDIRECTORY(plugins)
 ADD_SUBDIRECTORY(textures)
 ADD_SUBDIRECTORY(externalplugins)
 
-FIND_PACKAGE(Doxygen QUIET)
-if (DOXYGEN_FOUND)
-  OPTION(GENERATE_DOC "Do you want to generate the documentation ? [OFF|ON]")
-  if (GENERATE_DOC)
-    ADD_SUBDIRECTORY(docs)
-    SET(TULIP_LIB_DESC "Tulip Graph Library")
-    SET(TULIP_LIB_NAME "tulip")
-    CONFIGURE_FILE("docs/doxygen/tulip-lib.doxygen.in" "docs/doxygen/tulip-lib.doxygen")
-    SET(TULIP_LIB_DESC "Tulip Open GL Library")
-    SET(TULIP_LIB_NAME "tulip-ogl")
-    CONFIGURE_FILE("docs/doxygen/tulip-lib.doxygen.in" "docs/doxygen/tulip-ogl-lib.doxygen")
-    SET(TULIP_LIB_DESC "Tulip Qt Library")
-    SET(TULIP_LIB_NAME "tulip-qt")
-    CONFIGURE_FILE("docs/doxygen/tulip-lib.doxygen.in" "docs/doxygen/tulip-qt-lib.doxygen")
-    EXEC_PROGRAM(date ARGS "+%Y" OUTPUT_VARIABLE THIS_YEAR)
-    CONFIGURE_FILE("docs/doxygen/tulip.html.in" "docs/doxygen/tulip.html")
-    CONFIGURE_FILE("docs/doxygen/header.html.in" "docs/doxygen/header.html")
-    CONFIGURE_FILE("docs/doxygen/footer.html.in" "docs/doxygen/footer.html")
-    CONFIGURE_FILE("docs/doxygen/header-allPlugins.html.in" "docs/doxygen/header-allPlugins.html")
-    CONFIGURE_FILE("docs/doxygen/tulip-plugins.doxygen.in" "docs/doxygen/tulip-plugins.doxygen")    
-    CONFIGURE_FILE("docs/developerHandbook/gen-devPdf.sh.in" "docs/developerHandbook/gen-devPdf.sh")
-    CONFIGURE_FILE("docs/userHandbook/gen-userPdf.sh.in" "docs/userHandbook/gen-userPdf.sh")
-  endif(GENERATE_DOC)
-else(DOXYGEN_FOUND)
-MESSAGE("Doxygen not found: unable to generate documentation")
-endif(DOXYGEN_FOUND)
+ADD_SUBDIRECTORY(docs)
 
 ## -----------------------------------------------------------------------------------------------
 ## Set var to create tulip-config script
@@ -410,6 +385,11 @@ INSTALL(FILES FindGLEW.cmake
 INSTALL(FILES FindXML2.cmake 
         DESTINATION ${TulipShareInstallDir})
 ## -----------------------------------------------------------------------------------------------
+## Script for linux Tulip bundle building
+IF(LINUX)
+CONFIGURE_FILE("make_tulip_linux_bundle.sh.in" "make_tulip_linux_bundle.sh" @ONLY)
+ENDIF(LINUX)
+## -----------------------------------------------------------------------------------------------
 ## CPack packaging directives
 ## -----------------------------------------------------------------------------------------------
 
@@ -430,6 +410,7 @@ IF(NOT CPACK_CUSTOM_INSTALLER)
   SET(SOFTWARE_GROUP_NAME "Runtime")
   SET(PLUGINS_GROUP_NAME "Plugins")
   SET(EXTRAS_GROUP_NAME "Extras")
+  SET(THIRDPARTY_GROUP_NAME "Third party")
 ELSE()
   # In case a custom installer is set, all the base tulip software components will be in the same group.
   SET(LIBS_GROUP_NAME "Tulip software")
@@ -437,6 +418,7 @@ ELSE()
   SET(SOFTWARE_GROUP_NAME "Tulip software")
   SET(PLUGINS_GROUP_NAME "Tulip software")
   SET(EXTRAS_GROUP_NAME "Tulip software")
+  SET(THIRDPARTY_GROUP_NAME "Tulip software")
 ENDIF()
 
 # Defines specific software components from tulip.

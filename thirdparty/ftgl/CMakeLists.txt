@@ -1,3 +1,6 @@
+FIND_PACKAGE(Freetype REQUIRED)
+FIND_PACKAGE(OpenGL REQUIRED)
+
 SET(ftgl_SRCS
     FTBuffer.cpp 
     FTCharmap.cpp 
@@ -98,8 +101,10 @@ SET(ftlayout_SRCS
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 INCLUDE_DIRECTORIES(${FREETYPE_INCLUDE_DIRS})
 
-IF(UNIX)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-ENDIF(UNIX)
+ADD_LIBRARY(ftgl SHARED ${ftgl_SRCS} ${ftgl_headers_SRCS} ${ftglyph_SRCS} ${ftfont_SRCS} ${ftlayout_SRCS})
+TARGET_LINK_LIBRARIES(ftgl ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} ${FREETYPE_LIBRARY})
 
-ADD_LIBRARY(ftgl STATIC ${ftgl_SRCS} ${ftgl_headers_SRCS} ${ftglyph_SRCS} ${ftfont_SRCS} ${ftlayout_SRCS})
+INSTALL(TARGETS ftgl
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT ftgl
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT ftgl
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT ftgl)
