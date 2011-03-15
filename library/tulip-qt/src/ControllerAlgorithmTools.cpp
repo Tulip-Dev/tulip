@@ -58,7 +58,6 @@ namespace tlp {
   bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const string &name,DataSet *dataSet) {
     Observable::holdObservers();
     QtProgress myProgress(parent,name);
-    myProgress.hide();
     graph->push();
     
     bool ok=true;
