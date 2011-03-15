@@ -41,7 +41,7 @@ static string bSplineSpecificShaderCode =
 		"	if (t == 0.0) {"
 		"		return controlPoints[0];"
 		"	} else if (t >= 1.0) {"
-		"		return controlPoints[nbControlPoints - 1];"
+		"		return controlPoints[int(nbControlPoints) - 1];"
 		"	} else {"
 		"		int k = curveDegree;"
 		"		float cpt = 0.0;"
@@ -49,8 +49,8 @@ static string bSplineSpecificShaderCode =
 		"			++k;"
 		"			++cpt;"
 		"		}"
-		"		float knotVal = float(cpt) * stepKnots;"
-		"		for (int i = 0 ; i < coeffs.length ; ++i) {"
+		"		float knotVal = cpt * stepKnots;"
+		"		for (int i = 0 ; i < (curveDegree + 1) ; ++i) {"
 		"			coeffs[i] = 0.0;"
 		"		}"
 		"		coeffs[curveDegree] = 1.0;"
@@ -105,10 +105,6 @@ void GlOpenUniformCubicBSpline::drawCurve(std::vector<Coord> &controlPoints, con
 		AbstractGlCurve::drawCurve(controlPoints, startColor, endColor, startSize, endSize, nbCurvePoints);
 	}
 }
-
- /*static float clamp(float f, float minVal, float maxVal) {
-	return min(max(f, minVal), maxVal);
-	}*/
 
 Coord GlOpenUniformCubicBSpline::computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) {
 	return computeOpenUniformBsplinePoint(controlPoints, t, curveDegree);

@@ -192,8 +192,8 @@ GlShader *AbstractGlCurve::curveVertexShaderNormalMain(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderBillboardMain(NULL);
 
 AbstractGlCurve::AbstractGlCurve(const string &shaderProgramName, const string &curveSpecificShaderCode) :
-								curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
-								outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
+										curveShaderProgramNormal(NULL), curveShaderProgramBillboard(NULL), curveShaderProgram(NULL),
+										outlined(false), outlineColor(Color(0,0,0)), texture(""), texCoordFactor(1), billboardCurve(false), lookDir(Coord(0,0,1)) {
 	initShader(shaderProgramName, curveSpecificShaderCode);
 }
 
@@ -222,7 +222,7 @@ void AbstractGlCurve::buildCurveVertexBuffers(const unsigned int nbCurvePoints, 
 	curveVertexBuffersIndices[nbCurvePoints][3] = new GLushort[nbCurvePoints];
 
 	for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
-		float t = (float) i / (float) (nbCurvePoints - 1);
+		float t =  i / static_cast<float>(nbCurvePoints - 1);
 		curveVertexBuffersData[nbCurvePoints][6*i] = t;
 		curveVertexBuffersData[nbCurvePoints][6*i+1] = 1.0f;
 		curveVertexBuffersData[nbCurvePoints][6*i+2] = t;
@@ -249,6 +249,8 @@ void AbstractGlCurve::buildCurveVertexBuffers(const unsigned int nbCurvePoints, 
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, nbCurvePoints * sizeof(GLushort), curveVertexBuffersIndices[nbCurvePoints][2], GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, curveVertexBuffersObject[nbCurvePoints][4]);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, nbCurvePoints * sizeof(GLushort), curveVertexBuffersIndices[nbCurvePoints][3], GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 }
 
@@ -258,7 +260,7 @@ void AbstractGlCurve::draw(float, Camera *) {
 
 void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode) {
 	// restrict shaders compilation on compatible hardware, crashs can happened when using the Mesa software rasterizer
-	static string glVendor(((const char*)glGetString(GL_VENDOR)));
+	static string glVendor(reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
 	static bool glVendorOk = (glVendor.find("NVIDIA")!=string::npos) || (glVendor.find("ATI")!=string::npos);
 
 	if (glVendorOk && GlShaderProgram::shaderProgramsSupported()) {
@@ -308,12 +310,6 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
 
 void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
 
-	static bool vboOk = checkVboSupport();
-
-	if (curveVertexBuffersData.find(nbCurvePoints) == curveVertexBuffersData.end()) {
-		buildCurveVertexBuffers(nbCurvePoints, vboOk);
-	}
-
 	GLint renderMode;
 	glGetIntegerv(GL_RENDER_MODE, &renderMode);
 
@@ -337,6 +333,12 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 	}
 
 	if (curveShaderProgram != NULL && controlPoints.size() <= (size_t)MAX_SHADER_CONTROL_POINTS && renderMode != GL_SELECT) {
+
+		static bool vboOk = checkVboSupport();
+
+		if (curveVertexBuffersData.find(nbCurvePoints) == curveVertexBuffersData.end()) {
+			buildCurveVertexBuffers(nbCurvePoints, vboOk);
+		}
 
 		GLuint *vbo = curveVertexBuffersObject[nbCurvePoints];
 		GlShaderProgram *currentActiveShader = GlShaderProgram::getCurrentActiveShader();
