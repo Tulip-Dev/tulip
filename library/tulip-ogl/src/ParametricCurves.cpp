@@ -133,7 +133,7 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
 		curvePoints.resize(nbCurvePoints);
 		float h = 1.0 / static_cast<float>(nbCurvePoints - 1);
 		#pragma omp parallel for
-		for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
+		for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
 			float curStep = i * h;
 			curvePoints[i] = computeBezierPoint(controlPoints, curStep);
 		}
@@ -236,7 +236,7 @@ void computeCatmullRomPoints(const vector<Coord> &controlPoints, vector<Coord> &
 	computeCatmullRomGlobalParameter(controlPointsCp, globalParameter, alpha);
 	curvePoints.resize(nbCurvePoints);
 	#pragma omp parallel for
-	for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
+	for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
 		curvePoints[i] = computeCatmullRomPointImpl(controlPointsCp, i / static_cast<float>(nbCurvePoints - 1), globalParameter, closedCurve, alpha);
 	}
 }
@@ -264,7 +264,7 @@ Coord computeOpenUniformBsplinePoint(const vector<Coord> &controlPoints, const f
 		}
 		float knotVal = (cpt * stepKnots);
 		coeffs[curveDegree] = 1.0;
-		for (unsigned int i = 1 ; i <= curveDegree ; ++i) {
+		for (int i = 1 ; i <= static_cast<int>(curveDegree) ; ++i) {
 			coeffs[curveDegree-i] = (clamp(knotVal + stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + stepKnots, 0.0, 1.0) - clamp(knotVal + (-i+1) * stepKnots, 0.0, 1.0)) * coeffs[curveDegree-i+1];
 			int tabIdx = curveDegree-i+1;
 			for (int j = -i+1 ; j <= -1 ; ++j) {
@@ -287,7 +287,7 @@ Coord computeOpenUniformBsplinePoint(const vector<Coord> &controlPoints, const f
 void computeOpenUniformBsplinePoints(const vector<Coord> &controlPoints, vector<Coord> &curvePoints, const unsigned int curveDegree, const unsigned int nbCurvePoints) {
 	curvePoints.resize(nbCurvePoints);
 	#pragma omp parallel for
-	for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
+	for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
 		curvePoints[i] = computeOpenUniformBsplinePoint(controlPoints, i / static_cast<float>(nbCurvePoints - 1), curveDegree);
 	}
 }
