@@ -405,6 +405,7 @@ IF(NOT CPACK_CUSTOM_INSTALLER)
   SET(SOFTWARE_GROUP_NAME "Runtime")
   SET(PLUGINS_GROUP_NAME "Plugins")
   SET(EXTRAS_GROUP_NAME "Extras")
+  SET(THIRDPARTY_GROUP_NAME "Third party")
 ELSE()
   # In case a custom installer is set, all the base tulip software components will be in the same group.
   SET(LIBS_GROUP_NAME "Tulip software")
@@ -412,6 +413,7 @@ ELSE()
   SET(SOFTWARE_GROUP_NAME "Tulip software")
   SET(PLUGINS_GROUP_NAME "Tulip software")
   SET(EXTRAS_GROUP_NAME "Tulip software")
+  SET(THIRDPARTY_GROUP_NAME "Tulip software")
 ENDIF()
 
 # Defines specific software components from tulip.
