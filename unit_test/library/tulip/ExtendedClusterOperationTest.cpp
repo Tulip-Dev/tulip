@@ -71,8 +71,7 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
   CPPUNIT_ASSERT_EQUAL(4u, quotient->numberOfEdges());
   CPPUNIT_ASSERT_EQUAL(6u, graph->numberOfNodes());
 
-  GraphProperty *clusterInfo = quotient->getProperty<GraphProperty>("viewMetaGraph");
-  Graph *cluster = clusterInfo->getNodeValue(meta);
+  Graph *cluster = quotient->getNodeMetaInfo(meta);
   CPPUNIT_ASSERT(cluster!=0);
   CPPUNIT_ASSERT_EQUAL(true, cluster->isElement(nodes[0]));
   CPPUNIT_ASSERT_EQUAL(true, cluster->isElement(nodes[1]));
