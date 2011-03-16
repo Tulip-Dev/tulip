@@ -5,6 +5,8 @@
 
 class QGraphicsProxyWidget;
 class QGraphicsView;
+class QGraphicsItem;
+class QGLWidget;
 
 namespace tlp_new {
 
@@ -13,7 +15,7 @@ namespace tlp_new {
   *
   * Any Tulip view must provide a top level widget in which any drawing coming from the view will be done. Additional subwidgets may be added in the top level
   * window that will appear in the Tulip workspace.
-  * The AbstractGraphicsView creates a QGraphicsView as its top-level widget (the central view). The user can then define the "central widget" which will be included in a QGraphicsProxyWidget
+  * The AbstractGraphicsView creates a QWidget as its top-level widget, containing a vertical layout with a QGraphicsView (the central view) in it. The user can then define the "central widget" which will be included in a QGraphicsProxyWidget
   * and drawn as the background of the QGraphicsScene.
   *
   * Any interactor installed on the view will be installed on the central widget. If there is no central widget, then Interactor installation will have no effect.
@@ -82,9 +84,9 @@ public:
   /**
     * @brief Sets the central widget of the view
     * The central widget will be drawn as the background of the central view. Any interactor installed on this view will be installed on the central widget.
-    * @param deleteOldWidget If set to true, the old central widget will be deleted.
+    * @warning The AbstractGraphicsView does not take ownership on the widget, you'll have to delete it manually if you ever change the central widget
     */
-  void setCentralWidget(QWidget *, bool deleteOldWidget=true);
+  void setCentralWidget(QWidget *);
 
 protected:
   /**
@@ -106,10 +108,10 @@ protected:
   QGraphicsView *_centralView;
 
   /**
-    * The central widget
-    * @warning This pointer is set to NULL until the setCentralWidget method has been called.
+    * @brief The central layout
+    * The main view will be stored in a vertical layout, you can add other widgets in it.
     */
-  QWidget *_centralWidget;
+  QVBoxLayout *_mainLayout;
 
   /**
     * @brief Build the interactor tool bar.
@@ -117,6 +119,27 @@ protected:
     * You may reimplement this method in order to display your interactors in a custom fashion.
     */
   virtual void buildInteractorsToolBar();
+
+  /**
+    * @brief Event handler for the resize events
+    * The AbstractGraphicsView installs itself as an event handler on the main view in order to catch resize events.
+    * When such an event occurs, the scene and the central widget get resized to fit the size of the main view.
+    */
+  bool eventFilter(QObject *obj, QEvent *e);
+
+private:
+  /**
+    * The central widget
+    * @warning This pointer is set to NULL until the setCentralWidget method has been called.
+    */
+  QWidget *_centralWidget;
+
+  QWidget *_mainWidget;
+
+  QGraphicsItem *_centralWidgetItem;
+
+  // Only used if the central widget is a GlMainWidget
+  QGLWidget *_viewPortWidget;
 };
 }
 

@@ -15,6 +15,8 @@ public:
   virtual void draw();
   virtual void refresh();
   virtual void init();
+
+  tlp::Graph *_graph;
 };
 
 #endif // EMPTYVIEW_H
