@@ -25,27 +25,7 @@
 
 using namespace std;
 
-vector<vector<double> > buildPascalTriangle(unsigned int n) {
-	vector<vector<double> > pascalTriangle;
-	pascalTriangle.resize(n);
-	for (unsigned int i = 0; i < n; ++i) {
-		pascalTriangle[i].resize(i+1);
-	}
-
-	pascalTriangle[0][0] = 1;
-	for (unsigned int i = 1; i < n; i++) {
-		pascalTriangle[i][0] = 1;
-		pascalTriangle[i][i] = 1;
-		for (unsigned int j = 1; j < i; ++j) {
-			pascalTriangle[i][j] = pascalTriangle[i-1][j-1] + pascalTriangle[i-1][j];
-		}
-	}
-	return pascalTriangle;
-}
-
 static const unsigned int CONTROL_POINTS_LIMIT = 120;
-
-
 
 static string bezierSpecificVertexShaderSrc =
 		"uniform sampler2D pascalTriangleTex;"
@@ -72,7 +52,6 @@ static string bezierSpecificVertexShaderSrc =
 
 namespace tlp {
 
-float *GlBezierCurve::pascalTriangleTextureData(NULL);
 GLuint GlBezierCurve::pascalTriangleTextureId(0);
 
 GlBezierCurve::GlBezierCurve() : AbstractGlCurve("bezier vertex shader", bezierSpecificVertexShaderSrc) {}
@@ -85,8 +64,9 @@ GlBezierCurve::GlBezierCurve(const vector<Coord> &controlPoints, const Color &st
 GlBezierCurve::~GlBezierCurve() {}
 
 void GlBezierCurve::buildPascalTriangleTexture() {
-	vector<vector<double> > pascalTriangle = buildPascalTriangle(CONTROL_POINTS_LIMIT);
-	pascalTriangleTextureData = new float [CONTROL_POINTS_LIMIT * CONTROL_POINTS_LIMIT];
+	vector<vector<double> > pascalTriangle;
+	buildPascalTriangle(CONTROL_POINTS_LIMIT, pascalTriangle);
+	float *pascalTriangleTextureData = new float [CONTROL_POINTS_LIMIT * CONTROL_POINTS_LIMIT];
 	memset(pascalTriangleTextureData, 0, CONTROL_POINTS_LIMIT * CONTROL_POINTS_LIMIT * sizeof(float));
 	for (unsigned int i = 0 ; i < CONTROL_POINTS_LIMIT ; ++i) {
 		for (unsigned int j = 0 ; j <= i ; ++j) {
@@ -102,6 +82,8 @@ void GlBezierCurve::buildPascalTriangleTexture() {
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	glTexImage2D(GL_TEXTURE_2D,0,GL_LUMINANCE32F_ARB,CONTROL_POINTS_LIMIT,CONTROL_POINTS_LIMIT,0,GL_LUMINANCE,GL_FLOAT,pascalTriangleTextureData);
 	glDisable(GL_TEXTURE_2D);
+
+	delete [] pascalTriangleTextureData;
 }
 
 void GlBezierCurve::setCurveVertexShaderRenderingSpecificParameters() {

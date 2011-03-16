@@ -75,7 +75,6 @@ protected :
 private :
 
 	static void buildPascalTriangleTexture();
-	static float *pascalTriangleTextureData;
 	static GLuint pascalTriangleTextureId;
 
 };
