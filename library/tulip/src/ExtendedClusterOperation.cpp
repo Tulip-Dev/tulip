@@ -119,125 +119,6 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
     } delete itE;
   }
 }
-//====================================================================================
-/*
-void tlp::openMetaNode(Graph *graph, node metaNode,
-		       Graph *groupUnderSubGraph, GraphProperty *metaInfo) {
-  if (graph->getRoot()==graph) {
-    cerr << __PRETTY_FUNCTION__ << endl;
-    cerr << "\t Error: Could not ungroup a meta node in the root graph" << endl;
-    return;
-  }
-  Graph *metaGraph = metaInfo->getNodeValue(metaNode);
-  if (metaGraph == 0) return;
-
-  Observable::holdObservers();
-  //add node from meta to graph
-  {
-    node n;
-    stableForEach(n, metaGraph->getNodes()) //stable in case of fractal graph
-      graph->addNode(n);
-    edge e;
-    stableForEach(e, metaGraph->getEdges())
-      graph->addEdge(e);
-  }
-  updatePropertiesUngroup(graph, metaNode, metaInfo);
-
-  Graph* super = graph->getSuperGraph();
-  Iterator<edge>* metaEdges = super->getInOutEdges(metaNode);
-  if (!metaEdges->hasNext()) {
-    delete metaEdges;
-    if (groupUnderSubGraph != NULL)
-      groupUnderSubGraph->delSubGraph(metaGraph);
-    Observable::unholdObservers();
-    return;
-  }
-  bool hasSubEdges = super->isMetaEdge(metaEdges->next());
-  delete metaEdges;
-  metaEdges = super->getInOutEdges(metaNode);
-  ColorProperty *graphColors = 
-    graph->getProperty<ColorProperty>(colorProperty);
-  if (hasSubEdges) {
-    while (metaEdges->hasNext()) {
-      edge metaEdge = metaEdges->next();
-      Color metaColor = graphColors->getEdgeValue(metaEdge);
-      Iterator<edge>* subEdges = graph->getEdgeMetaInfo(metaEdge);
-      while(subEdges->hasNext()) {
-	edge e = subEdges->next();
-	graph->addEdge(e);
-	if (!graph->isElement(metaEdge))
-	  graph->delEdge(e);
-	graphColors->setEdgeValue(e, metaColor);
-      } delete subEdges;
-    }
-    graph->getRoot()->delAllNode(metaNode);
-  } else {
-    MutableContainer<node> mappingC;
-    MutableContainer<node> mappingN;
-    mappingC.setAll(node());
-    mappingN.setAll(node());
-    Graph *root = graph->getRoot();
-    buildMapping(root->getInOutNodes(metaNode), mappingC, metaInfo, node() );
-    buildMapping(metaGraph->getNodes() , mappingN, metaInfo, node() );
-
-    TLP_HASH_MAP<node, Color> metaEdgeToColor;
-    while (metaEdges->hasNext()) {
-      edge metaEdge = metaEdges->next();
-      metaEdgeToColor[graph->opposite (metaEdge, metaNode)] =
-	graphColors->getEdgeValue(metaEdge);
-    }
-    //Remove the metagraph from the hierarchy and remove the metanode
-    root->delAllNode(metaNode);
-    TLP_HASH_MAP<node, hash_set<node> > edges;
-    //=================================
-    //StableIterator<node> metaGraphNodes (metaGraph->getNodes());
-    //while (metaGraphNodes.hasNext()) {
-    StableIterator<edge> it(root->getEdges());
-    while(it.hasNext()) {
-      edge e = it.next();
-      if (graph->isElement(e)) continue;
-      node sourceC = mappingC.get(root->source(e).id);
-      node targetN = mappingN.get(root->target(e).id);
-      node sourceN = mappingN.get(root->source(e).id);
-      node targetC = mappingC.get(root->target(e).id);
-      node source, target;
-      Color edgeColor;
-      if (sourceC.isValid() && targetN.isValid()) {
-	source = sourceC;
-	target = targetN;
-	edgeColor = metaEdgeToColor[source];
-      } 
-      else {
-	if (sourceN.isValid() && targetC.isValid()) {
-	  source = sourceN;
-	  target = targetC;
-	  edgeColor = metaEdgeToColor[target];
-	} 
-	else continue;
-      }
-      if (metaInfo->getNodeValue(source) == 0 && 
-	  metaInfo->getNodeValue(target) == 0) {
-	graph->addEdge(e);
-	continue;
-      }
-      if ( (edges.find(source) == edges.end()) || 
-	   (edges[source].find(target) == edges[source].end()) ) {
-	edges[source].insert(target);
-	if (!graph->existEdge(source,target).isValid()) {
-	  edge addedEdge = graph->addEdge(source,target);
-	  graphColors->setEdgeValue (addedEdge, edgeColor);
-	}
-	else 
-	  cerr << "bug exist edge 1";
-      }
-      // }
-    }
-  }
-  delete metaEdges;
-  if (groupUnderSubGraph != NULL) groupUnderSubGraph->delSubGraph(metaGraph);
-  Observable::unholdObservers();
-}
-*/
 //=========================================================
 Graph * Graph::inducedSubGraph(const std::set<node> &nodes,
 			       Graph* parentSubGraph) {
@@ -314,10 +195,6 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
     property->computeMetaValue(metaNode, subGraph, this);
   }
 
-  
-  /*ColorProperty *colors = getProperty<ColorProperty>(colorProperty);
-    colors->setNodeValue(metaNode, Color(255, 255, 255, 127));*/
-
   // keep track of graph existing edges
   MutableContainer<bool> graphEdges;
   graphEdges.setAll(false);
@@ -353,25 +230,22 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 	existEdge (src, tgt).isValid();
 
       if (isElement(src) && subGraph->isElement(tgt)) {
-	if ( (edges.find(src) == edges.end()) || (edges[src].find(tgt) == edges[src].end()) ) {
-	  if (multiEdges || edges[src].empty()) {
-	    // add new meta edge
-	    edge metaEdge = addEdge(src, metaNode);
-	    if (!graphEdges.get(e.id))
-	      delEdge(metaEdge);
-	    // e is a sub-edge of metaEdge
-	    subEdges[metaEdge].insert(e);
-	    if (!multiEdges)
-	      // record metaEdge
-	      metaEdges[src] = metaEdge;
-	    if (!super->isElement(metaEdge))
-	      super->addEdge(metaEdge);
-	    //colors->setEdgeValue (metaEdge, colors->getEdgeValue(e));
-	  } else if (!multiEdges)
-	    // e is a sub-edge of an already created meta edge
-	    subEdges[metaEdges[src]].insert(e);
-	  edges[src].insert(tgt);
-	} 
+	if (multiEdges || edges[src].empty()) {
+	  // add new meta edge
+	  edge metaEdge = addEdge(src, metaNode);
+	  if (!graphEdges.get(e.id))
+	    delEdge(metaEdge);
+	  // e is a sub-edge of metaEdge
+	  subEdges[metaEdge].insert(e);
+	  if (!multiEdges)
+	    // record metaEdge
+	    metaEdges[src] = metaEdge;
+	  if (!super->isElement(metaEdge))
+	    super->addEdge(metaEdge);
+	} else if (!multiEdges)
+	  // e is a sub-edge of an already created meta edge
+	  subEdges[metaEdges[src]].insert(e);
+	edges[src].insert(tgt);
 	if (toDelete) {
 	  //	cerr << "delete edge e :" << e.id << endl;
 	  if (edgeDelAll)
@@ -380,25 +254,22 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 	}
       }
       if (isElement(tgt) && subGraph->isElement(src)) {
-	if ( (edges.find(tgt) == edges.end()) || (edges[tgt].find(src) == edges[tgt].end()) ) {
-	  if (multiEdges || edges[tgt].empty()) {
-	    // add new meta edge
-	    edge metaEdge = addEdge(metaNode, tgt);
-	    if (!graphEdges.get(e.id))
-	      delEdge(metaEdge);
-	    // e is a sub-edge of metaEdge
-	    subEdges[metaEdge].insert(e);
-	    if (!multiEdges)
-	      // record metaEdge
-	      metaEdges[src] = metaEdge;
-	    if (!super->isElement(metaEdge))
-	      super->addEdge(metaEdge);
-	    //colors->setEdgeValue(metaEdge, colors->getEdgeValue (e));
-	  } else if (!multiEdges)
-	    // e is a sub-edge of an already created meta edge
-	    subEdges[metaEdges[tgt]].insert(e);
-	  edges[tgt].insert(src);
-	}
+	if (multiEdges || edges[tgt].empty()) {
+	  // add new meta edge
+	  edge metaEdge = addEdge(metaNode, tgt);
+	  if (!graphEdges.get(e.id))
+	    delEdge(metaEdge);
+	  // e is a sub-edge of metaEdge
+	  subEdges[metaEdge].insert(e);
+	  if (!multiEdges)
+	    // record metaEdge
+	    metaEdges[tgt] = metaEdge;
+	  if (!super->isElement(metaEdge))
+	    super->addEdge(metaEdge);
+	} else if (!multiEdges)
+	  // e is a sub-edge of an already created meta edge
+	  subEdges[metaEdges[tgt]].insert(e);
+	edges[tgt].insert(src);
 	if (toDelete) {
 	  //	cerr << "delete edge e :" << e.id << endl;
 	  if (edgeDelAll)
@@ -552,8 +423,6 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     root->delAllNode(metaNode);
     TLP_HASH_MAP<node, TLP_HASH_SET<node> > edges;
     //=================================
-    //StableIterator<node> metaGraphNodes (metaGraph->getNodes());
-    //while (metaGraphNodes.hasNext()) {
     StableIterator<edge> it(root->getEdges());
     while(it.hasNext()) {
       edge e = it.next();
@@ -705,12 +574,6 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
     }
     ++itm;
   }
-  //compute layout according to the layouts of subgraphs
-  /*vector<node>::iterator itn = metaNodes.begin();
-  while(itn != metaNodes.end()) {
-    updateGroupLayout(this, quotientGraph, *itn);
-    itn++;
-    }*/
 
   Observable::unholdObservers();
 }

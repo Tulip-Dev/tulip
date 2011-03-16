@@ -80,6 +80,40 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
   CPPUNIT_ASSERT_EQUAL(2u, cluster->numberOfNodes());
 }
 //==========================================================
+void ExtendedClusterOperationTest::testBugCreateOpenMetaNode() {
+  edge e02 = quotient->addEdge(nodes[0], nodes[2]);
+  Iterator<edge>* ite = quotient->getInEdges(nodes[2]);
+  unsigned nbEdges = 0;
+  while (ite->hasNext()) {
+    ++nbEdges;
+    edge e = ite->next();
+    CPPUNIT_ASSERT(e == e02 || e == edges[1]);
+  } delete ite;
+  CPPUNIT_ASSERT(nbEdges = 2);
+
+  CPPUNIT_ASSERT(quotient->isElement(e02));
+  CPPUNIT_ASSERT(quotient->isElement(edges[1]));
+
+  meta = quotient->createMetaNode(group, false);
+
+  edge metaE = quotient->existEdge(meta, nodes[2]);
+  CPPUNIT_ASSERT(metaE.isValid());
+
+  ite = quotient->getEdgeMetaInfo(metaE);
+  nbEdges = 0;
+  while (ite->hasNext()) {
+    ++nbEdges;
+    edge e = ite->next();
+    CPPUNIT_ASSERT(e == e02 || e == edges[1]);
+  } delete ite;
+  CPPUNIT_ASSERT(nbEdges = 2);
+
+  quotient->openMetaNode(meta);
+  CPPUNIT_ASSERT(quotient->isElement(metaE) == false);
+  CPPUNIT_ASSERT(quotient->isElement(e02));
+  CPPUNIT_ASSERT(quotient->isElement(edges[1]));
+}
+//==========================================================
 void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   cerr << __PRETTY_FUNCTION__ << endl;
   Graph * graph = tlp::loadGraph("./DATA/graphs/openmetanode1.tlp.gz");
@@ -167,6 +201,8 @@ CppUnit::Test * ExtendedClusterOperationTest::suite() {
 								    &ExtendedClusterOperationTest::testOpenMetaNodes ) );
   suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Open a metanode in a hierarchy of subgraph #BUG-1", 
 										&ExtendedClusterOperationTest::testBugOpenInSubgraph ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Create a metanode on a non simple graph #BUG-1", 
+										&ExtendedClusterOperationTest::testBugCreateOpenMetaNode ) );
   return suiteOfTests;
 }
 //==========================================================
