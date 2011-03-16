@@ -254,18 +254,9 @@ namespace tlp {
       }
     }
 
-    if(occlusionTester && camera){
+    if(occlusionTester && camera && labelsDensity!=100){
       BoundingBox labelBoundingBox;
       Coord baseCoord=centerPosition;
-
-      switch(alignment) {
-      case ON_CENTER:break;
-      case ON_LEFT:baseCoord[0]-=sizeForOutAlign[0]/2.;break;
-      case ON_RIGHT:baseCoord[0]+=sizeForOutAlign[0]/2.;break;
-      case ON_TOP:baseCoord[1]+=sizeForOutAlign[1]/2.;break;
-      case ON_BOTTOM:baseCoord[1]-=sizeForOutAlign[1]/2.;break;
-      default:break;
-      }
 
       float wModified=w;
       float hModified=h;
@@ -276,6 +267,15 @@ namespace tlp {
       }else{
         wModified=w-w*(((float)labelsDensity)/(100.));
         hModified=h-h*(((float)labelsDensity)/(100.));
+      }
+
+      switch(alignment) {
+      case ON_CENTER:break;
+      case ON_LEFT:baseCoord[0]-=sizeForOutAlign[0]/2+wModified*scaleToApply/2.;break;
+      case ON_RIGHT:baseCoord[0]+=sizeForOutAlign[0]/2+wModified*scaleToApply/2.;break;
+      case ON_TOP:baseCoord[1]+=sizeForOutAlign[1]/2+hModified*scaleToApply/2.;break;
+      case ON_BOTTOM:baseCoord[1]-=sizeForOutAlign[1]/2+hModified*scaleToApply/2.;break;
+      default:break;
       }
 
       Size occlusionSize(wModified*scaleToApply/2.,hModified*scaleToApply/2.,0);
@@ -312,6 +312,12 @@ namespace tlp {
       glMultMatrixf((GLfloat*)&modelviewMatrix);
       glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat*)&transformMatrix);
       glPopMatrix();
+
+      BoundingBox bbTmp;
+      bbTmp.expand(Coord(baseCoord[0]+occlusionSize[0],baseCoord[1]+occlusionSize[1],baseCoord[2]));
+      bbTmp.expand(Coord(baseCoord[0]+occlusionSize[0],baseCoord[1]-occlusionSize[1],baseCoord[2]));
+      bbTmp.expand(Coord(baseCoord[0]-occlusionSize[0],baseCoord[1]-occlusionSize[1],baseCoord[2]));
+      bbTmp.expand(Coord(baseCoord[0]-occlusionSize[0],baseCoord[1]+occlusionSize[1],baseCoord[2]));
 
       labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]+occlusionSize[0],baseCoord[1]+occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
       labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]+occlusionSize[0],baseCoord[1]-occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
