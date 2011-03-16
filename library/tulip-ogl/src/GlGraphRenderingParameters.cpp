@@ -37,7 +37,6 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _viewMetaLabel(false),
   _viewOutScreenLabel(false),
   _elementOrdered(false),
-  _incrementalRendering(true),
   _edgeColorInterpolate(true),
   _edge3D(false),
   _edgeSizeInterpolate(true),
@@ -80,7 +79,6 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("outScreenLabel", _viewOutScreenLabel);
   data.set("elementOrdered", _elementOrdered);
   data.set("elementZOrdered", _elementZOrdered);
-  data.set("incrementalRendering", _incrementalRendering);
   data.set("edgeColorInterpolation", _edgeColorInterpolate);
   data.set("edgeSizeInterpolation", _edgeSizeInterpolate);
   data.set("edge3D", _edge3D);
@@ -139,8 +137,6 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
     setElementOrdered(b);
   if (data.get<bool>("elementZOrdered", b))
     setElementZOrdered(b);
-  if (data.get<bool>("incrementalRendering", b))
-    setIncrementalRendering(b);
   if (data.get<bool>("edgeColorInterpolation", b))
     setEdgeColorInterpolate(b);
   if (data.get<bool>("edgeSizeInterpolation", b))
@@ -229,13 +225,6 @@ void GlGraphRenderingParameters::setTexturePath(const std::string &path) {
 }
 std::string GlGraphRenderingParameters::getTexturePath() const {
   return _texturePath;
-}
-//====================================================
-bool GlGraphRenderingParameters::isIncrementalRendering() const {
-  return (_incrementalRendering);
-}
-void GlGraphRenderingParameters::setIncrementalRendering(const bool b) {
-  _incrementalRendering=b;
 }
 //====================================================
 bool GlGraphRenderingParameters::isDisplayEdges() const {
