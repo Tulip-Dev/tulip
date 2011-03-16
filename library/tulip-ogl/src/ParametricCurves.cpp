@@ -112,16 +112,43 @@ static void computeCubicBezierPoints(const Coord &p0, const Coord &p1, const Coo
 	curvePoints[nbCurvePoints - 1] = p3;
 }
 
-// Compute bezier curve point defined by controlPoints associated to paramter t (0 <= t <= 1) using "De Casteljau's algorithm"
-Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
-	vector<Coord> internalControlPoints(controlPoints);
-	for (unsigned int i = controlPoints.size() - 1 ; i > 0 ; --i) {
-		for (unsigned int j = 0 ; j < i ; ++j) {
-			internalControlPoints[j] = internalControlPoints[j] + t * (internalControlPoints[j+1] - internalControlPoints[j]);
+void buildPascalTriangle(unsigned int n, vector<vector<double> > &pascalTriangle) {
+	size_t curSize = pascalTriangle.size();
+
+	if (curSize >= n)
+		return;
+
+	pascalTriangle.resize(n);
+	for (unsigned int i = curSize ; i < n; ++i) {
+		pascalTriangle[i].resize(i+1);
+	}
+
+	for (unsigned int i = curSize ; i < n ; ++i) {
+		pascalTriangle[i][0] = 1;
+		pascalTriangle[i][i] = 1;
+		for (unsigned int j = 1; j < i; ++j) {
+			pascalTriangle[i][j] = pascalTriangle[i-1][j-1] + pascalTriangle[i-1][j];
 		}
 	}
-	return internalControlPoints[0];
 }
+
+static vector<vector<double> > pascalTriangle;
+
+Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
+	unsigned int nbControlPoints = controlPoints.size();
+	double s = (1.0 - t);
+	Vector<double, 3> bezierPoint;
+	bezierPoint[0] = bezierPoint[1] = bezierPoint[2] = 0;
+	for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
+		Vector<double, 3> controlPoint;
+		controlPoint[0] = controlPoints[i][0];
+		controlPoint[1] = controlPoints[i][1];
+		controlPoint[2] = controlPoints[i][2];
+		bezierPoint += controlPoint * pascalTriangle[nbControlPoints - 1][i] * pow(static_cast<double>(t), static_cast<double>(i)) * pow(s, static_cast<double>(nbControlPoints - 1 - i));
+	}
+	return Coord(bezierPoint[0], bezierPoint[1], bezierPoint[2]);
+}
+
 
 void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curvePoints, unsigned int nbCurvePoints) {
 	assert(controlPoints.size() > 1);
@@ -130,6 +157,7 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
 	case 3:computeQuadraticBezierPoints(controlPoints[0], controlPoints[1], controlPoints[2], curvePoints, nbCurvePoints);break;
 	case 4:computeCubicBezierPoints(controlPoints[0], controlPoints[1], controlPoints[2], controlPoints[3], curvePoints, nbCurvePoints);break;
 	default:
+		buildPascalTriangle(controlPoints.size(), pascalTriangle);
 		curvePoints.resize(nbCurvePoints);
 		float h = 1.0 / static_cast<float>(nbCurvePoints - 1);
 		#pragma omp parallel for

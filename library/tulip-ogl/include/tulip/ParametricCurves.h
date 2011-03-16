@@ -26,6 +26,14 @@
 namespace tlp {
 
 /**
+ * Compute Pascal triangle until nth row
+ *
+ * \param n the number of Pascal triangle rows to compute
+ * \param pascalTriangle a vector of vector of double to store the result. If that vector already contains m Pascal triangle rows and n > m, the first m row are not recomputed and the vector is expanded to store the new rows.
+ */
+TLP_GL_SCOPE void buildPascalTriangle(unsigned int n, std::vector<std::vector<double> > &pascalTriangle);
+
+/**
  * Compute the position of a point 'p' at t (0 <= t <= 1)
  * along Bézier curve defined by a set of control points
  *
