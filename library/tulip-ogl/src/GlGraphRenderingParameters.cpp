@@ -97,6 +97,7 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("edgesLabelStencil", _edgesLabelStencil);
   data.set("edgesMaxSizeToNodesSize", _edgesMaxSizeToNodesSize);
   data.set("selectionColor",_selectionColor);
+  data.set("labelsDensity", _labelsDensity);
   //data.set("SupergraphId", _graph->getId());
   return data;
 }
