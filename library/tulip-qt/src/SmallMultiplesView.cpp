@@ -63,6 +63,8 @@ SmallMultiplesView::SmallMultiplesView()
   inputData->getElementShape()->setAllNodeValue(4);
   inputData->getElementLabelPosition()->setAllNodeValue(2);
   inputData->getElementFontSize()->setAllNodeValue(2);
+  inputData->getElementFont()->setAllNodeValue(TulipBitmapDir + "font.ttf");
+  inputData->getElementFont()->setAllEdgeValue(TulipBitmapDir + "font.ttf");
   scene->getGlGraphComposite()->getRenderingParametersPointer()->setFontsType(1);
   scene->getGlGraphComposite()->getRenderingParametersPointer()->setLabelScaled(true);
   Observable::unholdObservers();
