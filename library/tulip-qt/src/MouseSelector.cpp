@@ -215,7 +215,6 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         }
       }
       started = false;
-      glMainWidget->draw();
       Observable::unholdObservers();
       return true;
     }
