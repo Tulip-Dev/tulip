@@ -267,15 +267,18 @@ namespace tlp {
       default:break;
       }
 
+      float wModified=w;
+      float hModified=h;
+
       if(labelsDensity<=0){
-        w-=labelsDensity;
-        h-=labelsDensity;
+        wModified-=labelsDensity;
+        hModified-=labelsDensity;
       }else{
-        w=w-w*(((float)labelsDensity)/(100.));
-        h=h-h*(((float)labelsDensity)/(100.));
+        wModified=w-w*(((float)labelsDensity)/(100.));
+        hModified=h-h*(((float)labelsDensity)/(100.));
       }
 
-      Size occlusionSize(w*scaleToApply/2.,h*scaleToApply/2.,0);
+      Size occlusionSize(wModified*scaleToApply/2.,hModified*scaleToApply/2.,0);
 
       float angle=M_PI*zRot/180;
 
