@@ -96,7 +96,7 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
     }
     if (started) {
       Observable::holdObservers();
-      BooleanProperty* selection=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<BooleanProperty>(glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementSelectedPropName());
+      BooleanProperty* selection=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
       selection->setAllNodeValue(false);
       selection->setAllEdgeValue(false);
       if ((w==0) && (h==0)) {
