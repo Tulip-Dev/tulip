@@ -56,7 +56,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _labelScaled(false),
   _labelMinSize(10),
   _labelMaxSize(30),
-  _labelsDensity(105) {
+  _labelsDensity(100) {
   _fontsPath = tlp::TulipLibDir + "tlp/bitmaps/";
   _texturePath = "";
   _edgesMaxSizeToNodesSize = true;
@@ -186,12 +186,12 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
 //====================================================
 unsigned int GlGraphRenderingParameters::getLabelsBorder() const {
   if(_labelsDensity<0)
-    return 0;
+    return 100;
   else
-    return _labelsDensity;
+    return -_labelsDensity;
 }
 void GlGraphRenderingParameters::setLabelsBorder(const unsigned int border) {
-  _labelsDensity = border;
+  _labelsDensity = -border;
 }
 //====================================================
 bool GlGraphRenderingParameters::isViewMetaLabel()const {
@@ -209,7 +209,7 @@ unsigned int GlGraphRenderingParameters::getFontsType()const {
 }
 void GlGraphRenderingParameters::setFontsType(unsigned int i) {
   if(i==1)
-    _labelsDensity=-99;
+    _labelsDensity=100;
   else
     _labelScaled=true;
 }
