@@ -365,7 +365,6 @@ namespace tlp {
     bool _viewMetaLabel;
     bool _viewOutScreenLabel;
     bool _elementOrdered;
-    bool _incrementalRendering;
     bool _edgeColorInterpolate;
     bool _edge3D;
     bool _edgeSizeInterpolate;
