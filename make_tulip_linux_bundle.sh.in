@@ -61,7 +61,7 @@ echo @QT_LIBRARY_DIR@/libphonon.so.4 copied in $BUNDLE_LIB_DIR
 # Qt3Support is not needed
 rm $BUNDLE_LIB_DIR/libQt3Support*.*
 # other tulip_app needed libs
-for LIB in libaudio libcrypto libk5crypto libgssapi_krb5 libkrb5 libssl freetype GLEW GLU gomp jpeg png12 stdc++ xml2
+for LIB in libaudio libcrypto libk5crypto libgssapi_krb5 libkrb5 libkeyutils libresolv libselinux libssl freetype GLEW GLU gomp jpeg png12 stdc++ xml2
 do
     copy_linked_lib $LIB $BUNDLE_BIN_DIR/tulip_app
 done;
