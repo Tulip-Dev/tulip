@@ -511,17 +511,17 @@ public:
 }; // class NodeElement
 
 
-inline adjEntry AdjElement::cyclicSucc() const
+inline adjEntry OGDF_EXPORT AdjElement::cyclicSucc() const
 {
 	return (m_next) ? (adjEntry)m_next : m_node->firstAdj();
 }
 
-inline adjEntry AdjElement::cyclicPred() const
+inline adjEntry OGDF_EXPORT AdjElement::cyclicPred() const
 {
 	return (m_prev) ? (adjEntry)m_prev : m_node->lastAdj();
 }
 
-inline bool test_forall_adj_edges(adjEntry &adj, edge &e)
+inline bool OGDF_EXPORT test_forall_adj_edges(adjEntry &adj, edge &e)
 {
 	if (adj) { e = adj->theEdge(); return true; }
 	else return false;

@@ -65,9 +65,9 @@
 
 namespace ogdf {
 
-	class OGDF_EXPORT PlanRep;
-	class OGDF_EXPORT PlanRepUML;
-	class OGDF_EXPORT OrthoRep;
+        class PlanRep;
+        class PlanRepUML;
+        class OrthoRep;
 
 
 //---------------------------------------------------------

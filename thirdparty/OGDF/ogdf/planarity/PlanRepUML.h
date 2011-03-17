@@ -69,9 +69,9 @@
 
 namespace ogdf {
 
-	class OGDF_EXPORT Layout;
-	class OGDF_EXPORT GridLayoutMapped;
-	class OGDF_EXPORT OrthoRep;
+	class Layout;
+	class GridLayoutMapped;
+	class OrthoRep;
 
  
 //---------------------------------------------------------
