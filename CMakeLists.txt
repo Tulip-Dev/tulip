@@ -364,9 +364,12 @@ SET(QT_INCLUDES "-I${QT_INCLUDE_DIR}")
 CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 
 ## -----------------------------------------------------------------------------------------------
-## create pluginstest.cpp
-## -----------------------------------------------------------------------------------------------
-CONFIGURE_FILE("unit_test/plugins/pluginstest.cpp.in" "unit_test/plugins/pluginstest.cpp" @ONLY)
+## create pluginstest.cpp (does not exists in delivered source package)
+##-----------------------------------------------------------------------------------------------
+IF(EXISTS "unit_test/plugins/pluginstest.cpp.in")
+CONFIGURE_FILE("unit_test/plugins/pluginstest.cpp.in"
+"unit_test/plugins/pluginstest.cpp" @ONLY)
+ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
 ## Installation of files
