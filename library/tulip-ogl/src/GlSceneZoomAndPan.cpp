@@ -130,7 +130,9 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
 		float bbHeightScreen = abs(bbScreenSecond.getY() - bbScreenFirst.getY());
 		double newZoomFactor = 0.0;
 
-		if (zoomAreaWidth > zoomAreaHeight) {
+		float aspectRatio = viewport[2] / static_cast<float>(viewport[3]);
+
+		if (zoomAreaWidth > (zoomAreaHeight * aspectRatio)) {
 			newZoomFactor = viewport[2] / bbWidthScreen;
 		} else {
 			newZoomFactor = viewport[3] / bbHeightScreen;
