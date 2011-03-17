@@ -3,6 +3,7 @@
 
 #include <tulip/ForEach.h>
 #include <tulip/vectorgraph.h>
+#include <set>
 
 namespace tlpext {
     /**
@@ -446,7 +447,16 @@ namespace tlpext {
       **/
     class  TLP_SCOPE Observer : virtual public Onlooker {
     public:
-        virtual void treatEvents(const  std::vector<Event> &events ) = 0;
+        virtual void treatEvents(const  std::vector<Event> &events ) {
+	  std::set<Observable*> observables;
+	  for(size_t k=0; k < events.size(); ++k) {
+	    observables.insert(events[k].sender());
+	  }
+	  update(observables.begin(), observables.end());
+	}
+	void update(std::set<Observable*>::iterator, std::set<Observable*>::iterator) {
+	  std::cout << "update non implemented" << std::endl;
+	}
     };
     //=======================================
     /**
@@ -490,6 +500,14 @@ namespace tlpext {
           * can make the Observer receive an event that has been sent before it was Observing the object.
           */
         void addOnlooker(const Onlooker &);
+	/**
+	 * @brief use for old observer tulip compatibility
+	 * @todo  set it as deprecated
+	*/
+	void addObserver(Observer * const obs) {
+	  assert(obs != 0);
+	  addOnlooker(*obs);
+	}
         /**
           * @brief remove an Observer/Listener of the observable
           *
@@ -501,7 +519,40 @@ namespace tlpext {
           * the events to work properly.
           */
         void removeOnlooker(const Onlooker &);
-        /**
+	/**
+	 * @brief use for old observer tulip compatibility
+	 * @todo  set it as deprecated
+	 */
+	void removeObserver(Observer  * const obs) {
+	  assert(obs != 0);
+	  removeOnlooker(*obs);
+	}
+
+	/**
+	 * @brief use for old observer tulip compatibility
+	 * @todo  set it as deprecated
+	 */	
+	void notifyObservers() {
+	    sendEvent(tlpext::Event(*this, tlpext::Event::MODIFICATION));
+	}
+	
+	/**
+	 * @brief use for old observer tulip compatibility
+	 * @todo  set it as deprecated
+	 */	
+	void notifyDestroy() {
+	  std::cout << "notify destroy no more useful" << std::endl;
+	}
+	
+	unsigned int countObservers() const {
+	  Onlooker *obs ;
+	  unsigned int result = 0;
+	  forEach(obs, getOnlookers())
+	    ++result;
+	  return result;
+	}
+
+	/**
           * @brief remove all Observer/Listener of the observable
           *
           * In case of nested unholding (almost never), Calling that function inside a hold/unhold block could
