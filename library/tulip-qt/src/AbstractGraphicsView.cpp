@@ -30,17 +30,6 @@ static QGLFormat GlInit() {
   return tmpFormat;
 }
 
-class MyProut: public QGLWidget {
-public:
-  MyProut(QGLFormat a, void *, QGLWidget *b): QGLWidget(a,0,b) {}
-  virtual ~MyProut() { cout << __PRETTY_FUNCTION__ << endl; }
-};
-
-class MyPwet: public QGraphicsView {
-public:
-  virtual ~MyPwet() { cout << __PRETTY_FUNCTION__ << endl; }
-};
-
 namespace tlp_new {
 
 AbstractGraphicsView::AbstractGraphicsView():
@@ -60,12 +49,12 @@ QWidget *AbstractGraphicsView::construct(QWidget *parent) {
   _mainLayout->setSpacing(0);
   _mainWidget->setLayout(_mainLayout);
 
-  _centralView = new MyPwet();
+  _centralView = new QGraphicsView();
   _mainLayout->addWidget(_centralView);
   QGraphicsScene *scene = new QGraphicsScene();
   _centralView->setScene(scene);
   _centralView->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
-  _viewportWidget = new MyProut(GlInit(), 0, GlMainWidget::getFirstQGLWidget());
+  _viewportWidget = new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget());
   _centralView->setViewport(_viewportWidget);
   _centralView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   _centralView->setFrameStyle(QFrame::NoFrame);
@@ -114,6 +103,9 @@ QWidget *AbstractGraphicsView::getCentralWidget() {
 }
 // ===================================
 void AbstractGraphicsView::setCentralWidget(QWidget *w) {
+  QGraphicsItem *oldCentralItem = _centralWidgetItem;
+  QWidget *oldCentralWidget = _centralWidget;
+
   if (_activeInteractor)
     _activeInteractor->remove();
 
@@ -148,6 +140,9 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
   }
   _centralWidgetItem->setPos(0,0);
   _centralWidgetItem->setZValue(0);
+
+  delete oldCentralItem;
+  delete oldCentralWidget;
 }
 // ===================================
 void AbstractGraphicsView::buildInteractorsToolBar() {
