@@ -21,6 +21,7 @@ namespace tlp_new {
   * Any interactor installed on the view will be installed on the central widget. If there is no central widget, then Interactor installation will have no effect.
   */
 class AbstractGraphicsView: public tlp::View {
+  Q_OBJECT
 public:
   AbstractGraphicsView();
   virtual ~AbstractGraphicsView();
@@ -127,6 +128,9 @@ protected:
     */
   bool eventFilter(QObject *obj, QEvent *e);
 
+protected slots:
+  void updateCentralView();
+
 private:
   /**
     * The central widget
@@ -137,9 +141,6 @@ private:
   QWidget *_mainWidget;
 
   QGraphicsItem *_centralWidgetItem;
-
-  // Only used if the central widget is a GlMainWidget
-  QGLWidget *_viewPortWidget;
 };
 }
 

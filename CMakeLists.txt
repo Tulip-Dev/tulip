@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
 FIND_PACKAGE(TULIP3 REQUIRED)
-FIND_PACKAGE(Qt4  REQUIRED)
+FIND_PACKAGE(Qt4 REQUIRED)
+FIND_PACKAGE(OpenGL REQUIRED)
 INCLUDE(${QT_USE_FILE})
 
 INCLUDE_DIRECTORIES(${TULIP_INCLUDE_DIR} ${QT_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/library/tulip-qt/include)
@@ -12,12 +13,15 @@ STRING(TOLOWER ${PLUGIN_NAME} PLUGIN_NAME)
 SET(LIB_SRCS
 library/tulip-qt/src/AbstractGraphicsView.cpp
 library/tulip-qt/src/EmptyView.cpp
+library/tulip-qt/src/GlMainWidgetGraphicsItem.cpp
 )
 
 SET(LIB_UI
 )
 
 SET(LIB_MOC
+library/tulip-qt/include/tulip/AbstractGraphicsView.h
+library/tulip-qt/include/tulip/GlMainWidgetGraphicsItem.h
 )
 
 SET(LIB_RCC
@@ -35,6 +39,7 @@ ${TULIP_LIBRARY}
 ${TULIP_OGL_LIBRARY}
 ${TULIP_QT4_LIBRARY}
 ${QT_QTOPENGL_LIBRARY}
-${QT_LIBRARIES})
+${QT_LIBRARIES}
+${OPENGL_glu_LIBRARY} ${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY})
 
 INSTALL(TARGETS ${PLUGIN_NAME}-${TULIP_PLUGIN_VERSION} DESTINATION ${TULIP_PLUGINS_PATH} COMPONENT tulip_graphicsview)
