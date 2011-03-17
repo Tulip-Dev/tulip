@@ -474,6 +474,7 @@ namespace tlp {
        */
       virtual void treatEvents(const  std::vector<Event> &events );
       virtual void _DEPRECATED update(std::set<Observable*>::iterator, std::set<Observable*>::iterator);
+      virtual void _DEPRECATED observableDestroyed(Observable *);
     };
     //=======================================
     /**
