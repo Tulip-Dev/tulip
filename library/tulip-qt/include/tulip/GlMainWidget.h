@@ -77,7 +77,7 @@ public:
 	/**
 	 * Construct the GlMainWidget
 	 */
-	GlMainWidget(QWidget *parent,AbstractView *view=NULL);
+  GlMainWidget(QWidget *parent,View *view=NULL);
 	~GlMainWidget();
 
 	/**
@@ -235,7 +235,7 @@ private:
 
 	tlp::GlScene scene;
 	QRegion _visibleArea;
-	AbstractView *view;
+  View *view;
 	int widthStored;
 	int heightStored;
 	char *renderingStore;

@@ -97,7 +97,7 @@ QGLWidget* GlMainWidget::getFirstQGLWidget() {
 }
 
 //==================================================
-GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
+GlMainWidget::GlMainWidget(QWidget *parent,View *view):
     								QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), _hasHulls(false), useFramebufferObject(false), glFrameBuf(NULL){
 	setFocusPolicy(Qt::StrongFocus);
 	setMouseTracking(true);
