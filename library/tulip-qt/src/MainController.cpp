@@ -18,8 +18,6 @@
  */
 #include "tulip/MainController.h"
 
-#include <stdio.h>
-
 #include <QtGui/QDockWidget>
 #include <QtGui/QWorkspace>
 #include <QtGui/QToolBar>
@@ -222,7 +220,7 @@ namespace tlp {
       delete eltProperties;
 
       delete tabWidgetDock;
-      
+
       delete currentGraph;
     }
   }
@@ -441,7 +439,7 @@ namespace tlp {
     Observable::holdObservers();
 
     ControllerViewsManager::drawViews(init);
-    
+
     eltProperties->updateTable();
     propertiesWidget->update();
 
@@ -462,7 +460,7 @@ namespace tlp {
     if(graphToReload){
       // enter here if a property is add/delete on the graph
       Graph *graph=graphToReload;
-      
+
       updateViewsOfGraph(graph);
       updateViewsOfSubGraphs(graph);
 
@@ -479,9 +477,9 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::initObservers() {
-    if (!getCurrentGraph()) 
+    if (!getCurrentGraph())
       return;
-    
+
     // Observe properties of the graph
     Iterator<PropertyInterface*> *it = getCurrentGraph()->getObjectProperties();
     while (it->hasNext()) {
@@ -491,9 +489,9 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::clearObservers() {
-    if (!getCurrentGraph()) 
+    if (!getCurrentGraph())
       return;
-    
+
     // Remove observation of properties
     Iterator<PropertyInterface*> *it =getCurrentGraph()->getObjectProperties();
     while (it->hasNext()) {
@@ -791,7 +789,7 @@ namespace tlp {
     return newView;
   }
   //**********************************************************************
-  View* MainController::createView(const string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize,const QRect &rect,bool maximized){ 
+  View* MainController::createView(const string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize,const QRect &rect,bool maximized){
     QRect newRect=rect;
     forceWidgetSize=true;
     unsigned int viewsNumber=getViewsNumber();
@@ -799,7 +797,7 @@ namespace tlp {
       forceWidgetSize=false;
       newRect=QRect(QPoint((viewsNumber)*20,(viewsNumber)*20),QSize(0,0));
     }
-    
+
     unsigned int holdCount=Observable::observersHoldCounter();
 
     View *createdView=ControllerViewsManager::createView(name,graph,dataSet,forceWidgetSize,newRect,maximized);
@@ -816,21 +814,21 @@ namespace tlp {
   }
   //**********************************************************************
   bool MainController::windowActivated(QWidget *widget) {
-    
+
     lastConfigTabIndexOnView[getCurrentView()]=configWidgetTab->currentIndex();
-    
+
     if(!ControllerViewsManager::windowActivated(widget))
       return false;
-    
+
     // Remove tabs of View Editor
     while(configWidgetTab->count()>0){
       configWidgetTab->removeTab(0);
     }
-    
+
     // Find view and graph of this widget
     View *view=getViewOfWidget(widget);
     Graph *graph=getGraphOfView(view);
-    
+
     // Update left part of tulip
     clusterTreeWidget->setGraph(graph);
     eltProperties->setGraph(graph);
@@ -857,7 +855,7 @@ namespace tlp {
     //Add observer
     graph->addGraphObserver(this);
     graph->addObserver(this);
-    
+
     return true;
   }
   //**********************************************************************
@@ -884,7 +882,7 @@ namespace tlp {
 
     updateCurrentGraphInfos();
     updateUndoRedoInfos();
-    
+
     initObservers();
     //Remove observer (nothing if this not observe)
     graph->removeGraphObserver(this);
@@ -901,7 +899,7 @@ namespace tlp {
       setMetaValueCalculator(&vLayoutCalc);
     graph->getProperty<SizeProperty>("viewSize")->
       setMetaValueCalculator(&vSizeCalc);
-    
+
     return true;
   }
   //**********************************************************************
@@ -913,11 +911,11 @@ namespace tlp {
     QWidget *configurationWidget;
     if(!ControllerViewsManager::changeInteractor(action,&configurationWidget))
       return false;
-    
+
     bool onInteractorConfigTab=configWidgetTab->currentIndex()==0;
     configWidgetTab->removeTab(0);
     configWidgetTab->insertTab(0,configurationWidget,"Interactor");
-      
+
     if(onInteractorConfigTab)
       configWidgetTab->setCurrentIndex(0);
 
@@ -980,7 +978,7 @@ namespace tlp {
   void MainController::updateCurrentGraphInfos() {
     if(!getCurrentGraph())
       return;
-    
+
     static QLabel *currentGraphInfosLabel = 0;
     if (!currentGraphInfosLabel) {
       currentGraphInfosLabel = new QLabel(mainWindowFacade.getStatusBar());
@@ -989,11 +987,11 @@ namespace tlp {
 
     currentGraphNbNodes=getCurrentGraph()->numberOfNodes();
     currentGraphNbEdges=getCurrentGraph()->numberOfEdges();
-    
-    char tmp[255];
-    sprintf(tmp,"nodes:%d, edges:%d", currentGraphNbNodes, currentGraphNbEdges);
-    currentGraphInfosLabel->setText(tmp);
-    // Update nb nodes/edges for current graph ans sub graphs
+
+    stringstream sstr;
+    sstr << "nodes: " << currentGraphNbNodes << ", edges: " << currentGraphNbEdges;
+    currentGraphInfosLabel->setText(sstr.str().c_str());
+    // Update nb nodes/edges for current graph and subgraphs
     clusterTreeWidget->updateCurrentGraphInfos(getCurrentGraph());
   }
   //==============================================================
@@ -1001,7 +999,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
     	return;
-    
+
     // free the previous ccpGraph
     if( copyCutPasteGraph ) {
       delete copyCutPasteGraph;
@@ -1034,7 +1032,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-   
+
     // free the previous ccpGraph
     if( copyCutPasteGraph ) {
       delete copyCutPasteGraph;
@@ -1058,7 +1056,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     graph->removeObserver(this);
     Observable::holdObservers();
     BooleanProperty * selP = graph->getProperty<BooleanProperty>("viewSelection");
@@ -1073,7 +1071,7 @@ namespace tlp {
     delete newGraph;
     Observable::unholdObservers();
     graph->addObserver(this);
-    
+
     updateCurrentGraphInfos();
 
     drawViews(true);
@@ -1117,7 +1115,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     set<node> tmp;
     Iterator<node> *it=graph->getNodes();
     BooleanProperty *select = graph->getProperty<BooleanProperty>("viewSelection");
@@ -1147,7 +1145,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     bool ok = FALSE;
     string tmp;
     bool verifGraph = true;
@@ -1191,7 +1189,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     graph->push();
     graph->removeObserver(this);
     Observable::holdObservers();
@@ -1219,7 +1217,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     graph->push();
     Observable::holdObservers();
     if(graph->existLocalProperty("viewSelection")){
@@ -1244,7 +1242,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     graph->push();
     Observable::holdObservers();
     BooleanProperty *selectionProperty =
@@ -1264,7 +1262,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     graph->push();
     Observable::holdObservers();
     if(graph->existLocalProperty("viewSelection")){
@@ -1291,7 +1289,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     inAlgorithm=true;
     bool result=ControllerAlgorithmTools::applyAlgorithm(graph,mainWindowFacade.getParentWidget(),action->text().toStdString());
     inAlgorithm=false;
@@ -1306,7 +1304,7 @@ namespace tlp {
   //**********************************************************************
   void MainController::afterChangeProperty() {
     undoAction->setEnabled(true);
-    editUndoAction->setEnabled(true);          
+    editUndoAction->setEnabled(true);
     propertiesWidget->setGraph(getCurrentGraph());
     drawViews(false);
   }
@@ -1315,7 +1313,7 @@ namespace tlp {
     GlMainView *mainView=dynamic_cast<GlMainView *>(getCurrentView());
     if(mainView)
       return new GraphState(mainView->getGlMainWidget());
-    
+
     return NULL;
   }
   //**********************************************************************
@@ -1346,7 +1344,7 @@ namespace tlp {
   //**********************************************************************
   void MainController::changeSelection() {
     QAction *action=(QAction*)(sender());
-    
+
     inAlgorithm=true;
     bool result = ControllerAlgorithmTools::changeBoolean(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewSelection",getCurrentView());
     inAlgorithm=false;
@@ -1398,7 +1396,7 @@ namespace tlp {
     GraphState * g0=NULL;
     if(morphingAction->isChecked())
       g0=constructGraphState();
-    
+
     inAlgorithm=true;
     bool result = ControllerAlgorithmTools::changeColors(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewColor",getCurrentView());
     inAlgorithm=false;
@@ -1416,7 +1414,7 @@ namespace tlp {
     GraphState * g0 = NULL;
     if(morphingAction->isChecked())
       g0=constructGraphState();
-  
+
     inAlgorithm=true;
     bool result = ControllerAlgorithmTools::changeSizes(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewSize",getCurrentView());
     inAlgorithm=false;
