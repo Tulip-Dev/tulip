@@ -108,7 +108,7 @@ class OGDF_EXPORT StaticSPQRTree : public virtual SPQRTree
 {
 public:
 
-	friend class OGDF_EXPORT StaticSkeleton;
+	friend class StaticSkeleton;
 
 
 	// constructors

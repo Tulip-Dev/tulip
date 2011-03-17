@@ -78,7 +78,7 @@ namespace ogdf {
 // and after (add) its structure
 //----------------------------------------------------------
 class OGDF_EXPORT ClusterGraphObserver {
-	friend class OGDF_EXPORT ClusterGraph;
+        friend class ClusterGraph;
 
 public:
 	ClusterGraphObserver() : m_pClusterGraph(0) {} 

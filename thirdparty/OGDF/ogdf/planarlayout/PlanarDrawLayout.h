@@ -68,7 +68,7 @@
 
 namespace ogdf {
 
-	class OGDF_EXPORT ShellingOrder;
+        class ShellingOrder;
 
 /**
  * \brief Implementation of the Planar-Draw layout algorithm.

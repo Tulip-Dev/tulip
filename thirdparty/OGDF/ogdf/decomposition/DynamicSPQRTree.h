@@ -106,7 +106,7 @@ class OGDF_EXPORT DynamicSPQRTree : public virtual SPQRTree, public DynamicSPQRF
 {
 public:
 
-	friend class OGDF_EXPORT DynamicSkeleton;
+        friend class DynamicSkeleton;
 
 
 	// constructors
