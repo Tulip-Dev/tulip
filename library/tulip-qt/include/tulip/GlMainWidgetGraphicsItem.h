@@ -15,7 +15,7 @@ namespace tlp {
   class GlMainWidget;
 }
 
-namespace tlp_new {
+namespace tlp {
 class GlMainWidgetGraphicsItem : public QGraphicsObject {
   Q_OBJECT
 public:
@@ -46,8 +46,8 @@ protected :
   void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
 
 protected slots:
-  void glMainWidgetDraw(tlp::GlMainWidget *,bool);
-  void glMainWidgetRedraw(tlp::GlMainWidget *);
+  void glMainWidgetDraw(GlMainWidget *,bool);
+  void glMainWidgetRedraw(GlMainWidget *);
 
 private :
   tlp::GlMainWidget *glMainWidget;

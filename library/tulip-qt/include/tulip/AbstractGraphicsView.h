@@ -8,7 +8,7 @@ class QGraphicsView;
 class QGraphicsItem;
 class QGLWidget;
 
-namespace tlp_new {
+namespace tlp {
 
 /**
   * @brief The AbstractGraphicsView class is an abstract implementation of the View interface to easily provide user with Qt graphics view technology.

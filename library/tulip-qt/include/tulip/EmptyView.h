@@ -5,7 +5,7 @@
 
 #include <tulip/GlMainWidget.h>
 
-class EmptyView: public tlp_new::AbstractGraphicsView {
+class EmptyView: public tlp::AbstractGraphicsView {
 public:
   EmptyView();
   virtual ~EmptyView();

@@ -24,7 +24,7 @@ static void setRasterPosition(unsigned int x, unsigned int y) {
   tlp::glTest(__PRETTY_FUNCTION__);
 }
 
-namespace tlp_new {
+namespace tlp {
 
 GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, int width, int height):
     QGraphicsObject(),

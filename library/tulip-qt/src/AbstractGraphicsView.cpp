@@ -30,7 +30,7 @@ static QGLFormat GlInit() {
   return tmpFormat;
 }
 
-namespace tlp_new {
+namespace tlp {
 
 AbstractGraphicsView::AbstractGraphicsView():
   _interactors(list<Interactor *>()), _activeInteractor(0),
@@ -146,6 +146,7 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
 }
 // ===================================
 void AbstractGraphicsView::buildInteractorsToolBar() {
+
 }
 // ===================================
 bool AbstractGraphicsView::eventFilter(QObject *obj, QEvent *e) {
