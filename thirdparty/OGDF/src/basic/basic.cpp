@@ -89,8 +89,11 @@ double OGDF_clk_tck = sysconf(_SC_CLK_TCK); //is long. but definig it here avoid
 
 #ifdef OGDF_DLL
 
-BOOL APIENTRY DllMain(HANDLE hModule, 
-	DWORD  ul_reason_for_call, LPVOID lpReserved)
+#ifdef __MINGW32__
+extern "C" BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
+#else
+BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
+#endif
 {
     switch (ul_reason_for_call)
 	{
