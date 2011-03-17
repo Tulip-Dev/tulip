@@ -3,6 +3,8 @@
 
 #include "AbstractGraphicsView.h"
 
+#include <tulip/GlMainWidget.h>
+
 class EmptyView: public tlp_new::AbstractGraphicsView {
 public:
   EmptyView();
@@ -17,6 +19,7 @@ public:
   virtual void init();
 
   tlp::Graph *_graph;
+  tlp::GlMainWidget *mainWidget;
 };
 
 #endif // EMPTYVIEW_H

@@ -20,7 +20,7 @@ class GlMainWidgetGraphicsItem : public QGraphicsObject {
   Q_OBJECT
 public:
   GlMainWidgetGraphicsItem(tlp::GlMainWidget *glMainWidget, int width, int height);
-  ~GlMainWidgetGraphicsItem();
+  virtual ~GlMainWidgetGraphicsItem();
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 

@@ -43,6 +43,7 @@ GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, i
 }
 
 GlMainWidgetGraphicsItem::~GlMainWidgetGraphicsItem() {
+  cout << __PRETTY_FUNCTION__ << endl;
   delete [] renderingStore;
   glMainWidget->removeEventFilter(this);
 }
@@ -154,37 +155,23 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
 }
 
 void GlMainWidgetGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-//  QPoint point(event->pos().x(),event->pos().y());
-//  if (! (point.x() < 0 || point.x() > width || point.y() < 0 || point.y() > height)) {
-    QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x(),event->pos().y()), Qt::NoButton, event->buttons(), event->modifiers());
-    QApplication::sendEvent(glMainWidget,eventModif);
-//  }
+  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x(),event->pos().y()), Qt::NoButton, event->buttons(), event->modifiers());
+  QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 void GlMainWidgetGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-//  QPoint point(event->pos().x(),event->pos().y());
-//  if (! (point.x() < 0 || point.x() > width || point.y() < 0 || point.y() > height)) {
-    QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonPress,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
-    QApplication::sendEvent(glMainWidget,eventModif);
-//  }
+  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonPress,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
+  QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 void GlMainWidgetGraphicsItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
-//  QPoint point(event->pos().x(),event->pos().y());
-//  if (! (point.x() < 0 || point.x() > width || point.y() < 0 || point.y() > height)) {
-    QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonDblClick,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
-    QApplication::sendEvent(glMainWidget,eventModif);
-//  }
+  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonDblClick,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
+  QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 void GlMainWidgetGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-  cout << __PRETTY_FUNCTION__ << endl;
-
-//  QPoint point(event->pos().x(),event->pos().y());
-//  if (! (point.x() < 0 || point.x() > width || point.y() < 0 || point.y() > height)) {
-    QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonRelease,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
-    QApplication::sendEvent(glMainWidget,eventModif);
-//  }
+  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonRelease,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
+  QApplication::sendEvent(glMainWidget,eventModif);
 }
 
 void GlMainWidgetGraphicsItem::wheelEvent(QGraphicsSceneWheelEvent *event) {

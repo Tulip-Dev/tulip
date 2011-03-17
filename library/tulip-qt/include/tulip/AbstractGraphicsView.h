@@ -141,6 +141,8 @@ private:
   QWidget *_mainWidget;
 
   QGraphicsItem *_centralWidgetItem;
+
+  QGLWidget *_viewportWidget;
 };
 }
 

@@ -30,14 +30,27 @@ static QGLFormat GlInit() {
   return tmpFormat;
 }
 
+class MyProut: public QGLWidget {
+public:
+  MyProut(QGLFormat a, void *, QGLWidget *b): QGLWidget(a,0,b) {}
+  virtual ~MyProut() { cout << __PRETTY_FUNCTION__ << endl; }
+};
+
+class MyPwet: public QGraphicsView {
+public:
+  virtual ~MyPwet() { cout << __PRETTY_FUNCTION__ << endl; }
+};
+
 namespace tlp_new {
 
 AbstractGraphicsView::AbstractGraphicsView():
   _interactors(list<Interactor *>()), _activeInteractor(0),
-  _centralView(0), _mainLayout(0), _centralWidget(0), _mainWidget(0), _centralWidgetItem(0) {
+  _centralView(0), _mainLayout(0), _centralWidget(0), _mainWidget(0), _centralWidgetItem(0), _viewportWidget(0) {
 }
 // ===================================
 AbstractGraphicsView::~AbstractGraphicsView() {
+  delete _centralWidgetItem;
+  delete _centralWidget;
 }
 // ===================================
 QWidget *AbstractGraphicsView::construct(QWidget *parent) {
@@ -47,12 +60,13 @@ QWidget *AbstractGraphicsView::construct(QWidget *parent) {
   _mainLayout->setSpacing(0);
   _mainWidget->setLayout(_mainLayout);
 
-  _centralView = new QGraphicsView();
+  _centralView = new MyPwet();
   _mainLayout->addWidget(_centralView);
   QGraphicsScene *scene = new QGraphicsScene();
   _centralView->setScene(scene);
   _centralView->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
-  _centralView->setViewport(new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget()));
+  _viewportWidget = new MyProut(GlInit(), 0, GlMainWidget::getFirstQGLWidget());
+  _centralView->setViewport(_viewportWidget);
   _centralView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   _centralView->setFrameStyle(QFrame::NoFrame);
   scene->setBackgroundBrush(Qt::white);
