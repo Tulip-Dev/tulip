@@ -37,7 +37,6 @@ MapIterator.cpp
 Observable.cpp
 ObservableGraph.cpp
 ObservableProperty.cpp
-observer.cpp
 Ordering.cpp
 OuterPlanarTest.cpp
 PlanarConMap.cpp
