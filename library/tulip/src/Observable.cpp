@@ -137,6 +137,10 @@ namespace tlp {
     }
     //=================================
     void Observer::treatEvents(const  std::vector<Event> &events ) {
+      if (events[0].type() == Event::DELETE) {
+	observableDestroyed(events[0].sender());
+	return;
+      }
       std::set<Observable*> observables;
       for(size_t k=0; k < events.size(); ++k) {
         observables.insert(events[k].sender());
@@ -145,6 +149,10 @@ namespace tlp {
     }
     //=================================
     void Observer::update(std::set<Observable*>::iterator, std::set<Observable*>::iterator) {
+      std::cout << __PRETTY_FUNCTION__ << " : non implemented" << std::endl;
+    }
+    //=================================
+    void Observer::observableDestroyed(Observable *) {
       std::cout << __PRETTY_FUNCTION__ << " : non implemented" << std::endl;
     }
     //=================================
