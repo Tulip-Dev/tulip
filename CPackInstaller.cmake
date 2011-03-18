@@ -1,6 +1,6 @@
 # This file include definitions for default Tulip packaging options
 # if CPACK_CUSTOM_INSTALLER is set, none of this options will be set and user will have to configure its own installer from scratch
-SET(CPACK_INCLUDE_TOPLEVEL_DIRECTORY 0)
+SET(CPACK_INCLUDE_TOPLEVEL_DIRECTORY 1)
 SET(CPACK_PACKAGE_DESCRIPTION_FILE ${PROJECT_SOURCE_DIR}/README)
 SET(CPACK_RESOURCE_FILE_LICENSE ${PROJECT_SOURCE_DIR}/COPYING.LESSER)
 
@@ -14,7 +14,9 @@ SET(CPACK_PACKAGE_VERSION_PATCH ${TulipReleaseVersion})
 
 # Source package
 SET(CPACK_SOURCE_GENERATOR "TGZ;ZIP")
-SET(CPACK_SOURCE_IGNORE_FILES ".svn")
+# Files excluded of the source package
+SET(CPACK_SOURCE_IGNORE_FILES ".svn" "~$" "^${PROJECT_SOURCE_DIR}/unit_test/" "^${PROJECT_SOURCE_DIR}/docs/doxygen/xml/" "^${PROJECT_SOURCE_DIR}/profile_test/")
+# name of the source package (+ extentions .tar.gz or .zip)
 SET(CPACK_SOURCE_PACKAGE_FILE_NAME "tulip-${TulipVersion}-src")
 SET(CPACK_PACKAGE_NAME "tulip")
 
