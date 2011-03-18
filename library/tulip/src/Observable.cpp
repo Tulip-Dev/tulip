@@ -121,7 +121,7 @@ namespace tlp {
     Event::Event(const Observable &sender, EventType type):
             _sender(sender.getNode()),
             _type(type) {
-        if (_type == DELETE)
+        if (_type == TLP_DELETE)
             throw OLOException("It is forbidden to create a delete events, DeleteEvents are autmotically generated at the observable destruction");
     }
     //----------------------------------
@@ -137,7 +137,7 @@ namespace tlp {
     }
     //=================================
     void Observer::treatEvents(const  std::vector<Event> &events ) {
-      if (events[0].type() == Event::DELETE) {
+      if (events[0].type() == Event::TLP_DELETE) {
 	observableDestroyed(events[0].sender());
 	return;
       }
@@ -156,7 +156,7 @@ namespace tlp {
       std::cout << __PRETTY_FUNCTION__ << " : non implemented" << std::endl;
     }
     //=================================
-    Observable::Observable():deleteMsgSent(false), queuedEvent(*this, Event::INVALID) {
+    Observable::Observable():deleteMsgSent(false), queuedEvent(*this, Event::TLP_INVALID) {
     }
     //----------------------------------------
     Observable::~Observable() {
@@ -182,14 +182,14 @@ namespace tlp {
             if (OLOObject::oAlive[n]) {
                 Observable *observable = dynamic_cast<Observable *>(OLOObject::oPointer[n]);
                 if (observable) {
-                    if (observable->queuedEvent.type() == Event::INVALID) continue;
+                    if (observable->queuedEvent.type() == Event::TLP_INVALID) continue;
                     Onlooker *observer;
                     forEach(observer, observable->getOnlookers()) {
                         if (dynamic_cast<Observer *>(observer)) {
                             preparedEvents[observer->getNode()].push_back(observable->queuedEvent);
                         }
                     }
-                    observable->queuedEvent._type = Event::INVALID;
+                    observable->queuedEvent._type = Event::TLP_INVALID;
                 }
             }
         }
@@ -244,8 +244,8 @@ namespace tlp {
         }
         deleteMsgSent = true;
         if (hasOnlookers()) {
-            Event msg(*this, Event::INVALID); //create a modify event to prevent raise exception, (hack) to forbid creation of Delete exception without calling that fucnton
-            msg._type = Event::DELETE;
+            Event msg(*this, Event::TLP_INVALID); //create a modify event to prevent raise exception, (hack) to forbid creation of Delete exception without calling that fucnton
+            msg._type = Event::TLP_DELETE;
             sendEvent(msg);
         }
     }
@@ -267,7 +267,7 @@ namespace tlp {
         vector< pair<Observer *, node > > observerTonotify;
         stableForEach(ni, oGraph.getInNodes(n)) {
             if (oAlive[ni]) {
-                if (ni == n && message.type() == Event::DELETE) {
+                if (ni == n && message.type() == Event::TLP_DELETE) {
                     cout << "[OLO info]: An observable olook itself Event::DELETE msg can't be sent to it." << endl;
                     continue;
                 }
@@ -275,8 +275,8 @@ namespace tlp {
                 if (!hobs)
                     dynamic_cast<Listener*>(oPointer[ni])->treatEvent(message);
                 else {
-                    if (message.type() == Event::MODIFICATION ||  message.type() == Event::DELETE) {
-                        if (holdCounter == 0  || message.type() == Event::DELETE) {
+                    if (message.type() == Event::TLP_MODIFICATION ||  message.type() == Event::TLP_DELETE) {
+                        if (holdCounter == 0  || message.type() == Event::TLP_DELETE) {
                             observerTonotify.push_back(pair<Observer *, node >(hobs, ni));
                         }
                         else {
@@ -333,7 +333,7 @@ namespace tlp {
     //----------------------------------------
     void Observable::notifyObservers() {
       if(hasOnlookers())
-        sendEvent(Event(*this, Event::MODIFICATION));
+        sendEvent(Event(*this, Event::TLP_MODIFICATION));
     }
     //----------------------------------------
     void Observable::notifyDestroy() {

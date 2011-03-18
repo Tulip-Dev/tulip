@@ -149,7 +149,7 @@ namespace tlp {
     class  TLP_SCOPE Event {
         friend class Observable;
     public:
-        enum EventType {DELETE = 0, MODIFICATION, INFORMATION, INVALID};
+        enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID};
         virtual ~Event();
         Observable* sender() const;
         Event(const Observable &sender, EventType type);
