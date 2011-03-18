@@ -155,7 +155,7 @@ void tlp::AbstractVectorProperty<vectType, eltType>::setNodeEltValue(const node 
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::nodeProperties.get(n, isNotDefault);
-  assert(vect->size() > i);
+  assert(vect.size() > i);
   this->notifyBeforeSetNodeValue(this, n);
   if (isNotDefault)
     vect[i] = v;
