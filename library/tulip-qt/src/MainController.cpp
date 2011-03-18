@@ -197,7 +197,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    copyCutPasteGraph(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL) {
+    currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL) {
     morph = new Morphing();
   }
   //**********************************************************************
@@ -1000,11 +1000,6 @@ namespace tlp {
     if(!graph)
     	return;
 
-    // free the previous ccpGraph
-    if( copyCutPasteGraph ) {
-      delete copyCutPasteGraph;
-      copyCutPasteGraph = 0;
-    }
     BooleanProperty * selP = graph->getProperty<BooleanProperty>("viewSelection");
     if( !selP ) return;
     // Save selection
@@ -1033,11 +1028,6 @@ namespace tlp {
     if(!graph)
       return;
 
-    // free the previous ccpGraph
-    if( copyCutPasteGraph ) {
-      delete copyCutPasteGraph;
-      copyCutPasteGraph = 0;
-    }
     BooleanProperty * selP = graph->getProperty<BooleanProperty>("viewSelection");
     if( !selP ) return;
     Observable::holdObservers();
