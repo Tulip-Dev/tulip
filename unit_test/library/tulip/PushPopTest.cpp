@@ -298,6 +298,8 @@ void PushPopTest::testSetEltValue() {
   node n2 = graph->addNode();
   edge e1 = graph->addEdge(n0, n2);
 
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1).size() == 0);
+
   prop->setNodeValue(n2, vv);
   prop->setEdgeValue(e1, vv);
   CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
@@ -324,6 +326,14 @@ void PushPopTest::testSetEltValue() {
   CPPUNIT_ASSERT(prop->getNodeValue(n2).size() == 3);
   CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 2) == 3.0);
 
+  prop->setNodeEltValue(n0, 0, 4.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 1);
+  CPPUNIT_ASSERT(prop->getNodeEltValue(n0, 0) == 4.0);
+
+  prop->popBackNodeEltValue(n0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
+  prop->pushBackNodeEltValue(n0, 3.0);
+
   graph->pop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
   CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
@@ -346,6 +356,10 @@ void PushPopTest::testSetEltValue() {
   CPPUNIT_ASSERT(prop->getEdgeEltValue(e1, 1) == 3.0);
   CPPUNIT_ASSERT(prop->getEdgeEltValue(e1, 2) == 3.0);
 
+  prop->setEdgeEltValue(e0, 0, 4.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0).size() == 1);
+  CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 0) == 4.0);
+ 
   graph->delNode(n1);
   CPPUNIT_ASSERT(graph->isElement(n1) == false);
   CPPUNIT_ASSERT(graph->isElement(e0) == false);
