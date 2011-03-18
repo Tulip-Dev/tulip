@@ -155,10 +155,15 @@ void tlp::AbstractVectorProperty<vectType, eltType>::setNodeEltValue(const node 
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::nodeProperties.get(n, isNotDefault);
-  assert(isNotDefault);
-  assert(vect.size() > i);
+  assert(vect->size() > i);
   this->notifyBeforeSetNodeValue(this, n);
-  vect[i] = v;
+  if (isNotDefault)
+    vect[i] = v;
+  else {
+    typename vectType::RealType tmp(vect);
+    tmp[i] = v;
+     AbstractProperty<vectType, vectType>::nodeProperties.set(n.id, tmp);
+  }
   this->notifyAfterSetNodeValue(this, n);
 }
 //============================================================
@@ -218,10 +223,15 @@ void tlp::AbstractVectorProperty<vectType, eltType>::setEdgeEltValue(const edge 
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::edgeProperties.get(e, isNotDefault);
-  assert(isNotDefault);
   assert(vect.size() > i);
   this->notifyBeforeSetEdgeValue(this, e);
-  vect[i] = v;
+  if (isNotDefault)
+    vect[i] = v;
+  else {
+    typename vectType::RealType tmp(vect);
+    tmp[i] = v;
+     AbstractProperty<vectType, vectType>::edgeProperties.set(e, tmp);
+  }
   this->notifyAfterSetEdgeValue(this, e);
 }
 //============================================================
