@@ -196,7 +196,7 @@ namespace tlp {
       QRect rect=mainWidget->frameGeometry();
       if (mainWidget->doSelect(he->pos().x()-rect.x(), he->pos().y()-rect.y(), type, tmpNode, tmpEdge)) {
         // try to show the viewLabel if any
-        StringProperty *labels = mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<StringProperty>("viewLabel");
+        StringProperty *labels = mainWidget->getGraph()->getProperty<StringProperty>("viewLabel");
         std::string label;
         QString ttip;
         switch(type) {
