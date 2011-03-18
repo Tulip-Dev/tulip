@@ -72,7 +72,10 @@ namespace tlp {
     }
     //----------------------------------
     OLOObject::~OLOObject() {
-        oAlive[n] = false;
+        if (!oAlive[n])
+            throw OLOException("OLO object has already been deleted, possible double free!!!");
+
+	oAlive[n] = false;
         if (notifying == 0 && unholding == 0 && holdCounter == 0) {
             oGraph.delNode(n);
         }
@@ -319,7 +322,7 @@ namespace tlp {
     //----------------------------------------
     void Observable::removeOnlooker(const Onlooker &obs) {
         if (!oAlive[n]) {
-            throw OLOException("removeObserver called on a deleted Observable");
+            throw OLOException("removeOnlooker called on a deleted Observable");
         }
         edge link(oGraph.existEdge(obs.getNode(), getNode()));
         if (link.isValid())
@@ -327,17 +330,23 @@ namespace tlp {
     }
     //----------------------------------------
     void Observable::removeObserver(Observer  * const obs) {
+      if (!oAlive[n]) {
+            throw OLOException("removeObserver called on a deleted Observable");
+      }
       assert(obs != 0);
       removeOnlooker(*obs);
     }
     //----------------------------------------
     void Observable::notifyObservers() {
+      if (!oAlive[n]) {
+            throw OLOException("notifyObservers called on a deleted Observable");
+      }
       if(hasOnlookers())
         sendEvent(Event(*this, Event::TLP_MODIFICATION));
     }
     //----------------------------------------
     void Observable::notifyDestroy() {
-      std::cout << "notify destroy no more useful" << std::endl;
+      std::cout << "notifyDestroy no more useful" << std::endl;
     }
     //----------------------------------------
     unsigned int Observable::countObservers() const {
@@ -354,14 +363,14 @@ namespace tlp {
     //----------------------------------------
     bool Observable::hasOnlookers() const {
         if (!oAlive[n]) {
-            throw OLOException("observed called on a deleted Observable");
+            throw OLOException("hasOnlookers called on a deleted Observable");
         }
         return oGraph.indeg(getNode()) > 0;
     }
     //----------------------------------------
     void Observable::removeOnlookers() {
         if (!oAlive[n]) {
-            throw OLOException("remove Observers called on a deleted Observable");
+            throw OLOException("removeOnlookers called on a deleted Observable");
         }
         Onlooker *obs;
         stableForEach(obs, getOnlookers())
