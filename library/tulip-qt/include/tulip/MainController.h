@@ -174,7 +174,6 @@ namespace tlp {
     void applyMorphing(GraphState *graphState);
 
     std::map<View *, int> lastConfigTabIndexOnView;
-    Graph * copyCutPasteGraph;
     unsigned int currentGraphNbNodes;
     unsigned int currentGraphNbEdges;
     Graph *graphToReload;
