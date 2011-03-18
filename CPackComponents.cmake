@@ -9,7 +9,7 @@ SET(CPACK_COMPONENT_GROUP_EXTRAS_DESCRIPTION "Tulip extra files and documentatio
 DEFINE_COMPONENT(ftgl "FTGL" "A library to render freetype fonts in openGL scenes." "" ${THIRDPARTY_GROUP_NAME})
 DEFINE_COMPONENT(qscintilla2 "QScintilla 2" "A library to provide source code edition facility in Qt." "" ${THIRDPARTY_GROUP_NAME})
 DEFINE_COMPONENT(gzstream "Gzstream" "A library to provide zlib facilities in a C++ iostream." "" ${THIRDPARTY_GROUP_NAME})
-DEFINE_COMPONENT(siplib "SIP library" "A library providing python bindings for C++." "libtulip;libtulip-ogl;libtulip-qt" ${THIRDPARTY_GROUP_NAME})
+DEFINE_COMPONENT(siplib "SIP library" "A library providing python bindings for C++." "libtulip;libtulip_ogl;libtulip_qt" ${THIRDPARTY_GROUP_NAME})
 
 # library/tulip
 DEFINE_COMPONENT(libtulip "Core library" "Tulip core library provides a framework for huge graph manipulation." "gzstream" ${LIBS_GROUP_NAME})
