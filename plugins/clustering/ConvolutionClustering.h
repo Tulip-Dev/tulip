@@ -23,11 +23,25 @@
 
 #include <tulip/TulipPlugin.h>
 
-class ConvolutionClustering:public tlp::Algorithm
+
+/** \addtogroup clustering */
+/*@{*/
+/** This plugin allow the discretization and the filtering of the distribution of
+* a node metric using convolution.
+*
+* A detailled usage of this procedure is detailled in :
+*
+* D. Auber, M. Delest and Y. Chiricota \n
+* "Strahler based graph clustering using convolution",\n
+* Published by the IEEE Computer Society, \n
+* 2004.
+*
+*/
+class ConvolutionClustering:public tlp::DoubleAlgorithm
 { 
 public:
 
-  ConvolutionClustering(tlp::AlgorithmContext);
+  ConvolutionClustering(tlp::PropertyContext);
   ~ConvolutionClustering();
   bool run();
   bool check(std::string &);
@@ -38,13 +52,14 @@ public:
   void autoSetParameter();  
   std::list<int> getLocalMinimum();
 private:
-  void buildSubGraphs(const std::vector<int>& ranges);
+//  void buildSubGraphs(const std::vector<int>& ranges);
+  void getClusters(const std::vector<int>& ranges);
   std::vector<double> smoothHistogram;
   std::map<int,int> histogramOfValues;
   int histosize,threshold,width;
   tlp::DoubleProperty *metric;
 };
-
+/*@}*/
 #endif
 
 
