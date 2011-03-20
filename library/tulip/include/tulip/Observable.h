@@ -99,6 +99,7 @@ namespace tlp {
 
     protected:
         OLOObject();
+	OLOObject(const OLOObject &);
         virtual ~OLOObject();
         /**
           * @brief return an iterator on in objects (Observable), the iterator guarantee that all objects are alive (not deleted during hold or notify)

@@ -71,6 +71,11 @@ namespace tlp {
         oAlive[n]   = true;
     }
     //----------------------------------
+    OLOObject::OLOObject(const OLOObject &):n(oGraph.addNode()) {
+        oPointer[n] = this;
+        oAlive[n]   = true;
+    }
+    //----------------------------------
     OLOObject::~OLOObject() {
         if (!oAlive[n])
             throw OLOException("OLO object has already been deleted, possible double free!!!");
