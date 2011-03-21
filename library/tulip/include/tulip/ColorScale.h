@@ -62,6 +62,7 @@ public:
 	ColorScale(const bool gradient = true);
 	ColorScale(const std::vector<Color> &colors, const bool gradient = true);
 	ColorScale(const ColorScale& scale);
+        ColorScale& operator=(const ColorScale& scale);
 	virtual ~ColorScale();
 
 	/**
