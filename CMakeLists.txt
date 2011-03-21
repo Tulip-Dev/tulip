@@ -14,6 +14,7 @@ SET(LIB_SRCS
 library/tulip-qt/src/AbstractGraphicsView.cpp
 library/tulip-qt/src/EmptyView.cpp
 library/tulip-qt/src/GlMainWidgetGraphicsItem.cpp
+library/tulip-qt/src/PushButtonItem.cpp
 )
 
 SET(LIB_UI
@@ -22,6 +23,7 @@ SET(LIB_UI
 SET(LIB_MOC
 library/tulip-qt/include/tulip/AbstractGraphicsView.h
 library/tulip-qt/include/tulip/GlMainWidgetGraphicsItem.h
+library/tulip-qt/include/tulip/PushButtonItem.h
 )
 
 SET(LIB_RCC

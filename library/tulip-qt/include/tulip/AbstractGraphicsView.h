@@ -114,12 +114,16 @@ protected:
     */
   QVBoxLayout *_mainLayout;
 
+
   /**
-    * @brief Build the interactor tool bar.
-    * This method is called from setInteractors. It's goal is to build a graphical component in order to display interactors.
-    * You may reimplement this method in order to display your interactors in a custom fashion.
+    * @brief Builds and returns the interactors toolbar.
+    * This methods builds and return a graphical tool for interactor management, it can be overloaded if you wish to implement your own toolbar.
+    * The AbstractGraphicsView takes ownership on the returned item. This item will be set on the central view as a child of the central widget.
+    * When the setCentralWidget method is called, the toolbar is backuped and displayed again after the central widget has been switched.
+    * If you do not wish to display your interactors in a QGraphicsItem, this method should return NULL.
+    * @warning This method is only called once after setInteractors is called.
     */
-  virtual void buildInteractorsToolBar();
+  virtual QGraphicsItem *buildInteractorsToolbar();
 
   /**
     * @brief Event handler for the resize events
@@ -132,17 +136,10 @@ protected slots:
   void updateCentralView();
 
 private:
-  /**
-    * The central widget
-    * @warning This pointer is set to NULL until the setCentralWidget method has been called.
-    */
   QWidget *_centralWidget;
-
-  QWidget *_mainWidget;
-
   QGraphicsItem *_centralWidgetItem;
-
-  QGLWidget *_viewportWidget;
+  QWidget *_mainWidget;
+  QGraphicsItem *_interactorsToolbar;
 };
 }
 

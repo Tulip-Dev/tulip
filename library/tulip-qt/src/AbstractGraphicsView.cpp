@@ -11,6 +11,9 @@
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtOpenGL/QGLWidget>
 
+// Remove me
+#include "tulip/PushButtonItem.h"
+
 using namespace tlp;
 using namespace std;
 
@@ -31,10 +34,10 @@ static QGLFormat GlInit() {
 }
 
 namespace tlp {
-
 AbstractGraphicsView::AbstractGraphicsView():
   _interactors(list<Interactor *>()), _activeInteractor(0),
-  _centralView(0), _mainLayout(0), _centralWidget(0), _mainWidget(0), _centralWidgetItem(0), _viewportWidget(0) {
+  _centralView(new QGraphicsView()), _mainLayout(0), _centralWidget(0), _mainWidget(0), _centralWidgetItem(0), _interactorsToolbar(0) {
+  _centralView->setScene(new QGraphicsScene());
 }
 // ===================================
 AbstractGraphicsView::~AbstractGraphicsView() {
@@ -48,23 +51,13 @@ QWidget *AbstractGraphicsView::construct(QWidget *parent) {
   _mainLayout->setMargin(0);
   _mainLayout->setSpacing(0);
   _mainWidget->setLayout(_mainLayout);
-
-  _centralView = new QGraphicsView();
   _mainLayout->addWidget(_centralView);
-  QGraphicsScene *scene = new QGraphicsScene();
-  _centralView->setScene(scene);
   _centralView->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
-  _viewportWidget = new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget());
-  _centralView->setViewport(_viewportWidget);
+  _centralView->setViewport(new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget()));
   _centralView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   _centralView->setFrameStyle(QFrame::NoFrame);
-  scene->setBackgroundBrush(Qt::white);
+  _centralView->scene()->setBackgroundBrush(Qt::white);
   _mainWidget->installEventFilter(this);
-
-  QGraphicsRectItem *rect = new QGraphicsRectItem(640,20,50,50,0, scene);
-  rect->setPen(QPen(Qt::red));
-  rect->setBrush(Qt::red);
-
   return _mainWidget;
 }
 // ===================================
@@ -80,7 +73,11 @@ void AbstractGraphicsView::setInteractors(const list<Interactor *> &interactors)
   _interactors = interactors;
   for (list<Interactor *>::iterator it = _interactors.begin(); it != _interactors.end(); ++it)
     (*it)->setView(this);
-  buildInteractorsToolBar();
+  _interactorsToolbar = buildInteractorsToolbar();
+  if (_interactorsToolbar) {
+    _interactorsToolbar->setParentItem(0);
+    _centralView->scene()->addItem(_interactorsToolbar);
+  }
 }
 // ===================================
 list<Interactor *> AbstractGraphicsView::getInteractors() {
@@ -103,6 +100,7 @@ QWidget *AbstractGraphicsView::getCentralWidget() {
 }
 // ===================================
 void AbstractGraphicsView::setCentralWidget(QWidget *w) {
+  assert(w);
   QGraphicsItem *oldCentralItem = _centralWidgetItem;
   QWidget *oldCentralWidget = _centralWidget;
 
@@ -141,12 +139,17 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
   _centralWidgetItem->setPos(0,0);
   _centralWidgetItem->setZValue(0);
 
+  if (_interactorsToolbar)
+    _interactorsToolbar->setParentItem(_centralWidgetItem); // Refresh parenthood between central widget item and toolbar
+
   delete oldCentralItem;
   delete oldCentralWidget;
 }
 // ===================================
-void AbstractGraphicsView::buildInteractorsToolBar() {
-
+QGraphicsItem *AbstractGraphicsView::buildInteractorsToolbar() {
+  PushButtonItem *btn = new PushButtonItem("prout", QIcon("D:/dev/tulip-trunk/testing/controllers/TulipLite/designer/dialog-apply.svg"));
+  btn->setPos(0,0);
+  return btn;
 }
 // ===================================
 bool AbstractGraphicsView::eventFilter(QObject *obj, QEvent *e) {
