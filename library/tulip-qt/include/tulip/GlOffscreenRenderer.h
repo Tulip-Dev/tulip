@@ -90,7 +90,7 @@ public :
 	/**
 	 * @brief Render the scene in a buffer. You need to call this function before getting the result with getImage or getGlTexture.
 	 **/
-	void renderScene(const bool centerScene = true);
+	void renderScene(const bool centerScene = true, const bool antialiased = false);
 
 	/**
 	 * @brief Generate a QImage from the scene. You need to call the renderScene function before this function.
@@ -107,7 +107,7 @@ private :
 
 	static GlOffscreenRenderer *instance;
 
-	unsigned int lastVPWidth, lastVPHeight;
+	unsigned int vPWidth, vPHeight;
 	QGLFramebufferObject *glFrameBuf, *glFrameBuf2;
 	GlScene scene;
 	GlLayer *mainLayer;
