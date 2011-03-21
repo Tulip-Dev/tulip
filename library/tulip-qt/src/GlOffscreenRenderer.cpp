@@ -37,7 +37,7 @@ GlOffscreenRenderer *GlOffscreenRenderer::getInstance() {
 }
 
 GlOffscreenRenderer::GlOffscreenRenderer()
-: lastVPWidth(0), lastVPHeight(0), glFrameBuf(NULL), glFrameBuf2(NULL), mainLayer(new GlLayer("Main")),
+: vPWidth(512), vPHeight(512), glFrameBuf(NULL), glFrameBuf2(NULL), mainLayer(new GlLayer("Main")),
   entitiesCpt(0), zoomFactor(DBL_MAX), cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
 	GlLayer *backgroundLayer=new GlLayer("Background");
 	backgroundLayer->setVisible(true);
@@ -49,9 +49,6 @@ GlOffscreenRenderer::GlOffscreenRenderer()
 	scene.addLayer(mainLayer);
 	scene.addLayer(foregroundLayer);
 	antialiasedFbo = false;
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-	antialiasedFbo = QGLFramebufferObject::hasOpenGLFramebufferBlit();
-#endif
 }
 
 GlOffscreenRenderer::~GlOffscreenRenderer() {
@@ -62,30 +59,8 @@ GlOffscreenRenderer::~GlOffscreenRenderer() {
 }
 
 void GlOffscreenRenderer::setViewPortSize(const unsigned int viewPortWidth, const unsigned int viewPortHeight) {
-	if (glFrameBuf != NULL && (lastVPWidth != viewPortWidth || lastVPHeight != viewPortHeight)) {
-		delete glFrameBuf;
-		glFrameBuf = NULL;
-		delete glFrameBuf2;
-		glFrameBuf2 = NULL;
-	}
-	if (glFrameBuf == NULL) {
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-		QGLFramebufferObjectFormat fboFmt;
-		fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
-		if (antialiasedFbo)
-			fboFmt.setSamples(8);
-		glFrameBuf = new QGLFramebufferObject(viewPortWidth, viewPortHeight, fboFmt);
-	}
-	if (antialiasedFbo && glFrameBuf2 == NULL) {
-		glFrameBuf2 = new QGLFramebufferObject(viewPortWidth, viewPortHeight);
-	}
-#else
-	glFrameBuf = new QGLFramebufferObject(viewPortWidth, viewPortHeight, QGLFramebufferObject::CombinedDepthStencil);
-	}
-#endif
-	scene.setViewport(0,0,viewPortWidth, viewPortHeight);
-	lastVPWidth = viewPortWidth;
-	lastVPHeight = viewPortHeight;
+	vPWidth = viewPortWidth;
+	vPHeight = viewPortHeight;
 }
 
 void GlOffscreenRenderer::setSceneBackgroundColor(const Color &color) {
@@ -134,7 +109,35 @@ void GlOffscreenRenderer::clearScene() {
 	zoomFactor = DBL_MAX;
 }
 
-void GlOffscreenRenderer::renderScene(const bool centerScene) {
+void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antialiased) {
+
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+	antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
+#endif
+
+	if (glFrameBuf != NULL && (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
+		delete glFrameBuf;
+		glFrameBuf = NULL;
+		delete glFrameBuf2;
+		glFrameBuf2 = NULL;
+	}
+
+	if (glFrameBuf == NULL) {
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+		QGLFramebufferObjectFormat fboFmt;
+		fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
+		if (antialiasedFbo)
+			fboFmt.setSamples(8);
+		glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
+	}
+	if (antialiasedFbo && glFrameBuf2 == NULL) {
+		glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
+	}
+#else
+	glFrameBuf = new QGLFramebufferObject(vPWidth, vPtHeight, QGLFramebufferObject::CombinedDepthStencil);
+	}
+#endif
+	scene.setViewport(0,0,vPWidth, vPHeight);
 
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 
@@ -161,10 +164,10 @@ void GlOffscreenRenderer::renderScene(const bool centerScene) {
 	scene.draw();
 	glFrameBuf->release();
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+	#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 	if (antialiasedFbo)
 		QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
-#endif
+	#endif
 
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
