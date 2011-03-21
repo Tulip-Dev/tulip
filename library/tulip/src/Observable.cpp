@@ -69,24 +69,36 @@ namespace tlp {
     OLOObject::OLOObject():n(oGraph.addNode()) {
         oPointer[n] = this;
         oAlive[n]   = true;
+        //cout << "[OLO node] created:" << n.id << "::" << this << endl;
     }
     //----------------------------------
     OLOObject::OLOObject(const OLOObject &):n(oGraph.addNode()) {
         oPointer[n] = this;
         oAlive[n]   = true;
+        //cout << "[OLO node] created (copy constructor):" << n.id << "::" << this << endl;
+    }
+    //----------------------------------
+    OLOObject& OLOObject::operator=(const OLOObject &) {
+#ifndef DNDEBUG
+        cout << "[OLO Warnig]: OLO object should reimplement their operator= else nothing is copied" << endl;
+#endif
+        return *this;
     }
     //----------------------------------
     OLOObject::~OLOObject() {
         if (!oAlive[n])
             throw OLOException("OLO object has already been deleted, possible double free!!!");
+        //cout << "[OLO node] destructor:" << n.id  << "::" << this << endl;
 
 	oAlive[n] = false;
         if (notifying == 0 && unholding == 0 && holdCounter == 0) {
             oGraph.delNode(n);
+            //cout << "[OLO node] deleted:" << n.id << "::" << this << endl;
         }
         else {
             delayedDelNode.push_back(n);
-            oGraph.delEdges(n);
+            //cout << "[OLO node] delayed delete:" << n.id << "::" << this << endl;
+	    oGraph.delEdges(n);
         }
     }
     //----------------------------------
@@ -188,7 +200,9 @@ namespace tlp {
         node n;
         forEach(n, OLOObject::oGraph.getNodes()) {
             if (OLOObject::oAlive[n]) {
+                //cout << "{" << n.id << "::" << OLOObject::oPointer[n] << flush;
                 Observable *observable = dynamic_cast<Observable *>(OLOObject::oPointer[n]);
+                //cout << "}" << flush;
                 if (observable) {
                     if (observable->queuedEvent.type() == Event::TLP_INVALID) continue;
                     Onlooker *observer;
@@ -351,7 +365,7 @@ namespace tlp {
     }
     //----------------------------------------
     void Observable::notifyDestroy() {
-      std::cout << "notifyDestroy no more useful" << std::endl;
+      //std::cout << "notifyDestroy no more useful" << std::endl;
     }
     //----------------------------------------
     unsigned int Observable::countObservers() const {
