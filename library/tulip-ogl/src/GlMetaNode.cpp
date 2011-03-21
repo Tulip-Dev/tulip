@@ -72,7 +72,11 @@ namespace tlp {
 
     node n=node(id);
 
-    GlNode::drawLabel(test,data,lod,camera);
+    if(data->parameters->isViewNodeLabel())
+      GlNode::drawLabel(test,data,lod,camera);
+
+    if(!data->parameters->isViewMetaLabel())
+      return;
 
     if(!data->getMetaNodeRenderer()->glMetaNodeHaveToRenderLabels())
       return;

@@ -205,8 +205,11 @@ namespace tlp {
     bool edgeLabelEmpty=(!glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedEdges()->hasNext())
                         && glGraphComposite->getInputData()->getElementLabel()->getEdgeDefaultStringValue()=="";
 
+    bool viewNodeLabel=glGraphComposite->getInputData()->parameters->isViewNodeLabel();
+    bool viewMetaLabel=glGraphComposite->getInputData()->parameters->isViewMetaLabel();
+
     // Draw Labels for Nodes
-    if(glGraphComposite->getInputData()->parameters->isViewNodeLabel() && !nodeLabelEmpty) {
+    if((viewNodeLabel || viewMetaLabel) && !nodeLabelEmpty) {
       node n;
       for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit.nodesLODVector.begin();it!=layerLODUnit.nodesLODVector.end();++it) {
         if((*it).lod<0 && !viewOutScreenLabel)
@@ -217,16 +220,18 @@ namespace tlp {
         if(selectionProperty->getNodeValue(n)==drawSelected){
           if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric){
             // Not metric ordered
-            if(!graph->isMetaNode(n)){
+            if(!graph->isMetaNode(n) && viewNodeLabel){
               glNode.id=n.id;
               glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
-            }else{
+            }else if(graph->isMetaNode(n)){
               glMetaNode.id=n.id;
               glMetaNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
             }
           }else{
             // Metric ordered
-            nodesMetricOrdered.push_back(pair<node,float>(n,(*it).lod));
+            if((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)){
+              nodesMetricOrdered.push_back(pair<node,float>(n,(*it).lod));
+            }
           }
         }
       }
