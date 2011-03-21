@@ -39,7 +39,7 @@ ColorScale::ColorScale(const vector<Color> &colors, const bool gradient) :
 	setColorScale(colors, gradient);
 }
 
-ColorScale::ColorScale(const ColorScale& scale) {
+ColorScale::ColorScale(const ColorScale& scale) :OLOObject() {
 	colorMap = scale.colorMap;
 	gradient = scale.gradient;
 	colorScaleSet = scale.colorScaleSet;
@@ -49,6 +49,7 @@ ColorScale& ColorScale::operator=(const ColorScale& scale) {
     colorMap = scale.colorMap;
     gradient = scale.gradient;
     colorScaleSet = scale.colorScaleSet;
+    return *this;
 }
 
 ColorScale::~ColorScale() {

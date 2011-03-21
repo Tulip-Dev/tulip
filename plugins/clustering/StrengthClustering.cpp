@@ -293,22 +293,22 @@ namespace {
     "This parameter defines the metric used in order to multiply strength metric computed values."\
     "If one is given the complexity will be in o(nlog(n)), o(n) neither." \
     HTML_HELP_CLOSE(),
-//    // layout subgraphs
-//    HTML_HELP_OPEN() \
-//    HTML_HELP_DEF( "type", "bool" ) \
-//    HTML_HELP_DEF( "values", "[true, false]" ) \
-//    HTML_HELP_DEF( "default", "true" ) \
-//    HTML_HELP_BODY() \
-//    "This parameter indicates whether the layout of the newly created subgraphs has to be computed or not." \
-//    HTML_HELP_CLOSE(),
-//    // layout quotient graph
-//    HTML_HELP_OPEN() \
-//    HTML_HELP_DEF( "type", "bool" ) \
-//    HTML_HELP_DEF( "values", "[true, false]" ) \
-//    HTML_HELP_DEF( "default", "true" ) \
-//    HTML_HELP_BODY() \
-//    "This parameter indicates whether the layout of the quotient graph has to be computed or not." \
-//    HTML_HELP_CLOSE(),
+    /*// layout subgraphs
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "values", "[true, false]" ) \
+    HTML_HELP_DEF( "default", "true" ) \
+    HTML_HELP_BODY() \
+    "This parameter indicates whether the layout of the newly created subgraphs has to be computed or not." \
+    HTML_HELP_CLOSE(),
+    // layout quotient graph
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "values", "[true, false]" ) \
+    HTML_HELP_DEF( "default", "true" ) \
+    HTML_HELP_BODY() \
+    "This parameter indicates whether the layout of the quotient graph has to be computed or not." \
+    HTML_HELP_CLOSE(),*/
   };
 }
 
