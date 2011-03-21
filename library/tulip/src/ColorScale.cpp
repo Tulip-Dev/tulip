@@ -45,7 +45,16 @@ ColorScale::ColorScale(const ColorScale& scale) {
 	colorScaleSet = scale.colorScaleSet;
 }
 
-ColorScale::~ColorScale() {}
+ColorScale& ColorScale::operator=(const ColorScale& scale) {
+    colorMap = scale.colorMap;
+    gradient = scale.gradient;
+    colorScaleSet = scale.colorScaleSet;
+}
+
+ColorScale::~ColorScale() {
+//  observableDeleted();
+//  cout << __PRETTY_FUNCTION__ << this << endl;
+}
 
 void ColorScale::setColorScale(const std::vector<Color> colors,
 		const bool gradientV) {
