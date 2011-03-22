@@ -3,9 +3,10 @@
 #include <QtGui/QPainter>
 #include <QtGui/QGraphicsColorizeEffect>
 
+namespace tlp {
 PushButtonItem::PushButtonItem(const QString &text, const QIcon &icon, const QSize &iconSize, QGraphicsItem *parent):
   QGraphicsObject(parent),
-  _text(text), _icon(icon), _iconSize(iconSize), _pressed(false), _hovered(false) {
+  _text(text), _icon(icon), _iconSize(iconSize), _pressed(false), _hovered(false), _clicking(false) {
   setAcceptHoverEvents(true);
 }
 //==========================
@@ -42,6 +43,8 @@ void PushButtonItem::setIconSize(const QSize &iconSize) {
 void PushButtonItem::mousePressEvent(QGraphicsSceneMouseEvent *) {
   if (!_pressed) {
     _pressed = true;
+    _clicking = true;
+    emit pressed();
     QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect();
     effect->setColor(QColor(255,255,255));
     effect->setStrength(0.3);
@@ -52,6 +55,10 @@ void PushButtonItem::mousePressEvent(QGraphicsSceneMouseEvent *) {
 void PushButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *) {
   if (_pressed) {
     _pressed = false;
+    emit released();
+    if (_clicking)
+      emit clicked();
+    _clicking = false;
     setGraphicsEffect(0);
   }
 }
@@ -59,15 +66,18 @@ void PushButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *) {
 void PushButtonItem::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
   if (!_hovered) {
     _hovered = true;
-    update();
+    emit hovered(true);
   }
+  update();
 }
 //==========================
 void PushButtonItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
   if (_hovered) {
     _hovered = false;
-    update();
+    _clicking = false;
+    emit hovered(false);
   }
+  update();
 }
 //==========================
 void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
@@ -99,4 +109,5 @@ QRectF PushButtonItem::boundingRect() const {
   }
 
   return QRectF(x(),y(),width, height);
+}
 }

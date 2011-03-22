@@ -6,6 +6,7 @@
 #include <QtCore/QSize>
 #include <QtCore/QString>
 
+namespace tlp {
 class PushButtonItem: public QGraphicsObject {
 Q_OBJECT;
 Q_PROPERTY(QString text READ text WRITE setText);
@@ -38,6 +39,7 @@ signals:
   void clicked();
   void pressed();
   void released();
+  void hovered(bool);
 
 private:
   QString _text;
@@ -46,5 +48,7 @@ private:
 
   bool _pressed;
   bool _hovered;
+  bool _clicking;
 };
+}
 #endif // PUSHBUTTONITEM_H
