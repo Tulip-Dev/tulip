@@ -254,7 +254,7 @@ void HierarchicalGraph::computeEdgeBends(const tlp::Graph *mySGraph, tlp::Layout
     Coord p1,p2;
     //we take the first and last point of the replaced edges
     while (graph->target(end) != graph->target(toUpdate)) {
-      Iterator<edge> *itE = mySGraph->getOutEdges(graph->target(end));
+       Iterator<edge> *itE = mySGraph->getOutEdges(graph->target(end));
       if (!itE->hasNext()) {
 	delete itE;
 	break;
@@ -264,7 +264,6 @@ void HierarchicalGraph::computeEdgeBends(const tlp::Graph *mySGraph, tlp::Layout
     }
     node firstN = graph->target(start);
     node endN = graph->source(end);
-
     LineType::RealType edgeLine;
     if (isReversed.get(toUpdate.id)) {
       p1 = tmpLayout.getNodeValue(endN);
@@ -433,7 +432,7 @@ bool HierarchicalGraph::run() {
   tmp.set("node spacing", nodeSpacing);
   if (edgeLength!=0)
     tmp.set("edge length", edgeLength);
-  tmp.set("orthogonal", false);
+  tmp.set("orthogonal", true);
   StringCollection tmpS("vertical;horizontal;");
   tmpS.setCurrent("vertical");
   tmp.set("orientation", tmpS);
@@ -450,10 +449,12 @@ bool HierarchicalGraph::run() {
     layoutResult->setNodeValue(n, tmpLayout.getNodeValue(n));
   }
 
-  computeEdgeBends(mySGraph, tmpLayout, replacedEdges, reversedEdges);
-  computeSelfLoops(mySGraph, tmpLayout, listSelfLoops);
-  
-  /*for (vector<edge>::const_iterator it=reversedEdges.begin(); it!=reversedEdges.end(); ++it) {
+  //  computeEdgeBends(mySGraph, tmpLayout, replacedEdges, reversedEdges);
+  //  computeSelfLoops(mySGraph, tmpLayout, listSelfLoops);
+  computeEdgeBends(graph, tmpLayout, replacedEdges, reversedEdges);
+  computeSelfLoops(graph, tmpLayout, listSelfLoops);
+  /*
+  for (vector<edge>::const_iterator it=reversedEdges.begin(); it!=reversedEdges.end(); ++it) {
     graph->reverse(*it);
   }
   mySGraph->delAllNode(startNode);
@@ -461,7 +462,8 @@ bool HierarchicalGraph::run() {
     mySGraph->delAllNode(properAddedNodes.back());
     properAddedNodes.pop_back();
   }
-  graph->delSubGraph(mySGraph);*/
+  graph->delSubGraph(mySGraph);
+  */
 
   // forget last temporary graph state 
   graph->pop();
@@ -510,8 +512,14 @@ bool HierarchicalGraph::run() {
       tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.0 + spacing/4.);
       Coord src2Pos = old.front();
       Coord tgt2Pos = old.back();
-      src2Pos[1] -= rev*(levelMaxSize[nodeLevel.get(src.id) + 1]/2.0 + spacing/4.);
-      tgt2Pos[1] += rev*(levelMaxSize[nodeLevel.get(tgt.id) - 1]/2.0 + spacing/4.);
+      src2Pos[1] = srcPos[1] + rev*spacing/2.;
+      tgt2Pos[1] = tgtPos[1] - rev*spacing/2.;
+      /*
+	Coord src2Pos = old.front();
+	Coord tgt2Pos = old.back();
+	src2Pos[1] += rev*(levelMaxSize[nodeLevel.get(src.id) + 1]/2.0 + spacing/4.);
+	tgt2Pos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id) - 1]/2.0 + spacing/4.);
+      */
       pos[0] = srcPos;
       pos[1] = src2Pos;
       pos[2] = tgt2Pos;
