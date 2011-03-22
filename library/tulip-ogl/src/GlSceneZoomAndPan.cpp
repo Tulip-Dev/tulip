@@ -32,6 +32,8 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
 	camCenterStart = camera.getCenter();
 	camCenterEnd = Coord(boundingBox.center());
 
+	camCenterEnd[2] = camCenterStart[2];
+
 	Coord blScene(camera.screenTo3DWorld(Coord(0, 0, 0)));
 	Coord trScene(camera.screenTo3DWorld(Coord(viewport[2], viewport[3], 0)));
 
@@ -42,7 +44,9 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
 	zoomAreaWidth = boundingBox[1][0] - boundingBox[0][0];
 	zoomAreaHeight = boundingBox[1][1] - boundingBox[0][1];
 
-	if (zoomAreaWidth > zoomAreaHeight) {
+	float aspectRatio = viewport[2] / static_cast<float>(viewport[3]);
+
+	if (zoomAreaWidth > (aspectRatio * zoomAreaHeight)) {
 		w0 = sceneBB[1][0] - sceneBB[0][0];
 		w1 = zoomAreaWidth;
 	} else {
