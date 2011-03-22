@@ -94,6 +94,7 @@ ENDIF(QT_VERSION_MINOR LESS 7)
                       
 ADD_DEPENDENCIES(pluginInstaller ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
 
+IF(QT_VERSION_MINOR GREATER 6)
 QT4_WRAP_CPP(pluginPusher_MOC_SRCS PushToPluginServer.h)
 ADD_EXECUTABLE(pluginPusher ${pluginPusher_SRCS} ${pluginPusher_MOC_SRCS})
 target_link_libraries(pluginPusher ${QT_LIBRARIES} 
@@ -102,6 +103,7 @@ target_link_libraries(pluginPusher ${QT_LIBRARIES}
                       ${LibTulipQtName}
                       ${LibTulipPluginsManagerName} 
                       ${LIBXML2_LIBRARIES})
+ENDIF(QT_VERSION_MINOR GREATER 6)                      	
 
 
 INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/generate_plugin_dirs.sh
