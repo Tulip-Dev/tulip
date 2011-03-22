@@ -40,6 +40,7 @@ GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, i
 
   resize(width, height);
   glMainWidget->installEventFilter(this);
+  setHandlesChildEvents(false);
 }
 
 GlMainWidgetGraphicsItem::~GlMainWidgetGraphicsItem() {

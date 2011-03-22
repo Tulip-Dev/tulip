@@ -11,9 +11,6 @@
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtOpenGL/QGLWidget>
 
-// Remove me
-#include "tulip/PushButtonItem.h"
-
 using namespace tlp;
 using namespace std;
 
@@ -126,7 +123,7 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
   GlMainWidget *glMainWidget = dynamic_cast<GlMainWidget *>(w);
   if (glMainWidget) {
     _centralWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _centralView->width(), _centralView->height());
-    _centralView->scene()->addItem(_centralWidgetItem);
+//    _centralView->scene()->addItem(_centralWidgetItem);
     connect(_centralWidget, SIGNAL(viewDrawn(GlMainWidget *,bool)), this, SLOT(updateCentralView()));
     connect(_centralWidget, SIGNAL(viewRedrawn(GlMainWidget *)), this, SLOT(updateCentralView()));
   }
@@ -147,9 +144,7 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
 }
 // ===================================
 QGraphicsItem *AbstractGraphicsView::buildInteractorsToolbar() {
-  PushButtonItem *btn = new PushButtonItem("prout", QIcon("D:/dev/tulip-trunk/testing/controllers/TulipLite/designer/dialog-apply.svg"));
-  btn->setPos(0,0);
-  return btn;
+  return 0;
 }
 // ===================================
 bool AbstractGraphicsView::eventFilter(QObject *obj, QEvent *e) {
