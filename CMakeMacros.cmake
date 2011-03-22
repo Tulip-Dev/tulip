@@ -26,7 +26,7 @@ IF(WIN32)
 # List of matching file will be set into the out_var variable.
 # Note: if no matching library is found, outvar will be set to ${out_var}-NOTFOUND
 MACRO(FIND_LIBRARY_GLOB out_var pattern)
-  SET(SEARCH_DIRS $ENV{CMAKE_LIBRARY_PATH} ${CMAKE_LIBRARY_PATH} ${CMAKE_SYSTEM_LIBRARY_PATH} ${QT_BINARY_DIR})
+  SET(SEARCH_DIRS $ENV{CMAKE_LIBRARY_PATH} ${CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR})
   FOREACH(ITP ${SEARCH_DIRS})
     STRING(REPLACE "\\" "/" P "${ITP}")
     FILE(GLOB RES "${P}/${pattern}")
