@@ -1,17 +1,17 @@
-#include "tulip/GraphicsLayoutItemGraph.h"
+#include "tulip/GraphicsLayoutItemGraphMapper.h"
 
 namespace tlp {
-GraphicsLayoutItemGraph::GraphicsLayoutItemGraph(const std::vector<QGraphicsLayoutItem *> &items): GraphicsGraph<QGraphicsLayoutItem>(items) {
+GraphicsLayoutItemGraphMapper::GraphicsLayoutItemGraphMapper(const std::vector<QGraphicsLayoutItem *> &items): GraphicsGraphMapper<QGraphicsLayoutItem>(items) {
 }
 
-GraphicsLayoutItemGraph::~GraphicsLayoutItemGraph() {
+GraphicsLayoutItemGraphMapper::~GraphicsLayoutItemGraphMapper() {
 }
 
-void GraphicsLayoutItemGraph::setItemPosition(QGraphicsLayoutItem *item, const QPointF &pos) {
+void GraphicsLayoutItemGraphMapper::setItemPosition(QGraphicsLayoutItem *item, const QPointF &pos) {
   item->setGeometry(QRectF(pos, item->geometry().size()));
 }
 
-QRectF GraphicsLayoutItemGraph::itemGeometry(QGraphicsLayoutItem *item) {
+QRectF GraphicsLayoutItemGraphMapper::itemGeometry(QGraphicsLayoutItem *item) {
   return item->geometry();
 }
 }

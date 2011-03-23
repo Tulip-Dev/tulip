@@ -1,6 +1,6 @@
 #include "tulip/TulipGraphicsLayout.h"
 
-#include "tulip/GraphicsLayoutItemGraph.h"
+#include "tulip/GraphicsLayoutItemGraphMapper.h"
 #include <tulip/DrawingTools.h>
 
 //FIXME: remove me
@@ -40,7 +40,7 @@ void TulipGraphicsLayout::setGeometry(const QRectF &rect) {
 }
 // ===================================
 QSizeF TulipGraphicsLayout::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const {
-  GraphicsLayoutItemGraph *g = new GraphicsLayoutItemGraph(_items.toVector().toStdVector());
+  GraphicsLayoutItemGraphMapper *g = new GraphicsLayoutItemGraphMapper(_items.toVector().toStdVector());
   g->applyValuesToGraph();
   LayoutProperty *layout = g->getGraph()->getProperty<tlp::LayoutProperty>("viewLayout");
   SizeProperty *sizes = g->getGraph()->getProperty<tlp::SizeProperty>("viewSize");
