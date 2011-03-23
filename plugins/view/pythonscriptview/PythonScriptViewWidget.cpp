@@ -46,15 +46,13 @@
 
 PythonScriptViewWidget::PythonScriptViewWidget(QWidget *parent) : QWidget(parent) {
 	setupUi(this);
-	QToolBar *mainScriptToolBar = new QToolBar(mainScriptToolBarWidget);
-	mainScriptToolBar->resize(mainScriptToolBarWidget->size());
+	mainScriptToolBar = new QToolBar(mainScriptToolBarWidget);
 	newMainScriptAction = mainScriptToolBar->addAction(QIcon(":/icons/doc_new.png"), "New main script");
 	loadMainScriptAction = mainScriptToolBar->addAction(QIcon(":/icons/doc_import.png"), "Load main script from file");
 	saveMainScriptAction = mainScriptToolBar->addAction(QIcon(":/icons/doc_export.png"), "Save main script to file");
 
-	QToolBar *modulesToolBar = new QToolBar(modulesToolBarWidget);
+	modulesToolBar = new QToolBar(modulesToolBarWidget);
 	modulesToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-	modulesToolBar->resize(modulesToolBarWidget->size());
 	newStringModuleAction = modulesToolBar->addAction(QIcon(":/icons/doc_plus.png"), "New string module");
 	newFileModuleAction = modulesToolBar->addAction(QIcon(":/icons/doc_new.png"), "New file module");
 	loadModuleAction = modulesToolBar->addAction(QIcon(":/icons/doc_import.png"), "Import module from file");
@@ -66,8 +64,25 @@ PythonScriptViewWidget::PythonScriptViewWidget(QWidget *parent) : QWidget(parent
 	sizes.push_back(500);
 	sizes.push_back(200);
 	splitter->setSizes(sizes);
+
+	connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(resizeToolBars()));
 }
 
 std::string PythonScriptViewWidget::getPythonCode() const {
 	return pythonCodeWidget->text().replace("\r\n", "\n").toStdString();
+}
+
+void PythonScriptViewWidget::resizeEvent(QResizeEvent *e) {
+	QWidget::resizeEvent(e);
+	resizeToolBars();
+}
+
+void PythonScriptViewWidget::showEvent(QShowEvent *e) {
+	QWidget::showEvent(e);
+	resizeToolBars();
+}
+
+void PythonScriptViewWidget::resizeToolBars() {
+	modulesToolBar->resize(modulesToolBarWidget->size());
+	mainScriptToolBar->resize(mainScriptToolBarWidget->size());
 }
