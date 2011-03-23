@@ -84,6 +84,16 @@ public:
 	float getZ() const;
 	
 	void get(float &, float &, float &) const;
+	
+	tlp::Coord operator*(const  tlp::Coord &) const;
+	tlp::Coord operator*(const float &) const;
+	tlp::Coord operator+(const  tlp::Coord &) const;
+	tlp::Coord operator+(const float &) const;
+	tlp::Coord operator-(const  tlp::Coord &) const;
+	tlp::Coord operator-(const float &) const; 
+	tlp::Coord operator/(const  tlp::Coord &) const;
+	tlp::Coord operator/(const float &) const;
+	tlp::Coord operator^(const  tlp::Coord &) const;
 		
 	
 };

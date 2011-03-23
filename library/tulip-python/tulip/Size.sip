@@ -74,5 +74,15 @@ public:
 	float getD() const;
 	void get(float &width, float &height, float &depth) const;
 
+	tlp::Size operator*(const  tlp::Size &) const;
+	tlp::Size operator*(const float &) const;
+	tlp::Size operator+(const  tlp::Size &) const;
+	tlp::Size operator+(const float &) const;
+	tlp::Size operator-(const  tlp::Size &) const;
+	tlp::Size operator-(const float &) const; 
+	tlp::Size operator/(const  tlp::Size &) const;
+	tlp::Size operator/(const float &) const;
+	tlp::Size operator^(const  tlp::Size &) const;
+
 };
 };
