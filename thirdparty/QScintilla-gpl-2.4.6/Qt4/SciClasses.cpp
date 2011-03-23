@@ -130,10 +130,8 @@ SciListBox::SciListBox(QWidget *parent, ListBoxQt *lbx_)
     // to be that the following works.  However it might now work because of a
     // change in Qt so we only enable it for recent versions in order to
     // reduce the risk of breaking something that works with earlier versions.
-#if QT_VERSION >= 0x040600
+#if QT_VERSION >= 0x040500
    setWindowFlags(Qt::ToolTip);
-#elif QT_VERSION >= 0x040500 		
-    setWindowFlags(Qt::Dialog|Qt::FramelessWindowHint);
 #else
     setWindowFlags(Qt::Tool|Qt::FramelessWindowHint);
 #endif
