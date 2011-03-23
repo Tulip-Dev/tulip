@@ -5,23 +5,23 @@
 #include <tulip/SizeProperty.h>
 
 template<typename TYPE>
-const std::string tlp::GraphicsGraph<TYPE>::LAYOUT_PROPNAME = "viewLayout";
+const std::string tlp::GraphicsGraphMapper<TYPE>::LAYOUT_PROPNAME = "viewLayout";
 
 template<typename TYPE>
-const std::string tlp::GraphicsGraph<TYPE>::SIZE_PROPNAME = "viewSize";
+const std::string tlp::GraphicsGraphMapper<TYPE>::SIZE_PROPNAME = "viewSize";
 
 template<typename TYPE>
-tlp::GraphicsGraph<TYPE>::GraphicsGraph(const std::vector<TYPE *> &items): _items(items), _graph(0) {
+tlp::GraphicsGraphMapper<TYPE>::GraphicsGraphMapper(const std::vector<TYPE *> &items): _items(items), _graph(0) {
   applyValuesToGraph();
 }
 
 template<typename TYPE>
-tlp::GraphicsGraph<TYPE>::~GraphicsGraph() {
+tlp::GraphicsGraphMapper<TYPE>::~GraphicsGraphMapper() {
   delete _graph;
 }
 
 template<typename TYPE>
-void tlp::GraphicsGraph<TYPE>::applyValuesToGraph() {
+void tlp::GraphicsGraphMapper<TYPE>::applyValuesToGraph() {
   delete _graph;
   _graph = tlp::newGraph();
 
@@ -40,7 +40,7 @@ void tlp::GraphicsGraph<TYPE>::applyValuesToGraph() {
 }
 
 template<typename TYPE>
-void tlp::GraphicsGraph<TYPE>::applyLayoutToItems(const QPointF &translateVector) {
+void tlp::GraphicsGraphMapper<TYPE>::applyLayoutToItems(const QPointF &translateVector) {
   if (!_graph)
     return;
 

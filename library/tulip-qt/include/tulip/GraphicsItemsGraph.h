@@ -1,14 +1,14 @@
 #ifndef GRAPHICSITEMSGRAPH_H
 #define GRAPHICSITEMSGRAPH_H
 
-#include "tulip/GraphicsGraph.h"
+#include "tulip/GraphicsGraphMapper.h"
 #include <QtGui/QGraphicsItem>
 
 namespace tlp {
-class GraphicsItemsGraph: public GraphicsGraph<QGraphicsItem> {
+class GraphicsItemsGraphMapper: public GraphicsGraphMapper<QGraphicsItem> {
 public:
-  GraphicsItemsGraph(const std::vector<QGraphicsItem *> &items);
-  virtual ~GraphicsItemsGraph();
+  GraphicsItemsGraphMapper(const std::vector<QGraphicsItem *> &items);
+  virtual ~GraphicsItemsGraphMapper();
 
 protected:
   virtual void setItemPosition(QGraphicsItem *item, const QPointF &pos);

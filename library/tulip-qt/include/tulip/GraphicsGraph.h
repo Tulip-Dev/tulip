@@ -7,10 +7,10 @@
 
 namespace tlp {
 template<typename TYPE>
-  class GraphicsGraph {
+  class GraphicsGraphMapper {
 public:
-  GraphicsGraph(const std::vector<TYPE *> &items);
-  virtual ~GraphicsGraph();
+  GraphicsGraphMapper(const std::vector<TYPE *> &items);
+  virtual ~GraphicsGraphMapper();
 
   void applyValuesToGraph();
   void applyLayoutToItems(const QPointF &center);
@@ -30,6 +30,6 @@ protected:
 };
 }
 
-#include "tulip/cxx/GraphicsGraph.cxx"
+#include "tulip/cxx/GraphicsGraphMapper.cxx"
 
 #endif // GRAPHICSGRAPH_H
