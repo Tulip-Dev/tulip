@@ -211,7 +211,7 @@ tlp.Graph.setEdgeOrder(tlp.node, list of tlp.edge)
 
 	bool isMetaEdge(const tlp::edge ) const ;
 
-	tlp::edge existEdge(const tlp::node , const tlp::node) const ;
+	tlp::edge existEdge(const tlp::node , const tlp::node, bool directed=true) const ;
 
 	tlp::BooleanProperty *getBooleanProperty(const std::string &name);
 %MethodCode
