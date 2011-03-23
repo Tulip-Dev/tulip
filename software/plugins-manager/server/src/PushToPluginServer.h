@@ -25,44 +25,88 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 
+#include <assert.h>
+
 class WebDavManager : public QObject {
   Q_OBJECT
   public: 
     WebDavManager(const QString& host, const QString& url, const QString& base64credentials) : _host(host), _url(url), _credentials("Basic " + base64credentials), _ongoingRequests(0) {
       _credentials = _credentials.replace("\012", "");
-    }
-    
-    void mkdir(const QString& folder) {
-      ++_ongoingRequests;
-      QUrl url;
-      url.setScheme("https");
-      url.setHost(_host);
-      url.setPort(443);
-      url.setPath(_url + folder);
-      QNetworkRequest mkcol(url);
-      mkcol.setRawHeader(QByteArray("Authorization"), _credentials.toAscii());
-//       mkcol.setRawHeader(QByteArray("Host"), _host.toAscii());
-      _manager.sendCustomRequest(mkcol, QString("MKCOL").toUtf8());
       connect(&_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(requestFinished(QNetworkReply*)));
+    }
+
+    bool folderExists(const QString& folder) {
+      _requestSucessFull = true;
+      ++_ongoingRequests;
+      std::cout << "propfind on " << folder.toStdString() << std::endl;
+
+      _manager.sendCustomRequest(initRequest(folder), QString("PROPFIND").toUtf8());
+//       connect(&_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(finishedPropFind(QNetworkReply*)));
       
+      while(_ongoingRequests > 0) {
+        QCoreApplication::processEvents();
+      }
+      return _requestSucessFull;
     }
     
-    void putFile(const QString& folder, QIODevice* data, QVariant mimetype = QVariant("binary/octet-stream")) {
+    bool mkdir(const QString& folder) {
+
+      if(folderExists(folder)) {
+        std::cout << "folder " << folder.toStdString() << " already exists." << std::endl;
+        return true;
+      }
+      
+      _requestSucessFull = true;
+      ++_ongoingRequests;
+
+      std::cout << "mkcol on " << folder.toStdString() << std::endl;
+      _manager.sendCustomRequest(initRequest(folder), QString("MKCOL").toUtf8());
+      
+
+      while(_ongoingRequests > 0) {
+        QCoreApplication::processEvents();
+      }
+      return _requestSucessFull;
+    }
+    
+    bool putFile(const QString& folder, QIODevice* data) {
+      _requestSucessFull = true;
       ++_ongoingRequests;
 //       std::cout << "putting file: " << _url.toStdString() + "/" + folder.toStdString() << std::endl; 
+      std::cout << "put on " << folder.toStdString() << std::endl;
+      _manager.sendCustomRequest(initRequest(folder), QString("PUT").toUtf8(), data);
+//       connect(&_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(requestFinished(QNetworkReply*)));
+      while(_ongoingRequests > 0) {
+        QCoreApplication::processEvents();
+      }
+
+      return _requestSucessFull;
+    }
+
+    QUrl initUrl(const QString& dest) {
       QUrl url;
       url.setScheme("https");
       url.setHost(_host);
       url.setPort(443);
-      url.setPath(_url + "/" + folder);
-      QNetworkRequest putFile(url);
-      putFile.setRawHeader(QByteArray("Authorization"), _credentials.toAscii());
-      putFile.setRawHeader(QByteArray("Host"), _host.toUtf8());
-      putFile.setHeader(QNetworkRequest::ContentLengthHeader, QVariant(data->size()));
-      putFile.setHeader(QNetworkRequest::ContentTypeHeader, mimetype);
+      url.setPath(_url + "/" + dest);
 
-      _manager.sendCustomRequest(putFile, QString("PUT").toUtf8(), data);
-      connect(&_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(requestFinished(QNetworkReply*)));
+      if(!url.isValid()) {
+        std::cout << "URL not valid: " << url.toString().toStdString() << std::endl;
+        assert(false);
+      }
+      
+      return url;
+    }
+
+    QNetworkRequest initRequest(const QString & destination, QIODevice* data = NULL, QVariant mimetype = QVariant("binary/octet-stream")) {
+      QNetworkRequest request(initUrl(destination));
+      request.setRawHeader(QByteArray("Authorization"), _credentials.toAscii());
+      request.setRawHeader(QByteArray("Host"), _host.toUtf8());
+      if(data != NULL) {
+        request.setHeader(QNetworkRequest::ContentLengthHeader, QVariant(data->size()));
+      }
+      request.setHeader(QNetworkRequest::ContentTypeHeader, mimetype);
+      return request;
     }
     
     void finish() {
@@ -78,6 +122,10 @@ class WebDavManager : public QObject {
         std::cout << "error: " << reply->errorString().toStdString() << std::endl; 
         std::cout << "reply: " << QString(reply->readAll()).toStdString() << std::endl; 
         std::cout << "request: " << reply->request().url().toString().toStdString() << std::endl;
+        _requestSucessFull = false;
+      }
+      if(!QString(reply->readAll()).contains("200")) {
+        _requestSucessFull = false;
       }
 //       else {
 //         std::cout << "success: " << QString(reply->readAll()).toStdString() << std::endl; 
@@ -90,4 +138,5 @@ class WebDavManager : public QObject {
     QString _credentials;
     QNetworkAccessManager _manager;
     uint _ongoingRequests;
+    bool _requestSucessFull;
 };
