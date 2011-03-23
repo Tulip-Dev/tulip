@@ -19,7 +19,7 @@
 #ifndef RECTANGLEPACKING_H
 #define RECTANGLEPACKING_H
 
-#include "math.h"
+#include <cmath>
 #include <vector>
 #include "Number.h"
 #include <tulip/PluginProgress.h>

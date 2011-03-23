@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/Graph.h>
-#include <tulip/GraphTools.h>
+// #include <tulip/Graph.h>
+// #include <tulip/GraphTools.h>
 #include <tulip/DrawingTools.h>
 
 #include "ConnectedComponentPacking.h"
