@@ -455,12 +455,16 @@ namespace tlp {
     }
 
     void GlQuadTreeLODCalculator::treatEvent(const Event &ev){
-      const GlSceneEvent *event = dynamic_cast<const GlSceneEvent *>(&ev);
-      if(event){
-        cout << "scene event" << endl;
+      const GlSceneEvent *sceneEv = dynamic_cast<const GlSceneEvent *>(&ev);
+      const Camera *camera=dynamic_cast<Camera *>(ev.sender());
+      if(sceneEv){
         setHaveToCompute();
+      }else if(camera){
+        if(ev.type()==Event::TLP_DELETE){
+          destroy(camera);
+        }
       }else{
-        cout << "unknow event" << endl;
+        assert(false);
       }
     }
 
@@ -495,7 +499,7 @@ namespace tlp {
       setInputData(NULL);
     }
 
-    void GlQuadTreeLODCalculator::destroy(Camera *) {
+    void GlQuadTreeLODCalculator::destroy(const Camera *) {
       std::vector<std::pair<std::string, GlLayer*> > *layerList=glScene->getLayersList();
 
       clearCamerasObservers();
@@ -514,13 +518,13 @@ namespace tlp {
 
     void GlQuadTreeLODCalculator::initCamerasObservers() {
       for(vector<Camera *>::iterator it=cameras.begin();it!=cameras.end();++it){
-        (*it)->addObserver(this);
+        (*it)->addOnlooker(*this);
       }
     }
 
     void GlQuadTreeLODCalculator::clearCamerasObservers(){
       for(vector<Camera *>::iterator it=cameras.begin();it!=cameras.end();++it){
-        (*it)->removeObserver(this);
+        (*it)->removeOnlooker(*this);
       }
     }
 

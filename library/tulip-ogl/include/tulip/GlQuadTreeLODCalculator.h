@@ -39,7 +39,7 @@ namespace tlp {
   /**
    * Class use to compute bounding boxs of a vector of GlEntity
    */
-  class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, public GraphObserver, public PropertyObserver, /*public Observer,*/ public CameraObserver, public Listener{
+  class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, public GraphObserver, public PropertyObserver, public Listener{
 
   public:
 
@@ -87,7 +87,7 @@ namespace tlp {
     void addLocalProperty(Graph*, const std::string &name);
     void delLocalProperty(Graph*, const std::string &name);
     void destroy(Graph *);
-    void destroy(Camera *);
+    void destroy(const Camera *);
 
     void removeObservers();
     void addObservers();

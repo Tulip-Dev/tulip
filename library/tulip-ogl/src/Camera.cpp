@@ -44,7 +44,7 @@ Camera::Camera(GlScene* scene,bool d3) :
     				matrixCoherent(false),scene(scene),d3(d3) {}
 //====================================================
 Camera::~Camera() {
-	notifyDestroy((Camera*)this);
+  observableDeleted();
 }
 //===================================================
 void Camera::setScene(GlScene* scene) {
@@ -57,7 +57,9 @@ void Camera::move(float speed) {
 	eyes += move;
 	center += move;
 	matrixCoherent=false;
-	notifyPointOfViewModified(this);
+	Event event(*this, Event::TLP_MODIFICATION);
+	if (hasOnlookers())
+		sendEvent(event);
 }
 //====================================================
 void Camera::rotate(float angle, float x, float y, float z) {
@@ -107,7 +109,10 @@ void Camera::rotate(float angle, float x, float y, float z) {
 	eyes = center + vNewEyes;
 	up   = vNewUp;
 	matrixCoherent=false;
-	notifyPointOfViewModified(this);
+
+	Event event(*this, Event::TLP_MODIFICATION);
+	if (hasOnlookers())
+		sendEvent(event);
 }
 //====================================================
 void Camera::strafeLeftRight(float speed) {
@@ -116,7 +121,10 @@ void Camera::strafeLeftRight(float speed) {
 	center += strafeVector;
 	eyes   += strafeVector;
 	matrixCoherent=false;
-	notifyPointOfViewModified(this);
+
+	Event event(*this, Event::TLP_MODIFICATION);
+	if (hasOnlookers())
+		sendEvent(event);
 }
 //====================================================
 void Camera::strafeUpDown(float speed) {
@@ -125,7 +133,10 @@ void Camera::strafeUpDown(float speed) {
 	center += strafeVector;
 	eyes   += strafeVector;
 	matrixCoherent=false;
-	notifyPointOfViewModified(this);
+
+	Event event(*this, Event::TLP_MODIFICATION);
+	if (hasOnlookers())
+		sendEvent(event);
 }
 //====================================================
 void Camera::initGl() {
@@ -259,7 +270,10 @@ void Camera::setSceneRadius(double sceneRadius,const BoundingBox sceneBoundingBo
 	this->sceneRadius=sceneRadius;
 	this->sceneBoundingBox=sceneBoundingBox;
 	matrixCoherent=false;
-	notifyPointOfViewModified(this);
+
+	Event event(*this, Event::TLP_MODIFICATION);
+	if (hasOnlookers())
+		sendEvent(event);
 }
 //====================================================
 void Camera::setZoomFactor(double zoomFactor) {
@@ -268,25 +282,37 @@ void Camera::setZoomFactor(double zoomFactor) {
 
 	this->zoomFactor=zoomFactor;
 	matrixCoherent=false;
-	notifyPointOfViewModified(this);
+
+	Event event(*this, Event::TLP_MODIFICATION);
+	if (hasOnlookers())
+		sendEvent(event);
 }
 //====================================================
 void Camera::setEyes(const Coord& eyes) {
 	this->eyes=eyes;
 	matrixCoherent=false;
-	notifyPointOfViewModified(this);
+
+	Event event(*this, Event::TLP_MODIFICATION);
+	if (hasOnlookers())
+		sendEvent(event);
 }
 //====================================================
 void Camera::setCenter(const Coord& center) {
 	this->center=center;
 	matrixCoherent=false;
-	notifyPointOfViewModified(this);
+
+	Event event(*this, Event::TLP_MODIFICATION);
+	if (hasOnlookers())
+		sendEvent(event);
 }
 //====================================================
 void Camera::setUp(const Coord& up) {
 	this->up=up;
 	matrixCoherent=false;
-	notifyPointOfViewModified(this);
+
+	Event event(*this, Event::TLP_MODIFICATION);
+	if (hasOnlookers())
+		sendEvent(event);
 }
 //====================================================
 void Camera::addObjectTransformation(const Coord &translation,const Coord &scale,const Coord &baseCoord ) {

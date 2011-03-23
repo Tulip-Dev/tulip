@@ -1,6 +1,5 @@
 INSTALL(FILES
 	tulip/Camera.h
-	tulip/CameraObserver.h
 	tulip/GlComposite.h 
 	tulip/GlGraphComposite.h 
 	tulip/GlGrid.h 
