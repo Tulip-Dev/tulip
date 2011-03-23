@@ -19,8 +19,6 @@
 #ifndef NUMBER_H
 #define NUMBER_H
 
-#include <string.h>
-
 /**
  *This class enables the comparison of floats or the initialization of float 
  *to infinity.

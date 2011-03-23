@@ -17,6 +17,7 @@
  *
  */
 #include "RectanglePacking.h"
+#include <cstring>
 
 using namespace std;
 using namespace tlp;

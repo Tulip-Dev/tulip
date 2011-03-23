@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <math.h>
-#include <list> 
 #include "Circular.h"
 #include "DatasetTools.h"
 
