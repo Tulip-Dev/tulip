@@ -304,7 +304,7 @@ namespace tlp {
     emit installPart(distPluginInfo.name,currentPart,partNumber);
   }
 
-  void UpdatePlugin::copyFile(const QDir& oldDir,const QString& oldName,const QDir& newDir,const QString& newName){
+  void UpdatePlugin::copyFile(const QDir& oldDir,const QString& oldName,const QDir& newDir,const QString& newName, bool displayMsg){
     QFile oldFile(QDir::toNativeSeparators(oldDir.absolutePath()+QString("/")+oldName));
     QFile newFile(QDir::toNativeSeparators(newDir.absolutePath()+QString("/")+newName));
     oldFile.open(QIODevice::ReadOnly);
@@ -312,6 +312,8 @@ namespace tlp {
     newFile.write(oldFile.readAll());
     oldFile.close();
     newFile.close();
+    if (displayMsg)
+      cout << newFile.fileName().toAscii().data() << " installed" << endl;
   }
 
   void UpdatePlugin::installWhenRestartTulip() {

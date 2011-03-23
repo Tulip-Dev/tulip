@@ -68,7 +68,7 @@ namespace tlp {
     void updatePartNumber();
     bool uninstall(const LocalPluginInfo &pluginInfo); // Synchronous
 
-    static void copyFile(const QDir& oldDir,const QString& oldName,const QDir& newDir,const QString& newName);
+    static void copyFile(const QDir& oldDir,const QString& oldName,const QDir& newDir,const QString& newName, bool displayMsg = false);
     static void installWhenRestartTulip();
     static bool isInstallDirWritable();
     static bool pluginUpdatesPending();
