@@ -1,5 +1,5 @@
-#ifndef GRAPHICSGRAPH_H
-#define GRAPHICSGRAPH_H
+#ifndef GRAPHICSGRAPHMAPPER_H
+#define GRAPHICSGRAPHMAPPER_H
 
 #include <tulip/GraphDecorator.h>
 #include <QtCore/QRectF>
@@ -32,4 +32,4 @@ protected:
 
 #include "tulip/cxx/GraphicsGraphMapper.cxx"
 
-#endif // GRAPHICSGRAPH_H
+#endif // GRAPHICSGRAPHMAPPER_H

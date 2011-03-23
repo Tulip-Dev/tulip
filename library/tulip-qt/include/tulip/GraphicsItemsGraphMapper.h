@@ -1,5 +1,5 @@
-#ifndef GRAPHICSITEMSGRAPH_H
-#define GRAPHICSITEMSGRAPH_H
+#ifndef GRAPHICSITEMSGRAPHMAPPER_H
+#define GRAPHICSITEMSGRAPHMAPPER_H
 
 #include "tulip/GraphicsGraphMapper.h"
 #include <QtGui/QGraphicsItem>
@@ -16,4 +16,4 @@ protected:
 };
 }
 
-#endif // GRAPHICSITEMSGRAPH_H
+#endif // GRAPHICSITEMSGRAPHMAPPER_H

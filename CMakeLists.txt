@@ -14,7 +14,10 @@ SET(LIB_SRCS
 library/tulip-qt/src/AbstractGraphicsView.cpp
 library/tulip-qt/src/EmptyView.cpp
 library/tulip-qt/src/GlMainWidgetGraphicsItem.cpp
+library/tulip-qt/src/GraphicsItemsGraphMapper.cpp
+library/tulip-qt/src/GraphicsLayoutItemGraphMapper.cpp
 library/tulip-qt/src/PushButtonItem.cpp
+library/tulip-qt/src/TulipGraphicsLayout.cpp
 )
 
 SET(LIB_UI
