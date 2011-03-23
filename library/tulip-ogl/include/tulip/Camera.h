@@ -28,7 +28,7 @@
 #include <tulip/Matrix.h>
 #include <tulip/BoundingBox.h>
 
-#include "tulip/CameraObserver.h"
+#include "tulip/Observable.h"
 #include "tulip/GlXMLTools.h"
 
 namespace tlp {
@@ -44,7 +44,7 @@ namespace tlp {
    *  - You can directly modify camera infor mation with setSceneRadius, setZoomFactor, setEyes, setCenter and setUp
    *  - You can transform screen coordinates to 3D world coordinates with screenTo3DWorld function and vise versa with worldTo2DScreen function
    */
-  class TLP_GL_SCOPE Camera : public ObservableCamera {
+  class TLP_GL_SCOPE Camera : public Observable {
   public:
     
     /**
