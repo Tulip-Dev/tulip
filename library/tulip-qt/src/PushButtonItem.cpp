@@ -3,9 +3,6 @@
 #include <QtGui/QPainter>
 #include <QtGui/QGraphicsColorizeEffect>
 
-//FIXME: remove me
-#include <iostream>
-
 namespace tlp {
 PushButtonItem::PushButtonItem(const QString &text, const QIcon &icon, const QSize &iconSize, QGraphicsItem *parent):
   QGraphicsObject(parent),
@@ -115,12 +112,9 @@ QRectF PushButtonItem::boundingRect() const {
 }
 //==========================
 void PushButtonItem::setGeometry(const QRectF &rect) {
+  QGraphicsLayoutItem::setGeometry(rect);
   setX(rect.x());
   setY(rect.y());
-}
-//==========================
-QRectF PushButtonItem::geometry() const {
-  return QRectF(pos(),boundingRect().size());
 }
 //==========================
 QSizeF PushButtonItem::sizeHint(Qt::SizeHint, const QSizeF &) const {

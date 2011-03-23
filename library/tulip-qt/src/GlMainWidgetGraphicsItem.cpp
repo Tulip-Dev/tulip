@@ -44,7 +44,6 @@ GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, i
 }
 
 GlMainWidgetGraphicsItem::~GlMainWidgetGraphicsItem() {
-  cout << __PRETTY_FUNCTION__ << endl;
   delete [] renderingStore;
   glMainWidget->removeEventFilter(this);
 }

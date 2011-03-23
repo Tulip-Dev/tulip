@@ -11,13 +11,6 @@
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtOpenGL/QGLWidget>
 
-// FIXME: remove me
-#include "tulip/PushButtonItem.h"
-#include <QtGui/QGraphicsLayout>
-#include <QtGui/QGraphicsWidget>
-#include <QtGui/QGraphicsLinearLayout>
-#include "tulip/TulipGraphicsLayout.h"
-
 using namespace tlp;
 using namespace std;
 
@@ -151,15 +144,6 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
 }
 // ===================================
 QGraphicsItem *AbstractGraphicsView::buildInteractorsToolbar() {
-  QGraphicsWidget *w = new QGraphicsWidget;
-  TulipGraphicsLayout *layout = new TulipGraphicsLayout("Circular");
-  w->setLayout(layout);
-  for (int i=0; i < 10; ++i) {
-    PushButtonItem *item = new PushButtonItem("D:/dev/tulip-3.5-maint/testing/controllers/TulipLite/designer/dialog-apply.svg");
-    _centralView->scene()->addItem(item);
-    layout->addItem(item);
-  }
-  _centralView->scene()->addItem(w);
   return 0;
 }
 // ===================================

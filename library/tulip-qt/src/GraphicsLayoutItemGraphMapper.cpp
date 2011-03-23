@@ -12,6 +12,6 @@ void GraphicsLayoutItemGraphMapper::setItemPosition(QGraphicsLayoutItem *item, c
 }
 
 QRectF GraphicsLayoutItemGraphMapper::itemGeometry(QGraphicsLayoutItem *item) {
-  return item->geometry();
+  return QRectF(QPointF(0,0),item->preferredSize());
 }
 }

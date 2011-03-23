@@ -12,7 +12,6 @@ const std::string tlp::GraphicsGraphMapper<TYPE>::SIZE_PROPNAME = "viewSize";
 
 template<typename TYPE>
 tlp::GraphicsGraphMapper<TYPE>::GraphicsGraphMapper(const std::vector<TYPE *> &items): _items(items), _graph(0) {
-  applyValuesToGraph();
 }
 
 template<typename TYPE>

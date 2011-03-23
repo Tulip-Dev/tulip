@@ -27,7 +27,6 @@ public:
   QRectF boundingRect() const;
 
   void setGeometry(const QRectF &rect);
-  QRectF geometry() const;
 
 protected:
   void mousePressEvent(QGraphicsSceneMouseEvent *);
