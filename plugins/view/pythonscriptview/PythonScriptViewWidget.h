@@ -45,14 +45,26 @@
 #include "PythonScriptViewWidgetData.h"
 #include <QtGui/QAction>
 
+class QToolBar;
 
 class PythonScriptViewWidget : public QWidget, public Ui::PythonScriptViewWidgetData {
+
+	Q_OBJECT
 
 public :
 
 	PythonScriptViewWidget(QWidget *parent=0);
 
+	void showEvent(QShowEvent *);
+	void resizeEvent(QResizeEvent *);
+
 	std::string getPythonCode() const;
+
+public slots :
+
+	void resizeToolBars();
+
+public :
 
 	QAction *newMainScriptAction;
 	QAction *loadMainScriptAction;
@@ -61,6 +73,9 @@ public :
 	QAction *newFileModuleAction;
 	QAction *loadModuleAction;
 	QAction *saveModuleAction;
+
+	QToolBar *mainScriptToolBar;
+	QToolBar *modulesToolBar;
 
 };
 

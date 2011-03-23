@@ -28,6 +28,7 @@ SET(pythonscriptview_UI
 
 SET(pythonscriptview_MOC
       PythonScriptView.h
+      PythonScriptViewWidget.h
 	  PythonInterpreter.h
 )
 
