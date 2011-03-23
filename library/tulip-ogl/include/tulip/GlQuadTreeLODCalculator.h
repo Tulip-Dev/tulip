@@ -27,7 +27,6 @@
 #include <tulip/Matrix.h>
 #include <tulip/Vector.h>
 #include <tulip/GlSceneObserver.h>
-#include <tulip/CameraObserver.h>
 #include <tulip/GlCPULODCalculator.h>
 
 namespace tlp {
