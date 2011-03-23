@@ -586,7 +586,9 @@ namespace tlp {
   void GlScene::addLayer(GlLayer *layer) {
     layersList.push_back(std::pair<std::string,GlLayer*>(layer->getName(),layer));
     layer->setScene(this);
-    notifyAddLayer(this,layer->getName(),layer);
+    GlSceneEvent event(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer);
+    if (hasOnlookers())
+      sendEvent(event);
   }
 
   bool GlScene::insertLayerBefore(GlLayer *layer,const string &name) {
@@ -594,7 +596,11 @@ namespace tlp {
       if((*it).first==name){
         layersList.insert(it,pair<string,GlLayer*>(layer->getName(),layer));
         layer->setScene(this);
-        notifyAddLayer(this,layer->getName(),layer);
+
+        GlSceneEvent event(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer);
+        if (hasOnlookers())
+          sendEvent(event);
+
         return true;
       }
     }
@@ -607,7 +613,11 @@ namespace tlp {
         ++it;
         layersList.insert(it,pair<string,GlLayer*>(layer->getName(),layer));
         layer->setScene(this);
-        notifyAddLayer(this,layer->getName(),layer);
+
+        GlSceneEvent event(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer);
+        if (hasOnlookers())
+          sendEvent(event);
+
         return true;
       }
     }
@@ -619,7 +629,11 @@ namespace tlp {
       if((*it).first==name){
         GlLayer *layer=(*it).second;
         layersList.erase(it);
-        notifyDelLayer(this,name,layer);
+
+        GlSceneEvent event(*this,GlSceneEvent::TLP_DELLAYER,layer->getName(),layer);
+        if (hasOnlookers())
+          sendEvent(event);
+
         if(deleteLayer)
           delete layer;
         return;
@@ -632,12 +646,28 @@ namespace tlp {
       if((*it).second==layer){
         GlLayer *layer=(*it).second;
         layersList.erase(it);
-        notifyDelLayer(this,layer->getName(),layer);
+
+        GlSceneEvent event(*this,GlSceneEvent::TLP_DELLAYER,layer->getName(),layer);
+        if (hasOnlookers())
+          sendEvent(event);
+
         if(deleteLayer)
           delete layer;
         return;
       }
     }
+  }
+
+  void GlScene::notifyModifyLayer(const std::string &name,GlLayer *layer){
+    GlSceneEvent event(*this,GlSceneEvent::TLP_MODIFYLAYER,name,layer);
+    if (hasOnlookers())
+      sendEvent(event);
+  }
+
+  void GlScene::notifyModifyEntity(GlSimpleEntity *entity){
+    GlSceneEvent event(*this,entity);
+    if (hasOnlookers())
+      sendEvent(event);
   }
 
   void GlScene::centerScene() {

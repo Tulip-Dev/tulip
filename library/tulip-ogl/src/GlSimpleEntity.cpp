@@ -34,6 +34,9 @@ namespace tlp {
   }
 
   void GlSimpleEntity::setVisible(bool visible) {
+    if(this->visible==visible)
+      return;
+
     this->visible=visible;
     for(vector<GlComposite*>::iterator it=parents.begin();it!=parents.end();++it) {
       (*it)->notifyModified(this);

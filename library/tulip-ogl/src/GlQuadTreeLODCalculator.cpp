@@ -423,8 +423,9 @@ namespace tlp {
             if(selectionProperty)
                 selectionProperty->removePropertyObserver(this);
         }
+
         if(glScene)
-          glScene->removeObserver(this);
+          glScene->removeOnlooker(*this);
     }
 
     void GlQuadTreeLODCalculator::addObservers() {
@@ -439,7 +440,7 @@ namespace tlp {
             selectionProperty->addPropertyObserver(this);
         }
         if(glScene)
-          glScene->addObserver(this);
+          glScene->addOnlooker(*this);
     }
 
     void GlQuadTreeLODCalculator::update(PropertyInterface *property){
@@ -451,6 +452,16 @@ namespace tlp {
 
         if(needCompute)
             setHaveToCompute();
+    }
+
+    void GlQuadTreeLODCalculator::treatEvent(const Event &ev){
+      const GlSceneEvent *event = dynamic_cast<const GlSceneEvent *>(&ev);
+      if(event){
+        cout << "scene event" << endl;
+        setHaveToCompute();
+      }else{
+        cout << "unknow event" << endl;
+      }
     }
 
     void GlQuadTreeLODCalculator::afterSetNodeValue(PropertyInterface *property,const node){

@@ -78,7 +78,7 @@ namespace tlp {
 
     for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it) {
       if((*it)->getScene())
-        (*it)->getScene()->notifyModifyLayer((*it)->getScene(),(*it)->getName(),(*it));
+        (*it)->getScene()->notifyModifyLayer((*it)->getName(),(*it));
     }
   }
   //============================================================
@@ -105,7 +105,7 @@ namespace tlp {
       for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it) {
         entity->addLayerParent(*it);
         if((*it)->getScene())
-          (*it)->getScene()->notifyModifyLayer((*it)->getScene(),(*it)->getName(),(*it));
+          (*it)->getScene()->notifyModifyLayer((*it)->getName(),(*it));
       }
     }
   }
@@ -127,7 +127,7 @@ namespace tlp {
 
     for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it) {
       if((*it)->getScene())
-        (*it)->getScene()->notifyModifyLayer((*it)->getScene(),(*it)->getName(),(*it));
+        (*it)->getScene()->notifyModifyLayer((*it)->getName(),(*it));
     }
   }
   //============================================================
@@ -147,7 +147,7 @@ namespace tlp {
 
         for(vector<GlLayer*>::iterator it=layerParents.begin();it!=layerParents.end();++it) {
           if((*it)->getScene())
-            (*it)->getScene()->notifyModifyLayer((*it)->getScene(),(*it)->getName(),(*it));
+            (*it)->getScene()->notifyModifyLayer((*it)->getName(),(*it));
         }
 
         return;
@@ -179,7 +179,7 @@ namespace tlp {
   //============================================================
   void GlComposite::notifyModified(GlSimpleEntity *entity) {
     if(layerParents.size()!=0)
-      layerParents[0]->getScene()->notifyModifyEntity(layerParents[0]->getScene(),entity);
+      layerParents[0]->getScene()->notifyModifyEntity(entity);
   }
   //============================================================
   void GlComposite::getXML(xmlNodePtr rootNode) {
