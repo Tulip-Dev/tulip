@@ -101,7 +101,7 @@ namespace tlp {
     /**
      * Set if the layer is visible
      */
-    void setVisible(bool visible) {composite.setVisible(visible);}
+    void setVisible(bool visible);
 
     /**
      * Return if the layer is visible

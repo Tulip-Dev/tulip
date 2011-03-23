@@ -74,6 +74,15 @@ namespace tlp {
     sharedCamera = false;
   }
 
+  void GlLayer::setVisible(bool visible) {
+    if(composite.isVisible()==visible)
+      return;
+
+    composite.setVisible(visible);
+    if(scene)
+      scene->notifyModifyLayer(this->name,this);
+  }
+
   void GlLayer::acceptVisitor(GlSceneVisitor *visitor) {
     if(composite.isVisible()) {
       visitor->visit(this);
@@ -84,19 +93,19 @@ namespace tlp {
   void GlLayer::addGlEntity(GlSimpleEntity *entity,const std::string& name){
     composite.addGlEntity(entity,name);
     if(scene)
-      scene->notifyModifyLayer(scene,this->name,this);
+      scene->notifyModifyLayer(this->name,this);
   }
 
   void GlLayer::deleteGlEntity(const std::string &key) {
     composite.deleteGlEntity(key);
     if(scene)
-      scene->notifyModifyLayer(scene,this->name,this);
+      scene->notifyModifyLayer(this->name,this);
   }
 
   void GlLayer::deleteGlEntity(GlSimpleEntity *entity) {
     composite.deleteGlEntity(entity);
     if(scene)
-      scene->notifyModifyLayer(scene,this->name,this);
+      scene->notifyModifyLayer(this->name,this);
   }
 
   GlSimpleEntity* GlLayer::findGlEntity(const std::string &key) {

@@ -77,7 +77,7 @@ namespace tlp {
    *
    * If you want to create a widget with a visualisation is better to use GlMainWidget class (this class use a GlScene inside)
    */
-  class TLP_GL_SCOPE GlScene : public GlObservableScene {
+  class TLP_GL_SCOPE GlScene : public Observable {
 
   public:
     /** \brief Constructor
@@ -254,6 +254,16 @@ namespace tlp {
      * Clear layers list
      */
     void clearLayersList() { layersList.clear();}
+
+    /**
+     * This function is called by GlLayer and GlComposite to send layer modification event
+     */
+    void notifyModifyLayer(const std::string &name,GlLayer *layer);
+
+    /**
+     * This function is called by GlComposite to send entity modification event
+     */
+    void notifyModifyEntity(GlSimpleEntity *entity);
 
     /**
      * Get XML description of the scene and children and store it in out string

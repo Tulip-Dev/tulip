@@ -24,32 +24,38 @@
 #include <iostream>
 #include "tulip/GlSceneObserver.h"
 
+#include <tulip/GlScene.h>
+
 using namespace std;
 
 namespace tlp {
 
-  void GlObservableScene::notifyAddLayer(GlScene *scene, const string& name, GlLayer* layer) {
-    set<GlSceneObserver *> copy(observers); //Used to preserve iteratros
-    for (set<GlSceneObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-      (*itlObs)->addLayer(scene, name, layer);
-  }
+GlSceneEvent::GlSceneEvent(const GlScene &scene,GlSceneEventType sceneEventType,const std::string &layerName,GlLayer *layer)
+  :Event(scene, Event::TLP_MODIFICATION),
+    sceneEventType(sceneEventType),
+    layerName(layerName),
+    layer(layer){
+}
 
-  void GlObservableScene::notifyDelLayer(GlScene *scene, const string& name, GlLayer* layer) {
-    set<GlSceneObserver *> copy(observers); //Used to preserve iteratros
-    for (set<GlSceneObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-      (*itlObs)->delLayer(scene, name, layer);
-  }
+GlSceneEvent::GlSceneEvent(const GlScene &scene,GlSimpleEntity *entity)
+  :Event(scene, Event::TLP_MODIFICATION),
+    sceneEventType(TLP_MODIFYENTITY),
+    glSimpleEntity(entity){
+}
 
-  void GlObservableScene::notifyModifyLayer(GlScene *scene, const string& name, GlLayer* layer) {
-    set<GlSceneObserver *> copy(observers); //Used to preserve iteratros
-    for (set<GlSceneObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-      (*itlObs)->modifyLayer(scene, name, layer);
-  }
+GlSimpleEntity *GlSceneEvent::getGlSimpleEntity(){
+  assert(sceneEventType==TLP_MODIFYENTITY);
+  return glSimpleEntity;
+}
 
-  void GlObservableScene::notifyModifyEntity(GlScene *scene, GlSimpleEntity *entity) {
-    set<GlSceneObserver *> copy(observers); //Used to preserve iteratros
-    for (set<GlSceneObserver *>::iterator itlObs=copy.begin();itlObs!=copy.end();++itlObs)
-      (*itlObs)->modifyEntity(scene, entity);
-  }
+std::string GlSceneEvent::getLayerName(){
+  assert(sceneEventType==TLP_ADDLAYER || sceneEventType==TLP_DELLAYER || sceneEventType==TLP_MODIFYLAYER);
+  return layerName;
+}
+
+GlLayer *GlSceneEvent::getLayer(){
+  assert(sceneEventType==TLP_ADDLAYER || sceneEventType==TLP_DELLAYER || sceneEventType==TLP_MODIFYLAYER);
+  return layer;
+}
 }
 
