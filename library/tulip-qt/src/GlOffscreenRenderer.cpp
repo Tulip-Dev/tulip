@@ -134,7 +134,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
 		glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
 	}
 #else
-	glFrameBuf = new QGLFramebufferObject(vPWidth, vPtHeight, QGLFramebufferObject::CombinedDepthStencil);
+	glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, QGLFramebufferObject::CombinedDepthStencil);
 	}
 #endif
 	scene.setViewport(0,0,vPWidth, vPHeight);
