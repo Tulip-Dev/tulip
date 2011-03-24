@@ -26,6 +26,7 @@
 #include <vector>
 #include <tulip/Coord.h>
 #include <tulip/BoundingBox.h>
+#include <tulip/Iterator.h>
 
 namespace tlp {
 
@@ -34,6 +35,7 @@ class LayoutProperty;
 class SizeProperty;
 class DoubleProperty;
 class BooleanProperty;
+
 
 /**
   *
@@ -52,6 +54,20 @@ TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
                                            const SizeProperty *size,
                                            const DoubleProperty *rotation,
                                            const BooleanProperty *selection = 0);
+
+
+/**
+ * Compute the bounding box of graph elements according to node position edge bends
+ * node z-rotation, and size of elements
+ *
+ * Iterator itN and itE will be deleted after the computations (ie. no need to delete them yourself)
+ */
+TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
+										 Iterator<edge> *itE,
+									     const LayoutProperty *layout,
+									     const SizeProperty *size,
+									     const DoubleProperty *rotation,
+									     const BooleanProperty *selection = 0);
 /**
   *
   * Compute a bounding sphere of a graph according to node position edge bends
