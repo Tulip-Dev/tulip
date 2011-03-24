@@ -38,5 +38,10 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${TulipInclude}
 
 ADD_LIBRARY(${LibTulipOglPythonName} STATIC ${TULIPOGL_PYTHON_BINDINGS_SRC})
 
+ADD_CUSTOM_TARGET(touchTulipOglPythonCMakeLists ALL
+                  COMMAND cmake -E touch ${CMAKE_CURRENT_LIST_FILE}
+                  COMMENT "touching CMakeLists.txt for Tulip OpenGL Python Bindings (force configure before next build to keep source files list updated)"
+                  DEPENDS ${LibTulipOglPythonName})
+
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)
