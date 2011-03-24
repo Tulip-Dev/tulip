@@ -23,12 +23,6 @@
 #endif
 
 #include <fstream>
-#include <iostream>
-#include <limits.h>
-#include <string>
-#include <map>
-#include <vector>
-
 
 #ifdef  _WIN32
 // compilation pb workaround
@@ -891,12 +885,14 @@ void TulipApp::exportGraph(QAction* action) {
 }
 //**********************************************************************
 void TulipApp::windowsMenuActivated(QAction* action) {
-  int id = action->data().toInt();
-  QWidget* w = controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]]->windowList().at(id);
-  if ( w ) {
-    w->setFocus();
-    w->show();
-  }
+    int id = action->data().toInt();
+    if(!controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]]->windowList().empty()) {
+        QWidget* w = controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]]->windowList().at(id);
+        if ( w ) {
+            w->setFocus();
+            w->show();
+        }
+    }
 }
 //**********************************************************************
 void TulipApp::windowsMenuAboutToShow() {
@@ -906,9 +902,11 @@ void TulipApp::windowsMenuAboutToShow() {
   QWorkspace *currentWorkspace=controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]];
   QAction* cascadeAction = windowsMenu->addAction("&Cascade", this, SLOT(cascade() ) );
   QAction* tileAction = windowsMenu->addAction("&Tile", currentWorkspace, SLOT(tile() ) );
+  QAction* closeallAction = windowsMenu->addAction("Close All", this, SLOT(closeAll()));
   if ( currentWorkspace->windowList().isEmpty() ) {
     cascadeAction->setEnabled(false);
     tileAction->setEnabled(false);
+    closeallAction->setEnabled(false);
   }else{
     windowsMenu->addSeparator();
     QWidgetList windows = currentWorkspace->windowList();
@@ -1294,4 +1292,10 @@ void TulipApp::cascade(){
   for(QWidgetList::iterator it=widgetList.begin();it!=widgetList.end();++it){
     (*it)->resize(QSize(512,512));
   }
+}
+
+//==============================================================
+void TulipApp::closeAll(){
+  QWorkspace *currentWorkspace=controllerToWorkspace[tabIndexToController[tabWidget->currentIndex()]];
+  currentWorkspace->closeAllWindows();
 }
