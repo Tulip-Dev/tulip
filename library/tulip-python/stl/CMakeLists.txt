@@ -38,6 +38,10 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 
 ADD_LIBRARY(${LibStlPythonName} STATIC ${STL_PYTHON_BINDINGS_SRC})
 
+ADD_CUSTOM_TARGET(touchStlPythonCMakeLists ALL
+                  COMMAND cmake -E touch ${CMAKE_CURRENT_LIST_FILE}
+                  COMMENT "touching CMakeLists.txt for Stl Python Bindings (force configure before next build to keep source files list updated)"
+                  DEPENDS ${LibStlPythonName})
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)

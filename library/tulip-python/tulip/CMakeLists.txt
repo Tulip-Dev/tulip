@@ -82,5 +82,10 @@ SET_SOURCE_FILES_PROPERTIES(siptuliptlpIteratorGraph.cpp
                        
 ADD_LIBRARY(${LibTulipPythonName} STATIC ${TULIP_PYTHON_BINDINGS_SRC})
 
+ADD_CUSTOM_TARGET(touchTulipPythonCMakeLists ALL
+                  COMMAND cmake -E touch ${CMAKE_CURRENT_LIST_FILE}
+                  COMMENT "touching CMakeLists.txt for Tulip Python Bindings (force configure before next build to keep source files list updated)"
+                  DEPENDS ${LibTulipPythonName})
+
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)
