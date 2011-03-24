@@ -162,7 +162,7 @@ const std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph
 
 VIEWPLUGIN(PythonScriptView, "Python Script view", "Antoine Lambert", "04/2010", "Python Script View", "0.7");
 
-PythonScriptView::PythonScriptView() : pythonInterpreter(NULL), fontZoom(0), scriptStopped(false) {}
+PythonScriptView::PythonScriptView() : pythonInterpreter(NULL),graph(NULL), fontZoom(0), scriptStopped(false) {}
 
 PythonScriptView::~PythonScriptView() {}
 
