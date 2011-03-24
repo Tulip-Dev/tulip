@@ -12,6 +12,7 @@ STRING(TOLOWER ${PLUGIN_NAME} PLUGIN_NAME)
 
 SET(LIB_SRCS
 library/tulip-qt/src/AbstractGraphicsView.cpp
+library/tulip-qt/src/AnimatedGraphicsObject.cpp
 library/tulip-qt/src/EmptyView.cpp
 library/tulip-qt/src/GlMainWidgetGraphicsItem.cpp
 library/tulip-qt/src/GraphicsItemsGraphMapper.cpp
@@ -25,6 +26,7 @@ SET(LIB_UI
 
 SET(LIB_MOC
 library/tulip-qt/include/tulip/AbstractGraphicsView.h
+library/tulip-qt/include/tulip/AnimatedGraphicsObject.h
 library/tulip-qt/include/tulip/GlMainWidgetGraphicsItem.h
 library/tulip-qt/include/tulip/PushButtonItem.h
 )

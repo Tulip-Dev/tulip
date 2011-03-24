@@ -1,14 +1,14 @@
 #ifndef PUSHBUTTONITEM_H
 #define PUSHBUTTONITEM_H
 
-#include <QtGui/QGraphicsObject>
 #include <QtGui/QIcon>
 #include <QtCore/QSize>
 #include <QtCore/QString>
 #include <QtGui/QGraphicsLayoutItem>
+#include "tulip/AnimatedGraphicsObject.h"
 
 namespace tlp {
-  class PushButtonItem: public QGraphicsObject, public QGraphicsLayoutItem {
+  class PushButtonItem: public AnimatedGraphicsObject, public QGraphicsLayoutItem {
 Q_INTERFACES(QGraphicsLayoutItem);
 Q_OBJECT;
 Q_PROPERTY(QString text READ text WRITE setText);
@@ -17,6 +17,7 @@ Q_PROPERTY(QSize iconSize READ iconSize WRITE setIconSize);
 
 public:
   PushButtonItem(const QString &text = "", const QIcon &icon = QIcon(), const QSize &iconSize = QSize(32,32), QGraphicsItem *parent=0);
+  PushButtonItem(QAction *action, const QSize &iconSize = QSize(32,32), QGraphicsItem *parent=0);
   virtual ~PushButtonItem();
 
   QString text() const;
@@ -27,6 +28,9 @@ public:
   QRectF boundingRect() const;
 
   void setGeometry(const QRectF &rect);
+
+  void setAction(QAction *);
+  QAction *action() const { return _action; }
 
 protected:
   void mousePressEvent(QGraphicsSceneMouseEvent *);
@@ -51,10 +55,12 @@ private:
   QString _text;
   QIcon _icon;
   QSize _iconSize;
+  QAction *_action;
 
   bool _pressed;
   bool _hovered;
   bool _clicking;
+
 };
 }
 #endif // PUSHBUTTONITEM_H

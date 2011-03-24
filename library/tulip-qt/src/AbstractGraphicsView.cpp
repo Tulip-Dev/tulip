@@ -11,6 +11,13 @@
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtOpenGL/QGLWidget>
 
+// FIXME: remove me
+#include <QtGui/QGraphicsWidget>
+#include <QtGui/QGraphicsLinearLayout>
+#include <QtGui/QPushButton>
+#include "tulip/PushButtonItem.h"
+#include "tulip/TulipGraphicsLayout.h"
+
 using namespace tlp;
 using namespace std;
 
@@ -29,6 +36,42 @@ static QGLFormat GlInit() {
   tmpFormat.setSampleBuffers(true);
   return tmpFormat;
 }
+
+//void saveGraphicsSceneHierarchyToTlp(QGraphicsScene *scene, const std::string &tlpFile) {
+//  Graph *g = newGraph();
+//  StringProperty *qoType = g->getProperty<StringProperty>("viewLabel");
+
+//  QList<QGraphicsItem *> items = scene->items();
+//  map<QGraphicsItem *,QList<QGraphicsItem *> > itemsAdjacency;
+//  map<node,QGraphicsItem *> nodeToItem;
+//  map<QGraphicsItem *,node> itemToNode;
+//  for (QList<QGraphicsItem *>::iterator it = items.begin(); it != items.end(); ++it) {
+//    QGraphicsItem *qgi = *it;
+//    itemsAdjacency[qgi] = qgi->childItems();
+//    node n = g->addNode();
+//    nodeToItem[n] = qgi;
+//    itemToNode[qgi] = n;
+
+//    QObject *qobj = dynamic_cast<QObject *>(qgi);
+//    if (qobj)
+//      qoType->setNodeValue(n,qobj->metaObject()->className());
+//    else
+//      qoType->setNodeValue(n,"QGraphicsItem");
+//  }
+
+//  node n;
+//  forEach(n,g->getNodes()) {
+//    QGraphicsItem *qgi = nodeToItem[n];
+//    for (QList<QGraphicsItem *>::iterator it = itemsAdjacency[qgi].begin(); it != itemsAdjacency[qgi].end(); ++it)
+//      g->addEdge(n,itemToNode[*it]);
+//  }
+
+//  string msg;
+//  if (!g->computeProperty("Sugiyama (OGDF)",g->getProperty<LayoutProperty>("viewLayout"),msg))
+//    qWarning(msg.c_str());
+//  saveGraph(g,tlpFile);
+//  delete g;
+//}
 
 namespace tlp {
 AbstractGraphicsView::AbstractGraphicsView():
@@ -71,10 +114,8 @@ void AbstractGraphicsView::setInteractors(const list<Interactor *> &interactors)
   for (list<Interactor *>::iterator it = _interactors.begin(); it != _interactors.end(); ++it)
     (*it)->setView(this);
   _interactorsToolbar = buildInteractorsToolbar();
-  if (_interactorsToolbar) {
-    _interactorsToolbar->setParentItem(0);
+  if (_interactorsToolbar)
     _centralView->scene()->addItem(_interactorsToolbar);
-  }
 }
 // ===================================
 list<Interactor *> AbstractGraphicsView::getInteractors() {
@@ -123,7 +164,7 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
   GlMainWidget *glMainWidget = dynamic_cast<GlMainWidget *>(w);
   if (glMainWidget) {
     _centralWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _centralView->width(), _centralView->height());
-//    _centralView->scene()->addItem(_centralWidgetItem);
+    _centralView->scene()->addItem(_centralWidgetItem);
     connect(_centralWidget, SIGNAL(viewDrawn(GlMainWidget *,bool)), this, SLOT(updateCentralView()));
     connect(_centralWidget, SIGNAL(viewRedrawn(GlMainWidget *)), this, SLOT(updateCentralView()));
   }
@@ -144,7 +185,15 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
 }
 // ===================================
 QGraphicsItem *AbstractGraphicsView::buildInteractorsToolbar() {
-  return 0;
+  QGraphicsWidget *w = new QGraphicsWidget;
+  QGraphicsLinearLayout *layout = new QGraphicsLinearLayout();
+  w->setLayout(layout);
+
+  for(list<Interactor *>::iterator it = _interactors.begin(); it != _interactors.end(); ++it) {
+    PushButtonItem *btn = new PushButtonItem((*it)->getAction());
+    layout->addItem(btn);
+  }
+  return w;
 }
 // ===================================
 bool AbstractGraphicsView::eventFilter(QObject *obj, QEvent *e) {
@@ -175,4 +224,5 @@ void AbstractGraphicsView::updateCentralView() {
   dynamic_cast<GlMainWidgetGraphicsItem *>(_centralWidgetItem)->setRedrawNeeded(true);
   _centralView->scene()->update();
 }
-} /* namespace tlp_new */
+
+}

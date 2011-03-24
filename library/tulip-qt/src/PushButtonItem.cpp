@@ -2,15 +2,34 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QGraphicsColorizeEffect>
+#include <QtGui/QAction>
+#include <QtGui/QGraphicsLayout>
+
+//FIXME: remove me
+#include <iostream>
 
 namespace tlp {
 PushButtonItem::PushButtonItem(const QString &text, const QIcon &icon, const QSize &iconSize, QGraphicsItem *parent):
-  QGraphicsObject(parent),
-  _text(text), _icon(icon), _iconSize(iconSize), _pressed(false), _hovered(false), _clicking(false) {
+  AnimatedGraphicsObject(parent),
+  _text(text), _icon(icon), _iconSize(iconSize),
+  _pressed(false), _hovered(false), _clicking(false), _action(0) {
   setAcceptHoverEvents(true);
+  setGraphicsItem(this);
+}
+//==========================
+PushButtonItem::PushButtonItem(QAction *action, const QSize &iconSize, QGraphicsItem *parent):
+  AnimatedGraphicsObject(parent),
+  _iconSize(iconSize),
+  _pressed(false), _hovered(false), _clicking(false),
+  _action(0) {
+
+  setAction(action);
+  setAcceptHoverEvents(true);
+  setGraphicsItem(this);
 }
 //==========================
 PushButtonItem::~PushButtonItem() {
+  delete _action;
 }
 //==========================
 QString PushButtonItem::text() const {
@@ -56,8 +75,11 @@ void PushButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *) {
   if (_pressed) {
     _pressed = false;
     emit released();
-    if (_clicking)
+    if (_clicking) {
+      if (_action)
+        _action->trigger();
       emit clicked();
+    }
     _clicking = false;
     setGraphicsEffect(0);
   }
@@ -102,22 +124,23 @@ QRectF PushButtonItem::boundingRect() const {
     width += _iconSize.width();
     height += _iconSize.height();
   }
-  if (_text != "") {
-    QGraphicsTextItem textItem(_text);
-    width = std::max<qreal>(width,textItem.boundingRect().width());
-    height += textItem.boundingRect().height();
-  }
 
   return QRectF(0,0,width, height);
 }
 //==========================
 void PushButtonItem::setGeometry(const QRectF &rect) {
   QGraphicsLayoutItem::setGeometry(rect);
-  setX(rect.x());
-  setY(rect.y());
+  moveItem(pos(), QPointF(rect.x(),rect.y()));
 }
 //==========================
 QSizeF PushButtonItem::sizeHint(Qt::SizeHint, const QSizeF &) const {
   return boundingRect().size();
+}
+//==========================
+void PushButtonItem::setAction(QAction *action) {
+  delete _action;
+  _action = action;
+  setIcon(_action->icon());
+  setText(action->text());
 }
 }

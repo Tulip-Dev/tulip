@@ -17,6 +17,8 @@ public:
 
   Graph *getGraph() const { return _graph; }
 
+  std::map<tlp::node, TYPE *> nodeToItemMap() const { return _nodeToItem; }
+
 protected:
   static const std::string LAYOUT_PROPNAME;
   static const std::string SIZE_PROPNAME;
