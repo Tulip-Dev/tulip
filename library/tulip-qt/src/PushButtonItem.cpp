@@ -11,10 +11,11 @@
 namespace tlp {
 PushButtonItem::PushButtonItem(const QString &text, const QIcon &icon, const QSize &iconSize, QGraphicsItem *parent):
   AnimatedGraphicsObject(parent),
-  _text(text), _icon(icon), _iconSize(iconSize),
+  _icon(icon), _iconSize(iconSize),
   _pressed(false), _hovered(false), _clicking(false), _action(0) {
   setAcceptHoverEvents(true);
   setGraphicsItem(this);
+  setToolTip(text);
 }
 //==========================
 PushButtonItem::PushButtonItem(QAction *action, const QSize &iconSize, QGraphicsItem *parent):
@@ -33,7 +34,7 @@ PushButtonItem::~PushButtonItem() {
 }
 //==========================
 QString PushButtonItem::text() const {
-  return _text;
+  return toolTip();
 }
 //==========================
 QIcon PushButtonItem::icon() const {
@@ -45,8 +46,7 @@ QSize PushButtonItem::iconSize() const {
 }
 //==========================
 void PushButtonItem::setText(const QString &text) {
-  _text = text;
-  prepareGeometryChange();
+  setToolTip(text);
 }
 //==========================
 void PushButtonItem::setIcon(const QIcon &icon) {
@@ -115,7 +115,7 @@ void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
   if (!_hovered)
     painter->setOpacity(0.8);
 
-  painter->drawPixmap(boundingRect().width()/2 - _iconSize.width()/2, 0, _iconSize.width(), _iconSize.height(), _icon.pixmap(_iconSize, mode));
+  painter->drawPixmap(0, 0, _iconSize.width(), _iconSize.height(), _icon.pixmap(_iconSize, mode));
 }
 //==========================
 QRectF PushButtonItem::boundingRect() const {
@@ -124,7 +124,6 @@ QRectF PushButtonItem::boundingRect() const {
     width += _iconSize.width();
     height += _iconSize.height();
   }
-
   return QRectF(0,0,width, height);
 }
 //==========================

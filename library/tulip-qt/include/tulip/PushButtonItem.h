@@ -52,7 +52,6 @@ signals:
   void hovered(bool);
 
 private:
-  QString _text;
   QIcon _icon;
   QSize _iconSize;
   QAction *_action;
