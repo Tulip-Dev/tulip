@@ -141,6 +141,7 @@ protected slots:
   void deletePluginsUpdateChecker();
   void tabChanged(int index);
   void cascade();
+  void closeAll();
 
 private:
   void buildMenus();
