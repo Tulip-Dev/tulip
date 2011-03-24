@@ -18,6 +18,11 @@ set(pluginPusher_SRCS
     PushToPluginServer.cpp
 )
 
+CONFIGURE_FILE("generate_plugin_dirs.sh.in" "generate_plugin_dirs.sh")
+CONFIGURE_FILE("generate_plugin_doc.sh" "generate_plugin_doc.sh")
+CONFIGURE_FILE("plugin_doc.doxygen" "plugin_doc.doxygen")
+
+
 INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${LIBXML2_INCLUDE_DIR} ${PROJECT_BINARY_DIR}/library/tulip-qt/include/tulip ${PROJECT_BINARY_DIR}/software/tulip/include ${TulipInclude} ${TulipQtInclude} ${TulipOGLInclude} ${TulipPluginsManagerInclude})
 
 ADD_EXECUTABLE(serverGenerator ${serverGenerator_SRCS})

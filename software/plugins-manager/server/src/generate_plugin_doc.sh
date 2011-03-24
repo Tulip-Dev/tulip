@@ -13,7 +13,7 @@ fi
 
 CONFIG_FILE=/tmp/plugin_doc_config.doxygen
 
-cat plugin_doc.doxygen > $CONFIG_FILE
+cat $(dirname $0)/plugin_doc.doxygen > $CONFIG_FILE
 echo "INPUT = $INPUT_FILE" >> $CONFIG_FILE
 echo "OUTPUT_DIRECTORY = $OUTPUT_DIR" >> $CONFIG_FILE
 

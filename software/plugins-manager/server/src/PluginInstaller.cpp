@@ -166,12 +166,12 @@ int main(int argc,char **argv) {
   
   QDir dir;
   dir.mkpath(targetPath);
-  dir.mkpath(targetPath+"/plugins/");
-  dir.mkpath(targetPath+"/plugins/"+path);
-  dir.mkpath(targetPath+"/plugins/"+path+"/"+subDir);
+  dir.mkpath(targetPath+"/pluginsV2/");
+  dir.mkpath(targetPath+"/pluginsV2/"+path);
+  dir.mkpath(targetPath+"/pluginsV2/"+path+"/"+subDir);
   
-  QDir dstDir(targetPath+"/plugins/"+path);
-  QDir dstSubDir(targetPath+"/plugins/"+path+"/"+subDir);
+  QDir dstDir(targetPath+"/pluginsV2/"+path);
+  QDir dstSubDir(targetPath+"/pluginsV2/"+path+"/"+subDir);
 
   if(generateDoc)
     if (!generatePluginInfoFile(pluginInfo, dstDir))
