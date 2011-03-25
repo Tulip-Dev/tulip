@@ -12,6 +12,18 @@ namespace tlp {
 }
 // ===================================
 TulipGraphicsLayout::~TulipGraphicsLayout() {
+  for (int i = count() - 1; i >= 0; --i) {
+      QGraphicsLayoutItem *item = itemAt(i);
+      // The following lines can be removed, but this removes the item
+      // from the layout more efficiently than the implementation of
+      // ~QGraphicsLayoutItem.
+      removeAt(i);
+      if (item) {
+          item->setParentLayoutItem(0);
+          if (item->ownedByLayout())
+              delete item;
+      }
+  }
   delete _dataSet;
 }
 // ===================================
