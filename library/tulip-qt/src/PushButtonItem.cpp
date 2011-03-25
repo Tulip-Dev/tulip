@@ -142,4 +142,12 @@ void PushButtonItem::setAction(QAction *action) {
   setIcon(_action->icon());
   setText(action->text());
 }
+//==========================
+void PushButtonItem::setItemSize(const QSizeF &s) {
+  setIconSize(QSize(s.width(),s.height()));
+}
+//==========================
+QSizeF PushButtonItem::itemSize() const {
+  return _iconSize;
+}
 }

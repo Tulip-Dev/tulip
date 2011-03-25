@@ -32,6 +32,9 @@ public:
   void setAction(QAction *);
   QAction *action() const { return _action; }
 
+  void setItemSize(const QSizeF &s);
+  QSizeF itemSize() const;
+
 protected:
   void mousePressEvent(QGraphicsSceneMouseEvent *);
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
