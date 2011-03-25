@@ -17,27 +17,14 @@
  *
  */
 
-#ifndef viewGl_included
-#define viewGl_included
-#include <map>
+#ifndef TULIPAPP_H
+#define TULIPAPP_H
 
-#include <vector>
-#include <QtGui/qdockwidget.h>
 #include <QtGui/qmessagebox.h>
-#include <QtGui/qsplitter.h>
-#include <QtCore/qstring.h>
 #include <QtGui/qmainwindow.h>
-#include <QtGui/qmenu.h>
-#include <QtGui/QTabWidget>
 #include <QtCore/QSettings>
-
 #include <QtCore/QProcess>
 
-#include <string>
-#include <tulip/Reflect.h>
-#include <tulip/GlScene.h>
-#include <tulip/Observable.h>
-#include <tulip/GlSceneObserver.h>
 #include <PluginsUpdateChecker.h>
 #include "TulipPluginLoader.h"
 #include "TulipData.h"
@@ -84,7 +71,7 @@ public:
     settings.setValue("needRestart", true);
     settings.endGroup();
     settings.sync();
-  }    
+  }
 
   static void disableRestart() {
     QSettings settings("TulipSoftware","Tulip");
@@ -92,7 +79,7 @@ public:
     settings.setValue("needRestart", false);
     settings.endGroup();
     settings.sync();
-  }    
+  }
 
 protected:
   QWidget *aboutWidget;

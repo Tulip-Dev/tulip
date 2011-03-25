@@ -28,81 +28,29 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qapplication.h>
+
 #include <QtGui/qfiledialog.h>
-#include <QtCore/qfileinfo.h>
 #include <QtCore/qlibraryinfo.h>
-#include <QtCore/qdir.h>
-#include <QtGui/qinputdialog.h>
-#include <QtGui/qworkspace.h>
-#include <QtGui/qmenubar.h>
+#include <QtGui/qevent.h>
 #include <QtGui/qdesktopwidget.h>
 #include <QtGui/qstatusbar.h>
-#include <QtGui/qpixmap.h>
-#include <QtGui/qimage.h>
-#include <QtGui/qimagewriter.h>
-#include <QtGui/qpainter.h>
-#include <QtGui/qprogressdialog.h>
-#include <QtGui/qlayout.h>
-#include <QtGui/qcombobox.h>
-#include <QtGui/qcursor.h>
-#include <QtGui/qaction.h>
-#include <QtGui/qradiobutton.h>
 #include <QtGui/qprinter.h>
 #include <QtGui/qprintdialog.h>
-#include <QtGui/qmenudata.h>
-#include <QtGui/qtextedit.h>
-#include <QtGui/qtoolbar.h>
 
-#include <tulip/tuliphash.h>
-#include <tulip/TlpTools.h>
-#include <tulip/Reflect.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/AbstractProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/StringProperty.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/StableIterator.h>
-#include <tulip/FindSelectionWidget.h>
-#include <tulip/Morphing.h>
-#include <tulip/ExtendedClusterOperation.h>
-#include <tulip/ExportModule.h>
-#include <tulip/Algorithm.h>
-#include <tulip/ImportModule.h>
-#include <tulip/ForEach.h>
-#include <tulip/Interactor.h>
-#include <tulip/GlScene.h>
-#include <tulip/GlLayer.h>
-#include <tulip/GlGraphComposite.h>
-#include <tulip/InteractorManager.h>
-#include <tulip/ViewPluginsManager.h>
 #include <tulip/ControllerPluginsManager.h>
-#include <tulip/GraphView.h>
 #include <tulip/NodeLinkDiagramComponent.h>
-#include <tulip/TabWidget.h>
 #include <tulip/MainController.h>
 #include <tulip/QtProgress.h>
 #include <tulip/PreferenceManager.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/QtOpenGlErrorViewer.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
-#include <tulip/tulipconf.h>
 
 #include <PluginsHelp.h>
 #include <PluginsManager.h>
-#include <UpdatePlugin.h>
 
 #include "TulipApp.h"
-#include "Application.h"
-#include "ElementInfoToolTip.h"
 #include "InfoDialog.h"
-#include "AppStartUp.h"
 #include "PreferenceDialog.h"
 #include "ChooseControllerDialog.h"
 
