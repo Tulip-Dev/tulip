@@ -24,7 +24,7 @@ else
   mkdir /tmp/plugins_doc
 fi
 
-for LIB_DIR in $(find $2 -name 'lib*-@TulipVersion@.so' -exec dirname {} ";")
+for LIB_DIR in $(find $BUILD_TOP_DIR -name 'lib*-@TulipVersion@.so' -exec dirname {} ";")
 do
 GEN_DOC=no
 FILE_XML=none
