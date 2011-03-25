@@ -110,9 +110,3 @@ target_link_libraries(pluginPusher ${QT_LIBRARIES}
                       ${LibTulipPluginsManagerName} 
                       ${LIBXML2_LIBRARIES})
 ENDIF(QT_VERSION_MINOR GREATER 6)                      	
-
-
-INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/generate_plugin_dirs.sh
-        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
-INSTALL(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/generate_plugin_doc.sh
-        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/")
