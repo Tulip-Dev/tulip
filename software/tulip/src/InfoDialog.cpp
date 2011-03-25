@@ -20,14 +20,12 @@
 #include <config.h>
 #endif
 
-#include <string>
-#include <QtGui/qlabel.h>
 #include <tulip/TulipRelease.h>
 #include "InfoDialog.h"
 
 using namespace std;
 
-/* 
+/*
  *  Constructs a InfoDialog which is a child of 'parent'
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
@@ -36,12 +34,12 @@ using namespace std;
 InfoDialog::InfoDialog( QWidget* parent)
     : QDialog( parent) {
   setupUi(this);
-  string tmp="Tulip ";
+  QString tmp="Tulip ";
   tmp+=TULIP_RELEASE;
-  TextLabel2->setText(tmp.c_str());
+  TextLabel2->setText(tmp);
 }
 
-/*  
+/*
  *  Destroys the object and frees any allocated resources
  */
 InfoDialog::~InfoDialog()
