@@ -20,10 +20,14 @@ do
   PLUGIN_LIB_NAME=$(basename $PLUGIN_LIB)
   PLUGIN_XML_NAME=${PLUGIN_LIB_NAME%.$SUFFIX}.xml
   PLUGIN_XML=$(find $SRV_DIR -name $PLUGIN_XML_NAME)
-  if [ $? -ne 0 ]; then
-    echo no directory found for $PLUGIN_LIB
+  if [ "$PLUGIN_XML" == "" ]; then
+    echo Error: no directory found for $PLUGIN_LIB
+    exit
   else
     echo copying $PLUGIN_LIB_NAME in $(dirname $PLUGIN_XML)/$ARCH
+    if [ ! -d $(dirname $PLUGIN_XML)/$ARCH ]; then
+      mkdir $(dirname $PLUGIN_XML)/$ARCH
+    fi
     cp $PLUGIN_LIB $(dirname $PLUGIN_XML)/$ARCH
   fi
 done

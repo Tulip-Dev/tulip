@@ -80,6 +80,13 @@ int main(int argc,char **argv) {
   InteractorManager::getInst().loadPlugins(&plug);
   ViewPluginsManager::getInst().loadPlugins(&plug);
   ControllerPluginsManager::getInst().loadPlugins(&plug);
+
+  if (!plug.errorMsgs.empty()) {
+    cout << "Error when loading plugins:"<< endl;
+    cout << plug.errorMsgs << endl;
+    return EXIT_FAILURE;
+  }
+
 #if defined(_WIN32)
   if (getEnvTlp)
     putenv((string("TLP_DIR=") + getEnvTlp).c_str());

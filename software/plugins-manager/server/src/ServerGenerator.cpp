@@ -55,6 +55,12 @@ int main(int argc,char **argv) {
   ViewPluginsManager::getInst().loadPlugins(&plug);
   ControllerPluginsManager::getInst().loadPlugins(&plug);
 
+  if (!plug.errorMsgs.empty()) {
+    cout << "Error when loading plugins:"<< endl;
+    cout << plug.errorMsgs << endl;
+    return EXIT_FAILURE;
+  }
+
   vector<LocalPluginInfo> pluginsList=plug.pluginsList;
 
   for(vector<LocalPluginInfo>::iterator it=pluginsList.begin();it!=pluginsList.end();++it) {
