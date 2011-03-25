@@ -38,7 +38,7 @@ using namespace tlp;
 int main(int argc,char **argv) {
   if(argc<=2)  {
     cout << "How to use :" << endl;
-    cout << " First arg : doc source directory (where directory \"doxygen\" are)" << endl;
+    cout << " First arg : doc source directory (where directory \"doxygen\" are), can be empty" << endl;
     cout << " Second arg : target directory" << endl;
     cout << " Third arg : source directory for mac/windows plugins" << endl;
     exit(1);
@@ -55,6 +55,12 @@ int main(int argc,char **argv) {
   ViewPluginsManager::getInst().loadPlugins(&plug);
   ControllerPluginsManager::getInst().loadPlugins(&plug);
 
+  if (!plug.errorMsgs.empty()) {
+    cout << "Error when loading plugins:"<< endl;
+    cout << plug.errorMsgs << endl;
+    return EXIT_FAILURE;
+  }
+
   vector<LocalPluginInfo> pluginsList=plug.pluginsList;
 
   for(vector<LocalPluginInfo>::iterator it=pluginsList.begin();it!=pluginsList.end();++it) {
@@ -67,16 +73,26 @@ int main(int argc,char **argv) {
 
   QDir dir;
   dir.mkpath(targetPath);
-  dir.mkpath(targetPath+"/plugins/");
+
+#if defined(I64)
+    QString archSubDir("i64");
+#else
+    QString archSubDir("i386");
+#endif
 
   for(vector<LocalPluginInfo>::iterator it=pluginsList.begin();it!=pluginsList.end();++it) {
+    QString path((*it).fileName.c_str());
 
-    QString path=(*it).fileName.c_str();
+    cout << "*** " << it->fileName.c_str() << " of type " << it->displayType << " found : " << endl;
 
-    QDir dstDir(targetPath+"/plugins/"+path);
-    dstDir.mkpath(targetPath+"/plugins/"+path);
+    // version is X.Y.Z a.b with X.Y.Z the Tulip version
+    path += '.' + QString((*it).version.substr(6).c_str());
 
-    if (!generatePluginInfoFile((*it), dstDir))
+    QDir dstDir(targetPath+"/pluginsV2/"+path);
+    dstDir.mkpath(targetPath+"/pluginsV2/"+path);
+    dstDir.mkpath(targetPath+"/pluginsV2/"+path + '/' + archSubDir);
+
+    if (!docPath.isEmpty() && !generatePluginInfoFile((*it), dstDir))
       return EXIT_FAILURE;
 
     QDir srcDir;
@@ -93,42 +109,55 @@ int main(int argc,char **argv) {
     if(argc==4) {
       secondSrcDir=QDir((string(argv[3])+subDir).c_str());
     }
-     
+
     if(srcDir.exists(QString((*it).fileName.c_str())+".so")) {
-      UpdatePlugin::copyFile(srcDir,QString((*it).fileName.c_str())+".so",dstDir,QString((*it).fileName.c_str())+".so."+QString((*it).version.c_str()).replace(" ",".")+".i386");
+      UpdatePlugin::copyFile(srcDir,QString((*it).fileName.c_str())+".so",
+			     QDir(dstDir.filePath(archSubDir)),
+			     QString((*it).fileName.c_str())+".so", true);
     }
     if(argc==4) {
+      dstDir.mkpath(targetPath+"/pluginsV2/"+path + "/i386");
       if(secondSrcDir.exists(QString((*it).fileName.c_str())+".dylib")) {
-	UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".dylib",dstDir,QString((*it).fileName.c_str())+".dylib."+QString((*it).version.c_str()).replace(" ","."));
+	UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".dylib",
+			       QDir(dstDir.filePath("i386")),
+			       QString((*it).fileName.c_str())+".dylib", true);
       }
       if(secondSrcDir.exists(QString((*it).fileName.c_str())+".dll")) {
-	UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".dll",dstDir,QString((*it).fileName.c_str())+".dll."+QString((*it).version.c_str()).replace(" ","."));
+	UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".dll",
+			       QDir(dstDir.filePath("i386")),
+			       QString((*it).fileName.c_str())+".dll", true);
       }
     }
-    // Documentation :
-    QDir pluginsDocDir(docPath+"/doxygen/xml");
+    if (!docPath.isEmpty()) {
+      // Documentation :
+      QDir pluginsDocDir(docPath+"/doxygen/xml");
 
-    QStringList filters;
-    filters << "class*.xml";
-    QStringList pluginsDocs = pluginsDocDir.entryList(filters);
-    QString fileName = QString((*it).fileName.c_str());
-    QString libName = fileName.split("-").first();
-    libName=libName.split("lib").last();
-    //cout << "lib name : " << libName.toStdString() << endl;
+      QStringList filters;
+      filters << "class*.xml";
+      QStringList pluginsDocs = pluginsDocDir.entryList(filters);
+      QString fileName = QString((*it).fileName.c_str());
+      QString libName = fileName.split("-").first();
+      libName=libName.split("lib").last();
+      //cout << "lib name : " << libName.toStdString() << endl;
   
-    QList<QString>::iterator iter = pluginsDocs.begin();
+      QList<QString>::iterator iter = pluginsDocs.begin();
     
-    while(iter != pluginsDocs.end()){
+      bool xmlDocFound = false;
+      while(iter != pluginsDocs.end()){
       
-      QString docFile(*iter);
-      docFile = (docFile.mid(5,docFile.size()-9));
-            
-      if(docFile.compare(libName,Qt::CaseInsensitive)==0){
-	QFile srcFile(docPath+"/doxygen/xml/" + (*iter));
-	QString version((*it).version.c_str());
-	generatePluginDocFile(fileName, version, srcFile, dstDir);
+	QString docFile(*iter);
+	docFile = (docFile.mid(5,docFile.size()-9));
+
+	if(docFile.compare(libName, Qt::CaseInsensitive)==0){
+	  QFile srcFile(docPath+"/doxygen/xml/" + (*iter));
+	  QString version((*it).version.c_str());
+	  generatePluginDocFile(fileName, version, srcFile, dstDir);
+	  xmlDocFound = true;
+	}
+	++iter;
       }
-      ++iter;
+      if (xmlDocFound == false)	
+	cout << "no xml doc file found" << endl;
     }
   }
     

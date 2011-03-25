@@ -57,8 +57,6 @@ bool generatePluginInfoFile(LocalPluginInfo& pInfo, QDir& dstDir) {
   rootNode = xmlNewNode(NULL, BAD_CAST "pluginInfo");
   xmlDocSetRootElement(doc, rootNode);
     
-  cout << "type : " << pInfo.type << " dptype : " << pInfo.displayType << endl;
-
   xmlNewProp(rootNode, BAD_CAST "name", BAD_CAST pInfo.name.c_str());
   xmlNewProp(rootNode, BAD_CAST "type", BAD_CAST pInfo.type.c_str());
   xmlNewProp(rootNode, BAD_CAST "displayType", BAD_CAST pInfo.displayType.c_str());
@@ -85,10 +83,9 @@ bool generatePluginInfoFile(LocalPluginInfo& pInfo, QDir& dstDir) {
   
   pluginXmlFile.write((char *)xmlbuff, buffersize);
   pluginXmlFile.close();
+  cout << QFileInfo(pluginXmlFile).fileName().toAscii().data() << " generated" << endl;
   xmlFree(xmlbuff);
   
-  cout << "Plugin : " << pInfo.fileName.c_str() << " installed" << endl;
-
   return true;
 }
 
@@ -106,4 +103,5 @@ void generatePluginDocFile(QString& pFileName, QString&, QFile& pDoxFile, QDir& 
   out << "<?xml version='1.0' encoding='UTF-8' standalone='no'?>" << "\n" << "<doc>" << "\n";
   out << srcStr.mid(beginPos,(endPos+endStr.length())-beginPos);
   out << "</doc>" << "\n" ;
+  cout << QFileInfo(dstFile).fileName().toAscii().data() << " generated" << endl;
 }
