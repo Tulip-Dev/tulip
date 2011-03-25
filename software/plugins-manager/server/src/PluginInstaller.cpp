@@ -80,6 +80,13 @@ int main(int argc,char **argv) {
   InteractorManager::getInst().loadPlugins(&plug);
   ViewPluginsManager::getInst().loadPlugins(&plug);
   ControllerPluginsManager::getInst().loadPlugins(&plug);
+
+  if (!plug.errorMsgs.empty()) {
+    cout << "Error when loading plugins:"<< endl;
+    cout << plug.errorMsgs << endl;
+    return EXIT_FAILURE;
+  }
+
 #if defined(_WIN32)
   if (getEnvTlp)
     putenv((string("TLP_DIR=") + getEnvTlp).c_str());
@@ -166,12 +173,12 @@ int main(int argc,char **argv) {
   
   QDir dir;
   dir.mkpath(targetPath);
-  dir.mkpath(targetPath+"/plugins/");
-  dir.mkpath(targetPath+"/plugins/"+path);
-  dir.mkpath(targetPath+"/plugins/"+path+"/"+subDir);
+  dir.mkpath(targetPath+"/pluginsV2/");
+  dir.mkpath(targetPath+"/pluginsV2/"+path);
+  dir.mkpath(targetPath+"/pluginsV2/"+path+"/"+subDir);
   
-  QDir dstDir(targetPath+"/plugins/"+path);
-  QDir dstSubDir(targetPath+"/plugins/"+path+"/"+subDir);
+  QDir dstDir(targetPath+"/pluginsV2/"+path);
+  QDir dstSubDir(targetPath+"/pluginsV2/"+path+"/"+subDir);
 
   if(generateDoc)
     if (!generatePluginInfoFile(pluginInfo, dstDir))

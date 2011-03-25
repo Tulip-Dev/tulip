@@ -1,3 +1,4 @@
+
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME = "Tulip Plugins"
 PROJECT_NUMBER         = 3.0.0
@@ -60,7 +61,6 @@ QT_AUTOBRIEF           = NO
 # description. Set this tag to YES if you prefer the old behaviour instead.
 
 MULTILINE_CPP_IS_BRIEF = NO
-DETAILS_AT_TOP         = YES
 INHERIT_DOCS           = YES
 
 SEPARATE_MEMBER_PAGES  = NO
