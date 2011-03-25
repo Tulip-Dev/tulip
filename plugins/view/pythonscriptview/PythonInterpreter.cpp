@@ -656,14 +656,15 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 #else
 	libPythonName += string(".so");
 #endif
-	dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+	if (QApplication::instance())
+	  dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
 #endif	
 	// checking if a QApplication is instanced before instancing any QWidget 
 	// allow to avoid segfaults when trying to instantiate the plugin outside the Tulip GUI (for instance, with tulip_check_pl)
-	if (QApplication::instance())
+	if (QApplication::instance()) {
 	  consoleDialog = new ConsoleOutputDialog();
 	
-	if (interpreterInit()) {
+	  if (interpreterInit()) {
 
 		initscriptengine();
 		_PyImport_FixupExtension(const_cast<char *>("scriptengine"), const_cast<char *>("scriptengine"));
@@ -712,6 +713,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 				runString(pluginCode.toStdString());
 			}
 		}
+	  }
 	}
 }
 
