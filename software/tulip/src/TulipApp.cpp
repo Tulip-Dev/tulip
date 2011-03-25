@@ -157,7 +157,7 @@ void TulipApp::startTulip() {
       errorDlg->exec();
     }
   if(ControllerFactory::factory->objMap.empty()){
-    QMessageBox::critical(this,tr("No controller found"),tr("No controller where found in Tulip plug-ins.\n Tulip can't work without controller."));
+    QMessageBox::critical(this,tr("No controller found"),tr("No controller was found in Tulip plugins directory.\n Tulip cannot work without a controller."));
     exit(-1);
   }
   buildMenus();
@@ -369,7 +369,7 @@ void TulipApp::closeTab(int index){
     tabWidget->setCurrentIndex(index-1);
 
     map<int,Controller *> newTabIndexToController;
-    for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
+    for(map<int,Controller *>::const_iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
       if((*it).first<index)
         newTabIndexToController[(*it).first]=(*it).second;
       else if((*it).first>index)
@@ -591,7 +591,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     QFileInfo tmp(s);
     QDir::setCurrent(tmp.dir().path() + "/");
 
-    QtProgress *progressBar = new QtProgress(this, string("Loading : ")+ s.section('/',-1).toUtf8().data());
+    QtProgress *progressBar = new QtProgress(this, string("Loading: ")+ s.section('/',-1).toUtf8().data());
 
     result = tlp::importGraph(*plugin, dataSet, progressBar ,newGraph);
 
@@ -871,7 +871,7 @@ QMessageBox::StandardButton TulipApp::askSaveGraph(const std::string &name,int i
   if(!controllerToGraphObserver[tabIndexToController[index]]->needSaving()) {
     return QMessageBox::No;
   }
-  string message = "Do you want to save this graph : " + name + " ?";
+  string message = "Do you want to save this graph: " + name + "?";
   QMessageBox::StandardButton answer;
   if(activateNoToAll) {
     answer = QMessageBox::question(this, "Save", QString::fromUtf8(message.c_str()),
@@ -946,7 +946,7 @@ void TulipApp::plugins() {
 void TulipApp::displayRestartForPlugins() {
   int result = QMessageBox::warning(this,
       tr("Update plugins"),
-      tr("To finish installing/removing plugins, \nTulip must be restarted.\nDo you want to restart Tulip now ?"),
+      tr("To finish installing/removing plugins, \nTulip must be restarted.\nDo you want to restart Tulip now?"),
       QMessageBox::Yes | QMessageBox::Default,
       QMessageBox::No);
   if(result == QMessageBox::Yes){
@@ -1160,7 +1160,7 @@ void TulipApp::preference() {
   
   int result = QMessageBox::warning(this,
 				    tr(""),
-                    tr("To apply preferences modifications, \nTulip must be restarted.\nDo you want to restart Tulip now ?"),
+                    tr("To apply preferences modifications, \nTulip must be restarted.\nDo you want to restart Tulip now?"),
 				    QMessageBox::Yes | QMessageBox::Default,
 				    QMessageBox::No);
   if(result == QMessageBox::Yes) {
