@@ -18,10 +18,10 @@ set(pluginPusher_SRCS
     PushToPluginServer.cpp
 )
 
-CONFIGURE_FILE("generate_plugin_dirs.sh.in" "generate_plugin_dirs.sh" @ONLY)
-CONFIGURE_FILE("copy_plugin_libs.sh.in" "copy_plugin_libs.sh" @ONLY)
-CONFIGURE_FILE("generate_plugin_doc.sh" "generate_plugin_doc.sh" COPYONLY)
-CONFIGURE_FILE("plugin_doc.doxygen" "plugin_doc.doxygen" COPYONLY)
+CONFIGURE_FILE("generate_plugin_dirs.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/generate_plugin_dirs.sh" @ONLY)
+CONFIGURE_FILE("copy_plugin_libs.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/copy_plugin_libs.sh" @ONLY)
+CONFIGURE_FILE("generate_plugin_doc.sh" "${CMAKE_CURRENT_BINARY_DIR}/generate_plugin_doc.sh" COPYONLY)
+CONFIGURE_FILE("plugin_doc.doxygen" "${CMAKE_CURRENT_BINARY_DIR}/plugin_doc.doxygen" COPYONLY)
 
 
 INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${LIBXML2_INCLUDE_DIR} ${PROJECT_BINARY_DIR}/library/tulip-qt/include/tulip ${PROJECT_BINARY_DIR}/software/tulip/include ${TulipInclude} ${TulipQtInclude} ${TulipOGLInclude} ${TulipPluginsManagerInclude})
