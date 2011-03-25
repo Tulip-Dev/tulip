@@ -51,6 +51,7 @@
 
 #include <QtCore/QDir>
 #include <QtGui/QVBoxLayout>
+#include <QtGui/QApplication>
 
 
 
@@ -657,8 +658,11 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 #endif
 	dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
 #endif	
-
-	consoleDialog = new ConsoleOutputDialog();
+	// checking if a QApplication is instanced before instancing any QWidget 
+	// allow to avoid segfaults when trying to instantiate the plugin outside the Tulip GUI (for instance, with tulip_check_pl)
+	if (QApplication::instance())
+	  consoleDialog = new ConsoleOutputDialog();
+	
 	if (interpreterInit()) {
 
 		initscriptengine();
@@ -680,7 +684,10 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 		_PyImport_FixupExtension(const_cast<char *>("tulipogl"), const_cast<char *>("tulipogl"));
 
 		runString("import sys; import scriptengine ; sys.stdout = scriptengine.ConsoleOutput(False); sys.stderr = scriptengine.ConsoleOutput(True);\n");
-		setDefaultConsoleWidget();
+		
+		if (QApplication::instance())
+		  setDefaultConsoleWidget();
+		
 		runString("from tulip import *;from tulipogl import *");
 		runString("pluginFactory = {}");
 
