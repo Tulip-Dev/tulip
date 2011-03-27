@@ -11,7 +11,6 @@ SET(TULIPOGL_SIP_FILES
     Module.sip
 )
 
-
 # Generate a SIP build file and parse its content to retrieve source files list
 EXECUTE_PROCESS(COMMAND ${SIP_EXE} -b ${CMAKE_CURRENT_BINARY_DIR}/tulipogl.sbf ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip)
 FILE(READ ${CMAKE_CURRENT_BINARY_DIR}/tulipogl.sbf TULIPOGL_SBF)
@@ -22,13 +21,8 @@ ADD_CUSTOM_COMMAND(OUTPUT ${TULIPOGL_PYTHON_BINDINGS_SRC}
                    COMMENT "Generating Python Bindings for libtulip-ogl"
                    DEPENDS ${TULIPOGL_SIP_FILES})
            
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -DSIP_STATIC_MODULE")
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w -DSIP_STATIC_MODULE")
-
-IF(UNIX)
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
-ENDIF(UNIX)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w ")
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w ")
 
 # Force to use SIP headers located in thirdparty
 # instead of those installed in the system
@@ -36,7 +30,26 @@ INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude})
 
-ADD_LIBRARY(${LibTulipOglPythonName} STATIC ${TULIPOGL_PYTHON_BINDINGS_SRC})
+ADD_LIBRARY(${LibTulipOglPythonName} SHARED ${TULIPOGL_PYTHON_BINDINGS_SRC})
+
+SET_TARGET_PROPERTIES(${LibTulipOglPythonName} 
+		      PROPERTIES OUTPUT_NAME tulipogl PREFIX "")
+
+IF(WIN32)
+SET_TARGET_PROPERTIES(${LibTulipOglPythonName} 
+		      PROPERTIES SUFFIX ".pyd")
+ELSE(WIN32)		     
+SET_TARGET_PROPERTIES(${LibTulipOglPythonName} 
+		      PROPERTIES SUFFIX ".so") 
+ENDIF(WIN32)
+
+TARGET_LINK_LIBRARIES(${LibTulipOglPythonName} ${LibTulipName} ${LibTulipOglName})
+TARGET_LINK_LIBRARIES(${LibTulipOglPythonName} ${PYTHON_LIBRARY})
+
+INSTALL(TARGETS ${LibTulipOglPythonName}
+	RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT ${LibTulipOglPythonName}
+	LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT ${LibTulipOglPythonName}
+	ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT ${LibTulipOglPythonName})
 
 ADD_CUSTOM_TARGET(touchTulipOglPythonCMakeLists ALL
                   COMMAND cmake -E touch ${CMAKE_CURRENT_LIST_FILE}

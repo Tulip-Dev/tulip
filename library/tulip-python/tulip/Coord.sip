@@ -43,6 +43,7 @@
 
 %Include Vector.sip
 
+
 namespace tlp {
 
 class Coord : tlp::Vec3f {
@@ -80,8 +81,6 @@ public:
 	float getX() const;
 	
 	float getY() const;
-	
-	float getZ() const;
 	
 	void get(float &, float &, float &) const;
 	

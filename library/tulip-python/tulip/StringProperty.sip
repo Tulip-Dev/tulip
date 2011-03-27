@@ -41,111 +41,145 @@
 // |                                                                         |
 // +-------------------------------------------------------------------------+
 
+%Include PropertyInterface.sip
+
 namespace tlp {
 
-class StringProperty :  tlp::PropertyInterface /NoDefaultCtors/ {
+class StringProperty : tlp::PropertyInterface /NoDefaultCtors/ {
 %TypeHeaderCode
 #include <tulip/StringProperty.h>
 %End
 public :
-	StringProperty (tlp::Graph *g, std::string n=""); 
 	
-	tlp::PropertyInterface* clonePrototype(tlp::Graph *, const std::string&);
+	StringProperty(tlp::Graph *g, std::string n="");
 	
-	void copy( const tlp::node, const tlp::node, tlp::PropertyInterface * );
-	
-	void copy( const tlp::edge, const tlp::edge, tlp::PropertyInterface * );
-	
-	std::string getNodeDefaultValue();
-	
-	std::string getEdgeDefaultValue();
-
-	const std::string getNodeValue(const tlp::node n);
-
-	const std::string getEdgeValue(const tlp::edge e);
-
-	void setNodeValue(const tlp::node n, const std::string &v);
-
-	void setEdgeValue(const tlp::edge e, const std::string &v);
-
 	void setAllNodeValue(const std::string &v);
-
-	void setAllEdgeValue(const std::string &v);
-	
-	virtual void erase(const tlp::node) ;
-	
-	virtual void erase(const tlp::edge) ;
-
-	virtual std::string getTypename() const ;
-
-	const std::string& getName() const;
-
-	virtual std::string getNodeDefaultStringValue() const ;
-	
-	virtual std::string getEdgeDefaultStringValue() const ;
-	
-	virtual std::string getNodeStringValue( const tlp::node n ) const ;
-	
-	virtual std::string getEdgeStringValue( const tlp::edge e ) const ;
-	
-	virtual bool setNodeStringValue( const tlp::node n, const std::string & v ) ;
-	
-	virtual bool setEdgeStringValue( const tlp::edge e, const std::string & v ) ;
-	
-	virtual bool setAllNodeStringValue( const std::string & v ) ;
-	
-	virtual bool setAllEdgeStringValue( const std::string & v ) ;
-	
-	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* = NULL) const ;
-	
-	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* = NULL) const ;
-	
-  	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
-	
-	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
-	
-	std::string __getitem__(const tlp::node n) const;
-%MethodCode
-     sipRes = new std::string(sipCpp->getNodeValue(*a0));
+%Docstring
+tlp.StringProperty.setAllNodeValue(string)
 %End
 
-	void __setitem__(const tlp::node n, const std::string &s) const;
+	void setAllEdgeValue(const std::string &v);
+%Docstring
+tlp.StringProperty.setAllEdgeValue(string)
+%End
+	
+	std::string getNodeDefaultValue();
+%Docstring
+tlp.StringProperty.getNodeDefaultValue() -> string
+%End	
+	
+	std::string getEdgeDefaultValue();
+%Docstring
+tlp.StringProperty.getEdgeDefaultValue() -> string
+%End	
+
+	const std::string getNodeValue(const tlp::node n);
 %MethodCode
-     sipCpp->setNodeValue(*a0, *a1);
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipRes = new std::string(sipCpp->getNodeValue(*a0));
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End
+
+%Docstring
+tlp.StringProperty.getNodeValue(tlp.node) -> string
+%End
+
+	const std::string getEdgeValue(const tlp::edge e);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipRes = new std::string(sipCpp->getEdgeValue(*a0));
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End
+
+%Docstring
+tlp.StringProperty.getEdgeValue(tlp.edge) -> string
+%End
+
+	void setNodeValue(const tlp::node n, const std::string &v);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->setNodeValue(*a0, *a1);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End
+
+%Docstring
+tlp.StringProperty.setNodeValue(tlp.node, string)
+%End
+
+	void setEdgeValue(const tlp::edge e, const std::string &v);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->setEdgeValue(*a0, *a1);
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End
+
+%Docstring
+tlp.StringProperty.setEdgeValue(tlp.edge, string)
+%End
+
+	std::string __getitem__(const tlp::node n) const;
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {	
+     	sipRes = new std::string(sipCpp->getNodeValue(*a0));
+    } else {
+    	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
+%End
+
+	void __setitem__(const tlp::node n, const std::string &v) const;
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {	
+     	sipCpp->setNodeValue(*a0, *a1);
+    } else {
+    	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    } 
 %End
 
 	std::string __getitem__(const tlp::edge e) const;
 %MethodCode
-     sipRes = new std::string(sipCpp->getEdgeValue(*a0));
+	if (sipCpp->getGraph()->isElement(*a0)) {	
+     	sipRes = new std::string(sipCpp->getEdgeValue(*a0));
+    } else {
+    	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
+     
 %End
 
-	void __setitem__(const tlp::edge e, const std::string &s) const;
+	void __setitem__(const tlp::edge e, const std::string &v) const;
 %MethodCode
-     sipCpp->setEdgeValue(*a0, *a1);
+	if (sipCpp->getGraph()->isElement(*a0)) {	
+     	sipCpp->setEdgeValue(*a0, *a1);
+    } else {
+    	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    } 
 %End
+	
 
-	SIP_PYOBJECT __repr__() const;
-%MethodCode
-	std::ostringstream oss;
-	oss << "<string property " << sipCpp->getName() << ">";
-	std::string s = oss.str();
-	sipRes = PyString_FromString(s.c_str());
-%End
+	
 };
 
-class StringVectorProperty :  tlp::PropertyInterface /NoDefaultCtors/ {
+};
+
+
+namespace tlp {
+
+class StringVectorProperty : tlp::PropertyInterface /NoDefaultCtors/ {
 %TypeHeaderCode
 #include <tulip/StringProperty.h>
 %End
 public :
-	StringVectorProperty (tlp::Graph *g, std::string n=""); 
-	
-	tlp::PropertyInterface* clonePrototype(tlp::Graph *, const std::string&);
-	
-	void copy( const tlp::node, const tlp::node, tlp::PropertyInterface * );
-	
-	void copy( const tlp::edge, const tlp::edge, tlp::PropertyInterface * );
-	
+
+	StringVectorProperty (tlp::Graph *, std::string n="");
+  	
+ 
 	const std::vector<std::string> getNodeDefaultValue();
 %Docstring
 tlp.StringVectorProperty.getNodeDefaultValue() -> list of string
@@ -186,64 +220,34 @@ tlp.StringVectorProperty.setAllNodeValue(list of string)
 tlp.StringVectorProperty.setAllEdgeValue(list of string)
 %End
 	
-	virtual void erase(const tlp::node) ;
-	
-	virtual void erase(const tlp::edge) ;
-
-	virtual std::string getTypename() const ;
-
-	const std::string& getName() const;
-
-	virtual std::string getNodeDefaultStringValue() const ;
-	
-	virtual std::string getEdgeDefaultStringValue() const ;
-	
-	virtual std::string getNodeStringValue( const tlp::node n ) const ;
-	
-	virtual std::string getEdgeStringValue( const tlp::edge e ) const ;
-	
-	virtual bool setNodeStringValue( const tlp::node n, const std::string & v ) ;
-	
-	virtual bool setEdgeStringValue( const tlp::edge e, const std::string & v ) ;
-	
-	virtual bool setAllNodeStringValue( const std::string & v ) ;
-	
-	virtual bool setAllEdgeStringValue( const std::string & v ) ;
-	
-	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* = NULL) const ;
-	
-	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* = NULL) const ;
-	
-  	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
-	
-	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
-	
 	void setNodeEltValue(const tlp::node n, unsigned int i, const std::string &v);
  
  	const std::string& getNodeEltValue(const tlp::node n, unsigned int i) const;
   
   	void pushBackNodeEltValue(const tlp::node n, const std::string& v);
  
-    void popBackNodeEltValue(const tlp::node n);
+	void popBackNodeEltValue(const tlp::node n);
+	
+	void resizeNodeValue(const tlp::node n, unsigned int size);
+	void resizeNodeValue(const tlp::node n, unsigned int size, std::string elt);
+	
+	void setEdgeEltValue(const tlp::edge e, unsigned int i, const std::string &v);
   
-    void resizeNodeValue(const tlp::node n, unsigned int size, std::string elt = "");
+	const std::string& getEdgeEltValue(const tlp::edge n, unsigned int i) const;
   
-    void setEdgeEltValue(const tlp::edge e, unsigned int i, const std::string &v);
+	void pushBackEdgeEltValue(const tlp::edge e, const std::string &v);
   
-    const std::string& getEdgeEltValue(const tlp::edge n, unsigned int i) const;
+	void popBackEdgeEltValue(const tlp::edge e);
   
-    void pushBackEdgeEltValue(const tlp::edge e, const std::string &v);
-  
-    void popBackEdgeEltValue(const tlp::edge e);
-  
-    void resizeEdgeValue(const tlp::edge e, unsigned int size, std::string elt = 0);
+  	void resizeEdgeValue(const tlp::edge e, unsigned int size);
+	void resizeEdgeValue(const tlp::edge e, unsigned int size, std::string elt);
     
-    std::vector<std::string> __getitem__(const tlp::node n) const;
+	std::vector<std::string> __getitem__(const tlp::node n) const;
 %MethodCode
      sipRes = new std::vector<std::string>(sipCpp->getNodeValue(*a0));
 %End
 
-	void __setitem__(const tlp::node n, const std::vector<std::string> &s) const;
+	void __setitem__(const tlp::node n, const std::vector<std::string> &v) const;
 %MethodCode
      sipCpp->setNodeValue(*a0, *a1);
 %End
@@ -253,7 +257,7 @@ tlp.StringVectorProperty.setAllEdgeValue(list of string)
      sipRes = new std::vector<std::string>(sipCpp->getEdgeValue(*a0));
 %End
 
-	void __setitem__(const tlp::edge e, const std::vector<std::string> &s) const;
+	void __setitem__(const tlp::edge e, const std::vector<std::string> &v) const;
 %MethodCode
      sipCpp->setEdgeValue(*a0, *a1);
 %End
@@ -261,9 +265,11 @@ tlp.StringVectorProperty.setAllEdgeValue(list of string)
 	SIP_PYOBJECT __repr__() const;
 %MethodCode
 	std::ostringstream oss;
-	oss << "<string vector property " << sipCpp->getName() << ">";
+	oss << "<String vector property " << sipCpp->getName() << ">";
 	std::string s = oss.str();
 	sipRes = PyString_FromString(s.c_str());
 %End
+	
 };
+
 };
