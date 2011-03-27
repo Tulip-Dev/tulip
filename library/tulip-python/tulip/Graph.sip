@@ -109,27 +109,110 @@ tlp.Graph.inducedSubGraph(list of tlp.node) -> tlp.Graph
 	tlp::node addNode();
 
 	void addNode(const tlp::node);
+%MethodCode
+	if (sipCpp->getRoot()->isElement(*a0)) {
+		sipCpp->addNode(*a0);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), *a0);
+	}
+%End	
 
 	void delNode(const tlp::node);
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipCpp->delNode(*a0);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
 
 	void delAllNode(const tlp::node);
+%MethodCode
+	if (sipCpp->getRoot()->isElement(*a0)) {
+		sipCpp->delAllNode(*a0);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), *a0);
+	}
+%End
 
 	tlp::edge addEdge(const tlp::node, const tlp::node );
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		if (sipCpp->isElement(*a1)) {
+			sipRes = new tlp::edge(sipCpp->addEdge(*a0, *a1));
+		} else {
+			sipIsErr = throwInvalidNodeException(sipCpp, *a1);
+		}
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
 
 	void addEdge(const tlp::edge );
+%MethodCode
+	if (sipCpp->getRoot()->isElement(*a0)) {
+		sipCpp->addEdge(*a0);
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), *a0);
+	}
+%End
 
 	 void delEdge(const tlp::edge );
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipCpp->delEdge(*a0);
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+	}
+%End
 
 	 void delAllEdge(const tlp::edge);
+%MethodCode
+	if (sipCpp->getRoot()->isElement(*a0)) {
+		sipCpp->delEdge(*a0);
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), *a0);
+	}
+%End
 
 	void setEdgeOrder(const tlp::node,const std::vector<tlp::edge> &);
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipCpp->setEdgeOrder(*a0, *a1);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
+	
 %Docstring
 tlp.Graph.setEdgeOrder(tlp.node, list of tlp.edge)
 %End
 
 	void swapEdgeOrder(const tlp::node,const tlp::edge , const tlp::edge );
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		if (sipCpp->isElement(*a1)) {
+			if (sipCpp->isElement(*a2)) {
+				sipCpp->swapEdgeOrder(*a0, *a1, *a2);
+			} else {
+				sipIsErr = throwInvalidEdgeException(sipCpp, *a2);
+			}
+		} else {
+			sipIsErr = throwInvalidEdgeException(sipCpp, *a1);
+		}
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
 
 	void reverse(const tlp::edge);
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipCpp->reverse(*a0);
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+	}
+%End
 
 	tlp::node getOneNode() const ;
 
@@ -139,25 +222,58 @@ tlp.Graph.setEdgeOrder(tlp.node, list of tlp.edge)
 %End	
 
 	tlp::node getInNode(const tlp::node,unsigned int )const ;
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new tlp::node(sipCpp->getInNode(*a0, a1));
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
 
 	tlp::Iterator<tlp::node>* getInNodes(const tlp::node) const;
 %MethodCode
-	sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getInNodes(*a0));
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getInNodes(*a0));
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
 %End		
 
 	tlp::node getOutNode(const tlp::node,unsigned int) const ;
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new tlp::node(sipCpp->getOutNode(*a0, a1));
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
 
 	tlp::Iterator<tlp::node>* getOutNodes(const tlp::node) const;
 %MethodCode
-	sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getOutNodes(*a0));
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getOutNodes(*a0));
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
 %End			
 
 	tlp::Iterator<tlp::node>* getInOutNodes(const tlp::node) const;
 %MethodCode
-	sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getInOutNodes(*a0));
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getInOutNodes(*a0));
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}	
 %End			
 
 	tlp::Graph* getNodeMetaInfo(const tlp::node) const;
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipRes = sipCpp->getNodeMetaInfo(*a0);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}	
+%End
 
 	tlp::Iterator<tlp::edge>* getEdges() const;
 %MethodCode
@@ -168,23 +284,40 @@ tlp.Graph.setEdgeOrder(tlp.node, list of tlp.edge)
 
 	tlp::Iterator<tlp::edge>* getOutEdges(const tlp::node) const;
 %MethodCode
-	sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getOutEdges(*a0));
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getOutEdges(*a0));
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
 %End		
 
 	tlp::Iterator<tlp::edge>* getInOutEdges(const tlp::node) const;
 %MethodCode
-	sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getInOutEdges(*a0));
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getInOutEdges(*a0));
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
 %End			
 
 	tlp::Iterator<tlp::edge>* getInEdges(const tlp::node) const;
 %MethodCode
-	sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getInEdges(*a0));
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getInEdges(*a0));
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
 %End		
 
 	tlp::Iterator<tlp::edge>* getEdgeMetaInfo(const tlp::edge) const;
 %MethodCode
-	sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getEdgeMetaInfo(*a0));
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getEdgeMetaInfo(*a0));
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+	}
 %End		
+
 	unsigned int getId() const;
 
 	unsigned int numberOfNodes()const ;
@@ -192,26 +325,93 @@ tlp.Graph.setEdgeOrder(tlp.node, list of tlp.edge)
 	unsigned int numberOfEdges()const ;
 
 	unsigned int deg(const tlp::node)const ;
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipRes = sipCpp->deg(*a0);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
 
 	unsigned int indeg(const tlp::node)const ;
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipRes = sipCpp->indeg(*a0);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
 
 	unsigned int outdeg(const tlp::node)const ;
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipRes = sipCpp->outdeg(*a0);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
 
 	tlp::node source(const tlp::edge)const ;
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new tlp::node(sipCpp->source(*a0));
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+	}
+%End
 
 	tlp::node target(const tlp::edge)const ;
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new tlp::node(sipCpp->source(*a0));
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+	}
+%End
 
 	tlp::node opposite(const tlp::edge, const tlp::node)const ;
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new tlp::node(sipCpp->opposite(*a0, *a1));
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+	}
+%End
 
 	bool isElement(const tlp::node ) const ;
 
-	bool isMetaNode(const tlp::node ) const ;
-
 	bool isElement(const tlp::edge ) const ;
 
+	bool isMetaNode(const tlp::node ) const ;
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipRes = sipCpp->isMetaNode(*a0);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
+
 	bool isMetaEdge(const tlp::edge ) const ;
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipRes = sipCpp->isMetaEdge(*a0);
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+	}
+%End
 
 	tlp::edge existEdge(const tlp::node , const tlp::node, bool directed=true) const ;
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		if (sipCpp->isElement(*a1)) {
+			sipRes = new tlp::edge(sipCpp->existEdge(*a0, *a1, a2));
+		} else {
+			sipIsErr = throwInvalidNodeException(sipCpp, *a1);
+		}
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
 
 	tlp::BooleanProperty *getBooleanProperty(const std::string &name);
 %MethodCode
@@ -353,11 +553,11 @@ tlp::CoordVectorProperty *getCoordVectorProperty(const std::string &name);
 
 	tlp::PropertyInterface* getProperty(const std::string& name);
 
-	 bool existProperty(const std::string& name);
+	bool existProperty(const std::string& name);
 
-	 bool existLocalProperty(const std::string& name);
+	bool existLocalProperty(const std::string& name);
 
-	 void delLocalProperty(const std::string& name);
+	void delLocalProperty(const std::string& name);
 
 	tlp::Iterator<std::string>* getLocalProperties();
 %MethodCode
@@ -374,7 +574,6 @@ tlp::CoordVectorProperty *getCoordVectorProperty(const std::string &name);
 	sipRes = new tlp::StableIterator<std::string>(sipCpp->getProperties());
 %End			
 	
-
 	bool computeIntegerProperty(const std::string &algorithm, tlp::IntegerProperty* result, tlp::DataSet *data=0);
 %MethodCode
 	std::string s;
@@ -530,7 +729,7 @@ tlp.Graph.createMetaNodes(tlp.IteratorGraph, tlp.Graph) -> list of tlp.node
 		std::string graphName;
 		sipCpp->getAttribute("name", graphName);
 		std::ostringstream oss;
-		oss << "<graph " << graphName << ">";
+		oss << "<graph \"" << graphName << "\" (id " << sipCpp->getId() << ") >";
 		std::string s = oss.str();
         sipRes = PyString_FromString(s.c_str());
 %End
@@ -549,7 +748,7 @@ namespace tlp {
 tlp::Graph *newGraph();
 tlp::Graph *loadGraph(const std::string &filename);
 bool saveGraph(tlp::Graph *, const std::string &filename);
-tlp::Graph *importGraph(const std::string &alg, tlp::DataSet &dataSet, tlp::Graph *newGraph=0);
+tlp::Graph *importGraph(const std::string &alg, tlp::DataSet &dataSet /Out/, tlp::Graph *newGraph=0);
 %MethodCode
 	sipRes = tlp::importGraph(*a0, *a1, 0, a2);
 %End

@@ -44,119 +44,158 @@
 %Include PropertyInterface.sip
 
 namespace tlp {
-class BooleanProperty : tlp:: PropertyInterface /NoDefaultCtors/ {
+
+class BooleanProperty : tlp::PropertyInterface /NoDefaultCtors/ {
 %TypeHeaderCode
 #include <tulip/BooleanProperty.h>
 %End
 public :
-	BooleanProperty (tlp::Graph *g, std::string n="");
 	
-	tlp::PropertyInterface* clonePrototype(tlp::Graph *, const std::string&);
+	BooleanProperty(tlp::Graph *g, std::string n="");
 	
-	void copy( const tlp::node, const tlp::node, tlp::PropertyInterface * );
-	
-	void copy( const tlp::edge, const tlp::edge, tlp::PropertyInterface * );
-	
-	void reverse();
-	
-	///reverse all the direction of edges of the visible graph which are true in this BooleanProperty
-	void reverseEdgeDirection();
-	
-	tlp::Iterator<tlp::node> *getNodesEqualTo(const bool val, tlp::Graph * = 0);
-	
-	tlp::Iterator<tlp::edge> *getEdgesEqualTo(const bool val, tlp::Graph * = 0);
-	
-	bool getNodeDefaultValue();
-	
-	bool getEdgeDefaultValue();
-
-	const bool getNodeValue(const tlp::node n);
-
-	const bool getEdgeValue(const tlp::edge e);
-
-	void setNodeValue(const tlp::node n, const bool &v);
-
-	void setEdgeValue(const tlp::edge e, const bool &v);
-
-	void setAllNodeValue(const bool &v);
-
-	void setAllEdgeValue(const bool &v);
-	
-	virtual void erase(const tlp::node) ;
-	
-	virtual void erase(const tlp::edge) ;
-
-	virtual std::string getTypename() const ;
-
-	const std::string& getName() const;
-
-	virtual std::string getNodeDefaultStringValue() const ;
-	
-	virtual std::string getEdgeDefaultStringValue() const ;
-	
-	virtual std::string getNodeStringValue( const tlp::node n ) const ;
-	
-	virtual std::string getEdgeStringValue( const tlp::edge e ) const ;
-	
-	virtual bool setNodeStringValue( const tlp::node n, const std::string & v ) ;
-	
-	virtual bool setEdgeStringValue( const tlp::edge e, const std::string & v ) ;
-	
-	virtual bool setAllNodeStringValue( const std::string & v ) ;
-	
-	virtual bool setAllEdgeStringValue( const std::string & v ) ;
-	
-	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* = NULL) const ;
-	
-	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* = NULL) const ;
-	
-  	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
-	
-	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
-	
-	bool __getitem__(const tlp::node n) const;
-%MethodCode
-     sipRes = sipCpp->getNodeValue(*a0);
+	void setAllNodeValue(const bool v);
+%Docstring
+tlp.BooleanProperty.setAllNodeValue(bool)
 %End
 
-	void __setitem__(const tlp::node n, const bool b) const;
+	void setAllEdgeValue(const bool v);
+%Docstring
+tlp.BooleanProperty.setAllEdgeValue(bool)
+%End
+	
+	bool getNodeDefaultValue();
+%Docstring
+tlp.BooleanProperty.getNodeDefaultValue() -> bool
+%End	
+	
+	bool getEdgeDefaultValue();
+%Docstring
+tlp.BooleanProperty.getEdgeDefaultValue() -> bool
+%End
+
+	const bool getNodeValue(const tlp::node n);
 %MethodCode
-     sipCpp->setNodeValue(*a0, a1);
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipRes = sipCpp->getNodeValue(*a0);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End
+
+%Docstring
+tlp.BooleanProperty.getNodeValue(tlp.node) -> bool
+%End
+
+	const bool getEdgeValue(const tlp::edge e);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipRes = sipCpp->getEdgeValue(*a0);
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End
+
+%Docstring
+tlp.BooleanProperty.getEdgeValue(tlp.edge) -> bool
+%End
+
+	void setNodeValue(const tlp::node n, const bool v);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->setNodeValue(*a0, a1);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End
+
+%Docstring
+tlp.BooleanProperty.setNodeValue(tlp.node, @PYTHON_NODE_TYPE)
+%End
+
+	void setEdgeValue(const tlp::edge e, const bool v);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->setEdgeValue(*a0, a1);
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End
+
+%Docstring
+tlp.BooleanProperty.setEdgeValue(tlp.edge, @PYTHON_EDGE_TYPE)
+%End
+
+	bool __getitem__(const tlp::node n) const;
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {	
+     	sipRes = sipCpp->getNodeValue(*a0);
+    } else {
+    	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
+%End
+
+	void __setitem__(const tlp::node n, const bool v) const;
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {	
+     	sipCpp->setNodeValue(*a0, a1);
+    } else {
+    	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    } 
 %End
 
 	bool __getitem__(const tlp::edge e) const;
 %MethodCode
-     sipRes = sipCpp->getEdgeValue(*a0);
+	if (sipCpp->getGraph()->isElement(*a0)) {	
+     	sipRes = sipCpp->getEdgeValue(*a0);
+    } else {
+    	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
+     
 %End
 
-	void __setitem__(const tlp::edge e, const bool b) const;
+	void __setitem__(const tlp::edge e, const bool v) const;
 %MethodCode
-     sipCpp->setEdgeValue(*a0, a1);
+	if (sipCpp->getGraph()->isElement(*a0)) {	
+     	sipCpp->setEdgeValue(*a0, a1);
+    } else {
+    	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    } 
 %End
 	
 	SIP_PYOBJECT __repr__() const;
 %MethodCode
 	std::ostringstream oss;
-	oss << "<boolean property " << sipCpp->getName() << ">";
+	oss << "<Boolean property " << sipCpp->getName() << ">";
 	std::string s = oss.str();
 	sipRes = PyString_FromString(s.c_str());
 %End
+	
+
+	void reverse();
+
+	void reverseEdgeDirection();
+	
+	tlp::Iterator<tlp::node> *getNodesEqualTo(const bool val, tlp::Graph *g = 0);
+		
+	tlp::Iterator<tlp::edge> *getEdgesEqualTo(const bool val, tlp::Graph *g = 0);
+	
+
+	
+};
 
 };
 
-class BooleanVectorProperty : tlp:: PropertyInterface /NoDefaultCtors/ {
+namespace tlp {
+
+class BooleanVectorProperty : tlp::PropertyInterface /NoDefaultCtors/ {
 %TypeHeaderCode
 #include <tulip/BooleanProperty.h>
 %End
 public :
-	BooleanVectorProperty (tlp::Graph *g, std::string n="");
-	
-	tlp::PropertyInterface* clonePrototype(tlp::Graph *, const std::string&);
-	
-	void copy( const tlp::node, const tlp::node, tlp::PropertyInterface * );
-	
-	void copy( const tlp::edge, const tlp::edge, tlp::PropertyInterface * );
-	
+
+	BooleanVectorProperty (tlp::Graph *, std::string n="");
+  	
+ 
 	const std::vector<bool> getNodeDefaultValue();
 %Docstring
 tlp.BooleanVectorProperty.getNodeDefaultValue() -> list of bool
@@ -197,64 +236,34 @@ tlp.BooleanVectorProperty.setAllNodeValue(list of bool)
 tlp.BooleanVectorProperty.setAllEdgeValue(list of bool)
 %End
 	
-	virtual void erase(const tlp::node) ;
-	
-	virtual void erase(const tlp::edge) ;
-
-	virtual std::string getTypename() const ;
-
-	const std::string& getName() const;
-
-	virtual std::string getNodeDefaultStringValue() const ;
-	
-	virtual std::string getEdgeDefaultStringValue() const ;
-	
-	virtual std::string getNodeStringValue( const tlp::node n ) const ;
-	
-	virtual std::string getEdgeStringValue( const tlp::edge e ) const ;
-	
-	virtual bool setNodeStringValue( const tlp::node n, const std::string & v ) ;
-	
-	virtual bool setEdgeStringValue( const tlp::edge e, const std::string & v ) ;
-	
-	virtual bool setAllNodeStringValue( const std::string & v ) ;
-	
-	virtual bool setAllEdgeStringValue( const std::string & v ) ;
-	
-	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* = NULL) const ;
-	
-	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* = NULL) const ;
-	
-  	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
-	
-	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
-	
 	void setNodeEltValue(const tlp::node n, unsigned int i, const bool &v);
  
  	const bool& getNodeEltValue(const tlp::node n, unsigned int i) const;
   
   	void pushBackNodeEltValue(const tlp::node n, const bool& v);
  
-    void popBackNodeEltValue(const tlp::node n);
+	void popBackNodeEltValue(const tlp::node n);
+	
+	void resizeNodeValue(const tlp::node n, unsigned int size);
+	void resizeNodeValue(const tlp::node n, unsigned int size, bool elt);
+	
+	void setEdgeEltValue(const tlp::edge e, unsigned int i, const bool &v);
   
-    void resizeNodeValue(const tlp::node n, unsigned int size, bool elt = false);
+	const bool& getEdgeEltValue(const tlp::edge n, unsigned int i) const;
   
- 	void setEdgeEltValue(const tlp::edge e, unsigned int i, const bool &v);
+	void pushBackEdgeEltValue(const tlp::edge e, const bool &v);
   
-    const bool& getEdgeEltValue(const tlp::edge n, unsigned int i) const;
+	void popBackEdgeEltValue(const tlp::edge e);
   
-    void pushBackEdgeEltValue(const tlp::edge e, const bool &v);
-  
-    void popBackEdgeEltValue(const tlp::edge e);
-  
-    void resizeEdgeValue(const tlp::edge e, unsigned int size, bool elt = false);
+  	void resizeEdgeValue(const tlp::edge e, unsigned int size);
+	void resizeEdgeValue(const tlp::edge e, unsigned int size, bool elt);
     
-    std::vector<bool> __getitem__(const tlp::node n) const;
+	std::vector<bool> __getitem__(const tlp::node n) const;
 %MethodCode
      sipRes = new std::vector<bool>(sipCpp->getNodeValue(*a0));
 %End
 
-	void __setitem__(const tlp::node n, const std::vector<bool> &color) const;
+	void __setitem__(const tlp::node n, const std::vector<bool> &v) const;
 %MethodCode
      sipCpp->setNodeValue(*a0, *a1);
 %End
@@ -264,19 +273,19 @@ tlp.BooleanVectorProperty.setAllEdgeValue(list of bool)
      sipRes = new std::vector<bool>(sipCpp->getEdgeValue(*a0));
 %End
 
-	void __setitem__(const tlp::edge e, const std::vector<bool> &color) const;
+	void __setitem__(const tlp::edge e, const std::vector<bool> &v) const;
 %MethodCode
      sipCpp->setEdgeValue(*a0, *a1);
 %End
 
 	SIP_PYOBJECT __repr__() const;
 %MethodCode
-		std::ostringstream oss;
-		oss << "<boolean vector property " << sipCpp->getName() << ">";
-		std::string s = oss.str();
-        sipRes = PyString_FromString(s.c_str());
+	std::ostringstream oss;
+	oss << "<Boolean vector property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
 %End
-};
+	
 };
 
-
+};

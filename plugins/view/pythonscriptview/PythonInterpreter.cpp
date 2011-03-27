@@ -53,18 +53,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QApplication>
 
-
-
 #include <sip.h>
-
-extern "C" {
-
-extern void initsip();
-extern void initstl();
-extern void inittulip();
-extern void inittulipogl();
-
-}
 
 #include <cstdio>
 #ifndef WIN32 
@@ -672,26 +661,14 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 		inittuliputils();
 		_PyImport_FixupExtension(const_cast<char *>("tuliputils"), const_cast<char *>("tuliputils"));
 
-		initsip();
-		_PyImport_FixupExtension(const_cast<char *>("sip"), const_cast<char *>("sip"));
-
-		initstl();
-		_PyImport_FixupExtension(const_cast<char *>("stl"), const_cast<char *>("stl"));
-
-		inittulip();
-		_PyImport_FixupExtension(const_cast<char *>("tulip"), const_cast<char *>("tulip"));
-
-		inittulipogl();
-		_PyImport_FixupExtension(const_cast<char *>("tulipogl"), const_cast<char *>("tulipogl"));
-
 		runString("import sys; import scriptengine ; sys.stdout = scriptengine.ConsoleOutput(False); sys.stderr = scriptengine.ConsoleOutput(True);\n");
 		
 		if (QApplication::instance())
 		  setDefaultConsoleWidget();
 		
-		runString("from tulip import *;from tulipogl import *");
+		addModuleSearchPath(tlp::TulipLibDir);
+		runString("import sip; import stl; from tulip import *;from tulipogl import *");
 		runString("pluginFactory = {}");
-
 
 		runString(pluginUtils);
 		string pythonPluginsPath = tlp::TulipLibDir + "tlp/python/";
