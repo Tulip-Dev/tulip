@@ -1,0 +1,105 @@
+
+namespace tlp {
+
+class @VEC_PROPERTY_TYPE@VectorProperty : tlp::PropertyInterface /NoDefaultCtors/ {
+%TypeHeaderCode
+#include <tulip/@PROPERTY_TYPE@Property.h>
+%End
+public :
+
+	@VEC_PROPERTY_TYPE@VectorProperty (tlp::Graph *, std::string n="");
+  	
+ 
+	const std::vector<@CPP_TYPE@> getNodeDefaultValue();
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeDefaultValue() -> list of @PYTHON_TYPE@
+%End
+	
+	const std::vector<@CPP_TYPE@> getEdgeDefaultValue();
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeDefaultValue() -> list of @PYTHON_TYPE@
+%End
+
+	const std::vector<@CPP_TYPE@> getNodeValue(const tlp::node n);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeValue(tlp.node) -> list of @PYTHON_TYPE@
+%End
+
+	const std::vector<@CPP_TYPE@> getEdgeValue(const tlp::edge e);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeValue(tlp.edge) -> list of @PYTHON_TYPE@
+%End
+
+	void setNodeValue(const tlp::node n, const std::vector<@CPP_TYPE@> &v);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setNodeValue(tlp.node, list of @PYTHON_TYPE@)
+%End
+
+	void setEdgeValue(const tlp::edge e, const std::vector<@CPP_TYPE@> &v);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setEdgeValue(tlp.edge, list of @PYTHON_TYPE@)
+%End
+
+	void setAllNodeValue(const std::vector<@CPP_TYPE@> &v);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllNodeValue(list of @PYTHON_TYPE@)
+%End
+
+	void setAllEdgeValue(const std::vector<@CPP_TYPE@> &v);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllEdgeValue(list of @PYTHON_TYPE@)
+%End
+	
+	void setNodeEltValue(const tlp::node n, unsigned int i, const @CPP_TYPE@ &v);
+ 
+ 	const @CPP_TYPE@& getNodeEltValue(const tlp::node n, unsigned int i) const;
+  
+  	void pushBackNodeEltValue(const tlp::node n, const @CPP_TYPE@& v);
+ 
+	void popBackNodeEltValue(const tlp::node n);
+	
+	void resizeNodeValue(const tlp::node n, unsigned int size);
+	void resizeNodeValue(const tlp::node n, unsigned int size, @CPP_TYPE@ elt);
+	
+	void setEdgeEltValue(const tlp::edge e, unsigned int i, const @CPP_TYPE@ &v);
+  
+	const @CPP_TYPE@& getEdgeEltValue(const tlp::edge n, unsigned int i) const;
+  
+	void pushBackEdgeEltValue(const tlp::edge e, const @CPP_TYPE@ &v);
+  
+	void popBackEdgeEltValue(const tlp::edge e);
+  
+  	void resizeEdgeValue(const tlp::edge e, unsigned int size);
+	void resizeEdgeValue(const tlp::edge e, unsigned int size, @CPP_TYPE@ elt);
+    
+	std::vector<@CPP_TYPE@> __getitem__(const tlp::node n) const;
+%MethodCode
+     sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getNodeValue(*a0));
+%End
+
+	void __setitem__(const tlp::node n, const std::vector<@CPP_TYPE@> &v) const;
+%MethodCode
+     sipCpp->setNodeValue(*a0, *a1);
+%End
+
+	std::vector<@CPP_TYPE@> __getitem__(const tlp::edge e) const;
+%MethodCode
+     sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getEdgeValue(*a0));
+%End
+
+	void __setitem__(const tlp::edge e, const std::vector<@CPP_TYPE@> &v) const;
+%MethodCode
+     sipCpp->setEdgeValue(*a0, *a1);
+%End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<@VEC_PROPERTY_TYPE@ vector property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
+	
+};
+
+};
