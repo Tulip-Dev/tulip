@@ -449,14 +449,14 @@ void TulipApp::closeTab(int index){
     if(index<tabWidget->currentIndex())
       newIndex--;
 
+    delete currentWidget;
+    delete controller;
+
     tabWidget->removeTab(index);
     //tabChanged(newIndex);
 
     if(tabWidget->count()==0)
       tabWidget->setCurrentIndex(-1);
-
-    delete currentWidget;
-    delete controller;
   }
 }
 //**********************************************************************
