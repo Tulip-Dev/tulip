@@ -215,7 +215,7 @@ void TulipApp::startTulip() {
     assistantProcessApp = QLibraryInfo::location(QLibraryInfo::BinariesPath)+ "/assistant";
 #else
 #if defined(_WIN32)
-  assistantPath.append("assistant.exe");
+  assistantPath.append("bin/assistant.exe");
 #else
   assistantPath.append("Assistant.app/Contents/MacOS/Assistant");
 #endif
