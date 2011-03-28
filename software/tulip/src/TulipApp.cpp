@@ -413,16 +413,16 @@ void TulipApp::closeTab(int index){
   if(controllerAutoLoad)
     return;
 
-  QWidget *currentWidget=tabWidget->widget(index);
-
   if(index!=tabWidget->currentIndex())
     tabWidget->setCurrentIndex(index);
 
   Graph *graph=tabIndexToController[index]->getGraph();
   while(graph->getRoot()!=graph)
     graph=graph->getRoot();
+
   QMessageBox::StandardButton answer =askSaveGraph(graph->getAttribute<string>("name"),index);
-    if(answer != QMessageBox::Cancel){
+    
+  if(answer != QMessageBox::Cancel){
     Controller *controller=tabIndexToController[index];
     tabWidget->setCurrentIndex(index-1);
 
@@ -449,10 +449,11 @@ void TulipApp::closeTab(int index){
     if(index<tabWidget->currentIndex())
       newIndex--;
 
-    delete currentWidget;
     delete controller;
 
+    QWidget *currentWidget=tabWidget->widget(index);
     tabWidget->removeTab(index);
+    delete currentWidget;
     //tabChanged(newIndex);
 
     if(tabWidget->count()==0)
