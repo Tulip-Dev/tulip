@@ -38,7 +38,7 @@ namespace tlp {
   /**
    * Class use to compute bounding boxs of a vector of GlEntity
    */
-  class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, public GraphObserver, public PropertyObserver, public Listener{
+  class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, public GraphObserver, public PropertyObserver, public Observable {
 
   public:
 

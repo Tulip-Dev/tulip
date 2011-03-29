@@ -26,7 +26,7 @@
 
 namespace tlp {
 
-class TLP_GL_SCOPE GlColorScale : public GlSimpleEntity, public Observer {
+class TLP_GL_SCOPE GlColorScale : public GlSimpleEntity, public Observable {
 
 public:
 
