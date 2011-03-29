@@ -29,13 +29,20 @@ private:
 
   // Display parameters
   QSize _iconSize;
-  qreal _margin;
+  int _margin;
   Qt::Orientation _orientation;
   int _animationMsec;
   QEasingCurve _animationEasing;
 
+  QColor _outerOutline;
+  QColor _innerOutline;
+  QColor _backgroundGradientStep1;
+  QColor _backgroundGradientStep2;
+
   QPointF translationVector() const;
   QSizeF hoveredIconSize() const;
+  QRectF computeBoundingRect() const;
+  PushButtonItem *buildButton(QAction *);
 };
 }
 

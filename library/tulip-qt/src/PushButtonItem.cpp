@@ -61,18 +61,16 @@ void PushButtonItem::setIconSize(const QSize &iconSize) {
 void PushButtonItem::mousePressEvent(QGraphicsSceneMouseEvent *) {
   if (!_pressed) {
     _pressed = true;
+    update();
     _clicking = true;
     emit pressed();
-    QGraphicsColorizeEffect *effect = new QGraphicsColorizeEffect();
-    effect->setColor(QColor(255,255,255));
-    effect->setStrength(0.3);
-    setGraphicsEffect(effect);
   }
 }
 //==========================
 void PushButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *) {
   if (_pressed) {
     _pressed = false;
+    update();
     emit released();
     if (_clicking) {
       if (_action)
@@ -80,7 +78,6 @@ void PushButtonItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *) {
       emit clicked();
     }
     _clicking = false;
-    setGraphicsEffect(0);
   }
 }
 //==========================
@@ -114,7 +111,24 @@ void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
   if (!_hovered)
     painter->setOpacity(0.8);
 
-  painter->drawPixmap(0, 0, _iconSize.width(), _iconSize.height(), _icon.pixmap(_iconSize, mode));
+  QPixmap pixmap = _icon.pixmap(_iconSize, mode);
+  if (_pressed) {
+    QImage img = pixmap.toImage();
+    QImage alpha = img.alphaChannel();
+    for (int x = 0; x < img.width(); ++x) {
+      for (int y = 0; y < img.height(); ++y) {
+        QColor col = img.pixel(x, y);
+        col.setRed(std::min<int>(255, col.red() + 20));
+        col.setGreen(std::min<int>(255, col.green() + 20));
+        col.setBlue(std::min<int>(255, col.blue() + 20));
+        img.setPixel(x, y, qRgba(col.red(), col.green(), col.blue(), col.alpha()));
+      }
+    }
+    img.setAlphaChannel(alpha);
+    pixmap = QPixmap::fromImage(img);
+  }
+
+  painter->drawPixmap(0, 0, _iconSize.width(), _iconSize.height(), pixmap);
 }
 //==========================
 QRectF PushButtonItem::boundingRect() const {

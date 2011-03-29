@@ -150,6 +150,7 @@ void AbstractGraphicsView::buildInteractorsToolbar() {
   ToolbarItem *tbi = new ToolbarItem();
   for(list<Interactor *>::iterator it = _interactors.begin(); it != _interactors.end(); ++it)
     tbi->addAction((*it)->getAction());
+  tbi->setPos(50,50);
   addToScene(tbi);
 }
 // ===================================
