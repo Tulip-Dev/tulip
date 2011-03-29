@@ -86,6 +86,9 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 QRectF ToolbarItem::boundingRect() const {
   QRectF result = computeBoundingRect();
 
+  if (_actions.empty())
+    return result;
+
   // Position items
   QPointF marginVector = _margin * translationVector();
   QPointF pos(_margin,_margin);
