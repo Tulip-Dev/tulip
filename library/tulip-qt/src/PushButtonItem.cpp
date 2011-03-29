@@ -150,10 +150,10 @@ QSizeF PushButtonItem::sizeHint(Qt::SizeHint, const QSizeF &) const {
 }
 //==========================
 void PushButtonItem::setAction(QAction *action) {
-  delete _action;
   _action = action;
   setIcon(_action->icon());
   setText(action->text());
+  update();
 }
 //==========================
 void PushButtonItem::setItemSize(const QSizeF &s) {

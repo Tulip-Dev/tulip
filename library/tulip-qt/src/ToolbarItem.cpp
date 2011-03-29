@@ -138,6 +138,7 @@ PushButtonItem *ToolbarItem::buildButton(QAction *action) {
   PushButtonItem *result = new PushButtonItem(action,_iconSize,this);
   result->setGraphicsEffect(new MirrorGraphicsEffect(-1 * _margin, _margin+3));
   connect(result,SIGNAL(hovered(bool)),this,SLOT(buttonHovered(bool)),Qt::DirectConnection);
+  connect(result,SIGNAL(clicked()),this,SLOT(buttonClicked()),Qt::DirectConnection);
   return result;
 }
 //==========================
@@ -147,5 +148,6 @@ void ToolbarItem::buttonHovered(bool f) {
 //==========================
 void ToolbarItem::buttonClicked() {
   PushButtonItem *btn = static_cast<PushButtonItem *>(sender());
+  setActiveAction(btn->action());
 }
 }
