@@ -60,7 +60,7 @@ namespace tlp {
    * On left : Property, and hierarchical view
    * In view menu you have access to all view plugins
    */
-  class TLP_QT_SCOPE MainController :  public ControllerViewsManager, public Observer, public GraphObserver {
+  class TLP_QT_SCOPE MainController :  public ControllerViewsManager, public Observable, public GraphObserver {
 
     Q_OBJECT;
 
