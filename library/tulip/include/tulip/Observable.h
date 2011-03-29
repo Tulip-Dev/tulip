@@ -112,14 +112,17 @@ namespace tlp {
         tlp::Iterator<tlp::node> *getOutObjects() const;
 
     private:
-        static tlp::VectorGraph               oGraph;         /** the graph that store all observers and connection between them*/
-        static tlp::NodeProperty<OLOObject *> oPointer;       /** store a pointer to the object represented by a node */
-        static tlp::NodeProperty<bool>        oAlive;         /** enables to know if an object has been deleted or not */
-        static std::vector<tlp::node>         delayedDelNode; /** store deleted nodes, to remove them at the end of the notify*/
+        static tlp::VectorGraph                oGraph;         /** the graph that store all observers and connection between them*/
+        static tlp::NodeProperty<OLOObject *>  oPointer;       /** store a pointer to the object represented by a node */
+        static tlp::NodeProperty<bool>         oAlive;         /** enables to know if an object has been deleted or not */
+        static tlp::EdgeProperty<unsigned char> oType;         /** enables to know the type of relation between to OLO Objects*/
+        static std::vector<tlp::node>          delayedDelNode; /** store deleted nodes, to remove them at the end of the notify*/
         static unsigned int              notifying;      /** counter of nested notify calls */
         static unsigned int              unholding;      /** counter of nested unhold calls */
         static unsigned int              holdCounter;    /** counter of nested holds */
         static bool                      _initialized;   /** use to initialize oGraph when the library is loaded (nice hack) */
+
+        enum OLOEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
 
     private:
         tlp::node n; /** node that represent that object in the OLOGraph.*/
@@ -159,6 +162,7 @@ namespace tlp {
             return _type;
         }
     private:
+        Event(){}
         tlp::node _sender;
         EventType _type;
     };
@@ -172,16 +176,15 @@ namespace tlp {
       * @see Observable
       * @see Event
       **/
+/*
     class  TLP_SCOPE Onlooker : virtual public OLOObject {
     public:
-        /**
-         * @brief return an iterators on Observable connected to that OnLooker.
-         */
         tlp::Iterator<Observable *> *getObservables() const;
     protected:
         virtual ~Onlooker() {
         }
     };
+*/
     //=======================================
     /**
       * @class Listener
@@ -318,10 +321,6 @@ namespace tlp {
       * @endcode
       *
       **/
-    class  TLP_SCOPE Listener : virtual public Onlooker {
-    public:
-        virtual void treatEvent(const Event &) = 0;
-    };
     //=======================================
     /**
       * @class Observer
@@ -465,19 +464,6 @@ namespace tlp {
       * @endcode
       *
       **/
-    class  TLP_SCOPE Observer : virtual public Onlooker {
-    public:
-      Observer() {}
-      _DEPRECATED Observer(bool){}
-      /**
-       * that function should be virtual pure
-       * the current implementation is only here to insure compatibility with
-       * tulip 3.x x<6.
-       */
-      virtual void treatEvents(const  std::vector<Event> &events );
-      virtual void _DEPRECATED update(std::set<Observable*>::iterator, std::set<Observable*>::iterator);
-      virtual void _DEPRECATED observableDestroyed(Observable *);
-    };
     //=======================================
     /**
       * @class Observable
@@ -503,6 +489,9 @@ namespace tlp {
       **/
     class  TLP_SCOPE Observable: virtual public OLOObject {
     public:
+        Observable();
+        _DEPRECATED Observable(bool){}
+
         virtual ~Observable();
         /**
          * @brief return an Iterator on all Onlookers
@@ -511,19 +500,33 @@ namespace tlp {
          * @see forEach
          * @see stableForEach
          */
-        tlp::Iterator<Onlooker *> *getOnlookers() const;
+        tlp::Iterator<Observable *> *getOnlookers() const;
+
+
+        tlp::Iterator<Observable *> *getObservables() const;
         /**
-          * @brief add an Observer/Listener to the observable
-          *
-          * The added Onlookers will received the next Event sent by the Observable.
-          * In case of nested unholding (almost never), calling that function inside hold/unhold block
-          * can make the Observer receive an event that has been sent before it was Observing the object.
-          */
-        void addOnlooker(const Onlooker &);
+         * that function should be virtual pure
+         * the current implementation is only here to insure compatibility with
+         * tulip 3.x x<6.
+         */
+        virtual void treatEvents(const  std::vector<Event> &events );
+        virtual void _DEPRECATED update(std::set<Observable*>::iterator, std::set<Observable*>::iterator);
+        virtual void _DEPRECATED observableDestroyed(Observable *);
+
+        virtual void treatEvent(const Event &);
+
+
   /**
    * @brief use for old observer tulip compatibility
   */
-  void _DEPRECATED addObserver(Observer * const obs);
+  void addObserver(Observable * const obs);
+
+  /**
+   * @brief use for old observer tulip compatibility
+  */
+  void addListener(Observable * const obs);
+
+
         /**
           * @brief remove an Observer/Listener of the observable
           *
@@ -534,11 +537,11 @@ namespace tlp {
           * problem in your application. Objects that are listening/observing could need to receive
           * the events to work properly.
           */
-        void removeOnlooker(const Onlooker &);
+        void removeOnlooker(const Observable &);
   /**
    * @brief use for old observer tulip compatibility
    */
-  void _DEPRECATED removeObserver(Observer  * const obs);
+  void _DEPRECATED removeObserver(Observable  * const obs);
 
 	/**
 	 * @brief use for old observer tulip compatibility
@@ -619,7 +622,15 @@ namespace tlp {
         }
 
     protected:
-        Observable();
+        /**
+          * @brief add an Observer/Listener to the observable
+          *
+          * The added Onlookers will received the next Event sent by the Observable.
+          * In case of nested unholding (almost never), calling that function inside hold/unhold block
+          * can make the Observer receive an event that has been sent before it was Observing the object.
+          */
+        void addOnlooker(const Observable &, OLOEDGETYPE type);
+
         /**
           * @brief Enable to send an event to all Observer/Listener
           *
