@@ -36,7 +36,7 @@ class GraphView;
 class GraphUpdatesRecorder;
 
 ///Implementation of the graph support of the Graph.
-class TLP_SCOPE GraphImpl:public GraphAbstract, public Observer {
+class TLP_SCOPE GraphImpl:public GraphAbstract {
 
   friend class GraphUpdatesRecorder;
   friend class TLPExport;  
