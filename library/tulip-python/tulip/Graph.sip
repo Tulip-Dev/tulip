@@ -17,6 +17,25 @@
  *
  */
 
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
+
 // +-------------------------------------------------------------------------+
 // | Tulip Python Bindings                                                   |
 // | inspired from bindings by the Booggie project development team          |
@@ -345,7 +364,7 @@ tlp.Graph.setEdgeOrder(tlp.node, list of tlp.edge)
 	tlp::node target(const tlp::edge)const ;
 %MethodCode
 	if (sipCpp->isElement(*a0)) {
-		sipRes = new tlp::node(sipCpp->source(*a0));
+		sipRes = new tlp::node(sipCpp->target(*a0));
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
 	}
@@ -690,6 +709,7 @@ tlp.Graph.createMetaNodes(tlp.IteratorGraph, tlp.Graph) -> list of tlp.node
         if (!found) {
         	std::ostringstream oss;
         	oss << "graph attribute \"" << *a0 << "\" does not exist.";
+		sipIsErr = 1;    
         	PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
         }
 %End
@@ -708,11 +728,11 @@ tlp.Graph.createMetaNodes(tlp.IteratorGraph, tlp.Graph) -> list of tlp.node
 
 	SIP_PYOBJECT __repr__() const;
 %MethodCode
-		std::string graphName;
-		sipCpp->getAttribute("name", graphName);
-		std::ostringstream oss;
-		oss << "<graph \"" << graphName << "\" (id " << sipCpp->getId() << ") >";
-		std::string s = oss.str();
+	std::string graphName;
+	sipCpp->getAttribute("name", graphName);
+	std::ostringstream oss;
+	oss << "<graph \"" << graphName << "\" (id " << sipCpp->getId() << ") >";
+	std::string s = oss.str();
         sipRes = PyString_FromString(s.c_str());
 %End
 

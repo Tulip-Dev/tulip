@@ -143,6 +143,14 @@ tlp.@PROPERTY_TYPE@Property.setEdgeValue(tlp.edge, @PYTHON_EDGE_TYPE@)
     	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
     } 
 %End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<@PROPERTY_TYPE@ property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
 	
 @PROPERTY_SPECIFIC_METHODS@
 	
