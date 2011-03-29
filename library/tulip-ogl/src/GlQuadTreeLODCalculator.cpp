@@ -440,7 +440,7 @@ namespace tlp {
             selectionProperty->addPropertyObserver(this);
         }
         if(glScene)
-          glScene->addOnlooker(*this);
+          glScene->addListener(this);
     }
 
     void GlQuadTreeLODCalculator::update(PropertyInterface *property){
@@ -518,7 +518,7 @@ namespace tlp {
 
     void GlQuadTreeLODCalculator::initCamerasObservers() {
       for(vector<Camera *>::iterator it=cameras.begin();it!=cameras.end();++it){
-        (*it)->addOnlooker(*this);
+        (*it)->addListener(this);
       }
     }
 
