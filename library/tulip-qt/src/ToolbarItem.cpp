@@ -3,6 +3,7 @@
 #include "tulip/PushButtonItem.h"
 #include "tulip/MirrorGraphicsEffect.h"
 #include <QtGui/QPainter>
+#include <assert.h>
 
 namespace tlp {
 ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
@@ -86,15 +87,24 @@ QRectF ToolbarItem::boundingRect() const {
   QRectF result = computeBoundingRect();
 
   // Position items
-  QPointF pos(0,_margin);
   QPointF marginVector = _margin * translationVector();
+  QPointF pos(_margin,_margin);
   QPointF iconVector(_iconSize.width() * translationVector().x(), _iconSize.height() * translationVector().y());
 
-  pos += marginVector;
   _activeButton->moveItem(pos, _animationMsec, _animationEasing);
   pos += iconVector + marginVector * 2;
   for (int i=0;i < _actions.size(); ++i) {
-    _actionButton[_actions[i]]->moveItem(pos,_animationMsec, _animationEasing);
+    PushButtonItem *btn = _actionButton[_actions[i]];
+    if (btn->hovered()) {
+      pos-=QPointF(_margin,_margin);
+      btn->resizeItem(hoveredIconSize(),_animationMsec,_animationEasing);
+    }
+    else {
+      btn->resizeItem(_iconSize,_animationMsec,_animationEasing);
+    }
+    btn->moveItem(pos,_animationMsec, _animationEasing);
+    if (btn->hovered())
+      pos+=QPointF(_margin,_margin);
     pos += iconVector + marginVector;
   }
 
@@ -112,8 +122,9 @@ QPointF ToolbarItem::translationVector() const {
   }
 }
 //==========================
-QSizeF ToolbarItem::hoveredIconSize() const {
-  return QSizeF(_iconSize.width() + 2 * (_margin - 1), _iconSize.height() + 2 * (_margin - 1));
+QSize ToolbarItem::hoveredIconSize() const {
+  int factor = 2 * (_margin - 1);
+  return QSize(_iconSize.width() + factor, _iconSize.height() + factor);
 }
 //==========================
 QRectF ToolbarItem::computeBoundingRect() const {
@@ -123,6 +134,15 @@ QRectF ToolbarItem::computeBoundingRect() const {
 PushButtonItem *ToolbarItem::buildButton(QAction *action) {
   PushButtonItem *result = new PushButtonItem(action,_iconSize,this);
   result->setGraphicsEffect(new MirrorGraphicsEffect(-1 * _margin, _margin+3));
+  connect(result,SIGNAL(hovered(bool)),this,SLOT(buttonHovered(bool)),Qt::DirectConnection);
   return result;
+}
+//==========================
+void ToolbarItem::buttonHovered(bool f) {
+  boundingRect();
+}
+//==========================
+void ToolbarItem::buttonClicked() {
+  PushButtonItem *btn = static_cast<PushButtonItem *>(sender());
 }
 }

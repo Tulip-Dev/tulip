@@ -1,5 +1,9 @@
 #include "tulip/AnimatedGraphicsObject.h"
 
+//FIXME: remove me
+#include <iostream>
+using namespace std;
+
 namespace tlp {
 AnimatedGraphicsObject::AnimatedGraphicsObject(QGraphicsItem *parent): QGraphicsObject(parent), _currentPositionAnimation(0), _currentSizeAnimation(0), _animated(true) {}
 
@@ -11,6 +15,9 @@ AnimatedGraphicsObject::~AnimatedGraphicsObject() {
 }
 
 void AnimatedGraphicsObject::moveItem(const QPointF &from, const QPointF &to, int msec, const QEasingCurve &easing) {
+  if (from == to)
+    return;
+
   if (_currentPositionAnimation)
     _currentPositionAnimation->stop();
 
@@ -33,6 +40,9 @@ void AnimatedGraphicsObject::moveItem(const QPointF &to, int msec, const QEasing
 }
 
 void AnimatedGraphicsObject::resizeItem(const QSizeF &from, const QSizeF &to, int msec, const QEasingCurve &easing) {
+  if (from == to)
+    return;
+
   if (_currentSizeAnimation)
     _currentSizeAnimation->stop();
 

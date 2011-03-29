@@ -9,7 +9,8 @@ class QAction;
 namespace tlp {
 class PushButtonItem;
 
-class ToolbarItem: public QGraphicsItemGroup {
+class ToolbarItem: public QObject, public QGraphicsItemGroup {
+    Q_OBJECT
 public:
   ToolbarItem(QGraphicsItem *parent=0, QGraphicsScene *scene=0);
   virtual ~ToolbarItem();
@@ -20,6 +21,10 @@ public:
 
   virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=0);
   virtual QRectF boundingRect() const;
+
+protected slots:
+  void buttonClicked();
+  void buttonHovered(bool);
 
 private:
   QVector<QAction *> _actions;
@@ -40,7 +45,7 @@ private:
   QColor _backgroundGradientStep2;
 
   QPointF translationVector() const;
-  QSizeF hoveredIconSize() const;
+  QSize hoveredIconSize() const;
   QRectF computeBoundingRect() const;
   PushButtonItem *buildButton(QAction *);
 };
