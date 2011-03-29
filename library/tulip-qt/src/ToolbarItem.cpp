@@ -1,49 +1,8 @@
 #include "tulip/ToolbarItem.h"
 
 #include "tulip/PushButtonItem.h"
-
+#include "tulip/MirrorGraphicsEffect.h"
 #include <QtGui/QPainter>
-#include <QtGui/QGraphicsEffect>
-
-//FIXME: remove me
-#include <iostream>
-using namespace std;
-
-class ToolbarButtonGraphicsEffect: public QGraphicsEffect {
-public:
-  ToolbarButtonGraphicsEffect(int yoffset=0, int height=0): _yoffset(yoffset), _height(height) {
-
-  }
-
-  virtual QRectF boundingRectFor(const QRectF &rect) const {
-    return rect;
-  }
-protected:
-  virtual void draw(QPainter *painter) {
-    // Original pixmap
-    painter->drawPixmap(0,0,sourcePixmap());
-    QImage img = sourcePixmap().toImage();
-
-    // Mirror effect
-    QLinearGradient gradient(0,0,0,img.height());
-    gradient.setColorAt(0.4,Qt::black);
-    gradient.setColorAt(0,Qt::white);
-    QImage reflexion = img.mirrored();
-    QImage mask = img;
-    QPainter p(&mask);
-    p.fillRect(img.rect(), gradient);
-    p.end();
-    reflexion.setAlphaChannel(mask);
-
-    // paint
-    int h = (_height == 0 ? reflexion.height() : _height);
-    painter->drawPixmap(0,sourcePixmap().height()+_yoffset,QPixmap::fromImage(reflexion.copy(0,0,reflexion.width(),h)));
-  }
-
-private:
-  int _yoffset;
-  int _height;
-};
 
 namespace tlp {
 ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
@@ -163,7 +122,7 @@ QRectF ToolbarItem::computeBoundingRect() const {
 //==========================
 PushButtonItem *ToolbarItem::buildButton(QAction *action) {
   PushButtonItem *result = new PushButtonItem(action,_iconSize,this);
-  result->setGraphicsEffect(new ToolbarButtonGraphicsEffect(-1 * _margin, _margin+3));
+  result->setGraphicsEffect(new MirrorGraphicsEffect(-1 * _margin, _margin+3));
   return result;
 }
 }
