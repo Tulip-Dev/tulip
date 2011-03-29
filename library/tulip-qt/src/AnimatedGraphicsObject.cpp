@@ -28,6 +28,10 @@ void AnimatedGraphicsObject::moveItem(const QPointF &from, const QPointF &to, in
     setPos(to);
 }
 
+void AnimatedGraphicsObject::moveItem(const QPointF &to, int msec, const QEasingCurve &easing) {
+  moveItem(pos(), to, msec, easing);
+}
+
 void AnimatedGraphicsObject::resizeItem(const QSizeF &from, const QSizeF &to, int msec, const QEasingCurve &easing) {
   if (_currentSizeAnimation)
     _currentSizeAnimation->stop();
@@ -44,6 +48,10 @@ void AnimatedGraphicsObject::resizeItem(const QSizeF &from, const QSizeF &to, in
 
   else
     setItemSize(to);
+}
+
+void AnimatedGraphicsObject::resizeItem(const QSizeF &to, int msec, const QEasingCurve &easing) {
+  resizeItem(itemSize(),to,msec,easing);
 }
 
 void AnimatedGraphicsObject::animationFinished() {

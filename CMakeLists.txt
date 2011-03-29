@@ -18,6 +18,7 @@ library/tulip-qt/src/GlMainWidgetGraphicsItem.cpp
 library/tulip-qt/src/GraphicsItemsGraphMapper.cpp
 library/tulip-qt/src/GraphicsLayoutItemGraphMapper.cpp
 library/tulip-qt/src/PushButtonItem.cpp
+library/tulip-qt/src/ToolbarItem.cpp
 library/tulip-qt/src/TulipGraphicsLayout.cpp
 )
 
@@ -29,6 +30,7 @@ library/tulip-qt/include/tulip/AbstractGraphicsView.h
 library/tulip-qt/include/tulip/AnimatedGraphicsObject.h
 library/tulip-qt/include/tulip/GlMainWidgetGraphicsItem.h
 library/tulip-qt/include/tulip/PushButtonItem.h
+library/tulip-qt/include/tulip/ToolbarItem.h
 )
 
 SET(LIB_RCC

@@ -3,6 +3,8 @@
 
 #include <tulip/View.h>
 
+#include <QtCore/QSet>
+
 class QGraphicsProxyWidget;
 class QGraphicsView;
 class QGraphicsItem;
@@ -117,13 +119,28 @@ protected:
 
   /**
     * @brief Builds and returns the interactors toolbar.
-    * This methods builds and return a graphical tool for interactor management, it can be overloaded if you wish to implement your own toolbar.
-    * The AbstractGraphicsView takes ownership on the returned item. This item will be set on the central view as a child of the central widget.
-    * When the setCentralWidget method is called, the toolbar is backuped and displayed again after the central widget has been switched.
-    * If you do not wish to display your interactors in a QGraphicsItem, this method should return NULL.
+    * This methods builds a graphical tool for interactor management, it can be overloaded if you wish to implement your own toolbar.
+    * When reimplementing this method, use the addToScene methdo to add your custom graphics item to the view
+    * @see addToScene()
+    * @see removeFromScene()
     * @warning This method is only called once after setInteractors is called.
     */
-  virtual QGraphicsItem *buildInteractorsToolbar();
+  virtual void buildInteractorsToolbar();
+
+  /**
+    * @brief Adds an item to the central scene.
+    * The added item's parenthood will be managed by the view. Meaning that when the setCentralWidget(); method is called. The item's parent will automatically be reset
+    * to the central widget's graphics item.
+    * @warning The view does not take specific ownership of the item. Meaning that it will only be managed by Qt as long as it's in the central view.
+    */
+  void addToScene(QGraphicsItem *item);
+
+  /**
+    * @brief Removes an item from the scene.
+    * Remove the corresponding item from the central scene.
+    * @warning Since the view does not take ownership on those items, the item will not be deleted.
+    */
+  void removeFromScene(QGraphicsItem *item);
 
   /**
     * @brief Event handler for the resize events
@@ -139,7 +156,9 @@ private:
   QWidget *_centralWidget;
   QGraphicsItem *_centralWidgetItem;
   QWidget *_mainWidget;
-  QGraphicsItem *_interactorsToolbar;
+
+  QSet<QGraphicsItem *> _items;
+  void refreshItemsParenthood();
 };
 }
 

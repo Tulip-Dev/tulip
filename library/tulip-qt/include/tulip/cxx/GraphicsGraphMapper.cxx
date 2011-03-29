@@ -33,7 +33,7 @@ void tlp::GraphicsGraphMapper<TYPE>::applyValuesToGraph() {
     node n = _graph->addNode();
     _nodeToItem[n] = _items[i];
     QRectF rect = itemGeometry(_items[i]);
-    layout->setNodeValue(n, Coord(rect.x(),rect.y(),0));
+    layout->setNodeValue(n, Coord(rect.x() + rect.width()/2,rect.y() - rect.height() / 2,0));
     sizes->setNodeValue(n, Size(rect.width(),rect.height(),1));
   }
 }
@@ -44,10 +44,12 @@ void tlp::GraphicsGraphMapper<TYPE>::applyLayoutToItems(const QPointF &translate
     return;
 
   tlp::LayoutProperty *layout = _graph->getProperty<tlp::LayoutProperty>(LAYOUT_PROPNAME);
+  SizeProperty *sizes = _graph->getProperty<tlp::SizeProperty>(SIZE_PROPNAME);
   node n;
   forEach (n, _graph->getNodes()) {
     Coord coord3D = layout->getNodeValue(n);
-    setItemPosition(_nodeToItem[n], QPointF(coord3D[0],coord3D[1]) + translateVector);
+    Size size3D = sizes->getNodeValue(n);
+    setItemPosition(_nodeToItem[n], QPointF(coord3D[0]-size3D[0]/2,coord3D[1]+size3D[1]/2) + translateVector);
   }
 }
 

@@ -35,6 +35,8 @@ public:
   void setItemSize(const QSizeF &s);
   QSizeF itemSize() const;
 
+  bool hovered() const { return _hovered; }
+
 protected:
   void mousePressEvent(QGraphicsSceneMouseEvent *);
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *);

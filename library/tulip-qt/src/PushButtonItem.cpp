@@ -30,7 +30,6 @@ PushButtonItem::PushButtonItem(QAction *action, const QSize &iconSize, QGraphics
 }
 //==========================
 PushButtonItem::~PushButtonItem() {
-  delete _action;
 }
 //==========================
 QString PushButtonItem::text() const {
