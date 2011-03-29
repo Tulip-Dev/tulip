@@ -98,7 +98,7 @@ static bool integrityTest(Graph *graph) {
 */
 //----------------------------------------------------------------
 GraphImpl::GraphImpl():
-  GraphAbstract(this),Observer(false) {
+  GraphAbstract(this) {
   // id 0 is for the root
   graphIds.get();
 }
