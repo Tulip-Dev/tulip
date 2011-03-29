@@ -27,7 +27,7 @@
 #include <QtGui/qtabwidget.h>
 #include <tulip/PropertyInterface.h>
 
-class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observer {
+class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observable {
    public : 
 
       GraphNeedsSavingObserver(QTabWidget* tabWidget, int graphIndex, tlp::Graph* graph, bool = true) :_needsSaving(false), _tabIndex(graphIndex), _tabWidget(tabWidget), _graph(graph) {
