@@ -409,33 +409,23 @@ ENDIF(LINUX)
 
 # Include external plugins configuration file.
 # Note: this is done before setting group names variables. User can set the CPACK_CUSTOM_INSTALLER to true and setup its own installer in this file.
-IF(EXISTS externalplugins/ExternalPlugins.cmake)
-  INCLUDE(externalplugins/ExternalPlugins.cmake)
-ENDIF()
 
-IF(NOT CPACK_CUSTOM_INSTALLER)
-  SET(LIBS_GROUP_NAME "Libraries")
-  SET(HEADERS_GROUP_NAME "Headers")
-  SET(SOFTWARE_GROUP_NAME "Runtime")
-  SET(PLUGINS_GROUP_NAME "Plugins")
-  SET(EXTRAS_GROUP_NAME "Extras")
-  SET(THIRDPARTY_GROUP_NAME "Third party")
-ELSE()
-  # In case a custom installer is set, all the base tulip software components will be in the same group.
-  SET(LIBS_GROUP_NAME "Tulip software")
-  SET(HEADERS_GROUP_NAME "Tulip software")
-  SET(SOFTWARE_GROUP_NAME "Tulip software")
-  SET(PLUGINS_GROUP_NAME "Tulip software")
-  SET(EXTRAS_GROUP_NAME "Tulip software")
-  SET(THIRDPARTY_GROUP_NAME "Tulip software")
-ENDIF()
+SET(LIBS_GROUP_NAME "Libraries")
+SET(HEADERS_GROUP_NAME "Headers")
+SET(SOFTWARE_GROUP_NAME "Runtime")
+SET(PLUGINS_GROUP_NAME "Plugins")
+SET(EXTRAS_GROUP_NAME "Extras")
+SET(THIRDPARTY_GROUP_NAME "Third party")
 
 # Defines specific software components from tulip.
 INCLUDE(CPackComponents.cmake)
 
-IF(NOT CPACK_CUSTOM_INSTALLER)
-  INCLUDE(CPackInstaller.cmake)
+IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/externalplugins/ExternalPlugins.cmake)   
+  INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/externalplugins/ExternalPlugins.cmake)
 ENDIF()
 
 
+IF(NOT CPACK_CUSTOM_INSTALLER)
+  INCLUDE(CPackInstaller.cmake)
+ENDIF()
 INCLUDE(CPack)
