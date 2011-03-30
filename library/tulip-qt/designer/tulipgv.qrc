@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/tulip/icons">
+        <file>document-properties.svg</file>
+    </qresource>
+</RCC>
