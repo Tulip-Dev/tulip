@@ -13,7 +13,6 @@ ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   _iconSize(32,32), _margin(6), _orientation(Qt::Horizontal), _animationMsec(100), _animationEasing(QEasingCurve::Linear),
   _outerOutline(0x9c,0x9a,0x94,0x00), _innerOutline(0xb3,0xaf,0xaf), _backgroundGradientStep1(0xdc,0xda,0xd5,0xd2), _backgroundGradientStep2(0xdc,0xda,0xd5,0x64) {
   setHandlesChildEvents(false);
-  setAcceptHoverEvents(true);
 }
 //==========================
 ToolbarItem::~ToolbarItem() {
@@ -32,6 +31,8 @@ void ToolbarItem::addAction(QAction *action) {
 
   if (!_activeAction)
     setActiveAction(action);
+
+  layout();
 }
 //==========================
 void ToolbarItem::removeAction(QAction *action) {
@@ -49,6 +50,7 @@ void ToolbarItem::removeAction(QAction *action) {
     else
       setActiveAction(0);
   }
+  layout();
 }
 //==========================
 void ToolbarItem::setActiveAction(QAction *action) {
@@ -107,10 +109,12 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 }
 //==========================
 QRectF ToolbarItem::boundingRect() const {
-  QRectF result = computeBoundingRect();
-
+  return computeBoundingRect();
+}
+//==========================
+void ToolbarItem::layout() {
   if (_actions.empty() || !_expanded)
-    return result;
+    return;
 
   // Position items
   QPointF marginVector = _margin * translationVector();
@@ -133,8 +137,6 @@ QRectF ToolbarItem::boundingRect() const {
 
     pos += iconVector + marginVector;
   }
-
-  return result;
 }
 //==========================
 QPointF ToolbarItem::translationVector() const {
@@ -172,7 +174,7 @@ PushButtonItem *ToolbarItem::buildButton(QAction *action) {
 }
 //==========================
 void ToolbarItem::buttonHovered(bool f) {
-  prepareGeometryChange();
+  layout();
 }
 //==========================
 void ToolbarItem::buttonClicked() {
@@ -219,17 +221,12 @@ void ToolbarItem::setExpanded(bool f) {
 
   connect(_currentExpandAnimation, SIGNAL(finished()), this, SLOT(expandAnimationFinished()), Qt::DirectConnection);
   _currentExpandAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+  layout();
 }
 //==========================
 void ToolbarItem::expandAnimationFinished() {
   _currentExpandAnimation = 0;
   for (QMap<QAction *,PushButtonItem *>::iterator it = _actionButton.begin(); it != _actionButton.end(); ++it)
     it.value()->setVisible(_expanded);
-}
-//==========================
-void ToolbarItem::hoverEnterEvent(QGraphicsSceneHoverEvent *) {
-}
-//==========================
-void ToolbarItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
 }
 }

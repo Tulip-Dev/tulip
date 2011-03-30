@@ -28,10 +28,6 @@ public slots:
   void expand() { setExpanded(true); }
   void setExpanded(bool f);
 
-protected:
-  void hoverEnterEvent(QGraphicsSceneHoverEvent *);
-  void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
-
 protected slots:
   void buttonClicked();
   void buttonHovered(bool);
@@ -62,6 +58,7 @@ private:
   QRectF computeBoundingRect() const;
   PushButtonItem *buildButton(QAction *);
   void modifyButton(PushButtonItem *btn, const QSize &newSize, const QPointF &newPos) const;
+  void layout();
 };
 }
 
