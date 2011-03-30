@@ -67,6 +67,10 @@ public :
   // redefinition of GraphObserver methods
   virtual void addNode(Graph* graph, const node n);
   virtual void addEdge(Graph* graph, const edge e);
+  virtual void delNode(Graph* graph, const node n);
+  virtual void delEdge(Graph* graph, const edge e);
+  virtual void addSubGraph(Graph* graph, Graph *sub);
+  virtual void delSubGraph(Graph* graph, Graph *sub);
 
   enum PredefinedMetaValueCalculator {NO_CALC = 0, AVG_CALC = 1, SUM_CALC = 2,
 				      MAX_CALC = 3, MIN_CALC = 4};
