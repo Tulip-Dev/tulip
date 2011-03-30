@@ -1,9 +1,5 @@
 #include "tulip/AnimatedGraphicsObject.h"
 
-//FIXME: remove me
-#include <iostream>
-using namespace std;
-
 namespace tlp {
 AnimatedGraphicsObject::AnimatedGraphicsObject(QGraphicsItem *parent): QGraphicsObject(parent), _currentPositionAnimation(0), _currentSizeAnimation(0), _animated(true), _behavior(StopPreviousAnimation) {}
 

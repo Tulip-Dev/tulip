@@ -5,9 +5,6 @@
 #include <QtGui/QAction>
 #include <QtGui/QGraphicsLayout>
 
-//FIXME: remove me
-#include <iostream>
-
 namespace tlp {
 PushButtonItem::PushButtonItem(const QString &text, const QIcon &icon, const QSize &iconSize, QGraphicsItem *parent):
   AnimatedGraphicsObject(parent),

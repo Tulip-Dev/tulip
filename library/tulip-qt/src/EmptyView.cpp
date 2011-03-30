@@ -49,3 +49,6 @@ VIEWPLUGIN(EmptyView, "Empty graphics view for test purposes", "Ludwig Fiolka", 
 INTERACTORPLUGINVIEWEXTENSION(i1, "i1" ,"InteractorNavigation", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
 INTERACTORPLUGINVIEWEXTENSION(i2, "i2" ,"InteractorSelection", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
 INTERACTORPLUGINVIEWEXTENSION(i3, "i3" ,"InteractorAddNode", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
+INTERACTORPLUGINVIEWEXTENSION(i4, "i4" ,"InteractorGetInformation", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
+INTERACTORPLUGINVIEWEXTENSION(i5, "i5" ,"InteractorRectangleZoom", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
+INTERACTORPLUGINVIEWEXTENSION(i6, "i6" ,"InteractorEditEdgeBends", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");

@@ -18,6 +18,7 @@
 #include "tulip/PushButtonItem.h"
 #include "tulip/TulipGraphicsLayout.h"
 #include "tulip/ToolbarItem.h"
+#include <QtGui/QAction>
 
 using namespace tlp;
 using namespace std;
@@ -147,11 +148,6 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
 }
 // ===================================
 void AbstractGraphicsView::buildInteractorsToolbar() {
-  ToolbarItem *tbi = new ToolbarItem();
-  for(list<Interactor *>::iterator it = _interactors.begin(); it != _interactors.end(); ++it)
-    tbi->addAction((*it)->getAction());
-  tbi->setPos(50,50);
-  addToScene(tbi);
 }
 // ===================================
 bool AbstractGraphicsView::eventFilter(QObject *obj, QEvent *e) {

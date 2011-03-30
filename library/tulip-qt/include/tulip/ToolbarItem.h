@@ -4,6 +4,7 @@
 #include <QtGui/QGraphicsItemGroup>
 #include <QtCore/QEasingCurve>
 
+class QAnimationGroup;
 class QAction;
 
 namespace tlp {
@@ -22,15 +23,27 @@ public:
   virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=0);
   virtual QRectF boundingRect() const;
 
+public slots:
+  void collapse() { setExpanded(false); }
+  void expand() { setExpanded(true); }
+  void setExpanded(bool f);
+
+protected:
+  void hoverEnterEvent(QGraphicsSceneHoverEvent *);
+  void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
+
 protected slots:
   void buttonClicked();
   void buttonHovered(bool);
+  void expandAnimationFinished();
 
 private:
   QVector<QAction *> _actions;
   QMap<QAction *,PushButtonItem *> _actionButton;
   QAction *_activeAction;
   PushButtonItem *_activeButton;
+  bool _expanded;
+  QAnimationGroup *_currentExpandAnimation;
 
   // Display parameters
   QSize _iconSize;
