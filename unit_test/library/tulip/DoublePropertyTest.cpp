@@ -107,23 +107,37 @@ void DoublePropertyTest::testDoublePropertyMaxUpdateFromString() {
 void DoublePropertyTest::testDoublePropertySubGraphMin() {
   DoubleProperty *doubleProperty = graph->getProperty<DoubleProperty>(doublePropertyName);
   Graph* subGraph = graph->addSubGraph();
-  node n = subGraph->addNode();
-  doubleProperty->setNodeValue(n, 6);
-  n = subGraph->addNode();
-  doubleProperty->setNodeValue(n, 9);
+  node n2 = subGraph->addNode();
+  doubleProperty->setNodeValue(n2, 6);
+  node n3 = subGraph->addNode();
+  doubleProperty->setNodeValue(n3, 9);
   CPPUNIT_ASSERT(doubleProperty->getNodeMin() == originalMin);
   CPPUNIT_ASSERT(doubleProperty->getNodeMin(subGraph) == 6);
+
+  subGraph->delNode(n2);
+  CPPUNIT_ASSERT(doubleProperty->getNodeMin(subGraph) == 9);
+  CPPUNIT_ASSERT(doubleProperty->getNodeMin() == originalMin);
+  graph->delNode(n1);
+  CPPUNIT_ASSERT(doubleProperty->getNodeMin(subGraph) == 9);
+  CPPUNIT_ASSERT(doubleProperty->getNodeMin() == 6);
 }
 
 void DoublePropertyTest::testDoublePropertySubGraphMax() {
   DoubleProperty *doubleProperty = graph->getProperty<DoubleProperty>(doublePropertyName);
   Graph* subGraph = graph->addSubGraph();
-  node n = subGraph->addNode();
-  doubleProperty->setNodeValue(n, 6);
-  n = subGraph->addNode();
-  doubleProperty->setNodeValue(n, 9);
+  node n2 = subGraph->addNode();
+  doubleProperty->setNodeValue(n2, 6);
+  node n3 = subGraph->addNode();
+  doubleProperty->setNodeValue(n3, 9);
   CPPUNIT_ASSERT(doubleProperty->getNodeMax() == originalMax);
   CPPUNIT_ASSERT(doubleProperty->getNodeMax(subGraph) == 9);
+
+  subGraph->delNode(n3);
+  CPPUNIT_ASSERT(doubleProperty->getNodeMax() == originalMax);
+  CPPUNIT_ASSERT(doubleProperty->getNodeMax(subGraph) == 6);
+  graph->delNode(n4);
+  CPPUNIT_ASSERT(doubleProperty->getNodeMax(subGraph) == 6);
+  CPPUNIT_ASSERT(doubleProperty->getNodeMax() == 9);
 }
 
 //==========================================================
