@@ -10,6 +10,11 @@ class AnimatedGraphicsObject: public QGraphicsObject {
   Q_PROPERTY(bool animated READ animated WRITE setAnimated);
   Q_PROPERTY(QSizeF itemSize READ itemSize WRITE setItemSize);
 public:
+  enum AnimationBehavior {
+    ContinuePreviousAnimation,
+    StopPreviousAnimation
+  };
+
   AnimatedGraphicsObject(QGraphicsItem *parent=0);
   ~AnimatedGraphicsObject();
 
@@ -24,6 +29,9 @@ public:
   virtual void setItemSize(const QSizeF &s) {}
   virtual QSizeF itemSize() const { return QSizeF(); }
 
+  void setAnimationBehavior(AnimationBehavior b) { _behavior = b; }
+  AnimationBehavior animationBehavior() const { return _behavior; }
+
 protected slots:
   void animationFinished();
 
@@ -31,6 +39,7 @@ private:
   QPropertyAnimation *_currentPositionAnimation;
   QPropertyAnimation *_currentSizeAnimation;
   bool _animated;
+  AnimationBehavior _behavior;
   QSizeF _itemSize;
 };
 }

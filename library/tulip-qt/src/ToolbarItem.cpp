@@ -80,6 +80,22 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->setBrush(QBrush(gradient));
     painter->drawRoundRect(outerRect,10,30);
   }
+  { // separator
+    QPointF marginVector = _margin * translationVector();
+    QPointF iconVector(_iconSize.width() * translationVector().x(), _iconSize.height() * translationVector().y());
+
+    QPointF start = QPointF(_margin,_margin) + iconVector + marginVector;
+    QPointF end(start.x() + _iconSize.width() * translationVector().y(), start.y() + _iconSize.height() * translationVector().x());
+    QPen pen;
+    QLinearGradient gradient(start,end);
+    gradient.setColorAt(0,_outerOutline);
+    gradient.setColorAt(0.4, _innerOutline);
+    gradient.setColorAt(0.6, _innerOutline);
+    gradient.setColorAt(1,_outerOutline);
+    pen.setBrush(QBrush(gradient));
+    painter->setPen(pen);
+    painter->drawLine(start,end);
+  }
   QGraphicsItemGroup::paint(painter,option,widget);
 }
 //==========================
@@ -98,16 +114,16 @@ QRectF ToolbarItem::boundingRect() const {
   pos += iconVector + marginVector * 2;
   for (int i=0;i < _actions.size(); ++i) {
     PushButtonItem *btn = _actionButton[_actions[i]];
+
     if (btn->hovered()) {
-      pos-=QPointF(_margin,_margin);
-      btn->resizeItem(hoveredIconSize(),_animationMsec,_animationEasing);
+        pos-=QPointF(_margin,_margin);
+        modifyButton(btn,hoveredIconSize(),pos);
+        pos+=QPointF(_margin,_margin);
     }
-    else {
-      btn->resizeItem(_iconSize,_animationMsec,_animationEasing);
-    }
-    btn->moveItem(pos,_animationMsec, _animationEasing);
-    if (btn->hovered())
-      pos+=QPointF(_margin,_margin);
+
+    else
+      modifyButton(btn,_iconSize,pos);
+
     pos += iconVector + marginVector;
   }
 
@@ -126,8 +142,7 @@ QPointF ToolbarItem::translationVector() const {
 }
 //==========================
 QSize ToolbarItem::hoveredIconSize() const {
-  int factor = 2 * (_margin - 1);
-  return QSize(_iconSize.width() + factor, _iconSize.height() + factor);
+  return QSize(_iconSize.width() + 2 * (_margin - 1), _iconSize.height() + 2 * (_margin - 1));
 }
 //==========================
 QRectF ToolbarItem::computeBoundingRect() const {
@@ -136,6 +151,7 @@ QRectF ToolbarItem::computeBoundingRect() const {
 //==========================
 PushButtonItem *ToolbarItem::buildButton(QAction *action) {
   PushButtonItem *result = new PushButtonItem(action,_iconSize,this);
+  result->setAnimationBehavior(AnimatedGraphicsObject::ContinuePreviousAnimation); // smooth up animations
   result->setGraphicsEffect(new MirrorGraphicsEffect(-1 * _margin, _margin+3));
   connect(result,SIGNAL(hovered(bool)),this,SLOT(buttonHovered(bool)),Qt::DirectConnection);
   connect(result,SIGNAL(clicked()),this,SLOT(buttonClicked()),Qt::DirectConnection);
@@ -144,10 +160,16 @@ PushButtonItem *ToolbarItem::buildButton(QAction *action) {
 //==========================
 void ToolbarItem::buttonHovered(bool f) {
   boundingRect();
+  update();
 }
 //==========================
 void ToolbarItem::buttonClicked() {
   PushButtonItem *btn = static_cast<PushButtonItem *>(sender());
   setActiveAction(btn->action());
+}
+//==========================
+void ToolbarItem::modifyButton(PushButtonItem *btn, const QSize &newSize, const QPointF &newPos) const {
+  btn->resizeItem(newSize,_animationMsec,_animationEasing);
+  btn->moveItem(newPos,_animationMsec,_animationEasing);
 }
 }

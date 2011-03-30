@@ -48,6 +48,7 @@ private:
   QSize hoveredIconSize() const;
   QRectF computeBoundingRect() const;
   PushButtonItem *buildButton(QAction *);
+  void modifyButton(PushButtonItem *btn, const QSize &newSize, const QPointF &newPos) const;
 };
 }
 

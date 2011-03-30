@@ -5,7 +5,7 @@
 using namespace std;
 
 namespace tlp {
-AnimatedGraphicsObject::AnimatedGraphicsObject(QGraphicsItem *parent): QGraphicsObject(parent), _currentPositionAnimation(0), _currentSizeAnimation(0), _animated(true) {}
+AnimatedGraphicsObject::AnimatedGraphicsObject(QGraphicsItem *parent): QGraphicsObject(parent), _currentPositionAnimation(0), _currentSizeAnimation(0), _animated(true), _behavior(StopPreviousAnimation) {}
 
 AnimatedGraphicsObject::~AnimatedGraphicsObject() {
   if (_currentPositionAnimation)
@@ -18,8 +18,11 @@ void AnimatedGraphicsObject::moveItem(const QPointF &from, const QPointF &to, in
   if (from == to)
     return;
 
-  if (_currentPositionAnimation)
+  if (_currentPositionAnimation) {
+    if (_behavior == ContinuePreviousAnimation)
+      return;
     _currentPositionAnimation->stop();
+  }
 
   if (_animated) {
     _currentPositionAnimation = new QPropertyAnimation(this, "pos");
@@ -43,8 +46,11 @@ void AnimatedGraphicsObject::resizeItem(const QSizeF &from, const QSizeF &to, in
   if (from == to)
     return;
 
-  if (_currentSizeAnimation)
+  if (_currentSizeAnimation) {
+    if (_behavior == ContinuePreviousAnimation)
+      return;
     _currentSizeAnimation->stop();
+  }
 
   if (_animated) {
     _currentSizeAnimation = new QPropertyAnimation(this, "itemSize");

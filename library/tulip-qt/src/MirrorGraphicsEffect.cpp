@@ -14,7 +14,7 @@ void MirrorGraphicsEffect::draw(QPainter *painter) {
   painter->drawPixmap(0,0,sourcePixmap());
   QImage img = sourcePixmap().toImage();
 
-  // Mirror effect
+//  // Mirror effect
   QLinearGradient gradient(0,0,0,img.height());
   gradient.setColorAt(0.4,Qt::black);
   gradient.setColorAt(0,Qt::white);
