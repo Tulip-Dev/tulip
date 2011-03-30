@@ -47,9 +47,9 @@ ENDIF(WIN32)
 TARGET_LINK_LIBRARIES(${LibStlPythonName} ${PYTHON_LIBRARY})
 
 INSTALL(TARGETS ${LibStlPythonName}
-	RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT ${LibStlPythonName}
-	LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT ${LibStlPythonName}
-	ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT ${LibStlPythonName})
+        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT pythonbindings
+        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings
+        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings)
 
 ADD_CUSTOM_TARGET(touchStlPythonCMakeLists ALL
                   COMMAND cmake -E touch ${CMAKE_CURRENT_LIST_FILE}

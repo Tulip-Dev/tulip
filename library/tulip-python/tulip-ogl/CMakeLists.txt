@@ -47,9 +47,9 @@ TARGET_LINK_LIBRARIES(${LibTulipOglPythonName} ${LibTulipName} ${LibTulipOglName
 TARGET_LINK_LIBRARIES(${LibTulipOglPythonName} ${PYTHON_LIBRARY})
 
 INSTALL(TARGETS ${LibTulipOglPythonName}
-	RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT ${LibTulipOglPythonName}
-	LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT ${LibTulipOglPythonName}
-	ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT ${LibTulipOglPythonName})
+        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT pythonbindings
+        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings
+        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings)
 
 ADD_CUSTOM_TARGET(touchTulipOglPythonCMakeLists ALL
                   COMMAND cmake -E touch ${CMAKE_CURRENT_LIST_FILE}

@@ -11,9 +11,11 @@ DEFINE_COMPONENT(qscintilla2 "QScintilla 2" "A library to provide source code ed
 DEFINE_COMPONENT(gzstream "Gzstream" "A library to provide zlib facilities in a C++ iostream." "" ${THIRDPARTY_GROUP_NAME})
 DEFINE_COMPONENT(siplib "SIP library" "A library providing python bindings for C++." "libtulip;libtulip_ogl;libtulip_qt" ${THIRDPARTY_GROUP_NAME})
 
+
 # library/tulip
 DEFINE_COMPONENT(libtulip "Core library" "Tulip core library provides a framework for huge graph manipulation." "gzstream" ${LIBS_GROUP_NAME})
 DEFINE_COMPONENT(libtulip_dev "Core library - Development files" "Tulip core library provides a framework for huge graph manipulation." "libtulip" ${HEADERS_GROUP_NAME})
+DEFINE_COMPONENT(pythonbindings "Python bindings" "Python bindings for Tulip." "siplib" ${LIBS_GROUP_NAME})
 
 # library/tulip-ogl
 DEFINE_COMPONENT(libtulip_ogl "OpenGL bindings" "Tulip-ogl provides opengl bindings for 3D visualization of graphs created with the Tulip core library. " "libtulip;ftgl" ${LIBS_GROUP_NAME})
@@ -31,7 +33,7 @@ DEFINE_COMPONENT(libtulip_plugins "Core plugins" "Plugins for Tulip core" "libtu
 DEFINE_COMPONENT(libtulip_ogl_plugins "OpenGL plugins" "Plugins for Tulip OpenGL" "libtulip;libtulip_ogl" ${PLUGINS_GROUP_NAME})
 DEFINE_COMPONENT(libtulip_qt_plugins "Qt plugins" "Plugins for Tulip Qt" "libtulip;libtulip_ogl;libtulip_qt" ${PLUGINS_GROUP_NAME})
 DEFINE_COMPONENT(tulip_plugins_spreadsheetview "Spreadsheet view" "Spreadsheet view plugin" "libtulip;libtulip_ogl;libtulip_qt" ${PLUGINS_GROUP_NAME})
-DEFINE_COMPONENT(tulip_plugins_pythonscriptview "Python view" "Python view plugin" "libtulip;libtulip_ogl;libtulip_qt" ${PLUGINS_GROUP_NAME})
+DEFINE_COMPONENT(tulip_plugins_pythonscriptview "Python view" "Python view plugin" "pythonbindings" ${PLUGINS_GROUP_NAME})
 DEFINE_COMPONENT(libtulip_ogdf_plugins "OGDF plugins" "Plugins using the Tulip OGDF bridge" "libtulip" ${PLUGINS_GROUP_NAME})
 
 # software/pluginsmanager
