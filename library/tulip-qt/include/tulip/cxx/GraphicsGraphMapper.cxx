@@ -3,6 +3,7 @@
 
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
+#include <tulip/ForEach.h>
 
 template<typename TYPE>
 const std::string tlp::GraphicsGraphMapper<TYPE>::LAYOUT_PROPNAME = "viewLayout";
