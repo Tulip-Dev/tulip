@@ -26,8 +26,8 @@ void AnimatedGraphicsObject::moveItem(const QPointF &from, const QPointF &to, in
     _currentPositionAnimation->setEndValue(to);
     _currentPositionAnimation->setDuration(msec);
     _currentPositionAnimation->setEasingCurve(easing);
-    _currentPositionAnimation->start(QAbstractAnimation::DeleteWhenStopped);
-    connect(_currentPositionAnimation, SIGNAL(finished()), this, SLOT(animationFinished()));
+    _currentPositionAnimation->start(QAbstractAnimation::KeepWhenStopped);
+    connect(_currentPositionAnimation, SIGNAL(finished()), this, SLOT(animationFinished()), Qt::DirectConnection);
   }
 
   else
@@ -54,8 +54,8 @@ void AnimatedGraphicsObject::resizeItem(const QSizeF &from, const QSizeF &to, in
     _currentSizeAnimation->setEndValue(to);
     _currentSizeAnimation->setDuration(msec);
     _currentSizeAnimation->setEasingCurve(easing);
-    _currentSizeAnimation->start(QAbstractAnimation::DeleteWhenStopped);
-    connect(_currentSizeAnimation, SIGNAL(finished()), this, SLOT(animationFinished()));
+    _currentSizeAnimation->start(QAbstractAnimation::KeepWhenStopped);
+    connect(_currentSizeAnimation, SIGNAL(finished()), this, SLOT(animationFinished()), Qt::DirectConnection);
   }
 
   else
@@ -67,9 +67,13 @@ void AnimatedGraphicsObject::resizeItem(const QSizeF &to, int msec, const QEasin
 }
 
 void AnimatedGraphicsObject::animationFinished() {
-  if (sender() == _currentPositionAnimation)
+  if (sender() == _currentPositionAnimation) {
+    _currentPositionAnimation->deleteLater();
     _currentPositionAnimation = 0;
-  else if (sender() == _currentSizeAnimation)
+  }
+  else if (sender() == _currentSizeAnimation) {
+    _currentSizeAnimation->deleteLater();
     _currentSizeAnimation = 0;
+  }
 }
 }

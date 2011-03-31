@@ -13,6 +13,7 @@ ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   _iconSize(32,32), _margin(6), _orientation(Qt::Horizontal), _animationMsec(100), _animationEasing(QEasingCurve::Linear),
   _outerOutline(0x9c,0x9a,0x94,0x00), _innerOutline(0xb3,0xaf,0xaf), _backgroundGradientStep1(0xdc,0xda,0xd5,0xd2), _backgroundGradientStep2(0xdc,0xda,0xd5,0x64) {
   setHandlesChildEvents(false);
+  setCacheMode(QGraphicsItem::ItemCoordinateCache);
 }
 //==========================
 ToolbarItem::~ToolbarItem() {

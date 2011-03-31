@@ -72,7 +72,7 @@ void GlMainWidgetGraphicsItem::glMainWidgetDraw(GlMainWidget *,bool) {
 }
 
 void GlMainWidgetGraphicsItem::glMainWidgetRedraw(GlMainWidget *) {
-//  redrawNeeded=true;
+  redrawNeeded=true;
   if (scene())
     scene()->update();
 }
