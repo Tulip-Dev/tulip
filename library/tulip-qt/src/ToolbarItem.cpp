@@ -2,6 +2,7 @@
 
 #include "tulip/PushButtonItem.h"
 #include "tulip/MirrorGraphicsEffect.h"
+#include "tulip/HighlightGraphicsEffect.h"
 #include <QtGui/QPainter>
 #include <QtCore/QParallelAnimationGroup>
 #include <assert.h>
@@ -125,6 +126,7 @@ void ToolbarItem::layout() {
   for (int i=0;i < _actions.size(); ++i) {
     PushButtonItem *btn = _actionButton[_actions[i]];
 
+#ifdef _WIN32
     if (btn->hovered()) {
         pos-=QPointF(_margin,_margin);
         modifyButton(btn,hoveredIconSize(),pos);
@@ -132,6 +134,7 @@ void ToolbarItem::layout() {
     }
 
     else
+#endif
       modifyButton(btn,_iconSize,pos);
 
     pos += iconVector + marginVector;
@@ -175,6 +178,13 @@ PushButtonItem *ToolbarItem::buildButton(QAction *action) {
 }
 //==========================
 void ToolbarItem::buttonHovered(bool f) {
+  PushButtonItem *btn = static_cast<PushButtonItem *>(sender());
+#ifndef _WIN32
+  if (f)
+    btn->setGraphicsEffect(new HighlightGraphicsEffect(3,_backgroundGradientStep1));
+  else
+    btn->setGraphicsEffect(0);
+#endif
   layout();
 }
 //==========================
