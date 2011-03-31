@@ -56,6 +56,10 @@ ELSEIF(WIN32)
     CreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Tulip ${TulipVersion}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\tulip.exe\\\" \\\"\\\" \\\"$INSTDIR\\\\lib\\\\tlp\\\\bitmaps\\\\logo32x32.ico\\\"
     CreateShortCut \\\"$DESKTOP\\\\Tulip ${TulipVersion}.lnk\\\" \\\"$INSTDIR\\\\bin\\\\tulip.exe\\\" \\\"\\\" \\\"$INSTDIR\\\\lib\\\\tlp\\\\bitmaps\\\\logo32x32.ico\\\"
   ")
+  SET(CPACK_NSIS_DELETE_ICONS_EXTRA "
+    Delete \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Tulip ${TulipVersion}.lnk\\\"
+    Delete \\\"$DESKTOP\\\\Tulip ${TulipVersion}.lnk\\\"
+  ")
 
   SET(CPACK_COMPONENT_GROUP_LIBRARIES_BOLD_TITLE TRUE)
   SET(CPACK_COMPONENT_GROUP_LIBRARIES_EXPANDED TRUE)
