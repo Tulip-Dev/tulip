@@ -165,7 +165,9 @@ QRectF ToolbarItem::computeBoundingRect() const {
 PushButtonItem *ToolbarItem::buildButton(QAction *action) {
   PushButtonItem *result = new PushButtonItem(action,_iconSize,this);
   result->setAnimationBehavior(AnimatedGraphicsObject::ContinuePreviousAnimation); // smooth up animations
+#ifdef _WIN32
   result->setGraphicsEffect(new MirrorGraphicsEffect(-1 * _margin, _margin+3));
+#endif
   result->setPos(_margin,_margin);
   connect(result,SIGNAL(hovered(bool)),this,SLOT(buttonHovered(bool)),Qt::DirectConnection);
   connect(result,SIGNAL(clicked()),this,SLOT(buttonClicked()),Qt::DirectConnection);

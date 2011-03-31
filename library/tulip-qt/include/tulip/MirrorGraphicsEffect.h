@@ -11,6 +11,7 @@ public:
 
 protected:
   virtual void draw(QPainter *painter);
+
 private:
   int _yoffset;
   int _height;
