@@ -41,7 +41,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ObservablePropertyTest );
 // these classes will capture
 // everything that will happen to our properties
 // synchronously or asynchronously
-class ObserverPTest :public Observer {
+class ObserverPTest :public Observable {
 public:
   std::set<Observable*> observables;
 
