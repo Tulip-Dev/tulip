@@ -939,7 +939,7 @@ void TulipApp::plugins() {
 
   PluginsManager *pluginsManager=new PluginsManager(multiServerManager,this);
 
-  pluginsManager->show();
+  pluginsManager->exec();
   if (UpdatePlugin::pluginUpdatesPending()) {
     displayRestartForPlugins();
   }
