@@ -2,7 +2,6 @@
 
 #include "tulip/PushButtonItem.h"
 #include "tulip/MirrorGraphicsEffect.h"
-#include "tulip/QtAnimationsManager.h"
 #include <QtGui/QPainter>
 #include <QtCore/QParallelAnimationGroup>
 #include <assert.h>
@@ -10,13 +9,15 @@
 namespace tlp {
 ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   : QGraphicsItemGroup(parent,scene),
-  _activeAction(0), _activeButton(0), _expanded(false),
+  _activeAction(0), _activeButton(0), _expanded(false), _currentExpandAnimation(0),
   _iconSize(32,32), _margin(6), _orientation(Qt::Horizontal), _animationMsec(100), _animationEasing(QEasingCurve::Linear),
   _outerOutline(0x9c,0x9a,0x94,0x00), _innerOutline(0xb3,0xaf,0xaf), _backgroundGradientStep1(0xdc,0xda,0xd5,0xd2), _backgroundGradientStep2(0xdc,0xda,0xd5,0x64) {
   setHandlesChildEvents(false);
 }
 //==========================
 ToolbarItem::~ToolbarItem() {
+  if (_currentExpandAnimation)
+    _currentExpandAnimation->stop();
 }
 //==========================
 void ToolbarItem::addAction(QAction *action) {
@@ -111,40 +112,31 @@ QRectF ToolbarItem::boundingRect() const {
   return computeBoundingRect();
 }
 //==========================
-void ToolbarItem::layout(QParallelAnimationGroup *expandGroup) {
-  QParallelAnimationGroup *animationGroup = expandGroup;
-  if (!expandGroup)
-    animationGroup = new QParallelAnimationGroup();
+void ToolbarItem::layout() {
+  if (_actions.empty() || !_expanded)
+    return;
 
-  if (!_actions.empty() && _expanded) {
-    // Position items
+  // Position items
+  QPointF marginVector = _margin * translationVector();
+  QPointF pos(_margin,_margin);
+  QPointF iconVector(_iconSize.width() * translationVector().x(), _iconSize.height() * translationVector().y());
 
-    QPointF marginVector = _margin * translationVector();
-    QPointF pos(_margin,_margin);
-    QPointF iconVector(_iconSize.width() * translationVector().x(), _iconSize.height() * translationVector().y());
+  _activeButton->moveItem(pos, _animationMsec, _animationEasing);
+  pos += iconVector + marginVector * 2;
+  for (int i=0;i < _actions.size(); ++i) {
+    PushButtonItem *btn = _actionButton[_actions[i]];
 
-    animationGroup->addAnimation(_activeButton->moveItem(pos, _animationMsec, _animationEasing));
-    pos += iconVector + marginVector * 2;
-    for (int i=0;i < _actions.size(); ++i) {
-      PushButtonItem *btn = _actionButton[_actions[i]];
-
-      if (btn->hovered()) {
-          pos-=QPointF(_margin,_margin);
-          animationGroup->addAnimation(btn->moveItem(pos,_animationMsec,_animationEasing));
-          animationGroup->addAnimation(btn->resizeItem(hoveredIconSize(),_animationMsec,_animationEasing));
-          pos+=QPointF(_margin,_margin);
-      }
-
-      else {
-        animationGroup->addAnimation(btn->moveItem(pos,_animationMsec,_animationEasing));
-        animationGroup->addAnimation(btn->resizeItem(_iconSize,_animationMsec,_animationEasing));
-      }
-
-      pos += iconVector + marginVector;
+    if (btn->hovered()) {
+        pos-=QPointF(_margin,_margin);
+        modifyButton(btn,hoveredIconSize(),pos);
+        pos+=QPointF(_margin,_margin);
     }
-  }
 
-  QtAnimationsManager::instance().startAnimation(this,animationGroup,QtAnimationsManager::ContinuePreviousAnimation);
+    else
+      modifyButton(btn,_iconSize,pos);
+
+    pos += iconVector + marginVector;
+  }
 }
 //==========================
 QPointF ToolbarItem::translationVector() const {
@@ -173,6 +165,7 @@ QRectF ToolbarItem::computeBoundingRect() const {
 //==========================
 PushButtonItem *ToolbarItem::buildButton(QAction *action) {
   PushButtonItem *result = new PushButtonItem(action,_iconSize,this);
+  result->setAnimationBehavior(AnimatedGraphicsObject::ContinuePreviousAnimation); // smooth up animations
   result->setGraphicsEffect(new MirrorGraphicsEffect(-1 * _margin, _margin+3));
   result->setPos(_margin,_margin);
   connect(result,SIGNAL(hovered(bool)),this,SLOT(buttonHovered(bool)),Qt::DirectConnection);
@@ -181,7 +174,7 @@ PushButtonItem *ToolbarItem::buildButton(QAction *action) {
 }
 //==========================
 void ToolbarItem::buttonHovered(bool f) {
-//  layout();
+  layout();
 }
 //==========================
 void ToolbarItem::buttonClicked() {
@@ -198,9 +191,12 @@ void ToolbarItem::modifyButton(PushButtonItem *btn, const QSize &newSize, const 
 }
 //==========================
 void ToolbarItem::setExpanded(bool f) {
+  if (_currentExpandAnimation)
+    _currentExpandAnimation->stop();
+
   _expanded = f;
 
-  QParallelAnimationGroup *animationGroup = new QParallelAnimationGroup();
+  _currentExpandAnimation = new QParallelAnimationGroup();
   for (QMap<QAction *,PushButtonItem *>::iterator it = _actionButton.begin(); it != _actionButton.end(); ++it) {
     PushButtonItem *btn = it.value();
     if (_expanded)
@@ -212,7 +208,7 @@ void ToolbarItem::setExpanded(bool f) {
       posAnim->setEndValue(QPointF(_margin,_margin));
       posAnim->setEasingCurve(_animationEasing);
       posAnim->setDuration(_animationMsec);
-      animationGroup->addAnimation(posAnim);
+      _currentExpandAnimation->addAnimation(posAnim);
     }
 
     QPropertyAnimation *fadeAnim = new QPropertyAnimation(btn,"opacity");
@@ -220,14 +216,16 @@ void ToolbarItem::setExpanded(bool f) {
     fadeAnim->setEndValue((f ? 1 : 0));
     fadeAnim->setEasingCurve(_animationEasing);
     fadeAnim->setDuration(_animationMsec);
-    animationGroup->addAnimation(fadeAnim);
+    _currentExpandAnimation->addAnimation(fadeAnim);
   }
 
-  connect(animationGroup, SIGNAL(finished()), this, SLOT(expandAnimationFinished()), Qt::DirectConnection);
-  layout(animationGroup);
+  connect(_currentExpandAnimation, SIGNAL(finished()), this, SLOT(expandAnimationFinished()), Qt::DirectConnection);
+  _currentExpandAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+  layout();
 }
 //==========================
 void ToolbarItem::expandAnimationFinished() {
+  _currentExpandAnimation = 0;
   for (QMap<QAction *,PushButtonItem *>::iterator it = _actionButton.begin(); it != _actionButton.end(); ++it)
     it.value()->setVisible(_expanded);
 }

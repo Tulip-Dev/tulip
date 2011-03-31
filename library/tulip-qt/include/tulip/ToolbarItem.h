@@ -4,7 +4,7 @@
 #include <QtGui/QGraphicsItemGroup>
 #include <QtCore/QEasingCurve>
 
-class QParallelAnimationGroup;
+class QAnimationGroup;
 class QAction;
 
 namespace tlp {
@@ -39,6 +39,7 @@ private:
   QAction *_activeAction;
   PushButtonItem *_activeButton;
   bool _expanded;
+  QAnimationGroup *_currentExpandAnimation;
 
   // Display parameters
   QSize _iconSize;
@@ -57,7 +58,7 @@ private:
   QRectF computeBoundingRect() const;
   PushButtonItem *buildButton(QAction *);
   void modifyButton(PushButtonItem *btn, const QSize &newSize, const QPointF &newPos) const;
-  void layout(QParallelAnimationGroup *expandGroup=0);
+  void layout();
 };
 }
 
