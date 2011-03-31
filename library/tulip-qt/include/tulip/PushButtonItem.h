@@ -12,16 +12,13 @@ namespace tlp {
 Q_INTERFACES(QGraphicsLayoutItem);
 Q_OBJECT;
 Q_PROPERTY(QString text READ text WRITE setText);
-Q_PROPERTY(QIcon icon READ icon WRITE setIcon);
 Q_PROPERTY(QSize iconSize READ iconSize WRITE setIconSize);
 
 public:
-  PushButtonItem(const QString &text = "", const QIcon &icon = QIcon(), const QSize &iconSize = QSize(32,32), QGraphicsItem *parent=0);
   PushButtonItem(QAction *action, const QSize &iconSize = QSize(32,32), QGraphicsItem *parent=0);
   virtual ~PushButtonItem();
 
   QString text() const;
-  QIcon icon() const;
   QSize iconSize() const;
 
   void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
@@ -47,7 +44,6 @@ protected:
 
 public slots:
   void setText(const QString &);
-  void setIcon(const QIcon &);
   void setIconSize(const QSize &);
 
 signals:
@@ -57,7 +53,6 @@ signals:
   void hovered(bool);
 
 private:
-  QIcon _icon;
   QSize _iconSize;
   QAction *_action;
 

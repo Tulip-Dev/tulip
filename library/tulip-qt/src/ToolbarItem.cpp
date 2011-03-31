@@ -69,8 +69,6 @@ void ToolbarItem::setActiveAction(QAction *action) {
 }
 //==========================
 void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-//  painter->setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
-
   QRectF outerRect = computeBoundingRect();
 
   { // Enclosing rect

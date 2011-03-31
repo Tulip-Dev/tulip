@@ -11,7 +11,7 @@ QRectF MirrorGraphicsEffect::boundingRectFor(const QRectF &rect) const {
 
 void MirrorGraphicsEffect::draw(QPainter *painter) {
   // Original pixmap
-  painter->drawPixmap(0,0,sourcePixmap());
+  drawSource(painter);
 //  QImage img = sourcePixmap().toImage();
 
 ////  // Mirror effect
