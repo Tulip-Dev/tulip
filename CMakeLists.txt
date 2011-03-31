@@ -35,6 +35,7 @@ library/tulip-qt/include/tulip/ToolbarItem.h
 )
 
 SET(LIB_RCC
+library/tulip-qt/designer/tulipgv.qrc
 )
 
 TULIP_QT4_WRAP_UI(LIB_UI_SRCS ${LIB_UI})
