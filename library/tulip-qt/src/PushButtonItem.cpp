@@ -5,6 +5,10 @@
 #include <QtGui/QAction>
 #include <QtGui/QGraphicsLayout>
 
+//FIXME: remove me
+#include <iostream>
+using namespace std;
+
 namespace tlp {
 PushButtonItem::PushButtonItem(const QString &text, const QIcon &icon, const QSize &iconSize, QGraphicsItem *parent):
   AnimatedGraphicsObject(parent),
@@ -126,6 +130,7 @@ void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 //  }
 
 //  painter->drawPixmap(0, 0, _iconSize.width(), _iconSize.height(), pixmap);
+  cout << __PRETTY_FUNCTION__ << endl;
   painter->setBrush(Qt::red);
   painter->drawRect(0, 0, _iconSize.width(), _iconSize.height());
 }

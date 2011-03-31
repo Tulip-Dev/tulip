@@ -58,7 +58,7 @@ QWidget *AbstractGraphicsView::construct(QWidget *parent) {
   _mainLayout->setSpacing(0);
   _mainWidget->setLayout(_mainLayout);
   _mainLayout->addWidget(_centralView);
-  _centralView->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
+//  _centralView->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
   _centralView->setViewport(new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget()));
   _centralView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   _centralView->setFrameStyle(QFrame::NoFrame);

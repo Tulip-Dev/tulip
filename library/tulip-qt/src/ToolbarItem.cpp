@@ -219,7 +219,7 @@ void ToolbarItem::setExpanded(bool f) {
     _currentExpandAnimation->addAnimation(fadeAnim);
   }
 
-  connect(_currentExpandAnimation, SIGNAL(finished()), this, SLOT(expandAnimationFinished()), Qt::DirectConnection);
+  connect(_currentExpandAnimation, SIGNAL(finished()), this, SLOT(expandAnimationFinished()));
   _currentExpandAnimation->start(QAbstractAnimation::DeleteWhenStopped);
   layout();
 }
