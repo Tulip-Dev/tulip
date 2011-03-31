@@ -96,36 +96,39 @@ void PushButtonItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
 }
 //==========================
 void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-  QIcon::Mode mode = QIcon::Normal;
-  if (!isEnabled())
-    mode = QIcon::Disabled;
-  if (isActive())
-    mode = QIcon::Active;
-  if (isSelected())
-    mode = QIcon::Selected;
+//  QIcon::Mode mode = QIcon::Normal;
+//  if (!isEnabled())
+//    mode = QIcon::Disabled;
+//  if (isActive())
+//    mode = QIcon::Active;
+//  if (isSelected())
+//    mode = QIcon::Selected;
 
-  painter->setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
-  if (!_hovered)
-    painter->setOpacity(0.8);
+//  painter->setRenderHints(QPainter::HighQualityAntialiasing | QPainter::SmoothPixmapTransform);
+//  if (!_hovered)
+//    painter->setOpacity(0.8);
 
-  QPixmap pixmap = _icon.pixmap(_iconSize, mode);
-  if (_pressed) {
-    QImage img = pixmap.toImage();
-    QImage alpha = img.alphaChannel();
-    for (int x = 0; x < img.width(); ++x) {
-      for (int y = 0; y < img.height(); ++y) {
-        QColor col = img.pixel(x, y);
-        col.setRed(std::min<int>(255, col.red() + 20));
-        col.setGreen(std::min<int>(255, col.green() + 20));
-        col.setBlue(std::min<int>(255, col.blue() + 20));
-        img.setPixel(x, y, qRgba(col.red(), col.green(), col.blue(), col.alpha()));
-      }
-    }
-    img.setAlphaChannel(alpha);
-    pixmap = QPixmap::fromImage(img);
-  }
+//  QPixmap pixmap = _icon.pixmap(_iconSize, mode);
+//  if (_pressed) {
+//    QImage img = pixmap.toImage();
+//    QImage alpha = img.alphaChannel();
+//    for (int x = 0; x < img.width(); ++x) {
+//      for (int y = 0; y < img.height(); ++y) {
+//        QColor col = img.pixel(x, y);
+//        col.setRed(std::min<int>(255, col.red() + 20));
+//        col.setGreen(std::min<int>(255, col.green() + 20));
+//        col.setBlue(std::min<int>(255, col.blue() + 20));
+//        img.setPixel(x, y, qRgba(col.red(), col.green(), col.blue(), col.alpha()));
+//      }
+//    }
+//    img.setAlphaChannel(alpha);
+//    pixmap = QPixmap::fromImage(img);
+//  }
 
-  painter->drawPixmap(0, 0, _iconSize.width(), _iconSize.height(), pixmap);
+//  painter->drawPixmap(0, 0, _iconSize.width(), _iconSize.height(), pixmap);
+
+  painter->setBrush(Qt::red);
+  painter->drawRect(0,0,_iconSize.width(),_iconSize.height());
 }
 //==========================
 QRectF PushButtonItem::boundingRect() const {

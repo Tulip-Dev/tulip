@@ -1,75 +1,57 @@
 #include "tulip/AnimatedGraphicsObject.h"
 
 namespace tlp {
-AnimatedGraphicsObject::AnimatedGraphicsObject(QGraphicsItem *parent): QGraphicsObject(parent), _currentPositionAnimation(0), _currentSizeAnimation(0), _animated(true), _behavior(StopPreviousAnimation) {}
-
-AnimatedGraphicsObject::~AnimatedGraphicsObject() {
-  if (_currentPositionAnimation)
-    _currentPositionAnimation->stop();
-  if (_currentSizeAnimation)
-    _currentSizeAnimation->stop();
+AnimatedGraphicsObject::AnimatedGraphicsObject(QGraphicsItem *parent)
+  : QGraphicsObject(parent),
+  _animated(true) {
 }
 
-void AnimatedGraphicsObject::moveItem(const QPointF &from, const QPointF &to, int msec, const QEasingCurve &easing) {
-  if (from == to)
-    return;
+AnimatedGraphicsObject::~AnimatedGraphicsObject() {
+}
 
-  if (_currentPositionAnimation) {
-    if (_behavior == ContinuePreviousAnimation)
-      return;
-    _currentPositionAnimation->stop();
-  }
+QAbstractAnimation *AnimatedGraphicsObject::moveItem(const QPointF &from, const QPointF &to, int msec, const QEasingCurve &easing) {
+//  if (from == to)
+//    return 0;
 
   if (_animated) {
-    _currentPositionAnimation = new QPropertyAnimation(this, "pos");
-    _currentPositionAnimation->setStartValue(from);
-    _currentPositionAnimation->setEndValue(to);
-    _currentPositionAnimation->setDuration(msec);
-    _currentPositionAnimation->setEasingCurve(easing);
-    _currentPositionAnimation->start(QAbstractAnimation::DeleteWhenStopped);
-    connect(_currentPositionAnimation, SIGNAL(finished()), this, SLOT(animationFinished()));
+    QPropertyAnimation *result = new QPropertyAnimation(this, "pos");
+    result->setStartValue(from);
+    result->setEndValue(to);
+    result->setDuration(msec);
+    result->setEasingCurve(easing);
+    return result;
   }
 
   else
     setPos(to);
+
+  return 0;
 }
 
-void AnimatedGraphicsObject::moveItem(const QPointF &to, int msec, const QEasingCurve &easing) {
-  moveItem(pos(), to, msec, easing);
+QAbstractAnimation *AnimatedGraphicsObject::moveItem(const QPointF &to, int msec, const QEasingCurve &easing) {
+  return moveItem(pos(), to, msec, easing);
 }
 
-void AnimatedGraphicsObject::resizeItem(const QSizeF &from, const QSizeF &to, int msec, const QEasingCurve &easing) {
-  if (from == to)
-    return;
-
-  if (_currentSizeAnimation) {
-    if (_behavior == ContinuePreviousAnimation)
-      return;
-    _currentSizeAnimation->stop();
-  }
+QAbstractAnimation *AnimatedGraphicsObject::resizeItem(const QSizeF &from, const QSizeF &to, int msec, const QEasingCurve &easing) {
+//  if (from == to)
+//    return 0;
 
   if (_animated) {
-    _currentSizeAnimation = new QPropertyAnimation(this, "itemSize");
-    _currentSizeAnimation->setStartValue(from);
-    _currentSizeAnimation->setEndValue(to);
-    _currentSizeAnimation->setDuration(msec);
-    _currentSizeAnimation->setEasingCurve(easing);
-    _currentSizeAnimation->start(QAbstractAnimation::DeleteWhenStopped);
-    connect(_currentSizeAnimation, SIGNAL(finished()), this, SLOT(animationFinished()));
+    QPropertyAnimation *result = new QPropertyAnimation(this, "itemSize");
+    result->setStartValue(from);
+    result->setEndValue(to);
+    result->setDuration(msec);
+    result->setEasingCurve(easing);
+    return result;
   }
 
   else
     setItemSize(to);
+
+  return 0;
 }
 
-void AnimatedGraphicsObject::resizeItem(const QSizeF &to, int msec, const QEasingCurve &easing) {
-  resizeItem(itemSize(),to,msec,easing);
-}
-
-void AnimatedGraphicsObject::animationFinished() {
-  if (sender() == _currentPositionAnimation)
-    _currentPositionAnimation = 0;
-  else if (sender() == _currentSizeAnimation)
-    _currentSizeAnimation = 0;
+QAbstractAnimation *AnimatedGraphicsObject::resizeItem(const QSizeF &to, int msec, const QEasingCurve &easing) {
+  return resizeItem(itemSize(),to,msec,easing);
 }
 }

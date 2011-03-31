@@ -15,17 +15,17 @@ void MirrorGraphicsEffect::draw(QPainter *painter) {
   QImage img = sourcePixmap().toImage();
 
 //  // Mirror effect
-  QLinearGradient gradient(0,0,0,img.height());
-  gradient.setColorAt(0.4,Qt::black);
-  gradient.setColorAt(0,Qt::white);
-  QImage reflexion = img.mirrored();
-  QImage mask = img;
-  QPainter p(&mask);
-  p.fillRect(img.rect(), gradient);
-  p.end();
-  reflexion.setAlphaChannel(mask);
+//  QLinearGradient gradient(0,0,0,img.height());
+//  gradient.setColorAt(0.4,Qt::black);
+//  gradient.setColorAt(0,Qt::white);
+//  QImage reflexion = img.mirrored();
+//  QImage mask = img;
+//  QPainter p(&mask);
+//  p.fillRect(img.rect(), gradient);
+//  p.end();
+//  reflexion.setAlphaChannel(mask);
 
-  // paint
-  int h = (_height == 0 ? reflexion.height() : _height);
-  painter->drawPixmap(0,sourcePixmap().height()+_yoffset,QPixmap::fromImage(reflexion.copy(0,0,reflexion.width(),h)));
+//  // paint
+//  int h = (_height == 0 ? reflexion.height() : _height);
+//  painter->drawPixmap(0,sourcePixmap().height()+_yoffset,QPixmap::fromImage(reflexion.copy(0,0,reflexion.width(),h)));
 }
