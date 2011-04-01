@@ -33,13 +33,11 @@ case "`uname -s`" in
             exit
           fi
 	  # check if libselinux is needed
-	  # (always needed if libkeyutils is not present)
-	  if [ -f /lib/libkeyutils.so.1 -a -f $THISDIR/../lib/libselinux.so.1 ]; then
-	    ldd $THISDIR/tulip_app 2>/dev/null | grep libselinux 2>&1 >/dev/null
-	    if [ $? -ne 0 ]; then
-	      # avoid not needed selinux library
-	      mv $THISDIR/../lib/libselinux.so.1 $THISDIR/../lib/libselinux.so.1.bak
-	    fi
+	  KR=$(uname -r | awk -F - '{print $1}')
+	  # not needed on ubuntu 8.04
+	  if [ "$KR" = "2.6.24" ]; then
+	    # move selinux library
+	    mv $THISDIR/../lib/libselinux.so.1 $THISDIR/../lib/libselinux.so.1.bak
 	  fi
 	fi
 	# finally set LD_LIBRARY_PATH
