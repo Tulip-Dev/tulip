@@ -209,7 +209,7 @@ void HierarchicalGraph::crossReduction(tlp::Graph *sg){
       j++;
     }
   }
-  sg->delAllNode(tmp);
+  sg->delNode(tmp, true);
   //  cerr << __PRETTY_FUNCTION__  << endl;
 }
 //================================================================================
@@ -302,8 +302,8 @@ void HierarchicalGraph::computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProper
     for (it = edge3.begin(); it!=edge3.end(); ++it)
       tmpLCoord.push_back(*it);
     layoutResult->setEdgeValue(tmp.old,tmpLCoord);
-    mySGraph->delAllNode(tmp.n1);
-    mySGraph->delAllNode(tmp.n2);
+    mySGraph->delNode(tmp.n1, true);
+    mySGraph->delNode(tmp.n2, true);
   }  
   //  cerr << "we clean every added nodes and edges" << endl;
 }

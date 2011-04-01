@@ -266,13 +266,13 @@ bool MixedModel::run() {
     
     vector<edge>::const_iterator ite = dummy.begin();
     for (; ite!=dummy.end(); ++ite)
-      currentGraph->delAllEdge(*ite);
+      currentGraph->delEdge(*ite, true);
     
     ite = added_edges.begin();
     const vector<Coord>& dv = layoutResult->getEdgeDefaultValue();
     for (; ite!=added_edges.end(); ++ite) {
       edge e = *ite;
-      currentGraph->delAllEdge(e);
+      currentGraph->delEdge(e, true);
       layoutResult->setEdgeValue(e, dv);
     }    
     delete carte;

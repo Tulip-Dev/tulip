@@ -219,7 +219,7 @@ void GraphView::removeNode(const node n) {
 //----------------------------------------------------------------
 void GraphView::delNode(const node n, bool deleteInAllGraphs) {
   if(deleteInAllGraphs) {
-    getRoot()->delAllNode(n);
+    getRoot()->delNode(n, true);
   }
   else {
     assert (isElement(n));
@@ -277,7 +277,7 @@ void GraphView::removeEdge(const edge e) {
 //----------------------------------------------------------------
 void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
   if(deleteInAllGraphs) {
-    getRoot()->delEdge(e, deleteInAllGraphs);
+    getRoot()->delEdge(e, true);
   }
   else {
     assert(isElement(e));
@@ -295,11 +295,11 @@ void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
 }
 //----------------------------------------------------------------
 void GraphView::delAllNode(const node n){
-  getRoot()->delAllNode(n);
+  delNode(n, true);
 }
 //----------------------------------------------------------------
 void GraphView::delAllEdge(const edge e){
-  getRoot()->delAllEdge(e);
+  delEdge(e, true);
 }
 //----------------------------------------------------------------
 void GraphView::setEdgeOrder(const node n,const std::vector<edge> &v ) {

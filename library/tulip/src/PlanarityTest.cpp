@@ -48,7 +48,7 @@ bool PlanarityTest::planarEmbedding(Graph *graph) {
   planarTest.isPlanar(true);
   vector<edge>::const_iterator it = addedEdges.begin();
   for (; it!=addedEdges.end(); ++it)
-    graph->delAllEdge(*it);
+    graph->delEdge(*it, true);
   Observable::unholdObservers();
   return true;
 }
@@ -65,7 +65,7 @@ list<edge> PlanarityTest::getObstructionsEdges(Graph *graph) {
   {
     vector<edge>::const_iterator it = addedEdges.begin();
     for (; it!=addedEdges.end(); ++it)
-      graph->delAllEdge(*it);
+      graph->delEdge(*it, true);
   }
   Observable::unholdObservers();
   set<edge> tmpAdded(addedEdges.begin(), addedEdges.end());
@@ -91,7 +91,7 @@ bool PlanarityTest::compute(Graph *graph) {
   resultsBuffer[(unsigned long)graph] = planarTest.isPlanar(true);
   vector<edge>::const_iterator it = addedEdges.begin();
   for (; it!=addedEdges.end(); ++it)
-    graph->delAllEdge(*it);
+    graph->delEdge(*it, true);
   graph->addGraphObserver(this);
   return resultsBuffer[(unsigned long)graph];
 }
