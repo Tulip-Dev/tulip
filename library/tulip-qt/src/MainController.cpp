@@ -195,7 +195,7 @@ namespace tlp {
   //**********************************************************************
   //**********************************************************************
 #ifndef WITHOUT_MAIN_CONTROLLER
-  CONTROLLERPLUGIN(MainController, "MainController", "Tulip Team", "16/04/2008", "Main controller", "1.0");
+  CONTROLLERPLUGIN(MainController, "Tulip Classic", "Tulip Team", "16/04/2008", "Tulip Classic", "1.0");
 #endif
 
   //**********************************************************************
