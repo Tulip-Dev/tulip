@@ -33,6 +33,27 @@ namespace tlp {
 class SGHierarchyWidget;
 }
 
+/*@{*/
+/** \file
+ *  \brief Python script view
+ *
+ *  This view aims to manipulate and modify a Tulip graph through the use of Python scripts.
+ *  Indeed, bindings for the Tulip C++ library have been developed in order to offer its features
+ *  to the Python world. The main functionalities have been wrapped, the most important ones being
+ *  graph and properties manipulation (for instance : adding nodes/edges to a graph, creating a property,
+ *  getting/setting property values associated to graph elements, ...) but also the ability to call
+ *  algorithms.
+ *
+ *  The view allows to write a script that will operate on the graph currently loaded in Tulip.
+ *  Its graphical interface contains the following components :
+ *  	- a nice script editor with syntax highlighting and auto-completion
+ *      - some buttons to start / stop the current edited script
+ *      - a console output widget
+ *
+ *  Even if the scripting feature works quite well, the bindings are still in development so crashes
+ *  could occur if one write a script that unfortunately corrupts the graph data model.
+ */
+
 class PythonScriptView : public tlp::AbstractView {
 
 	Q_OBJECT
