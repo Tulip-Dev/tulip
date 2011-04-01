@@ -212,11 +212,11 @@ public:
    * the sub-graph of the graph to maintain the sub-graph relation between graphs.
    * Warning : One can't add an existing node to the root graph
    */
-  virtual void delNode(const node)=0;
+  virtual void delNode(const node n, bool deleteInAllGraphs = false)=0;
   /**
    * Delete a node in all the hierarchy of graphs.
    */
-  virtual void delAllNode(const node)=0;
+  virtual _DEPRECATED void delAllNode(const node)=0;
   /**
    * Add a new edge in the graph and return it. This edge is also added in all
    * the super-graph of the graph to maintain the sub-graph relation between graphs.
@@ -236,13 +236,13 @@ public:
    * the sub-graph of the graph to maintain the sub-graph relation between graphs.
    * The ordering of edges is preserved.
    */
-  virtual  void delEdge(const edge )=0;
+  virtual  void delEdge(const edge e, bool deleteInAllGraphs = false)=0;
   /**
    * Delete an edge in all the hierarchy of graphs.
    * The ordering of edges around the node
    * is preserved.
    */
-  virtual  void delAllEdge(const edge)=0;
+  virtual _DEPRECATED void delAllEdge(const edge)=0;
   /**
    * Set the order of the edges around a node. This operation
    * ensure that adjacent edges of a node will

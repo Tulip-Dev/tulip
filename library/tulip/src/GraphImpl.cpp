@@ -209,7 +209,7 @@ void GraphImpl::removeNode(const node n) {
   notifyObservers();
 }
 //----------------------------------------------------------------
-void GraphImpl::delNode(const node n) {
+void GraphImpl::delNode(const node n, bool) {
   assert (isElement(n));
   notifyDelNode(this, n);
   // propagate to subgraphs
@@ -253,7 +253,7 @@ void GraphImpl::delNode(const node n) {
   notifyObservers();
 }
 //----------------------------------------------------------------
-void GraphImpl::delEdge(const edge e) {
+void GraphImpl::delEdge(const edge e, bool) {
   assert(existEdgeE(this, source(e),target(e), e));
   if (!isElement(e)) {
     return;

@@ -52,10 +52,10 @@ public:
   void addNode(const node);
   edge addEdge(const node ,const node);
   void addEdge(const edge);
-  void delNode(const node);
-  void delEdge(const edge );
-  void delAllNode(const node );
-  void delAllEdge(const edge );
+  void delNode(const tlp::node n, bool deleteInAllGraphs = false);
+  void delEdge(const tlp::edge e, bool deleteInAllGraphs = false);
+  void _DEPRECATED delAllNode(const node );
+  void _DEPRECATED delAllEdge(const edge );
   void setEdgeOrder(const node,const std::vector<edge> & );
   void swapEdgeOrder(const node,const edge , const edge );
   //=========================================================================
