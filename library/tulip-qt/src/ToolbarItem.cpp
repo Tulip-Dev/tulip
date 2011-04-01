@@ -15,6 +15,7 @@ ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   _outerOutline(0x9c,0x9a,0x94,0x00), _innerOutline(0xb3,0xaf,0xaf), _backgroundGradientStep1(0xdc,0xda,0xd5,0xd2), _backgroundGradientStep2(0xdc,0xda,0xd5,0x64) {
   setHandlesChildEvents(false);
   setCacheMode(QGraphicsItem::ItemCoordinateCache);
+  setAcceptHoverEvents(true);
 }
 //==========================
 ToolbarItem::~ToolbarItem() {
@@ -34,7 +35,7 @@ void ToolbarItem::addAction(QAction *action) {
   if (!_activeAction)
     setActiveAction(action);
 
-  layout();
+//  layout();
 }
 //==========================
 void ToolbarItem::removeAction(QAction *action) {
@@ -52,7 +53,7 @@ void ToolbarItem::removeAction(QAction *action) {
     else
       setActiveAction(0);
   }
-  layout();
+//  layout();
 }
 //==========================
 void ToolbarItem::setActiveAction(QAction *action) {
@@ -105,7 +106,8 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->setPen(pen);
     painter->drawLine(start,end);
   }
-  QGraphicsItemGroup::paint(painter,option,widget);
+  layout();
+//  QGraphicsItemGroup::paint(painter,option,widget);
 }
 //==========================
 QRectF ToolbarItem::boundingRect() const {
@@ -179,11 +181,19 @@ PushButtonItem *ToolbarItem::buildButton(QAction *action) {
 //==========================
 void ToolbarItem::buttonHovered(bool f) {
   PushButtonItem *btn = static_cast<PushButtonItem *>(sender());
-#ifndef _WIN32
+  if (btn == _activeButton)
+    return;
   if (f)
+#ifndef _WIN32
     btn->setGraphicsEffect(new HighlightGraphicsEffect(3,_backgroundGradientStep1));
-  else
+#else
     btn->setGraphicsEffect(0);
+#endif
+  else
+#ifndef _WIN32
+    btn->setGraphicsEffect(0);
+#else
+    btn->setGraphicsEffect(new MirrorGraphicsEffect(-1 * _margin, _margin+3));
 #endif
   layout();
 }
@@ -232,12 +242,24 @@ void ToolbarItem::setExpanded(bool f) {
 
   connect(_currentExpandAnimation, SIGNAL(finished()), this, SLOT(expandAnimationFinished()));
   _currentExpandAnimation->start(QAbstractAnimation::DeleteWhenStopped);
-  layout();
+//  layout();
 }
 //==========================
 void ToolbarItem::expandAnimationFinished() {
   _currentExpandAnimation = 0;
   for (QMap<QAction *,PushButtonItem *>::iterator it = _actionButton.begin(); it != _actionButton.end(); ++it)
     it.value()->setVisible(_expanded);
+}
+//==========================
+void ToolbarItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+  for (int i=0; i < _actions.size(); ++i)
+    _actionButton[_actions[i]]->setAnimationBehavior(AnimatedGraphicsObject::ContinuePreviousAnimation);
+  layout();
+}
+//==========================
+void ToolbarItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+  for (int i=0; i < _actions.size(); ++i)
+    _actionButton[_actions[i]]->setAnimationBehavior(AnimatedGraphicsObject::StopPreviousAnimation);
+  layout();
 }
 }

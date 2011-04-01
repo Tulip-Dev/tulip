@@ -91,6 +91,7 @@ void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
 
   QPixmap pixmap = _action->icon().pixmap(_iconSize, mode);
   if (_pressed) {
+    painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
     QImage img = pixmap.toImage();
     QImage alpha = img.alphaChannel();
     for (int x = 0; x < img.width(); ++x) {

@@ -33,6 +33,10 @@ protected slots:
   void buttonHovered(bool);
   void expandAnimationFinished();
 
+protected:
+  virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+  virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
 private:
   QVector<QAction *> _actions;
   QMap<QAction *,PushButtonItem *> _actionButton;

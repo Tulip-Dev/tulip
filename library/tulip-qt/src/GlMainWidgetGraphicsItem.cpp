@@ -66,14 +66,11 @@ void GlMainWidgetGraphicsItem::resize(int width, int height) {
 
 void GlMainWidgetGraphicsItem::glMainWidgetDraw(GlMainWidget *,bool) {
   redrawNeeded=true;
-  if (scene())
-    scene()->update();
+  update();
 }
 
 void GlMainWidgetGraphicsItem::glMainWidgetRedraw(GlMainWidget *) {
-  redrawNeeded=true;
-  if (scene())
-    scene()->update();
+  update();
 }
 
 
