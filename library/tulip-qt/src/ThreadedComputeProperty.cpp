@@ -4,7 +4,7 @@
 
 #include <tulip/Graph.h>
 
-AbstractComputeProperty::AbstractComputeProperty(tlp::Graph* graph, std::string name, std::string errorMsg, tlp::PluginProgress* progress, tlp::DataSet* dataset):
+AbstractComputeProperty::AbstractComputeProperty(tlp::Graph* graph, std::string name, std::string& errorMsg, tlp::PluginProgress* progress, tlp::DataSet* dataset):
   _graph(graph), _name(name), _errorMsg(errorMsg), _progress(progress), _dataset(dataset) {
 }
 
