@@ -5,11 +5,11 @@ SET(TULIP_SIP_FILES
     AcyclicTest.sip
     AbstractPropertyPointerType.sip.in
     AbstractPropertyBaseType.sip.in
-    AbstractVectorProperty.sip.in
     Algorithm.sip
     Array.sip
     BiconnectedTest.sip
     BooleanAlgorithm.sip
+    BooleanPropertySpecific.sip
     BoundingBox.sip
     ColorAlgorithm.sip
     ColorScale.sip
@@ -17,6 +17,8 @@ SET(TULIP_SIP_FILES
     ConnectedTest.sip
     Coord.sip
     DoubleAlgorithm.sip
+    DoublePropertySpecific.sip
+    DrawingTools.sip
     Edge.sip
     ExportModule.sip
     Graph.sip
@@ -24,8 +26,10 @@ SET(TULIP_SIP_FILES
     GraphMeasure.sip
     ImportModule.sip
     IntegerAlgorithm.sip
+    IntegerPropertySpecific.sip
     Iterator.sip
     LayoutAlgorithm.sip
+    LayoutPropertySpecific.sip
     MapIterator.sip
     Module.sip
     Node.sip
@@ -40,6 +44,7 @@ SET(TULIP_SIP_FILES
     Reflect.sip
     SimpleTest.sip
     SizeAlgorithm.sip
+    SizePropertySpecific.sip
     Size.sip
     StringCollection.sip
     TlpTools.sip
@@ -73,7 +78,7 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${TulipInclude}
 
 SET_SOURCE_FILES_PROPERTIES(siptuliptlpIteratorGraph.cpp
                             PROPERTIES COMPILE_DEFINITIONS ITERATOR_NO_COPY)
-                       
+ 
 ADD_LIBRARY(${LibTulipPythonName} SHARED ${TULIP_PYTHON_BINDINGS_SRC})
 
 SET_TARGET_PROPERTIES(${LibTulipPythonName} 
@@ -90,15 +95,16 @@ ENDIF(WIN32)
 TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipName})
 TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${PYTHON_LIBRARY})
 
+ADD_CUSTOM_TARGET(touchTulipPythonCMakeLists ALL
+                  COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_LIST_FILE}
+                  COMMENT "touching CMakeLists.txt for Tulip Python Bindings (force configure before next build to keep source files list updated)"
+                  DEPENDS ${LibTulipPythonName})
+
 INSTALL(TARGETS ${LibTulipPythonName}
         RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT pythonbindings
         LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings
         ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings)
 
-ADD_CUSTOM_TARGET(touchTulipPythonCMakeLists ALL
-                  COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_LIST_FILE}
-                  COMMENT "touching CMakeLists.txt for Tulip Python Bindings (force configure before next build to keep source files list updated)"
-                  DEPENDS ${LibTulipPythonName})
 
 
 

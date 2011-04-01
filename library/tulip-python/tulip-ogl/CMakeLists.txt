@@ -46,15 +46,17 @@ ENDIF(WIN32)
 TARGET_LINK_LIBRARIES(${LibTulipOglPythonName} ${LibTulipName} ${LibTulipOglName})
 TARGET_LINK_LIBRARIES(${LibTulipOglPythonName} ${PYTHON_LIBRARY})
 
+ADD_CUSTOM_TARGET(touchTulipOglPythonCMakeLists ALL
+                  COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_LIST_FILE}
+                  COMMENT "touching CMakeLists.txt for Tulip OpenGL Python Bindings (force configure before next build to keep source files list updated)"
+                  DEPENDS ${LibTulipOglPythonName})
+
 INSTALL(TARGETS ${LibTulipOglPythonName}
         RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT pythonbindings
         LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings
         ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings)
 
-ADD_CUSTOM_TARGET(touchTulipOglPythonCMakeLists ALL
-                  COMMAND cmake -E touch ${CMAKE_CURRENT_LIST_FILE}
-                  COMMENT "touching CMakeLists.txt for Tulip OpenGL Python Bindings (force configure before next build to keep source files list updated)"
-                  DEPENDS ${LibTulipOglPythonName})
+
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)

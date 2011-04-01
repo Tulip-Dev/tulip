@@ -156,5 +156,267 @@ tlp.@PROPERTY_TYPE@Property.setEdgeValue(tlp.edge, @PYTHON_EDGE_TYPE@)
 	
 };
 
+class @VEC_PROPERTY_TYPE@VectorProperty : tlp::PropertyInterface /NoDefaultCtors/ {
+%TypeHeaderCode
+#include <tulip/@PROPERTY_TYPE@Property.h>
+%End
+public :
+
+	@VEC_PROPERTY_TYPE@VectorProperty (tlp::Graph *, std::string n="");
+  	
+	const std::vector<@CPP_TYPE@> getNodeDefaultValue();
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeDefaultValue() -> list of @PYTHON_TYPE@
+%End
+	
+	const std::vector<@CPP_TYPE@> getEdgeDefaultValue();
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeDefaultValue() -> list of @PYTHON_TYPE@
+%End
+
+	const std::vector<@CPP_TYPE@> getNodeValue(const tlp::node n);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getNodeValue(*a0));
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End	
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeValue(tlp.node) -> list of @PYTHON_TYPE@
+%End
+
+	const std::vector<@CPP_TYPE@> getEdgeValue(const tlp::edge e);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getEdgeValue(*a0));
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End	
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeValue(tlp.edge) -> list of @PYTHON_TYPE@
+%End
+
+	void setNodeValue(const tlp::node n, const std::vector<@CPP_TYPE@> &v);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->setNodeValue(*a0, *a1);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End	
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setNodeValue(tlp.node, list of @PYTHON_TYPE@)
+%End
+
+	void setEdgeValue(const tlp::edge e, const std::vector<@CPP_TYPE@> &v);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->setEdgeValue(*a0, *a1);
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End	
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setEdgeValue(tlp.edge, list of @PYTHON_TYPE@)
+%End
+
+	void setAllNodeValue(const std::vector<@CPP_TYPE@> &v);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllNodeValue(list of @PYTHON_TYPE@)
+%End
+
+	void setAllEdgeValue(const std::vector<@CPP_TYPE@> &v);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllEdgeValue(list of @PYTHON_TYPE@)
+%End
+	
+	void setNodeEltValue(const tlp::node n, unsigned int i, const @CPP_TYPE@ &v);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		const std::vector<@CPP_TYPE@> &v = sipCpp->getNodeValue(*a0);
+		if (a1 < v.size()) {
+			sipCpp->setNodeEltValue(*a0, a1, *a2);
+		} else {
+			std::ostringstream oss;
+			oss << "vector associated to node " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
+			PyErr_SetString(PyExc_Exception, oss.str().c_str());
+			sipIsErr = -1;
+		}	
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End
+ 
+ 	const @CPP_TYPE@& getNodeEltValue(const tlp::node n, unsigned int i) const;
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		const std::vector<@CPP_TYPE@> &v = sipCpp->getNodeValue(*a0);
+		if (a1 < v.size()) {
+			sipRes = new @CPP_TYPE@(sipCpp->getNodeEltValue(*a0, a1));
+		} else {
+			std::ostringstream oss;
+			oss << "vector associated to node " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
+			PyErr_SetString(PyExc_Exception, oss.str().c_str());
+			sipIsErr = -1;
+		}	
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End
+  
+  	void pushBackNodeEltValue(const tlp::node n, const @CPP_TYPE@& v);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->pushBackNodeEltValue(*a0, *a1);	
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End
+ 
+	void popBackNodeEltValue(const tlp::node n);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->popBackNodeEltValue(*a0);	
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End	
+	
+	void resizeNodeValue(const tlp::node n, unsigned int size);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->resizeNodeValue(*a0, a1);	
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End
+	
+	void resizeNodeValue(const tlp::node n, unsigned int size, @CPP_TYPE@ elt);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->resizeNodeValue(*a0, a1, *a2);	
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End	
+	
+	void setEdgeEltValue(const tlp::edge e, unsigned int i, const @CPP_TYPE@ &v);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		const std::vector<@CPP_TYPE@> &v = sipCpp->getEdgeValue(*a0);
+		if (a1 < v.size()) {
+			sipCpp->setEdgeEltValue(*a0, a1, *a2);
+		} else {
+			std::ostringstream oss;
+			oss << "vector associated to edge " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
+			PyErr_SetString(PyExc_Exception, oss.str().c_str());
+			sipIsErr = -1;
+		}	
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End  
+
+	const @CPP_TYPE@& getEdgeEltValue(const tlp::edge n, unsigned int i) const;
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		const std::vector<@CPP_TYPE@> &v = sipCpp->getEdgeValue(*a0);
+		if (a1 < v.size()) {
+			sipRes = new @CPP_TYPE@(sipCpp->getEdgeEltValue(*a0, a1));
+		} else {
+			std::ostringstream oss;
+			oss << "vector associated to edge " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
+			PyErr_SetString(PyExc_Exception, oss.str().c_str());
+			sipIsErr = -1;
+		}	
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End
+  
+	void pushBackEdgeEltValue(const tlp::edge e, const @CPP_TYPE@ &v);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->pushBackEdgeEltValue(*a0, *a1);	
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End
+  
+	void popBackEdgeEltValue(const tlp::edge e);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->popBackEdgeEltValue(*a0);	
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End
+  
+  	void resizeEdgeValue(const tlp::edge e, unsigned int size);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->resizeEdgeValue(*a0, a1);	
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End  	
+  	
+	void resizeEdgeValue(const tlp::edge e, unsigned int size, @CPP_TYPE@ elt);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->resizeEdgeValue(*a0, a1, *a2);	
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End 
+    
+	std::vector<@CPP_TYPE@> __getitem__(const tlp::node n) const;
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+     	sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getNodeValue(*a0));
+     } else {
+     	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+     }
+%End
+
+	void __setitem__(const tlp::node n, const std::vector<@CPP_TYPE@> &v) const;
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+     	sipCpp->setNodeValue(*a0, *a1);
+     } else {
+     	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+     }
+%End
+
+	std::vector<@CPP_TYPE@> __getitem__(const tlp::edge e) const;
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+     	sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getEdgeValue(*a0));
+     } else {
+     	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+     }
+%End
+
+	void __setitem__(const tlp::edge e, const std::vector<@CPP_TYPE@> &v) const;
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+     	sipCpp->setEdgeValue(*a0, *a1);
+     } else {
+     	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+     }
+%End
+
+	SIP_PYOBJECT __repr__() const;
+%MethodCode
+	std::ostringstream oss;
+	oss << "<@VEC_PROPERTY_TYPE@ vector property " << sipCpp->getName() << ">";
+	std::string s = oss.str();
+	sipRes = PyString_FromString(s.c_str());
+%End
+	
+};
+
 };
 

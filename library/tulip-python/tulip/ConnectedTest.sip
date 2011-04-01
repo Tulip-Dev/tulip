@@ -23,9 +23,9 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-//%ModuleHeaderCode
-//typedef std::set<tlp::node> std_set_0100tlp_node;
-//%End
+%ModuleHeaderCode
+typedef std::set<tlp::node> std_set_0100tlp_node;
+%End
 
 namespace tlp {
 
@@ -45,7 +45,7 @@ tlp.ConnectedTest.makeConnected(tlp.Graph) -> list of tlp.edge
   
   static unsigned int numberOfConnectedComponents(const tlp::Graph*graph);
   
- //static void computeConnectedComponents(tlp::Graph *graph, std::vector<std_set_0100tlp_node>& components /Out/);
+  static void computeConnectedComponents(tlp::Graph *graph, std::vector<std_set_0100tlp_node>& components /Out/);
   
 private : 
 
