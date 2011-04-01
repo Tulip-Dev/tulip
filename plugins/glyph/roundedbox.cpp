@@ -147,6 +147,18 @@ const string roundedBoxOutlineGeometryShaderSrc =
 		"	EmitVertex();"
 		"}"
 		;
+		
+		
+/** \addtogroup glyph */
+/*@{*/
+/// A 2D glyph.
+/**
+ * This glyph draws a rounded box, meaning a rectangle with rounded corners.
+ * The box is colored according to the "viewColor" property. It can also be outlined if
+ * "viewBorderWidth" is greater than zero. The outline is colored according to the
+ * "viewBorderColor" property. Last but not least, it can also be textured according
+ * to the "viewTexture" property.
+ */		
 class RoundedBox : public Glyph {
 public:
 	RoundedBox(GlyphContext *gc = NULL);
