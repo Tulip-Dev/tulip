@@ -86,6 +86,8 @@
 %Include TriconnectedTest.sip
 %Include PlanarityTest.sip
 
+%Include DrawingTools.sip
+
 %ModuleHeaderCode
 static int throwInvalidNodeException(tlp::Graph *graph, tlp::node n) {
 	std::ostringstream oss;
