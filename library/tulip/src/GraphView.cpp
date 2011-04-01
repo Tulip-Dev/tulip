@@ -217,39 +217,44 @@ void GraphView::removeNode(const node n) {
   notifyObservers();
 }
 //----------------------------------------------------------------
-void GraphView::delNode(const node n) {
-  assert (isElement(n));
-  notifyDelNode(this, n);
-  // propagate to subgraphs
-  Iterator<Graph *>*itS = getSubGraphs();
-  while (itS->hasNext()) {
-    Graph *subGraph = itS->next();
-    if (subGraph->isElement(n))
-      subGraph->delNode(n);
-  } delete itS;
-  // remove node's edges
-  set<edge> loops;
-  bool haveLoops = false;
-  StableIterator<edge> itE(getInOutEdges(n));
-  while(itE.hasNext()) {
-    edge e = itE.next();
-    node s = opposite(e, n);
-    if (s!=n) {
-      removeEdge(e);
-    }
-    else {
-      loops.insert(e);
-      haveLoops = true;
-    }
+void GraphView::delNode(const node n, bool deleteInAllGraphs) {
+  if(deleteInAllGraphs) {
+    getRoot()->delAllNode(n);
   }
-  if (haveLoops) {
-    set<edge>::const_iterator it;
-    for ( it = loops.begin(); it!=loops.end(); ++it) {
-      removeEdge(*it);
+  else {
+    assert (isElement(n));
+    notifyDelNode(this, n);
+    // propagate to subgraphs
+    Iterator<Graph *>*itS = getSubGraphs();
+    while (itS->hasNext()) {
+      Graph *subGraph = itS->next();
+      if (subGraph->isElement(n))
+        subGraph->delNode(n);
+    } delete itS;
+    // remove node's edges
+    set<edge> loops;
+    bool haveLoops = false;
+    StableIterator<edge> itE(getInOutEdges(n));
+    while(itE.hasNext()) {
+      edge e = itE.next();
+      node s = opposite(e, n);
+      if (s!=n) {
+        removeEdge(e);
+      }
+      else {
+        loops.insert(e);
+        haveLoops = true;
+      }
     }
+    if (haveLoops) {
+      set<edge>::const_iterator it;
+      for ( it = loops.begin(); it!=loops.end(); ++it) {
+        removeEdge(*it);
+      }
+    }
+    delNodeInternal(n);
+    notifyObservers();
   }
-  delNodeInternal(n);
-  notifyObservers();
 }
 //----------------------------------------------------------------
 void GraphView::delEdgeInternal(const edge e) {
@@ -270,18 +275,23 @@ void GraphView::removeEdge(const edge e) {
   notifyObservers();
 }
 //----------------------------------------------------------------
-void GraphView::delEdge(const edge e) {
-  assert(isElement(e));
-  notifyDelEdge(this,e);
-  // propagate to subgraphs
-  Iterator<Graph *>*itS=getSubGraphs();
-  while (itS->hasNext()) {
-    Graph *subGraph = itS->next();
-    if (subGraph->isElement(e))
-      subGraph->delEdge(e);
-  } delete itS;
-  delEdgeInternal(e);
-  notifyObservers();
+void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
+  if(deleteInAllGraphs) {
+    getRoot()->delEdge(e, deleteInAllGraphs);
+  }
+  else {
+    assert(isElement(e));
+    notifyDelEdge(this,e);
+    // propagate to subgraphs
+    Iterator<Graph *>*itS=getSubGraphs();
+    while (itS->hasNext()) {
+      Graph *subGraph = itS->next();
+      if (subGraph->isElement(e))
+        subGraph->delEdge(e);
+    } delete itS;
+    delEdgeInternal(e);
+    notifyObservers();
+  }
 }
 //----------------------------------------------------------------
 void GraphView::delAllNode(const node n){

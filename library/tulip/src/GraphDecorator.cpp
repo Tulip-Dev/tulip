@@ -279,7 +279,7 @@ void GraphDecorator::removeEdge(const edge){
 }
 
 //============================================================
-void GraphDecorator::delNode(const node n){
+void GraphDecorator::delNode(const node n, bool){
   notifyDelNode(this, n);
   graph_component->delNode(n);
   notifyObservers();
@@ -293,7 +293,7 @@ void GraphDecorator::delAllNode(const node n){
 }
 
 //============================================================
-void GraphDecorator::delEdge(const edge e){
+void GraphDecorator::delEdge(const edge e, bool){
   notifyDelEdge(this,e);
   graph_component->delEdge(e);
   notifyObservers();
