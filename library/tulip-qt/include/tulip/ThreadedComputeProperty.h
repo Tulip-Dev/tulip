@@ -16,13 +16,13 @@ namespace tlp {
 
 struct AbstractComputeProperty {
   public:
-    explicit AbstractComputeProperty(tlp::Graph* graph, std::string name, std::string errorMsg, tlp::PluginProgress* progress, tlp::DataSet* dataset);
+    explicit AbstractComputeProperty(tlp::Graph* graph, std::string name, std::string& errorMsg, tlp::PluginProgress* progress, tlp::DataSet* dataset);
     virtual bool run() = 0;
 
   protected:
     tlp::Graph* _graph;
     std::string _name;
-    std::string _errorMsg;
+    std::string& _errorMsg;
     tlp::PluginProgress* _progress;
     tlp::DataSet* _dataset;
 };
@@ -30,25 +30,11 @@ struct AbstractComputeProperty {
 template<typename PropertyType>
 struct ComputePropertyTemplate : public AbstractComputeProperty {
   public:
-    ComputePropertyTemplate(tlp::Graph* graph, std::string name, PropertyType* result, std::string errorMsg, tlp::PluginProgress* progress, tlp::DataSet* dataset):
+    ComputePropertyTemplate(tlp::Graph* graph, std::string name, PropertyType* result, std::string& errorMsg, tlp::PluginProgress* progress, tlp::DataSet* dataset):
       AbstractComputeProperty(graph, name, errorMsg, progress, dataset), _property(result) {
     }
     virtual bool run() {
-
-      tlp::node n;
-      int nonDefault = 0;
-      forEach(n, _property->getNonDefaultValuatedNodes())  {
-        ++nonDefault;
-      }
-      std::cout << "before: " << nonDefault << std::endl;
       bool res = _graph->computeProperty<PropertyType>(_name, _property, _errorMsg, _progress, _dataset);
-
-      nonDefault = 0;
-      forEach(n, _property->getNonDefaultValuatedNodes())  {
-        ++nonDefault;
-      }
-      std::cout << "after: " << nonDefault << std::endl;
-
       return res;
     }
     

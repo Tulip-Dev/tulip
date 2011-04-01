@@ -145,15 +145,18 @@ namespace tlp {
       }
 
       // The algorithm is applied
-//       AbstractComputeProperty* param = new ComputePropertyTemplate<PROPERTY>(graph, name, tmp, erreurMsg, myProgress, &dataSet);
-//       ComputePropertyThread* thread = new ComputePropertyThread(param);
-//       
-//       resultBool = thread->computeProperty();
-// 
-//       delete param;
-//       delete thread;
+#if  (WIN32 && __GNUC_MINOR__ >= 5 && __GNUC__ == 4) // There is a bug in the openmp version distributed with MinGW < 4.5, so for these versions fall back to simple threaded mechanism
+      AbstractComputeProperty* param = new ComputePropertyTemplate<PROPERTY>(graph, name, tmp, erreurMsg, myProgress, &dataSet);
+      ComputePropertyThread* thread = new ComputePropertyThread(param);
+
+      resultBool = thread->computeProperty();
+
+      delete param;
+      delete thread;
+
+#else
       resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
-      
+#endif    
       graph->pop();
       if (updateLayout) {
         graph->removeAttribute("viewLayout");
