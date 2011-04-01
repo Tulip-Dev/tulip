@@ -537,11 +537,12 @@ namespace tlp {
           * problem in your application. Objects that are listening/observing could need to receive
           * the events to work properly.
           */
-        void removeOnlooker(const Observable &);
-  /**
+        void removeOnlooker(const Observable &, OLOEDGETYPE type);
+        /**
    * @brief use for old observer tulip compatibility
    */
-  void _DEPRECATED removeObserver(Observable  * const obs);
+        void  removeObserver(Observable  * const obs);
+        void  removeListener(Observable  * const obs);
 
 	/**
 	 * @brief use for old observer tulip compatibility
@@ -573,7 +574,9 @@ namespace tlp {
           * problem in your application. Objects that are listening/observing could need to receive
           * the events to work properly.
           */
-        void removeOnlookers();
+        //removed because there is no reason to disconnect observers of other objects, unstability
+        //can occur because internal library can use observers to work.
+        //void removeOnlookers();
         /**
           * @brief Enable to know if there is at least one Observer/Listener connected.
           *

@@ -425,7 +425,7 @@ namespace tlp {
         }
 
         if(glScene)
-          glScene->removeOnlooker(*this);
+          glScene->removeListener(this);
     }
 
     void GlQuadTreeLODCalculator::addObservers() {
@@ -524,7 +524,7 @@ namespace tlp {
 
     void GlQuadTreeLODCalculator::clearCamerasObservers(){
       for(vector<Camera *>::iterator it=cameras.begin();it!=cameras.end();++it){
-        (*it)->removeOnlooker(*this);
+        (*it)->removeListener(this);
       }
     }
 
