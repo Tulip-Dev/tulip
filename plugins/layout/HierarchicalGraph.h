@@ -29,9 +29,12 @@ public:
 
 /** \addtogroup layout */
 /*@{*/
-/// Hierarchical.h - An implementation of hierarchical graph drawing algorithm.
-/** This plugin is an implementation of hierarchical layout
- *  algorithm first published as:
+/**
+ * \file
+ * \brief An implementation of hierarchical graph drawing algorithm
+ *
+ * This plugin is an implementation of the hierarchical layout algorithm
+ * first published as:
  *
  *  D. Auber, \n
  *  "Tulip - A Huge Graph Visualization Framework", \n
