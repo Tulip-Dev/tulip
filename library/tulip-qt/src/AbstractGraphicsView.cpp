@@ -109,11 +109,6 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
   if (_activeInteractor)
     _activeInteractor->remove();
 
-  if (dynamic_cast<GlMainWidget *>(_centralWidget)) {
-    disconnect(_centralWidget, SIGNAL(viewDrawn(GlMainWidget *,bool)), this, SLOT(updateCentralView()));
-    disconnect(_centralWidget, SIGNAL(viewRedrawn(GlMainWidget *)), this, SLOT(updateCentralView()));
-  }
-
   _centralWidget = w;
 
   if (_activeInteractor)
@@ -129,8 +124,6 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
   if (glMainWidget) {
     _centralWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _centralView->width(), _centralView->height());
     _centralView->scene()->addItem(_centralWidgetItem);
-    connect(_centralWidget, SIGNAL(viewDrawn(GlMainWidget *,bool)), this, SLOT(updateCentralView()));
-    connect(_centralWidget, SIGNAL(viewRedrawn(GlMainWidget *)), this, SLOT(updateCentralView()));
   }
   else {
     _centralView->setViewport(new QGLWidget(GlInit(), 0, 0));
@@ -177,11 +170,6 @@ bool AbstractGraphicsView::eventFilter(QObject *obj, QEvent *e) {
     QMouseEvent *eventModif = new QMouseEvent(QEvent::MouseMove,QPoint(_centralView->size().width()/2, _centralView->size().height()/2), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
     QApplication::sendEvent(_centralView, eventModif);
   }
-}
-// ===================================
-void AbstractGraphicsView::updateCentralView() {
-  dynamic_cast<GlMainWidgetGraphicsItem *>(_centralWidgetItem)->setRedrawNeeded(true);
-  _centralView->scene()->update();
 }
 // ===================================
 void AbstractGraphicsView::addToScene(QGraphicsItem *item) {

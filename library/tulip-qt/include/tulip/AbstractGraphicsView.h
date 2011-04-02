@@ -149,9 +149,6 @@ protected:
     */
   bool eventFilter(QObject *obj, QEvent *e);
 
-protected slots:
-  void updateCentralView();
-
 private:
   QWidget *_centralWidget;
   QGraphicsItem *_centralWidgetItem;
