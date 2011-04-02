@@ -27,6 +27,6 @@ void MirrorGraphicsEffect::draw(QPainter *painter) {
 
   // paint
   int h = (_height == 0 ? reflexion.height() : _height);
-  painter->drawPixmap(0,sourcePixmap().height()+_yoffset,QPixmap::fromImage(reflexion.copy(0,0,reflexion.width(),h)));
+  painter->drawImage(0,sourcePixmap().height()+_yoffset,reflexion,0,0,reflexion.width(),h);
 }
 

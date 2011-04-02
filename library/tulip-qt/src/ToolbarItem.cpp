@@ -107,7 +107,6 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->drawLine(start,end);
   }
   layout();
-//  QGraphicsItemGroup::paint(painter,option,widget);
 }
 //==========================
 QRectF ToolbarItem::boundingRect() const {
@@ -128,7 +127,6 @@ void ToolbarItem::layout() {
   for (int i=0;i < _actions.size(); ++i) {
     PushButtonItem *btn = _actionButton[_actions[i]];
 
-#ifdef _WIN32
     if (btn->hovered()) {
         pos-=QPointF(_margin,_margin);
         modifyButton(btn,hoveredIconSize(),pos);
@@ -136,7 +134,6 @@ void ToolbarItem::layout() {
     }
 
     else
-#endif
       modifyButton(btn,_iconSize,pos);
 
     pos += iconVector + marginVector;
@@ -183,16 +180,10 @@ void ToolbarItem::buttonHovered(bool f) {
   PushButtonItem *btn = static_cast<PushButtonItem *>(sender());
   if (btn == _activeButton)
     return;
+#ifdef _WIN32
   if (f)
-#ifndef _WIN32
-    btn->setGraphicsEffect(new HighlightGraphicsEffect(3,_backgroundGradientStep1));
-#else
     btn->setGraphicsEffect(0);
-#endif
   else
-#ifndef _WIN32
-    btn->setGraphicsEffect(0);
-#else
     btn->setGraphicsEffect(new MirrorGraphicsEffect(-1 * _margin, _margin+3));
 #endif
   layout();
@@ -242,7 +233,6 @@ void ToolbarItem::setExpanded(bool f) {
 
   connect(_currentExpandAnimation, SIGNAL(finished()), this, SLOT(expandAnimationFinished()));
   _currentExpandAnimation->start(QAbstractAnimation::DeleteWhenStopped);
-//  layout();
 }
 //==========================
 void ToolbarItem::expandAnimationFinished() {
