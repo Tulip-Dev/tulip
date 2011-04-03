@@ -11,8 +11,11 @@ namespace tlp {
 ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   : QGraphicsItemGroup(parent,scene),
   _activeAction(0), _activeButton(0), _expanded(false), _currentExpandAnimation(0),
-  _iconSize(32,32), _margin(6), _orientation(Qt::Horizontal), _animationMsec(100), _animationEasing(QEasingCurve::Linear),
+
+  _iconSize(32,32), _margin(12), _orientation(Qt::Horizontal),
+  _animationMsec(100), _animationEasing(QEasingCurve::Linear),
   _outerOutline(0x9c,0x9a,0x94,0x00), _innerOutline(0xb3,0xaf,0xaf), _backgroundGradientStep1(0xdc,0xda,0xd5,0xd2), _backgroundGradientStep2(0xdc,0xda,0xd5,0x64) {
+
   setHandlesChildEvents(false);
   setCacheMode(QGraphicsItem::ItemCoordinateCache);
   setAcceptHoverEvents(true);
@@ -35,7 +38,6 @@ void ToolbarItem::addAction(QAction *action) {
   if (!_activeAction)
     setActiveAction(action);
 
-//  layout();
 }
 //==========================
 void ToolbarItem::removeAction(QAction *action) {
@@ -53,7 +55,6 @@ void ToolbarItem::removeAction(QAction *action) {
     else
       setActiveAction(0);
   }
-//  layout();
 }
 //==========================
 void ToolbarItem::setActiveAction(QAction *action) {
@@ -78,17 +79,26 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     pen.setColor(_outerOutline);
     pen.setWidth(2);
     painter->setPen(pen);
-    painter->drawRoundedRect(outerRect,7,7);
+//    painter->drawRoundedRect(outerRect,7,7);
 
-    QRectF innerRect(1,1,outerRect.width()-2,outerRect.height()-2);
-    pen.setColor(_innerOutline);
-    pen.setWidth(1);
-    painter->setPen(pen);
-    QLinearGradient gradient(0,0,0,innerRect.height());
-    gradient.setColorAt(0,_backgroundGradientStep1);
-    gradient.setColorAt(1,_backgroundGradientStep2);
-    painter->setBrush(QBrush(gradient));
-    painter->drawRoundedRect(innerRect,7,7);
+
+    painter->setBrush(Qt::red);
+    QPainterPath path;
+    path.addRoundedRect(outerRect,7,7);
+    path.addRect(0,0,7,outerRect.height());
+    path.addRect(0,0,outerRect.width(),7);
+    painter->drawPath(path);
+
+
+//    QRectF innerRect(1,1,outerRect.width()-2,outerRect.height()-2);
+//    pen.setColor(_innerOutline);
+//    pen.setWidth(1);
+//    painter->setPen(pen);
+//    QLinearGradient gradient(0,0,0,innerRect.height());
+//    gradient.setColorAt(0,_backgroundGradientStep1);
+//    gradient.setColorAt(1,_backgroundGradientStep2);
+//    painter->setBrush(QBrush(gradient));
+//    painter->drawRoundedRect(innerRect,7,7);
   }
   if (_expanded) { // separator
     QPointF marginVector = _margin * translationVector();
@@ -128,9 +138,9 @@ void ToolbarItem::layout() {
     PushButtonItem *btn = _actionButton[_actions[i]];
 
     if (btn->hovered()) {
-        pos-=QPointF(_margin,_margin);
+        pos-=QPointF(_margin-1,_margin-1);
         modifyButton(btn,hoveredIconSize(),pos);
-        pos+=QPointF(_margin,_margin);
+        pos+=QPointF(_margin-1,_margin-1);
     }
 
     else
@@ -152,7 +162,7 @@ QPointF ToolbarItem::translationVector() const {
 }
 //==========================
 QSize ToolbarItem::hoveredIconSize() const {
-  return QSize(_iconSize.width() + 2 * (_margin - 1), _iconSize.height() + 2 * (_margin - 1));
+  return QSize(_iconSize.width() + 2 * (_margin - 2), _iconSize.height() + 2 * (_margin - 2));
 }
 //==========================
 QRectF ToolbarItem::computeBoundingRect() const {
@@ -193,8 +203,12 @@ void ToolbarItem::buttonClicked() {
   PushButtonItem *btn = static_cast<PushButtonItem *>(sender());
   setActiveAction(btn->action());
 
-  if (btn == _activeButton)
+  if (btn == _activeButton) {
     setExpanded(!_expanded);
+    emit activeButtonClicked();
+  }
+  else
+    emit buttonClicked(btn);
 }
 //==========================
 void ToolbarItem::modifyButton(PushButtonItem *btn, const QSize &newSize, const QPointF &newPos) const {
