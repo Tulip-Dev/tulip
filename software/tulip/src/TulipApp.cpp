@@ -645,7 +645,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
         // if auto load controller setting is set
         if(haveControllerData && PreferenceManager::getInst().getAutoLoadController()){
           // check if this controller is in available controllers
-          for(vector<string>::iterator it=controllersName.begin();it!=controllersName.end();++it){
+          for(vector<string>::const_iterator it=controllersName.begin();it!=controllersName.end();++it){
             if((*it)==defaultControllerName){
               displayDialog=false;
               controllerName=defaultControllerName;
@@ -899,7 +899,7 @@ QMessageBox::StandardButton TulipApp::askSaveGraph(const std::string &name,int i
 bool TulipApp::closeWin() {
   QMessageBox::StandardButton answer = QMessageBox::No;
   if(!controllerAutoLoad){
-    for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end() && answer != QMessageBox::NoToAll;++it){
+    for(map<int,Controller *>::const_iterator it=tabIndexToController.begin();it!=tabIndexToController.end() && answer != QMessageBox::NoToAll;++it){
       if(it->second){
         Graph *graph=(it->second)->getGraph();
         assert(graph);
@@ -916,7 +916,7 @@ bool TulipApp::closeWin() {
       }
     }
 
-    for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
+    for(map<int,Controller *>::const_iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
       if(it->second){
         delete it->second;
       }
@@ -1054,7 +1054,7 @@ void TulipApp::loadInterface(int index){
 
   if(controllerToDockWidget.count(controller)!=0){
     vector<pair<Qt::DockWidgetArea,QDockWidget*> > tmp=controllerToDockWidget[controller];
-    vector<pair<Qt::DockWidgetArea,QDockWidget*> >::iterator it=tmp.end();
+    vector<pair<Qt::DockWidgetArea,QDockWidget*> >::const_iterator it=tmp.end();
 
 #if QT_MINOR_REL > 3
     it=tmp.begin();
@@ -1065,14 +1065,14 @@ void TulipApp::loadInterface(int index){
 #else
     while(it!=tmp.begin()){
       --it;
-      addDockWidget((*it).first,(*it).second);
-      (*it).second->show();
+      addDockWidget(it->first,it->second);
+      (it->second)->show();
     }
 
     if(controller) {
       vector<pair<QDockWidget *,QDockWidget*> > tabifiedDockWidget=controller->getMainWindowFacade()->getTabifiedDockWidget();
-      for(vector<pair<QDockWidget *,QDockWidget*> >::iterator it=tabifiedDockWidget.begin();it!=tabifiedDockWidget.end();++it) {
-	tabifyDockWidget((*it).first,(*it).second);
+      for(vector<pair<QDockWidget *,QDockWidget*> >::const_iterator it=tabifiedDockWidget.begin();it!=tabifiedDockWidget.end();++it) {
+	tabifyDockWidget(it->first,it->second);
       }
     }
 #endif
@@ -1081,7 +1081,7 @@ void TulipApp::loadInterface(int index){
   if(controllerToCustomToolBar.count(controller)!=0){
     vector<pair<Qt::ToolBarArea, QToolBar *> > toolBarsToAdd = controllerToCustomToolBar[controller];
     if (!toolBarsToAdd.empty()) {
-      for (vector<pair<Qt::ToolBarArea, QToolBar *> >::iterator it = toolBarsToAdd.begin(); it != toolBarsToAdd.end(); ++it) {
+      for (vector<pair<Qt::ToolBarArea, QToolBar *> >::const_iterator it = toolBarsToAdd.begin(); it != toolBarsToAdd.end(); ++it) {
         addToolBar(it->first, it->second);
         it->second->show();
       }
@@ -1091,7 +1091,7 @@ void TulipApp::loadInterface(int index){
   if(controllerToMenu.count(controller)!=0){
     vector<QAction *> actionsToAdd=controllerToMenu[controller];
     if(!actionsToAdd.empty()){
-      for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
+      for(vector<QAction *>::const_iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
         menuBar()->addAction(*it);
       }
     }
@@ -1100,7 +1100,7 @@ void TulipApp::loadInterface(int index){
   if(controllerToToolBar.count(controller)!=0){
     vector<QAction *> actionsToAdd=controllerToToolBar[controller];
     if(!actionsToAdd.empty()){
-      for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
+      for(vector<QAction *>::const_iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
         toolBar->addAction(*it);
       }
     }
@@ -1109,7 +1109,7 @@ void TulipApp::loadInterface(int index){
   if(controllerToGraphToolBar.count(controller)!=0){
     vector<QAction *> actionsToAdd=controllerToGraphToolBar[controller];
     if(!actionsToAdd.empty()){
-      for(vector<QAction *>::iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
+      for(vector<QAction *>::const_iterator it=actionsToAdd.begin();it!=actionsToAdd.end();++it){
         graphToolBar->addAction(*it);
         if((*it)->isChecked()){
           (*it)->activate(QAction::Trigger);
@@ -1130,7 +1130,7 @@ void TulipApp::loadInterface(int index){
 
   if (controllerToWidgetVisible.count(controller) != 0) {
     vector<pair<QWidget *,bool> > tmp = controllerToWidgetVisible[controller];
-    for(vector<pair<QWidget *,bool> >::iterator it = tmp.begin(); it != tmp.end(); ++it)
+    for(vector<pair<QWidget *,bool> >::const_iterator it = tmp.begin(); it != tmp.end(); ++it)
       it->first->setVisible(it->second);
   }
 }
