@@ -70,7 +70,7 @@ static string genCommonUniformVariables(const unsigned int maxNbControlPoints) {
 
 	oss << "#version 120" << endl;
 	oss << "uniform vec3 controlPoints[" << maxNbControlPoints << "];" << endl;
-	oss << "uniform float nbControlPoints;" << endl;
+	oss << "uniform int nbControlPoints;" << endl;
 
 	return oss.str();
 }
@@ -267,9 +267,10 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
 		if (MAX_SHADER_CONTROL_POINTS == 0) {
 			// has been determined experimentally by testing the implementation
 			// on several graphic cards with different video memory size and graphics drivers
+			//FIXME  try and determine this number in a more reliabhle way
 			glGetIntegerv(GL_MAX_VERTEX_UNIFORM_COMPONENTS_ARB, &MAX_SHADER_CONTROL_POINTS);
 			MAX_SHADER_CONTROL_POINTS /= 4;
-			MAX_SHADER_CONTROL_POINTS -= 44;
+			MAX_SHADER_CONTROL_POINTS -= 100;
 		}
 		if (curveVertexShaderNormalMain == NULL) {
 			curveVertexShaderNormalMain = new GlShader(Vertex);
@@ -357,7 +358,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
 		curveShaderProgram->activate();
 		curveShaderProgram->setUniformVec3FloatArray("controlPoints", controlPoints.size(), &controlPoints[0][0]);
-		curveShaderProgram->setUniformFloat("nbControlPoints", controlPoints.size());
+		curveShaderProgram->setUniformInt("nbControlPoints", controlPoints.size());
 		curveShaderProgram->setUniformInt("nbCurvePoints", nbCurvePoints);
 		curveShaderProgram->setUniformFloat("startSize", startSize);
 		curveShaderProgram->setUniformFloat("endSize", endSize);
