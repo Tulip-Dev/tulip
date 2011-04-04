@@ -36,6 +36,7 @@
 #include <QtGui/qstatusbar.h>
 #include <QtGui/qprinter.h>
 #include <QtGui/qprintdialog.h>
+#include <QtCore/QProcess>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/ControllerPluginsManager.h>
@@ -46,6 +47,7 @@
 #include <tulip/QtOpenGlErrorViewer.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 
+#include <PluginsUpdateChecker.h>
 #include <PluginsHelp.h>
 #include <PluginsManager.h>
 
@@ -72,7 +74,7 @@ static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::st
 
 //**********************************************************************
 ///Constructor of ViewGl
-TulipApp::TulipApp(QWidget* parent): QMainWindow(parent),currentTabIndex(-1)  {
+TulipApp::TulipApp(QWidget* parent): QMainWindow(parent),defaultControllerName("Tulip Classic"),currentTabIndex(-1)  {
   // initialize needRestart setting
   disableRestart();
   setupUi(this);
@@ -324,10 +326,16 @@ void TulipApp::fileNew(QAction *action) {
   enableElements(true);
 }
 //**********************************************************************
-bool TulipApp::fileNew(bool) {
-  TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
-  it=ControllerFactory::factory->objMap.begin();
-  string name=(*it).first;
+bool TulipApp::fileNew(bool fromMenu) {
+string name;
+  if(fromMenu) {
+    TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it=ControllerFactory::factory->objMap.begin();
+    name=it->first;
+}
+  else {
+    name=defaultControllerName;
+  }
+
   Graph *graph = newGraph();
   initializeGraph(graph);
   string graphName;
@@ -337,7 +345,7 @@ bool TulipApp::fileNew(bool) {
     GraphNeedsSavingObserver* observer = new GraphNeedsSavingObserver(tabWidget, tabWidget->currentIndex(), graph);
     observer->doNeedSaving();
     graph->addObserver(observer);
-    controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]] = observer;    
+    controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]] = observer;
     enableElements(true);
   } else
     return false;
@@ -396,9 +404,6 @@ void TulipApp::closeTab(int index){
     QWidget *currentWidget=tabWidget->widget(index);
     delete currentWidget;
 
-    //tabWidget->removeTab(index);
-    //tabChanged(newIndex);
-
     if(tabWidget->count()==0)
       tabWidget->setCurrentIndex(-1);
   }
@@ -416,7 +421,7 @@ bool TulipApp::createController(const string &name,const string &graphName) {
     QWidget *tab=new QWidget();
     QGridLayout *gridLayout = new QGridLayout(tab);
     QWorkspace *newWorkspace=new QWorkspace(tab);
-    
+
     newWorkspace->setBackground(QBrush(QPixmap(QString::fromUtf8(":/background_logo.png"))));
 
     gridLayout->addWidget(newWorkspace, 0, 0, 1, 1);
@@ -432,7 +437,7 @@ bool TulipApp::createController(const string &name,const string &graphName) {
     tabIndexToController[index]=newController;
     controllerToControllerName[newController]=name;
     controllerToWorkspace[newController]=newWorkspace;
-    
+
     //Set Qt object names
     tab->setObjectName(QString("ControllerMainWidget ")+QString::number(index));
     newWorkspace->setObjectName(QString("ControllerWorkspace ")+QString::number(index));
@@ -475,7 +480,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
   dataSet.set<DataSet>("controller",controller);
 
   string graphName;
-  
+
   if (graph->getRoot()->getAttribute("name", graphName) && graphName.find("unnamed") != 0)
     dataSet.set<string>("name", graphName);
   else
@@ -530,7 +535,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
     statusBar()->showMessage(QString::fromUtf8((filename + " saved.").c_str()));
   }
   delete progress;
-  
+
   tabWidget->setTabText(tabWidget->currentIndex(), QString::fromUtf8(filename.c_str()));
   controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]]->saved();
   //setNavigateCaption(filename);
@@ -619,7 +624,6 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       ChooseControllerDialog chooseControllerDialog;
 
       //check if we have controller information in file and set to default controller in ChooseControllerDialog
-      string defaultControllerName="MainController";
       if(dataSet.exist("controller")) {
         DataSet controller;
         dataSet.get<DataSet>("controller", controller);
@@ -700,7 +704,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     tabIndexToController[tabWidget->currentIndex()]->setData(newGraph,controllerData);
     GraphNeedsSavingObserver* observer = new GraphNeedsSavingObserver(tabWidget, tabWidget->currentIndex(), newGraph);
     newGraph->addGraphObserver(observer);
-    controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]] = observer;    
+    controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]] = observer;
     if (!noPlugin) {
       observer->doNeedSaving();
     }
@@ -774,7 +778,7 @@ void TulipApp::importGraph(QAction* action) {
       }
     }
     //cout << subMenu->name() << "->" << itemName << endl;
-    
+
     QAction *action = subMenu->addAction(itemName.c_str());
     QObject::connect(action,SIGNAL(triggered()),receiver,slot);
   }
@@ -869,7 +873,7 @@ void TulipApp::windowsMenuAboutToShow() {
 }
 //**********************************************************************
 QMessageBox::StandardButton TulipApp::askSaveGraph(const std::string &name,int index,bool activateNoToAll) {
-  
+
   if(!controllerToGraphObserver[tabIndexToController[index]]->needSaving()) {
     return QMessageBox::No;
   }
@@ -896,13 +900,13 @@ bool TulipApp::closeWin() {
   QMessageBox::StandardButton answer = QMessageBox::No;
   if(!controllerAutoLoad){
     for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end() && answer != QMessageBox::NoToAll;++it){
-      if((*it).second){
-        Graph *graph=((*it).second)->getGraph();
+      if(it->second){
+        Graph *graph=(it->second)->getGraph();
         assert(graph);
-        while(graph->getRoot()!=graph){
+        //while(graph->getRoot()!=graph){
           graph=graph->getRoot();
-        }
-        answer = askSaveGraph(graph->getAttribute<string>("name"),(*it).first,true);
+        //}
+        answer = askSaveGraph(graph->getAttribute<string>("name"),it->first,true);
         //If user cancel or click on cancel stop the process
         if(answer == QMessageBox::Cancel){
           return false;
@@ -913,8 +917,8 @@ bool TulipApp::closeWin() {
     }
 
     for(map<int,Controller *>::iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
-      if((*it).second){
-        delete (*it).second;
+      if(it->second){
+        delete it->second;
       }
     }
   }
@@ -1159,7 +1163,7 @@ void TulipApp::preference() {
 
   if(!pref.preferencesAreModified())
     return;
-  
+
   int result = QMessageBox::warning(this,
 				    tr(""),
                     tr("To apply preferences modifications, \nTulip must be restarted.\nDo you want to restart Tulip now?"),
