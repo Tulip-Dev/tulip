@@ -33,6 +33,10 @@ class @PROPERTY_TYPE@Property : tlp::PropertyInterface /NoDefaultCtors/ {
 %End
 public :
 	
+%Docstring
+tlp.@PROPERTY_TYPE@Property(tlp.Graph, string name="")
+%End	
+	
 	@PROPERTY_TYPE@Property(tlp::Graph *g, std::string n="");
 	
 	void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &v);
@@ -56,6 +60,10 @@ tlp.@PROPERTY_TYPE@Property.getEdgeDefaultValue() -> @PYTHON_EDGE_TYPE@
 %End	
 
 	const @PROPERTY_NODE_TYPE@ getNodeValue(const tlp::node n);
+%Docstring
+tlp.@PROPERTY_TYPE@Property.getNodeValue(tlp.node) -> @PYTHON_NODE_TYPE@
+%End	
+	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipRes = new @PROPERTY_NODE_TYPE@(sipCpp->getNodeValue(*a0));
@@ -64,11 +72,11 @@ tlp.@PROPERTY_TYPE@Property.getEdgeDefaultValue() -> @PYTHON_EDGE_TYPE@
 	}
 %End
 
-%Docstring
-tlp.@PROPERTY_TYPE@Property.getNodeValue(tlp.node) -> @PYTHON_NODE_TYPE@
-%End
-
 	const @PROPERTY_EDGE_TYPE@ getEdgeValue(const tlp::edge e);
+%Docstring
+tlp.@PROPERTY_TYPE@Property.getEdgeValue(tlp.edge) -> @PYTHON_EDGE_TYPE@
+%End
+	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipRes = new @PROPERTY_EDGE_TYPE@(sipCpp->getEdgeValue(*a0));
@@ -77,11 +85,11 @@ tlp.@PROPERTY_TYPE@Property.getNodeValue(tlp.node) -> @PYTHON_NODE_TYPE@
 	}
 %End
 
-%Docstring
-tlp.@PROPERTY_TYPE@Property.getEdgeValue(tlp.edge) -> @PYTHON_EDGE_TYPE@
-%End
-
 	void setNodeValue(const tlp::node n, const @PROPERTY_NODE_TYPE@ &v);
+%Docstring
+tlp.@PROPERTY_TYPE@Property.setNodeValue(tlp.node, @PYTHON_NODE_TYPE@)
+%End
+	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipCpp->setNodeValue(*a0, *a1);
@@ -90,21 +98,17 @@ tlp.@PROPERTY_TYPE@Property.getEdgeValue(tlp.edge) -> @PYTHON_EDGE_TYPE@
 	}
 %End
 
-%Docstring
-tlp.@PROPERTY_TYPE@Property.setNodeValue(tlp.node, @PYTHON_NODE_TYPE@)
-%End
-
 	void setEdgeValue(const tlp::edge e, const @PROPERTY_EDGE_TYPE@ &v);
+%Docstring
+tlp.@PROPERTY_TYPE@Property.setEdgeValue(tlp.edge, @PYTHON_EDGE_TYPE@)
+%End
+	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipCpp->setEdgeValue(*a0, *a1);
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
 	}
-%End
-
-%Docstring
-tlp.@PROPERTY_TYPE@Property.setEdgeValue(tlp.edge, @PYTHON_EDGE_TYPE@)
 %End
 
 	@PROPERTY_NODE_TYPE@ __getitem__(const tlp::node n) const;
@@ -162,6 +166,10 @@ class @VEC_PROPERTY_TYPE@VectorProperty : tlp::PropertyInterface /NoDefaultCtors
 %End
 public :
 
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty(tlp.Graph, string name="")
+%End
+
 	@VEC_PROPERTY_TYPE@VectorProperty (tlp::Graph *, std::string n="");
   	
 	const std::vector<@CPP_TYPE@> getNodeDefaultValue();
@@ -175,18 +183,23 @@ tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeDefaultValue() -> list of @PYTHON_T
 %End
 
 	const std::vector<@CPP_TYPE@> getNodeValue(const tlp::node n);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeValue(tlp.node) -> list of @PYTHON_TYPE@
+%End
+	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getNodeValue(*a0));
 	} else {
 		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
 	}
-%End	
-%Docstring
-tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeValue(tlp.node) -> list of @PYTHON_TYPE@
 %End
-
+	
 	const std::vector<@CPP_TYPE@> getEdgeValue(const tlp::edge e);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeValue(tlp.edge) -> list of @PYTHON_TYPE@
+%End
+	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getEdgeValue(*a0));
@@ -194,23 +207,25 @@ tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeValue(tlp.node) -> list of @PYTHON_
 		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
 	}
 %End	
-%Docstring
-tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeValue(tlp.edge) -> list of @PYTHON_TYPE@
-%End
 
 	void setNodeValue(const tlp::node n, const std::vector<@CPP_TYPE@> &v);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setNodeValue(tlp.node, list of @PYTHON_TYPE@)
+%End
+	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipCpp->setNodeValue(*a0, *a1);
 	} else {
 		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
 	}
-%End	
-%Docstring
-tlp.@VEC_PROPERTY_TYPE@VectorProperty.setNodeValue(tlp.node, list of @PYTHON_TYPE@)
 %End
-
+	
 	void setEdgeValue(const tlp::edge e, const std::vector<@CPP_TYPE@> &v);
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setEdgeValue(tlp.edge, list of @PYTHON_TYPE@)
+%End
+	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipCpp->setEdgeValue(*a0, *a1);
@@ -218,9 +233,6 @@ tlp.@VEC_PROPERTY_TYPE@VectorProperty.setNodeValue(tlp.node, list of @PYTHON_TYP
 		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
 	}
 %End	
-%Docstring
-tlp.@VEC_PROPERTY_TYPE@VectorProperty.setEdgeValue(tlp.edge, list of @PYTHON_TYPE@)
-%End
 
 	void setAllNodeValue(const std::vector<@CPP_TYPE@> &v);
 %Docstring

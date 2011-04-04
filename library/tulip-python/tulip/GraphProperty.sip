@@ -52,17 +52,16 @@ tlp.GraphProperty.getEdgeDefaultValue() -> list of tlp.edge
 %End
 
 	const std::set<tlp::edge> getEdgeValue(const tlp::edge e);
+%Docstring
+tlp.GraphProperty.getEdgeValue(tlp.edge) -> list of tlp.edge
+%End
+	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipRes = new std::set<tlp::edge>(sipCpp->getEdgeValue(*a0));
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
 	}
-%End	
-
-%Docstring
-
-tlp.GraphProperty.getEdgeValue(tlp.edge) -> list of tlp.edge
 %End	
 
 	void setNodeValue(const tlp::node n, tlp::Graph* v);
@@ -76,6 +75,10 @@ tlp.GraphProperty.getEdgeValue(tlp.edge) -> list of tlp.edge
 
 
 	void setEdgeValue(const tlp::edge e, const std::set<tlp::edge> &v);
+%Docstring
+tlp.GraphProperty.setEdgeValue(tlp.edge, list of tlp.edge)
+%End
+	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		sipCpp->setEdgeValue(*a0, *a1);
@@ -83,10 +86,6 @@ tlp.GraphProperty.getEdgeValue(tlp.edge) -> list of tlp.edge
 		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
 	}
 %End	
-
-%Docstring
-tlp.GraphProperty.setEdgeValue(tlp.edge, list of tlp.edge)
-%End
 
 	void setAllNodeValue(tlp::Graph* v);
 

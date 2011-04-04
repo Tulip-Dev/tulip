@@ -158,6 +158,10 @@ tlp.Graph.inducedSubGraph(list of tlp.node) -> tlp.Graph
 %End
 
 	void setEdgeOrder(const tlp::node,const std::vector<tlp::edge> &);
+%Docstring
+tlp.Graph.setEdgeOrder(tlp.node, list of tlp.edge)
+%End
+	
 %MethodCode
 	if (sipCpp->isElement(*a0)) {
 		sipCpp->setEdgeOrder(*a0, *a1);
@@ -166,9 +170,7 @@ tlp.Graph.inducedSubGraph(list of tlp.node) -> tlp.Graph
 	}
 %End
 	
-%Docstring
-tlp.Graph.setEdgeOrder(tlp.node, list of tlp.edge)
-%End
+
 
 	void swapEdgeOrder(const tlp::node,const tlp::edge , const tlp::edge );
 %MethodCode

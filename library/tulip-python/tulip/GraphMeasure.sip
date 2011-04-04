@@ -46,4 +46,7 @@ namespace tlp {
 %End  	
 
   	void reachableNodes(const tlp::Graph *graph, const tlp::node startNode, std::set<tlp::node> &result /Out/, unsigned int maxDistance, tlp::EDGE_TYPE direction = tlp::UNDIRECTED);
+%Docstring
+tlp.reachableNodes(tlp.Graph, tlp.node, int, tlp.EDGE_TYPE = tlp.UNDIRECTED) -> list of tlp.node 
+%End  	
 };
