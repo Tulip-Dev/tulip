@@ -18,6 +18,7 @@ IF(LINUX)
     CONFIGURE_FILE("doxygen/tulip-plugins.doxygen.in" "${CMAKE_CURRENT_BINARY_DIR}/doxygen/tulip-plugins.doxygen")
     CONFIGURE_FILE("developerHandbook/gen-devPdf.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/developerHandbook/gen-devPdf.sh")
     CONFIGURE_FILE("userHandbook/gen-userPdf.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/userHandbook/gen-userPdf.sh")
+    CONFIGURE_FILE("make_tulip_doc_tarball.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/make_tulip_doc_tarball.sh" @ONLY)
 
     include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} )
 
