@@ -12,7 +12,7 @@ TARGET_LINK_LIBRARIES(PlanarGraph-${TulipVersion} ${LibTulipName})
 ADD_DEPENDENCIES(PlanarGraph-${TulipVersion} ${LibTulipName})
 
 ##------------0----------------------------------------------------------------------------------------------------------------
-SET(DotImport_SRCS dotImport.cpp dotImportCLUT.h dotImportLexer.h dotImportParser.h)
+SET(DotImport_SRCS dotImport.cpp)
 ADD_LIBRARY(DotImport-${TulipVersion} SHARED ${DotImport_SRCS})
 TARGET_LINK_LIBRARIES(DotImport-${TulipVersion} ${LibTulipName})
 ADD_DEPENDENCIES(DotImport-${TulipVersion} ${LibTulipName})
@@ -24,7 +24,7 @@ TARGET_LINK_LIBRARIES(Grid-${TulipVersion} ${LibTulipName})
 ADD_DEPENDENCIES(Grid-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(GMLImport_SRCS GMLImport.cpp GMLParser.h)
+SET(GMLImport_SRCS GMLImport.cpp)
 ADD_LIBRARY(GMLImport-${TulipVersion} SHARED ${GMLImport_SRCS})
 TARGET_LINK_LIBRARIES(GMLImport-${TulipVersion} ${LibTulipName})
 ADD_DEPENDENCIES(GMLImport-${TulipVersion} ${LibTulipName})
@@ -84,7 +84,7 @@ TARGET_LINK_LIBRARIES(FileSystem-${TulipVersion} ${LibTulipName})
 ADD_DEPENDENCIES(FileSystem-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(WebImport_SRCS WebImport.cpp WebImport.h)
+SET(WebImport_SRCS WebImport.cpp)
 SET(WebImport_MOC WebImport.h)
 TULIP_QT4_WRAP_CPP(WebImport_MOC_SRCS ${WebImport_MOC})
 ADD_LIBRARY(WebImport-${TulipVersion} SHARED ${WebImport_SRCS} ${WebImport_MOC_SRCS})
