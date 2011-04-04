@@ -23,9 +23,7 @@
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qmainwindow.h>
 #include <QtCore/QSettings>
-#include <QtCore/QProcess>
 
-#include <PluginsUpdateChecker.h>
 #include "TulipPluginLoader.h"
 #include "TulipData.h"
 #include "GraphNeedsSavingObserver.h"
@@ -33,13 +31,15 @@
 namespace tlp {
   class Controller;
   class Graph;
+  class PluginsUpdateChecker;
+  class MultiServerManager;
 }
 
-//class QWorkspace;
 class QProgressDialog;
 class QEvent;
 class View3DSetup;
 class Cluster;
+class QProcess;
 
 // minimal structure to keep open files infos
 struct FileInfo {
@@ -154,6 +154,8 @@ private:
   QTabWidget *tabWidget;
   unsigned int mouseClicX,mouseClicY;
 
+  std::string defaultControllerName;
+
   QProcess *assistantProcess;
   QString assistantProcessApp;
 
@@ -162,7 +164,7 @@ private:
   bool controllerAutoLoad;
   int currentTabIndex;
   std::map<int,tlp::Controller *> tabIndexToController;
-  std::map<tlp::Controller *, GraphNeedsSavingObserver*>controllerToGraphObserver;
+  std::map<tlp::Controller *, GraphNeedsSavingObserver*> controllerToGraphObserver;
   std::map<tlp::Controller *, std::string> controllerToControllerName;
   std::map<tlp::Controller *,QWorkspace *> controllerToWorkspace;
   std::map<tlp::Controller *,std::vector<QAction *> > controllerToMenu;
