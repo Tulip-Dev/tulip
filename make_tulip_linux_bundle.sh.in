@@ -4,7 +4,7 @@
 # it intends to create a tulip bundle
 # runable on most linux distributions
 # its only optional parameter is the directory
-# where the bundle directory have to be created
+# where the bundle directory has to be created
 
 # if $1 is given it is the parent directory
 # of the created bundle dir
