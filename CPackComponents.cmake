@@ -36,9 +36,7 @@ DEFINE_COMPONENT(tulip_app "Tulip software" "The main Tulip software. Provides a
 DEFINE_COMPONENT(tulip_textures "Additional textures" "Additional textures for the Tulip software" "" ${EXTRAS_GROUP_NAME})
 
 # doc/*
-IF(GENERATE_DOC)
-  DEFINE_COMPONENT(tulip_doc "Framework documentation" "Manuals and doxygen for the Tulip framework." "libtulip" ${EXTRAS_GROUP_NAME})
-ENDIF()
+DEFINE_COMPONENT(tulip_doc "Framework documentation" "Manuals and doxygen for the Tulip framework." "libtulip" ${EXTRAS_GROUP_NAME})
 
 IF(LINUX)
   SET(META_DEPS "ftgl;qscintilla2;gzstream;siplib;libtulip;libtulip_ogl;libtulip_qt;tulip_app;tulip_pluginsmanager;tulip_textures;libtulip_plugins;libtulip_qt_plugins;libtulip_ogl_plugins;tulip_plugins_spreadsheetview")
