@@ -5,13 +5,17 @@
 #include "tulip/HighlightGraphicsEffect.h"
 #include <QtGui/QPainter>
 #include <QtCore/QParallelAnimationGroup>
+#include <QtCore/QTimer>
 #include <assert.h>
+
+//FIXME: remove me
+#include <iostream>
+using namespace std;
 
 namespace tlp {
 ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   : QGraphicsItemGroup(parent,scene),
-  _activeAction(0), _activeButton(0), _expanded(false), _currentExpandAnimation(0),
-
+  _activeAction(0), _activeButton(0), _focusedButton(0), _expanded(false), _currentExpandAnimation(0), _collapseTimeout(0),
   _iconSize(32,32), _margin(12), _orientation(Qt::Horizontal),
   _animationMsec(100), _animationEasing(QEasingCurve::Linear),
   _outerOutline(0x9c,0x9a,0x94,0x00), _innerOutline(0xb3,0xaf,0xaf), _backgroundGradientStep1(0xdc,0xda,0xd5,0xd2), _backgroundGradientStep2(0xdc,0xda,0xd5,0x64) {
@@ -72,33 +76,23 @@ void ToolbarItem::setActiveAction(QAction *action) {
 }
 //==========================
 void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-  QRectF outerRect = computeBoundingRect();
+  QRectF outerRect = boundingRect();
 
   { // Enclosing rect
     QPen pen;
     pen.setColor(_outerOutline);
     pen.setWidth(2);
     painter->setPen(pen);
-//    painter->drawRoundedRect(outerRect,7,7);
-
-
-    painter->setBrush(Qt::red);
-    QPainterPath path;
-    path.addRoundedRect(outerRect,7,7);
-    path.addRect(0,0,7,outerRect.height());
-    path.addRect(0,0,outerRect.width(),7);
-    painter->drawPath(path);
-
-
-//    QRectF innerRect(1,1,outerRect.width()-2,outerRect.height()-2);
-//    pen.setColor(_innerOutline);
-//    pen.setWidth(1);
-//    painter->setPen(pen);
-//    QLinearGradient gradient(0,0,0,innerRect.height());
-//    gradient.setColorAt(0,_backgroundGradientStep1);
-//    gradient.setColorAt(1,_backgroundGradientStep2);
-//    painter->setBrush(QBrush(gradient));
-//    painter->drawRoundedRect(innerRect,7,7);
+    painter->drawRoundedRect(outerRect,7,7);
+    QRectF innerRect(1,1,outerRect.width()-2,outerRect.height()-2);
+    pen.setColor(_innerOutline);
+    pen.setWidth(1);
+    painter->setPen(pen);
+    QLinearGradient gradient(0,0,0,innerRect.height());
+    gradient.setColorAt(0,_backgroundGradientStep1);
+    gradient.setColorAt(1,_backgroundGradientStep2);
+    painter->setBrush(QBrush(gradient));
+    painter->drawRoundedRect(innerRect,7,7);
   }
   if (_expanded) { // separator
     QPointF marginVector = _margin * translationVector();
@@ -116,11 +110,6 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     painter->setPen(pen);
     painter->drawLine(start,end);
   }
-  layout();
-}
-//==========================
-QRectF ToolbarItem::boundingRect() const {
-  return computeBoundingRect();
 }
 //==========================
 void ToolbarItem::layout() {
@@ -137,10 +126,12 @@ void ToolbarItem::layout() {
   for (int i=0;i < _actions.size(); ++i) {
     PushButtonItem *btn = _actionButton[_actions[i]];
 
-    if (btn->hovered()) {
-        pos-=QPointF(_margin-1,_margin-1);
-        modifyButton(btn,hoveredIconSize(),pos);
-        pos+=QPointF(_margin-1,_margin-1);
+    if (btn == _focusedButton) {
+      pos-=QPointF(_margin-1,_margin-1);
+      btn->setAnimationBehavior(AnimatedGraphicsObject::StopPreviousAnimation);
+      modifyButton(btn,hoveredIconSize(),pos);
+      btn->setAnimationBehavior(AnimatedGraphicsObject::ContinuePreviousAnimation);
+      pos+=QPointF(_margin-1,_margin-1);
     }
 
     else
@@ -148,6 +139,15 @@ void ToolbarItem::layout() {
 
     pos += iconVector + marginVector;
   }
+}
+//==========================
+QRectF ToolbarItem::boundingRect() const {
+  if (!_expanded)
+    return QRectF(0,0,hoveredIconSize().width(), hoveredIconSize().height());
+
+  if (_orientation == Qt::Horizontal)
+    return QRectF(0,0,(_actions.size() + 1) * (_margin + _iconSize.width()) + _margin*2, hoveredIconSize().height());
+  return QRectF(0,0,hoveredIconSize().width(),(_actions.size() + 1) * (_margin + _iconSize.height()) + _margin*2);
 }
 //==========================
 QPointF ToolbarItem::translationVector() const {
@@ -165,21 +165,9 @@ QSize ToolbarItem::hoveredIconSize() const {
   return QSize(_iconSize.width() + 2 * (_margin - 2), _iconSize.height() + 2 * (_margin - 2));
 }
 //==========================
-QRectF ToolbarItem::computeBoundingRect() const {
-  if (!_expanded)
-    return QRectF(0,0,hoveredIconSize().width(), hoveredIconSize().height());
-
-  if (_orientation == Qt::Horizontal)
-    return QRectF(0,0,(_actions.size() + 1) * (_margin + _iconSize.width()) + _margin*2, hoveredIconSize().height());
-  return QRectF(0,0,hoveredIconSize().width(),(_actions.size() + 1) * (_margin + _iconSize.height()) + _margin*2);
-}
-//==========================
 PushButtonItem *ToolbarItem::buildButton(QAction *action) {
   PushButtonItem *result = new PushButtonItem(action,_iconSize,this);
   result->setAnimationBehavior(AnimatedGraphicsObject::ContinuePreviousAnimation); // smooth up animations
-#ifdef _WIN32
-  result->setGraphicsEffect(new MirrorGraphicsEffect(-1 * _margin, _margin+3));
-#endif
   result->setPos(_margin,_margin);
   connect(result,SIGNAL(hovered(bool)),this,SLOT(buttonHovered(bool)),Qt::DirectConnection);
   connect(result,SIGNAL(clicked()),this,SLOT(buttonClicked()),Qt::DirectConnection);
@@ -187,15 +175,7 @@ PushButtonItem *ToolbarItem::buildButton(QAction *action) {
 }
 //==========================
 void ToolbarItem::buttonHovered(bool f) {
-  PushButtonItem *btn = static_cast<PushButtonItem *>(sender());
-  if (btn == _activeButton)
-    return;
-#ifdef _WIN32
-  if (f)
-    btn->setGraphicsEffect(0);
-  else
-    btn->setGraphicsEffect(new MirrorGraphicsEffect(-1 * _margin, _margin+3));
-#endif
+  _focusedButton = static_cast<PushButtonItem *>(sender());
   layout();
 }
 //==========================
@@ -203,10 +183,8 @@ void ToolbarItem::buttonClicked() {
   PushButtonItem *btn = static_cast<PushButtonItem *>(sender());
   setActiveAction(btn->action());
 
-  if (btn == _activeButton) {
-    setExpanded(!_expanded);
+  if (btn == _activeButton)
     emit activeButtonClicked();
-  }
   else
     emit buttonClicked(btn);
 }
@@ -220,6 +198,9 @@ void ToolbarItem::setExpanded(bool f) {
   if (_currentExpandAnimation)
     _currentExpandAnimation->stop();
 
+  if (_expanded == f)
+    return;
+
   _expanded = f;
 
   _currentExpandAnimation = new QParallelAnimationGroup();
@@ -227,6 +208,8 @@ void ToolbarItem::setExpanded(bool f) {
     PushButtonItem *btn = it.value();
     if (_expanded)
       btn->setVisible(true);
+
+    btn->setAcceptHoverEvents(false);
 
     if (!f) {
       QPropertyAnimation *posAnim = new QPropertyAnimation(btn,"pos");
@@ -251,19 +234,44 @@ void ToolbarItem::setExpanded(bool f) {
 //==========================
 void ToolbarItem::expandAnimationFinished() {
   _currentExpandAnimation = 0;
-  for (QMap<QAction *,PushButtonItem *>::iterator it = _actionButton.begin(); it != _actionButton.end(); ++it)
+  for (QMap<QAction *,PushButtonItem *>::iterator it = _actionButton.begin(); it != _actionButton.end(); ++it) {
     it.value()->setVisible(_expanded);
+    it.value()->setAcceptHoverEvents(true);
+  }
 }
 //==========================
 void ToolbarItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+  if (_collapseTimeout) {
+    delete _collapseTimeout;
+    _collapseTimeout = 0;
+  }
   for (int i=0; i < _actions.size(); ++i)
     _actionButton[_actions[i]]->setAnimationBehavior(AnimatedGraphicsObject::ContinuePreviousAnimation);
-  layout();
+
+  setExpanded(true);
 }
 //==========================
 void ToolbarItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+  if (_collapseTimeout) {
+    delete _collapseTimeout;
+    _collapseTimeout = 0;
+  }
+  _collapseTimeout = new QTimer(this);
+  _collapseTimeout->setSingleShot(true);
+  _collapseTimeout->setInterval(2000);
+  connect(_collapseTimeout,SIGNAL(timeout()),this,SLOT(collapse()));
+  _collapseTimeout->start();
   for (int i=0; i < _actions.size(); ++i)
     _actionButton[_actions[i]]->setAnimationBehavior(AnimatedGraphicsObject::StopPreviousAnimation);
+  _focusedButton = 0;
   layout();
+}
+//==========================
+void ToolbarItem::collapse() {
+  if (_collapseTimeout) {
+    delete _collapseTimeout;
+    _collapseTimeout = 0;
+  }
+  setExpanded(false);
 }
 }

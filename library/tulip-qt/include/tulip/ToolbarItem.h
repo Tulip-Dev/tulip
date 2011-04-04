@@ -6,6 +6,7 @@
 
 class QAnimationGroup;
 class QAction;
+class QTimer;
 
 namespace tlp {
 class PushButtonItem;
@@ -58,7 +59,7 @@ signals:
   void activeButtonClicked();
 
 public slots:
-  void collapse() { setExpanded(false); }
+  void collapse();
   void expand() { setExpanded(true); }
   void setExpanded(bool f);
 
@@ -77,8 +78,10 @@ private:
   QMap<QAction *,PushButtonItem *> _actionButton;
   QAction *_activeAction;
   PushButtonItem *_activeButton;
+  PushButtonItem *_focusedButton;
   bool _expanded;
   QAnimationGroup *_currentExpandAnimation;
+  QTimer *_collapseTimeout;
 
   // Display parameters
   QSize _iconSize;
@@ -93,7 +96,6 @@ private:
 
   QPointF translationVector() const;
   QSize hoveredIconSize() const;
-  QRectF computeBoundingRect() const;
   PushButtonItem *buildButton(QAction *);
   void modifyButton(PushButtonItem *btn, const QSize &newSize, const QPointF &newPos) const;
   void layout();
