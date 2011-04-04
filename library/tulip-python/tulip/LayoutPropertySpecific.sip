@@ -34,6 +34,9 @@
   	double averageAngularResolution(const tlp::node n, const tlp::Graph *graph = 0) const;
   
   	std::vector<double> angularResolutions(const tlp::node n, const tlp::Graph *graph = 0) const;
+%Docstring
+tlp.LayoutProperty.angularResolutions(tlp.node, tlp.Graph graph=None) -> list of float
+%End
 
 	void computeEmbedding(tlp::Graph *sg = 0);
   

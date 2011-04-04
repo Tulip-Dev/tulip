@@ -46,6 +46,9 @@ tlp.ConnectedTest.makeConnected(tlp.Graph) -> list of tlp.edge
   static unsigned int numberOfConnectedComponents(const tlp::Graph*graph);
   
   static void computeConnectedComponents(tlp::Graph *graph, std::vector<std_set_0100tlp_node>& components /Out/);
+%Docstring
+tlp.ConnectedTest.computeConnectedComponents(tlp.Graph) -> list of list of tlp.node
+%End
   
 private : 
 

@@ -80,7 +80,7 @@ public:
 	
 	void __setitem__(int i, const unsigned short &value);
 %MethodCode
-	if (a0 < 3)
+	if (a0 < 4)
 		(*sipCpp)[a0] = a1;
 	else
 		sipIsErr = 1;	
