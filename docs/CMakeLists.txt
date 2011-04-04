@@ -1,6 +1,3 @@
-
-MESSAGE("docs")
-
 IF(LINUX)
   FIND_PACKAGE(Doxygen)
   IF(DOXYGEN_FOUND)
