@@ -23,7 +23,11 @@
 #include "PythonScriptViewWidgetData.h"
 #include <QtGui/QAction>
 
+#include "PythonCodeEditor.h"
+
 class QToolBar;
+
+class PythonScriptView;
 
 class PythonScriptViewWidget : public QWidget, public Ui::PythonScriptViewWidgetData {
 
@@ -31,15 +35,31 @@ class PythonScriptViewWidget : public QWidget, public Ui::PythonScriptViewWidget
 
 public :
 
-	PythonScriptViewWidget(QWidget *parent=0);
+	PythonScriptViewWidget(PythonScriptView *view, QWidget *parent);
 
 	void showEvent(QShowEvent *);
 	void resizeEvent(QResizeEvent *);
 
-	std::string getPythonCode() const;
+	int addMainScriptEditor();
+	int addModuleEditor();
+
+	PythonCodeEditor *getMainScriptEditor(int idx) const;
+	PythonCodeEditor *getCurrentMainScriptEditor() const;
+	PythonCodeEditor *getModuleEditor(int idx) const;
+	PythonCodeEditor *getCurrentModuleEditor() const;
+
+	std::string getCurrentMainScriptCode() const;
+	std::string getMainScriptCode(int idx) const;
+	std::string getModuleCode(int idx) const;
+
+	bool eventFilter(QObject *obj, QEvent *event);
 
 public slots :
 
+	void decreaseFontSize();
+	void increaseFontSize();
+	void mainScriptTextChanged();
+	void moduleScriptTextChanged();
 	void resizeToolBars();
 
 public :
@@ -55,6 +75,15 @@ public :
 	QToolBar *mainScriptToolBar;
 	QToolBar *modulesToolBar;
 
+private :
+
+	int fontZoom;
+
+
+	void commentSelectedCode(QObject *obj);
+	void uncommentSelectedCode(QObject *obj);
+
+	PythonScriptView *pythonScriptView;
 };
 
 #endif /* PYTHONSCRIPTVIEWWIDGET_H_ */

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>507</width>
-    <height>532</height>
+    <width>606</width>
+    <height>643</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -81,25 +81,20 @@
          </widget>
         </item>
         <item>
-         <widget class="PythonCodeEditor" name="pythonCodeWidget" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+         <widget class="QTabWidget" name="mainScriptsTabWidget">
+          <property name="tabsClosable">
+           <bool>true</bool>
           </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>150</height>
-           </size>
-          </property>
-          <property name="toolTip">
-           <string/>
-          </property>
-          <property name="whatsThis">
-           <string/>
-          </property>
+          <widget class="QWidget" name="tab_5">
+           <attribute name="title">
+            <string>Tab 1</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="tab_6">
+           <attribute name="title">
+            <string>Tab 2</string>
+           </attribute>
+          </widget>
          </widget>
         </item>
        </layout>
@@ -309,14 +304,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>PythonCodeEditor</class>
-   <extends>QWidget</extends>
-   <header>PythonCodeEditor.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="PythonScriptViewResource.qrc"/>
  </resources>
