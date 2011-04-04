@@ -23,6 +23,30 @@ public:
   virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=0);
   virtual QRectF boundingRect() const;
 
+  QSize iconSize() const { return _iconSize; }
+  void setIconSize(const QSize &s) { _iconSize = s; update(); }
+
+  QSize hoveredIconSize() const { return _hoveredIconSize; }
+  void setHoveredIconSize(const QSize &s) { _hoveredIconSize = s; update(); }
+
+  int margin() const { return _margin; }
+  void setMargin(int m) { _margin = m; update(); }
+
+  Qt::Orientation orientation() const { return _orientation; }
+  void setOrientation(Qt::Orientation o) { _orientation = o; update(); }
+
+  int buttonMarginWidth() const { return _buttonMarginWidth; }
+  void setButtonMarginWidth(int m) { _buttonMarginWidth = m; update(); }
+
+  QColor buttonForegroundColor() const { return _buttonForegroundColor; }
+  void setButtonForegroundColor(const QColor &c) { _buttonForegroundColor = c; update(); }
+
+  QColor buttonBackgroundColor() const { return _buttonBackgroundColor; }
+  void setButtonBackgroundColor(const QColor &c) { _buttonBackgroundColor = c; update(); }
+
+  PushButtonItem::BackgroundShape buttonBackgroundShape() const { return _buttonBackgroundShape; }
+  void setButtonBackgroundShape(PushButtonItem::BackgroundShape s) { _buttonBackgroundShape = s; }
+
 signals:
   void expanded(bool);
   void buttonClicked(PushButtonItem *);
@@ -63,6 +87,7 @@ private:
   int _buttonMarginWidth;
   QColor _buttonForegroundColor;
   QColor _buttonBackgroundColor;
+  QColor _highlightColor;
   PushButtonItem::BackgroundShape _buttonBackgroundShape;
 
   int _animationMsec;

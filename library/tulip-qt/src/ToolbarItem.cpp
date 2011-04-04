@@ -2,16 +2,21 @@
 
 #include "tulip/MirrorGraphicsEffect.h"
 #include "tulip/HighlightGraphicsEffect.h"
+#include "tulip/QtAnimationsManager.h"
 #include <QtGui/QPainter>
 #include <QtCore/QParallelAnimationGroup>
+#include <QtCore/QSequentialAnimationGroup>
 #include <QtCore/QTimer>
 
 namespace tlp {
 ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   : QGraphicsItemGroup(parent,scene),
   _activeAction(0), _activeButton(0), _focusedButton(0), _expanded(false), _currentExpandAnimation(0), _collapseTimeout(0),
+
   _iconSize(28,28), _hoveredIconSize(42,42), _margin(4), _orientation(Qt::Horizontal),
-  _buttonMarginWidth(7), _buttonForegroundColor(QColor(200,200,200,150)), _buttonBackgroundColor(QColor(230,230,230,150)), _buttonBackgroundShape(PushButtonItem::CircleShape),
+
+  _buttonMarginWidth(7), _buttonForegroundColor(QColor(200,200,200,150)), _buttonBackgroundColor(QColor(230,230,230,150)), _highlightColor(QColor(255,255,255,150)), _buttonBackgroundShape(PushButtonItem::CircleShape),
+
   _animationMsec(100), _animationEasing(QEasingCurve::Linear) {
   setHandlesChildEvents(false);
   setCacheMode(QGraphicsItem::ItemCoordinateCache);
@@ -56,8 +61,24 @@ void ToolbarItem::removeAction(QAction *action) {
 void ToolbarItem::setActiveAction(QAction *action) {
   _activeAction = action;
   if (_activeAction) {
-    if (_activeButton)
+    if (_activeButton) {
       _activeButton->setAction(action);
+      QPropertyAnimation *anim1 = new QPropertyAnimation(_activeButton,"borderColor",this);
+      anim1->setStartValue(_buttonForegroundColor);
+      anim1->setEndValue(_highlightColor);
+      anim1->setDuration(1000);
+      anim1->setEasingCurve(QEasingCurve::Linear);
+      QPropertyAnimation *anim2 = new QPropertyAnimation(_activeButton,"borderColor",this);
+      anim2->setStartValue(anim1->endValue());
+      anim2->setEndValue(anim1->startValue());
+      anim2->setEasingCurve(anim1->easingCurve());
+      anim2->setDuration(anim1->duration());
+      QSequentialAnimationGroup *anim = new QSequentialAnimationGroup(this);
+      anim->addAnimation(anim1);
+      anim->addAnimation(anim2);
+      anim->setLoopCount(3);
+      QtAnimationsManager::instance().startAnimation(_activeButton,anim,QtAnimationsManager::StopPreviousAnimation);
+    }
     else
       _activeButton = buildButton(_activeAction);
   }
@@ -155,7 +176,8 @@ void ToolbarItem::buttonHovered(bool f) {
 //==========================
 void ToolbarItem::buttonClicked() {
   PushButtonItem *btn = static_cast<PushButtonItem *>(sender());
-  setActiveAction(btn->action());
+  if (btn != _activeButton)
+    setActiveAction(btn->action());
 
   if (btn == _activeButton)
     emit activeButtonClicked();

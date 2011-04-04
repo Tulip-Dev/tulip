@@ -13,6 +13,9 @@ Q_INTERFACES(QGraphicsLayoutItem);
 Q_OBJECT;
 Q_PROPERTY(QString text READ text WRITE setText);
 Q_PROPERTY(QSize iconSize READ iconSize WRITE setIconSize);
+Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor);
+Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor);
+Q_PROPERTY(int borderWidth READ borderWidth WRITE setBorderWidth);
 
 public:
   enum BackgroundShape {
