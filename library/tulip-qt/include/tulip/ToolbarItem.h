@@ -3,14 +3,13 @@
 
 #include <QtGui/QGraphicsItemGroup>
 #include <QtCore/QEasingCurve>
+#include "tulip/PushButtonItem.h"
 
 class QAnimationGroup;
 class QAction;
 class QTimer;
 
 namespace tlp {
-class PushButtonItem;
-
 class ToolbarItem: public QObject, public QGraphicsItemGroup {
     Q_OBJECT
 public:
@@ -23,35 +22,6 @@ public:
 
   virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=0);
   virtual QRectF boundingRect() const;
-
-  QSize iconSize() const { return _iconSize; }
-  void setIconSize(const QSize &s) { _iconSize = s; update(); }
-
-  int margin() const { return _margin; }
-  void setMargin(int m) { _margin = m; update(); }
-
-  Qt::Orientation orientation() const { return _orientation; }
-  void setOrientation(Qt::Orientation o) { _orientation = o; update(); }
-
-  int animationMsec() const { return _animationMsec; }
-  void setAnimationMsec(int ms) { _animationMsec = ms; update(); }
-
-  QEasingCurve animationEasing() const { return _animationEasing; }
-  void setAnimationEasing(const QEasingCurve &c) { _animationEasing = c; update(); }
-
-  QColor outerOutline() const { return _outerOutline; }
-  void setOuterOutline(const QColor &c) { _outerOutline = c; update(); }
-
-  QColor innerOutline() const { return _innerOutline; }
-  void setInnerOutline(const QColor &c) { _innerOutline = c; update(); }
-
-  QColor backgroundGradientStep1() const { return _backgroundGradientStep1; }
-  void setBackgroundGradientStep1(const QColor &c) { _backgroundGradientStep1 = c; update(); }
-
-  QColor backgroundGradientStep2() const { return _backgroundGradientStep2; }
-  void setBackgroundGradientStep2(const QColor &c) { _backgroundGradientStep2 = c; update(); }
-
-  bool isExpanded() const { return _expanded; }
 
 signals:
   void expanded(bool);
@@ -85,20 +55,24 @@ private:
 
   // Display parameters
   QSize _iconSize;
+  QSize _hoveredIconSize;
   int _margin;
   Qt::Orientation _orientation;
+
+  // Buttons style
+  int _buttonMarginWidth;
+  QColor _buttonForegroundColor;
+  QColor _buttonBackgroundColor;
+  PushButtonItem::BackgroundShape _buttonBackgroundShape;
+
   int _animationMsec;
   QEasingCurve _animationEasing;
-  QColor _outerOutline;
-  QColor _innerOutline;
-  QColor _backgroundGradientStep1;
-  QColor _backgroundGradientStep2;
 
   QPointF translationVector() const;
-  QSize hoveredIconSize() const;
+  QSizeF hoveredButtonSize() const;
+  QSizeF buttonSize() const;
   PushButtonItem *buildButton(QAction *);
   void modifyButton(PushButtonItem *btn, const QSize &newSize, const QPointF &newPos) const;
-  void layout();
 };
 }
 

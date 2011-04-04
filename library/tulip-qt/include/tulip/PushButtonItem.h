@@ -15,6 +15,12 @@ Q_PROPERTY(QString text READ text WRITE setText);
 Q_PROPERTY(QSize iconSize READ iconSize WRITE setIconSize);
 
 public:
+  enum BackgroundShape {
+    NoShape,
+    CircleShape,
+    SquareShape
+  };
+
   PushButtonItem(QAction *action, const QSize &iconSize = QSize(32,32), QGraphicsItem *parent=0);
   virtual ~PushButtonItem();
 
@@ -33,6 +39,18 @@ public:
   QSizeF itemSize() const;
 
   bool hovered() const { return _hovered; }
+
+  BackgroundShape backgroundShape() const { return _backgroundShape; }
+  void setBackgroundShape(BackgroundShape s) { _backgroundShape = s; update(); }
+
+  QColor borderColor() const { return _borderColor; }
+  void setBorderColor(const QColor &c) { _borderColor = c; update(); }
+
+  QColor backgroundColor() const { return _backgroundColor; }
+  void setBackgroundColor(const QColor &c) { _backgroundColor = c; update(); }
+
+  int borderWidth() const { return _borderWidth; }
+  void setBorderWidth(int w ) { _borderWidth = w; update(); }
 
 protected:
   void mousePressEvent(QGraphicsSceneMouseEvent *);
@@ -59,6 +77,11 @@ private:
   bool _pressed;
   bool _hovered;
   bool _clicking;
+
+  BackgroundShape _backgroundShape;
+  QColor _borderColor;
+  QColor _backgroundColor;
+  int _borderWidth;
 
 };
 }

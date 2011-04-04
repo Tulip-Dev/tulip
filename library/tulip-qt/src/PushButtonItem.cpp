@@ -10,7 +10,8 @@ PushButtonItem::PushButtonItem(QAction *action, const QSize &iconSize, QGraphics
   AnimatedGraphicsObject(parent),
   _iconSize(iconSize),
   _pressed(false), _hovered(false), _clicking(false),
-  _action(0) {
+  _action(0),
+  _borderWidth(7), _borderColor(QColor(200,200,200,150)), _backgroundColor(QColor(230,230,230,150)), _backgroundShape(NoShape) {
 
   setAction(action);
   setAcceptHoverEvents(true);
@@ -78,6 +79,20 @@ void PushButtonItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
 }
 //==========================
 void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+  // Border
+  if (_backgroundShape != NoShape) {
+    QPen pen(_borderColor);
+    pen.setWidth(_borderWidth);
+    painter->setPen(pen);
+    painter->setBrush(_backgroundColor);
+    if (_backgroundShape == SquareShape)
+      painter->drawRect(boundingRect());
+    else if (_backgroundShape == CircleShape) {
+      QRectF brect = boundingRect();
+      painter->drawEllipse(brect.x(),brect.y(),brect.width(),brect.height());
+    }
+  }
+  // Pixmap
   QIcon::Mode mode = QIcon::Normal;
   if (!isEnabled())
     mode = QIcon::Disabled;
@@ -106,7 +121,7 @@ void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     img.setAlphaChannel(alpha);
     pixmap = QPixmap::fromImage(img);
   }
-  painter->drawPixmap(0, 0, _iconSize.width(), _iconSize.height(), pixmap);
+  painter->drawPixmap(_borderWidth+3, _borderWidth+3, _iconSize.width(), _iconSize.height(), pixmap);
 
 }
 //==========================
@@ -116,7 +131,7 @@ QRectF PushButtonItem::boundingRect() const {
     width += _iconSize.width();
     height += _iconSize.height();
   }
-  return QRectF(0,0,width, height);
+  return QRectF(0,0,width+(_borderWidth+3)*2, height+(_borderWidth+3)*2);
 }
 //==========================
 void PushButtonItem::setGeometry(const QRectF &rect) {
