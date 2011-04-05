@@ -99,13 +99,13 @@ while test $# -gt 0; do
       OUTPUT=`echo ${OUTPUT} @GL_LDFLAGS@ @LIB_GL@`
       ;;
     --libs)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-${libversion}.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/libtulip-qt4-${libversion}.${libextension} @OPENMP_CXXFLAGS@`
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-${libversion}.${libextension} ${libdir}/libgzstream.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/libftgl.${libextension} ${libdir}/libtulip-qt4-${libversion}.${libextension} @OPENMP_CXXFLAGS@`
       ;;
     --lib_tulip)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-${libversion}.${libextension} @OPENMP_CXXFLAGS@`
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-${libversion}.${libextension} ${libdir}/libgzstream.${libextension} @OPENMP_CXXFLAGS@`
       ;;
     --lib_ogl)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-ogl-${libversion}.${libextension}`
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-ogl-${libversion}.${libextension}  ${libdir}/libftgl.${libextension}`
       ;;
     --plugincxxflags)
       OUTPUT=`echo ${OUTPUT} ${plugincxxflags}`
