@@ -232,6 +232,7 @@ void ToolbarItem::setExpanded(bool f) {
     return;
 
   _expanded = f;
+  emit expanded(f);
 
   _currentExpandAnimation = new QParallelAnimationGroup();
   for (QMap<QAction *,PushButtonItem *>::iterator it = _actionButton.begin(); it != _actionButton.end(); ++it) {
