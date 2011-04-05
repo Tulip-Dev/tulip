@@ -121,7 +121,12 @@ void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     img.setAlphaChannel(alpha);
     pixmap = QPixmap::fromImage(img);
   }
-  painter->drawPixmap(_borderWidth+3, _borderWidth+3, _iconSize.width(), _iconSize.height(), pixmap);
+  int x=0,y=0;
+  if (_backgroundShape != NoShape) {
+    x=_borderWidth+3;
+    y=_borderWidth+3;
+  }
+  painter->drawPixmap(x,y,_iconSize.width(),_iconSize.height(),pixmap);
 
 }
 //==========================
@@ -131,7 +136,12 @@ QRectF PushButtonItem::boundingRect() const {
     width += _iconSize.width();
     height += _iconSize.height();
   }
-  return QRectF(0,0,width+(_borderWidth+3)*2, height+(_borderWidth+3)*2);
+  if (_backgroundShape != NoShape) {
+    width += (_borderWidth+3) * 2;
+    height += (_borderWidth+3) * 2;
+  }
+
+  return QRectF(0,0,width,height);
 }
 //==========================
 void PushButtonItem::setGeometry(const QRectF &rect) {

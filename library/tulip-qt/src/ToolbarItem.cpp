@@ -7,16 +7,14 @@
 #include <QtCore/QParallelAnimationGroup>
 #include <QtCore/QSequentialAnimationGroup>
 #include <QtCore/QTimer>
+#include <assert.h>
 
 namespace tlp {
 ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   : QGraphicsItemGroup(parent,scene),
   _activeAction(0), _activeButton(0), _focusedButton(0), _expanded(false), _currentExpandAnimation(0), _collapseTimeout(0),
-
-  _iconSize(28,28), _hoveredIconSize(42,42), _margin(4), _orientation(Qt::Horizontal),
-
-  _buttonMarginWidth(7), _buttonForegroundColor(QColor(200,200,200,150)), _buttonBackgroundColor(QColor(230,230,230,150)), _highlightColor(QColor(255,255,255,150)), _buttonBackgroundShape(PushButtonItem::CircleShape),
-
+  _iconSize(32,32), _hoveredIconSize(42,42), _margin(0), _orientation(Qt::Horizontal),
+  _buttonMarginWidth(0), _buttonBackgroundShape(PushButtonItem::NoShape),
   _animationMsec(100), _animationEasing(QEasingCurve::Linear) {
   setHandlesChildEvents(false);
   setCacheMode(QGraphicsItem::ItemCoordinateCache);
@@ -102,23 +100,26 @@ PushButtonItem *ToolbarItem::buildButton(QAction *action) {
 }
 //==========================
 void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+  painter->setPen(Qt::black);
+  painter->drawRect(boundingRect());
+
   QPointF pos(_margin,_margin);
+  QSizeF hbSize = hoveredButtonSize();
+  QPointF hoveredGap((_hoveredIconSize.width() - _iconSize.width())/2, (_hoveredIconSize.height() - _iconSize.height())/2);
 
   if (_activeButton) {
     _activeButton->setPos(pos);
     _activeButton->setIconSize(_hoveredIconSize);
+    pos+=QPointF(translationVector().x() * (_margin + hbSize.width()),translationVector().y() * (_margin + hbSize.height()));
+    //separator
     pos+=QPointF(translationVector().x()*_margin,translationVector().y()*_margin);
   }
+
   if (!_expanded)
     return;
 
-  QSizeF hbSize = hoveredButtonSize();
-  QPointF hoveredGap((_hoveredIconSize.width() - _iconSize.width())/2, (_hoveredIconSize.height() - _iconSize.height())/2);
   pos+= hoveredGap;
-
   for (int i=0; i < _actions.size(); ++i) {
-    pos+=QPointF(translationVector().x() * (_margin + hbSize.width()),translationVector().y() * (_margin + hbSize.height()));
-
     PushButtonItem *btn = _actionButton[_actions[i]];
     if (btn->hovered()) {
       pos-=hoveredGap;
@@ -127,8 +128,9 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
       pos+=hoveredGap;
       btn->setAnimationBehavior(AnimatedGraphicsObject::ContinuePreviousAnimation);
     }
-
-    modifyButton(btn,_iconSize,pos);
+    else
+      modifyButton(btn,_iconSize,pos);
+    pos+=QPointF(translationVector().x() * (_margin + hbSize.width()),translationVector().y() * (_margin + hbSize.height()));
   }
 }
 //==========================
@@ -138,16 +140,16 @@ void ToolbarItem::modifyButton(PushButtonItem *btn, const QSize &newSize, const 
 }
 //==========================
 QRectF ToolbarItem::boundingRect() const {
-  QSizeF hoveredIcon = hoveredButtonSize();
-  QSizeF icon = buttonSize();
-  if (!_expanded || _actions.size() == 0)
-    return QRectF(QPointF(0,0), QSizeF(hoveredButtonSize().width()+_margin*2,hoveredButtonSize().height()+_margin*2));
+  QSizeF hbSize = hoveredButtonSize();
+  QPointF tVect = translationVector();
+  QSizeF size(_margin*2+hbSize.width(),_margin*2+hbSize.height());
+  if (_expanded) {
+    size = QSizeF(size.width() + _actions.size() * tVect.x() * (_margin + hbSize.width()),
+                  size.height() + _actions.size() *  tVect.y() * (_margin + hbSize.height()));
+    size = QSizeF(size.width() + tVect.x() * _margin, size.height() + tVect.y() * _margin);
+  }
 
-  if (_orientation == Qt::Horizontal)
-    return QRectF(0,0, (hoveredIcon.width()+_margin)*2 + (_margin + icon.width())*(_actions.size()-1)+_margin*2, hoveredIcon.height()+_margin*2);
-
-  return QRectF(0,0,hoveredIcon.width()+_margin*2,(hoveredIcon.height()+_margin)*2 + (_margin + icon.height())*(_actions.size()-1)+_margin*2);
-
+  return QRectF(QPointF(0,0),size);
 }
 //==========================
 QPointF ToolbarItem::translationVector() const {
@@ -162,11 +164,22 @@ QPointF ToolbarItem::translationVector() const {
 }
 //==========================
 QSizeF ToolbarItem::hoveredButtonSize() const {
-  return QSizeF(_hoveredIconSize.width() + (_buttonMarginWidth+3)*2, _hoveredIconSize.height() + (_buttonMarginWidth+3)*2);
+  if (!_activeButton)
+    return QSizeF();
+  return _activeButton->boundingRect().size();
 }
 //==========================
 QSizeF ToolbarItem::buttonSize() const {
-  return QSizeF(_iconSize.width() + (_buttonMarginWidth+3)*2, _iconSize.height() + (_buttonMarginWidth+3)*2);
+  if (!_activeButton)
+    return QSizeF();
+  PushButtonItem *btn = 0;
+  for (int i=0;i<_actions.size();++i) {
+    PushButtonItem *btn = _actionButton[_actions[i]];
+    if (!btn->hovered())
+      return btn->boundingRect().size();
+  }
+  assert(btn);
+  return btn->boundingRect().size() - (_hoveredIconSize - _iconSize);
 }
 //==========================
 void ToolbarItem::buttonHovered(bool f) {
@@ -178,7 +191,6 @@ void ToolbarItem::buttonClicked() {
   PushButtonItem *btn = static_cast<PushButtonItem *>(sender());
   if (btn != _activeButton)
     setActiveAction(btn->action());
-
   if (btn == _activeButton)
     emit activeButtonClicked();
   else
