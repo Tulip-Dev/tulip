@@ -14,12 +14,20 @@ PROJECT(tulip)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio" AND NOT ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #visual studio does not recognize these options
+IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles JOM" )
+	SET(MSVC 1)
+ELSE()
+	SET(MSVC 0)
+endif()
+
+message("${MSVC}")
+
+IF(NOT ${MSVC}) #visual studio does not recognize these options
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused")
 ENDIF()
 
 IF(WIN32)
-	IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio" AND NOT ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #visual studio does not recognize these options 
+	IF(NOT ${MSVC}) #visual studio does not recognize these options 
 		
 		# Dynamic ling against libstdc++ on win32/MinGW 
 		# The second test is for the case where ccache is used (CMAKE_CXX_COMPILER_ARG1 contains the path to the g++ compiler)
@@ -60,8 +68,8 @@ SET(TulipMajorVersion 3)
 SET(TulipMinorVersion 6)
 SET(TulipReleaseVersion 0)
 SET(TulipVersionSeparator .)
-IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #specific options for Visual Studio
-	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #visual studio 2008 needs boost
+IF(${MSVC}) #specific options for Visual Studio
+	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9") #visual studio 2008 needs boost
 		find_package(BOOST REQUIRED)
 		include_directories(${Boost_INCLUDE_DIRS})
 		include_directories(${Boost_INCLUDE_DIRS}/boost/tr1)
@@ -294,7 +302,7 @@ ENDIF(LINUX)
 
 IF(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DQT_ASSISTANT='\"assistant\"'")
-   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #if generating for visual studio, we assume the compiler will be vc++
+   IF(${MSVC}) #if generating for visual studio, we assume the compiler will be vc++
       #recommended for now, vc++ spits out too many warnings, and renders the whole output unreadable
     IF(NOT ${CMAKE_GENERATOR} MATCHES "NMake Makefiles")
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
@@ -307,8 +315,6 @@ IF(WIN32)
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_MATH_DEFINES")
 	  #prevents VS to define min and max macros (name clash with std::min and std::max)
 	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOMINMAX")
-	  #forces ftgl static compilation (prevents link errors with tulip-ogl, functions always defined without dllimport
-	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFTGL_LIBRARY_STATIC")
 	  #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
 	  #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /NODEFAULTLIB:MSVCRT")
 	  #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /MACHINE:X86")
