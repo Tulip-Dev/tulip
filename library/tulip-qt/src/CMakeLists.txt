@@ -78,7 +78,6 @@ CSVImportWizard.cpp
 SmallMultiplesView.cpp
 SmallMultiplesNavigatorComponent.cpp
 GlOffscreenRenderer.cpp
-ThreadedComputeProperty.cpp
 )
 
 set(tulip-qt_UI
@@ -144,7 +143,6 @@ set(tulip-qt_MOC
     ../include/tulip/CSVParserConfigurationWidget.h    
     ../include/tulip/CSVImportWizard.h
     ../include/tulip/SmallMultiplesView.h
-    ../include/tulip/ThreadedComputeProperty.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)
@@ -191,30 +189,13 @@ INSTALL(TARGETS ${LibTulipQtName}
 INSTALL(FILES ${tulip-qt_UI_SRCS} DESTINATION ${TulipIncludeInstallDir}/tulip/)
 
 IF(WIN32)
-  FIND_LIBRARY_GLOB(QTCORE_INSTALL_PATH "QtCore4.dll")
-  FIND_LIBRARY_GLOB(QTGUI_INSTALL_PATH "QtGui4.dll")
-  FIND_LIBRARY_GLOB(QTNETWORK_INSTALL_PATH "QtNetwork4.dll")
-  FIND_LIBRARY_GLOB(QTOPENGL_INSTALL_PATH "QtOpenGL4.dll")
-  FIND_LIBRARY_GLOB(QTXML_INSTALL_PATH "QtXml4.dll")
-  FIND_LIBRARY_GLOB(QTASSISTANT_INSTALL_PATH "QtAssistantClient4.dll")
-  FIND_LIBRARY_GLOB(QTSCRIPT_INSTALL_PATH "QtScript4.dll")
-  FIND_LIBRARY_GLOB(QTSQL_INSTALL_PATH "QtSql4.dll")
-  FIND_LIBRARY_GLOB(QTWEBKIT_INSTALL_PATH "QtWebkit4.dll")
-  FIND_LIBRARY_GLOB(QTXMLPATTERNS_INSTALL_PATH "QtXmlPatterns4.dll")
-  FIND_LIBRARY_GLOB(PHONON_INSTALL_PATH "phonon4.dll")
-
-  INSTALL_EXTERNAL_LIB(QTCORE_INSTALL_PATH libtulip_qt)
-  INSTALL_EXTERNAL_LIB(QTGUI_INSTALL_PATH libtulip_qt)
-  INSTALL_EXTERNAL_LIB(QTNETWORK_INSTALL_PATH libtulip_qt)
-  INSTALL_EXTERNAL_LIB(QTOPENGL_INSTALL_PATH libtulip_qt)
-  INSTALL_EXTERNAL_LIB(QTXML_INSTALL_PATH libtulip_qt)
-  INSTALL_EXTERNAL_LIB(QTASSISTANT_INSTALL_PATH libtulip_qt)
-  INSTALL_EXTERNAL_LIB(QTSCRIPT_INSTALL_PATH libtulip_qt)
-  INSTALL_EXTERNAL_LIB(QTSQL_INSTALL_PATH libtulip_qt)
-  INSTALL_EXTERNAL_LIB(QTWEBKIT_INSTALL_PATH libtulip_qt)
-  INSTALL_EXTERNAL_LIB(QTXMLPATTERNS_INSTALL_PATH libtulip_qt)
-  INSTALL_EXTERNAL_LIB(PHONON_INSTALL_PATH libtulip_qt)
-ELSEIF(APPLE)  
+  #Copy Qt libs
+  set(QT_LIBS phonon QtCLucene QtCore QtHelp QtGui QtNetwork QtOpenGL QtScript QtSql QtSvg QtWebKit QtXml QtXmlPatterns)
+  FOREACH(QT_LIB ${QT_LIBS})
+    FIND_LIBRARY_GLOB(QT_LIB_FILE "${QT_LIB}4.dll")
+    INSTALL_EXTERNAL_LIB(QT_LIB_FILE libtulip_qt)
+  ENDFOREACH()
+ELSEIF(APPLE)
   #Copy Qt libs
   set(QT_LIBS phonon QtAssistant QtCore QtDBus QtHelp QtGui QtNetwork QtOpenGL QtScript QtSql QtSvg QtWebKit QtXml QtXmlPatterns)
   FOREACH(QT_LIB ${QT_LIBS})
