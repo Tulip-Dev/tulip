@@ -21,6 +21,7 @@
 #include <tulip/Iterator.h>
 #include <tulip/tulipconf.h>
 #include <vector>
+#include <stdlib.h>
 
 namespace tlp {
 /**
