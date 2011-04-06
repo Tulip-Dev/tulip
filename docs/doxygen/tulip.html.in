@@ -1,7 +1,8 @@
 <HTML>
 <HEAD>
- <LINK REL="../common/tulip-doxygen.css" HREF="stylesheets.css">
  <LINK href="../common/favicon.ico" rel="SHORTCUT ICON">
+ <LINK href="tabs.css" rel="stylesheet" type="text/css"/>
+ <LINK href="doxygen.css" rel="stylesheet" type="text/css"/>
  <TITLE>Tulip Software home page</TITLE>
  <META NAME="Keywords" CONTENT="tulip,graph,drawing,information,visualization,tree,dag,opengl,3D,clustering,software,navigation,gpl,free,library">
  <META NAME="title" content="Tulip Software home page">
