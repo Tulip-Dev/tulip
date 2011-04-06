@@ -110,7 +110,7 @@ namespace tlp {
           * @brief return an iterator on out objects (Listener/Observer), the iterator garantee that all objects are alive (not deleted during hold or notify)
           */
         tlp::Iterator<tlp::node> *getOutObjects() const;
-
+		enum OLOEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
     private:
         static tlp::VectorGraph                oGraph;         /** the graph that store all observers and connection between them*/
         static tlp::NodeProperty<OLOObject *>  oPointer;       /** store a pointer to the object represented by a node */
@@ -121,9 +121,6 @@ namespace tlp {
         static unsigned int              unholding;      /** counter of nested unhold calls */
         static unsigned int              holdCounter;    /** counter of nested holds */
         static bool                      _initialized;   /** use to initialize oGraph when the library is loaded (nice hack) */
-
-        enum OLOEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
-
     private:
         tlp::node n; /** node that represent that object in the OLOGraph.*/
         /**
