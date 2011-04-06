@@ -301,10 +301,6 @@ ENDIF(LINUX)
 IF(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DQT_ASSISTANT='\"assistant\"'")
    IF(${MSVC}) #if generating for visual studio, we assume the compiler will be vc++
-      #recommended for now, vc++ spits out too many warnings, and renders the whole output unreadable
-    IF(NOT ${CMAKE_GENERATOR} MATCHES "NMake Makefiles")
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
-    ENDIF()
 	  #allows for link time optimization
 	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
 	  #tells VS to use multiple threads to compile
