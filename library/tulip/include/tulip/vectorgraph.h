@@ -652,6 +652,7 @@ namespace tlp {
 
 
 #ifndef NDEBUG //these two function are used to insure that property has been allocated in debug mode
+#if !defined(_MSC_VER) || defined(DLL_TULIP) //MSVC does not like definitions of DLLImport functions. If using MSVC, defining these only if compiling the Tulip DLL.
     template <typename TYPE>
             bool NodeProperty<TYPE>::isValid() const {
         if (this->_graph == 0) return false;
@@ -665,6 +666,7 @@ namespace tlp {
         if (this->_array == 0) return false;
         return this->_graph->isEdgeAttr(this->_array);
     }
+#endif
 #endif
 }
 #endif // VECTORGRAPH_H
