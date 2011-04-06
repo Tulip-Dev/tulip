@@ -215,5 +215,5 @@ ELSEIF(APPLE)
     INSTALL_EXTERNAL_LIB(QT_PLUGINS_DEPENDENCIES libtulip_qt)
   ENDFOREACH()
   #Copy Qt menu.
-  INSTALL(DIRECTORY "/Library/Frameworks/QtGui.framework/Versions/Current/Resources/qt_menu.nib" DESTINATION "${TulipAppleResourcesDir}" COMPONENT libtulip_qt OPTIONAL)
+  INSTALL(DIRECTORY "${QT_LIBRARY_DIR}/QtGui.framework/Versions/Current/Resources/qt_menu.nib" DESTINATION "${TulipAppleResourcesDir}" COMPONENT libtulip_qt OPTIONAL)
 ENDIF()
