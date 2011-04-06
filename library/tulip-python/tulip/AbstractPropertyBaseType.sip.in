@@ -38,11 +38,7 @@ tlp.@PROPERTY_TYPE@Property(tlp.Graph, string name="")
 %End	
 	
 	@PROPERTY_TYPE@Property(tlp::Graph *g, std::string n="");
-	
-%Docstring
-tlp.@PROPERTY_TYPE@Property.setAllNodeValue(@PYTHON_NODE_TYPE@)
-%End
-	
+		
 	void setAllNodeValue(const @PROPERTY_NODE_TYPE@ v);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setAllNodeValue(@PYTHON_NODE_TYPE@)
