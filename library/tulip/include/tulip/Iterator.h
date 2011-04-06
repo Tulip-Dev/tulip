@@ -88,8 +88,8 @@ private:
 #endif // DOXYGEN_NOTFOR_DEVEL
 /*@}*/
 #ifdef _MSC_VER
-  template class Iterator<edge>;
-  template class Iterator<node>;
+  template struct Iterator<edge>;
+  template struct Iterator<node>;
 #endif
 
 }
