@@ -78,6 +78,7 @@ CSVImportWizard.cpp
 SmallMultiplesView.cpp
 SmallMultiplesNavigatorComponent.cpp
 GlOffscreenRenderer.cpp
+ThreadedComputeProperty.cpp
 )
 
 set(tulip-qt_UI
@@ -160,6 +161,7 @@ set(tulip-qt_MOC
     ../include/tulip/BaseGraphicsViewComponent.h
     ../include/tulip/GlMainWidgetItem.h
     ../include/tulip/TabWidgetHidableMenuGraphicsProxy.h
+    ../include/tulip/ThreadedComputeProperty.h
 )
 ENDIF(QT_VERSION_MINOR GREATER 3)
 
