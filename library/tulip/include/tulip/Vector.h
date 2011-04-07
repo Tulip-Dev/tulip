@@ -174,11 +174,6 @@ namespace tlp {
   template struct Array<bool, 3>;
   template struct Array<bool, 4>;
   template struct Array<bool, 5>;
-  template class Vector<bool, 1>;
-  template class Vector<bool, 2>;
-  template class Vector<bool, 3>;
-  template class Vector<bool, 4>;
-  template class Vector<bool, 5>;
   
   template struct Array<double, 1>;
   template struct Array<double, 2>;

@@ -146,9 +146,9 @@ private:
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
 };
 
-class TLP_SCOPE CoordVectorProperty:public AbstractVectorProperty<tlp::CoordVectorType, tlp::Coord> { 
+class TLP_SCOPE CoordVectorProperty:public AbstractVectorProperty<tlp::CoordVectorType, tlp::PointType> { 
 public :
- CoordVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<CoordVectorType, tlp::Coord>(g, n) {}
+  CoordVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<CoordVectorType, tlp::PointType>(g, n) {}
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   std::string getTypename() const {
