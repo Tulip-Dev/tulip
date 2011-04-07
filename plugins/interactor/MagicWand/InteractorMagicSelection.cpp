@@ -42,6 +42,10 @@ class InteractorMagicSelection  : public InteractorChainOfResponsibility {
                     "Select neighbour elements which have the same value on a metric");
     }
 
+    ~InteractorMagicSelection() {
+    	delete configWidget;
+    }
+
     virtual bool isCompatible(const std::string &viewName) {
       return viewName=="Node Link Diagram view";
     }
