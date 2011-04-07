@@ -166,9 +166,8 @@ public:
   /**
    * Deprecated function, use setSuperGraph() instead.
    */
-  void setFather(Graph *sg) {
+  void _DEPRECATED setFather(Graph *sg) {
     std::cerr << __PRETTY_FUNCTION__ << " is deprecated, use setSuperGraph() instead." << std::endl;
-    setFather(sg);
   }
   /**
    * Returns an iterator on all the sub-graphs of the graph.
