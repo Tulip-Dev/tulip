@@ -3,23 +3,33 @@
 
 #include <QtGui/QGraphicsItemGroup>
 
+namespace tlp {
 class ToolbarItem;
-class PushButtonItem;
+class Interactor;
 
-class InteractorToolbarItem: public QGraphicsItemGroup {
+class InteractorToolbarItem: public QObject, public QGraphicsItemGroup {
+  Q_OBJECT
 public:
-  InteractorToolbarItem(QGraphicsItem *parent=0, QGraphicsScene *scene=0);
+  InteractorToolbarItem(std::list<Interactor *> interactors, QGraphicsItem *parent=0, QGraphicsScene *scene=0);
   virtual ~InteractorToolbarItem();
 
+  virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget=0);
+  virtual QRectF boundingRect() const;
+
+protected slots:
+  void sceneResized();
+
+protected:
+  virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+
 private:
+  std::list<Interactor *> _interactors;
   ToolbarItem *_toolbar;
-  PushButtonItem *_configurationWidgetButton;
 
-  Qt::Orientation _orientation;
-
-  QPointF settingsButtonPos() const;
-  QPointF configurationWidgetPos() const;
-  QPointF toolbarPos() const;
+  Qt::ToolBarArea _snapArea;
+  int _margin;
+  int _spacing;
 };
+}
 
 #endif // INTERACTORTOOLBARITEM_H

@@ -30,7 +30,7 @@ GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, i
     QGraphicsObject(),
     glMainWidget(glMainWidget), redrawNeeded(true), renderingStore(NULL) {
 
-  setFlag(QGraphicsItem::ItemIsMovable, true);
+//  setFlag(QGraphicsItem::ItemIsMovable, true);
   setFlag(QGraphicsItem::ItemIsSelectable, true);
   setFlag(QGraphicsItem::ItemIsFocusable, true);
   setAcceptHoverEvents(true);

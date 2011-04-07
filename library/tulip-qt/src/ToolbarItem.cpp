@@ -4,10 +4,16 @@
 #include "tulip/HighlightGraphicsEffect.h"
 #include "tulip/QtAnimationsManager.h"
 #include <QtGui/QPainter>
+#include <QtGui/QApplication>
+#include <QtGui/QPalette>
 #include <QtCore/QParallelAnimationGroup>
 #include <QtCore/QSequentialAnimationGroup>
 #include <QtCore/QTimer>
 #include <assert.h>
+
+//FIXME: remove me
+#include <iostream>
+using namespace std;
 
 namespace tlp {
 ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
@@ -100,19 +106,35 @@ PushButtonItem *ToolbarItem::buildButton(QAction *action) {
 }
 //==========================
 void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-  painter->setPen(Qt::black);
-  painter->drawRect(boundingRect());
-
   QPointF pos(_margin,_margin);
   QSizeF hbSize = hoveredButtonSize();
+  QPointF tVect = translationVector();
   QPointF hoveredGap((_hoveredIconSize.width() - _iconSize.width())/2, (_hoveredIconSize.height() - _iconSize.height())/2);
 
   if (_activeButton) {
     _activeButton->setPos(pos);
     _activeButton->setIconSize(_hoveredIconSize);
-    pos+=QPointF(translationVector().x() * (_margin + hbSize.width()),translationVector().y() * (_margin + hbSize.height()));
-    //separator
-    pos+=QPointF(translationVector().x()*_margin,translationVector().y()*_margin);
+    pos+=QPointF(tVect.x() * (_margin + hbSize.width()),tVect.y() * (_margin + hbSize.height()));
+    pos+=QPointF(tVect.x()*_margin,tVect.y()*_margin);
+
+    if (!_expanded) { // expander
+      int ew = 10,esp=0;
+      vector<QPointF> expanderPoints(3);
+      expanderPoints[0] = QPointF(pos.x() + esp * tVect.x(), pos.y() + esp * tVect.y());
+      expanderPoints[1] = QPointF(expanderPoints[0].x() + ew * tVect.y(), expanderPoints[0].y() + ew * tVect.x());
+      expanderPoints[2] = QPointF(expanderPoints[0].x() + ew/2, expanderPoints[0].y() + ew/2);
+
+      QColor c = QApplication::palette().color(QPalette::Shadow);
+      painter->setPen(QPen(c));
+      painter->setBrush(c);
+      QPainterPath path;
+      path.moveTo(expanderPoints[0]);
+      path.lineTo(expanderPoints[1]);
+      path.lineTo(expanderPoints[2]);
+      path.lineTo(expanderPoints[0]);
+      path.setFillRule(Qt::WindingFill);
+      painter->drawPath(path);
+    }
   }
 
   if (!_expanded)
@@ -130,8 +152,11 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
     }
     else
       modifyButton(btn,_iconSize,pos);
-    pos+=QPointF(translationVector().x() * (_margin + hbSize.width()),translationVector().y() * (_margin + hbSize.height()));
+    pos+=QPointF(tVect.x() * (_margin + hbSize.width()),tVect.y() * (_margin + hbSize.height()));
   }
+
+  for (QMap<QAction *,PushButtonItem *>::iterator it = _actionButton.begin();it != _actionButton.end();++it)
+    it.value()->setAnimated(true);
 }
 //==========================
 void ToolbarItem::modifyButton(PushButtonItem *btn, const QSize &newSize, const QPointF &newPos) const {
@@ -148,7 +173,8 @@ QRectF ToolbarItem::boundingRect() const {
                   size.height() + _actions.size() *  tVect.y() * (_margin + hbSize.height()));
     size = QSizeF(size.width() + tVect.x() * _margin, size.height() + tVect.y() * _margin);
   }
-
+  else
+    size = QSizeF(size.width() + tVect.x() * 5, size.height() + tVect.y() * 5);
   return QRectF(QPointF(0,0),size);
 }
 //==========================
@@ -277,5 +303,14 @@ void ToolbarItem::collapse() {
     _collapseTimeout = 0;
   }
   setExpanded(false);
+}
+//==========================
+void ToolbarItem::setOrientation(Qt::Orientation o) {
+  if (o == _orientation)
+    return;
+  _orientation = o;
+  for (QMap<QAction *,PushButtonItem *>::iterator it = _actionButton.begin();it != _actionButton.end();++it)
+    it.value()->setAnimated(false);
+  update();
 }
 }

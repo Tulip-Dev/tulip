@@ -33,7 +33,7 @@ public:
   void setMargin(int m) { _margin = m; update(); }
 
   Qt::Orientation orientation() const { return _orientation; }
-  void setOrientation(Qt::Orientation o) { _orientation = o; update(); }
+  void setOrientation(Qt::Orientation o);
 
   int buttonMarginWidth() const { return _buttonMarginWidth; }
   void setButtonMarginWidth(int m) { _buttonMarginWidth = m; update(); }

@@ -11,6 +11,8 @@
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtOpenGL/QGLWidget>
 
+#include "tulip/InteractorToolbarItem.h"
+
 // FIXME: remove me
 #include <QtGui/QGraphicsWidget>
 #include <QtGui/QGraphicsLinearLayout>
@@ -141,12 +143,8 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
 }
 // ===================================
 void AbstractGraphicsView::buildInteractorsToolbar() {
-  ToolbarItem *tb = new ToolbarItem();
-  for (list<Interactor *>::iterator it = _interactors.begin(); it != _interactors.end(); ++it)
-    tb->addAction((*it)->getAction());
-  tb->setPos(50,50);
-  tb->setFlag(QGraphicsItem::ItemIsMovable);
-  addToScene(tb);
+  InteractorToolbarItem *toolbar = new InteractorToolbarItem(_interactors);
+  addToScene(toolbar);
 }
 // ===================================
 bool AbstractGraphicsView::eventFilter(QObject *obj, QEvent *e) {
