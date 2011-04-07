@@ -31,8 +31,8 @@ bool ConnectedComponent::run() {
   std::vector<std::set<node> > components;
   ConnectedTest::computeConnectedComponents(graph, components);
   // assign the index of each component as value for its nodes
-  unsigned int curComponent = 0;
-  for (; curComponent < components.size(); curComponent++) {
+  //unsigned int curComponent = 0;
+  for (unsigned int curComponent=0; curComponent < components.size(); ++curComponent) {
     std::set<node>& component = components[curComponent];
     for(std::set<node>::const_iterator itNode = component.begin(); itNode!=component.end(); ++itNode) {
       doubleResult->setNodeValue(*itNode, curComponent);
@@ -43,20 +43,14 @@ bool ConnectedComponent::run() {
     while (itE->hasNext()) {
       edge ite=itE->next();
       node source= graph->source(ite);
-      node target= graph->target(ite);
-      if (doubleResult->getNodeValue(source) == doubleResult->getNodeValue(target))
-	doubleResult->setEdgeValue(ite, doubleResult->getNodeValue(source));
-      else
-	doubleResult->setEdgeValue(ite,curComponent);
+  //    node target= graph->target(ite);
+  //    if (doubleResult->getNodeValue(source) == doubleResult->getNodeValue(target))
+  	doubleResult->setEdgeValue(ite, doubleResult->getNodeValue(source));
+  //    else
+  //	doubleResult->setEdgeValue(ite,curComponent);
     } delete itE;
 
   return true;
 }
 //======================================================
-
-
-
-
-
-
 
