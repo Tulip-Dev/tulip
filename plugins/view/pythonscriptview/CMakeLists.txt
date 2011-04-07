@@ -3,6 +3,8 @@ IF(SIP_OK)
 
 INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQSCINTILLA_DLL")
+
 # Force to use SIP and QScintilla headers located in thirdparty and not those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${qscintilla2Include} ${SIP_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
