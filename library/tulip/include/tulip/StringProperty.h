@@ -48,9 +48,9 @@ public :
   }
 };
 
-  class TLP_SCOPE StringVectorProperty:public AbstractVectorProperty<tlp::StringVectorType, std::string>{ 
+  class TLP_SCOPE StringVectorProperty:public AbstractVectorProperty<tlp::StringVectorType, tlp::StringType>{ 
 public :
-  StringVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<StringVectorType, std::string>(g, n) {}
+  StringVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<StringVectorType, tlp::StringType>(g, n) {}
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );

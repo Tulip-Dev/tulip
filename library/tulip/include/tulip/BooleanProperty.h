@@ -66,9 +66,9 @@ public :
   Iterator<edge> *getEdgesEqualTo(const bool val, Graph *g = 0);
 };
 
-class TLP_SCOPE BooleanVectorProperty:public AbstractVectorProperty<tlp::BooleanVectorType, bool> { 
+class TLP_SCOPE BooleanVectorProperty:public AbstractVectorProperty<tlp::BooleanVectorType, tlp::BooleanType> { 
 public :
-  BooleanVectorProperty(Graph *g, std::string n="") :AbstractVectorProperty<BooleanVectorType, bool>(g, n) {}
+  BooleanVectorProperty(Graph *g, std::string n="") :AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>(g, n) {}
   // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   std::string getTypename() const {

@@ -69,9 +69,9 @@ private:
   void computeMinMax(Graph * sg=NULL);
 };
 
-class TLP_SCOPE SizeVectorProperty:public AbstractVectorProperty<tlp::SizeVectorType, tlp::Size> { 
+class TLP_SCOPE SizeVectorProperty:public AbstractVectorProperty<tlp::SizeVectorType, tlp::SizeType> { 
 public :
-  SizeVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<SizeVectorType, Size>(g, n) {}
+  SizeVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<SizeVectorType, SizeType>(g, n) {}
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
