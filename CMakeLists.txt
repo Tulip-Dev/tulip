@@ -144,7 +144,11 @@ FIND_PACKAGE(OpenMP QUIET)
 IF(OPENMP_FOUND)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
    IF(WIN32)
-     SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lgomp -lpthread")
+	  IF(${MSVC})
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /openmp")
+	  ELSE()
+		SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lgomp -lpthread")
+	  ENDIF()
    ENDIF()
 ELSE(OPENMP_FOUND)
   IF(WIN32)
@@ -300,20 +304,23 @@ ENDIF(LINUX)
 
 IF(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DQT_ASSISTANT='\"assistant\"'")
-   IF(${MSVC}) #if generating for visual studio, we assume the compiler will be vc++
-	  #allows for link time optimization
-	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
+   IF(${MSVC})
+	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W1")
 	  #tells VS to use multiple threads to compile
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 	  #makes VS define M_PI
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_MATH_DEFINES")
 	  #prevents VS to define min and max macros (name clash with std::min and std::max)
 	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOMINMAX")
+	  
 	  #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
 	  #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /NODEFAULTLIB:MSVCRT")
 	  #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /MACHINE:X86")
+	  
+	  #allows for link time optimization
+	  #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
 	  #link time optimization
-	  SET(CMAKE_SHARED_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /LTCG")
+	  #SET(CMAKE_SHARED_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /LTCG")
    ENDIF()
 ENDIF(WIN32)
 IF(APPLE)
