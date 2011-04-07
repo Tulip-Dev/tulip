@@ -366,11 +366,11 @@ public :
 	void setUniformVec4Int(const std::string &variableName, const int i1, const int i2, const int i3, const int i4);
 
 	void setUniformBool(const std::string &variableName, const bool b);
-	void setUniformVec2Bool(const std::string &variableName, const Vector<bool, 2> &vec2b);
+	void setUniformVec2Bool(const std::string &variableName, const Array<bool, 2> &vec2b);
 	void setUniformVec2Bool(const std::string &variableName, const bool b1, const bool b2);
-	void setUniformVec3Bool(const std::string &variableName, const Vector<bool, 3> &vec3b);
+	void setUniformVec3Bool(const std::string &variableName, const Array<bool, 3> &vec3b);
 	void setUniformVec3Bool(const std::string &variableName, const bool b1, const bool b2, const bool b3);
-	void setUniformVec4Bool(const std::string &variableName, const Vector<bool, 4> &vec4b);
+	void setUniformVec4Bool(const std::string &variableName, const Array<bool, 4> &vec4b);
 	void setUniformVec4Bool(const std::string &variableName, const bool i1, const bool i2, const bool i3, const bool i4);
 
 	void setAttributeFloat(const std::string &variableName, const float f);
@@ -390,11 +390,11 @@ public :
 	void setAttributeVec4Int(const std::string &variableName, const int i1, const int i2, const int i3, const int i4);
 
 	void setAttributeBool(const std::string &variableName, const bool b);
-	void setAttributeVec2Bool(const std::string &variableName, const Vector<bool, 2> &vec2b);
+	void setAttributeVec2Bool(const std::string &variableName, const Array<bool, 2> &vec2b);
 	void setAttributeVec2Bool(const std::string &variableName, const bool b1, const bool b2);
-	void setAttributeVec3Bool(const std::string &variableName, const Vector<bool, 3> &vec3b);
+	void setAttributeVec3Bool(const std::string &variableName, const Array<bool, 3> &vec3b);
 	void setAttributeVec3Bool(const std::string &variableName, const bool b1, const bool b2, const bool b3);
-	void setAttributeVec4Bool(const std::string &variableName, const Vector<bool, 4> &vec4b);
+	void setAttributeVec4Bool(const std::string &variableName, const Array<bool, 4> &vec4b);
 	void setAttributeVec4Bool(const std::string &variableName, const bool b1, const bool b2, const bool b3, const bool b4);
 
 	void setUniformTextureSampler(const std::string &samplerVariateName, const int samplerId);
@@ -446,19 +446,19 @@ public :
 	void setUniformVec4IntArray(const std::string &variableName, const unsigned int vec4iCount, const int *i);
 
 	template <unsigned int SIZE>
-	void setUniformBoolArray(const std::string &variableName, const Vector<bool, SIZE> &vecb);
+	void setUniformBoolArray(const std::string &variableName, const Array<bool, SIZE> &vecb);
 	void setUniformBoolArray(const std::string &variableName, const unsigned int bCount, const bool *b);
 
 	template <unsigned int SIZE>
-	void setUniformVec2BoolArray(const std::string &variableName, const Array<Vector<bool, 2>, SIZE> &vecvec2b);
+	void setUniformVec2BoolArray(const std::string &variableName, const Array<Array<bool, 2>, SIZE> &vecvec2b);
 	void setUniformVec2BoolArray(const std::string &variableName, const unsigned int vec2bCount, const bool *b);
 
 	template <unsigned int SIZE>
-	void setUniformVec3BoolArray(const std::string &variableName, const Array<Vector<bool, 3>, SIZE> &vecvec3b);
+	void setUniformVec3BoolArray(const std::string &variableName, const Array<Array<bool, 3>, SIZE> &vecvec3b);
 	void setUniformVec3BoolArray(const std::string &variableName, const unsigned int vec3bCount, const bool *b);
 
 	template <unsigned int SIZE>
-	void setUniformVec4BoolArray(const std::string &variableName, const Array<Vector<bool, 4>, SIZE> &vecvec4b);
+	void setUniformVec4BoolArray(const std::string &variableName, const Array<Array<bool, 4>, SIZE> &vecvec4b);
 	void setUniformVec4BoolArray(const std::string &variableName, const unsigned int vec4bCount, const bool *b);
 
 	void getUniformFloatVariableValue(const std::string &variableName, float *value);
