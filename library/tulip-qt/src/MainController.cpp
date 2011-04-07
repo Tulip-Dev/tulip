@@ -214,13 +214,20 @@ namespace tlp {
       delete graphMenu;
       delete undoAction;
       delete redoAction;
-
       delete clusterTreeWidget;
       delete propertiesWidget;
       delete eltProperties;
-
       delete tabWidgetDock;
-
+      delete configWidgetDock;
+      delete intMenu;
+      delete stringMenu;
+      delete sizesMenu;
+      delete colorsMenu;
+      delete layoutMenu;
+      delete metricMenu;
+      delete selectMenu;
+      delete generalMenu;
+      delete morph;
       delete currentGraph;
     }
   }
