@@ -366,9 +366,7 @@ void TulipApp::closeTab(int index){
   if(index!=tabWidget->currentIndex())
     tabWidget->setCurrentIndex(index);
 
-  Graph *graph=tabIndexToController[index]->getGraph();
-  while(graph->getRoot()!=graph)
-    graph=graph->getRoot();
+  Graph *graph=tabIndexToController[index]->getGraph()->getRoot();
 
   QMessageBox::StandardButton answer =askSaveGraph(graph->getAttribute<string>("name"),index);
 
@@ -378,10 +376,10 @@ void TulipApp::closeTab(int index){
 
     map<int,Controller *> newTabIndexToController;
     for(map<int,Controller *>::const_iterator it=tabIndexToController.begin();it!=tabIndexToController.end();++it){
-      if((*it).first<index)
-        newTabIndexToController[(*it).first]=(*it).second;
+      if(it->first<index)
+        newTabIndexToController[it->first]=it->second;
       else if((*it).first>index)
-        newTabIndexToController[(*it).first-1]=(*it).second;
+        newTabIndexToController[it->first-1]=it->second;
     }
     tabIndexToController=newTabIndexToController;
 
