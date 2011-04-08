@@ -454,17 +454,24 @@ namespace tlp {
             setHaveToCompute();
     }
 
-    void GlQuadTreeLODCalculator::treatEvent(const Event &ev){
+    void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
       const GlSceneEvent *sceneEv = dynamic_cast<const GlSceneEvent *>(&ev);
-      const Camera *camera=dynamic_cast<Camera *>(ev.sender());
       if(sceneEv){
         setHaveToCompute();
-      }else if(camera){
-        if(ev.type()==Event::TLP_DELETE){
-          destroy(camera);
-        }
-      }else{
-        assert(false);
+      } else {
+	const Camera *camera=dynamic_cast<Camera *>(ev.sender());
+	if (camera) {
+	  if (ev.type()==Event::TLP_DELETE) {
+	    destroy(camera);
+	  }
+	} else {
+	  const PropertyEvent* pEvt = dynamic_cast<const PropertyEvent *>(&ev);
+	  if (pEvt)
+	    PropertyObserver::treatEvent(ev);
+	  else {
+	    assert(false);
+	  }
+	}
       }
     }
 
