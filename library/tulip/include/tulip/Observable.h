@@ -552,7 +552,7 @@ namespace tlp {
 	void _DEPRECATED notifyDestroy();
 
 	/**
-	 * Return the number of OnLooker (ie : Listeners + Observers)
+	 * Return the number of Observers
 	 */
 	unsigned int countObservers() const ;
 
@@ -561,6 +561,10 @@ namespace tlp {
 	 */
 	unsigned int countOnLookers() const;
 
+	/**
+	 * Return the number of Listeners
+	 */
+	unsigned int countListeners() const;
   /**
           * @brief remove all Observer/Listener of the observable
           *

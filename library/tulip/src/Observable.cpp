@@ -50,6 +50,23 @@ namespace {
         }
         tlp::NodeProperty<bool> alive;
     } objectAlive;
+    //======================================================================
+    template<unsigned int linkType>
+    struct LinkFilter {
+      bool operator()(tlp::node n) {
+	edge link(oGraph.existEdge(n, oNode));
+	return (link.isValid() && (oType[link] & linkType));
+      }
+
+      LinkFilter(const VectorGraph& graph, 
+		 const EdgeProperty<unsigned char>& type,
+		 node n): oGraph(graph), oType(type), oNode(n) {}
+
+      const VectorGraph& oGraph;
+      const EdgeProperty<unsigned char>& oType;
+      node oNode;
+    };
+    
 }
 
 
@@ -410,13 +427,25 @@ namespace tlp {
     }
     //----------------------------------------
     unsigned int Observable::countObservers() const {
-      return countOnLookers();
+      unsigned int result = 0;
+      node n;
+      forEach(n, (new FilterIterator<node, LinkFilter<OBSERVER> >(oGraph.getInNodes(getNode()), LinkFilter<OBSERVER>(oGraph, oType, getNode()))))
+        ++result;
+      return result;
     }
     //----------------------------------------
     unsigned int Observable::countOnLookers() const {
       Observable *obs ;
       unsigned int result = 0;
       forEach(obs, getOnlookers())
+        ++result;
+      return result;
+    }
+    //----------------------------------------
+    unsigned int Observable::countListeners() const {
+      unsigned int result = 0;
+      node n;
+      forEach(n, (new FilterIterator<node, LinkFilter<LISTENER> >(oGraph.getInNodes(getNode()), LinkFilter<LISTENER>(oGraph, oType, getNode()))))
         ++result;
       return result;
     }
