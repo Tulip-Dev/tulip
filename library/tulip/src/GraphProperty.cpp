@@ -46,7 +46,6 @@ GraphProperty::~GraphProperty() {
       getNodeDefaultValue()->removeGraphObserver(this);
     }
   }
-  notifyDestroy(this);
 }
 //==============================
 void GraphProperty::setAllNodeValue(const GraphType::RealType& g) {
