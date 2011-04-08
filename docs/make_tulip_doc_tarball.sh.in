@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# This script intends to create a tarball of html
+# generated docs
+# the first parameter is the toplevel docs directory
+# it is optional, default is the directory where this script resides
+# the second one is the directory where the tarball has to be created
+# it is optional the default value is /tmp
+
+DOCS_DIR=$(dirname $0)
+OUTPUT_DIR=/tmp
+# if $1 is given it is the parent directory
+# of the generated docs
+if [ $# -eq 1 ]; then
+  DOCS_DIR=$1
+fi
+
+# if $2 is given it is the parent directory
+# of the created html tarball doc directory
+if [ $# -eq 2 ]; then
+  OUTPUT_DIR=$2
+fi
+
+OUTPUT_DOC_DIR=$OUTPUT_DIR/tulip-@TulipVersion@-html
+
+# if OUTPUT_DOC_DIR already exist
+# remove it
+if [ -d $OUTPUT_DOC_DIR ]; then
+  rm -rf $OUTPUT_DOC_DIR
+fi
+
+# create OUTPUT_DOC_DIR
+mkdir $OUTPUT_DOC_DIR
+COMMON_DOC_DIR=$OUTPUT_DOC_DIR/common
+mkdir $COMMON_DOC_DIR
+DOXYGEN_DOC_DIR=$OUTPUT_DOC_DIR/doxygen
+mkdir $DOXYGEN_DOC_DIR
+DEV_DOC_DIR=$OUTPUT_DOC_DIR/developerHandbook
+mkdir $DEV_DOC_DIR
+USER_DOC_DIR=$OUTPUT_DOC_DIR/userHandbook
+mkdir $USER_DOC_DIR
+
+#copy common files
+cp $DOCS_DIR/common/*.png $DOCS_DIR/common/*.gif $DOCS_DIR/common/*.css $DOCS_DIR/common/*.ico $OUTPUT_DOC_DIR/common
+
+#copy doxygen files
+cp $DOCS_DIR/doxygen/allPlugins*.html $DOCS_DIR/doxygen/tulip*.html $OUTPUT_DOC_DIR/doxygen
+cp -r $DOCS_DIR/doxygen/tulip*-lib $OUTPUT_DOC_DIR/doxygen
+#remove not needed files
+find $OUTPUT_DOC_DIR/doxygen/ -name '*.m*' | xargs rm
+
+#copy developerHandbook files
+cp -r $DOCS_DIR/developerHandbook/html $DOCS_DIR/developerHandbook/images $OUTPUT_DOC_DIR/developerHandbook
+#remove not needed files
+find $OUTPUT_DOC_DIR/developerHandbook -path '*/.svn' | xargs rm -rf
+
+#copy userHandbook files
+cp -r $DOCS_DIR/userHandbook/html $DOCS_DIR/userHandbook/images $OUTPUT_DOC_DIR/userHandbook
+#remove not needed files
+find $OUTPUT_DOC_DIR/userHandbook -path '*/.svn' | xargs rm -rf
+
+#produce the tarball
+cd $OUTPUT_DIR
+tar jcvf $OUTPUT_DIR/tulip-@TulipVersion@-html.tar.bz2 tulip-@TulipVersion@-html
+echo documentation tarball $OUTPUT_DIR/tulip-@TulipVersion@-html.tar.bz2 built
