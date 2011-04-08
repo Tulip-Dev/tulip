@@ -166,7 +166,7 @@ public:
   /**
    * Deprecated function, use setSuperGraph() instead.
    */
-  void _DEPRECATED setFather(Graph *sg) {
+  void _DEPRECATED setFather(Graph *) {
     std::cerr << __PRETTY_FUNCTION__ << " is deprecated, use setSuperGraph() instead." << std::endl;
   }
   /**
@@ -435,7 +435,7 @@ public:
    */
   virtual Iterator<std::string>* getLocalProperties()=0;
   /**
-   * Returns an iterator on the names of the properties inherited from the graph’s ancestors.
+   * Returns an iterator on the names of the properties inherited from the graph���s ancestors.
    */
   virtual Iterator<std::string>* getInheritedProperties()=0;
   /**
@@ -447,7 +447,7 @@ public:
    */
   virtual Iterator<PropertyInterface*>* getLocalObjectProperties()=0;
   /**
-   * Returns an iterator on the properties inherited from the graph’s ancestors.
+   * Returns an iterator on the properties inherited from the graph���s ancestors.
    */
   virtual Iterator<PropertyInterface*>* getInheritedObjectProperties()=0;
   /**
