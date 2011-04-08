@@ -30,11 +30,11 @@ MACRO(GEN_PROPERTY_BINDINGS TEMPLATE_FILE
   
 ENDMACRO(GEN_PROPERTY_BINDINGS)
 
-GEN_PROPERTY_BINDINGS("AbstractPropertyBaseType.sip.in" "BooleanProperty.sip" "Boolean" "Boolean" "bool" "bool" "bool" "bool" "BooleanPropertySpecific.sip")
-GEN_PROPERTY_BINDINGS("AbstractPropertyBaseType.sip.in" "DoubleProperty.sip" "Double" "Double" "double" "double" "double" "double" "DoublePropertySpecific.sip")
-GEN_PROPERTY_BINDINGS("AbstractPropertyBaseType.sip.in" "IntegerProperty.sip" "Integer" "Integer" "int" "int" "int" "int" "IntegerPropertySpecific.sip")
-GEN_PROPERTY_BINDINGS("AbstractPropertyPointerType.sip.in" "ColorProperty.sip" "Color" "Color" "tlp::Color" "tlp.Color" "tlp::Color" "tlp.Color" "")
-GEN_PROPERTY_BINDINGS("AbstractPropertyPointerType.sip.in" "LayoutProperty.sip" "Layout" "Coord" "tlp::Coord" "tlp.Coord" "std::vector<tlp::Coord>" "list of tlp.Coord" "LayoutPropertySpecific.sip")
-GEN_PROPERTY_BINDINGS("AbstractPropertyPointerType.sip.in" "SizeProperty.sip" "Size" "Size" "tlp::Size" "tlp.Size" "tlp::Size" "tlp.Size" "SizePropertySpecific.sip")		   		   
+GEN_PROPERTY_BINDINGS("AbstractPropertyBaseType.sip.in" "BooleanProperty.sip" "Boolean" "Boolean" "bool" "boolean" "bool" "boolean" "BooleanPropertySpecific.sip")
+GEN_PROPERTY_BINDINGS("AbstractPropertyBaseType.sip.in" "DoubleProperty.sip" "Double" "Double" "double" "float" "double" "float" "DoublePropertySpecific.sip")
+GEN_PROPERTY_BINDINGS("AbstractPropertyBaseType.sip.in" "IntegerProperty.sip" "Integer" "Integer" "int" "integer" "int" "integer" "IntegerPropertySpecific.sip")
+GEN_PROPERTY_BINDINGS("AbstractPropertyPointerType.sip.in" "ColorProperty.sip" "Color" "Color" "tlp::Color" ":class:`tlp.Color`" "tlp::Color" ":class:`tlp.Color`" "")
+GEN_PROPERTY_BINDINGS("AbstractPropertyPointerType.sip.in" "LayoutProperty.sip" "Layout" "Coord" "tlp::Coord" ":class:`tlp.Coord`" "std::vector<tlp::Coord>" "list of :class:`tlp.Coord`" "LayoutPropertySpecific.sip")
+GEN_PROPERTY_BINDINGS("AbstractPropertyPointerType.sip.in" "SizeProperty.sip" "Size" "Size" "tlp::Size" ":class:`tlp.Size`" "tlp::Size" ":class:`tlp.Size`" "SizePropertySpecific.sip")		   		   
 GEN_PROPERTY_BINDINGS("AbstractPropertyPointerType.sip.in" "StringProperty.sip" "String" "String" "std::string" "string" "std::string" "string" "")
    		   
