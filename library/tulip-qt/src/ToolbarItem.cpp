@@ -11,10 +11,6 @@
 #include <QtCore/QTimer>
 #include <assert.h>
 
-//FIXME: remove me
-#include <iostream>
-using namespace std;
-
 namespace tlp {
 ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   : QGraphicsItemGroup(parent,scene),
@@ -119,20 +115,17 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
     if (!_expanded) { // expander
       int ew = 10,esp=0;
-      vector<QPointF> expanderPoints(3);
-      expanderPoints[0] = QPointF(pos.x() + esp * tVect.x(), pos.y() + esp * tVect.y());
-      expanderPoints[1] = QPointF(expanderPoints[0].x() + ew * tVect.y(), expanderPoints[0].y() + ew * tVect.x());
-      expanderPoints[2] = QPointF(expanderPoints[0].x() + ew/2, expanderPoints[0].y() + ew/2);
-
+      std::vector<QPointF> points(3);
+      points[0] = QPointF(pos.x() + esp * tVect.x(), pos.y() + esp * tVect.y());
+      points[1] = QPointF(points[0].x() + ew * tVect.y(), points[0].y() + ew * tVect.x());
+      points[2] = QPointF(points[0].x() + ew/2, points[0].y() + ew/2);
       QColor c = QApplication::palette().color(QPalette::Shadow);
       painter->setPen(QPen(c));
       painter->setBrush(c);
-      QPainterPath path;
-      path.moveTo(expanderPoints[0]);
-      path.lineTo(expanderPoints[1]);
-      path.lineTo(expanderPoints[2]);
-      path.lineTo(expanderPoints[0]);
-      path.setFillRule(Qt::WindingFill);
+      QPainterPath path(points[0]);
+      path.lineTo(points[1]);
+      path.lineTo(points[2]);
+      path.lineTo(points[0]);
       painter->drawPath(path);
     }
   }

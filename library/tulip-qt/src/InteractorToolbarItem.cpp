@@ -9,9 +9,6 @@
 
 using namespace std;
 
-//FIXME: remove me
-#include <iostream>
-
 namespace tlp {
 InteractorToolbarItem::InteractorToolbarItem(list<Interactor *> interactors, QGraphicsItem *parent,QGraphicsScene *scene):
     QGraphicsItemGroup(parent,scene), _interactors(interactors), _snapArea(Qt::TopToolBarArea), _margin(5), _spacing(3) {
@@ -30,7 +27,7 @@ InteractorToolbarItem::~InteractorToolbarItem() {
 }
 
 void InteractorToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-  QRectF bRect(boundingRect());
+  QRectF brect(boundingRect());
   { // Enclosing rect
     QColor fgColor = QApplication::palette().color(QPalette::Shadow);
     QColor bgColor = QApplication::palette().color(QPalette::Window);
@@ -38,8 +35,18 @@ void InteractorToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsI
     bgColor.setAlpha(150);
     painter->setPen(QPen(fgColor));
     painter->setBrush(bgColor);
+    int round = 7;
 
-    painter->drawRoundedRect(bRect,7,7);
+    QRectF bgRect;
+    if (_snapArea == Qt::TopToolBarArea)
+      bgRect = QRectF(0,-round,brect.height()+round,brect.width());
+    else if (_snapArea == Qt::BottomToolBarArea)
+      bgRect = QRectF(0,0,brect.height()+round,brect.width());
+    else if (_snapArea == Qt::LeftToolBarArea)
+      bgRect = QRectF(-round,0,brect.height(),brect.width()+round);
+    else if (_snapArea == Qt::RightToolBarArea)
+      bgRect = QRectF(0,0,brect.height(),brect.width()+round);
+    painter->drawRoundedRect(bgRect,round,round);
   }
 }
 
