@@ -47,6 +47,7 @@ class  TLP_SCOPE PropertyObserver {
 public:
 	PropertyObserver(bool manageObservables = true)
 	:updateObservables(manageObservables) {}
+        PropertyObserver(const PropertyObserver&);
 	virtual ~PropertyObserver();
 	virtual void beforeSetNodeValue(PropertyInterface*, const node){}
 	virtual void afterSetNodeValue(PropertyInterface*, const node){}
@@ -78,6 +79,8 @@ class  TLP_SCOPE ObservableProperty {
 	friend class PropertyObserver;
 
 public:
+	ObservableProperty() {}
+	ObservableProperty(const ObservableProperty&);
 	virtual ~ObservableProperty() {removePropertyObservers();}
 	/**
 	 * Register a new observer

@@ -27,6 +27,9 @@
 using namespace stdext;
 using namespace tlp;
 
+// nothing has to be copied
+PropertyObserver::PropertyObserver(const PropertyObserver&) {}
+
 PropertyObserver::~PropertyObserver(){
 	/*#ifndef NDEBUG
   if(observables.size()!=0)
@@ -59,6 +62,9 @@ void ObservableProperty::addPropertyObserver(PropertyObserver *obs) const {
 		obs->addObservable((ObservableProperty*)this);
 	}
 }
+
+// nothing has to be copied
+ObservableProperty::ObservableProperty(const ObservableProperty&) {}
 
 void ObservableProperty::notifyBeforeSetNodeValue(PropertyInterface* p,
 		const node n) {

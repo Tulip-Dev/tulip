@@ -27,6 +27,9 @@
 using namespace stdext;
 using namespace tlp;
 
+// nothing has to be copied
+GraphObserver::GraphObserver(const GraphObserver&) {}
+
 GraphObserver::~GraphObserver(){
 	/*#ifndef NDEBUG
   if(observables.size()!=0)
