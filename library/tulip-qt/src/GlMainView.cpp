@@ -103,6 +103,15 @@ bool GlMainView::createPicture(const std::string &pictureName, int width, int he
 }
 
 //==================================================
+QImage GlMainView::createPicture( int width, int height, bool center, int zoom, int xOffset, int yOffset) {
+
+	if (width == 0 && height == 0)
+				return mainWidget->createPicture(mainWidget->width(), mainWidget->height(),center,zoom,xOffset,yOffset);
+	else
+				return mainWidget->createPicture(width, height,center,zoom,xOffset,yOffset);
+}
+
+//==================================================
 // Accessor and set
 //==================================================
 Graph *GlMainView::getGraph() {

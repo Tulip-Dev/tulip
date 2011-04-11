@@ -88,7 +88,6 @@ namespace tlp {
      */
     virtual void buildContextMenu(QObject*, QContextMenuEvent*, QMenu* contextMenu) ;
 
-    virtual void buildOutputImagesFormatsList(std::set<std::string>& outputFormats);
     /**
      * empty function : implement this function if you have implement buildContextMenu()
      */

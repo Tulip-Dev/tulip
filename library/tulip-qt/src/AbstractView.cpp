@@ -64,10 +64,11 @@ namespace tlp {
     new QGLWidget(frame);
 
     //Build output image list
-    exportImageMenu = new QMenu("&Save Picture as ");
+    exportImageMenu = new QMenu("&Export in EPS or SVG ");
 
     set<string> imgFormats;
-    buildOutputImagesFormatsList(imgFormats);
+    imgFormats.insert("EPS");
+    imgFormats.insert("SVG");
 
     for (set<string>::iterator it = imgFormats.begin(); it != imgFormats.end(); ++it) {
       exportImageMenu->addAction(QString::fromStdString(*it));
@@ -130,25 +131,6 @@ namespace tlp {
     }
     return false;
   }
-
-  void AbstractView::buildOutputImagesFormatsList(set<string>& outputFormats) {
-    // Tulip known formats (see GlGraph)
-    // formats are sorted, "~" is just an end marker
-    //Image PopuMenu
-    // int Qt 4, output formats are not yet sorted and uppercased
-    // first add Tulip known formats
-    outputFormats.insert("EPS");
-    outputFormats.insert("SVG");
-    // uppercase and insert all Qt formats
-foreach  (QByteArray format, QImageWriter::supportedImageFormats())
-  {
-    char* tmp = format.data();
-    for (int i = strlen(tmp) - 1; i >= 0; --i)
-    tmp[i] = toupper(tmp[i]);
-    outputFormats.insert(tmp);
-  }
-  // sort before inserting in exportImageMenu
-}
 
 void AbstractView::exportImage(QAction* action) {
   QString extension = action->text().toLower();

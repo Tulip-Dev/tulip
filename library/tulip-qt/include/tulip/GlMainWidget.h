@@ -167,6 +167,11 @@ public:
 	void createPicture(const std::string &pictureName,int width, int height,bool center=true, int zoom=1, int xDec=0, int yDec=0);
 
 	/**
+	 * Take a snapshot of the Widget and return it
+	 */
+	QImage createPicture(int width, int height,bool center=true, int zoom=1, int xDec=0, int yDec=0);
+
+	/**
 	 * Function to do picking on entities.  It just calls
 	 * selectEntities on the GlScene instance.
 	 */

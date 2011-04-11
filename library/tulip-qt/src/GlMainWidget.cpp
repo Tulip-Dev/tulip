@@ -652,8 +652,14 @@ QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName
 
 	return NULL;
 }
+
 //=====================================================
 void GlMainWidget::createPicture(const std::string &pictureName, int width, int height,bool center, int zoom, int xDec, int yDec){
+	createPicture(width,height,center,zoom,xDec,yDec).save(pictureName.c_str());
+}
+
+//=====================================================
+QImage GlMainWidget::createPicture(int width, int height,bool center, int zoom, int xDec, int yDec){
 #ifndef WITHOUT_QT_PICTURE_OUTPUT   
 	scene.setViewport(0,0,width,height);
 	if(center)
@@ -669,7 +675,7 @@ void GlMainWidget::createPicture(const std::string &pictureName, int width, int 
 
 	scene.draw();
 
-	glFrameBuf->toImage().save(pictureName.c_str());
+	return glFrameBuf->toImage();
 #else
 	makeCurrent();
 	scene.setViewport(0,0,width,height);
@@ -697,7 +703,7 @@ void GlMainWidget::createPicture(const std::string &pictureName, int width, int 
 	}
 	painter.end();
 	free(image);
-	pm.save(pictureName.c_str());
+	return pm.toImage();
 #endif
 }
 

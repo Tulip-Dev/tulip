@@ -29,4 +29,8 @@ namespace tlp {
   bool View::createPicture(const std::string&, int, int, bool, int, int, int) {
     return false;
   }
+
+  QImage View::createPicture(int, int, bool, int, int, int) {
+    return QImage();
+  }
 }

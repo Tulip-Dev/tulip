@@ -200,6 +200,7 @@ namespace tlp {
     QAction *morphingAction;
     QAction *undoAction;
     QAction *redoAction;
+    QAction *snapshotAction;
     QAction *editUndoAction;
     QAction *editRedoAction;
 
@@ -280,6 +281,7 @@ namespace tlp {
     void updateUndoRedoInfos();
     void undo();
     void redo();
+    void snapshot();
 
   public slots :
       void editCut();
