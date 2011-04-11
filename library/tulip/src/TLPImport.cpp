@@ -31,7 +31,7 @@
 #define TLP "tlp"
 #define AUTHOR "author"
 #define COMMENTS "comments"
-#define TLP_VERSION 2.2
+#define TLP_VERSION 2.3
 #define NODES "nodes"
 #define EDGE "edge"
 #define NB_NODES "nb_nodes"
@@ -68,7 +68,8 @@
 #define DISPLAYING "displaying"
 #define GLYPH "glyph"
 #define PLUGIN "plugin"
-#define ATTRIBUTES "attributes"
+#define OLD_ATTRIBUTES "attributes"
+#define ATTRIBUTES "graph_attributes"
 #define SCENE "scene"
 #define VIEWS "views"
 #define CONTROLLER "controller"
@@ -501,6 +502,31 @@ namespace tlp {
         bool close(){return true;}
     };
     //================================================================================
+    struct TLPAttributesBuilder: public TLPFalse {
+        TLPGraphBuilder *graphBuilder;
+
+        TLPAttributesBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder){}
+        virtual ~TLPAttributesBuilder(){
+        }
+        bool close() {return true;}
+        bool canRead() { return true; }
+        bool read(std::istream& is) {
+	  char c = ' ';
+	  // go to the first non space char
+	  while((is >> c) && isspace(c)) {}
+	  is.unget();
+	  // to read the id of the graph
+	  unsigned int id;
+	  if( !(is >> id) )
+	    return false;
+	  Graph* subgraph = id ? graphBuilder->_graph->getSubGraph(id) :
+	    graphBuilder->_graph;
+	  if (subgraph == NULL)
+	    return false;
+	  return DataSet::read(is, const_cast<DataSet &>(subgraph->getAttributes()));
+      }
+    };
+    //================================================================================
     struct TLPDataSetBuilder: public TLPFalse {
         TLPGraphBuilder *graphBuilder;
         DataSet dataSet;
@@ -746,8 +772,10 @@ bool TLPGraphBuilder::addStruct(const std::string& structName,TLPBuilder*&newBui
     }
     else if (structName==DISPLAYING) {
         newBuilder=new TLPDataSetBuilder(this, (char *) DISPLAYING);
-    } else if (structName==ATTRIBUTES) {
+    } else if (structName==OLD_ATTRIBUTES) {
         newBuilder=new TLPDataSetBuilder(this);
+    } else if (structName==ATTRIBUTES) {
+        newBuilder=new TLPAttributesBuilder(this);
     } else if (structName==SCENE) {
         newBuilder=new TLPSceneBuilder(this);
     } else if (structName==VIEWS) {

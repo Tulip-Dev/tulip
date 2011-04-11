@@ -154,15 +154,15 @@ void TlpImportExportTest::testExportCluster() {
 void TlpImportExportTest::testExportAttributes() {
   Graph *graph = newGraph();
   ostream *os = new ofstream("export_attributes.tlp");
-  bool b = true;
-  double d = 100.;
-  Color color(1, 2, 3, 4);
-  Coord coord(5., 6., 7.);
-  float f = 200.;
-  int i = -10;
-  unsigned int ui = 10;
-  Size size(8., 9., 10.);
-  string str("data");
+  bool b = true, sb = false;
+  double d = 100., sd = 50.;
+  Color color(1, 2, 3, 4), scolor(4, 3, 2, 1);
+  Coord coord(5., 6., 7.), scoord(0., 8. ,9.);
+  float f = 200., sf = 100.;
+  int i = -10, si = -5;
+  unsigned int ui = 10, sui = 5;
+  Size size(8., 9., 10.), ssize (10., 9., 8.);
+  string str("data"), sstr("atad");
 
   // set graph attributes of different types
   graph->setAttribute("type = bool", b);
@@ -174,6 +174,21 @@ void TlpImportExportTest::testExportAttributes() {
   graph->setAttribute("type = uint", ui);
   graph->setAttribute("type = size", size);
   graph->setAttribute("type = string", str);
+
+  Graph* sg = newSubGraph(graph, "sg");
+  CPPUNIT_ASSERT(sg->getId() == 1);
+
+  // set sg attributes of different types
+  sg->setAttribute("type = bool", sb);
+  sg->setAttribute("type = double", sd);
+  sg->setAttribute("type = color", scolor);
+  sg->setAttribute("type = coord", scoord);
+  sg->setAttribute("type = float", sf);
+  sg->setAttribute("type = int", si);
+  sg->setAttribute("type = uint", sui);
+  sg->setAttribute("type = size", ssize);
+  sg->setAttribute("type = string", sstr);
+
   DataSet dataSet;
   bool ok = exportGraph(graph, *os, "tlp", dataSet);
   delete graph;
@@ -210,6 +225,37 @@ void TlpImportExportTest::testExportAttributes() {
   str = string("");
   CPPUNIT_ASSERT(graph->getAttribute("type = string", str));
   CPPUNIT_ASSERT(str == "data");
+
+  sg = graph->getSubGraph(1);
+  CPPUNIT_ASSERT(sg);
+
+  b = false;
+  CPPUNIT_ASSERT(sg->getAttribute("type = bool", b));
+  CPPUNIT_ASSERT(b == sb);
+  d = 0.;
+  CPPUNIT_ASSERT(sg->getAttribute("type = double", d));
+  CPPUNIT_ASSERT(d == sd);
+  color = Color(0, 0, 0, 0);
+  CPPUNIT_ASSERT(sg->getAttribute("type = color", color));
+  CPPUNIT_ASSERT(color == scolor);
+  coord = Coord(0., 0., 0);
+  CPPUNIT_ASSERT(sg->getAttribute("type = coord", coord));
+  CPPUNIT_ASSERT(coord == scoord);
+  f = 0.;
+  CPPUNIT_ASSERT(sg->getAttribute("type = float", f));
+  CPPUNIT_ASSERT(f == sf);
+  i = 0;
+  CPPUNIT_ASSERT(sg->getAttribute("type = int", i));
+  CPPUNIT_ASSERT(i == si);
+  ui = 0;
+  CPPUNIT_ASSERT(sg->getAttribute("type = uint", ui));
+  CPPUNIT_ASSERT(ui == sui);
+  size = Size(0., 0., 0.);
+  CPPUNIT_ASSERT(sg->getAttribute("type = size", size));
+  CPPUNIT_ASSERT(size == ssize);
+  str = string("");
+  CPPUNIT_ASSERT(sg->getAttribute("type = string", str));
+  CPPUNIT_ASSERT(str == sstr);
 
   delete graph;
 }
