@@ -60,7 +60,7 @@ protected :
 SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),view(&v),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
   setupUi(this);
   scene=new QGraphicsScene();
-  scene->setBackgroundBrush(QApplication::palette().color(QPalette::Mid));
+  scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
   graphicsView->setScene(scene);
 
   widthSpinBox->setValue(view->getWidget()->width());
