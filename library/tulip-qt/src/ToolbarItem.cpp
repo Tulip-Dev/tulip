@@ -107,6 +107,9 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
   QPointF tVect = translationVector();
   QPointF hoveredGap((_hoveredIconSize.width() - _iconSize.width())/2, (_hoveredIconSize.height() - _iconSize.height())/2);
 
+//  painter->setBrush(QColor(255,0,0,10));
+//  painter->drawRect(boundingRect());
+
   if (_activeButton) {
     _activeButton->setPos(pos);
     _activeButton->setIconSize(_hoveredIconSize);
@@ -132,7 +135,6 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
   if (!_expanded)
     return;
-
   pos+= hoveredGap;
   for (int i=0; i < _actions.size(); ++i) {
     PushButtonItem *btn = _actionButton[_actions[i]];
@@ -164,10 +166,10 @@ QRectF ToolbarItem::boundingRect() const {
   if (_expanded) {
     size = QSizeF(size.width() + _actions.size() * tVect.x() * (_margin + hbSize.width()),
                   size.height() + _actions.size() *  tVect.y() * (_margin + hbSize.height()));
-    size = QSizeF(size.width() + tVect.x() * _margin, size.height() + tVect.y() * _margin);
+//    size = QSizeF(size.width() + tVect.x() * _margin, size.height() + tVect.y() * _margin);
   }
   else
-    size = QSizeF(size.width() + tVect.x() * 5, size.height() + tVect.y() * 5);
+    size = QSizeF(size.width() + tVect.x() * 10, size.height() + tVect.y() * 10);
   return QRectF(QPointF(0,0),size);
 }
 //==========================
