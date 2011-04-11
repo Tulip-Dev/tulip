@@ -53,7 +53,7 @@ class  TLP_SCOPE PropertyObserver :public Observable {
   virtual void afterSetAllNodeValue(PropertyInterface*){}
   virtual void beforeSetAllEdgeValue(PropertyInterface*){}
   virtual void afterSetAllEdgeValue(PropertyInterface*){}
-  virtual void destroy(const PropertyInterface*){}
+  virtual void destroy(PropertyInterface*){}
  protected:
   virtual void treatEvent(const Event& ev);
 };
