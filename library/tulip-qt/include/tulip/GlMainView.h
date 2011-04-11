@@ -106,6 +106,17 @@ namespace tlp {
     virtual bool createPicture(const std::string &pictureName,int width, int height,bool center, int zoom=1, int xOffset=0, int yOffset=0);
 
     /**
+     * Take a snapshot of the view like old createPicture function and return a QImage
+     * \param width : width of the picture
+     * \param height : height of the picture
+     * \param center : if we do a center view before create picture or use the current zoom and pan
+     * \param zoom : create a picture of a sub part of the view : with zoom=0 : create only one picture with entire view, with zoom=N : the view is cut into 2^N part in width and height
+     * \param xOffset : this parameters is used to know the part of the view to render if zoom!=0 : xOffset must be : 0 <= xOffset < 2^zoom
+     * \param yOffset : this parameters is used to know the part of the view to render if zoom!=0 : yOffset must be : 0 <= yOffset < 2^zoom
+     */
+    virtual QImage createPicture(int width, int height,bool center, int zoom=1, int xOffset=0, int yOffset=0);
+
+    /**
      * Build context menu for this view
      */
     virtual void buildContextMenu(QObject *object,QContextMenuEvent *event,QMenu *contextMenu);

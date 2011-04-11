@@ -53,6 +53,7 @@
 #include "tulip/NodeLinkDiagramComponent.h"
 #include "tulip/GlMainWidget.h"
 #include "tulip/InteractorManager.h"
+#include "tulip/SnapshotDialog.h"
 
 using namespace std;
 
@@ -318,6 +319,7 @@ namespace tlp {
     viewMenu->setEnabled(true);
     optionsMenu->setEnabled(true);
     graphMenu->setEnabled(true);
+    snapshotAction->setEnabled(true);
 
     unsigned int holdCount=Observable::observersHoldCounter();
     Observable::holdObservers();
@@ -783,12 +785,16 @@ namespace tlp {
 
     redoAction=new QAction(QIcon(":/i_redo.png"),"redo",mainWindowFacade.getParentWidget());
     undoAction=new QAction(QIcon(":/i_undo.png"),"undo",mainWindowFacade.getParentWidget());
+    snapshotAction = new QAction(QIcon(":/i_snapshot.png"),"snapshot",mainWindowFacade.getParentWidget());
     undoAction->setEnabled(false);
     redoAction->setEnabled(false);
+    snapshotAction->setEnabled(false);
     mainWindowFacade.getToolBar()->addAction(undoAction);
     mainWindowFacade.getToolBar()->addAction(redoAction);
+    mainWindowFacade.getToolBar()->addAction(snapshotAction);
     connect(undoAction,SIGNAL(triggered()),this,SLOT(undo()));
     connect(redoAction,SIGNAL(triggered()),this,SLOT(redo()));
+    connect(snapshotAction,SIGNAL(triggered()),this,SLOT(snapshot()));
   }
   //**********************************************************************
   View* MainController::initMainView(DataSet dataSet) {
@@ -1555,6 +1561,16 @@ namespace tlp {
     drawViews(false);
     updateCurrentGraphInfos();
     updateUndoRedoInfos();
+  }
+  //**********************************************************************
+  void MainController::snapshot(){
+    QImage image=currentView->createPicture(16,16,false);
+    if(image.isNull()){
+      QMessageBox::critical(NULL,"can't create snapshot","Sorry but you can't create snapshot with this view");
+    }else{
+      SnapshotDialog snapshotDialog(*currentView);
+      snapshotDialog.exec();
+    }
   }
 
 }

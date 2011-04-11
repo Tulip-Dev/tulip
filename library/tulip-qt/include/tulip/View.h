@@ -155,6 +155,18 @@ namespace tlp {
      * \return bool : Whether the picture can be created or not.
      */
     virtual bool createPicture(const std::string& pictureName, int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
+
+    /**
+     * @brief Take a snapshot of the view, and return a QImage
+     * \param width : width of the picture
+     * \param height : height of the picture
+     * \param center : whether we should center the view before creating the picture, or use the current zoom and pan.
+     * \param zoom : creates a picture of a sub part of the view. With zoom=1 creates only one picture with entire view; with zoom=N : the view is cut into 2^(N-1) part in width and height. Defaults to 1.
+     * \param xOffset : which part of the view to render if zoom!=1. xOffset must be 0 <= xOffset < 2^(zoom-1). Defaults to 0.
+     * \param yOffset : which part of the view to render if zoom!=1. yOffset must be 0 <= yOffset < 2^(zoom-1). Defaults to 0.
+     * \return Qimage : snapshot image.
+     */
+    virtual QImage createPicture(int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
     
     /**
      * @brief Return the real view name (if "" the real name is the name given by the plugin).
