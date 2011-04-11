@@ -52,7 +52,7 @@ ENDIF()
 ## -----------------------------------------------------------------------------------------------
 SET(TulipMajorVersion 3)
 SET(TulipMinorVersion 5)
-SET(TulipReleaseVersion 0)
+SET(TulipReleaseVersion 1)
 SET(TulipVersionSeparator .)
 IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #specific options for Visual Studio
 	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9") #visual studio 2008 needs boost
