@@ -53,7 +53,7 @@ struct WithParameter {
 	sipCpp->addParameter<tlp::StringCollection>(a0, a1, a2, a3);
 %End
 
-	void addIntParameter(const char* str,
+	void addIntegerParameter(const char* str,
 			const char* inHelp=0,
 			const char* inDefValue = 0,
 			bool isMandatory = true);
@@ -61,7 +61,7 @@ struct WithParameter {
 	sipCpp->addParameter<int>(a0, a1, a2, a3);
 %End
 
-	void addDoubleParameter(const char* str,
+	void addFloatParameter(const char* str,
 			const char* inHelp=0,
 			const char* inDefValue = 0,
 			bool isMandatory = true);
@@ -69,7 +69,7 @@ struct WithParameter {
 	sipCpp->addParameter<double>(a0, a1, a2, a3);
 %End
 
-	void addBoolParameter(const char* str,
+	void addBooleanParameter(const char* str,
 			const char* inHelp=0,
 			const char* inDefValue = 0,
 			bool isMandatory = true);
@@ -123,6 +123,14 @@ struct WithParameter {
 			bool isMandatory = true);
 %MethodCode
 	sipCpp->addParameter<tlp::BooleanProperty>(a0, a1, a2, a3);
+%End
+
+	void addStringPropertyParameter(const char* str,
+			const char* inHelp=0,
+			const char* inDefValue = 0,
+			bool isMandatory = true);
+%MethodCode
+	sipCpp->addParameter<tlp::StringProperty>(a0, a1, a2, a3);
 %End
 
 	void addColorParameter(const char* str,

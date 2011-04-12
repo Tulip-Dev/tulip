@@ -2288,7 +2288,7 @@ namespace tlp {
 tlp::Graph *newGraph();
 tlp::Graph *loadGraph(const std::string &filename);
 bool saveGraph(tlp::Graph *, const std::string &filename);
-tlp::Graph *importGraph(const std::string &alg, tlp::DataSet &dataSet /Out/, tlp::Graph *newGraph=0);
+tlp::Graph *importGraph(const std::string &alg, tlp::DataSet &dataSet, tlp::Graph *newGraph=0);
 %MethodCode
 	sipRes = tlp::importGraph(*a0, *a1, 0, a2);
 %End
