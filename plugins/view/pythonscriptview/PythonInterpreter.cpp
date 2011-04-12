@@ -473,29 +473,29 @@ const string pluginUtils =
 		"	code += \"pluginFactory[algoName] = \" + pluginClassName + \"Factory()\\n\"\n"
 		"	exec(code)\n"
 
-//		"def registerInteractorPlugin(pluginClassName, algoName, author, date, info, release):\n"
-//		"	code = \"class \" + pluginClassName + \"Factory(tlp.InteractorFactory):\\n\"\n"
-//		"	code += \"\\tdef __init__(self):\\n\"\n"
-//		"	code += \"\\t\\ttlp.InteractorFactory.__init__(self)\\n\"\n"
-//		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
-//		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-//		"	code += \"\\t\\treturn \" + pluginClassName + \"()\\n\"\n"
-//		"	code += \"\\tdef getName(self):\\n\"\n"
-//		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
-//		"	code += \"\\tdef getAuthor(self):\\n\"\n"
-//		"	code += \"\\t\\t return \\\"\" + author + \"\\\"\\n\"\n"
-//		"	code += \"\\tdef getGroup(self):\\n\"\n"
-//		"	code += \"\\t\\t return str(\"\")\\n\"\n"
-//		"	code += \"\\tdef getDate(self):\\n\"\n"
-//		"	code += \"\\t\\treturn \\\"\" + date + \"\\\"\\n\"\n"
-//		"	code += \"\\tdef getInfo(self):\\n\"\n"
-//		"	code += \"\\t\\treturn \\\"\" + info + \"\\\"\\n\"\n"
-//		"	code += \"\\tdef getRelease(self):\\n\"\n"
-//		"	code += \"\\t\\treturn \\\"\" + release + \"\\\"\\n\"\n"
-//		"	code += \"\\tdef getTulipRelease(self):\\n\"\n"
-//		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
-//		"	code += \"pluginFactory[algoName] = \" + pluginClassName + \"Factory()\\n\"\n"
-//		"	exec(code)\n"
+		//		"def registerInteractorPlugin(pluginClassName, algoName, author, date, info, release):\n"
+		//		"	code = \"class \" + pluginClassName + \"Factory(tlp.InteractorFactory):\\n\"\n"
+		//		"	code += \"\\tdef __init__(self):\\n\"\n"
+		//		"	code += \"\\t\\ttlp.InteractorFactory.__init__(self)\\n\"\n"
+		//		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
+		//		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
+		//		"	code += \"\\t\\treturn \" + pluginClassName + \"()\\n\"\n"
+		//		"	code += \"\\tdef getName(self):\\n\"\n"
+		//		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
+		//		"	code += \"\\tdef getAuthor(self):\\n\"\n"
+		//		"	code += \"\\t\\t return \\\"\" + author + \"\\\"\\n\"\n"
+		//		"	code += \"\\tdef getGroup(self):\\n\"\n"
+		//		"	code += \"\\t\\t return str(\"\")\\n\"\n"
+		//		"	code += \"\\tdef getDate(self):\\n\"\n"
+		//		"	code += \"\\t\\treturn \\\"\" + date + \"\\\"\\n\"\n"
+		//		"	code += \"\\tdef getInfo(self):\\n\"\n"
+		//		"	code += \"\\t\\treturn \\\"\" + info + \"\\\"\\n\"\n"
+		//		"	code += \"\\tdef getRelease(self):\\n\"\n"
+		//		"	code += \"\\t\\treturn \\\"\" + release + \"\\\"\\n\"\n"
+		//		"	code += \"\\tdef getTulipRelease(self):\\n\"\n"
+		//		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
+		//		"	code += \"pluginFactory[algoName] = \" + pluginClassName + \"Factory()\\n\"\n"
+		//		"	exec(code)\n"
 
 		"def registerGlyphPlugin(pluginClassName, glyphName, author, date, info, release, glyphId):\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.GlyphFactory):\\n\"\n"
@@ -523,29 +523,29 @@ const string pluginUtils =
 		"	code += \"pluginFactory[glyphName] = \" + pluginClassName + \"Factory()\\n\"\n"
 		"	exec(code)\n"
 
-//		"def registerViewPlugin(pluginClassName, viewName, author, date, info, release):\n"
-//		"	code = \"class \" + pluginClassName + \"Factory(tlp.ViewFactory):\\n\"\n"
-//		"	code += \"\\tdef __init__(self):\\n\"\n"
-//		"	code += \"\\t\\ttlp.ViewFactory.__init__(self)\\n\"\n"
-//		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
-//		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-//		"	code += \"\\t\\treturn \" + pluginClassName + \"()\\n\"\n"
-//		"	code += \"\\tdef getName(self):\\n\"\n"
-//		"	code += \"\\t\\t return \\\"\" + viewName + \"\\\"\\n\"\n"
-//		"	code += \"\\tdef getAuthor(self):\\n\"\n"
-//		"	code += \"\\t\\t return \\\"\" + author + \"\\\"\\n\"\n"
-//		"	code += \"\\tdef getGroup(self):\\n\"\n"
-//		"	code += \"\\t\\t return str(\"\")\\n\"\n"
-//		"	code += \"\\tdef getDate(self):\\n\"\n"
-//		"	code += \"\\t\\treturn \\\"\" + date + \"\\\"\\n\"\n"
-//		"	code += \"\\tdef getInfo(self):\\n\"\n"
-//		"	code += \"\\t\\treturn \\\"\" + info + \"\\\"\\n\"\n"
-//		"	code += \"\\tdef getRelease(self):\\n\"\n"
-//		"	code += \"\\t\\treturn \\\"\" + release + \"\\\"\\n\"\n"
-//		"	code += \"\\tdef getTulipRelease(self):\\n\"\n"
-//		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
-//		"	code += \"pluginFactory[viewName] = \" + pluginClassName + \"Factory()\\n\"\n"
-//		"	exec(code)\n"
+		//		"def registerViewPlugin(pluginClassName, viewName, author, date, info, release):\n"
+		//		"	code = \"class \" + pluginClassName + \"Factory(tlp.ViewFactory):\\n\"\n"
+		//		"	code += \"\\tdef __init__(self):\\n\"\n"
+		//		"	code += \"\\t\\ttlp.ViewFactory.__init__(self)\\n\"\n"
+		//		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
+		//		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
+		//		"	code += \"\\t\\treturn \" + pluginClassName + \"()\\n\"\n"
+		//		"	code += \"\\tdef getName(self):\\n\"\n"
+		//		"	code += \"\\t\\t return \\\"\" + viewName + \"\\\"\\n\"\n"
+		//		"	code += \"\\tdef getAuthor(self):\\n\"\n"
+		//		"	code += \"\\t\\t return \\\"\" + author + \"\\\"\\n\"\n"
+		//		"	code += \"\\tdef getGroup(self):\\n\"\n"
+		//		"	code += \"\\t\\t return str(\"\")\\n\"\n"
+		//		"	code += \"\\tdef getDate(self):\\n\"\n"
+		//		"	code += \"\\t\\treturn \\\"\" + date + \"\\\"\\n\"\n"
+		//		"	code += \"\\tdef getInfo(self):\\n\"\n"
+		//		"	code += \"\\t\\treturn \\\"\" + info + \"\\\"\\n\"\n"
+		//		"	code += \"\\tdef getRelease(self):\\n\"\n"
+		//		"	code += \"\\t\\treturn \\\"\" + release + \"\\\"\\n\"\n"
+		//		"	code += \"\\tdef getTulipRelease(self):\\n\"\n"
+		//		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
+		//		"	code += \"pluginFactory[viewName] = \" + pluginClassName + \"Factory()\\n\"\n"
+		//		"	exec(code)\n"
 		;
 
 ConsoleOutputDialog::ConsoleOutputDialog(QWidget *parent) : QDialog(parent) {
@@ -556,6 +556,7 @@ ConsoleOutputDialog::ConsoleOutputDialog(QWidget *parent) : QDialog(parent) {
 	setLayout(layout);
 	connect(consoleWidget, SIGNAL(textChanged()), this, SLOT(showOnOutputWrite()));
 	resize(400,200);
+	setModal(true);
 }
 
 
@@ -615,60 +616,65 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 	PyObject *pMainDict = PyModule_GetDict(pMainModule);
 	PyObject *pVersion = PyRun_String("str(sys.version_info[0])+\".\"+str(sys.version_info[1])", Py_eval_input, pMainDict, pMainDict);
 	pythonVersion = string(PyString_AsString(pVersion));
-	// hack for linux in order to be able to load dynamic python modules installed on the system (like numpy, matplotlib and other cool stuffs)		
-#ifndef WIN32	
-	string libPythonName = string("libpython") + pythonVersion;
-#ifdef __APPLE__
-	libPythonName += string(".dylib");
-#else
-	libPythonName += string(".so");
-#endif
-	if (QApplication::instance())
-	  dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
-#endif	
-	// checking if a QApplication is instanced before instancing any QWidget 
+
+	// checking if a QApplication is instanced before instancing any QWidget
 	// allow to avoid segfaults when trying to instantiate the plugin outside the Tulip GUI (for instance, with tulip_check_pl)
 	if (QApplication::instance()) {
-	  consoleDialog = new ConsoleOutputDialog();
-	
-	  if (interpreterInit()) {
 
-		initscriptengine();
-		_PyImport_FixupExtension(const_cast<char *>("scriptengine"), const_cast<char *>("scriptengine"));
+// hack for linux in order to be able to load dynamic python modules installed on the system (like numpy, matplotlib and other cool stuffs)
+#ifndef WIN32	
+		string libPythonName = string("libpython") + pythonVersion;
+#ifdef __APPLE__
+		libPythonName += string(".dylib");
+#else
+		libPythonName += string(".so");
+#endif
+		dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
+#endif
 
-		inittuliputils();
-		_PyImport_FixupExtension(const_cast<char *>("tuliputils"), const_cast<char *>("tuliputils"));
+		consoleDialog = new ConsoleOutputDialog();
 
-		runString("import sys; import scriptengine ; sys.stdout = scriptengine.ConsoleOutput(False); sys.stderr = scriptengine.ConsoleOutput(True);\n");
-		
-		if (QApplication::instance())
-		  setDefaultConsoleWidget();
-		
-		addModuleSearchPath(tlp::TulipLibDir);
-		runString("import sip; import stl; from tulip import *;from tulipogl import *");
-		runString("pluginFactory = {}");
+		if (interpreterInit()) {
 
-		runString(pluginUtils);
-		string pythonPluginsPath = tlp::TulipLibDir + "tlp/python/";
-		addModuleSearchPath(pythonPluginsPath);
+			initscriptengine();
+			_PyImport_FixupExtension(const_cast<char *>("scriptengine"), const_cast<char *>("scriptengine"));
 
-		QDir pythonPluginsDir(pythonPluginsPath.c_str());
-		QStringList nameFilter;
-		nameFilter << "*.py";
-		QFileInfoList fileList = pythonPluginsDir.entryInfoList(nameFilter);
-		for (int i = 0 ; i < fileList.size() ; ++i) {
-			QFileInfo fileInfo = fileList.at(i);
-			QFile file(fileInfo.absoluteFilePath());
-			if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-				QString pluginCode;
-				while (!file.atEnd()) {
-					pluginCode += file.readLine();
+			inittuliputils();
+			_PyImport_FixupExtension(const_cast<char *>("tuliputils"), const_cast<char *>("tuliputils"));
+
+			runString("import sys; import scriptengine ; sys.stdout = scriptengine.ConsoleOutput(False); sys.stderr = scriptengine.ConsoleOutput(True);\n");
+
+
+			setDefaultConsoleWidget();
+
+			addModuleSearchPath(tlp::TulipLibDir);
+			runString("import sip; import stl; from tulip import *;from tulipogl import *");
+			runString("pluginFactory = {}");
+
+			runString(pluginUtils);
+			string pythonPluginsPath = tlp::TulipLibDir + "tlp/python/";
+			addModuleSearchPath(pythonPluginsPath);
+
+			QDir pythonPluginsDir(pythonPluginsPath.c_str());
+			QStringList nameFilter;
+			nameFilter << "*.py";
+			QFileInfoList fileList = pythonPluginsDir.entryInfoList(nameFilter);
+			for (int i = 0 ; i < fileList.size() ; ++i) {
+				QFileInfo fileInfo = fileList.at(i);
+				QFile file(fileInfo.absoluteFilePath());
+				if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+					QString pluginCode;
+					while (!file.atEnd()) {
+						pluginCode += file.readLine();
+					}
+					file.close();
+					runString(pluginCode.toStdString());
 				}
-				file.close();
-				runString(pluginCode.toStdString());
 			}
+			// some external modules (like numpy) overrides the SIGINT handler at import
+			// reinstall the default one, otherwise Tulip can not be interrupted by hitting Ctrl-C in a console
+			setDefaultSIGINTHandler();
 		}
-	  }
 	}
 }
 
@@ -818,5 +824,14 @@ void PythonInterpreter::setConsoleWidget(QPlainTextEdit *console) {
 
 void PythonInterpreter::setDefaultConsoleWidget() {
 	consoleWidget = consoleDialog->consoleWidget;
+}
+
+void PythonInterpreter::setDefaultSIGINTHandler() {
+	QPlainTextEdit *lastConsoleWidget = consoleWidget;
+	consoleWidget = NULL;
+	if (runString("import signal")) {
+		runString("signal.signal(signal.SIGINT, signal.SIG_DFL)");
+	}
+	consoleWidget = lastConsoleWidget;
 }
 

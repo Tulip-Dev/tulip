@@ -446,6 +446,10 @@ void PythonScriptView::executeCurrentScript() {
 
 		Observable::unholdObservers();
 
+// some external modules (like numpy) overrides the SIGINT handler at import
+// reinstall the default one, otherwise Tulip can not be interrupted by hitting Ctrl-C in a console
+		pythonInterpreter->setDefaultSIGINTHandler();
+
 		scriptStopped = false;
 
 	} else {
