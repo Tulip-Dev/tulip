@@ -1,6 +1,5 @@
 
-MACRO(GEN_PROPERTY_BINDINGS TEMPLATE_FILE   
-			    GEN_FILE 
+MACRO(GEN_PROPERTY_BINDINGS GEN_FILE 
 			    PROPERTY_TYPE
 			    VEC_PROPERTY_TYPE
 			    CPP_NODE_TYPE 
@@ -9,7 +8,7 @@ MACRO(GEN_PROPERTY_BINDINGS TEMPLATE_FILE
 			    PYTHON_EDGE_TYPE
 			    PROPERTY_SPECIFIC_METHODS_FILE)
 
-  FILE(READ ${WORKING_DIR}/${TEMPLATE_FILE} input)
+  FILE(READ ${WORKING_DIR}/AbstractProperty.sip.in input)
   STRING(REPLACE "@PROPERTY_TYPE@" "${PROPERTY_TYPE}" input "${input}")
   STRING(REPLACE "@PROPERTY_NODE_TYPE@" "${CPP_NODE_TYPE}" input "${input}")
   STRING(REPLACE "@PROPERTY_EDGE_TYPE@" "${CPP_EDGE_TYPE}" input "${input}")
@@ -30,11 +29,12 @@ MACRO(GEN_PROPERTY_BINDINGS TEMPLATE_FILE
   
 ENDMACRO(GEN_PROPERTY_BINDINGS)
 
-GEN_PROPERTY_BINDINGS("AbstractPropertyBaseType.sip.in" "BooleanProperty.sip" "Boolean" "Boolean" "bool" "boolean" "bool" "boolean" "BooleanPropertySpecific.sip")
-GEN_PROPERTY_BINDINGS("AbstractPropertyBaseType.sip.in" "DoubleProperty.sip" "Double" "Double" "double" "float" "double" "float" "DoublePropertySpecific.sip")
-GEN_PROPERTY_BINDINGS("AbstractPropertyBaseType.sip.in" "IntegerProperty.sip" "Integer" "Integer" "int" "integer" "int" "integer" "IntegerPropertySpecific.sip")
-GEN_PROPERTY_BINDINGS("AbstractPropertyPointerType.sip.in" "ColorProperty.sip" "Color" "Color" "tlp::Color" ":class:`tlp.Color`" "tlp::Color" ":class:`tlp.Color`" "")
-GEN_PROPERTY_BINDINGS("AbstractPropertyPointerType.sip.in" "LayoutProperty.sip" "Layout" "Coord" "tlp::Coord" ":class:`tlp.Coord`" "std::vector<tlp::Coord>" "list of :class:`tlp.Coord`" "LayoutPropertySpecific.sip")
-GEN_PROPERTY_BINDINGS("AbstractPropertyPointerType.sip.in" "SizeProperty.sip" "Size" "Size" "tlp::Size" ":class:`tlp.Size`" "tlp::Size" ":class:`tlp.Size`" "SizePropertySpecific.sip")		   		   
-GEN_PROPERTY_BINDINGS("AbstractPropertyPointerType.sip.in" "StringProperty.sip" "String" "String" "std::string" "string" "std::string" "string" "")
+GEN_PROPERTY_BINDINGS("BooleanProperty.sip" "Boolean" "Boolean" "bool" "boolean" "bool" "boolean" "BooleanPropertySpecific.sip")
+GEN_PROPERTY_BINDINGS("DoubleProperty.sip" "Double" "Double" "double" "float" "double" "float" "DoublePropertySpecific.sip")
+GEN_PROPERTY_BINDINGS("IntegerProperty.sip" "Integer" "Integer" "int" "integer" "int" "integer" "IntegerPropertySpecific.sip")
+GEN_PROPERTY_BINDINGS("ColorProperty.sip" "Color" "Color" "tlp::Color" ":class:`tlp.Color`" "tlp::Color" ":class:`tlp.Color`" "")
+GEN_PROPERTY_BINDINGS("LayoutProperty.sip" "Layout" "Coord" "tlp::Coord" ":class:`tlp.Coord`" "std::vector<tlp::Coord>" "list of :class:`tlp.Coord`" "LayoutPropertySpecific.sip")
+GEN_PROPERTY_BINDINGS("SizeProperty.sip" "Size" "Size" "tlp::Size" ":class:`tlp.Size`" "tlp::Size" ":class:`tlp.Size`" "SizePropertySpecific.sip")		   		   
+GEN_PROPERTY_BINDINGS("StringProperty.sip" "String" "String" "std::string" "string" "std::string" "string" "")
+
    		   

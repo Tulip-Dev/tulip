@@ -39,7 +39,7 @@ public :
 
 //===========================================================================================
 		
-	void setAllNodeValue(const @PROPERTY_NODE_TYPE@ v);
+	void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &v);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setAllNodeValue(val)
 
@@ -51,7 +51,7 @@ Sets the same value on the whole set of nodes.
 
 //===========================================================================================
 
-	void setAllEdgeValue(const @PROPERTY_EDGE_TYPE@ v);
+	void setAllEdgeValue(const @PROPERTY_EDGE_TYPE@ &v);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setAllEdgeValue(val)
 
@@ -99,7 +99,11 @@ Returns the value associated to a particular node.
 	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
+#ifdef PROPERTY_BASE_TYPE	
 		sipRes = sipCpp->getNodeValue(*a0);
+#else
+		sipRes = new @PROPERTY_NODE_TYPE@(sipCpp->getNodeValue(*a0));
+#endif		
 	} else {
 		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
 	}
@@ -121,7 +125,11 @@ Returns the value associated to a particular edge.
 	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
+#ifdef PROPERTY_BASE_TYPE	
 		sipRes = sipCpp->getEdgeValue(*a0);
+#else
+		sipRes = new @PROPERTY_EDGE_TYPE@(sipCpp->getEdgeValue(*a0));
+#endif		
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
 	}
@@ -129,7 +137,7 @@ Returns the value associated to a particular edge.
 
 //===========================================================================================
 
-	void setNodeValue(const tlp::node n, const @PROPERTY_NODE_TYPE@ v);
+	void setNodeValue(const tlp::node n, const @PROPERTY_NODE_TYPE@ &v);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setNodeValue(node, val)
 
@@ -144,7 +152,11 @@ Sets the value of a particular node.
 	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
+#ifdef PROPERTY_BASE_TYPE	
 		sipCpp->setNodeValue(*a0, a1);
+#else
+		sipCpp->setNodeValue(*a0, *a1);
+#endif		
 	} else {
 		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
 	}
@@ -152,7 +164,7 @@ Sets the value of a particular node.
 
 //===========================================================================================
 
-	void setEdgeValue(const tlp::edge e, const @PROPERTY_EDGE_TYPE@ v);
+	void setEdgeValue(const tlp::edge e, const @PROPERTY_EDGE_TYPE@ &v);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setEdgeValue(edge, val)
 
@@ -167,7 +179,11 @@ Sets the value of a particular edge.
 	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
+#ifdef PROPERTY_BASE_TYPE	
 		sipCpp->setEdgeValue(*a0, a1);
+#else
+		sipCpp->setEdgeValue(*a0, *a1);
+#endif		
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
 	}
@@ -177,8 +193,12 @@ Sets the value of a particular edge.
 
 	@PROPERTY_NODE_TYPE@ __getitem__(const tlp::node n) const;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {	
+	if (sipCpp->getGraph()->isElement(*a0)) {
+#ifdef PROPERTY_BASE_TYPE		
      	sipRes = sipCpp->getNodeValue(*a0);
+#else
+		sipRes = new @PROPERTY_NODE_TYPE@(sipCpp->getNodeValue(*a0));
+#endif     	
     } else {
     	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
     }
@@ -186,10 +206,14 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-	void __setitem__(const tlp::node n, const @PROPERTY_NODE_TYPE@ v) const;
+	void __setitem__(const tlp::node n, const @PROPERTY_NODE_TYPE@ &v) const;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {	
+	if (sipCpp->getGraph()->isElement(*a0)) {
+#ifdef PROPERTY_BASE_TYPE		
      	sipCpp->setNodeValue(*a0, a1);
+#else
+		sipCpp->setNodeValue(*a0, *a1);
+#endif     	
     } else {
     	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
     } 
@@ -199,8 +223,12 @@ Sets the value of a particular edge.
 
 	@PROPERTY_EDGE_TYPE@ __getitem__(const tlp::edge e) const;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {	
+	if (sipCpp->getGraph()->isElement(*a0)) {
+#ifdef PROPERTY_BASE_TYPE		
      	sipRes = sipCpp->getEdgeValue(*a0);
+#else
+		sipRes = new @PROPERTY_EDGE_TYPE@(sipCpp->getEdgeValue(*a0));
+#endif     	
     } else {
     	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
     }
@@ -209,10 +237,14 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-	void __setitem__(const tlp::edge e, const @PROPERTY_EDGE_TYPE@ v) const;
+	void __setitem__(const tlp::edge e, const @PROPERTY_EDGE_TYPE@ &v) const;
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {	
+#ifdef PROPERTY_BASE_TYPE	
      	sipCpp->setEdgeValue(*a0, a1);
+#else
+		sipCpp->setEdgeValue(*a0, *a1);
+#endif     	
     } else {
     	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
     } 
@@ -402,7 +434,11 @@ Sets the value in the list attached to a particular node at the given index.
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		const std::vector<@CPP_TYPE@> &v = sipCpp->getNodeValue(*a0);
 		if (a1 < v.size()) {
+#ifdef PROPERTY_BASE_TYPE		
 			sipCpp->setNodeEltValue(*a0, a1, a2);
+#else
+			sipCpp->setNodeEltValue(*a0, a1, *a2);
+#endif			
 		} else {
 			std::ostringstream oss;
 			oss << "vector associated to node " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
@@ -434,7 +470,11 @@ Returns the value in the list attached to a particular node at the given index.
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		const std::vector<@CPP_TYPE@> &v = sipCpp->getNodeValue(*a0);
 		if (a1 < v.size()) {
+#ifdef PROPERTY_BASE_TYPE		
 			sipRes = sipCpp->getNodeEltValue(*a0, a1);
+#else
+			sipRes = new @CPP_TYPE@(sipCpp->getNodeEltValue(*a0, a1));
+#endif			
 		} else {
 			std::ostringstream oss;
 			oss << "vector associated to node " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
@@ -463,7 +503,11 @@ Inserts a value at the end of the list attached to a particular node. The size o
 
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->pushBackNodeEltValue(*a0, a1);	
+#ifdef PROPERTY_BASE_TYPE	
+		sipCpp->pushBackNodeEltValue(*a0, a1);
+#else
+		sipCpp->pushBackNodeEltValue(*a0, *a1);
+#endif			
 	} else {
 		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
 	}
@@ -532,7 +576,11 @@ Resizes the list attached to a particular node. The value given in paramater wil
 	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->resizeNodeValue(*a0, a1, a2);	
+#ifdef PROPERTY_BASE_TYPE	
+		sipCpp->resizeNodeValue(*a0, a1, a2);
+#else
+		sipCpp->resizeNodeValue(*a0, a1, *a2);
+#endif			
 	} else {
 		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
 	}
@@ -559,7 +607,11 @@ Sets the value in the list attached to a particular edge at the given index.
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		const std::vector<@CPP_TYPE@> &v = sipCpp->getEdgeValue(*a0);
 		if (a1 < v.size()) {
+#ifdef PROPERTY_BASE_TYPE		
 			sipCpp->setEdgeEltValue(*a0, a1, a2);
+#else
+			sipCpp->setEdgeEltValue(*a0, a1, *a2);
+#endif			
 		} else {
 			std::ostringstream oss;
 			oss << "vector associated to edge " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
@@ -591,7 +643,11 @@ Returns the value in the list attached to a particular edge at the given index.
 	if (sipCpp->getGraph()->isElement(*a0)) {
 		const std::vector<@CPP_TYPE@> &v = sipCpp->getEdgeValue(*a0);
 		if (a1 < v.size()) {
+#ifdef PROPERTY_BASE_TYPE		
 			sipRes = sipCpp->getEdgeEltValue(*a0, a1);
+#else
+			sipRes = new @CPP_TYPE@(sipCpp->getEdgeEltValue(*a0, a1));
+#endif			
 		} else {
 			std::ostringstream oss;
 			oss << "vector associated to edge " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
@@ -620,7 +676,11 @@ Inserts a value at the end of the list attached to a particular edge. The size o
 	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->pushBackEdgeEltValue(*a0, a1);	
+#ifdef PROPERTY_BASE_TYPE	
+		sipCpp->pushBackEdgeEltValue(*a0, a1);
+#else
+		sipCpp->pushBackEdgeEltValue(*a0, *a1);
+#endif			
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
 	}
@@ -689,7 +749,11 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 	
 %MethodCode
 	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->resizeEdgeValue(*a0, a1, a2);	
+#ifdef PROPERTY_BASE_TYPE	
+		sipCpp->resizeEdgeValue(*a0, a1, a2);
+#else
+		sipCpp->resizeEdgeValue(*a0, a1, *a2);
+#endif			
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
 	}

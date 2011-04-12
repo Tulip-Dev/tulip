@@ -3,8 +3,7 @@ IF(SIP_OK)
 
 SET(TULIP_SIP_FILES
     AcyclicTest.sip
-    AbstractPropertyPointerType.sip.in
-    AbstractPropertyBaseType.sip.in
+    AbstractProperty.sip.in
     Algorithm.sip
     Array.sip
     BiconnectedTest.sip
@@ -78,6 +77,14 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${TulipInclude}
 
 SET_SOURCE_FILES_PROPERTIES(siptuliptlpIteratorGraph.cpp
                             PROPERTIES COMPILE_DEFINITIONS ITERATOR_NO_COPY)
+                            
+SET_SOURCE_FILES_PROPERTIES(siptuliptlpBooleanProperty.cpp 
+							siptuliptlpBooleanVectorProperty.cpp
+							siptuliptlpDoubleProperty.cpp
+							siptuliptlpDoubleVectorProperty.cpp
+							siptuliptlpIntegerProperty.cpp
+							siptuliptlpIntegerVectorProperty.cpp	
+                            PROPERTIES COMPILE_DEFINITIONS PROPERTY_BASE_TYPE)                            
  
 ADD_LIBRARY(${LibTulipPythonName} SHARED ${TULIP_PYTHON_BINDINGS_SRC})
 
