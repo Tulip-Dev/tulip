@@ -91,26 +91,33 @@ scriptengine_ConsoleOutput_init(scriptengine_ConsoleOutput *self, PyObject *args
 /* This redirects stdout from the calling script. */
 static PyObject *
 scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
+
 	char *buf;
 
 	if(!PyArg_ParseTuple(o, "s", &buf))
 		return NULL;
 
-
-	if (buf != NULL && ((scriptengine_ConsoleOutput *)self)->writeToConsole) {
-		QBrush brush(Qt::SolidPattern);
-		if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
-			brush.setColor(Qt::red);
-		} else {
-			brush.setColor(Qt::black);
-		}
-		QTextCharFormat formt;
-		formt.setForeground(brush);
-		consoleWidget->moveCursor(QTextCursor::End);
-		QTextCursor cursor = consoleWidget->textCursor();
-		cursor.insertText(buf, formt);
+	if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
+		cerr << buf << endl;
 	}
 
+	if (consoleWidget) {
+		if (buf != NULL && ((scriptengine_ConsoleOutput *)self)->writeToConsole) {
+			QBrush brush(Qt::SolidPattern);
+			if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
+				brush.setColor(Qt::red);
+
+			} else {
+				brush.setColor(Qt::black);
+			}
+
+			QTextCharFormat formt;
+			formt.setForeground(brush);
+			consoleWidget->moveCursor(QTextCursor::End);
+			QTextCursor cursor = consoleWidget->textCursor();
+			cursor.insertText(buf, formt);
+		}
+	}
 	Py_RETURN_NONE;
 }
 
@@ -143,8 +150,8 @@ static PyMemberDef scriptengine_ConsoleOutput_members[] = {
 static PyMethodDef scriptengine_ConsoleOutput_methods[] = {
 		{"write", (PyCFunction) scriptengine_ConsoleOutput_write, METH_VARARGS,
 				"Post output to the scripting engine"},
-		{"enableConsoleOutput", (PyCFunction) scriptengine_ConsoleOutput_enableConsoleOutput, METH_VARARGS,
-				"enable / disable console output"},
+				{"enableConsoleOutput", (PyCFunction) scriptengine_ConsoleOutput_enableConsoleOutput, METH_VARARGS,
+						"enable / disable console output"},
 						{0, 0, 0, 0}  /* Sentinel */
 };
 

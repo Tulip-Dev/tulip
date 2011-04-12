@@ -72,6 +72,8 @@ public :
 	void stopCurrentScript();
 	bool isRunningScript() const {return runningScript;}
 	std::string getPythonVersion() const {return pythonVersion;}
+	void setDefaultSIGINTHandler();
+
 	
 	void setDefaultConsoleWidget();
 	void setConsoleWidget(QPlainTextEdit *consoleWidget);
