@@ -248,9 +248,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 	edges[src].insert(tgt);
 	if (toDelete) {
 	  //	cerr << "delete edge e :" << e.id << endl;
-	  if (edgeDelAll)
-	    delAllEdge(e);
-	  else delEdge(e);
+	  delEdge(e, edgeDelAll);
 	}
       }
       if (isElement(tgt) && subGraph->isElement(src)) {
@@ -272,9 +270,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 	edges[tgt].insert(src);
 	if (toDelete) {
 	  //	cerr << "delete edge e :" << e.id << endl;
-	  if (edgeDelAll)
-	    delAllEdge(e);
-	  else delEdge (e);
+	  delEdge(e, edgeDelAll);
 	}
       }
     }
@@ -331,7 +327,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
   if (!metaEdges->hasNext()) {
     delete metaEdges;
     // no edge so just remove the meta node
-    getRoot()->delAllNode(metaNode);
+    getRoot()->delNode(metaNode, true);
     Observable::unholdObservers();
     return;
   }
@@ -403,7 +399,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 	++itme;
       }
     }
-    getRoot()->delAllNode(metaNode);
+    getRoot()->delNode(metaNode, true);
   } else {
     MutableContainer<node> mappingC;
     MutableContainer<node> mappingN;
@@ -420,7 +416,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 	graphColors->getEdgeValue(metaEdge);
     }
     //Remove the metagraph from the hierarchy and remove the metanode
-    root->delAllNode(metaNode);
+    root->delNode(metaNode, true);
     TLP_HASH_MAP<node, TLP_HASH_SET<node> > edges;
     //=================================
     StableIterator<edge> it(root->getEdges());
