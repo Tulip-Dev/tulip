@@ -67,7 +67,6 @@ void BooleanProperty::reverse() {
     else
       setEdgeValue(ite,true);
   } delete itE;
-  notifyObservers();
   Observable::unholdObservers();
 }
 //=================================================================================
