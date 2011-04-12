@@ -213,7 +213,6 @@ void LayoutProperty::translate(const tlp::Vector<float,3>& v, Iterator<node> *it
   }
   if (itE != 0 || itN != 0) {
       resetBoundingBox();
-      notifyObservers();
   }
   Observable::unholdObservers();
 }
@@ -239,7 +238,6 @@ void LayoutProperty::center(Graph *sg) {
   tr /= -2.0;
   translate(tr, sg);
   resetBoundingBox();
-  notifyObservers();
   Observable::unholdObservers();
 }
 //=================================================================================
@@ -261,7 +259,6 @@ void LayoutProperty::normalize(Graph *sg) {
   dtmpMax = 1.0 / sqrt(dtmpMax);
   scale(Coord(dtmpMax,dtmpMax,dtmpMax), sg);  
   resetBoundingBox();
-  notifyObservers();
   Observable::unholdObservers();
 }
 //=================================================================================
@@ -287,7 +284,6 @@ void LayoutProperty::perfectAspectRatio() {
   scaleY = delta / deltaY;
   scaleZ = delta / deltaZ;
   scale(Coord(scaleX,scaleY,scaleZ));
-  notifyObservers();
   Observable::unholdObservers();
 }
 
