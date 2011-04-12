@@ -851,6 +851,7 @@ Returns the number of edges in the graph.
 :rtype: integer
 %End
 
+
 //===========================================================================================
 
 	unsigned int deg(const tlp::node)const ;
@@ -956,6 +957,29 @@ Returns the target of the edge.
 %MethodCode
 	if (sipCpp->isElement(*a0)) {
 		sipRes = new tlp::node(sipCpp->target(*a0));
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+	}
+%End
+
+
+//===========================================================================================
+
+	const std::pair<tlp::node, tlp::node>& ends(const tlp::edge) const;
+%Docstring
+tlp.Graph.ends(edge)
+
+Returns a tupple containing the two end nodes of an edge
+
+:param edge: an existing edge of the graph
+:type node: :class:`tlp.edge`
+:rtype: (:class:`tlp.node`, :class:`tlp.node`) 
+:throws: an exception if the edge does not belong to the graph
+%End
+
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		sipRes = new std::pair<tlp::node, tlp::node>(sipCpp->ends(*a0));
 	} else {
 		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
 	}
@@ -1945,6 +1969,37 @@ which can contain an error message.
 
 %MethodCode
 	sipRes = sipCpp->computeProperty<tlp::ColorProperty>(*a0, a1, *a2, NULL, a3);
+%End
+
+//===========================================================================================
+
+bool computeStringProperty(const std::string &algorithm, tlp::StringProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
+%Docstring
+tlp.Graph.computeStringProperty(algoName, result[, dataSet = None])
+
+Computes a string property on the current graph 
+using an external named string algorithm (plugin).
+The computed values will be stored in result. 
+Warning: previous values stored in result will be deleted.
+Parameters can be transmit to the algorithm
+using a :class:`tlp.DataSet` . In some cases, algorithms 
+can use this :class:`tlp.DataSet` in order to return some external information 
+(not stored in result).
+Returns a tuple whose first member is a boolean indicating if the 
+algorithm terminates successfully and second member is a string 
+which can contain an error message.
+
+:param algoName: the name of the string algorithm to call
+:type algoName: string
+:param result: a string property in which result of the algorithm will be stored
+:type result: :class:`tlp.StringProperty`
+:param dataSet: a data set containing some parameters to transmit to the algorithm
+:type dataSet: :class:`tlp.DataSet`
+:rtype: (boolean, string)
+%End
+
+%MethodCode
+	sipRes = sipCpp->computeProperty<tlp::StringProperty>(*a0, a1, *a2, NULL, a3);
 %End
 
 //===========================================================================================
