@@ -50,22 +50,22 @@ struct DataSet {
 	sipCpp->set(*a0, *a1);
 %End
 
-	bool getBool(const std::string &str, bool &v /Out/);
+	bool getBoolean(const std::string &str, bool &v /Out/);
 %MethodCode
 	sipRes = sipCpp->get(*a0, a1);
 %End
 	
-	void setBool(const std::string &str, const bool v);
+	void setBoolean(const std::string &str, const bool v);
 %MethodCode
 	sipCpp->set(*a0, a1);
 %End
 
-	bool getInt(const std::string &str, int &v /Out/);
+	bool getInteger(const std::string &str, int &v /Out/);
 %MethodCode
 	sipRes = sipCpp->get(*a0, a1);
 %End
 	
-	void setInt(const std::string &str, const int v);
+	void setInteger(const std::string &str, const int v);
 %MethodCode
 	sipCpp->set(*a0, a1);
 %End
