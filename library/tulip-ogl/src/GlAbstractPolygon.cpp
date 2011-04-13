@@ -21,7 +21,6 @@
 #include "tulip/GlAbstractPolygon.h"
 
 #include "tulip/OpenGlConfigManager.h"
-#include "tulip/GlLayer.h"
 #include "tulip/GlTextureManager.h"
 
 using namespace std;

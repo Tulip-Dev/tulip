@@ -20,14 +20,10 @@
 #include <string.h>
 #include <GL/glew.h>
 #include <tulip/Vector.h>
-#include <tulip/Size.h>
 #include <tulip/TlpTools.h>
 #include "tulip/Curves.h"
 #include "tulip/GlTextureManager.h"
 #include "tulip/OpenGlConfigManager.h"
-
-#include "tulip/OpenGlConfigManager.h"
-#include "tulip/tulipconf.h"
 
 using namespace std;
 using namespace tlp;

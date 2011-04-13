@@ -18,9 +18,6 @@
  */
 
 #include <sstream>
-#include <cmath>
-#include <list>
-#include <map>
 
 #include <tulip/GlLine.h>
 #include <tulip/GlLabel.h>
