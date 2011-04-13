@@ -222,7 +222,7 @@ void TestAlgorithmTest::testBiconnected() {
     BiconnectedTest::makeBiconnected(tmpGraph, vEdges);
     CPPUNIT_ASSERT(BiconnectedTest::isBiconnected(tmpGraph));
     for (vector<edge>::iterator it = vEdges.begin(); it != vEdges.end(); ++it) {
-      tmpGraph->delAllEdge(*it);
+      tmpGraph->delEdge(*it, true);
     }
     CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(tmpGraph));
     delete tmpGraph;

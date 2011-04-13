@@ -498,7 +498,7 @@ void SuperGraphTest::testSubgraph() {
   g2->addNode(n2);
   g2->addEdge(e);
   CPPUNIT_ASSERT(g2->isElement(n2) && g2->isElement(e));
-  g2->delAllNode(n2);
+  g2->delNode(n2, true);
   CPPUNIT_ASSERT(!g2->isElement(n2) && !g2->isElement(e));
   CPPUNIT_ASSERT(!graph->isElement(n2) && !graph->isElement(e));
   graph->clear();
