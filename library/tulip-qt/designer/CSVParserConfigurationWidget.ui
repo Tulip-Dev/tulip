@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>232</width>
-    <height>175</height>
+    <height>181</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -97,7 +97,7 @@
         <item row="2" column="0" colspan="2">
          <widget class="QCheckBox" name="switchRowColumnCheckBox">
           <property name="text">
-           <string>Switch row and column</string>
+           <string>Switch rows and columns</string>
           </property>
          </widget>
         </item>

@@ -84,15 +84,11 @@ namespace tlp{
           * @brief Allow user to define it's default text.
           **/
         void setDefaultText(const QString& newDefaultText);
-    protected:
 
-        void keyPressEvent(QKeyEvent *e);
     private:
         tlp::Graph *currentGraph;
         QString defaultText;
 
-    private slots:
-        void newGraphPropertySelected(const QString& propertyName);
     };
 
 
@@ -130,6 +126,9 @@ protected:
 private:
     CSVImportParameters importParameters;
     Ui::CSVGraphMappingConfigurationWidget *ui;
+
+private slots:
+    void createNewProperty();
 
 signals:
     void mappingChanged();

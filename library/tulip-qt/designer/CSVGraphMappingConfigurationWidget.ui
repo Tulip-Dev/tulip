@@ -158,12 +158,45 @@ p, li { white-space: pre-wrap; }
            <item row="0" column="1">
             <widget class="tlp::CSVColumnComboBox" name="targetColumnComboBox"/>
            </item>
-           <item row="1" column="0" colspan="2">
-            <widget class="tlp::GraphPropertiesSelectionComboBox" name="graphIndexPropertiesComboBox">
-             <property name="editable">
-              <bool>true</bool>
+           <item row="2" column="0" colspan="2">
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <property name="spacing">
+              <number>3</number>
              </property>
-            </widget>
+             <item>
+              <widget class="tlp::GraphPropertiesSelectionComboBox" name="graphIndexPropertiesComboBox">
+               <property name="editable">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="createNewPropertyPushButton">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Create new property</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
           </layout>
          </item>

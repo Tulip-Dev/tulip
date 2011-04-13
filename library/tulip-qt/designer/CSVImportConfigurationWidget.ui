@@ -23,7 +23,7 @@
    <item>
     <widget class="QCheckBox" name="useFirstLineAsPropertyNamecheckBox">
      <property name="text">
-      <string>Use first line as property name</string>
+      <string>Use first line tokens as name</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -35,7 +35,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Import line from</string>
+        <string>Import lines from</string>
        </property>
       </widget>
      </item>
@@ -150,7 +150,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Limit preview lines number</string>
+        <string>Limit number of preview lines</string>
        </property>
        <property name="checked">
         <bool>true</bool>
