@@ -21,7 +21,6 @@
 #endif
 
 #include <tulip/TlpTools.h>
-#include <tulip/TulipRelease.h>
 #include <PluginInfo.h>
 #include "Application.h"
 

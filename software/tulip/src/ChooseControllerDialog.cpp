@@ -22,9 +22,6 @@
 #include <config.h>
 #endif
 
-#include <iostream>
-
-#include <QtGui/QPushButton>
 #include <QtCore/QSettings>
 
 #include <tulip/PreferenceManager.h>
