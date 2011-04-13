@@ -20,10 +20,7 @@
 #include <vector>
 #include "tulip/Graph.h"
 #include "tulip/SimpleTest.h"
-#include "tulip/ConnectedTest.h"
 #include "tulip/MutableContainer.h"
-#include "tulip/BooleanProperty.h"
-#include "tulip/StableIterator.h"
 
 using namespace std;
 using namespace tlp;

@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <typeinfo>
 #include <iostream>
 #include <sstream>
 #include <map>

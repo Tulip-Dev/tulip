@@ -19,7 +19,6 @@
 #include "tulip/Graph.h"
 #include "tulip/TriconnectedTest.h"
 #include "tulip/BiconnectedTest.h"
-#include "tulip/MutableContainer.h"
 
 using namespace std;
 using namespace tlp;

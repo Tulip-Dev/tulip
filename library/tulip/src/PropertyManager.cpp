@@ -23,7 +23,7 @@
 #include "tulip/ForEach.h"
 #include "tulip/GraphAbstract.h"
 #include "tulip/PropertyManager.h"
-#include "tulip/AbstractProperty.h"
+#include "tulip/PropertyInterface.h"
 #include "tulip/GraphProperty.h"
 
 namespace tlp {

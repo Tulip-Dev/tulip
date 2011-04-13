@@ -22,11 +22,19 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#include "tulip/PropertyTypes.h"
-#include "tulip/TulipPlugin.h"
-#include "tulip/GraphProperty.h"
-#include "tulip/TlpTools.h"
-#include "tulip/TLPParser.h"
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/ImportModule.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/MethodFactory.h>
+#include <tulip/PropertyTypes.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/TlpTools.h>
+#include <tulip/TLPParser.h>
 
 #define TLP "tlp"
 #define AUTHOR "author"

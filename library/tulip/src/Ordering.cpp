@@ -18,7 +18,6 @@
  */
 
 #include <tulip/Ordering.h>
-#include <tulip/TlpTools.h>
 #include <tulip/BiconnectedTest.h>
 #include <assert.h>
 #include <cstdlib>
