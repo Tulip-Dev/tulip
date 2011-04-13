@@ -29,16 +29,11 @@
 #include <QtGui/qlineedit.h>
 #include <QtCore/qdir.h>
 #include <QtCore/qfileinfo.h>
-#include <QtCore/qmetaobject.h>
 #include <QtGui/qvalidator.h>
 #include <QtGui/qsizepolicy.h>
-#include <QtGui/qmessagebox.h>
-#include <QtGui/qinputdialog.h>
 #include <QtGui/qevent.h>
-#include <QtGui/qcheckbox.h>
-#include <QtGui/qitemeditorfactory.h>
+#include <QtGui/QDialogButtonBox>
 
-#include <tulip/Graph.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/StringProperty.h>
@@ -59,7 +54,6 @@
 #include "tulip/TulipTableWidget.h"
 #include "tulip/TextEditDialog.h"
 #include <tulip/ListPropertyWidget.h>
-#include <QtGui/QDialogButtonBox>
 
 #define COLORTABLEITEM_RTTI 1001
 #define FILETABLEITEM_RTTI  1002
