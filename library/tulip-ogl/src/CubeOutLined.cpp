@@ -17,7 +17,6 @@
  *
  */
 #include "tulip/Glyph.h"
-#include "tulip/Graph.h"
 #include "tulip/GlBox.h"
 
 using namespace std;
