@@ -102,16 +102,6 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   return data;
 }
 
-static Graph *findGraphById(Graph *sg, const unsigned int id) {
-  if (sg->getId()==id) return sg;
-  Iterator<Graph *> *itS=sg->getSubGraphs();
-  while (itS->hasNext()) {
-    Graph *tmp=findGraphById(itS->next(),id);
-    if (tmp!=0) {delete itS; return tmp;}
-  } delete itS;
-  return 0;
-}
-
 //This function should rewriten completly
 void GlGraphRenderingParameters::setParameters(const DataSet &data) {
   bool b = false;
