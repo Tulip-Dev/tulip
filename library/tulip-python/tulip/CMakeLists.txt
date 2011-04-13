@@ -56,8 +56,8 @@ SET(TULIP_SIP_FILES
 
 # First, generate tulip properties bindings based on template SIP files
 # Then, generate a SIP build file and parse its content to retrieve source files list
-EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -DWORKING_DIR=${CMAKE_CURRENT_SOURCE_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/generatePropertiesBindings.cmake
-				COMMAND ${SIP_EXE} -b ${CMAKE_CURRENT_BINARY_DIR}/tulip.sbf ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip)
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -DWORKING_DIR=${CMAKE_CURRENT_SOURCE_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/generatePropertiesBindings.cmake)
+EXECUTE_PROCESS(COMMAND ${SIP_EXE} -b ${CMAKE_CURRENT_BINARY_DIR}/tulip.sbf ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip)
 FILE(READ ${CMAKE_CURRENT_BINARY_DIR}/tulip.sbf TULIP_SBF)
 STRING(REGEX MATCHALL "[0-9A-Za-z_]*\\.cpp" TULIP_PYTHON_BINDINGS_SRC ${TULIP_SBF})
 
