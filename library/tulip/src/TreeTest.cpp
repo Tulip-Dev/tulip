@@ -23,7 +23,6 @@
 #include "tulip/AcyclicTest.h"
 #include "tulip/ForEach.h"
 #include "tulip/GraphTools.h"
-#include "tulip/ExtendedClusterOperation.h"
 #include "tulip/BooleanProperty.h"
 
 using namespace std;
