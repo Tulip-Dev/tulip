@@ -22,7 +22,8 @@
 #include <utility>
 #include <limits>
 
-#include "tulip/Vector.h"
+#include <tulip/Vector.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
     /**
@@ -56,7 +57,7 @@ namespace tlp {
      *
      * Author : <a href="www.tulip-software.org">Tulip team</a>
      */
-  struct BoundingBox : public Array<Vec3f, 2> {
+  struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   
       
     /**
