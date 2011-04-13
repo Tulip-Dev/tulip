@@ -20,15 +20,12 @@
 #include <config.h>
 #endif
 
-#include <qtimer.h>
-#include <qlocale.h>
-#include <QtGui/qdesktopwidget.h>
-#include <QtCore/QSettings>
+#include <QtCore/QTimer>
+#include <QtCore/QLocale>
+#include <QtGui/QDesktopWidget>
 
-#include "AppStartUp.h"
 #include "Application.h"
 #include "TulipApp.h"
-
 
 using namespace std;
 int main( int argc, char **argv ) {
