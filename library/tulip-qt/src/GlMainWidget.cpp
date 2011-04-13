@@ -21,14 +21,10 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <QtGui/qevent.h>
 #include <QtGui/qimage.h>
-#include <QtGui/qtooltip.h>
 #include <QtOpenGL/QGLPixelBuffer>
-#include <QtGui/QPainter>
 #include <QtOpenGL/QGLFramebufferObject>
 #include <QtOpenGL/QGLFormat>
-#include <QtCore/QTime>
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
 #include <omp.h>
@@ -37,21 +33,14 @@
 #include "tulip/GlMainWidget.h"
 
 #include <tulip/Graph.h>
-#include <tulip/Iterator.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/SizeProperty.h>
 #include <tulip/GlTools.h>
-#include <tulip/StlIterator.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
 
-
 #include "tulip/QGlPixelBufferManager.h"
 #include "tulip/Interactor.h"
-#include "tulip/InteractorManager.h"
 #include <tulip/GlCompositeHierarchyManager.h>
 #include "tulip/GlVertexArrayManager.h"
 

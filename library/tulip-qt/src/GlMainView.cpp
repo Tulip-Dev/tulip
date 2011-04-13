@@ -18,14 +18,10 @@
  */
 #include "tulip/GlMainView.h"
 
-#include <QtGui/QFileDialog>
 #include <QtGui/QMessageBox>
 #include <QtGui/QMenu>
-#include <QtGui/QImageWriter>
 
 #include "tulip/GlMainWidget.h"
-#include "tulip/FindSelectionWidget.h"
-#include "tulip/TabWidget.h"
 #include "tulip/GWOverviewWidget.h"
 
 using namespace std;

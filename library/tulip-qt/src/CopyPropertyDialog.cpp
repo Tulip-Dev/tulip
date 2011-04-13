@@ -34,7 +34,6 @@
 #include <QtGui/qtabwidget.h>
 
 #include "tulip/CopyPropertyDialog.h"
-#include "tulip/ForEach.h"
 
 using namespace std;
 using namespace tlp;

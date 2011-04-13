@@ -29,14 +29,10 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <QtGui/qlistview.h>
-#include <QtGui/qpushbutton.h>
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qinputdialog.h>
 #include <QtCore/qstring.h>
 #include <QtCore/qstringlist.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qtabwidget.h>
 #include <QtGui/qevent.h>
 
 #include <tulip/Graph.h>
@@ -47,9 +43,6 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/PropertyWidget.h>
-#include <tulip/SGHierarchyWidget.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/ForEach.h>
 
 #include "tulip/PropertyDialog.h"

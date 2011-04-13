@@ -18,17 +18,12 @@
  */
 #include "tulip/NodeLinkDiagramComponent.h"
 
-#include <QtGui/QMenuBar>
-#include <QtGui/QImageWriter>
-#include <QtGui/QStatusBar>
-#include <QtGui/QInputDialog>
-#include <QtGui/QMouseEvent>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QMenu>
 #include <QtGui/QToolTip>
 
-#include <tulip/ExtendedClusterOperation.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/StableIterator.h>
 #include <tulip/StringProperty.h>
 
 #include <tulip/GlMetaNodeTrueRenderer.h>
@@ -38,9 +33,8 @@
 #include "tulip/LayerManagerWidget.h"
 #include "tulip/AugmentedDisplayDialog.h"
 #include "tulip/GridOptionsWidget.h"
-#include "tulip/InteractorManager.h"
-#include "tulip/TlpQtTools.h"
-#include "tulip/BaseGraphicsViewComponentMacro.h"
+
+//#include "tulip/BaseGraphicsViewComponentMacro.h"
 
 namespace tlp {
 
