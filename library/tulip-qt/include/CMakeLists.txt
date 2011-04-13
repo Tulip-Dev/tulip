@@ -21,7 +21,6 @@ INSTALL(FILES
 	tulip/MouseBoxZoomer.h 
 	tulip/MouseEdgeBuilder.h 
 	tulip/MouseInteractors.h 
-	tulip/MouseMagicSelector.h 
 	tulip/MouseNodeBuilder.h 
 	tulip/MouseSelectionEditor.h 
 	tulip/MouseEdgeSelector.h 
