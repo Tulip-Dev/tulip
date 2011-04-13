@@ -30,7 +30,6 @@ MouseSelector.cpp
 MouseBoxZoomer.cpp
 MouseEdgeBuilder.cpp
 MouseInteractors.cpp
-MouseMagicSelector.cpp
 MouseNodeBuilder.cpp
 MouseSelectionEditor.cpp
 MouseEdgeSelector.cpp
