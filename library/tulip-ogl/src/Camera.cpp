@@ -57,9 +57,9 @@ void Camera::move(float speed) {
 	eyes += move;
 	center += move;
 	matrixCoherent=false;
-	Event event(*this, Event::TLP_MODIFICATION);
+
 	if (hasOnlookers())
-		sendEvent(event);
+		sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //====================================================
 void Camera::rotate(float angle, float x, float y, float z) {
@@ -110,9 +110,8 @@ void Camera::rotate(float angle, float x, float y, float z) {
 	up   = vNewUp;
 	matrixCoherent=false;
 
-	Event event(*this, Event::TLP_MODIFICATION);
 	if (hasOnlookers())
-		sendEvent(event);
+		sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //====================================================
 void Camera::strafeLeftRight(float speed) {
@@ -122,9 +121,8 @@ void Camera::strafeLeftRight(float speed) {
 	eyes   += strafeVector;
 	matrixCoherent=false;
 
-	Event event(*this, Event::TLP_MODIFICATION);
 	if (hasOnlookers())
-		sendEvent(event);
+		sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //====================================================
 void Camera::strafeUpDown(float speed) {
@@ -134,9 +132,8 @@ void Camera::strafeUpDown(float speed) {
 	eyes   += strafeVector;
 	matrixCoherent=false;
 
-	Event event(*this, Event::TLP_MODIFICATION);
 	if (hasOnlookers())
-		sendEvent(event);
+		sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //====================================================
 void Camera::initGl() {
@@ -271,9 +268,8 @@ void Camera::setSceneRadius(double sceneRadius,const BoundingBox sceneBoundingBo
 	this->sceneBoundingBox=sceneBoundingBox;
 	matrixCoherent=false;
 
-	Event event(*this, Event::TLP_MODIFICATION);
 	if (hasOnlookers())
-		sendEvent(event);
+		sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //====================================================
 void Camera::setZoomFactor(double zoomFactor) {
@@ -283,36 +279,32 @@ void Camera::setZoomFactor(double zoomFactor) {
 	this->zoomFactor=zoomFactor;
 	matrixCoherent=false;
 
-	Event event(*this, Event::TLP_MODIFICATION);
 	if (hasOnlookers())
-		sendEvent(event);
+		sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //====================================================
 void Camera::setEyes(const Coord& eyes) {
 	this->eyes=eyes;
 	matrixCoherent=false;
 
-	Event event(*this, Event::TLP_MODIFICATION);
 	if (hasOnlookers())
-		sendEvent(event);
+		sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //====================================================
 void Camera::setCenter(const Coord& center) {
 	this->center=center;
 	matrixCoherent=false;
 
-	Event event(*this, Event::TLP_MODIFICATION);
 	if (hasOnlookers())
-		sendEvent(event);
+		sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //====================================================
 void Camera::setUp(const Coord& up) {
 	this->up=up;
 	matrixCoherent=false;
 
-	Event event(*this, Event::TLP_MODIFICATION);
 	if (hasOnlookers())
-		sendEvent(event);
+		sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //====================================================
 void Camera::addObjectTransformation(const Coord &translation,const Coord &scale,const Coord &baseCoord ) {

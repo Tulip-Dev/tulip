@@ -586,9 +586,9 @@ namespace tlp {
   void GlScene::addLayer(GlLayer *layer) {
     layersList.push_back(std::pair<std::string,GlLayer*>(layer->getName(),layer));
     layer->setScene(this);
-    GlSceneEvent event(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer);
+
     if (hasOnlookers())
-      sendEvent(event);
+      sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer));
   }
 
   bool GlScene::insertLayerBefore(GlLayer *layer,const string &name) {
@@ -597,9 +597,8 @@ namespace tlp {
         layersList.insert(it,pair<string,GlLayer*>(layer->getName(),layer));
         layer->setScene(this);
 
-        GlSceneEvent event(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer);
         if (hasOnlookers())
-          sendEvent(event);
+          sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer));
 
         return true;
       }
@@ -614,9 +613,8 @@ namespace tlp {
         layersList.insert(it,pair<string,GlLayer*>(layer->getName(),layer));
         layer->setScene(this);
 
-        GlSceneEvent event(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer);
         if (hasOnlookers())
-          sendEvent(event);
+          sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer));
 
         return true;
       }
@@ -630,9 +628,8 @@ namespace tlp {
         GlLayer *layer=(*it).second;
         layersList.erase(it);
 
-        GlSceneEvent event(*this,GlSceneEvent::TLP_DELLAYER,layer->getName(),layer);
         if (hasOnlookers())
-          sendEvent(event);
+          sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELLAYER,layer->getName(),layer));
 
         if(deleteLayer)
           delete layer;
@@ -647,9 +644,8 @@ namespace tlp {
         GlLayer *layer=(*it).second;
         layersList.erase(it);
 
-        GlSceneEvent event(*this,GlSceneEvent::TLP_DELLAYER,layer->getName(),layer);
         if (hasOnlookers())
-          sendEvent(event);
+          sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELLAYER,layer->getName(),layer));
 
         if(deleteLayer)
           delete layer;
@@ -659,15 +655,13 @@ namespace tlp {
   }
 
   void GlScene::notifyModifyLayer(const std::string &name,GlLayer *layer){
-    GlSceneEvent event(*this,GlSceneEvent::TLP_MODIFYLAYER,name,layer);
     if (hasOnlookers())
-      sendEvent(event);
+      sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_MODIFYLAYER,name,layer));
   }
 
   void GlScene::notifyModifyEntity(GlSimpleEntity *entity){
-    GlSceneEvent event(*this,entity);
     if (hasOnlookers())
-      sendEvent(event);
+      sendEvent(GlSceneEvent(*this,entity));
   }
 
   void GlScene::centerScene() {
