@@ -198,25 +198,25 @@ namespace tlp {
 
     // GraphObserver interface
     // addedNodes
-    void addNode(Graph* g, node n);
+    void addNode(Graph* g, const node n);
 
     // addedEdges
-    void addEdge(Graph* g, edge e);
+    void addEdge(Graph* g, const edge e);
 
     // deletedNodes
-    void delNode(Graph* g, node n);
+    void delNode(Graph* g, const node n);
 
     // deletedEdges
-    void delEdge(Graph* g, edge e);
+    void delEdge(Graph* g, const edge e);
 
     // revertedEdges
-    void reverseEdge(Graph* g, edge e);
+    void reverseEdge(Graph* g, const edge e);
 
     // oldEdgeEnds
-    void beforeSetEnds(Graph* g, edge e);
+    void beforeSetEnds(Graph* g, const edge e);
 
     // newEdgeEnds
-    void afterSetEnds(Graph* g, edge e);
+    void afterSetEnds(Graph* g, const edge e);
 
     // addedSubGraphs
     void addSubGraph(Graph* g, Graph* sg);

@@ -90,8 +90,8 @@ namespace tlp {
 
 
     private:
-      void delNode(Graph *, node);
-      void delEdge(Graph *, edge);
+      void delNode(Graph *, const node);
+      void delEdge(Graph *, const edge);
       void destroy(Graph *);
     };
 
