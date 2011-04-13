@@ -305,7 +305,6 @@ ENDIF(LINUX)
 IF(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DQT_ASSISTANT='\"assistant\"'")
    IF(${MSVC})
-	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W1")
 	  #tells VS to use multiple threads to compile
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 	  #makes VS define M_PI
