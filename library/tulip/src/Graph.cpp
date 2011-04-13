@@ -17,9 +17,9 @@
  *
  */
 
-#include "thirdparty/gzstream/gzstream.h"
+#include <fstream>
+
 #include "tulip/Graph.h"
-#include "tulip/IdManager.h"
 #include "tulip/TlpTools.h"
 #include "tulip/GraphImpl.h"
 #include "tulip/BooleanProperty.h"

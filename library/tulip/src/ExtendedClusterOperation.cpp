@@ -29,9 +29,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/StringProperty.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/ForEach.h>
 
