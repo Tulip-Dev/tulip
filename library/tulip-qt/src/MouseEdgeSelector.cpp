@@ -163,7 +163,7 @@ bool MouseEdgeSelector::draw(GlMainWidget *glMainWidget){
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA,GL_SRC_COLOR);
-  float col[4]={0.8,0.8,0.7,0.2};
+  float col[4]={0.8f,0.8f,0.7f,0.2f};
   setColor(col);
   glBegin(GL_QUADS);
   glVertex2f(x, yy);
