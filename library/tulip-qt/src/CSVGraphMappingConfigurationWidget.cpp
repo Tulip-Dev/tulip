@@ -23,11 +23,11 @@
 #include <tulip/ForEach.h>
 #include <tulip/TlpQtTools.h>
 #include <QtGui/QComboBox>
-#include <QtGui/QGridLayout>
+#include <QtGui/QFormLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QDialogButtonBox>
 #include <QtGui/QPushButton>
-#include <QtGui/QKeyEvent>
+#include <QtGui/QLineEdit>
 using namespace tlp;
 using namespace std;
 
@@ -50,7 +50,9 @@ void CSVColumnComboBox::setCsvProperties(const CSVImportParameters& csvPropertie
     }else{
         setEnabled(true);
         for(unsigned int i = 0 ; i< csvProperties.columnNumber(); ++i){
-            addItem(tlpStringToQString(csvProperties.getColumnName(i)),QVariant(i));
+            if(csvProperties.importColumn(i)){
+                addItem(tlpStringToQString(csvProperties.getColumnName(i)),QVariant(i));
+            }
         }
     }
 
@@ -60,8 +62,7 @@ unsigned int CSVColumnComboBox::getSelectedColumnIndex()const{
     return itemData(currentIndex()).toUInt();
 }
 
-GraphPropertiesSelectionComboBox::GraphPropertiesSelectionComboBox(QWidget* parent):QComboBox(parent),currentGraph(NULL),defaultText("Choose an existing property."){
-    connect(this,SIGNAL(activated( const QString &)),this,SLOT(newGraphPropertySelected(const QString&)));
+GraphPropertiesSelectionComboBox::GraphPropertiesSelectionComboBox(QWidget* parent):QComboBox(parent),currentGraph(NULL),defaultText("Choose an existing property."){    
     addItem(defaultText);
     //Avoid user to handle it when no graph is given.
     setEnabled(false);
@@ -90,57 +91,6 @@ void GraphPropertiesSelectionComboBox::setGraph(Graph* graph){
     }
 }
 
-void GraphPropertiesSelectionComboBox::keyPressEvent(QKeyEvent *e){
-    //Qt workaround avoiding QDialog to close automatically
-    // let base class handle the event
-    QComboBox::keyPressEvent(e);
-    if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
-    {
-        // accept enter/return events so they won't
-        // be ever propagated to the parent dialog..
-        e->accept();
-    }
-}
-
-void GraphPropertiesSelectionComboBox::newGraphPropertySelected(const QString& propertyName){
-    //If the widget is not in edition mode , if the graph is invalid, if the new property name is empty or if the selected index is the label.
-    if(!isEditable() || currentGraph == NULL || propertyName.isEmpty() || currentIndex()==0)
-        return;
-    //The property don't exists create new one
-    if(!currentGraph->existProperty(QStringToTlpString(propertyName))){        
-        QDialog *dialog = new QDialog(this);
-        dialog->setObjectName("createNewPropertyDialog");
-        dialog->setLayout(new QVBoxLayout());
-        dialog->setWindowTitle(tr("New graph property creation."));
-        QLabel *label = new QLabel(tr("The property ") + propertyName + tr(" don't exists.\n Select type of the property you want to create."));
-        label->setObjectName("createNewPropertyDialogLabel");
-        dialog->layout()->addWidget(label);        
-        QComboBox *propertyTypeSelection = new QComboBox(dialog);
-        propertyTypeSelection->setObjectName("createNewPropertyDialogComboBox");
-        propertyTypeSelection->addItems(PropertyTools::getPropertyTypeLabelsList());
-        dialog->layout()->addWidget(propertyTypeSelection);
-        QDialogButtonBox *buttons = new QDialogButtonBox(dialog);
-        buttons->setObjectName("createNewPropertyDialogButtonBox");
-        QPushButton* createButton = new QPushButton(tr("Create"),buttons);
-        createButton->setObjectName("createNewPropertyDialogButton");
-        createButton->setDefault(true);
-        buttons->addButton(createButton,QDialogButtonBox::AcceptRole);
-        buttons->addButton(QDialogButtonBox::Cancel)->setObjectName("cancelCreateNewPropertyButton");
-        dialog->layout()->addWidget(buttons);
-        connect(buttons,SIGNAL(accepted()),dialog,SLOT(accept()));
-        connect(buttons,SIGNAL(rejected()),dialog,SLOT(reject()));
-        if(dialog->exec()==QDialog::Accepted){
-            string propertyType = PropertyTools::getPropertyTypeFromPropertyTypeLabel(QStringToTlpString(propertyTypeSelection->currentText()));
-            PropertyTools::getProperty(currentGraph,QStringToTlpString(propertyName),propertyType);
-        }else{
-            //Delete the new property.
-            removeItem(currentIndex());
-            setCurrentIndex(0);
-        }
-        dialog->deleteLater();
-    }
-}
-
 string GraphPropertiesSelectionComboBox::getSelectedGraphProperty()const{
     if(currentIndex()==0){
         return "";
@@ -163,15 +113,17 @@ CSVGraphMappingConfigurationWidget::CSVGraphMappingConfigurationWidget(QWidget *
     connect(ui->edgeMappingColumncomboBox,SIGNAL(currentIndexChanged(int)),this,SIGNAL(mappingChanged()));
     connect(ui->edgeMappingPropertycomboBox,SIGNAL(currentIndexChanged(int)),this,SIGNAL(mappingChanged()));
 
-    ui->graphIndexPropertiesComboBox->setDefaultText(tr("Choose graph entities id property"));
-    ui->sourceColumnComboBox->setDefaultText(tr("Choose CSV source entities id column"));
-    ui->targetColumnComboBox->setDefaultText(tr("Choose CSV target entities id column"));
+    connect(ui->createNewPropertyPushButton,SIGNAL(clicked(bool)),this,SLOT(createNewProperty()),Qt::QueuedConnection);
 
-    ui->nodeMappingColumncomboBox->setDefaultText(tr("Choose CSV entities id column"));
-    ui->nodeMappingPropertycomboBox->setDefaultText(tr("Choose graph entities id property"));
+    ui->graphIndexPropertiesComboBox->setDefaultText(tr("Choose property containing entities ids"));
+    ui->sourceColumnComboBox->setDefaultText(tr("Choose CSV column containing source entities ids"));
+    ui->targetColumnComboBox->setDefaultText(tr("Choose CSV column containing target entities ids"));
 
-    ui->edgeMappingColumncomboBox->setDefaultText(tr("Choose CSV relations id column"));
-    ui->edgeMappingPropertycomboBox->setDefaultText(tr("Choose graph relations id property"));
+    ui->nodeMappingColumncomboBox->setDefaultText(tr("Choose CSV column containing entities ids"));
+    ui->nodeMappingPropertycomboBox->setDefaultText(tr("Choose property containing entities ids"));
+
+    ui->edgeMappingColumncomboBox->setDefaultText(tr("Choose CSV column containing relations ids"));
+    ui->edgeMappingPropertycomboBox->setDefaultText(tr("Choose property containing relations ids"));
 
 }
 
@@ -233,7 +185,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
         string idPropertyName = ui->graphIndexPropertiesComboBox->getSelectedGraphProperty();
         unsigned int srcColumnId = ui->sourceColumnComboBox->getSelectedColumnIndex();
         unsigned int tgtColumnId = ui->targetColumnComboBox->getSelectedColumnIndex();
-        if(idPropertyName.empty() || srcColumnId ==UINT_MAX || tgtColumnId == UINT_MAX){
+        if(idPropertyName.empty() ||idPropertyName.empty() || srcColumnId ==UINT_MAX || tgtColumnId == UINT_MAX || srcColumnId == tgtColumnId){
             return NULL;
         }
         bool createMissingElement = ui->addMissingEdgeAndNodeCheckBox->isChecked();
@@ -250,7 +202,7 @@ bool CSVGraphMappingConfigurationWidget::isValid()const{
         if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importNodesPage){
         string idPropertyName = ui->nodeMappingPropertycomboBox->getSelectedGraphProperty();
         unsigned int columnId = ui->nodeMappingColumncomboBox->getSelectedColumnIndex();
-        if(idPropertyName.empty()|| columnId==UINT_MAX){
+        if(idPropertyName.empty() || columnId==UINT_MAX || !graph->existProperty(idPropertyName)){
             return false;
         }
         return true;
@@ -267,11 +219,62 @@ bool CSVGraphMappingConfigurationWidget::isValid()const{
         string idPropertyName = ui->graphIndexPropertiesComboBox->getSelectedGraphProperty();
         unsigned int srcColumnId = ui->sourceColumnComboBox->getSelectedColumnIndex();
         unsigned int tgtColumnId = ui->targetColumnComboBox->getSelectedColumnIndex();
-        if(idPropertyName.empty() || srcColumnId ==UINT_MAX || tgtColumnId == UINT_MAX){
+        if(idPropertyName.empty() || !graph->existProperty(idPropertyName) || srcColumnId ==UINT_MAX || tgtColumnId == UINT_MAX || srcColumnId == tgtColumnId){
             return false;
         }
         return true;
     }else{
         return false;
     }
+}
+
+void CSVGraphMappingConfigurationWidget::createNewProperty(){
+    QDialog *dialog = new QDialog(this);
+    dialog->setObjectName("createNewPropertyDialog");
+    QFormLayout * formLayout = new QFormLayout(dialog);
+    dialog->setLayout(formLayout);
+    dialog->setWindowTitle(tr("Create property"));
+    //Property type
+    QComboBox *propertyTypeSelection = new QComboBox(dialog);
+    propertyTypeSelection->setObjectName("createNewPropertyDialogComboBox");
+    propertyTypeSelection->addItems(PropertyTools::getPropertyTypeLabelsList());
+    formLayout->addRow(tr("Select the property type"),propertyTypeSelection);
+    //Property name
+    QLineEdit *propertyNameLineEdit = new QLineEdit(dialog);
+    propertyNameLineEdit->setObjectName("propertyNameLineEdit");
+    formLayout->addRow(tr("Enter the property name"),propertyNameLineEdit);
+
+    //Button box
+    QDialogButtonBox *buttons = new QDialogButtonBox(dialog);
+    buttons->setObjectName("createNewPropertyDialogButtonBox");
+    QPushButton* createButton = new QPushButton(tr("Create"),buttons);
+    createButton->setObjectName("createNewPropertyDialogButton");
+    createButton->setDefault(true);
+    buttons->addButton(createButton,QDialogButtonBox::AcceptRole);
+    buttons->addButton(QDialogButtonBox::Cancel)->setObjectName("cancelCreateNewPropertyButton");
+    formLayout->addRow(buttons);
+    connect(buttons,SIGNAL(accepted()),dialog,SLOT(accept()));
+    connect(buttons,SIGNAL(rejected()),dialog,SLOT(reject()));
+    if(dialog->exec()==QDialog::Accepted){
+        QString propertyName = propertyNameLineEdit->text();
+         string propertyType = PropertyTools::getPropertyTypeFromPropertyTypeLabel(QStringToTlpString(propertyTypeSelection->currentText()));
+
+         bool error = false;
+        if(propertyName.isEmpty()){
+            QMessageBox::critical(this,tr("Cannot create a property with an empty name."),tr("You can't create a property with empty name."));
+            error = true;
+        }
+        if(graph->existLocalProperty(QStringToTlpString(propertyName))){
+            QMessageBox::critical(this,tr("A property with the same name already exist."),tr("You cannot create a property if a property with the same name already exists in the graph."));
+            error = true;
+        }
+        if(!error){
+            PropertyTools::getLocalProperty(graph,QStringToTlpString(propertyName),propertyType);
+            //Refresh combobox
+            ui->graphIndexPropertiesComboBox->setGraph(graph);
+            //Select new property
+            ui->graphIndexPropertiesComboBox->setCurrentIndex(ui->graphIndexPropertiesComboBox->findText(propertyName));
+        }
+    }
+    dialog->deleteLater();
 }
