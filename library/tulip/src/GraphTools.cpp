@@ -28,7 +28,6 @@
 #include "tulip/DoubleProperty.h"
 #include "tulip/ForEach.h"
 #include "tulip/ConnectedTest.h"
-#include "tulip/ExtendedClusterOperation.h"
 #include "tulip/Ordering.h"
 
 #include <math.h>

@@ -24,11 +24,8 @@
 #endif
 
 #include "tulip/GraphMeasure.h"
-#include "tulip/Reflect.h"
 #include "tulip/Graph.h"
-#include "tulip/DoubleProperty.h"
 #include "tulip/ForEach.h"
-
 
 using namespace std;
 using namespace tlp;

@@ -22,7 +22,6 @@
 
 #include "tulip/GraphAbstract.h"
 #include "tulip/PropertyManager.h"
-#include "tulip/BooleanProperty.h"
 #include "tulip/GraphProperty.h"
 #include "tulip/StlIterator.h"
 #include "tulip/StableIterator.h"
