@@ -293,7 +293,7 @@ namespace tlp {
       Coord minL(box[0]);
       layout->setNodeValue(mN, (maxL + minL) / 2.0 );
       Coord v(maxL - minL);
-      if (v[2] < 0.0001) v[2] = 0.1;
+      if (v[2] < 0.0001) v[2] = 0.1f;
       mg->getProperty<SizeProperty>("viewSize")->
 	setNodeValue(mN, Size(v[0],v[1],v[2]));
     }

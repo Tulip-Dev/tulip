@@ -153,7 +153,7 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
 
-	float col[4] = {0.8, 0.4, 0.4, 0.2};
+	float col[4] = {0.8f, 0.4f, 0.4f, 0.2f};
 	setColor(col);
 	glBegin(GL_QUADS);
 	glVertex2f(x, y);
