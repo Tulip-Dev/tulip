@@ -35,13 +35,15 @@ class Graph;
 /// class for testing if the graph is biconnected
 class TLP_SCOPE BiconnectedTest : public GraphObserver {
 public:
+
   /**
    * Returns true if the graph is biconnected (ie. one must remove at least two nodes in order
-   * to disconnect the graph), false if not.
+   * to disconnect the graph), false otherwise.
    */
   static bool isBiconnected(Graph *graph);
+
   /**
-   * If the graph is not biconnected, add edges in order to make the graph
+   * If the graph is not biconnected, adds edges in order to make the graph
    * biconnected. The new edges are added in addedEdges.
    */
   static void makeBiconnected(Graph *graph, std::vector<edge>& addedEdges);

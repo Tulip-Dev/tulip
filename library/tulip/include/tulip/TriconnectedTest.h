@@ -36,6 +36,12 @@ class Graph;
 /// class for testing if a graph is triconnected
 class TLP_SCOPE TriconnectedTest : private GraphObserver {
 public:
+
+
+  /**
+   * Returns true if the graph is triconnected (i.e. a connected graph such that deleting any two nodes (and incident edges)
+   * results in a graph that is still connected), false otherwise.
+   */
   static bool isTriconnected(Graph *graph);
 
 private:

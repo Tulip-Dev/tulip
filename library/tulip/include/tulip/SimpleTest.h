@@ -37,18 +37,35 @@ class Graph;
  * class for testing if the graph is simple (ie no self loops and  no multiple or parallel edges)
  */
 class TLP_SCOPE SimpleTest : public GraphObserver {
- public: 
-  static bool isSimple(Graph *graph);
-  static void makeSimple(Graph* graph, std::vector<edge> &removed);
-  static bool simpleTest(Graph *graph, std::vector<edge> *multipleEdges=0, std::vector<edge> *loops=0);
- private:
-  SimpleTest();
-  void addEdge(Graph *, const edge);
-  void delEdge(Graph *, const edge);
-  void destroy(Graph *);
-  void deleteResult(Graph *graph);
-  static SimpleTest *instance;
-  TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
+public:
+
+	/**
+	 * Returns true if the graph is simple (i.e. it contains no self loops or parallel edges),
+	 * false otherwise.
+	 */
+	static bool isSimple(Graph *graph);
+
+	/**
+	 * Makes the graph  simple by removing self loops and parallel edges if any.
+	 * The removed edges are stored in the removed vector.
+	 */
+	static void makeSimple(Graph* graph, std::vector<edge> &removed);
+
+	/**
+	 * Performs simple test and stores found parallel edges in the multipleEdges vector
+	 * and found self loops in the loops vector.
+	 * Returns true if the graph is simple, false otherwise.
+	 */
+	static bool simpleTest(Graph *graph, std::vector<edge> *multipleEdges=0, std::vector<edge> *loops=0);
+
+private:
+	SimpleTest();
+	void addEdge(Graph *, const edge);
+	void delEdge(Graph *, const edge);
+	void destroy(Graph *);
+	void deleteResult(Graph *graph);
+	static SimpleTest *instance;
+	TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };
 /*@}*/
 

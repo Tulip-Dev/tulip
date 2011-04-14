@@ -40,7 +40,7 @@ class TLP_SCOPE ConnectedTest : private GraphObserver {
 public:
   /**
    * Returns true if the graph is connected (ie. it exists an undirected path 
-   * between each pair of nodes) else false.
+   * between each pair of nodes), false otherwise.
    */
   static bool isConnected(const Graph* const graph);
   /**
@@ -49,11 +49,11 @@ public:
    */
   static void makeConnected(Graph *graph, std::vector<edge>& addedEdges);
   /**
-   * Returns the number of connected components in the graph;
+   * Returns the number of connected components in the graph.
    */
   static unsigned int numberOfConnectedComponents(const Graph* const graph);
   /**
-   * Compute the nodes for each connected component
+   * Computes the sets of connected components and stores the result in the components vector.
    */
   static void computeConnectedComponents(Graph *graph, std::vector< std::set<node> >& components);
     
