@@ -30,13 +30,61 @@ class PlanarityTest {
 #include <tulip/PlanarityTest.h>
 %End
 public:
+
   static bool isPlanar(tlp::Graph *graph);
-  static bool planarEmbedding(tlp::Graph *graph);
-  static std::list<tlp::edge> getObstructionsEdges(tlp::Graph *graph);
 %Docstring
-tlp.PlanarityTest.getObstructionsEdges(tlp.Graph) -> list of tlp.edge
+tlp.PlanarityTest.isPlanar(graph)
+
+Returns True if the graph is planar (i.e. the graph can be drawn in such a way that no edges cross each other),
+False otherwise.
+
+:param graph: the graph on which to perform the planarity test
+:type graph: :class:`tlp.Graph`
+:rtype: boolean
+%End  
+  
+//===========================================================================================   
+  
+  static bool isPlanarEmbedding(tlp::Graph *graph);
+%Docstring
+tlp.PlanarityTest.isPlanarEmbedding(graph)
+
+Returns True if the current embedding of the graph is planar, False otherwise.
+
+:param graph: the graph on which to perform the planar embedding test
+:type graph: :class:`tlp.Graph`
+:rtype: boolean
 %End
   
+//===========================================================================================   
+  
+  static bool planarEmbedding(tlp::Graph *graph);
+%Docstring
+tlp.PlanarityTest.planarEmbedding(graph)
+
+Changes the order of edges around the nodes in order to make the
+embedding planar (the graph must be planar for that).
+Returns True if the graph is planar, False otherwise.
+
+:param graph: the graph on which to compute a planar embedding
+:type graph: :class:`tlp.Graph`
+:rtype: boolean
+%End  
+  
+//===========================================================================================   
+  
+  static std::list<tlp::edge> getObstructionsEdges(tlp::Graph *graph);
+%Docstring
+tlp.PlanarityTest.getObstructionsEdges(graph)
+
+Returns a list of edges that prevents to make the graph planar
+(ie. part of the minor of K3,3 or K5).
+
+:param graph: the graph on which to compute the obstruction edges
+:type graph: :class:`tlp.Graph`
+:rtype: list of :class:`tlp.edge`
+%End
+    
 private :
 
    PlanarityTest();  

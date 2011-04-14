@@ -82,7 +82,7 @@ tlp.AcyclicTest.makeAcyclic(graph)
 
 Makes the graph acyclic, by reversing edge direction (feedback arc set problem).
 If there is self loops, a new node is added with two edges that points to it.
-Returns a tupple containing whose first member is a list of reversed edges and second member is a list
+Returns a tuple containing whose first member is a list of reversed edges and second member is a list
 of transformed self loops.
 
 :param graph: the graph to make acyclic
@@ -96,7 +96,7 @@ of transformed self loops.
 %Docstring
 tlp.AcyclicTest.acyclicTest(graph)
 
-Returns a tupple whose first member is a boolean indicating if the graph is acyclic or not
+Returns a tuple whose first member is a boolean indicating if the graph is acyclic or not
 and second member is a list of edges that create cycle (when the graph is not acyclic). 
 
 :param graph: the graph on which to perform the acyclic test

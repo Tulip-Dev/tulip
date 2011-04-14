@@ -29,7 +29,18 @@ class TriconnectedTest {
 #include <tulip/TriconnectedTest.h>
 %End
 public:
+
   static bool isTriconnected(tlp::Graph *graph);
+%Docstring
+tlp.TriconnectedTest.isTriconnected(graph)
+
+Returns True if the graph is triconnected (i.e. a connected graph such that deleting any two nodes (and incident edges)
+results in a graph that is still connected), False otherwise.
+
+:param graph: the graph on which to perform the triconnected test
+:type graph: :class:`tlp.Graph`
+:rtype: boolean
+%End
   
 private :
 
