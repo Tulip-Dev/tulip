@@ -37,17 +37,55 @@ class ConnectedTest {
 public:
 
   static bool isConnected(const tlp::Graph*graph);
+%Docstring
+tlp.ConnectedTest.isConnected(graph)
+
+Returns True if the graph is connected (ie. it exists an undirected path 
+between each pair of nodes), False otherwise.
+
+:param graph: the graph on which to perform the connected test
+:type graph: :class:`tlp.Graph`
+:rtype: boolean
+%End
+
+//=========================================================================================== 
  
   static void makeConnected(tlp::Graph *graph, std::vector<tlp::edge>& addedEdges /Out/);
 %Docstring
-tlp.ConnectedTest.makeConnected(tlp.Graph) -> list of tlp.edge
+tlp.ConnectedTest.makeConnected(graph)
+
+If the graph is not connected, adds edges in order to make the graph
+connected. Returns a list of added edges.
+
+:param graph: the graph to make connected
+:type graph: :class:`tlp.Graph`
+:rtype: list of :class:`tlp.edge`
 %End
-  
+
+//===========================================================================================   
+
   static unsigned int numberOfConnectedComponents(const tlp::Graph*graph);
+%Docstring
+tlp.ConnectedTest.numberOfConnectedComponents(graph)
+
+Returns the number of connected components in the graph.
+
+:param graph: the graph on which to compute the number of connected components
+:type graph: :class:`tlp.Graph`
+:rtype: integer
+%End 
+  
+//===========================================================================================   
   
   static void computeConnectedComponents(tlp::Graph *graph, std::vector<std_set_0100tlp_node>& components /Out/);
 %Docstring
-tlp.ConnectedTest.computeConnectedComponents(tlp.Graph) -> list of list of tlp.node
+tlp.ConnectedTest.computeConnectedComponents(graph)
+
+Computes the sets of connected components. Returns a list of connected components.
+
+:param graph: the graph on which to compute the sets of connected components
+:type graph: :class:`tlp.Graph`
+:rtype: list of list of :class:`tlp.node`
 %End
   
 private : 

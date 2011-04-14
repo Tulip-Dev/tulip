@@ -30,7 +30,19 @@ class OuterPlanarTest {
 #include <tulip/OuterPlanarTest.h>
 %End
 public:
+
   static bool isOuterPlanar(tlp::Graph *graph);
+%Docstring
+tlp.OuterPlanarTest.isOuterPlanar(graph)
+
+Returns True if the graph is outerplanar (i.e. a graph with an embedding
+in the plane such that all vertices belong to the unbounded face of the embedding),
+False otherwise.
+
+:param graph: the graph on which to perform the outerplanarity test
+:type graph: :class:`tlp.Graph`
+:rtype: boolean
+%End
   
 private:
 

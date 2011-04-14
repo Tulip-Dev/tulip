@@ -969,7 +969,7 @@ Returns the target of the edge.
 %Docstring
 tlp.Graph.ends(edge)
 
-Returns a tupple containing the two end nodes of an edge
+Returns a tuple containing the two end nodes of an edge
 
 :param edge: an existing edge of the graph
 :type node: :class:`tlp.edge`
