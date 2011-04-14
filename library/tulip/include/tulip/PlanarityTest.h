@@ -41,19 +41,28 @@ public:
     on the edges of the graph, be careful to use a StableIterator
     to avoid any possible invalidation of the iterator.
   */
+
+  /**
+   * Returns true if the graph is planar (i.e. the graph can be drawn in such a way that no edges cross each other),
+   * false otherwise.
+   */
   static bool isPlanar(Graph *graph);
-  /*
-   * Return true if the current embbeding of the graph is planar else false;
+
+  /**
+   * Returns true if the current embedding of the graph is planar, false otherwise.
    */
   static bool isPlanarEmbedding(Graph *graph);
-  /*
-   * Change the order of edges around the graph in order to make the
-   * embedding planar (the graph must be planar for that.
+
+  /**
+   * Changes the order of edges around the nodes in order to make the
+   * embedding planar (the graph must be planar for that).
+   * Returns true if the graph is planar, false otherwise.
    */
   static bool planarEmbedding(Graph *graph);
-  /*
-   * Return a list of edges that prevents to make the graph planar
-   * ie. part of the minor of K3,3 or K5.
+
+  /**
+   * Returns a list of edges that prevents to make the graph planar
+   * (ie. part of the minor of K3,3 or K5).
    */
   static std::list<edge> getObstructionsEdges(Graph *graph);
   

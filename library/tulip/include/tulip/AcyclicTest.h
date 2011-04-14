@@ -49,19 +49,22 @@ class BooleanProperty;
 class TLP_SCOPE AcyclicTest : public GraphObserver {
 public:
 
-  /** Returns true if the graph is acyclic, false if not.
-   *  The result is cached (ie. the next call with the same graph is done in O(1) time)
+  /**
+   * Returns true if the graph is acyclic, false otherwise.
+   * The result is cached (ie. the next call with the same graph is done in O(1) time)
    */
   static bool isAcyclic(const Graph *graph);
+
   /**
     * Makes the graph acyclic, by reversing edge direction (feedback arc set problem).
     * If there is self loops, a new node is added with two edges that points to it.
     *
     */
   static void makeAcyclic(Graph* graph, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);
+
   /**
-    * Returns true if the graph is acyclic, false otherwise;
-    * if the graph is not acyclic, uses obstructionEdges variable to store all edges
+    * Returns true if the graph is acyclic, false otherwise.
+    * If the graph is not acyclic, uses obstructionEdges variable to store all edges
     * that create cycle.
     *
     */

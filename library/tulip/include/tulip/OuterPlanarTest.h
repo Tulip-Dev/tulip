@@ -33,6 +33,12 @@ struct node;
 /// class for testing the outerplanarity of a graph
 class TLP_SCOPE OuterPlanarTest  : private GraphObserver {
 public:
+
+  /**
+   * Returns true if the graph is outerplanar (i.e. a graph with an embedding
+   * in the plane such that all vertices belong to the unbounded face of the embedding),
+   * false otherwise.
+   */
   static bool isOuterPlanar(Graph *graph);
   
 private:
