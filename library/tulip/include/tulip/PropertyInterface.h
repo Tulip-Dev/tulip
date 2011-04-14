@@ -48,15 +48,17 @@ protected:
 public:
   virtual ~PropertyInterface();
   /**
-   * Remove the value stored for the node given in parameter.
+   * Removes the value stored for the node given in parameter.
+   * The new value for the node is the default one.
    */
   virtual void erase(const node) = 0;
   /**
-   * Remove the value stored for the edge given in parameter.
+   * Removes the value stored for the edge given in parameter.
+   * The new value for the edge is the default one.
    */
   virtual void erase(const edge) = 0;
   /**
-   * Set the value of a node (first argument) in the current property (this)
+   * Sets the value of a node (first argument) in the current property (this)
    * with the value of the node (second argument) defined in prop (third argument)
    * If the fourth argument is set to true, the value will be copied only if
    * it is not the default value.
@@ -64,7 +66,7 @@ public:
   virtual void copy(const node src, const node dst, PropertyInterface *prop,
 		    bool ifNotDefault = false) =0;
   /**
-   * Set the value of an edge (first argument) in the current property (this)
+   * Sets the value of an edge (first argument) in the current property (this)
    * with the value of the edge (second argument) defined in prop (third argument)
    * defined in this property (this).
    * If the fourth argument is set to true, the value will be copied only if
@@ -73,7 +75,7 @@ public:
   virtual void copy(const edge src, const edge dst , PropertyInterface *prop,
 		    bool ifNotDefault = false) =0;
   /**
-    * Create an object of the same real type of the current property, in the
+    * Creates an object of the same real type of the current property, in the
     * the graph (first parameter) with the name (second parameter).
     * Values are not copied.
     */
@@ -85,7 +87,7 @@ public:
   virtual std::string getTypename() const = 0;
 
   /**
-    * Return the name of the property
+    * Returns the name of the property.
     */
   const std::string& getName() const {
     return name;
@@ -101,116 +103,120 @@ public:
   }
 
   /**
-  * Returns a string representation of the node default value
+  * Returns a string representation of the node default value.
   */
   virtual std::string getNodeDefaultStringValue() const = 0;
   /**
-   * Clear all nodes registered values, and set a new node default value
-   * in converting the given string representation of a value
+   * Clears all nodes registered values, and sets a new node default value
+   * in converting the given string representation of a value.
+   * Returns true if the given string representation has been successfully converted to a value, false otherwise.
    */
   virtual bool setAllNodeStringValue( const std::string & v ) = 0;
   /**
-  * Returns a string representation of the edge default value
+  * Returns a string representation of the edge default value.
   */
   virtual std::string getEdgeDefaultStringValue() const = 0;
   /**
-   * Clear all edges registered values, and set a new edge default value
-   * in converting the given string representation of a value
+   * Clears all edges registered values, and sets a new edge default value
+   * in converting the given string representation of a value.
+   * Returns true if the given string representation has been successfully converted to a value, false otherwise.
    */
   virtual bool setAllEdgeStringValue( const std::string & v ) = 0;
   /**
-   * Returns a string conversion of the value registered for the given node
+   * Returns a string conversion of the value registered for the given node.
    */
   virtual std::string getNodeStringValue( const node n ) const = 0;
   /**
-   * Register a new value for the given node in converting
-   * the given string representation
+   * Registers a new value for the given node in converting
+   * the given string representation.
+   * Returns true if the given string representation has been successfully converted to a value, false otherwise.
    */
   virtual bool setNodeStringValue( const node n, const std::string & v ) = 0;
   /**
-   * Returns a string conversion of the value registered for the given edge
+   * Returns a string conversion of the value registered for the given edge.
    */
   virtual std::string getEdgeStringValue( const edge e ) const = 0;
   /**
-   * Register a new value for the given edge in converting
-   * the given string representation
+   * Registers a new value for the given edge in converting
+   * the given string representation.
+   * Returns true if the given string representation has been successfully converted to a value, false otherwise.
    */
   virtual bool setEdgeStringValue( const edge e, const std::string & v ) = 0;
   /**
    * Returns a pointer to a DataMem structure embedding the node default value
-   * WARNING: it is of the caller responsability to delete the returned structure
+   * WARNING: it is of the caller responsibility to delete the returned structure.
   */
   virtual DataMem* getNodeDefaultDataMemValue() const = 0;
   /**
-   * Clear all nodes registered values, and set a new node default value
-   * using the value embedded in the pointed DataMem structure
+   * Clears all nodes registered values, and set a new node default value
+   * using the value embedded in the pointed DataMem structure.
    */
   virtual void setAllNodeDataMemValue(const DataMem* v ) = 0;
   /**
    * Returns a pointer to a DataMem structure embedding the edge default value
-   * WARNING: the caller have the responsability to delete the returned structure
+   * WARNING: the caller have the responsibility to delete the returned structure.
   */
   virtual DataMem* getEdgeDefaultDataMemValue() const = 0;
   /**
-   * Clear all edges registered values, and set a new edge default value
-   * using the value embedded in the pointed DataMem structure
+   * Clears all edges registered values, and set a new edge default value
+   * using the value embedded in the pointed DataMem structure.
    */
   virtual void setAllEdgeDataMemValue(const DataMem* v ) = 0;
   /**
   * Returns a pointer to a DataMem structure embedding the node registered value
-  * WARNING: it is of the caller responsability to delete the returned structure
+  * WARNING: it is of the caller responsibility to delete the returned structure.
   */
   virtual DataMem* getNodeDataMemValue( const node n ) const = 0;
   /**
    * Returns a NULL pointer if the given node registered value is the default
    * else returns a pointer to a DataMem structure embedding the value
-   * WARNING: it is of the caller responsability to delete the returned structure
+   * WARNING: it is of the caller responsibility to delete the returned structure.
   */
   virtual DataMem* getNonDefaultDataMemValue( const node n ) const = 0;
   /**
-   * Register a new value for the given node
-   * using the value embedded in the pointed DataMem structure
+   * Registers a new value for the given node
+   * using the value embedded in the pointed DataMem structure.
    */
   virtual void setNodeDataMemValue( const node n, const DataMem* v) = 0;
   /**
   * Returns a pointer to a DataMem structure embedding the edge registered value
-  * WARNING: it is of the caller responsability to delete the returned structure
+  * WARNING: it is of the caller responsibility to delete the returned structure.
   */
   virtual DataMem* getEdgeDataMemValue( const edge e ) const = 0;
   /**
    * Returns a NULL pointer if the given edge registered value is the default
    * else returns a pointer to a DataMem structure embedding the value.
-   * WARNING: it is of the caller responsability to delete the returned structure
+   * WARNING: it is of the caller responsibility to delete the returned structure.
   */
   virtual DataMem* getNonDefaultDataMemValue( const edge e ) const = 0;
   /**
-   * Register a new value for the given node
-   * using the value embedded in the pointed DataMem structure
+   * Registers a new value for the given node
+   * using the value embedded in the pointed DataMem structure.
    */
   virtual void setEdgeDataMemValue( const edge e, const DataMem* v) = 0;
   /**
    * Returns an iterator on all nodes whose value is different
    * from the default value. When the pointer to the graph is not NULL
    * only the nodes owned by this graph are returned by the iterator.
-   * WARNING: it is of the caller responsability to delete the returned iterator
+   * WARNING: it is of the caller responsibility to delete the returned iterator.
    */
   virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* = NULL) const = 0;
   /**
    * Returns an iterator on all edges whose value is different
    * from the default value. When the pointer to the graph is not NULL
    * only the edges owned by this graph are returned by the iterator.
-   * WARNING: it is of the caller responsability to delete the returned iterator
+   * WARNING: it is of the caller responsibility to delete the returned iterator.
    */
   virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* = NULL) const = 0;
   /**
-   * Set a computed value for the meta node mN pointing to the sub-graph sg
+   * Sets a computed value for the meta node mN pointing to the sub-graph sg
    * mg is the graph owning the meta node
    */
   virtual void computeMetaValue(node mN, Graph* sg, Graph* mg)=0;
   /**
-   * Set a computed value for the meta edge mE representing the edges
+   * Sets a computed value for the meta edge mE representing the edges
    * from the iterator itE.
-   * mg is the graph owning the meta edge
+   * mg is the graph owning the meta edge.
    */
   virtual void computeMetaValue(edge mE, tlp::Iterator<edge>* itE, Graph* mg)=0;
 
@@ -222,7 +228,7 @@ public:
 
 
   /**
-   * Returns the meta value calculator associated to this property
+   * Returns the meta value calculator associated to this property.
    */
   MetaValueCalculator* getMetaValueCalculator() {
     return metaValueCalculator;
@@ -230,23 +236,23 @@ public:
 
   /**
    * Sets the meta value calculator.
-   * Be careful that its destruction is not managed by the property
+   * Be careful that its destruction is not managed by the property.
    */
   virtual void setMetaValueCalculator(MetaValueCalculator* mvCalc) {
     metaValueCalculator = mvCalc;
   }
 
   /**
-   * Register a new property observer
+   * Registers a new property observer.
    */
   void addPropertyObserver(PropertyObserver *pObs);
   /**
-   * Remove a registered property observer
+   * Removes a registered property observer.
    */
   void removePropertyObserver(PropertyObserver *pObs);
 
   /**
-   * Return the number of registered observers
+   * Returns the number of registered observers.
    */
   unsigned int countPropertyObservers() const {
     return countListeners();
