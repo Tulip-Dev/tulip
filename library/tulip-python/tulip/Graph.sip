@@ -2221,9 +2221,9 @@ Warning: this method will failed when called on the root graph.
         delete graphProperties;
         if (!found) {
         	std::ostringstream oss;
-        	oss << "graph attribute \"" << *a0 << "\" does not exist.";
-		sipIsErr = 1;    
-        	PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
+        	oss << "graph property named \"" << *a0 << "\" does not exist.";
+			sipIsErr = -1;    
+        	PyErr_SetString(PyExc_Exception, oss.str().c_str());
         }
 %End
 
