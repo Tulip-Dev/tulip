@@ -43,25 +43,25 @@ public :
     return "bool";
   }
   /*
-   * Reverse all values aasociated to graph elements
-   * i.e true => false, false => true
+   * Reverses all values associated to graph elements,
+   * i.e true => false, false => true.
    */
   void reverse();
   /*
-   * Reverse all the direction of edges of the visible graph
-   * which are true in this BooleanProperty
+   * Reverses all the direction of edges of the visible graph
+   * which are true in this BooleanProperty.
    */
   void reverseEdgeDirection();
   /*
-   * Return an iterator through all nodes belonging to g
-   * whose associated value is equal to val
-   * if g is NULL, the graph given when creating the property is considered
+   * Returns an iterator through all nodes belonging to g
+   * whose associated value is equal to val.
+   * If g is NULL, the graph given when creating the property is considered.
    */
   Iterator<node> *getNodesEqualTo(const bool val, Graph *g = 0);
   /*
-   * Return an iterator through all edges belonging to g
-   * whose associated value is equal to val
-   * if g is NULL, the graph given when creating the property is considered
+   * Returns an iterator through all edges belonging to g
+   * whose associated value is equal to val.
+   * If g is NULL, the graph given when creating the property is considered.
    */
   Iterator<edge> *getEdgesEqualTo(const bool val, Graph *g = 0);
 };
