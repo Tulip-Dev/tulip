@@ -77,7 +77,7 @@ class Grid: public ImportModule {
     addParameter<unsigned int> ("width", paramHelp[0], "10");
     addParameter<unsigned int> ("height", paramHelp[1], "10");
     addParameter<StringCollection> ("connectivity", paramHelp[2], "4;6;8");
-    addParameter<bool> ("oppositeNodesConnected", paramHelp[3], false);
+    addParameter<bool> ("oppositeNodesConnected", paramHelp[3], "false");
     addParameter<double> ("spacing", paramHelp[4], "1.0");
   }
   ~Grid() {
