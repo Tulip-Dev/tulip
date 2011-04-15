@@ -79,7 +79,7 @@ namespace tlp {
     std::vector<Coord> coordinates;
     GlCircle basicCircle;
     GlTriangle targetTriangle;
-    GlComplexPolygon sourceCross;
+    GlCircle sourceCircle;
     GlComposite *circleString;
     std::vector <GlEntity * > select;
     bool edgeSelected;
