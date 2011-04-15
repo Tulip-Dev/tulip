@@ -20,6 +20,8 @@
 #define MOUSEEDGEBENDEDITION_H
 #include <vector>
 #include <tulip/GlCircle.h>
+#include <tulip/GlTriangle.h>
+#include <tulip/GlComplexPolygon.h>
 #include <tulip/Observable.h>
 #include <tulip/InteractorComponent.h>
 #include <tulip/LayoutProperty.h>
@@ -75,15 +77,19 @@ namespace tlp {
     GlLayer *layer;
     std::vector<tlp::GlCircle> circles;
     std::vector<Coord> coordinates;
-    tlp::GlCircle basicCircle;
-    tlp::GlComposite *circleString;
+    GlCircle basicCircle;
+    GlTriangle targetTriangle;
+    GlComplexPolygon sourceTriangle;
+    GlComposite *circleString;
     std::vector <GlEntity * > select;
     bool edgeSelected;
     edge mEdge;
     node mNode;
     Coord start, end;
-    std::string theCircle;
+    std::string selectedEntity;
     bool belong(Coord, Coord, Coord, GlMainWidget*);
+    bool haveSelection(GlMainWidget *);
+    void computeSrcTgtEntities(GlMainWidget *);
     bool computeBendsCircles(GlMainWidget*);
     void mMouseTranslate(double, double, GlMainWidget*);
     void mMouseDelete();
