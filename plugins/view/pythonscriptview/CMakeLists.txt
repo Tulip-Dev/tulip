@@ -42,12 +42,14 @@ TULIP_QT4_WRAP_UI(pythonscriptview_UI_SRCS ${pythonscriptview_UI})
 TULIP_QT4_WRAP_CPP(pythonscriptview_MOC_SRCS ${pythonscriptview_MOC})
 QT4_ADD_RESOURCES(pythonscriptview_RCC_SRCS ${pythonscriptview_RCC})
 
-ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/tulip.api
-                   COMMAND ${SIP_EXE} -a ${CMAKE_CURRENT_SOURCE_DIR}/tulip.api ${CMAKE_SOURCE_DIR}/library/tulip-python/tulip/Module.sip
-                   COMMENT "Generating QScintilla API file for Tulip Python bindings"
-                   DEPENDS ${CMAKE_SOURCE_DIR}/library/tulip-python/tulip/*.sip)
-
 ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${pythonscriptview_UI_SRCS} ${pythonscriptview_MOC_SRCS} ${pythonscriptview_LIB_SRCS} ${pythonscriptview_RCC_SRCS})
+ADD_CUSTOM_COMMAND(
+				   TARGET pythonscriptview-${TulipVersion}
+				   PRE_BUILD
+                   COMMAND ${SIP_EXE} -a ${CMAKE_CURRENT_SOURCE_DIR}/tulip.api -I ${CMAKE_CURRENT_SOURCE_DIR}/../../../library/tulip-python/tulip/  ${CMAKE_CURRENT_SOURCE_DIR}/../../../library/tulip-python/tulip/Module.sip
+                   COMMENT "Generating QScintilla API file for Tulip Python bindings"
+                   DEPENDS library/tulip-python/tulip/*.sip
+				   VERBATIM)
 
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipOglName})
