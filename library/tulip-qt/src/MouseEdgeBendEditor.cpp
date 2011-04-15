@@ -151,7 +151,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE){
         glMainWidget->getGraph()->setEnds(mEdge,glMainWidget->getGraph()->ends(mEdge).first,tmpNode);
       }
-    }else if(selectedEntity=="sourceCross"){
+    }else if(selectedEntity=="sourceCircle"){
       node tmpNode;
       edge tmpEdge;
       ElementType type;
@@ -314,8 +314,8 @@ initProxies(glMainWidget);
   if(selectedEntity=="targetTriangle"){
     targetTriangle.translate(Coord(-(double)(editPosition[0] - newX), (double)(editPosition[1] - newY),0));
     glMainWidget->draw(false);
-  }else if(selectedEntity=="sourceCross"){
-    sourceCross.translate(Coord(-(double)(editPosition[0] - newX), (double)(editPosition[1] - newY),0));
+  }else if(selectedEntity=="sourceCircle"){
+    sourceCircle.translate(Coord(-(double)(editPosition[0] - newX), (double)(editPosition[1] - newY),0));
     glMainWidget->draw(false);
   }else{
     int i;
@@ -334,7 +334,7 @@ initProxies(glMainWidget);
 //========================================================================================
 void MouseEdgeBendEditor::mMouseDelete()
 {
-  if(selectedEntity!="targetTriangle" && selectedEntity!="sourceCross"){
+  if(selectedEntity!="targetTriangle" && selectedEntity!="sourceCircle"){
     int i;
     IntegerType::fromString(i, selectedEntity);
     vector<Coord>::iterator CoordIt=coordinates.begin();
@@ -472,19 +472,10 @@ void MouseEdgeBendEditor::computeSrcTgtEntities(GlMainWidget *glMainWidget){
     targetTriangle.setStencil(0);
   }
 
-  if(selectedEntity!="sourceCross"){
+  if(selectedEntity!="sourceCircle"){
     Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DScreen(start));
-    vector<Coord> tmpCoords;
-    tmpCoords.push_back(tmp+Coord(5,5));
-    tmpCoords.push_back(tmp);
-    tmpCoords.push_back(tmp+Coord(-5,5));
-    tmpCoords.push_back(tmp);
-    tmpCoords.push_back(tmp+Coord(-5,-5));
-    tmpCoords.push_back(tmp);
-    tmpCoords.push_back(tmp+Coord(5,-5));
-    tmpCoords.push_back(tmp);
-    sourceCross=GlComplexPolygon(tmpCoords,Color(255, 102, 255, 200),Color(128, 20, 20, 200));
-    sourceCross.setStencil(0);
+    sourceCircle=GlCircle(tmp,6,Color(128, 20, 20, 200),Color(255, 102, 255, 200),true,true);
+    sourceCircle.setStencil(0);
   }
 }
 //========================================================================================
@@ -512,7 +503,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
 
     computeSrcTgtEntities(glMainWidget);
     circleString->addGlEntity(&targetTriangle,"targetTriangle");
-    circleString->addGlEntity(&sourceCross,"sourceCross");
+    circleString->addGlEntity(&sourceCircle,"sourceCircle");
 
     // Bends circles
     vector<Coord>::iterator CoordIt=coordinates.begin();
