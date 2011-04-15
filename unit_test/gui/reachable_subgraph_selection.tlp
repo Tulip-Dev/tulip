@@ -1316,7 +1316,7 @@
 (property  0 size "viewTgtAnchorSize"
 (default "(1,1,0)" "(0.25,0.25,0.25)")
 )
-(attributes 
+(graph_attributes 0 
 (string "name" "unnamed_1")
 )
 (controller 
