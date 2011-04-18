@@ -94,7 +94,7 @@ void TulipApp::enableElements(bool enabled) {
   fileSaveAsAction->setEnabled(enabled);
   filePrintAction->setEnabled(enabled);
   mouseActionGroup->setEnabled(enabled);
-  exportGraphMenu.menuAction()->setEnabled(enabled);
+//   exportGraphMenu->menuAction()->setEnabled(enabled);
 }
 //**********************************************************************
 ///Destructor of viewGl
@@ -811,17 +811,20 @@ void TulipApp::buildMenus() {
     fileMenu->insertAction(fileOpenAction,newAction);
   }
 
-  buildMenuWithContext<ExportModuleFactory, ExportModule>(exportGraphMenu, this, SLOT(exportGraph()));
-  buildMenuWithContext<ImportModuleFactory, ImportModule>(importGraphMenu, this, SLOT(importGraph()));
+  importGraphMenu = new QMenu("&Import", fileMenu);
+  importGraphMenu->setObjectName("ImportMenu");
+  exportGraphMenu = new QMenu("&Export", fileMenu);
+  exportGraphMenu->setObjectName("ExportMenu");
+
+  buildMenuWithContext<ExportModuleFactory, ExportModule>(*exportGraphMenu, this, SLOT(exportGraph()));
+  buildMenuWithContext<ImportModuleFactory, ImportModule>(*importGraphMenu, this, SLOT(importGraph()));
   //connect(&exportGraphMenu, SIGNAL(triggered(QAction*)), SLOT(exportGraph(QAction*)));
   //connect(&importGraphMenu, SIGNAL(triggered(QAction*)), SLOT(importGraph(QAction*)));
-  if (importGraphMenu.actions().count()>0) {
-    importGraphMenu.setTitle("&Import");
-    fileMenu->insertMenu(filePrintAction,&importGraphMenu);
+  if (importGraphMenu->actions().count()>0) {
+    fileMenu->insertMenu(filePrintAction,importGraphMenu);
   }
-  if (exportGraphMenu.actions().count()>0) {
-    exportGraphMenu.setTitle("&Export");
-    fileMenu->insertMenu(filePrintAction,&exportGraphMenu);
+  if (exportGraphMenu->actions().count()>0) {
+    fileMenu->insertMenu(filePrintAction,exportGraphMenu);
   }
   fileMenu->insertSeparator(filePrintAction);
 }
