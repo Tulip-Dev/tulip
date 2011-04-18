@@ -89,8 +89,8 @@ protected:
   tlp::MultiServerManager *multiServerManager;
   bool elementsDisabled;
 
-  QMenu importGraphMenu;
-  QMenu exportGraphMenu;
+  QMenu* importGraphMenu;
+  QMenu* exportGraphMenu;
 
   void enableQMenu(QMenu *, bool);
   void enableElements(bool);
