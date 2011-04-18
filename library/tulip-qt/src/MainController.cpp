@@ -220,14 +220,6 @@ namespace tlp {
       delete eltProperties;
       delete tabWidgetDock;
       delete configWidgetDock;
-      delete intMenu;
-      delete stringMenu;
-      delete sizesMenu;
-      delete colorsMenu;
-      delete layoutMenu;
-      delete metricMenu;
-      delete selectMenu;
-      delete generalMenu;
       delete morph;
       delete currentGraph;
     }
