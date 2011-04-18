@@ -650,7 +650,7 @@ namespace tlp {
     }
     assert(windowAction);
 
-    editMenu = new QMenu("&Edit");
+    editMenu = new QMenu("&Edit", mainWindowFacade.getMenuBar());
     editMenu->setEnabled(false);
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,editMenu);
 
@@ -674,16 +674,16 @@ namespace tlp {
     editRedoAction->setEnabled(false);
 
      //Algorithm Menu
-    algorithmMenu = new QMenu("&Algorithm");
+    algorithmMenu = new QMenu("&Algorithm", mainWindowFacade.getMenuBar());
     algorithmMenu->setEnabled(false);
-    intMenu=new QMenu("&Integer");
-    stringMenu=new QMenu("L&abel");
-    sizesMenu=new QMenu("S&ize");
-    colorsMenu=new QMenu("&Color");
-    layoutMenu=new QMenu("&Layout");
-    metricMenu=new QMenu("&Measure");
-    selectMenu=new QMenu("&Selection");
-    generalMenu=new QMenu("&General");
+    intMenu=new QMenu("&Integer", algorithmMenu);
+    stringMenu=new QMenu("L&abel", algorithmMenu);
+    sizesMenu=new QMenu("S&ize", algorithmMenu);
+    colorsMenu=new QMenu("&Color", algorithmMenu);
+    layoutMenu=new QMenu("&Layout", algorithmMenu);
+    metricMenu=new QMenu("&Measure", algorithmMenu);
+    selectMenu=new QMenu("&Selection", algorithmMenu);
+    generalMenu=new QMenu("&General", algorithmMenu);
 
     buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(*intMenu, this, SLOT(changeInt()));
     buildPropertyMenu<StringType, StringType, StringAlgorithm>(*stringMenu, this, SLOT(changeString()));
@@ -714,7 +714,7 @@ namespace tlp {
 
 
     //Graph menu
-    graphMenu = new QMenu("&Graph");
+    graphMenu = new QMenu("&Graph", mainWindowFacade.getMenuBar());
     graphMenu->setEnabled(false);
     QMenu *testGraphMenu=graphMenu->addMenu("Test");
     tmpAction=testGraphMenu->addAction("Simple");
@@ -755,7 +755,7 @@ namespace tlp {
 
 
     //View menu
-    viewMenu = new QMenu("&View");
+    viewMenu = new QMenu("&View", mainWindowFacade.getMenuBar());
     viewMenu->setEnabled(false);
     connect(viewMenu, SIGNAL(triggered(QAction *)), SLOT(createView(QAction*)));
     TemplateFactory<ViewFactory, View, ViewContext>::ObjectCreator::const_iterator it;
@@ -765,7 +765,7 @@ namespace tlp {
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,viewMenu);
 
     //Options menu
-    optionsMenu = new QMenu("&Options");
+    optionsMenu = new QMenu("&Options", mainWindowFacade.getMenuBar());
     optionsMenu->setEnabled(false);
     forceRatioAction = optionsMenu->addAction("Force ratio");
     forceRatioAction->setCheckable(true);
