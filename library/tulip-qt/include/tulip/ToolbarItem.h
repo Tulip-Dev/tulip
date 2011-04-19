@@ -29,14 +29,8 @@ public:
   QSize hoveredIconSize() const { return _hoveredIconSize; }
   void setHoveredIconSize(const QSize &s) { _hoveredIconSize = s; update(); }
 
-  int margin() const { return _margin; }
-  void setMargin(int m) { _margin = m; update(); }
-
-  Qt::Orientation orientation() const { return _orientation; }
-  void setOrientation(Qt::Orientation o);
-
-  int buttonMarginWidth() const { return _buttonMarginWidth; }
-  void setButtonMarginWidth(int m) { _buttonMarginWidth = m; update(); }
+  int spacing() const { return _spacing; }
+  void setSpacing(int m) { _spacing = m; update(); }
 
   QColor buttonForegroundColor() const { return _buttonForegroundColor; }
   void setButtonForegroundColor(const QColor &c) { _buttonForegroundColor = c; update(); }
@@ -61,35 +55,46 @@ protected slots:
   void buttonClicked();
   void buttonHovered(bool);
   void expandAnimationFinished();
+  void sceneResized();
 
 protected:
   virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
   virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+  QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+
+  Qt::Orientation orientation() const { return _orientation; }
+  void setOrientation(Qt::Orientation o);
 
 private:
   // Inner state
+    // Actions & buttons
   QVector<QAction *> _actions;
   QMap<QAction *,PushButtonItem *> _actionButton;
   QAction *_activeAction;
   PushButtonItem *_activeButton;
   PushButtonItem *_focusedButton;
+    // Expand & collapse
   bool _expanded;
   QAnimationGroup *_currentExpandAnimation;
   QTimer *_collapseTimeout;
+    // Toolbar snapping
+  Qt::ToolBarArea _snapArea;
 
   // Display parameters
+    // Toolbar style
   QSize _iconSize;
   QSize _hoveredIconSize;
-  int _margin;
+  int _spacing;
   Qt::Orientation _orientation;
-
-  // Buttons style
-  int _buttonMarginWidth;
+  int _backgroundRectangleRound;
+  QColor _backgroundColor;
+  QColor _borderColor;
+    // Buttons style
   QColor _buttonForegroundColor;
   QColor _buttonBackgroundColor;
   QColor _highlightColor;
   PushButtonItem::BackgroundShape _buttonBackgroundShape;
-
+    // Animations look & feel
   int _animationMsec;
   QEasingCurve _animationEasing;
 

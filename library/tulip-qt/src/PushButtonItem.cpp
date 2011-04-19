@@ -1,5 +1,7 @@
 #include "tulip/PushButtonItem.h"
 
+#include <math.h>
+
 #include <QtGui/QPainter>
 #include <QtGui/QGraphicsColorizeEffect>
 #include <QtGui/QAction>
@@ -79,19 +81,18 @@ void PushButtonItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
 }
 //==========================
 void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+  QRectF brect = boundingRect();
+  QPen pen(_borderColor);
+  pen.setWidth(_borderWidth);
+  painter->setPen(pen);
+  painter->setBrush(_backgroundColor);
   // Border
-  if (_backgroundShape != NoShape) {
-    QPen pen(_borderColor);
-    pen.setWidth(_borderWidth);
-    painter->setPen(pen);
-    painter->setBrush(_backgroundColor);
-    if (_backgroundShape == SquareShape)
-      painter->drawRect(boundingRect());
-    else if (_backgroundShape == CircleShape) {
-      QRectF brect = boundingRect();
-      painter->drawEllipse(brect.x(),brect.y(),brect.width(),brect.height());
-    }
-  }
+  if (_backgroundShape == CircleShape)
+    painter->drawEllipse(brect);
+  else if (_backgroundShape == SquareShape)
+    painter->drawRoundedRect(brect,4,4);
+
+
   // Pixmap
   QIcon::Mode mode = QIcon::Normal;
   if (!isEnabled())
@@ -121,13 +122,8 @@ void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     img.setAlphaChannel(alpha);
     pixmap = QPixmap::fromImage(img);
   }
-  int x=0,y=0;
-  if (_backgroundShape != NoShape) {
-    x=_borderWidth+3;
-    y=_borderWidth+3;
-  }
-  painter->drawPixmap(x,y,_iconSize.width(),_iconSize.height(),pixmap);
 
+  painter->drawPixmap(brect.center().x() - _iconSize.width()/2,brect.center().y() - _iconSize.height()/2,_iconSize.width(),_iconSize.height(),pixmap);
 }
 //==========================
 QRectF PushButtonItem::boundingRect() const {
@@ -136,9 +132,13 @@ QRectF PushButtonItem::boundingRect() const {
     width += _iconSize.width();
     height += _iconSize.height();
   }
-  if (_backgroundShape != NoShape) {
-    width += (_borderWidth+3) * 2;
-    height += (_borderWidth+3) * 2;
+  if (_backgroundShape == SquareShape) {
+    width += 8;
+    height += 8;
+  }
+  if (_backgroundShape == CircleShape) {
+    width = sqrt(pow(_iconSize.width(),2) + pow(_iconSize.height(),2)) + 3;
+    height = width;
   }
 
   return QRectF(0,0,width,height);
