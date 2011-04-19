@@ -167,7 +167,7 @@ void ObservablePropertyTest::tearDown() {
   delete pObserver;
 }
 
-void ObservablePropertyTest::setNodeValue(PropertyInterface* prop, char* val,
+void ObservablePropertyTest::setNodeValue(PropertyInterface* prop, const char* val,
 					  bool all, bool found1,
 					  bool found2) {
   observer->reset();
@@ -194,7 +194,7 @@ void ObservablePropertyTest::setNodeValue(PropertyInterface* prop, char* val,
   }
 }
 
-void ObservablePropertyTest::setEdgeValue(PropertyInterface* prop, char* val,
+void ObservablePropertyTest::setEdgeValue(PropertyInterface* prop, const char* val,
 					  bool all, bool found1,
 					  bool found2) {
   observer->reset();
