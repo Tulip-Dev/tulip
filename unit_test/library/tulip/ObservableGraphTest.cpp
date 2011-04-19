@@ -462,7 +462,7 @@ void ObservableGraphTest::testSubgraph() {
   gObserver->reset();
   observer->reset();
   Observable::holdObservers();
-  g2->delAllNode(n2);
+  g2->delNode(n2, true);
   CPPUNIT_ASSERT(graphs.size() == 4);
   CPPUNIT_ASSERT(graphs[0] == graph);
   CPPUNIT_ASSERT(graphs[1] == g2);
