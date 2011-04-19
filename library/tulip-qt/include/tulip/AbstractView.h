@@ -78,6 +78,22 @@ namespace tlp {
       */
     QWidget *getCentralWidget() const { return centralWidget; }
 
+    /**
+     * @brief Default implementation of the savePicture function. Use the image objects returned by the createPicture function and save it to a picture file on disk.
+     * \param pictureName : filename to use for the picture, with extension (extension is used to infer image type).
+     * \param width : width of the picture
+     * \param height : height of the picture
+     * \param center : whether we should center the view before creating the picture, or use the current zoom and pan.
+     * \param zoom : creates a picture of a sub part of the view. With zoom=1 creates only one picture with entire view; with zoom=N : the view is cut into 2^(N-1) part in width and height. Defaults to 1.
+     * \param xOffset : which part of the view to render if zoom!=1. xOffset must be 0 <= xOffset < 2^(zoom-1). Defaults to 0.
+     * \param yOffset : which part of the view to render if zoom!=1. yOffset must be 0 <= yOffset < 2^(zoom-1). Defaults to 0.
+     * \return bool : Whether the picture can be created or not.
+     */
+    bool savePicture(const std::string& pictureName, int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
+
+    //Allow to call
+    using View::createPicture;
+
   protected:
     /**
      * empty function : implement this function if you want a specific event filter in your view
@@ -98,6 +114,7 @@ namespace tlp {
      * call this function to set view's centralWidget
      */
     void setCentralWidget(QWidget *widget);
+
 
     QWidget *widget;
     QVBoxLayout *mainLayout;
