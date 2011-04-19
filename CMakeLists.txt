@@ -273,6 +273,11 @@ SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 SET(ENABLE_RENDERING_TIME_DISPLAY OFF CACHE BOOL "Do you want to disable the rendering time display ? (Warning : You must have OpenMP) [OFF|ON]")
 
 ## -----------------------------------------------------------------------------------------------
+## Builds the unit tests
+## -----------------------------------------------------------------------------------------------
+SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
+
+## -----------------------------------------------------------------------------------------------
 ## Check 64 bits
 ## -----------------------------------------------------------------------------------------------
 EXEC_PROGRAM(uname ARGS "-m" OUTPUT_VARIABLE UNAME_OUT)
@@ -344,6 +349,11 @@ INCLUDE(CMakeMacros.cmake)
 ## -----------------------------------------------------------------------------------------------
 ## Sub dir (no comment)
 ## -----------------------------------------------------------------------------------------------
+IF(BUILD_TESTS)
+  INCLUDE(CTest)
+  ADD_SUBDIRECTORY(unit_test)
+ENDIF()
+
 ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)
 ADD_SUBDIRECTORY(software)
