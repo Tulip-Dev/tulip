@@ -807,9 +807,8 @@ namespace {
                 HTML_HELP_CLOSE()
             };
 }
-
-namespace tlp {
 #endif //DOXYGEN_NOTFOR_DEVEL
+namespace tlp {
 
     /** \addtogroup import */
     /*@{*/

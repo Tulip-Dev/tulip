@@ -89,9 +89,9 @@ inline void printGraph(std::ostream &os, tlp::Graph *graph) {
   os << graph << endl;
 }
 
-namespace tlp {
 #endif //DOXYGEN_NOTFOR_DEVEL
 
+namespace tlp {
 /** \addtogroup export */
 /*@{*/
 /// Export plugin for TLP format.
