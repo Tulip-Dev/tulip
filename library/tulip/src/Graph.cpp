@@ -19,16 +19,16 @@
 
 #include <fstream>
 
-#include "tulip/Graph.h"
-#include "tulip/TlpTools.h"
-#include "tulip/GraphImpl.h"
-#include "tulip/BooleanProperty.h"
-#include "tulip/GraphProperty.h"
-#include "tulip/Reflect.h"
-#include "tulip/ExportModule.h"
-#include "tulip/Algorithm.h"
-#include "tulip/ImportModule.h"
-#include "tulip/SimplePluginProgress.h"
+#include <tulip/Graph.h>
+#include <tulip/TlpTools.h>
+#include <tulip/GraphImpl.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/Reflect.h>
+#include <tulip/ExportModule.h>
+#include <tulip/Algorithm.h>
+#include <tulip/ImportModule.h>
+#include <tulip/SimplePluginProgress.h>
 
 using namespace std;
 using namespace tlp;

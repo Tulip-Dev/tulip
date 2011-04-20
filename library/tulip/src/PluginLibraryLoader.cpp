@@ -16,9 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/PluginLibraryLoader.h"
-#include "tulip/TulipRelease.h"
-#include "tulip/tulipconf.h"
+#include <tulip/PluginLibraryLoader.h>
+#include <tulip/TulipRelease.h>
+#include <tulip/tulipconf.h>
 #include <string.h>
 #include <set>
 

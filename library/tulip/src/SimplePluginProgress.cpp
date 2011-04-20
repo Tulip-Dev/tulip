@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/SimplePluginProgress.h"
+#include <tulip/SimplePluginProgress.h>
 using namespace tlp;
 using namespace std;
 SimplePluginProgress::SimplePluginProgress(): _state(TLP_CONTINUE),

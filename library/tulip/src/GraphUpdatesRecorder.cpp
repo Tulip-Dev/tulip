@@ -16,10 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GraphUpdatesRecorder.h"
-#include "tulip/Graph.h"
-#include "tulip/ForEach.h"
-#include "tulip/GraphImpl.h"
+#include <tulip/GraphUpdatesRecorder.h>
+#include <tulip/Graph.h>
+#include <tulip/ForEach.h>
+#include <tulip/GraphImpl.h>
 
 using namespace std;
 using namespace stdext;

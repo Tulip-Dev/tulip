@@ -16,19 +16,19 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/tuliphash.h"
-#include "tulip/GraphTools.h"
-#include "tulip/GraphMeasure.h"
-#include "tulip/AcyclicTest.h"
-#include "tulip/TreeTest.h"
-#include "tulip/Graph.h"
-#include "tulip/BooleanProperty.h"
-#include "tulip/StableIterator.h"
-#include "tulip/IntegerProperty.h"
-#include "tulip/DoubleProperty.h"
-#include "tulip/ForEach.h"
-#include "tulip/ConnectedTest.h"
-#include "tulip/Ordering.h"
+#include <tulip/tuliphash.h>
+#include <tulip/GraphTools.h>
+#include <tulip/GraphMeasure.h>
+#include <tulip/AcyclicTest.h>
+#include <tulip/TreeTest.h>
+#include <tulip/Graph.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/StableIterator.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/ForEach.h>
+#include <tulip/ConnectedTest.h>
+#include <tulip/Ordering.h>
 
 #include <math.h>
 

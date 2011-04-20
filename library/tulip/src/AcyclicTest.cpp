@@ -17,10 +17,10 @@
  *
  */
 #include <stack>
-#include "tulip/Graph.h"
-#include "tulip/AcyclicTest.h"
-#include "tulip/BooleanProperty.h"
-#include "tulip/StableIterator.h"
+#include <tulip/Graph.h>
+#include <tulip/AcyclicTest.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/StableIterator.h>
 
 using namespace std;
 using namespace tlp;

@@ -17,7 +17,6 @@
  *
  */
 #include <tulip/FaceIterator.h>
-//#include "FaceIterator.h"
 
 using namespace std;
 using namespace tlp;

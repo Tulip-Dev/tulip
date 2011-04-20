@@ -18,9 +18,9 @@
  */
 
 #include <vector>
-#include "tulip/Graph.h"
-#include "tulip/SimpleTest.h"
-#include "tulip/MutableContainer.h"
+#include <tulip/Graph.h>
+#include <tulip/SimpleTest.h>
+#include <tulip/MutableContainer.h>
 
 using namespace std;
 using namespace tlp;

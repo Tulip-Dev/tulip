@@ -22,7 +22,7 @@
 
 #include <cassert>
 #include <iostream>
-#include "tulip/ObservableGraph.h"
+#include <tulip/ObservableGraph.h>
 
 using namespace stdext;
 using namespace tlp;

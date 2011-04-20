@@ -17,9 +17,9 @@
  *
  */
 #include <iostream>
-#include "tulip/PropertyInterface.h"
-#include "tulip/ObservableProperty.h"
-#include "tulip/Graph.h"
+#include <tulip/PropertyInterface.h>
+#include <tulip/ObservableProperty.h>
+#include <tulip/Graph.h>
 
 using namespace tlp;
 

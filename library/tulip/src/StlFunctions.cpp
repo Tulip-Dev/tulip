@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/StlFunctions.h"
-#include "tulip/DoubleProperty.h"
+#include <tulip/StlFunctions.h>
+#include <tulip/DoubleProperty.h>
 
 bool tlp::LessByMetric::operator() (tlp::node n1, tlp::node n2) {
   return (metric->getNodeValue(n1) < metric->getNodeValue(n2));

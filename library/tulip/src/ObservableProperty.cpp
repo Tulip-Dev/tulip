@@ -21,8 +21,8 @@
 #endif
 
 #include <cassert>
-#include "tulip/ObservableProperty.h"
-#include "tulip/PropertyInterface.h"
+#include <tulip/ObservableProperty.h>
+#include <tulip/PropertyInterface.h>
 
 using namespace stdext;
 using namespace tlp;
