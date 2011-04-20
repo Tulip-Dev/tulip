@@ -503,6 +503,6 @@ protected:
 /*@}*/
 }
 #if !defined(_MSC_VER) || defined(DLL_TULIP) //When using VC++, we only want to include this when we are in the TULIP dll. With any other compiler, include it all the time
-#	include "./cxx/AbstractProperty.cxx"
+#	include "cxx/AbstractProperty.cxx"
 #endif
 #endif
