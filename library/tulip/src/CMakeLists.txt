@@ -10,7 +10,6 @@ ColorProperty.cpp
 ColorScale.cpp
 ConnectedTest.cpp
 ConvexHull.cpp
-Coord.cpp
 Delaunay.cpp
 DoubleAlgorithm.cpp
 DoubleProperty.cpp
