@@ -21,7 +21,7 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include "tulip/GlNode.h"
+#include <tulip/GlNode.h>
 
 namespace tlp {
 

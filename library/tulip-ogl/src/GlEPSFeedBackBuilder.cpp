@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlEPSFeedBackBuilder.h"
+#include <tulip/GlEPSFeedBackBuilder.h>
 
 #include <iostream>
 

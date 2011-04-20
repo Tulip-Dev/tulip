@@ -18,10 +18,10 @@
  */
 #include <GL/glew.h>
 
-#include "tulip/GlBox.h"
+#include <tulip/GlBox.h>
 
-#include "tulip/OpenGlConfigManager.h"
-#include "tulip/GlTools.h"
+#include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 

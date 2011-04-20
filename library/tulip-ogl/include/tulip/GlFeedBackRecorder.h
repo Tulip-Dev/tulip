@@ -24,7 +24,7 @@
 
 #include <tulip/Vector.h>
 
-#include "tulip/GlFeedBackBuilder.h"
+#include <tulip/GlFeedBackBuilder.h>
 
 namespace tlp {
 

@@ -22,10 +22,10 @@
 #include <vector>
 #include <utility>
 
-#include "tulip/GlSceneVisitor.h"
-#include "tulip/GlNode.h"
-#include "tulip/GlEdge.h"
-#include "tulip/GlLODCalculator.h"
+#include <tulip/GlSceneVisitor.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlLODCalculator.h>
 
 namespace tlp {
 

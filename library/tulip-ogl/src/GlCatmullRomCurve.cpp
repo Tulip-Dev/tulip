@@ -21,9 +21,9 @@
 
 #include <sstream>
 
-#include "tulip/GlCatmullRomCurve.h"
-#include "tulip/GlBezierCurve.h"
-#include "tulip/ParametricCurves.h"
+#include <tulip/GlCatmullRomCurve.h>
+#include <tulip/GlBezierCurve.h>
+#include <tulip/ParametricCurves.h>
 
 using namespace std;
 

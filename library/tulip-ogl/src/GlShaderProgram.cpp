@@ -23,8 +23,8 @@
 #include <fstream>
 #include <algorithm>
 
-#include "tulip/GlShaderProgram.h"
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/GlShaderProgram.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 

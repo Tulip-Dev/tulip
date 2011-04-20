@@ -23,7 +23,7 @@
 #include <cassert>
 #include <string>
 
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>

@@ -16,9 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlSimpleEntity.h"
+#include <tulip/GlSimpleEntity.h>
 
-#include "tulip/GlComposite.h"
+#include <tulip/GlComposite.h>
 
 using namespace std;
 

@@ -26,7 +26,7 @@
 #include <tulip/Color.h>
 #include <tulip/Size.h>
 
-#include "tulip/GlSimpleEntity.h"
+#include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
 /** \brief General class used to render grids as augmented displays.

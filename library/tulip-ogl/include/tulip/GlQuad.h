@@ -22,7 +22,7 @@
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 
-#include "tulip/GlPolygon.h"
+#include <tulip/GlPolygon.h>
 
 namespace tlp {
 /**

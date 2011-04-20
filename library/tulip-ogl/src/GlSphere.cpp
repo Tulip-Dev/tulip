@@ -16,14 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlSphere.h"
+#include <tulip/GlSphere.h>
 
 #include <tulip/Color.h>
 
-#include "tulip/GlDisplayListManager.h"
-#include "tulip/GlTextureManager.h"
-#include "tulip/GlTools.h"
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlTools.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 

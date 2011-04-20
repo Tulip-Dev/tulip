@@ -18,13 +18,13 @@
  */
 #include <GL/glew.h>
 
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
-#include "tulip/GlVertexArrayManager.h"
-#include "tulip/GlEdge.h"
-#include "tulip/GlNode.h"
-#include "tulip/GlGraphInputData.h"
-#include "tulip/Graph.h"
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/Graph.h>
 
 using namespace std;
 

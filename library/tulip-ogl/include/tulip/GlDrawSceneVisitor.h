@@ -19,8 +19,8 @@
 #ifndef Tulip_GLDRAWSCENEVISITOR_H
 #define Tulip_GLDRAWSCENEVISITOR_H
 
-#include "tulip/tuliphash.h"
-#include "tulip/GlSceneVisitor.h"
+#include <tulip/tuliphash.h>
+#include <tulip/GlSceneVisitor.h>
 
 namespace tlp {
   

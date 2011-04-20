@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlFeedBackRecorder.h"
+#include <tulip/GlFeedBackRecorder.h>
 
 #include <stdio.h>
 #include <iostream>

@@ -23,8 +23,8 @@
 #include <tulip/Color.h>
 #include <tulip/Size.h>
 
-#include "tulip/GlSimpleEntity.h"
-#include "tulip/GlTextureManager.h"
+#include <tulip/GlSimpleEntity.h>
+#include <tulip/GlTextureManager.h>
 
 namespace tlp {
   /**

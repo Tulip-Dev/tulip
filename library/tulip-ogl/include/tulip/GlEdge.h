@@ -20,12 +20,12 @@
 #define Tulip_GLEDGE_H
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
 #include <tulip/PropertyTypes.h>
 
-#include "tulip/GlComplexeEntity.h"
-#include "tulip/EdgeExtremityGlyph.h"
+#include <tulip/GlComplexeEntity.h>
+#include <tulip/EdgeExtremityGlyph.h>
 
 namespace tlp {
 

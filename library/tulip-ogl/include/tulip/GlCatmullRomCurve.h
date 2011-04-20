@@ -23,7 +23,7 @@
 
 #include <vector>
 
-#include "tulip/AbstractGlCurve.h"
+#include <tulip/AbstractGlCurve.h>
 
 namespace tlp {
 

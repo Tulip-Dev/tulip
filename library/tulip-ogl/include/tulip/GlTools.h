@@ -19,7 +19,7 @@
 #ifndef GLTOOLS_H
 #define GLTOOLS_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 #include <tulip/Size.h>

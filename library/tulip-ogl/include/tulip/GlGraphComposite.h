@@ -19,17 +19,17 @@
 #ifndef Tulip_GLGRAPHCOMPOSITE_H
 #define Tulip_GLGRAPHCOMPOSITE_H
 
-#include "tulip/GlComposite.h"
+#include <tulip/GlComposite.h>
 
 #include <vector>
 
 #include <tulip/ObservableGraph.h>
 
-#include "tulip/GlGraphRenderingParameters.h"
-#include "tulip/GlGraphInputData.h"
-#include "tulip/GlNode.h"
-#include "tulip/GlEdge.h"
-#include "tulip/GlMetaNode.h"
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlMetaNode.h>
 
 namespace tlp {
 

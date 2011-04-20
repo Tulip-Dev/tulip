@@ -16,12 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlProgressBar.h"
+#include <tulip/GlProgressBar.h>
 
-#include "tulip/GlPolygon.h"
-#include "tulip/GlLabel.h"
-#include "tulip/GlQuad.h"
-#include "tulip/TlpTools.h"
+#include <tulip/GlPolygon.h>
+#include <tulip/GlLabel.h>
+#include <tulip/GlQuad.h>
+#include <tulip/TlpTools.h>
 
 #include <vector>
 

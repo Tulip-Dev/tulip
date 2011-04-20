@@ -22,7 +22,7 @@
 //====================================================
 #include <stdio.h>
 #include <tulip/Color.h>
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
 namespace tlp {
 

@@ -36,7 +36,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/TemplateFactory.h>
 
-#include "tulip/GlGraphInputData.h"
+#include <tulip/GlGraphInputData.h>
 
 
 namespace tlp {

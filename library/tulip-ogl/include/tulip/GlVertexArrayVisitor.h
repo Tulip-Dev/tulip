@@ -20,7 +20,7 @@
 #define Tulip_GLVERTEXARRAYVISITOR_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include "tulip/GlSceneVisitor.h"
+#include <tulip/GlSceneVisitor.h>
 
 namespace tlp {
 

@@ -16,9 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlMetaNode.h"
+#include <tulip/GlMetaNode.h>
 
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
@@ -27,16 +27,16 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
 
-#include "tulip/Glyph.h"
-#include "tulip/GlCPULODCalculator.h"
-#include "tulip/GlGraphInputData.h"
-#include "tulip/DrawingTools.h"
-#include "tulip/GlEdge.h"
-#include "tulip/GlComplexeEntity.h"
-#include "tulip/GlGraphRenderingParameters.h"
-#include "tulip/Camera.h"
-#include "tulip/GlTools.h"
-#include "tulip/GlTextureManager.h"
+#include <tulip/Glyph.h>
+#include <tulip/GlCPULODCalculator.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/DrawingTools.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlComplexeEntity.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/Camera.h>
+#include <tulip/GlTools.h>
+#include <tulip/GlTextureManager.h>
 
 #include <iostream>
 

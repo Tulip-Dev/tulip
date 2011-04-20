@@ -16,21 +16,21 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlMetaNodeTrueRenderer.h"
+#include <tulip/GlMetaNodeTrueRenderer.h>
 
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
 #include <tulip/DrawingTools.h>
 #include <tulip/BoundingBox.h>
 
-#include "tulip/Camera.h"
-#include "tulip/GlGraphInputData.h"
-#include "tulip/GlCPULODCalculator.h"
-#include "tulip/Glyph.h"
-#include "tulip/GlNode.h"
-#include "tulip/GlEdge.h"
-#include "tulip/GlMetaNode.h"
-#include "tulip/GlVertexArrayManager.h"
+#include <tulip/Camera.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/GlCPULODCalculator.h>
+#include <tulip/Glyph.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlMetaNode.h>
+#include <tulip/GlVertexArrayManager.h>
 
 using namespace std;
 

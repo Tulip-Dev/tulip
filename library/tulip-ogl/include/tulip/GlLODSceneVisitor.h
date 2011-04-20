@@ -26,7 +26,7 @@
 
 #include <tulip/BoundingBox.h>
 
-#include "tulip/GlSceneVisitor.h"
+#include <tulip/GlSceneVisitor.h>
 
 namespace tlp {
 

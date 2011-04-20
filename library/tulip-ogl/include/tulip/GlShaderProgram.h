@@ -20,7 +20,7 @@
 #ifndef GL_SHADER_PROGRAM
 #define GL_SHADER_PROGRAM
 
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
 #include <string>
 #include <map>

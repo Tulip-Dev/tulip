@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlCircle.h"
+#include <tulip/GlCircle.h>
 
 namespace tlp {
 

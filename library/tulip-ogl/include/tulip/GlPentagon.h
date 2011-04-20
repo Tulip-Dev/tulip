@@ -19,7 +19,7 @@
 #ifndef GLPENTAGON_H
 #define GLPENTAGON_H
 
-#include "tulip/GlRegularPolygon.h"
+#include <tulip/GlRegularPolygon.h>
 
 namespace tlp {
   /**

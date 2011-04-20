@@ -17,7 +17,7 @@
  *
  */
 
-#include "tulip/GlSceneZoomAndPan.h"
+#include <tulip/GlSceneZoomAndPan.h>
 #include <algorithm>
 
 using namespace std;

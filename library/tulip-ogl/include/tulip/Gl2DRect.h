@@ -21,7 +21,7 @@
 
 #include <string>
 
-#include "tulip/GlRect.h"
+#include <tulip/GlRect.h>
 
 namespace tlp {
   /**

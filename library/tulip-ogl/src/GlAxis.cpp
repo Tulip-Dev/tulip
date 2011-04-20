@@ -24,7 +24,7 @@
 #include <tulip/GlRect.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 
-#include "tulip/GlAxis.h"
+#include <tulip/GlAxis.h>
 
 using namespace std;
 

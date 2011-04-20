@@ -23,8 +23,8 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include "tulip/GlBox.h"
-#include "tulip/GlComplexeEntity.h"
+#include <tulip/GlBox.h>
+#include <tulip/GlComplexeEntity.h>
 
 namespace tlp {
 

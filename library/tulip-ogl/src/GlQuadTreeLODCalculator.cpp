@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlQuadTreeLODCalculator.h"
+#include <tulip/GlQuadTreeLODCalculator.h>
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -25,10 +25,10 @@
 #include <tulip/Matrix.h>
 #include <tulip/QuadTree.h>
 
-#include "tulip/Camera.h"
-#include "tulip/GlEntity.h"
-#include "tulip/GlTools.h"
-#include "tulip/GlScene.h"
+#include <tulip/Camera.h>
+#include <tulip/GlEntity.h>
+#include <tulip/GlTools.h>
+#include <tulip/GlScene.h>
 #include <iostream>
 
 using namespace std;

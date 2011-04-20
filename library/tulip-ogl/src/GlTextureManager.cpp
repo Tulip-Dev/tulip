@@ -19,15 +19,15 @@
 
 #include <GL/glew.h>
 
-#include "tulip/GlTextureManager.h"
+#include <tulip/GlTextureManager.h>
 
-#include "tulip/OpenGlConfigManager.h"
-#include "tulip/OpenGlErrorViewer.h"
+#include <tulip/OpenGlConfigManager.h>
+#include <tulip/OpenGlErrorViewer.h>
 
 extern "C" {
 #include <stdio.h>
 
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
 #ifdef HAVE_LIBJPEG
 #include <jpeglib.h>

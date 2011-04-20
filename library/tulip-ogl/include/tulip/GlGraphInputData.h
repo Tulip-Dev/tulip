@@ -19,12 +19,12 @@
 #ifndef Tulip_GLGRAPHINPUTDATA_H
 #define Tulip_GLGRAPHINPUTDATA_H
 
-#include "tulip/tulipconf.h"
+#include <tulip/tulipconf.h>
 
 #include <tulip/MutableContainer.h>
 
-#include "tulip/GlMetaNodeRenderer.h"
-#include "tulip/GlGraphRenderingParameters.h"
+#include <tulip/GlMetaNodeRenderer.h>
+#include <tulip/GlGraphRenderingParameters.h>
 
 namespace tlp {
 

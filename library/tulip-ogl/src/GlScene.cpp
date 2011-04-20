@@ -24,28 +24,28 @@
 #include <climits>
 
 
-#include "tulip/OpenGlConfigManager.h"
-#include "tulip/GlScene.h"
+#include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlScene.h>
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
 #include <omp.h>
 #endif
 
-#include "tulip/GlLODSceneVisitor.h"
-#include "tulip/OcclusionTest.h"
-#include "tulip/GlCPULODCalculator.h"
-#include "tulip/GlBoundingBoxSceneVisitor.h"
-#include "tulip/GlSelectSceneVisitor.h"
-#include "tulip/Camera.h"
-#include "tulip/GlSimpleEntity.h"
-#include "tulip/GlComplexeEntity.h"
-#include "tulip/GlNode.h"
-#include "tulip/GlEdge.h"
-#include "tulip/GlFeedBackRecorder.h"
-#include "tulip/GlSVGFeedBackBuilder.h"
-#include "tulip/GlEPSFeedBackBuilder.h"
-#include "tulip/GlVertexArrayManager.h"
-#include "tulip/GlVertexArrayVisitor.h"
+#include <tulip/GlLODSceneVisitor.h>
+#include <tulip/OcclusionTest.h>
+#include <tulip/GlCPULODCalculator.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlSelectSceneVisitor.h>
+#include <tulip/Camera.h>
+#include <tulip/GlSimpleEntity.h>
+#include <tulip/GlComplexeEntity.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlFeedBackRecorder.h>
+#include <tulip/GlSVGFeedBackBuilder.h>
+#include <tulip/GlEPSFeedBackBuilder.h>
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/GlVertexArrayVisitor.h>
 
 using namespace std;
 

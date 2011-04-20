@@ -18,10 +18,10 @@
  */
 #include <GL/glew.h>
 
-#include "tulip/GlAbstractPolygon.h"
+#include <tulip/GlAbstractPolygon.h>
 
-#include "tulip/OpenGlConfigManager.h"
-#include "tulip/GlTextureManager.h"
+#include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlTextureManager.h>
 
 using namespace std;
 

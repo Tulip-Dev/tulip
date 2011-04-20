@@ -20,7 +20,7 @@
 #ifndef GLPROGRESSBAR_H_
 #define GLPROGRESSBAR_H_
 
-#include "tulip/GlComposite.h"
+#include <tulip/GlComposite.h>
 #include <tulip/SimplePluginProgress.h>
 
 const std::string SLIDER_TEXTURE_NAME = "cylinderTexture.png";
