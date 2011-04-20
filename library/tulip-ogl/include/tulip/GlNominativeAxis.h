@@ -22,7 +22,7 @@
 
 #include <map>
 
-#include "GlAxis.h"
+#include <tulip/GlAxis.h>
 
 namespace tlp {
 
