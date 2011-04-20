@@ -8,6 +8,7 @@
 class QAnimationGroup;
 class QAction;
 class QTimer;
+class QGraphicsSvgItem;
 
 namespace tlp {
 class ToolbarItem: public QObject, public QGraphicsItemGroup {
@@ -73,6 +74,7 @@ private:
   QAction *_activeAction;
   PushButtonItem *_activeButton;
   PushButtonItem *_focusedButton;
+  QGraphicsSvgItem *_settingsIcon;
     // Expand & collapse
   bool _expanded;
   QAnimationGroup *_currentExpandAnimation;
@@ -89,6 +91,7 @@ private:
   int _backgroundRectangleRound;
   QColor _backgroundColor;
   QColor _borderColor;
+  bool _showSettingsButton;
     // Buttons style
   QColor _buttonForegroundColor;
   QColor _buttonBackgroundColor;

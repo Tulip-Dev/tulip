@@ -7,7 +7,7 @@ namespace tlp {
 class ToolbarItem;
 class Interactor;
 
-class InteractorToolbarItem: public QObject, public QGraphicsItemGroup {
+class InteractorToolbarItem: public QObject {
   Q_OBJECT
 public:
   InteractorToolbarItem(std::list<Interactor *> interactors, QGraphicsItem *parent=0, QGraphicsScene *scene=0);

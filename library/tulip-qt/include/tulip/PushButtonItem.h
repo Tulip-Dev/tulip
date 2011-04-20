@@ -55,6 +55,9 @@ public:
   int borderWidth() const { return _borderWidth; }
   void setBorderWidth(int w ) { _borderWidth = w; update(); }
 
+  bool fadeout() const { return _fadeout; }
+  void setFadeout(bool f) { _fadeout = f; update(); }
+
 protected:
   void mousePressEvent(QGraphicsSceneMouseEvent *);
   void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
@@ -80,12 +83,12 @@ private:
   bool _pressed;
   bool _hovered;
   bool _clicking;
+  bool _fadeout;
 
   BackgroundShape _backgroundShape;
   QColor _borderColor;
   QColor _backgroundColor;
   int _borderWidth;
-
 };
 }
 #endif // PUSHBUTTONITEM_H

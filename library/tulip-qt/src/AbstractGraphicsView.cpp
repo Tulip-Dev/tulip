@@ -143,7 +143,6 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
 }
 // ===================================
 void AbstractGraphicsView::buildInteractorsToolbar() {
-//  InteractorToolbarItem *toolbar = new InteractorToolbarItem(_interactors);
   ToolbarItem *tb = new ToolbarItem();
   for (list<Interactor *>::iterator it = _interactors.begin(); it != _interactors.end(); ++it)
     tb->addAction((*it)->getAction());

@@ -11,7 +11,7 @@ namespace tlp {
 PushButtonItem::PushButtonItem(QAction *action, const QSize &iconSize, QGraphicsItem *parent):
   AnimatedGraphicsObject(parent),
   _iconSize(iconSize),
-  _pressed(false), _hovered(false), _clicking(false),
+  _pressed(false), _hovered(false), _clicking(false), _fadeout(true),
   _action(0),
   _borderWidth(7), _borderColor(QColor(200,200,200,150)), _backgroundColor(QColor(230,230,230,150)), _backgroundShape(NoShape) {
 
@@ -102,12 +102,13 @@ void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
   if (isSelected())
     mode = QIcon::Selected;
 
-  if (!_hovered)
+  if (!_hovered && _fadeout)
     painter->setOpacity(0.8);
+  else
+    painter->setOpacity(1);
 
   QPixmap pixmap = _action->icon().pixmap(_iconSize, mode);
   if (_pressed) {
-    painter->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
     QImage img = pixmap.toImage();
     QImage alpha = img.alphaChannel();
     for (int x = 0; x < img.width(); ++x) {
