@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlPentagon.h"
+#include <tulip/GlPentagon.h>
 
 using namespace std;
 

@@ -25,7 +25,7 @@
 #include <list>
 #include <string>
 
-#include "tulip/GlSimpleEntity.h"
+#include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
 

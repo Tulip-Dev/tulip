@@ -28,7 +28,7 @@
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 
-#include "tulip/GlSimpleEntity.h"
+#include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
 

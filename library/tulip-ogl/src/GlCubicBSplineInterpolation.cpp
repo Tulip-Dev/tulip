@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlCubicBSplineInterpolation.h"
+#include <tulip/GlCubicBSplineInterpolation.h>
 
 using namespace std;
 

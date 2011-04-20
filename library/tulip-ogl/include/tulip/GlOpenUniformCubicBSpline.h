@@ -20,8 +20,8 @@
 #ifndef GLUNIFORMCUBICBSPLINE_H_
 #define GLUNIFORMCUBICBSPLINE_H_
 
-#include "tulip/AbstractGlCurve.h"
-#include "tulip/GlTools.h"
+#include <tulip/AbstractGlCurve.h>
+#include <tulip/GlTools.h>
 
 namespace tlp {
 

@@ -21,7 +21,7 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 #include <vector>
 
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
 #include <tulip/Size.h>
 #include <tulip/Coord.h>

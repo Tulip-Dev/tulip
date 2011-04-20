@@ -23,9 +23,9 @@
 
 #include <tulip/Matrix.h>
 
-#include "tulip/GlEntity.h"
-#include "tulip/Camera.h"
-#include "tulip/GlComposite.h"
+#include <tulip/GlEntity.h>
+#include <tulip/Camera.h>
+#include <tulip/GlComposite.h>
 
 namespace tlp {
 

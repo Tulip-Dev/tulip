@@ -28,8 +28,8 @@
 #include <tulip/Matrix.h>
 #include <tulip/BoundingBox.h>
 
-#include "tulip/Observable.h"
-#include "tulip/GlXMLTools.h"
+#include <tulip/Observable.h>
+#include <tulip/GlXMLTools.h>
 
 namespace tlp {
 

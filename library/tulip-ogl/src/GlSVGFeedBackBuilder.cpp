@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlSVGFeedBackBuilder.h"
+#include <tulip/GlSVGFeedBackBuilder.h>
 
 using namespace std;
 

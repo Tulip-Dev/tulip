@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlRect.h"
+#include <tulip/GlRect.h>
 
 using namespace std;
 

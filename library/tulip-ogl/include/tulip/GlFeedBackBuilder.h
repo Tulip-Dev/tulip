@@ -22,7 +22,7 @@
 #include <tulip/tulipconf.h>
 
 #include <string>
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
 #include <tulip/Vector.h>
 

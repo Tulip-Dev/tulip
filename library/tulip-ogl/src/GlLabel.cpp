@@ -21,7 +21,7 @@
 
 #include <FTGL/ftgl.h>
 
-#include "tulip/GlLabel.h"
+#include <tulip/GlLabel.h>
 #include <tulip/Coord.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -31,13 +31,13 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
 
-#include "tulip/GlTools.h"
-#include "tulip/GlyphManager.h"
-#include "tulip/GlDisplayListManager.h"
-#include "tulip/OcclusionTest.h"
-#include "tulip/GlTLPFeedBackBuilder.h"
-#include "tulip/OcclusionTest.h"
-#include "tulip/GlTextureManager.h"
+#include <tulip/GlTools.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/OcclusionTest.h>
+#include <tulip/GlTLPFeedBackBuilder.h>
+#include <tulip/OcclusionTest.h>
+#include <tulip/GlTextureManager.h>
 
 
 using namespace std;

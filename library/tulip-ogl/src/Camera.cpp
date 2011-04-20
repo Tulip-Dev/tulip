@@ -16,12 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/Camera.h"
+#include <tulip/Camera.h>
 
 #include <cmath>
 
-#include "tulip/GlTools.h"
-#include "tulip/GlScene.h"
+#include <tulip/GlTools.h>
+#include <tulip/GlScene.h>
 
 #include <iostream>
 

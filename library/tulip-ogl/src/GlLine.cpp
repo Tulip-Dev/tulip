@@ -17,9 +17,9 @@
  *
  */
 
-#include "tulip/GlLine.h"
-#include "tulip/GlTools.h"
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/GlLine.h>
+#include <tulip/GlTools.h>
+#include <tulip/OpenGlConfigManager.h>
 
 
 using namespace std;

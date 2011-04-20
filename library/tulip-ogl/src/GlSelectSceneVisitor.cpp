@@ -16,11 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlSelectSceneVisitor.h"
-#include "tulip/GlSimpleEntity.h"
-#include "tulip/GlNode.h"
-#include "tulip/GlEdge.h"
-#include "tulip/GlLayer.h"
+#include <tulip/GlSelectSceneVisitor.h>
+#include <tulip/GlSimpleEntity.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlLayer.h>
 
 using namespace std;
 

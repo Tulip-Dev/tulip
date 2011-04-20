@@ -24,8 +24,8 @@
 #include <cstdlib>
 #include <cassert>
 
-#include "tulip/EpsFunction.h"
-#include "tulip/GlTools.h"
+#include <tulip/EpsFunction.h>
+#include <tulip/GlTools.h>
 
 using namespace tlp;
 

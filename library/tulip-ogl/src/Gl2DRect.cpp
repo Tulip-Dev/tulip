@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/Gl2DRect.h"
+#include <tulip/Gl2DRect.h>
 
 #include <limits>
 

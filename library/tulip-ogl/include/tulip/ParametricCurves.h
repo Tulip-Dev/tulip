@@ -21,7 +21,7 @@
 
 #include <vector>
 
-#include "tulip/Coord.h"
+#include <tulip/Coord.h>
 
 namespace tlp {
 

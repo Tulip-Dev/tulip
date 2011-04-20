@@ -21,7 +21,7 @@
 
 #include <tulip/tulipconf.h>
 
-#include "tulip/GlMetaNodeRenderer.h"
+#include <tulip/GlMetaNodeRenderer.h>
 
 namespace tlp {
 

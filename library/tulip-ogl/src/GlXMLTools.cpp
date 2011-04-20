@@ -16,28 +16,28 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlXMLTools.h"
+#include <tulip/GlXMLTools.h>
 
 #include <string>
 
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 
-#include "tulip/GlSimpleEntity.h"
-#include "tulip/Gl2DRect.h"
-#include "tulip/GlComposite.h"
-#include "tulip/GlBox.h"
-#include "tulip/GlCircle.h"
-#include "tulip/GlGrid.h"
-#include "tulip/GlLabel.h"
-#include "tulip/GlLine.h"
-#include "tulip/GlPolygon.h"
-#include "tulip/GlRect.h"
-#include "tulip/GlSphere.h"
-#include "tulip/GlCurve.h"
-#include "tulip/GlComplexPolygon.h"
-#include "tulip/GlConvexHull.h"
-#include "tulip/GlQuad.h"
+#include <tulip/GlSimpleEntity.h>
+#include <tulip/Gl2DRect.h>
+#include <tulip/GlComposite.h>
+#include <tulip/GlBox.h>
+#include <tulip/GlCircle.h>
+#include <tulip/GlGrid.h>
+#include <tulip/GlLabel.h>
+#include <tulip/GlLine.h>
+#include <tulip/GlPolygon.h>
+#include <tulip/GlRect.h>
+#include <tulip/GlSphere.h>
+#include <tulip/GlCurve.h>
+#include <tulip/GlComplexPolygon.h>
+#include <tulip/GlConvexHull.h>
+#include <tulip/GlQuad.h>
 
 using namespace std;
 

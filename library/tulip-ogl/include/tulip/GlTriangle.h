@@ -19,7 +19,7 @@
 #ifndef GLTRIANGLE_H
 #define GLTRIANGLE_H
 
-#include "tulip/GlRegularPolygon.h"
+#include <tulip/GlRegularPolygon.h>
 
 namespace tlp {
   /**

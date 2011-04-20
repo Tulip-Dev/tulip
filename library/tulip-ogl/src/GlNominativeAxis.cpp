@@ -17,7 +17,7 @@
  *
  */
 
-#include "tulip/GlNominativeAxis.h"
+#include <tulip/GlNominativeAxis.h>
 
 using namespace std;
 

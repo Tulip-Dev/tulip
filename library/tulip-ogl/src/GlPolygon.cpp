@@ -17,9 +17,9 @@
  *
  */
 
-#include "tulip/GlPolygon.h"
-#include "tulip/GlTools.h"
-#include "tulip/GlLayer.h"
+#include <tulip/GlPolygon.h>
+#include <tulip/GlTools.h>
+#include <tulip/GlLayer.h>
 
 
 

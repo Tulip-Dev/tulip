@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlCPULODCalculator.h"
+#include <tulip/GlCPULODCalculator.h>
 
 #include <tulip/Matrix.h>
 
@@ -24,10 +24,10 @@
 #include <omp.h>
 #endif
 
-#include "tulip/Camera.h"
-#include "tulip/GlEntity.h"
-#include "tulip/GlTools.h"
-#include "tulip/GlScene.h"
+#include <tulip/Camera.h>
+#include <tulip/GlEntity.h>
+#include <tulip/GlTools.h>
+#include <tulip/GlScene.h>
 
 #include <iostream>
 

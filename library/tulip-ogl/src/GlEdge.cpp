@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlEdge.h"
+#include <tulip/GlEdge.h>
 
 #include <tulip/Coord.h>
 #include <tulip/LayoutProperty.h>
@@ -28,23 +28,23 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/PreferenceManager.h>
 
-#include "tulip/GlTools.h"
-#include "tulip/GlyphManager.h"
-#include "tulip/Curves.h"
-#include "tulip/GlGraphStaticData.h"
-#include "tulip/GlLines.h"
-#include "tulip/GlDisplayListManager.h"
-#include "tulip/OcclusionTest.h"
-#include "tulip/GlTLPFeedBackBuilder.h"
-#include "tulip/GlSceneVisitor.h"
-#include "tulip/GlGraphRenderingParameters.h"
-#include "tulip/Camera.h"
-#include "tulip/GlBezierCurve.h"
-#include "tulip/GlCatmullRomCurve.h"
-#include "tulip/GlOpenUniformCubicBSpline.h"
-#include "tulip/GlTextureManager.h"
-#include "tulip/GlVertexArrayManager.h"
-#include "tulip/GlLabel.h"
+#include <tulip/GlTools.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/Curves.h>
+#include <tulip/GlGraphStaticData.h>
+#include <tulip/GlLines.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/OcclusionTest.h>
+#include <tulip/GlTLPFeedBackBuilder.h>
+#include <tulip/GlSceneVisitor.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/Camera.h>
+#include <tulip/GlBezierCurve.h>
+#include <tulip/GlCatmullRomCurve.h>
+#include <tulip/GlOpenUniformCubicBSpline.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/GlLabel.h>
 
 #include <iostream>
 

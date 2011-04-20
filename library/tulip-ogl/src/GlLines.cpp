@@ -22,8 +22,8 @@
 
 #include <iostream>
 #include <cmath>
-#include "tulip/GlLines.h"
-#include "tulip/GlTools.h"
+#include <tulip/GlLines.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;

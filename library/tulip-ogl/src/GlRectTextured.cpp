@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlRectTextured.h"
+#include <tulip/GlRectTextured.h>
 
 using namespace std;
 

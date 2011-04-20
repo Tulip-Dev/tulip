@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlGrid.h"
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/GlGrid.h>
+#include <tulip/OpenGlConfigManager.h>
 
 #include <tulip/GlTools.h>
 

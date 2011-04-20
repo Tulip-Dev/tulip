@@ -19,7 +19,7 @@
 #ifndef GLHEXAGON_H
 #define GLHEXAGON_H
 
-#include "tulip/GlRegularPolygon.h"
+#include <tulip/GlRegularPolygon.h>
 
 namespace tlp {
   /**

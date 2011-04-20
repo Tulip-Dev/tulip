@@ -25,7 +25,7 @@
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 
-#include "tulip/GlComposite.h"
+#include <tulip/GlComposite.h>
 
 namespace tlp {
 

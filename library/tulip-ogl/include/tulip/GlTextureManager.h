@@ -28,7 +28,7 @@
 #include <tulip/tulipconf.h>
 
 #include <cassert>
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 #include <string>
 #include <set>
 #include <iostream>

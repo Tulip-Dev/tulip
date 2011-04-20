@@ -16,14 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlLayer.h"
+#include <tulip/GlLayer.h>
 
 #include <iostream>
 
-#include "tulip/Camera.h"
-#include "tulip/GlEntity.h"
-#include "tulip/GlSceneVisitor.h"
-#include "tulip/GlScene.h"
+#include <tulip/Camera.h>
+#include <tulip/GlEntity.h>
+#include <tulip/GlSceneVisitor.h>
+#include <tulip/GlScene.h>
 
 using namespace std;
 

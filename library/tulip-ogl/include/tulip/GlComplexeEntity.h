@@ -23,7 +23,7 @@
 
 #include <tulip/BoundingBox.h>
 
-#include "tulip/GlEntity.h"
+#include <tulip/GlEntity.h>
 
 namespace tlp {
 
