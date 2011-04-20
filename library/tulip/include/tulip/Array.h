@@ -55,6 +55,6 @@ namespace tlp {
   /*@}*/
 }
 
-#include "./cxx/Array.cxx"
+#include "cxx/Array.cxx"
 
 #endif

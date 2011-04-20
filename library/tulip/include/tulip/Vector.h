@@ -209,5 +209,5 @@ namespace tlp {
   }
 #endif
 
-#include "./cxx/Vector.cxx"
+#include "cxx/Vector.cxx"
 #endif

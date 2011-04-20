@@ -237,5 +237,5 @@ public:
 /*@}*/
 
 }
-#include "./cxx/TemplateFactory.cxx"
+#include "cxx/TemplateFactory.cxx"
 #endif
