@@ -16,11 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/Graph.h"
-#include "tulip/StableIterator.h"
-#include "tulip/BiconnectedTest.h"
-#include "tulip/ConnectedTest.h"
-#include "tulip/MutableContainer.h"
+#include <tulip/Graph.h>
+#include <tulip/StableIterator.h>
+#include <tulip/BiconnectedTest.h>
+#include <tulip/ConnectedTest.h>
+#include <tulip/MutableContainer.h>
 
 using namespace std;
 using namespace tlp;

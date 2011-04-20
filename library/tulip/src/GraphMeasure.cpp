@@ -23,9 +23,9 @@
 #include <omp.h>
 #endif
 
-#include "tulip/GraphMeasure.h"
-#include "tulip/Graph.h"
-#include "tulip/ForEach.h"
+#include <tulip/GraphMeasure.h>
+#include <tulip/Graph.h>
+#include <tulip/ForEach.h>
 
 using namespace std;
 using namespace tlp;

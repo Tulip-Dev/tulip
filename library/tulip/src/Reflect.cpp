@@ -21,20 +21,20 @@
 #endif
 
 #include <string>
-#include "tulip/PropertyTypes.h"
-#include "tulip/Graph.h"
-#include "tulip/BooleanProperty.h"
-#include "tulip/DoubleProperty.h"
-#include "tulip/IntegerProperty.h"
-#include "tulip/Coord.h"
-#include "tulip/LayoutProperty.h"
-#include "tulip/Color.h"
-#include "tulip/ColorProperty.h"
-#include "tulip/Size.h"
-#include "tulip/SizeProperty.h"
-#include "tulip/StringProperty.h"
+#include <tulip/PropertyTypes.h>
+#include <tulip/Graph.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/Coord.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/Color.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/Size.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 
-#include "tulip/Reflect.h"
+#include <tulip/Reflect.h>
 
 using namespace std;
 using namespace tlp;

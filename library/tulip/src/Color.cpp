@@ -21,7 +21,7 @@
 #endif
 
 #include <cmath>
-#include "tulip/Color.h"
+#include <tulip/Color.h>
 
 static void RGBtoHSV(unsigned char r, unsigned char g, unsigned char b, int &h, int &s, int &v);
 static void HSVtoRGB(int h, int s, int v, unsigned char &r, unsigned char &g, unsigned char &b);

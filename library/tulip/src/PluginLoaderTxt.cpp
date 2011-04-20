@@ -22,7 +22,7 @@
 #endif
 
 #include <iostream>
-#include "tulip/PluginLoaderTxt.h"
+#include <tulip/PluginLoaderTxt.h>
 
 using namespace std;
 using namespace tlp;

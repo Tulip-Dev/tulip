@@ -17,7 +17,7 @@
  *
  */
 
-#include "tulip/ColorScale.h"
+#include <tulip/ColorScale.h>
 
 using namespace std;
 

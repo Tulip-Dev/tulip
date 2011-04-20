@@ -20,14 +20,14 @@
 #include <config.h>
 #endif
 
-#include "tulip/Graph.h"
-#include "tulip/GraphImpl.h"
-#include "tulip/PropertyManager.h"
-#include "tulip/GraphView.h"
-#include "tulip/GraphIterator.h"
-#include "tulip/StableIterator.h"
-#include "tulip/ForEach.h"
-#include "tulip/GraphUpdatesRecorder.h"
+#include <tulip/Graph.h>
+#include <tulip/GraphImpl.h>
+#include <tulip/PropertyManager.h>
+#include <tulip/GraphView.h>
+#include <tulip/GraphIterator.h>
+#include <tulip/StableIterator.h>
+#include <tulip/ForEach.h>
+#include <tulip/GraphUpdatesRecorder.h>
 
 using namespace std;
 using namespace tlp;

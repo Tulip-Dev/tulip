@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GraphStorage.h"
-#include "tulip/memorypool.h"
+#include <tulip/GraphStorage.h>
+#include <tulip/memorypool.h>
 
 using namespace tlp;
 

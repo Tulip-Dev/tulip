@@ -20,11 +20,11 @@
 #include <config.h>
 #endif
 
-#include "tulip/ForEach.h"
-#include "tulip/GraphAbstract.h"
-#include "tulip/PropertyManager.h"
-#include "tulip/PropertyInterface.h"
-#include "tulip/GraphProperty.h"
+#include <tulip/ForEach.h>
+#include <tulip/GraphAbstract.h>
+#include <tulip/PropertyManager.h>
+#include <tulip/PropertyInterface.h>
+#include <tulip/GraphProperty.h>
 
 namespace tlp {
 //======================================================================================

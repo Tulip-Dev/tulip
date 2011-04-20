@@ -17,8 +17,8 @@
  *
  */
 
-#include "tulip/Graph.h"
-#include "tulip/StringProperty.h"
+#include <tulip/Graph.h>
+#include <tulip/StringProperty.h>
 
 using namespace std;
 using namespace tlp;

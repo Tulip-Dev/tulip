@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/WithParameter.h"
-#include "tulip/Reflect.h"
+#include <tulip/WithParameter.h>
+#include <tulip/Reflect.h>
 
 tlp::StructDef tlp::WithParameter::getParameters(){return parameters;}

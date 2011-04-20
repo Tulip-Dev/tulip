@@ -16,9 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/Graph.h"
-#include "tulip/TriconnectedTest.h"
-#include "tulip/BiconnectedTest.h"
+#include <tulip/Graph.h>
+#include <tulip/TriconnectedTest.h>
+#include <tulip/BiconnectedTest.h>
 
 using namespace std;
 using namespace tlp;

@@ -17,10 +17,10 @@
  *
  */
 #include <list>
-#include "tulip/Graph.h"
-#include "tulip/ConnectedTest.h"
-#include "tulip/MutableContainer.h"
-#include "tulip/ForEach.h"
+#include <tulip/Graph.h>
+#include <tulip/ConnectedTest.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/ForEach.h>
 
 using namespace std;
 using namespace tlp;

@@ -16,14 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/DrawingTools.h"
-#include "tulip/Graph.h"
-#include "tulip/LayoutProperty.h"
-#include "tulip/SizeProperty.h"
-#include "tulip/DoubleProperty.h"
-#include "tulip/BooleanProperty.h"
-#include "tulip/ConvexHull.h"
-#include "tulip/ForEach.h"
+#include <tulip/DrawingTools.h>
+#include <tulip/Graph.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ConvexHull.h>
+#include <tulip/ForEach.h>
 
 #include <climits>
 
