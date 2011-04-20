@@ -26,8 +26,8 @@
 
 #include <set>
 #include <vector>
-#include "tulip/tuliphash.h"
-#include "tulip/ObservableGraph.h"
+#include <tulip/tuliphash.h>
+#include <tulip/ObservableGraph.h>
 
 namespace tlp {
 

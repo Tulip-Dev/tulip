@@ -24,9 +24,9 @@
 #include <map>
 #include <set>
 #include <string>
-#include "tulip/Iterator.h"
-#include "tulip/Node.h"
-#include "tulip/Edge.h"
+#include <tulip/Iterator.h>
+#include <tulip/Node.h>
+#include <tulip/Edge.h>
 
 namespace tlp {
 

@@ -21,14 +21,14 @@
 
 #include <string>
 #include <cstdlib>
-#include "tulip/tulipconf.h"
-#include "tulip/StoredType.h"
-#include "tulip/MutableContainer.h"
-#include "tulip/PropertyInterface.h"
-#include "tulip/Iterator.h"
-#include "tulip/PropertyAlgorithm.h"
-#include "tulip/TemplateFactory.h"
-#include "tulip/Reflect.h"
+#include <tulip/tulipconf.h>
+#include <tulip/StoredType.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/PropertyInterface.h>
+#include <tulip/Iterator.h>
+#include <tulip/PropertyAlgorithm.h>
+#include <tulip/TemplateFactory.h>
+#include <tulip/Reflect.h>
 
 namespace tlp {
 

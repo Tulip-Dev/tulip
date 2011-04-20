@@ -19,9 +19,9 @@
 #ifndef _TLPRETURNTYPE_
 #define _TLPRETURNTYPE_
 
-#include "tulip/Node.h"
-#include "tulip/Edge.h"
-#include "tulip/Color.h"
+#include <tulip/Node.h>
+#include <tulip/Edge.h>
+#include <tulip/Color.h>
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {

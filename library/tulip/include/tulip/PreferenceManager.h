@@ -20,11 +20,11 @@
 #define Tulip_PREFERENCEMANAGER_H
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include <config.h>
 #endif
 
-#include "tulip/tulipconf.h"
-#include "tulip/Color.h"
+#include <tulip/tulipconf.h>
+#include <tulip/Color.h>
 
 namespace tlp {
 

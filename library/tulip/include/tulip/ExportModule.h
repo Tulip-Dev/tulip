@@ -21,11 +21,11 @@
 #define _EXPORTMODULE_H
 
 #include <iostream>
-#include "tulip/WithParameter.h"
-#include "tulip/WithDependency.h"
-#include "tulip/Reflect.h"
-#include "tulip/Plugin.h"
-#include "tulip/TemplateFactory.h"
+#include <tulip/WithParameter.h>
+#include <tulip/WithDependency.h>
+#include <tulip/Reflect.h>
+#include <tulip/Plugin.h>
+#include <tulip/TemplateFactory.h>
 
 /** \addtogroup plugins */ 
 

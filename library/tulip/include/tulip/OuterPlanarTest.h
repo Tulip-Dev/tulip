@@ -19,8 +19,8 @@
 #ifndef OUTERPLANARTEST_H
 #define OUTERPLANARTEST_H
 
-#include "tulip/tuliphash.h"
-#include "tulip/ObservableGraph.h"
+#include <tulip/tuliphash.h>
+#include <tulip/ObservableGraph.h>
 
 namespace tlp {
 

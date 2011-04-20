@@ -31,12 +31,12 @@
 #include <sstream>
 #include <float.h>
 #include <tulip/StoredType.h>
-#include "tulip/Coord.h"
-#include "tulip/Size.h"
-#include "tulip/Color.h"
-#include "tulip/StringCollection.h"
-#include "tulip/Edge.h"
-#include "tulip/AbstractProperty.h"
+#include <tulip/Coord.h>
+#include <tulip/Size.h>
+#include <tulip/Color.h>
+#include <tulip/StringCollection.h>
+#include <tulip/Edge.h>
+#include <tulip/AbstractProperty.h>
 
 namespace tlp {
 

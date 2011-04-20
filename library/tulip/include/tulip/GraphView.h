@@ -32,9 +32,9 @@
 
 #ifndef DOXYGEN_NOTFOR_USER
 
-#include "tulip/GraphAbstract.h"
-#include "tulip/GraphImpl.h"
-#include "tulip/MutableContainer.h"
+#include <tulip/GraphAbstract.h>
+#include <tulip/GraphImpl.h>
+#include <tulip/MutableContainer.h>
 
 namespace tlp {
 

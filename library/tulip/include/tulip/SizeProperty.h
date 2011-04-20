@@ -23,10 +23,10 @@
 #include <config.h>
 #endif
 
-#include "tulip/tuliphash.h"
-#include "tulip/PropertyTypes.h"
-#include "tulip/AbstractProperty.h"
-#include "tulip/SizeAlgorithm.h"
+#include <tulip/tuliphash.h>
+#include <tulip/PropertyTypes.h>
+#include <tulip/AbstractProperty.h>
+#include <tulip/SizeAlgorithm.h>
 
 namespace tlp {
 

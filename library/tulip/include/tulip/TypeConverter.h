@@ -21,11 +21,11 @@
 
 #include <string>
 #include <list>
-#include "tulip/Color.h"
-#include "tulip/Size.h"
-#include "tulip/Coord.h"
-#include "tulip/Node.h"
-#include "tulip/Edge.h"
+#include <tulip/Color.h>
+#include <tulip/Size.h>
+#include <tulip/Coord.h>
+#include <tulip/Node.h>
+#include <tulip/Edge.h>
 
 namespace tlp {
 
