@@ -21,11 +21,11 @@
 
 #include <list>
 #include <string>
-#include "tulip/WithParameter.h"
-#include "tulip/WithDependency.h"
-#include "tulip/Plugin.h"
-#include "tulip/TemplateFactory.h"
-#include "tulip/MethodFactory.h"
+#include <tulip/WithParameter.h>
+#include <tulip/WithDependency.h>
+#include <tulip/Plugin.h>
+#include <tulip/TemplateFactory.h>
+#include <tulip/MethodFactory.h>
 
 /**
  * \addtogroup plugins

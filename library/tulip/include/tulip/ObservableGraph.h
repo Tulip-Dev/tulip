@@ -22,8 +22,8 @@
 #include <map>
 #include <algorithm>
 
-#include "tulip/Node.h"
-#include "tulip/Edge.h"
+#include <tulip/Node.h>
+#include <tulip/Edge.h>
 
 namespace tlp {
 

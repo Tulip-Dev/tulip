@@ -22,10 +22,10 @@
 #include <map>
 #include <algorithm>
 
-#include "tulip/tulipconf.h"
-#include "tulip/Node.h"
-#include "tulip/Edge.h"
-#include "tulip/Observable.h"
+#include <tulip/tulipconf.h>
+#include <tulip/Node.h>
+#include <tulip/Edge.h>
+#include <tulip/Observable.h>
 
 namespace tlp {
 

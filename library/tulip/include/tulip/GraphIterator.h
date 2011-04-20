@@ -18,13 +18,13 @@
  */
 #ifndef TULIP_GGRAPHITERATOR_H
 #define TULIP_GGRAPHITERATOR_H
-#include "tulip/Iterator.h"
-#include "tulip/memorypool.h"
+#include <tulip/Iterator.h>
+#include <tulip/memorypool.h>
 #include <set>
 
-#include "tulip/MutableContainer.h"
-#include "tulip/ObservableGraph.h"
-#include "tulip/tulipconf.h"
+#include <tulip/MutableContainer.h>
+#include <tulip/ObservableGraph.h>
+#include <tulip/tulipconf.h>
 #include <iostream>
 
 #ifndef DOXYGEN_NOTFOR_DEVEL

@@ -19,8 +19,8 @@
 
 #ifndef Tulip_FACE_H
 #define Tulip_FACE_H
-#include "tulip/tulipconf.h"
-#include "tulip/tuliphash.h"
+#include <tulip/tulipconf.h>
+#include <tulip/tuliphash.h>
 
 #include <climits>
 

@@ -23,7 +23,7 @@
 #include <config.h>
 #endif
 
-#include "tulip/Reflect.h"
+#include <tulip/Reflect.h>
 
 namespace tlp {
 

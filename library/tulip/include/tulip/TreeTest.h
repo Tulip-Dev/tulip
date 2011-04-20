@@ -24,10 +24,10 @@
 #include <config.h>
 #endif
 
-#include "tulip/tuliphash.h"
-#include "tulip/ObservableGraph.h"
-#include "tulip/MutableContainer.h"
-#include "tulip/PluginProgress.h"
+#include <tulip/tuliphash.h>
+#include <tulip/ObservableGraph.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/PluginProgress.h>
 
 namespace tlp {
 

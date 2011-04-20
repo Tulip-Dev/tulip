@@ -29,7 +29,7 @@
 #include <cassert>
 #include <typeinfo>
 #include <list>
-#include "tulip/StlIterator.h"
+#include <tulip/StlIterator.h>
 
 namespace tlp {
 
