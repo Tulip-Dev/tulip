@@ -177,19 +177,19 @@ ENDIF(OPENMP_FOUND)
 # because we need it later in the configure process 
 
 FIND_PACKAGE(PythonLibs)
-IF(PYTHONLIBS_FOUND)
-  SET(SIP_LIB siplib)
-  TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.11.2/sipgen sip CMAKE_FLAGS -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
+FIND_PACKAGE(PythonInterp)
+IF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+  SET(SIP_LIB sip)
+  TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.12.1/sipgen sip CMAKE_FLAGS -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
   IF(SIP_OK)
-    IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/sipgen/Debug/sipgen.exe")
-      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/sipgen/Debug/sipgen.exe)
+    IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/Debug/sipgen.exe")
+      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/Debug/sipgen.exe)
     ELSE()
-      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/sipgen/sipgen)
+      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/sipgen)
     ENDIF()
-    SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.11.2/siplib/)
+    SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.12.1/siplib/)
   ENDIF(SIP_OK)
-ENDIF(PYTHONLIBS_FOUND)
-
+ENDIF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 
 ## -----------------------------------------------------------------------------------------------
 ## Include file paths
@@ -429,23 +429,33 @@ ENDIF(LINUX)
 
 # Include external plugins configuration file.
 # Note: this is done before setting group names variables. User can set the CPACK_CUSTOM_INSTALLER to true and setup its own installer in this file.
+IF(EXISTS externalplugins/ExternalPlugins.cmake)
+  INCLUDE(externalplugins/ExternalPlugins.cmake)
+ENDIF()
 
-SET(LIBS_GROUP_NAME "Libraries")
-SET(HEADERS_GROUP_NAME "Headers")
-SET(SOFTWARE_GROUP_NAME "Runtime")
-SET(PLUGINS_GROUP_NAME "Plugins")
-SET(EXTRAS_GROUP_NAME "Extras")
-SET(THIRDPARTY_GROUP_NAME "Third party")
+IF(NOT CPACK_CUSTOM_INSTALLER)
+  SET(LIBS_GROUP_NAME "Libraries")
+  SET(HEADERS_GROUP_NAME "Headers")
+  SET(SOFTWARE_GROUP_NAME "Runtime")
+  SET(PLUGINS_GROUP_NAME "Plugins")
+  SET(EXTRAS_GROUP_NAME "Extras")
+  SET(THIRDPARTY_GROUP_NAME "Third party")
+ELSE()
+  # In case a custom installer is set, all the base tulip software components will be in the same group.
+  SET(LIBS_GROUP_NAME "Tulip software")
+  SET(HEADERS_GROUP_NAME "Tulip software")
+  SET(SOFTWARE_GROUP_NAME "Tulip software")
+  SET(PLUGINS_GROUP_NAME "Tulip software")
+  SET(EXTRAS_GROUP_NAME "Tulip software")
+  SET(THIRDPARTY_GROUP_NAME "Tulip software")
+ENDIF()
 
 # Defines specific software components from tulip.
 INCLUDE(CPackComponents.cmake)
 
-IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/externalplugins/ExternalPlugins.cmake)   
-  INCLUDE(${CMAKE_CURRENT_SOURCE_DIR}/externalplugins/ExternalPlugins.cmake)
-ENDIF()
-
-
 IF(NOT CPACK_CUSTOM_INSTALLER)
   INCLUDE(CPackInstaller.cmake)
 ENDIF()
+
+
 INCLUDE(CPack)
