@@ -42,6 +42,8 @@ public:
   PushButtonItem::BackgroundShape buttonBackgroundShape() const { return _buttonBackgroundShape; }
   void setButtonBackgroundShape(PushButtonItem::BackgroundShape s) { _buttonBackgroundShape = s; }
 
+  Qt::ToolBarArea snapArea() const { return _snapArea; }
+
 signals:
   void expanded(bool);
   void buttonClicked(PushButtonItem *);

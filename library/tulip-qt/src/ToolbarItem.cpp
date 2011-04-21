@@ -20,14 +20,14 @@ ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   _activeAction(0), _activeButton(0), _focusedButton(0), _settingsIcon(new QGraphicsSvgItem(":/tulip/icons/document-properties.svg")), _expanded(false), _currentExpandAnimation(0), _collapseTimeout(0),
   _snapArea(Qt::TopToolBarArea),
   _iconSize(39,39), _hoveredIconSize(_iconSize), _spacing(8), _orientation(Qt::Horizontal), _backgroundRectangleRound(4),
-  _backgroundColor(230,230,230,200), _borderColor(50,50,50), _showSettingsButton(true),
+    _backgroundColor(QApplication::palette().color(QPalette::Window)), _borderColor(QApplication::palette().color(QPalette::Shadow)), _showSettingsButton(true),
   _buttonBackgroundShape(PushButtonItem::SquareShape), _buttonBackgroundColor(255,255,255,10), _buttonForegroundColor(Qt::transparent),
   _animationMsec(100), _animationEasing(QEasingCurve::Linear) {
-  setFlag(QGraphicsItem::ItemIsMovable,true);
-  setFlag(QGraphicsItem::ItemSendsGeometryChanges,true);
-  setHandlesChildEvents(false);
+  setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges);
   setCacheMode(QGraphicsItem::ItemCoordinateCache);
+  setHandlesChildEvents(false);
   setAcceptHoverEvents(true);
+  _backgroundColor.setAlpha(200);
 }
 //==========================
 ToolbarItem::~ToolbarItem() {

@@ -52,3 +52,4 @@ INTERACTORPLUGINVIEWEXTENSION(i3, "i3" ,"InteractorAddNode", "Empty graphics vie
 INTERACTORPLUGINVIEWEXTENSION(i4, "i4" ,"InteractorGetInformation", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
 INTERACTORPLUGINVIEWEXTENSION(i5, "i5" ,"InteractorRectangleZoom", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
 INTERACTORPLUGINVIEWEXTENSION(i6, "i6" ,"InteractorEditEdgeBends", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
+INTERACTORPLUGINVIEWEXTENSION(i7, "i7" ,"PathFinder", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");

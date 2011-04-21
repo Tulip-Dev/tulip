@@ -11,16 +11,10 @@
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtOpenGL/QGLWidget>
 
-#include "tulip/InteractorToolbarItem.h"
-
-// FIXME: remove me
-#include <QtGui/QGraphicsWidget>
-#include <QtGui/QGraphicsLinearLayout>
-#include <QtGui/QPushButton>
-#include "tulip/PushButtonItem.h"
-#include "tulip/TulipGraphicsLayout.h"
 #include "tulip/ToolbarItem.h"
-#include <QtGui/QAction>
+#include "tulip/QtAnimationsManager.h"
+
+//FIXME: remove me
 
 using namespace tlp;
 using namespace std;
@@ -41,10 +35,75 @@ static QGLFormat GlInit() {
   return tmpFormat;
 }
 
+/**
+  * Used to emphasize configuration widget look & feel
+  */
+class StyledGraphicsWidget: public QGraphicsProxyWidget {
+public:
+  StyledGraphicsWidget(QGraphicsItem *parent=0, Qt::WindowFlags wFlags=0): QGraphicsProxyWidget(parent,wFlags) {}
+
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+    painter->setBrush(QApplication::palette().color(QPalette::Window));
+    painter->setPen(QApplication::palette().color(QPalette::Shadow));
+    painter->drawRoundedRect(boundingRect(),5,5);
+    QGraphicsProxyWidget::paint(painter,option,widget);
+  }
+
+  QRectF boundingRect() const {
+    QSizeF originalSize = QGraphicsProxyWidget::boundingRect().size();
+    originalSize += QSizeF(10,10);
+    return QRectF(QPointF(-5,-5),originalSize);
+  }
+
+  void resetPos(ToolbarItem *_toolbarItem) {
+    QPointF toolbarPos(_toolbarItem->pos());
+    QSizeF toolbarSize(_toolbarItem->boundingRect().size());
+    QSizeF sceneSize(scene()->sceneRect().size());
+    QPointF widgetPos(0,0);
+    QRectF widgetRect = boundingRect();
+    QSizeF maximumSize = QSizeF(0,0);
+
+    switch(_toolbarItem->snapArea()) {
+    case Qt::TopToolBarArea:
+      widgetPos = QPointF(toolbarPos.x(),toolbarSize.height());
+      maximumSize = QSizeF(sceneSize.width()-toolbarPos.x(),sceneSize.height()-toolbarPos.y());
+      break;
+    case Qt::LeftToolBarArea:
+      widgetPos = QPointF(toolbarSize.width(),toolbarPos.y());
+      maximumSize = QSizeF(sceneSize.width()-toolbarSize.width(),sceneSize.height()-toolbarPos.y());
+      break;
+    case Qt::RightToolBarArea:
+      widgetPos = QPointF(sceneSize.width()-toolbarSize.width()-widgetRect.size().width(),toolbarPos.y());
+      maximumSize = QSizeF(sceneSize.width()-toolbarSize.width(),sceneSize.height()-toolbarPos.y());
+      break;
+    case Qt::BottomToolBarArea:
+      widgetPos = QPointF(toolbarPos.x(),sceneSize.height()-toolbarSize.height()-widgetRect.size().height());
+      maximumSize = QSizeF(sceneSize.width()-toolbarPos.x(),sceneSize.height()-toolbarSize.height());
+      break;
+    }
+    widgetPos -= QPointF(widgetRect.x(),widgetRect.y());
+    maximumSize -= QSizeF(50,50);
+
+    setPos(widgetPos);
+    setMaximumSize(maximumSize);
+    adjustSize();
+  }
+
+protected:
+  bool sceneEventFilter(QGraphicsItem *watched, QEvent *event) {
+    if (!scene() || !watched || event->type() != QEvent::GraphicsSceneMouseMove)
+      return QGraphicsProxyWidget::sceneEventFilter(watched,event);
+
+    resetPos(static_cast<ToolbarItem *>(watched));
+    return false;
+  }
+};
+
 namespace tlp {
 AbstractGraphicsView::AbstractGraphicsView():
   _interactors(list<Interactor *>()), _activeInteractor(0),
-  _centralView(new QGraphicsView()), _mainLayout(0), _centralWidget(0), _mainWidget(0), _centralWidgetItem(0) {
+  _centralView(new QGraphicsView()), _mainLayout(0), _centralWidget(0), _mainWidget(0), _centralWidgetItem(0),
+  _toolbarItem(0), _activeConfigurationWidget(0) {
   _centralView->setScene(new QGraphicsScene());
 }
 // ===================================
@@ -143,10 +202,12 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
 }
 // ===================================
 void AbstractGraphicsView::buildInteractorsToolbar() {
-  ToolbarItem *tb = new ToolbarItem();
+  _toolbarItem = new ToolbarItem();
   for (list<Interactor *>::iterator it = _interactors.begin(); it != _interactors.end(); ++it)
-    tb->addAction((*it)->getAction());
-  addToScene(tb);
+    _toolbarItem->addAction((*it)->getAction());
+  connect(_toolbarItem,SIGNAL(activeButtonClicked()),this,SLOT(toggleInteractorConfigurationWidget()));
+  connect(_toolbarItem,SIGNAL(buttonClicked(PushButtonItem*)),this,SLOT(activeInteractorChanged()));
+  addToScene(_toolbarItem);
 }
 // ===================================
 bool AbstractGraphicsView::eventFilter(QObject *obj, QEvent *e) {
@@ -197,5 +258,35 @@ void AbstractGraphicsView::refreshItemsParenthood() {
     QGraphicsItem *item = *it;
     item->setParentItem(_centralWidgetItem);
   }
+}
+// ===================================
+void AbstractGraphicsView::toggleInteractorConfigurationWidget() {
+  if (_activeConfigurationWidget) {
+    delete _activeConfigurationWidget;
+    _activeConfigurationWidget = 0;
+    return;
+  }
+  if (!_toolbarItem)
+    return;
+
+  // Create widget proxy
+  QWidget *configWidget = _activeInteractor->getConfigurationWidget();
+  _activeConfigurationWidget = new StyledGraphicsWidget();
+  _activeConfigurationWidget->setWidget(configWidget);
+
+  // Display animation
+  QPropertyAnimation *anim = new QPropertyAnimation(_activeConfigurationWidget,"opacity",this);
+  anim->setStartValue(0);
+  anim->setEndValue(0.9);
+  anim->setDuration(300);
+  QtAnimationsManager::instance().startAnimation(_activeConfigurationWidget,anim,QtAnimationsManager::StopPreviousAnimation);
+  addToScene(_activeConfigurationWidget);
+  _toolbarItem->installSceneEventFilter(_activeConfigurationWidget);
+  static_cast<StyledGraphicsWidget *>(_activeConfigurationWidget)->resetPos(_toolbarItem);
+}
+// ===================================
+void AbstractGraphicsView::activeInteractorChanged() {
+  if (_activeConfigurationWidget)
+    toggleInteractorConfigurationWidget();
 }
 }
