@@ -14,11 +14,15 @@
 #include <QtSvg/QGraphicsSvgItem>
 #include <assert.h>
 
+//FIXME: remove me
+#include <iostream>
+using namespace std;
+
 namespace tlp {
 ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   : QGraphicsItemGroup(parent,scene),
   _activeAction(0), _activeButton(0), _focusedButton(0), _settingsIcon(new QGraphicsSvgItem(":/tulip/icons/document-properties.svg")), _expanded(false), _currentExpandAnimation(0), _collapseTimeout(0),
-  _snapArea(Qt::TopToolBarArea),
+  _snapArea(Qt::TopToolBarArea), _allowedSnapAreas(Qt::AllToolBarAreas),
   _iconSize(39,39), _hoveredIconSize(_iconSize), _spacing(8), _orientation(Qt::Horizontal), _backgroundRectangleRound(4),
     _backgroundColor(QApplication::palette().color(QPalette::Window)), _borderColor(QApplication::palette().color(QPalette::Shadow)), _showSettingsButton(true),
   _buttonBackgroundShape(PushButtonItem::SquareShape), _buttonBackgroundColor(255,255,255,10), _buttonForegroundColor(Qt::transparent),
@@ -357,32 +361,18 @@ QVariant ToolbarItem::itemChange(GraphicsItemChange change, const QVariant &valu
 
   // Update toolbar orientation and position
   QPointF result = value.toPointF();
-  if (result.y() <= 0) { // top
-    _snapArea = Qt::TopToolBarArea;
-    setOrientation(Qt::Horizontal);
-    result.setY(0);
-  }
-  else if (result.x() <= 0) { // left
-    _snapArea = Qt::LeftToolBarArea;
-    setOrientation(Qt::Vertical);
-    result.setX(0);
-  }
-  else if (result.y()+bsize.height() >= scene()->height()) {// bottom
-    _snapArea = Qt::BottomToolBarArea;
-    setOrientation(Qt::Horizontal);
-    result.setY(scene()->height()-boundingRect().height());
-  }
-  else if (result.x()+bsize.width() >= scene()->width()){ // right
-    _snapArea = Qt::RightToolBarArea;
-    setOrientation(Qt::Vertical);
-    result.setX(scene()->width()-boundingRect().width());
-  }
-  else {
-    if (orientation() == Qt::Horizontal)
-      result.setY(pos().y());
-    else
-      result.setX(pos().x());
-  }
+  if (result.y() <= 0)// top
+    result = setArea(Qt::TopToolBarArea,result);
+  else if (result.x() <= 0)// left
+    result = setArea(Qt::LeftToolBarArea,result);
+  else if (result.y()+bsize.height() >= scene()->height()) // bottom
+    result = setArea(Qt::BottomToolBarArea,result);
+  else if (result.x()+bsize.width() >= scene()->width()) // right
+    result = setArea(Qt::RightToolBarArea,result);
+  else if (_orientation == Qt::Vertical)
+    result.setX(pos().x());
+  else
+    result.setY(pos().y());
 
   // Compute new bounding size
   bsize = boundingRect().size();
@@ -392,6 +382,30 @@ QVariant ToolbarItem::itemChange(GraphicsItemChange change, const QVariant &valu
   result.setY(std::max<qreal>(0,result.y()));
   result.setX(std::min<qreal>(scene()->width()-bsize.width(),result.x()));
   result.setY(std::min<qreal>(scene()->height()-bsize.height(),result.y()));
+  return result;
+}
+//==========================
+QPointF ToolbarItem::setArea(Qt::ToolBarArea area, const QPointF &p) {
+  QPointF result = p;
+  if (_allowedSnapAreas.testFlag(area))
+    _snapArea = area;
+
+  if (_snapArea == Qt::BottomToolBarArea) {
+    setOrientation(Qt::Horizontal);
+    result.setY(scene()->height()-boundingRect().height());
+  }
+  else if (_snapArea == Qt::LeftToolBarArea) {
+    setOrientation(Qt::Vertical);
+    result.setX(0);
+  }
+  else if (_snapArea == Qt::RightToolBarArea) {
+    setOrientation(Qt::Vertical);
+    result.setX(scene()->width()-boundingRect().width());
+  }
+  else if (_snapArea == Qt::TopToolBarArea){
+    setOrientation(Qt::Horizontal);
+    result.setY(0);
+  }
   return result;
 }
 //==========================

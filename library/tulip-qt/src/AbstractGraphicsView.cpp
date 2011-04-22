@@ -63,7 +63,7 @@ public:
     QRectF widgetRect = boundingRect();
     QSizeF maximumSize = QSizeF(0,0);
 
-    switch(_toolbarItem->snapArea()) {
+    switch(_toolbarItem->area()) {
     case Qt::TopToolBarArea:
       widgetPos = QPointF(toolbarPos.x(),toolbarSize.height());
       maximumSize = QSizeF(sceneSize.width()-toolbarPos.x(),sceneSize.height()-toolbarPos.y());
@@ -205,6 +205,7 @@ void AbstractGraphicsView::buildInteractorsToolbar() {
   _toolbarItem = new ToolbarItem();
   for (list<Interactor *>::iterator it = _interactors.begin(); it != _interactors.end(); ++it)
     _toolbarItem->addAction((*it)->getAction());
+  _toolbarItem->setAllowedAreas(Qt::TopToolBarArea | Qt::LeftToolBarArea | Qt::RightToolBarArea);
   connect(_toolbarItem,SIGNAL(activeButtonClicked()),this,SLOT(toggleInteractorConfigurationWidget()));
   connect(_toolbarItem,SIGNAL(buttonClicked(PushButtonItem*)),this,SLOT(activeInteractorChanged()));
   addToScene(_toolbarItem);

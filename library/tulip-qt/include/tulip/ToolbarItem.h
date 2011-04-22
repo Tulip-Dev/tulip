@@ -42,7 +42,9 @@ public:
   PushButtonItem::BackgroundShape buttonBackgroundShape() const { return _buttonBackgroundShape; }
   void setButtonBackgroundShape(PushButtonItem::BackgroundShape s) { _buttonBackgroundShape = s; }
 
-  Qt::ToolBarArea snapArea() const { return _snapArea; }
+  Qt::ToolBarArea area() const { return _snapArea; }
+  void setAllowedAreas(Qt::ToolBarAreas a) { _allowedSnapAreas = a; }
+  Qt::ToolBarAreas allowedAreas() const { return _allowedSnapAreas; }
 
 signals:
   void expanded(bool);
@@ -83,6 +85,7 @@ private:
   QTimer *_collapseTimeout;
     // Toolbar snapping
   Qt::ToolBarArea _snapArea;
+  Qt::ToolBarAreas _allowedSnapAreas;
 
   // Display parameters
     // Toolbar style
@@ -108,6 +111,7 @@ private:
   QSizeF buttonSize() const;
   PushButtonItem *buildButton(QAction *);
   void modifyButton(PushButtonItem *btn, const QSize &newSize, const QPointF &newPos) const;
+  QPointF setArea(Qt::ToolBarArea, const QPointF &);
 };
 }
 
