@@ -19,14 +19,10 @@
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
-
-#include <tulip/TlpTools.h>
-#include <PluginInfo.h>
 #include "Application.h"
 
-#include <qdir.h>
-
-using namespace std;
+#include <PluginInfo.h>
+#include <tulip/TlpTools.h>
 
 //**********************************************************************
 Application::Application(int& argc, char ** argv): QApplication(argc,argv)
