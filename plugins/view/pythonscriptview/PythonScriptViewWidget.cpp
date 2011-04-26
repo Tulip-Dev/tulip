@@ -208,6 +208,8 @@ void PythonScriptViewWidget::increaseFontSize() {
 
 void PythonScriptViewWidget::mainScriptTextChanged() {
 	QString curTabText = mainScriptsTabWidget->tabText(mainScriptsTabWidget->currentIndex());
+	if (curTabText == "")
+		return;
 	if (!curTabText.contains("no file") && curTabText[curTabText.size() -1] != '*') {
 		curTabText += "*";
 		mainScriptsTabWidget->setTabText(mainScriptsTabWidget->currentIndex(), curTabText);
@@ -216,6 +218,8 @@ void PythonScriptViewWidget::mainScriptTextChanged() {
 
 void PythonScriptViewWidget::moduleScriptTextChanged() {
 	QString curTabText = modulesTabWidget->tabText(modulesTabWidget->currentIndex());
+	if (curTabText == "")
+		return;
 	if (curTabText[curTabText.size() -1] != '*') {
 		curTabText += "*";
 		modulesTabWidget->setTabText(modulesTabWidget->currentIndex(), curTabText);
