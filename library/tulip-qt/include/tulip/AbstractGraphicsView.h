@@ -10,9 +10,9 @@ class QGraphicsProxyWidget;
 class QGraphicsView;
 class QGraphicsItem;
 class QGLWidget;
+class ToolbarItem;
 
 namespace tlp {
-class ToolbarItem;
 class AbstractGraphicsView: public tlp::View {
   Q_OBJECT
 public:

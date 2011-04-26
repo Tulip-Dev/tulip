@@ -1,6 +1,5 @@
 #include "tulip/AnimatedGraphicsObject.h"
 
-namespace tlp {
 AnimatedGraphicsObject::AnimatedGraphicsObject(QGraphicsItem *parent): QGraphicsObject(parent), _currentPositionAnimation(0), _currentSizeAnimation(0), _animated(true), _behavior(StopPreviousAnimation) {}
 
 AnimatedGraphicsObject::~AnimatedGraphicsObject() {
@@ -75,5 +74,4 @@ void AnimatedGraphicsObject::animationFinished() {
     _currentSizeAnimation->deleteLater();
     _currentSizeAnimation = 0;
   }
-}
 }

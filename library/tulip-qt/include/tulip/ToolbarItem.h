@@ -10,7 +10,6 @@ class QAction;
 class QTimer;
 class QGraphicsSvgItem;
 
-namespace tlp {
 class ToolbarItem: public QObject, public QGraphicsItemGroup {
     Q_OBJECT
 public:
@@ -99,6 +98,5 @@ private:
   void modifyButton(PushButtonItem *btn, const QPointF &newPos) const;
   QPointF setArea(Qt::ToolBarArea, const QPointF &);
 };
-}
 
 #endif // TOOLBARITEM_H

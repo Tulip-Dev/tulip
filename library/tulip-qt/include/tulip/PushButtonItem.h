@@ -9,8 +9,7 @@
 #include <QtGui/QBrush>
 #include "tulip/AnimatedGraphicsObject.h"
 
-namespace tlp {
-  class PushButtonItem: public AnimatedGraphicsObject, public QGraphicsLayoutItem {
+class PushButtonItem: public AnimatedGraphicsObject, public QGraphicsLayoutItem {
 Q_INTERFACES(QGraphicsLayoutItem);
 Q_OBJECT;
 Q_PROPERTY(QString text READ text WRITE setText);
@@ -88,5 +87,4 @@ private:
   QColor _borderColor;
   QColor _backgroundColor;
 };
-}
 #endif // PUSHBUTTONITEM_H

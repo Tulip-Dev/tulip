@@ -4,7 +4,6 @@
 #include <QtGui/QGraphicsObject>
 #include <QtCore/QPropertyAnimation>
 
-namespace tlp {
 class AnimatedGraphicsObject: public QGraphicsObject {
   Q_OBJECT
   Q_PROPERTY(bool animated READ animated WRITE setAnimated);
@@ -42,5 +41,4 @@ private:
   AnimationBehavior _behavior;
   QSizeF _itemSize;
 };
-}
 #endif // ANIMATEDGRAPHICSOBJECT_H

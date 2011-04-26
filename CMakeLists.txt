@@ -21,8 +21,6 @@ library/tulip-qt/src/FramedGraphicsProxyWidget.cpp
 library/tulip-qt/src/GlMainWidgetGraphicsItem.cpp
 library/tulip-qt/src/GraphicsItemsGraphMapper.cpp
 library/tulip-qt/src/GraphicsLayoutItemGraphMapper.cpp
-library/tulip-qt/src/HighlightGraphicsEffect.cpp
-library/tulip-qt/src/MirrorGraphicsEffect.cpp
 library/tulip-qt/src/PushButtonItem.cpp
 library/tulip-qt/src/QtAnimationsManager.cpp
 library/tulip-qt/src/ToolbarItem.cpp

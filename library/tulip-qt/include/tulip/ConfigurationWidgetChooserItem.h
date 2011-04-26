@@ -5,7 +5,6 @@
 #include <QtCore/QObject>
 
 class QGraphicsProxyWidget;
-namespace tlp {
 class PushButtonItem;
 
 class ConfigurationWidgetChooserItem: public QObject, public QGraphicsItemGroup {
@@ -34,5 +33,4 @@ private:
   QColor _borderColor;
 };
 
-}
 #endif // CONFIGURATIONWIDGETCHOOSERITEM_H

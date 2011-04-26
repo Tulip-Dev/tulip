@@ -1,7 +1,5 @@
 #include "tulip/ToolbarItem.h"
 
-#include "tulip/MirrorGraphicsEffect.h"
-#include "tulip/HighlightGraphicsEffect.h"
 #include "tulip/QtAnimationsManager.h"
 #include <QtGui/QPainter>
 #include <QtGui/QAction>
@@ -14,7 +12,6 @@
 #include <QtSvg/QGraphicsSvgItem>
 #include <assert.h>
 
-namespace tlp {
 ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   : QGraphicsItemGroup(parent,scene),
   _activeAction(0), _activeButton(0), _settingsIcon(new QGraphicsSvgItem(":/tulip/icons/document-properties.svg")), _expanded(false), _currentExpandAnimation(0), _collapseTimeout(0),
@@ -412,5 +409,4 @@ void ToolbarItem::sceneResized() {
     newPos.setY(scene()->height()-boundingRect().height());
 
   setPos(newPos);
-}
 }

@@ -9,7 +9,6 @@
 
 using namespace std;
 
-namespace tlp {
 ConfigurationWidgetChooserItem::ConfigurationWidgetChooserItem(const std::list<std::pair<QWidget *, std::string> > &configurationWidgets, QGraphicsItem *parent):
   QObject(0), QGraphicsItemGroup(parent),_configurationWidgets(configurationWidgets),
   _settingsButton(0),_visibleWidget(0),_widgetList(0),
@@ -57,6 +56,4 @@ void ConfigurationWidgetChooserItem::resetPos() {
 }
 
 void ConfigurationWidgetChooserItem::toggleWidgetList() {
-}
-
 }

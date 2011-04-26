@@ -7,7 +7,6 @@
 #include <QtGui/QAction>
 #include <QtGui/QGraphicsLayout>
 
-namespace tlp {
 PushButtonItem::PushButtonItem(QAction *action, const QSize &iconSize, QGraphicsItem *parent, bool ownAction):
   AnimatedGraphicsObject(parent),
   _iconSize(iconSize),
@@ -165,5 +164,4 @@ void PushButtonItem::setItemSize(const QSizeF &s) {
 //==========================
 QSizeF PushButtonItem::itemSize() const {
   return _iconSize;
-}
 }
