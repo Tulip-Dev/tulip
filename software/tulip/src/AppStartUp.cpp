@@ -94,8 +94,6 @@ AppStartUp::AppStartUp(QWidget* parent) :
   string tmp = "Tulip ";
   tmp+=TULIP_RELEASE;
   setWindowTitle(tmp.c_str());
-  string dir = TulipLibDir;
-  dir += "tlp/bitmaps/";
   movie = new QMovie(string(":/startUpPicture.png").c_str());
   movie->setCacheMode(QMovie::CacheAll);
   PixmapLabel1->setMovie(movie);
