@@ -13,7 +13,7 @@ PushButtonItem::PushButtonItem(QAction *action, const QSize &iconSize, QGraphics
   _iconSize(iconSize),
   _pressed(false), _hovered(false), _clicking(false), _fadeout(true), _ownAction(ownAction),
   _action(0),
-  _borderWidth(7), _borderColor(QColor(200,200,200,150)), _backgroundColor(QColor(230,230,230,150)), _backgroundShape(NoShape) {
+  _backgroundShape(NoShape) {
 
   setAction(action);
   setAcceptHoverEvents(true);
@@ -84,9 +84,7 @@ void PushButtonItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *) {
 //==========================
 void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
   QRectF brect = boundingRect();
-  QPen pen(_borderColor);
-  pen.setWidth(_borderWidth);
-  painter->setPen(pen);
+  painter->setPen(_borderColor);
   painter->setBrush(_backgroundColor);
   // Border
   if (_backgroundShape == CircleShape)

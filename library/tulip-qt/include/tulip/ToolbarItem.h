@@ -27,20 +27,8 @@ public:
   QSize iconSize() const { return _iconSize; }
   void setIconSize(const QSize &s) { _iconSize = s; update(); }
 
-  QSize hoveredIconSize() const { return _hoveredIconSize; }
-  void setHoveredIconSize(const QSize &s) { _hoveredIconSize = s; update(); }
-
   int spacing() const { return _spacing; }
   void setSpacing(int m) { _spacing = m; update(); }
-
-  QColor buttonForegroundColor() const { return _buttonForegroundColor; }
-  void setButtonForegroundColor(const QColor &c) { _buttonForegroundColor = c; update(); }
-
-  QColor buttonBackgroundColor() const { return _buttonBackgroundColor; }
-  void setButtonBackgroundColor(const QColor &c) { _buttonBackgroundColor = c; update(); }
-
-  PushButtonItem::BackgroundShape buttonBackgroundShape() const { return _buttonBackgroundShape; }
-  void setButtonBackgroundShape(PushButtonItem::BackgroundShape s) { _buttonBackgroundShape = s; }
 
   Qt::ToolBarArea area() const { return _snapArea; }
   void setAllowedAreas(Qt::ToolBarAreas a) { _allowedSnapAreas = a; }
@@ -58,7 +46,7 @@ public slots:
 
 protected slots:
   void buttonClicked();
-  void buttonHovered(bool);
+  void buttonHovered(bool f);
   void expandAnimationFinished();
   void sceneResized();
 
@@ -77,7 +65,6 @@ private:
   QMap<QAction *,PushButtonItem *> _actionButton;
   QAction *_activeAction;
   PushButtonItem *_activeButton;
-  PushButtonItem *_focusedButton;
   QGraphicsSvgItem *_settingsIcon;
     // Expand & collapse
   bool _expanded;
@@ -87,30 +74,29 @@ private:
   Qt::ToolBarArea _snapArea;
   Qt::ToolBarAreas _allowedSnapAreas;
 
-  // Display parameters
-    // Toolbar style
+  // Toolbar style
   QSize _iconSize;
-  QSize _hoveredIconSize;
   int _spacing;
   Qt::Orientation _orientation;
   int _backgroundRectangleRound;
-  QColor _backgroundColor;
-  QColor _borderColor;
   bool _showSettingsButton;
-    // Buttons style
-  QColor _buttonForegroundColor;
-  QColor _buttonBackgroundColor;
-  QColor _highlightColor;
-  PushButtonItem::BackgroundShape _buttonBackgroundShape;
+
     // Animations look & feel
   int _animationMsec;
   QEasingCurve _animationEasing;
 
+    //Colors
+  QColor _toolbarBorder;
+  QColor _toolbarBackground;
+  QColor _buttonBackground;
+  QColor _buttonBorder;
+  QColor _buttonHighlight;
+  QColor _buttonHovered;
+
   QPointF translationVector() const;
-  QSizeF hoveredButtonSize() const;
   QSizeF buttonSize() const;
   PushButtonItem *buildButton(QAction *);
-  void modifyButton(PushButtonItem *btn, const QSize &newSize, const QPointF &newPos) const;
+  void modifyButton(PushButtonItem *btn, const QPointF &newPos) const;
   QPointF setArea(Qt::ToolBarArea, const QPointF &);
 };
 }

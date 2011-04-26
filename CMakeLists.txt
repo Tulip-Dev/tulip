@@ -15,7 +15,9 @@ STRING(TOLOWER ${PLUGIN_NAME} PLUGIN_NAME)
 SET(LIB_SRCS
 library/tulip-qt/src/AbstractGraphicsView.cpp
 library/tulip-qt/src/AnimatedGraphicsObject.cpp
+library/tulip-qt/src/ConfigurationWidgetChooserItem.cpp
 library/tulip-qt/src/EmptyView.cpp
+library/tulip-qt/src/FramedGraphicsProxyWidget.cpp
 library/tulip-qt/src/GlMainWidgetGraphicsItem.cpp
 library/tulip-qt/src/GraphicsItemsGraphMapper.cpp
 library/tulip-qt/src/GraphicsLayoutItemGraphMapper.cpp
@@ -33,6 +35,7 @@ SET(LIB_UI
 SET(LIB_MOC
 library/tulip-qt/include/tulip/AbstractGraphicsView.h
 library/tulip-qt/include/tulip/AnimatedGraphicsObject.h
+library/tulip-qt/include/tulip/ConfigurationWidgetChooserItem.h
 library/tulip-qt/include/tulip/GlMainWidgetGraphicsItem.h
 library/tulip-qt/include/tulip/PushButtonItem.h
 library/tulip-qt/include/tulip/QtAnimationsManager.h

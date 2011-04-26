@@ -14,24 +14,36 @@
 #include <QtSvg/QGraphicsSvgItem>
 #include <assert.h>
 
-//FIXME: remove me
-#include <iostream>
-using namespace std;
-
 namespace tlp {
 ToolbarItem::ToolbarItem(QGraphicsItem *parent,QGraphicsScene *scene)
   : QGraphicsItemGroup(parent,scene),
-  _activeAction(0), _activeButton(0), _focusedButton(0), _settingsIcon(new QGraphicsSvgItem(":/tulip/icons/document-properties.svg")), _expanded(false), _currentExpandAnimation(0), _collapseTimeout(0),
+  _activeAction(0), _activeButton(0), _settingsIcon(new QGraphicsSvgItem(":/tulip/icons/document-properties.svg")), _expanded(false), _currentExpandAnimation(0), _collapseTimeout(0),
   _snapArea(Qt::TopToolBarArea), _allowedSnapAreas(Qt::AllToolBarAreas),
-  _iconSize(39,39), _hoveredIconSize(_iconSize), _spacing(8), _orientation(Qt::Horizontal), _backgroundRectangleRound(4),
-    _backgroundColor(QApplication::palette().color(QPalette::Window)), _borderColor(QApplication::palette().color(QPalette::Shadow)), _showSettingsButton(true),
-  _buttonBackgroundShape(PushButtonItem::SquareShape), _buttonBackgroundColor(255,255,255,10), _buttonForegroundColor(Qt::transparent),
+  _iconSize(40,40), _spacing(8), _orientation(Qt::Horizontal), _backgroundRectangleRound(4),
+  _showSettingsButton(true),
   _animationMsec(100), _animationEasing(QEasingCurve::Linear) {
+
   setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemSendsGeometryChanges);
   setCacheMode(QGraphicsItem::ItemCoordinateCache);
   setHandlesChildEvents(false);
   setAcceptHoverEvents(true);
-  _backgroundColor.setAlpha(200);
+
+  _toolbarBorder = QApplication::palette().color(QPalette::Shadow);
+
+  _toolbarBackground = QApplication::palette().color(QPalette::Window);
+  _toolbarBackground.setAlpha(200);
+
+  _buttonBackground = QApplication::palette().color(QPalette::Midlight);
+  _buttonBackground.setAlpha(50);
+
+  _buttonHovered = QApplication::palette().color(QPalette::Mid);
+  _buttonHovered.setAlpha(50);
+
+  _buttonBorder = Qt::transparent;
+
+  _buttonHighlight = QApplication::palette().color(QPalette::Highlight);
+  _buttonHighlight.setAlpha(50);
+
 }
 //==========================
 ToolbarItem::~ToolbarItem() {
@@ -74,12 +86,12 @@ void ToolbarItem::setActiveAction(QAction *action) {
   if (_activeAction) {
     if (_activeButton) {
       _activeButton->setAction(action);
-      QPropertyAnimation *anim1 = new QPropertyAnimation(_activeButton,"borderColor",this);
-      anim1->setStartValue(_buttonForegroundColor);
-      anim1->setEndValue(_highlightColor);
+      QPropertyAnimation *anim1 = new QPropertyAnimation(_activeButton,"backgroundColor",this);
+      anim1->setStartValue(_buttonBackground);
+      anim1->setEndValue(_buttonHighlight);
       anim1->setDuration(1000);
       anim1->setEasingCurve(QEasingCurve::Linear);
-      QPropertyAnimation *anim2 = new QPropertyAnimation(_activeButton,"borderColor",this);
+      QPropertyAnimation *anim2 = new QPropertyAnimation(_activeButton,"backgroundColor",this);
       anim2->setStartValue(anim1->endValue());
       anim2->setEndValue(anim1->startValue());
       anim2->setEasingCurve(anim1->easingCurve());
@@ -106,10 +118,10 @@ PushButtonItem *ToolbarItem::buildButton(QAction *action) {
   PushButtonItem *result = new PushButtonItem(action,_iconSize,this);
   result->setAnimationBehavior(AnimatedGraphicsObject::ContinuePreviousAnimation);
   result->setPos(_spacing,_spacing);
-  result->setBorderColor(_buttonForegroundColor);
-  result->setBorderWidth(0);
-  result->setBackgroundColor(_buttonBackgroundColor);
-  result->setBackgroundShape(_buttonBackgroundShape);
+  result->setButtonShape(PushButtonItem::SquareShape);
+
+  result->setBorderColor(_buttonBorder);
+  result->setBackgroundColor(_buttonBackground);
   connect(result,SIGNAL(hovered(bool)),this,SLOT(buttonHovered(bool)),Qt::DirectConnection);
   connect(result,SIGNAL(clicked()),this,SLOT(buttonClicked()),Qt::DirectConnection);
   return result;
@@ -118,12 +130,11 @@ PushButtonItem *ToolbarItem::buildButton(QAction *action) {
 void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
   QPointF pos(_spacing/2,_spacing/2);
   QRectF brect(boundingRect());
-  QSizeF hbSize = hoveredButtonSize();
+  QSizeF bsize = buttonSize();
   QPointF tVect = translationVector();
-  QPointF hoveredGap((_hoveredIconSize.width() - _iconSize.width())/2, (_hoveredIconSize.height() - _iconSize.height())/2);
 
-  painter->setBrush(_backgroundColor);
-  painter->setPen(_borderColor);
+  painter->setBrush(_toolbarBackground);
+  painter->setPen(_toolbarBorder);
 
   if (_snapArea == Qt::TopToolBarArea) {
     painter->drawRoundedRect(0,-_backgroundRectangleRound,brect.width(),brect.height()+_backgroundRectangleRound,_backgroundRectangleRound,_backgroundRectangleRound);
@@ -141,22 +152,21 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
   if (_activeButton) {
     _activeButton->setPos(pos);
-    _activeButton->setIconSize(_hoveredIconSize);
     _settingsIcon->setVisible(_showSettingsButton);
     if (_showSettingsButton) {
-      _settingsIcon->setScale((_hoveredIconSize.width()/1.5) / _settingsIcon->boundingRect().width());
-      _settingsIcon->setPos(pos.x()-_hoveredIconSize.width()/6,pos.y()-_hoveredIconSize.width()/6);
+      _settingsIcon->setScale((_iconSize.width()/1.5) / _settingsIcon->boundingRect().width());
+      _settingsIcon->setPos(pos.x()-_iconSize.width()/6,pos.y()-_iconSize.width()/6);
     }
-    pos+=QPointF(tVect.x() * (_spacing + hbSize.width()),tVect.y() * (_spacing + hbSize.height()));
+    pos+=QPointF(tVect.x() * (_spacing + bsize.width()),tVect.y() * (_spacing + bsize.height()));
   }
 
   if (!_expanded)
     return;
 
   { // separator
-    QColor col = _borderColor;
+    QColor col = _toolbarBorder;
     col.setAlpha(200);
-    QPointF p1(pos),p2(pos.x() + tVect.y()*hbSize.width(), pos.y() + tVect.x()*hbSize.height());
+    QPointF p1(pos),p2(pos.x() + tVect.y()*bsize.width(), pos.y() + tVect.x()*bsize.height());
     QLinearGradient grad(p1,p2);
     grad.setColorAt(0,Qt::transparent);
     grad.setColorAt(0.3,col);
@@ -169,40 +179,36 @@ void ToolbarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
   }
   pos+=QPointF(tVect.x()*_spacing,tVect.y()*_spacing);
 
-  pos+= hoveredGap;
   for (int i=0; i < _actions.size(); ++i) {
     PushButtonItem *btn = _actionButton[_actions[i]];
-    if (btn->hovered()) {
-      pos-=hoveredGap;
-      btn->setAnimationBehavior(AnimatedGraphicsObject::StopPreviousAnimation);
-      modifyButton(btn,_hoveredIconSize,pos);
-      pos+=hoveredGap;
-      btn->setAnimationBehavior(AnimatedGraphicsObject::ContinuePreviousAnimation);
-    }
-    else
-      modifyButton(btn,_iconSize,pos);
-    pos+=QPointF(tVect.x() * (_spacing + hbSize.width()),tVect.y() * (_spacing + hbSize.height()));
+    modifyButton(btn,pos);
+    pos+=QPointF(tVect.x() * (_spacing + bsize.width()),tVect.y() * (_spacing + bsize.height()));
   }
 
   for (QMap<QAction *,PushButtonItem *>::iterator it = _actionButton.begin();it != _actionButton.end();++it)
     it.value()->setAnimated(true);
 }
 //==========================
-void ToolbarItem::modifyButton(PushButtonItem *btn, const QSize &newSize, const QPointF &newPos) const {
-  btn->resizeItem(newSize,_animationMsec,_animationEasing);
+void ToolbarItem::modifyButton(PushButtonItem *btn, const QPointF &newPos) const {
   btn->moveItem(newPos,_animationMsec,_animationEasing);
 }
 //==========================
 QRectF ToolbarItem::boundingRect() const {
-  QSizeF hbSize = hoveredButtonSize();
+  QSizeF result(_spacing,_spacing);
+  if (_snapArea == Qt::TopToolBarArea || _snapArea == Qt::BottomToolBarArea)
+    result+=QSizeF(_backgroundRectangleRound*2,_backgroundRectangleRound);
+  else if (_snapArea == Qt::LeftToolBarArea || Qt::RightToolBarArea)
+    result+=QSizeF(_backgroundRectangleRound,_backgroundRectangleRound*2);
+
+  QSizeF bsize = buttonSize();
+  result+=bsize;
   QPointF tVect = translationVector();
-  QSizeF size(_spacing+hbSize.width(),_spacing+hbSize.height());
+
   if (_expanded)
-    size = QSizeF(size.width() + _actions.size() * tVect.x() * (_spacing + hbSize.width()),
-                  size.height() + _actions.size() *  tVect.y() * (_spacing + hbSize.height()));
-  size.setWidth(size.width() + _backgroundRectangleRound + _backgroundRectangleRound * tVect.x());
-  size.setHeight(size.height() + _backgroundRectangleRound + _backgroundRectangleRound * tVect.y());
-  return QRectF(QPointF(0,0),size);
+    result += QSizeF(tVect.x() * (_actions.size() * (_spacing + bsize.width()) + _spacing),
+                     tVect.y() * (_actions.size() * (_spacing + bsize.height()) + _spacing));
+
+  return QRectF(QPointF(0,0),result);
 }
 //==========================
 QPointF ToolbarItem::translationVector() const {
@@ -216,28 +222,10 @@ QPointF ToolbarItem::translationVector() const {
   }
 }
 //==========================
-QSizeF ToolbarItem::hoveredButtonSize() const {
-  if (!_activeButton)
-    return QSizeF();
-  return _activeButton->boundingRect().size();
-}
-//==========================
 QSizeF ToolbarItem::buttonSize() const {
   if (!_activeButton)
     return QSizeF();
-  PushButtonItem *btn = 0;
-  for (int i=0;i<_actions.size();++i) {
-    PushButtonItem *btn = _actionButton[_actions[i]];
-    if (!btn->hovered())
-      return btn->boundingRect().size();
-  }
-  assert(btn);
-  return btn->boundingRect().size() - (_hoveredIconSize - _iconSize);
-}
-//==========================
-void ToolbarItem::buttonHovered(bool f) {
-  _focusedButton = static_cast<PushButtonItem *>(sender());
-  update();
+  return _activeButton->boundingRect().size();
 }
 //==========================
 void ToolbarItem::buttonClicked() {
@@ -248,6 +236,10 @@ void ToolbarItem::buttonClicked() {
     emit activeButtonClicked();
   else
     emit buttonClicked(btn);
+}
+//==========================
+void ToolbarItem::buttonHovered(bool f) {
+  static_cast<PushButtonItem *>(sender())->setBackgroundColor(f ? _buttonHovered : _buttonBackground);
 }
 //==========================
 void ToolbarItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
@@ -273,7 +265,6 @@ void ToolbarItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
   _collapseTimeout->start();
   for (int i=0; i < _actions.size(); ++i)
     _actionButton[_actions[i]]->setAnimationBehavior(AnimatedGraphicsObject::StopPreviousAnimation);
-  _focusedButton = 0;
   update();
 }
 //==========================

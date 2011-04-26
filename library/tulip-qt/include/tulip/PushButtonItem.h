@@ -5,6 +5,8 @@
 #include <QtCore/QSize>
 #include <QtCore/QString>
 #include <QtGui/QGraphicsLayoutItem>
+#include <QtGui/QPen>
+#include <QtGui/QBrush>
 #include "tulip/AnimatedGraphicsObject.h"
 
 namespace tlp {
@@ -15,7 +17,6 @@ Q_PROPERTY(QString text READ text WRITE setText);
 Q_PROPERTY(QSize iconSize READ iconSize WRITE setIconSize);
 Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor);
 Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor);
-Q_PROPERTY(int borderWidth READ borderWidth WRITE setBorderWidth);
 
 public:
   enum BackgroundShape {
@@ -43,17 +44,14 @@ public:
 
   bool hovered() const { return _hovered; }
 
-  BackgroundShape backgroundShape() const { return _backgroundShape; }
-  void setBackgroundShape(BackgroundShape s) { _backgroundShape = s; update(); }
+  BackgroundShape buttonShape() const { return _backgroundShape; }
+  void setButtonShape(BackgroundShape s) { _backgroundShape = s; update(); }
 
   QColor borderColor() const { return _borderColor; }
   void setBorderColor(const QColor &c) { _borderColor = c; update(); }
 
   QColor backgroundColor() const { return _backgroundColor; }
   void setBackgroundColor(const QColor &c) { _backgroundColor = c; update(); }
-
-  int borderWidth() const { return _borderWidth; }
-  void setBorderWidth(int w ) { _borderWidth = w; update(); }
 
   bool fadeout() const { return _fadeout; }
   void setFadeout(bool f) { _fadeout = f; update(); }
@@ -89,7 +87,6 @@ private:
   BackgroundShape _backgroundShape;
   QColor _borderColor;
   QColor _backgroundColor;
-  int _borderWidth;
 };
 }
 #endif // PUSHBUTTONITEM_H

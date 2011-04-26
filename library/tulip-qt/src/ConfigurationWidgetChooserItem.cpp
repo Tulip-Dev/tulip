@@ -20,10 +20,10 @@ ConfigurationWidgetChooserItem::ConfigurationWidgetChooserItem(const std::list<s
   setHandlesChildEvents(false);
 
   _settingsButton = new PushButtonItem(new QAction(QIcon(":/tulip/icons/document-properties.svg"),trUtf8("Toggle view's configuration widgets"),0),QSize(24,24),this,true);
-  _settingsButton->setBackgroundShape(PushButtonItem::SquareShape);
-  _settingsButton->setBackgroundColor(_bgColor);
-  _settingsButton->setBorderColor(_borderColor);
-  _settingsButton->setBorderWidth(2);
+  _settingsButton->setButtonShape(PushButtonItem::SquareShape);
+//  _settingsButton->setBackgroundColor(_bgColor);
+//  _settingsButton->setBorderColor(_borderColor);
+//  _settingsButton->setBorderWidth(2);
   _settingsButton->setFadeout(false);
 }
 
