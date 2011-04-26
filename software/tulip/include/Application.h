@@ -19,15 +19,10 @@
 #ifndef Tulip_APPLICATION_H
 #define Tulip_APPLICATION_H
 
-#include <string>
-#include <QtGui/qapplication.h>
-#include <tulip/Color.h>
-
-class ElementPropertiesWidget;
+#include <QtGui/QApplication>
 
 class Application:public QApplication {
 public:
-  std::string bitmapPath;
   Application(int& argc, char ** argv); 
   ~Application();
 };
