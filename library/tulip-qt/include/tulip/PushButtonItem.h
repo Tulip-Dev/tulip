@@ -24,7 +24,7 @@ public:
     SquareShape
   };
 
-  PushButtonItem(QAction *action, const QSize &iconSize = QSize(32,32), QGraphicsItem *parent=0);
+  PushButtonItem(QAction *action, const QSize &iconSize = QSize(32,32), QGraphicsItem *parent=0, bool ownAction=false);
   virtual ~PushButtonItem();
 
   QString text() const;
@@ -84,6 +84,7 @@ private:
   bool _hovered;
   bool _clicking;
   bool _fadeout;
+  bool _ownAction;
 
   BackgroundShape _backgroundShape;
   QColor _borderColor;

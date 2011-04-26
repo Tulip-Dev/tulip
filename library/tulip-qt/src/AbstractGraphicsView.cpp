@@ -13,8 +13,8 @@
 
 #include "tulip/ToolbarItem.h"
 #include "tulip/QtAnimationsManager.h"
-
-//FIXME: remove me
+#include "tulip/FramedGraphicsProxyWidget.h"
+#include "tulip/ConfigurationWidgetChooserItem.h"
 
 using namespace tlp;
 using namespace std;
@@ -35,25 +35,9 @@ static QGLFormat GlInit() {
   return tmpFormat;
 }
 
-/**
-  * Used to emphasize configuration widget look & feel
-  */
-class StyledGraphicsWidget: public QGraphicsProxyWidget {
+class ActiveInteractorConfigurationWidgetItem: public FramedGraphicsProxyWidget {
 public:
-  StyledGraphicsWidget(QGraphicsItem *parent=0, Qt::WindowFlags wFlags=0): QGraphicsProxyWidget(parent,wFlags) {}
-
-  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-    painter->setBrush(QApplication::palette().color(QPalette::Window));
-    painter->setPen(QApplication::palette().color(QPalette::Shadow));
-    painter->drawRoundedRect(boundingRect(),5,5);
-    QGraphicsProxyWidget::paint(painter,option,widget);
-  }
-
-  QRectF boundingRect() const {
-    QSizeF originalSize = QGraphicsProxyWidget::boundingRect().size();
-    originalSize += QSizeF(10,10);
-    return QRectF(QPointF(-5,-5),originalSize);
-  }
+  ActiveInteractorConfigurationWidgetItem(QGraphicsItem *parent=0, Qt::WindowFlags wFlags=0): FramedGraphicsProxyWidget(parent,wFlags) {}
 
   void resetPos(ToolbarItem *_toolbarItem) {
     QPointF toolbarPos(_toolbarItem->pos());
@@ -140,7 +124,7 @@ void AbstractGraphicsView::setInteractors(const list<Interactor *> &interactors)
   _interactors = interactors;
   for (list<Interactor *>::iterator it = _interactors.begin(); it != _interactors.end(); ++it)
     (*it)->setView(this);
-  buildInteractorsToolbar();
+  buildGraphicsUi();
 }
 // ===================================
 list<Interactor *> AbstractGraphicsView::getInteractors() {
@@ -201,7 +185,7 @@ void AbstractGraphicsView::setCentralWidget(QWidget *w) {
   delete oldCentralWidget;
 }
 // ===================================
-void AbstractGraphicsView::buildInteractorsToolbar() {
+void AbstractGraphicsView::buildGraphicsUi() {
   _toolbarItem = new ToolbarItem();
   for (list<Interactor *>::iterator it = _interactors.begin(); it != _interactors.end(); ++it)
     _toolbarItem->addAction((*it)->getAction());
@@ -209,6 +193,8 @@ void AbstractGraphicsView::buildInteractorsToolbar() {
   connect(_toolbarItem,SIGNAL(activeButtonClicked()),this,SLOT(toggleInteractorConfigurationWidget()));
   connect(_toolbarItem,SIGNAL(buttonClicked(PushButtonItem*)),this,SLOT(activeInteractorChanged()));
   addToScene(_toolbarItem);
+
+  addToScene(new ConfigurationWidgetChooserItem(getConfigurationWidget()));
 }
 // ===================================
 bool AbstractGraphicsView::eventFilter(QObject *obj, QEvent *e) {
@@ -272,7 +258,7 @@ void AbstractGraphicsView::toggleInteractorConfigurationWidget() {
 
   // Create widget proxy
   QWidget *configWidget = _activeInteractor->getConfigurationWidget();
-  _activeConfigurationWidget = new StyledGraphicsWidget();
+  _activeConfigurationWidget = new ActiveInteractorConfigurationWidgetItem();
   _activeConfigurationWidget->setWidget(configWidget);
 
   // Display animation
@@ -283,7 +269,7 @@ void AbstractGraphicsView::toggleInteractorConfigurationWidget() {
   QtAnimationsManager::instance().startAnimation(_activeConfigurationWidget,anim,QtAnimationsManager::StopPreviousAnimation);
   addToScene(_activeConfigurationWidget);
   _toolbarItem->installSceneEventFilter(_activeConfigurationWidget);
-  static_cast<StyledGraphicsWidget *>(_activeConfigurationWidget)->resetPos(_toolbarItem);
+  static_cast<ActiveInteractorConfigurationWidgetItem *>(_activeConfigurationWidget)->resetPos(_toolbarItem);
 }
 // ===================================
 void AbstractGraphicsView::activeInteractorChanged() {

@@ -47,7 +47,7 @@ protected:
   QVBoxLayout *_mainLayout;
 
 
-  virtual void buildInteractorsToolbar();
+  virtual void buildGraphicsUi();
 
   void addToScene(QGraphicsItem *item);
 

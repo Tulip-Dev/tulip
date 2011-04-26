@@ -8,10 +8,10 @@
 #include <QtGui/QGraphicsLayout>
 
 namespace tlp {
-PushButtonItem::PushButtonItem(QAction *action, const QSize &iconSize, QGraphicsItem *parent):
+PushButtonItem::PushButtonItem(QAction *action, const QSize &iconSize, QGraphicsItem *parent, bool ownAction):
   AnimatedGraphicsObject(parent),
   _iconSize(iconSize),
-  _pressed(false), _hovered(false), _clicking(false), _fadeout(true),
+  _pressed(false), _hovered(false), _clicking(false), _fadeout(true), _ownAction(ownAction),
   _action(0),
   _borderWidth(7), _borderColor(QColor(200,200,200,150)), _backgroundColor(QColor(230,230,230,150)), _backgroundShape(NoShape) {
 
@@ -21,6 +21,8 @@ PushButtonItem::PushButtonItem(QAction *action, const QSize &iconSize, QGraphics
 }
 //==========================
 PushButtonItem::~PushButtonItem() {
+  if (_ownAction)
+    delete _action;
 }
 //==========================
 QString PushButtonItem::text() const {
@@ -91,7 +93,6 @@ void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     painter->drawEllipse(brect);
   else if (_backgroundShape == SquareShape)
     painter->drawRoundedRect(brect,4,4);
-
 
   // Pixmap
   QIcon::Mode mode = QIcon::Normal;
