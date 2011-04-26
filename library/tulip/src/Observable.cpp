@@ -273,14 +273,22 @@ namespace tlp {
         if (!oAlive[n]) {
             throw OLOException("addObserver called on a deleted Observable");
         }
-        if (!oGraph.existEdge(obs.getNode(), getNode()).isValid()) {
-            oType[oGraph.addEdge(obs.getNode(), getNode())] = type;
-        }
-        else {
+	// check for an existing link
+	edge link(oGraph.existEdge(obs.getNode(), getNode()));
+        if (!link.isValid()) {
+	  // add new link
+	  link = oGraph.addEdge(obs.getNode(), getNode());
+	  oType[link] = type;
+	} else {
 #ifndef NDEBUG
+	  if (oType[link] & type) {
             cerr << "[OLO Warning]: observer already connected" << endl;
+	    return;
+	  }
 #endif
-        }
+	  // add the bit for the given type on the edge
+	  oType[link] |= type;
+	}
     }
     //----------------------------------------
     void Observable::addObserver(Observable * const obs) {
