@@ -93,7 +93,7 @@ void tlp::initTulipLib(char* appDirPath) {
 			 strlen(strrchr(appDirPath, '/') + 1));
 #ifdef I64
       // check for lib64
-      string tlpPath64 = TulipLibDir + "lib64/tlp";
+      string tlpPath64 = TulipLibDir + "lib64/tulip";
       struct stat statInfo;
       if (stat(tlpPath64.c_str(), &statInfo) == 0)
 	TulipLibDir.append("lib64");
@@ -129,9 +129,9 @@ void tlp::initTulipLib(char* appDirPath) {
       pos = TulipPluginsPath.find('\\', pos);
     }
 #endif
-    TulipPluginsPath= TulipLibDir + "tlp" + PATH_DELIMITER + TulipPluginsPath;
+    TulipPluginsPath= TulipLibDir + "tulip" + PATH_DELIMITER + TulipPluginsPath;
   } else
-    TulipPluginsPath= TulipLibDir + "tlp";
+    TulipPluginsPath= TulipLibDir + "tulip";
     
 
   // one dir up to initialize the doc dir
@@ -141,7 +141,7 @@ void tlp::initTulipLib(char* appDirPath) {
   TulipDocProfile=tulipDocDir+"tulip.qhc";
   TulipUserHandBookIndex=tulipDocDir+"userHandbook/html/index.html";
 
-  TulipBitmapDir=TulipLibDir+"tlp/bitmaps/";
+  TulipBitmapDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/bitmaps/";
 
   // initialize factories
   SizeProperty::initFactory();
