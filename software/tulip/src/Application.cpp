@@ -39,36 +39,6 @@ Application::Application(int& argc, char ** argv): QApplication(argc,argv)
 
   //add local plugins installation path
   tlp::TulipPluginsPath = tlp::PluginInfo::pluginsDirName + tlp::PATH_DELIMITER + tlp::TulipPluginsPath;
-
-  string::const_iterator begin=tlp::TulipPluginsPath.begin();
-  string::const_iterator end=begin;
-  while (end!=tlp::TulipPluginsPath.end())
-    if ((*end)==tlp::PATH_DELIMITER) {
-      if (begin!=end) {
-        string path = string(begin,end) + "/bitmaps/";
-        QDir *bitmapsDir= new QDir(path.c_str());
-        if(bitmapsDir->exists()) {
-          bitmapPath = path.c_str();
-          delete bitmapsDir;
-          return;
-        }
-        delete bitmapsDir;
-      }
-      ++end;
-      begin=end;
-    }
-    else
-      ++end;
-  if (begin!=end) {
-    string path = string(begin,end) + "/bitmaps/";
-    QDir *bitmapsDir= new QDir(path.c_str());
-    if(bitmapsDir->exists()) {
-      bitmapPath = path.c_str();
-      delete bitmapsDir;
-      return;
-    }
-    delete bitmapsDir;
-  }
 }
 
 //**********************************************************************
