@@ -49,6 +49,11 @@ public :
 public slots:
 
 	void showOnOutputWrite();
+	void hideConsoleOutputDialog();
+
+private:
+
+	QPoint lastPos;
 
 };
 

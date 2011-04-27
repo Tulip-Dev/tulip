@@ -42,6 +42,11 @@ TULIP_QT4_WRAP_UI(pythonscriptview_UI_SRCS ${pythonscriptview_UI})
 TULIP_QT4_WRAP_CPP(pythonscriptview_MOC_SRCS ${pythonscriptview_MOC})
 QT4_ADD_RESOURCES(pythonscriptview_RCC_SRCS ${pythonscriptview_RCC})
 
+IF(HAS_TULIP_QT_PYTHON_BINDINGS)
+SET_SOURCE_FILES_PROPERTIES(PythonInterpreter.cpp
+                            PROPERTIES COMPILE_DEFINITIONS HAS_TULIP_QT_PYTHON_BINDINGS)
+ENDIF()
+
 ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${pythonscriptview_UI_SRCS} ${pythonscriptview_MOC_SRCS} ${pythonscriptview_LIB_SRCS} ${pythonscriptview_RCC_SRCS})
 
 IF(${MSVC} AND ${CMAKE_GENERATOR}  MATCHES "Visual Studio")
