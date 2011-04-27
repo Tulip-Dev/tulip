@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <typeinfo>
 #include <tulip/GlQuadTreeLODCalculator.h>
 
 #ifdef _OPENMP
@@ -472,12 +473,12 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
 				destroy(camera);
 			}
 		} else {
-			const PropertyEvent* pEvt = dynamic_cast<const PropertyEvent *>(&ev);
-			if (pEvt)
-				PropertyObserver::treatEvent(ev);
-			else {
-				assert(false);
-			}
+		  if (typeid(ev) == typeid(GraphEvent) ||
+		      (ev.type() == Event::TLP_DELETE &&
+		       dynamic_cast<Graph*>(ev.sender())))
+		    GraphObserver::treatEvent(ev);
+		  else
+		    PropertyObserver::treatEvent(ev);
 		}
 	}
 }

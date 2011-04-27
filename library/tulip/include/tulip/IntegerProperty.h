@@ -27,6 +27,7 @@
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/IntegerAlgorithm.h>
+#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 
 
@@ -38,7 +39,7 @@ class PropertyContext;
 typedef AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> AbstractIntegerProperty;
 /** \addtogroup properties */ 
 /*@{*/
- class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public GraphObserver { 
+ class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, private GraphObserver { 
 
   friend class IntegerAlgorithm;
 
@@ -61,18 +62,20 @@ public :
   virtual void setAllNodeValue(const int &v);
   virtual void setAllEdgeValue(const int &v);
 
-  // redefinition of GraphObserver methods
-  virtual void addNode(Graph* graph, const node n);
-  virtual void addEdge(Graph* graph, const edge e);
-  virtual void delNode(Graph* graph, const node n);
-  virtual void delEdge(Graph* graph, const edge e);
-  virtual void addSubGraph(Graph* graph, Graph *sub);
-  virtual void delSubGraph(Graph* graph, Graph *sub);
-
 protected:
   virtual void clone_handler(AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> &);
 
 private:
+  // override some GraphObserver methods
+  void addNode(Graph* graph, const node n);
+  void addEdge(Graph* graph, const edge e);
+  void delNode(Graph* graph, const node n);
+  void delEdge(Graph* graph, const edge e);
+  void addSubGraph(Graph* graph, Graph *sub);
+  void delSubGraph(Graph* graph, Graph *sub);
+  // override Observable::treatEvent
+  void treatEvent(const Event&);
+
   TLP_HASH_MAP<unsigned int, int> maxN,minN,maxE,minE;
   TLP_HASH_MAP<unsigned int, bool> minMaxOkNode;
   TLP_HASH_MAP<unsigned int, bool> minMaxOkEdge;

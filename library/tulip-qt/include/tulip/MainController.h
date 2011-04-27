@@ -17,16 +17,6 @@
  *
  */
 
-/**
- Author: Morgan Mathiaut
- Email : mathiaut@labri.fr
- Last modification : 14/05/2008
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-*/
-
 #ifndef Tulip_MAINCONTROLLER_H
 #define Tulip_MAINCONTROLLER_H
 
@@ -60,7 +50,8 @@ namespace tlp {
    * On left : Property, and hierarchical view
    * In view menu you have access to all view plugins
    */
-  class TLP_QT_SCOPE MainController :  public ControllerViewsManager, public Observable, public GraphObserver {
+  class TLP_QT_SCOPE MainController :  public ControllerViewsManager,
+    private Observable, private GraphObserver {
 
     Q_OBJECT;
 
@@ -153,6 +144,10 @@ namespace tlp {
      * Call when an attribute is set on a graph
      */
     void afterSetAttribute(Graph*, const std::string&);
+    /**
+     * Call when receiving an event
+     */
+    void treatEvent(const Event&);
     /**
      * Call to update number of nodes/edges
      */

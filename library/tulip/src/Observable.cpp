@@ -98,7 +98,7 @@ namespace tlp {
     //----------------------------------
     OLOObject& OLOObject::operator=(const OLOObject &) {
 #ifndef DNDEBUG
-        cout << "[OLO Warnig]: OLO object should reimplement their operator= else nothing is copied" << endl;
+        cout << "[OLO Warning]: OLO object should reimplement their operator= else nothing is copied" << endl;
 #endif
         return *this;
     }
@@ -269,7 +269,7 @@ namespace tlp {
         return new ConversionIterator<node, Observable*, Node2Onlooker>(getInObjects(), node2Onlooker);
     }
     //----------------------------------------
-    void Observable::addOnlooker(const Observable &obs, OLOEDGETYPE type) {
+    void Observable::addOnlooker(const Observable &obs, OLOEDGETYPE type) const {
         if (!oAlive[n]) {
             throw OLOException("addObserver called on a deleted Observable");
         }
@@ -291,12 +291,12 @@ namespace tlp {
 	}
     }
     //----------------------------------------
-    void Observable::addObserver(Observable * const obs) {
+    void Observable::addObserver(Observable * const obs) const {
       assert(obs != 0);
       addOnlooker(*obs, OBSERVER);
     }
     //----------------------------------------
-    void Observable::addListener(Observable * const obs) {
+    void Observable::addListener(Observable * const obs) const {
       assert(obs != 0);
       addOnlooker(*obs, LISTENER);
     }
@@ -393,7 +393,7 @@ namespace tlp {
         }
     }
     //----------------------------------------
-    void Observable::removeOnlooker(const Observable &obs, OLOEDGETYPE type) {
+    void Observable::removeOnlooker(const Observable &obs, OLOEDGETYPE type) const {
         if (!oAlive[n]) {
             throw OLOException("removeOnlooker called on a deleted Observable");
         }
@@ -405,7 +405,7 @@ namespace tlp {
         }
     }
     //----------------------------------------
-    void Observable::removeObserver(Observable  * const obs) {
+    void Observable::removeObserver(Observable  * const obs) const {
       if (!oAlive[n]) {
             throw OLOException("removeObserver called on a deleted Observable");
       }
@@ -413,7 +413,7 @@ namespace tlp {
       removeOnlooker(*obs, OBSERVER);
     }
     //----------------------------------------
-    void Observable::removeListener(Observable  * const obs) {
+    void Observable::removeListener(Observable  * const obs) const {
       if (!oAlive[n]) {
             throw OLOException("removeListner called on a deleted Observable");
       }

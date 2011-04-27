@@ -27,6 +27,7 @@
 #include <set>
 #include <vector>
 #include <tulip/tuliphash.h>
+#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 
 namespace tlp {
@@ -36,7 +37,7 @@ class Graph;
 /** \addtogroup graph_test */ 
 /*@{*/
 /// class for testing if the graph is connected
-class TLP_SCOPE ConnectedTest : private GraphObserver {
+ class TLP_SCOPE ConnectedTest : private GraphObserver, public Observable {
 public:
   /**
    * Returns true if the graph is connected (ie. it exists an undirected path 
@@ -60,6 +61,7 @@ public:
 private:
   void connect(const Graph * const, std::vector<node>& toLink);
   bool compute(const Graph * const);
+  // override GraphObserver methods
   void addEdge(Graph *,const edge);
   void delEdge(Graph *,const edge);
   void reverseEdge(Graph *,const edge);
@@ -69,6 +71,8 @@ private:
   ConnectedTest();
   static ConnectedTest * instance;
   TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
+  // override Observable::treatEvent
+  virtual void treatEvent(const Event&);
 };
 
 }

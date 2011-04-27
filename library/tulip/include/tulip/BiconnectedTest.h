@@ -25,6 +25,7 @@
 #endif
 
 #include <tulip/tuliphash.h>
+#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 
 namespace tlp {
@@ -33,7 +34,7 @@ class Graph;
 /** \addtogroup graph_test */ 
 /*@{*/
 /// class for testing if the graph is biconnected
-class TLP_SCOPE BiconnectedTest : public GraphObserver {
+ class TLP_SCOPE BiconnectedTest : private GraphObserver, private Observable {
 public:
 
   /**
@@ -51,6 +52,7 @@ public:
 private:
   void connect(Graph *, std::vector<edge>& addedEdges);
   bool compute(Graph *);
+  // override GraphObserver methods
   void addEdge(Graph *,const edge);
   void delEdge(Graph *,const edge);
   void reverseEdge(Graph *,const edge);
@@ -60,6 +62,8 @@ private:
   BiconnectedTest(); //to ensure singleton
   static BiconnectedTest * instance;
   TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
+  // override Observable::treatEvent
+  virtual void treatEvent(const Event&);
 };
 }
 /*@}*/

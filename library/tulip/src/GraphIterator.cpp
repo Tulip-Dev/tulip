@@ -47,6 +47,10 @@ void NodeIteratorObserver::delNode(Graph*, node) {
   if (hasNext())
     std::cerr << "Warning: node deleted while iterating !!!" << std::endl;
 }
+
+void NodeIteratorObserver::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}
    
 void EdgeIteratorObserver::addEdge(Graph*, edge) {
   if (hasNext())
@@ -58,6 +62,10 @@ void EdgeIteratorObserver::delEdge(Graph*, edge) {
     std::cerr << "Warning: edge deleted while iterating !!!" << std::endl;
 }
 
+void EdgeIteratorObserver::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}
+   
 int getNumIterators() {
   return NumIterators;
 }

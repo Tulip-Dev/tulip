@@ -206,8 +206,6 @@ namespace tlp {
     clearObservers();
     Graph *currentGraph=getGraph();
     if (currentGraph) {
-      currentGraph->removeObserver(this);
-      currentGraph->removeGraphObserver(this);
       delete editMenu;
       delete algorithmMenu;
       delete viewMenu;
@@ -573,6 +571,10 @@ namespace tlp {
       clusterTreeWidget->update();
       changeWindowTitle(graph);
     }
+  }
+  //**********************************************************************
+  void MainController::treatEvent(const Event& evt) {
+    GraphObserver::treatEvent(evt);
   }
   //**********************************************************************
   void MainController::loadGUI() {

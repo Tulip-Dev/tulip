@@ -125,3 +125,6 @@ void SimpleTest::destroy(Graph *graph) {
   deleteResult(graph);
 }
 //=================================================================
+void SimpleTest::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}

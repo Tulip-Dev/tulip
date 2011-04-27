@@ -245,11 +245,11 @@ public:
   /**
    * Registers a new property observer.
    */
-  void addPropertyObserver(PropertyObserver *pObs);
+  void addPropertyObserver(Observable *pObs);
   /**
    * Removes a registered property observer.
    */
-  void removePropertyObserver(PropertyObserver *pObs);
+  void removePropertyObserver(Observable *pObs);
 
   /**
    * Returns the number of registered observers.

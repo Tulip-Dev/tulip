@@ -191,8 +191,9 @@ void ConnectedTest::delNode(Graph *graph,const node) {
 //=================================================================
 void ConnectedTest::destroy(Graph *graph) {
 	//  cerr << __PRETTY_FUNCTION__ << endl;
-	graph->removeGraphObserver(this);
 	resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
-
+void ConnectedTest::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}

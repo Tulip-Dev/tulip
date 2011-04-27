@@ -21,8 +21,9 @@
 #include <vector>
 #include <tulip/Coord.h>
 #include <tulip/InteractorComponent.h>
-#include <tulip/ObservableProperty.h>
 #include <tulip/ObservableGraph.h>
+#include <tulip/Observable.h>
+#include <tulip/ObservableProperty.h>
 
 namespace tlp {
 class Graph;
@@ -30,7 +31,8 @@ class LayoutProperty;
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent, public GraphObserver, public PropertyObserver
+class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent,
+  private GraphObserver, private PropertyObserver, private Observable
 {
  private:
   node source;
@@ -42,7 +44,6 @@ class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent, public GraphObse
 
  public:
   MouseEdgeBuilder();
-  ~MouseEdgeBuilder();
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
   void initObserver(Graph *);
@@ -51,6 +52,8 @@ class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent, public GraphObse
   void destroy(Graph *);
   void afterSetNodeValue(PropertyInterface*, const node);
   void destroy(PropertyInterface*);
+  void treatEvent(const Event&);
+
   InteractorComponent *clone() { return new MouseEdgeBuilder(); }
 };
 /*@}*/

@@ -377,6 +377,9 @@ void TreeTest::delNode(Graph *graph,const node) {
 }
 
 void TreeTest::destroy(Graph *graph) {
-  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
+}
+
+void TreeTest::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
 }

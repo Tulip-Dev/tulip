@@ -43,13 +43,6 @@ namespace tlp {
     delete nodesIterator;
   }
 
-  GlGraphComposite::~GlGraphComposite(){
-    if(inputData.getGraph()){
-      inputData.getGraph()->removeGraphObserver(this);
-      inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
-    }
-  }
-
   void GlGraphComposite::acceptVisitorForNodes(Graph *graph,GlSceneVisitor *visitor){
     if(isDisplayNodes() || isDisplayMetaNodes()){
       visitor->reserveMemoryForNodes(graph->numberOfNodes());
@@ -118,8 +111,6 @@ namespace tlp {
   //===================================================================
   void GlGraphComposite::destroy(Graph *g){
     if(inputData.getGraph()==g){
-      inputData.getGraph()->removeGraphObserver(this);
-      inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
       inputData.graph=NULL;
     }
   }

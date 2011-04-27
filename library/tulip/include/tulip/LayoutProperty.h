@@ -25,6 +25,7 @@
 
 #include <tulip/tuliphash.h>
 #include <tulip/PropertyTypes.h>
+#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/LayoutAlgorithm.h>
@@ -38,14 +39,13 @@ typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> Ab
 
 /** \addtogroup properties */ 
 /*@{*/
-  class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, public GraphObserver {
+ class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, private GraphObserver {
   friend class LayoutAlgorithm;
 
 public:
   LayoutProperty(Graph *, std::string n="", bool updateOnEdgeReversal = true);
-  ~LayoutProperty();
 
-  // redefinition of some PropertyInterface methods
+  // override some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   std::string getTypename() const {
     return "layout";
@@ -133,9 +133,6 @@ public:
   virtual void setAllNodeValue(const Coord &v);
   virtual void setAllEdgeValue(const std::vector<Coord> &v);
 
-  // redefinition of a GraphObserver method
-  virtual void reverseEdge(Graph *, const edge);
-
 protected:
   virtual void clone_handler(AbstractProperty<PointType,LineType, LayoutAlgorithm> &);
 
@@ -144,6 +141,10 @@ private:
   TLP_HASH_MAP<unsigned int, bool> minMaxOk;
   void computeMinMax(Graph * graph=NULL);
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
+  // override an GraphObserver method
+  void reverseEdge(Graph *, const edge);
+  // override Observable::treatEvent
+  void treatEvent(const Event&);
 };
 
 class TLP_SCOPE CoordVectorProperty:public AbstractVectorProperty<tlp::CoordVectorType, tlp::PointType> { 

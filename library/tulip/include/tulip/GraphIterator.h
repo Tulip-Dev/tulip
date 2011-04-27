@@ -24,6 +24,7 @@
 
 #include <tulip/MutableContainer.h>
 #include <tulip/ObservableGraph.h>
+#include <tulip/ObservableGraph.h>
 #include <tulip/tulipconf.h>
 #include <iostream>
 
@@ -44,18 +45,22 @@ class EdgeIterator :public Iterator<edge> {
 };
 
 #ifndef NDEBUG
-class NodeIteratorObserver :public NodeIterator, public GraphObserver {
-public:
+class NodeIteratorObserver :public NodeIterator, private GraphObserver, public Observable {
+private:
   // GraphObserver interface
   void addNode(Graph* g, node n);
   void delNode(Graph* g, node n);
+  // Observable interface
+  void treatEvent(const Event&);
 };
 
-class EdgeIteratorObserver :public EdgeIterator, public GraphObserver {
-public:
+class EdgeIteratorObserver :public EdgeIterator, private GraphObserver, public Observable {
+private:
   // GraphObserver interface
   void addEdge(Graph* g, edge e);
   void delEdge(Graph* g, edge e);
+  // Observable interface
+  void treatEvent(const Event&);
 };
 #endif
 //===========================================================

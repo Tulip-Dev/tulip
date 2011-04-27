@@ -41,7 +41,7 @@ class PropertyInterface;
  * framework for handling state dependency between observer and observed 
  * object.
  */
-class  TLP_SCOPE PropertyObserver :public Observable {
+class  TLP_SCOPE PropertyObserver {
 
  public:
   virtual ~PropertyObserver() {}
@@ -55,7 +55,7 @@ class  TLP_SCOPE PropertyObserver :public Observable {
   virtual void afterSetAllEdgeValue(PropertyInterface*){}
   virtual void destroy(PropertyInterface*){}
  protected:
-  virtual void treatEvent(const Event& ev);
+  void treatEvent(const Event& ev);
 };
 /*@}*/
 }
