@@ -180,9 +180,9 @@ namespace tlp {
     borderFont=new FTOutlineFont(fontName.c_str());
     if(font->Error() || borderFont->Error()){
       if(fontName=="")
-        cout << "Error in font loading : no font name" << endl;
+        cerr << "Error in font loading: no font name" << endl;
       else
-        cout << "Erro in font loading : " << fontName << " can't be loaded" << endl;
+        cerr << "Error in font loading: " << fontName << " cannot be loaded" << endl;
 
       delete font;
       delete borderFont;
