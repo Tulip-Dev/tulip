@@ -21,7 +21,6 @@ ADD_LIBRARY(ColorMapping-${TulipVersion} SHARED ${ColorMapping_SRCS} ${ColorMapp
 TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipOglName})
 TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipQtName})
-ADD_DEPENDENCIES(ColorMapping-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
