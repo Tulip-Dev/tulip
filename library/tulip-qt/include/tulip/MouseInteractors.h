@@ -37,10 +37,13 @@ namespace tlp {
  */
 class TLP_QT_SCOPE MousePanNZoomNavigator:public InteractorComponent {
 public:
-  MousePanNZoomNavigator(){}
+  MousePanNZoomNavigator():cameraScaleFactor(1), isGesturing(false){}
   ~MousePanNZoomNavigator(){}
   bool eventFilter(QObject *, QEvent *);
   InteractorComponent *clone() { return new MousePanNZoomNavigator(); }
+protected:
+  float cameraScaleFactor;
+  bool isGesturing;
 };
 
 /** An interactor class used to delete a graph element on mouse left click
@@ -61,7 +64,6 @@ private:
   InteractorComponent *currentSpecInteractorComponent;
 
   QCursor oldCursor;
-
 public:
   MouseNKeysNavigator() : currentSpecInteractorComponent(NULL){}
   ~MouseNKeysNavigator(){}
