@@ -17,6 +17,7 @@
  *
  */
 #include <iostream>
+#include <QtDebug>
 
 #ifdef  _WIN32
 // compilation pb workaround
@@ -24,6 +25,7 @@
 #endif
 #include <QtGui/qcursor.h>
 #include <QtGui/qevent.h>
+#include <QPinchGesture>
 
 #include "tulip/Graph.h"
 #include "tulip/MouseInteractors.h"
@@ -46,6 +48,73 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
       ((QWheelEvent *) e)->x(), ((QWheelEvent *) e)->y());
     g->draw(false);
     return true;
+  }
+
+  if(e->type() == QEvent::Gesture) {
+      GlMainWidget *g = (GlMainWidget *) widget;
+      QGestureEvent* gesture = (QGestureEvent*)e;
+      QPointF center;
+      //swipe events and pan events are never fired, known Qt bug
+      /*if(gesture->gesture(Qt::SwipeGesture)) {
+        QSwipeGesture* swipe = (QSwipeGesture*)gesture->gesture(Qt::SwipeGesture);
+        int x = cos(swipe->swipeAngle()) * swipe->property("velocity").toFloat();
+        int y = sin(swipe->swipeAngle()) * swipe->property("velocity").toFloat();
+        g->getScene()->translateCamera(x, y, 0);
+      }*/
+	  
+    if(gesture->gesture(Qt::PinchGesture)) {
+          QPinchGesture* pinch = (QPinchGesture*)gesture->gesture(Qt::PinchGesture);
+          Camera& camera = g->getScene()->getCamera();
+
+		  //store the camera scale factor when starting the gesture
+          if(pinch->state() == Qt::GestureStarted) {
+            cameraScaleFactor = camera.getZoomFactor();
+			isGesturing = true;
+          }
+
+          if(pinch->changeFlags() & QPinchGesture::ScaleFactorChanged) {  
+			//only set the zoom factor if two events in a row were in the same direction (zoom in or out) to smooth a bit the effect.
+			if((pinch->lastScaleFactor() > 1 && pinch->scaleFactor() > 1) || (pinch->lastScaleFactor() <= 1 && pinch->scaleFactor() <= 1)) {
+				camera.setZoomFactor(cameraScaleFactor * pinch->totalScaleFactor());
+			}
+          }
+
+          if(pinch->changeFlags() & QPinchGesture::RotationAngleChanged)
+          {
+			/*//backup the current camera center
+            Coord oldCenter = camera.getCenter();
+            Coord oldEye = camera.getEyes();
+			//sets the camera center to the center of the pich gesture
+            Coord rotationCenter(g->mapFromGlobal(pinch->centerPoint().toPoint()).x(), g->mapFromGlobal(pinch->centerPoint().toPoint()).y(), oldCenter.getZ());
+            Coord rotationEye=camera.getEyes()+(rotationCenter-oldCenter);
+            camera.setCenter(rotationCenter);
+            camera.setEyes(rotationEye);*/
+			//rotates the camera
+			camera.rotate((pinch->rotationAngle() - pinch->lastRotationAngle())/180*M_PI, 0, 0, 1);
+			/*
+			//restore old camera center and eyes
+            camera.setCenter(oldCenter);
+            camera.setEyes(oldEye); */
+          }
+
+		  if(pinch->state() == Qt::GestureFinished) {
+			isGesturing = false;
+          }
+		  if(gesture->gesture(Qt::PanGesture)) {
+			QPanGesture* pan = (QPanGesture*)gesture->gesture(Qt::PanGesture);
+
+			if(pan->state() == Qt::GestureStarted) {
+			  isGesturing = true;
+			}
+			if(pan->state() == Qt::GestureFinished) {
+			  isGesturing = false;
+			}
+			center = pan->delta();
+			g->getScene()->translateCamera(pan->delta().x(), -pan->delta().y(), 0);
+		  }
+      }
+      g->draw(false);
+	  return true;
   }
 
   return false;
@@ -210,6 +279,10 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
 }
 //===============================================================
 bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
+  if(isGesturing) {
+	return MousePanNZoomNavigator::eventFilter(widget, e);
+  }
+
   if(currentSpecInteractorComponent){
     if(currentSpecInteractorComponent->eventFilter(widget,e))
       return true;

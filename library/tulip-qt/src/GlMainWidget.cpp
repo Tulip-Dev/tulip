@@ -90,6 +90,9 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
     								QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), _hasHulls(false), useFramebufferObject(false), glFrameBuf(NULL){
 	setFocusPolicy(Qt::StrongFocus);
 	setMouseTracking(true);
+	grabGesture(Qt::PinchGesture);
+    grabGesture(Qt::PanGesture);
+    grabGesture(Qt::SwipeGesture);
 	renderingStore=NULL;
 #ifdef __APPLE__
 	// This code is here to bug fix black screen problem on MACOSX with Qt 4.7
