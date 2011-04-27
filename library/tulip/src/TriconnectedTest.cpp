@@ -85,8 +85,10 @@ void TriconnectedTest::delNode(Graph *graph,const node) {
 }
 //=================================================================
 void TriconnectedTest::destroy(Graph *graph) {
-  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
+void TriconnectedTest::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}
 

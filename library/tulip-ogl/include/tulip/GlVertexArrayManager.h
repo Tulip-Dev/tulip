@@ -32,6 +32,7 @@
 #include <tulip/Color.h>
 #include <tulip/Size.h>
 #include <tulip/tuliphash.h>
+#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/ObservableProperty.h>
 
@@ -48,7 +49,8 @@ class GlGraphInputData;
  *
  * Class used to render edges/nodes with vertex array
  */
-class TLP_GL_SCOPE GlVertexArrayManager : public GraphObserver, public PropertyObserver {
+class TLP_GL_SCOPE GlVertexArrayManager :
+ private GraphObserver, private PropertyObserver, private Observable {
 
 public:
 
@@ -96,6 +98,8 @@ protected:
 
 	void destroy(Graph *);
 	void destroy(PropertyInterface*);
+
+	void treatEvent(const Event&);
 
 	void clearLayoutData();
 	void clearColorData();

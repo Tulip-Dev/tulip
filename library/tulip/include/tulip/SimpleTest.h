@@ -25,6 +25,7 @@
 #endif
 
 #include <tulip/tuliphash.h>
+#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 
 namespace tlp {
@@ -36,7 +37,7 @@ class Graph;
 /**
  * class for testing if the graph is simple (ie no self loops and  no multiple or parallel edges)
  */
-class TLP_SCOPE SimpleTest : public GraphObserver {
+ class TLP_SCOPE SimpleTest : private GraphObserver, private Observable {
 public:
 
 	/**
@@ -60,9 +61,12 @@ public:
 
 private:
 	SimpleTest();
-	void addEdge(Graph *, const edge);
-	void delEdge(Graph *, const edge);
-	void destroy(Graph *);
+        // override some GraphObserver methods
+        void addEdge(Graph *, const edge);
+        void delEdge(Graph *, const edge);
+        void destroy(Graph *);
+        // override Observable::treatEvent
+        void treatEvent(const Event&);
 	void deleteResult(Graph *graph);
 	static SimpleTest *instance;
 	TLP_HASH_MAP<unsigned long, bool> resultsBuffer;

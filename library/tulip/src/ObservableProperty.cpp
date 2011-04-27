@@ -61,10 +61,7 @@ void PropertyObserver::treatEvent(const Event& ev) {
       assert(false);
     }
   } else {
-    PropertyInterface* prop =
-      // From my point of view the use of dynamic_cast should be correct
-      // but it fails, so I use reinterpret_cast (pm)
-      reinterpret_cast<PropertyInterface *>(ev.sender());
+    PropertyInterface* prop = dynamic_cast<PropertyInterface *>(ev.sender());
     if (prop && ev.type() == Event::TLP_DELETE)
       destroy(prop);
   }

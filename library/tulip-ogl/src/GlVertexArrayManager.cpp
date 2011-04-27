@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <typeinfo>
 #include <GL/glew.h>
 
 #include <tulip/OpenGlConfigManager.h>
@@ -506,4 +507,14 @@ void GlVertexArrayManager::clearObservers() {
 		colorObserverActivated=false;
 	}
 }
+
+void GlVertexArrayManager::treatEvent(const Event &evt) {
+  if (typeid(evt) == typeid(GraphEvent) ||
+      (evt.type() == Event::TLP_DELETE &&
+       dynamic_cast<Graph*>(evt.sender())))
+    GraphObserver::treatEvent(evt);
+  else
+    PropertyObserver::treatEvent(evt);
+}
+
 }

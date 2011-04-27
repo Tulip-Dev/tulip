@@ -110,9 +110,6 @@ void PlanarityTest::delEdge(Graph *graph,const edge) {
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
-void PlanarityTest::reverseEdge(Graph*,const edge) {
-}
-//=================================================================
 void PlanarityTest::addNode(Graph*,const node) {
 }
 //=================================================================
@@ -124,7 +121,9 @@ void PlanarityTest::delNode(Graph *graph,const node) {
 }
 //=================================================================
 void PlanarityTest::destroy(Graph *graph) {
-  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
+void PlanarityTest::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}

@@ -20,6 +20,7 @@
 #define OUTERPLANARTEST_H
 
 #include <tulip/tuliphash.h>
+#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 
 namespace tlp {
@@ -31,7 +32,7 @@ struct node;
 /** \addtogroup graph_test */ 
 /*@{*/
 /// class for testing the outerplanarity of a graph
-class TLP_SCOPE OuterPlanarTest  : private GraphObserver {
+ class TLP_SCOPE OuterPlanarTest  : private GraphObserver, private Observable {
 public:
 
   /**
@@ -42,14 +43,18 @@ public:
   static bool isOuterPlanar(Graph *graph);
   
 private:
+  // override some GraphObserver methods
   void addEdge(Graph *,const edge);
   void delEdge(Graph *,const edge);
   void reverseEdge(Graph *,const edge);
   void addNode(Graph *,const node);
   void delNode(Graph *,const node);
   void destroy(Graph *);
+  // override Observable::treatEvent
+  void treatEvent(const Event&);
+
   bool compute(Graph *graph);
-  OuterPlanarTest() : GraphObserver(false) {}
+  OuterPlanarTest() : GraphObserver() {}
   static OuterPlanarTest* instance;
   TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };

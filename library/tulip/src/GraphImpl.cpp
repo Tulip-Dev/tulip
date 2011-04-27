@@ -116,13 +116,10 @@ GraphImpl::~GraphImpl() {
   }
   delPreviousRecorders();
 
-  notifyDestroy();
   StableIterator<Graph *> itS(getSubGraphs());
   while(itS.hasNext())
     delAllSubGraphsInternal(itS.next(), true);
-  removeGraphObservers();
-  //removeObservers();
-  //must be done here because Property proxy needs to access to the graph structure
+
   delete propertyContainer;
 }
 //----------------------------------------------------------------
@@ -152,15 +149,13 @@ void GraphImpl::freeSubGraphId(unsigned int id) {
 //----------------------------------------------------------------
 node GraphImpl::restoreNode(node newNode) {
   storage.addNode(newNode);
-  notifyAddNode(this, newNode);
-  notifyObservers();
+  notifyAddNode(newNode);
   return newNode;
 }
 //----------------------------------------------------------------
 node GraphImpl::addNode() {
   node newNode = storage.addNode();
-  notifyAddNode(this, newNode);
-  notifyObservers();
+  notifyAddNode(newNode);
   return newNode;
 }
 //----------------------------------------------------------------
@@ -178,15 +173,13 @@ void GraphImpl::restoreAdj(node n, vector<edge>& edges) {
 //----------------------------------------------------------------
 edge GraphImpl::restoreEdge(edge newEdge, const node src, const node tgt) {
   storage.addEdge(src, tgt, newEdge, false);
-  notifyAddEdge(this, newEdge);
-  notifyObservers();
+  notifyAddEdge(newEdge);
   return newEdge;
 }
 //----------------------------------------------------------------
 edge GraphImpl::addEdge(const node src, const node tgt) {
   edge newEdge = storage.addEdge(src, tgt);
-  notifyAddEdge(this, newEdge);
-  notifyObservers();
+  notifyAddEdge(newEdge);
   return newEdge;
 }
 //----------------------------------------------------------------
@@ -201,16 +194,15 @@ void GraphImpl::reserveEdges(unsigned int nb) {
 //----------------------------------------------------------------
 void GraphImpl::removeNode(const node n) {
   assert(isElement(n));
-  notifyDelNode(this, n);
+  notifyDelNode(n);
   // remove from storage and propertyContainer
   storage.removeFromNodes(n);
   propertyContainer->erase(n);
-  notifyObservers();
 }
 //----------------------------------------------------------------
 void GraphImpl::delNode(const node n, bool) {
   assert (isElement(n));
-  notifyDelNode(this, n);
+  notifyDelNode(n);
   // propagate to subgraphs
   Iterator<Graph *>*itS=getSubGraphs();
   while (itS->hasNext()) {
@@ -228,7 +220,7 @@ void GraphImpl::delNode(const node n, bool) {
     edge e = edges->next();
     node s = opposite(e, n);
     if (s != n) {
-      notifyDelEdge(this, e);
+      notifyDelEdge(e);
       propertyContainer->erase(e);
     } else
       loops.insert(e);
@@ -237,7 +229,7 @@ void GraphImpl::delNode(const node n, bool) {
     set<edge>::const_iterator it;
     for (it = loops.begin(); it!=loops.end(); ++it) {
       edge e = *it;
-      notifyDelEdge(this, e);
+      notifyDelEdge(e);
       propertyContainer->erase(e);
    }
   }
@@ -247,9 +239,6 @@ void GraphImpl::delNode(const node n, bool) {
 
   // remove from propertyContainer
   propertyContainer->erase(n);
-
-  // notification
-  notifyObservers();
 }
 //----------------------------------------------------------------
 void GraphImpl::delEdge(const edge e, bool) {
@@ -353,8 +342,7 @@ void GraphImpl::reverse(const edge e) {
   storage.reverse(e);
 
   // notification
-  notifyReverseEdge(this, e);
-  notifyObservers();
+  notifyReverseEdge(e);
 
   // propagate edge reversal on subgraphs
   Graph* sg;
@@ -381,13 +369,12 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
     return;
 
   // notification
-  notifyBeforeSetEnds(this, e);
+  notifyBeforeSetEnds(e);
 
   storage.setEnds(e, newSrc, newTgt);
 
   // notification
-  notifyAfterSetEnds(this, e);
-  notifyObservers();
+  notifyAfterSetEnds(e);
 
   // propagate edge reversal on subgraphs
   Graph* sg;
@@ -410,12 +397,10 @@ unsigned int GraphImpl::numberOfNodes()const {
 //----------------------------------------------------------------
 void GraphImpl::removeEdge(const edge e) {
   assert(isElement(e));
-  notifyDelEdge(this,e);
+  notifyDelEdge(e);
   // remove from propertyContainer and storage
   propertyContainer->erase(e);
   storage.delEdge(e);
-
-  notifyObservers();
 }
 //----------------------------------------------------------------
 bool GraphImpl::canPop() {

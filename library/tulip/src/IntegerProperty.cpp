@@ -250,6 +250,10 @@ void IntegerProperty::delSubGraph(Graph*, Graph *sg) {
   // the property no longer observes the subgraph
   sg->removeGraphObserver(this);
 }
+//=============================================================
+void IntegerProperty::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}
 //=================================================================================
 PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )

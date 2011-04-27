@@ -18,7 +18,6 @@
  */
 #include <iostream>
 #include <tulip/PropertyInterface.h>
-#include <tulip/ObservableProperty.h>
 #include <tulip/Graph.h>
 
 using namespace tlp;
@@ -32,13 +31,14 @@ PropertyInterface::~PropertyInterface() {
     std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Serious bug; you have deleted a registered graph property named '"  << name.c_str() << "'" << std::endl;
     abort();
   }
+  observableDeleted();
 }
 
-void PropertyInterface::addPropertyObserver(PropertyObserver *pObs) {
+void PropertyInterface::addPropertyObserver(Observable *pObs) {
   addListener(pObs);
 }
 
-void PropertyInterface::removePropertyObserver(PropertyObserver *pObs) {
+void PropertyInterface::removePropertyObserver(Observable *pObs) {
   removeListener(pObs);
 }
 

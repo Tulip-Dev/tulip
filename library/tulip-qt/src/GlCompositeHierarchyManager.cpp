@@ -52,10 +52,6 @@ namespace tlp {
 		}
 	}
 	
-	GlCompositeHierarchyManager::~GlCompositeHierarchyManager() {
-		
-	}
-
 	const tlp::Color GlCompositeHierarchyManager::getColor() {
 		tlp::Color current = this->_fillColors.at(_currentColor++);
 		_currentColor = _currentColor % _fillColors.size();
@@ -127,6 +123,11 @@ void GlCompositeHierarchyManager::addNode(tlp::Graph* source, tlp::node) {
 			}
 		}
 	}
+
+  void GlCompositeHierarchyManager::treatEvent(const Event& evt) {
+    GraphObserver::treatEvent(evt);
+  }
+      
 	
 	void GlCompositeHierarchyManager::update(std::set< Observable* >::iterator, std::set< Observable* >::iterator) {
 	  if(_shouldRecreate) {
@@ -146,7 +147,7 @@ void GlCompositeHierarchyManager::addNode(tlp::Graph* source, tlp::node) {
 	  _shouldRecreate = false;
 	}
 		
-	void GlCompositeHierarchyManager::observableDestroyed(Observable* ){
+	void GlCompositeHierarchyManager::observableDestroyed(Observable*){
 	}
 	
 	void GlCompositeHierarchyManager::setGraph(tlp::Graph* graph) {

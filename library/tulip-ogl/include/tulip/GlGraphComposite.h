@@ -21,8 +21,10 @@
 
 #include <tulip/GlComposite.h>
 
+#include <typeinfo>
 #include <vector>
 
+#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 
 #include <tulip/GlGraphRenderingParameters.h>
@@ -39,7 +41,8 @@ namespace tlp {
    *
    * GlComposite use to represent a graph with nodes, metanodes and edges
    */
-  class TLP_GL_SCOPE GlGraphComposite : public GlComposite, public GraphObserver, public PropertyObserver {
+  class TLP_GL_SCOPE GlGraphComposite : public GlComposite,
+    private GraphObserver, private PropertyObserver, public Observable {
 
   public:
 
@@ -47,7 +50,6 @@ namespace tlp {
      * Build a GlGraphComposite with the graph data
      */
     GlGraphComposite(Graph* graph);
-    ~GlGraphComposite();
 
     /**
      * Return the rendering parameters use for rendering
@@ -172,6 +174,16 @@ namespace tlp {
      * Function use by the GraphObserver when the graph is delete
      */
     virtual void destroy(Graph *);
+
+    // override Observable::treatEvent
+    void treatEvent(const Event& evt) {
+      if (typeid(evt) == typeid(GraphEvent) ||
+	  (evt.type() == Event::TLP_DELETE &&
+	   dynamic_cast<Graph*>(evt.sender())))
+	GraphObserver::treatEvent(evt);
+      else
+	PropertyObserver::treatEvent(evt);
+    }
 
     void buildSortedList();
     void acceptVisitorForNodes(Graph *graph,GlSceneVisitor *visitor);

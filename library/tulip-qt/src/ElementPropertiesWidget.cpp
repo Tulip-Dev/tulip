@@ -65,11 +65,6 @@ namespace tlp {
 	    this,SLOT(propertyTableValueChanged(int,int)));
   }
   //==========================================
-  ElementPropertiesWidget::~ElementPropertiesWidget() {
-    if(graph)
-      graph->removeGraphObserver(this);
-  }
-  //==========================================
   QStringList ElementPropertiesWidget::getCurrentListedProperties() const{
     switch(displayMode) {
     case NODE: return nodeListedProperties;
@@ -366,5 +361,8 @@ namespace tlp {
   void ElementPropertiesWidget::destroy(Graph *) {
     setGraph(0, true);
   }
-
+  //==========================================
+  void ElementPropertiesWidget::treatEvent(const Event& evt) {
+    GraphObserver::treatEvent(evt);
+  }
 }

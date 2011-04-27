@@ -150,6 +150,7 @@ namespace tlp {
       **/
     class  TLP_SCOPE Event {
         friend class Observable;
+	friend class Graph;
     public:
         enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID};
         virtual ~Event();
@@ -516,12 +517,12 @@ namespace tlp {
   /**
    * @brief use for old observer tulip compatibility
   */
-  void addObserver(Observable * const obs);
+  void addObserver(Observable * const obs) const;
 
   /**
    * @brief use for old observer tulip compatibility
   */
-  void addListener(Observable * const obs);
+  void addListener(Observable * const obs) const;
 
 
         /**
@@ -534,12 +535,12 @@ namespace tlp {
           * problem in your application. Objects that are listening/observing could need to receive
           * the events to work properly.
           */
-        void removeOnlooker(const Observable &, OLOEDGETYPE type);
+        void removeOnlooker(const Observable &, OLOEDGETYPE type) const;
         /**
    * @brief use for old observer tulip compatibility
    */
-        void  removeObserver(Observable  * const obs);
-        void  removeListener(Observable  * const obs);
+        void  removeObserver(Observable  * const obs) const;
+        void  removeListener(Observable  * const obs) const;
 
 	/**
 	 * @brief use for old observer tulip compatibility
@@ -633,7 +634,7 @@ namespace tlp {
           * In case of nested unholding (almost never), calling that function inside hold/unhold block
           * can make the Observer receive an event that has been sent before it was Observing the object.
           */
-        void addOnlooker(const Observable &, OLOEDGETYPE type);
+        void addOnlooker(const Observable &, OLOEDGETYPE type) const;
 
         /**
           * @brief Enable to send an event to all Observer/Listener

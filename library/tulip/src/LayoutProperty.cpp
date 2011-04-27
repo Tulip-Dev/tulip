@@ -63,11 +63,6 @@ LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeRevers
   setMetaValueCalculator(&mvLayoutCalculator);
 }
 //======================================================
-LayoutProperty::~LayoutProperty() {
-  if (graph)
-    graph->removeGraphObserver(this);
-}
-//======================================================
 Coord LayoutProperty::getMax(Graph *sg) {
   if (sg==0) sg=graph;
   unsigned int sgi = sg->getId();
@@ -646,6 +641,10 @@ PropertyInterface* LayoutProperty::clonePrototype(Graph * g, const std::string& 
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
+}
+//=============================================================
+void LayoutProperty::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
 }
 //=================================================================================
 PropertyInterface* CoordVectorProperty::clonePrototype(Graph * g, const std::string& n) {

@@ -35,9 +35,8 @@ Graph *GraphDecorator::addSubGraph(BooleanProperty *selection,
 
 //============================================================
 void GraphDecorator::delSubGraph(Graph *s){
-  notifyDelSubGraph(this, s);
+  notifyDelSubGraph(s);
   graph_component->delSubGraph(s);
-  notifyObservers();
 }
 
 //============================================================
@@ -62,9 +61,8 @@ void GraphDecorator::clearSubGraphs(){
 
 //============================================================
 void GraphDecorator::delAllSubGraphs(Graph *s) {
-  notifyDelSubGraph(this, s);
+  notifyDelSubGraph(s);
   graph_component->delAllSubGraphs(s);
-  notifyObservers();
 }
 
 //============================================================
@@ -147,7 +145,7 @@ void GraphDecorator::setEnds(const edge e, const node src, const node tgt) {
 
 //============================================================
 void GraphDecorator::reverse(const edge e){
-  notifyReverseEdge(this, e);
+  notifyReverseEdge(e);
   graph_component->reverse(e);
 }
 
@@ -233,8 +231,7 @@ bool GraphDecorator::isMetaEdge(const edge e) const{
 //============================================================
 node GraphDecorator::addNode(){
   node newNode = graph_component->addNode();
-  notifyAddNode(this, newNode);
-  notifyObservers();
+  notifyAddNode(newNode);
   return newNode;
 }
 
@@ -257,8 +254,7 @@ void GraphDecorator::removeNode(const node){
 //============================================================
 edge GraphDecorator::addEdge(const node n, const node n2){
   edge newEdge = graph_component->addEdge(n, n2);
-  notifyAddEdge(this, newEdge);
-  notifyObservers();
+  notifyAddEdge(newEdge);
   return newEdge;
 }
 
@@ -280,9 +276,8 @@ void GraphDecorator::removeEdge(const edge){
 
 //============================================================
 void GraphDecorator::delNode(const node n, bool deleteInAllGraphs){
-  notifyDelNode(this, n);
+  notifyDelNode(n);
   graph_component->delNode(n, deleteInAllGraphs);
-  notifyObservers();
 }
 
 //============================================================ 
@@ -292,9 +287,8 @@ void GraphDecorator::delAllNode(const node n){
 
 //============================================================
 void GraphDecorator::delEdge(const edge e, bool deleteInAllGraphs){
-  notifyDelEdge(this,e);
+  notifyDelEdge(e);
   graph_component->delEdge(e, deleteInAllGraphs);
-  notifyObservers();
 }
 
 //============================================================
@@ -377,16 +371,14 @@ bool GraphDecorator::existLocalProperty(const std::string&name){
 
 //============================================================
 void GraphDecorator::delLocalProperty(const std::string&name){
-  notifyDelLocalProperty(this, name);
+  notifyDelLocalProperty(name);
   graph_component->delLocalProperty(name);
-  notifyObservers();
 }
 
 //============================================================
 void GraphDecorator::addLocalProperty(const std::string &name, PropertyInterface *prop) {
   graph_component->addLocalProperty(name, prop);
-  notifyAddLocalProperty(this, name);
-  notifyObservers();
+  notifyAddLocalProperty(name);
 }
 
 //============================================================

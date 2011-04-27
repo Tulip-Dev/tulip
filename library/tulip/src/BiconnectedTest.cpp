@@ -192,8 +192,10 @@ void BiconnectedTest::delNode(Graph *graph,const node) {
 void BiconnectedTest::destroy(Graph *graph) {
   //  cerr << __PRETTY_FUNCTION__ << (unsigned)graph << endl;
   //  cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
-  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
+void BiconnectedTest::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}
 
