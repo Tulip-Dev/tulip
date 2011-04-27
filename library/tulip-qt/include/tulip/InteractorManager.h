@@ -49,24 +49,24 @@ namespace tlp {
     }
 
     /**
-     * Load interactor plugins with PluginLoader : plug
+     * Loads interactor plugins
      */
     void loadPlugins(PluginLoader *plug=0);
 
     /**
-     * Get interactor with given name
+     * Gets interactor with given name
      */
     Interactor* getInteractor(const std::string &name);
 
     /**
-     * Return list of compatible interactor with give View
+     * Returns a list of compatible interactors with the view identified by viewName
      */
     std::list<std::string> getCompatibleInteractors(const std::string &viewName);
 
     /**
-     * Return priority sorted map of compatible interactor with give View
+     * Returns list sorted map of compatible interactor with give View
      */
-    std::multimap<int,std::string> getSortedCompatibleInteractors(const std::string &viewName);
+    std::list<std::string> getSortedCompatibleInteractors(const std::string &viewName);
 
   private:
 

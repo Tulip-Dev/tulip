@@ -46,15 +46,15 @@ QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
     }
 
     // Get interactors for this view and add them to view
-    multimap<int,string> interactorsNamesAndPriorityMap;
+    list<string> interactorsNameList;
     if(newView->getRealViewName()=="")
-      interactorsNamesAndPriorityMap=InteractorManager::getInst().getSortedCompatibleInteractors(verifiedName);
+    	interactorsNameList=InteractorManager::getInst().getSortedCompatibleInteractors(verifiedName);
     else
-      interactorsNamesAndPriorityMap=InteractorManager::getInst().getSortedCompatibleInteractors(newView->getRealViewName());
+    	interactorsNameList=InteractorManager::getInst().getSortedCompatibleInteractors(newView->getRealViewName());
 
     list<Interactor *> interactorsList;
-    for(multimap<int,string>::reverse_iterator it=interactorsNamesAndPriorityMap.rbegin();it!=interactorsNamesAndPriorityMap.rend();++it){
-      interactorsList.push_back(InteractorManager::getInst().getInteractor((*it).second));
+    for(list<string>::iterator it=interactorsNameList.begin();it!=interactorsNameList.end();++it){
+      interactorsList.push_back(InteractorManager::getInst().getInteractor(*it));
     }
     newView->setInteractors(interactorsList);
 
