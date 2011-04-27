@@ -177,7 +177,7 @@ public:
 	 */
 	bool selectGlEntities(const int x, const int y,
 			const int width, const int height,
-			std::vector<tlp::GlEntity *>
+			std::vector<tlp::GlSimpleEntity *>
 	&pickedEntities,
 	tlp::GlLayer* layer=NULL);
 	/**
@@ -186,7 +186,7 @@ public:
 	 * twelve pixels.
 	 */
 	bool selectGlEntities(const int x, const int y,
-			std::vector<tlp::GlEntity *>
+			std::vector<tlp::GlSimpleEntity *>
 	&pickedEntities,
 	tlp::GlLayer* layer=NULL);
 

@@ -174,7 +174,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 
     //  cerr << "edit pos:" << editPosition << endl;
 
-    vector < GlEntity *> select;
+    vector < GlSimpleEntity *> select;
     switch(qMouseEv->buttons()) {
     case Qt::LeftButton : {
       // first ensure that something is selected
