@@ -495,7 +495,7 @@ void GlMainWidget::makeCurrent() {
 //==================================================
 bool GlMainWidget::selectGlEntities(const int x, const int y,
 		const int width, const int height,
-		std::vector<GlEntity *> &pickedEntities,
+		std::vector<GlSimpleEntity *> &pickedEntities,
 		GlLayer* layer) {
 	makeCurrent();
 	std::vector<unsigned long> entities;
@@ -504,13 +504,13 @@ bool GlMainWidget::selectGlEntities(const int x, const int y,
 			layer,
 			entities);
 	for(std::vector<unsigned long>::iterator it=entities.begin();it!=entities.end();++it){
-		pickedEntities.push_back((GlEntity*)(*it));
+		pickedEntities.push_back((GlSimpleEntity*)(*it));
 	}
 	return number;
 }
 //==================================================
 bool GlMainWidget::selectGlEntities(const int x, const int y,
-		std::vector <GlEntity *> &pickedEntities,
+		std::vector <GlSimpleEntity *> &pickedEntities,
 		GlLayer* layer) {
 	return selectGlEntities(x,y,2,2,pickedEntities,layer);
 }

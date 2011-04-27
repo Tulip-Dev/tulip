@@ -81,7 +81,7 @@ namespace tlp {
     GlTriangle targetTriangle;
     GlCircle sourceCircle;
     GlComposite *circleString;
-    std::vector <GlEntity * > select;
+    std::vector <GlSimpleEntity * > select;
     bool edgeSelected;
     edge mEdge;
     node mNode;
