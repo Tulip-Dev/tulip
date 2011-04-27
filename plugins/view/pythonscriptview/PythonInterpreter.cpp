@@ -29,7 +29,9 @@
 
 #include <QtCore/QDir>
 #include <QtGui/QVBoxLayout>
+#include <QtGui/QHBoxLayout>
 #include <QtGui/QApplication>
+#include <QtGui/QPushButton>
 
 #include <sip.h>
 
@@ -40,14 +42,39 @@
 using namespace std;
 
 const string pluginUtils =
+		"from tulip import *\n"
+		"pluginFactory = {}\n"
+		"pluginModules = {}\n"
+
+		"def getCallingModuleName():\n"
+		"   import sys\n"
+		"   f = sys._current_frames().values()[0]\n"
+		"   f = f.f_back\n"
+		"   return f.f_back.f_globals['__name__']\n"
+
+		"def reloadTulipPythonPlugin(module):\n"
+		"   code = \"\"\n"
+		"   code += \"import \" + module + \"\\n\"\n"
+		"   code += \"reload(\" + module + \")\\n\"\n"
+		"   exec(code)\n"
+
+		"def reloadTulipPythonPlugins():\n"
+		"   code = \"\"\n"
+		"   for module in pluginModules.keys():\n"
+		"      reloadTulipPythonPlugin(module)\n"
 
 		"def registerAlgorithmPlugin(pluginClassName, algoName, author, date, info, release):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.AlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.AlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -66,12 +93,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerAlgorithmPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.AlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.AlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -90,12 +122,17 @@ const string pluginUtils =
 		"	exec(code) in globals(), locals()\n"
 
 		"def registerLayoutPlugin(pluginClassName, algoName, author, date, info, release):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.LayoutAlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.LayoutAlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -114,12 +151,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerLayoutPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.LayoutAlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.LayoutAlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -138,12 +180,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerDoublePlugin(pluginClassName, algoName, author, date, info, release):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.DoubleAlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.DoubleAlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -162,12 +209,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerDoublePluginOfGroup(pluginClassName, algoName, author, date, info, release, group):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.DoubleAlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.DoubleAlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -186,12 +238,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerIntegerPlugin(pluginClassName, algoName, author, date, info, release):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.IntegerAlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.IntegerAlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -210,12 +267,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerIntegerPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.IntegerAlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.IntegerAlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -234,12 +296,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerBooleanPlugin(pluginClassName, algoName, author, date, info, release):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.BooleanAlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.BooleanAlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -258,12 +325,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerBooleanPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.BooleanAlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.BooleanAlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -282,12 +354,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerSizePlugin(pluginClassName, algoName, author, date, info, release):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.SizeAlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.SizeAlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -306,12 +383,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerSizePluginOfGroup(pluginClassName, algoName, author, date, info, release, group):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.SizeAlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.SizeAlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -330,12 +412,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerColorPlugin(pluginClassName, algoName, author, date, info, release):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.ColorAlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.ColorAlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -354,12 +441,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerColorPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.ColorAlgorithmFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.ColorAlgorithmFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -378,12 +470,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerImportPlugin(pluginClassName, algoName, author, date, info, release):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.ImportModuleFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.ImportModuleFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -402,12 +499,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerImportPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.ImportModuleFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.ImportModuleFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -426,12 +528,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerExportPlugin(pluginClassName, algoName, author, date, info, release):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.ExportModuleFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.ExportModuleFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -450,12 +557,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 		"def registerExportPluginOfGroup(pluginClassName, algoName, author, date, info, release, group):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.ExportModuleFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.ExportModuleFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -473,37 +585,20 @@ const string pluginUtils =
 		"	code += \"pluginFactory[algoName] = \" + pluginClassName + \"Factory()\\n\"\n"
 		"	exec(code)\n"
 
-		//		"def registerInteractorPlugin(pluginClassName, algoName, author, date, info, release):\n"
-		//		"	code = \"class \" + pluginClassName + \"Factory(tlp.InteractorFactory):\\n\"\n"
-		//		"	code += \"\\tdef __init__(self):\\n\"\n"
-		//		"	code += \"\\t\\ttlp.InteractorFactory.__init__(self)\\n\"\n"
-		//		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
-		//		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		//		"	code += \"\\t\\treturn \" + pluginClassName + \"()\\n\"\n"
-		//		"	code += \"\\tdef getName(self):\\n\"\n"
-		//		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
-		//		"	code += \"\\tdef getAuthor(self):\\n\"\n"
-		//		"	code += \"\\t\\t return \\\"\" + author + \"\\\"\\n\"\n"
-		//		"	code += \"\\tdef getGroup(self):\\n\"\n"
-		//		"	code += \"\\t\\t return str(\"\")\\n\"\n"
-		//		"	code += \"\\tdef getDate(self):\\n\"\n"
-		//		"	code += \"\\t\\treturn \\\"\" + date + \"\\\"\\n\"\n"
-		//		"	code += \"\\tdef getInfo(self):\\n\"\n"
-		//		"	code += \"\\t\\treturn \\\"\" + info + \"\\\"\\n\"\n"
-		//		"	code += \"\\tdef getRelease(self):\\n\"\n"
-		//		"	code += \"\\t\\treturn \\\"\" + release + \"\\\"\\n\"\n"
-		//		"	code += \"\\tdef getTulipRelease(self):\\n\"\n"
-		//		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
-		//		"	code += \"pluginFactory[algoName] = \" + pluginClassName + \"Factory()\\n\"\n"
-		//		"	exec(code)\n"
+
 
 		"def registerGlyphPlugin(pluginClassName, glyphName, author, date, info, release, glyphId):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
 		"	code = \"class \" + pluginClassName + \"Factory(tlp.GlyphFactory):\\n\"\n"
 		"	code += \"\\tdef __init__(self):\\n\"\n"
 		"	code += \"\\t\\ttlp.GlyphFactory.__init__(self)\\n\"\n"
 		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
 		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		"	code += \"\\t\\treturn \" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
 		"	code += \"\\tdef getName(self):\\n\"\n"
 		"	code += \"\\t\\t return \\\"\" + glyphName + \"\\\"\\n\"\n"
 		"	code += \"\\tdef getAuthor(self):\\n\"\n"
@@ -523,46 +618,96 @@ const string pluginUtils =
 		"	code += \"pluginFactory[glyphName] = \" + pluginClassName + \"Factory()\\n\"\n"
 		"	exec(code)\n"
 
-		//		"def registerViewPlugin(pluginClassName, viewName, author, date, info, release):\n"
-		//		"	code = \"class \" + pluginClassName + \"Factory(tlp.ViewFactory):\\n\"\n"
-		//		"	code += \"\\tdef __init__(self):\\n\"\n"
-		//		"	code += \"\\t\\ttlp.ViewFactory.__init__(self)\\n\"\n"
-		//		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
-		//		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
-		//		"	code += \"\\t\\treturn \" + pluginClassName + \"()\\n\"\n"
-		//		"	code += \"\\tdef getName(self):\\n\"\n"
-		//		"	code += \"\\t\\t return \\\"\" + viewName + \"\\\"\\n\"\n"
-		//		"	code += \"\\tdef getAuthor(self):\\n\"\n"
-		//		"	code += \"\\t\\t return \\\"\" + author + \"\\\"\\n\"\n"
-		//		"	code += \"\\tdef getGroup(self):\\n\"\n"
-		//		"	code += \"\\t\\t return str(\"\")\\n\"\n"
-		//		"	code += \"\\tdef getDate(self):\\n\"\n"
-		//		"	code += \"\\t\\treturn \\\"\" + date + \"\\\"\\n\"\n"
-		//		"	code += \"\\tdef getInfo(self):\\n\"\n"
-		//		"	code += \"\\t\\treturn \\\"\" + info + \"\\\"\\n\"\n"
-		//		"	code += \"\\tdef getRelease(self):\\n\"\n"
-		//		"	code += \"\\t\\treturn \\\"\" + release + \"\\\"\\n\"\n"
-		//		"	code += \"\\tdef getTulipRelease(self):\\n\"\n"
-		//		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
-		//		"	code += \"pluginFactory[viewName] = \" + pluginClassName + \"Factory()\\n\"\n"
-		//		"	exec(code)\n"
+#ifdef HAS_TULIP_QT_PYTHON_BINDINGS
+		"def registerInteractorPlugin(pluginClassName, algoName, author, date, info, release):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
+		"	code = \"class \" + pluginClassName + \"Factory(tlp.InteractorFactory):\\n\"\n"
+		"	code += \"\\tdef __init__(self):\\n\"\n"
+		"	code += \"\\t\\ttlp.InteractorFactory.__init__(self)\\n\"\n"
+		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
+		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"()\\n\"\n"
+		"	code += \"\\tdef getName(self):\\n\"\n"
+		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getAuthor(self):\\n\"\n"
+		"	code += \"\\t\\t return \\\"\" + author + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getGroup(self):\\n\"\n"
+		"	code += \"\\t\\t return str(\"\")\\n\"\n"
+		"	code += \"\\tdef getDate(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + date + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getInfo(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + info + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getRelease(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + release + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getTulipRelease(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
+		"	code += \"pluginFactory[algoName] = \" + pluginClassName + \"Factory()\\n\"\n"
+		"	exec(code)\n"
+
+		"def registerViewPlugin(pluginClassName, viewName, author, date, info, release):\n"
+		"	if viewName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
+		"	code = \"class \" + pluginClassName + \"Factory(tlp.ViewFactory):\\n\"\n"
+		"	code += \"\\tdef __init__(self):\\n\"\n"
+		"	code += \"\\t\\ttlp.ViewFactory.__init__(self)\\n\"\n"
+		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
+		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"()\\n\"\n"
+		"	code += \"\\tdef getName(self):\\n\"\n"
+		"	code += \"\\t\\t return \\\"\" + viewName + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getAuthor(self):\\n\"\n"
+		"	code += \"\\t\\t return \\\"\" + author + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getGroup(self):\\n\"\n"
+		"	code += \"\\t\\t return str(\"\")\\n\"\n"
+		"	code += \"\\tdef getDate(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + date + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getInfo(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + info + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getRelease(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + release + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getTulipRelease(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
+		"	code += \"pluginFactory[viewName] = \" + pluginClassName + \"Factory()\\n\"\n"
+		"	exec(code)\n"
+#endif
 		;
 
-ConsoleOutputDialog::ConsoleOutputDialog(QWidget *parent) : QDialog(parent) {
+ConsoleOutputDialog::ConsoleOutputDialog(QWidget *parent) : QDialog(parent, Qt::Dialog | Qt::WindowStaysOnTopHint) {
 	setWindowTitle("Python Interpreter Output");
 	consoleWidget = new QPlainTextEdit(this);
+	QHBoxLayout *hLayout = new QHBoxLayout();
+	QPushButton *clearButton = new QPushButton("Clear");
+	connect(clearButton, SIGNAL(clicked()), consoleWidget, SLOT(clear()));
+	QPushButton *closeButton = new QPushButton("Close");
+	connect(closeButton, SIGNAL(clicked()), this, SLOT(hideConsoleOutputDialog()));
+	hLayout->addWidget(clearButton);
+	hLayout->addWidget(closeButton);
 	QVBoxLayout *layout = new QVBoxLayout();
 	layout->addWidget(consoleWidget);
+	layout->addLayout(hLayout);
 	setLayout(layout);
 	connect(consoleWidget, SIGNAL(textChanged()), this, SLOT(showOnOutputWrite()));
-	resize(400,200);
-	setModal(true);
+	resize(400,300);
 }
 
 
 void ConsoleOutputDialog::showOnOutputWrite() {
-	if (!isVisible())
+	if (!isVisible()) {
+		move(lastPos);
 		show();
+	}
+}
+
+void ConsoleOutputDialog::hideConsoleOutputDialog() {
+	lastPos = pos();
+	hide();
 }
 
 PythonInterpreter PythonInterpreter::instance;
@@ -621,7 +766,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 	// allow to avoid segfaults when trying to instantiate the plugin outside the Tulip GUI (for instance, with tulip_check_pl)
 	if (QApplication::instance()) {
 
-// hack for linux in order to be able to load dynamic python modules installed on the system (like numpy, matplotlib and other cool stuffs)
+		// hack for linux in order to be able to load dynamic python modules installed on the system (like numpy, matplotlib and other cool stuffs)
 #ifndef WIN32	
 		string libPythonName = string("libpython") + pythonVersion;
 #ifdef __APPLE__
@@ -644,15 +789,15 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 
 			runString("import sys; import scriptengine ; sys.stdout = scriptengine.ConsoleOutput(False); sys.stderr = scriptengine.ConsoleOutput(True);\n");
 
-
 			setDefaultConsoleWidget();
 
 			addModuleSearchPath(tlp::TulipLibDir);
-			runString("import sip; import stl; from tulip import *;from tulipogl import *");
-			runString("pluginFactory = {}");
 
-			runString(pluginUtils);
-			string pythonPluginsPath = tlp::TulipLibDir + "tlp/python/";
+			runString("from tulip import *;from tulipogl import *");
+
+			registerNewModuleFromString("tulipplugins", pluginUtils);
+
+			string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
 			addModuleSearchPath(pythonPluginsPath);
 
 			QDir pythonPluginsDir(pythonPluginsPath.c_str());
@@ -661,15 +806,9 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 			QFileInfoList fileList = pythonPluginsDir.entryInfoList(nameFilter);
 			for (int i = 0 ; i < fileList.size() ; ++i) {
 				QFileInfo fileInfo = fileList.at(i);
-				QFile file(fileInfo.absoluteFilePath());
-				if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-					QString pluginCode;
-					while (!file.atEnd()) {
-						pluginCode += file.readLine();
-					}
-					file.close();
-					runString(pluginCode.toStdString());
-				}
+				QString moduleName = fileInfo.fileName();
+				moduleName.replace(".py", "");
+				runString("import " + moduleName.toStdString());
 			}
 			// some external modules (like numpy) overrides the SIGINT handler at import
 			// reinstall the default one, otherwise Tulip can not be interrupted by hitting Ctrl-C in a console
