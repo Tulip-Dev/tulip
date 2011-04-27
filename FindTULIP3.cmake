@@ -67,7 +67,7 @@ STRING(REGEX MATCH "[0-9]*\\${TulipVersionSeparator}[0-9]*"
 ENDIF()
 
 # No effect if TULIP_DIR was already given
-IF(TULIP_INCLUDE_DIR)
+IF(TULIP_INCLUDE_DIR AND NOT TULIP_DIR)
   SET(TULIP_DIR ${TULIP_INCLUDE_DIR}/..)
 ENDIF()
 
