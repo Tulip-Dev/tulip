@@ -72,7 +72,7 @@ public:
 
 static ObserverGTest* observer;
 
-class GraphObserverTest :public GraphObserver {
+class GraphObserverTest :public GraphObserver, public Observable {
 public:
 
   vector<Graph*> graphs;
@@ -153,6 +153,9 @@ public:
   }
   void delLocalProperty(Graph* g, const string& name) {
     graphs.push_back(g), pName = name;
+  }
+  virtual void treatEvent(const Event& evt) {
+    GraphObserver::treatEvent(evt);
   }
 };  
 

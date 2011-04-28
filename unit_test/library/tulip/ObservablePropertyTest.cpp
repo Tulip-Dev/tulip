@@ -79,7 +79,7 @@ static ObserverPTest* observer;
 
 // this class will capture
 // everything that will happen to our properties
-class PropertyObserverTest :public PropertyObserver {
+class PropertyObserverTest :public PropertyObserver, public Observable {
 public:
   std::set<PropertyInterface*> properties;
   node lastNode;
@@ -121,6 +121,9 @@ public:
   }
   virtual void destroy(PropertyInterface* prop){
     properties.insert(prop);
+  }
+  virtual void treatEvent(const Event& evt) {
+    PropertyObserver::treatEvent(evt);
   }
 };
 
