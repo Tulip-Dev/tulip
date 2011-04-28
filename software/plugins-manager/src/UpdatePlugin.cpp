@@ -304,7 +304,7 @@ namespace tlp {
     emit installPart(distPluginInfo.name,currentPart,partNumber);
   }
 
-  void UpdatePlugin::copyFile(const QDir& oldDir,const QString& oldName,const QDir& newDir,const QString& newName){
+  void UpdatePlugin::moveFile(const QDir& oldDir,const QString& oldName,const QDir& newDir,const QString& newName){
     QFile oldFile(QDir::toNativeSeparators(oldDir.absolutePath()+QString("/")+oldName));
     QFile newFile(QDir::toNativeSeparators(newDir.absolutePath()+QString("/")+newName));
     oldFile.open(QIODevice::ReadOnly);
@@ -353,9 +353,9 @@ namespace tlp {
             QDir tmpDir=dstDir.absolutePath()+"/"+line.split("/").first();
             if(!tmpDir.exists())
               dstDir.mkpath(line.split("/").first());
-            copyFile(srcDir,line.split("/").last(),tmpDir,line.split("/").last());
+            moveFile(srcDir,line.split("/").last(),tmpDir,line.split("/").last());
           }else{
-            copyFile(srcDir,line,dstDir,line);
+            moveFile(srcDir,line,dstDir,line);
           }
         }else{
           if(line.contains("/"))
