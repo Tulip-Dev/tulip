@@ -61,6 +61,8 @@ namespace tlp {
     header.setValue( "User-Agent", "Tulip Agent");
 
     http.setHost( url.host() );
+    QNetworkProxy proxy=getProxy();
+    http.setProxy(proxy.hostName(), proxy.port(), proxy.user(), proxy.password());
 
     outFile=new QFile(outFileName.c_str());
     outFile->open(QIODevice::ReadWrite);
