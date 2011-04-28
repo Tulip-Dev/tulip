@@ -312,6 +312,7 @@ namespace tlp {
     newFile.write(oldFile.readAll());
     oldFile.close();
     newFile.close();
+    oldFile.remove();
   }
 
   void UpdatePlugin::installWhenRestartTulip() {
