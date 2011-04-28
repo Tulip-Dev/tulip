@@ -107,6 +107,14 @@ void DataSet::setData(const std::string &str, const DataType* value) {
   data.push_back(std::pair<std::string, tlp::DataType*>(str, val));
 }
 
+unsigned int DataSet::size() const {
+  return (unsigned int) data.size();
+}
+
+bool DataSet::empty() const {
+  return data.empty();
+}
+
 Iterator< pair<string, DataType*> >* DataSet::getValues() const {
   list< pair<string, DataType*> >::const_iterator begin = data.begin();
   list< pair<string, DataType*> >::const_iterator end = data.end();
