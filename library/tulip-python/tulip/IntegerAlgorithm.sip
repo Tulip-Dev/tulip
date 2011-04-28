@@ -45,7 +45,7 @@ protected:
 	
 };
 
-class IntegerAlgorithmFactory : tlp::Plugin {
+class IntegerAlgorithmFactory : tlp::PluginInfoInterface {
 %TypeHeaderCode
 #include <tulip/TemplateFactory.h>
 %End

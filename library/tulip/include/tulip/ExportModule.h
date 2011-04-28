@@ -50,7 +50,7 @@ public:
   DataSet *dataSet;
 };
 
-class ExportModuleFactory:public Plugin{
+class ExportModuleFactory:public PluginInfoInterface{
 public:
   static TLP_SCOPE TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext > *factory;
   static void initFactory() {

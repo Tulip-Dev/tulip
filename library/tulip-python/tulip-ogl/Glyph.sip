@@ -63,7 +63,7 @@ namespace tlp {
   	
   	
   	
-  	class GlyphFactory : tlp::Plugin {
+  	class GlyphFactory : tlp::PluginInfoInterface {
 %TypeHeaderCode
 #include <tulip/Glyph.h>
 %End  	

@@ -151,7 +151,7 @@ namespace tlp {
 
   };
 
-  class TLP_QT_SCOPE InteractorFactory: public Plugin {
+  class TLP_QT_SCOPE InteractorFactory: public PluginInfoInterface {
   public:
     virtual ~InteractorFactory() {}
     ///

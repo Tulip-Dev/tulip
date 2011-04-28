@@ -268,7 +268,7 @@ namespace tlp {
   /**
    * @brief This class should only be used by the plugin macros.
    **/
-  class TLP_QT_SCOPE ViewFactory: public Plugin {
+  class TLP_QT_SCOPE ViewFactory: public PluginInfoInterface {
   public:
     virtual ~ViewFactory() {}
     ///

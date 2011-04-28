@@ -46,7 +46,7 @@ protected:
 	
 };
 
-class DoubleAlgorithmFactory : tlp::Plugin {
+class DoubleAlgorithmFactory : tlp::PluginInfoInterface {
 %TypeHeaderCode
 #include <tulip/TemplateFactory.h>
 %End
