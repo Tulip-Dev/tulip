@@ -404,7 +404,8 @@ namespace tlp {
                 sel.setAllNodeValue(false);
                 sel.setAllEdgeValue(false);
                 clusterIndex[id] = clusterIndex[supergraphId]->addSubGraph(&sel, id);
-                clusterIndex[id]->setAttribute("name", name);
+                if (name.size())
+		  clusterIndex[id]->setAttribute("name", name);
                 return true;
             }
             return false;
@@ -464,11 +465,15 @@ namespace tlp {
         int clusterId, supergraphId;
         TLPClusterBuilder(TLPGraphBuilder *graphBuilder, int supergraph=0):graphBuilder(graphBuilder), supergraphId(supergraph){}
         bool addInt(const int id) {
-            clusterId = id;
-            return true;
+	  clusterId = id;
+	  if (graphBuilder->version > 2.2)
+	    return graphBuilder->addCluster(id, std::string(), supergraphId);
+	  return true;
         }
         bool addString(const std::string& str) {
-            return graphBuilder->addCluster(clusterId , str, supergraphId);
+	  if (graphBuilder->version < 2.3)
+	    return graphBuilder->addCluster(clusterId, str, supergraphId);
+	  return true;
         }
         bool addStruct(const std::string& structName, TLPBuilder*&newBuilder);
         bool addNode (int nodeId) {

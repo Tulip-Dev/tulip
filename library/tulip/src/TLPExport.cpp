@@ -135,7 +135,7 @@ public:
     pluginProgress->setComment("Saving Graph Elements");
     pluginProgress->progress(progress, graph->numberOfEdges() + graph->numberOfNodes());
     if (graph->getSuperGraph() != graph) {
-      os << "(cluster " << graph->getId() << " \"" << convert(graph->getAttribute<string>("name")) << "\"" << endl;
+      os << "(cluster " << graph->getId() << endl;
       Iterator<node> *itN = graph->getNodes();
       node beginNode, previousNode;
       unsigned int progupdate = 1 + (graph->numberOfEdges() + graph->numberOfNodes()) / 100;
@@ -410,9 +410,12 @@ public:
   }
   //=====================================================
   void saveAttributes(ostream &os, Graph *graph) {
-    os << "(graph_attributes " << graph->getId() << " ";
-    DataSet::write(os, graph->getAttributes());
-    os << ")" << endl;
+    const DataSet& attributes = graph->getAttributes();
+    if (!attributes.empty()) {
+      os << "(graph_attributes " << graph->getId() << " ";
+      DataSet::write(os, attributes);
+      os << ")" << endl;
+    }
     // save subgraph attributes
     Iterator<Graph *> *itS = graph->getSubGraphs();
     while (itS->hasNext())
