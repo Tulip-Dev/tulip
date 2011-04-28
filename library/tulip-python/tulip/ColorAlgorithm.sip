@@ -45,7 +45,7 @@ protected:
 	
 };
 
-class ColorAlgorithmFactory : tlp::Plugin {
+class ColorAlgorithmFactory : tlp::PluginInfoInterface {
 %TypeHeaderCode
 #include <tulip/TemplateFactory.h>
 %End

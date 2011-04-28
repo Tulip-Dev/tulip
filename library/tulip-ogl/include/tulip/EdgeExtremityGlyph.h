@@ -72,7 +72,7 @@ protected:
 	GlGraphInputData *edgeExtGlGraphInputData;
 };
 
-class TLP_GL_SCOPE EdgeExtremityGlyphFactory: public Plugin {
+class TLP_GL_SCOPE EdgeExtremityGlyphFactory: public PluginInfoInterface {
 public:
 	virtual ~EdgeExtremityGlyphFactory() {
 	}

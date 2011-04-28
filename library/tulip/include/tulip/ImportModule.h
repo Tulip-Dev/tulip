@@ -72,7 +72,7 @@ public:
   DataSet *dataSet;
 };
 
-class ImportModuleFactory:public Plugin{
+class ImportModuleFactory:public PluginInfoInterface{
 public:
   static TLP_SCOPE TemplateFactory<ImportModuleFactory,ImportModule,AlgorithmContext > *factory;
   static void initFactory() {

@@ -68,7 +68,7 @@ public :
 	
 };
 
-class ExportModuleFactory : tlp::Plugin {
+class ExportModuleFactory : tlp::PluginInfoInterface {
 %TypeHeaderCode
 #include <tulip/ExportModule.h>
 %End

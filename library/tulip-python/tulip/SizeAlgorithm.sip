@@ -45,7 +45,7 @@ protected:
 	
 };
 
-class SizeAlgorithmFactory : tlp::Plugin {
+class SizeAlgorithmFactory : tlp::PluginInfoInterface {
 %TypeHeaderCode
 #include <tulip/TemplateFactory.h>
 %End

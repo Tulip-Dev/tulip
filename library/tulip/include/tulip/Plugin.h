@@ -20,24 +20,25 @@
 #ifndef TULIPPLUGIN_H
 #define TULIPPLUGIN_H
 #include <string>
+#include <tulip/tulipconf.h>
 /**
  * \addtogroup plugins
  */ 
 namespace tlp {
 /*@{*/
-//TODO This class should be renamed to make obvious the fact it is abstract, and is not a base for plug-ins. (AbstractPluginInfo ?)
 /**
  * @brief Base interface for plug-in description.
  * This class is not intented to be subclassed by plug-ins themselves, but by the factories who create the plug-ins.
- * This class holds user informations, such as the author, date of creation, and miscellaneous informations.
+ * This class holds user informations, such as name of the author, date of creation, and miscellaneous informations.
  * It also holds informations for the Tulip plug-in system, such as the version (used to know when there is an update for a plug-in),
  * the name (used as unique identifier to register the plug-in),
  * the Tulip version the plug-in was built with (to know whether the plug-in is compatible with the currently running version of TUlip),
  * and the group this plug-in belongs to (e.g. trees).
  */
-class Plugin {
+
+class PluginInfoInterface {
 public:
-  virtual ~Plugin(){}
+  virtual ~PluginInfoInterface(){}
   /**
    * @brief Returns the name of the plug-in, as registered in the Tulip plug-in system.
    * This name must be unique, and if multiple plug-ins have the same name,
@@ -108,6 +109,9 @@ public:
    */
   virtual  std::string getTulipMinor() const=0;
 };
+
+typedef _DEPRECATED PluginInfoInterface Plugin;
+
 /*@}*/
 }
 #endif

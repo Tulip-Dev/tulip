@@ -47,7 +47,7 @@ protected:
 };
 
 namespace tlp {
-class BooleanAlgorithmFactory : tlp::Plugin {
+class BooleanAlgorithmFactory : tlp::PluginInfoInterface {
 %TypeHeaderCode
 #include <tulip/TemplateFactory.h>
 %End

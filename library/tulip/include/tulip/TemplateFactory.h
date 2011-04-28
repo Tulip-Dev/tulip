@@ -215,7 +215,7 @@ public:
 };
 
 
-template <class T> class PropertyFactory:public Plugin {
+template <class T> class PropertyFactory:public PluginInfoInterface {
 public:
   PropertyFactory(){}
   virtual ~PropertyFactory() {}

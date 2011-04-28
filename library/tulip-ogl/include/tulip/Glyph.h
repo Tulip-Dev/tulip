@@ -99,7 +99,7 @@ namespace tlp {
     virtual Coord getAnchor(const Coord &vector) const;
   };
 
-  class TLP_GL_SCOPE GlyphFactory: public Plugin {
+  class TLP_GL_SCOPE GlyphFactory: public PluginInfoInterface {
   public:
     virtual ~GlyphFactory() {}
     ///

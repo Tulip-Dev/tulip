@@ -89,7 +89,7 @@ public :
  * The factory the registers itself in the Tulip plug-in system (through the static initFactory() method when the library is loaded..
  * The actual registration is delegated to a TemplateFactory to factorize code.
  */
-class AlgorithmFactory:public Plugin{
+class AlgorithmFactory:public PluginInfoInterface{
 public:
   /**
    * @brief A static factory that is initialized when the library is loaded.
