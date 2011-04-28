@@ -189,16 +189,16 @@ namespace tlp {
     }
     //=================================
     void Observable::update(std::set<Observable*>::iterator, std::set<Observable*>::iterator) {
-      std::cout << __PRETTY_FUNCTION__ << " : non implemented" << std::endl;
+      std::cout << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
     }
     //=================================
     void Observable::treatEvent(const Event &) {
-        std::cout << __PRETTY_FUNCTION__ << " : non implemented" << std::endl;
+        std::cout << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
     }
 
     //=================================
     void Observable::observableDestroyed(Observable *) {
-      std::cout << __PRETTY_FUNCTION__ << " : non implemented" << std::endl;
+      std::cout << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
     }
     //=================================
     Observable::Observable():deleteMsgSent(false), queuedEvent(*this, Event::TLP_INVALID) {
