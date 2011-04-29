@@ -631,12 +631,25 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
         p = it->next();
         controllerData=*((DataSet*)p.second->value);
         haveControllerData=true;
-        defaultControllerName=p.first;
+        controllerName=p.first;
       }
+
+      // Hack after we have changed the name of the MainController
+      if(controllerName=="MainController")
+        controllerName="Tulip Classic";
 
       if(controllersName.size()==1){
         // if we have only one controller : auto load it
-        controllerName = controllersName[0];
+
+        // If controller doesn't exist : open a popup
+        if(!ControllerPluginsManager::getInst().controllerExists(controllerName)){
+          QMessageBox::critical(this,"Error",QString("The \"")+controllerName.c_str()+"\" perspective associated to the file\n"
+                                "you are trying to load in currently not\n"+
+                                "installed in your copy of Tulip.\n"+
+                                "You may retrieve it in the Help -> Plugins menu.\n\n"+
+                                "Default perspective will be used.");
+          controllerName=defaultControllerName;
+        }
       }else{
         bool displayDialog=true;
 
@@ -644,9 +657,8 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
         if(haveControllerData && PreferenceManager::getInst().getAutoLoadController()){
           // check if this controller is in available controllers
           for(vector<string>::const_iterator it=controllersName.begin();it!=controllersName.end();++it){
-            if((*it)==defaultControllerName){
+            if((*it)==controllerName){
               displayDialog=false;
-              controllerName=defaultControllerName;
               break;
             }
           }
@@ -655,9 +667,9 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
         if(displayDialog){
           // If we find controller name : display this name is ChooseControllerDialog (replace None)
           if(haveControllerData)
-            chooseControllerDialog.setDefaultControllerName(defaultControllerName);
+            chooseControllerDialog.setDefaultControllerName(controllerName);
 
-          chooseControllerDialog.setDefaultCheckedControllerName(defaultControllerName);
+          chooseControllerDialog.setDefaultCheckedControllerName(controllerName);
           chooseControllerDialog.setControllersAvailable(controllersName);
           if(chooseControllerDialog.exec()==QDialog::Rejected){
             return;
