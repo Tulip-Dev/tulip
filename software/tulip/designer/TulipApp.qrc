@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/tulip/app/icons">
+        <file>arrow-left.png</file>
+        <file>arrow-right.png</file>
+        <file>logo32x32.png</file>
+    </qresource>
+</RCC>

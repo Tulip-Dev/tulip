@@ -9,10 +9,12 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/InteractorManager.h>
+#include <tulip/InteractorManager.h>
 #include <tulip/ViewPluginsManager.h>
 #include <tulip/ControllerPluginsManager.h>
 
 #include "TulipSplashScreen.h"
+#include "TulipMainWindow.h"
 
 int main(int argc, char **argv) {
   QApplication tulip(argc, argv);
@@ -22,32 +24,22 @@ int main(int argc, char **argv) {
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
 #endif
 
+  // Initialize tulip libraries and load plugins
   tlp::initTulipLib(const_cast<char *>(QApplication::applicationDirPath().toStdString().c_str()));
+  TulipSplashScreen *splashScreen = new TulipSplashScreen();
+  splashScreen->show();
+  tlp::loadPlugins(splashScreen);
+  tlp::GlyphManager::getInst().loadPlugins(splashScreen);
+  tlp::EdgeExtremityGlyphManager::getInst().loadPlugins(splashScreen);
+  tlp::InteractorManager::getInst().loadPlugins(splashScreen);
+  tlp::ViewPluginsManager::getInst().loadPlugins(splashScreen);
+  tlp::ControllerPluginsManager::getInst().loadPlugins(splashScreen);
 
-  tlp::TulipSplashScreen splashScreen;
-  splashScreen.show();
+  QMap<QString,QString> abortedPlugins = splashScreen->abortedPlugins();
+  delete splashScreen;
 
-  tlp::loadPlugins(&splashScreen);
-  tlp::GlyphManager::getInst().loadPlugins(&splashScreen);
-  tlp::EdgeExtremityGlyphManager::getInst().loadPlugins(&splashScreen);
-  tlp::InteractorManager::getInst().loadPlugins(&splashScreen);
-  tlp::ViewPluginsManager::getInst().loadPlugins(&splashScreen);
-  tlp::ControllerPluginsManager::getInst().loadPlugins(&splashScreen);
-
-//  //add local plugins installation path. This is an application behavior, not a library one, and should stay here.
-//  tlp::TulipPluginsPath = tlp::PluginInfo::pluginsDirName + tlp::PATH_DELIMITER + tlp::TulipPluginsPath;
-
-//  TulipApp *mainWindow = new TulipApp();
-//  QRect screenRect = tulip.desktop()->availableGeometry();
-//  if (screenRect.height() > 890) {
-//    QRect wRect = mainWindow->geometry();
-//    int delta = (870 - wRect.height())/2;
-//    wRect.setTop(wRect.top() - delta);
-//    wRect.setBottom(wRect.bottom() + delta);
-//    mainWindow->setGeometry(wRect);
-//  }
-//  mainWindow->startTulip();
-
+  TulipMainWindow *mainWindow = new TulipMainWindow;
+  mainWindow->startApp();
 
   return tulip.exec();
 }

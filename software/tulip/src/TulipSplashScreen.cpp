@@ -4,16 +4,20 @@
 #include <QtGui/QApplication>
 #include <QtCore/QPropertyAnimation>
 
-namespace tlp {
+#include <tulip/TlpTools.h>
+
+using namespace tlp;
+
 TulipSplashScreen::TulipSplashScreen(): PluginLoader(), QSplashScreen(), _fileCounter(0) {
-  // FIXME: insert correct path here
-  setPixmap(QPixmap("../share/tulip/bitmaps/logo.bmp"));
+  setPixmap(QPixmap((tlp::TulipBitmapDir + "/logo.bmp").c_str()));
+
   setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
   QPropertyAnimation *fadeInAnimation = new QPropertyAnimation(this,"windowOpacity");
   fadeInAnimation->setStartValue(0);
   fadeInAnimation->setEndValue(1);
   fadeInAnimation->setDuration(200);
   fadeInAnimation->start(QAbstractAnimation::DeleteWhenStopped);
+  _abortedPlugins.clear();
 }
 
 void TulipSplashScreen::start(const std::string &, const std::string &type) {
@@ -36,6 +40,8 @@ void TulipSplashScreen::loaded(const std::string &name, const std::string &autho
 
 void TulipSplashScreen::aborted(const std::string &filename, const std::string &erreurmsg) {
   _message = trUtf8("Error loading ") + filename.c_str() + ": " + erreurmsg.c_str();
+
+  _abortedPlugins[filename.c_str()] = erreurmsg.c_str();
 }
 
 void TulipSplashScreen::finished(bool state, const std::string &msg) {
@@ -43,12 +49,6 @@ void TulipSplashScreen::finished(bool state, const std::string &msg) {
   if (!state)
     _message = trUtf8("Errors have been reported, see details on the startup screen.");
   repaint();
-
-  QPropertyAnimation *fadeInAnimation = new QPropertyAnimation(this,"windowOpacity");
-  fadeInAnimation->setStartValue(1);
-  fadeInAnimation->setEndValue(0);
-  fadeInAnimation->setDuration(400);
-  fadeInAnimation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 void TulipSplashScreen::drawContents(QPainter *painter) {
@@ -83,5 +83,4 @@ void TulipSplashScreen::drawContents(QPainter *painter) {
 
   painter->setBrush(QColor(0,0,0,200));
   painter->drawRect(progressRect.x(),progressRect.y(),w,progressRect.height());
-}
 }
