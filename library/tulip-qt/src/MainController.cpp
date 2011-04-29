@@ -1563,6 +1563,7 @@ namespace tlp {
       QMessageBox::critical(NULL,"can't create snapshot","Sorry but you can't create snapshot with this view");
     }else{
       SnapshotDialog snapshotDialog(*currentView);
+      snapshotDialog.setModal(true);
       snapshotDialog.exec();
     }
   }
