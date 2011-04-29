@@ -82,6 +82,10 @@ SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),view(&v)
 SnapshotDialog::~SnapshotDialog(){
 }
 
+void SnapshotDialog::resizeEvent(QResizeEvent *){
+  sizeSpinBoxValueChanged();
+}
+
 void SnapshotDialog::accept(){
   QImage image=view->createPicture(widthSpinBox->value(),heightSpinBox->value(),false);
   if(!image.save(fileName->text(),0,qualitySpinBox->value())){
@@ -154,6 +158,10 @@ void SnapshotDialog::sizeSpinBoxValueChanged(){
   ratio=((float)widthSpinBox->value())/((float)heightSpinBox->value());
 
   delete pixmapItem;
+  delete scene;
+  scene=new QGraphicsScene();
+  scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
+  graphicsView->setScene(scene);
   pixmapItem=scene->addPixmap(QPixmap::fromImage(image));
   pixmapItem->setPos(graphicsView->sceneRect().center()-pixmapItem->boundingRect().center());
 }

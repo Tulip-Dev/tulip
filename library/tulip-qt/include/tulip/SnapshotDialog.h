@@ -57,6 +57,8 @@ class LockLabel;
 
   protected :
 
+    void resizeEvent(QResizeEvent *);
+
     void sizeSpinBoxValueChanged();
 
     View *view;
