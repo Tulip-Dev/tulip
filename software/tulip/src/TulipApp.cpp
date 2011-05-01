@@ -635,7 +635,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       }
 
       // Hack after we have changed the name of the MainController
-      if(controllerName=="MainController")
+      if(controllerName=="MainController" || controllerName.empty())
         controllerName="Tulip Classic";
 
       if(controllersName.size()==1){
