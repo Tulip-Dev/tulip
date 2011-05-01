@@ -102,6 +102,8 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
       restoreSubGraph(itS->next());
     } delete itS;
     if (toRemove != subGraphToKeep) {
+      // avoid deletion of toRemove subgraphs
+      ((GraphAbstract *) toRemove)->subgraphs.clear();
       delete toRemove;
     } else
       // toRemove is not deleted,
