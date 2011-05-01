@@ -93,8 +93,9 @@ void TulipApp::enableElements(bool enabled) {
   fileSaveAction->setEnabled(enabled);
   fileSaveAsAction->setEnabled(enabled);
   filePrintAction->setEnabled(enabled);
+  fileCloseTabAction->setEnabled(enabled);
   mouseActionGroup->setEnabled(enabled);
-//   exportGraphMenu->menuAction()->setEnabled(enabled);
+  exportGraphMenu->menuAction()->setEnabled(enabled);
 }
 //**********************************************************************
 ///Destructor of viewGl

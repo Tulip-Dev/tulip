@@ -122,6 +122,9 @@
    </property>
   </action>
   <action name="fileCloseTabAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Close tab</string>
    </property>
