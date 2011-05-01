@@ -26,6 +26,7 @@
 #include <tulip/StlIterator.h>
 #include <tulip/StableIterator.h>
 #include <tulip/GraphView.h>
+#include <tulip/GraphImpl.h>
 #include <tulip/ConcatIterator.h>
 
 using namespace std;
@@ -34,14 +35,29 @@ using namespace tlp;
 const string metaGraphPropertyName = "viewMetaGraph";
 
 //=========================================================================
-GraphAbstract::GraphAbstract(Graph *supergraph)
+GraphAbstract::GraphAbstract(Graph *supergraph, unsigned int sgId)
  :supergraph(supergraph ? supergraph : this),
   root((supergraph == this) ? this : supergraph->getRoot()),
   subGraphToKeep(NULL), metaGraphProperty(NULL) {
-  propertyContainer=new PropertyManager(this);
+  // get id
+  if (supergraph != this)
+    id = ((GraphImpl *) getRoot())->getSubGraphId(sgId);
+  propertyContainer = new PropertyManager(this);
 }
 //=========================================================================
 GraphAbstract::~GraphAbstract() {
+  StableIterator<Graph *> itS(getSubGraphs());
+  while(itS.hasNext()) {
+    Graph* sg = itS.next();
+    // indicates supergraph destruction
+    sg->setSuperGraph(NULL);
+    delAllSubGraphsInternal(sg, true);
+  }
+
+  delete propertyContainer;
+  
+  if (supergraph != NULL && supergraph != this)
+    ((GraphImpl *) getRoot())->freeSubGraphId(id);
 }
 //=========================================================================
 void GraphAbstract::clear() {
@@ -101,6 +117,8 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
       restoreSubGraph(itS->next());
     } delete itS;
     if (toRemove != subGraphToKeep) {
+      // avoid deletion of toRemove subgraphs
+      ((GraphAbstract *) toRemove)->subgraphs.clear();
       delete toRemove;
     } else
       // toRemove is not deleted,

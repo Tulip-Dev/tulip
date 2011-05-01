@@ -34,11 +34,9 @@ namespace tlp {
 //----------------------------------------------------------------
 GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 		     unsigned int sgId):
-  GraphAbstract(supergraph),
+  GraphAbstract(supergraph, sgId),
   nNodes(0),
   nEdges(0) {
-  // get id
-  id = ((GraphImpl *) getRoot())->getSubGraphId(sgId);
   nodeAdaptativeFilter.setAll(false);
   edgeAdaptativeFilter.setAll(false);
   inDegree.setAll(0);
@@ -73,11 +71,8 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 }
 //----------------------------------------------------------------
 GraphView::~GraphView() {
-  StableIterator<Graph *> itS(getSubGraphs());
-  while(itS.hasNext())
-    delAllSubGraphsInternal(itS.next(), true);
-  delete propertyContainer; //must be done here because Property proxy needs to access to the graph structure
-  ((GraphImpl *) getRoot())->freeSubGraphId(id);
+  // notify destruction
+  observableDeleted();
 }
 //----------------------------------------------------------------
 bool GraphView::isElement(const node n) const {

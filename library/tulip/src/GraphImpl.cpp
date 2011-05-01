@@ -97,7 +97,7 @@ static bool integrityTest(Graph *graph) {
 */
 //----------------------------------------------------------------
 GraphImpl::GraphImpl():
-  GraphAbstract(this) {
+  GraphAbstract(this, 0) {
   // id 0 is for the root
   graphIds.get();
 }
@@ -116,11 +116,8 @@ GraphImpl::~GraphImpl() {
   }
   delPreviousRecorders();
 
-  StableIterator<Graph *> itS(getSubGraphs());
-  while(itS.hasNext())
-    delAllSubGraphsInternal(itS.next(), true);
-
-  delete propertyContainer;
+  // notify destruction
+  observableDeleted();
 }
 //----------------------------------------------------------------
 void GraphImpl::clear() {

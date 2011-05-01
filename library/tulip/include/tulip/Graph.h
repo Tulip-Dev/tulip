@@ -107,7 +107,7 @@ template<class C>struct Iterator;
 
 public:
   Graph():id(0) {}
-  virtual ~Graph() { observableDeleted(); }
+  virtual ~Graph() {}
   //=========================================================================
   // Graph hierarchy access and building
   //=========================================================================
