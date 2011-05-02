@@ -2,9 +2,9 @@
 #define TULIPMAINWINDOW_H
 
 #include <QtGui/QMainWindow>
-#include "ui_TulipMainWindow.h"
+#include <QtGui/QSystemTrayIcon>
 
-class QSystemTrayIcon;
+#include "ui_TulipMainWindow.h"
 
 class TulipMainWindow: public QMainWindow {
   Q_OBJECT
@@ -15,6 +15,13 @@ public:
 
 public slots:
   void startApp();
+  void closeApp();
+
+protected:
+  void closeEvent(QCloseEvent *);
+
+protected slots:
+  void systemTrayRequest(QSystemTrayIcon::ActivationReason);
 
 private:
   Ui::TulipMainWindowData *_ui;

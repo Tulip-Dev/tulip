@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>900</width>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Tulip</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="TulipApp.qrc">
+   <iconset>
     <normaloff>:/tulip/app/icons/logo32x32.png</normaloff>:/tulip/app/icons/logo32x32.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -276,8 +276,6 @@ background-color: rgb(255, 255, 255);
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="TulipApp.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

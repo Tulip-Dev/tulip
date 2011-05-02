@@ -3,6 +3,7 @@ PATTERN ".svn" EXCLUDE)
 
 SET(SRCS
   src/main.cpp
+  src/RssParser.cpp
   src/TulipMainWindow.cpp
   src/TulipSplashScreen.cpp
   src/TulipWelcomePage.cpp
@@ -15,6 +16,7 @@ QT4_WRAP_UI(UI_HEADERS
 
 QT4_WRAP_CPP(MOC_SRCS
   include/TulipMainWindow.h
+  include/TulipWelcomePage.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS
