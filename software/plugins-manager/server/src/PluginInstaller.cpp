@@ -185,17 +185,17 @@ int main(int argc,char **argv) {
       return EXIT_FAILURE;
 
   if (suffix == "so")
-    UpdatePlugin::copyFile(srcDir,
+    UpdatePlugin::moveFile(srcDir,
 			   QString(pluginInfo.fileName.c_str())+".so",
 			   dstSubDir,
 			   QString(pluginInfo.fileName.c_str())+".so");
   else if (suffix == "dylib")
-    UpdatePlugin::copyFile(srcDir,
+    UpdatePlugin::moveFile(srcDir,
 			   QString(pluginInfo.fileName.c_str())+".dylib",
 			   dstSubDir,
 			   QString(pluginInfo.fileName.c_str())+".dylib");
   else if (suffix == "dll")
-    UpdatePlugin::copyFile(srcDir,
+    UpdatePlugin::moveFile(srcDir,
 			   QString(pluginInfo.fileName.c_str())+".dll",
 			   dstSubDir,
 			   QString(pluginInfo.fileName.c_str())+".dll");
