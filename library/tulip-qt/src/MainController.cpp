@@ -187,6 +187,8 @@ namespace tlp {
   }
 
 
+
+
   //**********************************************************************
   //**********************************************************************
   //**********************************************************************
@@ -198,7 +200,11 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL) {
+    currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL),
+    editMenu(NULL), algorithmMenu(NULL), viewMenu(NULL), optionsMenu(NULL),
+    graphMenu(NULL), intMenu(NULL), stringMenu(NULL), sizesMenu(NULL),
+    colorsMenu(NULL), layoutMenu(NULL), metricMenu(NULL), selectMenu(NULL),
+    generalMenu(NULL) {
     morph = new Morphing();
   }
   //**********************************************************************
@@ -644,9 +650,13 @@ namespace tlp {
     }
     assert(windowAction);
 
-    editMenu = new QMenu("&Edit", mainWindowFacade.getMenuBar());
-    editMenu->setEnabled(false);
-    mainWindowFacade.getMenuBar()->insertMenu(windowAction,editMenu);
+    if (editMenu == NULL) {
+    	editMenu = new QMenu("&Edit", mainWindowFacade.getMenuBar());
+    	editMenu->setEnabled(false);
+    	mainWindowFacade.getMenuBar()->insertMenu(windowAction,editMenu);
+    } else {
+    	editMenu->clear();
+    }
 
     tmpAction=editMenu->addAction("&Cut",this,SLOT(editCut()),QKeySequence(tr("Ctrl+X")));
     editMenu->addAction("C&opy",this,SLOT(editCopy()),QKeySequence(tr("Ctrl+C")));
@@ -668,16 +678,53 @@ namespace tlp {
     editRedoAction->setEnabled(false);
 
      //Algorithm Menu
-    algorithmMenu = new QMenu("&Algorithm", mainWindowFacade.getMenuBar());
-    algorithmMenu->setEnabled(false);
-    intMenu=new QMenu("&Integer", algorithmMenu);
-    stringMenu=new QMenu("L&abel", algorithmMenu);
-    sizesMenu=new QMenu("S&ize", algorithmMenu);
-    colorsMenu=new QMenu("&Color", algorithmMenu);
-    layoutMenu=new QMenu("&Layout", algorithmMenu);
-    metricMenu=new QMenu("&Measure", algorithmMenu);
-    selectMenu=new QMenu("&Selection", algorithmMenu);
-    generalMenu=new QMenu("&General", algorithmMenu);
+    if (algorithmMenu == NULL) {
+    	algorithmMenu = new QMenu("&Algorithm", mainWindowFacade.getMenuBar());
+    	algorithmMenu->setEnabled(false);
+    } else {
+    	algorithmMenu->clear();
+    }
+
+
+    if (intMenu == NULL)
+    	intMenu=new QMenu("&Integer", algorithmMenu);
+    else
+    	intMenu->clear();
+
+    if (stringMenu == NULL)
+    	stringMenu=new QMenu("L&abel", algorithmMenu);
+    else
+    	stringMenu->clear();
+
+    if (sizesMenu == NULL)
+    	sizesMenu=new QMenu("S&ize", algorithmMenu);
+    else
+    	sizesMenu->clear();
+
+    if (colorsMenu == NULL)
+    	colorsMenu=new QMenu("&Color", algorithmMenu);
+    else
+    	colorsMenu->clear();
+
+    if (layoutMenu == NULL)
+    	layoutMenu=new QMenu("&Layout", algorithmMenu);
+    else
+    	layoutMenu->clear();
+
+    if (metricMenu == NULL)
+    	metricMenu=new QMenu("&Measure", algorithmMenu);
+    else
+    	metricMenu->clear();
+
+    if (selectMenu == NULL)
+    	selectMenu=new QMenu("&Selection", algorithmMenu);
+    else
+    	selectMenu->clear();
+
+    if (generalMenu == NULL)
+    	generalMenu=new QMenu("&General", algorithmMenu);
+    else
+    	generalMenu->clear();
 
     buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(*intMenu, this, SLOT(changeInt()));
     buildPropertyMenu<StringType, StringType, StringAlgorithm>(*stringMenu, this, SLOT(changeString()));
@@ -708,8 +755,13 @@ namespace tlp {
 
 
     //Graph menu
-    graphMenu = new QMenu("&Graph", mainWindowFacade.getMenuBar());
-    graphMenu->setEnabled(false);
+    if (graphMenu == NULL) {
+    	graphMenu = new QMenu("&Graph", mainWindowFacade.getMenuBar());
+    	graphMenu->setEnabled(false);
+    } else {
+    	graphMenu->clear();
+    }
+
     QMenu *testGraphMenu=graphMenu->addMenu("Test");
     tmpAction=testGraphMenu->addAction("Simple");
     connect(tmpAction,SIGNAL(triggered()),this,SLOT(isSimple()));
@@ -747,10 +799,14 @@ namespace tlp {
 
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,graphMenu);
 
-
     //View menu
-    viewMenu = new QMenu("&View", mainWindowFacade.getMenuBar());
-    viewMenu->setEnabled(false);
+    if (viewMenu == NULL)  {
+    	viewMenu = new QMenu("&View", mainWindowFacade.getMenuBar());
+    	viewMenu->setEnabled(false);
+    } else {
+    	viewMenu->clear();
+    }
+
     connect(viewMenu, SIGNAL(triggered(QAction *)), SLOT(createView(QAction*)));
     TemplateFactory<ViewFactory, View, ViewContext>::ObjectCreator::const_iterator it;
     for (it=ViewFactory::factory->objMap.begin();it != ViewFactory::factory->objMap.end();++it) {
@@ -759,8 +815,13 @@ namespace tlp {
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,viewMenu);
 
     //Options menu
-    optionsMenu = new QMenu("&Options", mainWindowFacade.getMenuBar());
-    optionsMenu->setEnabled(false);
+    if (optionsMenu == NULL) {
+    	optionsMenu = new QMenu("&Options", mainWindowFacade.getMenuBar());
+    	optionsMenu->setEnabled(false);
+    } else {
+    	optionsMenu->clear();
+    }
+
     forceRatioAction = optionsMenu->addAction("Force ratio");
     forceRatioAction->setCheckable(true);
     forceRatioAction->setChecked(false);

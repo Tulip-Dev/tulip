@@ -51,7 +51,7 @@ namespace tlp {
    * In view menu you have access to all view plugins
    */
   class TLP_QT_SCOPE MainController :  public ControllerViewsManager,
-    private Observable, private GraphObserver {
+    protected Observable, private GraphObserver {
 
     Q_OBJECT;
 
@@ -291,7 +291,8 @@ namespace tlp {
       void editDeselectAll();
 
   };
-
 }
+
+
 
 #endif
