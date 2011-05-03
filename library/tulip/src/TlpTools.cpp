@@ -72,7 +72,7 @@ const char tlp::PATH_DELIMITER = ';';
 const char tlp::PATH_DELIMITER = ':';
 #endif
 //=========================================================
-void tlp::initTulipLib(char* appDirPath) {
+void tlp::initTulipLib(const char* appDirPath) {
   // first we must ensure that the parsing of float or double
   // doest not depend on locale
   setlocale(LC_NUMERIC, "C");

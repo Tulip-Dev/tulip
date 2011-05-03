@@ -43,8 +43,14 @@ namespace tlp {
    * 2. the appDirPath parameter, if it is not NULL
    * 3. a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on unices.
    */
-  extern TLP_SCOPE void initTulipLib(char* appDirPath = 0);
+  extern TLP_SCOPE void initTulipLib(const char* appDirPath = 0);
     
+  /**
+   * @brief Calls loadPluginsFromDir for each directory in TulipPluginsPath.
+   *
+   * @param plug A PluginLoader to output what is going on. Defaults to 0.
+   * @return void
+   **/
   TLP_SCOPE void loadPlugins(PluginLoader *plug=0);
   TLP_SCOPE bool loadPlugin(const std::string &filename, PluginLoader *plug=0);
   TLP_SCOPE void loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader=0);
