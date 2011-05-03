@@ -103,7 +103,8 @@ ADD_DEPENDENCIES(pluginInstaller ${LibTulipName} ${LibTulipOglName} ${LibTulipQt
 IF(QT_VERSION_MINOR GREATER 6)
 QT4_WRAP_CPP(pluginPusher_MOC_SRCS PushToPluginServer.h)
 ADD_EXECUTABLE(pluginPusher ${pluginPusher_SRCS} ${pluginPusher_MOC_SRCS})
-target_link_libraries(pluginPusher ${QT_LIBRARIES} 
+target_link_libraries(pluginPusher ${QT_LIBRARIES}
+                      ${QT_QTXML_LIBRARY}
                       ${LibTulipName}
                       ${LibTulipOglName}
                       ${LibTulipQtName}
