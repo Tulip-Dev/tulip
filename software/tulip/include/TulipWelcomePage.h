@@ -14,6 +14,7 @@ public:
 
 protected slots:
   void rssReply(QNetworkReply *);
+  void openLink(const QString &link);
 
 private:
   Ui::TulipWelcomePageData *_ui;

@@ -17,6 +17,64 @@
    <iconset>
     <normaloff>:/tulip/app/icons/logo32x32.png</normaloff>:/tulip/app/icons/logo32x32.png</iconset>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QToolButton, QPushButton, QComboBox {
+    border-image: url(:/tulip/app/ui/btn_26.png) 4;
+    border-width: 4;
+    padding: 0px 6px;
+    font-size: 12px;
+}
+
+QToolButton, QPushButton, QComboBox, QLabel {
+    color: black;
+}
+
+QToolButton:hover, QPushButton:hover, QComboBox:hover {
+    border-image: url(:/tulip/app/ui/btn_26_hover.png) 4;
+}
+
+QToolButton:disabled, QPushButton:disabled, QComboBox::disabled {
+	color:gray;
+}
+
+QToolButton:pressed, QPushButton:pressed{
+    border-image: url(:/tulip/app/ui/btn_26_pressed.png) 4;
+}
+
+ QPushButton::menu-indicator{
+    subcontrol-origin: margin;
+	subcontrol-position: center right;
+	right: 4px;
+ }
+
+ QPushButton{
+	outline: none;
+	margin: 2
+ }
+
+ QComboBox QAbstractItemView {
+    background-color:white;
+}
+
+ QComboBox::down-arrow {
+     image: url(:/tulip/app/ui/combobox_arrow.png);
+ }
+QComboBox:drop-down
+{
+     subcontrol-origin: padding;
+     subcontrol-position: top right;
+     border-left-style: none; 
+     border-top-right-radius: 1px;
+     border-bottom-right-radius: 1px;
+}
+</string>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonTextBesideIcon</enum>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
@@ -255,9 +313,7 @@ QToolButton:pressed {
     <item>
      <widget class="QStackedWidget" name="pages">
       <property name="styleSheet">
-       <string notr="true">QStackedWidget#pages {
-background-color: rgb(255, 255, 255);
-}</string>
+       <string notr="true"/>
       </property>
       <property name="currentIndex">
        <number>0</number>
