@@ -16,6 +16,16 @@ public:
     return *_instance;
   }
 
+  /**
+    @brief Retrieves the list of documents recently opened with tulip
+    */
+  QList<QString> recentDocuments() const;
+
+  /**
+    @brief Registers a file in the list of recently opened documents
+    */
+  void addToRecentDocuments(const QString &);
+
 private:
   TulipSettings();
 
