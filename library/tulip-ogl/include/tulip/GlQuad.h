@@ -30,81 +30,112 @@ namespace tlp {
  */
 /*@{*/
 /**
- * \brief General class to render quads .
+ * \brief Utility class to render a quadrilateral .
  *
- * This class is a generic class to render quadsl.
+ * This is an utility class class for rendering a quadrilateral.
  */
 class TLP_GL_SCOPE GlQuad : public GlPolygon
 {
- 
- public:
 
-  /**
-   * Constructor
-   */
-  GlQuad();
+public:
 
-  /**
-   * Constructor
-   *
-   * \param positions Array indicating the position of the points. The first point is the top-left one. The next points are winding in clockwise order.
-   * \param color A single color indicating the color for every point of the Quad.
-   */
-  GlQuad(const Coord positions[4], const Color &color);
+	/**
+	 * Constructor
+	 */
+	GlQuad();
 
-  /**
-   * Constructor
-   * 
-   * \param positions Array indicating the position of the points. The first point is the top-left one. The next points are winding in clockwise order.
-   * \param colors Array indicating the color of the points. The order is the same as for the positions.
-   */
-  GlQuad(const Coord positions[4], const Color colors[4]);
 
-  /**
-   * Destructor
-   */
-  virtual ~GlQuad();
+	/**
+	 * Constructor
+	 *
+	 * Initializes a quadrilateral with 4 points winding in clockwise order and a single color.
+	 *
+	 * \param p1 the first quad vertex
+	 * \param p2 the second quad vertex
+	 * \param p3 the third quad vertex
+	 * \param p4 the fourth quad vertex
+	 * \param color A single color indicating the color for every point of the quadrilateral.
+	 */
+	GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4,
+		   const Color &color);
 
-  /**
-   * Accessor in writing to the position.
-   * \param idPosition Indicates which point we want to move.
-   */
-  void setPosition(const int idPosition, const Coord &position);
+	/* Constructor
+	 *
+	 * Initializes a quadrilateral with 4 points winding in clockwise order and a color attached to each point.
+	 *
+	 * \param p1 the first quad vertex
+	 * \param p2 the second quad vertex
+	 * \param p3 the third quad vertex
+	 * \param p4 the fourth quad vertex
+	 * \param c1 the color of the first quad vertex
+	 * \param c2 the color of the second quad vertex
+	 * \param c3 the color of the third quad vertex
+	 * \param c4 the color of the fourth quad vertex
+	 */
+	GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p4,
+		   const Color &c1, const Color &c2, const Color &c3, const Color &c4);
 
-  /**
-   * Accessor in writing to the color.
-   * \param idColor Indicates which point we want to colorize.
-   */
-  void setColor(const int idColor, const Color &color);
+	/**
+	 * Constructor
+	 *
+	 * \param positions Array indicating the position of the points. The first point is the top-left one. The next points are winding in clockwise order.
+	 * \param color A single color indicating the color for every point of the Quad.
+	 */
+	_DEPRECATED GlQuad(const Coord positions[4], const Color &color);
 
-  /**
-   * Accessor in writing to the basic color of GlAugmentedDisplay
-   */
-  void setColor(const Color& color);
+	/**
+	 * Constructor
+	 *
+	 * \param positions Array indicating the position of the points. The first point is the top-left one. The next points are winding in clockwise order.
+	 * \param colors Array indicating the color of the points. The order is the same as for the positions.
+	 */
+	_DEPRECATED GlQuad(const Coord positions[4], const Color colors[4]);
 
-  /**
-   * Accessor in reading to the position.
-   * \param idPosition Indicates which point we want to get the position.
-   */
-  const Coord& getPosition(const int idPosition) const;
+	/**
+	 * Destructor
+	 */
+	virtual ~GlQuad();
 
-  /**
-   * Accessor in reading to the color.
-   * \param idColor Indicates which point we want to get the color.
-   */
-  const Color& getColor(const int idColor) const;
+	/**
+	 * Accessor in writing to the position.
+	 * \param idPosition Indicates which point we want to move.
+	 */
+	void setPosition(const int idPosition, const Coord &position);
 
-  /**
-   * Function to export data in XML
-   */
-  virtual void getXML(xmlNodePtr rootNode);
-  
-  /**
-   * Function to set data with XML
-   */
-  virtual void setWithXML(xmlNodePtr rootNode);
+	/**
+	 * Accessor in writing to the color.
+	 * \param idColor Indicates which point we want to colorize.
+	 */
+	void setColor(const int idColor, const Color &color);
 
-  
+	/**
+	 * Accessor in writing to the basic color of GlAugmentedDisplay
+	 */
+	void setColor(const Color& color);
+
+	/**
+	 * Accessor in reading to the position.
+	 * \param idPosition Indicates which point we want to get the position.
+	 */
+	const Coord& getPosition(const int idPosition) const;
+
+	/**
+	 * Accessor in reading to the color.
+	 * \param idColor Indicates which point we want to get the color.
+	 */
+	const Color& getColor(const int idColor) const;
+
+	/**
+	 * Function to export data in XML
+	 */
+	virtual void getXML(xmlNodePtr rootNode);
+
+	/**
+	 * Function to set data with XML
+	 */
+	virtual void setWithXML(xmlNodePtr rootNode);
+
+
 };
 /*@}*/
 }
