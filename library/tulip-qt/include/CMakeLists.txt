@@ -78,6 +78,7 @@ INSTALL(FILES
   tulip/GlOffscreenRenderer.h
   tulip/SnapshotDialog.h
   tulip/PropertyCreationDialog.h
+  tulip/TulipSettings.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_qt_dev
 )
