@@ -20,18 +20,7 @@
 #include <config.h>
 #endif
 
-#include <cmath>
-#include <string>
-#include <sstream>
-#include <tulip/Graph.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/SizeProperty.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/DrawingTools.h>
-#include <tulip/ForEach.h>
-
 #include <tulip/MouseEdgeBendEditor.h>
 
 #include <QtGui/qevent.h>
@@ -61,14 +50,14 @@ MouseEdgeBendEditor::~MouseEdgeBendEditor(){
 }
 //========================================================================================
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
-  
+
   QMouseEvent * qMouseEv = (QMouseEvent *) e;
   if(qMouseEv == NULL)
     return false;
-    
+
   // Double click to create a new control point
   if(e->type() == QEvent::MouseButtonDblClick &&  qMouseEv->button() == Qt::LeftButton && haveSelection(glMainWidget)) {
-    operation = NEW_OP; 
+    operation = NEW_OP;
     mMouseCreate(qMouseEv->x(), qMouseEv->y(), glMainWidget);
     return true;
   }
@@ -398,8 +387,11 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainW
   _graph->push();
   if(edgeSelected)
     _layout->setEdgeValue(mEdge, coordinates);
-  else
-    _coordsVectorProperty->setNodeValue(mNode,coordinates);
+  else {
+    if(_coordsVectorProperty)
+      _coordsVectorProperty->setNodeValue(mNode,coordinates);
+  }
+
   Observable::unholdObservers();
 }
 //========================================================================================
