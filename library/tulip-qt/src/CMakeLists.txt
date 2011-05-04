@@ -80,6 +80,7 @@ GlOffscreenRenderer.cpp
 ThreadedComputeProperty.cpp
 SnapshotDialog.cpp
 PropertyCreationDialog.cpp
+TulipSettings.cpp
 )
 
 set(tulip-qt_UI
