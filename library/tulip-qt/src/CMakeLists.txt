@@ -79,6 +79,7 @@ SmallMultiplesNavigatorComponent.cpp
 GlOffscreenRenderer.cpp
 ThreadedComputeProperty.cpp
 SnapshotDialog.cpp
+PropertyCreationDialog.cpp
 )
 
 set(tulip-qt_UI
@@ -104,6 +105,7 @@ set(tulip-qt_UI
      ../designer/CSVParserConfigurationWidget.ui
      ../designer/CSVImportWizard.ui
      ../designer/SnapshotDialog.ui
+     ../designer/PropertyCreationDialog.ui
 )
 
 set(tulip-qt_MOC
@@ -146,6 +148,7 @@ set(tulip-qt_MOC
     ../include/tulip/CSVImportWizard.h
     ../include/tulip/SmallMultiplesView.h
     ../include/tulip/SnapshotDialog.h
+    ../include/tulip/PropertyCreationDialog.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)

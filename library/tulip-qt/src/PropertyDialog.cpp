@@ -45,7 +45,9 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/ForEach.h>
 
+
 #include "tulip/PropertyDialog.h"
+#include "tulip/PropertyCreationDialog.h"
 #include "tulip/CopyPropertyDialog.h"
 #include "tulip/CSVImportWizard.h"
 
@@ -151,61 +153,67 @@ namespace tlp {
     void PropertyDialog::newProperty() {
         if (!graph)
             return;
-        QStringList lst;
-        lst << "Color" << "Integer" << "Layout" << "Metric" << "Selection" << "Size" << "String" << "BooleanVector"
-                << "ColorVector" << "CoordVector" << "DoubleVector" << "IntegerVector" << "SizeVector" << "StringVector";
-        bool ok = false;
-        QString res = QInputDialog::getItem(this, "Property type", "Please select the property type", lst, 3, false, &ok);
-        if (ok) {
-            QString text = QInputDialog::getText(this, "Property name", "Please enter the property name", QLineEdit::Normal,
-                                                 QString::null, &ok);
-            if (ok && text == "") {
-                ok = false;
-                QMessageBox::warning(this, "Fail to create property", "You can't create a property with empty name",
-                                     QMessageBox::Ok, QMessageBox::Ok);
-            }
-            string textString(text.toUtf8().data());
-            if (ok && graph->existLocalProperty(textString)) {
-                ok = false;
-                QMessageBox::warning(this, "Fail to create property", "A property with same name already exist", QMessageBox::Ok,
-                                     QMessageBox::Ok);
-            }
-            if (ok) {
-                string erreurMsg;
-                graph->push();
 
-                if (res == trUtf8("Selection"))
-                    graph->getLocalProperty<BooleanProperty> (textString);
-                if (res == trUtf8("Metric"))
-                    graph->getLocalProperty<DoubleProperty> (textString);
-                if (res == trUtf8("Layout"))
-                    graph->getLocalProperty<LayoutProperty> (textString);
-                if (res == trUtf8("String"))
-                    graph->getLocalProperty<StringProperty> (textString);
-                if (res == trUtf8("Integer"))
-                    graph->getLocalProperty<IntegerProperty> (textString);
-                if (res == trUtf8("Size"))
-                    graph->getLocalProperty<SizeProperty> (textString);
-                if (res == trUtf8("Color"))
-                    graph->getLocalProperty<ColorProperty> (textString);
-                if (res == trUtf8("BooleanVector"))
-                    graph->getLocalProperty<BooleanVectorProperty> (textString);
-                if (res == trUtf8("DoubleVector"))
-                    graph->getLocalProperty<DoubleVectorProperty> (textString);
-                if (res == trUtf8("CoordVector"))
-                    graph->getLocalProperty<CoordVectorProperty> (textString);
-                if (res == trUtf8("StringVector"))
-                    graph->getLocalProperty<StringVectorProperty> (textString);
-                if (res == trUtf8("IntegerVector"))
-                    graph->getLocalProperty<IntegerVectorProperty> (textString);
-                if (res == trUtf8("SizeVector"))
-                    graph->getLocalProperty<SizeVectorProperty> (textString);
-                if (res == trUtf8("ColorVector"))
-                    graph->getLocalProperty<ColorVectorProperty> (textString);
-                setGraph(graph);
-                emit newPropertySignal(graph, textString);
-            }
+        PropertyInterface* property = PropertyCreationDialog::createNewProperty(graph,this);
+        if(property){
+            setGraph(graph);
+            emit newPropertySignal(graph, property->getName());
         }
+//        QStringList lst;
+//        lst << "Color" << "Integer" << "Layout" << "Metric" << "Selection" << "Size" << "String" << "BooleanVector"
+//                << "ColorVector" << "CoordVector" << "DoubleVector" << "IntegerVector" << "SizeVector" << "StringVector";
+//        bool ok = false;
+//        QString res = QInputDialog::getItem(this, "Property type", "Please select the property type", lst, 3, false, &ok);
+//        if (ok) {
+//            QString text = QInputDialog::getText(this, "Property name", "Please enter the property name", QLineEdit::Normal,
+//                                                 QString::null, &ok);
+//            if (ok && text == "") {
+//                ok = false;
+//                QMessageBox::warning(this, "Fail to create property", "You can't create a property with empty name",
+//                                     QMessageBox::Ok, QMessageBox::Ok);
+//            }
+//            string textString(text.toUtf8().data());
+//            if (ok && graph->existLocalProperty(textString)) {
+//                ok = false;
+//                QMessageBox::warning(this, "Fail to create property", "A property with same name already exist", QMessageBox::Ok,
+//                                     QMessageBox::Ok);
+//            }
+//            if (ok) {
+//                string erreurMsg;
+//                graph->push();
+
+//                if (res == trUtf8("Selection"))
+//                    graph->getLocalProperty<BooleanProperty> (textString);
+//                if (res == trUtf8("Metric"))
+//                    graph->getLocalProperty<DoubleProperty> (textString);
+//                if (res == trUtf8("Layout"))
+//                    graph->getLocalProperty<LayoutProperty> (textString);
+//                if (res == trUtf8("String"))
+//                    graph->getLocalProperty<StringProperty> (textString);
+//                if (res == trUtf8("Integer"))
+//                    graph->getLocalProperty<IntegerProperty> (textString);
+//                if (res == trUtf8("Size"))
+//                    graph->getLocalProperty<SizeProperty> (textString);
+//                if (res == trUtf8("Color"))
+//                    graph->getLocalProperty<ColorProperty> (textString);
+//                if (res == trUtf8("BooleanVector"))
+//                    graph->getLocalProperty<BooleanVectorProperty> (textString);
+//                if (res == trUtf8("DoubleVector"))
+//                    graph->getLocalProperty<DoubleVectorProperty> (textString);
+//                if (res == trUtf8("CoordVector"))
+//                    graph->getLocalProperty<CoordVectorProperty> (textString);
+//                if (res == trUtf8("StringVector"))
+//                    graph->getLocalProperty<StringVectorProperty> (textString);
+//                if (res == trUtf8("IntegerVector"))
+//                    graph->getLocalProperty<IntegerVectorProperty> (textString);
+//                if (res == trUtf8("SizeVector"))
+//                    graph->getLocalProperty<SizeVectorProperty> (textString);
+//                if (res == trUtf8("ColorVector"))
+//                    graph->getLocalProperty<ColorVectorProperty> (textString);
+//                setGraph(graph);
+//                emit newPropertySignal(graph, textString);
+//            }
+//        }
     }
     //=================================================
     void PropertyDialog::toStringProperty() {
