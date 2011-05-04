@@ -5,6 +5,12 @@ TulipSettings *TulipSettings::_instance = 0;
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
 
+TulipSettings &TulipSettings::instance() {
+    if (!_instance)
+      _instance = new TulipSettings;
+    return *_instance;
+  }
+
 QList<QString> TulipSettings::recentDocuments() const {
   QList<QVariant> recentDocumentsValue = value("app/recent_documents").toList();
   QList<QString> result;

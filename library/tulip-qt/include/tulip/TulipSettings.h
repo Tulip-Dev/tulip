@@ -11,11 +11,7 @@
   */
 class TLP_QT_SCOPE TulipSettings: public QSettings {
 public:
-  static TulipSettings &instance() {
-    if (!_instance)
-      _instance = new TulipSettings;
-    return *_instance;
-  }
+  static TulipSettings &instance();
 
   /**
     @brief Retrieves the list of documents recently opened with tulip
