@@ -2,7 +2,7 @@
 #define PROPERTYCREATIONDIALOG_H
 
 #include <QDialog>
-
+#include <tulip/tulipconf.h>
 namespace Ui {
     class PropertyCreationDialog;
 }
@@ -24,7 +24,7 @@ namespace tlp{
   *
   *
   **/
-class PropertyCreationDialog : public QDialog
+class TLP_QT_SCOPE PropertyCreationDialog : public QDialog
 {
     Q_OBJECT
 
