@@ -18,21 +18,22 @@
  */
 #ifndef MOUSEEDGEBENDEDITION_H
 #define MOUSEEDGEBENDEDITION_H
-#include <vector>
+
 #include <tulip/GlCircle.h>
 #include <tulip/GlTriangle.h>
-#include <tulip/GlComplexPolygon.h>
-#include <tulip/Observable.h>
 #include <tulip/InteractorComponent.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/IntegerProperty.h>
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
 
 namespace tlp {
+
+  class LayoutProperty;
+  class BooleanProperty;
+  class SizeProperty;
+  class DoubleProperty;
+  class CoordVectorProperty;
+  class IntegerProperty;
 
   /// This interactor allows to move/add/delete EdgeBends
   class TLP_QT_SCOPE MouseEdgeBendEditor:public InteractorComponent {
