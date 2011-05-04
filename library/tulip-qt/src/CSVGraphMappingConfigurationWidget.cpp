@@ -19,13 +19,13 @@
 #include "tulip/CSVGraphMappingConfigurationWidget.h"
 #include "tulip/CSVGraphMappingConfigurationWidgetData.h"
 #include "tulip/CSVGraphImport.h"
+#include "tulip/PropertyCreationDialog.h"
 #include <tulip/Graph.h>
 #include <tulip/ForEach.h>
 #include <tulip/TlpQtTools.h>
 #include <QtGui/QComboBox>
 #include <QtGui/QFormLayout>
 #include <QtGui/QLabel>
-#include <QtGui/QDialogButtonBox>
 #include <QtGui/QPushButton>
 #include <QtGui/QLineEdit>
 using namespace tlp;
@@ -229,52 +229,5 @@ bool CSVGraphMappingConfigurationWidget::isValid()const{
 }
 
 void CSVGraphMappingConfigurationWidget::createNewProperty(){
-    QDialog *dialog = new QDialog(this);
-    dialog->setObjectName("createNewPropertyDialog");
-    QFormLayout * formLayout = new QFormLayout(dialog);
-    dialog->setLayout(formLayout);
-    dialog->setWindowTitle(tr("Create property"));
-    //Property type
-    QComboBox *propertyTypeSelection = new QComboBox(dialog);
-    propertyTypeSelection->setObjectName("createNewPropertyDialogComboBox");
-    propertyTypeSelection->addItems(PropertyTools::getPropertyTypeLabelsList());
-    formLayout->addRow(tr("Select the property type"),propertyTypeSelection);
-    //Property name
-    QLineEdit *propertyNameLineEdit = new QLineEdit(dialog);
-    propertyNameLineEdit->setObjectName("propertyNameLineEdit");
-    formLayout->addRow(tr("Enter the property name"),propertyNameLineEdit);
-
-    //Button box
-    QDialogButtonBox *buttons = new QDialogButtonBox(dialog);
-    buttons->setObjectName("createNewPropertyDialogButtonBox");
-    QPushButton* createButton = new QPushButton(tr("Create"),buttons);
-    createButton->setObjectName("createNewPropertyDialogButton");
-    createButton->setDefault(true);
-    buttons->addButton(createButton,QDialogButtonBox::AcceptRole);
-    buttons->addButton(QDialogButtonBox::Cancel)->setObjectName("cancelCreateNewPropertyButton");
-    formLayout->addRow(buttons);
-    connect(buttons,SIGNAL(accepted()),dialog,SLOT(accept()));
-    connect(buttons,SIGNAL(rejected()),dialog,SLOT(reject()));
-    if(dialog->exec()==QDialog::Accepted){
-        QString propertyName = propertyNameLineEdit->text();
-         string propertyType = PropertyTools::getPropertyTypeFromPropertyTypeLabel(QStringToTlpString(propertyTypeSelection->currentText()));
-
-         bool error = false;
-        if(propertyName.isEmpty()){
-            QMessageBox::critical(this,tr("Cannot create a property with an empty name."),tr("You can't create a property with empty name."));
-            error = true;
-        }
-        if(graph->existLocalProperty(QStringToTlpString(propertyName))){
-            QMessageBox::critical(this,tr("A property with the same name already exist."),tr("You cannot create a property if a property with the same name already exists in the graph."));
-            error = true;
-        }
-        if(!error){
-            PropertyTools::getLocalProperty(graph,QStringToTlpString(propertyName),propertyType);
-            //Refresh combobox
-            ui->graphIndexPropertiesComboBox->setGraph(graph);
-            //Select new property
-            ui->graphIndexPropertiesComboBox->setCurrentIndex(ui->graphIndexPropertiesComboBox->findText(propertyName));
-        }
-    }
-    dialog->deleteLater();
+    PropertyCreationDialog::createNewProperty(graph,this);
 }

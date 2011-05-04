@@ -77,6 +77,7 @@ INSTALL(FILES
   tulip/SmallMultiplesNavigatorComponent.h
   tulip/GlOffscreenRenderer.h
   tulip/SnapshotDialog.h
+  tulip/PropertyCreationDialog.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_qt_dev
 )
