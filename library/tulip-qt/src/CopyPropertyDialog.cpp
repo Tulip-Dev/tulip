@@ -34,62 +34,277 @@
 #include <QtGui/qtabwidget.h>
 
 #include "tulip/CopyPropertyDialog.h"
+#include "tulip/TlpQtTools.h"
+#include <tulip/ForEach.h>
+#include <tulip/Graph.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 
 using namespace std;
 using namespace tlp;
 
 //=============================================================================
 CopyPropertyDialog::CopyPropertyDialog(QWidget* parent)
-  : QDialog(parent) {
-  setupUi(this);
-  connect((QObject *) buttonOK , SIGNAL(clicked()), this, SLOT(accept()) );
-  connect((QObject *) buttonCancel , SIGNAL(clicked()), this, SLOT(reject()) );
+    : QDialog(parent),_graph(NULL),_source(NULL) {
+    setupUi(this);
+    connect((QObject *) buttonOK , SIGNAL(clicked()), this, SLOT(accept()) );
+    connect((QObject *) buttonCancel , SIGNAL(clicked()), this, SLOT(reject()) );
+    errorIconLabel->setPixmap(QApplication::style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(16,16));    
+    connect(newPropertyNameLineEdit,SIGNAL(textChanged(QString)),this,SLOT(checkValidity()));
+    connect(buttonGroup,SIGNAL(buttonClicked (int)),this,SLOT(checkValidity()));
+    checkValidity();
 }
 
-void CopyPropertyDialog::setProperties(std::string& srcProp,
-				       std::vector<std::string>& localProps,
-				       std::vector<std::string>& inheritedProps) {
-  setWindowTitle(QString::fromUtf8((std::string("Copy property ") + srcProp).c_str()));
-  unsigned int i = 0;
-  if (localProps.size() == 0)
-    localPropertyButton->setEnabled(false);
-  else
-    for (; i < localProps.size(); ++i)
-      localProperties->addItem(QString::fromUtf8(localProps[i].c_str()));
-  if (inheritedProps.size() == 0)
-    inheritedPropertyButton->setEnabled(false);
-  else
-    for (i = 0; i < inheritedProps.size(); ++i)
-      inheritedProperties->addItem(QString::fromUtf8(inheritedProps[i].c_str()));
-}
+void CopyPropertyDialog::init(Graph* graph,PropertyInterface* source){
+    _graph = graph;
+    _source = source;
+    newPropertyRadioButton->setChecked(true);
+    if(_graph != NULL){
+        PropertyInterface* property;
+        Graph *parent = _graph->getSuperGraph();
+        if (parent == graph){
+            parent = 0;
+        }
+        forEach(property,_graph->getLocalObjectProperties()){
+            //Check if the same type and different name.
+            if(typeid(*property) == typeid(*source) && source->getName() != property->getName()){
+                localPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
+            }
+            if (parent && parent->existProperty(property->getName())){
+                inheritedPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
+            }
+        }
+        if(localPropertiesComboBox->count()==0){
+            localPropertyRadioButton->setEnabled(false);
+        }else{
+            localPropertyRadioButton->setEnabled(true);
+        }
 
-bool CopyPropertyDialog::getDestinationProperty(CopyPropertyDialog::destType& type, std::string& prop) {
-  type = CopyPropertyDialog::NEW;
-  if (exec() == QDialog::Accepted) {
-    if (newPropertyText->isEnabled())
-      prop = std::string(newPropertyText->text().toUtf8().data());
-    else {
-      type = CopyPropertyDialog::LOCAL;
-      if (localProperties->isEnabled())
-	prop = std::string(localProperties->currentText().toUtf8().data());
-      else {
-	type = CopyPropertyDialog::INHERITED;
-	prop = std::string(inheritedProperties->currentText().toUtf8().data());
-      }
+        forEach(property,_graph->getInheritedObjectProperties()){
+            //Check if the same type and different name.
+            if(typeid(*property) == typeid(*source) && source->getName() != property->getName()){
+                inheritedPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
+            }
+        }
+        if(inheritedPropertiesComboBox->count()==0){
+            inheritedPropertyRadioButton->setEnabled(false);
+        }else{
+            inheritedPropertyRadioButton->setEnabled(true);
+        }
     }
-    return true;
-  }
-  return false;
+    checkValidity();
 }
 
-void CopyPropertyDialog::setNew(bool flag) {
-  newPropertyText->setEnabled(flag);
+PropertyInterface* CopyPropertyDialog::copyProperty(QString& errorMsg){
+    PropertyInterface* property = NULL;    
+    QString propertyName;
+    bool valid = true;
+
+    //Check if parameters are valid.
+    if(_graph==NULL){
+        valid = false;
+        errorMsg = tr("Invalid graph");
+    }else if(_source == NULL){
+        valid = false;
+        errorMsg = tr("Invalid source property");
+    } else if(newPropertyRadioButton->isChecked()){
+        propertyName = newPropertyNameLineEdit->text();
+        if(propertyName.isEmpty()){
+            valid = false;
+            errorMsg = tr("Cannot create a property with an empty name");
+        }else if(_graph->existProperty(QStringToTlpString(propertyName))){
+            PropertyInterface* existingProperty = _graph->getProperty(QStringToTlpString(propertyName));
+            if(typeid(*existingProperty) != typeid(*_source)){
+                valid = false;
+                errorMsg = tr("A property with the same name but a different type already exists");
+            }
+        }
+    }else if(localPropertyRadioButton->isChecked()){
+        propertyName = localPropertiesComboBox->currentText();
+        if(propertyName.isEmpty()){
+            valid = false;
+            errorMsg = tr("No properties available");
+        }
+    }else{
+        propertyName = inheritedPropertiesComboBox->currentText();
+        if(propertyName.isEmpty()){
+            valid = false;
+            errorMsg = tr("No properties available");
+        }
+    }
+    if(valid){
+        string tulipPropertyName = QStringToTlpString(propertyName);
+        CopyPropertyDialog::PropertyScope destinationScope = destinationPropertyScope();
+        Graph *parentGraph = _graph->getSuperGraph();
+        _graph->push();
+        if (typeid((*_source)) == typeid(DoubleProperty)) {
+            DoubleProperty* doubleProperty = destinationScope==NEW?_graph->getLocalProperty<DoubleProperty>(tulipPropertyName):parentGraph->getProperty<DoubleProperty>(tulipPropertyName);
+            *doubleProperty = *((DoubleProperty*) _source);
+            property = doubleProperty;
+        }
+        if (typeid((*_source)) == typeid(LayoutProperty)) {
+            LayoutProperty* layoutProperty = destinationScope==NEW?_graph->getLocalProperty<LayoutProperty>(tulipPropertyName):parentGraph->getProperty<LayoutProperty>(tulipPropertyName);
+            *layoutProperty = *((LayoutProperty*) _source);
+            property = layoutProperty;
+        }
+        if (typeid((*_source)) == typeid(StringProperty)) {
+            StringProperty* stringProperty = destinationScope==NEW?_graph->getLocalProperty<StringProperty>(tulipPropertyName):parentGraph->getProperty<StringProperty>(tulipPropertyName);
+            *stringProperty = *((StringProperty*) _source);
+            property = stringProperty;
+        }
+        if (typeid((*_source)) == typeid(BooleanProperty)) {
+            BooleanProperty* booleanProperty = destinationScope==NEW?_graph->getLocalProperty<BooleanProperty>(tulipPropertyName):parentGraph->getProperty<BooleanProperty>(tulipPropertyName);
+            * booleanProperty= *((BooleanProperty*) _source);
+            property= booleanProperty;
+        }
+        if (typeid((*_source)) == typeid(IntegerProperty)) {
+            IntegerProperty* integerProperty = destinationScope==NEW?_graph->getLocalProperty<IntegerProperty>(tulipPropertyName):parentGraph->getProperty<IntegerProperty>(tulipPropertyName);
+            *integerProperty = *((IntegerProperty*) _source);
+            property = integerProperty;
+        }
+        if (typeid((*_source)) == typeid(ColorProperty)) {
+            ColorProperty* colorProperty = destinationScope==NEW?_graph->getLocalProperty<ColorProperty>(tulipPropertyName):parentGraph->getProperty<ColorProperty>(tulipPropertyName);
+            *colorProperty = *((ColorProperty*) _source);
+            property = colorProperty;
+        }
+        if (typeid((*_source)) == typeid(SizeProperty)) {
+            SizeProperty* sizeProperty = destinationScope==NEW?_graph->getLocalProperty<SizeProperty>(tulipPropertyName):parentGraph->getProperty<SizeProperty>(tulipPropertyName);
+            *sizeProperty = *((SizeProperty*) _source);
+            property = sizeProperty;
+        }
+        if (typeid((*_source)) == typeid(DoubleVectorProperty)) {
+            DoubleVectorProperty* doubleVectorProperty = destinationScope==NEW?_graph->getLocalProperty<DoubleVectorProperty>(tulipPropertyName):parentGraph->getProperty<DoubleVectorProperty>(tulipPropertyName);
+            *doubleVectorProperty= *((DoubleVectorProperty*) _source);
+            property = doubleVectorProperty;
+        }
+        if (typeid((*_source)) == typeid(CoordVectorProperty)) {
+            CoordVectorProperty* coordVectorProperty = destinationScope==NEW?_graph->getLocalProperty<CoordVectorProperty>(tulipPropertyName):parentGraph->getProperty<CoordVectorProperty>(tulipPropertyName);
+            *coordVectorProperty = *((CoordVectorProperty*) _source);
+            property = coordVectorProperty;
+        }
+        if (typeid((*_source)) == typeid(StringVectorProperty)) {
+            StringVectorProperty* stringVectorProperty = destinationScope==NEW?_graph->getLocalProperty<StringVectorProperty>(tulipPropertyName):parentGraph->getProperty<StringVectorProperty>(tulipPropertyName);
+            *stringVectorProperty = *((StringVectorProperty*) _source);
+            property = stringVectorProperty;
+        }
+        if (typeid((*_source)) == typeid(BooleanVectorProperty)) {
+            BooleanVectorProperty* booleanVectorProperty = destinationScope==NEW?_graph->getLocalProperty<BooleanVectorProperty>(tulipPropertyName):parentGraph->getProperty<BooleanVectorProperty>(tulipPropertyName);
+            *booleanVectorProperty = *((BooleanVectorProperty*) _source);
+            property = booleanVectorProperty;
+        }
+        if (typeid((*_source)) == typeid(IntegerVectorProperty)) {
+            IntegerVectorProperty* integerVectorProperty = destinationScope==NEW?_graph->getLocalProperty<IntegerVectorProperty>(tulipPropertyName):parentGraph->getProperty<IntegerVectorProperty>(tulipPropertyName);
+            *integerVectorProperty   = *((IntegerVectorProperty*) _source);
+            property = integerVectorProperty;
+        }
+        if (typeid((*_source))
+            == typeid(ColorVectorProperty)) {
+            ColorVectorProperty* colorVectorProperty = destinationScope==NEW?_graph->getLocalProperty<ColorVectorProperty>(tulipPropertyName):parentGraph->getProperty<ColorVectorProperty>(tulipPropertyName);
+            *colorVectorProperty= *((ColorVectorProperty*) _source);
+            property = colorVectorProperty;
+        }
+        if (typeid((*_source))
+            == typeid(SizeVectorProperty)) {
+            SizeVectorProperty* sizeVectorProperty = destinationScope==NEW?_graph->getLocalProperty<SizeVectorProperty>(tulipPropertyName):parentGraph->getProperty<SizeVectorProperty>(tulipPropertyName);
+            *sizeVectorProperty = *((SizeVectorProperty*) _source);
+            property = sizeVectorProperty;
+        }
+    }
+    return property;
 }
 
-void CopyPropertyDialog::setLocal(bool flag) {
-  localProperties->setEnabled(flag);
+PropertyInterface* CopyPropertyDialog::copyProperty(Graph* graph,PropertyInterface* toCopy,bool askBeforePropertyOverwriting,QWidget* parent){
+    PropertyInterface* property = NULL;
+    CopyPropertyDialog dialog(parent);
+    dialog.setWindowTitle(tr("Copy property ")+tlpStringToQString(toCopy->getName()));
+    dialog.init(graph,toCopy);
+    if(dialog.exec() == QDialog::Accepted){
+        QString errorMsg;
+        bool copy = true;
+        if(askBeforePropertyOverwriting && dialog.destinationPropertyScope()== CopyPropertyDialog::NEW){
+            QString selectedPropertyName = dialog.destinationPropertyName();
+            if(graph->existProperty(QStringToTlpString(selectedPropertyName))){
+                if (QMessageBox::question(parent, "Copy confirmation", QString("Property ")
+                    + selectedPropertyName + " already exists,\ndo you really want to overwrite it ?", QMessageBox::Ok,
+                    QMessageBox::Cancel) == QDialog::Rejected){
+                    copy = false;
+                }
+            }
+        }
+        if(copy){
+            PropertyInterface* createdProperty = dialog.copyProperty(errorMsg);
+            if(createdProperty == NULL){
+                QMessageBox::critical(parent,tr("Error during the copy"),errorMsg);
+            }
+            property = createdProperty;
+        }
+    }
+    return property;
 }
 
-void CopyPropertyDialog::setInherited(bool flag) {
-  inheritedProperties->setEnabled(flag);
+void CopyPropertyDialog::checkValidity(){
+    bool valid = true;
+    QString errorMsg;
+    if(_graph==NULL){
+        valid = false;
+        errorMsg = tr("Invalid graph");
+    }else if(_source == NULL){
+        valid = false;
+        errorMsg = tr("Invalid source property");
+    }else if(newPropertyRadioButton->isChecked()){
+        QString propertyName = newPropertyNameLineEdit->text();
+        if(propertyName.isEmpty()){
+            valid = false;
+            errorMsg = tr("Cannot create a property with an empty name");
+        }else if(_graph->existProperty(QStringToTlpString(propertyName))){
+            PropertyInterface* existingProperty = _graph->getProperty(QStringToTlpString(propertyName));
+            if(typeid(*existingProperty) != typeid(*_source)){
+                valid = false;
+                errorMsg = tr("A property with the same name but a different type already exists");
+            }
+        }
+    }else if(localPropertyRadioButton->isChecked()){
+        if(localPropertiesComboBox->currentText().isEmpty()){
+            valid = false;
+            errorMsg = tr("No properties available");
+        }
+    }else {
+        if(inheritedPropertiesComboBox->currentText().isEmpty()){
+            valid = false;
+            errorMsg = tr("No properties available");
+        }
+    }
+    errorNotificationWidget->setVisible(!errorMsg.isEmpty());
+    errorLabel->setText(errorMsg);
+    buttonOK->setEnabled(valid);
+}
+
+QString CopyPropertyDialog::destinationPropertyName()const{
+    if(_graph==NULL || _source == NULL){
+        return QString();
+    }
+    QString propertyName;
+    if(newPropertyRadioButton->isChecked()){
+        propertyName = newPropertyNameLineEdit->text();
+    }else if(localPropertyRadioButton->isChecked()){
+        propertyName = localPropertiesComboBox->currentText();
+    }else{
+        propertyName = inheritedPropertiesComboBox->currentText();
+    }
+    return propertyName;
+}
+
+CopyPropertyDialog::PropertyScope CopyPropertyDialog::destinationPropertyScope()const{
+    if(newPropertyRadioButton->isChecked()){
+        return NEW;
+    }else if(localPropertyRadioButton->isChecked()){
+        return LOCAL;
+    }else{
+        return INHERITED;
+    }
 }
