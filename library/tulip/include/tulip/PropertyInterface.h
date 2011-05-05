@@ -46,6 +46,7 @@ protected:
   Graph *graph;
 
 public:
+
   virtual ~PropertyInterface();
   /**
    * Removes the value stored for the node given in parameter.
@@ -64,7 +65,7 @@ public:
    * it is not the default value.
    */
   virtual void copy(const node src, const node dst, PropertyInterface *prop,
-		    bool ifNotDefault = false) =0;
+                    bool ifNotDefault = false) =0;
   /**
    * Sets the value of an edge (first argument) in the current property (this)
    * with the value of the edge (second argument) defined in prop (third argument)
@@ -73,7 +74,7 @@ public:
    * it is not the default value.
    */
   virtual void copy(const edge src, const edge dst , PropertyInterface *prop,
-		    bool ifNotDefault = false) =0;
+                    bool ifNotDefault = false) =0;
   /**
     * Creates an object of the same real type of the current property, in the
     * the graph (first parameter) with the name (second parameter).
@@ -258,6 +259,19 @@ public:
     return countListeners();
   }
 
+  /**
+    * @brief Compare value of the node n1 to the value of the node n2.
+    *
+    * @return Return 0 if values are equal otherwise otherwise a number different from 0 is returned, with its sign indicating whether the value ot the node n1 is considered greater than the comparing value of the node n2(positive sign), or smaller (negative sign).
+    **/
+   virtual int compare(node n1,node n2) = 0;
+   /**
+     * @brief Compare value of the edge e1 to the value of the edge e2.
+     *
+     * @return Return 0 if values are equal otherwise otherwise a number different from 0 is returned, with its sign indicating whether the value of edge e1 is considered greater than the comparing value of the edge e2 (positive sign), or smaller (negative sign).
+     **/
+   virtual int compare(edge e1,edge e2) = 0;
+
  protected:
   MetaValueCalculator* metaValueCalculator;
 
@@ -279,16 +293,16 @@ class TLP_SCOPE PropertyEvent :public Event {
     // be careful about the ordering of the constants
     // in the enum below because it is used in some assertions
     enum PropertyEventType {TLP_BEFORE_SET_NODE_VALUE = 0,
-			    TLP_AFTER_SET_NODE_VALUE,
-			    TLP_BEFORE_SET_ALL_NODE_VALUE,
-			    TLP_AFTER_SET_ALL_NODE_VALUE,
-			    TLP_BEFORE_SET_ALL_EDGE_VALUE,
-			    TLP_AFTER_SET_ALL_EDGE_VALUE,
-			    TLP_BEFORE_SET_EDGE_VALUE,
-			    TLP_AFTER_SET_EDGE_VALUE};
+                            TLP_AFTER_SET_NODE_VALUE,
+                            TLP_BEFORE_SET_ALL_NODE_VALUE,
+                            TLP_AFTER_SET_ALL_NODE_VALUE,
+                            TLP_BEFORE_SET_ALL_EDGE_VALUE,
+                            TLP_AFTER_SET_ALL_EDGE_VALUE,
+                            TLP_BEFORE_SET_EDGE_VALUE,
+                            TLP_AFTER_SET_EDGE_VALUE};
     PropertyEvent(const PropertyInterface& prop, PropertyEventType propEvtType,
-		  Event::EventType evtType = Event::TLP_MODIFICATION,
-		  unsigned int id = UINT_MAX)
+                  Event::EventType evtType = Event::TLP_MODIFICATION,
+                  unsigned int id = UINT_MAX)
       : Event(prop, evtType), evtType(propEvtType), eltId(id) {}
 
     PropertyInterface* getProperty() const {

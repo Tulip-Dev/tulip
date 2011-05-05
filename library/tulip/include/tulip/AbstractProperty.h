@@ -378,6 +378,18 @@ public:
     metaValueCalculator = mvCalc;
   }
 
+
+  /**
+    * @brief Default implementation of PropertyInterface::compare(node n1,node n2)
+    **/
+  int compare(node n1,node n2);
+
+  /**
+    * @brief Default implementation of PropertyInterface::compare(edge e1,edge e2)
+    **/
+  int compare(edge e1,edge e2);
+
+
   /**
    * @brief This class is used to delegate the computation of the values associated to meta nodes or edges.
    **/

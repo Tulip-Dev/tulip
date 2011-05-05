@@ -255,6 +255,14 @@ void IntegerProperty::treatEvent(const Event& evt) {
   GraphObserver::treatEvent(evt);
 }
 //=================================================================================
+int IntegerProperty::compare(node n1,node n2){
+    return getNodeValue(n1) - getNodeValue(n2);
+}
+//=================================================================================
+int IntegerProperty::compare(edge e1,edge e2){
+    return getEdgeValue(e1) - getEdgeValue(e2);
+}
+//=================================================================================
 PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
@@ -263,3 +271,4 @@ PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, const std::s
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
 }
+
