@@ -87,4 +87,5 @@ void TulipMainWindow::setPluginsErrors(const QMap<QString, QString> &e) {
 void TulipMainWindow::systemTrayMessageClicked() {
   if (_currentTrayMessage == PluginErrorMessage)
     _ui->pluginsPage->showErrorsPage();
+  _currentTrayMessage = NoMessage;
 }

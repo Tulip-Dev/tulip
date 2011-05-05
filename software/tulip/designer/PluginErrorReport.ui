@@ -29,18 +29,28 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QLabel" name="fileName">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <widget class="QPushButton" name="reinstallBtn">
+       <property name="minimumSize">
+        <size>
+         <width>28</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>28</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Reinstall</string>
        </property>
        <property name="text">
         <string/>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/tulip/app/icons/emblem-downloads.svg</normaloff>:/tulip/app/icons/emblem-downloads.svg</iconset>
        </property>
       </widget>
      </item>
@@ -65,34 +75,24 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="TulipApp.qrc">
+        <iconset>
          <normaloff>:/tulip/app/icons/edit-delete.svg</normaloff>:/tulip/app/icons/edit-delete.svg</iconset>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="reinstallBtn">
-       <property name="minimumSize">
-        <size>
-         <width>28</width>
-         <height>28</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>28</width>
-         <height>28</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Reinstall</string>
+      <widget class="QLabel" name="fileName">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <property name="text">
         <string/>
        </property>
-       <property name="icon">
-        <iconset resource="TulipApp.qrc">
-         <normaloff>:/tulip/app/icons/emblem-downloads.svg</normaloff>:/tulip/app/icons/emblem-downloads.svg</iconset>
+       <property name="alignment">
+        <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
        </property>
       </widget>
      </item>
@@ -122,12 +122,13 @@
      <property name="text">
       <string/>
      </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
     </widget>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="TulipApp.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
