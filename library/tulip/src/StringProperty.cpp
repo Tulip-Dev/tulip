@@ -34,6 +34,14 @@ PropertyInterface* StringProperty::clonePrototype(Graph * g, const std::string& 
 	return p;
 }
 //=================================================================================
+int StringProperty::compare(node n1,node n2){
+    return getNodeValue(n1).compare(getNodeValue(n2));
+}
+//=================================================================================
+int StringProperty::compare(edge e1,edge e2){
+    return getEdgeValue(e1).compare(getEdgeValue(e2));
+}
+//=================================================================================
 PropertyInterface* StringVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
@@ -42,4 +50,6 @@ PropertyInterface* StringVectorProperty::clonePrototype(Graph * g, const std::st
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
 }
+
+
 

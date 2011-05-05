@@ -46,6 +46,16 @@ public :
   std::string getTypename() const {
     return "string";
   }
+
+  /**
+    * @brief Specific implementation of AbstractProperty::compare(node n1,node n2)
+    **/
+  int compare(node n1,node n2);
+
+  /**
+    * @brief Specific implementation of AbstractProperty::compare(edge e1,edge e2)
+    **/
+  int compare(edge e1,edge e2);
 };
 
   class TLP_SCOPE StringVectorProperty:public AbstractVectorProperty<tlp::StringVectorType, tlp::StringType>{ 

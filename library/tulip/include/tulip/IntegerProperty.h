@@ -62,6 +62,16 @@ public :
   virtual void setAllNodeValue(const int &v);
   virtual void setAllEdgeValue(const int &v);
 
+  /**
+    * @brief Specific implementation of AbstractProperty::compare(node n1,node n2)
+    **/
+  int compare(node n1,node n2);
+
+  /**
+    * @brief Specific implementation of AbstractProperty::compare(edge e1,edge e2)
+    **/
+  int compare(edge e1,edge e2);
+
 protected:
   virtual void clone_handler(AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> &);
 
