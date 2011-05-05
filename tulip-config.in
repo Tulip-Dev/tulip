@@ -13,7 +13,7 @@ libversion=@libversion@
 libextension=so
 plugincxxflags="-fPIC -DPIC"
 pluginldflags=-shared
-pluginpath=${libdir}/tlp
+pluginpath=${prefix}/lib/tlp
 
 WINNT=$(sh -c 'uname -s | grep -q MINGW32_NT; echo $?')
 MACOSX=$(sh -c 'uname -s | grep -q Darwin; echo $?')
@@ -34,19 +34,19 @@ if [ $WINNT -eq 0 ] ; then
   libversion=@WIN_VERSION@
   libextension=dll
   plugincxxflags=-DPIC
-  if [ -f "$thisdir/uninst-Tulip.exe" ] ; then
+  if [ -f "$thisdir/../Uninstall.exe" ] ; then
 #   Windows installation
     drive=`echo ${thisdir} | awk -F / '{print $2}'`
     ndir=${thisdir/\/$drive\//$drive:/}
     if [ -d ${ndir} ]; then
       thisdir=${ndir}
     fi
-    includedir=${thisdir}/include
-    libdir=${thisdir}
-    pluginpath=${libdir}/lib/tlp
+    includedir=${thisdir}/../include
+    libdir=${thisdir}/../bin
+    pluginpath=${thisdir}/../lib/tlp
   else
-    pluginpath=${libdir}/bin
-    libdir=${exec_prefix}/bin
+    pluginpath=${prefix}/lib/tlp
+    libdir=${prefix}/bin
   fi
 fi
 
