@@ -19,6 +19,7 @@ QT4_WRAP_UI(UI_HEADERS
 )
 
 QT4_WRAP_CPP(MOC_SRCS
+  include/PluginsCenter.h
   include/TulipMainWindow.h
   include/TulipWelcomePage.h
 )

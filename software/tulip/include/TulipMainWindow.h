@@ -13,6 +13,8 @@ public:
   TulipMainWindow(QWidget *parent=0);
   virtual ~TulipMainWindow();
 
+  void setPluginsErrors(const QMap<QString,QString> &e) { _ui->pluginsPage->setPluginsError(e); }
+
 public slots:
   void startApp();
   void closeApp();

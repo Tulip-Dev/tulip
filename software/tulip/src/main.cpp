@@ -40,6 +40,7 @@ int main(int argc, char **argv) {
 
   TulipMainWindow *mainWindow = new TulipMainWindow;
   mainWindow->startApp();
+  mainWindow->setPluginsErrors(abortedPlugins);
 
   return tulip.exec();
 }
