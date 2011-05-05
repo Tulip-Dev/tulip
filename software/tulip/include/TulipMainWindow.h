@@ -18,7 +18,6 @@ public:
 public slots:
   void startApp();
   void closeApp();
-  void showPage(int);
 
 protected:
   void closeEvent(QCloseEvent *);
@@ -27,6 +26,7 @@ protected slots:
   void systemTrayRequest(QSystemTrayIcon::ActivationReason);
   void systemTrayMessageClicked();
   void pageChooserClicked();
+  void pageSwitched(int);
 
 private:
   enum SystemTrayMessage {
@@ -37,6 +37,8 @@ private:
   Ui::TulipMainWindowData *_ui;
   QSystemTrayIcon *_systemTrayIcon;
   SystemTrayMessage _currentTrayMessage;
+
+  QVector<QObject *> _pageChoosers;
 };
 
 #endif // TULIPMAINWINDOW_H

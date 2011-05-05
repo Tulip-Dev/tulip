@@ -7,13 +7,13 @@
 #include <tulip/TlpTools.h>
 #include <tulip/TulipRelease.h>
 
-//FIXME: remove me
-#include <iostream>
-using namespace std;
-
 TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new Ui::TulipMainWindowData()), _systemTrayIcon(0) {
-  cout << "test" << endl;
   _ui->setupUi(this);
+  _pageChoosers.clear();
+  _pageChoosers.push_back(_ui->welcomePageChooser);
+  _pageChoosers.push_back(_ui->pluginsPageChooser);
+  _pageChoosers.push_back(_ui->aboutPageChooser);
+
   _ui->mainLogo->setPixmap(QPixmap((tlp::TulipBitmapDir + "/welcomelogo.bmp").c_str()));
   setFixedSize(800,577);
 
@@ -37,6 +37,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   _systemTrayIcon->setToolTip(trUtf8("Tulip startup agent"));
   connect(_systemTrayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(systemTrayRequest(QSystemTrayIcon::ActivationReason)));
   connect(_systemTrayIcon,SIGNAL(messageClicked()),this,SLOT(systemTrayMessageClicked()));
+  connect(_ui->pages,SIGNAL(currentChanged(int)),this,SLOT(pageSwitched(int)));
 }
 
 TulipMainWindow::~TulipMainWindow() {
@@ -63,19 +64,16 @@ void TulipMainWindow::systemTrayRequest(QSystemTrayIcon::ActivationReason reason
     setVisible(!isVisible());
 }
 
-void TulipMainWindow::showPage(int i) {
+void TulipMainWindow::pageChooserClicked() {
   if (!isVisible())
     setVisible(true);
-  _ui->pages->setCurrentIndex(i);
+  _ui->pages->setCurrentIndex(_pageChoosers.indexOf(sender()));
 }
 
-void TulipMainWindow::pageChooserClicked() {
-  if (sender() == _ui->welcomePageChooser)
-    showPage(0);
-  else if (sender() == _ui->pluginsPageChooser)
-    showPage(1);
-  else
-    showPage(2);
+void TulipMainWindow::pageSwitched(int i) {
+  if (i >= _pageChoosers.size() || i < 0)
+    return;
+  static_cast<QToolButton *>(_pageChoosers[i])->setChecked(true);
 }
 
 void TulipMainWindow::setPluginsErrors(const QMap<QString, QString> &e) {
@@ -87,7 +85,6 @@ void TulipMainWindow::setPluginsErrors(const QMap<QString, QString> &e) {
 }
 
 void TulipMainWindow::systemTrayMessageClicked() {
-  cout << "test" << endl;
   if (_currentTrayMessage == PluginErrorMessage)
     _ui->pluginsPage->showErrorsPage();
 }
