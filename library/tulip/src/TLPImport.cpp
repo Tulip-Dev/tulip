@@ -86,7 +86,7 @@ namespace tlp {
         std::map<int,Graph *> clusterIndex;
         DataSet *dataSet;
         bool inTLP;
-        float version;
+        double version;
 
         TLPGraphBuilder(Graph *graph, DataSet *dataSet): _graph(graph),
         dataSet(dataSet) {
@@ -101,8 +101,8 @@ namespace tlp {
         bool addString(const std::string& str) {
             // only used to handle the version of tlp file format
             if (!version) {
-                version = (float) atof(str.c_str());
-                return version <= ((float)TLP_VERSION);
+                version = atof(str.c_str());
+                return version <= TLP_VERSION;
             }
             return false;
         }
