@@ -16,16 +16,19 @@ public:
 public slots:
   void startApp();
   void closeApp();
+  void showPage(int);
 
 protected:
   void closeEvent(QCloseEvent *);
 
 protected slots:
   void systemTrayRequest(QSystemTrayIcon::ActivationReason);
+  void pageChooserClicked();
 
 private:
   Ui::TulipMainWindowData *_ui;
   QSystemTrayIcon *_systemTrayIcon;
+
 };
 
 #endif // TULIPMAINWINDOW_H

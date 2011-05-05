@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>900</width>
-    <height>650</height>
+    <width>800</width>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -289,7 +289,7 @@ QToolButton:pressed {
         </widget>
        </item>
        <item>
-        <widget class="QToolButton" name="toolButton">
+        <widget class="QToolButton" name="aboutPageChooser">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -318,7 +318,9 @@ QToolButton:pressed {
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="TulipWelcomePage" name="page"/>
+      <widget class="TulipWelcomePage" name="welcomePage"/>
+      <widget class="PluginsCenter" name="pluginsPage"/>
+      <widget class="AboutTulipPage" name="aboutPage"/>
      </widget>
     </item>
    </layout>
@@ -329,6 +331,18 @@ QToolButton:pressed {
    <class>TulipWelcomePage</class>
    <extends>QWidget</extends>
    <header>TulipWelcomePage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PluginsCenter</class>
+   <extends>QWidget</extends>
+   <header>PluginsCenter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AboutTulipPage</class>
+   <extends>QWidget</extends>
+   <header>AboutTulipPage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

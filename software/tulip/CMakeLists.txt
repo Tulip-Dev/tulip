@@ -2,7 +2,9 @@ INSTALL(DIRECTORY bitmaps DESTINATION share/tulip/
 PATTERN ".svn" EXCLUDE)
 
 SET(SRCS
+  src/AboutTulipPage.cpp
   src/main.cpp
+  src/PluginsCenter.cpp
   src/RssParser.cpp
   src/TulipMainWindow.cpp
   src/TulipSplashScreen.cpp
@@ -10,6 +12,8 @@ SET(SRCS
 )
 
 QT4_WRAP_UI(UI_HEADERS
+  designer/AboutTulipPage.ui
+  designer/PluginsCenter.ui
   designer/TulipMainWindow.ui
   designer/TulipWelcomePage.ui
 )

@@ -3,6 +3,12 @@
         <file>arrow-left.png</file>
         <file>arrow-right.png</file>
         <file>logo32x32.png</file>
+        <file>plugin_algorithm.svg</file>
+        <file>plugin_controller.svg</file>
+        <file>plugin_interactor.svg</file>
+        <file>plugin_view.svg</file>
+        <file>error.svg</file>
+        <file>network-receive.svg</file>
     </qresource>
     <qresource prefix="/tulip/app/ui">
         <file>btn_26.png</file>

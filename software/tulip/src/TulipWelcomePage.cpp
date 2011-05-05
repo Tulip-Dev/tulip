@@ -16,20 +16,19 @@ static const int RSS_LIMIT = 3;
 
 TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui::TulipWelcomePageData) {
   _ui->setupUi(this);
+
   //Finalize Ui
   connect(_ui->websiteLabel,SIGNAL(linkActivated(QString)),this,SLOT(openLink(QString)));
   _ui->openProjectButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DirHomeIcon));
+
   // Fetch RSS
   _ui->rssScroll->setVisible(false);
   QNetworkAccessManager *manager = new QNetworkAccessManager(this);
   connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(rssReply(QNetworkReply*)));
   manager->get(QNetworkRequest(QUrl(RSS_URL)));
+
   // Recent documents list
   QList<QString> recentDocs = TulipSettings::instance().recentDocuments();
-
-  recentDocs.push_back("/home/seregon/file1.tlp");
-  recentDocs.push_back("/home/seregon/some/pretty/long/path/to/test/word/wrapping/it/should/be/cropped/at/the/end/of/the/label/now/we/will/add/some/padding/oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo.tlp");
-
   if (recentDocs.size() > 0) {
     QString txt = trUtf8("<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">p, li { white-space: pre-wrap; } a {color: black; }</style></head><body style=\" font-size:8.25pt; font-weight:400; font-style:normal;\">");
 
