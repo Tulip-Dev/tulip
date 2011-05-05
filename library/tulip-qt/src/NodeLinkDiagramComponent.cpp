@@ -324,7 +324,8 @@ namespace tlp {
           long compositeLong = 0;
           layerAndCompositeDataSet.get("layer",layerName);
           layerAndCompositeDataSet.get("composite",compositeLong);
-          mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
+          if (compositeLong)
+        	  mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
         }
       }
       for(std::list<std::string>::iterator it=toRemove.begin();it!=toRemove.end();++it)
@@ -346,9 +347,11 @@ namespace tlp {
           //add new info
           algorithmInfoDataSet[infoData.first]=newLayerAndCompositeDataSet;
 
-          GlComposite *composite;
-          composite=(GlComposite*)newCompositeLong;
-          mainWidget->getScene()->getLayer(newLayerName)->addGlEntity(composite,infoData.first);
+          if (newCompositeLong) {
+        	  GlComposite *composite =(GlComposite*) newCompositeLong;
+        	  mainWidget->getScene()->getLayer(newLayerName)->addGlEntity(composite,infoData.first);
+          }
+
         }else{
           //check integrity
           DataSet oldLayerAndCompositeDataSet=(*it).second;
@@ -362,22 +365,23 @@ namespace tlp {
             algorithmInfoDataSet.erase(it);
 
             algorithmInfoDataSet[infoData.first]=newLayerAndCompositeDataSet;
-            GlComposite *composite;
-            composite=(GlComposite*)newCompositeLong;
+            GlComposite *composite =(GlComposite*) newCompositeLong;
             mainWidget->getScene()->getLayer(newLayerName)->addGlEntity(composite,infoData.first);
           }
         }
       }
+
+      /*
       for(std::map<std::string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
         DataSet oldLayerAndCompositeDataSet=(*it).second;
         std::string oldLayerName;
-        long oldCompositeLong;
+        long oldCompositeLong = 0;
         oldLayerAndCompositeDataSet.get("layer",oldLayerName);
         oldLayerAndCompositeDataSet.get("composite",oldCompositeLong);
 
 
       }
-      /*Iterator< std::pair<std::string, DataType*> > *infoDataSetIt=nodeLinkDiagramComponentDataSet.getValues();
+      Iterator< std::pair<std::string, DataType*> > *infoDataSetIt=nodeLinkDiagramComponentDataSet.getValues();
       while(infoDataSetIt->hasNext()) {
         pair<string, DataType*> infoData;
         infoData = infoDataSetIt->next();
@@ -421,7 +425,8 @@ namespace tlp {
         long compositeLong = 0;
         layerAndCompositeDataSet.get("layer",layerName);
         layerAndCompositeDataSet.get("composite",compositeLong);
-        mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
+        if (compositeLong)
+        	mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
       }
       algorithmInfoDataSet.clear();
     }
