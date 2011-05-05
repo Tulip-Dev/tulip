@@ -395,8 +395,10 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainW
   _graph->push();
   if(edgeSelected)
     _layout->setEdgeValue(mEdge, coordinates);
-  else
-    _coordsVectorProperty->setNodeValue(mNode,coordinates);
+  else {
+    if (_coordsVectorProperty)
+      _coordsVectorProperty->setNodeValue(mNode,coordinates);
+  }
   Observable::unholdObservers();
 }
 //========================================================================================
