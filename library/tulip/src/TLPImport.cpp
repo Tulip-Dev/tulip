@@ -95,7 +95,7 @@ namespace tlp {
         std::map<int,Graph *> clusterIndex;
         DataSet *dataSet;
         bool inTLP;
-        float version;
+        double version;
 
         TLPGraphBuilder(Graph *graph, DataSet *dataSet): _graph(graph),
         dataSet(dataSet) {
@@ -110,21 +110,21 @@ namespace tlp {
         bool addString(const std::string& str) {
             // only used to handle the version of tlp file format
             if (!version) {
-                version = (float) atof(str.c_str());
-                return version <= ((float)TLP_VERSION);
+                version = atof(str.c_str());
+                return version <= TLP_VERSION;
             }
             return false;
         }
 
         bool addNode(int id) {
-            if (version < 2.1f)
+            if (version < 2.1)
                 nodeIndex[id]=_graph->addNode();
             else
                 _graph->addNode();
             return true;
         }
         bool addNodes(int first, int last) {
-            if (version < 2.1f) {
+            if (version < 2.1) {
                 while (first <= last) {
                     nodeIndex[first]=_graph->addNode();
                     first++;
@@ -147,7 +147,7 @@ namespace tlp {
         }
         bool addClusterNode(int id, int nodeId) {
             node n(nodeId);
-            if (version < 2.1f)
+            if (version < 2.1)
                 n = nodeIndex[nodeId];
             if (_graph->isElement(n) && clusterIndex[id]) {
                 clusterIndex[id]->addNode(n);
@@ -157,7 +157,7 @@ namespace tlp {
         }
         bool addClusterEdge(int id, int edgeId)  {
             edge e(edgeId);
-            if (version < 2.1f)
+            if (version < 2.1)
                 e = edgeIndex[edgeId];
             if (_graph->isElement(e) && clusterIndex[id]) {
                 clusterIndex[id]->addEdge(e);
@@ -166,7 +166,7 @@ namespace tlp {
         }
         bool addEdge(int id, int idSource,int idTarget) {
             node src(idSource), tgt(idTarget);
-            if (version < 2.1f) {
+            if (version < 2.1) {
                 src = nodeIndex[idSource];
                 tgt = nodeIndex[idTarget];
             }
@@ -179,7 +179,7 @@ namespace tlp {
         }
         bool setNodeValue(int nodeId, int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
             node n(nodeId);
-            if (version < 2.1f)
+            if (version < 2.1)
                 n = nodeIndex[nodeId];
             if (_graph->isElement(n) && clusterIndex[clusterId]) {
                 //cerr << "set node value ....." ;
@@ -213,7 +213,7 @@ namespace tlp {
 
         bool setEdgeValue(int edgeId, int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
             edge e(edgeId);
-            if (version < 2.1f)
+            if (version < 2.1)
                 e = edgeIndex[edgeId];
             if (_graph->isElement(e) && clusterIndex[clusterId]) {
                 //cerr << "setEdgeValue...." << "edge:" << edgeId << " cluster " << clusterId << " " << propertyName << " " << propertyType << " value=\""<< value<<"\"  ";
@@ -228,7 +228,7 @@ namespace tlp {
                 }
                 if (propertyType==INT){
                   //If we are in the old edge extremities id system we need to convert the ids in the file.
-                  if(version < 2.2f){
+                  if(version < 2.2){
                     if(propertyName==std::string("viewSrcAnchorShape") || propertyName==std::string("viewTgtAnchorShape")){
                       return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setEdgeStringValue(e, convertOldEdgeExtremitiesValueToNew(value) );
                     }
@@ -362,7 +362,7 @@ namespace tlp {
                     return clusterIndex[clusterId]->getLocalProperty<ColorProperty>(propertyName)->setAllEdgeStringValue( value );
                 if (propertyType==INT){
                   //If we are in the old edge extremities id system we need to convert the ids in the file.
-                  if(version < 2.2f){
+                  if(version < 2.2){
                     if(propertyName==std::string("viewSrcAnchorShape") || propertyName==std::string("viewTgtAnchorShape")){
                       return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setAllEdgeStringValue( convertOldEdgeExtremitiesValueToNew(value) );
                     }
@@ -466,12 +466,12 @@ namespace tlp {
         TLPClusterBuilder(TLPGraphBuilder *graphBuilder, int supergraph=0):graphBuilder(graphBuilder), supergraphId(supergraph){}
         bool addInt(const int id) {
 	  clusterId = id;
-	  if (graphBuilder->version > 2.2f)
+	  if (graphBuilder->version > 2.2)
 	    return graphBuilder->addCluster(id, std::string(), supergraphId);
 	  return true;
         }
         bool addString(const std::string& str) {
-	  if (graphBuilder->version < 2.3f)
+	  if (graphBuilder->version < 2.3)
 	    return graphBuilder->addCluster(clusterId, str, supergraphId);
 	  return true;
         }
