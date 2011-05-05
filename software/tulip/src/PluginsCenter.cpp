@@ -1,8 +1,5 @@
 #include "PluginsCenter.h"
-
-//FIXME: remove me
-#include <iostream>
-using namespace std;
+#include "PluginErrorReport.h"
 
 PluginsCenter::PluginsCenter(QWidget *parent) :
     QWidget(parent), _ui(new Ui::PluginsCenterData()) {
@@ -49,4 +46,7 @@ void PluginsCenter::listItemSelected() {
 void PluginsCenter::setPluginsError(const QMap<QString, QString> &errors) {
   if (errors.isEmpty())
     _ui->pluginsSideList->item(6)->setFlags(!Qt::ItemIsEnabled);
+
+  for (QMap<QString,QString>::const_iterator it = errors.begin(); it != errors.end(); ++it)
+    _ui->errorsLogAreaLayout->addWidget(new PluginErrorReport(it.key(),it.value()));
 }

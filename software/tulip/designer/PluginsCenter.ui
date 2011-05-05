@@ -207,7 +207,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            </font>
           </property>
           <property name="icon">
-           <iconset resource="TulipApp.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/logo32x32.png</normaloff>:/tulip/app/icons/logo32x32.png</iconset>
           </property>
          </item>
@@ -216,7 +216,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Algorithms</string>
           </property>
           <property name="icon">
-           <iconset resource="TulipApp.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/plugin_algorithm.svg</normaloff>:/tulip/app/icons/plugin_algorithm.svg</iconset>
           </property>
          </item>
@@ -225,7 +225,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Views</string>
           </property>
           <property name="icon">
-           <iconset resource="TulipApp.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/plugin_view.svg</normaloff>:/tulip/app/icons/plugin_view.svg</iconset>
           </property>
          </item>
@@ -234,7 +234,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Interactors</string>
           </property>
           <property name="icon">
-           <iconset resource="TulipApp.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/plugin_interactor.svg</normaloff>:/tulip/app/icons/plugin_interactor.svg</iconset>
           </property>
          </item>
@@ -243,7 +243,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Perspectives</string>
           </property>
           <property name="icon">
-           <iconset resource="TulipApp.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/plugin_controller.svg</normaloff>:/tulip/app/icons/plugin_controller.svg</iconset>
           </property>
          </item>
@@ -260,7 +260,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Errors</string>
           </property>
           <property name="icon">
-           <iconset resource="TulipApp.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/error.svg</normaloff>:/tulip/app/icons/error.svg</iconset>
           </property>
          </item>
@@ -269,7 +269,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Downloads</string>
           </property>
           <property name="icon">
-           <iconset resource="TulipApp.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/network-receive.svg</normaloff>:/tulip/app/icons/network-receive.svg</iconset>
           </property>
          </item>
@@ -283,7 +283,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
         <string notr="true"/>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="homePage">
         <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -408,7 +408,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                  <string>Algorithms</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="TulipApp.qrc">
+                 <iconset>
                   <normaloff>:/tulip/app/icons/plugin_algorithm.svg</normaloff>:/tulip/app/icons/plugin_algorithm.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -431,7 +431,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                  <string>Views</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="TulipApp.qrc">
+                 <iconset>
                   <normaloff>:/tulip/app/icons/plugin_view.svg</normaloff>:/tulip/app/icons/plugin_view.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -454,7 +454,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                  <string>Interactors</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="TulipApp.qrc">
+                 <iconset>
                   <normaloff>:/tulip/app/icons/plugin_interactor.svg</normaloff>:/tulip/app/icons/plugin_interactor.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -477,7 +477,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                  <string>Perspectives</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="TulipApp.qrc">
+                 <iconset>
                   <normaloff>:/tulip/app/icons/plugin_controller.svg</normaloff>:/tulip/app/icons/plugin_controller.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -580,7 +580,7 @@ p, li { white-space: pre-wrap; }
                 <x>0</x>
                 <y>0</y>
                 <width>419</width>
-                <height>170</height>
+                <height>188</height>
                </rect>
               </property>
               <property name="styleSheet">
@@ -636,6 +636,14 @@ p, li { white-space: pre-wrap; }
          </item>
          <item>
           <widget class="QScrollArea" name="errorsLogArea">
+           <property name="styleSheet">
+            <string notr="true">#errorsLogArea {
+border-left: 1px solid &quot;#C9C9C9&quot;;
+border-right: 1px solid &quot;#C9C9C9&quot;;
+border-bottom: 1px solid &quot;#C9C9C9&quot;;
+border-top: 1px solid &quot;#C9C9C9&quot;;
+}</string>
+           </property>
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>
            </property>
@@ -650,19 +658,16 @@ p, li { white-space: pre-wrap; }
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>406</width>
-              <height>344</height>
+              <width>402</width>
+              <height>357</height>
              </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">QWidget#scrollAreaWidgetContents {
+             <string notr="true">#errorsLogAreaContent {
 	background-color: white;
-border-left: 1px solid &quot;#C9C9C9&quot;;
-border-right: 1px solid &quot;#C9C9C9&quot;;
-border-bottom: 1px solid &quot;#C9C9C9&quot;;
-border-top: 1px solid &quot;#C9C9C9&quot;;
 }</string>
             </property>
+            <layout class="QVBoxLayout" name="errorsLogAreaLayout"/>
            </widget>
           </widget>
          </item>
@@ -675,8 +680,6 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="TulipApp.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

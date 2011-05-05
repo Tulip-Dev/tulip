@@ -5,6 +5,7 @@ SET(SRCS
   src/AboutTulipPage.cpp
   src/main.cpp
   src/PluginsCenter.cpp
+  src/PluginErrorReport.cpp
   src/RssParser.cpp
   src/TulipMainWindow.cpp
   src/TulipSplashScreen.cpp
@@ -14,12 +15,14 @@ SET(SRCS
 QT4_WRAP_UI(UI_HEADERS
   designer/AboutTulipPage.ui
   designer/PluginsCenter.ui
+  designer/PluginErrorReport.ui
   designer/TulipMainWindow.ui
   designer/TulipWelcomePage.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
   include/PluginsCenter.h
+  include/PluginErrorReport.h
   include/TulipMainWindow.h
   include/TulipWelcomePage.h
 )

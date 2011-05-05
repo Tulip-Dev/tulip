@@ -13,7 +13,7 @@ public:
   TulipMainWindow(QWidget *parent=0);
   virtual ~TulipMainWindow();
 
-  void setPluginsErrors(const QMap<QString,QString> &e) { _ui->pluginsPage->setPluginsError(e); }
+  void setPluginsErrors(const QMap<QString,QString> &);
 
 public slots:
   void startApp();
@@ -25,12 +25,18 @@ protected:
 
 protected slots:
   void systemTrayRequest(QSystemTrayIcon::ActivationReason);
+  void systemTrayMessageClicked();
   void pageChooserClicked();
 
 private:
+  enum SystemTrayMessage {
+    NoMessage,
+    PluginErrorMessage
+  };
+
   Ui::TulipMainWindowData *_ui;
   QSystemTrayIcon *_systemTrayIcon;
-
+  SystemTrayMessage _currentTrayMessage;
 };
 
 #endif // TULIPMAINWINDOW_H

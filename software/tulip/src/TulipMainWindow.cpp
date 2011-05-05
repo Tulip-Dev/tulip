@@ -7,7 +7,12 @@
 #include <tulip/TlpTools.h>
 #include <tulip/TulipRelease.h>
 
+//FIXME: remove me
+#include <iostream>
+using namespace std;
+
 TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new Ui::TulipMainWindowData()), _systemTrayIcon(0) {
+  cout << "test" << endl;
   _ui->setupUi(this);
   _ui->mainLogo->setPixmap(QPixmap((tlp::TulipBitmapDir + "/welcomelogo.bmp").c_str()));
   setFixedSize(800,577);
@@ -29,7 +34,9 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   systemTrayMenu->addSeparator();
   connect(systemTrayMenu->addAction(trUtf8("Exit")), SIGNAL(triggered()),this, SLOT(closeApp()));
   _systemTrayIcon->setContextMenu(systemTrayMenu);
+  _systemTrayIcon->setToolTip(trUtf8("Tulip startup agent"));
   connect(_systemTrayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(systemTrayRequest(QSystemTrayIcon::ActivationReason)));
+  connect(_systemTrayIcon,SIGNAL(messageClicked()),this,SLOT(systemTrayMessageClicked()));
 }
 
 TulipMainWindow::~TulipMainWindow() {
@@ -69,4 +76,18 @@ void TulipMainWindow::pageChooserClicked() {
     showPage(1);
   else
     showPage(2);
+}
+
+void TulipMainWindow::setPluginsErrors(const QMap<QString, QString> &e) {
+  _ui->pluginsPage->setPluginsError(e);
+  if (e.size() > 0) {
+    _systemTrayIcon->showMessage(trUtf8("Errors have been reported while loading plugins."),trUtf8("Click this message to see details."),QSystemTrayIcon::Critical);
+    _currentTrayMessage = PluginErrorMessage;
+  }
+}
+
+void TulipMainWindow::systemTrayMessageClicked() {
+  cout << "test" << endl;
+  if (_currentTrayMessage == PluginErrorMessage)
+    _ui->pluginsPage->showErrorsPage();
 }

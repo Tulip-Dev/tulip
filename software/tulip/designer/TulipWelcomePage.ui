@@ -302,7 +302,7 @@ p, li { white-space: pre-wrap; }
              <x>0</x>
              <y>0</y>
              <width>16</width>
-             <height>236</height>
+             <height>243</height>
             </rect>
            </property>
            <property name="sizePolicy">
@@ -380,7 +380,7 @@ p, li { white-space: pre-wrap; }
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="previousTipButton">
             <property name="text">
              <string/>
             </property>
@@ -391,7 +391,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="nextTipButton">
             <property name="text">
              <string/>
             </property>
