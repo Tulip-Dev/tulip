@@ -29,7 +29,6 @@
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/InteractorManager.h>
 #include <tulip/ViewPluginsManager.h>
-#include <tulip/ControllerPluginsManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include "AppStartUp.h"
 
@@ -60,7 +59,7 @@ void AppStartUp::initTulip(TulipPluginLoader *loader, std::string &errors) {
   EdgeExtremityGlyphManager::getInst().loadPlugins(loader);
   InteractorManager::getInst().loadPlugins(loader); // interactors plugins
   ViewPluginsManager::getInst().loadPlugins(loader); // view plugins
-  ControllerPluginsManager::getInst().loadPlugins(loader); // controller plugins
+  tlp::loadPlugins(loader, "/controller"); // controller plugins
 
   loadPluginsCheckDependencies(loader);
 

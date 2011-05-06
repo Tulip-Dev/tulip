@@ -39,7 +39,6 @@
 #include <QtCore/QProcess>
 
 #include <tulip/TlpQtTools.h>
-#include <tulip/ControllerPluginsManager.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/MainController.h>
 #include <tulip/QtProgress.h>

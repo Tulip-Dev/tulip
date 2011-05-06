@@ -31,7 +31,6 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/InteractorManager.h>
 #include <tulip/ViewPluginsManager.h>
-#include <tulip/ControllerPluginsManager.h>
 #include <tulip/View.h>
 
 using namespace std;
@@ -79,7 +78,7 @@ int main(int argc,char **argv) {
   //GlyphManager::getInst().loadPlugins(&plug); //Glyph plugins
   InteractorManager::getInst().loadPlugins(&plug);
   ViewPluginsManager::getInst().loadPlugins(&plug);
-  ControllerPluginsManager::getInst().loadPlugins(&plug);
+  tlp::loadPlugins(&plug, "/controller");
 
   if (!plug.errorMsgs.empty()) {
     cout << "Error when loading plugins:"<< endl;
