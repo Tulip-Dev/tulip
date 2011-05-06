@@ -33,9 +33,7 @@
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Matrix.h>
-#include <tulip/Plugin.h>
-#include <tulip/TemplateFactory.h>
-#include <tulip/Plugin.h>
+#include <tulip/AbstractPluginInfo.h>
 
 namespace tlp {
 typedef Matrix<float, 4> MatrixGL;

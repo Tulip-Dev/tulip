@@ -23,8 +23,8 @@
 #include <string>
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
-#include <tulip/Plugin.h>
-#include <tulip/TemplateFactory.h>
+#include <tulip/AbstractPluginInfo.h>
+#include <tulip/PluginManager.h>
 #include <tulip/MethodFactory.h>
 
 /**

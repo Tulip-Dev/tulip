@@ -28,7 +28,7 @@
 #include <QtGui/QWidget>
 
 #include <tulip/Reflect.h>
-#include <tulip/TemplateFactory.h>
+#include <tulip/PluginManager.h>
 #include "tulip/View.h"
 
 namespace tlp {
