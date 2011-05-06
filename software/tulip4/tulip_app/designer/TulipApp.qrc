@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/tulip/app/icons">
+        <file>arrow-left.png</file>
+        <file>arrow-right.png</file>
+        <file>logo32x32.png</file>
+        <file>plugin_algorithm.svg</file>
+        <file>plugin_controller.svg</file>
+        <file>plugin_interactor.svg</file>
+        <file>plugin_view.svg</file>
+        <file>error.svg</file>
+        <file>network-receive.svg</file>
+        <file>edit-delete.svg</file>
+        <file>emblem-downloads.svg</file>
+    </qresource>
+    <qresource prefix="/tulip/app/ui">
+        <file>btn_26.png</file>
+        <file>btn_26_hover.png</file>
+        <file>btn_26_pressed.png</file>
+        <file>combobox_arrow.png</file>
+        <file>list_bullet_arrow.png</file>
+    </qresource>
+</RCC>
