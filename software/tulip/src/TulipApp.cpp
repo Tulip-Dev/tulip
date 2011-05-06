@@ -231,13 +231,10 @@ void TulipApp::startTulip() {
   OpenGlErrorViewer *oldViewer=GlTextureManager::getInst().setErrorViewer(new QtOpenGlErrorViewer(this));
   delete oldViewer;
 
-  TemplateFactory<Controller, ControllerContext*>::ObjectCreator::const_iterator it;
-  it=ControllerFactory::factory->objMap.begin();
-  string name=(*it).first;
-  ++it;
-  if(it==ControllerFactory::factory->objMap.end()){
+  if(ControllerFactory::factory->objMap.size() < 2) {
     controllerAutoLoad=false;
-    createController(name,newName());
+    string name = ControllerFactory::factory->objMap.begin()->first;
+    createController(name, newName());
     currentTabIndex=0;
     Controller::currentActiveController(tabIndexToController[currentTabIndex]);
     controllerAutoLoad=true;
@@ -329,8 +326,7 @@ void TulipApp::fileNew(QAction *action) {
 bool TulipApp::fileNew(bool fromMenu) {
 string name;
   if(fromMenu) {
-    TemplateFactory<Controller, ControllerContext*>::ObjectCreator::const_iterator it=ControllerFactory::factory->objMap.begin();
-    name=it->first;
+    name = ControllerFactory::factory->objMap.begin()->first;
 }
   else {
     name=defaultControllerName;
@@ -803,17 +799,13 @@ template <typename TFACTORY, typename TMODULE>
   }
 //**********************************************************************
 void TulipApp::buildMenus() {
-  TemplateFactory<Controller, ControllerContext*>::ObjectCreator::const_iterator it;
-
-  // In this case doesn't add sub menu in new menu
-  it=ControllerFactory::factory->objMap.begin();
-  ++it;
-  if(it!=ControllerFactory::factory->objMap.end()) {
+// In this case doesn't add sub menu in new menu
+  if(ControllerFactory::factory->objMap.size() < 2) {
     //Add new menu in File menu
     newMenu=new QMenu("New");
     connect(newMenu, SIGNAL(triggered(QAction *)), SLOT(fileNew(QAction*)));
     fileMenu->insertMenu(fileOpenAction,newMenu);
-    for (it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
+    for (TemplateFactory<Controller, ControllerContext*>::ObjectCreator::const_iterator it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
       newMenu->addAction(it->first.c_str());
     }
   }else{
