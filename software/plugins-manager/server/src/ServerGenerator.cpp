@@ -29,7 +29,6 @@
 #include <tulip/TlpTools.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/InteractorManager.h>
-#include <tulip/ViewPluginsManager.h>
 
 using namespace std;
 using namespace tlp;

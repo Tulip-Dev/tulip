@@ -30,7 +30,6 @@
 #include <tulip/TlpTools.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/InteractorManager.h>
-#include <tulip/ViewPluginsManager.h>
 #include <tulip/View.h>
 
 using namespace std;

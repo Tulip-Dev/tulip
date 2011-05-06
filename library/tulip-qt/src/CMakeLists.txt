@@ -49,7 +49,6 @@ ControllerViewsManager.cpp
 MainController.cpp
 View.cpp
 AbstractView.cpp
-ViewPluginsManager.cpp
 RenderingParametersDialog.cpp
 LayerManagerWidget.cpp
 AugmentedDisplayDialog.cpp

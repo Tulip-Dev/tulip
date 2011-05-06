@@ -23,7 +23,6 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QLabel>
 
-#include "tulip/ViewPluginsManager.h"
 #include "tulip/InteractorManager.h"
 #include "tulip/Interactor.h"
 
@@ -37,12 +36,12 @@ QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
 
   void ControllerViewsTools::createView(const string &name,Graph *,DataSet,QWidget *parent,string *createdViewName, View **createdView, QWidget **createdWidget){
     string verifiedName=name;
-    View *newView=ViewPluginsManager::getInst().createView(name);
+    View *newView = ViewFactory::factory->getPluginObject(name, NULL);
 
     // if we can not create a view with given name : create a Node Link Diagram Component 
     if(!newView){
       verifiedName=mainViewName;
-      newView=ViewPluginsManager::getInst().createView(mainViewName);
+      newView=ViewFactory::factory->getPluginObject(mainViewName, NULL);
     }
 
     // Get interactors for this view and add them to view
@@ -54,7 +53,7 @@ QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
 
     list<Interactor *> interactorsList;
     for(list<string>::iterator it=interactorsNameList.begin();it!=interactorsNameList.end();++it){
-      interactorsList.push_back(InteractorManager::getInst().getInteractor(*it));
+      interactorsList.push_back(InteractorFactory::factory->getPluginObject(*it, NULL));
     }
     newView->setInteractors(interactorsList);
 
