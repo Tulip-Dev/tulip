@@ -103,7 +103,7 @@ list<node> findCycle(Graph *sg) {
 }
 //====================================================
 bool Tutte::run() {
-  _result->setAllEdgeValue(vector<Coord>(0));
+  result->setAllEdgeValue(vector<Coord>(0));
   std::list<node> tmp;
   tmp=findCycle(graph);
   std::list<node>::iterator itL;
@@ -114,7 +114,7 @@ bool Tutte::run() {
   int rayon=100;
   gamma=2*M_PI/tmp.size();
   for (itL=tmp.begin();itL!=tmp.end();++itL) {
-    _result->setNodeValue(*itL,Coord(rayon*cos(gamma*i)+rayon*2,rayon*sin(gamma*i)+rayon*2,0));
+    result->setNodeValue(*itL,Coord(rayon*cos(gamma*i)+rayon*2,rayon*sin(gamma*i)+rayon*2,0));
     i++;
   }
   std::list<node> toMove;
@@ -131,16 +131,16 @@ bool Tutte::run() {
     ok=false;
     for (itn=toMove.begin();itn!=toMove.end();++itn) {
       tmpCoord.set(0,0,0);
-      Coord baseCoord=_result->getNodeValue(*itn);
+      Coord baseCoord=result->getNodeValue(*itn);
       int i=0;
       itN=graph->getInOutNodes(*itn);
       while (itN->hasNext()) {
 	node itAdj=itN->next();
-	const Coord& tmpCoord2=_result->getNodeValue(itAdj);
+	const Coord& tmpCoord2=result->getNodeValue(itAdj);
 	tmpCoord.set(tmpCoord.getX()+tmpCoord2.getX(),tmpCoord.getY()+tmpCoord2.getY(),0);
 	++i;
       } delete itN;
-      _result->setNodeValue(*itn,Coord(tmpCoord.getX()/i,tmpCoord.getY()/i,0));
+      result->setNodeValue(*itn,Coord(tmpCoord.getX()/i,tmpCoord.getY()/i,0));
       if (fabs(baseCoord.getX()-tmpCoord.getX()/i)>0.02) ok=true;
       if (fabs(baseCoord.getY()-tmpCoord.getY()/i)>0.02) ok=true;
     }

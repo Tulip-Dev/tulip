@@ -587,9 +587,9 @@ static void generateInternalAPIHeader(sipSpec *pt, moduleDef *mod,
 "\n"
 "#define sipMalloc                   sipAPI_%s->api_malloc\n"
 "#define sipFree                     sipAPI_%s->api_free\n"
-"#define sipBuildResult              sipAPI_%s->api_build_result\n"
+"#define sipBuildResult              sipAPI_%s->api_buildresult\n"
 "#define sipCallMethod               sipAPI_%s->api_call_method\n"
-"#define sipParseResult              sipAPI_%s->api_parse_result\n"
+"#define sipParseResult              sipAPI_%s->api_parseresult\n"
 "#define sipParseArgs                sipAPI_%s->api_parse_args\n"
 "#define sipParseKwdArgs             sipAPI_%s->api_parse_kwd_args\n"
 "#define sipParsePair                sipAPI_%s->api_parse_pair\n"
@@ -602,7 +602,7 @@ static void generateInternalAPIHeader(sipSpec *pt, moduleDef *mod,
 "#define sipNoMethod                 sipAPI_%s->api_no_method\n"
 "#define sipAbstractMethod           sipAPI_%s->api_abstract_method\n"
 "#define sipBadClass                 sipAPI_%s->api_bad_class\n"
-"#define sipBadCatcherResult         sipAPI_%s->api_bad_catcher_result\n"
+"#define sipBadCatcherResult         sipAPI_%s->api_bad_catcherresult\n"
 "#define sipBadCallableArg           sipAPI_%s->api_bad_callable_arg\n"
 "#define sipBadOperatorArg           sipAPI_%s->api_bad_operator_arg\n"
 "#define sipTrace                    sipAPI_%s->api_trace\n"
@@ -1156,7 +1156,7 @@ static void generateComponentCpp(sipSpec *pt, const char *codeDir,
     generateModDefinition(pt->module, "NULL", fp);
 
     prcode(fp,
-"    PyObject *sip_mod, *sip_result;\n"
+"    PyObject *sip_mod, *sipresult;\n"
 "\n"
 "    /* Import the consolidated module. */\n"
 "    if ((sip_mod = PyImport_ImportModule(\"%s\")) == NULL)\n"
@@ -1167,16 +1167,16 @@ static void generateComponentCpp(sipSpec *pt, const char *codeDir,
     prcode(fp,
 "    /* Ask the consolidated module to do the initialistion. */\n"
 "#if PY_MAJOR_VERSION >= 3\n"
-"    sip_result = PyObject_CallMethod(sip_mod, \"init\", \"y\", \"%s\");\n"
+"    sipresult = PyObject_CallMethod(sip_mod, \"init\", \"y\", \"%s\");\n"
 "#else\n"
-"    sip_result = PyObject_CallMethod(sip_mod, \"init\", \"s\", \"%s\");\n"
+"    sipresult = PyObject_CallMethod(sip_mod, \"init\", \"s\", \"%s\");\n"
 "#endif\n"
 "    Py_DECREF(sip_mod);\n"
 "\n"
 "#if PY_MAJOR_VERSION >= 3\n"
-"    return sip_result;\n"
+"    return sipresult;\n"
 "#else\n"
-"    Py_XDECREF(sip_result);\n"
+"    Py_XDECREF(sipresult);\n"
 "#endif\n"
 "}\n"
         , pt->module->fullname->text
@@ -11546,7 +11546,7 @@ static void generateFunctionCall(classDef *c_scope, mappedTypeDef *mt_scope,
         ifaceFileDef *o_scope, overDef *od, int deref, moduleDef *mod,
         FILE *fp)
 {
-    int needsNew, error_flag, old_error_flag, newline, is_result, result_size,
+    int needsNew, error_flag, old_error_flag, newline, isresult, result_size,
             a, deltemps;
     const char *error_value;
     argDef *res = &od->pysig.result, orig_res;
@@ -11597,13 +11597,13 @@ static void generateFunctionCall(classDef *c_scope, mappedTypeDef *mt_scope,
         resetIsConstArg(res);
 
     /* See if sipRes is needed. */
-    is_result = (!isInplaceNumberSlot(od->common) &&
+    isresult = (!isInplaceNumberSlot(od->common) &&
              !isInplaceSequenceSlot(od->common) &&
              (res->atype != void_type || res->nrderefs != 0));
 
     newline = FALSE;
 
-    if (is_result)
+    if (isresult)
     {
         prcode(fp,
 "            ");
@@ -11773,7 +11773,7 @@ static void generateFunctionCall(classDef *c_scope, mappedTypeDef *mt_scope,
         prcode(fp,
 "            ");
 
-        if (od->common->slot != cmp_slot && is_result)
+        if (od->common->slot != cmp_slot && isresult)
         {
             /* Construct a copy on the heap if needed. */
             if (needsNew)

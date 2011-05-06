@@ -85,7 +85,7 @@ public:
     GlLabel label;
     BoundingBox bb;
 
-    _result->setAllNodeValue(Size(18, 18, 1));
+    result->setAllNodeValue(Size(18, 18, 1));
     node n;
     forEach(n, graph->getNodes()) {
       label.setFontNameSizeAndColor(fonts->getNodeValue(n),fontSizes->getNodeValue(n),Color());
@@ -93,10 +93,10 @@ public:
       if (str != "") {
         label.setText(str);
         bb=label.getTextBoundingBox();
-        _result->setNodeValue(n, Size(bb[1][0]-bb[0][0], bb[1][1]-bb[0][1], 1));
+        result->setNodeValue(n, Size(bb[1][0]-bb[0][0], bb[1][1]-bb[0][1], 1));
       }
     }
-    _result->setAllEdgeValue(Size(1, 1, 8));
+    result->setAllEdgeValue(Size(1, 1, 8));
 
     Observable::unholdObservers();
     return true;

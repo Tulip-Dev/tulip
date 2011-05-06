@@ -38,10 +38,10 @@ public:
   bool run() {
     node n;
     forEach(n,graph->getNodes())
-      _result->setNodeValue(n, getNodeValue(n));
+      result->setNodeValue(n, getNodeValue(n));
     edge e;
     forEach(e,graph->getEdges())
-      _result->setEdgeValue(e, getEdgeValue(e));
+      result->setEdgeValue(e, getEdgeValue(e));
     return true;
   }
 
@@ -83,8 +83,8 @@ private:
   }
 
   Size getEdgeValue(const edge e) {
-    Size s = _result->getNodeValue(graph->source(e));
-    Size t = _result->getNodeValue(graph->target(e));
+    Size s = result->getNodeValue(graph->source(e));
+    Size t = result->getNodeValue(graph->target(e));
     Coord tmp(s.getW(),s.getH(),s.getD());
     Coord tmp2(t.getW(),t.getH(),t.getD());
     float sizes=tmp.norm();

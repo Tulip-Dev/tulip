@@ -35,7 +35,7 @@ bool ConnectedComponent::run() {
   for (unsigned int curComponent=0; curComponent < components.size(); ++curComponent) {
     std::set<node>& component = components[curComponent];
     for(std::set<node>::const_iterator itNode = component.begin(); itNode!=component.end(); ++itNode) {
-      _result->setNodeValue(*itNode, curComponent);
+      result->setNodeValue(*itNode, curComponent);
     }
   }
   // propagate nodes computed value to edges
@@ -44,10 +44,10 @@ bool ConnectedComponent::run() {
       edge ite=itE->next();
       node source= graph->source(ite);
   //    node target= graph->target(ite);
-  //    if (_result->getNodeValue(source) == _result->getNodeValue(target))
-  	_result->setEdgeValue(ite, _result->getNodeValue(source));
+  //    if (result->getNodeValue(source) == result->getNodeValue(target))
+  	result->setEdgeValue(ite, result->getNodeValue(source));
   //    else
-  //	_result->setEdgeValue(ite,curComponent);
+  //	result->setEdgeValue(ite,curComponent);
     } delete itE;
 
   return true;

@@ -28,22 +28,22 @@ DepthMetric::DepthMetric(const tlp::PropertyContext &context):DoubleAlgorithm(co
 //=================================================
 double DepthMetric::getNodeValue(const tlp::node n) {
   if (graph->outdeg(n)==0) return 0.0;
-  if (_result->getNodeValue(n) > 0.1)
-    return _result->getNodeValue(n);
+  if (result->getNodeValue(n) > 0.1)
+    return result->getNodeValue(n);
   double max = 0;
   node _n2;
   forEach(_n2, graph->getOutNodes(n))
     max = std::max(max, getNodeValue(_n2));
-  _result->setNodeValue(n, max + 1);
+  result->setNodeValue(n, max + 1);
   return max + 1;
 }
 //====================================================================
 bool DepthMetric::run() {
-  _result->setAllEdgeValue(0);
-  _result->setAllNodeValue(0);
+  result->setAllEdgeValue(0);
+  result->setAllNodeValue(0);
   node _n;
   forEach(_n, graph->getNodes())
-    _result->setNodeValue(_n, getNodeValue(_n));
+    result->setNodeValue(_n, getNodeValue(_n));
   return true;
 }
 //=================================================

@@ -14,7 +14,7 @@ ComputePropertyThread::ComputePropertyThread(AbstractComputeProperty* computePro
 }
 
 void ComputePropertyThread::run() {
-  _result = _computeProperty->run();
+  result = _computeProperty->run();
 }
 
 bool ComputePropertyThread::computeProperty() {
@@ -22,7 +22,7 @@ bool ComputePropertyThread::computeProperty() {
   while(!_finished) {
     QCoreApplication::processEvents();
   }
-  return _result;
+  return result;
 }
 
 void ComputePropertyThread::notifyFinished() {

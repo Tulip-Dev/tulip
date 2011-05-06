@@ -96,11 +96,11 @@ public :
 template<class Property>
 class TemplateAlgorithm : public PropertyAlgorithm {
   public:
-    Property* _result;
+    Property* result;
     virtual ~TemplateAlgorithm(){}
   protected:
     TemplateAlgorithm (const tlp::PropertyContext  &context) : tlp::PropertyAlgorithm(context) {
-      _result = (Property*)context.propertyProxy;
+      result = (Property*)context.propertyProxy;
     }
 };
 

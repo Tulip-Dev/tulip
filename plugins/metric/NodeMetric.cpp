@@ -28,22 +28,22 @@ NodeMetric::NodeMetric(const tlp::PropertyContext &context):DoubleAlgorithm(cont
 {}
 //====================================================================
 double NodeMetric::getNodeValue(const tlp::node n) {
-  if (_result->getNodeValue(n)!=0)
-    return _result->getNodeValue(n);
-  double result = 1;
+  if (result->getNodeValue(n)!=0)
+    return result->getNodeValue(n);
+  double res = 1;
   node _n;
   forEach(_n, graph->getOutNodes(n))
-    result += getNodeValue(_n);
-  _result->setNodeValue(n, result);
-  return result;
+    res += getNodeValue(_n);
+  result->setNodeValue(n, res);
+  return res;
 }
 //====================================================================
 bool NodeMetric::run() {
-  _result->setAllEdgeValue(0);
-  _result->setAllNodeValue(0);
+  result->setAllEdgeValue(0);
+  result->setAllNodeValue(0);
   node _n;
   forEach(_n, graph->getNodes())
-    _result->setNodeValue(_n,getNodeValue(_n));
+    result->setNodeValue(_n,getNodeValue(_n));
   return true;
 }
 //====================================================================

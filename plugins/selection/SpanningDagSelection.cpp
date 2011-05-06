@@ -32,12 +32,12 @@ using namespace tlp;
 SpanningDagSelection::SpanningDagSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) {}
 //=================================================================
 bool SpanningDagSelection::run() {
-  _result->setAllNodeValue(true);
-  _result->setAllEdgeValue(true);
+  result->setAllNodeValue(true);
+  result->setAllEdgeValue(true);
   vector<edge> obstructions;
   AcyclicTest::acyclicTest(graph, &obstructions);
   for (vector<edge>::const_iterator it = obstructions.begin(); it != obstructions.end(); ++it) {
-    _result->setEdgeValue(*it, false);
+    result->setEdgeValue(*it, false);
   }
   return true;
 }

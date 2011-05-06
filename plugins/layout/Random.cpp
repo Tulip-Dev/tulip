@@ -44,15 +44,15 @@ bool Random::run() {
     dataSet->get("3D layout", is3D);
   }
 
-  _result->setAllEdgeValue(vector<Coord>(0));
+  result->setAllEdgeValue(vector<Coord>(0));
   graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
   Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
     if(is3D)
-      _result->setNodeValue(itn,Coord(rand()%1024,rand()%1024,rand()%1024));
+      result->setNodeValue(itn,Coord(rand()%1024,rand()%1024,rand()%1024));
     else
-      _result->setNodeValue(itn,Coord(rand()%1024,rand()%1024,0));
+      result->setNodeValue(itn,Coord(rand()%1024,rand()%1024,0));
   } delete itN;
   return true;
 }

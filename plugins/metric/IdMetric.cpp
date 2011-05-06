@@ -29,10 +29,10 @@ IdMetric::IdMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context)
 bool IdMetric::run() {
   node n;
   forEach(n, graph->getNodes())
-    _result->setNodeValue(n, n.id);
+    result->setNodeValue(n, n.id);
   edge e;
   forEach(e, graph->getEdges())
-    _result->setEdgeValue(e, e.id);
+    result->setEdgeValue(e, e.id);
   return true;
 }
 //=================================================================

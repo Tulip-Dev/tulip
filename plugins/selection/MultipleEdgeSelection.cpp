@@ -31,10 +31,10 @@ MultipleEdgeSelection::MultipleEdgeSelection(const tlp::PropertyContext &context
 bool MultipleEdgeSelection::run() {
   vector<edge> multipleEdges;
   SimpleTest::simpleTest(graph, &multipleEdges);
-  _result->setAllNodeValue(false);
-  _result->setAllEdgeValue(false);
+  result->setAllNodeValue(false);
+  result->setAllEdgeValue(false);
   vector<edge>::const_iterator it;
   for (it = multipleEdges.begin(); it != multipleEdges.end(); ++it) 
-    _result->setEdgeValue(*it, true);
+    result->setEdgeValue(*it, true);
   return true;
 }

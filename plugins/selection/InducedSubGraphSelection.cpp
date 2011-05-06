@@ -41,8 +41,8 @@ InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PropertyContext &c
 }
 //=================================================================================
 bool InducedSubGraphSelection::run() {
-  _result->setAllNodeValue(false);
-  _result->setAllEdgeValue(false);
+  result->setAllNodeValue(false);
+  result->setAllEdgeValue(false);
   BooleanProperty *entrySelection = 0;
   if (dataSet!=0) 
     dataSet->get("Nodes", entrySelection);  
@@ -53,13 +53,13 @@ bool InducedSubGraphSelection::run() {
   while (itN->hasNext()) {
     node itn=itN->next() ;
     if (entrySelection->getNodeValue(itn)) {
-      _result->setNodeValue(itn, true);
+      result->setNodeValue(itn, true);
       Iterator<edge> *itE = graph->getOutEdges(itn);
       while (itE->hasNext()) {
 	edge e = itE->next();
 	node target = graph->target(e);
 	if (entrySelection->getNodeValue(target))
-	  _result->setEdgeValue(e, true);
+	  result->setEdgeValue(e, true);
       } delete itE;
     }
   } delete itN;
