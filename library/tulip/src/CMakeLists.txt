@@ -29,7 +29,6 @@ GraphUpdatesRecorder.cpp
 GraphView.cpp
 IdManager.cpp
 IntegerProperty.cpp
-LayoutAlgorithm.cpp
 LayoutProperty.cpp
 MapIterator.cpp
 Observable.cpp

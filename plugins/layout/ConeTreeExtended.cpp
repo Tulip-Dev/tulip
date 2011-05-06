@@ -128,7 +128,7 @@ double ConeTreeExtended::treePlace3D(tlp::node n,
 void ConeTreeExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node,double> *px,
 				  TLP_HASH_MAP<tlp::node,double> *py,
 			double x, double y, int level) {
-  layoutResult->setNodeValue(n,Coord(x+(*px)[n], - yCoordinates[level],y+(*py)[n]));
+  _result->setNodeValue(n,Coord(x+(*px)[n], - yCoordinates[level],y+(*py)[n]));
   node itn;
   forEach(itn, tree->getOutNodes(n)) {
     calcLayout(itn, px, py, x+(*px)[n], y+(*py)[n], level + 1);
@@ -178,7 +178,7 @@ bool ConeTreeExtended::run() {
     }
   }
   //===========================================================
-  layoutResult->setAllEdgeValue(vector<Coord>(0));
+  _result->setAllEdgeValue(vector<Coord>(0));
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
@@ -207,8 +207,8 @@ bool ConeTreeExtended::run() {
 	const Size&  tmp = nodeSize->getNodeValue(n);
 	nodeSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
       }
-      const Coord& tmpC = layoutResult->getNodeValue(n);
-      layoutResult->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+      const Coord& tmpC = _result->getNodeValue(n);
+      _result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
 

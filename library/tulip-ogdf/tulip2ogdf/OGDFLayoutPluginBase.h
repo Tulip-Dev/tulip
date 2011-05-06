@@ -21,7 +21,7 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/TulipPlugin.h>
-#include <tulip/LayoutAlgorithm.h>
+#include <tulip/PropertyAlgorithm.h>
 
 #include <ogdf/basic/Graph_d.h>
 #include <ogdf/basic/GraphAttributes.h>

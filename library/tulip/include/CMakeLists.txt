@@ -22,8 +22,7 @@ INSTALL(FILES
 	tulip/LayoutProperty.h 
 	tulip/Plugin.h 
 	tulip/Algorithm.h 
-	tulip/BooleanAlgorithm.h  
-	tulip/LayoutAlgorithm.h 
+	tulip/BooleanAlgorithm.h
 	tulip/PluginLoader.h 
 	tulip/Size.h 
 	tulip/Node.h 
