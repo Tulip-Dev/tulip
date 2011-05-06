@@ -62,12 +62,12 @@ namespace tlp {
  * TemplateFactories register themselves in the Tulip plug-in system, and Tulip lists the plug-ins of each TemplateFactory.
  * 
  **/
-class TemplateFactoryInterface {
+class PluginManagerInterface {
 public:
-  static TLP_SCOPE std::map< std::string, TemplateFactoryInterface* > *allFactories;
+  static TLP_SCOPE std::map< std::string, PluginManagerInterface* > *allFactories;
   static TLP_SCOPE PluginLoader *currentLoader;
 
-  virtual ~TemplateFactoryInterface(){}
+  virtual ~PluginManagerInterface(){}
 
   /**
    * @brief Gets the list of plug-ins that registered themselves in this factory.
@@ -133,9 +133,9 @@ public:
    * @param name The name of the factory to add, used as key.   
    * @return void
    **/
-  static void addFactory(TemplateFactoryInterface *factory, const std::string &name)  {
+  static void addFactory(PluginManagerInterface *factory, const std::string &name)  {
     if (!allFactories)
-      allFactories = new std::map<std::string, TemplateFactoryInterface*>();
+      allFactories = new std::map<std::string, PluginManagerInterface*>();
     //std::cerr << name.c_str() << " factory added" << std::endl;
     (*allFactories)[name] = factory;
   }
@@ -168,10 +168,10 @@ class FactoryInterface;
  *
  * When constructed it registers itself into the factories map automatically.
  **/
-template<class ObjectType, class Context> class TemplateFactory: public TemplateFactoryInterface {
+template<class ObjectType, class Context> class PluginManager: public PluginManagerInterface {
 public:
-  TemplateFactory() {
-    TemplateFactoryInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
+  PluginManager() {
+    PluginManagerInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
   }
 
   typedef std::map< std::string , FactoryInterface<ObjectType, Context> * > ObjectCreator;

@@ -46,7 +46,7 @@ using namespace std;
 
 namespace tlp {
 
-  StructDef *ControllerAlgorithmTools::getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
+  StructDef *ControllerAlgorithmTools::getPluginParameters(PluginManagerInterface *factory, std::string name) {
     static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > > paramMaps;
     TLP_HASH_MAP<std::string, StructDef *>::const_iterator it;
     it = paramMaps[(unsigned long) factory].find(name);
