@@ -24,8 +24,6 @@
 using namespace tlp;
 using namespace std;
 
-TemplateFactory<GlyphFactory,Glyph, GlyphContext *> *GlyphFactory::factory;
-
 Glyph::Glyph(GlyphContext *gc) {
   if (gc != 0) {
     glGraphInputData=gc->glGraphInputData;

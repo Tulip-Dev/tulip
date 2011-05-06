@@ -28,6 +28,7 @@
 #include <tulip/TemplateFactory.h>
 #include <tulip/Vector.h>
 #include "Interactor.h"
+#include <tulip/Plugin.h>
 
 class QMenuBar;
 class QToolBar;
@@ -238,18 +239,9 @@ namespace tlp {
 
   };
 
-  class TLP_QT_SCOPE ControllerFactory: public AbstractPluginInfo {
+  class TLP_QT_SCOPE ControllerFactory: public FactoryInterface<Controller,ControllerContext *> {
   public:
     virtual ~ControllerFactory() {}
-    ///
-    virtual Controller *createPluginObject(ControllerContext *ic)=0;
-
-    static TemplateFactory<ControllerFactory,Controller,ControllerContext *> *factory;
-    static void initFactory() {
-      if (!factory) {
-	factory = new TemplateFactory<ControllerFactory,Controller,ControllerContext *>;
-      }
-    }
   };
 
 }

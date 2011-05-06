@@ -99,19 +99,19 @@ int main(int argc,char **argv) {
     unsetenv("TLP_DIR");
 #endif
 
-  TemplateFactory<GlyphFactory, Glyph, GlyphContext>::ObjectCreator::const_iterator itGlyphs;
+  TemplateFactory<Glyph, GlyphContext*>::ObjectCreator::const_iterator itGlyphs;
   vector<string> glyphsName;
   for (itGlyphs=GlyphFactory::factory->objMap.begin();itGlyphs != GlyphFactory::factory->objMap.end();++itGlyphs) {
     glyphsName.push_back((itGlyphs)->first);
   }
 
-  TemplateFactory<InteractorFactory, Interactor, InteractorContext>::ObjectCreator::const_iterator itInteractors;
+  TemplateFactory<Interactor, InteractorContext*>::ObjectCreator::const_iterator itInteractors;
   vector<string> interactorsName;
   for (itInteractors=InteractorFactory::factory->objMap.begin();itInteractors != InteractorFactory::factory->objMap.end();++itInteractors) {
     interactorsName.push_back((itInteractors)->first);
   }
 
-  TemplateFactory<ViewFactory, View, ViewContext>::ObjectCreator::const_iterator itViews;
+  TemplateFactory<View, ViewContext*>::ObjectCreator::const_iterator itViews;
   vector<string> viewsName;
   for (itViews=ViewFactory::factory->objMap.begin();itViews != ViewFactory::factory->objMap.end();++itViews) {
     viewsName.push_back((itViews)->first);

@@ -20,8 +20,6 @@
 #include <tulip/Vector.h>
 
 namespace tlp {
-TemplateFactory<EdgeExtremityGlyphFactory, EdgeExtremityGlyph, EdgeExtremityGlyphContext *>
-		*EdgeExtremityGlyphFactory::factory;
 EdgeExtremityGlyph::EdgeExtremityGlyph(EdgeExtremityGlyphContext *gc) {
 	if (gc != 0) {
 		edgeExtGlGraphInputData = gc->glGraphInputData;

@@ -37,6 +37,7 @@
 #include <tulip/TemplateFactory.h>
 
 #include <tulip/GlGraphInputData.h>
+#include <tulip/Plugin.h>
 
 
 namespace tlp {
@@ -99,20 +100,9 @@ namespace tlp {
     virtual Coord getAnchor(const Coord &vector) const;
   };
 
-  class TLP_GL_SCOPE GlyphFactory: public AbstractPluginInfo {
+  class TLP_GL_SCOPE GlyphFactory: public FactoryInterface<Glyph,GlyphContext *> {
   public:
     virtual ~GlyphFactory() {}
-    ///
-    virtual Glyph *createPluginObject(GlyphContext *gc)=0;
-    ///
-    virtual int getId() const=0;
-
-    static TemplateFactory<GlyphFactory,Glyph,GlyphContext *> *factory;
-    static void initFactory() {
-      if (!factory) {
-	factory = new TemplateFactory<GlyphFactory,Glyph,GlyphContext *>;
-      }
-    }
   };
 
 }

@@ -27,6 +27,7 @@
 #include <tulip/TemplateFactory.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Vector.h>
+#include <tulip/Plugin.h>
 
 class QMenuBar;
 class QVBoxLayout;
@@ -268,18 +269,9 @@ namespace tlp {
   /**
    * @brief This class should only be used by the plugin macros.
    **/
-  class TLP_QT_SCOPE ViewFactory: public AbstractPluginInfo {
+  class TLP_QT_SCOPE ViewFactory: public FactoryInterface<View, ViewContext*> {
   public:
     virtual ~ViewFactory() {}
-    ///
-    virtual View *createPluginObject(ViewContext *ic)=0;
-
-    static TemplateFactory<ViewFactory,View,ViewContext *> *factory;
-    static void initFactory() {
-      if (!factory) {
-	factory = new TemplateFactory<ViewFactory,View,ViewContext *>;
-      }
-    }
   };
 
 }

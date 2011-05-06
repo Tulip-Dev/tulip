@@ -89,28 +89,9 @@ public :
  * The factory the registers itself in the Tulip plug-in system (through the static initFactory() method when the library is loaded..
  * The actual registration is delegated to a TemplateFactory to factorize code.
  */
-class AlgorithmFactory:public AbstractPluginInfo{
+class AlgorithmFactory:public FactoryInterface<Algorithm,AlgorithmContext>{
 public:
-  /**
-   * @brief A static factory that is initialized when the library is loaded.
-   */
-  static TLP_SCOPE TemplateFactory<AlgorithmFactory, Algorithm,AlgorithmContext > *factory;
-  /**
-   * @brief This static initilization is called when the plug-in library is loaded, and registers the new plug-in in the
-   * Tulip plug-in system.
-   */
-  static void initFactory() {
-    if (!factory) {
-      factory = new TemplateFactory<AlgorithmFactory, Algorithm,AlgorithmContext >;
-    }
-  }
   virtual ~AlgorithmFactory() {}
-  /**
-   * @brief Creates a new Algorithm object.
-   *
-   * @return Algorithm A newly created algorithm plug-in.
-   */
-  virtual Algorithm * createPluginObject(AlgorithmContext context)=0;
 };
 /*@}*/
 

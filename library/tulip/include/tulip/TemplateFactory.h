@@ -154,6 +154,9 @@ public:
   }
 };
 
+template <class PluginObject, class PluginContext>
+class FactoryInterface;
+
 /**
  * @brief This template class takes 3 parameters :
  * 
@@ -165,13 +168,13 @@ public:
  *
  * When constructed it registers itself into the factories map automatically.
  **/
-template<class ObjectFactory, class ObjectType, class Context> class TemplateFactory: public TemplateFactoryInterface {
+template<class ObjectType, class Context> class TemplateFactory: public TemplateFactoryInterface {
 public:
   TemplateFactory() {
     TemplateFactoryInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
   }
 
-  typedef std::map< std::string , ObjectFactory * > ObjectCreator;
+  typedef std::map< std::string , FactoryInterface<ObjectType, Context> * > ObjectCreator;
 
   /**
    * @brief Stores the factories that register into this TemplateFactory.
@@ -210,28 +213,14 @@ public:
   std::string getPluginRelease(std::string name);
   std::list<tlp::Dependency> getPluginDependencies(std::string name);
   std::string getPluginsClassName();
-  void registerPlugin(ObjectFactory* objectFactory);
+  void registerPlugin(FactoryInterface<ObjectType, Context>* objectFactory);
   void removePlugin(const std::string &name);
 };
 
-template<class Property> class TemplateAlgorithm;
-
-template <class PropertyAlgorithm> class PropertyFactory:public AbstractPluginInfo {
+template <class PropertyAlgorithm> class PropertyFactory : public FactoryInterface<PropertyAlgorithm, PropertyContext> {
 public:
-  static TemplateFactory<PropertyFactory<PropertyAlgorithm>, PropertyAlgorithm, PropertyContext>* factory;
-  static void initFactory() {
-    if (!factory) {
-      factory = new TemplateFactory<PropertyFactory<PropertyAlgorithm>, PropertyAlgorithm, PropertyContext>();
-    }
-  }
-  
-  PropertyFactory(){}
   virtual ~PropertyFactory() {}
-  virtual PropertyAlgorithm* createPluginObject(const PropertyContext &context)=0;
 };
-
-template <class PropertyAlgorithm>
-TemplateFactory<PropertyFactory<PropertyAlgorithm>, PropertyAlgorithm, PropertyContext >* PropertyFactory<PropertyAlgorithm>::factory = 0;
 
 /*@}*/
 

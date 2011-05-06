@@ -232,7 +232,7 @@ void TulipApp::startTulip() {
   OpenGlErrorViewer *oldViewer=GlTextureManager::getInst().setErrorViewer(new QtOpenGlErrorViewer(this));
   delete oldViewer;
 
-  TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
+  TemplateFactory<Controller, ControllerContext*>::ObjectCreator::const_iterator it;
   it=ControllerFactory::factory->objMap.begin();
   string name=(*it).first;
   ++it;
@@ -330,7 +330,7 @@ void TulipApp::fileNew(QAction *action) {
 bool TulipApp::fileNew(bool fromMenu) {
 string name;
   if(fromMenu) {
-    TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it=ControllerFactory::factory->objMap.begin();
+    TemplateFactory<Controller, ControllerContext*>::ObjectCreator::const_iterator it=ControllerFactory::factory->objMap.begin();
     name=it->first;
 }
   else {
@@ -614,7 +614,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       delete progressBar;
       QApplication::restoreOverrideCursor();
 
-      TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
+      TemplateFactory<Controller, ControllerContext*>::ObjectCreator::const_iterator it;
       vector<string> controllersName;
       for (it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
         controllersName.push_back(it->first);
@@ -796,15 +796,15 @@ void TulipApp::importGraph(QAction* action) {
 //**********************************************************************
 template <typename TFACTORY, typename TMODULE>
   void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
-    typename TemplateFactory<TFACTORY, TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
+    typename TemplateFactory<TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
-    for (it=TFACTORY::factory->objMap.begin();it != TFACTORY::factory->objMap.end();++it)
+    for (it= FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.begin();it != FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.end();++it)
       insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
   }
 //**********************************************************************
 void TulipApp::buildMenus() {
-  TemplateFactory<ControllerFactory, Controller, ControllerContext>::ObjectCreator::const_iterator it;
+  TemplateFactory<Controller, ControllerContext*>::ObjectCreator::const_iterator it;
 
   // In this case doesn't add sub menu in new menu
   it=ControllerFactory::factory->objMap.begin();

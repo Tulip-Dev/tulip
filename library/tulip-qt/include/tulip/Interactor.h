@@ -26,6 +26,7 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/TemplateFactory.h>
 #include "InteractorManager.h"
+#include <tulip/Plugin.h>
 
 class QAction;
 
@@ -151,18 +152,9 @@ namespace tlp {
 
   };
 
-  class TLP_QT_SCOPE InteractorFactory: public AbstractPluginInfo {
+  class TLP_QT_SCOPE InteractorFactory: public tlp::FactoryInterface<Interactor,InteractorContext*> {
   public:
     virtual ~InteractorFactory() {}
-    ///
-    virtual Interactor *createPluginObject(InteractorContext *ic)=0;
-
-    static TemplateFactory<InteractorFactory,Interactor,InteractorContext *> *factory;
-    static void initFactory() {
-      if (!factory) {
-	factory = new TemplateFactory<InteractorFactory,Interactor,InteractorContext *>;
-      }
-    }
   };
 
 }

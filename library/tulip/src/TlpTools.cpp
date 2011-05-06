@@ -168,9 +168,6 @@ ostream *tlp::getOgzstream(const char *name, int open_mode) {
 }
 //=========================================================
 map<string, TemplateFactoryInterface* > *TemplateFactoryInterface::allFactories = 0;
-TemplateFactory<AlgorithmFactory, Algorithm,AlgorithmContext > *AlgorithmFactory::factory = 0;
-TemplateFactory<ImportModuleFactory,ImportModule,AlgorithmContext > *ImportModuleFactory::factory = 0;
-TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext > *ExportModuleFactory::factory = 0;
 //==========================================================
 PluginLoader *TemplateFactoryInterface::currentLoader = NULL;
 //==========================================================
