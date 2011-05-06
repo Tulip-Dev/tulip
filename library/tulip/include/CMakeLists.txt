@@ -44,7 +44,6 @@ INSTALL(FILES
 	tulip/StringProperty.h 
 	tulip/TemplateFactory.h 
 	tulip/Coord.h 
-	tulip/IntegerAlgorithm.h 
 	tulip/Observable.h 
 	tulip/ObservableGraph.h 
 	tulip/ObservableProperty.h 

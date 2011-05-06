@@ -28,7 +28,6 @@ GraphTools.cpp
 GraphUpdatesRecorder.cpp
 GraphView.cpp
 IdManager.cpp
-IntegerAlgorithm.cpp
 IntegerProperty.cpp
 LayoutAlgorithm.cpp
 LayoutProperty.cpp
