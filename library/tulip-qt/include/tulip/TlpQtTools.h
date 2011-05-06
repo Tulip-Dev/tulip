@@ -71,12 +71,6 @@ namespace tlp {
 
   TLP_QT_SCOPE void openGraphOnGlMainWidget(Graph *graph,DataSet *dataSet,GlMainWidget *glMainWidget);
 
-  TLP_QT_SCOPE void loadInteractorPluginsFromDir(std::string dir,PluginLoader *loader=0);
-  TLP_QT_SCOPE void loadViewPluginsFromDir(std::string dir,PluginLoader *loader=0);
-  TLP_QT_SCOPE void loadControllerPluginsFromDir(std::string dir,PluginLoader *loader=0);
-
-  TLP_QT_SCOPE bool canUseQGLPixelBuffer();
-
   TLP_QT_SCOPE bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QColor &result);
 
   inline QColor colorToQColor(const Color& color) {
