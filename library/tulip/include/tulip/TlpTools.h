@@ -49,9 +49,10 @@ namespace tlp {
    * @brief Calls loadPluginsFromDir for each directory in TulipPluginsPath.
    *
    * @param plug A PluginLoader to output what is going on. Defaults to 0.
+   * @param folder A fodler to append to each path in TulipPluginsPath (e.g. "views/")
    * @return void
    **/
-  TLP_SCOPE void loadPlugins(PluginLoader *plug=0);
+  TLP_SCOPE void loadPlugins(PluginLoader *plug=0, std::string folder = "");
   TLP_SCOPE bool loadPlugin(const std::string &filename, PluginLoader *plug=0);
   TLP_SCOPE void loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader=0);
   TLP_SCOPE void loadPluginsCheckDependencies(PluginLoader* loader=0);

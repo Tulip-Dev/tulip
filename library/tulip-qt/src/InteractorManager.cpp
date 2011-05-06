@@ -35,20 +35,8 @@ namespace tlp
   //====================================================
   void InteractorManager::loadPlugins(PluginLoader *plug) {
     InteractorFactory::initFactory();
-    string::const_iterator begin=tlp::TulipPluginsPath.begin();
-    string::const_iterator end=begin;
-    while (end!=tlp::TulipPluginsPath.end())
-      if ((*end)==tlp::PATH_DELIMITER) {
-        if (begin!=end)
-          tlp::loadInteractorPluginsFromDir(string(begin,end)+"/interactors",plug);
-        ++end;
-        begin=end;
-      } else
-        ++end;
-    if (begin!=end) {
-      tlp::loadInteractorPluginsFromDir(string(begin,end)+"/interactors",plug);
-    }
-
+    tlp::loadPlugins(plug, "/interactors");
+    
     // if interactorMap is empty, put all interactors in the Map
     interactorsMap.clear();
     InteractorContext ic;
