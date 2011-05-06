@@ -76,15 +76,14 @@ void GlLine::draw(float,Camera *) {
 		glLineStipple(factor,pattern);
 		glEnable(GL_LINE_STIPPLE);
 	}
-	glBegin(GL_LINE_STRIP);
 
-	for(unsigned int i=0; i < _points.size(); ++i) {
-		if (i < _colors.size()) {
-			setColor(_colors[i]);
-		}
-		glVertex3fv((float *)&_points[i]);
-	}
-	glEnd();
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 3 * sizeof(float), &_points[0]);
+	glColorPointer(4, GL_UNSIGNED_BYTE, 4 * sizeof(unsigned char), &_colors[0]);
+	glDrawArrays(GL_LINE_STRIP, 0, _points.size());
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
 
 	OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
