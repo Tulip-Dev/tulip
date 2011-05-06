@@ -800,7 +800,7 @@ template <typename TFACTORY, typename TMODULE>
 //**********************************************************************
 void TulipApp::buildMenus() {
 // In this case doesn't add sub menu in new menu
-  if(ControllerFactory::factory->objMap.size() < 2) {
+  if(ControllerFactory::factory->objMap.size() > 1) {
     //Add new menu in File menu
     newMenu=new QMenu("New");
     connect(newMenu, SIGNAL(triggered(QAction *)), SLOT(fileNew(QAction*)));
