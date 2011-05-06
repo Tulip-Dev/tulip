@@ -95,7 +95,7 @@ bool ImprovedWalker::run() {
   node root;
   tlp::getSource(tree, root);
   orientationType mask = getMask(dataSet);
-  oriLayout = new OrientableLayout(layoutResult, mask);
+  oriLayout = new OrientableLayout(_result, mask);
   SizeProperty* size;
   if (!getNodeSizePropertyParameter(dataSet, size))
     size = graph->getProperty<SizeProperty>("viewSize");

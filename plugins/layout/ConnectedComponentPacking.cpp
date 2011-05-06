@@ -148,19 +148,19 @@ bool ConnectedComponentPacking::run() {
   Iterator<node> *itN = graph->getNodes();
   while(itN->hasNext()){
     node n = itN->next();
-    layoutResult->setNodeValue(n, layout->getNodeValue(n));
+    _result->setNodeValue(n, layout->getNodeValue(n));
   } delete itN;
   Iterator<edge> *itE = graph->getEdges();
   while(itE->hasNext()){
     edge e = itE->next();
-    layoutResult->setEdgeValue(e, layout->getEdgeValue(e));
+    _result->setEdgeValue(e, layout->getEdgeValue(e));
   } delete itE;
   unsigned int i = 0;
   it = workingGraph->getSubGraphs();
   while(it->hasNext()) {
     Graph *sg = it->next();
     Coord move(rectangles[i][0][0]-rectanglesBackup[i][0][0], rectangles[i][0][1]-rectanglesBackup[i][0][1], 0);
-    layoutResult->translate(move, sg);
+    _result->translate(move, sg);
     ++i;
   } delete it;
   graph->delAllSubGraphs(workingGraph);

@@ -106,8 +106,10 @@ class TemplateAlgorithm : public PropertyAlgorithm {
 
 class SizeProperty;
 class IntegerProperty;
+class LayoutProperty;
 typedef TemplateAlgorithm<SizeProperty> SizeAlgorithm;
 typedef TemplateAlgorithm<IntegerProperty> IntegerAlgorithm;
+typedef TemplateAlgorithm<LayoutProperty> LayoutAlgorithm;
 
 // #include <tulip/PropertyAlgorithm.h>
 /*@}*/

@@ -28,7 +28,7 @@
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/AbstractProperty.h>
-#include <tulip/LayoutAlgorithm.h>
+#include <tulip/PropertyAlgorithm.h>
 
 namespace tlp {
 
@@ -40,8 +40,6 @@ typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> Ab
 /** \addtogroup properties */ 
 /*@{*/
  class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, private GraphObserver {
-  friend class LayoutAlgorithm;
-
 public:
   LayoutProperty(Graph *, std::string n="", bool updateOnEdgeReversal = true);
 

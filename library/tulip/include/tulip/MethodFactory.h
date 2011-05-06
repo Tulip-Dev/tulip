@@ -33,7 +33,6 @@
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/DoubleAlgorithm.h>
 #include <tulip/ColorAlgorithm.h>
-#include <tulip/LayoutAlgorithm.h>
 #include <tulip/StringAlgorithm.h>
 #include <tulip/BooleanAlgorithm.h>
 #include <tulip/Algorithm.h>

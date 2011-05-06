@@ -222,11 +222,11 @@ public:
     if (depth > 0) {
       // layout the node in the middle of the sector
       double nAngle = (startAngle + endAngle)/2.0;
-      layoutResult->setNodeValue(n, Coord(lRadii[depth] * cos(nAngle),
+      _result->setNodeValue(n, Coord(lRadii[depth] * cos(nAngle),
 					  lRadii[depth] * sin(nAngle),
 					  0));
     } else
-      layoutResult->setNodeValue(n, Coord(0, 0, 0));
+      _result->setNodeValue(n, Coord(0, 0, 0));
     node on;
     const double& nSpread = angles->getNodeValue(n);
     checkAngle = false;
@@ -284,11 +284,11 @@ public:
 	if (depth > 0) {
 	  // layout the node in the middle of the sector
 	  double nAngle = (startAngle + endAngle)/2.0;
-	  layoutResult->setNodeValue(n, Coord(lRadii[depth] * cos(nAngle),
+	  _result->setNodeValue(n, Coord(lRadii[depth] * cos(nAngle),
 					      lRadii[depth] * sin(nAngle),
 					      0));
 	} else
-	  layoutResult->setNodeValue(n, Coord(0, 0, 0));
+	  _result->setNodeValue(n, Coord(0, 0, 0));
 	visited.set(n.id, true);
       }
       Iterator<node>* it = dfsParams.neighbours;
