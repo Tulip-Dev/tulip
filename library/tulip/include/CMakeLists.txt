@@ -38,7 +38,6 @@ INSTALL(FILES
 	tulip/DoubleProperty.h 
 	tulip/PropertyAlgorithm.h 
 	tulip/IntegerProperty.h 
-	tulip/DoubleAlgorithm.h 
 	tulip/StringProperty.h 
 	tulip/TemplateFactory.h 
 	tulip/Coord.h 
@@ -46,8 +45,7 @@ INSTALL(FILES
 	tulip/ObservableGraph.h 
 	tulip/ObservableProperty.h 
 	tulip/PropertyInterface.h
-	tulip/AbstractProperty.h 
-	tulip/StringAlgorithm.h 
+	tulip/AbstractProperty.h
 	tulip/TlpTools.h 
 	tulip/PluginContext.h 
 	tulip/BooleanProperty.h 

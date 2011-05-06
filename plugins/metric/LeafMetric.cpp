@@ -27,23 +27,23 @@ using namespace tlp;
 LeafMetric::LeafMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {}
 //=======================================================================
 double LeafMetric::getNodeValue(const tlp::node n) {
-  if (doubleResult->getNodeValue(n) != 0) 
-    return doubleResult->getNodeValue(n);
+  if (_result->getNodeValue(n) != 0) 
+    return _result->getNodeValue(n);
   double result=0;
   node _n;
   forEach(_n, graph->getOutNodes(n)) 
     result += getNodeValue(_n);
   if (result==0) result=1.0;
-  doubleResult->setNodeValue(n, result);
+  _result->setNodeValue(n, result);
   return result;
 }
 //=======================================================================
 bool LeafMetric::run() {
-  doubleResult->setAllNodeValue(0);
-  doubleResult->setAllEdgeValue(0);
+  _result->setAllNodeValue(0);
+  _result->setAllEdgeValue(0);
   node n;
   forEach(n, graph->getNodes())
-    doubleResult->setNodeValue(n, getNodeValue(n));
+    _result->setNodeValue(n, getNodeValue(n));
   return true;
 }
 //=======================================================================

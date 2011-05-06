@@ -56,10 +56,10 @@ int StrongComponent::attachNumerotation(tlp::node n,
       renum.pop();
       finished[tmp]=true;
       minAttach[tmp]=result;
-      doubleResult->setNodeValue(tmp,curComponent);
+      _result->setNodeValue(tmp,curComponent);
     }
     finished[n]=true;
-    doubleResult->setNodeValue(n,curComponent);
+    _result->setNodeValue(n,curComponent);
     curComponent++;
     renum.pop();
   }
@@ -89,10 +89,10 @@ bool StrongComponent::run() {
     edge ite=itE->next();
     node source= graph->source(ite);
     node target= graph->target(ite);
-    if (doubleResult->getNodeValue(source)==doubleResult->getNodeValue(target))
-      doubleResult->setEdgeValue(ite,doubleResult->getNodeValue(source));
+    if (_result->getNodeValue(source)==_result->getNodeValue(target))
+      _result->setEdgeValue(ite,_result->getNodeValue(source));
     else
-      doubleResult->setEdgeValue(ite,curComponent);
+      _result->setEdgeValue(ite,curComponent);
   } delete itE;
 
 

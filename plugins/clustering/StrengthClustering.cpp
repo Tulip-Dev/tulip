@@ -379,7 +379,7 @@ bool StrengthClustering::run() {
   for(unsigned int i=0;i<tmp.size();++i){
       set<node>::const_iterator it;
       for(it=tmp[i].begin();it!=tmp[i].end();++it){
-        doubleResult->setNodeValue(*it,i);
+        _result->setNodeValue(*it,i);
       }
   }
 

@@ -10,7 +10,6 @@ ColorScale.cpp
 ConnectedTest.cpp
 ConvexHull.cpp
 Delaunay.cpp
-DoubleAlgorithm.cpp
 DoubleProperty.cpp
 DrawingTools.cpp
 ExtendedClusterOperation.cpp
@@ -54,7 +53,6 @@ SimplePluginProgress.cpp
 SimpleTest.cpp
 SizeProperty.cpp
 StlFunctions.cpp
-StringAlgorithm.cpp
 StringCollection.cpp
 StringProperty.cpp
 TLPExport.cpp
