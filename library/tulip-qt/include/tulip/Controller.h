@@ -238,24 +238,11 @@ namespace tlp {
 
   };
 
-  class TLP_QT_SCOPE ControllerFactory: public PluginInfoInterface {
+  class TLP_QT_SCOPE ControllerFactory: public AbstractPluginInfo {
   public:
     virtual ~ControllerFactory() {}
     ///
     virtual Controller *createPluginObject(ControllerContext *ic)=0;
-
-    virtual  std::string getMajor() const {
-      return tlp::getMajor(getRelease());
-    }
-    virtual  std::string getMinor() const  {
-      return tlp::getMinor(getRelease());
-    }
-    virtual  std::string getTulipMajor() const {
-      return tlp::getMajor(getTulipRelease());
-    }
-    virtual  std::string getTulipMinor() const  {
-      return tlp::getMinor(getTulipRelease());
-    }
 
     static TemplateFactory<ControllerFactory,Controller,ControllerContext *> *factory;
     static void initFactory() {

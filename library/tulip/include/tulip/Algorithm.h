@@ -89,7 +89,7 @@ public :
  * The factory the registers itself in the Tulip plug-in system (through the static initFactory() method when the library is loaded..
  * The actual registration is delegated to a TemplateFactory to factorize code.
  */
-class AlgorithmFactory:public PluginInfoInterface{
+class AlgorithmFactory:public AbstractPluginInfo{
 public:
   /**
    * @brief A static factory that is initialized when the library is loaded.
@@ -111,19 +111,6 @@ public:
    * @return Algorithm A newly created algorithm plug-in.
    */
   virtual Algorithm * createPluginObject(AlgorithmContext context)=0;
-
-  virtual  std::string getMajor() const {
-    return tlp::getMajor(getRelease());
-  }
-  virtual  std::string getMinor() const  {
-    return tlp::getMinor(getRelease());
-  }
-  virtual  std::string getTulipMajor() const {
-    return tlp::getMajor(getTulipRelease());
-  }
-  virtual  std::string getTulipMinor() const  {
-    return tlp::getMinor(getTulipRelease());
-  }
 };
 /*@}*/
 
