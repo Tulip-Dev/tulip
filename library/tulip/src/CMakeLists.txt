@@ -55,7 +55,6 @@ PropertyTypes.cpp
 Reflect.cpp
 SimplePluginProgress.cpp
 SimpleTest.cpp
-SizeAlgorithm.cpp
 SizeProperty.cpp
 StlFunctions.cpp
 StringAlgorithm.cpp

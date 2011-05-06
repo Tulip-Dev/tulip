@@ -114,7 +114,7 @@ public:
       if (xaxis) result[0]=sizos;
       if (yaxis) result[1]=sizos;
       if (zaxis) result[2]=sizos;
-      sizeResult->setNodeValue(itn, result);
+      _result->setNodeValue(itn, result);
     } delete itN;
   }
   
@@ -126,7 +126,7 @@ public:
       Size result  = entrySize->getEdgeValue(ite);
       result[0] = sizos;
       result[1] = sizos;
-      sizeResult->setEdgeValue(ite, result);
+      _result->setEdgeValue(ite, result);
     } delete itE;
   }
 
@@ -180,14 +180,14 @@ public:
       computeNodeSize();
       edge e;
       forEach(e, graph->getEdges())
-	sizeResult->setEdgeValue(e, entrySize->getEdgeValue(e));
+        _result->setEdgeValue(e, entrySize->getEdgeValue(e));
     }
     else {
       shift = entryMetric->getEdgeMin(graph);
       computeEdgeSize();
       node n;
       forEach(n, graph->getNodes())
-	sizeResult->setNodeValue(n, entrySize->getNodeValue(n));
+        _result->setNodeValue(n, entrySize->getNodeValue(n));
     }
     if (!mappingType) delete tmp;
     return true;

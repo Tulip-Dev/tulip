@@ -30,7 +30,7 @@
 #include <tulip/Plugin.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginContext.h>
-#include <tulip/SizeAlgorithm.h>
+#include <tulip/PropertyAlgorithm.h>
 #include <tulip/IntegerAlgorithm.h>
 #include <tulip/DoubleAlgorithm.h>
 #include <tulip/ColorAlgorithm.h>

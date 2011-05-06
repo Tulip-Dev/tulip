@@ -36,7 +36,6 @@ class DoubleProperty;
 /// Interface for metric plug-ins
 class TLP_SCOPE DoubleAlgorithm:public PropertyAlgorithm { 
   ///
-  friend class DoubleProperty;
 public:
   /** This metric is the one associated to the algorithm,
       The data should be store in it*/
