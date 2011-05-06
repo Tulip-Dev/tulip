@@ -52,7 +52,6 @@
 #include "tulip/FindSelectionWidget.h"
 #include "tulip/NodeLinkDiagramComponent.h"
 #include "tulip/GlMainWidget.h"
-#include "tulip/InteractorManager.h"
 #include "tulip/SnapshotDialog.h"
 
 using namespace std;
