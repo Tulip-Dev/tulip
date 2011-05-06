@@ -16,7 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/SimplePluginProgress.h"
+#include <tulip/SimplePluginProgress.h>
+#include <tulip/TemplateFactory.h>
 //================================================================================
 template<typename ATTRIBUTETYPE>
 ATTRIBUTETYPE tlp::Graph::getAttribute(const std::string &name) const {
@@ -114,8 +115,7 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
   circularCalls.insert(prop);
   tlp::PropertyContext tmpContext(context);
   tmpContext.propertyProxy = prop;
-  typename PropertyType::PAlgorithm *tmpAlgo =
-    PropertyType::factory->getPluginObject(algorithm, tmpContext);
+  typename PropertyType::PAlgorithm *tmpAlgo = tlp::PropertyFactory<TemplateAlgorithm<PropertyType> >::factory->getPluginObject(algorithm, tmpContext);
   if (tmpAlgo != 0) {
     result = tmpAlgo->check(msg);
     if (result) {

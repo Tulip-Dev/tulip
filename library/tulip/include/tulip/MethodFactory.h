@@ -47,8 +47,8 @@ class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>	\
 {                                                       \
  public:						\
   C##T##Factory(){					\
-    tlp::T##Property::initFactory();			\
-    tlp::T##Property::factory->registerPlugin((tlp::PropertyFactory<tlp::T##Algorithm> *) this); \
+    tlp::PropertyFactory<tlp::T##Algorithm>::initFactory();			\
+    tlp::PropertyFactory<tlp::T##Algorithm>::factory->registerPlugin((tlp::PropertyFactory<tlp::T##Algorithm> *) this); \
   }							\
   ~C##T##Factory(){}					\
   std::string getClassName() const { return std::string(#T);} \
