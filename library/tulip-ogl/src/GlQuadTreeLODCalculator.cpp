@@ -269,24 +269,29 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 #pragma omp sections nowait
 #endif
 			{
-				for(size_t i=0;i<nbSimples;++i){
-					entitiesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,layerLODUnit->simpleEntitiesLODVector[i].entity);
-				}
-			}
 #ifdef _OPENMP
-#pragma omp sections nowait
+#pragma omp section
 #endif
-			{
-				for(size_t i=0;i<nbNodes;++i){
-					nodesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->nodesLODVector[i].boundingBox,layerLODUnit->nodesLODVector[i].id);
+				{
+					for(size_t i=0;i<nbSimples;++i){
+						entitiesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,layerLODUnit->simpleEntitiesLODVector[i].entity);
+					}
 				}
-			}
 #ifdef _OPENMP
-#pragma omp sections nowait
+#pragma omp section
 #endif
-			{
-				for(size_t i=0;i<nbEdges;++i){
-					edgesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->edgesLODVector[i].boundingBox,layerLODUnit->edgesLODVector[i].id);
+				{
+					for(size_t i=0;i<nbNodes;++i){
+						nodesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->nodesLODVector[i].boundingBox,layerLODUnit->nodesLODVector[i].id);
+					}
+				}
+#ifdef _OPENMP
+#pragma omp section
+#endif
+				{
+					for(size_t i=0;i<nbEdges;++i){
+						edgesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->edgesLODVector[i].boundingBox,layerLODUnit->edgesLODVector[i].id);
+					}
 				}
 			}
 		}
@@ -473,12 +478,12 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
 				destroy(camera);
 			}
 		} else {
-		  if (typeid(ev) == typeid(GraphEvent) ||
-		      (ev.type() == Event::TLP_DELETE &&
-		       dynamic_cast<Graph*>(ev.sender())))
-		    GraphObserver::treatEvent(ev);
-		  else
-		    PropertyObserver::treatEvent(ev);
+			if (typeid(ev) == typeid(GraphEvent) ||
+					(ev.type() == Event::TLP_DELETE &&
+							dynamic_cast<Graph*>(ev.sender())))
+				GraphObserver::treatEvent(ev);
+			else
+				PropertyObserver::treatEvent(ev);
 		}
 	}
 }
