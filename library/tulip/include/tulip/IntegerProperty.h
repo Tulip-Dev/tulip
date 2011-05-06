@@ -26,7 +26,7 @@
 #include <tulip/tuliphash.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
-#include <tulip/IntegerAlgorithm.h>
+#include <tulip/PropertyAlgorithm.h>
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 
@@ -40,8 +40,6 @@ typedef AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorit
 /** \addtogroup properties */ 
 /*@{*/
  class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, private GraphObserver { 
-
-  friend class IntegerAlgorithm;
 
 public :
   IntegerProperty(Graph *, std::string n = "");

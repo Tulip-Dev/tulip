@@ -18,7 +18,7 @@
  */
 #include <limits.h>
 #include <tulip/IntegerProperty.h>
-#include <tulip/IntegerAlgorithm.h>
+#include <tulip/PropertyAlgorithm.h>
 
 using namespace std;
 using namespace tlp;
