@@ -31,21 +31,21 @@ PathLengthMetric::PathLengthMetric(const tlp::PropertyContext &context):DoubleAl
 //=======================================
 double PathLengthMetric::getNodeValue(const tlp::node n) {
   if (graph->outdeg(n)==0) return 0.0;
-  if (doubleResult->getNodeValue(n) > 0.1)
-    return doubleResult->getNodeValue(n);
+  if (_result->getNodeValue(n) > 0.1)
+    return _result->getNodeValue(n);
   double result=0;
   node child;
   forEach(child, graph->getOutNodes(n)) {
     result += getNodeValue(child);
   }
   result += leafMetric->getNodeValue(n);
-  doubleResult->setNodeValue(n, result);
+  _result->setNodeValue(n, result);
   return result;
 }
 //=======================================
 bool PathLengthMetric::run() {
-  doubleResult->setAllNodeValue(0);
-  doubleResult->setAllEdgeValue(0);
+  _result->setAllNodeValue(0);
+  _result->setAllEdgeValue(0);
   leafMetric = new DoubleProperty(graph);
   string erreurMsg;
   if (!graph->computeProperty("Leaf", leafMetric, erreurMsg)) {

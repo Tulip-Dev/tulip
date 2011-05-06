@@ -42,7 +42,7 @@ double g(int k,double width,double amplitude) {
     if (k<0)
       return ((double)k*slope+amplitude); //partie croissante du signal triangulaire
     else
-      return ((double)-k*slope+amplitude); //partie décroissante du signal triangulaire
+      return ((double)-k*slope+amplitude); //partie dï¿½croissante du signal triangulaire
   }
 }
 //================================================================================
@@ -225,7 +225,7 @@ void ConvolutionClustering::getClusters(const std::vector<int> &ranges){
     node n;
     forEach(n,graph->getNodes()){
         int tmp = getInterval((int)( (metric->getNodeValue(n) - metric->getNodeMin() )*(double)histosize / (metric->getNodeMax()-metric->getNodeMin())),ranges);
-        doubleResult->setNodeValue(n,tmp);
+        _result->setNodeValue(n,tmp);
     }
 }
 

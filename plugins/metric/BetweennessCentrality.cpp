@@ -83,8 +83,8 @@ public:
   addParameter<bool>("norm", paramHelp[1], "false", false);
   };
   bool run() {
-    doubleResult->setAllNodeValue(0.0);
-    doubleResult->setAllEdgeValue(0.0);
+    _result->setAllNodeValue(0.0);
+    _result->setAllEdgeValue(0.0);
     bool directed = false;
     bool norm = false;
     if ( dataSet!=0 ) {
@@ -142,9 +142,9 @@ public:
 	  delta.set(v.id, delta.get(v.id) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
           edge e  = graph->existEdge(v,w,directed);
           if(e.isValid())
-              doubleResult->setEdgeValue(e, doubleResult->getEdgeValue(e) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
+              _result->setEdgeValue(e, _result->getEdgeValue(e) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
 	}
-        if (w != s) doubleResult->setNodeValue(w, doubleResult->getNodeValue(w) + delta.get(w.id));
+        if (w != s) _result->setNodeValue(w, _result->getNodeValue(w) + delta.get(w.id));
       }
     }
     //Normalization
@@ -155,9 +155,9 @@ public:
         node s = it->next();
         //In the undirected case, the metric must be divided by two, then
         if(norm)
-          doubleResult->setNodeValue(s,doubleResult->getNodeValue(s)/((n-1.0)*(n-2.0)));
+          _result->setNodeValue(s,_result->getNodeValue(s)/((n-1.0)*(n-2.0)));
         else{
-          if(!directed) doubleResult->setNodeValue(s,doubleResult->getNodeValue(s)/2.0);
+          if(!directed) _result->setNodeValue(s,_result->getNodeValue(s)/2.0);
         }
       }
 
@@ -166,11 +166,11 @@ public:
           edge e = itE->next();          
           if(norm){
               if(directed)
-                doubleResult->setEdgeValue(e,4.0*doubleResult->getEdgeValue(e)/(n*n));
+                _result->setEdgeValue(e,4.0*_result->getEdgeValue(e)/(n*n));
               else
-                doubleResult->setEdgeValue(e,2.0*doubleResult->getEdgeValue(e)/(n*n));
+                _result->setEdgeValue(e,2.0*_result->getEdgeValue(e)/(n*n));
           }else
-            if(!directed) doubleResult->setEdgeValue(e,doubleResult->getEdgeValue(e)/(2.0));
+            if(!directed) _result->setEdgeValue(e,_result->getEdgeValue(e)/(2.0));
       }
       delete itE;
     }

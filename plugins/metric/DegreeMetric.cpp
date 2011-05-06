@@ -83,19 +83,19 @@ bool DegreeMetric::run() {
     switch(degreeTypes.getCurrent()) {
     case INOUT:
       forEach(n, graph->getNodes())
-	doubleResult->setNodeValue(n, double(graph->deg(n))/normalization);
+	_result->setNodeValue(n, double(graph->deg(n))/normalization);
       break;
     case IN:
       forEach(n, graph->getNodes())
-	doubleResult->setNodeValue(n, double(graph->indeg(n))/normalization);
+	_result->setNodeValue(n, double(graph->indeg(n))/normalization);
       break;
     case OUT:
       forEach(n, graph->getNodes())
-	doubleResult->setNodeValue(n, double(graph->outdeg(n))/normalization);
+	_result->setNodeValue(n, double(graph->outdeg(n))/normalization);
       break;
     }
     // null value for edges
-    doubleResult->setAllEdgeValue(0);
+    _result->setAllEdgeValue(0);
   }
   else {
     if (norm && graph->numberOfNodes() > 1 && graph->numberOfEdges() > 0) {
@@ -114,7 +114,7 @@ bool DegreeMetric::run() {
 	forEach(e, graph->getInOutEdges(n)) {
 	  nWeight += weights->getEdgeValue(e);
 	}
-	doubleResult->setNodeValue(n, nWeight / normalization);
+	_result->setNodeValue(n, nWeight / normalization);
       }
       break;
     case IN:
@@ -124,7 +124,7 @@ bool DegreeMetric::run() {
 	forEach(e, graph->getInEdges(n)) {
 	  nWeight += weights->getEdgeValue(e);
 	}
-	doubleResult->setNodeValue(n, nWeight / normalization);
+	_result->setNodeValue(n, nWeight / normalization);
       }
       break;
     case OUT:
@@ -134,7 +134,7 @@ bool DegreeMetric::run() {
 	forEach(e, graph->getOutEdges(n)) {
 	  nWeight += weights->getEdgeValue(e);
 	}
-	doubleResult->setNodeValue(n, nWeight / normalization);
+	_result->setNodeValue(n, nWeight / normalization);
       }
       break;
     }

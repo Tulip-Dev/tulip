@@ -142,7 +142,7 @@ double StrengthMetric::getNodeValue(const tlp::node n ) {
   Iterator<edge> *itE = graph->getInOutEdges(n);
   while (itE->hasNext()) {
     edge ite = itE->next();
-    result += doubleResult->getEdgeValue(ite);
+    result += _result->getEdgeValue(ite);
   } delete itE;
   return result/double(graph->deg(n));
 }
@@ -157,7 +157,7 @@ bool StrengthMetric::run() {
     pluginProgress->setComment("Computing Strength metric on edges...");
   }
   forEach(e, graph->getEdges()) {
-    doubleResult->setEdgeValue(e, getEdgeValue(e));
+    _result->setEdgeValue(e, getEdgeValue(e));
     if (pluginProgress && ((++steps % (maxSteps / 10)) == 0)) {
       pluginProgress->progress(++steps, maxSteps);
       if (pluginProgress->state() !=TLP_CONTINUE)
@@ -171,7 +171,7 @@ bool StrengthMetric::run() {
     maxSteps = 10;
   pluginProgress->setComment("Computing Strength metric on nodes...");
   forEach(n, graph->getNodes()) {
-    doubleResult->setNodeValue(n, getNodeValue(n));
+    _result->setNodeValue(n, getNodeValue(n));
     if (pluginProgress && ((++steps % (maxSteps / 10)) == 0)) {
       pluginProgress->progress(++steps, maxSteps);
       if (pluginProgress->state() !=TLP_CONTINUE)

@@ -22,7 +22,7 @@
 #include <tulip/tuliphash.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
-#include <tulip/DoubleAlgorithm.h>
+#include <tulip/PropertyAlgorithm.h>
 #include <tulip/ObservableGraph.h>
 
 #ifdef HAVE_CONFIG_H
@@ -37,9 +37,6 @@ typedef AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>
 /** \addtogroup properties */ 
 /*\@{*/
  class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, private GraphObserver { 
-
-  friend class DoubleAlgorithm;
-
 public :
   DoubleProperty (Graph *, std::string n="");
   DoubleType::RealType  getNodeMin(Graph *sg=0);

@@ -21,8 +21,6 @@
 #include <tulip/ForEach.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/PluginContext.h>
-#include <tulip/DoubleAlgorithm.h>
-#include <tulip/AbstractProperty.h>
 
 using namespace std;
 using namespace tlp;
