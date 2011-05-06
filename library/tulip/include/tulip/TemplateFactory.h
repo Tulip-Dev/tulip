@@ -214,13 +214,24 @@ public:
   void removePlugin(const std::string &name);
 };
 
+template<class Property> class TemplateAlgorithm;
 
-template <class T> class PropertyFactory:public AbstractPluginInfo {
+template <class PropertyAlgorithm> class PropertyFactory:public AbstractPluginInfo {
 public:
+  static TemplateFactory<PropertyFactory<PropertyAlgorithm>, PropertyAlgorithm, PropertyContext>* factory;
+  static void initFactory() {
+    if (!factory) {
+      factory = new TemplateFactory<PropertyFactory<PropertyAlgorithm>, PropertyAlgorithm, PropertyContext>();
+    }
+  }
+  
   PropertyFactory(){}
   virtual ~PropertyFactory() {}
-  virtual T* createPluginObject(const PropertyContext &context)=0;
+  virtual PropertyAlgorithm* createPluginObject(const PropertyContext &context)=0;
 };
+
+template <class PropertyAlgorithm>
+TemplateFactory<PropertyFactory<PropertyAlgorithm>, PropertyAlgorithm, PropertyContext >* PropertyFactory<PropertyAlgorithm>::factory = 0;
 
 /*@}*/
 

@@ -104,8 +104,8 @@ namespace tlp {
     bool   resultBool=true;
     if (query) {
       // plugin parameters dialog
-      StructDef *params = ControllerAlgorithmTools::getPluginParameters(PROPERTY::factory, name);
-      StructDef sysDef = PROPERTY::factory->getPluginParameters(name);
+      StructDef *params = ControllerAlgorithmTools::getPluginParameters(PropertyFactory<TemplateAlgorithm<PROPERTY> >::factory, name);
+      StructDef sysDef = PropertyFactory<TemplateAlgorithm<PROPERTY> >::factory->getPluginParameters(name);
       params->buildDefaultDataSet(dataSet, graph );
       string title = string("Tulip Parameter Editor: ") + name;
       resultBool = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,

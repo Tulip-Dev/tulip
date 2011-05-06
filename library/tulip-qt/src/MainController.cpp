@@ -118,13 +118,14 @@ namespace tlp {
     QObject::connect(action,SIGNAL(triggered()),receiver,slot);
   }
   //**********************************************************************
-  template <typename TYPEN, typename TYPEE, typename TPROPERTY>
+  template <typename TPROPERTY>
   void buildPropertyMenu(QMenu &menu, QObject *receiver, const char *slot) {
-    typename TemplateFactory<PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext>::ObjectCreator::const_iterator it;
+    typename TemplateFactory<PropertyFactory<TemplateAlgorithm<TPROPERTY> >, TemplateAlgorithm<TPROPERTY>, PropertyContext >::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
-    it=AbstractProperty<TYPEN, TYPEE, TPROPERTY>::factory->objMap.begin();
-    for (;it!=AbstractProperty<TYPEN,TYPEE, TPROPERTY>::factory->objMap.end();++it)
+    TemplateFactory<PropertyFactory<TemplateAlgorithm<TPROPERTY> >, TemplateAlgorithm<TPROPERTY>, PropertyContext >* factory = PropertyFactory<TemplateAlgorithm<TPROPERTY> >::factory;
+    it= factory->objMap.begin();
+    for (;it!=PropertyFactory<TemplateAlgorithm<TPROPERTY> >::factory->objMap.end();++it)
       insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
   }
   template <typename TFACTORY, typename TMODULE>
@@ -726,13 +727,13 @@ namespace tlp {
     else
     	generalMenu->clear();
 
-    buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(*intMenu, this, SLOT(changeInt()));
-    buildPropertyMenu<StringType, StringType, StringAlgorithm>(*stringMenu, this, SLOT(changeString()));
-    buildPropertyMenu<SizeType, SizeType, SizeAlgorithm>(*sizesMenu, this, SLOT(changeSizes()));
-    buildPropertyMenu<ColorType, ColorType, ColorAlgorithm>(*colorsMenu, this, SLOT(changeColors()));
-    buildPropertyMenu<PointType, LineType, LayoutAlgorithm>(*layoutMenu, this, SLOT(changeLayout()));
-    buildPropertyMenu<DoubleType, DoubleType, DoubleAlgorithm>(*metricMenu, this, SLOT(changeMetric()));
-    buildPropertyMenu<BooleanType, BooleanType, BooleanAlgorithm>(*selectMenu, this, SLOT(changeSelection()));
+    buildPropertyMenu<IntegerProperty>(*intMenu, this, SLOT(changeInt()));
+    buildPropertyMenu<StringProperty>(*stringMenu, this, SLOT(changeString()));
+    buildPropertyMenu<SizeProperty>(*sizesMenu, this, SLOT(changeSizes()));
+    buildPropertyMenu<ColorProperty>(*colorsMenu, this, SLOT(changeColors()));
+    buildPropertyMenu<LayoutProperty>(*layoutMenu, this, SLOT(changeLayout()));
+    buildPropertyMenu<DoubleProperty>(*metricMenu, this, SLOT(changeMetric()));
+    buildPropertyMenu<BooleanProperty>(*selectMenu, this, SLOT(changeSelection()));
     buildMenuWithContext<AlgorithmFactory, Algorithm>(*generalMenu, this, SLOT(applyAlgorithm()));
 
     if (selectMenu->actions().count()>0)

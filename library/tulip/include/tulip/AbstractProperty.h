@@ -39,6 +39,7 @@ class GraphView;
  * \defgroup properties Properties
  */ 
 /*@{*/
+
 /**
  * @brief This class is used to store a property of a graph.
  * It implements PropertyInterface and add new methods
@@ -57,12 +58,6 @@ class TLP_SCOPE AbstractProperty : public PropertyInterface {
   friend class GraphView;
 
 public:
-  static TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext > *factory;
-  static void initFactory() {
-    if (!factory) {
-      factory = new TemplateFactory< PropertyFactory<TPROPERTY>, TPROPERTY, PropertyContext >;
-    }
-  }
   AbstractProperty(Graph *, std::string n = "");
 
   
@@ -513,6 +508,7 @@ protected:
   void resizeEdgeValue(const edge e, size_t size, typename eltType::RealType elt = eltType::defaultValue());
  };
 /*@}*/
+
 }
 #if !defined(_MSC_VER) || defined(DLL_TULIP) //When using VC++, we only want to include this when we are in the TULIP dll. With any other compiler, include it all the time
 #	include "cxx/AbstractProperty.cxx"
