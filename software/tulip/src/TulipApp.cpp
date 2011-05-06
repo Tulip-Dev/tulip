@@ -46,6 +46,8 @@
 #include <tulip/QtOpenGlErrorViewer.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 
+#include <tulip/ControllerAlgorithmTools.h>
+
 #include <PluginsUpdateChecker.h>
 #include <PluginsHelp.h>
 #include <PluginsManager.h>
@@ -59,17 +61,6 @@
 
 using namespace std;
 using namespace tlp;
-
-//**********************************************************************
-// we use a hash_map to store plugin parameters
-static StructDef *getPluginParameters(PluginManagerInterface *factory, std::string name) {
-  static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > > paramMaps;
-  TLP_HASH_MAP<std::string, StructDef *>::const_iterator it;
-  it = paramMaps[(unsigned long) factory].find(name);
-  if (it == paramMaps[(unsigned long) factory].end())
-    paramMaps[(unsigned long) factory][name] = new StructDef(factory->getPluginParameters(name));
-  return paramMaps[(unsigned long) factory][name];
-}
 
 //**********************************************************************
 ///Constructor of ViewGl
@@ -570,7 +561,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       noPlugin = false;
       s = QString::null;
       StructDef sysDef = ImportModuleFactory::factory->getPluginParameters(*plugin);
-      StructDef *params = getPluginParameters(ImportModuleFactory::factory, *plugin);
+      StructDef *params = ControllerAlgorithmTools::getPluginParameters(ImportModuleFactory::factory, *plugin);
       params->buildDefaultDataSet( dataSet );
       string title = string("Enter Import parameters: ") + plugin->c_str();
       cancel = !tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
