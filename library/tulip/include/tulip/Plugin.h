@@ -135,7 +135,7 @@ public:
   }
 };
 
-template<class ObjectType, class Context> class TemplateFactory;
+template<class ObjectType, class Context> class PluginManager;
 
 template <class PluginObject, class PluginContext>
 class FactoryInterface : public AbstractPluginInfo {
@@ -156,20 +156,20 @@ class FactoryInterface : public AbstractPluginInfo {
     /**
      * @brief A static factory that is initialized when the library is loaded.
      */
-    static tlp::TemplateFactory<PluginObject, PluginContext> *factory;
+    static tlp::PluginManager<PluginObject, PluginContext> *factory;
 
     /**
      * @brief This static initilization is called when the plug-in library is loaded, and registers the new plug-in in the Tulip plug-in system.
      */
     static void initFactory() {
       if (!factory) {
-        factory = new tlp::TemplateFactory<PluginObject, PluginContext>();
+        factory = new tlp::PluginManager<PluginObject, PluginContext>();
       }
     }
   };
 
 template <class PluginObject, class PluginContext>
-TemplateFactory<PluginObject, PluginContext>* FactoryInterface<PluginObject, PluginContext>::factory = 0;
+PluginManager<PluginObject, PluginContext>* FactoryInterface<PluginObject, PluginContext>::factory = 0;
   
 typedef _DEPRECATED AbstractPluginInfo Plugin;
 

@@ -62,7 +62,7 @@ using namespace tlp;
 
 //**********************************************************************
 // we use a hash_map to store plugin parameters
-static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::string name) {
+static StructDef *getPluginParameters(PluginManagerInterface *factory, std::string name) {
   static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > > paramMaps;
   TLP_HASH_MAP<std::string, StructDef *>::const_iterator it;
   it = paramMaps[(unsigned long) factory].find(name);
@@ -609,7 +609,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       delete progressBar;
       QApplication::restoreOverrideCursor();
 
-      TemplateFactory<Controller, ControllerContext*>::ObjectCreator::const_iterator it;
+      PluginManager<Controller, ControllerContext*>::ObjectCreator::const_iterator it;
       vector<string> controllersName;
       for (it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
         controllersName.push_back(it->first);
@@ -791,7 +791,7 @@ void TulipApp::importGraph(QAction* action) {
 //**********************************************************************
 template <typename TFACTORY, typename TMODULE>
   void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
-    typename TemplateFactory<TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
+    typename PluginManager<TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
     for (it= FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.begin();it != FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.end();++it)
@@ -805,7 +805,7 @@ void TulipApp::buildMenus() {
     newMenu=new QMenu("New");
     connect(newMenu, SIGNAL(triggered(QAction *)), SLOT(fileNew(QAction*)));
     fileMenu->insertMenu(fileOpenAction,newMenu);
-    for (TemplateFactory<Controller, ControllerContext*>::ObjectCreator::const_iterator it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
+    for (PluginManager<Controller, ControllerContext*>::ObjectCreator::const_iterator it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
       newMenu->addAction(it->first.c_str());
     }
   }else{

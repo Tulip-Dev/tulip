@@ -167,9 +167,9 @@ ostream *tlp::getOgzstream(const char *name, int open_mode) {
   return new ogzstream(name, open_mode);
 }
 //=========================================================
-map<string, TemplateFactoryInterface* > *TemplateFactoryInterface::allFactories = 0;
+map<string, PluginManagerInterface* > *PluginManagerInterface::allFactories = 0;
 //==========================================================
-PluginLoader *TemplateFactoryInterface::currentLoader = NULL;
+PluginLoader *PluginManagerInterface::currentLoader = NULL;
 //==========================================================
 void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader) {
   if (loader!=0)
@@ -177,7 +177,7 @@ void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *lo
 
   tlp::PluginLibraryLoader plLoader(dir, loader);
 
-  TemplateFactoryInterface::currentLoader = loader;
+  PluginManagerInterface::currentLoader = loader;
   if (plLoader.hasPluginLibraryToLoad()) {
     while(plLoader.loadNextPluginLibrary(loader)) {
     }
@@ -193,12 +193,12 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
   // plugins dependencies loop
   bool depsNeedCheck;
   do {
-    map<string, TemplateFactoryInterface *>::const_iterator it =
-      TemplateFactoryInterface::allFactories->begin();
+    map<string, PluginManagerInterface *>::const_iterator it =
+      PluginManagerInterface::allFactories->begin();
     depsNeedCheck = false;
     // loop over factories
-    for (; it != TemplateFactoryInterface::allFactories->end(); ++it) {
-      TemplateFactoryInterface *tfi = (*it).second;
+    for (; it != PluginManagerInterface::allFactories->end(); ++it) {
+      PluginManagerInterface *tfi = (*it).second;
       // loop over plugins
       Iterator<string> *itP = tfi->availablePlugins();
       while(itP->hasNext()) {
@@ -209,7 +209,7 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
 	for (; itD != dependencies.end(); ++itD) {
 	  string factoryDepName = (*itD).factoryName;
 	  string pluginDepName = (*itD).pluginName;
-	  if (!TemplateFactoryInterface::pluginExists(factoryDepName, pluginDepName)) {
+	  if (!PluginManagerInterface::pluginExists(factoryDepName, pluginDepName)) {
 	    if (loader)
 	      loader->aborted(pluginName, tfi->getPluginsClassName() +
 			      " '" + pluginName + "' will be removed, it depends on missing " +
@@ -218,7 +218,7 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
 	    depsNeedCheck = true;
 	    break;
 	  }
-	  string release = (*TemplateFactoryInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
+	  string release = (*PluginManagerInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
 	  string releaseDep = (*itD).pluginRelease;
 	  if (getMajor(release) != getMajor(releaseDep) ||
 	      getMinor(release) != getMinor(releaseDep)) {
@@ -252,7 +252,7 @@ void tlp::loadPlugins(PluginLoader *plug, std::string folder) {
 }
 //=========================================================
 bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {
-  TemplateFactoryInterface::currentLoader = plug;
+  PluginManagerInterface::currentLoader = plug;
   if (plug)
     plug->loading(filename);
   return PluginLibraryLoader::loadPluginLibrary(filename, plug);

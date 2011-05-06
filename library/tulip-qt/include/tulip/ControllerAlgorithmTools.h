@@ -45,7 +45,7 @@ namespace tlp {
       /**
        * Return parameters need by a plugin
        */
-      static StructDef *getPluginParameters(TemplateFactoryInterface *factory, std::string name);
+      static StructDef *getPluginParameters(PluginManagerInterface *factory, std::string name);
       
       /**
        * Apply an algorithm on graph with given name and given dataSet, if the algorithm has a problem : display it in a QDialog in parent widget and return false
