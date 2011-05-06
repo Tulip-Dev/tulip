@@ -62,8 +62,8 @@ ENDIF()
 ## TulipVersion : Ma.Mi.Re
 ## TulipMMVersion : Ma.Mi
 ## -----------------------------------------------------------------------------------------------
-SET(TulipMajorVersion 3)
-SET(TulipMinorVersion 6)
+SET(TulipMajorVersion 4)
+SET(TulipMinorVersion 0)
 SET(TulipReleaseVersion 0)
 SET(TulipVersionSeparator .)
 IF(${MSVC}) #specific options for Visual Studio
