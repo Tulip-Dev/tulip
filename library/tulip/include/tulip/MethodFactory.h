@@ -32,7 +32,6 @@
 #include <tulip/PluginContext.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/DoubleAlgorithm.h>
-#include <tulip/ColorAlgorithm.h>
 #include <tulip/StringAlgorithm.h>
 #include <tulip/BooleanAlgorithm.h>
 #include <tulip/Algorithm.h>

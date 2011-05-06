@@ -4,7 +4,6 @@ BiconnectedTest.cpp
 BooleanAlgorithm.cpp
 BooleanProperty.cpp
 CMakeLists.txt
-ColorAlgorithm.cpp
 Color.cpp
 ColorProperty.cpp
 ColorScale.cpp
