@@ -99,26 +99,13 @@ namespace tlp {
     virtual Coord getAnchor(const Coord &vector) const;
   };
 
-  class TLP_GL_SCOPE GlyphFactory: public PluginInfoInterface {
+  class TLP_GL_SCOPE GlyphFactory: public AbstractPluginInfo {
   public:
     virtual ~GlyphFactory() {}
     ///
     virtual Glyph *createPluginObject(GlyphContext *gc)=0;
     ///
     virtual int getId() const=0;
-    
-    virtual  std::string getMajor() const {
-      return tlp::getMajor(getRelease());
-    }
-    virtual  std::string getMinor() const  {
-      return tlp::getMinor(getRelease());
-    }
-    virtual  std::string getTulipMajor() const {
-      return tlp::getMajor(getTulipRelease());
-    }
-    virtual  std::string getTulipMinor() const  {
-      return tlp::getMinor(getTulipRelease());
-    }
 
     static TemplateFactory<GlyphFactory,Glyph,GlyphContext *> *factory;
     static void initFactory() {

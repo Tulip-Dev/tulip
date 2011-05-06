@@ -72,7 +72,7 @@ public:
   DataSet *dataSet;
 };
 
-class ImportModuleFactory:public PluginInfoInterface{
+class ImportModuleFactory:public AbstractPluginInfo{
 public:
   static TLP_SCOPE TemplateFactory<ImportModuleFactory,ImportModule,AlgorithmContext > *factory;
   static void initFactory() {
@@ -82,18 +82,6 @@ public:
   }    
   virtual ~ImportModuleFactory() {}
   virtual ImportModule * createPluginObject(AlgorithmContext)=0;
-  virtual  std::string getMajor() const {
-    return tlp::getMajor(getRelease());
-  }
-  virtual  std::string getMinor() const  {
-    return tlp::getMinor(getRelease());
-  }
-  virtual  std::string getTulipMajor() const {
-    return tlp::getMajor(getTulipRelease());
-  }
-  virtual  std::string getTulipMinor() const  {
-    return tlp::getMinor(getTulipRelease());
-  }
 };
 /*@}*/
 }

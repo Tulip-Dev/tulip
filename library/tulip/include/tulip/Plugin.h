@@ -21,6 +21,7 @@
 #define TULIPPLUGIN_H
 #include <string>
 #include <tulip/tulipconf.h>
+#include <tulip/TlpTools.h>
 /**
  * \addtogroup plugins
  */ 
@@ -36,9 +37,9 @@ namespace tlp {
  * and the group this plug-in belongs to (e.g. trees).
  */
 
-class PluginInfoInterface {
+class AbstractPluginInfo {
 public:
-  virtual ~PluginInfoInterface(){}
+  virtual ~AbstractPluginInfo(){}
   /**
    * @brief Returns the name of the plug-in, as registered in the Tulip plug-in system.
    * This name must be unique, and if multiple plug-ins have the same name,
@@ -79,20 +80,7 @@ public:
    * @return string The release version.
    */
   virtual  std::string getRelease() const=0;
-  /**
-   * @brief Only the major of the plug-in version.
-   * A version should be X.Y, X being the major.
-   *
-   * @return The major part of the plug-in version.
-   */
-  virtual  std::string getMajor() const=0;
-  /**
-   * @brief Only the minor of the plug-in version.
-   * A version should be X.Y, Y being the major.
-   *
-   * @return The minor part of the plug-in version.
-   */
-  virtual  std::string getMinor() const=0;
+  
   /**
    * @brief The version of Tulip this plug-in was built with.
    * Tulip versions are X.Y.Z, X eing the major, Y the minor, and Z the patch.
@@ -100,17 +88,43 @@ public:
    * @return The Tulip version the plug-in was built with.
    */
   virtual  std::string getTulipRelease() const=0;
+  
+  /**
+   * @brief Only the major of the plug-in version.
+   * A version should be X.Y, X being the major.
+   *
+   * @return The major part of the plug-in version.
+   */
+  virtual  std::string getMajor() const {
+    return tlp::getMajor(getRelease());
+  }
+  
+  /**
+   * @brief Only the minor of the plug-in version.
+   * A version should be X.Y, Y being the major.
+   *
+   * @return The minor part of the plug-in version.
+   */
+  virtual  std::string getMinor() const {
+    return tlp::getMinor(getRelease());
+  }
+
   /**
    * @return The major Tulip version the plug-in was built with.
    */
-  virtual  std::string getTulipMajor() const=0;
-  /**
+  virtual  std::string getTulipMajor() const {
+    return tlp::getMajor(getTulipRelease());
+  }
+
+/**
    * @return Return the minor Tulip version this plug-in was built with.
    */
-  virtual  std::string getTulipMinor() const=0;
+  virtual  std::string getTulipMinor() const  {
+    return tlp::getMinor(getTulipRelease());
+  }
 };
 
-typedef _DEPRECATED PluginInfoInterface Plugin;
+typedef _DEPRECATED AbstractPluginInfo Plugin;
 
 /*@}*/
 }

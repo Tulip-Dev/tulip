@@ -215,23 +215,11 @@ public:
 };
 
 
-template <class T> class PropertyFactory:public PluginInfoInterface {
+template <class T> class PropertyFactory:public AbstractPluginInfo {
 public:
   PropertyFactory(){}
   virtual ~PropertyFactory() {}
   virtual T* createPluginObject(const PropertyContext &context)=0;
-  virtual  std::string getMajor() const {
-    return tlp::getMajor(getRelease());
-  }
-  virtual  std::string getMinor() const  {
-    return tlp::getMinor(getRelease());
-  }
-  virtual  std::string getTulipMajor() const {
-    return tlp::getMajor(getTulipRelease());
-  }
-  virtual  std::string getTulipMinor() const  {
-    return tlp::getMinor(getTulipRelease());
-  }
 };
 
 /*@}*/
