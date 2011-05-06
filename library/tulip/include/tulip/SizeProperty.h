@@ -26,7 +26,7 @@
 #include <tulip/tuliphash.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
-#include <tulip/SizeAlgorithm.h>
+#include <tulip/PropertyAlgorithm.h>
 
 namespace tlp {
 
@@ -39,8 +39,6 @@ class PropertyContext;
  */ 
 /*@{*/
   class TLP_SCOPE SizeProperty:public AbstractSizeProperty { 
-
-  friend class SizeAlgorithm;
 
 public :
   SizeProperty (Graph *, std::string n="");
