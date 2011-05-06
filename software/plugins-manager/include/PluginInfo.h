@@ -124,13 +124,13 @@ namespace tlp {
         return "Import";
           if(PropertyFactory<ExportModuleFactory>::factory && PropertyFactory<ExportModuleFactory>::factory->pluginExists(name))
         return "Export";
-          if (PropertyFactory<AlgorithmFactory>::factory && PropertyFactory<AlgorithmFactory>::factory->pluginExists(name))
+          if (AlgorithmFactory::factory && AlgorithmFactory::factory->pluginExists(name))
         return "General";
-          if (PropertyFactory<InteractorFactory>::factory && PropertyFactory<InteractorFactory>::factory->pluginExists(name))
+          if (InteractorFactory::factory && InteractorFactory::factory->pluginExists(name))
         return "Interactor";
-          if (PropertyFactory<ViewFactory>::factory && PropertyFactory<ViewFactory>::factory->pluginExists(name))
+          if (ViewFactory::factory && ViewFactory::factory->pluginExists(name))
         return "View";
-          if (PropertyFactory<ControllerFactory>::factory && PropertyFactory<ControllerFactory>::factory->pluginExists(name))
+          if (ControllerFactory::factory && ControllerFactory::factory->pluginExists(name))
         return "Controller";
 
       return "Glyph";
