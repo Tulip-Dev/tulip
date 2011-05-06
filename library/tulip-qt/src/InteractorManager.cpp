@@ -30,26 +30,17 @@ namespace tlp
 {
 
   InteractorManager::InteractorManager() {
-    InteractorFactory::initFactory();
   }
   //====================================================
-  void InteractorManager::loadPlugins(PluginLoader *plug) {
-    InteractorFactory::initFactory();
-    tlp::loadPlugins(plug, "/interactors");
-    
+  void InteractorManager::loadInteractorPlugins() {
     // if interactorMap is empty, put all interactors in the Map
     interactorsMap.clear();
-    InteractorContext ic;
 
     Iterator<string> *itS = InteractorFactory::factory->availablePlugins();
     while (itS->hasNext()) {
       string interactorName=itS->next();
-      interactorsMap[interactorName]=InteractorFactory::factory->getPluginObject(interactorName, &ic);
+      interactorsMap[interactorName]=InteractorFactory::factory->getPluginObject(interactorName, NULL);
     } delete itS;
-  }
-  //====================================================
-  Interactor *InteractorManager::getInteractor(const string &name){
-    return InteractorFactory::factory->getPluginObject(name, NULL);
   }
   //====================================================
   list<string> InteractorManager::getCompatibleInteractors(const string &viewName) {

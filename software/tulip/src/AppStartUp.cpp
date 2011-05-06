@@ -28,7 +28,6 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/InteractorManager.h>
-#include <tulip/ViewPluginsManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include "AppStartUp.h"
 
@@ -55,12 +54,22 @@ void AppStartUp::initTulip(TulipPluginLoader *loader, std::string &errors) {
   loader->appStartUp = this;
 
   tlp::loadPlugins(loader); // library side plugins
-  GlyphManager::getInst().loadPlugins(loader); // software side plugins, i.e. glyphs
-  EdgeExtremityGlyphManager::getInst().loadPlugins(loader);
-  InteractorManager::getInst().loadPlugins(loader); // interactors plugins
-  ViewPluginsManager::getInst().loadPlugins(loader); // view plugins
+
+  ControllerFactory::initFactory();
+  ViewFactory::initFactory();
+  GlyphFactory::initFactory();
+  InteractorFactory::initFactory();
+
+  tlp::loadPlugins(loader, "/interactors"); // interactors plugins
+  tlp::loadPlugins(loader, "/glyphs"); // glyphs plugins
+  tlp::loadPlugins(loader, "/views"); // view plugins
   tlp::loadPlugins(loader, "/controller"); // controller plugins
 
+  //initialization of utility members
+  GlyphManager::getInst().loadGlyphPlugins();
+  EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
+  InteractorManager::getInst().loadInteractorPlugins();
+  
   loadPluginsCheckDependencies(loader);
 
   errors = errorMsgs;

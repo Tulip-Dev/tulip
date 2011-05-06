@@ -50,7 +50,6 @@ INSTALL(FILES
 	tulip/GraphPropertiesSelectionWidget.h 
 	tulip/ItemsListWidget.h 
 	tulip/StringsListSelectionWidget.h 
-	tulip/ViewPluginsManager.h 
 	tulip/ColorScaleConfigDialog.h 
   tulip/ColorScaleWidget.h
 	tulip/StringsListSelectionWidgetInterface.h 

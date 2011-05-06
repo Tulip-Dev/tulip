@@ -44,7 +44,6 @@
 #include "tulip/GlMainWidgetGraphicsView.h"
 #include "tulip/Interactor.h"
 #include "tulip/NodeLinkDiagramComponent.h"
-#include "tulip/ViewPluginsManager.h"
 #include "tulip/TabWidgetHidableMenuGraphicsProxy.h"
 #include "tulip/GlMainWidgetItem.h"
 
@@ -52,7 +51,7 @@ using namespace std;
 
 namespace tlp {
 
-  BaseGraphicsViewComponent::BaseGraphicsViewComponent(const string &realViewName):realViewName(realViewName),graphicsView(NULL),baseView(ViewPluginsManager::getInst().createView(realViewName)){}
+  BaseGraphicsViewComponent::BaseGraphicsViewComponent(const string &realViewName):realViewName(realViewName),graphicsView(NULL),baseView(ViewFactory::factory->getPluginObject(realViewName, NULL)){}
 
   BaseGraphicsViewComponent::~BaseGraphicsViewComponent() {}
 

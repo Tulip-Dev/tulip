@@ -51,17 +51,7 @@ namespace tlp {
     /**
      * Loads interactor plugins
      */
-    void loadPlugins(PluginLoader *plug=0);
-
-    /**
-     * Gets interactor with given name
-     */
-    Interactor* getInteractor(const std::string &name);
-
-    /**
-     * Returns a list of compatible interactors with the view identified by viewName
-     */
-    std::list<std::string> getCompatibleInteractors(const std::string &viewName);
+    void loadInteractorPlugins();
 
     /**
      * Returns list sorted map of compatible interactor with give View
@@ -70,6 +60,11 @@ namespace tlp {
 
   private:
 
+    /**
+     * Returns a list of compatible interactors with the view identified by viewName
+     */
+    std::list<std::string> getCompatibleInteractors(const std::string &viewName);
+    
     InteractorManager();
 
     std::map<std::string,Interactor *> interactorsMap;

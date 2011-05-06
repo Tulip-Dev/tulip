@@ -47,7 +47,6 @@
 #include "tulip/ControllerAlgorithmTools.h"
 #include "tulip/ControllerViewsTools.h"
 #include "tulip/TabWidget.h"
-#include "tulip/ViewPluginsManager.h"
 #include "tulip/Morphing.h"
 #include "tulip/FindSelectionWidget.h"
 #include "tulip/NodeLinkDiagramComponent.h"

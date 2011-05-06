@@ -21,7 +21,6 @@
 #include <PluginLoaderWithInfo.h>
 #include <UpdatePlugin.h>
 #include <tulip/GlyphManager.h>
-#include <tulip/ViewPluginsManager.h>
 
 #include <QtCore/QString>
 #include <QtCore/QFile>
