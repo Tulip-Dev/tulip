@@ -45,7 +45,6 @@ INSTALL(FILES
     tulip/ControllerViewsTools.h
     tulip/ControllerViewsManager.h
 	tulip/MainController.h 
-	tulip/ControllerPluginsManager.h 
 	tulip/View.h 
 	tulip/AbstractView.h 
 	tulip/GraphPropertiesSelectionWidget.h 
