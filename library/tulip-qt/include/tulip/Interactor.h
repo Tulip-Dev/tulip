@@ -22,11 +22,11 @@
 #include <QtCore/qobject.h>
 #include <QtGui/QAction>
 
-#include <tulip/Plugin.h>
+#include <tulip/AbstractPluginInfo.h>
 #include <tulip/TulipRelease.h>
-#include <tulip/TemplateFactory.h>
+#include <tulip/PluginManager.h>
 #include <tulip/InteractorManager.h>
-#include <tulip/Plugin.h>
+#include <tulip/AbstractPluginInfo.h>
 
 class QAction;
 

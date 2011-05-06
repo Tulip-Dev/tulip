@@ -27,7 +27,7 @@
 
 #include <string>
 
-#include <tulip/Plugin.h>
+#include <tulip/AbstractPluginInfo.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginContext.h>
 #include <tulip/PropertyAlgorithm.h>

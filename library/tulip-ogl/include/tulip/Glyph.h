@@ -25,7 +25,7 @@
 #include <config.h>
 #endif
 
-#include <tulip/Plugin.h>
+#include <tulip/AbstractPluginInfo.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
@@ -34,10 +34,10 @@
 #include <tulip/Color.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/TlpTools.h>
-#include <tulip/TemplateFactory.h>
+#include <tulip/PluginManager.h>
 
 #include <tulip/GlGraphInputData.h>
-#include <tulip/Plugin.h>
+#include <tulip/AbstractPluginInfo.h>
 
 
 namespace tlp {

@@ -20,7 +20,7 @@ INSTALL(FILES
 	tulip/TriconnectedTest.h 
 	tulip/GraphProperty.h 
 	tulip/LayoutProperty.h 
-	tulip/Plugin.h 
+	tulip/AbstractPluginInfo.h
 	tulip/Algorithm.h 
 	tulip/PluginLoader.h 
 	tulip/Size.h 
@@ -38,7 +38,7 @@ INSTALL(FILES
 	tulip/PropertyAlgorithm.h 
 	tulip/IntegerProperty.h 
 	tulip/StringProperty.h 
-	tulip/TemplateFactory.h 
+	tulip/PluginManager.h
 	tulip/Coord.h 
 	tulip/Observable.h 
 	tulip/ObservableGraph.h 
@@ -99,7 +99,7 @@ INSTALL(FILES
   	tulip/cxx/Matrix.cxx
   	tulip/cxx/Circle.cxx
   	tulip/cxx/AbstractProperty.cxx
-  	tulip/cxx/TemplateFactory.cxx
+  	tulip/cxx/PluginManager.cxx
   	tulip/cxx/Reflect.cxx
   	tulip/cxx/Graph.cxx 
 DESTINATION ${TulipIncludeInstallDir}/tulip/cxx/

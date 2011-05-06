@@ -20,7 +20,7 @@
 #include <iostream>
 #include <tulip/StlIterator.h>
 
-#include <tulip/Plugin.h>
+#include <tulip/AbstractPluginInfo.h>
 
 template<class ObjectType, class Context>
 tlp::Iterator<std::string>* tlp::PluginManager< ObjectType, Context>::availablePlugins() {

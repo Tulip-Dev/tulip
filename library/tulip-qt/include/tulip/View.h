@@ -22,12 +22,12 @@
 #include <QtGui/QWidget>
 #include <QtGui/QMainWindow>
 
-#include <tulip/Plugin.h>
+#include <tulip/AbstractPluginInfo.h>
 #include <tulip/TulipRelease.h>
-#include <tulip/TemplateFactory.h>
+#include <tulip/PluginManager.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Vector.h>
-#include <tulip/Plugin.h>
+#include <tulip/AbstractPluginInfo.h>
 
 class QMenuBar;
 class QVBoxLayout;

@@ -11,7 +11,7 @@
  * of the License, or (at your option) any later version.
  *
  * Tulip is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY; witho  ut even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
  *
@@ -28,7 +28,7 @@
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
 #include <tulip/Iterator.h>
-#include <tulip/Plugin.h>
+#include <tulip/AbstractPluginInfo.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PluginContext.h>
 
@@ -225,5 +225,5 @@ public:
 /*@}*/
 
 }
-#include "cxx/TemplateFactory.cxx"
+#include "cxx/PluginManager.cxx"
 #endif
