@@ -31,7 +31,6 @@ static TLP_HASH_MAP<std::string, int> nameToEeGlyphId;
 const int EdgeExtremityGlyphManager::NoEdgeExtremetiesId = UINT_MAX;
 
 EdgeExtremityGlyphManager::EdgeExtremityGlyphManager() {
-	EdgeExtremityGlyphFactory::initFactory();
 }
 //====================================================
 string EdgeExtremityGlyphManager::glyphName(int id) {
@@ -75,12 +74,6 @@ void EdgeExtremityGlyphManager::loadGlyphPlugins() {
 
 }
 //====================================================
-void EdgeExtremityGlyphManager::loadPlugins(PluginLoader *plug) {
-		EdgeExtremityGlyphFactory::initFactory();
-    tlp::loadPlugins(plug, "/glyphs");
-	loadGlyphPlugins();
-}
-//
 void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
 		GlGraphInputData* glGraphInputData, MutableContainer<
 				EdgeExtremityGlyph *>& glyphs) {

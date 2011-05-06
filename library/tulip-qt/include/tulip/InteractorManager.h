@@ -28,7 +28,6 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/MutableContainer.h>
-#include <tulip/PluginLoader.h>
 
 namespace tlp {
 

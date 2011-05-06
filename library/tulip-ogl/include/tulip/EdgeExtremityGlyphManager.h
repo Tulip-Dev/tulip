@@ -25,7 +25,6 @@
 #include <tulip/MutableContainer.h>
 
 namespace tlp {
-struct PluginLoader;
 class GlGraphInputData;
 class EdgeExtremityGlyph;
 class Graph;
@@ -60,10 +59,6 @@ public:
 	 * Load glyphs plugins
 	 */
 	void loadGlyphPlugins();
-	/**
-	 * Load glyphs plugins with given PluginLoader
-	 */
-	void loadPlugins(PluginLoader *plug = 0);
 
 	/**
 	 * Create the glyph list and store it in glyphs parameter

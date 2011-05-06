@@ -33,7 +33,6 @@ namespace tlp
   static TLP_HASH_MAP<std::string, int>  nameToGlyphId;
 
   GlyphManager::GlyphManager() {
-    GlyphFactory::initFactory();
   }
   //====================================================
   string GlyphManager::glyphName(int id) {
@@ -64,12 +63,6 @@ namespace tlp
       glyphIdToName[pluginId]=pluginName;
       nameToGlyphId[pluginName]=pluginId;
     } delete itS;
-  }
-  //====================================================
-  void GlyphManager::loadPlugins(PluginLoader *plug) {
-    GlyphFactory::initFactory();
-    tlp::loadPlugins(plug, "/glyphs");
-    loadGlyphPlugins();
   }
   //
   void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs) {
