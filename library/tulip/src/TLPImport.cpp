@@ -22,16 +22,24 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#include "tulip/PropertyTypes.h"
-#include "tulip/TulipPlugin.h"
-#include "tulip/GraphProperty.h"
-#include "tulip/TlpTools.h"
-#include "tulip/TLPParser.h"
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/ImportModule.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/MethodFactory.h>
+#include <tulip/PropertyTypes.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/TlpTools.h>
+#include <tulip/TLPParser.h>
 
 #define TLP "tlp"
 #define AUTHOR "author"
 #define COMMENTS "comments"
-#define TLP_VERSION 2.2
+#define TLP_VERSION 2.3
 #define NODES "nodes"
 #define EDGE "edge"
 #define NB_NODES "nb_nodes"
@@ -68,7 +76,8 @@
 #define DISPLAYING "displaying"
 #define GLYPH "glyph"
 #define PLUGIN "plugin"
-#define ATTRIBUTES "attributes"
+#define OLD_ATTRIBUTES "attributes"
+#define ATTRIBUTES "graph_attributes"
 #define SCENE "scene"
 #define VIEWS "views"
 #define CONTROLLER "controller"
@@ -395,7 +404,8 @@ namespace tlp {
                 sel.setAllNodeValue(false);
                 sel.setAllEdgeValue(false);
                 clusterIndex[id] = clusterIndex[supergraphId]->addSubGraph(&sel, id);
-                clusterIndex[id]->setAttribute("name", name);
+                if (name.size())
+		  clusterIndex[id]->setAttribute("name", name);
                 return true;
             }
             return false;
@@ -455,11 +465,15 @@ namespace tlp {
         int clusterId, supergraphId;
         TLPClusterBuilder(TLPGraphBuilder *graphBuilder, int supergraph=0):graphBuilder(graphBuilder), supergraphId(supergraph){}
         bool addInt(const int id) {
-            clusterId = id;
-            return true;
+	  clusterId = id;
+	  if (graphBuilder->version > 2.2)
+	    return graphBuilder->addCluster(id, std::string(), supergraphId);
+	  return true;
         }
         bool addString(const std::string& str) {
-            return graphBuilder->addCluster(clusterId , str, supergraphId);
+	  if (graphBuilder->version < 2.3)
+	    return graphBuilder->addCluster(clusterId, str, supergraphId);
+	  return true;
         }
         bool addStruct(const std::string& structName, TLPBuilder*&newBuilder);
         bool addNode (int nodeId) {
@@ -499,6 +513,31 @@ namespace tlp {
             return true;
         }
         bool close(){return true;}
+    };
+    //================================================================================
+    struct TLPAttributesBuilder: public TLPFalse {
+        TLPGraphBuilder *graphBuilder;
+
+        TLPAttributesBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder){}
+        virtual ~TLPAttributesBuilder(){
+        }
+        bool close() {return true;}
+        bool canRead() { return true; }
+        bool read(std::istream& is) {
+	  char c = ' ';
+	  // go to the first non space char
+	  while((is >> c) && isspace(c)) {}
+	  is.unget();
+	  // to read the id of the graph
+	  unsigned int id;
+	  if( !(is >> id) )
+	    return false;
+	  Graph* subgraph = id ? graphBuilder->_graph->getSubGraph(id) :
+	    graphBuilder->_graph;
+	  if (subgraph == NULL)
+	    return false;
+	  return DataSet::read(is, const_cast<DataSet &>(subgraph->getAttributes()));
+      }
     };
     //================================================================================
     struct TLPDataSetBuilder: public TLPFalse {
@@ -746,8 +785,10 @@ bool TLPGraphBuilder::addStruct(const std::string& structName,TLPBuilder*&newBui
     }
     else if (structName==DISPLAYING) {
         newBuilder=new TLPDataSetBuilder(this, (char *) DISPLAYING);
-    } else if (structName==ATTRIBUTES) {
+    } else if (structName==OLD_ATTRIBUTES) {
         newBuilder=new TLPDataSetBuilder(this);
+    } else if (structName==ATTRIBUTES) {
+        newBuilder=new TLPAttributesBuilder(this);
     } else if (structName==SCENE) {
         newBuilder=new TLPSceneBuilder(this);
     } else if (structName==VIEWS) {
@@ -771,9 +812,8 @@ namespace {
                 HTML_HELP_CLOSE()
             };
 }
-
-namespace tlp {
 #endif //DOXYGEN_NOTFOR_DEVEL
+namespace tlp {
 
     /** \addtogroup import */
     /*@{*/

@@ -29,7 +29,7 @@
 #include <cassert>
 #include <typeinfo>
 #include <list>
-#include "tulip/StlIterator.h"
+#include <tulip/StlIterator.h>
 
 namespace tlp {
 
@@ -192,9 +192,15 @@ class TLP_SCOPE DataSet {
   DataType* getData(const std::string &str) const;
   /** set from an untyped value */
   void setData(const std::string &str, const DataType* value);
-  /** Return an iterator on all values */
+  /** Returns an iterator on all values */
   tlp::Iterator< std::pair<std::string, DataType*> > *getValues() const;
-  /** Return the data type serializer associated to the given typename. Returns NULL if no serializer is found */
+  /** Returns the number of registered values */
+  unsigned int size() const;
+  /** Indicates whether the set is empty of not */
+  bool empty() const;
+
+  /** Return the data type serializer associated to the given typename.
+      Returns NULL if no serializer is found */
   static DataTypeSerializer *typenameToSerializer(const std::string &name);
 };
 
