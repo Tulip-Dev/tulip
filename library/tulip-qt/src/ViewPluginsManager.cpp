@@ -33,19 +33,7 @@ namespace tlp
   //====================================================
   void ViewPluginsManager::loadPlugins(PluginLoader *plug) {
     ViewFactory::initFactory();
-    string::const_iterator begin=tlp::TulipPluginsPath.begin();
-    string::const_iterator end=begin;
-    while (end!=tlp::TulipPluginsPath.end())
-      if ((*end)==tlp::PATH_DELIMITER) {
-	if (begin!=end)
-	  tlp::loadViewPluginsFromDir(string(begin,end)+"/view", plug);
-	++end;
-	begin=end;
-      } else
-	++end;
-    if (begin!=end) {
-      tlp::loadViewPluginsFromDir(string(begin,end)+"/view", plug);
-    }
+    tlp::loadPlugins(plug, "/view");
   }
   //====================================================
   void ViewPluginsManager::initViewPluginsList(MutableContainer<View *> &views) {

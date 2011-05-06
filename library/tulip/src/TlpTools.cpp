@@ -17,7 +17,7 @@
  *
  */
 
-#include <string.h>
+#include <string>
 #include <locale.h>
 
 #ifndef _WIN32
@@ -238,19 +238,17 @@ void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
 }
 
 //=========================================================
-void tlp::loadPlugins(PluginLoader *plug) {
-  string::const_iterator begin=TulipPluginsPath.begin();
-  string::const_iterator end=begin;
-  while (end!=TulipPluginsPath.end())
-    if ((*end)==PATH_DELIMITER) {
-      if (begin!=end) 
-	loadPluginsFromDir(string(begin,end), "Algorithm", plug);
-      ++end;
-      begin=end;
-    } else
-      ++end;
-  if (begin!=end) 
-    loadPluginsFromDir(string(begin,end), "Algorithm", plug);
+void tlp::loadPlugins(PluginLoader *plug, std::string folder) {
+  vector<string> paths;
+  stringstream ss(TulipPluginsPath);
+  string item;
+  while(getline(ss, item, PATH_DELIMITER)) {
+    paths.push_back(item);
+  }
+  
+  for(vector<string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
+    loadPluginsFromDir((*it) + "/" + folder, "Algorithm", plug);
+  }
 }
 //=========================================================
 bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {

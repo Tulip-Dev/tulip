@@ -77,22 +77,7 @@ void EdgeExtremityGlyphManager::loadGlyphPlugins() {
 //====================================================
 void EdgeExtremityGlyphManager::loadPlugins(PluginLoader *plug) {
 		EdgeExtremityGlyphFactory::initFactory();
-	string::const_iterator begin = tlp::TulipPluginsPath.begin();
-	string::const_iterator end = begin;
-	eeglyphIdToName.clear();
-	nameToEeGlyphId.clear();
-	while (end != tlp::TulipPluginsPath.end())
-		if ((*end) == tlp::PATH_DELIMITER) {
-			if (begin != end)
-				tlp::loadPluginsFromDir(string(begin, end) + "/glyphs",
-						"Glyph", plug);
-			++end;
-			begin = end;
-		} else
-			++end;
-	if (begin != end) {
-		tlp::loadPluginsFromDir(string(begin, end) + "/glyphs", "Glyph", plug);
-	}
+    tlp::loadPlugins(plug, "/glyphs");
 	loadGlyphPlugins();
 }
 //

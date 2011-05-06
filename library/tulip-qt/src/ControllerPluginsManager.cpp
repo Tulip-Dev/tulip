@@ -33,19 +33,7 @@ namespace tlp
   //====================================================
   void ControllerPluginsManager::loadPlugins(PluginLoader *plug) {
     ControllerFactory::initFactory();
-    string::const_iterator begin=tlp::TulipPluginsPath.begin();
-    string::const_iterator end=begin;
-    while (end!=tlp::TulipPluginsPath.end())
-      if ((*end)==tlp::PATH_DELIMITER) {
-	if (begin!=end)
-	  tlp::loadControllerPluginsFromDir(string(begin,end)+"/controller", plug);
-	++end;
-	begin=end;
-      } else
-	++end;
-    if (begin!=end) {
-      tlp::loadControllerPluginsFromDir(string(begin,end)+"/controller", plug);
-    }
+    tlp::loadPlugins(plug, "/controller");
   }
   //====================================================
   bool ControllerPluginsManager::controllerExists(const string &name) {

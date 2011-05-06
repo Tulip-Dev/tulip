@@ -68,21 +68,7 @@ namespace tlp
   //====================================================
   void GlyphManager::loadPlugins(PluginLoader *plug) {
     GlyphFactory::initFactory();
-    string::const_iterator begin=tlp::TulipPluginsPath.begin();
-    string::const_iterator end=begin;
-    glyphIdToName.clear();
-    nameToGlyphId.clear();
-    while (end!=tlp::TulipPluginsPath.end())
-      if ((*end)==tlp::PATH_DELIMITER) {
-	if (begin!=end)
-	  tlp::loadPluginsFromDir(string(begin,end)+"/glyphs", "Glyph", plug);
-	++end;
-	begin=end;
-      } else
-	++end;
-    if (begin!=end) {
-      tlp::loadPluginsFromDir(string(begin,end)+"/glyphs", "Glyph", plug);
-    }
+    tlp::loadPlugins(plug, "/glyphs");
     loadGlyphPlugins();
   }
   //
