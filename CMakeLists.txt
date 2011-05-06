@@ -398,7 +398,8 @@ CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 ## Installation of files
 ## -----------------------------------------------------------------------------------------------
 INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config
-        DESTINATION ${TulipBinInstallDir})
+        DESTINATION ${TulipBinInstallDir}
+	COMPONENT libtulip_dev)
 INSTALL(FILES FindTULIP3.cmake 
         DESTINATION ${TulipShareInstallDir})
 INSTALL(FILES FindGLEW.cmake 
