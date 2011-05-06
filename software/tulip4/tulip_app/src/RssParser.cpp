@@ -4,12 +4,12 @@
 using namespace std;
 
 RssParser::RssParser(): QXmlDefaultHandler() {
-  result.clear();
+  _result.clear();
 }
 
 bool RssParser::startElement(const QString &namespaceURI, const QString &localName, const QString &qName, const QXmlAttributes &atts) {
   if (localName == "item")
-    result.push_back(RssItem());
+    _result.push_back(RssItem());
   _currentElement = localName;
   return true;
 }
@@ -20,7 +20,7 @@ bool RssParser::endElement(const QString &namespaceURI, const QString &localName
 }
 
 bool RssParser::characters(const QString &str) {
-  if (result.size() == 0)
+  if (_result.size() == 0)
     return true;
 
   fetchElement("title",str);
@@ -32,14 +32,14 @@ bool RssParser::characters(const QString &str) {
 }
 
 QList<RssParser::RssItem> RssParser::result() const {
-  return result;
+  return _result;
 }
 
 void RssParser::fetchElement(const QString &name, const QString &value) {
   if (name != _currentElement)
     return;
 
-  RssItem item = result[result.size()-1];
+  RssItem item = _result[_result.size()-1];
   if (name == "title")
     item.title = value;
   else if (name == "link")
@@ -49,5 +49,5 @@ void RssParser::fetchElement(const QString &name, const QString &value) {
   else if (name == "pubDate")
     item.pubDate = value;
 
-  result[result.size()-1] = item;
+  _result[_result.size()-1] = item;
 }
