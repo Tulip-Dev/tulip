@@ -53,16 +53,13 @@ namespace tlp {
     void loadInteractorPlugins();
 
     /**
-     * Returns list sorted map of compatible interactor with give View
+     * Returns a list of compatible interactors with the view identified by viewName
      */
     std::list<std::string> getSortedCompatibleInteractors(const std::string &viewName);
 
+    bool operator() (std::string first, std::string second);
   private:
-
-    /**
-     * Returns a list of compatible interactors with the view identified by viewName
-     */
-    std::list<std::string> getCompatibleInteractors(const std::string &viewName);
+//     bool comparePriority(std::string first, std::string second);
     
     InteractorManager();
 

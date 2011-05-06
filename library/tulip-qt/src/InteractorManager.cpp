@@ -29,6 +29,10 @@ using namespace std;
 namespace tlp
 {
 
+  bool InteractorManager::operator()(std::string first, std::string second) {
+    return interactorsMap[first]->getPriority() >= interactorsMap[second]->getPriority();
+  }
+  
   InteractorManager::InteractorManager() {
   }
   //====================================================
@@ -42,24 +46,16 @@ namespace tlp
       interactorsMap[interactorName]=InteractorFactory::factory->getPluginObject(interactorName, NULL);
     } delete itS;
   }
+  
   //====================================================
-  list<string> InteractorManager::getCompatibleInteractors(const string &viewName) {
+  list<string> InteractorManager::getSortedCompatibleInteractors(const string &viewName) {
     loadPlugins();
     list<string> compatibleInteractors;
     for(map<string,Interactor*>::iterator it=interactorsMap.begin();it!=interactorsMap.end();++it){
       if((*it).second->isCompatible(viewName))
         compatibleInteractors.push_back((*it).first);
     }
+    compatibleInteractors.sort(*this);
     return compatibleInteractors;
-  }
-
-  //====================================================
-  list<string> InteractorManager::getSortedCompatibleInteractors(const string &viewName) {
-    list<string> result;
-    list<string> compatibleInteractors=getCompatibleInteractors(viewName);
-    for(list<string>::iterator it=compatibleInteractors.begin();it!=compatibleInteractors.end();++it){
-      result.push_back(*it);
-    }
-    return result;
   }
 }
