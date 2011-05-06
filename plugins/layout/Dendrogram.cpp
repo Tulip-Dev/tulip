@@ -60,7 +60,7 @@ void Dendrogram::computeLevelHeights(tlp::Graph *tree, tlp::node n, unsigned int
 //====================================================================
 bool Dendrogram::run() {
   orientationType mask = getMask(dataSet);
-  OrientableLayout oriLayout(_result, mask);
+  OrientableLayout oriLayout(result, mask);
   SizeProperty* size;
   if (!getNodeSizePropertyParameter(dataSet, size))
     size = graph->getProperty<SizeProperty>("viewSize");

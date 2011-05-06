@@ -225,7 +225,7 @@ void ConvolutionClustering::getClusters(const std::vector<int> &ranges){
     node n;
     forEach(n,graph->getNodes()){
         int tmp = getInterval((int)( (metric->getNodeValue(n) - metric->getNodeMin() )*(double)histosize / (metric->getNodeMax()-metric->getNodeMin())),ranges);
-        _result->setNodeValue(n,tmp);
+        result->setNodeValue(n,tmp);
     }
 }
 

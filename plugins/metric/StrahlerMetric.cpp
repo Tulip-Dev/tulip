@@ -239,14 +239,14 @@ bool StrahlerMetric::run() {
       if (pluginProgress->progress(i++, graph->numberOfNodes())!=TLP_CONTINUE) break;
       switch(computationTypes.getCurrent()) {
       case ALL:
-	_result->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+	result->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
 					    +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
 	break;
       case REGISTERS:
-	_result->setNodeValue(itn, (double)cachedValues[itn].strahler);
+	result->setNodeValue(itn, (double)cachedValues[itn].strahler);
 	break;
       case STACKS:
-	_result->setNodeValue(itn, (double)cachedValues[itn].stacks);
+	result->setNodeValue(itn, (double)cachedValues[itn].stacks);
       }
       visited.clear();
       finished.clear();
@@ -263,14 +263,14 @@ bool StrahlerMetric::run() {
       node itn=itN->next();
       switch(computationTypes.getCurrent()) {
       case ALL:
-	_result->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
+	result->setNodeValue(itn,sqrt((double)cachedValues[itn].strahler*(double)cachedValues[itn].strahler
 					    +(double)cachedValues[itn].stacks*(double)cachedValues[itn].stacks));
 	break;
       case REGISTERS:
-	_result->setNodeValue(itn, (double)cachedValues[itn].strahler);
+	result->setNodeValue(itn, (double)cachedValues[itn].strahler);
 	break;
       case STACKS:
-	_result->setNodeValue(itn, (double)cachedValues[itn].stacks);
+	result->setNodeValue(itn, (double)cachedValues[itn].stacks);
       }
     } delete itN;
   }

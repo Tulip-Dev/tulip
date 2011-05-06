@@ -75,8 +75,8 @@ bool ReachableSubGraphSelection::run() {
     dataSet->get("startingnodes", startNodes);
   }
 
-  _result->setAllEdgeValue(false);
-  _result->setAllNodeValue(false);
+  result->setAllEdgeValue(false);
+  result->setAllNodeValue(false);
 
   if (startNodes) {
     Iterator<node>* itN = startNodes->getNodesEqualTo(true);
@@ -93,7 +93,7 @@ bool ReachableSubGraphSelection::run() {
     std::set<node>::const_iterator ite = reachables.end();
     // select nodes
     while (itr != ite) {
-      _result->setNodeValue((*itr), true);
+      result->setNodeValue((*itr), true);
       ++itr;
     }
 
@@ -102,9 +102,9 @@ bool ReachableSubGraphSelection::run() {
     while(itE->hasNext()) {
       edge e = itE->next();
       const std::pair<node, node>& ends = graph->ends(e);
-      if (_result->getNodeValue(ends.first) &&
-	  _result->getNodeValue(ends.second))
-	_result->setEdgeValue(e, true);
+      if (result->getNodeValue(ends.first) &&
+	  result->getNodeValue(ends.second))
+	result->setEdgeValue(e, true);
     }delete itE;
   }
  

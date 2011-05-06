@@ -110,11 +110,11 @@ public:
     while(itN->hasNext()) {
       node itn=itN->next();
       double sizos=min+(entryMetric->getNodeValue(itn)-shift)*(max-min)/range;
-      Size result=entrySize->getNodeValue(itn);
-      if (xaxis) result[0]=sizos;
-      if (yaxis) result[1]=sizos;
-      if (zaxis) result[2]=sizos;
-      _result->setNodeValue(itn, result);
+      Size res=entrySize->getNodeValue(itn);
+      if (xaxis) res[0]=sizos;
+      if (yaxis) res[1]=sizos;
+      if (zaxis) res[2]=sizos;
+      result->setNodeValue(itn, res);
     } delete itN;
   }
   
@@ -123,10 +123,10 @@ public:
     while(itE->hasNext()) {
       edge ite=itE->next();
       double sizos = min+(entryMetric->getEdgeValue(ite)-shift)*(max-min)/range;
-      Size result  = entrySize->getEdgeValue(ite);
-      result[0] = sizos;
-      result[1] = sizos;
-      _result->setEdgeValue(ite, result);
+      Size res  = entrySize->getEdgeValue(ite);
+      res[0] = sizos;
+      res[1] = sizos;
+      result->setEdgeValue(ite, res);
     } delete itE;
   }
 
@@ -180,14 +180,14 @@ public:
       computeNodeSize();
       edge e;
       forEach(e, graph->getEdges())
-        _result->setEdgeValue(e, entrySize->getEdgeValue(e));
+        result->setEdgeValue(e, entrySize->getEdgeValue(e));
     }
     else {
       shift = entryMetric->getEdgeMin(graph);
       computeEdgeSize();
       node n;
       forEach(n, graph->getNodes())
-        _result->setNodeValue(n, entrySize->getNodeValue(n));
+        result->setNodeValue(n, entrySize->getNodeValue(n));
     }
     if (!mappingType) delete tmp;
     return true;

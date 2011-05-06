@@ -82,7 +82,7 @@ TreeLeaf::~TreeLeaf() {}
 
 bool TreeLeaf::run() {
   orientationType mask = getMask(dataSet);
-  OrientableLayout oriLayout(_result, mask);
+  OrientableLayout oriLayout(result, mask);
   SizeProperty* size;
   if (!getNodeSizePropertyParameter(dataSet, size))
     size = graph->getProperty<SizeProperty>("viewSize");

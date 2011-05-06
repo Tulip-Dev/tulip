@@ -40,30 +40,30 @@ int StrongComponent::attachNumerotation(tlp::node n,
   id++;
   minAttach[n]=myId;
   renum.push(n);
-  int result=myId;
+  int res=myId;
   Iterator<node> *itN=graph->getOutNodes(n);
   for (;itN->hasNext();) {
     node tmpN=itN->next();
     if (!finished[tmpN]) {
       int tmp=attachNumerotation(tmpN,visited,finished,minAttach,id,renum,curComponent);
-      if (result>tmp) result=tmp;
+      if (res>tmp) res=tmp;
     }
   } delete itN;
-  minAttach[n]=result;
-  if (result==myId) {
+  minAttach[n]=res;
+  if (res==myId) {
     while (renum.top()!=n) {
       node tmp=renum.top();
       renum.pop();
       finished[tmp]=true;
-      minAttach[tmp]=result;
-      _result->setNodeValue(tmp,curComponent);
+      minAttach[tmp]=res;
+      result->setNodeValue(tmp,curComponent);
     }
     finished[n]=true;
-    _result->setNodeValue(n,curComponent);
+    result->setNodeValue(n,curComponent);
     curComponent++;
     renum.pop();
   }
-  return result;
+  return res;
 }
 
 StrongComponent::StrongComponent(const tlp::PropertyContext &context):DoubleAlgorithm(context) {}
@@ -89,10 +89,10 @@ bool StrongComponent::run() {
     edge ite=itE->next();
     node source= graph->source(ite);
     node target= graph->target(ite);
-    if (_result->getNodeValue(source)==_result->getNodeValue(target))
-      _result->setEdgeValue(ite,_result->getNodeValue(source));
+    if (result->getNodeValue(source)==result->getNodeValue(target))
+      result->setEdgeValue(ite,result->getNodeValue(source));
     else
-      _result->setEdgeValue(ite,curComponent);
+      result->setEdgeValue(ite,curComponent);
   } delete itE;
 
 

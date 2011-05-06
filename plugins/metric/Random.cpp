@@ -29,10 +29,10 @@ RandomMetric::RandomMetric(const tlp::PropertyContext &context):DoubleAlgorithm(
 bool RandomMetric::run() {
   node n;
   forEach(n, graph->getNodes())
-    _result->setNodeValue(n, (double)rand() / double(RAND_MAX));
+    result->setNodeValue(n, (double)rand() / double(RAND_MAX));
   edge e;
   forEach(e, graph->getEdges())
-    _result->setEdgeValue(e, (double)rand() / double(RAND_MAX));
+    result->setEdgeValue(e, (double)rand() / double(RAND_MAX));
   return true;
 }
 //===========================================

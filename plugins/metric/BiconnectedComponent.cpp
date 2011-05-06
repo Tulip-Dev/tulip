@@ -189,12 +189,12 @@ public:
     MutableContainer<int> compo;
     compo.setAll(-1);
     biconnectedComponents(*graph, compo);
-    _result->setAllEdgeValue(-1);
-    _result->setAllNodeValue(-1);
+    result->setAllEdgeValue(-1);
+    result->setAllNodeValue(-1);
     Iterator<edge> *it = graph->getEdges();
     while(it->hasNext()) {
       edge e = it->next();
-      _result->setEdgeValue(e, compo.get(e.id));
+      result->setEdgeValue(e, compo.get(e.id));
     } delete it;
     return true;
   }

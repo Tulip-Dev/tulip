@@ -50,7 +50,7 @@ public:
   bool computeProperty();
 
 private:
-  bool _result;
+  bool result;
   AbstractComputeProperty* _computeProperty;
   bool _finished;
 public slots:

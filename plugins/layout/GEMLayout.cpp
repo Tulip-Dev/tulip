@@ -136,7 +136,7 @@ void GEMLayout::vertexdata_init(const float starttemp) {
 void GEMLayout::updateLayout() {
   for (unsigned int i = 0; i < graph->numberOfNodes(); ++i) {
     //    cerr << "pos up ==> :" << _particules[i].pos << endl;
-    _result->setNodeValue(_particules[i].n, _particules[i].pos);
+    result->setNodeValue(_particules[i].n, _particules[i].pos);
   }
 }
 //=========================================================
@@ -337,16 +337,16 @@ bool GEMLayout::run() {
         ConnectedTest::computeConnectedComponents(graph, components);
         for (size_t i = 0; i < components.size(); ++i) {
             Graph * tmp = graph->inducedSubGraph(components[i]);
-            tmp->computeProperty("GEM (Frick)", _result, err, pluginProgress, dataSet);
+            tmp->computeProperty("GEM (Frick)", result, err, pluginProgress, dataSet);
         }
         // call connected component packing
         LayoutProperty tmpLayout(graph);
 	DataSet ds;
-        ds.set("coordinates", _result);
+        ds.set("coordinates", result);
         graph->computeProperty("Connected Component Packing", &tmpLayout, err, pluginProgress, &ds);
 	// forget last temporary graph state 
 	graph->pop();
-        *_result = tmpLayout;
+        *result = tmpLayout;
         return true;
     }
 
@@ -371,7 +371,7 @@ bool GEMLayout::run() {
 
   _nbNodes = graph->numberOfNodes();
   
-  _result->setAllEdgeValue(vector<Coord>(0));
+  result->setAllEdgeValue(vector<Coord>(0));
 
   if (max_iter == 0)
     max_iter = a_maxiter * _nbNodes * _nbNodes;

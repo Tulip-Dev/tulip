@@ -22,7 +22,7 @@ public:
 
 private:
   QString _currentElement;
-  QList<RssItem> _result;
+  QList<RssItem> result;
 
   void fetchElement(const QString &name, const QString &value);
 };

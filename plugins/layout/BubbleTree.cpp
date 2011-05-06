@@ -199,7 +199,7 @@ void BubbleTree::calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node,tlp::Vector<dou
   rot2[0] = sinAlpha; rot2[1] =  cosAlpha; rot2[2]=0.;
   zeta = rot1*zeta[0] + rot2*zeta[1];
   
-  _result->setNodeValue(n, Coord(enclosingCircleCenter[0]+zeta[0],
+  result->setNodeValue(n, Coord(enclosingCircleCenter[0]+zeta[0],
 				     enclosingCircleCenter[1]+zeta[1],
 				     0.) );
   /*
@@ -219,7 +219,7 @@ void BubbleTree::calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node,tlp::Vector<dou
 	delete itE;
 	vector<Coord>tmp(1.);
 	tmp[0] = Coord(bend[0], bend[1], 0.);
-	_result->setEdgeValue(ite,tmp);
+	result->setEdgeValue(ite,tmp);
     }
   }
   /*
@@ -242,7 +242,7 @@ void BubbleTree::calcLayout(tlp::node n, TLP_HASH_MAP< tlp::node, tlp::Vector< d
   /*
    * Make the recursive call, to place the children of n.
    */
- _result->setNodeValue(n,Coord(0., 0., 0.));
+ result->setNodeValue(n,Coord(0., 0., 0.));
   Iterator<node> *it = tree->getOutNodes(n);
   while (it->hasNext()) {
     node itn=it->next();
@@ -289,16 +289,16 @@ bool BubbleTree::run() {
 	ConnectedTest::computeConnectedComponents(graph, components);
         for (unsigned int i = 0; i < components.size(); ++i) {
             Graph * tmp = graph->inducedSubGraph(components[i]);
-            tmp->computeProperty("Bubble Tree", _result, err, pluginProgress, dataSet);
+            tmp->computeProperty("Bubble Tree", result, err, pluginProgress, dataSet);
         }
         // call connected componnent packing
         LayoutProperty tmpLayout(graph);
 	DataSet tmpdataSet;
-	tmpdataSet.set("coordinates", _result);
+	tmpdataSet.set("coordinates", result);
         graph->computeProperty("Connected Component Packing", &tmpLayout, err, pluginProgress, &tmpdataSet);
 	// forget last temporary graph state 
 	graph->pop();
-        *_result = tmpLayout;
+        *result = tmpLayout;
         return true;
     }
   
@@ -315,7 +315,7 @@ bool BubbleTree::run() {
 
   // ensure size updates will be kept after a pop
   preservePropertyUpdates(nodeSize);
-  _result->setAllEdgeValue(vector<Coord>(0));
+  result->setAllEdgeValue(vector<Coord>(0));
 
   if (pluginProgress)
     pluginProgress->showPreview(false);

@@ -159,15 +159,15 @@ bool EccentricityMetric::run() {
   }
   for (size_t ni = 0; ni < nbElem; ++ni) {
     if(!allPaths && norm)
-        _result->setNodeValue(vecNodes[ni], res[ni]/diameter);
+        result->setNodeValue(vecNodes[ni], res[ni]/diameter);
     else
-        _result->setNodeValue(vecNodes[ni], res[ni]);
+        result->setNodeValue(vecNodes[ni], res[ni]);
   }
 /*
   double t2 = omp_get_wtime();
   for (size_t ni = 0; ni < nbElem; ++ni) {
     double val = compute(vecNodes[ni]);
-    _result->setNodeValue(vecNodes[ni], val);    
+    result->setNodeValue(vecNodes[ni], val);    
   }
   double t3 = omp_get_wtime();
   cout << "omp : " << t2 - t1 << "s" << endl << flush;
@@ -178,7 +178,7 @@ bool EccentricityMetric::run() {
   for (unsigned int i=0; itN->hasNext(); ++i) {
     if (pluginProgress->progress(i, graph->numberOfNodes())!=TLP_CONTINUE) break;
     node n = itN->next();
-    _result->setNodeValue(n, compute(n));
+    result->setNodeValue(n, compute(n));
   }
   */
   return pluginProgress->state()!=TLP_CANCEL;

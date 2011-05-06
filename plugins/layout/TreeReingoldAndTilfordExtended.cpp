@@ -308,7 +308,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
   if(!compactLayout)
     tmpCoord.set(x+(*p)[n], -y, 0);
   else tmpCoord.set(x+(*p)[n], - (y+maxLevelSize[level]/2.), 0);
-  _result->setNodeValue(n,tmpCoord);
+  result->setNodeValue(n,tmpCoord);
   if (useLength) {
     edge ite;
     forEach(ite, tree->getOutEdges(n)) {
@@ -344,7 +344,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
 bool TreeReingoldAndTilfordExtended::run() {
   TLP_HASH_MAP<node,double> posRelative;
   
-  _result->setAllEdgeValue(vector<Coord>(0));
+  result->setAllEdgeValue(vector<Coord>(0));
   if (!getNodeSizePropertyParameter(dataSet, sizes))
     sizes = graph->getProperty<SizeProperty>("viewSize");
   // ensure size updates will be kept after a pop
@@ -431,19 +431,19 @@ bool TreeReingoldAndTilfordExtended::run() {
       LineType::RealType tmp;
       node src = tree->source(e);
       node tgt = tree->target(e);
-      const Coord& srcPos = _result->getNodeValue(src);
-      const Coord& tgtPos = _result->getNodeValue(tgt);
+      const Coord& srcPos = result->getNodeValue(src);
+      const Coord& tgtPos = result->getNodeValue(tgt);
       tmp.push_back(Coord(srcPos[0], srcPos[1], 0));
       tmp.push_back(Coord(tgtPos[0], srcPos[1], 0));
-      _result->setEdgeValue(e, tmp);
+      result->setEdgeValue(e, tmp);
     }
     if (orientation == "horizontal") {
       forEach(e, tree->getEdges()) {
-	LineType::RealType tmp = _result->getEdgeValue(e);
+	LineType::RealType tmp = result->getEdgeValue(e);
 	LineType::RealType tmp2;
 	tmp2.push_back(Coord(-tmp[0][1], tmp[0][0], tmp[0][2]));
 	tmp2.push_back(Coord(-tmp[1][1], tmp[1][0], tmp[1][2]));
-	_result->setEdgeValue(e, tmp2);
+	result->setEdgeValue(e, tmp2);
       }
     }
   }
@@ -454,8 +454,8 @@ bool TreeReingoldAndTilfordExtended::run() {
     forEach(n, tree->getNodes()) {
       const Size&  tmp = sizes->getNodeValue(n);
       sizes->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
-      const Coord& tmpC = _result->getNodeValue(n);
-      _result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
+      const Coord& tmpC = result->getNodeValue(n);
+      result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
   }
 
