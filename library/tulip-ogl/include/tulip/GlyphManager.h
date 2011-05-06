@@ -25,7 +25,6 @@
 #include <cassert>
 
 #include <tulip/tulipconf.h>
-#include <tulip/PluginLoader.h>
 #include <tulip/Glyph.h>
 
 namespace tlp {
@@ -58,10 +57,6 @@ namespace tlp {
      * Load glyphs plugins
      */
     void loadGlyphPlugins();
-    /**
-     * Load glyphs plugins with given PluginLoader
-     */
-    void loadPlugins(PluginLoader *plug=0);
 
     /**
      * Create the glyph list and store it in glyphs parameter

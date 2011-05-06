@@ -25,7 +25,7 @@
 #include <tulip/Plugin.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/TemplateFactory.h>
-#include "InteractorManager.h"
+#include <tulip/InteractorManager.h>
 #include <tulip/Plugin.h>
 
 class QAction;
@@ -141,15 +141,9 @@ namespace tlp {
      * This function is call when an undo is perform by the controller
      */
     virtual void undoIsDone() {}
-
-
   };
 
   class TLP_QT_SCOPE InteractorContext {
-
-  public :
-    InteractorContext(){}
-
   };
 
   class TLP_QT_SCOPE InteractorFactory: public tlp::FactoryInterface<Interactor,InteractorContext*> {
