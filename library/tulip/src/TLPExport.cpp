@@ -26,7 +26,7 @@
 #include <tulip/MethodFactory.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/StringCollection.h>
-#include <tulip/forEach.h>
+#include <tulip/ForEach.h>
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
