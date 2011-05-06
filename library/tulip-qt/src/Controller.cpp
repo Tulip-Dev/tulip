@@ -24,9 +24,6 @@ using namespace std;
 tlp::Controller* tlp::Controller::currentController=0;
 
 namespace tlp {
-
-  TemplateFactory<ControllerFactory,Controller, ControllerContext *> *ControllerFactory::factory;
-
   MainWindowFacade::MainWindowFacade()
   :mainWindow(NULL),menuBar(NULL),toolBar(NULL),interactorsToolBar(NULL),workspace(NULL),statusBar(NULL) {
   }

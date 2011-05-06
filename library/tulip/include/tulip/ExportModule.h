@@ -50,16 +50,9 @@ public:
   DataSet *dataSet;
 };
 
-class ExportModuleFactory:public AbstractPluginInfo{
+class ExportModuleFactory:public FactoryInterface<ExportModule,AlgorithmContext>{
 public:
-  static TLP_SCOPE TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext > *factory;
-  static void initFactory() {
-    if (!factory) {
-      factory = new TemplateFactory<ExportModuleFactory,ExportModule,AlgorithmContext >;
-     }
-  }    
   virtual ~ExportModuleFactory() {}
-  virtual ExportModule * createPluginObject(AlgorithmContext)=0;
 };
 /*@}*/
 }

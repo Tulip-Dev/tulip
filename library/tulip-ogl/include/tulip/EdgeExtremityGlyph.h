@@ -35,6 +35,7 @@
 #include <tulip/Matrix.h>
 #include <tulip/Plugin.h>
 #include <tulip/TemplateFactory.h>
+#include <tulip/Plugin.h>
 
 namespace tlp {
 typedef Matrix<float, 4> MatrixGL;
@@ -72,22 +73,9 @@ protected:
 	GlGraphInputData *edgeExtGlGraphInputData;
 };
 
-class TLP_GL_SCOPE EdgeExtremityGlyphFactory: public AbstractPluginInfo {
+class TLP_GL_SCOPE EdgeExtremityGlyphFactory: public FactoryInterface<EdgeExtremityGlyph, EdgeExtremityGlyphContext*> {
 public:
 	virtual ~EdgeExtremityGlyphFactory() {
-	}
-	///
-	virtual EdgeExtremityGlyph *createPluginObject(EdgeExtremityGlyphContext *gc)=0;
-	///
-	virtual int getId() const=0;
-
-	static TemplateFactory<EdgeExtremityGlyphFactory, EdgeExtremityGlyph,
-			EdgeExtremityGlyphContext *> *factory;
-	static void initFactory() {
-		if (!factory) {
-			factory = new TemplateFactory<EdgeExtremityGlyphFactory, EdgeExtremityGlyph,
-					EdgeExtremityGlyphContext *> ;
-		}
 	}
 };
 

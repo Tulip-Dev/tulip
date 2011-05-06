@@ -120,20 +120,20 @@ namespace tlp {
   //**********************************************************************
   template <typename TPROPERTY>
   void buildPropertyMenu(QMenu &menu, QObject *receiver, const char *slot) {
-    typename TemplateFactory<PropertyFactory<TemplateAlgorithm<TPROPERTY> >, TemplateAlgorithm<TPROPERTY>, PropertyContext >::ObjectCreator::const_iterator it;
+    typename TemplateFactory<TemplateAlgorithm<TPROPERTY>, PropertyContext >::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
-    TemplateFactory<PropertyFactory<TemplateAlgorithm<TPROPERTY> >, TemplateAlgorithm<TPROPERTY>, PropertyContext >* factory = PropertyFactory<TemplateAlgorithm<TPROPERTY> >::factory;
+    TemplateFactory<TemplateAlgorithm<TPROPERTY>, PropertyContext >* factory = PropertyFactory<TemplateAlgorithm<TPROPERTY> >::factory;
     it= factory->objMap.begin();
     for (;it!=PropertyFactory<TemplateAlgorithm<TPROPERTY> >::factory->objMap.end();++it)
       insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
   }
   template <typename TFACTORY, typename TMODULE>
   void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
-    typename TemplateFactory<TFACTORY, TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
+    typename TemplateFactory<TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
-    for (it=TFACTORY::factory->objMap.begin();it != TFACTORY::factory->objMap.end();++it)
+    for (it= FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.begin();it != FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.end();++it)
       insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
   }
   typedef std::vector<node> NodeA;
@@ -809,7 +809,7 @@ namespace tlp {
     }
 
     connect(viewMenu, SIGNAL(triggered(QAction *)), SLOT(createView(QAction*)));
-    TemplateFactory<ViewFactory, View, ViewContext>::ObjectCreator::const_iterator it;
+    TemplateFactory<View, ViewContext*>::ObjectCreator::const_iterator it;
     for (it=ViewFactory::factory->objMap.begin();it != ViewFactory::factory->objMap.end();++it) {
       viewMenu->addAction(it->first.c_str());
     }

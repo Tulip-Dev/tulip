@@ -19,6 +19,7 @@
 
 #ifndef TULIPPLUGIN_H
 #define TULIPPLUGIN_H
+#include <assert.h>
 #include <string>
 #include <tulip/tulipconf.h>
 #include <tulip/TlpTools.h>
@@ -40,6 +41,7 @@ namespace tlp {
 class AbstractPluginInfo {
 public:
   virtual ~AbstractPluginInfo(){}
+
   /**
    * @brief Returns the name of the plug-in, as registered in the Tulip plug-in system.
    * This name must be unique, and if multiple plug-ins have the same name,
@@ -47,6 +49,7 @@ public:
    * @return string the name of the plug-in.
    */
   virtual  std::string getName() const=0;
+
   /**
    * @brief Returns the name of the group this plug-in belongs to.
    * Groups and sub-groups are separated by two colons.
@@ -54,12 +57,14 @@ public:
    * @return the group name of this plug-in.
    */
   virtual std::string getGroup() const=0;
+
   /**
    * @brief The name of the author of this plug-in.
    *
    * @return the name of the author.
    */
   virtual  std::string getAuthor() const=0;
+
   /**
    * @brief The creation date of the plug-in.
    * This date is in a free format, but most Tulip plug-ins use a DD/MM/YYYY
@@ -67,6 +72,7 @@ public:
    * @return the creation date.
    */
   virtual  std::string getDate() const=0;
+
   /**
    * @brief Informations about the plug-in, from the plug-in author.
    * These informations can contains anything, and the developer is completely free to put anything here.
@@ -74,6 +80,7 @@ public:
    * @return string The informations associated with this plug-in.
    */
   virtual  std::string getInfo() const=0;
+
   /**
    * @brief The release version of the plug-in, including major and minor.
    * The version should be X.Y, X being the major, and Y the minor.
@@ -116,14 +123,54 @@ public:
     return tlp::getMajor(getTulipRelease());
   }
 
-/**
+  /**
    * @return Return the minor Tulip version this plug-in was built with.
    */
   virtual  std::string getTulipMinor() const  {
     return tlp::getMinor(getTulipRelease());
   }
+
+  virtual int getId() const {
+    return 0;
+  }
 };
 
+template<class ObjectType, class Context> class TemplateFactory;
+
+template <class PluginObject, class PluginContext>
+class FactoryInterface : public AbstractPluginInfo {
+  public:
+    /**
+     * @brief Creates a new Algorithm object.
+     *
+     * @param context The context for the new plug-in.
+     * @return PluginObject* A newly created algorithm plug-in.
+     **/
+    virtual PluginObject* createPluginObject(PluginContext context) {
+      (void) context;
+      std::cerr << "error from FactoryInterface<" << typeid(PluginObject).name() << ", " << typeid(PluginContext).name() <<">" << std::endl;
+      assert(false);
+      return NULL;
+    }
+
+    /**
+     * @brief A static factory that is initialized when the library is loaded.
+     */
+    static tlp::TemplateFactory<PluginObject, PluginContext> *factory;
+
+    /**
+     * @brief This static initilization is called when the plug-in library is loaded, and registers the new plug-in in the Tulip plug-in system.
+     */
+    static void initFactory() {
+      if (!factory) {
+        factory = new tlp::TemplateFactory<PluginObject, PluginContext>();
+      }
+    }
+  };
+
+template <class PluginObject, class PluginContext>
+TemplateFactory<PluginObject, PluginContext>* FactoryInterface<PluginObject, PluginContext>::factory = 0;
+  
 typedef _DEPRECATED AbstractPluginInfo Plugin;
 
 /*@}*/

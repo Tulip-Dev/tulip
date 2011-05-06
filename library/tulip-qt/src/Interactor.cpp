@@ -23,9 +23,6 @@
 using namespace std;
 
 namespace tlp {
-
-  TemplateFactory<InteractorFactory,Interactor, InteractorContext *> *InteractorFactory::factory;
-
   InteractorAction::InteractorAction(Interactor *interactor,const QIcon &icon, const QString &text):QAction(icon,text,NULL),interactor(interactor){
   }
 
