@@ -1,4 +1,4 @@
-ADD_SUBDIRECTORY(OGDF)
+#ADD_SUBDIRECTORY(OGDF)
 
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude})
 
