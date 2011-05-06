@@ -19,7 +19,7 @@
 
 // +-------------------------------------------------------------------------+
 // | Tulip Python Bindings                                                   |
-// | inspired from bindings by the Booggie project development team          |
+// | inspired from bindings by the Booggie project developpment team         |
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
@@ -35,6 +35,7 @@
 %Include Color.sip
 %Include Coord.sip
 %Include Size.sip
+%Include Matrix.sip
 %Include BoundingBox.sip
 %Include StringCollection.sip
 %Include ColorScale.sip
@@ -55,6 +56,7 @@
 %Include ExportModule.sip
 
 %Include PropertyInterface.sip
+
 %Include BooleanProperty.sip
 %Include DoubleProperty.sip
 %Include ColorProperty.sip
@@ -62,6 +64,7 @@
 %Include SizeProperty.sip
 %Include IntegerProperty.sip
 %Include LayoutProperty.sip
+
 %Include GraphProperty.sip
 
 %Include Plugin.sip
@@ -69,6 +72,7 @@
 %Include WithDependency.sip
 %Include PluginProgress.sip
 %Include Graph.sip
+%Include GraphMeasure.sip
 %Include PluginLoader.sip
 
 %Include TlpTools.sip
@@ -80,4 +84,27 @@
 %Include BiconnectedTest.sip
 %Include TriconnectedTest.sip
 %Include PlanarityTest.sip
+
+%Include DrawingTools.sip
+%Include Observable.sip
+
+%ModuleHeaderCode
+static int throwInvalidNodeException(tlp::Graph *graph, tlp::node n) {
+	std::ostringstream oss;
+	std::string graphName;
+	graph->getAttribute("name", graphName);
+	oss << "Node with id " << n.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
+	PyErr_SetString(PyExc_Exception, oss.str().c_str());
+	return -1;
+}
+
+static int throwInvalidEdgeException(tlp::Graph *graph, tlp::edge e) {
+	std::ostringstream oss;
+	std::string graphName;
+	graph->getAttribute("name", graphName);
+	oss << "Edge with id " << e.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
+	PyErr_SetString(PyExc_Exception, oss.str().c_str());
+	return -1;
+}
+%End
 

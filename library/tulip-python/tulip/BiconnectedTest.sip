@@ -30,10 +30,31 @@ class BiconnectedTest {
 #include <tulip/BiconnectedTest.h>
 %End
 public:
+
   static bool isBiconnected(tlp::Graph *graph);
+%Docstring
+tlp.BiconnectedTest.isBiconnected(graph)
+
+Returns True if the graph is biconnected (ie. one must remove at least two nodes in order
+to disconnect the graph), False otherwise.
+
+:param graph: the graph on which to perform the biconnected test
+:type graph: :class:`tlp.Graph`
+:rtype: boolean
+%End 
+
+//========================================================================================
+
   static void makeBiconnected(tlp::Graph *graph, std::vector<tlp::edge>& addedEdges /Out/);
 %Docstring
-tlp.BiconnectedTest.makeBiconnected(tlp.Graph) -> list of tlp.edge
+tlp.BiconnectedTest.makeBiconnected(graph)
+
+If the graph is not biconnected, adds edges in order to make the graph
+biconnected. Returns a list of added edges.
+
+:param graph: the graph to make biconnected.
+:type graph: :class:`tlp.Graph`
+:rtype: list of :class:`tlp.edge`
 %End
   
 private :

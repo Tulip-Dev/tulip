@@ -43,18 +43,50 @@ tlp.GraphProperty.getEdgeDefaultValue() -> list of tlp.edge
 %End
 
 	tlp::Graph* getNodeValue(const tlp::node n);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipRes = sipCpp->getNodeValue(*a0);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End
 
 	const std::set<tlp::edge> getEdgeValue(const tlp::edge e);
 %Docstring
 tlp.GraphProperty.getEdgeValue(tlp.edge) -> list of tlp.edge
+%End
+	
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipRes = new std::set<tlp::edge>(sipCpp->getEdgeValue(*a0));
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
 %End	
 
 	void setNodeValue(const tlp::node n, tlp::Graph* v);
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->setNodeValue(*a0, a1);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
+%End
+
 
 	void setEdgeValue(const tlp::edge e, const std::set<tlp::edge> &v);
 %Docstring
 tlp.GraphProperty.setEdgeValue(tlp.edge, list of tlp.edge)
 %End
+	
+%MethodCode
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->setEdgeValue(*a0, *a1);
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
+%End	
+
 	void setAllNodeValue(tlp::Graph* v);
 
 	void setAllEdgeValue(const std::set<tlp::edge> &v);
@@ -62,56 +94,41 @@ tlp.GraphProperty.setEdgeValue(tlp.edge, list of tlp.edge)
 tlp.GraphProperty.setAllEdgeValue(list of tlp.edge)
 %End
 	
-	virtual void erase(const tlp::node) ;
-	
-	virtual void erase(const tlp::edge) ;
-
-	virtual std::string getTypename() const ;
-
-	const std::string& getName() const;
-
-	virtual std::string getNodeDefaultStringValue() const ;
-	
-	virtual std::string getEdgeDefaultStringValue() const ;
-	
-	virtual std::string getNodeStringValue( const tlp::node n ) const ;
-	
-	virtual std::string getEdgeStringValue( const tlp::edge e ) const ;
-	
-	virtual bool setNodeStringValue( const tlp::node n, const std::string & v ) ;
-	
-	virtual bool setEdgeStringValue( const tlp::edge e, const std::string & v ) ;
-	
-	virtual bool setAllNodeStringValue( const std::string & v ) ;
-	
-	virtual bool setAllEdgeStringValue( const std::string & v ) ;
-	
-	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* = NULL) const ;
-	
-	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* = NULL) const ;
-	
-  	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
-	
-	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
 	
 	tlp::Graph* __getitem__(const tlp::node n) const;
 %MethodCode
-     sipRes = sipCpp->getNodeValue(*a0);
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipRes = sipCpp->getNodeValue(*a0);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
 %End
 
 	void __setitem__(const tlp::node n, tlp::Graph* g) const;
 %MethodCode
-     sipCpp->setNodeValue(*a0, a1);
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->setNodeValue(*a0, a1);
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+	}
 %End
 
 	std::set<tlp::edge> __getitem__(const tlp::edge e) const;
 %MethodCode
-     sipRes = new std::set<tlp::edge>(sipCpp->getEdgeValue(*a0));
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipRes = new std::set<tlp::edge>(sipCpp->getEdgeValue(*a0));
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
 %End
 
 	void __setitem__(const tlp::edge e, const std::set<tlp::edge> &se) const;
 %MethodCode
-     sipCpp->setEdgeValue(*a0, *a1);
+	if (sipCpp->getGraph()->isElement(*a0)) {
+		sipCpp->setEdgeValue(*a0, *a1);
+	} else {
+		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+	}
 %End
 
 	SIP_PYOBJECT __repr__() const;

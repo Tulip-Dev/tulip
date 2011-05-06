@@ -24,11 +24,12 @@
 // +-------------------------------------------------------------------------+
 
 namespace tlp {
-class BoundingBox {
+
+struct BoundingBox {
 %TypeHeaderCode
 #include <tulip/BoundingBox.h>
 %End
-     
+
       BoundingBox();
       
       BoundingBox(const tlp::Vec3f& min, const tlp::Vec3f& max);
@@ -36,11 +37,11 @@ class BoundingBox {
       tlp::Vec3f center() const;
 
       void expand(const tlp::Vec3f& coord);
-    
+
       void translate(const tlp::Vec3f& vec);
-    
+
       bool isValid() const;
-      
+
       tlp::Vec3f operator[](const unsigned int i) const;
 	
       void __setitem__(int i, const tlp::Vec3f &value);

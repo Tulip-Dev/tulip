@@ -25,6 +25,7 @@
 
 %Include Vector.sip
 
+
 namespace tlp {
 
 class Coord : tlp::Vec3f {
@@ -66,7 +67,7 @@ public:
 	float getZ() const;
 	
 	void get(float &, float &, float &) const;
-	
+		
 	tlp::Coord operator*(const  tlp::Coord &) const;
 	tlp::Coord operator*(const float &) const;
 	tlp::Coord operator+(const  tlp::Coord &) const;
