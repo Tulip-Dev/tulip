@@ -25,7 +25,7 @@
 
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
-#include <tulip/StringAlgorithm.h>
+#include <tulip/PropertyAlgorithm.h>
 
 namespace tlp {
 
@@ -35,9 +35,6 @@ class PropertyContext;
 /** \addtogroup properties */ 
 /*\@{*/
 class TLP_SCOPE StringProperty:public AbstractStringProperty{ 
-
-  friend class StringAlgorithm;
-
 public :
   StringProperty (Graph *g, std::string n="") :AbstractStringProperty(g, n) {}
 

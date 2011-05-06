@@ -109,13 +109,13 @@ class IntegerProperty;
 class LayoutProperty;
 class ColorProperty;
 class DoubleProperty;
-// class StringProperty;
+class StringProperty;
 typedef TemplateAlgorithm<SizeProperty> SizeAlgorithm;
 typedef TemplateAlgorithm<IntegerProperty> IntegerAlgorithm;
 typedef TemplateAlgorithm<LayoutProperty> LayoutAlgorithm;
 typedef TemplateAlgorithm<ColorProperty> ColorAlgorithm;
 typedef TemplateAlgorithm<DoubleProperty> DoubleAlgorithm;
-// typedef TemplateAlgorithm<StringProperty> StringAlgorithm;
+typedef TemplateAlgorithm<StringProperty> StringAlgorithm;
 
 // #include <tulip/PropertyAlgorithm.h>
 /*@}*/
