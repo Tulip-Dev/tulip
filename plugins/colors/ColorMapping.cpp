@@ -174,7 +174,7 @@ public:
     while(itE->hasNext()) {
       edge ite=itE->next();
       double dd=entryMetric->getEdgeValue(ite)-minE;
-      colorResult->setEdgeValue(ite, getColor(dd,maxE-minE));
+      _result->setEdgeValue(ite, getColor(dd,maxE-minE));
     } delete itE;
   }
   //=========================================================
@@ -186,7 +186,7 @@ public:
     while(itN->hasNext()) {
       node itn=itN->next();
       double dd=entryMetric->getNodeValue(itn)-minN;
-      colorResult->setNodeValue(itn, getColor(dd,maxN-minN));
+      _result->setNodeValue(itn, getColor(dd,maxN-minN));
     } delete itN;
   }
   //=========================================================
@@ -261,9 +261,9 @@ public:
           vector<unsigned int> *elements=&mapMetricElements[(*it).first];
           for(vector<unsigned>::iterator itE=elements->begin();itE!=elements->end();++itE){
             if(targetType.getCurrent()==NODES_TARGET)
-              colorResult->setNodeValue(node(*itE),(*it).second);
+              _result->setNodeValue(node(*itE),(*it).second);
             else
-              colorResult->setEdgeValue(edge(*itE),(*it).second);
+              _result->setEdgeValue(edge(*itE),(*it).second);
           }
         }
       }else{

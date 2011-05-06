@@ -25,7 +25,7 @@
 
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
-#include <tulip/ColorAlgorithm.h>
+#include <tulip/PropertyAlgorithm.h>
 
 namespace tlp {
 
@@ -36,7 +36,6 @@ typedef AbstractProperty<tlp::ColorType, tlp::ColorType, tlp::ColorAlgorithm> Ab
 /** \addtogroup properties */ 
 /*@{*/
 class TLP_SCOPE ColorProperty:public AbstractColorProperty { 
-  friend class ColorAlgorithm;
 public :
   ColorProperty (Graph *g, std::string n="") :AbstractColorProperty(g, n) {}
   // PropertyInterface inherited methods

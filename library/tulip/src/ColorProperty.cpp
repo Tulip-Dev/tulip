@@ -19,7 +19,6 @@
 #include <float.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/PluginContext.h>
-#include <tulip/ColorAlgorithm.h>
 
 using namespace std;
 using namespace tlp;
