@@ -49,8 +49,7 @@ namespace tlp
   }
   //====================================================
   Interactor *InteractorManager::getInteractor(const string &name){
-    InteractorContext ic;
-    return InteractorFactory::factory->getPluginObject(name, &ic);
+    return InteractorFactory::factory->getPluginObject(name, NULL);
   }
   //====================================================
   list<string> InteractorManager::getCompatibleInteractors(const string &viewName) {
@@ -65,14 +64,10 @@ namespace tlp
 
   //====================================================
   list<string> InteractorManager::getSortedCompatibleInteractors(const string &viewName) {
-    multimap<int,string> sortedInteractors;
     list<string> result;
     list<string> compatibleInteractors=getCompatibleInteractors(viewName);
     for(list<string>::iterator it=compatibleInteractors.begin();it!=compatibleInteractors.end();++it){
-    	sortedInteractors.insert(pair<int,string>(interactorsMap[*it]->getPriority(),(*it)));
-    }
-    for(multimap<int,string>::reverse_iterator it=sortedInteractors.rbegin();it!=sortedInteractors.rend();++it){
-    	result.push_back(it->second);
+      result.push_back(*it);
     }
     return result;
   }
