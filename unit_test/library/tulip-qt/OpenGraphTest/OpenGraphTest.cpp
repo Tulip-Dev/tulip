@@ -98,7 +98,7 @@ void OpenGraphTest::testOpenController() {
   DataSet *controllerData=(DataSet*)p.second->value;
   string controllerName=p.first;
 
-  this->controller=(MainController*)ControllerPluginsManager::getInst().createController(controllerName);
+  this->controller=(MainController*)ControllerFactory::factory->getPluginObject(controllerName, NULL);
   QVERIFY(this->controller!=NULL);
   this->controller->attachMainWindow(MainWindowFacade(mainWindow,graphToolBar,workspace));
   this->controller->setData(graph,*controllerData);

@@ -48,17 +48,12 @@ namespace tlp {
       return *inst;
     }
 
-
     /**
      * Load all view's plugins available
      * \param plug : Use this plugin loader
      */
     void loadPlugins(PluginLoader *plug=0);
 
-    /**
-     * Get available plugins list
-     */
-    void initViewPluginsList(MutableContainer<View *> &views);
     /**
      * Create view with given name
      * \return The view

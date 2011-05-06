@@ -236,7 +236,6 @@ namespace tlp {
   };
 
   class TLP_QT_SCOPE ControllerContext {
-
   };
 
   class TLP_QT_SCOPE ControllerFactory: public FactoryInterface<Controller,ControllerContext *> {
