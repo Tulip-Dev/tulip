@@ -17,6 +17,28 @@
  *
  */
 
+// +-------------------------------------------------------------------------+
+// | Tulip Python View                                                       |
+// | Author:  Antoine Lambert                                                |
+// | Contact:  antoine.lambert@labri.fr                                      |
+// +-------------------------------------------------------------------------+
+// | License:                                                                |
+// |                                                                         |
+// | Tulip Python View is free software; you can redistribute it             |
+// | and/or modify  it under the terms of the GNU General Public License     |
+// | as published by the Free Software Foundation; either version 2 of the   |
+// | License, or (at your option) any later version.                         |
+// |                                                                         |
+// | Tulip Python View is distributed in the hope that it will be            |
+// | useful, but WITHOUT ANY WARRANTY; without even the implied warranty of  |
+// | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the            |
+// | GNU General Public License for more details.                            |
+// |                                                                         |
+// | You should have received a copy of the GNU General Public License       |
+// | along with this program.  If not, see <http://www.gnu.org/licenses/>.   |
+// |                                                                         |
+// +-------------------------------------------------------------------------+
+
 #if defined(__GNUC__) && __GNUC__ >= 4 && ((__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >= 1) || (__GNUC_MINOR__ >= 3))
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
@@ -69,26 +91,33 @@ scriptengine_ConsoleOutput_init(scriptengine_ConsoleOutput *self, PyObject *args
 /* This redirects stdout from the calling script. */
 static PyObject *
 scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
+
 	char *buf;
 
 	if(!PyArg_ParseTuple(o, "s", &buf))
 		return NULL;
 
-
-	if (buf != NULL && ((scriptengine_ConsoleOutput *)self)->writeToConsole) {
-		QBrush brush(Qt::SolidPattern);
-		if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
-			brush.setColor(Qt::red);
-		} else {
-			brush.setColor(Qt::black);
-		}
-		QTextCharFormat formt;
-		formt.setForeground(brush);
-		consoleWidget->moveCursor(QTextCursor::End);
-		QTextCursor cursor = consoleWidget->textCursor();
-		cursor.insertText(buf, formt);
+	if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
+		cerr << buf << endl;
 	}
 
+	if (consoleWidget) {
+		if (buf != NULL && ((scriptengine_ConsoleOutput *)self)->writeToConsole) {
+			QBrush brush(Qt::SolidPattern);
+			if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
+				brush.setColor(Qt::red);
+
+			} else {
+				brush.setColor(Qt::black);
+			}
+
+			QTextCharFormat formt;
+			formt.setForeground(brush);
+			consoleWidget->moveCursor(QTextCursor::End);
+			QTextCursor cursor = consoleWidget->textCursor();
+			cursor.insertText(buf, formt);
+		}
+	}
 	Py_RETURN_NONE;
 }
 
@@ -121,8 +150,8 @@ static PyMemberDef scriptengine_ConsoleOutput_members[] = {
 static PyMethodDef scriptengine_ConsoleOutput_methods[] = {
 		{"write", (PyCFunction) scriptengine_ConsoleOutput_write, METH_VARARGS,
 				"Post output to the scripting engine"},
-		{"enableConsoleOutput", (PyCFunction) scriptengine_ConsoleOutput_enableConsoleOutput, METH_VARARGS,
-				"enable / disable console output"},
+				{"enableConsoleOutput", (PyCFunction) scriptengine_ConsoleOutput_enableConsoleOutput, METH_VARARGS,
+						"enable / disable console output"},
 						{0, 0, 0, 0}  /* Sentinel */
 };
 

@@ -55,8 +55,8 @@ const string updateVisualizationFunc =
 
 const unsigned int nbReservedCharacters = 22;
 const char pythonReservedCharacters[nbReservedCharacters] = {'#', '%', '/', '+', '-', '&', '*', '<', '>',
-                                                             '|', '~', '^', '=', '!', '\'', '\"', '{', '}',
-                                                             '(', ')', '[', ']'};
+		'|', '~', '^', '=', '!', '\'', '\"', '{', '}',
+		'(', ')', '[', ']'};
 
 const std::string cleanPropertyName(const std::string &propertyName) {
 	std::string ret(propertyName);
@@ -140,14 +140,13 @@ const std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph
 
 VIEWPLUGIN(PythonScriptView, "Python Script view", "Antoine Lambert", "04/2010", "Python Script View", "0.7");
 
-PythonScriptView::PythonScriptView() : pythonInterpreter(NULL),graph(NULL), fontZoom(0), scriptStopped(false) {}
+PythonScriptView::PythonScriptView() : pythonInterpreter(NULL),graph(NULL), scriptStopped(false) {}
 
 PythonScriptView::~PythonScriptView() {}
 
 QWidget *PythonScriptView::construct(QWidget *parent) {
 	QWidget *widget = AbstractView::construct(parent);
-	viewWidget = new PythonScriptViewWidget(widget);
-	viewWidget->pythonCodeWidget->installEventFilter(this);
+	viewWidget = new PythonScriptViewWidget(this, widget);
 	widget->resize(550,700);
 	browserDialog = new QDialog(viewWidget);
 	browserDialog->setWindowTitle("Tulip Python API");
@@ -166,10 +165,9 @@ QWidget *PythonScriptView::construct(QWidget *parent) {
 	connect(viewWidget->newFileModuleAction, SIGNAL(triggered()), this, SLOT(newFileModule()));
 	connect(viewWidget->loadModuleAction, SIGNAL(triggered()), this, SLOT(loadModule()));
 	connect(viewWidget->saveModuleAction, SIGNAL(triggered()), this, SLOT(saveModuleToFile()));
-	connect(viewWidget->pythonCodeWidget, SIGNAL(textChanged()), this, SLOT(mainScriptTextChanged()));
+	connect(viewWidget->mainScriptsTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeMainScriptTabRequested(int)));
 	connect(viewWidget->modulesTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeModuleTabRequested(int)));
-	connect(viewWidget->decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
-	connect(viewWidget->increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
+
 	setCentralWidget(viewWidget);
 	pythonInterpreter = PythonInterpreter::getInstance();
 	pythonInterpreter->runString(updateVisualizationFunc);
@@ -209,68 +207,126 @@ string& replaceAll(string& context, const string& from, const string& to) {
 
 void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
 	this->graph = graph;
-	string scriptCode;
-	string filename;
-	bool mainScriptLoaded = false;
-	if (dataSet.get("main script file", filename)) {
-		mainScriptLoaded = loadScript(filename.c_str());
-	}
-	if (!mainScriptLoaded && dataSet.get("script code", scriptCode)) {
-		// TLPParser seems to replace the tab character with four white spaces when reading the content of the TLP file, don't know why
-		// Anyway, replace the original tab character in order to have a correct indentation when setting the script text to the code editor
-		replaceAll(scriptCode, "    ", "\t");
-		viewWidget->pythonCodeWidget->setText(QString::fromStdString(scriptCode));
-		viewWidget->tabWidget->setTabText(0, "Main script [no file]");
-		viewWidget->tabWidget->setTabToolTip(0, "string main script, don't forget to save the current graph or\n save script to file to not lose modifications to source code.");
-	} else if (viewWidget->pythonCodeWidget->text() == "") {
-		viewWidget->pythonCodeWidget->setText(getDefaultScriptCode(pythonInterpreter->getPythonVersion(), graph).c_str());
-		viewWidget->tabWidget->setTabText(0, "Main script [no file]");
-		viewWidget->tabWidget->setTabToolTip(0, "string main script, don't forget to save the current graph or\n save script to file to not lose modifications to source code.");
-	}
 
+	if (viewWidget->mainScriptsTabWidget->count() == 0) {
 
-	pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
-
-	DataSet modulesDataSet;
-	if (dataSet.get("modules", modulesDataSet)) {
-		int i = 0;
-		string module;
-		ostringstream oss;
-		oss << "module" << i;
-		while (modulesDataSet.get(oss.str(), module)) {
-			bool moduleLoaded = loadModule(module.c_str());
-			if (!moduleLoaded) {
-				string moduleSrc;
+		string scriptCode;
+		string filename;
+		bool mainScriptLoaded = false;
+		DataSet mainScriptsDataSet;
+		if (dataSet.get("main_scripts", mainScriptsDataSet)) {
+			int i = 0;
+			string mainScript;
+			ostringstream oss;
+			oss << "main_script" << i;
+			while (mainScriptsDataSet.get(oss.str(), mainScript)) {
+				mainScriptLoaded = loadScript(mainScript.c_str());
+				if (!mainScriptLoaded) {
+					string mainScriptSrc;
+					oss.str("");
+					oss << "main_script_src" << i;
+					if (mainScriptsDataSet.get(oss.str(), mainScriptSrc)) {
+						int mainScriptId = viewWidget->addMainScriptEditor();
+						editedMainScripts[mainScriptId] = "";
+						PythonCodeEditor *codeEditor = viewWidget->getMainScriptEditor(mainScriptId);
+						// TLPParser seems to replace the tab character with four white spaces when reading the content of the TLP file, don't know why
+						// Anyway, replace the original tab character in order to have a correct indentation when setting the script text to the code editor
+						replaceAll(mainScriptSrc, "    ", "\t");
+						codeEditor->setText(QString::fromStdString(mainScriptSrc));
+						viewWidget->mainScriptsTabWidget->setTabText(mainScriptId, "[no file]");
+						viewWidget->mainScriptsTabWidget->setTabToolTip(mainScriptId, "string main script, don't forget to save the current graph or\n save script to file to not lose modifications to source code.");
+					}
+				}
 				oss.str("");
-				oss << "module_src" << i;
-				if (modulesDataSet.get(oss.str(), moduleSrc)) {
-					QFileInfo fileInfo(module.c_str());
-					loadModuleFromSrcCode(fileInfo.fileName().toStdString(), moduleSrc);
+				oss << "main_script" << ++i;
+			}
+			int mainScriptId = 0;
+			mainScriptsDataSet.get("main_script_id", mainScriptId);
+
+			viewWidget->mainScriptsTabWidget->setCurrentIndex(mainScriptId);
+
+		} else {
+
+			if (dataSet.get("main script file", filename)) {
+				mainScriptLoaded = loadScript(filename.c_str());
+			}
+			if (!mainScriptLoaded) {
+				editedMainScripts[viewWidget->addMainScriptEditor()] = "";
+				PythonCodeEditor *codeEditor = viewWidget->getMainScriptEditor(0);
+				if (dataSet.get("script code", scriptCode)) {
+					replaceAll(scriptCode, "    ", "\t");
+					codeEditor->setText(QString::fromStdString(scriptCode));
+					viewWidget->mainScriptsTabWidget->setTabText(0, "[no file]");
+					viewWidget->mainScriptsTabWidget->setTabToolTip(0, "string main script, don't forget to save the current graph or\n save script to file to not lose modifications to source code.");
+				} else {
+					codeEditor->setText(getDefaultScriptCode(pythonInterpreter->getPythonVersion(), graph).c_str());
+					viewWidget->mainScriptsTabWidget->setTabText(0, "[no file]");
+					viewWidget->mainScriptsTabWidget->setTabToolTip(0, "string main script, don't forget to save the current graph or\n save script to file to not lose modifications to source code.");
 				}
 			}
-			oss.str("");
-			oss << "module" << ++i;
-		}
-	}
 
-	pythonInterpreter->setDefaultConsoleWidget();
+		}
+		pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
+
+		DataSet modulesDataSet;
+		if (dataSet.get("modules", modulesDataSet)) {
+			int i = 0;
+			string module;
+			ostringstream oss;
+			oss << "module" << i;
+			while (modulesDataSet.get(oss.str(), module)) {
+				bool moduleLoaded = loadModule(module.c_str());
+				if (!moduleLoaded) {
+					string moduleSrc;
+					oss.str("");
+					oss << "module_src" << i;
+					if (modulesDataSet.get(oss.str(), moduleSrc)) {
+						replaceAll(moduleSrc, "    ", "\t");
+						QFileInfo fileInfo(module.c_str());
+						loadModuleFromSrcCode(fileInfo.fileName().toStdString(), moduleSrc);
+					}
+				}
+				oss.str("");
+				oss << "module" << ++i;
+			}
+		}
+
+		pythonInterpreter->setDefaultConsoleWidget();
+
+	}
 }
 
 void PythonScriptView::getData(Graph **graph,DataSet *dataSet) {
 	*graph = this->graph;
-	dataSet->set("main script file", mainScriptFileName);
-	string scriptCode = viewWidget->getPythonCode();
+
+	dataSet->set("main script file", editedMainScripts[viewWidget->mainScriptsTabWidget->currentIndex()]);
+	string scriptCode = viewWidget->getCurrentMainScriptCode();
 	dataSet->set("script code", scriptCode);
-	map<int, string>::const_iterator it = editedModules.begin();
-	DataSet modulesDataSet;
+
+	map<int, string>::const_iterator it = editedMainScripts.begin();
+	DataSet mainScriptsDataSet;
 	int i = 0;
+	for ( ; it != editedMainScripts.end() ; ++it) {
+		ostringstream oss;
+		oss << "main_script" << i;
+		mainScriptsDataSet.set(oss.str(), it->second);
+		oss.str("");
+		oss << "main_script_src" << i++;
+		mainScriptsDataSet.set(oss.str(), viewWidget->getMainScriptCode(it->first));
+	}
+	mainScriptsDataSet.set("main_script_id", viewWidget->mainScriptsTabWidget->currentIndex());
+	dataSet->set("main_scripts", mainScriptsDataSet);
+
+	it = editedModules.begin();
+	DataSet modulesDataSet;
+	i = 0;
 	for ( ; it != editedModules.end() ; ++it) {
 		ostringstream oss;
 		oss << "module" << i;
 		modulesDataSet.set(oss.str(), it->second);
 		oss.str("");
 		oss << "module_src" << i++;
-		modulesDataSet.set(oss.str(), static_cast<QsciScintilla *>(viewWidget->modulesTabWidget->widget(it->first))->text().toStdString());
+		modulesDataSet.set(oss.str(), viewWidget->getModuleCode(it->first));
 	}
 	dataSet->set("modules", modulesDataSet);
 }
@@ -291,20 +347,25 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
 void PythonScriptView::executeCurrentScript() {
 
-	if (!pythonInterpreter->isRunningScript()) {
+	if (!pythonInterpreter->isRunningScript() && viewWidget->mainScriptsTabWidget->count() > 0) {
 
 		pythonInterpreter->setConsoleWidget(viewWidget->consoleOutputWidget);
 		viewWidget->consoleOutputWidget->clear();
 
-		if (mainScriptFileName != "") {
+		int curMainScriptId = viewWidget->mainScriptsTabWidget->currentIndex();
+
+		if (editedMainScripts[curMainScriptId] != "") {
 			saveScript();
 		}
 
 		saveAllModules();
 		reloadAllModules();
 
-		viewWidget->pythonCodeWidget->clearErrorIndicator();
 		map<int, string>::const_iterator it;
+		for (it = editedMainScripts.begin() ; it != editedMainScripts.end() ; ++it) {
+			PythonCodeEditor *codeEditor = static_cast<PythonCodeEditor *>(viewWidget->mainScriptsTabWidget->widget(it->first));
+			codeEditor->clearErrorIndicator();
+		}
 		for (it = editedModules.begin() ; it != editedModules.end() ; ++it) {
 			PythonCodeEditor *codeEditor = static_cast<PythonCodeEditor *>(viewWidget->modulesTabWidget->widget(it->first));
 			codeEditor->clearErrorIndicator();
@@ -314,7 +375,7 @@ void PythonScriptView::executeCurrentScript() {
 		Observable::holdObservers();
 
 		pythonInterpreter->setTraceFunction(tracefunc);
-		pythonInterpreter->runString(viewWidget->getPythonCode().c_str());
+		pythonInterpreter->runString(viewWidget->getCurrentMainScriptCode().c_str());
 
 		viewWidget->scriptStatusLabel->setText("Executing script ...");
 		viewWidget->progressBar->setRange(0,0);
@@ -362,7 +423,7 @@ void PythonScriptView::executeCurrentScript() {
 				}
 				for (size_t i = 0 ; i < errorLines["<string>"].size() ; ++i) {
 					if (errorLines["<string>"][i] > 1) {
-						viewWidget->pythonCodeWidget->indicateScriptCurrentError(errorLines["<string>"][i]-1);
+						viewWidget->getCurrentMainScriptEditor()->indicateScriptCurrentError(errorLines["<string>"][i]-1);
 					}
 				}
 
@@ -383,12 +444,16 @@ void PythonScriptView::executeCurrentScript() {
 
 		pythonInterpreter->setDefaultConsoleWidget();
 
-		Observable::unholdObservers(true);
+		Observable::unholdObservers();
+
+// some external modules (like numpy) overrides the SIGINT handler at import
+// reinstall the default one, otherwise Tulip can not be interrupted by hitting Ctrl-C in a console
+		pythonInterpreter->setDefaultSIGINTHandler();
 
 		scriptStopped = false;
 
 	} else {
-		QMessageBox::information(viewWidget->pythonCodeWidget, "Script execution not allowed", "The Python interpreter already execute a script. You must wait for its termination or stop its execution before running a new script.");
+		QMessageBox::information(viewWidget->getCurrentMainScriptEditor(), "Script execution not allowed", "The Python interpreter already execute a script. You must wait for its termination or stop its execution before running a new script.");
 	}
 }
 
@@ -399,13 +464,11 @@ void PythonScriptView::stopCurrentScript() {
 }
 
 void PythonScriptView::newScript() {
-	if (QMessageBox::question(viewWidget, "Save current script ?", "Do you want to save the current script ?", QMessageBox::Cancel | QMessageBox::Ok ) == QMessageBox::Ok) {
-		saveScript();
-	}
-	viewWidget->pythonCodeWidget->setText(getDefaultScriptCode(pythonInterpreter->getPythonVersion(), graph).c_str());
-	mainScriptFileName = "";
-	viewWidget->tabWidget->setTabText(0, "Main script [no file]");
-	viewWidget->tabWidget->setTabToolTip(0, "string main script, don't forget to save the current graph or\n save script to file to not lose modifications to source code.");
+	int editorId = viewWidget->addMainScriptEditor();
+	editedMainScripts[editorId] = "";
+	viewWidget->getMainScriptEditor(editorId)->setText(getDefaultScriptCode(pythonInterpreter->getPythonVersion(), graph).c_str());
+	viewWidget->mainScriptsTabWidget->setTabText(editorId, "[no file]");
+	viewWidget->mainScriptsTabWidget->setTabToolTip(editorId, "string main script, don't forget to save the current graph or\n save script to file to not lose modifications to source code.");
 }
 
 void PythonScriptView::loadScript() {
@@ -419,15 +482,16 @@ bool PythonScriptView::loadScript(const QString &fileName) {
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 		return false;
 
-	mainScriptFileName = fileInfo.absoluteFilePath().toStdString();
 	QString scriptCode;
 	while (!file.atEnd()) {
 		scriptCode += file.readLine();
 	}
 
-	viewWidget->pythonCodeWidget->setText(scriptCode);
-	viewWidget->tabWidget->setTabText(0, "Main script ["+fileInfo.fileName()+"]");
-	viewWidget->tabWidget->setTabToolTip(0, fileInfo.absoluteFilePath());
+	int editorId = viewWidget->addMainScriptEditor();
+	editedMainScripts[editorId] = fileInfo.absoluteFilePath().toStdString();
+	viewWidget->getMainScriptEditor(editorId)->setText(scriptCode);
+	viewWidget->mainScriptsTabWidget->setTabText(editorId, fileInfo.fileName());
+	viewWidget->mainScriptsTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
 
 	file.close();
 
@@ -436,10 +500,12 @@ bool PythonScriptView::loadScript(const QString &fileName) {
 
 void PythonScriptView::saveScript() {
 	QString fileName;
+	int curMainEditorId = viewWidget->mainScriptsTabWidget->currentIndex();
+	QString mainScriptFileName = editedMainScripts[curMainEditorId].c_str();
 	if (mainScriptFileName == "")
 		fileName = QFileDialog::getSaveFileName(viewWidget, tr("Save Main Script"),"./","Python script (*.py)");
 	else
-		fileName = mainScriptFileName.c_str();
+		fileName = mainScriptFileName;
 
 	if (fileName != "") {
 		if (!fileName.endsWith(".py"))
@@ -448,10 +514,10 @@ void PythonScriptView::saveScript() {
 		QFileInfo fileInfo(file);
 		if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
 			return;
-		mainScriptFileName = fileInfo.absoluteFilePath().toStdString();
+		editedMainScripts[curMainEditorId] = fileInfo.absoluteFilePath().toStdString();
 		QTextStream out(&file);
-		out << viewWidget->getPythonCode().c_str();
-		viewWidget->tabWidget->setTabText(0, "Main script ["+fileInfo.fileName()+"]");
+		out << viewWidget->getCurrentMainScriptCode().c_str();
+		viewWidget->mainScriptsTabWidget->setTabText(curMainEditorId, fileInfo.fileName());
 		file.close();
 	}
 }
@@ -482,46 +548,34 @@ bool PythonScriptView::loadModule(const QString &fileName) {
 	}
 	file.close();
 
-	QsciScintilla *codeEditor = new PythonCodeEditor(viewWidget, fontZoom);
-	codeEditor->installEventFilter(this);
+	int editorId = viewWidget->addModuleEditor();
+	PythonCodeEditor *codeEditor = viewWidget->getModuleEditor(editorId);
 
 	pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
-	int tab = viewWidget->modulesTabWidget->addTab(codeEditor, moduleName);
 
-	viewWidget->modulesTabWidget->setTabText(tab, fileInfo.fileName());
-
-	editedModules[tab] = fileInfo.absoluteFilePath().toStdString();
+	editedModules[editorId] = fileInfo.absoluteFilePath().toStdString();
 
 	codeEditor->setText(scriptCode);
 
-	viewWidget->modulesTabWidget->setTabToolTip(tab, fileInfo.absoluteFilePath());
-	viewWidget->modulesTabWidget->setCurrentIndex(tab);
+	viewWidget->modulesTabWidget->setTabText(editorId, fileInfo.fileName());
+	viewWidget->modulesTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
 
 	pythonInterpreter->reloadModule(moduleName.replace(".py", "").toStdString());
 
-	connect(codeEditor, SIGNAL(textChanged()), this, SLOT(moduleScriptTextChanged()));
+
 
 	return true;
 }
 
 bool PythonScriptView::loadModuleFromSrcCode(const std::string &moduleName, const std::string &moduleSrcCode) {
-	QsciScintilla *codeEditor = new PythonCodeEditor(viewWidget, fontZoom);
-	codeEditor->installEventFilter(this);
-
-	int tab = viewWidget->modulesTabWidget->addTab(codeEditor, moduleName.c_str());
-
-	editedModules[tab] = moduleName;
-
-	viewWidget->modulesTabWidget->setTabText(tab, moduleName.c_str());
-
+	int editorId = viewWidget->addModuleEditor();
+	PythonCodeEditor *codeEditor = viewWidget->getModuleEditor(editorId);
+	editedModules[editorId] = moduleName;
 	codeEditor->setText(moduleSrcCode.c_str());
-
-	viewWidget->modulesTabWidget->setTabToolTip(tab, "string module, don't forget to save the current graph or\n save module to file to not lose modifications to source code.");
-	viewWidget->modulesTabWidget->setCurrentIndex(tab);
+	viewWidget->modulesTabWidget->setTabText(editorId, moduleName.c_str());
+	viewWidget->modulesTabWidget->setTabToolTip(editorId, "string module, don't forget to save the current graph or\n save module to file to not lose modifications to source code.");
 
 	pythonInterpreter->registerNewModuleFromString(QString(moduleName.c_str()).replace(".py", "").toStdString(),  moduleSrcCode);
-
-	connect(codeEditor, SIGNAL(textChanged()), this, SLOT(moduleScriptTextChanged()));
 
 	return true;
 }
@@ -540,22 +594,14 @@ void PythonScriptView::newFileModule() {
 	QString moduleName(fileInfo.fileName());
 	QString modulePath(fileInfo.absolutePath());
 
-	QsciScintilla *codeEditor = new PythonCodeEditor(viewWidget, fontZoom);
-	codeEditor->installEventFilter(this);
-	connect(codeEditor, SIGNAL(textChanged()), this, SLOT(moduleScriptTextChanged()));
-
+	int editorId = viewWidget->addModuleEditor();
+	viewWidget->modulesTabWidget->setTabToolTip(editorId, fileInfo.absoluteFilePath());
 	pythonInterpreter->addModuleSearchPath(modulePath.toStdString());
-	int tab = viewWidget->modulesTabWidget->addTab(codeEditor, moduleName);
-	viewWidget->modulesTabWidget->setTabText(tab, fileInfo.fileName());
-	viewWidget->modulesTabWidget->setTabToolTip(tab, "string module, don't forget to save the current graph or\n save module to file to not lose modifications to source code.");
+	viewWidget->modulesTabWidget->setTabText(editorId, fileInfo.fileName());
 
-	editedModules[tab] = fileInfo.absoluteFilePath().toStdString();
-
-	viewWidget->modulesTabWidget->setTabToolTip(tab, fileInfo.absoluteFilePath());
+	editedModules[editorId] = fileInfo.absoluteFilePath().toStdString();
 
 	file.close();
-
-	viewWidget->modulesTabWidget->setCurrentIndex(tab);
 }
 
 void PythonScriptView::newStringModule() {
@@ -566,17 +612,11 @@ void PythonScriptView::newStringModule() {
 		if (!moduleName.endsWith(".py"))
 			moduleName += ".py";
 
-		QsciScintilla *codeEditor = new PythonCodeEditor(viewWidget, fontZoom);
-		codeEditor->installEventFilter(this);
-		connect(codeEditor, SIGNAL(textChanged()), this, SLOT(moduleScriptTextChanged()));
+		int editorId = viewWidget->addModuleEditor();
+		viewWidget->modulesTabWidget->setTabText(editorId, moduleName);
+		editedModules[editorId] = moduleName.toStdString();
 
-		int tab = viewWidget->modulesTabWidget->addTab(codeEditor, moduleName);
-		viewWidget->modulesTabWidget->setTabText(tab, moduleName);
-
-		editedModules[tab] = moduleName.toStdString();
-
-		viewWidget->modulesTabWidget->setTabToolTip(tab, "string module, don't forget to save the current graph or\n save module to file to not lose modifications to source code.");
-		viewWidget->modulesTabWidget->setCurrentIndex(tab);
+		viewWidget->modulesTabWidget->setTabToolTip(editorId, "string module, don't forget to save the current graph or\n save module to file to not lose modifications to source code.");
 	}
 }
 
@@ -600,7 +640,6 @@ void PythonScriptView::saveModule() {
 
 void PythonScriptView::saveModule(int tabIdx) {
 	if (editedModules.find(tabIdx) != editedModules.end()) {
-		QsciScintilla *codeEditor = static_cast<QsciScintilla *>(viewWidget->modulesTabWidget->widget(tabIdx));
 		QString moduleNameExt = viewWidget->modulesTabWidget->tabText(tabIdx);
 		QString moduleName;
 		if (moduleNameExt[moduleNameExt.size() - 1] == '*')
@@ -613,7 +652,7 @@ void PythonScriptView::saveModule(int tabIdx) {
 		QFileInfo fileInfo(file);
 		if (fileInfo.fileName() != editedModules[tabIdx].c_str() && file.open(QIODevice::WriteOnly | QIODevice::Text)) {
 			QTextStream out(&file);
-			out << codeEditor->text().replace("\r\n", "\n");
+			out << viewWidget->getModuleCode(tabIdx).c_str();
 			file.close();
 			viewWidget->modulesTabWidget->setTabToolTip(tabIdx, fileInfo.absoluteFilePath());
 		}
@@ -652,7 +691,7 @@ bool PythonScriptView::eventFilter(QObject *obj, QEvent *event) {
 	if (event->type() == QEvent::KeyPress) {
 		QKeyEvent *keyEvt = static_cast<QKeyEvent *>(event);
 		if (keyEvt->modifiers() == Qt::ControlModifier && keyEvt->key() == Qt::Key_S) {
-			if (obj == viewWidget->pythonCodeWidget) {
+			if (obj == viewWidget->getCurrentMainScriptEditor()) {
 				saveScript();
 			} else {
 				saveModule();
@@ -661,34 +700,12 @@ bool PythonScriptView::eventFilter(QObject *obj, QEvent *event) {
 		} else if (keyEvt->modifiers() == Qt::ControlModifier && keyEvt->key() == Qt::Key_Space) {
 			executeCurrentScript();
 			return true;
-		} else if (keyEvt->modifiers() == Qt::ControlModifier && keyEvt->key() == Qt::Key_D) {
-			commentSelectedCode(obj);
-			return true;
-		} else if (keyEvt->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) && keyEvt->key() == Qt::Key_D) {
-			uncommentSelectedCode(obj);
-			return true;
 		}
 	}
 	return false;
 }
 
-void PythonScriptView::mainScriptTextChanged() {
-	if (mainScriptFileName != "") {
-		QString curTabText = viewWidget->tabWidget->tabText(0);
-		if (curTabText[curTabText.size() -1] != '*') {
-			curTabText += "*";
-			viewWidget->tabWidget->setTabText(0, curTabText);
-		}
-	}
-}
 
-void PythonScriptView::moduleScriptTextChanged() {
-	QString curTabText = viewWidget->modulesTabWidget->tabText(viewWidget->modulesTabWidget->currentIndex());
-	if (curTabText[curTabText.size() -1] != '*') {
-		curTabText += "*";
-		viewWidget->modulesTabWidget->setTabText(viewWidget->modulesTabWidget->currentIndex(), curTabText);
-	}
-}
 
 void PythonScriptView::closeModuleTabRequested(int tab) {
 	editedModules.erase(tab);
@@ -706,54 +723,18 @@ void PythonScriptView::closeModuleTabRequested(int tab) {
 	editedModules = editedModulesCp;
 }
 
-void PythonScriptView::commentSelectedCode(QObject *obj) {
-	QsciScintilla *codeEditor = dynamic_cast<QsciScintilla *>(obj);
-	if (codeEditor && codeEditor->hasSelectedText()) {
-		int lineFrom = 0;
-		int indexFrom = 0;
-		int lineTo = 0;
-		int indexTo = 0;
-		codeEditor->getSelection(&lineFrom, &indexFrom, &lineTo, &indexTo);
-		for (int i = lineFrom ; i <= lineTo ; ++i) {
-			codeEditor->insertAt("#", i, 0);
+void PythonScriptView::closeMainScriptTabRequested(int tab) {
+	editedMainScripts.erase(tab);
+	QWidget *editorWidget = viewWidget->mainScriptsTabWidget->widget(tab);
+	viewWidget->mainScriptsTabWidget->removeTab(tab);
+	delete editorWidget;
+	std::map<int, std::string> editedMainScriptsCp(editedMainScripts);
+	std::map<int, std::string>::iterator it;
+	for (it = editedMainScripts.begin() ; it != editedMainScripts.end() ; ++it) {
+		if (it->first > tab) {
+			editedMainScriptsCp[it->first - 1] = editedMainScripts[it->first];
+			editedMainScriptsCp.erase(it->first);
 		}
-		codeEditor->setSelection(lineFrom, 0, lineTo, codeEditor->text(lineTo).length() - 1);
 	}
-}
-void PythonScriptView::uncommentSelectedCode(QObject *obj) {
-	QsciScintilla *codeEditor = dynamic_cast<QsciScintilla *>(obj);
-	if (codeEditor && codeEditor->hasSelectedText()) {
-		int lineFrom = 0;
-		int indexFrom = 0;
-		int lineTo = 0;
-		int indexTo = 0;
-		codeEditor->getSelection(&lineFrom, &indexFrom, &lineTo, &indexTo);
-		for (int i = lineFrom ; i <= lineTo ; ++i) {
-			codeEditor->setSelection(i, 0, i, 1);
-			if (codeEditor->selectedText() == "#") {
-				codeEditor->removeSelectedText();
-			}
-		}
-		codeEditor->setSelection(lineFrom, 0, lineTo, codeEditor->text(lineTo).length() - 1);
-	}
-}
-
-void PythonScriptView::decreaseFontSize() {
-	viewWidget->pythonCodeWidget->zoomOut();
-	map<int, string>::const_iterator it;
-	for (it = editedModules.begin() ; it != editedModules.end() ; ++it) {
-		QsciScintilla *codeEditor = static_cast<QsciScintilla *>(viewWidget->modulesTabWidget->widget(it->first));
-		codeEditor->zoomOut();
-	}
-	--fontZoom;
-}
-
-void PythonScriptView::increaseFontSize() {
-	viewWidget->pythonCodeWidget->zoomIn();
-	map<int, string>::const_iterator it;
-	for (it = editedModules.begin() ; it != editedModules.end() ; ++it) {
-		QsciScintilla *codeEditor = static_cast<QsciScintilla *>(viewWidget->modulesTabWidget->widget(it->first));
-		codeEditor->zoomIn();
-	}
-	++fontZoom;
+	editedMainScripts = editedMainScriptsCp;
 }

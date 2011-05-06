@@ -26,6 +26,8 @@
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 
+#include <sip.h>
+#include <sipint.h>
 
 static PyObject *
 tuliputils_updateVisualization(PyObject *, PyObject *args)
@@ -51,8 +53,8 @@ tuliputils_updateVisualization(PyObject *, PyObject *args)
 }
 
 static PyMethodDef TulipUtilsMethods[] = {
-    {"updateVisualization",  tuliputils_updateVisualization, METH_VARARGS, "Update views on current graph."},
-    {NULL, NULL, 0, NULL}        /* Sentinel */
+		{"updateVisualization",  tuliputils_updateVisualization, METH_VARARGS, "Update views on current graph."},
+		{NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
 void

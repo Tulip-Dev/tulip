@@ -33,6 +33,7 @@ namespace tlp {
 class SGHierarchyWidget;
 }
 
+
 /*@{*/
 /** \file
  *  \brief Python script view
@@ -90,11 +91,10 @@ private slots :
 	void newFileModule();
 	void loadModule();
 	void saveModuleToFile();
-	void mainScriptTextChanged();
-	void moduleScriptTextChanged();
+
+	void closeMainScriptTabRequested(int tab);
 	void closeModuleTabRequested(int tab);
-	void decreaseFontSize();
-	void increaseFontSize();
+
 
 private :
 
@@ -105,8 +105,7 @@ private :
 	void saveModule(int tabIdx);
 	void saveAllModules();
 	void reloadAllModules();
-	void commentSelectedCode(QObject *obj);
-	void uncommentSelectedCode(QObject *obj);
+
 
 
 	PythonScriptViewWidget *viewWidget;
@@ -115,9 +114,9 @@ private :
 	QDialog *browserDialog;
 	QWebView *browser;
 
-	std::string mainScriptFileName;
+	std::map<int, std::string> editedMainScripts;
 	std::map<int, std::string> editedModules;
-	int fontZoom;
+
 
 	tlp::SGHierarchyWidget *clusterTreeWidget;
 	bool scriptStopped;
