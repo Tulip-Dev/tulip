@@ -92,6 +92,21 @@ public :
   PluginProgress *pluginProgress;
   DataSet *dataSet;
 };
+
+template<class Property>
+class TemplateAlgorithm : public PropertyAlgorithm {
+  public:
+    Property* _result;
+    virtual ~TemplateAlgorithm(){}
+  protected:
+    TemplateAlgorithm (const tlp::PropertyContext  &context) : tlp::PropertyAlgorithm(context) {
+      _result = (Property*)context.propertyProxy;
+    }
+};
+
+class SizeProperty;
+typedef TemplateAlgorithm<SizeProperty> SizeAlgorithm;
+
 /*@}*/
 
 }
