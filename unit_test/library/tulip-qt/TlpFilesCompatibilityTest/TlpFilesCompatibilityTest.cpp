@@ -73,7 +73,7 @@ void TlpFilesCompatibilityTest::testTlp_3_0_0B6() {
   dataSet->set("file::filename",string("../DATA/tlp_3_0_0B6.tlp"));
   tlp::importGraph("tlp", *dataSet, NULL ,graph);
 
-  MainController *controller=(MainController*)ControllerPluginsManager::getInst().createController("MainController");
+  MainController *controller=(MainController*)ControllerFactory::factory->getPluginObject("MainController", NULL);
   controller->attachMainWindow(MainWindowFacade(mainWindow,graphToolBar,workspace));
   controller->setData(graph,*dataSet);
   QWidgetList widgetList=workspace->windowList();

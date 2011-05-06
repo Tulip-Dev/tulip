@@ -46,17 +46,6 @@ namespace tlp {
     }
 
     void loadPlugins(PluginLoader *plug=0);
-
-    /**
-     * return if the Controller with given name exist
-     */
-    bool controllerExists(const std::string &name);
-
-    /**
-     * return Controller with given name
-     */
-    Controller *createController(const std::string &name);
-
   private:
 
     ControllerPluginsManager();

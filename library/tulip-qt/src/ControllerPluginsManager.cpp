@@ -35,13 +35,4 @@ namespace tlp
     ControllerFactory::initFactory();
     tlp::loadPlugins(plug, "/controller");
   }
-  //====================================================
-  bool ControllerPluginsManager::controllerExists(const string &name) {
-    return ControllerFactory::factory->pluginExists(name);
-  }
-  //====================================================
-  Controller* ControllerPluginsManager::createController(const string &name) {
-    ControllerContext ic;
-    return ControllerFactory::factory->getPluginObject(name, &ic);
-  }
 }

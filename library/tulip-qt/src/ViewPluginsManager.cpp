@@ -36,16 +36,7 @@ namespace tlp
     tlp::loadPlugins(plug, "/view");
   }
   //====================================================
-  void ViewPluginsManager::initViewPluginsList(MutableContainer<View *> &views) {
-    ViewContext ic;
-    views.setAll(0);
 
-    Iterator<string> *itS = ViewFactory::factory->availablePlugins();
-    while (itS->hasNext()) {
-      string viewPluginName=itS->next();
-      ViewFactory::factory->getPluginObject(viewPluginName, &ic);
-    } delete itS;
-  }
   //====================================================
   View* ViewPluginsManager::createView(const string &name) {
   	ViewContext ic;
