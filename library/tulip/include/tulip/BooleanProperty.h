@@ -25,7 +25,7 @@
 
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
-#include <tulip/BooleanAlgorithm.h>
+#include <tulip/PropertyAlgorithm.h>
 
 namespace tlp {
 
@@ -33,8 +33,6 @@ class PropertyContext;
 /** \addtogroup properties */ 
 /*@{*/
 class TLP_SCOPE BooleanProperty:public AbstractProperty<tlp::BooleanType, tlp::BooleanType, tlp::BooleanAlgorithm> { 
-  friend class BooleanAlgorithm;
-
 public :
   BooleanProperty (Graph *g, std::string n="") :AbstractProperty<BooleanType,BooleanType, BooleanAlgorithm>(g, n) {}
   // PropertyInterface inherited methods

@@ -33,7 +33,7 @@ public:
   bool run() { 
     std::string name = "Test";
     std::string err = "Error";
-    return graph->computeProperty(name, booleanResult, err);
+    return graph->computeProperty(name, _result, err);
   }
 };
 BOOLEANPLUGIN(Test,"Test","Jezequel","03/11/2004","0","1.0");

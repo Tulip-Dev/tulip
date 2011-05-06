@@ -1,7 +1,6 @@
 SET(tulip_LIB_SRCS AcyclicTest.cpp
 Bfs.cpp
 BiconnectedTest.cpp
-BooleanAlgorithm.cpp
 BooleanProperty.cpp
 CMakeLists.txt
 Color.cpp
