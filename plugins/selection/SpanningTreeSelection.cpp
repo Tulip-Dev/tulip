@@ -42,11 +42,11 @@ bool SpanningTreeSelection::run()
     for (;itN->hasNext();) { 
       node itn=itN->next();
       if (viewSelection->getNodeValue(itn)==true) {
-	booleanResult->setNodeValue(itn, true);
+	_result->setNodeValue(itn, true);
       }
     } delete itN;
   }
 
-  selectSpanningForest(graph, booleanResult, pluginProgress); 
+  selectSpanningForest(graph, _result, pluginProgress); 
   return true;
 }

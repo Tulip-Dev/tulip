@@ -27,10 +27,10 @@ using namespace tlp;
 LoopSelection::LoopSelection(const tlp::PropertyContext &context):BooleanAlgorithm(context) {}
 //============================================
 bool LoopSelection::run() {
-  booleanResult->setAllNodeValue(false);
+  _result->setAllNodeValue(false);
   edge e;
   forEach(e, graph->getEdges())
-    booleanResult->setEdgeValue(e, 
+    _result->setEdgeValue(e, 
 			       graph->source(e)==graph->target(e));
   return true;
 }
