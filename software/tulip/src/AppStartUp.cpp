@@ -62,7 +62,7 @@ void AppStartUp::initTulip(TulipPluginLoader *loader, std::string &errors) {
 
   tlp::loadPlugins(loader, "/interactors"); // interactors plugins
   tlp::loadPlugins(loader, "/glyphs"); // glyphs plugins
-  tlp::loadPlugins(loader, "/views"); // view plugins
+  tlp::loadPlugins(loader, "/view"); // view plugins
   tlp::loadPlugins(loader, "/controller"); // controller plugins
 
   //initialization of utility members
