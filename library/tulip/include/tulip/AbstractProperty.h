@@ -19,6 +19,7 @@
 #ifndef ABSTRACT_PROPERTY_H
 #define ABSTRACT_PROPERTY_H
 
+#include <typeinfo>
 #include <string>
 #include <cstdlib>
 #include <tulip/tulipconf.h>

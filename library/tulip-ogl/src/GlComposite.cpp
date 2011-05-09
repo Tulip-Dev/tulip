@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <typeinfo>
 #include <libxml/tree.h>
 #include <libxml/parser.h>
 #include <tulip/GlComposite.h>

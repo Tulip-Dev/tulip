@@ -24,7 +24,6 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <typeinfo>
 #include <QtGui/qevent.h>
 
 #include <tulip/Graph.h>
