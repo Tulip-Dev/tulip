@@ -19,7 +19,7 @@
 #ifndef Tulip_CHOOSECONTROLLERDIALOG_H
 #define Tulip_CHOOSECONTROLLERDIALOG_H
 
-#include "ChooseControllerDialogData.h"
+#include "ui_ChooseControllerDialog.h"
 
 class ChooseControllerDialog : public QDialog, public Ui::ChooseControllerDialogData {
     Q_OBJECT

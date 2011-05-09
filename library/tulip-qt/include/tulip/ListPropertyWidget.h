@@ -19,7 +19,7 @@
 
 #ifndef LISTPROPERTYWIDGET_H_
 #define LISTPROPERTYWIDGET_H_
-#include "tulip/ListPropertyWidgetData.h"
+#include "ui_ListPropertyWidget.h"
 #include <tulip/TulipTableWidget.h>
 #include <QtGui/QTableWidgetItem>
 class ListPropertyWidget: public QWidget, public Ui::Form {

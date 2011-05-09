@@ -1,6 +1,8 @@
 #include "PluginsCenter.h"
 #include "PluginErrorReport.h"
 
+#include "ui_PluginsCenter.h"
+
 PluginsCenter::PluginsCenter(QWidget *parent) :
     QWidget(parent), _ui(new Ui::PluginsCenterData()) {
   _ui->setupUi(this);

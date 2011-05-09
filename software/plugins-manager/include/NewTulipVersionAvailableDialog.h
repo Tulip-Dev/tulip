@@ -27,7 +27,7 @@
 
 #include <tulip/tulipconf.h>
 
-#include "NewTulipVersionAvailableDialogData.h"
+#include "ui_NewTulipVersionAvailableDialog.h"
 
 namespace tlp {
 

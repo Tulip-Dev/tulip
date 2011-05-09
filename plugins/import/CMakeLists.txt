@@ -1,8 +1,3 @@
-FIND_PACKAGE( Qt4 REQUIRED )
-INCLUDE( ${QT_USE_FILE} )
-
-INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")	
-
 INCLUDE_DIRECTORIES(./ ${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------
@@ -72,8 +67,7 @@ TARGET_LINK_LIBRARIES(FileSystem-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(WebImport_SRCS WebImport.cpp)
-SET(WebImport_MOC WebImport.h)
-TULIP_QT4_WRAP_CPP(WebImport_MOC_SRCS ${WebImport_MOC})
+QT4_WRAP_CPP(WebImport_MOC_SRCS WebImport.h)
 ADD_LIBRARY(WebImport-${TulipVersion} SHARED ${WebImport_SRCS} ${WebImport_MOC_SRCS})
 TARGET_LINK_LIBRARIES(WebImport-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(WebImport-${TulipVersion} ${QT_QTCORE_LIBRARY})

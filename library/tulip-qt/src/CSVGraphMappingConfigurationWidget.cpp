@@ -17,7 +17,7 @@
  *
  */
 #include "tulip/CSVGraphMappingConfigurationWidget.h"
-#include "tulip/CSVGraphMappingConfigurationWidgetData.h"
+#include "ui_CSVGraphMappingConfigurationWidget.h"
 #include "tulip/CSVGraphImport.h"
 #include "tulip/PropertyCreationDialog.h"
 #include <tulip/Graph.h>

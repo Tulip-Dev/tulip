@@ -122,7 +122,7 @@
   <customwidget>
    <class>tlp::ItemsListWidget</class>
    <extends>QListView</extends>
-   <header>ItemsListWidget.h</header>
+   <header>tulip/ItemsListWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources>

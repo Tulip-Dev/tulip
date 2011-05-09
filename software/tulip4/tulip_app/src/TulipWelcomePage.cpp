@@ -10,6 +10,7 @@
 #include <tulip/TulipSettings.h>
 
 #include "RssParser.h"
+#include "ui_TulipWelcomePage.h"
 
 static const QString RSS_URL = "http://tulip.labri.fr/TulipDrupal/?q=newsFeed.xml";
 static const int RSS_LIMIT = 3;

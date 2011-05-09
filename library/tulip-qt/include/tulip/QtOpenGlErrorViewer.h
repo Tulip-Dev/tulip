@@ -19,34 +19,21 @@
 #ifndef Tulip_QTOPENGLERRORVIEWER_H
 #define Tulip_QTOPENGLERRORVIEWER_H
 
-#include <QtGui/QWidget>
+#include <QtGui/QDialog>
 
 #include <tulip/OpenGlErrorViewer.h>
 
-#include "tulip/QtOpenGlErrorViewerWithAskAgainDialogData.h"
+namespace Ui {
+class QtOpenGlErrorViewerWithAskAgainDialogData;
+}
 
 namespace tlp {
-
-/** \brief Simple QDialog with an ask again check box
- *
- * This class is used by QtOpenGlErrorViewer to display errors with ask again check box
- */
-class TLP_QT_SCOPE QtOpenGlErrorViewerWithAskAgainDialog : public QDialog,public Ui::QtOpenGlErrorViewerWithAskAgainDialogData {
-
-public :
-
-  QtOpenGlErrorViewerWithAskAgainDialog(QWidget *parent=0);
-
-};
-
 /** \brief Simple class to display OpenGl error is QDialog
  *
  * This class is used to display OpenGl error is QDialog
  */
 class TLP_QT_SCOPE QtOpenGlErrorViewer : public OpenGlErrorViewer {
-
 public :
-
   /**
    * Basic constructor
    */
@@ -69,6 +56,18 @@ protected :
 
 };
 
+/** \brief Simple QDialog with an ask again check box
+ *
+ * This class is used by QtOpenGlErrorViewer to display errors with ask again check box
+ */
+class TLP_QT_SCOPE QtOpenGlErrorViewerWithAskAgainDialog : public QDialog {
+  friend class QtOpenGlErrorViewer;
+public :
+  QtOpenGlErrorViewerWithAskAgainDialog(QWidget *parent=0);
+
+private:
+  Ui::QtOpenGlErrorViewerWithAskAgainDialogData *_ui;
+};
 }
 
 #endif

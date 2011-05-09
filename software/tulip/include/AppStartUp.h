@@ -20,7 +20,7 @@
 #define APPSTARTUP_H
 #include <string>
 #include <QtGui/QMovie>
-#include "AppStartUpData.h"
+#include "ui_AppStartUp.h"
 
 namespace tlp {
   struct TulipPluginLoader;

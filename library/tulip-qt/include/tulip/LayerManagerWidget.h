@@ -25,7 +25,7 @@
 
 #include <tulip/tulipconf.h>
 
-#include "tulip/LayerManagerWidgetData.h"
+#include "ui_LayerManagerWidget.h"
 
 #include <QtGui/QTreeWidgetItem>
 

@@ -4,7 +4,9 @@
 #include <QtGui/QMainWindow>
 #include <QtGui/QSystemTrayIcon>
 
-#include "ui_TulipMainWindow.h"
+namespace Ui {
+class TulipMainWindowData;
+}
 
 class TulipMainWindow: public QMainWindow {
   Q_OBJECT

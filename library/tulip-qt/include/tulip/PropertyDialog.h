@@ -26,7 +26,7 @@
 #endif
 #include <tulip/Observable.h>
 
-#include "PropertyDialogData.h"
+#include "ui_PropertyDialog.h"
 
 class QStringList;
 class QScrollBar;

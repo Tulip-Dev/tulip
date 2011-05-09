@@ -27,7 +27,7 @@
 
 #include <QtNetwork/QNetworkProxy>
 
-#include "UpdatePluginsDialogData.h"
+#include "ui_UpdatePluginsDialog.h"
 #include "PluginInfo.h"
 
 namespace tlp {

@@ -2,7 +2,10 @@
 #define TULIPWELCOMEPAGE_H
 
 #include <QtGui/QWidget>
-#include "ui_TulipWelcomePage.h"
+
+namespace Ui {
+class TulipWelcomePageData;
+}
 
 class QNetworkReply;
 

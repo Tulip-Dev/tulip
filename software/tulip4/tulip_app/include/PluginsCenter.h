@@ -2,7 +2,10 @@
 #define PLUGINSCENTER_
 
 #include <QtGui/QWidget>
-#include "ui_PluginsCenter.h"
+
+namespace Ui {
+class PluginsCenterData;
+}
 
 class PluginsCenter: public QWidget {
   Q_OBJECT

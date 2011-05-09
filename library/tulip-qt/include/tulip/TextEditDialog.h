@@ -23,7 +23,7 @@
 
 #include <QtGui/QDialog>
 
-#include "tulip/TextEditDialogData.h"
+#include "ui_TextEditDialog.h"
 
 namespace tlp {
 

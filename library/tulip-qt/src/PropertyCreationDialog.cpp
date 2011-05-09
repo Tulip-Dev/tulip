@@ -1,5 +1,5 @@
 #include "tulip/PropertyCreationDialog.h"
-#include "PropertyCreationDialogData.h"
+#include "ui_PropertyCreationDialog.h"
 
 #include <tulip/Graph.h>
 #include <tulip/TlpQtTools.h>

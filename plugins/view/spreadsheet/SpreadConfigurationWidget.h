@@ -21,7 +21,7 @@
 #define SPREADCONFIGURATIONWIDGET_H_
 
 #include <QtGui/QWidget>
-#include "SpreadConfigurationWidgetData.h"
+#include "ui_SpreadConfigurationWidget.h"
 namespace tlp {
 class Graph;
 

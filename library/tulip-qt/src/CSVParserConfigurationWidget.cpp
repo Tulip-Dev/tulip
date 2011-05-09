@@ -23,7 +23,7 @@
 #include <QtGui/QKeyEvent>
 
 #include "tulip/CSVParserConfigurationWidget.h"
-#include "tulip/CSVParserConfigurationWidgetData.h"
+#include "ui_CSVParserConfigurationWidget.h"
 #include "tulip/CSVParser.h"
 
 using namespace tlp;

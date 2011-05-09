@@ -24,7 +24,7 @@
 
 #include <tulip/Color.h>
 
-#include "DoubleStringsListRelationDialogData.h"
+#include "ui_DoubleStringsListRelationDialog.h"
 
 namespace tlp {
 

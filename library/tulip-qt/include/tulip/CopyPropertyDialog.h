@@ -29,7 +29,7 @@
 #include <windows.h>
 #endif
 
-#include "CopyPropertyDialogData.h"
+#include "ui_CopyPropertyDialog.h"
 #include "tulip/Iterator.h"
 
 namespace tlp{

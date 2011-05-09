@@ -20,7 +20,7 @@
 #ifndef PYTHONSCRIPTVIEWWIDGET_H_
 #define PYTHONSCRIPTVIEWWIDGET_H_
 
-#include "PythonScriptViewWidgetData.h"
+#include "ui_PythonScriptViewWidget.h"
 #include <QtGui/QAction>
 
 #include "PythonCodeEditor.h"

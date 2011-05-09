@@ -17,7 +17,7 @@
  *
  */
 #include "tulip/PluginProgressWidget.h"
-#include "tulip/PluginProgressWidgetData.h"
+#include "ui_PluginProgressWidget.h"
 
 using namespace tlp;
 using namespace std;

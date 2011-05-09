@@ -90,33 +90,13 @@ SET(LibTulipPythonName "tulippython")
 SET(LibTulipOglPythonName "tulipoglpython")
 
 ## -----------------------------------------------------------------------------------------------
-## Find need packages
+## Find needed packages
 ## -----------------------------------------------------------------------------------------------
 FIND_PACKAGE(Freetype REQUIRED)
 FIND_PACKAGE(Qt4 4.7.0 REQUIRED)
+SET(QT_USE_QTOPENGL true)
 INCLUDE(${QT_USE_FILE})
-IF(DEFINED CMAKE_VERSION)
-  SET(HAVE_QT4_GET_MOC_FLAGS TRUE)
-ELSE(DEFINED CMAKE_VERSION)
-  MACRO (QT4_GET_MOC_FLAGS _moc_flags)
-     SET(${_moc_flags})
-     GET_DIRECTORY_PROPERTY(_inc_DIRS INCLUDE_DIRECTORIES)
 
-     FOREACH(_current ${_inc_DIRS})
-        SET(${_moc_flags} ${${_moc_flags}} "-I${_current}")
-     ENDFOREACH(_current ${_inc_DIRS})
-
-     GET_DIRECTORY_PROPERTY(_defines COMPILE_DEFINITIONS)
-     FOREACH(_current ${_defines})
-        SET(${_moc_flags} ${${_moc_flags}} "-D${_current}")
-     ENDFOREACH(_current ${_defines})
-
-     IF(Q_WS_WIN)
-       SET(${_moc_flags} ${${_moc_flags}} -DWIN32)
-     ENDIF(Q_WS_WIN)
-
-  ENDMACRO(QT4_GET_MOC_FLAGS)
-ENDIF(DEFINED CMAKE_VERSION)
 FIND_PACKAGE(OpenGL REQUIRED)
 FIND_PACKAGE(JPEG REQUIRED)
 IF(JPEG_FOUND)
@@ -217,7 +197,7 @@ SET(TulipLibInstallDir ${TulipAppleContentsDir}Frameworks/)
 SET(TulipIncludeInstallDir ${TulipAppleContentsDir}include/)
 SET(TulipShareInstallDir ${TulipAppleContentsDir}share/tulip)
 SET(TulipPluginsInstallDir ${TulipAppleContentsDir}lib/tulip/)
-SET(TulipBitmapInstallDir ${TulipAppleContentsDir}lib/tulip/bitmaps/)
+SET(TulipBitmapInstallDir ${TulipShareInstallDir}/bitmaps/)
 SET(TulipAppleResourcesDir ${TulipAppleContentsDir}Resources/)
 ELSE()
 SET(TulipLibInstallDir lib/)
@@ -225,13 +205,8 @@ SET(TulipPluginsInstallDir ${TulipLibInstallDir}/tulip/)
 SET(TulipBinInstallDir bin/)
 SET(TulipIncludeInstallDir include/)
 SET(TulipShareInstallDir share/tulip)
-SET(TulipBitmapInstallDir share/tulip/bitmaps/)
+SET(TulipBitmapInstallDir ${TulipShareInstallDir}/bitmaps/)
 ENDIF()
-
-## -----------------------------------------------------------------------------------------------
-## Set UseTulip file name
-## -----------------------------------------------------------------------------------------------
-SET(TulipUseFile UseTulip.cmake)
 
 ## -----------------------------------------------------------------------------------------------
 ## Disable deprecated compilation output

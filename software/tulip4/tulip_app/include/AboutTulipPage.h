@@ -3,7 +3,9 @@
 
 #include <QtGui/QWidget>
 
-#include "ui_AboutTulipPage.h"
+namespace Ui {
+class AboutTulipPageData;
+}
 
 class AboutTulipPage : public QWidget {
 public:

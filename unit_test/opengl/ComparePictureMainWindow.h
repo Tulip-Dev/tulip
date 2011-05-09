@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "ComparePictureData.h"
+#include "ui_ComparePicture.h"
 
 class ComparePictureMainWindow : public QMainWindow,public Ui::MainWindow {
 

@@ -22,7 +22,7 @@
 
 #include <QtGui/QWidget>
 
-#include "DoubleStringsListSelectionWidgetData.h"
+#include "ui_DoubleStringsListSelectionWidget.h"
 #include "StringsListSelectionWidgetInterface.h"
 
 namespace tlp {
