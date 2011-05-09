@@ -36,6 +36,12 @@ struct BoundingBox {
       
       tlp::Vec3f center() const;
 
+	  float width() const;
+	  
+	  float height() const;	
+
+	  float depth() const;	
+
       void expand(const tlp::Vec3f& coord);
 
       void translate(const tlp::Vec3f& vec);
