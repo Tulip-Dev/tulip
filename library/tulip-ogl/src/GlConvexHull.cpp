@@ -22,8 +22,8 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/GlTools.h>
-#include "tulip/GlConvexHull.h"
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/GlConvexHull.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 

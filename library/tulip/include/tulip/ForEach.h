@@ -26,8 +26,13 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
+  /**
+  * @brief Encapsulation of a Tulip Iterator intended to be allocated on the stack instead of the heap,
+  * so it gets deleted when out of scope.
+  * 
+  **/
   template<typename TYPE>
-    struct _TLP_IT {
+  struct _TLP_IT {
     _TLP_IT(Iterator<TYPE> *_it) : _it(_it) {
     }
     ~_TLP_IT() {
@@ -36,9 +41,12 @@ namespace tlp {
     Iterator<TYPE> *_it;
   };
 
+  /**
+  * @brief 
+  **/
   template<typename TYPE>
   inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
-    assert(_it._it !=0);
+    assert(_it._it != NULL);
     if(_it._it->hasNext()) {
       n = _it._it->next();
       return true;
@@ -50,9 +58,19 @@ namespace tlp {
 }
 #endif //DOXYGEN_NOTFOR_DEVEL
 
+/**
+ * @brief Allows to iterate on the nodes or edges of a Graph in a clear and concise way.
+ * It also avoid having to manage a tulip Iterator, whose deletion is often forgotten.
+ */
 #define forEach(A, B) \
 for(tlp::_TLP_IT<TYPEOF(A) > _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
 
+/**
+ * @brief Allows to iterate on the nodes or edges of a copy of a Graph in a clear and concise way.
+ * The stable Iterator creates a copy of the Graph, and iterates on the said copy.
+ * It allows deletion operations to be performed without invalidating the iterator.
+ * It also avoid having to manage a tulip Iterator, whose deletion is often forgotten.
+ */
 #define stableForEach(A, B)  \
   for(tlp::_TLP_IT<TYPEOF(A) > _it_foreach(new StableIterator<TYPEOF(A) >(B));  tlp::_tlp_if_test(A, _it_foreach);)
 

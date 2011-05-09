@@ -29,6 +29,16 @@
 #ifndef GZSTREAM_H
 #define GZSTREAM_H 1
 
+#ifdef _MSC_VER
+# 	ifdef GZSTREAM_DLL
+#		define GZSTREAM_SCOPE       __declspec(dllexport)
+#	else
+#		define GZSTREAM_SCOPE       __declspec(dllimport)
+#	endif
+#else 
+#	define GZSTREAM_SCOPE
+#endif
+
 // standard C++ with new header file names and std:: namespace
 #include <iostream>
 #include <fstream>
@@ -89,7 +99,7 @@ public:
 // function interface of the zlib. Files are compatible with gzip compression.
 // ----------------------------------------------------------------------------
 
-class igzstream : public gzstreambase, public std::istream {
+class GZSTREAM_SCOPE igzstream : public gzstreambase, public std::istream {
 public:
     igzstream() : std::istream( &buf) {} 
     igzstream( const char* name, int open_mode = std::ios::in)
@@ -100,7 +110,7 @@ public:
     }
 };
 
-class ogzstream : public gzstreambase, public std::ostream {
+class GZSTREAM_SCOPE ogzstream : public gzstreambase, public std::ostream {
 public:
     ogzstream() : std::ostream( &buf) {}
     ogzstream( const char* name, int mode = std::ios::out)

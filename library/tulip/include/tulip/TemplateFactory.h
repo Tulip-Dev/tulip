@@ -24,13 +24,13 @@
 #include <typeinfo>
 #include <set>
 
-#include "tulip/PluginLoader.h"
-#include "tulip/WithParameter.h"
-#include "tulip/WithDependency.h"
-#include "tulip/Iterator.h"
-#include "tulip/Plugin.h"
-#include "tulip/TlpTools.h"
-#include "tulip/PluginContext.h"
+#include <tulip/PluginLoader.h>
+#include <tulip/WithParameter.h>
+#include <tulip/WithDependency.h>
+#include <tulip/Iterator.h>
+#include <tulip/Plugin.h>
+#include <tulip/TlpTools.h>
+#include <tulip/PluginContext.h>
 
 namespace tlp {
 
@@ -215,7 +215,7 @@ public:
 };
 
 
-template <class T> class PropertyFactory:public Plugin {
+template <class T> class PropertyFactory:public PluginInfoInterface {
 public:
   PropertyFactory(){}
   virtual ~PropertyFactory() {}
@@ -237,5 +237,5 @@ public:
 /*@}*/
 
 }
-#include "./cxx/TemplateFactory.cxx"
+#include "cxx/TemplateFactory.cxx"
 #endif

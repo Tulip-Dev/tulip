@@ -27,19 +27,19 @@
 
 #include <string>
 
-#include "tulip/Plugin.h"
-#include "tulip/TulipRelease.h"
-#include "tulip/PluginContext.h"
-#include "tulip/SizeAlgorithm.h"
-#include "tulip/IntegerAlgorithm.h"
-#include "tulip/DoubleAlgorithm.h"
-#include "tulip/ColorAlgorithm.h"
-#include "tulip/LayoutAlgorithm.h"
-#include "tulip/StringAlgorithm.h"
-#include "tulip/BooleanAlgorithm.h"
-#include "tulip/Algorithm.h"
-#include "tulip/ImportModule.h"
-#include "tulip/ExportModule.h"
+#include <tulip/Plugin.h>
+#include <tulip/TulipRelease.h>
+#include <tulip/PluginContext.h>
+#include <tulip/SizeAlgorithm.h>
+#include <tulip/IntegerAlgorithm.h>
+#include <tulip/DoubleAlgorithm.h>
+#include <tulip/ColorAlgorithm.h>
+#include <tulip/LayoutAlgorithm.h>
+#include <tulip/StringAlgorithm.h>
+#include <tulip/BooleanAlgorithm.h>
+#include <tulip/Algorithm.h>
+#include <tulip/ImportModule.h>
+#include <tulip/ExportModule.h>
 
 /** \addtogroup plugins */ 
 /*@{*/

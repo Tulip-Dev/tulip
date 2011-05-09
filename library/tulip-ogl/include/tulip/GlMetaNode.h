@@ -21,7 +21,7 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include "tulip/GlNode.h"
+#include <tulip/GlNode.h>
 
 namespace tlp {
 
@@ -45,12 +45,12 @@ namespace tlp {
     /**
      * Draw label of the meta-node
      */
-    virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+    virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data);
 
     /**
      * Draw label of the meta-node with lod
      */
-    virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod,Camera *camera=NULL);
+    virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data,float lod,Camera *camera=NULL);
 
   };
 

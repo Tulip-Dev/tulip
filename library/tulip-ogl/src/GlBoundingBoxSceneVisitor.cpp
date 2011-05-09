@@ -16,17 +16,17 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlBoundingBoxSceneVisitor.h"
+#include <tulip/GlBoundingBoxSceneVisitor.h>
 
 #include <iostream>
 
-#include "tulip/GlGraphInputData.h"
-#include "tulip/GlSimpleEntity.h"
-#include "tulip/GlNode.h"
-#include "tulip/GlEdge.h"
-#include "tulip/GlLayer.h"
-#include "tulip/Camera.h"
-#include "tulip/GlTools.h"
+#include <tulip/GlGraphInputData.h>
+#include <tulip/GlSimpleEntity.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlLayer.h>
+#include <tulip/Camera.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 

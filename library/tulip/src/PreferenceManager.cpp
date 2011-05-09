@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/PreferenceManager.h"
+#include <tulip/PreferenceManager.h>
 
 tlp::PreferenceManager* tlp::PreferenceManager::inst=0;
 

@@ -27,7 +27,7 @@
 
 namespace tlp {
 
-  class TLP_PLUGINSMANAGER_SCOPE AuthorizationInstallDependencies : public QDialog{
+  class AuthorizationInstallDependencies : public QDialog{
     Q_OBJECT
     
     private :

@@ -24,9 +24,9 @@
 
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
-#include "tulip/IdManager.h"
-#include "tulip/SimpleVector.h"
-#include "tulip/MutableContainer.h"
+#include <tulip/IdManager.h>
+#include <tulip/SimpleVector.h>
+#include <tulip/MutableContainer.h>
 
 namespace tlp {
 

@@ -17,9 +17,8 @@
  *
  */
 #include <limits.h>
-#include "tulip/IntegerProperty.h"
-#include "tulip/PluginContext.h"
-#include "tulip/IntegerAlgorithm.h"
+#include <tulip/IntegerProperty.h>
+#include <tulip/IntegerAlgorithm.h>
 
 using namespace std;
 using namespace tlp;
@@ -251,6 +250,18 @@ void IntegerProperty::delSubGraph(Graph*, Graph *sg) {
   // the property no longer observes the subgraph
   sg->removeGraphObserver(this);
 }
+//=============================================================
+void IntegerProperty::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}
+//=================================================================================
+int IntegerProperty::compare(node n1,node n2){
+    return getNodeValue(n1) - getNodeValue(n2);
+}
+//=================================================================================
+int IntegerProperty::compare(edge e1,edge e2){
+    return getEdgeValue(e1) - getEdgeValue(e2);
+}
 //=================================================================================
 PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
@@ -260,3 +271,4 @@ PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, const std::s
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
 }
+

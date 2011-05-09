@@ -19,13 +19,14 @@
 #include "rectanglePackingFonctions.h"
 #include <stdlib.h>
 
+using namespace std;
+using namespace tlp;
+
 vector<Rectangle<float> > & RectanglePackingLimitRectangles(vector<Rectangle<float> > & v, const char * quality, PluginProgress * progress){
 
-  
   int numberOfPackedRectangles;
   vector<Rectangle<float> >::iterator itNewRect;
   int numberNewRect;
-
   
   RectanglePacking * rectPack = new RectanglePacking(v.size());
  
@@ -35,9 +36,7 @@ vector<Rectangle<float> > & RectanglePackingLimitRectangles(vector<Rectangle<flo
   /* we retrieve a pointer on the last rectangle which will be placed in an optimal way */
   itNewRect=v.begin();
 
-
   /* we go over all the rectangles to place in an optimal way */
-  
   for(numberNewRect = 1; numberNewRect <= numberOfPackedRectangles; numberNewRect++){
     
     /* we calculate the co-ordinates of the new rectangle and those of the rectangles that the new rectangle eventually displaces, that is to say the rectangles placed to its right or above it */
@@ -57,7 +56,6 @@ vector<Rectangle<float> > & RectanglePackingLimitRectangles(vector<Rectangle<flo
   /* we calculate the co-ordinates of the rectangles which have not been packed in an optimal way */
   rectPack->defaultPositionRestOfRectangles(itNewRect, v.end());
 
-
   delete rectPack;
   
   /*added to enable the synchronisation of the PluginProgress closing and the end of the algorithm*/
@@ -68,9 +66,7 @@ vector<Rectangle<float> > & RectanglePackingLimitRectangles(vector<Rectangle<flo
   return v;
 }
 
-
 vector<Rectangle<float> > & RectanglePackingLimitPositions(vector<Rectangle<float> > & v, const char * quality, PluginProgress * progress){
-
   
   /*useful variables for the PluginProgress*/
   int counter = 1;
@@ -81,14 +77,10 @@ vector<Rectangle<float> > & RectanglePackingLimitPositions(vector<Rectangle<floa
   
   RectanglePacking * rectPack = new RectanglePacking(entrySize);
 
-
   /* we calculate the number of rectangles which will be placed in an optimal way */
   numberTestedPositions = rectPack->calculNumberOfTestedPositions(quality);
-   
-  
 
   /* we go over all the rectangles to pack in an optimal way */
-  
   for(itNewRect=v.begin(); itNewRect!=v.end(); ++itNewRect){
     
     /* we calculate the co-ordinates of the new rectangle and those of the rectangles that the new rectangle eventually displaces, that is to say the rectangles placed to its right or above it */
@@ -99,12 +91,10 @@ vector<Rectangle<float> > & RectanglePackingLimitPositions(vector<Rectangle<floa
       if (progress->progress(counter, entrySize + 1) != false)
 	exit(1);
     counter++;
-    
   }
   
   /* we definitively change the co-ordinates of the rectangles which have been placed in an optimal way */
   (rectPack->firstSequence)->allocateCoordinates();
-  
   
   delete rectPack;
   
@@ -115,5 +105,3 @@ vector<Rectangle<float> > & RectanglePackingLimitPositions(vector<Rectangle<floa
   
   return v;
 }
-
-

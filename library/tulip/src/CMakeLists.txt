@@ -1,4 +1,73 @@
-FILE(GLOB tulip_LIB_SRCS "*.cpp")
+SET(tulip_LIB_SRCS AcyclicTest.cpp
+Bfs.cpp
+BiconnectedTest.cpp
+BooleanAlgorithm.cpp
+BooleanProperty.cpp
+CMakeLists.txt
+ColorAlgorithm.cpp
+Color.cpp
+ColorProperty.cpp
+ColorScale.cpp
+ConnectedTest.cpp
+ConvexHull.cpp
+Delaunay.cpp
+DoubleAlgorithm.cpp
+DoubleProperty.cpp
+DrawingTools.cpp
+ExtendedClusterOperation.cpp
+FaceIterator.cpp
+GraphAbstract.cpp
+Graph.cpp
+GraphDecorator.cpp
+GraphImpl.cpp
+GraphIterator.cpp
+GraphMeasure.cpp
+GraphProperty.cpp
+GraphStorage.cpp
+GraphTools.cpp
+GraphUpdatesRecorder.cpp
+GraphView.cpp
+IdManager.cpp
+IntegerAlgorithm.cpp
+IntegerProperty.cpp
+LayoutAlgorithm.cpp
+LayoutProperty.cpp
+MapIterator.cpp
+Observable.cpp
+ObservableGraph.cpp
+ObservableProperty.cpp
+Ordering.cpp
+OuterPlanarTest.cpp
+PlanarConMap.cpp
+PlanarityTest.cpp
+PlanarityTestEmbed.cpp
+PlanarityTestImpl.cpp
+PlanarityTestObstr.cpp
+PlanarityTestTools.cpp
+Plane.cpp
+PluginLibraryLoader.cpp
+PluginLoaderTxt.cpp
+Polynome.cpp
+PreferenceManager.cpp
+PropertyInterface.cpp
+PropertyManager.cpp
+PropertyTypes.cpp
+Reflect.cpp
+SimplePluginProgress.cpp
+SimpleTest.cpp
+SizeAlgorithm.cpp
+SizeProperty.cpp
+StlFunctions.cpp
+StringAlgorithm.cpp
+StringCollection.cpp
+StringProperty.cpp
+TLPExport.cpp
+TLPImport.cpp
+TlpTools.cpp
+TreeTest.cpp
+TriconnectedTest.cpp
+vectorgraph.cpp
+WithParameter.cpp)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_TULIP_LIB_DIR=\"\\\"${CMAKE_INSTALL_PREFIX}/lib/\\\"\"")
 INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR})
@@ -6,12 +75,12 @@ INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${PROJECT_SOURCE_DIR} ${ZLI
 ADD_LIBRARY (${LibTulipName} SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)
 TARGET_LINK_LIBRARIES(${LibTulipName} gzstream )
 IF(WIN32)
-	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
+	IF(${MSVC})
 		TARGET_LINK_LIBRARIES(${LibTulipName} Dbghelp)
-		IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9")
+		IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles")
 			SET_TARGET_PROPERTIES(${LibTulipName} PROPERTIES LINK_FLAGS " /NODEFAULTLIB:LIBCMT.lib ")
 		ENDIF()
-	ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+	ENDIF()
 ENDIF(WIN32)
 
 INSTALL(TARGETS ${LibTulipName}

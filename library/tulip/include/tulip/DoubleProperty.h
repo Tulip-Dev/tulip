@@ -19,11 +19,11 @@
 #ifndef TULIP_METRIC_H
 #define TULIP_METRIC_H
 
-#include "tulip/tuliphash.h"
-#include "tulip/PropertyTypes.h"
-#include "tulip/AbstractProperty.h"
-#include "tulip/DoubleAlgorithm.h"
-#include "tulip/ObservableGraph.h"
+#include <tulip/tuliphash.h>
+#include <tulip/PropertyTypes.h>
+#include <tulip/AbstractProperty.h>
+#include <tulip/DoubleAlgorithm.h>
+#include <tulip/ObservableGraph.h>
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -36,7 +36,7 @@ class PropertyContext;
 typedef AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> AbstractDoubleProperty;
 /** \addtogroup properties */ 
 /*\@{*/
- class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, public GraphObserver { 
+ class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, private GraphObserver { 
 
   friend class DoubleAlgorithm;
 
@@ -58,13 +58,13 @@ public :
     return "double";
   }
 
-  // redefinition of some AbstractProperty methods 
+  // override some AbstractProperty methods 
   virtual void setNodeValue(const node n, const double &v);
   virtual void setEdgeValue(const edge e, const double &v);
   virtual void setAllNodeValue(const double &v);
   virtual void setAllEdgeValue(const double &v);
 
-  // redefinition of GraphObserver methods
+  // override some GraphObserver methods
   virtual void addNode(Graph* graph, const node n);
   virtual void addEdge(Graph* graph, const edge e);
   virtual void delNode(Graph* graph, const node n);
@@ -86,11 +86,14 @@ private:
   TLP_HASH_MAP<unsigned int, bool> minMaxOkEdge;
   void computeMinMaxNode(Graph *sg=0);
   void computeMinMaxEdge(Graph *sg=0);
+  // override Observable::treatEvent
+  void treatEvent(const Event&);
+
 };
 
- class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVectorType, double> { 
+ class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVectorType, tlp::DoubleType> { 
 public :
- DoubleVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<DoubleVectorType, double>(g, n) {}
+  DoubleVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   std::string getTypename() const {

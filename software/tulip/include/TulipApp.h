@@ -17,28 +17,13 @@
  *
  */
 
-#ifndef viewGl_included
-#define viewGl_included
-#include <map>
+#ifndef TULIPAPP_H
+#define TULIPAPP_H
 
-#include <vector>
-#include <QtGui/qdockwidget.h>
 #include <QtGui/qmessagebox.h>
-#include <QtGui/qsplitter.h>
-#include <QtCore/qstring.h>
 #include <QtGui/qmainwindow.h>
-#include <QtGui/qmenu.h>
-#include <QtGui/QTabWidget>
 #include <QtCore/QSettings>
 
-#include <QtCore/QProcess>
-
-#include <string>
-#include <tulip/Reflect.h>
-#include <tulip/GlScene.h>
-#include <tulip/Observable.h>
-#include <tulip/GlSceneObserver.h>
-#include <PluginsUpdateChecker.h>
 #include "TulipPluginLoader.h"
 #include "TulipData.h"
 #include "GraphNeedsSavingObserver.h"
@@ -46,13 +31,15 @@
 namespace tlp {
   class Controller;
   class Graph;
+  class PluginsUpdateChecker;
+  class MultiServerManager;
 }
 
-//class QWorkspace;
 class QProgressDialog;
 class QEvent;
 class View3DSetup;
 class Cluster;
+class QProcess;
 
 // minimal structure to keep open files infos
 struct FileInfo {
@@ -84,7 +71,7 @@ public:
     settings.setValue("needRestart", true);
     settings.endGroup();
     settings.sync();
-  }    
+  }
 
   static void disableRestart() {
     QSettings settings("TulipSoftware","Tulip");
@@ -92,7 +79,7 @@ public:
     settings.setValue("needRestart", false);
     settings.endGroup();
     settings.sync();
-  }    
+  }
 
 protected:
   QWidget *aboutWidget;
@@ -102,8 +89,8 @@ protected:
   tlp::MultiServerManager *multiServerManager;
   bool elementsDisabled;
 
-  QMenu importGraphMenu;
-  QMenu exportGraphMenu;
+  QMenu* importGraphMenu;
+  QMenu* exportGraphMenu;
 
   void enableQMenu(QMenu *, bool);
   void enableElements(bool);
@@ -141,6 +128,7 @@ protected slots:
   void deletePluginsUpdateChecker();
   void tabChanged(int index);
   void cascade();
+  void closeAll();
 
 private:
   void buildMenus();
@@ -166,6 +154,8 @@ private:
   QTabWidget *tabWidget;
   unsigned int mouseClicX,mouseClicY;
 
+  std::string defaultControllerName;
+
   QProcess *assistantProcess;
   QString assistantProcessApp;
 
@@ -174,7 +164,7 @@ private:
   bool controllerAutoLoad;
   int currentTabIndex;
   std::map<int,tlp::Controller *> tabIndexToController;
-  std::map<tlp::Controller *, GraphNeedsSavingObserver*>controllerToGraphObserver;
+  std::map<tlp::Controller *, GraphNeedsSavingObserver*> controllerToGraphObserver;
   std::map<tlp::Controller *, std::string> controllerToControllerName;
   std::map<tlp::Controller *,QWorkspace *> controllerToWorkspace;
   std::map<tlp::Controller *,std::vector<QAction *> > controllerToMenu;

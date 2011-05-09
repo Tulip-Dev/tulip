@@ -24,7 +24,7 @@
 
 #include <tulip/BoundingBox.h>
 #include <tulip/Coord.h>
-#include "tulip/GlLODCalculator.h"
+#include <tulip/GlLODCalculator.h>
 
 namespace tlp {
   class GlSimpleEntity;

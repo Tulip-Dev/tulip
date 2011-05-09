@@ -19,9 +19,9 @@
 
 #include <GL/glew.h>
 
-#include "tulip/GlBezierCurve.h"
-#include "tulip/GlCatmullRomCurve.h"
-#include "tulip/ParametricCurves.h"
+#include <tulip/GlBezierCurve.h>
+#include <tulip/GlCatmullRomCurve.h>
+#include <tulip/ParametricCurves.h>
 
 using namespace std;
 
@@ -36,11 +36,11 @@ static string bezierSpecificVertexShaderSrc =
 		"	if (t == 0.0) {"
 		"		return controlPoints[0];"
 		"	} else if (t == 1.0) {"
-		"		return controlPoints[int(nbControlPoints) - 1];"
+		"		return controlPoints[nbControlPoints - 1];"
 		"	} else {"
 		"		float s = (1.0 - t);"
 		"		vec3 bezierPoint = vec3(0.0);"
-		"		for (int i = 0 ; i < int(nbControlPoints) ; ++i) { "
+		"		for (int i = 0 ; i < nbControlPoints ; ++i) { "
 		"			vec2 pascalTriangleTexIdx = vec2(float(i) * pascalTriangleTexStep, (nbControlPoints-1.0) * pascalTriangleTexStep);"
 		"			bezierPoint += controlPoints[i].xyz * texture2D(pascalTriangleTex, pascalTriangleTexIdx).r * pow(t, float(i)) * pow(s, nbControlPoints - 1.0 - float(i));"
 		"		}"

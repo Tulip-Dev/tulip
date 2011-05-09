@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/ParametricCurves.h"
+#include <tulip/ParametricCurves.h>
 
 using namespace std;
 

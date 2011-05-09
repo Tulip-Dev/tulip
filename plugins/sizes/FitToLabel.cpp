@@ -17,8 +17,8 @@
  *
  */
 
-#include <tulip/TextRenderer.h>
 #include <tulip/TlpTools.h>
+#include <tulip/GlLabel.h>
 
 #include <cmath>
 #include <tulip/TulipPlugin.h>
@@ -82,19 +82,18 @@ public:
       dataSet->get("prop::fontsize", fontSizes);
     }
 
-    TextRenderer textRender;
-    textRender.setMode(TLP_POLYGON);
+    GlLabel label;
+    BoundingBox bb;
+
     sizeResult->setAllNodeValue(Size(18, 18, 1));
     node n;
     forEach(n, graph->getNodes()) {
-      textRender.setContext(fonts->getNodeValue(n), fontSizes->getNodeValue(n), 255, 255, 255);
+      label.setFontNameSizeAndColor(fonts->getNodeValue(n),fontSizes->getNodeValue(n),Color());
       const string &str = labels->getNodeValue(n);
       if (str != "") {
-        float w_max, h, w;
-        w_max = 256.0;
-        textRender.setString(str, VERBATIM);
-        textRender.getBoundingBox(w_max, h, w);
-        sizeResult->setNodeValue(n, Size(int(w), int(h), 1));
+        label.setText(str);
+        bb=label.getTextBoundingBox();
+        sizeResult->setNodeValue(n, Size(bb[1][0]-bb[0][0], bb[1][1]-bb[0][1], 1));
       }
     }
     sizeResult->setAllEdgeValue(Size(1, 1, 8));

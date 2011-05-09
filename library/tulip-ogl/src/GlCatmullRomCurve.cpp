@@ -21,9 +21,9 @@
 
 #include <sstream>
 
-#include "tulip/GlCatmullRomCurve.h"
-#include "tulip/GlBezierCurve.h"
-#include "tulip/ParametricCurves.h"
+#include <tulip/GlCatmullRomCurve.h>
+#include <tulip/GlBezierCurve.h>
+#include <tulip/ParametricCurves.h>
 
 using namespace std;
 
@@ -59,7 +59,7 @@ static string catmullRomSpecificShaderCode=
 		"	if (t == 0.0) {"
 		"		return 0;"
 		"	} else if (t == 1.0)   {"
-		"		return int(nbControlPoints) - 1;"
+		"		return nbControlPoints - 1;"
 		"	} else {"
 		"		int i = 0;"
 		"		while (t >= (dist / totalLength)) {"
@@ -81,10 +81,10 @@ static string catmullRomSpecificShaderCode=
 		"		localT = (t - parameter[0]) / (parameter[1] - parameter[0]);"
 		"	}"
 		"	if (i == 0) {"
-		"		computeBezierSegmentControlPoints(closedCurve ? controlPoints[int(nbControlPoints) - 2] : controlPoints[i] - (controlPoints[i+1] - controlPoints[i]), controlPoints[i], controlPoints[i+1], controlPoints[i+2]);"
-		"	} else if (i == int(nbControlPoints) - 2) {"
+		"		computeBezierSegmentControlPoints(closedCurve ? controlPoints[nbControlPoints - 2] : controlPoints[i] - (controlPoints[i+1] - controlPoints[i]), controlPoints[i], controlPoints[i+1], controlPoints[i+2]);"
+		"	} else if (i == nbControlPoints - 2) {"
 		"		computeBezierSegmentControlPoints(controlPoints[i-1], controlPoints[i], controlPoints[i+1], closedCurve ? controlPoints[1] : controlPoints[i+1] + (controlPoints[i+1] - controlPoints[i]));"
-		"	} else if (i == int(nbControlPoints) - 1) {"
+		"	} else if (i == nbControlPoints - 1) {"
 		"		computeBezierSegmentControlPoints(controlPoints[i-2], controlPoints[i-1], controlPoints[i], closedCurve ? controlPoints[1] : controlPoints[i] + (controlPoints[i] - controlPoints[i-1]));"
 		"	} else {"
 		"		computeBezierSegmentControlPoints(controlPoints[i-1], controlPoints[i], controlPoints[i+1], controlPoints[i+2]);"

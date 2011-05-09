@@ -14,33 +14,45 @@ PROJECT(tulip)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options
+IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles JOM" )
+	SET(MSVC 1)
+ELSE()
+	SET(MSVC 0)
+endif()
+
+IF(NOT ${MSVC}) #visual studio does not recognize these options
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused")
 ENDIF()
 
 IF(WIN32)
- IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options 
-   # Dynamic ling against libstdc++ on win32/MinGW   
-   IF (CMAKE_COMPILER_IS_GNUCXX)
-		EXECUTE_PROCESS(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
-						OUTPUT_VARIABLE GCXX_VERSION)
-    IF(GCXX_VERSION VERSION_GREATER 4.0)
-      #SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
-      #SET(CMAKE_MODULE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
-      #SET(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
+	IF(NOT ${MSVC}) #visual studio does not recognize these options 
+		
+		# Dynamic ling against libstdc++ on win32/MinGW 
+		# The second test is for the case where ccache is used (CMAKE_CXX_COMPILER_ARG1 contains the path to the g++ compiler)
+		IF (CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ARG1}" MATCHES ".*[g][+][+].*")
+			EXECUTE_PROCESS(COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -dumpversion
+							OUTPUT_VARIABLE GCXX_VERSION)
+							
+			IF(GCXX_VERSION VERSION_GREATER 4.0)
+		
+				#SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
+				#SET(CMAKE_MODULE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
+				#SET(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
 
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_DLL")
-      SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shared-libgcc -Wl,--allow-multiple-definition")
-      SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shared-libgcc  -Wl,--allow-multiple-definition")
-      SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shared-libgcc  -Wl,--allow-multiple-definition")
-		ENDIF()
-		IF(GCXX_VERSION VERSION_GREATER 4.4 OR GCXX_VERSION VERSION_EQUAL 4.4)
-		  IF(GCXX_VERSION VERSION_LESS 4.5)
-			SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++_s")
-                  ENDIF()
-		ELSEIF(GCXX_VERSION VERSION_GREATER 4.5 OR GCXX_VERSION VERSION_EQUAL 4.5)
-			SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++")
-		ENDIF()		
+				SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_DLL")
+				SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shared-libgcc -Wl,--allow-multiple-definition")
+				SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} --shared-libgcc  -Wl,--allow-multiple-definition")
+				SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} --shared-libgcc  -Wl,--allow-multiple-definition")
+	  
+			ENDIF()
+			IF(GCXX_VERSION VERSION_GREATER 4.4 OR GCXX_VERSION VERSION_EQUAL 4.4)
+				IF(GCXX_VERSION VERSION_LESS 4.5)
+					SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++_s")
+				ENDIF()
+			ENDIF()	
+			IF(GCXX_VERSION VERSION_GREATER 4.5 OR GCXX_VERSION VERSION_EQUAL 4.5)
+				SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++")
+			ENDIF()
 	ENDIF()
  ENDIF()
 ENDIF()
@@ -54,14 +66,14 @@ SET(TulipMajorVersion 3)
 SET(TulipMinorVersion 6)
 SET(TulipReleaseVersion 0)
 SET(TulipVersionSeparator .)
-IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #specific options for Visual Studio
+IF(${MSVC}) #specific options for Visual Studio
 	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9") #visual studio 2008 needs boost
 		find_package(BOOST REQUIRED)
 		include_directories(${Boost_INCLUDE_DIRS})
 		include_directories(${Boost_INCLUDE_DIRS}/boost/tr1)
 	ENDIF()
    SET(TulipVersionSeparator _)
-ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+ENDIF()
 SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
 
@@ -71,6 +83,7 @@ SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVers
 SET(LibTulipName "tulip-${TulipMMVersion}")
 SET(LibTulipOglName "tulip-ogl-${TulipMMVersion}")
 SET(LibTulipQtName "tulip-qt4-${TulipMMVersion}")
+SET(LibTulipOGDFName "tulip-ogdf-${TulipMMVersion}")
 SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipMMVersion}")
 SET(LibStlPythonName "stlpython")
 SET(LibTulipPythonName "tulippython")
@@ -80,8 +93,7 @@ SET(LibTulipOglPythonName "tulipoglpython")
 ## Find need packages
 ## -----------------------------------------------------------------------------------------------
 FIND_PACKAGE(Freetype REQUIRED)
-FIND_PACKAGE(Qt4 4.4.0 REQUIRED)
-
+FIND_PACKAGE(Qt4 4.7.0 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 IF(DEFINED CMAKE_VERSION)
   SET(HAVE_QT4_GET_MOC_FLAGS TRUE)
@@ -132,7 +144,11 @@ FIND_PACKAGE(OpenMP QUIET)
 IF(OPENMP_FOUND)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
    IF(WIN32)
-     SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lgomp -lpthread")
+	  IF(${MSVC})
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /openmp")
+	  ELSE()
+		SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lgomp -lpthread")
+	  ENDIF()
    ENDIF()
 ELSE(OPENMP_FOUND)
   IF(WIN32)
@@ -161,19 +177,19 @@ ENDIF(OPENMP_FOUND)
 # because we need it later in the configure process 
 
 FIND_PACKAGE(PythonLibs)
-IF(PYTHONLIBS_FOUND)
-  SET(SIP_LIB siplib)
-  TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.11.2/sipgen sip CMAKE_FLAGS -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
+FIND_PACKAGE(PythonInterp)
+IF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
+  SET(SIP_LIB sip)
+  TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.12.1/sipgen sip CMAKE_FLAGS -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})
   IF(SIP_OK)
-    IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/sipgen/Debug/sipgen.exe")
-      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/sipgen/Debug/sipgen.exe)
+    IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/Debug/sip.exe")
+      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/Debug/sip.exe)
     ELSE()
-      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.11.2/sipgen/sipgen)
+      SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/sip)
     ENDIF()
-    SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.11.2/siplib/)
+    SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.12.1/siplib/)
   ENDIF(SIP_OK)
-ENDIF(PYTHONLIBS_FOUND)
-
+ENDIF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 
 ## -----------------------------------------------------------------------------------------------
 ## Include file paths
@@ -181,9 +197,12 @@ ENDIF(PYTHONLIBS_FOUND)
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
 SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
 SET(qscintilla2Include ${PROJECT_SOURCE_DIR}/thirdparty/QScintilla-gpl-2.4.6/Qt4/)
+SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF)
+SET(OGDFLibrary OGDF)
 SET(TulipInclude ${PROJECT_SOURCE_DIR}/library/tulip/include/)
 SET(TulipBuildInclude ${PROJECT_BINARY_DIR}/library/tulip/include/)
 SET(TulipOGLInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogl/include/)
+SET(TulipOGDFInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogdf/)
 SET(TulipQtInclude ${PROJECT_SOURCE_DIR}/library/tulip-qt/include/)
 SET(TulipQtBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-qt/include/)
 SET(TulipPluginsManagerInclude ${PROJECT_SOURCE_DIR}/software/plugins-manager/include/)
@@ -196,17 +215,17 @@ SET(TulipAppleContentsDir Tulip-${TulipVersion}.app/Contents/)
 SET(TulipBinInstallDir ${TulipAppleContentsDir}MacOS/)
 SET(TulipLibInstallDir ${TulipAppleContentsDir}Frameworks/)
 SET(TulipIncludeInstallDir ${TulipAppleContentsDir}include/)
-SET(TulipShareInstallDir ${TulipAppleContentsDir}share/)
-SET(TulipPluginsInstallDir ${TulipAppleContentsDir}lib/tlp/)
-SET(TulipBitmapInstallDir ${TulipAppleContentsDir}lib/tlp/bitmaps/)
+SET(TulipShareInstallDir ${TulipAppleContentsDir}share/tulip)
+SET(TulipPluginsInstallDir ${TulipAppleContentsDir}lib/tulip/)
+SET(TulipBitmapInstallDir ${TulipAppleContentsDir}lib/tulip/bitmaps/)
 SET(TulipAppleResourcesDir ${TulipAppleContentsDir}Resources/)
 ELSE()
 SET(TulipLibInstallDir lib/)
-SET(TulipPluginsInstallDir ${TulipLibInstallDir}/tlp/)
+SET(TulipPluginsInstallDir ${TulipLibInstallDir}/tulip/)
 SET(TulipBinInstallDir bin/)
 SET(TulipIncludeInstallDir include/)
-SET(TulipShareInstallDir share/)
-SET(TulipBitmapInstallDir lib/tlp/bitmaps/)
+SET(TulipShareInstallDir share/tulip)
+SET(TulipBitmapInstallDir share/tulip/bitmaps/)
 ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
@@ -254,6 +273,11 @@ SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 SET(ENABLE_RENDERING_TIME_DISPLAY OFF CACHE BOOL "Do you want to disable the rendering time display ? (Warning : You must have OpenMP) [OFF|ON]")
 
 ## -----------------------------------------------------------------------------------------------
+## Builds the unit tests
+## -----------------------------------------------------------------------------------------------
+SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
+
+## -----------------------------------------------------------------------------------------------
 ## Check 64 bits
 ## -----------------------------------------------------------------------------------------------
 EXEC_PROGRAM(uname ARGS "-m" OUTPUT_VARIABLE UNAME_OUT)
@@ -284,26 +308,24 @@ IF(LINUX)
 ENDIF(LINUX)
 
 IF(WIN32)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DDLL_EXPORT -DQT_ASSISTANT='\"assistant\"'")
-   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
-      #recommended for now, vc++ spits out too many warnings, and renders the whole output unreadable
-	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
-	  #allows for link time optimization
-	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DQT_ASSISTANT='\"assistant\"'")
+   IF(${MSVC})
 	  #tells VS to use multiple threads to compile
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 	  #makes VS define M_PI
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_MATH_DEFINES")
 	  #prevents VS to define min and max macros (name clash with std::min and std::max)
 	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOMINMAX")
-	  #forces ftgl static compilation (prevents link errors with tulip-ogl, functions always defined without dllimport
-	  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DFTGL_LIBRARY_STATIC")
+	  
 	  #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
-	  SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /NODEFAULTLIB:MSVCRT")
+	  #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /NODEFAULTLIB:MSVCRT")
 	  #SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /MACHINE:X86")
+	  
+	  #allows for link time optimization
+	  #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
 	  #link time optimization
-	  SET(CMAKE_SHARED_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /LTCG")
-   ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+	  #SET(CMAKE_SHARED_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} /LTCG")
+   ENDIF()
 ENDIF(WIN32)
 IF(APPLE)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D__APPLE__ -DQT_ASSISTANT='\"Assistant\"'")
@@ -327,6 +349,15 @@ INCLUDE(CMakeMacros.cmake)
 ## -----------------------------------------------------------------------------------------------
 ## Sub dir (no comment)
 ## -----------------------------------------------------------------------------------------------
+IF(BUILD_TESTS)
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+   SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+   SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+   SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
+  INCLUDE(CTest)
+  ADD_SUBDIRECTORY(unit_test)
+ENDIF()
+
 ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)
 ADD_SUBDIRECTORY(software)
@@ -362,14 +393,6 @@ SET(QT_LDFLAGS "${QT_QTCORE_LIBRARY_RELEASE} ${QT_QTGUI_LIBRARY_RELEASE} ${QT_QT
 SET(QT_INCLUDES "-I${QT_INCLUDE_DIR}")
 
 CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
-
-## -----------------------------------------------------------------------------------------------
-## create pluginstest.cpp (does not exists in delivered source package)
-##-----------------------------------------------------------------------------------------------
-IF(EXISTS "unit_test/plugins/pluginstest.cpp.in")
-CONFIGURE_FILE("unit_test/plugins/pluginstest.cpp.in"
-"unit_test/plugins/pluginstest.cpp" @ONLY)
-ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
 ## Installation of files

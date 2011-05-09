@@ -22,8 +22,8 @@
 #ifndef DOXYGEN_NOTFOR_USER
 
 #include <set>
-#include "tulip/Graph.h"
-#include "tulip/Reflect.h"
+#include <tulip/Graph.h>
+#include <tulip/Reflect.h>
 
 namespace tlp {
 
@@ -36,8 +36,9 @@ class GraphProperty;
 ///Abstract class for default graph operations.
 class GraphAbstract:public Graph {
   friend class PropertyManager;
+protected:
+  GraphAbstract(Graph *supergraph, unsigned int id);
 public:
-  GraphAbstract(Graph *supergraph=0);
   virtual ~GraphAbstract();
   virtual void clear();
   virtual Graph *addSubGraph(BooleanProperty *selection=0,

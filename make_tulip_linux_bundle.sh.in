@@ -42,7 +42,10 @@ rm $BUNDLE_DIR/share/Find*.*
 function copy_linked_lib() {
   LIB_TO_COPY=$(ldd $2 | grep $1 | awk '{print $3}')
   if [ "$LIB_TO_COPY" == "" ]; then
+      tput setaf 1
+      tput bold
       echo no library found for $1
+      tput sgr0
   else
       if [ ! -f $BUNDLE_LIB_DIR/$(basename $LIB_TO_COPY) ]; then
          cp $LIB_TO_COPY $BUNDLE_LIB_DIR
@@ -61,7 +64,7 @@ echo @QT_LIBRARY_DIR@/libphonon.so.4 copied in $BUNDLE_LIB_DIR
 # Qt3Support is not needed
 rm $BUNDLE_LIB_DIR/libQt3Support*.*
 # other tulip_app needed libs
-for LIB in libaudio libcrypto libk5crypto libgssapi_krb5 libkrb5 libkeyutils libselinux libssl freetype GLEW GLU gomp jpeg png12 stdc++ xml2
+for LIB in libicuuc libicudata libaudio libcrypto libk5crypto libgssapi_krb5 libkrb5 libkeyutils libresolv libselinux libssl freetype GLEW GLU gomp jpeg png stdc++ xml2
 do
     copy_linked_lib $LIB $BUNDLE_BIN_DIR/tulip_app
 done;

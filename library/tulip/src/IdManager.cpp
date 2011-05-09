@@ -20,7 +20,7 @@
 #include <config.h>
 #endif
 
-#include "tulip/IdManager.h"
+#include <tulip/IdManager.h>
 #include <limits.h>
 #include <assert.h>
 using namespace std;

@@ -62,6 +62,10 @@ namespace tlp {
 
     void viewNeedDraw();
 
+  protected :
+
+    void updateDensityLabels();
+
   };
 
 }

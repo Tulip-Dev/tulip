@@ -13,7 +13,7 @@ libversion=@libversion@
 libextension=so
 plugincxxflags="-fPIC -DPIC"
 pluginldflags=-shared
-pluginpath=${prefix}/lib/tlp
+pluginpath=${prefix}/lib/tulip
 
 WINNT=$(sh -c 'uname -s | grep -q MINGW32_NT; echo $?')
 MACOSX=$(sh -c 'uname -s | grep -q Darwin; echo $?')
@@ -27,7 +27,7 @@ if [ $MACOSX -eq 0 ] ; then
 # MacOS bundle
     includedir=$(dirname $thisdir)/include
     libdir=$(dirname $thisdir)/lib
-    pluginpath=${libdir}/tlp
+    pluginpath=${libdir}/tulip
   fi
 fi
 if [ $WINNT -eq 0 ] ; then
@@ -43,9 +43,9 @@ if [ $WINNT -eq 0 ] ; then
     fi
     includedir=${thisdir}/../include
     libdir=${thisdir}/../bin
-    pluginpath=${thisdir}/../lib/tlp
+    pluginpath=${thisdir}/../lib/tulip
   else
-    pluginpath=${prefix}/lib/tlp
+    pluginpath=${prefix}/lib/tulip
     libdir=${prefix}/bin
   fi
 fi

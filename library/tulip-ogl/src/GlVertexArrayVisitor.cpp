@@ -16,14 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlVertexArrayVisitor.h"
+#include <tulip/GlVertexArrayVisitor.h>
 
 #include <iostream>
 
-#include "tulip/GlGraphInputData.h"
-#include "tulip/GlEdge.h"
-#include "tulip/GlNode.h"
-#include "tulip/GlVertexArrayManager.h"
+#include <tulip/GlGraphInputData.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlVertexArrayManager.h>
 
 using namespace std;
 

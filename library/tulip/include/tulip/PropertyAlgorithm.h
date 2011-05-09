@@ -34,11 +34,11 @@
 #include <config.h>
 #endif
 
-#include "tulip/PluginContext.h"
-#include "tulip/Graph.h"
-#include "tulip/Reflect.h"
-#include "tulip/WithParameter.h"
-#include "tulip/WithDependency.h"
+#include <tulip/PluginContext.h>
+#include <tulip/Graph.h>
+#include <tulip/Reflect.h>
+#include <tulip/WithParameter.h>
+#include <tulip/WithDependency.h>
 
 namespace tlp {
 

@@ -16,13 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlTextureManager.h"
-#include "tulip/GlTools.h"
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlTools.h>
 
-#include "tulip/GlPolyQuad.h"
-#include "tulip/Vector.h"
-#include "tulip/OpenGlConfigManager.h"
-#include "tulip/GlShaderProgram.h"
+#include <tulip/GlPolyQuad.h>
+#include <tulip/Vector.h>
+#include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlShaderProgram.h>
 
 using namespace std;
 

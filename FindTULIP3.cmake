@@ -43,9 +43,9 @@ ELSEIF(NOT TULIP_DIR AND NOT TULIP_INCLUDE_DIR)
 ENDIF()
 
 SET(TulipVersionSeparator .)
-IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #visual studio does not recognize these options
+IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles") #visual studio does not recognize these options
    SET(TulipVersionSeparator _)
-ENDIF(${CMAKE_GENERATOR} MATCHES "Visual Studio")
+ENDIF()
 
 # Tulip version
 IF(NOT TULIP_VERSION AND TULIP_INCLUDE_DIR)
@@ -67,7 +67,7 @@ STRING(REGEX MATCH "[0-9]*\\${TulipVersionSeparator}[0-9]*"
 ENDIF()
 
 # No effect if TULIP_DIR was already given
-IF(TULIP_INCLUDE_DIR)
+IF(TULIP_INCLUDE_DIR AND NOT TULIP_DIR)
   SET(TULIP_DIR ${TULIP_INCLUDE_DIR}/..)
 ENDIF()
 
@@ -102,10 +102,10 @@ IF(TULIP_DIR)
                  NO_DEFAULT_PATH)
   ENDIF()
 
-  SET(TULIP_LIBS ${TULIP_LIBRARY} ${TULIP_OGL_LIBRARY} ${TULIP_QT4_LIBRARY} ${TULIP_PLUGINS_MANAGER_LIBRARY})
+  SET(TULIP_LIBS ${TULIP_LIBRARY} ${TULIP_OGL_LIBRARY} ${TULIP_QT4_LIBRARY})
 
   IF(NOT TULIP_PLUGINS_PATH)
-    SET(TULIP_PLUGINS_PATH ${TULIP_DIR}/lib/tlp)
+    SET(TULIP_PLUGINS_PATH ${TULIP_DIR}/lib/tulip)
   ENDIF()
 ENDIF()
 

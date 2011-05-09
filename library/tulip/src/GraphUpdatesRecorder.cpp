@@ -16,17 +16,17 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GraphUpdatesRecorder.h"
-#include "tulip/Graph.h"
-#include "tulip/ForEach.h"
-#include "tulip/GraphImpl.h"
-#include "tulip/GraphProperty.h"
+#include <typeinfo>
+#include <tulip/GraphUpdatesRecorder.h>
+#include <tulip/Graph.h>
+#include <tulip/ForEach.h>
+#include <tulip/GraphImpl.h>
 
 using namespace std;
 using namespace stdext;
 using namespace tlp;
 
-GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart) : GraphObserver(false), PropertyObserver(false),
+GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart) : GraphObserver(), PropertyObserver(),
 #if !defined(NDEBUG)
   recordingStopped(true),
 #endif
@@ -49,6 +49,13 @@ GraphUpdatesRecorder::~GraphUpdatesRecorder() {
     delete oldIdsState;
   if (newIdsState)
     delete newIdsState;  
+}
+
+void GraphUpdatesRecorder::treatEvent(const Event& ev) {
+  if (typeid(ev) == typeid(GraphEvent))
+    GraphObserver::treatEvent(ev);
+  else
+    PropertyObserver::treatEvent(ev);
 }
 
 // delete the objects collected as to be deleted

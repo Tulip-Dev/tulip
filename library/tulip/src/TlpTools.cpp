@@ -27,27 +27,26 @@
 #endif
 
 #if _MSC_VER
-#include "windows.h"
-#include "Dbghelp.h"
+#include <windows.h>
+#include <Dbghelp.h>
 #else
 #include <dirent.h>
 #endif
-#include "thirdparty/gzstream/gzstream.h"
+#include <thirdparty/gzstream/gzstream.h>
 
-#include "tulip/TlpTools.h"
-#include "tulip/PropertyTypes.h"
-#include "tulip/LayoutProperty.h"
-#include "tulip/DoubleProperty.h"
-#include "tulip/StringProperty.h"
-#include "tulip/BooleanProperty.h"
-#include "tulip/ColorProperty.h"
-#include "tulip/IntegerProperty.h"
-#include "tulip/SizeProperty.h"
-#include "tulip/GraphProperty.h"
-#include "tulip/ExportModule.h"
-#include "tulip/Algorithm.h"
-#include "tulip/ImportModule.h"
-#include "tulip/PluginLibraryLoader.h"
+#include <tulip/TlpTools.h>
+#include <tulip/PropertyTypes.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/ExportModule.h>
+#include <tulip/Algorithm.h>
+#include <tulip/ImportModule.h>
+#include <tulip/PluginLibraryLoader.h>
 
 using namespace std;
 using namespace tlp;
@@ -73,7 +72,7 @@ const char tlp::PATH_DELIMITER = ';';
 const char tlp::PATH_DELIMITER = ':';
 #endif
 //=========================================================
-void tlp::initTulipLib(char* appDirPath) {
+void tlp::initTulipLib(const char* appDirPath) {
   // first we must ensure that the parsing of float or double
   // doest not depend on locale
   setlocale(LC_NUMERIC, "C");
@@ -94,7 +93,7 @@ void tlp::initTulipLib(char* appDirPath) {
 			 strlen(strrchr(appDirPath, '/') + 1));
 #ifdef I64
       // check for lib64
-      string tlpPath64 = TulipLibDir + "lib64/tlp";
+      string tlpPath64 = TulipLibDir + "lib64/tulip";
       struct stat statInfo;
       if (stat(tlpPath64.c_str(), &statInfo) == 0)
 	TulipLibDir.append("lib64");
@@ -130,9 +129,9 @@ void tlp::initTulipLib(char* appDirPath) {
       pos = TulipPluginsPath.find('\\', pos);
     }
 #endif
-    TulipPluginsPath= TulipLibDir + "tlp" + PATH_DELIMITER + TulipPluginsPath;
+    TulipPluginsPath= TulipLibDir + "tulip" + PATH_DELIMITER + TulipPluginsPath;
   } else
-    TulipPluginsPath= TulipLibDir + "tlp";
+    TulipPluginsPath= TulipLibDir + "tulip";
     
 
   // one dir up to initialize the doc dir
@@ -142,7 +141,7 @@ void tlp::initTulipLib(char* appDirPath) {
   TulipDocProfile=tulipDocDir+"tulip.qhc";
   TulipUserHandBookIndex=tulipDocDir+"userHandbook/html/index.html";
 
-  TulipBitmapDir=TulipLibDir+"tlp/bitmaps/";
+  TulipBitmapDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/bitmaps/";
 
   // initialize factories
   SizeProperty::initFactory();
@@ -319,4 +318,8 @@ std::string tlp::getMinor(const std::string& v) {
   if (pos == rpos)
     return v.substr(pos+1);
   return v.substr(pos + 1, rpos - pos - 1);
+}
+//=========================================================
+const std::string& tlp::getCurrentPluginFileName() {
+  return PluginLibraryLoader::getCurrentPluginFileName();
 }

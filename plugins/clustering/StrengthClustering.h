@@ -27,9 +27,21 @@
 
 /** \addtogroup clustering */
 /*@{*/
-class StrengthClustering:public tlp::Algorithm { 
+/**
+* This plugin performs a single-linkage clustering.
+* The similarity measure used here is the Strength Metric computed on edges.
+* The best threshold is found using MQ Quality Measure.
+* See :
+*
+* Y. Chiricota, F. Jourdan and G. Melancon, G. \n
+* "Software components capture using graph clustering", \n
+* IEEE Computer Society, \n
+* 2003.
+*
+*/
+class StrengthClustering:public tlp::DoubleAlgorithm {
 public:
-  StrengthClustering(tlp::AlgorithmContext);
+  StrengthClustering(tlp::PropertyContext);
   ~StrengthClustering();
   bool run();
   bool check(std::string &);
@@ -37,13 +49,13 @@ private:
   std::vector< std::set<tlp::node> > computeNodePartition(double threshold);
   double computeMQValue(const std::vector< std::set<tlp::node> > & partition, tlp::Graph *);
   double findBestThreshold(int numberOfSteps, bool& stopped);
-  tlp::Graph* buildSubGraphs(const std::vector< std::set<tlp::node > > &);
-  bool recursiveCall(tlp::Graph *);
-  tlp::Graph* buildQuotientGraph(tlp::Graph *);
-  void adjustMetaGraphProperty(tlp::Graph *, std::map<tlp::Graph *, tlp::Graph *> &);
+//  tlp::Graph* buildSubGraphs(const std::vector< std::set<tlp::node > > &);
+//  bool recursiveCall(tlp::Graph *);
+//  tlp::Graph* buildQuotientGraph(tlp::Graph *);
+//  void adjustMetaGraphProperty(tlp::Graph *, std::map<tlp::Graph *, tlp::Graph *> &);
   tlp::DoubleProperty* values;
-  bool subgraphsLayout;
-  bool quotientLayout;
+//  bool subgraphsLayout;
+//  bool quotientLayout;
 };
 /*@}*/
 #endif

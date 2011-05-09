@@ -38,6 +38,9 @@ public:
   virtual ~ColorScale();
 
   virtual void setColorScale(const std::vector<tlp::Color> colors, const bool gradient = true);
+%Docstring
+tlp.ColorScale.setColorScale(list of tlp.Color, bool gradient=True)
+%End  
 
   virtual void setColorAtPos(const float pos, const tlp::Color &color);
   	

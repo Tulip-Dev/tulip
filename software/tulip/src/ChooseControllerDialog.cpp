@@ -22,9 +22,6 @@
 #include <config.h>
 #endif
 
-#include <iostream>
-
-#include <QtGui/QPushButton>
 #include <QtCore/QSettings>
 
 #include <tulip/PreferenceManager.h>
@@ -38,6 +35,7 @@ ChooseControllerDialog::ChooseControllerDialog( QWidget* parent)
   PreferenceManager &preferenceManager=PreferenceManager::getInst();
   bool autoLoadController=preferenceManager.getAutoLoadController();
   askAgain->setChecked(autoLoadController);
+  connect(listWidget,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(accept()));
   
   listWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 }
@@ -55,6 +53,10 @@ void ChooseControllerDialog::setControllersAvailable(const vector<string> &contr
       listWidget->setCurrentItem(item);
     }
   }
+  //Perform default selection if no item are selected.
+  if(listWidget->selectedItems().isEmpty() && listWidget->count()!=0){
+      listWidget->item(0)->setSelected(true);
+  }
 }
 
 void ChooseControllerDialog::setDefaultCheckedControllerName(const string &controllerName){
@@ -66,6 +68,7 @@ void ChooseControllerDialog::setDefaultControllerName(const string &controllerNa
 }
 
 string ChooseControllerDialog::getCheckedControllerName(){
+  assert(!listWidget->selectedItems().isEmpty());
   return listWidget->selectedItems().front()->text().toStdString();
 }
 

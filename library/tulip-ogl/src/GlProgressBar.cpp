@@ -16,12 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlProgressBar.h"
+#include <tulip/GlProgressBar.h>
 
-#include "tulip/GlPolygon.h"
-#include "tulip/GlLabel.h"
-#include "tulip/GlQuad.h"
-#include "tulip/TlpTools.h"
+#include <tulip/GlPolygon.h>
+#include <tulip/GlLabel.h>
+#include <tulip/GlQuad.h>
+#include <tulip/TlpTools.h>
 
 #include <vector>
 
@@ -126,7 +126,7 @@ void GlProgressBar::progress_handler(int step, int max_step) {
 	progressBarCoords[1] = progressBarCoords[0] + Coord(progressBarWidth, 0, 0);
 	progressBarCoords[2] = progressBarCoords[1] + Coord(0, -progressBarHeight, 0);
 	progressBarCoords[3] = progressBarCoords[2] + Coord(-progressBarWidth, 0, 0);
-	GlQuad *progressBarQuad = new GlQuad(progressBarCoords, color);
+	GlQuad *progressBarQuad = new GlQuad(progressBarCoords[0], progressBarCoords[1], progressBarCoords[2], progressBarCoords[3], color);
 	progressBarQuad->setTextureName(TulipBitmapDir + SLIDER_TEXTURE_NAME);
 
 	GlLabel *commentLabel = new GlLabel(commentLabelCenter, Coord(commentWidth, commentHeight, 0), color);

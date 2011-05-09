@@ -24,29 +24,28 @@
 #include <climits>
 
 
-#include "tulip/OpenGlConfigManager.h"
-#include "tulip/GlScene.h"
+#include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlScene.h>
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
 #include <omp.h>
 #endif
 
-#include "tulip/GlLODSceneVisitor.h"
-#include "tulip/TextRenderer.h"
-#include "tulip/OcclusionTest.h"
-#include "tulip/GlCPULODCalculator.h"
-#include "tulip/GlBoundingBoxSceneVisitor.h"
-#include "tulip/GlSelectSceneVisitor.h"
-#include "tulip/Camera.h"
-#include "tulip/GlSimpleEntity.h"
-#include "tulip/GlComplexeEntity.h"
-#include "tulip/GlNode.h"
-#include "tulip/GlEdge.h"
-#include "tulip/GlFeedBackRecorder.h"
-#include "tulip/GlSVGFeedBackBuilder.h"
-#include "tulip/GlEPSFeedBackBuilder.h"
-#include "tulip/GlVertexArrayManager.h"
-#include "tulip/GlVertexArrayVisitor.h"
+#include <tulip/GlLODSceneVisitor.h>
+#include <tulip/OcclusionTest.h>
+#include <tulip/GlCPULODCalculator.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlSelectSceneVisitor.h>
+#include <tulip/Camera.h>
+#include <tulip/GlSimpleEntity.h>
+#include <tulip/GlComplexeEntity.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlFeedBackRecorder.h>
+#include <tulip/GlSVGFeedBackBuilder.h>
+#include <tulip/GlEPSFeedBackBuilder.h>
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/GlVertexArrayVisitor.h>
 
 using namespace std;
 
@@ -187,7 +186,7 @@ namespace tlp {
     }
   }
 
-  void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphComposite,TextRenderer *fontRenderer,
+  void drawLabelsForComplexEntities(bool drawSelected,GlGraphComposite *glGraphComposite,
                                     OcclusionTest *occlusionTest,LayerLODUnit &layerLODUnit){
     Graph *graph=glGraphComposite->getInputData()->getGraph();
     BooleanProperty *selectionProperty=glGraphComposite->getInputData()->getElementSelected();
@@ -206,8 +205,11 @@ namespace tlp {
     bool edgeLabelEmpty=(!glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedEdges()->hasNext())
                         && glGraphComposite->getInputData()->getElementLabel()->getEdgeDefaultStringValue()=="";
 
+    bool viewNodeLabel=glGraphComposite->getInputData()->parameters->isViewNodeLabel();
+    bool viewMetaLabel=glGraphComposite->getInputData()->parameters->isViewMetaLabel();
+
     // Draw Labels for Nodes
-    if(glGraphComposite->getInputData()->parameters->isViewNodeLabel() && !nodeLabelEmpty) {
+    if((viewNodeLabel || viewMetaLabel) && !nodeLabelEmpty) {
       node n;
       for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit.nodesLODVector.begin();it!=layerLODUnit.nodesLODVector.end();++it) {
         if((*it).lod<0 && !viewOutScreenLabel)
@@ -218,16 +220,18 @@ namespace tlp {
         if(selectionProperty->getNodeValue(n)==drawSelected){
           if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric){
             // Not metric ordered
-            if(!graph->isMetaNode(n)){
+            if(!graph->isMetaNode(n) && viewNodeLabel){
               glNode.id=n.id;
-              glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
-            }else{
+              glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
+            }else if(graph->isMetaNode(n)){
               glMetaNode.id=n.id;
-              glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
+              glMetaNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
             }
           }else{
             // Metric ordered
-            nodesMetricOrdered.push_back(pair<node,float>(n,(*it).lod));
+            if((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)){
+              nodesMetricOrdered.push_back(pair<node,float>(n,(*it).lod));
+            }
           }
         }
       }
@@ -240,10 +244,10 @@ namespace tlp {
         for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin();it!=nodesMetricOrdered.end();++it){
           if(!graph->isMetaNode((*it).first)){
             glNode.id=(*it).first.id;
-            glNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
+            glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
           }else{
             glMetaNode.id=(*it).first.id;
-            glMetaNode.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
+            glMetaNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
           }
         }
       }
@@ -260,7 +264,7 @@ namespace tlp {
           if(!glGraphComposite->getInputData()->parameters->isElementOrdered() || !metric){
             // Not metric ordered
             glEdge.id=e.id;
-            glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
+            glEdge.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
           }else{
             // Metric ordered
             edgesMetricOrdered.push_back(pair<edge,float>(e,(*it).lod));
@@ -275,7 +279,7 @@ namespace tlp {
         sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
         for(vector<pair<edge,float> >::iterator it=edgesMetricOrdered.begin();it!=edgesMetricOrdered.end();++it){
           glEdge.id=(*it).first.id;
-          glEdge.drawLabel(occlusionTest,fontRenderer,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
+          glEdge.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).second,(Camera *)(layerLODUnit.camera));
         }
       }
     }
@@ -348,7 +352,6 @@ namespace tlp {
     lastTime=omp_get_wtime();
 #endif
 
-      TextRenderer fontRenderer;
       OcclusionTest occlusionTest;
 
       Camera *camera;
@@ -549,9 +552,15 @@ namespace tlp {
           //GlPointManager::getInst().endRendering();
 
           /*
-        Label draw
-      */
-          if(viewLabel && glGraphComposite) {
+            Label draw
+          */
+
+          bool labelDensityAtZero=true;
+          if(glGraphComposite){
+            if(glGraphComposite->getInputData()->parameters->getLabelsDensity()!=-100)
+              labelDensityAtZero=false;
+          }
+          if(viewLabel && glGraphComposite && !labelDensityAtZero) {
               glPushAttrib(GL_ALL_ATTRIB_BITS);
               glDisable(GL_LIGHTING);
               glDepthFunc(GL_ALWAYS );
@@ -559,10 +568,10 @@ namespace tlp {
               glDisable(GL_COLOR_MATERIAL);
 
               // Draw Labels for selected entities
-              drawLabelsForComplexEntities(true,glGraphComposite,&fontRenderer,&occlusionTest,*itLayer);
+              drawLabelsForComplexEntities(true,glGraphComposite,&occlusionTest,*itLayer);
 
               // Draw Labels for unselected entities
-              drawLabelsForComplexEntities(false,glGraphComposite,&fontRenderer,&occlusionTest,*itLayer);
+              drawLabelsForComplexEntities(false,glGraphComposite,&occlusionTest,*itLayer);
 
               glPopAttrib();
           }
@@ -577,7 +586,9 @@ namespace tlp {
   void GlScene::addLayer(GlLayer *layer) {
     layersList.push_back(std::pair<std::string,GlLayer*>(layer->getName(),layer));
     layer->setScene(this);
-    notifyAddLayer(this,layer->getName(),layer);
+
+    if (hasOnlookers())
+      sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer));
   }
 
   bool GlScene::insertLayerBefore(GlLayer *layer,const string &name) {
@@ -585,7 +596,10 @@ namespace tlp {
       if((*it).first==name){
         layersList.insert(it,pair<string,GlLayer*>(layer->getName(),layer));
         layer->setScene(this);
-        notifyAddLayer(this,layer->getName(),layer);
+
+        if (hasOnlookers())
+          sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer));
+
         return true;
       }
     }
@@ -598,7 +612,10 @@ namespace tlp {
         ++it;
         layersList.insert(it,pair<string,GlLayer*>(layer->getName(),layer));
         layer->setScene(this);
-        notifyAddLayer(this,layer->getName(),layer);
+
+        if (hasOnlookers())
+          sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer));
+
         return true;
       }
     }
@@ -610,7 +627,10 @@ namespace tlp {
       if((*it).first==name){
         GlLayer *layer=(*it).second;
         layersList.erase(it);
-        notifyDelLayer(this,name,layer);
+
+        if (hasOnlookers())
+          sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELLAYER,layer->getName(),layer));
+
         if(deleteLayer)
           delete layer;
         return;
@@ -623,12 +643,25 @@ namespace tlp {
       if((*it).second==layer){
         GlLayer *layer=(*it).second;
         layersList.erase(it);
-        notifyDelLayer(this,layer->getName(),layer);
+
+        if (hasOnlookers())
+          sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELLAYER,layer->getName(),layer));
+
         if(deleteLayer)
           delete layer;
         return;
       }
     }
+  }
+
+  void GlScene::notifyModifyLayer(const std::string &name,GlLayer *layer){
+    if (hasOnlookers())
+      sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_MODIFYLAYER,name,layer));
+  }
+
+  void GlScene::notifyModifyEntity(GlSimpleEntity *entity){
+    if (hasOnlookers())
+      sendEvent(GlSceneEvent(*this,entity));
   }
 
   void GlScene::centerScene() {

@@ -20,7 +20,7 @@
 #ifndef GLCOMPLEXPOLYGON_H
 #define GLCOMPLEXPOLYGON_H
 
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
 #ifdef WIN32 	 
 #include <windows.h> 	 
@@ -38,7 +38,7 @@
 #include <tulip/Coord.h>
 #include <tulip/tulipconf.h>
 
-#include "tulip/GlSimpleEntity.h"
+#include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
 

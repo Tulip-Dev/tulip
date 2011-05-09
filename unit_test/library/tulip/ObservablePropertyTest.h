@@ -49,8 +49,8 @@ public:
   void testRemoveObserver();
   void testObserverWhenRemoveObservable();
 
-  void setNodeValue(tlp::PropertyInterface*, char*, bool, bool, bool = true);
-  void setEdgeValue(tlp::PropertyInterface*, char*, bool, bool, bool = true);
+  void setNodeValue(tlp::PropertyInterface*, const char*, bool, bool, bool = true);
+  void setEdgeValue(tlp::PropertyInterface*, const char*, bool, bool, bool = true);
   void addObservers();
 
   static CppUnit::Test *suite();

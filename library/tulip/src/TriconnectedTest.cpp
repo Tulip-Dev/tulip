@@ -16,10 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/Graph.h"
-#include "tulip/TriconnectedTest.h"
-#include "tulip/BiconnectedTest.h"
-#include "tulip/MutableContainer.h"
+#include <tulip/Graph.h>
+#include <tulip/TriconnectedTest.h>
+#include <tulip/BiconnectedTest.h>
 
 using namespace std;
 using namespace tlp;
@@ -86,8 +85,10 @@ void TriconnectedTest::delNode(Graph *graph,const node) {
 }
 //=================================================================
 void TriconnectedTest::destroy(Graph *graph) {
-  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
+void TriconnectedTest::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}
 

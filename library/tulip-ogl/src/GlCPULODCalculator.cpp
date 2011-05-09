@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlCPULODCalculator.h"
+#include <tulip/GlCPULODCalculator.h>
 
 #include <tulip/Matrix.h>
 
@@ -24,10 +24,10 @@
 #include <omp.h>
 #endif
 
-#include "tulip/Camera.h"
-#include "tulip/GlEntity.h"
-#include "tulip/GlTools.h"
-#include "tulip/GlScene.h"
+#include <tulip/Camera.h>
+#include <tulip/GlEntity.h>
+#include <tulip/GlTools.h>
+#include <tulip/GlScene.h>
 
 #include <iostream>
 
@@ -129,14 +129,14 @@ namespace tlp {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for(size_t i=0;i<nb;++i){
+    for(int i=0;i<nb;++i){
       layerLODUnit->simpleEntitiesLODVector[i].lod=calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
     }
     nb=layerLODUnit->nodesLODVector.size();
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for(size_t i=0;i<nb;++i){
+    for(int i=0;i<nb;++i){
 			layerLODUnit->nodesLODVector[i].lod=calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
     }
     nb=layerLODUnit->edgesLODVector.size();
@@ -144,14 +144,14 @@ namespace tlp {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-			for(size_t i=0;i<nb;++i){
+			for(int i=0;i<nb;++i){
 				layerLODUnit->edgesLODVector[i].lod=calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
 			}
 		}else{
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-			for(size_t i=0;i<nb;++i){
+			for(int i=0;i<nb;++i){
 				layerLODUnit->edgesLODVector[i].lod=10;
 			}
 		}

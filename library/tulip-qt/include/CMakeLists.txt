@@ -21,7 +21,6 @@ INSTALL(FILES
 	tulip/MouseBoxZoomer.h 
 	tulip/MouseEdgeBuilder.h 
 	tulip/MouseInteractors.h 
-	tulip/MouseMagicSelector.h 
 	tulip/MouseNodeBuilder.h 
 	tulip/MouseSelectionEditor.h 
 	tulip/MouseEdgeSelector.h 
@@ -77,6 +76,9 @@ INSTALL(FILES
   tulip/SmallMultiplesView.h
   tulip/SmallMultiplesNavigatorComponent.h
   tulip/GlOffscreenRenderer.h
+  tulip/SnapshotDialog.h
+  tulip/PropertyCreationDialog.h
+  tulip/TulipSettings.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_qt_dev
 )

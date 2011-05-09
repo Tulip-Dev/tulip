@@ -22,277 +22,68 @@
 
 #include <cassert>
 #include <iostream>
-#include "tulip/ObservableGraph.h"
+#include <tulip/ObservableGraph.h>
+#include "tulip/Graph.h"
 
-using namespace stdext;
 using namespace tlp;
 
-// nothing has to be copied
-GraphObserver::GraphObserver(const GraphObserver&) {}
-
-GraphObserver::~GraphObserver(){
-	/*#ifndef NDEBUG
-  if(observables.size()!=0)
-    std::cerr << "Delete a graph observer without remove it from observable list" << std::endl;
-#endif*/
-	if (!observables.empty()) {
-		for(std::list<ObservableGraph *>::iterator it=observables.begin();it!=observables.end();++it){
-			(*it)->removeOnlyGraphObserver(this);
-		}
-	}
-}
-
-void GraphObserver::addObservable(ObservableGraph *graph){
-	if (updateObservables) {
-		observables.push_front(graph);
-	}
-}
-
-void GraphObserver::removeObservable(ObservableGraph *graph) {
-	if (updateObservables) {
-		observables.remove(graph);
-	}
-}
-
-void ObservableGraph::addGraphObserver(GraphObserver *obs) const {
-	// ensure obs does not already exists in observers
-	if (observersSet.find(obs) == observersSet.end()) {
-		observers.push_front(obs);
-		observersSet[obs] = observers.begin();
-		obs->addObservable(const_cast<ObservableGraph*>(this));
-	}
-}
-
-void ObservableGraph::notifyAddNode(Graph *sg, const node n) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->addNode(sg, n);
-	}
-}
-
-void ObservableGraph::notifyDelNode(Graph *sg, const node n) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->delNode(sg, n);
-	}
-}
-
-void ObservableGraph::notifyAddEdge(Graph *sg, const edge e) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->addEdge(sg, e);
-	}
-}
-
-void ObservableGraph::notifyBeforeSetEnds(Graph *sg, const edge e) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->beforeSetEnds(sg, e);
-	}
-}
-
-void ObservableGraph::notifyAfterSetEnds(Graph *sg, const edge e) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->afterSetEnds(sg, e);
-	}
-}
-
-void ObservableGraph::notifyDelEdge(Graph *sg, const edge e) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->delEdge(sg, e);
-	}
-}
-
-void ObservableGraph::notifyReverseEdge(Graph *sg, const edge e) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->reverseEdge(sg, e);
-	}
-}
-
-void ObservableGraph::notifyDestroy(Graph *sg) {
-	if (observers.empty())
-		return;
-	// use a copy to avoid the invalidation of the iterator
-	// when an observer remove itself from the list
-	std::list<GraphObserver*> copy(observers);
-	std::list<GraphObserver*>::iterator itObs = copy.begin();
-	std::list<GraphObserver*>::iterator ite = copy.end();
-	while (itObs != ite) {
-		(*itObs)->destroy(sg);
-		++itObs;
-	}
-}
-
-void ObservableGraph::notifyAddSubGraph(Graph *g, Graph *sg) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->addSubGraph(g, sg);
-	}
-}
-
-void ObservableGraph::notifyDelSubGraph(Graph *g, Graph *sg) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->delSubGraph(g, sg);
-	}
-}
-
-void ObservableGraph::notifyAddLocalProperty(Graph *g, const std::string& name) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->addLocalProperty(g, name);
-	}
-}
-
-void ObservableGraph::notifyDelLocalProperty(Graph *g, const std::string& name) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->delLocalProperty(g, name);
-	}
-}
-
-void ObservableGraph::notifyBeforeSetAttribute(Graph *g, const std::string& name) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->beforeSetAttribute(g, name);
-	}
-}
-
-void ObservableGraph::notifyAfterSetAttribute(Graph *g, const std::string& name) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->afterSetAttribute(g, name);
-	}
-}
-
-void ObservableGraph::notifyRemoveAttribute(Graph *g, const std::string& name) {
-	if (observers.empty())
-		return;
-	std::list<GraphObserver*>::iterator itObs = observers.begin();
-	std::list<GraphObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		GraphObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->removeAttribute(g, name);
-	}
-}
-
-void ObservableGraph::removeGraphObservers() {
-	if (observers.empty())
-		return;
-	for(std::list<GraphObserver*>::iterator it=observers.begin();it!=observers.end();++it){
-		(*it)->removeObservable(this);
-	}
-	observers.clear();
-	observersSet.clear();
+void GraphObserver::treatEvent(const Event& ev) {
+  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&ev);
+  if (gEvt) {
+    Graph* graph = gEvt->getGraph();
+    switch(gEvt->getType()) {
+    case GraphEvent::TLP_ADD_NODE:
+      addNode(graph, gEvt->getNode());
+      break;
+    case GraphEvent::TLP_DEL_NODE:
+      delNode(graph, gEvt->getNode());
+      break;
+    case GraphEvent::TLP_ADD_EDGE:
+      addEdge(graph, gEvt->getEdge());
+      break;
+    case GraphEvent::TLP_DEL_EDGE:
+      delEdge(graph, gEvt->getEdge());
+      break;
+    case GraphEvent::TLP_REVERSE_EDGE:
+      reverseEdge(graph, gEvt->getEdge());
+      break;
+    case GraphEvent::TLP_BEFORE_SET_ENDS:
+      beforeSetEnds(graph, gEvt->getEdge());
+      break;
+    case GraphEvent::TLP_AFTER_SET_ENDS:
+      afterSetEnds(graph, gEvt->getEdge());
+      break;
+    case GraphEvent::TLP_ADD_SUBGRAPH:
+      addSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
+      break;
+    case GraphEvent::TLP_DEL_SUBGRAPH:
+      delSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
+      break;
+    case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
+      addLocalProperty(graph, gEvt->getPropertyName());
+      break;
+    case GraphEvent::TLP_DEL_LOCAL_PROPERTY:
+      delLocalProperty(graph, gEvt->getPropertyName());
+      break;
+    case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
+      beforeSetAttribute(graph, gEvt->getAttributeName());
+      break;
+    case GraphEvent::TLP_AFTER_SET_ATTRIBUTE:
+      afterSetAttribute(graph, gEvt->getAttributeName());
+      break;
+    case GraphEvent::TLP_REMOVE_ATTRIBUTE:
+      removeAttribute(graph, gEvt->getAttributeName());
+      break;
+    default:
+      // this should not happen
+      assert(false);
+    }
+  } else {
+    Graph* graph =
+      // From my point of view the use of dynamic_cast should be correct
+      // but it fails, so I use reinterpret_cast (pm)
+      reinterpret_cast<Graph *>(ev.sender());
+    if (graph && ev.type() == Event::TLP_DELETE)
+      destroy(graph);
+  }
 }

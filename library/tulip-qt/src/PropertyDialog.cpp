@@ -20,7 +20,6 @@
 #include <config.h>
 #endif
 
-#include <stdio.h>
 #include <iostream>
 #include <sstream>
 #include <typeinfo>
@@ -30,14 +29,10 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <QtGui/qlistview.h>
-#include <QtGui/qpushbutton.h>
 #include <QtGui/qmessagebox.h>
 #include <QtGui/qinputdialog.h>
 #include <QtCore/qstring.h>
 #include <QtCore/qstringlist.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qtabwidget.h>
 #include <QtGui/qevent.h>
 
 #include <tulip/Graph.h>
@@ -48,12 +43,11 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/PropertyWidget.h>
-#include <tulip/SGHierarchyWidget.h>
-#include <tulip/GlMainWidget.h>
 #include <tulip/ForEach.h>
 
+
 #include "tulip/PropertyDialog.h"
+#include "tulip/PropertyCreationDialog.h"
 #include "tulip/CopyPropertyDialog.h"
 #include "tulip/CSVImportWizard.h"
 
@@ -159,61 +153,14 @@ namespace tlp {
     void PropertyDialog::newProperty() {
         if (!graph)
             return;
-        QStringList lst;
-        lst << "Color" << "Integer" << "Layout" << "Metric" << "Selection" << "Size" << "String" << "BooleanVector"
-                << "ColorVector" << "CoordVector" << "DoubleVector" << "IntegerVector" << "SizeVector" << "StringVector";
-        bool ok = false;
-        QString res = QInputDialog::getItem(this, "Property type", "Please select the property type", lst, 3, false, &ok);
-        if (ok) {
-            QString text = QInputDialog::getText(this, "Property name", "Please enter the property name", QLineEdit::Normal,
-                                                 QString::null, &ok);
-            if (ok && text == "") {
-                ok = false;
-                QMessageBox::warning(this, "Fail to create property", "You can't create a property with empty name",
-                                     QMessageBox::Ok, QMessageBox::Ok);
-            }
-            string textString(text.toUtf8().data());
-            if (ok && graph->existLocalProperty(textString)) {
-                ok = false;
-                QMessageBox::warning(this, "Fail to create property", "A property with same name already exist", QMessageBox::Ok,
-                                     QMessageBox::Ok);
-            }
-            if (ok) {
-                string erreurMsg;
-                graph->push();
 
-                if (res == trUtf8("Selection"))
-                    graph->getLocalProperty<BooleanProperty> (textString);
-                if (res == trUtf8("Metric"))
-                    graph->getLocalProperty<DoubleProperty> (textString);
-                if (res == trUtf8("Layout"))
-                    graph->getLocalProperty<LayoutProperty> (textString);
-                if (res == trUtf8("String"))
-                    graph->getLocalProperty<StringProperty> (textString);
-                if (res == trUtf8("Integer"))
-                    graph->getLocalProperty<IntegerProperty> (textString);
-                if (res == trUtf8("Size"))
-                    graph->getLocalProperty<SizeProperty> (textString);
-                if (res == trUtf8("Color"))
-                    graph->getLocalProperty<ColorProperty> (textString);
-                if (res == trUtf8("BooleanVector"))
-                    graph->getLocalProperty<BooleanVectorProperty> (textString);
-                if (res == trUtf8("DoubleVector"))
-                    graph->getLocalProperty<DoubleVectorProperty> (textString);
-                if (res == trUtf8("CoordVector"))
-                    graph->getLocalProperty<CoordVectorProperty> (textString);
-                if (res == trUtf8("StringVector"))
-                    graph->getLocalProperty<StringVectorProperty> (textString);
-                if (res == trUtf8("IntegerVector"))
-                    graph->getLocalProperty<IntegerVectorProperty> (textString);
-                if (res == trUtf8("SizeVector"))
-                    graph->getLocalProperty<SizeVectorProperty> (textString);
-                if (res == trUtf8("ColorVector"))
-                    graph->getLocalProperty<ColorVectorProperty> (textString);
-                setGraph(graph);
-                emit newPropertySignal(graph, textString);
-            }
+        Observable::holdObservers();
+        PropertyInterface* property = PropertyCreationDialog::createNewProperty(graph,this);
+        if(property){
+            setGraph(graph);
+            emit newPropertySignal(graph, property->getName());
         }
+        Observable::unholdObservers();
     }
     //=================================================
     void PropertyDialog::toStringProperty() {
@@ -278,227 +225,9 @@ namespace tlp {
     void PropertyDialog::cloneProperty() {
         if (!graph || !editedProperty)
             return;
-        // save editedProperty in local variable
-        // to avoid any reset due to a setGraph call
-        // from a addLocalProperty observer
-        PropertyInterface *editedProp = editedProperty;
-        CopyPropertyDialog dialog(parentWidget());
-        vector<string> localProps;
-        vector<string> inheritedProps;
-        PropertyInterface* prop;
-        Graph *parent = graph->getSuperGraph();
-        if (parent == graph)
-            parent = 0;
-        forEach(prop, graph->getLocalObjectProperties()) {
-            if (typeid(*prop) == typeid(*editedProp)) {
-                const string &pName = prop->getName();
-                if (pName != editedPropertyName)
-                    localProps.push_back(pName);
-                if (parent && parent->existProperty(pName))
-                    inheritedProps.push_back(pName);
-            }
-        }
-        forEach(prop, graph->getInheritedObjectProperties()) {
-            const string &pName = prop->getName();
-            if ((pName != editedPropertyName) && (typeid(*prop) == typeid(*editedProp)))
-                inheritedProps.push_back(pName);
-        }
-        dialog.setProperties(editedPropertyName, localProps, inheritedProps);
-        CopyPropertyDialog::destType type;
-        std::string text;
-        if (dialog.getDestinationProperty(type, text)) {
-            if (text.size() > 0) {
-                if (type != CopyPropertyDialog::INHERITED) {
-                    if (graph->existProperty(text)) {
-                        if (typeid(*graph->getProperty(text)) != typeid(*editedProp)) {
-                            QMessageBox::critical(parentWidget(), "Tulip Warning", "Properties are not of the same type.");
-                            return;
-                        }
-                        if (type == CopyPropertyDialog::NEW && graph->existLocalProperty(text)) {
-                            if (text == editedPropertyName) {
-                                QMessageBox::critical(parentWidget(), "Tulip Warning", "Properties are the same.");
-                                return;
-                            }
-                            else if (QMessageBox::question(parentWidget(), "Copy confirmation", (std::string("Property ")
-                                + text + " already exists,\ndo you really want to overwrite it ?").c_str(), QMessageBox::Ok,
-                                                           QMessageBox::Cancel) == QDialog::Rejected)
-                                return;
-                        }
-                    }
-                    Observable::holdObservers();
-                    // allow to undo
-                    graph->push();
-                    if (typeid((*editedProp)) == typeid(DoubleProperty)) {
-                        *graph->getLocalProperty<DoubleProperty> (text) = *((DoubleProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp)) == typeid(LayoutProperty)) {
-                        *graph->getLocalProperty<LayoutProperty> (text) = *((LayoutProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp)) == typeid(StringProperty)) {
-                        *graph->getLocalProperty<StringProperty> (text) = *((StringProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp)) == typeid(BooleanProperty)) {
-                        *graph->getLocalProperty<BooleanProperty> (text) = *((BooleanProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp)) == typeid(IntegerProperty)) {
-                        *graph->getLocalProperty<IntegerProperty> (text)
-                                = *((IntegerProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp)) == typeid(ColorProperty)) {
-                        *graph->getLocalProperty<ColorProperty> (text)
-                                = *((ColorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp)) == typeid(SizeProperty)) {
-                        *graph->getLocalProperty<SizeProperty> (text)
-                                = *((SizeProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp)) == typeid(DoubleVectorProperty)) {
-                        *graph->getLocalProperty<DoubleVectorProperty> (text)
-                                = *((DoubleVectorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp)) == typeid(CoordVectorProperty)) {
-                        *graph->getLocalProperty<CoordVectorProperty> (text)
-                                = *((CoordVectorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp)) == typeid(StringVectorProperty)) {
-                        *graph->getLocalProperty<StringVectorProperty> (text)
-                                = *((StringVectorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp)) == typeid(BooleanVectorProperty)) {
-                        *graph->getLocalProperty<BooleanVectorProperty> (text)
-                                = *((BooleanVectorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp)) == typeid(IntegerVectorProperty)) {
-                        *graph->getLocalProperty<IntegerVectorProperty> (text)
-                                = *((IntegerVectorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(ColorVectorProperty)) {
-                        *graph->getLocalProperty<ColorVectorProperty> (
-                                text) = *((ColorVectorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(SizeVectorProperty)) {
-                        *graph->getLocalProperty<SizeVectorProperty> (
-                                text)
-                                = *((SizeVectorProperty*) editedProp);
-                    }
-                    //}
-                }
-                else {
-                    Graph *parent = graph->getSuperGraph();
-                    Observable::holdObservers();
-                    // allow to undo
-                    parent->push();
-                    if (typeid((*editedProp))
-                        == typeid(DoubleProperty)) {
-                        *parent->getProperty<DoubleProperty> (
-                                text)
-                                = *((DoubleProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(LayoutProperty)) {
-                        *parent->getProperty<LayoutProperty> (
-                                text)
-                                = *((LayoutProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(StringProperty)) {
-                        *parent->getProperty<
-                                StringProperty> (text)
-                                = *((StringProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(BooleanProperty)) {
-                        *parent->getProperty<
-                                BooleanProperty> (text)
-                                = *((BooleanProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(IntegerProperty)) {
-                        *parent->getProperty<
-                                IntegerProperty> (
-                                        text)
-                                = *((IntegerProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(ColorProperty)) {
-                        *parent->getProperty<
-                                ColorProperty> (
-                                        text)
-                                = *((ColorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(SizeProperty)) {
-                        *parent->getProperty<
-                                SizeProperty> (
-                                        text)
-                                = *((SizeProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(DoubleVectorProperty)) {
-                        *parent->getProperty<
-                                DoubleVectorProperty> (
-                                        text)
-                                = *((DoubleVectorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(CoordVectorProperty)) {
-                        *parent->getProperty<
-                                CoordVectorProperty> (
-                                        text)
-                                = *((CoordVectorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(StringVectorProperty)) {
-                        *parent->getProperty<
-                                StringVectorProperty> (
-                                        text)
-                                = *((StringVectorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(BooleanVectorProperty)) {
-                        *parent->getProperty<
-                                BooleanVectorProperty> (
-                                        text)
-                                = *((BooleanVectorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(IntegerVectorProperty)) {
-                        *parent->getProperty<
-                                IntegerVectorProperty> (
-                                        text)
-                                = *((IntegerVectorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(ColorVectorProperty)) {
-                        *parent->getProperty<
-                                ColorVectorProperty> (
-                                        text)
-                                = *((ColorVectorProperty*) editedProp);
-                    }
-                    if (typeid((*editedProp))
-                        == typeid(SizeVectorProperty)) {
-                        *parent->getProperty<
-                                SizeVectorProperty> (
-                                        text)
-                                = *((SizeVectorProperty*) editedProp);
-                    }
-                }
-                setGraph(
-                        graph);
-                Observable::unholdObservers();
-            }
-            else {
-                QMessageBox::warning(
-                        this,
-                        tr(
-                                "Fail to copy property"),
-                        "You can't create a property with empty name",
-                        QMessageBox::Ok,
-                        QMessageBox::Ok);
-            }
-        }
+            Observable::holdObservers();
+        CopyPropertyDialog::copyProperty(graph,editedProperty,true,this);
+        Observable::unholdObservers();
     }
     //=================================================
     void PropertyDialog::importCSVData() {

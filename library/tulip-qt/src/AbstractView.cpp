@@ -35,141 +35,132 @@ using namespace std;
 
 namespace tlp {
 
-  AbstractView::AbstractView() :
-    View(), centralWidget(NULL), activeInteractor(NULL) {
+    AbstractView::AbstractView() :
+            View(), centralWidget(NULL), activeInteractor(NULL) {
 
-  }
-
-  AbstractView::~AbstractView() {
-    for (list<Interactor *>::iterator it = interactors.begin(); it != interactors.end(); ++it) {
-      delete (*it);
-    }
-  }
-
-  QWidget *AbstractView::construct(QWidget *parent) {
-    widget = new QWidget(parent);
-    QGridLayout *gridLayout = new QGridLayout(widget);
-    gridLayout->setSpacing(0);
-    gridLayout->setMargin(0);
-
-    mainLayout = new QVBoxLayout;
-
-    gridLayout->addLayout(mainLayout, 0, 0, 1, 1);
-
-    // Add this to by-pass a bug in Qt 4.4.1
-    // In the QWorkspace if the widget doesn't have a QGLWidget this widget pass below others widget
-    QFrame *frame = new QFrame(widget);
-    frame->setGeometry(QRect(0, 0, 0, 0));
-    new QGridLayout(frame);
-    new QGLWidget(frame);
-
-    //Build output image list
-    exportImageMenu = new QMenu("&Save Picture as ");
-
-    set<string> imgFormats;
-    buildOutputImagesFormatsList(imgFormats);
-
-    for (set<string>::iterator it = imgFormats.begin(); it != imgFormats.end(); ++it) {
-      exportImageMenu->addAction(QString::fromStdString(*it));
     }
 
-    connect(exportImageMenu, SIGNAL(triggered(QAction*)), SLOT(exportImage(QAction*)));
-
-    widget->installEventFilter(this);
-
-    return widget;
-  }
-
-  void AbstractView::setInteractors(const std::list<Interactor *> &interactorsList) {
-    interactors = interactorsList;
-    for (list<Interactor *>::iterator it = interactors.begin(); it != interactors.end(); ++it) {
-      (*it)->setView(this);
+    AbstractView::~AbstractView() {
+        for (list<Interactor *>::iterator it = interactors.begin(); it != interactors.end(); ++it) {
+            delete (*it);
+        }
     }
-  }
 
-  list<Interactor *> AbstractView::getInteractors() {
-    return interactors;
-  }
+    QWidget *AbstractView::construct(QWidget *parent) {
+        widget = new QWidget(parent);
+        QGridLayout *gridLayout = new QGridLayout(widget);
+        gridLayout->setSpacing(0);
+        gridLayout->setMargin(0);
 
-  void AbstractView::setActiveInteractor(Interactor *interactor) {
+        mainLayout = new QVBoxLayout;
+
+        gridLayout->addLayout(mainLayout, 0, 0, 1, 1);
+
+        // Add this to by-pass a bug in Qt 4.4.1
+        // In the QWorkspace if the widget doesn't have a QGLWidget this widget pass below others widget
+        QFrame *frame = new QFrame(widget);
+        frame->setGeometry(QRect(0, 0, 0, 0));
+        new QGridLayout(frame);
+        new QGLWidget(frame);
+
+        //Build output image list
+        exportImageMenu = new QMenu("&Export in EPS or SVG ");
+
+        set<string> imgFormats;
+        imgFormats.insert("EPS");
+        imgFormats.insert("SVG");
+
+        for (set<string>::iterator it = imgFormats.begin(); it != imgFormats.end(); ++it) {
+            exportImageMenu->addAction(QString::fromStdString(*it));
+        }
+
+        connect(exportImageMenu, SIGNAL(triggered(QAction*)), SLOT(exportImage(QAction*)));
+
+        widget->installEventFilter(this);
+
+        return widget;
+    }
+
+    void AbstractView::setInteractors(const std::list<Interactor *> &interactorsList) {
+        interactors = interactorsList;
+        for (list<Interactor *>::iterator it = interactors.begin(); it != interactors.end(); ++it) {
+            (*it)->setView(this);
+        }
+    }
+
+    list<Interactor *> AbstractView::getInteractors() {
+        return interactors;
+    }
+
+    void AbstractView::setActiveInteractor(Interactor *interactor) {
 	Interactor *currentInteractor = activeInteractor;
 	activeInteractor = NULL;
-    if (currentInteractor)
-    	currentInteractor->remove();
-    interactor->install(centralWidget);
-    activeInteractor = interactor;
-  }
-
-  void AbstractView::setCentralWidget(QWidget *widget) {
-    if (centralWidget) {
-      mainLayout->removeWidget(centralWidget);
-      centralWidget->setParent(0);
+        if (currentInteractor)
+            currentInteractor->remove();
+        interactor->install(centralWidget);
+        activeInteractor = interactor;
     }
-    widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    mainLayout->addWidget(widget);
-    centralWidget = widget;
-    if (activeInteractor)
-      setActiveInteractor(activeInteractor);
-    centralWidget->activateWindow();
-    centralWidget->setFocus();
-    centralWidget->show();
-  }
 
-  bool AbstractView::eventFilter(QObject *object, QEvent *event) {
-    specificEventFilter(object, event);
-
-    if (event->type() == QEvent::ContextMenu) {
-      QContextMenuEvent *me = (QContextMenuEvent*) event;
-      QMenu contextMenu(getWidget());
-      buildContextMenu(object, me, &contextMenu);
-      if (!contextMenu.actions().isEmpty()) {
-	QAction* menuAction = contextMenu.exec(me->globalPos());
-	if (menuAction)
-	  computeContextMenuAction(menuAction);
-      }
+    void AbstractView::setCentralWidget(QWidget *widget) {
+        if (centralWidget) {
+            mainLayout->removeWidget(centralWidget);
+            centralWidget->setParent(0);
+        }
+        widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        mainLayout->addWidget(widget);
+        centralWidget = widget;
+        if (activeInteractor)
+            setActiveInteractor(activeInteractor);
+        centralWidget->activateWindow();
+        centralWidget->setFocus();
+        centralWidget->show();
     }
-    return false;
-  }
 
-  void AbstractView::buildOutputImagesFormatsList(set<string>& outputFormats) {
-    // Tulip known formats (see GlGraph)
-    // formats are sorted, "~" is just an end marker
-    //Image PopuMenu
-    // int Qt 4, output formats are not yet sorted and uppercased
-    // first add Tulip known formats
-    outputFormats.insert("EPS");
-    outputFormats.insert("SVG");
-    // uppercase and insert all Qt formats
-foreach  (QByteArray format, QImageWriter::supportedImageFormats())
-  {
-    char* tmp = format.data();
-    for (int i = strlen(tmp) - 1; i >= 0; --i)
-    tmp[i] = toupper(tmp[i]);
-    outputFormats.insert(tmp);
-  }
-  // sort before inserting in exportImageMenu
-}
+    bool AbstractView::eventFilter(QObject *object, QEvent *event) {
+        specificEventFilter(object, event);
 
-void AbstractView::exportImage(QAction* action) {
-  QString extension = action->text().toLower();
-  QString s(QFileDialog::getSaveFileName(NULL, QString("Save Picture as ") + extension + " file", QString(), QString("Images (*.") + extension + ")"));
+        if (event->type() == QEvent::ContextMenu) {
+            QContextMenuEvent *me = (QContextMenuEvent*) event;
+            QMenu contextMenu(getWidget());
+            buildContextMenu(object, me, &contextMenu);
+            if (!contextMenu.actions().isEmpty()) {
+                QAction* menuAction = contextMenu.exec(me->globalPos());
+                if (menuAction)
+                    computeContextMenuAction(menuAction);
+            }
+        }
+        return false;
+    }
 
-  if (s.isNull()) {
-    return;
-  }
+    void AbstractView::exportImage(QAction* action) {
+        QString extension = action->text().toLower();
+        QString s(QFileDialog::getSaveFileName(NULL, QString("Save Picture as ") + extension + " file", QString(), QString("Images (*.") + extension + ")"));
 
-  //If no extension found automatically add the selected format extension.
-  if(!s.contains(QChar('.')) ) {
-    s.append('.');
-    s.append(extension);
-  }
+        if (s.isNull()) {
+            return;
+        }
 
-  createPicture(s.toStdString());
-}
+        //If no extension found automatically add the selected format extension.
+        if(!s.contains(QChar('.')) ) {
+            s.append('.');
+            s.append(extension);
+        }
 
-void AbstractView::buildContextMenu(QObject *, QContextMenuEvent *, QMenu *contextMenu) {
-  if (!exportImageMenu->isEmpty())
-  contextMenu->addMenu(exportImageMenu);
-}
+        savePicture(s.toStdString(),centralWidget->size().width(),centralWidget->size().height(),false);
+    }
+
+    void AbstractView::buildContextMenu(QObject *, QContextMenuEvent *, QMenu *contextMenu) {
+        if (!exportImageMenu->isEmpty())
+            contextMenu->addMenu(exportImageMenu);
+    }
+
+    bool AbstractView::savePicture(const string& pictureName, int width, int height, bool center, int zoom , int xOffset , int yOffset ){
+        QImage image = createPicture(width,height,center,zoom,xOffset,yOffset);
+        if(!image.isNull()){
+            return image.save(pictureName.c_str());
+        }else{
+            return false;
+        }
+    }
 
 }

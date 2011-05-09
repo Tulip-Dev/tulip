@@ -17,12 +17,12 @@
  *
  */
 
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
 #include <tulip/Rectangle.h>
-#include "tulip/GlTools.h"
-#include "tulip/Matrix.h"
-#include "tulip/BoundingBox.h"
+#include <tulip/GlTools.h>
+#include <tulip/Matrix.h>
+#include <tulip/BoundingBox.h>
 #include <iostream>
 #include <string>
 

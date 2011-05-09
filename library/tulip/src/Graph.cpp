@@ -17,18 +17,18 @@
  *
  */
 
-#include "thirdparty/gzstream/gzstream.h"
-#include "tulip/Graph.h"
-#include "tulip/IdManager.h"
-#include "tulip/TlpTools.h"
-#include "tulip/GraphImpl.h"
-#include "tulip/BooleanProperty.h"
-#include "tulip/GraphProperty.h"
-#include "tulip/Reflect.h"
-#include "tulip/ExportModule.h"
-#include "tulip/Algorithm.h"
-#include "tulip/ImportModule.h"
-#include "tulip/SimplePluginProgress.h"
+#include <fstream>
+
+#include <tulip/Graph.h>
+#include <tulip/TlpTools.h>
+#include <tulip/GraphImpl.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/Reflect.h>
+#include <tulip/ExportModule.h>
+#include <tulip/Algorithm.h>
+#include <tulip/ImportModule.h>
+#include <tulip/SimplePluginProgress.h>
 
 using namespace std;
 using namespace tlp;
@@ -353,23 +353,103 @@ void tlp::copyToGraph (Graph *outG, Graph* inG,
   } delete edgeIt;
 }
 
-void Graph::notifyDestroy() {
-  ObservableGraph::notifyDestroy(this);
-  Observable::notifyDestroy();
-}
-
-void Graph::notifyAddSubGraph(Graph* sg) {
-  ObservableGraph::notifyAddSubGraph(this, sg);
-  Observable::notifyObservers();
-}
-
 DataType* Graph::getAttribute(const std::string& name) const {
     return getAttributes().getData(name);
 }
 
 void Graph::setAttribute(const std::string &name, const DataType* value) {
-  notifyBeforeSetAttribute(this, name);
+  notifyBeforeSetAttribute(name);
   getNonConstAttributes().setData(name, value);
-  notifyAfterSetAttribute(this, name);
+  notifyAfterSetAttribute(name);
 }
 
+void Graph::addGraphObserver(Observable *gObs) const {
+  addListener(gObs);
+}
+
+void Graph::removeGraphObserver(Observable *gObs) const {
+  removeListener(gObs);
+}
+
+void Graph::notifyAddNode(const node n) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODE, n));
+}
+
+void Graph::notifyDelNode(const node n) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_NODE, n));
+}
+
+void Graph::notifyAddEdge(const edge e) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGE, e));
+}
+
+void Graph::notifyDelEdge(const edge e) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_EDGE, e));
+}
+
+void Graph::notifyReverseEdge(const edge e) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_REVERSE_EDGE, e));
+}
+
+void Graph::notifyBeforeSetEnds(const edge e) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_SET_ENDS, e,
+			 Event::TLP_INFORMATION));
+}
+  
+void Graph::notifyAfterSetEnds(const edge e) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_SET_ENDS, e));
+}
+
+void Graph::notifyAddSubGraph(const Graph* sg) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_SUBGRAPH, sg));
+}
+
+void Graph::notifyDelSubGraph(const Graph* sg) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_SUBGRAPH, sg));
+}
+
+void Graph::notifyAddLocalProperty(const std::string& propName) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_LOCAL_PROPERTY, propName));
+}
+
+void Graph::notifyDelLocalProperty(const std::string& propName) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_LOCAL_PROPERTY, propName));
+}
+  
+void Graph::notifyBeforeSetAttribute(const std::string& attName) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_SET_ATTRIBUTE,
+			 attName, Event::TLP_INFORMATION));
+}
+  
+void Graph::notifyAfterSetAttribute(const std::string& attName) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_SET_ATTRIBUTE, attName,
+			 Event::TLP_INFORMATION));
+}
+  
+void Graph::notifyRemoveAttribute(const std::string& attName) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_REMOVE_ATTRIBUTE, attName,
+			 Event::TLP_INFORMATION));
+}
+
+void Graph::notifyDestroy() {
+  if (hasOnlookers()) {
+    // the undo/redo mechanism has to simulate graph destruction
+    Event evt(*this, Event::TLP_MODIFICATION);
+    evt._type = Event::TLP_DELETE;
+    sendEvent(evt);
+  }
+}

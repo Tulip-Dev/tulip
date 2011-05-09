@@ -23,7 +23,7 @@
 
 #include <tulip/BoundingBox.h>
 
-#include "tulip/GlEntity.h"
+#include <tulip/GlEntity.h>
 
 namespace tlp {
 
@@ -55,7 +55,7 @@ namespace tlp {
     /**
      * Draw label of this entity
      */
-    virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data) = 0;
+    virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data) = 0;
   };
 
 }

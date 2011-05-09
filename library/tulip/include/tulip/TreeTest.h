@@ -24,10 +24,11 @@
 #include <config.h>
 #endif
 
-#include "tulip/tuliphash.h"
-#include "tulip/ObservableGraph.h"
-#include "tulip/MutableContainer.h"
-#include "tulip/PluginProgress.h"
+#include <tulip/tuliphash.h>
+#include <tulip/Observable.h>
+#include <tulip/ObservableGraph.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/PluginProgress.h>
 
 namespace tlp {
 
@@ -36,46 +37,64 @@ class Graph;
 /** \addtogroup graph_test */ 
 /*@{*/
 /// Class for testing if the graph is a tree
-class TLP_SCOPE TreeTest : private GraphObserver {
+ class TLP_SCOPE TreeTest : private GraphObserver, private Observable {
 public:
-  // check if the graph is a rooted tree
+
+  /**
+   *  Returns true if the graph is a rooted tree (i.e. a graph with one node designated as the root),
+   *  false otherwise.
+   */
   static bool isTree(Graph *graph);
-  // check if the graph is a free tree
+
+  /**
+   *  Returns true if the graph is a topological tree
+   *  (i.e. if the graph was undirected, there would be no cycle),
+   *  false otherwise.
+   */
   static bool isFreeTree(Graph *graph);
-  // turns a free tree into a rooted tree
+
+  /**
+   * Turns a free tree into a rooted tree.
+   */
   static void makeRootedTree(Graph *freeTree, node root);
-  // synonymous of the makeRootedTree
+
+  /**
+   * Synonymous of the makeRootedTree method.
+   */
   static void makeDirectedTree(Graph *freeTree, node root) {
     makeRootedTree(freeTree, root);
   };
 
   /**
-   * Compute a rooted tree from the graph.
-   * The algorithm is the following
-   * - if the graph is a rooted tree, return the graph
-   * - if the graph is a free tree, return a rooted clone subgraph
-   * - if the graph is connected, make a clone subgraph
-   *   return a rooted spanning tree of that clone
-   * - if the graph is not connected, make a clone subgraph,
-   *   compute a tree for each of its connected components,
-   *   add a simple source and return the clone.
+   * Computes a rooted tree from the graph.
+   * The algorithm is the following :
+   * - if the graph is a rooted tree, returns the graph
+   * - if the graph is a free tree, returns a rooted clone subgraph
+   * - if the graph is connected, makes a clone subgraph
+   *   and returns a rooted spanning tree of that clone
+   * - if the graph is not connected, makes a clone subgraph,
+   *   computes a tree for each of its connected components,
+   *   adds a simple source and returns the clone.
    */  
   static Graph *computeTree(Graph* graph, PluginProgress *pluginProgress = 0);
   
   /**
    * Clean the graph from a tree previously computed
-   * with the computeTree function
+   * with the computeTree method
    */
   static void cleanComputedTree(Graph *graph, Graph *tree);
 
 private:
   bool compute(Graph *);
+  // override GraphObserver methods
   void addEdge(Graph *,const edge);
   void delEdge(Graph *,const edge);
   void reverseEdge(Graph *,const edge);
   void addNode(Graph *,const node);
   void delNode(Graph *,const node);
   void destroy(Graph *);
+  // override Observable::treatEvent
+  void treatEvent(const Event&);
   TreeTest();
   static TreeTest * instance;
   bool isFreeTree (Graph *graph, node curRoot);

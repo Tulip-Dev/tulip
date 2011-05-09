@@ -48,7 +48,7 @@ namespace tlp {
   
   };
  
-  class TLP_PLUGINSMANAGER_SCOPE MultiServerManager : public QObject, public PluginsListManager {
+  class MultiServerManager : public QObject, public PluginsListManager {
 
     Q_OBJECT
  
@@ -93,7 +93,7 @@ namespace tlp {
   };
   
 
-  class TLP_PLUGINSMANAGER_SCOPE GetXmlListTreatment : public ResponseTreatment {
+  class GetXmlListTreatment : public ResponseTreatment {
     
     MultiServerManager* msm;
     std::string serverAddr;

@@ -820,6 +820,7 @@ void PushPopTest::testAddSubgraphProp() {
   
   sg->unpop();
   CPPUNIT_ASSERT(sg->existProperty("test"));
+  CPPUNIT_ASSERT(sg->getLocalProperty<DoubleProperty>("test") == prop);
   
   sg->pop();
   CPPUNIT_ASSERT(!sg->existProperty("test"));
@@ -841,6 +842,7 @@ void PushPopTest::testAddSubgraphProp() {
  
   sg->unpop();
   CPPUNIT_ASSERT(sg->existProperty("test"));
+  CPPUNIT_ASSERT(sg->getLocalProperty<DoubleProperty>("test") == prop);
 
   sg->pop();
   CPPUNIT_ASSERT(!sg->existProperty("test"));

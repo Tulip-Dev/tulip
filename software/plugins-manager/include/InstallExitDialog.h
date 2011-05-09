@@ -29,7 +29,7 @@
 namespace tlp {
   class InstallPluginDialog;
   
-  class TLP_PLUGINSMANAGER_SCOPE InstallExitDialog : public QDialog{
+  class InstallExitDialog : public QDialog{
     Q_OBJECT
     
   public:

@@ -33,7 +33,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ObservableGraphTest );
 // these classes will capture
 // everything that will happen to our properties
 // synchronously or asynchronously
-class ObserverGTest :public Observer {
+class ObserverGTest :public Observable {
 public:
   std::set<Observable*> observables;
   bool print;
@@ -72,7 +72,7 @@ public:
 
 static ObserverGTest* observer;
 
-class GraphObserverTest :public GraphObserver {
+class GraphObserverTest :public GraphObserver, public Observable {
 public:
 
   vector<Graph*> graphs;
@@ -153,6 +153,9 @@ public:
   }
   void delLocalProperty(Graph* g, const string& name) {
     graphs.push_back(g), pName = name;
+  }
+  virtual void treatEvent(const Event& evt) {
+    GraphObserver::treatEvent(evt);
   }
 };  
 
@@ -370,8 +373,15 @@ void ObservableGraphTest::testSubgraph() {
   CPPUNIT_ASSERT(observer->found(graph) == false);
   CPPUNIT_ASSERT(observer->found(g2) == false);
   CPPUNIT_ASSERT(observer->found(g3) == false);
-  // force unhold
-  Observable::unholdObservers(true);
+  // second unhold
+  Observable::unholdObservers();
+  CPPUNIT_ASSERT(Observable::observersHoldCounter() == 1);
+  CPPUNIT_ASSERT(observer->nbObservables() == 0);
+  CPPUNIT_ASSERT(observer->found(graph) == false);
+  CPPUNIT_ASSERT(observer->found(g2) == false);
+  CPPUNIT_ASSERT(observer->found(g3) == false);
+  // third unhold
+  Observable::unholdObservers();
   CPPUNIT_ASSERT(Observable::observersHoldCounter() == 0);
   CPPUNIT_ASSERT(observer->nbObservables() == 3);
   CPPUNIT_ASSERT(observer->found(graph));
@@ -455,7 +465,7 @@ void ObservableGraphTest::testSubgraph() {
   gObserver->reset();
   observer->reset();
   Observable::holdObservers();
-  g2->delAllNode(n2);
+  g2->delNode(n2, true);
   CPPUNIT_ASSERT(graphs.size() == 4);
   CPPUNIT_ASSERT(graphs[0] == graph);
   CPPUNIT_ASSERT(graphs[1] == g2);

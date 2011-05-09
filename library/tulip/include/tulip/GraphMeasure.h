@@ -23,9 +23,9 @@
 #include <config.h>
 #endif
 
-#include "tulip/Node.h"
-#include "tulip/MutableContainer.h"
-#include "tulip/DoubleProperty.h"
+#include <tulip/Node.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/DoubleProperty.h>
 
 namespace tlp {
 

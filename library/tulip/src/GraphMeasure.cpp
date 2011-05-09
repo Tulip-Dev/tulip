@@ -23,12 +23,9 @@
 #include <omp.h>
 #endif
 
-#include "tulip/GraphMeasure.h"
-#include "tulip/Reflect.h"
-#include "tulip/Graph.h"
-#include "tulip/DoubleProperty.h"
-#include "tulip/ForEach.h"
-
+#include <tulip/GraphMeasure.h>
+#include <tulip/Graph.h>
+#include <tulip/ForEach.h>
 
 using namespace std;
 using namespace tlp;
@@ -87,7 +84,7 @@ double tlp::averagePathLength(const Graph *graph,
   node n;
   int steps = 0;
   vector<node> nodes(nbNodes);
-  size_t i = 0;
+  int i = 0;
   forEach(n, graph->getNodes()) {
     nodes[i] = n;
     ++i;

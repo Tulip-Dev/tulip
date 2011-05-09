@@ -15,6 +15,7 @@ case "`uname -s`" in
 	fi
 	;;
     *Linux*|*GNU/kFreeBSD*)
+	export LD_LIBRARY_PATH=${THISDIR}/../lib:${THISDIR}/../lib/tlp:${THISDIR}/../lib/tlp/interactors:${THISDIR}/../lib/tlp/view:${LD_LIBRARY_PATH}
 	# make some additional stuff if we are in the bundle (Qt libs in ../lib)
 	QT_LIBS=$(ls ${THISDIR}/../lib/libQt*.* 2>&1 >/dev/null)
 	if [ $? -eq 0 ]; then
@@ -32,16 +33,7 @@ case "`uname -s`" in
 	    echo tulip "($EXE_TYPE)" cannot be executed on your system
             exit
           fi
-	  # check if libselinux is needed
-	  KR=$(uname -r | awk -F - '{print $1}')
-	  # not needed on ubuntu 8.04
-	  if [ "$KR" = "2.6.24" ]; then
-	    # move selinux library
-	    mv $THISDIR/../lib/libselinux.so.1 $THISDIR/../lib/libselinux.so.1.bak
-	  fi
 	fi
-	# finally set LD_LIBRARY_PATH
-	export LD_LIBRARY_PATH=${THISDIR}/../lib:${THISDIR}/../lib/tlp:${THISDIR}/../lib/tlp/interactors:${THISDIR}/../lib/tlp/view:${LD_LIBRARY_PATH}
 	;;
 esac
 

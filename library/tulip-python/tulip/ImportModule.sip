@@ -65,7 +65,7 @@ public:
   
 };
 
-class ImportModuleFactory : tlp::Plugin {
+class ImportModuleFactory : tlp::PluginInfoInterface {
 %TypeHeaderCode
 #include <tulip/ImportModule.h>
 %End

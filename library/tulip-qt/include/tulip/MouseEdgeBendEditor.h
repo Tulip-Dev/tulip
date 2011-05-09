@@ -18,19 +18,22 @@
  */
 #ifndef MOUSEEDGEBENDEDITION_H
 #define MOUSEEDGEBENDEDITION_H
-#include <vector>
+
 #include <tulip/GlCircle.h>
-#include <tulip/Observable.h>
+#include <tulip/GlTriangle.h>
 #include <tulip/InteractorComponent.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/IntegerProperty.h>
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
 
 namespace tlp {
+
+  class LayoutProperty;
+  class BooleanProperty;
+  class SizeProperty;
+  class DoubleProperty;
+  class CoordVectorProperty;
+  class IntegerProperty;
 
   /// This interactor allows to move/add/delete EdgeBends
   class TLP_QT_SCOPE MouseEdgeBendEditor:public InteractorComponent {
@@ -75,15 +78,19 @@ namespace tlp {
     GlLayer *layer;
     std::vector<tlp::GlCircle> circles;
     std::vector<Coord> coordinates;
-    tlp::GlCircle basicCircle;
-    tlp::GlComposite *circleString;
-    std::vector <GlEntity * > select;
+    GlCircle basicCircle;
+    GlTriangle targetTriangle;
+    GlCircle sourceCircle;
+    GlComposite *circleString;
+    std::vector <GlSimpleEntity * > select;
     bool edgeSelected;
     edge mEdge;
     node mNode;
     Coord start, end;
-    std::string theCircle;
+    std::string selectedEntity;
     bool belong(Coord, Coord, Coord, GlMainWidget*);
+    bool haveSelection(GlMainWidget *);
+    void computeSrcTgtEntities(GlMainWidget *);
     bool computeBendsCircles(GlMainWidget*);
     void mMouseTranslate(double, double, GlMainWidget*);
     void mMouseDelete();

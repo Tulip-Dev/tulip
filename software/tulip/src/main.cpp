@@ -20,25 +20,29 @@
 #include <config.h>
 #endif
 
-#include <qtimer.h>
-#include <qlocale.h>
-#include <QtGui/qdesktopwidget.h>
-#include <QtCore/QSettings>
+#include <QtCore/QTimer>
+#include <QtCore/QLocale>
+#include <QtGui/QDesktopWidget>
 
-#include "AppStartUp.h"
-#include "Application.h"
+#include <PluginInfo.h>
 #include "TulipApp.h"
-
 
 using namespace std;
 int main( int argc, char **argv ) {
-
+  QApplication tulip(argc, argv);
   QLocale::setDefault(QLocale(QLocale::English));
 
-  Application tulip( argc, argv );
+  #if defined(__APPLE__)
+  // allows to load qt imageformats plugin
+  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
+  #endif
+  tlp::initTulipLib((char *) QApplication::applicationDirPath().toAscii().data());
+  
+  //add local plugins installation path. This is an application behavior, not a library one, and should stay here.
+  tlp::TulipPluginsPath = tlp::PluginInfo::pluginsDirName + tlp::PATH_DELIMITER + tlp::TulipPluginsPath;
+  
   TulipApp *mainWindow = new TulipApp();
-  QDesktopWidget desktop;
-  QRect screenRect = desktop.availableGeometry();
+  QRect screenRect = tulip.desktop()->availableGeometry();
   if (screenRect.height() > 890) {
     QRect wRect = mainWindow->geometry();
     int delta = (870 - wRect.height())/2;
@@ -46,7 +50,7 @@ int main( int argc, char **argv ) {
     wRect.setBottom(wRect.bottom() + delta);
     mainWindow->setGeometry(wRect);
   }
-  QTimer::singleShot(0, mainWindow, SLOT(startTulip()) );
+  mainWindow->startTulip();
 
   return tulip.exec();
 }

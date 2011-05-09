@@ -23,8 +23,8 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include "tulip/GlBox.h"
-#include "tulip/GlComplexeEntity.h"
+#include <tulip/GlBox.h>
+#include <tulip/GlComplexeEntity.h>
 
 namespace tlp {
 
@@ -65,19 +65,19 @@ namespace tlp {
      * Draw the label of the node if drawNodesLabel is true and if label selection is equal to drawSelect
      * Use TextRenderer : renderer to draw the label
      */
-    virtual void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod);
+    virtual void drawLabel(bool drawSelect,OcclusionTest* test,GlGraphInputData* data,float lod);
 
     /**
      * Draw the label of the node if drawEdgesLabel is true
      * Use TextRenderer : renderer to draw the label
      */
-    virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+    virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data);
 
     /**
      * Draw the label of the node if drawEdgesLabel is true
      * Use TextRenderer : renderer to draw the label
      */
-    virtual void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data,float lod, Camera *camera=NULL);
+    virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data,float lod, Camera *camera=NULL);
 
     unsigned int id;
 

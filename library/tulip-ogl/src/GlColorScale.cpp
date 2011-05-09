@@ -20,7 +20,7 @@
 #include <map>
 #include <iostream>
 
-#include "tulip/GlColorScale.h"
+#include <tulip/GlColorScale.h>
 
 using namespace std;
 

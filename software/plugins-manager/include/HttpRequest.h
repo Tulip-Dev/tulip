@@ -32,7 +32,7 @@
 
 namespace tlp {
 
-  class TLP_PLUGINSMANAGER_SCOPE HttpRequest : public QObject{
+  class HttpRequest : public QObject{
     Q_OBJECT
     std::string result;
     QHttp http;

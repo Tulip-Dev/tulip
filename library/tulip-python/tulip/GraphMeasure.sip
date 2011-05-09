@@ -1,5 +1,4 @@
 %ModuleHeaderCode
-#include <tulip/ForEach.h>
 #include <tulip/GraphMeasure.h>
 %End
 

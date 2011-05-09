@@ -18,11 +18,11 @@
  */
 
 #include <limits.h>
-#include "tulip/ForEach.h"
-#include "tulip/DoubleProperty.h"
-#include "tulip/PluginContext.h"
-#include "tulip/DoubleAlgorithm.h"
-#include "tulip/AbstractProperty.h"
+#include <tulip/ForEach.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/PluginContext.h>
+#include <tulip/DoubleAlgorithm.h>
+#include <tulip/AbstractProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -483,4 +483,9 @@ void DoubleProperty::setMetaValueCalculator(PropertyInterface::MetaValueCalculat
     delete metaValueCalculator;
   metaValueCalculator = calc;
 }
+//=============================================================
+void DoubleProperty::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}
+   
 

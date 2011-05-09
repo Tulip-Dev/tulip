@@ -16,17 +16,17 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlLODSceneVisitor.h"
+#include <tulip/GlLODSceneVisitor.h>
 
 #include <iostream>
 
-#include "tulip/GlSimpleEntity.h"
-#include "tulip/GlNode.h"
-#include "tulip/GlEdge.h"
-#include "tulip/GlLayer.h"
-#include "tulip/Camera.h"
-#include "tulip/GlTools.h"
-#include "tulip/GlLODCalculator.h"
+#include <tulip/GlSimpleEntity.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlLayer.h>
+#include <tulip/Camera.h>
+#include <tulip/GlTools.h>
+#include <tulip/GlLODCalculator.h>
 
 using namespace std;
 

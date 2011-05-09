@@ -77,7 +77,7 @@ public:
 	/**
 	 * Construct the GlMainWidget
 	 */
-	GlMainWidget(QWidget *parent,AbstractView *view=NULL);
+  GlMainWidget(QWidget *parent,View *view=NULL);
 	~GlMainWidget();
 
 	/**
@@ -167,12 +167,17 @@ public:
 	void createPicture(const std::string &pictureName,int width, int height,bool center=true, int zoom=1, int xDec=0, int yDec=0);
 
 	/**
+	 * Take a snapshot of the Widget and return it
+	 */
+	QImage createPicture(int width, int height,bool center=true, int zoom=1, int xDec=0, int yDec=0);
+
+	/**
 	 * Function to do picking on entities.  It just calls
 	 * selectEntities on the GlScene instance.
 	 */
 	bool selectGlEntities(const int x, const int y,
 			const int width, const int height,
-			std::vector<tlp::GlEntity *>
+			std::vector<tlp::GlSimpleEntity *>
 	&pickedEntities,
 	tlp::GlLayer* layer=NULL);
 	/**
@@ -181,7 +186,7 @@ public:
 	 * twelve pixels.
 	 */
 	bool selectGlEntities(const int x, const int y,
-			std::vector<tlp::GlEntity *>
+			std::vector<tlp::GlSimpleEntity *>
 	&pickedEntities,
 	tlp::GlLayer* layer=NULL);
 
@@ -235,7 +240,7 @@ private:
 
 	tlp::GlScene scene;
 	QRegion _visibleArea;
-	AbstractView *view;
+  View *view;
 	int widthStored;
 	int heightStored;
 	char *renderingStore;

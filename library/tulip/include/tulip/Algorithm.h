@@ -21,11 +21,11 @@
 
 #include <list>
 #include <string>
-#include "tulip/WithParameter.h"
-#include "tulip/WithDependency.h"
-#include "tulip/Plugin.h"
-#include "tulip/TemplateFactory.h"
-#include "tulip/MethodFactory.h"
+#include <tulip/WithParameter.h>
+#include <tulip/WithDependency.h>
+#include <tulip/Plugin.h>
+#include <tulip/TemplateFactory.h>
+#include <tulip/MethodFactory.h>
 
 /**
  * \addtogroup plugins
@@ -89,7 +89,7 @@ public :
  * The factory the registers itself in the Tulip plug-in system (through the static initFactory() method when the library is loaded..
  * The actual registration is delegated to a TemplateFactory to factorize code.
  */
-class AlgorithmFactory:public Plugin{
+class AlgorithmFactory:public PluginInfoInterface{
 public:
   /**
    * @brief A static factory that is initialized when the library is loaded.
@@ -112,27 +112,15 @@ public:
    */
   virtual Algorithm * createPluginObject(AlgorithmContext context)=0;
 
-  /**
-   * @inheritdoc
-   */
   virtual  std::string getMajor() const {
     return tlp::getMajor(getRelease());
   }
-  /**
-   * @inheritdoc
-   */
   virtual  std::string getMinor() const  {
     return tlp::getMinor(getRelease());
   }
-  /**
-   * @inheritdoc
-   */
   virtual  std::string getTulipMajor() const {
     return tlp::getMajor(getTulipRelease());
   }
-  /**
-   * @inheritdoc
-   */
   virtual  std::string getTulipMinor() const  {
     return tlp::getMinor(getTulipRelease());
   }

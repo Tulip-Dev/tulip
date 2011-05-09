@@ -21,10 +21,10 @@
 
 #include <vector>
 
-#include "tulip/GlEntity.h"
-#include "tulip/GlSceneVisitor.h"
-#include "tulip/Camera.h"
-#include "tulip/GlXMLTools.h"
+#include <tulip/GlEntity.h>
+#include <tulip/GlSceneVisitor.h>
+#include <tulip/Camera.h>
+#include <tulip/GlXMLTools.h>
 #include <tulip/BoundingBox.h>
 
 namespace tlp {

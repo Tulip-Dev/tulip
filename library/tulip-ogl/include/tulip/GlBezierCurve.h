@@ -20,7 +20,7 @@
 #ifndef GLBEZIERCURVE_H_
 #define GLBEZIERCURVE_H_
 
-#include "tulip/AbstractGlCurve.h"
+#include <tulip/AbstractGlCurve.h>
 
 namespace tlp {
 

@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlEdge.h"
+#include <tulip/GlEdge.h>
 
 #include <tulip/Coord.h>
 #include <tulip/LayoutProperty.h>
@@ -28,25 +28,23 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/PreferenceManager.h>
 
-#include "tulip/GlTools.h"
-#include "tulip/GlyphManager.h"
-#include "tulip/Curves.h"
-#include "tulip/GlGraphStaticData.h"
-#include "tulip/GlLines.h"
-#include "tulip/GlDisplayListManager.h"
-#include "tulip/OcclusionTest.h"
-#include "tulip/TextRenderer.h"
-#include "tulip/GlTLPFeedBackBuilder.h"
-#include "tulip/GlSceneVisitor.h"
-#include "tulip/GlGraphRenderingParameters.h"
-#include "tulip/Camera.h"
-#include "tulip/GlBezierCurve.h"
-#include "tulip/GlCatmullRomCurve.h"
-#include "tulip/GlRenderer.h"
-#include "tulip/GlOpenUniformCubicBSpline.h"
-#include "tulip/GlTextureManager.h"
-#include "tulip/GlVertexArrayManager.h"
-#include "tulip/GlLabel.h"
+#include <tulip/GlTools.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/Curves.h>
+#include <tulip/GlGraphStaticData.h>
+#include <tulip/GlLines.h>
+#include <tulip/GlDisplayListManager.h>
+#include <tulip/OcclusionTest.h>
+#include <tulip/GlTLPFeedBackBuilder.h>
+#include <tulip/GlSceneVisitor.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/Camera.h>
+#include <tulip/GlBezierCurve.h>
+#include <tulip/GlCatmullRomCurve.h>
+#include <tulip/GlOpenUniformCubicBSpline.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/GlLabel.h>
 
 #include <iostream>
 
@@ -408,20 +406,20 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 	glDepthFunc(GL_LEQUAL);
 }
 
-void GlEdge::drawLabel(bool drawSelect,OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data,float lod) {
+void GlEdge::drawLabel(bool drawSelect,OcclusionTest* test, GlGraphInputData* data,float lod) {
 	edge e = edge(id);
 	bool select = data->getElementSelected()->getEdgeValue(e);
 	if(select!=drawSelect)
 		return;
 
-	drawLabel(test, renderer, data, lod);
+	drawLabel(test, data, lod);
 }
 
-void GlEdge::drawLabel(OcclusionTest* test, TextRenderer* renderer, GlGraphInputData* data) {
-	drawLabel(test,renderer,data,0.);
+void GlEdge::drawLabel(OcclusionTest* test, GlGraphInputData* data) {
+	drawLabel(test,data,0.);
 }
 
-void GlEdge::drawLabel(OcclusionTest* test, TextRenderer*, GlGraphInputData* data, float lod, Camera *camera) {
+void GlEdge::drawLabel(OcclusionTest* test, GlGraphInputData* data, float lod, Camera *camera) {
 
 	edge e = edge(id);
 
@@ -452,7 +450,6 @@ void GlEdge::drawLabel(OcclusionTest* test, TextRenderer*, GlGraphInputData* dat
 
 	label->setText(tmp);
 	label->setFontNameSizeAndColor(data->getElementFont()->getEdgeValue(e),fontSize,fontColor);
-	label->setRenderingMode(GlLabel::POLYGON_MODE);
 
 	const std::pair<node, node>& eEnds = data->graph->ends(e);
 	const node source = eEnds.first;
@@ -521,25 +518,24 @@ void GlEdge::drawLabel(OcclusionTest* test, TextRenderer*, GlGraphInputData* dat
 	}
 
 	BoundingBox bb=getBoundingBox(data);
-	float labelLOD=(lod/sqrt((bb[1][0]-bb[0][0])*(bb[1][0]-bb[0][0])+(bb[1][1]-bb[0][1])*(bb[1][1]-bb[0][1])))*sqrt(2)*0.001;
 
 	label->setSize(Coord(0.001,0.001,0));
 	label->rotate(0,0,angle);
 	label->setAlignment(ON_TOP);
 	label->setScaleToSize(false);
-	label->setLabelOcclusionBorder(data->parameters->getLabelsBorder());
+	label->setLabelsDensity(data->parameters->getLabelsBorder());
 	if(!data->parameters->isLabelOverlaped())
 		label->setOcclusionTester(test);
 	else
 		label->setOcclusionTester(NULL);
 	label->setPosition(position);
 
-	label->setUseLODOptimisation(true);
+	label->setUseLODOptimisation(true,bb);
 	label->setUseMinMaxSize(true);
 	label->setMinSize(data->parameters->getMinSizeOfLabel());
 	label->setMaxSize(data->parameters->getMaxSizeOfLabel());
 
-	label->drawWithStencil(labelLOD,camera);
+	label->drawWithStencil(lod,camera);
 }
 
 void GlEdge::getVertices(GlGraphInputData *data,

@@ -16,15 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlGraphInputData.h"
+#include <tulip/GlGraphInputData.h>
 
 #include <tulip/Graph.h>
 #include <tulip/DrawingTools.h>
 
-#include "tulip/GlyphManager.h"
+#include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
-#include "tulip/GlGraphRenderingParameters.h"
-#include "tulip/GlVertexArrayManager.h"
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlVertexArrayManager.h>
 
 namespace tlp {
   GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer):

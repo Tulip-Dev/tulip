@@ -18,10 +18,8 @@
  */
 
 #include <float.h>
-#include "tulip/SizeProperty.h"
-#include "tulip/PluginContext.h"
-#include "tulip/Observable.h"
-#include "tulip/SizeAlgorithm.h"
+#include <tulip/SizeProperty.h>
+#include <tulip/Observable.h>
 
 using namespace std;
 using namespace tlp;

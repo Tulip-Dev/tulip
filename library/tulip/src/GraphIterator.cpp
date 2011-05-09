@@ -21,10 +21,9 @@
 #endif
 
 #include <cassert>
-#include "tulip/Graph.h"
-#include "tulip/GraphImpl.h"
-#include "tulip/GraphIterator.h"
-#include "tulip/BooleanProperty.h"
+#include <tulip/Graph.h>
+#include <tulip/GraphImpl.h>
+#include <tulip/GraphIterator.h>
 
 namespace tlp {
 
@@ -39,26 +38,28 @@ void decrNumIterators() {
   NumIterators--;
 }
 
-void NodeIteratorObserver::addNode(Graph*, node) {
-  if (hasNext())
-    std::cerr << "Warning: node added while iterating !!!" << std::endl;
+void NodeIteratorObserver::treatEvent(const Event& evt) {
+  switch(evt.type()) {
+    case GraphEvent::TLP_ADD_NODE:
+    case GraphEvent::TLP_DEL_NODE:
+      if (hasNext())
+        std::cerr << "Warning: node deleted while iterating !!!" << std::endl;
+    default:
+      break;
+  }
 }
 
-void NodeIteratorObserver::delNode(Graph*, node) {
-  if (hasNext())
-    std::cerr << "Warning: node deleted while iterating !!!" << std::endl;
+void EdgeIteratorObserver::treatEvent(const Event& evt) {
+  switch(evt.type()) {
+    case GraphEvent::TLP_ADD_EDGE:
+    case GraphEvent::TLP_DEL_EDGE:
+      if (hasNext())
+        std::cerr << "Warning: edge deleted while iterating !!!" << std::endl;
+    default:
+      break;
+  }
 }
    
-void EdgeIteratorObserver::addEdge(Graph*, edge) {
-  if (hasNext())
-    std::cerr << "Warning: edge added while iterating !!!" << std::endl;
-}
-
-void EdgeIteratorObserver::delEdge(Graph*, edge) {
-  if (hasNext())
-    std::cerr << "Warning: edge deleted while iterating !!!" << std::endl;
-}
-
 int getNumIterators() {
   return NumIterators;
 }
@@ -410,11 +411,7 @@ bool InOutEdgesIterator::hasNext() {
 //************************************************************
 //************************************************************
 //============================================================
-  GraphImplNodeIterator::GraphImplNodeIterator(const Graph*
-#ifndef NDEBUG
-					       g
-#endif
-					       , Iterator<node>* it):
+  GraphImplNodeIterator::GraphImplNodeIterator(const Graph* g, Iterator<node>* it):
   itId(it) {
 #ifndef NDEBUG
   graph = (GraphImpl *) g;
@@ -423,6 +420,8 @@ bool InOutEdgesIterator::hasNext() {
   #pragma omp critical(addRemoveObserver)
 #endif
   graph->addGraphObserver(this);
+#else
+  (void)g; //avoid unused parameter warning
 #endif
 }
 GraphImplNodeIterator::~GraphImplNodeIterator(){
@@ -431,7 +430,7 @@ GraphImplNodeIterator::~GraphImplNodeIterator(){
   // see explanation above
   #pragma omp critical(addRemoveObserver)
 #endif
-  graph->removeGraphObserver(this);
+//   graph->removeGraphObserver(this);
 #endif
   delete itId;
 }
@@ -443,11 +442,7 @@ bool GraphImplNodeIterator::hasNext() {
   return (itId->hasNext());
 }
 //===============================================================
-GraphImplEdgeIterator::GraphImplEdgeIterator(const Graph*
-#ifndef NDEBUG
-					       g
-#endif
-					     , Iterator<edge>* it):
+GraphImplEdgeIterator::GraphImplEdgeIterator(const Graph* g, Iterator<edge>* it):
   itId(it) {
 #ifndef NDEBUG
   graph = (GraphImpl *) g;
@@ -456,6 +451,8 @@ GraphImplEdgeIterator::GraphImplEdgeIterator(const Graph*
   #pragma omp critical(addRemoveObserver)
 #endif
   graph->addGraphObserver(this);
+#else
+  (void)g; //avoid unused parameter warning
 #endif
 }
 GraphImplEdgeIterator::~GraphImplEdgeIterator(){

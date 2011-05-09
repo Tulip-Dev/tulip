@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlTriangle.h"
+#include <tulip/GlTriangle.h>
 
 
 

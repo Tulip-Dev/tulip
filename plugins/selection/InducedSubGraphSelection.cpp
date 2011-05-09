@@ -16,10 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cassert>
+
 #include "InducedSubGraphSelection.h"
-#include <tulip/BooleanProperty.h>
-#include <tulip/MethodFactory.h>
 
 using namespace tlp;
 
@@ -32,7 +30,7 @@ namespace {
     HTML_HELP_OPEN() \
     HTML_HELP_DEF( "type", "Selection" ) \
     HTML_HELP_BODY() \
-    "This selection defines the originally set of nodes used to extend the current selection to the induced sub-graph." \
+    "This selection defines the original set of nodes used to extend the current selection to the induced sub-graph." \
     HTML_HELP_CLOSE(),
   };
 }

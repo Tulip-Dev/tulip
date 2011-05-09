@@ -22,7 +22,7 @@
 #include <sstream>
 #include <algorithm>
 
-#include "tulip/GlQuantitativeAxis.h"
+#include <tulip/GlQuantitativeAxis.h>
 
 template <typename T>
 std::string getStringFromNumber(T number, unsigned int precision = 4) {

@@ -16,11 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlyphManager.h"
+#include <tulip/GlyphManager.h>
 
 #include <tulip/tuliphash.h>
 
-#include "tulip/Glyph.h"
+#include <tulip/Glyph.h>
 
 //====================================================
 tlp::GlyphManager* tlp::GlyphManager::inst=0;

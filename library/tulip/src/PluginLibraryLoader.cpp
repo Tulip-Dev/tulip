@@ -16,9 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/PluginLibraryLoader.h"
-#include "tulip/TulipRelease.h"
-#include "tulip/tulipconf.h"
+#include <tulip/PluginLibraryLoader.h>
+#include <tulip/TulipRelease.h>
+#include <tulip/tulipconf.h>
 #include <string.h>
 #include <set>
 
@@ -32,6 +32,8 @@
 #endif
 
 using namespace tlp;
+
+std::string PluginLibraryLoader::currentPluginLibrary;
 
 static std::set<std::string> previouslyLoadedLib;
 
@@ -126,7 +128,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
   if (_infos->hFind != INVALID_HANDLE_VALUE) {
     //printf("\t%s\n",  _infos->FindData.cFileName);
     n++;
-    std::string tmpStr = pluginPath +"/"+ _infos->FindData.cFileName;
+    currentPluginLibrary = pluginPath +"/"+ _infos->FindData.cFileName;
     std::string lib(_infos->FindData.cFileName);
     unsigned long idx = lib.rfind('-');
     if (idx != std::string::npos) {
@@ -135,15 +137,15 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
         if(!isPreviouslyLoaded(lib)){
           if (loader)
             loader->loading(_infos->FindData.cFileName);
-          loadPluginLibrary(tmpStr, loader);
+          loadPluginLibrary(currentPluginLibrary, loader);
         }
       }
       else if (loader)
-        loader->aborted(tmpStr,tmpStr + " is not compatible with Tulip "
+        loader->aborted(currentPluginLibrary,currentPluginLibrary + " is not compatible with Tulip "
             + TULIP_RELEASE);
     }
     else if (loader)
-      loader->aborted(tmpStr, tmpStr + " is not a Tulip plugin library");
+      loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
     pluginFound = FindNextFile (_infos->hFind, &_infos->FindData);
   }
   if (!pluginFound) {
@@ -207,13 +209,12 @@ PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath,
 bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
   if (n > 0) {
     struct dirent **namelist = (struct dirent **) infos;
-    std::string tmpStr;
     n--;
     std::string lib(namelist[n]->d_name);
     free(namelist[n]);
     if (n == 0)
       free(infos);
-    tmpStr = pluginPath +"/"+ lib;
+    currentPluginLibrary = pluginPath +"/"+ lib;
     // looking for a suffix matching -A.B.C
     unsigned long idx = lib.rfind('-', lib.rfind('.') - 1);
     if (idx != std::string::npos) {
@@ -223,7 +224,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
         if(!isPreviouslyLoaded(lib)){
           if (loader!=0)
             loader->loading(lib);
-          loadPluginLibrary(tmpStr, loader);
+          loadPluginLibrary(currentPluginLibrary, loader);
         }
         return n > 0;
       }
@@ -248,7 +249,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
               }
             }
             if (isNumber && loader) {
-              loader->aborted(tmpStr,tmpStr + " is not compatible with Tulip " + TULIP_RELEASE);
+              loader->aborted(currentPluginLibrary,  currentPluginLibrary + " is not compatible with Tulip " + TULIP_RELEASE);
               return n > 0;
             }
           }
@@ -256,7 +257,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
       }
     }
     if (loader)
-      loader->aborted(tmpStr, tmpStr + " is not a Tulip plugin library");
+      loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
   }
   return (n > 0); //return pluginLoaded;
 }

@@ -67,22 +67,14 @@ INCLUDE_DIRECTORIES(../include/ ${TulipInclude} ${TulipBuildInclude} ${PROJECT_B
 
 ADD_EXECUTABLE( tulip_check_pl ${tulip_check_pl_SRCS})
 TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipName} ${CMAKE_DL_LIBS})
+TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipQtName} )
 TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipPluginsManagerName})
-TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipPluginsManagerName})
-ADD_DEPENDENCIES(tulip_check_pl ${LibTulipName})
 
-ADD_LIBRARY(${LibTulipPluginsManagerName} SHARED ${${LibTulipPluginsManagerName}_UI_SRCS} ${${LibTulipPluginsManagerName}_MOC_SRCS} ${${LibTulipPluginsManagerName}_LIB_SRCS})
-TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTCORE_LIBRARY})
-TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTGUI_LIBRARY})
-TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTXML_LIBRARY})
+ADD_LIBRARY(${LibTulipPluginsManagerName} STATIC ${${LibTulipPluginsManagerName}_UI_SRCS} ${${LibTulipPluginsManagerName}_MOC_SRCS} ${${LibTulipPluginsManagerName}_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTNETWORK_LIBRARY})
-TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${LibTulipName})
-TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${LibTulipOglName})
-TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${LibTulipQtName})
-ADD_DEPENDENCIES(${LibTulipPluginsManagerName} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
 IF(WIN32)
-  IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
+  IF(${MSVC})
     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip_check_pl.exe 
             DESTINATION "${TulipBinInstallDir}"
             COMPONENT tulip_pluginsmanager)
@@ -104,8 +96,3 @@ IF(LINUX)
           DESTINATION "${TulipBinInstallDir}"
           COMPONENT tulip_pluginsmanager)
 ENDIF(LINUX)
-
-INSTALL(TARGETS ${LibTulipPluginsManagerName}
-       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_pluginsmanager
-       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_pluginsmanager
-       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_pluginsmanager)

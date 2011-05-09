@@ -238,7 +238,7 @@ namespace tlp {
 
   };
 
-  class TLP_QT_SCOPE ControllerFactory: public Plugin {
+  class TLP_QT_SCOPE ControllerFactory: public PluginInfoInterface {
   public:
     virtual ~ControllerFactory() {}
     ///

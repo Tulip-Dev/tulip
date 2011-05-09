@@ -111,21 +111,21 @@ int main(int argc,char **argv) {
     }
 
     if(srcDir.exists(QString((*it).fileName.c_str())+".so")) {
-      UpdatePlugin::copyFile(srcDir,QString((*it).fileName.c_str())+".so",
+      UpdatePlugin::moveFile(srcDir,QString((*it).fileName.c_str())+".so",
 			     QDir(dstDir.filePath(archSubDir)),
-			     QString((*it).fileName.c_str())+".so", true);
+			     QString((*it).fileName.c_str())+".so");
     }
     if(argc==4) {
       dstDir.mkpath(targetPath+"/pluginsV2/"+path + "/i386");
       if(secondSrcDir.exists(QString((*it).fileName.c_str())+".dylib")) {
-	UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".dylib",
+        UpdatePlugin::moveFile(secondSrcDir,QString((*it).fileName.c_str())+".dylib",
 			       QDir(dstDir.filePath("i386")),
-			       QString((*it).fileName.c_str())+".dylib", true);
+			       QString((*it).fileName.c_str())+".dylib");
       }
       if(secondSrcDir.exists(QString((*it).fileName.c_str())+".dll")) {
-	UpdatePlugin::copyFile(secondSrcDir,QString((*it).fileName.c_str())+".dll",
+        UpdatePlugin::moveFile(secondSrcDir,QString((*it).fileName.c_str())+".dll",
 			       QDir(dstDir.filePath("i386")),
-			       QString((*it).fileName.c_str())+".dll", true);
+			       QString((*it).fileName.c_str())+".dll");
       }
     }
     if (!docPath.isEmpty()) {

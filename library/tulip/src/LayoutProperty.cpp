@@ -19,10 +19,10 @@
 #include <cmath>
 #include <float.h>
 #include <fstream>
-#include "tulip/LayoutProperty.h"
-#include "tulip/Coord.h"
-#include "tulip/PluginContext.h"
-#include "tulip/ForEach.h"
+#include <tulip/LayoutProperty.h>
+#include <tulip/Coord.h>
+#include <tulip/PluginContext.h>
+#include <tulip/ForEach.h>
 
 using namespace std;
 using namespace tlp;
@@ -61,11 +61,6 @@ LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeRevers
     graph->addGraphObserver(this);
   // set default MetaValueCalculator
   setMetaValueCalculator(&mvLayoutCalculator);
-}
-//======================================================
-LayoutProperty::~LayoutProperty() {
-  if (graph)
-    graph->removeGraphObserver(this);
 }
 //======================================================
 Coord LayoutProperty::getMax(Graph *sg) {
@@ -213,7 +208,6 @@ void LayoutProperty::translate(const tlp::Vector<float,3>& v, Iterator<node> *it
   }
   if (itE != 0 || itN != 0) {
       resetBoundingBox();
-      notifyObservers();
   }
   Observable::unholdObservers();
 }
@@ -239,7 +233,6 @@ void LayoutProperty::center(Graph *sg) {
   tr /= -2.0;
   translate(tr, sg);
   resetBoundingBox();
-  notifyObservers();
   Observable::unholdObservers();
 }
 //=================================================================================
@@ -261,7 +254,6 @@ void LayoutProperty::normalize(Graph *sg) {
   dtmpMax = 1.0 / sqrt(dtmpMax);
   scale(Coord(dtmpMax,dtmpMax,dtmpMax), sg);  
   resetBoundingBox();
-  notifyObservers();
   Observable::unholdObservers();
 }
 //=================================================================================
@@ -287,7 +279,6 @@ void LayoutProperty::perfectAspectRatio() {
   scaleY = delta / deltaY;
   scaleZ = delta / deltaZ;
   scale(Coord(scaleX,scaleY,scaleZ));
-  notifyObservers();
   Observable::unholdObservers();
 }
 
@@ -650,6 +641,10 @@ PropertyInterface* LayoutProperty::clonePrototype(Graph * g, const std::string& 
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
+}
+//=============================================================
+void LayoutProperty::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
 }
 //=================================================================================
 PropertyInterface* CoordVectorProperty::clonePrototype(Graph * g, const std::string& n) {

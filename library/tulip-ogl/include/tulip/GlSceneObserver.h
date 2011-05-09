@@ -29,6 +29,8 @@
 
 #include <tulip/tulipconf.h>
 
+#include <tulip/Observable.h>
+
 namespace tlp {
 
   class GlLayer;
@@ -38,75 +40,29 @@ namespace tlp {
   /** \brief An observer to the scene
    * An observer to the scene who observe layers
    */
-  class TLP_GL_SCOPE GlSceneObserver {
+  class TLP_GL_SCOPE GlSceneEvent : public Event {
   public:
-    virtual ~GlSceneObserver() {}
-    /**
-     * This function is call when we add a new layer
-     */
-    virtual void addLayer(GlScene*, const std::string&, GlLayer*){}
-    /**
-     * This function is call when we remove a layer
-     */
-    virtual void delLayer(GlScene*, const std::string&, GlLayer*){}
-    /**
-     * This function is call when we add an entity to the layer
-     */
-    virtual void modifyLayer(GlScene*, const std::string&, GlLayer*){}
-    /**
-     * This function is call when we modify an entity
-     */
-    virtual void modifyEntity(GlScene *,GlSimpleEntity *){}
+
+    enum GlSceneEventType {TLP_ADDLAYER=0, TLP_DELLAYER, TLP_MODIFYLAYER, TLP_MODIFYENTITY};
+
+    GlSceneEvent(const GlScene &scene,GlSceneEventType sceneEventType,const std::string &layerName,GlLayer *layer);
+
+    GlSceneEvent(const GlScene &scene,GlSimpleEntity *entity);
+
+    GlSimpleEntity *getGlSimpleEntity();
+
+    std::string getLayerName();
+
+    GlLayer *getLayer();
+
+  protected :
+
+    GlSceneEventType sceneEventType;
+    std::string layerName;
+    GlLayer *layer;
+    GlSimpleEntity *glSimpleEntity;
+
   };
-
-  /**
-   * Observable scene
-   */
-  class TLP_GL_SCOPE GlObservableScene {
-  public:
-    virtual ~GlObservableScene() {}
-    /**
-     * Register a new observer
-     */
-    void addObserver(GlSceneObserver *) const;
-    /**
-     * Returns the number of observers
-     */
-    unsigned int countObservers();
-    /**
-     * Remove an observer
-     */
-    void removeObserver(GlSceneObserver *) const;
-    /**
-     * Remove all observers
-     */
-    void removeObservers();
-
-    void notifyAddLayer(GlScene *scene,const std::string& name, GlLayer* layer);
-    void notifyDelLayer(GlScene *scene,const std::string& name, GlLayer* layer);
-    void notifyModifyLayer(GlScene *scene,const std::string& name, GlLayer* layer);
-    void notifyModifyEntity(GlScene *,GlSimpleEntity *entity);
-
-  protected:
-
-    mutable std::set<GlSceneObserver*> observers;
-  };
-
-  inline void GlObservableScene::addObserver(GlSceneObserver *obs) const {
-    observers.insert(obs);
-  }
-
-  inline unsigned int GlObservableScene::countObservers() {
-    return observers.size();
-  }
-
-  inline void GlObservableScene::removeObserver(GlSceneObserver *item) const{
-    observers.erase(item);
-  }
-
-  inline void GlObservableScene::removeObservers() {
-    observers.clear();
-  }
 }
 
 #endif

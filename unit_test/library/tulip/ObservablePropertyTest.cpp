@@ -41,7 +41,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ObservablePropertyTest );
 // these classes will capture
 // everything that will happen to our properties
 // synchronously or asynchronously
-class ObserverPTest :public Observer {
+class ObserverPTest :public Observable {
 public:
   std::set<Observable*> observables;
 
@@ -79,7 +79,7 @@ static ObserverPTest* observer;
 
 // this class will capture
 // everything that will happen to our properties
-class PropertyObserverTest :public PropertyObserver {
+class PropertyObserverTest :public PropertyObserver, public Observable {
 public:
   std::set<PropertyInterface*> properties;
   node lastNode;
@@ -121,6 +121,9 @@ public:
   }
   virtual void destroy(PropertyInterface* prop){
     properties.insert(prop);
+  }
+  virtual void treatEvent(const Event& evt) {
+    PropertyObserver::treatEvent(evt);
   }
 };
 
@@ -167,7 +170,7 @@ void ObservablePropertyTest::tearDown() {
   delete pObserver;
 }
 
-void ObservablePropertyTest::setNodeValue(PropertyInterface* prop, char* val,
+void ObservablePropertyTest::setNodeValue(PropertyInterface* prop, const char* val,
 					  bool all, bool found1,
 					  bool found2) {
   observer->reset();
@@ -194,7 +197,7 @@ void ObservablePropertyTest::setNodeValue(PropertyInterface* prop, char* val,
   }
 }
 
-void ObservablePropertyTest::setEdgeValue(PropertyInterface* prop, char* val,
+void ObservablePropertyTest::setEdgeValue(PropertyInterface* prop, const char* val,
 					  bool all, bool found1,
 					  bool found2) {
   observer->reset();
@@ -353,12 +356,13 @@ void ObservablePropertyTest::testSynchronousDelete() {
   CPPUNIT_ASSERT(observer->nbObservables() == 0);
   CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
   for(unsigned int i = 0; i < 7; ++i) {
-    delete props[i];
-    CPPUNIT_ASSERT(observer->nbObservables() == i + 1);
-    CPPUNIT_ASSERT(observer->found(props[i]));
-    CPPUNIT_ASSERT(pObserver->nbProperties() == i + 1);
-    CPPUNIT_ASSERT(pObserver->found(props[i]));
+    PropertyInterface* prop = props[i];
+    delete prop;
     props[i] = NULL;
+    CPPUNIT_ASSERT(observer->nbObservables() == i + 1);
+    CPPUNIT_ASSERT(observer->found(prop));
+    CPPUNIT_ASSERT(pObserver->nbProperties() == i + 1);
+    CPPUNIT_ASSERT(pObserver->found(prop));
   }
 }
 
@@ -368,13 +372,14 @@ void ObservablePropertyTest::testAsynchronousDelete() {
   CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
   Observable::holdObservers();
   for(unsigned int i = 0; i < 7; ++i) {
-    delete props[i];
+    PropertyInterface* prop = props[i];
+    delete prop;
+    props[i] = NULL;
     // deletion is not asynchronous
     CPPUNIT_ASSERT(observer->nbObservables() == i + 1);
-    CPPUNIT_ASSERT(observer->found(props[i]));
+    CPPUNIT_ASSERT(observer->found(prop));
     CPPUNIT_ASSERT(pObserver->nbProperties() == i + 1);
-    CPPUNIT_ASSERT(pObserver->found(props[i]));
-    props[i] = NULL;
+    CPPUNIT_ASSERT(pObserver->found(prop));
   }
   Observable::unholdObservers();
 }
@@ -407,9 +412,9 @@ void ObservablePropertyTest::testRemoveObserver() {
 
   for(unsigned int i = 0; i < 7; ++i) {
     delete props[i];
+    props[i] = NULL;
     CPPUNIT_ASSERT(observer->nbObservables() == 0);
     CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
-    props[i] = NULL;
   }
 }
 

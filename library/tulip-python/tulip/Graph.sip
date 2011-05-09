@@ -48,7 +48,7 @@ typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
 
 enum ElementType {NODE=0, EDGE};
 
-class Graph  /Abstract/ {
+class Graph /Abstract/ {
 %TypeHeaderCode
 #include <tulip/Graph.h>
 %End

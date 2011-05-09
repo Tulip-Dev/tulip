@@ -172,6 +172,56 @@ PropertyInterface *PropertyTools::getProperty(Graph* graph, const string& proper
     }
 }
 
+PropertyInterface *PropertyTools::getLocalProperty(Graph* graph, const string& propertyName,
+                                              const string& propertyType) {
+
+    if (propertyType.compare("double") == 0) {
+        return graph->getLocalProperty<DoubleProperty> (propertyName);
+    }
+    else if (propertyType.compare("layout")==0) {
+        return graph->getLocalProperty<LayoutProperty> (propertyName);
+    }
+    else if (propertyType.compare("string")==0) {
+        return graph->getLocalProperty<StringProperty> (propertyName);
+    }
+    else if (propertyType.compare("int")==0) {
+        return graph->getLocalProperty<IntegerProperty> (propertyName);
+    }
+    else if (propertyType.compare("color")==0) {
+        return graph->getLocalProperty<ColorProperty> (propertyName);
+    }
+    else if (propertyType.compare("size")==0) {
+        return graph->getLocalProperty<SizeProperty> (propertyName);
+    }
+    else if (propertyType.compare("bool")==0) {
+        return graph->getLocalProperty<BooleanProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<double>")==0) {
+        return graph->getLocalProperty<DoubleVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<string>")==0) {
+        return graph->getLocalProperty<StringVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<int>")==0) {
+        return graph->getLocalProperty<IntegerVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<coord>")==0) {
+        return graph->getLocalProperty<CoordVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<color>")==0) {
+        return graph->getLocalProperty<ColorVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("BooleanVector")==0) {
+        return graph->getLocalProperty<BooleanVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("SizeVector")==0) {
+        return graph->getLocalProperty<SizeVectorProperty> (propertyName);
+    }
+    else {
+        return NULL;
+    }
+}
+
 
 CSVImportParameters::CSVImportParameters(unsigned int fromLine,unsigned int toLine,const vector<CSVColumn>& columns):fromLine(fromLine),toLine(toLine),columns(columns){
 }

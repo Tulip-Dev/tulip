@@ -22,17 +22,9 @@
 
 #include <time.h>
 #include <string>
-#include <QtGui/qprogressbar.h>
-#include <QtGui/qdialog.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qtextedit.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qapplication.h>
+#include <QtGui/QDialog>
 #include <QtCore/QSettings>
 #include <tulip/TlpTools.h>
-#include <tulip/PluginLoaderTxt.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/Glyph.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/InteractorManager.h>
@@ -102,8 +94,6 @@ AppStartUp::AppStartUp(QWidget* parent) :
   string tmp = "Tulip ";
   tmp+=TULIP_RELEASE;
   setWindowTitle(tmp.c_str());
-  string dir = TulipLibDir;
-  dir += "tlp/bitmaps/";
   movie = new QMovie(string(":/startUpPicture.png").c_str());
   movie->setCacheMode(QMovie::CacheAll);
   PixmapLabel1->setMovie(movie);

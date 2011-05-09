@@ -26,7 +26,7 @@
 #include <tulip/Coord.h>
 #include <tulip/tulipconf.h>
 
-#include "tulip/GlAbstractPolygon.h"
+#include <tulip/GlAbstractPolygon.h>
 
 namespace tlp {
   /**

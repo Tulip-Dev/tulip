@@ -93,7 +93,7 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
   while (it.hasNext()) {
     node n2 = it.next();
     if (isCNode(n2)) 
-      sg->delAllNode(n2);
+      sg->delNode(n2, true);
   }
   //  cout << "Le sge est " << (planar ? "planaire" : "non planaire") << endl;
   restore();
@@ -119,7 +119,7 @@ void PlanarityTestImpl::restore() {
   //delete edges added in bidirected
   map<edge,edge>::const_iterator it2;
   for (it2 = bidirectedEdges.begin(); it2!=bidirectedEdges.end(); ++it2) {
-    sg->delAllEdge(it2->first);
+    sg->delEdge(it2->first, true);
   }
 }
 

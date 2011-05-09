@@ -17,12 +17,12 @@
  *
  */
 
-#include "tulip/BooleanProperty.h"
-#include "tulip/PluginContext.h"
-#include "tulip/Observable.h"
-#include "tulip/BooleanAlgorithm.h"
-#include "tulip/AbstractProperty.h"
-#include "tulip/GraphIterator.h"
+#include <tulip/BooleanProperty.h>
+#include <tulip/PluginContext.h>
+#include <tulip/Observable.h>
+#include <tulip/BooleanAlgorithm.h>
+#include <tulip/AbstractProperty.h>
+#include <tulip/GraphIterator.h>
 
 using namespace std;
 using namespace tlp;
@@ -67,7 +67,6 @@ void BooleanProperty::reverse() {
     else
       setEdgeValue(ite,true);
   } delete itE;
-  notifyObservers();
   Observable::unholdObservers();
 }
 //=================================================================================

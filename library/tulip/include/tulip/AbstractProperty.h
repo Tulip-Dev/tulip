@@ -21,14 +21,14 @@
 
 #include <string>
 #include <cstdlib>
-#include "tulip/tulipconf.h"
-#include "tulip/StoredType.h"
-#include "tulip/MutableContainer.h"
-#include "tulip/PropertyInterface.h"
-#include "tulip/Iterator.h"
-#include "tulip/PropertyAlgorithm.h"
-#include "tulip/TemplateFactory.h"
-#include "tulip/Reflect.h"
+#include <tulip/tulipconf.h>
+#include <tulip/StoredType.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/PropertyInterface.h>
+#include <tulip/Iterator.h>
+#include <tulip/PropertyAlgorithm.h>
+#include <tulip/TemplateFactory.h>
+#include <tulip/Reflect.h>
 
 namespace tlp {
 
@@ -378,6 +378,18 @@ public:
     metaValueCalculator = mvCalc;
   }
 
+
+  /**
+    * @brief Default implementation of PropertyInterface::compare(node n1,node n2)
+    **/
+  int compare(node n1,node n2);
+
+  /**
+    * @brief Default implementation of PropertyInterface::compare(edge e1,edge e2)
+    **/
+  int compare(edge e1,edge e2);
+
+
   /**
    * @brief This class is used to delegate the computation of the values associated to meta nodes or edges.
    **/
@@ -425,7 +437,7 @@ protected:
    * @param v The value to set.
    * @return void
    **/
-  void setNodeEltValue(const node n, unsigned int i, const eltType &v);
+  void setNodeEltValue(const node n, unsigned int i, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v);
   /**
    * @brief Gets the value associated to node n, at index i.
    *
@@ -433,7 +445,7 @@ protected:
    * @param i The index at which to set the value.
    * @return const eltType& The value at index i in the vector for node n.
    **/
-  const eltType& getNodeEltValue(const node n, unsigned int i) const;
+  typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue getNodeEltValue(const node n, unsigned int i) const;
   /**
    * @brief Appends a new value at the end of the vector associated to node n, and notify the observers of a modification.
    *
@@ -441,7 +453,7 @@ protected:
    * @param v The value to append at the end of the vector.
    * @return void
    **/
-  void pushBackNodeEltValue(const node n, const eltType &v);
+  void pushBackNodeEltValue(const node n, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v);
   /**
    * @brief Removes the value at the end of the vector associated to node n, and notify the observers of a modification.
    *
@@ -457,7 +469,7 @@ protected:
    * @param elt The default value to set at indices where there was no value before. Defaults to eltType().
    * @return void
    **/
-  void resizeNodeValue(const node n, size_t size, eltType elt = eltType());
+  void resizeNodeValue(const node n, size_t size, typename eltType::RealType elt = eltType::defaultValue());
   /**
    * @brief Sets the value for edge e, at index i, to v, and notify the observers of a modification.
    *
@@ -466,7 +478,7 @@ protected:
    * @param v The value to set.
    * @return void
    **/
-  void setEdgeEltValue(const edge e, unsigned int i, const eltType &v);
+  void setEdgeEltValue(const edge e, unsigned int i, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v);
   /**
    * @brief Gets the value associated to edge e, at index i.
    *
@@ -474,7 +486,7 @@ protected:
    * @param i The index at which to set the value.
    * @return const eltType& The value at index i in the vector for node n.
    **/
-  const eltType& getEdgeEltValue(const edge n, unsigned int i) const;
+  typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue getEdgeEltValue(const edge n, unsigned int i) const;
   /**
    * @brief Appends a new value at the end of the vector associated to edge e, and notify the observers of a modification.
    *
@@ -482,7 +494,7 @@ protected:
    * @param v The value to append at the end of the vector.
    * @return void
    **/
-  void pushBackEdgeEltValue(const edge e, const eltType &v);
+  void pushBackEdgeEltValue(const edge e, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v);
     /**
    * @brief Removes the value at the end of the vector associated to edge e, and notify the observers of a modification.
    *
@@ -498,11 +510,11 @@ protected:
    * @param elt The default value to set at indices where there was no value before. Defaults to eltType().
    * @return void
    **/
-  void resizeEdgeValue(const edge e, size_t size, eltType elt = eltType());
+  void resizeEdgeValue(const edge e, size_t size, typename eltType::RealType elt = eltType::defaultValue());
  };
 /*@}*/
 }
 #if !defined(_MSC_VER) || defined(DLL_TULIP) //When using VC++, we only want to include this when we are in the TULIP dll. With any other compiler, include it all the time
-#	include "./cxx/AbstractProperty.cxx"
+#	include "cxx/AbstractProperty.cxx"
 #endif
 #endif

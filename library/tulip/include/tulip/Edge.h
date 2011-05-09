@@ -19,7 +19,7 @@
 #ifndef Tulip_EDGE_H
 #define Tulip_EDGE_H
 #include <climits>
-#include "tulip/tuliphash.h"
+#include <tulip/tuliphash.h>
 /**
  * \addtogroup graphs
  */ 

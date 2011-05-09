@@ -18,16 +18,13 @@
  */
 
 #include <sstream>
-#include <cmath>
-#include <list>
-#include <map>
 
 #include <tulip/GlLine.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlRect.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 
-#include "tulip/GlAxis.h"
+#include <tulip/GlAxis.h>
 
 using namespace std;
 

@@ -21,14 +21,10 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <QtGui/qevent.h>
 #include <QtGui/qimage.h>
-#include <QtGui/qtooltip.h>
 #include <QtOpenGL/QGLPixelBuffer>
-#include <QtGui/QPainter>
 #include <QtOpenGL/QGLFramebufferObject>
 #include <QtOpenGL/QGLFormat>
-#include <QtCore/QTime>
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
 #include <omp.h>
@@ -37,21 +33,14 @@
 #include "tulip/GlMainWidget.h"
 
 #include <tulip/Graph.h>
-#include <tulip/Iterator.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/SizeProperty.h>
 #include <tulip/GlTools.h>
-#include <tulip/StlIterator.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
 
-
 #include "tulip/QGlPixelBufferManager.h"
 #include "tulip/Interactor.h"
-#include "tulip/InteractorManager.h"
 #include <tulip/GlCompositeHierarchyManager.h>
 #include "tulip/GlVertexArrayManager.h"
 
@@ -97,10 +86,13 @@ QGLWidget* GlMainWidget::getFirstQGLWidget() {
 }
 
 //==================================================
-GlMainWidget::GlMainWidget(QWidget *parent,AbstractView *view):
+GlMainWidget::GlMainWidget(QWidget *parent,View *view):
     								QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view), _hasHulls(false), useFramebufferObject(false), glFrameBuf(NULL){
 	setFocusPolicy(Qt::StrongFocus);
 	setMouseTracking(true);
+	grabGesture(Qt::PinchGesture);
+    grabGesture(Qt::PanGesture);
+    grabGesture(Qt::SwipeGesture);
 	renderingStore=NULL;
 #ifdef __APPLE__
 	// This code is here to bug fix black screen problem on MACOSX with Qt 4.7
@@ -506,7 +498,7 @@ void GlMainWidget::makeCurrent() {
 //==================================================
 bool GlMainWidget::selectGlEntities(const int x, const int y,
 		const int width, const int height,
-		std::vector<GlEntity *> &pickedEntities,
+		std::vector<GlSimpleEntity *> &pickedEntities,
 		GlLayer* layer) {
 	makeCurrent();
 	std::vector<unsigned long> entities;
@@ -515,13 +507,13 @@ bool GlMainWidget::selectGlEntities(const int x, const int y,
 			layer,
 			entities);
 	for(std::vector<unsigned long>::iterator it=entities.begin();it!=entities.end();++it){
-		pickedEntities.push_back((GlEntity*)(*it));
+		pickedEntities.push_back((GlSimpleEntity*)(*it));
 	}
 	return number;
 }
 //==================================================
 bool GlMainWidget::selectGlEntities(const int x, const int y,
-		std::vector <GlEntity *> &pickedEntities,
+		std::vector <GlSimpleEntity *> &pickedEntities,
 		GlLayer* layer) {
 	return selectGlEntities(x,y,2,2,pickedEntities,layer);
 }
@@ -652,8 +644,14 @@ QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName
 
 	return NULL;
 }
+
 //=====================================================
 void GlMainWidget::createPicture(const std::string &pictureName, int width, int height,bool center, int zoom, int xDec, int yDec){
+	createPicture(width,height,center,zoom,xDec,yDec).save(pictureName.c_str());
+}
+
+//=====================================================
+QImage GlMainWidget::createPicture(int width, int height,bool center, int zoom, int xDec, int yDec){
 #ifndef WITHOUT_QT_PICTURE_OUTPUT   
 	scene.setViewport(0,0,width,height);
 	if(center)
@@ -669,7 +667,7 @@ void GlMainWidget::createPicture(const std::string &pictureName, int width, int 
 
 	scene.draw();
 
-	glFrameBuf->toImage().save(pictureName.c_str());
+	return glFrameBuf->toImage();
 #else
 	makeCurrent();
 	scene.setViewport(0,0,width,height);
@@ -697,7 +695,7 @@ void GlMainWidget::createPicture(const std::string &pictureName, int width, int 
 	}
 	painter.end();
 	free(image);
-	pm.save(pictureName.c_str());
+	return pm.toImage();
 #endif
 }
 

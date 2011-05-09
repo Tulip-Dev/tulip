@@ -21,197 +21,48 @@
 #endif
 
 #include <cassert>
-#include <iostream>
-#include "tulip/ObservableProperty.h"
+#include <tulip/ObservableProperty.h>
+#include <tulip/PropertyInterface.h>
 
 using namespace stdext;
 using namespace tlp;
 
-// nothing has to be copied
-PropertyObserver::PropertyObserver(const PropertyObserver&) {}
-
-PropertyObserver::~PropertyObserver(){
-	/*#ifndef NDEBUG
-  if(observables.size()!=0)
-    std::cerr << "Delete a property observer without remove it from observable list" << std::endl;
-#endif*/
-	if (!observables.empty()) {
-		for(std::list<ObservableProperty *>::iterator it=observables.begin();it!=observables.end();++it){
-			(*it)->removeOnlyPropertyObserver(this);
-		}
-	}
+void PropertyObserver::treatEvent(const Event& ev) {
+  const PropertyEvent* propEvt = dynamic_cast<const PropertyEvent*>(&ev);
+  if (propEvt) {
+    PropertyInterface* prop = propEvt->getProperty();
+    switch(propEvt->getType()) {
+    case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
+      beforeSetNodeValue(prop, propEvt->getNode());
+      break;
+    case PropertyEvent::TLP_AFTER_SET_NODE_VALUE:
+      afterSetNodeValue(prop, propEvt->getNode());
+      break;
+    case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:
+      beforeSetAllNodeValue(prop);
+      break;
+    case PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE:
+      afterSetAllNodeValue(prop);
+      break;
+    case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
+      beforeSetAllEdgeValue(prop);
+      break;
+    case PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE:
+      afterSetAllEdgeValue(prop);
+      break;
+    case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
+      beforeSetEdgeValue(prop, propEvt->getEdge());
+      break;
+    case PropertyEvent::TLP_AFTER_SET_EDGE_VALUE:
+      afterSetEdgeValue(prop, propEvt->getEdge());
+      break;
+    default:
+      // this should not happen
+      assert(false);
+    }
+  } else {
+    PropertyInterface* prop = dynamic_cast<PropertyInterface *>(ev.sender());
+    if (prop && ev.type() == Event::TLP_DELETE)
+      destroy(prop);
+  }
 }
-
-void PropertyObserver::addObservable(ObservableProperty *property){
-	if (updateObservables) {
-		observables.push_front(property);
-	}
-}
-
-void PropertyObserver::removeObservable(ObservableProperty *property) {
-	if (updateObservables) {
-		observables.remove(property);
-	}
-}
-
-void ObservableProperty::addPropertyObserver(PropertyObserver *obs) const {
-	// ensure obs does not already exists in observers
-	if (observersSet.find(obs) == observersSet.end()) {
-		observers.push_front(obs);
-		observersSet[obs] = observers.begin();
-		obs->addObservable((ObservableProperty*)this);
-	}
-}
-
-// nothing has to be copied
-ObservableProperty::ObservableProperty(const ObservableProperty&) {}
-
-void ObservableProperty::notifyBeforeSetNodeValue(PropertyInterface* p,
-		const node n) {
-	if (observers.empty())
-		return;
-	std::list<PropertyObserver*>::iterator itObs = observers.begin();
-	std::list<PropertyObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		PropertyObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->beforeSetNodeValue(p, n);
-	}
-}
-
-void ObservableProperty::notifyAfterSetNodeValue(PropertyInterface* p,
-		const node n) {
-	if (observers.empty())
-		return;
-	std::list<PropertyObserver*>::iterator itObs = observers.begin();
-	std::list<PropertyObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		PropertyObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->afterSetNodeValue(p, n);
-	}
-}
-
-void ObservableProperty::notifyBeforeSetEdgeValue(PropertyInterface* p,
-		const edge e) {
-	if (observers.empty())
-		return;
-	std::list<PropertyObserver*>::iterator itObs = observers.begin();
-	std::list<PropertyObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		PropertyObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->beforeSetEdgeValue(p, e);
-	}
-}
-
-void ObservableProperty::notifyAfterSetEdgeValue(PropertyInterface* p,
-		const edge e) {
-	if (observers.empty())
-		return;
-	std::list<PropertyObserver*>::iterator itObs = observers.begin();
-	std::list<PropertyObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		PropertyObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->afterSetEdgeValue(p, e);
-	}
-}
-
-void ObservableProperty::notifyBeforeSetAllNodeValue(PropertyInterface* p) {
-	if (observers.empty())
-		return;
-	std::list<PropertyObserver*>::iterator itObs = observers.begin();
-	std::list<PropertyObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		PropertyObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->beforeSetAllNodeValue(p);
-	}
-}
-
-void ObservableProperty::notifyAfterSetAllNodeValue(PropertyInterface* p) {
-	if (observers.empty())
-		return;
-	std::list<PropertyObserver*>::iterator itObs = observers.begin();
-	std::list<PropertyObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		PropertyObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->afterSetAllNodeValue(p);
-	}
-}
-
-void ObservableProperty::notifyBeforeSetAllEdgeValue(PropertyInterface* p) {
-	if (observers.empty())
-		return;
-	std::list<PropertyObserver*>::iterator itObs = observers.begin();
-	std::list<PropertyObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		PropertyObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->beforeSetAllEdgeValue(p);
-	}
-}
-
-void ObservableProperty::notifyAfterSetAllEdgeValue(PropertyInterface* p) {
-	if (observers.empty())
-		return;
-	std::list<PropertyObserver*>::iterator itObs = observers.begin();
-	std::list<PropertyObserver*>::iterator ite = observers.end();
-	while (itObs != ite) {
-		PropertyObserver* observer = *itObs;
-		// iterator is incremented before
-		// to ensure it will not be invalidated
-		// during the call to the method on the observer
-		++itObs;
-		observer->afterSetAllEdgeValue(p);
-	}
-}
-
-void ObservableProperty::notifyDestroy(PropertyInterface* p) {
-	// use a copy to avoid the invalidation of the iterator
-	// when an observer remove itself from the list
-	if (observers.empty())
-		return;
-	std::list<PropertyObserver*> copy(observers);
-	std::list<PropertyObserver*>::iterator itObs = copy.begin();
-	std::list<PropertyObserver*>::iterator ite = copy.end();
-	while (itObs != ite) {
-		(*itObs)->destroy(p);
-		++itObs;
-	}
-}
-
-void ObservableProperty::removePropertyObservers() {
-	if (observers.empty())
-		return;
-	for(std::list<PropertyObserver*>::iterator it=observers.begin();it!=observers.end();++it){
-		(*it)->removeObservable(this);
-	}
-	observers.clear();
-	observersSet.clear();
-}
-
-

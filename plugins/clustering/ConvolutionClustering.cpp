@@ -16,24 +16,20 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <stdio.h>
-#include <math.h>
-#include <sstream>
-#include <QtGui/qinputdialog.h>
-#include <tulip/Graph.h>
-#include <tulip/BooleanProperty.h>
-#include <fstream>
+
 
 #include "ConvolutionClustering.h"
 #include "ConvolutionClusteringSetup.h"
 
+#include "tulip/ForEach.h"
+
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(ConvolutionClustering,"Convolution","David Auber","14/08/2001","Alpha","1.0");
+DOUBLEPLUGINOFGROUP(ConvolutionClustering,"Convolution","David Auber","14/08/2001","Alpha","2.0","Clustering");
 
 //================================================================================
-  ConvolutionClustering::ConvolutionClustering(AlgorithmContext context):Algorithm(context) {}
+  ConvolutionClustering::ConvolutionClustering(PropertyContext context):DoubleAlgorithm(context) {}
 //================================================================================
 ConvolutionClustering::~ConvolutionClustering(){}
 //================================================================================
@@ -188,42 +184,51 @@ vector<double> *ConvolutionClustering::getHistogram() {
   return &smoothHistogram;
 }
 //================================================================================
-void ConvolutionClustering::buildSubGraphs(const vector<int>& ranges){
-  //  cerr << __PRETTY_FUNCTION__ << "...." << flush;
-  //build the empty graphs 
-  char str[100];
-  vector<Graph *> newGraphs(ranges.size()-1);
-  for (unsigned int i=0; i< ranges.size()-1; ++i) {
-    sprintf(str,"Cluster_%05i",i);
-    newGraphs[i] = tlp::newSubGraph(graph,string(str));
-  }
+//void ConvolutionClustering::buildSubGraphs(const vector<int>& ranges){
+//  //  cerr << __PRETTY_FUNCTION__ << "...." << flush;
+//  //build the empty graphs
+//  vector<Graph *> newGraphs(ranges.size()-1);
+//  for (unsigned int i=0; i< ranges.size()-1; ++i) {
+//    stringstream sstr;
+//    sstr << "Cluster_" << i;
+//    newGraphs[i] = tlp::newSubGraph(graph,sstr.str());
+//  }
   
-  //Fill the graphs with nodes
-  Iterator<node> *itN=graph->getNodes();
-  while (itN->hasNext()) {
-    node itn=itN->next();
-    int tmp = getInterval((int)( (metric->getNodeValue(itn) - metric->getNodeMin() ) * 
-				 (double)histosize / (metric->getNodeMax()-metric->getNodeMin()))
-			  ,ranges);
-    newGraphs[tmp]->addNode(itn);
-  } delete itN;
+//  //Fill the graphs with nodes
+//  Iterator<node> *itN=graph->getNodes();
+//  while (itN->hasNext()) {
+//    node itn=itN->next();
+//    int tmp = getInterval((int)( (metric->getNodeValue(itn) - metric->getNodeMin() ) *
+//				 (double)histosize / (metric->getNodeMax()-metric->getNodeMin()))
+//			  ,ranges);
+//    newGraphs[tmp]->addNode(itn);
+//  } delete itN;
   
-  //Fill the graphs with edges
-  for (unsigned int i=0; i< ranges.size()-1; ++i) {
-    Iterator<edge> *itE=graph->getEdges();
-    while (itE->hasNext()) {
-      edge ite=itE->next();
-      if (newGraphs[i]->isElement(graph->source(ite)) && newGraphs[i]->isElement(graph->target(ite)) ) 
-	newGraphs[i]->addEdge(ite);
-    } delete itE;
-  }
-  for (unsigned int i=0; i< ranges.size()-1; ++i) {
-    if (newGraphs[i]->numberOfNodes()==0) {
-      graph->delSubGraph(newGraphs[i]);
+//  //Fill the graphs with edges
+//  for (unsigned int i=0; i< ranges.size()-1; ++i) {
+//    Iterator<edge> *itE=graph->getEdges();
+//    while (itE->hasNext()) {
+//      edge ite=itE->next();
+//      if (newGraphs[i]->isElement(graph->source(ite)) && newGraphs[i]->isElement(graph->target(ite)) )
+//	newGraphs[i]->addEdge(ite);
+//    } delete itE;
+//  }
+//  for (unsigned int i=0; i< ranges.size()-1; ++i) {
+//    if (newGraphs[i]->numberOfNodes()==0) {
+//      graph->delSubGraph(newGraphs[i]);
+//    }
+//  }
+//  //  cerr << " end." << endl;
+//}
+//================================================================================
+void ConvolutionClustering::getClusters(const std::vector<int> &ranges){
+    node n;
+    forEach(n,graph->getNodes()){
+        int tmp = getInterval((int)( (metric->getNodeValue(n) - metric->getNodeMin() )*(double)histosize / (metric->getNodeMax()-metric->getNodeMin())),ranges);
+        doubleResult->setNodeValue(n,tmp);
     }
-  }
-  //  cerr << " end." << endl;
 }
+
 //================================================================================
 bool ConvolutionClustering::run() {
   histosize=128;
@@ -244,7 +249,8 @@ bool ConvolutionClustering::run() {
   }
   ranges.push_back(histosize);
   //Ensure that there is elements inside each intervals.
-  buildSubGraphs(ranges);
+//  buildSubGraphs(ranges);
+  getClusters(ranges);
   return true;
 }
 //================================================================================

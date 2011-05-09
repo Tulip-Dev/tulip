@@ -18,14 +18,10 @@
  */
 #include "tulip/GlMainView.h"
 
-#include <QtGui/QFileDialog>
 #include <QtGui/QMessageBox>
 #include <QtGui/QMenu>
-#include <QtGui/QImageWriter>
 
 #include "tulip/GlMainWidget.h"
-#include "tulip/FindSelectionWidget.h"
-#include "tulip/TabWidget.h"
 #include "tulip/GWOverviewWidget.h"
 
 using namespace std;
@@ -100,6 +96,15 @@ bool GlMainView::createPicture(const std::string &pictureName, int width, int he
 				mainWidget->createPicture(pictureName, width, height,center,zoom,xOffset,yOffset);
 
 	return true;
+}
+
+//==================================================
+QImage GlMainView::createPicture( int width, int height, bool center, int zoom, int xOffset, int yOffset) {
+
+	if (width == 0 && height == 0)
+				return mainWidget->createPicture(mainWidget->width(), mainWidget->height(),center,zoom,xOffset,yOffset);
+	else
+				return mainWidget->createPicture(width, height,center,zoom,xOffset,yOffset);
 }
 
 //==================================================

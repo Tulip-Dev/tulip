@@ -19,7 +19,7 @@
 #ifndef SIMPLEPLUGINPROGRESS_H
 #define SIMPLEPLUGINPROGRESS_H
 
-#include "tulip/PluginProgress.h"
+#include <tulip/PluginProgress.h>
 #include <string>
 namespace tlp{
     /**

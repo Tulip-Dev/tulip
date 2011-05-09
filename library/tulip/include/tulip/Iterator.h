@@ -24,14 +24,21 @@
 #include <tulip/Node.h>
 
 namespace tlp {
-  
+/**
+ * @addtogroup iterators
+ */
+ /*@{*/
 #ifndef DOXYGEN_NOTFOR_DEVEL
 extern TLP_SCOPE void incrNumIterators();
 extern TLP_SCOPE void decrNumIterators();
 extern TLP_SCOPE int getNumIterators();
 #endif // DOXYGEN_NOTFOR_DEVEL
 
-///Interface of Iterators
+/**
+* @brief Interface for Tulip iterators.
+* Allows basic iteration operations only.
+* @see forEach
+**/
 template<class itType> struct Iterator {
   ///
   Iterator(){
@@ -45,9 +52,18 @@ template<class itType> struct Iterator {
     decrNumIterators();
 #endif
   }
-  ///Return the next element
+  /**
+  * @brief Moves the Iterator on the next element.
+  *
+  * @return The current element pointed by the Iterator.
+  **/
   virtual itType next()=0;
-  ///Return true if it exist a next element
+  
+  /**
+  * @brief Tells if the sequence is at its end.
+  *
+  * @return bool Whether there are more elements to iterate on.
+  **/
   virtual bool hasNext()=0;
 };
 
@@ -70,10 +86,10 @@ private:
   Iterator<unsigned int> *it;
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
-
+/*@}*/
 #ifdef _MSC_VER
-  template class Iterator<edge>;
-  template class Iterator<node>;
+  template struct Iterator<edge>;
+  template struct Iterator<node>;
 #endif
 
 }

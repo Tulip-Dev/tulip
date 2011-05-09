@@ -66,7 +66,7 @@ namespace tlp {
 
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginInfo {
+  class PluginInfo {
 
   public :
 
@@ -152,7 +152,7 @@ namespace tlp {
   // from tulip_check_pl
 #define TLP_CHECK_PL_RETURN_SUCCESS 222
 
-  class TLP_PLUGINSMANAGER_SCOPE DistPluginInfo : public PluginInfo{
+  class DistPluginInfo : public PluginInfo{
 
   public :
     std::string fileName;
@@ -196,7 +196,7 @@ namespace tlp {
       };
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE LocalPluginInfo : public PluginInfo{
+  class LocalPluginInfo : public PluginInfo{
 
   public :
     std::string fileName;
@@ -226,7 +226,7 @@ namespace tlp {
       virtual bool isInstalledInHome();
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginCmp {
+  class PluginCmp {
   public :
     bool operator()(const PluginInfo& p1,const PluginInfo &p2) const {
       if(p1.name!=p2.name)
@@ -243,7 +243,7 @@ namespace tlp {
     }
   };
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginTypeCmp {
+  class PluginTypeCmp {
     public :
       bool operator()(const PluginInfo& p1,const PluginInfo &p2) {
         if(p1.type!=p2.type)
@@ -260,7 +260,7 @@ namespace tlp {
       }
     };
 
-  class TLP_PLUGINSMANAGER_SCOPE PluginDependencyCmp {
+  class PluginDependencyCmp {
     public :
     bool operator()(const PluginDependency& p1,const PluginDependency &p2) {
       if(p1.name!=p2.name)

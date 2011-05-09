@@ -23,9 +23,9 @@
 #include <vector>
 #include <map>
 
+#include <tulip/DataSet.h>
+#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
-#include <tulip/ObservableProperty.h>
-#include <tulip/PropertyInterface.h>
 #include <tulip/GlComposite.h>
 
 namespace tlp {
@@ -47,12 +47,12 @@ class GlConvexGraphHull;
    * Create a GlComposite item for each and every graph and subgraph.
 	 * This class observes the graph to update said hierarchy when a subgraph is added or deleted.
    */
-  class TLP_QT_SCOPE GlCompositeHierarchyManager : public GraphObserver, Observer {
+  class TLP_QT_SCOPE GlCompositeHierarchyManager :
+	private GraphObserver, private Observable {
 
   public:
 		GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty* layout, SizeProperty* size, 
 																DoubleProperty* rotation, bool visible = false, std::string namingProperty = "name", std::string subCompositeSuffix = " sub-hulls");
-		~GlCompositeHierarchyManager();
 		
 		void setGraph(tlp::Graph* graph);
 		DataSet getData();
@@ -71,7 +71,9 @@ class GlConvexGraphHull;
 		virtual void addNode(Graph* , const tlp::node );
     
 		virtual void update(std::set< Observable* >::iterator begin, std::set< Observable* >::iterator end);
-		virtual void observableDestroyed(Observable* );
+		virtual void observableDestroyed(Observable*);
+
+		void treatEvent(const Event&);
 		
 	private:
 		bool _shouldRecreate;

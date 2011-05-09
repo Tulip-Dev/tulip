@@ -20,12 +20,12 @@
 #define Tulip_GLEDGE_H
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/OpenGlConfigManager.h>
 
 #include <tulip/PropertyTypes.h>
 
-#include "tulip/GlComplexeEntity.h"
-#include "tulip/EdgeExtremityGlyph.h"
+#include <tulip/GlComplexeEntity.h>
+#include <tulip/EdgeExtremityGlyph.h>
 
 namespace tlp {
 
@@ -65,19 +65,19 @@ namespace tlp {
      * Draw the label of the edge if drawEdgesLabel is true and if label selection is equal to drawSelect
      * Use TextRenderer : renderer to draw the label
      */
-    void drawLabel(bool drawSelect,OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data, float lod);
+    void drawLabel(bool drawSelect,OcclusionTest* test,GlGraphInputData* data, float lod);
     
     /**
      * Draw the label of the edge if drawEdgesLabel is true
      * Use TextRenderer : renderer to draw the label
      */
-    void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data);
+    void drawLabel(OcclusionTest* test,GlGraphInputData* data);
 
     /**
      * Draw the label of the edge if drawEdgesLabel is true
      * Use TextRenderer : renderer to draw the label
      */
-    void drawLabel(OcclusionTest* test,TextRenderer* renderer,GlGraphInputData* data, float lod, Camera *camera=NULL);
+    void drawLabel(OcclusionTest* test,GlGraphInputData* data, float lod, Camera *camera=NULL);
 
     /**
      * This function is used by the engine to get line coordinates of the edge

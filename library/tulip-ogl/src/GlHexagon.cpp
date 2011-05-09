@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlHexagon.h"
+#include <tulip/GlHexagon.h>
 
 using namespace std;
 

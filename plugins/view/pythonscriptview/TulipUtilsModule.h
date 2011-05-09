@@ -26,9 +26,6 @@
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 
-#include <sip.h>
-#include <sipint.h>
-
 static PyObject *
 tuliputils_updateVisualization(PyObject *, PyObject *args)
 {
@@ -43,7 +40,7 @@ tuliputils_updateVisualization(PyObject *, PyObject *args)
 		for (size_t i = 0 ; i < tulipViews.size() ; ++i) {
 			tlp::GlMainView *glView = dynamic_cast<tlp::GlMainView *>(tulipViews[i]);
 			if (centerViews && glView) {
-				glView->getGlMainWidget()->getScene()->centerScene();
+			  glView->getGlMainWidget()->getScene()->centerScene();
 			}
 			tulipViews[i]->draw();
 		}
@@ -53,8 +50,8 @@ tuliputils_updateVisualization(PyObject *, PyObject *args)
 }
 
 static PyMethodDef TulipUtilsMethods[] = {
-		{"updateVisualization",  tuliputils_updateVisualization, METH_VARARGS, "Update views on current graph."},
-		{NULL, NULL, 0, NULL}        /* Sentinel */
+    {"updateVisualization",  tuliputils_updateVisualization, METH_VARARGS, "Update views on current graph."},
+    {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 
 void

@@ -23,9 +23,9 @@
 #include <config.h>
 #endif
 
-#include "tulip/PropertyTypes.h"
-#include "tulip/AbstractProperty.h"
-#include "tulip/StringAlgorithm.h"
+#include <tulip/PropertyTypes.h>
+#include <tulip/AbstractProperty.h>
+#include <tulip/StringAlgorithm.h>
 
 namespace tlp {
 
@@ -46,11 +46,21 @@ public :
   std::string getTypename() const {
     return "string";
   }
+
+  /**
+    * @brief Specific implementation of AbstractProperty::compare(node n1,node n2)
+    **/
+  int compare(node n1,node n2);
+
+  /**
+    * @brief Specific implementation of AbstractProperty::compare(edge e1,edge e2)
+    **/
+  int compare(edge e1,edge e2);
 };
 
-  class TLP_SCOPE StringVectorProperty:public AbstractVectorProperty<tlp::StringVectorType, std::string>{ 
+  class TLP_SCOPE StringVectorProperty:public AbstractVectorProperty<tlp::StringVectorType, tlp::StringType>{ 
 public :
-  StringVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<StringVectorType, std::string>(g, n) {}
+  StringVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<StringVectorType, tlp::StringType>(g, n) {}
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );

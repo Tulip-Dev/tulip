@@ -24,7 +24,7 @@
 
 #include <sstream>
 
-#include "tulip/GlTLPFeedBackBuilder.h"
+#include <tulip/GlTLPFeedBackBuilder.h>
 
 namespace tlp {
   

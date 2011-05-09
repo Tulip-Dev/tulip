@@ -21,7 +21,7 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
-#include "tulip/GlTools.h"
+#include <tulip/GlTools.h>
 #include <vector>
 
 

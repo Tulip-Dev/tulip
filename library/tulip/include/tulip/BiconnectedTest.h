@@ -24,8 +24,9 @@
 #include <config.h>
 #endif
 
-#include "tulip/tuliphash.h"
-#include "tulip/ObservableGraph.h"
+#include <tulip/tuliphash.h>
+#include <tulip/Observable.h>
+#include <tulip/ObservableGraph.h>
 
 namespace tlp {
 class Graph;
@@ -33,15 +34,17 @@ class Graph;
 /** \addtogroup graph_test */ 
 /*@{*/
 /// class for testing if the graph is biconnected
-class TLP_SCOPE BiconnectedTest : public GraphObserver {
+ class TLP_SCOPE BiconnectedTest : private GraphObserver, private Observable {
 public:
+
   /**
    * Returns true if the graph is biconnected (ie. one must remove at least two nodes in order
-   * to disconnect the graph), false if not.
+   * to disconnect the graph), false otherwise.
    */
   static bool isBiconnected(Graph *graph);
+
   /**
-   * If the graph is not biconnected, add edges in order to make the graph
+   * If the graph is not biconnected, adds edges in order to make the graph
    * biconnected. The new edges are added in addedEdges.
    */
   static void makeBiconnected(Graph *graph, std::vector<edge>& addedEdges);
@@ -49,6 +52,7 @@ public:
 private:
   void connect(Graph *, std::vector<edge>& addedEdges);
   bool compute(Graph *);
+  // override GraphObserver methods
   void addEdge(Graph *,const edge);
   void delEdge(Graph *,const edge);
   void reverseEdge(Graph *,const edge);
@@ -58,6 +62,8 @@ private:
   BiconnectedTest(); //to ensure singleton
   static BiconnectedTest * instance;
   TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
+  // override Observable::treatEvent
+  virtual void treatEvent(const Event&);
 };
 }
 /*@}*/

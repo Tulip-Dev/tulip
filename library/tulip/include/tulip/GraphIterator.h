@@ -18,17 +18,21 @@
  */
 #ifndef TULIP_GGRAPHITERATOR_H
 #define TULIP_GGRAPHITERATOR_H
-#include "tulip/Iterator.h"
-#include "tulip/memorypool.h"
+#include <tulip/Iterator.h>
+#include <tulip/memorypool.h>
 #include <set>
 
-#include "tulip/MutableContainer.h"
-#include "tulip/ObservableGraph.h"
-#include "tulip/tulipconf.h"
+#include <tulip/MutableContainer.h>
+#include <tulip/Observable.h>
+#include <tulip/tulipconf.h>
 #include <iostream>
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
+/**
+* \addtogroup iterators
+*/
+/*@{*/
 class Graph;
 class GraphImpl;
 struct node;
@@ -40,18 +44,16 @@ class EdgeIterator :public Iterator<edge> {
 };
 
 #ifndef NDEBUG
-class NodeIteratorObserver :public NodeIterator, public GraphObserver {
-public:
-  // GraphObserver interface
-  void addNode(Graph* g, node n);
-  void delNode(Graph* g, node n);
+class NodeIteratorObserver :public NodeIterator, public Observable {
+private:
+  // Observable interface
+  void treatEvent(const Event&);
 };
 
-class EdgeIteratorObserver :public EdgeIterator, public GraphObserver {
-public:
-  // GraphObserver interface
-  void addEdge(Graph* g, edge e);
-  void delEdge(Graph* g, edge e);
+class EdgeIteratorObserver :public EdgeIterator, public Observable {
+private:
+  // Observable interface
+  void treatEvent(const Event&);
 };
 #endif
 //===========================================================
@@ -215,8 +217,6 @@ class InOutEdgesIterator:public FactorEdgeIterator, public MemoryPool<InOutEdges
   void prepareNext();
 };
 
-
-
 //============================================================
 //Iterator for the GraphImpl
 //============================================================
@@ -259,7 +259,7 @@ class GraphImplEdgeIterator
   bool hasNext();
 };
 //============================================================
-
+/*@}*/
 }
 #endif // DOXYGEN_NOTFOR_DEVEL
 #endif

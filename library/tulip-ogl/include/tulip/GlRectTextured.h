@@ -20,7 +20,7 @@
 #ifndef Tulip_GLRECTTEXTURED_H
 #define Tulip_GLRECTTEXTURED_H
 
-#include "tulip/Gl2DRect.h"
+#include <tulip/Gl2DRect.h>
 
 namespace tlp {
   /**

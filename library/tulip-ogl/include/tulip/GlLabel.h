@@ -25,13 +25,17 @@
 #include <tulip/Color.h>
 #include <tulip/Size.h>
 
-#include "tulip/GlSimpleEntity.h"
+#include <tulip/GlSimpleEntity.h>
+
+class FTGLPolygonFont;
+class FTOutlineFont;
 
 namespace tlp {
 
   class Camera;
-  class TextRenderer;
   struct OcclusionTest;
+
+  enum LabelPosition {ON_CENTER = 0, ON_TOP = 1, ON_BOTTOM = 2, ON_LEFT = 3, ON_RIGHT = 4};
 
   /**
    * \addtogroup GlEntities
@@ -43,9 +47,6 @@ namespace tlp {
   class TLP_GL_SCOPE GlLabel : public GlSimpleEntity
   {
   public :
-
-    static const int TEXTURE_MODE = 0;
-    static const int POLYGON_MODE = 1;
 
     GlLabel();
 
@@ -107,6 +108,11 @@ namespace tlp {
      * Return the bounding box of the label
      */
     virtual BoundingBox getBoundingBox();
+
+    /**
+     * Return the bounding box of the text of the label
+     */
+    virtual BoundingBox getTextBoundingBox();
 
     /**
      * Set the size of the label
@@ -223,8 +229,9 @@ namespace tlp {
     /**
      * Set if the label is otimized with the lod
      */
-    virtual void setUseLODOptimisation(bool state){
+    virtual void setUseLODOptimisation(bool state,BoundingBox bb=BoundingBox()){
       useLOD=state;
+      lodBoundingBox=bb;
     }
 
     /**
@@ -236,16 +243,39 @@ namespace tlp {
 
     /**
      * Set label border for occlusion test
+     * \deprecated Use setLabelsDensity instead
      */
-    virtual void setLabelOcclusionBorder(unsigned int size){
-      occlusionBorderSize=size;
+    virtual void setLabelOcclusionBorder(int size){
+      labelsDensity=-size;
     }
 
     /**
      * Return label border for occlusion test
+     * \deprecated Use getLabelsDensity instead
      */
-    virtual unsigned int getLabelOcclusionBorder(){
-      return occlusionBorderSize;
+    virtual int getLabelOcclusionBorder(){
+      return -labelsDensity;
+    }
+
+    /**
+     * Set labels density of occlusion test
+     * This density must be in interval -100 100
+     */
+    virtual void setLabelsDensity(int density){
+      if(density<-100)
+        labelsDensity=-100;
+      else if(density>100)
+        labelsDensity=100;
+      else
+        labelsDensity=density;
+    }
+
+    /**
+     * Return label density of occlusion test
+     * This density must be in interval -100 100
+     */
+    virtual int getLabelDensity(){
+      return labelsDensity;
     }
 
     /**
@@ -298,7 +328,37 @@ namespace tlp {
     /**
      * @brief Sets the font size used when rendering the label.
      */
-    void setfontSize(int size) { fontSize = size; }
+    void setFontSize(int size) { fontSize = size; }
+
+    /**
+     * @return the outline color
+     */
+    Color getOutlineColor() const { return outlineColor; }
+
+    /**
+     * @brief Sets the outline color used when rendering the label.
+     */
+    void setOutlineColor(const Color &color) { outlineColor = color; }
+
+    /**
+     * @return the outline size
+     */
+    float getOutlineSize() const { return outlineSize; }
+
+    /**
+     * @brief Sets the outline size used when rendering the label.
+     */
+    void setOutlineSize(float size) { outlineSize = size; }
+
+    /**
+     * @return the texture name used to render the label
+     */
+    std::string getTextureName() const { return textureName; }
+
+    /**
+     * @brief Sets the texture name used when rendering the label.
+     */
+    void setTextureName(const std::string &name) { textureName=name; }
 
   private :
 
@@ -306,12 +366,16 @@ namespace tlp {
     std::string fontName;
     int fontSize;
     int renderingMode;
-    static TextRenderer *renderer;
+    FTGLPolygonFont *font;
+    FTOutlineFont *borderFont;
     Coord centerPosition;
     Coord translationAfterRotation;
     Coord size;
     Coord sizeForOutAlign;
     Color color;
+    Color outlineColor;
+    float outlineSize;
+    std::string textureName;
     int alignment;
     bool scaleToSize;
     bool useMinMaxSize;
@@ -323,8 +387,13 @@ namespace tlp {
     float yRot;
     float zRot;
     bool useLOD;
-    unsigned int occlusionBorderSize;
+    BoundingBox lodBoundingBox;
+    int labelsDensity;
     OcclusionTest *occlusionTester;
+
+    std::vector<std::string> textVector;
+    std::vector<float> textWidthVector;
+    BoundingBox textBoundingBox;
   };
   /*@}*/
 }

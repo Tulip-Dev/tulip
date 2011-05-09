@@ -20,22 +20,36 @@
 #define TULIP_CONCATITERATOR_H
 #include <tulip/Iterator.h>
 
-/**
- * This iterator enables to concatenate two iterators.
- * The iterators given in parameter will be automatically
- * delete when the iterator will be deleted.
- */
 namespace tlp {
-
-template<class itType> struct ConcatIterator : public Iterator<itType> {
-  ConcatIterator(Iterator<itType> *itOne,Iterator<itType> *itTwo) : 
+/**
+ * @addtogroup iterators
+ */
+ /*@{*/
+ /**
+ * @brief This Iterator iterates over the sequence formed by the concatenation of the sequences it is given.
+ * @warning This class takes ownership of the Iterators it is given.
+ **/
+ template<class itType> struct ConcatIterator : public Iterator<itType> {
+   
+   /**
+   * @brief Creates an Iterator that iterates over the concatenation of the two sequences it is given.
+   *
+   * @param itOne The first sequence to iterate upon.
+   * @param itTwo The second sequence, which will be iterated upon after the first sequence has been completely iterated upon.
+   **/
+   ConcatIterator(Iterator<itType> *itOne,Iterator<itType> *itTwo) :
     itOne(itOne),
     itTwo(itTwo) {
   }
+  
+  /**
+  * @brief Deletes the two iterators it was given at construction.
+  **/
   ~ConcatIterator() {
     delete itOne;
     delete itTwo;
   };
+
   itType next() {
     if (itOne->hasNext())
       return itOne->next();
@@ -43,6 +57,7 @@ template<class itType> struct ConcatIterator : public Iterator<itType> {
       return itTwo->next();
     }
   }
+
   bool hasNext() {
     return (itOne->hasNext() || itTwo->hasNext());
   };
@@ -51,6 +66,6 @@ template<class itType> struct ConcatIterator : public Iterator<itType> {
   Iterator<itType> *itOne;
   Iterator<itType> *itTwo;
 };
-
+/*@}*/
 }
 #endif

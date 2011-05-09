@@ -17,10 +17,10 @@
  *
  */
 #include <list>
-#include "tulip/Graph.h"
-#include "tulip/ConnectedTest.h"
-#include "tulip/MutableContainer.h"
-#include "tulip/ForEach.h"
+#include <tulip/Graph.h>
+#include <tulip/ConnectedTest.h>
+#include <tulip/MutableContainer.h>
+#include <tulip/ForEach.h>
 
 using namespace std;
 using namespace tlp;
@@ -191,8 +191,9 @@ void ConnectedTest::delNode(Graph *graph,const node) {
 //=================================================================
 void ConnectedTest::destroy(Graph *graph) {
 	//  cerr << __PRETTY_FUNCTION__ << endl;
-	graph->removeGraphObserver(this);
 	resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
-
+void ConnectedTest::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}

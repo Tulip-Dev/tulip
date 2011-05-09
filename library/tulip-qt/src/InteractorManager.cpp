@@ -76,11 +76,15 @@ namespace tlp
   }
 
   //====================================================
-  multimap<int,string> InteractorManager::getSortedCompatibleInteractors(const string &viewName) {
-    multimap<int,string> result;
+  list<string> InteractorManager::getSortedCompatibleInteractors(const string &viewName) {
+    multimap<int,string> sortedInteractors;
+    list<string> result;
     list<string> compatibleInteractors=getCompatibleInteractors(viewName);
     for(list<string>::iterator it=compatibleInteractors.begin();it!=compatibleInteractors.end();++it){
-      result.insert(pair<int,string>(interactorsMap[*it]->getPriority(),(*it)));
+    	sortedInteractors.insert(pair<int,string>(interactorsMap[*it]->getPriority(),(*it)));
+    }
+    for(multimap<int,string>::reverse_iterator it=sortedInteractors.rbegin();it!=sortedInteractors.rend();++it){
+    	result.push_back(it->second);
     }
     return result;
   }

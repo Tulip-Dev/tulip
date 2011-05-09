@@ -16,12 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <math.h>
-#include <sstream>
-#include <list>
-
-#include <tulip/Graph.h>
-#include <tulip/BooleanProperty.h>
 
 #include "HierarchicalClustering.h"
 

@@ -17,7 +17,7 @@
  *
  */
 
-#include "tulip/ColorScale.h"
+#include <tulip/ColorScale.h>
 
 using namespace std;
 
@@ -39,13 +39,23 @@ ColorScale::ColorScale(const vector<Color> &colors, const bool gradient) :
 	setColorScale(colors, gradient);
 }
 
-ColorScale::ColorScale(const ColorScale& scale) {
+ColorScale::ColorScale(const ColorScale& scale) :OLOObject(), Observable() {
 	colorMap = scale.colorMap;
 	gradient = scale.gradient;
 	colorScaleSet = scale.colorScaleSet;
 }
 
-ColorScale::~ColorScale() {}
+ColorScale& ColorScale::operator=(const ColorScale& scale) {
+    colorMap = scale.colorMap;
+    gradient = scale.gradient;
+    colorScaleSet = scale.colorScaleSet;
+    return *this;
+}
+
+ColorScale::~ColorScale() {
+//  observableDeleted();
+//  cout << __PRETTY_FUNCTION__ << this << endl;
+}
 
 void ColorScale::setColorScale(const std::vector<Color> colors,
 		const bool gradientV) {

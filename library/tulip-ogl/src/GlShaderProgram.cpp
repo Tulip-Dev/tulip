@@ -23,8 +23,8 @@
 #include <fstream>
 #include <algorithm>
 
-#include "tulip/GlShaderProgram.h"
-#include "tulip/OpenGlConfigManager.h"
+#include <tulip/GlShaderProgram.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 
@@ -395,7 +395,7 @@ void GlShaderProgram::setUniformBool(const std::string &variableName, const bool
 	glUniform1i(loc, b);
 }
 
-void GlShaderProgram::setUniformVec2Bool(const std::string &variableName, const Vector<bool, 2> &vec2b) {
+void GlShaderProgram::setUniformVec2Bool(const std::string &variableName, const Array<bool, 2> &vec2b) {
 	setUniformVec2IntArray(variableName, 1, (int *) &vec2b);
 }
 
@@ -404,7 +404,7 @@ void GlShaderProgram::setUniformVec2Bool(const std::string &variableName, const 
 	glUniform2i(loc, b1, b2);
 }
 
-void GlShaderProgram::setUniformVec3Bool(const std::string &variableName, const Vector<bool, 3> &vec3b) {
+void GlShaderProgram::setUniformVec3Bool(const std::string &variableName, const Array<bool, 3> &vec3b) {
 	setUniformVec3IntArray(variableName, 1, (int *) &vec3b);
 }
 
@@ -413,7 +413,7 @@ void GlShaderProgram::setUniformVec3Bool(const std::string &variableName, const 
 	glUniform3i(loc, b1, b2, b3);
 }
 
-void GlShaderProgram::setUniformVec4Bool(const std::string &variableName, const Vector<bool, 4> &vec4b) {
+void GlShaderProgram::setUniformVec4Bool(const std::string &variableName, const Array<bool, 4> &vec4b) {
 	setUniformVec4IntArray(variableName, 1, (int *) &vec4b);
 }
 
@@ -494,7 +494,7 @@ void GlShaderProgram::setAttributeBool(const std::string &variableName, const bo
 	setAttributeInt(variableName, b);
 }
 
-void GlShaderProgram::setAttributeVec2Bool(const std::string &variableName, const Vector<bool, 2> &vec2b) {
+void GlShaderProgram::setAttributeVec2Bool(const std::string &variableName, const Array<bool, 2> &vec2b) {
 	setAttributeVec2Bool(variableName, vec2b[0], vec2b[1]);
 }
 
@@ -502,7 +502,7 @@ void GlShaderProgram::setAttributeVec2Bool(const std::string &variableName, cons
 	setAttributeVec2Int(variableName, b1, b2);
 }
 
-void GlShaderProgram::setAttributeVec3Bool(const std::string &variableName, const Vector<bool, 3> &vec3b) {
+void GlShaderProgram::setAttributeVec3Bool(const std::string &variableName, const Array<bool, 3> &vec3b) {
 	setAttributeVec3Bool(variableName, vec3b[0], vec3b[1], vec3b[2]);
 }
 
@@ -510,7 +510,7 @@ void GlShaderProgram::setAttributeVec3Bool(const std::string &variableName, cons
 	setAttributeVec3Int(variableName, b1, b2, b3);
 }
 
-void GlShaderProgram::setAttributeVec4Bool(const std::string &variableName, const Vector<bool, 4> &vec4b) {
+void GlShaderProgram::setAttributeVec4Bool(const std::string &variableName, const Array<bool, 4> &vec4b) {
 	setAttributeVec4Bool(variableName, vec4b[0], vec4b[1], vec4b[2], vec4b[3]);
 }
 
@@ -692,7 +692,7 @@ void GlShaderProgram::setUniformVec4IntArray(const std::string &variableName, co
 
 
 template <unsigned int SIZE>
-void GlShaderProgram::setUniformBoolArray(const std::string &variableName, const Vector<bool, SIZE> &vecb) {
+void GlShaderProgram::setUniformBoolArray(const std::string &variableName, const Array<bool, SIZE> &vecb) {
 	setUniformIntArray(variableName, SIZE, (int *) &vecb);
 }
 
@@ -701,7 +701,7 @@ void GlShaderProgram::setUniformBoolArray(const std::string &variableName, const
 }
 
 template <unsigned int SIZE>
-void GlShaderProgram::setUniformVec2BoolArray(const std::string &variableName, const Array<Vector<bool, 2>, SIZE> &vecvec2b) {
+void GlShaderProgram::setUniformVec2BoolArray(const std::string &variableName, const Array<Array<bool, 2>, SIZE> &vecvec2b) {
 	bool *vvData = getVectorOfVectorData(vecvec2b);
 	setUniformVec2IntArray(variableName, SIZE, (int *) vvData);
 	delete [] vvData;
@@ -712,7 +712,7 @@ void GlShaderProgram::setUniformVec2BoolArray(const std::string &variableName, c
 }
 
 template <unsigned int SIZE>
-void GlShaderProgram::setUniformVec3BoolArray(const std::string &variableName, const Array<Vector<bool, 3>, SIZE> &vecvec3b) {
+void GlShaderProgram::setUniformVec3BoolArray(const std::string &variableName, const Array<Array<bool, 3>, SIZE> &vecvec3b) {
 	bool *vvData = getVectorOfVectorData(vecvec3b);
 	setUniformVec3IntArray(variableName, SIZE, (int *) vvData);
 	delete [] vvData;
@@ -723,7 +723,7 @@ void GlShaderProgram::setUniformVec3BoolArray(const std::string &variableName, c
 }
 
 template <unsigned int SIZE>
-void GlShaderProgram::setUniformVec4BoolArray(const std::string &variableName, const Array<Vector<bool, 4>, SIZE> &vecvec4b) {
+void GlShaderProgram::setUniformVec4BoolArray(const std::string &variableName, const Array<Array<bool, 4>, SIZE> &vecvec4b) {
 	bool *vvData = getVectorOfVectorData(vecvec4b);
 	setUniformVec4IntArray(variableName, SIZE, (int *) vvData);
 	delete [] vvData;

@@ -17,10 +17,10 @@
  *
  */
 #include <stack>
-#include "tulip/Graph.h"
-#include "tulip/AcyclicTest.h"
-#include "tulip/BooleanProperty.h"
-#include "tulip/StableIterator.h"
+#include <tulip/Graph.h>
+#include <tulip/AcyclicTest.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/StableIterator.h>
 
 using namespace std;
 using namespace tlp;
@@ -155,7 +155,6 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
 }
 //**********************************************************************
 void AcyclicTest::destroy(Graph *graph) {
-  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
@@ -176,3 +175,6 @@ void AcyclicTest::delEdge(Graph *graph,const edge) {
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
+void AcyclicTest::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}

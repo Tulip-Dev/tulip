@@ -30,7 +30,6 @@ MouseSelector.cpp
 MouseBoxZoomer.cpp
 MouseEdgeBuilder.cpp
 MouseInteractors.cpp
-MouseMagicSelector.cpp
 MouseNodeBuilder.cpp
 MouseSelectionEditor.cpp
 MouseEdgeSelector.cpp
@@ -78,6 +77,10 @@ CSVImportWizard.cpp
 SmallMultiplesView.cpp
 SmallMultiplesNavigatorComponent.cpp
 GlOffscreenRenderer.cpp
+ThreadedComputeProperty.cpp
+SnapshotDialog.cpp
+PropertyCreationDialog.cpp
+TulipSettings.cpp
 )
 
 set(tulip-qt_UI
@@ -102,6 +105,8 @@ set(tulip-qt_UI
      ../designer/CSVImportConfigurationWidget.ui
      ../designer/CSVParserConfigurationWidget.ui
      ../designer/CSVImportWizard.ui
+     ../designer/SnapshotDialog.ui
+     ../designer/PropertyCreationDialog.ui
 )
 
 set(tulip-qt_MOC
@@ -143,6 +148,8 @@ set(tulip-qt_MOC
     ../include/tulip/CSVParserConfigurationWidget.h    
     ../include/tulip/CSVImportWizard.h
     ../include/tulip/SmallMultiplesView.h
+    ../include/tulip/SnapshotDialog.h
+    ../include/tulip/PropertyCreationDialog.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)
@@ -160,6 +167,7 @@ set(tulip-qt_MOC
     ../include/tulip/BaseGraphicsViewComponent.h
     ../include/tulip/GlMainWidgetItem.h
     ../include/tulip/TabWidgetHidableMenuGraphicsProxy.h
+    ../include/tulip/ThreadedComputeProperty.h
 )
 ENDIF(QT_VERSION_MINOR GREATER 3)
 

@@ -51,6 +51,11 @@ namespace tlp{
            */
         static PropertyInterface *getProperty(Graph* graph, const std::string& propertyName,
                                             const std::string& propertyType);
+        /**
+           * @brief Find or create a local property in the graph.
+           */
+        static PropertyInterface *getLocalProperty(Graph* graph, const std::string& propertyName,
+                                            const std::string& propertyType);
     };
 
     /**

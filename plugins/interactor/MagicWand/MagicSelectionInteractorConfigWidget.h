@@ -35,7 +35,7 @@ enum Selectionbehavior {
   Intersect = 3
 };
 
-class MagicSelectionInteractorConfigWidget : public QWidget, public Ui_MagicSelectionInteractorConfigWidget, public tlp::Observer {
+class MagicSelectionInteractorConfigWidget : public QWidget, public Ui_MagicSelectionInteractorConfigWidget, public tlp::Observable {
   Q_OBJECT
   public:
     MagicSelectionInteractorConfigWidget(QWidget* parent = 0);

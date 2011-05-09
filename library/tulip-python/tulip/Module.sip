@@ -25,6 +25,8 @@
 
 %Module tulip 0
 
+
+
 %Import ../stl/Module.sip
 
 %Include Iterator.sip
@@ -35,7 +37,6 @@
 %Include Color.sip
 %Include Coord.sip
 %Include Size.sip
-%Include Matrix.sip
 %Include BoundingBox.sip
 %Include StringCollection.sip
 %Include ColorScale.sip
@@ -86,7 +87,6 @@
 %Include PlanarityTest.sip
 
 %Include DrawingTools.sip
-%Include Observable.sip
 
 %ModuleHeaderCode
 static int throwInvalidNodeException(tlp::Graph *graph, tlp::node n) {

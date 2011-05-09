@@ -48,9 +48,10 @@ namespace tlp {
     void loadPlugins(PluginLoader *plug=0);
 
     /**
-     * Get the list of available plugins
+     * return if the Controller with given name exist
      */
-    void initControllerPluginsList(MutableContainer<Controller *> &controllers);
+    bool controllerExists(const std::string &name);
+
     /**
      * return Controller with given name
      */

@@ -19,7 +19,8 @@
 #ifndef TULIP_STLITERATOR_H
 #define TULIP_STLITERATOR_H
 #include <map>
-#include "tulip/Iterator.h"
+#include <tulip/Iterator.h>
+#include <tulip/memorypool.h>
 
 namespace tlp {
 
@@ -39,6 +40,21 @@ namespace tlp {
     }
   private:
     ITERATOR it, itEnd;
+  };
+  //=================================================
+  /**
+    * @class MPStlIterator
+    * @ingroup Iterators
+    * @brief MPStlIterator implements memory pool for StlIterator
+    * @warning never inherit from that class
+    * @see StlIterator
+    */
+  template<typename VALUE, typename ITERATOR>
+  struct MPStlIterator:public StlIterator< VALUE, ITERATOR >,
+                         public MemoryPool<MPStlIterator<VALUE, ITERATOR> > {
+  MPStlIterator(const ITERATOR &startIt, const ITERATOR &endIt):
+          StlIterator<VALUE, ITERATOR>(startIt, endIt) {
+	  }
   };
   //=================================================
   template<typename KEY, typename VALUE> 

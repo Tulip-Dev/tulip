@@ -23,9 +23,9 @@
 #include <config.h>
 #endif
 
-#include "tulip/PropertyTypes.h"
-#include "tulip/AbstractProperty.h"
-#include "tulip/ColorAlgorithm.h"
+#include <tulip/PropertyTypes.h>
+#include <tulip/AbstractProperty.h>
+#include <tulip/ColorAlgorithm.h>
 
 namespace tlp {
 
@@ -46,9 +46,9 @@ public :
   }
 };
 
-class TLP_SCOPE ColorVectorProperty:public AbstractVectorProperty<tlp::ColorVectorType, tlp::Color> { 
+class TLP_SCOPE ColorVectorProperty:public AbstractVectorProperty<tlp::ColorVectorType, tlp::ColorType> { 
 public :
- ColorVectorProperty(Graph *g, std::string n="") :AbstractVectorProperty<ColorVectorType, tlp::Color>(g, n) {}
+ ColorVectorProperty(Graph *g, std::string n="") :AbstractVectorProperty<ColorVectorType, tlp::ColorType>(g, n) {}
   // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   std::string getTypename() const {

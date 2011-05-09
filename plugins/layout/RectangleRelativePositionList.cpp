@@ -18,7 +18,8 @@
  */
 #include "RectangleRelativePositionList.h"
 
-
+using namespace std;
+using namespace tlp;
 
 void RectangleRelativePositionList::addRectangleRelativePosition(vector<Rectangle<float> >::iterator itr, int numRect, float wdth, float hght, float x, float y, list<RectangleRelativePosition>::iterator itRectangleRelativePosition){
 
@@ -33,12 +34,9 @@ void RectangleRelativePositionList::addRectangleRelativePosition(vector<Rectangl
   this->insert(itRectangleRelativePosition, newRectangleRelativePosition);
 }
 
-
-
 void RectangleRelativePositionList::allocateCoordinates(){
 
   for(list<RectangleRelativePosition>::iterator itr=this->begin(); itr!=this->end(); ++itr){
-
     (*(itr->rectangleIterator))[0][0] = itr->rectangleLeftAbscissa;
     (*(itr->rectangleIterator))[0][1] = itr->rectangleLowOrdinate;
     (*(itr->rectangleIterator))[1][0] = (*(itr->rectangleIterator))[0][0] + itr->rectangleWidth;
@@ -46,17 +44,14 @@ void RectangleRelativePositionList::allocateCoordinates(){
   }
 }
 
-
 void RectangleRelativePositionList::stockOfTemporaryBestCoordinates(int bestPlaceInFirstSequence){
   
   list<RectangleRelativePosition>::reverse_iterator itRectToReposition = this->rbegin();
   int positionRectToReposition;
 
-
   for(positionRectToReposition = this->size(); positionRectToReposition>=bestPlaceInFirstSequence && itRectToReposition != this->rend(); --positionRectToReposition){
     itRectToReposition->rectangleTemporaryBestLeftAbscissa = itRectToReposition->rectangleTemporaryLeftAbscissa;
     itRectToReposition->rectangleTemporaryBestLowOrdinate = itRectToReposition->rectangleTemporaryLowOrdinate;
     itRectToReposition++;
-    }
-
+  }
 }

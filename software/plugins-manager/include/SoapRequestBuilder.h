@@ -30,7 +30,7 @@
 
 namespace tlp {
 
-  class TLP_PLUGINSMANAGER_SCOPE  SoapRequestBuilder {
+  class SoapRequestBuilder {
 
   private :
     // Document Structure

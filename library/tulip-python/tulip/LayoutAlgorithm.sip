@@ -46,7 +46,7 @@ protected:
 	
 };
 
-class LayoutAlgorithmFactory : tlp::Plugin {
+class LayoutAlgorithmFactory : tlp::PluginInfoInterface {
 %TypeHeaderCode
 #include <tulip/TemplateFactory.h>
 %End

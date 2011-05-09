@@ -17,8 +17,8 @@
  *
  */
 #include <iostream>
-#include "tulip/PropertyInterface.h"
-#include "tulip/Graph.h"
+#include <tulip/PropertyInterface.h>
+#include <tulip/Graph.h>
 
 using namespace tlp;
 
@@ -31,37 +31,66 @@ PropertyInterface::~PropertyInterface() {
     std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Serious bug; you have deleted a registered graph property named '"  << name.c_str() << "'" << std::endl;
     abort();
   }
-  notifyDestroy(this);
+  observableDeleted();
 }
 
-void PropertyInterface::notifyAfterSetNodeValue(PropertyInterface* p,
-						const node n) {
-  // dispatch to PropertyObserver & Observer
-  ObservableProperty::notifyAfterSetNodeValue(p, n);
-  Observable::notifyObservers();
+void PropertyInterface::addPropertyObserver(Observable *pObs) {
+  addListener(pObs);
 }
 
-void PropertyInterface::notifyAfterSetEdgeValue(PropertyInterface* p,
-						const edge e) {
-  // dispatch to PropertyObserver & Observer
-  ObservableProperty::notifyAfterSetEdgeValue(p, e);
-  Observable::notifyObservers();
+void PropertyInterface::removePropertyObserver(Observable *pObs) {
+  removeListener(pObs);
 }
 
-void PropertyInterface::notifyAfterSetAllNodeValue(PropertyInterface* p) {
-  // dispatch to PropertyObserver & Observer
-  ObservableProperty::notifyAfterSetAllNodeValue(p);
-  Observable::notifyObservers();
+void PropertyInterface::notifyBeforeSetNodeValue(const node n) {
+  if (hasOnlookers())
+    sendEvent(PropertyEvent(*this, PropertyEvent::TLP_BEFORE_SET_NODE_VALUE,
+			    Event::TLP_INFORMATION, n));
 }
 
-void PropertyInterface::notifyAfterSetAllEdgeValue(PropertyInterface* p) {
-  // dispatch to PropertyObserver & Observer
-  ObservableProperty::notifyAfterSetAllEdgeValue(p);
-  Observable::notifyObservers();
+void PropertyInterface::notifyAfterSetNodeValue(const node n) {
+  if (hasOnlookers())
+    sendEvent(PropertyEvent(*this, PropertyEvent::TLP_AFTER_SET_NODE_VALUE,
+			    Event::TLP_MODIFICATION, n));
 }
 
-void PropertyInterface::notifyDestroy(PropertyInterface* p) {
-  // dispatch to PropertyObserver & Observer
-  ObservableProperty::notifyDestroy(p);
-  Observable::notifyDestroy();
+void PropertyInterface::notifyBeforeSetEdgeValue(const edge e) {
+  if (hasOnlookers())
+    sendEvent(PropertyEvent(*this, PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE,
+			    Event::TLP_INFORMATION, e));
 }
+
+void PropertyInterface::notifyAfterSetEdgeValue(const edge e) {
+  if (hasOnlookers())
+    sendEvent(PropertyEvent(*this, PropertyEvent::TLP_AFTER_SET_EDGE_VALUE,
+			    Event::TLP_MODIFICATION, e));
+}
+
+void PropertyInterface::notifyBeforeSetAllNodeValue() {
+  if (hasOnlookers())
+    sendEvent(PropertyEvent(*this,
+			    PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE,
+			    Event::TLP_INFORMATION));
+}
+
+void PropertyInterface::notifyAfterSetAllNodeValue() {
+  if (hasOnlookers())
+    sendEvent(PropertyEvent(*this,
+			    PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE,
+			    Event::TLP_MODIFICATION));
+}
+
+void PropertyInterface::notifyBeforeSetAllEdgeValue() {
+  if (hasOnlookers())
+    sendEvent(PropertyEvent(*this,
+			    PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE,
+			    Event::TLP_INFORMATION));
+}
+
+void PropertyInterface::notifyAfterSetAllEdgeValue() {
+  if (hasOnlookers())
+    sendEvent(PropertyEvent(*this,
+			    PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE,
+			    Event::TLP_MODIFICATION));
+}
+

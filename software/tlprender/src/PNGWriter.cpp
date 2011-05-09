@@ -98,7 +98,7 @@ namespace tlprender {
     png_set_text(png_ptr, info_ptr, text_ptr, num_text);
 
     png_write_info(png_ptr, info_ptr);
-    delete text_ptr;
+    delete text_ptr[];
     
     /* Image */
     for (int i=height-1; i>=0; --i) {

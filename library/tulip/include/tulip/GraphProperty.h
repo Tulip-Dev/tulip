@@ -23,9 +23,9 @@
 #include <config.h>
 #endif
 
-#include "tulip/PropertyTypes.h"
-#include "tulip/AbstractProperty.h"
-#include "tulip/ObservableGraph.h"
+#include <tulip/PropertyTypes.h>
+#include <tulip/AbstractProperty.h>
+#include <tulip/ObservableGraph.h>
 
 namespace tlp {
 
@@ -43,7 +43,10 @@ typedef AbstractProperty<tlp::GraphType, tlp::EdgeSetType> AbstractGraphProperty
 public :
   GraphProperty (Graph *, std::string n="");
   virtual ~GraphProperty();
+  // override GraphObserver::destroy
   void destroy(Graph *);
+  // override Observable::treatEvent
+  void treatEvent(const Event&);
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );

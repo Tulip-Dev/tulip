@@ -23,11 +23,12 @@
 #include <config.h>
 #endif
 
-#include "tulip/tuliphash.h"
-#include "tulip/PropertyTypes.h"
-#include "tulip/AbstractProperty.h"
-#include "tulip/IntegerAlgorithm.h"
-#include "tulip/ObservableGraph.h"
+#include <tulip/tuliphash.h>
+#include <tulip/PropertyTypes.h>
+#include <tulip/AbstractProperty.h>
+#include <tulip/IntegerAlgorithm.h>
+#include <tulip/Observable.h>
+#include <tulip/ObservableGraph.h>
 
 
 namespace tlp {
@@ -38,7 +39,7 @@ class PropertyContext;
 typedef AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> AbstractIntegerProperty;
 /** \addtogroup properties */ 
 /*@{*/
- class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public GraphObserver { 
+ class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, private GraphObserver { 
 
   friend class IntegerAlgorithm;
 
@@ -61,18 +62,30 @@ public :
   virtual void setAllNodeValue(const int &v);
   virtual void setAllEdgeValue(const int &v);
 
-  // redefinition of GraphObserver methods
-  virtual void addNode(Graph* graph, const node n);
-  virtual void addEdge(Graph* graph, const edge e);
-  virtual void delNode(Graph* graph, const node n);
-  virtual void delEdge(Graph* graph, const edge e);
-  virtual void addSubGraph(Graph* graph, Graph *sub);
-  virtual void delSubGraph(Graph* graph, Graph *sub);
+  /**
+    * @brief Specific implementation of AbstractProperty::compare(node n1,node n2)
+    **/
+  int compare(node n1,node n2);
+
+  /**
+    * @brief Specific implementation of AbstractProperty::compare(edge e1,edge e2)
+    **/
+  int compare(edge e1,edge e2);
 
 protected:
   virtual void clone_handler(AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> &);
 
 private:
+  // override some GraphObserver methods
+  void addNode(Graph* graph, const node n);
+  void addEdge(Graph* graph, const edge e);
+  void delNode(Graph* graph, const node n);
+  void delEdge(Graph* graph, const edge e);
+  void addSubGraph(Graph* graph, Graph *sub);
+  void delSubGraph(Graph* graph, Graph *sub);
+  // override Observable::treatEvent
+  void treatEvent(const Event&);
+
   TLP_HASH_MAP<unsigned int, int> maxN,minN,maxE,minE;
   TLP_HASH_MAP<unsigned int, bool> minMaxOkNode;
   TLP_HASH_MAP<unsigned int, bool> minMaxOkEdge;
@@ -80,9 +93,9 @@ private:
   void computeMinMaxEdge(Graph *sg=0);
 };
 
-class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, int> { 
+class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> { 
 public :
-  IntegerVectorProperty(Graph *g, std::string n =""):AbstractVectorProperty<IntegerVectorType, int>(g, n) {}
+  IntegerVectorProperty(Graph *g, std::string n =""):AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {}
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   std::string getTypename() const {

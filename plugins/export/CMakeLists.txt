@@ -7,7 +7,6 @@ SET(GMLExport_SRCS
 
 ADD_LIBRARY(GMLExport-${TulipVersion} SHARED ${GMLExport_SRCS})
 TARGET_LINK_LIBRARIES(GMLExport-${TulipVersion} ${LibTulipName})
-ADD_DEPENDENCIES(GMLExport-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 

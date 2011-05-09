@@ -18,8 +18,6 @@
  */
 #include "tulip/MainController.h"
 
-#include <stdio.h>
-
 #include <QtGui/QDockWidget>
 #include <QtGui/QWorkspace>
 #include <QtGui/QToolBar>
@@ -50,12 +48,12 @@
 #include "tulip/ControllerViewsTools.h"
 #include "tulip/TabWidget.h"
 #include "tulip/ViewPluginsManager.h"
-#include "tulip/QtProgress.h"
 #include "tulip/Morphing.h"
 #include "tulip/FindSelectionWidget.h"
 #include "tulip/NodeLinkDiagramComponent.h"
 #include "tulip/GlMainWidget.h"
 #include "tulip/InteractorManager.h"
+#include "tulip/SnapshotDialog.h"
 
 using namespace std;
 
@@ -189,6 +187,8 @@ namespace tlp {
   }
 
 
+
+
   //**********************************************************************
   //**********************************************************************
   //**********************************************************************
@@ -200,7 +200,11 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    copyCutPasteGraph(NULL),currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL) {
+    currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL),
+    editMenu(NULL), algorithmMenu(NULL), viewMenu(NULL), optionsMenu(NULL),
+    graphMenu(NULL), intMenu(NULL), stringMenu(NULL), sizesMenu(NULL),
+    colorsMenu(NULL), layoutMenu(NULL), metricMenu(NULL), selectMenu(NULL),
+    generalMenu(NULL) {
     morph = new Morphing();
   }
   //**********************************************************************
@@ -208,8 +212,6 @@ namespace tlp {
     clearObservers();
     Graph *currentGraph=getGraph();
     if (currentGraph) {
-      currentGraph->removeObserver(this);
-      currentGraph->removeGraphObserver(this);
       delete editMenu;
       delete algorithmMenu;
       delete viewMenu;
@@ -217,13 +219,12 @@ namespace tlp {
       delete graphMenu;
       delete undoAction;
       delete redoAction;
-
       delete clusterTreeWidget;
       delete propertiesWidget;
       delete eltProperties;
-
       delete tabWidgetDock;
-      
+      delete configWidgetDock;
+      delete morph;
       delete currentGraph;
     }
   }
@@ -288,7 +289,7 @@ namespace tlp {
       Coord minL(box[0]);
       layout->setNodeValue(mN, (maxL + minL) / 2.0 );
       Coord v(maxL - minL);
-      if (v[2] < 0.0001) v[2] = 0.1;
+      if (v[2] < 0.0001) v[2] = 0.1f;
       mg->getProperty<SizeProperty>("viewSize")->
 	setNodeValue(mN, Size(v[0],v[1],v[2]));
     }
@@ -314,6 +315,7 @@ namespace tlp {
     viewMenu->setEnabled(true);
     optionsMenu->setEnabled(true);
     graphMenu->setEnabled(true);
+    snapshotAction->setEnabled(true);
 
     unsigned int holdCount=Observable::observersHoldCounter();
     Observable::holdObservers();
@@ -442,7 +444,7 @@ namespace tlp {
     Observable::holdObservers();
 
     ControllerViewsManager::drawViews(init);
-    
+
     eltProperties->updateTable();
     propertiesWidget->update();
 
@@ -463,7 +465,7 @@ namespace tlp {
     if(graphToReload){
       // enter here if a property is add/delete on the graph
       Graph *graph=graphToReload;
-      
+
       updateViewsOfGraph(graph);
       updateViewsOfSubGraphs(graph);
 
@@ -480,9 +482,9 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::initObservers() {
-    if (!getCurrentGraph()) 
+    if (!getCurrentGraph())
       return;
-    
+
     // Observe properties of the graph
     Iterator<PropertyInterface*> *it = getCurrentGraph()->getObjectProperties();
     while (it->hasNext()) {
@@ -492,9 +494,9 @@ namespace tlp {
   }
   //**********************************************************************
   void MainController::clearObservers() {
-    if (!getCurrentGraph()) 
+    if (!getCurrentGraph())
       return;
-    
+
     // Remove observation of properties
     Iterator<PropertyInterface*> *it =getCurrentGraph()->getObjectProperties();
     while (it->hasNext()) {
@@ -577,6 +579,10 @@ namespace tlp {
     }
   }
   //**********************************************************************
+  void MainController::treatEvent(const Event& evt) {
+    GraphObserver::treatEvent(evt);
+  }
+  //**********************************************************************
   void MainController::loadGUI() {
 
   	mainWindowFacade.getWorkspace()->setScrollBarsEnabled( true );
@@ -644,9 +650,13 @@ namespace tlp {
     }
     assert(windowAction);
 
-    editMenu = new QMenu("&Edit");
-    editMenu->setEnabled(false);
-    mainWindowFacade.getMenuBar()->insertMenu(windowAction,editMenu);
+    if (editMenu == NULL) {
+    	editMenu = new QMenu("&Edit", mainWindowFacade.getMenuBar());
+    	editMenu->setEnabled(false);
+    	mainWindowFacade.getMenuBar()->insertMenu(windowAction,editMenu);
+    } else {
+    	editMenu->clear();
+    }
 
     tmpAction=editMenu->addAction("&Cut",this,SLOT(editCut()),QKeySequence(tr("Ctrl+X")));
     editMenu->addAction("C&opy",this,SLOT(editCopy()),QKeySequence(tr("Ctrl+C")));
@@ -668,16 +678,53 @@ namespace tlp {
     editRedoAction->setEnabled(false);
 
      //Algorithm Menu
-    algorithmMenu = new QMenu("&Algorithm");
-    algorithmMenu->setEnabled(false);
-    intMenu=new QMenu("&Integer");
-    stringMenu=new QMenu("L&abel");
-    sizesMenu=new QMenu("S&ize");
-    colorsMenu=new QMenu("&Color");
-    layoutMenu=new QMenu("&Layout");
-    metricMenu=new QMenu("&Measure");
-    selectMenu=new QMenu("&Selection");
-    generalMenu=new QMenu("&General");
+    if (algorithmMenu == NULL) {
+    	algorithmMenu = new QMenu("&Algorithm", mainWindowFacade.getMenuBar());
+    	algorithmMenu->setEnabled(false);
+    } else {
+    	algorithmMenu->clear();
+    }
+
+
+    if (intMenu == NULL)
+    	intMenu=new QMenu("&Integer", algorithmMenu);
+    else
+    	intMenu->clear();
+
+    if (stringMenu == NULL)
+    	stringMenu=new QMenu("L&abel", algorithmMenu);
+    else
+    	stringMenu->clear();
+
+    if (sizesMenu == NULL)
+    	sizesMenu=new QMenu("S&ize", algorithmMenu);
+    else
+    	sizesMenu->clear();
+
+    if (colorsMenu == NULL)
+    	colorsMenu=new QMenu("&Color", algorithmMenu);
+    else
+    	colorsMenu->clear();
+
+    if (layoutMenu == NULL)
+    	layoutMenu=new QMenu("&Layout", algorithmMenu);
+    else
+    	layoutMenu->clear();
+
+    if (metricMenu == NULL)
+    	metricMenu=new QMenu("&Measure", algorithmMenu);
+    else
+    	metricMenu->clear();
+
+    if (selectMenu == NULL)
+    	selectMenu=new QMenu("&Selection", algorithmMenu);
+    else
+    	selectMenu->clear();
+
+    if (generalMenu == NULL)
+    	generalMenu=new QMenu("&General", algorithmMenu);
+    else
+    	generalMenu->clear();
 
     buildPropertyMenu<IntegerType, IntegerType, IntegerAlgorithm>(*intMenu, this, SLOT(changeInt()));
     buildPropertyMenu<StringType, StringType, StringAlgorithm>(*stringMenu, this, SLOT(changeString()));
@@ -708,8 +755,13 @@ namespace tlp {
 
 
     //Graph menu
-    graphMenu = new QMenu("&Graph");
-    graphMenu->setEnabled(false);
+    if (graphMenu == NULL) {
+    	graphMenu = new QMenu("&Graph", mainWindowFacade.getMenuBar());
+    	graphMenu->setEnabled(false);
+    } else {
+    	graphMenu->clear();
+    }
+
     QMenu *testGraphMenu=graphMenu->addMenu("Test");
     tmpAction=testGraphMenu->addAction("Simple");
     connect(tmpAction,SIGNAL(triggered()),this,SLOT(isSimple()));
@@ -747,10 +799,14 @@ namespace tlp {
 
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,graphMenu);
 
-
     //View menu
-    viewMenu = new QMenu("&View");
-    viewMenu->setEnabled(false);
+    if (viewMenu == NULL)  {
+    	viewMenu = new QMenu("&View", mainWindowFacade.getMenuBar());
+    	viewMenu->setEnabled(false);
+    } else {
+    	viewMenu->clear();
+    }
+
     connect(viewMenu, SIGNAL(triggered(QAction *)), SLOT(createView(QAction*)));
     TemplateFactory<ViewFactory, View, ViewContext>::ObjectCreator::const_iterator it;
     for (it=ViewFactory::factory->objMap.begin();it != ViewFactory::factory->objMap.end();++it) {
@@ -759,8 +815,13 @@ namespace tlp {
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,viewMenu);
 
     //Options menu
-    optionsMenu = new QMenu("&Options");
-    optionsMenu->setEnabled(false);
+    if (optionsMenu == NULL) {
+    	optionsMenu = new QMenu("&Options", mainWindowFacade.getMenuBar());
+    	optionsMenu->setEnabled(false);
+    } else {
+    	optionsMenu->clear();
+    }
+
     forceRatioAction = optionsMenu->addAction("Force ratio");
     forceRatioAction->setCheckable(true);
     forceRatioAction->setChecked(false);
@@ -779,12 +840,16 @@ namespace tlp {
 
     redoAction=new QAction(QIcon(":/i_redo.png"),"redo",mainWindowFacade.getParentWidget());
     undoAction=new QAction(QIcon(":/i_undo.png"),"undo",mainWindowFacade.getParentWidget());
+    snapshotAction = new QAction(QIcon(":/i_snapshot.png"),"snapshot",mainWindowFacade.getParentWidget());
     undoAction->setEnabled(false);
     redoAction->setEnabled(false);
+    snapshotAction->setEnabled(false);
     mainWindowFacade.getToolBar()->addAction(undoAction);
     mainWindowFacade.getToolBar()->addAction(redoAction);
+    mainWindowFacade.getToolBar()->addAction(snapshotAction);
     connect(undoAction,SIGNAL(triggered()),this,SLOT(undo()));
     connect(redoAction,SIGNAL(triggered()),this,SLOT(redo()));
+    connect(snapshotAction,SIGNAL(triggered()),this,SLOT(snapshot()));
   }
   //**********************************************************************
   View* MainController::initMainView(DataSet dataSet) {
@@ -792,7 +857,7 @@ namespace tlp {
     return newView;
   }
   //**********************************************************************
-  View* MainController::createView(const string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize,const QRect &rect,bool maximized){ 
+  View* MainController::createView(const string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize,const QRect &rect,bool maximized){
     QRect newRect=rect;
     forceWidgetSize=true;
     unsigned int viewsNumber=getViewsNumber();
@@ -800,7 +865,7 @@ namespace tlp {
       forceWidgetSize=false;
       newRect=QRect(QPoint((viewsNumber)*20,(viewsNumber)*20),QSize(0,0));
     }
-    
+
     unsigned int holdCount=Observable::observersHoldCounter();
 
     View *createdView=ControllerViewsManager::createView(name,graph,dataSet,forceWidgetSize,newRect,maximized);
@@ -817,21 +882,21 @@ namespace tlp {
   }
   //**********************************************************************
   bool MainController::windowActivated(QWidget *widget) {
-    
+
     lastConfigTabIndexOnView[getCurrentView()]=configWidgetTab->currentIndex();
-    
+
     if(!ControllerViewsManager::windowActivated(widget))
       return false;
-    
+
     // Remove tabs of View Editor
     while(configWidgetTab->count()>0){
       configWidgetTab->removeTab(0);
     }
-    
+
     // Find view and graph of this widget
     View *view=getViewOfWidget(widget);
     Graph *graph=getGraphOfView(view);
-    
+
     // Update left part of tulip
     clusterTreeWidget->setGraph(graph);
     eltProperties->setGraph(graph);
@@ -858,7 +923,7 @@ namespace tlp {
     //Add observer
     graph->addGraphObserver(this);
     graph->addObserver(this);
-    
+
     return true;
   }
   //**********************************************************************
@@ -885,7 +950,7 @@ namespace tlp {
 
     updateCurrentGraphInfos();
     updateUndoRedoInfos();
-    
+
     initObservers();
     //Remove observer (nothing if this not observe)
     graph->removeGraphObserver(this);
@@ -902,7 +967,7 @@ namespace tlp {
       setMetaValueCalculator(&vLayoutCalc);
     graph->getProperty<SizeProperty>("viewSize")->
       setMetaValueCalculator(&vSizeCalc);
-    
+
     return true;
   }
   //**********************************************************************
@@ -914,11 +979,11 @@ namespace tlp {
     QWidget *configurationWidget;
     if(!ControllerViewsManager::changeInteractor(action,&configurationWidget))
       return false;
-    
+
     bool onInteractorConfigTab=configWidgetTab->currentIndex()==0;
     configWidgetTab->removeTab(0);
     configWidgetTab->insertTab(0,configurationWidget,"Interactor");
-      
+
     if(onInteractorConfigTab)
       configWidgetTab->setCurrentIndex(0);
 
@@ -981,7 +1046,7 @@ namespace tlp {
   void MainController::updateCurrentGraphInfos() {
     if(!getCurrentGraph())
       return;
-    
+
     static QLabel *currentGraphInfosLabel = 0;
     if (!currentGraphInfosLabel) {
       currentGraphInfosLabel = new QLabel(mainWindowFacade.getStatusBar());
@@ -990,11 +1055,11 @@ namespace tlp {
 
     currentGraphNbNodes=getCurrentGraph()->numberOfNodes();
     currentGraphNbEdges=getCurrentGraph()->numberOfEdges();
-    
-    char tmp[255];
-    sprintf(tmp,"nodes:%d, edges:%d", currentGraphNbNodes, currentGraphNbEdges);
-    currentGraphInfosLabel->setText(tmp);
-    // Update nb nodes/edges for current graph ans sub graphs
+
+    stringstream sstr;
+    sstr << "nodes: " << currentGraphNbNodes << ", edges: " << currentGraphNbEdges;
+    currentGraphInfosLabel->setText(sstr.str().c_str());
+    // Update nb nodes/edges for current graph and subgraphs
     clusterTreeWidget->updateCurrentGraphInfos(getCurrentGraph());
   }
   //==============================================================
@@ -1002,12 +1067,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
     	return;
-    
-    // free the previous ccpGraph
-    if( copyCutPasteGraph ) {
-      delete copyCutPasteGraph;
-      copyCutPasteGraph = 0;
-    }
+
     BooleanProperty * selP = graph->getProperty<BooleanProperty>("viewSelection");
     if( !selP ) return;
     // Save selection
@@ -1035,12 +1095,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-   
-    // free the previous ccpGraph
-    if( copyCutPasteGraph ) {
-      delete copyCutPasteGraph;
-      copyCutPasteGraph = 0;
-    }
+
     BooleanProperty * selP = graph->getProperty<BooleanProperty>("viewSelection");
     if( !selP ) return;
     Observable::holdObservers();
@@ -1059,7 +1114,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     graph->removeObserver(this);
     Observable::holdObservers();
     BooleanProperty * selP = graph->getProperty<BooleanProperty>("viewSelection");
@@ -1074,7 +1129,7 @@ namespace tlp {
     delete newGraph;
     Observable::unholdObservers();
     graph->addObserver(this);
-    
+
     updateCurrentGraphInfos();
 
     drawViews(true);
@@ -1118,7 +1173,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     set<node> tmp;
     Iterator<node> *it=graph->getNodes();
     BooleanProperty *select = graph->getProperty<BooleanProperty>("viewSelection");
@@ -1148,7 +1203,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     bool ok = FALSE;
     string tmp;
     bool verifGraph = true;
@@ -1192,7 +1247,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     graph->push();
     graph->removeObserver(this);
     Observable::holdObservers();
@@ -1220,7 +1275,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     graph->push();
     Observable::holdObservers();
     if(graph->existLocalProperty("viewSelection")){
@@ -1245,7 +1300,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     graph->push();
     Observable::holdObservers();
     BooleanProperty *selectionProperty =
@@ -1265,7 +1320,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     graph->push();
     Observable::holdObservers();
     if(graph->existLocalProperty("viewSelection")){
@@ -1292,7 +1347,7 @@ namespace tlp {
     Graph *graph=getCurrentGraph();
     if(!graph)
       return;
-    
+
     inAlgorithm=true;
     bool result=ControllerAlgorithmTools::applyAlgorithm(graph,mainWindowFacade.getParentWidget(),action->text().toStdString());
     inAlgorithm=false;
@@ -1307,7 +1362,7 @@ namespace tlp {
   //**********************************************************************
   void MainController::afterChangeProperty() {
     undoAction->setEnabled(true);
-    editUndoAction->setEnabled(true);          
+    editUndoAction->setEnabled(true);
     propertiesWidget->setGraph(getCurrentGraph());
     drawViews(false);
   }
@@ -1316,7 +1371,7 @@ namespace tlp {
     GlMainView *mainView=dynamic_cast<GlMainView *>(getCurrentView());
     if(mainView)
       return new GraphState(mainView->getGlMainWidget());
-    
+
     return NULL;
   }
   //**********************************************************************
@@ -1347,7 +1402,7 @@ namespace tlp {
   //**********************************************************************
   void MainController::changeSelection() {
     QAction *action=(QAction*)(sender());
-    
+
     inAlgorithm=true;
     bool result = ControllerAlgorithmTools::changeBoolean(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewSelection",getCurrentView());
     inAlgorithm=false;
@@ -1399,7 +1454,7 @@ namespace tlp {
     GraphState * g0=NULL;
     if(morphingAction->isChecked())
       g0=constructGraphState();
-    
+
     inAlgorithm=true;
     bool result = ControllerAlgorithmTools::changeColors(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewColor",getCurrentView());
     inAlgorithm=false;
@@ -1417,7 +1472,7 @@ namespace tlp {
     GraphState * g0 = NULL;
     if(morphingAction->isChecked())
       g0=constructGraphState();
-  
+
     inAlgorithm=true;
     bool result = ControllerAlgorithmTools::changeSizes(getCurrentGraph(),mainWindowFacade.getParentWidget(),action->text().toStdString(),"viewSize",getCurrentView());
     inAlgorithm=false;
@@ -1561,6 +1616,17 @@ namespace tlp {
     drawViews(false);
     updateCurrentGraphInfos();
     updateUndoRedoInfos();
+  }
+  //**********************************************************************
+  void MainController::snapshot(){
+    QImage image=currentView->createPicture(16,16,false);
+    if(image.isNull()){
+      QMessageBox::critical(NULL,"can't create snapshot","Sorry but you can't create snapshot with this view");
+    }else{
+      SnapshotDialog snapshotDialog(*currentView);
+      snapshotDialog.setModal(true);
+      snapshotDialog.exec();
+    }
   }
 
 }

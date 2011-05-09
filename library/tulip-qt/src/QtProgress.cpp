@@ -38,16 +38,17 @@ namespace tlp {
         vblayout->setMargin(0);
         setLayout(vblayout);
         vblayout->addWidget(progressWidget);
+        show();
+
+        connect(this, SIGNAL(sendProgress(int, int)), progressWidget, SLOT(progress(int,int)));
     }
     //=====================================
     QtProgress::~QtProgress() {
     }
     ProgressState QtProgress::progress(int step, int max_step){
-        if (firstCall){
-            show();
-        }
-        firstCall=false;
-        return progressWidget->progress(step,max_step);
+//         return progressWidget->progress(step,max_step);
+        emit(sendProgress(step, max_step));
+        return progressWidget->state();
     }
 
     //=====================================
@@ -86,10 +87,6 @@ namespace tlp {
     }
     //=====================================
     void QtProgress::setComment(string msg) {
-        if (firstCall) {
-            show();
-        }
-        firstCall=false;
         progressWidget->setComment(msg);
     }
 }

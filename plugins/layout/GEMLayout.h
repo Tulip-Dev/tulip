@@ -19,13 +19,9 @@
 #ifndef Tulip_GEMLayout_H
 #define Tulip_GEMLayout_H
 
-#include <queue>
 #include <vector>
 
 #include <tulip/TulipPlugin.h>
-using namespace tlp;
-using namespace std;
-using namespace stdext;
 
 /** \addtogroup layout */
 /*@{*/
@@ -85,16 +81,16 @@ public:
     bool run();
 
 private: 
-    Coord computeForces(unsigned int v, 
+  tlp::Coord computeForces(unsigned int v, 
 			float shake, 
 			float gravity, 
 			bool testPlaced);
     
     struct GEMparticule {
-      node n;
-      Coord pos;        // position
+      tlp::node n;
+      tlp::Coord pos;        // position
       int in;
-      Coord imp;        // impulse
+      tlp::Coord imp;        // impulse
       float dir;        // direction
       float heat;        // heat
       float mass;        // weight = nr incident edges
@@ -115,14 +111,14 @@ private:
     unsigned int select();
     void vertexdata_init(const float starttemp);
     void insert();
-    void displace(int v, Coord imp);
+    void displace(int v, tlp::Coord imp);
     void a_round();
     void arrange();
     void updateLayout();
         
     std::vector<GEMparticule> _particules;
-    vector<int> _map; //for random selection
-    MutableContainer<GEMparticule *> _nodeToParticules;
+    std::vector<int> _map; //for random selection
+    tlp::MutableContainer<GEMparticule *> _nodeToParticules;
 
     /*
      * GEM3D variables
@@ -130,7 +126,7 @@ private:
 
     unsigned long Iteration;
     float         _temperature;
-    Coord         _center;
+    tlp::Coord    _center;
     float         _maxtemp;
     float         _oscillation, _rotation;
 

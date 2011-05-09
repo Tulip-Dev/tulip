@@ -19,23 +19,17 @@
 #ifndef RECTANGLEPACKING_H
 #define RECTANGLEPACKING_H
 
-#include "math.h"
+#include <cmath>
 #include <vector>
 #include "Number.h"
 #include <tulip/PluginProgress.h>
 #include "RectangleRelativePositionList.h"
 
-
-
-
 /**
  *This class is used for the implementation of the greedy algorithm.
  */
-
 class RectanglePacking
 {
- 
-  
   public:
   
   RectangleRelativePositionList * firstSequence;/**< List which is useful for the stocking of the first sequence of the even sequence. */
@@ -63,39 +57,29 @@ class RectanglePacking
   float bestWidthOfBoundingBox; /**< Best width of the rectangle including all the packed rectangles and a new rectangle to pack since the beginning of the position tests. */
   float bestHeightOfBoundingBox; /**< Best height of the rectangle including all the packed rectangles and a new rectangle to pack since the beginning of the position tests. */
 
-
-
   /**
    *constructor of the RectanglePacking class.
    *@param numberRects number of rectangles to pack.
    */
   RectanglePacking(int numberRects);
 
-
-
   /**
    *destroyer of the RectanglePacking class.
    */
   ~RectanglePacking();
   
-
-  
   /**
    *Place the rectangles not packed in an optimal way around the rectangle 
    *including the rectangles packed in an optimal way.
    */
-  void defaultPositionRestOfRectangles(vector<Rectangle<float> >::iterator itlim, vector<Rectangle<float> >::iterator itend);
+  void defaultPositionRestOfRectangles(std::vector<tlp::Rectangle<float> >::iterator itlim, std::vector<tlp::Rectangle<float> >::iterator itend);
   
-  
-
   /**
    *Search the best co-ordinates of a rectangle in order to pack it in the 
    *best way. Test the results obtained with all the possible positions in
    * the even sequence.
    */
-   void optimalPositionOfNewRectangle(vector<Rectangle<float> >::iterator itNewRect);
-  
- 
+  void optimalPositionOfNewRectangle(std::vector<tlp::Rectangle<float> >::iterator itNewRect);
 
   /**
    *Search the co-ordinates of a rectangle for the positions tested in the 
@@ -104,8 +88,7 @@ class RectanglePacking
    *@param positionInFirstSequence position tested in the first sequence.
    *@param positionInSecondSequence position tested in the second sequence.
    */
-  list<RectangleRelativePosition>::iterator testOfPositionOfNewRectangle(int positionInFirstSequence, int positionInSecondSequence);
-  
+  std::list<RectangleRelativePosition>::iterator testOfPositionOfNewRectangle(int positionInFirstSequence, int positionInSecondSequence);
  
   /**
    *Search the co-ordinates of a rectangle for the positions tested in the 
@@ -115,9 +98,7 @@ class RectanglePacking
    *@param positionInFirstSequence position tested in the first sequence.
    *@param positionInSecondSequence position tested in the second sequence.
    */
-  list<RectangleRelativePosition>::iterator positionOfNewRectangle(int positionInFirstSequence, int positionInSecondSequence);
-  
-
+  std::list<RectangleRelativePosition>::iterator positionOfNewRectangle(int positionInFirstSequence, int positionInSecondSequence);
  
   /**
    *Determine if the rectangle pointed by itRectLeftOrBelowOfNewRect has a 
@@ -129,28 +110,20 @@ class RectanglePacking
    *@param positionInFirstSequence position tested in the first sequence.
    *@param positionInSecondSequence position tested in the second sequence.
    */
-  void coordinatesOfNewRectangle(list<RectangleRelativePosition>::iterator itRectLeftOrBelowOfNewRect, int positionInFirstSequence, int positionInSecondSequence);
-  
-
+  void coordinatesOfNewRectangle(std::list<RectangleRelativePosition>::iterator itRectLeftOrBelowOfNewRect, int positionInFirstSequence, int positionInSecondSequence);
 
   /**
    *Stock in the fields maxWidthOfBoundingBox and maxHeightOfBoundingBox 
    *the dimensions of the rectangle including the rectangles on the left 
    *and below the considered rectangle.
    */
-  void dimensionsBoundingBoxOfRectanglesLeftOrBelowNewRectangle(list<RectangleRelativePosition>::iterator itRectLeftOrBelowOfNewRect);
-  
- 
-
+  void dimensionsBoundingBoxOfRectanglesLeftOrBelowNewRectangle(std::list<RectangleRelativePosition>::iterator itRectLeftOrBelowOfNewRect);
 
   /**
    *Search the dimensions of the rectangle including the new rectangle and
    *the rectangles on the left and below it.
    */
   void dimensionsBoundingBoxOfNewRectangleAndRectanglesLeftOrBelow();
-  
-  
-
 
   /**
    *Calculate again the co-ordinates of the rectangles places on the right and 
@@ -159,9 +132,7 @@ class RectanglePacking
    *@param positionInFirstSequence position tested in the first sequence.
    *@param positionInSecondSequence position tested in the second sequence.
    */
-  void repositionOfRectanglesRightOrAboveNewRectangle(list<RectangleRelativePosition>::iterator itFirstRectangleRightOrAboveOfNewRectangle, int positionInFirstSequence, int positionInSecondSequence);
-  
- 
+  void repositionOfRectanglesRightOrAboveNewRectangle(std::list<RectangleRelativePosition>::iterator itFirstRectangleRightOrAboveOfNewRectangle, int positionInFirstSequence, int positionInSecondSequence);
 
   /**
    *Compare the right abscissa and the high ordonate of the new rectangle,
@@ -171,8 +142,7 @@ class RectanglePacking
    *right or above the new rectangle.
    *@param positionInSecondSequence position tested in the second sequence.
    */
-  void modificationCoordinatesRectanglesRightOrAboveNewRectangleInFonctionNewRectangle(list<RectangleRelativePosition>::iterator itRectOfSequenceToReposition, int positionInSecondSequence);
-  
+  void modificationCoordinatesRectanglesRightOrAboveNewRectangleInFonctionNewRectangle(std::list<RectangleRelativePosition>::iterator itRectOfSequenceToReposition, int positionInSecondSequence);
   
  /**
    *Compare the left abscissa and the low ordonate of the rectangle pointed by 
@@ -185,24 +155,19 @@ class RectanglePacking
    *@param itRectOfSequenceToReposition pointer on the rectangles places on the
    *right or above the new rectangle.
    */
-  void modificationCoordinatesRectanglesRightOrAboveNewRectangleInFonctionAlreadyRepositionnedRectangles(list<RectangleRelativePosition>::iterator itFirstRectangleRightOrAboveOfNewRectangle, list<RectangleRelativePosition>::iterator itRectOfSequenceToReposition);
-  
-
+ void modificationCoordinatesRectanglesRightOrAboveNewRectangleInFonctionAlreadyRepositionnedRectangles(std::list<RectangleRelativePosition>::iterator itFirstRectangleRightOrAboveOfNewRectangle, std::list<RectangleRelativePosition>::iterator itRectOfSequenceToReposition);
 
   /**
    *Search the dimensions of the rectangle including the rectangles on the 
    *left and below the considered rectangle.
    */
-  void dimensionsBoundingBoxOfAllOptimalPositionnedRectangles(list<RectangleRelativePosition>::iterator itRectOfSequenceToReposition);
-  
-
+  void dimensionsBoundingBoxOfAllOptimalPositionnedRectangles(std::list<RectangleRelativePosition>::iterator itRectOfSequenceToReposition);
 
   /**
    * Modify the even sequence when all the position tests, for a new rectangle
    * to pack, have been made. 
    */
-  void modificationOfSequencePair(vector<Rectangle<float> >::iterator itNewRect, list<RectangleRelativePosition>::iterator itBestPositionInFirstSequence);
-  
+  void modificationOfSequencePair(std::vector<tlp::Rectangle<float> >::iterator itNewRect, std::list<RectangleRelativePosition>::iterator itBestPositionInFirstSequence);
  
   /**
    *Calculate the number of rectangles we can pack in an optimal way without 
@@ -223,7 +188,6 @@ class RectanglePacking
    */
   void lineOrColumnToStart(bool & boolWidth, bool & boolHeight);
   
-  
   /**
    *End a line and decide if the rectangle pointed is going to start a line
    *or a column.
@@ -241,27 +205,22 @@ class RectanglePacking
    * added to the width of the current line, is strictly lower to the width of
    * the including rectangle.
    */
-  void continueLine(vector<Rectangle<float> >::iterator itr, float & widthTemp,float & heightTemp, bool & boolWidth, bool & boolHeight);
+  void continueLine(std::vector<tlp::Rectangle<float> >::iterator itr, float & widthTemp,float & heightTemp, bool & boolWidth, bool & boolHeight);
   
    /**
    *We start or continue a new column if the height of the new rectangle to 
    *pack, added to the height of the current column, is strictly lower to the
    *height of the including rectangle.
    */
-  void continueColumn(vector<Rectangle<float> >::iterator itr, float & widthTemp,float & heightTemp, bool & boolWidth, bool & boolHeight);
-  
+   void continueColumn(std::vector<tlp::Rectangle<float> >::iterator itr, float & widthTemp,float & heightTemp, bool & boolWidth, bool & boolHeight);
 
-  void optimalPositionOfNewRectangleLimPos(vector<Rectangle<float> >::iterator itNewRect, int numberTestedPositions);
-
-
+   void optimalPositionOfNewRectangleLimPos(std::vector<tlp::Rectangle<float> >::iterator itNewRect, int numberTestedPositions);
 
   /**
    *Calculate the number of rectangles we can pack without go beyond the
    *complexity desired.
    */
   int calculNumberOfTestedPositions(const char * quality);
-
 };
-
 
 #endif

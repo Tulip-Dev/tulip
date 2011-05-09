@@ -20,12 +20,12 @@
 
 #include <sstream>
 
-#include "tulip/GlTextureManager.h"
-#include "tulip/GlOpenUniformCubicBSpline.h"
-#include "tulip/GlTools.h"
-#include "tulip/Curves.h"
-#include "tulip/GlBezierCurve.h"
-#include "tulip/ParametricCurves.h"
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlOpenUniformCubicBSpline.h>
+#include <tulip/GlTools.h>
+#include <tulip/Curves.h>
+#include <tulip/GlBezierCurve.h>
+#include <tulip/ParametricCurves.h>
 
 using namespace std;
 
@@ -41,7 +41,7 @@ static string bSplineSpecificShaderCode =
 		"	if (t == 0.0) {"
 		"		return controlPoints[0];"
 		"	} else if (t >= 1.0) {"
-		"		return controlPoints[int(nbControlPoints) - 1];"
+		"		return controlPoints[nbControlPoints - 1];"
 		"	} else {"
 		"		int k = curveDegree;"
 		"		float cpt = 0.0;"

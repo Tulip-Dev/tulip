@@ -187,5 +187,5 @@ namespace tlp {
 
 }
 
-#include "./cxx/Matrix.cxx"
+#include "cxx/Matrix.cxx"
 #endif

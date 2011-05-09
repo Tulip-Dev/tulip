@@ -17,14 +17,13 @@
  *
  */
 #include <stack>
-#include "tulip/Graph.h"
-#include "tulip/ConnectedTest.h"
-#include "tulip/TreeTest.h"
-#include "tulip/AcyclicTest.h"
-#include "tulip/ForEach.h"
-#include "tulip/GraphTools.h"
-#include "tulip/ExtendedClusterOperation.h"
-#include "tulip/BooleanProperty.h"
+#include <tulip/Graph.h>
+#include <tulip/ConnectedTest.h>
+#include <tulip/TreeTest.h>
+#include <tulip/AcyclicTest.h>
+#include <tulip/ForEach.h>
+#include <tulip/GraphTools.h>
+#include <tulip/BooleanProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -378,6 +377,9 @@ void TreeTest::delNode(Graph *graph,const node) {
 }
 
 void TreeTest::destroy(Graph *graph) {
-  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
+}
+
+void TreeTest::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
 }

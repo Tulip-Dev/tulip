@@ -19,18 +19,18 @@
 #ifndef TULIPGPU_H
 #define TULIPGPU_H
 
-#include "tulip/libgpugraph.h"
+#include <tulip/libgpugraph.h>
 
-#include "tulip/Graph.h"
-#include "tulip/Color.h"
-#include "tulip/Coord.h"
-#include "tulip/Size.h"
-#include "tulip/BooleanProperty.h"
-#include "tulip/ColorProperty.h"
-#include "tulip/DoubleProperty.h"
-#include "tulip/IntegerProperty.h"
-#include "tulip/LayoutProperty.h"
-#include "tulip/SizeProperty.h"
+#include <tulip/Graph.h>
+#include <tulip/Color.h>
+#include <tulip/Coord.h>
+#include <tulip/Size.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
 
 namespace tlp {
 

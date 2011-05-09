@@ -19,7 +19,6 @@ set(tulip_MOC
 
 set(tulip_SRCS 
     TulipApp.cpp
-    Application.cpp
     InfoDialog.cpp
     AppStartUp.cpp
     PreferenceDialog.cpp
@@ -39,43 +38,42 @@ INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${PR
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_MINOR_REL=${QT_VERSION_MINOR}")
 
 IF(WIN32)
-ADD_EXECUTABLE( tulip TulipLauncher.cpp)
-SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH ${TulipLibInstallDir})
-IF(NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio")
-TARGET_LINK_LIBRARIES( tulip -mwindows )
-ENDIF()
-TARGET_LINK_LIBRARIES( tulip ${QT_LIBRARIES} )
+  ADD_EXECUTABLE( tulip TulipLauncher.cpp)
+  SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH ${TulipLibInstallDir})
+  IF(NOT ${MSVC})
+    TARGET_LINK_LIBRARIES( tulip -mwindows )
+  ENDIF()
+  TARGET_LINK_LIBRARIES( tulip ${QT_LIBRARIES} )
 ENDIF(WIN32)
 
 ADD_EXECUTABLE( tulip_need_restart TulipNeedRestart.cpp)
 SET_TARGET_PROPERTIES(tulip_need_restart PROPERTIES INSTALL_RPATH ${TulipLibInstallDir})
 TARGET_LINK_LIBRARIES( tulip_need_restart ${QT_LIBRARIES} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
-ADD_DEPENDENCIES(tulip_need_restart tulip_app)
 
 ADD_EXECUTABLE( tulip_app ${tulip_UI_SRCS} ${tulip_MOC_SRCS} ${tulip_SRCS} ${tulip_RCC_SRCS})
 SET_TARGET_PROPERTIES(tulip_app PROPERTIES INSTALL_RPATH ${TulipLibInstallDir})
-IF(WIN32 AND NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio")
-TARGET_LINK_LIBRARIES( tulip_app -mwindows )
+IF(WIN32 AND NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio" AND NOT ${CMAKE_GENERATOR} MATCHES "NMake Makefiles")
+  TARGET_LINK_LIBRARIES( tulip_app -mwindows )
 ENDIF()
+
 TARGET_LINK_LIBRARIES( tulip_app ${FREETYPE_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${GZStreamLibrary} )
 TARGET_LINK_LIBRARIES( tulip_app ${QT_LIBRARIES} )
 IF(QT_VERSION_MINOR LESS 7)
-TARGET_LINK_LIBRARIES( tulip_app ${QT_QTASSISTANT_LIBRARY})
-TARGET_LINK_LIBRARIES( tulip_app ${QT_QTASSISTANTCLIENT_LIBRARY} )
+  TARGET_LINK_LIBRARIES( tulip_app ${QT_QTASSISTANT_LIBRARY})
+  TARGET_LINK_LIBRARIES( tulip_app ${QT_QTASSISTANTCLIENT_LIBRARY} )
 ENDIF(QT_VERSION_MINOR LESS 7)
-TARGET_LINK_LIBRARIES( tulip_app ${QT_QTXML_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${QT_QTOPENGL_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${OPENGL_glu_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${OPENGL_gl_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${LIBXML2_LIBRARIES} )
-TARGET_LINK_LIBRARIES( tulip_app ${JPEG_LIBRARY} )
+TARGET_LINK_LIBRARIES( tulip_app ${JPEG_LIBRARY})
+TARGET_LINK_LIBRARIES( tulip_app ${CMAKE_DL_LIBS})
+TARGET_LINK_LIBRARIES( tulip_app ${LibTulipPluginsManagerName})
+TARGET_LINK_LIBRARIES( tulip_app ${QT_QTXML_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipName})
-TARGET_LINK_LIBRARIES( tulip_app ${LibTulipName} ${CMAKE_DL_LIBS})
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipOglName})
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipQtName})
-TARGET_LINK_LIBRARIES( tulip_app ${LibTulipPluginsManagerName})
-ADD_DEPENDENCIES(tulip_app ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibTulipPluginsManagerName})
 
 IF(WIN32)
   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++

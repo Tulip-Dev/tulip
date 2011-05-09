@@ -31,13 +31,13 @@ using namespace std;
 namespace tlp {
 
 ControllerViewsManager::ControllerViewsManager() :
-    		  currentView(NULL), currentGraph(NULL) {
+    				  currentView(NULL), currentGraph(NULL) {
 }
 ControllerViewsManager::~ControllerViewsManager() {
-  for(map<QWidget *,View*>::iterator it=viewWidget.begin();it!=viewWidget.end();++it){
-    delete (*it).first;
-    delete (*it).second;
-  }
+	for(map<QWidget *,View*>::iterator it=viewWidget.begin();it!=viewWidget.end();++it){
+		delete (*it).first;
+		delete (*it).second;
+	}
 }
 //**********************************************************************
 void ControllerViewsManager::attachMainWindow(MainWindowFacade facade) {
@@ -84,8 +84,8 @@ void ControllerViewsManager::setGraphOfView(View *view, Graph *graph) {
 }
 //**********************************************************************
 void ControllerViewsManager::setDataOfView(View* view, Graph* graph, const DataSet& dataSet){
-    view->setData(graph,dataSet);
-    viewGraph[view]= graph;
+	view->setData(graph,dataSet);
+	viewGraph[view]= graph;
 }
 
 //**********************************************************************
@@ -115,12 +115,12 @@ void ControllerViewsManager::getViews(vector<View *> &views){
 }
 //**********************************************************************
 string ControllerViewsManager::getNameOfView(View *view) const{
-    map<View *,string>::const_iterator it = viewNames.find(view);
-    if(it!=viewNames.end()){
-        return it->second;
-    }else{
-        return "";
-    }
+	map<View *,string>::const_iterator it = viewNames.find(view);
+	if(it!=viewNames.end()){
+		return it->second;
+	}else{
+		return "";
+	}
 }
 //**********************************************************************
 void ControllerViewsManager::setNameOfView(View *view, const string &name) {
@@ -139,45 +139,45 @@ QWidget *ControllerViewsManager::getInteractorConfigurationWidgetOfView(View *vi
 //**********************************************************************
 //**********************************************************************
 void ControllerViewsManager::addView(View *createdView, Graph *graph, DataSet dataSet, bool forceWidgetSize, const QRect &rect, bool maximized, const string &createdViewName, QWidget *createdWidget) {
-  connect(createdWidget, SIGNAL(destroyed(QObject *)), this,
-          SLOT(widgetWillBeClosed(QObject *)));
+	connect(createdWidget, SIGNAL(destroyed(QObject *)), this,
+			SLOT(widgetWillBeClosed(QObject *)));
 
-  viewGraph[createdView] = graph;
-  viewNames[createdView] = createdViewName;
-  viewWidget[createdWidget] = createdView;
+	viewGraph[createdView] = graph;
+	viewNames[createdView] = createdViewName;
+	viewWidget[createdWidget] = createdView;
 
-  mainWindowFacade.getWorkspace()->addWindow(createdWidget);
+	mainWindowFacade.getWorkspace()->addWindow(createdWidget);
 
-  string windowTitle = createdViewName + " : " + graph->getAttribute<string> ("name");
-  createdWidget->setWindowTitle(QString::fromUtf8(windowTitle.c_str()));
+	string windowTitle = createdViewName + " : " + graph->getAttribute<string> ("name");
+	createdWidget->setWindowTitle(QString::fromUtf8(windowTitle.c_str()));
 
-  if (forceWidgetSize) {
-      ((QWidget*) (createdWidget->parent()))->setGeometry(rect);
-  } else {
-      QRect newRect = rect;
-      if (createdWidget->size().height() < 10 || createdWidget->size().width() < 10) {
-          newRect.setSize(QSize(500, 500));
-      } else {
-          newRect.setSize(createdWidget->size());
-      }
-      ((QWidget*) (createdWidget->parent()))->setGeometry(newRect);
-  }
+	if (forceWidgetSize) {
+		((QWidget*) (createdWidget->parent()))->setGeometry(rect);
+	} else {
+		QRect newRect = rect;
+		if (createdWidget->size().height() < 10 || createdWidget->size().width() < 10) {
+			newRect.setSize(QSize(500, 500));
+		} else {
+			newRect.setSize(createdWidget->size());
+		}
+		((QWidget*) (createdWidget->parent()))->setGeometry(newRect);
+	}
 
 
 
-  createdWidget->setMaximumSize(32767, 32767);
+	createdWidget->setMaximumSize(32767, 32767);
 
-  // block signals in order to not execute windowActivated slot before data are set
-  mainWindowFacade.getWorkspace()->blockSignals(true);
-  if (maximized)
-      ((QWidget*) (createdWidget->parent()))->showMaximized();
-  else
-      createdWidget->show();
-  mainWindowFacade.getWorkspace()->blockSignals(false);
+	// block signals in order to not execute windowActivated slot before data are set
+	mainWindowFacade.getWorkspace()->blockSignals(true);
+	if (maximized)
+		((QWidget*) (createdWidget->parent()))->showMaximized();
+	else
+		createdWidget->show();
+	mainWindowFacade.getWorkspace()->blockSignals(false);
 
-  createdView->setData(graph,dataSet);
+	createdView->setData(graph,dataSet);
 
-  windowActivated(createdWidget);
+	windowActivated(createdWidget);
 }
 
 View* ControllerViewsManager::createView(const string &name, Graph *graph, DataSet dataSet,
@@ -188,7 +188,7 @@ View* ControllerViewsManager::createView(const string &name, Graph *graph, DataS
 	ControllerViewsTools::createView(name, graph, dataSet, mainWindowFacade.getWorkspace(),
 			&createdViewName, &createdView, &createdWidget);
 
-    addView(createdView, graph, dataSet, forceWidgetSize, rect, maximized, createdViewName, createdWidget);
+	addView(createdView, graph, dataSet, forceWidgetSize, rect, maximized, createdViewName, createdWidget);
 
 	return createdView;
 }
@@ -207,10 +207,8 @@ void ControllerViewsManager::installInteractors(View *view) {
 
 	ControllerViewsTools::installInteractors(view, mainWindowFacade.getInteractorsToolBar());
 
-	if (lastAction) {
-		if (mainWindowFacade.getInteractorsToolBar()->actions().contains(lastAction)) {
-			changeInteractor(lastAction);
-		}
+	if (lastAction && mainWindowFacade.getInteractorsToolBar()->actions().contains(lastAction)) {
+		changeInteractor(lastAction);
 	} else {
 		if (mainWindowFacade.getInteractorsToolBar()->actions().size() != 0)
 			changeInteractor(mainWindowFacade.getInteractorsToolBar()->actions().front());

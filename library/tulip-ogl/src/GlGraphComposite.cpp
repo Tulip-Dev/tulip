@@ -16,15 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlGraphComposite.h"
+#include <tulip/GlGraphComposite.h>
 
 #include <iostream>
 
 #include <tulip/ForEach.h>
 #include <tulip/GraphProperty.h>
 
-#include "tulip/GlTools.h"
-#include "tulip/GlDisplayListManager.h"
+#include <tulip/GlTools.h>
+#include <tulip/GlDisplayListManager.h>
 
 using namespace std;
 
@@ -41,13 +41,6 @@ namespace tlp {
         metaNodes.insert(n);
     }
     delete nodesIterator;
-  }
-
-  GlGraphComposite::~GlGraphComposite(){
-    if(inputData.getGraph()){
-      inputData.getGraph()->removeGraphObserver(this);
-      inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
-    }
   }
 
   void GlGraphComposite::acceptVisitorForNodes(Graph *graph,GlSceneVisitor *visitor){
@@ -118,8 +111,6 @@ namespace tlp {
   //===================================================================
   void GlGraphComposite::destroy(Graph *g){
     if(inputData.getGraph()==g){
-      inputData.getGraph()->removeGraphObserver(this);
-      inputData.getGraph()->getProperty<GraphProperty>("viewMetaGraph")->removePropertyObserver(this);
       inputData.graph=NULL;
     }
   }

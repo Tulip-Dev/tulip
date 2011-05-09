@@ -18,12 +18,9 @@
  */
 
 #include <vector>
-#include "tulip/Graph.h"
-#include "tulip/SimpleTest.h"
-#include "tulip/ConnectedTest.h"
-#include "tulip/MutableContainer.h"
-#include "tulip/BooleanProperty.h"
-#include "tulip/StableIterator.h"
+#include <tulip/Graph.h>
+#include <tulip/SimpleTest.h>
+#include <tulip/MutableContainer.h>
 
 using namespace std;
 using namespace tlp;
@@ -128,3 +125,6 @@ void SimpleTest::destroy(Graph *graph) {
   deleteResult(graph);
 }
 //=================================================================
+void SimpleTest::treatEvent(const Event& evt) {
+  GraphObserver::treatEvent(evt);
+}

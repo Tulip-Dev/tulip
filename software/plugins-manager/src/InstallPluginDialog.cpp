@@ -53,7 +53,7 @@ namespace tlp {
         installTableWidget->insertRow(index);
 
         installTableWidget->setItem(index,0,new QTableWidgetItem((*it).c_str()));
-        installTableWidget->setItem(index,1,new QTableWidgetItem("in process"));
+        installTableWidget->setItem(index,1,new QTableWidgetItem("in progress"));
 
         pluginsInstallIndex[*it]=index;
         index++;
@@ -71,7 +71,7 @@ namespace tlp {
         removeTableWidget->insertRow(index);
 
         removeTableWidget->setItem(index,0,new QTableWidgetItem((*it).c_str()));
-        removeTableWidget->setItem(index,1,new QTableWidgetItem("in process"));
+        removeTableWidget->setItem(index,1,new QTableWidgetItem("in progress"));
 
         pluginsRemoveIndex[*it]=index;
         index++;
@@ -122,7 +122,7 @@ namespace tlp {
 
       installTableWidget->insertRow(installTableWidget->rowCount());
       installTableWidget->setItem(installTableWidget->rowCount(),0,itemWidget);
-      installTableWidget->setItem(installTableWidget->rowCount(),1,new QTableWidgetItem("in process"));
+      installTableWidget->setItem(installTableWidget->rowCount(),1,new QTableWidgetItem("in progress"));
     }else{
       removeTableWidget->setColumnCount(2);
 
@@ -131,7 +131,7 @@ namespace tlp {
 
       removeTableWidget->insertRow(removeTableWidget->rowCount());
       removeTableWidget->setItem(removeTableWidget->rowCount(),0,itemWidget);
-      removeTableWidget->setItem(removeTableWidget->rowCount(),1,new QTableWidgetItem("in process"));
+      removeTableWidget->setItem(removeTableWidget->rowCount(),1,new QTableWidgetItem("in progress"));
     }
     processNumber++;
     totalProcess++;

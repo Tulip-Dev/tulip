@@ -40,6 +40,8 @@
 #include "tulip/QtProgress.h"
 #include "tulip/TlpQtTools.h"
 
+#include "tulip/ThreadedComputeProperty.h"
+
 using namespace std;
 
 namespace tlp {
@@ -56,7 +58,6 @@ namespace tlp {
   bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const string &name,DataSet *dataSet) {
     Observable::holdObservers();
     QtProgress myProgress(parent,name);
-    myProgress.hide();
     graph->push();
     
     bool ok=true;
@@ -99,8 +100,6 @@ namespace tlp {
     unsigned int holdCount=Observable::observersHoldCounter();
     Observable::holdObservers();
     
-    QtProgress *myProgress=new QtProgress(parent, name,redraw ? view : 0);
-
     string erreurMsg;
     bool   resultBool=true;
     if (query) {
@@ -112,6 +111,8 @@ namespace tlp {
       resultBool = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
 					  title.c_str(), graph, parent);
     }
+
+    QtProgress *myProgress=new QtProgress(parent, name,redraw ? view : 0);
 
     if (resultBool) {
       PROPERTY* tmp = new PROPERTY(graph);
@@ -143,9 +144,19 @@ namespace tlp {
         }
       }
 
-      // The algorithm is apply
+      // The algorithm is applied
+#if  (WIN32 && __GNUC_MINOR__ >= 5 && __GNUC__ == 4) // There is a bug in the openmp version distributed with MinGW < 4.5, so for these versions fall back to simple threaded mechanism
+      AbstractComputeProperty* param = new ComputePropertyTemplate<PROPERTY>(graph, name, tmp, erreurMsg, myProgress, &dataSet);
+      ComputePropertyThread* thread = new ComputePropertyThread(param);
+
+      resultBool = thread->computeProperty();
+
+      delete param;
+      delete thread;
+
+#else
       resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
-      
+#endif    
       graph->pop();
       if (updateLayout) {
         graph->removeAttribute("viewLayout");

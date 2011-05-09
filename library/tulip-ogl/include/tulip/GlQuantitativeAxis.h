@@ -20,7 +20,7 @@
 #ifndef GLQUANTITATIVEAXIS_H_
 #define GLQUANTITATIVEAXIS_H_
 
-#include "GlAxis.h"
+#include <tulip/GlAxis.h>
 
 namespace tlp {
 

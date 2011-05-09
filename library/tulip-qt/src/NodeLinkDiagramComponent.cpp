@@ -18,17 +18,12 @@
  */
 #include "tulip/NodeLinkDiagramComponent.h"
 
-#include <QtGui/QMenuBar>
-#include <QtGui/QImageWriter>
-#include <QtGui/QStatusBar>
-#include <QtGui/QInputDialog>
-#include <QtGui/QMouseEvent>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QMenu>
 #include <QtGui/QToolTip>
 
-#include <tulip/ExtendedClusterOperation.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/StableIterator.h>
 #include <tulip/StringProperty.h>
 
 #include <tulip/GlMetaNodeTrueRenderer.h>
@@ -38,9 +33,8 @@
 #include "tulip/LayerManagerWidget.h"
 #include "tulip/AugmentedDisplayDialog.h"
 #include "tulip/GridOptionsWidget.h"
-#include "tulip/InteractorManager.h"
-#include "tulip/TlpQtTools.h"
-#include "tulip/BaseGraphicsViewComponentMacro.h"
+
+//#include "tulip/BaseGraphicsViewComponentMacro.h"
 
 namespace tlp {
 
@@ -196,7 +190,7 @@ namespace tlp {
       QRect rect=mainWidget->frameGeometry();
       if (mainWidget->doSelect(he->pos().x()-rect.x(), he->pos().y()-rect.y(), type, tmpNode, tmpEdge)) {
         // try to show the viewLabel if any
-        StringProperty *labels = mainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()->getProperty<StringProperty>("viewLabel");
+        StringProperty *labels = mainWidget->getGraph()->getProperty<StringProperty>("viewLabel");
         std::string label;
         QString ttip;
         switch(type) {
@@ -330,7 +324,8 @@ namespace tlp {
           long compositeLong = 0;
           layerAndCompositeDataSet.get("layer",layerName);
           layerAndCompositeDataSet.get("composite",compositeLong);
-          mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
+          if (compositeLong)
+        	  mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
         }
       }
       for(std::list<std::string>::iterator it=toRemove.begin();it!=toRemove.end();++it)
@@ -352,9 +347,11 @@ namespace tlp {
           //add new info
           algorithmInfoDataSet[infoData.first]=newLayerAndCompositeDataSet;
 
-          GlComposite *composite;
-          composite=(GlComposite*)newCompositeLong;
-          mainWidget->getScene()->getLayer(newLayerName)->addGlEntity(composite,infoData.first);
+          if (newCompositeLong) {
+        	  GlComposite *composite =(GlComposite*) newCompositeLong;
+        	  mainWidget->getScene()->getLayer(newLayerName)->addGlEntity(composite,infoData.first);
+          }
+
         }else{
           //check integrity
           DataSet oldLayerAndCompositeDataSet=(*it).second;
@@ -368,22 +365,23 @@ namespace tlp {
             algorithmInfoDataSet.erase(it);
 
             algorithmInfoDataSet[infoData.first]=newLayerAndCompositeDataSet;
-            GlComposite *composite;
-            composite=(GlComposite*)newCompositeLong;
+            GlComposite *composite =(GlComposite*) newCompositeLong;
             mainWidget->getScene()->getLayer(newLayerName)->addGlEntity(composite,infoData.first);
           }
         }
       }
+
+      /*
       for(std::map<std::string,DataSet>::iterator it=algorithmInfoDataSet.begin();it!=algorithmInfoDataSet.end();++it){
         DataSet oldLayerAndCompositeDataSet=(*it).second;
         std::string oldLayerName;
-        long oldCompositeLong;
+        long oldCompositeLong = 0;
         oldLayerAndCompositeDataSet.get("layer",oldLayerName);
         oldLayerAndCompositeDataSet.get("composite",oldCompositeLong);
 
 
       }
-      /*Iterator< std::pair<std::string, DataType*> > *infoDataSetIt=nodeLinkDiagramComponentDataSet.getValues();
+      Iterator< std::pair<std::string, DataType*> > *infoDataSetIt=nodeLinkDiagramComponentDataSet.getValues();
       while(infoDataSetIt->hasNext()) {
         pair<string, DataType*> infoData;
         infoData = infoDataSetIt->next();
@@ -427,7 +425,8 @@ namespace tlp {
         long compositeLong = 0;
         layerAndCompositeDataSet.get("layer",layerName);
         layerAndCompositeDataSet.get("composite",compositeLong);
-        mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
+        if (compositeLong)
+        	mainWidget->getScene()->getLayer(layerName)->deleteGlEntity((GlSimpleEntity*)compositeLong);
       }
       algorithmInfoDataSet.clear();
     }
@@ -465,7 +464,7 @@ namespace tlp {
   //==================================================
   void NodeLinkDiagramComponent::centerView() {
     mainWidget->getScene()->centerScene();
-    overviewWidget->setObservedView(mainWidget,mainWidget->getScene()->getGlGraphComposite());
+    overviewWidget->getView()->getScene()->centerScene();
     draw();
   }
   //==================================================

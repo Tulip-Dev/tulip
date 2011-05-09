@@ -27,7 +27,6 @@
 #include <tulip/Matrix.h>
 #include <tulip/Vector.h>
 #include <tulip/GlSceneObserver.h>
-#include <tulip/CameraObserver.h>
 #include <tulip/GlCPULODCalculator.h>
 
 namespace tlp {
@@ -39,7 +38,8 @@ namespace tlp {
   /**
    * Class use to compute bounding boxs of a vector of GlEntity
    */
-  class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator, public GraphObserver, public PropertyObserver, public GlSceneObserver, public CameraObserver {
+  class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator,
+    private GraphObserver, private PropertyObserver, private Observable {
 
   public:
 
@@ -74,6 +74,7 @@ namespace tlp {
   protected :
 
     void update(PropertyInterface *property);
+    void treatEvent(const Event &ev);
     void observableDestroyed(Observable *){}
     void afterSetNodeValue(PropertyInterface*,const node n);
     void afterSetEdgeValue(PropertyInterface*,const edge e);
@@ -86,12 +87,7 @@ namespace tlp {
     void addLocalProperty(Graph*, const std::string &name);
     void delLocalProperty(Graph*, const std::string &name);
     void destroy(Graph *);
-    void destroy(Camera *);
-
-    void addLayer(GlScene*, const std::string&, GlLayer*){setHaveToCompute();}
-    void delLayer(GlScene*, const std::string&, GlLayer*){setHaveToCompute();}
-    void modifyLayer(GlScene*, const std::string&, GlLayer*){setHaveToCompute();}
-    void modifyEntity(GlScene *,GlSimpleEntity *){setHaveToCompute();}
+    void destroy(const Camera *);
 
     void removeObservers();
     void addObservers();

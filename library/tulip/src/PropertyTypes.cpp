@@ -17,8 +17,8 @@
  *
  */
 
-#include "tulip/PropertyTypes.h"
-#include "tulip/Graph.h"
+#include <tulip/PropertyTypes.h>
+#include <tulip/Graph.h>
 
 using namespace std;
 using namespace tlp;

@@ -584,39 +584,100 @@ const string pluginUtils =
 		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
 		"	code += \"pluginFactory[algoName] = \" + pluginClassName + \"Factory()\\n\"\n"
 		"	exec(code)\n"
-		;
 
-const sipAPIDef *get_sip_api(){
-#if defined(SIP_USE_PYCAPSULE)
-	return (const sipAPIDef *)PyCapsule_Import("sip._C_API", 0);
-#else
-	PyObject *sip_module;
-	PyObject *sip_module_dict;
-	PyObject *c_api;
 
-	/* Import the SIP module. */
-	sip_module = PyImport_ImportModule("sip");
 
-	if (sip_module == NULL)
-		return NULL;
+		"def registerGlyphPlugin(pluginClassName, glyphName, author, date, info, release, glyphId):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
+		"	code = \"class \" + pluginClassName + \"Factory(tlp.GlyphFactory):\\n\"\n"
+		"	code += \"\\tdef __init__(self):\\n\"\n"
+		"	code += \"\\t\\ttlp.GlyphFactory.__init__(self)\\n\"\n"
+		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
+		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"(context)\\n\"\n"
+		"	code += \"\\tdef getName(self):\\n\"\n"
+		"	code += \"\\t\\t return \\\"\" + glyphName + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getAuthor(self):\\n\"\n"
+		"	code += \"\\t\\t return \\\"\" + author + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getGroup(self):\\n\"\n"
+		"	code += \"\\t\\t return str(\"\")\\n\"\n"
+		"	code += \"\\tdef getDate(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + date + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getInfo(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + info + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getRelease(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + release + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getTulipRelease(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
+		"	code += \"\\tdef getId(self):\\n\"\n"
+		"	code += \"\\t\\treturn \" + str(glyphId) + \"\\n\"\n"
+		"	code += \"pluginFactory[glyphName] = \" + pluginClassName + \"Factory()\\n\"\n"
+		"	exec(code)\n"
 
-	/* Get the module's dictionary. */
-	sip_module_dict = PyModule_GetDict(sip_module);
+#ifdef HAS_TULIP_QT_PYTHON_BINDINGS
+		"def registerInteractorPlugin(pluginClassName, algoName, author, date, info, release):\n"
+		"	if algoName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
+		"	code = \"class \" + pluginClassName + \"Factory(tlp.InteractorFactory):\\n\"\n"
+		"	code += \"\\tdef __init__(self):\\n\"\n"
+		"	code += \"\\t\\ttlp.InteractorFactory.__init__(self)\\n\"\n"
+		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
+		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"()\\n\"\n"
+		"	code += \"\\tdef getName(self):\\n\"\n"
+		"	code += \"\\t\\t return \\\"\" + algoName + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getAuthor(self):\\n\"\n"
+		"	code += \"\\t\\t return \\\"\" + author + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getGroup(self):\\n\"\n"
+		"	code += \"\\t\\t return str(\"\")\\n\"\n"
+		"	code += \"\\tdef getDate(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + date + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getInfo(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + info + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getRelease(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + release + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getTulipRelease(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
+		"	code += \"pluginFactory[algoName] = \" + pluginClassName + \"Factory()\\n\"\n"
+		"	exec(code)\n"
 
-	/* Get the "_C_API" attribute. */
-	c_api = PyDict_GetItemString(sip_module_dict, "_C_API");
-
-	if (c_api == NULL)
-		return NULL;
-
-	/* Sanity check that it is the right type. */
-	if (!PyCObject_Check(c_api))
-		return NULL;
-
-	/* Get the actual pointer from the object. */
-	return (const sipAPIDef *)PyCObject_AsVoidPtr(c_api);
+		"def registerViewPlugin(pluginClassName, viewName, author, date, info, release):\n"
+		"	if viewName in pluginFactory.keys():\n"
+		"		return\n"
+		"	pluginModule = getCallingModuleName()\n"
+		"	pluginModules[pluginModule] = 1\n"
+		"	code = \"class \" + pluginClassName + \"Factory(tlp.ViewFactory):\\n\"\n"
+		"	code += \"\\tdef __init__(self):\\n\"\n"
+		"	code += \"\\t\\ttlp.ViewFactory.__init__(self)\\n\"\n"
+		"	code += \"\\t\\tself.registerPlugin()\\n\"\n"
+		"	code += \"\\tdef createPluginObject(self, context):\\n\"\n"
+		"	code += \"\\t\\timport \" + pluginModule + \"\\n\"\n"
+		"	code += \"\\t\\treturn \" + pluginModule + \".\" + pluginClassName + \"()\\n\"\n"
+		"	code += \"\\tdef getName(self):\\n\"\n"
+		"	code += \"\\t\\t return \\\"\" + viewName + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getAuthor(self):\\n\"\n"
+		"	code += \"\\t\\t return \\\"\" + author + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getGroup(self):\\n\"\n"
+		"	code += \"\\t\\t return str(\"\")\\n\"\n"
+		"	code += \"\\tdef getDate(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + date + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getInfo(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + info + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getRelease(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\"\" + release + \"\\\"\\n\"\n"
+		"	code += \"\\tdef getTulipRelease(self):\\n\"\n"
+		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
+		"	code += \"pluginFactory[viewName] = \" + pluginClassName + \"Factory()\\n\"\n"
+		"	exec(code)\n"
 #endif
-}
+		;
 
 ConsoleOutputDialog::ConsoleOutputDialog(QWidget *parent) : QDialog(parent, Qt::Dialog | Qt::WindowStaysOnTopHint) {
 	setWindowTitle("Python Interpreter Output");
@@ -651,7 +712,37 @@ void ConsoleOutputDialog::hideConsoleOutputDialog() {
 
 PythonInterpreter PythonInterpreter::instance;
 
+const sipAPIDef *get_sip_api(){
+#if defined(SIP_USE_PYCAPSULE)
+	return (const sipAPIDef *)PyCapsule_Import("sip._C_API", 0);
+#else
+	PyObject *sip_module;
+	PyObject *sip_module_dict;
+	PyObject *c_api;
 
+	/* Import the SIP module. */
+	sip_module = PyImport_ImportModule("sip");
+
+	if (sip_module == NULL)
+		return NULL;
+
+	/* Get the module's dictionary. */
+	sip_module_dict = PyModule_GetDict(sip_module);
+
+	/* Get the "_C_API" attribute. */
+	c_api = PyDict_GetItemString(sip_module_dict, "_C_API");
+
+	if (c_api == NULL)
+		return NULL;
+
+	/* Sanity check that it is the right type. */
+	if (!PyCObject_Check(c_api))
+		return NULL;
+
+	/* Get the actual pointer from the object. */
+	return (const sipAPIDef *)PyCObject_AsVoidPtr(c_api);
+#endif
+}
 
 
 PythonInterpreter::PythonInterpreter() : runningScript(false) {
@@ -690,10 +781,6 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 
 		if (interpreterInit()) {
 
-			// Import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
-			// and if the site module is not present on the host system
-			runString("import site");
-
 			initscriptengine();
 			_PyImport_FixupExtension(const_cast<char *>("scriptengine"), const_cast<char *>("scriptengine"));
 
@@ -706,11 +793,11 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 
 			addModuleSearchPath(tlp::TulipLibDir);
 
-			runString("from tulip import *");
+			runString("from tulip import *;from tulipogl import *");
 
 			registerNewModuleFromString("tulipplugins", pluginUtils);
 
-			string pythonPluginsPath = tlp::TulipLibDir + "tlp/python/";
+			string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
 			addModuleSearchPath(pythonPluginsPath);
 
 			QDir pythonPluginsDir(pythonPluginsPath.c_str());

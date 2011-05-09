@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlDisplayListManager.h"
+#include <tulip/GlDisplayListManager.h>
 
 #include <iostream>
 

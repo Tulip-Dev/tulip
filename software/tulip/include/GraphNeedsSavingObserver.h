@@ -19,6 +19,8 @@
 #ifndef GRAPHNEEDSSAVINGOBSERVER_H
 #define GRAPHNEEDSSAVINGOBSERVER_H
 
+#include <typeinfo>
+#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/ObservableProperty.h>
 #include <tulip/Observable.h>
@@ -27,14 +29,12 @@
 #include <QtGui/qtabwidget.h>
 #include <tulip/PropertyInterface.h>
 
-class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observer {
+class GraphNeedsSavingObserver :
+public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observable {
    public : 
 
       GraphNeedsSavingObserver(QTabWidget* tabWidget, int graphIndex, tlp::Graph* graph, bool = true) :_needsSaving(false), _tabIndex(graphIndex), _tabWidget(tabWidget), _graph(graph) {
         addObserver();
-      }
-      virtual ~GraphNeedsSavingObserver() {
-        
       }
       
     protected :
@@ -60,9 +60,8 @@ class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::Property
         graph->getProperty(propertyName)->addPropertyObserver(this);
         doNeedSaving();
       }
-      virtual void delLocalProperty(tlp::Graph* graph, const std::string& propertyName) {
-        graph->getProperty(propertyName)->removePropertyObserver(this);
-        doNeedSaving();
+      virtual void delLocalProperty(tlp::Graph*, const std::string&) {
+	doNeedSaving();
       }
       
       virtual void addSubGraph(tlp::Graph* , tlp::Graph* newSubGraph) {
@@ -75,27 +74,7 @@ class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::Property
         }
         delete it;
       }
-      virtual void delSubGraph(tlp::Graph* , tlp::Graph* newSubGraph) {
-        tlp::Iterator<std::string>* it = newSubGraph->getProperties();
-        while(it->hasNext()) {
-          std::string propertyName = it->next();
-          tlp::PropertyInterface* property = newSubGraph->getProperty(propertyName);
-          property->removePropertyObserver(this);
-        }
-        delete it;
-        newSubGraph->removeGraphObserver(this);
-      }
       
-      virtual void destroy(tlp::Graph* graph) {
-        graph->removeGraphObserver(this);
-      }
-      virtual void destroy(tlp::PropertyInterface* property) {
-        property->removePropertyObserver(this);
-      }
-    
-      virtual void observableDestroyed(tlp::Observable* o) {
-        o->removeObserver(this);
-      }
       virtual void update(std::set< tlp::Observable* >::iterator, std::set< tlp::Observable* >::iterator) { doNeedSaving(); }
       
     public :
@@ -115,13 +94,24 @@ class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::Property
           tlp::Iterator<tlp::Graph*>* it = _graph->getSubGraphs();
           while(it->hasNext()) {
             tlp::Graph* sub = it->next();
-            delSubGraph(_graph, sub);
+            removeObserversOnGraph(sub);
           }
-          delSubGraph(_graph, _graph);
+          removeObserversOnGraph(_graph);
           delete it;
           _needsSaving = true;
         }
       }
+
+      void removeObserversOnGraph(tlp::Graph* graph) {
+        tlp::Iterator<tlp::PropertyInterface*>* it = graph->getLocalObjectProperties();
+        while(it->hasNext()) {
+          tlp::PropertyInterface* property = it->next();
+          property->removePropertyObserver(this);
+        }
+        delete it;
+        graph->removeGraphObserver(this);
+      }
+      
   private:
     void addObserver() {
       tlp::Iterator<std::string>* it = _graph->getProperties();
@@ -131,6 +121,12 @@ class GraphNeedsSavingObserver : public tlp::GraphObserver, public tlp::Property
         property->addPropertyObserver(this);
       }
       delete it;
+    }
+    void treatEvent(const tlp::Event& evt) {
+      if (typeid(evt) == typeid(tlp::GraphEvent))
+	tlp::GraphObserver::treatEvent(evt);
+      else
+	tlp::PropertyObserver::treatEvent(evt);
     }
     
     bool _needsSaving; 

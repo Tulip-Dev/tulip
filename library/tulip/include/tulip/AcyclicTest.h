@@ -25,8 +25,9 @@
 #endif
 
 #include <vector>
-#include "tulip/tuliphash.h"
-#include "tulip/ObservableGraph.h"
+#include <tulip/tuliphash.h>
+#include <tulip/Observable.h>
+#include <tulip/ObservableGraph.h>
 #include <tulip/MutableContainer.h>
 
 
@@ -46,29 +47,33 @@ class BooleanProperty;
 /** \addtogroup graph_test */ 
 /*@{*/
 /// Class for testing if the graph is acyclic
-class TLP_SCOPE AcyclicTest : public GraphObserver {
+  class TLP_SCOPE AcyclicTest : private GraphObserver, private Observable {
 public:
-  /** returns true if the graph is acyclic, false if not.
-   *  The result is cached (ie. the next call with the same graph is done in O(1) time)
+
+  /**
+   * Returns true if the graph is acyclic, false otherwise.
+   * The result is cached (ie. the next call with the same graph is done in O(1) time)
    */
   static bool isAcyclic(const Graph *graph);
+
   /**
-    * Make the graph acyclic, by reversing edge direction (feedback arc set problem).
-    * If there is self loops a new node is added with two edges that points to it.
+    * Makes the graph acyclic, by reversing edge direction (feedback arc set problem).
+    * If there is self loops, a new node is added with two edges that points to it.
     *
     */
   static void makeAcyclic(Graph* graph, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);
+
   /**
-    * Return true if the graph is acyclic else false;
-    * if the graph is not acyclic use obstructionEdges variable to store all edges
-    * that create cycle
+    * Returns true if the graph is acyclic, false otherwise.
+    * If the graph is not acyclic, uses obstructionEdges variable to store all edges
+    * that create cycle.
     *
     */
   static bool acyclicTest(const Graph *, std::vector<edge> *obstructionEdges = 0);
 
 private:
 
-  // overload of GraphObserver methods
+  //  override GraphObserver methods
   void addEdge(Graph *,const edge);
   void delEdge(Graph *,const edge);
   void reverseEdge(Graph *,const edge);
@@ -76,6 +81,8 @@ private:
   AcyclicTest();
   static AcyclicTest * instance;
   TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
+  // override Observable::treatEvent
+  virtual void treatEvent(const Event&);
 };
 }
 /*@}*/

@@ -31,12 +31,12 @@
 #include <sstream>
 #include <float.h>
 #include <tulip/StoredType.h>
-#include "tulip/Coord.h"
-#include "tulip/Size.h"
-#include "tulip/Color.h"
-#include "tulip/StringCollection.h"
-#include "tulip/Edge.h"
-#include "tulip/AbstractProperty.h"
+#include <tulip/Coord.h>
+#include <tulip/Size.h>
+#include <tulip/Color.h>
+#include <tulip/StringCollection.h>
+#include <tulip/Edge.h>
+#include <tulip/AbstractProperty.h>
 
 namespace tlp {
 
@@ -286,13 +286,13 @@ public:
 
 extern TLP_SCOPE void initTypeSerializers();
 #ifdef _MSC_VER
-	template class AbstractVectorProperty<DoubleVectorType, double>;
-	template class AbstractVectorProperty<IntegerVectorType, int>;
-	template class AbstractVectorProperty<BooleanVectorType, bool>;
-	template class AbstractVectorProperty<StringVectorType, std::string>;
-	template class AbstractVectorProperty<ColorVectorType, tlp::Color>;
-	template class AbstractVectorProperty<SizeVectorType, tlp::Size>;
-	template class AbstractVectorProperty<CoordVectorType, tlp::Coord>;
+	template class AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>;
+	template class AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>;
+	template class AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>;
+	template class AbstractVectorProperty<StringVectorType, tlp::StringType>;
+	template class AbstractVectorProperty<ColorVectorType, tlp::ColorType>;
+	template class AbstractVectorProperty<SizeVectorType, tlp::SizeType>;
+	template class AbstractVectorProperty<CoordVectorType, tlp::PointType>;
 #endif
 }
 

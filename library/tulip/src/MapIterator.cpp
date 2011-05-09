@@ -20,8 +20,8 @@
 #include <config.h>
 #endif
 
-#include "tulip/MapIterator.h"
-#include "tulip/Graph.h"
+#include <tulip/MapIterator.h>
+#include <tulip/Graph.h>
 using namespace std;
 using namespace tlp;
 

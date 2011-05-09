@@ -164,14 +164,18 @@ template<T1*, T2*>
 	T1 *first = sipCpp->first;
 	T2 *second = sipCpp->second;
 	
-	pyFirst = sipConvertFromType(first, sipType_T1, sipTransferObj);
-	pySecond = sipConvertFromType(second, sipType_T2, sipTransferObj);
+	pyFirst = sipConvertFromNewType(first, sipType_T1, sipTransferObj);
+	pySecond = sipConvertFromNewType(second, sipType_T2, sipTransferObj);
 	
 	if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
 		if (pyFirst) 
 			Py_DECREF(pyFirst);
+		else
+			delete first;
 		if (pySecond)
 			Py_DECREF(pySecond);
+		else
+			delete second;
 		Py_DECREF(pyTuple);
 		
 		return 0;
@@ -244,12 +248,14 @@ template<T1*, T2>
 	T1 *first = sipCpp->first;
 	T2 *second = new T2(sipCpp->second);
 	
-	pyFirst = sipConvertFromType(first, sipType_T1, sipTransferObj);
+	pyFirst = sipConvertFromNewType(first, sipType_T1, sipTransferObj);
 	pySecond = sipConvertFromNewType(second, sipType_T2, sipTransferObj);
 	
 	if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
 		if (pyFirst) 
 			Py_DECREF(pyFirst);
+		else
+			delete first;
 		if (pySecond)
 			Py_DECREF(pySecond);
 		else
@@ -327,7 +333,7 @@ template<T1, T2*>
 	T2 *second = sipCpp->second;
 	
 	pyFirst = sipConvertFromNewType(first, sipType_T1, sipTransferObj);
-	pySecond = sipConvertFromType(second, sipType_T2, sipTransferObj);
+	pySecond = sipConvertFromNewType(second, sipType_T2, sipTransferObj);
 	
 	if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
 		if (pyFirst) 
@@ -336,6 +342,8 @@ template<T1, T2*>
 			delete first;
 		if (pySecond)
 			Py_DECREF(pySecond);
+		else
+			delete second;
 		Py_DECREF(pyTuple);
 		
 		return 0;
