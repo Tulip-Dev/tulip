@@ -21,7 +21,6 @@
 
 #include <list>
 #include <string>
-#include <typeinfo>
 #include <set>
 
 #include <tulip/PluginLoader.h>
@@ -168,31 +167,27 @@ class FactoryInterface;
  *
  * When constructed it registers itself into the factories map automatically.
  **/
-template<class ObjectType, class Context> class PluginManager: public PluginManagerInterface {
+template<class ObjectType, class Context>
+class PluginManager: public PluginManagerInterface {
+private:
+  struct PluginDescription {
+    FactoryInterface<ObjectType, Context> * factory;
+    StructDef parameters;
+    std::list<tlp::Dependency> dependencies;
+  };
+  
 public:
 
   PluginManager() {
     PluginManagerInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
   }
 
-  typedef std::map< std::string , FactoryInterface<ObjectType, Context> * > ObjectCreator;
+  typedef std::map<std::string , PluginDescription> ObjectCreator;
 
   /**
    * @brief Stores the factories that register into this PluginManager.
    **/
   ObjectCreator objMap;
-  /**
-   * @brief Stores the parameters of each registered plug-in.
-   **/
-  std::map<std::string,StructDef> objParam;
-  /**
-   * @brief Stores the list of registered plug-ins.
-   **/
-  std::set<std::string> objNames;
-  /**
-   * @brief Stores the dependencies of the registered plug-ins.
-   **/
-  std::map<std::string, std::list<tlp::Dependency> > objDeps;
 
   /**
    * @brief Constructs a plug-in.

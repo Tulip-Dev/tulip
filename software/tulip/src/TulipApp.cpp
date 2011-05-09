@@ -786,7 +786,7 @@ template <typename TFACTORY, typename TMODULE>
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
     for (it= FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.begin();it != FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.end();++it)
-      insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
+      insertInMenu(menu, it->first.c_str(), it->second.factory->getGroup(), groupMenus, nGroups,receiver,slot);
   }
 //**********************************************************************
 void TulipApp::buildMenus() {

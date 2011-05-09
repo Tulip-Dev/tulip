@@ -59,7 +59,7 @@ namespace tlp
     Iterator<string> *itS=GlyphFactory::factory->availablePlugins();
     while (itS->hasNext()) {
       string pluginName=itS->next();
-      int pluginId=GlyphFactory::factory->objMap[pluginName]->getId();
+      int pluginId=GlyphFactory::factory->objMap[pluginName].factory->getId();
       glyphIdToName[pluginId]=pluginName;
       nameToGlyphId[pluginName]=pluginId;
     } delete itS;
@@ -77,7 +77,7 @@ namespace tlp
       //if (GlyphFactory::factory->objMap[glyphName]->getId() == 0) 
       //  glyphs.setAll(newGlyph);
       //    cerr << " id:" << GlyphFactory::factory->objMap[glyphName]->getId() << endl;
-      glyphs.set(GlyphFactory::factory->objMap[glyphName]->getId(), newGlyph);
+      glyphs.set(GlyphFactory::factory->objMap[glyphName].factory->getId(), newGlyph);
     //    cerr << glyphs.get(GlyphFactory::factory->objMap[glyphName]->getId()) << endl;
     } delete itS;
   }
@@ -86,7 +86,7 @@ namespace tlp
     Iterator<string> *itS = GlyphFactory::factory->availablePlugins();
     while (itS->hasNext()) {
       string glyphName=itS->next();
-      delete glyphs.get(GlyphFactory::factory->objMap[glyphName]->getId());
+      delete glyphs.get(GlyphFactory::factory->objMap[glyphName].factory->getId());
     } delete itS;
   }
 } 
