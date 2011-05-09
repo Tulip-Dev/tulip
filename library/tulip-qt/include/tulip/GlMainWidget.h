@@ -190,6 +190,26 @@ public:
 	&pickedEntities,
 	tlp::GlLayer* layer=NULL);
 
+        /**
+         * Deprecated, see others selectGlEntities functions.
+         */
+        _DEPRECATED bool selectGlEntities(const int x, const int y,
+                        const int width, const int height,
+                        std::vector<tlp::GlEntity *>
+        &pickedEntities,
+        tlp::GlLayer* layer=NULL){
+          return selectGlEntities(x,y,width,height,pickedEntities,layer);
+        }
+        /**
+         * Deprecated, see others selectGlEntities functions.
+         */
+        _DEPRECATED bool selectGlEntities(const int x, const int y,
+                        std::vector<tlp::GlEntity *>
+        &pickedEntities,
+        tlp::GlLayer* layer=NULL) {
+          return selectGlEntities(x,y,pickedEntities,layer);
+        }
+
 	/**
 	 * Grab the image of this widget
 	 */

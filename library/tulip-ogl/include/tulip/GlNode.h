@@ -79,6 +79,11 @@ namespace tlp {
      */
     virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data,float lod, Camera *camera=NULL);
 
+    /**
+     * Deprecate function : see others drawLabel functions
+    */
+    virtual _DEPRECATED void drawLabel(OcclusionTest *test, TextRenderer*, GlGraphInputData* data) {drawLabel(test,data);}
+
     unsigned int id;
 
     /**

@@ -75,6 +75,7 @@ INSTALL(FILES
     tulip/ParametricCurves.h
 	tulip/GlVertexArrayManager.h
 	tulip/GlVertexArrayVisitor.h
+        tulip/TextRenderer.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_ogl_dev
 )

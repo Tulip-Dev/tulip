@@ -80,6 +80,11 @@ namespace tlp {
     void drawLabel(OcclusionTest* test,GlGraphInputData* data, float lod, Camera *camera=NULL);
 
     /**
+     * Deprecate function : see others drawLabel functions
+    */
+    virtual _DEPRECATED void drawLabel(OcclusionTest *test, TextRenderer*, GlGraphInputData* data) {drawLabel(test,data);}
+
+    /**
      * This function is used by the engine to get line coordinates of the edge
      */
     void getVertices(GlGraphInputData *data,std::vector<Coord> &linesCoordsArray);
