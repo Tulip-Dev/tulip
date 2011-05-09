@@ -43,6 +43,7 @@ using namespace std;
 
 const string pluginUtils =
 		"from tulip import *\n"
+		"from tulipogl import *\n"
 		"pluginFactory = {}\n"
 		"pluginModules = {}\n"
 
@@ -619,6 +620,7 @@ const string pluginUtils =
 		"	exec(code)\n"
 
 #ifdef HAS_TULIP_QT_PYTHON_BINDINGS
+		"from tulipqt import *\n"
 		"def registerInteractorPlugin(pluginClassName, algoName, author, date, info, release):\n"
 		"	if algoName in pluginFactory.keys():\n"
 		"		return\n"
@@ -679,6 +681,38 @@ const string pluginUtils =
 #endif
 		;
 
+const sipAPIDef *get_sip_api(){
+#if defined(SIP_USE_PYCAPSULE)
+	return (const sipAPIDef *)PyCapsule_Import("sip._C_API", 0);
+#else
+	PyObject *sip_module;
+	PyObject *sip_module_dict;
+	PyObject *c_api;
+
+	/* Import the SIP module. */
+	sip_module = PyImport_ImportModule("sip");
+
+	if (sip_module == NULL)
+		return NULL;
+
+	/* Get the module's dictionary. */
+	sip_module_dict = PyModule_GetDict(sip_module);
+
+	/* Get the "_C_API" attribute. */
+	c_api = PyDict_GetItemString(sip_module_dict, "_C_API");
+
+	if (c_api == NULL)
+		return NULL;
+
+	/* Sanity check that it is the right type. */
+	if (!PyCObject_Check(c_api))
+		return NULL;
+
+	/* Get the actual pointer from the object. */
+	return (const sipAPIDef *)PyCObject_AsVoidPtr(c_api);
+#endif
+}
+
 ConsoleOutputDialog::ConsoleOutputDialog(QWidget *parent) : QDialog(parent, Qt::Dialog | Qt::WindowStaysOnTopHint) {
 	setWindowTitle("Python Interpreter Output");
 	consoleWidget = new QPlainTextEdit(this);
@@ -712,37 +746,7 @@ void ConsoleOutputDialog::hideConsoleOutputDialog() {
 
 PythonInterpreter PythonInterpreter::instance;
 
-const sipAPIDef *get_sip_api(){
-#if defined(SIP_USE_PYCAPSULE)
-	return (const sipAPIDef *)PyCapsule_Import("sip._C_API", 0);
-#else
-	PyObject *sip_module;
-	PyObject *sip_module_dict;
-	PyObject *c_api;
 
-	/* Import the SIP module. */
-	sip_module = PyImport_ImportModule("sip");
-
-	if (sip_module == NULL)
-		return NULL;
-
-	/* Get the module's dictionary. */
-	sip_module_dict = PyModule_GetDict(sip_module);
-
-	/* Get the "_C_API" attribute. */
-	c_api = PyDict_GetItemString(sip_module_dict, "_C_API");
-
-	if (c_api == NULL)
-		return NULL;
-
-	/* Sanity check that it is the right type. */
-	if (!PyCObject_Check(c_api))
-		return NULL;
-
-	/* Get the actual pointer from the object. */
-	return (const sipAPIDef *)PyCObject_AsVoidPtr(c_api);
-#endif
-}
 
 
 PythonInterpreter::PythonInterpreter() : runningScript(false) {
@@ -781,6 +785,10 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 
 		if (interpreterInit()) {
 
+			// Import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
+			// and if the site module is not present on the host system
+			runString("import site");
+
 			initscriptengine();
 			_PyImport_FixupExtension(const_cast<char *>("scriptengine"), const_cast<char *>("scriptengine"));
 
@@ -794,6 +802,10 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 			addModuleSearchPath(tlp::TulipLibDir);
 
 			runString("from tulip import *;from tulipogl import *");
+
+#ifdef HAS_TULIP_QT_PYTHON_BINDINGS
+			runString("from tulipqt import *;");
+#endif
 
 			registerNewModuleFromString("tulipplugins", pluginUtils);
 
