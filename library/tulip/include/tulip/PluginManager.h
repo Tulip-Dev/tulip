@@ -55,11 +55,11 @@ namespace tlp {
  *
  * It is used to list plug-ins that register themselves into it.
  * 
- * The TemplateFactory's role is to list plug-ins, and retrive their dependencies for Tulip to check if they are met.
+ * The PluginManager's role is to list plug-ins, and retrive their dependencies for Tulip to check if they are met.
  * The only check performed should be the unicity of a plug-in in the system.
  * 
- * Each Tulip plug-in has a factory, which needs to be registered into a TemplateFactory.
- * TemplateFactories register themselves in the Tulip plug-in system, and Tulip lists the plug-ins of each TemplateFactory.
+ * Each Tulip plug-in has a factory, which needs to be registered into a PluginManager.
+ * TemplateFactories register themselves in the Tulip plug-in system, and Tulip lists the plug-ins of each PluginManager.
  * 
  **/
 class PluginManagerInterface {
@@ -170,6 +170,7 @@ class FactoryInterface;
  **/
 template<class ObjectType, class Context> class PluginManager: public PluginManagerInterface {
 public:
+
   PluginManager() {
     PluginManagerInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
   }
@@ -177,7 +178,7 @@ public:
   typedef std::map< std::string , FactoryInterface<ObjectType, Context> * > ObjectCreator;
 
   /**
-   * @brief Stores the factories that register into this TemplateFactory.
+   * @brief Stores the factories that register into this PluginManager.
    **/
   ObjectCreator objMap;
   /**
@@ -192,10 +193,6 @@ public:
    * @brief Stores the dependencies of the registered plug-ins.
    **/
   std::map<std::string, std::list<tlp::Dependency> > objDeps;
-  /**
-   * @brief Stores the release version of the registered plug-ins.
-   **/
-  std::map<std::string, std::string> objRels;
 
   /**
    * @brief Constructs a plug-in.
@@ -206,7 +203,7 @@ public:
    **/
   ObjectType *getPluginObject(const std::string& name, Context p);
 
-  //the following function are inherited from TemplateFactoryInterface, and by default inherit the doc.
+  //the following function are inherited from PluginManagerInterface, and by default inherit the doc.
   Iterator<std::string>* availablePlugins();
   bool pluginExists(const std::string& pluginName);
   StructDef getPluginParameters(std::string name);

@@ -24,6 +24,7 @@
 
 template<class ObjectType, class Context>
 tlp::Iterator<std::string>* tlp::PluginManager< ObjectType, Context>::availablePlugins() {
+  
   return new tlp::StlIterator<std::string,std::set<std::string>::const_iterator>(objNames.begin(), objNames.end());
 }
 
@@ -36,30 +37,29 @@ template<class ObjectType, class Context>
 void tlp::PluginManager<ObjectType,Context>::registerPlugin(FactoryInterface<ObjectType, Context> *objectFactory) {
   std::string pluginName = objectFactory->getName();
   if (!pluginExists(pluginName)) {
-  objNames.insert(pluginName);
-  objMap[pluginName]=objectFactory;
-  ObjectType *withParam=objectFactory->createPluginObject(Context());
-  objParam[pluginName] = withParam->getParameters();
-  // loop over dependencies
-  // to demangle the class names
-  std::list<tlp::Dependency> dependencies = withParam->getDependencies();
-  std::list<tlp::Dependency>::iterator itD = dependencies.begin();
-  for (; itD != dependencies.end(); itD++) {
-    const char *factoryDepName = (*itD).factoryName.c_str();
-    (*itD).factoryName = tlp::demangleTlpClassName(factoryDepName);
-  }
-  objDeps[pluginName] = dependencies;
-  delete withParam;
-  objRels[pluginName] = objectFactory->getRelease();
-  if (currentLoader!=0) currentLoader->loaded(
-					      pluginName,
-					      objectFactory->getAuthor(),
-					      objectFactory->getDate(),
-					      objectFactory->getInfo(),
-					      objectFactory->getRelease(),
-					      objectFactory->getTulipRelease(),
-					      dependencies
-					      );
+    objNames.insert(pluginName);
+    objMap[pluginName]=objectFactory;
+    ObjectType *withParam=objectFactory->createPluginObject(Context());
+    objParam[pluginName] = withParam->getParameters();
+    // loop over dependencies
+    // to demangle the class names
+    std::list<tlp::Dependency> dependencies = withParam->getDependencies();
+    std::list<tlp::Dependency>::iterator itD = dependencies.begin();
+    for (; itD != dependencies.end(); itD++) {
+      const char *factoryDepName = (*itD).factoryName.c_str();
+      (*itD).factoryName = tlp::demangleTlpClassName(factoryDepName);
+    }
+    objDeps[pluginName] = dependencies;
+    delete withParam;
+    if (currentLoader!=0) currentLoader->loaded(
+                  pluginName,
+                  objectFactory->getAuthor(),
+                  objectFactory->getDate(),
+                  objectFactory->getInfo(),
+                  objectFactory->getRelease(),
+                  objectFactory->getTulipRelease(),
+                  dependencies
+                  );
   } else {
     if (currentLoader != 0) {
       std::string tmpStr;
@@ -75,7 +75,6 @@ void tlp::PluginManager<ObjectType,Context>::removePlugin(const std::string &nam
   objMap.erase(name);
   objParam.erase(name);
   objDeps.erase(name);
-  objRels.erase(name);
 }
 
 template<class ObjectType, class Context>
@@ -95,7 +94,7 @@ tlp::StructDef tlp::PluginManager<ObjectType,Context>::getPluginParameters(std::
 template<class ObjectType, class Context>
 std::string tlp::PluginManager<ObjectType,Context>::getPluginRelease(std::string name) {
   assert(objMap.find(name)!=objMap.end());
-  return objRels[name];
+  return objMap[name]->getRelease();
 }
 
 template<class ObjectType, class Context>
