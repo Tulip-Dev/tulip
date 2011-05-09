@@ -22,7 +22,6 @@
 
 #include <iostream>
 #include <sstream>
-#include <typeinfo>
 #include <vector>
 
 #ifdef  _WIN32

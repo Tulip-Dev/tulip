@@ -21,7 +21,6 @@
 
 #include <tulip/GlComposite.h>
 
-#include <typeinfo>
 #include <vector>
 
 #include <tulip/Observable.h>

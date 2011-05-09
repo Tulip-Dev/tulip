@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <typeinfo>
 #include <tulip/GraphUpdatesRecorder.h>
 #include <tulip/Graph.h>
 #include <tulip/ForEach.h>

@@ -19,7 +19,6 @@
 #ifndef GRAPHNEEDSSAVINGOBSERVER_H
 #define GRAPHNEEDSSAVINGOBSERVER_H
 
-#include <typeinfo>
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/ObservableProperty.h>
