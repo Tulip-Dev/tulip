@@ -25,9 +25,11 @@
 
 #include <tulip/tulipconf.h>
 
-#include "ui_LayerManagerWidget.h"
-
 #include <QtGui/QTreeWidgetItem>
+
+namespace Ui {
+class LayerManagerWidgetData;
+}
 
 namespace tlp {
 
@@ -38,7 +40,7 @@ namespace tlp {
   class GlMainView;
   class GlMainWidget;
 
-  class TLP_QT_SCOPE LayerManagerWidget : public QWidget, public Ui::LayerManagerWidgetData {
+  class TLP_QT_SCOPE LayerManagerWidget : public QWidget {
     Q_OBJECT
 
     GlMainView *mainView;
@@ -65,7 +67,11 @@ namespace tlp {
     void itemClicked(QTreeWidgetItem *,int);
     void applyVisibility();
     void applyVisibility(QTreeWidgetItem *item,GlComposite *composite);
+
+  private:
+    Ui::LayerManagerWidgetData *_ui;
   };
+
 
 }
 

@@ -20,15 +20,22 @@
 #ifndef COLORSCALECONFIGDIALOG_H_
 #define COLORSCALECONFIGDIALOG_H_
 
-#include "ui_ColorScaleConfigDialog.h"
 #include <tulip/ColorScale.h>
 
 #include <QtGui/QDialog>
 #include <QtCore/QString>
 
+namespace Ui {
+class ColorScaleDialog;
+}
+
+class QTableWidgetItem;
+class QListWidgetItem;
+class QLabel;
+
 namespace tlp {
 
-class TLP_QT_SCOPE ColorScaleConfigDialog : public QDialog, public Ui::ColorScaleDialog {
+class TLP_QT_SCOPE ColorScaleConfigDialog : public QDialog {
 
 	Q_OBJECT
 
@@ -58,6 +65,7 @@ private slots :
 	void invertEditedColorScale();
 
 private :
+  Ui::ColorScaleDialog *_ui;
 
 	void setColorScaleFromImage(const QString &imageFilePath);
 
@@ -66,7 +74,6 @@ private :
 
 	ColorScale *colorScale;
 	std::string gradientsImageDirectory;
-
 
 	static std::map<QString, std::vector<Color> > tulipImageColorScales;
 	static void loadTulipImageColorScales();

@@ -48,6 +48,7 @@
 #include <QtGui/qtextbrowser.h>
 #include <QtGui/qevent.h>
 #include <QtGui/QScrollArea>
+#include <QtGui/QHBoxLayout>
 
 
 using namespace tlp;

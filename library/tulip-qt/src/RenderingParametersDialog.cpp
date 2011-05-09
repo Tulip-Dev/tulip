@@ -28,12 +28,14 @@
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlMainView.h"
 
+#include "ui_RenderingParametersDialog.h"
+
 using namespace std;
 
 namespace tlp {
 
-  RenderingParametersDialog::RenderingParametersDialog(QWidget* parent) : QWidget(parent), glWidget(NULL) {
-    setupUi(this);
+  RenderingParametersDialog::RenderingParametersDialog(QWidget* parent) : QWidget(parent), _ui(new Ui::RenderingParametersDialogData), glWidget(NULL) {
+    _ui->setupUi(this);
 
     holdUpdateView=false;
     updateDensityLabels();
@@ -46,31 +48,31 @@ namespace tlp {
     GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
 
     holdUpdateView=true;
-    arrows->setChecked( param.isViewArrow());
-    colorInterpolation->setChecked( param.isEdgeColorInterpolate());
-    sizeInterpolation->setChecked( param.isEdgeSizeInterpolate());
-    ordering->setChecked( param.isElementOrdered());
-    orthogonal->setChecked(glWidget->getScene()->isViewOrtho());
-    edge3D->setChecked( param.isEdge3D());
+    _ui->arrows->setChecked( param.isViewArrow());
+    _ui->colorInterpolation->setChecked( param.isEdgeColorInterpolate());
+    _ui->sizeInterpolation->setChecked( param.isEdgeSizeInterpolate());
+    _ui->ordering->setChecked( param.isElementOrdered());
+    _ui->orthogonal->setChecked(glWidget->getScene()->isViewOrtho());
+    _ui->edge3D->setChecked( param.isEdge3D());
     Color backgroundC = glWidget->getScene()->getBackgroundColor();
-    setButtonColor(QColor(backgroundC[0],backgroundC[1],backgroundC[2]),background);
+    setButtonColor(QColor(backgroundC[0],backgroundC[1],backgroundC[2]),_ui->background);
     Color selectionC = param.getSelectionColor();
-    setButtonColor(QColor(selectionC[0],selectionC[1],selectionC[2]),selection);
-    scaled->setChecked(param.isLabelScaled());
+    setButtonColor(QColor(selectionC[0],selectionC[1],selectionC[2]),_ui->selection);
+    _ui->scaled->setChecked(param.isLabelScaled());
 
     if(param.getLabelsDensity()>0)
-      density->setValue(param.getLabelsDensity()+5);
+      _ui->density->setValue(param.getLabelsDensity()+5);
     else if(param.getLabelsDensity()<0)
-      density->setValue(param.getLabelsDensity()-5);
+      _ui->density->setValue(param.getLabelsDensity()-5);
     else
-      density->setValue(0);
+      _ui->density->setValue(0);
 
     updateDensityLabels();
-    blockEdgeSizeCheckBox->setChecked(param.getEdgesMaxSizeToNodesSize());
-    minSizeSpinBox->setValue(param.getMinSizeOfLabel());
-    maxSizeSpinBox->setValue(param.getMaxSizeOfLabel());
-    minSizeSpinBox->setMaximum(maxSizeSpinBox->value());
-    maxSizeSpinBox->setMinimum(minSizeSpinBox->value());
+    _ui->blockEdgeSizeCheckBox->setChecked(param.getEdgesMaxSizeToNodesSize());
+    _ui->minSizeSpinBox->setValue(param.getMinSizeOfLabel());
+    _ui->maxSizeSpinBox->setValue(param.getMaxSizeOfLabel());
+    _ui->minSizeSpinBox->setMaximum(_ui->maxSizeSpinBox->value());
+    _ui->maxSizeSpinBox->setMinimum(_ui->minSizeSpinBox->value());
 
     holdUpdateView=false;
   }
@@ -81,29 +83,29 @@ namespace tlp {
 
     GlGraphRenderingParameters param = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
 
-    param.setViewArrow(arrows->isChecked());
-    param.setEdgeColorInterpolate(colorInterpolation->isChecked());
-    param.setEdgeSizeInterpolate(sizeInterpolation->isChecked());
-    param.setElementOrdered(ordering->isChecked());
-    glWidget->getScene()->setViewOrtho(orthogonal->isChecked());
-    param.setEdge3D(edge3D->isChecked());
-    param.setLabelScaled(scaled->isChecked());
-    QColor backgroundC = background->palette().color(QPalette::Button);
+    param.setViewArrow(_ui->arrows->isChecked());
+    param.setEdgeColorInterpolate(_ui->colorInterpolation->isChecked());
+    param.setEdgeSizeInterpolate(_ui->sizeInterpolation->isChecked());
+    param.setElementOrdered(_ui->ordering->isChecked());
+    glWidget->getScene()->setViewOrtho(_ui->orthogonal->isChecked());
+    param.setEdge3D(_ui->edge3D->isChecked());
+    param.setLabelScaled(_ui->scaled->isChecked());
+    QColor backgroundC = _ui->background->palette().color(QPalette::Button);
     glWidget->getScene()->setBackgroundColor(Color(backgroundC.red(),backgroundC.green(),backgroundC.blue()));
-    QColor selectionC = selection->palette().color(QPalette::Button);
+    QColor selectionC = _ui->selection->palette().color(QPalette::Button);
     param.setSelectionColor(Color(selectionC.red(),selectionC.green(),selectionC.blue()));
 
-    if(density->value()>5)
-      param.setLabelsDensity(density->value()-5);
-    else if(density->value()<-5)
-      param.setLabelsDensity(density->value()+5);
+    if(_ui->density->value()>5)
+      param.setLabelsDensity(_ui->density->value()-5);
+    else if(_ui->density->value()<-5)
+      param.setLabelsDensity(_ui->density->value()+5);
     else
       param.setLabelsDensity(0);
 
     updateDensityLabels();
-    param.setEdgesMaxSizeToNodesSize(blockEdgeSizeCheckBox->isChecked());
-    param.setMinSizeOfLabel(minSizeSpinBox->value());
-    param.setMaxSizeOfLabel(maxSizeSpinBox->value());
+    param.setEdgesMaxSizeToNodesSize(_ui->blockEdgeSizeCheckBox->isChecked());
+    param.setMinSizeOfLabel(_ui->minSizeSpinBox->value());
+    param.setMaxSizeOfLabel(_ui->maxSizeSpinBox->value());
 
     glWidget->getScene()->getGlGraphComposite()->setRenderingParameters(param);
     emit viewNeedDraw();
@@ -111,21 +113,21 @@ namespace tlp {
   }
 
   void RenderingParametersDialog::backColor() {
-    QColor col=background->palette().color(QPalette::Button);
+    QColor col=_ui->background->palette().color(QPalette::Button);
     if(getColorDialog(col,0,"Color chooser",col))
-      setButtonColor(col,background);
+      setButtonColor(col,_ui->background);
     updateView();
   }
 
   void RenderingParametersDialog::selectionColor() {
-    QColor col=background->palette().color(QPalette::Button);
+    QColor col=_ui->background->palette().color(QPalette::Button);
     if(getColorDialog(col,0,"Color chooser",col))
-      setButtonColor(col,selection);
+      setButtonColor(col,_ui->selection);
     updateView();
   }
 
   void RenderingParametersDialog::selectionSaveAtDefaultColor() {
-    QColor selectionC = selection->palette().color(QPalette::Button);
+    QColor selectionC = _ui->selection->palette().color(QPalette::Button);
 
     QSettings settings("TulipSoftware","Tulip");
     settings.beginGroup("Preference");
@@ -171,27 +173,49 @@ namespace tlp {
   }
 
   void RenderingParametersDialog::updateDensityLabels(){
-    QFont newFont=allLabels->font();
+    QFont newFont=_ui->allLabels->font();
     newFont.setBold(false);
 
-    allLabels->setFont(newFont);
-    noOverlap->setFont(newFont);
-    noLabels->setFont(newFont);
+    _ui->allLabels->setFont(newFont);
+    _ui->noOverlap->setFont(newFont);
+    _ui->noLabels->setFont(newFont);
 
     newFont.setBold(true);
 
-    if(density->value()<5 && density->value()>-5)
-      noOverlap->setFont(newFont);
-    else if(density->value()==-105)
-      noLabels->setFont(newFont);
-    else if(density->value()==105)
-      allLabels->setFont(newFont);
+    if(_ui->density->value()<5 && _ui->density->value()>-5)
+      _ui->noOverlap->setFont(newFont);
+    else if(_ui->density->value()==-105)
+      _ui->noLabels->setFont(newFont);
+    else if(_ui->density->value()==105)
+      _ui->allLabels->setFont(newFont);
   }
 
   void RenderingParametersDialog::labelSizeChanged(int){
-    minSizeSpinBox->setMaximum(maxSizeSpinBox->value());
-    maxSizeSpinBox->setMinimum(minSizeSpinBox->value());
+    _ui->minSizeSpinBox->setMaximum(_ui->maxSizeSpinBox->value());
+    _ui->maxSizeSpinBox->setMinimum(_ui->minSizeSpinBox->value());
 
     updateView();
+  }
+
+  void RenderingParametersDialog::toggleEdge3DMenu(bool f) {
+    _ui->edge3D->setEnabled(f);
+  }
+
+  void RenderingParametersDialog::toggleScaledLabelsMenu(bool f) {
+    _ui->scaled->setEnabled(f);
+    if (!f)
+      _ui->scaled->setChecked(true);
+  }
+
+  void RenderingParametersDialog::toggleLabelSizesLimit(bool f) {
+    _ui->frame_2->setEnabled(f);
+  }
+
+  void RenderingParametersDialog::toggleOrthogonalMenu(bool f) {
+    _ui->orthogonal->setEnabled(f);
+  }
+
+  void RenderingParametersDialog::toggleBackgroundMenu(bool f) {
+    _ui->background->setEnabled(f);
   }
 }
