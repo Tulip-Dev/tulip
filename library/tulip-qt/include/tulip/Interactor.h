@@ -194,7 +194,7 @@ R : Revision
 #define INTERACTORPLUGINVIEWEXTENSION(CN,CNT,BCNT,VCN,A,D,I,R)     \
 class CN : public Interactor { \
 public : \
-CN() {baseInteractor=InteractorManager::getInst().getInteractor(BCNT);if(baseInteractor){setPriority(baseInteractor->getPriority());}} \
+CN() {baseInteractor=InteractorFactory::factory->getPluginObject(BCNT,NULL);if(baseInteractor){setPriority(baseInteractor->getPriority());}} \
   void setView(View *view){if(baseInteractor){baseInteractor->setView(view);}} \
   void install(QWidget *widget){if(baseInteractor){baseInteractor->install(widget);}} \
   void remove(){if(baseInteractor){baseInteractor->remove();}} \
@@ -215,7 +215,7 @@ P : Priority of this interactor (in ne menu)
 #define INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(CN,CNT,BCNT,VCN,A,D,I,R,P)     \
 class CN : public Interactor { \
 public : \
-CN() {setPriority(P);baseInteractor=InteractorManager::getInst().getInteractor(BCNT);} \
+CN() {setPriority(P);baseInteractor=InteractorFactory::factory->getPluginObject(BCNT,NULL);} \
  void setView(View *view){if(baseInteractor){baseInteractor->setView(view);}} \
  void install(QWidget *widget){if(baseInteractor){baseInteractor->install(widget);}} \
  void remove(){if(baseInteractor){baseInteractor->remove();}} \
