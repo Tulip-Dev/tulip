@@ -20,7 +20,7 @@
 #ifndef COLORSCALECONFIGDIALOG_H_
 #define COLORSCALECONFIGDIALOG_H_
 
-#include "tulip/ColorScaleConfigDialogData.h"
+#include "ui_ColorScaleConfigDialog.h"
 #include <tulip/ColorScale.h>
 
 #include <QtGui/QDialog>

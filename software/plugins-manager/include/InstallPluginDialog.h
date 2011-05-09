@@ -29,7 +29,7 @@
 #include <QtGui/QGroupBox>
 #include <QtGui/QProgressBar>
 
-#include "InstallPluginDialogData.h"
+#include "ui_InstallPluginDialog.h"
 #include "InstallExitDialog.h"
 
 namespace tlp {

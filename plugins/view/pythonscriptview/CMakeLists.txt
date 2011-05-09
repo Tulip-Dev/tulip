@@ -1,53 +1,45 @@
 IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
-INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
-
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQSCINTILLA_DLL")
+ADD_DEFINITIONS("-DQSCINTILLA_DLL")
 
 # Force to use SIP and QScintilla headers located in thirdparty and not those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${qscintilla2Include} ${SIP_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 
-SET(QT_USE_QTWEBKIT true)
-
-SET(pythonscriptview_LIB_SRCS
-    ConsoleOutputModule.h
-    PythonCodeEditor.cpp
-    PythonCodeEditor.h
-    PythonInterpreter.cpp
-    PythonInterpreter.h
-    PythonScriptView.h
-    PythonScriptView.cpp
-    PythonScriptViewWidget.h
-    PythonScriptViewWidget.cpp
-    TulipUtilsModule.h
+SET(SRCS
+  ConsoleOutputModule.h
+  PythonCodeEditor.cpp
+  PythonCodeEditor.h
+  PythonInterpreter.cpp
+  PythonInterpreter.h
+  PythonScriptView.h
+  PythonScriptView.cpp
+  PythonScriptViewWidget.h
+  PythonScriptViewWidget.cpp
+  TulipUtilsModule.h
 )
 
-SET(pythonscriptview_UI
-    PythonScriptViewWidget.ui
+QT4_WRAP_UI(UI_HEADERS
+  PythonScriptViewWidget.ui
 )
 
-SET(pythonscriptview_MOC
-    PythonScriptView.h
-    PythonScriptViewWidget.h
-    PythonInterpreter.h
+QT4_WRAP_CPP(MOC_SRCS
+  PythonScriptView.h
+  PythonScriptViewWidget.h
+  PythonInterpreter.h
 )
 
-SET(pythonscriptview_RCC
-    PythonScriptViewResource.qrc
+QT4_ADD_RESOURCES(RCC_SRCS
+  PythonScriptViewResource.qrc
 )
-
-TULIP_QT4_WRAP_UI(pythonscriptview_UI_SRCS ${pythonscriptview_UI})
-TULIP_QT4_WRAP_CPP(pythonscriptview_MOC_SRCS ${pythonscriptview_MOC})
-QT4_ADD_RESOURCES(pythonscriptview_RCC_SRCS ${pythonscriptview_RCC})
 
 IF(HAS_TULIP_QT_PYTHON_BINDINGS)
 SET_SOURCE_FILES_PROPERTIES(PythonInterpreter.cpp
                             PROPERTIES COMPILE_DEFINITIONS HAS_TULIP_QT_PYTHON_BINDINGS)
 ENDIF()
 
-ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${pythonscriptview_UI_SRCS} ${pythonscriptview_MOC_SRCS} ${pythonscriptview_LIB_SRCS} ${pythonscriptview_RCC_SRCS})
+ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${SRCS} ${MOC_SRCS} ${UI_HEADERS} ${RCC_SRCS})
 
 IF(${MSVC} AND ${CMAKE_GENERATOR}  MATCHES "Visual Studio")
 	ADD_CUSTOM_COMMAND(

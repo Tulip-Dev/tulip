@@ -59,17 +59,17 @@ INSTALL(FILES
 	tulip/QGlPixelBufferManager.h
 	tulip/GlCompositeHierarchyManager.h
 	tulip/BaseGraphicsViewComponentMacro.h
-    tulip/QtOpenGlErrorViewer.h
-    tulip/CSVContentHandler.h
-    tulip/CSVGraphImport.h
-    tulip/CSVGraphMappingConfigurationWidget.h
-    tulip/CSVImportConfigurationWidget.h    
-    tulip/CSVParser.h    
-    tulip/CSVParserConfigurationWidget.h
-    tulip/CSVImportWizard.h
-    tulip/QtGlSceneZoomAndPanAnimator.h
-    tulip/Morphing.h
-    tulip/GraphPropertiesTableWidget.h
+  tulip/QtOpenGlErrorViewer.h
+  tulip/CSVContentHandler.h
+  tulip/CSVGraphImport.h
+  tulip/CSVGraphMappingConfigurationWidget.h
+  tulip/CSVImportConfigurationWidget.h
+  tulip/CSVParser.h
+  tulip/CSVParserConfigurationWidget.h
+  tulip/CSVImportWizard.h
+  tulip/QtGlSceneZoomAndPanAnimator.h
+  tulip/Morphing.h
+  tulip/GraphPropertiesTableWidget.h
   tulip/TextEditDialog.h
   tulip/SmallMultiplesView.h
   tulip/SmallMultiplesNavigatorComponent.h
@@ -77,18 +77,11 @@ INSTALL(FILES
   tulip/SnapshotDialog.h
   tulip/PropertyCreationDialog.h
   tulip/TulipSettings.h
+  tulip/BaseGraphicsViewComponent.h
+  tulip/GlMainWidgetGraphicsView.h
+  tulip/GlMainWidgetItem.h
+  tulip/TabWidgetHidableMenuGraphicsProxy.h
+  tulip/GraphicsWidgetBase.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_qt_dev
 )
-
-IF(QT_VERSION_MINOR GREATER 3)
-INSTALL(FILES
-        tulip/BaseGraphicsViewComponent.h
-	tulip/GlMainWidgetGraphicsView.h
-	tulip/GlMainWidgetItem.h
-	tulip/TabWidgetHidableMenuGraphicsProxy.h	
-	tulip/GraphicsWidgetBase.h
-DESTINATION ${TulipIncludeInstallDir}/tulip/
-COMPONENT libtulip_qt_dev
-)
-ENDIF(QT_VERSION_MINOR GREATER 3)

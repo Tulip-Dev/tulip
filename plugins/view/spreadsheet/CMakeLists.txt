@@ -1,8 +1,6 @@
-INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
-
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${CMAKE_CURRENT_BINARY_DIR} .)	
 
-SET(spreadsheet_LIB_SRCS
+SET(SRCS
     SpreadView.h
     SpreadView.cpp 
     SpreadWidget.cpp 
@@ -24,13 +22,13 @@ SET(spreadsheet_LIB_SRCS
     SpreadConfigurationWidget.h
 )
 
-set(spreadsheet_UI
+QT4_WRAP_UI(UI_HEADERS
     SpreadInsertColumnDialog.ui
     SpreadMainWidget.ui
     SpreadConfigurationWidget.ui
 )
 
-set(spreadsheet_MOC
+QT4_WRAP_CPP(MOC_SRCS
     SpreadView.h
     SpreadWidget.h
     SpreadTable.h
@@ -39,10 +37,7 @@ set(spreadsheet_MOC
     SpreadConfigurationWidget.h
 )
 
-TULIP_QT4_WRAP_UI(spreadsheet_UI_SRCS ${spreadsheet_UI})
-TULIP_QT4_WRAP_CPP(spreadsheet_MOC_SRCS ${spreadsheet_MOC})
-
-ADD_LIBRARY(SpreadSheet-${TulipVersion} SHARED ${spreadsheet_UI_SRCS} ${spreadsheet_MOC_SRCS} ${spreadsheet_LIB_SRCS})
+ADD_LIBRARY(SpreadSheet-${TulipVersion} SHARED ${SRCS} ${MOC_SRCS} ${UI_HEADERS})
 TARGET_LINK_LIBRARIES(SpreadSheet-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(SpreadSheet-${TulipVersion} ${LibTulipOglName})
 TARGET_LINK_LIBRARIES(SpreadSheet-${TulipVersion} ${LibTulipQtName})

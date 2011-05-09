@@ -25,7 +25,7 @@
 
 #include <tulip/tulipconf.h>
 
-#include "AugmentedDisplayDialogData.h"
+#include "ui_AugmentedDisplayDialog.h"
 
 namespace tlp {
 

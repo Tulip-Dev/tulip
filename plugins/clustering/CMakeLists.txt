@@ -1,8 +1,3 @@
-FIND_PACKAGE( Qt4 REQUIRED )
-INCLUDE( ${QT_USE_FILE} )
-
-INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")	
-
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${CMAKE_CURRENT_BINARY_DIR})
 
 ##----------------------------------------------------------------------------------------------------------------------------
@@ -24,11 +19,11 @@ ADD_LIBRARY(HierarchicalClustering-${TulipVersion} SHARED ${HierarchicalClusteri
 TARGET_LINK_LIBRARIES(HierarchicalClustering-${TulipVersion} ${LibTulipName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(ConvolutionClustering_UI
+QT4_WRAP_UI(ConvolutionClustering_UI_SRCS
     ConvolutionClusteringSetup.ui
 )
 
-SET(ConvolutionClustering_MOC
+QT4_WRAP_CPP(ConvolutionClustering_MOC_SRCS
     ConvolutionClusteringSetup.h
 )
 
@@ -38,9 +33,6 @@ SET(ConvolutionClustering_SRCS
     ConvolutionClusteringSetup.cpp
     ConvolutionClusteringSetup.h
 )
-
-TULIP_QT4_WRAP_UI(ConvolutionClustering_UI_SRCS ${ConvolutionClustering_UI})
-TULIP_QT4_WRAP_CPP(ConvolutionClustering_MOC_SRCS ${ConvolutionClustering_MOC})
 
 ADD_LIBRARY(ConvolutionClustering-${TulipVersion} SHARED ${ConvolutionClustering_SRCS} ${ConvolutionClustering_UI_SRCS} ${ConvolutionClustering_MOC_SRCS})
 TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${LibTulipName} )

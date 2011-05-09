@@ -26,7 +26,7 @@
 #include <QtGui/QGraphicsScene>
 #include <QtGui/QApplication>
 
-#include "tulip/SnapshotDialogData.h"
+#include "ui_SnapshotDialog.h"
 
 #include "tulip/View.h"
 

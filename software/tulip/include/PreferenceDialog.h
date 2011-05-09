@@ -19,7 +19,7 @@
 #ifndef Tulip_PREFERENCEDIALOG_H
 #define Tulip_PREFERENCEDIALOG_H
 
-#include "PreferenceDialogData.h"
+#include "ui_PreferenceDialog.h"
 
 class PreferenceDialog : public QDialog, public Ui::PreferenceDialogData {
     Q_OBJECT

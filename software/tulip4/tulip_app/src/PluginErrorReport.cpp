@@ -2,6 +2,8 @@
 
 #include <QtCore/QFileInfo>
 
+#include "ui_PluginErrorReport.h"
+
 PluginErrorReport::PluginErrorReport(const QString &fileName, const QString &errorMsg, QWidget *parent): QWidget(parent), _ui(new Ui::PluginErrorReportData()) {
   _ui->setupUi(this);
 

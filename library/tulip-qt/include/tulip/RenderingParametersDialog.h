@@ -25,7 +25,7 @@
 
 #include <tulip/tulipconf.h>
 
-#include "tulip/RenderingParametersDialogData.h"
+#include "ui_RenderingParametersDialog.h"
 
 #include <QtGui/QTreeWidgetItem>
 

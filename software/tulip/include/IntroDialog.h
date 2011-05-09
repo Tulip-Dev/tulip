@@ -18,7 +18,7 @@
  */
 #ifndef INTRODIALOG_H
 #define INTRODIALOG_H
-#include "InfoDialogData.h"
+#include "ui_InfoDialog.h"
 
 class IntroDialog : public InfoDialogForm
 { 

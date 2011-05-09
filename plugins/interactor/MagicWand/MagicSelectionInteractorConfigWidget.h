@@ -20,7 +20,7 @@
 #define MAGICSELECTIONINTERACTORCONFIGWIDGET_H
 
 #include <QtGui/QWidget>
-#include "MagicSelectionInteractorConfigWidgetData.h"
+#include "ui_MagicSelectionInteractorConfigWidget.h"
 #include <tulip/Observable.h>
 
 namespace tlp {

@@ -25,7 +25,7 @@
 #include <QtCore/QSettings>
 
 #include "TulipPluginLoader.h"
-#include "TulipData.h"
+#include "ui_Tulip.h"
 #include "GraphNeedsSavingObserver.h"
 
 namespace tlp {

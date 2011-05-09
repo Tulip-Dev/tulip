@@ -27,7 +27,7 @@
 
 #include <QtNetwork/QNetworkProxy>
 
-#include "ProxyConfigurationDialogData.h"
+#include "ui_ProxyConfigurationDialog.h"
 
 namespace tlp {
 

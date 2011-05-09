@@ -17,7 +17,7 @@
  *
  */
 #include "tulip/CSVImportWizard.h"
-#include "tulip/CSVImportWizardData.h"
+#include "ui_CSVImportWizard.h"
 #include <tulip/QtProgress.h>
 #include <QtGui/QVBoxLayout>
 using namespace tlp;

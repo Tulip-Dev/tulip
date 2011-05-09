@@ -18,7 +18,7 @@
  */
 #ifndef CONVOLUTIONCLUSTERINGSETUP_H
 #define CONVOLUTIONCLUSTERINGSETUP_H
-#include "ConvolutionClusteringSetupData.h"
+#include "ui_ConvolutionClusteringSetup.h"
 #include "ConvolutionClustering.h"
 
 class ConvolutionClusteringSetup

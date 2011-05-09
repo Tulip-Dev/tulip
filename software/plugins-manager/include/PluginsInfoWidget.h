@@ -26,7 +26,7 @@
 
 #include "ResponseTreatment.h"
 #include "PluginInfo.h"
-#include "PluginsInfoWidgetData.h"
+#include "ui_PluginsInfoWidget.h"
 
 class QDomElement;
 

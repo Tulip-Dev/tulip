@@ -24,6 +24,8 @@
 #include <QtCore/QLocale>
 #include <QtGui/QDesktopWidget>
 
+#include <tulip/PluginManager.h>
+
 #include <PluginInfo.h>
 #include "TulipApp.h"
 

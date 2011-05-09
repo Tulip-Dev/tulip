@@ -19,8 +19,8 @@
 #ifndef GWOVERVIEW_H
 #define GWOVERVIEW_H
 
-#include "tulip/GWOverviewWidgetData.h"
-#include "tulip/RenderingParametersDialogData.h"
+#include "ui_GWOverviewWidget.h"
+#include "ui_RenderingParametersDialog.h"
 #include <tulip/Camera.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/GlMetaNodeRenderer.h>

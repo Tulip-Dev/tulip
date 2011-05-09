@@ -33,7 +33,7 @@
 #include <tulip/Coord.h>
 #include <tulip/TulipTableWidget.h>
 
-#include "tulip/ChooseFileNameDialogData.h"
+#include "ui_ChooseFileNameDialog.h"
 
 namespace tlp {
 

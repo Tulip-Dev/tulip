@@ -18,7 +18,7 @@
  */
 #ifndef INFODIALOG_H
 #define INFODIALOG_H
-#include "InfoDialogData.h"
+#include "ui_InfoDialog.h"
 
 class InfoDialog : public QDialog, public Ui::InfoDialogData { 
     Q_OBJECT

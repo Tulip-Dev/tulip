@@ -1,7 +1,5 @@
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 
-FIND_PACKAGE(PythonLibs REQUIRED)
-
 SET(siplib_SRCS
     apiversions.c
     bool.cpp

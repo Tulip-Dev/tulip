@@ -27,7 +27,7 @@
 #include <tulip/View.h>
 
 #include "SpreadTable.h"
-#include "SpreadMainWidgetData.h"
+#include "ui_SpreadMainWidget.h"
 
 namespace tlp {
   

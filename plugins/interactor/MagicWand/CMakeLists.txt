@@ -1,18 +1,17 @@
-TULIP_QT4_WRAP_UI(InteractorMagicSelection_UI_SRCS MagicSelectionInteractorConfigWidget.ui)
+QT4_WRAP_UI(UI_HEADERS MagicSelectionInteractorConfigWidget.ui)
 
-TULIP_QT4_WRAP_CPP(InteractorMagicSelection_MOC_SRCS MagicSelectionInteractorConfigWidget.h)
+QT4_WRAP_CPP(MOC_SRCS MagicSelectionInteractorConfigWidget.h)
 
-SET(InteractorMagicSelection_SRCS
-    InteractorMagicSelection.cpp
-    MagicSelectionInteractorConfigWidget.cpp
-    MouseMagicWandSelector.cpp
+SET(SRCS
+  InteractorMagicSelection.cpp
+  MagicSelectionInteractorConfigWidget.cpp
+  MouseMagicWandSelector.cpp
 )
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR})
 
-ADD_LIBRARY(InteractorMagicSelection-${TulipVersion} SHARED ${InteractorMagicSelection_SRCS} ${InteractorMagicSelection_UI_SRCS} ${InteractorMagicSelection_MOC_SRCS})
+ADD_LIBRARY(InteractorMagicSelection-${TulipVersion} SHARED ${SRCS} ${UI_HEADERS} ${MOC_SRCS})
 TARGET_LINK_LIBRARIES(InteractorMagicSelection-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
-ADD_DEPENDENCIES(InteractorMagicSelection-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
 
 INSTALL(TARGETS InteractorMagicSelection-${TulipVersion}
         DESTINATION ${TulipPluginsInstallDir}/interactors/

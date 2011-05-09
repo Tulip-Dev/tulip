@@ -6,16 +6,13 @@ SET(ColorMapping_SRCS
     DoubleStringsListRelationDialog.cpp
 )
 
-set(ColorMapping_UI
+QT4_WRAP_UI(ColorMapping_UI_SRCS
     DoubleStringsListRelationDialog.ui
 )
 
-set(ColorMapping_MOC
+QT4_WRAP_CPP(ColorMapping_MOC_SRCS
     DoubleStringsListRelationDialog.h
 )
-
-TULIP_QT4_WRAP_UI(ColorMapping_UI_SRCS ${ColorMapping_UI})
-TULIP_QT4_WRAP_CPP(ColorMapping_MOC_SRCS ${ColorMapping_MOC})
 
 ADD_LIBRARY(ColorMapping-${TulipVersion} SHARED ${ColorMapping_SRCS} ${ColorMapping_UI_SRCS} ${ColorMapping_MOC_SRCS})
 TARGET_LINK_LIBRARIES(ColorMapping-${TulipVersion} ${LibTulipName})

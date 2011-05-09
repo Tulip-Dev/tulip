@@ -25,7 +25,7 @@
 
 #include <tulip/tulipconf.h>
 
-#include "SpreadInsertColumnDialogData.h"
+#include "ui_SpreadInsertColumnDialog.h"
 
 class QUndoStack;
 class QMimeData;

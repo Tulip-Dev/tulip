@@ -19,7 +19,7 @@
 #ifndef _GRID_WIDGET_H_
 #define _GRID_WIDGET_H_
 
-#include "GridOptionsData.h"
+#include "ui_GridOptions.h"
 
 #include <tulip/GlMainWidget.h>
 #include <tulip/RenderingParametersDialog.h>

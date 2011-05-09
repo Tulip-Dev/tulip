@@ -1,8 +1,3 @@
-FIND_PACKAGE( Qt4 REQUIRED )
-INCLUDE( ${QT_USE_FILE} )
-
-INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
-
 set(serverGenerator_SRCS
     PluginGenerate.cpp
     ServerGenerator.cpp

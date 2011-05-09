@@ -23,7 +23,7 @@
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 
-#include "tulip/FindSelectionData.h"
+#include "ui_FindSelection.h"
 
 namespace tlp {
 

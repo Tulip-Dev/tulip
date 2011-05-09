@@ -34,7 +34,7 @@
 #include <config.h>
 #endif
 
-#include "tulip/TabWidgetData.h"
+#include "ui_TabWidget.h"
 
 
 namespace tlp {

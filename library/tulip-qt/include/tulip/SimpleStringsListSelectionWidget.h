@@ -23,7 +23,7 @@
 #include <QtGui/QWidget>
 
 #include "StringsListSelectionWidgetInterface.h"
-#include "SimpleStringsListSelectionWidgetData.h"
+#include "ui_SimpleStringsListSelectionWidget.h"
 
 namespace tlp {
 

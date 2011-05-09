@@ -7,6 +7,8 @@
 #include <tulip/TlpTools.h>
 #include <tulip/TulipRelease.h>
 
+#include "ui_TulipMainWindow.h"
+
 TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new Ui::TulipMainWindowData()), _systemTrayIcon(0) {
   _ui->setupUi(this);
   _pageChoosers.clear();

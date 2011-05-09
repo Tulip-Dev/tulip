@@ -21,12 +21,13 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QDialog>
 #include <QtCore/QSettings>
+#include "ui_QtOpenGlErrorViewerWithAskAgainDialog.h"
 
 namespace tlp {
 
-QtOpenGlErrorViewerWithAskAgainDialog::QtOpenGlErrorViewerWithAskAgainDialog(QWidget *parent):QDialog(parent){
-  setupUi(this);
-  connect(okButton,SIGNAL(clicked()),this,SLOT(accept()));
+QtOpenGlErrorViewerWithAskAgainDialog::QtOpenGlErrorViewerWithAskAgainDialog(QWidget *parent):QDialog(parent),_ui(new Ui::QtOpenGlErrorViewerWithAskAgainDialogData()){
+  _ui->setupUi(this);
+  connect(_ui->okButton,SIGNAL(clicked()),this,SLOT(accept()));
 }
 
 void QtOpenGlErrorViewer::displayError(const std::string &title,const std::string &errorMsg){
@@ -41,9 +42,9 @@ void QtOpenGlErrorViewer::displayErrorWithAskAgain(const std::string &title,cons
   if(askAgain){
     QtOpenGlErrorViewerWithAskAgainDialog dialog;
     dialog.setWindowTitle(title.c_str());
-    dialog.textLabel->setText(errorMsg.c_str());
+    dialog._ui->textLabel->setText(errorMsg.c_str());
     dialog.exec();
-    settings.setValue(title.c_str(),dialog.askAgainCheckBox->isChecked());
+    settings.setValue(title.c_str(),dialog._ui->askAgainCheckBox->isChecked());
   }
 
   settings.endGroup();

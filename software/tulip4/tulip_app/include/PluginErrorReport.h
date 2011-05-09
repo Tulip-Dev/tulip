@@ -2,7 +2,10 @@
 #define PLUGINERRORREPORT_H
 
 #include <QtGui/QWidget>
-#include "ui_PluginErrorReport.h"
+
+namespace Ui {
+class PluginErrorReportData;
+}
 
 class PluginErrorReport: public QWidget {
   Q_OBJECT
