@@ -24,10 +24,13 @@
 #endif
 
 #include <tulip/tulipconf.h>
-
-#include "ui_RenderingParametersDialog.h"
-
 #include <QtGui/QTreeWidgetItem>
+
+class QPushButton;
+
+namespace Ui {
+class RenderingParametersDialogData;
+}
 
 namespace tlp {
 
@@ -38,7 +41,7 @@ namespace tlp {
   class GlMainView;
   class GlMainWidget;
 
-  class TLP_QT_SCOPE RenderingParametersDialog : public QWidget, public Ui::RenderingParametersDialogData {
+  class TLP_QT_SCOPE RenderingParametersDialog : public QWidget {
     Q_OBJECT
 
     GlMainWidget* glWidget;
@@ -58,6 +61,12 @@ namespace tlp {
     void setButtonColor(QColor tmp,QPushButton *button);
     void labelSizeChanged(int);
 
+    void toggleEdge3DMenu(bool);
+    void toggleScaledLabelsMenu(bool);
+    void toggleLabelSizesLimit(bool);
+    void toggleOrthogonalMenu(bool);
+    void toggleBackgroundMenu(bool);
+
   signals :
 
     void viewNeedDraw();
@@ -65,6 +74,9 @@ namespace tlp {
   protected :
 
     void updateDensityLabels();
+
+  private:
+    Ui::RenderingParametersDialogData *_ui;
 
   };
 

@@ -24,21 +24,23 @@
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlMainView.h"
 
+#include "ui_LayerManagerWidget.h"
+
 using namespace std;
 
 namespace tlp {
 
-  LayerManagerWidget::LayerManagerWidget(QWidget* parent) : QWidget(parent) {
-    setupUi(this);
+  LayerManagerWidget::LayerManagerWidget(QWidget* parent) : QWidget(parent), _ui(new Ui::LayerManagerWidgetData) {
+    _ui->setupUi(this);
 
-    treeWidget->header()->resizeSection(0,205);
-    treeWidget->header()->resizeSection(1,70);
-    treeWidget->header()->resizeSection(2,70);
+    _ui->treeWidget->header()->resizeSection(0,205);
+    _ui->treeWidget->header()->resizeSection(1,70);
+    _ui->treeWidget->header()->resizeSection(2,70);
   }
 
   //=============================================================================
   void LayerManagerWidget::attachMainWidget(GlMainWidget* graphWidget) {
-    treeWidget->invisibleRootItem()->takeChildren();
+    _ui->treeWidget->invisibleRootItem()->takeChildren();
 
     observedMainWidget=graphWidget;
 
@@ -48,27 +50,27 @@ namespace tlp {
         addLayer(graphWidget->getScene(),(*it).first,(*it).second);
       }
     }
-    treeWidget->expandAll();
+    _ui->treeWidget->expandAll();
 
     //disconnect to make sure we have only one connection
-    disconnect(treeWidget,SIGNAL(itemClicked(QTreeWidgetItem *,int)),this, SLOT(itemClicked(QTreeWidgetItem *,int)));
-    connect(treeWidget,SIGNAL(itemClicked(QTreeWidgetItem *,int)),this, SLOT(itemClicked(QTreeWidgetItem *,int)));
+    disconnect(_ui->treeWidget,SIGNAL(itemClicked(QTreeWidgetItem *,int)),this, SLOT(itemClicked(QTreeWidgetItem *,int)));
+    connect(_ui->treeWidget,SIGNAL(itemClicked(QTreeWidgetItem *,int)),this, SLOT(itemClicked(QTreeWidgetItem *,int)));
     //disconnect to make sure we have only one connection
-    disconnect(applyButton, SIGNAL(clicked()),this, SLOT(apply()));
-    connect(applyButton, SIGNAL(clicked()),this, SLOT(apply()));
+    disconnect(_ui->applyButton, SIGNAL(clicked()),this, SLOT(apply()));
+    connect(_ui->applyButton, SIGNAL(clicked()),this, SLOT(apply()));
   }
   //=============================================================================
   void LayerManagerWidget::addLayer(GlScene*, const string& name, GlLayer* layer){
     if(layer->isAWorkingLayer())
       return;
-    QTreeWidgetItem *item=new QTreeWidgetItem(treeWidget,QStringList(name.c_str()));
+    QTreeWidgetItem *item=new QTreeWidgetItem(_ui->treeWidget,QStringList(name.c_str()));
     item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     if(layer->isVisible())
       item->setCheckState(1,Qt::Checked);
     else
       item->setCheckState(1,Qt::Unchecked);
     addComposite(layer->getComposite(),item);
-    treeWidget->expandAll();
+    _ui->treeWidget->expandAll();
   }
   //=============================================================================
   void LayerManagerWidget::addComposite(GlComposite *composite,QTreeWidgetItem *parent) {
@@ -189,7 +191,7 @@ namespace tlp {
   }
   //=============================================================================
   void LayerManagerWidget::updateLayer(const string& name,GlLayer *layer) {
-    QTreeWidgetItem* root=treeWidget->invisibleRootItem();
+    QTreeWidgetItem* root=_ui->treeWidget->invisibleRootItem();
     for(int i=0;i<root->childCount();i++) {
       QTreeWidgetItem *child=root->child(i);
       if(child->data(0,0).toString().toStdString()==name) {
@@ -198,7 +200,7 @@ namespace tlp {
         break;
       }
     }
-    treeWidget->expandAll();
+    _ui->treeWidget->expandAll();
   }
   //=============================================================================
   void LayerManagerWidget::delLayer(GlScene*, const string&, GlLayer*){
@@ -214,8 +216,8 @@ namespace tlp {
   //=============================================================================
   void LayerManagerWidget::applyVisibility() {
     GlScene *scene=observedMainWidget->getScene();
-    for(int i=0;i<treeWidget->topLevelItemCount();i++){
-      QTreeWidgetItem *layerItem=treeWidget->topLevelItem(i);
+    for(int i=0;i<_ui->treeWidget->topLevelItemCount();i++){
+      QTreeWidgetItem *layerItem=_ui->treeWidget->topLevelItem(i);
       GlLayer *layer=scene->getLayer(layerItem->text(0).toStdString());
       layer->setVisible(layerItem->checkState(1)==Qt::Checked);
       applyVisibility(layerItem,layer->getComposite());

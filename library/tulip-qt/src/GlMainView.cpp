@@ -21,6 +21,8 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QMenu>
 
+#include <QtGui/QFrame>
+#include <QtGui/QWidget>
 #include "tulip/GlMainWidget.h"
 #include "tulip/GWOverviewWidget.h"
 

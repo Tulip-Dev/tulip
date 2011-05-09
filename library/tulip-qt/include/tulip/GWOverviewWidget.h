@@ -19,8 +19,6 @@
 #ifndef GWOVERVIEW_H
 #define GWOVERVIEW_H
 
-#include "ui_GWOverviewWidget.h"
-#include "ui_RenderingParametersDialog.h"
 #include <tulip/Camera.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/GlMetaNodeRenderer.h>
@@ -28,8 +26,13 @@
 #include <string>
 #include <QtCore/qstring.h>
 #include <QtGui/qlayout.h>
+#include <QtGui/QWidget>
 
 class QEvent;
+
+namespace Ui {
+class GWOverviewWidgetData;
+}
 
 namespace tlp {
   class GlGraph;
@@ -41,7 +44,7 @@ namespace tlp {
 /** \addtogroup Tulip_Widgets */
 /*@{*/
   class TLP_QT_SIMPLE_SCOPE GWOverviewWidget :
-    public QWidget,public Ui::GWOverviewWidgetData {
+    public QWidget {
   Q_OBJECT
 
 public:
@@ -76,6 +79,8 @@ private slots:
   void observedViewDestroyed(QObject *glWidget);
 
 private :
+  Ui::GWOverviewWidgetData *_ui;
+
   GlMainWidget *_observedView;
   GlMainWidget *_view;
   bool _synchronizing;

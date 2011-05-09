@@ -32,6 +32,8 @@
 #include "tulip/GlMainWidget.h"
 #include "tulip/GlTools.h"
 
+#include "ui_GWOverviewWidget.h"
+#include "ui_RenderingParametersDialog.h"
 
 using namespace std;
 
@@ -50,12 +52,12 @@ private :
 };
 
 //=============================================================================
-  GWOverviewWidget::GWOverviewWidget(QWidget* parent,bool drawIfNotVisible) : QWidget(parent),_observedView(NULL),_initialCamera(NULL),drawIfNotVisible(drawIfNotVisible){
-  setupUi(this);
+  GWOverviewWidget::GWOverviewWidget(QWidget* parent,bool drawIfNotVisible) : QWidget(parent),_ui(new Ui::GWOverviewWidgetData()), _observedView(NULL),_initialCamera(NULL),drawIfNotVisible(drawIfNotVisible){
+  _ui->setupUi(this);
 
   // Setup the internal view of the overview
   //  This view is a GlMainWidget with only one layer : "Main"
-  _view = new GlMainWidget(frame);
+  _view = new GlMainWidget(_ui->frame);
   _view->setViewLabel(false);
   GlLayer* layer=new GlLayer("Main");
   layer->getComposite()->setDeleteComponentsInDestructor(false);
@@ -65,7 +67,7 @@ private :
   _view->addForegroundEntity(_glDraw);
 
   // Add the view to the overview widget
-  QGridLayout* gridLayout = new QGridLayout(frame);
+  QGridLayout* gridLayout = new QGridLayout(_ui->frame);
   gridLayout->setMargin(0);
   gridLayout->setSpacing(0);
   gridLayout->addWidget( _view, 0, 0, 1, 1);
