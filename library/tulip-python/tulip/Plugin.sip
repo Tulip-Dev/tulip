@@ -24,13 +24,13 @@
 // +-------------------------------------------------------------------------+
 
 namespace tlp {
-class PluginInfoInterface {
+class AbstractPluginInfo {
 
 %TypeHeaderCode
-#include <tulip/Plugin.h>
+#include <tulip/AbstractPluginInfo.h>
 %End
 public:
-	virtual ~PluginInfoInterface();
+	virtual ~AbstractPluginInfo();
 
 	virtual  std::string getName() const = 0;
 

@@ -24,8 +24,8 @@
 // +-------------------------------------------------------------------------+
 
 %ModuleHeaderCode
-#include <tulip/TemplateFactory.h>
-#include <tulip/LayoutAlgorithm.h>
+#include <tulip/PluginManager.h>
+#include <tulip/PropertyAlgorithm.h>
 #include <tulip/LayoutProperty.h>
 namespace tlp {
 typedef tlp::PropertyFactory<tlp::LayoutAlgorithm> LayoutAlgorithmFactory;
@@ -36,19 +36,19 @@ typedef tlp::PropertyFactory<tlp::LayoutAlgorithm> LayoutAlgorithmFactory;
 namespace tlp {
 class LayoutAlgorithm: tlp::PropertyAlgorithm {
 %TypeHeaderCode
-#include <tulip/LayoutAlgorithm.h>
+#include <tulip/PropertyAlgorithm.h>
 %End
 public:
 	virtual ~LayoutAlgorithm();
-	tlp::LayoutProperty *layoutResult;
+	tlp::LayoutProperty *result;
 protected:
 	LayoutAlgorithm(const tlp::PropertyContext &context);
 	
 };
 
-class LayoutAlgorithmFactory : tlp::PluginInfoInterface {
+class LayoutAlgorithmFactory : tlp::AbstractPluginInfo {
 %TypeHeaderCode
-#include <tulip/TemplateFactory.h>
+#include <tulip/PluginManager.h>
 %End
 public:
 
@@ -66,8 +66,8 @@ public:
 	
 	void registerPlugin();
 %MethodCode
-	tlp::LayoutProperty::initFactory();			
-    tlp::LayoutProperty::factory->registerPlugin(sipCpp);
+	tlp::PropertyFactory<tlp::LayoutAlgorithm>::initFactory();			
+    tlp::PropertyFactory<tlp::LayoutAlgorithm>::factory->registerPlugin(sipCpp);
 %End
 
 };

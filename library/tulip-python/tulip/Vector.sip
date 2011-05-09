@@ -26,6 +26,9 @@
 %ModuleHeaderCode
 #include <tulip/Vector.h>
 #include <sstream>
+namespace tlp {
+typedef tlp::Vector<int, 4> Vec4i;
+}
 %End
 
 namespace tlp {
@@ -172,6 +175,82 @@ public:
     float dist (const tlp::Vec4f &) const;
     float dotProduct(const tlp::Vec4f &) const;
    
+   SIP_PYOBJECT __repr__() const;
+%MethodCode
+		std::ostringstream oss;
+		oss << *sipCpp;
+		std::string s = oss.str();
+		s[0] = '[';
+		s[s.size() - 1] = ']';
+        sipRes = PyString_FromString(s.c_str());
+%End
+
+};
+
+class Vec4i  {
+
+public:
+
+	Vec4i();
+	
+	Vec4i(const int a0);
+%MethodCode
+		sipCpp = new tlp::Vec4i();
+		(*sipCpp)[0] = a0;
+		(*sipCpp)[1] = a0;
+		(*sipCpp)[2] = a0;
+		(*sipCpp)[3] = a0;
+%End
+	
+	Vec4i(const int a0, const int a1, const int a2, const int a3);
+%MethodCode
+		sipCpp = new tlp::Vec4i();
+		(*sipCpp)[0] = a0;
+		(*sipCpp)[1] = a1;
+		(*sipCpp)[2] = a2;
+		(*sipCpp)[2] = a3;
+		
+%End
+	
+	Vec4i(const tlp::Vec4i &);
+	
+	int operator[](const unsigned int i) const;
+	
+	void __setitem__(int i, const int &value);
+%MethodCode
+	if (a0 < 4)
+		(*sipCpp)[a0] = a1;
+	else
+		sipIsErr = 1;	
+%End
+	
+	tlp::Vec4i & operator*=(const int &);
+    tlp::Vec4i & operator*=(const tlp::Vec4i &);
+    tlp::Vec4i & operator/=(const int &);
+    tlp::Vec4i & operator/=(const tlp::Vec4i &);
+    tlp::Vec4i & operator+=(const int &);
+    tlp::Vec4i & operator+=(const tlp::Vec4i &);
+    tlp::Vec4i & operator-=(const int &);
+    tlp::Vec4i & operator-=(const tlp::Vec4i &);
+    tlp::Vec4i & operator^=(const tlp::Vec4i &);
+
+	tlp::Vec4i operator*(const  tlp::Vec4i &) const;
+	tlp::Vec4i operator*(const int &) const;
+	tlp::Vec4i operator+(const  tlp::Vec4i &) const;
+	tlp::Vec4i operator+(const int &) const;
+	tlp::Vec4i operator-(const  tlp::Vec4i &) const;
+	tlp::Vec4i operator-(const int &) const; 
+	tlp::Vec4i operator/(const  tlp::Vec4i &) const;
+	tlp::Vec4i operator/(const int &) const;
+	tlp::Vec4i operator^(const  tlp::Vec4i &) const;
+    
+    bool operator>(const tlp::Vec4i &) const;
+    bool operator<(const tlp::Vec4i &) const;
+    bool operator!=(const tlp::Vec4i &) const;
+    bool operator==(const tlp::Vec4i &) const;
+    
+    tlp::Vec4i & fill(const int &obj);
+    
    SIP_PYOBJECT __repr__() const;
 %MethodCode
 		std::ostringstream oss;

@@ -23,52 +23,25 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%ModuleHeaderCode
-#include <tulip/PluginManager.h>
-#include <tulip/PropertyAlgorithm.h>
-#include <tulip/ColorProperty.h>
 namespace tlp {
-typedef tlp::PropertyFactory<tlp::ColorAlgorithm> ColorAlgorithmFactory;
-};
-%End
 
-namespace tlp {
-class ColorAlgorithm : tlp::PropertyAlgorithm {
+class GlCircle : tlp::GlRegularPolygon {
 %TypeHeaderCode
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/GlCircle.h>
 %End
-public:
-	virtual ~ColorAlgorithm();
-	tlp::ColorProperty *result;
-protected:
-	ColorAlgorithm(const tlp::PropertyContext &context);
-	
-};
+  public:
 
-class ColorAlgorithmFactory : tlp::AbstractPluginInfo {
-%TypeHeaderCode
-#include <tulip/PluginManager.h>
-%End
-public:
+    GlCircle(const tlp::Coord &center = tlp::Coord(0,0,0),
+		float radius = 1.,
+		const tlp::Color &outlineColor = tlp::Color(255, 0 , 0 , 255),
+		const tlp::Color &fillColor = tlp::Color (0, 0, 255,255),
+		bool filled = false,
+		bool outlined = true,
+		float startAngle = 0.0,
+		unsigned int segments = 10);
 
-	virtual ~ColorAlgorithmFactory();
-	
-	virtual tlp::ColorAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
+    void set(const tlp::Coord &center, float radius, float startAngle);
 
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::PropertyFactory<tlp::ColorAlgorithm>::initFactory();	
-    tlp::PropertyFactory<tlp::ColorAlgorithm>::factory->registerPlugin(sipCpp);
-%End
-
-};
-
+  };
+  
 };

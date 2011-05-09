@@ -23,52 +23,22 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%ModuleHeaderCode
-#include <tulip/PluginManager.h>
-#include <tulip/PropertyAlgorithm.h>
-#include <tulip/ColorProperty.h>
 namespace tlp {
-typedef tlp::PropertyFactory<tlp::ColorAlgorithm> ColorAlgorithmFactory;
-};
-%End
 
-namespace tlp {
-class ColorAlgorithm : tlp::PropertyAlgorithm {
+class GlSceneVisitor {
 %TypeHeaderCode
-#include <tulip/PropertyAlgorithm.h>
-%End
-public:
-	virtual ~ColorAlgorithm();
-	tlp::ColorProperty *result;
-protected:
-	ColorAlgorithm(const tlp::PropertyContext &context);
-	
-};
-
-class ColorAlgorithmFactory : tlp::AbstractPluginInfo {
-%TypeHeaderCode
-#include <tulip/PluginManager.h>
-%End
-public:
-
-	virtual ~ColorAlgorithmFactory();
-	
-	virtual tlp::ColorAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
-
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::PropertyFactory<tlp::ColorAlgorithm>::initFactory();	
-    tlp::PropertyFactory<tlp::ColorAlgorithm>::factory->registerPlugin(sipCpp);
+#include <tulip/GlSceneVisitor.h>
 %End
 
+  public:
+
+    GlSceneVisitor();
+    virtual ~GlSceneVisitor();
+
+    virtual void visit(tlp::GlSimpleEntity *);
+    virtual void visit(tlp::GlLayer *);
+    
+  };
+  
 };
 
-};

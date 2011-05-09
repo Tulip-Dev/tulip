@@ -23,52 +23,48 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%ModuleHeaderCode
-#include <tulip/PluginManager.h>
-#include <tulip/PropertyAlgorithm.h>
-#include <tulip/ColorProperty.h>
-namespace tlp {
-typedef tlp::PropertyFactory<tlp::ColorAlgorithm> ColorAlgorithmFactory;
-};
-%End
 
 namespace tlp {
-class ColorAlgorithm : tlp::PropertyAlgorithm {
+
+class GlComposite : tlp::GlSimpleEntity {
 %TypeHeaderCode
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/GlComposite.h>
 %End
-public:
-	virtual ~ColorAlgorithm();
-	tlp::ColorProperty *result;
-protected:
-	ColorAlgorithm(const tlp::PropertyContext &context);
-	
+
+  public:
+  
+    GlComposite(bool deleteComponentsInDestructor=true);
+    
+    ~GlComposite();
+
+    virtual void addLayerParent(tlp::GlLayer *layer);
+
+    virtual void removeLayerParent(tlp::GlLayer *layer);
+
+    void reset(bool deleteElems);
+
+    void addGlEntity(tlp::GlSimpleEntity *entity, const std::string &key);
+
+    void deleteGlEntity(const std::string &key,bool informTheEntity=true);
+
+    void deleteGlEntity(tlp::GlSimpleEntity *entity,bool informTheEntity=true);
+
+    std::string findKey(tlp::GlSimpleEntity *entity);
+
+    tlp::GlSimpleEntity* findGlEntity(const std::string &key);
+
+    std::map<std::string, tlp::GlSimpleEntity*> *getDisplays();
+    
+    void notifyModified(tlp::GlSimpleEntity *entity);
+
+    virtual void draw(float, tlp::Camera *);
+
+    virtual void setStencil(int stencil);
+
+    virtual void acceptVisitor(tlp::GlSceneVisitor *visitor);
+    
+    void setDeleteComponentsInDestructor(bool deleteComponentsInDestructor);
+
+    virtual void translate(const tlp::Coord &mouvement);
 };
-
-class ColorAlgorithmFactory : tlp::AbstractPluginInfo {
-%TypeHeaderCode
-#include <tulip/PluginManager.h>
-%End
-public:
-
-	virtual ~ColorAlgorithmFactory();
-	
-	virtual tlp::ColorAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
-
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::PropertyFactory<tlp::ColorAlgorithm>::initFactory();	
-    tlp::PropertyFactory<tlp::ColorAlgorithm>::factory->registerPlugin(sipCpp);
-%End
-
-};
-
 };

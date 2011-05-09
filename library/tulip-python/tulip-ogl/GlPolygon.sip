@@ -23,52 +23,44 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%ModuleHeaderCode
-#include <tulip/PluginManager.h>
-#include <tulip/PropertyAlgorithm.h>
-#include <tulip/ColorProperty.h>
-namespace tlp {
-typedef tlp::PropertyFactory<tlp::ColorAlgorithm> ColorAlgorithmFactory;
-};
-%End
 
 namespace tlp {
-class ColorAlgorithm : tlp::PropertyAlgorithm {
+
+class GlPolygon : tlp::GlAbstractPolygon {
 %TypeHeaderCode
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/GlPolygon.h>
 %End
-public:
-	virtual ~ColorAlgorithm();
-	tlp::ColorProperty *result;
-protected:
-	ColorAlgorithm(const tlp::PropertyContext &context);
-	
+  public:
+    
+    GlPolygon(const bool filled = true,
+	      const bool outlined= true,
+        const std::string &textureName="",
+        const float outlineSize = 1);
+    
+    GlPolygon(const std::vector<tlp::Coord> &points,
+	      const std::vector<tlp::Color> &fillColors,
+	      const std::vector<tlp::Color> &outlineColors,
+	      const bool filled,
+	      const bool outlined,
+        const std::string &textureName="",
+        const float outlineSize = 1);
+    
+    GlPolygon(const unsigned int nbPoints,
+	      const unsigned int nbFillColors,
+	      const unsigned int nbOutlineColors,
+	      const bool filled = true,
+	      const bool outlined = true,
+        const std::string &textureName="",
+        const float outlineSize = 1);
+        
+    virtual ~GlPolygon();
+
+    virtual void resizePoints(const unsigned int nbPoints);
+
+    virtual void resizeColors(const unsigned int nbColors);
+
+    
+  };
+
 };
 
-class ColorAlgorithmFactory : tlp::AbstractPluginInfo {
-%TypeHeaderCode
-#include <tulip/PluginManager.h>
-%End
-public:
-
-	virtual ~ColorAlgorithmFactory();
-	
-	virtual tlp::ColorAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
-
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::PropertyFactory<tlp::ColorAlgorithm>::initFactory();	
-    tlp::PropertyFactory<tlp::ColorAlgorithm>::factory->registerPlugin(sipCpp);
-%End
-
-};
-
-};

@@ -23,52 +23,41 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%ModuleHeaderCode
-#include <tulip/PluginManager.h>
-#include <tulip/PropertyAlgorithm.h>
-#include <tulip/ColorProperty.h>
 namespace tlp {
-typedef tlp::PropertyFactory<tlp::ColorAlgorithm> ColorAlgorithmFactory;
-};
-%End
-
-namespace tlp {
-class ColorAlgorithm : tlp::PropertyAlgorithm {
+  
+class GlRegularPolygon : tlp::GlPolygon {
 %TypeHeaderCode
-#include <tulip/PropertyAlgorithm.h>
+#include <tulip/GlRegularPolygon.h>
 %End
-public:
-	virtual ~ColorAlgorithm();
-	tlp::ColorProperty *result;
-protected:
-	ColorAlgorithm(const tlp::PropertyContext &context);
-	
+  
+  public:
+  
+    GlRegularPolygon(const tlp::Coord &position,
+                     const tlp::Size &size,
+                     unsigned int numberOfSides,
+                     const tlp::Color &outlineColor = tlp::Color(255, 0 , 0 , 255),
+                     const tlp::Color &fillColor = tlp::Color (0, 0, 255,255),
+                     bool filled = true,
+                     bool outlined =true,
+                     const std::string &textureName="",
+                     float outlineSize=1.);
+  
+    virtual ~GlRegularPolygon();
+
+    void setStartAngle(float angle);
+
+    unsigned int getNumberOfSides();
+
+    void resizePoints(const unsigned int number);
+
+    void setNumberOfSides(unsigned int number);
+
+  protected :
+
+    void computePolygon();
+
+
+  };
+
 };
 
-class ColorAlgorithmFactory : tlp::AbstractPluginInfo {
-%TypeHeaderCode
-#include <tulip/PluginManager.h>
-%End
-public:
-
-	virtual ~ColorAlgorithmFactory();
-	
-	virtual tlp::ColorAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
-
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::PropertyFactory<tlp::ColorAlgorithm>::initFactory();	
-    tlp::PropertyFactory<tlp::ColorAlgorithm>::factory->registerPlugin(sipCpp);
-%End
-
-};
-
-};
