@@ -54,16 +54,4 @@ class GraphEvent : tlp::Event {
     
 };
 
-class DummyEvent : tlp::Event {
-%TypeHeaderCode
-#include <tulip/Graph.h>
-%End
-public:
-
-	DummyEvent(const tlp::Observable &sender, tlp::Event::EventType type, const std::string &msg);
-
-	std::string getMessage() const;
-
-};
-
 };
