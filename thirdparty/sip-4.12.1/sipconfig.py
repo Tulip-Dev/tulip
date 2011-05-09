@@ -28,7 +28,7 @@ import re
 _pkg_config = {
     'arch':               '',
     'default_bin_dir':    '/usr/bin',
-    'default_mod_dir':    '/usr/lib/python2.7/dist-packages',
+    'default_mod_dir':    '/usr/lib/python2.7/site-packages',
     'default_sip_dir':    '/usr/share/sip',
     'deployment_target':  '',
     'platform':           'linux-g++',
@@ -36,10 +36,10 @@ _pkg_config = {
     'py_inc_dir':         '/usr/include/python2.7',
     'py_lib_dir':         '/usr/lib/python2.7/config',
     'py_version':         0x020701,
-    'sip_bin':            '/usr/bin/sip',
-    'sip_config_args':    '',
-    'sip_inc_dir':        '/usr/include/python2.7',
-    'sip_mod_dir':        '/usr/lib/python2.7/dist-packages',
+    'sip_bin':            '/home/seregon/dev/tulip-build/debug/build/thirdparty/sip-4.12.1/sipgen/sip',
+    'sip_config_args':    '-b /home/seregon/dev/tulip-build/debug/build/thirdparty/sip-4.12.1/sipgen -e /home/seregon/dev/tulip/thirdparty/sip-4.12.1/siplib -d /home/seregon/dev/tulip-build/debug/build/thirdparty/sip-4.12.1/siplib',
+    'sip_inc_dir':        '/home/seregon/dev/tulip/thirdparty/sip-4.12.1/siplib',
+    'sip_mod_dir':        '/home/seregon/dev/tulip-build/debug/build/thirdparty/sip-4.12.1/siplib',
     'sip_version':        0x040c01,
     'sip_version_str':    '4.12.1',
     'universal':          ''
