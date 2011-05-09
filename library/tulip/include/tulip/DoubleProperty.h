@@ -36,7 +36,7 @@ class PropertyContext;
 typedef AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> AbstractDoubleProperty;
 /** \addtogroup properties */ 
 /*\@{*/
- class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, private GraphObserver { 
+ class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, public GraphObserver { 
 
   friend class DoubleAlgorithm;
 
@@ -86,9 +86,6 @@ private:
   TLP_HASH_MAP<unsigned int, bool> minMaxOkEdge;
   void computeMinMaxNode(Graph *sg=0);
   void computeMinMaxEdge(Graph *sg=0);
-  // override Observable::treatEvent
-  void treatEvent(const Event&);
-
 };
 
  class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVectorType, tlp::DoubleType> { 

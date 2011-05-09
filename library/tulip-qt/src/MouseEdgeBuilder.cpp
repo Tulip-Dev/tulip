@@ -24,7 +24,6 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <typeinfo>
 #include <QtGui/qevent.h>
 
 #include <tulip/Graph.h>
@@ -42,6 +41,11 @@ using namespace std;
 using namespace tlp;
 
 MouseEdgeBuilder::MouseEdgeBuilder():source(node()),started(false),graph(NULL),layoutProperty(NULL){}
+
+MouseEdgeBuilder::~MouseEdgeBuilder(){
+  if(graph)
+    graph->removeGraphObserver(this);
+}
 
 bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
@@ -174,13 +178,4 @@ void MouseEdgeBuilder::afterSetNodeValue(PropertyInterface *property, const node
 void MouseEdgeBuilder::destroy(PropertyInterface *property){
 	if(property==layoutProperty)
 		layoutProperty=NULL;
-}
-
-void MouseEdgeBuilder::treatEvent(const Event& evt) {
-	if (typeid(evt) == typeid(GraphEvent) ||
-			(evt.type() == Event::TLP_DELETE &&
-					dynamic_cast<Graph*>(evt.sender())))
-		GraphObserver::treatEvent(evt);
-	else
-		PropertyObserver::treatEvent(evt);
 }

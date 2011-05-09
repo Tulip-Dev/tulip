@@ -382,12 +382,12 @@ public:
   /**
     * @brief Default implementation of PropertyInterface::compare(node n1,node n2)
     **/
-  int compare(node n1,node n2);
+  int compare(const node n1, const node n2);
 
   /**
     * @brief Default implementation of PropertyInterface::compare(edge e1,edge e2)
     **/
-  int compare(edge e1,edge e2);
+  int compare(const edge e1, const edge e2);
 
 
   /**

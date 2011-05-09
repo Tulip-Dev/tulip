@@ -117,7 +117,7 @@ GraphImpl::~GraphImpl() {
   delPreviousRecorders();
 
   // notify destruction
-  observableDeleted();
+  notifyDestroy();
 }
 //----------------------------------------------------------------
 void GraphImpl::clear() {
@@ -146,13 +146,15 @@ void GraphImpl::freeSubGraphId(unsigned int id) {
 //----------------------------------------------------------------
 node GraphImpl::restoreNode(node newNode) {
   storage.addNode(newNode);
-  notifyAddNode(newNode);
+  notifyAddNode(this, newNode);
+  notifyObservers();
   return newNode;
 }
 //----------------------------------------------------------------
 node GraphImpl::addNode() {
   node newNode = storage.addNode();
-  notifyAddNode(newNode);
+  notifyAddNode(this, newNode);
+  notifyObservers();
   return newNode;
 }
 //----------------------------------------------------------------
@@ -170,13 +172,15 @@ void GraphImpl::restoreAdj(node n, vector<edge>& edges) {
 //----------------------------------------------------------------
 edge GraphImpl::restoreEdge(edge newEdge, const node src, const node tgt) {
   storage.addEdge(src, tgt, newEdge, false);
-  notifyAddEdge(newEdge);
+  notifyAddEdge(this, newEdge);
+  notifyObservers();
   return newEdge;
 }
 //----------------------------------------------------------------
 edge GraphImpl::addEdge(const node src, const node tgt) {
   edge newEdge = storage.addEdge(src, tgt);
-  notifyAddEdge(newEdge);
+  notifyAddEdge(this, newEdge);
+  notifyObservers();
   return newEdge;
 }
 //----------------------------------------------------------------
@@ -191,15 +195,16 @@ void GraphImpl::reserveEdges(unsigned int nb) {
 //----------------------------------------------------------------
 void GraphImpl::removeNode(const node n) {
   assert(isElement(n));
-  notifyDelNode(n);
+  notifyDelNode(this, n);
   // remove from storage and propertyContainer
   storage.removeFromNodes(n);
   propertyContainer->erase(n);
+  notifyObservers();
 }
 //----------------------------------------------------------------
 void GraphImpl::delNode(const node n, bool) {
   assert (isElement(n));
-  notifyDelNode(n);
+  notifyDelNode(this, n);
   // propagate to subgraphs
   Iterator<Graph *>*itS=getSubGraphs();
   while (itS->hasNext()) {
@@ -217,7 +222,7 @@ void GraphImpl::delNode(const node n, bool) {
     edge e = edges->next();
     node s = opposite(e, n);
     if (s != n) {
-      notifyDelEdge(e);
+      notifyDelEdge(this, e);
       propertyContainer->erase(e);
     } else
       loops.insert(e);
@@ -226,7 +231,7 @@ void GraphImpl::delNode(const node n, bool) {
     set<edge>::const_iterator it;
     for (it = loops.begin(); it!=loops.end(); ++it) {
       edge e = *it;
-      notifyDelEdge(e);
+      notifyDelEdge(this, e);
       propertyContainer->erase(e);
    }
   }
@@ -236,6 +241,9 @@ void GraphImpl::delNode(const node n, bool) {
 
   // remove from propertyContainer
   propertyContainer->erase(n);
+
+  // notification
+  notifyObservers();
 }
 //----------------------------------------------------------------
 void GraphImpl::delEdge(const edge e, bool) {
@@ -339,7 +347,8 @@ void GraphImpl::reverse(const edge e) {
   storage.reverse(e);
 
   // notification
-  notifyReverseEdge(e);
+  notifyReverseEdge(this, e);
+  notifyObservers();
 
   // propagate edge reversal on subgraphs
   Graph* sg;
@@ -366,12 +375,13 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
     return;
 
   // notification
-  notifyBeforeSetEnds(e);
+  notifyBeforeSetEnds(this, e);
 
   storage.setEnds(e, newSrc, newTgt);
 
   // notification
-  notifyAfterSetEnds(e);
+  notifyAfterSetEnds(this, e);
+  notifyObservers();
 
   // propagate edge reversal on subgraphs
   Graph* sg;
@@ -394,10 +404,12 @@ unsigned int GraphImpl::numberOfNodes()const {
 //----------------------------------------------------------------
 void GraphImpl::removeEdge(const edge e) {
   assert(isElement(e));
-  notifyDelEdge(e);
+  notifyDelEdge(this,e);
   // remove from propertyContainer and storage
   propertyContainer->erase(e);
   storage.delEdge(e);
+
+  notifyObservers();
 }
 //----------------------------------------------------------------
 bool GraphImpl::canPop() {

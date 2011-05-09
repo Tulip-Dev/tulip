@@ -107,7 +107,7 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
   assert(it != subgraphs.end());
   if (it != subgraphs.end()) {
     subGraphToKeep = NULL;
-    notifyDelSubGraph(toRemove);
+    notifyDelSubGraph(this, toRemove);
 
     Iterator<Graph *> *itS = toRemove->getSubGraphs();
     // remove from subgraphs
@@ -124,6 +124,7 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
       // toRemove is not deleted,
       // it can be restored on undo or redo
       toRemove->notifyDestroy();
+    notifyObservers();
   }
 }
 //=========================================================================
@@ -133,9 +134,10 @@ void GraphAbstract::removeSubGraph(Graph * toRemove, bool notify) {
       // when called from GraphUpdatesRecorder
       // we must notify the observers
       if (notify)
-	notifyDelSubGraph(toRemove);
+	notifyDelSubGraph(this, toRemove);
       subgraphs.erase(it);
       if (notify) {
+	notifyObservers();
 	toRemove->notifyDestroy();
       }
       break;
@@ -147,8 +149,9 @@ void GraphAbstract::delAllSubGraphsInternal(Graph * toRemove,
 					    bool deleteSubGraphs) {
   if (this != toRemove->getSuperGraph() || this==toRemove) // this==toRemove : root graph
     return;
-  notifyDelSubGraph(toRemove);
+  notifyDelSubGraph(this, toRemove);
   removeSubGraph(toRemove);
+  notifyObservers();
   StableIterator<Graph *> itS(toRemove->getSubGraphs());
   while (itS.hasNext())
     ((GraphAbstract*) toRemove)->delAllSubGraphsInternal(itS.next(),
@@ -365,8 +368,9 @@ PropertyInterface* GraphAbstract::getProperty(const string &str) {
 }
 //=========================================================================
 void GraphAbstract::delLocalProperty(const std::string &name) {
-  notifyDelLocalProperty(name);
+  notifyDelLocalProperty(this, name);
   propertyContainer->delLocalProperty(name);
+  notifyObservers();
 }
 //=========================================================================
 void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface *prop) {
@@ -375,7 +379,8 @@ void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface 
   if (name == metaGraphPropertyName) {
     metaGraphProperty = (GraphProperty *) prop;
   }    
-  notifyAddLocalProperty(name);
+  notifyAddLocalProperty(this, name);
+  notifyObservers();
 }
 //=========================================================================
 Iterator<std::string>* GraphAbstract::getLocalProperties() {

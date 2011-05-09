@@ -155,6 +155,7 @@ bool AcyclicTest::acyclicTest(const Graph *graph, vector<edge> *obstructionEdges
 }
 //**********************************************************************
 void AcyclicTest::destroy(Graph *graph) {
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
@@ -175,6 +176,3 @@ void AcyclicTest::delEdge(Graph *graph,const edge) {
   resultsBuffer.erase((unsigned long)graph);
 }
 //**********************************************************************
-void AcyclicTest::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
-}

@@ -34,9 +34,9 @@ bool tlp::Graph::getAttribute(const std::string &name, ATTRIBUTETYPE& value) con
 template<typename ATTRIBUTETYPE>
 void tlp::Graph::setAttribute(const std::string &name,const ATTRIBUTETYPE&value) {
   tlp::DataSet &data=getNonConstAttributes();
-  notifyBeforeSetAttribute(name);
+  notifyBeforeSetAttribute(this, name);
   data.set(name,value);
-  notifyAfterSetAttribute(name);
+  notifyAfterSetAttribute(this, name);
 }
 //================================================================================
 template<typename PropertyType>

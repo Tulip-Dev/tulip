@@ -25,7 +25,6 @@
 
 #include <tulip/tuliphash.h>
 #include <tulip/PropertyTypes.h>
-#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/LayoutAlgorithm.h>
@@ -39,11 +38,12 @@ typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> Ab
 
 /** \addtogroup properties */ 
 /*@{*/
- class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, private GraphObserver {
+  class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, public GraphObserver {
   friend class LayoutAlgorithm;
 
 public:
   LayoutProperty(Graph *, std::string n="", bool updateOnEdgeReversal = true);
+  ~LayoutProperty();
 
   // override some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
@@ -143,8 +143,6 @@ private:
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
   // override an GraphObserver method
   void reverseEdge(Graph *, const edge);
-  // override Observable::treatEvent
-  void treatEvent(const Event&);
 };
 
 class TLP_SCOPE CoordVectorProperty:public AbstractVectorProperty<tlp::CoordVectorType, tlp::PointType> { 

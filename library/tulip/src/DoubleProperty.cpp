@@ -483,9 +483,4 @@ void DoubleProperty::setMetaValueCalculator(PropertyInterface::MetaValueCalculat
     delete metaValueCalculator;
   metaValueCalculator = calc;
 }
-//=============================================================
-void DoubleProperty::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
-}
-   
 

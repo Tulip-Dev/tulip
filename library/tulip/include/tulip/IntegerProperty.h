@@ -27,7 +27,6 @@
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/IntegerAlgorithm.h>
-#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 
 
@@ -39,7 +38,7 @@ class PropertyContext;
 typedef AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> AbstractIntegerProperty;
 /** \addtogroup properties */ 
 /*@{*/
- class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, private GraphObserver { 
+ class TLP_SCOPE IntegerProperty:public AbstractIntegerProperty, public GraphObserver { 
 
   friend class IntegerAlgorithm;
 
@@ -65,12 +64,12 @@ public :
   /**
     * @brief Specific implementation of AbstractProperty::compare(node n1,node n2)
     **/
-  int compare(node n1,node n2);
+  int compare(const node n1, const node n2);
 
   /**
     * @brief Specific implementation of AbstractProperty::compare(edge e1,edge e2)
     **/
-  int compare(edge e1,edge e2);
+  int compare(const edge e1, const edge e2);
 
 protected:
   virtual void clone_handler(AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> &);
@@ -83,8 +82,6 @@ private:
   void delEdge(Graph* graph, const edge e);
   void addSubGraph(Graph* graph, Graph *sub);
   void delSubGraph(Graph* graph, Graph *sub);
-  // override Observable::treatEvent
-  void treatEvent(const Event&);
 
   TLP_HASH_MAP<unsigned int, int> maxN,minN,maxE,minE;
   TLP_HASH_MAP<unsigned int, bool> minMaxOkNode;

@@ -23,7 +23,6 @@
 #include <list>
 #include <tulip/tulipconf.h>
 #include <tulip/tuliphash.h>
-#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Edge.h> 
 
@@ -34,7 +33,7 @@ class Graph;
 /** \addtogroup graph_test */ 
 /*@{*/
 /// class for testing the planarity of a graph
- class TLP_SCOPE PlanarityTest : private GraphObserver, private Observable {
+class TLP_SCOPE PlanarityTest : public GraphObserver {
 public:
   /*
     The set of edges of the graph is modified during the execution of
@@ -74,10 +73,8 @@ private:
   void addNode(Graph *,const node);
   void delNode(Graph *,const node);
   void destroy(Graph *);
-  // override Observable::treatEvent
-  void treatEvent(const Event&);
   bool compute(Graph *graph);
-  PlanarityTest() : GraphObserver() {}
+  PlanarityTest() : GraphObserver(false) {}
   static PlanarityTest * instance;
   TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };

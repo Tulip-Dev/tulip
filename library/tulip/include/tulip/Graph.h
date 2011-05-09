@@ -34,6 +34,7 @@
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/Observable.h>
+#include <tulip/ObservableGraph.h>
 
 namespace tlp {
 
@@ -98,7 +99,7 @@ template<class C>struct Iterator;
 /**
  * The class Graph is the interface of a Graph in the Tulip Library.
  */
-  class TLP_SCOPE Graph : public Observable {
+  class TLP_SCOPE Graph : public Observable, public ObservableGraph {
 
   friend class GraphAbstract;
   friend class GraphUpdatesRecorder;
@@ -165,8 +166,9 @@ public:
   /**
    * Deprecated function, use setSuperGraph() instead.
    */
-  void _DEPRECATED setFather(Graph *) {
+  void _DEPRECATED setFather(Graph *g) {
     std::cerr << __PRETTY_FUNCTION__ << " is deprecated, use setSuperGraph() instead." << std::endl;
+    setSuperGraph(g);
   }
   /**
    * Returns an iterator on all the sub-graphs of the graph.
@@ -365,7 +367,7 @@ public:
   void setAttribute(const std::string &name, const DataType* value);
   /// Removes an existing attribute.
   void removeAttribute(const std::string &name) {
-    notifyRemoveAttribute(name);
+    notifyRemoveAttribute(this, name);
     getNonConstAttributes().remove(name);
   }
   /// Returns if the attribute exist.
@@ -453,22 +455,6 @@ public:
    * Returns an iterator on all the properties attached to the graph.
    */
   virtual Iterator<PropertyInterface*>* getObjectProperties()=0;
-
-  // observation mechanism
-  /**
-   * Register a new observer
-   */
-  void addGraphObserver(Observable *) const;
-  /**
-   * Returns the number of observers
-   */
-  unsigned int countGraphObservers() const {
-    return countListeners();
-  }
-  /**
-   * Remove an observer
-   */
-  void removeGraphObserver(Observable *) const;
 
   // updates management
   /*
@@ -578,110 +564,15 @@ protected:
   // only called by GraphUpdatesRecorder
   virtual void restoreSubGraph(Graph*, bool undoOrRedo = false)=0;
   virtual void setSubGraphToKeep(Graph*)=0;
-
-  // for notification of GraphObserver
-  void notifyAddNode(const node n);
-  void notifyAddEdge(const edge e);
-  void notifyBeforeSetEnds(const edge e);
-  void notifyAfterSetEnds(const edge e);
-  void notifyDelNode(const node n);
-  void notifyDelEdge(const edge e);
-  void notifyReverseEdge(const edge e);
-  void notifyAddSubGraph(const Graph*);
-  void notifyDelSubGraph(const Graph*);
-  void notifyAddLocalProperty(const std::string&);
-  void notifyDelLocalProperty(const std::string&);
-  void notifyBeforeSetAttribute(const std::string&);
-  void notifyAfterSetAttribute(const std::string&);
-  void notifyRemoveAttribute(const std::string&);
+  // override of inherited methods
+  // used to manage push/pop
   void notifyDestroy();
+  void notifyAddSubGraph(Graph*);
 
 protected:
 
   unsigned int id;
   std::set<tlp::PropertyInterface*> circularCalls;
-};
-
-/// Event classes for specific events on Graph
-class TLP_SCOPE GraphEvent :public Event {
-  public:
-    // be careful about the ordering of the constants
-    // in the enum below because it is used in some assertions
-    enum GraphEventType {
-      TLP_ADD_NODE = 0, TLP_DEL_NODE, TLP_ADD_EDGE, TLP_DEL_EDGE,
-      TLP_REVERSE_EDGE, TLP_BEFORE_SET_ENDS, TLP_AFTER_SET_ENDS,
-      TLP_ADD_SUBGRAPH, TLP_DEL_SUBGRAPH,
-      TLP_ADD_LOCAL_PROPERTY, TLP_DEL_LOCAL_PROPERTY,
-      TLP_BEFORE_SET_ATTRIBUTE, TLP_AFTER_SET_ATTRIBUTE, TLP_REMOVE_ATTRIBUTE
-    };
-
-    // constructor for node/edge events
-    GraphEvent(const Graph& g, GraphEventType graphEvtType, unsigned int id,
-	       Event::EventType evtType = Event::TLP_MODIFICATION)
-      : Event(g, evtType), evtType(graphEvtType) {
-      info.eltId = id;
-    }
-    // constructor for subgraph events
-    GraphEvent(const Graph& g, GraphEventType graphEvtType,
-	       const Graph* sg)
-      : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
-      info.subGraph = sg;
-    }
-
-    // constructor for attribute/property events
-    GraphEvent(const Graph& g, GraphEventType graphEvtType,
-	       const std::string& str,
-	       Event::EventType evtType = Event::TLP_MODIFICATION)
-      : Event(g, evtType), evtType(graphEvtType) {
-      info.name = new std::string(str);
-    }
-
-    // destructor needed to cleanup name if any
-    ~GraphEvent() {
-      if (evtType > TLP_DEL_SUBGRAPH)
-	delete info.name;
-    }
-
-    Graph* getGraph() const {
-      return dynamic_cast<Graph *>(sender());
-    }
-
-    node getNode() const {
-      assert(evtType < TLP_ADD_EDGE);
-      return node(info.eltId);
-    }
-
-    edge getEdge() const {
-      assert(evtType > TLP_DEL_NODE && evtType < TLP_ADD_SUBGRAPH);
-      return edge(info.eltId);
-    }
-
-    const Graph* getSubGraph() const {
-      assert(evtType > TLP_AFTER_SET_ENDS && evtType < TLP_ADD_LOCAL_PROPERTY);
-      return info.subGraph;
-    }
-
-    const std::string& getAttributeName() const {
-      assert(evtType > TLP_DEL_LOCAL_PROPERTY);
-      return *(info.name);
-    }
-
-    const std::string& getPropertyName() const {
-      assert(evtType > TLP_DEL_SUBGRAPH && evtType < TLP_BEFORE_SET_ATTRIBUTE);
-      return *(info.name);
-    }
-
-    GraphEventType getType() const {
-      return evtType;
-    }
-
-  protected:
-    GraphEventType evtType;
-    union {
-      unsigned int eltId;
-      const Graph* subGraph;
-      std::string* name;
-    } info;
 };
 
 }

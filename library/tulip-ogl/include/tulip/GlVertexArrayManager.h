@@ -99,8 +99,6 @@ protected:
 	void destroy(Graph *);
 	void destroy(PropertyInterface*);
 
-	void treatEvent(const Event&);
-
 	void clearLayoutData();
 	void clearColorData();
 	void clearData();

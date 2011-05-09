@@ -55,63 +55,48 @@ typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue tlp::Abst
 template <class Tnode, class Tedge, class TPROPERTY>
 void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setNodeValue(const tlp::node n,const typename Tnode::RealType &v) {
   assert(n.isValid());
-  notifyBeforeSetNodeValue(n);
+  notifyBeforeSetNodeValue(this, n);
   nodeProperties.set(n.id,v);
-  notifyAfterSetNodeValue(n);
+  notifyAfterSetNodeValue(this, n);
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
 void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setEdgeValue(const tlp::edge e,const typename Tedge::RealType &v) {
   assert(e.isValid());
-  notifyBeforeSetEdgeValue(e);
+  notifyBeforeSetEdgeValue(this, e);
   edgeProperties.set(e.id,v);
-  notifyAfterSetEdgeValue(e);
+  notifyAfterSetEdgeValue(this, e);
 }
 //=============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
 void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllNodeValue(const typename Tnode::RealType &v) {
-  notifyBeforeSetAllNodeValue();
+  notifyBeforeSetAllNodeValue(this);
   nodeDefaultValue = v;
   nodeProperties.setAll(v);
-  notifyAfterSetAllNodeValue();
+  notifyAfterSetAllNodeValue(this);
 }
 //============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
 void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllEdgeValue(const typename Tedge::RealType &v) {
-  notifyBeforeSetAllEdgeValue();
+  notifyBeforeSetAllEdgeValue(this);
   edgeDefaultValue = v;
   edgeProperties.setAll(v);
-  notifyAfterSetAllEdgeValue();
+  notifyAfterSetAllEdgeValue(this);
 }
-
+//============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
         int tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compare(node n1,node n2){
     const typename Tnode::RealType& n1Value = getNodeValue(n1);
     const typename Tnode::RealType& n2Value = getNodeValue(n2);
-    if(n1Value < n2Value){
-        return -1;
-    }else if(n1Value == n2Value){
-        return 0;
-    }else{
-        return 1;
-    }
+    return (n1Value < n2Value) ? -1 : ((n1Value == n2Value) ? 0 : -1);
 }
-
+//============================================================
 template <class Tnode, class Tedge, class TPROPERTY>
         int tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compare(edge e1,edge e2){
     const typename Tedge::RealType& e1Value = getEdgeValue(e1);
     const typename Tedge::RealType& e2Value = getEdgeValue(e2);
-    if(e1Value < e2Value){
-        return -1;
-    }else if(e1Value == e2Value){
-        return 0;
-    }else{
-        return 1;
-    }
+    return (e1Value < e2Value) ? -1 : ((e1Value == e2Value) ? 0 : -1);
 }
-
-
-
 //============================================================
 // define template iterator class to iterate over graph elts
 // belonging to a given graph instance
@@ -185,7 +170,7 @@ void tlp::AbstractVectorProperty<vectType, eltType>::setNodeEltValue(const node 
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::nodeProperties.get(n, isNotDefault);
   assert(vect.size() > i);
-  this->notifyBeforeSetNodeValue(n);
+  notifyBeforeSetNodeValue(this, n);
   if (isNotDefault)
     vect[i] = v;
   else {
@@ -193,7 +178,7 @@ void tlp::AbstractVectorProperty<vectType, eltType>::setNodeEltValue(const node 
     tmp[i] = v;
      AbstractProperty<vectType, vectType>::nodeProperties.set(n.id, tmp);
   }
-  this->notifyAfterSetNodeValue(n);
+  notifyAfterSetNodeValue(this, n);
 }
 //============================================================
 template <typename vectType, typename eltType>
@@ -212,7 +197,7 @@ void tlp::AbstractVectorProperty<vectType, eltType>::pushBackNodeEltValue(const 
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::nodeProperties.get(n, isNotDefault);
-  this->notifyBeforeSetNodeValue(n);
+  notifyBeforeSetNodeValue(this, n);
   if (isNotDefault)
     vect.push_back(v);
   else {
@@ -220,7 +205,7 @@ void tlp::AbstractVectorProperty<vectType, eltType>::pushBackNodeEltValue(const 
     tmp.push_back(v);
     AbstractProperty<vectType, vectType>::nodeProperties.set(n, tmp);
   }
-  this->notifyAfterSetNodeValue(n);
+  notifyAfterSetNodeValue(this, n);
 }
 //============================================================
 template <typename vectType, typename eltType>
@@ -229,10 +214,10 @@ void tlp::AbstractVectorProperty<vectType, eltType>::popBackNodeEltValue(const n
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::nodeProperties.get(n, isNotDefault);
-  this->notifyBeforeSetNodeValue(n);
+  notifyBeforeSetNodeValue(this, n);
   assert(isNotDefault);
   vect.pop_back();
-  this->notifyAfterSetNodeValue(n);
+  notifyAfterSetNodeValue(this, n);
 }
 //============================================================
 template <typename vectType, typename eltType>
@@ -242,9 +227,9 @@ void tlp::AbstractVectorProperty<vectType, eltType>::resizeNodeValue(const node 
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::nodeProperties.get(n, isNotDefault);
   assert(isNotDefault);
-  this->notifyBeforeSetNodeValue(n);
+  notifyBeforeSetNodeValue(this, n);
   vect.resize(size, elt);
-  this->notifyAfterSetNodeValue(n);
+  notifyAfterSetNodeValue(this, n);
 }
 //============================================================
 template <typename vectType, typename eltType>
@@ -254,7 +239,7 @@ void tlp::AbstractVectorProperty<vectType, eltType>::setEdgeEltValue(const edge 
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::edgeProperties.get(e, isNotDefault);
   assert(vect.size() > i);
-  this->notifyBeforeSetEdgeValue(e);
+  notifyBeforeSetEdgeValue(this, e);
   if (isNotDefault)
     vect[i] = v;
   else {
@@ -262,7 +247,7 @@ void tlp::AbstractVectorProperty<vectType, eltType>::setEdgeEltValue(const edge 
     tmp[i] = v;
      AbstractProperty<vectType, vectType>::edgeProperties.set(e, tmp);
   }
-  this->notifyAfterSetEdgeValue(e);
+  notifyAfterSetEdgeValue(this, e);
 }
 //============================================================
 template <typename vectType, typename eltType>
@@ -280,7 +265,7 @@ void tlp::AbstractVectorProperty<vectType, eltType>::pushBackEdgeEltValue(const 
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::edgeProperties.get(e, isNotDefault);
-  this->notifyBeforeSetEdgeValue(e);
+  notifyBeforeSetEdgeValue(this, e);
   if (isNotDefault)
     vect.push_back(v);
   else {
@@ -288,7 +273,7 @@ void tlp::AbstractVectorProperty<vectType, eltType>::pushBackEdgeEltValue(const 
     tmp.push_back(v);
     AbstractProperty<vectType, vectType>::edgeProperties.set(e, tmp);
   }    
-  this->notifyAfterSetEdgeValue(e);
+  notifyAfterSetEdgeValue(this, e);
 }
 //============================================================
 template <typename vectType, typename eltType>
@@ -297,10 +282,10 @@ void tlp::AbstractVectorProperty<vectType, eltType>::popBackEdgeEltValue(const e
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::edgeProperties.get(e, isNotDefault);
-  this->notifyBeforeSetEdgeValue(e);
+  notifyBeforeSetEdgeValue(this, e);
   assert(isNotDefault);
   vect.pop_back();
-  this->notifyAfterSetEdgeValue(e);
+  notifyAfterSetEdgeValue(this, e);
 }
 //============================================================
 template <typename vectType, typename eltType>
@@ -310,7 +295,7 @@ void tlp::AbstractVectorProperty<vectType, eltType>::resizeEdgeValue(const edge 
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::edgeProperties.get(e, isNotDefault);
   assert(isNotDefault);
-  this->notifyBeforeSetEdgeValue(e);
+  notifyBeforeSetEdgeValue(this, e);
   vect.resize(size, elt);
-  this->notifyAfterSetEdgeValue(e);
+  notifyAfterSetEdgeValue(this, e);
 }

@@ -121,9 +121,7 @@ void PlanarityTest::delNode(Graph *graph,const node) {
 }
 //=================================================================
 void PlanarityTest::destroy(Graph *graph) {
+  graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }
 //=================================================================
-void PlanarityTest::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
-}

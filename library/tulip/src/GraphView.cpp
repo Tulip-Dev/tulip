@@ -72,7 +72,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 //----------------------------------------------------------------
 GraphView::~GraphView() {
   // notify destruction
-  observableDeleted();
+  notifyDestroy();
 }
 //----------------------------------------------------------------
 bool GraphView::isElement(const node n) const {
@@ -102,7 +102,8 @@ void GraphView::reverse(const edge e, const node src, const node tgt) {
     inDegree.set(src.id, inDegree.get(src.id)+1);
     outDegree.set(tgt.id, outDegree.get(tgt.id)+1);
 
-    notifyReverseEdge(e);
+    notifyReverseEdge(this,e);
+    notifyObservers();
 
     // propagate edge reversal on subgraphs
     Graph* sg;
@@ -116,7 +117,7 @@ void GraphView::setEnds(const edge e, const node src, const node tgt,
 			const node newSrc, const node newTgt) {
   if (isElement(e)) {
     if (isElement(newSrc) && isElement(newTgt)) {
-      notifyBeforeSetEnds(e);
+      notifyBeforeSetEnds(this, e);
       if (src != newSrc) {
 	outDegree.set(src.id, outDegree.get(src.id)-1);
 	outDegree.set(newSrc.id, outDegree.get(newSrc.id) + 1);
@@ -126,7 +127,8 @@ void GraphView::setEnds(const edge e, const node src, const node tgt,
 	inDegree.set(newTgt.id, inDegree.get(newTgt.id)+1);
       }
       // notification
-      notifyAfterSetEnds(e);
+      notifyAfterSetEnds(this, e);
+      notifyObservers();
       
       // propagate edge ends update on subgraphs
       Graph* sg;
@@ -148,7 +150,8 @@ node GraphView::addNode() {
 node GraphView::restoreNode(node n) {
   nodeAdaptativeFilter.set(n.id, true);
   ++nNodes;
-  notifyAddNode(n);
+  notifyAddNode(this, n);
+  notifyObservers();
   return n;
 }
 //----------------------------------------------------------------
@@ -168,7 +171,8 @@ edge GraphView::addEdgeInternal(edge e) {
   node tgt = eEnds.second;
   outDegree.set(src.id, outDegree.get(src.id)+1);
   inDegree.set(tgt.id, inDegree.get(tgt.id)+1);
-  notifyAddEdge(e);
+  notifyAddEdge(this, e);
+  notifyObservers();
   return e;
 }
 //----------------------------------------------------------------
@@ -200,8 +204,9 @@ void GraphView::delNodeInternal(const node n) {
 }
 //----------------------------------------------------------------
 void GraphView::removeNode(const node n) {
-  notifyDelNode(n);
+  notifyDelNode(this, n);
   delNodeInternal(n);
+  notifyObservers();
 }
 //----------------------------------------------------------------
 void GraphView::delNode(const node n, bool deleteInAllGraphs) {
@@ -210,13 +215,13 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
   }
   else {
     assert (isElement(n));
-    notifyDelNode(n);
+    notifyDelNode(this, n);
     // propagate to subgraphs
     Iterator<Graph *>*itS = getSubGraphs();
     while (itS->hasNext()) {
       Graph *subGraph = itS->next();
       if (subGraph->isElement(n))
-        subGraph->delNode(n);
+	subGraph->delNode(n);
     } delete itS;
     // remove node's edges
     set<edge> loops;
@@ -226,20 +231,21 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
       edge e = itE.next();
       node s = opposite(e, n);
       if (s!=n) {
-        removeEdge(e);
+	removeEdge(e);
       }
       else {
-        loops.insert(e);
-        haveLoops = true;
+	loops.insert(e);
+	haveLoops = true;
       }
     }
     if (haveLoops) {
       set<edge>::const_iterator it;
       for ( it = loops.begin(); it!=loops.end(); ++it) {
-        removeEdge(*it);
+	removeEdge(*it);
       }
     }
     delNodeInternal(n);
+    notifyObservers();
   }
 }
 //----------------------------------------------------------------
@@ -256,8 +262,9 @@ void GraphView::delEdgeInternal(const edge e) {
 //----------------------------------------------------------------
 void GraphView::removeEdge(const edge e) {
   assert(isElement(e));
-  notifyDelEdge(e);
+  notifyDelEdge(this,e);
   delEdgeInternal(e);
+  notifyObservers();
 }
 //----------------------------------------------------------------
 void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
@@ -266,15 +273,16 @@ void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
   }
   else {
     assert(isElement(e));
-    notifyDelEdge(e);
+    notifyDelEdge(this,e);
     // propagate to subgraphs
     Iterator<Graph *>*itS=getSubGraphs();
     while (itS->hasNext()) {
       Graph *subGraph = itS->next();
       if (subGraph->isElement(e))
-        subGraph->delEdge(e);
+	subGraph->delEdge(e);
     } delete itS;
     delEdgeInternal(e);
+    notifyObservers();
   }
 }
 //----------------------------------------------------------------

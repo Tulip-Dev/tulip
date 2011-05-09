@@ -33,7 +33,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ObservableGraphTest );
 // these classes will capture
 // everything that will happen to our properties
 // synchronously or asynchronously
-class ObserverGTest :public Observable {
+class ObserverGTest :public Observer {
 public:
   std::set<Observable*> observables;
   bool print;
@@ -72,7 +72,7 @@ public:
 
 static ObserverGTest* observer;
 
-class GraphObserverTest :public GraphObserver, public Observable {
+class GraphObserverTest :public GraphObserver {
 public:
 
   vector<Graph*> graphs;
@@ -153,9 +153,6 @@ public:
   }
   void delLocalProperty(Graph* g, const string& name) {
     graphs.push_back(g), pName = name;
-  }
-  virtual void treatEvent(const Event& evt) {
-    GraphObserver::treatEvent(evt);
   }
 };  
 

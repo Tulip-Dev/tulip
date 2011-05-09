@@ -25,9 +25,8 @@
 #endif
 
 #include <vector>
-#include <tulip/tuliphash.h>
-#include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
+#include "tulip/tuliphash.h"
+#include "tulip/ObservableGraph.h"
 #include <tulip/MutableContainer.h>
 
 
@@ -47,7 +46,7 @@ class BooleanProperty;
 /** \addtogroup graph_test */ 
 /*@{*/
 /// Class for testing if the graph is acyclic
-  class TLP_SCOPE AcyclicTest : private GraphObserver, private Observable {
+class TLP_SCOPE AcyclicTest : public GraphObserver {
 public:
 
   /**
@@ -81,8 +80,6 @@ private:
   AcyclicTest();
   static AcyclicTest * instance;
   TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
-  // override Observable::treatEvent
-  virtual void treatEvent(const Event&);
 };
 }
 /*@}*/

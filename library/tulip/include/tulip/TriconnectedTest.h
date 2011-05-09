@@ -25,7 +25,6 @@
 #endif
 
 #include <tulip/tuliphash.h>
-#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 
 namespace tlp {
@@ -35,7 +34,7 @@ class Graph;
 /** \addtogroup graph_test */ 
 /*@{*/
 /// class for testing if a graph is triconnected
- class TLP_SCOPE TriconnectedTest : private GraphObserver, private Observable {
+class TLP_SCOPE TriconnectedTest : private GraphObserver {
 public:
 
 
@@ -54,8 +53,6 @@ private:
   void addNode(Graph *,const node);
   void delNode(Graph *,const node);
   void destroy(Graph *);
-  // override Observable::treatEvent
-  void treatEvent(const Event&);
   TriconnectedTest();
   static TriconnectedTest * instance;
   TLP_HASH_MAP<unsigned long,bool> resultsBuffer;

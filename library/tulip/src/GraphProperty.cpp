@@ -46,6 +46,7 @@ GraphProperty::~GraphProperty() {
       getNodeDefaultValue()->removeGraphObserver(this);
     }
   }
+  notifyDestroy(this);
 }
 //==============================
 void GraphProperty::setAllNodeValue(const GraphType::RealType& g) {
@@ -133,6 +134,7 @@ void GraphProperty::destroy(Graph *sg) {
       }
     }
     referencedGraph.set(sg->getId(), set<node>());
+    sg->removeGraphObserver(this);
   }
 }
 //============================================================
@@ -167,8 +169,4 @@ bool GraphProperty::setAllEdgeStringValue(const std::string&) {
 //=============================================================
 const set<edge>& GraphProperty::getReferencedEdges(const edge e) const{
   return ((GraphProperty *) this)->edgeProperties.get(e.id);
-}
-//=============================================================
-void GraphProperty::treatEvent(const Event& evt) {
-  GraphObserver::treatEvent(evt);
 }

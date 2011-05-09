@@ -25,7 +25,6 @@
 #endif
 
 #include <tulip/tuliphash.h>
-#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/PluginProgress.h>
@@ -37,7 +36,7 @@ class Graph;
 /** \addtogroup graph_test */ 
 /*@{*/
 /// Class for testing if the graph is a tree
- class TLP_SCOPE TreeTest : private GraphObserver, private Observable {
+ class TLP_SCOPE TreeTest : private GraphObserver {
 public:
 
   /**
@@ -93,8 +92,6 @@ private:
   void addNode(Graph *,const node);
   void delNode(Graph *,const node);
   void destroy(Graph *);
-  // override Observable::treatEvent
-  void treatEvent(const Event&);
   TreeTest();
   static TreeTest * instance;
   bool isFreeTree (Graph *graph, node curRoot);

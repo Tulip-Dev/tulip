@@ -320,6 +320,7 @@ namespace tlp {
       *
       **/
     //=======================================
+#define Observer Observable
     /**
       * @class Observer
       * @brief Observer is the base class for the implementation of an Observbale Observer.

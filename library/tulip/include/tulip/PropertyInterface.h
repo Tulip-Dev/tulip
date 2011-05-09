@@ -30,14 +30,12 @@
 
 namespace tlp {
 
-class PropertyObserver;
-
 /**
  * \defgroup properties
  */ 
 /*@{*/
 //=============================================================
-class TLP_SCOPE PropertyInterface: public Observable {
+class TLP_SCOPE PropertyInterface: public Observable, public ObservableProperty {
   friend class PropertyManager;
 protected:
   // name of the property when registered as a property of a graph
@@ -244,88 +242,26 @@ public:
   }
 
   /**
-   * Registers a new property observer.
-   */
-  void addPropertyObserver(Observable *pObs);
-  /**
-   * Removes a registered property observer.
-   */
-  void removePropertyObserver(Observable *pObs);
-
-  /**
-   * Returns the number of registered observers.
-   */
-  unsigned int countPropertyObservers() const {
-    return countListeners();
-  }
-
-  /**
     * @brief Compare value of the node n1 to the value of the node n2.
     *
     * @return Return 0 if values are equal otherwise otherwise a number different from 0 is returned, with its sign indicating whether the value ot the node n1 is considered greater than the comparing value of the node n2(positive sign), or smaller (negative sign).
     **/
-   virtual int compare(node n1,node n2) = 0;
+   virtual int compare(const node n1, const node n2) = 0;
    /**
      * @brief Compare value of the edge e1 to the value of the edge e2.
      *
      * @return Return 0 if values are equal otherwise otherwise a number different from 0 is returned, with its sign indicating whether the value of edge e1 is considered greater than the comparing value of the edge e2 (positive sign), or smaller (negative sign).
      **/
-   virtual int compare(edge e1,edge e2) = 0;
+   virtual int compare(const edge e1, const edge e2) = 0;
 
  protected:
   MetaValueCalculator* metaValueCalculator;
-
-  // for notification of PropertyObserver
-  void notifyBeforeSetNodeValue(const node n);
-  void notifyAfterSetNodeValue(const node n);
-  void notifyBeforeSetEdgeValue(const edge e);
-  void notifyAfterSetEdgeValue(const edge e);
-  void notifyBeforeSetAllNodeValue();
-  void notifyAfterSetAllNodeValue();
-  void notifyBeforeSetAllEdgeValue();
-  void notifyAfterSetAllEdgeValue();
-};
-
-/// Event class for specific events on PropertyInterface
-class TLP_SCOPE PropertyEvent :public Event {
-  public:
-
-    // be careful about the ordering of the constants
-    // in the enum below because it is used in some assertions
-    enum PropertyEventType {TLP_BEFORE_SET_NODE_VALUE = 0,
-                            TLP_AFTER_SET_NODE_VALUE,
-                            TLP_BEFORE_SET_ALL_NODE_VALUE,
-                            TLP_AFTER_SET_ALL_NODE_VALUE,
-                            TLP_BEFORE_SET_ALL_EDGE_VALUE,
-                            TLP_AFTER_SET_ALL_EDGE_VALUE,
-                            TLP_BEFORE_SET_EDGE_VALUE,
-                            TLP_AFTER_SET_EDGE_VALUE};
-    PropertyEvent(const PropertyInterface& prop, PropertyEventType propEvtType,
-                  Event::EventType evtType = Event::TLP_MODIFICATION,
-                  unsigned int id = UINT_MAX)
-      : Event(prop, evtType), evtType(propEvtType), eltId(id) {}
-
-    PropertyInterface* getProperty() const {
-      return reinterpret_cast<PropertyInterface *>(sender());
-    }
-
-    node getNode() const {
-      assert(evtType < TLP_BEFORE_SET_ALL_NODE_VALUE);
-      return node(eltId);
-    }
-
-    edge getEdge() const {
-      assert(evtType > TLP_AFTER_SET_ALL_EDGE_VALUE);
-      return edge(eltId);
-    }
-
-    PropertyEventType getType() const {
-      return evtType;
-    }
-
-  protected:
-    PropertyEventType evtType;
-    unsigned int eltId;
+  // redefinitions of ObservableProperty methods
+  void notifyAfterSetNodeValue(PropertyInterface*, const node n);
+  void notifyAfterSetEdgeValue(PropertyInterface*, const edge e);
+  void notifyAfterSetAllNodeValue(PropertyInterface*);
+  void notifyAfterSetAllEdgeValue(PropertyInterface*);
+  void notifyDestroy(PropertyInterface*);
 };
 
 }

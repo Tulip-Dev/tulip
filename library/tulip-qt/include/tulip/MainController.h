@@ -145,10 +145,6 @@ namespace tlp {
      */
     void afterSetAttribute(Graph*, const std::string&);
     /**
-     * Call when receiving an event
-     */
-    void treatEvent(const Event&);
-    /**
      * Call to update number of nodes/edges
      */
     void updateCurrentGraphInfos();

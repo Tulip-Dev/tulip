@@ -41,7 +41,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ObservablePropertyTest );
 // these classes will capture
 // everything that will happen to our properties
 // synchronously or asynchronously
-class ObserverPTest :public Observable {
+class ObserverPTest :public Observer {
 public:
   std::set<Observable*> observables;
 
@@ -79,7 +79,7 @@ static ObserverPTest* observer;
 
 // this class will capture
 // everything that will happen to our properties
-class PropertyObserverTest :public PropertyObserver, public Observable {
+class PropertyObserverTest :public PropertyObserver {
 public:
   std::set<PropertyInterface*> properties;
   node lastNode;
@@ -121,9 +121,6 @@ public:
   }
   virtual void destroy(PropertyInterface* prop){
     properties.insert(prop);
-  }
-  virtual void treatEvent(const Event& evt) {
-    PropertyObserver::treatEvent(evt);
   }
 };
 

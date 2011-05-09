@@ -50,12 +50,12 @@ public :
   /**
     * @brief Specific implementation of AbstractProperty::compare(node n1,node n2)
     **/
-  int compare(node n1,node n2);
+  int compare(const node n1, const node n2);
 
   /**
     * @brief Specific implementation of AbstractProperty::compare(edge e1,edge e2)
     **/
-  int compare(edge e1,edge e2);
+  int compare(const edge e1, const edge e2);
 };
 
   class TLP_SCOPE StringVectorProperty:public AbstractVectorProperty<tlp::StringVectorType, tlp::StringType>{ 

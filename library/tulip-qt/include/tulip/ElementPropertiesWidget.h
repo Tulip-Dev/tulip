@@ -26,15 +26,13 @@
 #include <QtCore/qstringlist.h>
 #include <QtCore/qsize.h>
 
-#include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
 #include <tulip/Graph.h>
+#include <tulip/ObservableGraph.h>
 #include "tulip/ElementPropertiesWidgetUI.h"
 
 namespace tlp {
 
-  class TLP_QT_SIMPLE_SCOPE ElementPropertiesWidget :
-  public ElementPropertiesWidgetUI, private GraphObserver, private Observable
+  class TLP_QT_SIMPLE_SCOPE ElementPropertiesWidget : public ElementPropertiesWidgetUI, public GraphObserver
     {
       Q_OBJECT;
       // moc as of qt 3.0.5 doesn't understand '::'... silly
@@ -62,6 +60,7 @@ namespace tlp {
 			      const QStringList &edgeListedProperties,
 			      QWidget *parent = 0);
       ElementPropertiesWidget(QWidget *parent = 0);
+      ~ElementPropertiesWidget();
     
       QStringList getCurrentListedProperties() const;
       QStringList getNodeListedProperties() const;
@@ -94,7 +93,6 @@ namespace tlp {
       void delNode(Graph *, const node);
       void delEdge(Graph *, const edge);
       void destroy(Graph *);
-      void treatEvent(const Event&);
     };
 
 }

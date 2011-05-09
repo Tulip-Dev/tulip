@@ -28,7 +28,6 @@
 #include <tulip/tuliphash.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
-#include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/ObservableProperty.h>
 #include <tulip/Graph.h>
@@ -82,7 +81,7 @@ namespace tlp {
   class GraphImpl;
   class GraphStorageIdsMemento;
 
-  class GraphUpdatesRecorder :public GraphObserver, public PropertyObserver, public Observable {
+  class GraphUpdatesRecorder :public GraphObserver, public PropertyObserver {
     friend class GraphImpl;
     //
 #if !defined(NDEBUG)
@@ -249,10 +248,6 @@ namespace tlp {
 
     // removeAttribute
     void removeAttribute(Graph* g, const std::string& name);
- 
-protected:
-    // override Observable::treatEvent
-    virtual void treatEvent(const Event& ev);
 };
 }
 

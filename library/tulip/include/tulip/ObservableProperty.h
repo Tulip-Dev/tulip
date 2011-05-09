@@ -25,11 +25,11 @@
 #include <tulip/tulipconf.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
-#include <tulip/Observable.h>
 
 namespace tlp {
 
 class PropertyInterface;
+class ObservableProperty;
 //=========================================================
 
 /** \addtogroup properties */ 
@@ -42,22 +42,100 @@ class PropertyInterface;
  * object.
  */
 class  TLP_SCOPE PropertyObserver {
+  friend class ObservableProperty;
 
- public:
-  virtual ~PropertyObserver() {}
-  virtual void beforeSetNodeValue(PropertyInterface*, const node){}
-  virtual void afterSetNodeValue(PropertyInterface*, const node){}
-  virtual void beforeSetEdgeValue(PropertyInterface*, const edge){}
-  virtual void afterSetEdgeValue(PropertyInterface*, const edge){}
-  virtual void beforeSetAllNodeValue(PropertyInterface*){}
-  virtual void afterSetAllNodeValue(PropertyInterface*){}
-  virtual void beforeSetAllEdgeValue(PropertyInterface*){}
-  virtual void afterSetAllEdgeValue(PropertyInterface*){}
-  virtual void destroy(PropertyInterface*){}
- protected:
-  void treatEvent(const Event& ev);
+public:
+	PropertyObserver(bool manageObservables = true)
+	:updateObservables(manageObservables) {}
+        PropertyObserver(const PropertyObserver&);
+	virtual ~PropertyObserver();
+	virtual void beforeSetNodeValue(PropertyInterface*, const node){}
+	virtual void afterSetNodeValue(PropertyInterface*, const node){}
+	virtual void beforeSetEdgeValue(PropertyInterface*, const edge){}
+	virtual void afterSetEdgeValue(PropertyInterface*, const edge){}
+	virtual void beforeSetAllNodeValue(PropertyInterface*){}
+	virtual void afterSetAllNodeValue(PropertyInterface*){}
+	virtual void beforeSetAllEdgeValue(PropertyInterface*){}
+	virtual void afterSetAllEdgeValue(PropertyInterface*){}
+	virtual void destroy(PropertyInterface*){}
+protected:
+	void addObservable(ObservableProperty *);
+	void removeObservable(ObservableProperty *);
+private:
+	std::list<ObservableProperty *> observables;
+	bool updateObservables;
 };
 /*@}*/
+}
+
+namespace tlp {
+
+/** \addtogroup properties */ 
+/*@{*/
+/**
+ */
+/// Observable object for Property
+class  TLP_SCOPE ObservableProperty {
+	friend class PropertyObserver;
+
+public:
+	ObservableProperty() {}
+	ObservableProperty(const ObservableProperty&);
+	virtual ~ObservableProperty() {removePropertyObservers();}
+	/**
+	 * Register a new observer
+	 */
+	void addPropertyObserver(PropertyObserver *) const;
+	/**
+	 * Returns the number of observers
+	 */
+	unsigned int countPropertyObservers();
+	/**
+	 * Remove an observer
+	 */
+	void removePropertyObserver(PropertyObserver *) const;
+	/**
+	 * Remove all observers
+	 */
+	void removePropertyObservers();
+
+protected:
+	void notifyBeforeSetNodeValue(PropertyInterface*,const node n);
+	void notifyAfterSetNodeValue(PropertyInterface*,const node n);
+	void notifyBeforeSetEdgeValue(PropertyInterface*,const edge e);
+	void notifyAfterSetEdgeValue(PropertyInterface*,const edge e);
+	void notifyBeforeSetAllNodeValue(PropertyInterface*);
+	void notifyAfterSetAllNodeValue(PropertyInterface*);
+	void notifyBeforeSetAllEdgeValue(PropertyInterface*);
+	void notifyAfterSetAllEdgeValue(PropertyInterface*);
+	void notifyDestroy(PropertyInterface*);
+	void removeOnlyPropertyObserver(PropertyObserver *) const;
+	mutable std::list<PropertyObserver*> observers;
+	mutable std::map<PropertyObserver*, std::list<PropertyObserver*>::iterator> observersSet;
+};
+/*@}*/
+
+inline unsigned int ObservableProperty::countPropertyObservers() { 
+	return observers.size();
+}
+
+inline void ObservableProperty::removePropertyObserver(PropertyObserver *item) const{
+	std::map<PropertyObserver*, std::list<PropertyObserver*>::iterator>::iterator it = observersSet.find(item);
+	if (it != observersSet.end()) {
+		observers.erase(it->second);
+		observersSet.erase(it);
+		item->removeObservable(const_cast<ObservableProperty *>(this));
+	}
+}
+
+inline void ObservableProperty::removeOnlyPropertyObserver(PropertyObserver *item) const {
+	std::map<PropertyObserver*, std::list<PropertyObserver*>::iterator>::iterator it = observersSet.find(item);
+	if (it != observersSet.end()) {
+		observers.erase(it->second);
+		observersSet.erase(it);
+	}
+}
+
 }
 
 #endif

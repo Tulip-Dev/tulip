@@ -19,7 +19,6 @@
 #ifndef GRAPHNEEDSSAVINGOBSERVER_H
 #define GRAPHNEEDSSAVINGOBSERVER_H
 
-#include <typeinfo>
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/ObservableProperty.h>
@@ -60,8 +59,9 @@ public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observable 
         graph->getProperty(propertyName)->addPropertyObserver(this);
         doNeedSaving();
       }
-      virtual void delLocalProperty(tlp::Graph*, const std::string&) {
-	doNeedSaving();
+      virtual void delLocalProperty(tlp::Graph* graph, const std::string& propertyName) {
+        graph->getProperty(propertyName)->removePropertyObserver(this);
+        doNeedSaving();
       }
       
       virtual void addSubGraph(tlp::Graph* , tlp::Graph* newSubGraph) {
@@ -73,6 +73,23 @@ public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observable 
           property->addPropertyObserver(this);
         }
         delete it;
+      }
+      virtual void delSubGraph(tlp::Graph* , tlp::Graph* newSubGraph) {
+        tlp::Iterator<std::string>* it = newSubGraph->getProperties();
+        while(it->hasNext()) {
+          std::string propertyName = it->next();
+          tlp::PropertyInterface* property = newSubGraph->getProperty(propertyName);
+          property->removePropertyObserver(this);
+        }
+        delete it;
+        newSubGraph->removeGraphObserver(this);
+      }
+      
+      virtual void destroy(tlp::Graph* graph) {
+        graph->removeGraphObserver(this);
+      }
+      virtual void destroy(tlp::PropertyInterface* property) {
+        property->removePropertyObserver(this);
       }
       
       virtual void update(std::set< tlp::Observable* >::iterator, std::set< tlp::Observable* >::iterator) { doNeedSaving(); }
@@ -121,12 +138,6 @@ public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observable 
         property->addPropertyObserver(this);
       }
       delete it;
-    }
-    void treatEvent(const tlp::Event& evt) {
-      if (typeid(evt) == typeid(tlp::GraphEvent))
-	tlp::GraphObserver::treatEvent(evt);
-      else
-	tlp::PropertyObserver::treatEvent(evt);
     }
     
     bool _needsSaving; 
