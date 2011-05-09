@@ -318,6 +318,8 @@ namespace tlp {
     optionsMenu->setEnabled(true);
     graphMenu->setEnabled(true);
     snapshotAction->setEnabled(true);
+	tabWidgetDock->setEnabled(true);
+    configWidgetDock->setEnabled(true);
 
     unsigned int holdCount=Observable::observersHoldCounter();
     Observable::holdObservers();
@@ -600,6 +602,7 @@ namespace tlp {
     mainWindowFacade.addDockWidget(Qt::LeftDockWidgetArea, tabWidgetDock);
     tabWidget->show();
     tabWidgetDock->show();
+	tabWidgetDock->setEnabled(false);
 
     //+++++++++++++++++++++++++++
     //Init hierarchy visualization widget
@@ -629,6 +632,7 @@ namespace tlp {
     configWidgetDock->setWindowTitle("View Editor");
     configWidgetDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     mainWindowFacade.addDockWidget(Qt::LeftDockWidgetArea, configWidgetDock);
+	configWidgetDock->setEnabled(false);
 
     mainWindowFacade.tabifyDockWidget(tabWidgetDock,configWidgetDock);
 
