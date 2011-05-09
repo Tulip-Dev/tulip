@@ -63,7 +63,7 @@ namespace tlp {
   	
   	
   	
-  	class GlyphFactory : tlp::PluginInfoInterface {
+  	class GlyphFactory : tlp::AbstractPluginInfo {
 %TypeHeaderCode
 #include <tulip/Glyph.h>
 %End  	
@@ -86,7 +86,7 @@ namespace tlp {
 %MethodCode
 	sipCpp->initFactory();
 	sipCpp->factory->registerPlugin(sipCpp);
-	tlp::GlyphManager::getInst().loadPlugins();
+	tlp::GlyphManager::getInst().loadGlyphPlugins();
 %End
   };
 

@@ -23,19 +23,27 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
+%ModuleHeaderCode
+#include <tulip/Vector.h>
+#include <tulip/GlLayer.h>
+typedef std::pair<std::string, tlp::GlLayer*> std_pair_0100std_string_0101tlp_GlLayer;
 namespace tlp {
-// TODO - inherits GlObservableScene
-class GlScene  {
+typedef tlp::Vector<int, 4> Vec4i;
+}
+%End
+
+typedef std::pair<std::string, tlp::GlLayer*> std_pair_0100std_string_0101tlp_GlLayer;
+
+namespace tlp {
+
+class GlScene  : tlp::Observable {
 %TypeHeaderCode
 #include <tulip/GlScene.h>
 %End
 public:
-	/*
-	 * TODO - GlLODCalculator
-	 * GlScene(GlLODCalculator *calculator=NULL);
-	 */
-	
 
+	GlScene();
+	
 	void initGlParameters();
 
 	void prerenderMetaNodes();
@@ -43,8 +51,6 @@ public:
 	void draw();
 
 	void centerScene();
-
-	void computeAjustSceneToSize(int width, int height, tlp::Coord *center, tlp::Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor);
 
 	void ajustSceneToSize(int width, int height);
 
@@ -58,29 +64,14 @@ public:
 
 	void rotateScene(const int x, const int y, const int z);
 
-	/*
-	TODO - SelectionFlag, GlLayer
-	bool selectEntities(SelectionFlag type, int x, int y, int h, int w,GlLayer *layer, std::vector<unsigned long>& selectedEntities);
-	*/
-	
-	void outputSVG(unsigned int size,const std::string& filename);
-
-	void outputEPS(unsigned int size,const std::string& filename);
-
 	unsigned char * getImage();
 
-	/*
-	TODO - Vector
-	void setViewport(Vector<int, 4> newViewport) {viewport=newViewport;}
-	*/
+	void setViewport(tlp::Vec4i &newViewport);
 	
 	void setViewport(int x, int y, int width, int height);
 
-	/*
-	TODO - Vector
-	Vector<int, 4> getViewport() {return viewport;}
-	*/
-	
+	tlp::Vec4i getViewport();
+
 	void setBackgroundColor(const tlp::Color& color);
 
 	tlp::Color getBackgroundColor();
@@ -91,29 +82,25 @@ public:
 
 	void setViewLabel(bool viewLabel);
 
-	/*
-	TODO - GlLayer
-	void addLayer(GlLayer *layer);
+	void addLayer(tlp::GlLayer *layer /Transfer/);
 	
-	GlLayer* getLayer(const std::string& name);
+	tlp::GlLayer* getLayer(const std::string& name);
 	
-	std::vector<std::pair<std::string, GlLayer*> >* getLayersList() {return &layersList;}
-	*/
-	
+	std::vector<std_pair_0100std_string_0101tlp_GlLayer>* getLayersList();
+
 	void clearLayersList();
 
-	void getXML(std::string &out);
+	void getXML(std::string &out /Out/);
 
 	void setWithXML(std::string &in, tlp::Graph *graph);
 
 	/*
-	TODO - GlLayer, GlGraphComposite
-	void addGlGraphCompositeInfo(GlLayer* layer,GlGraphComposite *glGraphComposite) {this->graphLayer=layer;this->glGraphComposite=glGraphComposite;}
-	GlGraphComposite* getGlGraphComposite() {return glGraphComposite;}
-	GlLayer* getGraphLayer() {return graphLayer;}
-
-	GlLayer* getSelectionLayer() {return selectionLayer;}
+	TODO - GlGraphComposite
+	void addGlGraphCompositeInfo(tlp::GlLayer* layer, tlp::GlGraphComposite *glGraphComposite);
+	tlp::GlGraphComposite* getGlGraphComposite();
 	*/
+	
+	tlp::GlLayer* getGraphLayer();
 	
 	tlp::Camera& getCamera();
 	

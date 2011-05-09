@@ -23,10 +23,18 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
+%ModuleHeaderCode
+#include <tulip/Matrix.h>
+namespace tlp {
+typedef tlp::Matrix<float, 4> Mat4f;
+};
+%End
+
 namespace tlp {
 
-class Camera {
+class Camera : tlp::Observable {
 public:
+
 	Camera(tlp::GlScene* scene, tlp::Coord center = tlp::Coord(0, 0, 0), tlp::Coord eyes = tlp::Coord(0, 0, 10), tlp::Coord up = tlp::Coord(0, -1, 0), double zoomFactor = 0.5, double sceneRadius = 10);
 
 	Camera(tlp::GlScene* scene, bool d3);
@@ -45,20 +53,14 @@ public:
 
 	bool is3D();
 
-	/**
-	 * TODO - Vector
-	 * Vector<int, 4> getViewport();
-	 */
+	tlp::Vec4i getViewport();
 
 	void initGl();
 
 	void initLight();
 
-	/**
-	 * TODO - Vector
-	 * void initProjection(const Vector<int, 4>& viewport,bool reset=true);
-	 */
-
+	void initProjection(const tlp::Vec4i& viewport,bool reset=true);
+	
 	void initProjection(bool reset = true);
 
 	void initModelView();
@@ -89,23 +91,19 @@ public:
 
 	bool haveObjectTransformation();
 
-	/**
-	 * TODO - Matrix
-	 * void getModelviewMatrix(Matrix<float, 4> &modelviewMatrix) { modelviewMatrix=this->modelviewMatrix;}
-	 * void getProjectionMatrix(Matrix<float, 4> &projectionMatrix) { projectionMatrix=this->projectionMatrix;}
-	 * void getTransformMatrix(Matrix<float, 4> &transformMatrix) { transformMatrix=this->transformMatrix;}
-	 * void getProjAndMVMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &projectionMatrix,Matrix<float, 4> &modelviewMatrix);
-	 * void getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix);
-	 */
-
+	void getModelviewMatrix(tlp::Mat4f &modelviewMatrix /Out/);
+	
+	void getProjectionMatrix(tlp::Mat4f &projectionMatrix /Out/);
+	
+	void getTransformMatrix(tlp::Mat4f &transformMatrix /Out/);
+	
+	void getProjAndMVMatrix(const tlp::Vec4i& viewport, tlp::Mat4f &projectionMatrix /Out/, tlp::Mat4f &modelviewMatrix /Out/);
+	
+	void getTransformMatrix(const tlp::Vec4i& viewport, tlp::Mat4f &transformMatrix /Out/);
+	
 	tlp::Coord screenTo3DWorld(const tlp::Coord &point);
 
 	tlp::Coord worldTo2DScreen(const tlp::Coord &obj);
 
-	/**
-	 * TODO - xmlNodePtr
-	 * void getXML(xmlNodePtr rootNode);
-	 * void setWithXML(xmlNodePtr rootNode);
-	 */
 };
 };

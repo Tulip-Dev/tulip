@@ -48,7 +48,7 @@ public:
 };
 
 namespace tlp {
-class AlgorithmFactory : tlp::PluginInfoInterface {
+class AlgorithmFactory : tlp::AbstractPluginInfo {
 %TypeHeaderCode
 #include <tulip/Algorithm.h>
 %End

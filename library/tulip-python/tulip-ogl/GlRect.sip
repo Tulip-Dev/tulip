@@ -23,52 +23,47 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%ModuleHeaderCode
-#include <tulip/PluginManager.h>
-#include <tulip/PropertyAlgorithm.h>
-#include <tulip/ColorProperty.h>
-namespace tlp {
-typedef tlp::PropertyFactory<tlp::ColorAlgorithm> ColorAlgorithmFactory;
-};
-%End
 
 namespace tlp {
-class ColorAlgorithm : tlp::PropertyAlgorithm {
+
+class GlRect : tlp::GlPolygon {
 %TypeHeaderCode
-#include <tulip/PropertyAlgorithm.h>
-%End
-public:
-	virtual ~ColorAlgorithm();
-	tlp::ColorProperty *result;
-protected:
-	ColorAlgorithm(const tlp::PropertyContext &context);
-	
-};
-
-class ColorAlgorithmFactory : tlp::AbstractPluginInfo {
-%TypeHeaderCode
-#include <tulip/PluginManager.h>
-%End
-public:
-
-	virtual ~ColorAlgorithmFactory();
-	
-	virtual tlp::ColorAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
-
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::PropertyFactory<tlp::ColorAlgorithm>::initFactory();	
-    tlp::PropertyFactory<tlp::ColorAlgorithm>::factory->registerPlugin(sipCpp);
+#include <tulip/GlRect.h>
 %End
 
+ public:
+  
+  GlRect(const tlp::Coord &topLeftPos, const tlp::Coord &bottomRightPos, const tlp::Color &topLeftCol, const tlp::Color &bottomRightCol, bool filled=true, bool outlined=false);
+
+  GlRect(const tlp::Coord &center, const tlp::Size &size, const tlp::Color &fillColor, const tlp::Color &outlineColor);
+
+  GlRect(bool filled=true, bool outlined=false);
+
+  virtual ~GlRect();
+
+  virtual tlp::Coord getCenter();
+
+  void setCenterAndSize(const tlp::Coord &center, const tlp::Size &size);
+
+  virtual tlp::Coord getTopLeftPos();
+
+  virtual tlp::Coord getBottomRightPos();
+
+  virtual tlp::Color getTopLeftColor();
+
+  virtual tlp::Color getBottomRightColor();
+
+  virtual void setTopLeftPos(const tlp::Coord &topLeftPos);
+
+  virtual void setBottomRightPos(const tlp::Coord &bottomRightPos);
+
+  virtual void setTopLeftColor(const tlp::Color &topLeftCol);
+
+  virtual void setBottomRightColor(const tlp::Color &bottomRightCol);
+
+  bool inRect(double x, double y);
+
 };
 
 };
+

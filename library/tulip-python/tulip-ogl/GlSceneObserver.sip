@@ -23,52 +23,36 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%ModuleHeaderCode
-#include <tulip/PluginManager.h>
-#include <tulip/PropertyAlgorithm.h>
-#include <tulip/ColorProperty.h>
 namespace tlp {
-typedef tlp::PropertyFactory<tlp::ColorAlgorithm> ColorAlgorithmFactory;
-};
-%End
 
-namespace tlp {
-class ColorAlgorithm : tlp::PropertyAlgorithm {
+class GlSceneEvent : tlp::Event {
 %TypeHeaderCode
-#include <tulip/PropertyAlgorithm.h>
-%End
-public:
-	virtual ~ColorAlgorithm();
-	tlp::ColorProperty *result;
-protected:
-	ColorAlgorithm(const tlp::PropertyContext &context);
-	
-};
-
-class ColorAlgorithmFactory : tlp::AbstractPluginInfo {
-%TypeHeaderCode
-#include <tulip/PluginManager.h>
-%End
-public:
-
-	virtual ~ColorAlgorithmFactory();
-	
-	virtual tlp::ColorAlgorithm * createPluginObject(const tlp::PropertyContext &) = 0 /Factory/; 
-
-	virtual  std::string getMajor() const;
-	
-	virtual  std::string getMinor() const;
-	
-	virtual  std::string getTulipMajor() const;
-	
-	virtual  std::string getTulipMinor() const;
-	
-	void registerPlugin();
-%MethodCode
-	tlp::PropertyFactory<tlp::ColorAlgorithm>::initFactory();	
-    tlp::PropertyFactory<tlp::ColorAlgorithm>::factory->registerPlugin(sipCpp);
+#include <tulip/GlSceneObserver.h>
 %End
 
-};
+%ConvertToSubClassCode
+   if (dynamic_cast<tlp::GlSceneEvent*>(sipCpp)) {
+        sipType = sipType_tlp_GlSceneEvent;
+   } else {
+        sipType = NULL;
+    }
+%End
+
+  public:
+
+    enum GlSceneEventType {TLP_ADDLAYER=0, TLP_DELLAYER, TLP_MODIFYLAYER, TLP_MODIFYENTITY};
+
+    GlSceneEvent(const tlp::GlScene &scene, GlSceneEventType sceneEventType, const std::string &layerName, tlp::GlLayer *layer);
+
+    GlSceneEvent(const tlp::GlScene &scene, tlp::GlSimpleEntity *entity);
+
+    tlp::GlSimpleEntity *getGlSimpleEntity();
+
+    std::string getLayerName();
+
+    tlp::GlLayer *getLayer();
 
 };
+};
+
+
