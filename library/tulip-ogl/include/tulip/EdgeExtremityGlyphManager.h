@@ -32,9 +32,6 @@ class Graph;
 class TLP_GL_SCOPE EdgeExtremityGlyphManager {
 
 public:
-
-
-
 	virtual ~EdgeExtremityGlyphManager() {
 	}
 

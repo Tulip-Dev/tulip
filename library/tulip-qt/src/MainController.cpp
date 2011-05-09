@@ -124,7 +124,7 @@ namespace tlp {
     PluginManager<TemplateAlgorithm<TPROPERTY>, PropertyContext >* factory = PropertyFactory<TemplateAlgorithm<TPROPERTY> >::factory;
     it= factory->objMap.begin();
     for (;it!=PropertyFactory<TemplateAlgorithm<TPROPERTY> >::factory->objMap.end();++it)
-      insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
+      insertInMenu(menu, it->first.c_str(), it->second.factory->getGroup(), groupMenus, nGroups,receiver,slot);
   }
   template <typename TFACTORY, typename TMODULE>
   void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
@@ -132,7 +132,7 @@ namespace tlp {
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
     for (it= FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.begin();it != FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.end();++it)
-      insertInMenu(menu, it->first.c_str(), it->second->getGroup(), groupMenus, nGroups,receiver,slot);
+      insertInMenu(menu, it->first.c_str(), it->second.factory->getGroup(), groupMenus, nGroups,receiver,slot);
   }
   typedef std::vector<node> NodeA;
   typedef std::vector<edge> EdgeA;

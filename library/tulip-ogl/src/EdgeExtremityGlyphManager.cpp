@@ -63,11 +63,10 @@ int EdgeExtremityGlyphManager::glyphId(string name) {
 }
 //====================================================
 void EdgeExtremityGlyphManager::loadGlyphPlugins() {
-		Iterator<string> *itS =
-			EdgeExtremityGlyphFactory::factory->availablePlugins();
+	Iterator<string> *itS = EdgeExtremityGlyphFactory::factory->availablePlugins();
 	while (itS->hasNext()) {
 		string pluginName = itS->next();
-		int pluginId = EdgeExtremityGlyphFactory::factory->objMap[pluginName]->getId();
+    int pluginId = EdgeExtremityGlyphFactory::factory->objMap[pluginName].factory->getId();
 		eeglyphIdToName[pluginId] = pluginName;
 		nameToEeGlyphId[pluginName] = pluginId;
 	}
@@ -86,7 +85,7 @@ void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
 		while (itS->hasNext()) {
 			string glyphName = itS->next();
 			EdgeExtremityGlyph *newGlyph = EdgeExtremityGlyphFactory::factory->getPluginObject(glyphName, &gc);
-			glyphs.set(EdgeExtremityGlyphFactory::factory->objMap[glyphName]->getId(), newGlyph);
+      glyphs.set(EdgeExtremityGlyphFactory::factory->objMap[glyphName].factory->getId(), newGlyph);
 		}
 		delete itS;
 }
@@ -99,7 +98,7 @@ void EdgeExtremityGlyphManager::clearGlyphList(Graph **,
 	while (itS->hasNext()) {
 		string glyphName = itS->next();
 		delete glyphs.get(
-				EdgeExtremityGlyphFactory::factory->objMap[glyphName]->getId());
+      EdgeExtremityGlyphFactory::factory->objMap[glyphName].factory->getId());
 	}
 	delete itS;
 }
