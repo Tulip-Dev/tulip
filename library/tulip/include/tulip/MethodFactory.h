@@ -121,5 +121,55 @@ extern "C" {                                            \
 #define EXPORTPLUGIN(C,N,A,D,I,R) EXPORTPLUGINOFGROUP(C,N,A,D,I,R,"") 
 #define IMPORTPLUGINOFGROUP(C,N,A,D,I,R,G) GRAPHPLUGINFACTORY(ImportModule,C,N,A,D,I,R,G)
 #define IMPORTPLUGIN(C,N,A,D,I,R) IMPORTPLUGINOFGROUP(C,N,A,D,I,R,"")
+
+#define POINTERCONTEXTPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
+class C##T##Factory:public tlp::FactoryInterface<T,T##Context *> \
+{                                                \
+public:                                          \
+  C##T##Factory(){         \
+    T##PluginManager::registerPlugin(this);           \
+  }                  \
+  std::string getName() const { return std::string(N);}  \
+  std::string getGroup() const { return std::string(G);}   \
+  std::string getAuthor() const {return std::string(A);}   \
+  std::string getDate() const {return std::string(D);}   \
+  std::string getInfo() const {return std::string(I);}   \
+  std::string getRelease() const {return std::string(R);}\
+  std::string getTulipRelease() const {return std::string(TULIP_RELEASE);} \
+  tlp::T * createPluginObject(tlp::T##Context *)    \
+  {            \
+  C *tmp = new C();        \
+  return ((tlp::T *) tmp);       \
+  }            \
+  };                                               \
+  extern "C" {                                            \
+  C##T##Factory C##T##FactoryInitializer;               \
+  }
+
+#define PLUGINWITHIDENTIFIERFACTORY(T,C,N,A,D,I,R,ID,G)     \
+class C##T##Factory:public tlp::FactoryInterface<T, T##Context*>   \
+{                                                \
+public:                                          \
+  C##T##Factory(){         \
+    T##PluginManager::registerPlugin(this);           \
+  }                  \
+  std::string getName() const { return std::string(N);}  \
+  std::string getGroup() const { return std::string(G);}   \
+  std::string getAuthor() const {return std::string(A);}   \
+  std::string getDate() const {return std::string(D);}   \
+  std::string getInfo() const {return std::string(I);}   \
+  std::string getRelease() const {return std::string(R);}\
+  std::string getTulipRelease() const {return std::string(TULIP_RELEASE);}\
+  int    getId() const {return ID;}    \
+  tlp::T * createPluginObject(tlp::T##Context *gc)   \
+  {            \
+  C *tmp = new C(gc);        \
+  return ((tlp::T *) tmp);       \
+  }            \
+  };                                               \
+  extern "C" {                                            \
+  C##T##Factory C##T##FactoryInitializer;               \
+  }
+
 /*@}*/
 #endif

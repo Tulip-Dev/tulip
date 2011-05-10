@@ -238,39 +238,10 @@ namespace tlp {
   class TLP_QT_SCOPE ControllerContext {
   };
 
-  class TLP_QT_SCOPE ControllerFactory: public FactoryInterface<Controller,ControllerContext *> {
-  public:
-    virtual ~ControllerFactory() {}
-  };
-
-  typedef StaticPluginManager<Controller, ControllerContext*> ControllerManager;
+  typedef StaticPluginManager<Controller, ControllerContext*> ControllerPluginManager;
 }
 
-#define CONTROLLERPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
-class C##T##Factory:public tlp::T##Factory	 \
-{                                                \
-public:                                          \
-  C##T##Factory(){				 \
-    ControllerManager::registerPlugin(this);	         \
-  }       					 \
-  std::string getName() const { return std::string(N);}	 \
-  std::string getGroup() const { return std::string(G);}	 \
-  std::string getAuthor() const {return std::string(A);}	 \
-  std::string getDate() const {return std::string(D);}	 \
-  std::string getInfo() const {return std::string(I);}	 \
-  std::string getRelease() const {return std::string(R);}\
-  std::string getTulipRelease() const {return std::string(TULIP_RELEASE);} \
-  tlp::T * createPluginObject(tlp::ControllerContext *)		\
-  {						 \
-    C *tmp = new C();				 \
-    return ((tlp::T *) tmp);			 \
-  }						 \
-};                                               \
-extern "C" {                                            \
-  C##T##Factory C##T##FactoryInitializer;               \
-}
-
-#define CONTROLLERPLUGINOFGROUP(C,N,A,D,I,R,G) CONTROLLERPLUGINFACTORY(Controller,C,N,A,D,I,R,G)
+#define CONTROLLERPLUGINOFGROUP(C,N,A,D,I,R,G) POINTERCONTEXTPLUGINFACTORY(Controller,C,N,A,D,I,R,G)
 #define CONTROLLERPLUGIN(C,N,A,D,I,R) CONTROLLERPLUGINOFGROUP(C,N,A,D,I,R,"")
 
 #endif

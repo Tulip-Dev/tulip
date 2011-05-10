@@ -40,10 +40,10 @@ namespace tlp
     // if interactorMap is empty, put all interactors in the Map
     interactorsMap.clear();
 
-    Iterator<string> *itS = InteractorPluginsManager::availablePlugins();
+    Iterator<string> *itS = InteractorPluginManager::availablePlugins();
     while (itS->hasNext()) {
       string interactorName=itS->next();
-      interactorsMap[interactorName]=InteractorPluginsManager::getPluginObject(interactorName, NULL);
+      interactorsMap[interactorName]=InteractorPluginManager::getPluginObject(interactorName, NULL);
     } delete itS;
   }
   

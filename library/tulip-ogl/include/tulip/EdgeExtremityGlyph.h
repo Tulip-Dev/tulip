@@ -72,12 +72,6 @@ protected:
 	GlGraphInputData *edgeExtGlGraphInputData;
 };
 
-class TLP_GL_SCOPE EdgeExtremityGlyphFactory: public FactoryInterface<EdgeExtremityGlyph, EdgeExtremityGlyphContext*> {
-public:
-	virtual ~EdgeExtremityGlyphFactory() {
-	}
-};
-
 typedef tlp::StaticPluginManager<EdgeExtremityGlyph, EdgeExtremityGlyphContext*> EdgeExtremityGlyphPluginManager;
 
 class TLP_GL_SCOPE EdgeExtremityGlyphFrom3DGlyph: public EdgeExtremityGlyph {
@@ -118,7 +112,7 @@ public:
 }
 
 #define EEGPLUGINFACTORY(T,C,N,A,D,I,R,ID,G)     \
-class C##T##Factory:public tlp::T##Factory	 \
+class C##T##Factory:public tlp::FactoryInterface<T, T##Context*>	 \
 {                                                \
 public:                                          \
   C##T##Factory(){				 \
@@ -132,7 +126,7 @@ public:                                          \
   std::string getRelease() const {return std::string(R);}\
   std::string getTulipRelease() const {return std::string(TULIP_RELEASE);}\
   int    getId() const {return ID;}		 \
-  tlp::T * createPluginObject(tlp::EdgeExtremityGlyphContext *gc)	 \
+  tlp::T * createPluginObject(tlp::T##Context *gc)	 \
   {						 \
     C *tmp = new C(gc);				 \
     return ((tlp::T *) tmp);			 \

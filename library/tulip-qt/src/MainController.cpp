@@ -807,7 +807,7 @@ namespace tlp {
 
     connect(viewMenu, SIGNAL(triggered(QAction *)), SLOT(createView(QAction*)));
     PluginManager<View, ViewContext*>::ObjectCreator::const_iterator it;
-    for (it=ViewManager::objMap().begin();it != ViewManager::objMap().end();++it) {
+    for (it=ViewPluginManager::objMap().begin();it != ViewPluginManager::objMap().end();++it) {
       viewMenu->addAction(it->first.c_str());
     }
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,viewMenu);
