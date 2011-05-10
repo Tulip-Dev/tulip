@@ -93,6 +93,9 @@ class AlgorithmFactory:public FactoryInterface<Algorithm,AlgorithmContext>{
 public:
   virtual ~AlgorithmFactory() {}
 };
+
+typedef StaticPluginManager<Algorithm,AlgorithmContext> AlgorithmManager;
+
 /*@}*/
 
 }

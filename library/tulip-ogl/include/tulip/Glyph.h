@@ -105,6 +105,8 @@ namespace tlp {
     virtual ~GlyphFactory() {}
   };
 
+  typedef StaticPluginManager<Glyph, GlyphContext*> GlyphPluginManager;
+
 }
 
 #define GPLUGINFACTORY(T,C,N,A,D,I,R,ID,G)     \
@@ -112,8 +114,7 @@ class C##T##Factory:public tlp::T##Factory	 \
 {                                                \
 public:                                          \
   C##T##Factory(){				 \
-    initFactory(); 			         \
-    factory->registerPlugin(this);	         \
+    GlyphPluginManager::registerPlugin(this);	         \
   }       					 \
   string getName() const { return string(N);}	 \
   string getGroup() const { return string(G);}	 \

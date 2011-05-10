@@ -106,31 +106,31 @@ namespace tlp {
   public :
 
     static std::string getPluginDisplayType(const std::string &name) {
-      if(PropertyFactory<SizeProperty>::factory && PropertyFactory<SizeProperty>::factory->pluginExists(name))
+      if(PropertyPluginManager<SizeProperty>::pluginExists(name))
         return "Size";
-          if(PropertyFactory<IntegerProperty>::factory && PropertyFactory<IntegerProperty>::factory->pluginExists(name))
+      if(PropertyPluginManager<IntegerProperty>::pluginExists(name))
         return "Integer";
-          if(PropertyFactory<LayoutProperty>::factory && PropertyFactory<LayoutProperty>::factory->pluginExists(name))
+      if(PropertyPluginManager<LayoutProperty>::pluginExists(name))
         return "Layout";
-          if(PropertyFactory<ColorProperty>::factory && PropertyFactory<ColorProperty>::factory->pluginExists(name))
+      if(PropertyPluginManager<ColorProperty>::pluginExists(name))
         return "Color";
-          if(PropertyFactory<DoubleProperty>::factory && PropertyFactory<DoubleProperty>::factory->pluginExists(name))
+      if(PropertyPluginManager<DoubleProperty>::pluginExists(name))
         return "Metric";
-          if(PropertyFactory<StringProperty>::factory && PropertyFactory<StringProperty>::factory->pluginExists(name))
+      if(PropertyPluginManager<StringProperty>::pluginExists(name))
         return "Label";
-          if(PropertyFactory<BooleanProperty>::factory && PropertyFactory<BooleanProperty>::factory->pluginExists(name))
+      if(PropertyPluginManager<BooleanProperty>::pluginExists(name))
         return "Selection";
-          if(PropertyFactory<ImportModuleFactory>::factory && PropertyFactory<ImportModuleFactory>::factory->pluginExists(name))
+      if(PropertyPluginManager<ImportModuleFactory>::pluginExists(name))
         return "Import";
-          if(PropertyFactory<ExportModuleFactory>::factory && PropertyFactory<ExportModuleFactory>::factory->pluginExists(name))
+      if(PropertyPluginManager<ExportModuleFactory>::pluginExists(name))
         return "Export";
-          if (AlgorithmFactory::factory && AlgorithmFactory::factory->pluginExists(name))
+          if (AlgorithmManager::pluginExists(name))
         return "General";
-          if (InteractorFactory::factory && InteractorFactory::factory->pluginExists(name))
+      if (InteractorPluginsManager::pluginExists(name))
         return "Interactor";
-          if (ViewFactory::factory && ViewFactory::factory->pluginExists(name))
+          if (ViewManager::pluginExists(name))
         return "View";
-          if (ControllerFactory::factory && ControllerFactory::factory->pluginExists(name))
+          if (ControllerManager::pluginExists(name))
         return "Controller";
 
       return "Glyph";

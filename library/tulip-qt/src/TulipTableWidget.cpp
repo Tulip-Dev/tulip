@@ -686,8 +686,7 @@ class GlyphTableItem: public IntFromListTableItem {
   QStringList* getGlyphNames() {
     if (!glyphNames) {
       glyphNames = new QStringList();
-      GlyphFactory::initFactory();
-      Iterator<string> *itS = GlyphFactory::factory->availablePlugins();
+      Iterator<string> *itS = GlyphPluginManager::availablePlugins();
       while (itS->hasNext()) {
         glyphNames->append(QString(itS->next().c_str()));
       }
@@ -789,9 +788,7 @@ class EdgeExtremityGlyphTableItem: public IntFromListTableItem {
 		if (!glyphNames) {
 			glyphNames = new QStringList();
 			glyphNames->append("NONE");
-			EdgeExtremityGlyphFactory::initFactory();
-			Iterator<string> *itS =
-					EdgeExtremityGlyphFactory::factory->availablePlugins();
+			Iterator<string> *itS = EdgeExtremityGlyphPluginManager::availablePlugins();
 			while (itS->hasNext()) {
 				glyphNames->append(QString(itS->next().c_str()));
 			}

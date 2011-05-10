@@ -274,6 +274,7 @@ namespace tlp {
     virtual ~ViewFactory() {}
   };
 
+  typedef StaticPluginManager<View, ViewContext*> ViewManager;
 }
 
 #define VIEWPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
@@ -281,8 +282,7 @@ class C##T##Factory:public tlp::T##Factory	 \
 {                                                \
 public:                                          \
   C##T##Factory(){				 \
-    initFactory(); 			         \
-    factory->registerPlugin(this);	         \
+    ViewManager::registerPlugin(this);	         \
   }       					 \
   std::string getName() const { return std::string(N);}	\
   std::string getGroup() const { return std::string(G);}	 \

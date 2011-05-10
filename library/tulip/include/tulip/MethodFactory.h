@@ -28,6 +28,7 @@
 #include <string>
 
 #include <tulip/AbstractPluginInfo.h>
+#include <tulip/PluginManager.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginContext.h>
 #include <tulip/PropertyAlgorithm.h>
@@ -47,8 +48,7 @@ class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>	\
 {                                                       \
  public:						\
   C##T##Factory(){					\
-    tlp::PropertyFactory<tlp::T##Algorithm>::initFactory();			\
-    tlp::PropertyFactory<tlp::T##Algorithm>::factory->registerPlugin((tlp::PropertyFactory<tlp::T##Algorithm> *) this); \
+    tlp::PropertyPluginManager<tlp::T##Algorithm>::registerPlugin((tlp::PropertyFactory<tlp::T##Algorithm> *) this); \
   }							\
   ~C##T##Factory(){}					\
   std::string getClassName() const { return std::string(#T);} \
@@ -95,8 +95,7 @@ class C##T##Factory:public tlp::T##Factory              \
 {                                                       \
  public:						\
   C##T##Factory(){					\
-    initFactory();					\
-    factory->registerPlugin(this);			\
+    StaticPluginManager<tlp::T, tlp::AlgorithmContext>::registerPlugin(this);			\
   }							\
   ~C##T##Factory(){}					\
   std::string getName() const { return std::string(N);}	\

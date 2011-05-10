@@ -74,8 +74,8 @@ namespace tlp {
   //**********************************************************************
   bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const string &name) {
     DataSet dataSet;
-    StructDef *params = getPluginParameters(AlgorithmFactory::factory, name);
-    StructDef sysDef = AlgorithmFactory::factory->getPluginParameters(name);
+    StructDef *params = getPluginParameters(PluginManager<Algorithm, AlgorithmContext>::getInstance(), name);
+    StructDef sysDef = AlgorithmManager::getPluginParameters(name);
     params->buildDefaultDataSet(dataSet, graph );
     string title = string("Tulip Parameter Editor: ") + name;
     bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
@@ -104,8 +104,8 @@ namespace tlp {
     bool   resultBool=true;
     if (query) {
       // plugin parameters dialog
-      StructDef *params = ControllerAlgorithmTools::getPluginParameters(PropertyFactory<TemplateAlgorithm<PROPERTY> >::factory, name);
-      StructDef sysDef = PropertyFactory<TemplateAlgorithm<PROPERTY> >::factory->getPluginParameters(name);
+      StructDef *params = ControllerAlgorithmTools::getPluginParameters(PluginManager<TemplateAlgorithm<PROPERTY>, PropertyContext>::getInstance(), name);
+      StructDef sysDef = PropertyPluginManager<TemplateAlgorithm<PROPERTY> >::getPluginParameters(name);
       params->buildDefaultDataSet(dataSet, graph );
       string title = string("Tulip Parameter Editor: ") + name;
       resultBool = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,

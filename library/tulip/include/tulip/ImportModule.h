@@ -76,6 +76,9 @@ class ImportModuleFactory:public FactoryInterface<ImportModule,AlgorithmContext>
 public:
   virtual ~ImportModuleFactory() {}
 };
+
+typedef StaticPluginManager<ImportModule,AlgorithmContext> ImportModuleManager;
+
 /*@}*/
 }
 #endif

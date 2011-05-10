@@ -111,7 +111,7 @@ bool tlp::saveGraph(Graph *sg, const string &filename) {
 //=========================================================
 Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *plugProgress, Graph *newGraph){
 
-  if (!ImportModuleFactory::factory->pluginExists(alg)) {
+  if (!ImportModuleManager::pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": import plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
     return NULL;
@@ -133,7 +133,7 @@ Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *pl
   }
   else tmpProgress=plugProgress;
   tmp.pluginProgress=tmpProgress;
-  ImportModule *newImportModule=ImportModuleFactory::factory->getPluginObject(alg, tmp);
+  ImportModule *newImportModule=ImportModuleManager::getPluginObject(alg, tmp);
   assert(newImportModule!=0);
   bool result;
   if (!(result=newImportModule->import(""))) {
@@ -150,7 +150,7 @@ Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *pl
 //=========================================================
 bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
 		      DataSet &dataSet, PluginProgress *plugProgress) {
-  if (!ExportModuleFactory::factory->pluginExists(alg)) {
+  if (!ExportModuleManager::pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": export plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
     return false;
@@ -168,7 +168,7 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
   }
   else tmpProgress=plugProgress;
   tmp.pluginProgress=tmpProgress;
-  ExportModule *newExportModule=ExportModuleFactory::factory->getPluginObject(alg, tmp);
+  ExportModule *newExportModule=ExportModuleManager::getPluginObject(alg, tmp);
   assert(newExportModule!=0);
   result=newExportModule->exportGraph(os,sg);
 
@@ -179,7 +179,7 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
 //=========================================================
 bool tlp::applyAlgorithm(Graph *sg,string &errorMsg,DataSet *dataSet,
 			  const string &alg, PluginProgress *plugProgress) {
-  if (!AlgorithmFactory::factory->pluginExists(alg)) {
+  if (!AlgorithmManager::pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
     return false;
@@ -197,7 +197,7 @@ bool tlp::applyAlgorithm(Graph *sg,string &errorMsg,DataSet *dataSet,
   }
   else tmpProgress=plugProgress;
   tmp.pluginProgress=tmpProgress; 
-  Algorithm *newAlgo=AlgorithmFactory::factory->getPluginObject(alg, tmp);
+  Algorithm *newAlgo=AlgorithmManager::getPluginObject(alg, tmp);
   if ((result=newAlgo->check(errorMsg)))
     newAlgo->run();
   delete newAlgo;
