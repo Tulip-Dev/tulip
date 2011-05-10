@@ -33,8 +33,6 @@
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 
-//#define STRINGLISTTABLEITEM_RTTI 1010
-
 class QLineEdit;
 class QPaintEvent;
 
@@ -58,25 +56,6 @@ public:
 	virtual void set(unsigned int i, const std::string& value) = 0;
 	virtual void clear()=0;
 
-};
-
-class TLP_QT_SCOPE ColorButton: public QPushButton {
-
-Q_OBJECT
-	;Q_PROPERTY(QRgb color READ getColor)
-	;
-
-private:
-	QRgb color;
-public:
-	ColorButton(const QRgb &c, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
-	~ColorButton();
-
-	QRgb getColor() const;
-	void paintEvent(QPaintEvent *);
-
-public slots:
-	void colorDialog();
 };
 
 class TLP_QT_SCOPE FilenameEditor: public QWidget {
@@ -109,45 +88,6 @@ private:
 	QPushButton *button;
 	QString fileFilter;
     QString basePath;
-};
-
-class TLP_QT_SCOPE SizeEditor: public QWidget {
-Q_OBJECT
-	;
-private:
-	Size size;
-	QLineEdit *edit[3];
-
-public:
-	SizeEditor(const Size &, QWidget *);
-	~SizeEditor();
-	Size getSize() const;
-	void setFocus();
-
-private slots:
-	void changeW(const QString &);
-	void changeH(const QString &);
-	void changeD(const QString &);
-};
-
-class CoordEditor: public QWidget {
-Q_OBJECT
-	;
-
-private:
-	Coord coord;
-	QLineEdit *edit[3];
-
-public:
-	CoordEditor(const Coord &, QWidget *);
-	~CoordEditor();
-	Coord getCoord() const;
-	void setFocus();
-
-private slots:
-	void changeX(const QString &);
-	void changeY(const QString &);
-	void changeZ(const QString &);
 };
 
 class LabelEditor: public QWidget {

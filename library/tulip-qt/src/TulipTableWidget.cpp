@@ -55,6 +55,10 @@
 #include "tulip/TextEditDialog.h"
 #include <tulip/ListPropertyWidget.h>
 
+#include "tulip/ColorButton.h"
+#include "tulip/SizeWidget.h"
+#include "tulip/CoordWidget.h"
+
 #define COLORTABLEITEM_RTTI 1001
 #define FILETABLEITEM_RTTI  1002
 #define SIZETABLEITEM_RTTI  1003
@@ -148,28 +152,6 @@ void ListItem::setContentFromEditor(QWidget*) {
 void ListItem::updateText() {
   setText(QString::fromUtf8(handler->getString().c_str()));
 }
-
-//================================================================================
-ColorButton::ColorButton(const QRgb &c, QWidget *parent, const char*, Qt::WFlags) :
-  QPushButton(parent), color(c) {
-  connect(this, SIGNAL(pressed()), SLOT(colorDialog()));
-  emit pressed(); // ugly but it works
-  setFocusPolicy(Qt::StrongFocus);
-}
-ColorButton::~ColorButton() {
-}
-QRgb ColorButton::getColor() const {
-  return color;
-}
-void ColorButton::colorDialog() {
-  QColor col;
-  if (getColorDialog(QColor(qRed(color), qGreen(color), qBlue(color), qAlpha(color)),parentWidget(),"Color chooser",col))
-    color = col.rgba();
-}
-void ColorButton::paintEvent(QPaintEvent *qpe) {
-  QPainter p(this);
-  p.fillRect(qpe->rect(), QColor(color));
-}
 //================================================
 class ColorTableItem: public TulipTableWidgetItem {
 private:
@@ -210,11 +192,13 @@ QRgb ColorTableItem::getColor() const {
   return color;
 }
 QWidget *ColorTableItem::createEditor(QTableWidget* table) const {
-  ColorButton *cb = new ColorButton(color, table->viewport());
+    ColorButton *cb = new ColorButton(table->viewport());
+    cb->setColor(QColor(color));
+    cb->setFocusPolicy(Qt::StrongFocus);
   return cb;
 }
 void ColorTableItem::setContentFromEditor(QWidget *w) {
-  color = ((ColorButton *) w)->getColor();
+  color = ((ColorButton *) w)->color().rgba();
   setText(
       ColorType::toString(Color(qRed(color), qGreen(color), qBlue(color), qAlpha(color))).c_str());
 }
@@ -339,60 +323,7 @@ QWidget *FileTableFontItem::createEditor(QTableWidget* table) const {
   w->setFileName(text());
   return w;
 }
-//================================================================================
-SizeEditor::SizeEditor(const Size &s, QWidget *parent) :
-  QWidget(parent), size(s) {
-  setAutoFillBackground(true);
-  QHBoxLayout *layout = new QHBoxLayout(this);
-  layout->setSpacing(3);
-  layout->setMargin(0);
-  QDoubleValidator *validator = new QDoubleValidator(this);
-  stringstream ss;
-  ss << size.getW() << " " << size.getH() << " " << size.getD();
-  for (int i = 0; i < 3; ++i) {
-    string str;
-    ss >> str;
-    edit[i] = new QLineEdit(str.c_str(), this);
-    edit[i]->setValidator(validator);
-    edit[i]->setFrame(true);
-    edit[i]->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-    layout->addWidget(edit[i]);
-  }
-  connect(edit[0], SIGNAL(textChanged(const QString &)), this, SLOT(changeW(const QString &)));
-  connect(edit[1], SIGNAL(textChanged(const QString &)), this, SLOT(changeH(const QString &)));
-  connect(edit[2], SIGNAL(textChanged(const QString &)), this, SLOT(changeD(const QString &)));
-  setFocusPolicy(Qt::StrongFocus);
-}
 
-SizeEditor::~SizeEditor() {
-}
-Size SizeEditor::getSize() const {
-  return size;
-}
-void SizeEditor::setFocus() {
-  edit[0]->setFocus();
-}
-void SizeEditor::changeW(const QString &s) {
-  stringstream ss;
-  ss << s.toUtf8().data();
-  float f;
-  ss >> f;
-  size.setW(f);
-}
-void SizeEditor::changeH(const QString &s) {
-  stringstream ss;
-  ss << s.toUtf8().data();
-  float f;
-  ss >> f;
-  size.setH(f);
-}
-void SizeEditor::changeD(const QString &s) {
-  stringstream ss;
-  ss << s.toUtf8().data();
-  float f;
-  ss >> f;
-  size.setD(f);
-}
 //================================================================================
 class SizeTableItem: public TulipTableWidgetItem {
 private:
@@ -423,11 +354,14 @@ void SizeTableItem::setSize(const Size &s) {
   setText(SizeType::toString(s).c_str());
 }
 QWidget *SizeTableItem::createEditor(QWidget* parent) const {
-  SizeEditor *w = new SizeEditor(size, parent);
+  SizeWidget *w = new SizeWidget(parent);
+  w->setSize(size);
+  w->setFocusPolicy(Qt::StrongFocus);
+  w->setAutoFillBackground(true);
   return w;
 }
 void SizeTableItem::setContentFromEditor(QWidget *editor) {
-  setSize(((SizeEditor *) editor)->getSize());
+  setSize(((SizeWidget *) editor)->size());
 }
 
 void SizeTableItem::setTextFromTulip(const std::string& data) {
@@ -438,74 +372,6 @@ void SizeTableItem::setTextFromTulip(const std::string& data) {
   }
 }
 
-//void SizeTableItem::setData(int role, const QVariant & value) {
-//	if (role != TULIPDATAROLE)
-//		TulipTableWidgetItem::setData(role, value);
-//	Size s;
-//	if (SizeType::fromString(s, value.toString().toStdString()))
-//		size = s;
-//}
-//
-//QVariant SizeTableItem::data(int role) const {
-//	if (role != TULIPDATAROLE)
-//		return TulipTableWidgetItem::data(role);
-//	return QVariant(QString::fromStdString(SizeType::toString(size)));
-//}
-//================================================================================
-CoordEditor::CoordEditor(const Coord &c, QWidget *parent) :
-  QWidget(parent), coord(c) {
-  QHBoxLayout *layout = new QHBoxLayout(this);
-  layout->setSpacing(3);
-  layout->setMargin(0);
-  QDoubleValidator *validator = new QDoubleValidator(this);
-  stringstream ss;
-  ss << coord.getX() << " " << coord.getY() << " " << coord.getZ();
-  for (int i = 0; i < 3; ++i) {
-    string str;
-    ss >> str;
-    edit[i] = new QLineEdit(str.c_str(), this);
-    edit[i]->setValidator(validator);
-    edit[i]->setFrame(true);
-    edit[i]->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-    layout->addWidget(edit[i]);
-  }
-  connect(edit[0], SIGNAL(textChanged(const QString &)), this, SLOT(changeX(const QString &)));
-  connect(edit[1], SIGNAL(textChanged(const QString &)), this, SLOT(changeY(const QString &)));
-  connect(edit[2], SIGNAL(textChanged(const QString &)), this, SLOT(changeZ(const QString &)));
-  setFocusPolicy(Qt::StrongFocus);
-}
-
-CoordEditor::~CoordEditor() {
-}
-
-Coord CoordEditor::getCoord() const {
-  return coord;
-}
-void CoordEditor::setFocus() {
-  edit[0]->setFocus();
-}
-
-void CoordEditor::changeX(const QString &s) {
-  stringstream ss;
-  ss << s.toUtf8().data();
-  float f;
-  ss >> f;
-  coord.setX(f);
-}
-void CoordEditor::changeY(const QString &s) {
-  stringstream ss;
-  ss << s.toUtf8().data();
-  float f;
-  ss >> f;
-  coord.setY(f);
-}
-void CoordEditor::changeZ(const QString &s) {
-  stringstream ss;
-  ss << s.toUtf8().data();
-  float f;
-  ss >> f;
-  coord.setZ(f);
-}
 //================================================================================
 class CoordTableItem: public TulipTableWidgetItem {
 private:
@@ -545,11 +411,15 @@ void CoordTableItem::setCoord(const Coord &c) {
   setText(PointType::toString(c).c_str());
 }
 QWidget *CoordTableItem::createEditor(QTableWidget* table) const {
-  CoordEditor *w = new CoordEditor(coord, table->viewport());
+  CoordWidget *w = new CoordWidget(table->viewport());
+  w->setCoord(coord);
+  w->setFocusPolicy(Qt::StrongFocus);
+  w->setAutoFillBackground(true);
+  w->setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed);
   return w;
 }
 void CoordTableItem::setContentFromEditor(QWidget *editor) {
-  setCoord(((CoordEditor *) editor)->getCoord());
+  setCoord(((CoordWidget *) editor)->coord());
 }
 //================================================================================
 LabelEditor::LabelEditor(const QString &label, QWidget *parent) :

@@ -81,6 +81,9 @@ ThreadedComputeProperty.cpp
 SnapshotDialog.cpp
 PropertyCreationDialog.cpp
 TulipSettings.cpp
+ColorButton.cpp
+CoordWidget.cpp
+SizeWidget.cpp
 )
 
 set(tulip-qt_UI
@@ -107,6 +110,8 @@ set(tulip-qt_UI
      ../designer/CSVImportWizard.ui
      ../designer/SnapshotDialog.ui
      ../designer/PropertyCreationDialog.ui
+     ../designer/CoordWidget.ui
+     ../designer/SizeWidget.ui
 )
 
 set(tulip-qt_MOC
@@ -150,6 +155,9 @@ set(tulip-qt_MOC
     ../include/tulip/SmallMultiplesView.h
     ../include/tulip/SnapshotDialog.h
     ../include/tulip/PropertyCreationDialog.h
+    ../include/tulip/ColorButton.h
+    ../include/tulip/CoordWidget.h
+    ../include/tulip/SizeWidget.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)

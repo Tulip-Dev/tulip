@@ -79,6 +79,9 @@ INSTALL(FILES
   tulip/SnapshotDialog.h
   tulip/PropertyCreationDialog.h
   tulip/TulipSettings.h
+  tulip/ColorButton.h
+  tulip/CoordWidget.h
+  tulip/SizeWidget.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_qt_dev
 )
