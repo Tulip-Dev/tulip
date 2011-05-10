@@ -84,6 +84,8 @@ TulipSettings.cpp
 ColorButton.cpp
 CoordWidget.cpp
 SizeWidget.cpp
+FileNameEditorWidget.cpp
+VectorEditionWidget.cpp
 )
 
 set(tulip-qt_UI
@@ -112,6 +114,8 @@ set(tulip-qt_UI
      ../designer/PropertyCreationDialog.ui
      ../designer/CoordWidget.ui
      ../designer/SizeWidget.ui
+     ../designer/FileNameEditorWidget.ui
+     ../designer/VectorEditionWidget.ui
 )
 
 set(tulip-qt_MOC
@@ -158,6 +162,8 @@ set(tulip-qt_MOC
     ../include/tulip/ColorButton.h
     ../include/tulip/CoordWidget.h
     ../include/tulip/SizeWidget.h
+    ../include/tulip/FileNameEditorWidget.h
+    ../include/tulip/VectorEditionWidget.h
 )
 
 IF(QT_VERSION_MINOR GREATER 3)

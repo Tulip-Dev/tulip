@@ -2,7 +2,7 @@
 #define COORDWIDGET_H
 #include <QtGui/QWidget>
 #include <tulip/Coord.h>
-#include <tulip/TlpQtTools.h>
+#include <tulip/tulipconf.h>
 
 namespace Ui {
     class CoordWidget;
@@ -13,7 +13,7 @@ namespace tlp{
   /**
   * @brief Simple Coord edition widget.
   **/
-    class CoordWidget : public QWidget
+    class TLP_QT_SCOPE CoordWidget : public QWidget
     {
         Q_OBJECT
     public:

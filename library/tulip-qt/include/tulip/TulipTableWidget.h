@@ -58,41 +58,8 @@ public:
 
 };
 
-class TLP_QT_SCOPE FilenameEditor: public QWidget {
-Q_OBJECT
-	;Q_PROPERTY(QString fileName READ fileName WRITE setFileName)
-	;Q_PROPERTY(QString filter READ filter WRITE setFilter)
-	;
-
-public:
-	FilenameEditor(QWidget *);
-	~FilenameEditor();
-
-	QString fileName() const;
-	QString filter() const;
-    QString getBasePath() const;
-
-public slots:
-	void setFileName(const QString &);
-	void setFilter(const QString &);
-    void setBasePath(const QString &);
-
-signals:
-	void fileNameChanged(const QString &);
-
-private slots:
-	void buttonPressed();
-
-private:
-	QLineEdit *lineedit;
-	QPushButton *button;
-	QString fileFilter;
-    QString basePath;
-};
-
 class LabelEditor: public QWidget {
 Q_OBJECT
-  ;
 
 private:
   QString label;

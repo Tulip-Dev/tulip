@@ -58,6 +58,7 @@
 #include "tulip/ColorButton.h"
 #include "tulip/SizeWidget.h"
 #include "tulip/CoordWidget.h"
+#include "tulip/FileNameEditorWidget.h"
 
 #define COLORTABLEITEM_RTTI 1001
 #define FILETABLEITEM_RTTI  1002
@@ -202,75 +203,7 @@ void ColorTableItem::setContentFromEditor(QWidget *w) {
   setText(
       ColorType::toString(Color(qRed(color), qGreen(color), qBlue(color), qAlpha(color))).c_str());
 }
-//================================================================================
-FilenameEditor::FilenameEditor(QWidget *parent) :
-  QWidget(parent),basePath("./") {
-  QHBoxLayout *layout = new QHBoxLayout(this);
-  layout->setMargin(0);
-  lineedit = new QLineEdit(this);
-  lineedit->setFrame(false);
-  lineedit->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
-  connect(lineedit, SIGNAL(textChanged(const QString &)), this,
-      SIGNAL(fileNameChanged(const QString &)));
-  layout->addWidget(lineedit);
-  button = new QPushButton("...", this);
-  button->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding));
-  button->setFixedWidth(button->fontMetrics().width(" ... "));
-  layout->addWidget(button);
-  connect(button, SIGNAL(clicked()), this, SLOT(buttonPressed()));
-  setFocusProxy(lineedit);
-}
-FilenameEditor::~FilenameEditor() {
-}
-QString FilenameEditor::fileName() const {
-  return lineedit->text();
-}
-void FilenameEditor::setFileName(const QString &s) {
-  lineedit->setText(s);
-}
-QString FilenameEditor::filter() const {
-  return fileFilter;
-}
-void FilenameEditor::setFilter(const QString &f) {
-  fileFilter = f;
-}
-QString FilenameEditor::getBasePath() const {
-  return basePath;
-}
-void FilenameEditor::setBasePath(const QString &f) {
-  basePath = f;
-}
-void FilenameEditor::buttonPressed() {
-  QFileDialog *dlg = new QFileDialog(this, "Choose a file", basePath, fileFilter);
-  dlg->setModal(true);
-  dlg->setFileMode(QFileDialog::ExistingFile);
-  if (dlg->exec() == QDialog::Accepted) {
-    QString file = dlg->selectedFiles().first();
-    if (!file.isNull()) {
-      //QStringList currentDir = QStringList::split(QDir::separator(), QDir::currentDirPath(), true);
-      //QStringList filePath = QStringList::split(QDir::separator(), QFileInfo(file).dirPath(true), true);
-      QStringList currentDir = QDir::currentPath().split(QDir::separator());
-      QStringList filePath = QFileInfo(file).dir().absolutePath().split(QDir::separator());
-      QString relativePath = "";
-      while ((!currentDir.empty() && !filePath.empty()) && (currentDir.front()
-          == filePath.front())) {
-        currentDir.pop_front();
-        filePath.pop_front();
-      }
-      while (!currentDir.empty()) {
-        relativePath += "..";
-        relativePath += QDir::separator();
-        currentDir.pop_front();
-      }
-      if (!filePath.empty())
-        relativePath += filePath.join((const QString) (QChar) QDir::separator())
-        + QDir::separator();
-      setFileName(relativePath + QFileInfo(file).fileName());
-    }
-  }
-  delete dlg;
-  // button->setDown(false);
-}
+
 //================================================================================
 class FileTableItem: public TulipTableWidgetItem {
 public:
@@ -286,14 +219,15 @@ FileTableItem::FileTableItem(QString s, int type) :
 FileTableItem::~FileTableItem() {
 }
 QWidget *FileTableItem::createEditor(QTableWidget* table) const {
-  FilenameEditor *w = new FilenameEditor(table->viewport());
+  FileNameEditorWidget *w = new FileNameEditorWidget(table->viewport());
   w->setFilter("Images (*.png *.jpeg *.jpg *.bmp)");
   w->setFileName(text());
   w->setBasePath(TulipBitmapDir.c_str());
+  w->setAutoFillBackground(true);
   return w;
 }
 void FileTableItem::setContentFromEditor(QWidget *w) {
-  QString s = ((FilenameEditor *) w)->fileName();
+  QString s = ((FileNameEditorWidget *) w)->fileName();
   if (!s.isNull()) {
 #ifdef _WIN32
     // hack for fix of sf bug #3023677
@@ -318,9 +252,10 @@ FileTableFontItem::FileTableFontItem(QString s) :
   FileTableItem(s, FILETABLEFONTITEM_RTTI) {
 }
 QWidget *FileTableFontItem::createEditor(QTableWidget* table) const {
-  FilenameEditor *w = new FilenameEditor(table->viewport());
+  FileNameEditorWidget *w = new FileNameEditorWidget(table->viewport());
   w->setFilter("Font (*.ttf)");
   w->setFileName(text());
+  w->setAutoFillBackground(true);
   return w;
 }
 

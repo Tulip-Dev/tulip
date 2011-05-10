@@ -82,6 +82,10 @@ INSTALL(FILES
   tulip/ColorButton.h
   tulip/CoordWidget.h
   tulip/SizeWidget.h
+  tulip/FileNameEditorWidget.h
+  tulip/TulipQVariantBuilder.h
+  tulip/FileNameEditorWidget.h
+  tulip/VectorEditionWidget.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_qt_dev
 )

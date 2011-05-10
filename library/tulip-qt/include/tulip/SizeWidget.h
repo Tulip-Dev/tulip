@@ -3,6 +3,8 @@
 
 #include <QtGui/QWidget>
 #include <tulip/Size.h>
+#include <tulip/tulipconf.h>
+
 namespace Ui {
     class SizeWidget;
 }
@@ -10,7 +12,7 @@ namespace tlp{
     /**
   * @brief Simple Size edition widget.
   **/
-    class SizeWidget : public QWidget
+    class TLP_QT_SCOPE SizeWidget : public QWidget
     {
         Q_OBJECT
     public:

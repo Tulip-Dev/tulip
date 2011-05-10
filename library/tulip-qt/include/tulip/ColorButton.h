@@ -20,7 +20,7 @@
 #define COLORBUTTON_H
 
 #include <QtGui/QPushButton>
-
+#include <tulip/tulipconf.h>
 /**
   * @brief The ColorButton widget provides a push button to display and allow user selection of a color.
   *
@@ -28,7 +28,7 @@
   **/
 
 namespace tlp{
-    class ColorButton: public QPushButton {
+    class TLP_QT_SCOPE ColorButton: public QPushButton {
         Q_OBJECT
         Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     public:
