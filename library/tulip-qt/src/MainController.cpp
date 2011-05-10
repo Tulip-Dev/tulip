@@ -125,12 +125,12 @@ namespace tlp {
     for (;it!=PropertyPluginManager<TemplateAlgorithm<TPROPERTY> >::objMap().end();++it)
       insertInMenu(menu, it->first.c_str(), it->second.factory->getGroup(), groupMenus, nGroups,receiver,slot);
   }
-  template <typename TFACTORY, typename TMODULE>
+  
   void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
-    typename PluginManager<TemplateAlgorithm<TMODULE>, PropertyContext>::ObjectCreator::const_iterator it;
+    typename PluginManager<Algorithm, AlgorithmContext>::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
-    for (it= PropertyPluginManager<TemplateAlgorithm<TMODULE> >::objMap().begin();it != PropertyPluginManager<TemplateAlgorithm<TMODULE> >::objMap().end();++it)
+    for (it= AlgorithmManager::objMap().begin();it != AlgorithmManager::objMap().end();++it)
       insertInMenu(menu, it->first.c_str(), it->second.factory->getGroup(), groupMenus, nGroups,receiver,slot);
   }
   typedef std::vector<node> NodeA;
@@ -731,7 +731,7 @@ namespace tlp {
     buildPropertyMenu<LayoutProperty>(*layoutMenu, this, SLOT(changeLayout()));
     buildPropertyMenu<DoubleProperty>(*metricMenu, this, SLOT(changeMetric()));
     buildPropertyMenu<BooleanProperty>(*selectMenu, this, SLOT(changeSelection()));
-    buildMenuWithContext<AlgorithmFactory, Algorithm>(*generalMenu, this, SLOT(applyAlgorithm()));
+    buildMenuWithContext(*generalMenu, this, SLOT(applyAlgorithm()));
 
     if (selectMenu->actions().count()>0)
       algorithmMenu->addMenu(selectMenu);
