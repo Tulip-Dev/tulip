@@ -17,7 +17,7 @@
  *
  */
 //====================================================================================
-#include <iostream>
+#include <tulip/PluginManager.h>
 #include <tulip/AbstractPluginInfo.h>
 
 template<typename KEY, typename VALUE>
@@ -39,12 +39,12 @@ private:
 };
 
 template<class ObjectType, class Context>
-tlp::Iterator<std::string>* tlp::PluginManager< ObjectType, Context>::availablePlugins() {
+tlp::Iterator<std::string>* tlp::PluginManager< ObjectType, Context>::availablePlugins() const {
   return new StlMapKeyIterator<std::string, PluginDescription>(objMap.begin(), objMap.end());
 }
 
 template<class ObjectType, class Context>
-bool tlp::PluginManager< ObjectType, Context>::pluginExists(const std::string &pluginName) {
+bool tlp::PluginManager< ObjectType, Context>::pluginExists(const std::string &pluginName) const {
   return (objMap.find(pluginName) != objMap.end());
 }
 
@@ -52,11 +52,7 @@ template<class ObjectType, class Context>
 void tlp::PluginManager<ObjectType,Context>::registerPlugin(FactoryInterface<ObjectType, Context> *objectFactory) {
   std::string pluginName = objectFactory->getName();
   if (!pluginExists(pluginName)) {
-    PluginDescription description;
-    description.factory = objectFactory;
-
     ObjectType *withParam=objectFactory->createPluginObject(Context());
-    description.parameters = withParam->getParameters();
     
     // loop over dependencies
     // to demangle the class names
@@ -66,8 +62,11 @@ void tlp::PluginManager<ObjectType,Context>::registerPlugin(FactoryInterface<Obj
       const char *factoryDepName = (*itD).factoryName.c_str();
       (*itD).factoryName = tlp::demangleTlpClassName(factoryDepName);
     }
+    
+    PluginDescription description;
+    description.factory = objectFactory;
+    description.parameters = withParam->getParameters();
     description.dependencies = dependencies;
-
     objMap[pluginName] = description;
     
     delete withParam;
@@ -95,31 +94,32 @@ void tlp::PluginManager<ObjectType,Context>::removePlugin(const std::string &nam
 }
 
 template<class ObjectType, class Context>
-ObjectType * tlp::PluginManager<ObjectType,Context>::getPluginObject(const std::string& name, Context c) {
-  typename ObjectCreator::iterator it;
-  it=objMap.find(name);
-  if (it!=objMap.end()) return (*it).second.factory->createPluginObject(c);
+ObjectType * tlp::PluginManager<ObjectType,Context>::getPluginObject(const std::string& name, Context c) const {
+  typename ObjectCreator::const_iterator it = objMap.find(name);
+  if (it!=objMap.end()) {
+    return (*it).second.factory->createPluginObject(c);
+  }
   return 0;
 }
 
 template<class ObjectType, class Context>
-tlp::StructDef tlp::PluginManager<ObjectType,Context>::getPluginParameters(std::string name) {
+const tlp::StructDef tlp::PluginManager<ObjectType,Context>::getPluginParameters(std::string name) const {
   assert(objMap.find(name)!=objMap.end());
-  return objMap[name].parameters;
+  return objMap.at(name).parameters;
 }
 
 template<class ObjectType, class Context>
-std::string tlp::PluginManager<ObjectType,Context>::getPluginRelease(std::string name) {
+std::string tlp::PluginManager<ObjectType,Context>::getPluginRelease(std::string name) const {
   assert(objMap.find(name)!=objMap.end());
-  return objMap[name].factory->getRelease();
+  return objMap.at(name).factory->getRelease();
 }
 
 template<class ObjectType, class Context>
-std::list<tlp::Dependency> tlp::PluginManager<ObjectType,Context>::getPluginDependencies(std::string name) {
+std::list<tlp::Dependency> tlp::PluginManager<ObjectType,Context>::getPluginDependencies(std::string name) const {
   assert(objMap.find(name)!=objMap.end());
-  return objMap[name].dependencies;
+  return objMap.at(name).dependencies;
 }
 
-template<class ObjectType, class Context> std::string tlp::PluginManager<ObjectType,Context>::getPluginsClassName() {
+template<class ObjectType, class Context> std::string tlp::PluginManager<ObjectType,Context>::getPluginsClassName() const {
   return demangleTlpClassName(typeid(ObjectType).name());
 }
