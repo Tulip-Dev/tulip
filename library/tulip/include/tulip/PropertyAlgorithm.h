@@ -94,7 +94,7 @@ public :
 };
 
 template<class Property>
-class TemplateAlgorithm : public PropertyAlgorithm {
+class TLP_SCOPE TemplateAlgorithm : public PropertyAlgorithm {
   public:
     Property* result;
     virtual ~TemplateAlgorithm(){}
@@ -118,6 +118,16 @@ typedef TemplateAlgorithm<ColorProperty> ColorAlgorithm;
 typedef TemplateAlgorithm<DoubleProperty> DoubleAlgorithm;
 typedef TemplateAlgorithm<StringProperty> StringAlgorithm;
 typedef TemplateAlgorithm<BooleanProperty> BooleanAlgorithm;
+
+#ifdef _MSC_VER
+template class tlp::TemplateAlgorithm<tlp::SizeProperty>;
+template class tlp::TemplateAlgorithm<tlp::IntegerProperty>;
+template class tlp::TemplateAlgorithm<tlp::LayoutProperty>;
+template class tlp::TemplateAlgorithm<tlp::ColorProperty>;
+template class tlp::TemplateAlgorithm<tlp::DoubleProperty>;
+template class tlp::TemplateAlgorithm<tlp::StringProperty>;
+template class tlp::TemplateAlgorithm<tlp::BooleanProperty>;
+#endif
 
 // #include <tulip/PropertyAlgorithm.h>
 /*@}*/
