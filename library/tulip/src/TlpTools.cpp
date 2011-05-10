@@ -189,54 +189,6 @@ void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *lo
   }
 }  
 
-void tlp::loadPluginsCheckDependencies(tlp::PluginLoader* loader) {
-  // plugins dependencies loop
-  bool depsNeedCheck;
-  do {
-    map<string, PluginManagerInterface *>::const_iterator it =
-      PluginManagerInterface::allFactories->begin();
-    depsNeedCheck = false;
-    // loop over factories
-    for (; it != PluginManagerInterface::allFactories->end(); ++it) {
-      PluginManagerInterface *tfi = (*it).second;
-      // loop over plugins
-      Iterator<string> *itP = tfi->availablePlugins();
-      while(itP->hasNext()) {
-	string pluginName = itP->next();
-	list<Dependency> dependencies = tfi->getPluginDependencies(pluginName);
-	list<Dependency>::const_iterator itD = dependencies.begin();
-	// loop over dependencies
-	for (; itD != dependencies.end(); ++itD) {
-	  string factoryDepName = (*itD).factoryName;
-	  string pluginDepName = (*itD).pluginName;
-	  if (!PluginManagerInterface::pluginExists(factoryDepName, pluginDepName)) {
-	    if (loader)
-	      loader->aborted(pluginName, tfi->getPluginsClassName() +
-			      " '" + pluginName + "' will be removed, it depends on missing " +
-			      factoryDepName + " '" + pluginDepName + "'.");
-	    tfi->removePlugin(pluginName);
-	    depsNeedCheck = true;
-	    break;
-	  }
-	  string release = (*PluginManagerInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
-	  string releaseDep = (*itD).pluginRelease;
-	  if (getMajor(release) != getMajor(releaseDep) ||
-	      getMinor(release) != getMinor(releaseDep)) {
-	    if (loader)
-	      loader->aborted(pluginName, tfi->getPluginsClassName() +
-			      " '" + pluginName + "' will be removed, it depends on release " +
-			      releaseDep + " of " + factoryDepName + " '" + pluginDepName + "' but " +
-			      release + " is loaded.");
-	    tfi->removePlugin(pluginName);
-	    depsNeedCheck = true;
-	    break;
-	  }
-	}
-      } delete itP;
-    }
-  } while (depsNeedCheck);
-}
-
 //=========================================================
 void tlp::loadPlugins(PluginLoader *plug, std::string folder) {
   vector<string> paths;
