@@ -155,7 +155,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/ThreadedComputeProperty.h
 )
 
-QT4_ADD_RESOURCES(RCC_SRCS ../designer/TulipQtResource.qrc)
+QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipQtResource.qrc)
 
 ADD_DEFINITIONS(-DQT_DLL)
 ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)

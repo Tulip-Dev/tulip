@@ -31,7 +31,7 @@ class LockLabel : public QLabel {
 public :
   LockLabel():QLabel(),locked(true){
     installEventFilter(this);
-    setPixmap(QPixmap(":/i_locked.png"));
+    setPixmap(QPixmap(":/tulip/qt/icons/i_locked.png"));
   }
 
   bool isLocked(){
@@ -45,7 +45,7 @@ protected :
         setPixmap(QPixmap(":/i_unlocked.png"));
         locked=false;
       }else{
-        setPixmap(QPixmap(":/i_locked.png"));
+        setPixmap(QPixmap(":/tulip/qt/icons/i_locked.png"));
         locked=true;
       }
       return true;

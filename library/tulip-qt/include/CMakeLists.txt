@@ -1,5 +1,3 @@
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tulip)
-
 INSTALL(FILES
 	tulip/TulipTableWidget.h 
 	tulip/GlMainWidget.h 
@@ -33,17 +31,12 @@ INSTALL(FILES
 	tulip/SGHierarchyWidget.h 
 	tulip/GWOverviewWidget.h 
 	tulip/TlpQtTools.h 
-	tulip/SGHierarchyWidgetPlugin.h 
-	tulip/GlMainWidgetPlugin.h 
-	tulip/ElementPropertiesWidgetPlugin.h 
-	tulip/GWOverviewWidgetPlugin.h 
-	tulip/PropertyWidgetPlugin.h 
 	tulip/QtProgress.h 
-        tulip/PluginProgressWidget.h
+  tulip/PluginProgressWidget.h
 	tulip/Controller.h 
 	tulip/ControllerAlgorithmTools.h
-    tulip/ControllerViewsTools.h
-    tulip/ControllerViewsManager.h
+  tulip/ControllerViewsTools.h
+  tulip/ControllerViewsManager.h
 	tulip/MainController.h 
 	tulip/View.h 
 	tulip/AbstractView.h 

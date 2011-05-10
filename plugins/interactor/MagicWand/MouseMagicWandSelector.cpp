@@ -43,7 +43,7 @@ bool tlp::MouseMagicWandSelector::eventFilter(QObject* widget, QEvent* e)
     bool hoveringOverNode = glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge) && type == NODE;
     if(e->type() == QEvent::MouseMove) {    
       if (hoveringOverNode) {
-        glMainWidget->setCursor(QCursor(QPixmap(":/i_magic.png")));
+        glMainWidget->setCursor(QCursor(QPixmap(":/tulip/qt/icons/i_magic.png")));
       }
       else {
         glMainWidget->setCursor(Qt::ArrowCursor);

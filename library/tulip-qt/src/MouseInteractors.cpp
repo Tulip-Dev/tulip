@@ -130,7 +130,7 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     if(e->type() == QEvent::MouseMove) {    
       if (glMainWidget->doSelect(qMouseEv->x(), qMouseEv->y(), type, tmpNode, tmpEdge)) {
-        glMainWidget->setCursor(QCursor(QPixmap(":/i_del.png")));
+        glMainWidget->setCursor(QCursor(QPixmap(":/tulip/qt/icons/i_del.png")));
       }
       else {
         glMainWidget->setCursor(Qt::ArrowCursor);
