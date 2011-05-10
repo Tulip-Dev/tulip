@@ -34,7 +34,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorSelection():NodeLinkDiagramComponentInteractor(":/i_selection.png","Select nodes/edges in a rectangle"){
+  InteractorSelection():NodeLinkDiagramComponentInteractor(":/tulip/qt/icons/i_selection.png","Select nodes/edges in a rectangle"){
     setPriority(3);
     setConfigurationWidgetText(QString("<h3>Selection interactor</h3>")+
                    "Select on rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.<br/><br/>"+

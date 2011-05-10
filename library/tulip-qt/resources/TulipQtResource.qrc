@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/tulip/qt/icons">
+        <file>i_addedge.png</file>
+        <file>i_addnode.png</file>
+        <file>i_bends.png</file>
+        <file>i_del.png</file>
+        <file>i_magic.png</file>
+        <file>i_move.png</file>
+        <file>i_navigation.png</file>
+        <file>i_select.png</file>
+        <file>i_selection.png</file>
+        <file>i_zoom.png</file>
+        <file>i_redo.png</file>
+        <file>i_undo.png</file>
+        <file>i_snapshot.png</file>
+        <file>i_locked.png</file>
+        <file>i_unlocked.png</file>
+    </qresource>
+    <qresource prefix="/tulip/qt/ui">
+        <file>arrow_two_head.png</file>
+        <file>down.png</file>
+        <file>left.png</file>
+        <file>right.png</file>
+        <file>up.png</file>
+    </qresource>
+</RCC>
