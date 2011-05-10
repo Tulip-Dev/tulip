@@ -149,7 +149,7 @@ void TulipApp::startTulip() {
       textWidget->setText(QString(errors.c_str()));
       errorDlg->exec();
     }
-  if(ControllerFactory::factory->objMap.empty()){
+  if(ControllerManager::objMap().empty()){
     QMessageBox::critical(this,tr("No controller found"),tr("No controller was found in Tulip plugins directory.\n Tulip cannot work without a controller."));
     exit(-1);
   }
@@ -222,9 +222,9 @@ void TulipApp::startTulip() {
   OpenGlErrorViewer *oldViewer=GlTextureManager::getInst().setErrorViewer(new QtOpenGlErrorViewer(this));
   delete oldViewer;
 
-  if(ControllerFactory::factory->objMap.size() < 2) {
+  if(ControllerManager::objMap().size() < 2) {
     controllerAutoLoad=false;
-    string name = ControllerFactory::factory->objMap.begin()->first;
+    string name = ControllerManager::objMap().begin()->first;
     createController(name, newName());
     currentTabIndex=0;
     Controller::currentActiveController(tabIndexToController[currentTabIndex]);
@@ -317,7 +317,7 @@ void TulipApp::fileNew(QAction *action) {
 bool TulipApp::fileNew(bool fromMenu) {
 string name;
   if(fromMenu) {
-    name = ControllerFactory::factory->objMap.begin()->first;
+    name = ControllerManager::objMap().begin()->first;
 }
   else {
     name=defaultControllerName;
@@ -415,7 +415,7 @@ bool TulipApp::createController(const string &name,const string &graphName) {
 
     loadInterface(-1);
 
-    Controller *newController = ControllerFactory::factory->getPluginObject(name, NULL);
+    Controller *newController = ControllerManager::getPluginObject(name, NULL);
     toolBar->setWindowTitle("Tool Bar");
     graphToolBar->setWindowTitle("Interactors Tool Bar");
     newController->attachMainWindow(MainWindowFacade(this,toolBar,graphToolBar,newWorkspace));
@@ -453,7 +453,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
 			  string author, string comments) {
 
   DataSet dataSet;
-  StructDef parameter = ExportModuleFactory::factory->getPluginParameters(plugin);
+  StructDef parameter = ExportModuleManager::getPluginParameters(plugin);
   parameter.buildDefaultDataSet(dataSet);
   DataSet controller;
   DataSet controllerData;
@@ -560,8 +560,8 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     }else {
       noPlugin = false;
       s = QString::null;
-      StructDef sysDef = ImportModuleFactory::factory->getPluginParameters(*plugin);
-      StructDef *params = ControllerAlgorithmTools::getPluginParameters(ImportModuleFactory::factory, *plugin);
+      StructDef sysDef = ImportModuleManager::getPluginParameters(*plugin);
+      StructDef *params = ControllerAlgorithmTools::getPluginParameters(PluginManager<ImportModule, AlgorithmContext>::getInstance(), *plugin);
       params->buildDefaultDataSet( dataSet );
       string title = string("Enter Import parameters: ") + plugin->c_str();
       cancel = !tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
@@ -602,7 +602,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
 
       PluginManager<Controller, ControllerContext*>::ObjectCreator::const_iterator it;
       vector<string> controllersName;
-      for (it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
+      for (it=ControllerManager::objMap().begin();it != ControllerManager::objMap().end();++it) {
         controllersName.push_back(it->first);
       }
 
@@ -629,7 +629,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
         // if we have only one controller : auto load it
 
         // If controller doesn't exist : open a popup
-        if(!ControllerFactory::factory->pluginExists(controllerName)) {
+        if(!ControllerManager::pluginExists(controllerName)) {
           QMessageBox::critical(this,"Error",QString("The \"")+controllerName.c_str()+"\" perspective associated to the file\n"
                                 "you are trying to load in currently not\n"+
                                 "installed in your copy of Tulip.\n"+
@@ -785,18 +785,18 @@ template <typename TFACTORY, typename TMODULE>
     typename PluginManager<TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
-    for (it= FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.begin();it != FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.end();++it)
+    for (it= StaticPluginManager<TMODULE, AlgorithmContext>::objMap().begin();it != StaticPluginManager<TMODULE, AlgorithmContext>::objMap().end();++it)
       insertInMenu(menu, it->first.c_str(), it->second.factory->getGroup(), groupMenus, nGroups,receiver,slot);
   }
 //**********************************************************************
 void TulipApp::buildMenus() {
 // In this case doesn't add sub menu in new menu
-  if(ControllerFactory::factory->objMap.size() > 1) {
+  if(ControllerManager::objMap().size() > 1) {
     //Add new menu in File menu
     newMenu=new QMenu("New");
     connect(newMenu, SIGNAL(triggered(QAction *)), SLOT(fileNew(QAction*)));
     fileMenu->insertMenu(fileOpenAction,newMenu);
-    for (PluginManager<Controller, ControllerContext*>::ObjectCreator::const_iterator it=ControllerFactory::factory->objMap.begin();it != ControllerFactory::factory->objMap.end();++it) {
+    for (PluginManager<Controller, ControllerContext*>::ObjectCreator::const_iterator it=ControllerManager::objMap().begin();it != ControllerManager::objMap().end();++it) {
       newMenu->addAction(it->first.c_str());
     }
   }else{

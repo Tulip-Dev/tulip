@@ -51,7 +51,7 @@ using namespace std;
 
 namespace tlp {
 
-  BaseGraphicsViewComponent::BaseGraphicsViewComponent(const string &realViewName):realViewName(realViewName),graphicsView(NULL),baseView(ViewFactory::factory->getPluginObject(realViewName, NULL)){}
+  BaseGraphicsViewComponent::BaseGraphicsViewComponent(const string &realViewName):realViewName(realViewName),graphicsView(NULL),baseView(ViewManager::getPluginObject(realViewName, NULL)){}
 
   BaseGraphicsViewComponent::~BaseGraphicsViewComponent() {}
 

@@ -54,6 +54,9 @@ class ExportModuleFactory:public FactoryInterface<ExportModule,AlgorithmContext>
 public:
   virtual ~ExportModuleFactory() {}
 };
+
+typedef StaticPluginManager<ExportModule,AlgorithmContext> ExportModuleManager;
+
 /*@}*/
 }
 #endif

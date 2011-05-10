@@ -143,18 +143,6 @@ void tlp::initTulipLib(const char* appDirPath) {
 
   TulipBitmapDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/bitmaps/";
 
-  // initialize factories
-  PropertyFactory<TemplateAlgorithm<SizeProperty> >::initFactory();
-  PropertyFactory<TemplateAlgorithm<IntegerProperty> >::initFactory();
-  PropertyFactory<TemplateAlgorithm<LayoutProperty> >::initFactory();
-  PropertyFactory<TemplateAlgorithm<ColorProperty> >::initFactory();
-  PropertyFactory<TemplateAlgorithm<DoubleProperty> >::initFactory();
-  PropertyFactory<TemplateAlgorithm<StringProperty> >::initFactory();
-  PropertyFactory<TemplateAlgorithm<BooleanProperty> >::initFactory();
-  AlgorithmFactory::initFactory();
-  ImportModuleFactory::initFactory();
-  ExportModuleFactory::initFactory();
-
   // initialize serializers
   initTypeSerializers();
 }

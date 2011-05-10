@@ -55,11 +55,6 @@ void AppStartUp::initTulip(TulipPluginLoader *loader, std::string &errors) {
 
   tlp::loadPlugins(loader); // library side plugins
 
-  ControllerFactory::initFactory();
-  ViewFactory::initFactory();
-  GlyphFactory::initFactory();
-  InteractorFactory::initFactory();
-
   tlp::loadPlugins(loader, "/interactors"); // interactors plugins
   tlp::loadPlugins(loader, "/glyphs"); // glyphs plugins
   tlp::loadPlugins(loader, "/view"); // view plugins

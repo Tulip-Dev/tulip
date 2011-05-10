@@ -34,6 +34,7 @@
 #include <tulip/Coord.h>
 #include <tulip/Matrix.h>
 #include <tulip/AbstractPluginInfo.h>
+#include <tulip/PluginManager.h>
 
 namespace tlp {
 typedef Matrix<float, 4> MatrixGL;
@@ -77,6 +78,8 @@ public:
 	}
 };
 
+typedef tlp::StaticPluginManager<EdgeExtremityGlyph, EdgeExtremityGlyphContext*> EdgeExtremityGlyphPluginManager;
+
 class TLP_GL_SCOPE EdgeExtremityGlyphFrom3DGlyph: public EdgeExtremityGlyph {
 public:
 	EdgeExtremityGlyphFrom3DGlyph(EdgeExtremityGlyphContext *gc);
@@ -119,8 +122,7 @@ class C##T##Factory:public tlp::T##Factory	 \
 {                                                \
 public:                                          \
   C##T##Factory(){				 \
-    initFactory(); 			         \
-    factory->registerPlugin(this);	         \
+    EdgeExtremityGlyphPluginManager::registerPlugin(this);	         \
   }       					 \
   std::string getName() const { return std::string(N);}	 \
   std::string getGroup() const { return std::string(G);}	 \

@@ -92,37 +92,12 @@ public:
   virtual const StructDef getPluginParameters(std::string name) const = 0;
 
   /**
-   * @brief Gets the release number of the given plug-in.
-   *
-   * @param name The name of the plug-in to retrieve the version number of.
-   * @return :string The version number, ussually formatted as X[.Y], where X is the major, and Y the minor.
-   **/
-  virtual std::string getPluginRelease(std::string name) const = 0;
-
-  /**
    * @brief Gets the dependencies of a plug-in.
    *
    * @param name The name of the plug-in to retrieve the dependencies of.
    * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The list of dependencies of the plug-in.
    **/
   virtual std::list<tlp::Dependency> getPluginDependencies(std::string name) const = 0;
-
-  /**
-   * @brief Gets the class name for the plug-in's registered class.
-   *  If the class is in the tlp namespace, the 'tlp::' prefix is removed.
-   *
-   * @return :string The class name of the plug-in.
-   **/
-  virtual std::string getPluginsClassName() const = 0;
-
-  /**
-   * @brief Removes a plug-in from this factory.
-   * This is usefull when a plug-in has unmet dependencies, or appears more than once.
-   *
-   * @param name The name of the plug-in to remove.
-   * @return void
-   **/
-  virtual void removePlugin(const std::string& name)=0;
 
   /**
    * @brief Adds a factory to a static map of factories.
@@ -200,6 +175,32 @@ public:
       }
     } while (depsNeedCheck);
   }
+
+  protected:
+    /**
+    * @brief Gets the release number of the given plug-in.
+    *
+    * @param name The name of the plug-in to retrieve the version number of.
+    * @return :string The version number, ussually formatted as X[.Y], where X is the major, and Y the minor.
+    **/
+    virtual std::string getPluginRelease(std::string name) const = 0;
+
+    /**
+     * @brief Removes a plug-in from this factory.
+     * This is usefull when a plug-in has unmet dependencies, or appears more than once.
+     *
+     * @param name The name of the plug-in to remove.
+     * @return void
+     **/
+    virtual void removePlugin(const std::string& name)=0;
+
+    /**
+     * @brief Gets the class name for the plug-in's registered class.
+     *  If the class is in the tlp namespace, the 'tlp::' prefix is removed.
+     *
+     * @return :string The class name of the plug-in.
+     **/
+    virtual std::string getPluginsClassName() const = 0;
 };
 
 template <class PluginObject, class PluginContext>
@@ -227,8 +228,11 @@ private:
   
 public:
 
-  PluginManager() {
-    PluginManagerInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
+  static PluginManager<ObjectType, Context>* getInstance() {
+    if(_instance == NULL) {
+      _instance = new PluginManager<ObjectType, Context>();
+    }
+    return _instance;
   }
 
   typedef std::map<std::string , PluginDescription> ObjectCreator;
@@ -251,16 +255,69 @@ public:
   Iterator<std::string>* availablePlugins() const;
   bool pluginExists(const std::string& pluginName) const;
   const StructDef getPluginParameters(std::string name) const;
-  std::string getPluginRelease(std::string name) const;
   std::list<tlp::Dependency> getPluginDependencies(std::string name) const;
-  std::string getPluginsClassName() const;
   void registerPlugin(FactoryInterface<ObjectType, Context>* objectFactory);
+protected:
+
+  static PluginManager<ObjectType, Context>* _instance;
+  
+  PluginManager() {
+    PluginManagerInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
+  }
+  
   void removePlugin(const std::string &name);
+  std::string getPluginRelease(std::string name) const;
+  std::string getPluginsClassName() const;
 };
 
-template <class PropertyAlgorithm> class PropertyFactory : public FactoryInterface<PropertyAlgorithm, PropertyContext> {
+template <class ObjectType, class Context>
+PluginManager<ObjectType, Context>* PluginManager<ObjectType, Context>::_instance = 0;
+
+
+/**
+ * @brief This class adds nothing but syntactic sugar. But it's extra-sweet, so it's OK.
+ * It allows to write StaticPluginManager<T, U>::function() instead of PluginManager<T, U>::getInstace()->function().
+ * It is usefull only because there are typedefs for each plugin type to make this even more sugary (e.g. Algorithm has a typedef PluginManager<Algorithm, AlgorithmContext> AlgorithmManager.
+ * Thus, it is possible (and recommended) to write AlgorithmManager::function(); as it 
+ **/
+template<class ObjectType, class Context>
+class StaticPluginManager {
+public:
+  static Iterator<std::string>* availablePlugins() {
+    return PluginManager<ObjectType, Context>::getInstance()->availablePlugins();
+  }
+  static bool pluginExists(const std::string& pluginName) {
+    return PluginManager<ObjectType, Context>::getInstance()->pluginExists(pluginName);
+  }
+  static const StructDef getPluginParameters(std::string name) {
+    return PluginManager<ObjectType, Context>::getInstance()->getPluginParameters(name);
+  }
+  static std::list<tlp::Dependency> getPluginDependencies(std::string name) {
+    return PluginManager<ObjectType, Context>::getInstance()->getPluginDependencies(name);
+  }
+  static void registerPlugin(FactoryInterface<ObjectType, Context>* objectFactory) {
+    PluginManager<ObjectType, Context>::getInstance()->registerPlugin(objectFactory);
+  }
+
+  static ObjectType *getPluginObject(const std::string& name, Context p) {
+    return PluginManager<ObjectType, Context>::getInstance()->getPluginObject(name, p);
+  }
+
+  static const typename PluginManager<ObjectType, Context>::ObjectCreator& objMap() {
+    return PluginManager<ObjectType, Context>::getInstance()->objMap;
+  }
+};
+
+template <class PropertyAlgorithm>
+class PropertyFactory : public FactoryInterface<PropertyAlgorithm, PropertyContext> {
 public:
   virtual ~PropertyFactory() {}
+};
+
+template <class PropertyAlgorithm>
+class PropertyPluginManager : public StaticPluginManager<PropertyAlgorithm, PropertyContext> {
+public:
+  virtual ~PropertyPluginManager() {}
 };
 
 /*@}*/

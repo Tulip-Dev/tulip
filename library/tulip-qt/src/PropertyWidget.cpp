@@ -343,8 +343,7 @@ void PropertyWidget::setAllNodeValue() {
 
   if (editedPropertyName == "viewShape") {
     QStringList tmp;
-    GlyphFactory::initFactory();
-    Iterator<string> *itS=GlyphFactory::factory->availablePlugins();
+    Iterator<string> *itS=GlyphPluginManager::availablePlugins();
     while (itS->hasNext()){
       tmp.append(QString(itS->next().c_str()));
     }delete itS;
@@ -488,8 +487,7 @@ void  PropertyWidget::setAllEdgeValue() {
   else if(editedPropertyName == "viewSrcAnchorShape" || editedPropertyName == "viewTgtAnchorShape"){
 	  QStringList tmp;
 	  tmp.append("NONE");
-	  EdgeExtremityGlyphFactory::initFactory();
-	  Iterator<string> *itS=EdgeExtremityGlyphFactory::factory->availablePlugins();
+	  Iterator<string> *itS=EdgeExtremityGlyphPluginManager::availablePlugins();
 	  while (itS->hasNext()){
 		  tmp.append(QString(itS->next().c_str()));
 	  }delete itS;

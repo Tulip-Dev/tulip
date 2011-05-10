@@ -152,25 +152,8 @@ class FactoryInterface : public AbstractPluginInfo {
       assert(false);
       return NULL;
     }
-
-    /**
-     * @brief A static factory that is initialized when the library is loaded.
-     */
-    static tlp::PluginManager<PluginObject, PluginContext> *factory;
-
-    /**
-     * @brief This static initilization is called when the plug-in library is loaded, and registers the new plug-in in the Tulip plug-in system.
-     */
-    static void initFactory() {
-      if (!factory) {
-        factory = new tlp::PluginManager<PluginObject, PluginContext>();
-      }
-    }
   };
-
-template <class PluginObject, class PluginContext>
-PluginManager<PluginObject, PluginContext>* FactoryInterface<PluginObject, PluginContext>::factory = 0;
-  
+ 
 typedef _DEPRECATED AbstractPluginInfo Plugin;
 
 /*@}*/

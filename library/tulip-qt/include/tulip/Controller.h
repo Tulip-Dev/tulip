@@ -243,6 +243,7 @@ namespace tlp {
     virtual ~ControllerFactory() {}
   };
 
+  typedef StaticPluginManager<Controller, ControllerContext*> ControllerManager;
 }
 
 #define CONTROLLERPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
@@ -250,8 +251,7 @@ class C##T##Factory:public tlp::T##Factory	 \
 {                                                \
 public:                                          \
   C##T##Factory(){				 \
-    initFactory(); 			         \
-    factory->registerPlugin(this);	         \
+    ControllerManager::registerPlugin(this);	         \
   }       					 \
   std::string getName() const { return std::string(N);}	 \
   std::string getGroup() const { return std::string(G);}	 \

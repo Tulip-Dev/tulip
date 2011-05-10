@@ -151,6 +151,7 @@ namespace tlp {
     virtual ~InteractorFactory() {}
   };
 
+  typedef StaticPluginManager<Interactor, InteractorContext*> InteractorPluginsManager;
 }
 
 #define INTERACTORPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
@@ -158,8 +159,7 @@ class C##T##Factory:public T##Factory	 \
 {                                                \
 public:                                          \
   C##T##Factory(){				 \
-    initFactory(); 			         \
-    factory->registerPlugin(this);	         \
+    InteractorPluginsManager::registerPlugin(this);	         \
   }       					 \
   std::string getName() const { return std::string(N);}	 \
   std::string getGroup() const { return std::string(G);}	 \

@@ -121,17 +121,16 @@ namespace tlp {
     typename PluginManager<TemplateAlgorithm<TPROPERTY>, PropertyContext >::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
-    PluginManager<TemplateAlgorithm<TPROPERTY>, PropertyContext >* factory = PropertyFactory<TemplateAlgorithm<TPROPERTY> >::factory;
-    it= factory->objMap.begin();
-    for (;it!=PropertyFactory<TemplateAlgorithm<TPROPERTY> >::factory->objMap.end();++it)
+    it= PropertyPluginManager<TemplateAlgorithm<TPROPERTY> >::objMap().begin();
+    for (;it!=PropertyPluginManager<TemplateAlgorithm<TPROPERTY> >::objMap().end();++it)
       insertInMenu(menu, it->first.c_str(), it->second.factory->getGroup(), groupMenus, nGroups,receiver,slot);
   }
   template <typename TFACTORY, typename TMODULE>
   void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
-    typename PluginManager<TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
+    typename PluginManager<TemplateAlgorithm<TMODULE>, PropertyContext>::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
-    for (it= FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.begin();it != FactoryInterface<TMODULE, AlgorithmContext>::factory->objMap.end();++it)
+    for (it= PropertyPluginManager<TemplateAlgorithm<TMODULE> >::objMap().begin();it != PropertyPluginManager<TemplateAlgorithm<TMODULE> >::objMap().end();++it)
       insertInMenu(menu, it->first.c_str(), it->second.factory->getGroup(), groupMenus, nGroups,receiver,slot);
   }
   typedef std::vector<node> NodeA;
@@ -808,7 +807,7 @@ namespace tlp {
 
     connect(viewMenu, SIGNAL(triggered(QAction *)), SLOT(createView(QAction*)));
     PluginManager<View, ViewContext*>::ObjectCreator::const_iterator it;
-    for (it=ViewFactory::factory->objMap.begin();it != ViewFactory::factory->objMap.end();++it) {
+    for (it=ViewManager::objMap().begin();it != ViewManager::objMap().end();++it) {
       viewMenu->addAction(it->first.c_str());
     }
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,viewMenu);
