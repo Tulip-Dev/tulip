@@ -7,12 +7,10 @@ Download the latest versions of MinGW-*.exe, MSYS-*.exe, msysDTK-*.exe
 from http://prdownloads.sourceforge.net/mingw. Install them as listed above,
 and accept the proposed mount point during the installation process of MSYS.
 
-2- Install Qt 4.Y.Z Windows Open Source Edition
-----------------------------------------------------------
-You have to download and install Qt from the official website:
-http://qt.nokia.com/products/platform/qt-for-windows/
-
-You can alternatively compile Qt yourself.
+2- Install the last Qt 4.Y.Z Windows LGPL Edition
+-------------------------------------------------
+You have to download and install Qt from the official download page
+http://qt.nokia.com/downloads/
 
 3- Install the needed librairies
 --------------------------------
@@ -30,16 +28,15 @@ You can install them in the MinGW directory, or in an independent directory,
 though you will have to tell CMake where to find these using CMAKE_LIBRARY_PATH and CMAKE_INCLUDE_PATH
 if you choose the latter.
 
-4- Configure Tulip
-------------------
+4- Configure Tulip with CMake
+-----------------------------
 Using the CMake GUI, find the tulip source directory, create a build directory, and hit configure.
-You will be rpesented with a dialog asking what kind of generator you want to use.
+You will be presented with a dialog asking what kind of generator you want to use.
 Choose MSYS makefiles or Visual Studio, depending on what toolchain you are using.
 
 5a- Build Tulip with MinGW
--------------
+--------------------------
 run
-
 > make
 then
 > make install
@@ -60,3 +57,4 @@ Then run
 > make package
 
 Using Visual Studio, right-click on the 'package' project, and click 'generate'.
+
