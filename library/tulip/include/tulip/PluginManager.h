@@ -61,10 +61,10 @@ namespace tlp {
  * TemplateFactories register themselves in the Tulip plug-in system, and Tulip lists the plug-ins of each PluginManager.
  * 
  **/
-class PluginManagerInterface {
+class TLP_SCOPE PluginManagerInterface {
 public:
-  static TLP_SCOPE std::map< std::string, PluginManagerInterface* > *allFactories;
-  static TLP_SCOPE PluginLoader *currentLoader;
+  static std::map< std::string, PluginManagerInterface* > *allFactories;
+  static PluginLoader *currentLoader;
 
   virtual ~PluginManagerInterface(){}
 
