@@ -22,6 +22,7 @@
 #include <QtCore/qobject.h>
 #include <QtGui/QAction>
 
+#include <tulip/MethodFactory.h>
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginManager.h>
@@ -146,39 +147,10 @@ namespace tlp {
   class TLP_QT_SCOPE InteractorContext {
   };
 
-  class TLP_QT_SCOPE InteractorFactory: public tlp::FactoryInterface<Interactor,InteractorContext*> {
-  public:
-    virtual ~InteractorFactory() {}
-  };
-
-  typedef StaticPluginManager<Interactor, InteractorContext*> InteractorPluginsManager;
+  typedef StaticPluginManager<Interactor, InteractorContext*> InteractorPluginManager;
 }
 
-#define INTERACTORPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
-class C##T##Factory:public T##Factory	 \
-{                                                \
-public:                                          \
-  C##T##Factory(){				 \
-    InteractorPluginsManager::registerPlugin(this);	         \
-  }       					 \
-  std::string getName() const { return std::string(N);}	 \
-  std::string getGroup() const { return std::string(G);}	 \
-  std::string getAuthor() const {return std::string(A);}	 \
-  std::string getDate() const {return std::string(D);}	 \
-  std::string getInfo() const {return std::string(I);}	 \
-  std::string getRelease() const {return std::string(R);}\
-  std::string getTulipRelease() const {return std::string(TULIP_RELEASE);} \
-  T * createPluginObject(tlp::InteractorContext *)		     \
-  {						 \
-    C *tmp = new C();				 \
-    return ((T *) tmp);			 \
-  }						 \
-};                                               \
-extern "C" {                                            \
-  C##T##Factory C##T##FactoryInitializer;               \
-}
-
-#define INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,G) INTERACTORPLUGINFACTORY(Interactor,C,N,A,D,I,R,G)
+#define INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,G) POINTERCONTEXTPLUGINFACTORY(Interactor,C,N,A,D,I,R,G)
 #define INTERACTORPLUGIN(C,N,A,D,I,R) INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,"")
 
 /*

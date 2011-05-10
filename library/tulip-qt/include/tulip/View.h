@@ -22,6 +22,7 @@
 #include <QtGui/QWidget>
 #include <QtGui/QMainWindow>
 
+#include <tulip/MethodFactory.h>
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginManager.h>
@@ -266,48 +267,10 @@ namespace tlp {
   class TLP_QT_SCOPE ViewContext {
   };
 
-  /**
-   * @brief This class should only be used by the plugin macros.
-   **/
-  class TLP_QT_SCOPE ViewFactory: public FactoryInterface<View, ViewContext*> {
-  public:
-    virtual ~ViewFactory() {}
-  };
-
-  typedef StaticPluginManager<View, ViewContext*> ViewManager;
+  typedef StaticPluginManager<View, ViewContext*> ViewPluginManager;
 }
 
-#define VIEWPLUGINFACTORY(T,C,N,A,D,I,R,G)     \
-class C##T##Factory:public tlp::T##Factory	 \
-{                                                \
-public:                                          \
-  C##T##Factory(){				 \
-    ViewManager::registerPlugin(this);	         \
-  }       					 \
-  std::string getName() const { return std::string(N);}	\
-  std::string getGroup() const { return std::string(G);}	 \
-  std::string getAuthor() const {return std::string(A);}	 \
-  std::string getDate() const {return std::string(D);}	 \
-  std::string getInfo() const {return std::string(I);}	 \
-  std::string getRelease() const {return std::string(R);}\
-  std::string getTulipRelease() const {return std::string(TULIP_RELEASE);}	\
-  tlp::T * createPluginObject(tlp::ViewContext *)			\
-  {						 \
-  	C *tmp = new C();				 \
-    return ((tlp::T *) tmp);			 \
-  }						 \
-};                                               \
-extern "C" {                                            \
-  C##T##Factory C##T##FactoryInitializer;               \
-}
-
-#define VIEWPLUGINOFGROUP(C,N,A,D,I,R,G) VIEWPLUGINFACTORY(View,C,N,A,D,I,R,G)
+#define VIEWPLUGINOFGROUP(C,N,A,D,I,R,G) POINTERCONTEXTPLUGINFACTORY(View,C,N,A,D,I,R,G)
 #define VIEWPLUGIN(C,N,A,D,I,R) VIEWPLUGINOFGROUP(C,N,A,D,I,R,"")
 
 #endif
-
-
-
-
-
-

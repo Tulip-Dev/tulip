@@ -100,17 +100,12 @@ namespace tlp {
     virtual Coord getAnchor(const Coord &vector) const;
   };
 
-  class TLP_GL_SCOPE GlyphFactory: public FactoryInterface<Glyph,GlyphContext *> {
-  public:
-    virtual ~GlyphFactory() {}
-  };
-
   typedef StaticPluginManager<Glyph, GlyphContext*> GlyphPluginManager;
 
 }
 
 #define GPLUGINFACTORY(T,C,N,A,D,I,R,ID,G)     \
-class C##T##Factory:public tlp::T##Factory	 \
+class C##T##Factory:public tlp::FactoryInterface<T, T##Context*>	 \
 {                                                \
 public:                                          \
   C##T##Factory(){				 \
