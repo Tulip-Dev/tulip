@@ -138,8 +138,8 @@ public:                                          \
   std::string getTulipRelease() const {return std::string(TULIP_RELEASE);} \
   tlp::T * createPluginObject(tlp::T##Context *)    \
   {            \
-  C *tmp = new C();        \
-  return ((tlp::T *) tmp);       \
+    C *tmp = new C();        \
+    return ((tlp::T *) tmp);       \
   }            \
   };                                               \
   extern "C" {                                            \
@@ -163,8 +163,8 @@ public:                                          \
   int    getId() const {return ID;}    \
   tlp::T * createPluginObject(tlp::T##Context *gc)   \
   {            \
-  C *tmp = new C(gc);        \
-  return ((tlp::T *) tmp);       \
+    C *tmp = new C(gc);        \
+    return ((tlp::T *) tmp);       \
   }            \
   };                                               \
   extern "C" {                                            \

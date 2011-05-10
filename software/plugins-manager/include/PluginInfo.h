@@ -106,23 +106,23 @@ namespace tlp {
   public :
 
     static std::string getPluginDisplayType(const std::string &name) {
-      if(PropertyPluginManager<SizeProperty>::pluginExists(name))
+      if(PropertyPluginManager<TemplateAlgorithm<SizeProperty> >::pluginExists(name))
         return "Size";
-      if(PropertyPluginManager<IntegerProperty>::pluginExists(name))
+      if(PropertyPluginManager<TemplateAlgorithm<IntegerProperty> >::pluginExists(name))
         return "Integer";
-      if(PropertyPluginManager<LayoutProperty>::pluginExists(name))
+      if(PropertyPluginManager<TemplateAlgorithm<LayoutProperty> >::pluginExists(name))
         return "Layout";
-      if(PropertyPluginManager<ColorProperty>::pluginExists(name))
+      if(PropertyPluginManager<TemplateAlgorithm<ColorProperty> >::pluginExists(name))
         return "Color";
-      if(PropertyPluginManager<DoubleProperty>::pluginExists(name))
+      if(PropertyPluginManager<TemplateAlgorithm<DoubleProperty> >::pluginExists(name))
         return "Metric";
-      if(PropertyPluginManager<StringProperty>::pluginExists(name))
+      if(PropertyPluginManager<TemplateAlgorithm<StringProperty> >::pluginExists(name))
         return "Label";
-      if(PropertyPluginManager<BooleanProperty>::pluginExists(name))
+      if(PropertyPluginManager<TemplateAlgorithm<BooleanProperty> >::pluginExists(name))
         return "Selection";
-      if(PropertyPluginManager<ImportModuleFactory>::pluginExists(name))
+      if(ImportModuleManager::pluginExists(name))
         return "Import";
-      if(PropertyPluginManager<ExportModuleFactory>::pluginExists(name))
+      if(ExportModuleManager::pluginExists(name))
         return "Export";
           if (AlgorithmManager::pluginExists(name))
         return "General";
