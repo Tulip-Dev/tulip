@@ -12,19 +12,20 @@
 <book><title>Tulip User Manual</title>
 
 <chapter id="introduction"><title>Introduction</title>
-        <para>The research by the information visualization community clearly shows that using a visual representation of data-sets enables faster analysis by the end users. Tulip, created by David AUBER, is a contribution to the area of information visualization, <quote>InfoViz</quote>. Even if the Tulip framework enables the visualization, the drawing and the edition of small graphs, all the parts of the framework have been built in order to be able to visualize graphs having up to 10.000.000 elements. A visualization system must draw and display huge graphs, enables to navigate through geometric operations as well as extracts subgraphs of the data and allows to change the representation of the results obtained by filtering. 
+
+        <para>Research by the information visualization community has shown that using a visual representation of datasets enables faster analysis by the end users. Tulip, created by David AUBER, is a contribution to the area of information visualization, <quote>InfoViz</quote>. Even if Tulip enables the visualization, drawing and edition of small graphs, all the parts of the framework have been built with large graphs in mind, up to 10.000.000 elements. A visualization system must draw and display huge graphs, enables to navigate through geometric operations as well as extract subgraphs and allow to change the representation by filtering.
         <graphic fileref="images/tulip-screen.png"/>
         </para>
 
-<!--It manages graphs with up to 1,000,000 elements (node and edges). It provides a rich set of basic services for operations on graphs: metric computation, node and edge, layout, selection, extraction of view and subgraphs, and labeling of nodes and edges with arbitrary sets of attributes. Further operations related to the application domain are provided by means of a software plugins. Any program using Tulip can add to the core features by providing its own domain-speciﬁc plugins.
+<!--It manages graphs with up to 1,000,000 elements (node and edges). It provides a rich set of basic services for operations on graphs: metric computation, node and edge, layout, selection, extraction of view and subgraphs, and labeling of nodes and edges with arbitrary sets of attributes. Further operations related to the application domain are provided by means of a software plugins. Any program using Tulip can add to the core features by providing its own domain-specific plugins.
 
 The Tulip framework ... The main relevant features in this software are:
-     - a powerful kernel in terms of time and memory complexity, other.
-     - extensibility by plugins without recompiling,
-     - possibility to map texture without loosing “performance”,
+     - a powerful kernel in terms of time and memory complexity
+     - extensibility by plugins (i.e. without recompiling),
+     - possibility to map texture without loosing performance,
      - easy management of clusters.
 
-Managing the colors of nodes in the interface is done by mapping attribute values on RGB or HSV values or size values. Two methods are proposed :
+Managing the colors of nodes in the interface is done by mapping attribute values on RGB or HSV values or size values. Two methods are proposed:
      - linear mapping,
      - distribution mapping.
 1 Introduction-->
