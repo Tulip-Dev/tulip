@@ -96,6 +96,10 @@ public:
 
 typedef StaticPluginManager<Algorithm,AlgorithmContext> AlgorithmManager;
 
+#ifdef WIN32
+template class TLP_SCOPE PluginManager<Algorithm,AlgorithmContext>;
+#endif
+
 /*@}*/
 
 }

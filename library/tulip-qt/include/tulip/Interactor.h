@@ -148,6 +148,10 @@ namespace tlp {
   };
 
   typedef StaticPluginManager<Interactor, InteractorContext*> InteractorPluginManager;
+
+  #ifdef WIN32
+	template class TLP_QT_SCOPE PluginManager<Interactor,InteractorContext *>;
+  #endif
 }
 
 #define INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,G) POINTERCONTEXTPLUGINFACTORY(Interactor,C,N,A,D,I,R,G)

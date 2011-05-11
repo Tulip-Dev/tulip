@@ -119,17 +119,16 @@ typedef TemplateAlgorithm<DoubleProperty> DoubleAlgorithm;
 typedef TemplateAlgorithm<StringProperty> StringAlgorithm;
 typedef TemplateAlgorithm<BooleanProperty> BooleanAlgorithm;
 
-#ifdef _MSC_VER
-template class tlp::TemplateAlgorithm<tlp::SizeProperty>;
-template class tlp::TemplateAlgorithm<tlp::IntegerProperty>;
-template class tlp::TemplateAlgorithm<tlp::LayoutProperty>;
-template class tlp::TemplateAlgorithm<tlp::ColorProperty>;
-template class tlp::TemplateAlgorithm<tlp::DoubleProperty>;
-template class tlp::TemplateAlgorithm<tlp::StringProperty>;
-template class tlp::TemplateAlgorithm<tlp::BooleanProperty>;
+#ifdef WIN32
+template class TLP_SCOPE tlp::PropertyPluginManager<SizeAlgorithm>;
+template class TLP_SCOPE tlp::PropertyPluginManager<IntegerAlgorithm>;
+template class TLP_SCOPE tlp::PropertyPluginManager<LayoutAlgorithm>;
+template class TLP_SCOPE tlp::PropertyPluginManager<ColorAlgorithm>;
+template class TLP_SCOPE tlp::PropertyPluginManager<DoubleAlgorithm>;
+template class TLP_SCOPE tlp::PropertyPluginManager<StringAlgorithm>;
+template class TLP_SCOPE tlp::PropertyPluginManager<BooleanAlgorithm>;
 #endif
 
-// #include <tulip/PropertyAlgorithm.h>
 /*@}*/
 
 }

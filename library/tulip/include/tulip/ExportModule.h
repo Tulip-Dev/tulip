@@ -57,6 +57,10 @@ public:
 
 typedef StaticPluginManager<ExportModule,AlgorithmContext> ExportModuleManager;
 
+#ifdef WIN32
+template class TLP_SCOPE PluginManager<ExportModule,AlgorithmContext>;
+#endif
+
 /*@}*/
 }
 #endif

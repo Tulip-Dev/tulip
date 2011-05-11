@@ -127,7 +127,7 @@ namespace tlp {
   }
   
   void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
-    typename PluginManager<Algorithm, AlgorithmContext>::ObjectCreator::const_iterator it;
+    PluginManager<Algorithm, AlgorithmContext>::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
     for (it= AlgorithmManager::objMap().begin();it != AlgorithmManager::objMap().end();++it)

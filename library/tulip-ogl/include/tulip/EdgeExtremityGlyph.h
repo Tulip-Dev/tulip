@@ -74,6 +74,10 @@ protected:
 
 typedef tlp::StaticPluginManager<EdgeExtremityGlyph, EdgeExtremityGlyphContext*> EdgeExtremityGlyphPluginManager;
 
+#ifdef WIN32
+	template class TLP_GL_SCOPE PluginManager<EdgeExtremityGlyph,EdgeExtremityGlyphContext *>;
+#endif
+
 class TLP_GL_SCOPE EdgeExtremityGlyphFrom3DGlyph: public EdgeExtremityGlyph {
 public:
 	EdgeExtremityGlyphFrom3DGlyph(EdgeExtremityGlyphContext *gc);
