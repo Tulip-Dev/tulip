@@ -40,11 +40,13 @@ using namespace tlp;
 
 static std::string errorMsgs;
 
-static const int tipsNumber=3;
-static const std::string tips[tipsNumber] = {
-  "If you want to add new plugins to Tulip(algorithms, interactors, views), take a look at the plugin manager: <br>Menu : <b>Help -> Plugins</b>",
+static unsigned int tipsNumber = 0;
+static const char* tips[] = {
+  "If you want to download new Tulip plugins(algorithms, interactors, views), take a look at the plugin manager: <br>Menu : <b>Help -> Plugins</b>",
   "If you find a bug in tulip, please make a bug report on our sourceforge project page at: http://sourceforge.net/tracker/?group_id=61223",
-  "Tulip 3.5.0 increased performances on edge rendering by over 200%"
+  "OGDF layout plugins are now available in Tulip 3.6.0",
+  /* last one needs to be NULL */
+  NULL
 };
 
 void AppStartUp::initTulip(TulipPluginLoader *loader, std::string &errors) {
@@ -100,9 +102,11 @@ AppStartUp::AppStartUp(QWidget* parent) :
   movie->start();
   movie->stop();
 
+  // compute tipsNumber
+  while(tips[tipsNumber]) ++tipsNumber;
   srand ( time(NULL) );
   currentTipNumber=rand() % tipsNumber;
-  textBrowser->setHtml(tips[currentTipNumber].c_str());
+  textBrowser->setHtml(tips[currentTipNumber]);
 
   QSettings settings("TulipSoftware","Tulip");
   settings.beginGroup("Preference");
@@ -149,5 +153,5 @@ void AppStartUp::setLabel(string str) {
 
 void AppStartUp::nextTip() {
   currentTipNumber = (currentTipNumber + 1) % tipsNumber;
-  textBrowser->setHtml(tips[currentTipNumber].c_str());
+  textBrowser->setHtml(tips[currentTipNumber]);
 }
