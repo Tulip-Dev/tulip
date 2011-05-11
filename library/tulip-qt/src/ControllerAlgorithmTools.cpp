@@ -104,7 +104,7 @@ namespace tlp {
     bool   resultBool=true;
     if (query) {
       // plugin parameters dialog
-      StructDef *params = ControllerAlgorithmTools::getPluginParameters(PluginManager<TemplateAlgorithm<PROPERTY>, AlgorithmContext>::getInstance(), name);
+      StructDef *params = ControllerAlgorithmTools::getPluginParameters(PluginManager<TemplateAlgorithm<PROPERTY>, PropertyContext>::getInstance(), name);
       StructDef sysDef = PropertyPluginManager<TemplateAlgorithm<PROPERTY> >::getPluginParameters(name);
       params->buildDefaultDataSet(dataSet, graph );
       string title = string("Tulip Parameter Editor: ") + name;
@@ -156,7 +156,7 @@ namespace tlp {
 
 #else
       resultBool = graph->computeProperty(name, tmp, erreurMsg, myProgress, &dataSet);
-#endif    
+#endif
       graph->pop();
       if (updateLayout) {
         graph->removeAttribute("viewLayout");
