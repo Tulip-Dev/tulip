@@ -612,6 +612,7 @@ class TLP_SCOPE GraphEvent :public Event {
       TLP_REVERSE_EDGE, TLP_BEFORE_SET_ENDS, TLP_AFTER_SET_ENDS,
       TLP_ADD_SUBGRAPH, TLP_DEL_SUBGRAPH,
       TLP_ADD_LOCAL_PROPERTY, TLP_DEL_LOCAL_PROPERTY,
+      TLP_ADD_INHERITED_PROPERTY, TLP_DEL_INHERITED_PROPERTY,
       TLP_BEFORE_SET_ATTRIBUTE, TLP_AFTER_SET_ATTRIBUTE, TLP_REMOVE_ATTRIBUTE
     };
 
@@ -662,7 +663,7 @@ class TLP_SCOPE GraphEvent :public Event {
     }
 
     const std::string& getAttributeName() const {
-      assert(evtType > TLP_DEL_LOCAL_PROPERTY);
+      assert(evtType > TLP_DEL_INHERITED_PROPERTY);
       return *(info.name);
     }
 
