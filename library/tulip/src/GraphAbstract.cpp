@@ -378,6 +378,16 @@ void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface 
   notifyAddLocalProperty(name);
 }
 //=========================================================================
+void GraphAbstract::notifyAddInheritedProperty(const std::string& propName) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_INHERITED_PROPERTY, propName));
+}
+//=========================================================================
+void GraphAbstract::notifyDelInheritedProperty(const std::string& propName) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_INHERITED_PROPERTY, propName));
+}
+//=========================================================================
 Iterator<std::string>* GraphAbstract::getLocalProperties() {
   return propertyContainer->getLocalProperties();
 }

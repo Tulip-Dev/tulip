@@ -34,6 +34,7 @@ public:
   void tearDown();
 
   void testAddDel();
+  void testAddDelProperties();
   void testClear();
   void testOrderEdgeAndSwap();
   void testSubgraph();

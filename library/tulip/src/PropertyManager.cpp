@@ -139,6 +139,9 @@ void PropertyManager::setInheritedProperty(const string &str,
     if (str == metaGraphPropertyName)
       ((GraphAbstract *) graph)->metaGraphProperty = (GraphProperty *) p;
 
+    // graph observers notification
+    ((GraphAbstract *) graph)->notifyAddInheritedProperty(str);
+
     // loop on subgraphs
     Graph* sg;
     forEach(sg, graph->getSubGraphs()) {
@@ -208,6 +211,10 @@ void PropertyManager::delInheritedProperty(const string &str) {
   // if found remove from inherited properties
   if (it != inheritedProperties.end()) {
     inheritedProperties.erase(it);
+
+    // graph observers notification
+    ((GraphAbstract *) graph)->notifyDelInheritedProperty(str);
+
     // loop on subgraphs
     Graph* sg;
     forEach(sg, graph->getSubGraphs()) {
