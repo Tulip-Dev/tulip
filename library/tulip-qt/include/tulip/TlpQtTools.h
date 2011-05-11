@@ -47,6 +47,7 @@ Q_DECLARE_METATYPE(std::vector<int>)
 Q_DECLARE_METATYPE(std::vector<tlp::Size>)
 Q_DECLARE_METATYPE(std::vector<std::string>)
 
+
 namespace tlp {
 
   /**
