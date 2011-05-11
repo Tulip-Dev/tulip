@@ -25,7 +25,7 @@
 #include <tulip/MethodFactory.h>
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/TulipRelease.h>
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Vector.h>
 #include <tulip/AbstractPluginInfo.h>
@@ -267,10 +267,10 @@ namespace tlp {
   class TLP_QT_SCOPE ViewContext {
   };
 
-  typedef StaticPluginManager<View, ViewContext*> ViewPluginManager;
+  typedef StaticPluginLister<View, ViewContext*> ViewPluginLister;
 
   #ifdef WIN32
-	template class TLP_QT_SCOPE PluginManager<View,ViewContext *>;
+	template class TLP_QT_SCOPE PluginLister<View,ViewContext *>;
   #endif
 }
 

@@ -25,7 +25,7 @@
 #include <tulip/MethodFactory.h>
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/TulipRelease.h>
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 #include <tulip/InteractorManager.h>
 #include <tulip/AbstractPluginInfo.h>
 
@@ -147,10 +147,10 @@ namespace tlp {
   class TLP_QT_SCOPE InteractorContext {
   };
 
-  typedef StaticPluginManager<Interactor, InteractorContext*> InteractorPluginManager;
+  typedef StaticPluginLister<Interactor, InteractorContext*> InteractorPluginLister;
 
   #ifdef WIN32
-	template class TLP_QT_SCOPE PluginManager<Interactor,InteractorContext *>;
+	template class TLP_QT_SCOPE PluginLister<Interactor,InteractorContext *>;
   #endif
 }
 

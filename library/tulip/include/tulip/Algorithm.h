@@ -24,7 +24,7 @@
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
 #include <tulip/AbstractPluginInfo.h>
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 #include <tulip/MethodFactory.h>
 
 /**
@@ -87,17 +87,17 @@ public :
  * @brief A base class for algorithm plug-ins factory.
  * Each plug-in declares (through a macro) its own factory.
  * The factory the registers itself in the Tulip plug-in system (through the static initFactory() method when the library is loaded..
- * The actual registration is delegated to a PluginManager to factorize code.
+ * The actual registration is delegated to a PluginLister to factorize code.
  */
 class AlgorithmFactory:public FactoryInterface<Algorithm,AlgorithmContext>{
 public:
   virtual ~AlgorithmFactory() {}
 };
 
-typedef StaticPluginManager<Algorithm,AlgorithmContext> AlgorithmManager;
+typedef StaticPluginLister<Algorithm,AlgorithmContext> AlgorithmManager;
 
 #ifdef WIN32
-template class TLP_SCOPE PluginManager<Algorithm,AlgorithmContext>;
+template class TLP_SCOPE PluginLister<Algorithm,AlgorithmContext>;
 #endif
 
 /*@}*/

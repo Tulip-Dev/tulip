@@ -30,10 +30,10 @@ class TLP_QT_SCOPE Perspective : public WithParameter, public WithDependency {
 class TLP_QT_SCOPE PerspectiveContext {
 };
 
-typedef StaticPluginManager<Perspective, PerspectiveContext> PerspectivePluginManager;
+typedef StaticPluginLister<Perspective, PerspectiveContext> PerspectivePluginLister;
 
 #ifdef WIN32
-template class TLP_QT_SCOPE PluginManager<Perspective, PerspectiveContext>;
+template class TLP_QT_SCOPE PluginLister<Perspective, PerspectiveContext>;
 #endif
 }
 
@@ -42,7 +42,7 @@ class C##T##Factory:public tlp::T##Factory              \
 {                                                       \
 public:            \
   C##T##Factory(){          \
-    StaticPluginManager<tlp::T, tlp::T##Context>::registerPlugin(this);     \
+    StaticPluginLister<tlp::T, tlp::T##Context>::registerPlugin(this);     \
   }             \
   ~C##T##Factory(){}          \
   std::string getName() const { return std::string(N);} \

@@ -25,7 +25,7 @@
 
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/TulipRelease.h>
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 #include <tulip/Vector.h>
 #include "Interactor.h"
 #include <tulip/AbstractPluginInfo.h>
@@ -238,10 +238,10 @@ namespace tlp {
   class TLP_QT_SCOPE ControllerContext {
   };
 
-  typedef StaticPluginManager<Controller, ControllerContext*> ControllerPluginManager;
+  typedef StaticPluginLister<Controller, ControllerContext*> ControllerPluginLister;
 
 #ifdef WIN32
-  template class TLP_QT_SCOPE PluginManager<Controller,ControllerContext *>;
+  template class TLP_QT_SCOPE PluginLister<Controller,ControllerContext *>;
 #endif
 
 }

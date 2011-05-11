@@ -21,7 +21,7 @@
 namespace tlp {
   template <class PropertyAlgorithm> class PropertyFactory;
   template<class Property> class TemplateAlgorithm;
-  template <class PropertyAlgorithm> class PropertyPluginManager;
+  template <class PropertyAlgorithm> class PropertyPluginLister;
 }
 
 //================================================================================
@@ -121,7 +121,7 @@ bool tlp::Graph::computeProperty(const std::string &algorithm, PropertyType* pro
   circularCalls.insert(prop);
   tlp::PropertyContext tmpContext(context);
   tmpContext.propertyProxy = prop;
-  typename PropertyType::PAlgorithm *tmpAlgo = tlp::PropertyPluginManager<tlp::TemplateAlgorithm<PropertyType> >::getPluginObject(algorithm, tmpContext);
+  typename PropertyType::PAlgorithm *tmpAlgo = tlp::PropertyPluginLister<tlp::TemplateAlgorithm<PropertyType> >::getPluginObject(algorithm, tmpContext);
   if (tmpAlgo != 0) {
     result = tmpAlgo->check(msg);
     if (result) {

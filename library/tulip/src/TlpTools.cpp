@@ -155,9 +155,9 @@ ostream *tlp::getOgzstream(const char *name, int open_mode) {
   return new ogzstream(name, open_mode);
 }
 //=========================================================
-map<string, PluginManagerInterface* > *PluginManagerInterface::allFactories = 0;
+map<string, PluginListerInterface* > *PluginListerInterface::allFactories = 0;
 //==========================================================
-PluginLoader *PluginManagerInterface::currentLoader = NULL;
+PluginLoader *PluginListerInterface::currentLoader = NULL;
 //==========================================================
 void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader) {
   if (loader!=0)
@@ -165,7 +165,7 @@ void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *lo
 
   tlp::PluginLibraryLoader plLoader(dir, loader);
 
-  PluginManagerInterface::currentLoader = loader;
+  PluginListerInterface::currentLoader = loader;
   if (plLoader.hasPluginLibraryToLoad()) {
     while(plLoader.loadNextPluginLibrary(loader)) {
     }
@@ -192,7 +192,7 @@ void tlp::loadPlugins(PluginLoader *plug, std::string folder) {
 }
 //=========================================================
 bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {
-  PluginManagerInterface::currentLoader = plug;
+  PluginListerInterface::currentLoader = plug;
   if (plug)
     plug->loading(filename);
   return PluginLibraryLoader::loadPluginLibrary(filename, plug);

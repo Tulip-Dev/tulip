@@ -54,19 +54,19 @@ namespace tlp {
  *
  * It is used to list plug-ins that register themselves into it.
  * 
- * The PluginManager's role is to list plug-ins, and retrive their dependencies for Tulip to check if they are met.
+ * The PluginLister's role is to list plug-ins, and retrive their dependencies for Tulip to check if they are met.
  * The only check performed should be the unicity of a plug-in in the system.
  * 
- * Each Tulip plug-in has a factory, which needs to be registered into a PluginManager.
- * TemplateFactories register themselves in the Tulip plug-in system, and Tulip lists the plug-ins of each PluginManager.
+ * Each Tulip plug-in has a factory, which needs to be registered into a PluginLister.
+ * TemplateFactories register themselves in the Tulip plug-in system, and Tulip lists the plug-ins of each PluginLister.
  * 
  **/
-class TLP_SCOPE PluginManagerInterface {
+class TLP_SCOPE PluginListerInterface {
 public:
-  static std::map< std::string, PluginManagerInterface* > *allFactories;
+  static std::map< std::string, PluginListerInterface* > *allFactories;
   static PluginLoader *currentLoader;
 
-  virtual ~PluginManagerInterface(){}
+  virtual ~PluginListerInterface(){}
 
   /**
    * @brief Gets the list of plug-ins that registered themselves in this factory.
@@ -107,9 +107,9 @@ public:
    * @param name The name of the factory to add, used as key.   
    * @return void
    **/
-  static void addFactory(PluginManagerInterface *factory, const std::string &name)  {
+  static void addFactory(PluginListerInterface *factory, const std::string &name)  {
     if (!allFactories)
-      allFactories = new std::map<std::string, PluginManagerInterface*>();
+      allFactories = new std::map<std::string, PluginListerInterface*>();
     //std::cerr << name.c_str() << " factory added" << std::endl;
     (*allFactories)[name] = factory;
   }
@@ -131,11 +131,11 @@ public:
     // plugins dependencies loop
     bool depsNeedCheck;
     do {
-      std::map<std::string, PluginManagerInterface *>::const_iterator it = PluginManagerInterface::allFactories->begin();
+      std::map<std::string, PluginListerInterface *>::const_iterator it = PluginListerInterface::allFactories->begin();
       depsNeedCheck = false;
       // loop over factories
-      for (; it != PluginManagerInterface::allFactories->end(); ++  it) {
-        PluginManagerInterface *tfi = (*it).second;
+      for (; it != PluginListerInterface::allFactories->end(); ++  it) {
+        PluginListerInterface *tfi = (*it).second;
         // loop over plugins
         Iterator<std::string> *itP = tfi->availablePlugins();
         while(itP->hasNext()) {
@@ -146,7 +146,7 @@ public:
           for (; itD != dependencies.end(); ++itD) {
             std::string factoryDepName = (*itD).factoryName;
             std::string pluginDepName = (*itD).pluginName;
-            if (!PluginManagerInterface::pluginExists(factoryDepName, pluginDepName)) {
+            if (!PluginListerInterface::pluginExists(factoryDepName, pluginDepName)) {
               if (loader)
                 loader->aborted(pluginName, tfi->getPluginsClassName() +
                 " '" + pluginName + "' will be removed, it depends on missing " +
@@ -155,7 +155,7 @@ public:
               depsNeedCheck = true;
               break;
             }
-            std::string release = (*PluginManagerInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
+            std::string release = (*PluginListerInterface::allFactories)[factoryDepName]->getPluginRelease(pluginDepName);
             std::string releaseDep = (*itD).pluginRelease;
             if (getMajor(release) != getMajor(releaseDep) ||
               getMinor(release) != getMinor(releaseDep)) {
@@ -218,7 +218,7 @@ class FactoryInterface;
  * When constructed it registers itself into the factories map automatically.
  **/
 template<class ObjectType, class Context>
-class PluginManager: public PluginManagerInterface {
+class PluginLister: public PluginListerInterface {
 private:
   struct PluginDescription {
     FactoryInterface<ObjectType, Context>* factory;
@@ -228,9 +228,9 @@ private:
   
 public:
 
-  static PluginManager<ObjectType, Context>* getInstance() {
+  static PluginLister<ObjectType, Context>* getInstance() {
     if(_instance == NULL) {
-      _instance = new PluginManager<ObjectType, Context>();
+      _instance = new PluginLister<ObjectType, Context>();
     }
     return _instance;
   }
@@ -251,7 +251,7 @@ public:
    **/
   ObjectType *getPluginObject(const std::string& name, Context p) const;
 
-  //the following function are inherited from PluginManagerInterface, and by default inherit the doc.
+  //the following function are inherited from PluginListerInterface, and by default inherit the doc.
   Iterator<std::string>* availablePlugins() const;
   bool pluginExists(const std::string& pluginName) const;
   const StructDef getPluginParameters(std::string name) const;
@@ -259,10 +259,10 @@ public:
   void registerPlugin(FactoryInterface<ObjectType, Context>* objectFactory);
 protected:
 
-  static PluginManager<ObjectType, Context>* _instance;
+  static PluginLister<ObjectType, Context>* _instance;
   
-  PluginManager() {
-    PluginManagerInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
+  PluginLister() {
+    PluginListerInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
   }
   
   void removePlugin(const std::string &name);
@@ -271,40 +271,40 @@ protected:
 };
 
 template <class ObjectType, class Context>
-PluginManager<ObjectType, Context>* PluginManager<ObjectType, Context>::_instance = 0;
+PluginLister<ObjectType, Context>* PluginLister<ObjectType, Context>::_instance = 0;
 
 
 /**
  * @brief This class adds nothing but syntactic sugar. But it's extra-sweet, so it's OK.
- * It allows to write StaticPluginManager<T, U>::function() instead of PluginManager<T, U>::getInstace()->function().
- * It is usefull only because there are typedefs for each plugin type to make this even more sugary (e.g. Algorithm has a typedef PluginManager<Algorithm, AlgorithmContext> AlgorithmManager.
+ * It allows to write StaticPluginLister<T, U>::function() instead of PluginLister<T, U>::getInstace()->function().
+ * It is usefull only because there are typedefs for each plugin type to make this even more sugary (e.g. Algorithm has a typedef PluginLister<Algorithm, AlgorithmContext> AlgorithmManager.
  * Thus, it is possible (and recommended) to write AlgorithmManager::function(); as it 
  **/
 template<class ObjectType, class Context>
-class StaticPluginManager {
+class StaticPluginLister {
 public:
   static Iterator<std::string>* availablePlugins() {
-    return PluginManager<ObjectType, Context>::getInstance()->availablePlugins();
+    return PluginLister<ObjectType, Context>::getInstance()->availablePlugins();
   }
   static bool pluginExists(const std::string& pluginName) {
-    return PluginManager<ObjectType, Context>::getInstance()->pluginExists(pluginName);
+    return PluginLister<ObjectType, Context>::getInstance()->pluginExists(pluginName);
   }
   static const StructDef getPluginParameters(std::string name) {
-    return PluginManager<ObjectType, Context>::getInstance()->getPluginParameters(name);
+    return PluginLister<ObjectType, Context>::getInstance()->getPluginParameters(name);
   }
   static std::list<tlp::Dependency> getPluginDependencies(std::string name) {
-    return PluginManager<ObjectType, Context>::getInstance()->getPluginDependencies(name);
+    return PluginLister<ObjectType, Context>::getInstance()->getPluginDependencies(name);
   }
   static void registerPlugin(FactoryInterface<ObjectType, Context>* objectFactory) {
-    PluginManager<ObjectType, Context>::getInstance()->registerPlugin(objectFactory);
+    PluginLister<ObjectType, Context>::getInstance()->registerPlugin(objectFactory);
   }
 
   static ObjectType *getPluginObject(const std::string& name, Context p) {
-    return PluginManager<ObjectType, Context>::getInstance()->getPluginObject(name, p);
+    return PluginLister<ObjectType, Context>::getInstance()->getPluginObject(name, p);
   }
 
-  static const typename PluginManager<ObjectType, Context>::ObjectCreator& objMap() {
-    return PluginManager<ObjectType, Context>::getInstance()->objMap;
+  static const typename PluginLister<ObjectType, Context>::ObjectCreator& objMap() {
+    return PluginLister<ObjectType, Context>::getInstance()->objMap;
   }
 };
 
@@ -315,13 +315,13 @@ public:
 };
 
 template <class PropertyAlgorithm>
-class PropertyPluginManager : public StaticPluginManager<PropertyAlgorithm, PropertyContext> {
+class PropertyPluginLister : public StaticPluginLister<PropertyAlgorithm, PropertyContext> {
 public:
-  virtual ~PropertyPluginManager() {}
+  virtual ~PropertyPluginLister() {}
 };
 
 /*@}*/
 
 }
-#include "cxx/PluginManager.cxx"
+#include "cxx/PluginLister.cxx"
 #endif

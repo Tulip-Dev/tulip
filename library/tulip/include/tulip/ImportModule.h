@@ -23,7 +23,7 @@
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
 #include <tulip/AbstractPluginInfo.h>
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 
 /** \addtogroup plugins */ 
 namespace tlp {
@@ -77,10 +77,10 @@ public:
   virtual ~ImportModuleFactory() {}
 };
 
-typedef StaticPluginManager<ImportModule,AlgorithmContext> ImportModuleManager;
+typedef StaticPluginLister<ImportModule,AlgorithmContext> ImportModuleManager;
 
 #ifdef WIN32
-template class TLP_SCOPE PluginManager<ImportModule,AlgorithmContext>;
+template class TLP_SCOPE PluginLister<ImportModule,AlgorithmContext>;
 #endif
 
 /*@}*/

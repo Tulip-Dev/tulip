@@ -135,7 +135,7 @@ public:
   }
 };
 
-template<class ObjectType, class Context> class PluginManager;
+template<class ObjectType, class Context> class PluginLister;
 
 template <class PluginObject, class PluginContext>
 class FactoryInterface : public AbstractPluginInfo {

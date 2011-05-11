@@ -118,16 +118,16 @@ namespace tlp {
   //**********************************************************************
   template <typename TPROPERTY>
   void buildPropertyMenu(QMenu &menu, QObject *receiver, const char *slot) {
-    typename PluginManager<TemplateAlgorithm<TPROPERTY>, PropertyContext >::ObjectCreator::const_iterator it;
+    typename PluginLister<TemplateAlgorithm<TPROPERTY>, PropertyContext >::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
-    it= PropertyPluginManager<TemplateAlgorithm<TPROPERTY> >::objMap().begin();
-    for (;it!=PropertyPluginManager<TemplateAlgorithm<TPROPERTY> >::objMap().end();++it)
+    it= PropertyPluginLister<TemplateAlgorithm<TPROPERTY> >::objMap().begin();
+    for (;it!=PropertyPluginLister<TemplateAlgorithm<TPROPERTY> >::objMap().end();++it)
       insertInMenu(menu, it->first.c_str(), it->second.factory->getGroup(), groupMenus, nGroups,receiver,slot);
   }
   
   void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
-    PluginManager<Algorithm, AlgorithmContext>::ObjectCreator::const_iterator it;
+    PluginLister<Algorithm, AlgorithmContext>::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
     for (it= AlgorithmManager::objMap().begin();it != AlgorithmManager::objMap().end();++it)
@@ -806,8 +806,8 @@ namespace tlp {
     }
 
     connect(viewMenu, SIGNAL(triggered(QAction *)), SLOT(createView(QAction*)));
-    PluginManager<View, ViewContext*>::ObjectCreator::const_iterator it;
-    for (it=ViewPluginManager::objMap().begin();it != ViewPluginManager::objMap().end();++it) {
+    PluginLister<View, ViewContext*>::ObjectCreator::const_iterator it;
+    for (it=ViewPluginLister::objMap().begin();it != ViewPluginLister::objMap().end();++it) {
       viewMenu->addAction(it->first.c_str());
     }
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,viewMenu);
