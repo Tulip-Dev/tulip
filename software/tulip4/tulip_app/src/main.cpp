@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
   tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
   tlp::InteractorManager::getInst().loadInteractorPlugins();
 
-  tlp::PluginManagerInterface::checkLoadedPluginsDependencies(splashScreen);
+  tlp::PluginListerInterface::checkLoadedPluginsDependencies(splashScreen);
 
   QMap<QString,QString> abortedPlugins = splashScreen->abortedPlugins();
   delete splashScreen;
