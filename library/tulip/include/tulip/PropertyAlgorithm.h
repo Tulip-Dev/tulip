@@ -121,13 +121,13 @@ typedef TemplateAlgorithm<StringProperty> StringAlgorithm;
 typedef TemplateAlgorithm<BooleanProperty> BooleanAlgorithm;
 
 #ifdef WIN32
-template class TLP_SCOPE tlp::PropertyPluginManager<SizeAlgorithm>;
-template class TLP_SCOPE tlp::PropertyPluginManager<IntegerAlgorithm>;
-template class TLP_SCOPE tlp::PropertyPluginManager<LayoutAlgorithm>;
-template class TLP_SCOPE tlp::PropertyPluginManager<ColorAlgorithm>;
-template class TLP_SCOPE tlp::PropertyPluginManager<DoubleAlgorithm>;
-template class TLP_SCOPE tlp::PropertyPluginManager<StringAlgorithm>;
-template class TLP_SCOPE tlp::PropertyPluginManager<BooleanAlgorithm>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<SizeProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<IntegerProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<LayoutProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<ColorProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<DoubleProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<StringProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<BooleanProperty>, PropertyContext>;
 #endif
 
 /*@}*/
