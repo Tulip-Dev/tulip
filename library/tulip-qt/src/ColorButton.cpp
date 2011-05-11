@@ -54,7 +54,7 @@ void ColorButton::paintEvent(QPaintEvent *event) {
 }
 
 void ColorButton::askColor() {
-  QColor newColor(QColorDialog::getColor(_color, this));
+  QColor newColor(QColorDialog::getColor(_color, this,tr("Choose a color"), QColorDialog::ShowAlphaChannel));
   if (!newColor.isValid())
     return;
   setColor(newColor);
