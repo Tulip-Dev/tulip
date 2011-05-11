@@ -239,6 +239,11 @@ namespace tlp {
   };
 
   typedef StaticPluginManager<Controller, ControllerContext*> ControllerPluginManager;
+
+#ifdef WIN32
+  template class TLP_QT_SCOPE PluginManager<Controller,ControllerContext *>;
+#endif
+
 }
 
 #define CONTROLLERPLUGINOFGROUP(C,N,A,D,I,R,G) POINTERCONTEXTPLUGINFACTORY(Controller,C,N,A,D,I,R,G)

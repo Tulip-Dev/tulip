@@ -268,6 +268,10 @@ namespace tlp {
   };
 
   typedef StaticPluginManager<View, ViewContext*> ViewPluginManager;
+
+  #ifdef WIN32
+	template class TLP_QT_SCOPE PluginManager<View,ViewContext *>;
+  #endif
 }
 
 #define VIEWPLUGINOFGROUP(C,N,A,D,I,R,G) POINTERCONTEXTPLUGINFACTORY(View,C,N,A,D,I,R,G)

@@ -102,6 +102,9 @@ namespace tlp {
 
   typedef StaticPluginManager<Glyph, GlyphContext*> GlyphPluginManager;
 
+  #ifdef WIN32
+	template class TLP_GL_SCOPE PluginManager<Glyph,GlyphContext *>;
+  #endif
 }
 
 #define GPLUGINFACTORY(T,C,N,A,D,I,R,ID,G)     \
