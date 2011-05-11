@@ -9,9 +9,6 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/InteractorManager.h>
-#include <tulip/InteractorManager.h>
-#include <tulip/ViewPluginsManager.h>
-#include <tulip/ControllerPluginsManager.h>
 
 #include "TulipSplashScreen.h"
 #include "TulipMainWindow.h"
@@ -28,12 +25,19 @@ int main(int argc, char **argv) {
   tlp::initTulipLib(const_cast<char *>(QApplication::applicationDirPath().toStdString().c_str()));
   TulipSplashScreen *splashScreen = new TulipSplashScreen();
   splashScreen->show();
-  tlp::loadPlugins(splashScreen);
-  tlp::GlyphManager::getInst().loadPlugins(splashScreen);
-  tlp::EdgeExtremityGlyphManager::getInst().loadPlugins(splashScreen);
-  tlp::InteractorManager::getInst().loadPlugins(splashScreen);
-  tlp::ViewPluginsManager::getInst().loadPlugins(splashScreen);
-  tlp::ControllerPluginsManager::getInst().loadPlugins(splashScreen);
+
+
+  tlp::loadPlugins(splashScreen); // library side plugins
+  tlp::loadPlugins(splashScreen, "/interactors"); // interactors plugins
+  tlp::loadPlugins(splashScreen, "/glyphs"); // glyphs plugins
+  tlp::loadPlugins(splashScreen, "/view"); // view plugins
+  tlp::loadPlugins(splashScreen, "/controller"); // controller plugins
+
+  tlp::GlyphManager::getInst().loadGlyphPlugins();
+  tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
+  tlp::InteractorManager::getInst().loadInteractorPlugins();
+
+  tlp::PluginManagerInterface::checkLoadedPluginsDependencies(splashScreen);
 
   QMap<QString,QString> abortedPlugins = splashScreen->abortedPlugins();
   delete splashScreen;
