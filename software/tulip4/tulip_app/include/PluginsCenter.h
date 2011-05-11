@@ -2,6 +2,7 @@
 #define PLUGINSCENTER_
 
 #include <QtGui/QWidget>
+#include <QtCore/QMap>
 
 namespace Ui {
 class PluginsCenterData;
