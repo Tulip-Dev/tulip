@@ -383,6 +383,36 @@ void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface 
   notifyObservers();
 }
 //=========================================================================
+void GraphAbstract::notifyAddInheritedProperty(const std::string& name) {
+  if (observers.empty())
+    return;
+  std::list<GraphObserver*>::iterator itObs = observers.begin();
+  std::list<GraphObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    GraphObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->addInheritedProperty(this, name);
+  }
+}
+
+void GraphAbstract::notifyDelInheritedProperty(const std::string& name) {
+  if (observers.empty())
+    return;
+  std::list<GraphObserver*>::iterator itObs = observers.begin();
+  std::list<GraphObserver*>::iterator ite = observers.end();
+  while (itObs != ite) {
+    GraphObserver* observer = *itObs;
+    // iterator is incremented before
+    // to ensure it will not be invalidated
+    // during the call to the method on the observer
+    ++itObs;
+    observer->delInheritedProperty(this, name);
+  }
+}
+//=========================================================================
 Iterator<std::string>* GraphAbstract::getLocalProperties() {
   return propertyContainer->getLocalProperties();
 }

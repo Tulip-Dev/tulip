@@ -89,6 +89,8 @@ public:
   virtual void delSubGraph(Graph *, Graph *){}
   virtual void addLocalProperty(Graph*, const std::string&){}
   virtual void delLocalProperty(Graph*, const std::string&){}
+  virtual void addInheritedProperty(Graph*, const std::string&){}
+  virtual void delInheritedProperty(Graph*, const std::string&){}
   virtual void beforeSetAttribute(Graph*, const std::string&) {}
   virtual void afterSetAttribute(Graph*, const std::string&) {}
   virtual void removeAttribute(Graph*, const std::string&) {}
