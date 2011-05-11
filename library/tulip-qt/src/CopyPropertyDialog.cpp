@@ -20,6 +20,8 @@
 #include <config.h>
 #endif
 
+#include "CopyPropertyDialogData.h"
+
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
@@ -50,20 +52,20 @@ using namespace tlp;
 
 //=============================================================================
 CopyPropertyDialog::CopyPropertyDialog(QWidget* parent)
-    : QDialog(parent),_graph(NULL),_source(NULL) {
-    setupUi(this);
-    connect((QObject *) buttonOK , SIGNAL(clicked()), this, SLOT(accept()) );
-    connect((QObject *) buttonCancel , SIGNAL(clicked()), this, SLOT(reject()) );
-    errorIconLabel->setPixmap(QApplication::style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(16,16));    
-    connect(newPropertyNameLineEdit,SIGNAL(textChanged(QString)),this,SLOT(checkValidity()));
-    connect(buttonGroup,SIGNAL(buttonClicked (int)),this,SLOT(checkValidity()));
+    : QDialog(parent),ui(new Ui::CopyPropertyDialogData()),_graph(NULL),_source(NULL) {
+    ui->setupUi(this);
+    connect(ui->buttonOK , SIGNAL(clicked()), this, SLOT(accept()) );
+    connect(ui->buttonCancel , SIGNAL(clicked()), this, SLOT(reject()) );
+    ui->errorIconLabel->setPixmap(QApplication::style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(16,16));
+    connect(ui->newPropertyNameLineEdit,SIGNAL(textChanged(QString)),this,SLOT(checkValidity()));
+    connect(ui->buttonGroup,SIGNAL(buttonClicked (int)),this,SLOT(checkValidity()));
     checkValidity();
 }
 
 void CopyPropertyDialog::init(Graph* graph,PropertyInterface* source){
     _graph = graph;
     _source = source;
-    newPropertyRadioButton->setChecked(true);
+    ui->newPropertyRadioButton->setChecked(true);
     if(_graph != NULL){
         PropertyInterface* property;
         Graph *parent = _graph->getSuperGraph();
@@ -73,28 +75,28 @@ void CopyPropertyDialog::init(Graph* graph,PropertyInterface* source){
         forEach(property,_graph->getLocalObjectProperties()){
             //Check if the same type and different name.
             if(typeid(*property) == typeid(*source) && source->getName() != property->getName()){
-                localPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
+                ui->localPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
             }
             if (parent && parent->existProperty(property->getName())){
-                inheritedPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
+                ui->inheritedPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
             }
         }
-        if(localPropertiesComboBox->count()==0){
-            localPropertyRadioButton->setEnabled(false);
+        if(ui->localPropertiesComboBox->count()==0){
+            ui->localPropertyRadioButton->setEnabled(false);
         }else{
-            localPropertyRadioButton->setEnabled(true);
+            ui->localPropertyRadioButton->setEnabled(true);
         }
 
         forEach(property,_graph->getInheritedObjectProperties()){
             //Check if the same type and different name.
             if(typeid(*property) == typeid(*source) && source->getName() != property->getName()){
-                inheritedPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
+                ui->inheritedPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
             }
         }
-        if(inheritedPropertiesComboBox->count()==0){
-            inheritedPropertyRadioButton->setEnabled(false);
+        if(ui->inheritedPropertiesComboBox->count()==0){
+            ui->inheritedPropertyRadioButton->setEnabled(false);
         }else{
-            inheritedPropertyRadioButton->setEnabled(true);
+            ui->inheritedPropertyRadioButton->setEnabled(true);
         }
     }
     checkValidity();
@@ -112,8 +114,8 @@ PropertyInterface* CopyPropertyDialog::copyProperty(QString& errorMsg){
     }else if(_source == NULL){
         valid = false;
         errorMsg = tr("Invalid source property");
-    } else if(newPropertyRadioButton->isChecked()){
-        propertyName = newPropertyNameLineEdit->text();
+    } else if(ui->newPropertyRadioButton->isChecked()){
+        propertyName = ui->newPropertyNameLineEdit->text();
         if(propertyName.isEmpty()){
             valid = false;
             errorMsg = tr("Cannot create a property with an empty name");
@@ -124,14 +126,14 @@ PropertyInterface* CopyPropertyDialog::copyProperty(QString& errorMsg){
                 errorMsg = tr("A property with the same name but a different type already exists");
             }
         }
-    }else if(localPropertyRadioButton->isChecked()){
-        propertyName = localPropertiesComboBox->currentText();
+    }else if(ui->localPropertyRadioButton->isChecked()){
+        propertyName = ui->localPropertiesComboBox->currentText();
         if(propertyName.isEmpty()){
             valid = false;
             errorMsg = tr("No properties available");
         }
     }else{
-        propertyName = inheritedPropertiesComboBox->currentText();
+        propertyName = ui->inheritedPropertiesComboBox->currentText();
         if(propertyName.isEmpty()){
             valid = false;
             errorMsg = tr("No properties available");
@@ -256,8 +258,8 @@ void CopyPropertyDialog::checkValidity(){
     }else if(_source == NULL){
         valid = false;
         errorMsg = tr("Invalid source property");
-    }else if(newPropertyRadioButton->isChecked()){
-        QString propertyName = newPropertyNameLineEdit->text();
+    }else if(ui->newPropertyRadioButton->isChecked()){
+        QString propertyName = ui->newPropertyNameLineEdit->text();
         if(propertyName.isEmpty()){
             valid = false;
             errorMsg = tr("Cannot create a property with an empty name");
@@ -268,20 +270,20 @@ void CopyPropertyDialog::checkValidity(){
                 errorMsg = tr("A property with the same name but a different type already exists");
             }
         }
-    }else if(localPropertyRadioButton->isChecked()){
-        if(localPropertiesComboBox->currentText().isEmpty()){
+    }else if(ui->localPropertyRadioButton->isChecked()){
+        if(ui->localPropertiesComboBox->currentText().isEmpty()){
             valid = false;
             errorMsg = tr("No properties available");
         }
     }else {
-        if(inheritedPropertiesComboBox->currentText().isEmpty()){
+        if(ui->inheritedPropertiesComboBox->currentText().isEmpty()){
             valid = false;
             errorMsg = tr("No properties available");
         }
     }
-    errorNotificationWidget->setVisible(!errorMsg.isEmpty());
-    errorLabel->setText(errorMsg);
-    buttonOK->setEnabled(valid);
+    ui->errorNotificationWidget->setVisible(!errorMsg.isEmpty());
+    ui->errorLabel->setText(errorMsg);
+    ui->buttonOK->setEnabled(valid);
 }
 
 QString CopyPropertyDialog::destinationPropertyName()const{
@@ -289,20 +291,20 @@ QString CopyPropertyDialog::destinationPropertyName()const{
         return QString();
     }
     QString propertyName;
-    if(newPropertyRadioButton->isChecked()){
-        propertyName = newPropertyNameLineEdit->text();
-    }else if(localPropertyRadioButton->isChecked()){
-        propertyName = localPropertiesComboBox->currentText();
+    if(ui->newPropertyRadioButton->isChecked()){
+        propertyName = ui->newPropertyNameLineEdit->text();
+    }else if(ui->localPropertyRadioButton->isChecked()){
+        propertyName = ui->localPropertiesComboBox->currentText();
     }else{
-        propertyName = inheritedPropertiesComboBox->currentText();
+        propertyName = ui->inheritedPropertiesComboBox->currentText();
     }
     return propertyName;
 }
 
 CopyPropertyDialog::PropertyScope CopyPropertyDialog::destinationPropertyScope()const{
-    if(newPropertyRadioButton->isChecked()){
+    if(ui->newPropertyRadioButton->isChecked()){
         return NEW;
-    }else if(localPropertyRadioButton->isChecked()){
+    }else if(ui->localPropertyRadioButton->isChecked()){
         return LOCAL;
     }else{
         return INHERITED;
