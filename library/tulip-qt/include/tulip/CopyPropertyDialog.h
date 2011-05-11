@@ -19,18 +19,26 @@
 #ifndef COPYPROPERTYDIALOG_H
 #define COPYPROPERTYDIALOG_H
 
-#include <tulip/tulipconf.h>
-
 #include <string>
 #include <vector>
+
+#include <tulip/tulipconf.h>
+#include <tulip/Iterator.h>
+
+#include <QtCore/QString>
+#include <QtGui/QDialog>
+#include <QtGui/QWidget>
 
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
 #endif
 
-#include "CopyPropertyDialogData.h"
-#include "tulip/Iterator.h"
+
+
+namespace Ui{
+    class CopyPropertyDialogData;
+}
 
 namespace tlp{
 class Graph;
@@ -49,10 +57,10 @@ class PropertyInterface;
   *
   *
   **/
-class TLP_QT_SCOPE CopyPropertyDialog : public QDialog, public Ui::CopyPropertyDialogData
-{ 
-  Q_OBJECT;
 
+class TLP_QT_SCOPE CopyPropertyDialog : public QDialog
+{ 
+  Q_OBJECT
 public:
   CopyPropertyDialog(QWidget *parent = 0);
 
@@ -96,6 +104,7 @@ public:
   static PropertyInterface* copyProperty(tlp::Graph* graph,tlp::PropertyInterface* source,bool askBeforePropertyOverwriting=false,QWidget* parent=NULL);
 
 private:
+  Ui::CopyPropertyDialogData *ui;
   tlp::Graph* _graph;
   tlp::PropertyInterface* _source;  
 
