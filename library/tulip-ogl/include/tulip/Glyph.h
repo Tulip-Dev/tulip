@@ -34,7 +34,7 @@
 #include <tulip/Color.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/TlpTools.h>
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 
 #include <tulip/GlGraphInputData.h>
 #include <tulip/AbstractPluginInfo.h>
@@ -100,10 +100,10 @@ namespace tlp {
     virtual Coord getAnchor(const Coord &vector) const;
   };
 
-  typedef StaticPluginManager<Glyph, GlyphContext*> GlyphPluginManager;
+  typedef StaticPluginLister<Glyph, GlyphContext*> GlyphPluginLister;
 
   #ifdef WIN32
-	template class TLP_GL_SCOPE PluginManager<Glyph,GlyphContext *>;
+	template class TLP_GL_SCOPE PluginLister<Glyph,GlyphContext *>;
   #endif
 }
 
@@ -112,7 +112,7 @@ class C##T##Factory:public tlp::FactoryInterface<T, T##Context*>	 \
 {                                                \
 public:                                          \
   C##T##Factory(){				 \
-    GlyphPluginManager::registerPlugin(this);	         \
+    GlyphPluginLister::registerPlugin(this);	         \
   }       					 \
   string getName() const { return string(N);}	 \
   string getGroup() const { return string(G);}	 \

@@ -28,7 +28,7 @@
 #include <QtGui/QWidget>
 
 #include <tulip/Reflect.h>
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 #include "tulip/View.h"
 
 namespace tlp {
@@ -45,7 +45,7 @@ namespace tlp {
       /**
        * Return parameters need by a plugin
        */
-      static StructDef *getPluginParameters(PluginManagerInterface *factory, std::string name);
+      static StructDef *getPluginParameters(PluginListerInterface *factory, std::string name);
       
       /**
        * Apply an algorithm on graph with given name and given dataSet, if the algorithm has a problem : display it in a QDialog in parent widget and return false

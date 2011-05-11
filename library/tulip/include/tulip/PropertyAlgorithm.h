@@ -39,7 +39,7 @@
 #include <tulip/Reflect.h>
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 
 namespace tlp {
 
@@ -121,13 +121,13 @@ typedef TemplateAlgorithm<StringProperty> StringAlgorithm;
 typedef TemplateAlgorithm<BooleanProperty> BooleanAlgorithm;
 
 #ifdef WIN32
-template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<SizeProperty>, PropertyContext>;
-template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<IntegerProperty>, PropertyContext>;
-template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<LayoutProperty>, PropertyContext>;
-template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<ColorProperty>, PropertyContext>;
-template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<DoubleProperty>, PropertyContext>;
-template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<StringProperty>, PropertyContext>;
-template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<BooleanProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<SizeProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<IntegerProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<LayoutProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<ColorProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<DoubleProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<StringProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<BooleanProperty>, PropertyContext>;
 #endif
 
 /*@}*/

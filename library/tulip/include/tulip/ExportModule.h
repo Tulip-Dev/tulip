@@ -25,7 +25,7 @@
 #include <tulip/WithDependency.h>
 #include <tulip/Reflect.h>
 #include <tulip/AbstractPluginInfo.h>
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 
 /** \addtogroup plugins */ 
 
@@ -55,10 +55,10 @@ public:
   virtual ~ExportModuleFactory() {}
 };
 
-typedef StaticPluginManager<ExportModule,AlgorithmContext> ExportModuleManager;
+typedef StaticPluginLister<ExportModule,AlgorithmContext> ExportModuleManager;
 
 #ifdef WIN32
-template class TLP_SCOPE PluginManager<ExportModule,AlgorithmContext>;
+template class TLP_SCOPE PluginLister<ExportModule,AlgorithmContext>;
 #endif
 
 /*@}*/

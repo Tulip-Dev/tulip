@@ -65,7 +65,7 @@ void AppStartUp::initTulip(TulipPluginLoader *loader, std::string &errors) {
   EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
   InteractorManager::getInst().loadInteractorPlugins();
   
-  PluginManagerInterface::checkLoadedPluginsDependencies(loader);
+  PluginListerInterface::checkLoadedPluginsDependencies(loader);
 
   errors = errorMsgs;
   // free memory

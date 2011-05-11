@@ -1,5 +1,5 @@
 
-#include "PluginManager.h"
+#include "PluginLister.h"
 
 QList<PluginInformations> PluginInformations::pluginsList(PluginLocation list = PluginLocation::All) const {
   QList<PluginInformations> list;

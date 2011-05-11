@@ -3,10 +3,10 @@
 
 #include <QList>
 
-#ifndef PluginManager_H
-#define PluginManager_H
+#ifndef PluginLister_H
+#define PluginLister_H
 
-class PluginManager {
+class PluginLister {
 public:
   
   enum PluginLocation {
@@ -18,4 +18,4 @@ public:
   
 }
 
-#endif //PluginManager_H
+#endif //PluginLister_H

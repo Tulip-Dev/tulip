@@ -36,12 +36,12 @@ QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
 
   void ControllerViewsTools::createView(const string &name,Graph *,DataSet,QWidget *parent,string *createdViewName, View **createdView, QWidget **createdWidget){
     string verifiedName=name;
-    View *newView = ViewPluginManager::getPluginObject(name, NULL);
+    View *newView = ViewPluginLister::getPluginObject(name, NULL);
 
     // if we can not create a view with given name : create a Node Link Diagram Component 
     if(!newView){
       verifiedName=mainViewName;
-      newView=ViewPluginManager::getPluginObject(mainViewName, NULL);
+      newView=ViewPluginLister::getPluginObject(mainViewName, NULL);
     }
 
     // Get interactors for this view and add them to view
@@ -53,7 +53,7 @@ QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
 
     list<Interactor *> interactorsList;
     for(list<string>::iterator it=interactorsNameList.begin();it!=interactorsNameList.end();++it){
-      interactorsList.push_back(InteractorPluginManager::getPluginObject(*it, NULL));
+      interactorsList.push_back(InteractorPluginLister::getPluginObject(*it, NULL));
     }
     newView->setInteractors(interactorsList);
 

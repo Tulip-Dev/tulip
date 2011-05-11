@@ -106,19 +106,19 @@ namespace tlp {
   public :
 
     static std::string getPluginDisplayType(const std::string &name) {
-      if(PropertyPluginManager<TemplateAlgorithm<SizeProperty> >::pluginExists(name))
+      if(PropertyPluginLister<TemplateAlgorithm<SizeProperty> >::pluginExists(name))
         return "Size";
-      if(PropertyPluginManager<TemplateAlgorithm<IntegerProperty> >::pluginExists(name))
+      if(PropertyPluginLister<TemplateAlgorithm<IntegerProperty> >::pluginExists(name))
         return "Integer";
-      if(PropertyPluginManager<TemplateAlgorithm<LayoutProperty> >::pluginExists(name))
+      if(PropertyPluginLister<TemplateAlgorithm<LayoutProperty> >::pluginExists(name))
         return "Layout";
-      if(PropertyPluginManager<TemplateAlgorithm<ColorProperty> >::pluginExists(name))
+      if(PropertyPluginLister<TemplateAlgorithm<ColorProperty> >::pluginExists(name))
         return "Color";
-      if(PropertyPluginManager<TemplateAlgorithm<DoubleProperty> >::pluginExists(name))
+      if(PropertyPluginLister<TemplateAlgorithm<DoubleProperty> >::pluginExists(name))
         return "Metric";
-      if(PropertyPluginManager<TemplateAlgorithm<StringProperty> >::pluginExists(name))
+      if(PropertyPluginLister<TemplateAlgorithm<StringProperty> >::pluginExists(name))
         return "Label";
-      if(PropertyPluginManager<TemplateAlgorithm<BooleanProperty> >::pluginExists(name))
+      if(PropertyPluginLister<TemplateAlgorithm<BooleanProperty> >::pluginExists(name))
         return "Selection";
       if(ImportModuleManager::pluginExists(name))
         return "Import";
@@ -126,11 +126,11 @@ namespace tlp {
         return "Export";
           if (AlgorithmManager::pluginExists(name))
         return "General";
-      if (InteractorPluginManager::pluginExists(name))
+      if (InteractorPluginLister::pluginExists(name))
         return "Interactor";
-          if (ViewPluginManager::pluginExists(name))
+          if (ViewPluginLister::pluginExists(name))
         return "View";
-          if (ControllerPluginManager::pluginExists(name))
+          if (ControllerPluginLister::pluginExists(name))
         return "Controller";
 
       return "Glyph";

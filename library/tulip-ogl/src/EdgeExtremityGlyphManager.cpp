@@ -19,7 +19,7 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/tuliphash.h>
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 
 tlp::EdgeExtremityGlyphManager* tlp::EdgeExtremityGlyphManager::eeinst = 0;
 
@@ -63,10 +63,10 @@ int EdgeExtremityGlyphManager::glyphId(string name) {
 }
 //====================================================
 void EdgeExtremityGlyphManager::loadGlyphPlugins() {
-  Iterator<string> *itS = EdgeExtremityGlyphPluginManager::availablePlugins();
+  Iterator<string> *itS = EdgeExtremityGlyphPluginLister::availablePlugins();
 	while (itS->hasNext()) {
 		string pluginName = itS->next();
-    int pluginId = EdgeExtremityGlyphPluginManager::objMap().at(pluginName).factory->getId();
+    int pluginId = EdgeExtremityGlyphPluginLister::objMap().at(pluginName).factory->getId();
 		eeglyphIdToName[pluginId] = pluginName;
 		nameToEeGlyphId[pluginName] = pluginId;
 	}
@@ -81,11 +81,11 @@ void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
 				glGraphInputData);
 		glyphs.setAll(0);
 		Iterator<string> *itS =
-		EdgeExtremityGlyphPluginManager::availablePlugins();
+		EdgeExtremityGlyphPluginLister::availablePlugins();
 		while (itS->hasNext()) {
 			string glyphName = itS->next();
-      EdgeExtremityGlyph *newGlyph = EdgeExtremityGlyphPluginManager::getPluginObject(glyphName, &gc);
-      glyphs.set(EdgeExtremityGlyphPluginManager::objMap().at(glyphName).factory->getId(), newGlyph);
+      EdgeExtremityGlyph *newGlyph = EdgeExtremityGlyphPluginLister::getPluginObject(glyphName, &gc);
+      glyphs.set(EdgeExtremityGlyphPluginLister::objMap().at(glyphName).factory->getId(), newGlyph);
 		}
 		delete itS;
 }
@@ -94,11 +94,11 @@ void EdgeExtremityGlyphManager::clearGlyphList(Graph **,
 		GlGraphInputData*, MutableContainer<
 				EdgeExtremityGlyph *>& glyphs) {
 		Iterator<string> *itS =
-		EdgeExtremityGlyphPluginManager::availablePlugins();
+		EdgeExtremityGlyphPluginLister::availablePlugins();
 	while (itS->hasNext()) {
 		string glyphName = itS->next();
 		delete glyphs.get(
-      EdgeExtremityGlyphPluginManager::objMap().at(glyphName).factory->getId());
+      EdgeExtremityGlyphPluginLister::objMap().at(glyphName).factory->getId());
 	}
 	delete itS;
 }

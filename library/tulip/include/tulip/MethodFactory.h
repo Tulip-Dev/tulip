@@ -28,7 +28,7 @@
 #include <string>
 
 #include <tulip/AbstractPluginInfo.h>
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginContext.h>
 #include <tulip/PropertyAlgorithm.h>
@@ -48,7 +48,7 @@ class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>	\
 {                                                       \
  public:						\
   C##T##Factory(){					\
-    tlp::PropertyPluginManager<tlp::T##Algorithm>::registerPlugin((tlp::PropertyFactory<tlp::T##Algorithm> *) this); \
+    tlp::PropertyPluginLister<tlp::T##Algorithm>::registerPlugin((tlp::PropertyFactory<tlp::T##Algorithm> *) this); \
   }							\
   ~C##T##Factory(){}					\
   std::string getClassName() const { return std::string(#T);} \
@@ -95,7 +95,7 @@ class C##T##Factory:public tlp::T##Factory              \
 {                                                       \
  public:						\
   C##T##Factory(){					\
-    StaticPluginManager<tlp::T, tlp::AlgorithmContext>::registerPlugin(this);			\
+    StaticPluginLister<tlp::T, tlp::AlgorithmContext>::registerPlugin(this);			\
   }							\
   ~C##T##Factory(){}					\
   std::string getName() const { return std::string(N);}	\
@@ -127,7 +127,7 @@ class C##T##Factory:public tlp::FactoryInterface<T,T##Context *> \
 {                                                \
 public:                                          \
   C##T##Factory(){         \
-    T##PluginManager::registerPlugin(this);           \
+    T##PluginLister::registerPlugin(this);           \
   }                  \
   std::string getName() const { return std::string(N);}  \
   std::string getGroup() const { return std::string(G);}   \
@@ -151,7 +151,7 @@ class C##T##Factory:public tlp::FactoryInterface<T, T##Context*>   \
 {                                                \
 public:                                          \
   C##T##Factory(){         \
-    T##PluginManager::registerPlugin(this);           \
+    T##PluginLister::registerPlugin(this);           \
   }                  \
   std::string getName() const { return std::string(N);}  \
   std::string getGroup() const { return std::string(G);}   \
