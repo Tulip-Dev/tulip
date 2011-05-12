@@ -20,8 +20,6 @@
 #include <config.h>
 #endif
 
-#include "CopyPropertyDialogData.h"
-
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
@@ -35,8 +33,10 @@
 #include <QtGui/qlabel.h>
 #include <QtGui/qtabwidget.h>
 
-#include "tulip/CopyPropertyDialog.h"
-#include "tulip/TlpQtTools.h"
+#include "ui_CopyPropertyDialog.h"
+
+#include <tulip/CopyPropertyDialog.h>
+#include <tulip/TlpQtTools.h>
 #include <tulip/ForEach.h>
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
