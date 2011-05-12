@@ -1,10 +1,11 @@
+#include <tulip/PluginManager.h>
 
-#include "PluginLister.h"
+using namespace tlp;
 
-QList<PluginInformations> PluginInformations::pluginsList(PluginLocation list = PluginLocation::All) const {
-  QList<PluginInformations> list;
-  PluginInformations info;
-  list << info;
+QList<const tlp::PluginInformationsInterface*> PluginManager::pluginsList(PluginLocation list) {
+  QList<const tlp::PluginInformationsInterface*> result;
+  /*PluginInformationsInterface info;
+   result* << info*/;
   
-  return list;
+   return result;
 }

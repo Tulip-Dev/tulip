@@ -1,34 +1,39 @@
 #include <tulip/PluginInformations.h>
 
-QString PluginInformations::identifier() const{
-  return "plugin";
+using namespace tlp;
+
+LocalPluginInformations::LocalPluginInformations(const AbstractPluginInfo* info) :_infos(info) {
 }
-QString PluginInformations::name() const{
+
+QString LocalPluginInformations::identifier() const{
+  return _infos->getName().c_str();
+}
+QString LocalPluginInformations::name() const{
   return "Plugin name";
 }
 
-QString PluginInformations::shortDescription() const{
+QString LocalPluginInformations::shortDescription() const{
   return "This is a plugin.";
 }
-QString PluginInformations::longDescriptionPath() const{
+QString LocalPluginInformations::longDescriptionPath() const{
   return "longDescription.html";
 }
 
-QIcon PluginInformations::iconPath() const{
+QString LocalPluginInformations::iconPath() const{
   return ":/logo32x32.png";
 }
 
-QDate PluginInformations::installDate() const{
-  return QDate::currentTime();
+QDateTime LocalPluginInformations::installDate() const{
+  return QDateTime::currentDateTime();
 }
 
-QString PluginInformations::type() const{
+QString LocalPluginInformations::type() const{
   return "Algorithm";
 }
-QStringList PluginInformations::dependencies() const{
+QStringList LocalPluginInformations::dependencies() const{
   QStringList l;
   return l;
 }
-QString PluginInformations::version() const{
+QString LocalPluginInformations::version() const{
   return "4.0.0";
 }
