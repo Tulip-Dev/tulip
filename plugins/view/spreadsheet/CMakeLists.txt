@@ -3,44 +3,35 @@ INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")
 INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${CMAKE_CURRENT_BINARY_DIR} .)	
 
 SET(spreadsheet_LIB_SRCS
-    SpreadView.h
     SpreadView.cpp 
-    SpreadWidget.cpp 
-    SpreadTable.cpp
-    SpreadCell.cpp
-    SpreadCalculator.cpp
-    SpreadValue.cpp
-    SpreadItemDelegate.cpp
-    SpreadCommands.cpp
-    SpreadConfigurationWidget.cpp
-    SpreadWidget.h
-    SpreadTable.h
-    SpreadCell.h
-    SpreadCalculator.h
-    SpreadValue.h
-    SpreadItemDelegate.h
-    SpreadCommands.h
-    SpreadLineEdit.h
-    SpreadConfigurationWidget.h
+    TulipTableWidget.cpp
+    GraphTableModel.cpp
+    ElementCollection.cpp
+    TulipItemDelegate.cpp
+    TulipQVariantBuilder.cpp
+    VectorEditionWidget.cpp    
+    HeaderSelectionDialog.cpp
 )
 
 set(spreadsheet_UI
-    SpreadInsertColumnDialog.ui
-    SpreadMainWidget.ui
-    SpreadConfigurationWidget.ui
+    SpreadViewWidget.ui
+    VectorEditionWidget.ui
+    PropertySelectionDialog.ui
+    HeaderSelectionDialog.ui
 )
 
 set(spreadsheet_MOC
     SpreadView.h
-    SpreadWidget.h
-    SpreadTable.h
-    SpreadItemDelegate.h
-    SpreadLineEdit.h
-    SpreadConfigurationWidget.h
+    TulipTableWidget.h
+    GraphTableModel.h
+    ElementCollection.h
+    TulipItemDelegate.h
+    VectorEditionWidget.h    
+    HeaderSelectionDialog.h
 )
 
-TULIP_QT4_WRAP_UI(spreadsheet_UI_SRCS ${spreadsheet_UI})
-TULIP_QT4_WRAP_CPP(spreadsheet_MOC_SRCS ${spreadsheet_MOC})
+QT4_WRAP_UI(spreadsheet_UI_SRCS ${spreadsheet_UI})
+QT4_WRAP_CPP(spreadsheet_MOC_SRCS ${spreadsheet_MOC})
 
 ADD_LIBRARY(SpreadSheet-${TulipVersion} SHARED ${spreadsheet_UI_SRCS} ${spreadsheet_MOC_SRCS} ${spreadsheet_LIB_SRCS})
 TARGET_LINK_LIBRARIES(SpreadSheet-${TulipVersion} ${LibTulipName})

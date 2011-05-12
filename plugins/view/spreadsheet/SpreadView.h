@@ -26,13 +26,14 @@
 
 #include <tulip/AbstractView.h>
 
-#include "SpreadWidget.h"
+
+namespace Ui {
+    class SpreadViewWidget;
+}
 
 namespace tlp {
 
 class Graph;
-
-class SpreadConfigurationWidget;
 
 class SpreadView: public AbstractView {
 Q_OBJECT
@@ -50,16 +51,7 @@ public:
 	void installInteractor(QAction*) {
 	}
 
-	virtual void createPicture(const std::string&, int, int);
-
-	std::list<std::pair<QWidget *, std::string> > getConfigurationWidget();
-
-	std::vector<std::string> getSelectedProperties() const;
-protected:
-
-
-	SpreadWidget *mainWidget;
-	SpreadConfigurationWidget *configurationWidget;
+        QImage createPicture(int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
 
 public slots :
 
@@ -68,9 +60,11 @@ public slots :
 	void init();
 	void setGraph(Graph *graph);
 
+    private:
+        Ui::SpreadViewWidget *ui;
+        tlp::Graph* _graph;
 
-	protected slots:
-	void updated();
+
 };
 
 }
