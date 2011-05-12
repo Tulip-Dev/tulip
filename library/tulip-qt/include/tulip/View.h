@@ -267,7 +267,7 @@ namespace tlp {
   class TLP_QT_SCOPE ViewContext {
   };
 
-  typedef StaticPluginLister<View, ViewContext*> ViewPluginLister;
+  typedef StaticPluginLister<View, ViewContext*> ViewLister;
 
   #ifdef WIN32
 	template class TLP_QT_SCOPE PluginLister<View,ViewContext *>;

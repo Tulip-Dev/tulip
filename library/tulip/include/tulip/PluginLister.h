@@ -233,7 +233,7 @@ private:
     StructDef parameters;
     std::list<tlp::Dependency> dependencies;
   };
-  
+
 public:
 
   static PluginLister<ObjectType, Context>* getInstance() {
@@ -242,13 +242,6 @@ public:
     }
     return _instance;
   }
-
-  typedef std::map<std::string , PluginDescription> ObjectCreator;
-
-  /**
-   * @brief Stores the the facotry, dependencies, and parameters of all the plugins that register into this factory.
-   **/
-  ObjectCreator objMap;
 
   /**
    * @brief Constructs a plug-in.
@@ -273,6 +266,11 @@ protected:
   PluginLister() {
     PluginListerInterface::addFactory(this, tlp::demangleTlpClassName(typeid(ObjectType).name()));
   }
+
+  /**
+  * @brief Stores the the facotry, dependencies, and parameters of all the plugins that register into this factory.
+  **/
+  std::map<std::string , PluginDescription> objMap;
   
   void removePlugin(const std::string &name);
   std::string getPluginRelease(std::string name) const;
@@ -286,8 +284,8 @@ PluginLister<ObjectType, Context>* PluginLister<ObjectType, Context>::_instance 
 /**
  * @brief This class adds nothing but syntactic sugar. But it's extra-sweet, so it's OK.
  * It allows to write StaticPluginLister<T, U>::function() instead of PluginLister<T, U>::getInstace()->function().
- * It is usefull only because there are typedefs for each plugin type to make this even more sugary (e.g. Algorithm has a typedef PluginLister<Algorithm, AlgorithmContext> AlgorithmManager.
- * Thus, it is possible (and recommended) to write AlgorithmManager::function(); as it 
+ * It is usefull only because there are typedefs for each plugin type to make this even more sugary (e.g. Algorithm has a typedef PluginLister<Algorithm, AlgorithmContext> AlgorithmLister.
+ * Thus, it is possible (and recommended) to write AlgorithmLister::function(); as it
  **/
 template<class ObjectType, class Context>
 class StaticPluginLister {
@@ -311,9 +309,9 @@ public:
   static ObjectType *getPluginObject(const std::string& name, Context p) {
     return PluginLister<ObjectType, Context>::getInstance()->getPluginObject(name, p);
   }
-
-  static const typename PluginLister<ObjectType, Context>::ObjectCreator& objMap() {
-    return PluginLister<ObjectType, Context>::getInstance()->objMap;
+  
+  static const AbstractPluginInfo* pluginInformations(const std::string& name) {
+    return PluginLister<ObjectType, Context>::getInstance()->pluginInformations(name);
   }
 };
 

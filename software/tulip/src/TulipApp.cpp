@@ -149,7 +149,7 @@ void TulipApp::startTulip() {
       textWidget->setText(QString(errors.c_str()));
       errorDlg->exec();
     }
-  if(ControllerPluginLister::objMap().empty()){
+  if(!ControllerLister::availablePlugins()->hasNext()){
     QMessageBox::critical(this,tr("No controller found"),tr("No controller was found in Tulip plugins directory.\n Tulip cannot work without a controller."));
     exit(-1);
   }
@@ -222,9 +222,11 @@ void TulipApp::startTulip() {
   OpenGlErrorViewer *oldViewer=GlTextureManager::getInst().setErrorViewer(new QtOpenGlErrorViewer(this));
   delete oldViewer;
 
-  if(ControllerPluginLister::objMap().size() < 2) {
+  Iterator<string>* plugins = ControllerLister::availablePlugins();
+  plugins->next(); //we know there is at least one from the previous test (about 70 lines up)
+  if(!plugins->hasNext()) {
     controllerAutoLoad=false;
-    string name = ControllerPluginLister::objMap().begin()->first;
+    string name = ControllerLister::availablePlugins()->next();
     createController(name, newName());
     currentTabIndex=0;
     Controller::currentActiveController(tabIndexToController[currentTabIndex]);
@@ -232,6 +234,7 @@ void TulipApp::startTulip() {
   }else{
     controllerAutoLoad=false;
   }
+  delete plugins;
 
   int argc = qApp->argc();
   if (argc>1) {
@@ -317,7 +320,7 @@ void TulipApp::fileNew(QAction *action) {
 bool TulipApp::fileNew(bool fromMenu) {
 string name;
   if(fromMenu) {
-    name = ControllerPluginLister::objMap().begin()->first;
+    name = ControllerLister::availablePlugins()->next();
 }
   else {
     name=defaultControllerName;
@@ -415,7 +418,7 @@ bool TulipApp::createController(const string &name,const string &graphName) {
 
     loadInterface(-1);
 
-    Controller *newController = ControllerPluginLister::getPluginObject(name, NULL);
+    Controller *newController = ControllerLister::getPluginObject(name, NULL);
     toolBar->setWindowTitle("Tool Bar");
     graphToolBar->setWindowTitle("Interactors Tool Bar");
     newController->attachMainWindow(MainWindowFacade(this,toolBar,graphToolBar,newWorkspace));
@@ -599,11 +602,11 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     }else{
       delete progressBar;
       QApplication::restoreOverrideCursor();
-
-      PluginLister<Controller, ControllerContext*>::ObjectCreator::const_iterator it;
+      
       vector<string> controllersName;
-      for (it=ControllerPluginLister::objMap().begin();it != ControllerPluginLister::objMap().end();++it) {
-        controllersName.push_back(it->first);
+      string name;
+      forEach(name, ControllerLister::availablePlugins()) {
+        controllersName.push_back(name);
       }
 
       ChooseControllerDialog chooseControllerDialog;
@@ -629,7 +632,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
         // if we have only one controller : auto load it
 
         // If controller doesn't exist : open a popup
-        if(!ControllerPluginLister::pluginExists(controllerName)) {
+        if(!ControllerLister::pluginExists(controllerName)) {
           QMessageBox::critical(this,"Error",QString("The \"")+controllerName.c_str()+"\" perspective associated to the file\n"
                                 "you are trying to load in currently not\n"+
                                 "installed in your copy of Tulip.\n"+
@@ -780,24 +783,34 @@ void TulipApp::importGraph(QAction* action) {
     QObject::connect(action,SIGNAL(triggered()),receiver,slot);
   }
 //**********************************************************************
-template <typename TFACTORY, typename TMODULE>
+template <typename TMODULE>
   void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
-    typename PluginLister<TMODULE, AlgorithmContext>::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
-    for (it= StaticPluginLister<TMODULE, AlgorithmContext>::objMap().begin();it != StaticPluginLister<TMODULE, AlgorithmContext>::objMap().end();++it)
-      insertInMenu(menu, it->first.c_str(), it->second.factory->getGroup(), groupMenus, nGroups,receiver,slot);
+    
+    Iterator<string>* plugins = StaticPluginLister<TMODULE, AlgorithmContext>::availablePlugins();
+    while(plugins->hasNext()) {
+      string pluginName = plugins->next();
+      insertInMenu(menu, pluginName.c_str(), StaticPluginLister<TMODULE, AlgorithmContext>::pluginInformations(pluginName)->getGroup(), groupMenus, nGroups,receiver,slot);
+    }
+    delete plugins;
   }
 //**********************************************************************
 void TulipApp::buildMenus() {
 // In this case doesn't add sub menu in new menu
-  if(ControllerPluginLister::objMap().size() > 1) {
+  Iterator<string>* plugins = ControllerLister::availablePlugins();
+  bool one = plugins->hasNext();
+  if(one) {
+    plugins->next();
+  }
+  if(one && plugins->hasNext()) {
     //Add new menu in File menu
     newMenu=new QMenu("New");
     connect(newMenu, SIGNAL(triggered(QAction *)), SLOT(fileNew(QAction*)));
     fileMenu->insertMenu(fileOpenAction,newMenu);
-    for (PluginLister<Controller, ControllerContext*>::ObjectCreator::const_iterator it=ControllerPluginLister::objMap().begin();it != ControllerPluginLister::objMap().end();++it) {
-      newMenu->addAction(it->first.c_str());
+    string controllerName;
+    forEach(controllerName, ControllerLister::availablePlugins()) {
+      newMenu->addAction(controllerName.c_str());
     }
   }else{
     newAction = new QAction("New",fileMenu);
@@ -805,14 +818,15 @@ void TulipApp::buildMenus() {
     connect(newAction,SIGNAL(triggered(bool)), SLOT(fileNew(bool)));
     fileMenu->insertAction(fileOpenAction,newAction);
   }
+  delete plugins;
 
   importGraphMenu = new QMenu("&Import", fileMenu);
   importGraphMenu->setObjectName("ImportMenu");
   exportGraphMenu = new QMenu("&Export", fileMenu);
   exportGraphMenu->setObjectName("ExportMenu");
 
-  buildMenuWithContext<ExportModuleFactory, ExportModule>(*exportGraphMenu, this, SLOT(exportGraph()));
-  buildMenuWithContext<ImportModuleFactory, ImportModule>(*importGraphMenu, this, SLOT(importGraph()));
+  buildMenuWithContext<ExportModule>(*exportGraphMenu, this, SLOT(exportGraph()));
+  buildMenuWithContext<ImportModule>(*importGraphMenu, this, SLOT(importGraph()));
   //connect(&exportGraphMenu, SIGNAL(triggered(QAction*)), SLOT(exportGraph(QAction*)));
   //connect(&importGraphMenu, SIGNAL(triggered(QAction*)), SLOT(importGraph(QAction*)));
   if (importGraphMenu->actions().count()>0) {

@@ -94,7 +94,7 @@ public:
   virtual ~AlgorithmFactory() {}
 };
 
-typedef StaticPluginLister<Algorithm,AlgorithmContext> AlgorithmManager;
+typedef StaticPluginLister<Algorithm,AlgorithmContext> AlgorithmLister;
 
 #ifdef WIN32
 template class TLP_SCOPE PluginLister<Algorithm,AlgorithmContext>;

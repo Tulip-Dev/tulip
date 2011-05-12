@@ -56,37 +56,29 @@ namespace tlp
   }
   //====================================================
   void GlyphManager::loadGlyphPlugins() {
-    Iterator<string> *itS=GlyphPluginLister::availablePlugins();
-    while (itS->hasNext()) {
-      string pluginName=itS->next();
-      int pluginId=GlyphPluginLister::objMap().at(pluginName).factory->getId();
+    string pluginName;
+    forEach(pluginName, GlyphLister::availablePlugins()) {
+      int pluginId=GlyphLister::pluginInformations(pluginName)->getId();
       glyphIdToName[pluginId]=pluginName;
       nameToGlyphId[pluginName]=pluginId;
-    } delete itS;
+    }
   }
-  //
+  
   void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs) {
     GlyphContext gc = GlyphContext(graph,glGraphInputData);
-    glyphs.setAll(GlyphPluginLister::getPluginObject("3D - Cube OutLined", &gc));
-    Iterator<string> *itS = GlyphPluginLister::availablePlugins();
-    while (itS->hasNext()) {
-      string glyphName=itS->next();
-      //cerr << "loading : " << glyphName << endl;
-      Glyph *newGlyph = GlyphPluginLister::getPluginObject(glyphName, &gc);
-      //    cerr << newGlyph << endl;
-      //if (GlyphPluginLister::objMap[glyphName]->getId() == 0)
-      //  glyphs.setAll(newGlyph);
-      //    cerr << " id:" << GlyphPluginLister::objMap[glyphName]->getId() << endl;
-      glyphs.set(GlyphPluginLister::objMap().at(glyphName).factory->getId(), newGlyph);
-    //    cerr << glyphs.get(GlyphPluginLister::objMap[glyphName]->getId()) << endl;
-    } delete itS;
+    glyphs.setAll(GlyphLister::getPluginObject("3D - Cube OutLined", &gc));
+
+    string glyphName;
+    forEach(glyphName, GlyphLister::availablePlugins()) {
+      Glyph *newGlyph = GlyphLister::getPluginObject(glyphName, &gc);
+      glyphs.set(GlyphLister::pluginInformations(glyphName)->getId(), newGlyph);
+    }
   }
 
   void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Glyph *>& glyphs) {
-    Iterator<string> *itS = GlyphPluginLister::availablePlugins();
-    while (itS->hasNext()) {
-      string glyphName=itS->next();
-      delete glyphs.get(GlyphPluginLister::objMap().at(glyphName).factory->getId());
-    } delete itS;
+    string glyphName;
+    forEach(glyphName, GlyphLister::availablePlugins()) {
+      delete glyphs.get(GlyphLister::pluginInformations(glyphName)->getId());
+    }
   }
 } 

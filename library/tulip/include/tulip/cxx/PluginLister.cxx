@@ -100,7 +100,7 @@ void tlp::PluginLister<ObjectType,Context>::removePlugin(const std::string &name
 
 template<class ObjectType, class Context>
 ObjectType * tlp::PluginLister<ObjectType,Context>::getPluginObject(const std::string& name, Context c) const {
-  typename ObjectCreator::const_iterator it = objMap.find(name);
+  typename std::map<std::string , PluginDescription>::const_iterator it = objMap.find(name);
   if (it!=objMap.end()) {
     return (*it).second.factory->createPluginObject(c);
   }

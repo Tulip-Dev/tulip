@@ -8,6 +8,7 @@ LocalPluginInformations::LocalPluginInformations(const AbstractPluginInfo* info)
 QString LocalPluginInformations::identifier() const{
   return _infos->getName().c_str();
 }
+
 QString LocalPluginInformations::name() const{
   return _infos->getName().c_str();
 }
@@ -15,6 +16,7 @@ QString LocalPluginInformations::name() const{
 QString LocalPluginInformations::shortDescription() const{
   return _infos->getInfo().c_str();
 }
+
 QString LocalPluginInformations::longDescriptionPath() const{
   return "index.html";
 }
@@ -30,10 +32,12 @@ QDateTime LocalPluginInformations::installDate() const{
 QString LocalPluginInformations::type() const{
   return "Algorithm";
 }
+
 QStringList LocalPluginInformations::dependencies() const{
   QStringList l;
   return l;
 }
+
 QString LocalPluginInformations::version() const{
   return _infos->getRelease().c_str();
 }
