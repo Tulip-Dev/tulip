@@ -30,6 +30,7 @@
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PluginContext.h>
+#include <tulip/PluginLibraryLoader.h>
 
 namespace tlp {
 
@@ -108,6 +109,14 @@ public:
    **/
   virtual std::list<tlp::Dependency> getPluginDependencies(std::string name) const = 0;
 
+  /**
+   * @brief Gets the library from which a plug-in has been loaded.
+   *
+   * @param name The name of the plug-in to retrieve the library of.
+   * @return std::string The library from which the plug-in was loaded.
+   **/
+  virtual std::string getPluginLibrary(const std::string& name) const = 0;
+  
   /**
    * @brief Gets the class name for the plug-in's registered class.
    *  If the class is in the tlp namespace, the 'tlp::' prefix is removed.
@@ -239,6 +248,7 @@ private:
     FactoryInterface<ObjectType, Context>* factory;
     StructDef parameters;
     std::list<tlp::Dependency> dependencies;
+    std::string library;
   };
 
 public:
@@ -269,6 +279,7 @@ public:
   const AbstractPluginInfo* pluginInformations(const std::string& name) const;
   bool pluginExists(const std::string& pluginName) const;
   const StructDef getPluginParameters(std::string name) const;
+  std::string getPluginLibrary(const std::string& name) const;
   std::list<tlp::Dependency> getPluginDependencies(std::string name) const;
   void registerPlugin(FactoryInterface<ObjectType, Context>* objectFactory);
 protected:

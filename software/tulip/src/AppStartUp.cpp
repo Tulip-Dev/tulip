@@ -32,6 +32,7 @@
 #include "AppStartUp.h"
 
 #include "TulipPluginLoader.h"
+#include <tulip/PluginManager.h>
 
 using namespace std;
 using namespace tlp;
@@ -67,6 +68,8 @@ void AppStartUp::initTulip(TulipPluginLoader *loader, std::string &errors) {
   
   PluginListerInterface::checkLoadedPluginsDependencies(loader);
 
+  PluginManager::pluginsList();
+  
   errors = errorMsgs;
   // free memory
   errorMsgs.resize(0);
