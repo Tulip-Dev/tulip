@@ -72,12 +72,7 @@ public:
   DataSet *dataSet;
 };
 
-class ImportModuleFactory:public FactoryInterface<ImportModule,AlgorithmContext>{
-public:
-  virtual ~ImportModuleFactory() {}
-};
-
-typedef StaticPluginLister<ImportModule,AlgorithmContext> ImportModuleManager;
+typedef StaticPluginLister<ImportModule,AlgorithmContext> ImportModuleLister;
 
 #ifdef WIN32
 template class TLP_SCOPE PluginLister<ImportModule,AlgorithmContext>;

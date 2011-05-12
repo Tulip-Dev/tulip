@@ -206,9 +206,3 @@ protected : \
 INTERACTORPLUGIN(CN, CNT, A , D , I , R);
 
 #endif
-
-
-
-
-
-

@@ -83,17 +83,6 @@ public :
   DataSet *dataSet;
 };
 
-/**
- * @brief A base class for algorithm plug-ins factory.
- * Each plug-in declares (through a macro) its own factory.
- * The factory the registers itself in the Tulip plug-in system (through the static initFactory() method when the library is loaded..
- * The actual registration is delegated to a PluginLister to factorize code.
- */
-class AlgorithmFactory:public FactoryInterface<Algorithm,AlgorithmContext>{
-public:
-  virtual ~AlgorithmFactory() {}
-};
-
 typedef StaticPluginLister<Algorithm,AlgorithmContext> AlgorithmLister;
 
 #ifdef WIN32

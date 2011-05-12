@@ -111,7 +111,7 @@ bool tlp::saveGraph(Graph *sg, const string &filename) {
 //=========================================================
 Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *plugProgress, Graph *newGraph){
 
-  if (!ImportModuleManager::pluginExists(alg)) {
+  if (!ImportModuleLister::pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": import plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
     return NULL;
@@ -133,7 +133,7 @@ Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *pl
   }
   else tmpProgress=plugProgress;
   tmp.pluginProgress=tmpProgress;
-  ImportModule *newImportModule=ImportModuleManager::getPluginObject(alg, tmp);
+  ImportModule *newImportModule=ImportModuleLister::getPluginObject(alg, tmp);
   assert(newImportModule!=0);
   bool result;
   if (!(result=newImportModule->import(""))) {
@@ -150,7 +150,7 @@ Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *pl
 //=========================================================
 bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
 		      DataSet &dataSet, PluginProgress *plugProgress) {
-  if (!ExportModuleManager::pluginExists(alg)) {
+  if (!ExportModuleLister::pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": export plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
     return false;
@@ -168,7 +168,7 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
   }
   else tmpProgress=plugProgress;
   tmp.pluginProgress=tmpProgress;
-  ExportModule *newExportModule=ExportModuleManager::getPluginObject(alg, tmp);
+  ExportModule *newExportModule=ExportModuleLister::getPluginObject(alg, tmp);
   assert(newExportModule!=0);
   result=newExportModule->exportGraph(os,sg);
 

@@ -202,7 +202,7 @@ void importGraph(const string &filename, const string &importPluginName, GlScene
   DataSet dataSet;
 
   StructDef parameter=
-    ImportModuleFactory::factory->getPluginParameters(importPluginName);
+    ImportModulelISTER::getPluginParameters(importPluginName);
   Iterator<pair<string,string> > *itP=parameter.getField();
 
   for (;itP->hasNext();) {
@@ -368,7 +368,7 @@ int main (int argc, char **argv) {
     DataSet dataSet;
     ostream *os = new ofstream(saveTLPFile.c_str());
     StructDef parameter =
-      ExportModuleFactory::factory->getPluginParameters("tlp");
+      ExportModuleLister::getPluginParameters("tlp");
 
     dataSet.set("displaying", glOffscreen.scene.getGlGraphComposite()->getRenderingParameters().getParameters());
 
