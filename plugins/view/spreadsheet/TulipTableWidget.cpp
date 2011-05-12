@@ -1,7 +1,7 @@
 #include "TulipTableWidget.h"
-//#include "headerselectiondialog.h"
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/CopyPropertyDialog.h>
+#include <tulip/BooleanProperty.h>
 #include <QtGui/QHeaderView>
 #include <QtGui/QMenu>
 #include <QtGui/QVBoxLayout>
@@ -18,7 +18,7 @@ TulipTableWidget::TulipTableWidget(QWidget* parent):QTableView(parent),_graph(NU
     connect(horizontalHeader(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showPropertiesContextMenu(QPoint)));
     horizontalHeader()->setMovable(true);
     verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(verticalHeader(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showElementsContextMenu(QPoint)));
+    connect(verticalHeader(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showHorizontalHeaderViewContextMenu(QPoint)));
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showTableContextMenu(QPoint)));
 }
@@ -31,14 +31,40 @@ void TulipTableWidget::setGraph(Graph* graph,ElementType element){
     setItemDelegate(new TulipItemDelegate(this));    
 }
 
-void TulipTableWidget::showElementsContextMenu(const QPoint& position){
+void TulipTableWidget::showTableContextMenu(const QPoint& position){
+    showElementContextMenu(rowAt(position.y()),position);
+}
+
+void TulipTableWidget::showHorizontalHeaderViewContextMenu(const QPoint& position){
+    showElementContextMenu(verticalHeader()->logicalIndexAt(position),position);
+}
+
+void TulipTableWidget::showElementContextMenu(int clickedRowIndex,const QPoint& position){
     QMenu contextMenu(this);
-    QHeaderView *headers=verticalHeader();
-    int clickedColumn = headers->logicalIndexAt(position);
-    QAction* deleteElements = contextMenu.addAction(tr("Remove element(s) from graph"),this,SLOT(deleteElements()));
-    deleteElements->setData(clickedColumn);
-    QAction* delAllElements = contextMenu.addAction(tr("Delete element(s)"),this,SLOT(deleteAllElements()));
-    delAllElements->setData(clickedColumn);
+    //Ensure the clicked index is always selected.
+    if(!selectionModel()->isRowSelected(clickedRowIndex,QModelIndex())){
+        selectionModel()->select(_tulipTableModel->index(clickedRowIndex,0),QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    }
+    QModelIndexList rows = selectionModel()->selectedRows(0);
+    set<unsigned int> elements = indexListToIds(rows);
+    contextMenu.addAction(areAllElementsSelected(rows)?tr("Deselect on graph"):tr("Select on graph"),this,SLOT(selectElements()));
+    contextMenu.addAction(tr("Highlight selected element(s)"),this,SLOT(highlightElements()));
+    contextMenu.addAction(tr("Remove from graph"),this,SLOT(deleteElements()));
+    contextMenu.addAction(tr("Delete"),this,SLOT(deleteAllElements()));
+    if(_type == NODE){
+        contextMenu.addAction(tr("Copy"),this,SLOT(copyNodes()));
+        //Group only available if there is more than one node selected.
+        QAction *group = contextMenu.addAction(tr("Group "),this,SLOT(group()));
+        group->setEnabled(rows.size()>1);
+        QAction *ungroup = contextMenu.addAction(tr("Ungroup "),this,SLOT(ungroup()));
+        //If only one node is not a meta node cannot ungroup.
+        for(set<unsigned int>::iterator it = elements.begin(); it != elements.end();++it){
+            if(!_graph->isMetaNode(node(*it))){
+                ungroup->setEnabled(false);
+                break;
+            }
+        }
+    }
     contextMenu.exec(mapToGlobal(position));
 }
 
@@ -49,7 +75,7 @@ void TulipTableWidget::showPropertiesContextMenu(const QPoint& position){
     //Properties operations
     contextMenu.addAction(tr("Create new column"),this,SLOT(createNewProperties()));
     contextMenu.addSeparator();
-    QAction *hideColumnAction = contextMenu.addAction(tr("Hide column(s)"),this,SLOT(hideColumn()));
+    QAction *hideColumnAction = contextMenu.addAction(tr("Hide column"),this,SLOT(hideColumn()));
     hideColumnAction->setData(QVariant(clickedColumn));
     QAction *setAllValuesAction = contextMenu.addAction(tr("Set all values"),this,SLOT(setAllColumnValues()));
     setAllValuesAction->setData(QVariant(clickedColumn));
@@ -57,7 +83,7 @@ void TulipTableWidget::showPropertiesContextMenu(const QPoint& position){
     copyToColumnAction->setData(QVariant(clickedColumn));
     QAction *clearColumnAction =contextMenu.addAction(tr("Reset column"),this,SLOT(resetColumn()));
     clearColumnAction->setData(QVariant(clickedColumn));
-    QAction *deleteColumnAction =contextMenu.addAction(tr("Delete column(s)"),this,SLOT(deleteColumn()));
+    QAction *deleteColumnAction =contextMenu.addAction(tr("Delete column"),this,SLOT(deleteColumn()));
     deleteColumnAction->setData(QVariant(clickedColumn));    
 
     contextMenu.addSeparator();
@@ -105,21 +131,10 @@ void TulipTableWidget::createNewProperties(){
 
 void TulipTableWidget::hideColumn(){
     QAction* action = qobject_cast<QAction*>(sender());
-    if(action!=NULL){
-        QModelIndexList indexes = selectedIndexes();
+    if(action!=NULL){        
         QHeaderView *headers=horizontalHeader();
-        if(indexes.empty()){
-            int index = action->data().toInt();
-            headers->setSectionHidden(index,true);
-        }else{
-            set<int> columns;
-            for(QModelIndexList::iterator it = indexes.begin() ; it != indexes.end() ; ++it){
-                columns.insert((*it).column());
-            }
-            for(set<int>::iterator it = columns.begin() ; it != columns.end(); ++it){
-                headers->setSectionHidden(*it,true);
-            }
-        }
+        int index = action->data().toInt();
+        headers->setSectionHidden(index,true);
     }
 }
 
@@ -170,16 +185,14 @@ void TulipTableWidget::resetColumn(){
 
 void TulipTableWidget::deleteColumn(){
     QAction* action = qobject_cast<QAction*>(sender());
-    if(action!=NULL){
-        QModelIndexList indexes = selectedIndexes();
-        if(indexes.empty()){
-            int index = action->data().toInt();
-            _tulipTableModel->removeColumn(index);
-        }else{
-            _tulipTableModel->removeColumns(indexes);
-        }
+    if(action!=NULL){        
+        int index = action->data().toInt();
+        _tulipTableModel->removeColumn(index);
     }
 }
+
+//////////////////////////////////////NODES OPERATIONS/////////////////////////////////////////////////
+
 
 void TulipTableWidget::deleteElements(){
     QAction* action = qobject_cast<QAction*>(sender());
@@ -223,3 +236,106 @@ void TulipTableWidget::doDeleteElements(const QModelIndexList& elements,bool del
     }
     Observable::unholdObservers();
 }
+
+void TulipTableWidget::selectElements(){
+    QModelIndexList rows = selectionModel()->selectedRows(0);
+    BooleanProperty* selectionProperty = _graph->getProperty<BooleanProperty>("viewSelection");
+    set<unsigned int> elements = indexListToIds(rows);
+    //If all elements are selected deselect them.
+    bool select = !areAllElementsSelected(rows);
+    Observable::holdObservers();
+    for(set<unsigned int>::iterator it = elements.begin(); it != elements.end();++it){
+        if(_type == NODE){
+            selectionProperty->setNodeValue(node(*it),select);
+        }else{
+            selectionProperty->setEdgeValue(edge(*it),select);
+        }
+    }
+    Observable::unholdObservers();
+}
+
+void TulipTableWidget::highlightElements(){
+    BooleanProperty* selectionProperty = _graph->getProperty<BooleanProperty>("viewSelection");
+    QItemSelectionModel *itemSelectionModel = new QItemSelectionModel(_tulipTableModel);
+    for(int i = 0 ; i < _tulipTableModel->rowCount() ; ++i){
+        if(_type == NODE){
+            if(selectionProperty->getNodeValue(node(_tulipTableModel->idForIndex(i)))){
+                itemSelectionModel->select(_tulipTableModel->index(i,0),QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+            }
+        }else{
+            if(selectionProperty->getEdgeValue(edge(_tulipTableModel->idForIndex(i)))){
+                itemSelectionModel->select(_tulipTableModel->index(i,0),QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+            }
+        }
+    }
+    QItemSelectionModel *oldSelectionModel = selectionModel();
+    setSelectionModel(itemSelectionModel);
+    oldSelectionModel->deleteLater();
+}
+
+bool TulipTableWidget::areAllElementsSelected(const QModelIndexList& elementsIndexes)const{
+    BooleanProperty* selectionProperty = _graph->getProperty<BooleanProperty>("viewSelection");
+    set<unsigned int> elements = indexListToIds(elementsIndexes);
+    bool allSelected = true;
+    for(set<unsigned int>::iterator it = elements.begin(); it != elements.end();++it){
+        if(_type == NODE){
+            if(!selectionProperty->getNodeValue(node(*it))){
+                allSelected = false;
+                break;
+            }
+        }else{
+            if(!selectionProperty->getEdgeValue(edge(*it))){
+                allSelected = false;
+                break;
+            }
+        }
+    }
+    return allSelected;
+}
+
+set<unsigned int> TulipTableWidget::indexListToIds(const QModelIndexList& elementsIndexes)const{
+    set<unsigned int> elements;
+    for(QModelIndexList::const_iterator it = elementsIndexes.begin();it != elementsIndexes.end();++it){
+        elements.insert(_tulipTableModel->idForIndex(*it));
+    }
+    return elements;
+}
+
+void TulipTableWidget::group(){
+    QModelIndexList rows = selectionModel()->selectedRows(0);
+    set<unsigned int> elements = indexListToIds(rows);
+    set<node> nodes;
+    for(set<unsigned int>::iterator it = elements.begin(); it != elements.end();++it){
+        nodes.insert(node(*it));
+    }
+    Observable::holdObservers();
+    _graph->createMetaNode(nodes);
+    Observable::unholdObservers();
+}
+
+void TulipTableWidget::ungroup(){
+    QModelIndexList rows = selectionModel()->selectedRows(0);
+    set<unsigned int> elements = indexListToIds(rows);
+    Observable::holdObservers();
+    for(set<unsigned int>::iterator it = elements.begin(); it != elements.end();++it){
+        _graph->openMetaNode(node(*it));
+    }
+    Observable::unholdObservers();
+}
+
+void TulipTableWidget::copyNodes(){
+    QModelIndexList rows = selectionModel()->selectedRows(0);
+    set<unsigned int> elements = indexListToIds(rows);
+    Observable::holdObservers();
+    for(set<unsigned int>::iterator it = elements.begin(); it != elements.end();++it){
+        node orig = node(*it);
+        node dest = _graph->addNode();
+        PropertyInterface* property;
+        forEach(property,_graph->getObjectProperties()){
+            property->setNodeStringValue(dest,property->getNodeStringValue(orig));
+        }
+    }
+    Observable::unholdObservers();
+}
+
+
