@@ -33,7 +33,7 @@
 
 using namespace tlp;
 
-std::string PluginLibraryLoader::currentPluginLibrary;
+std::string PluginLibraryLoader::currentPluginLibrary = "libTulip";
 
 static std::set<std::string> previouslyLoadedLib;
 

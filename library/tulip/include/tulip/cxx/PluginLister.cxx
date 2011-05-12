@@ -17,9 +17,6 @@
  *
  */
 //====================================================================================
-#include <tulip/PluginLister.h>
-#include <tulip/AbstractPluginInfo.h>
-
 template<typename KEY, typename VALUE>
 struct StlMapKeyIterator : public tlp::Iterator<KEY> {
   StlMapKeyIterator(typename std::map<KEY,VALUE>::const_iterator startIt, typename std::map<KEY,VALUE>::const_iterator endIt):
@@ -72,6 +69,7 @@ void tlp::PluginLister<ObjectType,Context>::registerPlugin(FactoryInterface<Obje
     description.factory = objectFactory;
     description.parameters = withParam->getParameters();
     description.dependencies = dependencies;
+    description.library = PluginLibraryLoader::getCurrentPluginFileName();
     plugins[pluginName] = description;
     
     delete withParam;
@@ -127,4 +125,8 @@ std::list<tlp::Dependency> tlp::PluginLister<ObjectType,Context>::getPluginDepen
 
 template<class ObjectType, class Context> std::string tlp::PluginLister<ObjectType,Context>::getPluginsClassName() const {
   return demangleTlpClassName(typeid(ObjectType).name());
+}
+
+template<class ObjectType, class Context> std::string tlp::PluginLister<ObjectType,Context>::getPluginLibrary(const std::string& name) const {
+  return plugins.at(name).library;
 }
