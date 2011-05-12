@@ -9,14 +9,14 @@ QString LocalPluginInformations::identifier() const{
   return _infos->getName().c_str();
 }
 QString LocalPluginInformations::name() const{
-  return "Plugin name";
+  return _infos->getName().c_str();
 }
 
 QString LocalPluginInformations::shortDescription() const{
-  return "This is a plugin.";
+  return _infos->getInfo().c_str();
 }
 QString LocalPluginInformations::longDescriptionPath() const{
-  return "longDescription.html";
+  return "index.html";
 }
 
 QString LocalPluginInformations::iconPath() const{
@@ -35,5 +35,5 @@ QStringList LocalPluginInformations::dependencies() const{
   return l;
 }
 QString LocalPluginInformations::version() const{
-  return "4.0.0";
+  return _infos->getRelease().c_str();
 }
