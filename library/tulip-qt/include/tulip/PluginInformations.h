@@ -53,7 +53,7 @@ class TLP_QT_SCOPE PluginInformationsInterface {
 
 class TLP_QT_SCOPE LocalPluginInformations : public PluginInformationsInterface {
   public:
-    LocalPluginInformations(const AbstractPluginInfo* info);
+    LocalPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<Dependency>& dependencies);
 
     virtual QString identifier() const;
     virtual QString name() const;
@@ -65,11 +65,14 @@ class TLP_QT_SCOPE LocalPluginInformations : public PluginInformationsInterface 
     virtual QDateTime installDate() const;
     
     virtual QString type() const;
-    virtual QStringList dependencies() const;
+    virtual const QStringList& dependencies() const;
     virtual QString version() const;
     
   private:
     const AbstractPluginInfo* _infos;
+    const QString _type;
+    const std::list<Dependency> _dependencies;
+    QStringList _dependenciesNames;
 };
 
 }

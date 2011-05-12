@@ -2,7 +2,11 @@
 
 using namespace tlp;
 
-LocalPluginInformations::LocalPluginInformations(const AbstractPluginInfo* info) :_infos(info) {
+LocalPluginInformations::LocalPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list< Dependency >& dependencies)
+  :_infos(info), _type(type.c_str()), _dependencies(dependencies) {
+    for(std::list<tlp::Dependency>::const_iterator it = _dependencies.begin(); it != _dependencies.end(); ++it) {
+      _dependenciesNames.push_back(it->pluginName);
+    }
 }
 
 QString LocalPluginInformations::identifier() const{
@@ -30,12 +34,11 @@ QDateTime LocalPluginInformations::installDate() const{
 }
 
 QString LocalPluginInformations::type() const{
-  return "Algorithm";
+  return _type;
 }
 
-QStringList LocalPluginInformations::dependencies() const{
-  QStringList l;
-  return l;
+const QStringList& LocalPluginInformations::dependencies() const{
+  return _dependenciesNames;
 }
 
 QString LocalPluginInformations::version() const{
