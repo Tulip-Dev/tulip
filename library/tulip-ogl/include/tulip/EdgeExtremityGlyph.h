@@ -72,7 +72,7 @@ protected:
 	GlGraphInputData *edgeExtGlGraphInputData;
 };
 
-typedef tlp::StaticPluginLister<EdgeExtremityGlyph, EdgeExtremityGlyphContext*> EdgeExtremityGlyphPluginLister;
+typedef tlp::StaticPluginLister<EdgeExtremityGlyph, EdgeExtremityGlyphContext*> EdgeExtremityGlyphLister;
 
 #ifdef WIN32
 	template class TLP_GL_SCOPE PluginLister<EdgeExtremityGlyph,EdgeExtremityGlyphContext *>;
@@ -120,7 +120,7 @@ class C##T##Factory:public tlp::FactoryInterface<T, T##Context*>	 \
 {                                                \
 public:                                          \
   C##T##Factory(){				 \
-    EdgeExtremityGlyphPluginLister::registerPlugin(this);	         \
+    EdgeExtremityGlyphLister::registerPlugin(this);	         \
   }       					 \
   std::string getName() const { return std::string(N);}	 \
   std::string getGroup() const { return std::string(G);}	 \

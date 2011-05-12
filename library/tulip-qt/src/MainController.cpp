@@ -118,20 +118,22 @@ namespace tlp {
   //**********************************************************************
   template <typename TPROPERTY>
   void buildPropertyMenu(QMenu &menu, QObject *receiver, const char *slot) {
-    typename PluginLister<TemplateAlgorithm<TPROPERTY>, PropertyContext >::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
-    it= PropertyPluginLister<TemplateAlgorithm<TPROPERTY> >::objMap().begin();
-    for (;it!=PropertyPluginLister<TemplateAlgorithm<TPROPERTY> >::objMap().end();++it)
-      insertInMenu(menu, it->first.c_str(), it->second.factory->getGroup(), groupMenus, nGroups,receiver,slot);
+    string pluginName;
+    forEach(pluginName, PropertyPluginLister<TemplateAlgorithm<TPROPERTY> >::availablePlugins()) {
+      const AbstractPluginInfo* pluginInfo = PropertyPluginLister<TemplateAlgorithm<TPROPERTY> >::pluginInformations(pluginName);
+      insertInMenu(menu, pluginName, pluginInfo->getGroup(), groupMenus, nGroups, receiver, slot);
+    }
   }
   
   void buildMenuWithContext(QMenu &menu, QObject *receiver, const char *slot) {
-    PluginLister<Algorithm, AlgorithmContext>::ObjectCreator::const_iterator it;
     std::vector<QMenu*> groupMenus;
     std::string::size_type nGroups = 0;
-    for (it= AlgorithmManager::objMap().begin();it != AlgorithmManager::objMap().end();++it)
-      insertInMenu(menu, it->first.c_str(), it->second.factory->getGroup(), groupMenus, nGroups,receiver,slot);
+    string pluginName;
+    forEach(pluginName, AlgorithmLister::availablePlugins()) {
+      insertInMenu(menu, pluginName.c_str(), AlgorithmLister::pluginInformations(pluginName)->getGroup(), groupMenus, nGroups,receiver,slot);
+    }
   }
   typedef std::vector<node> NodeA;
   typedef std::vector<edge> EdgeA;
@@ -806,9 +808,10 @@ namespace tlp {
     }
 
     connect(viewMenu, SIGNAL(triggered(QAction *)), SLOT(createView(QAction*)));
-    PluginLister<View, ViewContext*>::ObjectCreator::const_iterator it;
-    for (it=ViewPluginLister::objMap().begin();it != ViewPluginLister::objMap().end();++it) {
-      viewMenu->addAction(it->first.c_str());
+
+    string viewName;
+    forEach(viewName, ViewLister::availablePlugins()) {
+      viewMenu->addAction(viewName.c_str());
     }
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,viewMenu);
 

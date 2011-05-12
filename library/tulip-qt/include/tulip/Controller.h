@@ -238,7 +238,7 @@ namespace tlp {
   class TLP_QT_SCOPE ControllerContext {
   };
 
-  typedef StaticPluginLister<Controller, ControllerContext*> ControllerPluginLister;
+  typedef StaticPluginLister<Controller, ControllerContext*> ControllerLister;
 
 #ifdef WIN32
   template class TLP_QT_SCOPE PluginLister<Controller,ControllerContext *>;
@@ -250,9 +250,3 @@ namespace tlp {
 #define CONTROLLERPLUGIN(C,N,A,D,I,R) CONTROLLERPLUGINOFGROUP(C,N,A,D,I,R,"")
 
 #endif
-
-
-
-
-
-

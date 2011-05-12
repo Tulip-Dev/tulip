@@ -147,7 +147,7 @@ namespace tlp {
   class TLP_QT_SCOPE InteractorContext {
   };
 
-  typedef StaticPluginLister<Interactor, InteractorContext*> InteractorPluginLister;
+  typedef StaticPluginLister<Interactor, InteractorContext*> InteractorLister;
 
   #ifdef WIN32
 	template class TLP_QT_SCOPE PluginLister<Interactor,InteractorContext *>;

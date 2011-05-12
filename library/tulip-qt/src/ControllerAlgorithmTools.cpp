@@ -75,7 +75,7 @@ namespace tlp {
   bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const string &name) {
     DataSet dataSet;
     StructDef *params = getPluginParameters(PluginLister<Algorithm, AlgorithmContext>::getInstance(), name);
-    StructDef sysDef = AlgorithmManager::getPluginParameters(name);
+    StructDef sysDef = AlgorithmLister::getPluginParameters(name);
     params->buildDefaultDataSet(dataSet, graph );
     string title = string("Tulip Parameter Editor: ") + name;
     bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,

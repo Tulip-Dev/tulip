@@ -124,13 +124,13 @@ namespace tlp {
         return "Import";
       if(ExportModuleManager::pluginExists(name))
         return "Export";
-          if (AlgorithmManager::pluginExists(name))
+          if (AlgorithmLister::pluginExists(name))
         return "General";
-      if (InteractorPluginLister::pluginExists(name))
+      if (InteractorLister::pluginExists(name))
         return "Interactor";
-          if (ViewPluginLister::pluginExists(name))
+          if (ViewLister::pluginExists(name))
         return "View";
-          if (ControllerPluginLister::pluginExists(name))
+          if (ControllerLister::pluginExists(name))
         return "Controller";
 
       return "Glyph";

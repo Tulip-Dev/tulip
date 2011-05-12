@@ -46,6 +46,7 @@ class TLP_QT_SCOPE PluginInformationsInterface {
     virtual QString type() const = 0;
     virtual QStringList dependencies() const = 0;
     virtual QString version() const = 0;
+    
   protected:
     PluginInformationsInterface() {}
 };

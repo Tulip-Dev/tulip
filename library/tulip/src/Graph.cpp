@@ -179,7 +179,7 @@ bool tlp::exportGraph(Graph *sg,ostream &os, const string &alg,
 //=========================================================
 bool tlp::applyAlgorithm(Graph *sg,string &errorMsg,DataSet *dataSet,
 			  const string &alg, PluginProgress *plugProgress) {
-  if (!AlgorithmManager::pluginExists(alg)) {
+  if (!AlgorithmLister::pluginExists(alg)) {
     cerr << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << alg
          << "\" doesn't exists (or is not loaded)" << endl;
     return false;
@@ -197,7 +197,7 @@ bool tlp::applyAlgorithm(Graph *sg,string &errorMsg,DataSet *dataSet,
   }
   else tmpProgress=plugProgress;
   tmp.pluginProgress=tmpProgress; 
-  Algorithm *newAlgo=AlgorithmManager::getPluginObject(alg, tmp);
+  Algorithm *newAlgo=AlgorithmLister::getPluginObject(alg, tmp);
   if ((result=newAlgo->check(errorMsg)))
     newAlgo->run();
   delete newAlgo;

@@ -100,7 +100,7 @@ namespace tlp {
     virtual Coord getAnchor(const Coord &vector) const;
   };
 
-  typedef StaticPluginLister<Glyph, GlyphContext*> GlyphPluginLister;
+  typedef StaticPluginLister<Glyph, GlyphContext*> GlyphLister;
 
   #ifdef WIN32
 	template class TLP_GL_SCOPE PluginLister<Glyph,GlyphContext *>;
@@ -112,7 +112,7 @@ class C##T##Factory:public tlp::FactoryInterface<T, T##Context*>	 \
 {                                                \
 public:                                          \
   C##T##Factory(){				 \
-    GlyphPluginLister::registerPlugin(this);	         \
+    GlyphLister::registerPlugin(this);	         \
   }       					 \
   string getName() const { return string(N);}	 \
   string getGroup() const { return string(G);}	 \

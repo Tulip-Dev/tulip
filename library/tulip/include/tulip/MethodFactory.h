@@ -127,7 +127,7 @@ class C##T##Factory:public tlp::FactoryInterface<T,T##Context *> \
 {                                                \
 public:                                          \
   C##T##Factory(){         \
-    T##PluginLister::registerPlugin(this);           \
+    T##Lister::registerPlugin(this);           \
   }                  \
   std::string getName() const { return std::string(N);}  \
   std::string getGroup() const { return std::string(G);}   \
