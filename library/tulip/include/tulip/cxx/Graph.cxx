@@ -19,7 +19,6 @@
 #include <tulip/SimplePluginProgress.h>
 
 namespace tlp {
-  template <class PropertyAlgorithm> class PropertyFactory;
   template<class Property> class TemplateAlgorithm;
   template <class PropertyAlgorithm> class PropertyPluginLister;
 }

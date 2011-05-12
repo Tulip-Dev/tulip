@@ -50,12 +50,7 @@ public:
   DataSet *dataSet;
 };
 
-class ExportModuleFactory:public FactoryInterface<ExportModule,AlgorithmContext>{
-public:
-  virtual ~ExportModuleFactory() {}
-};
-
-typedef StaticPluginLister<ExportModule,AlgorithmContext> ExportModuleManager;
+typedef StaticPluginLister<ExportModule,AlgorithmContext> ExportModuleLister;
 
 #ifdef WIN32
 template class TLP_SCOPE PluginLister<ExportModule,AlgorithmContext>;

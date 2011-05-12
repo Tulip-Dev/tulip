@@ -456,7 +456,7 @@ bool TulipApp::doFileSave(Controller *controllerToSave,string plugin, string fil
 			  string author, string comments) {
 
   DataSet dataSet;
-  StructDef parameter = ExportModuleManager::getPluginParameters(plugin);
+  StructDef parameter = ExportModuleLister::getPluginParameters(plugin);
   parameter.buildDefaultDataSet(dataSet);
   DataSet controller;
   DataSet controllerData;
@@ -563,7 +563,7 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
     }else {
       noPlugin = false;
       s = QString::null;
-      StructDef sysDef = ImportModuleManager::getPluginParameters(*plugin);
+      StructDef sysDef = ImportModuleLister::getPluginParameters(*plugin);
       StructDef *params = ControllerAlgorithmTools::getPluginParameters(PluginLister<ImportModule, AlgorithmContext>::getInstance(), *plugin);
       params->buildDefaultDataSet( dataSet );
       string title = string("Enter Import parameters: ") + plugin->c_str();

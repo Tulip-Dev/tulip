@@ -44,11 +44,11 @@
 //===========================================================
 /// Macro for factorization of source code pf Properties plugin mechanism
 #define PROPERTYPLUGINFACTORY(T,C,N,A,D,I,R,G)          \
-class C##T##Factory:public tlp::PropertyFactory<tlp::T##Algorithm>	\
+class C##T##Factory:public tlp::FactoryInterface<tlp::T##Algorithm, tlp::PropertyContext>	\
 {                                                       \
  public:						\
   C##T##Factory(){					\
-    tlp::PropertyPluginLister<tlp::T##Algorithm>::registerPlugin((tlp::PropertyFactory<tlp::T##Algorithm> *) this); \
+    tlp::PropertyPluginLister<tlp::T##Algorithm>::registerPlugin((tlp::FactoryInterface<tlp::T##Algorithm, tlp::PropertyContext> *) this); \
   }							\
   ~C##T##Factory(){}					\
   std::string getClassName() const { return std::string(#T);} \
@@ -91,7 +91,7 @@ extern "C" {                                            \
 //===========================================================
 /// Macro for factorization of source code of Graph modification plugin mechanism 
 #define GRAPHPLUGINFACTORY(T,C,N,A,D,I,R,G)	\
-class C##T##Factory:public tlp::T##Factory              \
+class C##T##Factory:public tlp::FactoryInterface<tlp::T, tlp::AlgorithmContext>              \
 {                                                       \
  public:						\
   C##T##Factory(){					\

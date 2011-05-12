@@ -120,9 +120,9 @@ namespace tlp {
         return "Label";
       if(PropertyPluginLister<TemplateAlgorithm<BooleanProperty> >::pluginExists(name))
         return "Selection";
-      if(ImportModuleManager::pluginExists(name))
+      if(ImportModuleLister::pluginExists(name))
         return "Import";
-      if(ExportModuleManager::pluginExists(name))
+      if(ExportModuleLister::pluginExists(name))
         return "Export";
           if (AlgorithmLister::pluginExists(name))
         return "General";
