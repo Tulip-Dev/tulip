@@ -8,6 +8,8 @@ HeaderSelectionDialog::HeaderSelectionDialog(QWidget *parent) :
     ui(new Ui::HeaderSelectionDialog)
 {
     ui->setupUi(this);
+    connect(ui->displayAllColumnsPushButton,SIGNAL(clicked(bool)),this,SLOT(showAll()));
+    connect(ui->hideAllColumnsPushButton,SIGNAL(clicked(bool)),this,SLOT(hideAll()));
 }
 
 HeaderSelectionDialog::~HeaderSelectionDialog()
@@ -24,7 +26,7 @@ void HeaderSelectionDialog::setHeaderView(QHeaderView* headerView){
         item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
         item->setCheckState(headerView->isSectionHidden(i)?Qt::Unchecked:Qt::Checked);
         ui->listWidget->addItem(item);
-    }    
+    }
 }
 
 set<int> HeaderSelectionDialog::selectedIndexes()const{
@@ -40,11 +42,24 @@ set<int> HeaderSelectionDialog::selectedIndexes()const{
 
 void HeaderSelectionDialog::updateHeaders(QHeaderView* header,QWidget* parent){
     HeaderSelectionDialog *dialog = new HeaderSelectionDialog(parent);
+    dialog->setWindowTitle(tr("Choose columns to display"));
     dialog->setHeaderView(header);
     if(dialog->exec() == QDialog::Accepted){
         set<int> selection = dialog->selectedIndexes();
         for(int i=0;i<header->count();++i){
             header->setSectionHidden(i,selection.find(i)==selection.end());
         }
+    }
+}
+
+void HeaderSelectionDialog::hideAll(){
+    for(int i = 0 ; i <ui->listWidget->count() ; ++i){
+        ui->listWidget->item(i)->setCheckState(Qt::Unchecked);
+    }
+}
+
+void HeaderSelectionDialog::showAll(){
+    for(int i = 0 ; i <ui->listWidget->count() ; ++i){
+        ui->listWidget->item(i)->setCheckState(Qt::Checked);
     }
 }

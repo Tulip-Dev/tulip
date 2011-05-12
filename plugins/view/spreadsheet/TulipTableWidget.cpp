@@ -19,6 +19,8 @@ TulipTableWidget::TulipTableWidget(QWidget* parent):QTableView(parent),_graph(NU
     horizontalHeader()->setMovable(true);
     verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(verticalHeader(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showElementsContextMenu(QPoint)));
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showTableContextMenu(QPoint)));
 }
 
 void TulipTableWidget::setGraph(Graph* graph,ElementType element){
@@ -78,6 +80,11 @@ void TulipTableWidget::showPropertiesContextMenu(const QPoint& position){
     QAction* othersAction = columnsMenu->addAction(tr("Others..."));
     connect(othersAction,SIGNAL(triggered()),this,SLOT(showPropertiesListDialog()));
     contextMenu.exec(mapToGlobal(position));
+}
+
+void TulipTableWidget::showTableContextMenu(){
+    QMenu contextMenu(this);
+
 }
 
 void TulipTableWidget::updateHorizontalHeaderVisibility(bool checked){

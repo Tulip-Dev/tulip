@@ -24,6 +24,10 @@ public:
 
 private:
     Ui::HeaderSelectionDialog *ui;
+
+private slots:
+    void hideAll();
+    void showAll();
 };
 
 #endif // HEADERSELECTIONDIALOG_H

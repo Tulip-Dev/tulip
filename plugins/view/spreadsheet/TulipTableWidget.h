@@ -58,6 +58,7 @@ protected slots:
     void showElementsContextMenu(const QPoint& position);
     void showPropertiesContextMenu(const QPoint& position);
     void showPropertiesListDialog();
+    void showTableContextMenu();
 
 
 };
