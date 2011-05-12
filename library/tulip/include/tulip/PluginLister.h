@@ -74,6 +74,14 @@ public:
    * @return :Iterator< std::string >* An iterator over the names of the plug-ins registered in this factory.
    **/
   virtual Iterator<std::string>* availablePlugins() const = 0;
+
+  /**
+   * @brief gets more detailed informations about one specific plug-in.
+   *
+   * @param name The name of the plugin to retrieve informations for.
+   * @return :AbstractPluginInfo* The informations on the plugin;
+   **/
+  virtual const AbstractPluginInfo* pluginInformations(const std::string& name) const = 0;
   
   /**
    * @brief Checks if a given name is registered in this factory.
@@ -253,6 +261,7 @@ public:
 
   //the following function are inherited from PluginListerInterface, and by default inherit the doc.
   Iterator<std::string>* availablePlugins() const;
+  const AbstractPluginInfo* pluginInformations(const std::string& name) const;
   bool pluginExists(const std::string& pluginName) const;
   const StructDef getPluginParameters(std::string name) const;
   std::list<tlp::Dependency> getPluginDependencies(std::string name) const;

@@ -44,6 +44,11 @@ tlp::Iterator<std::string>* tlp::PluginLister< ObjectType, Context>::availablePl
 }
 
 template<class ObjectType, class Context>
+const tlp::AbstractPluginInfo* tlp::PluginLister< ObjectType, Context>::pluginInformations(const std::string& name) const {
+  return objMap.at(name).factory;
+}
+
+template<class ObjectType, class Context>
 bool tlp::PluginLister< ObjectType, Context>::pluginExists(const std::string &pluginName) const {
   return (objMap.find(pluginName) != objMap.end());
 }
