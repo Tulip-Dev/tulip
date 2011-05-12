@@ -1,12 +1,13 @@
+#include <tulip/PluginInformations.h>
 
-#include <tulip/PluginInformations>
-
-#include <QList>
+#include <QtCore/QList>
 
 #ifndef PluginLister_H
 #define PluginLister_H
 
-class PluginLister {
+namespace tlp {
+
+class TLP_QT_SCOPE PluginManager {
 public:
   
   enum PluginLocation {
@@ -14,8 +15,9 @@ public:
     Local = 1,
     Remote = 2
   };
-  static QList<PluginInformations> pluginsList(PluginLocation list = PluginLocation::All) const;
+  static QList<const tlp::PluginInformationsInterface*> pluginsList(PluginLocation list = All);
   
-}
+};
 
+}
 #endif //PluginLister_H

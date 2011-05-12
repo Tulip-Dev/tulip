@@ -79,6 +79,8 @@ SET(SRCS
   TabWidgetHidableMenuGraphicsProxy.cpp
   GraphicsWidgetBase.cpp
   GlMainWidgetItem.cpp
+  PluginInformations.cpp
+  PluginManager.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS

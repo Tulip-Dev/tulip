@@ -20,30 +20,57 @@
 #ifndef PLUGININFORMATIONS_H
 #define PLUGININFORMATIONS_H
 
-#include <QDate>
-#include <QIcon>
+#include <QtCore/QDateTime>
+#include <QtGui/QIcon>
+
+#include <tulip/AbstractPluginInfo.h>
+
+namespace tlp {
 
 /**
  * @brief This class describes the whereabouts of a plugin, be it locally installed, or on a remote server.
  *
  * This class is meant to describe a plug-in so a comprehensive list can be displayed, i.e. to manage plug-ins installation.
- *
- * This is a WIP for Tulip 4.0 and serves no real purpose as of now.
  **/
-class PluginInformations {
-  public:   
-    QString identifier() const;
-    QString name() const;
+class TLP_QT_SCOPE PluginInformationsInterface {
+  public:
+    virtual QString identifier() const = 0;
+    virtual QString name() const = 0;
 
-    QString shortDescription() const;
-    QString longDescriptionPath() const;
+    virtual QString shortDescription() const = 0;
+    virtual QString longDescriptionPath() const = 0;
 
-    QString iconPath() const;
-    QDate installDate() const;
+    virtual QString iconPath() const = 0;
+    virtual QDateTime installDate() const = 0;
     
-    QString type() const;
-    QStringList dependencies() const;
-    QString version() const;
+    virtual QString type() const = 0;
+    virtual QStringList dependencies() const = 0;
+    virtual QString version() const = 0;
+  protected:
+    PluginInformationsInterface() {}
 };
+
+class TLP_QT_SCOPE LocalPluginInformations : public PluginInformationsInterface {
+  public:
+    LocalPluginInformations(const AbstractPluginInfo* info);
+
+    virtual QString identifier() const;
+    virtual QString name() const;
+    
+    virtual QString shortDescription() const;
+    virtual QString longDescriptionPath() const;
+    
+    virtual QString iconPath() const;
+    virtual QDateTime installDate() const;
+    
+    virtual QString type() const;
+    virtual QStringList dependencies() const;
+    virtual QString version() const;
+    
+  private:
+    const AbstractPluginInfo* _infos;
+};
+
+}
 
 #endif //PLUGININFORMATIONS_H
