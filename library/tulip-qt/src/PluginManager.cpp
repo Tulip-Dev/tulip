@@ -14,7 +14,7 @@ QList<const tlp::PluginInformationsInterface*> PluginManager::pluginsList(Locati
       while(plugins->hasNext()) {
         string pluginName = plugins->next();
         const AbstractPluginInfo* info = currentLister->pluginInformations(pluginName);
-        PluginInformationsInterface* localinfo = new LocalPluginInformations(info);
+        PluginInformationsInterface* localinfo = new LocalPluginInformations(info, currentLister->getPluginsClassName(), currentLister->getPluginDependencies(pluginName));
         result.push_back(localinfo);
       }
       delete plugins;

@@ -64,7 +64,7 @@ namespace tlp {
  **/
 class TLP_SCOPE PluginListerInterface {
 public:
-  static std::map< std::string, PluginListerInterface* > *allFactories;
+  static std::map<std::string, PluginListerInterface*> *allFactories;
   static PluginLoader *currentLoader;
 
   virtual ~PluginListerInterface(){}
@@ -108,6 +108,14 @@ public:
    **/
   virtual std::list<tlp::Dependency> getPluginDependencies(std::string name) const = 0;
 
+  /**
+   * @brief Gets the class name for the plug-in's registered class.
+   *  If the class is in the tlp namespace, the 'tlp::' prefix is removed.
+   *
+   * @return :string The class name of the plug-in.
+   **/
+  virtual std::string getPluginsClassName() const = 0;
+  
   /**
    * @brief Adds a factory to a static map of factories.
    * This map is then used to list all the factories, and all the plug-ins for each factory.
@@ -208,14 +216,6 @@ public:
      * @return void
      **/
     virtual void removePlugin(const std::string& name)=0;
-
-    /**
-     * @brief Gets the class name for the plug-in's registered class.
-     *  If the class is in the tlp namespace, the 'tlp::' prefix is removed.
-     *
-     * @return :string The class name of the plug-in.
-     **/
-    virtual std::string getPluginsClassName() const = 0;
 };
 
 template <class PluginObject, class PluginContext>
