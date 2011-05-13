@@ -1,3 +1,4 @@
 # Cannot be added until we remove tulip3 app
 ADD_SUBDIRECTORY(bitmaps)
 ADD_SUBDIRECTORY(tulip_app)
+ADD_SUBDIRECTORY(tulip)

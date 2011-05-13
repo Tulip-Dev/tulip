@@ -62,10 +62,9 @@ void TulipWelcomePage::rssReply(QNetworkReply *reply) {
     _ui->rssScroll->widget()->setLayout(rssLayout);
 
     QList<RssParser::RssItem> rssItems = parser->result();
-
     int i=0;
     for (QList<RssParser::RssItem>::iterator it = rssItems.begin(); it != rssItems.end(); ++it) {
-      if (i++ >= RSS_LIMIT)
+      if (i >= RSS_LIMIT)
         break;
       QString text = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body style=\" font-size:8.25pt; font-weight:400; font-style:normal;\"><p style=\" -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:9pt; color:#616161;\"><img src=\":/tulip/app/ui/list_bullet_arrow.png\"></img>   ";
       text += it->title;
