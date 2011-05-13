@@ -23,10 +23,18 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
+
+
+
+
 %ModuleHeaderCode
 typedef std::pair<QWidget *, std::string> std_pair_0101QWidget_0100std_string;
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GlMainView.h>
+#include <tulip/View.h>
+namespace tlp {
+typedef FactoryInterface<View, ViewContext*> ViewFactory;
+};
 %End
 
 typedef std::pair<QWidget *, std::string> std_pair_0101QWidget_0100std_string;
@@ -112,8 +120,7 @@ class ViewFactory : tlp::AbstractPluginInfo {
 
     	void registerPlugin();
 %MethodCode
-	sipCpp->initFactory();
-	sipCpp->factory->registerPlugin(sipCpp);
+	tlp::ViewLister::registerPlugin(sipCpp);
 %End
   };
 };

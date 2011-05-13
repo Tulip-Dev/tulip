@@ -37,7 +37,8 @@ public :
 	
 	virtual bool importGraph(const std::string &s) = 0;
 };
-}
+typedef tlp::FactoryInterface<tlp::ImportModule, tlp::AlgorithmContext> ImportModuleFactory;
+};
 %End
 
 
@@ -84,8 +85,7 @@ public:
 	
 	void registerPlugin();
 %MethodCode
-	sipCpp->initFactory();
-	sipCpp->factory->registerPlugin(sipCpp);
+	tlp::StaticPluginLister<tlp::ImportModule, tlp::AlgorithmContext>::registerPlugin(sipCpp);
 %End
 };
 };

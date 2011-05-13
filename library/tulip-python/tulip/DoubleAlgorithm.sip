@@ -24,11 +24,10 @@
 // +-------------------------------------------------------------------------+
 
 %ModuleHeaderCode
-#include <tulip/PluginManager.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/DoubleProperty.h>
 namespace tlp {
-typedef tlp::PropertyFactory<tlp::DoubleAlgorithm> DoubleAlgorithmFactory;
+typedef tlp::FactoryInterface<tlp::DoubleAlgorithm, tlp::PropertyContext> DoubleAlgorithmFactory;
 };
 %End
 
@@ -48,7 +47,7 @@ protected:
 
 class DoubleAlgorithmFactory : tlp::AbstractPluginInfo {
 %TypeHeaderCode
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 %End
 public:
 
@@ -66,8 +65,7 @@ public:
 	
 	void registerPlugin();
 %MethodCode
-	tlp::PropertyFactory<tlp::DoubleAlgorithm>::initFactory();			
-    tlp::PropertyFactory<tlp::DoubleAlgorithm>::factory->registerPlugin(sipCpp);
+	tlp::PropertyPluginLister<tlp::DoubleAlgorithm>::registerPlugin(sipCpp);
 %End
 
 };

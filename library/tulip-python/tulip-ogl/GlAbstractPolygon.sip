@@ -38,6 +38,9 @@ class GlAbstractPolygon : tlp::GlSimpleEntity {
 
     enum PolygonMode {POLYGON = 0, QUAD_STRIP = 1};
     
+    
+    void draw(float lod, tlp::Camera *camera);
+    
     PolygonMode getPolygonMode();
     
     void setPolygonMode(PolygonMode mode);
@@ -77,6 +80,10 @@ class GlAbstractPolygon : tlp::GlSimpleEntity {
     float getHideOutlineLod();
 
     void setHideOutlineLod(float lod);
+
+	virtual void getXML(_xmlNode* rootNode);
+    
+    virtual void setWithXML(_xmlNode* rootNode);
 
   protected:
 

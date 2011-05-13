@@ -25,6 +25,9 @@
 
 %ModuleHeaderCode
 #include <tulip/GlyphManager.h>
+namespace tlp {
+typedef FactoryInterface<Glyph, GlyphContext*> GlyphFactory;
+};
 %End
 
 
@@ -84,8 +87,7 @@ namespace tlp {
 
     	void registerPlugin();
 %MethodCode
-	sipCpp->initFactory();
-	sipCpp->factory->registerPlugin(sipCpp);
+	tlp::GlyphLister::registerPlugin(sipCpp);
 	tlp::GlyphManager::getInst().loadGlyphPlugins();
 %End
   };

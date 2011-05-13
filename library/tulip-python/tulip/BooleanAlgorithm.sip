@@ -24,11 +24,10 @@
 // +-------------------------------------------------------------------------+
 
 %ModuleHeaderCode
-#include <tulip/PluginManager.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/BooleanProperty.h>
 namespace tlp {
-typedef tlp::PropertyFactory<tlp::BooleanAlgorithm> BooleanAlgorithmFactory;
+typedef tlp::FactoryInterface<tlp::BooleanAlgorithm, tlp::PropertyContext> BooleanAlgorithmFactory;
 };
 %End
 
@@ -49,7 +48,7 @@ protected:
 namespace tlp {
 class BooleanAlgorithmFactory : tlp::AbstractPluginInfo {
 %TypeHeaderCode
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 %End
 public:
 
@@ -67,9 +66,7 @@ public:
 	
 	void registerPlugin();
 %MethodCode
-
-	tlp::PropertyFactory<tlp::BooleanAlgorithm>::initFactory();			
-    tlp::PropertyFactory<tlp::BooleanAlgorithm>::factory->registerPlugin(sipCpp);
+	tlp::PropertyPluginLister<tlp::BooleanAlgorithm>::registerPlugin(sipCpp);
 %End
 
 };

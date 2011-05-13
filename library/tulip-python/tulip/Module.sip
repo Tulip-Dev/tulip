@@ -62,6 +62,10 @@
 
 namespace tlp;
 
+%ModuleHeaderCode
+#include <tulip/PluginLister.h>
+%End
+
 %Import ../stl/Module.sip
 
 %Include Iterator.sip

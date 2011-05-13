@@ -24,11 +24,10 @@
 // +-------------------------------------------------------------------------+
 
 %ModuleHeaderCode
-#include <tulip/PluginManager.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/SizeProperty.h>
 namespace tlp {
-typedef tlp::PropertyFactory<tlp::SizeAlgorithm> SizeAlgorithmFactory;
+typedef tlp::FactoryInterface<tlp::SizeAlgorithm, tlp::PropertyContext> SizeAlgorithmFactory;
 };
 %End
 
@@ -47,7 +46,7 @@ protected:
 
 class SizeAlgorithmFactory : tlp::AbstractPluginInfo {
 %TypeHeaderCode
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 %End
 public:
 
@@ -65,9 +64,7 @@ public:
 	
 	void registerPlugin();
 %MethodCode
-
-	tlp::PropertyFactory<tlp::SizeAlgorithm>::initFactory();			
-    tlp::PropertyFactory<tlp::SizeAlgorithm>::factory->registerPlugin(sipCpp);
+	tlp::PropertyPluginLister<tlp::SizeAlgorithm>::registerPlugin(sipCpp);
 %End
 
 };
