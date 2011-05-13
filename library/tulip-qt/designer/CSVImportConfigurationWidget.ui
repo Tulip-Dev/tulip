@@ -23,7 +23,7 @@
    <item>
     <widget class="QCheckBox" name="useFirstLineAsPropertyNamecheckBox">
      <property name="text">
-      <string>Use first line tokens as name</string>
+      <string>Use first line tokens as columns names</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -71,7 +71,7 @@
    <item>
     <widget class="QScrollArea" name="propertiesListScrollArea">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>

@@ -115,15 +115,15 @@ CSVGraphMappingConfigurationWidget::CSVGraphMappingConfigurationWidget(QWidget *
 
     connect(ui->createNewPropertyPushButton,SIGNAL(clicked(bool)),this,SLOT(createNewProperty()),Qt::QueuedConnection);
 
-    ui->graphIndexPropertiesComboBox->setDefaultText(tr("Choose property containing entities ids"));
+    ui->graphIndexPropertiesComboBox->setDefaultText(tr("Choose the property containing existing entities ids"));
     ui->sourceColumnComboBox->setDefaultText(tr("Choose CSV column containing source entities ids"));
     ui->targetColumnComboBox->setDefaultText(tr("Choose CSV column containing target entities ids"));
 
     ui->nodeMappingColumncomboBox->setDefaultText(tr("Choose CSV column containing entities ids"));
-    ui->nodeMappingPropertycomboBox->setDefaultText(tr("Choose property containing entities ids"));
+    ui->nodeMappingPropertycomboBox->setDefaultText(tr("Choose the property containing existing entities ids"));
 
     ui->edgeMappingColumncomboBox->setDefaultText(tr("Choose CSV column containing relations ids"));
-    ui->edgeMappingPropertycomboBox->setDefaultText(tr("Choose property containing relations ids"));
+    ui->edgeMappingPropertycomboBox->setDefaultText(tr("Choose the property containing existing relations ids"));
 
 }
 
