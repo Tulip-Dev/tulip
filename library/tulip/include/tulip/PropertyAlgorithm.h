@@ -121,13 +121,24 @@ typedef TemplateAlgorithm<StringProperty> StringAlgorithm;
 typedef TemplateAlgorithm<BooleanProperty> BooleanAlgorithm;
 
 #ifdef WIN32
-template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<SizeProperty>, PropertyContext>;
-template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<IntegerProperty>, PropertyContext>;
-template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<LayoutProperty>, PropertyContext>;
-template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<ColorProperty>, PropertyContext>;
-template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<DoubleProperty>, PropertyContext>;
-template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<StringProperty>, PropertyContext>;
-template class TLP_SCOPE tlp::PluginLister<TemplateAlgorithm<BooleanProperty>, PropertyContext>;
+
+#ifdef _MSC_VER //MSVC needs explicit instantiations of the templates
+template class TemplateAlgorithm<SizeProperty>;
+template class TemplateAlgorithm<IntegerProperty>;
+template class TemplateAlgorithm<LayoutProperty>;
+template class TemplateAlgorithm<ColorProperty>;
+template class TemplateAlgorithm<DoubleProperty>;
+template class TemplateAlgorithm<StringProperty>;
+template class TemplateAlgorithm<BooleanProperty>;
+#endif
+
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<SizeProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<IntegerProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<LayoutProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<ColorProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<DoubleProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<StringProperty>, PropertyContext>;
+template class TLP_SCOPE tlp::PluginManager<TemplateAlgorithm<BooleanProperty>, PropertyContext>;
 #endif
 
 /*@}*/
