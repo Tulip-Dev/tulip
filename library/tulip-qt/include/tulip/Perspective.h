@@ -22,12 +22,60 @@
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
 
-namespace tlp {
+class QMainWindow;
 
+namespace tlp {
+/**
+  @brief Class representing a Perspective plugin
+  The perspective plugin system replaces the old Controller mechanism available in Tulip 3.x. It's been designed to be more flexible and to allow a complete control
+  on the user interface.
+
+  Keep in mind that Perspective plugins have been designed to work inside their own processes. Those process might be instanciated from a ROOT PROCESS (tulip_app in case of a
+  Perspective run into Tulip or as standalone applications.
+
+  Several signals and slots are available. They are meant to establish a simple communication protocol between the perspective's process and the tulip_app parent process.
+  Those elements provide access to common features like asking the tulip_app to open the plugins manager, to show the help screen, to properly close the perspective etc.
+  @see The tulip_perspective and tulip_app application respective docs to see how tulip processes are ordered.
+  @see class documentation for an exhaustive list of signals/slots
+  @note Those signals and slots are meant to be used when run along with the tulip_app process. If no tulip_app is present, those functions will do nothing.
+
+  Perspective plugins are given a PerspectiveContext when they are initialized. The PerspectiveContext contains the following fields:
+  @list
+  @li mainWindow (QMainWindow): This is a Qt main window widget which has been partly initialized by the process. This window is initially hidden. The perspective
+                                takes this ownership of the main window. Which means that one can delete it if the perspective is not meant to run into a GUI.
+  @li document: Still to be defined.
+  @endlist
+  */
 class TLP_QT_SCOPE Perspective : public WithParameter, public WithDependency {
+  Q_OBJECT
+
+  /**
+    @brief Construct the perspective along with its respective context.
+    @warning The context object is not automatically stored and will have to be handled specificly by implementations.
+    */
+  explicit Perspective(PerspectiveContext &) {}
+
+  signals:
+  /**
+    @brief Asks the underlying tulip_app to display the welcome screen.
+    */
+  void showWelcomeScreen();
+
+  /**
+    @brief Asks the underlying tulip_app to display the welcome screen.
+    */
+  void showPluginsCenterScreen();
+
+  /**
+    @brief Asks the underlying tulip_app to display the welcome screen.
+    */
+  void showHelpScreen();
+
+  // TODO: add open new controller function and some stuff to handle documents
 };
 
-class TLP_QT_SCOPE PerspectiveContext {
+struct TLP_QT_SCOPE PerspectiveContext {
+  QMainWindow *mainWindow;
 };
 
 typedef StaticPluginLister<Perspective, PerspectiveContext> PerspectivePluginLister;
