@@ -8,6 +8,10 @@ namespace Ui {
 class TulipMainWindowData;
 }
 
+/**
+  @brief The window used in the tulip_app process to display the Welcome, plugins center and getting help screens.
+  This class is basically a controller for the 3 underleying screens that manage their own logic.
+  */
 class TulipMainWindow: public QMainWindow {
   Q_OBJECT
 

@@ -35,7 +35,7 @@ namespace tlp {
 
   Several signals and slots are available. They are meant to establish a simple communication protocol between the perspective's process and the tulip_app parent process.
   Those elements provide access to common features like asking the tulip_app to open the plugins manager, to show the help screen, to properly close the perspective etc.
-  @see The tulip_perspective and tulip_app application respective docs to see how tulip processes are ordered.
+  // TODO: add a link to some online documentation about tulip's process encapsulation.
   @see class documentation for an exhaustive list of signals/slots
   @note Those signals and slots are meant to be used when run along with the tulip_app process. If no tulip_app is present, those functions will do nothing.
 

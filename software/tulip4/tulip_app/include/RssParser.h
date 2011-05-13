@@ -3,6 +3,10 @@
 
 #include <QtXml/QXmlDefaultHandler>
 
+/**
+  @brief a Basic XML/RSS parser meant to parse RSS flux coming from the Tulip website.
+  The RSS parser store items titles, links, publication dates and descriptions so that the welcome screen can display them.
+  */
 class RssParser: public QXmlDefaultHandler {
 public:
   struct RssItem {
