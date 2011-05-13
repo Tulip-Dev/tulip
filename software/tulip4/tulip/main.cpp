@@ -18,8 +18,19 @@ int main(int argc,char **argv) {
 
   // Check for elements to be installed
 
-  // build up the tulip_app process
+  // Build up the tulip_app process
   QProcess tulip_app;
+  // Setup environment
+  QProcessEnvironment env(QProcessEnvironment::systemEnvironment());
+  QString basePath(QCoreApplication::applicationDirPath() + "/../");
+#if defined(__APPLE__)
+  env.insert("DYLD_LIBRARY_PATH", QDir::toNativeSeparators(basePath) + "/Frameworks" + ":" + env.value("DYLD_LIBRARY_PATH"));
+#elif defined(__linux__)
+  env.insert("LD_LIBRARY_PATH",QDir::toNativeSeparators(basePath) + "/lib" + ":" + env.value("LD_LIBRARY_PATH"));
+#endif
+
+  qWarning(env.value("LD_LIBRARY_PATH").toStdString().c_str());
+
   tulip_app.setReadChannelMode(QProcess::ForwardedChannels);
   bool restart=true;
 
@@ -32,6 +43,7 @@ int main(int argc,char **argv) {
     settings.remove("app/need_restart");
     settings.sync();
 
+    tulip_app.setProcessEnvironment(env);
     tulip_app.start(QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("tulip_app4"),arguments);
     tulip_app.waitForFinished(-1);
 
