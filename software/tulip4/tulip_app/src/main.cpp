@@ -12,7 +12,7 @@
 #include "TulipMainWindow.h"
 
 int main(int argc, char **argv) {
-  QApplication tulip(argc, argv);
+  QApplication tulip_app(argc, argv);
   QLocale::setDefault(QLocale(QLocale::English));
 
 #if defined(__APPLE__) // allows to load qt imageformats plugin
@@ -39,5 +39,5 @@ int main(int argc, char **argv) {
   mainWindow->startApp();
   mainWindow->setPluginsErrors(abortedPlugins);
 
-  return tulip.exec();
+  return tulip_app.exec();
 }
