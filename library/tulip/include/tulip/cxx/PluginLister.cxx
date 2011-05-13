@@ -42,7 +42,7 @@ tlp::Iterator<std::string>* tlp::PluginLister< ObjectType, Context>::availablePl
 
 template<class ObjectType, class Context>
 const tlp::AbstractPluginInfo* tlp::PluginLister< ObjectType, Context>::pluginInformations(const std::string& name) const {
-  return plugins.at(name).factory;
+  return plugins.find(name)->second.factory;
 }
 
 template<class ObjectType, class Context>
@@ -108,19 +108,19 @@ ObjectType * tlp::PluginLister<ObjectType,Context>::getPluginObject(const std::s
 template<class ObjectType, class Context>
 const tlp::StructDef tlp::PluginLister<ObjectType,Context>::getPluginParameters(std::string name) const {
   assert(plugins.find(name)!=plugins.end());
-  return plugins.at(name).parameters;
+  return plugins.find(name)->second.parameters;
 }
 
 template<class ObjectType, class Context>
 std::string tlp::PluginLister<ObjectType,Context>::getPluginRelease(std::string name) const {
   assert(plugins.find(name)!=plugins.end());
-  return plugins.at(name).factory->getRelease();
+  return plugins.find(name)->second.factory->getRelease();
 }
 
 template<class ObjectType, class Context>
 std::list<tlp::Dependency> tlp::PluginLister<ObjectType,Context>::getPluginDependencies(std::string name) const {
   assert(plugins.find(name)!=plugins.end());
-  return plugins.at(name).dependencies;
+  return plugins.find(name)->second.dependencies;
 }
 
 template<class ObjectType, class Context> std::string tlp::PluginLister<ObjectType,Context>::getPluginsClassName() const {
@@ -128,5 +128,5 @@ template<class ObjectType, class Context> std::string tlp::PluginLister<ObjectTy
 }
 
 template<class ObjectType, class Context> std::string tlp::PluginLister<ObjectType,Context>::getPluginLibrary(const std::string& name) const {
-  return plugins.at(name).library;
+  return plugins.find(name)->second.library;
 }
