@@ -95,7 +95,7 @@ class C##T##Factory:public tlp::FactoryInterface<tlp::T, tlp::AlgorithmContext> 
 {                                                       \
  public:						\
   C##T##Factory(){					\
-    StaticPluginLister<tlp::T, tlp::AlgorithmContext>::registerPlugin(this);			\
+    tlp::StaticPluginLister<tlp::T, tlp::AlgorithmContext>::registerPlugin(this);			\
   }							\
   ~C##T##Factory(){}					\
   std::string getName() const { return std::string(N);}	\
@@ -151,7 +151,7 @@ class C##T##Factory:public tlp::FactoryInterface<T, T##Context*>   \
 {                                                \
 public:                                          \
   C##T##Factory(){         \
-    T##PluginLister::registerPlugin(this);           \
+    tlp::T##PluginLister::registerPlugin(this);           \
   }                  \
   std::string getName() const { return std::string(N);}  \
   std::string getGroup() const { return std::string(G);}   \
