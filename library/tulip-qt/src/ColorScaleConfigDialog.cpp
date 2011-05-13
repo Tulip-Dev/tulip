@@ -39,7 +39,7 @@ namespace tlp {
 map<QString, vector<Color> > ColorScaleConfigDialog::tulipImageColorScales;
 
 ColorScaleConfigDialog::ColorScaleConfigDialog(ColorScale *colorScale,
-    QWidget *parent) : QDialog(parent), colorScale(colorScale), _ui(new Ui::ColorScaleDialog) {
+    QWidget *parent) : QDialog(parent), _ui(new Ui::ColorScaleDialog), colorScale(colorScale) {
   _ui->setupUi(this);
   _ui->colorsTable->setColumnWidth(0, _ui->colorsTable->width());
   _ui->colorsTable->horizontalHeader()->setHidden(true);

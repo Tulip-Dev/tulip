@@ -34,7 +34,7 @@ using namespace std;
 
 namespace tlp {
 
-  RenderingParametersDialog::RenderingParametersDialog(QWidget* parent) : QWidget(parent), _ui(new Ui::RenderingParametersDialogData), glWidget(NULL) {
+  RenderingParametersDialog::RenderingParametersDialog(QWidget* parent) : QWidget(parent), glWidget(NULL), _ui(new Ui::RenderingParametersDialogData) {
     _ui->setupUi(this);
 
     holdUpdateView=false;
