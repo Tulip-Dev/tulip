@@ -16,7 +16,6 @@ SET(spreadsheet_LIB_SRCS
 set(spreadsheet_UI
     SpreadViewWidget.ui
     VectorEditionWidget.ui
-    PropertySelectionDialog.ui
     HeaderSelectionDialog.ui
 )
 
