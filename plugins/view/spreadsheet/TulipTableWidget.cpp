@@ -2,10 +2,13 @@
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/CopyPropertyDialog.h>
 #include <tulip/BooleanProperty.h>
+
 #include <QtGui/QHeaderView>
 #include <QtGui/QMenu>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QDialogButtonBox>
+#include <QtGui/QKeyEvent>
+
 #include "GraphTableModel.h"
 #include "TulipItemDelegate.h"
 #include "HeaderSelectionDialog.h"
@@ -49,8 +52,7 @@ void TulipTableWidget::showElementContextMenu(int clickedRowIndex,const QPoint& 
     set<unsigned int> elements = indexListToIds(rows);
     contextMenu.addAction(areAllElementsSelected(rows)?tr("Deselect on graph"):tr("Select on graph"),this,SLOT(selectElements()));
     contextMenu.addAction(tr("Highlight selected element(s)"),this,SLOT(highlightElements()));
-    contextMenu.addAction(tr("Remove from graph"),this,SLOT(deleteElements()));
-    contextMenu.addAction(tr("Delete"),this,SLOT(deleteAllElements()));
+    contextMenu.addAction(QIcon(":/i_del.png"),tr("Delete"),this,SLOT(deleteElements()));
     if(_type == NODE){
         contextMenu.addAction(tr("Copy"),this,SLOT(copyNodes()));
         //Group only available if there is more than one node selected.
@@ -260,11 +262,11 @@ void TulipTableWidget::highlightElements(){
     for(int i = 0 ; i < _tulipTableModel->rowCount() ; ++i){
         if(_type == NODE){
             if(selectionProperty->getNodeValue(node(_tulipTableModel->idForIndex(i)))){
-                itemSelectionModel->select(_tulipTableModel->index(i,0),QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+                itemSelectionModel->select(_tulipTableModel->index(i,0),QItemSelectionModel::Select| QItemSelectionModel::Rows);
             }
         }else{
             if(selectionProperty->getEdgeValue(edge(_tulipTableModel->idForIndex(i)))){
-                itemSelectionModel->select(_tulipTableModel->index(i,0),QItemSelectionModel::SelectCurrent | QItemSelectionModel::Rows);
+                itemSelectionModel->select(_tulipTableModel->index(i,0),QItemSelectionModel::Select| QItemSelectionModel::Rows);
             }
         }
     }
@@ -339,3 +341,11 @@ void TulipTableWidget::copyNodes(){
 }
 
 
+
+void TulipTableWidget::keyPressedEvent(QKeyEvent * event){
+    if(event->modifiers()== Qt::ControlModifier && event->key() == Qt::Key_A){
+        QItemSelection selection(_tulipTableModel->index(0,0),_tulipTableModel->index(_tulipTableModel->rowCount(),_tulipTableModel->columnCount()));
+        selectionModel()->select(selection,QItemSelectionModel::ClearAndSelect);
+        event->accept();
+    }
+}

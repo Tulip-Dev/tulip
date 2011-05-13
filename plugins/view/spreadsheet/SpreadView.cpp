@@ -39,6 +39,8 @@ QWidget *SpreadView::construct(QWidget *parent) {
         QWidget* mainWidget = new QWidget(widget);
         ui->setupUi(mainWidget);
         setCentralWidget(mainWidget);
+        installEventFilter(mainWidget);
+        installEventFilter(ui->nodesTableView);
 	return widget;
 }
 
@@ -68,6 +70,8 @@ void SpreadView::refresh() {
 
 void SpreadView::init() {
 }
+
+
 QImage SpreadView::createPicture(int width, int height, bool , int  , int xOffset , int yOffset ){
     return QPixmap::grabWidget(getCentralWidget(),xOffset,yOffset,width,height).toImage();
 }
@@ -75,3 +79,5 @@ QImage SpreadView::createPicture(int width, int height, bool , int  , int xOffse
 VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "2.0")
 
 }
+
+

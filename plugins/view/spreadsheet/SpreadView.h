@@ -60,6 +60,8 @@ public slots :
 	void init();
 	void setGraph(Graph *graph);
 
+    protected slots:
+
     private:
         Ui::SpreadViewWidget *ui;
         tlp::Graph* _graph;

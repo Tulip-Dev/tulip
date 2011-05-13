@@ -38,6 +38,9 @@
        </property>
        <item>
         <widget class="TulipTableWidget" name="nodesTableView">
+         <property name="editTriggers">
+          <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+         </property>
          <property name="selectionBehavior">
           <enum>QAbstractItemView::SelectRows</enum>
          </property>
@@ -61,6 +64,9 @@
        </property>
        <item>
         <widget class="TulipTableWidget" name="edgesTableView">
+         <property name="editTriggers">
+          <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+         </property>
          <property name="selectionBehavior">
           <enum>QAbstractItemView::SelectRows</enum>
          </property>

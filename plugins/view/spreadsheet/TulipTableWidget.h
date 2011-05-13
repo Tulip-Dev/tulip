@@ -31,6 +31,8 @@ protected:
       **/
     void showElementContextMenu(int clickedRowIndex,const QPoint& position);
 
+    void keyPressedEvent(QKeyEvent * event);
+
     tlp::Graph* _graph;
     tlp::ElementType _type;
     GraphTableModel* _tulipTableModel;
