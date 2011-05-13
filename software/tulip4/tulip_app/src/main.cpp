@@ -6,9 +6,7 @@
 #include <QtCore/QLocale>
 
 #include <tulip/TlpTools.h>
-#include <tulip/GlyphManager.h>
-#include <tulip/EdgeExtremityGlyphManager.h>
-#include <tulip/InteractorManager.h>
+#include <tulip/PluginLister.h>
 
 #include "TulipSplashScreen.h"
 #include "TulipMainWindow.h"
@@ -26,16 +24,11 @@ int main(int argc, char **argv) {
   TulipSplashScreen *splashScreen = new TulipSplashScreen();
   splashScreen->show();
 
-
   tlp::loadPlugins(splashScreen); // library side plugins
   tlp::loadPlugins(splashScreen, "/interactors"); // interactors plugins
   tlp::loadPlugins(splashScreen, "/glyphs"); // glyphs plugins
   tlp::loadPlugins(splashScreen, "/view"); // view plugins
   tlp::loadPlugins(splashScreen, "/controller"); // controller plugins
-
-  tlp::GlyphManager::getInst().loadGlyphPlugins();
-  tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
-  tlp::InteractorManager::getInst().loadInteractorPlugins();
 
   tlp::PluginListerInterface::checkLoadedPluginsDependencies(splashScreen);
 
