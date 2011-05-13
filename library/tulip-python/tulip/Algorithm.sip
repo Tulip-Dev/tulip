@@ -23,6 +23,13 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
+%ModuleHeaderCode
+#include <tulip/Algorithm.h>
+namespace tlp {
+typedef tlp::FactoryInterface<tlp::Algorithm, tlp::AlgorithmContext> AlgorithmFactory;
+};
+%End
+
 namespace tlp {
 class Algorithm : tlp::WithParameter, tlp::WithDependency {
 %TypeHeaderCode
@@ -68,8 +75,7 @@ public:
 	
 	void registerPlugin();
 %MethodCode
-	sipCpp->initFactory();
-	sipCpp->factory->registerPlugin(sipCpp);
+	tlp::StaticPluginLister<tlp::Algorithm, tlp::AlgorithmContext>::registerPlugin(sipCpp);
 %End
 };
 };

@@ -24,11 +24,10 @@
 // +-------------------------------------------------------------------------+
 
 %ModuleHeaderCode
-#include <tulip/PluginManager.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/ColorProperty.h>
 namespace tlp {
-typedef tlp::PropertyFactory<tlp::ColorAlgorithm> ColorAlgorithmFactory;
+typedef tlp::FactoryInterface<tlp::ColorAlgorithm, tlp::PropertyContext> ColorAlgorithmFactory;
 };
 %End
 
@@ -47,7 +46,7 @@ protected:
 
 class ColorAlgorithmFactory : tlp::AbstractPluginInfo {
 %TypeHeaderCode
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 %End
 public:
 
@@ -65,8 +64,7 @@ public:
 	
 	void registerPlugin();
 %MethodCode
-	tlp::PropertyFactory<tlp::ColorAlgorithm>::initFactory();	
-    tlp::PropertyFactory<tlp::ColorAlgorithm>::factory->registerPlugin(sipCpp);
+	tlp::PropertyPluginLister<tlp::ColorAlgorithm>::registerPlugin(sipCpp);
 %End
 
 };

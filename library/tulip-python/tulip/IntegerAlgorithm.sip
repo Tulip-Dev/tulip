@@ -24,11 +24,10 @@
 // +-------------------------------------------------------------------------+
 
 %ModuleHeaderCode
-#include <tulip/PluginManager.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/IntegerProperty.h>
 namespace tlp {
-typedef tlp::PropertyFactory<tlp::IntegerAlgorithm> IntegerAlgorithmFactory;
+typedef tlp::FactoryInterface<tlp::IntegerAlgorithm, tlp::PropertyContext> IntegerAlgorithmFactory;
 };
 %End
 
@@ -47,7 +46,7 @@ protected:
 
 class IntegerAlgorithmFactory : tlp::AbstractPluginInfo {
 %TypeHeaderCode
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 %End
 public:
 
@@ -65,8 +64,7 @@ public:
 	
 	void registerPlugin();
 %MethodCode
-	tlp::PropertyFactory<tlp::IntegerAlgorithm>::initFactory();			
-    tlp::PropertyFactory<tlp::IntegerAlgorithm>::factory->registerPlugin(sipCpp);
+	tlp::PropertyPluginLister<tlp::IntegerAlgorithm>::registerPlugin(sipCpp);;
 %End
 
 };

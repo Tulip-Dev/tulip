@@ -40,14 +40,14 @@ class GlComplexPolygon : tlp::GlSimpleEntity {
     
     GlComplexPolygon();
     
-    GlComplexPolygon(const std::vector<tlp::Coord> &coords, tlp::Color fcolor, int polygonEdgesType=0, const std::string &textureName = "");
-
-    GlComplexPolygon(const std::vector<tlp::Coord> &coords, tlp::Color fcolor, tlp::Color ocolor, int polygonEdgesType=0, const std::string &textureName = "");
-
     GlComplexPolygon(const std::vector<std_vector_0100tlp_Coord>&coords, tlp::Color fcolor, int polygonEdgesType=0, const std::string &textureName = "");
 
     GlComplexPolygon(const std::vector<std_vector_0100tlp_Coord>&coords, tlp::Color fcolor, tlp::Color ocolor,int polygonEdgesType=0,const std::string &textureName = "");
     
+    GlComplexPolygon(const std::vector<tlp::Coord> &coords, tlp::Color fcolor, int polygonEdgesType=0, const std::string &textureName = "");
+
+    GlComplexPolygon(const std::vector<tlp::Coord> &coords, tlp::Color fcolor, tlp::Color ocolor, int polygonEdgesType=0, const std::string &textureName = "");
+
 	virtual ~GlComplexPolygon();
 
     virtual void draw(float lod, tlp::Camera *camera);
@@ -72,6 +72,10 @@ class GlComplexPolygon : tlp::GlSimpleEntity {
     		                const float texCoordFactor = 1.f, const int polygonId = 0);
 
     void desactivateQuadBorder(const int polygonId = 0);
+    
+    virtual void getXML(_xmlNode* rootNode);
+    
+    virtual void setWithXML(_xmlNode* rootNode);
 
 
   };

@@ -24,11 +24,10 @@
 // +-------------------------------------------------------------------------+
 
 %ModuleHeaderCode
-#include <tulip/PluginManager.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/LayoutProperty.h>
 namespace tlp {
-typedef tlp::PropertyFactory<tlp::LayoutAlgorithm> LayoutAlgorithmFactory;
+typedef tlp::FactoryInterface<tlp::LayoutAlgorithm, tlp::PropertyContext> LayoutAlgorithmFactory;
 };
 %End
 
@@ -48,7 +47,7 @@ protected:
 
 class LayoutAlgorithmFactory : tlp::AbstractPluginInfo {
 %TypeHeaderCode
-#include <tulip/PluginManager.h>
+#include <tulip/PluginLister.h>
 %End
 public:
 
@@ -66,8 +65,7 @@ public:
 	
 	void registerPlugin();
 %MethodCode
-	tlp::PropertyFactory<tlp::LayoutAlgorithm>::initFactory();			
-    tlp::PropertyFactory<tlp::LayoutAlgorithm>::factory->registerPlugin(sipCpp);
+	tlp::PropertyPluginLister<tlp::LayoutAlgorithm>::registerPlugin(sipCpp);
 %End
 
 };

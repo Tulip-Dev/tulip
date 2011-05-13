@@ -36,7 +36,6 @@ void initTulipLib(char* appDirPath=0);
 void loadPlugins(tlp::PluginLoader *plug=0);
 bool loadPlugin(const std::string &filename, tlp::PluginLoader *plug=0);
 void loadPluginsFromDir(std::string dir, std::string type, tlp::PluginLoader *loader=0);
-void loadPluginsCheckDependencies(tlp::PluginLoader* loader=0);
 
 std::string getMajor(const std::string& v);
 std::string getMinor(const std::string& v);

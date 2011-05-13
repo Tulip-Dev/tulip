@@ -23,6 +23,13 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
+%ModuleHeaderCode
+#include <tulip/Interactor.h>
+namespace tlp {
+typedef FactoryInterface<Interactor, InteractorContext*> InteractorFactory;
+};
+%End
+
 namespace tlp {
 class Interactor : QObject, tlp::WithParameter, tlp::WithDependency /Abstract/ {
 %TypeHeaderCode
@@ -93,8 +100,7 @@ public:
 	
 	void registerPlugin();
 %MethodCode
-	sipCpp->initFactory();
-	sipCpp->factory->registerPlugin(sipCpp);
+	tlp::InteractorLister::registerPlugin(sipCpp);
 %End
 };
 };

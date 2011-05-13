@@ -38,6 +38,7 @@ public :
 	virtual bool exportGraph(Graph *g) = 0;
 	
 };
+typedef tlp::FactoryInterface<tlp::ExportModule, tlp::AlgorithmContext> ExportModuleFactory;
 }
 %End
 
@@ -88,8 +89,7 @@ public:
   
   void registerPlugin();
 %MethodCode
-	sipCpp->initFactory();
-	sipCpp->factory->registerPlugin(sipCpp);
+	tlp::StaticPluginLister<tlp::ExportModule, tlp::AlgorithmContext>::registerPlugin(sipCpp);
 %End
   
 };
