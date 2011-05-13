@@ -1,5 +1,5 @@
-#include "headerselectiondialog.h"
-#include "ui_headerselectiondialog.h"
+#include "HeaderSelectionDialog.h"
+#include "ui_HeaderSelectionDialog.h"
 
 using namespace std;
 
