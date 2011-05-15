@@ -375,19 +375,14 @@ CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 ## -----------------------------------------------------------------------------------------------
 ## Installation of files
 ## -----------------------------------------------------------------------------------------------
-INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config
-        DESTINATION ${TulipBinInstallDir}
-	COMPONENT libtulip_dev)
-INSTALL(FILES FindTULIP3.cmake 
-        DESTINATION ${TulipShareInstallDir})
-INSTALL(FILES FindGLEW.cmake 
-        DESTINATION ${TulipShareInstallDir})
-INSTALL(FILES FindXML2.cmake 
-        DESTINATION ${TulipShareInstallDir})
+INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_dev)
+INSTALL(FILES FindTULIP3.cmake DESTINATION ${TulipShareInstallDir} COMPONENT libtulip_dev)
+INSTALL(FILES FindGLEW.cmake DESTINATION ${TulipShareInstallDir} COMPONENT libtulip_dev)
+INSTALL(FILES FindXML2.cmake DESTINATION ${TulipShareInstallDir} COMPONENT libtulip_dev)
 ## -----------------------------------------------------------------------------------------------
 ## Script for linux Tulip bundle building
 IF(LINUX)
-CONFIGURE_FILE("make_tulip_linux_bundle.sh.in" "make_tulip_linux_bundle.sh" @ONLY)
+  CONFIGURE_FILE("make_tulip_linux_bundle.sh.in" "make_tulip_linux_bundle.sh" @ONLY)
 ENDIF(LINUX)
 ## -----------------------------------------------------------------------------------------------
 ## CPack packaging directives
