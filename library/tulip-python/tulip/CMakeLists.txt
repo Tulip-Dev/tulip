@@ -112,9 +112,9 @@ ADD_CUSTOM_TARGET(touchTulipPythonCMakeLists ALL
                   DEPENDS ${LibTulipPythonName})
 
 INSTALL(TARGETS ${LibTulipPythonName}
-        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT pythonbindings
-        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings
-        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings)
+        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_python)
 
 
 
