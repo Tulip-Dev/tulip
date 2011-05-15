@@ -236,6 +236,9 @@ p, li { white-space: pre-wrap; }
 
 &lt;/body&gt;&lt;/html&gt;</string>
         </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -252,7 +255,7 @@ p, li { white-space: pre-wrap; }
            <x>0</x>
            <y>0</y>
            <width>230</width>
-           <height>327</height>
+           <height>325</height>
           </rect>
          </property>
         </widget>
@@ -319,7 +322,7 @@ p, li { white-space: pre-wrap; }
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources/TulipApp.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/arrow-left.png</normaloff>:/tulip/app/icons/arrow-left.png</iconset>
           </property>
          </widget>
@@ -330,7 +333,7 @@ p, li { white-space: pre-wrap; }
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../resources/TulipApp.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/arrow-right.png</normaloff>:/tulip/app/icons/arrow-right.png</iconset>
           </property>
          </widget>
@@ -355,8 +358,6 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources/TulipApp.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

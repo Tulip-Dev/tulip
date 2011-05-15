@@ -33,7 +33,7 @@ void PluginsCenter::showReposPage() {
 }
 
 void PluginsCenter::showPage(QWidget *page) {
-  QStackedWidget *stackedParent = dynamic_cast<QStackedWidget *>(parent());
+  QStackedWidget *stackedParent = static_cast<QStackedWidget *>(parent());
   if (!stackedParent)
     return;
   stackedParent->setCurrentWidget(this);
