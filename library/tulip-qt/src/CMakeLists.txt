@@ -81,6 +81,7 @@ SET(SRCS
   GlMainWidgetItem.cpp
   PluginInformations.cpp
   PluginManager.cpp
+  TulipProject.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -155,6 +156,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/GlMainWidgetItem.h
   ../include/tulip/TabWidgetHidableMenuGraphicsProxy.h
   ../include/tulip/ThreadedComputeProperty.h
+  ../include/tulip/TulipProject.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipQtResource.qrc)
@@ -162,9 +164,9 @@ QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipQtResource.qrc)
 ADD_DEFINITIONS(-DQT_DLL)
 ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
 
-INCLUDE_DIRECTORIES(../include ${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtBuildInclude} ${CMAKE_CURRENT_BINARY_DIR})
+INCLUDE_DIRECTORIES(../include ${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${QuazipInclude})
 ADD_LIBRARY(${LibTulipQtName} SHARED ${SRCS} ${MOC_SRCS} ${RCC_SRCS} ${UI_HEADERS})
-TARGET_LINK_LIBRARIES(${LibTulipQtName} ${QT_LIBRARIES} ${LibTulipName} ${LibTulipOglName})
+TARGET_LINK_LIBRARIES(${LibTulipQtName} ${QT_LIBRARIES} ${LibTulipName} ${LibTulipOglName} quazip)
 
 INSTALL(TARGETS ${LibTulipQtName}
        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_qt

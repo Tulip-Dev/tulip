@@ -75,6 +75,7 @@ INSTALL(FILES
   tulip/GlMainWidgetItem.h
   tulip/TabWidgetHidableMenuGraphicsProxy.h
   tulip/GraphicsWidgetBase.h
+  tulip/TulipProject.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT libtulip_qt_dev
 )
