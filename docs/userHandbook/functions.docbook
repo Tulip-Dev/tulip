@@ -137,12 +137,9 @@
                 </itemizedlist>
             For removing a property, you just have to select the property and click on the button named <code>Remove</code>. When deleting properties used by the render engine, those properties will be temporary removed from the list but still continue to exist. Note that it is not possible to remove <code>inherited</code> properties.
             </para>
-            <para> For importing properties from CSV files click on the <code>Import CSV Data</code>. A widget will appear to help user import data in the current graph see <xref />. </para>
+            <para> For importing properties from CSV files click on the <code>Import CSV Data</code>. A widget will appear to help user import data in the current graph see <xref linkend="csv-import"/>. </para>
             <para> The last feature is cloning property. Select the desired property and click on the button named <code>Clone</code>. Type the name you have chosen. The new property keeps the values. </para>
-        </sect3>
-        <sect3 id="csv-import"> <title>Import properties from CSV file.</title>
-        <para>Displays a wizard to guide user during the import of CSV files into the current graph.</para>
-            </sect3>
+        </sect3>        
         <sect3 id="find-tut"><title>Find : make a request.</title>
             <para>The find tool is in the <code>Edit</code> menu. Make a graph with several nodes. Change some properties of node for making operations. Select nodes, check the <code>Filter</code> box and select the properties you want to change : <code>viewRotation</code>. Click on the <code>Set all</code> button and type a value (<code>20</code> for example). Now, you have some node with a rotation of 0 degree and some other rotated of 20. So in the Find box : 
                 <itemizedlist>
@@ -158,6 +155,7 @@
 		&Subgraphs;
     </sect1>
     <sect1 id="text-rend"><title>Text Rendering</title>
+    
         <para>It is possible to assign a label to each element of the graph. <application>Tulip</application> can display them with three methods : 3D and texture for node labels, bitmap for node and edge labels. 
         <figure>
             <title>Bitmap Rendering</title>
@@ -173,5 +171,118 @@
         </figure>
         </para>
         <para>In a future version of Tulip, It will be possible to create labels with XML tags like the HTML rendering. Some tags will be available in order to allow the user to organize the content of the labels.</para>
+    </sect1>
+    <sect1 id="csv-import"><title>Importing CSV data</title>
+	<para>To help user during the import data process Tulip provides an import wizard which is a three paneled dialog with configuration options.</para>
+	<para>The first panel allows the user to configure the source file location, the characters encoding, the field delimiter character and the text delimiter character. </para>
+	<para>The second panel allows the user to define the line range, which columns to import and to define the type of data for each column.</para>
+	<para>The third panel allows the user to select how to import data in the graph.</para>    
+	<para>You can find CSV import tutorials here <xref linkend="tuto-csv-import"/>.</para>
+	<sect2><title>Source file settings panel</title>
+	<para>The first panel allows the user to configure the source file location, the characters encoding, the field delimiter character, the text delimiter character. </para>
+	<figure>
+            <title>Source file settings panel</title>
+            <graphic fileref="images/csvimport_panel_1.png"/>
+        </figure>
+	<para>The purpose of each labeled component is explained below: </para>
+	<orderedlist>
+		<listitem>
+		  <para>The source file location field : this field indicates the location of the file to parse. To change the source file click on the “...” button.</para>
+		</listitem>
+		<listitem>
+		  <para>The file encoding selection menu : this drop down menu provides a list of encoding schemes for the characters in the text file.</para>
+		</listitem>
+		<listitem>
+		  <para>The data orientation : this check-box allows the user to invert rows and columns i.e to treat rows as columns and columns as rows in next steps.</para>
+		</listitem>
+		<listitem>
+		  <para>The separator selector : this field allows the user to define the characters used to separate data value fields within each row. Select a separator in the list or input a custom separator and press the enter key to validate your input.</para>
+		</listitem>
+		<listitem>
+		  <para>The text delimiter selector : this field allows the user to define the characters used as start and end delimiter for data value fields. Select a delimiter in the list or input a custom and press the enter key to validate your input.
+			Separated value files often additionally define a character used to indicate the start and end of a data element which should be considered a single text entry.
+			This strategy allows the inclusion of text entries which include the value separator. </para>
+		  <para>
+			For example, a file which is structured as a comma separated value file, could use the double quotation mark to delimit text values and would then be able to include text values such as: 	'Zoe, Mark, Sally'. 
+		  </para>
+		</listitem>
+		<listitem>
+		  <para>The preview area : this area displays a preview of the file as it will be interpreted with these settings.</para>
+		</listitem>
+	</orderedlist>
+	</sect2>	
+	<sect2><title>Data selection panel</title>
+	<para>The second panel allows the user to define the line range, which columns to import and to define their data types.</para>
+	<figure>
+            <title>Data selection panel</title>
+            <graphic fileref="images/csvimport_panel_2.png"/>
+        </figure>
+	<para>The purpose of each labeled component is explained below: </para>
+	<orderedlist>
+		<listitem>
+		  <para>Use first line tokens as columns names : use the elements in the first line as default names for the columns. If checked the first line will be skipped during the import process.</para>
+		</listitem>
+		<listitem>
+		  <para>The line range spinbuttons : these two spin buttons allow the user to select the start and end rows for the data import. The spin boxes can be used either by typing a new value in the text entry area where the numbers are displayed, or by using the mouse button to click on the up arrow to increase the number and the down arrow to decrease the number. 
+			For instance, if the text file contained a large header area with meta information, this header could be excluded from the data imported by increasing the number of the starting, "From", line.
+		  </para>
+		</listitem>
+		<listitem>
+		  <para>The columns configuration area : this area allows the user to configure each column detected in the file. Any single column can be excluded from the data imported by clicking in the checkbox under its name to remove the check mark. User can rename a column by editing the field containing it's original name. You can't input the same name of another column. 
+			The data type of a column can be changed using the combo-box under it's name. 
+		  </para>
+		</listitem>
+		<listitem>
+		  <para>The preview area : this area displays a preview of the file as it will be interpreted with these settings.
+			If a column isn't selected it will not appear in the preview.
+		  </para>
+		</listitem>
+		<listitem>
+		  <para>The number of preview lines spinbutton : allows the user to increase the number of preview. If unchecked all the file will be displayed.
+		  </para>
+		</listitem>
+	</orderedlist>	
+	</sect2>
+	<sect2><title>Import method panel</title> 
+	<para>The third panel allows the user to select how to import data in the graph.</para>
+	<figure>
+            <title>Import method panel</title>
+            <graphic fileref="images/csvimport_panel_3.png"/>
+        </figure>
+	<para>The purpose of each labeled component is explained below: </para>
+	<orderedlist>
+		<listitem>
+		  <para>The import methods list</para>
+		</listitem>
+		<listitem>
+		  <para>The configuration area for the selected import method</para>
+		</listitem>
+	</orderedlist>
+	<para>Currently there is 4 methods to import data on graph:</para>
+	<itemizedlist>
+	  <listitem>Import data on new entities (nodes).</listitem>
+	  <listitem>Import data on new relations (edges).</listitem>
+	  <listitem>Import data on existing entities (nodes).</listitem>
+	  <listitem>Import data on existing relations (edges).</listitem>	  
+	</itemizedlist>
+	<sect3><title>Import data on new entities (nodes)</title>
+	<para>Create a new entity (node) for each row in the file and import the data of selected columns on created entities (nodes).</para>
+	</sect3>
+	  <sect3><title>Import data on new relations (edges)</title>	  
+	  <para>Create a new relation (edge) for each row and import the data of  selected columns on created relations (edges). </para>
+	  <para>A relation is defined by it's source entity id and it's destination entity id. For each row we compare source and destination ids to graph entities ids. If the source and destination ids correspond to existing entities ids a new relation is created between those entities. If there is no entities in the graph with such ids you can force the creation of missing entities with the “Create missing entities” option.</para>
+	  <para>The example below represents a graph with four entities “a”, “b”, “c”, “d” and  two  relations : “a” -> “b” and “b” -> “c”. </para>	  
+	  <para><code>a;b</code></para>
+	  <para><code>b;c</code></para>	
+	  </sect3>
+	  <sect3><title>Import data on existing entities (nodes)</title>
+	  <para>Import the data of selected columns on existing entities (node).</para>
+	  <para>For each row we compare the destination entity id to graph entities ids. If there is a correspondence we import the row data on the first matching entity. If there is no entity with such id you can force the creation of a new entity with the “Create missing entities” option.</para>
+	  </sect3>
+	  <sect3><title>Import data on existing relations (edges)</title>
+	  <para>Import selected columns on existing relations(edges).</para>
+	  <para>For each row we compare the destination relation id to graph relations ids. If there is a correspondence we import the row data on the first matching relation.</para>
+	  </sect3>
+	</sect2>	
     </sect1>
 </chapter>

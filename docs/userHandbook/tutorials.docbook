@@ -202,7 +202,7 @@
      		<para>As you have seen, tulip implements powerful layouts and tools, to make a complex graph into a simple and understandable one.</para>
      	</sect2>
     </sect1>
-    <sect1 id="infovis"><title>People in InfoVis</title>
+    <sect1 id="infovis"><title>People in InfoVis</title>    
     	<sect2 id="people-in-infovis"><title>Analyzing an author</title>
     		<para>First, download and open this <ulink url="http://tulip.labri.fr/samples/GRCite.tlp.gz">tulip graph file</ulink>.</para>
     		<para>This graph represent the relations between authors, conferences and papers. To distinguish paper, conferences and authors, we will re-color them : </para>
@@ -323,5 +323,83 @@
     		 	<para> We see this star shape small-world decomposition only for the InfoVis symposia, because of the nature of this dataset: it is only the InfoVis symposia that have a complete set of authors and papers available.</para>
     		 </sect3>
     	</sect2>
+    </sect1>
+    <sect1 id="tuto-csv-import">
+      <title>Importing data from CSV files</title>
+      <sect2><title>Importing new nodes from CSV file</title>
+	<para>The example below represents graph with ten entities. We will see how to import this graph in Tulip with the CSV import.</para>
+	<literallayout>
+	<code>	  
+	  node_id;second_major;gender;major_index;year;dorm;high_school;student_fac
+	  0;0;2;205;2006;169;15903;1
+	  1;0;2;207;2005;0;3029;2
+	  2;0;1;208;0;0;3699;2
+	  3;0;2;228;2006;169;17763;1
+	  4;206;2;204;2006;0;2790;1
+	  5;0;2;228;2005;169;50029;2
+	  6;0;1;223;2006;169;3523;1
+	  7;0;1;208;2007;169;2780;1
+	  8;0;2;205;2006;170;5477;1
+	  9;0;1;228;0;0;23675;1	
+	</code>
+	</literallayout>
+	<orderedlist>
+	  <listitem><para>Launch Tulip.</para></listitem>
+	  <listitem><para>Click on "File->New"</para></listitem>
+	  <listitem><para>Click on “Import CSV data.”</para></listitem>
+	  <listitem><para>Edit the location field and select the file created from the example.</para></listitem>
+	  <listitem><para>Choose the “;” character as separator.</para></listitem>
+	  <listitem><para>Click on next.</para></listitem>
+	  <listitem><para>Choose the columns you want to import (in our case all).</para></listitem>
+	  <listitem><para>Click on next.</para></listitem>
+	  <listitem><para>Select “New entities” in the “Import data on” list.</para></listitem>
+	  <listitem><para>Click on the “Finish” button to launch the import.</para></listitem>
+	  <listitem><para>You can now work with the imported graph.</para></listitem>
+	</orderedlist>
+	</sect2>
+	<sect2><title>Importing new entities from CSV file</title>
+	<para>The example below represents graph with ten entities and eighteen relations. We will see how to import this graph in Tulip with the CSV import.</para>
+	<literallayout>
+	<code>
+	  "Source","Target","second_major","gender","major_index"
+	  0,3,0,2,205
+	  0,4,0,2,207
+	  0,5,0,1,208
+	  0,6,0,2,228
+	  0,8,206,2,204
+	  0,9,0,2,228
+	  1,2,0,1,223
+	  2,3,0,1,208
+	  2,4,0,2,205
+	  2,6,0,1,228
+	  2,7,200,1,201
+	  3,6,0,2,199
+	  3,7,0,2,202
+	  3,9,0,2,199
+	  4,8,0,2,209
+	  4,9,200,1,201
+	  5,7,206,2,223
+	  8,9,0,1,223
+	  </code>
+	</literallayout>
+	<orderedlist>
+	  <listitem><para>Launch Tulip.</para></listitem>
+	  <listitem><para>Click on "File->New"</para></listitem>
+	  <listitem><para>Click on “Import CSV data.”</para></listitem>
+	  <listitem><para>Edit the location field and select the file created from the example.</para></listitem>
+	  <listitem><para>Choose the “,” character as separator.</para></listitem>
+	  <listitem><para>Choose the “ ” ” character as text delimiter.</para></listitem>	  
+	  <listitem><para>Click on next.</para></listitem>
+	  <listitem><para>Choose the columns you want to import (in our case all).</para></listitem>
+	  <listitem><para>Click on next.</para></listitem>
+	  <listitem><para>Select “New relations” in the “Import data on” list.</para></listitem>
+	  <listitem><para>Choose the “Source” column in the “Choose CSV column containing source entities id”.</para></listitem>
+	  <listitem><para>Choose the “Target” column in the “Choose CSV column containing target entities id”.</para></listitem>
+	  <listitem><para>Choose the “viewLabel” property in the “ Choose the property containing existing entities ids”.</para></listitem>
+	  <listitem><para>Check the Create missing entities to force the creation of missing entities.</para></listitem>
+	  <listitem><para>Click on the “Finish” button to launch the import.</para></listitem>
+	  <listitem><para>You can now work with the imported graph.</para></listitem>
+	</orderedlist>
+	</sect2>
     </sect1>
 </chapter>
