@@ -15,7 +15,7 @@ public:
   TulipSplashScreen();
   virtual ~TulipSplashScreen() {}
 
-  virtual void start(const std::string &path,const std::string &type);
+  virtual void start(const std::string &path);
   virtual void loading(const std::string &filename);
   virtual void loaded(const tlp::AbstractPluginInfo* infos, const std::list <tlp::Dependency>& deps);
   virtual void numberOfFiles(int n) { _numberOfFiles = n; _fileCounter = 0; }

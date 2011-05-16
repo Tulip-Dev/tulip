@@ -27,8 +27,8 @@
 
 using namespace std;
 using namespace tlp;
-void PluginLoaderTxt::start(const string &path,const string &type) {
-    cout << "Start loading " << type << " plug-ins in " << path << endl;
+void PluginLoaderTxt::start(const string &path) {
+    cout << "Start loading plug-ins in " << path << endl;
 }
 
 void PluginLoaderTxt::loading(const string &filename) {

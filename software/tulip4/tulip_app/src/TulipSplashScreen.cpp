@@ -21,8 +21,8 @@ TulipSplashScreen::TulipSplashScreen(): PluginLoader(), QSplashScreen(), _fileCo
   _abortedPlugins.clear();
 }
 
-void TulipSplashScreen::start(const std::string &, const std::string &type) {
-  _title = trUtf8("Loading ") + type.c_str() + "...";
+void TulipSplashScreen::start(const std::string &) {
+  _title = trUtf8("Loading ") + "...";
   _message = QString();
   repaint();
 }
