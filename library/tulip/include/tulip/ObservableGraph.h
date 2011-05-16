@@ -18,10 +18,9 @@
  */
 #ifndef GRAPHOBSERVABLE_H
 #define GRAPHOBSERVABLE_H
-#include <list>
-#include <map>
 #include <algorithm>
 
+#include <tulip/Observable.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 
@@ -29,7 +28,6 @@ namespace tlp {
 
 class Graph;
 class PropertyInterface;
-class ObservableGraph;
 //=========================================================
 
 /** \addtogroup graphs */
@@ -70,13 +68,25 @@ class ObservableGraph;
  * \endcode
  */
 class TLP_SCOPE GraphObserver {
-  friend class ObservableGraph;
+  friend class Graph;
+private:
+  class RealGraphObserver :public Observable {
+    GraphObserver* visibleObserver;
+  public:
+    RealGraphObserver(GraphObserver *observer) :visibleObserver(observer) {}
+    virtual void treatEvent(const Event &);
+  };
+
+  RealGraphObserver hiddenObserver;
 
 public:
-	GraphObserver(bool manageObservables = true)
-	:updateObservables(manageObservables) {}
-        GraphObserver(const GraphObserver&);
-	virtual ~GraphObserver();
+  GraphObserver() :hiddenObserver(this) {}
+  // no copy for hiddenObserver
+  GraphObserver(const GraphObserver&) :hiddenObserver(this) {}
+  GraphObserver& operator=(const GraphObserver &) {
+    return *this;
+  }
+
   virtual void addNode(Graph *, const node ){}
   virtual void addEdge(Graph *, const edge ){}
   virtual void beforeSetEnds(Graph *, const edge){}
@@ -94,94 +104,8 @@ public:
   virtual void beforeSetAttribute(Graph*, const std::string&) {}
   virtual void afterSetAttribute(Graph*, const std::string&) {}
   virtual void removeAttribute(Graph*, const std::string&) {}
-protected:
-	void addObservable(ObservableGraph *);
-	void removeObservable(ObservableGraph *);
-private:
-	std::list<ObservableGraph *> observables;
-	bool updateObservables;
 };
 /*@}*/
-}
-
-namespace tlp {
-
-/** \addtogroup graphs */
-/*@{*/
-/**
- * \class ObservableGraph
- * \brief That class enables to easily implement several type of
- *        Observable graph.
- *
- * That class is used internally in Tulip to factorize the code of
- * Observable for all the implementations of Graph.
- * It can be used for new Graph implementations (almost never a good idea).
- */
-class  TLP_SCOPE ObservableGraph {
-	friend class GraphObserver;
-
-public:
-	virtual ~ObservableGraph() {removeGraphObservers();}
-	/**
-	 * Register a new observer
-	 */
-	void addGraphObserver(GraphObserver *) const;
-	/**
-	 * Returns the number of observers
-	 */
-	unsigned int countGraphObservers();
-	/**
-	 * Remove an observer
-	 */
-	void removeGraphObserver(GraphObserver *) const;
-	/**
-	 * Remove all observers
-	 */
-	void removeGraphObservers();
-
-protected:
-	void notifyAddNode(Graph *,const node n);
-	void notifyAddEdge(Graph *,const edge e);
-	void notifyBeforeSetEnds(Graph *, const edge e);
-	void notifyAfterSetEnds(Graph *,const edge e);
-	void notifyDelNode(Graph *,const node n);
-	void notifyDelEdge(Graph *,const edge e);
-	void notifyReverseEdge(Graph *,const edge e);
-	void notifyAddSubGraph(Graph*, Graph*);
-	void notifyDelSubGraph(Graph*, Graph*);
-	void notifyAddLocalProperty(Graph*, const std::string&);
-	void notifyDelLocalProperty(Graph*, const std::string&);
-	void notifyBeforeSetAttribute(Graph*, const std::string&);
-	void notifyAfterSetAttribute(Graph*, const std::string&);
-	void notifyRemoveAttribute(Graph*, const std::string&);
-	void notifyDestroy(Graph*);
-	void removeOnlyGraphObserver(GraphObserver *) const;
-	mutable std::list<GraphObserver*> observers;
-	mutable std::map<GraphObserver*, std::list<GraphObserver*>::iterator> observersSet;
-};
-
-inline unsigned int ObservableGraph::countGraphObservers() {
-	return observers.size();
-}
-
-
-inline void ObservableGraph::removeGraphObserver(GraphObserver *item) const {
-	std::map<GraphObserver*, std::list<GraphObserver*>::iterator>::iterator it = observersSet.find(item);
-	if (it != observersSet.end()) {
-		observers.erase(it->second);
-		observersSet.erase(it);
-		item->removeObservable(const_cast<ObservableGraph*>(this));
-	}
-}
-
-inline void ObservableGraph::removeOnlyGraphObserver(GraphObserver *item) const {
-	std::map<GraphObserver*, std::list<GraphObserver*>::iterator>::iterator it = observersSet.find(item);
-	if (it != observersSet.end()) {
-		observers.erase(it->second);
-		observersSet.erase(it);
-	}
-}
-
 }
 
 #endif

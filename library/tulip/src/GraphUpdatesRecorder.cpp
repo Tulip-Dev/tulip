@@ -25,7 +25,7 @@ using namespace std;
 using namespace stdext;
 using namespace tlp;
 
-GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart) : GraphObserver(false), PropertyObserver(false),
+GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart) : GraphObserver(), PropertyObserver(false),
 #if !defined(NDEBUG)
   recordingStopped(true),
 #endif

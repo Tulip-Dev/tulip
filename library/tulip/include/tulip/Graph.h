@@ -99,7 +99,7 @@ template<class C>struct Iterator;
 /**
  * The class Graph is the interface of a Graph in the Tulip Library.
  */
-  class TLP_SCOPE Graph : public Observable, public ObservableGraph {
+  class TLP_SCOPE Graph : public Observable {
 
   friend class GraphAbstract;
   friend class GraphUpdatesRecorder;
@@ -367,7 +367,7 @@ public:
   void setAttribute(const std::string &name, const DataType* value);
   /// Removes an existing attribute.
   void removeAttribute(const std::string &name) {
-    notifyRemoveAttribute(this, name);
+    notifyRemoveAttribute(name);
     getNonConstAttributes().remove(name);
   }
   /// Returns if the attribute exist.
@@ -455,6 +455,22 @@ public:
    * Returns an iterator on all the properties attached to the graph.
    */
   virtual Iterator<PropertyInterface*>* getObjectProperties()=0;
+
+  // observation mechanism
+  /**
+   * Register a new observer
+   */
+  void addGraphObserver(GraphObserver *) const;
+  /**
+   * Returns the number of observers
+   */
+  unsigned int countGraphObservers() const {
+    return countListeners();
+  }
+  /**
+   * Remove an observer
+   */
+  void removeGraphObserver(GraphObserver *) const;
 
   // updates management
   /*
@@ -564,15 +580,156 @@ protected:
   // only called by GraphUpdatesRecorder
   virtual void restoreSubGraph(Graph*, bool undoOrRedo = false)=0;
   virtual void setSubGraphToKeep(Graph*)=0;
-  // override of inherited methods
-  // used to manage push/pop
+
+  // for notification of GraphObserver
+  void notifyAddNode(const node n);
+  void notifyAddNode(Graph*, const node n) {
+    notifyAddNode(n);
+  }
+  void notifyAddEdge(const edge e);
+  void notifyAddEdge(Graph*, const edge e) {
+    notifyAddEdge(e);
+  }
+  void notifyBeforeSetEnds(const edge e);
+  void notifyBeforeSetEnds(Graph*, const edge e) {
+    notifyBeforeSetEnds(e);
+  }
+  void notifyAfterSetEnds(const edge e);
+  void notifyAfterSetEnds(Graph*, const edge e) {
+    notifyAfterSetEnds(e);
+  }  
+  void notifyDelNode(const node n);
+  void notifyDelNode(Graph*, const node n) {
+    notifyDelNode(n);
+  }
+  void notifyDelEdge(const edge e);
+  void notifyDelEdge(Graph*, const edge e) {
+    notifyDelEdge(e);
+  }
+  void notifyReverseEdge(const edge e);
+  void notifyReverseEdge(Graph*, const edge e) {
+    notifyReverseEdge(e);
+  }
+  void notifyAddSubGraph(const Graph*);
+  void notifyAddSubGraph(Graph*, const Graph* sg) {
+    notifyAddSubGraph(sg);
+  }  
+  void notifyDelSubGraph(const Graph*);
+  void notifyDelSubGraph(Graph*, const Graph* sg) {
+    notifyDelSubGraph(sg);
+  }
+  void notifyAddLocalProperty(const std::string&);
+  void notifyAddLocalProperty(Graph*, const std::string& name) {
+    notifyAddLocalProperty(name);
+  }
+  void notifyDelLocalProperty(const std::string&);
+  void notifyDelLocalProperty(Graph*, const std::string& name) {
+    notifyDelLocalProperty(name);
+  }
+  void notifyBeforeSetAttribute(const std::string&);
+  void notifyBeforeSetAttribute(Graph*, const std::string& name) {
+    notifyBeforeSetAttribute(name);
+  }
+  void notifyAfterSetAttribute(const std::string&);
+  void notifyAfterSetAttribute(Graph*, const std::string& name) {
+    notifyAfterSetAttribute(name);
+  }
+  void notifyRemoveAttribute(const std::string&);
+  void notifyRemoveAttribute(Graph*, const std::string& name) {
+    notifyRemoveAttribute(name);
+  }
   void notifyDestroy();
-  void notifyAddSubGraph(Graph*);
+  void notifyDestroy(Graph*) {
+    notifyDestroy();
+  }
 
 protected:
 
   unsigned int id;
   std::set<tlp::PropertyInterface*> circularCalls;
+};
+
+/// Event class for specific events on Graph
+class TLP_SCOPE GraphEvent :public Event {
+  public:
+    // be careful about the ordering of the constants
+    // in the enum below because it is used in some assertions
+    enum GraphEventType {
+      TLP_ADD_NODE = 0, TLP_DEL_NODE, TLP_ADD_EDGE, TLP_DEL_EDGE,
+      TLP_REVERSE_EDGE, TLP_BEFORE_SET_ENDS, TLP_AFTER_SET_ENDS,
+      TLP_ADD_SUBGRAPH, TLP_DEL_SUBGRAPH,
+      TLP_ADD_LOCAL_PROPERTY, TLP_DEL_LOCAL_PROPERTY,
+      TLP_ADD_INHERITED_PROPERTY, TLP_DEL_INHERITED_PROPERTY,
+      TLP_BEFORE_SET_ATTRIBUTE, TLP_AFTER_SET_ATTRIBUTE, TLP_REMOVE_ATTRIBUTE
+    };
+
+    // constructor for node/edge events
+    GraphEvent(const Graph& g, GraphEventType graphEvtType, unsigned int id,
+	       Event::EventType evtType = Event::TLP_MODIFICATION)
+      : Event(g, evtType), evtType(graphEvtType) {
+      info.eltId = id;
+    }
+    // constructor for subgraph events
+    GraphEvent(const Graph& g, GraphEventType graphEvtType,
+	       const Graph* sg)
+      : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
+      info.subGraph = sg;
+    }
+
+    // constructor for attribute/property events
+    GraphEvent(const Graph& g, GraphEventType graphEvtType,
+	       const std::string& str,
+	       Event::EventType evtType = Event::TLP_MODIFICATION)
+      : Event(g, evtType), evtType(graphEvtType) {
+      info.name = new std::string(str);
+    }
+
+    // destructor needed to cleanup name if any
+    ~GraphEvent() {
+      if (evtType > TLP_DEL_SUBGRAPH)
+	delete info.name;
+    }
+
+    Graph* getGraph() const {
+      return dynamic_cast<Graph *>(sender());
+    }
+
+    node getNode() const {
+      assert(evtType < TLP_ADD_EDGE);
+      return node(info.eltId);
+    }
+
+    edge getEdge() const {
+      assert(evtType > TLP_DEL_NODE && evtType < TLP_ADD_SUBGRAPH);
+      return edge(info.eltId);
+    }
+
+    const Graph* getSubGraph() const {
+      assert(evtType > TLP_AFTER_SET_ENDS && evtType < TLP_ADD_LOCAL_PROPERTY);
+      return info.subGraph;
+    }
+
+    const std::string& getAttributeName() const {
+      assert(evtType > TLP_DEL_INHERITED_PROPERTY);
+      return *(info.name);
+    }
+
+    const std::string& getPropertyName() const {
+      assert(evtType > TLP_DEL_SUBGRAPH && evtType < TLP_BEFORE_SET_ATTRIBUTE);
+      return *(info.name);
+    }
+
+    GraphEventType getType() const {
+      return evtType;
+    }
+
+  protected:
+    GraphEventType evtType;
+    union {
+      unsigned int eltId;
+      const Graph* subGraph;
+      std::string* name;
+    } info;
 };
 
 }

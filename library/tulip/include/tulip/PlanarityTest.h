@@ -33,7 +33,7 @@ class Graph;
 /** \addtogroup graph_test */ 
 /*@{*/
 /// class for testing the planarity of a graph
-class TLP_SCOPE PlanarityTest : public GraphObserver {
+class TLP_SCOPE PlanarityTest : private GraphObserver {
 public:
   /*
     The set of edges of the graph is modified during the execution of
@@ -74,7 +74,7 @@ private:
   void delNode(Graph *,const node);
   void destroy(Graph *);
   bool compute(Graph *graph);
-  PlanarityTest() : GraphObserver(false) {}
+  PlanarityTest() {}
   static PlanarityTest * instance;
   TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };
