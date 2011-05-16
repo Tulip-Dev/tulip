@@ -28,17 +28,19 @@ namespace tlp {
 
 class TLP_SCOPE PluginLibraryLoader {
  public:
-  std::string msg;
-   
   PluginLibraryLoader(std::string pluginPath, PluginLoader *loader);
   bool hasPluginLibraryToLoad() { return n >= 0; }
   bool loadNextPluginLibrary(PluginLoader *loader);
+
+  std::string getMessage() const;
+  
   static bool loadPluginLibrary(const std::string & filename, PluginLoader *loader = 0);
   static const std::string& getCurrentPluginFileName() {
     return currentPluginLibrary;
   }
 
  private:
+  std::string msg;
   int n;
   std::string pluginPath;
   PluginLoader *loader;
