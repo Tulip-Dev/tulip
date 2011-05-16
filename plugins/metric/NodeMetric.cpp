@@ -107,14 +107,7 @@ bool NodeMetric::run() {
   doubleResult->setAllNodeValue(0);
   node n;
   forEach(n, graph->getNodes()) {
-    double value = getNodeValue(n);
-    if (value < 0.0) {
-      if (pluginProgress) {
-	pluginProgress->setError("The Graph must be acyclic");
-	return false;
-      }
-    }
-    doubleResult->setNodeValue(n, value);
+    doubleResult->setNodeValue(n, getNodeValue(n));
   }
   return true;
 }
