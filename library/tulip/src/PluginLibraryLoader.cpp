@@ -47,6 +47,10 @@ static bool isPreviouslyLoaded(const std::string &lib){
   return false;
 }
 
+std::string PluginLibraryLoader::getMessage() const {
+  return msg;
+}
+
 #ifdef _WIN32
 
 bool PluginLibraryLoader::loadPluginLibrary(const std::string & filename, PluginLoader *loader) {
@@ -64,18 +68,17 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string & filename, Plugin
         0,               // minimum size of buffer
         NULL);              // no inserts
       if (!msg) {
-  char scode[128];
-  sprintf(scode, "%s: unable to load(error %d)",
-    filename.c_str(), (int) dwErrCode);
-  loader->aborted(filename, std::string(scode));
-      } else {
-  loader->aborted(filename, filename + ": " + msg);
-  LocalFree(msg);
+        char scode[128];
+        sprintf(scode, "%s: unable to load(error %d)", filename.c_str(), (int) dwErrCode);
+        loader->aborted(filename, std::string(scode));
+      }
+      else {
+        loader->aborted(filename, filename + ": " + msg);
+        LocalFree(msg);
       }
     }
-    return false;
   }
-  return true;
+  return hDLL != NULL;
 }
 
 struct IteratorInfos {
@@ -163,9 +166,8 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginL
   if (!handle) {
     if (loader!=0)
       loader->aborted(filename, std::string(dlerror()));
-    return false;
   }
-  return true;
+  return handle;
 }
 
 // accepts only file whose name matches *.so or *.dylib
@@ -178,7 +180,8 @@ int __tulip_select_libs(struct dirent *ent) {
   const unsigned long suffix_len = 6;
 #endif
   int idx = strlen(ent->d_name) - suffix_len;
-  if (idx < 0) return 0;
+  if (idx < 0)
+    return 0;
 
   for (unsigned long i=0; i < suffix_len; ++i) {
     if ((ent->d_name[idx + i]) != suffix[i]) return 0;
@@ -186,8 +189,7 @@ int __tulip_select_libs(struct dirent *ent) {
   return 1;
 }
 
-PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath,
-           PluginLoader *loader) {
+PluginLibraryLoader::PluginLibraryLoader(std::string _pluginPath, PluginLoader *loader) {
   struct dirent **namelist;
   n = scandir((const char *) _pluginPath.c_str(),
         &namelist,

@@ -170,10 +170,10 @@ void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *lo
     while(plLoader.loadNextPluginLibrary(loader)) {
     }
     if (loader)
-      loader->finished(true, plLoader.msg);
+      loader->finished(true, plLoader.getMessage());
   } else {
     if (loader)
-      loader->finished(false, plLoader.msg);
+      loader->finished(false, plLoader.getMessage());
   }
 }  
 
