@@ -1,0 +1,105 @@
+<!--<!DOCTYPE chapter SYSTEM "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">-->
+<chapter id="tutorial_beginner"><title>Tutorial</title>
+  <sect1 id="first-step"><title>First Steps</title>
+    <para> The goal of this part is to create a graph, save it, and apply the most common analysis operations.</para>
+    <sect2 id="first-dis"><title>Creating a graph</title>
+			There are several ways to create a graph: through a generation alorithm (see below), by manually building it element by element (see below),
+			or through the wizard "Import CSV Data" (see <ulink url="http://tulip.labri.fr/TulipDrupal/?q=node/1411">this video tutorial</ulink>).
+      <sect3 id="import"><title>Generate a graph</title>
+        <para>
+					<itemizedlist>
+						<listitem><para>Click menu <code>File → Import → Graph</code>.</para>
+						</listitem>
+						<listitem><para>Select a generation method, for instance <code>Grid approximation</code> and click OK.</para></listitem>
+					</itemizedlist>
+					A graph with nodes and edges is now displayed.
+					With the mouse wheel, you can zoom in an out.
+					Click and drag to move the graph.
+					Shift-click rotates the graph around x and y axis, Ctrl-click rotates around the z axis.
+					To reset the view, right-click and select <code>View → Center view</code>.
+        </para>
+      </sect3>
+      <sect3 id="create"><title>Build a graph</title>
+        <para>
+          <itemizedlist>
+            <listitem> <para>Click Menu <code>File → New</code>.</para> </listitem>
+            <listitem>
+              <para> Select the <inlinegraphic fileref="images/i_addedge.png"/> tool.
+								Click on a few different places in the "Node Link Diagram View" subwindow: each click adds a node.
+								Now, add a few links: for each link, click on the source node, then on the target node.</para>
+            </listitem>
+						<listitem>
+							Click <code>View Editor</code> (bottom left corner) → <code>Rendering parameters → arrows</code> to display or hide them.
+							Click <code>Layer manager</code> and uncheck <code>Edges</code> then click <code>Apply</code> to hide the edges.
+							The first column (visibility) determines whether this element is visible,
+							the second column determines stencil: when a layer has the stencil, it is displayed on top of layers who do not.
+						</listitem>
+            <listitem>
+              <para>To delete an element, select the <inlinegraphic fileref="images/i_del.png"/> tool and click the element.</para>
+            </listitem>
+          </itemizedlist>
+        </para>
+      </sect3>
+    </sect2>
+		<sect2 id="save"><title>Saving</title>
+			<para>To save your work in Tulip's own file format (.tlp), click menu <code>File → Save</code> or <code>File → Save as</code>.
+				To save it in another file format (only GML and TLP are supported without any plugin installed),
+				click menu <code>File → Export</code>.</para>
+		</sect2>
+    <sect2 id="algos"><title>Algorithms</title>
+	    <para>
+				Generate a graph: click Menu <code>File → Import → Graph → Random General Graph</code>, type in "50" in the nodes field and "50" edges.
+				Since node positions are random, the layout is tangled:
+				<graphic fileref="images/tutorial_beginner_random-graph.png"/>
+				To improve it, let's apply a <emphasis>Layout algorithm</emphasis>: click <code>Algorithm → Layout → Force directed → GEM</code>.
+				It computes a good position for each node:
+				<graphic fileref="images/tutorial_beginner_random-graph_laid-out.png"/>
+			</para>
+			<para>
+				Some <code>layout</code> algorithms can only be applied to graphs belonging to a specific graph class. 
+				For instance, the <code>Bubble Tree</code> algorithm can only be applied on a tree.
+	      There are algortihms for computing Layout, Measures, Selection, Clustering (in <code>General</code>) and more.
+			</para>
+		</sect2>
+		<sect2><title>Properties</title>
+			Properties are an important concept in Tulip, they are used to store information about each node and edge. To see them,
+			click <code>Graph Editor</code> (bottom left corner) → <code>Properties</code> (tab on the left),
+			and in the bottom part click <code>viewColor</code>.
+			This property stores, for each node, the color used to display it. In the upper part,
+			double-click a red cell and choose a blueish color, click OK,
+			and press <keycap>Enter</keycap> to update the graph display on the right:
+			<graphic fileref="images/tutorial_beginner_viewColor.png"/>
+			The corresponding node (in the picture, the node with id 2) is displayed in blue (on the drawing, it is in the bottom right corner).
+
+			<para>To compute more meaningful colors, click menu <code>Algorithm → Measure → Graph → Betweeness centrality</code>,
+				this computes a centrality for each node. The graph is now displayed with colors depending on this metric
+				(nodes at the center have a high centrality and are thus blue, node at the border have a low centrality and are thus red):
+				<graphic fileref="images/tutorial_beginner_centrality.png"/>
+				The result of this computation has been stored in the viewMetric property:
+				<graphic fileref="images/tutorial_beginner_viewMetric.png"/>
+				But if we run another algorithm, it will overwrite the viewMetric property. So, let's copy the result into another property:
+				click <code>viewMetric</code> then <code>copy</code> and type in "centrality" (as a new property).
+			</para>
+			<para>
+				Now, let's add labels. In the bottom part (the list of properties), click <code>viewLabel</code>
+				(not "<code>viewLabel...</code>"),
+				then double-click the cell under the mouse in the picture below, and type in "Hello World !".
+				Click OK, then press <keycap>Enter</keycap> to update the display. The node with id 2 has a label:
+				<graphic fileref="images/tutorial_beginner_viewLabel.png"/>
+
+				To get more meaningful labels, let's apply an algorithm.
+				Click <code>Algorithm → Measure → Misc → Id</code>. The result of this metric (here, the identifier of each node)
+				has been stored in the viewMetric property (overwriting the previously computed centrality).
+				Also, new colors have been computed to represent this property, but do not pay attention to them for now:
+				<graphic fileref="images/tutorial_beginner_id.png"/>
+				To display this viewMetric property as labels, click <code>viewMetric</code> then <code>To labels</code>.
+				(One can see that the colors represent the id: small id have a reddish color, while high id have a blueish color.)
+				To restore the colors representing centralilty, click
+				<code>Algorithm → Color → Color mapping</code> and select "centrality" under "linear/uniform property". Click <code>OK</code>.
+
+				The final picture should look like this (since the graph is random, the exact structure can be different):
+				<graphic fileref="images/tutorial_beginner_id_centrality.png"/>
+			</para>
+		</sect2>
+  </sect1>
+</chapter>

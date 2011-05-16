@@ -1,373 +1,457 @@
-<chapter id="interface"><title>Graphic Interface</title>
-  <sect1 id="main-window"><title>Main window : Menus</title>
+<chapter id="interface"><title>Graphical User Interface</title>
+	<para>We suggest to run Tulip and experiment with the concepts explained while reading this Manual.
+		Here are the components of the main window:
+    <graphic fileref="images/i_interface.png"/>
+	</para>
+  <sect1 id="main-window"><title>Menus</title>
     <para>
       <graphic fileref="images/mainmenu.png"/>
-      The main window of Tulip software is composed of several subwindows and a menu bar :
       <itemizedlist>
         <listitem>
-          <para><code>File</code>: this menu is used for usual file operations :
-	    <itemizedlist>
-	      <listitem>
-		<para><code>New</code> (<keycap>Ctrl+N</keycap>, <keycap>APPLE+N</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Open</code> (<keycap>Ctrl+O</keycap>, <keycap>APPLE+0</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Save</code> (<keycap>Ctrl+S</keycap>, <keycap>APPLE+S</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Save As</code> (<keycap>Ctrl+Shift+S</keycap>, <keycap>APPLE+Shift+S</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Print</code> (<keycap>Ctrl+P</keycap>, <keycap>APPLE+P</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Close Tab</code>,
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Exit</code>(<keycap>Ctrl+Q</keycap>, <keycap>APPLE+Q</keycap> on Mac).
-		</para>
-	      </listitem>
-	    </itemizedlist>
-	    Others are added:
+          <para><code>File</code>: usual file operations
+						(<code>New</code>, <code>Open</code>, <code>Save</code>, <code>Save as</code>, <code>Print</code>, <code>Close Tab</code>,
+						<code>Exit</code>)
+						<!-- Note: keyboard shortcuts are already visible in the menus.
+								 A shorter text means a more attentive reader. -->
+						<!-- <itemizedlist>
+								 <listitem>
+									 <para><code>New</code> (<keycap>Ctrl+N</keycap>, <keycap>APPLE+N</keycap> on Mac),
+									 </para>
+								 </listitem>
+								 <listitem>
+									 <para><code>Open</code> (<keycap>Ctrl+O</keycap>, <keycap>APPLE+0</keycap> on Mac),
+									 </para>
+								 </listitem>
+								 <listitem>
+									 <para><code>Save</code> (<keycap>Ctrl+S</keycap>, <keycap>APPLE+S</keycap> on Mac),
+									 </para>
+								 </listitem>
+								 <listitem>
+									 <para><code>Save As</code> (<keycap>Ctrl+Shift+S</keycap>, <keycap>APPLE+Shift+S</keycap> on Mac),
+									 </para>
+								 </listitem>
+								 <listitem>
+									 <para><code>Print</code> (<keycap>Ctrl+P</keycap>, <keycap>APPLE+P</keycap> on Mac),
+									 </para>
+								 </listitem>
+								 <listitem>
+									 <para><code>Close Tab</code>,
+									 </para>
+								 </listitem>
+								 <listitem>
+									 <para><code>Exit</code>(<keycap>Ctrl+Q</keycap>, <keycap>APPLE+Q</keycap> on Mac).
+									 </para>
+								 </listitem>
+						</itemizedlist> -->
+						and
             <itemizedlist>
               <listitem>
-                <para><code>Import</code> : this submenu is populated by import plugins. 
+                <para><code>Import</code>: when import plugins are installed, they go into this menu.
                   <itemizedlist>
                     <listitem>
-                      <para><code>File</code> : Plugins allowing importation of graph files in different format such as Adjacent Matrix, gml, dot (graphviz), or tlp (tulip default file format).
+                      <para><code>File</code>: import graphs in various file formats, such as
+												Adjacency Matrix (see <ulink url="http://en.wikipedia.org/wiki/Adjacency_matrix">Wikipedia: Adjacency Matrix</ulink> for details),
+												GML (used by the <application>graphlet</application> system, a toolkit for graph editors and graph algorithms),
+												dot (graphviz),
+												or TLP (Tulip's own file format).
                       </para>
                     </listitem>
                     <listitem>
-                      <para><code>Graph</code> : Plugins allowing the creation of randomly generated graphs of different types.
+                      <para><code>Graph</code>: plugins to generate graphs (random or deterministic):
+												<itemizedlist>
+													<listitem><para>Complete General Graph: complete graph</para></listitem>
+													<listitem><para>Complete Tree</para></listitem>
+													<listitem><para>Grid: 2D grid</para></listitem>
+													<listitem><para>Grid approximation:
+															This algorithm creates the specified number of nodes and places them randomly in the 2D plane.
+															Then it adds an edge between all pairs of nodes that are at distance at most <emphasis>d</emphasis>.
+															<emphasis>d</emphasis> is adjusted so that the average degree is approximately the degree requested.
+													</para></listitem>
+													<listitem><para>Random General Graph</para></listitem>
+													<listitem><para>Random Simple Graph</para></listitem>
+													<listitem><para>Uniform Random Binary Tree</para></listitem>
+												</itemizedlist>
                       </para>
                     </listitem>
                     <listitem>
-                      <para><code>Misc</code> : Plugins to capture the tree structure of a file system directory, or the graph structure of a web site.
+                      <para><code>Misc</code>:
+												plugins to capture the tree structure of a file system directory under a selected root,
+												or crawl the graph structure of a web site.
                       </para>
                     </listitem>
                   </itemizedlist>
                 </para>
               </listitem>
               <listitem>
-                <para><code>Export</code>: this submenu is populated by export plugins allowing to save a tulip graph accordingly to a specified format. By default Tulip is able to export in GML and TLP formats.
+                <para><code>Export</code>. save a graph in GML or TLP formats. Plugins can be installed to support more file formats.
                 </para>
               </listitem>
             </itemizedlist>
           </para>
         </listitem>
         <listitem>
-          <para><code>Edit</code>: this is composed of tools affecting the selected elements:
-	    <itemizedlist>
-	      <listitem>
-		<para><code>Cut</code> (<keycap>Ctrl+X</keycap>, <keycap>APPLE+X</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Copy</code> (<keycap>Ctrl+C</keycap>, <keycap>APPLE+C</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Paste</code> (<keycap>Ctrl+V</keycap>, <keycap>APPLE+V</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Find</code> (<keycap>Ctrl+F</keycap>, <keycap>APPLE+F</keycap> on Mac). This tool has 4 options:
-		  <itemizedlist>
-		    <listitem><para>Replace : Replace the current selection (nodes or edges already selected).
-		    </para></listitem>
-		    <listitem><para>Add : Add the nodes (or edges) to be selected to the current selection.
-		    </para></listitem>
-		    <listitem><para>Remove : Remove nodes (or edges) from the current selection.
-		    </para></listitem>
-		    <listitem><para>Intersect : Select the intersection between the nodes (or edges) TO BE selected, and the ones from the current selection.
-		    </para></listitem>
-		  </itemizedlist>
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Select All</code> (<keycap>Ctrl+A</keycap>, <keycap>APPLE+A</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Delete selection</code> (<keycap>Del</keycap>),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Deselect all</code> (<keycap>Ctrl+Shift+A</keycap>, <keycap>APPLE+Shift+A</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Invert Selection</code> (<keycap>Ctrl+I</keycap>, <keycap>APPLE+I</keycap> on Mac).
-		</para>
-	      </listitem>
-	    </itemizedlist>
-	    This menu contains also:
-	    <itemizedlist>
-	      <listitem>
-		<para><code>Create group</code> (<keycap>Ctrl+G</keycap>, <keycap>APPLE+G</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Create subgraph</code> (<keycap>Ctrl+Shift+G</keycap>, <keycap>APPLE+Shift+G</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Undo</code> (<keycap>Ctrl+Z</keycap>, <keycap>APPLE+Z</keycap> on Mac),
-		</para>
-	      </listitem>
-	      <listitem>
-		<para><code>Redo</code> (<keycap>Ctrl+Y</keycap>, <keycap>APPLE+Y</keycap> on Mac).</para>
-              </listitem>
-	    </itemizedlist>
-	    </para>
-	</listitem>
+          <para><code>Edit</code>:
+						<itemizedlist>
+							<listitem>
+								<para><code>Cut</code> <!-- (<keycap>Ctrl+X</keycap>, <keycap>APPLE+X</keycap> on Mac), -->
+								</para>
+							</listitem>
+							<listitem>
+								<para><code>Copy</code> <!-- (<keycap>Ctrl+C</keycap>, <keycap>APPLE+C</keycap> on Mac), -->
+								</para>
+							</listitem>
+							<listitem>
+								<para><code>Paste</code>. <!-- (<keycap>Ctrl+V</keycap>, <keycap>APPLE+V</keycap> on Mac), -->
+									Note that a copied element is placed at the location of the original;
+									use right-click <code>View → Center View</code> or <keycap>Ctrl+Shift+C</keycap> if the pasted element is outside of the screen
+								</para>
+							</listitem>
+
+							as well as modify the selection:
+							<listitem>
+								<para><code>Find</code> <!-- (<keycap>Ctrl+F</keycap>, <keycap>APPLE+F</keycap> on Mac) -->. This tool has 4 options:
+									<itemizedlist>
+										<listitem><para>Replace: Replace the current selection (nodes or edges already selected).
+										</para></listitem>
+										<listitem><para>Add: Add the nodes (or edges) to be selected to the current selection.
+										</para></listitem>
+										<listitem><para>Remove: Remove nodes (or edges) from the current selection.
+										</para></listitem>
+										<listitem><para>Intersect: Select the intersection between the nodes (or edges) TO BE selected, and the ones from the current selection.
+										</para></listitem>
+									</itemizedlist>
+								</para>
+							</listitem>
+							<listitem>
+								<para><code>Select All</code> <!-- (<keycap>Ctrl+A</keycap>, <keycap>APPLE+A</keycap> on Mac) -->,
+								</para>
+							</listitem>
+							<listitem>
+								<para><code>Delete selection</code><!--  (<keycap>Del</keycap>) -->: delete selected nodes and edges,
+								</para>
+							</listitem>
+							<listitem>
+								<para><code>Deselect all</code> <!-- (<keycap>Ctrl+Shift+A</keycap>, <keycap>APPLE+Shift+A</keycap> on Mac) -->,
+								</para>
+							</listitem>
+							<listitem>
+								<para><code>Invert Selection</code> <!-- (<keycap>Ctrl+I</keycap>, <keycap>APPLE+I</keycap> on Mac) -->.
+								</para>
+							</listitem>
+						</itemizedlist>
+						This menu also contains
+						<code>Create group</code>,
+						<code>Create subgraph</code>,
+						<code>Undo</code>,
+						<code>Redo</code>.
+						<!-- <itemizedlist> 
+								 <listitem>
+									 <para><code>Create group</code> (<keycap>Ctrl+G</keycap>, <keycap>APPLE+G</keycap> on Mac),
+									 </para>
+								 </listitem>
+								 <listitem>
+									 <para><code>Create subgraph</code> (<keycap>Ctrl+Shift+G</keycap>, <keycap>APPLE+Shift+G</keycap> on Mac),
+									 </para>
+								 </listitem>
+								 <listitem>
+									 <para><code>Undo</code> (<keycap>Ctrl+Z</keycap>, <keycap>APPLE+Z</keycap> on Mac),
+									 </para>
+								 </listitem>
+								 <listitem>
+									 <para><code>Redo</code> (<keycap>Ctrl+Y</keycap>, <keycap>APPLE+Y</keycap> on Mac).</para>
+								 </listitem>
+						</itemizedlist>-->
+					</para>
+				</listitem>
         <listitem>
-          <para><code>Algorithm</code>: this one is divided in several parts to make a difference between the kind of algorithms you can apply. These are:
+          <para><code>Algorithm</code>:
             <itemizedlist>
               <listitem>
-                <para><code>Selection</code>: this submenu is populated by 'selection' algorithms. These algorithms allows to select nodes and or edges (assign the 'viewSelection' property see <xref linkend="graph-properties"/> for more details) satifying some criteria. For example the 'Loop Selection' algorithm detects all edges for which the starting and ending nodes are the same.</para>
+                <para><code>Selection</code>: select nodes and/or edges based on advanced criteria. (Selecting means assigning the 'viewSelection' property, see <xref linkend="graph-properties"/> for details). For example, the 'Loop Selection' algorithm detects all edges for which the starting and ending nodes are the same.</para>
               </listitem>
               <listitem>
-                <para><code>Color</code>: this submenu is populated by 'color' algorithms. This kind of algorithm computes the color (the 'viewColor' property see <xref linkend="graph-properties"/> for more details ) of the graph elements. A default one, 'Metric Mapping', is provided; it allows to color all graph elements according to a metric property.</para>
+                <para><code>Color</code>: computes the color (the 'viewColor' property, see <xref linkend="graph-properties"/> for details) of the graph elements. A default one, 'Metric Mapping', is provided; it allows to color all graph elements according to a metric property.</para>
+								<!-- This plug-in allows you to choose any number of colors, and computes an interpolation to fill in the blanks if needed (or you can force colors to some values by using the enumerated mode). -->
               </listitem>
               <listitem>
-                <para><code>Measure</code>: this submenu is populated by 'metric' algorithms. These algorithms allows to compute and assigned a value to the 'viewMetric' property of graph elements see <xref linkend="graph-properties"/> for more details. For example, when running the 'Degree' algorithm, the degree (the number of its neighbors) is compute and assigned to each graph node 'viewMetric' property.</para>
+                <para><code>Measure</code>: compute and assign a value to the 'viewMetric' property of graph elements, see <xref linkend="graph-properties"/> for details. For example, when running the 'Degree' algorithm, the degree (the number of neighbors) is computed and stored, for each node, into its 'viewMetric' property.</para>
               </listitem>
               <listitem>
-                <para><code>Layout</code>: this submenu is populated by 'layout' algorithms which allow to display graphs using different types of drawings. For example, the 'Circular' algorithm places all nodes of a graph along a circle.
+                <para><code>Layout</code>: compute the position of each node.
+									For example, the 'Circular' algorithm places all nodes along a circle.
                 </para>
                 <para>
-                  Before :
+                  Before:
                   <graphic fileref="images/algorithms_circularbefor.png"/>
                 </para>
                 <para>
-                  After :
+                  After:
                   <graphic fileref="images/algorithms_circularafter.png" />
                 </para>
               </listitem>
               <listitem>
-                <para><code>Size</code>: this submenu is populated by 'size' algorithms which allow to compute the size (the 'viewSize' property see <xref linkend="graph-properties"/> for more details) of the graph elements.</para>
+                <para><code>Size</code>: compute a size (the 'viewSize' property see <xref linkend="graph-properties"/> for details) of the graph elements.</para>
               </listitem>
               <listitem>
-                <para><code>General</code>: this submenu is populated by more general algorithms for computing properties, subgraphs, quotient graphs, groups... For example the 'Equal Value' algorithm create subgraphs for which the included elements have the same value for a choosed 'metric' property.</para>
+                <para><code>General</code>: more general algorithms: subgraphs, quotient graphs, groups... For example the 'Equal Value' algorithm create subgraphs for which the elements have a chosen value for a chosen 'metric' property.</para>
               </listitem>
             </itemizedlist>
-            For more information please visit <xref linkend="algo"/>
+            For more information, see <xref linkend="algo"/>.
           </para>
         </listitem>
         <listitem>
-          <para><code>Graph </code> :
-            This menu is composed of 2 sub menus :
+          <para><code>Graph </code>:
             <itemizedlist>
-              <listitem><para><code>Tests</code>: This sub menu contains tools able to say if the graph obey some constraints :
-                <itemizedlist>
-                  <listitem><para><code>Simple </code>: Is the Graph Simple ? For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Simple_graph#Simple_graph">Wikipedia: Simple graphs</ulink></para>
-                  </listitem>
-                  <listitem><para><code>Directed Tree </code>: A directed tree is a directed graph which would be a tree if the directions on the edges were ignored. Some authors restrict the phrase to the case where the edges are all directed towards a particular vertex, or all directed away from a particular vertex.</para><para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Directed_tree">Wikipedia: Directed Tree</ulink></para>
-                  </listitem>
-                  <listitem><para><code>Free Tree</code>: A tree without any designated root is called a free tree. </para><para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Free_tree">Wikipedia: Simple graphs</ulink></para>
-                  </listitem>
-                  <listitem><para><code>Acyclic</code> : A graph is acyclic if it contains no cycle. A cycle is a path that as the same source and target. </para><para> For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Acyclic_Graph">Wikipedia: Acyclic graphs</ulink></para>
-                  </listitem>
-                  <listitem><para><code>Connected</code> : A graph is called connected if every pair of vertices in the graph is connected. For more information please visit : </para> <para><ulink url="http://en.wikipedia.org/wiki/Connected_graph">Wikipedia: Connectivity </ulink></para>
-                  </listitem>
-                  <listitem><para><code>Bi-connected </code>: A connected graph is biconnected if the removal of any single node and his out edges can not disconnect the graph. </para><para> For more information please visit :<ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Biconnected Graphs </ulink></para>
-                  </listitem>
-                  <listitem><para><code>Tri-connected </code> : If it is always possible to establish a path from any node to an other one even after removing any 2 nodes, then the graph is said to be Tri-connected. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/K-connected_graph">Wikipedia: k-connected graphs </ulink></para>
-                  </listitem>
-                  <listitem><para><code>Planar </code>: A  graph is said to be planar if it can be drawn on the (Euclidean) plane without any edges crossing. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Planar_graph">Wikipedia : Planar Graphs</ulink></para>
-                  </listitem>
-            	  <listitem><para><code>Outer Planar </code>: A graph is said to be outer planar if it has an embedding in the plane such that its nodes lie on a fixed circle and its edges lie inside the disk without any crossing. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Planar_graph#Outerplanar_graphs">Wikipedia : Outerplanar Graphs</ulink></para>
-            	  </listitem>
-                </itemizedlist>
+              <listitem><para><code>Tests</code>: test if the graph obey some constraints:
+									<itemizedlist>
+										<listitem><para><code>Simple </code>: Is the Graph Simple?
+												As opposed to a multigraph, a simple graph is an undirected graph
+												that has no loops and no more than one edge between any two different vertices.
+												For more information, please visit: <ulink url="http://en.wikipedia.org/wiki/Simple_graph#Simple_graph">Wikipedia: Simple graphs</ulink></para>
+										</listitem>
+										<listitem><para><code>Directed Tree </code>: A directed tree is a directed graph which would be a tree if the directions on the edges were ignored. Some authors restrict the term to the case where all edges are directed towards a particular vertex, or all away from a particular vertex. More information: <ulink url="http://en.wikipedia.org/wiki/Directed_tree">Wikipedia: Directed Tree</ulink></para>
+										</listitem>
+										<listitem><para><code>Free Tree</code>: A tree without any designated root is called a free tree.  More information: <ulink url="http://en.wikipedia.org/wiki/Free_tree">Wikipedia: Free tree</ulink></para>
+										</listitem>
+										<listitem><para><code>Acyclic</code>: A graph is acyclic iff it contains no cycle. (A cycle is a path having the same start and and nodes.)  More information: <ulink url="http://en.wikipedia.org/wiki/Acyclic_Graph">Wikipedia: Acyclic graphs</ulink></para>
+										</listitem>
+										<listitem><para><code>Connected</code>: A graph is connected iff there is path path from any node to any other node. More information: </para> <para><ulink url="http://en.wikipedia.org/wiki/Connected_graph">Wikipedia: Connectivity </ulink></para>
+										</listitem>
+										<listitem><para><code>Bi-connected </code>: A connected graph is biconnected if the removal of any single node (and its adjacent edges) does not disconnect the graph.   More information:<ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Biconnected Graphs </ulink></para>
+										</listitem>
+										<listitem><para><code>Tri-connected </code>: If it is always possible to establish a path from any node to an other one even after removing any 2 nodes, then the graph is said to be tri-connected.  More information: <ulink url="http://en.wikipedia.org/wiki/K-connected_graph">Wikipedia: k-connected graphs </ulink></para>
+										</listitem>
+										<listitem><para><code>Planar </code>: A  graph is said to be planar if it can be drawn on the (Euclidean) plane without any edges crossing. More information: <ulink url="http://en.wikipedia.org/wiki/Planar_graph">Wikipedia: Planar Graphs</ulink></para>
+										</listitem>
+            				<listitem><para><code>Outer Planar </code>: A graph is said to be outer planar if it has an embedding in the plane such that its nodes lie on a fixed circle and its edges lie inside the disk without any crossing. More information: <ulink url="http://en.wikipedia.org/wiki/Planar_graph#Outerplanar_graphs">Wikipedia: Outerplanar Graphs</ulink></para>
+            				</listitem>
+									</itemizedlist>
               </para></listitem>
-              <listitem><para><code>Modify </code>: Those operations will modify the entire structure of a graph .
-                <itemizedlist>
-                  <listitem><para><code>Make Simple </code>: This algorithm will change the graph to make it a simple graph. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Simple_graph#Simple_graph">Wikipedia: Simple graphs</ulink></para>
-                  </listitem>
-                  <listitem><para><code>Make Acyclic</code> : A graph is acyclic if it contains no cycle. A cycle is a path that as the same source and target. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Acyclic_Graph">Wikipedia: Acyclic graphs</ulink></para>
-                  </listitem>
-                  <listitem><para><code>Make Connected</code> : A graph is said to be connected if every pair of vertices in the graph is connected. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Connected_graph">Wikipedia: Connectivity </ulink></para>
-                  </listitem>
-                  <listitem><para><code>Make Bi-connected </code>: For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Biconnected_graph">Wikipedia: Biconnected Graphs </ulink></para>
-                  </listitem>
-                  <listitem><para><code>Make directed </code>: If the graph is a free tree, make it directed. If only one node is selected, this one will be considered as the root node. If none is selected, Tulip will heuristically choose the center of the graph as the root node. For more information please visit : <ulink url="http://en.wikipedia.org/wiki/Directed_tree">Wikipedia: Directed Tree</ulink></para>
-                  </listitem>
-                  <listitem><para>Reverse selected edges : Exchange source and target of an edge.
-                  </para></listitem>
-                </itemizedlist>
+              <listitem><para><code>Modify </code>: Modify the whole structure of a graph, to ensure the graph has one of the above properties:
+									<itemizedlist>
+										<listitem><para><code>Make Simple </code>:
+												Makes the graph simple (by removing self loops and parallel edges, if any).
+												see <ulink url="../../doxygen/tulip-lib/classtlp_1_1SimpleTest.html">Algorithm documentation</ulink></para>
+										</listitem>
+										<listitem><para><code>Make Acyclic</code>
+												Makes the graph acyclic (by replacing each loop with a triangle, then reversing some edges).
+												<!-- More information: <ulink url="http://en.wikipedia.org/wiki/Feedback_arc_set">Wikipedia: feedback arc set problem.</ulink> -->
+											</para>
+										</listitem>
+										<listitem><para><code>Make Connected</code>
+												If the graph is not connected, adds edges to make the graph connected.</para>
+										</listitem>
+										<listitem><para><code>Make Bi-connected </code>
+												If the graph is not biconnected, adds edges to make the graph biconnected.</para>
+										</listitem>
+										<listitem><para><code>Make directed </code>: If the graph is a free tree, make it directed. If only one node is selected, this one will be considered as the root node. If none is selected, Tulip will heuristically choose the center of the graph as the root node. More information: <ulink url="http://en.wikipedia.org/wiki/Directed_tree">Wikipedia: Directed Tree</ulink></para>
+										</listitem>
+										<listitem><para>Reverse selected edges: Exchange source and target of those edges.
+										</para></listitem>
+									</itemizedlist>
               </para></listitem>
             </itemizedlist>
           </para>
-          <para><code>View</code>: this menu display all available view types. Click on one and a new view on the current graph will be created (<xref linkend="Main-views" /> )</para>
         </listitem>
         <listitem>
-          <para><code>Windows</code>: this menu contains two options for the management of the views in the workspace : cascade or tile mode.</para>
+          <para><code>View</code>: click one and a new subwindow will be created in the view window. For instance, table view displays the list of nodes and the list of edges. See <xref linkend="Main-views" />.</para>
         </listitem>
-        <listitem><para><code>Options</code>: this menu allows to enable/disable the display options and show Graph/View editor widget:
-	  <itemizedlist>
-            <listitem><para>Display options :
-	      <itemizedlist>
-		<listitem><para>Force ratio : Tries to keep a good Height/Width ratio for the layout of the graph.
-		</para></listitem> 
-		<listitem><para>Map metric : Applies the Color / Metric Mapping algorithm, whenever, a measure algorithm has been run.
-		</para></listitem> 
-		<listitem><para>Morphing : Enables the Morphing from a layout to an other.
-		</para></listitem>
-	      </itemizedlist>
-	    </para></listitem>
-	    <listitem><para>Show Graph/View editor : if you close Graph/View editor tab on left dock widget, you can show it by this menu</para></listitem>
-	  </itemizedlist>
-	</para></listitem>
-	<listitem>
-          <para><code>Help</code>: in this menu, you can find informations about the software and the way to make your first steps.</para>
+        <listitem>
+          <para><code>Windows</code>: manages the subwindows of the view window.</para>
+        </listitem>
+        <listitem><para><code>Options</code>: enable/disable the display options, and show the Graph or View editor:
+						<itemizedlist>
+							<listitem><para>Display options:
+									<itemizedlist>
+										<listitem><para>Force ratio: Tries to keep a good Height/Width ratio for the graph layout.
+										</para></listitem>
+										<listitem><para>Map metric:
+												Whenever a measure algorithm is run, show its result by updating the graph colors (i.e. applies the Color / Metric Mapping algorithm)
+										</para></listitem>
+										<listitem><para>Morphing: when a new layout is applied, displays an animation morphing the old layout to the new one.
+										</para></listitem>
+									</itemizedlist>
+							</para></listitem>
+							<listitem><para>Show Graph/View editor: if you have closed the Graph or View editor tab (in the left dock widget),
+									you can show it again thanks to this menu</para></listitem>
+						</itemizedlist>
+				</para></listitem>
+				<listitem>
+          <para><code>Help</code>:
+						<code>Documentation</code> (the present one),
+						<code>Preferences</code>,
+						<code>Plugins</code> manager,
+						<code>About</code> this software, including version number.
+					</para>
         </listitem>
       </itemizedlist>
     </para>
   </sect1>
-  <sect1 id="main-window-toolsbar"><title>Main window : Tools bar</title>
+
+  <sect1 id="main-window-toolsbar"><title>Toolbar</title>
     <para>
       <graphic fileref="images/tools_bar.png"/>
-      The tool bar contains 5 tools : 
+      The toolbar contains 5 tools: 
       <itemizedlist>
       	<listitem>
-      		<para><inlinegraphic fileref="images/i_open.png"/><code> Open file</code> : Open a new graph.
-            </para>
+      		<para><inlinegraphic fileref="images/i_open.png"/><code> Open file</code>: Open a new graph.
+          </para>
       	</listitem>
       	<listitem>
-      		<para><inlinegraphic fileref="images/i_save.png"/><code> Save file</code> : Save current graph.
-            </para>
+      		<para><inlinegraphic fileref="images/i_save.png"/><code> Save file</code>: Save the current graph.
+          </para>
       	</listitem>
       	<listitem>
-      		<para><inlinegraphic fileref="images/i_print.png"/><code> Print</code> : Print the current graph.
-            </para>
+      		<para><inlinegraphic fileref="images/i_print.png"/><code> Print</code>: Print the current graph.
+          </para>
       	</listitem>
       	<listitem>
-      		<para><inlinegraphic fileref="images/i_undo.png"/><code> Undo</code> : Undo the last operation on the graph.
-            </para>
+      		<para><inlinegraphic fileref="images/i_undo.png"/><code> Undo</code>: Undo the last operation on the graph.
+          </para>
       	</listitem>
       	<listitem>
-      		<para><inlinegraphic fileref="images/i_redo.png"/><code> Redo</code> : Redo the last undo operation.
-            </para>
+      		<para><inlinegraphic fileref="images/i_redo.png"/><code> Redo</code>: Redo the last undo operation.
+          </para>
       	</listitem>
       </itemizedlist>
    	</para>
   </sect1>
+
   <sect1 id="infoeditor"><title>Graph Editor</title>
     <para>
-      This subwindow is divided in three tabs : Property, Element, Hierarchy.
+      This subwindow is divided into three tabs: Property, Element, Hierarchy.
     </para>
     <sect2 id="property"><title>Property</title>
       <para>
-        This tab enables to display the properties of nodes and edges as a table. It is composed of two parts. The one of the top of the tab displays all the values of nodes or edges for the selected property (choosen in the lists at the bottom of the tab). It is possible to display only the values of the selected elements by using the <code>selected only</code> box. The user can modify directly a value by double-clicking on the corresponding cell in the table. After editing the value, press the <keycap>Enter</keycap> key to update the display of the graph with the new value. It is possible to set all the nodes or edges value with the <code>Set all</code> button; if the <code>selected only</code> box is checked, this will only affect the selected elements. An other possibility is to set as labels the values of the selected property by clicking on the <code>To labels</code> button. The bottom part of the tab displays the lists of all the local and inherited properties of a graph. An inherited property is a property which is defined for an upper graph in the hierarchy of graphs (see <xref linkend="hierar"/>). 
+        This tab displays the properties of nodes and edges as a table.
+				(Properties will be covered in <xref linkend="graph-properties"/>.)
+				This tab can also be acessed by clicking the <inlinegraphic fileref="images/i_select.png"/> tool,
+				then clicking on a graph element (node or edge).
+			</para>
+			<para>
+				It is composed of two parts: click on the bottom one to choose which property to display in the top one.
+				Check <code>selected only</code> to restrict the table to the nodes selected in the node link diagram (i.e. the drawing).
+				<!-- The bottom part of the tab displays the lists of all the local and inherited properties of a graph. An inherited property is a property which is defined for an upper graph in the hierarchy of graphs (see <xref linkend="hierar"/>). -->
         <graphic fileref="images/info-editor.png"/>
-        By a right mouse button press (press <keycap>Ctrl</keycap> key when mouse pressing on Mac) on a row of the table values, you can display a pop-up menu allowing some actions on the graph element corresponding to the table row: 
+
+				Right-click (<keycap>Ctrl</keycap>-click on Mac) on a table row to display this pop-up menu about the corresponding element:
         <graphic fileref="images/info-contextmenu.png"/>
         <itemizedlist>
-          <listitem><para><code>Add to/Remove from selection</code> : this allows to change the selection state of the element,</para>
+          <listitem><para><code>Add to/Remove from selection</code>: change the selection state of the element,</para>
           </listitem>
-          <listitem><para><code>Select</code> : the current element replaces the whole selection,</para>
+          <listitem><para><code>Select</code>: the current element replaces the whole selection,</para>
           </listitem>
-          <listitem><para><code>Delete</code> : this permanently removes the element from the current graph,</para>
+          <listitem><para><code>Delete</code>: permanently remove the element from the current graph,</para>
           </listitem>
-          <listitem><para><code>Properties</code> : this shows the element properties in the <quote>Element</quote> tab (see after).</para>
+          <listitem><para><code>Properties</code>: show the element properties in the <quote>Element</quote> tab (which we now explain).</para>
           </listitem>
         </itemizedlist>
-      For more details please visit : <xref linkend="graph-properties"/>
       </para>
     </sect2>
     <sect2 id="element"><title>Element</title>
       <para>
-        This tab shows informations about an element of the graph, node or edge, previously "pointed" using the <inlinegraphic fileref="images/i_select.png"/> mouse toolbar operation. At the top, you can find the type of the element and its <quote>id</quote>. To follow, here is the table displaying the elements properties and associated values. As within the tables of the <quote>Property</quote> tab, it is possible to update the values within this table.
+				Click this button in the toolbar <inlinegraphic fileref="images/i_select.png"/>,
+				then click an element (node or edge). The element tab opens:
         <graphic fileref="images/element.png"/>
+				Like before, double-click a cell (in the value column) to update it.
       </para>
     </sect2>
     <sect2 id="hierar"><title>Hierarchy</title>
       <para>
-        This tab shows the inclusion relationships betweeen the different existing subgraphs and groups of a graph. All of them could be created with the Tulip tools. A hierarchy of graph is often the result of the computation of clustering algorithms. 
+        This tab shows the hierarchy, i.e. the inclusions between the subgraphs and groups of the current graph.
+				<!-- All of them could be created with the Tulip tools. -->
+				Hierarchies will be explained in <xref linkend="hierarchy"/>. A hierarchy is often the result of a clustering algorithm.
         <graphic fileref="images/hierachy.png"/>
-        By a right mouse button press (press <keycap>Ctrl</keycap> key when mouse pressing on Mac) in the hierarchy display, you can display a pop-up menu allowing to remove, clone, rename, a graph (subgraph or group).
+				Right-click an element to remove, clone or rename it.
       </para>
     </sect2>
   </sect1>
+
   <sect1 id="configuration"><title>View Editor</title>
     <para>
-      This subwindow is accessible by clicking on the "Configuration" tab at the bottom left corner.
-    </para>
-    <para>
-      On this subwindow you can found interactor configuration and view configuration. When we change the active view this window also changes.
+			Click the "View editor" tab at the bottom left corner to access this subwindow.
+			Here one can configure the interactor (see picture below) and the view.
+			Thus, when the type of active view changes, this window also changes.
+      For example, when the view is the Node Link Diagram (i.e. a drawing), there is a tab with Rendering parameters (like on the picture below),
+			but when the view is the Table view, there is no need for a rotation interactor!
     </para>
     <graphic fileref="images/view_editor.png"/>
     <para>
-      For example when you are on Node Link Diagram View, you can find Rendering parameters dialog on this configuration window.
     </para>
-  </sect1> 
+  </sect1>
+
   <sect1 id="Main-views"><title>Standard views</title>
     <sect2 id="NodeLinkDiagramComponent"><title>Node Link Diagram view</title>
+			<para>This is the most intuitive view: it draws the graph.
+			</para>
       <sect3 id="mouse"><title>Mouse Interaction Toolbar</title>
         <para>
           <graphic fileref="images/mouse-tool.png"/>
-          This toolbar allows to select the mouse operation you want to perform. Operations are listed and explained, from left to right of the toolbar :
+					Buttons to act on the graph with the mouse.
           <itemizedlist>
             <listitem id="navigator3D" xreflabel="Node Link Diagram 3D Navigator">
-              <para><inlinegraphic fileref="images/i_navigation.png"/><code>3D Navigation</code> : This tool enables the 3D navigation in a graph using the mouse movements (left button pressed); the available operations are: translate, rotate, zoom, zoom and pan. Translation is the default operation and can also be activated using the Arrow keys; rotation is activated using <keycap>Shift</keycap> key, zoom is activated using <keycap>Ctrl</keycap> key (<keycap>Alt</keycap> key on Mac), zoom and pan is activated using the wheel of the mouse (<keycap>APPLE</keycap> key on Mac). Warning, the last operation is 'mouse position centered'; i.e it attempts to translate the last 2D or 3D position of the mouse to the center of the view.
+              <para><inlinegraphic fileref="images/i_navigation.png"/><code>3D Navigation</code>: move, rotate and zoom the view.
+								Zooming behavior: the point under the cursor is moved closer to the center.
               </para>
             </listitem>
             <listitem>
-              <para><inlinegraphic fileref="images/i_select.png"/><code>Get Information</code> : when this operation is selected, if you click on an element of a graph (node or edge), Tulip displays all available properties of that node/edge using the <code>Element</code> tab of the <code>Info Editor</code> sub-window (see <xref linkend="infoeditor"/>).</para>
+              <para><inlinegraphic fileref="images/i_select.png"/><code>Get Information</code>:
+								click an element (node or edge) and Tulip displays all available properties of that element.
+								<!--, in the <code>Element</code> tab of the <code>Info Editor</code> sub-window 	(see <xref linkend="infoeditor"/>). -->
+							</para>
             </listitem>
             <listitem id="rectangleSelection" xreflabel="Node Link Diagram Rectangle Selection">
-              <para><inlinegraphic fileref="images/i_selection.png"/><code>Rectangle Selection</code> : Allows multiple elements selection. Elements within the selection box are selected. If <keycap>Shift</keycap> key is pressed, the newly selected elements are added to the current selection, if <keycap>Ctrl</keycap> key (<keycap>Alt</keycap> key on Mac) is pressed, the selected elements are removed from the current selection; else they replace the current selection.
+              <para><inlinegraphic fileref="images/i_selection.png"/><code>Rectangle Selection</code>: select all elements touching the selection box (the previous selection is replaced, but can be recovered with <code>Undo</code>). With <keycap>Shift</keycap>, the newly selected elements are added to the current selection; with <keycap>Ctrl</keycap> (<keycap>Alt</keycap> on Mac), the selected elements are removed from the current selection.
               </para>
             </listitem>
             <listitem>
-              <para><inlinegraphic fileref="images/i_move.png"/><code>Selection edition</code> : This tool allows to modify the current selection. Available operations are horizontal stretch, vertical stretch, all axis stretch, coordinate axis rotation and translation. If no key is pressed, coordinates are modified. If <keycap>Shift</keycap> key is pressed, only coordinates are modified. If <keycap>Ctrl</keycap> is pressed, only size is modified. A left button click outside the selection box reset the selection.
+              <para><inlinegraphic fileref="images/i_move.png"/><code>Selection edition</code>: modify the shape and position.
+								<keycap>Shift</keycap>-click modifies only coordinates.
+								<keycap>Ctrl</keycap>-click modifies only size.
+								Left-click outside the selection resets the selection.
               </para>
               <itemizedlist>
                 <listitem>
                   <para>
-                    <inlinegraphic fileref="images/mousebarselectcircle.png"/> Press on this 'circle' to rotate the selection.
+                    <inlinegraphic fileref="images/i_selection_click-inside.png"/> Click inside the selection to translate it.
                   </para>
                 </listitem>
                 <listitem>
                   <para>
-                    <inlinegraphic fileref="images/mousebarselecttriangle.png"/> Press on this 'triangle' to change width or height of the selection.
+                    <inlinegraphic fileref="images/mousebarselectcircle.png"/> The circle rotates the selection.
                   </para>
                 </listitem>
                 <listitem>
                   <para>
-                    <inlinegraphic fileref="images/mousebarselectsquare.png"/> The 'square' is used both for resizing AND rotating the selection.
+                    <inlinegraphic fileref="images/mousebarselecttriangle.png"/> The triangle streches (horizontally or vertically) the selection.
                   </para>
                 </listitem>
                 <listitem>
                   <para>
-                    <inlinegraphic fileref="images/mousebarselectalign.png"/> These five icons are used to align selected nodes.
+                    <inlinegraphic fileref="images/mousebarselectsquare.png"/> The square does the same as triangles, but in both directions.
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    <inlinegraphic fileref="images/mousebarselectalign.png"/> Align the selected nodes:
                     <itemizedlist>
                       <listitem>
-                      First one : align vertically on center
+												<inlinegraphic fileref="images/i_align_vert_center.png"/> align vertically on center
                       </listitem>
                       <listitem>
-                      2nd : align horizontally on center
+												<inlinegraphic fileref="images/i_align_horiz_center.png"/> align horizontally on center
                       </listitem>
                       <listitem>
-                      3rd : align vertically on the right side
+												<inlinegraphic fileref="images/i_align_vert_right.png"/> align vertically on the right side
                       </listitem>
                       <listitem>
-                      4th : align vertically on the left side
+												<inlinegraphic fileref="images/i_align_vert_left.png"/> align vertically on the left side
                       </listitem>
                       <listitem>
-                      5th : align horizontally on the bottom side 
+												<inlinegraphic fileref="images/i_align_horiz_bottom.png"/> align horizontally on the bottom side 
                       </listitem>
                       <listitem>
-                      6th : align horizontally on the top side
+												<inlinegraphic fileref="images/i_align_horiz_top.png"/> align horizontally on the top side
                       </listitem>
                     </itemizedlist>
                   </para>
@@ -375,148 +459,180 @@
               </itemizedlist>
             </listitem>
             <listitem>
-              <para><inlinegraphic fileref="images/i_magic.png"/><code>Magic Selection</code> : It enables to select all the graph connected nodes having the same metric. It works like the magic selection in image editing software. The difference is the topology of the graph.
+              <para><inlinegraphic fileref="images/i_magic.png"/><code>Magic Selection</code>: selects all the nodes having the same metric and connect to the clicked node. Thus, it works like the magic selection in image editing software, but consider neighboring nodes instead of neighboring pixels.
               </para>
             </listitem>
             <listitem>
-              <para><inlinegraphic fileref="images/i_zoom.png"/><code>Zoom Box</code> : It enables to zoom on a defined rectangle area. The first corner of the rectangle is defined when pressing the mouse left button, the opposite corner is defined when moving the mouse and the zoom operation is performed on the desired rectangle when the button is released.
+              <para><inlinegraphic fileref="images/i_zoom.png"/><code>Zoom Box</code>: draw a rectangle and Tulip zooms on this area.
               </para>
             </listitem>
             <listitem id="zoomBox" xreflabel="Node Link Diagram Zoom Box">
-              <para><inlinegraphic fileref="images/i_del.png"/><code>Delete element</code> : allows to delete a node or edge by a single left click. The deleted node or edge is the one under the mouse when you click.
+              <para><inlinegraphic fileref="images/i_del.png"/><code>Delete element</code>: click a node or edge to delete it.
               </para>
             </listitem>
             <listitem>
-              <para><inlinegraphic fileref="images/i_addnode.png"/><code>Add node</code> : when it is selected, you can add a node in the graph by a simple left mouse click on the current graph view. The node is placed at the coordinates corresponding to the mouse position when you clicked.
+              <para><inlinegraphic fileref="images/i_addnode.png"/><code>Add node</code>: click to add a node at the mouse position.
               </para>
             </listitem>
             <listitem>
-              <para><inlinegraphic fileref="images/i_addedge.png"/><code>Add edge</code> : when it is selected, you can add an edge in the graph by mouse left clicking first on the source node then any left click will add a bend to the edge until a left click on the target node. 
+              <para><inlinegraphic fileref="images/i_addedge.png"/><code>Add edge</code>:
+								to add an edge, click the source node,
+								optionally click outside of nodes to add bends,
+								finally click the target node.
+								When not tracing a link, click outside of nodes to add a node.
               </para>
             </listitem>
             <listitem>
-                <para><inlinegraphic fileref="images/i_bends.png"/><code>Edit edge bends</code> : when it is selected, you can edit the bends of an edge by first selecting the edge using the mouse left button. Then a mouse left click with the <keycap>Shift</keycap> key pressed will add a new bend, moving the mouse with the left button pressed will allow to move an existing one, a mouse left click on a bend with the <keycap>Ctrl</keycap> key pressed (<keycap>Alt</keycap> key on Mac) will remove it.
-                </para>
+              <para><inlinegraphic fileref="images/i_bends.png"/><code>Edit edge bends</code>:
+								click on an edge to select it (with this tool),
+								then <keycap>Shift</keycap>-click to add a new bend,
+								click a bend to move it,
+								or <keycap>Ctrl</keycap>-click (<keycap>Alt</keycap> on Mac) to remove a bend.
+              </para>
             </listitem>
           </itemizedlist>
         </para>
       </sect3>
-      <sect3 id="view-window"><title>View window</title>
+
+			<sect3 id="view-window"><title>View window</title>
         <para>
+          This is where the graph is drawn, in 2D or 3D.
+					Several 3D views can be displayed, each one in a subwindow.
+					Here is an example graph with 9 nodes:
           <graphic fileref="images/3d-view.png"/>
-          The 3D graph view subwindow is the window where the graph is displayed. It can display graph in two or three dimensions and enables to apply the mouse operations selected in the tool bar by directly clicking on the drawing of the graph. If the user lets the mouse during few seconds on a node/edge, a tooltip window displays its id and label (use <quote>Options</quote> menu to enable tooltips).
+					<!-- If the user lets the mouse during few seconds on a node/edge, a tooltip window displays its id and label (use <quote>Options</quote> menu to enable tooltips). -->
         </para>
-        <sect4 id="pop-up"><title>Pop-up menu of graph view</title>
-          <graphic fileref="images/view-contextmenu.png"/>
-          <para>This pop-up menu is displayed when pressing on the mouse right button (press <keycap>Ctrl</keycap> key when mouse pressing on Mac) :
+        <sect4 id="pop-up"><title>Context menu</title>
+          <para>
+						Right-click (<keycap>Ctrl</keycap>-click Mac) to display this menu:
+						<graphic fileref="images/view-contextmenu.png"/>
             <itemizedlist>
-              <listitem><para><code>View -> Redraw view</code> : redraw the view,</para>
+							<listitem>
+								<para><code>View</code>: <code>Redraw view</code>, <code>Center view</code>.</para>
+							</listitem>
+							<listitem>
+								<code>Dialog</code>:
+								<itemizedlist>
+									<listitem><para><code>3D Overview</code>: toggle top left overview</para></listitem>
+									<listitem><para><code>Augmented Display</code></para></listitem>
+								</itemizedlist>
               </listitem>
-              <listitem><para><code>View -> Center view</code> : center the current graph in the view,</para>
-              </listitem>
-              <listitem><para><code>Dialog -> 3D Overview</code> : display/hide top left overview,</para>
-              </listitem>
-	      <listitem><para><code>Options -> Tooltips</code> : enables the display of tooltips on nodes or edges,</para>
-              </listitem>
-              <listitem><para><code>Options -> Grid</code> : shows the grid configuration dialog.</para>
-              </listitem>
-	      <listitem><para><code>Options -> Z Ordering</code> : Use this option when you have graph with transparent nodes/edges.</para>
-              </listitem>
-	      <listitem><para><code>Options -> Antialiasing</code> : enable/disable antialiasing.</para>
-              </listitem>
-	      <listitem><para><code>Options -> Textured meta node</code> : enable/disable meta node texture rendering.</para>
-              </listitem>
-              <listitem><para><code>Save picture as -> ...</code> : to save the graph picture in multiple format.</para>
-              </listitem>
+							<listitem>
+								<code>Options</code>:
+								<itemizedlist>
+									<listitem><para><code>Tooltips</code>: toggle the display of tooltips when hovering nodes or edges</para>
+									</listitem>
+									<listitem><para><code>Grid</code>: shows the grid configuration dialog.</para>
+									</listitem>
+									<listitem><para><code>Z Ordering</code>: Use this option when you have graph with transparent nodes or edges.</para>
+									</listitem>
+									<listitem><para><code>Antialiasing</code>: toggle antialiasing.</para>
+									</listitem>
+									<listitem><para><code>Textured meta node</code>: toggle meta node texture rendering.</para>
+									</listitem>
+								</itemizedlist>
+							</listitem>
+							<!-- <listitem><para><code>Save picture as → ...</code>: save the graph picture in different format.</para> -->
+              <!-- </listitem> -->
             </itemizedlist>
           </para>
+					Right-click a graph element to display this menu:
           <graphic fileref="images/view-contextmenu-element.png"/>
-          <para>If you press the mouse right button (press <keycap>Ctrl</keycap> key when mouse pressing on Mac) when on a graph element, you have this contextual menu to perform simple actions on this element : 
+					If the element is a metanode, the following extra entries are available:
+          <para>
             <itemizedlist>
-              <listitem><para><code>Add to/Remove from selection</code> : this allows to change the selection state of the element,</para>
+              <!-- <listitem><para><code>Add to/Remove from selection</code>: this allows to change the selection state of the element,</para> -->
+              <!-- </listitem> -->
+              <!-- <listitem><para><code>Select</code>: the current element replaces the whole selection,</para> -->
+              <!-- </listitem> -->
+              <!-- <listitem><para><code>Delete</code>: this permanently removes the element from the current graph,</para> -->
+              <!-- </listitem> -->
+              <listitem><para><code>Go inside</code>: shows the corresponding subgraph in the current view,</para>
               </listitem>
-              <listitem><para><code>Select</code> : the current element replaces the whole selection,</para>
+              <listitem><para><code>Ungroup</code>: removes the metanode (the nodes of its subgraph are kept in the current graph),</para>
               </listitem>
-              <listitem><para><code>Delete</code> : this permanently removes the element from the current graph,</para>
-              </listitem>
-              <listitem><para><code>Go inside</code> : if the element is a metanode, this shows the corresponding subgraph in the current view,</para>
-              </listitem>
-              <listitem><para><code>Ungroup</code> : if the element is a metanode, this permanently removes it and its corresponding subgraph,</para>
-              </listitem>
-              <listitem><para><code>Properties</code> : this shows the element properties in the <quote>Element</quote> tab.</para>
-              </listitem>
+              <!-- <listitem><para><code>Properties</code>: this shows the element properties in the <quote>Element</quote> tab.</para> -->
+              <!-- </listitem> -->
             </itemizedlist>
           </para>
         </sect4>
       </sect3>
+
       <sect3 id="renderingparams"><title>Rendering Parameters</title>
-        <para>All actions in this dialog are just performed for the current view window.
+        <para>
           <graphic fileref="images/renderingparams.png"/>
-          This dialog is displayed when clicking on the Configuration tab at button left corner. Enables to configure the rendering of the graph. The available options are grouped in the following three frames:
+					Actions in this dialog are aplied only on the current view window.
           <itemizedlist>
-            <listitem><para><code>Labels</code> : the options in this frame only affect the display of the labels:
+            <listitem><para><code>Labels</code>:
                 <itemizedlist>
-                  <listitem><para><code>Type</code> : this indicates the text display mode which can be one of Bitmap, Texture or 3D.</para>
+                  <listitem><para><code>metric ordering</code>: if checked, labels are displayed in decreasing order of the viewMetric property.</para>
                   </listitem>
-                  <listitem><para><code>metric ordering</code> : when checked the labels are displayed in using the viewMetric property decreasing order.</para>
+                  <listitem><para><code>Density</code>: move this slider to the right to have less labels displayed.</para>
                   </listitem>
-                  <listitem><para><code>Density</code> : use this slider to avoid having too much labels displayed (max is on the left).</para>
+									<listitem><code>Scale labels to fit node size</code></listitem>
+              </itemizedlist></para>
+            </listitem>
+            <listitem><para><code>Edges</code>:
+                <itemizedlist>
+                  <!-- <listitem><para><code>arrows</code>: enables/disables the display of arrows.</para> -->
+                  <!-- </listitem> -->
+                  <!-- <listitem><para><code>3D</code>: enables/disables the display of edges in 3D.</para> -->
+                  <!-- </listitem> -->
+                  <listitem><para><code>Color interpolation</code>: if checked, the edge color is a gradient from the color of its source node to the color of its target node.</para>
+                  </listitem>
+                  <listitem><para><code>Size interpolation</code>: like color interpolation, but for edge width.</para>
+                  </listitem>
+                  <listitem><para><code>Block max edge size to node size</code>: if checked, the edge size cannot be greater than the node size.</para>
                   </listitem>
               </itemizedlist></para>
             </listitem>
-            <listitem><para><code>Edges</code> : this frame options affect the way the edges are displayed:
+            <listitem><para><code>Others</code>:
                 <itemizedlist>
-                  <listitem><para><code>arrows</code> : enables/disables the display of arrows.</para>
+                  <listitem><para><code>Orthogonal projection</code>: If not checked, the perspective projection is used instead of the orthogonal one.</para>
                   </listitem>
-                  <listitem><para><code>3D</code> : enables/disables the display of edges in 3D.</para>
-                  </listitem>
-                  <listitem><para><code>Color interpolation</code> : when checked the edge color is interpolated from the color of its source node to the color of its target node.</para>
-                  </listitem>
-                  <listitem><para><code>Size interpolation</code> : when checked the edge size is interpolated from the size of its source node to the size of its target node.</para>
-                  </listitem>
-                  <listitem><para><code>Block max edge size to node size</code> : when checked the edge size can not be greater than the node size.</para>
-                  </listitem>
-              </itemizedlist></para>
-            </listitem>
-            <listitem><para><code>Others</code> : the options in this frame are related to general aspects of the rendering:
-                <itemizedlist>
-                  <listitem><para><code>Orthogonal projection</code> : enables/disables the orthogonal projection. If not checked, the perpsective projection is used.</para>
-                  </listitem>
-                  <listitem><para><code>Background color</code> : enables to choose a color for the background of a graph view.</para>
-                  </listitem>
-                  <listitem><para><code>Selection color</code> : enables to choose a color for the selected nodes/edges. If you click on \"Save at default\", this selection color is apply when you open a new view.</para>
+                  <!-- <listitem><para><code>Background color</code>: background color of a graph view.</para> -->
+                  <!-- </listitem> -->
+                  <listitem><para><code>Selection color</code>: how to show that a node is selected.
+											Click "Save at default" to apply this selection color to new views.</para>
                   </listitem>
               </itemizedlist></para>
             </listitem>
           </itemizedlist>
         </para>
       </sect3>
+
       <sect3 id="layermanager"><title>Layer Manager</title>
-        <para>All actions in this dialog are just performed for the current view window.
+        <para>
           <graphic fileref="images/layermanager.png"/>
-          This dialog is displayed when clicking on the Configuration tab at button left corner. Enables to configure the elements visibility and priority. The available options are grouped in two columns :
+					Actions in this dialog are aplied only on the current view window.
           <itemizedlist>
-            <listitem><para><code>Visible</code> : Visibility of the entity
+            <listitem><para><code>Visible</code>: should the element be displayed?
             </para></listitem>
-            <listitem><para><code>Stencil</code> : Priority to display the entity
+            <listitem><para><code>Stencil</code>: priority to display the entity
             </para></listitem>
           </itemizedlist>
         </para>
-        <para>In this menu, you see Hull entity, it represents the convex hulls of the graph. When you click on visible, a hierarchy of convex hulls is build. The name of a hull is the name of the corresponding subgraph.</para>   
-        <para>In a future version you could add/modify/remove entity</para>
+        <para>Hull means the convex hull of the graph.
+					If visible is clicked, a hierarchy of convex hulls is built.</para>
+        <!-- <para>In a future version you could add/modify/remove entity</para> -->
       </sect3>
     </sect2>
+
     <sect2 id="SpreadsheetComponent"><title>Table view</title>
+      <para>
+        Cell color is given by the viewColor property of the element, text color is given by the viewLabelColor property.
+			</para>
       <graphic fileref="images/spreadsheet_view.png"/>
-      <para>
-        In this view you can visualize the values of the properties of the graph elements (nodes or edges) in a table form, displaying one element's properties values by row.
-      </para>
-      <para>
-        You have two tabs : Node and Edge.
-      </para>
-      <para>
-        Color of a cell depends on the value of the viewColor property of the node/edge and the color of the text depends on the value of the viewLabelColor property of the node./edge
-	</para>
+      <!-- <para> -->
+      <!-- In this view you can visualize the values of the properties of the graph elements (nodes or edges) in a table form, displaying one element's properties values by row. -->
+      <!-- </para> -->
     </sect2>
   </sect1>
 </chapter>
+
+<!--  LocalWords:  GML TLP viewSelection viewColor viewMetric viewSize Tri nd
+	-->
+<!--  LocalWords:  subgraphs biconnected Outerplanar subgraph interactor th
+	-->
+<!--  LocalWords:  tooltip tooltips metanode viewLabelColor
+	-->
