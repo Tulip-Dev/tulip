@@ -33,10 +33,10 @@ namespace tlp {
     AppStartUp *appStartUp;
     int progress;
 
-    virtual void start(const std::string &path,const std::string &type) {
+    virtual void start(const std::string &path) {
       appStartUp->setProgress(0);
       progress=0;
-      PluginLoaderWithInfo::start(path,type);
+      PluginLoaderWithInfo::start(path);
     }
 
     virtual void numberOfFiles(int nbFile) {

@@ -159,9 +159,9 @@ map<string, PluginListerInterface* > *PluginListerInterface::allFactories = 0;
 //==========================================================
 PluginLoader *PluginListerInterface::currentLoader = NULL;
 //==========================================================
-void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader) {
+void tlp::loadPluginsFromDir(std::string dir, PluginLoader *loader) {
   if (loader!=0)
-    loader->start(dir.c_str(), type);
+    loader->start(dir.c_str());
 
   tlp::PluginLibraryLoader plLoader(dir, loader);
 
@@ -171,7 +171,8 @@ void tlp::loadPluginsFromDir(std::string dir, std::string type, PluginLoader *lo
     }
     if (loader)
       loader->finished(true, plLoader.getMessage());
-  } else {
+  }
+  else {
     if (loader)
       loader->finished(false, plLoader.getMessage());
   }
@@ -187,7 +188,7 @@ void tlp::loadPlugins(PluginLoader *plug, std::string folder) {
   }
   
   for(vector<string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
-    loadPluginsFromDir((*it) + "/" + folder, "Algorithm", plug);
+    loadPluginsFromDir((*it) + "/" + folder, plug);
   }
 }
 //=========================================================

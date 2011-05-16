@@ -54,7 +54,7 @@ namespace tlp {
    **/
   TLP_SCOPE void loadPlugins(PluginLoader *plug=0, std::string folder = "");
   TLP_SCOPE bool loadPlugin(const std::string &filename, PluginLoader *plug=0);
-  TLP_SCOPE void loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader=0);
+  TLP_SCOPE void loadPluginsFromDir(std::string dir, PluginLoader *loader=0);
 
   /**
    * @brief Demangles the name of a C++ class defined in the tlp namespace.

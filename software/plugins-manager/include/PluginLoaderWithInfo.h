@@ -34,14 +34,12 @@ namespace tlp {
   //==============================================================
   struct PluginLoaderWithInfo:public PluginLoader {
     std::vector<LocalPluginInfo> pluginsList;
-    std::string currentType;
     std::string currentDisplayType;
     std::string currentPath;
     std::string currentFileName;
     std::string errorMsgs;
 
-    virtual void start(const std::string &path,const std::string &type) {
-      currentType=type;
+    virtual void start(const std::string &path) {
       currentPath=path;
     }
 
@@ -54,7 +52,7 @@ namespace tlp {
     {
       LocalPluginInfo plugin;
       plugin.name = infos->getName();
-      plugin.type = currentType;
+      plugin.type = "Algorithm";
       plugin.version = infos->getTulipRelease() + " " + infos->getRelease();
       plugin.fileName = currentFileName.substr(0,currentFileName.rfind("."));
       plugin.author = infos->getAuthor();
