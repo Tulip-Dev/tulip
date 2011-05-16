@@ -19,13 +19,15 @@
 #ifndef _Tulip_PLUGINLOADERWITHINFO_H_
 #define _Tulip_PLUGINLOADERWITHINFO_H_
 
+#include "PluginInfo.h"
+
 #include <vector>
 #include <iostream>
 
-#include <tulip/PluginLoaderTxt.h>
-
-#include "PluginInfo.h"
 #include <QtCore/QFileInfo>
+
+#include <tulip/PluginLoaderTxt.h>
+#include <tulip/AbstractPluginInfo.h>
 
 namespace tlp {
 
@@ -48,26 +50,20 @@ namespace tlp {
       currentFileName = QFileInfo(filename.c_str()).fileName().toStdString();
     }
 
-    virtual void loaded(const std::string &name,
-			const std::string &author,
-			const std::string &date, 
-			const std::string &info,
-			const std::string &release,
-			const std::string &version,
-			const std::list <Dependency> &deps)
+    virtual void loaded(const AbstractPluginInfo* infos, const std::list <Dependency>& deps)
     {
       LocalPluginInfo plugin;
-      plugin.name=name;
-      plugin.type=currentType;
-      plugin.version=version+" "+release;
-      plugin.fileName=currentFileName.substr(0,currentFileName.rfind("."));
-      plugin.author=author;
-      plugin.date=date;
-      plugin.info=info;
-      plugin.server="Installed";
+      plugin.name = infos->getName();
+      plugin.type = currentType;
+      plugin.version = infos->getTulipRelease() + " " + infos->getRelease();
+      plugin.fileName = currentFileName.substr(0,currentFileName.rfind("."));
+      plugin.author = infos->getAuthor();
+      plugin.date = infos->getDate();
+      plugin.info = infos->getInfo();
+      plugin.server = "Installed";
       
       for(std::list<Dependency>::const_iterator it=deps.begin();it!=deps.end();++it) {
-        PluginDependency dep((*it).pluginName,(*it).factoryName,version+" "+(*it).pluginRelease);
+        PluginDependency dep((*it).pluginName,(*it).factoryName,infos->getTulipRelease() + " " + (*it).pluginRelease);
         plugin.dependencies.push_back(dep);
       }
       

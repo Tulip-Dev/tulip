@@ -24,6 +24,7 @@
 #include <PluginLoaderWithInfo.h>
 
 #include "AppStartUp.h"
+#include <tulip/AbstractPluginInfo.h>
 
 namespace tlp {
 
@@ -43,20 +44,14 @@ namespace tlp {
       qApp->processEvents();
     }
 
-    virtual void loaded(const std::string &name,
-			const std::string &author,
-			const std::string &date, 
-			const std::string &info,
-			const std::string &release,
-			const std::string &version,
-			const std::list <Dependency> &deps)
+    virtual void loaded(const AbstractPluginInfo* infos, const std::list <Dependency>& deps)
     {
       progress++;
-      appStartUp->setLabel(name);
+      appStartUp->setLabel(infos->getName());
       appStartUp->setProgress(progress);
       qApp->processEvents();
 
-      PluginLoaderWithInfo::loaded(name,author,date,info,release,version,deps);
+      PluginLoaderWithInfo::loaded(infos, deps);
     }
 
     virtual void aborted(const std::string &filename,const  std::string &errormsg) {

@@ -5,6 +5,7 @@
 #include <QtCore/QPropertyAnimation>
 
 #include <tulip/TlpTools.h>
+#include <tulip/AbstractPluginInfo.h>
 
 using namespace tlp;
 
@@ -33,9 +34,8 @@ void TulipSplashScreen::loading(const std::string &filename) {
   repaint();
 }
 
-void TulipSplashScreen::loaded(const std::string &name, const std::string &author, const std::string &date,
-                               const std::string &info, const std::string &release, const std::string &version, const std::list<Dependency> &) {
-  _message = name.c_str() + trUtf8(" loaded.");
+void TulipSplashScreen::loaded(const AbstractPluginInfo* infos, const std::list <Dependency>& ) {
+  _message = infos->getName().c_str() + trUtf8(" loaded.");
 }
 
 void TulipSplashScreen::aborted(const std::string &filename, const std::string &erreurmsg) {
