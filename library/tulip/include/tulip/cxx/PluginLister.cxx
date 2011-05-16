@@ -73,16 +73,11 @@ void tlp::PluginLister<ObjectType,Context>::registerPlugin(FactoryInterface<Obje
     plugins[pluginName] = description;
     
     delete withParam;
-    if (currentLoader!=0) currentLoader->loaded(
-                  pluginName,
-                  objectFactory->getAuthor(),
-                  objectFactory->getDate(),
-                  objectFactory->getInfo(),
-                  objectFactory->getRelease(),
-                  objectFactory->getTulipRelease(),
-                  dependencies
-                  );
-  } else {
+    if (currentLoader!=0) {
+      currentLoader->loaded(objectFactory, dependencies);
+    }
+  }
+  else {
     if (currentLoader != 0) {
       std::string tmpStr;
       tmpStr += "'" + pluginName + "' " + getPluginsClassName() + " plugin";
