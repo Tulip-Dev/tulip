@@ -24,29 +24,49 @@
 #include <tulip/PluginLoader.h>
 #include <tulip/tulipconf.h>
 
+#ifndef _WIN32
+#include <dirent.h>
+#endif
+
 namespace tlp {
 
-class TLP_SCOPE PluginLibraryLoader {
+  /**
+   * @brief This class takes care of the actual loading of the libraries.
+   **/
+  class TLP_SCOPE PluginLibraryLoader {
  public:
-  PluginLibraryLoader(std::string pluginPath, PluginLoader *loader);
-  bool hasPluginLibraryToLoad() { return n >= 0; }
-  bool loadNextPluginLibrary(PluginLoader *loader);
-
-  std::string getMessage() const;
+  static void loadPlugins(std::string pluginPath, PluginLoader *loader);
   
   static bool loadPluginLibrary(const std::string & filename, PluginLoader *loader = 0);
+  
   static const std::string& getCurrentPluginFileName() {
-    return currentPluginLibrary;
+    return getInstance()->currentPluginLibrary;
   }
 
  private:
-  std::string msg;
-  int n;
-  std::string pluginPath;
-  PluginLoader *loader;
+  bool hasPluginLibraryToLoad() { return nbUnloadedPluginLibraries >= 0; }
+  bool loadNextPluginLibrary(PluginLoader *loader);
+
+  void initPluginDir(PluginLoader *loader);
    
-  void *infos;
-  static std::string currentPluginLibrary;
+  static PluginLibraryLoader* getInstance() {
+    if(_instance == NULL) {
+      _instance = new PluginLibraryLoader();
+    }
+    return _instance;
+  }
+  static PluginLibraryLoader* _instance;
+   
+  std::string message;
+  int nbUnloadedPluginLibraries;
+  std::string pluginPath;
+  std::string currentPluginLibrary;
+  
+#ifdef _WIN32
+  IteratorInfos* infos;
+#else
+  struct dirent ** infos;
+#endif
 };
 
 }
