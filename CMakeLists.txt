@@ -88,6 +88,7 @@ SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipMMVersion}")
 SET(LibStlPythonName "stlpython")
 SET(LibTulipPythonName "tulippython")
 SET(LibTulipOglPythonName "tulipoglpython")
+SET(LibTulipQtPythonName "tulipqtpython")
 
 ## -----------------------------------------------------------------------------------------------
 ## Find needed packages
@@ -170,6 +171,8 @@ IF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
       SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen/sip)
     ENDIF()
     SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.12.1/siplib/)
+    EXECUTE_PROCESS(COMMAND ${SIP_EXE} -V 
+                    OUTPUT_VARIABLE SIP_VERSION)
   ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 
@@ -179,7 +182,7 @@ ENDIF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
 SET(QuazipInclude ${PROJECT_SOURCE_DIR}/quazip)
 SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
-SET(qscintilla2Include ${PROJECT_SOURCE_DIR}/thirdparty/QScintilla-gpl-2.4.6/Qt4/)
+SET(qscintilla2Include ${PROJECT_SOURCE_DIR}/thirdparty/QScintilla-gpl-2.5.1/Qt4/)
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF)
 SET(OGDFLibrary OGDF)
 SET(TulipInclude ${PROJECT_SOURCE_DIR}/library/tulip/include/)

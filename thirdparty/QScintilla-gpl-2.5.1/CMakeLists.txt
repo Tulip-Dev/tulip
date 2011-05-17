@@ -1,0 +1,235 @@
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include/ ${CMAKE_CURRENT_SOURCE_DIR}/src/ ${CMAKE_CURRENT_SOURCE_DIR}/Qt4 ${CMAKE_CURRENT_SOURCE_DIR}/lexlib/)
+
+SET(LIB_SRCS
+	lexlib/Accessor.cpp
+	lexlib/CharacterSet.cpp
+	lexlib/LexerBase.cpp
+	lexlib/LexerModule.cpp
+	lexlib/LexerNoExceptions.cpp
+	lexlib/LexerSimple.cpp
+	lexlib/PropSetSimple.cpp
+	lexlib/StyleContext.cpp
+	lexlib/WordList.cpp
+    src/AutoComplete.cpp
+	src/CallTip.cpp
+	src/Catalogue.cpp
+	src/CellBuffer.cpp
+	src/CharClassify.cpp
+    src/ContractionState.cpp
+    src/Decoration.cpp
+    src/Document.cpp
+    src/Editor.cpp
+    src/ExternalLexer.cpp
+    src/Indicator.cpp
+    src/KeyMap.cpp
+    src/LineMarker.cpp
+    src/PerLine.cpp
+    src/PositionCache.cpp
+    src/RESearch.cpp
+    src/RunStyles.cpp
+    src/ScintillaBase.cpp
+    src/Selection.cpp
+    src/Style.cpp
+    src/UniConversion.cpp
+    src/ViewStyle.cpp
+    src/XPM.cpp
+    lexers/LexA68k.cpp
+    lexers/LexAbaqus.cpp
+    lexers/LexAda.cpp
+    lexers/LexAPDL.cpp
+    lexers/LexAsm.cpp
+    lexers/LexAsn1.cpp
+    lexers/LexASY.cpp
+    lexers/LexAU3.cpp
+    lexers/LexAVE.cpp
+    lexers/LexBaan.cpp
+    lexers/LexBash.cpp
+    lexers/LexBasic.cpp
+    lexers/LexBullant.cpp
+    lexers/LexCaml.cpp
+    lexers/LexCLW.cpp
+    lexers/LexCmake.cpp
+    lexers/LexCOBOL.cpp
+    lexers/LexConf.cpp
+    lexers/LexCPP.cpp
+    lexers/LexCrontab.cpp
+    lexers/LexCsound.cpp
+    lexers/LexCSS.cpp
+    lexers/LexD.cpp
+    lexers/LexEiffel.cpp
+    lexers/LexErlang.cpp
+    lexers/LexEScript.cpp
+    lexers/LexFlagship.cpp
+    lexers/LexForth.cpp
+    lexers/LexFortran.cpp
+    lexers/LexGAP.cpp
+    lexers/LexGui4Cli.cpp
+    lexers/LexHaskell.cpp
+    lexers/LexHTML.cpp
+    lexers/LexInno.cpp
+    lexers/LexKix.cpp
+    lexers/LexLisp.cpp
+    lexers/LexLout.cpp
+    lexers/LexLua.cpp
+    lexers/LexMagik.cpp
+    lexers/LexMarkdown.cpp
+    lexers/LexMatlab.cpp
+    lexers/LexMetapost.cpp
+    lexers/LexMMIXAL.cpp
+    lexers/LexModula.cpp
+    lexers/LexMPT.cpp
+    lexers/LexMSSQL.cpp
+    lexers/LexMySQL.cpp
+    lexers/LexNimrod.cpp
+    lexers/LexNsis.cpp
+    lexers/LexOpal.cpp
+    lexers/LexOthers.cpp
+    lexers/LexPascal.cpp
+    lexers/LexPB.cpp
+    lexers/LexPerl.cpp
+    lexers/LexPLM.cpp
+    lexers/LexPOV.cpp
+    lexers/LexPowerPro.cpp
+    lexers/LexPowerShell.cpp
+    lexers/LexProgress.cpp
+    lexers/LexPS.cpp
+    lexers/LexPython.cpp
+    lexers/LexR.cpp
+    lexers/LexRebol.cpp
+    lexers/LexRuby.cpp
+    lexers/LexScriptol.cpp
+    lexers/LexSmalltalk.cpp
+    lexers/LexSML.cpp
+    lexers/LexSorcus.cpp
+    lexers/LexSpecman.cpp
+    lexers/LexSpice.cpp
+    lexers/LexSQL.cpp
+    lexers/LexTACL.cpp
+    lexers/LexTADS3.cpp
+    lexers/LexTAL.cpp
+    lexers/LexTCL.cpp
+    lexers/LexTeX.cpp
+    lexers/LexTxt2tags.cpp
+    lexers/LexVB.cpp
+    lexers/LexVerilog.cpp
+    lexers/LexVHDL.cpp
+    lexers/LexYAML.cpp
+    Qt4/ListBoxQt.cpp
+    Qt4/PlatQt.cpp
+    Qt4/qsciabstractapis.cpp
+    Qt4/qsciapis.cpp
+    Qt4/qscicommand.cpp
+    Qt4/qscicommandset.cpp
+    Qt4/qscidocument.cpp
+    Qt4/qscilexerbash.cpp
+    Qt4/qscilexerbatch.cpp
+    Qt4/qscilexercmake.cpp
+    Qt4/qscilexer.cpp
+    Qt4/qscilexercpp.cpp
+    Qt4/qscilexercsharp.cpp
+    Qt4/qscilexercss.cpp
+    Qt4/qscilexercustom.cpp
+    Qt4/qscilexerd.cpp
+    Qt4/qscilexerdiff.cpp
+    Qt4/qscilexerfortran77.cpp
+    Qt4/qscilexerfortran.cpp
+    Qt4/qscilexerhtml.cpp
+    Qt4/qscilexeridl.cpp
+    Qt4/qscilexerjava.cpp
+    Qt4/qscilexerjavascript.cpp
+    Qt4/qscilexerlua.cpp
+    Qt4/qscilexermakefile.cpp
+    Qt4/qscilexermatlab.cpp
+    Qt4/qscilexeroctave.cpp
+    Qt4/qscilexerpascal.cpp
+    Qt4/qscilexerperl.cpp
+    Qt4/qscilexerpostscript.cpp
+    Qt4/qscilexerpov.cpp
+    Qt4/qscilexerproperties.cpp
+    Qt4/qscilexerpython.cpp
+    Qt4/qscilexerruby.cpp
+    Qt4/qscilexerspice.cpp
+    Qt4/qscilexersql.cpp
+    Qt4/qscilexertcl.cpp
+    Qt4/qscilexertex.cpp
+    Qt4/qscilexerverilog.cpp
+    Qt4/qscilexervhdl.cpp
+    Qt4/qscilexerxml.cpp
+    Qt4/qscilexeryaml.cpp
+    Qt4/qscimacro.cpp
+    Qt4/qsciprinter.cpp
+    Qt4/qsciscintillabase.cpp
+    Qt4/qsciscintilla.cpp
+    Qt4/qscistyle.cpp
+    Qt4/qscistyledtext.cpp
+    Qt4/SciClasses.cpp
+    Qt4/ScintillaQt.cpp
+)
+    
+QT4_WRAP_CPP(LIB_MOC_SRCS
+    Qt4/Qsci/qsciscintilla.h
+    Qt4/Qsci/qsciscintillabase.h
+    Qt4/Qsci/qsciabstractapis.h
+    Qt4/Qsci/qsciapis.h
+    Qt4/Qsci/qscimacro.h
+    Qt4/SciClasses.h
+    Qt4/Qsci/qscilexerbash.h                                                                                                                      
+    Qt4/Qsci/qscilexerbatch.h                                                                                                                     
+    Qt4/Qsci/qscilexercmake.h
+    Qt4/Qsci/qscilexercpp.h
+    Qt4/Qsci/qscilexercsharp.h
+    Qt4/Qsci/qscilexercss.h
+    Qt4/Qsci/qscilexercustom.h
+    Qt4/Qsci/qscilexerd.h
+    Qt4/Qsci/qscilexerdiff.h
+    Qt4/Qsci/qscilexerfortran77.h
+    Qt4/Qsci/qscilexerfortran.h
+    Qt4/Qsci/qscilexer.h
+    Qt4/Qsci/qscilexerhtml.h
+    Qt4/Qsci/qscilexeridl.h
+    Qt4/Qsci/qscilexerjava.h
+    Qt4/Qsci/qscilexerjavascript.h
+    Qt4/Qsci/qscilexerlua.h
+    Qt4/Qsci/qscilexermakefile.h
+    Qt4/Qsci/qscilexermatlab.h
+    Qt4/Qsci/qscilexeroctave.h
+    Qt4/Qsci/qscilexerpascal.h
+    Qt4/Qsci/qscilexerperl.h
+    Qt4/Qsci/qscilexerpostscript.h
+    Qt4/Qsci/qscilexerpov.h
+    Qt4/Qsci/qscilexerproperties.h
+    Qt4/Qsci/qscilexerpython.h
+    Qt4/Qsci/qscilexerruby.h
+    Qt4/Qsci/qscilexerspice.h
+    Qt4/Qsci/qscilexersql.h
+    Qt4/Qsci/qscilexertcl.h
+    Qt4/Qsci/qscilexertex.h
+    Qt4/Qsci/qscilexerverilog.h
+    Qt4/Qsci/qscilexervhdl.h
+    Qt4/Qsci/qscilexerxml.h
+    Qt4/Qsci/qscilexeryaml.h   
+)
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -DSCI_LEXER -DQT -DQSCINTILLA_MAKE_DLL")
+IF(UNIX)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+ENDIF(UNIX)
+
+
+ADD_LIBRARY(qscintilla2 SHARED ${LIB_SRCS} ${LIB_MOC_SRCS})
+TARGET_LINK_LIBRARIES(qscintilla2 ${QT_LIBRARIES})
+
+INSTALL(TARGETS qscintilla2
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT qscintilla2
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT qscintilla2
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT qscintilla2)
+       
+INSTALL(FILES 
+        ${CMAKE_CURRENT_SOURCE_DIR}/qsci/api/python/Python-2.4.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/qsci/api/python/Python-2.5.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/qsci/api/python/Python-2.6.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/qsci/api/python/Python-2.7.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/qsci/api/python/Python-3.1.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/qsci/api/python/Python-3.2.api 
+        DESTINATION ${TulipShareInstallDir}/apiFiles 
+        COMPONENT qscintilla2)
