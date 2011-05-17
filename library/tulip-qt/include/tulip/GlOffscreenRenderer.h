@@ -42,7 +42,7 @@ namespace tlp {
  * //Center and render the scene.
  * glOffscreenRenderer->renderScene(true);
  * //Get the result
- * QImage preview = glOffscreenRenderer->getGLTexture(true);
+ * QImage preview = glOffscreenRenderer->getImage();
  * @endcode
  **/
 class TLP_QT_SCOPE GlOffscreenRenderer {
