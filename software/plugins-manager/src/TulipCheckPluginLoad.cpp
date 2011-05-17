@@ -30,7 +30,7 @@ int main(int argc,char **argv) {
   initTulipLib(NULL);
   // only check that the dynamic loading
   // of the library is OK
-  loadPlugin(argv[1], NULL);
+  PluginLibraryLoader::loadPluginLibrary(argv[1], NULL);
 
   cout << "pluginLoaded" << endl;
 

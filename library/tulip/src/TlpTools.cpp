@@ -158,45 +158,36 @@ ostream *tlp::getOgzstream(const char *name, int open_mode) {
 map<string, PluginListerInterface* > *PluginListerInterface::allFactories = 0;
 //==========================================================
 PluginLoader *PluginListerInterface::currentLoader = NULL;
-//==========================================================
-void tlp::loadPluginsFromDir(std::string dir, PluginLoader *loader) {
-  if (loader!=0)
-    loader->start(dir.c_str());
-
-  tlp::PluginLibraryLoader plLoader(dir, loader);
-
-  PluginListerInterface::currentLoader = loader;
-  if (plLoader.hasPluginLibraryToLoad()) {
-    while(plLoader.loadNextPluginLibrary(loader)) {
-    }
-    if (loader)
-      loader->finished(true, plLoader.getMessage());
-  }
-  else {
-    if (loader)
-      loader->finished(false, plLoader.getMessage());
-  }
-}  
 
 //=========================================================
-void tlp::loadPlugins(PluginLoader *plug, std::string folder) {
+void tlp::loadPlugins(PluginLoader *loader, std::string folder) {
   vector<string> paths;
   stringstream ss(TulipPluginsPath);
   string item;
   while(getline(ss, item, PATH_DELIMITER)) {
     paths.push_back(item);
   }
-  
+
+  //load the plugins in 'folder' for each path in TulipPluginsPath (TulipPluginsPath/folder)
   for(vector<string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
-    loadPluginsFromDir((*it) + "/" + folder, plug);
+    string dir = (*it) + "/" + folder;
+    if (loader!=0)
+      loader->start(dir.c_str());
+    
+    tlp::PluginLibraryLoader plLoader(dir, loader);
+    
+    PluginListerInterface::currentLoader = loader;
+    if (plLoader.hasPluginLibraryToLoad()) {
+      while(plLoader.loadNextPluginLibrary(loader)) {
+      }
+      if (loader)
+        loader->finished(true, plLoader.getMessage());
+    }
+    else {
+      if (loader)
+        loader->finished(false, plLoader.getMessage());
+    }
   }
-}
-//=========================================================
-bool tlp::loadPlugin(const std::string & filename, PluginLoader *plug) {
-  PluginListerInterface::currentLoader = plug;
-  if (plug)
-    plug->loading(filename);
-  return PluginLibraryLoader::loadPluginLibrary(filename, plug);
 }
 
 //=========================================================
