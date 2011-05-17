@@ -95,11 +95,6 @@ namespace tlp {
    * If there are more than two dots, everything between the first and last dots is returned.
    */
   TLP_SCOPE std::string getMinor(const std::string &release);
-  /**
-   * @brief Gets the plugin library currently loading
-   * Returns the absolute file name of the plugin library currently loading
-   */
-  TLP_SCOPE const std::string& getCurrentPluginFileName();
 }
 
 #endif
