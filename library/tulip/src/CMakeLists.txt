@@ -1,9 +1,7 @@
 # Hack: on Apple, we need to set this file to be linked in first when generating the tulip library for static variable instanciation order
-IF(APPLE)
-SET(tulip_LIB_SRCS PluginLibraryLoader.cpp)
-ENDIF()
 
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS}
+PluginLibraryLoader.cpp
 AcyclicTest.cpp
 Bfs.cpp
 BiconnectedTest.cpp
@@ -66,10 +64,6 @@ TreeTest.cpp
 TriconnectedTest.cpp
 vectorgraph.cpp
 WithParameter.cpp)
-
-IF(NOT APPLE)
-SET(tulip_LIB_SRCS ${tulip_LIB_SRCS} PluginLibraryLoader.cpp)
-ENDIF()
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_TULIP_LIB_DIR=\"\\\"${CMAKE_INSTALL_PREFIX}/lib/\\\"\"")
 INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR})

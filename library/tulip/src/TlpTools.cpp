@@ -174,19 +174,9 @@ void tlp::loadPlugins(PluginLoader *loader, std::string folder) {
     if (loader!=0)
       loader->start(dir.c_str());
     
-    tlp::PluginLibraryLoader plLoader(dir, loader);
+    tlp::PluginLibraryLoader::loadPlugins(dir, loader);
     
     PluginListerInterface::currentLoader = loader;
-    if (plLoader.hasPluginLibraryToLoad()) {
-      while(plLoader.loadNextPluginLibrary(loader)) {
-      }
-      if (loader)
-        loader->finished(true, plLoader.getMessage());
-    }
-    else {
-      if (loader)
-        loader->finished(false, plLoader.getMessage());
-    }
   }
 }
 
