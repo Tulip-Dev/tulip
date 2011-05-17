@@ -84,7 +84,7 @@ double tlp::averagePathLength(const Graph *graph,
   node n;
   int steps = 0;
   vector<node> nodes(nbNodes);
-  int i = 0;
+  unsigned i = 0;
   forEach(n, graph->getNodes()) {
     nodes[i] = n;
     ++i;
