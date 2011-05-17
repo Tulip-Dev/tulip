@@ -67,6 +67,14 @@ INSTALL(TARGETS ${LibTulipOglPythonName}
         LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_python
         ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_python)
 
+ADD_CUSTOM_COMMAND(
+				   TARGET ${LibTulipOglPythonName}
+				   POST_BUILD
+                   COMMAND ${SIP_EXE} -a ${CMAKE_CURRENT_BINARY_DIR}/tulipogl.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+                   COMMENT "Generating QScintilla API file for Tulip OpenGL Python bindings"
+				   VERBATIM)
+				   
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulipogl.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT libtulip_python)
 
 
 ENDIF(SIP_OK)
