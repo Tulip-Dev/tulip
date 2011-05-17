@@ -81,7 +81,7 @@ int main(int argc,char **argv) {
 
   initTulipLib(pluginPath.toStdString().c_str());
   PluginLoaderTxt loader;
-  tlp::loadPlugins(&loader); // library side plugins
+  tlp::PluginLibraryLoader::loadPlugins(&loader); // library side plugins
 
   std::list<tlp::Dependency> dependencies;
   std::string pluginType;

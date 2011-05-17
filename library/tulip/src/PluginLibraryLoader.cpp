@@ -19,8 +19,11 @@
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/tulipconf.h>
+#include <tulip/PluginLister.h>
 #include <string.h>
+#include <sstream>
 #include <set>
+#include <vector>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -46,17 +49,32 @@ static bool isPreviouslyLoaded(const std::string &lib) {
   return false;
 }
 
-void PluginLibraryLoader::loadPlugins(std::string _pluginPath, PluginLoader *loader) {
-  getInstance()->pluginPath = _pluginPath;
-  getInstance()->initPluginDir(loader);
-  
-  bool hasPluginToLoad = getInstance()->hasPluginLibraryToLoad();
-  if (hasPluginToLoad) {
-    while(getInstance()->loadNextPluginLibrary(loader)) {
-    }
+void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) {
+  std::vector<std::string> paths;
+  std::stringstream ss(TulipPluginsPath);
+  std::string item;
+  while(getline(ss, item, PATH_DELIMITER)) {
+    paths.push_back(item);
   }
-  if (loader) {
-    loader->finished(hasPluginToLoad, getInstance()->message);
+  
+  //load the plugins in 'folder' for each path in TulipPluginsPath (TulipPluginsPath/folder)
+  for(std::vector<std::string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
+    std::string dir = (*it) + "/" + folder;
+    if (loader!=0)
+      loader->start(dir.c_str());
+    
+    PluginListerInterface::currentLoader = loader;
+    getInstance()->pluginPath = dir;
+    getInstance()->initPluginDir(loader);
+    
+    bool hasPluginToLoad = getInstance()->hasPluginLibraryToLoad();
+    if (hasPluginToLoad) {
+      while(getInstance()->loadNextPluginLibrary(loader)) {
+      }
+    }
+    if (loader) {
+      loader->finished(hasPluginToLoad, getInstance()->message);
+    }
   }
 }
 #ifdef _WIN32

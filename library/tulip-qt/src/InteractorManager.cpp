@@ -49,7 +49,6 @@ namespace tlp
   
   //====================================================
   list<string> InteractorManager::getSortedCompatibleInteractors(const string &viewName) {
-    loadPlugins();
     list<string> compatibleInteractors;
     for(map<string,Interactor*>::iterator it=interactorsMap.begin();it!=interactorsMap.end();++it){
       if((*it).second->isCompatible(viewName))

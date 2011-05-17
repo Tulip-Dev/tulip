@@ -20,15 +20,15 @@ int main(int argc, char **argv) {
 #endif
 
   // Initialize tulip libraries and load plugins
-  tlp::initTulipLib(const_cast<char *>(QApplication::applicationDirPath().toStdString().c_str()));
+  tlp::initTulipLib(QApplication::applicationDirPath().toStdString().c_str());
   TulipSplashScreen *splashScreen = new TulipSplashScreen();
   splashScreen->show();
 
-  tlp::loadPlugins(splashScreen); // library side plugins
-  tlp::loadPlugins(splashScreen, "/interactors"); // interactors plugins
-  tlp::loadPlugins(splashScreen, "/glyphs"); // glyphs plugins
-  tlp::loadPlugins(splashScreen, "/view"); // view plugins
-  tlp::loadPlugins(splashScreen, "/controller"); // controller plugins
+  tlp::PluginLibraryLoader::loadPlugins(splashScreen); // library side plugins
+  tlp::PluginLibraryLoader::loadPlugins(splashScreen, "/interactors"); // interactors plugins
+  tlp::PluginLibraryLoader::loadPlugins(splashScreen, "/glyphs"); // glyphs plugins
+  tlp::PluginLibraryLoader::loadPlugins(splashScreen, "/view"); // view plugins
+  tlp::PluginLibraryLoader::loadPlugins(splashScreen, "/controller"); // controller plugins
 
   tlp::PluginListerInterface::checkLoadedPluginsDependencies(splashScreen);
 

@@ -35,7 +35,15 @@ namespace tlp {
    **/
   class TLP_SCOPE PluginLibraryLoader {
  public:
-  static void loadPlugins(std::string pluginPath, PluginLoader *loader);
+   
+  /**
+  * @brief Loads all the plugins in each directory contained in TulipPluginsPath.
+  *
+  * @param plug A PluginLoader to output what is going on. Defaults to 0.
+  * @param folder A folder to append to each path in TulipPluginsPath (e.g. "views/")
+  * @return void
+  **/
+  static void loadPlugins(PluginLoader *loader = NULL, std::string pluginPath = "");
   
   static bool loadPluginLibrary(const std::string & filename, PluginLoader *loader = 0);
   

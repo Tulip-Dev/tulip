@@ -160,27 +160,6 @@ map<string, PluginListerInterface* > *PluginListerInterface::allFactories = 0;
 PluginLoader *PluginListerInterface::currentLoader = NULL;
 
 //=========================================================
-void tlp::loadPlugins(PluginLoader *loader, std::string folder) {
-  vector<string> paths;
-  stringstream ss(TulipPluginsPath);
-  string item;
-  while(getline(ss, item, PATH_DELIMITER)) {
-    paths.push_back(item);
-  }
-
-  //load the plugins in 'folder' for each path in TulipPluginsPath (TulipPluginsPath/folder)
-  for(vector<string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
-    string dir = (*it) + "/" + folder;
-    if (loader!=0)
-      loader->start(dir.c_str());
-    
-    tlp::PluginLibraryLoader::loadPlugins(dir, loader);
-    
-    PluginListerInterface::currentLoader = loader;
-  }
-}
-
-//=========================================================
 // tlp class names demangler
 #if defined(__GNUC__)
 #include <cxxabi.h>
