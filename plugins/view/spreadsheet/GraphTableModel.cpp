@@ -146,7 +146,7 @@ QVariant GraphTableModel::data(const QModelIndex& index, int role ) const{
         GraphTableModelIndex tableIndex = element(index);
         if(tableIndex.isValid()){
             TulipQVariantBuilder helper;
-            return helper.data(role,_displayedType,tableIndex.element(),tableIndex.property());
+            return helper.data(_graph,role,_displayedType,tableIndex.element(),tableIndex.property());
         }
     }
     return QVariant();

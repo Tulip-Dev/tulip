@@ -2,7 +2,7 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
-
+#include "GlyphPreviewGenerator.h"
 using namespace tlp;
 using namespace std;
 
@@ -10,11 +10,29 @@ TulipQVariantBuilder::TulipQVariantBuilder()
 {
 }
 
-QVariant TulipQVariantBuilder::data(int displayRole,ElementType elementType,unsigned int elementId,TulipPropertyType propertyType,PropertyInterface* property)const{
+QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType elementType,unsigned int elementId,TulipPropertyType propertyType,PropertyInterface* property)const{
     switch(displayRole){
     case Qt::DisplayRole:
         {
             switch(propertyType){
+            case DOUBLEPROPERTY_RTTI:
+                {
+                    DoubleProperty* doubleProp = dynamic_cast<DoubleProperty*>(property);
+                    double min = 0;
+                    double max = 0;
+                    double value = 0;
+                    if(elementType == NODE){
+                        min = doubleProp->getNodeMin(graph);
+                        max = doubleProp->getNodeMax(graph);
+                        value = doubleProp->getNodeValue(node(elementId));
+                    }else{
+                        min = doubleProp->getEdgeMin(graph);
+                        max = doubleProp->getEdgeMax(graph);
+                        value = doubleProp->getEdgeValue(edge(elementId));
+                    }
+                    return QVariant::fromValue< Interval<double> >(Interval<double>(min,value,max));
+                }
+                break;
             case NODEGLYPHPROPERTY_RTTI:
                 return QVariant(QString::fromUtf8(GlyphManager::getInst().glyphName(((IntegerProperty*)property)->getNodeValue(node(elementId))).c_str()));
                 break;
@@ -25,11 +43,7 @@ QVariant TulipQVariantBuilder::data(int displayRole,ElementType elementType,unsi
             case EDGEEXTREMITYGLYPHPROPERTY_RTTI:
                 return QVariant(QString::fromUtf8(EdgeExtremityGlyphManager::getInst().glyphName(
                         ((IntegerProperty*)property)->getEdgeValue(edge(elementId))).c_str()));
-                break;
-            case COLORPROPERTY_RTTI:
-                //Don't display any string just use the BackgroundRole
-                return QVariant();
-                break;
+                break;              
             default:{
                     if(elementType == NODE)
                         return QVariant(QString::fromUtf8(property->getNodeStringValue(node(elementId)).c_str()));
@@ -165,14 +179,20 @@ QVariant TulipQVariantBuilder::data(int displayRole,ElementType elementType,unsi
             }
         }
         break;
-    case Qt::BackgroundRole:
+    case Qt::DecorationRole:
         {
             switch(propertyType){
             case COLORPROPERTY_RTTI:
                 {
                     const Color& color = (elementType == NODE ? ((ColorProperty*)property)->getNodeValue(node(elementId)):((ColorProperty*)property)->getEdgeValue(edge(elementId)));
-                    return QVariant(QBrush(colorToQColor(color)));
+                    return QVariant(QColor(colorToQColor(color)));
                 }
+                break;
+                case NODEGLYPHPROPERTY_RTTI:
+                return QVariant(GlyphPreviewGenerator::getInst().getPreview(((IntegerProperty*)property)->getNodeValue(node(elementId))));
+                break;
+            case EDGEEXTREMITYGLYPHPROPERTY_RTTI:
+                    return QVariant(EdgeExtremityGlyphPreviewGenerator::getInst().getPreview(((IntegerProperty*)property)->getEdgeValue(edge(elementId))));
                 break;
             default:
                 return QVariant();
@@ -333,7 +353,7 @@ bool TulipQVariantBuilder::setData(const QVariant& value, ElementType elementTyp
 }
 Qt::ItemFlags TulipQVariantBuilder::flags(Qt::ItemFlags defaultFlags,ElementType elementType,unsigned int ,TulipPropertyType propertyType,PropertyInterface*)const{
     switch(propertyType){
-    //If we try to display an edge extremity property for nodes desactivate the row.
+        //If we try to display an edge extremity property for nodes desactivate the row.
     case EDGEEXTREMITYGLYPHPROPERTY_RTTI:
         if(elementType == NODE){
             return Qt::NoItemFlags;

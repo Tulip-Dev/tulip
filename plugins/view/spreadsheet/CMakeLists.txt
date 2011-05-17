@@ -11,6 +11,7 @@ SET(spreadsheet_LIB_SRCS
     TulipQVariantBuilder.cpp
     VectorEditionWidget.cpp    
     HeaderSelectionDialog.cpp
+    GlyphPreviewGenerator.cpp
 )
 
 set(spreadsheet_UI

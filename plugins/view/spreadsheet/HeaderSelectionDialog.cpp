@@ -1,15 +1,18 @@
 #include "HeaderSelectionDialog.h"
 #include "ui_HeaderSelectionDialog.h"
+#include <QtCore/QRegExp>
 
 using namespace std;
 
 HeaderSelectionDialog::HeaderSelectionDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::HeaderSelectionDialog)
+        QDialog(parent),
+        ui(new Ui::HeaderSelectionDialog)
 {
     ui->setupUi(this);
     connect(ui->displayAllColumnsPushButton,SIGNAL(clicked(bool)),this,SLOT(showAll()));
-    connect(ui->hideAllColumnsPushButton,SIGNAL(clicked(bool)),this,SLOT(hideAll()));
+    //    connect(ui->hideAllColumnsPushButton,SIGNAL(clicked(bool)),this,SLOT(hideAll()));
+    connect(ui->displayUserPushButton,SIGNAL(clicked(bool)),this,SLOT(showUser()));
+    connect(ui->displayVisualPushButton,SIGNAL(clicked(bool)),this,SLOT(showVisual()));
 }
 
 HeaderSelectionDialog::~HeaderSelectionDialog()
@@ -34,7 +37,7 @@ set<int> HeaderSelectionDialog::selectedIndexes()const{
     for(int i = 0 ; i< ui->listWidget->count();++i){
         QListWidgetItem* item = ui->listWidget->item(i);
         if(item->checkState() == Qt::Checked){
-            selected.insert(i);
+            selected.insert(item->data(Qt::UserRole).toInt());
         }
     }
     return selected;
@@ -61,5 +64,28 @@ void HeaderSelectionDialog::hideAll(){
 void HeaderSelectionDialog::showAll(){
     for(int i = 0 ; i <ui->listWidget->count() ; ++i){
         ui->listWidget->item(i)->setCheckState(Qt::Checked);
+    }
+}
+
+void HeaderSelectionDialog::showVisual(){
+    QRegExp regexp("^view|^\\*view");
+    for(int i = 0 ; i <ui->listWidget->count() ; ++i){
+        //Check if it's a visual properties
+        if(regexp.indexIn(ui->listWidget->item(i)->text())!=-1){
+            ui->listWidget->item(i)->setCheckState(Qt::Checked);
+        }else{
+            ui->listWidget->item(i)->setCheckState(Qt::Unchecked);
+        }
+    }
+}
+
+void HeaderSelectionDialog::showUser(){
+    QRegExp regexp("^view|^\\*view");
+    for(int i = 0 ; i <ui->listWidget->count() ; ++i){
+        if(regexp.indexIn(ui->listWidget->item(i)->text()) == -1){
+            ui->listWidget->item(i)->setCheckState(Qt::Checked);
+        }else{
+            ui->listWidget->item(i)->setCheckState(Qt::Unchecked);
+        }
     }
 }

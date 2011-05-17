@@ -10,6 +10,27 @@
 enum TulipPropertyType{BOOLEAN_PROPERTY_RTTI=1001,COLORPROPERTY_RTTI = 1002,DOUBLEPROPERTY_RTTI=1003,GRAPHPROPERTY_RTTI=1004, INTEGER_PROPERTY_RTTI=1005,LAYOUTPROPERTY_RTTI=1006,SIZEPROPERTY_RTTI=1007,STRINGPROPERTY_RTTI=1010,BOOLEANVECTORPROPERTY_RTTI=1011,COLORVECTORPROPERTY_RTTI=1012,COORDVECTORPROPERTY_RTTI=1013 ,DOUBLEVECTORPROPERTY_RTTI=1014,INTEGERVECTORPROPERTY_RTTI=1015,SIZEVECTORPROPERTY_RTTI=1016,STRINGVECTORPROPERTY_RTTI=1017, EDGEEXTREMITYGLYPHPROPERTY_RTTI=1018,EDGESHAPEPROPERTY_RTTI=1019,  FILEPROPERTY_RTTI = 1020,FONTFILEPROPERTY_RTTI=1021 ,LABELPOSITIONPROPERTY_RTTI=1008, NODEGLYPHPROPERTY_RTTI= 1022, TEXTUREPROPERTY_RTTI=1024};
 enum TulipGraphTableModelRole{DataTypeRole=33};
 
+template <class T>
+        class Interval {
+    T _min;
+    T _value;
+    T _max;
+
+        public:
+    Interval(){
+    }
+    Interval(const Interval& other):_min(other._min),_value(other._value),_max(other._max){}
+    Interval(const T& min, const T& value, const T& max):_min(min),_value(value),_max(max){}
+    const T& min()const{
+        return _min;
+    }
+    const T& max()const{
+        return _max;
+    }
+    const T& value()const{
+        return _value;
+    }
+};
 
 /**
   * @brief Use this class to edit a file with the TulipItemDelegate.
@@ -39,6 +60,7 @@ private:
 
 Q_DECLARE_METATYPE(FilteredUrl)
 Q_DECLARE_METATYPE(tlp::ElementCollection);
+Q_DECLARE_METATYPE(Interval<double>);
 
 /**
 * @brief Class giving help function to convert Tulip data to Qt model/view programming.
@@ -55,10 +77,10 @@ public:
     **/
     TulipPropertyType getPropertyType(tlp::ElementType elementType,tlp::PropertyInterface* property)const;
 
-    QVariant data(int displayRole,tlp::ElementType elementType,unsigned int elementId,TulipPropertyType propertyType,tlp::PropertyInterface* property)const;
+    QVariant data(tlp::Graph* graph,int displayRole,tlp::ElementType elementType,unsigned int elementId,TulipPropertyType propertyType,tlp::PropertyInterface* property)const;
 
-    inline QVariant data(int displayRole,tlp::ElementType elementType,unsigned int elementId,tlp::PropertyInterface* property) const{
-        return data(displayRole,elementType,elementId,getPropertyType(elementType,property),property);
+    inline QVariant data(tlp::Graph* graph,int displayRole,tlp::ElementType elementType,unsigned int elementId,tlp::PropertyInterface* property) const{
+        return data(graph,displayRole,elementType,elementId,getPropertyType(elementType,property),property);
     }
 
     Qt::ItemFlags flags(Qt::ItemFlags defaultFlags,tlp::ElementType elementType,unsigned int elementId,TulipPropertyType propertyType,tlp::PropertyInterface* property)const;

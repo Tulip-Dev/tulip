@@ -59,11 +59,15 @@ QWidget* TulipItemDelegate::createEditor(QWidget* p, const QStyleOptionViewItem&
         if(data.userType() == qMetaTypeId< Coord >()){
         CoordWidget *editor = new CoordWidget(p);
         editor->setCoord(data.value<Coord>());
+        editor->setAutoFillBackground(true);
+        editor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         return editor;
     }else
         if(data.userType() == qMetaTypeId< Size >()){
         SizeWidget * editor = new  SizeWidget(p);
         editor->setSize(data.value<Size>());
+        editor->setAutoFillBackground(true);
+        editor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         return editor;
     }else
         if(data.userType() == qMetaTypeId< vector<bool > >()){        
@@ -196,4 +200,35 @@ QWidget* TulipItemDelegate::createFileNameEditor(QWidget* parent, const QString&
     editor->setFilter(filenameFilter);
     editor->setAutoFillBackground(true);
     return editor;
+}
+
+void TulipItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const{
+    QVariant data = index.data();
+    if(data.userType() == qMetaTypeId< Interval<double> >()){
+        painter->save();
+        if (option.state & QStyle::State_Selected)
+            painter->fillRect(option.rect, option.palette.highlight());
+
+        Interval<double> value = data.value<Interval<double> >();
+        if(value.min() != value.max()){
+            double percent = ( value.value() - value.min() ) / (value.max() - value.min());
+            QRect histogramFrame = option.rect;
+            QRect histogramRect(histogramFrame.topLeft(),QSize(histogramFrame.width()*percent,histogramFrame.height()));
+                painter->fillRect(histogramRect,option.palette.midlight());
+        }
+        QString text = QString::number(value.value());
+        QRect boundingRect = option.fontMetrics.boundingRect(text);
+        boundingRect.moveCenter(option.rect.center());
+
+        QPen pen = painter->pen();
+        if (option.state & QStyle::State_Selected)
+            pen.setColor(option.palette.color(QPalette::HighlightedText));
+        else
+            pen.setColor(option.palette.color(QPalette::Text));
+        painter->setPen(pen);
+        painter->drawText(boundingRect,0,text);
+        painter->restore();
+    }else{
+        QStyledItemDelegate::paint(painter,option,index);
+    }
 }

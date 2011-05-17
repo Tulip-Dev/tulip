@@ -28,6 +28,8 @@ private:
 private slots:
     void hideAll();
     void showAll();
+    void showVisual();
+    void showUser();
 };
 
 #endif // HEADERSELECTIONDIALOG_H

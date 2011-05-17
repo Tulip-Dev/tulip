@@ -38,6 +38,8 @@ namespace tlp{
                               const QModelIndex& index) const;
         void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
 
+        void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
+
     protected:
         QWidget* createFileNameEditor(QWidget* parent , const QString& defaultFileName,const QString& filenameFilter=QString()) const;
     };
