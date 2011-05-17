@@ -589,7 +589,7 @@ const string pluginUtils =
 
 
 		"def registerGlyphPlugin(pluginClassName, glyphName, author, date, info, release, glyphId):\n"
-		"	if algoName in pluginFactory.keys():\n"
+		"	if glyphName in pluginFactory.keys():\n"
 		"		return\n"
 		"	pluginModule = getCallingModuleName()\n"
 		"	pluginModules[pluginModule] = 1\n"
