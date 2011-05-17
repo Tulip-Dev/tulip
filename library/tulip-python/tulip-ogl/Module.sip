@@ -60,6 +60,17 @@
     PyRun_SimpleString(tlpImportHook.c_str());
 %End
 
+%ModuleHeaderCode
+#include <string>
+static void printErrorMessage(const std::string &errMsg) {
+	std::string pythonCode = "import sys\n"
+							 "sys.stderr.write(\"";
+	pythonCode += errMsg;
+	pythonCode += "\\n\")";
+	PyRun_SimpleString(pythonCode.c_str());
+}
+%End
+
 namespace tlp;
 
 %Include GlSimpleEntity.sip

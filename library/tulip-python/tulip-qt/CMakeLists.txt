@@ -89,7 +89,14 @@ INSTALL(TARGETS ${LibTulipQtPythonName}
         ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_python)
 
 
-
+ADD_CUSTOM_COMMAND(
+				   TARGET ${LibTulipQtPythonName}
+				   POST_BUILD
+                   COMMAND ${SIP_EXE} ${PYQT_SIP_ARGS} -I ${PYQT4_SIP_DIR} ${PYQT4_SIP_FLAGS} -a ${CMAKE_CURRENT_BINARY_DIR}/tulipqt.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+                   COMMENT "Generating QScintilla API file for Tulip Qt Python bindings"
+				   VERBATIM)
+				   
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulipqt.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT libtulip_python)
 
 ELSE(EXISTS ${PYQT4_SIP_DIR})
 MESSAGE("The directory that should contain PyQt4 SIP files (${PYQT4_SIP_DIR}) does not exist. You should check your installation of PyQt4.")
