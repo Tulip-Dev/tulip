@@ -241,7 +241,4 @@ std::string tlp::getMinor(const std::string& v) {
     return v.substr(pos+1);
   return v.substr(pos + 1, rpos - pos - 1);
 }
-//=========================================================
-const std::string& tlp::getCurrentPluginFileName() {
-  return PluginLibraryLoader::getCurrentPluginFileName();
-}
+
