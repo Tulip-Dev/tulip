@@ -39,6 +39,7 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/PlanarityTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PluginContext.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PluginLoader.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/PluginLibraryLoader.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PluginProgress.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Plugin.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertyAlgorithm.sip
@@ -116,7 +117,14 @@ INSTALL(TARGETS ${LibTulipPythonName}
         LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_python
         ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_python)
 
-
+ADD_CUSTOM_COMMAND(
+				   TARGET ${LibTulipPythonName}
+				   POST_BUILD
+                   COMMAND ${SIP_EXE} -a ${CMAKE_CURRENT_BINARY_DIR}/tulip.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+                   COMMENT "Generating QScintilla API file for Tulip Python bindings"
+				   VERBATIM)
+				   
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT libtulip_python)
 
 
 ENDIF(SIP_OK)
