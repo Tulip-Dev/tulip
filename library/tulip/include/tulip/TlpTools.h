@@ -46,15 +46,13 @@ namespace tlp {
   extern TLP_SCOPE void initTulipLib(const char* appDirPath = 0);
     
   /**
-   * @brief Calls loadPluginsFromDir for each directory in TulipPluginsPath.
+   * @brief Loads all the plugins in each directory contained in TulipPluginsPath.
    *
    * @param plug A PluginLoader to output what is going on. Defaults to 0.
-   * @param folder A fodler to append to each path in TulipPluginsPath (e.g. "views/")
+   * @param folder A folder to append to each path in TulipPluginsPath (e.g. "views/")
    * @return void
    **/
   TLP_SCOPE void loadPlugins(PluginLoader *plug=0, std::string folder = "");
-  TLP_SCOPE bool loadPlugin(const std::string &filename, PluginLoader *plug=0);
-  TLP_SCOPE void loadPluginsFromDir(std::string dir, PluginLoader *loader=0);
 
   /**
    * @brief Demangles the name of a C++ class defined in the tlp namespace.

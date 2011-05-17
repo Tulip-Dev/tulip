@@ -49,7 +49,7 @@ void PluginsTest::testloadPlugin() {
   // plugin does not exist yet
   CPPUNIT_ASSERT(!tlp::PropertyPluginLister<tlp::TemplateAlgorithm<tlp::BooleanProperty> >::pluginExists("Test"));
   PluginLoaderTxt loader;
-  tlp::loadPlugin("./testPlugin.so", &loader);
+  PluginLibraryLoader::loadPluginLibrary("./testPlugin.so", &loader);
   // plugin should exist now
   CPPUNIT_ASSERT(tlp::PropertyPluginLister<tlp::TemplateAlgorithm<tlp::BooleanProperty> >::pluginExists("Test"));
   list<Dependency> deps = tlp::PropertyPluginLister<tlp::TemplateAlgorithm<tlp::BooleanProperty> >::getPluginDependencies("Test");
@@ -71,7 +71,7 @@ void PluginsTest::testCircularPlugin() {
 void PluginsTest::testAncestorGraph() {
   string name = "Test";
   string err = "Error";
-  tlp::loadPlugin("testPlugin2.so");
+  PluginLibraryLoader::loadPluginLibrary("testPlugin2.so");
   Graph *child = graph->addSubGraph();
   Graph *child2 = graph->addSubGraph();
   // ensure child2 is not empty
