@@ -156,6 +156,7 @@ public:
     tlp::Vec4f & operator^=(const tlp::Vec4f &);
 
 	tlp::Vec4f operator*(const  tlp::Vec4f &) const;
+	tlp::Vec4f operator*(const tlp::Mat4f &mat) const;
 	tlp::Vec4f operator*(const float &) const;
 	tlp::Vec4f operator+(const  tlp::Vec4f &) const;
 	tlp::Vec4f operator+(const float &) const;
