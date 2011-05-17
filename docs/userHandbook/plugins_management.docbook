@@ -1,110 +1,58 @@
 <chapter id="plugins_management"><title>Plugins Management</title>
   <para>
-    To open plugins management click on Plugins in Help menu.
+    Click Menu <code>Help</code> → <code>Plugins</code>.
   </para>
   <sect1 id="plugin-management-interface"><title>Interface</title>
     <para>
-      Main window :
+      Main window:
       <graphic fileref="images/plugins_main.png"/>
     </para>
     <para>
-      The main window is divided in two sides :
-      <itemizedlist>
+      The main window is divided in two parts:
+			<itemizedlist>
         <listitem><para>
-	  Left side : Plugins list view
-	</para></listitem>
-	<listitem><para>
-	  Right side : Documentation
-	</para></listitem>
+						Left side: plugins list view
+        </para></listitem>
+        <listitem><para>
+						Right side: documentation
+        </para></listitem>
       </itemizedlist>
     </para>
-    <sect2 id="plugins_list"><title>Plugins List</title>
       <para>
-	The "Installed" group displays the locally installed plugins. The others group displays the plugins available on server.
+        The "Installed" group displays the locally installed plugins. The other groups display the plugins available on servers.
+				The set of available servers can be changed in Menu <code>Configure</code> → <code>Servers</code> (inside the plugins window).
+				<!-- One server address is for instance "http://tulip.labri.fr/pluginsServer/server.php". -->
       </para>
       <para>
-	At the version level you can see the status of the plugin : nothing, version or installed.
-	<itemizedlist>
+         The status of the plugin can be nothing, version or installed. <!-- TODO -->
+        <itemizedlist>
           <listitem><para>
-	    Nothing : Plugin is not installed.
-	  </para></listitem>
-	  <listitem><para>
-	    Version number : Plugin is installed, the version number you can see is the locally installed version. 
-	  </para></listitem>
-	  <listitem><para>
-	    Installed : Plugin is installed and its version is the same on the server. 
-	  </para></listitem>
-	</itemizedlist>
-      </para>
-    </sect2>
-    <sect2 id="documentation"><title>Plugin's Documentation</title>
-      <para>
-	If you want to see the plugin's documentation, click on the version number of a plugin (not on the checkbox : this is to install/remove plugin).
-      </para>
-      <para>
-	Documentation is composed in two groups :
-	<itemizedlist>
+							Nothing: Plugin is not installed.
+          </para></listitem>
           <listitem><para>
-	    On the top : brief description of the plugin (version, author, info ...) 
-	  </para></listitem>
-	  <listitem><para>
-	    At the bottom : detailed description of the plugin.
-	  </para></listitem>
-	</itemizedlist>
+							Version number: Plugin is installed, the version number is the locally installed version.
+          </para></listitem>
+          <listitem><para>
+							Installed: Plugin is installed and its version is the same on the server.
+          </para></listitem>
+        </itemizedlist>
+
+				Click a checkbox to select a plugin for install/uninstall.
+				Click the version number to see the documentation.
       </para>
-    </sect2>
-  </sect1>
-  <sect1 id="setup"><title>Setup</title>
-    <para>
-      To setup plugins manager click on <code>Configure->Servers</code> button of menu.
-    </para>
-    <para>
-      Servers configuration :
-      <graphic fileref="images/plugins_servermanager.png"/>
-    </para>
-    <sect2 id="add_server"><title>Add a server</title>
-      <para>
-	To add a server, click on <code>Add Server</code> button.
-	After that you have a window to enter the server address.
-	<graphic fileref="images/plugins_editserver.png"/>
-	And example of server address is : "http://tulip.labri.fr/pluginsServer/server.php".
-      </para>
-    </sect2>
-    <sect2 id="modify_remove_server"><title>Modify/Remove a server</title>
-      <para>
-	To modify a server : select it then click on <code>Modify</code> button.
-	After that you can change the server address.
-	The server name cannot be changed because it is managed by the server.
-      </para>
-      <para>
-	To remove a server : select it then click on <code>Remove</code> button.
-      </para>
-    </sect2>
   </sect1>
   <sect1 id="install_remove"><title>Install/Remove plugins</title>
-    <sect2 id="simple_installation"><title>Simple installation</title>
-      <para> 
-	If you want to install a plugin, just click on the check box at the version level.
+      <para>To install one or more plugins, click the checkboxes next to them, then click <code>Apply</code>.
+				Once download and installation is complete, restart Tulip to see the modification.
       </para>
+    <sect2 id="dep_installation"><title>Dependencies</title>
       <para>
-	After that click on <code>Apply Change</code> in <code>File</code> menu.
-	A new window appears :
-	<graphic fileref="images/plugins_installremove.png"/>
-	When all plugins are installed/removed you can click on <code>Ok</code> button.
-      </para>
-      <para>
-	After plugin installation/remove you have to restart tulip to see the modification.
-      </para>
-    </sect2>
-    <sect2 id="dep_installation"><title>Installation/Remove with dependencies</title>
-      <para>
-	At installation, if the plugin depends on other plugins a new window appears with the list of needed plugins.
-	If you click on <code>Yes</code>, the needed plugins will be installed too.
-	If you click on <code>No</code>, the needed plugins won't be installed.
-      </para>
-      <para>
-	When you remove plugin, this is alike with plugins needing the one you want to remove.
-      </para>
+        At installation, if the plugin depends on other plugins, a new window appears with the list of needed plugins.
+				Likewise, when removing a plugin, the list of plugins needing it will be displayed.
+			</para>
     </sect2>
   </sect1>
 </chapter>
+
+<!--  LocalWords:  Plugin's
+	-->

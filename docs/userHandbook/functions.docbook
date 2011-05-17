@@ -1,288 +1,175 @@
 <chapter id="functions"><title>Functionalities</title>
-    <sect1 id="manag-graphs"><title>Management of Graphs</title>
-        <para>Tulip software offers a way to create and manage graphs. The main window enables to have several 3D views to show differents graphs. The menu bar enables the user to create a new view. In there and with the mouse toolbar, the users can create nodes and edges at the place where the pointer is. When you have a graph and you want to keep traces of the graph, you can save it in the <filename>.tlp</filename> format, of Tulip Software. An other option is to export it in the <filename>GML</filename> format, for the <application>graphlet</application> system, a toolkit for graph editors and graph algorithms. Then, you can save as an picture the result you had. Tulip supports different formats : BMP, EPS, JPEG, PBM, PGM, PNG, PPM, SVG, XBM, XPM. </para>
-        <para>
-        Tulip could generate a graph from data : importation.
-        <itemizedlist><title>Examples of importation</title>
-        <listitem><para>Adjacency Matrix : a form of representation of graphs. Please visit <ulink url="http://en.wikipedia.org/wiki/Adjacency_matrix">Wikipedia: Adjacency Matrix</ulink> for more details.</para></listitem>
-        <listitem><para>File System : make a graph with your file system ; the root is the directory you have selected.</para></listitem>
-        <listitem><para>GML import : create a graph from this other format.</para></listitem>
-        <listitem><para>dot : create a graph from <emphasis>graphviz</emphasis> format.</para></listitem>
-        </itemizedlist>
-        The second possibility is to generate automatically different kinds of graph : Graph, Tree, Grid, which could be complete, simple, uniform, ...
-        <itemizedlist><title>Examples of generation</title>
-        <listitem><para>Complete General Graph</para></listitem>
-        <listitem><para>Complete Tree</para></listitem>
-        <listitem><para>Grid</para></listitem>
-        <listitem><para>Grid approximation</para></listitem>
-        <listitem><para>Random General Graph</para></listitem>
-        <listitem><para>Random Simple Graph</para></listitem>
-        <listitem><para>Uniform Random Binary Tree</para></listitem>
-        </itemizedlist>
-        </para>
-
-        <para>It is posssible to do a <quote>Copy-Paste</quote>. You can cut, copy and paste selected elements from a view. When you paste an element, it is placed at the same location it was in the original view. Use <code>View->Center View</code> (<keycap>Ctrl+Shift+C</keycap>) to make it visible in the second view. The menus and the mouse toolbar allow you to select the operation you want to perform on the selection.</para>
-        <sect2 id="find"><title>The <quote>Find</quote> tool</title>
-            <para>In the <code>Edit</code> menu, it exists a <code>Find</code> item allowing to do some requests on the current graph. The tool gives a way to choose the desired property and the action you want perform regarding the current selection: Make out of the found elements a new selection, Add them to the selection, Remove them from the selection or Intersect them with the current selection.</para>
-        </sect2>
-    </sect1>
-    <sect1 id="algo"><title>Algorithms</title>
+  <!-- <sect1 id="manag-graphs"><title>Graph Management</title> -->
+	<!-- The information of this section was already covered in the previous chapter -->
+  <!-- </sect1> -->
+  <sect1 id="algo"><title>Algorithms</title>
 		&Algorithms;
-    </sect1>
-    <sect1 id="graph-properties"><title>Properties of graph</title>
-        <para>In <application>Tulip</application>, there is a way to assign properties to each node or edge of the graph. <application>Tulip</application> defines two kinds of property : intrinsic and extrinsic. The first represents the properties computed relatively to the structure of graphs. But it is possible to assign values to the nodes or the edges that are not related to the structure. For example, if we build the map of a region and the nodes represent the towns, the label property can be used for the name of town. But it is not possible to determine the name with the structure of the graph; this kind of property is extrinsic.</para>
+  </sect1>
+  <sect1 id="graph-properties"><title>Graph properties</title>
+    <para>Each node and edge has a set of associated <emphasis>properties</emphasis>.
+			<!-- There are two kinds of property: intrinsic and extrinsic. 
+					 Intrinsic properties are those computed relatively to the graph structure.
+					 On the other hand, if we build for instance the map of a region where the nodes represent cities, the label property can be used for the city name. Since it is not possible to determine the name from the graph structure, this property is extrinsic.
+				-->
+			The properties used by the renderer begin with the <quote>view</quote> prefix, by convention: viewColor, viewLabel, viewLayout...
+			It is possible to define an unlimited number of additional properties to store information.
+    </para>
+		<sect2 id="list-properties"><title>Rendering Properties</title>
+			<para> Here is the list of rendering properties:</para>
+			<itemizedlist>
+				<listitem><para><code>viewBorderColor</code>: border Color of an edge or a node.
+				</para></listitem>
+				<listitem><para><code>viewBorderWidth</code>
+						<!-- Width of the border of an edge or a node. -->
+				</para></listitem>
+				<listitem><para><code>viewColor</code>
+						<!-- Color of an edge or a node. -->
+				</para></listitem>
+				<listitem><para><code>viewFont</code>:
+						Font path used to render the label
+				</para></listitem>
+				<listitem><para><code>viewFontSize</code>
+						<!-- font size used to render label of an edge or a node. -->
+				</para></listitem>
+				<listitem><para><code>viewLabel</code>
+						<!-- Label of an edge or a node. -->
+				</para></listitem>
+				<listitem><para><code>viewLabelColor</code>
+						<!-- Color label of an edge or a node. -->
+				</para></listitem>
+				<listitem><para><code>viewLabelPosition</code>
+						<!-- Label position (x,y,z) of an edge or a node. -->
+				</para></listitem>
+				<listitem><para><code>viewLayout</code>:
+						Position (x,y,z) of a node, or vector of the bends positions of an edge.
+				</para></listitem>
+				<listitem><para><code>viewMetric</code>:
+						Result of the last measure (<xref linkend="Measure"/>) algorithm applied.
+				</para></listitem>
+				<listitem><para><code>viewRotation</code>:
+						Rotation (0 to 360) of a node or edge
+				</para></listitem>
+				<listitem><para><code>viewSelection</code>:
+						true if the element is selected, false if not.
+				</para></listitem>
+				<listitem><para><code>viewShape</code>
+						<!-- Shape of a node or a graph. -->
+				</para></listitem>
+				<listitem><para><code>viewSize</code>:
+						For a node: (height, width, depth).
+						For an edge: (width at source, width at end, arrow size).
+						For edge size to take effect, <code>View editor</code> → <code>Rendering parameters</code> → <code>Size interpolation</code> must be unchecked.
+				</para></listitem>
+				<listitem><para><code>viewSrcAnchorShape</code>: <!-- TODO -->
+						Shape of the source anchor of an edge.
+						For this setting to take effect, <code>View editor</code> → <code>Rendering parameters</code> → <code>Arrow</code> must be checked.
+				</para></listitem>
+				<listitem><para><code>viewSrcAnchorSize</code> <!-- TODO -->
+						<!-- Size of the source anchor of an edge. -->
+				</para></listitem>
+				<listitem><para><code>viewTexture</code>:
+						Texture to replace the color background of the node.
+				</para></listitem>
+				<listitem><para><code>viewTgtAnchorShape</code>
+						Like <code>viewSrcAnchorShape</code>, on opposite end of the edge.
+						<!-- Shape of the target anchor of an edge. -->
+				</para></listitem>
+				<listitem><para><code>viewTgtAnchorSize</code>:
+						<!-- Size of the target anchor of an edge. -->
+				</para></listitem>
+			</itemizedlist>
+		</sect2>
+    <sect2 id="mana-inst"><title>Management</title>
+    <para>
+			There are several ways to update properties:
+			<itemizedlist>
+				<listitem>through algorithms (as explained in <xref linkend="algo"/>)</listitem>
+				<listitem> <code>Import CSV Data</code> allows (through a wizard) to import properties from a CSV file. </listitem>
+				<listitem>through <code>Graph Editor</code> → <code>Property</code> (see <xref linkend="property"/>), as we now explain.
+				</listitem>
+			</itemizedlist>
+    </para>
+    <para>
+			To modify the properties of just one element:
+			<itemizedlist>
+				<listitem> In the bottom part, select the property to update.</listitem>
+        <listitem><para>In the upper part, double-click the cell to update, edit it and click OK.</para></listitem>
+				<listitem>Press <keycap>Enter</keycap> to update the drawing.</listitem>
+      </itemizedlist>
 
-        <para>For each graph, <application>Tulip</application> provides a set of properties used by the renderer engine ; all begin with the <quote>view</quote> prefix by convention : viewColor, viewLabel, viewLayout... They are updated during the computation phase of the plugins. In the other hand, it is possible to define properties to store informations relative to the graph. The number of this created properties are not limited. 
-        </para>
-	<sect2 id="list-properties"><title>Rendering Properties</title>
-	<para> Following is the list of rendering properties :</para>
-	<itemizedlist>
-		<listitem><para><code>viewBorderColor :</code>
-		    Color of the border of an edge or a node.
-		</para></listitem>
-		<listitem><para><code>viewBorderWidth :</code>
-			Width of the border of an edge or a node.
-		</para></listitem>
-		<listitem><para><code>viewColor :</code>
-			Color of an edge or a node.
-		</para></listitem>
-		<listitem><para><code>viewFont :</code>
-			Font path used to render label of an edge or a node.
-		</para></listitem>
-		<listitem><para><code>viewFontSize :</code>
-			font size used to render label of an edge or a node.
-		</para></listitem>
-		<listitem><para><code>viewLabel :</code>
-			Label of an edge or a node.
-		</para></listitem>
-		<listitem><para><code>viewLabelColor :</code>
-			Color label of an edge or a node.
-		</para></listitem>
-		<listitem><para><code>viewLabelPosition :</code>
-			Label position (x,y,z) of an edge or a node.
-		</para></listitem>
-		<listitem><para><code>viewLayout :</code>
-			Position (x,y,z) of a node, or vector of the bends positions of the edges.
-		</para></listitem>
-		<listitem><para><code>viewMetric :</code>
-			Result value of the last measure ( <xref linkend="Measure" /> ) algorithm applied.
-		</para></listitem>
-		<listitem><para><code>viewRotation :</code>
-			Rotation (0 to 360) of a node or an edge
-		</para></listitem>
-		<listitem><para><code>viewSelection :</code>
-			Selection equals true if the node or edge is selected. False if it is not.
-		</para></listitem>
-		<listitem><para><code>viewShape :</code>
-			Shape of a node or a graph.
-		</para></listitem>
-		<listitem><para><code>viewSize :</code>
-			Size (height, width, depth) of a node or an edge. To re-size an edge, the parameter "Size Interpolation" (CONTROL+R) must be switched off. For an edge, the three fields are : Width at source of the edge, Width at the end of the edge, Size of the arrow. 
-		</para></listitem>
-		<listitem><para><code>viewSrcAnchorShape :</code>
-			Shape of the source anchor of an egde. 
-		</para></listitem>
-		<listitem><para><code>viewSrcAnchorShape :</code>
-			Size of the source anchor of an egde. 
-		</para></listitem>
-		<listitem><para><code>viewTexture :</code>
-			Texture will replace the color background of the node.
-		</para></listitem>
-		<listitem><para><code>viewTgtAnchorShape :</code>
-			Shape of the target anchor of an egde. 
-		</para></listitem>
-		<listitem><para><code>viewTgtAnchorShape :</code>
-			Size of the target anchor of an egde. 
-		</para></listitem>
-	</itemizedlist>
-	</sect2>
-	<sect2 id="using-props"><title>Using Properties</title>
-		<sect3 id="properties"><title>Updates of property values</title>
-        <para>As it is explained in the last section, it is possible to update the properties attached to the graph elements with algorithms. An other solution is to update the values through the <code>Property</code> tab of the <code>Info Editor</code> subwindow.</para>
-        <para>To give an example, create a graph :
+			To modify the properties of several elements:
+      <itemizedlist>
+        <listitem><para>Select elements (for instance with the <inlinegraphic fileref="images/i_selection.png"/> tool).</para></listitem>
+        <listitem><para>Select the property to modify, here <code>viewLabel</code>.</para></listitem>
+        <listitem>Click <code>selected only</code>: the table above displays only the selected elements.
+					(if this is not checked, all nodes will be modified).</listitem>
+        <listitem><para>Click <code>Set all</code>, write some text: <quote>Hello world!</quote> and click OK.</para></listitem>
+				<listitem>Press enter to update the view.</listitem>
+			</itemizedlist>
+			Likewise, the <code>Edges</code> tab allows to modify edge properties.
+		</para>
+		<para>Click <code>To labels</code> to set as labels the values of the selected property.</para>
+		<para>
+      To remove a property, select it first, then click <code>Remove</code>.
+			When deleting properties used by the renderer, those properties will be temporary removed from the list but still continue to exist.
+			Note that it is not possible to remove inherited properties.
+    </para>
+		<para>To find a property more easily, you can enter the first letters of the property name in the text box just above the list of properties.
+		</para>
+    </sect2>
+    <sect2 id="find-tut"><title>Find</title>
+      <para>
+				Menu <code>Edit</code> → <code>Find</code> allows to run a simple request on the database of elements.
+				For instance,
+				<itemizedlist>
+					<listitem>open a graph with several nodes and select som of them with the selection tool
+						<inlinegraphic fileref="images/i_selection.png"/>.</listitem>
+					<listitem>Go to <code>Graph editor</code> → <code>Property</code>, click <code>Selected only</code>.
+						You should see only the selected nodes in the upper part of the <code>Graph editor</code> subwindow.</listitem>
+					<listitem>Click the property <code>viewRotation</code>, then <code>Set all</code>, enter <code>20</code>, click <code>OK</code>.
+						We now have some nodes with a rotation of 0 degree and some other rotated 20.</listitem>
+					<listitem>Unselect all nodes (Menu <code>Edit</code> or Ctrl+Shift+a).</listitem>
+				</itemizedlist>
+				We can now demonstrate the Find tool:
         <itemizedlist>
-            <listitem><para>Select the property you want to update, <code>viewSize</code> in the <code>local</code> table, for example, to manage the size of the nodes. Now, you can change all values or the value of one node.
-                <orderedlist>
-                    <listitem><para>Click on <code>Set all</code>, and write the new coordinates : <code>(2.0, 2.0, 2.0)</code></para></listitem>
-                    <listitem><para>Click on the line and the second column of the choosed node in the table. Change the values for the <code>width</code>, the <code>height</code> and <code>depth</code>.</para></listitem>
-                </orderedlist>
-            </para></listitem>
+					<listitem> click Menu <code>Edit</code> → <code>Find</code> or Ctrl+Shift+F,</listitem>
+          <listitem><para>choose <code>viewRotation</code> as input property</para></listitem>
+          <listitem><para>choose <code>=</code> and <code>0</code> as filter</para></listitem>
+          <listitem><para>Under <code>options</code>, select <code>Replace</code> and <code>on nodes</code>.</para></listitem>
+					<listitem>Press enter.</listitem>
         </itemizedlist>
-
-         If you want to change properties of selected elements, use the check box <code>selected only</code> of the <code>Property</code> tab.
-        <itemizedlist>
-            <listitem><para>Select elements with the <inlinegraphic fileref="images/i_selection.png"/> mouse toolbar operation or using the 'Add/Remove Selection' item displayed in the contextual pop-up menu which appears when pressing on the mouse right button (press <keycap>Ctrl</keycap> key when mouse pressing on Mac).
-            </para></listitem>
-            <listitem><para>Select the property you want to modify : <code>viewLabel</code>.
-            </para></listitem>
-            <listitem><para>Click on the checkbox named <code>Filter</code>. The selected element just appears in the table above.
-            </para></listitem>
-            <listitem><para>Click on <code>Set all</code> and write the text you want to display : <quote>Hey!</quote>.
-            </para></listitem>
-        </itemizedlist>
-        If you uncheck <code>selected only</code>, all nodes are in the table. It is possible to do the same thing with the values of edges. You just have to click on the tab named <code>Edges</code>.
-     There is an other solution to modify the value of one node or edge :
-        <itemizedlist>
-            <listitem><para>First select the <inlinegraphic fileref="images/i_select.png"/> mouse toolbar operation, then click on the node or edge you want to  update.</para></listitem>
-            <listitem><para>The <code>Element</code> tab of the <code>Info Editor</code> subwindow is then selected. It displays the informations of the element you clicked on.</para></listitem>
-        </itemizedlist>
-        </para>
-        </sect3>
-        <sect3 id="mana-inst"><title>Management of properties</title>
-            <para>The bottom of the <code>Property</code> subwindow enables to manage the properties. For each graph, as explain before, a set of display properties already exists. If you want to create a new property :
-                <itemizedlist>
-                    <listitem><para>Click on the <code>New</code> button.</para></listitem>
-                    <listitem><para>Select the type of property, <code>String</code>. (other possibilities are Color, Integer, Layout, Metric, Size, Selection)</para></listitem>
-                    <listitem><para>Type the name of the new Property (e.g. <code>mylabel</code>). </para> </listitem>
-                </itemizedlist>
-            For removing a property, you just have to select the property and click on the button named <code>Remove</code>. When deleting properties used by the render engine, those properties will be temporary removed from the list but still continue to exist. Note that it is not possible to remove <code>inherited</code> properties.
-            </para>
-            <para> For importing properties from CSV files click on the <code>Import CSV Data</code>. A widget will appear to help user import data in the current graph see <xref linkend="csv-import"/>. </para>
-            <para> The last feature is cloning property. Select the desired property and click on the button named <code>Clone</code>. Type the name you have chosen. The new property keeps the values. </para>
-        </sect3>        
-        <sect3 id="find-tut"><title>Find : make a request.</title>
-            <para>The find tool is in the <code>Edit</code> menu. Make a graph with several nodes. Change some properties of node for making operations. Select nodes, check the <code>Filter</code> box and select the properties you want to change : <code>viewRotation</code>. Click on the <code>Set all</code> button and type a value (<code>20</code> for example). Now, you have some node with a rotation of 0 degree and some other rotated of 20. So in the Find box : 
-                <itemizedlist>
-                        <listitem><para>Select the property used for the request : <code>viewRotation</code>.</para></listitem>
-                        <listitem><para>Choose the operation and type a value for the comparaisons : <code>=</code> and <code>20</code>, to find the element rotated of 20 degrees. </para></listitem>
-                        <listitem><para>Select the action in the <code>Options</code> part : <code>Add</code> and the kind of the elements of the request : <code>on nodes</code>.</para></listitem>
-                </itemizedlist>
-            </para>
-        </sect3>	
-	</sect2>
-    </sect1>
-     <sect1 id="hierarchy"><title>Hierarchy</title>
+				All the non-rotated nodes should now be selected.
+      </para>
+			<para>For textual fields, the filter supports regular expressions.</para>
+    </sect2>
+  </sect1>
+  <sect1 id="hierarchy"><title>Hierarchy</title>
 		&Subgraphs;
-    </sect1>
-    <sect1 id="text-rend"><title>Text Rendering</title>
-    
-        <para>It is possible to assign a label to each element of the graph. <application>Tulip</application> can display them with three methods : 3D and texture for node labels, bitmap for node and edge labels. 
-        <figure>
-            <title>Bitmap Rendering</title>
-            <graphic fileref="images/bitmap-label.png"/>
-        </figure>
-        <figure>
-            <title>3D Rendering</title>
-            <graphic fileref="images/3d-label.png"/>
-        </figure>
-        <figure>
-            <title>Texture Rendering</title>
-            <graphic fileref="images/text-label.png"/>
-        </figure>
-        </para>
-        <para>In a future version of Tulip, It will be possible to create labels with XML tags like the HTML rendering. Some tags will be available in order to allow the user to organize the content of the labels.</para>
-    </sect1>
-    <sect1 id="csv-import"><title>Importing CSV data</title>
-	<para>To help user during the import data process Tulip provides an import wizard which is a three paneled dialog with configuration options.</para>
-	<para>The first panel allows the user to configure the source file location, the characters encoding, the field delimiter character and the text delimiter character. </para>
-	<para>The second panel allows the user to define the line range, which columns to import and to define the type of data for each column.</para>
-	<para>The third panel allows the user to select how to import data in the graph.</para>    
-	<para>You can find CSV import tutorials here <xref linkend="tuto-csv-import"/>.</para>
-	<sect2><title>Source file settings panel</title>
-	<para>The first panel allows the user to configure the source file location, the characters encoding, the field delimiter character, the text delimiter character. </para>
-	<figure>
-            <title>Source file settings panel</title>
-            <graphic fileref="images/csvimport_panel_1.png"/>
-        </figure>
-	<para>The purpose of each labeled component is explained below: </para>
-	<orderedlist>
-		<listitem>
-		  <para>The source file location field : this field indicates the location of the file to parse. To change the source file click on the “...” button.</para>
-		</listitem>
-		<listitem>
-		  <para>The file encoding selection menu : this drop down menu provides a list of encoding schemes for the characters in the text file.</para>
-		</listitem>
-		<listitem>
-		  <para>The data orientation : this check-box allows the user to invert rows and columns i.e to treat rows as columns and columns as rows in next steps.</para>
-		</listitem>
-		<listitem>
-		  <para>The separator selector : this field allows the user to define the characters used to separate data value fields within each row. Select a separator in the list or input a custom separator and press the enter key to validate your input.</para>
-		</listitem>
-		<listitem>
-		  <para>The text delimiter selector : this field allows the user to define the characters used as start and end delimiter for data value fields. Select a delimiter in the list or input a custom and press the enter key to validate your input.
-			Separated value files often additionally define a character used to indicate the start and end of a data element which should be considered a single text entry.
-			This strategy allows the inclusion of text entries which include the value separator. </para>
-		  <para>
-			For example, a file which is structured as a comma separated value file, could use the double quotation mark to delimit text values and would then be able to include text values such as: 	'Zoe, Mark, Sally'. 
-		  </para>
-		</listitem>
-		<listitem>
-		  <para>The preview area : this area displays a preview of the file as it will be interpreted with these settings.</para>
-		</listitem>
-	</orderedlist>
-	</sect2>	
-	<sect2><title>Data selection panel</title>
-	<para>The second panel allows the user to define the line range, which columns to import and to define their data types.</para>
-	<figure>
-            <title>Data selection panel</title>
-            <graphic fileref="images/csvimport_panel_2.png"/>
-        </figure>
-	<para>The purpose of each labeled component is explained below: </para>
-	<orderedlist>
-		<listitem>
-		  <para>Use first line tokens as columns names : use the elements in the first line as default names for the columns. If checked the first line will be skipped during the import process.</para>
-		</listitem>
-		<listitem>
-		  <para>The line range spinbuttons : these two spin buttons allow the user to select the start and end rows for the data import. The spin boxes can be used either by typing a new value in the text entry area where the numbers are displayed, or by using the mouse button to click on the up arrow to increase the number and the down arrow to decrease the number. 
-			For instance, if the text file contained a large header area with meta information, this header could be excluded from the data imported by increasing the number of the starting, "From", line.
-		  </para>
-		</listitem>
-		<listitem>
-		  <para>The columns configuration area : this area allows the user to configure each column detected in the file. Any single column can be excluded from the data imported by clicking in the checkbox under its name to remove the check mark. User can rename a column by editing the field containing it's original name. You can't input the same name of another column. 
-			The data type of a column can be changed using the combo-box under it's name. 
-		  </para>
-		</listitem>
-		<listitem>
-		  <para>The preview area : this area displays a preview of the file as it will be interpreted with these settings.
-			If a column isn't selected it will not appear in the preview.
-		  </para>
-		</listitem>
-		<listitem>
-		  <para>The number of preview lines spinbutton : allows the user to increase the number of preview. If unchecked all the file will be displayed.
-		  </para>
-		</listitem>
-	</orderedlist>	
-	</sect2>
-	<sect2><title>Import method panel</title> 
-	<para>The third panel allows the user to select how to import data in the graph.</para>
-	<figure>
-            <title>Import method panel</title>
-            <graphic fileref="images/csvimport_panel_3.png"/>
-        </figure>
-	<para>The purpose of each labeled component is explained below: </para>
-	<orderedlist>
-		<listitem>
-		  <para>The import methods list</para>
-		</listitem>
-		<listitem>
-		  <para>The configuration area for the selected import method</para>
-		</listitem>
-	</orderedlist>
-	<para>Currently there is 4 methods to import data on graph:</para>
-	<itemizedlist>
-	  <listitem>Import data on new entities (nodes).</listitem>
-	  <listitem>Import data on new relations (edges).</listitem>
-	  <listitem>Import data on existing entities (nodes).</listitem>
-	  <listitem>Import data on existing relations (edges).</listitem>	  
-	</itemizedlist>
-	<sect3><title>Import data on new entities (nodes)</title>
-	<para>Create a new entity (node) for each row in the file and import the data of selected columns on created entities (nodes).</para>
-	</sect3>
-	  <sect3><title>Import data on new relations (edges)</title>	  
-	  <para>Create a new relation (edge) for each row and import the data of  selected columns on created relations (edges). </para>
-	  <para>A relation is defined by it's source entity id and it's destination entity id. For each row we compare source and destination ids to graph entities ids. If the source and destination ids correspond to existing entities ids a new relation is created between those entities. If there is no entities in the graph with such ids you can force the creation of missing entities with the “Create missing entities” option.</para>
-	  <para>The example below represents a graph with four entities “a”, “b”, “c”, “d” and  two  relations : “a” -> “b” and “b” -> “c”. </para>	  
-	  <para><code>a;b</code></para>
-	  <para><code>b;c</code></para>	
-	  </sect3>
-	  <sect3><title>Import data on existing entities (nodes)</title>
-	  <para>Import the data of selected columns on existing entities (node).</para>
-	  <para>For each row we compare the destination entity id to graph entities ids. If there is a correspondence we import the row data on the first matching entity. If there is no entity with such id you can force the creation of a new entity with the “Create missing entities” option.</para>
-	  </sect3>
-	  <sect3><title>Import data on existing relations (edges)</title>
-	  <para>Import selected columns on existing relations(edges).</para>
-	  <para>For each row we compare the destination relation id to graph relations ids. If there is a correspondence we import the row data on the first matching relation.</para>
-	  </sect3>
-	</sect2>	
-    </sect1>
+  </sect1>
+
+	<!-- has text rendering been dropped? -->
+	<!-- 
+     <sect1 id="text-rend"><title>Text Rendering</title>
+       <para>It is possible to assign a label to each element of the graph. <application>Tulip</application> can display them with three methods: 3D and texture for node labels, bitmap for node and edge labels. 
+         <figure>
+           <title>Bitmap Rendering</title>
+           <graphic fileref="images/bitmap-label.png"/>
+         </figure>
+         <figure>
+           <title>3D Rendering</title>
+           <graphic fileref="images/3d-label.png"/>
+         </figure>
+         <figure>
+           <title>Texture Rendering</title>
+           <graphic fileref="images/text-label.png"/>
+         </figure>
+       </para>
+       <para>In a future version of Tulip, It will be possible to create labels with XML tags like the HTML rendering. Some tags will be available in order to allow the user to organize the content of the labels.</para>
+     </sect1>
+		 -->
 </chapter>
+
+<!--  LocalWords:  tlp GML graphlet XBM XPM viewColor viewLabel viewLayout
+	-->
+<!--  LocalWords:  uncheck
+	-->
