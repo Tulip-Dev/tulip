@@ -2,10 +2,6 @@
   <qresource prefix="/">
     <file>icons/round_minus.png</file>
     <file>icons/round_plus.png</file>
-    <file>tulip.api</file>
-    <file>Python-2.5.api</file>
-    <file>Python-2.6.api</file>
-    <file>Python-2.7.api</file>
     <file>apidoc/api-objects.txt</file>
     <file>apidoc/class-tree.html</file>
     <file>apidoc/crarr.png</file>

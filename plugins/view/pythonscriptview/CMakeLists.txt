@@ -41,29 +41,14 @@ ENDIF()
 
 ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${SRCS} ${MOC_SRCS} ${UI_HEADERS} ${RCC_SRCS})
 
-IF(${MSVC} AND ${CMAKE_GENERATOR}  MATCHES "Visual Studio")
-	ADD_CUSTOM_COMMAND(
-				   TARGET pythonscriptview-${TulipVersion}
-				   PRE_BUILD
-                   COMMAND ${SIP_EXE} -a ${CMAKE_CURRENT_SOURCE_DIR}/tulip.api -I ${CMAKE_CURRENT_SOURCE_DIR}/../../../library/tulip-python/tulip/  ${CMAKE_CURRENT_SOURCE_DIR}/../../../library/tulip-python/tulip/Module.sip
-                   COMMENT "Generating QScintilla API file for Tulip Python bindings"
-                   DEPENDS library/tulip-python/tulip/*.sip
-				   VERBATIM)
-ELSE()
-	ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/tulip.api
-                   COMMAND ${SIP_EXE} -a ${CMAKE_CURRENT_SOURCE_DIR}/tulip.api ${CMAKE_SOURCE_DIR}/library/tulip-python/tulip/Module.sip
-                   COMMENT "Generating QScintilla API file for Tulip Python bindings"
-                   DEPENDS ${CMAKE_SOURCE_DIR}/library/tulip-python/tulip/*.sip)
-ENDIF()
-
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipOglName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipQtName})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} qscintilla2)
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTCORE_LIBRARY})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTGUI_LIBRARY})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTOPENGL_LIBRARY})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} qscintilla2)
 
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
