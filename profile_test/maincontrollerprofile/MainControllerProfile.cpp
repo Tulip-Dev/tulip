@@ -70,7 +70,7 @@ int main(int argc,char ** argv ){
   tlp::initTulipLib();
 
   PluginLoaderTxt txtPlug;
-  tlp::loadPlugins(&txtPlug);   // library side plugins
+  tlp::PluginLibraryLoader::loadPlugins(&txtPlug);   // library side plugins
   GlyphManager::getInst().loadPlugins(&txtPlug);   // software side plugins, i.e. glyphs
   ViewPluginsManager::getInst().loadPlugins(&txtPlug);
   //  GlGraph::loadPlugins(); //Glyoh plugins */

@@ -54,12 +54,12 @@ void AppStartUp::initTulip(TulipPluginLoader *loader, std::string &errors) {
 
   loader->appStartUp = this;
 
-  tlp::loadPlugins(loader); // library side plugins
+  tlp::PluginLibraryLoader::loadPlugins(loader); // library side plugins
 
-  tlp::loadPlugins(loader, "/interactors"); // interactors plugins
-  tlp::loadPlugins(loader, "/glyphs"); // glyphs plugins
-  tlp::loadPlugins(loader, "/view"); // view plugins
-  tlp::loadPlugins(loader, "/controller"); // controller plugins
+  tlp::PluginLibraryLoader::loadPlugins(loader, "/interactors"); // interactors plugins
+  tlp::PluginLibraryLoader::loadPlugins(loader, "/glyphs"); // glyphs plugins
+  tlp::PluginLibraryLoader::loadPlugins(loader, "/view"); // view plugins
+  tlp::PluginLibraryLoader::loadPlugins(loader, "/controller"); // controller plugins
 
   //initialization of utility members
   GlyphManager::getInst().loadGlyphPlugins();

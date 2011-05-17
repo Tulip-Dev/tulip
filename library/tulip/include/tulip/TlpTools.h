@@ -44,16 +44,7 @@ namespace tlp {
    * 3. a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on unices.
    */
   extern TLP_SCOPE void initTulipLib(const char* appDirPath = 0);
-    
-  /**
-   * @brief Loads all the plugins in each directory contained in TulipPluginsPath.
-   *
-   * @param plug A PluginLoader to output what is going on. Defaults to 0.
-   * @param folder A folder to append to each path in TulipPluginsPath (e.g. "views/")
-   * @return void
-   **/
-  TLP_SCOPE void loadPlugins(PluginLoader *plug=0, std::string folder = "");
-
+  
   /**
    * @brief Demangles the name of a C++ class defined in the tlp namespace.
    * Simply removes the 'tlp::' prefix from the class name.
