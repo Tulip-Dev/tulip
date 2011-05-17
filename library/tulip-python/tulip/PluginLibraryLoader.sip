@@ -17,22 +17,22 @@
  *
  */
 
-// +-------------------------------------------------------------------------+
-// | Tulip Python Bindings                                                   |
-// | inspired from bindings by the Booggie project development team          |
-// | (http://booggie.org/)                                                   |
-// +-------------------------------------------------------------------------+
-
 namespace tlp {
 
-std::string TulipLibDir;
-std::string TulipPluginsPath;
-std::string TulipDocProfile;
-std::string TulipUserHandBookIndex;
-std::string TulipBitmapDir;
 
-void initTulipLib(char* appDirPath=0);
+class PluginLibraryLoader {
+%TypeHeaderCode
+#include <tulip/PluginLibraryLoader.h>
+%End
 
-std::string getMajor(const std::string& v);
-std::string getMinor(const std::string& v);
+ public:
+   
+ 
+  static void loadPlugins(tlp::PluginLoader *loader = NULL, std::string pluginPath = "");
+  
+  static bool loadPluginLibrary(const std::string & filename, tlp::PluginLoader *loader = 0);
+  
+ 
+};
+
 };

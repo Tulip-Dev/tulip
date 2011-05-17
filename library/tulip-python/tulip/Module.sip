@@ -60,10 +60,38 @@
     PyRun_SimpleString(tlpImportHook.c_str());
 %End
 
-namespace tlp;
-
 %ModuleHeaderCode
 #include <tulip/PluginLister.h>
+#include <tulip/Graph.h>
+#include <string>
+#include <sstream>
+
+static int throwInvalidNodeException(tlp::Graph *graph, tlp::node n) {
+	std::ostringstream oss;
+	std::string graphName;
+	graph->getAttribute("name", graphName);
+	oss << "Node with id " << n.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
+	PyErr_SetString(PyExc_Exception, oss.str().c_str());
+	return -1;
+}
+
+static int throwInvalidEdgeException(tlp::Graph *graph, tlp::edge e) {
+	std::ostringstream oss;
+	std::string graphName;
+	graph->getAttribute("name", graphName);
+	oss << "Edge with id " << e.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
+	PyErr_SetString(PyExc_Exception, oss.str().c_str());
+	return -1;
+}
+
+
+static void printErrorMessage(const std::string &errMsg) {
+	std::string pythonCode = "import sys\n"
+							 "sys.stderr.write(\"";
+	pythonCode += errMsg;
+	pythonCode += "\\n\")";
+	PyRun_SimpleString(pythonCode.c_str());
+}
 %End
 
 %Import ../stl/Module.sip
@@ -115,6 +143,7 @@ namespace tlp;
 %Include Graph.sip
 %Include GraphMeasure.sip
 %Include PluginLoader.sip
+%Include PluginLibraryLoader.sip
 
 %Include TlpTools.sip
 %Include AcyclicTest.sip
@@ -130,23 +159,5 @@ namespace tlp;
 %Include Observable.sip
 %Include GraphEvent.sip
 
-%ModuleHeaderCode
-static int throwInvalidNodeException(tlp::Graph *graph, tlp::node n) {
-	std::ostringstream oss;
-	std::string graphName;
-	graph->getAttribute("name", graphName);
-	oss << "Node with id " << n.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
-	PyErr_SetString(PyExc_Exception, oss.str().c_str());
-	return -1;
-}
 
-static int throwInvalidEdgeException(tlp::Graph *graph, tlp::edge e) {
-	std::ostringstream oss;
-	std::string graphName;
-	graph->getAttribute("name", graphName);
-	oss << "Edge with id " << e.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
-	PyErr_SetString(PyExc_Exception, oss.str().c_str());
-	return -1;
-}
-%End
 
