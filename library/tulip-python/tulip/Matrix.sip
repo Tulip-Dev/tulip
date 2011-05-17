@@ -69,17 +69,19 @@ class Mat4f {
     
     tlp::Mat4f & operator*=(const float obj);
     
-    tlp::Mat4f operator*(const tlp::Mat4f &mat);
+    tlp::Mat4f operator*(const tlp::Mat4f &mat) const;
     
-    tlp::Mat4f operator*(const float obj);
+    tlp::Vec4f operator*(const tlp::Vec4f &v) const;
+    
+    tlp::Mat4f operator*(const float obj) const;
     
     tlp::Mat4f & operator/=(const tlp::Mat4f &mat);
     
     tlp::Mat4f & operator/=(const float obj);
     
-    tlp::Mat4f operator/(const tlp::Mat4f &mat);
+    tlp::Mat4f operator/(const tlp::Mat4f &mat) const;
     
-    tlp::Mat4f operator/(const float obj);
+    tlp::Mat4f operator/(const float obj) const;
     
     tlp::Mat4f cofactor() const;
     
