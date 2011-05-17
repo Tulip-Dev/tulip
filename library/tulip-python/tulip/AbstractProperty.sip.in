@@ -262,7 +262,43 @@ Sets the value of a particular edge.
 	
 //===========================================================================================	
 	
+	virtual void erase(const tlp::node) ;
+	
+	virtual void erase(const tlp::edge) ;
+
+	virtual std::string getTypename() const ;
+
+	const std::string& getName() const;
+
+	virtual std::string getNodeDefaultStringValue() const ;
+	
+	virtual std::string getEdgeDefaultStringValue() const ;
+	
+	virtual std::string getNodeStringValue(const tlp::node n) const ;
+	
+	virtual std::string getEdgeStringValue(const tlp::edge e) const ;
+	
+	virtual bool setNodeStringValue(const tlp::node n, const std::string & v);
+	
+	virtual bool setEdgeStringValue(const tlp::edge e, const std::string & v);
+	
+	virtual bool setAllNodeStringValue(const std::string & v);
+	
+	virtual bool setAllEdgeStringValue(const std::string & v);
+	
+	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* = NULL) const ;
+	
+	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* = NULL) const ;
+	
+  	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
+	
+	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
+	
+//===========================================================================================
+	
 @PROPERTY_SPECIFIC_METHODS@
+
+//===========================================================================================
 	
 };
 
@@ -812,6 +848,42 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 	std::string s = oss.str();
 	sipRes = PyString_FromString(s.c_str());
 %End
+
+//===========================================================================================	
+	
+	virtual void erase(const tlp::node) ;
+	
+	virtual void erase(const tlp::edge) ;
+
+	virtual std::string getTypename() const ;
+
+	const std::string& getName() const;
+
+	virtual std::string getNodeDefaultStringValue() const ;
+	
+	virtual std::string getEdgeDefaultStringValue() const ;
+	
+	virtual std::string getNodeStringValue(const tlp::node n) const ;
+	
+	virtual std::string getEdgeStringValue(const tlp::edge e) const ;
+	
+	virtual bool setNodeStringValue(const tlp::node n, const std::string & v);
+	
+	virtual bool setEdgeStringValue(const tlp::edge e, const std::string & v);
+	
+	virtual bool setAllNodeStringValue(const std::string & v);
+	
+	virtual bool setAllEdgeStringValue(const std::string & v);
+	
+	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* = NULL) const ;
+	
+	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* = NULL) const ;
+	
+  	virtual void copy(tlp::node, tlp::node, tlp::PropertyInterface*, bool) ;
+	
+	virtual void copy(tlp::edge, tlp::edge, tlp::PropertyInterface*, bool) ;
+	
+//===========================================================================================
 	
 };
 
