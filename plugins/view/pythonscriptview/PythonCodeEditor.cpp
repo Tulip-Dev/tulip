@@ -26,9 +26,11 @@
 #include <QtCore/QEvent>
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
+#include <QtCore/QDir>
 
-#include <Qsci/qscilexerpython.h>
 #include <Qsci/qsciapis.h>
+
+#include <tulip/TlpTools.h>
 
 using namespace std;
 
@@ -111,15 +113,25 @@ void loadApiFile(const QString &path, QsciAPIs *api) {
 	apiFile.close();
 }
 
+QsciLexerPython *PythonCodeEditor::pythonLexer(NULL);
+
 PythonCodeEditor::PythonCodeEditor(QWidget *parent, int fontZoom) : QsciScintilla(parent) {
 	installEventFilter(new GragKeyboardFocusEventFilter());
-	QsciLexerPython *pythonLexer = new CustomLexerPython;
-	pythonLexer->setIndentationWarning(QsciLexerPython::Inconsistent);
-	QsciAPIs *api = new QsciAPIs(pythonLexer);
-	loadApiFile(":/tulip.api", api);
-	loadApiFile(":/Python-" + QString(PythonInterpreter::getInstance()->getPythonVersion().c_str()) + ".api", api);
-	api->add("updateVisualization()");
-	api->prepare();
+	if (pythonLexer == NULL) {
+		pythonLexer = new CustomLexerPython;
+		QsciAPIs *api = new QsciAPIs(pythonLexer);
+		QDir apiDir(QString(tlp::TulipBitmapDir.c_str()) + "../apiFiles");
+		QStringList nameFilter;
+		nameFilter << "*.api";
+		QFileInfoList fileList = apiDir.entryInfoList(nameFilter);
+		for (int i = 0 ; i < fileList.size() ; ++i) {
+			QFileInfo fileInfo = fileList.at(i);
+			loadApiFile(fileInfo.absoluteFilePath(), api);
+		}
+		loadApiFile(QString(tlp::TulipBitmapDir.c_str()) + "../apiFiles/Python-" + QString(PythonInterpreter::getInstance()->getPythonVersion().c_str()) + ".api", api);
+		api->add("updateVisualization()");
+		api->prepare();
+	}
 	setUtf8(true);
 	setLexer(pythonLexer);
 	setBraceMatching(QsciScintilla::SloppyBraceMatch);
@@ -129,6 +141,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent, int fontZoom) : QsciScintill
 	setMarginLineNumbers(1, true);
 	setMarginWidth(1, "---------");
 	setFolding(QsciScintilla::CircledTreeFoldStyle);
+	setIndentationGuides(true);
 
 	errorIndicator = indicatorDefine(QsciScintilla::SquiggleIndicator);
 	setIndicatorForegroundColor(QColor(255,0,0), errorIndicator);

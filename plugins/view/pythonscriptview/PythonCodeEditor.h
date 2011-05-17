@@ -21,6 +21,7 @@
 #define PYTHONCODEEDITOR_H_
 
 #include <Qsci/qsciscintilla.h>
+#include <Qsci/qscilexerpython.h>
 
 class PythonCodeEditor : public QsciScintilla {
 
@@ -34,6 +35,8 @@ public :
 private :
 
 	int errorIndicator;
+
+	static QsciLexerPython *pythonLexer;
 };
 
 
