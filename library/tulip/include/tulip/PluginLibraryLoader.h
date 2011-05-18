@@ -26,6 +26,8 @@
 
 #ifndef _WIN32
 #include <dirent.h>
+#else
+#include <windows.h>
 #endif
 
 namespace tlp {
