@@ -72,10 +72,15 @@ class TLP_QT_SCOPE LocalPluginInformations : public PluginInformationsInterface 
     const AbstractPluginInfo* _infos;
     const QString _type;
     QStringList _dependenciesNames;
-    const QString _iconPath;
-    const QString _longDescriptionPath;
+    QString _iconPath;
+    QString _longDescriptionPath;
+    QString _libraryPath;
+    QDateTime _installDate;
 
     const std::list<Dependency> _dependencies;
+
+    static const QString DefaultLongDescriptionPath;
+    static const QString DefaultIconPath;
 };
 
 }
