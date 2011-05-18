@@ -26,7 +26,6 @@
 #include <vector>
 
 #ifdef _WIN32
-#include <windows.h>
 #include <stdio.h>
 #else
 #include <stdlib.h>
@@ -44,7 +43,6 @@ static bool isPreviouslyLoaded(const std::string &lib) {
   std::string libName=lib.substr(0,idx);
   if(previouslyLoadedLib.count(libName)!=0)
     return true;
-
   previouslyLoadedLib.insert(libName);
   return false;
 }
@@ -168,8 +166,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
         }
       }
       else if (loader)
-        loader->aborted(currentPluginLibrary,currentPluginLibrary + " is not compatible with Tulip "
-            + TULIP_RELEASE);
+        loader->aborted(currentPluginLibrary,currentPluginLibrary + " is not compatible with Tulip " + TULIP_RELEASE);
     }
     else if (loader)
       loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
@@ -215,8 +212,7 @@ int __tulip_select_libs(struct dirent *ent) {
 
 void PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
   struct dirent **namelist;
-  nbUnloadedPluginLibraries = scandir((const char *) pluginPath.c_str(),
-        &namelist,
+  nbUnloadedPluginLibraries = scandir((const char *) pluginPath.c_str(), &namelist,
 #if !(defined(__APPLE__) || defined(__FreeBSD__))
         (int (*) (const dirent *))
 #endif
@@ -264,7 +260,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
         }
         if (isNumber && suffix.size() > idx + 1) {
           suffix = suffix.substr(idx + 1);
-          idx = suffix.find(STRINGIFY(VERSION_SEPARATOR));
+          idx = suffix.find(TULIP_MM_RELEASE); 
           if (idx != std::string::npos) {
             for (unsigned long i = 0; i < idx; ++i) {
               if (!isdigit(suffix[i])) {
