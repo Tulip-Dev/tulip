@@ -23,21 +23,16 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-// SIP support for std::vector
-// by Giovanni Bajo <rasky@develer.com>
-// Public domain
-
-
 // ****************************************************
 // SIP generic implementation for std::vector<>
 // ****************************************************
-// ALas, this template-based generic implementation is valid only
-// if the element type is a SIP-wrapped type. For basic types (int, double, etc.)
-// we are forced to cut & paste to provide a specialization.
+// This template-based generic implementation is valid only
+// if the element type is a SIP-wrapped type. 
+// For basic types (int, double, etc.),
+// we are forced to provide a specialization.
 
 template<TYPE>
-%MappedType std::vector<TYPE>
-{
+%MappedType std::vector<TYPE> {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -46,22 +41,21 @@ template<TYPE>
    PyObject *l;
 
    // Create the Python list of the correct length.
-   if ((l = PyList_New(sipCpp -> size())) == NULL)
+   if ((l = PyList_New(sipCpp -> size())) == NULL) {
        return NULL;
+   }
 
    // Go through each element in the C++ instance and convert it to a
    // wrapped P2d.
-   for (int i = 0; i < (int)sipCpp -> size(); ++i)
-   {
+   for (int i = 0; i < (int)sipCpp -> size(); ++i) {
        TYPE *cpp = new TYPE(sipCpp -> at(i));
        PyObject *pobj;
 
        // Get the Python wrapper for the Type instance, creating a new
        // one if necessary, and handle any ownership transfer.
-       if ((pobj = sipConvertFromNewType(cpp, sipType_TYPE, sipTransferObj)) == NULL)
-       {
+       if ((pobj = sipConvertFromNewType(cpp, sipType_TYPE, sipTransferObj)) == NULL) {
            // There was an error so garbage collect the Python list.
-           Py_DECREF(l);
+           Py_XDECREF(l);
            return NULL;
        }
 
@@ -74,61 +68,47 @@ template<TYPE>
 %End
 
 %ConvertToTypeCode
+
    // Check if type is compatible
-   if (sipIsErr == NULL)
-   {
-       // Must be any iterable
-       PyObject *i = PyObject_GetIter(sipPy);
-       bool iterable = (i != NULL);
-       Py_XDECREF(i);
-       return iterable;
-   }
-
-   // Iterate over the object
-   PyObject *iterator = PyObject_GetIter(sipPy);
-   PyObject *item;
-
-   std::vector<TYPE> *V = new std::vector<TYPE>();
-
-   while ((item = PyIter_Next(iterator)))
-   {
-       if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE))
-       {
-           PyErr_Format(PyExc_TypeError, "object in iterable cannot be converted to TYPE");
-           *sipIsErr = 1;
-           break;
+   if (sipIsErr == NULL) {
+   	   if (!PyList_Check(sipPy)) {
+          return 0;
        }
-
+       for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+            PyObject *item = PyList_GET_ITEM(sipPy, i);
+            if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
+                return 0;
+            }
+       }
+       return 1;
+   }
+ 
+   // Convert Python list of TYPE to  std::vector<TYPE>
+   std::vector<TYPE> *v = new std::vector<TYPE>();
+   v->reserve(PyList_GET_SIZE(sipPy));
+   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
        int state;
-       TYPE* p = reinterpret_cast<TYPE*>(
-            sipConvertToType(item, sipType_TYPE, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
+       TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(PyList_GET_ITEM(sipPy, i), sipType_TYPE, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
 
-       if (!*sipIsErr)
-           V->push_back(*p);
+	   if (*sipIsErr) {
+          sipReleaseType(p, sipType_TYPE, state);
+          delete v;
+          return 0;
+       }		
 
-       sipReleaseType(p, sipType_TYPE, state);
-       Py_DECREF(item);
+       v->push_back(*p);
+
+       sipReleaseType(p, sipType_TYPE, state);       
    }
 
-   Py_DECREF(iterator);
-
-   if (*sipIsErr)
-   {
-       delete V;
-       return 0;
-   }
-
-   *sipCppPtr = V;
+   *sipCppPtr = v;
    return sipGetState(sipTransferObj);
 %End
 };
 
-// ****************************************************
-// Specialization for std::vector<double>
-// ****************************************************
-
-%MappedType std::vector<double>
-{
+template<TYPE*>
+%MappedType std::vector<TYPE*> {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -137,13 +117,91 @@ template<TYPE>
    PyObject *l;
 
    // Create the Python list of the correct length.
-   if ((l = PyList_New(sipCpp -> size())) == NULL)
+   if ((l = PyList_New(sipCpp -> size())) == NULL) {
        return NULL;
+   }
+
+   // Go through each element in the C++ instance and convert it to a
+   // wrapped P2d.
+   for (int i = 0; i < (int)sipCpp -> size(); ++i) {
+       PyObject *pobj;
+
+       // Get the Python wrapper for the Type instance, creating a new
+       // one if necessary, and handle any ownership transfer.
+       if ((pobj = sipConvertFromType(sipCpp -> at(i), sipType_TYPE, sipTransferObj)) == NULL) {
+           // There was an error so garbage collect the Python list.
+           Py_XDECREF(l);
+           return NULL;
+       }
+
+       // Add the wrapper to the list.
+       PyList_SET_ITEM(l, i, pobj);
+   }
+
+   // Return the Python list.
+   return l;
+%End
+
+%ConvertToTypeCode
+
+   // Check if type is compatible
+   if (sipIsErr == NULL) {
+   	   if (!PyList_Check(sipPy)) {
+          return 0;
+       }
+       for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+            PyObject *item = PyList_GET_ITEM(sipPy, i);
+            if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
+                return 0;
+            }
+       }
+       return 1;
+   }
+ 
+   // Convert Python list of TYPE to std::vector<TYPE*>
+   std::vector<TYPE*> *v = new std::vector<TYPE*>();
+   v->reserve(PyList_GET_SIZE(sipPy));
+   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+       int state;
+       TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(PyList_GET_ITEM(sipPy, i), sipType_TYPE, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
+
+	   if (*sipIsErr) {
+          sipReleaseType(p, sipType_TYPE, state);
+          delete v;
+          return 0;
+       }		
+
+       v->push_back(p);
+
+       sipReleaseType(p, sipType_TYPE, state);       
+   }
+
+   *sipCppPtr = v;
+   return sipGetState(sipTransferObj);
+%End
+};
+
+// ****************************************************
+// Specialization for std::vector<double>
+// ****************************************************
+
+%MappedType std::vector<double> {
+%TypeHeaderCode
+#include <vector>
+%End
+
+%ConvertFromTypeCode
+   PyObject *l;
+
+   // Create the Python list of the correct length.
+   if ((l = PyList_New(sipCpp -> size())) == NULL) {
+       return NULL;
+   }
 
    // Go through each element in the C++ instance and convert it to a
    // wrapped object.
-   for (int i = 0; i < (int)sipCpp -> size(); ++i)
-   {
+   for (int i = 0; i < (int)sipCpp -> size(); ++i) {
        // Add the wrapper to the list.
        PyList_SET_ITEM(l, i, PyFloat_FromDouble(sipCpp -> at(i)));
    }
@@ -154,52 +212,30 @@ template<TYPE>
 
 %ConvertToTypeCode
    // Check if type is compatible
-   if (sipIsErr == NULL)
-   {
-       // Must be any iterable
-       PyObject *i = PyObject_GetIter(sipPy);
-       bool iterable = (i != NULL);
-       Py_XDECREF(i);
-       return iterable;
+   if (sipIsErr == NULL) {
+   	   if (!PyList_Check(sipPy)) {
+          return 0;
+       }
+       for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+            PyObject *item = PyList_GET_ITEM(sipPy, i);
+            if (!PyNumber_Check(item)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to double");
+                return 0;
+            }
+       }
+       return 1;
+   }
+ 
+   // Convert Python list of numbers to a std::vector<double>
+   std::vector<double> *v = new std::vector<double>();
+   v->reserve(PyList_GET_SIZE(sipPy));
+   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+       PyObject *f = PyNumber_Float(PyList_GET_ITEM(sipPy, i));
+       v->push_back(PyFloat_AsDouble(f));
+       Py_XDECREF(f);       
    }
 
-   // Iterate over the object
-   PyObject *iterator = PyObject_GetIter(sipPy);
-   PyObject *item;
-
-   // Maximum number of elements
-   int len = PyObject_Size(sipPy);
-   std::vector<double> *V = new std::vector<double>();
-   V->reserve(len);
-
-   if (len)
-   {
-       while ((item = PyIter_Next(iterator)))
-       {
-           if (!PyNumber_Check(item))
-           {
-               PyErr_Format(PyExc_TypeError, "object in iterable is not a number");
-               *sipIsErr = 1;
-               break;
-           }
-
-           PyObject *f = PyNumber_Float(item);
-           V->push_back(PyFloat_AsDouble(f));
-
-           Py_DECREF(f);
-           Py_DECREF(item);
-       }
-
-       Py_DECREF(iterator);
-
-       if (*sipIsErr)
-       {
-           delete V;
-           return 0;
-       }
-   }
-
-   *sipCppPtr = V;
+   *sipCppPtr = v;
    return sipGetState(sipTransferObj);
 %End
 };
@@ -209,8 +245,7 @@ template<TYPE>
 // Specialization for std::vector<int>
 // ****************************************************
 
-%MappedType std::vector<int>
-{
+%MappedType std::vector<int> {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -219,13 +254,13 @@ template<TYPE>
    PyObject *l;
 
    // Create the Python list of the correct length.
-   if ((l = PyList_New(sipCpp -> size())) == NULL)
+   if ((l = PyList_New(sipCpp -> size())) == NULL) {
        return NULL;
+   }
 
    // Go through each element in the C++ instance and convert it to a
    // wrapped object.
-   for (int i = 0; i < (int)sipCpp -> size(); ++i)
-   {
+   for (int i = 0; i < (int)sipCpp -> size(); ++i) {
        // Add the wrapper to the list.
        PyList_SET_ITEM(l, i, PyInt_FromLong(sipCpp -> at(i)));
    }
@@ -236,61 +271,38 @@ template<TYPE>
 
 %ConvertToTypeCode
    // Check if type is compatible
-   if (sipIsErr == NULL)
-   {
-       // Must be any iterable
-       PyObject *i = PyObject_GetIter(sipPy);
-       bool iterable = (i != NULL);
-       Py_XDECREF(i);
-       return iterable;
+   if (sipIsErr == NULL) {
+   	   if (!PyList_Check(sipPy)) {
+          return 0;
+       }
+       for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+            PyObject *item = PyList_GET_ITEM(sipPy, i);
+            if (!PyInt_Check(item)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to int");
+                return 0;
+            }
+       }
+       return 1;
+   }
+ 
+   // Convert Python list of integers to a std::vector<int>
+   std::vector<int> *v = new std::vector<int>();
+   v->reserve(PyList_GET_SIZE(sipPy));
+   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+       v->push_back(PyInt_AsLong(PyList_GET_ITEM(sipPy, i)));
    }
 
-   // Iterate over the object
-   PyObject *iterator = PyObject_GetIter(sipPy);
-   PyObject *item;
-
-   // Maximum number of elements
-   int len = PyObject_Size(sipPy);
-   std::vector<int> *V = new std::vector<int>();
-   V->reserve(len);
-
-   if (len)
-   {
-       while ((item = PyIter_Next(iterator)))
-       {
-           if (!PyInt_Check(item))
-           {
-               PyErr_Format(PyExc_TypeError, "object in iterable cannot be converted to float");
-               *sipIsErr = 1;
-               break;
-           }
-
-           int val = PyInt_AsLong(item);
-           V->push_back(val);
-
-           Py_DECREF(item);
-       }
-
-       Py_DECREF(iterator);
-
-       if (*sipIsErr)
-       {
-           delete V;
-           return 0;
-       }
-   }
-
-   *sipCppPtr = V;
+   *sipCppPtr = v;
    return sipGetState(sipTransferObj);
 %End
+
 };
 
 // ****************************************************
 // Specialization for std::vector<bool>
 // ****************************************************
 
-%MappedType std::vector<bool>
-{
+%MappedType std::vector<bool> {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -299,13 +311,13 @@ template<TYPE>
    PyObject *l;
 
    // Create the Python list of the correct length.
-   if ((l = PyList_New(sipCpp -> size())) == NULL)
+   if ((l = PyList_New(sipCpp -> size())) == NULL) {
        return NULL;
+   }
 
    // Go through each element in the C++ instance and convert it to a
    // wrapped object.
-   for (int i = 0; i < (int)sipCpp -> size(); ++i)
-   {
+   for (int i = 0; i < (int)sipCpp -> size(); ++i) {
        // Add the wrapper to the list.
        PyList_SET_ITEM(l, i, PyBool_FromLong(sipCpp -> at(i)));
    }
@@ -316,50 +328,29 @@ template<TYPE>
 
 %ConvertToTypeCode
    // Check if type is compatible
-   if (sipIsErr == NULL)
-   {
-       // Must be any iterable
-       PyObject *i = PyObject_GetIter(sipPy);
-       bool iterable = (i != NULL);
-       Py_XDECREF(i);
-       return iterable;
+   if (sipIsErr == NULL) {
+   	   if (!PyList_Check(sipPy)) {
+          return 0;
+       }
+       for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+            PyObject *item = PyList_GET_ITEM(sipPy, i);
+            if (!PyBool_Check(item)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to bool");
+                return 0;
+            }
+       }
+       return 1;
+   }
+ 
+   // Convert Python list of booleans to a std::vector<bool>
+   std::vector<bool> *v = new std::vector<bool>();
+   v->reserve(PyList_GET_SIZE(sipPy));	
+   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+       v->push_back(PyList_GET_ITEM(sipPy, i) == Py_True);
    }
 
-   // Iterate over the object
-   PyObject *iterator = PyObject_GetIter(sipPy);
-   PyObject *item;
-
-   // Maximum number of elements
-   int len = PyObject_Size(sipPy);
-   std::vector<bool> *V = new std::vector<bool>();
-   V->reserve(len);
-
-   if (len)
-   {
-       while ((item = PyIter_Next(iterator)))
-       {
-           if (!PyBool_Check(item))
-           {
-               PyErr_Format(PyExc_TypeError, "object in iterable cannot be converted to bool");
-               *sipIsErr = 1;
-               break;
-           }
-
-           V->push_back(item == Py_True);
-
-           Py_DECREF(item);
-       }
-
-       Py_DECREF(iterator);
-
-       if (*sipIsErr)
-       {
-           delete V;
-           return 0;
-       }
-   }
-
-   *sipCppPtr = V;
+   *sipCppPtr = v;
    return sipGetState(sipTransferObj);
 %End
+
 };

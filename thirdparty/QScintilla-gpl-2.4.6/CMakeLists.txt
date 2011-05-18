@@ -149,3 +149,12 @@ INSTALL(TARGETS qscintilla2
        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT qscintilla2
        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT qscintilla2
        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT qscintilla2)
+
+INSTALL(FILES 
+        ${CMAKE_CURRENT_SOURCE_DIR}/qsci/api/python/Python-2.4.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/qsci/api/python/Python-2.5.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/qsci/api/python/Python-2.6.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/qsci/api/python/Python-2.7.api
+        ${CMAKE_CURRENT_SOURCE_DIR}/qsci/api/python/Python-3.1.api
+        DESTINATION ${TulipShareInstallDir}/apiFiles 
+        COMPONENT qscintilla2)

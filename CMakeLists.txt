@@ -94,7 +94,6 @@ SET(LibTulipOGDFName "tulip-ogdf-${TulipMMVersion}")
 SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipMMVersion}")
 SET(LibStlPythonName "stlpython")
 SET(LibTulipPythonName "tulippython")
-SET(LibTulipOglPythonName "tulipoglpython")
 
 ## -----------------------------------------------------------------------------------------------
 ## Find need packages

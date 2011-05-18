@@ -24,20 +24,31 @@
 // +-------------------------------------------------------------------------+
 
 template<T1, T2>
-%MappedType std::map<T1, T2>
-{
+%MappedType std::map<T1, T2> {
 %TypeHeaderCode
 #include <map>
 %End
 
 %ConvertToTypeCode
-	if (sipIsErr == NULL) {
-		return PyDict_Check(sipPy);
-	}
-
+	
 	PyObject *key = NULL;
 	PyObject *val = NULL;
 	Py_ssize_t pos = 0;
+
+	if (sipIsErr == NULL) {
+		if (!PyDict_Check(sipPy)) {
+			return 0;
+		}
+		while (PyDict_Next(sipPy, &pos, &key, &val)) {
+			bool ok = sipCanConvertToType(key, sipType_T1, SIP_NOT_NONE);
+			ok = ok && sipCanConvertToType(val, sipType_T2, SIP_NOT_NONE);
+			if (!ok) {
+				return 0;
+			}
+		}
+		return 1;
+	}
+
 	
 	std::map <T1, T2> *map = new std::map<T1, T2>();
 	
@@ -49,11 +60,9 @@ template<T1, T2>
 		T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(val, sipType_T2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 		
 		if (*sipIsErr) {
-			delete map;
-			
+			delete map;		
 			sipReleaseType(t1, sipType_T1, t1State);
 			sipReleaseType(t2, sipType_T2, t2State);
-			
 			return 0;
 		}
 		
@@ -110,40 +119,50 @@ template<T1, T2>
 };
 
 template<T1, T2>
-%MappedType std::map<T1, T2 *>
-{
+%MappedType std::map<T1, T2 *> {
 %TypeHeaderCode
 #include <map>
 %End
 
 %ConvertToTypeCode
-	if (sipIsErr == NULL) {
-		return PyDict_Check(sipPy);
-	}
-
 	PyObject *key = NULL;
 	PyObject *val = NULL;
 	Py_ssize_t pos = 0;
+
+	if (sipIsErr == NULL) {
+		if (!PyDict_Check(sipPy)) {
+			return 0;
+		}
+		while (PyDict_Next(sipPy, &pos, &key, &val)) {
+			bool ok = sipCanConvertToType(key, sipType_T1, SIP_NOT_NONE);
+			ok = ok && sipCanConvertToType(val, sipType_T2, SIP_NOT_NONE);
+			if (!ok) {
+				return 0;
+			}
+		}
+		return 1;
+	}
 	
 	std::map <T1, T2 *> *map = new std::map<T1, T2 *>();
 	
 	while (PyDict_Next(sipPy, &pos, &key, &val)) {
 		int t1State = 0;
+		int t2State = 0;
 		
 		T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(key, sipType_T1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-		T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(val, sipType_T2, sipTransferObj, 0, 0, sipIsErr));
+		T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(val, sipType_T2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 		
 		if (*sipIsErr) {
 			delete map;
-			
 			sipReleaseType(t1, sipType_T1, t1State);
-			
+			sipReleaseType(t2, sipType_T2, t2State);
 			return 0;
 		}
 		
 		(*map)[*t1] = t2;
 		
 		sipReleaseType(t1, sipType_T1, t1State);
+		sipReleaseType(t2, sipType_T2, t2State);
 	}
 	
 	*sipCppPtr = map;
@@ -189,3 +208,6 @@ template<T1, T2>
 	return pyDict;
 %End
 };
+
+
+

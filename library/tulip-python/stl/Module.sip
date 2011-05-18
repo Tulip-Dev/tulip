@@ -25,6 +25,17 @@
 
 %Module stl 0
 
+%ModuleHeaderCode
+#include <string>
+static void printErrorMessage(const std::string &errMsg) {
+	std::string pythonCode = "import sys\n"
+							 "sys.stderr.write(\"";
+	pythonCode += errMsg;
+	pythonCode += "\\n\")";
+	PyRun_SimpleString(pythonCode.c_str());
+}
+%End
+
 %Include list.sip
 %Include pair.sip
 %Include set.sip

@@ -25,7 +25,38 @@
 
 %Module tulip 0
 
+%ModuleHeaderCode
+#include <tulip/Graph.h>
+#include <string>
+#include <sstream>
 
+static int throwInvalidNodeException(tlp::Graph *graph, tlp::node n) {
+	std::ostringstream oss;
+	std::string graphName;
+	graph->getAttribute("name", graphName);
+	oss << "Node with id " << n.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
+	PyErr_SetString(PyExc_Exception, oss.str().c_str());
+	return -1;
+}
+
+static int throwInvalidEdgeException(tlp::Graph *graph, tlp::edge e) {
+	std::ostringstream oss;
+	std::string graphName;
+	graph->getAttribute("name", graphName);
+	oss << "Edge with id " << e.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
+	PyErr_SetString(PyExc_Exception, oss.str().c_str());
+	return -1;
+}
+
+
+static void printErrorMessage(const std::string &errMsg) {
+	std::string pythonCode = "import sys\n"
+							 "sys.stderr.write(\"";
+	pythonCode += errMsg;
+	pythonCode += "\\n\")";
+	PyRun_SimpleString(pythonCode.c_str());
+}
+%End
 
 %Import ../stl/Module.sip
 
@@ -37,6 +68,7 @@
 %Include Color.sip
 %Include Coord.sip
 %Include Size.sip
+%Include Matrix.sip
 %Include BoundingBox.sip
 %Include StringCollection.sip
 %Include ColorScale.sip
@@ -87,24 +119,8 @@
 %Include PlanarityTest.sip
 
 %Include DrawingTools.sip
+%Include Observable.sip
+%Include GraphEvent.sip
 
-%ModuleHeaderCode
-static int throwInvalidNodeException(tlp::Graph *graph, tlp::node n) {
-	std::ostringstream oss;
-	std::string graphName;
-	graph->getAttribute("name", graphName);
-	oss << "Node with id " << n.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
-	PyErr_SetString(PyExc_Exception, oss.str().c_str());
-	return -1;
-}
 
-static int throwInvalidEdgeException(tlp::Graph *graph, tlp::edge e) {
-	std::ostringstream oss;
-	std::string graphName;
-	graph->getAttribute("name", graphName);
-	oss << "Edge with id " << e.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
-	PyErr_SetString(PyExc_Exception, oss.str().c_str());
-	return -1;
-}
-%End
 

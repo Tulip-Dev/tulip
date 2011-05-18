@@ -24,26 +24,34 @@
 // +-------------------------------------------------------------------------+
 
 template<T1, T2>
-%MappedType std::pair<T1, T2>
-{
+%MappedType std::pair<T1, T2> {
 %TypeHeaderCode
 #include <utility>
 %End
 
 %ConvertToTypeCode
-	if (sipIsErr == NULL) {
-		return PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2;
-	}
-
 	PyObject *itm1 = NULL;
 	PyObject *itm2 = NULL;
+	
+	if (sipIsErr == NULL) {
+		if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
+			return 0;
+	
+		itm1 = PyTuple_GetItem(sipPy, 0);
+		itm2 = PyTuple_GetItem(sipPy, 1);
+	
+		bool ok = sipCanConvertToType(itm1, sipType_T1, SIP_NOT_NONE);
+		ok = ok && sipCanConvertToType(itm2, sipType_T2, SIP_NOT_NONE);
+				
+		if (!ok) {
+			return 0;
+		}
+		
+		return 1;
+	}
 
 	itm1 = PyTuple_GetItem(sipPy, 0);
 	itm2 = PyTuple_GetItem(sipPy, 1);
-	
-	if (itm1 == NULL || itm2 == NULL) {
-		return 0;
-	}
 	
 	int t1State = 0;
 	int t2State = 0;
@@ -53,8 +61,7 @@ template<T1, T2>
 
 	if (*sipIsErr) {
 		sipReleaseType(t1, sipType_T1, t1State);
-		sipReleaseType(t2, sipType_T2, t2State);
-		
+		sipReleaseType(t2, sipType_T2, t2State);	
 		return 0;
 	}
 
@@ -85,21 +92,21 @@ template<T1, T2>
 	
 	if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
 		if (pyFirst) 
-			Py_DECREF(pyFirst);
+			Py_XDECREF(pyFirst);
 		else
 			delete first;
 		if (pySecond)
-			Py_DECREF(pySecond);
+			Py_XDECREF(pySecond);
 		else
 			delete second;
-		Py_DECREF(pyTuple);
+		Py_XDECREF(pyTuple);
 		
 		return 0;
 	}
 	
 	if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
 		Py_XDECREF(pySecond);
-		Py_DECREF(pyTuple);
+		Py_XDECREF(pyTuple);
 		
 		return 0;
 	}
@@ -109,26 +116,34 @@ template<T1, T2>
 };
 
 template<T1*, T2*>
-%MappedType std::pair<T1*, T2*>
-{
+%MappedType std::pair<T1*, T2*> {
 %TypeHeaderCode
 #include <utility>
 %End
 
 %ConvertToTypeCode
-	if (sipIsErr == NULL) {
-		return PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2;
-	}
-
 	PyObject *itm1 = NULL;
 	PyObject *itm2 = NULL;
+	
+	if (sipIsErr == NULL) {
+		if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
+			return 0;
+	
+		itm1 = PyTuple_GetItem(sipPy, 0);
+		itm2 = PyTuple_GetItem(sipPy, 1);
+	
+		bool ok = sipCanConvertToType(itm1, sipType_T1, SIP_NOT_NONE);
+		ok = ok && sipCanConvertToType(itm2, sipType_T2, SIP_NOT_NONE);
+			
+		if (!ok) {
+			return 0;
+		}
+		
+		return 1;
+	}
 
 	itm1 = PyTuple_GetItem(sipPy, 0);
 	itm2 = PyTuple_GetItem(sipPy, 1);
-	
-	if (itm1 == NULL || itm2 == NULL) {
-		return 0;
-	}
 	
 	int t1State = 0;
 	int t2State = 0;
@@ -164,26 +179,22 @@ template<T1*, T2*>
 	T1 *first = sipCpp->first;
 	T2 *second = sipCpp->second;
 	
-	pyFirst = sipConvertFromNewType(first, sipType_T1, sipTransferObj);
-	pySecond = sipConvertFromNewType(second, sipType_T2, sipTransferObj);
+	pyFirst = sipConvertFromType(first, sipType_T1, sipTransferObj);
+	pySecond = sipConvertFromType(second, sipType_T2, sipTransferObj);
 	
 	if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
 		if (pyFirst) 
-			Py_DECREF(pyFirst);
-		else
-			delete first;
+			Py_XDECREF(pyFirst);
 		if (pySecond)
-			Py_DECREF(pySecond);
-		else
-			delete second;
-		Py_DECREF(pyTuple);
+			Py_XDECREF(pySecond);
+		Py_XDECREF(pyTuple);
 		
 		return 0;
 	}
 	
 	if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
 		Py_XDECREF(pySecond);
-		Py_DECREF(pyTuple);
+		Py_XDECREF(pyTuple);
 		
 		return 0;
 	}
@@ -193,26 +204,34 @@ template<T1*, T2*>
 };
 
 template<T1*, T2>
-%MappedType std::pair<T1*, T2>
-{
+%MappedType std::pair<T1*, T2> {
 %TypeHeaderCode
 #include <utility>
 %End
 
 %ConvertToTypeCode
-	if (sipIsErr == NULL) {
-		return PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2;
-	}
-
-	PyObject *itm1 = NULL;
+	PyObject *itm1 = NULL;	
 	PyObject *itm2 = NULL;
+	
+	if (sipIsErr == NULL) {
+		if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
+			return 0;
+	
+		itm1 = PyTuple_GetItem(sipPy, 0);
+		itm2 = PyTuple_GetItem(sipPy, 1);
+	
+		bool ok = sipCanConvertToType(itm1, sipType_T1, SIP_NOT_NONE);
+		ok = ok && sipCanConvertToType(itm2, sipType_T2, SIP_NOT_NONE);
+		
+		if (!ok) {
+			return 0;
+		}
+		
+		return 1;
+	}
 
 	itm1 = PyTuple_GetItem(sipPy, 0);
 	itm2 = PyTuple_GetItem(sipPy, 1);
-	
-	if (itm1 == NULL || itm2 == NULL) {
-		return 0;
-	}
 	
 	int t1State = 0;
 	int t2State = 0;
@@ -222,7 +241,7 @@ template<T1*, T2>
 
 	if (*sipIsErr) {
 		sipReleaseType(t1, sipType_T1, t1State);
-		sipReleaseType(t2, sipType_T2, t2State);		
+		sipReleaseType(t2, sipType_T2, t2State);
 		return 0;
 	}
 
@@ -248,27 +267,24 @@ template<T1*, T2>
 	T1 *first = sipCpp->first;
 	T2 *second = new T2(sipCpp->second);
 	
-	pyFirst = sipConvertFromNewType(first, sipType_T1, sipTransferObj);
+	pyFirst = sipConvertFromType(first, sipType_T1, sipTransferObj);
 	pySecond = sipConvertFromNewType(second, sipType_T2, sipTransferObj);
 	
 	if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
 		if (pyFirst) 
-			Py_DECREF(pyFirst);
-		else
-			delete first;
+			Py_XDECREF(pyFirst);
 		if (pySecond)
-			Py_DECREF(pySecond);
+			Py_XDECREF(pySecond);
 		else
 			delete second;
-		Py_DECREF(pyTuple);
+		Py_XDECREF(pyTuple);
 		
 		return 0;
 	}
 	
 	if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
 		Py_XDECREF(pySecond);
-		Py_DECREF(pyTuple);
-		
+		Py_XDECREF(pyTuple);
 		return 0;
 	}
 	
@@ -277,26 +293,34 @@ template<T1*, T2>
 };
 
 template<T1, T2*>
-%MappedType std::pair<T1, T2*>
-{
+%MappedType std::pair<T1, T2*> {
 %TypeHeaderCode
 #include <utility>
 %End
 
 %ConvertToTypeCode
-	if (sipIsErr == NULL) {
-		return PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2;
-	}
-
 	PyObject *itm1 = NULL;
 	PyObject *itm2 = NULL;
+	
+	if (sipIsErr == NULL) {
+		if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
+			return 0;
+	
+		itm1 = PyTuple_GetItem(sipPy, 0);
+		itm2 = PyTuple_GetItem(sipPy, 1);
+	
+		bool ok = sipCanConvertToType(itm1, sipType_T1, SIP_NOT_NONE);
+		ok = ok && sipCanConvertToType(itm2, sipType_T2, SIP_NOT_NONE);
+			
+		if (!ok) {
+			return 0;
+		}
+		
+		return 1;
+	}
 
 	itm1 = PyTuple_GetItem(sipPy, 0);
 	itm2 = PyTuple_GetItem(sipPy, 1);
-	
-	if (itm1 == NULL || itm2 == NULL) {
-		return 0;
-	}
 	
 	int t1State = 0;
 	int t2State = 0;
@@ -306,7 +330,7 @@ template<T1, T2*>
 
 	if (*sipIsErr) {
 		sipReleaseType(t1, sipType_T1, t1State);
-		sipReleaseType(t2, sipType_T2, t2State);		
+		sipReleaseType(t2, sipType_T2, t2State);
 		return 0;
 	}
 
@@ -333,25 +357,23 @@ template<T1, T2*>
 	T2 *second = sipCpp->second;
 	
 	pyFirst = sipConvertFromNewType(first, sipType_T1, sipTransferObj);
-	pySecond = sipConvertFromNewType(second, sipType_T2, sipTransferObj);
+	pySecond = sipConvertFromType(second, sipType_T2, sipTransferObj);
 	
 	if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
 		if (pyFirst) 
-			Py_DECREF(pyFirst);
+			Py_XDECREF(pyFirst);
 		else
 			delete first;
 		if (pySecond)
-			Py_DECREF(pySecond);
-		else
-			delete second;
-		Py_DECREF(pyTuple);
+			Py_XDECREF(pySecond);
+		Py_XDECREF(pyTuple);
 		
 		return 0;
 	}
 	
 	if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
 		Py_XDECREF(pySecond);
-		Py_DECREF(pyTuple);
+		Py_XDECREF(pyTuple);
 		
 		return 0;
 	}

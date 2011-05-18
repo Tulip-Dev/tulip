@@ -26,8 +26,7 @@
 
 // std::list
 template<TYPE *>
-%MappedType std::list<TYPE *>
-{
+%MappedType std::list<TYPE *> {
 %TypeHeaderCode
 #include <list>
 %End
@@ -36,8 +35,9 @@ template<TYPE *>
    PyObject *l;
 
    // Create the Python list of the correct length.
-   if ((l = PyList_New(sipCpp -> size())) == NULL)
+   if ((l = PyList_New(sipCpp -> size())) == NULL) {
        return NULL;
+   }
 
    int i = 0;
    for(std::list<TYPE *>::iterator iter = sipCpp->begin(); iter != sipCpp->end(); iter++) {
@@ -46,10 +46,9 @@ template<TYPE *>
 
        // Get the Python wrapper for the Type instance, creating a new
        // one if necessary, and handle any ownership transfer.
-       if ((pobj = sipConvertFromType(cpp, sipType_TYPE, sipTransferObj)) == NULL)
-       {
+       if ((pobj = sipConvertFromType(cpp, sipType_TYPE, sipTransferObj)) == NULL) {
            // There was an error so garbage collect the Python list.
-           Py_DECREF(l);
+           Py_XDECREF(l);
            return NULL;
        }
 
@@ -63,57 +62,45 @@ template<TYPE *>
 
 %ConvertToTypeCode
    // Check if type is compatible
-   if (sipIsErr == NULL)
-   {
-       // Must be any iterable
-       PyObject *i = PyObject_GetIter(sipPy);
-       bool iterable = (i != NULL);
-       Py_XDECREF(i);
-       return iterable;
-   }
-
-   // Iterate over the object
-   PyObject *iterator = PyObject_GetIter(sipPy);
-   PyObject *item;
-
-   std::list<TYPE *> *V = new std::list<TYPE *>();
-   
-   while ((item = PyIter_Next(iterator)))
-   {
-       if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE))
-       {
-           PyErr_Format(PyExc_TypeError, "object in iterable cannot be converted to TYPE");
-           *sipIsErr = 1;
-           break;
+   if (sipIsErr == NULL) {
+   	   if (!PyList_Check(sipPy)) {
+          return 0;
        }
-
+       for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+            PyObject *item = PyList_GET_ITEM(sipPy, i);
+            if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
+                return 0;
+            }
+       }
+       return 1;
+   }
+ 
+   // Convert Python list of TYPE to  std::list<TYPE*>
+   std::list<TYPE*> *l = new std::list<TYPE*>();
+   
+   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
        int state;
-       TYPE* p = reinterpret_cast<TYPE*>(
-            sipConvertToType(item, sipType_TYPE, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
+       TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(PyList_GET_ITEM(sipPy, i), sipType_TYPE, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
 
-       if (!*sipIsErr)
-           V->push_back(p);
+	   if (*sipIsErr) {
+          sipReleaseType(p, sipType_TYPE, state);
+          delete l;
+          return 0;
+       }		
 
-       sipReleaseType(p, sipType_TYPE, state);
-       Py_DECREF(item);
+       l->push_back(p);
+
+       sipReleaseType(p, sipType_TYPE, state);       
    }
 
-   Py_DECREF(iterator);
-
-   if (*sipIsErr)
-   {
-       delete V;
-       return 0;
-   }
-
-   *sipCppPtr = V;
+   *sipCppPtr = l;
    return sipGetState(sipTransferObj);
 %End
 };
 
 template<TYPE>
-%MappedType std::list<TYPE>
-{
+%MappedType std::list<TYPE> {
 %TypeHeaderCode
 #include <list>
 %End
@@ -122,8 +109,9 @@ template<TYPE>
    PyObject *l;
 
    // Create the Python list of the correct length.
-   if ((l = PyList_New(sipCpp -> size())) == NULL)
+   if ((l = PyList_New(sipCpp -> size())) == NULL) {
        return NULL;
+   }
 
    int i = 0;
    for(std::list<TYPE>::iterator iter = sipCpp->begin(); iter != sipCpp->end(); iter++) {
@@ -132,10 +120,9 @@ template<TYPE>
 
        // Get the Python wrapper for the Type instance, creating a new
        // one if necessary, and handle any ownership transfer.
-       if ((pobj = sipConvertFromType(&cpp, sipType_TYPE, sipTransferObj)) == NULL)
-       {
+       if ((pobj = sipConvertFromType(&cpp, sipType_TYPE, sipTransferObj)) == NULL) {
            // There was an error so garbage collect the Python list.
-           Py_DECREF(l);
+           Py_XDECREF(l);
            return NULL;
        }
 
@@ -149,50 +136,38 @@ template<TYPE>
 
 %ConvertToTypeCode
    // Check if type is compatible
-   if (sipIsErr == NULL)
-   {
-       // Must be any iterable
-       PyObject *i = PyObject_GetIter(sipPy);
-       bool iterable = (i != NULL);
-       Py_XDECREF(i);
-       return iterable;
-   }
-
-   // Iterate over the object
-   PyObject *iterator = PyObject_GetIter(sipPy);
-   PyObject *item;
-
-   std::list<TYPE> *V = new std::list<TYPE>();
-   
-   while ((item = PyIter_Next(iterator)))
-   {
-       if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE))
-       {
-           PyErr_Format(PyExc_TypeError, "object in iterable cannot be converted to TYPE");
-           *sipIsErr = 1;
-           break;
+   if (sipIsErr == NULL) {
+   	   if (!PyList_Check(sipPy)) {
+          return 0;
        }
-
+       for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+            PyObject *item = PyList_GET_ITEM(sipPy, i);
+            if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE)) {
+                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
+                return 0;
+            }
+       }
+       return 1;
+   }
+ 
+   // Convert Python list of TYPE to  std::list<TYPE>
+   std::list<TYPE> *l = new std::list<TYPE>();
+   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
        int state;
-       TYPE* p = reinterpret_cast<TYPE*>(
-            sipConvertToType(item, sipType_TYPE, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
+       TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(PyList_GET_ITEM(sipPy, i), sipType_TYPE, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
 
-       if (!*sipIsErr)
-           V->push_back(*p);
+	   if (*sipIsErr) {
+          sipReleaseType(p, sipType_TYPE, state);
+          delete l;
+          return 0;
+       }		
 
-       sipReleaseType(p, sipType_TYPE, state);
-       Py_DECREF(item);
+       l->push_back(*p);
+
+       sipReleaseType(p, sipType_TYPE, state);       
    }
 
-   Py_DECREF(iterator);
-
-   if (*sipIsErr)
-   {
-       delete V;
-       return 0;
-   }
-
-   *sipCppPtr = V;
+   *sipCppPtr = l;
    return sipGetState(sipTransferObj);
 %End
 };
