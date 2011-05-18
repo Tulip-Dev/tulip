@@ -21,6 +21,9 @@ namespace tlp{
         ~CoordWidget();
         tlp::Coord coord()const;
     public slots:
+        /**
+          * @brief Set the Coord displayed by this widget. Emit the coordChanged signals.
+          **/
         void setCoord(const tlp::Coord& coord);
 
     signals:

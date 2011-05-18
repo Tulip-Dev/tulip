@@ -1,19 +1,20 @@
 #include "tulip/CoordWidget.h"
 #include "CoordWidgetData.h"
+#include <QtGui/QDoubleValidator>
 #include <cfloat>
 using namespace tlp;
 CoordWidget::CoordWidget(QWidget* parent) : QWidget(parent),ui(new Ui::CoordWidget())
 {
     ui->setupUi(this);
-    ui->xDoubleSpinBox->setMinimum(FLT_MIN);
-    ui->xDoubleSpinBox->setMaximum(FLT_MAX);
-    ui->yDoubleSpinBox->setMinimum(FLT_MIN);
-    ui->yDoubleSpinBox->setMaximum(FLT_MAX);
-    ui->zDoubleSpinBox->setMinimum(FLT_MIN);
-    ui->zDoubleSpinBox->setMaximum(FLT_MAX);
-    connect(ui->xDoubleSpinBox,SIGNAL(valueChanged(double)),this,SLOT(coordUpdated()));
-    connect(ui->yDoubleSpinBox,SIGNAL(valueChanged(double)),this,SLOT(coordUpdated()));
-    connect(ui->zDoubleSpinBox,SIGNAL(valueChanged(double)),this,SLOT(coordUpdated()));
+    QDoubleValidator *validator = new QDoubleValidator(this);
+    validator->setRange(-FLT_MAX,FLT_MAX,1000);
+    ui->xLineEdit->setValidator(validator);
+    ui->yLineEdit->setValidator(validator);
+    ui->zLineEdit->setValidator(validator);
+    setCoord(Coord());
+    connect(ui->xLineEdit,SIGNAL(textChanged(double)),this,SLOT(coordUpdated()));
+    connect(ui->yLineEdit,SIGNAL(textChanged(double)),this,SLOT(coordUpdated()));
+    connect(ui->zLineEdit,SIGNAL(textChanged(double)),this,SLOT(coordUpdated()));
 }
 
 CoordWidget::~CoordWidget(){
@@ -21,13 +22,13 @@ CoordWidget::~CoordWidget(){
 }
 
 Coord CoordWidget::coord()const{
-    return Coord(ui->xDoubleSpinBox->value(),ui->yDoubleSpinBox->value(),ui->zDoubleSpinBox->value());
+    return Coord(ui->xLineEdit->text().toFloat(),ui->yLineEdit->text().toFloat(),ui->zLineEdit->text().toFloat());
 }
 void CoordWidget::setCoord(const Coord& coord){
     blockSignals(true);
-    ui->xDoubleSpinBox->setValue(coord[0]);
-    ui->yDoubleSpinBox->setValue(coord[1]);
-    ui->zDoubleSpinBox->setValue(coord[2]);
+    ui->xLineEdit->setText(QString::number(coord[0]));
+    ui->yLineEdit->setText(QString::number(coord[1]));
+    ui->zLineEdit->setText(QString::number(coord[2]));
     blockSignals(false);
     coordUpdated();
 }

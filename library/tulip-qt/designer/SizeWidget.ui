@@ -14,57 +14,87 @@
    <string>Form</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>3</number>
+   </property>
    <property name="margin">
     <number>0</number>
    </property>
    <item>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <item>
       <widget class="QLabel" name="widthLabel">
        <property name="text">
-        <string>Width</string>
+        <string>W</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>
        </property>
+       <property name="buddy">
+        <cstring>widthLineEdit</cstring>
+       </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="widthDoubleSpinBox"/>
+     <item>
+      <widget class="QLineEdit" name="widthLineEdit"/>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QFormLayout" name="formLayout_2">
-     <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="spacing">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <item>
       <widget class="QLabel" name="heightLabel">
        <property name="text">
-        <string>Height</string>
+        <string>H</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>
        </property>
+       <property name="buddy">
+        <cstring>heightLineEdit</cstring>
+       </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="heightDoubleSpinBox"/>
+     <item>
+      <widget class="QLineEdit" name="heightLineEdit"/>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QFormLayout" name="formLayout_3">
-     <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <property name="spacing">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <item>
       <widget class="QLabel" name="depthLabel">
        <property name="text">
-        <string>Depth</string>
+        <string>D</string>
        </property>
        <property name="wordWrap">
         <bool>true</bool>
        </property>
+       <property name="buddy">
+        <cstring>depthLineEdit</cstring>
+       </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="depthDoubleSpinBox"/>
+     <item>
+      <widget class="QLineEdit" name="depthLineEdit"/>
      </item>
     </layout>
    </item>

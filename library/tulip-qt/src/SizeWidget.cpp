@@ -8,15 +8,15 @@ SizeWidget::SizeWidget(QWidget *parent) :
     ui(new Ui::SizeWidget)
 {
     ui->setupUi(this);
-    ui->widthDoubleSpinBox->setMinimum(0);
-    ui->widthDoubleSpinBox->setMaximum(FLT_MAX);
-    ui->heightDoubleSpinBox->setMinimum(0);
-    ui->heightDoubleSpinBox->setMaximum(FLT_MAX);
-    ui->depthDoubleSpinBox->setMinimum(0);
-    ui->depthDoubleSpinBox->setMaximum(FLT_MAX);
-    connect(ui->widthDoubleSpinBox,SIGNAL(valueChanged(double)),this,SLOT(sizeUpdated()));
-    connect(ui->heightDoubleSpinBox,SIGNAL(valueChanged(double)),this,SLOT(sizeUpdated()));
-    connect(ui->depthDoubleSpinBox,SIGNAL(valueChanged(double)),this,SLOT(sizeUpdated()));
+    QDoubleValidator *validator = new QDoubleValidator(this);
+    validator->setRange(-FLT_MAX,FLT_MAX,1000);
+    ui->widthLineEdit->setValidator(validator);
+    ui->heightLineEdit->setValidator(validator);
+    ui->depthLineEdit->setValidator(validator);
+    setSize(Size());
+    connect(ui->widthLineEdit,SIGNAL(valueChanged(double)),this,SLOT(sizeUpdated()));
+    connect(ui->heightLineEdit,SIGNAL(valueChanged(double)),this,SLOT(sizeUpdated()));
+    connect(ui->depthLineEdit,SIGNAL(valueChanged(double)),this,SLOT(sizeUpdated()));
 }
 
 SizeWidget::~SizeWidget()
@@ -25,14 +25,14 @@ SizeWidget::~SizeWidget()
 }
 
 Size SizeWidget::size()const{
-    return Size(ui->widthDoubleSpinBox->value(),ui->heightDoubleSpinBox->value(),ui->depthDoubleSpinBox->value());
+    return Size(ui->widthLineEdit->text().toFloat(),ui->heightLineEdit->text().toFloat(),ui->depthLineEdit->text().toFloat());
 }
 
 void SizeWidget::setSize(const Size& size){
     blockSignals(true);
-    ui->widthDoubleSpinBox->setValue(size[0]);
-    ui->heightDoubleSpinBox->setValue(size[1]);
-    ui->depthDoubleSpinBox->setValue(size[2]);
+    ui->widthLineEdit->setText(QString::number(size[0]));
+    ui->heightLineEdit->setText(QString::number(size[1]));
+    ui->depthLineEdit->setText(QString::number(size[2]));
     blockSignals(false);
     sizeUpdated();
 }

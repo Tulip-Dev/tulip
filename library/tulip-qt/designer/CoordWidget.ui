@@ -10,6 +10,12 @@
     <height>22</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -21,8 +27,14 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="spacing">
+      <number>3</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <item>
       <widget class="QLabel" name="xLabel">
        <property name="text">
         <string>X</string>
@@ -30,49 +42,69 @@
        <property name="wordWrap">
         <bool>true</bool>
        </property>
+       <property name="buddy">
+        <cstring>xLineEdit</cstring>
+       </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="xDoubleSpinBox"/>
+     <item>
+      <widget class="QLineEdit" name="xLineEdit"/>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QFormLayout" name="formLayout_2">
-     <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <item>
       <widget class="QLabel" name="yLabel">
        <property name="text">
         <string>Y</string>
        </property>
-       <property name="wordWrap">
-        <bool>true</bool>
+       <property name="buddy">
+        <cstring>yLineEdit</cstring>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="yDoubleSpinBox"/>
+     <item>
+      <widget class="QLineEdit" name="yLineEdit"/>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QFormLayout" name="formLayout_3">
-     <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <property name="spacing">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <item>
       <widget class="QLabel" name="zLabel">
        <property name="text">
         <string>Z</string>
        </property>
-       <property name="wordWrap">
-        <bool>true</bool>
+       <property name="buddy">
+        <cstring>zLineEdit</cstring>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="zDoubleSpinBox"/>
+     <item>
+      <widget class="QLineEdit" name="zLineEdit"/>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>xLineEdit</tabstop>
+  <tabstop>yLineEdit</tabstop>
+  <tabstop>zLineEdit</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
