@@ -11,8 +11,13 @@
 #include "TulipSplashScreen.h"
 #include "TulipMainWindow.h"
 
+#include <tulip/TulipProject.h>
+#include <iostream>
+using namespace std;
+
 int main(int argc, char **argv) {
   QApplication tulip_app(argc, argv);
+  tulip_app.setApplicationName("tulip");
   QLocale::setDefault(QLocale(QLocale::English));
 
 #if defined(__APPLE__) // allows to load qt imageformats plugin
