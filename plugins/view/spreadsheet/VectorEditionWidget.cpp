@@ -40,9 +40,6 @@ QVariant ListPropertyWidgetModel::data(const QModelIndex& index, int role) const
         if(role == Qt::EditRole){
             return elements->getValue(index.row());
         }
-        if(role == DataTypeRole){
-            return QVariant(elementsType);
-        }
     }
     return QVariant();
 }

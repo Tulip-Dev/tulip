@@ -145,9 +145,13 @@ protected:
     **/
     virtual void updateElementsTable();
     /**
-    * @brief Fill the propertyTable and the PropertyTypeTable.
+    * @brief Fill the propertyTable. For each property in the graph call the useProperty function to know if we add the property in the table.
     **/
     virtual void updatePropertyTable();
+    /**
+      * @brief Return if the property must be integrated in the property table. This function is called before each insertion in the property table.
+      **/
+    virtual bool useProperty(tlp::PropertyInterface* property) const;
 
     virtual bool removeElements(int first,int last,const QModelIndex& parent = QModelIndex());
     virtual bool removeProperties(int first,int last,const QModelIndex& parent = QModelIndex());

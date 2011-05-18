@@ -168,7 +168,9 @@ void TulipTableWidget::copyColumnToOther(){
     if(action!=NULL){
         int index = action->data().toInt();
         PropertyInterface* property = _tulipTableModel->propertyForIndex(index);
+        Observable::holdObservers();
         CopyPropertyDialog::copyProperty(_graph,property,true,this);
+        Observable::unholdObservers();
     }
 }
 

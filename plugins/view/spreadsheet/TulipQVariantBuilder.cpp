@@ -69,6 +69,8 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
                         int glyphIndex = GlyphManager::getInst().glyphId(glyphName);
                         //Associate the last added element to the shape id
                         collection.setData(collection.index(elementIndex,0),QVariant(glyphIndex),Qt::UserRole);
+                        //Set the glyph preview.
+                        collection.setData(collection.index(elementIndex,0),QVariant(GlyphPreviewGenerator::getInst().getPreview(glyphIndex)),Qt::DecorationRole);
                         //If the shape id is the same than the selected mark the last added element as selected
                         collection.setElementSelection(elementIndex,glyphIndex == value);
                     }
@@ -106,6 +108,7 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
                         collection.addElement(tlpStringToQString(glyphName));
                         int elementIndex = collection.rowCount()-1;
                         int glyphIndex = EdgeExtremityGlyphManager::getInst().glyphId(glyphName);
+                        collection.setData(collection.index(elementIndex,0),QVariant(EdgeExtremityGlyphPreviewGenerator::getInst().getPreview(glyphIndex)),Qt::DecorationRole);
                         //Associate the last added element to the shape id
                         collection.setData(collection.index(elementIndex,0),QVariant(glyphIndex),Qt::UserRole);
                         //If the shape id is the same than the selected mark the last added element as selected
@@ -188,11 +191,11 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
                     return QVariant(QColor(colorToQColor(color)));
                 }
                 break;
-                case NODEGLYPHPROPERTY_RTTI:
+            case NODEGLYPHPROPERTY_RTTI:
                 return QVariant(GlyphPreviewGenerator::getInst().getPreview(((IntegerProperty*)property)->getNodeValue(node(elementId))));
                 break;
             case EDGEEXTREMITYGLYPHPROPERTY_RTTI:
-                    return QVariant(EdgeExtremityGlyphPreviewGenerator::getInst().getPreview(((IntegerProperty*)property)->getEdgeValue(edge(elementId))));
+                return QVariant(EdgeExtremityGlyphPreviewGenerator::getInst().getPreview(((IntegerProperty*)property)->getEdgeValue(edge(elementId))));
                 break;
             default:
                 return QVariant();
@@ -219,9 +222,13 @@ TulipPropertyType TulipQVariantBuilder::getPropertyType(ElementType elementType,
     else if (property->getName().compare("viewFont")==0) {
         return FONTFILEPROPERTY_RTTI;
     }else if(property->getName().compare("viewTgtAnchorShape")==0){
-        return EDGEEXTREMITYGLYPHPROPERTY_RTTI;
-    }else if(property->getName().compare("viewSrcAnchorShape")==0){
-        return EDGEEXTREMITYGLYPHPROPERTY_RTTI;
+        return elementType==EDGE?EDGEEXTREMITYGLYPHPROPERTY_RTTI:INVALID_PROPERTY_RTTI;
+    }else if(property->getName().compare("viewSrcAnchorShape")==0  ){
+        return elementType==EDGE?EDGEEXTREMITYGLYPHPROPERTY_RTTI:INVALID_PROPERTY_RTTI;
+    }else if(property->getName().compare("viewSrcAnchorSize")==0 ){
+        return elementType==EDGE?SIZEPROPERTY_RTTI:INVALID_PROPERTY_RTTI;
+    }else if(property->getName().compare("viewTgtAnchorSize")==0 ){
+        return elementType==EDGE?SIZEPROPERTY_RTTI:INVALID_PROPERTY_RTTI;
     }
     else if (typeid(*property) == typeid(BooleanProperty)) {
         return BOOLEAN_PROPERTY_RTTI;
@@ -240,7 +247,9 @@ TulipPropertyType TulipQVariantBuilder::getPropertyType(ElementType elementType,
     else if (typeid(*property) == typeid(LayoutProperty)) {
         return LAYOUTPROPERTY_RTTI;
     }
-    else if (typeid(*property) == typeid(StringVectorProperty)) {
+    else if(typeid(*property) == typeid(StringProperty)){
+        return STRINGPROPERTY_RTTI;
+    }else if (typeid(*property) == typeid(StringVectorProperty)) {
         return STRINGVECTORPROPERTY_RTTI;
     }
     else if (typeid(*property) == typeid(ColorVectorProperty)) {
@@ -260,8 +269,8 @@ TulipPropertyType TulipQVariantBuilder::getPropertyType(ElementType elementType,
     }
     else if (typeid(*property) == typeid(CoordVectorProperty)) {
         return COORDVECTORPROPERTY_RTTI;
-    }else{
-        return STRINGPROPERTY_RTTI;
+    }else {
+        return INVALID_PROPERTY_RTTI;
     }
 }
 
@@ -351,15 +360,11 @@ bool TulipQVariantBuilder::setData(const QVariant& value, ElementType elementTyp
         break;
     }
 }
-Qt::ItemFlags TulipQVariantBuilder::flags(Qt::ItemFlags defaultFlags,ElementType elementType,unsigned int ,TulipPropertyType propertyType,PropertyInterface*)const{
+Qt::ItemFlags TulipQVariantBuilder::flags(Qt::ItemFlags defaultFlags,ElementType,unsigned int ,TulipPropertyType propertyType,PropertyInterface*)const{
     switch(propertyType){
         //If we try to display an edge extremity property for nodes desactivate the row.
-    case EDGEEXTREMITYGLYPHPROPERTY_RTTI:
-        if(elementType == NODE){
-            return Qt::NoItemFlags;
-        }else{
-            return defaultFlags | Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
-        }
+    case INVALID_PROPERTY_RTTI:
+        return Qt::NoItemFlags;
         break;
     default:
         return defaultFlags | Qt::ItemIsEditable | Qt::ItemIsDragEnabled;

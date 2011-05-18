@@ -54,6 +54,7 @@ QWidget* TulipItemDelegate::createEditor(QWidget* p, const QStyleOptionViewItem&
         if(data.userType() == qMetaTypeId< Color >()){
         ColorButton* button =  new ColorButton(p);
         button->setColor(colorToQColor(data.value<Color>()));
+        button->setFocusPolicy(Qt::StrongFocus);
         return button;
     }else
         if(data.userType() == qMetaTypeId< Coord >()){
@@ -61,6 +62,7 @@ QWidget* TulipItemDelegate::createEditor(QWidget* p, const QStyleOptionViewItem&
         editor->setCoord(data.value<Coord>());
         editor->setAutoFillBackground(true);
         editor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        editor->setFocusPolicy(Qt::StrongFocus);
         return editor;
     }else
         if(data.userType() == qMetaTypeId< Size >()){
@@ -68,11 +70,12 @@ QWidget* TulipItemDelegate::createEditor(QWidget* p, const QStyleOptionViewItem&
         editor->setSize(data.value<Size>());
         editor->setAutoFillBackground(true);
         editor->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        editor->setFocusPolicy(Qt::StrongFocus);
         return editor;
     }else
         if(data.userType() == qMetaTypeId< vector<bool > >()){        
         VectorEditionWidget *vectorWidget = new VectorEditionWidget(p);
-        vectorWidget->setInterface(BOOLEAN_PROPERTY_RTTI,new ListPropertyWidgetTypeManger<BooleanType>(data.value<vector<bool> >()));
+        vectorWidget->setInterface(BOOLEAN_PROPERTY_RTTI,new ListPropertyWidgetTypeManger<BooleanType>(data.value<vector<bool> >()));        
         return vectorWidget;
     }else
         if(data.userType() == qMetaTypeId< vector<Color > >()){

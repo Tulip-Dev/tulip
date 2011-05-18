@@ -27,14 +27,14 @@ using namespace std;
 
 namespace tlp {
 
-SpreadView::SpreadView() :
-        AbstractView(),ui(new Ui::SpreadViewWidget),_graph(NULL){
-}
-SpreadView::~SpreadView() {  
-    delete ui;
-}
+    SpreadView::SpreadView() :
+            AbstractView(),ui(new Ui::SpreadViewWidget),_graph(NULL){
+    }
+    SpreadView::~SpreadView() {
+        delete ui;
+    }
 
-QWidget *SpreadView::construct(QWidget *parent) {
+    QWidget *SpreadView::construct(QWidget *parent) {
 	QWidget *widget = AbstractView::construct(parent);	
         QWidget* mainWidget = new QWidget(widget);
         ui->setupUi(mainWidget);
@@ -42,42 +42,44 @@ QWidget *SpreadView::construct(QWidget *parent) {
         installEventFilter(mainWidget);
         installEventFilter(ui->nodesTableView);
 	return widget;
-}
+    }
 
-void SpreadView::setData(Graph *graph, DataSet) {
-    _graph = graph;
-    ui->nodesTableView->setGraph(graph,NODE);
-    ui->edgesTableView->setGraph(graph,EDGE);
-}
+    void SpreadView::setData(Graph *graph, DataSet) {
+        if(graph!= _graph){
+            _graph = graph;
+            ui->nodesTableView->setGraph(graph,NODE);
+            ui->edgesTableView->setGraph(graph,EDGE);
+        }
+    }
 
-void SpreadView::getData(Graph **graph, DataSet *) {
-    *graph = _graph;
-}
+    void SpreadView::getData(Graph **graph, DataSet *) {
+        *graph = _graph;
+    }
 
-Graph* SpreadView::getGraph() {	
-    return _graph;
-}
+    Graph* SpreadView::getGraph() {
+        return _graph;
+    }
 
-void SpreadView::setGraph(Graph *graph) {	
-    setData(graph,DataSet());
-}
+    void SpreadView::setGraph(Graph *graph) {
+        setData(graph,DataSet());
+    }
 
-void SpreadView::draw() {	
-}
+    void SpreadView::draw() {
+    }
 
-void SpreadView::refresh() {	
-}
+    void SpreadView::refresh() {
+    }
 
-void SpreadView::init() {
-}
+    void SpreadView::init() {
+    }
 
 
-QImage SpreadView::createPicture(int width, int height, bool , int  , int xOffset , int yOffset ){
-    return QPixmap::grabWidget(getCentralWidget(),xOffset,yOffset,width,height).toImage();
-}
+    QImage SpreadView::createPicture(int width, int height, bool , int  , int xOffset , int yOffset ){
+        return QPixmap::grabWidget(getCentralWidget(),xOffset,yOffset,width,height).toImage();
+    }
 
-VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "2.0")
+    VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "2.0")
 
-}
+        }
 
 

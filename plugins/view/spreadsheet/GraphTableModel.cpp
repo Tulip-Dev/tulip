@@ -9,6 +9,9 @@ using namespace tlp;
 using namespace std;
 
 
+/**
+  * @brief Sort elements in function of the given property values.
+  **/
 struct PropertyValueComparator {
 public:
     PropertyValueComparator(Qt::SortOrder sortOrder,ElementType type,PropertyInterface* property):_sortOrder(sortOrder),_type(type),_property(property){}
@@ -34,6 +37,9 @@ private:
     PropertyInterface* _property;
 };
 
+/**
+  * @brief Sort properties by name.
+  **/
 struct PropertyComparator {
 public:
     bool operator()(PropertyInterface* p1,PropertyInterface* p2){
@@ -47,7 +53,7 @@ GraphTableModelIndex::GraphTableModelIndex(unsigned int element,PropertyInterfac
 }
 
 GraphTableModel::GraphTableModel(Graph* graph,ElementType displayType,QObject* parent ):QAbstractTableModel(parent),_graph(NULL),_displayedType(displayType),_orientation(Qt::Vertical),_sortColum(-1),_order(Qt::AscendingOrder)
-{
+{    
     setGraph(graph);
 }
 
@@ -113,14 +119,27 @@ void GraphTableModel::updatePropertyTable(){
     if(_graph != NULL){
         PropertyInterface* property;
         forEach(property,_graph->getObjectProperties()){         
-            property->removePropertyObserver(this);            
-            property->removeObserver(this);
-            _propertiesTable.push_back(property);            
-            property->getGraph()->addGraphObserver(this);
-            property->addObserver(this);            
+            if(useProperty(property)){
+                property->removePropertyObserver(this);
+                property->removeObserver(this);
+                _propertiesTable.push_back(property);
+                property->addPropertyObserver(this);
+                property->addObserver(this);
+            }
         }
         PropertyComparator comparator;        
         std::stable_sort(_propertiesTable.begin(),_propertiesTable.end(),comparator);
+    }
+}
+
+bool GraphTableModel::useProperty(PropertyInterface* property) const{
+    TulipQVariantBuilder qvariantBuilder;
+    switch(qvariantBuilder.getPropertyType(_displayedType,property)){
+    case INVALID_PROPERTY_RTTI:
+        return false;
+        break;
+    default:
+        return true;
     }
 }
 
@@ -133,15 +152,6 @@ int GraphTableModel::rowCount(const QModelIndex& ) const{
 
 QVariant GraphTableModel::data(const QModelIndex& index, int role ) const{
     switch(role){
-    case DataTypeRole:
-        {
-            GraphTableModelIndex tableIndex = element(index);
-            if(tableIndex.isValid()){
-                TulipQVariantBuilder helper;
-                return QVariant(helper.getPropertyType(_displayedType,tableIndex.property()));
-            }
-        }
-        break;
     default:
         GraphTableModelIndex tableIndex = element(index);
         if(tableIndex.isValid()){
@@ -345,26 +355,29 @@ void GraphTableModel::delEdge(Graph *,const edge e){
         _idsToDelete.insert(e.id);
     }
 }
-void GraphTableModel::addLocalProperty(Graph* g, const string& propertyName){    
-    //    if(_propertiesTable.find(g->getProperty(propertyName)))
-    //If there is an existing inherited property with the same name hide the inherited property.
-    bool found = false;
-    for(unsigned int i = 0;i < _propertiesTable.size(); ++i){
-        //Find an existing property hide them
-        if(_propertiesTable[i]->getName().compare(propertyName)==0){
-            _propertiesTable[i]->removePropertyObserver(this);
-            _propertiesTable[i]->removeObserver(this);
-            _propertiesTable[i]=g->getProperty(propertyName);
-            _propertiesTable[i]->addPropertyObserver(this);
-            _propertiesTable[i]->addObserver(this);
-            found = true;
-            _propertiesUpdated.insert(_propertiesTable[i]);
-            break;
+void GraphTableModel::addLocalProperty(Graph* g, const string& propertyName){
+    PropertyInterface* property = g->getProperty(propertyName);
+    //Check if we need to add the property
+    if(useProperty(property)){
+        //If there is an existing inherited property with the same name hide the inherited property.
+        bool found = false;
+        for(unsigned int i = 0;i < _propertiesTable.size(); ++i){
+            //Find an existing property hide them
+            if(_propertiesTable[i]->getName().compare(propertyName)==0){
+                _propertiesTable[i]->removePropertyObserver(this);
+                _propertiesTable[i]->removeObserver(this);
+                _propertiesTable[i]=property;
+                _propertiesTable[i]->addPropertyObserver(this);
+                _propertiesTable[i]->addObserver(this);
+                found = true;
+                _propertiesUpdated.insert(property);
+                break;
+            }
         }
-    }
-    //If no existing properties add new one.
-    if(!found){
-        _propertiesToAdd.insert(g->getProperty(propertyName));
+        //If no existing properties add new one.
+        if(!found){
+            _propertiesToAdd.insert(property);
+        }
     }
 }
 
@@ -385,7 +398,7 @@ void GraphTableModel::delProperty(PropertyInterface* property){
     Graph *current = property->getGraph();
     Graph* parent = current->getSuperGraph();
     //If there is a super property replace the deleted one by the super
-    if(parent != current && parent->existProperty(property->getName())){
+    if(parent != current && parent->existProperty(property->getName()) && parent->getProperty(property->getName()) != property){
         for(unsigned int i = 0;i < _propertiesTable.size(); ++i){
             if(_propertiesTable[i] == property){
                 _propertiesTable[i]->removePropertyObserver(this);
@@ -427,12 +440,12 @@ void GraphTableModel::afterSetAllEdgeValue(PropertyInterface* property){
 
 
 
-void GraphTableModel::treatEvents(const  vector<Event> &){
-    if(!_idsToDelete.empty()){                
+void GraphTableModel::treatEvents(const  vector<Event> &){    
+    if(!_idsToDelete.empty()){
         removeFromVector<unsigned int>(_idsToDelete,_idTable,_orientation==Qt::Vertical);        
         _idsToDelete.clear();
     }
-    if(!_propertiesToDelete.empty()){        
+    if(!_propertiesToDelete.empty()){                        
         removeFromVector<PropertyInterface*>(_propertiesToDelete,_propertiesTable,_orientation==Qt::Horizontal);
         _propertiesToDelete.clear();
     }
@@ -446,9 +459,7 @@ void GraphTableModel::treatEvents(const  vector<Event> &){
         }
         _idsToAdd.clear();
     }    
-    if(!_propertiesToAdd.empty()){        
-        for(set<PropertyInterface*>::iterator it = _propertiesToAdd.begin();it!= _propertiesToAdd.end();++it){            
-        }
+    if(!_propertiesToAdd.empty()){
         PropertyComparator comparator;
         addToVector<PropertyInterface*,PropertyComparator>(_propertiesToAdd,_propertiesTable,_orientation==Qt::Horizontal,&comparator);
         _propertiesToAdd.clear();
