@@ -58,6 +58,13 @@ IF(WIN32)
 ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
+## build type detection
+IF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
+   SET(CMAKE_DEBUG_MODE TRUE)
+ELSE(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
+   SET(CMAKE_DEBUG_MODE FALSE)
+ENDIF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
+## -----------------------------------------------------------------------------------------------
 ## Tulip version numbers
 ## TulipVersion : Ma.Mi.Re
 ## TulipMMVersion : Ma.Mi
@@ -142,12 +149,15 @@ ENDIF(NOT LIBXML2_FOUND)
 
 FIND_PACKAGE(OpenMP QUIET)
 IF(OPENMP_FOUND)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+   SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${OpenMP_CXX_FLAGS}")
+   SET(OPENMP_CXX_FLAGS "${OpenMP_CXX_FLAGS}")
    IF(WIN32)
 	  IF(${MSVC})
-		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /openmp")
+		SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /openmp")
+		SET(OPENMP_CXX_FLAGS "/openmp")
 	  ELSE()
 		SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lgomp -lpthread")
+		SET(OPENMP_LIBRARIES "-lgomp -lpthread")
 	  ENDIF()
    ENDIF()
 ELSE(OPENMP_FOUND)
@@ -156,9 +166,13 @@ ELSE(OPENMP_FOUND)
    IF(OMP_CFLAGS)
       ## HACK: do not know why OpenMP_CXX_FLAGS
       ## is not set when running on window ?
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_C_FLAGS}")
+      SET(CMAKE_CXX_FLAGS_RELEASES "${CMAKE_CXX_FLAGS_RELEASE} ${OpenMP_C_FLAGS}")
+      SET(OPENMP_CXX_FLAGS "${OpenMP_C_FLAGS}")
       SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OpenMP_C_FLAGS}")
+      SET(OPENMP_LINKER_FLAGS "${OpenMP_C_FLAGS}")
       SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lgomp -lpthread")
+      SET(OPENMP_LIBRARIES "-lgomp -lpthread")
+      SET(OPENMP_FOUND TRUE)
    ELSE(OMP_CFLAGS)
       MESSAGE("OpenMP not found: multithreaded code will not be used")
    ENDIF(OMP_CFLAGS)
@@ -267,10 +281,24 @@ SET(TULIP_SERVER_GENERATION OFF CACHE BOOL "Enable process to make generation of
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DNDEBUG")
 
 ## -----------------------------------------------------------------------------------------------
-## Enable output of rendering time
-## Warning : You must have OpenMP
+## Enable debugging of OpenMP
 ## -----------------------------------------------------------------------------------------------
-SET(ENABLE_RENDERING_TIME_DISPLAY OFF CACHE BOOL "Do you want to disable the rendering time display ? (Warning : You must have OpenMP) [OFF|ON]")
+IF(OPENMP_FOUND AND CMAKE_DEBUG_MODE)
+  SET(DEBUG_OPENMP OFF CACHE BOOL "Do you want to enable OpenMP in Debug mode ? [OFF|ON]")
+  IF(DEBUG_OPENMP)
+    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${OPENMP_CXX_FLAGS}")
+    SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${OPENMP_LINKER_FLAGS}")
+    SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} ${OPENMP_LIBRARIES}")
+  ENDIF(DEBUG_OPENMP)
+ENDIF(OPENMP_FOUND AND CMAKE_DEBUG_MODE)
+
+## -----------------------------------------------------------------------------------------------
+## Enable output of rendering time
+## only if OpenMP is enabled
+## -----------------------------------------------------------------------------------------------
+IF(OPENMP_FOUND AND ((NOT CMAKE_DEBUG_MODE) OR DEBUG_OPENMP))
+  SET(ENABLE_RENDERING_TIME_DISPLAY OFF CACHE BOOL "Do you want to enable the rendering time display ? [OFF|ON]")
+ENDIF(OPENMP_FOUND AND ((NOT CMAKE_DEBUG_MODE) OR DEBUG_OPENMP))
 
 ## -----------------------------------------------------------------------------------------------
 ## Builds the unit tests
