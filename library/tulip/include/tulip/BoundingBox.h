@@ -84,16 +84,47 @@ namespace tlp {
         assert(isValid());
     }
       
-      /**
-       * @brief gets the geometrical center of the bounding box.
-       * An assertion is raised in debug mode if the BoundingBox is not valid.
-       *
-       * @return The center of the bounding box :Vec3f
-       **/
-      Vec3f center() const {
-          assert(isValid());
-          return ((*this)[0] + (*this)[1]) / 2.f;
+    /**
+     * @brief gets the geometrical center of the bounding box.
+     * An assertion is raised in debug mode if the BoundingBox is not valid.
+     *
+     * @return The center of the bounding box :Vec3f
+     **/
+    Vec3f center() const {
+        assert(isValid());
+        return ((*this)[0] + (*this)[1]) / 2.f;
     }
+      
+    /**
+     * @brief Returns the width of the bounding box
+     * An assertion is raised in debug mode if the BoundingBox is not valid.
+     *
+     **/
+    float width() const {
+      assert(isValid());
+      return ((*this)[1][0] - (*this)[0][0]);
+    }
+
+    /**
+     * @brief Returns the height of the bounding box
+     * An assertion is raised in debug mode if the BoundingBox is not valid.
+     *
+     **/
+    float height() const {
+      assert(isValid());
+      return ((*this)[1][1] - (*this)[0][1]);
+    }
+
+    /**
+     * @brief Returns the depth of the bounding box
+     * An assertion is raised in debug mode if the BoundingBox is not valid.
+     *
+     **/
+    float depth() const {
+      assert(isValid());
+      return ((*this)[1][2] - (*this)[0][2]);
+    }
+      
 
     /**
      * @brief Expands the bounding box to one containing the vector passed as param.
