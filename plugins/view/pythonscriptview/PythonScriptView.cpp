@@ -74,7 +74,7 @@ const std::string getDefaultScriptCode(const string &pythonVersion, Graph *graph
 	oss << "# To cancel the modifications performed by the script" << endl;
 	oss << "# on the current graph, click on the undo button." << endl << endl;
 
-	oss << "# Some usefull keyboards shortcuts : " << endl;
+	oss << "# Some useful keyboards shortcuts : " << endl;
 	oss << "#   * Ctrl + D : comment selected lines." << endl;
 	oss << "#   * Ctrl + Shift + D  : uncomment selected lines." << endl;
 	oss << "#   * Ctrl + Space  : run script." << endl << endl;

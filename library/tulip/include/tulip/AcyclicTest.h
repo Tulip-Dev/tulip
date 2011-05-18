@@ -58,7 +58,7 @@ public:
 
   /**
     * Makes the graph acyclic, by reversing edge direction (feedback arc set problem).
-    * If there is self loops, a new node is added with two edges that points to it.
+    * If there are self loops, a new node is added with two edges that points to it.
     *
     */
   static void makeAcyclic(Graph* graph, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);

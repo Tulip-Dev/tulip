@@ -1,6 +1,6 @@
 Tulip Readme file.
 
-This software is under LGPL licence,(see COPYING.LESSER file).
+This software is under LGPL licence, (see COPYING.LESSER file).
 It has been designed and implemented by David Auber.
 
 Requirements :
@@ -13,12 +13,12 @@ Requirements :
 - glew 1.4 or higher
 - gcc, g++ >= 3.4.2
 
-Complete list of dependencies for Ubuntu >= 8.04
-libqt4-dev libfreetype6-dev zlib1g-dev libglew-dev libjpeg-dev libpng12-dev build-essential cmake doxygen libxml2-dev 
+Complete list of dependencies for Ubuntu >= 8.04:
+libqt4-dev libfreetype6-dev zlib1g-dev libglew-dev libjpeg-dev libpng12-dev build-essential cmake doxygen libxml2-dev
 
 The optional Python plug-in requires python >= 2.5 (package: python2.5-dev)
 
-The installation procedure is described in the files :
+The installation procedure is described in the files
 INSTALL, INSTALL.mac, INSTALL.win
 
 tar jxvf tulip-*.tar.bz2
@@ -34,9 +34,9 @@ Join the Tulip Team:
 If you want to support our project, all new plug-ins and bug fixes are
 welcome.
 
-for bug reports use www.tulip-software.org (Software => Bug Report)
+For bug reports, use www.tulip-software.org (Software => Bug Report)
 
 Auber David
-LaBRI , Université Bordeaux I, 
-E-mail : auber@tulip-software.org 
+LaBRI , Université Bordeaux I,
+E-mail : auber@tulip-software.org
 
