@@ -360,24 +360,25 @@ void GraphTableModel::addLocalProperty(Graph* g, const string& propertyName){
     //Check if we need to add the property
     if(useProperty(property)){
         //If there is an existing inherited property with the same name hide the inherited property.
-        bool found = false;
+//        bool found = false;
         for(unsigned int i = 0;i < _propertiesTable.size(); ++i){
             //Find an existing property hide them
             if(_propertiesTable[i]->getName().compare(propertyName)==0){
-                _propertiesTable[i]->removePropertyObserver(this);
-                _propertiesTable[i]->removeObserver(this);
-                _propertiesTable[i]=property;
-                _propertiesTable[i]->addPropertyObserver(this);
-                _propertiesTable[i]->addObserver(this);
-                found = true;
-                _propertiesUpdated.insert(property);
+//                _propertiesTable[i]->removePropertyObserver(this);
+//                _propertiesTable[i]->removeObserver(this);
+//                _propertiesTable[i]=property;
+//                _propertiesTable[i]->addPropertyObserver(this);
+//                _propertiesTable[i]->addObserver(this);
+//                found = true;
+//                _propertiesUpdated.insert(property);
+                _propertiesToDelete.insert(_propertiesTable[i]);
                 break;
             }
         }
         //If no existing properties add new one.
-        if(!found){
+//        if(!found){
             _propertiesToAdd.insert(property);
-        }
+//        }
     }
 }
 
@@ -394,24 +395,24 @@ void GraphTableModel::delInheritedProperty(Graph *graph, const std::string &name
 }
 
 void GraphTableModel::delProperty(PropertyInterface* property){    
-    //Need to check if there is a property with the same name in the upper hierachy
-    Graph *current = property->getGraph();
-    Graph* parent = current->getSuperGraph();
-    //If there is a super property replace the deleted one by the super
-    if(parent != current && parent->existProperty(property->getName()) && parent->getProperty(property->getName()) != property){
-        for(unsigned int i = 0;i < _propertiesTable.size(); ++i){
-            if(_propertiesTable[i] == property){
-                _propertiesTable[i]->removePropertyObserver(this);
-                _propertiesTable[i]->removeObserver(this);
-                _propertiesTable[i] = parent->getProperty(property->getName());
-                _propertiesTable[i]->addPropertyObserver(this);
-                _propertiesTable[i]->addObserver(this);
-                _propertiesUpdated.insert(_propertiesTable[i]);
-            }
-        }
-    }else{
+//    //Need to check if there is a property with the same name in the upper hierachy
+//    Graph *current = property->getGraph();
+//    Graph* parent = current->getSuperGraph();
+//    //If there is a super property replace the deleted one by the super
+//    if(parent != current && parent->existProperty(property->getName()) && parent->getProperty(property->getName()) != property){
+//        for(unsigned int i = 0;i < _propertiesTable.size(); ++i){
+//            if(_propertiesTable[i] == property){
+//                _propertiesTable[i]->removePropertyObserver(this);
+//                _propertiesTable[i]->removeObserver(this);
+//                _propertiesTable[i] = parent->getProperty(property->getName());
+//                _propertiesTable[i]->addPropertyObserver(this);
+//                _propertiesTable[i]->addObserver(this);
+//                _propertiesUpdated.insert(_propertiesTable[i]);
+//            }
+//        }
+//    }else{
         _propertiesToDelete.insert(property);
-    }
+//    }
 }
 
 void GraphTableModel::afterSetNodeValue(PropertyInterface* property, const node n){
@@ -445,7 +446,11 @@ void GraphTableModel::treatEvents(const  vector<Event> &){
         removeFromVector<unsigned int>(_idsToDelete,_idTable,_orientation==Qt::Vertical);        
         _idsToDelete.clear();
     }
-    if(!_propertiesToDelete.empty()){                        
+    if(!_propertiesToDelete.empty()){
+        for(set<PropertyInterface*>::iterator it = _propertiesToDelete.begin() ; it != _propertiesToDelete.end();++it){
+            (*it)->removePropertyObserver(this);
+            (*it)->removeObserver(this);
+        }
         removeFromVector<PropertyInterface*>(_propertiesToDelete,_propertiesTable,_orientation==Qt::Horizontal);
         _propertiesToDelete.clear();
     }
@@ -462,6 +467,10 @@ void GraphTableModel::treatEvents(const  vector<Event> &){
     if(!_propertiesToAdd.empty()){
         PropertyComparator comparator;
         addToVector<PropertyInterface*,PropertyComparator>(_propertiesToAdd,_propertiesTable,_orientation==Qt::Horizontal,&comparator);
+        for(set<PropertyInterface*>::iterator it = _propertiesToAdd.begin() ; it != _propertiesToAdd.end();++it){
+            (*it)->addPropertyObserver(this);
+            (*it)->addObserver(this);
+        }
         _propertiesToAdd.clear();
     }
     if(!_propertiesUpdated.empty() || !_dataUpdated.empty()){
