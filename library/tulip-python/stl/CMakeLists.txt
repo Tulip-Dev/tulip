@@ -7,7 +7,6 @@ SET(STL_SIP_FILES
     Module.sip
     pair.sip
     set.sip
-    stl.sip
     string.sip
     vector.sip
 )
