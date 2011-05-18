@@ -180,7 +180,7 @@ ENDIF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 ## Include file paths
 ## -----------------------------------------------------------------------------------------------
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
-SET(QuazipInclude ${PROJECT_SOURCE_DIR}/quazip)
+SET(QuazipInclude ${PROJECT_SOURCE_DIR}/thirdparty/quazip)
 SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
 SET(qscintilla2Include ${PROJECT_SOURCE_DIR}/thirdparty/QScintilla-gpl-2.5.1/Qt4/)
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF)
