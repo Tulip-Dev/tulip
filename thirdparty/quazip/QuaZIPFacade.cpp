@@ -88,8 +88,7 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath) {
     inFile.getFileInfo(&inInfo);
 
     QFileInfo outInfo(rootDir.absoluteFilePath(inInfo.name));
-    if (!rootDir.mkpath(outInfo.absolutePath()))
-      return false;
+    rootDir.mkpath(outInfo.absolutePath());
 
     QFile outFile(outInfo.absoluteFilePath());
     if (!outFile.open(QIODevice::WriteOnly) || !inFile.open(QIODevice::ReadOnly))

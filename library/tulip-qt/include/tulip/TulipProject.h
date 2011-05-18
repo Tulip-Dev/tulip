@@ -3,6 +3,7 @@
 
 #include <fstream>
 
+#include <QtCore/QDir>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QDate>
@@ -12,8 +13,9 @@
 #include <tulip/tulipconf.h>
 #include <tulip/PluginProgress.h>
 
-#define PROJECT_OK 0
-#define CREATE_FILE_FAIL 1
+#define TLP_PROJECT_OK 0
+#define TLP_FS_ERROR 1
+#define TLP_ARCHIVE_ERROR 2
 
 namespace tlp {
 
@@ -47,6 +49,8 @@ namespace tlp {
   Files in a tulip project are identified by their path. Those path ar similar to the path of a standard file system and use the "/" character as a separator.
   The root directory is identified by "/".
 
+  @warning TulipProject paths ALWAYS use the "/" character as a directory separator. This is OS-independant.
+
   @example A file called graph.tlp located at the top-level directory will be identified by the "/graph.tlp" path while the file "graph.tlp" located in the "data" directory will be identified by "/data/graph.tlp".
   */
 class TLP_QT_SCOPE TulipProject: public QObject {
@@ -73,7 +77,7 @@ public:
     @arg progress A progress handler.
     @return a pointer to a TulipProject object.
     */
-  static TulipProject *openProject(const QString &file,int *errorCode=NULL, tlp::PluginProgress *progress=NULL);
+  static TulipProject *openProject(const QString &file,int *errorCode=NULL);
 
   /**
     @brief Writes files in the TulipProject into a packed archive.
@@ -83,7 +87,7 @@ public:
     @param progress A progress handler
     @return Some error code or PROJECT_OK if method returned sucessfully.
     */
-  int write(const QString &file, tlp::PluginProgress *progress=NULL);
+  int write(const QString &file);
 
   /**
     @brief Lists entries in a directory
@@ -108,10 +112,19 @@ public:
 
   /**
     @brief Removes a directory from the project.
-    If the given file points to a file, or if the directory does not exist, this method will fail and return false.
+    If the given file points to a file, or if the directory does not exist, or if the directory is not empty, this method will fail and return false.
+    @see removeAllDir to remove a non-empty directory.
     @param path The path to delete. @see TulipProject
     */
   bool removeDir(const QString &path);
+
+  /**
+    @brief Removes a directory and all its content from the project.
+    If the given file points to a file, or if the directory does not exist, this method will fail and return false.
+    @warning This will remove every file stored in the specified directory.
+    @param path The path to delete. @see TulipProject
+    */
+  bool removeAllDir(const QString &path);
 
   /**
     @brief Gets a STL file stream (R/W access mode) to the given path.
@@ -130,6 +143,7 @@ public:
     */
   QIODevice *fileStream(const QString &path);
 
+  // Developer note: Every field in the TulipProject tagged as a Q_PROPERTY will automaticaly be serialized in the project.xml file
   /**
     @brief the name of the project
     */
@@ -159,17 +173,9 @@ Q_PROPERTY(QString perspective READ perspective WRITE setPerspective)
   QString perspective() const;
 
   /**
-    @brief Date of last modification of the project.
-    This is basically the date of last modification indicated by the file system.
-    */
-Q_PROPERTY(QDate date READ date)
-  QDate date() const;
-
-  /**
     @brief The version of the Tulip project format with which the file was created.
     Project from older format versions will always by saved into the newest version available.
     */
-Q_PROPERTY(QString version READ version)
   QString version() const;
 
 public slots:
@@ -181,10 +187,14 @@ public slots:
 private:
   static QString temporaryPath();
 
+  bool writeMetaInfos();
+  void readMetaInfos();
+
+  QString toAbsolutePath(const QString &relativePath);
+
   // Core fileset
-  QString _rootPath;
-  QString _dataPath;
-  QString _metaInfosFile;
+  QDir _rootDir;
+  QDir _dataDir;
 
   // Meta informations
   QString _author;
