@@ -70,7 +70,7 @@ class PropertyInterface;
 class TLP_SCOPE GraphObserver {
   friend class Graph;
 private:
-  class RealGraphObserver :public Observable {
+  class TLP_SCOPE RealGraphObserver :public Observable {
     GraphObserver* visibleObserver;
   public:
     RealGraphObserver(GraphObserver *observer) :visibleObserver(observer) {}

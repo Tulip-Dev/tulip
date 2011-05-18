@@ -45,7 +45,7 @@ class  TLP_SCOPE PropertyObserver {
   friend class PropertyInterface;
 
 private:
-  class RealPropertyObserver :public Observable {
+  class TLP_SCOPE RealPropertyObserver :public Observable {
     PropertyObserver* visibleObserver;
   public:
     RealPropertyObserver(PropertyObserver *observer)
