@@ -58,7 +58,9 @@ class TLP_QT_SCOPE TulipProject: public QObject {
 
   TulipProject();
   TulipProject(const QString &);
+
 public:
+  virtual ~TulipProject();
 
   /**
     @brief Starts a new TulipProject from scratch
@@ -191,6 +193,7 @@ private:
   void readMetaInfos();
 
   QString toAbsolutePath(const QString &relativePath);
+  bool removeAllDirPrivate(const QString &path);
 
   // Core fileset
   QDir _rootDir;

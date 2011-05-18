@@ -25,16 +25,14 @@ bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath
   QDir parentDir(currentDir);
   parentDir.cdUp();
 
-  QFileInfoList entries = currentDir.entryInfoList();
+  QFileInfoList entries = currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst);
   for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
     QFileInfo info(*it);
 
     if (info.isDir()) { // Recurse in directories if they are different from . and ..
       QDir childDir(info.absoluteFilePath());
-      if (childDir.absolutePath() != currentDir.absolutePath() && childDir.absolutePath() != parentDir.absolutePath()) {
-        QFileInfo childInfo(childDir.absolutePath());
-        zipDirContent(childDir,archive,archivePath + childInfo.fileName() + QDir::separator());
-      }
+      QFileInfo childInfo(childDir.absolutePath());
+      zipDirContent(childDir,archive,archivePath + childInfo.fileName() + QDir::separator());
     }
 
     else {
