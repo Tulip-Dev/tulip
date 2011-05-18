@@ -13,11 +13,12 @@
 #include <tulip/PluginProgress.h>
 
 #define PROJECT_OK 0
+#define CREATE_FILE_FAIL 1
 
 namespace tlp {
 
 /**
-  @brief The TulipProject object handles the content of a Tulip project archive.
+  @brief The TulipProject object handles the content of a Tulip project.
 
   All tulip projects contain a set of defined static meta-informations:
   @list
@@ -32,16 +33,16 @@ namespace tlp {
   Alongside those informations, one can store any kind of file into a Tulip project. Since a project is meant to be associated to a specific perspective, the responisbility of those file
   is left to the perspective.
 
-  A TulipProject DOES NOT automatically save to disk. One will have to call the save() method to serialize data.
-  Precise implementation or actual location of uncompressed the files when a TulipProject is opened should not be known or taken into account by the user.
+  A TulipProject DOES NOT automatically save to disk. One will have to call the write() method to serialize data.
+  @warning Precise implementation of the TulipProject object should NOT be known or used by the user since it could be subject to changes.
 
-  When opening/saving a TulipProject, errors might be raised due to invalid filesystem operations. Error codes are integer values defined in constants:
+  When operating on a TulipProject, errors might be raised due to invalid filesystem operations. Error codes are integer values defined in constants:
   @list
   @li PROJECT_OK (0): no error
   @endlist
 
   After opening and before saving a project, user will be able to list/delete files and directories available in the project and open them using std filestreams or Qt's QIODevice.
-  Files can be opened using the stdFileStram and fileStram methods. They will always be opened in Read/Write mode.
+  Files can be opened using the stdFileStram and fileStream methods. They will always be opened in Read/Write mode.
 
   Files in a tulip project are identified by their path. Those path ar similar to the path of a standard file system and use the "/" character as a separator.
   The root directory is identified by "/".
@@ -52,10 +53,18 @@ class TLP_QT_SCOPE TulipProject: public QObject {
   Q_OBJECT
 
   TulipProject();
+  TulipProject(const QString &);
 public:
 
   /**
-    @brief Opens a compressed tulip project file
+    @brief Starts a new TulipProject from scratch
+    This method builds up a new TulipProject file without taking any input.
+    @see openProject()
+    */
+  static TulipProject *newProject(int *errorCode=NULL);
+
+  /**
+    @brief Opens a previously saved tulip project file
     This method will unpack a tulip project file into some directory and allow the user to manipulate the files.
     @see TulipProject::save()
     @arg file The file to open.
@@ -64,17 +73,17 @@ public:
     @arg progress A progress handler.
     @return a pointer to a TulipProject object.
     */
-  static TulipProject *open(const QString &file,int *errorCode, tlp::PluginProgress *progress=0);
+  static TulipProject *openProject(const QString &file,int *errorCode=NULL, tlp::PluginProgress *progress=NULL);
 
   /**
-    @brief Saves files in the TulipProject into a packed archive.
+    @brief Writes files in the TulipProject into a packed archive.
     This method packs every file in the project into a single archive.
     @note This method DOES NOT close the project. It only  commits changes to the specified file. A TulipProject is only closed when destroyed.
     @param file Absolute path where files should be packed.
     @param progress A progress handler
     @return Some error code or PROJECT_OK if method returned sucessfully.
     */
-  int save(const QString &file, tlp::PluginProgress *progress=0);
+  int write(const QString &file, tlp::PluginProgress *progress=NULL);
 
   /**
     @brief Lists entries in a directory
@@ -168,6 +177,20 @@ public slots:
   void setDescription(const QString &);
   void setAuthor(const QString &);
   void setPerspective(const QString &);
+
+private:
+  static QString temporaryPath();
+
+  // Core fileset
+  QString _rootPath;
+  QString _dataPath;
+  QString _metaInfosFile;
+
+  // Meta informations
+  QString _author;
+  QString _name;
+  QString _description;
+  QString _perspective;
 };
 
 }
