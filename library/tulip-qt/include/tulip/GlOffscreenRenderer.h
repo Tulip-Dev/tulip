@@ -38,7 +38,8 @@ namespace tlp {
  * glOffscreenRenderer->clearScene();
  * //Change the background color of the scene to white
  * glOffscreenRenderer->setSceneBackgroundColor(Color(255,255,255,255));
- * //Add
+ * //Add the graph to render.
+ * glOffscreenRenderer->addGraphToScene(graph);
  * //Center and render the scene.
  * glOffscreenRenderer->renderScene(true);
  * //Get the result
