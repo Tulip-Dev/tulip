@@ -39,7 +39,6 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/PlanarityTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PluginContext.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PluginLoader.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/PluginLibraryLoader.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PluginProgress.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Plugin.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertyAlgorithm.sip
