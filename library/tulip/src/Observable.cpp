@@ -84,14 +84,22 @@ namespace tlp {
     bool                      OLOObject::_initialized = OLOObject::init();
     bool                      Observable::eventQueued = false;
     //----------------------------------
-    OLOObject::OLOObject():n(oGraph.addNode()) {
-        oPointer[n] = this;
+    OLOObject::OLOObject() {
+#ifdef _OPENMP
+        if (omp_get_thread_num() != 0)
+	  throw OLOException("OLO object creation is only allowed in the main thread");
+#endif
+        oPointer[n = oGraph.addNode()] = this;
         oAlive[n]   = true;
         //cout << "[OLO node] created:" << n.id << "::" << this << endl;
     }
     //----------------------------------
-    OLOObject::OLOObject(const OLOObject &):n(oGraph.addNode()) {
-        oPointer[n] = this;
+    OLOObject::OLOObject(const OLOObject &) {
+#ifdef _OPENMP
+        if (omp_get_thread_num() != 0)
+	  throw OLOException("OLO object creation is only allowed in the main thread");
+#endif
+        oPointer[n = oGraph.addNode()] = this;
         oAlive[n]   = true;
         //cout << "[OLO node] created (copy constructor):" << n.id << "::" << this << endl;
     }
