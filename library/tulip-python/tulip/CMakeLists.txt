@@ -2,61 +2,61 @@ IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
 SET(TULIP_SIP_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/AcyclicTest.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/AbstractProperty.sip.in
-    ${CMAKE_CURRENT_SOURCE_DIR}/Algorithm.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Array.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/BiconnectedTest.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/BooleanAlgorithm.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/BooleanPropertySpecific.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/BoundingBox.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/ColorAlgorithm.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/ColorScale.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Color.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/ConnectedTest.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Coord.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/DoubleAlgorithm.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/DoublePropertySpecific.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/DrawingTools.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Edge.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/ExportModule.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Graph.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/GraphEvent.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/GraphProperty.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/GraphMeasure.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/ImportModule.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/IntegerAlgorithm.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/IntegerPropertySpecific.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Iterator.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/LayoutAlgorithm.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/LayoutPropertySpecific.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/MapIterator.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Matrix.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Node.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Observable.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/OuterPlanarTest.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/PlanarityTest.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/PluginContext.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/PluginLoader.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/PluginLibraryLoader.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/PluginProgress.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Plugin.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/PropertyAlgorithm.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/PropertyInterface.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Reflect.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/SimpleTest.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/SizeAlgorithm.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/SizePropertySpecific.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Size.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/StringCollection.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/TlpTools.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/TreeTest.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/TriconnectedTest.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Vector.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/WithDependency.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/WithParameter.sip
-    CACHE INTERNAL ""
+  ${CMAKE_CURRENT_SOURCE_DIR}/AcyclicTest.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/AbstractProperty.sip.in
+  ${CMAKE_CURRENT_SOURCE_DIR}/Algorithm.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Array.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/BiconnectedTest.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/BooleanAlgorithm.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/BooleanPropertySpecific.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/BoundingBox.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/ColorAlgorithm.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/ColorScale.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Color.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/ConnectedTest.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Coord.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/DoubleAlgorithm.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/DoublePropertySpecific.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/DrawingTools.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Edge.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/ExportModule.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Graph.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/GraphEvent.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/GraphProperty.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/GraphMeasure.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/ImportModule.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/IntegerAlgorithm.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/IntegerPropertySpecific.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Iterator.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/LayoutAlgorithm.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/LayoutPropertySpecific.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/MapIterator.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Matrix.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Node.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Observable.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/OuterPlanarTest.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/PlanarityTest.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/PluginContext.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/PluginLoader.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/PluginLibraryLoader.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/PluginProgress.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Plugin.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/PropertyAlgorithm.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/PropertyInterface.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Reflect.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/SimpleTest.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/SizeAlgorithm.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/SizePropertySpecific.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Size.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/StringCollection.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/TlpTools.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/TreeTest.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/TriconnectedTest.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/Vector.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/WithDependency.sip
+  ${CMAKE_CURRENT_SOURCE_DIR}/WithParameter.sip
+  CACHE INTERNAL ""
 )
 
 # First, generate tulip properties bindings based on template SIP files
@@ -78,34 +78,30 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w")
 # instead of those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${TulipInclude} ${TulipBuildInclude})
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${TulipCoreInclude} ${TulipCoreBuildInclude})
 
 SET_SOURCE_FILES_PROPERTIES(siptuliptlpIteratorGraph.cpp
                             PROPERTIES COMPILE_DEFINITIONS ITERATOR_NO_COPY)
                             
 SET_SOURCE_FILES_PROPERTIES(siptuliptlpBooleanProperty.cpp 
-							siptuliptlpBooleanVectorProperty.cpp
-							siptuliptlpDoubleProperty.cpp
-							siptuliptlpDoubleVectorProperty.cpp
-							siptuliptlpIntegerProperty.cpp
-							siptuliptlpIntegerVectorProperty.cpp	
-                            PROPERTIES COMPILE_DEFINITIONS PROPERTY_BASE_TYPE)                            
- 
+  siptuliptlpBooleanVectorProperty.cpp
+  siptuliptlpDoubleProperty.cpp
+  siptuliptlpDoubleVectorProperty.cpp
+  siptuliptlpIntegerProperty.cpp
+  siptuliptlpIntegerVectorProperty.cpp
+  PROPERTIES COMPILE_DEFINITIONS PROPERTY_BASE_TYPE)
+
 ADD_LIBRARY(${LibTulipPythonName} SHARED ${TULIP_PYTHON_BINDINGS_SRC})
 
-SET_TARGET_PROPERTIES(${LibTulipPythonName} 
-		      PROPERTIES OUTPUT_NAME tulip PREFIX "")
+SET_TARGET_PROPERTIES(${LibTulipPythonName} PROPERTIES OUTPUT_NAME tulip PREFIX "")
 
 IF(WIN32)
-SET_TARGET_PROPERTIES(${LibTulipPythonName} 
-		      PROPERTIES SUFFIX ".pyd")
+  SET_TARGET_PROPERTIES(${LibTulipPythonName} PROPERTIES SUFFIX ".pyd")
 ELSE(WIN32)
-SET_TARGET_PROPERTIES(${LibTulipPythonName} 
-		      PROPERTIES SUFFIX ".so")		      
+  SET_TARGET_PROPERTIES(${LibTulipPythonName} PROPERTIES SUFFIX ".so")
 ENDIF(WIN32)
 
-TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipName})
-TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${PYTHON_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipCoreName} ${PYTHON_LIBRARY})
 
 ADD_CUSTOM_TARGET(touchTulipPythonCMakeLists ALL
                   COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_LIST_FILE}
@@ -113,19 +109,18 @@ ADD_CUSTOM_TARGET(touchTulipPythonCMakeLists ALL
                   DEPENDS ${LibTulipPythonName})
 
 INSTALL(TARGETS ${LibTulipPythonName}
-        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_python)
+        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_python)
 
 ADD_CUSTOM_COMMAND(
-				   TARGET ${LibTulipPythonName}
-				   POST_BUILD
-                   COMMAND ${SIP_EXE} -a ${CMAKE_CURRENT_BINARY_DIR}/tulip.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
-                   COMMENT "Generating QScintilla API file for Tulip Python bindings"
-				   VERBATIM)
-				   
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT libtulip_python)
+  TARGET ${LibTulipPythonName}
+  POST_BUILD
+  COMMAND ${SIP_EXE} -a ${CMAKE_CURRENT_BINARY_DIR}/tulip.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+  COMMENT "Generating QScintilla API file for Tulip Python bindings"
+  VERBATIM)
 
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)

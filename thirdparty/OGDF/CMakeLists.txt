@@ -14,6 +14,6 @@ IF(WIN32)
 ENDIF(WIN32)
 
 INSTALL(TARGETS ${OGDFLibrary}
-       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_ogdf
-       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_ogdf
-       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT libtulip_ogdf)
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT ogdf
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT ogdf
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT ogdf)

@@ -23,7 +23,7 @@ LINUX=$(sh -c 'uname -s | grep -q Linux; echo $?')
 if [ $MACOSX -eq 0 ] ; then
   libextension=dylib
   pluginldflags="-bundle -Wl,-bind_at_load -flat_namespace"
-  if [ -e $(dirname $thisdir)/lib/libtulip.dylib ] ; then
+  if [ -e $(dirname $thisdir)/lib/libtulip-core.dylib ] ; then
 # MacOS bundle
     includedir=$(dirname $thisdir)/include
     libdir=$(dirname $thisdir)/lib
@@ -99,10 +99,10 @@ while test $# -gt 0; do
       OUTPUT=`echo ${OUTPUT} @GL_LDFLAGS@ @LIB_GL@`
       ;;
     --libs)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-${libversion}.${libextension} ${libdir}/libgzstream.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/libftgl.${libextension} ${libdir}/libtulip-qt4-${libversion}.${libextension} @OPENMP_CXXFLAGS@`
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/libgzstream.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/libftgl.${libextension} ${libdir}/libtulip-gui-${libversion}.${libextension} @OPENMP_CXXFLAGS@`
       ;;
     --lib_tulip)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-${libversion}.${libextension} ${libdir}/libgzstream.${libextension} @OPENMP_CXXFLAGS@`
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/libgzstream.${libextension} @OPENMP_CXXFLAGS@`
       ;;
     --lib_ogl)
       OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-ogl-${libversion}.${libextension}  ${libdir}/libftgl.${libextension}`

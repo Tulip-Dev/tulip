@@ -9,15 +9,14 @@
 ## -----------------------------------------------------------------------------------------------
 ## ***********************************************************************************************
 ## -----------------------------------------------------------------------------------------------
-
 PROJECT(tulip)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles JOM" )
-	SET(MSVC 1)
+  SET(MSVC 1)
 ELSE()
-	SET(MSVC 0)
+  SET(MSVC 0)
 endif()
 
 IF(NOT ${MSVC}) #visual studio does not recognize these options
@@ -25,36 +24,33 @@ IF(NOT ${MSVC}) #visual studio does not recognize these options
 ENDIF()
 
 IF(WIN32)
-	IF(NOT ${MSVC}) #visual studio does not recognize these options 
-		
-		# Dynamic ling against libstdc++ on win32/MinGW 
-		# The second test is for the case where ccache is used (CMAKE_CXX_COMPILER_ARG1 contains the path to the g++ compiler)
-		IF (CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ARG1}" MATCHES ".*[g][+][+].*")
-			EXECUTE_PROCESS(COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -dumpversion
-							OUTPUT_VARIABLE GCXX_VERSION)
-							
-			IF(GCXX_VERSION VERSION_GREATER 4.0)
-		
-				#SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
-				#SET(CMAKE_MODULE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
-				#SET(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
+  IF(NOT ${MSVC}) #visual studio does not recognize these options
 
-				SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_DLL")
-				SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shared-libgcc -Wl,--allow-multiple-definition")
-				SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} --shared-libgcc  -Wl,--allow-multiple-definition")
-				SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} --shared-libgcc  -Wl,--allow-multiple-definition")
-	  
-			ENDIF()
-			IF(GCXX_VERSION VERSION_GREATER 4.4 OR GCXX_VERSION VERSION_EQUAL 4.4)
-				IF(GCXX_VERSION VERSION_LESS 4.5)
-					SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++_s")
-				ENDIF()
-			ENDIF()	
-			IF(GCXX_VERSION VERSION_GREATER 4.5 OR GCXX_VERSION VERSION_EQUAL 4.5)
-				SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++")
-			ENDIF()
-	ENDIF()
- ENDIF()
+    # Dynamic ling against libstdc++ on win32/MinGW
+    # The second test is for the case where ccache is used (CMAKE_CXX_COMPILER_ARG1 contains the path to the g++ compiler)
+    IF(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ARG1}" MATCHES ".*[g][+][+].*")
+      EXECUTE_PROCESS(COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -dumpversion OUTPUT_VARIABLE GCXX_VERSION)
+
+      IF(GCXX_VERSION VERSION_GREATER 4.0)
+        #SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
+        #SET(CMAKE_MODULE_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
+        #SET(CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -Wl,-subsystem,console")
+
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_DLL")
+        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shared-libgcc -Wl,--allow-multiple-definition")
+        SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} --shared-libgcc  -Wl,--allow-multiple-definition")
+        SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} --shared-libgcc  -Wl,--allow-multiple-definition")
+      ENDIF()
+      IF(GCXX_VERSION VERSION_GREATER 4.4 OR GCXX_VERSION VERSION_EQUAL 4.4)
+        IF(GCXX_VERSION VERSION_LESS 4.5)
+          SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++_s")
+        ENDIF()
+      ENDIF()
+      IF(GCXX_VERSION VERSION_GREATER 4.5 OR GCXX_VERSION VERSION_EQUAL 4.5)
+        SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++")
+      ENDIF()
+    ENDIF()
+  ENDIF()
 ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
@@ -74,12 +70,11 @@ SET(TulipMinorVersion 0)
 SET(TulipReleaseVersion 0)
 SET(TulipVersionSeparator .)
 IF(${MSVC}) #specific options for Visual Studio
-	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9") #visual studio 2008 needs boost
-		find_package(BOOST REQUIRED)
-		include_directories(${Boost_INCLUDE_DIRS})
-		include_directories(${Boost_INCLUDE_DIRS}/boost/tr1)
-	ENDIF()
-   SET(TulipVersionSeparator _)
+  IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9") #visual studio 2008 needs boost
+    FIND_PACKAGE(BOOST REQUIRED)
+    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}/boost/tr1)
+  ENDIF()
+  SET(TulipVersionSeparator _)
 ENDIF()
 SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
@@ -87,15 +82,14 @@ SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVers
 ## -----------------------------------------------------------------------------------------------
 ## Lib names
 ## -----------------------------------------------------------------------------------------------
-SET(LibTulipName "tulip-${TulipMMVersion}")
+SET(LibTulipCoreName "tulip-core-${TulipMMVersion}")
 SET(LibTulipOglName "tulip-ogl-${TulipMMVersion}")
-SET(LibTulipQtName "tulip-qt4-${TulipMMVersion}")
+SET(LibTulipGUIName "tulip-gui-${TulipMMVersion}")
 SET(LibTulipOGDFName "tulip-ogdf-${TulipMMVersion}")
-SET(LibTulipPluginsManagerName "tulip-pluginsmanager-${TulipMMVersion}")
 SET(LibStlPythonName "stlpython")
-SET(LibTulipPythonName "tulippython")
-SET(LibTulipOglPythonName "tulipoglpython")
-SET(LibTulipQtPythonName "tulipqtpython")
+SET(LibTulipPythonName "tulip-core-python-${TulipMMVersion}")
+SET(LibTulipOglPythonName "tulip-ogl-python-${TulipMMVersion}")
+SET(LibTulipGUIPythonName "tulip-gui-python-${TulipMMVersion}")
 
 ## -----------------------------------------------------------------------------------------------
 ## Find needed packages
@@ -199,13 +193,13 @@ SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
 SET(qscintilla2Include ${PROJECT_SOURCE_DIR}/thirdparty/QScintilla-gpl-2.5.1/Qt4/)
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF)
 SET(OGDFLibrary OGDF)
-SET(TulipInclude ${PROJECT_SOURCE_DIR}/library/tulip/include/)
-SET(TulipBuildInclude ${PROJECT_BINARY_DIR}/library/tulip/include/)
+
+SET(TulipCoreInclude ${PROJECT_SOURCE_DIR}/library/tulip-core/include/)
+SET(TulipCoreBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-core/include/)
 SET(TulipOGLInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogl/include/)
 SET(TulipOGDFInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogdf/)
-SET(TulipQtInclude ${PROJECT_SOURCE_DIR}/library/tulip-qt/include/)
-SET(TulipQtBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-qt/include/)
-SET(TulipPluginsManagerInclude ${PROJECT_SOURCE_DIR}/software/plugins-manager/include/)
+SET(TulipGUIInclude ${PROJECT_SOURCE_DIR}/library/tulip-gui/include/)
+SET(TulipGUIBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-gui/include/)
 
 ## -----------------------------------------------------------------------------------------------
 ## Install paths
@@ -231,30 +225,16 @@ ENDIF()
 ## -----------------------------------------------------------------------------------------------
 ## Disable deprecated compilation output
 ## -----------------------------------------------------------------------------------------------
-if (DEFINED NO_DEPRECATED)
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
-endif (DEFINED NO_DEPRECATED)
+IF(DEFINED NO_DEPRECATED)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated")
+ENDIF(DEFINED NO_DEPRECATED)
 
 ## -----------------------------------------------------------------------------------------------
-## Disable process to make MainController plugin (for developpers)
+## Disable Qt picture output. This is a developer flag used for VMs
 ## -----------------------------------------------------------------------------------------------
-SET(TULIP_USE_MAIN_CONTROLLER ON CACHE BOOL "Link Main controller plugin")
-IF(NOT TULIP_USE_MAIN_CONTROLLER)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITHOUT_MAIN_CONTROLLER")
-ENDIF(NOT TULIP_USE_MAIN_CONTROLLER)
-
-## -----------------------------------------------------------------------------------------------
-## Disable process to make MainController plugin (for developpers)
-## -----------------------------------------------------------------------------------------------
-SET(TULIP_USE_QT_PICTURE_OUTPUT ON CACHE BOOL "Use Qt picture output")
-IF(NOT TULIP_USE_QT_PICTURE_OUTPUT)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITHOUT_QT_PICTURE_OUTPUT")
-ENDIF(NOT TULIP_USE_QT_PICTURE_OUTPUT)
-
-## -----------------------------------------------------------------------------------------------
-## Enable process to make generation of plugins informations for server (for developpers)
-## -----------------------------------------------------------------------------------------------
-SET(TULIP_SERVER_GENERATION OFF CACHE BOOL "Enable process to make generation of plugins informations for server (for developpers)")
+IF(${TULIP_DISABLE_QT_PICTURE_OUTPUT})
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DWITHOUT_QT_PICTURE_OUTPUT")
+ENDIF()
 
 ## -----------------------------------------------------------------------------------------------
 ## Define NDEBUG when we are in release mode
@@ -348,7 +328,7 @@ ENDIF(LINUX)
 ## -----------------------------------------------------------------------------------------------
 SET(VERSION "${TulipVersion}")
 SET(MM_VERSION "${TulipMMVersion}")
-CONFIGURE_FILE("library/tulip/include/tulip/TulipRelease.h.in" "library/tulip/include/tulip/TulipRelease.h")
+CONFIGURE_FILE("library/tulip-core/include/tulip/TulipRelease.h.in" "library/tulip-core/include/tulip/TulipRelease.h")
 
 ## -----------------------------------------------------------------------------------------------
 ## Include macro definitions
@@ -373,8 +353,6 @@ ADD_SUBDIRECTORY(software)
 ADD_SUBDIRECTORY(plugins)
 ADD_SUBDIRECTORY(textures)
 ADD_SUBDIRECTORY(externalplugins)
-
-ADD_SUBDIRECTORY(docs)
 
 ## -----------------------------------------------------------------------------------------------
 ## Set var to create tulip-config script
@@ -406,23 +384,17 @@ CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 ## -----------------------------------------------------------------------------------------------
 ## Installation of files
 ## -----------------------------------------------------------------------------------------------
-INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config DESTINATION ${TulipBinInstallDir} COMPONENT libtulip_dev)
-INSTALL(FILES FindTULIP3.cmake DESTINATION ${TulipShareInstallDir} COMPONENT libtulip_dev)
-INSTALL(FILES FindGLEW.cmake DESTINATION ${TulipShareInstallDir} COMPONENT libtulip_dev)
-INSTALL(FILES FindXML2.cmake DESTINATION ${TulipShareInstallDir} COMPONENT libtulip_dev)
+INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config DESTINATION ${TulipBinInstallDir} COMPONENT tulip_core_dev)
+INSTALL(FILES FindTULIP.cmake FindGLEW.cmake FindXML2.cmake DESTINATION ${TulipShareInstallDir} COMPONENT tulip_core_dev)
 ## -----------------------------------------------------------------------------------------------
 ## Script for linux Tulip bundle building
 IF(LINUX)
   CONFIGURE_FILE("make_tulip_linux_bundle.sh.in" "make_tulip_linux_bundle.sh" @ONLY)
 ENDIF(LINUX)
+
 ## -----------------------------------------------------------------------------------------------
 ## CPack packaging directives
 ## -----------------------------------------------------------------------------------------------
-
-# You can create your own installer by creating a setting the CPACK_CUSTOM_INSTALLER to true.
-# If this variable is not set, directives in the CPackInstaller.cmake file will be used to set the project licence, maintainer etc.
-# When making your own installer, please be sure to set at least all the variables present in the CPackInstaller.cmake file.
-# Consult CPack documentation for additional information.
 
 # Include external plugins configuration file.
 # Note: this is done before setting group names variables. User can set the CPACK_CUSTOM_INSTALLER to true and setup its own installer in this file.
@@ -430,29 +402,16 @@ IF(EXISTS externalplugins/ExternalPlugins.cmake)
   INCLUDE(externalplugins/ExternalPlugins.cmake)
 ENDIF()
 
-IF(NOT CPACK_CUSTOM_INSTALLER)
-  SET(LIBS_GROUP_NAME "Libraries")
-  SET(HEADERS_GROUP_NAME "Headers")
-  SET(SOFTWARE_GROUP_NAME "Runtime")
-  SET(PLUGINS_GROUP_NAME "Plugins")
-  SET(EXTRAS_GROUP_NAME "Extras")
-  SET(THIRDPARTY_GROUP_NAME "Third party")
-ELSE()
-  # In case a custom installer is set, all the base tulip software components will be in the same group.
-  SET(LIBS_GROUP_NAME "Tulip software")
-  SET(HEADERS_GROUP_NAME "Tulip software")
-  SET(SOFTWARE_GROUP_NAME "Tulip software")
-  SET(PLUGINS_GROUP_NAME "Tulip software")
-  SET(EXTRAS_GROUP_NAME "Tulip software")
-  SET(THIRDPARTY_GROUP_NAME "Tulip software")
-ENDIF()
+SET(LIBS_GROUP_NAME "Libraries")
+SET(HEADERS_GROUP_NAME "Headers")
+SET(SOFTWARE_GROUP_NAME "Runtime")
+SET(PLUGINS_GROUP_NAME "Plugins")
+SET(EXTRAS_GROUP_NAME "Extras")
+SET(THIRDPARTY_GROUP_NAME "Third party")
 
 # Defines specific software components from tulip.
 INCLUDE(CPackComponents.cmake)
 
-IF(NOT CPACK_CUSTOM_INSTALLER)
-  INCLUDE(CPackInstaller.cmake)
-ENDIF()
-
+INCLUDE(CPackInstaller.cmake)
 
 INCLUDE(CPack)
