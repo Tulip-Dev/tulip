@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>397</width>
-    <height>146</height>
+    <height>157</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -61,6 +61,9 @@
      </item>
      <item>
       <layout class="QFormLayout" name="formLayout">
+       <property name="labelAlignment">
+        <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+       </property>
        <property name="topMargin">
         <number>0</number>
        </property>
@@ -73,6 +76,9 @@
        </item>
        <item row="0" column="0">
         <widget class="QRadioButton" name="newPropertyRadioButton">
+         <property name="toolTip">
+          <string>The destination property will be a new property. It's name is given by the contents of  the text field on the right</string>
+         </property>
          <property name="text">
           <string>New property</string>
          </property>
@@ -86,6 +92,9 @@
        </item>
        <item row="1" column="0">
         <widget class="QRadioButton" name="localPropertyRadioButton">
+         <property name="toolTip">
+          <string>The destination property will be an already existing local property choosen in the list on the right</string>
+         </property>
          <property name="text">
           <string>Local property</string>
          </property>
@@ -96,6 +105,9 @@
        </item>
        <item row="2" column="0">
         <widget class="QRadioButton" name="inheritedPropertyRadioButton">
+         <property name="toolTip">
+          <string>The destination property will be an already existing parent property choosen in the list on the right</string>
+         </property>
          <property name="text">
           <string>Inherited property</string>
          </property>
