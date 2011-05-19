@@ -92,24 +92,29 @@
 
 <sect2 id="color-algos"><title>Color Algorithms</title>
 	Algorithms to change the colors of elements, i.e. to set the viewColor property.
-  <sect3 id="metric-mapping"><title>Metric Mapping</title>
-		<para>Affects colors to the elements, based on one property. For instance, after computing some metric on the graph like the nodes degree,
-			the metric mapping algorithm computes a color for each node that represents the degree.</para>
+  <sect3 id="metric-mapping"><title>Color Mapping</title>
+		<para>Affects colors to the elements, based on one property.
+			In the folling, we take the degree property as an example (which can be computed through Algorithm→Measure→Graph→Degree).
+			The metric mapping algorithm would then compute a color for each node that represents the degree.</para>
 		<para>Parameters:</para>
 		<itemizedlist>
-			<listitem><para><code>Linear/uniform property</code>: the property to be mapped to colors, i.e. the input to be represented visually.
-			</para></listitem>
-			<listitem><para><code>Enumerated property</code>: <!-- TODO -->
-			</para></listitem>
 			<listitem><para>
-					<code>Type</code>: type of color quantification.
+					<code>Type</code>:
 					<itemizedlist>
-						<listitem>uniform: if two nodes have the same property value, they both have the same color</listitem>
-						<listitem>linear: if two nodes have the property value, they have slightly differnt colors</listitem>
-						<listitem>enumerated:</listitem> <!-- TODO -->
+						<listitem>linear: map the full range of degrees (e.g. 0 to 42) to the colorscale, linearly.
+							For instance, if the colorscale is white to black, the degree 21 would be represented as 50% gray.</listitem>
+						<listitem>uniform: sort the set of existing degrees, then map this set to the colorscale.
+							For instance, if half the nodes have a degree less than 10, the degree ten would be represented as 50% gray.</listitem>
+						<listitem>enumerated: use this one for properties that have no natural order and a small number of distinct values,
+							like a country name.</listitem>
 					</itemizedlist>
 				</para>
 			</listitem>
+			<listitem><para><code>Linear/uniform property</code>:
+					If type is linear or uniform, this is the property to be mapped to colors, i.e. the input to be represented visually.
+			</para></listitem>
+			<listitem><para><code>Enumerated property</code>:
+					If type is enumerated, this property will be used instead of the above setting.</para></listitem>
 			<listitem><para><code>Target</code>
 			</para></listitem>
 			<listitem><para><code>colorScale</code> </para></listitem>
@@ -159,14 +164,15 @@
 						If set to any other double properties, for instance viewMetric,
 						compute the sum of this property on all adjacent edges.</para>
 				</listitem>
-				<listitem>Norm</listitem> <!-- TODO -->
+				<listitem>Norm</listitem>
 			</itemizedlist>
     </sect4>
     <sect4 id="eccentricity"><title>Eccentricity</title>
 			<para>The Eccentricity of a node is the maximum distance between this node and any other one.
-				In this version the value is normalized
-				(1 for the center of the network,
-				0 for the most eccentric node). <!-- TODO -->
+				<!-- In this version the value is normalized -->
+				<!-- (1 for the center of the network, -->
+				<!-- 0 for the most eccentric node). -->
+				<!-- TODO -->
 			</para>
 			<para><ulink url="../../doxygen/allPlugins.html#EccentricityMetric">Algorithm documentation</ulink></para>
     </sect4>

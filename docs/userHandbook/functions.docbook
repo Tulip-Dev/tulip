@@ -60,7 +60,7 @@
 						For an edge: (width at source, width at end, arrow size).
 						For edge size to take effect, <code>View editor</code> → <code>Rendering parameters</code> → <code>Size interpolation</code> must be unchecked.
 				</para></listitem>
-				<listitem><para><code>viewSrcAnchorShape</code>: <!-- TODO -->
+				<listitem><para><code>viewSrcAnchorShape</code>:
 						Shape of the source anchor of an edge.
 						For this setting to take effect, <code>View editor</code> → <code>Rendering parameters</code> → <code>Arrow</code> must be checked.
 				</para></listitem>

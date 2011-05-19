@@ -21,22 +21,24 @@
       <para>
         The "Installed" group displays the locally installed plugins. The other groups display the plugins available on servers.
 				The set of available servers can be changed in Menu <code>Configure</code> → <code>Servers</code> (inside the plugins window).
-				<!-- One server address is for instance "http://tulip.labri.fr/pluginsServer/server.php". -->
+				One server address is for instance http://tulip.labri.fr/pluginsServer/server.php .
       </para>
-      <para>
-         The status of the plugin can be nothing, version or installed. <!-- TODO -->
+				 <para>
+					 <!-- This is just obvious when looking at the GUI. No need to repeat it. -->
+      <!--
+        A plugin can be in three states:
         <itemizedlist>
           <listitem><para>
-							Nothing: Plugin is not installed.
+							not installed (the box is not checked)
           </para></listitem>
           <listitem><para>
-							Version number: Plugin is installed, the version number is the locally installed version.
+							installed (box is checked)
           </para></listitem>
           <listitem><para>
-							Installed: Plugin is installed and its version is the same on the server.
+							Not compatible
           </para></listitem>
         </itemizedlist>
-
+				-->
 				Click a checkbox to select a plugin for install/uninstall.
 				Click the version number to see the documentation.
       </para>
