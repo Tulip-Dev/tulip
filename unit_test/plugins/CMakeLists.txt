@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
 
 SET(prefix "${CMAKE_INSTALL_PREFIX}")
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/pluginstest.cpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/pluginstest.cpp" @ONLY)
@@ -8,7 +8,7 @@ SET(TULIP_PLUGINS_TESTS_SRCS
   pluginstest.cpp)
 
 ADD_EXECUTABLE(tulip_plugins_tests  ${TULIP_PLUGINS_TESTS_SRCS})
-TARGET_LINK_LIBRARIES(tulip_plugins_tests ${LibTulipName} cppunit)
+TARGET_LINK_LIBRARIES(tulip_plugins_tests ${LibTulipCoreName} cppunit)
 
 # ADD_CUSTOM_TARGET(copyTestData ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/DATA ${CMAKE_CURRENT_BINARY_DIR}/DATA )
 # ADD_CUSTOM_TARGET(copyTestData2 ALL ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/TlpImportExportTest.cpp ${CMAKE_CURRENT_BINARY_DIR}/TlpImportExportTest.cpp )

@@ -1,25 +1,21 @@
-INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${LIBXML2_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${LIBXML2_INCLUDE_DIR})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(MetricSizeMapping_SRCS MetricMapping.cpp )
-ADD_LIBRARY(MetricSizeMapping-${TulipVersion} SHARED ${MetricSizeMapping_SRCS})
-TARGET_LINK_LIBRARIES(MetricSizeMapping-${TulipVersion} ${LibTulipName})
+ADD_LIBRARY(MetricSizeMapping-${TulipVersion} SHARED MetricMapping.cpp)
+TARGET_LINK_LIBRARIES(MetricSizeMapping-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(AutoSize_SRCS AutoSize.cpp)
-ADD_LIBRARY(AutoSize-${TulipVersion} SHARED ${AutoSize_SRCS})
-TARGET_LINK_LIBRARIES(AutoSize-${TulipVersion} ${LibTulipName})
+ADD_LIBRARY(AutoSize-${TulipVersion} SHARED AutoSize.cpp)
+TARGET_LINK_LIBRARIES(AutoSize-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(FitToLabels_SRCS FitToLabel.cpp)
-ADD_LIBRARY(FitToLabels-${TulipVersion} SHARED ${FitToLabels_SRCS})
-TARGET_LINK_LIBRARIES(FitToLabels-${TulipVersion} ${LibTulipName})
-TARGET_LINK_LIBRARIES(FitToLabels-${TulipVersion} ${LibTulipOglName})
+ADD_LIBRARY(FitToLabels-${TulipVersion} SHARED FitToLabel.cpp)
+TARGET_LINK_LIBRARIES(FitToLabels-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS 
-	MetricSizeMapping-${TulipVersion}
-	AutoSize-${TulipVersion}
-	FitToLabels-${TulipVersion}
-  DESTINATION ${TulipPluginsInstallDir}/
-  COMPONENT libtulip_ogl_plugins)
+  MetricSizeMapping-${TulipVersion}
+  AutoSize-${TulipVersion}
+  FitToLabels-${TulipVersion}
+DESTINATION ${TulipPluginsInstallDir}
+COMPONENT tulip_ogl_plugins)

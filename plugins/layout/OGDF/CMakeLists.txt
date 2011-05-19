@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipInclude} ${TulipBuildInclude} ${OGDFInclude} ${TulipOGDFInclude})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${OGDFInclude} ${TulipOGDFInclude})
 FILE(GLOB PLUGINS_SRCS "*.cpp")
 
 IF(WIN32)
@@ -14,5 +14,5 @@ FOREACH(OGDFPlugin ${PLUGINS_SRCS})
   ADD_LIBRARY(${PLUGIN_NAME}-${TulipVersion} SHARED ${OGDFPlugin})
   TARGET_LINK_LIBRARIES(${PLUGIN_NAME}-${TulipVersion} ${TulipLibName} ${LibTulipOGDFName} ${OGDF_LIBRARY})
 
-  INSTALL(TARGETS ${PLUGIN_NAME}-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT libtulip_ogdf_plugins)
+  INSTALL(TARGETS ${PLUGIN_NAME}-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT tulip_ogdf_plugins)
 ENDFOREACH()

@@ -99,7 +99,7 @@ MACRO(INSTALL_EXTERNAL_LIB var_name component)
   ENDIF()
 ENDMACRO()
 
-MACRO(FIND_LIBRARY_DEPENDANCIES out_var library)
+MACRO(FIND_LIBRARY_DEPENDENCIES out_var library)
       EXECUTE_PROCESS(COMMAND otool -L ${library} COMMAND grep "dylib \\|/4/Qt" COMMAND awk "{print $1}" OUTPUT_VARIABLE OUTPUT RESULT_VARIABLE RESULT)
       #Transform the output to list
       STRING(REPLACE "\n" ";" DEP_LIST ${OUTPUT})

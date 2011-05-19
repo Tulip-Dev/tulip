@@ -5,7 +5,7 @@ ADD_DEFINITIONS("-DQSCINTILLA_DLL")
 
 # Force to use SIP and QScintilla headers located in thirdparty and not those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${qscintilla2Include} ${SIP_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${TulipQtInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 
 SET(SRCS
   ConsoleOutputModule.h
@@ -17,8 +17,7 @@ SET(SRCS
   PythonScriptView.cpp
   PythonScriptViewWidget.h
   PythonScriptViewWidget.cpp
-  TulipUtilsModule.h
-)
+  TulipUtilsModule.h)
 
 QT4_WRAP_UI(UI_HEADERS
   PythonScriptViewWidget.ui
@@ -35,31 +34,16 @@ QT4_ADD_RESOURCES(RCC_SRCS
 )
 
 IF(HAS_TULIP_QT_PYTHON_BINDINGS)
-SET_SOURCE_FILES_PROPERTIES(PythonInterpreter.cpp
-                            PROPERTIES COMPILE_DEFINITIONS HAS_TULIP_QT_PYTHON_BINDINGS)
+  SET_SOURCE_FILES_PROPERTIES(PythonInterpreter.cpp PROPERTIES COMPILE_DEFINITIONS HAS_TULIP_QT_PYTHON_BINDINGS)
 ENDIF()
 
 ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${SRCS} ${MOC_SRCS} ${UI_HEADERS} ${RCC_SRCS})
 
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipName})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipOglName})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipQtName})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTCORE_LIBRARY})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTGUI_LIBRARY})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTOPENGL_LIBRARY})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} qscintilla2)
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${QT_LIBRARIES} qscintilla2 ${PYTHON_LIBRARY})
 
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
+ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibStlPythonName} ${LibTulipPythonName} ${LibTulipOglPythonName})
 
-ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibStlPythonName} ${LibTulipPythonName} ${LibTulipOglPythonName} qscintilla2)
-
-INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}/view/ COMPONENT tulip_plugins_pythonscriptview)
-
-IF(WIN32)
-	FIND_LIBRARY_GLOB(PYTHON_INSTALL_PATH "python2*.dll")
-	INSTALL_EXTERNAL_LIB(PYTHON_INSTALL_PATH tulip_plugins_pythonscriptview)
-ENDIF()
+INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}/view/ COMPONENT tulip_gui_pythonview)
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)

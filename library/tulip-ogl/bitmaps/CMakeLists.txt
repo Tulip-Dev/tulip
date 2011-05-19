@@ -5,4 +5,4 @@ INSTALL(FILES
   cylinderTexture.png
   roundTexture.png
 DESTINATION ${TulipBitmapInstallDir}
-COMPONENT libtulip_ogl)
+COMPONENT tulip_ogl)

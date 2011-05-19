@@ -22,7 +22,7 @@ SET(SRCS
 
 QT4_ADD_RESOURCES(RCC_SRCS ../designer/TulipResource.qrc)
 
-INCLUDE_DIRECTORIES(../include/ ${TulipBuildInclude} ${TulipQtBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${TulipInclude} ${TulipQtInclude} ${TulipOGLInclude} ${TulipPluginsManagerInclude})
+INCLUDE_DIRECTORIES(../include/ ${TulipCoreBuildInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreInclude} ${TulipGUIInclude} ${TulipOGLInclude} ${PROJECT_SOURCE_DIR}/software/plugins-manager/include/)
 
 ADD_DEFINITIONS("-DQT_MINOR_REL=${QT_VERSION_MINOR}")
 
@@ -39,7 +39,7 @@ ENDIF(WIN32)
 # Tulip need restart executable
 ADD_EXECUTABLE(tulip_need_restart TulipNeedRestart.cpp)
 SET_TARGET_PROPERTIES(tulip_need_restart PROPERTIES INSTALL_RPATH ${TulipLibInstallDir})
-TARGET_LINK_LIBRARIES( tulip_need_restart ${QT_LIBRARIES} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName})
+TARGET_LINK_LIBRARIES( tulip_need_restart ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
 
 #Tulip app
 ADD_EXECUTABLE(tulip_app ${UI_HEADERS} ${MOC_SRCS} ${SRCS} ${RCC_SRCS})
@@ -61,11 +61,11 @@ TARGET_LINK_LIBRARIES( tulip_app ${OPENGL_gl_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${LIBXML2_LIBRARIES} )
 TARGET_LINK_LIBRARIES( tulip_app ${JPEG_LIBRARY})
 TARGET_LINK_LIBRARIES( tulip_app ${CMAKE_DL_LIBS})
-TARGET_LINK_LIBRARIES( tulip_app ${LibTulipPluginsManagerName})
+TARGET_LINK_LIBRARIES( tulip_app "tulip-pluginsmanager-${TulipMMVersion}")
 TARGET_LINK_LIBRARIES( tulip_app ${QT_QTXML_LIBRARY} )
-TARGET_LINK_LIBRARIES( tulip_app ${LibTulipName})
+TARGET_LINK_LIBRARIES( tulip_app ${LibTulipCoreName})
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipOglName})
-TARGET_LINK_LIBRARIES( tulip_app ${LibTulipQtName})
+TARGET_LINK_LIBRARIES( tulip_app ${LibTulipGUIName})
 
 IF(WIN32)
   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++
@@ -98,20 +98,5 @@ ELSE(WIN32)
     DESTINATION ${TulipBinInstallDir}
     COMPONENT tulip_app)
 ENDIF(WIN32)
-
-#Copy QtAssistant apps
-IF(APPLE)
-  FIND_LIBRARY_GLOB(QTASSISTANT_INSTALL_PATH "QtAssistant.framework/QtAssistant")
-  IF(QTASSISTANT_INSTALL_PATH)
-    INSTALL_EXTERNAL_LIB(QTASSISTANT_INSTALL_PATH tulip_app)
-  ENDIF()
-  INSTALL(DIRECTORY "/Developer/Applications/Qt/Assistant.app" DESTINATION ${TulipAppleContentsDir} USE_SOURCE_PERMISSIONS COMPONENT tulip_app OPTIONAL)
-
-ELSEIF(WIN32)
-  INSTALL(FILES ${QT_BINARY_DIR}/assistant.exe DESTINATION "${TulipBinInstallDir}" COMPONENT tulip_app)
-  #the sqldriver is needed to show the documentation
-  #because the docs/tulip.qhc generated file is an embedded sql database
-  INSTALL(FILES ${QT_PLUGINS_DIR}/sqldrivers/qsqlite4.dll DESTINATION "${TulipBinInstallDir}/plugins/sqldrivers" COMPONENT tulip_app)
-ENDIF()
 
 
