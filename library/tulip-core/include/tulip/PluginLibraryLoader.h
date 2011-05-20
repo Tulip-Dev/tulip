@@ -27,13 +27,7 @@
 #ifndef _WIN32
 #include <dirent.h>
 #else
-#include <windows.h>
-struct IteratorInfos {
-#define BUFSIZE 256
-  HANDLE hFind;
-  WIN32_FIND_DATA FindData;
-  TCHAR currentDirectory[BUFSIZE];
-};
+struct IteratorInfos;
 #endif
 
 namespace tlp {
