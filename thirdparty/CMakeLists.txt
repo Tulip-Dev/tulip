@@ -94,7 +94,7 @@ ELSEIF(APPLE)
   FIND_LIBRARY_GLOB_DIR(QTCORE_LIBFILE "QtCore.framework/QtCore" "/Library/Frameworks")
   INSTALL_EXTERNAL_LIB(QTCORE_LIBFILE qt_core)
 
-  FIND_LIBRARY_GLOB_DIR(QTGUI_LIBFILE "QtGui.framework/QtCore" "/Library/Frameworks")
+  FIND_LIBRARY_GLOB_DIR(QTGUI_LIBFILE "QtGui.framework/QtGui" "/Library/Frameworks")
   INSTALL_EXTERNAL_LIB(QTGUI_LIBFILE qt_gui)
 
   FIND_LIBRARY_GLOB_DIR(QTNETWORK_LIBFILE "QtNetwork.framework/QtNetwork" "/Library/Frameworks")
