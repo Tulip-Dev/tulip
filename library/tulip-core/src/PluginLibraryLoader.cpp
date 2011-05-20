@@ -27,6 +27,7 @@
 
 #ifdef _WIN32
 #include <stdio.h>
+#include <windows.h>
 #else
 #include <stdlib.h>
 #include <dlfcn.h>
@@ -76,6 +77,13 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) 
   }
 }
 #ifdef _WIN32
+
+struct IteratorInfos {
+#define BUFSIZE 256
+  HANDLE hFind;
+  WIN32_FIND_DATA FindData;
+  TCHAR currentDirectory[BUFSIZE];
+};
 
 bool PluginLibraryLoader::loadPluginLibrary(const std::string & filename, PluginLoader *loader) {
   HINSTANCE hDLL = LoadLibrary(filename.c_str());
