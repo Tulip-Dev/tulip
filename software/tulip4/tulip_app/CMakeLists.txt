@@ -24,7 +24,7 @@ include/TulipWelcomePage.h)
 
 QT4_ADD_RESOURCES(RCC_SRCS resources/TulipApp.qrc)
 
-INCLUDE_DIRECTORIES(include ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDES})
+INCLUDE_DIRECTORIES(include ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR})
 
 ADD_EXECUTABLE(tulip_app4 ${SRCS} ${UI_HEADERS} ${MOC_SRCS} ${RCC_SRCS})
 

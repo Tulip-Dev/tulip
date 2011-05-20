@@ -164,7 +164,7 @@ QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipQtResource.qrc)
 ADD_DEFINITIONS(-DQT_DLL)
 ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
 
-INCLUDE_DIRECTORIES(../include ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${QuazipInclude})
+INCLUDE_DIRECTORIES(../include ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${QuazipInclude} ${QT_INCLUDE_DIR})
 ADD_LIBRARY(${LibTulipGUIName} SHARED ${SRCS} ${MOC_SRCS} ${RCC_SRCS} ${UI_HEADERS})
 TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOglName} quazip)
 

@@ -55,7 +55,7 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w")
 # instead of those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${QT_INCLUDES} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipCoreBuildInclude})
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${QT_INCLUDE_DIR} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipCoreBuildInclude})
 
 ADD_LIBRARY(${LibTulipGUIPythonName} SHARED ${TULIP_QT_PYTHON_BINDINGS_SRC})
 
