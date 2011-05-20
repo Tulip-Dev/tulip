@@ -114,8 +114,8 @@ ELSEIF(APPLE)
 #    FIND_LIBRARY_DEPENDENCIES(QT_PLUGINS_DEPENDENCIES "${PLUGIN}")
 #    INSTALL_EXTERNAL_LIB(QT_PLUGINS_DEPENDENCIES tulip_gui)
 #  ENDFOREACH()
-#  #Copy Qt menu.
-#  INSTALL(DIRECTORY "${QT_LIBRARY_DIR}/QtGui.framework/Versions/Current/Resources/qt_menu.nib" DESTINATION "${TulipAppleResourcesDir}" COMPONENT tulip_gui OPTIONAL)
+  #Copy Qt menu.
+  INSTALL(DIRECTORY "${QT_LIBRARY_DIR}/QtGui.framework/Versions/Current/Resources/qt_menu.nib" DESTINATION "${TulipAppleResourcesDir}" COMPONENT qt_gui OPTIONAL)
 
   INSTALL_EXTERNAL_LIB(FREETYPE_LIBRARY freetype)
   INSTALL_EXTERNAL_LIB(GLEW_LIBRARY glew)
