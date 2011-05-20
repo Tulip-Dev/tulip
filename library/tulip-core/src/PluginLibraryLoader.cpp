@@ -26,7 +26,6 @@
 #include <vector>
 
 #ifdef _WIN32
-#include <windows.h>
 #include <stdio.h>
 #else
 #include <stdlib.h>
@@ -44,7 +43,6 @@ static bool isPreviouslyLoaded(const std::string &lib) {
   std::string libName=lib.substr(0,idx);
   if(previouslyLoadedLib.count(libName)!=0)
     return true;
-
   previouslyLoadedLib.insert(libName);
   return false;
 }
@@ -107,21 +105,14 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string & filename, Plugin
   return hDLL != NULL;
 }
 
-struct IteratorInfos {
-#define BUFSIZE 256
-  HANDLE hFind;
-  WIN32_FIND_DATA FindData;
-  TCHAR currentDirectory[BUFSIZE];
-};
-
 void PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
   DWORD dwRet;
   IteratorInfos *_infos = new IteratorInfos();
   dwRet = GetCurrentDirectory(BUFSIZE, _infos ->currentDirectory);
   //printf("Plugins from: %s\n", pluginPath.c_str());
-  n = 0;
+  nbUnloadedPluginLibraries = 0;
   if(dwRet == 0) {
-    n = -1;
+    nbUnloadedPluginLibraries = -1;
     message = std::string("Scandir error");//perror("scandir");
     delete _infos;
   } else {
@@ -129,7 +120,7 @@ void PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
     DWORD fileAttr = GetFileAttributes(pluginPath.c_str());
     if (fileAttr == 0xFFFFFFFF) {
       message = std::string("Directory not found: ") + pluginPath;
-      n = -1;
+      nbUnloadedPluginLibraries = -1;
       delete _infos;
       return;
     }
@@ -146,7 +137,7 @@ void PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
       loader->numberOfFiles(nbFiles);
       _infos->hFind = FindFirstFile ("*.dll", &_infos->FindData);
     }
-    infos = (void *) _infos;
+    infos = _infos;
   }
 }
 
@@ -154,7 +145,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
   bool pluginFound = false;
   if (infos->hFind != INVALID_HANDLE_VALUE) {
     //printf("\t%s\n",  infos->FindData.cFileName);
-    n++;
+    nbUnloadedPluginLibraries++;
     currentPluginLibrary = pluginPath +"/"+ infos->FindData.cFileName;
     std::string lib(infos->FindData.cFileName);
     unsigned long idx = lib.rfind('-');
@@ -168,8 +159,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
         }
       }
       else if (loader)
-        loader->aborted(currentPluginLibrary,currentPluginLibrary + " is not compatible with Tulip "
-            + TULIP_RELEASE);
+        loader->aborted(currentPluginLibrary,currentPluginLibrary + " is not compatible with Tulip " + TULIP_RELEASE);
     }
     else if (loader)
       loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
@@ -215,8 +205,7 @@ int __tulip_select_libs(struct dirent *ent) {
 
 void PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
   struct dirent **namelist;
-  nbUnloadedPluginLibraries = scandir((const char *) pluginPath.c_str(),
-        &namelist,
+  nbUnloadedPluginLibraries = scandir((const char *) pluginPath.c_str(), &namelist,
 #if !(defined(__APPLE__) || defined(__FreeBSD__))
         (int (*) (const dirent *))
 #endif
@@ -264,7 +253,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
         }
         if (isNumber && suffix.size() > idx + 1) {
           suffix = suffix.substr(idx + 1);
-          idx = suffix.find(STRINGIFY(VERSION_SEPARATOR));
+          idx = suffix.find(TULIP_MM_RELEASE); 
           if (idx != std::string::npos) {
             for (unsigned long i = 0; i < idx; ++i) {
               if (!isdigit(suffix[i])) {
