@@ -94,8 +94,8 @@ public:
 
 private:
   tlp::node addFileNode(const QFileInfo &infos, tlp::Graph *g) {
-    tlp::node result = g->addNode();
-    _absolutePaths->setNodeValue(result,infos.absoluteFilePath().toStdString());
+    tlp::node n = g->addNode();
+    _absolutePaths->setNodeValue(n,infos.absoluteFilePath().toStdString());
     _baseNames->setNodeValue(n,infos.baseName().toStdString());
     _createdDates->setNodeValue(n,infos.created().toString().toStdString());
     _fileNames->setNodeValue(n,infos.fileName().toStdString());
@@ -103,7 +103,7 @@ private:
     _isReadable->setNodeValue(n,infos.isReadable());
     _isSymlink->setNodeValue(n,infos.isSymLink());
     _isWritable->setNodeValue(n,infos.isWritable());
-    _lastModifiedDates->setNodeValue(n,infos.lastModified().toString());
+    _lastModifiedDates->setNodeValue(n,infos.lastModified().toString().toStdString());
   }
 
   tlp::StringProperty *_absolutePaths;
