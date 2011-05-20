@@ -48,7 +48,7 @@ void PluginsCenter::listItemSelected() {
 void PluginsCenter::setPluginsError(const QMap<QString, QString> &errors) {
   QListWidgetItem *errorsItem = _ui->pluginsSideList->item(6);
   if (errors.isEmpty())
-    errorsItem->setFlags(!Qt::ItemIsEnabled);
+    errorsItem->setFlags(~Qt::ItemFlags(Qt::ItemIsEnabled));
   else {
     QFont f = errorsItem->font();
     f.setBold(true);
