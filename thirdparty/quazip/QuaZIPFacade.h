@@ -3,12 +3,14 @@
 
 #include <QtCore/QString>
 
+#include "quazip_global.h"
+
 /**
   @brief This class is a facade to the QuaZIP libraries features.
   It provides with convenience methods allowing to manipulate the QuaZIP library on a higher level.
   QuaZIPFacade contains only static methods, as it should only work as a toolbox.
   */
-class QuaZIPFacade {
+class QUAZIP_EXPORT QuaZIPFacade {
   QuaZIPFacade();
 public:
 

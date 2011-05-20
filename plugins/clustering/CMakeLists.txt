@@ -30,7 +30,7 @@ SET(ConvolutionClustering_SRCS
   ConvolutionClusteringSetup.h)
 
 ADD_LIBRARY(ConvolutionClustering-${TulipVersion} SHARED ${ConvolutionClustering_SRCS} ${ConvolutionClustering_UI_SRCS} ${ConvolutionClustering_MOC_SRCS})
-TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${LibTulipCoreName})
+TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${LibTulipCoreName} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(EqualValueClustering_SRCS
