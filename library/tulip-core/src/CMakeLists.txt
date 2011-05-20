@@ -64,10 +64,10 @@ vectorgraph.cpp
 WithParameter.cpp)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_TULIP_LIB_DIR=\"\\\"${CMAKE_INSTALL_PREFIX}/lib/\\\"\"")
-INCLUDE_DIRECTORIES(../include/ ${TulipCoreBuildInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(../include/ ${TulipCoreBuildInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR} ${QT_INCLUDE_DIR})
 
 ADD_LIBRARY(${LibTulipCoreName} SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)
-TARGET_LINK_LIBRARIES(${LibTulipCoreName} gzstream )
+TARGET_LINK_LIBRARIES(${LibTulipCoreName} gzstream ${QT_QTCORE_LIBRARY})
 IF(WIN32)
   IF(${MSVC})
     TARGET_LINK_LIBRARIES(${LibTulipCoreName} Dbghelp)

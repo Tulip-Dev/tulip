@@ -123,7 +123,7 @@ while test $# -gt 0; do
       OUTPUT=`echo ${OUTPUT} @QT_LDFLAGS@ @LIB_QT@`
       ;;
     --qtincludes)
-      OUTPUT=`echo ${OUTPUT} @QT_INCLUDES@`
+      OUTPUT=`echo ${OUTPUT} -I@QT_INCLUDE_DIR@`
       ;;
     --sharepath)
       OUTPUT=`echo ${OUTPUT} ${sharedir}`

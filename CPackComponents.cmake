@@ -161,7 +161,7 @@ IF(WIN32 OR APPLE) # Components shared between Mac OS and Win32 plateforms
   DEFINE_COMPONENT(tulip_ogl
     "TulipOGL"
     "TulipOGL provides bridges between the TulipCore library and OpenGL to allow 3D visualization of Graph objects."
-    "tulip_core;qt_xml;glew;jpeg;png;freetype;ftgl;${W32_LIBXML2}"
+    "tulip_core;qt_xml;qt_core;glew;jpeg;png;freetype;ftgl;${W32_LIBXML2}"
     ${LIBS_GROUP_NAME})
 
   DEFINE_COMPONENT(tulip_ogl_dev
