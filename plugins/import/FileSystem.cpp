@@ -104,6 +104,7 @@ private:
     _isSymlink->setNodeValue(n,infos.isSymLink());
     _isWritable->setNodeValue(n,infos.isWritable());
     _lastModifiedDates->setNodeValue(n,infos.lastModified().toString().toStdString());
+    return n;
   }
 
   tlp::StringProperty *_absolutePaths;
