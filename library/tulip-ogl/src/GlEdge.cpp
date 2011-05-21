@@ -168,20 +168,22 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 		return;
 	}
 
+	std::string edgeTexture = data->getElementTexture()->getEdgeValue(e);
+
 	if(lodSize>-5 && lodSize<5 && data->getGlVertexArrayManager()->renderingIsBegin() && (!data->parameters->getFeedbackRender()) && data->getElementShape()->getEdgeValue(e)==POLYLINESHAPE){
 		data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
+		return;
+	} else if (data->getGlVertexArrayManager()->renderingIsBegin()
+			   && !data->parameters->isEdge3D()
+			   && !data->parameters->getFeedbackRender()
+			   && data->getElementShape()->getEdgeValue(e) == POLYLINESHAPE
+			   && edgeTexture == "") {
+		data->getGlVertexArrayManager()->activateQuadEdgeDisplay(this,selected);
 		return;
 	}
 
 	const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
 	const Coord& tgtCoord = data->getElementLayout()->getNodeValue(target);
-
-	/*if(data->parameters->isElementZOrdered()){
-		if(data->elementColor->getEdgeValue(e)[3]!=255){
-			GlPointManager::getInst().endRendering();
-			GlPointManager::getInst().beginRendering();
-		}
-  }*/
 
 	if (selected) {
 		glDisable(GL_DEPTH_TEST);
@@ -218,19 +220,6 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 
 	Color srcCol, tgtCol;
 	getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
-
-	/*if (lod < 5) {
-		if (OpenGlConfigManager::getInst().canUseGlew() && GlPointManager::getInst().renderingIsBegin()) {
-			GlPointManager::getInst().addPoint(srcCoord, srcCol, 1);
-		} else {
-			setColor(srcCol);
-			glPointSize(1);
-			glBegin(GL_POINTS);
-			glVertex3f(srcCoord[0], srcCoord[1], srcCoord[2]);
-			glEnd();
-		}
-		return;
-  }*/
 
 	const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
 	unsigned nbBends = bends.size();
@@ -274,9 +263,6 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	}
 
 	double lineWidth=data->getElementBorderWidth()->getEdgeValue(e);
-	if(lineWidth < 1e-6)
-		lineWidth=1e-6;
-	glLineWidth(lineWidth);
 
 	unsigned int startEdgeGlyph = data->getElementSrcAnchorShape()->getEdgeValue(e);
 	unsigned int endEdgeGlyph = data->getElementTgtAnchorShape()->getEdgeValue(e);
@@ -300,7 +286,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	GlTextureManager::getInst().setAnimationFrame(data->getElementAnimationFrame()->getEdgeValue(e));
 	//draw Edge
 	drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, srcCol, tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
-			data->getElementShape()->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, data->getElementTexture()->getEdgeValue(e));
+			data->getElementShape()->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, edgeTexture, lineWidth);
 	GlTextureManager::getInst().setAnimationFrame(0);
 
 	if (data->parameters->getFeedbackRender()) {
@@ -315,7 +301,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Coord &startPoint,
 		const Coord &endPoint, const LineType::RealType &bends, const Color &startColor,
 		const Color &endColor, const Coord &lookDir, bool colorInterpolate, const Color &borderColor,
-		const Size &size, int shape, bool edge3D, float lod,const string &textureName) {
+		const Size &size, int shape, bool edge3D, float lod,const string &textureName, const float outlineWidth) {
 
 	glDisable(GL_CULL_FACE);
 	glDepthFunc(GL_LEQUAL);
@@ -341,9 +327,9 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 	switch (shape) {
 	case POLYLINESHAPE:
 		if (lod > 1000 || lod < -1000){
-			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,colorInterpolate,borderColor,textureName);
+			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,colorInterpolate,borderColor,textureName, outlineWidth);
 		}else{
-			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,true,borderColor,textureName);
+			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,true,borderColor,textureName, outlineWidth);
 		}
 		break;
 	case L3D_BIT + POLYLINESHAPE: {
