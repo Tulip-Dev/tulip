@@ -125,6 +125,7 @@ GLfloat* buildCurvePoints (const vector<Coord> &vertices,
 	result(0,1) = vertices[0] + dir*sizes[0];
 	//============
 	for(unsigned int i=1; i< vertices.size() - 1; ++i) {
+
 		Coord xu = vertices[i-1] - vertices[i];
 		Coord xv = vertices[i+1] - vertices[i];
 		float n_xu = xu.norm();
@@ -169,24 +170,24 @@ GLfloat* buildCurvePoints (const vector<Coord> &vertices,
 					dec->push_back(i);
 				if ((xu^xv)[2] > 0) {
 					result(i+resultDec,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
-					result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
+					result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[i];
 					result(i+resultDec+1,0 + inversion) = vertices[i] + bi_xu_xv*newSize;
 					result(i+resultDec+1,1 - inversion) = vertices[i] + vectUnit*sizes[i];
 				}else{
-					result(i+resultDec,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
 					result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
-					result(i+resultDec+1,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
+					result(i+resultDec,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
 					result(i+resultDec+1,0 + inversion) = vertices[i] - vectUnit*sizes[i];
+					result(i+resultDec+1,1 - inversion) = vertices[i] + bi_xu_xv*newSize;
 				}
 				++resultDec;
 			}else{
 				if ((xu^xv)[2] > 0) {
-					result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[1];
-					result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[1];
+					result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
+					result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[i];
 					inversion=!inversion;
 				}else{
-					result(i+resultDec,1 - inversion) = vertices[i] - vectUnit*sizes[i];
-					result(i+resultDec,0 + inversion) = vertices[i] + vectUnit*sizes[i];
+					result(i+resultDec,0 + inversion) = vertices[i] - vectUnit*sizes[i];
+					result(i+resultDec,1 - inversion) = vertices[i] + vectUnit*sizes[i];
 					inversion=!inversion;
 				}
 			}
@@ -202,6 +203,114 @@ GLfloat* buildCurvePoints (const vector<Coord> &vertices,
 	result(vertices.size()-1+resultDec,1 - inversion) = vertices[vertices.size()-1] + dir*sizes[vertices.size()-1];
 	resultSize=vertices.size()+resultDec;
 	return result.data;
+}
+
+void buildCurvePoints (const vector<Coord> &vertices,
+		const vector<float> &sizes,
+		const Coord &startN,
+		const Coord &endN,
+		vector<Coord> &result) {
+
+
+	int inversion=1;
+	//start point
+	Coord xu = startN - vertices[0];
+	xu /= xu.norm();
+	Coord xv = Coord(0,0,1.);
+	Coord dir = xu^xv;
+	if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
+	result.push_back(vertices[0] - dir*sizes[0]);
+	result.push_back(vertices[0] + dir*sizes[0]);
+	//============
+	for(unsigned int i=1; i< vertices.size() - 1; ++i) {
+
+		Coord xu = vertices[i-1] - vertices[i];
+		Coord xv = vertices[i+1] - vertices[i];
+		float n_xu = xu.norm();
+		float n_xv = xv.norm();
+		xu /= n_xu;
+		xv /= n_xv;
+
+		Coord bi_xu_xv = xu+xv;
+		if(bi_xu_xv ==Coord(0,0,0)) {
+			//two point at the same coord
+			size_t n = result.size() / 2;
+			result.push_back(result[2*(n-1)]);
+			result.push_back(result[2*(n-1)+1]);
+			continue;
+		}
+
+		bi_xu_xv /= bi_xu_xv.norm();
+		float newSize=sizes[i];
+		Coord u=vertices[i-1]-vertices[i];
+		Coord v=vertices[i+1]-vertices[i];
+		float angle=M_PI-acos(u.dotProduct(v)/(u.norm()*v.norm()));
+		if(isnan(angle))
+			angle=0;
+		newSize=newSize/cos(angle/2.);
+
+		if(angle<M_PI/2+M_PI/4) {
+			//normal form
+			if ((xu^xv)[2] > 0) {
+				result.push_back(vertices[i] + bi_xu_xv*newSize*inversion);
+				result.push_back(vertices[i] - bi_xu_xv*newSize*inversion);
+			} else {
+				result.push_back(vertices[i] - bi_xu_xv*newSize*inversion);
+				result.push_back(vertices[i] + bi_xu_xv*newSize*inversion);
+			}
+
+		}else{
+			//broken form
+
+			Coord vectUnit(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);
+
+			if(!(newSize>u.norm() || newSize>v.norm() || fabs(angle-M_PI)<1E-5)) {
+				if ((xu^xv)[2] > 0) {
+					if (inversion > 0) {
+						result.push_back(vertices[i] + bi_xu_xv*newSize);
+						result.push_back(vertices[i] - vectUnit*sizes[i]);
+						result.push_back(vertices[i] + bi_xu_xv*newSize);
+						result.push_back(vertices[i] + vectUnit*sizes[i]);
+					} else {
+						result.push_back(vertices[i] - vectUnit*sizes[i]);
+						result.push_back(vertices[i] + bi_xu_xv*newSize);
+						result.push_back(vertices[i] + vectUnit*sizes[i]);
+						result.push_back(vertices[i] + bi_xu_xv*newSize);
+					}
+				}else{
+					if (inversion > 0) {
+						result.push_back(vertices[i] + vectUnit*sizes[i]);
+						result.push_back(vertices[i] + bi_xu_xv*newSize);
+						result.push_back(vertices[i] - vectUnit*sizes[i]);
+						result.push_back(vertices[i] + bi_xu_xv*newSize);
+					} else {
+						result.push_back(vertices[i] + bi_xu_xv*newSize);
+						result.push_back(vertices[i] + vectUnit*sizes[i]);
+						result.push_back(vertices[i] + bi_xu_xv*newSize);
+						result.push_back(vertices[i] - vectUnit*sizes[i]);
+					}
+				}
+			}else{
+				if ((xu^xv)[2] > 0) {
+					result.push_back(vertices[i] + vectUnit*sizes[i]*inversion);
+					result.push_back(vertices[i] - vectUnit*sizes[i]*inversion);
+					inversion*=-1;
+				}else{
+					result.push_back(vertices[i] - vectUnit*sizes[i]*inversion);
+					result.push_back(vertices[i] + vectUnit*sizes[i]*inversion);
+					inversion*=-1;
+				}
+			}
+		}
+	}
+	//end point
+	xu = endN - vertices[vertices.size()-1];
+	xu /= xu.norm();
+	xv = Coord(0,0,-1);
+	dir = xu^xv;
+	if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
+	result.push_back(vertices[vertices.size()-1] - dir*sizes[vertices.size()-1]*inversion);
+	result.push_back(vertices[vertices.size()-1] + dir*sizes[vertices.size()-1]*inversion);
 }
 //==============================================
 vector<Coord> splineCurve(const vector<Coord> &vertices) {
@@ -252,7 +361,7 @@ void computeCleanVertices(const vector<Coord> &bends,
 		}
 		if (result.size() < 2) { //only one valid point for a line
 			result.clear();
-		return;
+			return;
 		}
 		//Adjust tangent direction
 		if ((startN - startPoint).norm() < 1E-4) {
@@ -284,12 +393,15 @@ void polyLine(const vector<Coord> &vertices,
 	getColors(vertices,c1,c2,colors);
 
 	OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-	glBegin(GL_LINE_STRIP);
-	for (unsigned int i = 0; i < vertices.size(); ++i) {
-		setColor(colors[i]);
-		glVertex3fv((float *)&vertices[i]);
-	}
-	glEnd();
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
+	glColorPointer(4, GL_UNSIGNED_BYTE, 0, &colors[0]);
+	glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+
 	OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 }
 //=============================================
@@ -298,92 +410,98 @@ void polyQuad(const vector<Coord> &vertices,
 		float s1, float s2,
 		const Coord &startN, const Coord &endN,
 		bool colorInterpolate,const Color &borderColor,
-		const string &textureName) {
-
-	vector<Color> colors;
-	getColors(vertices, c1, c2,colors);
+		const string &textureName, const float outlineWidth) {
 
 	vector<float> sizes;
 	getSizes(vertices, s1, s2,sizes);
 
-	unsigned int size;
-	vector<unsigned int> decTab;
-	unsigned int dec=0;
-	GLfloat *points = buildCurvePoints(vertices, sizes, startN, endN,size,&decTab);
+	vector<Coord> quadVertices;
+	vector<unsigned int> bottomOutlineIndices;
+	vector<unsigned int> topOutlineIndices;
+	vector<float> texCoords;
+
+	buildCurvePoints(vertices, sizes, startN, endN, quadVertices);
+
+	float length = 0;
+	vector<Coord> centerLine;
+	centerLine.reserve(quadVertices.size()/2);
+	for (size_t i = 0 ; i < quadVertices.size() / 2 ; ++i) {
+		centerLine.push_back((quadVertices[2*i]+quadVertices[2*i+1])/2);
+		bottomOutlineIndices.push_back(2*i);
+		topOutlineIndices.push_back(2*i+1);
+
+		if (i == 0) {
+			texCoords.push_back(0);
+			texCoords.push_back(0);
+			texCoords.push_back(0);
+			texCoords.push_back(1);
+		} else {
+			Coord p1_0 = quadVertices[2*(i-1)];
+			Coord p1_1 = quadVertices[2*i];
+			Coord p2_0 = quadVertices[2*(i-1)+1];
+			Coord p2_1 = quadVertices[2*i+1];
+			length += ((p1_1+p2_1)/2.-(p1_0+p2_0)/2.).norm()/(p1_0-p2_0).norm();
+			texCoords.push_back(length);
+			texCoords.push_back(0);
+			texCoords.push_back(length);
+			texCoords.push_back(1);
+		}
+	}
+
+	vector<Color> colors;
+	getColors(centerLine, c1, c2,colors);
+
+	vector<Color> quadColors;
+	quadColors.reserve(quadVertices.size());
+	for (size_t i = 0 ; i < colors.size() ; ++i) {
+		quadColors.push_back(colors[i]);
+		quadColors.push_back(colors[i]);
+	}
+
 	if(textureName!="") {
 		GlTextureManager::getInst().activateTexture(textureName);
 	}
 
 	OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 
-	float length = 0;
-	glBegin(GL_QUAD_STRIP);
-	for (unsigned int i = 0; i < size; ++i) {
-		if(dec<decTab.size())
-			if(i==decTab[dec])
-				dec++;
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-		glColor4ubv(((const GLubyte *)&colors[i-dec]));
+	glVertexPointer(3, GL_FLOAT, 0, &quadVertices[0]);
+	glColorPointer(4, GL_UNSIGNED_BYTE, 0, &quadColors[0]);
+	glTexCoordPointer(2, GL_FLOAT, 0, &texCoords[0]);
 
-		if(i==0){
-			glTexCoord2f(0, 0.0f);
-			glVertex3fv(&points[i*3]);
-			glTexCoord2f(0, 1.0f);
-			glVertex3fv(&points[i*3 + size*3]);
-		}else{
-			if(textureName!="") {
-				Coord p1_0(points[i*3 - 3],points[i*3-2],points[i*3-1]);
-				Coord p1_1(points[i*3],points[i*3+1],points[i*3+2]);
-				Coord p2_0(points[i*3 + size*3 - 3],points[i*3 + size*3-2],points[i*3 + size*3-1]);
-				Coord p2_1(points[i*3 + size*3],points[i*3 + size*3+1],points[i*3 + size*3+2]);
-				length += ((p1_1+p2_1)/2.-(p1_0+p2_0)/2.).norm()/(p1_0-p2_0).norm();
-			}
-
-			glTexCoord2f(length, 0.0f);
-			glVertex3fv(&points[i*3]);
-			glTexCoord2f(length, 1.0f);
-			glVertex3fv(&points[i*3 + size*3]);
-		}
-	}
-	glEnd();
+	glDrawArrays(GL_QUAD_STRIP, 0, quadVertices.size());
 
 	OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
-	if(textureName!="")
+	if(textureName!="") {
 		GlTextureManager::getInst().desactivateTexture();
-
-	OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
-	dec=0;
-	glBegin(GL_LINE_STRIP);
-	if(!colorInterpolate)
-		glColor4ubv(((const GLubyte *)&borderColor));
-	for (unsigned int i = 0; i < size; ++i) {
-		if(dec<decTab.size())
-			if(i==decTab[dec])
-				dec++;
-		if(colorInterpolate)
-			glColor4ubv(((const GLubyte *)&colors[i-dec]));
-		glVertex3fv(&points[i*3]);
 	}
-	glEnd();
-	dec=0;
-	glBegin(GL_LINE_STRIP);
-	if(!colorInterpolate)
-		glColor4ubv(((const GLubyte *)&borderColor));
-	for (unsigned int i = 0; i < size; ++i) {
-		if(dec<decTab.size())
-			if(i==decTab[dec])
-				dec++;
-		if(colorInterpolate)
-			glColor4ubv(((const GLubyte *)&colors[i-dec]));
-		glVertex3fv(&points[i*3 + size*3]);
+
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	if (outlineWidth > 0) {
+		glLineWidth(outlineWidth);
+
+		OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+
+		if(!colorInterpolate) {
+			glDisableClientState(GL_COLOR_ARRAY);
+			glColor4ubv(((const GLubyte *)&borderColor));
+		}
+
+		glDrawElements(GL_LINE_STRIP, bottomOutlineIndices.size(), GL_UNSIGNED_INT, &bottomOutlineIndices[0]);
+		glDrawElements(GL_LINE_STRIP, topOutlineIndices.size(), GL_UNSIGNED_INT, &topOutlineIndices[0]);
+
+		OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+
+		glLineWidth(1.0);
 	}
-	glEnd();
 
-	OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
-
-	delete [] points;
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
 }
 //=============================================
 void simpleQuad(const vector<Coord> &vertices,
@@ -535,20 +653,7 @@ void simpleQuad(const vector<Coord> &vertices,
 
 	delete [] points;
 }
-//=============================================
-void bezierCylinder(const vector<Coord> &,
-		const Color &, const Color &,
-		float, float,
-		const Coord &, const Coord &) {
-	/* gleCoord  *point_array  = new gleCoord [30 + 2];
-		gleColor  *color_array  = new gleColor [30 + 2];
-		gleDouble *radius_array = new gleDouble[30 + 2];
 
-      for (unsigned int i = 0; i < 30; ++i) {
-      Bezier(double (&p)[3], const double (*points)[3], unsigned int size, double mu);
-    }
-   */
-}
 void bezierQuad(const vector<Coord> &vertices,
 		const Color &c1, const Color &c2,
 		float s1, float s2,
@@ -696,13 +801,7 @@ void bezierLine(const vector<Coord> &vertices,
 	glDisable(GL_MAP1_VERTEX_3);
 	delete [] data;
 }
-//==================================================================
-void splineCylinder(const vector<Coord> &vertices,
-		const Color &c1, const Color &c2,
-		float s1, float s2,
-		const Coord &startN, const Coord &endN) {
-	tlp::bezierCylinder(splineCurve(vertices), c1, c2, s1, s2, startN, endN);
-}
+
 void splineQuad(const vector<Coord> &vertices,
 		const Color &c1, const Color &c2,
 		float s1, float s2,

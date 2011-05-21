@@ -47,7 +47,8 @@ namespace tlp {
     const Coord &,            /* normal to the end curve */
     bool,	  		  /* if true : use start and end color to border lines, if false : use borderColor*/
     const Color &,		  /* border color */
-    const std::string &textureName="");			/* textureName */
+    const std::string &textureName="",			/* textureName */
+    const float outlineWidth=0);
   TLP_GL_SCOPE void simpleQuad(const std::vector<Coord> &, /* quad vertces */
         const Color &,            /* start color */
         const Color &,            /* end color */
@@ -78,6 +79,11 @@ namespace tlp {
       const Coord &endN,
       unsigned int &resultSize,
       std::vector<unsigned int> *dec=NULL);
+  TLP_GL_SCOPE void buildCurvePoints (const std::vector<Coord> &vertices,
+  		const std::vector<float> &sizes,
+  		const Coord &startN,
+  		const Coord &endN,
+  		std::vector<Coord> &result);
 }
 #endif //DOXYGEN_NOTFOR_DEVEL
 #endif
