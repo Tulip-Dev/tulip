@@ -21,7 +21,7 @@ include/PluginsCenter.h
 include/TulipMainWindow.h
 include/TulipWelcomePage.h)
 
-QT4_ADD_RESOURCES(RCC_SRCS resources/TulipApp.qrc)
+QT4_ADD_RESOURCES(RCC_SRCS resources/TulipAgent.qrc)
 
 INCLUDE_DIRECTORIES(include ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR})
 
@@ -29,7 +29,7 @@ ADD_EXECUTABLE(tulip_agent ${SRCS} ${UI_HEADERS} ${MOC_SRCS} ${RCC_SRCS})
 
 TARGET_LINK_LIBRARIES(tulip_agent ${LibTulipGUIName} ${QT_LIBRARIES})
 
-INSTALL(TARGETS tulip_app4
+INSTALL(TARGETS tulip_agent
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_app
   LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_app
   ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_app)
