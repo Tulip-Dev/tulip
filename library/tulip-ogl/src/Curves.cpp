@@ -214,8 +214,17 @@ void buildCurvePoints (const vector<Coord> &vertices,
 
 	int inversion=1;
 	//start point
-	Coord xu = startN - vertices[0];
+
+
+
+	Coord xu;
+	if (startN != vertices[0]) {
+	 xu = startN - vertices[0];
+	} else {
+		xu = vertices[0] - vertices[1];
+	}
 	xu /= xu.norm();
+
 	Coord xv = Coord(0,0,1.);
 	Coord dir = xu^xv;
 	if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
@@ -304,7 +313,12 @@ void buildCurvePoints (const vector<Coord> &vertices,
 		}
 	}
 	//end point
-	xu = endN - vertices[vertices.size()-1];
+	if (endN != vertices[vertices.size()-1]) {
+		xu = endN - vertices[vertices.size()-1];
+	} else {
+		xu = vertices[vertices.size()-1] - vertices[vertices.size()-2];
+	}
+
 	xu /= xu.norm();
 	xv = Coord(0,0,-1);
 	dir = xu^xv;
