@@ -81,13 +81,19 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orient�, planaire
   virtual bool isElement(const edge e) const;
   virtual bool isMetaEdge(const edge e) const;
   virtual node addNode();
-  virtual void addNode(const node n);
-  virtual edge addEdge(const node n, const node n2);
-
-  virtual void addEdge(const edge e);
+  virtual void addNodes(unsigned int nb, std::vector<node>& addedNodes);
+  virtual void addNode(const node);
+  virtual void addNodes(Iterator<node>* nodes);
+  virtual edge addEdge(const node n1, const node n2);
+  virtual void addEdges(const std::vector<std::pair<node, node> >& edges,
+			std::vector<edge>& addedEdges);
+  virtual void addEdge(const edge);
+  virtual void addEdges(Iterator<edge>* edges);
   virtual void delNode(const tlp::node n, bool deleteInAllGraphs = false);
+  virtual void delNodes(Iterator<node>* itN, bool deleteInAllGraphs);
   virtual _DEPRECATED void delAllNode(const node n);
   virtual void delEdge(const tlp::edge e, bool deleteInAllGraphs = false);
+  virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false);
   virtual _DEPRECATED void delAllEdge(const edge e);
   virtual void setEdgeOrder(const node n,const std::vector<edge> & s);
   virtual void swapEdgeOrder(const node n ,const edge e1, const edge e2);
@@ -130,6 +136,9 @@ protected:
   // called by GraphUpdatesRecorder
   virtual node restoreNode(node);
   virtual edge restoreEdge(edge, node source, node target);
+  virtual void restoreNodes(const std::vector<node>&);
+  virtual void restoreEdges(const std::vector<edge>& edges,
+			    const std::vector<std::pair<node, node> >& ends);
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);

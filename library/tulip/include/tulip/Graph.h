@@ -201,6 +201,13 @@ public:
    */
   virtual node addNode()=0;
   /**
+   * Adds new nodes in the graph and returns them the addedNodes vector.
+   * The new nodes are also added in all
+   * the graph ancestors to maintain the sub-graph relation between graphs.
+   * Warning the addedNodes vector is cleared before adding nodes
+   */
+  virtual void addNodes(unsigned int nbNodes, std::vector<node>& addedNodes)=0;
+  /**
    * Adds an existing node in the graph. This node is also added in all
    * the graph ancestors to maintain the sub-graph relation between graphs.
    * Warning, the node must be an element of the graph hierarchy, thus it must be
@@ -209,12 +216,30 @@ public:
    */
   virtual void addNode(const node)=0;
   /**
-   * Deletes a node in the graph. This node is also removed in all
-   * the sub-graph of the graph to maintain the sub-graph relation between graphs.
-   * If deleteInAllGraphs is true, the node will be removed in all the
-   * hierarchy of graphs.
+   * Adds existing nodes in the graph. The nodes are also added in all
+   * the graph ancestors to maintain the sub-graph relation between graphs.
+   * Warning, the added nodes must be elements of the graph hierarchy,
+   * thus they must be elements of the root graph.
+   * Warning : One can't add existing nodes to the root graph.
+   */
+  virtual void addNodes(Iterator<node>* nodes)=0;
+  /**
+   * Deletes a node in the graph. This node is also removed in
+   * the sub-graphs hierarchy of the current graph to maintain
+   * the sub-graph relation between graphs.
+   * If deleteInAllGraphs is true, the node is deleted
+   * in the whole hierarchy of graphs.
    */
   virtual void delNode(const node n, bool deleteInAllGraphs = false)=0;
+  /**
+   * Deletes nodes in the graph. These nodes are also removed in
+   * the sub-graphs hierarchy of the current graph to maintain
+   * the sub-graph relation between graphs.
+   * If deleteInAllGraphs is true, these nodes are  deleted
+   * in the whole hierarchy of graphs.
+   * It is the responsability of the caller to delete the iterator.
+   */
+  virtual void delNodes(Iterator<node>* itN, bool deleteInAllGraphs = false)=0;
   /**
    * Deletes a node in all the hierarchy of graphs.
    */
@@ -225,6 +250,14 @@ public:
    */
   virtual edge addEdge(const node, const node )=0;
   /**
+   * Adds new edges in the graph and returns them the addedNodes vector.
+   * The new nodes are also added in all
+   * the graph ancestors to maintain the sub-graph relation between graphs.
+   * Warning : the addedEdges vector is cleared before adding edges
+   */
+  virtual void addEdges(const std::vector<std::pair<node, node> >& edges,
+			std::vector<edge>& addedEdges)=0;
+  /**
    * Adds an existing edge in the graph. This edge is also added in all
    * the graph's ancestors to maintain the sub-graph relation between graphs.
    * Warning, the edge must be an element of the graph hierarchy, thus it must be
@@ -233,16 +266,36 @@ public:
    */
   virtual void addEdge(const edge )=0;
   /**
-   * Deletes an edge in the graph. This edge is also removed in all
-   * the sub-graphs of the graph to maintain the sub-graph relation between graphs.
-   * The ordering of edges is preserved.
+   * Adds existing edges in the graph. The edges are also added in all
+   * the graph ancestors to maintain the sub-graph relation between graphs.
+   * Warning, the added edges must be elements of the graph hierarchy,
+   * thus they must be elements of the root graph.
+   * Warning : One can't add existing edges to the root graph.
    */
-  virtual  void delEdge(const edge e, bool deleteInAllGraphs = false)=0;
+  virtual void addEdges(Iterator<edge>* edges)=0;
+  /**
+   * Deletes an edge in the graph. The edge is also removed in
+   * the sub-graphs hierarchy of the current graph to maintain
+   * the sub-graph relation between graphs.
+   * If deleteInAllGraphs is true, the edge is deleted
+   * in the whole hierarchy of graphs.
+   * The ordering of remaining edges is preserved.
+   */
+  virtual void delEdge(const edge e, bool deleteInAllGraphs = false)=0;
+  /**
+   * Deletes edges in the graph. These edges are also removed in
+   * the sub-graphs hierarchy of the current graph to maintain
+   * the sub-graph relation between graphs.
+   * If deleteInAllGraphs is true, the edges are deleted
+   * in the whole hierarchy of graphs.
+   * The ordering of remaining edges is preserved.
+   * It is the responsability of the caller to delete the iterator.
+   */
+  virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false)=0;
   /**
    * Deletes an edge in all the hierarchy of graphs.
    * The ordering of edges around the node
-   * is preserved. If deleteInAllGraphs is true, the edge will be removed in all the
-   * hierarchy of graphs.
+   * is preserved.
    */
   virtual _DEPRECATED void delAllEdge(const edge)=0;
   /**
@@ -562,7 +615,10 @@ protected:
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder
   virtual node restoreNode(node)=0;
+  virtual void restoreNodes(const std::vector<node>& nodes)=0;
   virtual edge restoreEdge(edge, node source, node target)=0;
+  virtual void restoreEdges(const std::vector<edge>& edges,
+			    const std::vector<std::pair<node, node> >& ends)=0;
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node)=0;
@@ -657,6 +713,7 @@ class TLP_SCOPE GraphEvent :public Event {
     enum GraphEventType {
       TLP_ADD_NODE = 0, TLP_DEL_NODE, TLP_ADD_EDGE, TLP_DEL_EDGE,
       TLP_REVERSE_EDGE, TLP_BEFORE_SET_ENDS, TLP_AFTER_SET_ENDS,
+      TLP_ADD_NODES, TLP_ADD_EDGES,
       TLP_ADD_SUBGRAPH, TLP_DEL_SUBGRAPH,
       TLP_ADD_LOCAL_PROPERTY, TLP_DEL_LOCAL_PROPERTY,
       TLP_ADD_INHERITED_PROPERTY, TLP_DEL_INHERITED_PROPERTY,
@@ -668,6 +725,20 @@ class TLP_SCOPE GraphEvent :public Event {
 	       Event::EventType evtType = Event::TLP_MODIFICATION)
       : Event(g, evtType), evtType(graphEvtType) {
       info.eltId = id;
+    }
+    // constructor for nodes events
+    GraphEvent(const Graph& g, GraphEventType graphEvtType,
+	       const std::vector<node>& nodes,
+	       Event::EventType evtType = Event::TLP_MODIFICATION)
+      : Event(g, evtType), evtType(graphEvtType) {
+      info.nodes = &nodes;
+    }
+    // constructor for edges events
+    GraphEvent(const Graph& g, GraphEventType graphEvtType,
+	       const std::vector<edge>& edges,
+	       Event::EventType evtType = Event::TLP_MODIFICATION)
+      : Event(g, evtType), evtType(graphEvtType) {
+      info.edges = &edges;
     }
     // constructor for subgraph events
     GraphEvent(const Graph& g, GraphEventType graphEvtType,
@@ -700,12 +771,22 @@ class TLP_SCOPE GraphEvent :public Event {
     }
 
     edge getEdge() const {
-      assert(evtType > TLP_DEL_NODE && evtType < TLP_ADD_SUBGRAPH);
+      assert(evtType > TLP_DEL_NODE && evtType < TLP_ADD_NODES);
       return edge(info.eltId);
     }
 
+    const std::vector<node>& getNodes() const {
+      assert(evtType == TLP_ADD_NODES);
+      return *(info.nodes);
+    }
+
+    const std::vector<edge>& getEdges() const {
+      assert(evtType == TLP_ADD_EDGES);
+      return *(info.edges);
+    }
+
     const Graph* getSubGraph() const {
-      assert(evtType > TLP_AFTER_SET_ENDS && evtType < TLP_ADD_LOCAL_PROPERTY);
+      assert(evtType > TLP_ADD_EDGES && evtType < TLP_ADD_LOCAL_PROPERTY);
       return info.subGraph;
     }
 
@@ -729,6 +810,8 @@ class TLP_SCOPE GraphEvent :public Event {
       unsigned int eltId;
       const Graph* subGraph;
       std::string* name;
+      const std::vector<node>* nodes;
+      const std::vector<edge>* edges;
     } info;
 };
 

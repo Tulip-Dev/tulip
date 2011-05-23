@@ -53,10 +53,6 @@ void IdManager::free(const unsigned int id) {
     state.freeIds.insert(id);
 }
 //-----------------------------------------------------------
-unsigned int IdManager::get() {
-  return state.nextId++;
-}
-//-----------------------------------------------------------
 void IdManager::getFreeId(unsigned int id) {
   assert(id > state.firstId);
   if (id >= state.nextId) {

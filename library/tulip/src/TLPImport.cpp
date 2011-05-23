@@ -18,9 +18,9 @@
  */
 #include <fstream>
 #include <string>
+#include <vector>
 #include <errno.h>
 #include <sys/stat.h>
-#include <string.h>
 
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
@@ -124,15 +124,13 @@ namespace tlp {
             return true;
         }
         bool addNodes(int first, int last) {
+	     std::vector<node> nodes;
+	    _graph->addNodes(last - first + 1, nodes);
             if (version < 2.1) {
+	        std::vector<node>::iterator it = nodes.begin();
                 while (first <= last) {
-                    nodeIndex[first]=_graph->addNode();
-                    first++;
-                }
-            } else {
-                while (first <= last) {
-                    _graph->addNode();
-                    first++;
+		  nodeIndex[first]=(*it);
+		  ++first, ++it;
                 }
             }
             return true;

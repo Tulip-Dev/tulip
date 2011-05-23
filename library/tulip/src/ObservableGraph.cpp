@@ -53,6 +53,18 @@ void GraphObserver::RealGraphObserver::treatEvent(const Event& ev) {
     case GraphEvent::TLP_AFTER_SET_ENDS:
       visibleObserver->afterSetEnds(graph, gEvt->getEdge());
       break;
+    case GraphEvent::TLP_ADD_NODES: {
+      const std::vector<node>& nodes = gEvt->getNodes();
+      for (unsigned int i = 0; i < nodes.size(); ++i)
+	visibleObserver->addNode(graph, nodes[i]);
+      break;
+    }
+    case GraphEvent::TLP_ADD_EDGES: {
+      const std::vector<edge>& edges = gEvt->getEdges();
+      for (unsigned int i = 0; i < edges.size(); ++i)
+	visibleObserver->addEdge(graph, edges[i]);
+      break;
+    }
     case GraphEvent::TLP_ADD_SUBGRAPH:
       visibleObserver->addSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
       break;
@@ -73,6 +85,7 @@ void GraphObserver::RealGraphObserver::treatEvent(const Event& ev) {
       break;
     case GraphEvent::TLP_REMOVE_ATTRIBUTE:
       visibleObserver->removeAttribute(graph, gEvt->getAttributeName());
+      break;
     case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
       visibleObserver->addInheritedProperty(graph, gEvt->getPropertyName());
       break;
