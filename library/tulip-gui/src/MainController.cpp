@@ -319,14 +319,6 @@ namespace tlp {
     Observable::holdObservers();
     Graph *newGraph=graph;
 
-    // If graph don't have valid layoutProperty : we apply random layout
-    Iterator<node>* itn = newGraph->getProperty<LayoutProperty>("viewLayout")->getNonDefaultValuatedNodes();
-    if (!itn->hasNext() && newGraph->numberOfNodes()>1) {
-      DataSet dataSet;
-      dataSet.set<bool>("3D layout",false);
-      ControllerAlgorithmTools::changeProperty<LayoutProperty>(newGraph,mainWindowFacade.getParentWidget(),"Random","viewLayout",dataSet,NULL,false,false,false);
-    } delete itn;
-
     Graph *lastViewedGraph=newGraph;
     Observable::unholdObservers();
     setCurrentGraph(newGraph);
