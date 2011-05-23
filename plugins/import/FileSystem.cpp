@@ -51,14 +51,12 @@ public:
   bool import(const std::string &) {
     if (dataSet == 0)
       return false;
+
     std::string rootPathStr;
     dataSet->get("dir::directory",rootPathStr);
     QFileInfo rootInfo(rootPathStr.c_str());
     if (!rootInfo.exists())
       return false;
-    tlp::node rootNode = addFileNode(rootInfo,graph);
-    if (!rootInfo.isDir())
-      return true;
 
     _absolutePaths = graph->getProperty<tlp::StringProperty>("Absolute paths");
     _baseNames = graph->getProperty<tlp::StringProperty>("Base name");
@@ -74,14 +72,31 @@ public:
     _permissions = graph->getProperty<tlp::IntegerProperty>("Permission ID");
     _suffixes = graph->getProperty<tlp::StringProperty>("Suffix");
 
+    tlp::node rootNode = addFileNode(rootInfo,graph);
+    if (!rootInfo.isDir())
+      return true;
+
+    bool deleteProgress=false;
+    if (!pluginProgress) {
+      deleteProgress=true;
+      pluginProgress = new tlp::SimplePluginProgress;
+    }
+
+    pluginProgress->progress(0,100);
     QStack<QPair<QString,tlp::node> > fsStack;
     fsStack.push(QPair<QString,tlp::node>(rootInfo.absoluteFilePath(),rootNode));
     while (!fsStack.empty()) {
       QPair<QString,tlp::node> elem = fsStack.pop();
       QDir currentDir(QDir(elem.first));
+
+      pluginProgress->setComment(("Visiting " + currentDir.absolutePath()).toStdString());
+
       tlp::node parentNode(elem.second);
       QFileInfoList entries(currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst));
+
+      int n=entries.size(),i=0;
       for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
+        pluginProgress->progress(i++,entries.size());
         QFileInfo fileInfos(*it);
         tlp::node fileNode=addFileNode(fileInfos, graph);
         graph->addEdge(parentNode,fileNode);
@@ -89,6 +104,10 @@ public:
           fsStack.push_back(QPair<QString,tlp::node>(fileInfos.absoluteFilePath(),fileNode));
       }
     }
+
+    if (deleteProgress)
+      delete pluginProgress;
+
     return true;
   }
 
@@ -104,6 +123,10 @@ private:
     _isSymlink->setNodeValue(n,infos.isSymLink());
     _isWritable->setNodeValue(n,infos.isWritable());
     _lastModifiedDates->setNodeValue(n,infos.lastModified().toString().toStdString());
+    _lastReadDates->setNodeValue(n,infos.lastRead().toString().toStdString());
+    _owners->setNodeValue(n,infos.owner().toStdString());
+    _permissions->setNodeValue(n,(int)(infos.permissions()));
+    _suffixes->setNodeValue(n,infos.suffix().toStdString());
     return n;
   }
 
