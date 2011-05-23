@@ -2,7 +2,6 @@ SET(SRCS
 src/AboutTulipPage.cpp
 src/main.cpp
 src/PluginErrorReport.cpp
-#src/PluginManager.cpp
 src/PluginsCenter.cpp
 src/RssParser.cpp
 src/TulipMainWindow.cpp
@@ -26,9 +25,9 @@ QT4_ADD_RESOURCES(RCC_SRCS resources/TulipApp.qrc)
 
 INCLUDE_DIRECTORIES(include ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR})
 
-ADD_EXECUTABLE(tulip_app4 ${SRCS} ${UI_HEADERS} ${MOC_SRCS} ${RCC_SRCS})
+ADD_EXECUTABLE(tulip_agent ${SRCS} ${UI_HEADERS} ${MOC_SRCS} ${RCC_SRCS})
 
-TARGET_LINK_LIBRARIES(tulip_app4 ${LibTulipGUIName} ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(tulip_agent ${LibTulipGUIName} ${QT_LIBRARIES})
 
 INSTALL(TARGETS tulip_app4
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_app
