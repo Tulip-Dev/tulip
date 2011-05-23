@@ -55,6 +55,7 @@ GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData)
  vectorIndexSizeInit(false),
  edgesModified(false) {
 	colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
+	sizeInterpolate=inputData->parameters->isEdgeSizeInterpolate();
 }
 
 GlVertexArrayManager::~GlVertexArrayManager(){
@@ -78,6 +79,12 @@ bool GlVertexArrayManager::haveToCompute(){
 		colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
 		clearColorData();
 		toComputeColor = true;
+		return true;
+	}
+	if(inputData->parameters->isEdgeSizeInterpolate()!=sizeInterpolate){
+		sizeInterpolate=inputData->parameters->isEdgeSizeInterpolate();
+		clearLayoutData();
+		toComputeLayout = true;
 		return true;
 	}
 
@@ -391,7 +398,7 @@ void GlVertexArrayManager::addEdge(GlEdge *edge){
 			edge->getEdgeSize(inputData, tlp::edge(edge->id),srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
 
 			vector<float> edgeSizes;
-			getSizes(vertices, edgeSize[0], edgeSize[1], edgeSizes);
+			getSizes(vertices, edgeSize[0]/2.0f, edgeSize[1]/2.0f, edgeSizes);
 
 			edgeToQuadIndexVector[edge->id]=pair<unsigned int,unsigned int>(quadsIndexArray.size(),quadsIndexCountArray.size());
 			edgeToBottomOulineIndexVector[edge->id]=quadsBottomOutlineIndexArray.size();

@@ -176,6 +176,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	} else if (data->getGlVertexArrayManager()->renderingIsBegin()
 			   && !data->parameters->isEdge3D()
 			   && !data->parameters->getFeedbackRender()
+			   && !data->parameters->isViewArrow()
 			   && data->getElementShape()->getEdgeValue(e) == POLYLINESHAPE
 			   && edgeTexture == "") {
 		data->getGlVertexArrayManager()->activateQuadEdgeDisplay(this,selected);
@@ -268,14 +269,14 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	unsigned int endEdgeGlyph = data->getElementTgtAnchorShape()->getEdgeValue(e);
 
 	if (startEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
-								displayArrow(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),edgeSize[0],srcCol,maxSrcSize,selected,startEdgeGlyph,endEdgeGlyph,
+								displayArrow(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),srcCol,maxSrcSize,selected,startEdgeGlyph,endEdgeGlyph,
 				bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
 	} else {
 		beginLineAnchor = srcAnchor;
 	}
 
 	if (endEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
-								displayArrow(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),edgeSize[1],tgtCol,maxTgtSize,selected,endEdgeGlyph,startEdgeGlyph,
+								displayArrow(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),tgtCol,maxTgtSize,selected,endEdgeGlyph,startEdgeGlyph,
 				bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
 	} else {
 		endLineAnchor = tgtAnchor;
@@ -728,11 +729,10 @@ void GlEdge::displayArrow(GlGraphInputData *data,
 
 	Size size;
 	if (data->parameters->isEdgeSizeInterpolate()) {
-		size[0] = (sizeRatio[0]*10.) * edgeSize;
-		if (size[0] > maxGlyphSize)
-			size[0] = maxGlyphSize;
-		size[1] = std::min(maxSize, (float)(edgeSize * (sizeRatio[1]*10.)));
-		size[2] = std::min(maxSize, (float)(edgeSize * (sizeRatio[2]*10.)));
+		size[0] = edgeSize / 4.0f;
+		size[1] = edgeSize / 4.0f;
+		size[2] = edgeSize / 4.0f;
+
 	} else {
 		size[0] = sizeRatio[0] > maxGlyphSize ? maxGlyphSize : sizeRatio[0];
 		size[1] = std::min(maxSize, sizeRatio[1]);

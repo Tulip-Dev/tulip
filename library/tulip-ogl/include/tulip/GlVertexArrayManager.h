@@ -123,6 +123,7 @@ protected:
 	bool vectorIndexSizeInit;
 
 	bool colorInterpolate;
+	bool sizeInterpolate;
 	bool edgesModified;
 
 	std::vector<Coord> linesCoordsArray;
