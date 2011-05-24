@@ -20,10 +20,6 @@
 #ifndef _Tulip_HTTPREQUEST_H
 #define _Tulip_HTTPREQUEST_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 #include <QtNetwork/QHttp>

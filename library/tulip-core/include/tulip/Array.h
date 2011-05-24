@@ -21,9 +21,6 @@
 #ifndef _TLP_GEO_ARRAY_H
 #define _TLP_GEO_ARRAY_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <cassert>
 #include <iostream>
 #include <tulip/tulipconf.h>

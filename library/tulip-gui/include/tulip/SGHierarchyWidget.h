@@ -19,10 +19,6 @@
 #ifndef CLUSTERTREE_H
 #define CLUSTERTREE_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <QtCore/qobject.h>
 #include <QtCore/qpoint.h>
 #include <QtGui/qtreewidget.h>

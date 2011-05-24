@@ -21,10 +21,6 @@
 #ifndef _TLP_VECTORCAST_H
 #define _TLP_VECTORCAST_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <cassert>
 #include <tulip/Vector.h>
 

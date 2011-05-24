@@ -19,10 +19,6 @@
 #ifndef Tulip_OPENGLERRORVIEWER_H
 #define Tulip_OPENGLERRORVIEWER_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 #include <iostream>

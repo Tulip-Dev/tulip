@@ -16,10 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/IdManager.h>
 #include <limits.h>
 #include <assert.h>

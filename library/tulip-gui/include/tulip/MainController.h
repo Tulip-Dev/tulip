@@ -20,10 +20,6 @@
 #ifndef Tulip_MAINCONTROLLER_H
 #define Tulip_MAINCONTROLLER_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/Reflect.h>
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>

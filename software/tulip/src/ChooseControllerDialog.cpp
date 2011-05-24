@@ -18,10 +18,6 @@
  */
 #include "ChooseControllerDialog.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <QtCore/QSettings>
 
 #include <tulip/PreferenceManager.h>

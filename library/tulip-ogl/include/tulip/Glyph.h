@@ -21,10 +21,6 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/WithParameter.h>

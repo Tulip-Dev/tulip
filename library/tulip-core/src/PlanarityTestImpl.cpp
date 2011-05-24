@@ -21,10 +21,6 @@
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/Graph.h>
 #include <tulip/PlanarityTestImpl.h>
 #include <tulip/MutableContainer.h>

@@ -19,10 +19,6 @@
 #ifndef Tulip_CONTROLLERVIEWSMANAGER_H
 #define Tulip_CONTROLLERVIEWSMANAGER_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 #include <map>

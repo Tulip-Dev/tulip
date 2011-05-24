@@ -20,10 +20,6 @@
 #ifndef TULIP_TEST_H
 #define TULIP_TEST_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <vector>
 #include <tulip/tuliphash.h>
 #include <tulip/Observable.h>

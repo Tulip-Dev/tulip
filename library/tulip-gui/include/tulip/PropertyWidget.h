@@ -19,10 +19,6 @@
 #ifndef PROPERTYWIDGETS_H
 #define PROPERTYWIDGETS_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <string>
 
 #include <QtGui/qwidget.h>

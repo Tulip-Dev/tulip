@@ -30,10 +30,6 @@
 #ifndef Tulip_GLMAINVIEW_H
 #define Tulip_GLMAINVIEW_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include "tulip/AbstractView.h"
 
 #include <QtGui/QMainWindow>

@@ -23,10 +23,6 @@
 #include <set>
 #include <string>
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 #include <tulip/Observable.h>

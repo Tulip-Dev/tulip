@@ -19,10 +19,6 @@
 #ifndef Tulip_CONTROLLERVIEWSTOOLS_H
 #define Tulip_CONTROLLERVIEWSTOOLS_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 #include <tulip/View.h>
 

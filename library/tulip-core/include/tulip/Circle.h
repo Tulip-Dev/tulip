@@ -20,10 +20,6 @@
 #ifndef TLP_GEO_CIRCLE_H
 #define TLP_GEO_CIRCLE_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <vector>
 #include <tulip/Vector.h>
 namespace tlp {

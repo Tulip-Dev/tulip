@@ -16,10 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/GraphAbstract.h>
 #include <tulip/PropertyManager.h>
 #include <tulip/GraphProperty.h>

@@ -19,10 +19,6 @@
 #ifndef Tulip_UPDATEPLUGINSDIALOG_H
 #define Tulip_UPDATEPLUGINSDIALOG_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 #include <QtNetwork/QNetworkProxy>
