@@ -21,7 +21,6 @@
 #include <algorithm>
 #include <tulip/GraphTools.h>
 #include "DatasetTools.h"
-#include "EdgeTools.h"
 #include "Orientation.h"
 #include "ImprovedWalker.h"
 
@@ -118,7 +117,7 @@ bool ImprovedWalker::run() {
   secondWalk(root,0,0);
 
   if (hasOrthogonalEdge(dataSet))
-    setOrthogonalEdge(oriLayout, tree, spacing);
+    oriLayout->setOrthogonalEdge(tree, spacing);
     
   // forget last temporary graph state 
   graph->pop();

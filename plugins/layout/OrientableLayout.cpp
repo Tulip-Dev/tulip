@@ -125,3 +125,40 @@ OrientableLayout::LineType OrientableLayout::getEdgeValue(const tlp::edge e) {
 OrientableLayout::LineType OrientableLayout::getEdgeDefaultValue() {
     return convertEdgeLinetype(layout->getEdgeDefaultValue());
 }
+
+//====================================================================
+void OrientableLayout::setOrthogonalEdge(const Graph* tree, float interNodeDistance) {
+  Iterator<node>* itNode = tree->getNodes();
+  while (itNode->hasNext()) {
+    node            currentNode      = itNode->next();
+    OrientableCoord currentNodeCoord = getNodeValue(currentNode);
+    Iterator<edge>* itEdge           = tree->getOutEdges(currentNode);
+    while (itEdge->hasNext())
+      addControlPoints(tree, currentNodeCoord, itEdge->next(), interNodeDistance);
+    delete itEdge;
+  }
+  delete itNode;
+}
+
+//====================================================================
+void OrientableLayout::addControlPoints(const Graph* tree, OrientableCoord fatherCoord, edge e, float interNodeDistance) {
+  node child                  = tree->target(e);
+  OrientableCoord childCoord  = getNodeValue(child); 
+  
+  if (fatherCoord.getX() != childCoord.getX()) { 
+    OrientableLayout::LineType  newControlPoints;     
+    
+    float coordModifier  = interNodeDistance / 2.f;
+    
+    OrientableCoord coord  = createCoord();
+    float           coordY = fatherCoord.getY() + coordModifier;
+    coord.set(fatherCoord.getX(), coordY, 0);    
+    newControlPoints.push_back(coord);
+    
+    
+    coord.set(childCoord.getX(), coordY, 0);
+    newControlPoints.push_back(coord);
+    
+    setEdgeValue(e, newControlPoints);
+  }
+}

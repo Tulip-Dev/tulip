@@ -22,7 +22,6 @@
 #include "TreeTools.h"
 #include "Orientation.h"
 #include "DatasetTools.h"
-#include "EdgeTools.h"
 #include "Dendrogram.h"
 using namespace std;
 using namespace tlp;
@@ -89,7 +88,7 @@ bool Dendrogram::run() {
   setAllNodesCoordX(root, 0.f, &oriLayout, &oriSize);
   shiftAllNodes(root, 0.f, &oriLayout);
   setAllNodesCoordY(&oriLayout, &oriSize);
-  setOrthogonalEdge(&oriLayout, graph, spacing);
+  oriLayout.setOrthogonalEdge(graph, spacing);
 
   // forget last temporary graph state 
   graph->pop();

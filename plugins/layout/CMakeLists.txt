@@ -72,7 +72,6 @@ TARGET_LINK_LIBRARIES(Tutte-${TulipVersion} ${LibTulipCoreName})
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(Dendrogram_SRCS 
   DatasetTools.cpp
-  EdgeTools.cpp
   OrientableCoord.cpp
   OrientableLayout.cpp
   OrientableSize.cpp
@@ -86,7 +85,6 @@ TARGET_LINK_LIBRARIES(Dendrogram-${TulipVersion} ${LibTulipCoreName})
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(ImprovedWalker_SRCS 
   DatasetTools.cpp
-  EdgeTools.cpp
   ImprovedWalker.cpp
   OrientableCoord.cpp
   OrientableLayout.cpp
