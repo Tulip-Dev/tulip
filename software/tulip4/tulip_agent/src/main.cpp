@@ -12,8 +12,8 @@
 #include "PluginsCenter.h"
 
 int main(int argc, char **argv) {
-  QApplication tulip_app(argc, argv);
-  tulip_app.setApplicationName("tulip");
+  QApplication tulip_agent(argc, argv);
+  tulip_agent.setApplicationName(QObject::trUtf8("Tulip Agent"));
   QLocale::setDefault(QLocale(QLocale::English));
 
 #if defined(__APPLE__) // allows to load qt imageformats plugin
@@ -43,5 +43,5 @@ int main(int argc, char **argv) {
   delete errorReport;
 
   mainWindow->startApp();
-  return tulip_app.exec();
+  return tulip_agent.exec();
 }
