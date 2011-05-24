@@ -58,6 +58,7 @@ public:
   virtual unsigned int outdeg(const node) const;
   virtual bool isMetaNode(const node) const;
   virtual Graph* getNodeMetaInfo(const node) const;
+  virtual void delNodes(Iterator<node>* itN, bool deleteInAllGraphs);
   virtual node source(const edge) const;
   virtual void setSource(const edge, const node);
   virtual node target(const edge) const;
@@ -69,6 +70,7 @@ public:
   virtual void reverse(const edge);
   virtual bool isMetaEdge(const edge) const;
   virtual Iterator<edge>* getEdgeMetaInfo(const edge) const;
+  virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false);
   //=======================================
   virtual node getOneNode() const;
   virtual node getInNode(const node,unsigned int ) const;

@@ -49,9 +49,14 @@ public:
   bool isElement(const node ) const;
   bool isElement(const edge ) const;
   node addNode();
+  void addNodes(unsigned int nb, std::vector<node>& addedNodes);
   void addNode(const node);
+  void addNodes(Iterator<node>* nodes);
   edge addEdge(const node ,const node);
+  void addEdges(const std::vector<std::pair<node, node> >& edges,
+		std::vector<edge>& addedEdges);
   void addEdge(const edge);
+  void addEdges(Iterator<edge>* edges);
   void delNode(const tlp::node n, bool deleteInAllGraphs = false);
   void delEdge(const tlp::edge e, bool deleteInAllGraphs = false);
   void _DEPRECATED delAllNode(const node );
@@ -108,7 +113,10 @@ protected:
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder
   virtual node restoreNode(node);
+  virtual void restoreNodes(const std::vector<node>&);
   virtual edge restoreEdge(edge, node source, node target);
+  virtual void restoreEdges(const std::vector<edge>& edges,
+			    const std::vector<std::pair<node, node> >& ends);
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);

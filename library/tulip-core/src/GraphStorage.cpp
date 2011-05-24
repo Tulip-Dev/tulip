@@ -481,10 +481,10 @@ void GraphStorage::swapEdgeOrder(const node n, const edge e1, const edge e2) {
  */
 node GraphStorage::addNode(node n) {
   outDegree.set(n.id, 0);
-  while (nodes.size() <= n.id){
-    nodes.push_back(EdgeContainer());
-  }
-  nodes[n.id].clear();
+  if (nodes.size() <= n.id)
+    nodes.resize(n.id + 1);
+  else
+    nodes[n.id].clear();
   nbNodes++;
 
   return n;
@@ -494,7 +494,43 @@ node GraphStorage::addNode(node n) {
  * @brief Add a new node in the structure and return it
  */
 node GraphStorage::addNode() {
-  return addNode(node(this->nodeIds.get()));
+  return addNode(node(nodeIds.get()));
+}
+//=======================================================
+/**
+ * @brief Add nb new nodes in the structure
+ * and return them in addedNodes
+ */
+void GraphStorage::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
+  addedNodes.clear();
+  unsigned int first = nodeIds.getFirstOfRange(nb);
+  unsigned int last = first + nb - 1;
+  nodes.reserve(last + 1);
+  if (nodes.size() <= first)
+    nodes.resize(first);
+
+  unsigned int nodesSize = nodes.size();
+  for (; first <= last; ++first) {
+    outDegree.set(first, 0);
+    if (nodesSize <= first) {
+      nodes.push_back(EdgeContainer());
+      ++nodesSize;
+    } else
+      nodes[first].clear();
+    addedNodes.push_back(node(first));
+  }
+  nbNodes += nb;
+}
+//=======================================================
+/**
+ * @brief restore the given nodes in the structure
+ */
+void GraphStorage::restoreNodes(const std::vector<node>& addedNodes) {
+  std::vector<node>::const_iterator it = addedNodes.begin();
+  std::vector<node>::const_iterator ite = addedNodes.end();
+  for (;it != ite; ++it) {
+    addNode(*it);
+  }
 }
 //=======================================================
 /**
@@ -542,9 +578,8 @@ edge GraphStorage::addEdge(const node src, const node tgt,
 			   const edge e, bool updateEndsEdges) {
   std::pair< node , node > tmp(src, tgt);
   outDegree.set(src.id, outDegree.get(src.id) + 1);
-  while (edges.size()<= e.id){
-    edges.push_back(tmp);
-  }
+  if (edges.size() <= e.id)
+    edges.resize(e.id + 1);
   edges[e.id] = tmp;
   if (updateEndsEdges) {
     nodes[src.id].push_back(e);
@@ -560,6 +595,57 @@ edge GraphStorage::addEdge(const node src, const node tgt,
  */
 edge GraphStorage::addEdge(node src, node tgt) {
   return addEdge(src, tgt, edge(edgeIds.get()), true);
+}
+//=======================================================
+/**
+ * @brief Add edges in the structure and returns them
+ * in the addedEdges vector
+ */
+void GraphStorage::addEdges(const std::vector<std::pair<node, node> >& ends,
+			    std::vector<edge>& addedEdges) {
+  addedEdges.clear();
+  unsigned int nb = ends.size();
+  unsigned int first = edgeIds.getFirstOfRange(nb);
+  edges.reserve(first + nb);
+  if (edges.size() < first) {
+    edges.resize(first);
+  }
+  unsigned int edgesSize = edges.size();
+  std::vector<std::pair<node, node> >::const_iterator it = ends.begin();
+  std::vector<std::pair<node, node> >::const_iterator end = ends.end();
+  for (; it != end; ++it, ++first) {
+    if (edgesSize == first) {
+      edges.push_back(*it);
+      ++edgesSize;
+    } else
+      edges[first] = *it;
+    node src = (*it).first;
+    node tgt = (*it).second;
+    outDegree.set(src.id, outDegree.get(src.id) + 1);
+    edge e(first);
+    nodes[src.id].push_back(e);
+    nodes[tgt.id].push_back(e);
+    addedEdges.push_back(e);
+  }
+  nbEdges += nb;
+}
+//=======================================================
+/**
+ * @brief restore edges in the structure
+ */
+void GraphStorage::restoreEdges(const std::vector<edge>& rEdges,
+				const std::vector<std::pair<node, node> >& ends) {
+  assert(rEdges.size());
+  assert(rEdges.size() == ends.size());
+  unsigned int i = 0;
+  std::vector<edge>::const_iterator it = rEdges.begin();
+  std::vector<edge>::const_iterator end = rEdges.end();
+  for (; it != end; ++it, ++i) {
+    edges[*it] = ends[i];
+    node src = ends[i].first;
+    outDegree.set(src.id, outDegree.get(src.id) + 1);
+  }
+  nbEdges += i;
 }
 //=======================================================
 /**

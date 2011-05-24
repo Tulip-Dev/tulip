@@ -76,28 +76,65 @@ void PushPopTest::testAddDel() {
   CPPUNIT_ASSERT(graph->isElement(n0) == false);
   CPPUNIT_ASSERT(graph->isElement(e0) == false);
 
+  vector<node> nodes;
+  vector<pair <node, node> > ends;
+  vector<edge> edges;
+
+  graph->addNodes(3, nodes);
+  CPPUNIT_ASSERT(nodes.size() == 3);
+  ends.push_back(pair<node, node>(nodes[0], nodes[1]));
+  ends.push_back(pair<node, node>(nodes[0], nodes[2]));
+  ends.push_back(pair<node, node>(nodes[1], nodes[2]));
+  graph->addEdges(ends, edges);
+  CPPUNIT_ASSERT(edges.size() == 3);
+
   graph->pop();
 
   CPPUNIT_ASSERT(graph->isElement(e1) == false);
   CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
+  CPPUNIT_ASSERT(graph->isElement(nodes[0]) == false);
+  CPPUNIT_ASSERT(graph->isElement(nodes[1]) == false);
+  CPPUNIT_ASSERT(graph->isElement(nodes[2]) == false);
 
   graph->unpop();
   CPPUNIT_ASSERT(graph->existEdge(n2, n3) == e1);
   CPPUNIT_ASSERT(graph->isElement(e0) == false);
+  CPPUNIT_ASSERT(graph->isElement(nodes[0]));
+  CPPUNIT_ASSERT(graph->isElement(nodes[1]));
+  CPPUNIT_ASSERT(graph->isElement(nodes[2]));
+  CPPUNIT_ASSERT(graph->existEdge(nodes[0], nodes[1]) == edges[0]);
+  CPPUNIT_ASSERT(graph->existEdge(nodes[0], nodes[2]) == edges[1]);
+  CPPUNIT_ASSERT(graph->existEdge(nodes[1], nodes[2]) == edges[2]);
 
   graph->reverse(e1);
   CPPUNIT_ASSERT(graph->existEdge(n3, n2) == e1);
-  
+
+  StlIterator<edge, std::vector<edge>::const_iterator> ite(edges.begin(),
+							   edges.end());
+  graph->delEdges(&ite);
+  CPPUNIT_ASSERT(graph->isElement(edges[0]) == false);
+  CPPUNIT_ASSERT(graph->isElement(edges[1]) == false);
+  CPPUNIT_ASSERT(graph->isElement(edges[2]) == false);
+
   graph->pop();
   CPPUNIT_ASSERT(graph->isElement(e1) == false);
   CPPUNIT_ASSERT(graph->isElement(n2) == false);
   CPPUNIT_ASSERT(graph->isElement(n3) == false);
+  CPPUNIT_ASSERT(graph->isElement(nodes[0]) == false);
+  CPPUNIT_ASSERT(graph->isElement(nodes[1]) == false);
+  CPPUNIT_ASSERT(graph->isElement(nodes[2]) == false);
 
   graph->unpop();
   CPPUNIT_ASSERT(graph->isElement(e1) == true);
   CPPUNIT_ASSERT(graph->isElement(n2) == true);
   CPPUNIT_ASSERT(graph->isElement(n3) == true);
   CPPUNIT_ASSERT(graph->existEdge(n3, n2) == e1);
+  CPPUNIT_ASSERT(graph->isElement(nodes[0]));
+  CPPUNIT_ASSERT(graph->isElement(nodes[1]));
+  CPPUNIT_ASSERT(graph->isElement(nodes[2]));
+  CPPUNIT_ASSERT(graph->isElement(edges[0]) == false);
+  CPPUNIT_ASSERT(graph->isElement(edges[1]) == false);
+  CPPUNIT_ASSERT(graph->isElement(edges[2]) == false);
 
   graph->delEdge(e1);
   CPPUNIT_ASSERT(graph->isElement(e1) == false);

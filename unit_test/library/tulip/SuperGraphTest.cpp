@@ -272,6 +272,18 @@ void SuperGraphTest::testAddDel() {
   }
   CPPUNIT_ASSERT(graph->numberOfNodes() == NB_ADD);
 
+  StlIterator<node, std::vector<node>::const_iterator> itn(nodes.begin(),
+							   nodes.end());
+  graph->delNodes(&itn);
+
+  CPPUNIT_ASSERT(graph->numberOfNodes() == 0);
+
+  graph->addNodes(NB_ADD, nodes);
+  for (unsigned int i=0; i<NB_ADD; ++i) {
+    CPPUNIT_ASSERT(graph->isElement(nodes[i]));
+    nodePresent[i] = true;
+  }
+  CPPUNIT_ASSERT(graph->numberOfNodes() == NB_ADD);
 
   for (unsigned int i=0; i< NB_EDGES; ++i) {
     edges.push_back(graph->addEdge(nodes[rand()%NB_ADD],nodes[rand()%NB_ADD]));
@@ -280,11 +292,20 @@ void SuperGraphTest::testAddDel() {
   }
   CPPUNIT_ASSERT(graph->numberOfEdges() == NB_EDGES);
 
-  for (unsigned int i=0; i < NB_EDGES / 2; ++i) {
+  for (unsigned int i=0; i < NB_EDGES; ++i) {
     graph->delEdge(edges[i]);
     CPPUNIT_ASSERT(!graph->isElement(edges[i]));
   }
-  CPPUNIT_ASSERT(graph->numberOfEdges() == NB_EDGES - NB_EDGES/2);
+  CPPUNIT_ASSERT(graph->numberOfEdges() == 0);
+
+  vector<pair<node, node> > ends;
+
+  for (unsigned int i=0; i< NB_EDGES; ++i) {
+    ends.push_back(pair<node, node>(nodes[rand()%NB_ADD],nodes[rand()%NB_ADD]));
+  }
+  graph->addEdges(ends, edges);
+  CPPUNIT_ASSERT(graph->numberOfEdges() == NB_EDGES);
+
 
   for (unsigned int i=0; i<NB_ADD; ++i) {
     Iterator<edge> *itE = graph->getInOutEdges(nodes[i]);

@@ -18,9 +18,9 @@
  */
 #include <fstream>
 #include <string>
+#include <vector>
 #include <errno.h>
 #include <sys/stat.h>
-#include <string.h>
 
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
@@ -95,7 +95,7 @@ namespace tlp {
         std::map<int,Graph *> clusterIndex;
         DataSet *dataSet;
         bool inTLP;
-        double version;
+        float version;
 
         TLPGraphBuilder(Graph *graph, DataSet *dataSet): _graph(graph),
         dataSet(dataSet) {
@@ -110,29 +110,27 @@ namespace tlp {
         bool addString(const std::string& str) {
             // only used to handle the version of tlp file format
             if (!version) {
-                version = atof(str.c_str());
-                return version <= TLP_VERSION;
+                version = (float) atof(str.c_str());
+                return version <= ((float)TLP_VERSION);
             }
             return false;
         }
 
         bool addNode(int id) {
-            if (version < 2.1)
+            if (version < 2.1f)
                 nodeIndex[id]=_graph->addNode();
             else
                 _graph->addNode();
             return true;
         }
         bool addNodes(int first, int last) {
+	     std::vector<node> nodes;
+	    _graph->addNodes(last - first + 1, nodes);
             if (version < 2.1) {
+	        std::vector<node>::iterator it = nodes.begin();
                 while (first <= last) {
-                    nodeIndex[first]=_graph->addNode();
-                    first++;
-                }
-            } else {
-                while (first <= last) {
-                    _graph->addNode();
-                    first++;
+		  nodeIndex[first]=(*it);
+		  ++first, ++it;
                 }
             }
             return true;

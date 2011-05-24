@@ -91,18 +91,16 @@ public:
       total += previous;
     }
     graph->reserveEdges(total);
-    graph->reserveNodes(total + 1);
-    node n = graph->addNode();
-    list<node> nodes;
-    nodes.push_front(n);
+    vector<node> nodes;
+    graph->addNodes(total + 1, nodes);
+    unsigned int current = 0;
+    unsigned int nextChild = 1;
     while(total) {
-      n = nodes.front();
-      nodes.pop_front();
-      for (unsigned int i = 0; i < degree; ++i, --total) {
-	node n1 = graph->addNode();
-	graph->addEdge(n, n1);
-	nodes.push_back(n1);
+      node n = nodes[current];
+      for (unsigned int i = 0; i < degree; ++i, ++nextChild, --total) {
+	graph->addEdge(n, nodes[nextChild]);
       }
+      ++current;
     }
     if (needLayout) {
       // apply Tree Leaf
