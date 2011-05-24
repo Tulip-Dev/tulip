@@ -17,8 +17,8 @@ TulipSplashScreen::TulipSplashScreen(): PluginLoader(), QSplashScreen(), _fileCo
   fadeInAnimation->setStartValue(0);
   fadeInAnimation->setEndValue(1);
   fadeInAnimation->setDuration(200);
+  show();
   fadeInAnimation->start(QAbstractAnimation::DeleteWhenStopped);
-  _abortedPlugins.clear();
 }
 
 void TulipSplashScreen::start(const std::string &) {
@@ -40,8 +40,6 @@ void TulipSplashScreen::loaded(const AbstractPluginInfo* infos, const std::list 
 
 void TulipSplashScreen::aborted(const std::string &filename, const std::string &erreurmsg) {
   _message = trUtf8("Error loading ") + filename.c_str() + ": " + erreurmsg.c_str();
-
-  _abortedPlugins[filename.c_str()] = erreurmsg.c_str();
 }
 
 void TulipSplashScreen::finished(bool state, const std::string &msg) {

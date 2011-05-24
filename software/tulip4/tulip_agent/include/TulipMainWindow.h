@@ -7,6 +7,7 @@
 namespace Ui {
 class TulipMainWindowData;
 }
+class PluginsCenter;
 
 /**
   @brief The window used in the tulip_app process to display the Welcome, plugins center and getting help screens.
@@ -19,7 +20,7 @@ public:
   TulipMainWindow(QWidget *parent=0);
   virtual ~TulipMainWindow();
 
-  void setPluginsErrors(const QMap<QString,QString> &);
+  PluginsCenter *pluginsCenter() const;
 
 public slots:
   void startApp();

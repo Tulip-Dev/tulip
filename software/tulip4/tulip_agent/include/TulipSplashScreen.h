@@ -22,8 +22,6 @@ public:
   virtual void aborted(const std::string &filename,const  std::string &erreurmsg);
   virtual void finished(bool state,const std::string &msg);
 
-  QMap<QString,QString> abortedPlugins() const { return _abortedPlugins; }
-
 protected:
   virtual void drawContents(QPainter *painter);
 
@@ -33,8 +31,6 @@ private:
 
   int _fileCounter;
   int _numberOfFiles;
-
-  QMap<QString,QString> _abortedPlugins;
 };
 
 #endif // TULIPSPLASHSCREEN_H

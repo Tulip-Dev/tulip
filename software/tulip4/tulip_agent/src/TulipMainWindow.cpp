@@ -24,7 +24,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
 
   //System tray
   _systemTrayIcon = new QSystemTrayIcon(QIcon(":/tulip/app/icons/logo32x32.png"),this);
-  _systemTrayIcon->setToolTip(QString("Tulip"));
+  _systemTrayIcon->setToolTip(trUtf8("Tulip agent"));
   QMenu *systemTrayMenu = new QMenu();
   systemTrayMenu->addAction(trUtf8("Show"));
   systemTrayMenu->addAction(trUtf8("Hide"));
@@ -35,7 +35,6 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   systemTrayMenu->addSeparator();
   connect(systemTrayMenu->addAction(trUtf8("Exit")), SIGNAL(triggered()),this, SLOT(closeApp()));
   _systemTrayIcon->setContextMenu(systemTrayMenu);
-  _systemTrayIcon->setToolTip(trUtf8("Tulip startup agent"));
   connect(_systemTrayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(systemTrayRequest(QSystemTrayIcon::ActivationReason)));
   connect(_systemTrayIcon,SIGNAL(messageClicked()),this,SLOT(systemTrayMessageClicked()));
   connect(_ui->pages,SIGNAL(currentChanged(int)),this,SLOT(pageSwitched(int)));
@@ -60,11 +59,6 @@ void TulipMainWindow::closeEvent(QCloseEvent *e) {
   hide();
 }
 
-void TulipMainWindow::systemTrayRequest(QSystemTrayIcon::ActivationReason reason) {
-  if (reason == QSystemTrayIcon::Trigger)
-    setVisible(!isVisible());
-}
-
 void TulipMainWindow::pageChooserClicked() {
   if (!isVisible())
     setVisible(true);
@@ -77,16 +71,17 @@ void TulipMainWindow::pageSwitched(int i) {
   static_cast<QToolButton *>(_pageChoosers[i])->setChecked(true);
 }
 
-void TulipMainWindow::setPluginsErrors(const QMap<QString, QString> &e) {
-  _ui->pluginsPage->setPluginsError(e);
-  if (e.size() > 0) {
-    _systemTrayIcon->showMessage(trUtf8("Errors have been reported while loading plugins."),trUtf8("Click this message to see details."),QSystemTrayIcon::Critical);
-    _currentTrayMessage = PluginErrorMessage;
-  }
+void TulipMainWindow::systemTrayRequest(QSystemTrayIcon::ActivationReason reason) {
+  if (reason == QSystemTrayIcon::Trigger)
+    setVisible(!isVisible());
 }
 
 void TulipMainWindow::systemTrayMessageClicked() {
   if (_currentTrayMessage == PluginErrorMessage)
     _ui->pluginsPage->showErrorsPage();
   _currentTrayMessage = NoMessage;
+}
+
+PluginsCenter *TulipMainWindow::pluginsCenter() const {
+  return _ui->pluginsPage;
 }

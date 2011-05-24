@@ -1,15 +1,15 @@
-#include <QtGui/QApplication>
 #include <QtCore/QLocale>
+#include <QtGui/QApplication>
 
-#include <tulip/TlpTools.h>
 #include <tulip/PluginLister.h>
+#include <tulip/PluginLibraryLoader.h>
+#include <tulip/TlpTools.h>
 
-#include "TulipSplashScreen.h"
 #include "TulipMainWindow.h"
-
-#include <tulip/TulipProject.h>
-#include <iostream>
-using namespace std;
+#include "PluginLoaderReporter.h"
+#include "PluginLoaderDispatcher.h"
+#include "TulipSplashScreen.h"
+#include "PluginsCenter.h"
 
 int main(int argc, char **argv) {
   QApplication tulip_app(argc, argv);
@@ -20,25 +20,28 @@ int main(int argc, char **argv) {
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
 #endif
 
-  // Initialize tulip libraries and load plugins
   tlp::initTulipLib(QApplication::applicationDirPath().toStdString().c_str());
+
+  // Check dependencies
+  PluginLoaderDispatcher *dispatcher = new PluginLoaderDispatcher();
   TulipSplashScreen *splashScreen = new TulipSplashScreen();
-  splashScreen->show();
+  PluginLoaderReporter *errorReport = new PluginLoaderReporter();
+  dispatcher->registerLoader(errorReport);
+  dispatcher->registerLoader(splashScreen);
 
-  tlp::PluginLibraryLoader::loadPlugins(splashScreen); // library side plugins
-  tlp::PluginLibraryLoader::loadPlugins(splashScreen, "/interactors"); // interactors plugins
-  tlp::PluginLibraryLoader::loadPlugins(splashScreen, "/glyphs"); // glyphs plugins
-  tlp::PluginLibraryLoader::loadPlugins(splashScreen, "/view"); // view plugins
-  tlp::PluginLibraryLoader::loadPlugins(splashScreen, "/controller"); // controller plugins
+  tlp::PluginLibraryLoader::loadPlugins(dispatcher);
+  tlp::PluginListerInterface::checkLoadedPluginsDependencies(dispatcher);
 
-  tlp::PluginListerInterface::checkLoadedPluginsDependencies(splashScreen);
-
-  QMap<QString,QString> abortedPlugins = splashScreen->abortedPlugins();
+  delete dispatcher;
   delete splashScreen;
 
   TulipMainWindow *mainWindow = new TulipMainWindow;
-  mainWindow->startApp();
-  mainWindow->setPluginsErrors(abortedPlugins);
+  QMap<QString,QString> errorsMap(errorReport->errors());
+  for(QMap<QString,QString>::iterator it = errorsMap.begin(); it != errorsMap.end(); ++it)
+    mainWindow->pluginsCenter()->reportPluginError(it.key(), it.value());
 
+  delete errorReport;
+
+  mainWindow->startApp();
   return tulip_app.exec();
 }

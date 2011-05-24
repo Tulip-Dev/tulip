@@ -2,6 +2,8 @@ SET(SRCS
 src/AboutTulipPage.cpp
 src/main.cpp
 src/PluginErrorReport.cpp
+src/PluginLoaderDispatcher.cpp
+src/PluginLoaderReporter.cpp
 src/PluginsCenter.cpp
 src/RssParser.cpp
 src/TulipMainWindow.cpp
@@ -26,6 +28,14 @@ QT4_ADD_RESOURCES(RCC_SRCS resources/TulipAgent.qrc)
 INCLUDE_DIRECTORIES(include ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR})
 
 ADD_EXECUTABLE(tulip_agent ${SRCS} ${UI_HEADERS} ${MOC_SRCS} ${RCC_SRCS})
+
+IF(LINUX)
+  SET_TARGET_PROPERTIES(tulip_agent PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
+ELSEIF(APPLE)
+  SET_TARGET_PROPERTIES(tulip_agent PROPERTIES INSTALL_RPATH "$ORIGIN/../Frameworks")
+ELSE()
+  SET_TARGET_PROPERTIES(tulip_agent PROPERTIES INSTALL_RPATH "$ORIGIN")
+ENDIF()
 
 TARGET_LINK_LIBRARIES(tulip_agent ${LibTulipGUIName} ${QT_LIBRARIES})
 

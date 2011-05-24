@@ -45,16 +45,12 @@ void PluginsCenter::listItemSelected() {
     showErrorsPage();
 }
 
-void PluginsCenter::setPluginsError(const QMap<QString, QString> &errors) {
+void PluginsCenter::reportPluginError(const QString &filename, const QString &errormsg) {
+  _ui->errorsLogAreaLayout->addWidget(new PluginErrorReport(filename,errormsg));
   QListWidgetItem *errorsItem = _ui->pluginsSideList->item(6);
-  if (errors.isEmpty())
-    errorsItem->setFlags(~Qt::ItemFlags(Qt::ItemIsEnabled));
-  else {
-    QFont f = errorsItem->font();
-    f.setBold(true);
-    errorsItem->setFont(f);
-  }
+  errorsItem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 
-  for (QMap<QString,QString>::const_iterator it = errors.begin(); it != errors.end(); ++it)
-    _ui->errorsLogAreaLayout->addWidget(new PluginErrorReport(it.key(),it.value()));
+  QFont f = errorsItem->font();
+  f.setBold(true);
+  errorsItem->setFont(f);
 }

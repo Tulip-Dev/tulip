@@ -262,6 +262,9 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <iconset>
             <normaloff>:/tulip/app/icons/error.svg</normaloff>:/tulip/app/icons/error.svg</iconset>
           </property>
+          <property name="flags">
+           <set>ItemIsSelectable|ItemIsDragEnabled|ItemIsUserCheckable</set>
+          </property>
          </item>
          <item>
           <property name="text">
@@ -573,7 +576,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                 <x>0</x>
                 <y>0</y>
                 <width>419</width>
-                <height>193</height>
+                <height>179</height>
                </rect>
               </property>
               <property name="styleSheet">
@@ -660,7 +663,7 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>81</width>
+              <width>82</width>
               <height>28</height>
              </rect>
             </property>
