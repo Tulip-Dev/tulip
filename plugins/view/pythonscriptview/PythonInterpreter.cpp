@@ -690,6 +690,10 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 
 		if (interpreterInit()) {
 
+			string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
+			addModuleSearchPath(pythonPluginsPath, true);
+			addModuleSearchPath(tlp::TulipLibDir, true);
+
 			// Import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
 			// and if the site module is not present on the host system
 			runString("import site");
@@ -704,14 +708,9 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 
 			setDefaultConsoleWidget();
 
-			addModuleSearchPath(tlp::TulipLibDir);
-
 			runString("from tulip import *");
 
 			registerNewModuleFromString("tulipplugins", pluginUtils);
-
-			string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
-			addModuleSearchPath(pythonPluginsPath);
 
 			QDir pythonPluginsDir(pythonPluginsPath.c_str());
 			QStringList nameFilter;
@@ -783,11 +782,15 @@ bool PythonInterpreter::runString(const string &pyhtonCode) {
 	return  ret != -1;
 }
 
-void PythonInterpreter::addModuleSearchPath(const std::string &path) {
+void PythonInterpreter::addModuleSearchPath(const std::string &path, const bool beforeOtherPaths) {
 	if (currentImportPaths.find(path) == currentImportPaths.end()) {
 		ostringstream oss;
 		oss << "import sys" << endl;
-		oss << "sys.path.append(\"" << path << "\")" << endl;
+		if (beforeOtherPaths) {
+			oss << "sys.path.insert(0, \"" << path << "\")" << endl;
+		} else {
+			oss << "sys.path.append(\"" << path << "\")" << endl;
+		}
 		runString(oss.str());
 		currentImportPaths.insert(path);
 	}

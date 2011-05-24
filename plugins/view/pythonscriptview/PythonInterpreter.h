@@ -71,7 +71,7 @@ public :
 	bool runString(const std::string &pyhtonCode);
 	bool runGraphScript(const std::string &module, const std::string &function, tlp::Graph *graph);
 	bool functionExists(const std::string &moduleName, const std::string &functionName);
-	void addModuleSearchPath(const std::string &path);
+	void addModuleSearchPath(const std::string &path, const bool beforeOtherPaths = false);
 	void deleteModule(const std::string &moduleName);
 	void reloadModule(const std::string &moduleName);
 	void stopCurrentScript();
