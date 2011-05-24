@@ -20,14 +20,13 @@ class PluginsCenter: public QWidget {
 public:
   explicit PluginsCenter(QWidget *parent=0);
 
-  void setPluginsError(const QMap<QString,QString> &);
-
 public slots:
   void showHomePage();
   void showSearchPage();
   void showErrorsPage();
   void showDownloadsPage();
   void showReposPage();
+  void reportPluginError(const QString &filename, const QString &errormsg);
 
 protected slots:
   void showPage(QWidget *page);
@@ -35,7 +34,6 @@ protected slots:
 
 private:
   Ui::PluginsCenterData *_ui;
-  QMap<QString,QString> _pluginsErrors;
 };
 
 #endif // PLUGINSCENTER_
