@@ -21,10 +21,6 @@
 #ifndef _TLP_GEO_MATRIX_H
 #define _TLP_GEO_MATRIX_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <cassert>
 #include <iostream>
 #include <vector>

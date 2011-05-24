@@ -19,10 +19,6 @@
 #ifndef TULIP_SELECTION_H
 #define TULIP_SELECTION_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/PropertyAlgorithm.h>

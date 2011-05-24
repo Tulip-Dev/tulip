@@ -21,10 +21,6 @@
 #ifndef _Tulip_PLUGINSUPDATECHECKER_H_
 #define _Tulip_PLUGINSUPDATECHECKER_H_
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 #include <QtCore/QObject>

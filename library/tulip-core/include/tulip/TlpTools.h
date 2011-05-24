@@ -19,10 +19,6 @@
 #ifndef _TLPTOOLS_H
 #define _TLPTOOLS_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <iostream>
 #include <tulip/tulipconf.h>
 #include <tulip/PluginLoader.h>

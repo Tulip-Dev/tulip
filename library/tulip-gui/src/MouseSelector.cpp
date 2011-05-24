@@ -16,10 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>

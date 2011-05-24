@@ -20,10 +20,6 @@
 #ifndef TULIP_CONNECTEDTEST_H
 #define TULIP_CONNECTEDTEST_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <set>
 #include <vector>
 #include <tulip/tuliphash.h>

@@ -19,10 +19,6 @@
 #ifndef Tulip_GLSCENE_H
 #define Tulip_GLSCENE_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 #include <tulip/GlSceneObserver.h>

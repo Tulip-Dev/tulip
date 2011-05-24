@@ -20,10 +20,6 @@
 #ifndef TULIP_TRICONNECTEDTEST_H
 #define TULIP_TRICONNECTEDTEST_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tuliphash.h>
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>

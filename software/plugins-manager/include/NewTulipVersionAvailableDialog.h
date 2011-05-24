@@ -19,10 +19,6 @@
 #ifndef Tulip_NEWTULIPVERSIONAVAILABLEDIALOG_H
 #define Tulip_NEWTULIPVERSIONAVAILABLEDIALOG_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <QtGui/QDialog>
 
 #include <tulip/tulipconf.h>

@@ -20,10 +20,6 @@
 #ifndef TULIP_TREETEST_H
 #define TULIP_TREETEST_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tuliphash.h>
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>

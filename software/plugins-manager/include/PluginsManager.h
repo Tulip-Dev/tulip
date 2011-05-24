@@ -20,10 +20,6 @@
 #ifndef _Tulip_PLUGINSMANAGERMAINWINDOW_H
 #define _Tulip_PLUGINSMANAGERMAINWINDOW_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 #include <QtGui/QDialog>

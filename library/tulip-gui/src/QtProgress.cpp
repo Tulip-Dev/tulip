@@ -20,9 +20,6 @@
 #include "tulip/PluginProgressWidget.h"
 #include "tulip/TlpQtTools.h"
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
 #include <QtGui/QVBoxLayout>
 using namespace std;
 

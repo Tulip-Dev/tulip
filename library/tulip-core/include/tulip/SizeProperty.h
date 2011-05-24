@@ -19,10 +19,6 @@
 #ifndef TULIP_SIZES_H
 #define TULIP_SIZES_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tuliphash.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>

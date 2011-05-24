@@ -20,11 +20,6 @@
 #ifndef METHODFACTORY_H
 #define METHODFACTORY_H
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-
 #include <string>
 
 #include <tulip/AbstractPluginInfo.h>
