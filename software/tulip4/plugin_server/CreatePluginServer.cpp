@@ -35,7 +35,7 @@ using namespace tlp;
 
 class ArchiveCreator : public PluginLoader {
   public:
-    ArchiveCreator(const QString& archiveDestinationDir) : archiveDestinationDir(archiveDestinationDir), tulipVersion(TULIP_RELEASE) {
+    ArchiveCreator(const QString& destinationDir) : destinationDir(archiveDestinationDir), tulipVersion(TULIP_RELEASE) {
       #if defined(_WIN32) || defined(_WIN64)
       platform = "win";
       #elif defined(__APPLE__)
@@ -64,7 +64,6 @@ class ArchiveCreator : public PluginLoader {
     }
     
     virtual void loaded(const tlp::AbstractPluginInfo* info, const std::list< Dependency >& dependencies) {
-      std::cout <<"loaded: " << info->getName() << std::endl;
       QString pluginName = QString::fromStdString(info->getName());
       QString pluginLibrary;     
       std::string pluginType;
@@ -81,9 +80,12 @@ class ArchiveCreator : public PluginLoader {
       
       QString archiveName = pluginSimplifiedName + "-" + info->getRelease().c_str() + "-" + tulipVersion + "-" + platform + architecture + "-" + compiler + ".zip";
       
-      bool compressed = QuaZIPFacade::zipDir(currentPluginDir, archiveDestinationDir + "/" + archiveName);
+      bool compressed = QuaZIPFacade::zipDir(currentPluginDir, destinationDir + "/" + archiveName);
       if(!compressed) {
-        cout << "failed to compress folder " << currentPluginDir.toStdString() << " as archive: " << archiveDestinationDir.toStdString() << "/" << archiveName.toStdString() << endl;
+        cout << "failed to compress folder " << currentPluginDir.toStdString() << " as archive: " << destinationDir.toStdString() << "/archives/" << archiveName.toStdString() << endl;
+      }
+      else {
+        std::cout << "created archive: " << destinationDir.toStdString() << "/archives/" << archiveName.toStdString() << std::endl;
       }
       //creates the xml document for this plugin
       QDomDocument pluginInfoDocument;
@@ -104,27 +106,19 @@ class ArchiveCreator : public PluginLoader {
         dependencyElement.setAttribute("version", QString::fromStdString(it->pluginRelease));
       }
       
-      QFile outputXML(archiveDestinationDir + "/" + pluginSimplifiedName + ".xml");
+      QFile outputXML(destinationDir + "/xml/" + pluginSimplifiedName + ".xml");
       outputXML.open(QIODevice::ReadWrite);
       outputXML.write(pluginInfoDocument.toByteArray());
       outputXML.close();
     }
 
-    virtual void aborted(const std::string& filename, const std::string& error) {
-      cout << "\taborted " << filename << " because: " << error << endl;
-    }
-    virtual void finished(bool, const std::string&) {
-      cout << "done ! " << endl;
-    }
-    virtual void loading(const std::string& filename){
-      cout << "\tloading: " << filename << endl;
-    }
-    virtual void start(const std::string& path){
-      cout << "starting: " << path << endl;
-    }
+    virtual void aborted(const std::string& filename, const std::string& error) {}
+    virtual void loading(const std::string& filename) {}
+    virtual void finished(bool, const std::string&) {}
+    virtual void start(const std::string& path) {}
     
   private:
-    QString archiveDestinationDir;
+    QString destinationDir;
     QString currentPluginDir;
     QString platform;
     QString architecture;
@@ -146,6 +140,7 @@ int main(int argc,char **argv) {
 //   
   if(argc < 2) {
     std::cout << "packagePlugin pluginPath [destinationDir]" << std::endl;
+    cout << "destinationDir defaults to the current dir" << endl;
     exit(0);
   }
 
