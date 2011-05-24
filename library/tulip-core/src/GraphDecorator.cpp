@@ -236,7 +236,19 @@ node GraphDecorator::addNode(){
 }
 
 //============================================================
+void GraphDecorator::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
+  graph_component->addNodes(nb, addedNodes);
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODES, addedNodes));
+}
+
+//============================================================
 void GraphDecorator::addNode(const node){
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
+}
+
+//============================================================
+void GraphDecorator::addNodes(Iterator<node>*) {
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
@@ -244,6 +256,11 @@ void GraphDecorator::addNode(const node){
 node GraphDecorator::restoreNode(node n){
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
   return n;
+}
+
+//============================================================
+void GraphDecorator::restoreNodes(const std::vector<node>&) {
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
@@ -259,7 +276,20 @@ edge GraphDecorator::addEdge(const node n, const node n2){
 }
 
 //============================================================
+void GraphDecorator::addEdges(const std::vector<std::pair<node, node> >& edges,
+			      std::vector<edge>& addedEdges) {
+  graph_component->addEdges(edges, addedEdges);
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGES, addedEdges));
+}
+
+//============================================================
 void GraphDecorator::addEdge(const edge){
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
+}
+
+//============================================================
+void GraphDecorator::addEdges(Iterator<edge>*) {
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
@@ -269,6 +299,11 @@ edge GraphDecorator::restoreEdge(edge e, node, node){
   return e;
 }
 
+//============================================================
+void GraphDecorator::restoreEdges(const std::vector<edge>&,
+				  const std::vector<std::pair<node, node> >&) {
+  std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
+}
 //============================================================
 void GraphDecorator::removeEdge(const edge){
   std::cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
@@ -280,6 +315,14 @@ void GraphDecorator::delNode(const node n, bool deleteInAllGraphs){
   graph_component->delNode(n, deleteInAllGraphs);
 }
 
+//============================================================
+void GraphDecorator::delNodes(Iterator<node>* itN, bool deleteInAllGraphs){
+  assert(itN != NULL);
+  while(itN->hasNext()) {
+    delNode(itN->next(), deleteInAllGraphs);
+  }
+}
+
 //============================================================ 
 void GraphDecorator::delAllNode(const node n){
   delNode(n, true);
@@ -289,6 +332,14 @@ void GraphDecorator::delAllNode(const node n){
 void GraphDecorator::delEdge(const edge e, bool deleteInAllGraphs){
   notifyDelEdge(e);
   graph_component->delEdge(e, deleteInAllGraphs);
+}
+
+//=========================================================================
+void GraphDecorator::delEdges(Iterator<edge>* itE, bool deleteInAllGraphs) {
+  assert(itE != NULL);
+  while(itE->hasNext()) {
+    delEdge(itE->next(), deleteInAllGraphs);
+  }
 }
 
 //============================================================

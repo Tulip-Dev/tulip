@@ -122,11 +122,11 @@ Graph * Graph::inducedSubGraph(const std::set<node> &nodes,
 			       Graph* parentSubGraph) {
   if (parentSubGraph == NULL)
     parentSubGraph = this;
+  // create subgraph and add nodes
   Graph *result = parentSubGraph->addSubGraph();
-  set<node>::const_iterator itNodeSet = nodes.begin();
-  for(;itNodeSet!=nodes.end(); ++itNodeSet) {
-    result->addNode(*itNodeSet);
-  }
+  StlIterator<node, std::set<node>::const_iterator> it(nodes.begin(), nodes.end());
+  result->addNodes(&it);
+
   Iterator<node> *itN=result->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
@@ -203,8 +203,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
   //we can now Remove nodes from graph
   StableIterator<node> itN(subGraph->getNodes());
-  while (itN.hasNext())
-    delNode(itN.next());
+  delNodes(&itN);
 
   //create new meta edges from nodes to metanode
   Graph* super = getSuperGraph();
@@ -312,9 +311,8 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       addNode(n);
       mappingM.set(n.id, n);
     }
-    edge e;
-    stableForEach(e, metaGraph->getEdges())
-      addEdge(e);
+    StableIterator<edge> ite(metaGraph->getEdges());
+    addEdges(&ite);
   }
   if (updateProperties)
     updatePropertiesUngroup(this, metaNode, metaInfo);

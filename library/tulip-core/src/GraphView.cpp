@@ -141,11 +141,30 @@ node GraphView::addNode() {
   return restoreNode(tmp);
 }
 //----------------------------------------------------------------
+void GraphView::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
+  if (!addedNodes.empty()) {
+    getSuperGraph()->addNodes(nb, addedNodes);
+    restoreNodes(addedNodes);
+  }
+}
+//----------------------------------------------------------------
 node GraphView::restoreNode(node n) {
   nodeAdaptativeFilter.set(n.id, true);
   ++nNodes;
   notifyAddNode(n);
   return n;
+}
+//----------------------------------------------------------------
+void GraphView::restoreNodes(const std::vector<node>& nodes) {
+  std::vector<node>::const_iterator it = nodes.begin();
+  std::vector<node>::const_iterator ite = nodes.end();
+  for (; it != ite; ++it) {
+    assert(getRoot()->isElement(*it));
+    nodeAdaptativeFilter.set(*it, true);
+  }
+  nNodes += nodes.size();
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODES, nodes));
 }
 //----------------------------------------------------------------
 void GraphView::addNode(const node n) {
@@ -154,6 +173,28 @@ void GraphView::addNode(const node n) {
     if (!getSuperGraph()->isElement(n)) getSuperGraph()->addNode(n);
     restoreNode(n);
   }
+}
+//----------------------------------------------------------------
+  void GraphView::addNodes(Iterator<node>* addedNodes) {
+  std::vector<node> nodes;
+  std::vector<node> superNodes;
+  Graph* super = getSuperGraph();
+  bool superIsRoot = (super == getRoot());
+  while(addedNodes->hasNext()) {
+    node n = addedNodes->next();
+    if (!isElement(n)) {
+      nodes.push_back(n);
+      if (!superIsRoot && !super->isElement(n))
+	superNodes.push_back(n);
+    }
+  }
+  if (!superNodes.empty()) {
+    StlIterator<node, std::vector<node>::iterator> it(superNodes.begin(),
+						      superNodes.end());
+    super->addNodes(&it);
+  }
+  if (!nodes.empty())
+    restoreNodes(nodes);
 }
 //----------------------------------------------------------------
 edge GraphView::addEdgeInternal(edge e) {
@@ -168,11 +209,32 @@ edge GraphView::addEdgeInternal(edge e) {
   return e;
 }
 //----------------------------------------------------------------
-edge GraphView::restoreEdge(edge e, const node,const node) {
+edge GraphView::restoreEdge(edge e, const node, const node) {
   return addEdgeInternal(e);
 }
 //----------------------------------------------------------------
-edge GraphView::addEdge(const node n1,const node n2) {
+void GraphView::restoreEdges(const std::vector<edge>& edges,
+			     const std::vector<std::pair<node, node> >&ends) {
+  bool hasEnds = !ends.empty();
+  unsigned int i = 0;
+  std::vector<edge>::const_iterator it = edges.begin();
+  std::vector<edge>::const_iterator ite = edges.end();
+  for (; it != ite; ++it, ++i) {
+    edge e = *it;
+    assert(getRoot()->isElement(e));
+    edgeAdaptativeFilter.set(e, true);
+    std::pair<node, node> eEnds(hasEnds ? ends[i] : this->ends(e));
+    node src = eEnds.first;
+    node tgt = eEnds.second;
+    outDegree.set(src.id, outDegree.get(src.id)+1);
+    inDegree.set(tgt.id, inDegree.get(tgt.id)+1);
+  }
+  nEdges += edges.size();
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGES, edges));
+}
+//----------------------------------------------------------------
+edge GraphView::addEdge(const node n1, const node n2) {
   assert(isElement(n1));
   assert(isElement(n2));
   return addEdgeInternal(getSuperGraph()->addEdge(n1,n2));
@@ -187,6 +249,38 @@ void GraphView::addEdge(const edge e) {
       getSuperGraph()->addEdge(e);
     addEdgeInternal(e);
   }
+}
+//----------------------------------------------------------------
+void GraphView::addEdges(const std::vector<std::pair<node, node> >& ends,
+			 std::vector<edge>& addedEdges) {
+  assert(ends.size() == addedEdges.size());
+  getSuperGraph()->addEdges(ends, addedEdges);
+  restoreEdges(addedEdges, ends);
+}
+//----------------------------------------------------------------
+  void GraphView::addEdges(Iterator<edge>* addedEdges) {
+  std::vector<edge> edges;
+  std::vector<edge> superEdges;
+  Graph* super = getSuperGraph();
+  bool superIsRoot = (super == getRoot());
+  while(addedEdges->hasNext()) {
+    edge e = addedEdges->next();
+    assert(getRoot()->isElement(e));
+    assert(isElement(source(e)));
+    assert(isElement(target(e)));
+    if (!edgeAdaptativeFilter.get(e.id)) {
+      edges.push_back(e);
+      if (!superIsRoot && !super->isElement(e))
+	superEdges.push_back(e);
+    }
+  }
+  if (!superEdges.empty()) {
+    StlIterator<edge, std::vector<edge>::iterator> it(superEdges.begin(),
+						      superEdges.end());
+    super->addEdges(&it);
+  }
+  if (!edges.empty())
+    restoreEdges(edges, std::vector<pair<node, node> >());
 }
 //----------------------------------------------------------------
 void GraphView::delNodeInternal(const node n) {
@@ -212,7 +306,7 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
     while (itS->hasNext()) {
       Graph *subGraph = itS->next();
       if (subGraph->isElement(n))
-        subGraph->delNode(n);
+	subGraph->delNode(n);
     } delete itS;
     // remove node's edges
     set<edge> loops;
@@ -222,17 +316,17 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
       edge e = itE.next();
       node s = opposite(e, n);
       if (s!=n) {
-        removeEdge(e);
+	removeEdge(e);
       }
       else {
-        loops.insert(e);
-        haveLoops = true;
+	loops.insert(e);
+	haveLoops = true;
       }
     }
     if (haveLoops) {
       set<edge>::const_iterator it;
       for ( it = loops.begin(); it!=loops.end(); ++it) {
-        removeEdge(*it);
+	removeEdge(*it);
       }
     }
     delNodeInternal(n);
@@ -268,7 +362,7 @@ void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
     while (itS->hasNext()) {
       Graph *subGraph = itS->next();
       if (subGraph->isElement(e))
-        subGraph->delEdge(e);
+	subGraph->delEdge(e);
     } delete itS;
     delEdgeInternal(e);
   }

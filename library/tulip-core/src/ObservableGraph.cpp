@@ -49,6 +49,18 @@ void GraphObserver::treatEvent(const Event& ev) {
     case GraphEvent::TLP_AFTER_SET_ENDS:
       afterSetEnds(graph, gEvt->getEdge());
       break;
+    case GraphEvent::TLP_ADD_NODES: {
+      const std::vector<node>& nodes = gEvt->getNodes();
+      for (unsigned int i = 0; i < nodes.size(); ++i)
+	addNode(graph, nodes[i]);
+      break;
+    }
+    case GraphEvent::TLP_ADD_EDGES: {
+      const std::vector<edge>& edges = gEvt->getEdges();
+      for (unsigned int i = 0; i < edges.size(); ++i)
+	addEdge(graph, edges[i]);
+      break;
+    }
     case GraphEvent::TLP_ADD_SUBGRAPH:
       addSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
       break;

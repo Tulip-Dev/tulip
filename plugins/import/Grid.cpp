@@ -83,74 +83,84 @@ class Grid: public ImportModule {
   ~Grid() {
   }
 
-  void buildRow(vector<node> &row, unsigned int height, int conn, bool isTore,
-      double spacing) {
+  void buildRow(const vector<node>& nodes, vector<pair<node, node> >& ends,
+		unsigned int iRow, unsigned width,
+		int conn, bool isTore, double spacing) {
     LayoutProperty *layout = graph->getProperty<LayoutProperty> ("viewLayout");
-    unsigned int width = row.size();
 
     //Used for conn == 6
     double r = 0.5;
     double h = sqrt((r * r) - ((r / 2) * (r / 2)));
     double hHeight = cos(DEGTORAD(60)) * r;
     double shift = 0;
-    //If height is even introduce a shift
-    if (height % 2 == 0) {
+    //If iRow is even introduce a shift
+    if (iRow % 2 == 0) {
       shift += h;
     } else {
       shift += 0;
     }
+    unsigned int iBegin = iRow * width;
+    node previous, current;
     for (unsigned int i = 0; i < width; ++i) {
-      row[i] = graph->addNode();
+      current = nodes[iBegin + i];
       if (conn == 6) {
-
-        layout ->setNodeValue(row[i], Coord(i * 2 * h + shift + i * spacing,
-            height * (1.0 - hHeight + spacing), 0));
+        layout->setNodeValue(current,
+			     Coord(i * 2 * h + shift + i * spacing,
+				   iRow * (1.0 - hHeight + spacing), 0));
       } else
-        layout ->setNodeValue(row[i], Coord(i * (1.0 + spacing), height * (1.0
-            + spacing), 0));
+        layout->setNodeValue(current,
+			     Coord(i * (1.0 + spacing), iRow * (1.0
+								+ spacing), 0));
+      if (previous.isValid())
+	ends.push_back(pair<node, node>(previous, current));
+      previous = current;
     }
-    //At this time the first edge is alway the good
-    for (unsigned int i = 0; i < width - 1; ++i)
-      graph->addEdge(row[i], row[i + 1]);
-
     if (isTore)
-      graph->addEdge(row[width - 1], row[0]);
+      ends.push_back(pair<node, node>(current, nodes[iBegin]));
   }
 
-  void connectRow(vector<node> &row1, unsigned int row1H, vector<node> &row2,
-      unsigned int, int conn, bool isTore) {
-    assert(row1.size()==row2.size());
-    unsigned int width = row1.size();
+  void connectRow(const vector<node> &nodes, vector<pair<node, node> > &ends,
+		  unsigned int row1, unsigned int row2, unsigned int width,
+		  int conn, bool isTore) {
+    unsigned int row1Begin = row1 * width;
+    unsigned int row2Begin = row2 * width;
     for (unsigned int i = 0; i < width; ++i) {
-      graph->addEdge(row1[i], row2[i]);
+      ends.push_back(pair<node, node>(nodes[row1Begin + i],
+				      nodes[row2Begin + i]));
 
       if (conn == 8) {
         if (i > 0) {
-          graph ->addEdge(row1[i], row2[i - 1]);
+          ends.push_back(pair<node, node>(nodes[row1Begin + i],
+					  nodes[row2Begin + i - 1]));
         } else if (isTore) {
-          graph->addEdge(row1[i], row2[width - 1]);
+          ends.push_back(pair<node, node>(nodes[row1Begin + i],
+					  nodes[row2Begin + width - 1]));
         }
         if (i < width - 1) {
-          graph ->addEdge(row1[i], row2[i + 1]);
+          ends.push_back(pair<node, node>(nodes[row1Begin + i],
+					  nodes[row2Begin + i + 1]));
         } else if (isTore) {
-          graph->addEdge(row1[i], row2[0]);
+          ends.push_back(pair<node, node>(nodes[row1Begin + i],
+					  nodes[row2Begin]));
         }
       }
       if (conn == 6) {
-        //In this case the row1 height must be even in order to ensure right connectivity in the hexagonal grid.
-        if (row1H % 2 == 0) {
+        //In this case row1 must be even in order to ensure right connectivity in the hexagonal grid.
+        if (row1 % 2 == 0) {
           if (i < width - 1)
-            graph->addEdge(row1[i], row2[i + 1]);
+            ends.push_back(pair<node, node>(nodes[row1Begin + i],
+					    nodes[row2Begin + i + 1]));
           else if (isTore)
-            graph->addEdge(row1[i], row2[0]);
+            ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin]));
         } else {
           if (i > 0)
-            graph->addEdge(row1[i], row2[i - 1]);
+            ends.push_back(pair<node, node>(nodes[row1Begin + i],
+					    nodes[row2Begin + i - 1]));
           else if (isTore)
-            graph->addEdge(row1[i], row2[width - 1]);
+            ends.push_back(pair<node, node>(nodes[row1Begin + i],
+					    nodes[row2Begin + width - 1]));
         }
       }
-
     }
   }
 
@@ -202,7 +212,9 @@ class Grid: public ImportModule {
       conn = 8;
 
     // graph is predimensioned according the parameters
-    graph->reserveNodes(height * width);
+    vector<node> nodes;
+    nodes.reserve(height * width);
+    graph->addNodes(height * width, nodes);
 
     // compute nb edges
     unsigned int nbEdges = height * (width - 1);
@@ -222,23 +234,22 @@ class Grid: public ImportModule {
       if (isTore)
 	nbEdges += height - 1;
     }
-    graph->reserveEdges(nbEdges);
- 
-    vector<vector<node> > grid;
-    grid.resize(height);
+    vector<pair<node, node> > ends;
+    ends.reserve(nbEdges);
+    vector<edge> edges;
+    edges.reserve(nbEdges);
 
-    grid[0].resize(width);
-    buildRow(grid[0], 0, conn, isTore, spacing);
+    buildRow(nodes, ends, 0, width, conn, isTore, spacing);
     for (unsigned int i = 1; i < height; ++i) {
-      grid[i].resize(width);
-
-      buildRow(grid[i], i, conn, isTore, spacing);
-      connectRow(grid[i - 1], i - 1, grid[i], i, conn, isTore);
+      buildRow(nodes, ends, i, width, conn, isTore, spacing);
+      connectRow(nodes, ends, i - 1, i, width, conn, isTore);
     }
 
     if (isTore) {
-      connectRow(grid[height - 1], height - 1, grid[0], 0, conn, isTore);
+      connectRow(nodes, ends, height - 1, 0, width, conn, isTore);
     }
+
+    graph->addEdges(ends, edges);
 
     return true;
   }

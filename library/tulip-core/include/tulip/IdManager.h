@@ -95,11 +95,20 @@ public:
    */
   void free(const unsigned int);
   /**
-   * Returns a new id, the returned id is choosen to minimize
-   * the memory space of the free list, and the fragmentation
-   * of the ids.
+   * Returns a new id.
    */
-  unsigned int get();
+  unsigned int get() {
+    return state.nextId++;
+  }
+  /**
+   * Returns the first id of a range of nb new ids.
+   */
+  unsigned int getFirstOfRange(unsigned nb) {
+    unsigned int first = state.nextId;
+    state.nextId += nb;
+    return first;
+  }
+
   /**
    * assuming the given id is free.
    * remove it from free ids

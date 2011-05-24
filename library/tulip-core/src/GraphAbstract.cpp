@@ -295,6 +295,13 @@ unsigned int GraphAbstract::outdeg(const node n) const {
   return deg;
 }
 //=========================================================================
+void GraphAbstract::delNodes(Iterator<node>* itN, bool deleteInAllGraphs) {
+  assert(itN != NULL);
+  while(itN->hasNext()) {
+    delNode(itN->next(), deleteInAllGraphs);
+  }
+}
+//=========================================================================
 node GraphAbstract::source(const edge e) const {
   return root->source(e);
 }
@@ -346,6 +353,13 @@ edge GraphAbstract::existEdge(const node n1, const node n2,
     }
   } delete it;
   return edge();
+}
+//=========================================================================
+void GraphAbstract::delEdges(Iterator<edge>* itE, bool deleteInAllGraphs) {
+  assert(itE != NULL);
+  while(itE->hasNext()) {
+    delEdge(itE->next(), deleteInAllGraphs);
+  }
 }
 //=========================================================================
 bool GraphAbstract::existProperty(const std::string &name) {

@@ -146,13 +146,31 @@ node GraphImpl::restoreNode(node newNode) {
   return newNode;
 }
 //----------------------------------------------------------------
+void GraphImpl::restoreNodes(const std::vector<node>& nodes) {
+  if (!nodes.empty()) {
+    storage.restoreNodes(nodes);
+    if (hasOnlookers())
+      sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODES, nodes));
+  }
+}
+//----------------------------------------------------------------
 node GraphImpl::addNode() {
   node newNode = storage.addNode();
   notifyAddNode(newNode);
   return newNode;
 }
 //----------------------------------------------------------------
+void GraphImpl::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
+  storage.addNodes(nb, addedNodes);
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODES, addedNodes));
+}
+//----------------------------------------------------------------
 void GraphImpl::addNode(const node) {
+  cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << endl;
+}
+//----------------------------------------------------------------
+void GraphImpl::addNodes(Iterator<node>*) {
   cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << endl;
 }
 //----------------------------------------------------------------
@@ -176,9 +194,31 @@ edge GraphImpl::addEdge(const node src, const node tgt) {
   return newEdge;
 }
 //----------------------------------------------------------------
+void GraphImpl::addEdges(const std::vector<std::pair<node, node> >& edges,
+			 std::vector<edge>& addedEdges) {
+  if (!edges.empty()) {
+    storage.addEdges(edges, addedEdges);
+    if (hasOnlookers())
+      sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGES, addedEdges));
+  }
+}
+//----------------------------------------------------------------
+void GraphImpl::restoreEdges(const std::vector<edge>& edges,
+			     const std::vector<std::pair<node, node> >& ends) {
+  if (!edges.empty()) {
+    storage.restoreEdges(edges, ends);
+    if (hasOnlookers())
+      sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGES, edges));
+  }
+}
+//----------------------------------------------------------------
 void GraphImpl::addEdge(const edge e) {
   cerr << "{Warning ] : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << endl;
   cerr << "\t Trying to add edge " << e.id << " (" << source(e).id << "," << target(e).id << ")" << endl;
+}
+//----------------------------------------------------------------
+void GraphImpl::addEdges(Iterator<edge>*) {
+  cerr << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << endl;
 }
 //----------------------------------------------------------------
 void GraphImpl::reserveEdges(unsigned int nb) {
