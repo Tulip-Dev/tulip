@@ -203,7 +203,7 @@ GLfloat projectSize(const BoundingBox &bb,
 	float x2 = (proj2[0]/proj2[3] * 0.5 + 0.5 ) * viewport[2];
 
 	float width = fabs(x1 - x2);
-	float size = sqrt(2. * width);
+	float size = pow(2. * width, 2);
 
 	// Test of visibily
 	x2 += viewport[0];
