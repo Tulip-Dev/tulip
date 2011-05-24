@@ -25,53 +25,69 @@
 class QMainWindow;
 
 namespace tlp {
+class TulipProject;
 /**
-  @brief Class representing a Perspective plugin
-  The perspective plugin system replaces the old Controller mechanism available in Tulip 3.x. It's been designed to be more flexible and to allow a complete control
-  on the user interface.
+  @brief Perspective class is the top-most class of the Tulip 4 Perspective system.
+  The perspective system replaces the Tulip 3 controller mechanism.
+  A perspective plugin is meant to provide a whole GUI application encapsulating a complete business layer, using graphs as backend.
 
-  Keep in mind that Perspective plugins have been designed to work inside their own processes. Those process might be instanciated from a ROOT PROCESS (tulip_app in case of a
-  Perspective run into Tulip or as standalone applications.
+  A perspective plugin is meant to run in its own process and has complete control over it. The host process can be run into two modes: managed and headless.
+  Here is a complete workflow of Tulip processes encapsulation leading to the initialization of a Perspective:
 
-  Several signals and slots are available. They are meant to establish a simple communication protocol between the perspective's process and the tulip_app parent process.
-  Those elements provide access to common features like asking the tulip_app to open the plugins manager, to show the help screen, to properly close the perspective etc.
-  // TODO: add a link to some online documentation about tulip's process encapsulation.
-  @see class documentation for an exhaustive list of signals/slots
-  @note Those signals and slots are meant to be used when run along with the tulip_app process. If no tulip_app is present, those functions will do nothing.
+  1 => tulip_agent is run. This process verifies that plugins load correctly and display error reports. It also provide GUI facility to manage plugins (fix loading errors, install new plugins, etc)
+       The tulip_agent process also provides the user with a list of installed and valid perspectives. When a perspective is chosen, the tulip_agent process run a new "tulip" process that will instantiate the perspective.
+       The tulip_agent also provides automatic updates for plugins coming from plugins servers.
+  2 => tulip process is run. At this point, we are sure that the plugin environment is valid and that every plugin needed by our perspective loads flawlessly.
+       The tulip_process will load plugins once again, then it will parse its arguments:
+       @list
+       @li If a file is provided as first argument, the tulip process will create a TulipProject object with it and check the associated perspective plugin.
+       @li If the --perspective flag is provided, the tulip process will create the corresponding perspective plugin instance without a project.
+       @endlist
+  3 => The tulip process instantiate a (hidden) QMainWindow with some features (putting tulip icon on it, setting its titlebar, etc)
+  4 => The perspective plugin is created and given its QMainWindow. QMainWindow ownership is left to the perspective plugin.
+  5 => The construct method is called, allowing the perspective to build-up its GUI on the main window.
+  6 => If a file was provided when running the tulip process, the setProject method is called, providing the associated TulipProject instance.
 
-  Perspective plugins are given a PerspectiveContext when they are initialized. The PerspectiveContext contains the following fields:
+  Perspectives can be run into two modes:
   @list
-  @li mainWindow (QMainWindow): This is a Qt main window widget which has been partly initialized by the process. This window is initially hidden. The perspective
-                                takes this ownership of the main window. Which means that one can delete it if the perspective is not meant to run into a GUI.
-  @li document: Still to be defined.
+  @li Managed: The full workflow described above is followed, starting from tulip_center.
+  @li Headless: We start directly the tulip process. This mean that plugins environment has not been previously checked for errors.
   @endlist
+
+  Remember that your perspective has complete control over the tulip process. You choose when to stop it or what to do with your QMainWidnow.
+
+  Finally, a Perspective declares several signals. Those signals can be used to communicate with the tulip_agent process. Each signal expose a specific feature of the tulip_agent process.
+  Communication between process is hidden and its inner workings should not be known or used by the user.
   */
 class TLP_QT_SCOPE Perspective : public WithParameter, public WithDependency {
   Q_OBJECT
+  QMainWindow *_mainWindow;
+public:
 
   /**
-    @brief Construct the perspective along with its respective context.
-    @warning The context object is not automatically stored and will have to be handled specificly by implementations.
+    @brief Build a perspective along with its context
     */
-  explicit Perspective(PerspectiveContext &) {}
-
-  signals:
-  /**
-    @brief Asks the underlying tulip_app to display the welcome screen.
-    */
-  void showWelcomeScreen();
+  Perspective(PerspectiveContext &c) { _mainWindow = c.mainWindow; }
 
   /**
-    @brief Asks the underlying tulip_app to display the welcome screen.
+    @brief This method checks if a perspective plugin is compatible with a specific TulipProject.
+    Tulip4 is meant to be able to hot switch between perspectives using the same input data.
+    @return This method should parse the TulipProject files and return true if it can import data from any of those files.
     */
-  void showPluginsCenterScreen();
+  virtual bool isCompatible(tlp::TulipProject *) { return false; }
 
   /**
-    @brief Asks the underlying tulip_app to display the welcome screen.
+    @brief This method is called when the Perspective UI should be built.
+    @warning Since plugins loading process might create unused instance of a perspective plugin, you should never do anything in the Perspective constructor and use the construct method instead.
     */
-  void showHelpScreen();
+  virtual void construct()=0;
 
-  // TODO: add open new controller function and some stuff to handle documents
+  /**
+    @brief Associate the perspe'ctive to its project.
+    This method is called only if a project file has been given to the host process. The given TulipProject is already opened and its ownership is given to the Perspective.
+    @note This method will always be called after construct()
+    */
+  virtual void setProject(tlp::TulipProject *)=0;
 };
 
 struct TLP_QT_SCOPE PerspectiveContext {
