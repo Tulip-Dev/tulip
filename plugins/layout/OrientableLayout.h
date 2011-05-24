@@ -44,8 +44,10 @@ public:
 
     PointType       getNodeDefaultValue();
     LineType        getEdgeDefaultValue();
+    
+    void setOrthogonalEdge(const tlp::Graph* tree, float interNodeDistance);
 
-private:
+private:  
 	typedef std::vector<tlp::Coord> CoordLineType;
 	std::vector<OrientableCoord> convertEdgeLinetype(const std::vector<tlp::Coord>& v);
 	
@@ -58,6 +60,7 @@ private:
 	void  (OrientableCoord::*writeX)(float);
 	void  (OrientableCoord::*writeY)(float);
 	void  (OrientableCoord::*writeZ)(float);
+  void addControlPoints(const tlp::Graph* tree, OrientableCoord fatherCoord, tlp::edge e, float interNodeDistance);
 };
 
 #endif
