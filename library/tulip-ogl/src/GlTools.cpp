@@ -158,34 +158,6 @@ Coord unprojectPoint(const Coord &obj,
 	return result;
 }
 //====================================================
-double segmentSize(const Coord &u, const Coord &v,
-		const tlp::MatrixGL &transform,
-		const Vector<int, 4> &viewport) {
-	Coord p1 = projectPoint(u, transform, viewport);
-	Coord p2 = projectPoint(v, transform, viewport);
-	return sqr(p1[0]-p2[0]) + sqr(p1[1]-p2[1]);
-}
-//====================================================
-double segmentVisible(const Coord &u, const Coord &v,
-		const tlp::MatrixGL &transform,
-		const Vector<int, 4> &viewport) {
-	Coord p1 = projectPoint(u, transform, viewport);
-	Coord p2 = projectPoint(v, transform, viewport);
-	GLfloat minx = viewport[0];
-	GLfloat miny = viewport[1];
-	GLfloat maxx = minx + viewport[2];
-	GLfloat maxy = miny + viewport[3];
-	double size = sqr(p1[0]-p2[0]) + sqr(p1[1]-p2[1]);
-	if (( (p1[0]<minx && p2[0]<minx) ||
-			(p1[1]<miny && p2[1]<miny) ||
-			(p1[0]>maxx && p2[0]>maxx) ||
-			(p1[1]>maxy && p2[1]>maxy) ) ) {
-		return -size;
-	}
-	else
-		return size;
-}
-//====================================================
 GLfloat projectSize(const Coord &position,const Size& size,
 		const MatrixGL &projectionMatrix, const MatrixGL &modelviewMatrix,
 		const Vector<int, 4> &viewport) {
