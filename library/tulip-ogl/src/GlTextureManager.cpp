@@ -376,7 +376,6 @@ bool GlTextureManager::loadTexture(const string& filename)
 bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo &texti,GlTexture &glTexture){
 	int GLFmt = texti.hasAlpha ? GL_RGBA : GL_RGB;
 
-	bool spriteOnHeight=false;
 	bool spriteOnWidth=false;
 	unsigned int spriteNumber=1;
 	unsigned int width=texti.width;
@@ -388,7 +387,6 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
 	}else{
 		if(texti.width!=texti.height){
 			if(texti.height>texti.width){
-				spriteOnHeight=true;
 				spriteNumber=texti.height/texti.width;
 				height=width;
 			}else{

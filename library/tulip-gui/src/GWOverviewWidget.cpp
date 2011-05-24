@@ -113,7 +113,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       Camera cview  = _observedView->getScene()->getCamera();
       middle = _view->getScene()->getCamera().worldTo2DScreen(middle);
       //      cerr << "Square center: " << Coord(x, y, z) << endl;
-      float dx, dy, dz;
+      float dx, dy;
       int resultViewport;
       if(viewport[2]<viewport[3])
         resultViewport=viewport[2];
@@ -121,7 +121,6 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
         resultViewport=viewport[3];
       dx = (middle[0] - mouseClicX) * resultViewport * cview.getZoomFactor() / (cover.getZoomFactor() * widgetWidth);
       dy = (middle[1] - (widgetHeight - mouseClicY)) * resultViewport * cview.getZoomFactor() / (cover.getZoomFactor() * widgetHeight);
-      dz = 0;
       //      cerr << "Translation : " << Coord(dx, dy, dz) << endl;
       _observedView->getScene()->translateCamera((int) dx, (int) dy, 0);
       _observedView->draw();

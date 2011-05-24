@@ -471,7 +471,7 @@ void PlanarityTestImpl::obstructionEdgesCNodeCounter(Graph *sG, node cNode, node
   // seachs for a node f in RBC[cNode] between jl and jr s.t.
   // f has a descendant that is a neighbor of w in G;
   bool flag = false;
-  node v = NULL_NODE, f = NULL_NODE, t12 = NULL_NODE, t22 = NULL_NODE;
+  node f = NULL_NODE, t12 = NULL_NODE, t22 = NULL_NODE;
   if (t1 != NULL_NODE && t1 != cNode)
     t12 = lastPNode(t1, cNode);
   if (t2 != NULL_NODE && t2 != cNode)

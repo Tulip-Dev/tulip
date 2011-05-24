@@ -34,7 +34,6 @@ PreferenceDialog::PreferenceDialog( QWidget* parent)
   PreferenceManager &preferenceManager=PreferenceManager::getInst();
   bool networkConnection=preferenceManager.getNetworkConnection();
   bool autoLoadController=preferenceManager.getAutoLoadController();
-  Color selectionColor=preferenceManager.getSelectionColor();
 
   networkRadioButton->setChecked(networkConnection);
   autoLoadControllerButton->setChecked(autoLoadController);
