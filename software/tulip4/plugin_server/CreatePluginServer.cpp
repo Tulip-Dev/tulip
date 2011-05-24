@@ -16,19 +16,21 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "PushToPluginServer.h"
+#include "CreatePluginServer.h"
 
 #include <QtCore/QString>
 #include <QtCore/QFile>
 #include <QtCore/QDir>
 #include <QtCore/QBuffer>
+#include <QtXml/QDomDocument>
 #include <QtGui/QApplication>
 
 #include <tulip/PluginLister.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginInformations.h>
 #include <tulip/PluginLoaderTxt.h>
-#include <QDomDocument>
+
+#include <QuaZIPFacade.h>
 
 using namespace std;
 using namespace tlp;
@@ -80,7 +82,8 @@ int main(int argc,char **argv) {
   #endif
 
   initTulipLib(pluginPath.toStdString().c_str());
-  tlp::PluginLibraryLoader::loadPlugins(); // library side plugins
+  PluginLoaderTxt loader;
+  tlp::PluginLibraryLoader::loadPlugins(&loader); // library side plugins
 
   std::list<tlp::Dependency> dependencies;
   std::string pluginType;
@@ -90,7 +93,7 @@ int main(int argc,char **argv) {
     Iterator<string>* plugins = currentLister->availablePlugins();
     while(plugins->hasNext()) {
       string currentPluginName = plugins->next();
-      if(currentLister->getPluginLibrary(currentPluginName) != "libTulip") {
+      if(currentLister->getPluginLibrary(currentPluginName) != "") {
         pluginName = QString::fromStdString(currentPluginName);
         dependencies = currentLister->getPluginDependencies(currentPluginName);
         pluginType = currentLister->getPluginsClassName();
@@ -106,6 +109,8 @@ int main(int argc,char **argv) {
   QString archiveName = pluginName + "-" + info->getRelease().c_str() + "-" + tulipVersion + "-" + platform + architecture + "-" + compiler + ".zip";
 
   std::cout << archiveName.toStdString() << std::endl;
+  
+  QuaZIPFacade::zipDir(pluginPath, pluginPath + "../" + archiveName);
 
   //creates the xml document for this plugin
   QDomDocument pluginInfoDocument;
