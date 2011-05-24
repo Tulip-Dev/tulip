@@ -208,11 +208,9 @@ namespace tlp {
       }
       if (smooth) {
 	/* Smooth shaded polygon; varying colors at vetices. */
-	int triOffset;
 
 	/* Break polygon into "nvertices-2" triangle fans. */
 	for (int i = 0; i < nvertices - 2; i++) {
-	  triOffset = i * 7;
 	  stream_out << "[" << vertex[0].x << " " << vertex[i + 1].x << " " << vertex[i + 2].x << " " << vertex[0].y << " " <<  vertex[i + 1].y << " " << vertex[i + 2].y << "]";
 	  stream_out << " [" << vertex[0].red << " " << vertex[0].green << " " << vertex[0].blue << "] ["
 		     << vertex[i + 1].red << " " << vertex[i + 1].green << " " << vertex[i + 1].blue << "] ["

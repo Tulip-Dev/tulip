@@ -121,7 +121,6 @@ void Ordering::updateOutAndVisitedFaces(Face f){
 void Ordering::updateContourLeftRight(node pred, node n, edge e, node last){
   node no = pred;                                            
   node no2 =  n;
-  edge ed_tmp = e;
   while(no2 != last){                                  
     contour.set(no2.id,true);
     right.set(no.id,no2);
@@ -723,7 +722,6 @@ void Ordering::selectAndUpdate(node n) {
   res.push_back(n);
   _data.push_back(res);
 
-  node next = right.get(n.id);
   node v = left.get(n.id);
   n1 = v;
   on_cont.setAll(false);
@@ -974,7 +972,6 @@ void Ordering::selectAndUpdate(Face f){
   if (!edge_pred.isValid())
     edge_pred = Gp->existEdge(n2,n1);
   edge_pred = Gp->succCycleEdge(edge_pred,pred);
-  bool marked_face = false;
   bool min_markded_face = false;
   int add_node = 0;
   bool was_visited = visitedFaces.get(f.id);
@@ -1005,8 +1002,7 @@ void Ordering::selectAndUpdate(Face f){
   
   
   // test if face f is marked and if it is the "minimal" one
-  if(markedFaces.get(f.id)) {                  
-    marked_face=true;
+  if(markedFaces.get(f.id)) {
     markedFaces.set(f.id,false);
     if(f == minMarkedFace.face)
       min_markded_face=true;

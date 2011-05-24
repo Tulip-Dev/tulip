@@ -228,10 +228,6 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 		const Vector<int,4>& globalViewport,
 		const Vector<int,4>& currentViewport) {
 
-	BooleanProperty *selectedProperty=NULL;
-	if(inputData)
-		selectedProperty=inputData->getGraph()->getProperty<BooleanProperty>(inputData->getElementSelectedPropName());
-
 	// aX,aY : rotation on the camera in x and y
 	Coord eyeCenter=currentCamera->getCenter()-currentCamera->getEyes();
 	double aX=atan(eyeCenter[1]/eyeCenter[2]);

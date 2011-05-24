@@ -39,13 +39,11 @@ int main(int argc,char **argv) {
   QApplication app(argc, argv);
 
   if(argc < 2) {
-    std::cout << "pluginPusher pluginPath serverUrl base64credentials" << std::endl;
+    std::cout << "packagePlugin pluginPath" << std::endl;
     exit(0);
   }
   
   QString pluginPath = argv[1];
-//   QString serverURL = argv[2];
-//   QString base64credentials = argv[3];
   
   QString pluginName;
   QString tulipVersion;
@@ -131,7 +129,7 @@ int main(int argc,char **argv) {
     dependencyElement.setAttribute("version", QString::fromStdString(it->pluginRelease));
   }
 
-  QFile outputXML("output.xml");
+  QFile outputXML(pluginName + ".xml");
   outputXML.open(QIODevice::ReadWrite);
   outputXML.write(pluginInfoDocument.toByteArray());
   outputXML.close();

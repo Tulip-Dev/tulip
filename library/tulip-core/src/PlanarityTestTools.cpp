@@ -195,10 +195,12 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
   }
   //  cerr << endl;
 
+#ifndef NDEBUG
   for (list<edge>::iterator it = edgeInT0.begin(); it != edgeInT0.end(); it++) {
     edge e = *it;
     assert (!(isBackEdge(g, e) || isBackEdge(g, edgeReversal(e))));
   }
+#endif
 
   
   //  cerr << "DFS order :" ;  

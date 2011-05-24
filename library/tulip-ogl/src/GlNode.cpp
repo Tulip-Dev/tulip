@@ -221,8 +221,6 @@ namespace tlp {
     bool selected=data->getElementSelected()->getNodeValue(n);
     // Color of the label : selected or not
     const Color& fontColor = selected ? data->parameters->getSelectionColor() :data->getElementLabelColor()->getNodeValue(n);
-    // Size of the node
-    Size size=data->getElementSize()->getNodeValue(n);
 
     // If we have transparent label : return
     if(fontColor.getA()==0)
