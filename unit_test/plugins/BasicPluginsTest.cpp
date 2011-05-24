@@ -281,20 +281,6 @@ void BasicPluginsTest::testMetricColorMapping() {
 }
 
 //==========================================================
-void BasicPluginsTest::testEnumeratedColorValuesMapping() {
-  initializeGraph("Random General Tree");
-  DoubleProperty metric(graph);
-  string errorMsg;
-  bool result = graph->computeProperty("Degree", &metric, errorMsg);
-  CPPUNIT_ASSERT(result);
-
-  /*ColorProperty color(graph);
-  ds.set("Property", &metric);
-  result = graph->computeProperty("Enumerated Values Mapping",
-				  &color, errorMsg); 
-				  CPPUNIT_ASSERT(result);*/
-}
-//==========================================================
 void BasicPluginsTest::testBubbleTree() {
   bool result = computeProperty<LayoutProperty>("Bubble Tree");
   CPPUNIT_ASSERT(result);
@@ -584,7 +570,6 @@ CppUnit::Test * BasicPluginsTest::suite() {
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("StrengthMetric", &BasicPluginsTest::testStrengthMetric));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("StrongComponent", &BasicPluginsTest::testStrongComponent));;
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("MetricColorMapping", &BasicPluginsTest::testMetricColorMapping));
-  suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("EnumeratedColorValuesMapping", &BasicPluginsTest::testEnumeratedColorValuesMapping));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("BubbleTree", &BasicPluginsTest::testBubbleTree));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("Circular", &BasicPluginsTest::testCircular));
   suiteOfTests->addTest(new CppUnit::TestCaller<BasicPluginsTest>("ConeTreeExtended", &BasicPluginsTest::testConeTreeExtended));
