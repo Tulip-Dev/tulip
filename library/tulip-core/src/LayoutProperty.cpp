@@ -27,8 +27,6 @@
 using namespace std;
 using namespace tlp;
 
-inline double sqr(double x){return (x*x);}
-
 // define a specific MetaValueCalculator
 class LayoutMetaValueCalculator
   :public AbstractLayoutProperty::MetaValueCalculator {
@@ -244,12 +242,12 @@ void LayoutProperty::normalize(Graph *sg) {
   if (sg->numberOfNodes()==0) return;
   Observable::holdObservers();
   center();
-  double dtmpMax = 1.0;
+  float dtmpMax = 1.0;
   Iterator<node> *itN=sg->getNodes();
   while (itN->hasNext())  {
     node itn=itN->next();
     const Coord& tmpCoord = getNodeValue(itn);
-    dtmpMax  = std::max(dtmpMax, sqr(tmpCoord[0])+sqr(tmpCoord[1])+sqr(tmpCoord[2]));
+    dtmpMax  = std::max(dtmpMax, sqrt(tmpCoord[0])+sqrt(tmpCoord[1])+sqrt(tmpCoord[2]));
   } delete itN;
   dtmpMax = 1.0 / sqrt(dtmpMax);
   scale(Coord(dtmpMax,dtmpMax,dtmpMax), sg);  

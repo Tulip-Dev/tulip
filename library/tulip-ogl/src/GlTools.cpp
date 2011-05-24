@@ -203,7 +203,7 @@ GLfloat projectSize(const BoundingBox &bb,
 	float x2 = (proj2[0]/proj2[3] * 0.5 + 0.5 ) * viewport[2];
 
 	float width = fabs(x1 - x2);
-	float size = sqr(2. * width);
+	float size = sqrt(2. * width);
 
 	// Test of visibily
 	x2 += viewport[0];
@@ -300,8 +300,4 @@ float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<floa
 float calculate2DLod(const BoundingBox& bb,const Vector<int, 4>&,const Vector<int, 4>&) {
 	return (bb[1][0] - bb[0][0]) * (bb[1][1] - bb[0][1]);
 }
-}
-
-GLfloat tlp::sqr(const GLfloat f) {
-	return f*f;
 }

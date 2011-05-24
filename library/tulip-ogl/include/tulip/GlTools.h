@@ -47,7 +47,6 @@ namespace tlp {
   TLP_GL_SCOPE Coord unprojectPoint(const Coord &obj,
 				    const MatrixGL &,
 				    const tlp::Vector<int, 4> &viewport);
-  inline GLfloat sqr(const GLfloat f);
   TLP_GL_SCOPE GLfloat projectSize(const BoundingBox& bb,
 		      const MatrixGL &, const MatrixGL &,const Vector<int, 4> &viewport);
   TLP_GL_SCOPE GLfloat projectSize(const Coord& position,const Size& size,
