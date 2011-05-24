@@ -78,6 +78,7 @@ IF(${MSVC}) #specific options for Visual Studio
 ENDIF()
 SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
+SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}${TulipReleaseVersion}")
 
 ## -----------------------------------------------------------------------------------------------
 ## Lib names
@@ -326,8 +327,6 @@ ENDIF(LINUX)
 ## -----------------------------------------------------------------------------------------------
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in
 ## -----------------------------------------------------------------------------------------------
-SET(VERSION "${TulipVersion}")
-SET(MM_VERSION "${TulipMMVersion}")
 CONFIGURE_FILE("library/tulip-core/include/tulip/TulipRelease.h.in" "library/tulip-core/include/tulip/TulipRelease.h")
 
 ## -----------------------------------------------------------------------------------------------
