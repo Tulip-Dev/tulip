@@ -21,9 +21,7 @@
 #include <QtCore/QString>
 #include <QtCore/QFile>
 #include <QtCore/QDir>
-#include <QtCore/QBuffer>
 #include <QtXml/QDomDocument>
-#include <QtGui/QApplication>
 
 #include <tulip/PluginLister.h>
 #include <tulip/TulipRelease.h>
@@ -35,106 +33,147 @@
 using namespace std;
 using namespace tlp;
 
-int main(int argc,char **argv) {
-  QApplication app(argc, argv);
+class ArchiveCreator : public PluginLoader {
+  public:
+    ArchiveCreator(const QString& archiveDestinationDir) : archiveDestinationDir(archiveDestinationDir), tulipVersion(TULIP_RELEASE) {
+      #if defined(_WIN32) || defined(_WIN64)
+      platform = "win";
+      #elif defined(__APPLE__)
+      platform = "mac";
+      #else
+      platform = "linux";
+      #endif
+      
+      #if _WIN64 || __amd64__
+      architecture = "64";
+      #else
+      architecture = "32";
+      #endif
+      
+      #if defined(__clang__)
+      compiler = "Clang";
+      #elif defined(__GNUC__)
+      compiler="gcc";
+      #elif defined(_MSC_VER)
+      compiler = "MSVC";
+      #endif
+    }
+    
+    void setCurrentPluginDir(const QString& pluginDir) {
+      currentPluginDir = pluginDir;
+    }
+    
+    virtual void loaded(const tlp::AbstractPluginInfo* info, const std::list< Dependency >& dependencies) {
+      std::cout <<"loaded: " << info->getName() << std::endl;
+      QString pluginName = QString::fromStdString(info->getName());
+      QString pluginLibrary;     
+      std::string pluginType;
+      
+      for(std::map<std::string, PluginListerInterface*>::const_iterator it = PluginListerInterface::allFactories->begin(); it != PluginListerInterface::allFactories->end(); ++it) {
+        PluginListerInterface* currentLister = it->second;
+        if(currentLister->pluginExists(pluginName.toStdString())) {
+          pluginLibrary = QString::fromStdString(currentLister->getPluginLibrary(pluginName.toStdString()));
+          pluginType = currentLister->getPluginsClassName();
+        }
+      }
+      
+      QString pluginSimplifiedName = pluginName.simplified().remove(' ').toLower();
+      
+      QString archiveName = pluginSimplifiedName + "-" + info->getRelease().c_str() + "-" + tulipVersion + "-" + platform + architecture + "-" + compiler + ".zip";
+      
+      bool compressed = QuaZIPFacade::zipDir(currentPluginDir, archiveDestinationDir + "/" + archiveName);
+      if(!compressed) {
+        cout << "failed to compress folder " << currentPluginDir.toStdString() << " as archive: " << archiveDestinationDir.toStdString() << "/" << archiveName.toStdString() << endl;
+      }
+      //creates the xml document for this plugin
+      QDomDocument pluginInfoDocument;
+      QDomElement infoElement = pluginInfoDocument.createElement("plugin");
+      pluginInfoDocument.appendChild(infoElement);
+      infoElement.setAttribute("name", pluginName);
+      infoElement.setAttribute("type", QString::fromStdString(pluginType));
+      infoElement.setAttribute("author", QString::fromStdString(info->getAuthor()));
+      infoElement.setAttribute("date", QString::fromStdString(info->getDate()));
+      infoElement.setAttribute("info", QString::fromStdString(info->getInfo()));
+      infoElement.setAttribute("fileName", pluginLibrary);
+      infoElement.setAttribute("version", QString::fromStdString(info->getRelease()));
+      
+      for(std::list<Dependency>::const_iterator it = dependencies.begin(); it != dependencies.end(); ++it) {
+        QDomElement dependencyElement = pluginInfoDocument.createElement("dependency");
+        dependencyElement.setAttribute("name", QString::fromStdString(it->pluginName));
+        dependencyElement.setAttribute("type", QString::fromStdString(it->factoryName));
+        dependencyElement.setAttribute("version", QString::fromStdString(it->pluginRelease));
+      }
+      
+      QFile outputXML(archiveDestinationDir + "/" + pluginSimplifiedName + ".xml");
+      outputXML.open(QIODevice::ReadWrite);
+      outputXML.write(pluginInfoDocument.toByteArray());
+      outputXML.close();
+    }
 
+    virtual void aborted(const std::string& filename, const std::string& error) {
+      cout << "\taborted " << filename << " because: " << error << endl;
+    }
+    virtual void finished(bool, const std::string&) {
+      cout << "done ! " << endl;
+    }
+    virtual void loading(const std::string& filename){
+      cout << "\tloading: " << filename << endl;
+    }
+    virtual void start(const std::string& path){
+      cout << "starting: " << path << endl;
+    }
+    
+  private:
+    QString archiveDestinationDir;
+    QString currentPluginDir;
+    QString platform;
+    QString architecture;
+    QString compiler;
+    QString tulipVersion;
+};
+
+int main(int argc,char **argv) {
+  //the plugin path is the root of the plugin folder. In the following example, it is the edgeseparation folder.
+//   pluginserver/
+//   ├── edgeseparation
+//   │   ├── lib
+//   │   │   └── tulip
+//   │   │       └── libedgeseparation-4.0.0.so
+//   │   └── share
+//   │       └── doc
+//   │           └── edgeseparation
+//   │               └── index.html
+//   
   if(argc < 2) {
-    std::cout << "packagePlugin pluginPath" << std::endl;
+    std::cout << "packagePlugin pluginPath [destinationDir]" << std::endl;
     exit(0);
   }
-  
-  QString pluginPath = argv[1];
-  
-  QString pluginName;
-  QString tulipVersion;
-  QString platform;
-  QString architecture;
-  QString compiler;
 
-  QString pluginLibrary;
-  
-  const AbstractPluginInfo* info;
-  
-  tulipVersion = QString(TULIP_RELEASE);
-  
-  #if defined(_WIN32) || defined(_WIN64)
-    platform = "win";
-  #elif defined(__APPLE__)
-    platform = "mac";
-  #else
-    platform = "linux";
-  #endif
-  
-  #if _WIN64 || __amd64__
-    architecture = "64";
-  #else
-    architecture = "32";
-  #endif
-  
-  #if defined(__clang__)
-    compiler = "Clang";
-  #elif defined(__GNUC__)
-    compiler="gcc";
-  #elif defined(_MSC_VER)
-    compiler = "MSVC";
-  #endif
-
-  initTulipLib(pluginPath.toStdString().c_str());
-  PluginLoaderTxt loader;
-  tlp::PluginLibraryLoader::loadPlugins(&loader); // library side plugins
-
-  std::list<tlp::Dependency> dependencies;
-  std::string pluginType;
-  
-  for(std::map<std::string, PluginListerInterface*>::const_iterator it = PluginListerInterface::allFactories->begin(); it != PluginListerInterface::allFactories->end(); ++it) {
-    PluginListerInterface* currentLister = it->second;
-    Iterator<string>* plugins = currentLister->availablePlugins();
-    while(plugins->hasNext()) {
-      string currentPluginName = plugins->next();
-      if(currentLister->getPluginLibrary(currentPluginName) != "") {
-        pluginName = QString::fromStdString(currentPluginName);
-        dependencies = currentLister->getPluginDependencies(currentPluginName);
-        pluginType = currentLister->getPluginsClassName();
-        info = currentLister->pluginInformations(currentPluginName);
-        pluginLibrary = QString::fromStdString(currentLister->getPluginLibrary(currentPluginName));
-      }
+  QString destinationDir;
+  if(argc < 3) {
+    destinationDir = QDir::currentPath();
+  }
+  else {
+    destinationDir = argv[2];
+    QDir destination(QDir::current());
+    if(!destination.exists(destinationDir)) {
+      destination.mkdir(destinationDir);
     }
-    delete plugins;
   }
 
-  pluginName = pluginName.simplified().remove(' ').toLower();
-  
-  QString archiveName = pluginName + "-" + info->getRelease().c_str() + "-" + tulipVersion + "-" + platform + architecture + "-" + compiler + ".zip";
-
-  std::cout << archiveName.toStdString() << std::endl;
-  
-  QuaZIPFacade::zipDir(pluginPath, pluginPath + "../" + archiveName);
-
-  //creates the xml document for this plugin
-  QDomDocument pluginInfoDocument;
-  QDomElement infoElement = pluginInfoDocument.createElement("plugin");
-  pluginInfoDocument.appendChild(infoElement);
-  infoElement.setAttribute("name", pluginName);
-  infoElement.setAttribute("type", QString::fromStdString(pluginType));
-  infoElement.setAttribute("author", QString::fromStdString(info->getAuthor()));
-  infoElement.setAttribute("date", QString::fromStdString(info->getDate()));
-  infoElement.setAttribute("info", QString::fromStdString(info->getInfo()));
-  infoElement.setAttribute("fileName", pluginLibrary);
-  infoElement.setAttribute("version", QString::fromStdString(info->getRelease()));
-
-  for(std::list<Dependency>::const_iterator it = dependencies.begin(); it != dependencies.end(); ++it) {
-    QDomElement dependencyElement = pluginInfoDocument.createElement("dependency");
-    dependencyElement.setAttribute("name", QString::fromStdString(it->pluginName));
-    dependencyElement.setAttribute("type", QString::fromStdString(it->factoryName));
-    dependencyElement.setAttribute("version", QString::fromStdString(it->pluginRelease));
+  initTulipLib();
+  ArchiveCreator creator(destinationDir);
+  QDir pluginServerDir(argv[1]);
+  PluginListerInterface::currentLoader = &creator;
+  foreach(const QString folder, pluginServerDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+    QString plugindir = pluginServerDir.canonicalPath() + "/" + folder + "/lib/tulip/";
+    creator.setCurrentPluginDir(plugindir);
+    
+    //TODO find file using QDir instead of this hackish "solution"
+    QString pluginFile = plugindir + "lib" + folder + "-" + TULIP_RELEASE + ".so";
+//     cout << plugindir.toStdString() << ": " << pluginFile.toStdString() << endl;
+    PluginLibraryLoader::loadPluginLibrary(pluginFile.toStdString(), &creator);
   }
-
-  QFile outputXML(pluginName + ".xml");
-  outputXML.open(QIODevice::ReadWrite);
-  outputXML.write(pluginInfoDocument.toByteArray());
-  outputXML.close();
  
   return 0;
 }
-
-
