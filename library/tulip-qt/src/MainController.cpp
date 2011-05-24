@@ -545,6 +545,7 @@ namespace tlp {
         while(itS->hasNext()) {
           newToCompute.push_back(itS->next());
         }
+        delete itS;
       }
       toCompute=newToCompute;
     }

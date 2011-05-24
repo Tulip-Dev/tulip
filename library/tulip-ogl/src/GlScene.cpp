@@ -200,10 +200,16 @@ namespace tlp {
     GlEdge glEdge(0);
     GlMetaNode glMetaNode(0);
 
-    bool nodeLabelEmpty=(!glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedNodes()->hasNext())
+    Iterator<node> *nonDefaultLabelNodes = glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedNodes();
+    Iterator<edge> *nonDefaultLabelEdges = glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedEdges();
+
+    bool nodeLabelEmpty=(!nonDefaultLabelNodes->hasNext())
                         && glGraphComposite->getInputData()->getElementLabel()->getNodeDefaultStringValue()=="";
-    bool edgeLabelEmpty=(!glGraphComposite->getInputData()->getElementLabel()->getNonDefaultValuatedEdges()->hasNext())
+    bool edgeLabelEmpty=(!nonDefaultLabelEdges->hasNext())
                         && glGraphComposite->getInputData()->getElementLabel()->getEdgeDefaultStringValue()=="";
+
+    delete nonDefaultLabelNodes;
+    delete nonDefaultLabelEdges;
 
     bool viewNodeLabel=glGraphComposite->getInputData()->parameters->isViewNodeLabel();
     bool viewMetaLabel=glGraphComposite->getInputData()->parameters->isViewMetaLabel();
