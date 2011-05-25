@@ -78,6 +78,35 @@ QString suffix = "*.dylib";
 QString suffix = "*.so";
 #endif
 
+#ifdef _WIN32
+bool PluginLibraryLoader::loadPluginLibrary(const std::string & filename, PluginLoader *loader) {   
+  HINSTANCE hDLL = LoadLibrary(filename.c_str());   
+  if (hDLL == NULL) {   
+    if (loader!=0) {   
+      char *msg;   
+      DWORD dwErrCode = GetLastError();   
+      FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |   
+      FORMAT_MESSAGE_FROM_SYSTEM,   
+      NULL,               // no source buffer needed   
+      dwErrCode,          // error code for this message   
+      MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),   
+                    (LPTSTR)&msg,       // allocated by fcn   
+                    0,               // minimum size of buffer   
+                    NULL);              // no inserts   
+      if (!msg) {   
+        char scode[128];   
+        sprintf(scode, "%s: unable to load(error %d)", filename.c_str(), (int) dwErrCode);   
+        loader->aborted(filename, std::string(scode));   
+      }   
+      else {   
+        loader->aborted(filename, filename + ": " + msg);   
+        LocalFree(msg);   
+      }   
+    }   
+  }   
+  return hDLL != NULL;   
+}
+#else 
 bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginLoader *loader) {
   void *handle = dlopen (filename.c_str() , RTLD_NOW);
   if (!handle) {
@@ -86,6 +115,7 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginL
   }
   return handle;
 }
+#endif
 
 void PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
   
