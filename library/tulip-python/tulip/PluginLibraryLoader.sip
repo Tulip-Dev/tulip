@@ -28,10 +28,14 @@ class PluginLibraryLoader {
  public:
    
  
-  static void loadPlugins(tlp::PluginLoader *loader = NULL, std::string pluginPath = "");
+  	static void loadPlugins(tlp::PluginLoader *loader = NULL, std::string pluginPath = "");
   
-  static bool loadPluginLibrary(const std::string & filename, tlp::PluginLoader *loader = 0);
+  	static bool loadPluginLibrary(const std::string & filename, tlp::PluginLoader *loader = 0);
   
+  
+  private:
+  
+  	PluginLibraryLoader();
  
 };
 
