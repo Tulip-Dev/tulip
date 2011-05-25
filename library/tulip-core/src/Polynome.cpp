@@ -17,6 +17,8 @@
  *
  */
 #include <tulip/Polynome.h>
+
+#include <tulip/tulipconf.h> //required for msvc compilation
 #include <math.h>
 #include <stdlib.h>
 
