@@ -31,8 +31,10 @@
 #else
 #include <stdlib.h>
 #include <dlfcn.h>
-#include <QDir>
 #endif
+
+#include <QtCore/QString>
+#include <QtCore/QDir>
 
 using namespace tlp;
 
