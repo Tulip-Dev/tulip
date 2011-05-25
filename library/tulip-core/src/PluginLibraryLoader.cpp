@@ -39,7 +39,6 @@
 using namespace tlp;
 
 PluginLibraryLoader* PluginLibraryLoader::_instance = NULL;
-std::set<std::string> PluginLibraryLoader::libraries;
 
 void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) {
   std::vector<std::string> paths;
@@ -59,13 +58,8 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) 
     getInstance()->pluginPath = dir;
     getInstance()->initPluginDir(loader);
     
-    bool hasPluginToLoad = getInstance()->hasPluginLibraryToLoad();
-    if (hasPluginToLoad) {
-      while(getInstance()->loadNextPluginLibrary(loader)) {
-      }
-    }
     if (loader) {
-      loader->finished(hasPluginToLoad, getInstance()->message);
+      loader->finished(true, getInstance()->message);
     }
   }
 }
@@ -118,7 +112,6 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string &filename, PluginL
 #endif
 
 void PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
-  
   QDir pluginDir(pluginPath.c_str());
   QStringList filters(suffix);
   QStringList plugins = pluginDir.entryList(filters, QDir::Files);
@@ -132,19 +125,9 @@ void PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
     return;
   }
   
-  //Qt is not allowed in tulip-core headers, so convert to std types.
   foreach(const QString& library, plugins) {
-    libraries.insert(library.toStdString());
-  }
-  currentLibrary = libraries.begin();
-}
-
-bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
-  if(currentLibrary != libraries.end()) {
-    std::string lib = *currentLibrary;
-    QString library(lib.c_str());
+    std::string lib = library.toStdString();
     currentPluginLibrary = pluginPath +"/"+ lib;
-    
     if(library.contains(TULIP_RELEASE)) {
       if (loader!=0) {
         loader->loading(lib);
@@ -157,8 +140,6 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
         loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
       }
     }
-    
-    currentLibrary++;
   }
-  return currentLibrary != libraries.end(); //return whether there are more plugins to load
 }
+
