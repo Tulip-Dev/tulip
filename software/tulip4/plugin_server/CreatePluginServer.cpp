@@ -33,9 +33,24 @@
 using namespace std;
 using namespace tlp;
 
+void copyfolder(const QString& origin, const QString& destination) {
+  QDir destinationDir(destination);
+  if(!destinationDir.exists()) {
+    destinationDir.mkdir(destinationDir.absolutePath());
+  }
+  
+  QDir originDir(origin);
+  foreach(const QString& element, originDir.entryList(QDir::Files | QDir::NoSymLinks)) {
+    QFile::copy(originDir.absolutePath() + "/" + element, destinationDir.absolutePath() + "/" + element);
+  }
+  foreach(const QString& element, originDir.entryList(QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot)) {
+    copyfolder(originDir.absolutePath() + "/" + element, destinationDir.absolutePath() + "/" + element);
+  }
+}
+
 class ArchiveCreator : public PluginLoader {
   public:
-    ArchiveCreator(const QString& destinationDir) : destinationDir(archiveDestinationDir), tulipVersion(TULIP_RELEASE) {
+    ArchiveCreator(const QString& destinationDir) : destinationDir(destinationDir), tulipVersion(TULIP_RELEASE) {
       #if defined(_WIN32) || defined(_WIN64)
       platform = "win";
       #elif defined(__APPLE__)
@@ -80,12 +95,14 @@ class ArchiveCreator : public PluginLoader {
       
       QString archiveName = pluginSimplifiedName + "-" + info->getRelease().c_str() + "-" + tulipVersion + "-" + platform + architecture + "-" + compiler + ".zip";
       
-      bool compressed = QuaZIPFacade::zipDir(currentPluginDir, destinationDir + "/" + archiveName);
+      QDir pluginDir(destinationDir + "/");
+      pluginDir.mkdir(pluginSimplifiedName);
+      bool compressed = QuaZIPFacade::zipDir(currentPluginDir, destinationDir + "/" + pluginSimplifiedName + "/" + archiveName);
       if(!compressed) {
         cout << "failed to compress folder " << currentPluginDir.toStdString() << " as archive: " << destinationDir.toStdString() << "/archives/" << archiveName.toStdString() << endl;
       }
       else {
-        std::cout << "created archive: " << destinationDir.toStdString() << "/archives/" << archiveName.toStdString() << std::endl;
+        std::cout << "created archive: " << destinationDir.toStdString() << "/" + pluginSimplifiedName.toStdString( )+ "/" << archiveName.toStdString() << std::endl;
       }
       //creates the xml document for this plugin
       QDomDocument pluginInfoDocument;
@@ -110,6 +127,11 @@ class ArchiveCreator : public PluginLoader {
       outputXML.open(QIODevice::ReadWrite);
       outputXML.write(pluginInfoDocument.toByteArray());
       outputXML.close();
+      
+      pluginDir.cd(pluginSimplifiedName);
+      if(pluginDir.exists(currentPluginDir + "/share/doc/" + pluginSimplifiedName)) {
+        copyfolder(currentPluginDir + "/share/doc/" + pluginSimplifiedName, destinationDir + "/" + pluginSimplifiedName + "/html/");
+      }
     }
 
     virtual void aborted(const std::string& filename, const std::string& error) {}
@@ -156,17 +178,19 @@ int main(int argc,char **argv) {
     }
   }
 
+  QDir subdirs(destinationDir);
+  subdirs.mkdir("xml");
+
   initTulipLib();
   ArchiveCreator creator(destinationDir);
   QDir pluginServerDir(argv[1]);
   PluginListerInterface::currentLoader = &creator;
   foreach(const QString folder, pluginServerDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-    QString plugindir = pluginServerDir.canonicalPath() + "/" + folder + "/lib/tulip/";
+    QString plugindir = pluginServerDir.canonicalPath() + "/" + folder;
     creator.setCurrentPluginDir(plugindir);
     
     //TODO find file using QDir instead of this hackish "solution"
-    QString pluginFile = plugindir + "lib" + folder + "-" + TULIP_RELEASE + ".so";
-//     cout << plugindir.toStdString() << ": " << pluginFile.toStdString() << endl;
+    QString pluginFile = plugindir  + "/lib/tulip/lib" + folder + "-" + TULIP_RELEASE + ".so";
     PluginLibraryLoader::loadPluginLibrary(pluginFile.toStdString(), &creator);
   }
  
