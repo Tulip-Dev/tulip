@@ -19,16 +19,18 @@
 #ifndef Tulip_CONTROLLERALGORITHMTOOLS_H
 #define Tulip_CONTROLLERALGORITHMTOOLS_H
 
+#include <string>
+
 #include <tulip/tulipconf.h>
 
-#include <QtGui/QWidget>
-
-#include <tulip/Reflect.h>
-#include <tulip/PluginLister.h>
-#include "tulip/View.h"
+class QWidget;
 
 namespace tlp {
   class Graph;
+  class PluginListerInterface;
+  class View;
+  class DataSet;
+  class StructDef;
   
   /** \brief Algorithm tools for Controller 
    *

@@ -24,13 +24,12 @@
 #include <set>
 
 #include <tulip/PluginLoader.h>
-#include <tulip/WithParameter.h>
-#include <tulip/WithDependency.h>
 #include <tulip/Iterator.h>
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PluginContext.h>
 #include <tulip/PluginLibraryLoader.h>
+#include <tulip/PluginContext.h>
 
 namespace tlp {
 
