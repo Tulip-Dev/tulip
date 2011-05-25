@@ -21,19 +21,16 @@
 
 #ifndef DOXYGEN_NOTFOR_USER
 
+#include <set>
+
 #include <tulip/PluginLoader.h>
 #include <tulip/tulipconf.h>
-
-#ifndef _WIN32
-#include <dirent.h>
-#else
-struct IteratorInfos;
-#endif
 
 namespace tlp {
 
   /**
    * @brief This class takes care of the actual loading of the libraries.
+   * It is a singleton to guarantee the currentPluginLibrary member is initialized.
    **/
   class TLP_SCOPE PluginLibraryLoader {
  public:
@@ -54,11 +51,12 @@ namespace tlp {
   }
 
  private:
-  bool hasPluginLibraryToLoad() { return nbUnloadedPluginLibraries >= 0; }
+  PluginLibraryLoader() {}
+  bool hasPluginLibraryToLoad() { return currentLibrary != libraries.end(); }
   bool loadNextPluginLibrary(PluginLoader *loader);
 
   void initPluginDir(PluginLoader *loader);
-   
+  
   static PluginLibraryLoader* getInstance() {
     if(_instance == NULL) {
       _instance = new PluginLibraryLoader();
@@ -66,17 +64,13 @@ namespace tlp {
     return _instance;
   }
   static PluginLibraryLoader* _instance;
-   
+  
   std::string message;
-  int nbUnloadedPluginLibraries;
   std::string pluginPath;
   std::string currentPluginLibrary;
   
-#ifdef _WIN32
-  IteratorInfos* infos;
-#else
-  struct dirent ** infos;
-#endif
+  static std::set<std::string> libraries;
+  std::set<std::string>::const_iterator currentLibrary;
 };
 
 }
