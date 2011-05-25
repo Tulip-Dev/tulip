@@ -1,79 +1,96 @@
-<para><application>Tulip</application> provides a system for the management of graphs hierarchies. The <code>Graph Editor</code> → <code>hierarchy</code> subwindow displays the existing instances of subgraphs and groups, and their relationships.
-	Click on the tree to view the corresponding subgraph.
-	Right-click to remove, clone, or create a subgraph.</para>
+<para><application>Tulip</application> supports graphs hierarchies: go to <code>Graph Editor</code> → <code>hierarchy</code> to view the tree of subgraphs. Click on the tree to view the corresponding subgraph.</para>
 <sect2 id="hierarchy-defs"><title>Definitions</title>
-	<para>Here is an example hierarchy, on a graph with six nodes (0 to 5): <graphic fileref="images/hierarchy_def_graph.png" />
+	<para>Here is an example graph (it is the Orion constellation). Disregard the thick fading edges for now. <graphic fileref="images/hierarchy_def_graph.png" />
 	</para>
 	<sect3 id="subgraph"><title>Subgraph</title>
     <para>
-			A subgraph shares its elements with the graph, it is just a part of the graph
+			A subgraph is simply a subset of the graph elements:
+			some nodes of the graph, and some edges between them
 			(more information: <ulink url="http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Subgraphs">Wikipedia: Subgraphs</ulink>).
-			For instance, here is a subgraph composed of nodes 0, 1 and 2:
-			<graphic fileref="images/hierarchy_def_subgraph.png" /></para>
-		It is possible to add properties to the subgraph only, or to use the inherited properties.
-		Some clustering algorithms create subgraphs.
+		</para>
+		<para>
+			Specifically, an edge of a subgraph must already be present in the original graph.
+			A subgraph does not necessarily contains all the edges of the induced subgraph.
+			For an edge to be in the subgraph, both its endpoints must be in the subgraph.
+		</para>
+		<para>
+			For instance, here is a subgraph consisting in nodes 3 to 7 (but not all edges between them):
+			<graphic fileref="images/hierarchy_def_subgraph.png" />
+			Subgraphs can be nested. Here are two subgraphs included in subgraph 1:
+			<graphic fileref="images/hierarchy_def_subsubgraph1.png" />
+			(and this is Orion's belt):
+			<graphic fileref="images/hierarchy_def_subsubgraph2.png" />
+		</para>
   </sect3>
-  <sect3 id="group"><title>Groups</title>
-    <para>A group is a set of nodes and edges, constituting a single node in the root graph.
-			Here is a group of two nodes (3 and 4), contituting the node 5 in the root graph: <graphic fileref="images/hierarchy_def_group.png" />
-			There can be several levels, constituting a hierarchy.</para>
-	</sect3>
 	<sect3 id="meta-node"><title>Meta-node</title>
-		<para>A meta-node is a node containing a group.
-			In the above example, node 5 is a metanode.
-			A meta node can contain / refer to the root graph.
+		<para>
+			To better view the hierarchy, a subgraph can be represented as a single node,
+			called a meta-node. A meta-node is always associated to exactly one subgraph.
+			Here is the belt, represented as on single node (node with id 9) in a larger subgraph consisting of nodes 0 to 5:
+			<graphic fileref="images/hierarchy_def_metanode1.png" />
+			This subgraph (with id 8) is it itself represented as one single node in the complete graph:
+			<graphic fileref="images/hierarchy_def_groups.png" />
+			Note the thick fading edges: they go from one small red node to a large white meta-node.
+			They are thus thin red to thick white.
+			<!-- A meta node can contain / refer to the root graph. -->
 		</para>
 	</sect3>
 	<sect3 id="meta-graph"><title>Meta-graph</title>
 		<para>A meta-graph is a graph that contains meta-nodes.
-			The subgraph "groups" contains nodes 0,1,2 and 5 of the root graph.
+			The "group" subgraph is a nice representation of the hierarchy:
 			<graphic fileref="images/hierarchy_def_groups.png" />
+			Each time a meta-node is created, it is added to the subgraph "groups" (which is created it with all nodes if it does not exists)
+			and all nodes of the meta-node are removed from the "group" subgraph.
+			Here, "groups" contains nodes 6,7 and 8.
+			Meta-node 8 contains nodes 0,1,2 and 9.
+			And meta-node 9 contains nodes 3,4 and 5.
+		</para>
+		<para>
+			On the other hand, the root graph represents all nodes and all meta-nodes (each meta-node has a representation of its subgraph inside it),
+			and thus can be a bit messy:
+			<graphic fileref="images/hierarchy_def_root.png" />
 		</para>
 	</sect3>
 </sect2>
-<sect2 id="hierarchy-create"><title>Creating subgraphs or Groups</title>
+
+<sect2 id="hierarchy-create"><title>Creating subgraphs or meta-nodes</title>
 	<sect3 id="hierarchy-create-subgraph"><title>Creating a subgraph</title>
 		<para>To create a subgraph:</para>
 		<itemizedlist>
 			<listitem><para> Select a few Nodes with the selection tool. (Shift + click, will add a node to the selection) 
-				  To select the edges that are between the selected nodes use the "Induced Sub-graph" algorithm.
+				  Optionally, select all edges between the selected nodes with the "Induced Sub-graph" algorithm.
 			</para></listitem>
 			<listitem><para> Click menu → <code>Edit</code> → <code>Create Subgraph</code>, (or <keycap>Ctrl + Shift + G</keycap>). </para></listitem>
 		</itemizedlist>
-		<para>The subgraph apperas in the hierarchy tab.</para>
+		<para>The subgraph appears in the hierarchy tab.</para>
 	</sect3>
-	<sect3 id="hierarchy-create-group"><title>Creating a group</title>
-		<para>To create a group:</para>
-		<itemizedlist>
-			<listitem><para>As above, select a few nodes and run the "Induced Sub-graph" algorithm.</para></listitem>
-			<listitem> <para>
-					Click menu <code>Edit</code> → <code>Create group</code>, or <keycap>Ctrl + G</keycap>.
-					If a warning "Grouping can't be done on the root graph, a subgraph will be created" appears, just click <code>OK</code>.
-			</para> </listitem>
-		</itemizedlist>
-		<para>The new group apperas in the hierarchy tab.</para>
-		<para>Several subgraphs will be created:</para> 
-		<itemizedlist>
-			<listitem><para>A copy of the root graph called "groups" containing a meta-graph with a new meta-node pointing to our group.</para>
-			</listitem>
-			<listitem><para>A subgraph called "grp_00042" (or any number), which is our new group.</para></listitem>
-		</itemizedlist>
+	<sect3 id="hierarchy-create-group"><title>Creating a meta-node</title>
+		To create a meta-node, select the desired nodes then <code>right-click → create group</code>.
+		(If a warning "Grouping can't be done on the root graph, a subgraph will be created" appears, just click <code>OK</code>.)
+		<code>Create metanode</code> means:
+			<itemizedlist>
+				<listitem>create a subgraph with the selected elements. This subgraph is called grp_00042 (or any other number)</listitem>
+				<listitem>create a meta-node in the current subgraph (unless it is the root graph) and associate both
+					(i.e. the newly created subgraph and meta-node)</listitem>
+			</itemizedlist>
 	</sect3>
 </sect2>
-<sect2 id="hierarchy-del"><title>Removing / ungrouping a subgraph or group</title>
-	Right-click a subgraph or group to remove or ungroup it.
-	<para>Deleting a group deletes all nodes in this group, but not the meta-node.</para> <!-- TODO -->
-	<para>When ungrouping a group, all the layouts properties of the group's nodes are applied to the root graph.
-		The subgraphs created with the group are not deleted.</para>
+
+<sect2 id="hierarchy-del"><title>Removing / ungrouping a subgraph or meta-node</title>
+	Right-click a subgraph or meta-node to remove or ungroup it.
+	<para>Deleting a meta-node deletes all nodes in this meta-node, but not the meta-node.
+		The meta-node still has a representation of its (empty) subgraph inside it, it is thus an empty ellipse.
+	</para>
+	<para>When ungrouping a meta-node, all the layouts properties of the meta-node's nodes are moved to the root graph.
+		The subgraphs created with the meta-node are not deleted.</para>
 	<para>Removing a subgraph has no effects on the root graph.</para>
 </sect2> 
-<sect2 id="hierarchy-uses"><title>Modifying subgraphs or groups</title>
+<sect2 id="hierarchy-uses"><title>Modifying subgraphs or meta-nodes</title>
 	<sect3 id="hierarchy-uses-subs"><title>Subgraphs</title>
 		<para>If you move nodes within a subgraph (with the mouse or through a layout algorithm), the same node will be moved in the root graph.</para>
-		<para>If you use a measure algorithm on a subgraph, new local properties are created. Those properties are not applied to the root graphs.</para>
-	</sect3>
-	<sect3 id="hierarchy-uses-groups"><title>Groups</title>
-		<para>Changes on groups are not applied to the root graph (unless you ungroup the group afterwards).</para>
+		<para>If you use a measure algorithm on a subgraph, new local properties are created. Those properties are not applied to the root graph
+			(if properties are not defined on the subgraph, they are inherited).
+		</para>
 	</sect3>
 </sect2>
 <sect2 id="hierarchy-algos"><title>Algorithms that create subgraphs</title>
@@ -86,5 +103,8 @@
 	</itemizedlist></para>
 </sect2>
 
+<!-- Local Variables: *** -->
+<!-- ispell-local-dictionary: "en" *** -->
+<!-- End: *** -->
 <!--  LocalWords:  subgraphs subgraph Ungrouping Ungroup ungroup ungrouping
 	-->
