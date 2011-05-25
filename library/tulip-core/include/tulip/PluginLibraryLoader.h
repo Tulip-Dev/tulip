@@ -85,7 +85,6 @@ class TLP_SCOPE PluginLibraryLoader {
 
  private:
   PluginLibraryLoader() {}
-  bool hasPluginLibraryToLoad() { return currentLibrary != libraries.end(); }
   bool loadNextPluginLibrary(PluginLoader *loader);
 
   void initPluginDir(PluginLoader *loader);
@@ -101,9 +100,6 @@ class TLP_SCOPE PluginLibraryLoader {
   std::string message;
   std::string pluginPath;
   std::string currentPluginLibrary;
-  
-  static std::set<std::string> libraries;
-  std::set<std::string>::const_iterator currentLibrary;
 };
 
 }
