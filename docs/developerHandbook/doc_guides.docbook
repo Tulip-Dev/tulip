@@ -1,4 +1,22 @@
 <chapter id="doc-guidelines"><title>Documentation Guidelines</title>
+    <!--======  ENGLISH   ============================================================    -->
+    <sect1 id="english"><title>Some antisocial English recommendations</title>
+			<para>Here are the most frequent mistakes once seen in user documentation.
+				A well written documentation makes the learning curve less steep for potential users and support the profesionnal look of the software.</para>
+
+			<para>Use a spellchecker. This finds words like "choosen", "choosed", "chosed" (the correct form is "chosen").</para>
+
+			<para>Do not repeat things when they are totally obvious. For instance, when there is a button "Add Server", do not write "To add a server, click on Add Server button." This is boring for the reader, who then pays less attention. Another example: "colorScale", documentation: "This is the color scale used". Here, the documentation brings no information.</para>
+
+			<para>English details (that the spellchecker will not find):
+			<itemizedlist>
+				<listitem>"mouse button pressed down" and variants -> "click"</listitem>
+				<listitem>no space before punctuations in two parts (i.e., as opposed to French, no space before ";:!?")</listitem>
+			</itemizedlist>
+			</para>
+
+			<para>Writing good documention is hard, it requires adopting the reader point of view: which question does she have? what is surprising for someone new to Tulip? what will she chafe at?</para>
+		</sect1>
     <!--======  DEFINITIONS   ========================================================    -->
     <sect1 id="definitions"><title>Definitions</title>
 	<orderedlist>

@@ -459,7 +459,7 @@
               </itemizedlist>
             </listitem>
             <listitem>
-              <para><inlinegraphic fileref="images/i_magic.png"/><code>Magic Selection</code>: selects all the nodes having the same metric and connect to the clicked node. Thus, it works like the magic selection in image editing software, but consider neighboring nodes instead of neighboring pixels.
+              <para><inlinegraphic fileref="images/i_magic.png"/><code>Magic Selection</code>: selects all the nodes having the same metric and connected to the clicked node. Thus, it works like the magic selection in image editing software, but consider neighboring nodes instead of neighboring pixels.
               </para>
             </listitem>
             <listitem>
@@ -612,8 +612,7 @@
             </para></listitem>
           </itemizedlist>
         </para>
-        <para>Hull means the convex hull of the graph.
-					If visible is clicked, a hierarchy of convex hulls is built.</para>
+        <para>If the visibility checkbox next to Hull is clicked, the convex hull of each subgraph is computed.</para>
         <!-- <para>In a future version you could add/modify/remove entity</para> -->
       </sect3>
     </sect2>
