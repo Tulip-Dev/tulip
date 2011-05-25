@@ -133,7 +133,6 @@ void PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
   }
   
   //Qt is not allowed in tulip-core headers, so convert to std types.
-//   libraries. reserve(nbUnloadedPluginLibraries);
   foreach(const QString& library, plugins) {
     libraries.insert(library.toStdString());
   }
@@ -146,8 +145,6 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
     QString library(lib.c_str());
     currentPluginLibrary = pluginPath +"/"+ lib;
     
-//     std::cout << (library.contains(TULIP_RELEASE)?"true":"false") << " ; " << !isPreviouslyLoaded(lib) << std::endl;
-//     libraries.
     if(library.contains(TULIP_RELEASE)) {
       if (loader!=0) {
         loader->loading(lib);
@@ -163,5 +160,5 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
     
     currentLibrary++;
   }
-  return currentLibrary != libraries.end(); //return pluginLoaded;
+  return currentLibrary != libraries.end(); //return whether there are more plugins to load
 }
