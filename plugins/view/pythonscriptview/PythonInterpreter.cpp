@@ -585,9 +585,6 @@ const string pluginUtils =
 		"	code += \"\\t\\treturn \\\""+ string(TULIP_RELEASE) + "\\\"\\n\"\n"
 		"	code += \"pluginFactory[algoName] = \" + pluginClassName + \"Factory()\\n\"\n"
 		"	exec(code)\n"
-
-
-
 		"def registerGlyphPlugin(pluginClassName, glyphName, author, date, info, release, glyphId):\n"
 		"	if glyphName in pluginFactory.keys():\n"
 		"		return\n"
@@ -618,7 +615,6 @@ const string pluginUtils =
 		"	code += \"\\t\\treturn \" + str(glyphId) + \"\\n\"\n"
 		"	code += \"pluginFactory[glyphName] = \" + pluginClassName + \"Factory()\\n\"\n"
 		"	exec(code)\n"
-
 #ifdef HAS_TULIP_QT_PYTHON_BINDINGS
 		"from tulipqt import *\n"
 		"def registerInteractorPlugin(pluginClassName, algoName, author, date, info, release):\n"
@@ -785,6 +781,10 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 
 		if (interpreterInit()) {
 
+			string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
+			addModuleSearchPath(pythonPluginsPath, true);
+			addModuleSearchPath(tlp::TulipLibDir, true);
+
 			// Import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
 			// and if the site module is not present on the host system
 			runString("import site");
@@ -799,18 +799,12 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 
 			setDefaultConsoleWidget();
 
-			addModuleSearchPath(tlp::TulipLibDir);
-
 			runString("from tulip import *;from tulipogl import *");
-
 #ifdef HAS_TULIP_QT_PYTHON_BINDINGS
 			runString("from tulipqt import *;");
 #endif
 
 			registerNewModuleFromString("tulipplugins", pluginUtils);
-
-			string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
-			addModuleSearchPath(pythonPluginsPath);
 
 			QDir pythonPluginsDir(pythonPluginsPath.c_str());
 			QStringList nameFilter;
@@ -882,11 +876,15 @@ bool PythonInterpreter::runString(const string &pyhtonCode) {
 	return  ret != -1;
 }
 
-void PythonInterpreter::addModuleSearchPath(const std::string &path) {
+void PythonInterpreter::addModuleSearchPath(const std::string &path, const bool beforeOtherPaths) {
 	if (currentImportPaths.find(path) == currentImportPaths.end()) {
 		ostringstream oss;
 		oss << "import sys" << endl;
-		oss << "sys.path.append(\"" << path << "\")" << endl;
+		if (beforeOtherPaths) {
+			oss << "sys.path.insert(0, \"" << path << "\")" << endl;
+		} else {
+			oss << "sys.path.append(\"" << path << "\")" << endl;
+		}
 		runString(oss.str());
 		currentImportPaths.insert(path);
 	}
