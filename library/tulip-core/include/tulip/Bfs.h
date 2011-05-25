@@ -17,8 +17,8 @@
  *
  */
 
-//#ifndef Bfs_H
-//#define Bfs_H
+#ifndef Bfs_H
+#define Bfs_H
 
 #include <tulip/MutableContainer.h>
 
@@ -43,3 +43,4 @@ class TLP_SCOPE Bfs {
 
  };  
 }
+#endif
