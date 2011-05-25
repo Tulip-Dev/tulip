@@ -21,9 +21,7 @@
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
 
-#include <float.h>
 #include <tulip/GraphProperty.h>
-#include <tulip/PluginContext.h>
 
 using namespace std;
 using namespace tlp;

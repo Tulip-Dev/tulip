@@ -21,9 +21,7 @@
 #include <string>
 
 #include <libxml/tree.h>
-#include <libxml/parser.h>
 
-#include <tulip/GlSimpleEntity.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlComposite.h>
 #include <tulip/GlBox.h>

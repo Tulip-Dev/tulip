@@ -18,7 +18,6 @@
  */
 
 #include <tulip/PlanarityTestImpl.h>
-#include <tulip/StableIterator.h>
 #include <tulip/Graph.h>
 
 using namespace std;

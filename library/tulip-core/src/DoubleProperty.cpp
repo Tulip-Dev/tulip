@@ -20,7 +20,6 @@
 #include <limits.h>
 #include <tulip/ForEach.h>
 #include <tulip/DoubleProperty.h>
-#include <tulip/PluginContext.h>
 
 using namespace std;
 using namespace tlp;

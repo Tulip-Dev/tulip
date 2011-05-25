@@ -19,17 +19,10 @@
 #include <tulip/GlConvexGraphHull.h>
 
 #include <tulip/Graph.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/DoubleProperty.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/GlComposite.h>
 using namespace std;
-
-#ifndef NDEBUG
-#include <iostream>
-#endif /* NDEBUG */
 
 namespace tlp {
 

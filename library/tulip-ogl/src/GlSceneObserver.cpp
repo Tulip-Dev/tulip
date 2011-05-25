@@ -17,7 +17,6 @@
  *
  */
 #include <cassert>
-#include <iostream>
 #include <tulip/GlSceneObserver.h>
 
 #include <tulip/GlScene.h>

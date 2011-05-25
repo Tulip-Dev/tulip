@@ -18,8 +18,6 @@
  */
 #include <tulip/GlDisplayListManager.h>
 
-#include <iostream>
-
 //====================================================
 tlp::GlDisplayListManager* tlp::GlDisplayListManager::inst=0;
 

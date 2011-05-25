@@ -29,10 +29,6 @@
 #include <tulip/Edge.h>
 #include <tulip/ForEach.h>
 #include <tulip/StlIterator.h>
-#include <tulip/conversioniterator.h>
-#include <tulip/uniqueiterator.h>
-#include <tulip/filteriterator.h>
-
 
 using namespace std;
 using namespace tlp;

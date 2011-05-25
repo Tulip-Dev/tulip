@@ -21,7 +21,6 @@
 #include <locale.h>
 
 #ifndef _WIN32
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #endif
@@ -29,24 +28,11 @@
 #if _MSC_VER
 #include <windows.h>
 #include <Dbghelp.h>
-#else
-#include <dirent.h>
 #endif
 #include <thirdparty/gzstream/gzstream.h>
 
 #include <tulip/TlpTools.h>
 #include <tulip/PropertyTypes.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/StringProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/ExportModule.h>
-#include <tulip/Algorithm.h>
-#include <tulip/ImportModule.h>
-#include <tulip/PluginLibraryLoader.h>
 
 using namespace std;
 using namespace tlp;

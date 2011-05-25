@@ -18,8 +18,6 @@
  */
 #include <tulip/GlEPSFeedBackBuilder.h>
 
-#include <iostream>
-
 using namespace std;
 
 namespace tlp {

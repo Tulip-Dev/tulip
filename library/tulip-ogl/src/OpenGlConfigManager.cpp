@@ -19,10 +19,7 @@
 #include <GL/glew.h>
 
 #include <tulip/OpenGlConfigManager.h>
-
 #include <tulip/OpenGlErrorViewer.h>
-
-#include <iostream>
 
 //====================================================
 tlp::OpenGlConfigManager* tlp::OpenGlConfigManager::inst=0;

@@ -18,7 +18,6 @@
  */
 
 #include <map>
-#include <iostream>
 
 #include <tulip/GlColorScale.h>
 

@@ -28,20 +28,16 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/PreferenceManager.h>
 
+#include <tulip/GlGraphInputData.h>
+#include <tulip/Glyph.h>
 #include <tulip/GlTools.h>
-#include <tulip/GlyphManager.h>
-#include <tulip/GlDisplayListManager.h>
-#include <tulip/OcclusionTest.h>
 #include <tulip/GlTLPFeedBackBuilder.h>
 #include <tulip/GlSceneVisitor.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlLabel.h>
-
-#include <iostream>
 
 //====================================================
 tlp::GlLabel* tlp::GlNode::label=0;

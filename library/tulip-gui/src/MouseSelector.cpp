@@ -24,7 +24,6 @@
 
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
-#include <tulip/LayoutProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlTools.h>
 #include <tulip/MouseSelector.h>
