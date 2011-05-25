@@ -18,11 +18,7 @@
  */
 #include <tulip/GlVertexArrayVisitor.h>
 
-#include <iostream>
-
 #include <tulip/GlGraphInputData.h>
-#include <tulip/GlEdge.h>
-#include <tulip/GlNode.h>
 #include <tulip/GlVertexArrayManager.h>
 
 using namespace std;

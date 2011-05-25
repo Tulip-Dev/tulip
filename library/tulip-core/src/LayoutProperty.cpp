@@ -18,10 +18,8 @@
  */
 #include <cmath>
 #include <float.h>
-#include <fstream>
 #include <tulip/LayoutProperty.h>
 #include <tulip/Coord.h>
-#include <tulip/PluginContext.h>
 #include <tulip/ForEach.h>
 
 using namespace std;

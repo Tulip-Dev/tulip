@@ -20,7 +20,6 @@
 
 #include <tulip/Color.h>
 
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlTools.h>
 #include <tulip/OpenGlConfigManager.h>

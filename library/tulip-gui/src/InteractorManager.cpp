@@ -18,8 +18,6 @@
  */
 #include "tulip/InteractorManager.h"
 #include "tulip/Interactor.h"
-#include "tulip/TlpQtTools.h"
-
 
 //====================================================
 tlp::InteractorManager* tlp::InteractorManager::inst=0;

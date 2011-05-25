@@ -21,7 +21,6 @@
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlTriangle.h>
 
-#include <string>
 using namespace tlp;
 using namespace std;
 class GlArrow2DEdgeExtremity: public EdgeExtremityGlyphFrom2DGlyph {

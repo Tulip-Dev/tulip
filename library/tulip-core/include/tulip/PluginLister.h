@@ -302,7 +302,6 @@ protected:
 template <class ObjectType, class Context>
 PluginLister<ObjectType, Context>* PluginLister<ObjectType, Context>::_instance = 0;
 
-
 /**
  * @brief This class adds nothing but syntactic sugar. But it's extra-sweet, so it's OK.
  * It allows to write StaticPluginLister<T, U>::function() instead of PluginLister<T, U>::getInstace()->function().

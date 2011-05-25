@@ -25,8 +25,6 @@
 #include <QtCore/QEvent>
 #include <QtGui/QMouseEvent>
 
-#include <iostream>
-
 using namespace std;
 
 namespace tlp {

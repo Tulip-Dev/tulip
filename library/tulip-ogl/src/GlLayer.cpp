@@ -18,10 +18,7 @@
  */
 #include <tulip/GlLayer.h>
 
-#include <iostream>
-
 #include <tulip/Camera.h>
-#include <tulip/GlEntity.h>
 #include <tulip/GlSceneVisitor.h>
 #include <tulip/GlScene.h>
 

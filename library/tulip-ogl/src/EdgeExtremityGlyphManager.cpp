@@ -19,7 +19,6 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/tuliphash.h>
-#include <tulip/PluginLister.h>
 #include <tulip/ForEach.h>
 
 tlp::EdgeExtremityGlyphManager* tlp::EdgeExtremityGlyphManager::eeinst = 0;

@@ -17,8 +17,6 @@
  *
  */
 
-#include <tulip/OpenGlConfigManager.h>
-
 #include <tulip/Rectangle.h>
 #include <tulip/GlTools.h>
 #include <tulip/Matrix.h>

@@ -18,10 +18,6 @@
  */
 #include "tulip/CSVParser.h"
 #include <tulip/PluginProgress.h>
-#include <QtGui/QApplication>
-#include <stdexcept>
-
-#include <iostream>
 
 #include <fstream>
 #include <algorithm>

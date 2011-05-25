@@ -17,12 +17,10 @@
  *
  */
 
-#include <tulip/Size.h>
 #include <tulip/Curves.h>
 #include <tulip/GlCurve.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlXMLTools.h>
-#include <tulip/GlTools.h>
 
 using namespace std;
 

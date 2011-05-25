@@ -21,7 +21,6 @@
 #include <tulip/PropertyManager.h>
 #include <tulip/GraphView.h>
 #include <tulip/GraphIterator.h>
-#include <tulip/StableIterator.h>
 #include <tulip/ForEach.h>
 #include <tulip/GraphUpdatesRecorder.h>
 

@@ -25,11 +25,7 @@
 #endif
 
 #include <tulip/Camera.h>
-#include <tulip/GlEntity.h>
 #include <tulip/GlTools.h>
-#include <tulip/GlScene.h>
-
-#include <iostream>
 
 using namespace std;
 

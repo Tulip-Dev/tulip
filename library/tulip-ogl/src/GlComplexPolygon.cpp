@@ -26,13 +26,10 @@
 #endif
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/GlTools.h>
-#include <tulip/GlLayer.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/ParametricCurves.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlShaderProgram.h>
-
-#include <tulip/TlpTools.h>
 
 #ifdef __APPLE_CC__
 #if __APPLE_CC__ < 5400

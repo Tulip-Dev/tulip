@@ -22,7 +22,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
-#include <tulip/Coord.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/Color.h>
 #include <tulip/ColorProperty.h>

@@ -17,7 +17,6 @@
  *
  */
 #include <cassert>
-#include <iostream>
 #include <tulip/ObservableGraph.h>
 #include "tulip/Graph.h"
 

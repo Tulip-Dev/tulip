@@ -18,9 +18,7 @@
  */
 
 #include <tulip/BooleanProperty.h>
-#include <tulip/PluginContext.h>
 #include <tulip/Observable.h>
-#include <tulip/AbstractProperty.h>
 #include <tulip/GraphIterator.h>
 
 using namespace std;

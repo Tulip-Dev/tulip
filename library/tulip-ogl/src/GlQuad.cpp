@@ -19,10 +19,7 @@
 
 #include <tulip/GlQuad.h>
 
-#include <tulip/GlTextureManager.h>
 #include <tulip/GlXMLTools.h>
-#include <tulip/GlTools.h>
-#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 
