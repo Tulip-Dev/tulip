@@ -107,6 +107,13 @@ namespace tlp {
         virtual ~TLPGraphBuilder(){
         }
 
+        Graph *getSubGraph(unsigned int id) {
+        	if (clusterIndex.find(id) != clusterIndex.end()) {
+        		return clusterIndex[id];
+        	}
+        	return NULL;
+        }
+
         bool addString(const std::string& str) {
             // only used to handle the version of tlp file format
             if (!version) {
@@ -530,7 +537,7 @@ namespace tlp {
 	  unsigned int id;
 	  if( !(is >> id) )
 	    return false;
-	  Graph* subgraph = id ? graphBuilder->_graph->getSubGraph(id) :
+	  Graph* subgraph = id ? graphBuilder->getSubGraph(id) :
 	    graphBuilder->_graph;
 	  if (subgraph == NULL)
 	    return false;
