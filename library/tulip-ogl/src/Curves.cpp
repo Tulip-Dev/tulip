@@ -205,126 +205,116 @@ GLfloat* buildCurvePoints (const vector<Coord> &vertices,
 	return result.data;
 }
 
+static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const Coord &pAfter,
+		float size, int inversion, vector<Coord> &result) {
+
+
+	Coord u = pBefore - pCurrent;
+	Coord v = pAfter - pCurrent;
+	Coord xu = u;
+	Coord xv = v;
+
+	float n_xu = xu.norm();
+	float n_xv = xv.norm();
+	xu /= n_xu;
+	xv /= n_xv;
+
+
+	Coord bi_xu_xv = xu+xv;
+	float newSize=size;
+	float angle = 0;
+	//two point at the same coord
+	if(bi_xu_xv == Coord(0,0,0)) {
+		bi_xu_xv = xv;
+		bi_xu_xv[0] = -xv[1];
+		bi_xu_xv[1] = xv[0];
+	} else {
+		bi_xu_xv /= bi_xu_xv.norm();
+
+		angle=M_PI-acos(u.dotProduct(v)/(u.norm()*v.norm()));
+		if(isnan(angle))
+			angle=0;
+		newSize=newSize/cos(angle/2.);
+
+	}
+
+	if(angle<M_PI/2+M_PI/4) {
+		//normal form
+		if ((xu^xv)[2] > 0) {
+			result.push_back(pCurrent + bi_xu_xv*newSize*inversion);
+			result.push_back(pCurrent - bi_xu_xv*newSize*inversion);
+		} else {
+			result.push_back(pCurrent - bi_xu_xv*newSize*inversion);
+			result.push_back(pCurrent + bi_xu_xv*newSize*inversion);
+		}
+
+	}else{
+		//broken form
+
+		Coord vectUnit(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);
+
+		if(!(newSize>u.norm() || newSize>v.norm() || fabs(angle-M_PI)<1E-5)) {
+			if ((xu^xv)[2] > 0) {
+				if (inversion > 0) {
+					result.push_back(pCurrent + bi_xu_xv*newSize);
+					result.push_back(pCurrent - vectUnit*size);
+					result.push_back(pCurrent + bi_xu_xv*newSize);
+					result.push_back(pCurrent + vectUnit*size);
+				} else {
+					result.push_back(pCurrent - vectUnit*size);
+					result.push_back(pCurrent + bi_xu_xv*newSize);
+					result.push_back(pCurrent + vectUnit*size);
+					result.push_back(pCurrent + bi_xu_xv*newSize);
+				}
+			}else{
+				if (inversion > 0) {
+					result.push_back(pCurrent + vectUnit*size);
+					result.push_back(pCurrent + bi_xu_xv*newSize);
+					result.push_back(pCurrent - vectUnit*size);
+					result.push_back(pCurrent + bi_xu_xv*newSize);
+				} else {
+					result.push_back(pCurrent + bi_xu_xv*newSize);
+					result.push_back(pCurrent + vectUnit*size);
+					result.push_back(pCurrent + bi_xu_xv*newSize);
+					result.push_back(pCurrent - vectUnit*size);
+				}
+			}
+		}else{
+			if ((xu^xv)[2] > 0) {
+				result.push_back(pCurrent + vectUnit*size*inversion);
+				result.push_back(pCurrent - vectUnit*size*inversion);
+				inversion*=-1;
+			}else{
+				result.push_back(pCurrent - vectUnit*size*inversion);
+				result.push_back(pCurrent + vectUnit*size*inversion);
+				inversion*=-1;
+			}
+		}
+	}
+	return inversion;
+}
+
 void buildCurvePoints (const vector<Coord> &vertices,
 		const vector<float> &sizes,
 		const Coord &startN,
 		const Coord &endN,
 		vector<Coord> &result) {
-
-
 	int inversion=1;
-	//start point
-
-
-
-	Coord xu;
 	if (startN != vertices[0]) {
-	 xu = startN - vertices[0];
+		inversion = computeExtrusion(startN, vertices[0], vertices[1], sizes[0], inversion, result);
 	} else {
-		xu = vertices[0] - vertices[1];
+		inversion = computeExtrusion(vertices[0] - (vertices[1] - vertices[0]), vertices[0], vertices[1], sizes[0], inversion, result);
 	}
-	xu /= xu.norm();
 
-	Coord xv = Coord(0,0,1.);
-	Coord dir = xu^xv;
-	if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
-	result.push_back(vertices[0] - dir*sizes[0]);
-	result.push_back(vertices[0] + dir*sizes[0]);
-	//============
 	for(unsigned int i=1; i< vertices.size() - 1; ++i) {
-
-		Coord xu = vertices[i-1] - vertices[i];
-		Coord xv = vertices[i+1] - vertices[i];
-		float n_xu = xu.norm();
-		float n_xv = xv.norm();
-		xu /= n_xu;
-		xv /= n_xv;
-
-		Coord bi_xu_xv = xu+xv;
-		if(bi_xu_xv ==Coord(0,0,0)) {
-			//two point at the same coord
-			size_t n = result.size() / 2;
-			result.push_back(result[2*(n-1)]);
-			result.push_back(result[2*(n-1)+1]);
-			continue;
-		}
-
-		bi_xu_xv /= bi_xu_xv.norm();
-		float newSize=sizes[i];
-		Coord u=vertices[i-1]-vertices[i];
-		Coord v=vertices[i+1]-vertices[i];
-		float angle=M_PI-acos(u.dotProduct(v)/(u.norm()*v.norm()));
-		if(isnan(angle))
-			angle=0;
-		newSize=newSize/cos(angle/2.);
-
-		if(angle<M_PI/2+M_PI/4) {
-			//normal form
-			if ((xu^xv)[2] > 0) {
-				result.push_back(vertices[i] + bi_xu_xv*newSize*inversion);
-				result.push_back(vertices[i] - bi_xu_xv*newSize*inversion);
-			} else {
-				result.push_back(vertices[i] - bi_xu_xv*newSize*inversion);
-				result.push_back(vertices[i] + bi_xu_xv*newSize*inversion);
-			}
-
-		}else{
-			//broken form
-
-			Coord vectUnit(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);
-
-			if(!(newSize>u.norm() || newSize>v.norm() || fabs(angle-M_PI)<1E-5)) {
-				if ((xu^xv)[2] > 0) {
-					if (inversion > 0) {
-						result.push_back(vertices[i] + bi_xu_xv*newSize);
-						result.push_back(vertices[i] - vectUnit*sizes[i]);
-						result.push_back(vertices[i] + bi_xu_xv*newSize);
-						result.push_back(vertices[i] + vectUnit*sizes[i]);
-					} else {
-						result.push_back(vertices[i] - vectUnit*sizes[i]);
-						result.push_back(vertices[i] + bi_xu_xv*newSize);
-						result.push_back(vertices[i] + vectUnit*sizes[i]);
-						result.push_back(vertices[i] + bi_xu_xv*newSize);
-					}
-				}else{
-					if (inversion > 0) {
-						result.push_back(vertices[i] + vectUnit*sizes[i]);
-						result.push_back(vertices[i] + bi_xu_xv*newSize);
-						result.push_back(vertices[i] - vectUnit*sizes[i]);
-						result.push_back(vertices[i] + bi_xu_xv*newSize);
-					} else {
-						result.push_back(vertices[i] + bi_xu_xv*newSize);
-						result.push_back(vertices[i] + vectUnit*sizes[i]);
-						result.push_back(vertices[i] + bi_xu_xv*newSize);
-						result.push_back(vertices[i] - vectUnit*sizes[i]);
-					}
-				}
-			}else{
-				if ((xu^xv)[2] > 0) {
-					result.push_back(vertices[i] + vectUnit*sizes[i]*inversion);
-					result.push_back(vertices[i] - vectUnit*sizes[i]*inversion);
-					inversion*=-1;
-				}else{
-					result.push_back(vertices[i] - vectUnit*sizes[i]*inversion);
-					result.push_back(vertices[i] + vectUnit*sizes[i]*inversion);
-					inversion*=-1;
-				}
-			}
-		}
+		inversion = computeExtrusion(vertices[i-1], vertices[i], vertices[i+1], sizes[i], inversion, result);
 	}
-	//end point
+
 	if (endN != vertices[vertices.size()-1]) {
-		xu = endN - vertices[vertices.size()-1];
+		inversion = computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], endN, sizes[sizes.size() - 1], inversion, result);
 	} else {
-		xu = vertices[vertices.size()-1] - vertices[vertices.size()-2];
+		inversion = computeExtrusion(vertices[vertices.size()-2], vertices[vertices.size()-1], vertices[vertices.size()-1] + (vertices[vertices.size()-1] - vertices[vertices.size()-2]), sizes[sizes.size() - 1], inversion, result);
 	}
-
-	xu /= xu.norm();
-	xv = Coord(0,0,-1);
-	dir = xu^xv;
-	if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
-	result.push_back(vertices[vertices.size()-1] - dir*sizes[vertices.size()-1]*inversion);
-	result.push_back(vertices[vertices.size()-1] + dir*sizes[vertices.size()-1]*inversion);
 }
 //==============================================
 vector<Coord> splineCurve(const vector<Coord> &vertices) {
