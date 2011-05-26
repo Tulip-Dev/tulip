@@ -164,6 +164,29 @@ public:
   }
 };  
 
+class DelInheritedPropertyObserverTest :public GraphObserver {
+public:
+    DelInheritedPropertyObserverTest():inheritedPropertyExist(false),initialized(false){
+
+    }
+    bool inheritedPropertyExist;
+    bool initialized;
+    void delInheritedProperty(Graph* g, const string& name) {
+        if(!initialized){
+            inheritedPropertyExist = g->getProperty(name)!=NULL;
+            if(inheritedPropertyExist){
+                g->getProperty(name)->getName();
+            }
+            initialized = true;
+        }else{
+            inheritedPropertyExist = inheritedPropertyExist & (g->getProperty(name)!=NULL);
+            if(inheritedPropertyExist){
+                g->getProperty(name)->getName();
+            }
+        }
+    }
+};
+
 static GraphObserverTest* gObserver;
 
 //==========================================================
@@ -645,6 +668,17 @@ void ObservableGraphTest::testObserverWhenRemoveObservable() {
   delete observerTmp;
   CPPUNIT_ASSERT(graph->countObservers() == 1);*/
 }
+
+void ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend() {
+    Graph *g1 = graph->addSubGraph();
+    DelInheritedPropertyObserverTest *observer = new DelInheritedPropertyObserverTest();
+    g1->addGraphObserver(observer);
+    graph->getLocalProperty<BooleanProperty>("test");
+    graph->delLocalProperty("test");
+    CPPUNIT_ASSERT(observer->initialized);
+    CPPUNIT_ASSERT(observer->inheritedPropertyExist);
+}
+
 //==========================================================
 CppUnit::Test * ObservableGraphTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph" );
@@ -663,6 +697,9 @@ CppUnit::Test * ObservableGraphTest::suite() {
 								  &ObservableGraphTest::testAddDelProperties) );
   suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test Observer when remove Observable", 
 								  &ObservableGraphTest::testObserverWhenRemoveObservable) );
+
+  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test if the property exist when delInherited function is called",
+                                                                  &ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend) );
 
 
   return suiteOfTests;
