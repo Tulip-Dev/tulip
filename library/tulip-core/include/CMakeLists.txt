@@ -86,7 +86,6 @@ INSTALL(FILES
   tulip/conversioniterator.h
   tulip/filteriterator.h
   tulip/uniqueiterator.h
-  tulip/stlfilteriterator.h
   tulip/vectorgraph.h
   tulip/vectorgraphproperty.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
