@@ -341,8 +341,6 @@ void GlVertexArrayManager::addEdge(GlEdge *edge){
 	const Color &tgtColor = inputData->getElementColor()->getNodeValue(tgt);
 	const Color &borderColor = inputData->getElementBorderColor()->getEdgeValue(tlp::edge(edge->id));
 
-
-
 	if(toComputeAll || toComputeLayout){
 
 		size_t lastIndex=linesCoordsArray.size();
@@ -440,10 +438,12 @@ void GlVertexArrayManager::addEdge(GlEdge *edge){
 
 			quadsCoordsArray.insert(quadsCoordsArray.end(), quadVertices.begin(), quadVertices.end());
 			quadsIndexCountArray.push_back(quadVertices.size());
+
 		}else{
 			linesIndexCountArray.push_back(0);
 			edgeToPointIndexVector[edge->id]=-1;
 			quadsIndexCountArray.push_back(0);
+			edgeToLineIndexVector[edge->id]=make_pair(-1,linesIndexCountArray.size()-1);
 			edgeToQuadIndexVector[edge->id] = make_pair(-1,quadsIndexCountArray.size()-1);
 		}
 	}else{
@@ -454,11 +454,13 @@ void GlVertexArrayManager::addEdge(GlEdge *edge){
 		GLsizei numberOfVertices=linesIndexCountArray[index.second];
 
 		if(numberOfVertices!=0){
+
 			vector<Color> colors;
 			edge->getColors(inputData, &linesCoordsArray[linesIndexArray[index.first]],numberOfVertices,colors);
 			linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
 
 			GLsizei numberQuadVertices=quadsIndexCountArray[indexQuad.second];
+
 			unsigned int baseQuadIndex=quadsIndexArray[indexQuad.first];
 
 			vector<Coord> centerLine;
