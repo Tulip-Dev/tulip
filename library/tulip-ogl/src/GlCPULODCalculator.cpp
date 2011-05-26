@@ -121,7 +121,7 @@ namespace tlp {
     size_t nb=layerLODUnit->simpleEntitiesLODVector.size();
 
 #ifdef _OPENMP
-    omp_set_num_threads(omp_get_num_procs());
+    omp_set_num_threads(std::min(omp_get_num_procs(), 4));
     omp_set_nested(true);
     omp_set_dynamic(false);
 #endif
@@ -129,14 +129,14 @@ namespace tlp {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for(unsigned i=0;i<nb;++i){
+    for(int i=0;i<static_cast<int>(nb);++i){
       layerLODUnit->simpleEntitiesLODVector[i].lod=calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
     }
     nb=layerLODUnit->nodesLODVector.size();
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for(unsigned i=0;i<nb;++i){
+    for(int i=0;i<static_cast<int>(nb);++i){
 			layerLODUnit->nodesLODVector[i].lod=calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
     }
     nb=layerLODUnit->edgesLODVector.size();
@@ -144,14 +144,14 @@ namespace tlp {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-			for(unsigned i=0;i<nb;++i){
+			for(int i=0;i<static_cast<int>(nb);++i){
 				layerLODUnit->edgesLODVector[i].lod=calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
 			}
 		}else{
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-			for(unsigned i=0;i<nb;++i){
+			for(int i=0;i<static_cast<int>(nb);++i){
 				layerLODUnit->edgesLODVector[i].lod=10;
 			}
 		}
