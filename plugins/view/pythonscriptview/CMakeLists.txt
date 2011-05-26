@@ -41,6 +41,8 @@ ENDIF()
 
 ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${SRCS} ${MOC_SRCS} ${UI_HEADERS} ${RCC_SRCS})
 
+ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipQtName} qscintilla2)
+
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipQtName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} qscintilla2)
