@@ -7,6 +7,8 @@ ADD_DEFINITIONS("-DQSCINTILLA_DLL")
 INCLUDE_DIRECTORIES(BEFORE ${qscintilla2Include} ${SIP_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 
+SET(QT_USE_QTWEBKIT true)
+
 SET(SRCS
   ConsoleOutputModule.h
   PythonCodeEditor.cpp
@@ -39,9 +41,13 @@ ENDIF()
 
 ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${SRCS} ${MOC_SRCS} ${UI_HEADERS} ${RCC_SRCS})
 
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${QT_LIBRARIES} qscintilla2 ${PYTHON_LIBRARY})
-
-ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibStlPythonName} ${LibTulipPythonName} ${LibTulipOglPythonName})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipName})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipQtName})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} qscintilla2)
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTCORE_LIBRARY})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTGUI_LIBRARY})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
 INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}/view/ COMPONENT tulip_gui_pythonview)
 
