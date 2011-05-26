@@ -45,17 +45,14 @@ QT4_ADD_RESOURCES(pythonscriptview_RCC_SRCS ${pythonscriptview_RCC})
 ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${pythonscriptview_LIB_SRCS} ${pythonscriptview_MOC_SRCS} ${pythonscriptview_UI_SRCS} ${pythonscriptview_RCC_SRCS})
 
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipName})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipOglName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipQtName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} qscintilla2)
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTCORE_LIBRARY})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTGUI_LIBRARY})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTOPENGL_LIBRARY})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
-
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
-ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipOglName} ${LibTulipQtName} ${LibStlPythonName} ${LibTulipPythonName} ${LibTulipOglPythonName} qscintilla2)
+ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipName} ${LibTulipQtName} qscintilla2)
 
 INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}/view/ COMPONENT tulip_plugins_pythonscriptview)
 
