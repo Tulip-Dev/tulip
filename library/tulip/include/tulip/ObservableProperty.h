@@ -43,11 +43,13 @@ class PropertyInterface;
  */
 class  TLP_SCOPE PropertyObserver {
   friend class PropertyInterface;
+  // this class is for import of the observation graph
+  friend class Observergraph;
 
 private:
   class TLP_SCOPE RealPropertyObserver :public Observable {
-    PropertyObserver* visibleObserver;
   public:
+    PropertyObserver* visibleObserver;
     RealPropertyObserver(PropertyObserver *observer)
       :visibleObserver(observer) {}
     virtual void treatEvent(const Event &);

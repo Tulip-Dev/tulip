@@ -288,6 +288,9 @@ std::string tlp::demangleTlpClassName(const char* className) {
   abi::__cxa_demangle((char *) className, (char *) demangleBuffer,
 		      &length, &status);
   // skip tlp::
+  // if needed
+  if (strncmp(demangleBuffer, "tlp::", 5))
+    return std::string(demangleBuffer);
   return std::string(demangleBuffer + 5);
 }
 #elif _MSC_VER

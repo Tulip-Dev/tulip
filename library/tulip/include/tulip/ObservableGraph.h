@@ -27,7 +27,6 @@
 namespace tlp {
 
 class Graph;
-class PropertyInterface;
 //=========================================================
 
 /** \addtogroup graphs */
@@ -69,10 +68,13 @@ class PropertyInterface;
  */
 class TLP_SCOPE GraphObserver {
   friend class Graph;
+  // this class is for import of the observation graph
+  friend class Observergraph;
+
 private:
   class TLP_SCOPE RealGraphObserver :public Observable {
-    GraphObserver* visibleObserver;
   public:
+    GraphObserver* visibleObserver;
     RealGraphObserver(GraphObserver *observer) :visibleObserver(observer) {}
     virtual void treatEvent(const Event &);
   };

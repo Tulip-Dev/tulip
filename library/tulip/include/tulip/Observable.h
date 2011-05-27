@@ -79,6 +79,14 @@ namespace tlp {
           * @brief return the node representing that OLOObject in the OLOGraph
           */
         tlp::node   getNode() const;
+	/**
+	 * @brief return the number of sent nofication
+	 */
+	unsigned int getSent() const;
+	/**
+	 * @brief return the number of received nofication
+	 */
+	unsigned int getReceived() const;
 
     public:
         /**
@@ -123,6 +131,10 @@ namespace tlp {
         static bool                      _initialized;   /** use to initialize oGraph when the library is loaded (nice hack) */
     private:
         tlp::node n; /** node that represent that object in the OLOGraph.*/
+#ifndef NDEBUG
+	unsigned int sent; /* counter of sent notification */
+	unsigned int received; /* counter of received notification */
+#endif
         /**
           * @brief Trick to init the OLOGraph properties (automatically call at the loading of the library.
           */
