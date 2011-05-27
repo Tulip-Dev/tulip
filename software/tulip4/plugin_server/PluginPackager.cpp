@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "CreatePluginServer.h"
 
 #include <QtCore/QString>
 #include <QtCore/QFile>
@@ -29,24 +28,10 @@
 #include <tulip/PluginLoaderTxt.h>
 
 #include <QuaZIPFacade.h>
+#include <fcntl.h>
 
 using namespace std;
 using namespace tlp;
-
-void copyfolder(const QString& origin, const QString& destination) {
-  QDir destinationDir(destination);
-  if(!destinationDir.exists()) {
-    destinationDir.mkdir(destinationDir.absolutePath());
-  }
-  
-  QDir originDir(origin);
-  foreach(const QString& element, originDir.entryList(QDir::Files | QDir::NoSymLinks)) {
-    QFile::copy(originDir.absolutePath() + "/" + element, destinationDir.absolutePath() + "/" + element);
-  }
-  foreach(const QString& element, originDir.entryList(QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot)) {
-    copyfolder(originDir.absolutePath() + "/" + element, destinationDir.absolutePath() + "/" + element);
-  }
-}
 
 class ArchiveCreator : public PluginLoader {
   public:
@@ -107,7 +92,7 @@ class ArchiveCreator : public PluginLoader {
       //creates the xml document for this plugin
       QDomDocument pluginInfoDocument;
       QDomElement infoElement = pluginInfoDocument.createElement("plugin");
-      pluginInfoDocument.appendChild(infoElement);
+      infoElement.setTagName("plugin");
       infoElement.setAttribute("name", pluginName);
       infoElement.setAttribute("type", QString::fromStdString(pluginType));
       infoElement.setAttribute("author", QString::fromStdString(info->getAuthor()));
@@ -121,23 +106,21 @@ class ArchiveCreator : public PluginLoader {
         dependencyElement.setAttribute("name", QString::fromStdString(it->pluginName));
         dependencyElement.setAttribute("type", QString::fromStdString(it->factoryName));
         dependencyElement.setAttribute("version", QString::fromStdString(it->pluginRelease));
+        infoElement.appendChild(dependencyElement);
       }
-      
-      QFile outputXML(destinationDir + "/xml/" + pluginSimplifiedName + ".xml");
-      outputXML.open(QIODevice::ReadWrite);
-      outputXML.write(pluginInfoDocument.toByteArray());
-      outputXML.close();
-      
-      pluginDir.cd(pluginSimplifiedName);
-      if(pluginDir.exists(currentPluginDir + "/share/doc/" + pluginSimplifiedName)) {
-        copyfolder(currentPluginDir + "/share/doc/" + pluginSimplifiedName, destinationDir + "/" + pluginSimplifiedName + "/html/");
-      }
+      _xmlElements.push_back(infoElement);
     }
 
-    virtual void aborted(const std::string& filename, const std::string& error) {}
-    virtual void loading(const std::string& filename) {}
+    virtual void aborted(const std::string& plugin, const std::string& message) {
+      std::cout << "failed to load plugin " << plugin << ": " << message << std::endl;
+    }
+    virtual void loading(const std::string&) {}
     virtual void finished(bool, const std::string&) {}
-    virtual void start(const std::string& path) {}
+    virtual void start(const std::string&) {}
+
+    const QList<QDomElement>& xmlElements() {
+      return _xmlElements;
+    }
     
   private:
     QString destinationDir;
@@ -146,6 +129,7 @@ class ArchiveCreator : public PluginLoader {
     QString architecture;
     QString compiler;
     QString tulipVersion;
+    QList<QDomElement> _xmlElements;
 };
 
 int main(int argc,char **argv) {
@@ -178,21 +162,47 @@ int main(int argc,char **argv) {
     }
   }
 
-  QDir subdirs(destinationDir);
-  subdirs.mkdir("xml");
-
   initTulipLib();
   ArchiveCreator creator(destinationDir);
   QDir pluginServerDir(argv[1]);
   PluginListerInterface::currentLoader = &creator;
+
+  QStringList libraries;
+  #if defined(_WIN32) || defined(_WIN64)
+  libraries.push_back("*.dll");
+  #elif defined(__APPLE__)
+  libraries.push_back("*.dylib");
+  #else
+  libraries.push_back("*.so");
+  #endif
+  
   foreach(const QString folder, pluginServerDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
     QString plugindir = pluginServerDir.canonicalPath() + "/" + folder;
     creator.setCurrentPluginDir(plugindir);
     
-    //TODO find file using QDir instead of this hackish "solution"
-    QString pluginFile = plugindir  + "/lib/tulip/lib" + folder + "-" + TULIP_RELEASE + ".so";
-    PluginLibraryLoader::loadPluginLibrary(pluginFile.toStdString(), &creator);
+    QDir pluginDirectory(plugindir);
+    pluginDirectory.cd("lib");
+    pluginDirectory.cd("tulip");
+    foreach(const QString& pluginFile, pluginDirectory.entryList(libraries, QDir::Files | QDir::NoSymLinks)) {
+      QString pluginFileName = pluginDirectory.canonicalPath() + "/" + pluginFile;
+      PluginLibraryLoader::loadPluginLibrary(pluginFileName.toStdString(), &creator);
+    }
   }
- 
+
+  QDomDocument serverDescription;
+  QDomElement description = serverDescription.createElement("server");
+  serverDescription.appendChild(description);
+  description.setAttribute("serverName", destinationDir);
+  description.setAttribute("lastUpdate", QDateTime::currentDateTime().toString(Qt::ISODate));
+  
+  foreach(const QDomElement& element, creator.xmlElements()) {
+    description.appendChild(element);
+  }
+  
+  QFile outputXML(destinationDir + "/serverDescription.xml");
+  outputXML.open(QIODevice::ReadWrite);
+  outputXML.write(serverDescription.toByteArray());
+  outputXML.close();
+  
   return 0;
 }
