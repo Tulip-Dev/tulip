@@ -121,6 +121,8 @@ void GlVertexArrayManager::beginRendering() {
 	isBegin=true;
 	linesRenderingStartIndexArray.clear();
 	linesRenderingCountArray.clear();
+	linesSelectedRenderingStartIndexArray.clear();
+	linesSelectedRenderingCountArray.clear();
 
 	quadsRenderingCountArray.clear();
 	quadsRenderingStartIndexArray.clear();
@@ -132,7 +134,7 @@ void GlVertexArrayManager::beginRendering() {
 	quadsOutlineSelectedRenderingIndexArray.clear();
 	quadsOutlineSelectedRenderingCountArray.clear();
 
-	linesSelectedRenderingStartIndexArray.clear();
+
 	points1PNodesRenderingIndexArray.clear();
 	points1PNodesSelectedRenderingIndexArray.clear();
 	points2PNodesRenderingIndexArray.clear();
@@ -140,14 +142,11 @@ void GlVertexArrayManager::beginRendering() {
 	points1PEdgesRenderingIndexArray.clear();
 	points1PEdgesSelectedRenderingIndexArray.clear();
 
-	linesIndexCountArray.reserve(graph->numberOfEdges());
 
-	linesSelectedRenderingStartIndexArray.reserve(graph->numberOfEdges());
 	points1PNodesRenderingIndexArray.reserve(graph->numberOfNodes());
 	points1PNodesSelectedRenderingIndexArray.reserve(graph->numberOfNodes());
 	points2PNodesRenderingIndexArray.reserve(graph->numberOfNodes());
 	points2PNodesSelectedRenderingIndexArray.reserve(graph->numberOfNodes());
-
 	points1PEdgesRenderingIndexArray.reserve(graph->numberOfEdges());
 	points1PEdgesSelectedRenderingIndexArray.reserve(graph->numberOfEdges());
 
