@@ -44,6 +44,8 @@ using namespace std;
 
 namespace tlp {
 
+  static const int SpaceBetweenLine=5;
+
   GlLabel::GlLabel() {
     init();
   }
@@ -117,7 +119,7 @@ namespace tlp {
         if(x2-x1>textBoundingBox[1][0])
           textBoundingBox[1][0]=(x2-x1);
 
-        textBoundingBox[0][1]-=fontSize+5;
+        textBoundingBox[0][1]-=fontSize+SpaceBetweenLine;
       }
     }
   }
@@ -231,8 +233,14 @@ namespace tlp {
     div_w = size[0]/w;
     div_h = size[1]/h;
 
-    float screenH=(h*(lod/sqrt((lodBoundingBox[1][0]-lodBoundingBox[0][0])*(lodBoundingBox[1][0]-lodBoundingBox[0][0])
-                               +(lodBoundingBox[1][1]-lodBoundingBox[0][1])*(lodBoundingBox[1][1]-lodBoundingBox[0][1]))))/2.;
+    float screenH;
+    float multiLineH=h;
+    if(textVector.size()>1)
+      multiLineH=(h-(textVector.size()-1)*10)/textVector.size();
+
+    screenH=(multiLineH*(lod/sqrt((lodBoundingBox[1][0]-lodBoundingBox[0][0])*(lodBoundingBox[1][0]-lodBoundingBox[0][0])+(lodBoundingBox[1][1]-lodBoundingBox[0][1])*(lodBoundingBox[1][1]-lodBoundingBox[0][1]))))/2.;
+
+
     float scaleToApply=1.;
 
     if(scaleToSize){
