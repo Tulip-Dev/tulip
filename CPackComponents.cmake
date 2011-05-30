@@ -14,7 +14,6 @@ IF(WIN32) # Windows-specific components
   SET(W32_BASE_SYSTEM "base_system")
   SET(W32_LIBXML2 "libxml2")
   SET(W32_PYTHON "python")
-  SET(W32_DBUS "dbus")
 
   DEFINE_COMPONENT(base_system
     "Base system"
@@ -34,15 +33,15 @@ IF(WIN32) # Windows-specific components
     ""
     ${THIRDPARTY_GROUP_NAME})
 
-  DEFINE_COMPONENT(dbus
-    "DBus"
-    "D-Bus is a message bus system, a simple way for applications to talk to one another."
-    "base_system"
-    ${THIRDPARTY_GROUP_NAME})
-
 ENDIF(WIN32)
 
 IF(WIN32 OR APPLE) # Components shared between Mac OS and Win32 plateforms
+
+  DEFINE_COMPONENT(dbus
+    "DBus"
+    "D-Bus is a message bus system, a simple way for applications to talk to one another."
+    "${W32_BASE_SYSTEM}"
+    ${THIRDPARTY_GROUP_NAME})
 
 #-------------------------------------
 # Thirdparty

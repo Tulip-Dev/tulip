@@ -1,0 +1,107 @@
+D-Bus 1.4.8 (2011-04-08)
+==
+
+The "It's like the beginning of a lobster" release.
+
+  • Rename configure.in to configure.ac, and update it to modern conventions
+    (fd.o #32245; Javier Jardón, Simon McVittie)
+  • Correctly give XDG_DATA_HOME priority over XDG_DATA_DIRS (fd.o #34496,
+    Anders Kaseorg)
+  • Prevent X11 autolaunching if $DISPLAY is unset or empty, and add
+    --disable-x11-autolaunch configure option to prevent it altogether
+    in embedded environments (fd.o #19997, NB#219964; Simon McVittie)
+  • Install the documentation, and an index for Devhelp (fd.o #13495,
+    Debian #454142; Simon McVittie, Matthias Clasen)
+  • If checks are not disabled, check validity of string-like types and
+    booleans when sending them (fd.o #16338, NB#223152; Simon McVittie)
+  • Add UnknownObject, UnknownInterface, UnknownProperty and PropertyReadOnly
+    errors to dbus-shared.h (fd.o #34527, Lennart Poettering)
+  • Break up a huge conditional in config-parser so gcov can produce coverage
+    data (fd.o #10887, Simon McVittie)
+  • List which parts of the Desktop Entry specification are applicable to
+    .service files (fd.o #19159, Sven Herzberg)
+  • Don't suppress service activation if two services have the same Exec=
+    (fd.o #35750, Colin Walters)
+  • Windows:
+    · Avoid the name ELEMENT_TYPE due to namespace-pollution from winioctl.h
+      (Andre Heinecke)
+    · Include _dbus_path_is_absolute in libdbus on Windows, fixing compilation
+      (fd.o #32805, Mark Brand)
+
+D-Bus 1.4.6 (2010-02-17)
+==
+
+The "1, 2, miss a few, 99, 100" release.
+
+  • Remove unfinished changes intended to support GTest-based tests,
+    which were mistakenly included in 1.4.4
+
+D-Bus 1.4.4 (2010-02-17)
+==
+
+  • Switch back to using even micro versions for stable releases; 1.4.1
+    should have been called 1.4.2, so skip that version number
+  • Don't leave bad file descriptors being watched when spawning processes,
+    which could result in a busy-loop (fd.o #32992, NB#200248; possibly
+    also LP#656134, LP#680444, LP#713157)
+  • Check for MSG_NOSIGNAL correctly
+  • Fix failure to detect abstract socket support (fd.o #29895)
+  • Make _dbus_system_logv actually exit with DBUS_SYSTEM_LOG_FATAL
+    (fd.o #32262, NB#180486)
+  • Improve some error code paths (fd.o #29981, fd.o #32264, fd.o #32262,
+    fd.o #33128, fd.o #33277, fd.o #33126, NB#180486)
+  • Avoid possible symlink attacks in /tmp during compilation (fd.o #32854)
+  • Tidy up dead code (fd.o #25306, fd.o #33128, fd.o #34292, NB#180486)
+  • Improve gcc malloc annotations (fd.o #32710)
+  • If the system bus is launched via systemd, protect it from the OOM killer
+  • Documentation improvements (fd.o #11190)
+  • Avoid readdir_r, which is difficult to use correctly (fd.o #8284,
+    fd.o #15922, LP#241619)
+  • Cope with invalid files in session.d, system.d (fd.o #19186,
+    Debian #230231)
+  • Don't distribute generated files that embed our builddir (fd.o #30285,
+    fd.o #34292)
+  • Raise the system bus's fd limit to be sufficient for its configuration
+    (fd.o #33474, LP#381063)
+  • Fix syslog string processing
+  • Ignore -Waddress
+  • Remove broken gcov parsing code and --enable-gcov, and replace them
+    with lcov HTML reports and --enable-compiler-coverage (fd.o #10887)
+  • Windows:
+    · avoid live-lock in Windows CE due to unfair condition variables
+  • OpenBSD:
+    · support credentials-passing (fd.o #32542)
+  • Solaris:
+    · opt-in to thread safety (fd.o #33464)
+
+D-Bus 1.4.1 (20 December 2010)
+==
+
+ • Fix for CVE-2010-4352: sending messages with excessively-nested variants can
+   crash the bus. The existing restriction to 64-levels of nesting previously
+   only applied to the static type signature; now it also applies to dynamic
+   nesting using variants. Thanks to Rémi Denis-Courmont for discoving this
+   issue.
+ • OS X portability fixes, including launchd support.
+ • Windows autolaunch improvements.
+ • Various bug fixes.
+
+D-Bus 1.4.0 (6 Sep 2010)
+==
+ - systemd hookup
+
+D-Bus 1.3.1 (23 June 2010)
+==
+ - New standardized PropertiesChanged signal in the properties interface
+ - Various portability fixes, in particular to Windows platforms
+ - Support forking bus services, for compatibility
+
+D-Bus 1.3.0 (29 July 2009)
+==
+ - ability for dbus-send to send to any bus (--address)
+ - file descriptor passing on Unix socket transports
+ - use of GCC atomic intrinsics for better processor support
+   (requires -march=i486 or above for x86 compilation)
+ - thread-safe FD_CLOEXEC setting on recent Linux kernels (2.6.24-27 and up)
+   and glibc (2.9 for pipe2 and 2.10 for accept4)
+ - feature negotiation in the bus daemon
