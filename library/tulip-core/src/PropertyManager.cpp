@@ -172,11 +172,8 @@ void PropertyManager::delLocalProperty(const string &str) {
   // if found remove from local properties
   if (it!=localProperties.end()) {
     PropertyInterface* oldProp = (*it).second;
+    //Remove property from map.
     localProperties.erase(it);
-    if (graph->canDeleteProperty(graph, oldProp))
-      //if (!graph->canPop())
-      delete oldProp;
-
     // loop in the ascendant hierarchy to get
     // an inherited property
     PropertyInterface* newProp = NULL;
@@ -184,8 +181,8 @@ void PropertyManager::delLocalProperty(const string &str) {
     while (g != g->getSuperGraph()) {
       g = g->getSuperGraph();
       if (g->existLocalProperty(str)) {
-	newProp = g->getProperty(str);
-	break;
+        newProp = g->getProperty(str);
+        break;
       }
     }
 
@@ -198,6 +195,11 @@ void PropertyManager::delLocalProperty(const string &str) {
        (((GraphAbstract *) g)->propertyContainer)->delInheritedProperty(str);
      }
     }
+    //Delete property
+    //Need to be done after subgraph notification.
+    if (graph->canDeleteProperty(graph, oldProp))
+      //if (!graph->canPop())
+      delete oldProp;
   }
 }
 //==============================================================
@@ -206,17 +208,17 @@ void PropertyManager::delInheritedProperty(const string &str) {
   it = inheritedProperties.find(str);
   // if found remove from inherited properties
   if (it != inheritedProperties.end()) {
+      // graph observers notification
+      ((GraphAbstract *) graph)->notifyDelInheritedProperty(str);
+
+      // loop on subgraphs
+      Graph* sg;
+      forEach(sg, graph->getSubGraphs()) {
+        // to remove as inherited property
+        (((GraphAbstract *) sg)->propertyContainer)->delInheritedProperty(str);
+      }
+
     inheritedProperties.erase(it);
-
-    // graph observers notification
-    ((GraphAbstract *) graph)->notifyDelInheritedProperty(str);
-
-    // loop on subgraphs
-    Graph* sg;
-    forEach(sg, graph->getSubGraphs()) {
-      // to remove as inherited property
-      (((GraphAbstract *) sg)->propertyContainer)->delInheritedProperty(str);
-    }
   }
 }
 Iterator<string>*  PropertyManager::getLocalProperties() {
