@@ -14,6 +14,7 @@ IF(WIN32) # Windows-specific components
   SET(W32_BASE_SYSTEM "base_system")
   SET(W32_LIBXML2 "libxml2")
   SET(W32_PYTHON "python")
+  SET(W32_DBUS "dbus")
 
   DEFINE_COMPONENT(base_system
     "Base system"
@@ -31,6 +32,12 @@ IF(WIN32) # Windows-specific components
     "python"
     "Python is a programming language that lets you work more quickly and integrate your systems more effectively."
     ""
+    ${THIRDPARTY_GROUP_NAME})
+
+  DEFINE_COMPONENT(dbus
+    "DBus"
+    "D-Bus is a message bus system, a simple way for applications to talk to one another."
+    "base_system"
     ${THIRDPARTY_GROUP_NAME})
 
 ENDIF(WIN32)
@@ -237,7 +244,7 @@ IF(WIN32 OR APPLE) # Components shared between Mac OS and Win32 plateforms
   DEFINE_COMPONENT(tulip_app
     "Tulip"
     "A full GUI application including TulipCore, TulipOGL and TulipGUI features."
-    "tulip_core;tulip_ogl;tulip_gui;tulip_python;tulip_core_plugins;tulip_ogl_plugins;tulip_gui_plugins;tulip_gui;spreadview;tulip_gui_pythonview"
+    "tulip_core;tulip_ogl;tulip_gui;tulip_python;tulip_core_plugins;tulip_ogl_plugins;tulip_gui_plugins;tulip_gui;spreadview;tulip_gui_pythonview;${W32_DBUS}"
     ${SOFTWARE_GROUP_NAME})
 
 ENDIF(WIN32 OR APPLE)
