@@ -1,0 +1,8 @@
+<node>
+  <interface name="org.labri.Tulip">
+    <property name="pid" type="s" access="read"/>
+    <method name="ShowWelcomeScreen"/>
+    <method name="ShowPluginsCenter"/>
+    <method name="ShowAboutPage"/>
+  </interface>
+</node>

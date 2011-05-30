@@ -6,6 +6,8 @@ src/PluginLoaderDispatcher.cpp
 src/PluginLoaderReporter.cpp
 src/PluginsCenter.cpp
 src/RssParser.cpp
+src/TulipAgentService.cpp
+src/TulipAgentServiceAdaptor.cpp
 src/TulipMainWindow.cpp
 src/TulipSplashScreen.cpp
 src/TulipWelcomePage.cpp)
@@ -20,6 +22,8 @@ designer/TulipWelcomePage.ui)
 QT4_WRAP_CPP(MOC_SRCS
 include/PluginErrorReport.h
 include/PluginsCenter.h
+include/TulipAgentService.h
+include/TulipAgentServiceAdaptor.h
 include/TulipMainWindow.h
 include/TulipWelcomePage.h)
 
