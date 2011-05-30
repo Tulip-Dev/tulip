@@ -41,6 +41,7 @@ public:
   void testDeleteSubgraph();
   void testReverse();
   void testObserverWhenRemoveObservable();
+  void testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend();
 
   static CppUnit::Test *suite();
 };
