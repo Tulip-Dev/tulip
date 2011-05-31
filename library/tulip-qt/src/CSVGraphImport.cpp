@@ -27,48 +27,31 @@ using namespace std;
 const char minusChar = '-';
 
 string PropertyTools::getPropertyTypeLabel(const string& typeName){
-    if(typeName.compare("graph")==0)return "Graph";
-    if(typeName.compare("double")==0)return "Metric";
-    if(typeName.compare("layout")==0)return "Layout";
-    if(typeName.compare("string")==0)return "String";
-    if(typeName.compare("int")==0)return "Integer";
-    if(typeName.compare("color")==0)return "Color";
-    if(typeName.compare("size")==0)return "Size";
-    if(typeName.compare("bool")==0)return "Selection";
-    if(typeName.compare("vector<double>")==0)return "DoubleVector";
-    if(typeName.compare("vector<string>")==0)return "StringVector";
-    if(typeName.compare("vector<int>")==0)return "IntegerVector";
-    if(typeName.compare("vector<coord>")==0)return "CoordVector";
-    if(typeName.compare("vector<color>")==0)return "ColorVector";
-    if(typeName.compare("vector<size>")==0)return "SizeVector";
-    if(typeName.compare("vector<bool>")==0)return "BooleanVector";
-    return "";
+   return QStringToTlpString(propertyTypeToPropertyTypeLabel(typeName));
 }
 
 string PropertyTools::getPropertyTypeFromPropertyTypeLabel(const string& typeNameLabel){
-    if(typeNameLabel.compare("Graph")==0)return "graph";
-    if(typeNameLabel.compare("Metric" )==0)return "double";
-    if(typeNameLabel.compare("Layout")==0)return "layout";
-    if(typeNameLabel.compare("String")==0)return "string";
-    if(typeNameLabel.compare("Integer")==0)return  "int";
-    if(typeNameLabel.compare("Color")==0)return  "color";
-    if(typeNameLabel.compare("Size")==0)return  "size";
-    if(typeNameLabel.compare("Selection")==0)return  "bool";
-    if(typeNameLabel.compare("DoubleVector")==0)return "vector<double>";
-    if(typeNameLabel.compare("StringVector")==0)return "vector<string>";
-    if(typeNameLabel.compare("IntegerVector")==0)return "vector<int>";
-    if(typeNameLabel.compare("CoordVector")==0)return "vector<coord>";
-    if(typeNameLabel.compare("ColorVector")==0)return "vector<color>";
-    if(typeNameLabel.compare("SizeVector")==0)return "vector<size>";
-    if(typeNameLabel.compare("BooleanVector")==0)return "vector<bool>";
-    return "";
+    return propertyTypeLabelToPropertyType(tlpStringToQString(typeNameLabel));
 }
 
 QStringList PropertyTools::getPropertyTypeLabelsList(){
-    QStringList lst;
-    lst << "Color" << "Integer" << "Layout" << "Metric" << "Selection" << "Size" << "String" << "BooleanVector"
-            << "ColorVector" << "CoordVector" << "DoubleVector" << "IntegerVector" << "SizeVector" << "StringVector";
-    return lst;
+    QStringList labels;
+    //Init properties list
+    labels<<propertyTypeToPropertyTypeLabel("color");
+    labels<<propertyTypeToPropertyTypeLabel("int");
+    labels<<propertyTypeToPropertyTypeLabel("layout");
+    labels<<propertyTypeToPropertyTypeLabel("double");
+    labels<<propertyTypeToPropertyTypeLabel("bool");
+    labels<<propertyTypeToPropertyTypeLabel("size");
+    labels<<propertyTypeToPropertyTypeLabel("string");
+    labels<<propertyTypeToPropertyTypeLabel("vector<bool>");
+    labels<<propertyTypeToPropertyTypeLabel("vector<color>");
+    labels<<propertyTypeToPropertyTypeLabel("vector<coord>");
+    labels<<propertyTypeToPropertyTypeLabel("vector<double>");
+    labels<<propertyTypeToPropertyTypeLabel("vector<int>");
+    labels<<propertyTypeToPropertyTypeLabel("vector<size>");
+    labels<<propertyTypeToPropertyTypeLabel("vector<string>");
+    return labels;
 }
 
 string PropertyTools::guessDataType(const string& data, const string& decimalSeparator) {

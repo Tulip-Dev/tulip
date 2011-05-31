@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>274</width>
-    <height>108</height>
+    <width>293</width>
+    <height>123</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,76 +40,6 @@
        <property name="toolTip">
         <string>Select the property type</string>
        </property>
-       <item>
-        <property name="text">
-         <string>Color</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Integer</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Layout</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Metric</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Selection</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Size</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>String</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>BooleanVector</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>ColorVector</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>CoordVector</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>DoubleVector</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>IntegerVector</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>SizeVector</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>StringVector</string>
-        </property>
-       </item>
       </widget>
      </item>
      <item row="1" column="0">

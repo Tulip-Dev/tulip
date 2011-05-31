@@ -20,6 +20,7 @@
 #include <tulip/Graph.h>
 #include <tulip/PropertyInterface.h>
 #include <tulip/ForEach.h>
+#include <tulip/TlpQtTools.h>
 #include <QtGui/QTableWidgetItem>
 #include <QtGui/QHeaderView>
 #include <algorithm>
@@ -99,15 +100,7 @@ QTableWidgetItem* GraphPropertiesTableWidget::createPropertyItem(PropertyInterfa
     return new QTableWidgetItem(QString::fromUtf8(property->getName().c_str()));
   }
   else if (column == 1) {
-    //Update the name to correspond with interface name of properties.
-    string propertyType = property->getTypename();
-    if (propertyType.compare("bool") == 0) {
-      propertyType = "selection";
-    }
-    else if (propertyType.compare("double") == 0) {
-      propertyType = "metric";
-    }
-    return new QTableWidgetItem(QString::fromUtf8(propertyType.c_str()));
+    return new QTableWidgetItem(propertyTypeToPropertyTypeLabel(property->getTypename()));
   }
   else if (column == 2) {
     if (graph->existLocalProperty(property->getName())) {
