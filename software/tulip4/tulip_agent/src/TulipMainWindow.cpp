@@ -85,3 +85,27 @@ void TulipMainWindow::systemTrayMessageClicked() {
 PluginsCenter *TulipMainWindow::pluginsCenter() const {
   return _ui->pluginsPage;
 }
+
+
+// Methods and properties coming from the D-Bus implementation
+qlonglong TulipMainWindow::pid() const {
+  return QApplication::applicationPid();
+}
+
+void TulipMainWindow::ShowAboutPage() {
+  if (!isVisible())
+    setVisible(true);
+  _ui->pages->setCurrentWidget(_ui->aboutPage);
+}
+
+void TulipMainWindow::ShowPluginsCenter() {
+  if (!isVisible())
+    setVisible(true);
+  _ui->pages->setCurrentWidget(_ui->pluginsPage);
+}
+
+void TulipMainWindow::ShowWelcomeScreen() {
+  if (!isVisible())
+    setVisible(true);
+  _ui->pages->setCurrentWidget(_ui->welcomePage);
+}
