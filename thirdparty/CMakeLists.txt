@@ -91,11 +91,13 @@ IF(WIN32)
   FIND_LIBRARY_GLOB(DBUS_DAEMON_PATH "dbus-daemon.exe")
   FIND_LIBRARY_GLOB(DBUS_ENV_PATH "dbus-env.bat")
   FIND_LIBRARY_GLOB(DBUS_LAUNCH_PATH "dbus-launch.exe")
+  FIND_LIBRARY_GLOB(EXPAT_PATH "libexpat.dll")
 
   INSTALL_EXTERNAL_LIB(LIBDBUS_PATH dbus)
   INSTALL_EXTERNAL_LIB(DBUS_DAEMON_PATH dbus)
   INSTALL_EXTERNAL_LIB(DBUS_ENV_PATH dbus)
   INSTALL_EXTERNAL_LIB(DBUS_LAUNCH_PATH dbus)
+  INSTALL_EXTERNAL_LIB(EXPAT_PATH dbus)
 
 ELSEIF(APPLE)
 ## -----------------------------------------------------------------------------------------------
