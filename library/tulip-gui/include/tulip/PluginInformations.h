@@ -23,9 +23,11 @@
 #include <QtCore/QDateTime>
 #include <QtGui/QIcon>
 
-#include <tulip/AbstractPluginInfo.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
+  class AbstractPluginInfo;
+  class Dependency;
 
 /**
  * @brief This class describes the whereabouts of a plugin, be it locally installed, or on a remote server.
@@ -53,7 +55,8 @@ class TLP_QT_SCOPE PluginInformationsInterface {
 
 class TLP_QT_SCOPE LocalPluginInformations : public PluginInformationsInterface {
   public:
-    LocalPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<Dependency>& dependencies, const std::string& library);
+    LocalPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies, const std::string& library);
+    LocalPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies, const QString& longDescriptionPath, const QString& iconPath);
 
     virtual QString identifier() const;
     virtual QString name() const;

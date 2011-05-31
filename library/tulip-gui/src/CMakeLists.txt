@@ -157,6 +157,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/TabWidgetHidableMenuGraphicsProxy.h
   ../include/tulip/ThreadedComputeProperty.h
   ../include/tulip/TulipProject.h
+  ../include/tulip/PluginManager.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipQtResource.qrc)
