@@ -1,4 +1,5 @@
 #include "WebDavManager.h"
+#include <QDomDocument>
 
 WebDavManager::WebDavManager(const QString& host, const QString& url, const QString& base64credentials) : _host(host), _url(url), _credentials("Basic " + base64credentials), _ongoingRequests(0), _displayErrors(true) {
   _credentials = _credentials.replace("\012", "");
@@ -94,4 +95,20 @@ QNetworkRequest WebDavManager::initRequest(const QString& destination, QIODevice
   }
   request.setHeader(QNetworkRequest::ContentTypeHeader, mimetype);
   return request;
+}
+
+QDomDocument* WebDavManager::getRemoteDescription() {
+  QNetworkRequest request = initRequest("archive/serverDescription.xml");
+
+  QNetworkAccessManager manager;
+  QNetworkReply* reply = manager.get(request);
+  
+  QDomDocument* currentServerDescription = new QDomDocument();
+  QString errorMsg;
+  bool result = currentServerDescription->setContent(reply->readAll(), &errorMsg);
+  std::cout << result << ":"<< errorMsg.toStdString() << std::endl;
+
+  reply->deleteLater();
+  
+  return currentServerDescription;
 }

@@ -15,4 +15,5 @@ target_link_libraries(packagePlugins ${QT_LIBRARIES}
                       quazip)
 
 target_link_libraries(pushPlugins ${QT_LIBRARIES}
+                      ${LibTulipGUIName}
                       ${QT_QTXML_LIBRARY})
