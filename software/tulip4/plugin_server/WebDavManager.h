@@ -31,6 +31,7 @@
 
 #include <assert.h>
 
+class QDomDocument;
 /**
  * @brief This class uploads files to a server using the WEBDAV protocol.
  * It is tailored for a very specific use and only supports authentified (https) mode.
@@ -78,6 +79,8 @@ class WebDavManager : public QObject {
      **/
     bool putFile(const QString& filename, QIODevice* data);
 
+    QDomDocument* getRemoteDescription();
+    
     /**
      * @brief Ensure that all operations are finished.
      *

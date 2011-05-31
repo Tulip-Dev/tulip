@@ -58,7 +58,9 @@ class PluginInformationsCollector : public PluginLoader {
       infoElement.setAttribute("date", QString::fromStdString(info->getDate()));
       infoElement.setAttribute("info", QString::fromStdString(info->getInfo()));
       infoElement.setAttribute("fileName", pluginLibrary);
-      infoElement.setAttribute("version", QString::fromStdString(info->getRelease()));
+      infoElement.setAttribute("release", QString::fromStdString(info->getRelease()));
+      infoElement.setAttribute("group", QString::fromStdString(info->getGroup()));
+      infoElement.setAttribute("tulipRelease", QString::fromStdString(info->getTulipRelease()));
       
       for(std::list<Dependency>::const_iterator it = dependencies.begin(); it != dependencies.end(); ++it) {
         QDomElement dependencyElement = pluginInfoDocument.createElement("dependency");
@@ -193,7 +195,7 @@ int main(int argc,char **argv) {
   }
   
   QFile outputXML(destinationDir + "/serverDescription.xml");
-  outputXML.open(QIODevice::ReadWrite);
+  outputXML.open(QIODevice::ReadWrite | QIODevice::Truncate);
   outputXML.write(serverDescription.toByteArray());
   outputXML.close();
   
