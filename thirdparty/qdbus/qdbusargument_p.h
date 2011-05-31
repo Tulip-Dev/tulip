@@ -150,7 +150,7 @@ private:
     Q_DISABLE_COPY(QDBusMarshaller)
 };
 
-class QDBusDemarshaller: public QDBusArgumentPrivate
+class Q_DBUS_EXPORT QDBusDemarshaller: public QDBusArgumentPrivate
 {
 public:
     inline QDBusDemarshaller() : parent(0) { direction = Demarshalling; }
