@@ -443,6 +443,17 @@ public:
    */
   template<typename PropertyType>
   PropertyType* getLocalProperty(const std::string &name);
+
+  /**
+    * Try to returns a pointer to a PropertyInterface PropertyInterface which is in the graph properties pool.
+    * The real type of the PropertyInterface is tested with the propertyType string parameter.
+    * If the PropertyInterface is not in the pool, a new one is created and returned.
+    * If the type parameter is not a valid property type this function returns a NULL pointer.
+    * Using of delete on that property will cause an abort of the program
+    * (use delLocalProperty instead).
+    */
+  PropertyInterface *getLocalProperty(const std::string& propertyName, const std::string& propertyType);
+
   /**
    * Computes a property on the current graph
    * using an external named algorithm (plug-in).
@@ -471,6 +482,17 @@ public:
    * In DEBUG the existence of a property is checked using an assertion.
    */
   virtual PropertyInterface* getProperty(const std::string& name)=0;
+
+  /**
+    * Try to returns a pointer to a PropertyInterface PropertyInterface which is in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+    * The real type of the PropertyInterface is tested with the propertyType string parameter.
+    * If the PropertyInterface is not in the pool, a new one is created and returned.
+    * If the type parameter is not a valid property type this function returns a NULL pointer.
+    * Using of delete on that property will cause an abort of the program
+    * (use delLocalProperty instead).
+    */
+  PropertyInterface *getProperty(const std::string& propertyName, const std::string& propertyType);
+
   /**
    *  Returns true if a property of that name exists
    *  in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
