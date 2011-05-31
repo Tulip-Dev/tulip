@@ -33,36 +33,8 @@
 using namespace std;
 using namespace tlp;
 
-class ArchiveCreator : public PluginLoader {
+class PluginInformationsCollector : public PluginLoader {
   public:
-    ArchiveCreator(const QString& destinationDir) : destinationDir(destinationDir), tulipVersion(TULIP_RELEASE) {
-      #if defined(_WIN32) || defined(_WIN64)
-      platform = "win";
-      #elif defined(__APPLE__)
-      platform = "mac";
-      #else
-      platform = "linux";
-      #endif
-      
-      #if _WIN64 || __amd64__
-      architecture = "64";
-      #else
-      architecture = "32";
-      #endif
-      
-      #if defined(__clang__)
-      compiler = "Clang";
-      #elif defined(__GNUC__)
-      compiler="gcc";
-      #elif defined(_MSC_VER)
-      compiler = "MSVC";
-      #endif
-    }
-    
-    void setCurrentPluginDir(const QString& pluginDir) {
-      currentPluginDir = pluginDir;
-    }
-    
     virtual void loaded(const tlp::AbstractPluginInfo* info, const std::list< Dependency >& dependencies) {
       QString pluginName = QString::fromStdString(info->getName());
       QString pluginLibrary;     
@@ -76,19 +48,6 @@ class ArchiveCreator : public PluginLoader {
         }
       }
       
-      QString pluginSimplifiedName = pluginName.simplified().remove(' ').toLower();
-      
-      QString archiveName = pluginSimplifiedName + "-" + info->getRelease().c_str() + "-" + tulipVersion + "-" + platform + architecture + "-" + compiler + ".zip";
-      
-      QDir pluginDir(destinationDir + "/");
-      pluginDir.mkdir(pluginSimplifiedName);
-      bool compressed = QuaZIPFacade::zipDir(currentPluginDir, destinationDir + "/" + pluginSimplifiedName + "/" + archiveName);
-      if(!compressed) {
-        cout << "failed to compress folder " << currentPluginDir.toStdString() << " as archive: " << destinationDir.toStdString() << "/archives/" << archiveName.toStdString() << endl;
-      }
-      else {
-        std::cout << "created archive: " << destinationDir.toStdString() << "/" + pluginSimplifiedName.toStdString( )+ "/" << archiveName.toStdString() << std::endl;
-      }
       //creates the xml document for this plugin
       QDomDocument pluginInfoDocument;
       QDomElement infoElement = pluginInfoDocument.createElement("plugin");
@@ -123,12 +82,6 @@ class ArchiveCreator : public PluginLoader {
     }
     
   private:
-    QString destinationDir;
-    QString currentPluginDir;
-    QString platform;
-    QString architecture;
-    QString compiler;
-    QString tulipVersion;
     QList<QDomElement> _xmlElements;
 };
 
@@ -149,6 +102,32 @@ int main(int argc,char **argv) {
     cout << "destinationDir defaults to the current dir" << endl;
     exit(0);
   }
+  
+  QString platform;
+  QString architecture;
+  QString compiler;
+  QString tulipVersion = TULIP_RELEASE;
+  #if defined(_WIN32) || defined(_WIN64)
+  platform = "win";
+  #elif defined(__APPLE__)
+  platform = "mac";
+  #else
+  platform = "linux";
+  #endif
+
+  #if _WIN64 || __amd64__
+  architecture = "64";
+  #else
+  architecture = "32";
+  #endif
+
+  #if defined(__clang__)
+  compiler = "Clang";
+  #elif defined(__GNUC__)
+  compiler="gcc";
+  #elif defined(_MSC_VER)
+  compiler = "MSVC";
+  #endif
 
   QString destinationDir;
   if(argc < 3) {
@@ -163,9 +142,9 @@ int main(int argc,char **argv) {
   }
 
   initTulipLib();
-  ArchiveCreator creator(destinationDir);
+  PluginInformationsCollector collector;
   QDir pluginServerDir(argv[1]);
-  PluginListerInterface::currentLoader = &creator;
+  PluginListerInterface::currentLoader = &collector;
 
   QStringList libraries;
   #if defined(_WIN32) || defined(_WIN64)
@@ -176,17 +155,31 @@ int main(int argc,char **argv) {
   libraries.push_back("*.so");
   #endif
   
-  foreach(const QString folder, pluginServerDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-    QString plugindir = pluginServerDir.canonicalPath() + "/" + folder;
-    creator.setCurrentPluginDir(plugindir);
+  foreach(const QString component, pluginServerDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+    QString plugindir = pluginServerDir.canonicalPath() + "/" + component;
     
     QDir pluginDirectory(plugindir);
     pluginDirectory.cd("lib");
     pluginDirectory.cd("tulip");
     foreach(const QString& pluginFile, pluginDirectory.entryList(libraries, QDir::Files | QDir::NoSymLinks)) {
       QString pluginFileName = pluginDirectory.canonicalPath() + "/" + pluginFile;
-      PluginLibraryLoader::loadPluginLibrary(pluginFileName.toStdString(), &creator);
+      PluginLibraryLoader::loadPluginLibrary(pluginFileName.toStdString(), &collector);
     }
+
+    QString pluginSimplifiedName = component.simplified().remove(' ').toLower();
+
+    QString archiveName = pluginSimplifiedName + /*"-" + info->getRelease().c_str() +*/ "-" + tulipVersion + "-" + platform + architecture + "-" + compiler + ".zip";
+
+    QDir pluginDir(destinationDir + "/");
+    pluginDir.mkdir(pluginSimplifiedName);
+    bool compressed = QuaZIPFacade::zipDir(plugindir, destinationDir + "/" + pluginSimplifiedName + "/" + archiveName);
+    if(!compressed) {
+      cout << "failed to compress folder " << plugindir.toStdString() << " as archive: " << destinationDir.toStdString() << "/archives/" << archiveName.toStdString() << endl;
+    }
+    else {
+      std::cout << "created archive: " << destinationDir.toStdString() << "/" + pluginSimplifiedName.toStdString( )+ "/" << archiveName.toStdString() << std::endl;
+    }
+    
   }
 
   QDomDocument serverDescription;
@@ -195,7 +188,7 @@ int main(int argc,char **argv) {
   description.setAttribute("serverName", destinationDir);
   description.setAttribute("lastUpdate", QDateTime::currentDateTime().toString(Qt::ISODate));
   
-  foreach(const QDomElement& element, creator.xmlElements()) {
+  foreach(const QDomElement& element, collector.xmlElements()) {
     description.appendChild(element);
   }
   
