@@ -1,3 +1,9 @@
+# Sources from this directory are direcly taken from the src/dbus directory of Qt framework.
+# This CMakeLists is not shipped along with those sources since Qt is compiled using qmake.
+# To get the sources compiling, make sure that every file including a moc uses the .cxx file extension (rename #include "moc_xxx.cpp" to #include "moc_xxx.cxx")
+# Included mocs should not be compiled and are put into a separate QT4_WRAP_CPP macro.
+# no other modification should be made on the sources.
+
 INCLUDE_DIRECTORIES(${QT_INCLUDE_DIRECTORY} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${DBUS_INCLUDE_DIRECTORY})
 
 ADD_DEFINITIONS(-DQT_BUILD_DBUS_LIB -DDBUS_API_SUBJECT_TO_CHANGE -DQT_MAKEDLL)
@@ -30,9 +36,11 @@ qdbuspendingreply.cpp
 qdbus_symbols.cpp
 qdbusservicewatcher.cpp)
 
-QT4_GENERATE_MOC(qdbusabstractinterface.h moc_qdbusabstractinterface.cpp)
-QT4_GENERATE_MOC(qdbuspendingcall.h moc_qdbuspendingcall.cpp)
-QT4_GENERATE_MOC(qdbusservicewatcher.h moc_qdbusservicewatcher.cpp)
+#Those mocs are not compiled since they are included in source files.
+QT4_WRAP_CPP(MOC_SRCS_TMP
+qdbusservicewatcher.h
+qdbuspendingcall.h
+qdbusabstractinterface.h)
 
 QT4_WRAP_CPP(MOC_SRCS
 qdbusabstractadaptor.h
@@ -40,8 +48,6 @@ qdbusconnection_p.h
 qdbusconnectioninterface.h
 qdbuspendingcall_p.h
 qdbusserver.h)
-
-ADD_CUSTOM_TARGET(force_qdbus_moc_generation ALL SOURCES moc_qdbusabstractinterface.cpp moc_qdbuspendingcall.cpp moc_qdbusservicewatcher.cpp)
 
 ADD_LIBRARY(QtDBus4 SHARED ${SRCS} ${MOC_SRCS})
 
@@ -53,4 +59,4 @@ INSTALL(TARGETS QtDBus4
        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT dbus)
 
 # Override the Qt's library variable with the compiled target name
-SET(QT_QTDBUS_LIBRARY QtDBus4)
+SET(QT_QTDBUS_LIBRARY QtDBus4 CACHE STRING "" FORCE)

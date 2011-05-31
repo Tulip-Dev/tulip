@@ -536,4 +536,4 @@ QT_END_NAMESPACE
 
 #endif // QT_NO_DBUS
 
-#include "moc_qdbuspendingcall.cpp"
+#include "moc_qdbuspendingcall.cxx"

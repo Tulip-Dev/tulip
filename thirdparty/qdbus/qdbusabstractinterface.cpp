@@ -772,4 +772,4 @@ QT_END_NAMESPACE
 
 #endif // QT_NO_DBUS
 
-#include "moc_qdbusabstractinterface.cpp"
+#include "moc_qdbusabstractinterface.cxx"

@@ -122,6 +122,11 @@ IF(NOT LIBXML2_FOUND)
    message(FATAL_ERROR "Cannot find the XML2 library (required)")
 ENDIF(NOT LIBXML2_FOUND)
 
+IF(WIN32)
+# Qt D-Bus definitions
+  ADD_DEFINITIONS(-DQT_NO_DBUS -DQT_DBUS)
+ENDIF(WIN32)
+
 ## -----------------------------------------------------------------------------------------------
 ## OpenMP
 ## -----------------------------------------------------------------------------------------------
