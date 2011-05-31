@@ -23,7 +23,13 @@
 #include <tulip/TlpTools.h>
 #include <tulip/GraphImpl.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
 #include <tulip/GraphProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 #include <tulip/Reflect.h>
 #include <tulip/ExportModule.h>
 #include <tulip/Algorithm.h>
@@ -452,4 +458,99 @@ void Graph::notifyDestroy() {
     evt._type = Event::TLP_DELETE;
     sendEvent(evt);
   }
+}
+PropertyInterface *Graph::getLocalProperty(const std::string& propertyName, const std::string& propertyType){
+    if (propertyType.compare("double") == 0) {
+        return getLocalProperty<DoubleProperty> (propertyName);
+    }
+    else if (propertyType.compare("layout")==0) {
+        return getLocalProperty<LayoutProperty> (propertyName);
+    }
+    else if (propertyType.compare("string")==0) {
+        return getLocalProperty<StringProperty> (propertyName);
+    }
+    else if (propertyType.compare("int")==0) {
+        return getLocalProperty<IntegerProperty> (propertyName);
+    }
+    else if (propertyType.compare("color")==0) {
+        return getLocalProperty<ColorProperty> (propertyName);
+    }
+    else if (propertyType.compare("size")==0) {
+        return getLocalProperty<SizeProperty> (propertyName);
+    }
+    else if (propertyType.compare("bool")==0) {
+        return getLocalProperty<BooleanProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<double>")==0) {
+        return getLocalProperty<DoubleVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<string>")==0) {
+        return getLocalProperty<StringVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<int>")==0) {
+        return getLocalProperty<IntegerVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<coord>")==0) {
+        return getLocalProperty<CoordVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<color>")==0) {
+        return getLocalProperty<ColorVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("BooleanVector")==0) {
+        return getLocalProperty<BooleanVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("SizeVector")==0) {
+        return getLocalProperty<SizeVectorProperty> (propertyName);
+    }
+    else {
+        return NULL;
+    }
+}
+
+PropertyInterface *Graph::getProperty(const std::string& propertyName, const std::string& propertyType){
+    if (propertyType.compare("double") == 0) {
+        return getProperty<DoubleProperty> (propertyName);
+    }
+    else if (propertyType.compare("layout")==0) {
+        return getProperty<LayoutProperty> (propertyName);
+    }
+    else if (propertyType.compare("string")==0) {
+        return getProperty<StringProperty> (propertyName);
+    }
+    else if (propertyType.compare("int")==0) {
+        return getProperty<IntegerProperty> (propertyName);
+    }
+    else if (propertyType.compare("color")==0) {
+        return getProperty<ColorProperty> (propertyName);
+    }
+    else if (propertyType.compare("size")==0) {
+        return getProperty<SizeProperty> (propertyName);
+    }
+    else if (propertyType.compare("bool")==0) {
+        return getProperty<BooleanProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<double>")==0) {
+        return getProperty<DoubleVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<string>")==0) {
+        return getProperty<StringVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<int>")==0) {
+        return getProperty<IntegerVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<coord>")==0) {
+        return getProperty<CoordVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("vector<color>")==0) {
+        return getProperty<ColorVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("BooleanVector")==0) {
+        return getProperty<BooleanVectorProperty> (propertyName);
+    }
+    else if (propertyType.compare("SizeVector")==0) {
+        return getProperty<SizeVectorProperty> (propertyName);
+    }
+    else {
+        return NULL;
+    }
 }
