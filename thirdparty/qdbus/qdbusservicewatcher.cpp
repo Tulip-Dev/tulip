@@ -378,4 +378,4 @@ QT_END_NAMESPACE
 
 #endif // QT_NO_DBUS
 
-#include "moc_qdbusservicewatcher.cpp"
+#include "moc_qdbusservicewatcher.cxx"
