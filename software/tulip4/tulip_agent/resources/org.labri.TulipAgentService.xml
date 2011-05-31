@@ -1,8 +1,17 @@
 <node>
   <interface name="org.labri.Tulip">
-    <property name="pid" type="s" access="read"/>
+    <property name="pid" type="x" access="read"/>
     <method name="ShowWelcomeScreen"/>
     <method name="ShowPluginsCenter"/>
     <method name="ShowAboutPage"/>
   </interface>
 </node>
+
+<!--This file describes a D-Bus service and can be used along with Qt D-Bus executables to generate Server/Client classes.-->
+<!--To do so, issue tue following commands:-->
+
+<!--Client proxy:-->
+<!--qdbusxml2cpp -v -c TulipAgentServiceClient -p include/TulipAgentServiceClient.h:src/TulipAgentServiceClient.cpp resources/org.labri.TulipAgentService.xml-->
+
+<!--Server stub (adaptor):-->
+<!--qdbusxml2cpp -c TulipAgentService -a include/TulipAgentServiceAdaptor.h:src/TulipAgentServiceAdaptor.cpp resources/org.labri.TulipAgentService.xml-->

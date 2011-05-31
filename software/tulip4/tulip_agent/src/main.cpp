@@ -1,10 +1,12 @@
 #include <QtCore/QLocale>
 #include <QtGui/QApplication>
+#include <QtDBus/QDBusConnection>
 
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/TlpTools.h>
 
+#include "TulipAgentServiceAdaptor.h"
 #include "TulipMainWindow.h"
 #include "PluginLoaderReporter.h"
 #include "PluginLoaderDispatcher.h"
@@ -42,6 +44,16 @@ int main(int argc, char **argv) {
 
   delete errorReport;
 
+  // Register D-Bus service
+  new TulipAgentService(mainWindow);
+  bool dbusRegisterServiceOk = QDBusConnection::sessionBus().registerService("org.labri.Tulip");
+  bool dbusRegisterObjectOk = QDBusConnection::sessionBus().registerObject("/",mainWindow);
+  if (!dbusRegisterServiceOk)
+    qWarning() << "D-Bus registration of service org.labri.Tulip failed.";
+  if (!dbusRegisterObjectOk)
+    qWarning() << "D-Bus registration of object / over service org.labri.Tulip failed.";
+
   mainWindow->startApp();
+
   return tulip_agent.exec();
 }

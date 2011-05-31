@@ -46,6 +46,16 @@ private:
   SystemTrayMessage _currentTrayMessage;
 
   QVector<QObject *> _pageChoosers;
+
+
+// Methods and properties coming from the D-Bus service implementation
+public:
+  Q_PROPERTY(qlonglong pid READ pid)
+  qlonglong pid() const;
+public Q_SLOTS:
+  void ShowAboutPage();
+  void ShowPluginsCenter();
+  void ShowWelcomeScreen();
 };
 
 #endif // TULIPMAINWINDOW_H
