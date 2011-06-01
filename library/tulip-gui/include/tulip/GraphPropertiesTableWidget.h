@@ -34,7 +34,7 @@ namespace tlp {
    * Widget to display properties for a graph.
    * User can filter displayed properties in function of their name with a QRegularExpression. Property name don't need to fully match regular expression to be displayed, if only one part of the name match the property is displayed.
    */
-  class GraphPropertiesTableWidget: public QTableWidget {
+  class TLP_QT_SCOPE GraphPropertiesTableWidget: public QTableWidget {
   Q_OBJECT
   public:
     enum PropertyType {

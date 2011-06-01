@@ -75,7 +75,7 @@ private:
     CSVGraphMappingConfigurationWidget* graphMappingConfigurationWidget;
 };
 
-class CSVImportWizard : public QWizard
+class TLP_QT_SCOPE CSVImportWizard : public QWizard
 {
     Q_OBJECT
 

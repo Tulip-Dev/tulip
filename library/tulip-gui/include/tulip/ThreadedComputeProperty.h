@@ -14,7 +14,7 @@ namespace tlp {
   class QtProgress;
 }
 
-struct AbstractComputeProperty {
+struct TLP_QT_SCOPE AbstractComputeProperty {
   public:
     explicit AbstractComputeProperty(tlp::Graph* graph, std::string name, std::string& errorMsg, tlp::PluginProgress* progress, tlp::DataSet* dataset);
     virtual bool run() = 0;
@@ -42,7 +42,7 @@ struct ComputePropertyTemplate : public AbstractComputeProperty {
     PropertyType* _property;
 };
 
-class ComputePropertyThread : public QThread {
+class TLP_QT_SCOPE ComputePropertyThread : public QThread {
   Q_OBJECT
 public:
   explicit ComputePropertyThread(AbstractComputeProperty* computeProperty);
