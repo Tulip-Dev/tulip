@@ -11,6 +11,15 @@
 ## -----------------------------------------------------------------------------------------------
 PROJECT(tulip)
 
+# Hack: on Apple, we need to set specifically the value of INSTALL_NAME_DIR for every single bloody target
+# since RPATH is not supported for the DyLib format.
+IF(APPLE)
+  FUNCTION(ADD_LIBRARY name)
+    _ADD_LIBRARY(${name} ${ARGN})
+    SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_NAME_DIR "@loader_path/../Frameworks")
+  ENDFUNCTION()
+ENDIF(APPLE)
+
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles JOM" )
@@ -422,3 +431,7 @@ INCLUDE(CPackComponents.cmake)
 INCLUDE(CPackInstaller.cmake)
 
 INCLUDE(CPack)
+
+IF(APPLE)
+
+ENDIF(APPLE)
