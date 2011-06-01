@@ -1,5 +1,0 @@
-ADD_SUBDIRECTORY(plugins-manager)
-ADD_SUBDIRECTORY(tulip)
-ADD_SUBDIRECTORY(tulip4)
-#ADD_SUBDIRECTORY(tlprender)
-
