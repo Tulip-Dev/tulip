@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/Controller.h"
+#include "tulip3/Controller.h"
 
 using namespace std;
 

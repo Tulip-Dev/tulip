@@ -25,7 +25,6 @@
 
 #include "tulip/Interactor.h"
 #include "tulip/View.h"
-#include "tulip/Controller.h"
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp

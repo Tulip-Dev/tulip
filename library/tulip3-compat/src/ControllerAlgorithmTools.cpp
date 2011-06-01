@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/ControllerAlgorithmTools.h"
+#include "tulip3/ControllerAlgorithmTools.h"
 
 #include <QtGui/QMessageBox>
 

@@ -36,7 +36,7 @@ namespace tlp {
    *
    * This class contain tools to use algorithm in Controllers
    */
-  class TLP_QT_SCOPE ControllerAlgorithmTools {
+  class TLP3_COMPAT_SCOPE ControllerAlgorithmTools {
 
     public :
       

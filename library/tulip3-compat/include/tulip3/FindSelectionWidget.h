@@ -31,7 +31,7 @@ class Graph;
 class PropertyInterface;
 class BooleanProperty;
 
-class TLP_QT_SCOPE FindSelectionWidget : public QDialog,
+class TLP3_COMPAT_SCOPE FindSelectionWidget : public QDialog,
   public Ui::FindSelectionData {
   Q_OBJECT
 public:

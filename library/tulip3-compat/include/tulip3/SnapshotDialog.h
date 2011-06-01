@@ -34,7 +34,7 @@ namespace tlp {
 
 class LockLabel;
 
-  class TLP_QT_SCOPE SnapshotDialog : public QDialog,public Ui::SnapshotDialogData {
+  class TLP3_COMPAT_SCOPE SnapshotDialog : public QDialog,public Ui::SnapshotDialogData {
 
     Q_OBJECT
 

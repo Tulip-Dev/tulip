@@ -1,8 +1,5 @@
 INSTALL(FILES
-  tulip/TulipTableWidget.h
   tulip/GlMainWidget.h
-  tulip/TabWidget.h
-  tulip/PropertyDialog.h
   tulip/CopyPropertyDialog.h
   tulip/RenderingParametersDialog.h
   tulip/LayerManagerWidget.h
@@ -24,20 +21,11 @@ INSTALL(FILES
   tulip/MouseEdgeSelector.h
   tulip/MouseEdgeBendEditor.h
   tulip/MouseShowElementInfos.h
-  tulip/PropertyWidget.h
-  tulip/ElementPropertiesWidgetUI.h
-  tulip/ElementPropertiesWidget.h
-  tulip/FindSelectionWidget.h
   tulip/SGHierarchyWidget.h
   tulip/GWOverviewWidget.h
   tulip/TlpQtTools.h
   tulip/QtProgress.h
   tulip/PluginProgressWidget.h
-  tulip/Controller.h
-  tulip/ControllerAlgorithmTools.h
-  tulip/ControllerViewsTools.h
-  tulip/ControllerViewsManager.h
-  tulip/MainController.h
   tulip/View.h
   tulip/AbstractView.h
   tulip/GraphPropertiesSelectionWidget.h
@@ -63,11 +51,9 @@ INSTALL(FILES
   tulip/QtGlSceneZoomAndPanAnimator.h
   tulip/Morphing.h
   tulip/GraphPropertiesTableWidget.h
-  tulip/TextEditDialog.h
   tulip/SmallMultiplesView.h
   tulip/SmallMultiplesNavigatorComponent.h
   tulip/GlOffscreenRenderer.h
-  tulip/SnapshotDialog.h
   tulip/PropertyCreationDialog.h
   tulip/TulipSettings.h
   tulip/BaseGraphicsViewComponent.h

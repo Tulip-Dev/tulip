@@ -21,8 +21,8 @@
 #include <QtGui/qheaderview.h>
 #include <QtGui/qscrollbar.h>
 
-#include "tulip/TulipTableWidget.h"
-#include "tulip/ElementPropertiesWidget.h"
+#include "tulip3/TulipTableWidget.h"
+#include "tulip3/ElementPropertiesWidget.h"
 
 using namespace std;
 

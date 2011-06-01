@@ -17,7 +17,7 @@
  *
  */
 
-#include "tulip/SnapshotDialog.h"
+#include "tulip3/SnapshotDialog.h"
 
 #include <QtGui/QMessageBox>
 #include <QtGui/QImageWriter>

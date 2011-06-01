@@ -16,40 +16,31 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifndef _Tulip_TEXTEDITDIALOG_H
-#define _Tulip_TEXTEDITDIALOG_H
 
-#include <tulip/tulipconf.h>
+/**
+ Author: Morgan Mathiaut
+ Email : mathiaut@labri.fr
+ Last modification : 16/05/08
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by  
+ the Free Software Foundation; either version 2 of the License, or     
+ (at your option) any later version.
+*/
 
-#include <QtGui/QDialog>
+#ifndef Tulip_TABWIDGET_H
+#define Tulip_TABWIDGET_H
 
-#include "ui_TextEditDialog.h"
+#include "ui_TabWidget.h"
 
 namespace tlp {
 
-  class TLP_QT_SCOPE TextEditDialog : public QDialog,public Ui::TextEditDialogData {
-
-    Q_OBJECT
-
-  public :
-
-    TextEditDialog(const QString &text,QWidget *parent=NULL):QDialog(parent) {
+  class TLP3_COMPAT_SCOPE TabWidget : public QWidget, public Ui::TabWidgetData {
+  public:
+    TabWidget(QWidget* parent) : QWidget(parent) {
       setupUi(this);
-      // don't break focus chain
-      textEdit->setTabChangesFocus(true);
-      textEdit->setText(text);
     }
-
-    QString getText(){return textEdit->toPlainText();}
-
   };
-
-}
 
 #endif
 
-
-
-
-
-
+}

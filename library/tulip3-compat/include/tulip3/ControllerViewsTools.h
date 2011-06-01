@@ -30,7 +30,7 @@ namespace tlp {
    *
    * This class contain tools to use views in Controllers
    */
-  class TLP_QT_SCOPE ControllerViewsTools {
+  class TLP3_COMPAT_SCOPE ControllerViewsTools {
 
     public :
 

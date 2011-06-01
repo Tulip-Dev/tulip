@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/ListPropertyWidget.h>
+#include "tulip3/ListPropertyWidget.h"
 
 using namespace std;
 using namespace tlp;

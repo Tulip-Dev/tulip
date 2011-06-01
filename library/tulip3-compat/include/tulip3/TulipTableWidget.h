@@ -60,7 +60,7 @@ public:
 
 };
 
-class TLP_QT_SCOPE ColorButton: public QPushButton {
+class TLP3_COMPAT_SCOPE ColorButton: public QPushButton {
 
 Q_OBJECT
 	;Q_PROPERTY(QRgb color READ getColor)
@@ -79,7 +79,7 @@ public slots:
 	void colorDialog();
 };
 
-class TLP_QT_SCOPE FilenameEditor: public QWidget {
+class TLP3_COMPAT_SCOPE FilenameEditor: public QWidget {
 Q_OBJECT
 	;Q_PROPERTY(QString fileName READ fileName WRITE setFileName)
 	;Q_PROPERTY(QString filter READ filter WRITE setFilter)
@@ -111,7 +111,7 @@ private:
     QString basePath;
 };
 
-class TLP_QT_SCOPE SizeEditor: public QWidget {
+class TLP3_COMPAT_SCOPE SizeEditor: public QWidget {
 Q_OBJECT
 	;
 private:
@@ -165,7 +165,7 @@ public:
 };
 
 /* table items */
-class TLP_QT_SCOPE TulipTableWidgetItem: public QTableWidgetItem {
+class TLP3_COMPAT_SCOPE TulipTableWidgetItem: public QTableWidgetItem {
 public:
 	TulipTableWidgetItem(int type) :
 		QTableWidgetItem(type) {
@@ -209,7 +209,7 @@ private:
 /** \addtogroup Tulip_Widgets */
 /*@{*/
 /* this table handle displaying and editing node or edge properties */
-class TLP_QT_SCOPE TulipTableWidget: public QTableWidget {
+class TLP3_COMPAT_SCOPE TulipTableWidget: public QTableWidget {
 Q_OBJECT
 	;Q_PROPERTY(QColor backColor1 READ getBackColor1 WRITE setBackColor1 RESET resetBackColor1)
 	;Q_PROPERTY(QColor backColor2 READ getBackColor2 WRITE setBackColor2 RESET resetBackColor2)

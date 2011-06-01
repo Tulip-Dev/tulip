@@ -41,7 +41,7 @@
 #include <tulip/ForEach.h>
 
 
-#include "tulip/PropertyDialog.h"
+#include "tulip3/PropertyDialog.h"
 #include "tulip/PropertyCreationDialog.h"
 #include "tulip/CopyPropertyDialog.h"
 #include "tulip/CSVImportWizard.h"
