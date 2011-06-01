@@ -232,6 +232,17 @@ IF(WIN32 OR APPLE) # Components shared between Mac OS and Win32 plateforms
     "tulip_ogdf"
     ${PLUGINS_GROUP_NAME})
 
+  DEFINE_COMPONENT(tulip3_compat
+    "Tulip 3 compatibility layer"
+    "Classes kept from Tulip3 for compatibility purposes."
+    "tulip_core;tulip_ogl;tulip_gui"
+    ${LIBS_GROUP_NAME})
+
+  DEFINE_COMPONENT(tulip3_compat_dev
+    "Tulip 3 compatiblity layer (headers)"
+    "Headers for the Tulip 3 compatibility layer."
+    "tulip3_compat"
+    ${HEADERS_GROUP_NAME})
 
   DEFINE_COMPONENT(tulip_python
     "TulipPython"
@@ -287,6 +298,9 @@ IF(WIN32) # NSIS-specific behavior for installation types
   SET(CPACK_COMPONENT_TULIP_OGDF_INSTALL_TYPES Full Framework)
   SET(CPACK_COMPONENT_TULIP_OGDF_DEV_INSTALL_TYPES Full Framework)
   SET(CPACK_COMPONENT_TULIP_OGDF_PLUGINS_INSTALL_TYPES Full)
+
+  SET(CPACK_COMPONENT_TULIP3_COMPAT_INSTALL_TYPES Full Framework)
+  SET(CPACK_COMPONENT_TULIP3_COMPAT_DEV_INSTALL_TYPES Full Framework)
 
   SET(CPACK_COMPONENT_TULIP_PYTHON_INSTALL_TYPES Full Framework)
 
