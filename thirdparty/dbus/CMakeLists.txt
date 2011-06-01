@@ -4,3 +4,7 @@ INSTALL(FILES
   etc/dbus-1/system.conf
 DESTINATION etc/dbus-1/
 COMPONENT dbus)
+
+IF(APPLE)
+  ADD_SUBDIRECTORY(libdbus)
+ENDIF(APPLE)
