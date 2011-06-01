@@ -18,17 +18,16 @@ int main(int argc, char **argv) {
   tulip_agent.setApplicationName(QObject::trUtf8("Tulip Agent"));
   QLocale::setDefault(QLocale(QLocale::English));
 
+#if defined(__APPLE__) // allows to load qt imageformats plugin
+  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
+#endif
+
   // There can be only one tulip_agent running at a time on the same system.
   // To ensure that no agent is already running, we check the existence of an org.labri.Tulip service on the session bus.
   if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.labri.Tulip").value()) {
     qWarning("Tulip agent is already running. Note that you can only have one at a time on your system. Please check your system tray to display the tulip agent window.");
     exit(1);
   }
-
-
-#if defined(__APPLE__) // allows to load qt imageformats plugin
-  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
-#endif
 
   tlp::initTulipLib(QApplication::applicationDirPath().toStdString().c_str());
 

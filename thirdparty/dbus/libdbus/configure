@@ -19475,7 +19475,7 @@ if test "x$GCC" = "xyes"; then
 
   case " $CFLAGS " in
   *[\ \	]-Wno-address[\ \	]*) ;;
-  *) CFLAGS="$CFLAGS -Wno-address" ;;
+  *) CFLAGS="$CFLAGS" ;;
   esac
 
   case " $CFLAGS " in
