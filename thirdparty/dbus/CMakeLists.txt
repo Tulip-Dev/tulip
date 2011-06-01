@@ -16,7 +16,7 @@ ELSEIF(APPLE)
   INSTALL(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/dbus/lib/libdbus-1.dylib
     ${CMAKE_CURRENT_BINARY_DIR}/dbus/lib/libdbus-1.3.dylib
-  DESTINATION ${TulipBinInstallDir} COMPONENT dbus)
+  DESTINATION ${TulipLibInstallDir} COMPONENT dbus)
   INSTALL(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/dbus/bin/dbus-daemon
     ${CMAKE_CURRENT_BINARY_DIR}/dbus/bin/dbus-launch
