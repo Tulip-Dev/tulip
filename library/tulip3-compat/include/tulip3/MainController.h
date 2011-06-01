@@ -24,7 +24,7 @@
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 
-#include "tulip/ControllerViewsManager.h"
+#include "tulip3/ControllerViewsManager.h"
 
 class QAction;
 class QMenu;
@@ -46,7 +46,7 @@ namespace tlp {
    * On left : Property, and hierarchical view
    * In view menu you have access to all view plugins
    */
-  class TLP_QT_SCOPE MainController :  public ControllerViewsManager,
+  class TLP3_COMPAT_SCOPE MainController :  public ControllerViewsManager,
     protected Observable, private GraphObserver {
 
     Q_OBJECT;

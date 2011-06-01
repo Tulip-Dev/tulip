@@ -25,7 +25,7 @@
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
 #include <tulip/Graph.h>
-#include "tulip/ElementPropertiesWidgetUI.h"
+#include "tulip3/ElementPropertiesWidgetUI.h"
 
 namespace tlp {
 

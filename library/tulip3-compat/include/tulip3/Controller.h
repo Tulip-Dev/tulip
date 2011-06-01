@@ -27,7 +27,7 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginLister.h>
 #include <tulip/Vector.h>
-#include "Interactor.h"
+#include <tulip/Interactor.h>
 #include <tulip/AbstractPluginInfo.h>
 
 class QMenuBar;
@@ -42,7 +42,7 @@ namespace tlp {
    * This class provide a facade of QMainWindow
    * It is used by Controller to acces to QMainWindow
    */
-	class TLP_QT_SCOPE MainWindowFacade {
+  class TLP3_COMPAT_SCOPE MainWindowFacade {
 
 	public :
 
@@ -166,7 +166,7 @@ namespace tlp {
    *  Tulip controller interface class
    *  If you want to create a new Controller : implement setData and getData and extend attachMainWindow (see attachMainWindow description)
    */
-  class TLP_QT_SCOPE Controller : public QObject, public WithParameter, public WithDependency{
+  class TLP3_COMPAT_SCOPE Controller : public QObject, public WithParameter, public WithDependency{
 
     Q_OBJECT;
 
@@ -235,13 +235,13 @@ namespace tlp {
 
   };
 
-  class TLP_QT_SCOPE ControllerContext {
+  class TLP3_COMPAT_SCOPE ControllerContext {
   };
 
   typedef StaticPluginLister<Controller, ControllerContext*> ControllerLister;
 
 #ifdef WIN32
-  template class TLP_QT_SCOPE PluginLister<Controller,ControllerContext *>;
+  template class TLP3_COMPAT_SCOPE PluginLister<Controller,ControllerContext *>;
 #endif
 
 }

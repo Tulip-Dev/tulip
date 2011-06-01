@@ -24,7 +24,7 @@
 #include <map>
 #include <string>
 
-#include "tulip/Controller.h"
+#include "tulip3/Controller.h"
 
 class QWidget;
 class QAction;
@@ -38,7 +38,7 @@ namespace tlp {
    *
    * This class manage views for Controllers 
    */
-  class TLP_QT_SCOPE ControllerViewsManager : public Controller {
+  class TLP3_COMPAT_SCOPE ControllerViewsManager : public Controller {
 
     Q_OBJECT;
     

@@ -22,7 +22,7 @@ SET(SRCS
 
 QT4_ADD_RESOURCES(RCC_SRCS ../designer/TulipResource.qrc)
 
-INCLUDE_DIRECTORIES(../include/ ${TulipCoreBuildInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreInclude} ${TulipGUIInclude} ${TulipOGLInclude} ${PROJECT_SOURCE_DIR}/software/plugins-manager/include/)
+INCLUDE_DIRECTORIES(../include/ ${TulipCoreBuildInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreInclude} ${TulipGUIInclude} ${TulipOGLInclude} ${Tulip3CompatInclude} ${Tulip3CompatBuildInclude} ${PROJECT_SOURCE_DIR}/software/tulip3/plugins-manager/include/)
 
 ADD_DEFINITIONS("-DQT_MINOR_REL=${QT_VERSION_MINOR}")
 
@@ -33,13 +33,13 @@ IF(WIN32)
   IF(NOT ${MSVC})
     TARGET_LINK_LIBRARIES(tulip -mwindows)
   ENDIF()
-  TARGET_LINK_LIBRARIES(tulip ${QT_LIBRARIES})
+  TARGET_LINK_LIBRARIES(tulip ${QT_LIBRARIES} ${LibTulip3CompatName})
 ENDIF(WIN32)
 
 # Tulip need restart executable
 ADD_EXECUTABLE(tulip_need_restart TulipNeedRestart.cpp)
 SET_TARGET_PROPERTIES(tulip_need_restart PROPERTIES INSTALL_RPATH ${TulipLibInstallDir})
-TARGET_LINK_LIBRARIES( tulip_need_restart ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
+TARGET_LINK_LIBRARIES( tulip_need_restart ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulip3CompatName})
 
 #Tulip app
 ADD_EXECUTABLE(tulip_app ${UI_HEADERS} ${MOC_SRCS} ${SRCS} ${RCC_SRCS})
@@ -66,6 +66,7 @@ TARGET_LINK_LIBRARIES( tulip_app ${QT_QTXML_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipCoreName})
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipOglName})
 TARGET_LINK_LIBRARIES( tulip_app ${LibTulipGUIName})
+TARGET_LINK_LIBRARIES( tulip_app ${LibTulip3CompatName})
 
 IF(WIN32)
   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio") #if generating for visual studio, we assume the compiler will be vc++

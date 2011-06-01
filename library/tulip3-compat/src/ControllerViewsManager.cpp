@@ -16,15 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/ControllerViewsManager.h"
+#include "tulip3/ControllerViewsManager.h"
 
 #include <QtGui/QWorkspace>
 #include <QtGui/QToolBar>
 
 #include <tulip/Graph.h>
 
-#include "tulip/View.h"
-#include "tulip/ControllerViewsTools.h"
+#include <tulip/View.h>
+#include "tulip3/ControllerViewsTools.h"
 
 using namespace std;
 

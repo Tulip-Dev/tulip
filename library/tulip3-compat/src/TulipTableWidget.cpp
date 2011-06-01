@@ -51,9 +51,9 @@
 #include <tulip/GlTextureManager.h>
 
 #include "tulip/TlpQtTools.h"
-#include "tulip/TulipTableWidget.h"
-#include "tulip/TextEditDialog.h"
-#include <tulip/ListPropertyWidget.h>
+#include "tulip3/TulipTableWidget.h"
+#include "tulip3/TextEditDialog.h"
+#include "tulip3/ListPropertyWidget.h"
 
 #define COLORTABLEITEM_RTTI 1001
 #define FILETABLEITEM_RTTI  1002

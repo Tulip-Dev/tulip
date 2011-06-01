@@ -24,13 +24,13 @@
 **
 ****************************************************************************/
 
-#include "../include/tulip/ElementPropertiesWidgetUI.h"
+#include "tulip3/ElementPropertiesWidgetUI.h"
 
 #include <QtGui/qlabel.h>
 #include <QtGui/qlayout.h>
 #include <QtGui/qwhatsthis.h>
 
-#include <tulip/PropertyWidget.h>
+#include "tulip3/PropertyWidget.h"
 
 using namespace tlp;
 

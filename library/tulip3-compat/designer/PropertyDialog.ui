@@ -209,7 +209,7 @@
   <customwidget>
    <class>PropertyWidget</class>
    <extends>QTableWidget</extends>
-   <header>tulip/PropertyWidget.h</header>
+   <header>tulip3/PropertyWidget.h</header>
   </customwidget>
   <customwidget>
    <class>tlp::GraphPropertiesTableWidget</class>

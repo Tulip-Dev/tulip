@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/MainController.h"
+#include "tulip3/MainController.h"
 
 #include <QtGui/QDockWidget>
 #include <QtGui/QWorkspace>
@@ -44,14 +44,14 @@
 #include <tulip/ForEach.h>
 #include <tulip/DrawingTools.h>
 
-#include "tulip/ControllerAlgorithmTools.h"
-#include "tulip/ControllerViewsTools.h"
-#include "tulip/TabWidget.h"
-#include "tulip/Morphing.h"
-#include "tulip/FindSelectionWidget.h"
-#include "tulip/NodeLinkDiagramComponent.h"
-#include "tulip/GlMainWidget.h"
-#include "tulip/SnapshotDialog.h"
+#include "tulip3/ControllerAlgorithmTools.h"
+#include "tulip3/ControllerViewsTools.h"
+#include "tulip3/TabWidget.h"
+#include <tulip/Morphing.h>
+#include "tulip3/FindSelectionWidget.h"
+#include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/GlMainWidget.h>
+#include "tulip3/SnapshotDialog.h"
 
 using namespace std;
 

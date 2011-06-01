@@ -104,10 +104,10 @@
   </customwidget>
  </customwidgets>
  <includes>
-  <include location="local" >../include/tulip/PropertyDialog.h</include>
-  <include location="local" >../include/tulip/ElementPropertiesWidget.h</include>
-  <include location="local" >../include/tulip/PropertyWidget.h</include>
-  <include location="local" >../include/tulip/SGHierarchyWidget.h</include>
+  <include location="local" >../include/tulip3/PropertyDialog.h</include>
+  <include location="local" >../include/tulip3/ElementPropertiesWidget.h</include>
+  <include location="local" >../include/tulip3/PropertyWidget.h</include>
+  <include location="local" >tulip/SGHierarchyWidget.h</include>
  </includes>
  <resources/>
  <connections/>

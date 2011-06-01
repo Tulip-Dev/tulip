@@ -52,9 +52,9 @@
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GlTextureManager.h>
 
-#include "tulip/TlpQtTools.h"
-#include "tulip/PropertyWidget.h"
-#include "tulip/TextEditDialog.h"
+#include <tulip/TlpQtTools.h>
+#include "tulip3/PropertyWidget.h"
+#include "tulip3/TextEditDialog.h"
 
 #define TABLEBUFSIZE 100
 

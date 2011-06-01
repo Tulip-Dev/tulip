@@ -53,17 +53,19 @@ SET(SRCS
   NewTulipVersionAvailableDialog.cpp
 )
 
-INCLUDE_DIRECTORIES(../include/ ${TulipCoreInclude} ${TulipCoreBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${TulipGUIInclude})
+INCLUDE_DIRECTORIES(../include/ ${TulipCoreInclude} ${TulipCoreBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${TulipGUIInclude} ${Tulip3CompatInclude} ${Tulip3CompatBuildInclude})
 
 # tulip_check_pl
 ADD_EXECUTABLE(tulip_check_pl TulipCheckPluginLoad.cpp)
 TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipCoreName} ${CMAKE_DL_LIBS})
 TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulipGUIName} )
 TARGET_LINK_LIBRARIES(tulip_check_pl "tulip-pluginsmanager-${TulipMMVersion}")
+TARGET_LINK_LIBRARIES(tulip_check_pl ${LibTulip3CompatName})
 
 # pluginsmanager library
 ADD_LIBRARY("tulip-pluginsmanager-${TulipMMVersion}" STATIC ${SRCS} ${UI_HEADERS} ${MOC_SRCS})
 TARGET_LINK_LIBRARIES("tulip-pluginsmanager-${TulipMMVersion}" ${QT_QTNETWORK_LIBRARY})
+TARGET_LINK_LIBRARIES("tulip-pluginsmanager-${TulipMMVersion}" ${LibTulip3CompatName})
 
 IF(${MSVC})
   INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip_check_pl.exe DESTINATION "${TulipBinInstallDir}" COMPONENT tulip_pluginsmanager)

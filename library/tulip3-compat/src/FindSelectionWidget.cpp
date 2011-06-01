@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/FindSelectionWidget.h"
+#include "tulip3/FindSelectionWidget.h"
 
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
@@ -41,7 +41,7 @@ static bool IsEvaluableProxy( PropertyInterface *p) {
     dynamic_cast<BooleanProperty*>(p) || dynamic_cast<IntegerProperty*>(p);
 }
 
-struct TLP_QT_SCOPE GItem {
+struct TLP3_COMPAT_SCOPE GItem {
   GItem( const node & inN ): n(inN), isnode(true) {}
   GItem( const edge & inE ): e(inE), isnode(false) {}
   node n;

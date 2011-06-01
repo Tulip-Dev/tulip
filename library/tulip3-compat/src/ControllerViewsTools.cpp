@@ -16,15 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/ControllerViewsTools.h"
+#include "tulip3/ControllerViewsTools.h"
 
 #include <QtGui/QToolBar>
 #include <QtGui/QAction>
 #include <QtGui/QGridLayout>
 #include <QtGui/QLabel>
 
-#include "tulip/InteractorManager.h"
-#include "tulip/Interactor.h"
+#include <tulip/InteractorManager.h>
+#include <tulip/Interactor.h>
 
 using namespace std;
 

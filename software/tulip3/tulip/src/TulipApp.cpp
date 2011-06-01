@@ -36,13 +36,13 @@
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/NodeLinkDiagramComponent.h>
-#include <tulip/MainController.h>
+#include <tulip3/MainController.h>
 #include <tulip/QtProgress.h>
 #include <tulip/PreferenceManager.h>
 #include <tulip/QtOpenGlErrorViewer.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 
-#include <tulip/ControllerAlgorithmTools.h>
+#include <tulip3/ControllerAlgorithmTools.h>
 
 #include <PluginsUpdateChecker.h>
 #include <PluginsHelp.h>

@@ -36,7 +36,7 @@ class Graph;
 class GlMainWidget;
 class PropertyInterface;
 
-class TLP_QT_SCOPE PropertyDialog: public QWidget, public Ui::PropertyDialogData {
+class TLP3_COMPAT_SCOPE PropertyDialog: public QWidget, public Ui::PropertyDialogData {
 Q_OBJECT
   ;
 

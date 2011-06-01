@@ -27,7 +27,7 @@
 #include <tulip/tuliphash.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
-#include <tulip/TulipTableWidget.h>
+#include "tulip3/TulipTableWidget.h"
 
 #include "ui_ChooseFileNameDialog.h"
 

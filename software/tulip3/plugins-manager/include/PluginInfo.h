@@ -37,7 +37,7 @@
 #include <tulip/ExportModule.h>
 #include <tulip/Interactor.h>
 #include <tulip/View.h>
-#include <tulip/Controller.h>
+#include <tulip3/Controller.h>
 
 namespace tlp {
 
