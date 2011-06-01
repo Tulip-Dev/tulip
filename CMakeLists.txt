@@ -91,6 +91,7 @@ SET(LibStlPythonName "stlpython")
 SET(LibTulipPythonName "tulip-core-python-${TulipMMVersion}")
 SET(LibTulipOglPythonName "tulip-ogl-python-${TulipMMVersion}")
 SET(LibTulipGUIPythonName "tulip-gui-python-${TulipMMVersion}")
+SET(LibTulip3CompatName "tulip3-compat-${TulipMMVersion}")
 
 ## -----------------------------------------------------------------------------------------------
 ## Find needed packages
@@ -207,6 +208,8 @@ SET(TulipOGLInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogl/include/)
 SET(TulipOGDFInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogdf/)
 SET(TulipGUIInclude ${PROJECT_SOURCE_DIR}/library/tulip-gui/include/)
 SET(TulipGUIBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-gui/include/)
+SET(Tulip3CompatInclude ${PROJECT_SOURCE_DIR}/library/tulip3-compat/include/)
+SET(Tulip3CompatBuildInclude ${PROJECT_BINARY_DIR}/library/tulip3-compat/include/)
 
 ## -----------------------------------------------------------------------------------------------
 ## Install paths
