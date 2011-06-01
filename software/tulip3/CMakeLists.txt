@@ -1,0 +1,2 @@
+ADD_SUBDIRECTORY(tulip)
+ADD_SUBDIRECTORY(plugins-manager)
