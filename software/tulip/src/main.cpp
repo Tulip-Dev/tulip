@@ -13,6 +13,10 @@
 #include "TulipSplashScreen.h"
 #include "PluginsCenter.h"
 
+#if defined(__APPLE__)
+#include <QtCore/QDir>
+#endif
+
 int main(int argc, char **argv) {
   QApplication tulip_agent(argc, argv);
   tulip_agent.setApplicationName(QObject::trUtf8("Tulip Agent"));
@@ -20,6 +24,7 @@ int main(int argc, char **argv) {
 
 #if defined(__APPLE__) // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
+  QDir::setCurrent(QApplication::applicationDirPath() + "/../Frameworks");
 #endif
 
   // There can be only one tulip_agent running at a time on the same system.
