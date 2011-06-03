@@ -48,6 +48,7 @@ private:
   QVector<QObject *> _pageChoosers;
 
 
+
 // Methods and properties coming from the D-Bus service implementation
 public:
   Q_PROPERTY(qlonglong pid READ pid)

@@ -51,7 +51,7 @@ void TulipMainWindow::startApp() {
 void TulipMainWindow::closeApp() {
   _systemTrayIcon->hide();
   delete _systemTrayIcon;
-  QApplication::exit();
+  QApplication::exit(0);
 }
 
 void TulipMainWindow::closeEvent(QCloseEvent *e) {

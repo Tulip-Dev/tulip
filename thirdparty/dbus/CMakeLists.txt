@@ -20,10 +20,14 @@ ELSEIF(APPLE)
   INSTALL(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/dbus/bin/dbus-daemon
     ${CMAKE_CURRENT_BINARY_DIR}/dbus/bin/dbus-launch
+  PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE WORLD_READ WORLD_EXECUTE
   DESTINATION ${TulipBinInstallDir} COMPONENT dbus)
   INSTALL(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/dbus/etc/dbus-1/session.conf
     ${CMAKE_CURRENT_BINARY_DIR}/dbus/etc/dbus-1/system.conf
+  DESTINATION ${TulipBinInstallDir}/../etc/dbus-1/ COMPONENT dbus)
+  INSTALL(DIRECTORY
+    ${CMAKE_CURRENT_BINARY_DIR}/dbus/etc/dbus-1/session.d
   DESTINATION ${TulipBinInstallDir}/../etc/dbus-1/ COMPONENT dbus)
 
 ENDIF()
