@@ -15,6 +15,8 @@
 
 #if defined(__APPLE__)
 #include <QtCore/QDir>
+#include <sys/types.h>
+#include <signal.h>
 #endif
 
 int main(int argc, char **argv) {
@@ -24,7 +26,26 @@ int main(int argc, char **argv) {
 
 #if defined(__APPLE__) // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
+
+  // Switch the current directory to ensure that libdbus is loaded
+  QString currentPath = QDir::currentPath();
   QDir::setCurrent(QApplication::applicationDirPath() + "/../Frameworks");
+
+  // Manually run the dbus daemon
+  QProcess dbus_daemon;
+  dbus_daemon.setProcessChannelMode(QProcess::MergedChannels);
+  dbus_daemon.start(QApplication::applicationDirPath() + "/dbus-launch");
+  // Retrieve session bus address and update environment variables
+  dbus_daemon.waitForReadyRead(-1);
+  QRegExp sessionBusAddressRegexp("^DBUS_SESSION_BUS_ADDRESS\\=(unix\\:[^\\n\\r]*).*");
+  if (sessionBusAddressRegexp.exactMatch(dbus_daemon.readLine()))
+      setenv("DBUS_SESSION_BUS_ADDRESS",sessionBusAddressRegexp.cap(1).toStdString().c_str(),1);
+
+  // Retrieve dbus_daemon PID to be able to kill it when application ends.
+  QRegExp dbusPidRegexp("DBUS_SESSION_BUS_PID\\=([0-9]*).*");
+  pid_t dbusPid = 0;
+  if (dbusPidRegexp.exactMatch(dbus_daemon.readLine()))
+    dbusPid = dbusPidRegexp.cap(1).toLong();
 #endif
 
   // There can be only one tulip_agent running at a time on the same system.
@@ -33,6 +54,10 @@ int main(int argc, char **argv) {
     qWarning("Tulip agent is already running. Note that you can only have one at a time on your system. Please check your system tray to display the tulip agent window.");
     exit(1);
   }
+
+#if defined(__APPLE__) // revert current directory
+  QDir::setCurrent(currentPath);
+#endif
 
   tlp::initTulipLib(QApplication::applicationDirPath().toStdString().c_str());
 
@@ -67,5 +92,10 @@ int main(int argc, char **argv) {
 
   mainWindow->startApp();
 
-  return tulip_agent.exec();
+  int result = tulip_agent.exec();
+#if defined(__APPLE__) // manually kill D-Bus process
+  qWarning() << "Terminating D-Bus at PID: " << dbusPid;
+  kill(dbusPid,SIGKILL);
+#endif
+  return result;
 }
