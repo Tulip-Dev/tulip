@@ -6,4 +6,4 @@ ADD_SUBDIRECTORY(plugin_server)
 #ADD_SUBDIRECTORY(tlprender)
 
 # Tulip 3 executables
-ADD_SUBDIRECTORY(tulip3)
+#ADD_SUBDIRECTORY(tulip3)
