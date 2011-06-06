@@ -70,6 +70,8 @@ public:
   */
 class TLP_QT_SCOPE Perspective : public QObject, public WithParameter, public WithDependency {
   Q_OBJECT
+
+protected:
   QMainWindow *_mainWindow;
 public:
 
@@ -108,11 +110,11 @@ template class TLP_QT_SCOPE PluginLister<Perspective, PerspectiveContext>;
 }
 
 #define PERSPECTIVEPLUGINFACTORY(T,C,N,A,D,I,R,G) \
-class C##T##Factory:public tlp::T##Factory              \
+class C##T##Factory:public tlp::FactoryInterface<tlp::T,tlp::T##Context> \
 {                                                       \
 public:            \
   C##T##Factory(){          \
-    StaticPluginLister<tlp::T, tlp::T##Context>::registerPlugin(this);     \
+    tlp::StaticPluginLister<tlp::T, tlp::T##Context>::registerPlugin(this);     \
   }             \
   ~C##T##Factory(){}          \
   std::string getName() const { return std::string(N);} \

@@ -61,6 +61,7 @@ INSTALL(FILES
   tulip/GraphicsWidgetBase.h
   tulip/TulipProject.h
   tulip/SimplePluginProgressWidget.h
+  tulip/Perspective.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
