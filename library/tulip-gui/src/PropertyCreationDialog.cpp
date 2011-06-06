@@ -24,6 +24,23 @@ PropertyCreationDialog::PropertyCreationDialog(Graph* graph,QWidget *parent ):
 
 void PropertyCreationDialog::initGui(){
     ui->setupUi(this);
+    QStringList labels;
+    //Init properties list
+    labels<<propertyTypeToPropertyTypeLabel("color");
+    labels<<propertyTypeToPropertyTypeLabel("int");
+    labels<<propertyTypeToPropertyTypeLabel("layout");
+    labels<<propertyTypeToPropertyTypeLabel("double");
+    labels<<propertyTypeToPropertyTypeLabel("bool");
+    labels<<propertyTypeToPropertyTypeLabel("size");
+    labels<<propertyTypeToPropertyTypeLabel("string");
+    labels<<propertyTypeToPropertyTypeLabel("vector<bool>");
+    labels<<propertyTypeToPropertyTypeLabel("vector<color>");
+    labels<<propertyTypeToPropertyTypeLabel("vector<coord>");
+    labels<<propertyTypeToPropertyTypeLabel("vector<double>");
+    labels<<propertyTypeToPropertyTypeLabel("vector<int>");
+    labels<<propertyTypeToPropertyTypeLabel("vector<size>");
+    labels<<propertyTypeToPropertyTypeLabel("vector<string>");
+    ui->propertyTypeComboBox->addItems(labels);
     _createPropertyButton = ui->buttonBox->addButton(tr("Create"),QDialogButtonBox::AcceptRole);
     ui->errorIconLabel->setPixmap(QApplication::style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(16,16));
     connect(ui->propertyNameLineEdit,SIGNAL(textChanged(QString)),this,SLOT(checkValidity()));
@@ -54,43 +71,14 @@ void PropertyCreationDialog::accept(){
         error = true;
     }
     if (_graph->existLocalProperty(QStringToTlpString(propertyName))) {
-        QMessageBox::warning(this, "Fail to create property", "A property with same name already exist", QMessageBox::Ok,
+        QMessageBox::warning(this, "Fail to create property", "A property with the same name already exist", QMessageBox::Ok,
                              QMessageBox::Ok);
         error = true;
     }
 
     if(!error){
         _graph->push();
-
-        QString propertyType = ui->propertyTypeComboBox->currentText();
-        if (propertyType == trUtf8("Selection"))
-            _createdProperty = _graph->getLocalProperty<BooleanProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("Metric"))
-            _createdProperty =_graph->getLocalProperty<DoubleProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("Layout"))
-            _createdProperty =_graph->getLocalProperty<LayoutProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("String"))
-            _createdProperty =_graph->getLocalProperty<StringProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("Integer"))
-            _createdProperty =_graph->getLocalProperty<IntegerProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("Size"))
-            _createdProperty =_graph->getLocalProperty<SizeProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("Color"))
-            _createdProperty =_graph->getLocalProperty<ColorProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("BooleanVector"))
-            _createdProperty =_graph->getLocalProperty<BooleanVectorProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("DoubleVector"))
-            _createdProperty =_graph->getLocalProperty<DoubleVectorProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("CoordVector"))
-            _createdProperty =_graph->getLocalProperty<CoordVectorProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("StringVector"))
-            _createdProperty =_graph->getLocalProperty<StringVectorProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("IntegerVector"))
-            _createdProperty =_graph->getLocalProperty<IntegerVectorProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("SizeVector"))
-            _createdProperty =_graph->getLocalProperty<SizeVectorProperty> (QStringToTlpString(propertyName));
-        if (propertyType == trUtf8("ColorVector"))
-            _createdProperty =_graph->getLocalProperty<ColorVectorProperty> (QStringToTlpString(propertyName));
+        _createdProperty = _graph->getProperty(QStringToTlpString(propertyName),propertyTypeLabelToPropertyType(ui->propertyTypeComboBox->currentText()));
     }
     QDialog::accept();
 }
@@ -118,7 +106,7 @@ void PropertyCreationDialog::checkValidity(){
         ui->errorNotificationWidget->setVisible(true);
         return;
     } else if (_graph->existLocalProperty(QStringToTlpString(propertyName))) {
-        ui->errorLabel->setText(tr("A property with same name already exist"));
+        ui->errorLabel->setText(tr("A property with the same name already exist"));
         _createPropertyButton->setEnabled(false);
         ui->errorNotificationWidget->setVisible(true);
         return;

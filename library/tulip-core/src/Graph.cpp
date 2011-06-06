@@ -460,46 +460,46 @@ void Graph::notifyDestroy() {
   }
 }
 PropertyInterface *Graph::getLocalProperty(const std::string& propertyName, const std::string& propertyType){
-    if (propertyType.compare("double") == 0) {
+    if (propertyType.compare(DoubleProperty::propertyTypename) == 0) {
         return getLocalProperty<DoubleProperty> (propertyName);
     }
-    else if (propertyType.compare("layout")==0) {
+    else if (propertyType.compare(LayoutProperty::propertyTypename)==0) {
         return getLocalProperty<LayoutProperty> (propertyName);
     }
-    else if (propertyType.compare("string")==0) {
+    else if (propertyType.compare(StringProperty::propertyTypename)==0) {
         return getLocalProperty<StringProperty> (propertyName);
     }
-    else if (propertyType.compare("int")==0) {
+    else if (propertyType.compare(IntegerProperty::propertyTypename)==0) {
         return getLocalProperty<IntegerProperty> (propertyName);
     }
-    else if (propertyType.compare("color")==0) {
+    else if (propertyType.compare(ColorProperty::propertyTypename)==0) {
         return getLocalProperty<ColorProperty> (propertyName);
     }
-    else if (propertyType.compare("size")==0) {
+    else if (propertyType.compare(SizeProperty::propertyTypename)==0) {
         return getLocalProperty<SizeProperty> (propertyName);
     }
-    else if (propertyType.compare("bool")==0) {
+    else if (propertyType.compare(BooleanProperty::propertyTypename)==0) {
         return getLocalProperty<BooleanProperty> (propertyName);
     }
-    else if (propertyType.compare("vector<double>")==0) {
+    else if (propertyType.compare(DoubleVectorProperty::propertyTypename)==0) {
         return getLocalProperty<DoubleVectorProperty> (propertyName);
     }
-    else if (propertyType.compare("vector<string>")==0) {
+    else if (propertyType.compare(StringVectorProperty::propertyTypename)==0) {
         return getLocalProperty<StringVectorProperty> (propertyName);
     }
-    else if (propertyType.compare("vector<int>")==0) {
+    else if (propertyType.compare(IntegerVectorProperty::propertyTypename)==0) {
         return getLocalProperty<IntegerVectorProperty> (propertyName);
     }
-    else if (propertyType.compare("vector<coord>")==0) {
+    else if (propertyType.compare(CoordVectorProperty::propertyTypename)==0) {
         return getLocalProperty<CoordVectorProperty> (propertyName);
     }
-    else if (propertyType.compare("vector<color>")==0) {
+    else if (propertyType.compare(ColorVectorProperty::propertyTypename)==0) {
         return getLocalProperty<ColorVectorProperty> (propertyName);
     }
-    else if (propertyType.compare("BooleanVector")==0) {
+    else if (propertyType.compare(BooleanVectorProperty::propertyTypename)==0) {
         return getLocalProperty<BooleanVectorProperty> (propertyName);
     }
-    else if (propertyType.compare("SizeVector")==0) {
+    else if (propertyType.compare(SizeVectorProperty::propertyTypename)==0) {
         return getLocalProperty<SizeVectorProperty> (propertyName);
     }
     else {
@@ -508,49 +508,50 @@ PropertyInterface *Graph::getLocalProperty(const std::string& propertyName, cons
 }
 
 PropertyInterface *Graph::getProperty(const std::string& propertyName, const std::string& propertyType){
-    if (propertyType.compare("double") == 0) {
+    if (propertyType.compare(DoubleProperty::propertyTypename) == 0) {
         return getProperty<DoubleProperty> (propertyName);
     }
-    else if (propertyType.compare("layout")==0) {
+    else if (propertyType.compare(LayoutProperty::propertyTypename)==0) {
         return getProperty<LayoutProperty> (propertyName);
     }
-    else if (propertyType.compare("string")==0) {
+    else if (propertyType.compare(StringProperty::propertyTypename)==0) {
         return getProperty<StringProperty> (propertyName);
     }
-    else if (propertyType.compare("int")==0) {
+    else if (propertyType.compare(IntegerProperty::propertyTypename)==0) {
         return getProperty<IntegerProperty> (propertyName);
     }
-    else if (propertyType.compare("color")==0) {
+    else if (propertyType.compare(ColorProperty::propertyTypename)==0) {
         return getProperty<ColorProperty> (propertyName);
     }
-    else if (propertyType.compare("size")==0) {
+    else if (propertyType.compare(SizeProperty::propertyTypename)==0) {
         return getProperty<SizeProperty> (propertyName);
     }
-    else if (propertyType.compare("bool")==0) {
+    else if (propertyType.compare(BooleanProperty::propertyTypename)==0) {
         return getProperty<BooleanProperty> (propertyName);
     }
-    else if (propertyType.compare("vector<double>")==0) {
+    else if (propertyType.compare(DoubleVectorProperty::propertyTypename)==0) {
         return getProperty<DoubleVectorProperty> (propertyName);
     }
-    else if (propertyType.compare("vector<string>")==0) {
+    else if (propertyType.compare(StringVectorProperty::propertyTypename)==0) {
         return getProperty<StringVectorProperty> (propertyName);
     }
-    else if (propertyType.compare("vector<int>")==0) {
+    else if (propertyType.compare(IntegerVectorProperty::propertyTypename)==0) {
         return getProperty<IntegerVectorProperty> (propertyName);
     }
-    else if (propertyType.compare("vector<coord>")==0) {
+    else if (propertyType.compare(CoordVectorProperty::propertyTypename)==0) {
         return getProperty<CoordVectorProperty> (propertyName);
     }
-    else if (propertyType.compare("vector<color>")==0) {
+    else if (propertyType.compare(ColorVectorProperty::propertyTypename)==0) {
         return getProperty<ColorVectorProperty> (propertyName);
     }
-    else if (propertyType.compare("BooleanVector")==0) {
+    else if (propertyType.compare(BooleanVectorProperty::propertyTypename)==0) {
         return getProperty<BooleanVectorProperty> (propertyName);
     }
-    else if (propertyType.compare("SizeVector")==0) {
+    else if (propertyType.compare(SizeVectorProperty::propertyTypename)==0) {
         return getProperty<SizeVectorProperty> (propertyName);
     }
     else {
         return NULL;
     }
 }
+
