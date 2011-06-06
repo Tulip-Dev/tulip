@@ -50,9 +50,11 @@ public :
   bool setAllNodeStringValue(const std::string & v);
   bool setEdgeStringValue( const edge e, const std::string & v);
   bool setAllEdgeStringValue(const std::string & v);
-  std::string getTypename() const {
-    return "graph";
-  }
+  static const std::string propertyTypename;
+   std::string getTypename() const {
+     return propertyTypename;
+   }
+
 
   // redefinition of some AbstractProperty methods 
   virtual void setNodeValue(const node n, const GraphType::RealType& g);

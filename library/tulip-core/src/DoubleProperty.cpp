@@ -24,6 +24,9 @@
 using namespace std;
 using namespace tlp;
 
+const string DoubleProperty::propertyTypename="double";
+const string DoubleVectorProperty::propertyTypename="vector<double>";
+
 //=============================================================
 // Predefined Meta Value Calculators
 //=============================================================

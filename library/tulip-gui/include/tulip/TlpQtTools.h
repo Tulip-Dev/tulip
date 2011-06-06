@@ -87,6 +87,29 @@ namespace tlp {
   inline QString tlpStringToQString(const std::string& toConvert){
       return QString::fromUtf8(toConvert.c_str());
   }
+
+  /**
+      * @brief Convert the property type string to a label to display in the GUI.
+      * The property type label is the string to display in the GUI instead of the basic property type string.
+      * By example for a property of type "double" the label displayed in the GUI will be "Metric".
+      **/
+    TLP_QT_SCOPE QString propertyTypeToPropertyTypeLabel(const std::string& typeName);
+
+    /**
+      * @brief Get the string to display as property type for the given property.
+      * The property type label is the string to display in the GUI instead of the property type string.
+      * By example for a property of type "double" the label displayed in the GUI will be "Metric".
+      **/
+    inline QString propertyInterfaceToPropertyTypeLabel(const tlp::PropertyInterface* const property){
+        return propertyTypeToPropertyTypeLabel(property->getTypename());
+    }
+
+    /**
+      * @brief Convert the label of a property type to it's corresponding property type.
+      * The property type label is the string to display in the GUI instead of the property type string.
+      * By example for a property of type "double" the label displayed in the GUI will be "Metric".
+      **/
+    TLP_QT_SCOPE std::string propertyTypeLabelToPropertyType(const QString& typeNameLabel);
 }
 
 #endif

@@ -46,9 +46,11 @@ public :
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
-  std::string getTypename() const {
-    return "size";
-  }
+  static const std::string propertyTypename;
+   std::string getTypename() const {
+     return propertyTypename;
+   }
+
 
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node n, const Size &v);
@@ -69,9 +71,11 @@ public :
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
-  std::string getTypename() const {
-    return "vector<size>";
-  }
+  static const std::string propertyTypename;
+   std::string getTypename() const {
+     return propertyTypename;
+   }
+
 };
 /*@}*/
 

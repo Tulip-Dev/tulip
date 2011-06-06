@@ -47,9 +47,11 @@ public :
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
-  std::string getTypename() const {
-    return "double";
-  }
+  static const std::string propertyTypename;
+   std::string getTypename() const {
+     return propertyTypename;
+   }
+
 
   // override some AbstractProperty methods 
   virtual void setNodeValue(const node n, const double &v);
@@ -89,9 +91,11 @@ public :
   DoubleVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
-  std::string getTypename() const {
-    return "vector<double>";
-  }
+  static const std::string propertyTypename;
+   std::string getTypename() const {
+     return propertyTypename;
+   }
+
 };
 /*@}*/
 
