@@ -1,10 +1,10 @@
 SET(SRCS
   src/main.cpp
-#  TulipAgentCommunicator.cpp
+  src/TulipAgentCommunicator.cpp
 )
 
 QT4_WRAP_CPP(MOC_SRCS
-#  include/TulipAgentCommunicator.h
+  include/TulipAgentCommunicator.h
 )
 
 INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} include/)

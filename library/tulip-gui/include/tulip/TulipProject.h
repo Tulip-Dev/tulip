@@ -13,10 +13,6 @@
 #include <tulip/tulipconf.h>
 #include <tulip/PluginProgress.h>
 
-#define TLP_PROJECT_OK 0
-#define TLP_FS_ERROR 1
-#define TLP_ARCHIVE_ERROR 2
-
 namespace tlp {
 
 /**
@@ -38,10 +34,7 @@ namespace tlp {
   A TulipProject DOES NOT automatically save to disk. One will have to call the write() method to serialize data.
   @warning Precise implementation of the TulipProject object should NOT be known or used by the user since it could be subject to changes.
 
-  When operating on a TulipProject, errors might be raised due to invalid filesystem operations. Error codes are integer values defined in constants:
-  @list
-  @li PROJECT_OK (0): no error
-  @endlist
+  If something wrong happens when calling a method from TulipProject, this method will return either false or a invalid result (see specific method documentation). The last error message can be retrieved with the lastError() method.
 
   After opening and before saving a project, user will be able to list/delete files and directories available in the project and open them using std filestreams or Qt's QIODevice.
   Files can be opened using the stdFileStram and fileStream methods. They will always be opened in Read/Write mode.
@@ -67,19 +60,17 @@ public:
     This method builds up a new TulipProject file without taking any input.
     @see openProject()
     */
-  static TulipProject *newProject(int *errorCode=NULL);
+  static TulipProject *newProject();
 
   /**
     @brief Opens a previously saved tulip project file
     This method will unpack a tulip project file into some directory and allow the user to manipulate the files.
     @see TulipProject::save()
-    @arg file The file to open.
-    @arg errorCode If the opening process fails, this method will return a NULL pointer and input an error code into the errorCode parameter.
-    @see TulipProject for a complete list of error codes.
-    @arg progress A progress handler.
-    @return a pointer to a TulipProject object.
+    @param file The file to open.
+    @param progress A progress handler.
+    @return a pointer to a TulipProject object or a NULL pointer if the method failed.
     */
-  static TulipProject *openProject(const QString &file,int *errorCode=NULL);
+  static TulipProject *openProject(const QString &file, tlp::PluginProgress *progress=NULL);
 
   /**
     @brief Writes files in the TulipProject into a packed archive.
@@ -87,9 +78,9 @@ public:
     @note This method DOES NOT close the project. It only  commits changes to the specified file. A TulipProject is only closed when destroyed.
     @param file Absolute path where files should be packed.
     @param progress A progress handler
-    @return Some error code or PROJECT_OK if method returned sucessfully.
+    @return False if method failed
     */
-  int write(const QString &file);
+  bool write(const QString &file,tlp::PluginProgress *progress=NULL);
 
   /**
     @brief Lists entries in a directory
@@ -144,6 +135,18 @@ public:
     @return an opened Qt device on the given path.
     */
   QIODevice *fileStream(const QString &path);
+
+  /**
+    @brief Returns the last error raised.
+    @note The returned string is null if no error was raised.
+    */
+  QString lastError() const { return _lastError; }
+
+  /**
+    @brief Check if the object is a valid TulipProject.
+    @warning Calling methods on invalid TulipProject instances may result in undefined behavior.
+    */
+  bool isValid() const { return _isValid; }
 
   // Developer note: Every field in the TulipProject tagged as a Q_PROPERTY will automaticaly be serialized in the project.xml file
   /**
@@ -204,6 +207,10 @@ private:
   QString _name;
   QString _description;
   QString _perspective;
+
+  // Error handling
+  QString _lastError;
+  bool _isValid;
 };
 
 }

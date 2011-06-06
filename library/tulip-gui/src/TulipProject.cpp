@@ -1,12 +1,16 @@
 #include "tulip/TulipProject.h"
 
+#include <tulip/SimplePluginProgress.h>
+
 #include <QtCore/QMetaProperty>
 #include <QtCore/QDir>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QTextStream>
 #include <QtXml/QDomDocument>
+
 #include <stdlib.h>
 #include <assert.h>
+
 #include <QuaZIPFacade.h>
 
 #define DATA_DIR_NAME "data"
@@ -18,58 +22,76 @@ using namespace std;
 
 namespace tlp {
 
-TulipProject::TulipProject() {
-  abort(); // This private constructer should never been called. It has been privately declared to prevent use of default constructor
+TulipProject::TulipProject(): _isValid(false) {
+  // This private constructer should never been called. It has been privately declared to prevent use of default constructor
 }
 
 TulipProject::TulipProject(const QString &path)
   : _rootDir(path),
-    _dataDir(_rootDir.absoluteFilePath(DATA_DIR_NAME)) {
+    _dataDir(_rootDir.absoluteFilePath(DATA_DIR_NAME)), _isValid(true) {
 }
 
 TulipProject::~TulipProject() {
   removeAllDir(_rootDir.absolutePath());
 }
 
-TulipProject *TulipProject::newProject(int *errorCode) {
+TulipProject *TulipProject::newProject() {
   QString rootPath = temporaryPath();
   QDir rootDir(temporaryPath());
   bool dirOk = rootDir.mkpath(rootPath) && rootDir.mkdir(DATA_DIR_NAME);
   if (!dirOk) {
-    if (errorCode) *errorCode = TLP_FS_ERROR;
-    return NULL;
+    TulipProject *result = new TulipProject;
+    result->_lastError = "Failed to create a temporary path: " + rootPath;
+    return result;
   }
-
-  if (errorCode) *errorCode = TLP_PROJECT_OK;
 
   return new TulipProject(rootPath);
 }
 
-TulipProject *TulipProject::openProject(const QString &file,int *errorCode) {
-  TulipProject *project = TulipProject::newProject(errorCode);
-  if (!project) {
-    if (errorCode) *errorCode = TLP_FS_ERROR;
-    return NULL;
+TulipProject *TulipProject::openProject(const QString &file, tlp::PluginProgress *progress) {
+  bool deleteProgress = false;
+  if (!progress) {
+    progress = new tlp::SimplePluginProgress;
+    deleteProgress = true;
   }
+
+  TulipProject *project = TulipProject::newProject();
+  if (!project->isValid())
+    return project;
 
   if (!QuaZIPFacade::unzip(project->_rootDir.absolutePath(),file)) {
-    if (errorCode) *errorCode = TLP_ARCHIVE_ERROR;
-    delete project;
-    return NULL;
+    project->_isValid = false;
+    project->_lastError = "Failed to unzip project.";
+    return project;
   }
-
   project->readMetaInfos();
 
-  if (errorCode) *errorCode = TLP_PROJECT_OK;
+  if (deleteProgress)
+    delete progress;
+
   return project;
 }
 
-int TulipProject::write(const QString &file) {
-  if (!writeMetaInfos())
-      return TLP_FS_ERROR;
-  if (!QuaZIPFacade::zipDir(_rootDir.absolutePath(),file))
-    return TLP_ARCHIVE_ERROR;
-  return TLP_PROJECT_OK;
+bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
+  bool deleteProgress = false;
+  if (!progress) {
+    progress = new tlp::SimplePluginProgress;
+    deleteProgress = true;
+  }
+
+  if (!writeMetaInfos()) {
+    _lastError = "Failed to save meta-informations.";
+    return false;
+  }
+  if (!QuaZIPFacade::zipDir(_rootDir.absolutePath(),file)) {
+    _lastError = "Failed to zip project.";
+    return false;
+  }
+
+  if (deleteProgress)
+    delete progress;
+
+  return true;
 }
 
 // ==============================

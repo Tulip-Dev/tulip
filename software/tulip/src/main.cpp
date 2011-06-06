@@ -24,14 +24,15 @@ int main(int argc, char **argv) {
   tulip_agent.setApplicationName(QObject::trUtf8("Tulip Agent"));
   QLocale::setDefault(QLocale(QLocale::English));
 
-#if defined(__APPLE__) // allows to load qt imageformats plugin
+#if defined(__APPLE__)
+  // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
 
   // Switch the current directory to ensure that libdbus is loaded
   QString currentPath = QDir::currentPath();
   QDir::setCurrent(QApplication::applicationDirPath() + "/../Frameworks");
 
-  // Manually run the dbus daemon
+  // Manually run the dbus daemon and retrieve infos
   QProcess dbus_daemon;
   dbus_daemon.setProcessChannelMode(QProcess::MergedChannels);
   dbus_daemon.start(QApplication::applicationDirPath() + "/dbus-launch");
@@ -40,7 +41,6 @@ int main(int argc, char **argv) {
   QRegExp sessionBusAddressRegexp("^DBUS_SESSION_BUS_ADDRESS\\=(unix\\:[^\\n\\r]*).*");
   if (sessionBusAddressRegexp.exactMatch(dbus_daemon.readLine()))
       setenv("DBUS_SESSION_BUS_ADDRESS",sessionBusAddressRegexp.cap(1).toStdString().c_str(),1);
-
   // Retrieve dbus_daemon PID to be able to kill it when application ends.
   QRegExp dbusPidRegexp("DBUS_SESSION_BUS_PID\\=([0-9]*).*");
   pid_t dbusPid = 0;
@@ -93,7 +93,8 @@ int main(int argc, char **argv) {
   mainWindow->startApp();
 
   int result = tulip_agent.exec();
-#if defined(__APPLE__) // manually kill D-Bus process
+#if defined(__APPLE__)
+  // manually killing D-Bus process
   qWarning() << "Terminating D-Bus at PID: " << dbusPid;
   kill(dbusPid,SIGKILL);
 #endif
