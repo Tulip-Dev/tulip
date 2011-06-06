@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include <QuaZIPFacade.h>
+#include <tulip/QuaZIPFacade.h>
 
 #define DATA_DIR_NAME "data"
 #define INFOS_FILE_NAME "project.xml"
