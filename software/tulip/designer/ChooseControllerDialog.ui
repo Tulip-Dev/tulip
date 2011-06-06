@@ -36,7 +36,7 @@
         </font>
        </property>
        <property name="text" >
-        <string>Saved controller with this graph :</string>
+        <string>Saved controller with this graph:</string>
        </property>
        <property name="alignment" >
         <set>Qt::AlignCenter</set>
@@ -74,7 +74,7 @@
         </font>
        </property>
        <property name="text" >
-        <string>Select a controller to load this graph :</string>
+        <string>Select a controller to load this graph:</string>
        </property>
        <property name="textFormat" >
         <enum>Qt::AutoText</enum>
