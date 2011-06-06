@@ -21,11 +21,20 @@
 
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
+#include <tulip/PluginLister.h>
+#include <QtCore/QObject>
 
 class QMainWindow;
 
 namespace tlp {
 class TulipProject;
+
+class TLP_QT_SCOPE PerspectiveContext {
+public:
+  QMainWindow *mainWindow;
+};
+
+
 /**
   @brief Perspective class is the top-most class of the Tulip 4 Perspective system.
   The perspective system replaces the Tulip 3 controller mechanism.
@@ -59,7 +68,7 @@ class TulipProject;
   Finally, a Perspective declares several signals. Those signals can be used to communicate with the tulip_agent process. Each signal expose a specific feature of the tulip_agent process.
   Communication between process is hidden and its inner workings should not be known or used by the user.
   */
-class TLP_QT_SCOPE Perspective : public WithParameter, public WithDependency {
+class TLP_QT_SCOPE Perspective : public QObject, public WithParameter, public WithDependency {
   Q_OBJECT
   QMainWindow *_mainWindow;
 public:
@@ -67,14 +76,14 @@ public:
   /**
     @brief Build a perspective along with its context
     */
-  Perspective(PerspectiveContext &c) { _mainWindow = c.mainWindow; }
+  Perspective(PerspectiveContext &c);
 
   /**
     @brief This method checks if a perspective plugin is compatible with a specific TulipProject.
     Tulip4 is meant to be able to hot switch between perspectives using the same input data.
     @return This method should parse the TulipProject files and return true if it can import data from any of those files.
     */
-  virtual bool isCompatible(tlp::TulipProject *) { return false; }
+  virtual bool isCompatible(tlp::TulipProject *);
 
   /**
     @brief Build the perspective UI but does not associate the perspective with any project.
@@ -90,15 +99,12 @@ public:
 
 };
 
-struct TLP_QT_SCOPE PerspectiveContext {
-  QMainWindow *mainWindow;
-};
-
 typedef StaticPluginLister<Perspective, PerspectiveContext> PerspectivePluginLister;
 
 #ifdef WIN32
 template class TLP_QT_SCOPE PluginLister<Perspective, PerspectiveContext>;
 #endif
+
 }
 
 #define PERSPECTIVEPLUGINFACTORY(T,C,N,A,D,I,R,G) \

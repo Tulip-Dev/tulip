@@ -69,6 +69,7 @@ SET(SRCS
   TulipProject.cpp
   QuaZIPFacade.cpp
   SimplePluginProgressWidget.cpp
+  Perspective.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -125,6 +126,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/TulipProject.h
   ../include/tulip/PluginManager.h
   ../include/tulip/SimplePluginProgressWidget.h
+  ../include/tulip/Perspective.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipQtResource.qrc)
