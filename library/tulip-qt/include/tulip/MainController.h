@@ -125,27 +125,28 @@ namespace tlp {
      */
     void clearObservers();
     /**
-     * Call when a subgraph is add
+     * Called when a subgraph is added.
      */
     void addSubGraph(Graph*, Graph *);
     /**
-     * Call when a subgraph is remove
+     * Called when a subgraph is removed.
      */
-    void delSubGraph(Graph*, Graph*);
+    void delSubGraph(Graph*, Graph*);    
+
     /**
-     * Call when a local property is add
+     * Called when a local property is added
      */
     void addLocalProperty(Graph*, const std::string&);
     /**
-     * Call when a local property is delete
+     * Called when a local property is deleted
      */
     void delLocalProperty(Graph*, const std::string&);
     /**
-     * Call when an attribute is set on a graph
+     * Called when an attribute is set on a graph
      */
     void afterSetAttribute(Graph*, const std::string&);
     /**
-     * Call to update number of nodes/edges
+     * Update number of nodes/edges in the status bar and the cluster tree widget.
      */
     void updateCurrentGraphInfos();
     
@@ -168,6 +169,7 @@ namespace tlp {
     unsigned int currentGraphNbNodes;
     unsigned int currentGraphNbEdges;
     Graph *graphToReload;
+    bool propertiesListUpdated;
     bool blockUpdate;
     bool inAlgorithm;
 

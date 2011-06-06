@@ -125,8 +125,7 @@ void PropertyWidget::changePropertyValue(int i,int j) {
     changePropertyEdgeValue(i,j);
 }
 
-void PropertyWidget::changePropertyEdgeValue(int i,int j) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+void PropertyWidget::changePropertyEdgeValue(int i,int j) {  
   if (editedProperty == NULL) return;
   Observable::holdObservers();
   bool result=true;

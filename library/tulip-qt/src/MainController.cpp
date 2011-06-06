@@ -200,7 +200,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL),
+    currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),propertiesListUpdated(false),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL),
     editMenu(NULL), algorithmMenu(NULL), viewMenu(NULL), optionsMenu(NULL),
     graphMenu(NULL), intMenu(NULL), stringMenu(NULL), sizesMenu(NULL),
     colorsMenu(NULL), layoutMenu(NULL), metricMenu(NULL), selectMenu(NULL),
@@ -466,6 +466,12 @@ namespace tlp {
 
     blockUpdate=true;
 
+    if(propertiesListUpdated){
+        eltProperties->setGraph(getCurrentGraph());
+        propertiesWidget->setGraph(getCurrentGraph());
+        propertiesListUpdated=false;
+    }
+
     if(graphToReload){
       // enter here if a property is add/delete on the graph
       Graph *graph=graphToReload;
@@ -558,8 +564,7 @@ namespace tlp {
     graphToReload=graph;
 
     if(graph==getCurrentGraph()){
-      eltProperties->setGraph(graph);
-      propertiesWidget->setGraph(graph);
+        propertiesListUpdated = true;
     }
 
     graph->getProperty(propertyName)->addObserver(this);
@@ -569,12 +574,12 @@ namespace tlp {
     graphToReload=graph;
 
     if(graph==getCurrentGraph()){
-      eltProperties->setGraph(graph);
-      propertiesWidget->setGraph(graph);
+     propertiesListUpdated = true;
     }
 
     graph->getProperty(propertyName)->removeObserver(this);
   }
+
   //**********************************************************************
   void MainController::afterSetAttribute(Graph *graph, const std::string &name){
     // In this function we only do threatment if graph name is changed (attribute "name" is changed)
