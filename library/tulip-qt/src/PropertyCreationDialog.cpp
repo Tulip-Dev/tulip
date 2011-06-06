@@ -71,7 +71,7 @@ void PropertyCreationDialog::accept(){
         error = true;
     }
     if (_graph->existLocalProperty(QStringToTlpString(propertyName))) {
-        QMessageBox::warning(this, "Fail to create property", "A property with same name already exist", QMessageBox::Ok,
+        QMessageBox::warning(this, "Fail to create property", "A property with the same name already exist", QMessageBox::Ok,
                              QMessageBox::Ok);
         error = true;
     }
@@ -106,7 +106,7 @@ void PropertyCreationDialog::checkValidity(){
         ui->errorNotificationWidget->setVisible(true);
         return;
     } else if (_graph->existLocalProperty(QStringToTlpString(propertyName))) {
-        ui->errorLabel->setText(tr("A property with same name already exist"));
+        ui->errorLabel->setText(tr("A property with the same name already exist"));
         _createPropertyButton->setEnabled(false);
         ui->errorNotificationWidget->setVisible(true);
         return;
