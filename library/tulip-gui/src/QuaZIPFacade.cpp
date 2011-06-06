@@ -1,4 +1,4 @@
-#include "QuaZIPFacade.h"
+#include "tulip/QuaZIPFacade.h"
 
 #include <QtCore/QDir>
 #include <QtCore/QFile>

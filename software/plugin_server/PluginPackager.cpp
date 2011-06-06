@@ -26,8 +26,8 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginInformations.h>
 #include <tulip/PluginLoaderTxt.h>
+#include <tulip/QuaZIPFacade.h>
 
-#include <QuaZIPFacade.h>
 #include <fcntl.h>
 
 using namespace std;
@@ -91,13 +91,13 @@ int main(int argc,char **argv) {
   //the plugin path is the root of the plugin folder. In the following example, it is the edgeseparation folder.
 //   pluginserver/
 //   ├── edgeseparation
-//   │   ├── lib
-//   │   │   └── tulip
-//   │   │       └── libedgeseparation-4.0.0.so
-//   │   └── share
-//   │       └── doc
-//   │           └── edgeseparation
-//   │               └── index.html
+//   │   ├── lib
+//   │   │   └── tulip
+//   │   │       └── libedgeseparation-4.0.0.so
+//   │   └── share
+//   │       └── doc
+//   │           └── edgeseparation
+//   │               └── index.html
 //   
   if(argc < 2) {
     std::cout << "packagePlugin pluginPath [destinationDir]" << std::endl;

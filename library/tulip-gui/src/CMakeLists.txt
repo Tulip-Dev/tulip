@@ -69,6 +69,7 @@ SET(SRCS
   PluginInformations.cpp
   PluginManager.cpp
   TulipProject.cpp
+  QuaZIPFacade.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
