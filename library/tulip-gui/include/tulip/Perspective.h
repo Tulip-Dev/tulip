@@ -46,7 +46,7 @@ class TulipProject;
   3 => The tulip process instantiate a (hidden) QMainWindow with some features (putting tulip icon on it, setting its titlebar, etc)
   4 => The perspective plugin is created and given its QMainWindow. QMainWindow ownership is left to the perspective plugin.
   5 => The construct method is called, allowing the perspective to build-up its GUI on the main window.
-  6 => If a file was provided when running the tulip process, the setProject method is called, providing the associated TulipProject instance.
+  6 => If a file was provided when running the tulip process, the construct method is given a TulipProject * instance as it's first member.
 
   Perspectives can be run into two modes:
   @list
@@ -77,17 +77,17 @@ public:
   virtual bool isCompatible(tlp::TulipProject *) { return false; }
 
   /**
-    @brief This method is called when the Perspective UI should be built.
-    @warning Since plugins loading process might create unused instance of a perspective plugin, you should never do anything in the Perspective constructor and use the construct method instead.
+    @brief Build the perspective UI but does not associate the perspective with any project.
+    @warning Since perspective plugins may be instanciated at load time, no operation should be done into the constructor. Use this method instead.
     */
   virtual void construct()=0;
 
   /**
-    @brief Associate the perspe'ctive to its project.
-    This method is called only if a project file has been given to the host process. The given TulipProject is already opened and its ownership is given to the Perspective.
-    @note This method will always be called after construct()
+    @brief Build the perspective UI, associating it with the given project.
+    @warning Since perspective plugins may be instanciated at load time, no operation should be done into the constructor. Use this method instead.
     */
-  virtual void setProject(tlp::TulipProject *)=0;
+  virtual void construct(tlp::TulipProject *)=0;
+
 };
 
 struct TLP_QT_SCOPE PerspectiveContext {
