@@ -26,18 +26,21 @@
 
 #include <tulip/AbstractView.h>
 
+#include <QtCore/QModelIndexList>
+
 
 namespace Ui {
     class SpreadViewWidget;
 }
 
+class TulipTableWidget;
+class TableViewColumnModel;
 namespace tlp {
 
 class Graph;
 
 class SpreadView: public AbstractView {
 Q_OBJECT
-
 public:
 
 	SpreadView();
@@ -55,17 +58,71 @@ public:
 
 public slots :
 
+        /**
+          * @brief Show property menu
+          **/
+        void showPropertiesContextMenu(const QPoint& position);        
+
+
+        /**
+          * @brief Show the context menu when user click on the table view.
+          **/
+        void showTableContextMenu(const QPoint& position);
+
+        /**
+          * @brief Called when user request the context menu on the elements header view.
+          */
+        void showElementsContextMenu(const QPoint& position);
+
+
+
+
 	void draw();
 	void refresh();
 	void init();
 	void setGraph(Graph *graph);
 
-    protected slots:
+
+
+    protected :
+
+    void showPropertiesContextMenu(TulipTableWidget* tableWidget,int clickedColumn,const QPoint& position);
+    void fillPropertiesContextMenu(QMenu& menu,TulipTableWidget* tableWidget,int clickedColumn);
+    /**
+      * @brief Execute the context menu for the selected row.
+      **/
+    void showElementsContextMenu(TulipTableWidget* tableWidget,int clickedRowIndex,const QPoint& position);
+    void fillElementsContextMenu(QMenu& menu,TulipTableWidget* tableWidget,int clickedRowIndex);
+
+    void deleteElements( const QModelIndexList& elements,TulipTableWidget *tableWidget ,bool delAll);
+
+    TulipTableWidget* currentTable()const;
+protected slots:
+
+    void showEditColumnDialog();
+
+    //Columns operations    
+    void hideColumn();
+    void createNewProperties();
+    void copyColumnToOther();
+    void setAllColumnValues();
+    void resetColumn();
+    void deleteColumn();
+
+    //Rows operations
+    void selectElements();
+    void highlightElements();
+    void deleteElements();
+    //Nodes operations
+    void copyNodes();
+    void group();    
+    void ungroup();
 
     private:
         Ui::SpreadViewWidget *ui;
         tlp::Graph* _graph;
-
+        TableViewColumnModel* _nodesColumnsModel;
+        TableViewColumnModel* _edgesColumnsModel;
 
 };
 

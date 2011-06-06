@@ -43,7 +43,7 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
             case EDGEEXTREMITYGLYPHPROPERTY_RTTI:
                 return QVariant(QString::fromUtf8(EdgeExtremityGlyphManager::getInst().glyphName(
                         ((IntegerProperty*)property)->getEdgeValue(edge(elementId))).c_str()));
-                break;              
+                break;
             default:{
                     if(elementType == NODE)
                         return QVariant(QString::fromUtf8(property->getNodeStringValue(node(elementId)).c_str()));
@@ -104,7 +104,7 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
                     collection.setData(collection.index(0,0),QVariant(EdgeExtremityGlyphManager::NoEdgeExtremetiesId),Qt::UserRole);
                     collection.setElementSelection(0,EdgeExtremityGlyphManager::NoEdgeExtremetiesId == value);
                     string glyphName;
-                    forEach(glyphName,EdgeExtremityGlyphFactory::factory->availablePlugins()) {                        
+                    forEach(glyphName,EdgeExtremityGlyphFactory::factory->availablePlugins()) {
                         collection.addElement(tlpStringToQString(glyphName));
                         int elementIndex = collection.rowCount()-1;
                         int glyphIndex = EdgeExtremityGlyphManager::getInst().glyphId(glyphName);

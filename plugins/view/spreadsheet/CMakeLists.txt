@@ -12,12 +12,15 @@ SET(spreadsheet_LIB_SRCS
     VectorEditionWidget.cpp    
     HeaderSelectionDialog.cpp
     GlyphPreviewGenerator.cpp
+    TableViewColumnModel.cpp
+    TableColumnSelectionWidget.cpp
 )
 
 set(spreadsheet_UI
     SpreadViewWidget.ui
     VectorEditionWidget.ui
     HeaderSelectionDialog.ui
+    TableColumnSelectionWidget.ui
 )
 
 set(spreadsheet_MOC
@@ -28,6 +31,8 @@ set(spreadsheet_MOC
     TulipItemDelegate.h
     VectorEditionWidget.h    
     HeaderSelectionDialog.h
+    TableViewColumnModel.h
+    TableColumnSelectionWidget.h
 )
 
 QT4_WRAP_UI(spreadsheet_UI_SRCS ${spreadsheet_UI})

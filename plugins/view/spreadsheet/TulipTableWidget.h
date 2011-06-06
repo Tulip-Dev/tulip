@@ -4,6 +4,10 @@
 #include <tulip/Graph.h>
 
 class GraphTableModel;
+
+/**
+  * @brief Table widget object providing convinience functions for handling graph objects.
+  **/
 class TulipTableWidget : public QTableView
 {
     Q_OBJECT
@@ -11,10 +15,19 @@ public:
     TulipTableWidget(QWidget* parent=NULL);
     virtual ~TulipTableWidget(){}
 
-    void setGraph(tlp::Graph* graph,tlp::ElementType element);    
+    void setGraph(tlp::Graph* graph,tlp::ElementType element);
 
-protected:
-    void setModel(QAbstractItemModel *){}
+    tlp::ElementType elementType()const{
+        return _type;
+    }
+
+    tlp::Graph* graph()const{
+        return _graph;
+    }
+
+    GraphTableModel* graphModel()const{
+        return _tulipTableModel;
+    }
 
     /**
       * @brief Check if all the elements are selected .
@@ -26,75 +39,28 @@ protected:
       **/
     std::set<unsigned int> indexListToIds(const QModelIndexList& elementsIndexes)const;
 
-    /**
-      * @brief Execute the context menu for the selected row.
-      **/
-    void showElementContextMenu(int clickedRowIndex,const QPoint& position);
+    void highlightElements(const std::set<unsigned int>& elementsToHighligh);
 
-    void keyPressedEvent(QKeyEvent * event);
+    /**
+      * @brief Scrolls the view if necessary to show a maximum of elements in the list. Compute the element at the top left corner and move the view port to it's position.
+      **/
+    void scrollToFirstOf(const QModelIndexList& indexes);
+
+    /**
+      * @brief Convinience function that highlight all the elements in the list and move the viewport of the table view on the element at the top left corner.
+      **/
+    void highlightAndDisplayElements(const std::set<unsigned int>& elements);
+
+protected:
+    void setModel(QAbstractItemModel *){}
 
     tlp::Graph* _graph;
     tlp::ElementType _type;
     GraphTableModel* _tulipTableModel;
 
-protected slots:
-
-    void createNewProperties();
-    /**
-      * @brief Hide the selected columns or the column stored in the data of the action.
-      *
-      * If there is a selection
-      **/
-    void hideColumn();
-    /**
-      * @brief
-      **/
-    void setAllColumnValues();
-    /**
-      *
-      **/
-    void copyColumnToOther();
-    /**
-      * @brief Set all the column values to the default value.
-      **/
-    void resetColumn();
-    /**
-      * @brief Delete the selected columns.
-      **/
-    void deleteColumn();
-    //////////////////////////////////////////////
-    /**
-      * @brief Delete the selected elements.
-      **/
-    void deleteElements();
-    void deleteAllElements();
-    void doDeleteElements(const QModelIndexList& elements,bool delAll);
-
-    void selectElements();
-
-    void group();
-    void ungroup();
-
-    void copyNodes();
-
-    void highlightElements();
 
 
     void updateHorizontalHeaderVisibility(bool checked);
-    /**
-      * @brief Show the context menu when user click on the vertical header view.
-      */
-    void showHorizontalHeaderViewContextMenu(const QPoint& position);
-    /**
-      * @brief Show the context menu when user click on the table view.
-      **/
-    void showTableContextMenu(const QPoint& position);
-
-
-
-    void showPropertiesContextMenu(const QPoint& position);
-    void showPropertiesListDialog();
-    void showTableContextMenu();
 
 
 };

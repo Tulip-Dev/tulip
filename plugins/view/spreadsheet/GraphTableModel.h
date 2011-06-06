@@ -31,7 +31,7 @@ class GraphTableModel : public QAbstractTableModel, public tlp::Observable , pub
 {
     Q_OBJECT
 public:
-    GraphTableModel(tlp::Graph* graph,tlp::ElementType displayType=tlp::NODE,QObject* parent = 0);
+    GraphTableModel(tlp::Graph* graph,tlp::ElementType elementType=tlp::NODE,QObject* parent = 0);
 
     //Get set parameters
     tlp::Graph* graph()const{
@@ -43,7 +43,7 @@ public:
     void setGraph(tlp::Graph* newGraph);
 
     tlp::ElementType elementType()const{
-        return _displayedType;        
+        return _elementType;
     }
 
     /**
@@ -81,6 +81,12 @@ public:
       * @brief Get the id at the given index. If the index is not valid return UINT_MAX.
       **/
     virtual unsigned int idForIndex(int index,const QModelIndex& parent = QModelIndex()) const;
+
+    /**
+      * @brief Retrieve the indexes of the given ids. If an id is not in the table it will be ignored.
+      *
+      **/
+    virtual QList<int> indexesForIds(const std::set<unsigned int>& ids)const;
     /**
       * @brief Convinience function to get the property for an index call the propertyForIndex function with the right index in function of properties orientation in the model.
       **/
@@ -93,6 +99,12 @@ public:
     virtual tlp::PropertyInterface* propertyForIndex(int index,const QModelIndex& parent = QModelIndex()) const;
 
     /**
+      * @brief Retrieve the indexes of the given properties. If a property is not in the table it will be ignored.
+      *
+      **/
+    virtual QList<int> indexesForProperties(const std::set<tlp::PropertyInterface*>& properties)const;
+
+    /**
       * @brief Reimplementation of QAbstractTableModel::columnCount(). Return the size of the property table if the orientation of the model is equal to Qt::Vertical else return the size of the elements table.
       **/
     virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
@@ -100,9 +112,6 @@ public:
       * @brief Reimplementation of QAbstractTableModel::rowCount(). Return the size of the elements table if the orientation of the model is equal to Qt::Vertical else return the size of the properties table.
       **/
     virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-
-
-
 
 
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
@@ -134,12 +143,11 @@ public:
     void afterSetEdgeValue(tlp::PropertyInterface*, const tlp::edge);
     void afterSetAllNodeValue(tlp::PropertyInterface*);
     void afterSetAllEdgeValue(tlp::PropertyInterface*);    
-    void treatEvents(const  std::vector<tlp::Event> &events );
+    void treatEvents(const  std::vector<tlp::Event> &events );    
 
 
 protected:
 
-    void delProperty(tlp::PropertyInterface* property);
     /**
     * @brief Fill the idTable.
     **/
@@ -152,6 +160,11 @@ protected:
       * @brief Return if the property must be integrated in the property table. This function is called before each insertion in the property table.
       **/
     virtual bool useProperty(tlp::PropertyInterface* property) const;
+
+    /**
+      * @brief Sort elements according to a given property values.
+      **/
+    virtual void sortElements(tlp::PropertyInterface* property, Qt::SortOrder order);
 
     virtual bool removeElements(int first,int last,const QModelIndex& parent = QModelIndex());
     virtual bool removeProperties(int first,int last,const QModelIndex& parent = QModelIndex());
@@ -211,14 +224,16 @@ private:
     }
 
     tlp::Graph* _graph;
-    tlp::ElementType _displayedType;
+    tlp::ElementType _elementType;
     Qt::Orientation _orientation;
     std::vector<unsigned int> _idTable;
     std::vector<tlp::PropertyInterface*> _propertiesTable;
 
-    int _sortColum;
+    //Sorting var
+    tlp::PropertyInterface* _sortingProperty;
     Qt::SortOrder _order;
 
+    //Graph update buffers
     std::set<tlp::PropertyInterface*> _propertiesToDelete;
     std::set<tlp::PropertyInterface*> _propertiesToAdd;
     std::set<unsigned int> _idsToDelete;

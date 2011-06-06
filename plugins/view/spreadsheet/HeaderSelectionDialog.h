@@ -7,7 +7,7 @@ namespace Ui {
     class HeaderSelectionDialog;
 }
 
-class QHeaderView;
+class QTableView;
 class HeaderSelectionDialog : public QDialog
 {
     Q_OBJECT
@@ -16,20 +16,13 @@ public:
     explicit HeaderSelectionDialog(QWidget *parent = 0);
     ~HeaderSelectionDialog();
 
-    void setHeaderView(QHeaderView* headerView);
+    void setTableView(QTableView* tableView);
 
-    std::set<int> selectedIndexes()const;
-
-    static void updateHeaders(QHeaderView* header,QWidget* parent);
+    static void updateHeaders(QTableView* tableView,const QString& title,QWidget* parent);
 
 private:
     Ui::HeaderSelectionDialog *ui;
 
-private slots:
-    void hideAll();
-    void showAll();
-    void showVisual();
-    void showUser();
 };
 
 #endif // HEADERSELECTIONDIALOG_H
