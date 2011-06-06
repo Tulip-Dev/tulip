@@ -69,8 +69,7 @@ void PropertyCreationDialog::accept(){
         QMessageBox::warning(this, "Fail to create property", "You can't create a property with an empty name",
                              QMessageBox::Ok, QMessageBox::Ok);
         error = true;
-    }
-    if (_graph->existLocalProperty(QStringToTlpString(propertyName))) {
+    } else if (_graph->existLocalProperty(QStringToTlpString(propertyName))) {
         QMessageBox::warning(this, "Fail to create property", "A property with the same name already exist", QMessageBox::Ok,
                              QMessageBox::Ok);
         error = true;
