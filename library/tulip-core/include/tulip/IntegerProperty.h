@@ -46,9 +46,11 @@ public :
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
-  std::string getTypename() const {
-    return "int";
-  }
+  static const std::string propertyTypename;
+   std::string getTypename() const {
+     return propertyTypename;
+   }
+
 
   // redefinition of some AbstractProperty methods 
   virtual void setNodeValue(const node n, const int &v);
@@ -92,9 +94,11 @@ public :
   IntegerVectorProperty(Graph *g, std::string n =""):AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {}
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
-  std::string getTypename() const {
-    return "vector<int>";
-  }
+  static const std::string propertyTypename;
+   std::string getTypename() const {
+     return propertyTypename;
+   }
+
 };
 /*@}*/
 

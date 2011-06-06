@@ -27,6 +27,9 @@ using namespace tlp;
 
 inline double sqr(double x){return (x*x);}
 
+const string LayoutProperty::propertyTypename="layout";
+const string CoordVectorProperty::propertyTypename="vector<coord>";
+
 // define a specific MetaValueCalculator
 class LayoutMetaValueCalculator
   :public AbstractLayoutProperty::MetaValueCalculator {

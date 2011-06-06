@@ -25,11 +25,68 @@
 
 #include "tulip/Interactor.h"
 #include "tulip/View.h"
-
+#include <tulip/BooleanProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/StringProperty.h>
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
  */
 using namespace std;
+using namespace tlp;
+
+/**
+  * Init property type to property label conversion map
+  **/
+static map<string,QString> buildPropertyTypeToPropertyTypeLabelMap(){
+    map<string,QString> propertyTypeToPropertyTypeLabel;
+    propertyTypeToPropertyTypeLabel[BooleanProperty::propertyTypename]=QString("Selection");
+    propertyTypeToPropertyTypeLabel[ColorProperty::propertyTypename]=QString("Color");
+    propertyTypeToPropertyTypeLabel[DoubleProperty::propertyTypename]=QString("Metric");
+    propertyTypeToPropertyTypeLabel[GraphProperty::propertyTypename]=QString("Graph");
+    propertyTypeToPropertyTypeLabel[IntegerProperty::propertyTypename]=QString("Integer");
+    propertyTypeToPropertyTypeLabel[LayoutProperty::propertyTypename]=QString("Layout");
+    propertyTypeToPropertyTypeLabel[SizeProperty::propertyTypename]=QString("Size");
+    propertyTypeToPropertyTypeLabel[StringProperty::propertyTypename]=QString("String");
+    propertyTypeToPropertyTypeLabel[BooleanVectorProperty::propertyTypename]=QString("BooleanVector");
+    propertyTypeToPropertyTypeLabel[ColorVectorProperty::propertyTypename]=QString("ColorVector");
+    propertyTypeToPropertyTypeLabel[CoordVectorProperty::propertyTypename]=QString("CoordVector");
+    propertyTypeToPropertyTypeLabel[DoubleVectorProperty::propertyTypename]=QString("DoubleVector");
+    propertyTypeToPropertyTypeLabel[IntegerVectorProperty::propertyTypename]=QString("IntegerVector");
+    propertyTypeToPropertyTypeLabel[SizeVectorProperty::propertyTypename]=QString("SizeVector");
+    propertyTypeToPropertyTypeLabel[StringVectorProperty::propertyTypename]=QString("StringVector");
+    return propertyTypeToPropertyTypeLabel;
+}
+//Property type to property label conversion map
+static const map<string,QString> propertyTypeToPropertyTypeLabelMap = buildPropertyTypeToPropertyTypeLabelMap();
+/**
+  * Init property type label to property type conversion map
+  **/
+static map<QString,string> buildPropertyTypeLabelToPropertyTypeMap(){
+    map<QString,string> propertyTypeLabelToPropertyType;
+    propertyTypeLabelToPropertyType[QString("Selection")]=BooleanProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("Color")]=ColorProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("Metric")]=DoubleProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("Graph")]=GraphProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("Integer")]=IntegerProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("Layout")]=LayoutProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("Size")]=SizeProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("String")]=StringProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("BooleanVector")]=BooleanVectorProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("ColorVector")]=ColorVectorProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("CoordVector")]=CoordVectorProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("DoubleVector")]=DoubleVectorProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("IntegerVector")]=IntegerVectorProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("SizeVector")]=SizeVectorProperty::propertyTypename;
+    propertyTypeLabelToPropertyType[QString("StringVector")]=StringVectorProperty::propertyTypename;
+    return propertyTypeLabelToPropertyType;
+}
+//Property type label to property type conversion map
+static const map<QString,string> propertyTypeLabelToPropertyTypeMap = buildPropertyTypeLabelToPropertyTypeMap();
 
 namespace tlp {
 
@@ -60,4 +117,13 @@ namespace tlp {
 #endif
   }
 
+  QString propertyTypeToPropertyTypeLabel(const string& typeName){
+        map<string,QString>::const_iterator  it = propertyTypeToPropertyTypeLabelMap.find(typeName);
+        return it != propertyTypeToPropertyTypeLabelMap.end()?it->second:QString();
+    }
+
+    string propertyTypeLabelToPropertyType(const QString& typeNameLabel){
+        map<QString,string>::const_iterator  it = propertyTypeLabelToPropertyTypeMap.find(typeNameLabel);
+        return it != propertyTypeLabelToPropertyTypeMap.end()?it->second:string();
+    }
 }

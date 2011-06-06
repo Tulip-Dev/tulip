@@ -85,7 +85,7 @@ void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllEdgeValue(const typenam
 }
 
 template <class Tnode, class Tedge, class TPROPERTY>
-        int tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compare(node n1,node n2){
+        int tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compare(const node n1,const node n2){
     const typename Tnode::RealType& n1Value = getNodeValue(n1);
     const typename Tnode::RealType& n2Value = getNodeValue(n2);
     if(n1Value < n2Value){
@@ -98,7 +98,7 @@ template <class Tnode, class Tedge, class TPROPERTY>
 }
 
 template <class Tnode, class Tedge, class TPROPERTY>
-        int tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compare(edge e1,edge e2){
+        int tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compare(const edge e1,const edge e2){
     const typename Tedge::RealType& e1Value = getEdgeValue(e1);
     const typename Tedge::RealType& e2Value = getEdgeValue(e2);
     if(e1Value < e2Value){

@@ -43,6 +43,9 @@ public:
 
 static SizeMetaValueCalculator mvSizeCalculator;
 
+const string SizeProperty::propertyTypename="size";
+const string SizeVectorProperty::propertyTypename="vector<size>";
+
 //==============================
 SizeProperty::SizeProperty (Graph *sg, std::string n):
   AbstractProperty<SizeType,SizeType, SizeAlgorithm>(sg, n) {

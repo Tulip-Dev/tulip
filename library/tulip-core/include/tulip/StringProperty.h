@@ -36,19 +36,21 @@ public :
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
-  std::string getTypename() const {
-    return "string";
-  }
+  static const std::string propertyTypename;
+   std::string getTypename() const {
+     return propertyTypename;
+   }
+
 
   /**
     * @brief Specific implementation of AbstractProperty::compare(node n1,node n2)
     **/
-  int compare(node n1,node n2);
+  int compare(const node n1,const node n2);
 
   /**
     * @brief Specific implementation of AbstractProperty::compare(edge e1,edge e2)
     **/
-  int compare(edge e1,edge e2);
+  int compare(const edge e1,const edge e2);
 };
 
   class TLP_SCOPE StringVectorProperty:public AbstractVectorProperty<tlp::StringVectorType, tlp::StringType>{ 
@@ -57,9 +59,11 @@ public :
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
-  std::string getTypename() const {
-    return "vector<string>";
-  }
+  static const std::string propertyTypename;
+   std::string getTypename() const {
+     return propertyTypename;
+   }
+
 };
 /*\@}*/
 }
