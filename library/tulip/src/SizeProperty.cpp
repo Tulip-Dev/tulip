@@ -24,6 +24,9 @@
 using namespace std;
 using namespace tlp;
 
+const string SizeProperty::propertyTypename="size";
+const string SizeVectorProperty::propertyTypename="vector<size>";
+
 class SizeMetaValueCalculator
   :public AbstractSizeProperty::MetaValueCalculator {
 public:

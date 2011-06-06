@@ -39,8 +39,10 @@ public :
   BooleanProperty (Graph *g, std::string n="") :AbstractProperty<BooleanType,BooleanType, BooleanAlgorithm>(g, n) {}
   // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
+
+  static const std::string propertyTypename;
   std::string getTypename() const {
-    return "bool";
+    return propertyTypename;
   }
   /*
    * Reverses all values associated to graph elements,
@@ -71,8 +73,10 @@ public :
   BooleanVectorProperty(Graph *g, std::string n="") :AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>(g, n) {}
   // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
+
+  static const std::string propertyTypename;
   std::string getTypename() const {
-    return "vector<bool>";
+    return propertyTypename;
   }
 };
 

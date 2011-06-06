@@ -27,6 +27,9 @@
 using namespace std;
 using namespace tlp;
 
+const string LayoutProperty::propertyTypename="layout";
+const string CoordVectorProperty::propertyTypename="vector<coord>";
+
 inline double sqr(double x){return (x*x);}
 
 // define a specific MetaValueCalculator

@@ -23,6 +23,9 @@
 using namespace std;
 using namespace tlp;
 
+const string IntegerProperty::propertyTypename="int";
+const string IntegerVectorProperty::propertyTypename="vector<int>";
+
 //==============================
 ///Constructeur d'un IntegerProperty
 IntegerProperty::IntegerProperty (Graph *sg, std::string n):AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm>(sg, n),

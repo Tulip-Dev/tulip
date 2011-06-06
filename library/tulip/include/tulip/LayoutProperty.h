@@ -47,8 +47,9 @@ public:
 
   // override some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
+  static const std::string propertyTypename;
   std::string getTypename() const {
-    return "layout";
+    return propertyTypename;
   }
 
   //=======================================
@@ -150,8 +151,9 @@ public :
   CoordVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<CoordVectorType, tlp::PointType>(g, n) {}
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
+  static const std::string propertyTypename;
   std::string getTypename() const {
-    return "vector<coord>";
+    return propertyTypename;
   }
 };
 

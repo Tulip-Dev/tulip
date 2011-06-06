@@ -43,8 +43,9 @@ public :
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
+  static const std::string propertyTypename;
   std::string getTypename() const {
-    return "string";
+    return propertyTypename;
   }
 
   /**
@@ -64,8 +65,9 @@ public :
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
+  static const std::string propertyTypename;
   std::string getTypename() const {
-    return "vector<string>";
+    return propertyTypename;
   }
 };
 /*\@}*/

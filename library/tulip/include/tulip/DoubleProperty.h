@@ -53,9 +53,10 @@ public :
   void clone_handler(AbstractProperty<DoubleType,DoubleType, DoubleAlgorithm> &);
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  PropertyInterface* clonePrototype(Graph *, const std::string& );  
+  static const std::string propertyTypename;
   std::string getTypename() const {
-    return "double";
+    return propertyTypename;
   }
 
   // override some AbstractProperty methods 
@@ -93,8 +94,9 @@ public :
   DoubleVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
+  static const std::string propertyTypename;
   std::string getTypename() const {
-    return "vector<double>";
+    return propertyTypename;
   }
 };
 /*@}*/

@@ -24,6 +24,9 @@
 using namespace std;
 using namespace tlp;
 
+const string ColorProperty::propertyTypename = "color";
+const string ColorVectorProperty::propertyTypename = "vector<color>";
+
 //=================================================================================
 PropertyInterface* ColorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )

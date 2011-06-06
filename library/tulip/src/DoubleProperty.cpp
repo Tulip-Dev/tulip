@@ -30,6 +30,10 @@ using namespace tlp;
 //=============================================================
 // Predefined Meta Value Calculators
 //=============================================================
+
+const string DoubleProperty::propertyTypename="double";
+const string DoubleVectorProperty::propertyTypename="vector<double>";
+
 typedef void (*DoubleNodePredefinedCalculator) (AbstractDoubleProperty* metric,
 						node mN, Graph* sg);
 

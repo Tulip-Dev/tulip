@@ -27,6 +27,9 @@
 using namespace std;
 using namespace tlp;
 
+const string BooleanProperty::propertyTypename = "bool";
+const string BooleanVectorProperty::propertyTypename = "vector<bool>";
+
 //=================================================================================
 Iterator<node>* BooleanProperty::getNodesEqualTo(const bool val, Graph *sg) {
   if (sg == 0) sg = graph;

@@ -28,6 +28,8 @@
 using namespace std;
 using namespace tlp;
 
+const string GraphProperty::propertyTypename="graph";
+
 //==============================
 GraphProperty::GraphProperty (Graph *sg, std::string n) : 
   AbstractProperty<GraphType, EdgeSetType>(sg, n) {

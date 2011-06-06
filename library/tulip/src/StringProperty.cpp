@@ -23,6 +23,9 @@
 using namespace std;
 using namespace tlp;
 
+const string StringProperty::propertyTypename="string";
+const string StringVectorProperty::propertyTypename="vector<string>";
+
 //=================================================================================
 PropertyInterface* StringProperty::clonePrototype(Graph * g, const std::string& n)
 {
