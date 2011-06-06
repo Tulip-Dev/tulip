@@ -24,11 +24,52 @@
 #include <QtGui/QIcon>
 
 #include <tulip/tulipconf.h>
+#include <tulip/AbstractPluginInfo.h>
 
 namespace tlp {
-  class AbstractPluginInfo;
   class Dependency;
 
+/**
+  * @brief This implementation of AbstractPluginInfo represents a plugin located on a remote server, thus not yet installed.
+  * All the informations are 'manually' entered into this class.
+  *
+  **/
+class TLP_QT_SCOPE DistantPluginInfo : public tlp::AbstractPluginInfo {
+public:
+  DistantPluginInfo(const std::string& author, const std::string& date, const std::string& group, const std::string& name, const std::string& info, const std::string& release, const std::string& tulipRelease)
+  : _author(author), _date(date), _group(group), _name(name), _info(info), _release(release), _tulipRelease(tulipRelease) {
+  }
+  virtual std::string getAuthor() const {
+    return _author;
+  }
+  virtual std::string getDate() const {
+    return _date;
+  }
+  virtual std::string getGroup() const {
+    return _group;
+  }
+  virtual std::string getName() const {
+    return _name;
+  }
+  virtual std::string getInfo() const {
+    return _info;
+  }
+  virtual std::string getRelease() const {
+    return _release;
+  }
+  virtual std::string getTulipRelease() const {
+    return _tulipRelease;
+  }
+private:
+  const std::string& _author;
+  const std::string& _date;
+  const std::string& _group;
+  const std::string& _name;
+  const std::string& _info;
+  const std::string& _release;
+  const std::string& _tulipRelease;
+};
+  
 /**
  * @brief This class describes the whereabouts of a plugin, be it locally installed, or on a remote server.
  *
@@ -53,10 +94,31 @@ class TLP_QT_SCOPE PluginInformationsInterface {
     PluginInformationsInterface() {}
 };
 
-class TLP_QT_SCOPE LocalPluginInformations : public PluginInformationsInterface {
+/**
+ * @brief Straightforward implementation of PluginInformationsInterface, useable for both remote and local plugins.
+ **/
+class TLP_QT_SCOPE PluginInformations : public PluginInformationsInterface {
   public:
-    LocalPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies, const std::string& library);
-    LocalPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies, const QString& longDescriptionPath, const QString& iconPath);
+    /**
+     * @brief This constructor is used for local plugin description, and the library is used to determine the path of the icon and long description.
+     *
+     * @param info The AbstractPluginInfo representing the plugin to describe.
+     * @param type The type of the plugin.
+     * @param dependencies The dependencies of the plugin.
+     * @param library The library file from which the plugin was loaded.
+     **/
+    PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies, const std::string& library);
+
+    /**
+     * @brief This constructor is used for remote plugin description, the long description and icon's paths are directly provided.
+     *
+     * @param info The AbstractPluginInfo representing the plugin to describe.
+     * @param type The type of the plugin.
+     * @param dependencies The dependencies of the plugin.
+     * @param longDescriptionPath The URL where the long description resides.
+     * @param iconPath The URL where the icon resides.
+     **/
+    PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies, const QString& longDescriptionPath, const QString& iconPath);
 
     virtual QString identifier() const;
     virtual QString name() const;
@@ -64,7 +126,7 @@ class TLP_QT_SCOPE LocalPluginInformations : public PluginInformationsInterface 
     virtual QString shortDescription() const;
     virtual QString longDescriptionPath() const;
     
-    virtual QString iconPath() const;
+    virtual QString iconPath() const; 
     virtual QDateTime installDate() const;
     
     virtual QString type() const;

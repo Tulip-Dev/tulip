@@ -10,7 +10,7 @@
 using namespace std;
 using namespace tlp;
 
-QMap<QString, QList<tlp::PluginInformationsInterface*> > PluginManager::_remoteLocations;
+QMap<QString, QList<const tlp::PluginInformationsInterface*> > PluginManager::_remoteLocations;
 
 QList<const tlp::PluginInformationsInterface*> PluginManager::pluginsList(Location list) {
   QList<const tlp::PluginInformationsInterface*> result;
@@ -22,7 +22,7 @@ QList<const tlp::PluginInformationsInterface*> PluginManager::pluginsList(Locati
       while(plugins->hasNext()) {
         string pluginName = plugins->next();
         const AbstractPluginInfo* info = currentLister->pluginInformations(pluginName);
-        PluginInformationsInterface* localinfo = new LocalPluginInformations(info, currentLister->getPluginsClassName(),
+        PluginInformationsInterface* localinfo = new PluginInformations(info, currentLister->getPluginsClassName(),
                                                                              currentLister->getPluginDependencies(pluginName), currentLister->getPluginLibrary(pluginName));
         result.push_back(localinfo);
       }
@@ -31,6 +31,9 @@ QList<const tlp::PluginInformationsInterface*> PluginManager::pluginsList(Locati
   }
 
   if(list.testFlag(Remote)) {
+    for(QMap<QString, QList<const tlp::PluginInformationsInterface*> >::const_iterator it = _remoteLocations.begin(); it != _remoteLocations.end(); ++it) {
+      result << it.value();
+    }
   }
 
   return result;
@@ -54,12 +57,12 @@ QString PluginManager::getPluginServerDescription(const QString& location) {
   return content;
 }
 
-QList<tlp::PluginInformationsInterface*> PluginManager::parseDescription(const QString& xmlDescription) {
+QList<const tlp::PluginInformationsInterface*> PluginManager::parseDescription(const QString& xmlDescription) {
   QDomDocument description;
   description.setContent(xmlDescription);
   QDomElement elm = description.documentElement();
   
-  QList<tlp::PluginInformationsInterface*> remotePlugins;
+  QList<const tlp::PluginInformationsInterface*> remotePlugins;
   QDomNodeList pluginNodes = description.elementsByTagName("plugin");
   for(int i = 0; i < pluginNodes.count(); ++i) {
     const QDomNode& child = pluginNodes.at(i);
@@ -85,7 +88,7 @@ QList<tlp::PluginInformationsInterface*> PluginManager::parseDescription(const Q
     //TODO fill these values from the location
     QString longDescriptionPath;
     QString iconPath;
-    PluginInformationsInterface* pluginInformations = new LocalPluginInformations(pluginInfo, type, dependencies, longDescriptionPath, iconPath);
+    PluginInformationsInterface* pluginInformations = new PluginInformations(pluginInfo, type, dependencies, longDescriptionPath, iconPath);
     remotePlugins.push_back(pluginInformations);
   }
 
