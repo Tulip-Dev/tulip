@@ -208,35 +208,44 @@ GLfloat* buildCurvePoints (const vector<Coord> &vertices,
 static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const Coord &pAfter,
 		float size, int inversion, vector<Coord> &result) {
 
-
 	Coord u = pBefore - pCurrent;
 	Coord v = pAfter - pCurrent;
-	Coord xu = u;
-	Coord xv = v;
 
-	float n_xu = xu.norm();
-	float n_xv = xv.norm();
-	xu /= n_xu;
-	xv /= n_xv;
+	if (fabs(u[2]) < 1e-3) u[2] = 0;
+	if (fabs(v[2]) < 1e-3) v[2] = 0;
 
+	Coord xu = u / u.norm();
+	Coord xv = v / v.norm();
 
 	Coord bi_xu_xv = xu+xv;
+
+	if(bi_xu_xv == Coord(0,0,0)) {
+		if (result.empty()) {
+			xv = Coord(0,0,1.);
+			Coord dir = xu^xv;
+			if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
+			result.push_back(pCurrent - dir*size);
+			result.push_back(pCurrent + dir*size);
+		} else {
+			xu = xv;
+			xv = Coord(0,0,-1);
+			Coord dir = xu^xv;
+			if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
+			result.push_back(pCurrent - dir*inversion*size);
+			result.push_back(pCurrent + dir*inversion*size);
+		}
+		return inversion;
+	}
+
 	float newSize=size;
 	float angle = 0;
-	//two point at the same coord
-	if(bi_xu_xv == Coord(0,0,0)) {
-		bi_xu_xv = xv;
-		bi_xu_xv[0] = -xv[1];
-		bi_xu_xv[1] = xv[0];
-	} else {
-		bi_xu_xv /= bi_xu_xv.norm();
 
-		angle=M_PI-acos(u.dotProduct(v)/(u.norm()*v.norm()));
-		if(isnan(angle))
-			angle=0;
-		newSize=newSize/cos(angle/2.);
+	bi_xu_xv /= bi_xu_xv.norm();
 
-	}
+	angle=M_PI-acos(u.dotProduct(v)/(u.norm()*v.norm()));
+	if(isnan(angle) || fabs(angle) < 1e-5)
+		angle=0;
+	newSize=newSize/cos(angle/2.);
 
 	if(angle<M_PI/2+M_PI/4) {
 		//normal form
