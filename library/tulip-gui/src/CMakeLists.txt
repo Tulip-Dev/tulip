@@ -29,8 +29,6 @@ SET(SRCS
   InteractorManager.cpp
   Interactor.cpp
   InteractorChainOfResponsibility.cpp
-  PluginProgressWidget.cpp
-  QtProgress.cpp
   View.cpp
   AbstractView.cpp
   RenderingParametersDialog.cpp
@@ -70,6 +68,7 @@ SET(SRCS
   PluginManager.cpp
   TulipProject.cpp
   QuaZIPFacade.cpp
+  SimplePluginProgressWidget.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -79,7 +78,6 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/AugmentedDisplayDialog.ui
   ../designer/GWOverviewWidget.ui
   ../designer/GridOptions.ui
-  ../designer/PluginProgressWidget.ui
   ../designer/ColorScaleConfigDialog.ui
   ../designer/SimpleStringsListSelectionWidget.ui
   ../designer/DoubleStringsListSelectionWidget.ui
@@ -89,6 +87,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/CSVParserConfigurationWidget.ui
   ../designer/CSVImportWizard.ui
   ../designer/PropertyCreationDialog.ui
+  ../designer/SimplePluginProgressWidget.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -103,8 +102,6 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/GWOverviewWidget.h
   ../include/tulip/Interactor.h
   ../include/tulip/GridOptionsWidget.h
-  ../include/tulip/PluginProgressWidget.h
-  ../include/tulip/QtProgress.h
   ../include/tulip/View.h
   ../include/tulip/AbstractView.h
   ../include/tulip/ItemsListWidget.h
@@ -127,6 +124,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/ThreadedComputeProperty.h
   ../include/tulip/TulipProject.h
   ../include/tulip/PluginManager.h
+  ../include/tulip/SimplePluginProgressWidget.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipQtResource.qrc)

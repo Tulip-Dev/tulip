@@ -37,7 +37,7 @@
 #include <tulip/GlCPULODCalculator.h>
 
 #include "tulip/NodeLinkDiagramComponent.h"
-#include "tulip/QtProgress.h"
+#include "tulip3/QtProgress.h"
 #include "tulip/TlpQtTools.h"
 
 #include "tulip/ThreadedComputeProperty.h"

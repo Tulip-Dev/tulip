@@ -16,9 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/QtProgress.h"
-#include "tulip/PluginProgressWidget.h"
-#include "tulip/TlpQtTools.h"
+#include "tulip3/QtProgress.h"
+#include <tulip3/PluginProgressWidget.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QtGui/QVBoxLayout>
 using namespace std;

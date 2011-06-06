@@ -33,18 +33,18 @@ namespace tlp {
     class TLP_QT_SCOPE QtProgress : public QDialog, public tlp::PluginProgress{
         Q_OBJECT
     public:
-        QtProgress(QWidget* parent, std::string text, View *view=NULL,int updateInterval=200);
+        QtProgress(QWidget* parent, std::string text, tlp::View *view=NULL,int updateInterval=200);
         virtual ~QtProgress();
     signals:
         void sendProgress(int, int);
     public slots:
-        ProgressState progress(int step, int max_step);
+        tlp::ProgressState progress(int step, int max_step);
         void cancel();
         void stop();
         bool isPreviewMode() const ;
         void setPreviewMode(bool);
         void showPreview(bool);
-        ProgressState state() const;
+        tlp::ProgressState state() const;
         std::string getError();
         void setError(std::string error);
         void setComment(std::string);

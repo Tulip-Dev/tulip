@@ -11,7 +11,6 @@
 namespace tlp {
   class DataSet;
   class PluginProgress;
-  class QtProgress;
 }
 
 struct TLP_QT_SCOPE AbstractComputeProperty {
