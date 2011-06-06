@@ -18,7 +18,7 @@
  */
 #include "tulip/CSVImportWizard.h"
 #include "ui_CSVImportWizard.h"
-#include <tulip/QtProgress.h>
+#include <tulip/SimplePluginProgressWidget.h>
 #include <QtGui/QVBoxLayout>
 using namespace tlp;
 CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage ( QWidget * parent):QWizardPage(parent),parserConfigurationWidget(new CSVParserConfigurationWidget(this)),previewTableWidget(new CSVTableWidget(this)){
@@ -42,7 +42,8 @@ void CSVParsingConfigurationQWizardPage::parserChanged(){
     previewTableWidget->begin();
     if(parser!=NULL){
         previewTableWidget->setEnabled(true);
-        QtProgress progress(this,"Generating preview");
+        SimplePluginProgressWidget progress(this);
+        progress.setWindowTitle("Generating preview");
         progress.setComment("Parsing file");
         parser->parse(previewTableWidget,&progress);
     }else{
@@ -125,7 +126,8 @@ void CSVImportWizard::accept(){
             }
             if(processIsValid){
                 //Launch the import process
-                QtProgress progress(this,"Importing CSV data on graph");
+                SimplePluginProgressWidget progress(this);
+                progress.setWindowTitle("Importing CSV data on graph");
                 progress.setComment("Building index");
                 //Build the mapping index
                 processIsValid = parser->parse(rowMapping,&progress);

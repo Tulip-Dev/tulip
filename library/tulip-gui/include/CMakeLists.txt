@@ -24,8 +24,6 @@ INSTALL(FILES
   tulip/SGHierarchyWidget.h
   tulip/GWOverviewWidget.h
   tulip/TlpQtTools.h
-  tulip/QtProgress.h
-  tulip/PluginProgressWidget.h
   tulip/View.h
   tulip/AbstractView.h
   tulip/GraphPropertiesSelectionWidget.h
@@ -62,6 +60,7 @@ INSTALL(FILES
   tulip/TabWidgetHidableMenuGraphicsProxy.h
   tulip/GraphicsWidgetBase.h
   tulip/TulipProject.h
+  tulip/SimplePluginProgressWidget.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

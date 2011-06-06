@@ -19,7 +19,7 @@
 #include "tulip/CSVImportConfigurationWidget.h"
 #include "ui_CSVImportConfigurationWidget.h"
 #include <tulip/TlpQtTools.h>
-#include <tulip/QtProgress.h>
+#include <tulip/SimplePluginProgressWidget.h>
 #include <QtGui/QComboBox>
 #include <QtGui/QLineEdit>
 #include <QtGui/QScrollBar>
@@ -177,7 +177,8 @@ void CSVImportConfigurationWidget::setNewParser(CSVParser *newParser){
 void CSVImportConfigurationWidget::updateWidget(){
     if(parser){
         setEnabled(true);
-        QtProgress progress(this,"Generating previews",NULL);
+        SimplePluginProgressWidget progress(this);
+        progress.setWindowTitle("Generating previews");
         progress.setComment("Generating preview");
         parser->parse(this,&progress);
     }else{

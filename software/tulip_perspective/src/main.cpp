@@ -8,9 +8,6 @@
 #include <tulip/PluginLister.h>
 #include <tulip/TlpTools.h>
 
-#include <iostream>
-using namespace std;
-
 // This PluginLoader basically does nothing. It's only used to load plugins at startup.
 class NoOpPluginLoader: public tlp::PluginLoader {
 public:
@@ -67,9 +64,6 @@ int main(int argc,char **argv) {
     else if (projectFilePath.isNull())
       projectFilePath = a;
   }
-
-  cout << perspectiveName.toStdString() << endl;
-  cout << projectFilePath.toStdString() << endl;
 
   // Initialize main window.
 
