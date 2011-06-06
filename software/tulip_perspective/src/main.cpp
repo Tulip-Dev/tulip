@@ -1,12 +1,21 @@
 #include "TulipAgentCommunicator.h"
 
-#include <QtGui/QApplication>
 #include <QtCore/QString>
 #include <QtCore/QDir>
+#include <QtGui/QApplication>
+#include <QtGui/QMainWindow>
 
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TulipProject.h>
+#include <tulip/SimplePluginProgressWidget.h>
+#include <tulip/PluginLister.h>
+#include <tulip/Perspective.h>
+
+#include <iostream>
+using namespace std;
+using namespace tlp;
 
 // This PluginLoader basically does nothing. It's only used to load plugins at startup.
 class NoOpPluginLoader: public tlp::PluginLoader {
@@ -18,6 +27,10 @@ public:
   virtual void aborted(const std::string &,const  std::string &) {}
   virtual void finished(bool ,const std::string &) {}
 };
+
+void usage(const QString &error) {
+
+}
 
 int main(int argc,char **argv) {
   QApplication tulip_perspective(argc, argv);
@@ -65,11 +78,40 @@ int main(int argc,char **argv) {
       projectFilePath = a;
   }
 
-  // Initialize main window.
+  if (perspectiveName.isNull() && projectFilePath.isNull())
+    usage("Invalid arguments");
 
   // Initialize project
+  TulipProject *project = NULL;
+  if (!projectFilePath.isNull()) {
+    SimplePluginProgressWidget *progress = new SimplePluginProgressWidget;
+    progress->show();
+    project = TulipProject::openProject(projectFilePath,progress);
+    if (!project->isValid()) {
+      usage("Failed to open project file " + projectFilePath + ": " + project->lastError());
+      exit(1);
+    }
+    perspectiveName = project->perspective();
+    delete progress;
+  }
+
+  // Initialize main window.
+  QMainWindow *mainWindow = new QMainWindow();
+  mainWindow->setVisible(false);
 
   // Construct perspective
+  PerspectiveContext context;
+  context.mainWindow = mainWindow;
+  Perspective *perspective = StaticPluginLister<Perspective,PerspectiveContext>::getPluginObject(perspectiveName.toStdString(), context);
+  if (!perspective) {
+    usage("Failed to create perspective: " + perspectiveName);
+    exit(1);
+  }
+
+  if (project)
+    perspective->construct(project);
+  else
+    perspective->construct();
 
   // Connect perspective and communicator
 
