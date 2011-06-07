@@ -37,7 +37,7 @@ echo @prefix@/share copied in $BUNDLE_DIR
 
 # remove not needed files
 rm $BUNDLE_BIN_DIR/tulip-config
-rm $BUNDLE_DIR/share/Find*.*
+rm $BUNDLE_DIR/share/tulip/Find*.*
 
 function copy_linked_lib() {
   LIB_TO_COPY=$(ldd $2 | grep $1 | awk '{print $3}')
@@ -69,7 +69,7 @@ do
     copy_linked_lib $LIB $BUNDLE_BIN_DIR/tulip_app
 done;
 # add python needed libs
-LIB_PYTHON_SCRIPT_VIEW=$(ls $BUNDLE_LIB_DIR/tlp/view/libpython*)
+LIB_PYTHON_SCRIPT_VIEW=$(ls $BUNDLE_LIB_DIR/tulip/view/libpython*)
 for LIB in libcrypto libk5crypto libgssapi_krb5 libkrb5 libssl libpython
 do
     copy_linked_lib $LIB $LIB_PYTHON_SCRIPT_VIEW
