@@ -253,20 +253,6 @@ namespace tlp {
      */
     bool isEdge3D() const;
     /**
-     * Get the size of the border that is added to any label when
-     * using bitmap fonts.
-     * \deprecated Use getLabelsDensity instead
-     */
-    unsigned int getLabelsBorder() const;
-    /**
-     * Get the size of the border that is added to any label when
-     * using bitmap fonts. Setting this parameter to a high value
-     * enables de reduce the label density in the final drawing.
-     * Default value is set to 2 which enables readable labels.
-     * \deprecated Use setLabelsDensity instead
-     */
-    void setLabelsBorder(const unsigned int);
-    /**
      * set if Edge max size is block to node size
      */
     void setEdgesMaxSizeToNodesSize(const bool b);
@@ -298,16 +284,6 @@ namespace tlp {
      * Set if labels are scaled to node size
      */
     void setLabelScaled(bool state);
-    /**
-     * return if labels can be overlaped
-     * \deprecated Use getLabelsDensity instead
-     */
-    bool isLabelOverlaped();
-    /**
-     * Set if labels can be overlaped
-     * \deprecated Use setLabelsDensity instead
-     */
-    void setLabelOverlaped(bool state);
     /**
      * Return labels density
      * This density must be in interval -100 100

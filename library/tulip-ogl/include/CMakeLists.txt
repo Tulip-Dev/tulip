@@ -9,7 +9,6 @@ INSTALL(FILES
   tulip/GlCircle.h
   tulip/GlLabel.h
   tulip/GlRect.h
-  tulip/GlRectTextured.h
   tulip/Gl2DRect.h
   tulip/GlAbstractPolygon.h
   tulip/GlPolygon.h
