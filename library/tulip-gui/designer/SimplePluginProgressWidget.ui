@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>214</width>
-    <height>206</height>
+    <width>202</width>
+    <height>253</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,16 +21,22 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="CircleProgressBar" name="circleProgress" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimumSize">
         <size>
-         <width>128</width>
-         <height>128</height>
+         <width>200</width>
+         <height>200</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>128</width>
-         <height>128</height>
+         <width>200</width>
+         <height>200</height>
         </size>
        </property>
       </widget>
@@ -38,7 +44,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="commentLabel">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
        <horstretch>0</horstretch>
@@ -54,14 +60,14 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="previewCheck">
-     <property name="text">
-      <string>Preview</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QCheckBox" name="previewCheck">
+       <property name="text">
+        <string>Preview</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">

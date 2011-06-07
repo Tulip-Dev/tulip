@@ -13,6 +13,8 @@ public:
   explicit CircleProgressBar(QWidget *parent=0);
   void setValue(int value, int max);
 
+  virtual int heightForWidth(int w) const;
+
 protected:
   virtual void paintEvent(QPaintEvent *);
 };
@@ -29,6 +31,8 @@ class TLP_QT_SCOPE SimplePluginProgressWidget: public QWidget, public tlp::Simpl
 
 public:
   explicit SimplePluginProgressWidget(QWidget *parent=0,Qt::WindowFlags f=0);
+
+  void setComment(std::string);
 
 protected:
   virtual void progress_handler(int step, int max_step);
