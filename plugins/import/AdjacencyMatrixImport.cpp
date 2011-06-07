@@ -99,7 +99,7 @@ public:
     return false;
   }    
 
-  bool import(const string &) {
+  bool import() {
     string name2;
     if (!dataSet->get("file::name", name2))
       return false;

@@ -48,7 +48,7 @@ public:
   }
   ~FileSystem(){}
 
-  bool import(const std::string &) {
+  bool import() {
     if (dataSet == 0)
       return false;
 

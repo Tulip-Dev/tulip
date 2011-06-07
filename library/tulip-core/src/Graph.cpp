@@ -142,7 +142,7 @@ Graph * tlp::importGraph(const string &alg, DataSet &dataSet, PluginProgress *pl
   ImportModule *newImportModule=ImportModuleLister::getPluginObject(alg, tmp);
   assert(newImportModule!=0);
   bool result;
-  if (!(result=newImportModule->import(""))) {
+  if (!(result=newImportModule->import())) {
     if (newGraphP) delete newGraph;
   }
   if (deletePluginProgress) delete tmpProgress;

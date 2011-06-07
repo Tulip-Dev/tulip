@@ -165,7 +165,7 @@ class Grid: public ImportModule {
   }
 
 
-  bool import(const string &) {
+  bool import() {
     unsigned int width = 10;
     unsigned int height = 10;
     bool isTore = false;

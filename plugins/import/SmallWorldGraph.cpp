@@ -75,7 +75,7 @@ public:
   }
   ~SmallWorldGraph(){}
   
-  bool import(const string &) {
+  bool import() {
     unsigned int nbNodes  = 200;
     unsigned int avgDegree = 10;
     bool enableLongEdge = false;

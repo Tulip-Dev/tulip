@@ -58,7 +58,7 @@ public:
   ~CompleteGraph(){
   }
   
-  bool import(const string &) {
+  bool import() {
     unsigned int nbNodes  = 5;
     bool undirected = false;
     if (dataSet!=0) {
