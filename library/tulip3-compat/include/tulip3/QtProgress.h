@@ -30,7 +30,7 @@ namespace tlp {
       *
       * Display and control a PluginProgress widget inside a QDialog.
       **/
-    class TLP_QT_SCOPE QtProgress : public QDialog, public tlp::PluginProgress{
+    class TLP3_COMPAT_SCOPE QtProgress : public QDialog, public tlp::PluginProgress{
         Q_OBJECT
     public:
         QtProgress(QWidget* parent, std::string text, tlp::View *view=NULL,int updateInterval=200);

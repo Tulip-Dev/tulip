@@ -37,7 +37,7 @@ namespace tlp {
       * If user give a View and if the preview check box is checked each time the progress_handler function is called the init function of the view is called.
       * Be careful when using the preview mode as it can slow down the process.
       **/
-class TLP_QT_SCOPE PluginProgressWidget : public QWidget, public tlp::SimplePluginProgress
+class TLP3_COMPAT_SCOPE PluginProgressWidget : public QWidget, public tlp::SimplePluginProgress
 {
     Q_OBJECT
 
