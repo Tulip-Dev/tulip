@@ -29,6 +29,7 @@
 #include <tulip/Vector.h>
 #include <tulip/Interactor.h>
 #include <tulip/AbstractPluginInfo.h>
+#include <tulip/Perspective.h>
 
 class QMenuBar;
 class QToolBar;
@@ -93,12 +94,12 @@ namespace tlp {
 		void addDockWidget( Qt::DockWidgetArea area, QDockWidget * dockWidget) {
 			mainWindow->addDockWidget(area,dockWidget);
 		}
-                /**
-                * @brief Remove a dock widget from the QMainWindow.
-                **/
-                void removeDockWidget(QDockWidget* dockWidet){
-                    mainWindow->removeDockWidget(dockWidet);
-                }
+    /**
+    * @brief Remove a dock widget from the QMainWindow.
+    **/
+    void removeDockWidget(QDockWidget* dockWidet){
+        mainWindow->removeDockWidget(dockWidet);
+    }
 
 		/**
 		 * Moves second dock widget on top of first dock widget, creating a tabbed docked area
@@ -130,28 +131,28 @@ namespace tlp {
       return mainWindow->centralWidget();
     }
 
-        /**
-          * Add a new custom toolbar on a side of the main Window.
-          */
-        void addToolBar(Qt::ToolBarArea area, QToolBar *toolBar) {
-          mainWindow->addToolBar(area, toolBar);
-        }
+    /**
+      * Add a new custom toolbar on a side of the main Window.
+      */
+    void addToolBar(Qt::ToolBarArea area, QToolBar *toolBar) {
+      mainWindow->addToolBar(area, toolBar);
+    }
 
-        Qt::DockWidgetArea dockWidgetArea(QDockWidget *dock) {
-          return mainWindow->dockWidgetArea(dock);
-        }
+    Qt::DockWidgetArea dockWidgetArea(QDockWidget *dock) {
+      return mainWindow->dockWidgetArea(dock);
+    }
 
-        QByteArray saveState(int version = 0) {
-          return mainWindow->saveState(version);
-        }
+    QByteArray saveState(int version = 0) {
+      return mainWindow->saveState(version);
+    }
 
-        bool restoreState(const QByteArray& state, int version = 0) {
-          return mainWindow->restoreState(state, version);
-        }
+    bool restoreState(const QByteArray& state, int version = 0) {
+      return mainWindow->restoreState(state, version);
+    }
 
 	private:
 
-        QMainWindow *mainWindow;
+    QMainWindow *mainWindow;
 		QMenuBar *menuBar;
 		QToolBar *toolBar;
 		QToolBar *interactorsToolBar;
@@ -166,13 +167,19 @@ namespace tlp {
    *  Tulip controller interface class
    *  If you want to create a new Controller : implement setData and getData and extend attachMainWindow (see attachMainWindow description)
    */
-  class TLP3_COMPAT_SCOPE Controller : public QObject, public WithParameter, public WithDependency{
+  class TLP3_COMPAT_SCOPE Controller : public tlp::Perspective {
 
     Q_OBJECT;
 
   public:
 
+    Controller(tlp::PerspectiveContext &c);
+
     virtual ~Controller() {}
+
+    // Methods inherited from Perspective
+    virtual void construct();
+    virtual void construct(tlp::TulipProject *);
 
     /**
      * By default in Tulip, if we have only one controller, we auto load it
@@ -233,20 +240,18 @@ namespace tlp {
 
     static Controller *currentController;
 
+
+  private:
+    void _buildUi();
+
   };
 
   class TLP3_COMPAT_SCOPE ControllerContext {
   };
 
-  typedef StaticPluginLister<Controller, ControllerContext*> ControllerLister;
-
-#ifdef WIN32
-  template class TLP3_COMPAT_SCOPE PluginLister<Controller,ControllerContext *>;
-#endif
-
 }
 
-#define CONTROLLERPLUGINOFGROUP(C,N,A,D,I,R,G) POINTERCONTEXTPLUGINFACTORY(Controller,C,N,A,D,I,R,G)
+#define CONTROLLERPLUGINOFGROUP(C,N,A,D,I,R,G) PERSPECTIVEPLUGINOFGROUP(C,N,A,D,I,R,G)
 #define CONTROLLERPLUGIN(C,N,A,D,I,R) CONTROLLERPLUGINOFGROUP(C,N,A,D,I,R,"")
 
 #endif

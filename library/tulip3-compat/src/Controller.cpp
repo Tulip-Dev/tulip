@@ -18,6 +18,10 @@
  */
 #include "tulip3/Controller.h"
 
+#include <QtGui/QWorkspace>
+
+#include "ui_Tulip.h"
+
 using namespace std;
 
 //====================================================
@@ -31,8 +35,35 @@ namespace tlp {
 		:mainWindow(mainWindow),menuBar(mainWindow->menuBar()),toolBar(toolBar),interactorsToolBar(interactorsToolBar),workspace(workspace),statusBar(mainWindow->statusBar()){
   }
 
+
+
+  Controller::Controller(tlp::PerspectiveContext &c): Perspective(c) {
+  }
+
+  void Controller::construct() {
+    _buildUi();
+    setData(tlp::newGraph());
+  }
+
+  void Controller::construct(tlp::TulipProject *project) {
+    _buildUi();
+  }
+
   void Controller::attachMainWindow(MainWindowFacade facade) {
     mainWindowFacade=facade;
+  }
+
+  void Controller::_buildUi() {
+    Ui::TulipData *ui = new Ui::TulipData;
+    ui->setupUi(_mainWindow);
+    _mainWindow->show();
+
+    QGridLayout *gridLayout = new QGridLayout(ui->tab);
+    QWorkspace *workspace = new QWorkspace(ui->tab);
+    workspace->setBackground(QBrush(QPixmap(QString::fromUtf8(":/background_logo.png"))));
+    gridLayout->addWidget(workspace, 0, 0, 1, 1);
+
+    attachMainWindow(MainWindowFacade(_mainWindow,ui->toolBar,ui->graphToolBar,workspace));
   }
 
 }

@@ -44,7 +44,7 @@ namespace tlp {
     
     public :
       
-      ControllerViewsManager();
+      ControllerViewsManager(tlp::PerspectiveContext &c);
       virtual ~ControllerViewsManager();
       
       /**

@@ -42,11 +42,14 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/FindSelection.ui
   ../designer/SnapshotDialog.ui
   ../designer/PluginProgressWidget.ui
+  ../designer/Tulip.ui
 )
+
+QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipResource.qrc)
 
 INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipGUIBuildInclude} ${Tulip3CompatInclude} ${Tulip3CompatBuildInclude} ${CMAKE_CURRENT_BINARY_DIR})
 
-ADD_LIBRARY(${LibTulip3CompatName} SHARED ${SRCS} ${MOC_SRCS} ${UI_HEADERS})
+ADD_LIBRARY(${LibTulip3CompatName} SHARED ${SRCS} ${MOC_SRCS} ${UI_HEADERS} ${RCC_SRCS})
 
 TARGET_LINK_LIBRARIES(${LibTulip3CompatName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
 

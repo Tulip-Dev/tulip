@@ -1,0 +1,983 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TulipData</class>
+ <widget class="QMainWindow" name="TulipData">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1005</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Tulip</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/TulipResource.qrc">
+    <normaloff>:/logo32x32.png</normaloff>:/logo32x32.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QTabWidget" name="centralTabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Tab 2</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="fileOpenAction"/>
+   <addaction name="fileSaveAction"/>
+   <addaction name="filePrintAction"/>
+  </widget>
+  <widget class="QToolBar" name="graphToolBar">
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1005</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="windowsMenu">
+    <property name="title">
+     <string>&amp;Windows</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="fileOpenAction"/>
+    <addaction name="fileSaveAction"/>
+    <addaction name="fileSaveAsAction"/>
+    <addaction name="separator"/>
+    <addaction name="filePrintAction"/>
+    <addaction name="separator"/>
+    <addaction name="fileCloseTabAction"/>
+    <addaction name="fileExitAction"/>
+   </widget>
+   <widget class="QMenu" name="helpMenu">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="helpDocumentationAction"/>
+    <addaction name="separator"/>
+    <addaction name="filePreferenceAction"/>
+    <addaction name="pluginsAction"/>
+    <addaction name="separator"/>
+    <addaction name="helpAboutAction"/>
+   </widget>
+   <addaction name="fileMenu"/>
+   <addaction name="windowsMenu"/>
+   <addaction name="helpMenu"/>
+  </widget>
+  <action name="fileOpenAction">
+   <property name="icon">
+    <iconset resource="TulipResource.qrc">
+     <normaloff>:/i_open.png</normaloff>:/i_open.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+   <property name="iconText">
+    <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="fileCloseTabAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Close tab</string>
+   </property>
+   <property name="iconText">
+    <string>Close tab</string>
+   </property>
+  </action>
+  <action name="fileSaveAction">
+   <property name="icon">
+    <iconset resource="TulipResource.qrc">
+     <normaloff>:/i_save.png</normaloff>:/i_save.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="iconText">
+    <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="fileSaveAsAction">
+   <property name="text">
+    <string>Save &amp;As...</string>
+   </property>
+   <property name="iconText">
+    <string>Save As</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="filePrintAction">
+   <property name="icon">
+    <iconset resource="TulipResource.qrc">
+     <normaloff>:/i_print.png</normaloff>:/i_print.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Print...</string>
+   </property>
+   <property name="iconText">
+    <string>Print</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="fileExitAction">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+   <property name="iconText">
+    <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="editUndoAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>image7</normaloff>image7</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Undo</string>
+   </property>
+   <property name="iconText">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="editRedoAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>image8</normaloff>image8</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Redo</string>
+   </property>
+   <property name="iconText">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="editCutAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>image9</normaloff>image9</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Cut</string>
+   </property>
+   <property name="iconText">
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="editCopyAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>image10</normaloff>image10</iconset>
+   </property>
+   <property name="text">
+    <string>C&amp;opy</string>
+   </property>
+   <property name="iconText">
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="editPasteAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>image11</normaloff>image11</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Paste</string>
+   </property>
+   <property name="iconText">
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="editFindAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>image12</normaloff>image12</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Find...</string>
+   </property>
+   <property name="iconText">
+    <string>Find</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="helpDocumentationAction">
+   <property name="text">
+    <string>&amp;Documentation...</string>
+   </property>
+   <property name="iconText">
+    <string>Documentation</string>
+   </property>
+   <property name="shortcut">
+    <string/>
+   </property>
+  </action>
+  <action name="pluginsAction">
+   <property name="text">
+    <string>&amp;Plugins...</string>
+   </property>
+   <property name="iconText">
+    <string>Plugins</string>
+   </property>
+  </action>
+  <action name="helpAboutAction">
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+   <property name="iconText">
+    <string>About</string>
+   </property>
+   <property name="shortcut">
+    <string/>
+   </property>
+  </action>
+  <action name="force_ratio">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Force ratio</string>
+   </property>
+   <property name="iconText">
+    <string>Force ratio</string>
+   </property>
+  </action>
+  <action name="map_metric">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Map Metric</string>
+   </property>
+   <property name="iconText">
+    <string>Map Metric</string>
+   </property>
+  </action>
+  <action name="enable_morphing">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Morphing</string>
+   </property>
+   <property name="iconText">
+    <string>Morphing</string>
+   </property>
+  </action>
+  <action name="grid_option">
+   <property name="text">
+    <string>Grid</string>
+   </property>
+   <property name="iconText">
+    <string>Grid</string>
+   </property>
+  </action>
+  <action name="Action">
+   <property name="text">
+    <string>Tests</string>
+   </property>
+   <property name="iconText">
+    <string>Unnamed</string>
+   </property>
+  </action>
+  <action name="is_acyclic">
+   <property name="text">
+    <string>Acyclic</string>
+   </property>
+   <property name="iconText">
+    <string>Acyclicity</string>
+   </property>
+   <property name="toolTip">
+    <string>Checks is the current graph is acyclic</string>
+   </property>
+  </action>
+  <action name="is_biconnected">
+   <property name="text">
+    <string>Biconnected</string>
+   </property>
+   <property name="iconText">
+    <string>Biconnected</string>
+   </property>
+   <property name="toolTip">
+    <string>Checks is the current graph is biconnected</string>
+   </property>
+  </action>
+  <action name="is_triconnected">
+   <property name="text">
+    <string>Triconnected</string>
+   </property>
+   <property name="iconText">
+    <string>Triconnected</string>
+   </property>
+   <property name="toolTip">
+    <string>Checks is the current graph is triconnected</string>
+   </property>
+  </action>
+  <action name="is_planar">
+   <property name="text">
+    <string>Planar</string>
+   </property>
+   <property name="iconText">
+    <string>Planarity</string>
+   </property>
+   <property name="toolTip">
+    <string>Checks is the current graph is planar</string>
+   </property>
+  </action>
+  <action name="is_outer_planar">
+   <property name="text">
+    <string>Outer Planar</string>
+   </property>
+   <property name="iconText">
+    <string>Outer Planarity</string>
+   </property>
+   <property name="toolTip">
+    <string>Checks is the current graph is outer planar</string>
+   </property>
+  </action>
+  <action name="is_simple">
+   <property name="text">
+    <string>Simple</string>
+   </property>
+   <property name="iconText">
+    <string>Simple</string>
+   </property>
+   <property name="toolTip">
+    <string>Checks is the current graph is simple</string>
+   </property>
+  </action>
+  <action name="is_directed_tree">
+   <property name="text">
+    <string>Directed Tree</string>
+   </property>
+   <property name="iconText">
+    <string>Directed Tree</string>
+   </property>
+   <property name="toolTip">
+    <string>Checks if the current graph is a directed tree</string>
+   </property>
+  </action>
+  <action name="menunew_itemAction">
+   <property name="text">
+    <string>&amp;Modify</string>
+   </property>
+   <property name="iconText">
+    <string>&amp;Modify</string>
+   </property>
+  </action>
+  <action name="make_acyclic">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Make acyclic</string>
+   </property>
+   <property name="iconText">
+    <string>Make acyclic</string>
+   </property>
+   <property name="toolTip">
+    <string>Makes the current graph acyclic</string>
+   </property>
+  </action>
+  <action name="make_simple">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Make simple</string>
+   </property>
+   <property name="iconText">
+    <string>Make simple</string>
+   </property>
+   <property name="toolTip">
+    <string>Makes the current graph simple</string>
+   </property>
+  </action>
+  <action name="make_biconnected">
+   <property name="text">
+    <string>Make biconnected</string>
+   </property>
+   <property name="iconText">
+    <string>Make biconnected</string>
+   </property>
+   <property name="toolTip">
+    <string>Makes the current graph biconnected</string>
+   </property>
+  </action>
+  <action name="make_connected">
+   <property name="text">
+    <string>Make connected</string>
+   </property>
+   <property name="iconText">
+    <string>new item</string>
+   </property>
+   <property name="toolTip">
+    <string>Makes the current graph connected</string>
+   </property>
+  </action>
+  <action name="is_connected">
+   <property name="text">
+    <string>Connected</string>
+   </property>
+   <property name="iconText">
+    <string>new item</string>
+   </property>
+  </action>
+  <action name="Reverse_selected_edgesAction">
+   <property name="text">
+    <string>Reverse selected edges</string>
+   </property>
+   <property name="iconText">
+    <string>Reverse selected edges</string>
+   </property>
+  </action>
+  <action name="editDeselect_allAction">
+   <property name="text">
+    <string>Deselect All</string>
+   </property>
+   <property name="iconText">
+    <string>Deselect All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+A</string>
+   </property>
+  </action>
+  <action name="editReverse_selectionAction">
+   <property name="text">
+    <string>Invert selection</string>
+   </property>
+   <property name="iconText">
+    <string>Invert selection</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="editAction">
+   <property name="text">
+    <string/>
+   </property>
+   <property name="iconText">
+    <string/>
+   </property>
+  </action>
+  <action name="editDelete_selectionAction">
+   <property name="text">
+    <string>Delete selection</string>
+   </property>
+   <property name="iconText">
+    <string>Delete selection</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="editCreate_subgraphAction">
+   <property name="text">
+    <string>Create subgraph</string>
+   </property>
+   <property name="iconText">
+    <string>Create subgraph</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+G</string>
+   </property>
+  </action>
+  <action name="editCreate_groupAction">
+   <property name="text">
+    <string>Create group</string>
+   </property>
+   <property name="iconText">
+    <string>Create group</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="editSelect_AllAction">
+   <property name="text">
+    <string>Select All</string>
+   </property>
+   <property name="iconText">
+    <string>Select All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="tooltips">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Tooltips</string>
+   </property>
+   <property name="iconText">
+    <string>Tooltips</string>
+   </property>
+   <property name="toolTip">
+    <string>Enable/disable the display of tooltips on graph nodes or edges</string>
+   </property>
+  </action>
+  <action name="is_free_tree">
+   <property name="text">
+    <string>Free Tree</string>
+   </property>
+   <property name="iconText">
+    <string>Unnamed</string>
+   </property>
+   <property name="toolTip">
+    <string>Checks if the current graph is a free tree</string>
+   </property>
+  </action>
+  <action name="make_directed">
+   <property name="text">
+    <string>Make directed</string>
+   </property>
+   <property name="iconText">
+    <string>Unnamed</string>
+   </property>
+   <property name="toolTip">
+    <string>Tranforms the current graph into a directed tree</string>
+   </property>
+  </action>
+  <action name="filePreferenceAction">
+   <property name="text">
+    <string>Preferences...</string>
+   </property>
+  </action>
+  <actiongroup name="mouseActionGroup">
+   <action name="addEdgeAction">
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../../../../../:/i_addedge.png</normaloff>../../../../../../../:/i_addedge.png</iconset>
+    </property>
+    <property name="text">
+     <string>addEdge</string>
+    </property>
+    <property name="iconText">
+     <string>addEdge</string>
+    </property>
+    <property name="toolTip">
+     <string>Add edges</string>
+    </property>
+   </action>
+   <action name="addNodeAction">
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../../../../../:/i_addnode.png</normaloff>../../../../../../../:/i_addnode.png</iconset>
+    </property>
+    <property name="text">
+     <string>addNode</string>
+    </property>
+    <property name="iconText">
+     <string>addNode</string>
+    </property>
+    <property name="toolTip">
+     <string>Add nodes</string>
+    </property>
+   </action>
+   <action name="deleteAction">
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../../../../../:/i_del.png</normaloff>../../../../../../../:/i_del.png</iconset>
+    </property>
+    <property name="text">
+     <string>delete</string>
+    </property>
+    <property name="iconText">
+     <string>delete</string>
+    </property>
+    <property name="toolTip">
+     <string>Delete nodes or edges</string>
+    </property>
+   </action>
+   <action name="zoomAction">
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../../../../../:/i_zoom.png</normaloff>../../../../../../../:/i_zoom.png</iconset>
+    </property>
+    <property name="text">
+     <string>zoom</string>
+    </property>
+    <property name="iconText">
+     <string>zoom</string>
+    </property>
+    <property name="toolTip">
+     <string>Zoom on rectangle</string>
+    </property>
+   </action>
+   <action name="navigate_action">
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../../../../../:/i_navigation.png</normaloff>../../../../../../../:/i_navigation.png</iconset>
+    </property>
+    <property name="text">
+     <string>navigate</string>
+    </property>
+    <property name="iconText">
+     <string>navigate</string>
+    </property>
+    <property name="toolTip">
+     <string>Navigate in graph</string>
+    </property>
+   </action>
+   <action name="moveSelectionAction">
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../../../../../:/i_move.png</normaloff>../../../../../../../:/i_move.png</iconset>
+    </property>
+    <property name="text">
+     <string>moveSelection</string>
+    </property>
+    <property name="iconText">
+     <string>moveSelection</string>
+    </property>
+    <property name="toolTip">
+     <string>Move/Reshape selection</string>
+    </property>
+   </action>
+   <action name="selectionAction">
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../../../../../:/i_selection.png</normaloff>../../../../../../../:/i_selection.png</iconset>
+    </property>
+    <property name="text">
+     <string>selection</string>
+    </property>
+    <property name="iconText">
+     <string>selection</string>
+    </property>
+    <property name="toolTip">
+     <string>Select nodes/edges in a rectangle</string>
+    </property>
+   </action>
+   <action name="magicSelectionAction">
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../../../../../:/i_magic.png</normaloff>../../../../../../../:/i_magic.png</iconset>
+    </property>
+    <property name="text">
+     <string>magicSelection</string>
+    </property>
+    <property name="iconText">
+     <string>magicSelection</string>
+    </property>
+    <property name="toolTip">
+     <string>Selection of reachable elements with equal value</string>
+    </property>
+   </action>
+   <action name="selectAction">
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../../../../../:/i_select.png</normaloff>../../../../../../../:/i_select.png</iconset>
+    </property>
+    <property name="text">
+     <string>select</string>
+    </property>
+    <property name="iconText">
+     <string>select</string>
+    </property>
+    <property name="toolTip">
+     <string>Get information on nodes/edges</string>
+    </property>
+   </action>
+   <action name="editEdgeBendAction">
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../../../../../../:/i_bends.png</normaloff>../../../../../../../:/i_bends.png</iconset>
+    </property>
+    <property name="text">
+     <string>editedgeBend</string>
+    </property>
+    <property name="iconText">
+     <string>editedgeBend</string>
+    </property>
+    <property name="toolTip">
+     <string>Edit edge bends</string>
+    </property>
+   </action>
+  </actiongroup>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <includes>
+  <include location="local">qworkspace.h</include>
+ </includes>
+ <resources>
+  <include location="TulipResource.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>fileOpenAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>fileOpen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fileCloseTabAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>fileCloseTab()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fileSaveAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>fileSave()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fileSaveAsAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>fileSaveAs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>filePrintAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>filePrint()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fileExitAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>fileExit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>helpDocumentationAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>helpDocumentation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginsAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>plugins()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>helpAboutAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>helpAbout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>filePreferenceAction</sender>
+   <signal>triggered()</signal>
+   <receiver>TulipData</receiver>
+   <slot>preference()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>510</x>
+     <y>377</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

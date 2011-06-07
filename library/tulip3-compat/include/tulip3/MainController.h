@@ -55,7 +55,7 @@ namespace tlp {
     /**
      * Default constructor
      */
-    MainController();
+    MainController(PerspectiveContext &c);
     /**
      * Default destructor
      */

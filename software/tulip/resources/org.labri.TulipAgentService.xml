@@ -4,6 +4,26 @@
     <method name="ShowWelcomeScreen"/>
     <method name="ShowPluginsCenter"/>
     <method name="ShowAboutPage"/>
+    <method name="OpenProject">
+      <arg name="file" type="s" direction="in"/>
+    </method>
+    <method name="OpenProjectWith">
+      <arg name="file" type="s" direction="in"/>
+      <arg name="perspective" type="s" direction="in"/>
+    </method>-->
+    <method name="CreatePerspective">
+      <arg name="name" type="s" direction="in"/>
+    </method>
+    <method name="AddPluginRepository">
+      <arg name="url" type="s" direction="in"/>
+    </method>
+    <method name="RemovePluginRepository">
+      <arg name="url" type="s" direction="in"/>
+    </method>
+    <method name="GetCompatiblePerspectives">
+      <arg name="file" type="s" direction="in"/>
+      <arg name="result" type="as" direction="out"/>
+    </method>
   </interface>
 </node>
 
