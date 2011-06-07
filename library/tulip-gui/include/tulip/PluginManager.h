@@ -1,4 +1,5 @@
 #include <tulip/PluginInformations.h>
+#include <tulip/WithDependency.h>
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
@@ -7,7 +8,11 @@
 #define PLUGINMANAGER_H
 
 namespace tlp {
- 
+
+  class AbstractPluginInfo;
+
+  typedef QMap<QString, tlp::PluginInformations*> LocationPlugins;
+  
   /**
    * @brief This class allows to easily install, remove, update, and list plugins (both installed and available).
    *
@@ -28,9 +33,9 @@ public:
    * @brief Lists plugins from the specified locations.
    *
    * @param list The locations from which to list plugins (All, Remote or Local). Defaults to All.
-   * @return :PluginInformationsInterface* > The list of plugins available (or installed) at the specified location.
+   * @return :PluginInformations* > The list of plugins available (or installed) at the specified location.
    **/
-  static QList<const tlp::PluginInformationsInterface*>  pluginsList(Location list = All);
+  QList< PluginInformations* > pluginsList(tlp::PluginManager::Location list = All);
 
   /**
    * @brief Adds a remote location from which to list plugins.
@@ -49,18 +54,18 @@ public:
   static QString getPluginServerDescription(const QString& location);
   
   /**
-   * @brief Parses the a server description's xml file and creates a list of PluginInformationsInterface from it.
+   * @brief Parses the a server description's xml file and creates a list of PluginInformations from it.
    *
    * @param description The contents of a serverDescvription.xml file.
-   * @return :PluginInformationsInterface* > The list of plugins contained in this server description.
+   * @return LocationPlugins The list of plugins contained in this server description.
    **/
-  static QList<const tlp::PluginInformationsInterface*> parseDescription(const QString& description);
+  static LocationPlugins parseDescription(const QString& xmlDescription);
 
 private:
   /**
    * @brief Contains all the remote locations added, and for each of them the list of plugins on the location.
    **/
-  static QMap<QString, QList<const tlp::PluginInformationsInterface*> > _remoteLocations;
+  static QMap<QString, LocationPlugins> _remoteLocations;
 
 };
 

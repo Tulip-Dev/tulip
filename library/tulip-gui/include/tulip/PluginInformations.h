@@ -25,6 +25,7 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/AbstractPluginInfo.h>
+#include <QMap>
 
 namespace tlp {
   class Dependency;
@@ -69,35 +70,24 @@ private:
   const std::string& _release;
   const std::string& _tulipRelease;
 };
+
+struct PluginInfoWithDependencies {
+  PluginInfoWithDependencies() {}
   
-/**
- * @brief This class describes the whereabouts of a plugin, be it locally installed, or on a remote server.
- *
- * This class is meant to describe a plug-in so a comprehensive list can be displayed, i.e. to manage plug-ins installation.
- **/
-class TLP_QT_SCOPE PluginInformationsInterface {
-  public:
-    virtual QString identifier() const = 0;
-    virtual QString name() const = 0;
-
-    virtual QString shortDescription() const = 0;
-    virtual QString longDescriptionPath() const = 0;
-
-    virtual QString iconPath() const = 0;
-    virtual QDateTime installDate() const = 0;
-    
-    virtual QString type() const = 0;
-    virtual const QStringList& dependencies() const = 0;
-    virtual QString version() const = 0;
-    
-  protected:
-    PluginInformationsInterface() {}
+  PluginInfoWithDependencies(const tlp::AbstractPluginInfo* info, const std::list<tlp::Dependency>& dependencies): infos(info), dependencies(dependencies) {
+    for(std::list<tlp::Dependency>::const_iterator it = dependencies.begin(); it != dependencies.end(); ++it) {
+      dependenciesNames.push_back(it->pluginName.c_str());
+    }
+  }
+  const tlp::AbstractPluginInfo* infos;
+  QStringList dependenciesNames;
+  std::list<tlp::Dependency> dependencies;
 };
 
 /**
  * @brief Straightforward implementation of PluginInformationsInterface, useable for both remote and local plugins.
  **/
-class TLP_QT_SCOPE PluginInformations : public PluginInformationsInterface {
+class TLP_QT_SCOPE PluginInformations {
   public:
     /**
      * @brief This constructor is used for local plugin description, and the library is used to determine the path of the icon and long description.
@@ -120,27 +110,39 @@ class TLP_QT_SCOPE PluginInformations : public PluginInformationsInterface {
      **/
     PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies, const QString& longDescriptionPath, const QString& iconPath);
 
-    virtual QString identifier() const;
-    virtual QString name() const;
+    void AddPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies);
+    void AddPluginInformations(const tlp::PluginInformations* info);
+
+    QString identifier() const;
+    //TODO this should be a displayname, not the name used to register into the plugin system
+    QString name() const;
     
-    virtual QString shortDescription() const;
-    virtual QString longDescriptionPath() const;
+    QString shortDescription() const;
+    QString longDescriptionPath() const;
     
-    virtual QString iconPath() const; 
-    virtual QDateTime installDate() const;
+    QString iconPath() const;
+    QDateTime installDate() const;
     
-    virtual QString type() const;
-    virtual const QStringList& dependencies() const;
-    virtual QString version() const;
-    
+    QString type() const;
+    const QStringList& dependencies(QString version) const;
+    const QStringList& versions() const;
+
+    QString installedVersion() const;
+    bool isInstalled(QString version) const;
+    bool updateAvailable() const;
+
+    bool fetch(QString version) const;
+    bool remove() const;
   private:
-    const AbstractPluginInfo* _infos;
+    QString _lastVersion;
     const QString _type;
-    QStringList _dependenciesNames;
     const QString _iconPath;
     const QString _longDescriptionPath;
-
-    const std::list<Dependency> _dependencies;
+    const bool _isLocal;
+    const QString _installedVersion;
+    bool _updateAvailable;
+    QStringList _versions;
+    QMap<QString, PluginInfoWithDependencies> _infos;
 };
 
 }
