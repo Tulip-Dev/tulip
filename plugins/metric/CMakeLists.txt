@@ -65,22 +65,19 @@ ADD_LIBRARY(BetweennessCentrality-${TulipVersion} SHARED BetweennessCentrality.c
 TARGET_LINK_LIBRARIES(BetweennessCentrality-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS 
-  Eccentricity-${TulipVersion}
-  DegreeMetric-${TulipVersion}
-  ClusterMetric-${TulipVersion}
-  StrengthMetric-${TulipVersion}
-  BiconnectedComponent-${TulipVersion}
-  ConnectedComponent-${TulipVersion}
-  StrongComponent-${TulipVersion}
-  DagLevelMetric-${TulipVersion}
-  IdMetric-${TulipVersion}
-  LeafMetric-${TulipVersion}
-  NodeMetric-${TulipVersion}
-  DepthMetric-${TulipVersion}
-  PathLengthMetric-${TulipVersion}
-  StrahlerMetric-${TulipVersion}
-  RandomMetric-${TulipVersion}
-  BetweennessCentrality-${TulipVersion}
-DESTINATION ${TulipPluginsInstallDir}
-COMPONENT tulip_core_plugins)
+INSTALL(TARGETS Eccentricity-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Eccentricity-${TulipVersion})
+INSTALL(TARGETS DegreeMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT DegreeMetric-${TulipVersion})
+INSTALL(TARGETS ClusterMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ClusterMetric-${TulipVersion})
+INSTALL(TARGETS StrengthMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthMetric-${TulipVersion})
+INSTALL(TARGETS BiconnectedComponent-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT BiconnectedComponent-${TulipVersion})
+INSTALL(TARGETS ConnectedComponent-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ConnectedComponent-${TulipVersion})
+INSTALL(TARGETS StrongComponent-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrongComponent-${TulipVersion})
+INSTALL(TARGETS DagLevelMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT DagLevelMetric-${TulipVersion})
+INSTALL(TARGETS IdMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT IdMetric-${TulipVersion})
+INSTALL(TARGETS LeafMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT LeafMetric-${TulipVersion})
+INSTALL(TARGETS NodeMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT NodeMetric-${TulipVersion})
+INSTALL(TARGETS DepthMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT DepthMetric-${TulipVersion})
+INSTALL(TARGETS PathLengthMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT PathLengthMetric-${TulipVersion})
+INSTALL(TARGETS StrahlerMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrahlerMetric-${TulipVersion})
+INSTALL(TARGETS RandomMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT RandomMetric-${TulipVersion})
+INSTALL(TARGETS BetweennessCentrality-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT BetweennessCentrality-${TulipVersion})
