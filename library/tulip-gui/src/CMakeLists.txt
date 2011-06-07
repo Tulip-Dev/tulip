@@ -129,7 +129,7 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/Perspective.h
 )
 
-QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipQtResource.qrc)
+QT4_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
 
 ADD_DEFINITIONS(-DQT_DLL)
 ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)

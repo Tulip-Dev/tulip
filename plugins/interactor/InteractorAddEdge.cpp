@@ -35,7 +35,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorAddEdge():NodeLinkDiagramComponentInteractor(":/tulip/qt/icons/i_addedge.png","Add edges"){
+  InteractorAddEdge():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addedge.png","Add edges"){
     setPriority(1);
     setConfigurationWidgetText(QString("<h3>Add edge interactor</h3>")+
                    "<b>Mouse left</b> click on the source node,<br/>then <b>Mouse left</b> click on the target node.<br/>Any <b>Mouse left</b> click outside a node will add an edge bend.<br/><br/>If you want to cancel the current edge construction, click on the middle mouse button");

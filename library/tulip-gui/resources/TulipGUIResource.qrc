@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/tulip/qt/icons">
+    <qresource prefix="/tulip/gui/icons">
         <file>i_addedge.png</file>
         <file>i_addnode.png</file>
         <file>i_bends.png</file>
@@ -15,8 +15,9 @@
         <file>i_snapshot.png</file>
         <file>i_locked.png</file>
         <file>i_unlocked.png</file>
+        <file>logo32x32.png</file>
     </qresource>
-    <qresource prefix="/tulip/qt/ui">
+    <qresource prefix="/tulip/gui/ui">
         <file>arrow_two_head.png</file>
         <file>down.png</file>
         <file>left.png</file>

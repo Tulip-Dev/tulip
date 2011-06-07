@@ -33,7 +33,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorNavigation():NodeLinkDiagramComponentInteractor(":/tulip/qt/icons/i_navigation.png","Navigate in graph"){
+  InteractorNavigation():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_navigation.png","Navigate in graph"){
     setPriority(5);
     setConfigurationWidgetText(QString("<h3>Navigation interactor</h3>")+
                                "3D Navigation in the graph<br><br>"+

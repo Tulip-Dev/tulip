@@ -33,7 +33,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorDeleteElement():NodeLinkDiagramComponentInteractor(":/tulip/qt/icons/i_del.png","Delete nodes or edges"){
+  InteractorDeleteElement():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_del.png","Delete nodes or edges"){
     setPriority(1);
     setConfigurationWidgetText(QString("<h3>Delete interactor</h3>")+
                    "<b>Mouse left</b> click on an element to delete it");

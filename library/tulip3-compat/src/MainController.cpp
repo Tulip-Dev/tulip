@@ -829,9 +829,9 @@ namespace tlp {
     connect(configurationDockAction,SIGNAL(triggered()), this, SLOT(showViewEditor()));
     mainWindowFacade.getMenuBar()->insertMenu(windowAction,optionsMenu);
 
-    redoAction=new QAction(QIcon(":/tulip/qt/icons/i_redo.png"),"redo",mainWindowFacade.getParentWidget());
-    undoAction=new QAction(QIcon(":/tulip/qt/icons/i_undo.png"),"undo",mainWindowFacade.getParentWidget());
-    snapshotAction = new QAction(QIcon(":/tulip/qt/icons/i_snapshot.png"),"snapshot",mainWindowFacade.getParentWidget());
+    redoAction=new QAction(QIcon(":/tulip/gui/icons/i_redo.png"),"redo",mainWindowFacade.getParentWidget());
+    undoAction=new QAction(QIcon(":/tulip/gui/icons/i_undo.png"),"undo",mainWindowFacade.getParentWidget());
+    snapshotAction = new QAction(QIcon(":/tulip/gui/icons/i_snapshot.png"),"snapshot",mainWindowFacade.getParentWidget());
     undoAction->setEnabled(false);
     redoAction->setEnabled(false);
     snapshotAction->setEnabled(false);

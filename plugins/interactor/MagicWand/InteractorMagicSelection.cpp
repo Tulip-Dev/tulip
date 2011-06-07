@@ -36,7 +36,7 @@ class InteractorMagicSelection  : public InteractorChainOfResponsibility {
     /**
     * Default constructor
     */
-    InteractorMagicSelection():InteractorChainOfResponsibility(":/tulip/qt/icons/i_magic.png","Fuzzy selection: select neighboring nodes based on their value of a metric."), configWidget(NULL) {
+    InteractorMagicSelection():InteractorChainOfResponsibility(":/tulip/gui/icons/i_magic.png","Fuzzy selection: select neighboring nodes based on their value of a metric."), configWidget(NULL) {
       setPriority(3);
       setConfigurationWidgetText(QString("<h3>Magic selection interactor</h3>")+
                     "Select neighbour elements which have the same value on a metric");

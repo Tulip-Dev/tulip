@@ -38,7 +38,7 @@ QString PluginInformations::longDescriptionPath() const{
 }
 
 QString PluginInformations::iconPath() const{
-  return ":/logo32x32.png";
+  return ":/tulip/gui/icons/logo32x32.png";
 }
 
 QDateTime PluginInformations::installDate() const{

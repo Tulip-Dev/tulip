@@ -35,7 +35,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorEditEdgeBends():NodeLinkDiagramComponentInteractor(":/tulip/qt/icons/i_bends.png","Edit edge bends"){
+  InteractorEditEdgeBends():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends.png","Edit edge bends"){
     setPriority(1);
     setConfigurationWidgetText(QString("<h3>Edit edge bends interactor</h3>")+
                                "Modify edge bends<br/><br/>"+
