@@ -839,7 +839,7 @@ namespace tlp {
             addParameter<DataSet>(DISPLAYING);
         }
         ~TLPImport(){}
-        bool import(const std::string&) {
+        bool import() {
             std::string filename;
             std::string data;
             std::stringstream *tmpss=NULL;

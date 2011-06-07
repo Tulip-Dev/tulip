@@ -97,7 +97,7 @@ public:
     return result;
   }
 
-  bool import(const string &) {
+  bool import() {
     srand(clock()); 
 
     unsigned int sizeMin  = 10;

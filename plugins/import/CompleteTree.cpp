@@ -75,7 +75,7 @@ public:
   ~CompleteTree(){
   }
 
-  bool import(const string &) {
+  bool import() {
     unsigned int degree  = 2;
     unsigned int depth   = 5;
     bool needLayout = false;

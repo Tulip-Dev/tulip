@@ -51,10 +51,9 @@ public:
   /**
   * @brief The import operations should take place here.
   *
-  * @param  unused, deprecated parameter
   * @return bool Whether the import was sucessful or not.
   **/
-  virtual bool import(const std::string &)=0;
+  virtual bool import()=0;
   
   /**
   * @brief The Graph in which to write the data to import.
