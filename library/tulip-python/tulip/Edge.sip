@@ -30,6 +30,16 @@ class edge {
 #include <tulip/tulipconf.h>
 #include <tulip/Edge.h>
 %End
+
+%Docstring
+An instance of this class represent an edge in a Tulip graph. It encapsulates an integer identifier.
+Use specific methods in the :class:`tlp.Graph` class to get references on such objects (
+for instance :meth:`tlp.Graph.addEdge`, :meth:`tlp.Graph.getEdges`, :meth:`tlp.Graph.getInEdges`, ...).
+Edge objects can be used as keys in a Python dictionnary.
+
+The edge identifier can be accessed through the **id** class member.
+%End
+
 public:
 	unsigned int id;
 	edge();
@@ -37,6 +47,13 @@ public:
 	bool __eq__(const tlp::edge) const;
 	bool __ne__(const tlp::edge) const;
 	bool isValid() const;
+%Docstring
+tlp.edge.isValid()
+
+Returns True if the edge is a valid one, meaning it is attached to a graph.
+
+:rtype: boolean 
+%End
 	
 	SIP_PYOBJECT __repr__() const;
 %MethodCode

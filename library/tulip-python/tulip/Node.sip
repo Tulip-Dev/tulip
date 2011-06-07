@@ -25,10 +25,19 @@
 
 namespace tlp {
 class node {
-
 %TypeHeaderCode
 #include <tulip/Node.h>
 %End
+
+%Docstring
+An instance of this class represent a node in a Tulip graph. It encapsulates an integer identifier.
+Use specific methods in the :class:`tlp.Graph` class to get references on such objects (
+for instance :meth:`tlp.Graph.addNode`, :meth:`tlp.Graph.getNodes`, :meth:`tlp.Graph.getOutNodes`, ...).
+Node objects can be used as keys in a Python dictionnary.
+
+The node identifier can be accessed through the **id** class member.
+%End
+
 public:
 	unsigned int id;
 	node();
@@ -36,6 +45,13 @@ public:
 	bool __eq__(const tlp::node);
 	bool __ne__(const tlp::node);
 	bool isValid();
+%Docstring
+tlp.node.isValid()
+
+Returns True if the node is a valid one, meaning it is attached to a graph.
+
+:rtype: boolean 
+%End
 	
 	SIP_PYOBJECT __repr__() const;
 %MethodCode
@@ -44,7 +60,7 @@ public:
 		std::string s = oss.str();
         sipRes = PyString_FromString(s.c_str());
 %End
-
+ 
 	long __hash__() const;
 %MethodCode
         return static_cast<long>(sipCpp->id);

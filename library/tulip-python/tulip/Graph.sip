@@ -53,6 +53,15 @@ class Graph : tlp::Observable /Abstract/ {
 #include <tulip/Graph.h>
 %End
 
+%Docstring
+This is the main Tulip class. It enables to :
+
+	* create a directed graph
+	* create and manipulate a sub-graphs hierarchy
+	* get semantic iterators on graph elements
+	* create and retrieve properties of different types to get/set data on the graph
+%End
+
 public:
 
 	Graph();
@@ -162,7 +171,7 @@ tlp.Graph.getSubGraphs()
 
 Returns an iterator on all the sub-graphs of the graph.
 
-:rtype: :class:`tlp.IteratorGraph` 
+:rtype: an iterator on :class:`tlp.Graph` objects  
 %End
 	
 %MethodCode
@@ -553,7 +562,7 @@ tlp.Graph.getNodes()
 
 Returns an iterator on the nodes.
 
-:rtype: :class:`tlp.IteratorNode` 
+:rtype: an iterator on :class:`tlp.node` objects 
 %End	
 	
 %MethodCode
@@ -603,7 +612,7 @@ Return an iterator on the predecessors of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: :class:`tlp.IteratorNode`
+:rtype: an iterator on :class:`tlp.node` objects
 :throws: an exception if the node does not belong to the graph
 %End	
 	
@@ -648,7 +657,7 @@ Returns an iterator on the successors of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: :class:`tlp.IteratorNode`
+:rtype: an iterator on :class:`tlp.node` objects
 :throws: an exception if the node does not belong to the graph
 %End
 	
@@ -670,7 +679,7 @@ Returns an iterator on the neighbours of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: :class:`tlp.IteratorNode`
+:rtype: an iterator on :class:`tlp.node` objects
 :throws: an exception if the node does not belong to the graph
 %End
 	
@@ -712,7 +721,7 @@ tlp.Graph.getEdges()
 
 Returns an iterator on the edges.
 
-:rtype: :class:`tlp.IteratorEdge` 
+:rtype: an iterator on :class:`tlp.edge` objects 
 %End
 	
 %MethodCode
@@ -740,7 +749,7 @@ Returns an iterator on the outgoing edges of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: :class:`tlp.IteratorEdge`
+:rtype: an iterator on :class:`tlp.edge` objects
 :throws: an exception if the node does not belong to the graph
 %End	
 	
@@ -762,7 +771,7 @@ Returns an iterator on the incoming and outgoing edges of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: :class:`tlp.IteratorEdge`
+:rtype: an iterator on :class:`tlp.edge` objects
 :throws: an exception if the node does not belong to the graph
 %End
 	
@@ -784,7 +793,7 @@ Returns an iterator on the incoming edges of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
-:rtype: :class:`tlp.IteratorEdge`
+:rtype: an iterator on :class:`tlp.edge` objects
 :throws: an exception if the node does not belong to the graph
 %End
 	
@@ -806,7 +815,7 @@ Returns an iterator on the underlying edges of a meta edge.
 
 :param edge: an existing edge of the graph
 :type edge: :class:`tlp.edge`
-:rtype: :class:`tlp.IteratorEdge`
+:rtype: an iterator on :class:`tlp.edge` objects
 :throws: an exception if the edge does not belong to the graph
 %End	
 	
@@ -2123,7 +2132,7 @@ Populates a quotient graph with one meta node for each iterated graph.
 Returns a list of created meta-nodes.
 
 :param itGraph: a graph iterator, (typically a subgraph iterator)
-:type itGraph: :class:`tlp.IteratorGraph`
+:type itGraph: an iterator on :class:`tlp.Graph` objects
 :param quotientGraph: the graph that will contain the meta nodes
 :type quotientGraph: :class:`tlp.Graph`
 :rtype: list of :class:`tlp.node`
