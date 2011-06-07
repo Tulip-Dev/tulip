@@ -8,29 +8,49 @@
 using namespace tlp;
 
 PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list< Dependency >& dependencies, const std::string& library)
-    :_infos(info), _type(type.c_str()), _dependencies(dependencies) {
-  for(std::list<tlp::Dependency>::const_iterator it = _dependencies.begin(); it != _dependencies.end(); ++it) {
-    _dependenciesNames.push_back(it->pluginName.c_str());
-  }
+    :_type(type.c_str()), _isLocal(true), _installedVersion(info->getRelease().c_str()), _updateAvailable(false) {
+  _versions << info->getRelease().c_str();
+  PluginInfoWithDependencies pluginInfo(info, dependencies);
+  _infos[info->getName().c_str()] = pluginInfo;
 }
 
 PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies, const QString& longDescriptionPath, const QString& iconPath)
-    :_infos(info), _type(type.c_str()), _dependencies(dependencies) {
-  for(std::list<tlp::Dependency>::const_iterator it = _dependencies.begin(); it != _dependencies.end(); ++it) {
-    _dependenciesNames.push_back(it->pluginName.c_str());
+    :_type(type.c_str()), _isLocal(false), _installedVersion(QString::null), _updateAvailable(false) {
+  _versions << info->getRelease().c_str();
+  PluginInfoWithDependencies pluginInfo(info, dependencies);
+  _infos[info->getName().c_str()] = pluginInfo;
+}
+
+void PluginInformations::AddPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies) {
+    QString newVersion = info->getRelease().c_str();
+    if(_installedVersion > newVersion) {
+      _updateAvailable = true;
+    }
+    
+    _versions << newVersion;
+    PluginInfoWithDependencies pluginInfo(info, dependencies);
+    _infos[info->getName().c_str()] = pluginInfo;
+}
+
+void PluginInformations::AddPluginInformations(const tlp::PluginInformations* info) {
+  foreach(const QString& version, info->versions()) {
+    if(version > _installedVersion) {
+      _updateAvailable = true;
+    }
+    _versions << version;
   }
 }
 
 QString PluginInformations::identifier() const{
-  return _infos->getName().c_str();
+  return _infos.begin().value().infos->getName().c_str();
 }
 
 QString PluginInformations::name() const{
-  return _infos->getName().c_str();
+  return _infos.begin().value().infos->getName().c_str();
 }
 
 QString PluginInformations::shortDescription() const{
-  return _infos->getInfo().c_str();
+  return _infos.begin().value().infos->getInfo().c_str();
 }
 
 QString PluginInformations::longDescriptionPath() const{
@@ -49,10 +69,30 @@ QString PluginInformations::type() const{
   return _type;
 }
 
-const QStringList& PluginInformations::dependencies() const{
-  return _dependenciesNames;
+const QStringList& PluginInformations::dependencies(QString version) const{
+  return _infos[version].dependenciesNames;
 }
 
-QString PluginInformations::version() const{
-  return _infos->getRelease().c_str();
+const QStringList& PluginInformations::versions() const {
+  return _versions;
+}
+
+QString PluginInformations::installedVersion() const {
+  return _installedVersion;
+}
+
+bool PluginInformations::isInstalled(QString version) const {
+  return version == _installedVersion;
+}
+
+bool PluginInformations::updateAvailable() const {
+  return _updateAvailable;
+}
+
+bool PluginInformations::fetch(QString version) const {
+  //FIXME implement me
+}
+
+bool PluginInformations::remove() const {
+  //FIXME implement me
 }

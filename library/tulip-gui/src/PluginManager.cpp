@@ -10,10 +10,10 @@
 using namespace std;
 using namespace tlp;
 
-QMap<QString, QList<const tlp::PluginInformationsInterface*> > PluginManager::_remoteLocations;
+QMap<QString, LocationPlugins> PluginManager::_remoteLocations;
 
-QList<const tlp::PluginInformationsInterface*> PluginManager::pluginsList(Location list) {
-  QList<const tlp::PluginInformationsInterface*> result;
+QList<tlp::PluginInformations*> PluginManager::pluginsList(Location list) {
+  QMap<QString, tlp::PluginInformations*> result;
 
   if(list.testFlag(Local)) {
     for(std::map<std::string, PluginListerInterface*>::const_iterator it = PluginListerInterface::allFactories->begin(); it != PluginListerInterface::allFactories->end(); ++it) {
@@ -22,21 +22,29 @@ QList<const tlp::PluginInformationsInterface*> PluginManager::pluginsList(Locati
       while(plugins->hasNext()) {
         string pluginName = plugins->next();
         const AbstractPluginInfo* info = currentLister->pluginInformations(pluginName);
-        PluginInformationsInterface* localinfo = new PluginInformations(info, currentLister->getPluginsClassName(),
+        PluginInformations* localinfo = new PluginInformations(info, currentLister->getPluginsClassName(),
                                                                              currentLister->getPluginDependencies(pluginName), currentLister->getPluginLibrary(pluginName));
-        result.push_back(localinfo);
+        result[pluginName.c_str()] = localinfo;
       }
       delete plugins;
     }
   }
 
   if(list.testFlag(Remote)) {
-    for(QMap<QString, QList<const tlp::PluginInformationsInterface*> >::const_iterator it = _remoteLocations.begin(); it != _remoteLocations.end(); ++it) {
-      result << it.value();
+    for(QMap<QString, LocationPlugins>::const_iterator it = _remoteLocations.begin(); it != _remoteLocations.end(); ++it) {
+      for(LocationPlugins::const_iterator locationIt = it.value().begin(); locationIt != it.value().end(); ++locationIt) {
+        QMap<QString, tlp::PluginInformations*>::const_iterator current = result.find(locationIt.key());
+        if(current == result.end()) {
+          result[locationIt.key()] = locationIt.value();
+        }
+        else {
+          current.value()->AddPluginInformations(locationIt.value());
+        }
+      }
     }
   }
 
-  return result;
+  return result.values();
 }
 
 QString PluginManager::getPluginServerDescription(const QString& location) {
@@ -57,12 +65,12 @@ QString PluginManager::getPluginServerDescription(const QString& location) {
   return content;
 }
 
-QList<const tlp::PluginInformationsInterface*> PluginManager::parseDescription(const QString& xmlDescription) {
+LocationPlugins PluginManager::parseDescription(const QString& xmlDescription) {
   QDomDocument description;
   description.setContent(xmlDescription);
   QDomElement elm = description.documentElement();
   
-  QList<const tlp::PluginInformationsInterface*> remotePlugins;
+  LocationPlugins remotePlugins;
   QDomNodeList pluginNodes = description.elementsByTagName("plugin");
   for(int i = 0; i < pluginNodes.count(); ++i) {
     const QDomNode& child = pluginNodes.at(i);
@@ -88,8 +96,9 @@ QList<const tlp::PluginInformationsInterface*> PluginManager::parseDescription(c
     //TODO fill these values from the location
     QString longDescriptionPath;
     QString iconPath;
-    PluginInformationsInterface* pluginInformations = new PluginInformations(pluginInfo, type, dependencies, longDescriptionPath, iconPath);
-    remotePlugins.push_back(pluginInformations);
+    PluginInformations* pluginInformations = new PluginInformations(pluginInfo, type, dependencies, longDescriptionPath, iconPath);
+//     PluginInfoWithDependencies infos(pluginInfo, dependencies);
+    remotePlugins[pluginInfo->getName().c_str()] = pluginInformations;
   }
 
   return remotePlugins;
