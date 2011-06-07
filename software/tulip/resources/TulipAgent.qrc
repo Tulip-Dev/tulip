@@ -2,7 +2,6 @@
     <qresource prefix="/tulip/app/icons">
         <file>arrow-left.png</file>
         <file>arrow-right.png</file>
-        <file>logo32x32.png</file>
         <file>plugin_algorithm.svg</file>
         <file>plugin_controller.svg</file>
         <file>plugin_interactor.svg</file>

@@ -207,7 +207,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>:/tulip/app/icons/logo32x32.png</normaloff>:/tulip/app/icons/logo32x32.png</iconset>
+            <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
           </property>
          </item>
          <item>

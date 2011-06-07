@@ -34,7 +34,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorAddNode():NodeLinkDiagramComponentInteractor(":/tulip/qt/icons/i_addnode.png","Add nodes"){
+  InteractorAddNode():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addnode.png","Add nodes"){
     setPriority(1);
     setConfigurationWidgetText(QString("<h3>Add node interactor</h3>")+
                    "<b>Mouse left</b> click to add a node in the graph");

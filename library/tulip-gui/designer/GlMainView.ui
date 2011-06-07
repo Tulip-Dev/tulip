@@ -13,7 +13,7 @@
    <string>GraphView</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="../../../software/tulip/designer/TulipResource.qrc" >:/logo32x32.png</iconset>
+   <iconset resource="../../../software/tulip/designer/TulipResource.qrc" >:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <widget class="QWidget" name="widget" >
    <layout class="QVBoxLayout" >
