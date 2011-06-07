@@ -1,6 +1,6 @@
-#include "TableViewColumnModel.h"
+#include "TulipTableWidgetColumnSelectionModel.h"
 #include <QtGui/QTableView>
-TableViewColumnModel::TableViewColumnModel(QTableView* tableView ,QObject* parent):QAbstractListModel(parent),_tableView(tableView),_tableModel(tableView->model())
+TulipTableWidgetColumnSelectionModel::TulipTableWidgetColumnSelectionModel(QTableView* tableView ,QObject* parent):QAbstractListModel(parent),_tableView(tableView),_tableModel(tableView->model())
 {
     connect(_tableModel,SIGNAL(columnsAboutToBeInserted(QModelIndex,int,int)),this,SLOT(columnsAboutToBeInserted(QModelIndex,int,int)));
     connect(_tableModel,SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)),this,SLOT(columnsAboutToBeRemoved(QModelIndex,int,int)));
@@ -11,31 +11,31 @@ TableViewColumnModel::TableViewColumnModel(QTableView* tableView ,QObject* paren
     connect(_tableModel,SIGNAL(headerDataChanged(Qt::Orientation,int,int)),this,SLOT(headerDataChanged(Qt::Orientation,int,int)));
 }
 
-int TableViewColumnModel::rowCount( const QModelIndex &) const{
+int TulipTableWidgetColumnSelectionModel::rowCount( const QModelIndex &) const{
+    if(_tableModel!=NULL){
     return _tableModel->columnCount();
+    }else{
+        return 0;
+    }
 }
 
-QVariant TableViewColumnModel::data( const QModelIndex & index, int role) const{
+QVariant TulipTableWidgetColumnSelectionModel::data( const QModelIndex & index, int role) const{
     if(hasIndex(index.row(),index.column(),index.parent())){
-        switch(role){
-        case Qt::DisplayRole:
-            return _tableModel->headerData(index.row(),Qt::Horizontal,Qt::DisplayRole);
-            break;
+        switch(role){        
         case Qt::CheckStateRole:
             {
-                QVariant v = _tableView->isColumnHidden(index.row())?QVariant(Qt::Unchecked):QVariant(Qt::Checked);
-                return v;
+                return _tableView->isColumnHidden(index.row())?QVariant(Qt::Unchecked):QVariant(Qt::Checked);
             }
             break;
         default:
-            return QVariant();
+            return _tableModel->headerData(index.row(),Qt::Horizontal,role);
             break;
         }
     }
     return QVariant();
 }
 
-bool TableViewColumnModel::setData( const QModelIndex & index, const QVariant & value, int role){
+bool TulipTableWidgetColumnSelectionModel::setData( const QModelIndex & index, const QVariant & value, int role){
     if(hasIndex(index.row(),index.column(),index.parent())){
         switch(role){
         case Qt::CheckStateRole:
@@ -53,39 +53,39 @@ bool TableViewColumnModel::setData( const QModelIndex & index, const QVariant & 
     return false;
 }
 
-Qt::ItemFlags TableViewColumnModel::flags( const QModelIndex & index ) const{
+Qt::ItemFlags TulipTableWidgetColumnSelectionModel::flags( const QModelIndex & index ) const{
     return QAbstractListModel::flags(index) | Qt::ItemIsUserCheckable;
 }
 
-void TableViewColumnModel::columnsInserted( const QModelIndex &, int , int  ){
+void TulipTableWidgetColumnSelectionModel::columnsInserted( const QModelIndex &, int , int  ){
     endInsertColumns();
     reset();
 }
 
-void TableViewColumnModel::columnsMoved( const QModelIndex & , int , int , const QModelIndex & , int  ){
+void TulipTableWidgetColumnSelectionModel::columnsMoved( const QModelIndex & , int , int , const QModelIndex & , int  ){
     reset();
 }
 
-void TableViewColumnModel::columnsRemoved( const QModelIndex & , int , int  ){
+void TulipTableWidgetColumnSelectionModel::columnsRemoved( const QModelIndex & , int , int  ){
 
     endRemoveColumns();
     reset();
 }
 
-void TableViewColumnModel::headerDataChanged( Qt::Orientation , int , int  ){
+void TulipTableWidgetColumnSelectionModel::headerDataChanged( Qt::Orientation , int , int  ){
     reset();
 }
 
-void TableViewColumnModel::columnsAboutToBeInserted( const QModelIndex & , int first, int last ){
+void TulipTableWidgetColumnSelectionModel::columnsAboutToBeInserted( const QModelIndex & , int first, int last ){
     beginInsertColumns(QModelIndex(),first,last);
 }
 
 
-void TableViewColumnModel::columnsAboutToBeRemoved( const QModelIndex & , int first, int last ){
+void TulipTableWidgetColumnSelectionModel::columnsAboutToBeRemoved( const QModelIndex & , int first, int last ){
     beginRemoveColumns(QModelIndex(),first,last);
 }
 
-void TableViewColumnModel::setColumnVisible(int columnIndex,bool visible){
+void TulipTableWidgetColumnSelectionModel::setColumnVisible(int columnIndex,bool visible){
     if(hasIndex(columnIndex,0)){
         _tableView->setColumnHidden(columnIndex,!visible);
         emit dataChanged(index(columnIndex,0),index(columnIndex,0));

@@ -1,15 +1,15 @@
-#ifndef TABLEVIEWCOLUMNMODEL_H
-#define TABLEVIEWCOLUMNMODEL_H
+#ifndef TULIPTABLEWIDGETCOLUMNSELECTIONMODEL_H
+#define TULIPTABLEWIDGETCOLUMNSELECTIONMODEL_H
 #include <QtCore/QAbstractListModel>
 class QTableView;
 /**
-  * @brief List model controlling the visibility of table view columns.
+  * @brief List model controlling the visibility of TulipTableWidget view columns.
   **/
-class TableViewColumnModel : public QAbstractListModel
+class TulipTableWidgetColumnSelectionModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    TableViewColumnModel(QTableView* tableView ,QObject* parent=NULL);
+    TulipTableWidgetColumnSelectionModel(QTableView* tableView ,QObject* parent=NULL);
 
     int rowCount( const QModelIndex & parent = QModelIndex() ) const;
 
@@ -37,4 +37,4 @@ private slots:
         void headerDataChanged ( Qt::Orientation orientation, int first, int last );
 };
 
-#endif // TABLEVIEWCOLUMNMODEL_H
+#endif // TULIPTABLEWIDGETCOLUMNSELECTIONMODEL_H

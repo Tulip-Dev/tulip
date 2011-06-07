@@ -28,9 +28,7 @@
 #include <QtGui/QMenu>
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
-#include "TableViewColumnModel.h"
 #include "GraphTableModel.h"
-#include "HeaderSelectionDialog.h"
 using namespace std;
 
 namespace tlp {
@@ -38,7 +36,7 @@ namespace tlp {
 
 
 SpreadView::SpreadView() :
-    AbstractView(),ui(new Ui::SpreadViewWidget),_graph(NULL),_nodesColumnsModel(NULL),_edgesColumnsModel(NULL){
+    AbstractView(),ui(new Ui::SpreadViewWidget),_graph(NULL){
 }
 SpreadView::~SpreadView() {
     delete ui;
@@ -68,8 +66,11 @@ QWidget *SpreadView::construct(QWidget *parent) {
     ui->edgesTableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->edgesTableView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showTableContextMenu(QPoint)));
 
-    //Column selection widget
-    connect(ui->editColumnPushButton,SIGNAL(clicked( bool )),this,SLOT(showEditColumnDialog()));
+    //Column selection widgets
+    ui->nodesTableColumnEditionWidget->setVisible(false);
+    ui->nodesTableColumnEditionWidget->setEnabled(false);
+    ui->edgesTableColumnEditionWidget->setVisible(false);
+    ui->edgesTableColumnEditionWidget->setEnabled(false);
 
     return widget;
 }
@@ -80,18 +81,11 @@ void SpreadView::setData(Graph *graph, DataSet) {
         ui->nodesTableView->setGraph(graph,NODE);
         ui->edgesTableView->setGraph(graph,EDGE);
 
-        TableViewColumnModel *oldNodeColumnModel = _nodesColumnsModel;
-        TableViewColumnModel *oldEdgeColumnModel = _edgesColumnsModel;
+        ui->nodesTableColumnEditionWidget->setTableView(ui->nodesTableView);
+        ui->nodesTableColumnEditionWidget->setEnabled(true);
+        ui->edgesTableColumnEditionWidget->setTableView(ui->edgesTableView);
+        ui->edgesTableColumnEditionWidget->setEnabled(true);
 
-        _nodesColumnsModel = new TableViewColumnModel(ui->nodesTableView,this);
-        _edgesColumnsModel = new TableViewColumnModel(ui->edgesTableView,this);
-
-        if(oldNodeColumnModel){
-            oldNodeColumnModel->deleteLater();
-        }
-        if(oldEdgeColumnModel){
-            oldEdgeColumnModel->deleteLater();
-        }
     }
 }
 
@@ -168,7 +162,7 @@ void SpreadView::showPropertiesContextMenu(TulipTableWidget* tableWidget,int cli
     fillPropertiesContextMenu(contextMenu,tableWidget,clickedColumn);
     contextMenu.exec(tableWidget->mapToGlobal(position));
 }
-void SpreadView::fillPropertiesContextMenu(QMenu& menu,TulipTableWidget*,int clickedColumn){
+void SpreadView::fillPropertiesContextMenu(QMenu& menu,TulipTableWidget* tulipTableWidget,int clickedColumn){
     //Properties operations
     QAction *hideColumnAction = menu.addAction(tr("Hide column"),this,SLOT(hideColumn()));    
     hideColumnAction->setData(QVariant(clickedColumn));
@@ -184,8 +178,13 @@ void SpreadView::fillPropertiesContextMenu(QMenu& menu,TulipTableWidget*,int cli
     QAction *clearColumnAction =menu.addAction(tr("Reset column"),this,SLOT(resetColumn()));
     clearColumnAction->setData(QVariant(clickedColumn));
 
+
     QAction *deleteColumnAction =menu.addAction(tr("Delete column"),this,SLOT(deleteColumn()));
     deleteColumnAction->setData(QVariant(clickedColumn));
+    //Avoid to delete inherited properties
+    if(tulipTableWidget->graphModel()->propertyForIndex(clickedColumn)->getGraph() != _graph){
+        deleteColumnAction->setEnabled(false);
+    }
 }
 
 void SpreadView::showElementsContextMenu(const QPoint& position){
@@ -214,12 +213,6 @@ void SpreadView::showTableContextMenu(const QPoint& position){
     contextMenu.exec(tableWidget->mapToGlobal(position));
 }
 
-
-void SpreadView::showEditColumnDialog(){
-    QTableView *tableView = (ui->tabWidget->currentWidget() == ui->nodeTab )? ui->nodesTableView : ui->edgesTableView;
-    QString title = (ui->tabWidget->currentWidget() == ui->nodeTab )? tr("Nodes table visible columns") : tr("Edges table visible columns");
-    HeaderSelectionDialog::updateHeaders(tableView,title,getCentralWidget());
-}
 
 
 void SpreadView::hideColumn(){
@@ -286,7 +279,9 @@ void SpreadView::deleteColumn(){
         GraphTableModel* model = currentTable()->graphModel();
         PropertyInterface* property = model->propertyForIndex(index);
         string propertyName = property->getName();
+        Observable::holdObservers();
         property->getGraph()->delLocalProperty(propertyName);
+        Observable::unholdObservers();
     }
 }
 
@@ -410,11 +405,9 @@ void SpreadView::ungroup(){
     ui->edgesTableView->highlightAndDisplayElements(metanodeEdges);
 }
 
-
-
-
 VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "2.0")
 
 }
+
 
 

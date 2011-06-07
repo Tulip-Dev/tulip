@@ -11,7 +11,6 @@
 
 #include "GraphTableModel.h"
 #include "TulipItemDelegate.h"
-#include "HeaderSelectionDialog.h"
 
 using namespace tlp;
 using namespace std;

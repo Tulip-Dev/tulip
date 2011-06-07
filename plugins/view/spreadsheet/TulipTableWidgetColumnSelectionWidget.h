@@ -1,23 +1,26 @@
-#ifndef TABLECOLUMNSELECTIONWIDGET_H
-#define TABLECOLUMNSELECTIONWIDGET_H
+#ifndef TULIPTABLEWIDGETCOLUMNSELECTIONWIDGET_H
+#define TULIPTABLEWIDGETCOLUMNSELECTIONWIDGET_H
 
 #include <QtGui/QWidget>
 #include <QtCore/QRegExp>
-class QTableView;
+class TulipTableWidget;
 namespace Ui {
     class TableColumnSelectionWidget;
 }
 
-class TableViewColumnModel;
+class TulipTableWidgetColumnSelectionModel;
 
-class TableColumnSelectionWidget : public QWidget
+/**
+  * @brief Widget used to display and hide columns in a Tulip table widget.
+  **/
+class TulipTableWidgetColumnSelectionWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit TableColumnSelectionWidget(QWidget *parent = 0);
-    ~TableColumnSelectionWidget();
-    void setTableView(QTableView* tableView);
+    explicit TulipTableWidgetColumnSelectionWidget(QWidget *parent = 0);
+    ~TulipTableWidgetColumnSelectionWidget();
+    void setTableView(TulipTableWidget* tableView);
 
 private slots:
 
@@ -31,17 +34,14 @@ private slots:
     void updateCheckUncheckAllButtonState();
 
     void showVisualProperties();
-    void showDataProperties();
-    void showLocalProperties();
-    void showInheritedProperties();
-    void showPropertiesWithType();
+    void showDataProperties();        
 
     void showCustomPatternProperties(const QString& pattern);
 
 
 private:
     Ui::TableColumnSelectionWidget *ui;
-    TableViewColumnModel *_tableColumnModel;
+    TulipTableWidgetColumnSelectionModel *_tableColumnModel;
 
     /**
       * @brief Display all the columns with a name that match (or not) the given regexp.
@@ -50,4 +50,4 @@ private:
     void selectColumns(const QRegExp& regExp,bool match);
 };
 
-#endif // TABLECOLUMNSELECTIONWIDGET_H
+#endif // TULIPTABLEWIDGETCOLUMNSELECTIONWIDGET_H

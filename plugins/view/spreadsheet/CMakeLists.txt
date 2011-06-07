@@ -9,18 +9,16 @@ SET(spreadsheet_LIB_SRCS
     ElementCollection.cpp
     TulipItemDelegate.cpp
     TulipQVariantBuilder.cpp
-    VectorEditionWidget.cpp    
-    HeaderSelectionDialog.cpp
+    VectorEditionWidget.cpp        
     GlyphPreviewGenerator.cpp
-    TableViewColumnModel.cpp
-    TableColumnSelectionWidget.cpp
+    TulipTableWidgetColumnSelectionModel.cpp
+    TulipTableWidgetColumnSelectionWidget.cpp
 )
 
 set(spreadsheet_UI
     SpreadViewWidget.ui
-    VectorEditionWidget.ui
-    HeaderSelectionDialog.ui
-    TableColumnSelectionWidget.ui
+    VectorEditionWidget.ui    
+    TulipTableWidgetColumnSelectionWidget.ui
 )
 
 set(spreadsheet_MOC
@@ -29,16 +27,20 @@ set(spreadsheet_MOC
     GraphTableModel.h
     ElementCollection.h
     TulipItemDelegate.h
-    VectorEditionWidget.h    
-    HeaderSelectionDialog.h
-    TableViewColumnModel.h
-    TableColumnSelectionWidget.h
+    VectorEditionWidget.h        
+    TulipTableWidgetColumnSelectionModel.h
+    TulipTableWidgetColumnSelectionWidget.h
+)
+
+SET(spreadsheet_RCC
+    Spreadsheet.qrc
 )
 
 QT4_WRAP_UI(spreadsheet_UI_SRCS ${spreadsheet_UI})
 QT4_WRAP_CPP(spreadsheet_MOC_SRCS ${spreadsheet_MOC})
+QT4_ADD_RESOURCES(spreadsheet_RCC_SRCS ${spreadsheet_RCC})
 
-ADD_LIBRARY(SpreadSheet-${TulipVersion} SHARED ${spreadsheet_UI_SRCS} ${spreadsheet_MOC_SRCS} ${spreadsheet_LIB_SRCS})
+ADD_LIBRARY(SpreadSheet-${TulipVersion} SHARED ${spreadsheet_UI_SRCS} ${spreadsheet_MOC_SRCS} ${spreadsheet_LIB_SRCS} ${spreadsheet_RCC_SRCS})
 TARGET_LINK_LIBRARIES(SpreadSheet-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(SpreadSheet-${TulipVersion} ${LibTulipOglName})
 TARGET_LINK_LIBRARIES(SpreadSheet-${TulipVersion} ${LibTulipQtName})

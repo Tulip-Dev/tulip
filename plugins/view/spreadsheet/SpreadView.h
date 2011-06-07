@@ -30,61 +30,56 @@
 
 
 namespace Ui {
-    class SpreadViewWidget;
+class SpreadViewWidget;
 }
 
 class TulipTableWidget;
-class TableViewColumnModel;
 namespace tlp {
 
 class Graph;
 
 class SpreadView: public AbstractView {
-Q_OBJECT
+    Q_OBJECT
 public:
 
-	SpreadView();
-	virtual ~SpreadView();
+    SpreadView();
+    virtual ~SpreadView();
 
-	QWidget *construct(QWidget *parent);
-	void setData(Graph *graph, DataSet dataSet);
-	void getData(Graph **graph, DataSet *dataSet);
-	Graph *getGraph();
+    QWidget *construct(QWidget *parent);
+    void setData(Graph *graph, DataSet dataSet);
+    void getData(Graph **graph, DataSet *dataSet);
+    Graph *getGraph();
 
-	void installInteractor(QAction*) {
-	}
+    void installInteractor(QAction*) {
+    }
 
-        QImage createPicture(int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
+    QImage createPicture(int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
+
 
 public slots :
 
-        /**
-          * @brief Show property menu
-          **/
-        void showPropertiesContextMenu(const QPoint& position);        
+    /**
+    * @brief Show property menu
+    **/
+    void showPropertiesContextMenu(const QPoint& position);
 
 
-        /**
-          * @brief Show the context menu when user click on the table view.
-          **/
-        void showTableContextMenu(const QPoint& position);
+    /**
+    * @brief Show the context menu when user click on the table view.
+    **/
+    void showTableContextMenu(const QPoint& position);
 
-        /**
-          * @brief Called when user request the context menu on the elements header view.
-          */
-        void showElementsContextMenu(const QPoint& position);
+    /**
+    * @brief Called when user request the context menu on the elements header view.
+    */
+    void showElementsContextMenu(const QPoint& position);
 
+    void draw();
+    void refresh();
+    void init();
+    void setGraph(Graph *graph);
 
-
-
-	void draw();
-	void refresh();
-	void init();
-	void setGraph(Graph *graph);
-
-
-
-    protected :
+protected :
 
     void showPropertiesContextMenu(TulipTableWidget* tableWidget,int clickedColumn,const QPoint& position);
     void fillPropertiesContextMenu(QMenu& menu,TulipTableWidget* tableWidget,int clickedColumn);
@@ -96,10 +91,11 @@ public slots :
 
     void deleteElements( const QModelIndexList& elements,TulipTableWidget *tableWidget ,bool delAll);
 
+    /**
+      * @brief Return the active table.
+      **/
     TulipTableWidget* currentTable()const;
-protected slots:
-
-    void showEditColumnDialog();
+protected slots:    
 
     //Columns operations    
     void hideColumn();
@@ -118,12 +114,9 @@ protected slots:
     void group();    
     void ungroup();
 
-    private:
-        Ui::SpreadViewWidget *ui;
-        tlp::Graph* _graph;
-        TableViewColumnModel* _nodesColumnsModel;
-        TableViewColumnModel* _edgesColumnsModel;
-
+private:
+    Ui::SpreadViewWidget *ui;
+    tlp::Graph* _graph;
 };
 
 }

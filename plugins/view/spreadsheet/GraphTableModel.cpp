@@ -205,13 +205,7 @@ QVariant GraphTableModel::headerData(int section, Qt::Orientation orientation, i
             name.append("\n");
             name.append("( ");
             name.append(propertyInterfaceToPropertyTypeLabel(_propertiesTable[section]));
-            name.append(" )");
-
-            PropertyInterface* property = _propertiesTable[section];
-            if(property->getGraph() != _graph){
-                name.prepend("*");
-            }
-
+            name.append(" )");          
             return QVariant(name);
         }
 
@@ -238,7 +232,15 @@ QVariant GraphTableModel::headerData(int section, Qt::Orientation orientation, i
             }
             return QVariant(toolTip);
         }
-        break;       
+        break;
+    case Qt::DecorationRole:
+    {
+        if(orientation == Qt::Horizontal){
+            PropertyInterface* property = _propertiesTable[section];
+            return property->getGraph() != _graph?QVariant(QIcon(":/spreadsheet/inherited_properties.png")):QVariant();
+        }
+    }
+        break;
     }
     return QVariant();
 }
