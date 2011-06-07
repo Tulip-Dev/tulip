@@ -226,48 +226,6 @@ namespace tlp {
 
     bool generated;
     GLuint buffers[7];
-
-  public :
-
-    //=====================================================
-    // Deprecated
-    //=====================================================
-
-    /**
-     * return the ith color used for filling the polygon
-     * @deprecated use getFillColor
-     */
-    const Color& fcolor(const unsigned int i) const;
-
-    /**
-     * return the ith color used for filling the polygon
-     * @deprecated use getFillColor
-     */
-    Color& fcolor(const unsigned int i);
-
-    /**
-     * Set the ith color used for filling the polygon
-     * @deprecated use setFillColor
-     */
-    void setFColor(const unsigned int i,const Color &color);
-
-    /**
-     * return the ith color used for outlining the polygon
-     * @deprecated use getOutlineColor
-     */
-    const Color& ocolor(const unsigned int i) const;
-
-    /**
-     * return the ith color used for outlining the polygon
-     * @deprecated use getOutlineColor
-     */
-    virtual Color& ocolor(const unsigned int i);
-
-    /**
-     * Set the ith color used for outlining the polygon
-     * @deprecated use setOutlineColor
-     */
-    virtual void setOColor(const unsigned int i,const Color &color);
   };
   /*@}*/
 }

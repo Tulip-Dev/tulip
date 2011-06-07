@@ -504,41 +504,4 @@ namespace tlp {
       boundingBox.expand(*it);
     }
   }
-
-  //=====================================================
-  // Deprecated
-  //=====================================================
-
-  //=====================================================
-  const Color& GlAbstractPolygon::fcolor(const unsigned int i) const {
-    cout << __PRETTY_FUNCTION__ << " deprecated : use getFillColor" << endl;
-    return fillColors[i];
-  }
-  //=====================================================
-  Color& GlAbstractPolygon::fcolor(const unsigned int i) {
-    cout << __PRETTY_FUNCTION__ << " deprecated : use getFillColor" << endl;
-    return fillColors[i];
-  }
-  //=====================================================
-  void GlAbstractPolygon::setFColor(const unsigned int i,const Color &color) {
-    cout << __PRETTY_FUNCTION__ << " deprecated : use setFillColor" << endl;
-    fillColors[i]=color;
-    clearGenerated();
-  }
-  //=====================================================
-  const Color& GlAbstractPolygon::ocolor(const unsigned int i) const {
-    cout << __PRETTY_FUNCTION__ << " deprecated : use getOutlineColor" << endl;
-    return outlineColors[i];
-  }
-  //=====================================================
-  Color& GlAbstractPolygon::ocolor(const unsigned int i) {
-    cout << __PRETTY_FUNCTION__ << " deprecated : use getOutlineColor" << endl;
-    return outlineColors[i];
-  }
-  //=====================================================
-  void GlAbstractPolygon::setOColor(const unsigned int i,const Color &color) {
-    cout << __PRETTY_FUNCTION__ << " deprecated : use getOutlineColor" << endl;
-    outlineColors[i]=color;
-    clearGenerated();
-  }
 }

@@ -56,28 +56,6 @@ namespace tlp {
     void set(const Coord &center, float radius, float startAngle);
 
     /**
-     * return the fill color of the circle (i parameter is not used)
-     * This is an overload of the GlPolygon function to dismiss its behavior.
-     */
-    virtual const Color& fcolor(const unsigned int) const {return GlRegularPolygon::fcolor(0);}
-    /**
-     * return the fill color of the circle (i parameter is not used)
-     * This is an overload of the GlPolygon function to dismiss its behavior.
-     */
-    virtual Color& fcolor(const unsigned int) {return GlRegularPolygon::fcolor(0);}
-
-    /**
-     * return the outline color of the circle (i parameter is not used)
-     * This is an overload of the GlPolygon function to dismiss its behavior.
-     */
-    virtual const Color& ocolor(const unsigned int) const {return GlRegularPolygon::ocolor(0);}
-    /**
-     * return the outline color of the circle (i parameter is not used)
-     * This is an overload of the GlPolygon function to dismiss its behavior.
-     */
-    virtual Color& ocolor(const unsigned int) {return GlRegularPolygon::ocolor(0);}
-
-    /**
      * Function to export data in XML
      */
     virtual void getXML(xmlNodePtr rootNode);
