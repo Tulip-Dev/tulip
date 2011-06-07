@@ -1,4 +1,5 @@
 FIND_PACKAGE( Qt4 REQUIRED )
+SET(QT_USE_QTOPENGL true)
 INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE("${PROJECT_SOURCE_DIR}/${TulipUseFile}")	
@@ -196,6 +197,9 @@ INCLUDE_DIRECTORIES(../include/ ../include/tulip ${TulipInclude} ${TulipBuildInc
 ADD_LIBRARY(${LibTulipQtName} SHARED ${tulip-qt_UI_SRCS} ${tulip-qt_MOC_SRCS} ${tulip-qt_RCC_SRCS} ${tulip-qt_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${QT_QTCORE_LIBRARY})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${QT_QTGUI_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipQtName} ${GLEW_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipQtName} ${OPENGL_glu_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipQtName} ${OPENGL_gl_LIBRARY})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${QT_QTOPENGL_LIBRARY})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${LibTulipName})
 TARGET_LINK_LIBRARIES(${LibTulipQtName} ${LibTulipOglName})

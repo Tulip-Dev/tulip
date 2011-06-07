@@ -164,7 +164,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
 	scene.draw();
 	glFrameBuf->release();
 
-	#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+  #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) and !defined(__APPLE__)
 	if (antialiasedFbo)
 		QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
 	#endif
