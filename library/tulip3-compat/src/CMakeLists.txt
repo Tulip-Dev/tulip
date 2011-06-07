@@ -12,6 +12,8 @@ SET(SRCS
   ElementPropertiesWidgetUI.cpp
   FindSelectionWidget.cpp
   SnapshotDialog.cpp
+  QtProgress.cpp
+  PluginProgressWidget.cpp
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -27,6 +29,8 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip3/FindSelectionWidget.h
   ../include/tulip3/SnapshotDialog.h
   ../include/tulip3/TextEditDialog.h
+  ../include/tulip3/QtProgress.h
+  ../include/tulip3/PluginProgressWidget.h
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -37,6 +41,7 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/TextEditDialog.ui
   ../designer/FindSelection.ui
   ../designer/SnapshotDialog.ui
+  ../designer/PluginProgressWidget.ui
 )
 
 INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipGUIBuildInclude} ${Tulip3CompatInclude} ${Tulip3CompatBuildInclude} ${CMAKE_CURRENT_BINARY_DIR})
