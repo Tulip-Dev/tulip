@@ -144,13 +144,6 @@ public:
    */
   virtual Graph* getSuperGraph()const =0;
   /**
-   * Deprecated function, use getSuperGraph() instead.
-   */
-  Graph* getFather()const {
-    std::cerr << __PRETTY_FUNCTION__ << " is deprecated, use getSuperGraph() instead." << std::endl;
-    return getSuperGraph();
-  }
-  /**
    * Returns the root graph of the graph hierarchy.
    */
   virtual Graph* getRoot() const =0;
@@ -159,13 +152,6 @@ public:
    * Standard users should never use this function.
    */
   virtual void setSuperGraph(Graph *)=0;
-  /**
-   * Deprecated function, use setSuperGraph() instead.
-   */
-  void _DEPRECATED setFather(Graph *g) {
-    std::cerr << __PRETTY_FUNCTION__ << " is deprecated, use setSuperGraph() instead." << std::endl;
-    setSuperGraph(g);
-  }
   /**
    * Returns an iterator on all the sub-graphs of the graph.
    */
@@ -237,10 +223,6 @@ public:
    */
   virtual void delNodes(Iterator<node>* itN, bool deleteInAllGraphs = false)=0;
   /**
-   * Deletes a node in all the hierarchy of graphs.
-   */
-  virtual _DEPRECATED void delAllNode(const node)=0;
-  /**
    * Adds a new edge in the graph and returns it. This edge is also added in all
    * the super-graph of the graph to maintain the sub-graph relation between graphs.
    */
@@ -288,12 +270,6 @@ public:
    * It is the responsability of the caller to delete the iterator.
    */
   virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false)=0;
-  /**
-   * Deletes an edge in all the hierarchy of graphs.
-   * The ordering of edges around the node
-   * is preserved.
-   */
-  virtual _DEPRECATED void delAllEdge(const edge)=0;
   /**
    * Sets the order of the edges around a node. This operation
    * ensures that adjacent edges of a node will

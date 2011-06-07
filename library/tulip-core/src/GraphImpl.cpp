@@ -290,10 +290,6 @@ void GraphImpl::delEdge(const edge e, bool) {
   removeEdge(e);
 }
 //----------------------------------------------------------------
-void GraphImpl::delAllNode(const node n){delNode(n);}
-//----------------------------------------------------------------
-void GraphImpl::delAllEdge(const edge e){delEdge(e);}
-//----------------------------------------------------------------
 void GraphImpl::setEdgeOrder(const node n, const vector<edge> &v) {
   storage.setEdgeOrder(n, v);
 }

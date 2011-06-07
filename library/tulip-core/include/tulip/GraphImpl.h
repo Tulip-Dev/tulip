@@ -59,8 +59,6 @@ public:
   void addEdges(Iterator<edge>* edges);
   void delNode(const tlp::node n, bool deleteInAllGraphs = false);
   void delEdge(const tlp::edge e, bool deleteInAllGraphs = false);
-  void _DEPRECATED delAllNode(const node );
-  void _DEPRECATED delAllEdge(const edge );
   void setEdgeOrder(const node,const std::vector<edge> & );
   void swapEdgeOrder(const node,const edge , const edge );
   //=========================================================================

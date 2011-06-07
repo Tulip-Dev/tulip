@@ -91,10 +91,8 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orient�, planaire
   virtual void addEdges(Iterator<edge>* edges);
   virtual void delNode(const tlp::node n, bool deleteInAllGraphs = false);
   virtual void delNodes(Iterator<node>* itN, bool deleteInAllGraphs);
-  virtual _DEPRECATED void delAllNode(const node n);
   virtual void delEdge(const tlp::edge e, bool deleteInAllGraphs = false);
   virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false);
-  virtual _DEPRECATED void delAllEdge(const edge e);
   virtual void setEdgeOrder(const node n,const std::vector<edge> & s);
   virtual void swapEdgeOrder(const node n ,const edge e1, const edge e2);
 
