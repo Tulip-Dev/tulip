@@ -198,7 +198,7 @@ namespace tlp {
 
   //**********************************************************************
   MainController::MainController():
-    currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL),
+    currentGraphNbNodes(0),currentGraphNbEdges(0),graphToReload(NULL),propertiesListUpdated(false),blockUpdate(false),inAlgorithm(false),clusterTreeWidget(NULL),
     editMenu(NULL), algorithmMenu(NULL), viewMenu(NULL), optionsMenu(NULL),
     graphMenu(NULL), intMenu(NULL), stringMenu(NULL), sizesMenu(NULL),
     colorsMenu(NULL), layoutMenu(NULL), metricMenu(NULL), selectMenu(NULL),
@@ -314,6 +314,8 @@ namespace tlp {
     optionsMenu->setEnabled(true);
     graphMenu->setEnabled(true);
     snapshotAction->setEnabled(true);
+    tabWidgetDock->setEnabled(true);
+    configWidgetDock->setEnabled(true);
 
     unsigned int holdCount=Observable::observersHoldCounter();
     Observable::holdObservers();
@@ -452,6 +454,12 @@ namespace tlp {
 
     blockUpdate=true;
 
+    if(propertiesListUpdated){
+        eltProperties->setGraph(getCurrentGraph());
+        propertiesWidget->setGraph(getCurrentGraph());
+        propertiesListUpdated=false;
+    }
+    
     if(graphToReload){
       // enter here if a property is add/delete on the graph
       Graph *graph=graphToReload;
@@ -531,6 +539,7 @@ namespace tlp {
         while(itS->hasNext()) {
           newToCompute.push_back(itS->next());
         }
+        delete itS;
       }
       toCompute=newToCompute;
     }
@@ -543,8 +552,7 @@ namespace tlp {
     graphToReload=graph;
 
     if(graph==getCurrentGraph()){
-      eltProperties->setGraph(graph);
-      propertiesWidget->setGraph(graph);
+       propertiesListUpdated = true;
     }
 
     graph->getProperty(propertyName)->addObserver(this);
@@ -554,8 +562,7 @@ namespace tlp {
     graphToReload=graph;
 
     if(graph==getCurrentGraph()){
-      eltProperties->setGraph(graph);
-      propertiesWidget->setGraph(graph);
+      propertiesListUpdated = true;
     }
 
     graph->getProperty(propertyName)->removeObserver(this);
@@ -592,6 +599,7 @@ namespace tlp {
     mainWindowFacade.addDockWidget(Qt::LeftDockWidgetArea, tabWidgetDock);
     tabWidget->show();
     tabWidgetDock->show();
+    tabWidgetDock->setEnabled(false);
 
     //+++++++++++++++++++++++++++
     //Init hierarchy visualization widget
@@ -621,7 +629,7 @@ namespace tlp {
     configWidgetDock->setWindowTitle("View Editor");
     configWidgetDock->setFeatures(QDockWidget::DockWidgetClosable | QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
     mainWindowFacade.addDockWidget(Qt::LeftDockWidgetArea, configWidgetDock);
-
+    configWidgetDock->setEnabled(false);
     mainWindowFacade.tabifyDockWidget(tabWidgetDock,configWidgetDock);
 
     buildMenu();
