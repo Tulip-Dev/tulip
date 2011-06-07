@@ -51,22 +51,6 @@ GlQuad::GlQuad(const Coord &p1, const Coord &p2, const Coord &p3, const Coord &p
 	recomputeBoundingBox();
 }
 
-GlQuad::GlQuad(const Coord positions[4], const Color &color):GlPolygon(4,4,4,true,false) {
-  for(int i=0; i < 4; ++i) {
-    points[i] = positions[i];
-  }
-  setFillColor(color);
-  recomputeBoundingBox();
-}
-
-GlQuad::GlQuad(const Coord positions[4], const Color colors[4]){
-  for(int i=0; i < 4; ++i) {
-    points[i] = positions[i];
-    fillColors[i]    = colors[i];
-  }
-  recomputeBoundingBox();
-}
-
 GlQuad::~GlQuad() {
 }
 

@@ -55,12 +55,6 @@ namespace tlp {
      */
     GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
 
-    /**
-     * Contructor with fontPath, centerPosition, size, fontColor and alignment
-     * \deprecate this constructor will be remove on Tulip 4 version
-     */
-    GlLabel(const std::string &fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
-
     ~GlLabel();
 
     /**
@@ -239,22 +233,6 @@ namespace tlp {
      */
     virtual bool getUseLODOptimisation(){
       return useLOD;
-    }
-
-    /**
-     * Set label border for occlusion test
-     * \deprecated Use setLabelsDensity instead
-     */
-    virtual void setLabelOcclusionBorder(int size){
-      labelsDensity=-size;
-    }
-
-    /**
-     * Return label border for occlusion test
-     * \deprecated Use getLabelsDensity instead
-     */
-    virtual int getLabelOcclusionBorder(){
-      return -labelsDensity;
     }
 
     /**

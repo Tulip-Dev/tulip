@@ -51,7 +51,6 @@ SET(tulip-ogl_LIB_SRCS
   GlQuadTreeLODCalculator.cpp
   GlQuantitativeAxis.cpp
   GlRect.cpp
-  GlRectTextured.cpp
   GlRegularPolygon.cpp
   GlScene.cpp
   GlSceneObserver.cpp

@@ -76,22 +76,6 @@ public:
 		   const Color &c1, const Color &c2, const Color &c3, const Color &c4);
 
 	/**
-	 * Constructor
-	 *
-	 * \param positions Array indicating the position of the points. The first point is the top-left one. The next points are winding in clockwise order.
-	 * \param color A single color indicating the color for every point of the Quad.
-	 */
-	_DEPRECATED GlQuad(const Coord positions[4], const Color &color);
-
-	/**
-	 * Constructor
-	 *
-	 * \param positions Array indicating the position of the points. The first point is the top-left one. The next points are winding in clockwise order.
-	 * \param colors Array indicating the color of the points. The order is the same as for the positions.
-	 */
-	_DEPRECATED GlQuad(const Coord positions[4], const Color colors[4]);
-
-	/**
 	 * Destructor
 	 */
 	virtual ~GlQuad();

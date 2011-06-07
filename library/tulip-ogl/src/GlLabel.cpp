@@ -53,10 +53,6 @@ namespace tlp {
     init();
   }
 
-  GlLabel::GlLabel(const string &,Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign){
-    init();
-  }
-
   GlLabel::~GlLabel() {
     delete font;
     delete borderFont;
