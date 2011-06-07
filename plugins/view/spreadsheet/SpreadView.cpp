@@ -36,7 +36,7 @@ namespace tlp {
 
 
 SpreadView::SpreadView() :
-    AbstractView(),ui(new Ui::SpreadViewWidget),_graph(NULL){
+    AbstractView(),ui(new Ui::SpreadViewWidget),_graph(NULL),_reloadSelectionProperty(false){
 }
 SpreadView::~SpreadView() {
     delete ui;
@@ -71,6 +71,8 @@ QWidget *SpreadView::construct(QWidget *parent) {
     ui->nodesTableColumnEditionWidget->setEnabled(false);
     ui->edgesTableColumnEditionWidget->setVisible(false);
     ui->edgesTableColumnEditionWidget->setEnabled(false);
+
+    connect(ui->checkBox,SIGNAL(stateChanged(int)),this,SLOT(updateElementVisibility(int)));
 
     return widget;
 }
@@ -405,9 +407,100 @@ void SpreadView::ungroup(){
     ui->edgesTableView->highlightAndDisplayElements(metanodeEdges);
 }
 
+void SpreadView::updateElementVisibility(int state){
+    showOnlySelectedElements(state == Qt::Checked);
+}
+
+void SpreadView::showOnlySelectedElements(bool show){
+    assert(_graph != NULL);
+    BooleanProperty* viewSelection = _graph->getProperty<BooleanProperty>("viewSelection");
+    if(show){
+        viewSelection->addListener(this);
+        viewSelection->addObserver(this);
+        viewSelection->getGraph()->addListener(this);
+        viewSelection->getGraph()->addObserver(this);
+    }else{
+        viewSelection->removeListener(this);
+        viewSelection->removeObserver(this);
+        viewSelection->getGraph()->removeListener(this);
+        viewSelection->getGraph()->removeObserver(this);
+    }
+    _updatedNodes.setAll(true);
+    _updatedEdges.setAll(true);
+    updateFilters(show);
+}
+
+void SpreadView::updateFilters(bool show){
+    BooleanProperty* viewSelection = _graph->getProperty<BooleanProperty>("viewSelection");
+
+    GraphTableModel* nodesGraphModel = ui->nodesTableView->graphModel();
+    for(int i= 0; i < nodesGraphModel->rowCount(); ++i){
+        node n(nodesGraphModel->idForIndex(i));
+        if(_updatedNodes.get(n.id)){
+            ui->nodesTableView->setRowHidden(i,show == !viewSelection->getNodeValue(n));
+        }
+    }
+    GraphTableModel* edgesGraphModel = ui->edgesTableView->graphModel();
+    for(int i= 0; i < edgesGraphModel->rowCount(); ++i){
+        edge e(edgesGraphModel->idForIndex(i));
+        if(_updatedEdges.get(e.id)){
+            ui->edgesTableView->setRowHidden(i,show == !viewSelection->getEdgeValue(e));
+        }
+    }
+    _updatedNodes.setAll(false);
+    _updatedEdges.setAll(false);
+}
+
+void SpreadView::treatEvent(const Event &ev){
+    const PropertyEvent* propEvt = dynamic_cast<const PropertyEvent*>(&ev);
+    if (propEvt) {
+        switch(propEvt->getType()) {
+        case PropertyEvent::TLP_AFTER_SET_NODE_VALUE:
+            _updatedNodes.set(propEvt->getNode(),true);
+            break;
+        case PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE:
+            _updatedNodes.setAll(true);
+            break;
+        case PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE:
+            _updatedEdges.setAll(true);
+            break;
+        case PropertyEvent::TLP_AFTER_SET_EDGE_VALUE:
+            _updatedEdges.set(propEvt->getEdge(),true);
+            break;
+        default:
+            break;
+        }
+    } else {
+        const GraphEvent* graphEvt = dynamic_cast<const GraphEvent*>(&ev);
+        if(graphEvt){
+            switch(graphEvt->getType()) {
+            case GraphEvent::TLP_DEL_LOCAL_PROPERTY:{
+                _reloadSelectionProperty = true;
+            }
+                break;
+            default:
+                break;
+            }
+        }
+    }
+}
+
+void SpreadView::treatEvents(const  std::vector<Event> &events){
+    if (_reloadSelectionProperty) {
+        //Old viewSelection property was deleted so we need to observe new one.
+        BooleanProperty* viewSelection = _graph->getProperty<BooleanProperty>("viewSelection");
+        viewSelection->addObserver(this);
+        viewSelection->addPropertyObserver(this);
+        viewSelection->getGraph()->addObserver(this);
+        viewSelection->getGraph()->addListener(this);
+        _updatedNodes.setAll(true);
+        _updatedEdges.setAll(true);
+        _reloadSelectionProperty = false;
+    }
+    updateFilters(true);
+}
+
 VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "2.0")
 
 }
-
-
 

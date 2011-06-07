@@ -25,6 +25,8 @@
 #include <tulip/tulipconf.h>
 
 #include <tulip/AbstractView.h>
+#include <tulip/ObservableProperty.h>
+#include <tulip/MutableContainer.h>
 
 #include <QtCore/QModelIndexList>
 
@@ -38,7 +40,7 @@ namespace tlp {
 
 class Graph;
 
-class SpreadView: public AbstractView {
+class SpreadView: public AbstractView , public PropertyObserver, public Observable{
     Q_OBJECT
 public:
 
@@ -79,6 +81,9 @@ public slots :
     void init();
     void setGraph(Graph *graph);
 
+    void treatEvent(const Event &);
+    void treatEvents(const  std::vector<Event> &events );
+
 protected :
 
     void showPropertiesContextMenu(TulipTableWidget* tableWidget,int clickedColumn,const QPoint& position);
@@ -96,6 +101,9 @@ protected :
       **/
     TulipTableWidget* currentTable()const;
 protected slots:    
+
+    void updateElementVisibility(int state);
+    void showOnlySelectedElements(bool show);
 
     //Columns operations    
     void hideColumn();
@@ -115,8 +123,15 @@ protected slots:
     void ungroup();
 
 private:
+
+    void updateFilters(bool show);
+
     Ui::SpreadViewWidget *ui;
     tlp::Graph* _graph;
+
+    MutableContainer<bool> _updatedNodes;
+    MutableContainer<bool> _updatedEdges;
+    bool _reloadSelectionProperty;
 };
 
 }
