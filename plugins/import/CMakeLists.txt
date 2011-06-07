@@ -72,20 +72,17 @@ ADD_LIBRARY(WebImport-${TulipVersion} SHARED ${WebImport_SRCS} ${WebImport_MOC_S
 TARGET_LINK_LIBRARIES(WebImport-${TulipVersion} ${LibTulipCoreName} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS 
-  PlanarGraph-${TulipVersion}
-  DotImport-${TulipVersion}
-  Grid-${TulipVersion}
-  GMLImport-${TulipVersion}
-  RandomGraph-${TulipVersion}
-  RandomSimpleGraph-${TulipVersion}
-  AdjacencyMatrixImport-${TulipVersion}
-  CompleteGraph-${TulipVersion}
-  RandomTree-${TulipVersion}
-  RandomTreeGeneral-${TulipVersion}
-  CompleteTree-${TulipVersion}
-  SmallWorldGraph-${TulipVersion}
-  FileSystem-${TulipVersion}
-  WebImport-${TulipVersion}
-DESTINATION ${TulipPluginsInstallDir}
-COMPONENT tulip_core_plugins)
+INSTALL(TARGETS PlanarGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT PlanarGraph-${TulipVersion})
+INSTALL(TARGETS DotImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT DotImport-${TulipVersion})
+INSTALL(TARGETS Grid-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Grid-${TulipVersion})
+INSTALL(TARGETS GMLImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT GMLImport-${TulipVersion})
+INSTALL(TARGETS RandomGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT RandomGraph-${TulipVersion})
+INSTALL(TARGETS RandomSimpleGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT RandomSimpleGraph-${TulipVersion})
+INSTALL(TARGETS AdjacencyMatrixImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT AdjacencyMatrixImport-${TulipVersion})
+INSTALL(TARGETS CompleteGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT CompleteGraph-${TulipVersion})
+INSTALL(TARGETS RandomTree-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT RandomTree-${TulipVersion})
+INSTALL(TARGETS RandomTreeGeneral-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT RandomTreeGeneral-${TulipVersion})
+INSTALL(TARGETS CompleteTree-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT CompleteTree-${TulipVersion})
+INSTALL(TARGETS SmallWorldGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT SmallWorldGraph-${TulipVersion})
+INSTALL(TARGETS FileSystem-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT FileSystem-${TulipVersion})
+INSTALL(TARGETS WebImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT WebImport-${TulipVersion})

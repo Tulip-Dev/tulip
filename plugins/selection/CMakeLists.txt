@@ -29,13 +29,10 @@ ADD_LIBRARY(Kruskal-${TulipVersion} SHARED Kruskal.cpp Kruskal.h)
 TARGET_LINK_LIBRARIES(Kruskal-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS 
-  SpanningDagSelection-${TulipVersion}
-  ReachableSubGraphSelection-${TulipVersion}
-  SpanningTreeSelection-${TulipVersion}
-  InducedSubGraphSelection-${TulipVersion}
-  LoopSelection-${TulipVersion}
-  MultipleSelection-${TulipVersion}
-  Kruskal-${TulipVersion}
-DESTINATION ${TulipPluginsInstallDir}
-COMPONENT tulip_core_plugins)
+INSTALL(TARGETS SpanningDagSelection-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT SpanningDagSelection-${TulipVersion})
+INSTALL(TARGETS ReachableSubGraphSelection-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ReachableSubGraphSelection-${TulipVersion})
+INSTALL(TARGETS SpanningTreeSelection-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT SpanningTreeSelection-${TulipVersion})
+INSTALL(TARGETS InducedSubGraphSelection-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InducedSubGraphSelection-${TulipVersion})
+INSTALL(TARGETS LoopSelection-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT LoopSelection-${TulipVersion})
+INSTALL(TARGETS MultipleSelection-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT MultipleSelection-${TulipVersion})
+INSTALL(TARGETS Kruskal-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Kruskal-${TulipVersion})

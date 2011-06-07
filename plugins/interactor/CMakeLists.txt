@@ -40,15 +40,12 @@ ADD_LIBRARY(InteractorEditEdgeBends-${TulipVersion} SHARED InteractorEditEdgeBen
 TARGET_LINK_LIBRARIES(InteractorEditEdgeBends-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS 
-  InteractorNavigation-${TulipVersion}
-  InteractorGetInformation-${TulipVersion}
-  InteractorSelection-${TulipVersion}
-  InteractorSelectionModifier-${TulipVersion}
-  InteractorRectangleZoom-${TulipVersion}
-  InteractorDeleteElement-${TulipVersion}
-  InteractorAddNode-${TulipVersion}
-  InteractorAddEdge-${TulipVersion}
-  InteractorEditEdgeBends-${TulipVersion}
-DESTINATION ${TulipPluginsInstallDir}/interactors/
-COMPONENT tulip_gui_plugins)
+INSTALL(TARGETS InteractorNavigation-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorNavigation-${TulipVersion})
+INSTALL(TARGETS InteractorGetInformation-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorGetInformation-${TulipVersion})
+INSTALL(TARGETS InteractorSelection-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorSelection-${TulipVersion})
+INSTALL(TARGETS InteractorSelectionModifier-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorSelectionModifier-${TulipVersion})
+INSTALL(TARGETS InteractorRectangleZoom-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorRectangleZoom-${TulipVersion})
+INSTALL(TARGETS InteractorDeleteElement-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorDeleteElement-${TulipVersion})
+INSTALL(TARGETS InteractorAddNode-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorAddNode-${TulipVersion})
+INSTALL(TARGETS InteractorAddEdge-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorAddEdge-${TulipVersion})
+INSTALL(TARGETS InteractorEditEdgeBends-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorEditEdgeBends-${TulipVersion})

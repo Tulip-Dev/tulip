@@ -83,22 +83,19 @@ TARGET_LINK_LIBRARIES(RoundedBox-${TulipVersion} ${LibTulipCoreName} ${LibTulipO
 
 ##----------------------------------------------------------------------------------------------------------------------------
 
-INSTALL(TARGETS 
-  Circle-${TulipVersion}
-  Hexagone-${TulipVersion}
-  Triangle-${TulipVersion}
-  Pentagone-${TulipVersion}
-  Square-${TulipVersion}
-  Ring-${TulipVersion}
-  Billboard-${TulipVersion}
-  Cube-${TulipVersion}
-  CubeOutlinedTransparent-${TulipVersion}
-  Sphere-${TulipVersion}
-  Cone-${TulipVersion}
-  Cylinder-${TulipVersion}
-  HalfCylinder-${TulipVersion}
-  ChristmasTree-${TulipVersion}
-  Window-${TulipVersion}
-  RoundedBox-${TulipVersion}
-DESTINATION ${TulipPluginsInstallDir}/glyphs/
-COMPONENT tulip_ogl_plugins)
+INSTALL(TARGETS Circle-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Circle-${TulipVersion})
+INSTALL(TARGETS Hexagone-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Hexagone-${TulipVersion})
+INSTALL(TARGETS Triangle-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Triangle-${TulipVersion})
+INSTALL(TARGETS Pentagone-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Pentagone-${TulipVersion})
+INSTALL(TARGETS Square-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Square-${TulipVersion})
+INSTALL(TARGETS Ring-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Ring-${TulipVersion})
+INSTALL(TARGETS Billboard-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Billboard-${TulipVersion})
+INSTALL(TARGETS Cube-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Cube-${TulipVersion})
+INSTALL(TARGETS CubeOutlinedTransparent-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT CubeOutlinedTransparent-${TulipVersion})
+INSTALL(TARGETS Sphere-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Sphere-${TulipVersion})
+INSTALL(TARGETS Cone-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Cone-${TulipVersion})
+INSTALL(TARGETS Cylinder-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Cylinder-${TulipVersion})
+INSTALL(TARGETS HalfCylinder-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT HalfCylinder-${TulipVersion})
+INSTALL(TARGETS ChristmasTree-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ChristmasTree-${TulipVersion})
+INSTALL(TARGETS Window-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Window-${TulipVersion})
+INSTALL(TARGETS RoundedBox-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT RoundedBox-${TulipVersion})

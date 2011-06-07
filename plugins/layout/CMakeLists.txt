@@ -100,21 +100,18 @@ ADD_LIBRARY(SquarifiedTreeMap-${TulipVersion} SHARED SquarifiedTreeMap.cpp)
 TARGET_LINK_LIBRARIES(SquarifiedTreeMap-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS 
-  MixedModel-${TulipVersion}
-  ConnectedComponentPacking-${TulipVersion}
-  Random-${TulipVersion}
-  GemLayout-${TulipVersion}
-  TreeReingoldAndTilforExtended-${TulipVersion}
-  ConeTreeExtended-${TulipVersion}
-  TreeRadial-${TulipVersion}
-  TreeLeaf-${TulipVersion}
-  BubbleTree-${TulipVersion}
-  Circular-${TulipVersion}
-  HierarchicalGraph-${TulipVersion}
-  Tutte-${TulipVersion}
-  Dendrogram-${TulipVersion}
-  ImprovedWalker-${TulipVersion}
-  SquarifiedTreeMap-${TulipVersion}
-DESTINATION ${TulipPluginsInstallDir}
-COMPONENT tulip_core_plugins)
+INSTALL(TARGETS MixedModel-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT MixedModel-${TulipVersion})
+INSTALL(TARGETS ConnectedComponentPacking-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ConnectedComponentPacking-${TulipVersion})
+INSTALL(TARGETS Random-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Random-${TulipVersion})
+INSTALL(TARGETS GemLayout-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT GemLayout-${TulipVersion})
+INSTALL(TARGETS TreeReingoldAndTilforExtended-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT TreeReingoldAndTilforExtended-${TulipVersion})
+INSTALL(TARGETS ConeTreeExtended-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ConeTreeExtended-${TulipVersion})
+INSTALL(TARGETS TreeRadial-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT TreeRadial-${TulipVersion})
+INSTALL(TARGETS TreeLeaf-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT TreeLeaf-${TulipVersion})
+INSTALL(TARGETS BubbleTree-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT BubbleTree-${TulipVersion})
+INSTALL(TARGETS Circular-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Circular-${TulipVersion})
+INSTALL(TARGETS HierarchicalGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT HierarchicalGraph-${TulipVersion})
+INSTALL(TARGETS Tutte-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Tutte-${TulipVersion})
+INSTALL(TARGETS Dendrogram-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Dendrogram-${TulipVersion})
+INSTALL(TARGETS ImprovedWalker-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ImprovedWalker-${TulipVersion})
+INSTALL(TARGETS SquarifiedTreeMap-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT SquarifiedTreeMap-${TulipVersion})

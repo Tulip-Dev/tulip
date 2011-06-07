@@ -37,4 +37,4 @@ QT4_WRAP_CPP(MOC_SRCS
 ADD_LIBRARY(SpreadSheet-${TulipVersion} SHARED ${SRCS} ${MOC_SRCS} ${UI_HEADERS})
 TARGET_LINK_LIBRARIES(SpreadSheet-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
 
-INSTALL(TARGETS SpreadSheet-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}/view/ COMPONENT tulip_gui_spreadview)
+INSTALL(TARGETS SpreadSheet-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT SpreadSheet-${TulipVersion})
