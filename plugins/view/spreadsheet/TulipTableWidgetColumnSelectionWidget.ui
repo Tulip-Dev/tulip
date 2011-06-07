@@ -37,10 +37,26 @@
     </widget>
    </item>
    <item row="2" column="0" rowspan="6">
-    <widget class="QListView" name="listView"/>
+    <widget class="QListView" name="listView">
+     <property name="editTriggers">
+      <set>QAbstractItemView::NoEditTriggers</set>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::NoSelection</enum>
+     </property>
+    </widget>
    </item>
    <item row="8" column="0">
     <widget class="QGroupBox" name="groupBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="title">
       <string>Filter properties</string>
      </property>

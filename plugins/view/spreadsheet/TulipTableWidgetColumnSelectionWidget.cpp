@@ -3,7 +3,27 @@
 #include "TulipTableWidgetColumnSelectionModel.h"
 #include "TulipTableWidget.h"
 #include <QtGui/QMenu>
+#include <QtGui/QStyledItemDelegate>
 #include <cassert>
+
+
+class TulipTableWidgetColumnSelectionWidgetItemDelegate : public QStyledItemDelegate{
+public :
+    TulipTableWidgetColumnSelectionWidgetItemDelegate(QObject * parent = 0) : QStyledItemDelegate(parent){
+    }
+
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const{
+        QStyleOptionViewItemV4 opt = option;
+        initStyleOption(&opt, index);
+        opt.decorationPosition= QStyleOptionViewItem::Right;
+        const QWidget *widget = NULL;
+        if (const QStyleOptionViewItemV3 *v3 = qstyleoption_cast<const QStyleOptionViewItemV3 *>(&option)){
+            widget = v3->widget;
+        }
+        QStyle *style = widget ? widget->style() : QApplication::style();
+        style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
+    }
+};
 
 TulipTableWidgetColumnSelectionWidget::TulipTableWidgetColumnSelectionWidget(QWidget *parent) :
     QWidget(parent),
@@ -18,6 +38,8 @@ TulipTableWidgetColumnSelectionWidget::TulipTableWidgetColumnSelectionWidget(QWi
     //User pattern
     connect(ui->customPatternLineEdit,SIGNAL(textChanged( QString)),this,SLOT(showCustomPatternProperties(QString)));
 
+    ui->listView->setItemDelegate(new TulipTableWidgetColumnSelectionWidgetItemDelegate(ui->listView));
+
 }
 
 TulipTableWidgetColumnSelectionWidget::~TulipTableWidgetColumnSelectionWidget()
@@ -29,7 +51,7 @@ void TulipTableWidgetColumnSelectionWidget::setTableView(TulipTableWidget* table
     assert(tableView != NULL);
     QAbstractItemModel* oldModel = ui->listView->model();
     if(oldModel){
-    disconnect(oldModel,SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(updateCheckUncheckAllButtonState()));
+        disconnect(oldModel,SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(updateCheckUncheckAllButtonState()));
     }
     _tableColumnModel = new TulipTableWidgetColumnSelectionModel(tableView,this);
     ui->listView->setModel(_tableColumnModel);

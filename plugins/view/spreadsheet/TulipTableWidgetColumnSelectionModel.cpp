@@ -26,7 +26,7 @@ QVariant TulipTableWidgetColumnSelectionModel::data( const QModelIndex & index, 
             {
                 return _tableView->isColumnHidden(index.row())?QVariant(Qt::Unchecked):QVariant(Qt::Checked);
             }
-            break;
+            break;       
         default:
             return _tableModel->headerData(index.row(),Qt::Horizontal,role);
             break;
