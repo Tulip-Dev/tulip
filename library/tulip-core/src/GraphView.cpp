@@ -367,14 +367,6 @@ void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
   }
 }
 //----------------------------------------------------------------
-void GraphView::delAllNode(const node n){
-  delNode(n, true);
-}
-//----------------------------------------------------------------
-void GraphView::delAllEdge(const edge e){
-  delEdge(e, true);
-}
-//----------------------------------------------------------------
 void GraphView::setEdgeOrder(const node n,const std::vector<edge> &v ) {
   getRoot()->setEdgeOrder(n,v);
 }

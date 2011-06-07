@@ -123,7 +123,7 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
     string name = subgraph->getAttribute<string>("name");
     if (name == "unnamed") {
       find = true;
-      breakForEach;
+      break;
     }
   }
   CPPUNIT_ASSERT(find && subgraph != 0);

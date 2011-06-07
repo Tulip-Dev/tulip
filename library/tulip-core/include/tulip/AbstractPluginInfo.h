@@ -154,8 +154,6 @@ class FactoryInterface : public AbstractPluginInfo {
     }
   };
  
-typedef _DEPRECATED AbstractPluginInfo Plugin;
-
 /*@}*/
 }
 #endif

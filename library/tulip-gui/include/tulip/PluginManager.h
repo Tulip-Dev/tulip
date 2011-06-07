@@ -1,5 +1,4 @@
 #include <tulip/PluginInformations.h>
-#include <tulip/WithDependency.h>
 
 #include <QtCore/QList>
 #include <QtCore/QMap>

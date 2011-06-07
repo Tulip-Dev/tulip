@@ -133,18 +133,6 @@ namespace tlp {
      **/
     virtual Interactor *getActiveInteractor() = 0;
     
-    /**
-     * @brief Take a snapshot of the view and put it in a picture
-     * 
-     * @deprecated In Tulip 4.x.y this function will be replaced by void createPicture(const string &pictureName,int width, int height, bool center, int zoom, int xOffset, int yOffset)
-     *
-     * @param pictureName filename to use for the picture, with extension (extension is used to infer image type).
-     * @param width width of the picture Defaults to 0.
-     * @param height height of the picture Defaults to 0.
-     * @return void
-     **/
-    virtual void _DEPRECATED createPicture(const std::string &pictureName,int width=0, int height=0);
-
     /**      
      * @brief Take a snapshot of the view, and save it to a picture on disk.
      *

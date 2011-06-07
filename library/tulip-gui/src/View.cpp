@@ -21,8 +21,6 @@
 using namespace std;
 
 namespace tlp {
-  void View::createPicture(const std::string &,int, int) {};
-  
   bool View::createPicture(const std::string& pictureName, int width, int height, bool center, int zoom, int xOffset, int yOffset) {
     return savePicture(pictureName,width,height,center,zoom,xOffset,yOffset);
   }
