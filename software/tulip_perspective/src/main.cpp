@@ -29,7 +29,19 @@ public:
 };
 
 void usage(const QString &error) {
-
+  int returnCode = 0;
+  if (!error.isEmpty()) {
+    cerr << "Error: " << error.toStdString() << endl;
+    returnCode = 1;
+  }
+  cout << "Usage: tulip_perspective [OPTION] [FILE]" << endl
+       << "Run a Tulip Perspective plugin into its dedicated process." << endl
+       << "If Tulip main process is already running, embedded perspective will run into managed mode." << endl << endl
+       << "FILE: a Tulip project file. If a file is specified, the --perspective flag will be ignored and tulip_perspective will look into the project's meta-informations to find the correct perspective to launch." << endl
+       << "List of OPTIONS:" << endl
+       << "  --perspective=<perspective_name>\tWill use the perspective specified by perspective_name. Perspective will be run with no project file. If a project file has been specified using the FILE option, this flag will be ignored." << endl
+       << "  --help\tDisplays this help message and ignores other options." << endl;
+  exit(returnCode);
 }
 
 int main(int argc,char **argv) {
@@ -74,6 +86,8 @@ int main(int argc,char **argv) {
       continue;
     if (perspectiveRegexp.exactMatch(a))
       perspectiveName = perspectiveRegexp.cap(1);
+    else if (a == "--help")
+      usage("");
     else if (projectFilePath.isNull())
       projectFilePath = a;
   }
@@ -87,10 +101,10 @@ int main(int argc,char **argv) {
     SimplePluginProgressWidget *progress = new SimplePluginProgressWidget;
     progress->show();
     project = TulipProject::openProject(projectFilePath,progress);
-    if (!project->isValid()) {
+
+    if (!project->isValid())
       usage("Failed to open project file " + projectFilePath + ": " + project->lastError());
-      exit(1);
-    }
+
     perspectiveName = project->perspective();
     delete progress;
   }
@@ -103,10 +117,8 @@ int main(int argc,char **argv) {
   PerspectiveContext context;
   context.mainWindow = mainWindow;
   Perspective *perspective = StaticPluginLister<Perspective,PerspectiveContext>::getPluginObject(perspectiveName.toStdString(), context);
-  if (!perspective) {
+  if (!perspective)
     usage("Failed to create perspective: " + perspectiveName);
-    exit(1);
-  }
 
   if (project)
     perspective->construct(project);
