@@ -50,13 +50,20 @@ private:
 
 
 // Methods and properties coming from the D-Bus service implementation
-public:
-  Q_PROPERTY(qlonglong pid READ pid)
-  qlonglong pid() const;
-public Q_SLOTS:
-  void ShowAboutPage();
-  void ShowPluginsCenter();
-  void ShowWelcomeScreen();
+public: // PROPERTIES
+    Q_PROPERTY(qlonglong pid READ pid)
+    qlonglong pid() const;
+
+public Q_SLOTS: // METHODS
+    void AddPluginRepository(const QString &url);
+    void CreatePerspective(const QString &name);
+    QStringList GetCompatiblePerspectives(const QString &file);
+    void OpenProject(const QString &file);
+    void OpenProjectWith(const QString &file, const QString &perspective);
+    void RemovePluginRepository(const QString &url);
+    void ShowAboutPage();
+    void ShowPluginsCenter();
+    void ShowWelcomeScreen();
 };
 
 #endif // TULIPMAINWINDOW_H

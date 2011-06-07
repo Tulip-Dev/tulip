@@ -12,21 +12,11 @@
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/PluginLister.h>
 #include <tulip/Perspective.h>
+#include <tulip/InteractorManager.h>
 
 #include <iostream>
 using namespace std;
 using namespace tlp;
-
-// This PluginLoader basically does nothing. It's only used to load plugins at startup.
-class NoOpPluginLoader: public tlp::PluginLoader {
-public:
-  virtual void start(const std::string &) {}
-  virtual void numberOfFiles(int) {}
-  virtual void loading(const std::string &) {}
-  virtual void loaded(const tlp::AbstractPluginInfo* infos, const std::list <tlp::Dependency>&) {}
-  virtual void aborted(const std::string &,const  std::string &) {}
-  virtual void finished(bool ,const std::string &) {}
-};
 
 void usage(const QString &error) {
   int returnCode = 0;
@@ -57,28 +47,24 @@ int main(int argc,char **argv) {
   QDir::setCurrent(QApplication::applicationDirPath() + "/../Frameworks");
 #endif
 
-  TulipAgentCommunicator communicator("org.labri.Tulip","/",QDBusConnection::sessionBus(),0);
+  TulipAgentCommunicator *communicator = new TulipAgentCommunicator("org.labri.Tulip","/",QDBusConnection::sessionBus(),0);
 
-  bool headlessMode = QDBusConnection::sessionBus().interface()->isServiceRegistered("org.labri.Tulip").value();
-  if (headlessMode)
-    qWarning("no org.labri.Tulip service on session bus. Falling back to headless mode.");
+  if (!(QDBusConnection::sessionBus().interface()->isServiceRegistered("org.labri.Tulip").value()))
+    qWarning("No org.labri.Tulip service on session bus. Falling back to headless mode.");
 
 #if defined(__APPLE__) // revert current directory
   QDir::setCurrent(currentPath);
 #endif
 
+  // Init Tulip and load plugins
   tlp::initTulipLib(QApplication::applicationDirPath().toStdString().c_str());
-
-  // Check dependencies
-  NoOpPluginLoader *loader = new NoOpPluginLoader;
-  tlp::PluginLibraryLoader::loadPlugins(loader);
-  tlp::PluginListerInterface::checkLoadedPluginsDependencies(loader);
-  delete loader;
+  tlp::PluginLibraryLoader::loadPlugins();
+  tlp::PluginListerInterface::checkLoadedPluginsDependencies(0);
+  tlp::InteractorManager::getInst().loadInteractorPlugins();
 
   // Check arguments
   QString perspectiveName,projectFilePath;
   QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");
-
   QString a;
   int i=0;
   foreach(a,QApplication::arguments()) {
@@ -113,19 +99,28 @@ int main(int argc,char **argv) {
   QMainWindow *mainWindow = new QMainWindow();
   mainWindow->setVisible(false);
 
-  // Construct perspective
+  // Create perspective
   PerspectiveContext context;
   context.mainWindow = mainWindow;
+
   Perspective *perspective = StaticPluginLister<Perspective,PerspectiveContext>::getPluginObject(perspectiveName.toStdString(), context);
   if (!perspective)
     usage("Failed to create perspective: " + perspectiveName);
+
+  // Connect perspective and communicator
+  QObject::connect(perspective,SIGNAL(showTulipWelcomeScreen()),communicator,SLOT(ShowWelcomeScreen()));
+  QObject::connect(perspective,SIGNAL(showTulipPluginsCenter()),communicator,SLOT(ShowPluginsCenter()));
+  QObject::connect(perspective,SIGNAL(showTulipAboutPage()),communicator,SLOT(ShowAboutPage()));
+  QObject::connect(perspective,SIGNAL(openProject(QString)),communicator,SLOT(OpenProject(QString)));
+  QObject::connect(perspective,SIGNAL(openProjectWith(QString,QString)),communicator,SLOT(OpenProjectWith(QString,QString)));
+  QObject::connect(perspective,SIGNAL(createPerspective(QString)),communicator,SLOT(CreatePerspective(QString)));
+  QObject::connect(perspective,SIGNAL(addPluginRepository(QString)),communicator,SLOT(AddPluginRepository(QString)));
+  QObject::connect(perspective,SIGNAL(removePluginRepository(QString)),communicator,SLOT(RemovePluginRepository(QString)));
 
   if (project)
     perspective->construct(project);
   else
     perspective->construct();
-
-  // Connect perspective and communicator
 
   return tulip_perspective.exec();
 }

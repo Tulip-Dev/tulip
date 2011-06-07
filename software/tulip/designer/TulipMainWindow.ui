@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>:/tulip/app/icons/logo32x32.png</normaloff>:/tulip/app/icons/logo32x32.png</iconset>
+    <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">QToolButton, QPushButton, QComboBox {

@@ -9,8 +9,8 @@
  * before re-generating it.
  */
 
-#ifndef TULIPAGENTSERVICEADAPTOR_H_1306835011
-#define TULIPAGENTSERVICEADAPTOR_H_1306835011
+#ifndef TULIPAGENTSERVICEADAPTOR_H_1307461834
+#define TULIPAGENTSERVICEADAPTOR_H_1307461834
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
@@ -34,6 +34,26 @@ class TulipAgentService: public QDBusAbstractAdaptor
 "    <method name=\"ShowWelcomeScreen\"/>\n"
 "    <method name=\"ShowPluginsCenter\"/>\n"
 "    <method name=\"ShowAboutPage\"/>\n"
+"    <method name=\"OpenProject\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"file\"/>\n"
+"    </method>\n"
+"    <method name=\"OpenProjectWith\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"file\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"perspective\"/>\n"
+"    </method>-->\n"
+"    <method name=\"CreatePerspective\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"name\"/>\n"
+"    </method>\n"
+"    <method name=\"AddPluginRepository\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"url\"/>\n"
+"    </method>\n"
+"    <method name=\"RemovePluginRepository\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"url\"/>\n"
+"    </method>\n"
+"    <method name=\"GetCompatiblePerspectives\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"file\"/>\n"
+"      <arg direction=\"out\" type=\"as\" name=\"result\"/>\n"
+"    </method>\n"
 "  </interface>\n"
         "")
 public:
@@ -45,6 +65,12 @@ public: // PROPERTIES
     qlonglong pid() const;
 
 public Q_SLOTS: // METHODS
+    void AddPluginRepository(const QString &url);
+    void CreatePerspective(const QString &name);
+    QStringList GetCompatiblePerspectives(const QString &file);
+    void OpenProject(const QString &file);
+    void OpenProjectWith(const QString &file, const QString &perspective);
+    void RemovePluginRepository(const QString &url);
     void ShowAboutPage();
     void ShowPluginsCenter();
     void ShowWelcomeScreen();

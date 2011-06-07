@@ -31,6 +31,8 @@ class TulipProject;
 
 class TLP_QT_SCOPE PerspectiveContext {
 public:
+  PerspectiveContext(): mainWindow(0) {}
+
   QMainWindow *mainWindow;
 };
 
@@ -99,6 +101,55 @@ public:
     */
   virtual void construct(tlp::TulipProject *)=0;
 
+signals:
+  /**
+    @brief Asks the tulip process to display the Welcome screen
+    When emmited, this signal will command to the main tulip process to show the main window (if hidden in the systray) and to display the Welcome screen.
+    The welcome screen shows the latest Tulip news and allow the user to open a new perspective or to open a project.
+    @note By default, emitting this signal when in headless mode does nothing.
+    */
+  void showTulipWelcomeScreen();
+
+  /**
+    @brief Asks the tulip process to display the Plugins center screen
+    When emmited, this signal will command to the main tulip process to show the main window (if hidden in the systray) and to display the Plugins center.
+    The Plugins center allows the user to manage installation/removal/update of plugins and to add/remove plugins repositories.
+    @note By default, emitting this signal when in headless mode does nothing.
+    */
+  void showTulipPluginsCenter();
+
+  /**
+    @brief Asks the tulip process to display the About page
+    When emmited, this signal will command to the main tulip process to show the main window (if hidden in the systray) and to display the About page.
+    The About page contains links to online documentation, help resources and so.
+    @note By default, emitting this signal when in headless mode does nothing.
+    */
+  void showTulipAboutPage();
+
+  /**
+    @brief Asks the tulip process to open a new perspective
+    When emmited, this signal will command the main tulip process to open a new perspective whose name is specified by the name parameter.
+    If the name is not valid, no perspective will be created without further notice.
+    @note By default, emitting this signal when in headless mode does nothing.
+    */
+  void createPerspective(QString name);
+
+  /**
+    @brief Asks the tulip process to open a project file.
+    This signal will make the main tulip process open a new project. The project will be opened with its associated perspective. If no such perspective exists, the function will return
+    without further notice.
+    @note By default, emitting this signal when in headless mode does nothing.
+    */
+  void openProject(QString);
+
+
+  void openProjectWith(QString,QString);
+
+
+  void addPluginRepository(QString);
+
+
+  void removePluginRepository(QString);
 };
 
 typedef StaticPluginLister<Perspective, PerspectiveContext> PerspectivePluginLister;
@@ -134,6 +185,7 @@ public:            \
     C##T##Factory C##T##FactoryInitializer;               \
   }
 
-#define PERSPECTIVEPLUGIN(C,N,A,D,I,R) PERSPECTIVEPLUGINFACTORY(Perspective,C,N,A,D,I,R,"")
+#define PERSPECTIVEPLUGINOFGROUP(C,N,A,D,I,R,G) PERSPECTIVEPLUGINFACTORY(Perspective,C,N,A,D,I,R,G)
+#define PERSPECTIVEPLUGIN(C,N,A,D,I,R) PERSPECTIVEPLUGINOFGROUP(C,N,A,D,I,R,"")
 
 #endif //_PERSPECTIVE_H

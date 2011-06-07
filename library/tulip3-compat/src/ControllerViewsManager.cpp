@@ -30,8 +30,8 @@ using namespace std;
 
 namespace tlp {
 
-ControllerViewsManager::ControllerViewsManager() :
-    				  currentView(NULL), currentGraph(NULL) {
+ControllerViewsManager::ControllerViewsManager(PerspectiveContext &c) :
+              Controller(c), currentView(NULL), currentGraph(NULL) {
 }
 ControllerViewsManager::~ControllerViewsManager() {
 	for(map<QWidget *,View*>::iterator it=viewWidget.begin();it!=viewWidget.end();++it){

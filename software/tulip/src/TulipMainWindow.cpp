@@ -23,7 +23,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(_ui->aboutPageChooser,SIGNAL(clicked()),this,SLOT(pageChooserClicked()));
 
   //System tray
-  _systemTrayIcon = new QSystemTrayIcon(QIcon(":/tulip/app/icons/logo32x32.png"),this);
+  _systemTrayIcon = new QSystemTrayIcon(QIcon(":/tulip/gui/icons/logo32x32.png"),this);
   _systemTrayIcon->setToolTip(trUtf8("Tulip agent"));
   QMenu *systemTrayMenu = new QMenu();
   systemTrayMenu->addAction(trUtf8("Show"));
@@ -108,4 +108,28 @@ void TulipMainWindow::ShowWelcomeScreen() {
   if (!isVisible())
     setVisible(true);
   _ui->pages->setCurrentWidget(_ui->welcomePage);
+}
+
+void TulipMainWindow::AddPluginRepository(const QString &url) {
+
+}
+
+void TulipMainWindow::RemovePluginRepository(const QString &url) {
+
+}
+
+void TulipMainWindow::CreatePerspective(const QString &name) {
+
+}
+
+void TulipMainWindow::OpenProject(const QString &file) {
+
+}
+
+void TulipMainWindow::OpenProjectWith(const QString &file, const QString &perspective) {
+
+}
+
+QStringList TulipMainWindow::GetCompatiblePerspectives(const QString &file) {
+  return QStringList();
 }

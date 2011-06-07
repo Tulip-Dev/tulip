@@ -39,6 +39,44 @@ qlonglong TulipAgentService::pid() const
     return qvariant_cast< qlonglong >(parent()->property("pid"));
 }
 
+void TulipAgentService::AddPluginRepository(const QString &url)
+{
+    // handle method call org.labri.Tulip.AddPluginRepository
+    QMetaObject::invokeMethod(parent(), "AddPluginRepository", Q_ARG(QString, url));
+}
+
+void TulipAgentService::CreatePerspective(const QString &name)
+{
+    // handle method call org.labri.Tulip.CreatePerspective
+    QMetaObject::invokeMethod(parent(), "CreatePerspective", Q_ARG(QString, name));
+}
+
+QStringList TulipAgentService::GetCompatiblePerspectives(const QString &file)
+{
+    // handle method call org.labri.Tulip.GetCompatiblePerspectives
+    QStringList result;
+    QMetaObject::invokeMethod(parent(), "GetCompatiblePerspectives", Q_RETURN_ARG(QStringList, result), Q_ARG(QString, file));
+    return result;
+}
+
+void TulipAgentService::OpenProject(const QString &file)
+{
+    // handle method call org.labri.Tulip.OpenProject
+    QMetaObject::invokeMethod(parent(), "OpenProject", Q_ARG(QString, file));
+}
+
+void TulipAgentService::OpenProjectWith(const QString &file, const QString &perspective)
+{
+    // handle method call org.labri.Tulip.OpenProjectWith
+    QMetaObject::invokeMethod(parent(), "OpenProjectWith", Q_ARG(QString, file), Q_ARG(QString, perspective));
+}
+
+void TulipAgentService::RemovePluginRepository(const QString &url)
+{
+    // handle method call org.labri.Tulip.RemovePluginRepository
+    QMetaObject::invokeMethod(parent(), "RemovePluginRepository", Q_ARG(QString, url));
+}
+
 void TulipAgentService::ShowAboutPage()
 {
     // handle method call org.labri.Tulip.ShowAboutPage
