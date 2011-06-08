@@ -84,15 +84,29 @@ namespace tlp {
     bool                      OLOObject::_initialized = OLOObject::init();
     bool                      Observable::eventQueued = false;
     //----------------------------------
-    OLOObject::OLOObject():n(oGraph.addNode()) {
-        oPointer[n] = this;
+    OLOObject::OLOObject() {
+#ifdef _OPENMP
+        if (omp_get_thread_num() != 0)
+	  throw OLOException("OLO object creation is only allowed in the main thread");
+#endif
+        oPointer[n = oGraph.addNode()] = this;
         oAlive[n]   = true;
+#ifndef NDEBUG
+	sent = received = 0;
+#endif
         //cout << "[OLO node] created:" << n.id << "::" << this << endl;
     }
     //----------------------------------
-    OLOObject::OLOObject(const OLOObject &):n(oGraph.addNode()) {
-        oPointer[n] = this;
+  OLOObject::OLOObject(const OLOObject &) {
+#ifdef _OPENMP
+        if (omp_get_thread_num() != 0)
+	  throw OLOException("OLO object creation is only allowed in the main thread");
+#endif
+        oPointer[n = oGraph.addNode()] = this;
         oAlive[n]   = true;
+#ifndef NDEBUG
+	sent = received = 0;
+#endif
         //cout << "[OLO node] created (copy constructor):" << n.id << "::" << this << endl;
     }
     //----------------------------------
@@ -130,6 +144,20 @@ namespace tlp {
     //----------------------------------
     node OLOObject::getNode() const {
         return n;
+    }
+    //----------------------------------
+    unsigned int OLOObject::getSent() const {
+#ifndef NDEBUG
+        return sent;
+#endif
+	return 0;
+    }
+    //----------------------------------
+    unsigned int OLOObject::getReceived() const {
+#ifndef NDEBUG
+        return received;
+#endif
+	return 0;
     }
     //----------------------------------
     bool   OLOObject::isAlive(tlp::node n) {
@@ -250,6 +278,9 @@ namespace tlp {
         for (it = preparedEvents.begin(); it!=preparedEvents.end(); ++it) {
             if (oAlive[it->first]) {
                 Observable *obs  = dynamic_cast<Observable *>(oPointer[it->first]);
+#ifndef NDEBUG
+		++(obs->received);
+#endif
                 obs->treatEvents(it->second);
             }
         }
@@ -358,7 +389,12 @@ namespace tlp {
                 continue;
             }
             if (oAlive[itobs->second]) //other listeners/observers could be destroyed during the treat event
+	      {
+#ifndef NDEBUG
+		++(itobs->first->received);
+#endif
                 itobs->first->treatEvent(message);
+	      }
             if (!oAlive[backn]) {
                 throw OLOException("An observable has been deleted during the notifification of its observer (ie. an observer has deleted its caller during an update)");
             }
@@ -372,12 +408,20 @@ namespace tlp {
                 continue;
             }
             if (oAlive[itobs->second]) //other listeners/observers could be destroyed during the treat event
+	      {
+#ifndef NDEBUG
+		++(itobs->first->received);
+#endif
                 itobs->first->treatEvents(tmp);
+	      }
             if (!oAlive[backn]) {
                 throw OLOException("An observable has been deleted during the notifification of its observer (ie. an observer has deleted its caller during an update)");
             }
         }
 
+#ifndef NDEBUG
+	++sent;
+#endif
         --notifying;
         updateObserverGraph();
     }
