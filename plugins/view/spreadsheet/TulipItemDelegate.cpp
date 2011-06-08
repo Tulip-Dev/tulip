@@ -215,14 +215,14 @@ void TulipItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & 
         painter->save();
 
         if (opt.state & QStyle::State_Selected)
-            painter->fillRect(opt.rect, QBrush(Qt::lightGray));
+            painter->fillRect(opt.rect, opt.palette.highlight());
 
         Interval<double> value = data.value<Interval<double> >();
         if(value.min() != value.max()){
             double percent = ( value.value() - value.min() ) / (value.max() - value.min());
             QRect histogramFrame = opt.rect;
             QRect histogramRect(histogramFrame.topLeft(),QSize(histogramFrame.width()*percent,histogramFrame.height()));
-            painter->fillRect(histogramRect,opt.palette.midlight());
+            painter->fillRect(histogramRect,QBrush(Qt::lightGray));
         }
         QString text = QString::number(value.value());
         const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
