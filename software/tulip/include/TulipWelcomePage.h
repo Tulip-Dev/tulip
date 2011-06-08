@@ -19,9 +19,13 @@ public:
   explicit TulipWelcomePage(QWidget *parent=0);
   virtual ~TulipWelcomePage();
 
+signals:
+  void openPerspective(QString);
+
 protected slots:
   void rssReply(QNetworkReply *);
   void openLink(const QString &link);
+  void perspectiveSelected();
 
 private:
   Ui::TulipWelcomePageData *_ui;

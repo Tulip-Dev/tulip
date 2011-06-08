@@ -355,6 +355,8 @@ INCLUDE(CMakeMacros.cmake)
 ## -----------------------------------------------------------------------------------------------
 ## Sub dir (no comment)
 ## -----------------------------------------------------------------------------------------------
+OPTION(TULIP_USE_TULIP3 "Link Tulip executables against Tulip 3 compatibility layer. Note that it will add deprecated plugins into Tulip !" OFF)
+
 IF(BUILD_TESTS)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")

@@ -47,7 +47,7 @@ private:
 
   QVector<QObject *> _pageChoosers;
 
-
+  void runPerspectiveProcess(const QString &perspective,const QString &file);
 
 // Methods and properties coming from the D-Bus service implementation
 public: // PROPERTIES

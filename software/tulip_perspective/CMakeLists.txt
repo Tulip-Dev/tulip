@@ -19,7 +19,11 @@ ELSE()
   SET_TARGET_PROPERTIES(tulip_perspective PROPERTIES INSTALL_RPATH "$ORIGIN")
 ENDIF()
 
-TARGET_LINK_LIBRARIES(tulip_perspective ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${LibTulip3CompatName} ${QT_QTDBUS_LIBRARY})
+TARGET_LINK_LIBRARIES(tulip_perspective ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_QTDBUS_LIBRARY})
+
+IF(TULIP_USE_TULIP3)
+  TARGET_LINK_LIBRARIES(tulip_perspective ${LibTulip3CompatName})
+ENDIF()
 
 
 INSTALL(TARGETS tulip_perspective

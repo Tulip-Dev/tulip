@@ -194,7 +194,7 @@ namespace tlp {
   //**********************************************************************
   //**********************************************************************
   //**********************************************************************
-  CONTROLLERPLUGIN(MainController, "TulipClassic", "Tulip Team", "16/04/2008", "Tulip Classic", "1.0");
+  CONTROLLERPLUGIN(MainController, "Tulip Classic", "Tulip Team", "16/04/2008", "Main interface used in Tulip 3 and left for compitibility purposes.", "1.0");
 
   //**********************************************************************
   MainController::MainController(PerspectiveContext &c):
