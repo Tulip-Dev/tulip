@@ -35,6 +35,7 @@
 #include <QtGui/QComboBox>
 #include <QtGui/QPainter>
 #include <QtGui/QApplication>
+#include <QtGui/QTextLayout>
 
 using namespace tlp;
 using namespace std;
@@ -209,32 +210,37 @@ QWidget* TulipItemDelegate::createFileNameEditor(QWidget* parent, const QString&
 void TulipItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const{
     QVariant data = index.data();
     if(data.userType() == qMetaTypeId< Interval<double> >()){
+        QStyleOptionViewItemV4 opt = static_cast<QStyleOptionViewItemV4>(option);
+        initStyleOption(&opt,index);
         painter->save();
-        if (option.state & QStyle::State_Selected)
-            painter->fillRect(option.rect, option.palette.highlight());
+
+        if (opt.state & QStyle::State_Selected)
+            painter->fillRect(opt.rect, opt.palette.highlight());
 
         Interval<double> value = data.value<Interval<double> >();
         if(value.min() != value.max()){
             double percent = ( value.value() - value.min() ) / (value.max() - value.min());
-            QRect histogramFrame = option.rect;
+            QRect histogramFrame = opt.rect;
             QRect histogramRect(histogramFrame.topLeft(),QSize(histogramFrame.width()*percent,histogramFrame.height()));
-            painter->fillRect(histogramRect,option.palette.midlight());
+            painter->fillRect(histogramRect,opt.palette.midlight());
         }
-        painter->restore();
         QString text = QString::number(value.value());
-        QStyleOptionViewItemV4 opt = option;
-        initStyleOption(&opt, index);
-        opt.features |= QStyleOptionViewItemV2::HasDisplay;
-        opt.text = text;
-
-        const QWidget* widget=NULL;
-        if (const QStyleOptionViewItemV3 *v3 = qstyleoption_cast<const QStyleOptionViewItemV3 *>(&option)){
-            widget = v3->widget;
-        }
-
-        QStyle *style = widget ? widget->style() : QApplication::style();
-        style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, widget);
-
+        const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
+        QRect boundingRect = opt.rect;
+        boundingRect.adjust(textMargin, 0, -textMargin, 0);
+        QPen pen = painter->pen();
+        if (opt.state & QStyle::State_Selected)
+            pen.setColor(opt.palette.color(QPalette::HighlightedText));
+        else
+            pen.setColor(opt.palette.color(QPalette::Text));
+        painter->setPen(pen);
+        QTextOption textOption;
+        const bool wrapText = opt.features & QStyleOptionViewItemV2::WrapText;
+        textOption.setWrapMode(wrapText ? QTextOption::WordWrap : QTextOption::ManualWrap);
+        textOption.setTextDirection(opt.direction);
+        textOption.setAlignment(QStyle::visualAlignment(opt.direction, opt.displayAlignment));
+        painter->drawText(boundingRect,text,textOption);
+        painter->restore();
     }else{
         QStyledItemDelegate::paint(painter,option,index);
     }

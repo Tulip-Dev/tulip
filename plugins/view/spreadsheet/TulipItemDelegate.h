@@ -42,6 +42,7 @@ namespace tlp{
 
     protected:
         QWidget* createFileNameEditor(QWidget* parent , const QString& defaultFileName,const QString& filenameFilter=QString()) const;
+
     };
 }
 
