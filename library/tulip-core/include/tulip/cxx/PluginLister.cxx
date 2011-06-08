@@ -17,24 +17,6 @@
  *
  */
 //====================================================================================
-template<typename KEY, typename VALUE>
-struct StlMapKeyIterator : public tlp::Iterator<KEY> {
-  StlMapKeyIterator(typename std::map<KEY,VALUE>::const_iterator startIt, typename std::map<KEY,VALUE>::const_iterator endIt):
-  it(startIt),
-  itEnd(endIt)
-  {}
-  KEY next() {
-    const KEY tmp = it->first;
-    ++it;
-    return tmp;
-  }
-  bool hasNext() {
-    return it != itEnd;
-  }
-private:
-  typename std::map<KEY,VALUE>::const_iterator it, itEnd;
-};
-
 template<class ObjectType, class Context>
 tlp::Iterator<std::string>* tlp::PluginLister< ObjectType, Context>::availablePlugins() const {
   return new StlMapKeyIterator<std::string, PluginDescription>(plugins.begin(), plugins.end());
@@ -101,7 +83,7 @@ ObjectType * tlp::PluginLister<ObjectType,Context>::getPluginObject(const std::s
 }
 
 template<class ObjectType, class Context>
-const tlp::StructDef tlp::PluginLister<ObjectType,Context>::getPluginParameters(std::string name) const {
+const tlp::ParameterList tlp::PluginLister<ObjectType,Context>::getPluginParameters(std::string name) const {
   assert(plugins.find(name)!=plugins.end());
   return plugins.find(name)->second.parameters;
 }

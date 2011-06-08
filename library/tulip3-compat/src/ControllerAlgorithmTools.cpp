@@ -46,12 +46,12 @@ using namespace std;
 
 namespace tlp {
 
-  StructDef *ControllerAlgorithmTools::getPluginParameters(PluginListerInterface *factory, std::string name) {
-    static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, StructDef * > > paramMaps;
-    TLP_HASH_MAP<std::string, StructDef *>::const_iterator it;
+  ParameterList *ControllerAlgorithmTools::getPluginParameters(PluginListerInterface *factory, std::string name) {
+    static TLP_HASH_MAP<unsigned long, TLP_HASH_MAP<std::string, ParameterList * > > paramMaps;
+    TLP_HASH_MAP<std::string, ParameterList *>::const_iterator it;
     it = paramMaps[(unsigned long) factory].find(name);
     if (it == paramMaps[(unsigned long) factory].end())
-      paramMaps[(unsigned long) factory][name] = new StructDef(factory->getPluginParameters(name));
+      paramMaps[(unsigned long) factory][name] = new ParameterList(factory->getPluginParameters(name));
     return paramMaps[(unsigned long) factory][name];
   }
   //**********************************************************************
@@ -74,8 +74,8 @@ namespace tlp {
   //**********************************************************************
   bool ControllerAlgorithmTools::applyAlgorithm(Graph *graph,QWidget *parent,const string &name) {
     DataSet dataSet;
-    StructDef *params = getPluginParameters(PluginLister<Algorithm, AlgorithmContext>::getInstance(), name);
-    StructDef sysDef = AlgorithmLister::getPluginParameters(name);
+    ParameterList *params = getPluginParameters(PluginLister<Algorithm, AlgorithmContext>::getInstance(), name);
+    ParameterList sysDef = AlgorithmLister::getPluginParameters(name);
     params->buildDefaultDataSet(dataSet, graph );
     string title = string("Tulip Parameter Editor: ") + name;
     bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,
@@ -104,8 +104,8 @@ namespace tlp {
     bool   resultBool=true;
     if (query) {
       // plugin parameters dialog
-      StructDef *params = ControllerAlgorithmTools::getPluginParameters(PluginLister<TemplateAlgorithm<PROPERTY>, PropertyContext>::getInstance(), name);
-      StructDef sysDef = PropertyPluginLister<TemplateAlgorithm<PROPERTY> >::getPluginParameters(name);
+      ParameterList *params = ControllerAlgorithmTools::getPluginParameters(PluginLister<TemplateAlgorithm<PROPERTY>, PropertyContext>::getInstance(), name);
+      ParameterList sysDef = PropertyPluginLister<TemplateAlgorithm<PROPERTY> >::getPluginParameters(name);
       params->buildDefaultDataSet(dataSet, graph );
       string title = string("Tulip Parameter Editor: ") + name;
       resultBool = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet,

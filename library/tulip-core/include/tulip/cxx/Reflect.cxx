@@ -18,29 +18,6 @@
  */
 
 //=======================================================================
-//Strucdef implementation
-template<typename T> void tlp::StructDef::add(const char* str, const char* inHelp,
-					      const char* inDefValue, bool isMandatory) {
-  std::list< std::pair<std::string, std::string> >::const_iterator it;
-  for (it = data.begin(); it != data.end(); ++it) {
-    if ((*it).first == str)
-      break;
-  }
-  if (it == data.end()) {
-    data.push_back(std::pair<std::string, std::string>(std::string(str), std::string(typeid(T).name())));
-    if (inHelp)
-      help[str] = std::string(inHelp);
-    if (inDefValue)
-      defValue[str] = std::string(inDefValue);
-    mandatory[str] = isMandatory;
-  }
-#ifndef NDEBUG
-  else {
-    std::cerr << "StructDef::addVar " << str << " already exists" << std::endl;
-  }
-#endif
-}
-//=======================================================================
 //DataSet implementation
 template<typename T> bool tlp::DataSet::get(const std::string& str,T& value) const {
   for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =

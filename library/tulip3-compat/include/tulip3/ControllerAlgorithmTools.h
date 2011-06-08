@@ -30,7 +30,7 @@ namespace tlp {
   class PluginListerInterface;
   class View;
   class DataSet;
-  class StructDef;
+  class ParameterList;
   
   /** \brief Algorithm tools for Controller 
    *
@@ -43,7 +43,7 @@ namespace tlp {
       /**
        * Return parameters need by a plugin
        */
-      static StructDef *getPluginParameters(PluginListerInterface *factory, std::string name);
+      static ParameterList *getPluginParameters(PluginListerInterface *factory, std::string name);
       
       /**
        * Apply an algorithm on graph with given name and given dataSet, if the algorithm has a problem : display it in a QDialog in parent widget and return false
