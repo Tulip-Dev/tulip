@@ -13,6 +13,9 @@ GlyphPreviewGenerator::GlyphPreviewGenerator():_graph(newGraph()),_node(_graph->
     GlGraphRenderingParameters parameters;
     GlGraphInputData inputData(_graph,&parameters);
     inputData.elementSize->setAllNodeValue(Size(1,1,1));
+    inputData.elementColor->setAllNodeValue(Color(192,192,192));
+    inputData.elementBorderColor->setAllNodeValue(Color(0,0,0));
+    inputData.elementBorderWidth->setAllNodeValue(1);
 
 }
 
@@ -53,6 +56,8 @@ EdgeExtremityGlyphPreviewGenerator::EdgeExtremityGlyphPreviewGenerator():_graph(
     inputData.elementSize->setAllEdgeValue(Size(0.125,0.125,0.125));
     inputData.elementColor->setAllNodeValue(Color(255,255,255,0));
     inputData.elementBorderColor->setAllNodeValue(Color(255,255,255,0));
+    inputData.elementColor->setAllEdgeValue(Color(192,192,192));
+    inputData.elementBorderColor->setAllEdgeValue(Color(0,0,0));
     node n1 = _graph->addNode();
     node n2= _graph->addNode();
     _edge = _graph->addEdge(n1,n2);
