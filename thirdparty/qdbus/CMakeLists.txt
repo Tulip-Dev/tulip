@@ -29,7 +29,6 @@ qdbusargument.cpp
 qdbusreply.cpp
 qdbusmetatype.cpp
 qdbusextratypes.cpp
-qdbusmarshaller.cpp
 qdbuscontext.cpp
 qdbuspendingcall.cpp
 qdbuspendingreply.cpp
