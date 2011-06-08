@@ -17,6 +17,7 @@ namespace tlp{
 
     class ListPropertyWidgetTypeMangerInterface{
     public:
+        virtual ~ListPropertyWidgetTypeMangerInterface(){}
         virtual std::string getDefaultStringValue() const=0;
         virtual QVariant getValue(unsigned int i) = 0;
         virtual QVariant getStringValue(unsigned int i) = 0;
@@ -32,6 +33,10 @@ namespace tlp{
     public:
         ListPropertyWidgetTypeManger<TYPECLASS>(const std::vector<typename TYPECLASS::RealType>& elements) : elements(elements){
         }
+
+        virtual ~ListPropertyWidgetTypeManger(){
+        }
+
         std::string getDefaultStringValue() const{
             return TYPECLASS::toString(TYPECLASS::defaultValue());
         }
