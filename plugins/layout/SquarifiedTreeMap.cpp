@@ -70,7 +70,7 @@ namespace
 //====================================================================
 SquarifiedTreeMap::SquarifiedTreeMap(const tlp::PropertyContext& context) :LayoutAlgorithm(context){
   aspectRatio = DEFAULT_RATIO;
-  addParameter<DoubleProperty>("metric", paramHelp[0], 0, false);
+  addParameter<DoubleProperty>("metric", paramHelp[0], "", false);
   addParameter<double>("Aspect Ratio", paramHelp[1], "1.");
   addParameter<bool>("Treemap Type", paramHelp[2], "false");
 }

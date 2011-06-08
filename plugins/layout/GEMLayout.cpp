@@ -87,9 +87,9 @@ LAYOUTPLUGINOFGROUP(GEMLayout,"GEM (Frick)","Tulip Team","16/10/2008","Stable","
 
 GEMLayout::GEMLayout(const tlp::PropertyContext &context) : LayoutAlgorithm(context) {
   addParameter<bool>("3D layout", paramHelp[0], "false");
-  addParameter<DoubleProperty>("edge length", paramHelp[1], 0, false);
-  addParameter<LayoutProperty>("initial layout", paramHelp[2], 0, false);
-  addParameter<unsigned int>("max iterations", paramHelp[3], 0);
+  addParameter<DoubleProperty>("edge length", paramHelp[1], "", false);
+  addParameter<LayoutProperty>("initial layout", paramHelp[2], "", false);
+  addParameter<unsigned int>("max iterations", paramHelp[3], "");
   addDependency<LayoutAlgorithm>("Connected Component Packing", "1.0");
 
   i_maxtemp      = IMAXTEMPDEF;

@@ -59,7 +59,7 @@ namespace {
 //==============================================================================
 DegreeMetric::DegreeMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {
    addParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
-   addParameter<DoubleProperty>("metric", paramHelp[1], 0, false);
+   addParameter<DoubleProperty>("metric", paramHelp[1], "", false);
    addParameter<bool>("norm", paramHelp[2], "false", false);
 }
 //==================================================================

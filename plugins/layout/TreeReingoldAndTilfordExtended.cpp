@@ -72,7 +72,7 @@ TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const tlp::Proper
   LayoutAlgorithm(context),
   lengthMetric(0) {
   addNodeSizePropertyParameter(this);
-  addParameter<IntegerProperty>("edge length", paramHelp[0], 0, false);
+  addParameter<IntegerProperty>("edge length", paramHelp[0], "", false);
   addParameter<StringCollection>("orientation", paramHelp[1], ORIENTATION );
   addParameter<bool>("orthogonal", paramHelp[2], "true" );
   addSpacingParameters(this);
