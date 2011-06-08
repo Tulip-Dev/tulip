@@ -25,11 +25,13 @@
 
 #include <tulip/PluginLoader.h>
 #include <tulip/Iterator.h>
+#include <tulip/StlIterator.h>
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PluginContext.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginContext.h>
+#include <tulip/WithParameter.h>
 
 namespace tlp {
 
@@ -96,9 +98,9 @@ public:
    * @brief Gets the list of parameters for the given plug-in.
    *
    * @param name The name of the plug-in to retrieve the parameters of.
-   * @return :StructDef The parameters of the plug-in.
+   * @return :ParameterList The parameters of the plug-in.
    **/
-  virtual const StructDef getPluginParameters(std::string name) const = 0;
+  virtual const ParameterList getPluginParameters(std::string name) const = 0;
 
   /**
    * @brief Gets the dependencies of a plug-in.
@@ -245,7 +247,7 @@ class PluginLister: public PluginListerInterface {
 private:
   struct PluginDescription {
     FactoryInterface<ObjectType, Context>* factory;
-    StructDef parameters;
+    ParameterList parameters;
     std::list<tlp::Dependency> dependencies;
     std::string library;
   };
@@ -277,7 +279,7 @@ public:
   Iterator<std::string>* availablePlugins() const;
   const AbstractPluginInfo* pluginInformations(const std::string& name) const;
   bool pluginExists(const std::string& pluginName) const;
-  const StructDef getPluginParameters(std::string name) const;
+  const ParameterList getPluginParameters(std::string name) const;
   std::string getPluginLibrary(const std::string& name) const;
   std::list<tlp::Dependency> getPluginDependencies(std::string name) const;
   void registerPlugin(FactoryInterface<ObjectType, Context>* objectFactory);
@@ -317,7 +319,7 @@ public:
   static bool pluginExists(const std::string& pluginName) {
     return PluginLister<ObjectType, Context>::getInstance()->pluginExists(pluginName);
   }
-  static const StructDef getPluginParameters(std::string name) {
+  static const ParameterList getPluginParameters(std::string name) {
     return PluginLister<ObjectType, Context>::getInstance()->getPluginParameters(name);
   }
   static std::list<tlp::Dependency> getPluginDependencies(std::string name) {

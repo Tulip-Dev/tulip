@@ -82,4 +82,23 @@ namespace tlp {
   }
   //=================================================
 }
+
+template<typename KEY, typename VALUE>
+struct StlMapKeyIterator : public tlp::Iterator<KEY> {
+  StlMapKeyIterator(typename std::map<KEY,VALUE>::const_iterator startIt, typename std::map<KEY,VALUE>::const_iterator endIt):
+  it(startIt),
+  itEnd(endIt)
+  {}
+  KEY next() {
+    const KEY tmp = it->first;
+    ++it;
+    return tmp;
+  }
+  bool hasNext() {
+    return it != itEnd;
+  }
+private:
+  typename std::map<KEY,VALUE>::const_iterator it, itEnd;
+};
+
 #endif

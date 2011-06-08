@@ -151,14 +151,14 @@ struct IParam {
 
 struct QParamDialog : public QDialog {
 
-	const StructDef* sysDef;
-	StructDef *inDef;
+	const ParameterList* sysDef;
+	ParameterList *inDef;
 	QScrollArea *scrollArea;
 	QWidget *parametersPanel;
 	QVBoxLayout *mainLayout;
 
 
-	QParamDialog(const StructDef *sDef, StructDef *iDef,
+	QParamDialog(const ParameterList *sDef, ParameterList *iDef,
 			QWidget * parent = 0)
 	: QDialog( parent), sysDef(sDef), inDef(iDef) {
 		helpBrowser = 0;
@@ -187,7 +187,7 @@ struct QParamDialog : public QDialog {
 			// bool
 			if(ip.typeName == TN(bool)) {
 				QCheckBox * cb = (QCheckBox*) ip.wA[0];
-				inDef->setDefValue(ip.name, BooleanType::toString(cb->isChecked()));
+				inDef->setDefaultValue(ip.name, BooleanType::toString(cb->isChecked()));
 			}
 
 			// int
@@ -199,17 +199,17 @@ struct QParamDialog : public QDialog {
 					ip.typeName == TN(float) ||
 					ip.typeName == TN(double)) {
 				QLineEdit * le = (QLineEdit *) ip.wA[0];
-				inDef->setDefValue(ip.name, le->text().toUtf8().data());
+				inDef->setDefaultValue(ip.name, le->text().toUtf8().data());
 			}
 
 			// string
 			else if(ip.typeName == TN(std::string)) {
 				if (ip.name.find("text::") != std::string::npos) {
 					QTextEdit *te = (QTextEdit *) ip.wA[0];
-					inDef->setDefValue(ip.name, te->toPlainText().toUtf8().data());
+					inDef->setDefaultValue(ip.name, te->toPlainText().toUtf8().data());
 				} else {
 					QLineEdit * le = (QLineEdit *) ip.wA[0];
-					inDef->setDefValue( ip.name, le->text().toUtf8().data() );
+					inDef->setDefaultValue( ip.name, le->text().toUtf8().data() );
 				}
 			}
 
@@ -224,7 +224,7 @@ struct QParamDialog : public QDialog {
 				int B			= leB->text().toInt();
 				int A			= leA->text().toInt();
 				Color c( R, G, B, A );
-				inDef->setDefValue(ip.name, ColorType::toString(c));
+				inDef->setDefaultValue(ip.name, ColorType::toString(c));
 			}
 
 			// Size
@@ -235,7 +235,7 @@ struct QParamDialog : public QDialog {
 				float W	= leW->text().toFloat();
 				float H	= leH->text().toFloat();
 				float D	= leD->text().toFloat();
-				inDef->setDefValue(ip.name, SizeType::toString(Size(W,H,D)));
+				inDef->setDefaultValue(ip.name, SizeType::toString(Size(W,H,D)));
 			}
 
 			// PropertyInterface*
@@ -250,7 +250,7 @@ struct QParamDialog : public QDialog {
 				QComboBox * cb = (QComboBox*) ip.wA[0];
 				std::string value = cb->currentText().toUtf8().data();
 				if (value != NONE_PROP)
-					inDef->setDefValue(ip.name, value);
+					inDef->setDefaultValue(ip.name, value);
 			}
 
 			// StringCollection
@@ -263,7 +263,7 @@ struct QParamDialog : public QDialog {
 						value += ";";
 						value += cb->itemText(i).toUtf8().data();
 					}
-				inDef->setDefValue(ip.name, value);
+				inDef->setDefaultValue(ip.name, value);
 			}
 		}
 	}
@@ -276,7 +276,7 @@ struct QParamDialog : public QDialog {
 			if(ip.typeName == TN(bool)) {
 				QCheckBox * cb = (QCheckBox*) ip.wA[0];
 				bool isOn;
-				BooleanType::fromString(isOn, sysDef->getDefValue(ip.name));
+				BooleanType::fromString(isOn, sysDef->getDefaultValue(ip.name));
 				cb->setChecked(isOn);
 			}
 			// int
@@ -288,17 +288,17 @@ struct QParamDialog : public QDialog {
 					ip.typeName == TN(float) ||
 					ip.typeName == TN(double)) {
 				QLineEdit * le = (QLineEdit *) ip.wA[0];
-				le->setText(QString(sysDef->getDefValue(ip.name).c_str()));
+				le->setText(QString(sysDef->getDefaultValue(ip.name).c_str()));
 			}
 
 			// string
 			else if(ip.typeName == TN(std::string)) {
 				if (ip.name.find("text::") != std::string::npos) {
 					QTextEdit *te = (QTextEdit *) ip.wA[0];
-					te->setText(QString::fromUtf8(sysDef->getDefValue(ip.name).c_str()));
+					te->setText(QString::fromUtf8(sysDef->getDefaultValue(ip.name).c_str()));
 				} else {
 					QLineEdit * le = (QLineEdit *) ip.wA[0];
-					le->setText(QString::fromUtf8(sysDef->getDefValue(ip.name).c_str()));
+					le->setText(QString::fromUtf8(sysDef->getDefaultValue(ip.name).c_str()));
 				}
 			}
 
@@ -309,7 +309,7 @@ struct QParamDialog : public QDialog {
 				QLineEdit * leB = (QLineEdit*) ip.wA[4];
 				QLineEdit * leA = (QLineEdit*) ip.wA[6];
 				Color c;
-				ColorType::fromString(c, sysDef->getDefValue(ip.name));
+				ColorType::fromString(c, sysDef->getDefaultValue(ip.name));
 				leR->setText(QString("%1").arg(c.getR()));
 				leG->setText(QString("%1").arg(c.getG()));
 				leB->setText(QString("%1").arg(c.getB()));
@@ -325,7 +325,7 @@ struct QParamDialog : public QDialog {
 				QLineEdit * leH = (QLineEdit*) ip.wA[2];
 				QLineEdit * leD = (QLineEdit*) ip.wA[4];
 				Size s;
-				SizeType::fromString(s, sysDef->getDefValue(ip.name));
+				SizeType::fromString(s, sysDef->getDefaultValue(ip.name));
 				leW->setText(QString("%1").arg(s.getW()));
 				leH->setText(QString("%1").arg(s.getH()));
 				leD->setText(QString("%1").arg(s.getD()));
@@ -341,7 +341,7 @@ struct QParamDialog : public QDialog {
 					|| ip.typeName == TN(SizeProperty)
 					|| ip.typeName == TN(ColorProperty)) {
 				QComboBox * cb = (QComboBox*) ip.wA[0];
-				std::string value = sysDef->getDefValue(ip.name);
+				std::string value = sysDef->getDefaultValue(ip.name);
 				if (sysDef->isMandatory(ip.name))
 					cb->setCurrentIndex(0);
 				else {
@@ -359,7 +359,7 @@ struct QParamDialog : public QDialog {
 			// StringCollection
 			else if (ip.typeName == TN(StringCollection)) {
 				QComboBox * cb = (QComboBox*) ip.wA[0];
-				StringCollection coll(sysDef->getDefValue(ip.name));
+				StringCollection coll(sysDef->getDefaultValue(ip.name));
 				std::string current = coll.getCurrentString();
 				for ( int i = 0; i < cb->count(); i++)
 					if (current == cb->itemText(i).toUtf8().data()){
@@ -450,21 +450,19 @@ struct QParamDialog : public QDialog {
 		//
 		// Parse inDef
 
-		Iterator< std::pair<std::string,std::string> > * defIt;
-		defIt = inDef->getField();
+		Iterator<std::string>* defIt;
+		defIt = inDef->getParametersNames();
 
 		while( defIt->hasNext() ) {
-			std::pair<std::string,std::string> def;
-			def = defIt->next();
 			IParam ip;
-			ip.name     = def.first;
-			ip.typeName = def.second;
+      ip.name     = defIt->next();;
+			ip.typeName = inDef->getValue(ip.name);
 			ip.helpText = inDef->getHelp(ip.name);
 			// first part of the parameter name may be used
 			// to indicate a subtype
-			std::string::size_type pos = def.first.find("::");
+			std::string::size_type pos = ip.name.find("::");
 			if (pos != std::string::npos)
-				ip.label = new QLabel(def.first.substr(pos + 2, def.first.length() - pos - 2).c_str(), parametersPanel);
+        ip.label = new QLabel(ip.name.substr(pos + 2, ip.name.length() - pos - 2).c_str(), parametersPanel);
 			else
 				ip.label    = new QLabel( ip.name.c_str(), parametersPanel);
 			ip.label->setAlignment( Qt::AlignRight | Qt::AlignVCenter );
@@ -714,7 +712,7 @@ struct QParamDialog : public QDialog {
 			}
 			// StringCollection
 			else if(ip.typeName == TN (StringCollection) ) {
-				std::string valueCollection =  inDef->getDefValue(ip.name);
+				std::string valueCollection =  inDef->getDefaultValue(ip.name);
 				StringCollection stringCol(valueCollection);
 				QComboBox * cb = new QComboBox( parametersPanel );
 				for(unsigned int i=0; i < stringCol.size(); i++ ) {
@@ -978,8 +976,8 @@ struct QParamDialog : public QDialog {
 
 bool
 tlp::openDataSetDialog(	DataSet & outSet,
-		const StructDef *sysDef,
-		StructDef *inDef,
+		const ParameterList *sysDef,
+		ParameterList *inDef,
 		const DataSet *inSet,
 		const char * inName,
 		Graph * inG,
