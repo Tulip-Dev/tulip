@@ -215,7 +215,7 @@ void TulipItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & 
         painter->save();
 
         if (opt.state & QStyle::State_Selected)
-            painter->fillRect(opt.rect, opt.palette.highlight());
+            painter->fillRect(opt.rect, QBrush(Qt::lightGray));
 
         Interval<double> value = data.value<Interval<double> >();
         if(value.min() != value.max()){
