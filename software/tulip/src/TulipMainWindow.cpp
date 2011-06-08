@@ -3,11 +3,15 @@
 #include <QtGui/QMenu>
 #include <QtGui/QCloseEvent>
 #include <QtCore/QFile>
+#include <QtCore/QProcess>
+#include <QtCore/QDir>
 
 #include <tulip/TlpTools.h>
 #include <tulip/TulipRelease.h>
 
 #include "ui_TulipMainWindow.h"
+
+#include <QtCore/QDebug>
 
 TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new Ui::TulipMainWindowData()), _systemTrayIcon(0) {
   _ui->setupUi(this);
@@ -38,6 +42,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(_systemTrayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(systemTrayRequest(QSystemTrayIcon::ActivationReason)));
   connect(_systemTrayIcon,SIGNAL(messageClicked()),this,SLOT(systemTrayMessageClicked()));
   connect(_ui->pages,SIGNAL(currentChanged(int)),this,SLOT(pageSwitched(int)));
+  connect(_ui->welcomePage,SIGNAL(openPerspective(QString)),this,SLOT(CreatePerspective(QString)));
 }
 
 TulipMainWindow::~TulipMainWindow() {
@@ -119,7 +124,7 @@ void TulipMainWindow::RemovePluginRepository(const QString &url) {
 }
 
 void TulipMainWindow::CreatePerspective(const QString &name) {
-
+  runPerspectiveProcess(name,"");
 }
 
 void TulipMainWindow::OpenProject(const QString &file) {
@@ -132,4 +137,14 @@ void TulipMainWindow::OpenProjectWith(const QString &file, const QString &perspe
 
 QStringList TulipMainWindow::GetCompatiblePerspectives(const QString &file) {
   return QStringList();
+}
+
+void TulipMainWindow::runPerspectiveProcess(const QString &perspective, const QString &file) {
+  QStringList args;
+  if (!perspective.isEmpty())
+    args << "--perspective=" + perspective;
+  if (!file.isEmpty())
+    args << file;
+  QDir appDir(QApplication::applicationDirPath());
+  QProcess::startDetached(appDir.absoluteFilePath("tulip_perspective"),args);
 }

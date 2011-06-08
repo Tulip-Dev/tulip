@@ -67,10 +67,8 @@ int main(int argc, char **argv) {
   PluginLoaderReporter *errorReport = new PluginLoaderReporter();
   dispatcher->registerLoader(errorReport);
   dispatcher->registerLoader(splashScreen);
-
   tlp::PluginLibraryLoader::loadPlugins(dispatcher);
   tlp::PluginListerInterface::checkLoadedPluginsDependencies(dispatcher);
-
   delete dispatcher;
   delete splashScreen;
 

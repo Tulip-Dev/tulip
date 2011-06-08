@@ -48,15 +48,9 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item>
-      <widget class="QFrame" name="controllersFrame">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
+      <widget class="QScrollArea" name="perspectivesScrollArea">
        <property name="styleSheet">
-        <string notr="true">QFrame#controllersFrame {
+        <string notr="true">#perspectivesFrame {
   background-color: rgb(255, 255, 255);
   border-left: 1px solid &quot;#C9C9C9&quot;;
   border-right: 1px solid &quot;#C9C9C9&quot;;
@@ -107,11 +101,21 @@ QToolButton:pressed {
 }</string>
        </property>
        <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
+        <enum>QFrame::NoFrame</enum>
        </property>
-       <property name="frameShadow">
-        <enum>QFrame::Raised</enum>
+       <property name="widgetResizable">
+        <bool>true</bool>
        </property>
+       <widget class="QWidget" name="perspectivesFrame">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>692</width>
+          <height>616</height>
+         </rect>
+        </property>
+       </widget>
       </widget>
      </item>
      <item>
@@ -254,8 +258,8 @@ p, li { white-space: pre-wrap; }
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>230</width>
-           <height>325</height>
+           <width>228</width>
+           <height>322</height>
           </rect>
          </property>
         </widget>

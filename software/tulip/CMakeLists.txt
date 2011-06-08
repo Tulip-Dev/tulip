@@ -1,29 +1,35 @@
 SET(SRCS
-src/AboutTulipPage.cpp
-src/main.cpp
-src/PluginErrorReport.cpp
-src/PluginLoaderDispatcher.cpp
-src/PluginLoaderReporter.cpp
-src/PluginsCenter.cpp
-src/RssParser.cpp
-src/TulipAgentServiceAdaptor.cpp
-src/TulipMainWindow.cpp
-src/TulipSplashScreen.cpp
-src/TulipWelcomePage.cpp)
+  src/AboutTulipPage.cpp
+  src/main.cpp
+  src/PerspectiveItemWidget.cpp
+  src/PluginErrorReport.cpp
+  src/PluginLoaderDispatcher.cpp
+  src/PluginLoaderReporter.cpp
+  src/PluginsCenter.cpp
+  src/RssParser.cpp
+  src/TulipAgentServiceAdaptor.cpp
+  src/TulipMainWindow.cpp
+  src/TulipSplashScreen.cpp
+  src/TulipWelcomePage.cpp
+)
 
 QT4_WRAP_UI(UI_HEADERS
-designer/AboutTulipPage.ui
-designer/PluginErrorReport.ui
-designer/PluginsCenter.ui
-designer/TulipMainWindow.ui
-designer/TulipWelcomePage.ui)
+  designer/AboutTulipPage.ui
+  designer/PerspectiveItem.ui
+  designer/PluginErrorReport.ui
+  designer/PluginsCenter.ui
+  designer/TulipMainWindow.ui
+  designer/TulipWelcomePage.ui
+)
 
 QT4_WRAP_CPP(MOC_SRCS
-include/PluginErrorReport.h
-include/PluginsCenter.h
-include/TulipAgentServiceAdaptor.h
-include/TulipMainWindow.h
-include/TulipWelcomePage.h)
+  include/PerspectiveItemWidget.h
+  include/PluginErrorReport.h
+  include/PluginsCenter.h
+  include/TulipAgentServiceAdaptor.h
+  include/TulipMainWindow.h
+  include/TulipWelcomePage.h
+)
 
 QT4_ADD_RESOURCES(RCC_SRCS resources/TulipAgent.qrc)
 
@@ -40,6 +46,10 @@ ELSE()
 ENDIF()
 
 TARGET_LINK_LIBRARIES(tulip4 ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES} ${QT_QTDBUS_LIBRARY})
+
+IF(TULIP_USE_TULIP3)
+  TARGET_LINK_LIBRARIES(tulip4 ${LibTulip3CompatName})
+ENDIF()
 
 INSTALL(TARGETS tulip4
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_app

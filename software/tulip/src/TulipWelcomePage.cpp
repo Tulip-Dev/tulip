@@ -8,7 +8,9 @@
 #include <QtXml/QXmlSimpleReader>
 
 #include <tulip/TulipSettings.h>
+#include <tulip/PluginManager.h>
 
+#include "PerspectiveItemWidget.h"
 #include "RssParser.h"
 #include "ui_TulipWelcomePage.h"
 
@@ -41,6 +43,21 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
     txt += trUtf8("</body></html>");
     _ui->recentDocumentsLabel->setText(txt);
   }
+
+  // Perspectives list
+  QVBoxLayout *perspectivesLayout = new QVBoxLayout(_ui->perspectivesFrame);
+  perspectivesLayout->setContentsMargins(6,6,6,6);
+  tlp::PluginManager localPluginManager; // This manager is used to list locally loaded plugins. We won't need to rebuild the list until tulip restarts
+  QList<tlp::PluginInformations *> localPlugins = localPluginManager.pluginsList(tlp::PluginManager::Local);
+  tlp::PluginInformations *info;
+  foreach(info,localPlugins) {
+    if (info->type() != "Perspective")
+      continue;
+    PerspectiveItemWidget *item = new PerspectiveItemWidget(info);
+    perspectivesLayout->addWidget(item);
+    connect(item,SIGNAL(selected()),this,SLOT(perspectiveSelected()));
+  }
+  perspectivesLayout->addItem(new QSpacerItem(10,10,QSizePolicy::Maximum,QSizePolicy::Expanding));
 }
 
 TulipWelcomePage::~TulipWelcomePage() {
@@ -85,4 +102,9 @@ void TulipWelcomePage::rssReply(QNetworkReply *reply) {
 
 void TulipWelcomePage::openLink(const QString &link) {
   QDesktopServices::openUrl(link);
+}
+
+void TulipWelcomePage::perspectiveSelected() {
+  PerspectiveItemWidget *item = static_cast<PerspectiveItemWidget *>(sender());
+  emit openPerspective(item->perspectiveId());
 }
