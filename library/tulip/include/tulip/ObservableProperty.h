@@ -58,6 +58,7 @@ private:
   RealPropertyObserver hiddenPObserver;
 public:
   PropertyObserver() :hiddenPObserver(this) {}
+  virtual ~PropertyObserver(){}
   // no copy for hiddenObserver
   PropertyObserver(const PropertyObserver&) :hiddenPObserver(this) {}
   PropertyObserver& operator=(const PropertyObserver &) {

@@ -83,6 +83,7 @@ private:
 
 public:
   GraphObserver() :hiddenObserver(this) {}
+  virtual ~GraphObserver(){}
   // no copy for hiddenObserver
   GraphObserver(const GraphObserver&) :hiddenObserver(this) {}
   GraphObserver& operator=(const GraphObserver &) {
