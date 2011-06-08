@@ -296,7 +296,7 @@ p, li { white-space: pre-wrap; }
         </property>
         <property name="text">
          <string>&lt;body&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/tulip/app/ui/list_bullet_arrow.png&quot; /&gt;&lt;span style=&quot;color:#626262; font-size:large;&quot;&gt;    Did you know ?&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/tulip/app/ui/list_bullet_arrow.png&quot; /&gt;&lt;span style=&quot;color:#626262; font-size:large;&quot;&gt;    Did you know?&lt;/span&gt;&lt;/p&gt;
 &lt;/body&gt;
 &lt;/html&gt;</string>
         </property>

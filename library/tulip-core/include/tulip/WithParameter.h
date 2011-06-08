@@ -213,9 +213,9 @@ struct TLP_SCOPE WithParameter {
    * @param isMandatory Whether this parameter requires a value or not. Defaults to true.
    * @return void
    **/
-  template<typename T> void addParameter(const char* str,
-					 const char* inHelp=0,
-					 const char* inDefValue = 0,
+  template<typename T> void addParameter(const std::string &str,
+           const std::string &inHelp=std::string(),
+           const std::string &inDefValue = std::string(),
 					 bool isMandatory = true)
   { parameters.template add<T>(str,inHelp,inDefValue,isMandatory); }
 protected:

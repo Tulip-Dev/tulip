@@ -314,7 +314,7 @@ namespace {
 
 //================================================================================
 StrengthClustering::StrengthClustering(PropertyContext context):DoubleAlgorithm(context) {
-  addParameter<DoubleProperty>("metric", paramHelp[0], 0, false);
+  addParameter<DoubleProperty>("metric", paramHelp[0], "", false);
 //  addParameter<bool>("layout subgraphs", paramHelp[1], "true");
 //  addParameter<bool>("layout quotient graph", paramHelp[2], "true");
 //  addDependency<Algorithm>("Quotient Clustering", "1.3");
