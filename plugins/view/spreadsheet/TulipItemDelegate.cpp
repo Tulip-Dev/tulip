@@ -45,8 +45,11 @@ QWidget* TulipItemDelegate::createEditor(QWidget* p, const QStyleOptionViewItem&
     QVariant data = index.data(Qt::EditRole);
     //Create the right editor in function of the data type.
     //If the data are int check if there is Glyph, Edge Extremity or Edge shape
-    if(data.userType() == QVariant::Int){
-        return QStyledItemDelegate::createEditor(p, option, index);
+    if(data.userType() == QVariant::Double){
+        QLineEdit *lineEdit = new QLineEdit(p);
+        lineEdit->setValidator(new QDoubleValidator(lineEdit));
+        lineEdit->setText(QString::number(data.toDouble()));
+        return lineEdit;
     }else
         //If data are QString check if there is file.
         if(data.userType() == QVariant::String){
@@ -131,8 +134,9 @@ QWidget* TulipItemDelegate::createEditor(QWidget* p, const QStyleOptionViewItem&
 void TulipItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* model,
                                      const QModelIndex& index) const {
     QVariant data = index.data(Qt::EditRole);
-    if(data.userType() == QVariant::Int){
-        QStyledItemDelegate::setModelData(editor, model, index);
+    if(data.userType() == QVariant::Double){
+        QLineEdit* lineEdit = static_cast<QLineEdit*>(editor);
+        model->setData(index,QVariant(lineEdit->text().toDouble()));
     }else
         if(data.userType() == qMetaTypeId< Color >()){
             QVariant v;
