@@ -213,25 +213,29 @@ QWidget* TulipItemDelegate::createFileNameEditor(QWidget* parent, const QString&
 
 void TulipItemDelegate::paint( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const{
     QVariant data = index.data();
-    if(data.userType() == qMetaTypeId< Interval<double> >()){
+    //Get the normalized value of the element.
+    QVariant normalizedValue = index.data(NormalizedValueRole);
+    //If we have a normalized value represent it as an histogram.
+    if(normalizedValue.isValid() && normalizedValue.type()==QVariant::Double){
         QStyleOptionViewItemV4 opt = static_cast<QStyleOptionViewItemV4>(option);
         initStyleOption(&opt,index);
         painter->save();
 
+        //Change the color of the background if the element is selected
         if (opt.state & QStyle::State_Selected)
             painter->fillRect(opt.rect, opt.palette.highlight());
 
-        Interval<double> value = data.value<Interval<double> >();
-        if(value.min() != value.max()){
-            double percent = ( value.value() - value.min() ) / (value.max() - value.min());
-            QRect histogramFrame = opt.rect;
-            QRect histogramRect(histogramFrame.topLeft(),QSize(histogramFrame.width()*percent,histogramFrame.height()));
-            painter->fillRect(histogramRect,QBrush(Qt::lightGray));
-        }
-        QString text = QString::number(value.value());
+        //Draw histogram
+        double normalization = normalizedValue.toDouble();
+        QRect histogramFrame = opt.rect;
+        QRect histogramRect(histogramFrame.topLeft(),QSize(histogramFrame.width()*normalization,histogramFrame.height()));
+        painter->fillRect(histogramRect,QBrush(Qt::lightGray));
+        //Draw value
+        QString text = data.toString();
         const int textMargin = QApplication::style()->pixelMetric(QStyle::PM_FocusFrameHMargin) + 1;
         QRect boundingRect = opt.rect;
         boundingRect.adjust(textMargin, 0, -textMargin, 0);
+        //Change the color of the text if the element is selected
         QPen pen = painter->pen();
         if (opt.state & QStyle::State_Selected)
             pen.setColor(opt.palette.color(QPalette::HighlightedText));

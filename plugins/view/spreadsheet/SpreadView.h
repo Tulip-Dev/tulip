@@ -30,7 +30,6 @@
 
 #include <QtCore/QModelIndexList>
 
-
 namespace Ui {
 class SpreadViewWidget;
 }
@@ -104,6 +103,7 @@ protected slots:
 
     void updateElementVisibility(int state);
     void showOnlySelectedElements(bool show);
+    void searchElements(const QString& pattern);
 
     //Columns operations    
     void hideColumn();
@@ -124,7 +124,10 @@ protected slots:
 
 private:
 
-    void updateFilters(bool show);
+    bool displayOnlySelectedElements()const;
+    QRegExp elementValuesFilter()const;
+
+    void updateFilters();
 
     Ui::SpreadViewWidget *ui;
     tlp::Graph* _graph;
@@ -132,6 +135,7 @@ private:
     MutableContainer<bool> _updatedNodes;
     MutableContainer<bool> _updatedEdges;
     bool _reloadSelectionProperty;
+
 };
 
 }

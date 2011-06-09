@@ -29,6 +29,7 @@
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
 #include "GraphTableModel.h"
+#include <tulip/TlpQtTools.h>
 using namespace std;
 
 namespace tlp {
@@ -72,7 +73,8 @@ QWidget *SpreadView::construct(QWidget *parent) {
     ui->edgesTableColumnEditionWidget->setVisible(false);
     ui->edgesTableColumnEditionWidget->setEnabled(false);
 
-    connect(ui->checkBox,SIGNAL(stateChanged(int)),this,SLOT(updateElementVisibility(int)));
+    connect(ui->showOnlySelectedElementsCheckBox,SIGNAL(stateChanged(int)),this,SLOT(updateElementVisibility(int)));
+    connect(ui->searchBarLineEdit,SIGNAL(textChanged(QString)),this,SLOT(searchElements(QString)));
 
     return widget;
 }
@@ -424,27 +426,58 @@ void SpreadView::showOnlySelectedElements(bool show){
         viewSelection->removeObserver(this);
         viewSelection->getGraph()->removeListener(this);
         viewSelection->getGraph()->removeObserver(this);
-    }
+    }    
     _updatedNodes.setAll(true);
     _updatedEdges.setAll(true);
-    updateFilters(show);
+    updateFilters();
 }
 
-void SpreadView::updateFilters(bool show){
+void SpreadView::updateFilters(){
     BooleanProperty* viewSelection = _graph->getProperty<BooleanProperty>("viewSelection");
-
     GraphTableModel* nodesGraphModel = ui->nodesTableView->graphModel();
+    bool displayOnlySelected = displayOnlySelectedElements();
+    QRegExp regExp = elementValuesFilter();
     for(int i= 0; i < nodesGraphModel->rowCount(); ++i){
         node n(nodesGraphModel->idForIndex(i));
         if(_updatedNodes.get(n.id)){
-            ui->nodesTableView->setRowHidden(i,show == !viewSelection->getNodeValue(n));
+            bool display = true;
+            if(displayOnlySelected){
+                display = viewSelection->getNodeValue(n);
+            }
+            bool match = false;
+            if(regExp.isEmpty() ){
+                match = true;
+            }else{
+                PropertyInterface* property;
+                forEach(property,_graph->getObjectProperties()){
+                    match |= regExp.exactMatch(tlpStringToQString(property->getNodeStringValue(n)));
+                    if(match)
+                        break;
+                }
+            }
+            ui->nodesTableView->setRowHidden(i,!(display && match));
         }
     }
     GraphTableModel* edgesGraphModel = ui->edgesTableView->graphModel();
     for(int i= 0; i < edgesGraphModel->rowCount(); ++i){
         edge e(edgesGraphModel->idForIndex(i));
         if(_updatedEdges.get(e.id)){
-            ui->edgesTableView->setRowHidden(i,show == !viewSelection->getEdgeValue(e));
+            bool display = true;
+            if(displayOnlySelected){
+                display = viewSelection->getEdgeValue(e);
+            }
+            bool match = false;
+            if(regExp.isEmpty() ){
+                match = true;
+            }else{
+                PropertyInterface* property;
+                forEach(property,_graph->getObjectProperties()){
+                    match |= regExp.exactMatch(tlpStringToQString(property->getEdgeStringValue(e)));
+                    if(match)
+                        break;
+                }
+            }
+            ui->edgesTableView->setRowHidden(i,!(display && match));
         }
     }
     _updatedNodes.setAll(false);
@@ -485,7 +518,7 @@ void SpreadView::treatEvent(const Event &ev){
     }
 }
 
-void SpreadView::treatEvents(const  std::vector<Event> &events){
+void SpreadView::treatEvents(const  std::vector<Event> &){
     if (_reloadSelectionProperty) {
         //Old viewSelection property was deleted so we need to observe new one.
         BooleanProperty* viewSelection = _graph->getProperty<BooleanProperty>("viewSelection");
@@ -497,10 +530,25 @@ void SpreadView::treatEvents(const  std::vector<Event> &events){
         _updatedEdges.setAll(true);
         _reloadSelectionProperty = false;
     }
-    updateFilters(true);
+    updateFilters();
 }
 
-VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "2.0")
+void SpreadView::searchElements(const QString&){
+    _updatedNodes.setAll(true);
+    _updatedEdges.setAll(true);
+    updateFilters();
+}
+
+bool SpreadView::displayOnlySelectedElements()const{
+    return ui->showOnlySelectedElementsCheckBox->checkState()==Qt::Checked;
+}
+
+QRegExp SpreadView::elementValuesFilter()const{
+    return QRegExp(ui->searchBarLineEdit->text());
+}
+
+VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "07/06/2011", "Spreadsheet view", "2.0")
 
 }
+
 

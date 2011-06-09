@@ -12,7 +12,7 @@ SET(spreadsheet_LIB_SRCS
     VectorEditionWidget.cpp        
     GlyphPreviewGenerator.cpp
     TulipTableWidgetColumnSelectionModel.cpp
-    TulipTableWidgetColumnSelectionWidget.cpp
+    TulipTableWidgetColumnSelectionWidget.cpp    
 )
 
 set(spreadsheet_UI

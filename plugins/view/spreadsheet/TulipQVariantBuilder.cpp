@@ -15,24 +15,6 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
     case Qt::DisplayRole:
         {
             switch(propertyType){
-            case DOUBLEPROPERTY_RTTI:
-                {
-                    DoubleProperty* doubleProp = dynamic_cast<DoubleProperty*>(property);
-                    double min = 0;
-                    double max = 0;
-                    double value = 0;
-                    if(elementType == NODE){
-                        min = doubleProp->getNodeMin(graph);
-                        max = doubleProp->getNodeMax(graph);
-                        value = doubleProp->getNodeValue(node(elementId));
-                    }else{
-                        min = doubleProp->getEdgeMin(graph);
-                        max = doubleProp->getEdgeMax(graph);
-                        value = doubleProp->getEdgeValue(edge(elementId));
-                    }
-                    return QVariant::fromValue< Interval<double> >(Interval<double>(min,value,max));
-                }
-                break;
             case NODEGLYPHPROPERTY_RTTI:
                 return QVariant(QString::fromUtf8(GlyphManager::getInst().glyphName(((IntegerProperty*)property)->getNodeValue(node(elementId))).c_str()));
                 break;
@@ -202,6 +184,38 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
                 break;
             }
         }
+        break;
+        //If we can compute
+    case NormalizedValueRole:{
+        switch(propertyType){
+            case DOUBLEPROPERTY_RTTI:
+                {
+                    DoubleProperty* doubleProp = dynamic_cast<DoubleProperty*>(property);
+                    double min = 0;
+                    double max = 0;
+                    double value = 0;
+                    //Compute the normalization of the elements.
+                    if(elementType == NODE){
+                        min = doubleProp->getNodeMin(graph);
+                        max = doubleProp->getNodeMax(graph);
+                        value = doubleProp->getNodeValue(node(elementId));
+                    }else{
+                        min = doubleProp->getEdgeMin(graph);
+                        max = doubleProp->getEdgeMax(graph);
+                        value = doubleProp->getEdgeValue(edge(elementId));
+                    }
+                    if(min != max){
+                        return QVariant(( value - min ) / (max - min));
+                    }else{
+                        return QVariant();
+                    }
+
+                }
+                break;
+        default:
+            return QVariant();
+        }
+    }
         break;
     default:
         return QVariant();

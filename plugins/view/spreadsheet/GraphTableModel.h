@@ -25,7 +25,7 @@ private:
     tlp::PropertyInterface* _property;
 };
 /**
-  * @brief The GraphTableModel class allows to visualize and edit a Tulip Graph object with Qt's model/view framework.
+  * @brief The GraphTableModel class allows to visualize and edit a Tulip Graph object with Qt's model/view framework. You can only use this model only with TulipItemDelegate class instead you cannot see double values and histogram.
   **/
 class GraphTableModel : public QAbstractTableModel, public tlp::Observable , public tlp::GraphObserver, public tlp::PropertyObserver
 {

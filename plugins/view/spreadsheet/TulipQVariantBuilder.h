@@ -7,6 +7,10 @@
 
 #include "ElementCollection.h"
 
+/**
+  * Add a value to each kind of property.
+  * Used to determine the kind of data to use in the TulipQVariantBuilder::data and TulipQVariantBuilder::setData functions.
+  **/
 enum TulipPropertyType{
     BOOLEAN_PROPERTY_RTTI=1001,
     COLORPROPERTY_RTTI = 1002,
@@ -31,6 +35,11 @@ enum TulipPropertyType{
     NODEGLYPHPROPERTY_RTTI= 1022,
     TEXTUREPROPERTY_RTTI=1024,
     INVALID_PROPERTY_RTTI=UINT_MAX
+};
+
+enum TulipItemDataRole{
+    //Return a double value between 0 and 1 where 0 correspond to elements with the lowest value and 1 the highest.
+    NormalizedValueRole = 33
 };
 
 template <class T>
@@ -100,6 +109,11 @@ public:
     **/
     TulipPropertyType getPropertyType(tlp::ElementType elementType,tlp::PropertyInterface* property)const;
 
+    /**
+      * @brief Transform nodes and edges properties values to QVariant compatible with Qt model/view framework. See QAbstractItemModel::data function.
+      *
+      * Handle a new role NormalizedValueRole. This role is used for
+      **/
     QVariant data(tlp::Graph* graph,int displayRole,tlp::ElementType elementType,unsigned int elementId,TulipPropertyType propertyType,tlp::PropertyInterface* property)const;
 
     inline QVariant data(tlp::Graph* graph,int displayRole,tlp::ElementType elementType,unsigned int elementId,tlp::PropertyInterface* property) const{
