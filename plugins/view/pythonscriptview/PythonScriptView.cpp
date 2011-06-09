@@ -38,7 +38,7 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/GraphProperty.h>
 #include <tulip/SGHierarchyWidget.h>
-#include <tulip/MainController.h>
+#include <tulip3/MainController.h>
 
 #include <sstream>
 

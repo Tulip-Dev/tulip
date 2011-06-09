@@ -22,7 +22,7 @@
 
 #include "PythonInterpreter.h"
 
-#include <tulip/MainController.h>
+#include <tulip3/MainController.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 
