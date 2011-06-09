@@ -63,7 +63,7 @@ namespace tlp {
     workspace->setBackground(QBrush(QPixmap(QString::fromUtf8(":/background_logo.png"))));
     gridLayout->addWidget(workspace, 0, 0, 1, 1);
 
-    connect(ui->fileOpenAction,SIGNAL(triggered()),this,SIGNAL(openProject()));
+    connect(ui->fileOpenAction,SIGNAL(triggered()),this,SIGNAL(showOpenProjectWindow()));
     connect(ui->fileSaveAction,SIGNAL(triggered()),this,SLOT(save()));
     connect(ui->fileSaveAsAction,SIGNAL(triggered()),this,SLOT(saveAs()));
     connect(ui->helpDocumentationAction,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));

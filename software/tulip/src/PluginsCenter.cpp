@@ -25,7 +25,7 @@ void PluginsCenter::showHomePage() {
 }
 
 void PluginsCenter::showSearchPage() {
-  showPage(_ui->searchPage);
+  showPage(_ui->pluginsListPage);
 }
 
 void PluginsCenter::showReposPage() {

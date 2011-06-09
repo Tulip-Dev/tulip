@@ -11,6 +11,8 @@
         <file>edit-delete.svg</file>
         <file>emblem-downloads.svg</file>
         <file>start.svg</file>
+        <file>list-add.svg</file>
+        <file>list-del.svg</file>
     </qresource>
     <qresource prefix="/tulip/app/ui">
         <file>btn_26.png</file>
