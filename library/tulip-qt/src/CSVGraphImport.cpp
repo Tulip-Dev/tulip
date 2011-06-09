@@ -451,6 +451,8 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
                 }
                 if (overwritePropertiesButton == QMessageBox::NoToAll || overwritePropertiesButton == QMessageBox::No) {
                     interf = NULL;
+                }else{
+                    interf = graph->getProperty(propertyName);
                 }
             }
             else {
