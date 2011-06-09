@@ -36,8 +36,17 @@ void usage(const QString &error) {
 
 int main(int argc,char **argv) {
   QApplication tulip_perspective(argc, argv);
+
+  SimplePluginProgressWidget *progress = new SimplePluginProgressWidget;
+  progress->setWindowTitle(QObject::trUtf8("Opening perspective"));
+  progress->setComment(QObject::trUtf8("Starting process"));
+  progress->progress(0,100);
+  progress->show();
+
   tulip_perspective.setApplicationName(QObject::trUtf8("Tulip"));
   QLocale::setDefault(QLocale(QLocale::English));
+
+  progress->setComment(QObject::trUtf8("Initializing D-Bus"));
 
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
@@ -56,11 +65,18 @@ int main(int argc,char **argv) {
   QDir::setCurrent(currentPath);
 #endif
 
+  progress->progress(25,100);
+
+  progress->setComment(QObject::trUtf8("Loading plugins"));
+
   // Init Tulip and load plugins
   tlp::initTulipLib(QApplication::applicationDirPath().toStdString().c_str());
   tlp::PluginLibraryLoader::loadPlugins();
   tlp::PluginListerInterface::checkLoadedPluginsDependencies(0);
   tlp::InteractorManager::getInst().loadInteractorPlugins();
+
+  progress->progress(60,100);
+  progress->setComment(QObject::trUtf8("Cheking arguments"));
 
   // Check arguments
   QString perspectiveName,projectFilePath;
@@ -84,16 +100,16 @@ int main(int argc,char **argv) {
   // Initialize project
   TulipProject *project = NULL;
   if (!projectFilePath.isNull()) {
-    SimplePluginProgressWidget *progress = new SimplePluginProgressWidget;
-    progress->show();
     project = TulipProject::openProject(projectFilePath,progress);
 
     if (!project->isValid())
       usage("Failed to open project file " + projectFilePath + ": " + project->lastError());
 
     perspectiveName = project->perspective();
-    delete progress;
   }
+
+  progress->progress(80,100);
+  progress->setComment("Setting up GUI");
 
   // Initialize main window.
   QMainWindow *mainWindow = new QMainWindow();
@@ -111,6 +127,7 @@ int main(int argc,char **argv) {
   QObject::connect(perspective,SIGNAL(showTulipWelcomeScreen()),communicator,SLOT(ShowWelcomeScreen()));
   QObject::connect(perspective,SIGNAL(showTulipPluginsCenter()),communicator,SLOT(ShowPluginsCenter()));
   QObject::connect(perspective,SIGNAL(showTulipAboutPage()),communicator,SLOT(ShowAboutPage()));
+  QObject::connect(perspective,SIGNAL(showOpenProjectWindow()),communicator,SLOT(ShowOpenProjectWindow()));
   QObject::connect(perspective,SIGNAL(openProject(QString)),communicator,SLOT(OpenProject(QString)));
   QObject::connect(perspective,SIGNAL(openProjectWith(QString,QString)),communicator,SLOT(OpenProjectWith(QString,QString)));
   QObject::connect(perspective,SIGNAL(createPerspective(QString)),communicator,SLOT(CreatePerspective(QString)));
@@ -121,6 +138,8 @@ int main(int argc,char **argv) {
     perspective->construct(project);
   else
     perspective->construct();
+
+  delete progress;
 
   return tulip_perspective.exec();
 }

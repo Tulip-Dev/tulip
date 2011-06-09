@@ -181,6 +181,12 @@ namespace tlp {
     virtual void construct();
     virtual void construct(tlp::TulipProject *);
 
+  protected slots:
+    void save();
+    void saveAs();
+
+  public:
+
     /**
      * By default in Tulip, if we have only one controller, we auto load it
      * If in your controller, you modify return of this function, you stop this process

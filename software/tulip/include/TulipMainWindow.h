@@ -62,8 +62,10 @@ public Q_SLOTS: // METHODS
     void OpenProjectWith(const QString &file, const QString &perspective);
     void RemovePluginRepository(const QString &url);
     void ShowAboutPage();
+    void ShowOpenProjectWindow();
     void ShowPluginsCenter();
     void ShowWelcomeScreen();
+Q_SIGNALS: // SIGNALS
 };
 
 #endif // TULIPMAINWINDOW_H

@@ -9,8 +9,8 @@
  * before re-generating it.
  */
 
-#ifndef TULIPAGENTSERVICEADAPTOR_H_1307461834
-#define TULIPAGENTSERVICEADAPTOR_H_1307461834
+#ifndef TULIPAGENTSERVICEADAPTOR_H_1307548549
+#define TULIPAGENTSERVICEADAPTOR_H_1307548549
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
@@ -34,6 +34,7 @@ class TulipAgentService: public QDBusAbstractAdaptor
 "    <method name=\"ShowWelcomeScreen\"/>\n"
 "    <method name=\"ShowPluginsCenter\"/>\n"
 "    <method name=\"ShowAboutPage\"/>\n"
+"    <method name=\"ShowOpenProjectWindow\"/>\n"
 "    <method name=\"OpenProject\">\n"
 "      <arg direction=\"in\" type=\"s\" name=\"file\"/>\n"
 "    </method>\n"
@@ -72,6 +73,7 @@ public Q_SLOTS: // METHODS
     void OpenProjectWith(const QString &file, const QString &perspective);
     void RemovePluginRepository(const QString &url);
     void ShowAboutPage();
+    void ShowOpenProjectWindow();
     void ShowPluginsCenter();
     void ShowWelcomeScreen();
 Q_SIGNALS: // SIGNALS

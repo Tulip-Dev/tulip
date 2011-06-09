@@ -142,9 +142,9 @@ signals:
     */
   void openProject(QString);
 
-
   void openProjectWith(QString,QString);
 
+  void showOpenProjectWindow();
 
   void addPluginRepository(QString);
 

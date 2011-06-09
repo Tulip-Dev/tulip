@@ -100,18 +100,21 @@ qlonglong TulipMainWindow::pid() const {
 void TulipMainWindow::ShowAboutPage() {
   if (!isVisible())
     setVisible(true);
+  raise();
   _ui->pages->setCurrentWidget(_ui->aboutPage);
 }
 
 void TulipMainWindow::ShowPluginsCenter() {
   if (!isVisible())
     setVisible(true);
+  raise();
   _ui->pages->setCurrentWidget(_ui->pluginsPage);
 }
 
 void TulipMainWindow::ShowWelcomeScreen() {
   if (!isVisible())
     setVisible(true);
+  raise();
   _ui->pages->setCurrentWidget(_ui->welcomePage);
 }
 
@@ -125,6 +128,10 @@ void TulipMainWindow::RemovePluginRepository(const QString &url) {
 
 void TulipMainWindow::CreatePerspective(const QString &name) {
   runPerspectiveProcess(name,"");
+}
+
+void TulipMainWindow::ShowOpenProjectWindow() {
+
 }
 
 void TulipMainWindow::OpenProject(const QString &file) {
