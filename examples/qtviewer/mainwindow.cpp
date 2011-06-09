@@ -31,12 +31,11 @@ QtViewerMainWindow::QtViewerMainWindow(const string &filename) : QMainWindow(), 
   resize(800, 600);
 
   // Get interactors for this view and add them to view
-  multimap<int,string> interactorsNamesAndPriorityMap;
-  interactorsNamesAndPriorityMap=InteractorManager::getInst().getSortedCompatibleInteractors("Node Link Diagram view");
+  std::list<std::string> interactorsNamesAndPriorityMap(InteractorManager::getInst().getSortedCompatibleInteractors("Node Link Diagram view"));
   
   list<Interactor *> interactorsList;
-  for(multimap<int,string>::reverse_iterator it=interactorsNamesAndPriorityMap.rbegin();it!=interactorsNamesAndPriorityMap.rend();++it){
-    interactorsList.push_back(InteractorManager::getInst().getInteractor((*it).second));
+  for(std::list<std::string>::reverse_iterator it=interactorsNamesAndPriorityMap.rbegin();it!=interactorsNamesAndPriorityMap.rend();++it){
+    interactorsList.push_back(InteractorManager::getInst().getInteractor((*it)));
   }
   nodeLinkView->setInteractors(interactorsList);
   
