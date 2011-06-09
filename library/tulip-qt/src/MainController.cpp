@@ -942,6 +942,9 @@ namespace tlp {
       return false;
 
     clearObservers();
+    //Remove observer (nothing if this not observe)
+    graph->removeGraphObserver(this);
+    graph->removeObserver(this);
 
     unsigned int holdCount=Observable::observersHoldCounter();
 
@@ -960,9 +963,6 @@ namespace tlp {
     updateUndoRedoInfos();
 
     initObservers();
-    //Remove observer (nothing if this not observe)
-    graph->removeGraphObserver(this);
-    graph->removeObserver(this);
     //Add observer
     graph->addGraphObserver(this);
     graph->addObserver(this);
