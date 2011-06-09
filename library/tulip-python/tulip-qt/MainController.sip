@@ -26,14 +26,12 @@
 
 namespace tlp {
 
-class MainController : tlp::ControllerViewsManager  {
+class MainController : tlp::ControllerViewsManager /Abstract/ {
 %TypeHeaderCode
-#include <tulip/MainController.h>
+#include <tulip3/MainController.h>
 %End
 
   public:
-
-	MainController();
 
 	virtual ~MainController();
 

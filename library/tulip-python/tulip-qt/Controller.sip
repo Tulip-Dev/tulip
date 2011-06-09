@@ -26,7 +26,7 @@
 %ModuleHeaderCode
 #include <QtGui/QDockWidget>
 typedef std::pair<QDockWidget *,QDockWidget *> std_pair_0101QDockWidget_0101QDockWidget;
-#include <tulip/MainController.h>
+#include <tulip3/MainController.h>
 %End
 
 typedef std::pair<QDockWidget *,QDockWidget *> std_pair_0101QDockWidget_0101QDockWidget;
@@ -35,7 +35,7 @@ namespace tlp {
 
 class MainWindowFacade {
 %TypeHeaderCode
-#include <tulip/Controller.h>
+#include <tulip3/Controller.h>
 %End
 
 public :
@@ -81,9 +81,9 @@ public :
 };
 
 
-class Controller : QObject, tlp::WithParameter, tlp::WithDependency {
+class Controller : QObject, tlp::WithParameter, tlp::WithDependency /Abstract/ {
 %TypeHeaderCode
-#include <tulip/Controller.h>
+#include <tulip3/Controller.h>
 %End
 
 %ConvertToSubClassCode

@@ -24,9 +24,6 @@
 // +-------------------------------------------------------------------------+
 
 
-
-
-
 %ModuleHeaderCode
 typedef std::pair<QWidget *, std::string> std_pair_0101QWidget_0100std_string;
 #include <tulip/NodeLinkDiagramComponent.h>
@@ -59,6 +56,7 @@ class View : QObject, tlp::WithParameter, tlp::WithDependency /Abstract/ {
 %End
 
 public:
+
 	virtual QWidget *construct(QWidget *parent) = 0;
 
 	virtual void setData(tlp::Graph *graph, tlp::DataSet dataSet) = 0;
@@ -73,12 +71,14 @@ public:
 
 	virtual std::list<tlp::Interactor *> getInteractors() = 0;
 	
-	
 	virtual void setActiveInteractor(tlp::Interactor *interactor) = 0;
 
-	virtual void createPicture(const std::string &pictureName,int width, int height) = 0;
+	virtual bool savePicture(const std::string& pictureName, int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
+
+	virtual QImage createPicture(int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
 
 public slots:
+
 	virtual void setGraph(tlp::Graph *graph) = 0;
 	
 	virtual void draw() = 0;
