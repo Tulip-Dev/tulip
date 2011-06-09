@@ -204,6 +204,8 @@ void PropertyManager::delLocalProperty(const string &str) {
     if (graph->canDeleteProperty(graph, oldProp))
       //if (!graph->canPop())
       delete oldProp;
+    else
+      oldProp->notifyDestroy();
   }
 }
 //==============================================================
