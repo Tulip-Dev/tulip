@@ -233,7 +233,23 @@ IF(TULIP_OGDF_LIBRARY)
   SET(TULIP_LIBRARIES ${TULIP_LIBRARIES} ${TULIP_OGDF_LIBRARY})
 ENDIF(TULIP_OGDF_LIBRARY)
 
+<<<<<<< Updated upstream
 IF(TULIP3_COMPAT_LIBRARY)
   MARK_AS_ADVANCED(TULIP3_COMPAT_LIBRARY)
   SET(TULIP_LIBRARIES ${TULIP_LIBRARIES} ${TULIP3_COMPAT_LIBRARY})
 ENDIF(TULIP3_COMPAT_LIBRARY)
+=======
+MACRO(TULIP_PLUGINSERVER)
+  add_custom_command(OUTPUT "pseudo-install" COMMAND ${CMAKE_COMMAND} -P cmake_install.cmake)
+  add_custom_command(OUTPUT "plugin packages" COMMAND packagePlugins ${CMAKE_BINARY_DIR}/pluginserver archive DEPENDS "pseudo-install")
+  add_custom_target(pluginserver DEPENDS "plugin packages")
+ENDMACRO()
+
+MACRO(GENERATE_DOCUMENTATION PLUGIN_COMPONENT)
+  SET(TEMPLATE_DIR /home/packadal/src/tulip/doc/pluginDocTemplate)
+  add_custom_target("copy sources-${PLUGIN_COMPONENT}" ALL COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/html doc)
+  add_custom_target("HTML documentation-${PLUGIN_COMPONENT}" ALL COMMAND sphinx-build -b html -n -c ${TEMPLATE_DIR} -q ${CMAKE_CURRENT_BINARY_DIR}/doc ${CMAKE_CURRENT_BINARY_DIR}/html)
+  add_dependencies("HTML documentation-${PLUGIN_COMPONENT}" "copy sources-${PLUGIN_COMPONENT}")
+  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION ${TULIP_PLUGINS_DIR}/../../share/doc/${PLUGIN_COMPONENT} COMPONENT ${PLUGIN_COMPONENT})
+ENDMACRO(GENERATE_DOCUMENTATION)
+>>>>>>> Stashed changes
