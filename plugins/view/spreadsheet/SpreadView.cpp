@@ -448,11 +448,11 @@ void SpreadView::updateFilters(){
             if(regExp.isEmpty() ){
                 match = true;
             }else{
-                PropertyInterface* property;
-                forEach(property,_graph->getObjectProperties()){
-                    match |= regExp.exactMatch(tlpStringToQString(property->getNodeStringValue(n)));
-                    if(match)
-                        break;
+                for(int j=0;j< nodesGraphModel->columnCount() ; ++j){
+                    //If the column is visible.
+                   if(!ui->nodesTableView->isColumnHidden(i)){
+                        match |= regExp.exactMatch(nodesGraphModel->data(nodesGraphModel->index(i,j)).toString());
+                   }
                 }
             }
             ui->nodesTableView->setRowHidden(i,!(display && match));
@@ -470,11 +470,11 @@ void SpreadView::updateFilters(){
             if(regExp.isEmpty() ){
                 match = true;
             }else{
-                PropertyInterface* property;
-                forEach(property,_graph->getObjectProperties()){
-                    match |= regExp.exactMatch(tlpStringToQString(property->getEdgeStringValue(e)));
-                    if(match)
-                        break;
+                for(int j=0;j< edgesGraphModel->columnCount() ; ++j){
+                    //If the column is visible.
+                   if(!ui->edgesTableView->isColumnHidden(i)){
+                        match |= regExp.exactMatch(edgesGraphModel->data(edgesGraphModel->index(i,j)).toString());
+                   }
                 }
             }
             ui->edgesTableView->setRowHidden(i,!(display && match));
