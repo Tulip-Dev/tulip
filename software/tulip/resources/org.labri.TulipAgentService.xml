@@ -4,6 +4,7 @@
     <method name="ShowWelcomeScreen"/>
     <method name="ShowPluginsCenter"/>
     <method name="ShowAboutPage"/>
+    <method name="ShowOpenProjectWindow"/>
     <method name="OpenProject">
       <arg name="file" type="s" direction="in"/>
     </method>

@@ -83,6 +83,12 @@ void TulipAgentService::ShowAboutPage()
     QMetaObject::invokeMethod(parent(), "ShowAboutPage");
 }
 
+void TulipAgentService::ShowOpenProjectWindow()
+{
+    // handle method call org.labri.Tulip.ShowOpenProjectWindow
+    QMetaObject::invokeMethod(parent(), "ShowOpenProjectWindow");
+}
+
 void TulipAgentService::ShowPluginsCenter()
 {
     // handle method call org.labri.Tulip.ShowPluginsCenter

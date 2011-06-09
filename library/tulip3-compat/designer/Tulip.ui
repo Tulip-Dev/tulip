@@ -70,7 +70,7 @@
      <x>0</x>
      <y>0</y>
      <width>1005</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="windowsMenu">
@@ -108,7 +108,7 @@
   </widget>
   <action name="fileOpenAction">
    <property name="icon">
-    <iconset resource="TulipResource.qrc">
+    <iconset resource="../resources/TulipResource.qrc">
      <normaloff>:/i_open.png</normaloff>:/i_open.png</iconset>
    </property>
    <property name="text">
@@ -134,7 +134,7 @@
   </action>
   <action name="fileSaveAction">
    <property name="icon">
-    <iconset resource="TulipResource.qrc">
+    <iconset resource="../resources/TulipResource.qrc">
      <normaloff>:/i_save.png</normaloff>:/i_save.png</iconset>
    </property>
    <property name="text">
@@ -160,7 +160,7 @@
   </action>
   <action name="filePrintAction">
    <property name="icon">
-    <iconset resource="TulipResource.qrc">
+    <iconset resource="../resources/TulipResource.qrc">
      <normaloff>:/i_print.png</normaloff>:/i_print.png</iconset>
    </property>
    <property name="text">
@@ -816,168 +816,7 @@
   <include location="local">qworkspace.h</include>
  </includes>
  <resources>
-  <include location="TulipResource.qrc"/>
+  <include location="../resources/TulipResource.qrc"/>
  </resources>
- <connections>
-  <connection>
-   <sender>fileOpenAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>fileOpen()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>fileCloseTabAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>fileCloseTab()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>fileSaveAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>fileSave()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>fileSaveAsAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>fileSaveAs()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>filePrintAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>filePrint()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>fileExitAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>fileExit()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>helpDocumentationAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>helpDocumentation()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pluginsAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>plugins()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>helpAboutAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>helpAbout()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>filePreferenceAction</sender>
-   <signal>triggered()</signal>
-   <receiver>TulipData</receiver>
-   <slot>preference()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>510</x>
-     <y>377</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

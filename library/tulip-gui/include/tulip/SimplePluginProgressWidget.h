@@ -33,6 +33,8 @@ public:
   explicit SimplePluginProgressWidget(QWidget *parent=0,Qt::WindowFlags f=0);
 
   void setComment(std::string);
+  void setComment(const QString &);
+  void setComment(const char *);
 
 protected:
   virtual void progress_handler(int step, int max_step);

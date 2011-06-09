@@ -63,7 +63,22 @@ namespace tlp {
     workspace->setBackground(QBrush(QPixmap(QString::fromUtf8(":/background_logo.png"))));
     gridLayout->addWidget(workspace, 0, 0, 1, 1);
 
+    connect(ui->fileOpenAction,SIGNAL(triggered()),this,SIGNAL(openProject()));
+    connect(ui->fileSaveAction,SIGNAL(triggered()),this,SLOT(save()));
+    connect(ui->fileSaveAsAction,SIGNAL(triggered()),this,SLOT(saveAs()));
+    connect(ui->helpDocumentationAction,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));
+    connect(ui->helpDocumentationAction,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));
+    connect(ui->pluginsAction,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
+    connect(ui->helpAboutAction,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));
     attachMainWindow(MainWindowFacade(_mainWindow,ui->toolBar,ui->graphToolBar,workspace));
+  }
+
+  void Controller::save() {
+
+  }
+
+  void Controller::saveAs() {
+
   }
 
 }

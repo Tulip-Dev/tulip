@@ -58,4 +58,12 @@ void SimplePluginProgressWidget::setComment(std::string s) {
   _ui->commentLabel->setText("<html><head/><body><b>" + QString(s.c_str()) + "</b></body></html>");
 }
 
+void SimplePluginProgressWidget::setComment(const QString &s) {
+  setComment(s.toStdString());
+}
+
+void SimplePluginProgressWidget::setComment(const char *s) {
+  setComment(std::string(s));
+}
+
 }
