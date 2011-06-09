@@ -23,6 +23,37 @@
 #include <Qsci/qsciscintilla.h>
 #include <Qsci/qscilexerpython.h>
 
+#include <QtCore/QEvent>
+
+static std::string kw;
+
+class CustomLexerPython : public QsciLexerPython {
+public:
+	CustomLexerPython(QObject *parent=0) : QsciLexerPython(parent) {
+		kw = QsciLexerPython::keywords(1);
+		kw += " True False";
+	}
+
+	const char *keywords (int) const {
+		return kw.c_str();
+	}
+};
+
+class GragKeyboardFocusEventFilter : public QObject{
+
+public :
+
+	bool eventFilter(QObject *, QEvent *event) {
+		if (event->type() == QEvent::ShortcutOverride) {
+			event->accept();
+			return true;
+		}
+
+		return false;
+	}
+
+};
+
 class PythonCodeEditor : public QsciScintilla {
 
 public :
@@ -31,6 +62,10 @@ public :
 
 	void indicateScriptCurrentError(int lineNumber);
 	void clearErrorIndicator();
+
+protected:
+
+	void showEvent(QShowEvent * event);
 
 private :
 

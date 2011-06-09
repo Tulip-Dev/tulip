@@ -21,6 +21,7 @@ SET(pythonscriptview_LIB_SRCS
     PythonScriptView.cpp
     PythonScriptViewWidget.h
     PythonScriptViewWidget.cpp
+    PythonShellWidget.cpp
     TulipUtilsModule.h
 )
 
@@ -32,6 +33,7 @@ SET(pythonscriptview_MOC
     PythonScriptView.h
     PythonScriptViewWidget.h
     PythonInterpreter.h
+    PythonShellWidget.h
 )
 
 SET(pythonscriptview_RCC

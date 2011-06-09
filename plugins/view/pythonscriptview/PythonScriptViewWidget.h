@@ -62,6 +62,8 @@ public slots :
 	void moduleScriptTextChanged();
 	void resizeToolBars();
 
+	void currentTabChanged(int index);
+
 public :
 
 	QAction *newMainScriptAction;

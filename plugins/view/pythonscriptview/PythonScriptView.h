@@ -72,7 +72,7 @@ public :
 
 	tlp::Graph* getGraph() {return graph;}
 	void createPicture(const std::string&, int, int) {}
-	void setGraph(tlp::Graph* graph) {this->graph = graph;}
+	void setGraph(tlp::Graph* graph) {setData(graph, tlp::DataSet());}
 	void draw() {}
 	void refresh() {}
 	void init() {}

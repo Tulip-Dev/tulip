@@ -22,8 +22,6 @@
 
 #include <iostream>
 #include <sstream>
-
-#include <QtCore/QEvent>
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
 #include <QtCore/QDir>
@@ -34,36 +32,9 @@
 
 using namespace std;
 
-static string kw;
 
-class CustomLexerPython : public QsciLexerPython {
-public:
-	CustomLexerPython(QObject *parent=0) : QsciLexerPython(parent) {
-		kw = QsciLexerPython::keywords(1);
-		kw += " True False";
-	}
 
-	const char *keywords (int) const {
-		return kw.c_str();
-	}
-};
-
-class GragKeyboardFocusEventFilter : public QObject{
-
-public :
-
-	bool eventFilter(QObject *, QEvent *event) {
-		if (event->type() == QEvent::ShortcutOverride) {
-			event->accept();
-			return true;
-		}
-
-		return false;
-	}
-
-};
-
-void loadApiFile(const QString &path, QsciAPIs *api) {
+static void loadApiFile(const QString &path, QsciAPIs *api) {
 	QFile apiFile(path);
 	apiFile.open(QIODevice::ReadOnly | QIODevice::Text);
 	QTextStream in(&apiFile);
@@ -164,3 +135,8 @@ void PythonCodeEditor::indicateScriptCurrentError(int lineNumber) {
 void PythonCodeEditor::clearErrorIndicator() {
 	clearIndicatorRange(0, 0, lines(), text(lines()).length(), errorIndicator);
 }
+
+void PythonCodeEditor::showEvent(QShowEvent *) {
+	setFocus();
+}
+

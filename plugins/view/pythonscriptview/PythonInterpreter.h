@@ -57,6 +57,8 @@ private:
 
 };
 
+class PythonShellWidget;
+
 class PythonInterpreter {
 
 public :
@@ -77,11 +79,16 @@ public :
 	void stopCurrentScript();
 	bool isRunningScript() const {return runningScript;}
 	std::string getPythonVersion() const {return pythonVersion;}
+	std::string getPythonShellBanner() const;
 	void setDefaultSIGINTHandler();
-
 	
+
+	std::vector<std::string> getGlobalDictEntries(const std::string &prefixFilter = "");
+	std::vector<std::string> getObjectDictEntries(const std::string &objectName, const std::string &prefixFilter = "");
+
 	void setDefaultConsoleWidget();
 	void setConsoleWidget(QPlainTextEdit *consoleWidget);
+	void setPythonShellWidget(PythonShellWidget *shellWidget);
 
 private :
 

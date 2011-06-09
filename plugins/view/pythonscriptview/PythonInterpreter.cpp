@@ -41,7 +41,7 @@
 #endif
 using namespace std;
 
-const string pluginUtils =
+static const string pluginUtils =
 		"from tulip import *\n"
 		"pluginFactory = {}\n"
 		"pluginModules = {}\n"
@@ -586,6 +586,17 @@ const string pluginUtils =
 		"	exec(code)\n"
 		;
 
+static const string printObjectDictFunction =
+		"def printObjectDict(obj):\n"
+		"	if hasattr(obj, \"__dict__\"):\n"
+		"		for k in obj.__dict__.keys():\n"
+		"			print k\n"
+		"	if hasattr(obj, \"__class__\"):\n"
+		"		for k in obj.__class__.__dict__.keys():\n"
+		"			print k\n"
+		""
+		;
+
 const sipAPIDef *get_sip_api(){
 #if defined(SIP_USE_PYCAPSULE)
 	return (const sipAPIDef *)PyCapsule_Import("sip._C_API", 0);
@@ -725,6 +736,8 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 			// some external modules (like numpy) overrides the SIGINT handler at import
 			// reinstall the default one, otherwise Tulip can not be interrupted by hitting Ctrl-C in a console
 			setDefaultSIGINTHandler();
+
+			runString(printObjectDictFunction);
 		}
 	}
 }
@@ -875,10 +888,17 @@ void PythonInterpreter::reloadModule(const std::string &moduleName) {
 
 void PythonInterpreter::setConsoleWidget(QPlainTextEdit *console) {
 	consoleWidget = console;
+	shellWidget = NULL;
 }
 
 void PythonInterpreter::setDefaultConsoleWidget() {
 	consoleWidget = consoleDialog->consoleWidget;
+	shellWidget = NULL;
+}
+
+void PythonInterpreter::setPythonShellWidget(PythonShellWidget *shell) {
+	consoleWidget = NULL;
+	shellWidget = shell;
 }
 
 void PythonInterpreter::setDefaultSIGINTHandler() {
@@ -890,3 +910,72 @@ void PythonInterpreter::setDefaultSIGINTHandler() {
 	consoleWidget = lastConsoleWidget;
 }
 
+std::string PythonInterpreter::getPythonShellBanner() const {
+	return string("Python ") + string(Py_GetVersion()) + string(" on ") + string(Py_GetPlatform());
+}
+
+std::vector<std::string> PythonInterpreter::getGlobalDictEntries(const std::string &prefixFilter) {
+	std::vector<std::string> ret;
+	std::set<std::string> publicMembersSorted;
+	outputActivated = false;
+	consoleOuput = "";
+	runString("import __main__\nprintObjectDict(__main__)");
+	QStringList objectDictList = QString(consoleOuput.c_str()).split("\n");
+	for (int i = 0 ; i < objectDictList.count() ; ++i) {
+		if (objectDictList[i] != "") {
+			if (objectDictList[i].startsWith("_")) {
+				continue;
+			} else {
+				if (prefixFilter != "") {
+					if (objectDictList[i].startsWith(QString(prefixFilter.c_str()))) {
+						publicMembersSorted.insert(objectDictList[i].toStdString());
+					}
+				} else {
+					publicMembersSorted.insert(objectDictList[i].toStdString());
+				}
+			}
+
+		}
+	}
+	set<string>::iterator it;
+	for (it = publicMembersSorted.begin() ; it != publicMembersSorted.end() ; ++it) {
+		ret.push_back(*it);
+	}
+	outputActivated = true;
+	return ret;
+}
+
+std::vector<std::string> PythonInterpreter::getObjectDictEntries(const std::string &objectName, const std::string &prefixFilter) {
+	std::vector<std::string> ret;
+	std::set<std::string> publicMembersSorted;
+	outputActivated = false;
+	consoleOuput = "";
+	if (runString(objectName)) {
+		ostringstream oss;
+		oss << "printObjectDict(" << objectName << ")";
+		runString(oss.str());
+		QStringList objectDictList = QString(consoleOuput.c_str()).split("\n");
+		for (int i = 0 ; i < objectDictList.count() ; ++i) {
+			if (objectDictList[i] != "") {
+				if (objectDictList[i].startsWith("_")) {
+					continue;
+				} else {
+					if (prefixFilter != "") {
+						if (objectDictList[i].startsWith(QString(prefixFilter.c_str()))) {
+							publicMembersSorted.insert(objectDictList[i].toStdString());
+						}
+					} else {
+						publicMembersSorted.insert(objectDictList[i].toStdString());
+					}
+				}
+
+			}
+		}
+		set<string>::iterator it;
+		for (it = publicMembersSorted.begin() ; it != publicMembersSorted.end() ; ++it) {
+			ret.push_back(*it);
+		}
+	}
+	outputActivated = true;
+	return ret;
+}

@@ -23,22 +23,6 @@
 #include "PythonScriptViewWidget.h"
 #include "PythonScriptView.h"
 
-
-class GragKeyboardFocusEventFilter : public QObject{
-
-public :
-
-	bool eventFilter(QObject *, QEvent *event) {
-		if (event->type() == QEvent::ShortcutOverride) {
-			event->accept();
-			return true;
-		}
-
-		return false;
-	}
-
-};
-
 PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), fontZoom(0) , pythonScriptView(view) {
 	setupUi(this);
 	consoleOutputWidget->installEventFilter(new GragKeyboardFocusEventFilter());
@@ -58,13 +42,15 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
 	modulesTabWidget->clear();
 	mainScriptsTabWidget->clear();
 	QList<int> sizes;
-	sizes.push_back(500);
-	sizes.push_back(200);
+	sizes.push_back(550);
+	sizes.push_back(150);
 	splitter->setSizes(sizes);
+	splitter->setCollapsible(0, false);
 
 	connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(resizeToolBars()));
 	connect(decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
 	connect(increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
+	connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 }
 
 std::string PythonScriptViewWidget::getCurrentMainScriptCode() const {
@@ -193,6 +179,7 @@ void PythonScriptViewWidget::decreaseFontSize() {
 	for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
 		static_cast<QsciScintilla *>(modulesTabWidget->widget(i))->zoomOut();
 	}
+	pythonShellWidget->zoomOut();
 	--fontZoom;
 }
 
@@ -203,6 +190,7 @@ void PythonScriptViewWidget::increaseFontSize() {
 	for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
 		static_cast<QsciScintilla *>(modulesTabWidget->widget(i))->zoomIn();
 	}
+	pythonShellWidget->zoomIn();
 	++fontZoom;
 }
 
@@ -224,4 +212,23 @@ void PythonScriptViewWidget::moduleScriptTextChanged() {
 		curTabText += "*";
 		modulesTabWidget->setTabText(modulesTabWidget->currentIndex(), curTabText);
 	}
+}
+
+void PythonScriptViewWidget::currentTabChanged(int index) {
+	static int lastTabIndex = 0;
+	static QList<int> lastSizes = splitter->sizes();
+	if (lastTabIndex != 2) {
+		lastSizes = splitter->sizes();
+	}
+	QList<int> sizes;
+	if (index == 2) {
+		sizes.push_back(height());
+		sizes.push_back(0);
+		runScriptButton->setEnabled(false);
+	} else {
+		runScriptButton->setEnabled(true);
+		sizes = lastSizes;
+	}
+	splitter->setSizes(sizes);
+	lastTabIndex = index;
 }

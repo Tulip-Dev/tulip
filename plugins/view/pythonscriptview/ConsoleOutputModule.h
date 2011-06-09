@@ -49,6 +49,8 @@
 
 #include <QtGui/QPlainTextEdit>
 
+
+#include "PythonShellWidget.h"
 #include "PythonInterpreter.h"
 
 #include <iostream>
@@ -56,6 +58,9 @@
 using namespace std;
 
 QPlainTextEdit *consoleWidget = NULL;
+PythonShellWidget *shellWidget = NULL;
+std::string consoleOuput = "";
+bool outputActivated = true;
 
 typedef struct {
 	PyObject_HEAD
@@ -97,27 +102,36 @@ scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
 	if(!PyArg_ParseTuple(o, "s", &buf))
 		return NULL;
 
-	if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
-		cerr << buf << endl;
-	}
+	consoleOuput += buf;
 
-	if (consoleWidget) {
-		if (buf != NULL && ((scriptengine_ConsoleOutput *)self)->writeToConsole) {
-			QBrush brush(Qt::SolidPattern);
-			if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
-				brush.setColor(Qt::red);
+	if (outputActivated) {
 
-			} else {
-				brush.setColor(Qt::black);
-			}
-
-			QTextCharFormat formt;
-			formt.setForeground(brush);
-			consoleWidget->moveCursor(QTextCursor::End);
-			QTextCursor cursor = consoleWidget->textCursor();
-			cursor.insertText(buf, formt);
+		if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
+			cerr << buf << endl;
 		}
+
+		if (consoleWidget) {
+			if (buf != NULL && ((scriptengine_ConsoleOutput *)self)->writeToConsole) {
+				QBrush brush(Qt::SolidPattern);
+				if (((scriptengine_ConsoleOutput *)self)->stderrflag) {
+					brush.setColor(Qt::red);
+
+				} else {
+					brush.setColor(Qt::black);
+				}
+
+				QTextCharFormat formt;
+				formt.setForeground(brush);
+				consoleWidget->moveCursor(QTextCursor::End);
+				QTextCursor cursor = consoleWidget->textCursor();
+				cursor.insertText(buf, formt);
+			}
+		} else if (shellWidget) {
+			shellWidget->insert(buf, true);
+		}
+
 	}
+
 	Py_RETURN_NONE;
 }
 

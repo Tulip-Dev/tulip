@@ -191,6 +191,8 @@ QWidget *PythonScriptView::construct(QWidget *parent) {
 		}
 	}
 
+	viewWidget->pythonShellWidget->setConsoleWidget(viewWidget->consoleOutputWidget);
+
 	return widget;
 }
 
@@ -207,6 +209,8 @@ string& replaceAll(string& context, const string& from, const string& to) {
 
 void PythonScriptView::setData(Graph *graph,DataSet dataSet) {
 	this->graph = graph;
+
+	viewWidget->pythonShellWidget->setCurrentGraph(graph);
 
 	if (viewWidget->mainScriptsTabWidget->count() == 0) {
 
