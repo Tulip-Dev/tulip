@@ -55,7 +55,7 @@ SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -w")
 # instead of those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${QT_INCLUDE_DIR} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipCoreBuildInclude})
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${QT_INCLUDE_DIR} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipCoreBuildInclude} ${Tulip3CompatInclude})
 
 ADD_LIBRARY(${LibTulipGUIPythonName} SHARED ${TULIP_QT_PYTHON_BINDINGS_SRC})
 
@@ -67,7 +67,7 @@ ELSE(WIN32)
   SET_TARGET_PROPERTIES(${LibTulipGUIPythonName} PROPERTIES SUFFIX ".so")
 ENDIF(WIN32)
 
-TARGET_LINK_LIBRARIES(${LibTulipGUIPythonName} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${PYTHON_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipGUIPythonName} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulip3CompatName} ${PYTHON_LIBRARY} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY})
 
 ADD_CUSTOM_TARGET(touchTulipQtPythonCMakeLists ALL
   COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_LIST_FILE}

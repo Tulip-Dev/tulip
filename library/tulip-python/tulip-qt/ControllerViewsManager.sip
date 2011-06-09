@@ -27,14 +27,13 @@ namespace tlp {
 
 
 
-class ControllerViewsManager : tlp::Controller {
+class ControllerViewsManager : tlp::Controller /Abstract/ {
 %TypeHeaderCode
-#include <tulip/ControllerViewsManager.h>
+#include <tulip3/ControllerViewsManager.h>
 %End
 
 	public :
       
-      ControllerViewsManager();
       virtual ~ControllerViewsManager();
     
       void attachMainWindow(tlp::MainWindowFacade facade);

@@ -31,11 +31,11 @@ public :
 	PythonImportModule(AlgorithmContext context) : 
 		ImportModule(context){}
 	
-	bool import(const std::string &s) {
-		return importGraph(s);
+	bool import() {
+		return importGraph();
 	}
 	
-	virtual bool importGraph(const std::string &s) = 0;
+	virtual bool importGraph() = 0;
 };
 typedef tlp::FactoryInterface<tlp::ImportModule, tlp::AlgorithmContext> ImportModuleFactory;
 };
@@ -62,7 +62,7 @@ public:
 
   PythonImportModule(tlp::AlgorithmContext context);
   
-  virtual bool importGraph(const std::string &s) = 0;
+  virtual bool importGraph() = 0;
   
 };
 
