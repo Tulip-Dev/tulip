@@ -12,9 +12,9 @@ CoordWidget::CoordWidget(QWidget* parent) : QWidget(parent),ui(new Ui::CoordWidg
     ui->yLineEdit->setValidator(validator);
     ui->zLineEdit->setValidator(validator);
     setCoord(Coord());
-    connect(ui->xLineEdit,SIGNAL(textChanged(double)),this,SLOT(coordUpdated()));
-    connect(ui->yLineEdit,SIGNAL(textChanged(double)),this,SLOT(coordUpdated()));
-    connect(ui->zLineEdit,SIGNAL(textChanged(double)),this,SLOT(coordUpdated()));
+    connect(ui->xLineEdit,SIGNAL(textChanged(QString)),this,SLOT(coordUpdated()));
+    connect(ui->yLineEdit,SIGNAL(textChanged(QString)),this,SLOT(coordUpdated()));
+    connect(ui->zLineEdit,SIGNAL(textChanged(QString)),this,SLOT(coordUpdated()));
 }
 
 CoordWidget::~CoordWidget(){
