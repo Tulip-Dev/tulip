@@ -19,15 +19,15 @@ public:
     bool operator()(unsigned int elt1,unsigned int elt2){
         if(_elementType == NODE){
             if(_sortOrder == Qt::AscendingOrder){
-                return _property->compare(node(elt1),node(elt2)) < 0 ;
+                return _property->compare(node(elt1),node(elt2)) == -1 ;
             }else{
-                return _property->compare(node(elt1),node(elt2)) > 0 ;
+                return _property->compare(node(elt1),node(elt2)) == 1 ;
             }
         }else{
             if(_sortOrder == Qt::AscendingOrder){
-                return _property->compare(edge(elt1),edge(elt2)) < 0 ;
+                return _property->compare(edge(elt1),edge(elt2)) == -1 ;
             }else{
-                return _property->compare(edge(elt1),edge(elt2)) > 0 ;
+                return _property->compare(edge(elt1),edge(elt2)) == 1 ;
             }
         }
     }
