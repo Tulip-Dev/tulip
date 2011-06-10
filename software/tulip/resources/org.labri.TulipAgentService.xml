@@ -25,6 +25,7 @@
       <arg name="file" type="s" direction="in"/>
       <arg name="result" type="as" direction="out"/>
     </method>
+    <signal name="Terminate"/>
   </interface>
 </node>
 
@@ -36,3 +37,5 @@
 
 <!--Server stub (adaptor):-->
 <!--qdbusxml2cpp -c TulipAgentService -a include/TulipAgentServiceAdaptor.h:src/TulipAgentServiceAdaptor.cpp resources/org.labri.TulipAgentService.xml-->
+<!--or, from the software/tulip directory:-->
+<!--qdbusxml2cpp -v -c TulipAgentCommunicator -p ../tulip_perspective/include/TulipAgentCommunicator.h:../tulip_perspective/src/TulipAgentCommunicator.cpp resources/org.labri.TulipAgentService.xml-->

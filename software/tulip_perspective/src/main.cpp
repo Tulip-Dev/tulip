@@ -94,19 +94,37 @@ int main(int argc,char **argv) {
       projectFilePath = a;
   }
 
-  if (perspectiveName.isNull() && projectFilePath.isNull())
+  if (perspectiveName.isNull() && projectFilePath.isNull()) // no argument given (program was previously stopped if --help was specified)
     usage("Invalid arguments");
 
-  // Initialize project
+  // Initialize context
+  PerspectiveContext context;
   TulipProject *project = NULL;
-  if (!projectFilePath.isNull()) {
+
+  if (!projectFilePath.isNull()) { // some file was specified. We check if it can be opened as a TulipProject. If not, we consider it as an external file.
     project = TulipProject::openProject(projectFilePath,progress);
 
-    if (!project->isValid())
-      usage("Failed to open project file " + projectFilePath + ": " + project->lastError());
+    if (!project->isValid()) {
+      if (perspectiveName.isEmpty()) // If the specified file is not a tulip project, we need a perspective name to open it
+        usage("Invalid project file and could not retrieve a perspective name: " + project->lastError());
+      else {
+        context.externalFile = projectFilePath;
+        delete project;
+        project = NULL;
+      }
+    }
 
-    perspectiveName = project->perspective();
+    else // We have a valid tulip project
+      perspectiveName = project->perspective();
   }
+
+  if (!project) { // no file path was specified or it was not a tulip project, we create an empty project
+    project = TulipProject::newProject();
+    if (!project->isValid())
+      usage("Failed to initialize project files:" + project->lastError());
+    project->setPerspective(perspectiveName);
+  }
+  context.project = project;
 
   progress->progress(80,100);
   progress->setComment("Setting up GUI");
@@ -114,11 +132,18 @@ int main(int argc,char **argv) {
   // Initialize main window.
   QMainWindow *mainWindow = new QMainWindow();
   mainWindow->setVisible(false);
-
-  // Create perspective
-  PerspectiveContext context;
+  QString title("Tulip [" + perspectiveName + "]");
+  if (project) {
+    title += " - ";
+    if (!project->name().isNull())
+      title += project->name();
+    else
+      title += projectFilePath;
+  }
+  mainWindow->setWindowTitle(title);
   context.mainWindow = mainWindow;
 
+  // Create perspective object
   Perspective *perspective = StaticPluginLister<Perspective,PerspectiveContext>::getPluginObject(perspectiveName.toStdString(), context);
   if (!perspective)
     usage("Failed to create perspective: " + perspectiveName);
@@ -133,11 +158,9 @@ int main(int argc,char **argv) {
   QObject::connect(perspective,SIGNAL(createPerspective(QString)),communicator,SLOT(CreatePerspective(QString)));
   QObject::connect(perspective,SIGNAL(addPluginRepository(QString)),communicator,SLOT(AddPluginRepository(QString)));
   QObject::connect(perspective,SIGNAL(removePluginRepository(QString)),communicator,SLOT(RemovePluginRepository(QString)));
+  QObject::connect(communicator,SIGNAL(Terminate()),perspective,SLOT(terminated()));
 
-  if (project)
-    perspective->construct(project);
-  else
-    perspective->construct();
+  perspective->construct();
 
   delete progress;
 

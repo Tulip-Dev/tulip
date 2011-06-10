@@ -31,9 +31,10 @@ class TulipProject;
 
 class TLP_QT_SCOPE PerspectiveContext {
 public:
-  PerspectiveContext(): mainWindow(0) {}
-
+  PerspectiveContext(): mainWindow(0), project(0) {}
   QMainWindow *mainWindow;
+  TulipProject *project;
+  QString externalFile;
 };
 
 
@@ -52,12 +53,11 @@ public:
        The tulip_process will load plugins once again, then it will parse its arguments:
        @list
        @li If a file is provided as first argument, the tulip process will create a TulipProject object with it and check the associated perspective plugin.
-       @li If the --perspective flag is provided, the tulip process will create the corresponding perspective plugin instance without a project.
+       @li If the --perspective flag is provided, the tulip process will create the corresponding perspective plugin instance with an empty project.
        @endlist
   3 => The tulip process instantiate a (hidden) QMainWindow with some features (putting tulip icon on it, setting its titlebar, etc)
   4 => The perspective plugin is created and given its QMainWindow. QMainWindow ownership is left to the perspective plugin.
   5 => The construct method is called, allowing the perspective to build-up its GUI on the main window.
-  6 => If a file was provided when running the tulip process, the construct method is given a TulipProject * instance as it's first member.
 
   Perspectives can be run into two modes:
   @list
@@ -74,13 +74,17 @@ class TLP_QT_SCOPE Perspective : public QObject, public WithParameter, public Wi
   Q_OBJECT
 
 protected:
+  TulipProject *_project;
   QMainWindow *_mainWindow;
+  QString _externalFile;
 public:
 
   /**
     @brief Build a perspective along with its context
     */
   Perspective(PerspectiveContext &c);
+
+  virtual ~Perspective();
 
   /**
     @brief This method checks if a perspective plugin is compatible with a specific TulipProject.
@@ -95,11 +99,9 @@ public:
     */
   virtual void construct()=0;
 
-  /**
-    @brief Build the perspective UI, associating it with the given project.
-    @warning Since perspective plugins may be instanciated at load time, no operation should be done into the constructor. Use this method instead.
-    */
-  virtual void construct(tlp::TulipProject *)=0;
+public slots:
+  // TODO: doc
+  virtual void terminated() {}
 
 signals:
   /**
@@ -142,13 +144,16 @@ signals:
     */
   void openProject(QString);
 
+  // TODO: doc
   void openProjectWith(QString,QString);
 
+  // TODO: doc
   void showOpenProjectWindow();
 
+  // TODO: doc
   void addPluginRepository(QString);
 
-
+  // TODO: doc
   void removePluginRepository(QString);
 };
 

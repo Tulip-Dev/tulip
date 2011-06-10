@@ -10,11 +10,8 @@
     <height>700</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Tulip</string>
-  </property>
   <property name="windowIcon">
-   <iconset resource="../resources/TulipResource.qrc">
+   <iconset>
     <normaloff>:/logo32x32.png</normaloff>:/logo32x32.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -70,7 +67,7 @@
      <x>0</x>
      <y>0</y>
      <width>1005</width>
-     <height>24</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="windowsMenu">
@@ -108,7 +105,7 @@
   </widget>
   <action name="fileOpenAction">
    <property name="icon">
-    <iconset resource="../resources/TulipResource.qrc">
+    <iconset>
      <normaloff>:/i_open.png</normaloff>:/i_open.png</iconset>
    </property>
    <property name="text">
@@ -134,7 +131,7 @@
   </action>
   <action name="fileSaveAction">
    <property name="icon">
-    <iconset resource="../resources/TulipResource.qrc">
+    <iconset>
      <normaloff>:/i_save.png</normaloff>:/i_save.png</iconset>
    </property>
    <property name="text">
@@ -160,7 +157,7 @@
   </action>
   <action name="filePrintAction">
    <property name="icon">
-    <iconset resource="../resources/TulipResource.qrc">
+    <iconset>
      <normaloff>:/i_print.png</normaloff>:/i_print.png</iconset>
    </property>
    <property name="text">
@@ -815,8 +812,6 @@
  <includes>
   <include location="local">qworkspace.h</include>
  </includes>
- <resources>
-  <include location="../resources/TulipResource.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

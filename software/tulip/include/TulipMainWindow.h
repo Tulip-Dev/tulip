@@ -66,6 +66,7 @@ public Q_SLOTS: // METHODS
     void ShowPluginsCenter();
     void ShowWelcomeScreen();
 Q_SIGNALS: // SIGNALS
+    void Terminate();
 };
 
 #endif // TULIPMAINWINDOW_H
