@@ -178,11 +178,11 @@ namespace tlp {
 
     // Methods inherited from Perspective
     virtual void construct();
-    virtual void construct(tlp::TulipProject *);
 
   protected slots:
     void save();
     void saveAs();
+    void saveAs(const QString &);
 
   public:
 
@@ -235,6 +235,9 @@ namespace tlp {
       return currentController;
     }
 
+  public slots:
+    void terminated();
+
   signals:
 
     void willBeClosed();
@@ -249,6 +252,9 @@ namespace tlp {
   private:
     void _buildUi();
 
+    // methods and code taken from the old TulipApp object
+    void initializeGraph(Graph *graph);
+    void doFileSave();
   };
 
   class TLP3_COMPAT_SCOPE ControllerContext {

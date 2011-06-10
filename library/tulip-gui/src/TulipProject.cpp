@@ -69,6 +69,7 @@ TulipProject *TulipProject::openProject(const QString &file, tlp::PluginProgress
   if (deleteProgress)
     delete progress;
 
+  project->_projectFile = file;
   return project;
 }
 
@@ -91,6 +92,7 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
   if (deleteProgress)
     delete progress;
 
+  _projectFile = file;
   return true;
 }
 

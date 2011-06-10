@@ -4,6 +4,13 @@ namespace tlp {
 
 Perspective::Perspective(PerspectiveContext &c) {
   _mainWindow = c.mainWindow;
+  _project = c.project;
+  _externalFile = c.externalFile;
+}
+
+Perspective::~Perspective() {
+  delete _project;
+  delete _mainWindow;
 }
 
 bool Perspective::isCompatible(tlp::TulipProject *) {

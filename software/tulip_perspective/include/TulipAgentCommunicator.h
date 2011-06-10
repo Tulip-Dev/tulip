@@ -8,8 +8,8 @@
  * Do not edit! All changes made to it will be lost.
  */
 
-#ifndef TULIPAGENTCOMMUNICATOR_H_1307548650
-#define TULIPAGENTCOMMUNICATOR_H_1307548650
+#ifndef TULIPAGENTCOMMUNICATOR_H_1307704631
+#define TULIPAGENTCOMMUNICATOR_H_1307704631
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
@@ -107,6 +107,7 @@ public Q_SLOTS: // METHODS
     }
 
 Q_SIGNALS: // SIGNALS
+    void Terminate();
 };
 
 namespace org {

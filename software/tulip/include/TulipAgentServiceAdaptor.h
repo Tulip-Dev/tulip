@@ -9,8 +9,8 @@
  * before re-generating it.
  */
 
-#ifndef TULIPAGENTSERVICEADAPTOR_H_1307548549
-#define TULIPAGENTSERVICEADAPTOR_H_1307548549
+#ifndef TULIPAGENTSERVICEADAPTOR_H_1307704634
+#define TULIPAGENTSERVICEADAPTOR_H_1307704634
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
@@ -55,6 +55,7 @@ class TulipAgentService: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"s\" name=\"file\"/>\n"
 "      <arg direction=\"out\" type=\"as\" name=\"result\"/>\n"
 "    </method>\n"
+"    <signal name=\"Terminate\"/>\n"
 "  </interface>\n"
         "")
 public:
@@ -77,6 +78,7 @@ public Q_SLOTS: // METHODS
     void ShowPluginsCenter();
     void ShowWelcomeScreen();
 Q_SIGNALS: // SIGNALS
+    void Terminate();
 };
 
 #endif

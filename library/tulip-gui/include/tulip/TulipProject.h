@@ -148,6 +148,13 @@ public:
     */
   bool isValid() const { return _isValid; }
 
+  /**
+    @brief Return the archive file associated with this project.
+    If the project has been opened from an existing file or if the write method has already been called, this method will return the last file path specified.
+    In other cases, this method will return an empty string.
+    */
+  QString projectFile() const { return _projectFile; }
+
   // Developer note: Every field in the TulipProject tagged as a Q_PROPERTY will automaticaly be serialized in the project.xml file
   /**
     @brief the name of the project
@@ -201,6 +208,7 @@ private:
   // Core fileset
   QDir _rootDir;
   QDir _dataDir;
+  QString _projectFile;
 
   // Meta informations
   QString _author;
