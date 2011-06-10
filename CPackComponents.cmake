@@ -9,13 +9,12 @@ SET(CPACK_COMPONENT_GROUP_EXTRAS_DESCRIPTION "Tulip extra files and documentatio
 DEFINE_COMPONENT(ftgl "FTGL" "A library to render freetype fonts in openGL scenes." "" ${THIRDPARTY_GROUP_NAME})
 DEFINE_COMPONENT(qscintilla2 "QScintilla 2" "A library to provide source code edition facility in Qt." "" ${THIRDPARTY_GROUP_NAME})
 DEFINE_COMPONENT(gzstream "Gzstream" "A library to provide zlib facilities in a C++ iostream." "" ${THIRDPARTY_GROUP_NAME})
-DEFINE_COMPONENT(siplib "SIP library" "A library providing python bindings for C++." "libtulip;libtulip_ogl;libtulip_qt" ${THIRDPARTY_GROUP_NAME})
-
+DEFINE_COMPONENT(sip "SIP library" "A library providing python bindings for C++." "libtulip;libtulip_ogl;libtulip_qt" ${THIRDPARTY_GROUP_NAME})
 
 # library/tulip
 DEFINE_COMPONENT(libtulip "Core library" "Tulip core library provides a framework for huge graph manipulation." "gzstream" ${LIBS_GROUP_NAME})
 DEFINE_COMPONENT(libtulip_dev "Core library - Development files" "Tulip core library provides a framework for huge graph manipulation." "libtulip" ${HEADERS_GROUP_NAME})
-DEFINE_COMPONENT(pythonbindings "Python bindings" "Python bindings for Tulip." "siplib" ${LIBS_GROUP_NAME})
+DEFINE_COMPONENT(pythonbindings "Python bindings" "Python bindings for Tulip." "sip" ${LIBS_GROUP_NAME})
 
 # library/tulip-ogl
 DEFINE_COMPONENT(libtulip_ogl "OpenGL bindings" "Tulip-ogl provides opengl bindings for 3D visualization of graphs created with the Tulip core library. " "libtulip;ftgl" ${LIBS_GROUP_NAME})
@@ -47,7 +46,7 @@ IF(GENERATE_DOC)
 ENDIF()
 
 IF(LINUX)
-  SET(META_DEPS "ftgl;qscintilla2;gzstream;siplib;libtulip;libtulip_ogl;libtulip_qt;tulip_app;tulip_pluginsmanager;tulip_textures;libtulip_plugins;libtulip_qt_plugins;libtulip_ogl_plugins;tulip_plugins_spreadsheetview")
+  SET(META_DEPS "ftgl;qscintilla2;gzstream;sip;libtulip;libtulip_ogl;libtulip_qt;tulip_app;tulip_pluginsmanager;tulip_textures;libtulip_plugins;libtulip_qt_plugins;libtulip_ogl_plugins;tulip_plugins_spreadsheetview")
   # meta package (Linux only)
   IF(GENERATE_DOC)
     SET(META_DEPS "${META_DEPS};tulip_doc")
