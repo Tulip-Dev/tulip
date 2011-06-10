@@ -5,20 +5,6 @@
 
 #include <tulip/SimplePluginProgress.h>
 
-class TLP_QT_SCOPE CircleProgressBar: public QWidget {
-  int _value;
-  int _max;
-
-public:
-  explicit CircleProgressBar(QWidget *parent=0);
-  void setValue(int value, int max);
-
-  virtual int heightForWidth(int w) const;
-
-protected:
-  virtual void paintEvent(QPaintEvent *);
-};
-
 namespace Ui {
 class SimplePluginProgressWidgetData;
 }
