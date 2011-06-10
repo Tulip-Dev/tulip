@@ -24,7 +24,6 @@
 #include <QtGui/QMainWindow>
 
 #include <tulip/AbstractPluginInfo.h>
-#include <tulip/TulipRelease.h>
 #include <tulip/PluginLister.h>
 #include <tulip/Vector.h>
 #include <tulip/Interactor.h>
