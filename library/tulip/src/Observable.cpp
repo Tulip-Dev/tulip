@@ -474,7 +474,9 @@ namespace tlp {
     }
     //----------------------------------------
     void Observable::notifyDestroy() {
-      //std::cout << "notifyDestroy no more useful" << std::endl;
+#ifndef NDEBUG
+      cerr << "[OLO Warning]: no event sent on notifyDestroy" << endl;
+#endif
     }
     //----------------------------------------
     unsigned int Observable::countObservers() const {
