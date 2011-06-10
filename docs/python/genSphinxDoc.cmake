@@ -1,0 +1,2 @@
+SET(ENV{PYTHONPATH} ${BIN_DIR}/../../library/tulip-python/tulip:${BIN_DIR}/../../library/tulip-python/stl:${BIN_DIR}/../../thirdparty/sip-4.12.1/siplib:$ENV{PYTHONPATH})
+EXECUTE_PROCESS(COMMAND ${SPHINX_EXECUTABLE} -b html -d ${BIN_DIR}/doctrees ${SOURCE_DIR} ${BIN_DIR}/doc)

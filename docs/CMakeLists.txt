@@ -1,5 +1,6 @@
 IF(LINUX)
   FIND_PACKAGE(Doxygen)
+  
   IF(DOXYGEN_FOUND)
     SET(TULIP_LIB_DESC "Tulip Graph Library")
     SET(TULIP_LIB_NAME "tulip")
@@ -35,16 +36,17 @@ IF(LINUX)
     ADD_DEPENDENCIES(tulip_qhp common_copy dev_toc dev_keywords dox_toc dox_keywords user_toc user_keywords allPlugins-html tulip-libs-html)
     ADD_DEPENDENCIES(tulip_qch tulip_qhp)
     ADD_DEPENDENCIES(doc tulip_qch tulip_qhcp)
+  ELSE()
+  	MESSAGE("Doxygen not found: unable to generate documentation")
   ENDIF()
-ELSE(LINUX)
-  MESSAGE("Doxygen not found: unable to generate documentation")
 ENDIF(LINUX)
 
+add_subdirectory(python)
 
 ADD_CUSTOM_TARGET(doc_generation ALL
 ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhc
 COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/tulip.qch
-COMMENT "Cheking if documentation files are present")
+COMMENT "Checking if documentation files are present")
 
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhc ${CMAKE_CURRENT_BINARY_DIR}/tulip.qch
