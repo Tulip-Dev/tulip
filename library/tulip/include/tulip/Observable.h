@@ -163,6 +163,7 @@ namespace tlp {
     class  TLP_SCOPE Event {
         friend class Observable;
 	friend class Graph;
+	friend class PropertyInterface;
     public:
         enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID};
         virtual ~Event();

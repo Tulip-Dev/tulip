@@ -94,3 +94,12 @@ void PropertyInterface::notifyAfterSetAllEdgeValue() {
 			    PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE,
 			    Event::TLP_MODIFICATION));
 }
+
+void PropertyInterface::notifyDestroy() {
+  if (hasOnlookers()) {
+    // the undo/redo mechanism has to simulate graph destruction
+    Event evt(*this, Event::TLP_MODIFICATION);
+    evt._type = Event::TLP_DELETE;
+    sendEvent(evt);
+  }
+}
