@@ -705,9 +705,12 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 			addModuleSearchPath(pythonPluginsPath, true);
 			addModuleSearchPath(tlp::TulipLibDir, true);
 
-			// Import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
+			// Try to import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
 			// and if the site module is not present on the host system
+			// Disable output while trying to import the module to not confuse the user
+			outputActivated = false;
 			runString("import site");
+			outputActivated = true;
 
 			initscriptengine();
 			_PyImport_FixupExtension(const_cast<char *>("scriptengine"), const_cast<char *>("scriptengine"));
