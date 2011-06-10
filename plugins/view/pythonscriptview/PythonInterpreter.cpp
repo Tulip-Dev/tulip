@@ -703,8 +703,12 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 
 			string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
 			addModuleSearchPath(pythonPluginsPath, true);
-			addModuleSearchPath(tlp::TulipLibDir, true);
 
+#ifdef __APPLE__
+			addModuleSearchPath(tlp::TulipLibDir + "../Frameworks", true);
+#else
+			addModuleSearchPath(tlp::TulipLibDir, true);
+#endif
 			// Try to import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
 			// and if the site module is not present on the host system
 			// Disable output while trying to import the module to not confuse the user
