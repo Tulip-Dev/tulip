@@ -135,7 +135,11 @@ public:
     pluginProgress->setComment("Saving Graph Elements");
     pluginProgress->progress(progress, graph->numberOfEdges() + graph->numberOfNodes());
     if (graph->getSuperGraph() != graph) {
-      os << "(cluster " << graph->getId() << endl;
+      os << "(cluster " << graph->getId();
+      if (useOldFormat) {
+    	  os << " \"" << convert(graph->getAttribute<string>("name")) << "\"";
+      }
+      os << endl;
       Iterator<node> *itN = graph->getNodes();
       node beginNode, previousNode;
       unsigned int progupdate = 1 + (graph->numberOfEdges() + graph->numberOfNodes()) / 100;
