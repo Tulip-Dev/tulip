@@ -15,7 +15,7 @@ case "`uname -s`" in
 	fi
 	;;
     *Linux*|*GNU/kFreeBSD*)
-	export LD_LIBRARY_PATH=${THISDIR}/../lib:${THISDIR}/../lib/tlp:${THISDIR}/../lib/tlp/interactors:${THISDIR}/../lib/tlp/view:${LD_LIBRARY_PATH}
+	export LD_LIBRARY_PATH=${THISDIR}/../lib:${THISDIR}/../lib/tulip:${THISDIR}/../lib/tulip/interactors:${THISDIR}/../lib/tulip/view:${LD_LIBRARY_PATH}
 	# make some additional stuff if we are in the bundle (Qt libs in ../lib)
 	QT_LIBS=$(ls ${THISDIR}/../lib/libQt*.* 2>&1 >/dev/null)
 	if [ $? -eq 0 ]; then
