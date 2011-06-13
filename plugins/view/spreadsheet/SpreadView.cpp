@@ -507,7 +507,7 @@ void SpreadView::treatEvent(const Event &ev){
         const GraphEvent* graphEvt = dynamic_cast<const GraphEvent*>(&ev);
         if(graphEvt){
             switch(graphEvt->getType()) {
-            case GraphEvent::TLP_DEL_LOCAL_PROPERTY:{
+            case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:{
                 _reloadSelectionProperty = true;
             }
                 break;

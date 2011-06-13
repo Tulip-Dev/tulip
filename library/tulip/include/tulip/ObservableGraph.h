@@ -101,6 +101,11 @@ public:
   virtual void addSubGraph(Graph *, Graph *){}
   virtual void delSubGraph(Graph *, Graph *){}
   virtual void addLocalProperty(Graph*, const std::string&){}
+  virtual void beforeDelLocalProperty(Graph* g, const std::string& pName) {
+    // to ensure compatibility
+    delLocalProperty(g, pName);
+  }
+  virtual void afterDelLocalProperty(Graph*, const std::string&){}
   virtual void delLocalProperty(Graph*, const std::string&){}
   virtual void addInheritedProperty(Graph*, const std::string&){}
   virtual void delInheritedProperty(Graph*, const std::string&){}

@@ -428,9 +428,16 @@ void Graph::notifyAddLocalProperty(const std::string& propName) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_LOCAL_PROPERTY, propName));
 }
 
-void Graph::notifyDelLocalProperty(const std::string& propName) {
+void Graph::notifyBeforeDelLocalProperty(const std::string& propName) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_DEL_LOCAL_PROPERTY, propName));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY,
+			 propName, Event::TLP_INFORMATION));
+}
+  
+void Graph::notifyAfterDelLocalProperty(const std::string& propName) {
+  if (hasOnlookers())
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY,
+			 propName));
 }
   
 void Graph::notifyBeforeSetAttribute(const std::string& attName) {

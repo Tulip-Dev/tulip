@@ -74,8 +74,11 @@ void GraphObserver::RealGraphObserver::treatEvent(const Event& ev) {
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
       visibleObserver->addLocalProperty(graph, gEvt->getPropertyName());
       break;
-    case GraphEvent::TLP_DEL_LOCAL_PROPERTY:
-      visibleObserver->delLocalProperty(graph, gEvt->getPropertyName());
+    case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:
+      visibleObserver->beforeDelLocalProperty(graph, gEvt->getPropertyName());
+      break;
+    case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
+      visibleObserver->afterDelLocalProperty(graph, gEvt->getPropertyName());
       break;
     case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
       visibleObserver->beforeSetAttribute(graph, gEvt->getAttributeName());

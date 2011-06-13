@@ -228,7 +228,7 @@ namespace tlp {
     void addLocalProperty(Graph* g, const std::string& name);
 
     // deletedProperties
-    void delLocalProperty(Graph* g, const std::string& name);
+    void beforeDelLocalProperty(Graph* g, const std::string& name);
 
     // PropertyObserver Interface
     // oldNodeValues

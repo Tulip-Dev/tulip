@@ -951,7 +951,7 @@ void GraphUpdatesRecorder::addLocalProperty(Graph* g, const string& name) {
   // no need to observe the newly added property
 }
 
-void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
+void GraphUpdatesRecorder::beforeDelLocalProperty(Graph* g, const string& name) {
   PropertyRecord p(g->getProperty(name),  name);
   TLP_HASH_MAP<unsigned long, set<PropertyRecord> >::iterator it =
     addedProperties.find((unsigned long) g);
