@@ -1,6 +1,7 @@
 #ifndef SIMPLEPLUGINPROGRESSWIDGET_H
 #define SIMPLEPLUGINPROGRESSWIDGET_H
 
+#include <QtGui/QDialog>
 #include <QtGui/QWidget>
 
 #include <tulip/SimplePluginProgress.h>
@@ -10,6 +11,7 @@ class SimplePluginProgressWidgetData;
 }
 
 namespace tlp {
+
 
 class TLP_QT_SCOPE SimplePluginProgressWidget: public QWidget, public tlp::SimplePluginProgress {
   Q_OBJECT
@@ -25,6 +27,15 @@ public:
 protected:
   virtual void progress_handler(int step, int max_step);
   virtual void preview_handler(bool);
+};
+
+class TLP_QT_SCOPE SimplePluginProgressDialog: public QDialog {
+public:
+  explicit SimplePluginProgressDialog(QWidget *parent=0);
+  tlp::PluginProgress *progress() const { return _progress; }
+
+private:
+  tlp::PluginProgress *_progress;
 };
 
 }
