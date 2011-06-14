@@ -37,7 +37,8 @@ Creating / Accessing / Deleting a graph property
 
 Before using a graph property, you have to create it. To do so, use specific methods from the :class:`tlp.Graph` class like :meth:`tlp.Graph.getDoubleProperty`,
 :meth:`tlp.Graph.getLayoutProperty`, :meth:`tlp.Graph.getIntegerVectorProperty`, ... (see :ref:`Access and compute graph properties <graph-class.properties>`).
-All these methods take a string identifier as parameter to name the property. The created property can then be accessed / deleted through its identifier. Below is
+All these methods take a string identifier as parameter to name the property. The created property can then be accessed / deleted through its identifier. 
+It is also possible to create anonymous properties that won't be managed by a graph. Below is
 some code samples that illustrate these features::
 
   # create a DoubleProperty called "myMetric" if it does not exist
@@ -49,6 +50,9 @@ some code samples that illustrate these features::
 
   # The property can be deleted by the graph that has created it
   graph.delLocalProperty("myMetric")
+
+  # Anonymous properties can also be instantiated the following way
+  myOtherMetric = tlp.DoubleProperty(graph)	
 
 
 Working with graph properties

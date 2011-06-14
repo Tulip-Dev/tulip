@@ -263,12 +263,123 @@ the Graph class
 
 	.. automethod:: tulip::tlp.Graph.openMetaNode
 
+Tulip datatypes
+---------------
+
+.. autoclass:: tulip::tlp.Vec3f
+	:members:
+	:undoc-members:
+	
+.. autoclass:: tulip::tlp.Vec4f
+
+.. autoclass:: tulip::tlp.Vec4i
+
+.. autoclass:: tulip::tlp.Coord
+	:members:
+	:undoc-members:
+	
+.. autoclass:: tulip::tlp.Size
+	:members:
+	:undoc-members:
+	
+.. autoclass:: tulip::tlp.Color
+	:members:
+	:undoc-members:		
+
 Graph properties classes
 ----------------------------
 
 .. autoclass:: tulip::tlp.PropertyInterface
 	:members:
 	:undoc-members:
+	
+.. autoclass:: tulip::tlp.BooleanProperty
+	:members: getNodesEqualTo, getEdgesEqualTo, reverse, reverseEdgeDirection, 
+	          getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue
+	          
+.. autoclass:: tulip::tlp.ColorProperty
+	:members: getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue	          	
+	
+.. autoclass:: tulip::tlp.DoubleProperty
+	:members: getNodeMin, getNodeMax, getEdgeMin, getEdgeMax, 
+	          uniformQuantification, nodesUniformQuantification, edgesUniformQuantification, 
+	          getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue
+
+.. autoclass:: tulip::tlp.IntegerProperty
+	:members: getNodeMin, getNodeMax, getEdgeMin, getEdgeMax,
+			  getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue
+	          
+.. autoclass:: tulip::tlp.LayoutProperty
+	:members: angularResolutions, averageAngularResolution, averageAngularResolution,
+			  center, computeEmbedding, computeEmbedding, crossingNumber,
+			  edgeLength, getMin, getMax, normalize, perfectAspectRatio, 
+			  rotateX, rotateY, rotateZ, rotateZ, scale, scale, translate, translate,      
+			  getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue 
+
+.. autoclass:: tulip::tlp.SizeProperty
+	:members: getMin, getMax, scale, scale,
+			  getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue
+
+.. autoclass:: tulip::tlp.StringProperty
+	:members: getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue
+	          
+.. autoclass:: tulip::tlp.BooleanVectorProperty
+	:members: getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue,
+	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
+	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,  
+	          pushBackEdgeEltValue, popBackEdgeEltValue, resizeEdgeValue, resizeEdgeValue
+	          
+.. autoclass:: tulip::tlp.CoordVectorProperty
+	:members: getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue,
+	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
+	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,  
+	          pushBackEdgeEltValue, popBackEdgeEltValue, resizeEdgeValue, resizeEdgeValue	          
+	          
+.. autoclass:: tulip::tlp.ColorVectorProperty
+	:members: getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue,
+	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
+	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,  
+	          pushBackEdgeEltValue, popBackEdgeEltValue, resizeEdgeValue, resizeEdgeValue 
+
+.. autoclass:: tulip::tlp.DoubleVectorProperty
+	:members: getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue,
+	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
+	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,  
+	          pushBackEdgeEltValue, popBackEdgeEltValue, resizeEdgeValue, resizeEdgeValue
+	          
+.. autoclass:: tulip::tlp.IntegerVectorProperty
+	:members: getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue,
+	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
+	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,  
+	          pushBackEdgeEltValue, popBackEdgeEltValue, resizeEdgeValue, resizeEdgeValue
+
+
+
+.. autoclass:: tulip::tlp.SizeVectorProperty
+	:members: getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue,
+	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
+	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,  
+	          pushBackEdgeEltValue, popBackEdgeEltValue, resizeEdgeValue, resizeEdgeValue
+
+.. autoclass:: tulip::tlp.StringVectorProperty
+	:members: getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
+	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue,
+	          getNodeEltValue, setNodeEltValue, pushBackNodeEltValue, popBackNodeEltValue,
+	          resizeNodeValue, resizeNodeValue, getEdgeEltValue, setEdgeEltValue,  
+	          pushBackEdgeEltValue, popBackEdgeEltValue, resizeEdgeValue, resizeEdgeValue
 
 Graph test classes
 ----------------------------

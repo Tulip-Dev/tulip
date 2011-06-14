@@ -34,6 +34,69 @@ typedef tlp::Vector<int, 4> Vec4i;
 namespace tlp {
 class Vec3f  {
 
+%Docstring
+This class represents a vector with 3 floating point components.
+It can be instantiated as illustrated in the code below: ::
+
+	# Initializes a Vec3f with all components set to 0.0
+	v = tlp.Vec3f()
+	
+	# Initializes a Vec3f with all components set to 1.0
+	v2 = tlp.Vec3f(1.0)
+	
+	# Initializes a Vec3f by specifying the value of each component
+	v3 = tlp.Vec3f(1.0, 2.0, 3.0) 
+	
+	# Initializes a Vec3f by copy
+	v4 = tlp.Vec3f(v3)
+
+Numerous mathematical operations are available to work with vectors. The sample code below illustrates them: ::
+
+	# Instantiate two vectors
+	v = tlp.Vec3f(4.5, 1.0, 3.0)
+	v2 = tlp.Vec3f(1.5, 2.0, 6.0)
+	
+	# Add two vectors, operator += is also available
+	v3 = v + v2
+	
+	# Add a value to all components of a vector, operator += is also available
+	v4 = v + 2.0
+	
+	# Subtract two vectors, operator -= is also available
+	v5 = v - v2
+	
+	# Subtract a value to all components of a vector, operator -= is also available
+	v6 = v - 3.0
+	
+	# Multiply two vectors (not vector product), operator *= is also available
+	v7 = v * v2
+	
+	# Multiply each component of a vector by a value, operator *= is also available
+	v8 = v * 2.0
+	
+	# Divide two vectors, operator /= is also available
+	v9 = v / v2
+	
+	# Divide each component of a vector by a value, operator /= is also available
+	v10 = v / 2.0
+	
+	# Perform a vector product, operator ^= is also available
+	v11 = v ^ v2
+
+Each component of the vector can be read / written through the [] operator: ::
+
+	v = tlp.Vec3f(1.0, 2.0, 3.0)
+	
+	# read first component
+	a = v[0]
+	
+	# write third component
+	v[2] = 4.0
+	
+Operators for vectors equality (==), vectors difference (!=) and vectors comparison (<, >) are also available.
+	
+%End
+
 public:
 
 	Vec3f();
@@ -92,9 +155,45 @@ public:
     bool operator==(const tlp::Vec3f &) const;
     
     tlp::Vec3f & fill(const float &obj);
+%Docstring
+tlp.Vec3f.fill(val)
+
+Set the same value to each component of the vector.
+
+:param val: a value
+:type val: float
+%End
+    
     float norm () const;
+%Docstring
+tlp.Vec3f.norm()
+
+Computes and returns the euclidean norm of the vector.
+
+:rtype: float
+%End    
+    
     float dist (const tlp::Vec3f &) const;
+%Docstring
+tlp.Vec3f.dist(v)
+
+Computes and returns the distance between the vector (3d point) and another one.
+
+:param v: a vector
+:type v: :class:`tlp.Vec3f`
+:rtype: float
+%End    
+    
     float dotProduct(const tlp::Vec3f &) const;
+%Docstring
+tlp.Vec3f.dotProduct(v)
+
+Computes and returns the dot product (scalar product) of the vector with another one
+
+:param v: a vector
+:type v: :class:`tlp.Vec3f`
+:rtype: float
+%End
    
    SIP_PYOBJECT __repr__() const;
 %MethodCode
@@ -109,6 +208,11 @@ public:
 };
 
 class Vec4f  {
+
+%Docstring
+This class represents a vector with 4 floating point components.
+Constructors, operators and methods are similar to those from the :class:`tlp.Vec3f` class. 
+%End
 
 public:
 
@@ -189,6 +293,11 @@ public:
 };
 
 class Vec4i  {
+
+%Docstring
+This class represents a vector with 4 integer components.
+Constructors, operators and methods are similar to those from the :class:`tlp.Vec3f` class. 
+%End
 
 public:
 

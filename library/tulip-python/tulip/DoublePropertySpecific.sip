@@ -58,10 +58,11 @@ tlp.DoubleProperty.uniformQuantification(n)
 
 Performs an uniform quantification on nodes and edges based on the values stored in that double property.
 An uniform quantification tries to separate the nodes and edges in n classes of equivalent size according to theirs values in increasing order.
-Warning : all previous values on nodes will be erased and replaced by the id of the class they belong to
 
 :param n: the number of desired classes
 :type n: integer
+
+.. warning:: All previous values on nodes and edges will be erased and replaced by the id of the class they belong to.
 %End	
 	
 //===========================================================================================	
@@ -72,10 +73,11 @@ tlp.DoubleProperty.nodesUniformQuantification(n)
 
 Performs an uniform quantification on nodes based on the values stored in that double property.
 An uniform quantification tries to separate the nodes in n classes of equivalent size according to theirs values in increasing order.
-Warning : all previous values on nodes will be erased and replaced by the id of the class they belong to
 
 :param n: the number of desired classes
 :type n: integer
+
+.. warning:: All previous values on nodes will be erased and replaced by the id of the class they belong to.
 %End
 	
 //===========================================================================================	
@@ -86,9 +88,10 @@ tlp.DoubleProperty.edgesUniformQuantification(n)
 
 Performs an uniform quantification on edges based on the values stored in that double property.
 An uniform quantification tries to separate the edges in n classes of equivalent size according to theirs values in increasing order.
-Warning : all previous values on nodes will be erased and replaced by the id of the class they belong to
 
 :param n: the number of desired classes
 :type n: integer
+
+.. warning:: All previous values on edges will be erased and replaced by the id of the class they belong to.
 %End
 

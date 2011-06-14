@@ -31,6 +31,11 @@ class @PROPERTY_TYPE@Property : tlp::PropertyInterface /NoDefaultCtors/ {
 %TypeHeaderCode
 #include <tulip/@PROPERTY_TYPE@Property.h>
 %End
+
+%Docstring
+Bases: :class:`tlp.PropertyInterface`
+%End
+
 public :
 	
 //===========================================================================================
@@ -306,12 +311,16 @@ class @VEC_PROPERTY_TYPE@VectorProperty : tlp::PropertyInterface /NoDefaultCtors
 %TypeHeaderCode
 #include <tulip/@PROPERTY_TYPE@Property.h>
 %End
+
+%Docstring
+Bases: :class:`tlp.PropertyInterface`
+%End
+
 public :
 
 //===========================================================================================
 
 	@VEC_PROPERTY_TYPE@VectorProperty (tlp::Graph *, std::string n="");
-  	
   	
 //===========================================================================================	
  
