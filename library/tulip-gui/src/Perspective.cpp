@@ -6,6 +6,7 @@ Perspective::Perspective(PerspectiveContext &c) {
   _mainWindow = c.mainWindow;
   _project = c.project;
   _externalFile = c.externalFile;
+  _parameters = c.parameters;
 }
 
 Perspective::~Perspective() {

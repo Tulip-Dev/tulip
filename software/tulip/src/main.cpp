@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
   delete errorReport;
 
   // Register D-Bus service
-  new TulipAgentService(mainWindow);
+  new TulipAgentServiceAdaptor(mainWindow);
   bool dbusRegisterServiceOk = QDBusConnection::sessionBus().registerService("org.labri.Tulip");
   bool dbusRegisterObjectOk = QDBusConnection::sessionBus().registerObject("/",mainWindow);
   if (!dbusRegisterServiceOk)

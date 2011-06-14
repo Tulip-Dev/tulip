@@ -3,6 +3,7 @@
 
 #include <QtGui/QMainWindow>
 #include <QtGui/QSystemTrayIcon>
+#include <QtCore/QVariant>
 
 namespace Ui {
 class TulipMainWindowData;
@@ -53,13 +54,13 @@ private:
 public: // PROPERTIES
     Q_PROPERTY(qlonglong pid READ pid)
     qlonglong pid() const;
-
 public Q_SLOTS: // METHODS
     void AddPluginRepository(const QString &url);
     void CreatePerspective(const QString &name);
+    void CreatePerspective(const QString &name, const QVariantMap &parameters);
     QStringList GetCompatiblePerspectives(const QString &file);
     void OpenProject(const QString &file);
-    void OpenProjectWith(const QString &file, const QString &perspective);
+    void OpenProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters);
     void RemovePluginRepository(const QString &url);
     void ShowAboutPage();
     void ShowOpenProjectWindow();

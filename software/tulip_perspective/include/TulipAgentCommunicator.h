@@ -8,8 +8,8 @@
  * Do not edit! All changes made to it will be lost.
  */
 
-#ifndef TULIPAGENTCOMMUNICATOR_H_1307704631
-#define TULIPAGENTCOMMUNICATOR_H_1307704631
+#ifndef TULIPAGENTCOMMUNICATOR_H_1308052999
+#define TULIPAGENTCOMMUNICATOR_H_1308052999
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
@@ -54,6 +54,13 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QLatin1String("CreatePerspective"), argumentList);
     }
 
+    inline QDBusPendingReply<> CreatePerspective(const QString &name, const QVariantMap &parameters)
+    {
+        QList<QVariant> argumentList;
+        argumentList << qVariantFromValue(name) << qVariantFromValue(parameters);
+        return asyncCallWithArgumentList(QLatin1String("CreatePerspective"), argumentList);
+    }
+
     inline QDBusPendingReply<QStringList> GetCompatiblePerspectives(const QString &file)
     {
         QList<QVariant> argumentList;
@@ -68,10 +75,10 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QLatin1String("OpenProject"), argumentList);
     }
 
-    inline QDBusPendingReply<> OpenProjectWith(const QString &file, const QString &perspective)
+    inline QDBusPendingReply<> OpenProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters)
     {
         QList<QVariant> argumentList;
-        argumentList << qVariantFromValue(file) << qVariantFromValue(perspective);
+        argumentList << qVariantFromValue(file) << qVariantFromValue(perspective) << qVariantFromValue(parameters);
         return asyncCallWithArgumentList(QLatin1String("OpenProjectWith"), argumentList);
     }
 
