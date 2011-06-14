@@ -116,6 +116,8 @@ class TLP_QT_SCOPE PluginInformations {
     QString identifier() const;
     //TODO this should be a displayname, not the name used to register into the plugin system
     QString name() const;
+
+    QString group() const { return "group"; }
     
     QString shortDescription() const;
     QString longDescriptionPath() const;

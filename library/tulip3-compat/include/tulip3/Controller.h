@@ -29,6 +29,7 @@
 #include <tulip/Interactor.h>
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/Perspective.h>
+#include <tulip/Observable.h>
 
 class QMenuBar;
 class QToolBar;
@@ -237,12 +238,18 @@ namespace tlp {
 
   public slots:
     void terminated();
+    void runImportPlugin(const QString &name, tlp::Graph *);
+
+  protected slots:
+    void importMenuClicked();
 
   signals:
 
     void willBeClosed();
 
   protected :
+
+    virtual bool isEmpty();
 
     MainWindowFacade mainWindowFacade;
 
