@@ -126,8 +126,11 @@ void TulipMainWindow::RemovePluginRepository(const QString &url) {
 
 }
 
-void TulipMainWindow::CreatePerspective(const QString &name) {
+void TulipMainWindow::CreatePerspective(const QString &name,const QVariantMap &parameters) {
   runPerspectiveProcess(name,"");
+}
+void TulipMainWindow::CreatePerspective(const QString &name) {
+  CreatePerspective(name,QVariantMap());
 }
 
 void TulipMainWindow::ShowOpenProjectWindow() {
@@ -138,7 +141,7 @@ void TulipMainWindow::OpenProject(const QString &file) {
 
 }
 
-void TulipMainWindow::OpenProjectWith(const QString &file, const QString &perspective) {
+void TulipMainWindow::OpenProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters) {
 
 }
 

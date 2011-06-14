@@ -9,9 +9,16 @@
       <arg name="file" type="s" direction="in"/>
     </method>
     <method name="OpenProjectWith">
+      <annotation name="com.trolltech.QtDBus.QtTypeName.In2" value="QVariantMap"/>
       <arg name="file" type="s" direction="in"/>
       <arg name="perspective" type="s" direction="in"/>
+      <arg name="parameters" type="a{sv}" direction="in"/>
     </method>-->
+    <method name="CreatePerspective">
+      <annotation name="com.trolltech.QtDBus.QtTypeName.In1" value="QVariantMap"/>
+      <arg name="name" type="s" direction="in"/>
+      <arg name="parameters" type="a{sv}" direction="in"/>
+    </method>
     <method name="CreatePerspective">
       <arg name="name" type="s" direction="in"/>
     </method>
@@ -33,9 +40,7 @@
 <!--To do so, issue tue following commands:-->
 
 <!--Client proxy:-->
-<!--qdbusxml2cpp -v -c TulipAgentServiceClient -p include/TulipAgentServiceClient.h:src/TulipAgentServiceClient.cpp resources/org.labri.TulipAgentService.xml-->
+<!--qdbusxml2cpp -v -c TulipAgentCommunicator -p ../tulip_perspective/include/TulipAgentCommunicator.h:../tulip_perspective/src/TulipAgentCommunicator.cpp resources/org.labri.TulipAgentService.xml-->
 
 <!--Server stub (adaptor):-->
-<!--qdbusxml2cpp -c TulipAgentService -a include/TulipAgentServiceAdaptor.h:src/TulipAgentServiceAdaptor.cpp resources/org.labri.TulipAgentService.xml-->
-<!--or, from the software/tulip directory:-->
-<!--qdbusxml2cpp -v -c TulipAgentCommunicator -p ../tulip_perspective/include/TulipAgentCommunicator.h:../tulip_perspective/src/TulipAgentCommunicator.cpp resources/org.labri.TulipAgentService.xml-->
+<!--qdbusxml2cpp -c TulipAgentServiceAdaptor -a include/TulipAgentServiceAdaptor.h:src/TulipAgentServiceAdaptor.cpp resources/org.labri.TulipAgentService.xml-->
