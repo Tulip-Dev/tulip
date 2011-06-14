@@ -108,12 +108,17 @@ int main(int argc,char **argv) {
       delete project;
       project = NULL;
     }
-    if (project)
-      perspectiveName = project->perspective();
-    else
-      context.externalFile = projectFilePath;
   }
+  if (project)
+    perspectiveName = project->perspective();
+  else {
+    project = TulipProject::newProject();
+    project->setPerspective(perspectiveName);
+  }
+
+  context.externalFile = projectFilePath;
   context.parameters = extraParams;
+  context.project = project;
 
   if (perspectiveName.isNull())
     usage("Could not determine the perspective to launch." + error);

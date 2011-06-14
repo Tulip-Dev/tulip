@@ -18,6 +18,7 @@
  */
 #include "tulip3/Controller.h"
 
+#include <tulip3/ControllerAlgorithmTools.h>
 #include <QtGui/QWorkspace>
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
@@ -27,6 +28,9 @@
 #include <tulip/StringProperty.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/TulipProject.h>
+#include <tulip/PluginManager.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/SimplePluginProgressWidget.h>
 #include "tulip3/QtProgress.h"
 #include <QtCore/QDebug>
 
@@ -45,18 +49,20 @@ namespace tlp {
 		:mainWindow(mainWindow),menuBar(mainWindow->menuBar()),toolBar(toolBar),interactorsToolBar(interactorsToolBar),workspace(workspace),statusBar(mainWindow->statusBar()){
   }
 
-
-
   Controller::Controller(tlp::PerspectiveContext &c): Perspective(c) {
   }
 
   void Controller::construct() {
     _buildUi();
+
+
     tlp::Graph *g;
     DataSet controllerData;
     if (_externalFile.isEmpty()) {
       g = tlp::newGraph();
       initializeGraph(g);
+      if (_parameters.contains("import"))
+        runImportPlugin(_parameters["import"].toString(),g);
     }
     else {
       QtProgress progress(_mainWindow, "Loading file");
@@ -92,6 +98,26 @@ namespace tlp {
     workspace->setBackground(QBrush(QPixmap(QString::fromUtf8(":/background_logo.png"))));
     gridLayout->addWidget(workspace, 0, 0, 1, 1);
 
+    QMenu *importMenu = new QMenu(trUtf8("Import"));
+    tlp::PluginManager manager;
+    QList<tlp::PluginInformations *> localPlugins = manager.pluginsList(PluginManager::Local);
+    tlp::PluginInformations *infos;
+    QMap<QString,QMenu *> groupMenus;
+    foreach(infos,localPlugins) {
+      if (infos->type() != "ImportModule")
+        continue;
+      QMenu *parent = importMenu;
+      if (groupMenus.contains(infos->group()))
+        parent = groupMenus[infos->group()];
+      else if (!infos->group().isEmpty()) {
+        parent = importMenu->addMenu(infos->group());
+        groupMenus[infos->group()] = parent;
+      }
+      QAction *action = parent->addAction(infos->name());;
+      connect(action,SIGNAL(triggered()),this,SLOT(importMenuClicked()));
+    }
+    ui->fileMenu->insertMenu(ui->filePrintAction,importMenu);
+
     connect(ui->fileOpenAction,SIGNAL(triggered()),this,SIGNAL(showOpenProjectWindow()));
     connect(ui->fileSaveAction,SIGNAL(triggered()),this,SLOT(save()));
     connect(ui->fileSaveAsAction,SIGNAL(triggered()),this,SLOT(saveAs()));
@@ -99,7 +125,34 @@ namespace tlp {
     connect(ui->helpDocumentationAction,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));
     connect(ui->pluginsAction,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
     connect(ui->helpAboutAction,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));
+
     attachMainWindow(MainWindowFacade(_mainWindow,ui->toolBar,ui->graphToolBar,workspace));
+  }
+
+  void Controller::importMenuClicked() {
+    QAction *src = static_cast<QAction *>(sender());
+    if (isEmpty()) {
+      QVariantMap params;
+      params["import"]=src->text();
+      emit createPerspective(_project->perspective(),params);
+    }
+    else
+      runImportPlugin(src->text(),getGraph());
+  }
+
+  void Controller::runImportPlugin(const QString &name, Graph *g) {
+    DataSet dataSet;
+    ParameterList *params = ControllerAlgorithmTools::getPluginParameters(PluginLister<ImportModule,AlgorithmContext>::getInstance(),name.toStdString());
+    ParameterList sysDef = ImportModuleLister::getPluginParameters(name.toStdString());
+    params->buildDefaultDataSet(dataSet,g);
+    string title = string("Tulip Parameter Editor: ") + name.toStdString();
+    bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet, title.c_str(), g, _mainWindow);
+    if (ok) {
+      Observable::holdObservers();
+      SimplePluginProgressWidget *progress = new SimplePluginProgressWidget(_mainWindow);
+      tlp::importGraph(name.toStdString(),dataSet,progress,g);
+      Observable::unholdObservers();
+    }
   }
 
   void Controller::save() {
@@ -129,8 +182,12 @@ namespace tlp {
   }
 
   void Controller::terminated() {
-//    if (QMessageBox::question(0, trUtf8("Exiting"),trUtf8("Do you want to save your graph?"),QMessageBox::Yes,QMessageBox::No) == QMessageBox::Yes)
-//      save();
+    if (!isEmpty() && QMessageBox::question(0, trUtf8("Exiting"),trUtf8("Do you want to save your graph?"),QMessageBox::Yes,QMessageBox::No) == QMessageBox::Yes)
+      save();
+  }
+
+  bool Controller::isEmpty() {
+    return getGraph()->numberOfNodes() > 0;
   }
 
 }
