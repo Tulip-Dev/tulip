@@ -37,4 +37,13 @@ void SimplePluginProgressWidget::setComment(const char *s) {
   setComment(std::string(s));
 }
 
+SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent): QDialog(parent) {
+  setModal(true);
+  QVBoxLayout *mainLayout = new QVBoxLayout;
+  mainLayout->setContentsMargins(0,0,0,0);
+  _progress = new SimplePluginProgressWidget(this);
+  mainLayout->addWidget(static_cast<SimplePluginProgressWidget *>(_progress));
+  setLayout(mainLayout);
+}
+
 }

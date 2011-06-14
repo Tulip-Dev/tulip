@@ -149,9 +149,11 @@ namespace tlp {
     bool ok = tlp::openDataSetDialog(dataSet, &sysDef, params, &dataSet, title.c_str(), g, _mainWindow);
     if (ok) {
       Observable::holdObservers();
-      SimplePluginProgressWidget *progress = new SimplePluginProgressWidget(_mainWindow);
-      tlp::importGraph(name.toStdString(),dataSet,progress,g);
+      SimplePluginProgressDialog *progress = new SimplePluginProgressDialog(_mainWindow);
+      progress->show();
+      tlp::importGraph(name.toStdString(),dataSet,progress->progress(),g);
       Observable::unholdObservers();
+      delete progress;
     }
   }
 
