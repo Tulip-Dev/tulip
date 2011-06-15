@@ -23,193 +23,35 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
+%ModuleHeaderCode
+#include <tulip/ColorScale.h>
+%End
+
 namespace tlp {
 
 
 struct DataSet {
+
 	DataSet();
+	
 	DataSet(const tlp::DataSet &set);
-
-	bool getDataSet(const std::string &str, tlp::DataSet &v /Out/);
-%MethodCode
-	sipRes = sipCpp->get(*a0, *a1);
-%End
-	
-	void setDataSet(const std::string &str, const tlp::DataSet &v);
-%MethodCode
-	sipCpp->set(*a0, *a1);
-%End
-
-	bool getString(const std::string &str, std::string &v /Out/);
-%MethodCode
-	sipRes = sipCpp->get(*a0, *a1);
-%End
-	
-	void setString(const std::string &str, const std::string &v);
-%MethodCode
-	sipCpp->set(*a0, *a1);
-%End
-
-	bool getBoolean(const std::string &str, bool &v /Out/);
-%MethodCode
-	sipRes = sipCpp->get(*a0, a1);
-%End
-	
-	void setBoolean(const std::string &str, const bool v);
-%MethodCode
-	sipCpp->set(*a0, a1);
-%End
-
-	bool getInteger(const std::string &str, int &v /Out/);
-%MethodCode
-	sipRes = sipCpp->get(*a0, a1);
-%End
-	
-	void setInteger(const std::string &str, const int v);
-%MethodCode
-	sipCpp->set(*a0, a1);
-%End
-
-	bool getFloat(const std::string &str, double &v /Out/);
-%MethodCode
-	sipRes = sipCpp->get(*a0, a1);
-%End
-	
-	void setFloat(const std::string &str, const double v);
-%MethodCode
-	sipCpp->set(*a0, a1);
-%End
-	
-	bool getSize(const std::string &str, tlp::Size &v /Out/);
-%MethodCode
-	sipRes = sipCpp->get(*a0, *a1);
-%End
-
-	void setSize(const std::string &str, const tlp::Size &v);
-%MethodCode
-	sipCpp->set(*a0, *a1);
-%End
-
-	bool getCoord(const std::string &str, tlp::Coord &v /Out/);
-%MethodCode
-	sipRes = sipCpp->get(*a0, *a1);
-%End
-
-	void setCoord(const std::string &str, const tlp::Coord &v);
-%MethodCode
-	sipCpp->set(*a0, *a1);
-%End
-
-	bool getColor(const std::string &str, tlp::Color &v /Out/);
-%MethodCode
-	sipRes = sipCpp->get(*a0, *a1);
-%End
-
-	void setColor(const std::string &str, const tlp::Color &v);
-%MethodCode
-	sipCpp->set(*a0, *a1);
-%End
-
-	bool getColorScale(const std::string &str, tlp::ColorScale &v /Out/);
-%MethodCode
-	sipRes = sipCpp->get(*a0, *a1);
-%End
-
-	void setColorScale(const std::string &str, const tlp::ColorScale &v);
-%MethodCode
-	sipCpp->set(*a0, *a1);
-%End
-
-	bool getStringCollection(const std::string &str, tlp::StringCollection &v /Out/);
-%MethodCode
-	sipRes = sipCpp->get(*a0, *a1);
-%End
-
-	void setStringCollection(const std::string &str, const tlp::StringCollection &v);
-%MethodCode
-	sipCpp->set(*a0, *a1);
-%End
-
-	bool getLayoutProperty(const std::string &str, tlp::LayoutProperty *&v /Out/);
-%MethodCode
-	a1 = NULL;
-	sipRes = sipCpp->get(*a0, a1);
-%End	
-	
-	void setLayoutProperty(const std::string &str, const tlp::LayoutProperty *v );
-%MethodCode
-	sipCpp->set(*a0, a1);
-%End
-
-	bool getDoubleProperty(const std::string &str, tlp::DoubleProperty *&v /Out/);
-%MethodCode
-	a1 = NULL;
-	sipRes = sipCpp->get(*a0, a1);
-%End	
-
-	void setDoubleProperty(const std::string &str, const tlp::DoubleProperty *v);
-%MethodCode
-	sipCpp->set(*a0, a1);
-%End
-
-	bool getIntegerProperty(const std::string &str, tlp::IntegerProperty *&v /Out/);
-%MethodCode
-	a1 = NULL;
-	sipRes = sipCpp->get(*a0, a1);
-%End
-
-	void setIntegerProperty(const std::string &str, const tlp::IntegerProperty *v);
-%MethodCode
-	sipCpp->set(*a0, a1);
-%End
-
-	bool getBooleanProperty(const std::string &str, tlp::BooleanProperty *&v /Out/);
-%MethodCode
-	a1 = NULL;
-	sipRes = sipCpp->get(*a0, a1);
-%End		
-
-	void setBooleanProperty(const std::string &str, const tlp::BooleanProperty *v);
-%MethodCode
-	sipCpp->set(*a0, a1);
-%End
-
-	bool getStringProperty(const std::string &str, tlp::StringProperty *&v /Out/);
-%MethodCode
-	a1 = NULL;
-	sipRes = sipCpp->get(*a0, a1);
-%End	
-
-	void setStringProperty(const std::string &str, const tlp::StringProperty *v);
-%MethodCode
-	sipCpp->set(*a0, a1);
-%End
-
-	bool getColorProperty(const std::string &str, tlp::ColorProperty *&v /Out/);
-%MethodCode
-	a1 = NULL;
-	sipRes = sipCpp->get(*a0, a1);
-%End
-		
-	void setColorProperty(const std::string &str, const tlp::ColorProperty *v);
-%MethodCode
-	sipCpp->set(*a0, a1);
-%End
-
-	bool getProperty(const std::string &str, tlp::PropertyInterface *&v /Out/);
-%MethodCode
-	a1 = NULL;
-	sipRes = sipCpp->get(*a0, a1);
-%End		
-
-	void setProperty(const std::string &str, const tlp::PropertyInterface *v);
-%MethodCode
-	sipCpp->set(*a0, a1);
-%End
 
 	bool exist(const std::string &str) const;
 
 	void remove(const std::string &str);
+	
+	unsigned int size() const;
+	
+	std::vector<std::string> getKeys() const;
+%MethodCode
+	std::vector<std::string> ret;
+	tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = sipCpp->getValues();
+	while (it->hasNext()) {
+		ret.push_back(it->next().first);
+	}
+	delete it;
+	sipRes = new std::vector<std::string>(ret);
+%End	
 	
 	void __setitem__(const std::string &attributeName, SIP_PYOBJECT po);
 %MethodCode
@@ -268,6 +110,12 @@ struct DataSet {
 		} else if (sipCanConvertToType(a1, sipType_tlp_PropertyInterface, SIP_NOT_NONE)) {		
 			tlp::PropertyInterface *p = reinterpret_cast<tlp::PropertyInterface *>(sipConvertToType(a1, sipType_tlp_PropertyInterface, NULL, SIP_NOT_NONE, &state, &iserr));
 			sipCpp->set(*a0, p);
+		} else {
+			sipIsErr = 1;
+			std::string msg = "Object of type ";
+			msg += std::string(a1->ob_type->tp_name);
+			msg += " can not be store in a Tulip dataset.";
+			PyErr_SetString(PyExc_Exception, msg.c_str());
 		}
 %End
 	
@@ -382,8 +230,9 @@ struct DataSet {
 	
 	if (!ok) {
 		std::ostringstream oss;
-		oss << "Data set entry \"" << *a0 << "\" does not exist.";
+		oss << "Dataset entry \"" << *a0 << "\" does not exist.";
 		sipRes = NULL;
+		sipIsErr = 1;
 		PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
 	}
 %End	

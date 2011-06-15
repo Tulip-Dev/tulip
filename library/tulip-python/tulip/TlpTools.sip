@@ -23,6 +23,10 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
+%ModuleHeaderCode
+#include <tulip/TemplateFactory.h>
+%End
+
 namespace tlp {
 
 std::string TulipLibDir;
@@ -40,4 +44,23 @@ void loadPluginsCheckDependencies(tlp::PluginLoader* loader=0);
 
 std::string getMajor(const std::string& v);
 std::string getMinor(const std::string& v);
+
+tlp::DataSet getDefaultAlgorithmParameters(const std::string &algoName, tlp::Graph *graph = 0);
+%MethodCode
+	tlp::TemplateFactoryInterface *selectedFactory = NULL;
+	tlp::DataSet result;
+	std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
+	for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
+		if (it->second->pluginExists(*a0)) {
+			selectedFactory = it->second;
+			break;
+		}
+	} 
+	if (selectedFactory) {
+		tlp::StructDef parameters = selectedFactory->getPluginParameters(*a0);
+		parameters.buildDefaultDataSet(result, a1);
+	} 
+	sipRes = new tlp::DataSet(result);
+%End
+
 };
