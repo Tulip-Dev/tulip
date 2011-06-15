@@ -59,8 +59,15 @@ tlp::DataSet getDefaultAlgorithmParameters(const std::string &algoName, tlp::Gra
 	if (selectedFactory) {
 		tlp::StructDef parameters = selectedFactory->getPluginParameters(*a0);
 		parameters.buildDefaultDataSet(result, a1);
-	} 
-	sipRes = new tlp::DataSet(result);
+		sipRes = new tlp::DataSet(result);
+	} else {
+		sipIsErr = 1;
+		std::string msg = "No plugin named  ";
+		msg += *a0;
+		msg += ".";
+		PyErr_SetString(PyExc_Exception, msg.c_str());
+	}
+	
 %End
 
 };
