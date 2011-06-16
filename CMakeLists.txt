@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-FIND_PACKAGE(TULIP3 REQUIRED)
+FIND_PACKAGE(TULIP REQUIRED)
 FIND_PACKAGE(Qt4 REQUIRED)
 FIND_PACKAGE(OpenGL REQUIRED)
 SET(QT_USE_QTOPENGL true)
@@ -19,44 +19,34 @@ library/tulip-qt/src/ConfigurationWidgetChooserItem.cpp
 library/tulip-qt/src/EmptyView.cpp
 library/tulip-qt/src/FramedGraphicsProxyWidget.cpp
 library/tulip-qt/src/GlMainWidgetGraphicsItem.cpp
-library/tulip-qt/src/GraphicsItemsGraphMapper.cpp
-library/tulip-qt/src/GraphicsLayoutItemGraphMapper.cpp
 library/tulip-qt/src/PushButtonItem.cpp
-library/tulip-qt/src/QtAnimationsManager.cpp
 library/tulip-qt/src/ToolbarItem.cpp
-library/tulip-qt/src/TulipGraphicsLayout.cpp
+library/tulip-qt/src/QtAnimationsManager.cpp
 )
 
-SET(LIB_UI
-)
-
-SET(LIB_MOC
+QT4_WRAP_CPP(LIB_MOC_SRCS
 library/tulip-qt/include/tulip/AbstractGraphicsView.h
 library/tulip-qt/include/tulip/AnimatedGraphicsObject.h
 library/tulip-qt/include/tulip/ConfigurationWidgetChooserItem.h
 library/tulip-qt/include/tulip/GlMainWidgetGraphicsItem.h
 library/tulip-qt/include/tulip/PushButtonItem.h
-library/tulip-qt/include/tulip/QtAnimationsManager.h
 library/tulip-qt/include/tulip/ToolbarItem.h
+library/tulip-qt/include/tulip/QtAnimationsManager.h
 )
 
-SET(LIB_RCC
+QT4_ADD_RESOURCES(LIB_RCC_SRCS
 library/tulip-qt/designer/tulipgv.qrc
 )
 
-TULIP_QT4_WRAP_UI(LIB_UI_SRCS ${LIB_UI})
-TULIP_QT4_WRAP_CPP(LIB_MOC_SRCS ${LIB_MOC})
-QT4_ADD_RESOURCES(LIB_RCC_SRCS ${LIB_RCC})
+ADD_LIBRARY(${PLUGIN_NAME}-${TULIP_VERSION} SHARED ${LIB_SRCS} ${LIB_UI_SRCS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
+#ADD_EXECUTABLE(${PLUGIN_NAME}-${TULIP_VERSION} ${LIB_SRCS} ${LIB_UI_SRCS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS} library/tulip-qt/src/main.cpp)
 
-ADD_LIBRARY(${PLUGIN_NAME}-${TULIP_PLUGIN_VERSION} SHARED ${LIB_SRCS} ${LIB_UI_SRCS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
-
-TARGET_LINK_LIBRARIES(${PLUGIN_NAME}-${TULIP_PLUGIN_VERSION}
-${TULIP_LIBRARY}
-${TULIP_LIBRARY}
+TARGET_LINK_LIBRARIES(${PLUGIN_NAME}-${TULIP_VERSION}
+${TULIP_CORE_LIBRARY}
 ${TULIP_OGL_LIBRARY}
-${TULIP_QT4_LIBRARY}
+${TULIP_GUI_LIBRARY}
 ${QT_QTOPENGL_LIBRARY}
 ${QT_LIBRARIES}
 ${OPENGL_glu_LIBRARY} ${OPENGL_gl_LIBRARY} ${GLEW_LIBRARY})
 
-INSTALL(TARGETS ${PLUGIN_NAME}-${TULIP_PLUGIN_VERSION} DESTINATION ${TULIP_PLUGINS_PATH} COMPONENT tulip_graphicsview)
+INSTALL(TARGETS ${PLUGIN_NAME}-${TULIP_VERSION} DESTINATION ${TULIP_PLUGINS_DIR} COMPONENT tulip_graphicsview)
