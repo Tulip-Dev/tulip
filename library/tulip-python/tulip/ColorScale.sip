@@ -45,5 +45,7 @@ public:
 	
   bool isGradient() const;
   
+  std::map<float, tlp::Color> getColorMap() const;
+  
 };
 };

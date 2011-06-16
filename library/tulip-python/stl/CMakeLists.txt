@@ -2,13 +2,14 @@ IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
 SET(STL_SIP_FILES
-    list.sip
-    map.sip
-    Module.sip
-    pair.sip
-    set.sip
-    string.sip
-    vector.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/list.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/map.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/pair.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/set.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/string.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/vector.sip
+    CACHE INTERNAL ""
 )
 
 # Generate a SIP build file and parse its content to retrieve source files list
