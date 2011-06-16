@@ -8,10 +8,6 @@
 PluginsCenter::PluginsCenter(QWidget *parent) :
     QWidget(parent), _ui(new Ui::PluginsCenterData()) {
   _ui->setupUi(this);
-  _ui->pluginDetailsFrame->setVisible(false);
-
-  connect(_ui->pluginsSearchList,SIGNAL(showHtml(QString)),this,SLOT(displayHtmlDescription(QString)));
-  connect(_ui->pluginsSearchList,SIGNAL(hideHtml()),_ui->pluginDetailsFrame,SLOT(hide()));
   connect(_ui->repoButton,SIGNAL(clicked()),this,SLOT(showReposPage()));
   connect(_ui->homeButton,SIGNAL(clicked()),this,SLOT(showHomePage()));
   connect(_ui->pluginsSideList,SIGNAL(itemSelectionChanged()),this,SLOT(listItemSelected()));
@@ -128,10 +124,4 @@ void PluginsCenter::browseInteractors() {
 void PluginsCenter::browsePerspectives() {
   _ui->pluginsSearchList->setTypeFilter(PERSPECTIVE_PLUGIN_NAME);
   showSearchPage();
-}
-
-void PluginsCenter::displayHtmlDescription(const QString &url) {
-  _ui->pluginDetailsPage->setUrl(url);
-  _ui->pluginDetailsFrame->setVisible(true);
-  _ui->pluginDetailsPage->setVisible(true);
 }
