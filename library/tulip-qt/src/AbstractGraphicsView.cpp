@@ -14,7 +14,6 @@
 #include "tulip/ToolbarItem.h"
 #include "tulip/QtAnimationsManager.h"
 #include "tulip/FramedGraphicsProxyWidget.h"
-#include "tulip/ConfigurationWidgetChooserItem.h"
 
 using namespace tlp;
 using namespace std;
@@ -193,8 +192,6 @@ void AbstractGraphicsView::buildGraphicsUi() {
   connect(_toolbarItem,SIGNAL(activeButtonClicked()),this,SLOT(toggleInteractorConfigurationWidget()));
   connect(_toolbarItem,SIGNAL(buttonClicked(PushButtonItem*)),this,SLOT(activeInteractorChanged()));
   addToScene(_toolbarItem);
-
-  addToScene(new ConfigurationWidgetChooserItem(getConfigurationWidget()));
 }
 // ===================================
 bool AbstractGraphicsView::eventFilter(QObject *obj, QEvent *e) {

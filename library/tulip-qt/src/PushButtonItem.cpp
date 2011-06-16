@@ -11,8 +11,7 @@ PushButtonItem::PushButtonItem(QAction *action, const QSize &iconSize, QGraphics
   AnimatedGraphicsObject(parent),
   _iconSize(iconSize),
   _pressed(false), _hovered(false), _clicking(false), _fadeout(true), _ownAction(ownAction),
-  _action(0),
-  _backgroundShape(NoShape) {
+  _action(0) {
 
   setAction(action);
   setAcceptHoverEvents(true);
@@ -85,11 +84,6 @@ void PushButtonItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
   QRectF brect = boundingRect();
   painter->setPen(_borderColor);
   painter->setBrush(_backgroundColor);
-  // Border
-  if (_backgroundShape == CircleShape)
-    painter->drawEllipse(brect);
-  else if (_backgroundShape == SquareShape)
-    painter->drawRoundedRect(brect,4,4);
 
   // Pixmap
   QIcon::Mode mode = QIcon::Normal;
@@ -130,14 +124,6 @@ QRectF PushButtonItem::boundingRect() const {
   if (!_action->icon().isNull()) {
     width += _iconSize.width();
     height += _iconSize.height();
-  }
-  if (_backgroundShape == SquareShape) {
-    width += 8;
-    height += 8;
-  }
-  if (_backgroundShape == CircleShape) {
-    width = sqrt(pow(_iconSize.width(),2) + pow(_iconSize.height(),2)) + 3;
-    height = width;
   }
 
   return QRectF(0,0,width,height);

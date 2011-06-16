@@ -18,12 +18,6 @@ Q_PROPERTY(QColor backgroundColor READ backgroundColor WRITE setBackgroundColor)
 Q_PROPERTY(QColor borderColor READ borderColor WRITE setBorderColor);
 
 public:
-  enum BackgroundShape {
-    NoShape,
-    CircleShape,
-    SquareShape
-  };
-
   PushButtonItem(QAction *action, const QSize &iconSize = QSize(32,32), QGraphicsItem *parent=0, bool ownAction=false);
   virtual ~PushButtonItem();
 
@@ -42,9 +36,6 @@ public:
   QSizeF itemSize() const;
 
   bool hovered() const { return _hovered; }
-
-  BackgroundShape buttonShape() const { return _backgroundShape; }
-  void setButtonShape(BackgroundShape s) { _backgroundShape = s; update(); }
 
   QColor borderColor() const { return _borderColor; }
   void setBorderColor(const QColor &c) { _borderColor = c; update(); }
@@ -83,7 +74,6 @@ private:
   bool _fadeout;
   bool _ownAction;
 
-  BackgroundShape _backgroundShape;
   QColor _borderColor;
   QColor _backgroundColor;
 };

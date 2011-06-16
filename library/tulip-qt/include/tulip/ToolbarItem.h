@@ -45,7 +45,6 @@ public slots:
 
 protected slots:
   void buttonClicked();
-  void buttonHovered(bool f);
   void expandAnimationFinished();
   void sceneResized();
 
@@ -64,11 +63,12 @@ private:
   QMap<QAction *,PushButtonItem *> _actionButton;
   QAction *_activeAction;
   PushButtonItem *_activeButton;
-  QGraphicsSvgItem *_settingsIcon;
+
     // Expand & collapse
   bool _expanded;
   QAnimationGroup *_currentExpandAnimation;
   QTimer *_collapseTimeout;
+
     // Toolbar snapping
   Qt::ToolBarArea _snapArea;
   Qt::ToolBarAreas _allowedSnapAreas;
@@ -78,7 +78,6 @@ private:
   int _spacing;
   Qt::Orientation _orientation;
   int _backgroundRectangleRound;
-  bool _showSettingsButton;
 
     // Animations look & feel
   int _animationMsec;
@@ -87,10 +86,6 @@ private:
     //Colors
   QColor _toolbarBorder;
   QColor _toolbarBackground;
-  QColor _buttonBackground;
-  QColor _buttonBorder;
-  QColor _buttonHighlight;
-  QColor _buttonHovered;
 
   QPointF translationVector() const;
   QSizeF buttonSize() const;
