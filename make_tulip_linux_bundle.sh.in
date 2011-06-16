@@ -64,13 +64,13 @@ echo @QT_LIBRARY_DIR@/libphonon.so.4 copied in $BUNDLE_LIB_DIR
 # Qt3Support is not needed
 rm $BUNDLE_LIB_DIR/libQt3Support*.*
 # other tulip_app needed libs
-for LIB in libicuuc libicudata libaudio libcrypto libk5crypto libgssapi_krb5 libkrb5 libkeyutils libresolv libselinux libssl freetype GLEW GLU gomp jpeg png stdc++ xml2
+for LIB in libicuuc libicudata libaudio libcrypto libk5crypto libgssapi_krb5 libkrb5 libkeyutils libresolv libselinux libssl freetype GLEW GLU gomp jpeg png stdc++ xml2 libz
 do
     copy_linked_lib $LIB $BUNDLE_BIN_DIR/tulip_app
 done;
 # add python needed libs
 LIB_PYTHON_SCRIPT_VIEW=$(ls $BUNDLE_LIB_DIR/tulip/view/libpython*)
-for LIB in libcrypto libk5crypto libgssapi_krb5 libkrb5 libssl libpython
+for LIB in libcrypto libk5crypto libgssapi_krb5 libkrb5 libssl libicui18n libpython
 do
     copy_linked_lib $LIB $LIB_PYTHON_SCRIPT_VIEW
 done;
@@ -85,6 +85,13 @@ mkdir $BUNDLE_BIN_DIR/plugins
 # copy sqldrivers (needed by assistant)
 cp -Rp @QT_PLUGINS_DIR@/sqldrivers $BUNDLE_BIN_DIR/plugins
 echo @QT_PLUGINS_DIR@/sqldrivers copied in $BUNDLE_BIN_DIR/plugins
+
+# tweak OS/ABI header part of libraries (System V instead of Linux)
+for LIB in $(find $OUTPUT_DIR/Tulip-@TulipVersion@ -name '*.so*')
+do
+    strip --strip-unneeded $LIB
+done;
+
 
 # build bundle tarball
 cd $OUTPUT_DIR/Tulip-@TulipVersion@
