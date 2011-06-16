@@ -62,13 +62,13 @@ public:
     return _tulipRelease;
   }
 private:
-  const std::string& _author;
-  const std::string& _date;
-  const std::string& _group;
-  const std::string& _name;
-  const std::string& _info;
-  const std::string& _release;
-  const std::string& _tulipRelease;
+  const std::string _author;
+  const std::string _date;
+  const std::string _group;
+  const std::string _name;
+  const std::string _info;
+  const std::string _release;
+  const std::string _tulipRelease;
 };
 
 struct PluginInfoWithDependencies {
