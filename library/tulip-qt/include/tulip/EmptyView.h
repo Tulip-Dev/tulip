@@ -18,6 +18,19 @@ public:
   virtual void refresh();
   virtual void init();
 
+  tlp::GlMainWidget* getGlMainWidget() {
+    return mainWidget;
+  }
+
+  void centerView() {
+    mainWidget->getScene()->centerScene();
+    draw();
+  }
+
+  void hideOverview(bool hide) {
+    
+  }
+
   tlp::Graph *_graph;
   tlp::GlMainWidget *mainWidget;
 };

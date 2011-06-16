@@ -39,17 +39,18 @@ tlp::Graph *EmptyView::getGraph() {
   return _graph;
 }
 void EmptyView::setGraph(tlp::Graph *graph) {
+  mainWidget->setGraph(graph);
   _graph = graph;
 }
-void EmptyView::draw() { cout << __PRETTY_FUNCTION__ << endl; ((GlMainWidget *)getCentralWidget())->draw(); }
-void EmptyView::refresh() {cout << __PRETTY_FUNCTION__ << endl;  ((GlMainWidget *)getCentralWidget())->redraw(); }
+void EmptyView::draw() { mainWidget->draw(); }
+void EmptyView::refresh() { draw(); }
 void EmptyView::init() {}
 
-VIEWPLUGIN(EmptyView, "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Release Candidate", "2.0");
-INTERACTORPLUGINVIEWEXTENSION(i1, "i1" ,"InteractorNavigation", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
-INTERACTORPLUGINVIEWEXTENSION(i2, "i2" ,"InteractorSelection", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
-INTERACTORPLUGINVIEWEXTENSION(i3, "i3" ,"InteractorAddNode", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
-INTERACTORPLUGINVIEWEXTENSION(i4, "i4" ,"InteractorGetInformation", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
-INTERACTORPLUGINVIEWEXTENSION(i5, "i5" ,"InteractorRectangleZoom", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
-INTERACTORPLUGINVIEWEXTENSION(i6, "i6" ,"InteractorEditEdgeBends", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
-INTERACTORPLUGINVIEWEXTENSION(i7, "i7" ,"PathFinder", "Empty graphics view for test purposes", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
+VIEWPLUGIN(EmptyView, "GraphicsView", "Ludwig Fiolka", "07/01/2011", "Release Candidate", "2.0");
+INTERACTORPLUGINVIEWEXTENSION(i1, "i1" ,"InteractorNavigation", "GraphicsView", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
+INTERACTORPLUGINVIEWEXTENSION(i2, "i2" ,"InteractorSelection", "GraphicsView", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
+INTERACTORPLUGINVIEWEXTENSION(i3, "i3" ,"InteractorAddNode", "GraphicsView", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
+INTERACTORPLUGINVIEWEXTENSION(i4, "i4" ,"InteractorGetInformation", "GraphicsView", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
+INTERACTORPLUGINVIEWEXTENSION(i5, "i5" ,"InteractorRectangleZoom", "GraphicsView", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
+INTERACTORPLUGINVIEWEXTENSION(i6, "i6" ,"InteractorEditEdgeBends", "GraphicsView", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
+INTERACTORPLUGINVIEWEXTENSION(i7, "i7" ,"PathFinder", "GraphicsView", "Ludwig Fiolka", "07/01/2011", "Stable", "1.0");
