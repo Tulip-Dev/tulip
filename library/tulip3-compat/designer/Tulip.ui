@@ -27,9 +27,12 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <property name="documentMode">
+       <bool>false</bool>
+      </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
-        <string>Tab 2</string>
+        <string>Workspace</string>
        </attribute>
       </widget>
      </widget>

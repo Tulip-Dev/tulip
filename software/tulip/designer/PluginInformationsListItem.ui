@@ -10,6 +10,12 @@
     <height>87</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="focusPolicy">
    <enum>Qt::ClickFocus</enum>
   </property>
@@ -120,7 +126,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
             <string>Remove</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources/TulipAgent.qrc">
+            <iconset>
              <normaloff>:/tulip/app/icons/package-purge.svg</normaloff>:/tulip/app/icons/package-purge.svg</iconset>
            </property>
           </widget>
@@ -131,7 +137,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
             <string>Install</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources/TulipAgent.qrc">
+            <iconset>
              <normaloff>:/tulip/app/icons/package-installed-updated.svg</normaloff>:/tulip/app/icons/package-installed-updated.svg</iconset>
            </property>
           </widget>
@@ -150,12 +156,12 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="infosButton">
            <property name="text">
             <string>More infos</string>
            </property>
            <property name="icon">
-            <iconset resource="../resources/TulipAgent.qrc">
+            <iconset>
              <normaloff>:/tulip/app/icons/help-contents.svg</normaloff>:/tulip/app/icons/help-contents.svg</iconset>
            </property>
           </widget>
@@ -168,8 +174,6 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources/TulipAgent.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

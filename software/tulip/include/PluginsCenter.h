@@ -32,8 +32,20 @@ protected slots:
   void showPage(QWidget *page);
   void listItemSelected();
 
+  void browseAll();
+  void browseAlgorithms();
+  void browseImportExport();
+  void browseGlyphs();
+  void browseViews();
+  void browseInteractors();
+  void browsePerspectives();
+
+  void displayHtmlDescription(const QString &);
+
 private:
+  QVector<const char *> _typeSlots;
   Ui::PluginsCenterData *_ui;
+  QStringList indexType(int) const;
 };
 
 #endif // PLUGINSCENTER_
