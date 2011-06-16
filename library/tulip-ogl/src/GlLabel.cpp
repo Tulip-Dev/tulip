@@ -49,11 +49,16 @@ namespace tlp {
   GlLabel::GlLabel() {
     init();
   }
-  GlLabel::GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign) {
+  GlLabel::GlLabel(Coord centerPosition,Coord labelSize,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(Size(labelSize[0],labelSize[1],labelSize[2])),color(fontColor),leftAlign(leftAlign) {
     init();
   }
 
-  GlLabel::GlLabel(const string &,Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign){
+  GlLabel::GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign) {
+    init();
+  }
+
+
+  GlLabel::GlLabel(const string &,Coord centerPosition,Coord labelSize,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(Size(labelSize[0],labelSize[1],labelSize[2])),color(fontColor),leftAlign(leftAlign){
     init();
   }
 
@@ -143,20 +148,38 @@ namespace tlp {
     return textBoundingBox;
   }
   //============================================================
-  void GlLabel::setSize(const Coord &size) {
+  void GlLabel::setSize(const Coord& size){
+      setSize(Size(size[0],size[1],size[2]));
+  }
+  //============================================================
+  void GlLabel::setSize(const Size &size) {
     this->size=size;
     this->sizeForOutAlign=size;
   }
   //============================================================
-  Coord GlLabel::getSize() {
+  Coord GlLabel::getSize(){
+      Size s = getLabelSize();
+      return Coord(s[0],s[1],s[2]);
+  }
+  //============================================================
+  Size GlLabel::getLabelSize() const{
     return size;
   }
   //============================================================
-  void GlLabel::setSizeForOutAlign(const Coord &size) {
+  void GlLabel::setSizeForOutAlign(const Coord &size){
+      setSizeForOutAlign(Size(size[0],size[1],size[2]));
+  }
+  //============================================================
+  void GlLabel::setSizeForOutAlign(const Size &size) {
     this->sizeForOutAlign=size;
   }
   //============================================================
-  Coord GlLabel::getSizeForOutAlign() {
+  Coord GlLabel::getSizeForOutAlign(){
+      Size s = getLabelSizeForOutAlign();
+      return Coord(s[0],s[1],s[2]);
+  }
+  //============================================================
+  Size GlLabel::getLabelSizeForOutAlign() const{
     return sizeForOutAlign;
   }
   //============================================================

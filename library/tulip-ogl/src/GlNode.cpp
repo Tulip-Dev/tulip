@@ -260,8 +260,8 @@ namespace tlp {
     label->setFontNameSizeAndColor(data->getElementFont()->getNodeValue(n),fontSize,fontColor);
     label->setText(tmp);
     label->setTranslationAfterRotation(centerBB*nodeSize);
-    label->setSize(Coord(nodeSize[0]*sizeBB[0],nodeSize[1]*sizeBB[1],0));
-    label->setSizeForOutAlign(Coord(nodeSize[0],nodeSize[1],0));
+    label->setSize(Size(nodeSize[0]*sizeBB[0],nodeSize[1]*sizeBB[1],0));
+    label->setSizeForOutAlign(Size(nodeSize[0],nodeSize[1],0));
     label->rotate(0,0,data->getElementRotation()->getNodeValue(n));
     label->setAlignment(labelPos);
     label->setScaleToSize(data->parameters->isLabelScaled());

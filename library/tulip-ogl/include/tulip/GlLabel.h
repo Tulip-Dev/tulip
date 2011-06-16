@@ -52,14 +52,20 @@ namespace tlp {
 
     /**
      * Contructor with fontPath, centerPosition, size, fontColor and alignment
+     * Use GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign=false) instead.
      */
-    GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
+    _DEPRECATED GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
+
+    /**
+     * Contructor with fontPath, centerPosition, size, fontColor and alignment
+     */
+    GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign=false);
 
     /**
      * Contructor with fontPath, centerPosition, size, fontColor and alignment
      * \deprecate this constructor will be remove on Tulip 4 version
      */
-    GlLabel(const std::string &fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
+    _DEPRECATED GlLabel(const std::string &fontPath,Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
 
     ~GlLabel();
 
@@ -115,25 +121,49 @@ namespace tlp {
     virtual BoundingBox getTextBoundingBox();
 
     /**
-     * Set the size of the label
-     */
-    virtual void setSize(const Coord &size);
+      * Use setSize(const Size& size instead)
+      **/
+    virtual _DEPRECATED void setSize(const Coord& size);
 
     /**
-     * return the size of the text
+     * Set the size of the label
      */
-    virtual Coord getSize();
+    virtual void setSize(const Size &size);
+
+    /**
+     * return the size of the text.
+     * Deprecated use getLabelSize instead.
+     */
+    virtual Coord _DEPRECATED getSize();
+
+    /**
+      * return the size of the text.
+      **/
+    virtual Size getLabelSize() const;
 
     /**
      * Set the size for alignment outside (left/right/top/bottom)
      *  Warning : this size is reinit when you call setSize
      */
-    virtual void setSizeForOutAlign(const Coord &size);
+    virtual void setSizeForOutAlign(const Size &size);
+
+    /**
+     * Set the size for alignment outside (left/right/top/bottom)
+     *  Warning : this size is reinit when you call setSize
+     * Deprecated use setSizeForOutAlign(const Size &size) instead
+     */
+    virtual void _DEPRECATED setSizeForOutAlign(const Coord &size);
+
+    /**
+     * return the size for alignment outside (left/right/top/bottom)
+     * Deprecated use getLabelSizeForOutAlign() instead
+     */
+    virtual Coord _DEPRECATED getSizeForOutAlign();
 
     /**
      * return the size for alignment outside (left/right/top/bottom)
      */
-    virtual Coord getSizeForOutAlign();
+    virtual Size getLabelSizeForOutAlign()const;
 
     /**
      * Set color of label
@@ -370,8 +400,8 @@ namespace tlp {
     FTOutlineFont *borderFont;
     Coord centerPosition;
     Coord translationAfterRotation;
-    Coord size;
-    Coord sizeForOutAlign;
+    Size size;
+    Size sizeForOutAlign;
     Color color;
     Color outlineColor;
     float outlineSize;
