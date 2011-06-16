@@ -5,7 +5,7 @@
 
 using namespace tlp;
 
-PluginInformationsListItem::PluginInformationsListItem(tlp::PluginInformations *infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData) {
+PluginInformationsListItem::PluginInformationsListItem(tlp::PluginInformations *infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData), _pluginInformations(infos) {
   _ui->setupUi(this);
 
   if (infos->updateAvailable()) {
@@ -24,10 +24,16 @@ PluginInformationsListItem::PluginInformationsListItem(tlp::PluginInformations *
   _ui->shortDescription->setText("<p><span style=\"font-size:small; color:#626262;\">" + infos->shortDescription() + "</span>");
   if (!hasFocus())
     _ui->bottomFrame->hide();
+
+  connect(_ui->infosButton,SIGNAL(clicked()),this,SLOT(infosButtonClicked()));
 }
 
 void PluginInformationsListItem::focusInEvent(QFocusEvent *) {
   emit gotFocus();
+}
+
+void PluginInformationsListItem::infosButtonClicked() {
+  emit showInfos(_pluginInformations->longDescriptionPath());
 }
 
 void PluginInformationsListItem::expand() {

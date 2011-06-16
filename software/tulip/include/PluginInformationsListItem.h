@@ -14,12 +14,17 @@ class PluginInformationsListItem: public QWidget {
   Q_OBJECT
 public:
   explicit PluginInformationsListItem(tlp::PluginInformations *, QWidget *parent = 0);
+  tlp::PluginInformations *pluginInformations() const { return _pluginInformations; }
 
 protected:
   void focusInEvent(QFocusEvent *);
 
+protected slots:
+  void infosButtonClicked();
+
 signals:
   void gotFocus();
+  void showInfos(QString);
 
 public slots:
   void expand();
@@ -27,6 +32,7 @@ public slots:
 
 private:
   Ui::PluginInformationsListItemData *_ui;
+  tlp::PluginInformations *_pluginInformations;
 
 };
 

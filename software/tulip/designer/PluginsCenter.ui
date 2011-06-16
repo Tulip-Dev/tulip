@@ -165,16 +165,28 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
         <number>0</number>
        </property>
        <property name="topMargin">
-        <number>1</number>
+        <number>5</number>
        </property>
        <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
         <widget class="QListWidget" name="pluginsSideList">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
-           <width>250</width>
+           <width>150</width>
            <height>16777215</height>
           </size>
          </property>
@@ -311,13 +323,13 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
        <widget class="QWidget" name="homePage">
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <property name="leftMargin">
-          <number>9</number>
+          <number>5</number>
          </property>
          <property name="topMargin">
           <number>5</number>
          </property>
          <property name="rightMargin">
-          <number>9</number>
+          <number>5</number>
          </property>
          <property name="bottomMargin">
           <number>0</number>
@@ -473,7 +485,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                </widget>
               </item>
               <item row="0" column="5">
-               <widget class="QToolButton" name="browsPerspectivesButton">
+               <widget class="QToolButton" name="browsePerspectivesButton">
                 <property name="text">
                  <string>Perspectives</string>
                 </property>
@@ -645,7 +657,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>572</width>
+                <width>715</width>
                 <height>213</height>
                </rect>
               </property>
@@ -670,26 +682,41 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
           <number>0</number>
          </property>
          <property name="leftMargin">
-          <number>9</number>
+          <number>5</number>
          </property>
          <property name="topMargin">
           <number>5</number>
          </property>
          <property name="rightMargin">
-          <number>9</number>
+          <number>5</number>
          </property>
          <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
-          <widget class="QScrollArea" name="pluginsSearchList">
+          <widget class="PluginResultsList" name="pluginsSearchList">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>20</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>0</width>
+             <height>80</height>
+            </size>
+           </property>
            <property name="styleSheet">
-            <string notr="true">#pluginsSearchListContent {
-background-color: white;
+            <string notr="true">#pluginsSearchList {
 border-top: 1px solid &quot;#C9C9C9&quot;;
 border-right: 1px solid &quot;#C9C9C9&quot;;
 border-left: 1px solid &quot;#C9C9C9&quot;;
 border-bottom: 1px solid &quot;#C9C9C9&quot;;
+}
+
+#pluginsSearchListContent {
+background-color: white;
 }</string>
            </property>
            <property name="frameShape">
@@ -698,13 +725,13 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <property name="widgetResizable">
             <bool>true</bool>
            </property>
-           <widget class="PluginResultsList" name="pluginsSearchListContent">
+           <widget class="QWidget" name="pluginsSearchListContent">
             <property name="geometry">
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>65</width>
-              <height>16</height>
+              <width>715</width>
+              <height>231</height>
              </rect>
             </property>
            </widget>
@@ -712,13 +739,19 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
          </item>
          <item>
           <widget class="QFrame" name="pluginDetailsFrame">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>18</verstretch>
+            </sizepolicy>
+           </property>
            <property name="styleSheet">
-            <string notr="true">QFrame#pluginDetailsFrame { 
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(245, 245, 245, 255), stop:1 rgba(225,225,225, 255)); 
-border-bottom: 1px solid &quot;#C9C9C9&quot;;
+            <string notr="true">#pluginDetailsFrame {
+	background-color: rgb(255, 0, 4);
 border-top: 1px solid &quot;#C9C9C9&quot;;
-border-left: 1px solid &quot;#C9C9C9&quot;;
 border-right: 1px solid &quot;#C9C9C9&quot;;
+border-left: 1px solid &quot;#C9C9C9&quot;;
+border-bottom: 1px solid &quot;#C9C9C9&quot;;
 }</string>
            </property>
            <property name="frameShape">
@@ -727,6 +760,26 @@ border-right: 1px solid &quot;#C9C9C9&quot;;
            <property name="frameShadow">
             <enum>QFrame::Raised</enum>
            </property>
+           <layout class="QVBoxLayout" name="verticalLayout_10">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QWebView" name="pluginDetailsPage">
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="url">
+               <url>
+                <string>about:blank</string>
+               </url>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
@@ -734,13 +787,13 @@ border-right: 1px solid &quot;#C9C9C9&quot;;
        <widget class="QWidget" name="reposPage">
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <property name="leftMargin">
-          <number>9</number>
+          <number>5</number>
          </property>
          <property name="topMargin">
           <number>5</number>
          </property>
          <property name="rightMargin">
-          <number>9</number>
+          <number>5</number>
          </property>
          <property name="bottomMargin">
           <number>0</number>
@@ -945,13 +998,13 @@ p, li { white-space: pre-wrap; }
        <widget class="QWidget" name="errorsPage">
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <property name="leftMargin">
-          <number>9</number>
+          <number>5</number>
          </property>
          <property name="topMargin">
           <number>5</number>
          </property>
          <property name="rightMargin">
-          <number>9</number>
+          <number>5</number>
          </property>
          <property name="bottomMargin">
           <number>0</number>
@@ -989,8 +1042,8 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>555</width>
-              <height>360</height>
+              <width>71</width>
+              <height>16</height>
              </rect>
             </property>
             <property name="styleSheet">
@@ -1049,13 +1102,13 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
        <widget class="QWidget" name="downloadsPage">
         <layout class="QVBoxLayout" name="verticalLayout_8">
          <property name="leftMargin">
-          <number>9</number>
+          <number>5</number>
          </property>
          <property name="topMargin">
           <number>5</number>
          </property>
          <property name="rightMargin">
-          <number>9</number>
+          <number>5</number>
          </property>
          <property name="bottomMargin">
           <number>0</number>
@@ -1082,8 +1135,8 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>574</width>
-              <height>443</height>
+              <width>90</width>
+              <height>25</height>
              </rect>
             </property>
            </widget>
@@ -1099,8 +1152,13 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PluginResultsList</class>
+   <class>QWebView</class>
    <extends>QWidget</extends>
+   <header>QtWebKit/QWebView</header>
+  </customwidget>
+  <customwidget>
+   <class>PluginResultsList</class>
+   <extends>QScrollArea</extends>
    <header>PluginResultsList.h</header>
    <container>1</container>
   </customwidget>
