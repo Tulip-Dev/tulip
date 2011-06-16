@@ -654,10 +654,12 @@ void GlMainWidget::createPicture(const std::string &pictureName, int width, int 
 QImage GlMainWidget::createPicture(int width, int height,bool center, int zoom, int xDec, int yDec){
 #ifndef WITHOUT_QT_PICTURE_OUTPUT   
 	scene.setViewport(0,0,width,height);
+  scene.setViewportZoom(zoom,xDec,yDec);
+
 	if(center)
 		scene.ajustSceneToSize(width,height);
 
-	scene.setViewportZoom(zoom,xDec,yDec);
+
 
 	scene.prerenderMetaNodes();
 
@@ -666,6 +668,8 @@ QImage GlMainWidget::createPicture(int width, int height,bool center, int zoom, 
 	glFrameBuf->makeCurrent();
 
 	scene.draw();
+
+  scene.setViewportZoom(1,0,0);
 
 	return glFrameBuf->toImage();
 #else

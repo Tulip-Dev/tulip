@@ -42,7 +42,11 @@ namespace tlp {
 
     GlCPULODCalculator();
     virtual ~GlCPULODCalculator();
-    virtual GlLODCalculator *clone(){return new GlCPULODCalculator;}
+    virtual GlLODCalculator *clone(){
+      GlCPULODCalculator *calculator=new GlCPULODCalculator();
+      calculator->setComputeOutScreenLOD(computeOutScreenLOD);
+      return calculator;
+    }
 
     /**
      * Begin a new camera (use to render next entities)
@@ -93,6 +97,13 @@ namespace tlp {
       computeEdgesLOD=state;
     }
 
+    /**
+     * Set if the LOD is computed for out screen entities
+     */
+    void setComputeOutScreenLOD(bool state){
+      computeOutScreenLOD=state;
+    }
+
 
   protected:
 
@@ -101,6 +112,7 @@ namespace tlp {
     virtual void computeFor2DCamera(LayerLODUnit *layerLODUnit,const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
     bool computeEdgesLOD;
+    bool computeOutScreenLOD;
 
     BoundingBox sceneBoundingBox;
 

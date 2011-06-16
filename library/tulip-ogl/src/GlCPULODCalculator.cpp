@@ -35,8 +35,7 @@ using namespace std;
 
 namespace tlp {
 
-  GlCPULODCalculator::GlCPULODCalculator():computeEdgesLOD(false){
-
+  GlCPULODCalculator::GlCPULODCalculator():computeEdgesLOD(false),computeOutScreenLOD(false){
   }
 
   GlCPULODCalculator::~GlCPULODCalculator() {
@@ -130,14 +129,14 @@ namespace tlp {
 #pragma omp parallel for
 #endif
     for(int i=0;i<static_cast<int>(nb);++i){
-      layerLODUnit->simpleEntitiesLODVector[i].lod=calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
+      layerLODUnit->simpleEntitiesLODVector[i].lod=calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport,computeOutScreenLOD);
     }
     nb=layerLODUnit->nodesLODVector.size();
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
     for(int i=0;i<static_cast<int>(nb);++i){
-			layerLODUnit->nodesLODVector[i].lod=calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
+      layerLODUnit->nodesLODVector[i].lod=calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport,computeOutScreenLOD);
     }
     nb=layerLODUnit->edgesLODVector.size();
     if(computeEdgesLOD){
@@ -145,7 +144,7 @@ namespace tlp {
 #pragma omp parallel for
 #endif
 			for(int i=0;i<static_cast<int>(nb);++i){
-				layerLODUnit->edgesLODVector[i].lod=calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
+        layerLODUnit->edgesLODVector[i].lod=calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport,computeOutScreenLOD);
 			}
 		}else{
 #ifdef _OPENMP

@@ -110,15 +110,7 @@ namespace tlp {
     if(!OpenGlConfigManager::getInst().glewIsInit())
       OpenGlConfigManager::getInst().initGlew();
 
-    int zoomTmp=1;
-    for(int i=0;i<viewportZoom-1;++i){
-      zoomTmp=zoomTmp*2;
-    }
-
-    glViewport(viewport[0]-viewport[2]*xDecViewport,viewport[1]-viewport[3]*yDecViewport,viewport[2]*zoomTmp,viewport[3]*zoomTmp);
-
-		int newViewport[4];
-		glGetIntegerv(GL_VIEWPORT,newViewport);
+		glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
 
     bool antialiased = true;
     if(glGraphComposite) {
@@ -221,6 +213,11 @@ namespace tlp {
         if((*it).lod<0 && !viewOutScreenLabel)
           continue;
 
+        float lod=(*it).lod;
+
+        if(viewOutScreenLabel && lod<0)
+          lod=-lod;
+
         n.id=(*it).id;
 
         if(selectionProperty->getNodeValue(n)==drawSelected){
@@ -228,15 +225,15 @@ namespace tlp {
             // Not metric ordered
             if(!graph->isMetaNode(n) && viewNodeLabel){
               glNode.id=n.id;
-              glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
+              glNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),lod,(Camera *)(layerLODUnit.camera));
             }else if(graph->isMetaNode(n)){
               glMetaNode.id=n.id;
-              glMetaNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),(*it).lod,(Camera *)(layerLODUnit.camera));
+              glMetaNode.drawLabel(occlusionTest,glGraphComposite->getInputData(),lod,(Camera *)(layerLODUnit.camera));
             }
           }else{
             // Metric ordered
             if((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)){
-              nodesMetricOrdered.push_back(pair<node,float>(n,(*it).lod));
+              nodesMetricOrdered.push_back(pair<node,float>(n,lod));
             }
           }
         }
@@ -674,7 +671,7 @@ namespace tlp {
     ajustSceneToSize(viewport[2], viewport[3]);
   }
 
-  void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,BoundingBox *sceneBoundingBox){
+	void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coord *eye, float *sceneRadius, float *xWhiteFactor, float *yWhiteFactor,BoundingBox *sceneBoundingBox,float *zoomFactor){
     if(xWhiteFactor)
       *xWhiteFactor=0.;
     if(yWhiteFactor)
@@ -711,20 +708,74 @@ namespace tlp {
     Coord maxC(boundingBox[1]);
     Coord minC(boundingBox[0]);
 
-    double dx = maxC[0] - minC[0];
-    double dy = maxC[1] - minC[1];
-    double dz = maxC[2] - minC[2];
-
-    Coord centerTmp=(maxC + minC)/2.f;
-    if(center){
-      *center=centerTmp;
+    int zoomTmp=1;
+    for(int i=0;i<viewportZoom-1;++i){
+      zoomTmp=zoomTmp*2;
     }
+
+	double dx = maxC[0] - minC[0];
+	double dy = maxC[1] - minC[1];
+	double dz = maxC[2] - minC[2];
+
+		double dxZoomed=(maxC[0] - minC[0])/zoomTmp;
+		double dyZoomed=(maxC[1] - minC[1])/zoomTmp;
+
+		int newXDecViewport;
+		if(xDecViewport<zoomTmp/2)
+			newXDecViewport=xDecViewport-zoomTmp/2;
+		else
+			newXDecViewport=xDecViewport-zoomTmp/2+1;
+
+		int newYDecViewport;
+		if(yDecViewport<zoomTmp/2)
+			newYDecViewport=yDecViewport-zoomTmp/2;
+		else
+			newYDecViewport=yDecViewport-zoomTmp/2+1;
+
+
+
+		Coord centerTmp=(maxC + minC)/2;
+
+		if(zoomTmp!=1){
+			double dec;
+			if(dxZoomed>=dyZoomed)
+				dec=dxZoomed;
+			else
+				dec=dyZoomed;
+
+			if(newXDecViewport<0) {
+				if(newXDecViewport==-1)
+					centerTmp[0]-=dec/2;
+				else
+					centerTmp[0]-=dec/2-dec*(newXDecViewport+1);
+			}else{
+				if(newXDecViewport==1)
+					centerTmp[0]+=dec/2;
+				else
+					centerTmp[0]+=dec/2+dec*(newXDecViewport-1);
+			}
+			if(newYDecViewport<0) {
+				if(newYDecViewport==-1)
+					centerTmp[1]-=dec/2;
+				else
+					centerTmp[1]-=dec/2-dec*(newYDecViewport+1);
+			}else{
+				if(newYDecViewport==1)
+					centerTmp[1]+=dec/2;
+				else
+					centerTmp[1]+=dec/2+dec*(newYDecViewport-1);
+			}
+		}
+
+	if(center){
+    *center=centerTmp;
+  }
 
     if ((dx==0) && (dy==0) && (dz==0))
       dx = dy = dz = 10.0;
 
-    double wdx=width/dx;
-    double hdy=height/dy;
+	double wdx=width/dxZoomed;
+	double hdy=height/dyZoomed;
 
     float sceneRadiusTmp;
     if(dx<dy){
@@ -769,6 +820,10 @@ namespace tlp {
       *sceneBoundingBox=boundingBox;
     }
 
+  if(zoomFactor){
+    *zoomFactor=zoomTmp;
+  }
+
 
   }
 
@@ -777,9 +832,10 @@ namespace tlp {
     Coord center;
     Coord eye;
     float sceneRadius;
+	float zoomFactor;
     BoundingBox sceneBoundingBox;
 
-    computeAjustSceneToSize(width,height, &center, &eye, &sceneRadius,NULL,NULL,&sceneBoundingBox);
+  computeAjustSceneToSize(width,height, &center, &eye, &sceneRadius,NULL,NULL,&sceneBoundingBox,&zoomFactor);
 
     for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       Camera &camera=(*it).second->getCamera();
@@ -789,7 +845,7 @@ namespace tlp {
 
       camera.setEyes(eye);
       camera.setUp(Coord(0, 1., 0));
-      camera.setZoomFactor(1.);
+      camera.setZoomFactor(zoomFactor);
     }
   }
 

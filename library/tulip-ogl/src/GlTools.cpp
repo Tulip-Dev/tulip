@@ -264,7 +264,7 @@ GLfloat projectSize(const BoundingBox &bb,
 	return size;
 }
 //====================================================
-float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<float, 4>& transformMatrix,const Vector<int, 4>& globalViewport,const Vector<int, 4>& currentViewport) {
+float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<float, 4>& transformMatrix,const Vector<int, 4>& globalViewport,const Vector<int, 4>& currentViewport,bool computeOutScreenLOD) {
 	BoundingBox bbTmp(bb);
 	Coord src[8];
 	Coord dst[8];
@@ -319,7 +319,10 @@ float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<floa
 	}
 
 	if(!inScreen){
-		return -1;
+    if(computeOutScreenLOD)
+      return -sqrt((bbBox[2]-bbBox[0])*(bbBox[2]-bbBox[0])+(bbBox[3]-bbBox[1])*(bbBox[3]-bbBox[1])) * 2;
+    else
+      return -1;
 	}else{
 		return sqrt((bbBox[2]-bbBox[0])*(bbBox[2]-bbBox[0])+(bbBox[3]-bbBox[1])*(bbBox[3]-bbBox[1])) * 2;
 	}
