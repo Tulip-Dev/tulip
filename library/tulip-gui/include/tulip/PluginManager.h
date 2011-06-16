@@ -1,10 +1,24 @@
+#ifndef PLUGINMANAGER_H
+#define PLUGINMANAGER_H
+
 #include <tulip/PluginInformations.h>
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
 
-#ifndef PLUGINMANAGER_H
-#define PLUGINMANAGER_H
+#define PROPERTY_ALGORITHM_PLUGIN_NAME "PropertyAlgorithm"
+#define ALGORITHM_PLUGIN_NAME "Algorithm"
+
+#define IMPORT_PLUGIN_NAME "ImportModule"
+#define EXPORT_PLUGIN_NAME "ExportModule"
+
+#define GLYPH_PLUGIN_NAME "Glyph"
+#define EE_GLYPH_PLUGIN_NAME "EdgeExtremityGlyph"
+
+#define VIEW_PLUGIN_NAME "View"
+#define INTERACTOR_PLUGIN_NAME "Interactor"
+#define PERSPECTIVE_PLUGIN_NAME "Perspective"
+
 
 namespace tlp {
 

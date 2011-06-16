@@ -131,6 +131,7 @@ class TLP_QT_SCOPE PluginInformations {
 
     QString installedVersion() const;
     bool isInstalled(QString version) const;
+    bool isInstalled() const;
     bool updateAvailable() const;
 
     bool fetch(QString version) const;

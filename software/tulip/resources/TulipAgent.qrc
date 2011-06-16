@@ -13,6 +13,12 @@
         <file>start.svg</file>
         <file>list-add.svg</file>
         <file>list-del.svg</file>
+        <file>package-installed-updated.svg</file>
+        <file>package-purge.svg</file>
+        <file>package-upgrade.svg</file>
+        <file>plugin_glyph.svg</file>
+        <file>help-contents.svg</file>
+        <file>plugin_import_export.svg</file>
     </qresource>
     <qresource prefix="/tulip/app/ui">
         <file>btn_26.png</file>

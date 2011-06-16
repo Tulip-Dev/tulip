@@ -9,16 +9,16 @@ PerspectiveItemWidget::PerspectiveItemWidget(tlp::PluginInformations *infos,QWid
 
   _ui->setupUi(this);
   _ui->icon->setPixmap(infos->iconPath());
-  _ui->name->setText("<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"font-size:large;\"><b>"
+  _ui->name->setText("<p><span style=\"font-size:large;\"><b>"
                      +
                      infos->name()
                      +
-                     "</b></span></p></body></html>");
-  _ui->description->setText("<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"color:#626262;\">"
+                     "</b></span></p>");
+  _ui->description->setText("<p><span style=\"color:#626262;\">"
                             +
                             infos->shortDescription()
                             +
-                            "</span></p></body></html>");
+                            "</span></p>");
   connect(_ui->runButton,SIGNAL(clicked()),this,SIGNAL(selected()));
 }
 
