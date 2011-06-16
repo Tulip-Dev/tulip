@@ -32,12 +32,8 @@ library/tulip-qt/include/tulip/ToolbarItem.h
 library/tulip-qt/include/tulip/QtAnimationsManager.h
 )
 
-QT4_ADD_RESOURCES(LIB_RCC_SRCS
-library/tulip-qt/designer/tulipgv.qrc
-)
 
-ADD_LIBRARY(${PLUGIN_NAME}-${TULIP_VERSION} SHARED ${LIB_SRCS} ${LIB_UI_SRCS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
-#ADD_EXECUTABLE(${PLUGIN_NAME}-${TULIP_VERSION} ${LIB_SRCS} ${LIB_UI_SRCS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS} library/tulip-qt/src/main.cpp)
+ADD_LIBRARY(${PLUGIN_NAME}-${TULIP_VERSION} SHARED ${LIB_SRCS} ${LIB_MOC_SRCS})
 
 TARGET_LINK_LIBRARIES(${PLUGIN_NAME}-${TULIP_VERSION}
 ${TULIP_CORE_LIBRARY}
