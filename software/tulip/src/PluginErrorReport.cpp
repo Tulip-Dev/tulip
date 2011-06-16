@@ -10,7 +10,7 @@ PluginErrorReport::PluginErrorReport(const QString &fileName, const QString &err
   QFileInfo fileInfo(fileName);
   _ui->fileName->setText("<html><head/><body><b>" + fileInfo.fileName() + "</b></body></head>");
 
-  _ui->errorMsg->setText("<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"font-size:small;\">" +
+  _ui->errorMsg->setText("<p><span style=\"font-size:small;\">" +
                          errorMsg +
-                         "</span></p></body></html>");
+                         "</span></p>");
 }

@@ -85,6 +85,10 @@ bool PluginInformations::isInstalled(QString version) const {
   return version == _installedVersion;
 }
 
+bool PluginInformations::isInstalled() const {
+  return !(installedVersion().isEmpty());
+}
+
 bool PluginInformations::updateAvailable() const {
   return _updateAvailable;
 }

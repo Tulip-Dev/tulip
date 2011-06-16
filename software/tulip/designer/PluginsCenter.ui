@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>881</width>
-    <height>471</height>
+    <height>484</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -131,6 +131,9 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
           <height>16777215</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Apply filter on plugin names</string>
+        </property>
         <property name="placeholderText">
          <string>Search plugins</string>
         </property>
@@ -215,8 +218,26 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Algorithms</string>
           </property>
           <property name="icon">
-           <iconset resource="../resources/TulipAgent.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/plugin_algorithm.svg</normaloff>:/tulip/app/icons/plugin_algorithm.svg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Import/Export</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/tulip/app/icons/plugin_import_export.svg</normaloff>:/tulip/app/icons/plugin_import_export.svg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Glyphs</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/tulip/app/icons/plugin_glyph.svg</normaloff>:/tulip/app/icons/plugin_glyph.svg</iconset>
           </property>
          </item>
          <item>
@@ -224,7 +245,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Views</string>
           </property>
           <property name="icon">
-           <iconset resource="../resources/TulipAgent.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/plugin_view.svg</normaloff>:/tulip/app/icons/plugin_view.svg</iconset>
           </property>
          </item>
@@ -233,7 +254,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Interactors</string>
           </property>
           <property name="icon">
-           <iconset resource="../resources/TulipAgent.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/plugin_interactor.svg</normaloff>:/tulip/app/icons/plugin_interactor.svg</iconset>
           </property>
          </item>
@@ -242,7 +263,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Perspectives</string>
           </property>
           <property name="icon">
-           <iconset resource="../resources/TulipAgent.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/plugin_controller.svg</normaloff>:/tulip/app/icons/plugin_controller.svg</iconset>
           </property>
          </item>
@@ -259,7 +280,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Errors</string>
           </property>
           <property name="icon">
-           <iconset resource="../resources/TulipAgent.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/error.svg</normaloff>:/tulip/app/icons/error.svg</iconset>
           </property>
           <property name="flags">
@@ -271,7 +292,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
            <string>Downloads</string>
           </property>
           <property name="icon">
-           <iconset resource="../resources/TulipAgent.qrc">
+           <iconset>
             <normaloff>:/tulip/app/icons/network-receive.svg</normaloff>:/tulip/app/icons/network-receive.svg</iconset>
           </property>
          </item>
@@ -401,14 +422,17 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_2">
-              <item>
+             <layout class="QGridLayout" name="gridLayout_2">
+              <item row="0" column="0">
                <widget class="QToolButton" name="browseAlgorithmsButton">
+                <property name="toolTip">
+                 <string>Algorithm plugins copmpute metrics on graph elements and modify the graph structure</string>
+                </property>
                 <property name="text">
                  <string>Algorithms</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources/TulipAgent.qrc">
+                 <iconset>
                   <normaloff>:/tulip/app/icons/plugin_algorithm.svg</normaloff>:/tulip/app/icons/plugin_algorithm.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -425,13 +449,13 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                 </property>
                </widget>
               </item>
-              <item>
+              <item row="0" column="3">
                <widget class="QToolButton" name="browseViewsButton">
                 <property name="text">
                  <string>Views</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources/TulipAgent.qrc">
+                 <iconset>
                   <normaloff>:/tulip/app/icons/plugin_view.svg</normaloff>:/tulip/app/icons/plugin_view.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -448,13 +472,36 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                 </property>
                </widget>
               </item>
-              <item>
+              <item row="0" column="5">
+               <widget class="QToolButton" name="browsPerspectivesButton">
+                <property name="text">
+                 <string>Perspectives</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>:/tulip/app/icons/plugin_controller.svg</normaloff>:/tulip/app/icons/plugin_controller.svg</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>64</width>
+                  <height>64</height>
+                 </size>
+                </property>
+                <property name="toolButtonStyle">
+                 <enum>Qt::ToolButtonTextUnderIcon</enum>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
                <widget class="QToolButton" name="browseInteractorsButton">
                 <property name="text">
                  <string>Interactors</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources/TulipAgent.qrc">
+                 <iconset>
                   <normaloff>:/tulip/app/icons/plugin_interactor.svg</normaloff>:/tulip/app/icons/plugin_interactor.svg</iconset>
                 </property>
                 <property name="iconSize">
@@ -471,14 +518,37 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                 </property>
                </widget>
               </item>
-              <item>
-               <widget class="QToolButton" name="browsPerspectivesButton">
+              <item row="0" column="2">
+               <widget class="QToolButton" name="browseGlyphsButton">
                 <property name="text">
-                 <string>Perspectives</string>
+                 <string>Glyphs</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources/TulipAgent.qrc">
-                  <normaloff>:/tulip/app/icons/plugin_controller.svg</normaloff>:/tulip/app/icons/plugin_controller.svg</iconset>
+                 <iconset>
+                  <normaloff>:/tulip/app/icons/plugin_glyph.svg</normaloff>:/tulip/app/icons/plugin_glyph.svg</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>64</width>
+                  <height>64</height>
+                 </size>
+                </property>
+                <property name="toolButtonStyle">
+                 <enum>Qt::ToolButtonTextUnderIcon</enum>
+                </property>
+                <property name="autoRaise">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QToolButton" name="browseImportExportButton">
+                <property name="text">
+                 <string>Import/Export</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>:/tulip/app/icons/plugin_import_export.svg</normaloff>:/tulip/app/icons/plugin_import_export.svg</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -575,8 +645,8 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>455</width>
-                <height>144</height>
+                <width>572</width>
+                <height>213</height>
                </rect>
               </property>
               <property name="styleSheet">
@@ -594,9 +664,87 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="pluginsListPage"/>
+       <widget class="QWidget" name="pluginsListPage">
+        <layout class="QVBoxLayout" name="verticalLayout_7">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>9</number>
+         </property>
+         <property name="topMargin">
+          <number>5</number>
+         </property>
+         <property name="rightMargin">
+          <number>9</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QScrollArea" name="pluginsSearchList">
+           <property name="styleSheet">
+            <string notr="true">#pluginsSearchListContent {
+background-color: white;
+border-top: 1px solid &quot;#C9C9C9&quot;;
+border-right: 1px solid &quot;#C9C9C9&quot;;
+border-left: 1px solid &quot;#C9C9C9&quot;;
+border-bottom: 1px solid &quot;#C9C9C9&quot;;
+}</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="PluginResultsList" name="pluginsSearchListContent">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>65</width>
+              <height>16</height>
+             </rect>
+            </property>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="pluginDetailsFrame">
+           <property name="styleSheet">
+            <string notr="true">QFrame#pluginDetailsFrame { 
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(245, 245, 245, 255), stop:1 rgba(225,225,225, 255)); 
+border-bottom: 1px solid &quot;#C9C9C9&quot;;
+border-top: 1px solid &quot;#C9C9C9&quot;;
+border-left: 1px solid &quot;#C9C9C9&quot;;
+border-right: 1px solid &quot;#C9C9C9&quot;;
+}</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
        <widget class="QWidget" name="reposPage">
         <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="leftMargin">
+          <number>9</number>
+         </property>
+         <property name="topMargin">
+          <number>5</number>
+         </property>
+         <property name="rightMargin">
+          <number>9</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
@@ -756,7 +904,7 @@ p, li { white-space: pre-wrap; }
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources/TulipAgent.qrc">
+                 <iconset>
                   <normaloff>:/tulip/app/icons/list-add.svg</normaloff>:/tulip/app/icons/list-add.svg</iconset>
                 </property>
                </widget>
@@ -782,7 +930,7 @@ p, li { white-space: pre-wrap; }
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resources/TulipAgent.qrc">
+                 <iconset>
                   <normaloff>:/tulip/app/icons/list-del.svg</normaloff>:/tulip/app/icons/list-del.svg</iconset>
                 </property>
                </widget>
@@ -796,8 +944,14 @@ p, li { white-space: pre-wrap; }
        </widget>
        <widget class="QWidget" name="errorsPage">
         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="leftMargin">
+          <number>9</number>
+         </property>
          <property name="topMargin">
           <number>5</number>
+         </property>
+         <property name="rightMargin">
+          <number>9</number>
          </property>
          <property name="bottomMargin">
           <number>0</number>
@@ -805,35 +959,9 @@ p, li { white-space: pre-wrap; }
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;
+            <string>&lt;p&gt;&lt;img src=&quot;:/tulip/app/ui/list_bullet_arrow.png&quot; /&gt;&lt;span style=&quot;color:#626262; font-size:large;&quot;&gt;   Fix plugins errors&lt;/span&gt;&lt;/p&gt;
 
-&lt;body&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/tulip/app/ui/list_bullet_arrow.png&quot; /&gt;&lt;span style=&quot;color:#626262; font-size:large;&quot;&gt;   Fix plugins errors&lt;/span&gt;&lt;/p&gt;
-
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:medium;&quot;&gt; &lt;/p&gt;
-
-&lt;/body&gt;
-
-&lt;/html&gt;</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="errorsLabel">
-           <property name="text">
-            <string>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;
-
-&lt;body&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot;color:#dc4d4f;  font-size:medium;&quot;&gt;Errors have been detected while loading plugins. Check the error log for details.&lt;/span&gt;&lt;/p&gt;
-
-&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="wordWrap">
-            <bool>true</bool>
+&lt;p&gt;&lt;span style=&quot;color:#dc4d4f;&quot;&gt;Errors have been detected while loading plugins. Check the error log for details.&lt;/span&gt;&lt;/p&gt;</string>
            </property>
           </widget>
          </item>
@@ -861,8 +989,8 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>83</width>
-              <height>28</height>
+              <width>555</width>
+              <height>360</height>
              </rect>
             </property>
             <property name="styleSheet">
@@ -874,17 +1002,109 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
            </widget>
           </widget>
          </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="reinstallAllErrorsButton">
+             <property name="text">
+              <string>Reinstall all</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>:/tulip/app/icons/emblem-downloads.svg</normaloff>:/tulip/app/icons/emblem-downloads.svg</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="removeAllErrorsButton">
+             <property name="text">
+              <string>Remove all</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>:/tulip/app/icons/edit-delete.svg</normaloff>:/tulip/app/icons/edit-delete.svg</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="downloadsPage"/>
+       <widget class="QWidget" name="downloadsPage">
+        <layout class="QVBoxLayout" name="verticalLayout_8">
+         <property name="leftMargin">
+          <number>9</number>
+         </property>
+         <property name="topMargin">
+          <number>5</number>
+         </property>
+         <property name="rightMargin">
+          <number>9</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QScrollArea" name="downloadsList">
+           <property name="styleSheet">
+            <string notr="true">#downloadsListContents {
+background-color: white;
+border-top: 1px solid &quot;#C9C9C9&quot;;
+border-right: 1px solid &quot;#C9C9C9&quot;;
+border-left: 1px solid &quot;#C9C9C9&quot;;
+border-bottom: 1px solid &quot;#C9C9C9&quot;;
+}</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="downloadsListContents">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>574</width>
+              <height>443</height>
+             </rect>
+            </property>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources/TulipAgent.qrc"/>
- </resources>
+ <customwidgets>
+  <customwidget>
+   <class>PluginResultsList</class>
+   <extends>QWidget</extends>
+   <header>PluginResultsList.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
  <connections/>
 </ui>

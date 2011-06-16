@@ -33,14 +33,13 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
   // Recent documents list
   QList<QString> recentDocs = TulipSettings::instance().recentDocuments();
   if (recentDocs.size() > 0) {
-    QString txt = trUtf8("<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">p, li { white-space: pre-wrap; } a {color: black; }</style></head><body>");
+    QString txt;
 
     for (QList<QString>::iterator it = recentDocs.begin(); it != recentDocs.end(); ++it)
-      txt += trUtf8(("<p style=\" -qt-block-indent:0; text-indent:0px;\"><span><img src=\":/tulip/app/ui/list_bullet_arrow.png\"></img>   <a href=\"" +
+      txt += trUtf8(("<p><span><img src=\":/tulip/app/ui/list_bullet_arrow.png\"></img>   <a href=\"" +
                      *it + "\">" + *it + "</a>" +
                      "</span></p><p/>").toStdString().c_str());
 
-    txt += trUtf8("</body></html>");
     _ui->recentDocumentsLabel->setText(txt);
   }
 
@@ -83,9 +82,9 @@ void TulipWelcomePage::rssReply(QNetworkReply *reply) {
     for (QList<RssParser::RssItem>::iterator it = rssItems.begin(); it != rssItems.end(); ++it) {
       if (i++ >= RSS_LIMIT)
         break;
-      QString text = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">p, li { white-space: pre-wrap; }</style></head><body><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"color:#626262; font-size:large;\">";
+      QString text = "<p><span style=\"color:#626262; font-size:large;\">";
       text += it->title;
-      text += "</span></p><p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:medium;\"> </p><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\"color:#000000;\">";
+      text += "</span></p><p><span>";
       text += it->description;
       text += "</span></p></body></html>";
       QLabel *label = new QLabel(text,0);
