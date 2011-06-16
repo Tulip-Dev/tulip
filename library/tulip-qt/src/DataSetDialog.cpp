@@ -70,7 +70,7 @@ class ColorScalePushButton : public QWidget {
 
 public :
 
-	ColorScalePushButton(const QString &text, QWidget *parent):QWidget(parent){
+	ColorScalePushButton(const QString &text, const ColorScale &colorScal, QWidget *parent):QWidget(parent), colorScale(colorScal) {
 
 		QHBoxLayout *layout = new QHBoxLayout;
 		button=new QPushButton(text);
@@ -729,7 +729,9 @@ struct QParamDialog : public QDialog {
 
 			// ColorScale
 			else if(ip.typeName == TN (ColorScale) ) {
-				ColorScalePushButton *button=new ColorScalePushButton("Color Scale",parametersPanel);
+				ColorScale colorScale;
+				inSet->get(ip.name,colorScale);
+				ColorScalePushButton *button=new ColorScalePushButton("Color Scale", colorScale, parametersPanel);
 				ip.wA.push_back(button);
 			}
 

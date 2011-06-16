@@ -156,8 +156,9 @@ public:
     addParameter<PropertyInterface*>("enumerated\nproperty",paramHelp[1],"viewMetric");
     addParameter<StringCollection>(ELT_TYPE, paramHelp[2], ELT_TYPES);
     addParameter<StringCollection>(TARGET_TYPE, paramHelp[3], TARGET_TYPES);
-    addParameter<ColorScale>("colorScale",paramHelp[4],"(255,255,0,128)");
+    addParameter<ColorScale>("colorScale",paramHelp[4],"((229, 40, 0, 200), (255, 170, 0, 200), (255, 255, 127, 200), (156, 161, 255, 200), (75, 75, 255, 200))");
   }
+
   //=========================================================
   ~ColorMapping(){}
   //=========================================================
