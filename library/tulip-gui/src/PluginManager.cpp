@@ -84,7 +84,7 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription) {
     const std::string release = childElement.attribute("release").toStdString();
     const std::string group = childElement.attribute("group").toStdString();
     const std::string tulipRelease = childElement.attribute("tulipRelease").toStdString();
-    
+
     tlp::AbstractPluginInfo* pluginInfo = new DistantPluginInfo(author, date, group, name, info, release, tulipRelease);
     std::list<tlp::Dependency> dependencies;
     for(QDomNode n = child.firstChild(); !n.isNull(); n = n.nextSibling()) {
@@ -97,6 +97,7 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription) {
     QString longDescriptionPath;
     QString iconPath;
     PluginInformations* pluginInformations = new PluginInformations(pluginInfo, type, dependencies, longDescriptionPath, iconPath);
+
 //     PluginInfoWithDependencies infos(pluginInfo, dependencies);
     remotePlugins[pluginInfo->getName().c_str()] = pluginInformations;
   }
