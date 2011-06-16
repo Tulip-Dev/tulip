@@ -120,11 +120,21 @@ struct DataSet {
 %End
 	
 	
-	SIP_PYOBJECT __getitem__(const std::string &attributeName) const;
+	SIP_PYOBJECT __getitem__(const std::string &attributeName);
 %MethodCode
 	bool ok = false;
-	if (sipCpp->exist(*a0)) {
-		tlp::DataType* dataType = sipCpp->getData(*a0);
+	tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = sipCpp->getValues();
+	tlp::DataType* dataType = NULL;
+	while (it->hasNext()) {
+		std::pair<std::string, tlp::DataType*> p = it->next();
+		if (p.first == *a0) {
+			dataType = p.second;
+		}
+	}
+	delete it;
+	
+	if (dataType) {
+		 
 		if (dataType->getTypeName() == std::string(typeid(bool).name())) {
 			ok = true;
 			sipRes = PyBool_FromLong(*(reinterpret_cast<bool*>(dataType->value)));
@@ -167,31 +177,26 @@ struct DataSet {
 			
 		} else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
 			ok = true;
-			sipRes = sipConvertFromNewType(new tlp::DataSet(*(reinterpret_cast<tlp::DataSet *>(dataType->value))), sipType_tlp_DataSet, NULL);
-			
-		} else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
-			ok = true;
-			sipRes = sipConvertFromNewType(new tlp::DataSet(*(reinterpret_cast<tlp::DataSet *>(dataType->value))), sipType_tlp_DataSet, NULL);
-			
+			sipRes = sipConvertFromType(reinterpret_cast<tlp::DataSet *>(dataType->value), sipType_tlp_DataSet, NULL);
 		} else if (dataType->getTypeName() == std::string(typeid(tlp::Coord).name())) {
 			ok = true;
-			sipRes = sipConvertFromNewType(new tlp::Coord(*(reinterpret_cast<tlp::Coord *>(dataType->value))), sipType_tlp_Coord, NULL);
+			sipRes = sipConvertFromType(reinterpret_cast<tlp::Coord *>(dataType->value), sipType_tlp_Coord, NULL);
 			
 		} else if (dataType->getTypeName() == std::string(typeid(tlp::Color).name())) {
 			ok = true;
-			sipRes = sipConvertFromNewType(new tlp::Color(*(reinterpret_cast<tlp::Color *>(dataType->value))), sipType_tlp_Color, NULL);
+			sipRes = sipConvertFromType(reinterpret_cast<tlp::Color *>(dataType->value), sipType_tlp_Color, NULL);
 			
 		} else if (dataType->getTypeName() == std::string(typeid(tlp::Size).name())) {
 			ok = true;
-			sipRes = sipConvertFromNewType(new tlp::Size(*(reinterpret_cast<tlp::Size *>(dataType->value))), sipType_tlp_Size, NULL);
+			sipRes = sipConvertFromType(reinterpret_cast<tlp::Size *>(dataType->value), sipType_tlp_Size, NULL);
 			
 		} else if (dataType->getTypeName() == std::string(typeid(tlp::ColorScale).name())) {
 			ok = true;
-			sipRes = sipConvertFromNewType(new tlp::ColorScale(*(reinterpret_cast<tlp::ColorScale *>(dataType->value))), sipType_tlp_ColorScale, NULL);
+			sipRes = sipConvertFromType(reinterpret_cast<tlp::ColorScale *>(dataType->value), sipType_tlp_ColorScale, NULL);
 			
 		} else if (dataType->getTypeName() == std::string(typeid(tlp::StringCollection).name())) {
 			ok = true;
-			sipRes = sipConvertFromNewType(new tlp::StringCollection(*(reinterpret_cast<tlp::StringCollection *>(dataType->value))), sipType_tlp_StringCollection, NULL);
+			sipRes = sipConvertFromType(reinterpret_cast<tlp::StringCollection *>(dataType->value), sipType_tlp_StringCollection, NULL);
 			
 		} else if (dataType->getTypeName() == std::string(typeid(tlp::PropertyInterface*).name())) {
 			ok = true;
