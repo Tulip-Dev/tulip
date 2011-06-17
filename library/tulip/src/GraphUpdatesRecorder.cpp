@@ -758,11 +758,12 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
     deletedNodes[n] = graphs;
   } else
     (*it).second.insert(g);    set<node> nodes;
+  // no need of the loop below because properties are observed too
   // loop on properties to save the node's associated values
-  PropertyInterface* prop;
+  /*PropertyInterface* prop;
   forEach(prop, g->getLocalObjectProperties()) {
     beforeSetNodeValue(prop, n);
-  }
+    }*/
   if (g == g->getSuperGraph())
     recordEdgeContainer(oldContainers, (GraphImpl*) g, n);
 }
@@ -819,12 +820,14 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
   }
   else
     (*it).second.graphs.insert(g);
+  
+  // no need of the loop below because properties are observed too
   // loop on properties
-  PropertyInterface* prop;
+  /*PropertyInterface* prop;
   // loop on properties to save the edge's associated values
   forEach(prop, g->getLocalObjectProperties()) {
     beforeSetEdgeValue(prop, e);
-  }
+    }*/
   if (g == g->getSuperGraph()) {
     // record source & target old containers
     const pair<node, node> &eEnds = g->ends(e);
