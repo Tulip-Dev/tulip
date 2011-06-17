@@ -32,9 +32,18 @@ namespace tlp{
         Q_OBJECT
         Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     public:
-                ColorButton(QWidget *parent=0);
+        ColorButton(QWidget *parent=0);
+        /**
+          * Use ColorButton instead.
+          */
+        _DEPRECATED ColorButton(const QRgb &c, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
         ~ColorButton();
         QColor color() const;
+
+        /**
+          * Use color function instead
+          **/
+        QRgb _DEPRECATED getColor() const;
 
     public slots:
         void setColor(const QColor &);

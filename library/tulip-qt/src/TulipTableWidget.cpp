@@ -55,10 +55,8 @@
 #include "tulip/TextEditDialog.h"
 #include <tulip/ListPropertyWidget.h>
 
-#include "tulip/ColorButton.h"
 #include "tulip/SizeWidget.h"
 #include "tulip/CoordWidget.h"
-#include "tulip/FileNameEditorWidget.h"
 
 #define COLORTABLEITEM_RTTI 1001
 #define FILETABLEITEM_RTTI  1002
@@ -105,7 +103,7 @@ public:
             data[i] = tmp;
         } else {
             std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " Error index too high !"
-                    << std::endl;
+                      << std::endl;
             assert(false);
         }
 
@@ -118,6 +116,117 @@ public:
 private:
     typename VectorType::RealType data;
 };
+
+//This code is keeped for code compatibility.
+//================================================================================
+SizeEditor::SizeEditor(const Size &s, QWidget *parent) :
+    QWidget(parent), size(s) {
+    setAutoFillBackground(true);
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setSpacing(3);
+    layout->setMargin(0);
+    QDoubleValidator *validator = new QDoubleValidator(this);
+    stringstream ss;
+    ss << size.getW() << " " << size.getH() << " " << size.getD();
+    for (int i = 0; i < 3; ++i) {
+        string str;
+        ss >> str;
+        edit[i] = new QLineEdit(str.c_str(), this);
+        edit[i]->setValidator(validator);
+        edit[i]->setFrame(true);
+        edit[i]->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+        layout->addWidget(edit[i]);
+    }
+    connect(edit[0], SIGNAL(textChanged(const QString &)), this, SLOT(changeW(const QString &)));
+    connect(edit[1], SIGNAL(textChanged(const QString &)), this, SLOT(changeH(const QString &)));
+    connect(edit[2], SIGNAL(textChanged(const QString &)), this, SLOT(changeD(const QString &)));
+    setFocusPolicy(Qt::StrongFocus);
+}
+
+SizeEditor::~SizeEditor() {
+}
+Size SizeEditor::getSize() const {
+    return size;
+}
+void SizeEditor::setFocus() {
+    edit[0]->setFocus();
+}
+void SizeEditor::changeW(const QString &s) {
+    stringstream ss;
+    ss << s.toUtf8().data();
+    float f;
+    ss >> f;
+    size.setW(f);
+}
+void SizeEditor::changeH(const QString &s) {
+    stringstream ss;
+    ss << s.toUtf8().data();
+    float f;
+    ss >> f;
+    size.setH(f);
+}
+void SizeEditor::changeD(const QString &s) {
+    stringstream ss;
+    ss << s.toUtf8().data();
+    float f;
+    ss >> f;
+    size.setD(f);
+}
+
+CoordEditor::CoordEditor(const Coord &c, QWidget *parent) :
+    QWidget(parent), coord(c) {
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setSpacing(3);
+    layout->setMargin(0);
+    QDoubleValidator *validator = new QDoubleValidator(this);
+    stringstream ss;
+    ss << coord.getX() << " " << coord.getY() << " " << coord.getZ();
+    for (int i = 0; i < 3; ++i) {
+        string str;
+        ss >> str;
+        edit[i] = new QLineEdit(str.c_str(), this);
+        edit[i]->setValidator(validator);
+        edit[i]->setFrame(true);
+        edit[i]->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding));
+        layout->addWidget(edit[i]);
+    }
+    connect(edit[0], SIGNAL(textChanged(const QString &)), this, SLOT(changeX(const QString &)));
+    connect(edit[1], SIGNAL(textChanged(const QString &)), this, SLOT(changeY(const QString &)));
+    connect(edit[2], SIGNAL(textChanged(const QString &)), this, SLOT(changeZ(const QString &)));
+    setFocusPolicy(Qt::StrongFocus);
+}
+
+CoordEditor::~CoordEditor() {
+}
+
+Coord CoordEditor::getCoord() const {
+    return coord;
+}
+void CoordEditor::setFocus() {
+    edit[0]->setFocus();
+}
+
+void CoordEditor::changeX(const QString &s) {
+    stringstream ss;
+    ss << s.toUtf8().data();
+    float f;
+    ss >> f;
+    coord.setX(f);
+}
+void CoordEditor::changeY(const QString &s) {
+    stringstream ss;
+    ss << s.toUtf8().data();
+    float f;
+    ss >> f;
+    coord.setY(f);
+}
+void CoordEditor::changeZ(const QString &s) {
+    stringstream ss;
+    ss << s.toUtf8().data();
+    float f;
+    ss >> f;
+    coord.setZ(f);
+}
 
 class ListItem: public TulipTableWidgetItem {
 public:
@@ -138,7 +247,7 @@ private:
 };
 
 ListItem::ListItem(TulipTableWidgetItem* orig, DynamicTypeHandlerInterface* handler) :
-        TulipTableWidgetItem(LISTTABLEITEM_RTTI), orig(orig), handler(handler) {
+    TulipTableWidgetItem(LISTTABLEITEM_RTTI), orig(orig), handler(handler) {
     updateText();
 }
 
@@ -175,9 +284,9 @@ public:
 };
 
 ColorTableItem::ColorTableItem(const QRgb &color) :
-        TulipTableWidgetItem(COLORTABLEITEM_RTTI), color(color) {
+    TulipTableWidgetItem(COLORTABLEITEM_RTTI), color(color) {
     setText(
-            ColorType::toString(Color(qRed(color), qGreen(color), qBlue(color), qAlpha(color))).c_str());
+                ColorType::toString(Color(qRed(color), qGreen(color), qBlue(color), qAlpha(color))).c_str());
 }
 ColorTableItem::~ColorTableItem() {
 }
@@ -187,7 +296,7 @@ void ColorTableItem::setTextFromTulip(const std::string& data) {
     if (ColorType::fromString(c, data)) {
         color = qRgba(c[0], c[1], c[2], c[3]);
         setText(
-                ColorType::toString(Color(qRed(color), qGreen(color), qBlue(color), qAlpha(color))).c_str());
+                    ColorType::toString(Color(qRed(color), qGreen(color), qBlue(color), qAlpha(color))).c_str());
     }
 }
 
@@ -203,7 +312,7 @@ QWidget *ColorTableItem::createEditor(QTableWidget* table) const {
 void ColorTableItem::setContentFromEditor(QWidget *w) {
     color = ((ColorButton *) w)->color().rgba();
     setText(
-            ColorType::toString(Color(qRed(color), qGreen(color), qBlue(color), qAlpha(color))).c_str());
+                ColorType::toString(Color(qRed(color), qGreen(color), qBlue(color), qAlpha(color))).c_str());
 }
 
 //================================================================================
@@ -216,7 +325,7 @@ public:
 };
 
 FileTableItem::FileTableItem(QString s, int type) :
-        TulipTableWidgetItem(s, type) {
+    TulipTableWidgetItem(s, type) {
 }
 FileTableItem::~FileTableItem() {
 }
@@ -251,7 +360,7 @@ public:
 };
 
 FileTableFontItem::FileTableFontItem(QString s) :
-        FileTableItem(s, FILETABLEFONTITEM_RTTI) {
+    FileTableItem(s, FILETABLEFONTITEM_RTTI) {
 }
 QWidget *FileTableFontItem::createEditor(QTableWidget* table) const {
     FileNameEditorWidget *w = new FileNameEditorWidget(table->viewport());
@@ -281,7 +390,7 @@ public:
 };
 
 SizeTableItem::SizeTableItem(const Size& s) :
-        TulipTableWidgetItem(SIZETABLEITEM_RTTI) {
+    TulipTableWidgetItem(SIZETABLEITEM_RTTI) {
     setSize(s);
 }
 SizeTableItem::~SizeTableItem() {
@@ -330,7 +439,7 @@ public:
 };
 
 CoordTableItem::CoordTableItem(const Coord& c) :
-        TulipTableWidgetItem(COORDTABLEITEM_RTTI) {
+    TulipTableWidgetItem(COORDTABLEITEM_RTTI) {
     setCoord(c);
 }
 CoordTableItem::~CoordTableItem() {
@@ -360,7 +469,7 @@ void CoordTableItem::setContentFromEditor(QWidget *editor) {
 }
 //================================================================================
 LabelEditor::LabelEditor(const QString &label, QWidget *parent) :
-        QWidget(parent),label(label) {
+    QWidget(parent),label(label) {
     TextEditDialog *textEditDialog=new TextEditDialog(label, parent);
     if(textEditDialog->exec()){
         this->label=textEditDialog->getText();
@@ -395,7 +504,7 @@ public:
 };
 
 LabelTableItem::LabelTableItem(const QString& label) :
-        TulipTableWidgetItem(LABELTABLEITEM_RTTI) {
+    TulipTableWidgetItem(LABELTABLEITEM_RTTI) {
     setLabel(label);
 }
 LabelTableItem::~LabelTableItem() {
@@ -429,7 +538,7 @@ private:
 };
 
 IntFromListEditor::IntFromListEditor(QStringList *list, QWidget *widget) :
-        QComboBox(widget), values(list) {
+    QComboBox(widget), values(list) {
     populate();
 }
 
@@ -444,7 +553,7 @@ class IntFromListTableItem: public TulipTableWidgetItem {
     int value;
 public:
     IntFromListTableItem(QStringList* l, int type) :
-            TulipTableWidgetItem(type), names(l) {
+        TulipTableWidgetItem(type), names(l) {
     }
     ~IntFromListTableItem() {
     }
@@ -504,7 +613,7 @@ class GlyphTableItem: public IntFromListTableItem {
     }
 public:
     GlyphTableItem(int val) :
-            IntFromListTableItem(getGlyphNames(), GLYPHTABLEITEM_RTTI) {
+        IntFromListTableItem(getGlyphNames(), GLYPHTABLEITEM_RTTI) {
         setValue(val);
     }
     ~GlyphTableItem() {
@@ -531,14 +640,14 @@ class EdgeShapeTableItem: public IntFromListTableItem {
             edgeShapeNames = new QStringList;
             for (int i = 0; i < GlGraphStaticData::edgeShapesCount; i++)
                 edgeShapeNames->append(QString(GlGraphStaticData::edgeShapeName(
-                        GlGraphStaticData::edgeShapeIds[i]).c_str()));
+                                                   GlGraphStaticData::edgeShapeIds[i]).c_str()));
         }
         return edgeShapeNames;
     }
 
 public:
     EdgeShapeTableItem(int val) :
-            IntFromListTableItem(getEdgeShapeNames(), EDGESHAPETABLEITEM_RTTI) {
+        IntFromListTableItem(getEdgeShapeNames(), EDGESHAPETABLEITEM_RTTI) {
         setValue(val);
     }
     ~EdgeShapeTableItem() {
@@ -571,7 +680,7 @@ class LabelPositionTableItem: public IntFromListTableItem {
 
 public:
     LabelPositionTableItem(int val) :
-            IntFromListTableItem(getLabelPositionNames(), LABELPOSITIONTABLEITEM_RTTI) {
+        IntFromListTableItem(getLabelPositionNames(), LABELPOSITIONTABLEITEM_RTTI) {
         setValue(val);
     }
     ~LabelPositionTableItem() {
@@ -608,7 +717,7 @@ class EdgeExtremityGlyphTableItem: public IntFromListTableItem {
     }
 public:
     EdgeExtremityGlyphTableItem(int val) :
-            IntFromListTableItem(getGlyphNames(), EDGEEXTREMITYGLYPHTABLEITEM_RTTI) {
+        IntFromListTableItem(getGlyphNames(), EDGEEXTREMITYGLYPHTABLEITEM_RTTI) {
         setValue(val);
     }
     ~EdgeExtremityGlyphTableItem() {
@@ -619,7 +728,7 @@ public:
 
 QString EdgeExtremityGlyphTableItem::valueToText(int val) const {
     return QString(
-            tlp::EdgeExtremityGlyphManager::getInst().glyphName(val).c_str());
+                tlp::EdgeExtremityGlyphManager::getInst().glyphName(val).c_str());
 }
 
 int EdgeExtremityGlyphTableItem::textToValue(const QString& s) const {
@@ -648,7 +757,7 @@ public:
 };
 
 SelectionTableItem::SelectionTableItem(bool value) :
-        TulipTableWidgetItem(SELECTIONTABLEITEM_RTTI) {
+    TulipTableWidgetItem(SELECTIONTABLEITEM_RTTI) {
     setValue(value);
 }
 SelectionTableItem::~SelectionTableItem() {
@@ -664,7 +773,7 @@ void SelectionTableItem::setTextFromTulip(const std::string& data) {
 class TulipTableItemDelegate: public QItemDelegate {
 public:
     TulipTableItemDelegate(TulipTableWidget* parent) :
-            QItemDelegate(parent) {
+        QItemDelegate(parent) {
     }
 
     ~TulipTableItemDelegate() {
@@ -672,7 +781,7 @@ public:
     QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem & option,
                           const QModelIndex& index) const;
     void
-            paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
 };
 
@@ -770,7 +879,7 @@ void TulipTableItemDelegate::setModelData(QWidget* editor, QAbstractItemModel* m
 
 ListItemPushButton::ListItemPushButton(DynamicTypeHandlerInterface* handler,
                                        TulipTableWidgetItem *orig, QWidget* parent, const QString& text) :
-QPushButton(text, parent), orig(orig), handler(handler) {
+    QPushButton(text, parent), orig(orig), handler(handler) {
     connect(this, SIGNAL(pressed()), SLOT(showListDialog()));
     emit pressed(); // ugly but it works
     setFlat(true);
@@ -787,7 +896,7 @@ void ListItemPushButton::showListDialog() {
     ListPropertyWidget *lw = new ListPropertyWidget(handler, (TulipTableWidgetItem*) orig->clone(),
                                                     dialog);
     lw->tableWidget->setItemDelegate(
-            new TulipTableItemDelegate((TulipTableWidget*) lw->tableWidget));
+                new TulipTableItemDelegate((TulipTableWidget*) lw->tableWidget));
     dialog->layout()->addWidget(lw);
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
                                                        | QDialogButtonBox::Cancel, Qt::Horizontal, dialog);
@@ -804,7 +913,7 @@ void ListItemPushButton::showListDialog() {
 }
 
 TulipTableWidget::TulipTableWidget(QWidget *parent, const char *) :
-        QTableWidget(parent), updateColumnTitle(false) {
+    QTableWidget(parent), updateColumnTitle(false) {
     resetBackColor1();
     resetBackColor2();
     setItemDelegate(new TulipTableItemDelegate(this));
@@ -854,23 +963,23 @@ void TulipTableWidget::setTulipNodeItem(const PropertyInterface *editedProperty,
         int labelPos = ((IntegerProperty *) editedProperty)->getNodeValue(n);
         /* LabelPositionTableItem *item = new LabelPositionTableItem(this, false);
 
-		 label = tr("Label");
-		 this->setItem(row, col, item);
-		 item->setCurrentItem(GlGraphStaticData::labelPositionName(labelPos).c_str()); */
+   label = tr("Label");
+   this->setItem(row, col, item);
+   item->setCurrentItem(GlGraphStaticData::labelPositionName(labelPos).c_str()); */
 
         setItem(row, col, new LabelPositionTableItem(labelPos));
     } else if (propertyName == "viewTexture") {
         setItem(row, col, new FileTableItem(QString(
-                const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
+                                                const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
     } else if (propertyName == "viewFont") {
         setItem(row, col, new FileTableFontItem(QString(
-                const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
+                                                    const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
     } else if (propertyName == "viewLabel") {
         setItem(row, col, new LabelTableItem(QString::fromUtf8(
-                const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
+                                                 const_cast<PropertyInterface *> (editedProperty)->getNodeStringValue(n).c_str())));
     } else if (typeid(*editedProperty) == typeid(BooleanProperty)) {
         setItem(row, col, new SelectionTableItem(
-                ((BooleanProperty *) editedProperty)->getNodeValue(n)));
+                    ((BooleanProperty *) editedProperty)->getNodeValue(n)));
     } else if (typeid(*editedProperty) == typeid(ColorProperty)) {
         ColorProperty *tmpCol = (ColorProperty *) editedProperty;
         Color c = tmpCol->getNodeValue(n);
@@ -907,11 +1016,11 @@ void TulipTableWidget::setTulipNodeItem(const PropertyInterface *editedProperty,
 }
 
 void TulipTableWidget::setTulipEdgeItem(
-        const PropertyInterface *editedProperty,
-        const std::string propertyName,
-        const edge &e,
-        const int row,
-        const int col) {
+    const PropertyInterface *editedProperty,
+    const std::string propertyName,
+    const edge &e,
+    const int row,
+    const int col) {
     QString
             label;
     if (propertyName == "viewTgtAnchorShape") {
@@ -937,10 +1046,10 @@ void TulipTableWidget::setTulipEdgeItem(
         setItem(row,col,new FileTableFontItem(QString(const_cast<PropertyInterface *> (editedProperty)->getEdgeStringValue(e).c_str())));
     } else if (propertyName == "viewLabel") {
         setItem(row, col, new LabelTableItem(QString::fromUtf8(
-                const_cast<PropertyInterface *> (editedProperty)->getEdgeStringValue(e).c_str())));
+                                                 const_cast<PropertyInterface *> (editedProperty)->getEdgeStringValue(e).c_str())));
     } else if (propertyName == "viewTexture") {
         setItem(row, col, new FileTableItem(QString(
-                const_cast<PropertyInterface *> (editedProperty)->getEdgeStringValue(e).c_str())));
+                                                const_cast<PropertyInterface *> (editedProperty)->getEdgeStringValue(e).c_str())));
     } else if (propertyName.compare("viewLayout") == 0) {
         setItem(row,col,new ListItem(new CoordTableItem(Coord()),new DynamicTypeHandler<LineType,PointType> (((LayoutProperty*) editedProperty)->getEdgeStringValue(e))));
     } else if (typeid(*editedProperty) == typeid(StringVectorProperty)) {

@@ -33,10 +33,18 @@
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 
+//These lines are for code compatibility between Tulip 3.5 and Tulip 3.6
+#include "tulip/FileNameEditorWidget.h"
+#include "tulip/ColorButton.h"
+
+
 class QLineEdit;
 class QPaintEvent;
 
 namespace tlp {
+
+//These lines are for code compatibility between Tulip 3.5 and Tulip 3.6
+typedef  FileNameEditorWidget FilenameEditor;
 
 struct edge;
 struct node;
@@ -70,6 +78,51 @@ public:
   QString getLabel() const;
 
 };
+
+/**
+  * Use SizeWidget instead.
+  **/
+class TLP_QT_SCOPE SizeEditor: public QWidget {
+         Q_OBJECT
+                 ;
+         private:
+                 Size size;
+                 QLineEdit *edit[3];
+
+         public:
+                 _DEPRECATED SizeEditor(const Size &, QWidget *);
+                 ~SizeEditor();
+                 Size getSize() const;
+                 void setFocus();
+
+         private slots:
+                 void changeW(const QString &);
+                 void changeH(const QString &);
+                 void changeD(const QString &);
+         };
+
+/**
+  * Use CoordWidget instead.
+  **/
+class CoordEditor: public QWidget {
+    Q_OBJECT
+                 ;
+
+    private:
+                 Coord coord;
+                 QLineEdit *edit[3];
+
+         public:
+                 _DEPRECATED CoordEditor(const Coord &, QWidget *);
+                 ~CoordEditor();
+                 Coord getCoord() const;
+                 void setFocus();
+
+         private slots:
+                 void changeX(const QString &);
+                 void changeY(const QString &);
+                 void changeZ(const QString &);
+         };
 
 /* table items */
 class TLP_QT_SCOPE TulipTableWidgetItem: public QTableWidgetItem {
