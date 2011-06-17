@@ -219,9 +219,9 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
     }
 }
 
-QVariant TulipQVariantBuilder::defaultElementValueData(tlp::Graph* graph,int displayRole,tlp::ElementType elementType,TulipPropertyType propertyType,tlp::PropertyInterface* property)const{
+/*QVariant TulipQVariantBuilder::defaultElementValueData(tlp::Graph* graph,int displayRole,tlp::ElementType elementType,TulipPropertyType propertyType,tlp::PropertyInterface* property)const{
 
-}
+}*/
 
 TulipPropertyType TulipQVariantBuilder::getPropertyType(ElementType elementType,PropertyInterface* property) const
 {
