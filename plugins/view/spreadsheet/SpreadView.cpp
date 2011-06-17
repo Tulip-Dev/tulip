@@ -37,7 +37,7 @@ namespace tlp {
 
 
 SpreadView::SpreadView() :
-    AbstractView(),ui(new Ui::SpreadViewWidget),_graph(NULL),_reloadSelectionProperty(false){
+    AbstractView(),ui(new Ui::SpreadViewWidget),_graph(NULL),_selectionProperty(NULL),_reloadSelectionProperty(false){
 }
 SpreadView::~SpreadView() {
     delete ui;
@@ -97,6 +97,12 @@ void SpreadView::setData(Graph *graph, DataSet) {
         connect(ui->nodesTableView->graphModel(),SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),this,SLOT(rowsInserted(QModelIndex,int,int)));
         connect(ui->nodesTableView->graphModel(),SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(dataChanged(QModelIndex,QModelIndex)));
         connect(ui->nodesTableView->graphModel(),SIGNAL(modelReset()),this,SLOT(modelReset()));
+
+        connect(ui->edgesTableView->graphModel(),SIGNAL(columnsAboutToBeInserted ( QModelIndex , int , int)),this,SLOT(columnsInserted(QModelIndex,int,int)));
+        connect(ui->edgesTableView->graphModel(),SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)),this,SLOT(rowsInserted(QModelIndex,int,int)));
+        connect(ui->edgesTableView->graphModel(),SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),this,SLOT(rowsInserted(QModelIndex,int,int)));
+        connect(ui->edgesTableView->graphModel(),SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(dataChanged(QModelIndex,QModelIndex)));
+        connect(ui->edgesTableView->graphModel(),SIGNAL(modelReset()),this,SLOT(modelReset()));
 
     }
 }
@@ -424,26 +430,33 @@ void SpreadView::updateElementVisibility(int state){
 }
 
 void SpreadView::showOnlySelectedElements(bool show){
-    assert(_graph != NULL);
-    BooleanProperty* viewSelection = _graph->getProperty<BooleanProperty>("viewSelection");
+    assert(_graph != NULL);    
     if(show){
-        viewSelection->addListener(this);
-        viewSelection->addObserver(this);
-        viewSelection->getGraph()->addListener(this);
-        viewSelection->getGraph()->addObserver(this);
+        //Listen for property creation destruction.
+        _graph->addListener(this);
+        _graph->addObserver(this);
+        if(_graph->existProperty("viewSelection")){
+            _selectionProperty = _graph->getProperty<BooleanProperty>("viewSelection");
+            _selectionProperty->addObserver(this);
+            _selectionProperty->addListener(this);
+        }
     }else{
-        viewSelection->removeListener(this);
-        viewSelection->removeObserver(this);
-        viewSelection->getGraph()->removeListener(this);
-        viewSelection->getGraph()->removeObserver(this);
-    }    
+        //No need to listen graph anymore.
+        _graph->removeListener(this);
+        _graph->removeObserver(this);
+        if(_selectionProperty != NULL){
+            _selectionProperty->removeListener(this);
+            _selectionProperty->removeObserver(this);
+            _selectionProperty = NULL;
+        }
+    }
+    //Need to update filter.
     _updatedNodes.setAll(true);
     _updatedEdges.setAll(true);
     updateFilters();
 }
 
-void SpreadView::updateFilters(){
-    BooleanProperty* viewSelection = _graph->getProperty<BooleanProperty>("viewSelection");
+void SpreadView::updateFilters(){    
     GraphTableModel* nodesGraphModel = ui->nodesTableView->graphModel();
     bool displayOnlySelected = displayOnlySelectedElements();
     QRegExp regExp = elementValuesFilter();
@@ -452,7 +465,7 @@ void SpreadView::updateFilters(){
         if(_updatedNodes.get(n.id)){
             bool display = true;
             if(displayOnlySelected){
-                display = viewSelection->getNodeValue(n);
+                display = _selectionProperty->getNodeValue(n);
             }
             bool match = false;
             if(regExp.isEmpty() ){
@@ -474,7 +487,7 @@ void SpreadView::updateFilters(){
         if(_updatedEdges.get(e.id)){
             bool display = true;
             if(displayOnlySelected){
-                display = viewSelection->getEdgeValue(e);
+                display = _selectionProperty->getEdgeValue(e);
             }
             bool match = false;
             if(regExp.isEmpty() ){
@@ -517,8 +530,20 @@ void SpreadView::treatEvent(const Event &ev){
         const GraphEvent* graphEvt = dynamic_cast<const GraphEvent*>(&ev);
         if(graphEvt){
             switch(graphEvt->getType()) {
+            case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
+            case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
+            case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
             case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:{
-                _reloadSelectionProperty = true;
+                string propertyName = graphEvt->getPropertyName();
+                //A new selection property was created or the current one will be destructed.
+                if(propertyName.compare("viewSelection")==0){
+                    if(_selectionProperty != NULL){
+                        _selectionProperty->removeListener(this);
+                        _selectionProperty->removeObserver(this);
+                        _selectionProperty = NULL;
+                    }
+                    _reloadSelectionProperty = true;
+                }
             }
                 break;
             default:
@@ -529,15 +554,16 @@ void SpreadView::treatEvent(const Event &ev){
 }
 
 void SpreadView::treatEvents(const  std::vector<Event> &){
+    //Need to reload selection property
     if (_reloadSelectionProperty) {
-        //Old viewSelection property was deleted so we need to observe new one.
-        BooleanProperty* viewSelection = _graph->getProperty<BooleanProperty>("viewSelection");
-        viewSelection->addObserver(this);
-        viewSelection->addPropertyObserver(this);
-        viewSelection->getGraph()->addObserver(this);
-        viewSelection->getGraph()->addListener(this);
-        _updatedNodes.setAll(true);
-        _updatedEdges.setAll(true);
+        assert(_selectionProperty == NULL);
+        if(_graph->existProperty("viewSelection")){
+            _selectionProperty = _graph->getProperty<BooleanProperty>("viewSelection");
+            _selectionProperty->addObserver(this);
+            _selectionProperty->addPropertyObserver(this);
+            _updatedNodes.setAll(true);
+            _updatedEdges.setAll(true);
+        }
         _reloadSelectionProperty = false;
     }
     updateFilters();
@@ -553,7 +579,7 @@ void SpreadView::filterElements(const QString&){
 }
 
 bool SpreadView::displayOnlySelectedElements()const{
-    return ui->showOnlySelectedElementsCheckBox->checkState()==Qt::Checked;
+    return ui->showOnlySelectedElementsCheckBox->checkState()==Qt::Checked && _selectionProperty != NULL;
 }
 
 QRegExp SpreadView::elementValuesFilter()const{
@@ -581,6 +607,7 @@ void SpreadView::rowsInserted(const QModelIndex &, int first, int last){
             _updatedEdges.set(model->idForIndex(i),true);
         }
     }
+    updateFilters();
 }
 
 void SpreadView::modelReset(){
@@ -590,9 +617,10 @@ void SpreadView::modelReset(){
     }else if(model == ui->edgesTableView->graphModel()){
         _updatedEdges.setAll(true);
     }
+    updateFilters();
 }
 void SpreadView::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight){
-    GraphTableModel* model = static_cast<GraphTableModel*>(sender());
+    GraphTableModel* model = static_cast<GraphTableModel*>(sender());    
     if(model == ui->nodesTableView->graphModel()){
         for(int i = topLeft.row() ; i <= bottomRight.row() ; ++i){
             _updatedNodes.set(model->idForIndex(i),true);
@@ -602,6 +630,7 @@ void SpreadView::dataChanged(const QModelIndex & topLeft, const QModelIndex & bo
             _updatedEdges.set(model->idForIndex(i),true);
         }
     }
+    updateFilters();
 }
 
 VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "07/06/2011", "Spreadsheet view", "2.0")

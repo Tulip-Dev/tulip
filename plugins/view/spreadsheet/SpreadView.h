@@ -38,6 +38,7 @@ class GraphTableWidget;
 namespace tlp {
 
 class Graph;
+class BooleanProperty;
 
 class SpreadView: public AbstractView , public PropertyObserver, public Observable{
     Q_OBJECT
@@ -141,6 +142,7 @@ private:
 
     MutableContainer<bool> _updatedNodes;
     MutableContainer<bool> _updatedEdges;
+    tlp::BooleanProperty* _selectionProperty;
     bool _reloadSelectionProperty;
 
 };
