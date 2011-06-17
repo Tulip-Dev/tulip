@@ -116,7 +116,7 @@ class TLP_QT_SCOPE PluginInformations {
     QString identifier() const;
     //TODO this should be a displayname, not the name used to register into the plugin system
     QString name() const;
-
+    QString author() const { return "author"; }
     QString group() const { return "group"; }
     
     QString shortDescription() const;
@@ -128,6 +128,7 @@ class TLP_QT_SCOPE PluginInformations {
     QString type() const;
     const QStringList& dependencies(QString version) const;
     const QStringList& versions() const;
+    QString latestVersion() const { return "latestVersion"; }
 
     QString installedVersion() const;
     bool isInstalled(QString version) const;

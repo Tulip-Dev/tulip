@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>960</width>
-    <height>788</height>
+    <width>958</width>
+    <height>786</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -111,8 +111,8 @@ QToolButton:pressed {
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>692</width>
-          <height>616</height>
+          <width>690</width>
+          <height>611</height>
          </rect>
         </property>
        </widget>
@@ -185,7 +185,7 @@ border-left: 1px solid &quot;#C9C9C9&quot;;
 }</string>
      </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
@@ -258,8 +258,8 @@ p, li { white-space: pre-wrap; }
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>228</width>
-           <height>322</height>
+           <width>238</width>
+           <height>324</height>
           </rect>
          </property>
         </widget>

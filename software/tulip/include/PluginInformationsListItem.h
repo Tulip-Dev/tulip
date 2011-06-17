@@ -19,12 +19,9 @@ public:
 protected:
   void focusInEvent(QFocusEvent *);
 
-protected slots:
-  void infosButtonClicked();
-
 signals:
   void gotFocus();
-  void showInfos(QString);
+  void showDetailedInformations();
 
 public slots:
   void expand();

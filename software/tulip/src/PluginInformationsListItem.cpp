@@ -19,21 +19,20 @@ PluginInformationsListItem::PluginInformationsListItem(tlp::PluginInformations *
     _ui->statusIcon->setToolTip(trUtf8("Latest version installed on ") + infos->installDate().toString());
     _ui->installButton->setEnabled(false);
   }
+  if (!infos->isInstalled()) // TODO: check if plugin is in a tulip library
+    _ui->removeButton->setEnabled(false);
+
   _ui->icon->setPixmap(QPixmap(infos->iconPath()));
   _ui->name->setText("<p><span style=\"font-size:large;\"><b>" + infos->name() + "</b></span>");
   _ui->shortDescription->setText("<p><span style=\"font-size:small; color:#626262;\">" + infos->shortDescription() + "</span>");
   if (!hasFocus())
     _ui->bottomFrame->hide();
 
-  connect(_ui->infosButton,SIGNAL(clicked()),this,SLOT(infosButtonClicked()));
+  connect(_ui->infosButton,SIGNAL(clicked()),this,SIGNAL(showDetailedInformations()));
 }
 
 void PluginInformationsListItem::focusInEvent(QFocusEvent *) {
   emit gotFocus();
-}
-
-void PluginInformationsListItem::infosButtonClicked() {
-  emit showInfos(_pluginInformations->longDescriptionPath());
 }
 
 void PluginInformationsListItem::expand() {

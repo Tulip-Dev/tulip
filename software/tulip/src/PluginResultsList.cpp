@@ -1,13 +1,14 @@
 #include "PluginResultsList.h"
 
 #include "PluginInformationsListItem.h"
+#include "DetailedPluginInformationsWidget.h"
 
 #include <tulip/PluginManager.h>
 #include <tulip/PluginInformations.h>
 #include <QtGui/QVBoxLayout>
 
 PluginResultsList::PluginResultsList(QWidget *parent)
-  : QScrollArea(parent), _pluginManager(new tlp::PluginManager), _focusedItem(0) {
+  : QScrollArea(parent), _pluginManager(new tlp::PluginManager), _focusedItem(0), _resultsListCache(0) {
 }
 
 void PluginResultsList::setTypeFilter(const QString &s,bool autoRefresh) {
@@ -27,8 +28,12 @@ void PluginResultsList::setNameFilter(const QString &s,bool autoRefresh) {
 }
 
 void PluginResultsList::refreshResults() {
+  if (_resultsListCache) {
+    delete _resultsListCache;
+    _resultsListCache = 0;
+  }
   _focusedItem = 0;
-  emit hideHtml();
+
   QWidget *mainWidget = new QWidget();
   mainWidget->setObjectName(QString::fromUtf8("pluginsSearchListContent"));
   QVBoxLayout *searchLayout = new QVBoxLayout(mainWidget);
@@ -55,7 +60,7 @@ void PluginResultsList::refreshResults() {
 
     PluginInformationsListItem *item = new PluginInformationsListItem(infos,mainWidget);
     connect(item,SIGNAL(gotFocus()),this,SLOT(changeFocus()));
-    connect(item,SIGNAL(showInfos(QString)),this,SIGNAL(showHtml(QString)));
+    connect(item,SIGNAL(showDetailedInformations()),this,SLOT(switchToDetailedInformations()));
     searchLayout->addWidget(item);
   }
   searchLayout->addItem(new QSpacerItem(1,1,QSizePolicy::Maximum,QSizePolicy::Expanding));
@@ -63,11 +68,23 @@ void PluginResultsList::refreshResults() {
 }
 
 void PluginResultsList::changeFocus() {
-  emit hideHtml();
   PluginInformationsListItem *oldFocus = qobject_cast<PluginInformationsListItem *>(_focusedItem),
       *newFocus = qobject_cast<PluginInformationsListItem *>(sender());
   _focusedItem = newFocus;
   if (oldFocus)
     oldFocus->collapse();
   newFocus->expand();
+}
+
+void PluginResultsList::switchToDetailedInformations() {
+  PluginInformationsListItem *item = qobject_cast<PluginInformationsListItem *>(_focusedItem);
+  _resultsListCache = takeWidget();
+  DetailedPluginInformationsWidget *detailedInfosWidget = new DetailedPluginInformationsWidget(item->pluginInformations());
+  setWidget(detailedInfosWidget);
+  connect(detailedInfosWidget,SIGNAL(goBack()),this,SLOT(restoreResultsList()));
+}
+
+void PluginResultsList::restoreResultsList() {
+  if (_resultsListCache)
+    setWidget(_resultsListCache);
 }

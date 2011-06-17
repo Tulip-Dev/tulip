@@ -13,6 +13,7 @@ SET(SRCS
   src/TulipSplashScreen.cpp
   src/TulipWelcomePage.cpp
   src/PluginResultsList.cpp
+  src/DetailedPluginInformationsWidget.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -23,6 +24,7 @@ QT4_WRAP_UI(UI_HEADERS
   designer/TulipMainWindow.ui
   designer/TulipWelcomePage.ui
   designer/PluginInformationsListItem.ui
+  designer/DetailedPluginInformationsWidget.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -34,6 +36,7 @@ QT4_WRAP_CPP(MOC_SRCS
   include/TulipWelcomePage.h
   include/PluginInformationsListItem.h
   include/PluginResultsList.h
+  include/DetailedPluginInformationsWidget.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS resources/TulipAgent.qrc)

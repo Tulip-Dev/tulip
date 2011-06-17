@@ -50,33 +50,33 @@ void PluginsCenter::showPage(QWidget *page) {
 void PluginsCenter::listItemSelected() {
   int row = _ui->pluginsSideList->currentRow();
   switch (row) {
-  case 0:
+  case 2:
     browseAll();
     break;
-  case 1:
+  case 3:
     browseAlgorithms();
     break;
-  case 2:
+  case 4:
     browseImportExport();
     break;
-  case 3:
+  case 5:
     browseGlyphs();
     break;
-  case 4:
+  case 6:
     browseViews();
     break;
-  case 5:
+  case 7:
     browseInteractors();
     break;
-  case 6:
+  case 8:
     browsePerspectives();
     break;
-  case 7: // separator
+  case 9: // separator
     break;
-  case 8:
+  case 10:
     showErrorsPage();
     break;
-  case 9:
+  case 11:
     showDownloadsPage();
     break;
   }
