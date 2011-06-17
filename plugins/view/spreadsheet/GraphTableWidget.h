@@ -1,5 +1,5 @@
-#ifndef TULIPTABLEWIDGET_H
-#define TULIPTABLEWIDGET_H
+#ifndef GRAPHTABLEWIDGET_H
+#define GRAPHTABLEWIDGET_H
 #include <QtGui/QTableView>
 #include <tulip/Graph.h>
 
@@ -8,12 +8,12 @@ class GraphTableModel;
 /**
   * @brief Table widget object providing convinience functions for handling graph objects.
   **/
-class TulipTableWidget : public QTableView
+class GraphTableWidget : public QTableView
 {
     Q_OBJECT
 public:
-    TulipTableWidget(QWidget* parent=NULL);
-    virtual ~TulipTableWidget(){}
+    GraphTableWidget(QWidget* parent=NULL);
+    virtual ~GraphTableWidget(){}
 
     void setGraph(tlp::Graph* graph,tlp::ElementType element);
 
@@ -65,4 +65,4 @@ protected:
 
 };
 
-#endif // TULIPTABLEWIDGET_H
+#endif // GRAPHTABLEWIDGET_H

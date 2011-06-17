@@ -1,7 +1,7 @@
 #include "TulipTableWidgetColumnSelectionWidget.h"
 #include "ui_TulipTableWidgetColumnSelectionWidget.h"
 #include "TulipTableWidgetColumnSelectionModel.h"
-#include "TulipTableWidget.h"
+#include "GraphTableWidget.h"
 #include <QtGui/QMenu>
 #include <QtGui/QStyledItemDelegate>
 #include <cassert>
@@ -47,7 +47,7 @@ TulipTableWidgetColumnSelectionWidget::~TulipTableWidgetColumnSelectionWidget()
     delete ui;
 }
 
-void TulipTableWidgetColumnSelectionWidget::setTableView(TulipTableWidget* tableView){
+void TulipTableWidgetColumnSelectionWidget::setTableView(GraphTableWidget* tableView){
     assert(tableView != NULL);
     QAbstractItemModel* oldModel = ui->listView->model();
     if(oldModel){

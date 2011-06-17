@@ -4,7 +4,7 @@ INCLUDE_DIRECTORIES(${TulipInclude} ${TulipBuildInclude} ${TulipOGLInclude} ${Tu
 
 SET(spreadsheet_LIB_SRCS
     SpreadView.cpp 
-    TulipTableWidget.cpp
+    GraphTableWidget.cpp
     GraphTableModel.cpp
     ElementCollection.cpp
     TulipItemDelegate.cpp
@@ -23,7 +23,7 @@ set(spreadsheet_UI
 
 set(spreadsheet_MOC
     SpreadView.h
-    TulipTableWidget.h
+    GraphTableWidget.h
     GraphTableModel.h
     ElementCollection.h
     TulipItemDelegate.h

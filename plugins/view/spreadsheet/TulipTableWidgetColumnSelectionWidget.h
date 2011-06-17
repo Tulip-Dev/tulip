@@ -3,7 +3,7 @@
 
 #include <QtGui/QWidget>
 #include <QtCore/QRegExp>
-class TulipTableWidget;
+class GraphTableWidget;
 namespace Ui {
     class TableColumnSelectionWidget;
 }
@@ -20,7 +20,7 @@ class TulipTableWidgetColumnSelectionWidget : public QWidget
 public:
     explicit TulipTableWidgetColumnSelectionWidget(QWidget *parent = 0);
     ~TulipTableWidgetColumnSelectionWidget();
-    void setTableView(TulipTableWidget* tableView);
+    void setTableView(GraphTableWidget* tableView);
 
 private slots:
 

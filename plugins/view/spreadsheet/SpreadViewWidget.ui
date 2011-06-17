@@ -39,16 +39,25 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="showOnlySelectedElementsCheckBox">
-       <property name="text">
-        <string>Show only selected elements</string>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-      </widget>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
+     <property name="verticalSpacing">
+      <number>0</number>
+     </property>
      <item row="0" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="spacing">
@@ -90,7 +99,7 @@
             </widget>
            </item>
            <item>
-            <widget class="TulipTableWidget" name="nodesTableView">
+            <widget class="GraphTableWidget" name="nodesTableView">
              <property name="editTriggers">
               <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
              </property>
@@ -126,7 +135,7 @@
             </widget>
            </item>
            <item>
-            <widget class="TulipTableWidget" name="edgesTableView">
+            <widget class="GraphTableWidget" name="edgesTableView">
              <property name="editTriggers">
               <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
              </property>
@@ -151,15 +160,39 @@
      <property name="topMargin">
       <number>0</number>
      </property>
-     <item row="0" column="0">
+     <item row="1" column="0">
       <widget class="QLabel" name="label">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Search</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="searchBarLineEdit"/>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="filterPatternLineEdit">
+       <property name="placeholderText">
+        <string>Input a filter pattern</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="3">
+      <widget class="QCheckBox" name="showOnlySelectedElementsCheckBox">
+       <property name="text">
+        <string>Show only selected elements</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="filterPushButton">
+       <property name="text">
+        <string>Filter</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -167,9 +200,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>TulipTableWidget</class>
+   <class>GraphTableWidget</class>
    <extends>QTableView</extends>
-   <header>TulipTableWidget.h</header>
+   <header>GraphTableWidget.h</header>
   </customwidget>
   <customwidget>
    <class>TulipTableWidgetColumnSelectionWidget</class>

@@ -57,7 +57,7 @@ QWidget *SpreadView::construct(QWidget *parent) {
     ui->nodesTableView->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->nodesTableView->verticalHeader(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showElementsContextMenu(QPoint)));
     ui->nodesTableView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->nodesTableView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showTableContextMenu(QPoint)));
+    connect(ui->nodesTableView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showTableContextMenu(QPoint)));    
 
     //Edges table
     ui->edgesTableView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -74,7 +74,8 @@ QWidget *SpreadView::construct(QWidget *parent) {
     ui->edgesTableColumnEditionWidget->setEnabled(false);
 
     connect(ui->showOnlySelectedElementsCheckBox,SIGNAL(stateChanged(int)),this,SLOT(updateElementVisibility(int)));
-    connect(ui->searchBarLineEdit,SIGNAL(textChanged(QString)),this,SLOT(searchElements(QString)));
+    connect(ui->filterPatternLineEdit,SIGNAL(returnPressed()),this,SLOT(filterElements()));
+    connect(ui->filterPushButton,SIGNAL(clicked()),this,SLOT(filterElements()));
 
     return widget;
 }
@@ -89,6 +90,13 @@ void SpreadView::setData(Graph *graph, DataSet) {
         ui->nodesTableColumnEditionWidget->setEnabled(true);
         ui->edgesTableColumnEditionWidget->setTableView(ui->edgesTableView);
         ui->edgesTableColumnEditionWidget->setEnabled(true);
+
+        //Connect data modification events to ensure filtering il always up to date.
+        connect(ui->nodesTableView->graphModel(),SIGNAL(columnsAboutToBeInserted ( QModelIndex , int , int)),this,SLOT(columnsInserted(QModelIndex,int,int)));
+        connect(ui->nodesTableView->graphModel(),SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)),this,SLOT(rowsInserted(QModelIndex,int,int)));
+        connect(ui->nodesTableView->graphModel(),SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),this,SLOT(rowsInserted(QModelIndex,int,int)));
+        connect(ui->nodesTableView->graphModel(),SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(dataChanged(QModelIndex,QModelIndex)));
+        connect(ui->nodesTableView->graphModel(),SIGNAL(modelReset()),this,SLOT(modelReset()));
 
     }
 }
@@ -119,16 +127,16 @@ QImage SpreadView::createPicture(int width, int height, bool , int  , int xOffse
     return QPixmap::grabWidget(getCentralWidget(),xOffset,yOffset,width,height).toImage();
 }
 
-TulipTableWidget* SpreadView::currentTable()const{
+GraphTableWidget* SpreadView::currentTable()const{
     return ui->tabWidget->currentWidget()==ui->nodeTab?ui->nodesTableView:ui->edgesTableView;
 }
 
-void SpreadView::showElementsContextMenu(TulipTableWidget* tableWidget,int clickedRowIndex,const QPoint& position){
+void SpreadView::showElementsContextMenu(GraphTableWidget* tableWidget,int clickedRowIndex,const QPoint& position){
     QMenu contextMenu(tableWidget);
     fillElementsContextMenu(contextMenu,tableWidget,clickedRowIndex);
     contextMenu.exec(tableWidget->mapToGlobal(position));
 }
-void SpreadView::fillElementsContextMenu(QMenu& menu,TulipTableWidget* tableWidget,int clickedRowIndex){
+void SpreadView::fillElementsContextMenu(QMenu& menu,GraphTableWidget* tableWidget,int clickedRowIndex){
     QAbstractItemModel* tulipTableModel = tableWidget->model();
     //Ensure the clicked index is always selected.
     if(!tableWidget->selectionModel()->isRowSelected(clickedRowIndex,QModelIndex())){
@@ -161,12 +169,12 @@ void SpreadView::fillElementsContextMenu(QMenu& menu,TulipTableWidget* tableWidg
 }
 
 
-void SpreadView::showPropertiesContextMenu(TulipTableWidget* tableWidget,int clickedColumn,const QPoint& position){
+void SpreadView::showPropertiesContextMenu(GraphTableWidget* tableWidget,int clickedColumn,const QPoint& position){
     QMenu contextMenu(tableWidget);
     fillPropertiesContextMenu(contextMenu,tableWidget,clickedColumn);
     contextMenu.exec(tableWidget->mapToGlobal(position));
 }
-void SpreadView::fillPropertiesContextMenu(QMenu& menu,TulipTableWidget* tulipTableWidget,int clickedColumn){
+void SpreadView::fillPropertiesContextMenu(QMenu& menu,GraphTableWidget* tulipTableWidget,int clickedColumn){
     //Properties operations
     QAction *hideColumnAction = menu.addAction(tr("Hide column"),this,SLOT(hideColumn()));    
     hideColumnAction->setData(QVariant(clickedColumn));
@@ -211,7 +219,7 @@ void SpreadView::showPropertiesContextMenu(const QPoint& position){
 }
 
 void SpreadView::showTableContextMenu(const QPoint& position){
-    TulipTableWidget* tableWidget = qobject_cast<TulipTableWidget*>(sender());
+    GraphTableWidget* tableWidget = qobject_cast<GraphTableWidget*>(sender());
     QMenu contextMenu(tableWidget);
     fillElementsContextMenu(contextMenu,tableWidget,tableWidget->indexAt(position).row());
     contextMenu.exec(tableWidget->mapToGlobal(position));
@@ -240,7 +248,7 @@ void SpreadView::setAllColumnValues(){
     QAction* action = qobject_cast<QAction*>(sender());
     if(action!=NULL){
         int index = action->data().toInt();
-        TulipTableWidget* tableWidget = currentTable();
+        GraphTableWidget* tableWidget = currentTable();
         GraphTableModel* model = tableWidget->graphModel();
         QDialog dialog(tableWidget);
         dialog.setLayout(new QVBoxLayout(&dialog));
@@ -254,7 +262,9 @@ void SpreadView::setAllColumnValues(){
         if(dialog.exec()== QDialog::Accepted){
             Observable::holdObservers();
             for(int j = 0 ; j < model->rowCount() ; ++j){
-                tableWidget->itemDelegate()->setModelData(editorWidget,model,model->index(j,index));
+                if(!tableWidget->isRowHidden(j)){
+                    tableWidget->itemDelegate()->setModelData(editorWidget,model,model->index(j,index));
+                }
             }
             Observable::unholdObservers();
         }
@@ -265,7 +275,7 @@ void SpreadView::resetColumn(){
     QAction* action = qobject_cast<QAction*>(sender());
     if(action!=NULL){
         int index = action->data().toInt();
-        TulipTableWidget* tableWidget = currentTable();
+        GraphTableWidget* tableWidget = currentTable();
         GraphTableModel* model = tableWidget->graphModel();
         PropertyInterface* property = model->propertyForIndex(index);
         if(model->elementType() == NODE){
@@ -290,7 +300,7 @@ void SpreadView::deleteColumn(){
 }
 
 void SpreadView::selectElements(){
-    TulipTableWidget *tableWidget = currentTable();
+    GraphTableWidget *tableWidget = currentTable();
     QModelIndexList rows = tableWidget->selectionModel()->selectedRows(0);
     BooleanProperty* selectionProperty = _graph->getProperty<BooleanProperty>("viewSelection");
     set<unsigned int> elements = tableWidget->indexListToIds(rows);
@@ -308,7 +318,7 @@ void SpreadView::selectElements(){
 }
 
 void SpreadView::highlightElements(){
-    TulipTableWidget *tableWidget = currentTable();
+    GraphTableWidget *tableWidget = currentTable();
     BooleanProperty* selectionProperty = _graph->getProperty<BooleanProperty>("viewSelection");
     set<unsigned int> ids;
     if(tableWidget->elementType()==NODE){
@@ -328,13 +338,13 @@ void SpreadView::highlightElements(){
 void SpreadView::deleteElements(){
     QAction* action = qobject_cast<QAction*>(sender());
     if(action!=NULL){
-        TulipTableWidget *tableWidget = currentTable();
+        GraphTableWidget *tableWidget = currentTable();
         QModelIndexList indexes = tableWidget->selectionModel()->selectedRows(0);
         deleteElements(indexes,tableWidget,false);
     }
 }
 
-void SpreadView::deleteElements(const QModelIndexList& elements,TulipTableWidget *tableWidget ,bool delAll){
+void SpreadView::deleteElements(const QModelIndexList& elements,GraphTableWidget *tableWidget ,bool delAll){
     //Get the elements list
     set<unsigned int> elementsList = tableWidget->indexListToIds(elements);
     Observable::holdObservers();
@@ -351,7 +361,7 @@ void SpreadView::deleteElements(const QModelIndexList& elements,TulipTableWidget
 }
 
 void SpreadView::copyNodes(){
-    TulipTableWidget *tableWidget = currentTable();
+    GraphTableWidget *tableWidget = currentTable();
     QModelIndexList rows = tableWidget->selectionModel()->selectedRows(0);
     set<unsigned int> elements = tableWidget->indexListToIds(rows);
     set<unsigned int> createdElements;
@@ -370,7 +380,7 @@ void SpreadView::copyNodes(){
 }
 
 void SpreadView::group(){
-    TulipTableWidget *tableWidget = currentTable();
+    GraphTableWidget *tableWidget = currentTable();
     QModelIndexList rows = tableWidget->selectionModel()->selectedRows(0);
     set<unsigned int> elements = tableWidget->indexListToIds(rows);
     set<node> nodes;
@@ -386,7 +396,7 @@ void SpreadView::group(){
 }
 
 void SpreadView::ungroup(){
-    TulipTableWidget *tableWidget = currentTable();
+    GraphTableWidget *tableWidget = currentTable();
     QModelIndexList rows = tableWidget->selectionModel()->selectedRows(0);
     set<unsigned int> elements = tableWidget->indexListToIds(rows);
     set<unsigned int> metanodeNodes;
@@ -450,9 +460,9 @@ void SpreadView::updateFilters(){
             }else{
                 for(int j=0;j< nodesGraphModel->columnCount() ; ++j){
                     //If the column is visible.
-                   if(!ui->nodesTableView->isColumnHidden(i)){
+                    if(!ui->nodesTableView->isColumnHidden(i)){
                         match |= regExp.exactMatch(nodesGraphModel->data(nodesGraphModel->index(i,j)).toString());
-                   }
+                    }
                 }
             }
             ui->nodesTableView->setRowHidden(i,!(display && match));
@@ -472,9 +482,9 @@ void SpreadView::updateFilters(){
             }else{
                 for(int j=0;j< edgesGraphModel->columnCount() ; ++j){
                     //If the column is visible.
-                   if(!ui->edgesTableView->isColumnHidden(i)){
+                    if(!ui->edgesTableView->isColumnHidden(i)){
                         match |= regExp.exactMatch(edgesGraphModel->data(edgesGraphModel->index(i,j)).toString());
-                   }
+                    }
                 }
             }
             ui->edgesTableView->setRowHidden(i,!(display && match));
@@ -532,8 +542,11 @@ void SpreadView::treatEvents(const  std::vector<Event> &){
     }
     updateFilters();
 }
+void SpreadView::filterElements(){
+    filterElements(ui->filterPatternLineEdit->text());
+}
 
-void SpreadView::searchElements(const QString&){
+void SpreadView::filterElements(const QString&){
     _updatedNodes.setAll(true);
     _updatedEdges.setAll(true);
     updateFilters();
@@ -544,11 +557,54 @@ bool SpreadView::displayOnlySelectedElements()const{
 }
 
 QRegExp SpreadView::elementValuesFilter()const{
-    return QRegExp(ui->searchBarLineEdit->text());
+    return QRegExp(ui->filterPatternLineEdit->text());
+}
+
+void SpreadView::columnsInserted(const QModelIndex & , int , int ){
+    //When adding a column we need to sort all the elements
+    modelReset();
+}
+
+void SpreadView::columnsDeleted(const QModelIndex &, int , int ){
+    //When deleting a column we need to sort all the elements
+    modelReset();
+}
+
+void SpreadView::rowsInserted(const QModelIndex &, int first, int last){
+    GraphTableModel* model = static_cast<GraphTableModel*>(sender());
+    if(model == ui->nodesTableView->graphModel()){
+        for(int i = first ; i <= last ; ++i){
+            _updatedNodes.set(model->idForIndex(i),true);
+        }
+    }else if(model == ui->edgesTableView->graphModel()){
+        for(int i = first ; i <= last ; ++i){
+            _updatedEdges.set(model->idForIndex(i),true);
+        }
+    }
+}
+
+void SpreadView::modelReset(){
+    GraphTableModel* model = static_cast<GraphTableModel*>(sender());
+    if(model == ui->nodesTableView->graphModel()){
+        _updatedNodes.setAll(true);
+    }else if(model == ui->edgesTableView->graphModel()){
+        _updatedEdges.setAll(true);
+    }
+}
+void SpreadView::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight){
+    GraphTableModel* model = static_cast<GraphTableModel*>(sender());
+    if(model == ui->nodesTableView->graphModel()){
+        for(int i = topLeft.row() ; i <= bottomRight.row() ; ++i){
+            _updatedNodes.set(model->idForIndex(i),true);
+        }
+    }else if(model == ui->edgesTableView->graphModel()){
+        for(int i = topLeft.row() ; i <= bottomRight.row() ; ++i){
+            _updatedEdges.set(model->idForIndex(i),true);
+        }
+    }
 }
 
 VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "07/06/2011", "Spreadsheet view", "2.0")
-
 }
 
 

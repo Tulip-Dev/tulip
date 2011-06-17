@@ -240,6 +240,7 @@ private:
     std::set<unsigned int> _idsToAdd;
     std::set<tlp::PropertyInterface*> _propertiesUpdated;
     std::vector<GraphTableModelIndex> _dataUpdated;
+
 };
 
 #endif // GRAPHTABLEMODEL_H

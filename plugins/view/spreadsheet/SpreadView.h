@@ -34,7 +34,7 @@ namespace Ui {
 class SpreadViewWidget;
 }
 
-class TulipTableWidget;
+class GraphTableWidget;
 namespace tlp {
 
 class Graph;
@@ -85,25 +85,26 @@ public slots :
 
 protected :
 
-    void showPropertiesContextMenu(TulipTableWidget* tableWidget,int clickedColumn,const QPoint& position);
-    void fillPropertiesContextMenu(QMenu& menu,TulipTableWidget* tableWidget,int clickedColumn);
+    void showPropertiesContextMenu(GraphTableWidget* tableWidget,int clickedColumn,const QPoint& position);
+    void fillPropertiesContextMenu(QMenu& menu,GraphTableWidget* tableWidget,int clickedColumn);
     /**
       * @brief Execute the context menu for the selected row.
       **/
-    void showElementsContextMenu(TulipTableWidget* tableWidget,int clickedRowIndex,const QPoint& position);
-    void fillElementsContextMenu(QMenu& menu,TulipTableWidget* tableWidget,int clickedRowIndex);
+    void showElementsContextMenu(GraphTableWidget* tableWidget,int clickedRowIndex,const QPoint& position);
+    void fillElementsContextMenu(QMenu& menu,GraphTableWidget* tableWidget,int clickedRowIndex);
 
-    void deleteElements( const QModelIndexList& elements,TulipTableWidget *tableWidget ,bool delAll);
+    void deleteElements( const QModelIndexList& elements,GraphTableWidget *tableWidget ,bool delAll);
 
     /**
       * @brief Return the active table.
       **/
-    TulipTableWidget* currentTable()const;
+    GraphTableWidget* currentTable()const;
 protected slots:    
 
     void updateElementVisibility(int state);
     void showOnlySelectedElements(bool show);
-    void searchElements(const QString& pattern);
+    void filterElements();
+    void filterElements(const QString& pattern);
 
     //Columns operations    
     void hideColumn();
@@ -121,6 +122,12 @@ protected slots:
     void copyNodes();
     void group();    
     void ungroup();
+
+    void columnsInserted(const QModelIndex & parent, int first, int last);
+    void columnsDeleted(const QModelIndex & parent, int first, int last);
+    void rowsInserted(const QModelIndex & parent, int first, int last);
+    void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
+    void modelReset();
 
 private:
 
