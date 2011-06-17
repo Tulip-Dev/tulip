@@ -3,6 +3,51 @@
 :mod:`tulip` module API    
 ==========================
 
+Utility functions
+-------------------
+
+Graph management
+^^^^^^^^^^^^^^^^
+
+.. autofunction:: tulip::tlp.newGraph
+
+.. autofunction:: tulip::tlp.loadGraph
+
+.. autofunction:: tulip::tlp.saveGraph
+
+.. autofunction:: tulip::tlp.importGraph
+
+.. autofunction:: tulip::tlp.applyAlgorithm
+
+.. autofunction:: tulip::tlp.newSubGraph
+
+.. autofunction:: tulip::tlp.newCloneSubGraph
+
+.. autofunction:: tulip::tlp.getSource
+
+.. autofunction:: tulip::tlp.copyToGraph
+
+.. autofunction:: tulip::tlp.removeFromGraph
+
+Graph measures
+^^^^^^^^^^^^^^
+
+.. autofunction:: tulip::tlp.averagePathLength
+
+.. autofunction:: tulip::tlp.averageClusteringCoefficient
+
+.. autofunction:: tulip::tlp.clusteringCoefficient
+
+.. autofunction:: tulip::tlp.dagLevel
+
+.. autofunction:: tulip::tlp.minDegree
+
+.. autofunction:: tulip::tlp.maxDegree
+
+.. autofunction:: tulip::tlp.maxDistance
+
+.. autofunction:: tulip::tlp.reachableNodes
+
 Graph elements classes
 ----------------------------
 
@@ -382,7 +427,7 @@ Graph properties classes
 	          pushBackEdgeEltValue, popBackEdgeEltValue, resizeEdgeValue, resizeEdgeValue
 
 Graph test classes
-----------------------------
+-------------------
 
 .. autoclass:: tulip::tlp.SelfLoops
 	:members:

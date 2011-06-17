@@ -60,6 +60,9 @@ This is the main Tulip class. It enables to :
 	* create and manipulate a sub-graphs hierarchy
 	* get semantic iterators on graph elements
 	* create and retrieve properties of different types to get/set data on the graph
+	
+This class can not be instanced directly. Use :func:`tlp.newGraph()` to create a new
+empty graph.	
 %End
 
 public:
@@ -1801,6 +1804,9 @@ tlp.Graph.computeIntegerProperty(algoName, result[, dataSet = None])
 
 Computes an integer property on the current graph 
 using an external named integer algorithm (plugin).
+Integer algorithm plugins are objects
+implementing the tlp::IntegerAlgorithm interface in C++ or 
+the :class:`tlp.IntegerAlgorithm` interface in Python.
 The computed values will be stored in result. 
 Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
@@ -1832,6 +1838,9 @@ tlp.Graph.computeDoubleProperty(algoName, result[, dataSet = None])
 
 Computes a double property on the current graph 
 using an external named double algorithm (plugin).
+Double algorithm plugins are objects
+implementing the tlp::DoubleAlgorithm interface in C++ or 
+the :class:`tlp.DoubleAlgorithm` interface in Python.
 The computed values will be stored in result. 
 Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
@@ -1863,6 +1872,9 @@ tlp.Graph.computeLayoutProperty(algoName, result[, dataSet = None])
 
 Computes a layout property on the current graph 
 using an external named layout algorithm (plugin).
+Layout algorithm plugins are objects
+implementing the tlp::LayoutAlgorithm interface in C++ or 
+the :class:`tlp.LayoutAlgorithm` interface in Python.
 The computed values will be stored in result. 
 Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
@@ -1894,6 +1906,9 @@ tlp.Graph.computeBooleanProperty(algoName, result[, dataSet = None])
 
 Computes a boolean property on the current graph 
 using an external named boolean algorithm (plugin).
+Boolean algorithm plugins are objects
+implementing the tlp::BooleanAlgorithm interface in C++ or 
+the :class:`tlp.BooleanAlgorithm` interface in Python.
 The computed values will be stored in result. 
 Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
@@ -1926,6 +1941,9 @@ tlp.Graph.computeSizeProperty(algoName, result[, dataSet = None])
 
 Computes a size property on the current graph 
 using an external named size algorithm (plugin).
+Size algorithm plugins are objects
+implementing the tlp::SizeAlgorithm interface in C++ or 
+the :class:`tlp.SizeAlgorithm` interface in Python.
 The computed values will be stored in result. 
 Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
@@ -1957,6 +1975,9 @@ tlp.Graph.computeColorProperty(algoName, result[, dataSet = None])
 
 Computes a color property on the current graph 
 using an external named color algorithm (plugin).
+Color algorithm plugins are objects
+implementing the tlp::ColorAlgorithm interface in C++ or 
+the :class:`tlp.ColorAlgorithm` interface in Python.
 The computed values will be stored in result. 
 Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
@@ -1988,6 +2009,9 @@ tlp.Graph.computeStringProperty(algoName, result[, dataSet = None])
 
 Computes a string property on the current graph 
 using an external named string algorithm (plugin).
+String algorithm plugins are objects
+implementing the tlp::StringAlgorithm interface in C++ or 
+the :class:`tlp.StringAlgorithm` interface in Python.
 The computed values will be stored in result. 
 Warning: previous values stored in result will be deleted.
 Parameters can be transmit to the algorithm
@@ -2480,22 +2504,189 @@ if (!ok) {
 
 namespace tlp {
 
+//===========================================================================================
+
 tlp::Graph *newGraph();
+%Docstring
+tlp.newGraph()
+
+Creates and returns a new empty graph.
+
+:rtype: :class:`tlp.Graph`
+%End
+
+//===========================================================================================
+
 tlp::Graph *loadGraph(const std::string &filename);
+%Docstring
+tlp.loadGraph(filename)
+
+Loads a graph in the tlp format from a file (extension can be .tlp or .tlp.gz).
+Returns a new graph or None if the import fails.
+
+:param filename: the path to the tlp file
+:type filename: string
+:rtype: :class:`tlp.Graph`
+
+.. warning:: this function uses "tlp" import plugin (must be loaded).
+
+%End
+
+//===========================================================================================
+
 bool saveGraph(tlp::Graph *, const std::string &filename);
+%Docstring
+tlp.saveGraph(graph, filename)
+
+Saves a graph to a file in the tlp format. Extension of the destination file can be either 
+.tlp (raw export) or .tlp.gz (compressed export). Returns True if the graph has been 
+successfully saved.
+
+:param graph: the graph to export
+:type graph: :class:`tlp.Graph`
+:param filename: the path to the destination file
+:type filename: string
+:rtype: boolean
+
+.. warning:: this function use "tlp" export plugin (must be loaded).
+
+%End
+
+//===========================================================================================
+
 tlp::Graph *importGraph(const std::string &alg, tlp::DataSet &dataSet, tlp::Graph *newGraph=0);
+%Docstring
+tlp.importGraph(importPluginName, dataSet[, newGraph = None])
+
+Imports a graph using a Tulip import plugin (must be loaded).
+Returns a new graph or None if the import fails.
+
+:param importPluginName: the name of the Tulip import plugin
+:type importPluginName: string
+:param dataSet: a dataset filled with parameters to transmit to the import plugin
+:type dataset: :class:`tlp.DataSet`
+:param newGraph: if provided, add imported graph elements in that graph
+:type newGraph: :class:`tlp.Graph`
+:rtype: :class:`tlp.Graph`
+%End
+
 %MethodCode
 	sipRes = tlp::importGraph(*a0, *a1, 0, a2);
 %End
 
-bool applyAlgorithm(tlp::Graph *graph, std::string &errMsg /Out/, tlp::DataSet *dataSet =0, const std::string &alg="any");
+//===========================================================================================
+
+bool applyAlgorithm(tlp::Graph *graph, std::string &errMsg /Out/, tlp::DataSet *dataSet, const std::string &alg);
+%Docstring
+tlp.applyAlgorithm(graph, dataSet, algoName)
+
+Applies an algorithm plugin (must be loaded) on a graph . Algorithm plugins are objects
+implementing the tlp::Algorithm interface in C++ or the :class:`tlp.Algorithm` interface in Python. 
+Parameters can be transmit to the algorithm trough a DataSet object (refer to the plugin 
+documentation to get its parameters list). 
+
+Returns a tuple whose first member is a boolean indicating if the algorithm has been successfully applied
+and second member is a string that can contain an error message if the algorithms fails during
+its execution.
+
+:param graph: the graph on which to apply the algorithm
+:type graph: :class:`tlp.Graph`
+:param dataSet: a dataset filled with parameters to transmit to the algorithm
+:type dataSet: :class:`tlp.DataSet`
+:param algoName: the name of the algorithm plugin to call
+:type algoName: string
+:rtype: (boolean, string)
+
+%End
+
+
+//===========================================================================================
 
 tlp::Graph *newSubGraph(tlp::Graph *, std::string name = "unnamed");
-tlp::Graph *newCloneSubGraph(tlp::Graph *, std::string name = "unnamed");
-bool getSource(tlp::Graph *, tlp::node &n);
-void copyToGraph(tlp::Graph *outG, tlp::Graph *inG, tlp::BooleanProperty* inSelection=0, tlp::BooleanProperty* outSelection=0 );
-void removeFromGraph(tlp::Graph *ioG, tlp::BooleanProperty *inSelection = 0);
+%Docstring
+tlp.newSubGraph(root[, name = "unnamed"])
 
+Creates and returns an empty subgraph of a graph.
+
+:param root: the graph on which the subgraph will be created
+:type root: :class:`tlp.Graph`
+:param name: the subgraph name
+:type name: string
+:rtype: :class:`tlp.Graph`
+%End
+
+//===========================================================================================
+
+tlp::Graph *newCloneSubGraph(tlp::Graph *, std::string name = "unnamed");
+%Docstring
+tlp.newCloneSubGraph(root[, name = "unnamed"])
+
+Creates and returns a subgraph of a graph root that is equal to that graph (a clone subgraph).
+
+:param root: the graph on which the subgraph will be created
+:type root: :class:`tlp.Graph`
+:param name: the subgraph name
+:type name: string
+:rtype: :class:`tlp.Graph`
+%End
+
+//===========================================================================================
+
+bool getSource(tlp::Graph *, tlp::node &n);
+%Docstring
+tlp.getSource(graph)
+
+Finds the first node whose input degree equals 0.
+Returns a tuple whose first member is a boolean indicating if such node exists and
+second member is the found node (invalid if there is no source);
+
+:param graph: the graph on which to find a source
+:type graph: :class:`tlp.Graph`
+:rtype: (boolean, :class:`tlp.node`)
+%End
+
+//===========================================================================================
+
+void copyToGraph(tlp::Graph *outG, tlp::Graph *inG, tlp::BooleanProperty* inSelection=0, tlp::BooleanProperty* outSelection=0 );
+%Docstring
+tlp.copyToGraph(outGraph, inGraph[, inSelection = None, outSelection = None])
+
+Appends the selected part of a graph (properties, nodes and edges) into another one.
+If no selection is done, the whole input graph graph is appended.
+The output selection is used to select the appended nodes & edges
+
+:param outGraph: the graph on which to append elements
+:type outGraph: :class:`tlp.Graph`
+:param inGraph: the graph to append
+:type inGraph: :class:`tlp.Graph`
+:param inSelection: boolean property attached to inGraph, only selected elements will be appended if provided
+:type inSelection: :class:`tlp.BooleanProperty`
+:param outSelection: boolean property attached to outGraph, appended nodes and edges will be selected if provided 
+:type outSelection: :class:`tlp.BooleanProperty`
+
+.. warning:: The input selection is extended to all selected edge ends.
+
+%End
+
+//===========================================================================================
+
+void removeFromGraph(tlp::Graph *ioG, tlp::BooleanProperty *inSelection = 0);
+%Docstring
+tlp.removeFromGraph(inGraph[, inSelection = None])
+
+Removes the selected part of a graph (properties values, nodes and edges).
+If no selection is done, the whole graph is reseted to default value.
+
+:param inGraph: the graph on which to remove elements
+:type inGraph: :class:`tlp.Graph`
+:param inSelection: boolean property attached to inGraph, only selected elements will be removed if provided
+:type inSelection: :class:`tlp.BooleanProperty`
+
+.. warning:: The selection is extended to all selected edge ends.
+
+%End
+
+//===========================================================================================
 
 };
 
