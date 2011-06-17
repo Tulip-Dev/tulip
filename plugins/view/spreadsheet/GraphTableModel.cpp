@@ -410,7 +410,7 @@ void GraphTableModel::addInheritedProperty(Graph* g, const string& propertyName)
     _propertiesToAdd.insert(g->getProperty(propertyName));
 }
 
-void GraphTableModel::delInheritedProperty(Graph *graph, const std::string &name){        
+void GraphTableModel::beforeDelInheritedProperty(Graph *graph, const std::string &name){
     _propertiesToDelete.insert(graph->getProperty(name));
 }
 
@@ -497,10 +497,10 @@ void GraphTableModel::treatEvents(const  vector<Event> &){
                 //Sort elements
                 sortElements(_sortingProperty,_order);
             }else{
-                emit dataChanged(index(0,0),index(rowCount(),columnCount()));
+                emit dataChanged(index(0,0),index(rowCount()-1,columnCount()-1));
             }
         }else{
-            emit dataChanged(index(0,0),index(rowCount(),columnCount()));
+            emit dataChanged(index(0,0),index(rowCount()-1,columnCount()-1));
         }
         _propertiesUpdated.clear();
         _dataUpdated.clear();

@@ -159,7 +159,7 @@ public:
   void addInheritedProperty(Graph* g, const string& name) {
     sGraphs.push_back(g), spName = name;
   }
-  void delInheritedProperty(Graph* g, const string& name) {
+  void afterDelInheritedProperty(Graph* g, const string& name) {
     sGraphs.push_back(g), spName = name;
   }
 };  
@@ -171,7 +171,7 @@ public:
     }
     bool inheritedPropertyExist;
     bool initialized;
-    void delInheritedProperty(Graph* g, const string& name) {
+    void afterDelInheritedProperty(Graph* g, const string& name) {
         if(!initialized){
             inheritedPropertyExist = g->getProperty(name)!=NULL;
             if(inheritedPropertyExist){

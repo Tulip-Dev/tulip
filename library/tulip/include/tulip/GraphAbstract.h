@@ -119,7 +119,8 @@ private:
   GraphProperty* metaGraphProperty;
 
   void notifyAddInheritedProperty(const std::string& prop);
-  void notifyDelInheritedProperty(const std::string& prop);
+  void notifyBeforeDelInheritedProperty(const std::string& prop);
+  void notifyAfterDelInheritedProperty(const std::string& prop);
 };
 
 }

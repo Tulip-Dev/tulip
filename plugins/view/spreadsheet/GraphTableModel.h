@@ -138,7 +138,7 @@ public:
     void addLocalProperty(tlp::Graph*, const std::string&);
     void delLocalProperty(tlp::Graph *, const std::string &);
     void addInheritedProperty(tlp::Graph*, const std::string&);
-    void delInheritedProperty(tlp::Graph *, const std::string &);
+    void beforeDelInheritedProperty(tlp::Graph *, const std::string &);
     void afterSetNodeValue(tlp::PropertyInterface*, const tlp::node);
     void afterSetEdgeValue(tlp::PropertyInterface*, const tlp::edge);
     void afterSetAllNodeValue(tlp::PropertyInterface*);
