@@ -1,6 +1,5 @@
 #include "ElementCollection.h"
 #include <iostream>
-using namespace tlp;
 using namespace std;
 
 

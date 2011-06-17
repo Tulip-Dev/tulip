@@ -8,7 +8,7 @@
 #include <QtGui/QIcon>
 #include <QtCore/QStringList>
 #include <QtCore/QList>
-namespace tlp{
+
 
     class ElementCollection : public QAbstractListModel
     {
@@ -41,7 +41,5 @@ namespace tlp{
             QList<QMap<int,QVariant> > _data;
 
     };
-
-}
 
 #endif // ELEMENTCOLLECTION_H

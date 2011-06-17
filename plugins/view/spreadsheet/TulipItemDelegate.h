@@ -22,7 +22,6 @@
 #include <QtGui/QStyledItemDelegate>
 #include <tulip/tulipconf.h>
 
-namespace tlp{
     /**
     * @brief QItemDelegate to display and edit Tulip data in the Qt model/view architecture.
     **/
@@ -44,6 +43,5 @@ namespace tlp{
         QWidget* createFileNameEditor(QWidget* parent , const QString& defaultFileName,const QString& filenameFilter=QString()) const;
 
     };
-}
 
 #endif /* TULIPTABLEWIDGETITEMDELEGATE_H_ */

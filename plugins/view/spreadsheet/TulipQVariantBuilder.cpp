@@ -55,7 +55,7 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
                         //If the shape id is the same than the selected mark the last added element as selected
                         collection.setElementSelection(elementIndex,glyphIndex == value);
                     }
-                    return QVariant::fromValue<tlp::ElementCollection>(collection);
+                    return QVariant::fromValue<ElementCollection>(collection);
                 }
                 break;
             case EDGESHAPEPROPERTY_RTTI:
@@ -70,7 +70,7 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
                         //If the shape id is the same than the selected mark the last added element as selected
                         collection.setElementSelection(elementIndex,GlGraphStaticData::edgeShapeIds[i] == value);
                     }
-                    return QVariant::fromValue<tlp::ElementCollection>(collection);
+                    return QVariant::fromValue<ElementCollection>(collection);
                 }
                 break;
             case EDGEEXTREMITYGLYPHPROPERTY_RTTI:
@@ -93,7 +93,7 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
                         //If the shape id is the same than the selected mark the last added element as selected
                         collection.setElementSelection(elementIndex,glyphIndex == value);
                     }
-                    return QVariant::fromValue<tlp::ElementCollection>(collection);
+                    return QVariant::fromValue<ElementCollection>(collection);
                 }
                 break;
             case INTEGER_PROPERTY_RTTI:
@@ -218,10 +218,6 @@ QVariant TulipQVariantBuilder::data(Graph* graph,int displayRole,ElementType ele
         return QVariant();
     }
 }
-
-/*QVariant TulipQVariantBuilder::defaultElementValueData(tlp::Graph* graph,int displayRole,tlp::ElementType elementType,TulipPropertyType propertyType,tlp::PropertyInterface* property)const{
-
-}*/
 
 TulipPropertyType TulipQVariantBuilder::getPropertyType(ElementType elementType,PropertyInterface* property) const
 {

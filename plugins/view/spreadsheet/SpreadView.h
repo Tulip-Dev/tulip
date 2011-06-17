@@ -30,17 +30,18 @@
 
 #include <QtCore/QModelIndexList>
 
+
 namespace Ui {
 class SpreadViewWidget;
 }
 
 class GraphTableWidget;
 namespace tlp {
-
 class Graph;
 class BooleanProperty;
+}
 
-class SpreadView: public AbstractView , public PropertyObserver, public Observable{
+class SpreadView: public tlp::AbstractView , public tlp::PropertyObserver, public tlp::Observable{
     Q_OBJECT
 public:
 
@@ -48,9 +49,9 @@ public:
     virtual ~SpreadView();
 
     QWidget *construct(QWidget *parent);
-    void setData(Graph *graph, DataSet dataSet);
-    void getData(Graph **graph, DataSet *dataSet);
-    Graph *getGraph();
+    void setData(tlp::Graph *graph, tlp::DataSet dataSet);
+    void getData(tlp::Graph **graph, tlp::DataSet *dataSet);
+    tlp::Graph *getGraph();
 
     void installInteractor(QAction*) {
     }
@@ -79,10 +80,10 @@ public slots :
     void draw();
     void refresh();
     void init();
-    void setGraph(Graph *graph);
+    void setGraph(tlp::Graph *graph);
 
-    void treatEvent(const Event &);
-    void treatEvents(const  std::vector<Event> &events );
+    void treatEvent(const tlp::Event &);
+    void treatEvents(const std::vector<tlp::Event> &events);
 
 protected :
 
@@ -144,13 +145,12 @@ private:
     Ui::SpreadViewWidget *ui;
     tlp::Graph* _graph;
 
-    MutableContainer<bool> _updatedNodes;
-    MutableContainer<bool> _updatedEdges;
+    tlp::MutableContainer<bool> _updatedNodes;
+    tlp::MutableContainer<bool> _updatedEdges;
     tlp::BooleanProperty* _selectionProperty;
     bool _reloadSelectionProperty;
 
 };
 
-}
 
 #endif

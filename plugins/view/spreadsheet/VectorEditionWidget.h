@@ -12,7 +12,6 @@
 namespace Ui {
     class VectorEditionWidget;
 }
-namespace tlp{
 
 
     class ListPropertyWidgetTypeMangerInterface{
@@ -171,6 +170,5 @@ namespace tlp{
     private:
         Ui::VectorEditionWidget *ui;
     };
-}
 
 #endif // VECTOREDITIONWIDGET_H

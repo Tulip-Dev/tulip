@@ -270,11 +270,11 @@ void GraphTableModel::sortElements(tlp::PropertyInterface* property, Qt::SortOrd
     _sortingProperty = property;
     PropertyValueComparator comparator(order,_elementType,_sortingProperty);
     std::stable_sort(_idTable.begin(),_idTable.end(),comparator);
-    emit dataChanged(index(0,0),index(rowCount(),columnCount()));
+    emit dataChanged(index(0,0),index(rowCount()-1,columnCount()-1));
     if(_orientation == Qt::Vertical){
-        emit headerDataChanged ( Qt::Vertical, 0, rowCount() );
+        emit headerDataChanged ( Qt::Vertical, 0, rowCount()-1 );
     }else{
-        emit headerDataChanged ( Qt::Horizontal, 0, columnCount() );
+        emit headerDataChanged ( Qt::Horizontal, 0, columnCount()-1 );
     }
 }
 

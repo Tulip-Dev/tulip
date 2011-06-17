@@ -91,7 +91,7 @@ private:
 };
 
 Q_DECLARE_METATYPE(FilteredUrl)
-Q_DECLARE_METATYPE(tlp::ElementCollection);
+Q_DECLARE_METATYPE(ElementCollection);
 Q_DECLARE_METATYPE(Interval<double>);
 
 /**
