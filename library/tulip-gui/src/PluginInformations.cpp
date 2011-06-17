@@ -54,7 +54,7 @@ QString PluginInformations::shortDescription() const{
 }
 
 QString PluginInformations::longDescriptionPath() const{
-  return "index.html";
+  return "http://www.perdu.com";
 }
 
 QString PluginInformations::iconPath() const{

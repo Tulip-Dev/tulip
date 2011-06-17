@@ -13,10 +13,6 @@ public:
   explicit PluginResultsList(QWidget *parent=0);
   tlp::PluginManager *pluginManager() const { return _pluginManager; }
 
-signals:
-  void showHtml(const QString &);
-  void hideHtml();
-
 public slots:
   void setTypeFilter(const QStringList &,bool autoRefresh=true);
   void setTypeFilter(const QString &,bool autoRefresh=true);
@@ -25,10 +21,13 @@ public slots:
 
 protected slots:
   void changeFocus();
+  void switchToDetailedInformations();
+  void restoreResultsList();
 
 private:
   tlp::PluginManager *_pluginManager;
   QWidget *_focusedItem;
+  QWidget *_resultsListCache;
 
   QStringList _typeFilter;
   QString _nameFilter;

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>936</width>
-    <height>87</height>
+    <height>99</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -126,7 +126,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
             <string>Remove</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../resources/TulipAgent.qrc">
              <normaloff>:/tulip/app/icons/package-purge.svg</normaloff>:/tulip/app/icons/package-purge.svg</iconset>
            </property>
           </widget>
@@ -137,8 +137,8 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
             <string>Install</string>
            </property>
            <property name="icon">
-            <iconset>
-             <normaloff>:/tulip/app/icons/package-installed-updated.svg</normaloff>:/tulip/app/icons/package-installed-updated.svg</iconset>
+            <iconset resource="../resources/TulipAgent.qrc">
+             <normaloff>:/tulip/app/icons/list-add.svg</normaloff>:/tulip/app/icons/list-add.svg</iconset>
            </property>
           </widget>
          </item>
@@ -161,7 +161,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
             <string>More infos</string>
            </property>
            <property name="icon">
-            <iconset>
+            <iconset resource="../resources/TulipAgent.qrc">
              <normaloff>:/tulip/app/icons/help-contents.svg</normaloff>:/tulip/app/icons/help-contents.svg</iconset>
            </property>
           </widget>
@@ -174,6 +174,8 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/TulipAgent.qrc"/>
+ </resources>
  <connections/>
 </ui>
