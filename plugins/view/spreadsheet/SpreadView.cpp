@@ -149,9 +149,20 @@ void SpreadView::fillElementsContextMenu(QMenu& menu,GraphTableWidget* tableWidg
         tableWidget->selectionModel()->select(tulipTableModel->index(clickedRowIndex,0),QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     }
     QModelIndexList rows = tableWidget->selectionModel()->selectedRows(0);
-    set<unsigned int> elements = tableWidget->indexListToIds(rows);
-    menu.addAction(tableWidget->areAllElementsSelected(rows)?tr("Deselect on graph"):tr("Select on graph"),this,SLOT(selectElements()));
-    menu.addAction(tr("Highlight selected element(s)"),this,SLOT(highlightElements()));
+    set<unsigned int> elements = tableWidget->indexListToIds(rows);    
+    QAction* selectOnGraph = menu.addAction(tr("Select on graph"),this,SLOT(selectElements()));
+    selectOnGraph->setToolTip(tr("Replace the current graph selection by the elements highlighted in the table."));
+    GraphTableWidget::SelectionStatus status = tableWidget->selectionStatus(rows);
+    QAction* addToSelection = menu.addAction(tr("Add to graph selection"),this,SLOT(addToSelection()));
+    addToSelection->setToolTip(tr("Add the elements highlighted in the table to the graph selection."));
+    QAction* removeFromSelection = menu.addAction(tr("Remove from graph selection"),this,SLOT(removeFromSelection()));
+    removeFromSelection->setToolTip(tr("Remove the elements highlighted in the table from the graph selection."));
+    if(status == GraphTableWidget::Selected){
+        addToSelection->setEnabled(false);
+    }else if(status == GraphTableWidget::Unselected){
+        removeFromSelection->setEnabled(false);
+    }
+    menu.addAction(tr("Highlight graph selection in the table"),this,SLOT(highlightElements()));
 
     if(tableWidget->elementType() == NODE){
 
@@ -306,13 +317,31 @@ void SpreadView::deleteColumn(){
 }
 
 void SpreadView::selectElements(){
+    GraphTableWidget *tableWidget = currentTable();    
+    updateSelectionForHighlightedElements(tableWidget,true,true);
+}
+
+void SpreadView::addToSelection(){
     GraphTableWidget *tableWidget = currentTable();
-    QModelIndexList rows = tableWidget->selectionModel()->selectedRows(0);
+    updateSelectionForHighlightedElements(tableWidget,true);
+}
+
+void SpreadView::removeFromSelection(){
+    GraphTableWidget *tableWidget = currentTable();
+    updateSelectionForHighlightedElements(tableWidget,false);
+}
+
+void SpreadView::updateSelectionForHighlightedElements(GraphTableWidget* tableWidget,bool select,bool clearOldSelection){
     BooleanProperty* selectionProperty = _graph->getProperty<BooleanProperty>("viewSelection");
-    set<unsigned int> elements = tableWidget->indexListToIds(rows);
-    //If all elements are selected deselect them.
-    bool select = !tableWidget->areAllElementsSelected(rows);
+    set<unsigned int> elements = tableWidget->indexListToIds(tableWidget->selectionModel()->selectedRows(0));
     Observable::holdObservers();
+    if(clearOldSelection){
+        if(tableWidget->elementType() == NODE){
+            selectionProperty->setAllNodeValue(false);
+        }else{
+            selectionProperty->setAllEdgeValue(false);
+        }
+    }
     for(set<unsigned int>::iterator it = elements.begin(); it != elements.end();++it){
         if(tableWidget->elementType() == NODE){
             selectionProperty->setNodeValue(node(*it),select);

@@ -12,6 +12,12 @@ class GraphTableWidget : public QTableView
 {
     Q_OBJECT
 public:
+    //Selected : all the elements are selected.
+    //Unselected : all the elements are unselected.
+    //PartiallySelected : only a part of the elements are selected.
+    enum SelectionStatus{Selected,Unselected,PartiallySelected};
+
+
     GraphTableWidget(QWidget* parent=NULL);
     virtual ~GraphTableWidget(){}
 
@@ -30,9 +36,9 @@ public:
     }
 
     /**
-      * @brief Check if all the elements are selected .
+      * @brief Compute the selection status for the elements list.
       **/
-    bool areAllElementsSelected(const QModelIndexList& elements)const;
+    SelectionStatus selectionStatus(const QModelIndexList& elements)const;
 
     /**
       * @brief Convert the index list to ids.

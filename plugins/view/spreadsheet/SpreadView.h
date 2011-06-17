@@ -117,6 +117,8 @@ protected slots:
 
     //Rows operations
     void selectElements();
+    void addToSelection();
+    void removeFromSelection();
     void highlightElements();
     void deleteElements();
     //Nodes operations
@@ -134,6 +136,8 @@ private:
 
     bool displayOnlySelectedElements()const;
     QRegExp elementValuesFilter()const;
+
+    void updateSelectionForHighlightedElements(GraphTableWidget* tableWidget,bool select,bool clearOldSelection=false);
 
     void updateFilters();
 

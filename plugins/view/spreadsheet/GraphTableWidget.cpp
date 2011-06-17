@@ -28,24 +28,28 @@ void GraphTableWidget::setGraph(Graph* graph,ElementType element){
 }
 
 
-bool GraphTableWidget::areAllElementsSelected(const QModelIndexList& elementsIndexes)const{
+GraphTableWidget::SelectionStatus GraphTableWidget::selectionStatus(const QModelIndexList& elementsIndexes)const{
     BooleanProperty* selectionProperty = _graph->getProperty<BooleanProperty>("viewSelection");
     set<unsigned int> elements = indexListToIds(elementsIndexes);
     bool allSelected = true;
+    bool allUnselected = true;
     for(set<unsigned int>::iterator it = elements.begin(); it != elements.end();++it){
         if(_type == NODE){
-            if(!selectionProperty->getNodeValue(node(*it))){
+            if(selectionProperty->getNodeValue(node(*it))){
+                allUnselected = false;
+            }else{
                 allSelected = false;
-                break;
             }
         }else{
-            if(!selectionProperty->getEdgeValue(edge(*it))){
+            if(selectionProperty->getEdgeValue(edge(*it))){
+                allUnselected = false;
+            }else{
                 allSelected = false;
-                break;
+
             }
         }
     }
-    return allSelected;
+    return allSelected?Selected:(allUnselected?Unselected:PartiallySelected);
 }
 
 set<unsigned int> GraphTableWidget::indexListToIds(const QModelIndexList& elementsIndexes)const{
