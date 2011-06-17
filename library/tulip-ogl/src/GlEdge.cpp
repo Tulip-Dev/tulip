@@ -519,7 +519,7 @@ void GlEdge::drawLabel(OcclusionTest* test, GlGraphInputData* data, float lod, C
 
 	BoundingBox bb=getBoundingBox(data);
 
-	label->setSize(Coord(0.001,0.001,0));
+        label->setSize(Size(0.001,0.001,0));
 	label->rotate(0,0,angle);
 	label->setAlignment(ON_TOP);
 	label->setScaleToSize(false);

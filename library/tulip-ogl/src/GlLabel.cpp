@@ -49,7 +49,7 @@ namespace tlp {
   GlLabel::GlLabel() {
     init();
   }
-  GlLabel::GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign) {
+  GlLabel::GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign) {
     init();
   }
 
@@ -139,20 +139,20 @@ namespace tlp {
     return textBoundingBox;
   }
   //============================================================
-  void GlLabel::setSize(const Coord &size) {
+  void GlLabel::setSize(const Size &size) {
     this->size=size;
     this->sizeForOutAlign=size;
   }
   //============================================================
-  Coord GlLabel::getSize() {
+  Size GlLabel::getSize() {
     return size;
   }
   //============================================================
-  void GlLabel::setSizeForOutAlign(const Coord &size) {
+  void GlLabel::setSizeForOutAlign(const Size &size) {
     this->sizeForOutAlign=size;
   }
   //============================================================
-  Coord GlLabel::getSizeForOutAlign() {
+  Size GlLabel::getSizeForOutAlign() {
     return sizeForOutAlign;
   }
   //============================================================
