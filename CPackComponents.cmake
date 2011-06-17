@@ -40,10 +40,10 @@ DEFINE_COMPONENT(tulip_pluginsmanager "Plugins manager" "A software to manage pl
 DEFINE_COMPONENT(tulip_app "Tulip software" "The main Tulip software. Provides a complete interface and a set of tools to easily create, manage and visualize huge graphs in 3D scenes." "libtulip;libtulip_ogl;libtulip_qt;tulip_pluginsmanager" ${SOFTWARE_GROUP_NAME})
 DEFINE_COMPONENT(tulip_textures "Additional textures" "Additional textures for the Tulip software" "" ${EXTRAS_GROUP_NAME})
 
-# doc/*
-IF(GENERATE_DOC)
-  DEFINE_COMPONENT(tulip_doc "Framework documentation" "Manuals and doxygen for the Tulip framework." "libtulip" ${EXTRAS_GROUP_NAME})
-ENDIF()
+# doc/
+# must be always present because it may be installed by hand
+# even it is not generated
+DEFINE_COMPONENT(tulip_doc "Framework documentation" "Manuals and doxygen for the Tulip framework." "libtulip" ${EXTRAS_GROUP_NAME})
 
 IF(LINUX)
   SET(META_DEPS "ftgl;qscintilla2;gzstream;sip;libtulip;libtulip_ogl;libtulip_qt;tulip_app;tulip_pluginsmanager;tulip_textures;libtulip_plugins;libtulip_qt_plugins;libtulip_ogl_plugins;tulip_plugins_spreadsheetview")
