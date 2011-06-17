@@ -30,7 +30,7 @@
 #include <string>
 #include <sstream>
 
-static int throwInvalidNodeException(tlp::Graph *graph, tlp::node n) {
+static int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n) {
 	std::ostringstream oss;
 	std::string graphName;
 	graph->getAttribute("name", graphName);
@@ -39,7 +39,7 @@ static int throwInvalidNodeException(tlp::Graph *graph, tlp::node n) {
 	return -1;
 }
 
-static int throwInvalidEdgeException(tlp::Graph *graph, tlp::edge e) {
+static int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e) {
 	std::ostringstream oss;
 	std::string graphName;
 	graph->getAttribute("name", graphName);
