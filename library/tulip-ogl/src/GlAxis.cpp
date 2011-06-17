@@ -73,10 +73,10 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
 			axisGraduation->addPoint(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() - axisGradsWidth / 2), axisColor);
 			if (axisGradsPosition == LEFT_OR_BELOW) {
 				graduationLabel = new GlLabel(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() - axisGradsWidth / 2 - labelHeight / 2),
-											  Coord(labelWidth, labelHeight), axisColor);
+                                                                                          Size(labelWidth, labelHeight), axisColor);
 			} else if (axisGradsPosition == RIGHT_OR_ABOVE) {
 				graduationLabel = new GlLabel(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() + axisGradsWidth / 2 + labelHeight / 2),
-											  Coord(labelWidth, labelHeight), axisColor);
+                                                                                          Size(labelWidth, labelHeight), axisColor);
 			}
 		} else if (axisOrientation == VERTICAL_AXIS) {
 			labelHeight = spaceBetweenAxisGrads * MAGIG_FACTOR;
@@ -90,10 +90,10 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
 			axisGraduation->addPoint(Coord(axisBaseCoord.getX() + axisGradsWidth / 2., axisBaseCoord.getY() + i * spaceBetweenAxisGrads), axisColor);
 			if (axisGradsPosition == LEFT_OR_BELOW) {
 				graduationLabel = new GlLabel(Coord(axisBaseCoord.getX() - axisGradsWidth / 2. - labelWidth / 2. , axisBaseCoord.getY() + i * spaceBetweenAxisGrads),
-											  Coord(labelWidth, labelHeight), axisColor);
+                                                                                          Size(labelWidth, labelHeight), axisColor);
 			} else if (axisGradsPosition == RIGHT_OR_ABOVE) {
 				graduationLabel = new GlLabel(Coord(axisBaseCoord.getX() + axisGradsWidth / 2. + labelWidth / 2. , axisBaseCoord.getY() + i * spaceBetweenAxisGrads),
-											  Coord(labelWidth, labelHeight), axisColor);
+                                                                                          Size(labelWidth, labelHeight), axisColor);
 			}
 		}
 		oss.str("");
@@ -166,7 +166,7 @@ void GlAxis::addAxisCaption(const Coord &captionLabelCenter, const bool frame) {
     captionComposite->reset(true);
     captionSet = true;
 
-    GlLabel *captionLabel = new GlLabel(captionLabelCenter, Coord(captionWidth, captionHeight), axisColor);
+    GlLabel *captionLabel = new GlLabel(captionLabelCenter, Size(captionWidth, captionHeight), axisColor);
     captionLabel->setText(captionText);
     captionComposite->addGlEntity(captionLabel, axisName + " axis caption");
 

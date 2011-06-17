@@ -53,7 +53,7 @@ namespace tlp {
     /**
      * Contructor with fontPath, centerPosition, size, fontColor and alignment
      */
-    GlLabel(Coord centerPosition,Coord size,Color fontColor,bool leftAlign=false);
+    GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign=false);
 
     ~GlLabel();
 
@@ -111,23 +111,23 @@ namespace tlp {
     /**
      * Set the size of the label
      */
-    virtual void setSize(const Coord &size);
+    virtual void setSize(const Size &size);
 
     /**
      * return the size of the text
      */
-    virtual Coord getSize();
+    virtual Size getSize();
 
     /**
      * Set the size for alignment outside (left/right/top/bottom)
      *  Warning : this size is reinit when you call setSize
      */
-    virtual void setSizeForOutAlign(const Coord &size);
+    virtual void setSizeForOutAlign(const Size &size);
 
     /**
      * return the size for alignment outside (left/right/top/bottom)
      */
-    virtual Coord getSizeForOutAlign();
+    virtual Size getSizeForOutAlign();
 
     /**
      * Set color of label
@@ -348,8 +348,8 @@ namespace tlp {
     FTOutlineFont *borderFont;
     Coord centerPosition;
     Coord translationAfterRotation;
-    Coord size;
-    Coord sizeForOutAlign;
+    Size size;
+    Size sizeForOutAlign;
     Color color;
     Color outlineColor;
     float outlineSize;

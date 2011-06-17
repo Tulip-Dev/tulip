@@ -129,11 +129,11 @@ void GlProgressBar::progress_handler(int step, int max_step) {
 	GlQuad *progressBarQuad = new GlQuad(progressBarCoords[0], progressBarCoords[1], progressBarCoords[2], progressBarCoords[3], color);
 	progressBarQuad->setTextureName(TulipBitmapDir + SLIDER_TEXTURE_NAME);
 
-	GlLabel *commentLabel = new GlLabel(commentLabelCenter, Coord(commentWidth, commentHeight, 0), color);
+        GlLabel *commentLabel = new GlLabel(commentLabelCenter, Size(commentWidth, commentHeight, 0), color);
 	commentLabel->setText(comment);
 
 	GlLabel *percentLabel = new GlLabel(Coord(progressBarTLCorner.getX() + (progressBarMaxWidth / 2.), progressBarTLCorner.getY() - (progressBarHeight / 2.), 0),
-									    Coord(((1./10.) * progressBarMaxWidth), ((8./10.) * progressBarHeight), 0), percentLabelAndFrameColor);
+                                                                            Size(((1./10.) * progressBarMaxWidth), ((8./10.) * progressBarHeight), 0), percentLabelAndFrameColor);
 	stringstream str;
 	str << currentPercent << " %";
 	percentLabel->setText(str.str());
