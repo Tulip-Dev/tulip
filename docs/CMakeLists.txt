@@ -50,5 +50,5 @@ COMMENT "Checking if documentation files are present")
 
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.qhc ${CMAKE_CURRENT_BINARY_DIR}/tulip.qch
-  DESTINATION ${TulipShareInstallDir}/tulip
+  DESTINATION ${TulipShareInstallDir}
   COMPONENT tulip_doc)
