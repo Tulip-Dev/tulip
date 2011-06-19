@@ -37,23 +37,49 @@ namespace tlp {
 
   /**
    * @brief Initializes the Tulip library.
-   * Looks for the Tulip plug-ins directory, and loads the plug-ins from it.
+   * Looks for the Tulip plugins directory and fills the Tulip path variables : tlp::TulipLibDir, tlp::TulipPluginsPath, ...
    * The plug-ins directory can be defined in different ways, given by order of prevalence :
    * 1. the TLP_DIR environment variable, if it has a value
    * 2. the appDirPath parameter, if it is not NULL
-   * 3. a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on unices.
+   * 3. a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on unix.
    */
   extern TLP_SCOPE void initTulipLib(const char* appDirPath = 0);
     
   /**
    * @brief Calls loadPluginsFromDir for each directory in TulipPluginsPath.
    *
+   * Loads plugins installed in the directories listed in the tlp::TulipPluginsPath variable
+   *  (in the form "<path1>;<path2>" on windows and "<path1>:<path2>" on unix)
+   *
    * @param plug A PluginLoader to output what is going on. Defaults to 0.
-   * @return void
    **/
   TLP_SCOPE void loadPlugins(PluginLoader *plug=0);
+
+  /**
+   * Loads a plugin from a specific shared library.
+   *
+   * @param filename the path to the shared library containing the Tulip plugin (file extension : .so on linux, .dylib on mac, .dll on windows)
+   * @param plug A PluginLoader to output what is going on. Defaults to 0.
+   * @return bool true if the plugin was correctly loaded
+   */
   TLP_SCOPE bool loadPlugin(const std::string &filename, PluginLoader *plug=0);
+
+  /**
+    * Loads plugins located in a specific directory
+    *
+    * @param dir the path to the directory containing the Tulip plugins
+    * @param type a string used by the plugin loader (if any) to output the type of plugin being loaded
+    * @param loader A PluginLoader to output what is going on. Defaults to 0.
+    */
   TLP_SCOPE void loadPluginsFromDir(std::string dir, std::string type, PluginLoader *loader=0);
+
+  /**
+    *
+    * Checks the dependencies of all plugins loaded so far. If a plugin does not have all its dependencies fulfilled,
+    * it is unloaded and removed from the current plugins database.
+    *
+    * @param loader A PluginLoader to output what is going on. Defaults to 0.
+    **/
   TLP_SCOPE void loadPluginsCheckDependencies(PluginLoader* loader=0);
 
   /**
@@ -62,6 +88,7 @@ namespace tlp {
    * @return string The demangled name of a Tulip C++ class.
    */
   TLP_SCOPE std::string demangleTlpClassName(const char *className);
+
   /**
    * @brief Returns an istream to read from a gzipped file (uses gzstream lib).
    * The stream has to be deleted after use.
@@ -70,6 +97,7 @@ namespace tlp {
    * @return istream gzipped input stream from a file.
    */
   TLP_SCOPE std::istream *getIgzstream(const char *name, int open_mode = std::ios::in);
+
   /**
    * @brief Returns an ostream to write to a gzipped file (uses gzstream lib).
    * The stream has to be deleted after use.
@@ -79,14 +107,16 @@ namespace tlp {
    * @return ostream gzipped output stream to a file.
    */
   TLP_SCOPE std::ostream *getOgzstream(const char *name, int open_mode = std::ios::out);
+
   /**
-   * @brief Splits the string and returns everything befor the first dot ('.').
+   * @brief Splits the string and returns everything before the first dot ('.').
    * This is used to return major version number, as version numbers are formatted as X.Y.Z,
    * X being the major, Y the minor, and Z the patch version.
    *
-   * @return string The part of the string befor the first dot.
+   * @return string The part of the string before the first dot.
    */
   TLP_SCOPE std::string getMajor(const std::string &release);
+
   /**
    * @brief Splits the string and return the minor version.
    * If the string does not contain any dot, then 0 is returned.
@@ -95,6 +125,7 @@ namespace tlp {
    * If there are more than two dots, everything between the first and last dots is returned.
    */
   TLP_SCOPE std::string getMinor(const std::string &release);
+
   /**
    * @brief Gets the plugin library currently loading
    * Returns the absolute file name of the plugin library currently loading
