@@ -42,7 +42,7 @@ std::string getTulipRelease();
 tlp.getTulipRelease()
 
 Returns the current version number of Tulip in the form X.Y.Z,
-X being the major version, Y the minor versiob, and Z the patch version.
+X being the major version, Y the minor version, and Z the patch version.
 
 :rtype: string
 %End
