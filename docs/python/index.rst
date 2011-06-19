@@ -18,7 +18,7 @@ features provided by the bindings are listed below :
 * the ability to write Tulip plugins in pure Python
 
 The bindings can be used inside the Tulip sofware GUI in order to run scripts on the current visualized graph.
-Starting from Tulip 3.6 (not released yet), the bindings can also be used outside Tulip through the classical Python interpreter.
+Starting from Tulip 3.6, the bindings can also be used outside Tulip through the classical Python interpreter.
 
 Contents
 =================================================

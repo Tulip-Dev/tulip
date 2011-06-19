@@ -27,6 +27,7 @@
 
 %ModuleHeaderCode
 #include <tulip/Graph.h>
+#include <tulip/TemplateFactory.h>
 #include <string>
 #include <sstream>
 
@@ -55,6 +56,33 @@ static void printErrorMessage(const std::string &errMsg) {
 	pythonCode += errMsg;
 	pythonCode += "\\n\")";
 	PyRun_SimpleString(pythonCode.c_str());
+}
+
+template <typename T>
+std::vector<std::string> getPluginsList() {
+	std::vector<std::string> ret;
+	std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
+	for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
+		if (it->first == tlp::demangleTlpClassName(typeid(T).name())) {
+			tlp::Iterator<std::string> *itS = it->second->availablePlugins();
+			while (itS->hasNext()) {
+				ret.push_back(itS->next());
+			}
+			delete itS;
+		}
+	}
+	return ret;
+}
+
+template <typename T>
+bool pluginExists(std::string pluginName) {
+	std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
+	for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
+		if (it->first == tlp::demangleTlpClassName(typeid(T).name()) && it->second->pluginExists(pluginName)) {
+			return true;
+		}
+	}
+	return false;
 }
 %End
 

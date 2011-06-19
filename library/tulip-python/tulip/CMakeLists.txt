@@ -123,8 +123,8 @@ ADD_CUSTOM_COMMAND(
                    COMMENT "Generating QScintilla API file for Tulip Python bindings"
 				   VERBATIM)
 				   
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT libtulip_python)
-
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT pythonbindings)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir} COMPONENT pythonbindings)
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)

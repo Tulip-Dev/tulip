@@ -48,6 +48,41 @@ Graph measures
 
 .. autofunction:: tulip::tlp.reachableNodes
 
+Plugins Management
+^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: tulip::tlp.initTulipLib
+
+.. autofunction:: tulip::tlp.loadPlugins
+
+.. autofunction:: tulip::tlp.loadPlugin
+
+.. autofunction:: tulip::tlp.loadPluginsFromDir
+
+.. autofunction:: tulip::tlp.loadPluginsCheckDependencies
+
+.. autofunction:: tulip::tlp.getDefaultPluginParameters
+
+.. autofunction:: tulip::tlp.getImportPluginsList
+
+.. autofunction:: tulip::tlp.getExportPluginsList
+
+.. autofunction:: tulip::tlp.getAlgorithmPluginsList
+
+.. autofunction:: tulip::tlp.getBooleanAlgorithmPluginsList
+
+.. autofunction:: tulip::tlp.getColorAlgorithmPluginsList
+
+.. autofunction:: tulip::tlp.getDoubleAlgorithmPluginsList
+
+.. autofunction:: tulip::tlp.getIntegerAlgorithmPluginsList
+
+.. autofunction:: tulip::tlp.getLayoutAlgorithmPluginsList
+
+.. autofunction:: tulip::tlp.getSizeAlgorithmPluginsList
+
+.. autofunction:: tulip::tlp.getStringAlgorithmPluginsList
+
 Graph elements classes
 ----------------------------
 

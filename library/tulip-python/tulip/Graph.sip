@@ -34,6 +34,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
+#include <tulip/Algorithm.h>
 namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
 typedef tlp::Graph* GraphPointer;
@@ -1824,10 +1825,19 @@ which can contain an error message.
 :param dataSet: a data set containing some parameters to transmit to the algorithm
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
+:throws: an exception if the requested integer algorithm plugin is not registered in the plugins database.
 %End	
 
 %MethodCode
-	sipRes = sipCpp->computeProperty<tlp::IntegerProperty>(*a0, a1, *a2, NULL, a3);
+	if (pluginExists<tlp::IntegerAlgorithm>(*a0)) {
+		sipRes = sipCpp->computeProperty<tlp::IntegerProperty>(*a0, a1, *a2, NULL, a3);
+	} else {
+		sipIsErr = 1;
+		std::string msg = "No Tulip integer algorithm plugin named  ";
+		msg += *a0;
+		msg += ".";
+		PyErr_SetString(PyExc_Exception, msg.c_str());
+	}
 %End
 
 //===========================================================================================
@@ -1858,10 +1868,19 @@ which can contain an error message.
 :param dataSet: a data set containing some parameters to transmit to the algorithm
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
+:throws: an exception if the requested double algorithm plugin is not registered in the plugins database.
 %End
 	
 %MethodCode
-	sipRes = sipCpp->computeProperty<tlp::DoubleProperty>(*a0, a1, *a2, NULL, a3);
+	if (pluginExists<tlp::DoubleAlgorithm>(*a0)) {
+		sipRes = sipCpp->computeProperty<tlp::DoubleProperty>(*a0, a1, *a2, NULL, a3);
+	} else {
+		sipIsErr = 1;
+		std::string msg = "No Tulip double algorithm plugin named  ";
+		msg += *a0;
+		msg += ".";
+		PyErr_SetString(PyExc_Exception, msg.c_str());
+	}	
 %End
 
 //===========================================================================================
@@ -1892,10 +1911,19 @@ which can contain an error message.
 :param dataSet: a data set containing some parameters to transmit to the algorithm
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
+:throws: an exception if the requested layout algorithm plugin is not registered in the plugins database.
 %End
 	
 %MethodCode
-	sipRes = sipCpp->computeProperty<tlp::LayoutProperty>(*a0, a1, *a2, NULL, a3);
+	if (pluginExists<tlp::LayoutAlgorithm>(*a0)) {
+		sipRes = sipCpp->computeProperty<tlp::LayoutProperty>(*a0, a1, *a2, NULL, a3);
+	} else {
+		sipIsErr = 1;
+		std::string msg = "No Tulip layout algorithm plugin named  ";
+		msg += *a0;
+		msg += ".";
+		PyErr_SetString(PyExc_Exception, msg.c_str());
+	}	
 %End
 
 //===========================================================================================
@@ -1926,11 +1954,19 @@ which can contain an error message.
 :param dataSet: a data set containing some parameters to transmit to the algorithm
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
+:throws: an exception if the requested boolean algorithm plugin is not registered in the plugins database.
 %End
 	
 %MethodCode
-	std::string s;
-	sipRes = sipCpp->computeProperty<tlp::BooleanProperty>(*a0, a1, *a2, NULL, a3);
+	if (pluginExists<tlp::BooleanAlgorithm>(*a0)) {
+		sipRes = sipCpp->computeProperty<tlp::BooleanProperty>(*a0, a1, *a2, NULL, a3);
+	} else {
+		sipIsErr = 1;
+		std::string msg = "No Tulip boolean algorithm plugin named  ";
+		msg += *a0;
+		msg += ".";
+		PyErr_SetString(PyExc_Exception, msg.c_str());
+	}
 %End
 
 //===========================================================================================
@@ -1938,7 +1974,6 @@ which can contain an error message.
 	bool computeSizeProperty(const std::string &algorithm, tlp::SizeProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
 %Docstring
 tlp.Graph.computeSizeProperty(algoName, result[, dataSet = None])
-
 Computes a size property on the current graph 
 using an external named size algorithm (plugin).
 Size algorithm plugins are objects
@@ -1961,10 +1996,19 @@ which can contain an error message.
 :param dataSet: a data set containing some parameters to transmit to the algorithm
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
+:throws: an exception if the requested size algorithm plugin is not registered in the plugins database.
 %End
 	
 %MethodCode
-	sipRes = sipCpp->computeProperty<tlp::SizeProperty>(*a0, a1, *a2, NULL, a3);
+	if (pluginExists<tlp::SizeAlgorithm>(*a0)) {
+		sipRes = sipCpp->computeProperty<tlp::SizeProperty>(*a0, a1, *a2, NULL, a3);
+	} else {
+		sipIsErr = 1;
+		std::string msg = "No Tulip size algorithm plugin named  ";
+		msg += *a0;
+		msg += ".";
+		PyErr_SetString(PyExc_Exception, msg.c_str());
+	}	
 %End
 
 //===========================================================================================
@@ -1995,10 +2039,19 @@ which can contain an error message.
 :param dataSet: a data set containing some parameters to transmit to the algorithm
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
+:throws: an exception if the requested color algorithm plugin is not registered in the plugins database.
 %End
 
 %MethodCode
-	sipRes = sipCpp->computeProperty<tlp::ColorProperty>(*a0, a1, *a2, NULL, a3);
+	if (pluginExists<tlp::ColorAlgorithm>(*a0)) {
+		sipRes = sipCpp->computeProperty<tlp::ColorProperty>(*a0, a1, *a2, NULL, a3);
+	} else {
+		sipIsErr = 1;
+		std::string msg = "No Tulip color algorithm plugin named  ";
+		msg += *a0;
+		msg += ".";
+		PyErr_SetString(PyExc_Exception, msg.c_str());
+	}	
 %End
 
 //===========================================================================================
@@ -2029,10 +2082,19 @@ which can contain an error message.
 :param dataSet: a data set containing some parameters to transmit to the algorithm
 :type dataSet: :class:`tlp.DataSet`
 :rtype: (boolean, string)
+:throws: an exception if the requested string algorithm plugin is not registered in the plugins database.
 %End
 
 %MethodCode
-	sipRes = sipCpp->computeProperty<tlp::StringProperty>(*a0, a1, *a2, NULL, a3);
+	if (pluginExists<tlp::StringAlgorithm>(*a0)) {
+		sipRes = sipCpp->computeProperty<tlp::StringProperty>(*a0, a1, *a2, NULL, a3);
+	} else {
+		sipIsErr = 1;
+		std::string msg = "No Tulip string algorithm plugin named  ";
+		msg += *a0;
+		msg += ".";
+		PyErr_SetString(PyExc_Exception, msg.c_str());
+	}
 %End
 
 //===========================================================================================
@@ -2528,8 +2590,6 @@ Returns a new graph or None if the import fails.
 :type filename: string
 :rtype: :class:`tlp.Graph`
 
-.. warning:: this function uses "tlp" import plugin (must be loaded).
-
 %End
 
 //===========================================================================================
@@ -2548,8 +2608,6 @@ successfully saved.
 :type filename: string
 :rtype: boolean
 
-.. warning:: this function use "tlp" export plugin (must be loaded).
-
 %End
 
 //===========================================================================================
@@ -2564,15 +2622,25 @@ Returns a new graph or None if the import fails.
 :param importPluginName: the name of the Tulip import plugin
 :type importPluginName: string
 :param dataSet: a dataset filled with parameters to transmit to the import plugin
-:type dataset: :class:`tlp.DataSet`
+:type dataSet: :class:`tlp.DataSet`
 :param newGraph: if provided, add imported graph elements in that graph
 :type newGraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.Graph`
+:throws: an exception if the requested import plugin is not registered in the plugins database. 
 %End
 
 %MethodCode
-	sipRes = tlp::importGraph(*a0, *a1, 0, a2);
+	if (pluginExists<tlp::ImportModule>(*a0)) {
+		sipRes = tlp::importGraph(*a0, *a1, 0, a2);
+	} else {
+		sipIsErr = 1;
+		std::string msg = "No Tulip import plugin named  ";
+		msg += *a0;
+		msg += ".";
+		PyErr_SetString(PyExc_Exception, msg.c_str());
+	}	
 %End
+
 
 //===========================================================================================
 
@@ -2596,7 +2664,20 @@ its execution.
 :param algoName: the name of the algorithm plugin to call
 :type algoName: string
 :rtype: (boolean, string)
+:throws: an exception if the requested algorithm plugin is not registered in the plugins database.
 
+%End
+
+%MethodCode
+	if (pluginExists<tlp::Algorithm>(*a3)) {
+		sipRes = tlp::applyAlgorithm(a0, *a1, a2, *a3);
+	} else {
+		sipIsErr = 1;
+		std::string msg = "No Tulip algorithm plugin named  ";
+		msg += *a3;
+		msg += ".";
+		PyErr_SetString(PyExc_Exception, msg.c_str());
+	}	
 %End
 
 
