@@ -44,7 +44,7 @@ def registerAlgorithmPlugin(pluginClassName, algoName, author, date, info, relea
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -73,7 +73,7 @@ def registerAlgorithmPluginOfGroup(pluginClassName, algoName, author, date, info
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -102,7 +102,7 @@ def registerLayoutPlugin(pluginClassName, algoName, author, date, info, release)
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -131,7 +131,7 @@ def registerLayoutPluginOfGroup(pluginClassName, algoName, author, date, info, r
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -160,7 +160,7 @@ def registerDoublePlugin(pluginClassName, algoName, author, date, info, release)
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -189,7 +189,7 @@ def registerDoublePluginOfGroup(pluginClassName, algoName, author, date, info, r
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -218,7 +218,7 @@ def registerIntegerPlugin(pluginClassName, algoName, author, date, info, release
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -247,7 +247,7 @@ def registerIntegerPluginOfGroup(pluginClassName, algoName, author, date, info, 
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -276,7 +276,7 @@ def registerBooleanPlugin(pluginClassName, algoName, author, date, info, release
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -305,7 +305,7 @@ def registerBooleanPluginOfGroup(pluginClassName, algoName, author, date, info, 
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -334,7 +334,7 @@ def registerSizePlugin(pluginClassName, algoName, author, date, info, release):
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -363,7 +363,7 @@ def registerSizePluginOfGroup(pluginClassName, algoName, author, date, info, rel
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -392,7 +392,7 @@ def registerColorPlugin(pluginClassName, algoName, author, date, info, release):
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -421,7 +421,7 @@ def registerColorPluginOfGroup(pluginClassName, algoName, author, date, info, re
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -450,7 +450,7 @@ def registerImportPlugin(pluginClassName, algoName, author, date, info, release)
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -479,7 +479,7 @@ def registerImportPluginOfGroup(pluginClassName, algoName, author, date, info, r
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -508,7 +508,7 @@ def registerExportPlugin(pluginClassName, algoName, author, date, info, release)
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)
         
@@ -537,6 +537,6 @@ def registerExportPluginOfGroup(pluginClassName, algoName, author, date, info, r
         code += "\tdef getRelease(self):\n"
         code += "\t\treturn \"" + release + "\"\n"
         code += "\tdef getTulipRelease(self):\n"
-        code += "\t\treturn \"3.6.0\"\n"
+        code += "\t\treturn \"" + tlp.getTulipRelease() + "\"\n"
         code += "pluginFactory[algoName] = " + pluginClassName + "Factory()\n"
         exec(code)

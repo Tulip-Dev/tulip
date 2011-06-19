@@ -51,6 +51,8 @@ Graph measures
 Plugins Management
 ^^^^^^^^^^^^^^^^^^
 
+.. autofunction:: tulip::tlp.getTulipRelease
+
 .. autofunction:: tulip::tlp.initTulipLib
 
 .. autofunction:: tulip::tlp.loadPlugins

@@ -37,6 +37,22 @@ std::string TulipBitmapDir;
 
 //=====================================================================
 
+std::string getTulipRelease();
+%Docstring
+tlp.getTulipRelease()
+
+Returns the current version number of Tulip in the form X.Y.Z,
+X being the major version, Y the minor versiob, and Z the patch version.
+
+:rtype: string
+%End
+
+%MethodCode
+	sipRes = new std::string(TULIP_RELEASE);
+%End
+
+//=====================================================================
+
 void initTulipLib(char* appDirPath=0);
 %Docstring
 tlp.initTulipLib()
