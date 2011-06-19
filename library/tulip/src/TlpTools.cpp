@@ -59,6 +59,9 @@ using namespace tlp;
 #endif
 #endif
 
+#define QUOTE_ARG(x) #x
+#define QUOTE_EXPANDED_ARG(x) QUOTE_ARG(x)
+
 static const char *TULIP_PLUGINS_PATH_VARIABLE="TLP_PLUGINS_PATH";
 
 string tlp::TulipLibDir;
@@ -138,7 +141,7 @@ void tlp::initTulipLib(const char* appDirPath) {
   pos = TulipLibDir.length() - 2;
   pos = TulipLibDir.rfind("/", pos);
   tulipDocDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/";
-  TulipDocProfile=tulipDocDir+"tulip.qhc";
+  TulipDocProfile=tulipDocDir+"tulip"+QUOTE_EXPANDED_ARG(TULIP_INT_RELEASE)+".qhc";
   TulipUserHandBookIndex=tulipDocDir+"userHandbook/html/index.html";
 
   TulipBitmapDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/bitmaps/";
