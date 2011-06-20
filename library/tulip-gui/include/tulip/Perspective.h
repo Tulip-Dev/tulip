@@ -22,13 +22,13 @@
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
 #include <tulip/PluginLister.h>
+#include <tulip/TulipProject.h>
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 
 class QMainWindow;
 
 namespace tlp {
-class TulipProject;
 
 class TLP_QT_SCOPE PerspectiveContext {
 public:

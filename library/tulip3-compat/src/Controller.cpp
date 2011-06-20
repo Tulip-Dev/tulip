@@ -131,13 +131,13 @@ namespace tlp {
 
   void Controller::importMenuClicked() {
     QAction *src = static_cast<QAction *>(sender());
-    if (isEmpty()) {
+    if (isEmpty())
+      runImportPlugin(src->text(),getGraph());
+    else {
       QVariantMap params;
       params["import"]=src->text();
       emit createPerspective(_project->perspective(),params);
     }
-    else
-      runImportPlugin(src->text(),getGraph());
   }
 
   void Controller::runImportPlugin(const QString &name, Graph *g) {
@@ -189,7 +189,7 @@ namespace tlp {
   }
 
   bool Controller::isEmpty() {
-    return getGraph()->numberOfNodes() > 0;
+    return getGraph()->numberOfNodes() == 0;
   }
 
 }
