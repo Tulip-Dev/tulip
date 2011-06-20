@@ -33,7 +33,7 @@ public:
   void computeMetaValue(AbstractSizeProperty* prop,
 			node mN, Graph* sg, Graph*) {
     if (sg->numberOfNodes() == 0) {
-      prop->setNodeValue(mN, Size(0, 0, 0));
+      prop->setNodeValue(mN, Size(1, 1, 1));
       return;
     }
 
