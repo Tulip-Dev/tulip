@@ -40,7 +40,7 @@ namespace tlp {
 
   Gl2DRect::Gl2DRect(float bottom,float left,float height, float width,const std::string& textureName,bool xInv, bool yInv)
     :GlRect(Coord(0.5,-0.5,0),Coord(-0.5,0.5,0),Color(255,255,255,255),Color(255,255,255,255),true,false),
-    top(bottom),bottom(bottom+height),left(left),right(left+width),inPercent(false),xInv(xInv),yInv(yInv)
+    top(bottom+height),bottom(bottom),left(left),right(left+width),inPercent(false),xInv(xInv),yInv(yInv)
   {
     this->textureName=textureName;
   }
@@ -92,7 +92,7 @@ namespace tlp {
       }
 
       center=Coord((xMin+xMax)/2.,(yMin+yMax)/2.,0);
-      size=Size(xMax-xMin,yMax-yMin,0);
+      size=Size(xMax-xMin,yMax-yMin,0);     
     }
 
     glPushMatrix();
