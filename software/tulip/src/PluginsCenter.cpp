@@ -98,7 +98,7 @@ void PluginsCenter::browseAll() {
 }
 
 void PluginsCenter::browseAlgorithms() {
-  _ui->pluginsSearchList->setTypeFilter(QStringList() << ALGORITHM_PLUGIN_NAME << PROPERTY_ALGORITHM_PLUGIN_NAME);
+  _ui->pluginsSearchList->setTypeFilter(QStringList() << ALGORITHM_PLUGIN_NAME << PROPERTY_ALGORITHM_PLUGIN_NAME << TEMPLATE_ALGORITHM_PLUGIN_NAME);
   showSearchPage();
 }
 

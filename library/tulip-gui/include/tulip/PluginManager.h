@@ -8,6 +8,7 @@
 
 #define PROPERTY_ALGORITHM_PLUGIN_NAME "PropertyAlgorithm"
 #define ALGORITHM_PLUGIN_NAME "Algorithm"
+#define TEMPLATE_ALGORITHM_PLUGIN_NAME "TemplateAlgorithm"
 
 #define IMPORT_PLUGIN_NAME "ImportModule"
 #define EXPORT_PLUGIN_NAME "ExportModule"
