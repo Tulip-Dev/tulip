@@ -159,7 +159,7 @@ public:
   void addInheritedProperty(Graph* g, const string& name) {
     sGraphs.push_back(g), spName = name;
   }
-  void delInheritedProperty(Graph* g, const string& name) {
+  void afterDelInheritedProperty(Graph* g, const string& name) {
     sGraphs.push_back(g), spName = name;
   }
   virtual void treatEvent(const Event& evt) {
@@ -170,8 +170,8 @@ public:
       case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
 	addInheritedProperty(graph, gEvt->getPropertyName());
 	return;
-      case GraphEvent::TLP_DEL_INHERITED_PROPERTY:
-	delInheritedProperty(graph, gEvt->getPropertyName());
+      case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
+        afterDelInheritedProperty(graph, gEvt->getPropertyName());
 	return;
       default:
 	break;
@@ -206,7 +206,7 @@ public:
       const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
       if (gEvt) {
         Graph* graph = gEvt->getGraph();
-        if (gEvt->getType() == GraphEvent::TLP_DEL_INHERITED_PROPERTY)
+        if (gEvt->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY)
 	  delInheritedProperty(graph, gEvt->getPropertyName());
       }
     }
