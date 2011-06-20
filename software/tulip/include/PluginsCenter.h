@@ -40,6 +40,8 @@ protected slots:
   void browseInteractors();
   void browsePerspectives();
 
+  void setPluginNameFilter(const QString &);
+
 private:
   QVector<const char *> _typeSlots;
   Ui::PluginsCenterData *_ui;

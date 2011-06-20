@@ -16,7 +16,7 @@ public:
 public slots:
   void setTypeFilter(const QStringList &,bool autoRefresh=true);
   void setTypeFilter(const QString &,bool autoRefresh=true);
-  void setNameFilter(const QString &,bool autoRefresh=false);
+  void setNameFilter(const QString &,bool autoRefresh=true);
   void refreshResults();
 
 protected slots:
