@@ -17,6 +17,7 @@ PluginsCenter::PluginsCenter(QWidget *parent) :
   connect(_ui->browseViewsButton,SIGNAL(clicked()),this,SLOT(browseViews()));
   connect(_ui->browseInteractorsButton,SIGNAL(clicked()),this,SLOT(browseInteractors()));
   connect(_ui->browsePerspectivesButton,SIGNAL(clicked()),this,SLOT(browsePerspectives()));
+  connect(_ui->searchEdit,SIGNAL(textChanged(QString)),this,SLOT(setPluginNameFilter(QString)));
 }
 
 void PluginsCenter::showDownloadsPage() {
@@ -123,5 +124,10 @@ void PluginsCenter::browseInteractors() {
 
 void PluginsCenter::browsePerspectives() {
   _ui->pluginsSearchList->setTypeFilter(PERSPECTIVE_PLUGIN_NAME);
+  showSearchPage();
+}
+
+void PluginsCenter::setPluginNameFilter(const QString &f) {
+  _ui->pluginsSearchList->setNameFilter(f);
   showSearchPage();
 }
