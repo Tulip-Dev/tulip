@@ -11,7 +11,7 @@ Perspective::Perspective(PerspectiveContext &c) {
 
 Perspective::~Perspective() {
   delete _project;
-  delete _mainWindow;
+//  delete _mainWindow;
 }
 
 bool Perspective::isCompatible(tlp::TulipProject *) {

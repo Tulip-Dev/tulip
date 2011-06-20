@@ -9,16 +9,11 @@
 #include <QtXml/QDomDocument>
 
 #include <stdlib.h>
-#include <assert.h>
-
 #include <tulip/QuaZIPFacade.h>
 
 #define DATA_DIR_NAME "data"
 #define INFOS_FILE_NAME "project.xml"
 #define TLPPROJ_VERSION "1.0"
-
-#include <iostream>
-using namespace std;
 
 namespace tlp {
 
@@ -34,7 +29,7 @@ TulipProject::TulipProject(const QString &path)
 TulipProject::~TulipProject() {
   if (!isValid())
     return;
-  removeAllDir(_rootDir.absolutePath());
+  removeAllDirPrivate(_rootDir.absolutePath());
 }
 
 TulipProject *TulipProject::newProject() {
