@@ -81,7 +81,8 @@ void GraphObserver::treatEvent(const Event& ev) {
     case GraphEvent::TLP_REMOVE_ATTRIBUTE:
       removeAttribute(graph, gEvt->getAttributeName());
     case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
-    case GraphEvent::TLP_DEL_INHERITED_PROPERTY:
+    case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
+    case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
       break;
     default:
       // this should not happen

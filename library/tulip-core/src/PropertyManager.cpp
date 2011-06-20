@@ -172,8 +172,7 @@ void PropertyManager::delLocalProperty(const string &str) {
   // if found remove from local properties
   if (it!=localProperties.end()) {
     PropertyInterface* oldProp = (*it).second;
-    //Remove property from map.
-    localProperties.erase(it);
+
     // loop in the ascendant hierarchy to get
     // an inherited property
     PropertyInterface* newProp = NULL;
@@ -185,6 +184,11 @@ void PropertyManager::delLocalProperty(const string &str) {
         break;
       }
     }
+    if (newProp == NULL){
+      (((GraphAbstract *) g)->notifyBeforeDelInheritedProperty(str));
+    }
+    //Remove property from map.
+    localProperties.erase(it);
 
     if (newProp)
       setInheritedProperty(str, newProp);
@@ -209,7 +213,7 @@ void PropertyManager::delInheritedProperty(const string &str) {
   // if found remove from inherited properties
   if (it != inheritedProperties.end()) {
       // graph observers notification
-      ((GraphAbstract *) graph)->notifyDelInheritedProperty(str);
+      ((GraphAbstract *) graph)->notifyAfterDelInheritedProperty(str);
 
       // loop on subgraphs
       Graph* sg;
