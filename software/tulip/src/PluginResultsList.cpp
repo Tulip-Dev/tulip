@@ -6,6 +6,7 @@
 #include <tulip/PluginManager.h>
 #include <tulip/PluginInformations.h>
 #include <QtGui/QVBoxLayout>
+#include <QtCore/QDebug>
 
 PluginResultsList::PluginResultsList(QWidget *parent)
   : QScrollArea(parent), _pluginManager(new tlp::PluginManager), _focusedItem(0), _resultsListCache(0) {
@@ -49,12 +50,13 @@ void PluginResultsList::refreshResults() {
     else {
       QString f;
       foreach(f,_typeFilter)
-        if (infos->type() == f)
+        if (infos->type().startsWith(f))
           typeMatches = true;
     }
     // Apply name filter
     if (_nameFilter.isEmpty() || infos->name().contains(_nameFilter,Qt::CaseInsensitive))
       nameMatches = true;
+
     if (!typeMatches || !nameMatches)
       continue;
 
