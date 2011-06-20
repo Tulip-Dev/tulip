@@ -89,7 +89,6 @@ namespace tlp {
   GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
 
   GlScene::GlScene(GlLODCalculator *calculator):viewportZoom(1),xDecViewport(0),yDecViewport(0),backgroundColor(255, 255, 255, 255),viewLabel(true),viewOrtho(true),displayEdgesInLastRendering(true),glGraphComposite(NULL), noClearBackground(false) {
-    Camera camera(this,false);
 
     if(calculator!=NULL)
       lodCalculator=calculator;
@@ -702,6 +701,11 @@ namespace tlp {
         *eye=Coord(0, 0, *sceneRadius);
         *eye=*eye + *center;
       }
+
+      if(zoomFactor){
+        *zoomFactor=1.;
+      }
+
       return;
     }
 
