@@ -63,6 +63,8 @@ void PluginResultsList::refreshResults() {
     PluginInformationsListItem *item = new PluginInformationsListItem(infos,mainWidget);
     connect(item,SIGNAL(gotFocus()),this,SLOT(changeFocus()));
     connect(item,SIGNAL(showDetailedInformations()),this,SLOT(switchToDetailedInformations()));
+    connect(item,SIGNAL(fetch()),this,SLOT(pluginFetch()));
+    connect(item,SIGNAL(remove()),this,SLOT(pluginRemove()));
     searchLayout->addWidget(item);
   }
   searchLayout->addItem(new QSpacerItem(1,1,QSizePolicy::Maximum,QSizePolicy::Expanding));
@@ -79,14 +81,32 @@ void PluginResultsList::changeFocus() {
 }
 
 void PluginResultsList::switchToDetailedInformations() {
-  PluginInformationsListItem *item = qobject_cast<PluginInformationsListItem *>(_focusedItem);
+  PluginInformationsListItem *item = qobject_cast<PluginInformationsListItem *>(sender());
   _resultsListCache = takeWidget();
   DetailedPluginInformationsWidget *detailedInfosWidget = new DetailedPluginInformationsWidget(item->pluginInformations());
   setWidget(detailedInfosWidget);
   connect(detailedInfosWidget,SIGNAL(goBack()),this,SLOT(restoreResultsList()));
+  connect(detailedInfosWidget,SIGNAL(fetch()),this,SLOT(pluginFetch()));
+  connect(detailedInfosWidget,SIGNAL(remove()),this,SLOT(pluginRemove()));
 }
 
 void PluginResultsList::restoreResultsList() {
   if (_resultsListCache)
     setWidget(_resultsListCache);
+}
+
+void PluginResultsList::pluginFetch() {
+  PluginInformationsListItem *listItem = dynamic_cast<PluginInformationsListItem *>(sender());
+  if (listItem)
+    emit fetch(listItem->pluginInformations());
+  else
+    emit fetch(dynamic_cast<DetailedPluginInformationsWidget *>(sender())->pluginInformations());
+}
+
+void PluginResultsList::pluginRemove() {
+  PluginInformationsListItem *listItem = dynamic_cast<PluginInformationsListItem *>(sender());
+  if (listItem)
+    emit remove(listItem->pluginInformations());
+  else
+    emit remove(dynamic_cast<DetailedPluginInformationsWidget *>(sender())->pluginInformations());
 }

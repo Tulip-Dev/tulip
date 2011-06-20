@@ -4,6 +4,7 @@
 #include "ui_PluginsCenter.h"
 
 #include <tulip/PluginManager.h>
+#include <QtCore/QDebug>
 
 PluginsCenter::PluginsCenter(QWidget *parent) :
     QWidget(parent), _ui(new Ui::PluginsCenterData()) {
@@ -18,6 +19,8 @@ PluginsCenter::PluginsCenter(QWidget *parent) :
   connect(_ui->browseInteractorsButton,SIGNAL(clicked()),this,SLOT(browseInteractors()));
   connect(_ui->browsePerspectivesButton,SIGNAL(clicked()),this,SLOT(browsePerspectives()));
   connect(_ui->searchEdit,SIGNAL(textChanged(QString)),this,SLOT(setPluginNameFilter(QString)));
+  connect(_ui->pluginsSearchList,SIGNAL(fetch(tlp::PluginInformations*)),this,SLOT(fetch(tlp::PluginInformations*)));
+  connect(_ui->pluginsSearchList,SIGNAL(remove(tlp::PluginInformations*)),this,SLOT(remove(tlp::PluginInformations*)));
 }
 
 void PluginsCenter::showDownloadsPage() {
@@ -130,4 +133,12 @@ void PluginsCenter::browsePerspectives() {
 void PluginsCenter::setPluginNameFilter(const QString &f) {
   _ui->pluginsSearchList->setNameFilter(f);
   showSearchPage();
+}
+
+void PluginsCenter::fetch(tlp::PluginInformations *infos) {
+  qWarning() << "Fetch " << infos->name();
+}
+
+void PluginsCenter::remove(tlp::PluginInformations *infos) {
+  qWarning() << "remove " << infos->name();
 }

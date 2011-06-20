@@ -29,6 +29,8 @@ PluginInformationsListItem::PluginInformationsListItem(tlp::PluginInformations *
     _ui->bottomFrame->hide();
 
   connect(_ui->infosButton,SIGNAL(clicked()),this,SIGNAL(showDetailedInformations()));
+  connect(_ui->installButton,SIGNAL(clicked()),this,SIGNAL(fetch()));
+  connect(_ui->removeButton,SIGNAL(clicked()),this,SIGNAL(remove()));
 }
 
 void PluginInformationsListItem::focusInEvent(QFocusEvent *) {
