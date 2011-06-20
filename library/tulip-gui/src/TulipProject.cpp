@@ -32,6 +32,8 @@ TulipProject::TulipProject(const QString &path)
 }
 
 TulipProject::~TulipProject() {
+  if (!isValid())
+    return;
   removeAllDir(_rootDir.absolutePath());
 }
 

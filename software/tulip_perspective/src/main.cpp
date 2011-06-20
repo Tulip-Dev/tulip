@@ -161,5 +161,7 @@ int main(int argc,char **argv) {
 
   delete progress;
 
-  return tulip_perspective.exec();
+  int result = tulip_perspective.exec();
+  delete perspective;
+  return result;
 }
