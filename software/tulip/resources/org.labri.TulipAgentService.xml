@@ -32,6 +32,10 @@
       <arg name="file" type="s" direction="in"/>
       <arg name="result" type="as" direction="out"/>
     </method>
+    <method name="EnableCrashHandling">
+      <arg name="folder" type="s" direction="in"/>
+      <arg name="pid" type="x" direction="in"/>
+    </method>
     <signal name="Terminate"/>
   </interface>
 </node>

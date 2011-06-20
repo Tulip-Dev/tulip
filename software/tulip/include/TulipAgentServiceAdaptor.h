@@ -9,8 +9,8 @@
  * before re-generating it.
  */
 
-#ifndef TULIPAGENTSERVICEADAPTOR_H_1308053007
-#define TULIPAGENTSERVICEADAPTOR_H_1308053007
+#ifndef TULIPAGENTSERVICEADAPTOR_H_1308571716
+#define TULIPAGENTSERVICEADAPTOR_H_1308571716
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
@@ -62,6 +62,10 @@ class TulipAgentServiceAdaptor: public QDBusAbstractAdaptor
 "      <arg direction=\"in\" type=\"s\" name=\"file\"/>\n"
 "      <arg direction=\"out\" type=\"as\" name=\"result\"/>\n"
 "    </method>\n"
+"    <method name=\"EnableCrashHandling\">\n"
+"      <arg direction=\"in\" type=\"s\" name=\"folder\"/>\n"
+"      <arg direction=\"in\" type=\"x\" name=\"pid\"/>\n"
+"    </method>\n"
 "    <signal name=\"Terminate\"/>\n"
 "  </interface>\n"
         "")
@@ -77,6 +81,7 @@ public Q_SLOTS: // METHODS
     void AddPluginRepository(const QString &url);
     void CreatePerspective(const QString &name);
     void CreatePerspective(const QString &name, const QVariantMap &parameters);
+    void EnableCrashHandling(const QString &folder, qlonglong pid);
     QStringList GetCompatiblePerspectives(const QString &file);
     void OpenProject(const QString &file);
     void OpenProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters);

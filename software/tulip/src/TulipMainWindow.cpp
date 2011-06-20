@@ -10,6 +10,7 @@
 #include <tulip/TulipRelease.h>
 
 #include "ui_TulipMainWindow.h"
+#include "TulipPerspectiveProcessHandler.h"
 
 #include <QtCore/QDebug>
 
@@ -127,7 +128,7 @@ void TulipMainWindow::RemovePluginRepository(const QString &url) {
 }
 
 void TulipMainWindow::CreatePerspective(const QString &name,const QVariantMap &parameters) {
-  runPerspectiveProcess(name,"",parameters);
+  TulipPerspectiveProcessHandler::instance().createPerspective(name,"",parameters);
 }
 void TulipMainWindow::CreatePerspective(const QString &name) {
   CreatePerspective(name,QVariantMap());
@@ -149,17 +150,7 @@ QStringList TulipMainWindow::GetCompatiblePerspectives(const QString &file) {
   return QStringList();
 }
 
-void TulipMainWindow::runPerspectiveProcess(const QString &perspective, const QString &file, const QVariantMap &parameters) {
-  QStringList args;
-  if (!perspective.isEmpty())
-    args << "--perspective=" + perspective;
-  if (!file.isEmpty())
-    args << file;
-
-  QString k;
-  foreach(k,parameters.keys())
-    args << "--" + k + "=" + parameters[k].toString();
-
-  QDir appDir(QApplication::applicationDirPath());
-  QProcess::startDetached(appDir.absoluteFilePath("tulip_perspective"),args);
+void TulipMainWindow::EnableCrashHandling(const QString &folder, qlonglong pid) {
+  qWarning() << "enable crash handling " << folder << " " << pid;
+  TulipPerspectiveProcessHandler::instance().enableCrashHandling(pid,folder);
 }

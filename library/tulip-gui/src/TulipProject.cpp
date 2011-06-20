@@ -93,6 +93,12 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
   return true;
 }
 
+TulipProject *TulipProject::restoreProject(const QString &path) {
+  TulipProject *project = new TulipProject(path);
+  project->_isValid = project->readMetaInfos();
+  return project;
+}
+
 // ==============================
 //      FILES MANIPULATION
 // ==============================
@@ -132,6 +138,10 @@ QIODevice *TulipProject::fileStream(const QString &path) {
   QFile *result = new QFile(toAbsolutePath(path));
   result->open(QIODevice::ReadWrite);
   return result;
+}
+
+QString TulipProject::absoluteRootPath() const {
+  return _rootDir.absolutePath();
 }
 
 // ==============================
@@ -199,12 +209,13 @@ bool TulipProject::writeMetaInfos() {
   return true;
 }
 
-void TulipProject::readMetaInfos() {
+bool TulipProject::readMetaInfos() {
   QFile in(_rootDir.absoluteFilePath(INFOS_FILE_NAME));
   if (!in.open(QIODevice::ReadOnly))
-    return;
+    return false;
   QDomDocument doc;
-  doc.setContent(&in);
+  if (!doc.setContent(&in))
+    return false;
   in.close();
 
   QDomElement rootElement = doc.documentElement();
@@ -220,6 +231,8 @@ void TulipProject::readMetaInfos() {
     if (property(propName).isValid())
       setProperty(propName,e.text());
   }
+
+  return true;
 }
 
 QString TulipProject::toAbsolutePath(const QString &relativePath) {

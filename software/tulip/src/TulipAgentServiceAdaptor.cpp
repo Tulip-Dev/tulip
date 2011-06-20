@@ -57,6 +57,12 @@ void TulipAgentServiceAdaptor::CreatePerspective(const QString &name, const QVar
     QMetaObject::invokeMethod(parent(), "CreatePerspective", Q_ARG(QString, name), Q_ARG(QVariantMap, parameters));
 }
 
+void TulipAgentServiceAdaptor::EnableCrashHandling(const QString &folder, qlonglong pid)
+{
+    // handle method call org.labri.Tulip.EnableCrashHandling
+    QMetaObject::invokeMethod(parent(), "EnableCrashHandling", Q_ARG(QString, folder), Q_ARG(qlonglong, pid));
+}
+
 QStringList TulipAgentServiceAdaptor::GetCompatiblePerspectives(const QString &file)
 {
     // handle method call org.labri.Tulip.GetCompatiblePerspectives
