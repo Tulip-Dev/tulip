@@ -46,4 +46,8 @@ SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent): QDialog
   setLayout(mainLayout);
 }
 
+SimplePluginProgressDialog::~SimplePluginProgressDialog() {
+  delete _progress;
+}
+
 }
