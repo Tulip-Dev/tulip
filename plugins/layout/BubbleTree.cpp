@@ -319,8 +319,13 @@ bool BubbleTree::run() {
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
+
   // push a temporary graph state (not redoable)
   graph->push(false);
+  // but ensure layoutResult will be preserved
+  if (layoutResult->getName() != "")
+    preservePropertyUpdates(layoutResult);
+
   tree = TreeTest::computeTree(graph, pluginProgress);
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
     graph->pop();
