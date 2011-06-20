@@ -55,7 +55,6 @@ namespace tlp {
   void Controller::construct() {
     _buildUi();
 
-
     tlp::Graph *g;
     DataSet controllerData;
     if (_externalFile.isEmpty()) {
@@ -69,6 +68,7 @@ namespace tlp {
       progress.show();
       DataSet importData;
       importData.set("file::filename",_externalFile.toStdString());
+      _lastUsedSavePath = _externalFile;
       g = tlp::importGraph("tlp",importData,&progress);
 
       if(importData.exist("controller")) {
@@ -125,6 +125,8 @@ namespace tlp {
     connect(ui->helpDocumentationAction,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));
     connect(ui->pluginsAction,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
     connect(ui->helpAboutAction,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));
+    connect(ui->fileSaveAction,SIGNAL(triggered()),this,SLOT(save()));
+    connect(ui->fileSaveAsAction,SIGNAL(triggered()),this,SLOT(saveAs()));
 
     attachMainWindow(MainWindowFacade(_mainWindow,ui->toolBar,ui->graphToolBar,workspace));
   }
@@ -158,12 +160,28 @@ namespace tlp {
   }
 
   void Controller::save() {
+    if (_lastUsedSavePath.isEmpty())
+      saveAs();
+    else
+      saveAs(_lastUsedSavePath);
   }
 
   void Controller::saveAs() {
+    saveAs(QFileDialog::getSaveFileName(0,trUtf8("Save File"), _lastUsedSavePath, trUtf8("Tulip graphs (*.tlp)")));
   }
 
   void Controller::saveAs(const QString &file) {
+    if (file.isEmpty())
+      return;
+    ofstream os(file.toStdString().c_str());
+
+    Graph *g;
+    DataSet dataSet;
+    getData(&g,&dataSet);
+    tlp::SimplePluginProgressDialog *progress = new tlp::SimplePluginProgressDialog(0);
+    tlp::exportGraph(g,os,"tlp",dataSet,progress->progress());
+    delete progress;
+    _lastUsedSavePath = file;
   }
 
   void Controller::initializeGraph(Graph *graph) {

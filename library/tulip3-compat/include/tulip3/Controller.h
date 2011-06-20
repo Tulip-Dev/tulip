@@ -171,6 +171,8 @@ namespace tlp {
 
     Q_OBJECT;
 
+    QString _lastUsedSavePath;
+
   public:
 
     Controller(tlp::PerspectiveContext &c);
