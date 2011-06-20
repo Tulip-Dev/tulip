@@ -5,7 +5,7 @@
 #include "ui_DetailedPluginInformationsWidget.h"
 
 DetailedPluginInformationsWidget::DetailedPluginInformationsWidget(tlp::PluginInformations *infos,QWidget *parent)
-  : QWidget(parent), _ui(new Ui::DetailedPluginInformationsWidgetData) {
+  : QWidget(parent), _ui(new Ui::DetailedPluginInformationsWidgetData), _pluginInformations(infos) {
   _ui->setupUi(this);
   _ui->icon->setPixmap(QPixmap(infos->iconPath()));
   _ui->nameAndAuthor->setText("<span style=\"font-size: large;\"><b>" + infos->name() + "</b></span><span style=\"color:#626262;\"> by " + infos->author() + "</span>");
@@ -21,4 +21,6 @@ DetailedPluginInformationsWidget::DetailedPluginInformationsWidget(tlp::PluginIn
   _ui->detailedDescriptionView->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
   _ui->detailedDescriptionView->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
   connect(_ui->backButton,SIGNAL(clicked()),this,SIGNAL(goBack()));
+  connect(_ui->instalButton,SIGNAL(clicked()),this,SIGNAL(fetch()));
+  connect(_ui->removeButton,SIGNAL(clicked()),this,SIGNAL(remove()));
 }

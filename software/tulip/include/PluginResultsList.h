@@ -5,6 +5,7 @@
 
 namespace tlp {
 class PluginManager;
+class PluginInformations;
 }
 
 class PluginResultsList : public QScrollArea {
@@ -23,6 +24,13 @@ protected slots:
   void changeFocus();
   void switchToDetailedInformations();
   void restoreResultsList();
+
+  void pluginFetch();
+  void pluginRemove();
+
+signals:
+  void fetch(tlp::PluginInformations *);
+  void remove(tlp::PluginInformations *);
 
 private:
   tlp::PluginManager *_pluginManager;

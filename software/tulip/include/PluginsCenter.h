@@ -8,6 +8,10 @@ namespace Ui {
 class PluginsCenterData;
 }
 
+namespace tlp {
+class PluginInformations;
+}
+
 /**
   @brief The widget managing plugins installation.
   This widget is meant to list plugins available from several plugins repositories. Order them by categories and provide with a way to easily download and install them.
@@ -27,6 +31,8 @@ public slots:
   void showDownloadsPage();
   void showReposPage();
   void reportPluginError(const QString &filename, const QString &errormsg);
+  void fetch(tlp::PluginInformations *);
+  void remove(tlp::PluginInformations *);
 
 protected slots:
   void showPage(QWidget *page);

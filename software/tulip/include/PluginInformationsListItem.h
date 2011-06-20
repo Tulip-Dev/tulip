@@ -22,6 +22,8 @@ protected:
 signals:
   void gotFocus();
   void showDetailedInformations();
+  void fetch();
+  void remove();
 
 public slots:
   void expand();
