@@ -53,7 +53,7 @@ void PluginResultsList::refreshResults() {
           typeMatches = true;
     }
     // Apply name filter
-    if (_nameFilter.isEmpty() || infos->name().contains(_nameFilter))
+    if (_nameFilter.isEmpty() || infos->name().contains(_nameFilter,Qt::CaseInsensitive))
       nameMatches = true;
     if (!typeMatches || !nameMatches)
       continue;
