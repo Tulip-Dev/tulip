@@ -51,8 +51,8 @@ class TLP_QT_SCOPE TulipProject: public QObject {
 
   TulipProject();
   TulipProject(const QString &);
-
 public:
+
   virtual ~TulipProject();
 
   /**
@@ -68,9 +68,17 @@ public:
     @see TulipProject::save()
     @param file The file to open.
     @param progress A progress handler.
-    @return a pointer to a TulipProject object or a NULL pointer if the method failed.
+    @return a pointer to a TulipProject object.
     */
   static TulipProject *openProject(const QString &file, tlp::PluginProgress *progress=NULL);
+
+  /**
+    @brief Restores a project which has already been extracted into path
+    @warning Using several TulipProject instances on the same directory may result in undefined behavior. This method should only be used for crash handling purposes.
+    @param path The path where the archive was previously extracted
+    @return a pointer to a TulipProject object.
+    */
+  static TulipProject *restoreProject(const QString &path);
 
   /**
     @brief Writes files in the TulipProject into a packed archive.
@@ -155,6 +163,13 @@ public:
     */
   QString projectFile() const { return _projectFile; }
 
+  /**
+    @brief This method returns the real absolute path corresponding to / in the TulipProject.
+    This can be used to create a TulipProject directly from a path.
+    @warning Using several TulipProject instances at the same time on the same path may result in undefined behavior.
+    */
+  QString absoluteRootPath() const;
+
   // Developer note: Every field in the TulipProject tagged as a Q_PROPERTY will automaticaly be serialized in the project.xml file
   /**
     @brief the name of the project
@@ -200,7 +215,7 @@ private:
   static QString temporaryPath();
 
   bool writeMetaInfos();
-  void readMetaInfos();
+  bool readMetaInfos();
 
   QString toAbsolutePath(const QString &relativePath);
   bool removeAllDirPrivate(const QString &path);

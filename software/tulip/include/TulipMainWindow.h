@@ -48,16 +48,16 @@ private:
 
   QVector<QObject *> _pageChoosers;
 
-  void runPerspectiveProcess(const QString &perspective,const QString &file, const QVariantMap &parameters);
-
 // Methods and properties coming from the D-Bus service implementation
 public: // PROPERTIES
     Q_PROPERTY(qlonglong pid READ pid)
     qlonglong pid() const;
+
 public Q_SLOTS: // METHODS
     void AddPluginRepository(const QString &url);
     void CreatePerspective(const QString &name);
     void CreatePerspective(const QString &name, const QVariantMap &parameters);
+    void EnableCrashHandling(const QString &folder, qlonglong pid);
     QStringList GetCompatiblePerspectives(const QString &file);
     void OpenProject(const QString &file);
     void OpenProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters);

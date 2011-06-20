@@ -157,6 +157,8 @@ int main(int argc,char **argv) {
   QObject::connect(communicator,SIGNAL(Terminate()),perspective,SLOT(terminated()));
   QObject::connect(qApp,SIGNAL(aboutToQuit()),perspective,SLOT(terminated()));
 
+  communicator->EnableCrashHandling(project->absoluteRootPath(),QApplication::applicationPid());
+
   perspective->construct();
 
   delete progress;

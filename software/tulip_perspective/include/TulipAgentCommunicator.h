@@ -8,8 +8,8 @@
  * Do not edit! All changes made to it will be lost.
  */
 
-#ifndef TULIPAGENTCOMMUNICATOR_H_1308052999
-#define TULIPAGENTCOMMUNICATOR_H_1308052999
+#ifndef TULIPAGENTCOMMUNICATOR_H_1308571708
+#define TULIPAGENTCOMMUNICATOR_H_1308571708
 
 #include <QtCore/QObject>
 #include <QtCore/QByteArray>
@@ -59,6 +59,13 @@ public Q_SLOTS: // METHODS
         QList<QVariant> argumentList;
         argumentList << qVariantFromValue(name) << qVariantFromValue(parameters);
         return asyncCallWithArgumentList(QLatin1String("CreatePerspective"), argumentList);
+    }
+
+    inline QDBusPendingReply<> EnableCrashHandling(const QString &folder, qlonglong pid)
+    {
+        QList<QVariant> argumentList;
+        argumentList << qVariantFromValue(folder) << qVariantFromValue(pid);
+        return asyncCallWithArgumentList(QLatin1String("EnableCrashHandling"), argumentList);
     }
 
     inline QDBusPendingReply<QStringList> GetCompatiblePerspectives(const QString &file)
