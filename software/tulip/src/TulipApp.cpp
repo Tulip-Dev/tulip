@@ -566,11 +566,15 @@ void TulipApp::fileOpen(string *plugin, QString &s) {
       s = QFileDialog::getOpenFileName(this, tr("Choose a file to open" ),
 				       QString(),
 				       tr("Tulip graph (*.tlp *.tlp.gz)"));
-
       if (s == QString::null)
 	cancel=true;
-      else
+      else  {
+	if (QFileInfo(s).isDir()) {
+	  QMessageBox::critical(this, "Error", s + " is a directory.");
+	  cancel = true;
+	} else
 	dataSet.set("file::filename", string(s.toUtf8().data()));
+      }
     }else {
       noPlugin = false;
       s = QString::null;
