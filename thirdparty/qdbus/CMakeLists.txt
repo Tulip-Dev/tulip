@@ -41,6 +41,11 @@ qdbusservicewatcher.h
 qdbuspendingcall.h
 qdbusabstractinterface.h)
 
+#if this is not specified, the compilation might try to go ahead without generating the mocs
+SET_SOURCE_FILES_PROPERTIES(qdbusabstractinterface.cpp PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/moc_qdbusabstractinterface.cxx)
+SET_SOURCE_FILES_PROPERTIES(qdbuspendingcall.cpp PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/moc_qdbuspendingcall.cxx)
+SET_SOURCE_FILES_PROPERTIES(qdbusservicewatcher.cpp PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/moc_qdbusservicewatcher.cxx)
+
 QT4_WRAP_CPP(MOC_SRCS
 qdbusabstractadaptor.h
 qdbusconnection_p.h
