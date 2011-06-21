@@ -171,9 +171,6 @@ namespace tlp {
   }
 
   void Controller::saveAs(const QString &file) {
-    Graph *prout = NULL;
-    prout->addNode();
-
     if (file.isEmpty())
       return;
     ofstream os(file.toStdString().c_str());
