@@ -375,8 +375,9 @@ PropertyInterface* GraphAbstract::getProperty(const string &str) {
 }
 //=========================================================================
 void GraphAbstract::delLocalProperty(const std::string &name) {
-  notifyDelLocalProperty(name);
+  notifyBeforeDelLocalProperty(name);
   propertyContainer->delLocalProperty(name);
+  notifyAfterDelLocalProperty(name);
 }
 //=========================================================================
 void GraphAbstract::addLocalProperty(const std::string &name, PropertyInterface *prop) {

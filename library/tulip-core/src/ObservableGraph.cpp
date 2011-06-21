@@ -69,7 +69,7 @@ void GraphObserver::treatEvent(const Event& ev) {
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
       addLocalProperty(graph, gEvt->getPropertyName());
       break;
-    case GraphEvent::TLP_DEL_LOCAL_PROPERTY:
+    case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:
       delLocalProperty(graph, gEvt->getPropertyName());
       break;
     case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
@@ -80,6 +80,7 @@ void GraphObserver::treatEvent(const Event& ev) {
       break;
     case GraphEvent::TLP_REMOVE_ATTRIBUTE:
       removeAttribute(graph, gEvt->getAttributeName());
+    case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
     case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
     case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
     case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
