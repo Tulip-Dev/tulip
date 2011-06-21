@@ -12,10 +12,6 @@
 #include "ui_TulipMainWindow.h"
 #include "TulipPerspectiveProcessHandler.h"
 
-//FIXME: remove me
-#include <QtCore/QDebug>
-#include "ui_TulipPerspectiveCrashHandler.h"
-
 TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new Ui::TulipMainWindowData()), _systemTrayIcon(0) {
   _ui->setupUi(this);
   _pageChoosers.clear();
