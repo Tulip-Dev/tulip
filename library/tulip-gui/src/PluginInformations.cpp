@@ -95,8 +95,10 @@ bool PluginInformations::updateAvailable() const {
 
 bool PluginInformations::fetch(QString version) const {
   //FIXME implement me
+  return false;
 }
 
 bool PluginInformations::remove() const {
   //FIXME implement me
+  return false;
 }
