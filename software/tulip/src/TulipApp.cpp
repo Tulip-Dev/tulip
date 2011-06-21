@@ -322,7 +322,6 @@ void TulipApp::fileNew(QAction *action) {
   tabIndexToController[tabWidget->currentIndex()]->setData(graph);
   GraphNeedsSavingObserver* observer = new GraphNeedsSavingObserver(tabWidget, tabWidget->currentIndex(), graph);
   observer->doNeedSaving();
-  graph->addObserver(observer);
   controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]] = observer;
   enableElements(true);
 }
@@ -345,7 +344,6 @@ string name;
     tabIndexToController[tabWidget->currentIndex()]->setData(graph);
     GraphNeedsSavingObserver* observer = new GraphNeedsSavingObserver(tabWidget, tabWidget->currentIndex(), graph);
     observer->doNeedSaving();
-    graph->addObserver(observer);
     controllerToGraphObserver[tabIndexToController[tabWidget->currentIndex()]] = observer;
     enableElements(true);
   } else
