@@ -93,6 +93,12 @@ AppStartUp::AppStartUp(QWidget* parent) :
   setupUi(this);
   setModal(true);
 
+// fix a strange bug when linking to the qt debug libraries for mingw
+// when visibility of the text in the progress bar is enabled, tulip crashes at startup
+#if defined(__MINGW32__) && !defined(NDEBUG)
+  progressBar->setTextVisible(false);
+#endif
+
   string tmp = "Tulip ";
   tmp+=TULIP_RELEASE;
   setWindowTitle(tmp.c_str());
