@@ -179,8 +179,14 @@ bool ConeTreeExtended::run() {
 
   if (pluginProgress)
     pluginProgress->showPreview(false);
+
   // push a temporary graph state (not redoable)
   graph->push(false);
+
+  // but ensure result will be preserved
+  if (result->getName() != "")
+    preservePropertyUpdates(result);
+
   tree = TreeTest::computeTree(graph, pluginProgress);
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
     graph->pop();

@@ -94,6 +94,9 @@ bool TreeLeaf::run() {
 
   // push a temporary graph state (not redoable)
   graph->push(false);
+  // but ensure result will be preserved
+  if (result->getName() != "")
+    preservePropertyUpdates(result);
 
   Graph *tree = TreeTest::computeTree(graph, pluginProgress);
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
