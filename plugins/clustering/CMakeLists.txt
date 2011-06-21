@@ -44,8 +44,7 @@ TULIP_QT4_WRAP_CPP(ConvolutionClustering_MOC_SRCS ${ConvolutionClustering_MOC})
 
 ADD_LIBRARY(ConvolutionClustering-${TulipVersion} SHARED ${ConvolutionClustering_SRCS} ${ConvolutionClustering_UI_SRCS} ${ConvolutionClustering_MOC_SRCS})
 TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${LibTulipName} )
-TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${QT_QTCORE_LIBRARY})
-TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${QT_QTGUI_LIBRARY})
+TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${QT_LIBRARIES})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(EqualValueClustering_SRCS
