@@ -117,10 +117,7 @@ void ConsoleOutputDialog::hideConsoleOutputDialog() {
 
 PythonInterpreter PythonInterpreter::instance;
 
-
-
-
-PythonInterpreter::PythonInterpreter() : runningScript(false) {
+PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NULL) {
 	int argc=1;
 	char *argv[1];
 	argv[0] = const_cast<char *>("");
@@ -152,8 +149,12 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 		dlopen(libPythonName.c_str(), RTLD_LAZY | RTLD_GLOBAL);
 #endif
 
+// fix a bug when linking to the qt debug libraries for Visual Studio : 
+// instantiating a widget when the plugin is being loaded (PythonInterpreter object is instantiated when LoadLibrary is called on the dll of the plugin)
+// makes tulip crash
+#if !defined(_MSC_VER) && !defined(_DEBUG)
 		consoleDialog = new ConsoleOutputDialog();
-
+#endif
 		if (interpreterInit()) {
 
 			string pythonPluginsPath = tlp::TulipLibDir + "tulip/python/";
@@ -179,7 +180,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false) {
 
 			runString("import sys; import scriptengine ; sys.stdout = scriptengine.ConsoleOutput(False); sys.stderr = scriptengine.ConsoleOutput(True);\n");
 
-			setDefaultConsoleWidget();
+			//setDefaultConsoleWidget();
 
 			runString("from tulip import *");
 
@@ -271,6 +272,13 @@ void PythonInterpreter::addModuleSearchPath(const std::string &path, const bool 
 
 bool PythonInterpreter::runGraphScript(const string &module, const string &function, tlp::Graph *graph) {
 
+// special case for Visual Studio debug mode :
+// instantiate the console dialog here because we could not in the constructor (segfault otherwise)
+#if defined(_MSC_VER) && defined(_DEBUG)
+	if (!consoleDialog)
+		consoleDialog = new ConsoleOutputDialog();
+#endif
+
 	// Build the name object
 	PyObject *pName = PyString_FromString(module.c_str());
 
@@ -352,7 +360,8 @@ void PythonInterpreter::setConsoleWidget(QPlainTextEdit *console) {
 }
 
 void PythonInterpreter::setDefaultConsoleWidget() {
-	consoleWidget = consoleDialog->consoleWidget;
+	if (consoleDialog)
+		consoleWidget = consoleDialog->consoleWidget;
 	shellWidget = NULL;
 }
 
