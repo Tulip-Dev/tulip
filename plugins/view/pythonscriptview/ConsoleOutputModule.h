@@ -57,10 +57,10 @@
 
 using namespace std;
 
-QPlainTextEdit *consoleWidget = NULL;
-PythonShellWidget *shellWidget = NULL;
-std::string consoleOuput = "";
-bool outputActivated = true;
+static QPlainTextEdit *consoleWidget = NULL;
+static PythonShellWidget *shellWidget = NULL;
+static std::string consoleOuput = "";
+static bool outputActivated = true;
 
 typedef struct {
 	PyObject_HEAD
