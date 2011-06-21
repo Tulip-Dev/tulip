@@ -28,8 +28,10 @@
 #include <QtGui/qtabwidget.h>
 #include <tulip/PropertyInterface.h>
 
+#include <deque>
+
 class GraphNeedsSavingObserver :
-public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observable {
+public tlp::GraphObserver, public tlp::PropertyObserver{
    public : 
 
       GraphNeedsSavingObserver(QTabWidget* tabWidget, int graphIndex, tlp::Graph* graph, bool = true) :_needsSaving(false), _tabIndex(graphIndex), _tabWidget(tabWidget), _graph(graph) {
@@ -40,11 +42,7 @@ public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observable 
 
       virtual void addEdge(tlp::Graph* , const tlp::edge ) { doNeedSaving(); }
       virtual void addNode(tlp::Graph* , const tlp::node ) { doNeedSaving(); }
-      virtual void afterSetAllEdgeValue(tlp::PropertyInterface* ) { doNeedSaving(); }
-      virtual void afterSetAllNodeValue(tlp::PropertyInterface* ) { doNeedSaving(); }
-      virtual void afterSetAttribute(tlp::Graph* , const std::string& ) { doNeedSaving(); }
-      virtual void afterSetEdgeValue(tlp::PropertyInterface* , const tlp::edge ) { doNeedSaving(); }
-      virtual void afterSetNodeValue(tlp::PropertyInterface* , const tlp::node ) { doNeedSaving(); }
+      virtual void afterSetAttribute(tlp::Graph* , const std::string& ) { doNeedSaving(); }      
       virtual void beforeSetAllEdgeValue(tlp::PropertyInterface* ) { doNeedSaving(); }
       virtual void beforeSetAllNodeValue(tlp::PropertyInterface* ) { doNeedSaving(); }
       virtual void beforeSetAttribute(tlp::Graph* , const std::string& ) { doNeedSaving(); }
@@ -53,37 +51,11 @@ public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observable 
       virtual void delEdge(tlp::Graph* , const tlp::edge ) { doNeedSaving(); }
       virtual void delNode(tlp::Graph* , const tlp::node ) { doNeedSaving(); }
       virtual void removeAttribute(tlp::Graph* , const std::string& ) { doNeedSaving(); }
-      virtual void reverseEdge(tlp::Graph* , const tlp::edge ) { doNeedSaving(); }
-      
-      virtual void addLocalProperty(tlp::Graph* graph, const std::string& propertyName) {
-        graph->getProperty(propertyName)->addPropertyObserver(this);
-        doNeedSaving();
-      }
-      virtual void delLocalProperty(tlp::Graph* graph, const std::string& propertyName) {
-        graph->getProperty(propertyName)->removePropertyObserver(this);
-        doNeedSaving();
-      }
-      
-      virtual void addSubGraph(tlp::Graph* , tlp::Graph* newSubGraph) {
-        newSubGraph->addGraphObserver(this);
-        tlp::Iterator<std::string>* it = newSubGraph->getProperties();
-        while(it->hasNext()) {
-          std::string propertyName = it->next();
-          tlp::PropertyInterface* property = newSubGraph->getProperty(propertyName);
-          property->addPropertyObserver(this);
-        }
-        delete it;
-      }
-      virtual void delSubGraph(tlp::Graph* , tlp::Graph* newSubGraph) {
-        tlp::Iterator<std::string>* it = newSubGraph->getProperties();
-        while(it->hasNext()) {
-          std::string propertyName = it->next();
-          tlp::PropertyInterface* property = newSubGraph->getProperty(propertyName);
-          property->removePropertyObserver(this);
-        }
-        delete it;
-        newSubGraph->removeGraphObserver(this);
-      }
+      virtual void reverseEdge(tlp::Graph* , const tlp::edge ) { doNeedSaving(); }      
+      virtual void addLocalProperty(tlp::Graph* , const std::string& ) { doNeedSaving(); }
+      virtual void delLocalProperty(tlp::Graph* , const std::string& ) {doNeedSaving(); }
+      virtual void addSubGraph(tlp::Graph* , tlp::Graph*) {doNeedSaving();}
+      virtual void delSubGraph(tlp::Graph* , tlp::Graph* ) {doNeedSaving();}
       
       virtual void destroy(tlp::Graph* graph) {
         graph->removeGraphObserver(this);
@@ -91,8 +63,6 @@ public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observable 
       virtual void destroy(tlp::PropertyInterface* property) {
         property->removePropertyObserver(this);
       }
-      
-      virtual void update(std::set< tlp::Observable* >::iterator, std::set< tlp::Observable* >::iterator) { doNeedSaving(); }
       
     public :
 
@@ -104,40 +74,69 @@ public tlp::GraphObserver, public tlp::PropertyObserver, public tlp::Observable 
       bool needSaving() const { 
         return _needsSaving; 
       }
-      
+            
       void doNeedSaving() {
         if(!_needsSaving) {
+            //add the "*" char in the tab
           _tabWidget->setTabText(_tabIndex, _tabWidget->tabText(_tabIndex) + " *");
-          tlp::Iterator<tlp::Graph*>* it = _graph->getSubGraphs();
-          while(it->hasNext()) {
-            tlp::Graph* sub = it->next();
-            removeObserversOnGraph(sub);
-          }
-          removeObserversOnGraph(_graph);
-          delete it;
+          // Stop listening graphs.
+          removeObservers();
           _needsSaving = true;
         }
       }
 
-      void removeObserversOnGraph(tlp::Graph* graph) {
-        tlp::Iterator<tlp::PropertyInterface*>* it = graph->getLocalObjectProperties();
-        while(it->hasNext()) {
-          tlp::PropertyInterface* property = it->next();
-          property->removePropertyObserver(this);
-        }
-        delete it;
-        graph->removeGraphObserver(this);
-      }
+
       
   private:
-    void addObserver() {
-      tlp::Iterator<std::string>* it = _graph->getProperties();
-      while(it->hasNext()) {
-        std::string propertyName = it->next();
-        tlp::PropertyInterface* property = _graph->getProperty(propertyName);
-        property->addPropertyObserver(this);
+      /**
+        * @brief Listen all the observable objects in the graph (subgraphs, properties).
+        **/
+    void addObserver() {      
+      std::deque<tlp::Graph*> toObserve;
+      toObserve.push_back(_graph);
+      while(!toObserve.empty()){
+          tlp::Graph* current = toObserve.front();
+          current->addGraphObserver(this);
+          toObserve.pop_front();
+
+          //Listen properties.
+          tlp::PropertyInterface* property;
+          forEach(property,current->getLocalObjectProperties()) {
+            property->addPropertyObserver(this);
+          }
+
+          //Fetch subgraphs
+          tlp::Graph* subgraphs;
+          forEach(subgraphs,current->getSubGraphs()){
+              toObserve.push_back(subgraphs);
+          }
       }
-      delete it;
+    }
+
+    /**
+      * @brief  Stop listening all the observable objects in the graph (subgraphs, properties).
+      **/
+    void removeObservers(){
+        std::deque<tlp::Graph*> toUnobserve;
+        toUnobserve.push_back(_graph);
+        while(!toUnobserve.empty()){
+            tlp::Graph* current = toUnobserve.front();
+            toUnobserve.pop_front();
+
+            current->removeGraphObserver(this);
+
+            //Stop listening properties.
+            tlp::PropertyInterface* property;
+            forEach(property,current->getLocalObjectProperties()) {
+              property->removePropertyObserver(this);
+            }
+
+            //Fetch subgraphs
+            tlp::Graph* subgraphs;
+            forEach(subgraphs,current->getSubGraphs()){
+                toUnobserve.push_back(subgraphs);
+            }
+        }
     }
     
     bool _needsSaving; 
