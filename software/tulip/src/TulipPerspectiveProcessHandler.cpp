@@ -9,6 +9,10 @@
 
 #include "ui_TulipPerspectiveCrashHandler.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 SelectionButton::SelectionButton(QWidget *parent): QPushButton(parent) {}
 void SelectionButton::paintEvent(QPaintEvent *e) {
   QPushButton::paintEvent(e);
@@ -74,7 +78,11 @@ void TulipPerspectiveProcessHandler::perspectiveFinished(int exitCode, QProcess:
 void TulipPerspectiveProcessHandler::enableCrashHandling(qlonglong perspectivePid, const QString &perspectiveProjectPath) {
   QProcess *p;
   foreach(p,_processInfos.keys()) {
+  #ifdef _WIN32
+  if (p->pid()->dwProcessId == perspectivePid) {
+  #else
     if (p->pid() == perspectivePid) {
+  #endif
       PerspectiveProcessInfos infos = _processInfos[p];
       infos.projectPath = perspectiveProjectPath;
       _processInfos[p] = infos;
