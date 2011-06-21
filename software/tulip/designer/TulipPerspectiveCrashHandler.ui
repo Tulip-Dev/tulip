@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>437</width>
-    <height>187</height>
+    <width>542</width>
+    <height>459</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,96 +52,281 @@ QToolButton:pressed, QPushButton:pressed{
 	margin: 2
  }</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="margin">
-    <number>4</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
-    <number>4</number>
+    <number>0</number>
    </property>
-   <item row="0" column="1">
-    <widget class="QLabel" name="title">
-     <property name="text">
-      <string/>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="topFrame">
+     <property name="styleSheet">
+      <string notr="true">#topFrame {
+	background-color: white;
+}</string>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
      </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>8</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="icon">
+        <property name="minimumSize">
+         <size>
+          <width>48</width>
+          <height>48</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>48</width>
+          <height>48</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>:/tulip/gui/icons/logo32x32.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="title">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>&lt;p&gt;&lt;span style=&quot;font-size: large;&quot;&gt;&lt;b&gt;The perspective &lt;span style=&quot;color: #626262&quot;&gt;Tulip Classic&lt;/span&gt; has died unexpectedly&lt;/b&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;Tulip was able to backup some temporary data saved by this perspective. Do you want to save them in a Tulip Project file ?&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;Please support Tulip by sending the error report to our development team&lt;/b&gt;&lt;/p&gt;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QLabel" name="description">
+   <item>
+    <widget class="QFrame" name="buttonFrame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">#buttonFrame { 
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(245, 245, 245, 255), stop:1 rgba(225,225,225, 255)); 
+border-bottom: 1px solid &quot;#C9C9C9&quot;;
+border-top: 1px solid &quot;#C9C9C9&quot;;
+}</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="detailsIcon">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>:/tulip/app/ui/list_bullet_arrow.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="detailsLink">
+        <property name="text">
+         <string>&lt;a href=&quot;Show details&quot;&gt;More details&lt;/a&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="closeButton">
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Send report</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="saveButton">
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Save data</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="detailsFrame">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="icon">
-     <property name="minimumSize">
-      <size>
-       <width>64</width>
-       <height>64</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>64</width>
-       <height>64</height>
-      </size>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
-    <widget class="SelectionButton" name="pushButton">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>40</height>
-      </size>
-     </property>
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">#detailsFrame {
+	background-color: white;
+}</string>
      </property>
-     <property name="text">
-      <string>Close</string>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
      </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="SelectionButton" name="pushButton_2">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>40</height>
-      </size>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
-     <property name="text">
-      <string>Backup data</string>
-     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QFormLayout" name="formLayout">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::ExpandingFieldsGrow</enum>
+        </property>
+        <property name="labelAlignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="perspectiveNameHeader">
+          <property name="text">
+           <string>&lt;b&gt;Perspective name:&lt;/b&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="perspectiveNameValue">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="fileHeader">
+          <property name="text">
+           <string>&lt;b&gt;File:&lt;/b&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="argumentsHeader">
+          <property name="text">
+           <string>&lt;b&gt;Arguments:&lt;/b&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="pidHeader">
+          <property name="text">
+           <string>&lt;b&gt;PID:&lt;/b&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="pidValue">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="argumentsValue">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="fileValue">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QPlainTextEdit" name="stackTrace">
+        <property name="styleSheet">
+         <string notr="true">#stackTrace { 
+background-color: white; 
+border-bottom: 1px solid &quot;#C9C9C9&quot;;
+border-top: 1px solid &quot;#C9C9C9&quot;;
+border-left: 1px solid &quot;#C9C9C9&quot;;
+border-right: 1px solid &quot;#C9C9C9&quot;;
+}</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>SelectionButton</class>
-   <extends>QPushButton</extends>
-   <header>TulipPerspectiveProcessHandler.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

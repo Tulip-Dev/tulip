@@ -63,14 +63,6 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError e
     error = trUtf8("An unknown error occurred.");
     break;
   }
-
-  Ui::TulipPerspectiveCrashHandlerData ui;
-  QDialog crashDialog(0,Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
-  ui.setupUi(&crashDialog);
-  ui.title->setText(trUtf8("<p><span style=\"color:#626262; font-size:large;\">The perspective<b> ") + infos.name + trUtf8(" </b>has ended unexpectedly.</span></p>"));
-  ui.description->setText(error);
-  ui.icon->setPixmap(QApplication::style()->standardIcon(QStyle::SP_MessageBoxCritical).pixmap(64,64));
-  crashDialog.exec();
 }
 
 void TulipPerspectiveProcessHandler::perspectiveFinished(int exitCode, QProcess::ExitStatus exitStatus) {
