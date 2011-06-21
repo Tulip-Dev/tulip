@@ -284,6 +284,7 @@ public:
   void notifyAfterSetAllNodeValue();
   void notifyBeforeSetAllEdgeValue();
   void notifyAfterSetAllEdgeValue();
+  void notifyDestroy();
 };
 
 /// Event class for specific events on PropertyInterface

@@ -42,6 +42,7 @@ public:
   void testSubgraph();
   void testTests();
   void testAddDelProps();
+  void testObserveDelProps();
   void testAddSubgraphProp();
   void testMetaNode();
  

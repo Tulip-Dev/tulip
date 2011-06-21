@@ -412,8 +412,9 @@ bool GraphDecorator::existLocalProperty(const std::string&name){
 
 //============================================================
 void GraphDecorator::delLocalProperty(const std::string&name){
-  notifyDelLocalProperty(name);
+  notifyBeforeDelLocalProperty(name);
   graph_component->delLocalProperty(name);
+  notifyAfterDelLocalProperty(name);
 }
 
 //============================================================

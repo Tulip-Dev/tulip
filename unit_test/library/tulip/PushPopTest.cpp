@@ -833,6 +833,87 @@ void PushPopTest::testAddDelProps() {
   CPPUNIT_ASSERT(graph->getProperty<BooleanProperty>("boolean") == bProp);
 }
 
+// this class will capture
+// everything that will happen to our properties
+class PropertyObserverForTest :public PropertyObserver, public Observable {
+public:
+  std::set<PropertyInterface*> properties;
+
+  PropertyObserverForTest() {}
+
+  void reset() {
+    properties.clear();
+  }
+
+  unsigned int nbProperties() {
+    return properties.size();
+  }
+
+  bool found(PropertyInterface *prop) {
+    return properties.find(prop) != properties.end();
+  }
+
+  virtual void destroy(PropertyInterface* prop){
+    properties.insert(prop);
+  }
+
+  virtual void treatEvent(const Event& evt) {
+      PropertyInterface* prop = dynamic_cast<PropertyInterface *>(evt.sender());
+      if (prop && evt.type() == Event::TLP_DELETE)
+        destroy(prop);
+      }
+
+};
+
+void PushPopTest::testObserveDelProps() {
+  CPPUNIT_ASSERT(!graph->existProperty("boolean"));
+
+  BooleanProperty* bProp = graph->getProperty<BooleanProperty>("boolean");
+  CPPUNIT_ASSERT(graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(!graph->existProperty("double"));
+
+  PropertyObserverForTest pObserver;
+  pObserver.reset();
+  bProp->addPropertyObserver(&pObserver);
+  CPPUNIT_ASSERT(pObserver.nbProperties() == 0);
+
+  graph->push();
+
+  graph->delLocalProperty("boolean");
+  CPPUNIT_ASSERT(!graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(pObserver.nbProperties() == 1);
+  CPPUNIT_ASSERT(pObserver.found(bProp));
+
+  DoubleProperty* dProp = graph->getProperty<DoubleProperty>("double");
+  dProp->addPropertyObserver(&pObserver);
+  pObserver.reset();
+  CPPUNIT_ASSERT(pObserver.nbProperties() == 0);
+  graph->pop();
+  CPPUNIT_ASSERT(graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(!graph->existProperty("double"));
+  CPPUNIT_ASSERT(pObserver.nbProperties() == 1);
+  CPPUNIT_ASSERT(pObserver.found(dProp));
+  pObserver.reset();
+
+  graph->unpop();
+  CPPUNIT_ASSERT(graph->existProperty("double"));
+  CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double") == dProp);
+  CPPUNIT_ASSERT(!graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(pObserver.nbProperties() == 1);
+  CPPUNIT_ASSERT(pObserver.found(bProp));
+
+  graph->delLocalProperty("double");
+  CPPUNIT_ASSERT(!graph->existProperty("double"));
+  CPPUNIT_ASSERT(pObserver.nbProperties() == 2);
+  CPPUNIT_ASSERT(pObserver.found(dProp));
+
+  graph->pop();
+  CPPUNIT_ASSERT(graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(graph->getProperty<BooleanProperty>("boolean") == bProp);
+  CPPUNIT_ASSERT(!graph->existProperty("double"));
+}
+
+
 void PushPopTest::testAddSubgraphProp() {
   Graph *sg;
 
@@ -960,6 +1041,8 @@ CppUnit::Test * PushPopTest::suite() {
 								  &PushPopTest::testAddSubgraphProp) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Tests operations", 
 								  &PushPopTest::testTests) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Properties deletion operations",
+                                                                   &PushPopTest::testObserveDelProps) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Properties operations", 
 								  &PushPopTest::testAddDelProps) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "MetaNode operations", 

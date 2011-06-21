@@ -668,9 +668,10 @@ protected:
   void notifyAddLocalProperty(Graph*, const std::string& name) {
     notifyAddLocalProperty(name);
   }
-  void notifyDelLocalProperty(const std::string&);
+  void notifyBeforeDelLocalProperty(const std::string&);
+  void notifyAfterDelLocalProperty(const std::string&);
   void notifyDelLocalProperty(Graph*, const std::string& name) {
-    notifyDelLocalProperty(name);
+    notifyBeforeDelLocalProperty(name);
   }
   void notifyBeforeSetAttribute(const std::string&);
   void notifyBeforeSetAttribute(Graph*, const std::string& name) {
@@ -705,7 +706,7 @@ class TLP_SCOPE GraphEvent :public Event {
       TLP_REVERSE_EDGE, TLP_BEFORE_SET_ENDS, TLP_AFTER_SET_ENDS,
       TLP_ADD_NODES, TLP_ADD_EDGES,
       TLP_ADD_SUBGRAPH, TLP_DEL_SUBGRAPH,
-      TLP_ADD_LOCAL_PROPERTY, TLP_DEL_LOCAL_PROPERTY,
+      TLP_ADD_LOCAL_PROPERTY, TLP_BEFORE_DEL_LOCAL_PROPERTY,TLP_AFTER_DEL_LOCAL_PROPERTY,
       TLP_ADD_INHERITED_PROPERTY, TLP_BEFORE_DEL_INHERITED_PROPERTY,TLP_AFTER_DEL_INHERITED_PROPERTY,
       TLP_BEFORE_SET_ATTRIBUTE, TLP_AFTER_SET_ATTRIBUTE, TLP_REMOVE_ATTRIBUTE
     };
