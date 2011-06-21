@@ -68,6 +68,6 @@ void Size::setD(const float depth) {array[2]=depth;}
 
 }
 #ifdef _MSC_VER
-template class tlp::VectorCast<float,3, tlp::Size>;
+	template class TLP_SCOPE tlp::VectorCast<float,3, tlp::Size>;
 #endif
 #endif

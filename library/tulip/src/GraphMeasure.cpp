@@ -84,7 +84,7 @@ double tlp::averagePathLength(const Graph *graph,
   node n;
   int steps = 0;
   vector<node> nodes(nbNodes);
-  unsigned i = 0;
+  int i = 0;
   forEach(n, graph->getNodes()) {
     nodes[i] = n;
     ++i;
@@ -93,7 +93,7 @@ double tlp::averagePathLength(const Graph *graph,
 #ifdef _OPENMP
 #pragma omp parallel for private(i) schedule(dynamic, 1)
 #endif
-  for (i = 0; i < nbNodes; ++i) {
+  for (i = 0; i < static_cast<int>(nbNodes); ++i) {
     if (stopfor) continue;
     // check if we are in the main thread.
     // Qt calls can't be done outside of the master thread

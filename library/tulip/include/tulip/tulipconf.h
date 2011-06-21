@@ -33,6 +33,9 @@
 #endif
 
 #if _MSC_VER
+// disable some annoying Visual Studio warnings 
+#pragma warning(disable: 4251)
+#pragma warning(disable: 4275)
 //MSVC 2010 has a different keyword for typeof, and deprecated
 #  if _MSC_VER >= 1600
 #    define _DEPRECATED __declspec(deprecated)

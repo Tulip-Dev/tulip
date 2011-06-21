@@ -286,13 +286,13 @@ public:
 
 extern TLP_SCOPE void initTypeSerializers();
 #ifdef _MSC_VER
-	template class AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>;
-	template class AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>;
-	template class AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>;
-	template class AbstractVectorProperty<StringVectorType, tlp::StringType>;
-	template class AbstractVectorProperty<ColorVectorType, tlp::ColorType>;
-	template class AbstractVectorProperty<SizeVectorType, tlp::SizeType>;
-	template class AbstractVectorProperty<CoordVectorType, tlp::PointType>;
+	template class TLP_SCOPE AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>;
+	template class TLP_SCOPE AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>;
+	template class TLP_SCOPE AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>;
+	template class TLP_SCOPE AbstractVectorProperty<StringVectorType, tlp::StringType>;
+	template class TLP_SCOPE AbstractVectorProperty<ColorVectorType, tlp::ColorType>;
+	template class TLP_SCOPE AbstractVectorProperty<SizeVectorType, tlp::SizeType>;
+	template class TLP_SCOPE AbstractVectorProperty<CoordVectorType, tlp::PointType>;
 #endif
 }
 
