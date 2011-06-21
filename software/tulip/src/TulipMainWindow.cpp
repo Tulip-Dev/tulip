@@ -149,6 +149,5 @@ QStringList TulipMainWindow::GetCompatiblePerspectives(const QString &file) {
 }
 
 void TulipMainWindow::EnableCrashHandling(const QString &folder, qlonglong pid) {
-  qWarning() << "enable crash handling " << folder << " " << pid;
   TulipPerspectiveProcessHandler::instance().enableCrashHandling(pid,folder);
 }
