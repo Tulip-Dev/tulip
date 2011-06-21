@@ -6,19 +6,19 @@
 #include <QtCore/QList>
 #include <QtCore/QMap>
 
-#define PROPERTY_ALGORITHM_PLUGIN_NAME "PropertyAlgorithm"
-#define ALGORITHM_PLUGIN_NAME "Algorithm"
-#define TEMPLATE_ALGORITHM_PLUGIN_NAME "TemplateAlgorithm"
+static const QString PROPERTY_ALGORITHM_PLUGIN_NAME = "PropertyAlgorithm";
+static const QString ALGORITHM_PLUGIN_NAME = "Algorithm";
+static const QString TEMPLATE_ALGORITHM_PLUGIN_NAME = "TemplateAlgorithm";
 
-#define IMPORT_PLUGIN_NAME "ImportModule"
-#define EXPORT_PLUGIN_NAME "ExportModule"
+static const QString IMPORT_PLUGIN_NAME = "ImportModule";
+static const QString EXPORT_PLUGIN_NAME = "ExportModule";
 
-#define GLYPH_PLUGIN_NAME "Glyph"
-#define EE_GLYPH_PLUGIN_NAME "EdgeExtremityGlyph"
+static const QString GLYPH_PLUGIN_NAME = "Glyph";
+static const QString EE_GLYPH_PLUGIN_NAME = "EdgeExtremityGlyph";
 
-#define VIEW_PLUGIN_NAME "View"
-#define INTERACTOR_PLUGIN_NAME "Interactor"
-#define PERSPECTIVE_PLUGIN_NAME "Perspective"
+static const QString VIEW_PLUGIN_NAME = "View";
+static const QString INTERACTOR_PLUGIN_NAME = "Interactor";
+static const QString PERSPECTIVE_PLUGIN_NAME = "Perspective";
 
 
 namespace tlp {
