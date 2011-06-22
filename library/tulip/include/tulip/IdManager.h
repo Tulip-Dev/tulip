@@ -53,12 +53,14 @@ private:
   
  IdManagerIterator(const IdManagerState& infos):
   current(infos.firstId), last(infos.nextId), freeIds(infos.freeIds), it(freeIds.begin()) {
+#ifdef TLP_NO_IDS_REUSE
     std::set<unsigned int>::const_reverse_iterator itr;
     itr = freeIds.rbegin();
     while(itr != freeIds.rend() && (*itr) == last - 1) {
       --last;
       ++itr;
     }
+#endif
   }
   ~IdManagerIterator() {}
 
@@ -98,7 +100,11 @@ public:
    * Returns a new id.
    */
   unsigned int get() {
+#ifdef TLP_NO_IDS_REUSE
     return state.nextId++;
+#else
+    return state.freeIds.empty() ? state.nextId++ : getFreeId();
+#endif
   }
   /**
    * Returns the first id of a range of nb new ids.
@@ -109,6 +115,12 @@ public:
     return first;
   }
 
+#ifndef TLP_NO_IDS_REUSE
+  /**
+   * remove and return the first available id from the free ids
+   */
+  unsigned int getFreeId();
+#endif
   /**
    * assuming the given id is free.
    * remove it from free ids
