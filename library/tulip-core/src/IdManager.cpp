@@ -49,6 +49,16 @@ void IdManager::free(const unsigned int id) {
     state.freeIds.insert(id);
 }
 //-----------------------------------------------------------
+#ifndef TLP_NO_IDS_REUSE
+unsigned int IdManager::getFreeId() {
+  std::set<unsigned int>::iterator it = state.freeIds.begin();
+  assert(it != state.freeIds.end());
+  unsigned int tmp = *it;
+  state.freeIds.erase(it);
+  return tmp;
+}
+#endif
+//-----------------------------------------------------------
 void IdManager::getFreeId(unsigned int id) {
   assert(id > state.firstId);
   if (id >= state.nextId) {
