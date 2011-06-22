@@ -56,6 +56,8 @@ IF(WIN32 AND NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio" AND NOT ${CMAKE_GENE
   TARGET_LINK_LIBRARIES( tulip_app -mwindows )
 ENDIF()
 
+ADD_DEPENDENCIES(tulip_need_restart tulip_app)
+
 TARGET_LINK_LIBRARIES( tulip_app ${FREETYPE_LIBRARY} )
 TARGET_LINK_LIBRARIES( tulip_app ${GZStreamLibrary} )
 TARGET_LINK_LIBRARIES( tulip_app ${QT_LIBRARIES} )
