@@ -22,18 +22,12 @@ ENDIF(APPLE)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles JOM" )
-  SET(MSVC 1)
-ELSE()
-  SET(MSVC 0)
-endif()
-
-IF(NOT ${MSVC}) #visual studio does not recognize these options
+IF(NOT MSVC) #visual studio does not recognize these options
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused")
 ENDIF()
 
 IF(WIN32)
-  IF(NOT ${MSVC}) #visual studio does not recognize these options
+  IF(NOT MSVC) #visual studio does not recognize these options
 
     # Dynamic ling against libstdc++ on win32/MinGW
     # The second test is for the case where ccache is used (CMAKE_CXX_COMPILER_ARG1 contains the path to the g++ compiler)
@@ -78,7 +72,7 @@ SET(TulipMajorVersion 4)
 SET(TulipMinorVersion 0)
 SET(TulipReleaseVersion 0)
 SET(TulipVersionSeparator .)
-IF(${MSVC}) #specific options for Visual Studio
+IF(MSVC) #specific options for Visual Studio
   IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9") #visual studio 2008 needs boost
     FIND_PACKAGE(BOOST REQUIRED)
     INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}/boost/tr1)
@@ -147,7 +141,7 @@ IF(OPENMP_FOUND)
    SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${OpenMP_CXX_FLAGS}")
    SET(OPENMP_CXX_FLAGS "${OpenMP_CXX_FLAGS}")
    IF(WIN32)
-	  IF(${MSVC})
+	  IF(MSVC)
 		SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /openmp")
 		SET(OPENMP_CXX_FLAGS "/openmp")
 	  ELSE()
@@ -318,7 +312,7 @@ ENDIF(LINUX)
 
 IF(WIN32)
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32 -DQT_ASSISTANT='\"assistant\"'")
-   IF(${MSVC})
+   IF(MSVC)
 	  #tells VS to use multiple threads to compile
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 	  #makes VS define M_PI
