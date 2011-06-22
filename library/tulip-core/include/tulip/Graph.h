@@ -38,50 +38,77 @@ class BooleanProperty;
 class PluginProgress;
 template<class C>struct Iterator;
 
-  enum ElementType {NODE=0, EDGE};
+enum ElementType {NODE=0, EDGE};
   /**
-   * Loads a graph in the tlp format.
-   * Warning : this function use "tlp" import plugin (must be loaded).
+ * Loads a graph in the tlp format from a file (extension can be .tlp or .tlp.gz).
+ * Returns NULL if the import fails.
+ * Warning : this function uses "tlp" import plugin (must be loaded).
    */
   TLP_SCOPE Graph * loadGraph(const std::string &filename);
   /**
-   * Saves a graph in tlp format.
+ * Saves a graph to a file in the tlp format. Extension of the destination file can be either
+ * .tlp (raw export) or .tlp.gz (compressed export).
+ *
+ * Returns true if the graph was successfully exported.
    * Warning : this function use "tlp" export plugin (must be loaded).
    */
   TLP_SCOPE bool saveGraph(Graph *, const std::string &filename);
+
+/**
+ * Imports a graph using the Tulip import plugin named alg (must be loaded) with parameters stored in dataSet.
+ * If newGraph is not NULL, imported graph elements will be added to it. Otherwise, returns a new graph
+ * or NULL if the import fails.
+ */
   TLP_SCOPE Graph * importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0,Graph *newGraph=0);
+
+/**
+ * Exports a graph using the Tulip export plugin named alg (must be loaded) with parameters stored in dataSet.
+ * An output stream os (can be file stream, string stream, ..) has to be provided as parameter and will be used
+ * by the export plugin.
+ * Returns true if the graph was successfully exported.
+ */
   TLP_SCOPE bool exportGraph(Graph *graph,std::ostream  &os,const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0);
-  TLP_SCOPE bool applyAlgorithm(Graph *graph,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="any", PluginProgress *plugProgress=0);
+
   /**
-   * Returns a new graph.
+ * Applies an algorithm plugin named alg (must be loaded) on graph . Algorithm plugins are objects
+ * implementing the tlp::Algorithm interface. Parameters can be transmit to the algorithm trough a
+ * DataSet object (refer to the plugin documentation to get its parameters list).
+ * If an error occurs, a message may have been stored by the algorithm in the errosMsg variable.
+ * Returns true if the algorithm has been successfully applied.
    */
-  TLP_SCOPE Graph* newGraph();
+TLP_SCOPE bool applyAlgorithm(Graph *graph,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="any", PluginProgress *plugProgress=0);
+
   /**
-   *  Returns an empty subgraph.
+ * Returns a new empty graph.
    */
-  TLP_SCOPE Graph *newSubGraph(Graph *, std::string name = "unnamed");
+TLP_SCOPE Graph* newGraph();
+
   /**
-   *  Returns a subgraph equal to the graph given in parameter (a clone subgraph).
+ *  Creates and returns an empty subgraph of root.
    */
-  TLP_SCOPE Graph *newCloneSubGraph(Graph *, std::string name = "unnamed");
+TLP_SCOPE Graph *newSubGraph(Graph *root, std::string name = "unnamed");
+
   /**
-   *  Find the first node of degree 0, if no node exist return false else true.
+ *  Creates and returns a subgraph of root that is equal to root (a clone subgraph).
    */
-  TLP_SCOPE bool getSource(Graph *, node &n);
+TLP_SCOPE Graph *newCloneSubGraph(Graph *root, std::string name = "unnamed");
+
   /**
-   * Returns an istream from a gzipped file (uses gzstream lib)
-   * the stream has to be deleted after use.
-   * \warning Don't forget to check the stream with ios::bad()!
+ *  Finds the first node whose input degree equals 0.
+ *  If no node exists, returns false else true.
    */
+TLP_SCOPE bool getSource(const Graph *, node &n);
+
   /**
-   * Append the selected part of the graph inG (properties, nodes & edges) into the graph outG.
+ * Appends the selected part of the graph inG (properties, nodes and edges) into the graph outG.
    * If no selection is done (inSel=NULL), the whole inG graph is appended.
    * The output selection is used to select the appended nodes & edges
    * \warning The input selection is extended to all selected edge ends.
    */
-  TLP_SCOPE void copyToGraph( Graph *outG, Graph *inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
+TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
+
   /**
-   * Remove the selected part of the graph ioG (properties, nodes & edges).
+ * Removes the selected part of the graph ioG (properties values, nodes and edges).
    * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
    * \warning The selection is extended to all selected edge ends.
    */
@@ -159,11 +186,11 @@ public:
   /**
    * Indicates if the graph argument is a direct sub-graph.
    */
-  virtual bool isSubGraph(Graph* sg) const=0;
+	virtual bool isSubGraph(const Graph* sg) const=0;
   /**
    * Indicates if the graph argument is a descendant of this graph.
    */
-  virtual bool isDescendantGraph(Graph* sg) const=0;
+	virtual bool isDescendantGraph(const Graph* sg) const=0;
   /**
    * Returns a pointer on the sub-graph with the corresponding id
    * or NULL if there is no sub-graph with that id.
@@ -219,7 +246,7 @@ public:
    * the sub-graph relation between graphs.
    * If deleteInAllGraphs is true, these nodes are  deleted
    * in the whole hierarchy of graphs.
-   * It is the responsability of the caller to delete the iterator.
+	 * It is the responsibility of the caller to delete the iterator.
    */
   virtual void delNodes(Iterator<node>* itN, bool deleteInAllGraphs = false)=0;
   /**
@@ -267,7 +294,7 @@ public:
    * If deleteInAllGraphs is true, the edges are deleted
    * in the whole hierarchy of graphs.
    * The ordering of remaining edges is preserved.
-   * It is the responsability of the caller to delete the iterator.
+	 * It is the responsibility of the caller to delete the iterator.
    */
   virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false)=0;
   /**
@@ -407,23 +434,25 @@ public:
    */
   virtual  void addLocalProperty(const std::string &name, PropertyInterface *prop)=0;
  /**
-   * Try to returns a pointer to a PropertyInterface PropertyInterface which is in the graph properties pool.
-   * The real type of the PropertyInterface is tested with the propertyType string parameter.
+	 * Returns a pointer to a PropertyInterface which is in the graph properties pool.
+	 * The real type of the PropertyInterface is tested with the template parameter.
    * If the PropertyInterface is not in the pool, a new one is created and returned.
-   * If the type parameter is not a valid property type this function returns a NULL pointer.
    * Using of delete on that property will cause an abort of the program
    * (use delLocalProperty instead).
    */
-  PropertyInterface *getLocalProperty(const std::string& propertyName, const std::string& propertyType);
+	template<typename PropertyType>
+	PropertyType* getLocalProperty(const std::string &name);
+
   /**
-   * Returns a pointer to a PropertyInterface which is in the graph properties pool.
-   * The real type of the PropertyInterface is tested with the template parameter.
+	 * Try to returns a pointer to a PropertyInterface PropertyInterface which is in the graph properties pool.
+	 * The real type of the PropertyInterface is tested with the propertyType string parameter.
    * If the PropertyInterface is not in the pool, a new one is created and returned.
+	 * If the type parameter is not a valid property type this function returns a NULL pointer.
    * Using of delete on that property will cause an abort of the program
    * (use delLocalProperty instead).
    */
-  template<typename PropertyType>
-  PropertyType* getLocalProperty(const std::string &name);
+	PropertyInterface *getLocalProperty(const std::string& propertyName, const std::string& propertyType);
+
   /**
    * Computes a property on the current graph
    * using an external named algorithm (plug-in).
@@ -477,27 +506,27 @@ public:
   /**
    * Returns an iterator on the names of the properties local to the graph.
    */
-  virtual Iterator<std::string>* getLocalProperties()=0;
+	virtual Iterator<std::string>* getLocalProperties() const=0;
   /**
    * Returns an iterator on the names of the properties inherited from the graph���s ancestors.
    */
-  virtual Iterator<std::string>* getInheritedProperties()=0;
+	virtual Iterator<std::string>* getInheritedProperties() const=0;
   /**
    * Returns an iterator on the name of all the properties attached to the graph.
    */
-  virtual Iterator<std::string>* getProperties()=0;
+	virtual Iterator<std::string>* getProperties() const=0;
   /**
    * Returns an iterator on the properties local to the graph.
    */
-  virtual Iterator<PropertyInterface*>* getLocalObjectProperties()=0;
+	virtual Iterator<PropertyInterface*>* getLocalObjectProperties() const=0;
   /**
    * Returns an iterator on the properties inherited from the graph���s ancestors.
    */
-  virtual Iterator<PropertyInterface*>* getInheritedObjectProperties()=0;
+	virtual Iterator<PropertyInterface*>* getInheritedObjectProperties() const=0;
   /**
    * Returns an iterator on all the properties attached to the graph.
    */
-  virtual Iterator<PropertyInterface*>* getObjectProperties()=0;
+	virtual Iterator<PropertyInterface*>* getObjectProperties() const=0;
 
   // observation mechanism
   /**
