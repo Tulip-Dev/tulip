@@ -69,7 +69,7 @@ INCLUDE_DIRECTORIES(../include/ ${TulipCoreBuildInclude} ${PROJECT_SOURCE_DIR} $
 ADD_LIBRARY(${LibTulipCoreName} SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)
 TARGET_LINK_LIBRARIES(${LibTulipCoreName} gzstream ${QT_QTCORE_LIBRARY})
 IF(WIN32)
-  IF(${MSVC})
+  IF(MSVC)
     TARGET_LINK_LIBRARIES(${LibTulipCoreName} Dbghelp)
     IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles")
       SET_TARGET_PROPERTIES(${LibTulipCoreName} PROPERTIES LINK_FLAGS " /NODEFAULTLIB:LIBCMT.lib ")

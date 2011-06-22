@@ -41,11 +41,6 @@ qdbusservicewatcher.h
 qdbuspendingcall.h
 qdbusabstractinterface.h)
 
-#if this is not specified, the compilation might try to go ahead without generating the mocs
-SET_SOURCE_FILES_PROPERTIES(qdbusabstractinterface.cpp PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/moc_qdbusabstractinterface.cxx)
-SET_SOURCE_FILES_PROPERTIES(qdbuspendingcall.cpp PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/moc_qdbuspendingcall.cxx)
-SET_SOURCE_FILES_PROPERTIES(qdbusservicewatcher.cpp PROPERTIES OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/moc_qdbusservicewatcher.cxx)
-
 QT4_WRAP_CPP(MOC_SRCS
 qdbusabstractadaptor.h
 qdbusconnection_p.h
@@ -59,7 +54,10 @@ TARGET_LINK_LIBRARIES(QtDBus4 ${QT_QTCORE_LIBRARY} ${QT_QTXML_LIBRARY} ${DBUS_LI
 IF(WIN32)
   TARGET_LINK_LIBRARIES(QtDBus4 -lws2_32 -ladvapi32 -lnetapi32 -luser32)
 ENDIF(WIN32)
+
+#if this is not specified, the compilation might try to go ahead without generating the mocs
 ADD_CUSTOM_TARGET(force_qdbus_moc_generation ALL SOURCES ${MOC_SRCS_TMP})
+ADD_DEPENDENCIES(QtDBus4 force_qdbus_moc_generation)
 
 INSTALL(TARGETS QtDBus4
        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT dbus
