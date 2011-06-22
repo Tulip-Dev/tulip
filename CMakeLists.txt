@@ -344,6 +344,19 @@ IF(LINUX)
 ENDIF(LINUX)
 
 ## -----------------------------------------------------------------------------------------------
+## Google breakpad
+## -----------------------------------------------------------------------------------------------
+IF(CMAKE_BUILD_TYPE STREQUAL "Release" AND (WIN32 OR LINUX))
+  OPTION(USE_GOOGLE_BREAKPAD "Use Google breakpad to generate error reports. You'll have to run the breakpad_strip script corresponding to your system as a post-install step." OFF)
+ENDIF()
+
+IF(USE_GOOGLE_BREAKPAD)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
+  ADD_DEFINITIONS(-DUSE_GOOGLE_BREAKPAD)
+ENDIF(USE_GOOGLE_BREAKPAD)
+
+## -----------------------------------------------------------------------------------------------
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in
 ## -----------------------------------------------------------------------------------------------
 CONFIGURE_FILE("library/tulip-core/include/tulip/TulipRelease.h.in" "library/tulip-core/include/tulip/TulipRelease.h")
