@@ -13,11 +13,11 @@
         <generate>
             <file>
                 <input>tulip.qhp</input>
-                <output>tulip.qch</output>
+                <output>tulip@TulipIntVersion@.qch</output>
             </file>
         </generate>
         <register>
-            <file>tulip.qch</file>
+            <file>tulip@TulipIntVersion@.qch</file>
         </register>
     </docFiles>
 </QHelpCollectionProject>
