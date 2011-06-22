@@ -22,15 +22,15 @@
 
 #ifndef DOXYGEN_NOTFOR_USER
 
-template <typename TYPE> struct BmdList;
-template <typename TYPE> struct BmdListTest;
+template <typename TYPE> class BmdList;
+template <typename TYPE> class BmdListTest;
 
 namespace tlp {
   template <typename TYPE>
   class BmdLink {
     
-  friend struct BmdList<TYPE>;
-  friend struct BmdListTest<TYPE>;
+  friend class BmdList<TYPE>;
+  friend class BmdListTest<TYPE>;
   public:
     TYPE getData() {
       return data;

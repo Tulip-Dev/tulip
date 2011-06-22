@@ -199,8 +199,8 @@ void BubbleTree::calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node,tlp::Vector<dou
   rot2[0] = sinAlpha; rot2[1] =  cosAlpha; rot2[2]=0.;
   zeta = rot1*zeta[0] + rot2*zeta[1];
   
-  layoutResult->setNodeValue(n, Coord(enclosingCircleCenter[0]+zeta[0],
-				     enclosingCircleCenter[1]+zeta[1],
+  layoutResult->setNodeValue(n, Coord(static_cast<float>(enclosingCircleCenter[0]+zeta[0]),
+				     static_cast<float>(enclosingCircleCenter[1]+zeta[1]),
 				     0.) );
   /*
    * Place bend on edge to prevent overlaping
@@ -217,8 +217,8 @@ void BubbleTree::calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node,tlp::Vector<dou
 	Iterator<edge> *itE=tree->getInEdges(n);
 	edge ite=itE->next();
 	delete itE;
-	vector<Coord>tmp(1.);
-	tmp[0] = Coord(bend[0], bend[1], 0.);
+	vector<Coord>tmp(1);
+	tmp[0] = Coord(static_cast<float>(bend[0]), static_cast<float>(bend[1]), 0.);
 	layoutResult->setEdgeValue(ite,tmp);
     }
   }
@@ -246,8 +246,8 @@ void BubbleTree::calcLayout(tlp::node n, TLP_HASH_MAP< tlp::node, tlp::Vector< d
   Iterator<node> *it = tree->getOutNodes(n);
   while (it->hasNext()) {
     node itn=it->next();
-    Coord newpos((*relativePosition)[itn][0]-(*relativePosition)[n][2],
-		 (*relativePosition)[itn][1]-(*relativePosition)[n][3], 0.);
+    Coord newpos(static_cast<float>((*relativePosition)[itn][0]-(*relativePosition)[n][2]),
+		 static_cast<float>((*relativePosition)[itn][1]-(*relativePosition)[n][3]), 0.f);
     Vector<double,3> origin,tmp;
     origin[0] = (*relativePosition)[itn][0]-(*relativePosition)[n][2];
     origin[1] = (*relativePosition)[itn][1]-(*relativePosition)[n][3];

@@ -104,7 +104,7 @@ public:
       string pathEntry=directory+entryName;
       lstat(pathEntry.c_str(),&infoEntry);
     #endif
-      if (infoEntry.st_dev==true) continue;
+      if (infoEntry.st_dev==0) continue;
       node newNode=graph->addNode();
       graph->addEdge(n,newNode);
       label->setNodeValue(newNode,entryName);
@@ -120,9 +120,9 @@ public:
 	size->setNodeValue(newNode,infoEntry.st_size);
       uid->setNodeValue(newNode,infoEntry.st_uid);
       gid->setNodeValue(newNode,infoEntry.st_gid);
-      lastaccess->setNodeValue(newNode,infoEntry.st_atime);
-      lastmodif->setNodeValue(newNode,infoEntry.st_mtime);
-      lastchange->setNodeValue(newNode,infoEntry.st_ctime);
+      lastaccess->setNodeValue(newNode,static_cast<double>(infoEntry.st_atime));
+      lastmodif->setNodeValue(newNode,static_cast<double>(infoEntry.st_mtime));
+      lastchange->setNodeValue(newNode,static_cast<double>(infoEntry.st_ctime));
       
       if ((infoEntry.st_mode & S_IFMT) == S_IFDIR) {
 	x += 2;
@@ -140,16 +140,16 @@ public:
 	  delete itN;
 	  size->setNodeValue(newNode,newSize/1024.0);
 	  if (graph->outdeg(newNode) == 0) {
-	    layout->setNodeValue(newNode, Coord(x, y, 0));
+	    layout->setNodeValue(newNode, Coord(static_cast<float>(x), static_cast<float>(y), 0));
 	    x += 2;
 	  } else {
 	    tmp[0] /= graph->outdeg(newNode);
-	    tmp[1] = y;
+	    tmp[1] = static_cast<float>(y);
 	    layout->setNodeValue(newNode, tmp);
 	  }
 	}
       } else {
-	layout->setNodeValue(newNode, Coord(x, y, 0));
+	layout->setNodeValue(newNode, Coord(static_cast<float>(x), static_cast<float>(y), 0));
 	x += 2;
       }
        #ifdef _WIN32
@@ -194,7 +194,7 @@ public:
       pluginProgress->setError(strerror(errno));
       return false;
     }
-    if (infoEntry.st_dev!=true)  {
+    if (infoEntry.st_dev!=0)  {
       label->setNodeValue(newNode,dirName.c_str());
       if (infoEntry.st_size<1)
 	size->setNodeValue(newNode,1);
@@ -202,9 +202,9 @@ public:
 	size->setNodeValue(newNode,infoEntry.st_size);
       uid->setNodeValue(newNode,infoEntry.st_uid);
       gid->setNodeValue(newNode,infoEntry.st_gid);
-      lastaccess->setNodeValue(newNode,infoEntry.st_atime);
-      lastmodif->setNodeValue(newNode,infoEntry.st_mtime);
-      lastchange->setNodeValue(newNode,infoEntry.st_ctime);
+      lastaccess->setNodeValue(newNode,static_cast<double>(infoEntry.st_atime));
+      lastmodif->setNodeValue(newNode,static_cast<double>(infoEntry.st_mtime));
+      lastchange->setNodeValue(newNode,static_cast<double>(infoEntry.st_ctime));
     }
 
     pluginProgress->showPreview(false);
@@ -221,7 +221,7 @@ public:
 	tmp += layout->getNodeValue(itn);
       } delete itN;
       size->setNodeValue(newNode,newSize);
-      tmp /= graph->outdeg(newNode);
+      tmp /= static_cast<float>(graph->outdeg(newNode));
       tmp[1] = 0;
       layout->setNodeValue(newNode, tmp);
       node itn;

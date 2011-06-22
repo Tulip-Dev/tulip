@@ -105,11 +105,11 @@ class Grid: public ImportModule {
       current = nodes[iBegin + i];
       if (conn == 6) {
         layout->setNodeValue(current,
-			     Coord(i * 2 * h + shift + i * spacing,
-				   iRow * (1.0 - hHeight + spacing), 0));
+			     Coord(static_cast<float>(i * 2 * h + shift + i * spacing),
+				   static_cast<float>(iRow * 1.0 - hHeight + spacing), 0));
       } else
         layout->setNodeValue(current,
-			     Coord(i * (1.0 + spacing), iRow * (1.0
+			     Coord(i * static_cast<float>(1.0 + spacing), iRow * static_cast<float>(1.0
 								+ spacing), 0));
       if (previous.isValid())
 	ends.push_back(pair<node, node>(previous, current));

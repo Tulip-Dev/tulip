@@ -93,8 +93,8 @@ Coord  LayoutProperty::getMin(Graph *sg) {
 static void rotateVector(Coord &vec, double alpha, int rot) {
   Coord backupVec(vec);
   double aRot =  2.0*M_PI * alpha / 360.0;
-  float cosA = cos(aRot);
-  float sinA = sin(aRot);
+  float cosA = static_cast<float>(cos(aRot));
+  float sinA = static_cast<float>(sin(aRot));
   switch(rot) {
   case Z_ROT:
     vec[0] = backupVec[0]*cosA - backupVec[1]*sinA;
@@ -262,7 +262,7 @@ void LayoutProperty::normalize(Graph *sg) {
     dtmpMax  = std::max(dtmpMax, sqr(tmpCoord[0])+sqr(tmpCoord[1])+sqr(tmpCoord[2]));
   } delete itN;
   dtmpMax = 1.0 / sqrt(dtmpMax);
-  scale(Coord(dtmpMax,dtmpMax,dtmpMax), sg);  
+  scale(Coord(static_cast<float>(dtmpMax),static_cast<float>(dtmpMax),static_cast<float>(dtmpMax)), sg);  
   resetBoundingBox();
   notifyObservers();
   Observable::unholdObservers();
@@ -289,7 +289,7 @@ void LayoutProperty::perfectAspectRatio() {
   scaleX = delta / deltaX;
   scaleY = delta / deltaY;
   scaleZ = delta / deltaZ;
-  scale(Coord(scaleX,scaleY,scaleZ));
+  scale(Coord(static_cast<float>(scaleX),static_cast<float>(scaleY),static_cast<float>(scaleZ)));
   notifyObservers();
   Observable::unholdObservers();
 }

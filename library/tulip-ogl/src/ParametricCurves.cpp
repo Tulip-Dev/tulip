@@ -23,7 +23,7 @@ using namespace std;
 namespace tlp {
 
 static void computeLinearBezierPoints(const Coord &p0, const Coord &p1, vector<Coord> &curvePoints, const unsigned int nbCurvePoints) {
-	float h = 1.0 / static_cast<float>((nbCurvePoints - 1));
+	float h = 1.0f / static_cast<float>((nbCurvePoints - 1));
 	Coord firstFD((p1 - p0) * h);
 	Coord c(p0);
 
@@ -45,7 +45,7 @@ static void computeLinearBezierPoints(const Coord &p0, const Coord &p1, vector<C
 static void computeQuadraticBezierPoints(const Coord &p0, const Coord &p1, const Coord &p2, vector<Coord> &curvePoints, const unsigned int nbCurvePoints) {
 
 	// Compute our step size
-	float h = 1.0 / static_cast<float>(nbCurvePoints - 1);
+	float h = 1.0f / static_cast<float>(nbCurvePoints - 1);
 	float h2 = h*h;
 
 	// Compute Initial forward difference
@@ -80,7 +80,7 @@ static void computeCubicBezierPoints(const Coord &p0, const Coord &p1, const Coo
 	Coord C(p0 * -3.f + p1 * 3.f);
 
 	// Compute our step size
-	float h = 1.0 / static_cast<float>(nbCurvePoints - 1);
+	float h = 1.0f / static_cast<float>(nbCurvePoints - 1);
 	float h2 = h*h;
 	float h3 = h2*h;
 	float h36 = h3*6;
@@ -146,7 +146,7 @@ Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
 		controlPoint[2] = controlPoints[i][2];
 		bezierPoint += controlPoint * pascalTriangle[nbControlPoints - 1][i] * pow(static_cast<double>(t), static_cast<double>(i)) * pow(s, static_cast<double>(nbControlPoints - 1 - i));
 	}
-	return Coord(bezierPoint[0], bezierPoint[1], bezierPoint[2]);
+	return Coord(static_cast<float>(bezierPoint[0]), static_cast<float>(bezierPoint[1]), static_cast<float>(bezierPoint[2]));
 }
 
 
@@ -159,7 +159,7 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
 	default:
 		buildPascalTriangle(controlPoints.size(), pascalTriangle);
 		curvePoints.resize(nbCurvePoints);
-		float h = 1.0 / static_cast<float>(nbCurvePoints - 1);
+		float h = 1.0f / static_cast<float>(nbCurvePoints - 1);
 		#pragma omp parallel for
 		for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
 			float curStep = i * h;
@@ -237,7 +237,7 @@ static Coord computeCatmullRomPointImpl(const vector<Coord> &controlPoints, cons
 	}
 	float t2 = localT * localT;
 	float t3 = t2 * localT;
-	float s = 1.0 - localT;
+	float s = 1.0f - localT;
 	float s2 = s * s;
 	float s3 = s2	* s;
 	return bezierControlPoints[0] * s3 + bezierControlPoints[1] * 3.0 * localT * s2 + bezierControlPoints[2] * 3.0 * t2 * s + bezierControlPoints[3] * t3;

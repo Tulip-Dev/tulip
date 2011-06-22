@@ -91,9 +91,9 @@ inline void copyVorVertexToVorDiagram (const double *points, int numberofpoints,
   //load the voronoi vertices of the diagram
   for (int i = 0; i < numberofpoints; ++i) {
     tlp::VoronoiDiagram::Vertex vertex;
-    vertex.setX (points[2*i]);
-    vertex.setY (points[2*i + 1]);
-    vertex.setZ (0.0);
+    vertex.setX (static_cast<float>(points[2*i]));
+    vertex.setY (static_cast<float>(points[2*i + 1]));
+    vertex.setZ (0.0f);
     voronoiDiagram->vertices.push_back (vertex);
   }//end for
 }//end copyToVoronoiLists
@@ -111,9 +111,9 @@ inline void  copyVorEdgeAndRaysToVorDiagram (const int *edgelist,
       tlp::VoronoiDiagram::Ray curRay;
       curRay.p = (edgelist[2*i] != TRIANGLE_NULL) ? 
 	edgelist[2*i] : edgelist[2*i + 1];
-      curRay.v.setX (normlist[2*i]);
-      curRay.v.setY (normlist[2*i + 1]);
-      curRay.v.setZ (0.0);
+      curRay.v.setX (static_cast<float>(normlist[2*i]));
+      curRay.v.setY (static_cast<float>(normlist[2*i + 1]));
+      curRay.v.setZ (0.0f);
       if (curRay.v.norm() > FLOAT_ERROR) curRay.v /= curRay.v.norm();
       voronoiDiagram->rays.push_back (curRay);
     }//end if

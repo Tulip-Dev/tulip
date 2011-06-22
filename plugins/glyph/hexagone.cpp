@@ -77,8 +77,8 @@ Hexagone::~Hexagone() {
 }
 //=====================================================
 void Hexagone::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-        boundingBox[0] = Coord(-0.35, -0.35, 0);
-        boundingBox[1] = Coord(0.35, 0.35, 0);
+        boundingBox[0] = Coord(-0.35f, -0.35f, 0);
+        boundingBox[1] = Coord(0.35f, 0.35f, 0);
 }
 //=====================================================
 void Hexagone::draw(node n, float lod) {
@@ -89,7 +89,7 @@ void Hexagone::draw(node n, float lod) {
 
   draw(glGraphInputData->getElementColor()->getNodeValue(n),
        glGraphInputData->getElementBorderColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+       static_cast<float>(glGraphInputData->getElementBorderWidth()->getNodeValue(n)),
        textureName,
        lod);
 }
@@ -106,7 +106,7 @@ void Hexagone::draw(edge e,
 
   draw(glyphColor,
        borderColor,
-       edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+       static_cast<float>(edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e)),
        textureName,
        lod);
 }
@@ -117,7 +117,7 @@ void Hexagone::draw(const Color &fillColor,
                     const std::string &textureName,
                     float lod){
   if(borderWidth<1e-6)
-    borderWidth=1e-6;
+    borderWidth=1e-6f;
 
   hexagon->setFillColor(fillColor);
   hexagon->setOutlineColor(borderColor);

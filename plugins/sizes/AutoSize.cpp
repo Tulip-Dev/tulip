@@ -79,7 +79,7 @@ private:
 	if (tmpDist<dist) dist=tmpDist;
       }
     }delete itN;
-    return Size(dist/2,dist/2,dist/2);
+    return Size(static_cast<float>(dist/2),static_cast<float>(dist/2),static_cast<float>(dist/2));
   }
 
   Size getEdgeValue(const edge e) {

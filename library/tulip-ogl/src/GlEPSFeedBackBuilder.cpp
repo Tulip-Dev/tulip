@@ -159,11 +159,11 @@ namespace tlp {
 
       /* Back up half a step; we want the end points to be
 	 exactly the their endpoint colors. */
-      xnext -= xstep / 2.0;
-      ynext -= ystep / 2.0;
-      rnext -= rstep / 2.0;
-      gnext -= gstep / 2.0;
-      bnext -= bstep / 2.0;
+      xnext -= xstep / 2.0f;
+      ynext -= ystep / 2.0f;
+      rnext -= rstep / 2.0f;
+      gnext -= gstep / 2.0f;
+      bnext -= bstep / 2.0f;
     } else {
       /* Single color line. */
       steps = 0;

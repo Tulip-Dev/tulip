@@ -37,12 +37,12 @@ GlAxis::GlAxis(const std::string &axisName, const Coord &axisBaseCoord, const fl
 			   captionText(axisName), captionOffset(0),
 			   axisLinesComposite(new GlComposite()), captionComposite(new GlComposite()),
 			   gradsComposite(new GlComposite()), captionSet(false), maxCaptionWidth(0),
-			   maxGraduationLabelWidth(axisLength / 8.) {
+			   maxGraduationLabelWidth(axisLength / 8.f) {
 	buildAxisLine();
 	addGlEntity(captionComposite, "caption composite");
 	addGlEntity(gradsComposite, "grads composite");
 	addGlEntity(axisLinesComposite, "axis lines composite");
-	axisGradsWidth = (DEFAULT_GRAD_WIDTH * axisLength) / 200.;
+	axisGradsWidth = (DEFAULT_GRAD_WIDTH * axisLength) / 200.f;
 }
 
 GlAxis::~GlAxis() {
@@ -52,7 +52,7 @@ GlAxis::~GlAxis() {
 void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels, const LabelPosition &axisGradsPosition) {
 	spaceBetweenAxisGrads = axisLength / (axisGradsLabels.size() - 1);
 	if (captionOffset == 0) {
-		captionOffset = axisLength / 10.;
+		captionOffset = axisLength / 10.f;
 	}
 	gradsComposite->reset(true);
 	ostringstream oss;
@@ -68,7 +68,7 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
 			if (maxGraduationLabelWidth != 0 && labelWidth > maxGraduationLabelWidth) {
 				labelWidth = maxGraduationLabelWidth;
 			}
-			labelHeight = labelWidth / 3.;
+			labelHeight = labelWidth / 3.f;
 			axisGraduation->addPoint(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() + axisGradsWidth / 2), axisColor);
 			axisGraduation->addPoint(Coord(axisBaseCoord.getX() + i * spaceBetweenAxisGrads, axisBaseCoord.getY() - axisGradsWidth / 2), axisColor);
 			if (axisGradsPosition == LEFT_OR_BELOW) {
@@ -80,19 +80,19 @@ void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
 			}
 		} else if (axisOrientation == VERTICAL_AXIS) {
 			labelHeight = spaceBetweenAxisGrads * MAGIG_FACTOR;
-			labelWidth = axisGradsLabels[i].length() * (labelHeight / 2.);
+			labelWidth = axisGradsLabels[i].length() * (labelHeight / 2.f);
 
 			if (maxGraduationLabelWidth != 0 && labelWidth > maxGraduationLabelWidth) {
 				labelWidth = maxGraduationLabelWidth;
 			}
 
-			axisGraduation->addPoint(Coord(axisBaseCoord.getX() - axisGradsWidth / 2., axisBaseCoord.getY() + i * spaceBetweenAxisGrads), axisColor);
-			axisGraduation->addPoint(Coord(axisBaseCoord.getX() + axisGradsWidth / 2., axisBaseCoord.getY() + i * spaceBetweenAxisGrads), axisColor);
+			axisGraduation->addPoint(Coord(axisBaseCoord.getX() - axisGradsWidth / 2.f, axisBaseCoord.getY() + i * spaceBetweenAxisGrads), axisColor);
+			axisGraduation->addPoint(Coord(axisBaseCoord.getX() + axisGradsWidth / 2.f, axisBaseCoord.getY() + i * spaceBetweenAxisGrads), axisColor);
 			if (axisGradsPosition == LEFT_OR_BELOW) {
-				graduationLabel = new GlLabel(Coord(axisBaseCoord.getX() - axisGradsWidth / 2. - labelWidth / 2. , axisBaseCoord.getY() + i * spaceBetweenAxisGrads),
+				graduationLabel = new GlLabel(Coord(axisBaseCoord.getX() - axisGradsWidth / 2.f - labelWidth / 2.f , axisBaseCoord.getY() + i * spaceBetweenAxisGrads),
                                                                                           Size(labelWidth, labelHeight), axisColor);
 			} else if (axisGradsPosition == RIGHT_OR_ABOVE) {
-				graduationLabel = new GlLabel(Coord(axisBaseCoord.getX() + axisGradsWidth / 2. + labelWidth / 2. , axisBaseCoord.getY() + i * spaceBetweenAxisGrads),
+				graduationLabel = new GlLabel(Coord(axisBaseCoord.getX() + axisGradsWidth / 2.f + labelWidth / 2.f , axisBaseCoord.getY() + i * spaceBetweenAxisGrads),
                                                                                           Size(labelWidth, labelHeight), axisColor);
 			}
 		}
@@ -133,13 +133,13 @@ Coord GlAxis::computeCaptionCenter() {
 		if (captionPosition == RIGHT_OR_ABOVE) {
 			captionCenter = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength + captionOffset + captionHeight / 2);
 		} else {
-			captionCenter = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() - captionOffset - captionHeight / 2);
+			captionCenter = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() - captionOffset - captionHeight / 2.f);
 		}
 	} else if (axisOrientation == HORIZONTAL_AXIS) {
 		if (captionPosition == RIGHT_OR_ABOVE) {
-			captionCenter = Coord(axisBaseCoord.getX() + axisLength + captionOffset + (captionWidth / 2.), axisBaseCoord.getY());
+			captionCenter = Coord(axisBaseCoord.getX() + axisLength + captionOffset + (captionWidth / 2.f), axisBaseCoord.getY());
 		} else {
-			captionCenter = Coord(axisBaseCoord.getX() - captionOffset - (captionWidth / 2.) , axisBaseCoord.getY());
+			captionCenter = Coord(axisBaseCoord.getX() - captionOffset - (captionWidth / 2.f) , axisBaseCoord.getY());
 		}
 	}
 	return captionCenter;

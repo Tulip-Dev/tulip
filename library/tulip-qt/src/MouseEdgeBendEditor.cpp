@@ -450,11 +450,11 @@ void MouseEdgeBendEditor::computeSrcTgtEntities(GlMainWidget *glMainWidget){
   if(coordinates.empty()){
     endAngle=atan((start[1]-end[1])/(start[0]-end[0]));
     if(start[0]-end[0]>0)
-      endAngle+=M_PI;
+      endAngle+=static_cast<float>(M_PI);
   }else{
     endAngle=atan((end[1]-coordinates[coordinates.size()-1][1])/(end[0]-coordinates[coordinates.size()-1][0]));
     if(end[0]-coordinates[coordinates.size()-1][0]>0)
-      endAngle+=M_PI;
+      endAngle+=static_cast<float>(M_PI);
   }
 
   if(selectedEntity!="targetTriangle"){

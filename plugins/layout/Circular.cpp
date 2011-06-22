@@ -191,7 +191,7 @@ bool Circular::run() {
     double xcoord = maxRad/2.0;
     node itn;
     forEach(itn, graph->getNodes()) {
-      layoutResult->setNodeValue (itn, Coord (xcoord, 0, 0));
+      layoutResult->setNodeValue (itn, Coord (static_cast<float>(xcoord), 0, 0));
       xcoord *= -1;
     }
   }//end if
@@ -240,8 +240,8 @@ bool Circular::run() {
 
       //compute the position of the node.
       gamma += halfAngle;
-      layoutResult->setNodeValue(itn, Coord(rayon*cos(gamma),
-				      rayon*sin(gamma), 0));
+      layoutResult->setNodeValue(itn, Coord(static_cast<float>(rayon*cos(gamma)),
+				      static_cast<float>(rayon*sin(gamma)), 0));
       gamma += halfAngle;
     }//end while
   }//end else

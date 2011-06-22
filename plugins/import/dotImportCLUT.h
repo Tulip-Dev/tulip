@@ -690,7 +690,7 @@ void HSBtoRGB(	float  inH,  float  inS,  float  inB,
 	else
 	{
 		float _h = inH * 6.0f,
-			  _i = int( _h ),
+			  _i = static_cast<float>(int( _h )),
 			  _1 = inB * ( 1.0f - inS ),
 			  _2 = inB * ( 1.0f - inS*(_h-_i) ),
 			  _3 = inB * ( 1.0f - inS*(1.0f-(_h-_i)) );

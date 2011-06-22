@@ -695,7 +695,7 @@ namespace tlp {
       if(center)
         *center=Coord(0,0,0);
       if(sceneRadius)
-        *sceneRadius=sqrt(300.0);
+        *sceneRadius=static_cast<float>(sqrt(300.0));
 
       if(eye && center && sceneRadius){
         *eye=Coord(0, 0, *sceneRadius);
@@ -749,25 +749,25 @@ namespace tlp {
 
 			if(newXDecViewport<0) {
 				if(newXDecViewport==-1)
-					centerTmp[0]-=dec/2;
+					centerTmp[0]-=static_cast<float>(dec/2);
 				else
-					centerTmp[0]-=dec/2-dec*(newXDecViewport+1);
+					centerTmp[0]-=static_cast<float>(dec/2-dec*(newXDecViewport+1));
 			}else{
 				if(newXDecViewport==1)
-					centerTmp[0]+=dec/2;
+					centerTmp[0]+=static_cast<float>(dec/2);
 				else
-					centerTmp[0]+=dec/2+dec*(newXDecViewport-1);
+					centerTmp[0]+=static_cast<float>(dec/2+dec*(newXDecViewport-1));
 			}
 			if(newYDecViewport<0) {
 				if(newYDecViewport==-1)
-					centerTmp[1]-=dec/2;
+					centerTmp[1]-=static_cast<float>(dec/2);
 				else
-					centerTmp[1]-=dec/2-dec*(newYDecViewport+1);
+					centerTmp[1]-=static_cast<float>(dec/2-dec*(newYDecViewport+1));
 			}else{
 				if(newYDecViewport==1)
-					centerTmp[1]+=dec/2;
+					centerTmp[1]+=static_cast<float>(dec/2);
 				else
-					centerTmp[1]+=dec/2+dec*(newYDecViewport-1);
+					centerTmp[1]+=static_cast<float>(dec/2+dec*(newYDecViewport-1));
 			}
 		}
 
@@ -784,30 +784,30 @@ namespace tlp {
     float sceneRadiusTmp;
     if(dx<dy){
       if(wdx<hdy){
-        sceneRadiusTmp=dx;
+        sceneRadiusTmp=static_cast<float>(dx);
         if(yWhiteFactor)
-          *yWhiteFactor=(1.-(dy/(sceneRadiusTmp*(height/width))))/2.;
+          *yWhiteFactor=static_cast<float>((1.-(dy/(sceneRadiusTmp*(height/width))))/2.);
       }else{
         if (width < height)
-          sceneRadiusTmp=dx*wdx/hdy;
+          sceneRadiusTmp=static_cast<float>(dx*wdx/hdy);
         else
-          sceneRadiusTmp=dy;
+          sceneRadiusTmp=static_cast<float>(dy);
         if(xWhiteFactor){
-          *xWhiteFactor=(1.-(dx/sceneRadiusTmp))/2.;
+          *xWhiteFactor=static_cast<float>((1.-(dx/sceneRadiusTmp))/2.);
         }
       }
     }else{
       if(wdx>hdy){
-        sceneRadiusTmp=dy;
+        sceneRadiusTmp=static_cast<float>(dy);
         if(xWhiteFactor)
-          *xWhiteFactor=(1.-(dx/(sceneRadiusTmp*(width/height))))/2.;
+          *xWhiteFactor=static_cast<float>((1.-(dx/(sceneRadiusTmp*(width/height))))/2.);
       }else{
         if (height < width)
-          sceneRadiusTmp=dy*hdy/wdx;
+          sceneRadiusTmp=static_cast<float>(dy*hdy/wdx);
         else
-          sceneRadiusTmp=dx;
+          sceneRadiusTmp=static_cast<float>(dx);
         if(yWhiteFactor)
-          *yWhiteFactor=(1.-(dy/sceneRadiusTmp))/2.;
+          *yWhiteFactor=static_cast<float>((1.-(dy/sceneRadiusTmp))/2.);
       }
     }
 
@@ -825,7 +825,7 @@ namespace tlp {
     }
 
   if(zoomFactor){
-    *zoomFactor=zoomTmp;
+    *zoomFactor=static_cast<float>(zoomTmp);
   }
 
 
@@ -878,7 +878,7 @@ namespace tlp {
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera())) {
         Coord v1(0, 0, 0);
-        Coord v2(x, y, z);
+        Coord v2(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
         v1 = (*it).second->getCamera().screenTo3DWorld(v1);
         v2 = (*it).second->getCamera().screenTo3DWorld(v2);
         Coord move = v2 - v1;
@@ -899,9 +899,9 @@ namespace tlp {
   void GlScene::rotateScene(const int x, const int y, const int z) {
     for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin();it!=layersList.end();++it) {
       if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera())) {
-        (*it).second->getCamera().rotate(float(x)/360.0 * M_PI, 1.0, 0, 0);
-        (*it).second->getCamera().rotate(float(y)/360.0 * M_PI, 0, 1.0, 0);
-        (*it).second->getCamera().rotate(float(z)/360.0 * M_PI, 0, 0, 1.0);
+        (*it).second->getCamera().rotate(static_cast<float>(x/360.0 * M_PI), 1.0f, 0, 0);
+        (*it).second->getCamera().rotate(static_cast<float>(y/360.0 * M_PI), 0, 1.0f, 0);
+        (*it).second->getCamera().rotate(static_cast<float>(z/360.0 * M_PI), 0, 0, 1.0f);
       }
     }
   }
@@ -1114,7 +1114,12 @@ namespace tlp {
     if(!filename.empty()) {
       /* subgraphs drawing disabled
 	 initMapsSVG(_renderingParameters.getGraph(), &ge); */
-      FILE* file = fopen(filename.c_str(), "w");
+      FILE* file;
+#ifndef _MSC_VER
+	  file = fopen(filename.c_str(), "w");
+#else
+	  fopen_s(&file, filename.c_str(), "w"); 	
+#endif
       if (file) {
         fprintf(file, "%s",str.c_str());
         fclose(file);
@@ -1153,7 +1158,12 @@ namespace tlp {
     string str;
     builder.getResult(&str);
     if(!filename.empty()) {
-      FILE* file = fopen(filename.c_str(), "w");
+      FILE* file;
+#ifndef _MSC_VER
+	  file = fopen(filename.c_str(), "w");
+#else
+	  fopen_s(&file, filename.c_str(), "w");
+#endif
       if (file) {
         fprintf(file, "%s", str.c_str());
         fclose(file);

@@ -64,12 +64,12 @@ namespace tlp {
     Coord center;
     Size size;
     if(inPercent){
-      center=Coord(viewport[0]+(left*(viewport[2]-viewport[0])+right*(viewport[2]-viewport[0]))/2.,
-                         viewport[1]+(bottom*(viewport[3]-viewport[1])+top*(viewport[3]-viewport[1]))/2.,
-                         0);
+      center=Coord(viewport[0]+(left*(viewport[2]-viewport[0])+right*(viewport[2]-viewport[0]))/2.f,
+                         viewport[1]+(bottom*(viewport[3]-viewport[1])+top*(viewport[3]-viewport[1]))/2.f,
+                         0.f);
       size=Size(right*(viewport[2]-viewport[0])-left*(viewport[2]-viewport[0]),
                      bottom*(viewport[3]-viewport[1])-top*(viewport[3]-viewport[1]),
-                     0);
+                     0.f);
     }else{
       float xMin;
       float xMax;
@@ -91,8 +91,8 @@ namespace tlp {
         yMin=viewport[3]-top;
       }
 
-      center=Coord((xMin+xMax)/2.,(yMin+yMax)/2.,0);
-      size=Size(xMax-xMin,yMax-yMin,0);     
+      center=Coord((xMin+xMax)/2.f,(yMin+yMax)/2.f,0.f);
+      size=Size(xMax-xMin,yMax-yMin,0.f);     
     }
 
     glPushMatrix();

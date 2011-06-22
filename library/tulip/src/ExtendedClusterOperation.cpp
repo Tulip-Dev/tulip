@@ -71,12 +71,12 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
   BoundingBox box = tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
   Coord maxL(box[1]);
   Coord minL(box[0]);
-  double width  = maxL[0] - minL[0];
-  double height = maxL[1] - minL[1];
-  double depth =  maxL[2] - minL[2];
-  if (width<0.0001) width=1.0;
-  if (height<0.0001) height=1.0;
-  if (depth<0.0001) depth=1.0;
+  float width  = maxL[0] - minL[0];
+  float height = maxL[1] - minL[1];
+  float depth =  maxL[2] - minL[2];
+  if (width<0.0001f) width=1.0;
+  if (height<0.0001f) height=1.0;
+  if (depth<0.0001f) depth=1.0;
   Coord center = (maxL + minL) / -2.0f;
   clusterLayout->translate(center, cluster);
   clusterLayout->rotateZ(graphRot->getNodeValue(metanode), cluster);

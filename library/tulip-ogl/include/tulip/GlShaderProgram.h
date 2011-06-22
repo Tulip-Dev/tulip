@@ -359,7 +359,7 @@ public :
 
 	void setUniformInt(const std::string &variableName, const int f);
 	void setUniformVec2Int(const std::string &variableName, const Vector<int, 2> &vec2i);
-	void setUniformVec2Int(const std::string &variableName, const float i1, const float i2);
+	void setUniformVec2Int(const std::string &variableName, const int i1, const int i2);
 	void setUniformVec3Int(const std::string &variableName, const Vector<int, 3> &vec3i);
 	void setUniformVec3Int(const std::string &variableName, const int i1, const int i2, const int i3);
 	void setUniformVec4Int(const std::string &variableName, const Vector<int, 4> &vec4i);
@@ -383,7 +383,7 @@ public :
 
 	void setAttributeInt(const std::string &variableName, const int f);
 	void setAttributeVec2Int(const std::string &variableName, const Vector<int, 2> &vec2i);
-	void setAttributeVec2Int(const std::string &variableName, const float i1, const float i2);
+	void setAttributeVec2Int(const std::string &variableName, const int i1, const int i2);
 	void setAttributeVec3Int(const std::string &variableName, const Vector<int, 3> &vec3i);
 	void setAttributeVec3Int(const std::string &variableName, const int i1, const int i2, const int i3);
 	void setAttributeVec4Int(const std::string &variableName, const Vector<int, 4> &vec4i);

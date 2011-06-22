@@ -168,11 +168,11 @@ tlp::Circle<Obj> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj> > & cir
 	+2*a1*r2*r2*a3+2*a3*a3*r1*r2-2*a1*r3*a2*r1+2*a1*r3*a3*r1+2*a2*r1*a1*r2-2*a2*r3*a1*r2
 	-2*a2*r3*a3*r1-2*a1*r2*a3*r1-2*a1*r3*a3*r2-2*a2*r1*a3*r2+2*a2*r3*a3*r2+2*a2*b3*a1*b2
 	+2*a3*b2*a1*b3+2*a2*b1*a1*b3-2*a2*b1*a1*b2-2*a1*b3*a3*b1+2*a1*b2*a3*b1;
-      Obj R = 0.5*v/aa;
-      Obj y = -0.5*(-2*a1*R*r2-2*a3*R*r1+2*a2*R*r1+2*a3*R*r2-2*a2*R*r3+a1*a3*a3+a1*b3*b3-a1*r3*r3
+      Obj R = 0.5f*v/aa;
+      Obj y = -0.5f*(-2*a1*R*r2-2*a3*R*r1+2*a2*R*r1+2*a3*R*r2-2*a2*R*r3+a1*a3*a3+a1*b3*b3-a1*r3*r3
 		       +a2*a1*a1+a2*b1*b1+a1*r2*r2+2*a1*R*r3-a3*b1*b1+a3*a2*a2+a3*b2*b2+a3*r1*r1-a3*r2*r2-a2*a3*a3-a2*b3*b3
 		       -a2*r1*r1+a2*r3*r3-a1*a2*a2-a1*b2*b2-a3*a1*a1)/(a2*b3+a3*b1-a2*b1-a1*b3+a1*b2-a3*b2);
-      Obj x = 0.5*(-a1*a1*b3+a1*a1*b2+2*R*r2*b3+b1*a3*a3+b1*b3*b3+2*b1*R*r3-2*R*r1*b3+2*R*r1*b2+b1*r2*r2
+      Obj x = 0.5f*(-a1*a1*b3+a1*a1*b2+2*R*r2*b3+b1*a3*a3+b1*b3*b3+2*b1*R*r3-2*R*r1*b3+2*R*r1*b2+b1*r2*r2
 		      -b2*a3*a3-b2*b3*b3+b2*r3*r3-2*b2*R*r3-b1*r3*r3-r2*r2*b3+a2*a2*b3-r1*r1*b2-b1*b2*b2+b1*b1*b2-b1*b1*b3
 		      -b1*a2*a2+b2*b2*b3+r1*r1*b3-2*b1*R*r2)/(a2*b3+a3*b1-a2*b1-a1*b3+a1*b2-a3*b2);
       return  tlp::Circle<Obj>(x,y,R);

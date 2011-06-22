@@ -229,21 +229,21 @@ struct GMLNodeGraphicsBuilder:public GMLTrue {
   {}
 
   bool addInt(const string &st,const int integer) {
-    if (st=="x") coord.setX(integer);
-    if (st=="y") coord.setY(integer);
-    if (st=="z") coord.setZ(integer);
-    if (st=="w") size.setW(integer);
-    if (st=="h") size.setH(integer);
-    if (st=="d") size.setD(integer);
+    if (st=="x") coord.setX(static_cast<float>(integer));
+    if (st=="y") coord.setY(static_cast<float>(integer));
+    if (st=="z") coord.setZ(static_cast<float>(integer));
+    if (st=="w") size.setW(static_cast<float>(integer));
+    if (st=="h") size.setH(static_cast<float>(integer));
+    if (st=="d") size.setD(static_cast<float>(integer));
     return true;
   }
   bool addDouble(const string &st,const double real) {
-    if (st=="x") coord.setX(real);
-    if (st=="y") coord.setY(real);
-    if (st=="z") coord.setZ(real);
-    if (st=="w") size.setW(real);
-    if (st=="h") size.setH(real);
-    if (st=="d") size.setD(real);
+    if (st=="x") coord.setX(static_cast<float>(real));
+    if (st=="y") coord.setY(static_cast<float>(real));
+    if (st=="z") coord.setZ(static_cast<float>(real));
+    if (st=="w") size.setW(static_cast<float>(real));
+    if (st=="h") size.setH(static_cast<float>(real));
+    if (st=="d") size.setD(static_cast<float>(real));
     return true;
   }
   bool addString(const string &st,const string &str) {
@@ -393,15 +393,15 @@ struct GMLEdgeGraphicsLinePointBuilder:public GMLTrue {
     coord(0,0,0)
   {}
   bool addInt(const string &st,const int integer) {
-    if (st=="x") coord.setX(integer);
-    if (st=="y") coord.setY(integer);
-    if (st=="z") coord.setZ(integer);
+    if (st=="x") coord.setX(static_cast<float>(integer));
+    if (st=="y") coord.setY(static_cast<float>(integer));
+    if (st=="z") coord.setZ(static_cast<float>(integer));
     return true;
   }
   bool addDouble(const string &st,const double real) {
-    if (st=="x") coord.setX(real);
-    if (st=="y") coord.setY(real);
-    if (st=="z") coord.setZ(real);
+    if (st=="x") coord.setX(static_cast<float>(real));
+    if (st=="y") coord.setY(static_cast<float>(real));
+    if (st=="z") coord.setZ(static_cast<float>(real));
     return true;
   }
   bool close() {

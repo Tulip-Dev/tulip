@@ -79,8 +79,8 @@ Pentagone::~Pentagone() {
 }
 //=====================================================
 void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-        boundingBox[0] = Coord(-0.30, -0.35, 0);
-        boundingBox[1] = Coord(0.30, 0.35, 0);
+        boundingBox[0] = Coord(-0.3f, -0.35f, 0);
+        boundingBox[1] = Coord(0.3f, 0.35f, 0);
 }
 //=====================================================
 void Pentagone::draw(node n, float lod) {
@@ -91,7 +91,7 @@ void Pentagone::draw(node n, float lod) {
 
   draw(glGraphInputData->getElementColor()->getNodeValue(n),
        glGraphInputData->getElementBorderColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+       static_cast<float>(glGraphInputData->getElementBorderWidth()->getNodeValue(n)),
        textureName,
        lod);
 }
@@ -104,7 +104,7 @@ void Pentagone::draw(edge e, node, const Color& glyphColor, const Color &borderC
 
   draw(glyphColor,
        borderColor,
-       edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+       static_cast<float>(edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e)),
        textureName,
        lod);
 }
@@ -116,7 +116,7 @@ void Pentagone::draw(const Color &fillColor,
                      const std::string &textureName,
                      float lod){
   if(borderWidth<1e-6)
-    borderWidth=1e-6;
+    borderWidth=1e-6f;
 
   pentagon->setFillColor(fillColor);
   pentagon->setOutlineColor(borderColor);

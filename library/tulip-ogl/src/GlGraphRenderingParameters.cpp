@@ -181,7 +181,7 @@ unsigned int GlGraphRenderingParameters::getLabelsBorder() const {
     return -_labelsDensity;
 }
 void GlGraphRenderingParameters::setLabelsBorder(const unsigned int border) {
-  _labelsDensity = -border;
+  _labelsDensity = -static_cast<int>(border);
 }
 //====================================================
 bool GlGraphRenderingParameters::isViewMetaLabel()const {

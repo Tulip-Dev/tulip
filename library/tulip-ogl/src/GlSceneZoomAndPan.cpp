@@ -35,7 +35,7 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
 	camCenterEnd[2] = camCenterStart[2];
 
 	Coord blScene(camera.screenTo3DWorld(Coord(0, 0, 0)));
-	Coord trScene(camera.screenTo3DWorld(Coord(viewport[2], viewport[3], 0)));
+	Coord trScene(camera.screenTo3DWorld(Coord(static_cast<float>(viewport[2]), static_cast<float>(viewport[3]), 0)));
 
 	BoundingBox sceneBB;
 	sceneBB.expand(blScene);
@@ -93,7 +93,7 @@ void GlSceneZoomAndPan::setAdditionalGlSceneAnimation(AdditionalGlSceneAnimation
 
 void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
 	if (doZoomAndPan) {
-		double t = (double) animationStep / (double) nbAnimationSteps;
+		double t = static_cast<double>(animationStep) / nbAnimationSteps;
 		double s = t * S;
 		double u = 0, w = 0, f = 0;
 		if (optimalPath) {
@@ -123,13 +123,13 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
 				f = 0;
 			}
 		}
-		camera.setCenter(camCenterStart + (camCenterEnd - camCenterStart) *f);
-		camera.setEyes(Coord(0, 0, camera.getSceneRadius()));
+		camera.setCenter(camCenterStart + (camCenterEnd - camCenterStart) * static_cast<float>(f));
+		camera.setEyes(Coord(0, 0, static_cast<float>(camera.getSceneRadius())));
 		camera.setEyes(camera.getEyes() + camera.getCenter());
-		camera.setUp(Coord(0, 1., 0));
+		camera.setUp(Coord(0, 1, 0));
 
-		Coord bbScreenFirst = camera.worldTo2DScreen(camera.getCenter() - Coord(w/2, w/2, 0));
-		Coord bbScreenSecond = camera.worldTo2DScreen(camera.getCenter() + Coord(w/2, w/2, 0));
+		Coord bbScreenFirst = camera.worldTo2DScreen(camera.getCenter() - Coord(static_cast<float>(w/2), static_cast<float>(w/2), 0));
+		Coord bbScreenSecond = camera.worldTo2DScreen(camera.getCenter() + Coord(static_cast<float>(w/2), static_cast<float>(w/2), 0));
 		float bbWidthScreen = abs(bbScreenSecond.getX() - bbScreenFirst.getX());
 		float bbHeightScreen = abs(bbScreenSecond.getY() - bbScreenFirst.getY());
 		double newZoomFactor = 0.0;

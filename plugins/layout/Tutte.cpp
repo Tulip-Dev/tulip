@@ -112,7 +112,7 @@ bool Tutte::run() {
   float gamma;
   int i=0;
   int rayon=100;
-  gamma=2*M_PI/tmp.size();
+  gamma=static_cast<float>(2*M_PI/tmp.size());
   for (itL=tmp.begin();itL!=tmp.end();++itL) {
     layoutResult->setNodeValue(*itL,Coord(rayon*cos(gamma*i)+rayon*2,rayon*sin(gamma*i)+rayon*2,0));
     i++;

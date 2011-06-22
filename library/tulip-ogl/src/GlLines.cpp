@@ -39,7 +39,7 @@ void GlLines::glDrawLine(const Coord &startPoint, const Coord &endPoint, const d
 {
 	OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 	GlLines::glEnableLineStipple(stippleType);
-	glLineWidth(width);
+	glLineWidth(static_cast<float>(width));
 	glBegin(GL_LINES);
 	setColor(startColor);
 	glVertex3f(startPoint[0],startPoint[1],startPoint[2]);
@@ -59,7 +59,7 @@ void GlLines::glDrawCurve(const Coord &startPoint, const vector<Coord> &bends, c
 		return;
 	}
 	GlLines::glEnableLineStipple(stippleType);
-	glLineWidth(width);
+	glLineWidth(static_cast<float>(width));
 
 	GLfloat *colorStart = startColor.getGL();
 	colorStart[3] = 1.0;
@@ -101,7 +101,7 @@ void GlLines::glDrawBezierCurve(const Coord &startPoint,const vector<Coord> &ben
 		return;
 	}
 	GlLines::glEnableLineStipple(stippleType);
-	glLineWidth(width);
+	glLineWidth(static_cast<float>(width));
 	GLfloat *bendsCoordinates=buildCurvePoints(startPoint,bends,endPoint);
 	GLfloat *colorStart=startColor.getGL();
 	colorStart[3] = 1.0;
@@ -141,7 +141,7 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
 	}
 	OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 	GlLines::glEnableLineStipple(stippleType);
-	glLineWidth(width);
+	glLineWidth(static_cast<float>(width));
 
 	GLfloat *colorStart=startColor.getGL();
 	colorStart[3] = 1.0;

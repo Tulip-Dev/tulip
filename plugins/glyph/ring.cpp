@@ -49,7 +49,7 @@ using namespace tlp;
 class Ring: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
 	Ring(GlyphContext *gc = NULL);
-	Ring(EdgeExtremityGlyphContext *gc = NULL);
+	Ring(EdgeExtremityGlyphContext *gc);
 	virtual ~Ring();
 	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
 	virtual string getName() {
@@ -80,8 +80,8 @@ Ring::~Ring() {
 }
 //=====================================================
 void Ring::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-	boundingBox[0] = Coord(-0.35, -0.35, 0);
-	boundingBox[1] = Coord(0.35, 0.35, 0);
+	boundingBox[0] = Coord(-0.35f, -0.35f, 0);
+	boundingBox[1] = Coord(0.35f, 0.35f, 0);
 }
 //=====================================================
 void Ring::draw(node n, float lod) {
@@ -119,14 +119,14 @@ void Ring::drawRingBorder() {
 	double alpha = M_PI / 2.;
 	double delta = 2. * M_PI / 30.0;
 	for (unsigned int i = 0; i < 30; ++i) {
-		glVertex3f(0.5 * cos(alpha), 0.5 * sin(alpha), 0.0);
+		glVertex3f(0.5f * static_cast<float>(cos(alpha)), 0.5f * static_cast<float>(sin(alpha)), 0.0f);
 		alpha += delta;
 	}
 	glEnd();
 	glBegin(GL_LINE_LOOP);
 	alpha = M_PI / 2.;
 	for (unsigned int i = 0; i < 30; ++i) {
-		glVertex3f(0.2 * cos(alpha), 0.2 * sin(alpha), 0.0);
+		glVertex3f(0.2f * static_cast<float>(cos(alpha)), 0.2f * static_cast<float>(sin(alpha)), 0.0f);
 		alpha += delta;
 	}
 	glEnd();
@@ -160,9 +160,9 @@ void Ring::drawGlyph(const Color& glyohColor, const string& texture,
 
 	if (lod > 20) {
 		if (borderWidth < 1e-6)
-			glLineWidth(1e-6); //no negative borders
+			glLineWidth(1e-6f); //no negative borders
 		else
-			glLineWidth(borderWidth);
+			glLineWidth(static_cast<float>(borderWidth));
 	}
 	glDisable(GL_LIGHTING);
 	setColor(borderColor);

@@ -175,9 +175,9 @@ Coord GlQuantitativeAxis::getAxisPointCoordForValue(double value) const {
 		val = log(val) / log(static_cast<double>(logBase));
 	}
 	if (ascendingOrder) {
-		 offset = (val - minV) * scale;
+		 offset = static_cast<float>((val - minV) * scale);
 	} else {
-		offset = (maxV - val) * scale;
+		offset = static_cast<float>((maxV - val) * scale);
 	}
 	if (axisOrientation == HORIZONTAL_AXIS) {
 		ret = Coord(axisBaseCoord.getX() + offset, axisBaseCoord.getY(), 0);
@@ -235,7 +235,7 @@ void GlQuantitativeAxis::addArrowDrawing() {
 	arrowLine3->setLineWidth(2.0);
 	float axisExtensionLength = captionOffset;
 	float arrowWidth = axisGradsWidth;
-	float arrowLength = (1./2.) * axisExtensionLength;
+	float arrowLength = 0.5f * axisExtensionLength;
 	Coord arrowEndCoord;
 	if (axisOrientation == HORIZONTAL_AXIS) {
 		if (ascendingOrder) {

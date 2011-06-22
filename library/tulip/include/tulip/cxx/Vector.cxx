@@ -251,14 +251,14 @@ TYPE  VECTORTLP::norm() const{
   case 1:  
     return VECTORTLP::array[0];
   case 2:
-    return sqrt(VECTORTLP::array[0]*VECTORTLP::array[0]+VECTORTLP::array[1]*VECTORTLP::array[1]);
+    return static_cast<TYPE>(sqrt(VECTORTLP::array[0]*VECTORTLP::array[0]+VECTORTLP::array[1]*VECTORTLP::array[1]));
   case 3:
-    return sqrt(VECTORTLP::array[0]*VECTORTLP::array[0]+VECTORTLP::array[1]*VECTORTLP::array[1]+VECTORTLP::array[2]*VECTORTLP::array[2]);
+    return static_cast<TYPE>(sqrt(VECTORTLP::array[0]*VECTORTLP::array[0]+VECTORTLP::array[1]*VECTORTLP::array[1]+VECTORTLP::array[2]*VECTORTLP::array[2]));
   default :
     TYPE tmp=0;
     for (unsigned int i=0;i<SIZE;++i)
       tmp+=VECTORTLP::array[i]*VECTORTLP::array[i];
-    return(sqrt(tmp));
+    return(static_cast<TYPE>(sqrt(tmp)));
   }
 }
 //======================================================
@@ -268,14 +268,14 @@ TYPE  VECTORTLP::dist(const VECTOR &c) const{
   case 1:  
     return 0;
   case 2:
-    return sqrt((VECTORTLP::array[0]-c.VECTORTLP::array[0])*(VECTORTLP::array[0]-c.VECTORTLP::array[0])+(VECTORTLP::array[1]-c.VECTORTLP::array[1])*(VECTORTLP::array[1]-c.VECTORTLP::array[1]));
+    return static_cast<TYPE>(sqrt((VECTORTLP::array[0]-c.VECTORTLP::array[0])*(VECTORTLP::array[0]-c.VECTORTLP::array[0])+(VECTORTLP::array[1]-c.VECTORTLP::array[1])*(VECTORTLP::array[1]-c.VECTORTLP::array[1])));
    case 3:
-    return sqrt((VECTORTLP::array[0]-c.VECTORTLP::array[0])*(VECTORTLP::array[0]-c.VECTORTLP::array[0])+(VECTORTLP::array[1]-c.VECTORTLP::array[1])*(VECTORTLP::array[1]-c.VECTORTLP::array[1])+(VECTORTLP::array[2]-c.VECTORTLP::array[2])*(VECTORTLP::array[2]-c.VECTORTLP::array[2]));
+    return static_cast<TYPE>(sqrt((VECTORTLP::array[0]-c.VECTORTLP::array[0])*(VECTORTLP::array[0]-c.VECTORTLP::array[0])+(VECTORTLP::array[1]-c.VECTORTLP::array[1])*(VECTORTLP::array[1]-c.VECTORTLP::array[1])+(VECTORTLP::array[2]-c.VECTORTLP::array[2])*(VECTORTLP::array[2]-c.VECTORTLP::array[2])));
    default :
     TYPE tmp=0;
     for (unsigned int i=0;i<SIZE;++i)
       tmp+=(VECTORTLP::array[i]-c.VECTORTLP::array[i])*(VECTORTLP::array[i]-c.VECTORTLP::array[i]);
-    return(sqrt(tmp));
+    return(static_cast<TYPE>(sqrt(tmp)));
    }
 }
 //=======================================================================

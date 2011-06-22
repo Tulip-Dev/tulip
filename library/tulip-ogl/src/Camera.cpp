@@ -150,9 +150,9 @@ void Camera::initLight() {
 	if(d3) {
 		// set positional light for 3D camera
 		eyes.get(pos[0],pos[1],pos[2]);
-		pos[0]=pos[0] + ((eyes[0]-center[0])/zoomFactor) + (eyes[0]-center[0])*4;
-		pos[1]=pos[1] + ((eyes[1]-center[1])/zoomFactor) + (eyes[1]-center[1])*4;
-		pos[2]=pos[2] + ((eyes[2]-center[2])/zoomFactor) + (eyes[2]-center[2])*4;
+		pos[0]=pos[0] + ((eyes[0]-center[0])/static_cast<float>(zoomFactor)) + (eyes[0]-center[0])*4;
+		pos[1]=pos[1] + ((eyes[1]-center[1])/static_cast<float>(zoomFactor)) + (eyes[1]-center[1])*4;
+		pos[2]=pos[2] + ((eyes[2]-center[2])/static_cast<float>(zoomFactor)) + (eyes[2]-center[2])*4;
 		pos[3]=1;
 	}else{
 		// set directional light for 2D camera
@@ -161,12 +161,12 @@ void Camera::initLight() {
 		pos[2]=100;
 		pos[3]=0;
 	}
-	GLfloat amb[4] = {0.3,0.3 , 0.3 ,0.3};
-	GLfloat dif[4] = {0.5,0.5,0.5,1};
-	GLfloat specular[4] = {0,0,0,1};
-	GLfloat attC[3] = {1.,1.,1.};
-	GLfloat attL[3] = {0,0,0};
-	GLfloat attQ[3] = {0,0,0};
+	GLfloat amb[4] = {0.3f, 0.3f, 0.3f, 0.3f};
+	GLfloat dif[4] = {0.5f, 0.5f, 0.5f, 1.0f};
+	GLfloat specular[4] = {0.0f, 0.0f, 0.0f, 1.0f};
+	GLfloat attC[3] = {1.0f, 1.0f, 1.0f}; 
+	GLfloat attL[3] = {0.0f, 0.0f, 0.0f};
+	GLfloat attQ[3] = {0.0f, 0.0f, 0.0f};
 
 	glEnable( GL_LIGHTING );
 	glEnable( GL_LIGHT0 );
@@ -201,7 +201,7 @@ void Camera::initProjection(const Vector<int, 4>& viewport,bool reset){
 	}
 
 	if(d3) {
-		float ratio = double(viewport[2])/double(viewport[3]);
+		float ratio = static_cast<float>(viewport[2])/static_cast<float>(viewport[3]);
 		if(scene->isViewOrtho()) {
 			if (ratio>1)
 				glOrtho(-ratio*sceneRadius/2.0/zoomFactor, ratio*sceneRadius/2.0/zoomFactor,
@@ -376,7 +376,7 @@ Coord Camera::worldTo2DScreen(const Coord &obj) {
 	initModelView();
 
 	Vector<int, 4> viewport = getViewport();
-	return projectPoint(obj, transformMatrix, viewport) - Coord(viewport[0], viewport[1]);
+	return projectPoint(obj, transformMatrix, viewport) - Coord(static_cast<float>(viewport[0]), static_cast<float>(viewport[1]));
 }
 //====================================================
 Vector<int, 4> Camera::getViewport() {

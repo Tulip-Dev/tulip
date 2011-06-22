@@ -197,7 +197,7 @@ void GlPolyQuad::draw(float, Camera *) {
 
 	if (outlined) {
 		OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-		glLineWidth(outlineWidth);
+		glLineWidth(static_cast<float>(outlineWidth));
 		setMaterial(outlineColor);
 		if (nbSubdivisionsPerSegment > 1) {
 			glDrawElements(GL_LINE_LOOP, vertexArray.size(), GL_UNSIGNED_SHORT, &outlineIndices[0]);

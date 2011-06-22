@@ -56,7 +56,7 @@ namespace tlp {
     const Coord &nodeCoord = inputData->getElementLayout()->getNodeValue(n);
     const Size &nodeSize = inputData->getElementSize()->getNodeValue(n);
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
-    glRotatef(inputData->getElementRotation()->getNodeValue(n), 0., 0., 1.);
+    glRotatef(static_cast<float>(inputData->getElementRotation()->getNodeValue(n)), 0.f, 0.f, 1.f);
     Graph *metaGraph = inputData->getGraph()->getNodeMetaInfo(n);
     GlGraphRenderingParameters metaParameters = *inputData->parameters;
     GlGraphInputData metaData(metaGraph,&metaParameters);
@@ -91,12 +91,12 @@ namespace tlp {
       includeSize[2]*=nodeSize[2]/includeSize[2];
 
     glScalef(includeSize[0], includeSize[1], includeSize[2]);
-    glTranslatef(includeTranslate[0],includeTranslate[1],includeTranslate[2]-width/1000.);
+    glTranslatef(includeTranslate[0],includeTranslate[1],includeTranslate[2]-static_cast<float>(width/1000.));
 
     if (width<0.0001) width=1;
     if (height<0.0001) height=1;
     if (dept<0.0001) dept=1;
-    Coord scale(1/width,1/height,1/dept);
+    Coord scale(static_cast<float>(1/width),static_cast<float>(1/height),static_cast<float>(1/dept));
 
     Camera *activeCamera;
 

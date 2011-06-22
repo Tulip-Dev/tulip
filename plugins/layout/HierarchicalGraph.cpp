@@ -500,20 +500,20 @@ bool HierarchicalGraph::run() {
     vector<Coord> old = layoutResult->getEdgeValue(e);
     if (old.empty()) {
       vector<Coord> pos(2);
-      srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.0 + spacing/4.);
-      tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.0 + spacing/4.);
+      srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.f + spacing/4.f);
+      tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.f + spacing/4.f);
       pos[0] = srcPos;
       pos[1] = tgtPos;
       layoutResult->setEdgeValue(e, pos);
     }
     else {
       vector<Coord> pos(4);
-      srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.0 + spacing/4.);
-      tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.0 + spacing/4.);
+      srcPos[1] += rev*(levelMaxSize[nodeLevel.get(src.id)]/2.f + spacing/4.f);
+      tgtPos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id)]/2.f + spacing/4.f);
       Coord src2Pos = old.front();
       Coord tgt2Pos = old.back();
-      src2Pos[1] = srcPos[1] + rev*spacing/2.;
-      tgt2Pos[1] = tgtPos[1] - rev*spacing/2.;
+      src2Pos[1] = srcPos[1] + rev*spacing/2.f;
+      tgt2Pos[1] = tgtPos[1] - rev*spacing/2.f;
       /*
 	Coord src2Pos = old.front();
 	Coord tgt2Pos = old.back();
@@ -532,7 +532,7 @@ bool HierarchicalGraph::run() {
   forEach(n, graph->getNodes()) {
     Coord tmp = layoutResult->getNodeValue(n);
     const Size& tmpS = nodeSize->getNodeValue(n);
-    tmp[1] -= (levelMaxSize[nodeLevel.get(n.id)] - tmpS[1]) / 2.0;
+    tmp[1] -= (levelMaxSize[nodeLevel.get(n.id)] - tmpS[1]) / 2.f;
     layoutResult->setNodeValue(n, tmp);
   }
 

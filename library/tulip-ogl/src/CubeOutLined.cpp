@@ -74,7 +74,7 @@ namespace tlp {
     double lineWidth=glGraphInputData->getElementBorderWidth()->getNodeValue(n);
     if(lineWidth < 1e-6)
       lineWidth=1e-6;
-    box->setOutlineSize(lineWidth);
+    box->setOutlineSize(static_cast<float>(lineWidth));
 
     box->draw(lod,NULL);
   }

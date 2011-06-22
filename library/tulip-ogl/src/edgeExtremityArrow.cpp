@@ -60,7 +60,7 @@ void GlArrow2DEdgeExtremity::draw(edge e, node, const Color& glyphColor, const C
 		width=1e-6;
 
   triangle->setFillColor(glyphColor);
-  triangle->setOutlineSize(width);
+  triangle->setOutlineSize(static_cast<float>(width));
   triangle->setOutlineColor(borderColor);
   triangle->draw(lod,NULL);
 }

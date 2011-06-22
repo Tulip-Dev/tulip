@@ -82,7 +82,7 @@ void Billboard::draw(node n,float lod) {
   double borderWidth=glGraphInputData->getElementBorderWidth()->getNodeValue(n);
   if (borderWidth < 1e-6)
     borderWidth=1e-6;
-  rect->setOutlineSize(borderWidth);
+  rect->setOutlineSize(static_cast<float>(borderWidth));
   
   // setup orientation
   float mdlM[16];

@@ -97,10 +97,10 @@ unsigned char tlp::Color::getG()const{return array[1];}
 unsigned char tlp::Color::getB()const{return array[2];}
 unsigned char tlp::Color::getA()const{return array[3];}
 
-float tlp::Color::getRGL()const{return (float)array[0]/255.0;}
-float tlp::Color::getGGL()const{return (float)array[1]/255.0;}
-float tlp::Color::getBGL()const{return (float)array[2]/255.0;}
-float tlp::Color::getAGL()const{return (float)array[3]/255.0;}
+float tlp::Color::getRGL()const{return (float)array[0]/255.0f;}
+float tlp::Color::getGGL()const{return (float)array[1]/255.0f;}
+float tlp::Color::getBGL()const{return (float)array[2]/255.0f;}
+float tlp::Color::getAGL()const{return (float)array[3]/255.0f;}
 float* tlp::Color::getGL()const{
   float *result=new float[4];
   result[0]=getRGL();

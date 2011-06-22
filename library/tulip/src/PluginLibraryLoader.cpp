@@ -146,7 +146,7 @@ bool PluginLibraryLoader::loadNextPluginLibrary(PluginLoader *loader) {
     }
     else if (loader)
       loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
-    pluginFound = FindNextFile (_infos->hFind, &_infos->FindData);
+    pluginFound = FindNextFile (_infos->hFind, &_infos->FindData) != 0;
   }
   if (!pluginFound) {
     //printf("*** no more plugins ***\n");

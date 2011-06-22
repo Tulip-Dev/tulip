@@ -50,9 +50,9 @@ bool Random::run() {
   while (itN->hasNext()) {
     node itn=itN->next();
     if(is3D)
-      layoutResult->setNodeValue(itn,Coord(rand()%1024,rand()%1024,rand()%1024));
+      layoutResult->setNodeValue(itn,Coord(static_cast<float>(rand()%1024),static_cast<float>(rand()%1024),static_cast<float>(rand()%1024)));
     else
-      layoutResult->setNodeValue(itn,Coord(rand()%1024,rand()%1024,0));
+      layoutResult->setNodeValue(itn,Coord(static_cast<float>(rand()%1024),static_cast<float>(rand()%1024,0)));
   } delete itN;
   return true;
 }

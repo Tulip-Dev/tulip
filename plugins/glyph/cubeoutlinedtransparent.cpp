@@ -40,7 +40,7 @@ class CubeOutLinedTransparent: public Glyph,
 		public EdgeExtremityGlyphFrom3DGlyph {
 public:
 	CubeOutLinedTransparent(GlyphContext *gc = NULL);
-	CubeOutLinedTransparent(EdgeExtremityGlyphContext *gc = NULL);
+	CubeOutLinedTransparent(EdgeExtremityGlyphContext *gc);
 	virtual ~CubeOutLinedTransparent();
 	virtual void draw(node n, float lod);
 	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
@@ -79,7 +79,7 @@ void CubeOutLinedTransparent::draw(node n, float lod) {
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   draw(glGraphInputData->getElementBorderColor()->getNodeValue(n),
-       glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+       static_cast<float>(glGraphInputData->getElementBorderWidth()->getNodeValue(n)),
        textureName,
        lod);
 }
@@ -92,7 +92,7 @@ void CubeOutLinedTransparent::draw(edge e, node, const Color &borderColor, const
     textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
   draw(borderColor,
-       edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+       static_cast<float>(edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e)),
        textureName,
        lod);
 	glDisable(GL_LIGHTING);
@@ -110,7 +110,7 @@ void CubeOutLinedTransparent::draw(const Color &borderColor,float borderWidth,co
   double lineWidth=borderWidth;
   if(lineWidth < 1e-6)
     lineWidth=1e-6;
-  box->setOutlineSize(lineWidth);
+  box->setOutlineSize(static_cast<float>(lineWidth));
 
   box->draw(lod,NULL);
 }

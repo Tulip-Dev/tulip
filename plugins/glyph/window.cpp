@@ -74,24 +74,24 @@ Window::Window(GlyphContext* context):
   Glyph(context), 
   _rectColor(205, 205, 205, 255), 
   _textColor(205, 205, 205, 255), 
-  _titleBarSize(0.1), 
-  _borderWidth(0.02), 
+  _titleBarSize(0.1f), 
+  _borderWidth(0.02f), 
   _border(texture)
 {
   
-  const float textheight = 0.05;
+  const float textheight = 0.05f;
   
   Coord v[10];
-  v[0].set(-0.5, 0.5, 0);
-  v[1].set( 0.5, 0.5, 0);
-  v[2].set( 0.5,-0.5, 0);
-  v[3].set(-0.5,-0.5, 0);
-  v[4].set(-0.5 + _borderWidth, 0.5 - _borderWidth, 0);
-  v[5].set( 0.5 - _borderWidth, 0.5 - _borderWidth, 0);
-  v[6].set( 0.5 - _borderWidth,-0.5 + _borderWidth, 0);
-  v[7].set(-0.5 + _borderWidth,-0.5 + _borderWidth, 0);
-  v[8].set( 0.5 - _borderWidth, 0.5 - _borderWidth - textheight *2.f, 0);
-  v[9].set(-0.5 + _borderWidth, 0.5 - _borderWidth - textheight *2.f, 0);
+  v[0].set(-0.5f, 0.5f, 0);
+  v[1].set( 0.5f, 0.5f, 0);
+  v[2].set( 0.5f,-0.5f, 0);
+  v[3].set(-0.5f,-0.5f, 0);
+  v[4].set(-0.5f + _borderWidth, 0.5f - _borderWidth, 0);
+  v[5].set( 0.5f - _borderWidth, 0.5f - _borderWidth, 0);
+  v[6].set( 0.5f - _borderWidth,-0.5f + _borderWidth, 0);
+  v[7].set(-0.5f + _borderWidth,-0.5f + _borderWidth, 0);
+  v[8].set( 0.5f - _borderWidth, 0.5f - _borderWidth - textheight *2.f, 0);
+  v[9].set(-0.5f + _borderWidth, 0.5f - _borderWidth - textheight *2.f, 0);
 
   _bb.expand(v[6]);
   _bb.expand(v[9]);

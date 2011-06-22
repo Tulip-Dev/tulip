@@ -70,7 +70,7 @@ void GlBezierCurve::buildPascalTriangleTexture() {
 	memset(pascalTriangleTextureData, 0, CONTROL_POINTS_LIMIT * CONTROL_POINTS_LIMIT * sizeof(float));
 	for (unsigned int i = 0 ; i < CONTROL_POINTS_LIMIT ; ++i) {
 		for (unsigned int j = 0 ; j <= i ; ++j) {
-			pascalTriangleTextureData[i * CONTROL_POINTS_LIMIT + j] = pascalTriangle[i][j];
+			pascalTriangleTextureData[i * CONTROL_POINTS_LIMIT + j] = static_cast<float>(pascalTriangle[i][j]);
 		}
 	}
 	glEnable(GL_TEXTURE_2D);
@@ -113,7 +113,7 @@ Coord GlBezierCurve::computeCurvePointOnCPU(const std::vector<Coord> &controlPoi
 
 void GlBezierCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints) {
 
-	static bool floatTextureOk = glewIsSupported("GL_ARB_texture_float");
+	static bool floatTextureOk = glewIsSupported("GL_ARB_texture_float") == GL_TRUE;
 	if (pascalTriangleTextureId == 0 && floatTextureOk) {
 		buildPascalTriangleTexture();
 	}

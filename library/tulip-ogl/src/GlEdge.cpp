@@ -216,7 +216,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 		glPassThrough(textColor[3]);
 
 		glPassThrough(TLP_FB_BEGIN_EDGE);
-		glPassThrough(id); //id of the node for the feed back mode
+		glPassThrough(static_cast<float>(id)); //id of the node for the feed back mode
 	}
 
 	Color srcCol, tgtCol;
@@ -287,7 +287,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	GlTextureManager::getInst().setAnimationFrame(data->getElementAnimationFrame()->getEdgeValue(e));
 	//draw Edge
 	drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, srcCol, tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
-			data->getElementShape()->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, edgeTexture, lineWidth);
+			data->getElementShape()->getEdgeValue(e), data->parameters->isEdge3D(), lodSize, edgeTexture, static_cast<float>(lineWidth));
 	GlTextureManager::getInst().setAnimationFrame(0);
 
 	if (data->parameters->getFeedbackRender()) {
@@ -328,14 +328,14 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 	switch (shape) {
 	case POLYLINESHAPE:
 		if (lod > 1000 || lod < -1000){
-			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,colorInterpolate,borderColor,textureName, outlineWidth);
+			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,colorInterpolate,borderColor,textureName, outlineWidth);
 		}else{
-			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,true,borderColor,textureName, outlineWidth);
+			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,true,borderColor,textureName, outlineWidth);
 		}
 		break;
 	case L3D_BIT + POLYLINESHAPE: {
 		glDisable(GL_LIGHTING);
-		simpleQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
+		simpleQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
 		glEnable(GL_LIGHTING);
 		break;
 	}
@@ -368,7 +368,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 			curve->setBillboardCurve(true);
 			curve->setLookDir(lookDir);
 		}
-		float startSize = size[0]*0.5, endSize = size[1]*0.5;
+		float startSize = size[0]*0.5f, endSize = size[1]*0.5f;
 		if (lod > -5 && lod < 5) {
 			startSize = 1;
 			endSize = 1;
@@ -383,9 +383,9 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 	}
 	default:
 		if (lod > 1000 || lod < -1000){
-			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,colorInterpolate,borderColor);
+			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,colorInterpolate,borderColor);
 		}else{
-			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5, size[1] * .5, srcDir, tgtDir,true,borderColor);
+			tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,true,borderColor);
 		}
 		break;
 	}
@@ -469,11 +469,11 @@ void GlEdge::drawLabel(OcclusionTest* test, GlGraphInputData* data, float lod, C
 	float angle;
 	if (bends.empty()) {
 		position = (srcCoord + tgtCoord) / 2.f;
-		angle=atan((tgtCoord[1]-srcCoord[1])/(tgtCoord[0]-srcCoord[0]))*(180./M_PI);
+		angle=atan((tgtCoord[1]-srcCoord[1])/(tgtCoord[0]-srcCoord[0]))*static_cast<float>(180./M_PI);
 	} else {
 		if (bends.size() % 2 == 0){
 			position = (bends[bends.size() / 2 - 1] + bends[bends.size() / 2]) / 2.f;
-			angle=atan((bends[bends.size() / 2][1]-bends[bends.size() / 2 - 1][1])/(bends[bends.size() / 2][0]-bends[bends.size() / 2 - 1][0]))*(180./M_PI);
+			angle=atan((bends[bends.size() / 2][1]-bends[bends.size() / 2 - 1][1])/(bends[bends.size() / 2][0]-bends[bends.size() / 2 - 1][0]))*static_cast<float>(180./M_PI);
 		}else{
 			position = bends[bends.size() / 2];
 			Coord firstVector;
@@ -487,14 +487,14 @@ void GlEdge::drawLabel(OcclusionTest* test, GlGraphInputData* data, float lod, C
 				secondVector=bends[bends.size() / 2]-tgtCoord;
 			}
 
-			float firstAngle=atan(firstVector[1]/firstVector[0])*(180./M_PI);
-			float secondAngle=atan(secondVector[1]/secondVector[0])*(180./M_PI);
+			float firstAngle=atan(firstVector[1]/firstVector[0])*static_cast<float>(180./M_PI);
+			float secondAngle=atan(secondVector[1]/secondVector[0])*static_cast<float>(180./M_PI);
 
 			Coord textDirection=firstVector+secondVector;
 			if(textDirection[1]<0)
 				label->setTranslationAfterRotation(Coord(0,-label->getTranslationAfterRotation()[1],0));
 
-			angle=(firstAngle+secondAngle)/2.;
+			angle=(firstAngle+secondAngle)/2.f;
 			if(firstVector[0] *secondVector[0]>=0)
 				angle+=90;
 
@@ -506,7 +506,7 @@ void GlEdge::drawLabel(OcclusionTest* test, GlGraphInputData* data, float lod, C
 
 	BoundingBox bb=getBoundingBox(data);
 
-        label->setSize(Size(0.001,0.001,0));
+    label->setSize(Size(0.001f,0.001f,0.0f));
 	label->rotate(0,0,angle);
 	label->setAlignment(ON_TOP);
 	label->setScaleToSize(false);
@@ -618,14 +618,14 @@ void GlEdge::getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, cons
 
 	if (data->parameters->isEdgeSizeInterpolate()) {
 		if(srcSize[0]<srcSize[1])
-			edgeSize[0]=srcSize[0]/16.;
+			edgeSize[0]=srcSize[0]/16.f;
 		else
-			edgeSize[0]=srcSize[1]/16.;
+			edgeSize[0]=srcSize[1]/16.f;
 
 		if(tgtSize[0]<tgtSize[1])
-			edgeSize[1]=tgtSize[0]/16.;
+			edgeSize[1]=tgtSize[0]/16.f;
 		else
-			edgeSize[1]=tgtSize[1]/16.;
+			edgeSize[1]=tgtSize[1]/16.f;
 	} else {
 		const Size &size = data->getElementSize()->getEdgeValue(e);
 		edgeSize[0]=size[0];
@@ -634,8 +634,8 @@ void GlEdge::getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, cons
 			edgeSize[0] = std::min(maxSrcSize, size[0]);
 			edgeSize[1] = std::min(maxTgtSize, size[1]);
 		}
-		edgeSize[0]=edgeSize[0]/2.;
-		edgeSize[1]=edgeSize[1]/2.;
+		edgeSize[0]=edgeSize[0]/2.f;
+		edgeSize[1]=edgeSize[1]/2.f;
 	}
 }
 
@@ -666,8 +666,8 @@ float GlEdge::getEdgeWidthLod(const Coord &edgeCoord,
 			Vector<int, 4> viewport = camera->getViewport();
 			camera->getTransformMatrix(transformMatrix);
 			Coord pScr = projectPoint(Coord(0,0,0), transformMatrix, viewport);
-			pScr[0] = (float)viewport[2];
-			pScr[1] = (float)viewport[3] - 1.0;
+			pScr[0] = static_cast<float>(viewport[2]);
+			pScr[1] = static_cast<float>(viewport[3]) - 1.0f;
 			MatrixGL tmp(transformMatrix);
 			tmp.inverse();
 			Coord worldPosition=unprojectPoint(pScr, tmp, viewport);
@@ -723,7 +723,7 @@ void GlEdge::displayArrow(GlGraphInputData *data,
 	float nrm = lineAnchor.norm();
 	float maxGlyphSize;
 	if (tgtEdgeGlyph != 0 && numberOfBends == 0)
-		maxGlyphSize = nrm * .5;
+		maxGlyphSize = nrm * .5f;
 	else
 		maxGlyphSize = nrm;
 
@@ -738,7 +738,7 @@ void GlEdge::displayArrow(GlGraphInputData *data,
 		size[1] = std::min(maxSize, sizeRatio[1]);
 		size[2] = std::min(maxSize, sizeRatio[2]);
 		if (selected)
-			size += 0.05;
+			size += 0.05f;
 	}
 
 	EdgeExtremityGlyph *extremityGlyph = data->extremityGlyphs.get(srcEdgeGlyph);

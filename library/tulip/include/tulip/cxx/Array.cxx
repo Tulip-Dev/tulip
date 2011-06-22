@@ -45,7 +45,7 @@ std::ostream& tlp::operator<<(std::ostream &os,const tlp::Array<Obj,SIZE> &a) {
 template <typename Obj,unsigned int SIZE>
 std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
   char c;
-  int pos = is.tellg();
+  std::streampos pos = is.tellg();
   is.clear();
   // skip spaces
   while((is >> c) && isspace(c)) {}
@@ -58,7 +58,7 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
     bool ok;
     if (i>0 ) {
       // skip spaces
-      while((ok = (is >> c)) && isspace(c)) {}
+      while((ok = !(is >> c).fail()) && isspace(c)) {}
       if (!ok || c!=',') {
 	is.seekg(pos);
 	is.setstate( std::ios::failbit );
@@ -66,10 +66,10 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
       }
     }
     // skip spaces
-    while((ok = (is >> c)) && isspace(c)) {}
+    while((ok = !(is >> c).fail()) && isspace(c)) {}
     is.unget();
     bool done = true;
-    done = ( is >> outA.array[i] );
+    done = !( is >> outA.array[i] ).fail();
     if( !done ) {
       is.seekg(pos);
       is.setstate( std::ios::failbit );
@@ -77,7 +77,7 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
     }
   }
   // skip spaces
-  while((is >> c) && isspace(c)) {}
+  while(!(is >> c).fail() && isspace(c)) {}
   if (c!=')' ) {
     is.seekg(pos);
     is.setstate( std::ios::failbit );

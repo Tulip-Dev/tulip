@@ -50,7 +50,7 @@ struct GMLTokenParser {
     val.str.erase();
     bool endOfStream=false,strGet=false,slashMode=false,started=false,stop=false;
     char ch;
-    while ( (!stop) && (endOfStream=is.get(ch)))
+    while ( (!stop) && (endOfStream=!(is.get(ch)).fail()) )
       {
 	curChar++;
 	if (strGet)

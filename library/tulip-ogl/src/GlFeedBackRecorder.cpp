@@ -110,7 +110,7 @@ namespace tlp {
       case GL_LINE_RESET_TOKEN:
         vertex = (Feedback3Dcolor *) loc;
         depthSum = vertex[0].z + vertex[1].z;
-        prims[item].depth = depthSum / 2.0;
+        prims[item].depth = depthSum / 2.0f;
         loc += pointSize*2;
         item++;
         break;

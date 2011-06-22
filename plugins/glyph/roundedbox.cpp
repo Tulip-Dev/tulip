@@ -184,8 +184,8 @@ void RoundedBox::initRoundedSquare() {
 }
 
 void RoundedBox::getIncludeBoundingBox(BoundingBox &boundingBox,node ) {
-        boundingBox[0] = Coord(-0.35, -0.35, 0);
-        boundingBox[1] = Coord(0.35, 0.35, 0);
+        boundingBox[0] = Coord(-0.35f, -0.35f, 0);
+        boundingBox[1] = Coord(0.35f, 0.35f, 0);
 }
 
 GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
@@ -193,16 +193,16 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
 	float radiusL = radius / size[0];
 	float radiusH = radius / size[1];
 
-	float wi = 1.0 - 2*radiusL;
-	float hi = 1.0 - 2*radiusH;
+	float wi = 1.0f - 2*radiusL;
+	float hi = 1.0f - 2*radiusH;
 
-	Coord P1 = Coord(-0.5, 0.5) + Coord(radiusL, -radiusH);
+	Coord P1 = Coord(-0.5f, 0.5f) + Coord(radiusL, -radiusH);
 	Coord P2 = P1 + Coord(wi, 0);
 	Coord P3 = P2 + Coord(0, -hi);
 	Coord P4 = P1 + Coord(0, -hi);
 
 	int steps = 20;
-	float delta = (M_PI/2) / steps;
+	float delta = static_cast<float>((M_PI/2) / steps);
 
 	vector<Coord> boxPoints;
 	boxPoints.resize(steps * 4);
@@ -286,7 +286,7 @@ void RoundedBox::draw(node n, float lod) {
 
 
 	const Size &size = glGraphInputData->getElementSize()->getNodeValue(n);
-	float outlineWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
+	float outlineWidth = static_cast<float>(glGraphInputData->getElementBorderWidth()->getNodeValue(n));
 	const string &texture = glGraphInputData->getElementTexture()->getNodeValue(n);
 
 	if (roundedBoxShader == NULL || !roundedBoxShader->isLinked() || !roundedBoxOutlineShader->isLinked() || (GlShaderProgram::getCurrentActiveShader() && GlShaderProgram::getCurrentActiveShader()->getName() == "fisheye")) {

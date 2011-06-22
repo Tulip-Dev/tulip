@@ -44,7 +44,7 @@ using namespace tlp;
 class Square: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
 	Square(GlyphContext *gc = NULL);
-	Square(EdgeExtremityGlyphContext*gc = NULL);
+	Square(EdgeExtremityGlyphContext*gc);
 	virtual ~Square();
 	virtual void draw(node n, float lod);
 	virtual Coord getAnchor(const Coord &vector) const;
@@ -117,7 +117,7 @@ void Square::drawGlyph(const Color& glyphColor, const string& texture,
 	rect->setTextureName(texturePath+texture);
 	if (borderWidth < 1e-6)
 		borderWidth=1e-6;
-	rect->setOutlineSize(borderWidth);
+	rect->setOutlineSize(static_cast<float>(borderWidth));
 	rect->draw(lod,NULL);
 }
 /*@}*/

@@ -44,7 +44,7 @@ using namespace tlp;
 class Cone: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
 	Cone(GlyphContext *gc = NULL);
-	Cone(EdgeExtremityGlyphContext *gc = NULL);
+	Cone(EdgeExtremityGlyphContext *gc);
 	virtual ~Cone();
 	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
 	virtual void draw(node n, float lod);
@@ -107,13 +107,13 @@ Coord Cone::getAnchor(const Coord &vector) const {
 	y1 = 0;
 	vx1 = sqrt(x * x + y * y);
 	vy1 = z;
-	py = -1.0 * (vy1 * (vx0 / vy0 * y0 + x0 - x1) - vx1 * y1) / (vx1 - vy1
+	py = -1.0f * (vy1 * (vx0 / vy0 * y0 + x0 - x1) - vx1 * y1) / (vx1 - vy1
 			/ vy0 * vx0);
 	px = vx0 * (py - y0) / vy0 + x0;
 
-	if (fabsf(py) > 0.5) {
+	if (fabsf(py) > 0.5f) {
 		n = anchor.norm();
-		py = n * 0.5 / fabsf(z);
+		py = n * 0.5f / fabsf(z);
 		anchor.setX(x * py / n);
 		anchor.setY(y * py / n);
 		anchor.setZ(z * py / n);

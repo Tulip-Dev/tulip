@@ -44,7 +44,7 @@ using namespace tlp;
 class Circle: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
 	Circle(GlyphContext *gc = NULL);
-	Circle(EdgeExtremityGlyphContext *gc = NULL);
+	Circle(EdgeExtremityGlyphContext *gc);
 	virtual ~Circle();
 	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
 	virtual void draw(node n, float lod);
@@ -77,8 +77,8 @@ Circle::~Circle() {
 }
 //=====================================================
 void Circle::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-        boundingBox[0] = Coord(-0.35, -0.35, 0);
-        boundingBox[1] = Coord(0.35, 0.35, 0);
+        boundingBox[0] = Coord(-0.35f, -0.35f, 0);
+        boundingBox[1] = Coord(0.35f, 0.35f, 0);
 }
 //=====================================================
 void Circle::draw(edge e, node, const Color& glyphColor,const Color &borderColor, float lod) {
@@ -89,7 +89,7 @@ void Circle::draw(edge e, node, const Color& glyphColor,const Color &borderColor
 
   draw(glyphColor,
        borderColor,
-       edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+       static_cast<float>(edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e)),
        textureName,
        lod);
 }
@@ -104,7 +104,7 @@ void Circle::draw(node n, float lod) {
 
   draw(Glyph::glGraphInputData->getElementColor()->getNodeValue(n),
        Glyph::glGraphInputData->getElementBorderColor()->getNodeValue(n),
-       Glyph::glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+       static_cast<float>(Glyph::glGraphInputData->getElementBorderWidth()->getNodeValue(n)),
        textureName,
        lod);
 }
@@ -115,7 +115,7 @@ void Circle::draw(const Color &fillColor,
                   const std::string &textureName,
                   float lod){
   if(borderWidth<1e-6)
-    borderWidth=1e-6;
+    borderWidth=1e-6f;
 
   circle->setFillColor(fillColor);
   circle->setOutlineColor(borderColor);

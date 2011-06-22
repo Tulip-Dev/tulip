@@ -275,10 +275,10 @@ void CALLBACK endCallback(GLvoid *polygonData) {
 void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData) {
 	const GLdouble *pointer = static_cast<GLdouble *>(vertex);
 	GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
-	Coord v(pointer[0], pointer[1], pointer[2]);
+	Coord v(static_cast<float>(pointer[0]), static_cast<float>(pointer[1]), static_cast<float>(pointer[2]));
 	Vec2f texCoord;
-	texCoord[0] = pointer[0] / complexPolygon->getTextureZoom();
-	texCoord[1] = pointer[1] / complexPolygon->getTextureZoom();
+	texCoord[0] = static_cast<float>(pointer[0]) / complexPolygon->getTextureZoom();
+	texCoord[1] = static_cast<float>(pointer[1]) / complexPolygon->getTextureZoom();
 	complexPolygon->addVertex(v, texCoord);
 }
 
@@ -393,7 +393,7 @@ void GlComplexPolygon::setOutlineSize(double size) {
 }
 //=====================================================
 void GlComplexPolygon::addPoint(const Coord& point) {
-	pointsIdx[currentVector].push_back(points[currentVector].size());
+	pointsIdx[currentVector].push_back(static_cast<float>(points[currentVector].size()));
 	points[currentVector].push_back(point);
 	boundingBox.expand(point);
 }
@@ -539,9 +539,9 @@ void GlComplexPolygon::draw(float,Camera *) {
 	}
 
 	if (outlined) {
-		float lineWidth=outlineSize;
-		if(lineWidth < 1e-6)
-			lineWidth=1e-6;
+		float lineWidth=static_cast<float>(outlineSize);
+		if(lineWidth < 1e-6f)
+			lineWidth=1e-6f;
 		glLineWidth(lineWidth);
 		setMaterial(outlineColor);
 

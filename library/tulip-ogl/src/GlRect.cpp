@@ -50,10 +50,10 @@ namespace tlp {
     invertYTexture=false;
 
     vector<Coord> coords;
-    coords.push_back(center+Coord(size[0]/2.,size[1]/2.,0));
-    coords.push_back(center+Coord(size[0]/2.,-size[1]/2.,0));
-    coords.push_back(center+Coord(-size[0]/2.,-size[1]/2.,0));
-    coords.push_back(center+Coord(-size[0]/2.,size[1]/2.0));
+    coords.push_back(center+Coord(size[0]/2.f,size[1]/2.f,0));
+    coords.push_back(center+Coord(size[0]/2.f,-size[1]/2.f,0));
+    coords.push_back(center+Coord(-size[0]/2.f,-size[1]/2.f,0));
+    coords.push_back(center+Coord(-size[0]/2.f,size[1]/2.f));
     setPoints(coords);
 
     setFillColor(fillColor);
@@ -74,10 +74,10 @@ namespace tlp {
   }
   //=====================================================
   void GlRect::setCenterAndSize(const Coord &center, const Size &size) {
-    points[0]=center+Coord(size[0]/2.,size[1]/2.,0);
-    points[1]=center+Coord(size[0]/2.,-size[1]/2.,0);
-    points[2]=center+Coord(-size[0]/2.,-size[1]/2.,0);
-    points[3]=center+Coord(-size[0]/2.,size[1]/2.,0);
+    points[0]=center+Coord(size[0]/2.f,size[1]/2.f,0);
+    points[1]=center+Coord(size[0]/2.f,-size[1]/2.f,0);
+    points[2]=center+Coord(-size[0]/2.f,-size[1]/2.f,0);
+    points[3]=center+Coord(-size[0]/2.f,size[1]/2.f,0);
   }
   //=====================================================
   Coord GlRect::getTopLeftPos() {

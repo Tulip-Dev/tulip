@@ -49,7 +49,7 @@ std::ostream& tlp::operator<<(std::ostream &os,const tlp::Color &a) {
 std::istream & tlp::operator>> (std::istream &is, tlp::Color & outA) {
   const unsigned int SIZE =4;
   char c;
-  int pos = is.tellg();
+  std::streampos pos = is.tellg();
   is.clear();
   if( !(is >> c) || c!='(' ) {
     is.seekg(pos);
@@ -64,7 +64,7 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Color & outA) {
     }
     bool done = true;
     unsigned int vi;
-    done = ( is >> vi );
+	done = !( is >> vi ).fail();
     outA.array[i] = vi;
     if( !done ) {
       is.seekg(pos);
@@ -72,7 +72,7 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Color & outA) {
       return is;
     }
   }
-  if( !(is >> c) || c!=')' ) {
+  if( (is >> c).fail() || c!=')' ) {
     is.seekg(pos);
     is.setstate( std::ios::failbit );
     return is;  
@@ -152,7 +152,7 @@ void RGBtoHSV(unsigned char r, unsigned char g, unsigned char b, int &h, int &s,
 void HSVtoRGB(int h, int s, int v, unsigned char &r, unsigned char &g, unsigned char &b) {
   int i;
   int p, q, t;
-  float f, sf = s/255.0;
+  float f, sf = s/255.0f;
 
   if (v<0) v = 0;
   else if (v>255) v = 255;

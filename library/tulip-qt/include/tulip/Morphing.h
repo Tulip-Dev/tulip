@@ -37,7 +37,8 @@ namespace tlp {
   class SizeProperty;
   class ColorProperty;
   //=====================================
-  struct TLP_QT_SCOPE GraphState {
+  class TLP_QT_SCOPE GraphState {
+  public:
     Graph *g;
     LayoutProperty *layout;
     SizeProperty *size;

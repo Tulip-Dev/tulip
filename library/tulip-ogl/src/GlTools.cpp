@@ -98,16 +98,16 @@ void setColor(GLfloat *c){
 //====================================================
 void setMaterial(const Color &c) {
 	float colorMat[4];
-	colorMat[0] = ((float)c[0])/255.0;
-	colorMat[1] = ((float)c[1])/255.0;
-	colorMat[2] = ((float)c[2])/255.0;
-	colorMat[3] = ((float)c[3])/255.0;
+	colorMat[0] = ((float)c[0])/255.0f;
+	colorMat[1] = ((float)c[1])/255.0f;
+	colorMat[2] = ((float)c[2])/255.0f;
+	colorMat[3] = ((float)c[3])/255.0f;
 	setColor(c);
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, colorMat);
 }
 //====================================================
 bool cameraIs3D() {
-	return glIsEnabled(GL_LIGHT0);
+	return glIsEnabled(GL_LIGHT0) == GL_TRUE;
 }
 //====================================================
 Coord projectPoint(const Coord &obj,
@@ -171,8 +171,8 @@ double segmentVisible(const Coord &u, const Coord &v,
 		const Vector<int, 4> &viewport) {
 	Coord p1 = projectPoint(u, transform, viewport);
 	Coord p2 = projectPoint(v, transform, viewport);
-	GLfloat minx = viewport[0];
-	GLfloat miny = viewport[1];
+	GLfloat minx = static_cast<GLfloat>(viewport[0]);
+	GLfloat miny = static_cast<GLfloat>(viewport[1]);
 	GLfloat maxx = minx + viewport[2];
 	GLfloat maxy = miny + viewport[3];
 	double size = sqr(p1[0]-p2[0]) + sqr(p1[1]-p2[1]);
@@ -227,15 +227,15 @@ GLfloat projectSize(const BoundingBox &bb,
 	Vector<float, 4> proj2 =  vect2 * tmp;
 
 
-	float x1 = (proj1[0]/proj1[3] * 0.5 + 0.5 ) * viewport[2];
-	float x2 = (proj2[0]/proj2[3] * 0.5 + 0.5 ) * viewport[2];
+	float x1 = (proj1[0]/proj1[3] * 0.5f + 0.5f ) * viewport[2];
+	float x2 = (proj2[0]/proj2[3] * 0.5f + 0.5f ) * viewport[2];
 
 	float width = fabs(x1 - x2);
-	float size = sqr(2. * width);
+	float size = sqr(2.f * width);
 
 	// Test of visibily
 	x2 += viewport[0];
-	float y2 = (proj2[1]/proj2[3] * 0.5 + 0.5) * viewport[3] + viewport[1];
+	float y2 = (proj2[1]/proj2[3] * 0.5f + 0.5f) * viewport[3] + viewport[1];
 	Vector<float, 2> upleft;
 	upleft[0] = x2 - width;
 	upleft[1] = y2 - width;
@@ -247,12 +247,12 @@ GLfloat projectSize(const BoundingBox &bb,
 	r1[1] = downright;
 
 	Vector<float, 2> upleftV;
-	upleftV[0] = viewport[0];
-	upleftV[1] = viewport[1];
+	upleftV[0] = static_cast<float>(viewport[0]);
+	upleftV[1] = static_cast<float>(viewport[1]);
 
 	Vector<float, 2> downrightV;
-	downrightV[0] = viewport[0] + viewport[2];
-	downrightV[1] = viewport[1] + viewport[3];
+	downrightV[0] = static_cast<float>(viewport[0] + viewport[2]);
+	downrightV[1] = static_cast<float>(viewport[1] + viewport[3]);
 
 	Rectangle<float> r2;
 	r2[0] = upleftV;

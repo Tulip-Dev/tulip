@@ -36,7 +36,7 @@ namespace tlp {
   position(position),
   size(size),
   numberOfSides(numberOfSides),
-  startAngle(M_PI/2.)
+  startAngle(static_cast<float>(M_PI/2.))
   {
     computePolygon();
 
@@ -76,7 +76,7 @@ namespace tlp {
 
     BoundingBox box;
     vector<Coord> points;
-    float delta = (2.0f * M_PI) / (float)numberOfSides;
+    float delta = static_cast<float>((2.0 * M_PI) / numberOfSides);
     for (unsigned int i=0; i < numberOfSides; ++i) {
       float deltaX = cos(i * delta + startAngle);
       float deltaY = sin(i * delta + startAngle);
@@ -84,11 +84,11 @@ namespace tlp {
       box.expand(points.back());
     }
     for(vector<Coord>::iterator it=points.begin();it!=points.end();++it){
-      (*it)[0]=position[0]+(((*it)[0]-((box[1][0]+box[0][0])/2.))/((box[1][0]-box[0][0])/2.))*size[0];
-      (*it)[1]=position[1]+(((*it)[1]-((box[1][1]+box[0][1])/2.))/((box[1][1]-box[0][1])/2.))*size[1];
+      (*it)[0]=position[0]+(((*it)[0]-((box[1][0]+box[0][0])/2.f))/((box[1][0]-box[0][0])/2.f))*size[0];
+      (*it)[1]=position[1]+(((*it)[1]-((box[1][1]+box[0][1])/2.f))/((box[1][1]-box[0][1])/2.f))*size[1];
     }
-    boundingBox.expand(position+size/2.);
-    boundingBox.expand(position-size/2.);
+    boundingBox.expand(position+size/2.f);
+    boundingBox.expand(position-size/2.f);
 
     setPoints(points);
 

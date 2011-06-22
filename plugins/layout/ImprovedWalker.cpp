@@ -113,7 +113,7 @@ bool ImprovedWalker::run() {
   // check if the specified layer spacing is greater
   // than the max of the minimum layer spacing of the tree
   for (unsigned int i = 0; i < maxYbyLevel.size() - 1;  ++i) {
-    float minLayerSpacing = (maxYbyLevel[i] + maxYbyLevel[i + 1]) / 2.;
+    float minLayerSpacing = (maxYbyLevel[i] + maxYbyLevel[i + 1]) / 2.f;
     if (minLayerSpacing + nodeSpacing > spacing)
       spacing = minLayerSpacing + nodeSpacing;
   }
@@ -194,8 +194,8 @@ void ImprovedWalker::firstWalk(tlp::node v) {
     node vleftSibling = leftSibling(v);
     if (vleftSibling  != BADNODE)
       prelimX[v]     += prelimX[vleftSibling] + nodeSpacing
-	+ oriSize->getNodeValue(v).getW()/2.
-	+ oriSize->getNodeValue(vleftSibling).getW()/2.;
+	+ oriSize->getNodeValue(v).getW()/2.f
+	+ oriSize->getNodeValue(vleftSibling).getW()/2.f;
   }
   else {
     node defaultAncestor    = leftmostChild(v);    

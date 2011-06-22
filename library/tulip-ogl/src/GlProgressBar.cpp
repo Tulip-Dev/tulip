@@ -34,7 +34,7 @@ static const string PERCENT_ID = "percent label";
 namespace tlp {
 
 GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int width, const unsigned int height, const Color &color) :
-	width(width), height(height), color(color), percentLabelAndFrameColor(color) {
+	width(static_cast<float>(width)), height(static_cast<float>(height)), color(color), percentLabelAndFrameColor(color) {
 
 
 	if (percentLabelAndFrameColor.getH() >= 180) {
@@ -43,10 +43,10 @@ GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int wid
 		percentLabelAndFrameColor.setH(percentLabelAndFrameColor.getH() + 180);
 	}
 
-	Coord globalFrameVertice1 = Coord(centerPosition.getX() - (width / 2.), centerPosition.getY() + (height/2.));
-	Coord globalFrameVertice2 = Coord(centerPosition.getX() + (width / 2.), centerPosition.getY() + (height/2.));
-	Coord globalFrameVertice3 = Coord(centerPosition.getX() + (width / 2.), centerPosition.getY() - (height/2.));
-	Coord globalFrameVertice4 = Coord(centerPosition.getX() - (width / 2.), centerPosition.getY() - (height/2.));
+	Coord globalFrameVertice1 = Coord(centerPosition.getX() - (width / 2.f), centerPosition.getY() + (height/2.f));
+	Coord globalFrameVertice2 = Coord(centerPosition.getX() + (width / 2.f), centerPosition.getY() + (height/2.f));
+	Coord globalFrameVertice3 = Coord(centerPosition.getX() + (width / 2.f), centerPosition.getY() - (height/2.f));
+	Coord globalFrameVertice4 = Coord(centerPosition.getX() - (width / 2.f), centerPosition.getY() - (height/2.f));
 
 	vector<Coord> globalFrameCoords;
 	globalFrameCoords.push_back(globalFrameVertice1);
@@ -62,13 +62,13 @@ GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int wid
 
 	addGlEntity(new GlPolygon(globalFrameCoords, globalFrameColors, globalFrameColors, false, true), "global frame");
 
-	progressBarMaxWidth = (4./5.) * width;
-	progressBarHeight = (4./5.) * (height / 2.);
-	commentWidth = (4./5.) * width;
-	commentHeight = (4./5.) * (height / 2.);
+	progressBarMaxWidth = (4.f/5.f) * width;
+	progressBarHeight = (4.f/5.f) * (height / 2.f);
+	commentWidth = (4.f/5.f) * width;
+	commentHeight = (4.f/5.f) * (height / 2.f);
 
-	progressBarTLCorner = Coord(centerPosition.getX() - ((2./5.) * width), centerPosition.getY() - ((1./10.) * (height / 2.)), 0);
-	commentLabelCenter = Coord(centerPosition.getX(), centerPosition.getY() + (height / 4.), 0);
+	progressBarTLCorner = Coord(centerPosition.getX() - ((2.f/5.f) * width), centerPosition.getY() - ((1.f/10.f) * (height / 2.f)), 0);
+	commentLabelCenter = Coord(centerPosition.getX(), centerPosition.getY() + (height / 4.f), 0);
 
 	Coord progressBarFrameVertice1 = progressBarTLCorner + Coord(-2,2,0);
 	Coord progressBarFrameVertice2 = progressBarFrameVertice1 + Coord(progressBarMaxWidth + 2, 0, 0);
@@ -116,7 +116,7 @@ void GlProgressBar::progress_handler(int step, int max_step) {
 		delete previousPercent;
 	}
 
-	float progressBarWidth =  (currentPercent * progressBarMaxWidth) / 100.;
+	float progressBarWidth =  (currentPercent * progressBarMaxWidth) / 100.f;
 
   if (progressBarWidth == 0)
     progressBarWidth = 1; // Avoid assert in GlAbstractPolygon::draw
@@ -132,8 +132,8 @@ void GlProgressBar::progress_handler(int step, int max_step) {
         GlLabel *commentLabel = new GlLabel(commentLabelCenter, Size(commentWidth, commentHeight, 0), color);
 	commentLabel->setText(comment);
 
-	GlLabel *percentLabel = new GlLabel(Coord(progressBarTLCorner.getX() + (progressBarMaxWidth / 2.), progressBarTLCorner.getY() - (progressBarHeight / 2.), 0),
-                                                                            Size(((1./10.) * progressBarMaxWidth), ((8./10.) * progressBarHeight), 0), percentLabelAndFrameColor);
+	GlLabel *percentLabel = new GlLabel(Coord(progressBarTLCorner.getX() + (progressBarMaxWidth / 2.f), progressBarTLCorner.getY() - (progressBarHeight / 2.f), 0),
+                                                                            Size(((1.f/10.f) * progressBarMaxWidth), ((8.f/10.f) * progressBarHeight), 0), percentLabelAndFrameColor);
 	stringstream str;
 	str << currentPercent << " %";
 	percentLabel->setText(str.str());

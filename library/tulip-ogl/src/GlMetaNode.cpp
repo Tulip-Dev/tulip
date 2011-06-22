@@ -119,7 +119,7 @@ namespace tlp {
     const Coord &nodeCoord = data->getElementLayout()->getNodeValue(n);
     const Size &nodeSize = data->getElementSize()->getNodeValue(n);
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
-    glRotatef(data->getElementRotation()->getNodeValue(n), 0., 0., 1.);
+    glRotatef(static_cast<float>(data->getElementRotation()->getNodeValue(n)), 0.f, 0.f, 1.f);
 
     BoundingBox bboxes = tlp::computeBoundingBox(metaData.getGraph(), metaData.getElementLayout(), metaData.getElementSize(), metaData.getElementRotation());
 
@@ -154,8 +154,8 @@ namespace tlp {
     if (height<0.0001) height=1;
     if (dept<0.0001) dept=1;
 
-    Coord scale(1/width,1/height,1/dept);
-    glScalef(1.0/width, 1.0/height, 1.0/dept);
+    Coord scale(1/static_cast<float>(width),1/static_cast<float>(height),1/static_cast<float>(dept));
+    glScalef(scale[0], scale[1], scale[2]);
     glTranslatef(translate[0],translate[1],translate[2]);
 
     vector<Coord> objectScale, objectTranslate, objectCoord;

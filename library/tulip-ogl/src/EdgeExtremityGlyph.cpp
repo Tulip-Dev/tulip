@@ -59,17 +59,17 @@ void EdgeExtremityGlyphFrom3DGlyph::getTransformationMatrix(const Coord &src, co
 
 	//vAB * vV = xAB * xV + yAB*yV + zAB * zV = |AB| * |V| * cos(alpha) = 0;
 	if (fabs(vAB[2]) < 1E-6) {
-		vV[0] = 0;
-		vV[1] = 0;
-		vV[2] = 1.0;
+		vV[0] = 0.0f;
+		vV[1] = 0.0f;
+		vV[2] = 1.0f;
 	} else if (fabs(vAB[1]) < 1E-6) {
-		vV[0] = 0;
-		vV[1] = 1.0;
-		vV[2] = 0;
+		vV[0] = 0.0f;
+		vV[1] = 1.0f;
+		vV[2] = 0.0f;
 	} else {
-		vV[0] = 0;
-		vV[1] = 1. / vAB[1];
-		vV[2] = -1. / vAB[2];
+		vV[0] = 0.0f;
+		vV[1] = 1.0f / vAB[1];
+		vV[2] = -1.0f / vAB[2];
 		vV /= vV.norm();
 	}
 
@@ -82,7 +82,7 @@ void EdgeExtremityGlyphFrom3DGlyph::getTransformationMatrix(const Coord &src, co
 		transformationMatrix[0][i] = vW[i];
 		transformationMatrix[1][i] = vV[i];
 		transformationMatrix[2][i] = vAB[i];
-		transformationMatrix[3][i] = dest[i] + (-glyphSize[0] * .5 * vAB[i]);
+		transformationMatrix[3][i] = dest[i] + (-glyphSize[0] * 0.5f * vAB[i]);
 	}
 
 	transformationMatrix[0][3] = 0;
@@ -188,17 +188,17 @@ void EdgeExtremityGlyphFrom2DGlyph::getTransformationMatrix(const Coord &src, co
 
 	//vAB * vV = xAB * xV + yAB*yV + zAB * zV = |AB| * |V| * cos(alpha) = 0;
 	if (fabs(vAB[2]) < 1E-6) {
-		vV[0] = 0;
-		vV[1] = 0;
-		vV[2] = 1.0;
+		vV[0] = 0.0f;
+		vV[1] = 0.0f;
+		vV[2] = 1.0f;
 	} else if (fabs(vAB[1]) < 1E-6) {
-		vV[0] = 0;
-		vV[1] = 1.0;
-		vV[2] = 0;
+		vV[0] = 0.0f;
+		vV[1] = 1.0f;
+		vV[2] = 0.0f;
 	} else {
-		vV[0] = 0;
-		vV[1] = 1. / vAB[1];
-		vV[2] = -1. / vAB[2];
+		vV[0] = 0.0f;
+		vV[1] = 1.0f / vAB[1];
+		vV[2] = -1.0f / vAB[2];
 		vV /= vV.norm();
 	}
 
@@ -211,7 +211,7 @@ void EdgeExtremityGlyphFrom2DGlyph::getTransformationMatrix(const Coord &src, co
 		transformationMatrix[0][i] = vAB[i];
 		transformationMatrix[1][i] = vW[i];
 		transformationMatrix[2][i] = vV[i];
-		transformationMatrix[3][i] = dest[i] + (-glyphSize[0] * .5 * vAB[i]);
+		transformationMatrix[3][i] = dest[i] + (-glyphSize[0] * 0.5f * vAB[i]);
 	}
 
 	transformationMatrix[0][3] = 0;

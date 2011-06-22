@@ -41,8 +41,8 @@ BoundingBox computeNewBoundingBox(const BoundingBox &box,const Coord &centerScen
 	Coord center(box[0] + size);
 	//size = Coord(size.norm(),size.norm(),size.norm());
 	size.fill(size.norm());
-	center[0]=centerScene[0]+(cos(aY)*(center[0]-centerScene[0]));
-	center[1]=centerScene[1]+(cos(aX)*(center[1]-centerScene[1]));
+	center[0]=centerScene[0]+(static_cast<float>(cos(aY))*(center[0]-centerScene[0]));
+	center[1]=centerScene[1]+(static_cast<float>(cos(aX))*(center[1]-centerScene[1]));
 
 	return BoundingBox(center-size,center+size);
 }
@@ -305,14 +305,14 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 	BoundingBox cameraBoundingBox;
 
 	// Project camera bondinx box to know visible part of the quadtree
-	pSrc[0] = transformedViewport[0];
-	pSrc[1] = (globalViewport[1] + globalViewport[3]) - (transformedViewport[1] + transformedViewport[3]);
+	pSrc[0] = static_cast<float>(transformedViewport[0]);
+	pSrc[1] = static_cast<float>((globalViewport[1] + globalViewport[3]) - (transformedViewport[1] + transformedViewport[3]));
 	cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
-	pSrc[1] = transformedViewport[1]+transformedViewport[3];
+	pSrc[1] = static_cast<float>(transformedViewport[1]+transformedViewport[3]);
 	cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
-	pSrc[0] = transformedViewport[0]+transformedViewport[2];
+	pSrc[0] = static_cast<float>(transformedViewport[0]+transformedViewport[2]);
 	cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
-	pSrc[1] = transformedViewport[1];
+	pSrc[1] = static_cast<float>(transformedViewport[1]);
 	cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
 
 	int ratio;
@@ -342,7 +342,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 					if(aX==0 && aY==0){
 						if((renderingEntitiesFlag & RenderingWithoutRemove)==0){
 							if(nodesQuadTree[quadTreesVectorPosition])
-								nodesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resNodes,ratio);
+								nodesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resNodes,static_cast<float>(ratio));
 						}else{
 							if(nodesQuadTree[quadTreesVectorPosition])
 								nodesQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resNodes);
@@ -368,7 +368,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 					if(aX==0 && aY==0){
 						if((renderingEntitiesFlag & RenderingWithoutRemove)==0){
 							if(edgesQuadTree[quadTreesVectorPosition])
-								edgesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resEdges,ratio);
+								edgesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox,resEdges,static_cast<float>(ratio));
 						}else{
 							if(edgesQuadTree[quadTreesVectorPosition])
 								edgesQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resEdges);
@@ -394,7 +394,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 			if((renderingEntitiesFlag & RenderingSimpleEntities)!=0 && entitiesQuadTree[quadTreesVectorPosition]!=NULL){
 				if(aX==0 && aY==0){
 					if((renderingEntitiesFlag & RenderingWithoutRemove)==0)
-						entitiesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox, resEntities, ratio);
+						entitiesQuadTree[quadTreesVectorPosition]->getElementsWithRatio(cameraBoundingBox, resEntities, static_cast<float>(ratio));
 					else
 						entitiesQuadTree[quadTreesVectorPosition]->getElements(cameraBoundingBox,resEntities);
 				}else{

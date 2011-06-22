@@ -61,8 +61,8 @@ HalfCylinder::~HalfCylinder() {
 }
 //=====================================================
 void HalfCylinder::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-        boundingBox[0] = Coord(-0.35, -0.35, 0);
-        boundingBox[1] = Coord(0.35, 0.35, 1);
+        boundingBox[0] = Coord(-0.35f, -0.35f, 0);
+        boundingBox[1] = Coord(0.35f, 0.35f, 1);
 }
 //=================================================================================================
 void HalfCylinder::draw(node n,float) {

@@ -306,8 +306,8 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
   //cerr << "TreeReingoldAndTilfordExtended::calcLayout" << endl;
   Coord tmpCoord;
   if(!compactLayout)
-    tmpCoord.set(x+(*p)[n], -y, 0);
-  else tmpCoord.set(x+(*p)[n], - (y+maxLevelSize[level]/2.), 0);
+    tmpCoord.set(static_cast<float>(x+(*p)[n]), -static_cast<float>(y), 0);
+  else tmpCoord.set(static_cast<float>(x+(*p)[n]), - static_cast<float>(y+maxLevelSize[level])/2.f, 0);
   layoutResult->setNodeValue(n,tmpCoord);
   if (useLength) {
     edge ite;
@@ -376,7 +376,7 @@ bool TreeReingoldAndTilfordExtended::run() {
       const Size& boundCircle = sizes->getNodeValue (n);
       double diam = 2*sqrt (boundCircle.getW()*boundCircle.getW()/4.0 +
 			    boundCircle.getH()*boundCircle.getH()/4.0);
-      circleSizes->setNodeValue (n, Size (diam, diam, 1.0));
+      circleSizes->setNodeValue (n, Size (static_cast<float>(diam), static_cast<float>(diam), 1.0f));
     }//end forEach
     sizes = circleSizes;
   }//end if
@@ -416,7 +416,7 @@ bool TreeReingoldAndTilfordExtended::run() {
   // than the max of the minimum layer spacing of the tree
   if(!compactLayout){
     for (unsigned int i = 0; i < maxSizeLevel.size() - 1;  ++i) {
-      float minLayerSpacing = (maxSizeLevel[i] + maxSizeLevel[i + 1]) / 2;
+      float minLayerSpacing = static_cast<float>((maxSizeLevel[i] + maxSizeLevel[i + 1]) / 2);
       if (minLayerSpacing + nodeSpacing > spacing)
 	spacing = minLayerSpacing + spacing;
     }

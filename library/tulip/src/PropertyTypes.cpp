@@ -102,7 +102,7 @@ bool GraphType::fromString(RealType & v, const string & s ) {
   istringstream iss;
   iss.str( s );
   unsigned long lv;
-  bool ok = iss >> lv;
+  bool ok = !(iss >> lv).fail();
   if (ok)
     v = (RealType) lv;
   else
@@ -140,7 +140,7 @@ bool EdgeSetType::read(istream& is, RealType & v) {
   char c  = ' ';
   bool ok;
   // go to first '('
-  while((ok = (is >> c)) && isspace(c)) {}
+  while((ok = !(is >> c).fail()) && isspace(c)) {}
   // for compatibility with older version (3.0)
   if (!ok)
     return true;
@@ -148,12 +148,12 @@ bool EdgeSetType::read(istream& is, RealType & v) {
     return false;
   edge e;
   for( ;; ) {
-    if( !(is >> c) )
+    if( (is >> c).fail())
       return false;
     if( c == ')' )
       return true;
     is.unget();
-    if( !(is >> e.id) )
+    if( (is >> e.id).fail())
       return false;
     v.insert( e );
   }
@@ -186,12 +186,12 @@ string DoubleType::toString( const RealType & v ) {
 }
 
 bool DoubleType::read(istream& iss, RealType & v) {
-  return (iss >> v);
+	return !(iss >> v).fail();
 }
 
 bool DoubleType::fromString( RealType & v, const string & s ) {
   istringstream iss(s);
-  return (iss >> v);
+  return !(iss >> v).fail();
 }
 
 //
@@ -245,12 +245,12 @@ string IntegerType::toString( const RealType & v ) {
 }
 
 bool IntegerType::read(istream& iss, RealType & v) {
-  return (iss >> v);
+	return !(iss >> v).fail();
 }
 
 bool IntegerType::fromString( RealType & v, const string & s ) {
   istringstream iss(s);
-  return (iss >> v);
+  return !(iss >> v).fail();
 }
 
 //
@@ -502,17 +502,17 @@ bool PointType::read(istream& is, RealType & v) {
   char c = ' ';
   bool ok;
   // skip spaces
-  while((ok = (is >> c)) && isspace(c)) {}
+  while((ok = !(is >> c).fail()) && isspace(c)) {}
   bool dbqFound = false;
   if (c == '"')
     // open double quotes found
     dbqFound = true;
   else
     is.unget();
-  ok = is >> v;
+  ok = !(is >> v).fail();
   if (ok && dbqFound) {
     // look for the close double quote
-    ok = is >> c;
+    ok = !(is >> c).fail();
     if (c != '"')
       return false;
   }
@@ -521,14 +521,14 @@ bool PointType::read(istream& is, RealType & v) {
 
 bool PointType::fromString( RealType & v, const string & s ) {
   istringstream iss(s);
-  return iss >> v;
+  return !(iss >> v).fail();
 }
 
 //
 // SizeType
 
 Size SizeType::undefinedValue() {
-  return Size(-DBL_MAX,-DBL_MAX,-DBL_MAX);
+  return Size(-FLT_MAX,-FLT_MAX,-FLT_MAX);
 }
 
 Size SizeType::defaultValue() {
@@ -550,17 +550,17 @@ bool SizeType::read(istream& is, RealType & v) {
   char c = ' ';
   bool ok;
   // skip spaces
-  while((ok = (is >> c)) && isspace(c)) {}
+  while((ok = !(is >> c).fail()) && isspace(c)) {}
   bool dbqFound = false;
   if (c == '"')
     // open double quotes found
     dbqFound = true;
   else
     is.unget();
-  ok = is >> v;
+  ok = !(is >> v).fail();
   if (ok && dbqFound) {
     // look for the close double quote
-    ok = is >> c;
+    ok = !(is >> c).fail();
     if (c != '"')
       return false;
   }
@@ -569,7 +569,7 @@ bool SizeType::read(istream& is, RealType & v) {
 
 bool SizeType::fromString( RealType & v, const string & s ) {
   istringstream iss(s);
-  return iss >> v;
+  return !(iss >> v).fail();
 }
 
 //
@@ -631,13 +631,13 @@ string StringType::toString( const RealType & v ) {
 bool StringType::read(istream& is, RealType & v) {
   char c= ' ';
   // go to first '"'
-  while((is >> c) && isspace(c)) {}
+  while(!(is >> c).fail() && isspace(c)) {}
   if (c != '"')
     return false;
   bool bslashFound = false;
   string str;
   for(;;) {
-    if ( !(is >> c) )
+    if ( (is >> c).fail() )
       return false;
     if (bslashFound) {
       str.push_back(c);
@@ -692,7 +692,7 @@ bool StringVectorType::read(istream& is, RealType & v) {
   v.clear();
   char c = ' ';
   // go to first '('
-  while((is >> c) && isspace(c)) {}
+  while(!(is >> c).fail() && isspace(c)) {}
   if (c != '(')
     return false;
 
@@ -701,7 +701,7 @@ bool StringVectorType::read(istream& is, RealType & v) {
   bool firstVal = true;
   bool sepFound = false;
   for( ;; ) {
-    if( !(is >> c) )
+    if( (is >> c).fail() )
       return endFound;
     if (isspace(c))
       continue;
@@ -764,17 +764,17 @@ bool ColorType::read(istream& is, RealType & v) {
   char c = ' ';
   bool ok;
   // skip spaces
-  while((ok = (is >> c)) && isspace(c)) {}
+  while(!(ok = (is >> c).fail()) && isspace(c)) {}
   bool dbqFound = false;
   if (c == '"')
     // open double quotes found
     dbqFound = true;
   else
     is.unget();
-  ok = is >> v;
+  ok = !(is >> v).fail();
   if (ok && dbqFound) {
     // look for the close double quote
-    ok = is >> c;
+    ok = !(is >> c).fail();
     if (c != '"')
       return false;
   }
@@ -783,7 +783,7 @@ bool ColorType::read(istream& is, RealType & v) {
 
 bool ColorType::fromString( RealType & v, const string & s ) {
   istringstream iss(s);
-  return iss >> v;
+  return !(iss >> v).fail();
 }
 
 //
@@ -877,7 +877,7 @@ struct UintTypeSerializer :public TypedDataSerializer<unsigned int> {
   }
 
   bool read(istream& is, unsigned int& v) {
-    return is >> v;
+    return !(is >> v).fail();
   }
 };
 
@@ -893,7 +893,7 @@ struct FloatTypeSerializer :public TypedDataSerializer<float> {
   }
 
   bool read(istream& is, float& v) {
-    return is >> v;
+    return !(is >> v).fail();
   }
 };
 

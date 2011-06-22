@@ -34,8 +34,8 @@ namespace {
 void rotate(Coord &vec, double alpha) {
 	Coord backupVec(vec);
 	double zRot = -2.0 * M_PI * alpha / 360.0;
-	float cosz = cos(zRot);
-	float sinz = sin(zRot);
+	float cosz = static_cast<float>(cos(zRot));
+	float sinz = static_cast<float>(sin(zRot));
 	vec[0] = backupVec[0] * cosz - backupVec[1] * sinz;
 	vec[1] = backupVec[0] * sinz + backupVec[1] * cosz;
 }
@@ -63,10 +63,10 @@ void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutPr
 				Vec3f point(layout->getNodeValue(itn));
 				double rot(rotation->getNodeValue(itn));
 				vector<Coord> points(4);
-				points[0].set( nSize[0]/2.,  nSize[1]/2.,  nSize[2]/2.);
-				points[1].set(-nSize[0]/2., -nSize[1]/2., -nSize[2]/2.);
-				points[2].set(+nSize[0]/2., -nSize[1]/2., -nSize[2]/2.);
-				points[3].set(-nSize[0]/2., +nSize[1]/2., +nSize[2]/2.);
+				points[0].set( nSize[0]/2.f,  nSize[1]/2.f,  nSize[2]/2.f);
+				points[1].set(-nSize[0]/2.f, -nSize[1]/2.f, -nSize[2]/2.f);
+				points[2].set(+nSize[0]/2.f, -nSize[1]/2.f, -nSize[2]/2.f);
+				points[3].set(-nSize[0]/2.f, +nSize[1]/2.f, +nSize[2]/2.f);
 				for (unsigned int i = 0; i < 4; ++i) {
 					rotate(points[i], rot);
 					points[i] += point;
@@ -144,7 +144,7 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
 			if (curRad > maxRad) {
 				maxRad = curRad;
 				radDir /= radDir.norm();
-				radDir *= curRad;
+				radDir *= static_cast<float>(curRad);
 				result.second = radDir + centre;
 			}
 		}//end if

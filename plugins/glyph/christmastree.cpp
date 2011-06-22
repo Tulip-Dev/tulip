@@ -44,7 +44,7 @@ using namespace tlp;
 class ChristmasTree: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
 	ChristmasTree(GlyphContext *gc = NULL);
-	ChristmasTree(EdgeExtremityGlyphContext *gc = NULL);
+	ChristmasTree(EdgeExtremityGlyphContext *gc);
 	virtual void draw(node n, float lod);
 	virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod);
 

@@ -27,7 +27,7 @@
 using namespace std;
 
 static bool checkVboSupport() {
-	static bool vboOk = glewIsSupported("GL_ARB_vertex_buffer_object");
+	static bool vboOk = glewIsSupported("GL_ARB_vertex_buffer_object") == GL_TRUE;
 	return vboOk;
 }
 
@@ -317,7 +317,7 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 	glDisable(GL_LIGHTING);
 	glDisable(GL_CULL_FACE);
 
-	glLineWidth(1.4);
+	glLineWidth(1.4f);
 
 	if (texture != "") {
 		unsigned int i = nbCurvePoints / 2;

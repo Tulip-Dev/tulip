@@ -43,15 +43,15 @@ class EdgeIterator :public Iterator<edge> {
 class NodeIteratorObserver :public NodeIterator, public GraphObserver {
 public:
   // GraphObserver interface
-  void addNode(Graph* g, node n);
-  void delNode(Graph* g, node n);
+  void addNode(Graph* g, const node n);
+  void delNode(Graph* g, const node n);
 };
 
 class EdgeIteratorObserver :public EdgeIterator, public GraphObserver {
 public:
   // GraphObserver interface
-  void addEdge(Graph* g, edge e);
-  void delEdge(Graph* g, edge e);
+  void addEdge(Graph* g, const edge e);
+  void delEdge(Graph* g, const edge e);
 };
 #endif
 //===========================================================

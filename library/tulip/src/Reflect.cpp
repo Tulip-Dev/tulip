@@ -215,29 +215,29 @@ bool DataSet::read(std::istream& is, DataSet& ds) {
 		if (c == '(') {
 			bool ok;
 			// skip spaces before output type name
-			while((ok = (is >> c)) && isspace(c)) {}
+			while((ok = !(is >> c).fail()) && isspace(c)) {}
 			if (!ok)
 				return false;
 			string otn;
 			// read output type name until next space char
 			do {
 				otn.push_back(c);
-			} while((ok = (is >> c)) && !isspace(c));
+			} while((ok = !(is >> c).fail()) && !isspace(c));
 			// skip spaces before prop
-			while((ok = (is >> c)) && isspace(c)) {}
+			while((ok = !(is >> c).fail()) && isspace(c)) {}
 			if (!ok)
 				return false;
 			if (c != '"')
 				return false;
 			string prop;
 			// read prop until next "
-			while((ok = (is >> c)) && (c != '"')) {
+			while((ok = !(is >> c).fail()) && (c != '"')) {
 				prop.push_back(c);
 			}
 			if (!ok)
 				return false;
 			// skip spaces before data type
-			while((ok = (is >> c)) && isspace(c)) {}
+			while((ok = !(is >> c).fail()) && isspace(c)) {}
 			if (!ok)
 				return false;
 			is.unget();
@@ -245,7 +245,7 @@ bool DataSet::read(std::istream& is, DataSet& ds) {
 			if (!ds.readData(is, prop, otn))
 				return false;
 			// skip spaces before )
-			while((ok = (is >> c)) && isspace(c)) {}
+			while((ok = !(is >> c).fail()) && isspace(c)) {}
 			if (!ok)
 				return false;
 			if (c != ')')

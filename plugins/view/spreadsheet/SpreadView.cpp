@@ -576,7 +576,7 @@ void SpreadView::treatEvent(const Event &ev){
     }
 }
 
-void SpreadView::treatEvents(const vector<Event> &events){
+void SpreadView::treatEvents(const vector<Event> &){
     //Need to reload selection property
     if (_reloadSelectionProperty) {
         assert(_selectionProperty == NULL);

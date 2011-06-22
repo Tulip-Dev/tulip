@@ -111,9 +111,9 @@ public:
       node itn=itN->next();
       double sizos=min+(entryMetric->getNodeValue(itn)-shift)*(max-min)/range;
       Size result=entrySize->getNodeValue(itn);
-      if (xaxis) result[0]=sizos;
-      if (yaxis) result[1]=sizos;
-      if (zaxis) result[2]=sizos;
+      if (xaxis) result[0]=static_cast<float>(sizos);
+      if (yaxis) result[1]=static_cast<float>(sizos);
+      if (zaxis) result[2]=static_cast<float>(sizos);
       sizeResult->setNodeValue(itn, result);
     } delete itN;
   }
@@ -124,8 +124,8 @@ public:
       edge ite=itE->next();
       double sizos = min+(entryMetric->getEdgeValue(ite)-shift)*(max-min)/range;
       Size result  = entrySize->getEdgeValue(ite);
-      result[0] = sizos;
-      result[1] = sizos;
+      result[0] = static_cast<float>(sizos);
+      result[1] = static_cast<float>(sizos);
       sizeResult->setEdgeValue(ite, result);
     } delete itE;
   }

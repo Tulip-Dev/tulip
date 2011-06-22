@@ -64,7 +64,12 @@ static bool loadBMP(const string &filename, TextureInfo *texture,string &errorMs
 	int i;
 	unsigned char temp;
 	/* make sure the file is there and open it read-only (binary) */
-	if ((file = fopen(filename.c_str(), "rb")) == NULL)
+#ifndef _MSC_VER
+	file = fopen(filename.c_str(), "rb");
+#else
+	fopen_s(&file, filename.c_str(), "rb");
+#endif
+	if (file == NULL)
 	{
 		errorMsg = "File not found : " + filename;
 		//cerr << __PRETTY_FUNCTION__ << ": File not found :" << filename << endl;
@@ -174,7 +179,13 @@ static bool loadJPEG(const string &filename, TextureInfo *texture,string &errorM
 	cerr << __PRETTY_FUNCTION__ << ": filename=" << filename << endl;
 #endif
 	FILE *file;
-	if ((file = fopen(filename.c_str(), "rb")) == NULL) {
+#ifndef _MSC_VER
+	file = fopen(filename.c_str(), "rb");
+#else
+	fopen_s(&file, filename.c_str(), "rb");
+#endif
+
+	if (file == NULL) {
 		errorMsg = "File not found : " + filename;
 		//cerr << __PRETTY_FUNCTION__ << ": File not found:" << filename << endl;
 		return false;
@@ -220,8 +231,13 @@ static bool loadPNG(const string &filename, TextureInfo *texture,string &errorMs
 #endif
 
 	FILE *file;
+#ifndef _MSC_VER
+	file = fopen(filename.c_str(), "rb");
+#else
+	fopen_s(&file, filename.c_str(), "rb");
+#endif
 
-	if ((file = fopen(filename.c_str(), "rb")) == NULL) {
+	if (file == NULL) {
 		errorMsg = "File not found : " + filename;
 		//cerr << __PRETTY_FUNCTION__ << ": File not found:" << filename << endl;
 		return false;
@@ -253,7 +269,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture,string &errorMs
 	{
 		png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 		fclose(file);
-		return file;
+		return file != NULL;
 	}
 
 	png_init_io(png_ptr, file);
@@ -399,7 +415,7 @@ bool GlTextureManager::loadTexture(const std::string &filename,const TextureInfo
 		}
 
 
-		static bool canUseNpotTextures = glewIsSupported("GL_ARB_texture_non_power_of_two");
+		static bool canUseNpotTextures = glewIsSupported("GL_ARB_texture_non_power_of_two") == GL_TRUE;
 
 		if (!canUseNpotTextures) {
 			bool formatOk=false;

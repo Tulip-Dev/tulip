@@ -16,6 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#if _MSC_VER
+// disable Visual Studio warning about using this in base member initializer list
+// this is not critical in our case as we only store a pointer
+#pragma warning(disable: 4355)
+#endif
+
 #include <iostream>
 #include <sstream>
 #include <map>

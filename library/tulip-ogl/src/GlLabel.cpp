@@ -261,7 +261,7 @@ namespace tlp {
     if(textVector.size()>1)
       multiLineH=(h-(textVector.size()-1)*10)/textVector.size();
 
-    screenH=(multiLineH*(lod/sqrt((lodBoundingBox[1][0]-lodBoundingBox[0][0])*(lodBoundingBox[1][0]-lodBoundingBox[0][0])+(lodBoundingBox[1][1]-lodBoundingBox[0][1])*(lodBoundingBox[1][1]-lodBoundingBox[0][1]))))/2.;
+    screenH=static_cast<float>(multiLineH*(lod/sqrt((lodBoundingBox[1][0]-lodBoundingBox[0][0])*(lodBoundingBox[1][0]-lodBoundingBox[0][0])+(lodBoundingBox[1][1]-lodBoundingBox[0][1])*(lodBoundingBox[1][1]-lodBoundingBox[0][1]))))/2.f;
 
 
     float scaleToApply=1.;
@@ -273,8 +273,8 @@ namespace tlp {
         scaleToApply=div_h;
       }
     }else{
-      scaleToApply=0.05;
-      float tmpScreenH=screenH*0.05;
+      scaleToApply=0.05f;
+      float tmpScreenH=screenH*0.05f;
       if(useMinMaxSize){
         if(tmpScreenH<minSize){
           scaleToApply*=minSize/tmpScreenH;
@@ -296,22 +296,22 @@ namespace tlp {
         wModified-=labelsDensity;
         hModified-=labelsDensity;
       }else{
-        wModified=w-w*(((float)labelsDensity)/(100.));
-        hModified=h-h*(((float)labelsDensity)/(100.));
+        wModified=w-w*(((float)labelsDensity)/(100.f));
+        hModified=h-h*(((float)labelsDensity)/(100.f));
       }
 
       switch(alignment) {
       case ON_CENTER:break;
-      case ON_LEFT:baseCoord[0]-=sizeForOutAlign[0]/2+wModified*scaleToApply/2.;break;
-      case ON_RIGHT:baseCoord[0]+=sizeForOutAlign[0]/2+wModified*scaleToApply/2.;break;
-      case ON_TOP:baseCoord[1]+=sizeForOutAlign[1]/2+hModified*scaleToApply/2.;break;
-      case ON_BOTTOM:baseCoord[1]-=sizeForOutAlign[1]/2+hModified*scaleToApply/2.;break;
+      case ON_LEFT:baseCoord[0]-=sizeForOutAlign[0]/2+wModified*scaleToApply/2.f;break;
+      case ON_RIGHT:baseCoord[0]+=sizeForOutAlign[0]/2+wModified*scaleToApply/2.f;break;
+      case ON_TOP:baseCoord[1]+=sizeForOutAlign[1]/2+hModified*scaleToApply/2.f;break;
+      case ON_BOTTOM:baseCoord[1]-=sizeForOutAlign[1]/2+hModified*scaleToApply/2.f;break;
       default:break;
       }
 
-      Size occlusionSize(wModified*scaleToApply/2.,hModified*scaleToApply/2.,0);
+      Size occlusionSize(wModified*scaleToApply/2.f,hModified*scaleToApply/2.f,0);
 
-      float angle=M_PI*zRot/180;
+      float angle=static_cast<float>(M_PI*zRot/180);
 
       if(zRot!=0){
         BoundingBox tmpBB;
@@ -355,12 +355,12 @@ namespace tlp {
       labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]-occlusionSize[0],baseCoord[1]-occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
       labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]-occlusionSize[0],baseCoord[1]+occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
 
-      if(occlusionTester->testRectangle(RectangleInt2D(labelBoundingBox[0][0],labelBoundingBox[0][1],labelBoundingBox[1][0],labelBoundingBox[1][1]))){
+      if(occlusionTester->testRectangle(RectangleInt2D(static_cast<int>(labelBoundingBox[0][0]),static_cast<int>(labelBoundingBox[0][1]),static_cast<int>(labelBoundingBox[1][0]),static_cast<int>(labelBoundingBox[1][1])))){
         glPopAttrib();
         return;
       }
 
-      occlusionTester->addRectangle(RectangleInt2D(labelBoundingBox[0][0],labelBoundingBox[0][1],labelBoundingBox[1][0],labelBoundingBox[1][1]));
+      occlusionTester->addRectangle(RectangleInt2D(static_cast<int>(labelBoundingBox[0][0]),static_cast<int>(labelBoundingBox[0][1]),static_cast<int>(labelBoundingBox[1][0]),static_cast<int>(labelBoundingBox[1][1])));
     }
 
     glPushMatrix();
@@ -405,10 +405,10 @@ namespace tlp {
       float hAlign=0;
 
       switch (alignment) {
-      case ON_TOP:hAlign=h/2.;break;
-      case ON_BOTTOM:hAlign=-(h/2.);break;
-      case ON_LEFT:wAlign = -(w/2.);break;
-      case ON_RIGHT:wAlign = w/2.;break;
+      case ON_TOP:hAlign=h/2.f;break;
+      case ON_BOTTOM:hAlign=-(h/2.f);break;
+      case ON_LEFT:wAlign = -(w/2.f);break;
+      case ON_RIGHT:wAlign = w/2.f;break;
       default:break;
       }
 
@@ -417,8 +417,8 @@ namespace tlp {
       setMaterial(Color(color[0],color[1],color[2],128));
       OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
       glBegin(GL_LINES);
-      glVertex3f(-w/2.+wAlign,hAlign,0);
-      glVertex3f(w/2.+wAlign,hAlign,0);
+      glVertex3f(-w/2.f+wAlign,hAlign,0);
+      glVertex3f(w/2.f+wAlign,hAlign,0);
       glEnd();
       OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
       glLineWidth(1);

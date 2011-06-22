@@ -14,18 +14,12 @@ PROJECT(tulip)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-IF(${CMAKE_GENERATOR} MATCHES "Visual Studio" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles" OR ${CMAKE_GENERATOR} MATCHES "NMake Makefiles JOM" )
-	SET(MSVC 1)
-ELSE()
-	SET(MSVC 0)
-endif()
-
-IF(NOT ${MSVC}) #visual studio does not recognize these options
+IF(NOT MSVC) #visual studio does not recognize these options
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused")
 ENDIF()
 
 IF(WIN32)
-	IF(NOT ${MSVC}) #visual studio does not recognize these options 
+	IF(NOT MSVC) #visual studio does not recognize these options 
 		
 		# Dynamic ling against libstdc++ on win32/MinGW 
 		# The second test is for the case where ccache is used (CMAKE_CXX_COMPILER_ARG1 contains the path to the g++ compiler)
@@ -73,7 +67,7 @@ SET(TulipMajorVersion 3)
 SET(TulipMinorVersion 6)
 SET(TulipReleaseVersion 0)
 SET(TulipVersionSeparator .)
-IF(${MSVC}) #specific options for Visual Studio
+IF(MSVC) #specific options for Visual Studio
 	IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9") #visual studio 2008 needs boost
 		find_package(BOOST REQUIRED)
 		include_directories(${Boost_INCLUDE_DIRS})
@@ -152,7 +146,7 @@ IF(OPENMP_FOUND)
    SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} ${OpenMP_CXX_FLAGS}")
    SET(OPENMP_CXX_FLAGS "${OpenMP_CXX_FLAGS}")
    IF(WIN32)
-	  IF(${MSVC})
+	  IF(MSVC)
 		SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /openmp")
 		SET(OPENMP_CXX_FLAGS "/openmp")
 	  ELSE()
@@ -192,6 +186,7 @@ ENDIF(OPENMP_FOUND)
 
 FIND_PACKAGE(PythonLibs)
 FIND_PACKAGE(PythonInterp)
+
 IF(PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
   SET(SIP_LIB sip)
   TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-4.12.1/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.12.1/sipgen sip CMAKE_FLAGS -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES})

@@ -106,7 +106,7 @@ public:
 
     for (unsigned int i=0; i<nbNodes;++i) {
       sg[i]=graph->addNode();
-      newLayout->setNodeValue(sg[i],Coord(rand()%WIDTH, rand()%HEIGHT, 0));
+      newLayout->setNodeValue(sg[i],Coord(static_cast<float>(rand()%WIDTH), static_cast<float>(rand()%HEIGHT), 0));
     }
     unsigned int count = 0;
     unsigned int iterations = nbNodes*(nbNodes-1)/2;

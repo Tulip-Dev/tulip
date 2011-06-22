@@ -258,24 +258,24 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 				// convert in radian
 				alpha = M_PI * alpha / 180.0;
 				// get half height of bounding box
-				float hh = box.getH() / 2.0;
+				float hh = box.getH() / 2.0f;
 				// get half width of bounding box
-				float hw = box.getW() / 2.0;
+				float hw = box.getW() / 2.0f;
 				// add 10%
 				float hl;
-				if (hh/10. < hw/10.)
-					hl = hh/10.;
+				if (hh/10.f < hw/10.f)
+					hl = hh/10.f;
 				else
-					hl = hw/10.;
+					hl = hw/10.f;
 
 				hh += hl;
 				hw += hl;
 				if (bendsl > hl)
 					bendsl = hl;
 				// add points of rotated bounding box
-				float cosA = cos(alpha);
-				float sinA = sin(alpha);
-				Coord vect(0,0,-0.01);
+				float cosA = static_cast<float>(cos(alpha));
+				float sinA = static_cast<float>(sin(alpha));
+				Coord vect(0.0f, 0.0f, -0.01f);
 				vect.setX(-hw * cosA + hh * sinA);
 				vect.setY(-hw * sinA - hh * cosA);
 				gConvexHull.push_back(point + vect);
@@ -297,7 +297,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
 				unsigned int nbBends = bends.size();
 				for (unsigned int i = 0; i < nbBends; i++) {
 					Coord point(bends[i]);
-					double x = point.getX(), y = point.getY();
+					float x = point.getX(), y = point.getY();
 					point.setX(x - bendsl);
 					point.setY(y - bendsl);
 					gConvexHull.push_back(point);

@@ -69,8 +69,8 @@ namespace tlp {
       assert(box.isValid());
       return box;
     }else{
-      float cosAngle=cos((float)data->getElementRotation()->getNodeValue(n)/180.*M_PI);
-      float sinAngle=sin((float)data->getElementRotation()->getNodeValue(n)/180.*M_PI);
+      float cosAngle=static_cast<float>(cos(data->getElementRotation()->getNodeValue(n)/180.*M_PI));
+      float sinAngle=static_cast<float>(sin(data->getElementRotation()->getNodeValue(n)/180.*M_PI));
       Coord tmp1(data->getElementSize()->getNodeValue(n)/2.f);
       Coord tmp2(tmp1[0] ,-tmp1[1], tmp1[2]);
       Coord tmp3(-tmp1[0],-tmp1[1],-tmp1[2]);
@@ -130,13 +130,13 @@ namespace tlp {
       glPassThrough(textColor[0]);glPassThrough(textColor[1]);glPassThrough(textColor[2]);glPassThrough(textColor[3]);
 
       glPassThrough(TLP_FB_BEGIN_NODE);
-      glPassThrough(id); //id of the node for the feed back mode
+      glPassThrough(static_cast<float>(id)); //id of the node for the feed back mode
     }
 
     bool selected = data->getElementSelected()->getNodeValue(n);
     if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
       if (lod < 1) lod = 1;
-      int size= sqrt(lod);
+      int size= static_cast<int>(sqrt(lod));
 
       if(data->getGlVertexArrayManager()->renderingIsBegin()){
         if(size<2)
@@ -151,9 +151,9 @@ namespace tlp {
         OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
         glDisable(GL_LIGHTING);
         setColor(color);
-        glPointSize(size);
+        glPointSize(static_cast<float>(size));
         glBegin(GL_POINTS);
-        glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]/2.);
+        glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]/2.f);
         glEnd();
         glEnable(GL_LIGHTING);
         OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
@@ -164,7 +164,7 @@ namespace tlp {
     //draw a glyph or make recursive call for meta nodes
     glPushMatrix();
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
-    glRotatef(data->getElementRotation()->getNodeValue(n), 0., 0., 1.);
+    glRotatef(static_cast<float>(data->getElementRotation()->getNodeValue(n)), 0.f, 0.f, 1.f);
 
     // If node size in z is equal to 0 we have to scale with FLT_EPSILON to preserve normal
     // (because if we do a scale of (x,y,0) and if we have a normal like (0,0,1) the new normal after scale will be (0,0,0) and we will have light problem)
@@ -262,7 +262,7 @@ namespace tlp {
     label->setTranslationAfterRotation(centerBB*nodeSize);
     label->setSize(Size(nodeSize[0]*sizeBB[0],nodeSize[1]*sizeBB[1],0));
     label->setSizeForOutAlign(Size(nodeSize[0],nodeSize[1],0));
-    label->rotate(0,0,data->getElementRotation()->getNodeValue(n));
+    label->rotate(0,0,static_cast<float>(data->getElementRotation()->getNodeValue(n)));
     label->setAlignment(labelPos);
     label->setScaleToSize(data->parameters->isLabelScaled());
     label->setUseLODOptimisation(true,this->getBoundingBox(data));
@@ -273,7 +273,7 @@ namespace tlp {
     label->setOcclusionTester(test);
 
     if(includeBB[1][2]!=0)
-      label->setPosition(Coord(nodeCoord[0],nodeCoord[1],nodeCoord[2]+nodeSize[2]/2.));
+      label->setPosition(Coord(nodeCoord[0],nodeCoord[1],nodeCoord[2]+nodeSize[2]/2.f));
     else
       label->setPosition(Coord(nodeCoord[0],nodeCoord[1],nodeCoord[2]));
 

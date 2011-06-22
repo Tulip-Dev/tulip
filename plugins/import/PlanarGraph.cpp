@@ -80,7 +80,7 @@ public:
     graph->addEdge(f.a, f.b);
     graph->addEdge(f.b, f.c);
     graph->addEdge(f.c, f.a);
-    float val = nbNodes;	
+    float val = static_cast<float>(nbNodes);	
     newLayout->setNodeValue(f.a, Coord(-val, -val, 0));
     newLayout->setNodeValue(f.b, Coord(0, val, 0));
     newLayout->setNodeValue(f.c, Coord(val, -val, 0));

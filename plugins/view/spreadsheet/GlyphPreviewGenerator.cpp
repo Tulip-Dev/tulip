@@ -52,8 +52,8 @@ EdgeExtremityGlyphPreviewGenerator::EdgeExtremityGlyphPreviewGenerator():_graph(
     //Init graph.
     GlGraphRenderingParameters parameters;
     GlGraphInputData inputData(_graph,&parameters);
-    inputData.elementSize->setAllNodeValue(Size(0.01,0.2,0.1));
-    inputData.elementSize->setAllEdgeValue(Size(0.125,0.125,0.125));
+    inputData.elementSize->setAllNodeValue(Size(0.01f,0.2f,0.1f));
+    inputData.elementSize->setAllEdgeValue(Size(0.125f,0.125f,0.125f));
     inputData.elementColor->setAllNodeValue(Color(255,255,255,0));
     inputData.elementBorderColor->setAllNodeValue(Color(255,255,255,0));
     inputData.elementColor->setAllEdgeValue(Color(192,192,192));
@@ -62,9 +62,9 @@ EdgeExtremityGlyphPreviewGenerator::EdgeExtremityGlyphPreviewGenerator():_graph(
     node n2= _graph->addNode();
     _edge = _graph->addEdge(n1,n2);
     inputData.elementLayout->setNodeValue(n1,Coord(0,0,0));
-    inputData.elementLayout->setNodeValue(n2,Coord(0.3,0,0));
+    inputData.elementLayout->setNodeValue(n2,Coord(0.3f,0,0));
     vector<Coord> bends;
-    bends.push_back(Coord(0.01,0,0));
+    bends.push_back(Coord(0.01f,0,0));
     inputData.elementLayout->setAllEdgeValue(bends);
 
     inputData.elementSrcAnchorShape->setAllEdgeValue(EdgeExtremityGlyphManager::NoEdgeExtremetiesId);

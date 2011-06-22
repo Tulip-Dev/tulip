@@ -18,6 +18,13 @@
  */
 #ifndef GRAPHOBSERVABLE_H
 #define GRAPHOBSERVABLE_H
+
+#if _MSC_VER
+// disable Visual Studio warning about using this in base member initializer list
+// this is not critical in our case as we only store a pointer
+#pragma warning(disable: 4355)
+#endif
+
 #include <algorithm>
 
 #include <tulip/Observable.h>

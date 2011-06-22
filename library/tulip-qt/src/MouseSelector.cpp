@@ -242,7 +242,7 @@ bool MouseSelector::draw(GlMainWidget *glMainWidget){
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA,GL_SRC_COLOR);
-  float col[4]={0,0,0,0.2};
+  float col[4]={0,0,0,0.2f};
   if (mousePressModifier ==
 #if defined(__APPLE__)
             Qt::AltModifier
@@ -250,17 +250,17 @@ bool MouseSelector::draw(GlMainWidget *glMainWidget){
             Qt::ControlModifier
 #endif
         ){
-    col[0]=1.;
-    col[1]=0.8;
-    col[2]=1.;
+    col[0]=1.f;
+    col[1]=0.8f;
+    col[2]=1.f;
   }else if(mousePressModifier == Qt::ShiftModifier){
-    col[0]=1.;
-    col[1]=.7;
-    col[2]=.7;
+    col[0]=1.f;
+    col[1]=.7f;
+    col[2]=.7f;
   }else{
-    col[0]=0.8;
-    col[1]=0.8;
-    col[2]=0.7;
+    col[0]=0.8f;
+    col[1]=0.8f;
+    col[2]=0.7f;
   }
   setColor(col);
   glBegin(GL_QUADS);

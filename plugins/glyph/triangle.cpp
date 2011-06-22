@@ -82,9 +82,9 @@ void Triangle::draw(node n,float lod) {
     double lineWidth=glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth")->getNodeValue(n);
     if (lineWidth < 1e-6)
       lineWidth=1e-6;
-    triangle->setOutlineSize(lineWidth);
+    triangle->setOutlineSize(static_cast<float>(lineWidth));
   }else{
-    triangle->setOutlineSize(2.);
+    triangle->setOutlineSize(2.f);
   }
 
   triangle->draw(lod,NULL);

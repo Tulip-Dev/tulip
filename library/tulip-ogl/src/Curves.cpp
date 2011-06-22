@@ -145,10 +145,10 @@ GLfloat* buildCurvePoints (const vector<Coord> &vertices,
 		float newSize=sizes[i];
 		Coord u=vertices[i-1]-vertices[i];
 		Coord v=vertices[i+1]-vertices[i];
-		float angle=M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm()));
+		float angle=static_cast<float>(M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm())));
 		if(isnan(angle))
 			angle=0;
-		newSize=newSize/cos(angle/2.);
+		newSize=newSize/static_cast<float>(cos(angle/2.));
 
 		if(angle<M_PI/2+M_PI/4) {
 			//normal form
@@ -231,8 +231,8 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
 			xv = Coord(0,0,-1);
 			Coord dir = xu^xv;
 			if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
-			result.push_back(pCurrent - dir*inversion*size);
-			result.push_back(pCurrent + dir*inversion*size);
+			result.push_back(pCurrent - dir*static_cast<float>(inversion)*size);
+			result.push_back(pCurrent + dir*static_cast<float>(inversion)*size);
 		}
 		return inversion;
 	}
@@ -242,19 +242,19 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
 
 	bi_xu_xv /= bi_xu_xv.norm();
 
-	angle=M_PI-acos(u.dotProduct(v)/(u.norm()*v.norm()));
+	angle=static_cast<float>(M_PI-acos(u.dotProduct(v)/(u.norm()*v.norm())));
 	if(isnan(angle) || fabs(angle) < 1e-5)
 		angle=0;
-	newSize=newSize/cos(angle/2.);
+	newSize=newSize/static_cast<float>(cos(angle/2.0));
 
 	if(angle<M_PI/2+M_PI/4) {
 		//normal form
 		if ((xu^xv)[2] > 0) {
-			result.push_back(pCurrent + bi_xu_xv*newSize*inversion);
-			result.push_back(pCurrent - bi_xu_xv*newSize*inversion);
+			result.push_back(pCurrent + bi_xu_xv*newSize*static_cast<float>(inversion));
+			result.push_back(pCurrent - bi_xu_xv*newSize*static_cast<float>(inversion));
 		} else {
-			result.push_back(pCurrent - bi_xu_xv*newSize*inversion);
-			result.push_back(pCurrent + bi_xu_xv*newSize*inversion);
+			result.push_back(pCurrent - bi_xu_xv*newSize*static_cast<float>(inversion));
+			result.push_back(pCurrent + bi_xu_xv*newSize*static_cast<float>(inversion));
 		}
 
 	}else{
@@ -290,12 +290,12 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
 			}
 		}else{
 			if ((xu^xv)[2] > 0) {
-				result.push_back(pCurrent + vectUnit*size*inversion);
-				result.push_back(pCurrent - vectUnit*size*inversion);
+				result.push_back(pCurrent + vectUnit*size*static_cast<float>(inversion));
+				result.push_back(pCurrent - vectUnit*size*static_cast<float>(inversion));
 				inversion*=-1;
 			}else{
-				result.push_back(pCurrent - vectUnit*size*inversion);
-				result.push_back(pCurrent + vectUnit*size*inversion);
+				result.push_back(pCurrent - vectUnit*size*static_cast<float>(inversion));
+				result.push_back(pCurrent + vectUnit*size*static_cast<float>(inversion));
 				inversion*=-1;
 			}
 		}
@@ -565,10 +565,10 @@ void simpleQuad(const vector<Coord> &vertices,
 		float newSize=sizes[i];
 		Coord u=vertices[i-1]-vertices[i];
 		Coord v=vertices[i+1]-vertices[i];
-		float angle=M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm()));
+		float angle=static_cast<float>(M_PI-acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(u.norm()*v.norm())));
 		if(isnan(angle))
 			angle=0;
-		newSize=newSize/cos(angle/2.);
+		newSize=newSize/static_cast<float>(cos(angle/2.));
 
 		result(i,0) = vertices[i] - xu_xv*newSize;
 		result(i,1) = vertices[i] + xu_xv*newSize;
@@ -682,7 +682,7 @@ void bezierQuad(const vector<Coord> &vertices,
 			points[i]=vertices[i];
 		Coord dir = vertices[MAX_BENDS - 1] - vertices[(MAX_BENDS - 2)];
 		dir /= dir.norm();
-		dir *= ((vertices[MAX_BENDS-1] - vertices[MAX_BENDS]).norm()/5.);
+		dir *= ((vertices[MAX_BENDS-1] - vertices[MAX_BENDS]).norm()/5.f);
 		bezierQuad(points, c1, colors[MAX_BENDS - 1], s1, sizes[MAX_BENDS - 1], startN, vertices[MAX_BENDS-1] + dir);
 		vector<Coord> newCurve(vertices.size()-(MAX_BENDS - 2));
 		newCurve[0] = vertices[MAX_BENDS - 1];
@@ -701,7 +701,7 @@ void bezierQuad(const vector<Coord> &vertices,
 		baseColor[i] = c1[i];
 		delta[i] = float(c2[i]) - float(c1[i]);
 	}
-	delta /= steps;
+	delta /= static_cast<float>(steps);
 	unsigned int size;
 	vector<float> sizes;
 	getSizes(vertices, s1, s2,sizes);
@@ -773,7 +773,7 @@ void bezierLine(const vector<Coord> &vertices,
 
 		Coord dir = vertices[MAX_BENDS - 1] - vertices[(MAX_BENDS - 2)];
 		dir /= dir.norm();
-		dir *= ((vertices[MAX_BENDS-1] - vertices[MAX_BENDS]).norm()/5.);
+		dir *= ((vertices[MAX_BENDS-1] - vertices[MAX_BENDS]).norm()/5.f);
 
 		vector<Coord> newCurve(vertices.size()-(MAX_BENDS - 2));
 		newCurve[0] = vertices[MAX_BENDS - 1];
@@ -795,7 +795,7 @@ void bezierLine(const vector<Coord> &vertices,
 		color[i] = c1[i];
 		delta[i] = float(c2[i]) - float(c1[i]);
 	}
-	delta /= steps;
+	delta /= static_cast<float>(steps);
 	glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, vertices.size(), data);
 	glEnable(GL_MAP1_VERTEX_3);
 

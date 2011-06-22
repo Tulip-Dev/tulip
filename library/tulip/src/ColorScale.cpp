@@ -83,7 +83,7 @@ void ColorScale::setColorScale(const std::vector<Color> colors,
 				} else {
 					colorMap[i * shift] = colors[i];
 					if (!gradient) {
-						colorMap[((i + 1) * shift) - 1E-6] = colors[i];
+						colorMap[((i + 1) * shift) - 1E-6f] = colors[i];
 					}
 				}
 			}

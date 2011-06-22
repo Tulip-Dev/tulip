@@ -59,8 +59,8 @@ void Polynome::resolv(float result[3], int &nResult) {
     
   if (Delta > 0)
     {
-      u = cbrt((-q / 2) - sqrt(Delta));
-      v = cbrt((-q / 2) + sqrt(Delta));
+      u = static_cast<float>(cbrt((-q / 2) - sqrt(Delta)));
+      v = static_cast<float>(cbrt((-q / 2) + sqrt(Delta)));
 	
       result[0] = u + v + h; 
 	
@@ -80,12 +80,12 @@ void Polynome::resolv(float result[3], int &nResult) {
       float alpha = 0;
 	
       if (abs((int) k) == 1)
-	alpha = - PI * (k - 1) / 2;
+	alpha = static_cast<float>(- PI * (k - 1) / 2);
       else 
 	alpha = acos(k); 
 	
       for(int i=0; i < 3; i++)
-	result[i] = 2 * r * cos((alpha + 2 * i * PI) / 3.0) + h;
+	result[i] = static_cast<float>(2 * r * cos((alpha + 2 * i * PI) / 3.0) + h);
 	
       nResult = 3;
     } 

@@ -46,7 +46,7 @@ using namespace tlp;
 class Sphere: public Glyph, public EdgeExtremityGlyphFrom3DGlyph {
 public:
 	Sphere(GlyphContext *gc = NULL);
-	Sphere(EdgeExtremityGlyphContext *gc = NULL);
+	Sphere(EdgeExtremityGlyphContext *gc);
 	virtual ~Sphere();
 	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
 	virtual void draw(node n, float lod);
@@ -73,8 +73,8 @@ Sphere::~Sphere() {
 }
 //=====================================================
 void Sphere::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-	boundingBox[0] = Coord(-0.35, -0.35, -0.35);
-	boundingBox[1] = Coord(0.35, 0.35, 0.35);
+	boundingBox[0] = Coord(-0.35f, -0.35f, -0.35f);
+	boundingBox[1] = Coord(0.35f, 0.35f, 0.35f);
 }
 
 static GLuint buffers[] = { 0, 0, 0 };
@@ -122,9 +122,9 @@ void Sphere::generateBuffers(int space) {
 			indices[vertexCount*2-n-2]=n+vertexCount+2;
 			indices[vertexCount*2-n-3]=n+vertexCount+3;
 
-			vertex[n*3] = sin((i) / 180 * PI) * sin((j) / 180 * PI) /2.;
-			vertex[n*3+1] = cos((i) / 180 * PI) * sin((j) / 180 * PI) /2.;
-			vertex[n*3+2] = -cos((j) / 180 * PI) /2.;
+			vertex[n*3] = static_cast<float>(sin((i) / 180 * PI) * sin((j) / 180 * PI) /2.);
+			vertex[n*3+1] = static_cast<float>(cos((i) / 180 * PI) * sin((j) / 180 * PI) /2.);
+			vertex[n*3+2] = static_cast<float>(-cos((j) / 180 * PI) /2.);
 			vertex[(vertexCount+n)*3]=vertex[n*3];
 			vertex[(vertexCount+n)*3+1]=vertex[n*3+1];
 			vertex[(vertexCount+n)*3+2]=-vertex[n*3+2];
@@ -134,9 +134,9 @@ void Sphere::generateBuffers(int space) {
 			texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
 			n++;
 
-			vertex[n*3] = sin((i) / 180 * PI) * sin((j + space) / 180 * PI) /2.;
-			vertex[n*3+1] = cos((i) / 180 * PI) * sin((j + space) / 180 * PI) /2.;
-			vertex[n*3+2] = -cos((j + space) / 180 * PI) /2.;
+			vertex[n*3] = static_cast<float>(sin((i) / 180 * PI) * sin((j + space) / 180 * PI) /2.);
+			vertex[n*3+1] = static_cast<float>(cos((i) / 180 * PI) * sin((j + space) / 180 * PI) /2.);
+			vertex[n*3+2] = static_cast<float>(-cos((j + space) / 180 * PI) /2.);
 			vertex[(vertexCount+n)*3]=vertex[n*3];
 			vertex[(vertexCount+n)*3+1]=vertex[n*3+1];
 			vertex[(vertexCount+n)*3+2]=-vertex[n*3+2];
@@ -146,9 +146,9 @@ void Sphere::generateBuffers(int space) {
 			texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
 			n++;
 
-			vertex[n*3] = sin((i + space) / 180 * PI) * sin((j) / 180 * PI) /2.;
-			vertex[n*3+1] = cos((i + space) / 180 * PI) * sin((j) / 180 * PI) /2.;
-			vertex[n*3+2] = -cos((j) / 180 * PI) /2.;
+			vertex[n*3] = static_cast<float>(sin((i + space) / 180 * PI) * sin((j) / 180 * PI) /2.);
+			vertex[n*3+1] = static_cast<float>(cos((i + space) / 180 * PI) * sin((j) / 180 * PI) /2.);
+			vertex[n*3+2] = static_cast<float>(-cos((j) / 180 * PI) /2.);
 			vertex[(vertexCount+n)*3]=vertex[n*3];
 			vertex[(vertexCount+n)*3+1]=vertex[n*3+1];
 			vertex[(vertexCount+n)*3+2]=-vertex[n*3+2];
@@ -158,9 +158,9 @@ void Sphere::generateBuffers(int space) {
 			texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
 			n++;
 
-			vertex[n*3] = sin((i + space) / 180 * PI) * sin((j + space) / 180 * PI) /2.;
-			vertex[n*3+1] = cos((i + space) / 180 * PI) * sin((j + space) / 180 * PI) /2.;
-			vertex[n*3+2] = -cos((j + space) / 180 * PI) /2.;
+			vertex[n*3] = static_cast<float>(sin((i + space) / 180 * PI) * sin((j + space) / 180 * PI) /2.);
+			vertex[n*3+1] = static_cast<float>(cos((i + space) / 180 * PI) * sin((j + space) / 180 * PI) /2.);
+			vertex[n*3+2] = static_cast<float>(-cos((j + space) / 180 * PI) /2.);
 			vertex[(vertexCount+n)*3]=vertex[n*3];
 			vertex[(vertexCount+n)*3+1]=vertex[n*3+1];
 			vertex[(vertexCount+n)*3+2]=-vertex[n*3+2];

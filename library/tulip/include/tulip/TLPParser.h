@@ -54,7 +54,7 @@ struct TLPTokenParser {
     val.str.erase();
     bool endOfStream=false,strGet=false,slashMode=false,started=false,stop=false,strComment=false;
     char ch;
-    while ( (!stop) && (endOfStream=is.get(ch))) {
+	while ( (!stop) && (endOfStream=!(is.get(ch).fail()))) {
       curPos++;
       curChar++;
       if (strGet)

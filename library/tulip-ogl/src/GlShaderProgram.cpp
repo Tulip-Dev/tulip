@@ -62,7 +62,7 @@ static void readShaderSourceFile(const string &vertexShaderSourceFilePath, char 
 		return;
 	}
 	ifs.seekg (0, ios::end);
-	unsigned int length = ifs.tellg();
+	unsigned int length = static_cast<unsigned int>(ifs.tellg());
 	ifs.seekg (0, ios::beg);
 
 	*shader = new char[length+1];
@@ -263,8 +263,8 @@ bool GlShaderProgram::shaderProgramsSupported() {
     if (!OpenGlConfigManager::getInst().canUseGlew()) {
 		return false;
 	}
-	static bool vertexShaderExtOk = glewIsSupported("GL_ARB_vertex_shader");
-	static bool fragmentShaderExtOk = glewIsSupported("GL_ARB_fragment_shader");
+	static bool vertexShaderExtOk = glewIsSupported("GL_ARB_vertex_shader") == GL_TRUE;
+	static bool fragmentShaderExtOk = glewIsSupported("GL_ARB_fragment_shader") == GL_TRUE;
 	return (vertexShaderExtOk && fragmentShaderExtOk);
 }
 
@@ -273,7 +273,7 @@ bool GlShaderProgram::geometryShaderSupported() {
     if (!OpenGlConfigManager::getInst().canUseGlew()) {
 		return false;
 	}
-	static bool geometryShaderExtOk = glewIsSupported("GL_EXT_geometry_shader4");
+	static bool geometryShaderExtOk = glewIsSupported("GL_EXT_geometry_shader4") == GL_TRUE;
 	return geometryShaderExtOk;
 }
 
@@ -367,7 +367,7 @@ void GlShaderProgram::setUniformVec2Int(const std::string &variableName, const V
 	setUniformVec2IntArray(variableName, 1, (int *) &vec2i);
 }
 
-void GlShaderProgram::setUniformVec2Int(const std::string &variableName, const float i1, const float i2) {
+void GlShaderProgram::setUniformVec2Int(const std::string &variableName, const int i1, const int i2) {
 	GLint loc = getUniformVariableLocation(variableName);
 	glUniform2i(loc, i1, i2);
 }
@@ -467,7 +467,7 @@ void GlShaderProgram::setAttributeVec2Int(const std::string &variableName, const
 	setAttributeVec2Int(variableName, vec2i[0], vec2i[1]);
 }
 
-void GlShaderProgram::setAttributeVec2Int(const std::string &variableName, const float i1, const float i2) {
+void GlShaderProgram::setAttributeVec2Int(const std::string &variableName, const int i1, const int i2) {
 	GLint loc = getAttributeVariableLocation(variableName);
 	glVertexAttrib2s(loc, i1, i2);
 }

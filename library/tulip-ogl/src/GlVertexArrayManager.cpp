@@ -274,7 +274,7 @@ void GlVertexArrayManager::endRendering() {
 
 	// Edges polyline rendering
 	glStencilFunc(GL_LEQUAL, inputData->parameters->getEdgesStencil(), 0xFFFF);
-	glLineWidth(1.4);
+	glLineWidth(1.4f);
 	if (!linesRenderingStartIndexArray.empty()) {
 		glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(linesColorsArray));
 		glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
@@ -521,7 +521,7 @@ void GlVertexArrayManager::activateQuadEdgeDisplay(GlEdge *edge, bool selected) 
 	unsigned int bottomOutlineIndicesIdx = edgeToBottomOulineIndexVector[edge->id];
 	unsigned int topOutlineIndicesIdx = edgeToTopOutlineIndexVector[edge->id];
 
-	float borderWidth = inputData->getElementBorderWidth()->getEdgeValue(tlp::edge(edge->id));
+	float borderWidth = static_cast<float>(inputData->getElementBorderWidth()->getEdgeValue(tlp::edge(edge->id)));
 
 
 	if(numberOfVertices==0)
