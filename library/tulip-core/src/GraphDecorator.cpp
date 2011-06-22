@@ -86,11 +86,11 @@ Iterator<Graph *> * GraphDecorator::getSubGraphs() const{
 }
 
 //=========================================================================
-bool GraphDecorator::isSubGraph(Graph* sg) const {
+bool GraphDecorator::isSubGraph(const Graph* sg) const {
   return graph_component->isSubGraph(sg);
 }
 //=========================================================================
-bool GraphDecorator::isDescendantGraph(Graph* sg) const {
+bool GraphDecorator::isDescendantGraph(const Graph* sg) const {
   return graph_component->isDescendantGraph(sg);
 }
 //=========================================================================
@@ -424,31 +424,31 @@ void GraphDecorator::addLocalProperty(const std::string &name, PropertyInterface
 }
 
 //============================================================
-Iterator<std::string>* GraphDecorator::getLocalProperties(){
+Iterator<std::string>* GraphDecorator::getLocalProperties() const {
   return graph_component->getLocalProperties();
 }
 
 //============================================================
-Iterator<std::string>* GraphDecorator::getInheritedProperties(){
+Iterator<std::string>* GraphDecorator::getInheritedProperties() const {
   return graph_component->getInheritedProperties();
 }
 
 //============================================================
-Iterator<std::string>* GraphDecorator::getProperties(){
+Iterator<std::string>* GraphDecorator::getProperties() const {
   return graph_component->getProperties();
 }
 //============================================================
-Iterator<PropertyInterface*>* GraphDecorator::getLocalObjectProperties(){
+Iterator<PropertyInterface*>* GraphDecorator::getLocalObjectProperties() const {
   return graph_component->getLocalObjectProperties();
 }
 
 //============================================================
-Iterator<PropertyInterface*>* GraphDecorator::getInheritedObjectProperties(){
+Iterator<PropertyInterface*>* GraphDecorator::getInheritedObjectProperties() const {
   return graph_component->getInheritedObjectProperties();
 }
 
 //============================================================
-Iterator<PropertyInterface*>* GraphDecorator::getObjectProperties(){
+Iterator<PropertyInterface*>* GraphDecorator::getObjectProperties() const {
   return graph_component->getObjectProperties();
 }
 //----------------------------------------------------------------

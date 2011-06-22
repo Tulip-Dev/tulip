@@ -182,7 +182,7 @@ Iterator<Graph *> * GraphAbstract::getSubGraphs() const {
   return new StlIterator<Graph *, GRAPH_SEQ::const_iterator >(subgraphs.begin(),subgraphs.end());
 }
 //=========================================================================
-bool GraphAbstract::isSubGraph(Graph* sg) const {
+bool GraphAbstract::isSubGraph(const Graph* sg) const {
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
   while(it != subgraphs.end()) {
     if (*it == sg)
@@ -192,7 +192,7 @@ bool GraphAbstract::isSubGraph(Graph* sg) const {
   return false;
 }
 //=========================================================================
-bool GraphAbstract::isDescendantGraph(Graph* sg) const {
+bool GraphAbstract::isDescendantGraph(const Graph* sg) const {
   if (isSubGraph(sg))
     return true;
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
@@ -404,27 +404,27 @@ void GraphAbstract::notifyBeforeDelInheritedProperty(const std::string& propName
       sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY, name));
  }
 //=========================================================================
-Iterator<std::string>* GraphAbstract::getLocalProperties() {
+Iterator<std::string>* GraphAbstract::getLocalProperties() const {
   return propertyContainer->getLocalProperties();
 }
 //=========================================================================
-Iterator<std::string>* GraphAbstract::getInheritedProperties() {
+Iterator<std::string>* GraphAbstract::getInheritedProperties() const {
   return propertyContainer->getInheritedProperties();
 }
 //=========================================================================
-Iterator<std::string>* GraphAbstract::getProperties() {
+Iterator<std::string>* GraphAbstract::getProperties() const {
   return new ConcatIterator<std::string> (propertyContainer->getLocalProperties(),propertyContainer->getInheritedProperties());
 }
 //=========================================================================
-Iterator<PropertyInterface*>* GraphAbstract::getLocalObjectProperties() {
+Iterator<PropertyInterface*>* GraphAbstract::getLocalObjectProperties() const {
   return propertyContainer->getLocalObjectProperties();
 }
 //=========================================================================
-Iterator<PropertyInterface*>* GraphAbstract::getInheritedObjectProperties() {
+Iterator<PropertyInterface*>* GraphAbstract::getInheritedObjectProperties() const {
   return propertyContainer->getInheritedObjectProperties();
 }
 //=========================================================================
-Iterator<PropertyInterface*>* GraphAbstract::getObjectProperties() {
+Iterator<PropertyInterface*>* GraphAbstract::getObjectProperties() const {
   return new ConcatIterator<PropertyInterface*> (propertyContainer->getLocalObjectProperties(),propertyContainer->getInheritedObjectProperties());
 }
 //=========================================================================

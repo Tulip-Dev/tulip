@@ -41,8 +41,8 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orient�, planaire
   virtual void setSuperGraph(Graph* s);
   virtual Graph* getRoot() const;
   virtual Iterator<Graph *> * getSubGraphs() const;
-  virtual bool isSubGraph(Graph* sg) const;
-  virtual bool isDescendantGraph(Graph* sg) const;
+  virtual bool isSubGraph(const Graph* sg) const;
+  virtual bool isDescendantGraph(const Graph* sg) const;
   virtual Graph* getSubGraph(unsigned int id) const;
   virtual Graph* getDescendantGraph(unsigned int id) const;
 
@@ -111,12 +111,12 @@ class TLP_SCOPE GraphDecorator : public Graph {  // non-orient�, planaire
   virtual bool existLocalProperty(const std::string&name);
   virtual void delLocalProperty(const std::string&name);
   virtual void addLocalProperty(const std::string &name, PropertyInterface *prop);
-  virtual Iterator<std::string>* getLocalProperties();
-  virtual Iterator<std::string>* getInheritedProperties();
-  virtual Iterator<std::string>* getProperties();
-  virtual Iterator<PropertyInterface*>* getLocalObjectProperties();
-  virtual Iterator<PropertyInterface*>* getInheritedObjectProperties();
-  virtual Iterator<PropertyInterface*>* getObjectProperties();
+  virtual Iterator<std::string>* getLocalProperties() const;
+  virtual Iterator<std::string>* getInheritedProperties() const;
+  virtual Iterator<std::string>* getProperties() const;
+  virtual Iterator<PropertyInterface*>* getLocalObjectProperties() const;
+  virtual Iterator<PropertyInterface*>* getInheritedObjectProperties() const;
+  virtual Iterator<PropertyInterface*>* getObjectProperties() const;
   // updates management
   virtual void push(bool unpopAllowed = true);
   virtual void pop(bool unpopAllowed = true);

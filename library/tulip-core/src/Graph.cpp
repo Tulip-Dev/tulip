@@ -211,7 +211,7 @@ bool tlp::applyAlgorithm(Graph *sg,string &errorMsg,DataSet *dataSet,
   return result;
 }
 //=========================================================
-bool tlp::getSource(Graph *graph, node &n) {
+bool tlp::getSource(const Graph *graph, node &n) {
   Iterator<node> *it=graph->getNodes();
   while (it->hasNext()) {
     n=it->next();
@@ -278,7 +278,7 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
     ioG->delNode( nodeA[in] );
 }
 
-void tlp::copyToGraph (Graph *outG, Graph* inG,
+void tlp::copyToGraph (Graph *outG, const Graph* inG,
 		       BooleanProperty *inSel, BooleanProperty* outSel) {
   if( outSel ) {
     outSel->setAllNodeValue( false );
