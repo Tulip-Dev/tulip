@@ -340,7 +340,7 @@ ENDIF(LINUX)
 ## -----------------------------------------------------------------------------------------------
 ## Google breakpad
 ## -----------------------------------------------------------------------------------------------
-IF(CMAKE_BUILD_TYPE STREQUAL "Release" AND (WIN32 OR LINUX))
+IF(WIN32 OR LINUX)
   OPTION(USE_GOOGLE_BREAKPAD "Use Google breakpad to generate error reports. You'll have to run the breakpad_strip script corresponding to your system as a post-install step." OFF)
 ENDIF()
 

@@ -14,12 +14,18 @@
 #include <tulip/PluginLister.h>
 #include <tulip/Perspective.h>
 #include <tulip/InteractorManager.h>
+#include <tulip/CrashHandling.h>
 
 #include <iostream>
 using namespace std;
 using namespace tlp;
 
 void usage(const QString &error) {
+  start_crash_handler();
+
+  Perspective *prout=0;
+  prout->construct();
+
   int returnCode = 0;
   if (!error.isEmpty()) {
     QMessageBox::warning(0,"Error",error);
