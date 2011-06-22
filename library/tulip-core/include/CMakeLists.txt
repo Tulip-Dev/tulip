@@ -88,6 +88,7 @@ INSTALL(FILES
   tulip/uniqueiterator.h
   tulip/vectorgraph.h
   tulip/vectorgraphproperty.h
+  tulip/SystemDefinition.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_core_dev
 )

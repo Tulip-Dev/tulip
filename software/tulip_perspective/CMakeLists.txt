@@ -7,7 +7,10 @@ QT4_WRAP_CPP(MOC_SRCS
   include/TulipAgentCommunicator.h
 )
 
-INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} include/)
+IF(USE_GOOGLE_BREAKPAD)
+  INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/thirdparty/google-breakpad/src)
+ENDIF(USE_GOOGLE_BREAKPAD)
+INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} include/)
 
 ADD_EXECUTABLE(tulip_perspective ${SRCS} ${MOC_SRCS})
 
@@ -24,6 +27,10 @@ TARGET_LINK_LIBRARIES(tulip_perspective ${LibTulipCoreName} ${LibTulipOGLName} $
 IF(TULIP_USE_TULIP3)
   TARGET_LINK_LIBRARIES(tulip_perspective ${LibTulip3CompatName})
 ENDIF()
+
+IF(USE_GOOGLE_BREAKPAD)
+  TARGET_LINK_LIBRARIES(tulip_perspective breakpad_client)
+ENDIF(USE_GOOGLE_BREAKPAD)
 
 
 INSTALL(TARGETS tulip_perspective

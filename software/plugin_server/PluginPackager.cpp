@@ -22,6 +22,7 @@
 #include <QtCore/QDir>
 #include <QtXml/QDomDocument>
 
+#include <tulip/SystemDefinition.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginInformations.h>
@@ -105,31 +106,10 @@ int main(int argc,char **argv) {
     exit(0);
   }
   
-  QString platform;
-  QString architecture;
-  QString compiler;
+  QString platform;(OS_PLATFORM);
+  QString architecture(OS_ARCHITECTURE);
+  QString compiler(OS_COMPILER);
   QString tulipVersion = TULIP_RELEASE;
-  #if defined(_WIN32) || defined(_WIN64)
-  platform = "win";
-  #elif defined(__APPLE__)
-  platform = "mac";
-  #else
-  platform = "linux";
-  #endif
-
-  #if _WIN64 || __amd64__
-  architecture = "64";
-  #else
-  architecture = "32";
-  #endif
-
-  #if defined(__clang__)
-  compiler = "Clang";
-  #elif defined(__GNUC__)
-  compiler="gcc";
-  #elif defined(_MSC_VER)
-  compiler = "MSVC";
-  #endif
 
   QString destinationDir;
   if(argc < 3) {
