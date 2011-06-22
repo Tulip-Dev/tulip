@@ -48,8 +48,8 @@ public:
   virtual Graph* getSuperGraph()const;
   virtual Graph* getRoot() const;
   virtual Iterator<Graph *>* getSubGraphs() const;
-  virtual bool isSubGraph(Graph* sg) const;
-  virtual bool isDescendantGraph(Graph* sg) const;
+  virtual bool isSubGraph(const Graph* sg) const;
+  virtual bool isDescendantGraph(const Graph* sg) const;
   virtual Graph* getSubGraph(unsigned int id) const;
   virtual Graph* getDescendantGraph(unsigned int id) const;
   //=======================================
@@ -83,12 +83,12 @@ public:
   bool existLocalProperty(const std::string&);
   void delLocalProperty(const std::string&);
   void addLocalProperty(const std::string &name, PropertyInterface *prop);
-  Iterator<std::string>* getLocalProperties();
-  Iterator<std::string>* getInheritedProperties();
-  Iterator<std::string>* getProperties();
-  Iterator<PropertyInterface*>* getLocalObjectProperties();
-  Iterator<PropertyInterface*>* getInheritedObjectProperties();
-  Iterator<PropertyInterface*>* getObjectProperties();
+  Iterator<std::string>* getLocalProperties() const;
+  Iterator<std::string>* getInheritedProperties() const;
+  Iterator<std::string>* getProperties() const;
+  Iterator<PropertyInterface*>* getLocalObjectProperties() const;
+  Iterator<PropertyInterface*>* getInheritedObjectProperties() const;
+  Iterator<PropertyInterface*>* getObjectProperties() const;
   PropertyInterface* getProperty(const std::string &);
 
   // to get viewMetaGraph property

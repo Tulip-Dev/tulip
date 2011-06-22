@@ -103,7 +103,7 @@ TLP_SCOPE Graph *newCloneSubGraph(Graph *root, std::string name = "unnamed");
  *  Finds the first node whose input degree equals 0.
  *  If no node exists, returns false else true.
  */
-TLP_SCOPE bool getSource(Graph *, node &n);
+TLP_SCOPE bool getSource(const Graph *, node &n);
 
 /**
  * Appends the selected part of the graph inG (properties, nodes and edges) into the graph outG.
@@ -111,7 +111,7 @@ TLP_SCOPE bool getSource(Graph *, node &n);
  * The output selection is used to select the appended nodes & edges
  * \warning The input selection is extended to all selected edge ends.
  */
-TLP_SCOPE void copyToGraph( Graph *outG, Graph *inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
+TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
 
 /**
  * Removes the selected part of the graph ioG (properties values, nodes and edges).
@@ -206,11 +206,11 @@ public:
 	/**
 	 * Indicates if the graph argument is a direct sub-graph.
 	 */
-	virtual bool isSubGraph(Graph* sg) const=0;
+	virtual bool isSubGraph(const Graph* sg) const=0;
 	/**
 	 * Indicates if the graph argument is a descendant of this graph.
 	 */
-	virtual bool isDescendantGraph(Graph* sg) const=0;
+	virtual bool isDescendantGraph(const Graph* sg) const=0;
 	/**
 	 * Returns a pointer on the sub-graph with the corresponding id
 	 * or NULL if there is no sub-graph with that id.
@@ -538,27 +538,27 @@ public:
 	/**
 	 * Returns an iterator on the names of the properties local to the graph.
 	 */
-	virtual Iterator<std::string>* getLocalProperties()=0;
+	virtual Iterator<std::string>* getLocalProperties() const=0;
 	/**
 	 * Returns an iterator on the names of the properties inherited from the graph���s ancestors.
 	 */
-	virtual Iterator<std::string>* getInheritedProperties()=0;
+	virtual Iterator<std::string>* getInheritedProperties() const=0;
 	/**
 	 * Returns an iterator on the name of all the properties attached to the graph.
 	 */
-	virtual Iterator<std::string>* getProperties()=0;
+	virtual Iterator<std::string>* getProperties() const=0;
 	/**
 	 * Returns an iterator on the properties local to the graph.
 	 */
-	virtual Iterator<PropertyInterface*>* getLocalObjectProperties()=0;
+	virtual Iterator<PropertyInterface*>* getLocalObjectProperties() const=0;
 	/**
 	 * Returns an iterator on the properties inherited from the graph���s ancestors.
 	 */
-	virtual Iterator<PropertyInterface*>* getInheritedObjectProperties()=0;
+	virtual Iterator<PropertyInterface*>* getInheritedObjectProperties() const=0;
 	/**
 	 * Returns an iterator on all the properties attached to the graph.
 	 */
-	virtual Iterator<PropertyInterface*>* getObjectProperties()=0;
+	virtual Iterator<PropertyInterface*>* getObjectProperties() const=0;
 
 	// observation mechanism
 	/**
