@@ -21,11 +21,6 @@ using namespace std;
 using namespace tlp;
 
 void usage(const QString &error) {
-  start_crash_handler();
-
-  Perspective *prout=0;
-  prout->construct();
-
   int returnCode = 0;
   if (!error.isEmpty()) {
     QMessageBox::warning(0,"Error",error);
@@ -42,6 +37,12 @@ void usage(const QString &error) {
 }
 
 int main(int argc,char **argv) {
+  start_crash_handler();
+
+  cout << "Crashing now, sorry :)" << endl;
+  Perspective *prout=0;
+  prout->construct();
+
   QApplication tulip_perspective(argc, argv);
   tulip_perspective.setApplicationName(QObject::trUtf8("Tulip"));
   QLocale::setDefault(QLocale(QLocale::English));

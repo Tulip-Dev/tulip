@@ -6,8 +6,8 @@
 #include <QtGui/QFileDialog>
 #include <QtGui/QPainter>
 #include <tulip/TulipProject.h>
-
-#include "ui_TulipPerspectiveCrashHandler.h"
+#include <tulip/CrashHandling.h>
+#include "TulipPerspectiveCrashHandler.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -48,25 +48,51 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
     QProcess *process = new QProcess;
     connect(process,SIGNAL(error(QProcess::ProcessError)),this,SLOT(perspectiveCrashed(QProcess::ProcessError)));
     connect(process,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(perspectiveFinished(int,QProcess::ExitStatus)));
+    process->setReadChannel(QProcess::StandardOutput);
+    process->setReadChannelMode(QProcess::ForwardedChannels);
+    process->setReadChannel(QProcess::StandardError);
+    process->setProcessChannelMode(QProcess::SeparateChannels);
     process->start(appDir.absoluteFilePath("tulip_perspective"),args);
     _processInfos[process] = PerspectiveProcessInfos(perspective,parameters,file);
   }
 
 void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError e) {
   QProcess *process = static_cast<QProcess *>(sender());
+  process->setReadChannel(QProcess::StandardError);
   PerspectiveProcessInfos infos = _processInfos[process];
-  QString error;
-  switch(e) {
-  case QProcess::FailedToStart:
-    error = trUtf8("The process failed to start. Either the invoked program is missing, or you may have insufficient permissions to invoke the program.");
-    break;
-  case QProcess::Crashed:
-    error = trUtf8("The process crashed some time after starting successfully.");
-    break;
-  default:
-    error = trUtf8("An unknown error occurred.");
-    break;
+
+  TulipPerspectiveCrashHandler crashHandler;
+
+#ifdef USE_GOOGLE_BREAKPAD
+  QRegExp plateform("^" + QString(BREAKPAD_PLATEFORM_HEADER) + " (.*)\n"),
+      arch("^" + QString(BREAKPAD_ARCH_HEADER) + " (.*)\n"),
+      compiler("^" + QString(BREAKPAD_COMPILER_HEADER) + " (.*)\n"),
+      version("^" + QString(BREAKPAD_VERSION_HEADER) + " (.*)\n"),
+      dump("^" + QString(BREAKPAD_DUMP_HEADER) + " (.*)\n");
+
+  QMap<QRegExp *,QString> envInfos;
+  envInfos[&plateform] = "";
+  envInfos[&arch] = "";
+  envInfos[&compiler] = "";
+  envInfos[&version] = "";
+  envInfos[&dump] = "";
+
+  while (!process->atEnd()) {
+    QString line(process->readLine());
+
+    QRegExp *re;
+    foreach(re,envInfos.keys()) {
+      if (re->exactMatch(line)) {
+        envInfos[re] = re->cap(1);
+        break;
+      }
+    }
   }
+  crashHandler.setEnvData(envInfos[&plateform],envInfos[&arch],envInfos[&compiler],envInfos[&version],envInfos[&dump]);
+#endif
+  crashHandler.setPerspectiveData(infos);
+  crashHandler.exec();
+
 }
 
 void TulipPerspectiveProcessHandler::perspectiveFinished(int exitCode, QProcess::ExitStatus exitStatus) {
