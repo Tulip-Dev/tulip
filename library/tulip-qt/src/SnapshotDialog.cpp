@@ -89,7 +89,7 @@ void SnapshotDialog::resizeEvent(QResizeEvent *){
 void SnapshotDialog::accept(){
   QImage image=view->createPicture(widthSpinBox->value(),heightSpinBox->value(),false);
   if(!image.save(fileName->text(),0,qualitySpinBox->value())){
-    QMessageBox::critical(this,"Snapshot can't be saved","Snapshot can't be saved in file : "+fileName->text());
+    QMessageBox::critical(this,"Snapshot cannot be saved","Snapshot cannot be saved in file : "+fileName->text());
   }else{
     QDialog::accept();
   }
