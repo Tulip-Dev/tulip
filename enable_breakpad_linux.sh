@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 usage() {
   [ "$1" != "" ] && echo $1
@@ -30,9 +30,9 @@ parse_dir() {
   for f in $(file * | grep ELF | cut -f 1 -d ':'); do
     out_file=$output_dir/$(basename $f '.so').sym
     echo -e '  \e[00;32mDumping\e[00m symbols from '$f' to '$out_file'.'
-    $dump_syms_exe $f > $out_file || exit 1
+    $dump_syms_exe $f > $out_file
     echo -e '  \e[00;32mStripping\e[00m debugging symbols from '$f'.'
-    $strip_exe -g $f || exit 1
+    $strip_exe -g $f
   done
 
   for f in *; do
@@ -43,4 +43,4 @@ parse_dir() {
 orig_pwd=$(pwd)
 
 cd $install_dir
-parse_dir
+parse_dir 2> >(while read line; do echo -e '\e[01;31m'$line'\e[0m'; done)

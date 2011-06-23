@@ -15,6 +15,8 @@ SET(SRCS
   src/PluginResultsList.cpp
   src/DetailedPluginInformationsWidget.cpp
   src/TulipPerspectiveProcessHandler.cpp
+  src/TulipPerspectiveCrashHandler.cpp
+  src/FormPost.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -40,6 +42,8 @@ QT4_WRAP_CPP(MOC_SRCS
   include/PluginResultsList.h
   include/DetailedPluginInformationsWidget.h
   include/TulipPerspectiveProcessHandler.h
+  include/TulipPerspectiveCrashHandler.h
+  include/FormPost.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS resources/TulipAgent.qrc)
