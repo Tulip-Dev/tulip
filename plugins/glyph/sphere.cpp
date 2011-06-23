@@ -111,18 +111,18 @@ void Sphere::generateBuffers(int space) {
 
 	n = 0;
 
-	for(float j = 0; j <= 90 - space; j+=space) {
-		for(float i = 0; i <= 360 - space; i+=space) {
-			indices[n]=n;
-			indices[n+1]=n+1;
-			indices[n+2]=n+2;
-			indices[n+3]=n+3;
-			indices[vertexCount*2-n]=n+vertexCount;
-			indices[vertexCount*2-n-1]=n+vertexCount+1;
-			indices[vertexCount*2-n-2]=n+vertexCount+2;
-			indices[vertexCount*2-n-3]=n+vertexCount+3;
+  for(float j = 0; j <= 90 - space; j+=space) {
+    for(float i = 0; i <= 360 - space; i+=space) {
+      indices[n]=n;
+      indices[n+1]=n+1;
+      indices[n+2]=n+2;
+      indices[n+3]=n+3;
+      indices[vertexCount*2-n]=n+vertexCount;
+      indices[vertexCount*2-n-1]=n+vertexCount+1;
+      indices[vertexCount*2-n-2]=n+vertexCount+2;
+      indices[vertexCount*2-n-3]=n+vertexCount+3;
 
-			vertex[n*3] = static_cast<float>(sin((i) / 180 * PI) * sin((j) / 180 * PI) /2.);
+      vertex[n*3] = static_cast<float>(sin((i) / 180 * PI) * sin((j) / 180 * PI) /2.);
 			vertex[n*3+1] = static_cast<float>(cos((i) / 180 * PI) * sin((j) / 180 * PI) /2.);
 			vertex[n*3+2] = static_cast<float>(-cos((j) / 180 * PI) /2.);
 			vertex[(vertexCount+n)*3]=vertex[n*3];
@@ -131,10 +131,10 @@ void Sphere::generateBuffers(int space) {
 			texturesCoord[n*2] = 1-((i) / 360);
 			texturesCoord[n*2+1] = (2 * j) / 360;
 			texturesCoord[(vertexCount+n)*2] = texturesCoord[n*2];
-			texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
-			n++;
+      texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
+      n++;
 
-			vertex[n*3] = static_cast<float>(sin((i) / 180 * PI) * sin((j + space) / 180 * PI) /2.);
+      vertex[n*3] = static_cast<float>(sin((i) / 180 * PI) * sin((j + space) / 180 * PI) /2.);
 			vertex[n*3+1] = static_cast<float>(cos((i) / 180 * PI) * sin((j + space) / 180 * PI) /2.);
 			vertex[n*3+2] = static_cast<float>(-cos((j + space) / 180 * PI) /2.);
 			vertex[(vertexCount+n)*3]=vertex[n*3];
@@ -143,7 +143,7 @@ void Sphere::generateBuffers(int space) {
 			texturesCoord[n*2] = 1-(i) / 360;
 			texturesCoord[n*2+1] = (2 * (j + space)) / 360;
 			texturesCoord[(vertexCount+n)*2] = texturesCoord[n*2];
-			texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
+      texturesCoord[(vertexCount+n)*2+1] = -texturesCoord[n*2+1];
 			n++;
 
 			vertex[n*3] = static_cast<float>(sin((i + space) / 180 * PI) * sin((j) / 180 * PI) /2.);
@@ -172,20 +172,21 @@ void Sphere::generateBuffers(int space) {
 		}
 	}
 
+  indices[vertexCount]=vertexCount*2-1;
 
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-	glBufferData(GL_ARRAY_BUFFER, vertexCount*3*2*sizeof(GLfloat),vertex, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, vertexCount*3*2*sizeof(GLfloat),vertex, GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-	glBufferData(GL_ARRAY_BUFFER, vertexCount*2*2*sizeof(GLfloat),texturesCoord, GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, vertexCount*2*2*sizeof(GLfloat),texturesCoord, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexCount*2*sizeof(GLushort), indices, GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexCount*2*sizeof(GLushort), indices, GL_STATIC_DRAW);
 }
 /*@}*/
 void Sphere::drawGlyph(const Color& glyphColor, const string& texture,
 		const string& texturePath, float) {
 	bool canUseGlew = OpenGlConfigManager::getInst().canUseGlew();
 
-	int space = 9;
+  int space = 9;
 	int vertexCount = (90 / space) * (360 / space) * 4;
 
 	if (canUseGlew) {
@@ -226,8 +227,9 @@ void Sphere::drawGlyph(const Color& glyphColor, const string& texture,
 		}
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
-		glDrawElements(GL_TRIANGLE_STRIP, vertexCount * 2, GL_UNSIGNED_SHORT,
-				BUFFER_OFFSET(0));
+    glDrawElements(GL_TRIANGLE_STRIP, vertexCount, GL_UNSIGNED_SHORT,BUFFER_OFFSET(0));
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
+    glDrawElements(GL_TRIANGLE_STRIP, vertexCount, GL_UNSIGNED_SHORT,BUFFER_OFFSET(vertexCount*sizeof(GLushort)));
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
