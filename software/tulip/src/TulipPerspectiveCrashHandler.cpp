@@ -14,8 +14,11 @@ TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
   _ui->errorReportTitle->setVisible(false);
   _ui->sendReportButton->setVisible(false);
   _ui->detailsLink->setVisible(false);
+  _ui->detailsIcon->setVisible(false);
+  adjustHeight();
+#else
+  _poster = 0;
 #endif
-
   connect(_ui->detailsLink,SIGNAL(linkActivated(QString)),this,SLOT(toggleDetailedView()));
   connect(_ui->sendReportButton,SIGNAL(clicked()),this,SLOT(sendReport()));
   connect(_ui->saveButton,SIGNAL(clicked()),this,SLOT(saveData()));
@@ -24,9 +27,16 @@ TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
 void TulipPerspectiveCrashHandler::setDetailedView(bool f) {
   _isDetailedView = f;
   _ui->detailsFrame->setVisible(f);
+  adjustHeight();
+}
+
+void TulipPerspectiveCrashHandler::adjustHeight() {
+  setFixedSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
   int w = width();
   adjustSize();
   resize(w,height());
+//  setFixedSize(width(),height());
+
 }
 
 void TulipPerspectiveCrashHandler::toggleDetailedView() {
@@ -36,21 +46,28 @@ void TulipPerspectiveCrashHandler::toggleDetailedView() {
 void TulipPerspectiveCrashHandler::sendReport() {
   if (_reportPath.isNull())
     return;
-  FormPost *poster = new FormPost;
-  poster->addField("platform",_ui->plateformValue->text());
-  poster->addField("compiler",_ui->compilerValue->text());
-  poster->addField("arch",_ui->archValue->text());
-  poster->addField("perspective_name",_ui->perspectiveNameValue->text());
-  poster->addField("tulip_version",_ui->versionValue->text());
-  poster->addFile("dump_file",_reportPath,"application/octet-stream");
-  connect(poster->postData("http://tulip.labri.fr/crash_report/send_report.php"),SIGNAL(finished()),this,SLOT(reportPosted()));
+
+#ifdef USE_GOOGLE_BREAKPAD
+  _poster = new FormPost;
+  _poster->addField("platform",_ui->plateformValue->text());
+  _poster->addField("compiler",_ui->compilerValue->text());
+  _poster->addField("arch",_ui->archValue->text());
+  _poster->addField("perspective_name",_ui->perspectiveNameValue->text());
+  _poster->addField("tulip_version",_ui->versionValue->text());
+  _poster->addFile("dump_file",_reportPath,"application/octet-stream");
+  connect(_poster->postData("http://tulip.labri.fr/crash_report/send_report.php"),SIGNAL(finished()),this,SLOT(reportPosted()));
   _ui->sendReportButton->setText(trUtf8("Sending report"));
   _ui->sendReportButton->setEnabled(false);
+#endif
 }
 
 void TulipPerspectiveCrashHandler::reportPosted() {
+  _ui->sendReportButton->setText(trUtf8("Report sent"));
+#ifdef USE_GOOGLE_BREAKPAD
   _ui->errorReportTitle->setText(trUtf8("<b>Report has been sent. Thank you for supporting Tulip !</b>"));
   sender()->deleteLater();
+  _poster->deleteLater();
+#endif
 }
 
 void TulipPerspectiveCrashHandler::saveData() {

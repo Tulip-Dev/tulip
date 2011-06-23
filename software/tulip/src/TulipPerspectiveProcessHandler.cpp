@@ -79,7 +79,6 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError e
 
   while (!process->atEnd()) {
     QString line(process->readLine());
-
     QRegExp *re;
     foreach(re,envInfos.keys()) {
       if (re->exactMatch(line)) {
