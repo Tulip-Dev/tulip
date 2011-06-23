@@ -49,6 +49,17 @@ function copy_linked_lib() {
   else
       if [ ! -f $BUNDLE_LIB_DIR/$(basename $LIB_TO_COPY) ]; then
          cp $LIB_TO_COPY $BUNDLE_LIB_DIR
+	 PYTHON_LIB=$(echo $LIB_TO_COPY | grep libpython)
+	 # for Python, we need to create a symlink as the Tulip Python Script View plugin
+	 # performs a dlopen on libpythonX.Y.so when it is loaded
+	 if [ "$PYTHON_LIB" != "" ]; then
+		PYTHON_LIB_NAME=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\)$/libpython\1/')
+		PYTHON_LIB_SYMLINK_NAME=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\.so\).*$/libpython\1/')
+		PWD_BAK=$PWD
+		cd $BUNDLE_LIB_DIR
+		ln -s $PYTHON_LIB_NAME $PYTHON_LIB_SYMLINK_NAME 	
+		cd $PWD_BAK
+	 fi	 
          echo $LIB_TO_COPY copied in $BUNDLE_LIB_DIR
       fi
   fi
