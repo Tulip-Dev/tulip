@@ -165,13 +165,6 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 #else
 			addModuleSearchPath(tlp::TulipLibDir, true);
 #endif
-			// Try to import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
-			// and if the site module is not present on the host system
-			// Disable output while trying to import the module to not confuse the user
-			outputActivated = false;
-			runString("import site");
-			outputActivated = true;
-
 			initscriptengine();
 			_PyImport_FixupExtension(const_cast<char *>("scriptengine"), const_cast<char *>("scriptengine"));
 
@@ -179,8 +172,15 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
 			_PyImport_FixupExtension(const_cast<char *>("tuliputils"), const_cast<char *>("tuliputils"));
 
 			runString("import sys; import scriptengine ; sys.stdout = scriptengine.ConsoleOutput(False); sys.stderr = scriptengine.ConsoleOutput(True);\n");
-
-			//setDefaultConsoleWidget();
+			
+			// Try to import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
+			// and if the site module is not present on the host system
+			// Disable output while trying to import the module to not confuse the user
+			outputActivated = false;
+			runString("import site");
+			outputActivated = true;
+			
+			setDefaultConsoleWidget();
 
 			runString("from tulip import *");
 
