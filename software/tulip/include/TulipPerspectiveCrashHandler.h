@@ -4,6 +4,10 @@
 #include <QtGui/QDialog>
 #include "TulipPerspectiveProcessHandler.h"
 
+#ifdef USE_GOOGLE_BREAKPAD
+class FormPost;
+#endif
+
 namespace Ui {
 class TulipPerspectiveCrashHandlerData;
 }
@@ -15,6 +19,12 @@ class TulipPerspectiveCrashHandler : public QDialog {
   PerspectiveProcessInfos _perspectiveInfos;
   bool _isDetailedView;
   QString _reportPath;
+
+#ifdef USE_GOOGLE_BREAKPAD
+  FormPost *_poster;
+#endif
+
+  void adjustHeight();
 
 public:
   explicit TulipPerspectiveCrashHandler(QWidget *parent = 0);
