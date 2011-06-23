@@ -14,9 +14,9 @@ SizeWidget::SizeWidget(QWidget *parent) :
     ui->heightLineEdit->setValidator(validator);
     ui->depthLineEdit->setValidator(validator);
     setSize(Size());
-    connect(ui->widthLineEdit,SIGNAL(valueChanged(double)),this,SLOT(sizeUpdated()));
-    connect(ui->heightLineEdit,SIGNAL(valueChanged(double)),this,SLOT(sizeUpdated()));
-    connect(ui->depthLineEdit,SIGNAL(valueChanged(double)),this,SLOT(sizeUpdated()));
+    connect(ui->widthLineEdit,SIGNAL(textChanged(const QString &)),this,SLOT(sizeUpdated()));
+    connect(ui->heightLineEdit,SIGNAL(textChanged(const QString &)),this,SLOT(sizeUpdated()));
+    connect(ui->depthLineEdit,SIGNAL(textChanged(const QString &)),this,SLOT(sizeUpdated()));
 }
 
 SizeWidget::~SizeWidget()
