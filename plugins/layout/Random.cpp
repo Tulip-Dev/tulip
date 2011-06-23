@@ -52,7 +52,7 @@ bool Random::run() {
     if(is3D)
       layoutResult->setNodeValue(itn,Coord(static_cast<float>(rand()%1024),static_cast<float>(rand()%1024),static_cast<float>(rand()%1024)));
     else
-      layoutResult->setNodeValue(itn,Coord(static_cast<float>(rand()%1024),static_cast<float>(rand()%1024,0)));
+      layoutResult->setNodeValue(itn,Coord(static_cast<float>(rand()%1024),static_cast<float>(rand()%1024),0));
   } delete itN;
   return true;
 }
