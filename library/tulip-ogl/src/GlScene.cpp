@@ -472,9 +472,9 @@ namespace tlp {
 
                   bb = (*it).boundingBox;
                   Coord middle((bb[1] + bb[0])/2.f);
-                  /*dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-          dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));*/
-                  dist=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+                  dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
+                  dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
+                  dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
                   entitiesSet.insert(EntityWithDistance(dist,&(*it)));
               }
 
@@ -491,9 +491,9 @@ namespace tlp {
 
                       bb=(*it).boundingBox;
                       Coord middle((bb[1]+bb[0])/2.f);
-                      /*dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-            dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));*/
-                      dist=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+                      dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
+                      dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
+                      dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
                       entitiesSet.insert(EntityWithDistance(dist,&(*it),true));
                   }
 
@@ -508,9 +508,9 @@ namespace tlp {
 
                       bb = (*it).boundingBox;
                       Coord middle((bb[0] + bb[1])/2.f);
-                      /*dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
-            dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));*/
-                      dist=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+                      dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
+                      dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
+                      dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
                       entitiesSet.insert(EntityWithDistance(dist,&(*it),false));
                   }
               }
