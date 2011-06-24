@@ -24,7 +24,6 @@
 #include <tulip/PlanarConMap.h>
 #include <tulip/ConnectedTest.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/ExtendedClusterOperation.h>
 #include "PlanarityTestTest.h"
 
 using namespace std;

@@ -66,7 +66,6 @@ INSTALL(FILES
   tulip/MutableContainer.h
   tulip/PluginLibraryLoader.h
   tulip/StlFunctions.h
-  tulip/ExtendedClusterOperation.h
   tulip/StringCollection.h
   tulip/DrawingTools.h
   tulip/Face.h

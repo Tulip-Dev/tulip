@@ -80,7 +80,7 @@ private:
    * @brief Contains all the remote locations added, and for each of them the list of plugins on the location.
    **/
   static QMap<QString, LocationPlugins> _remoteLocations;
-
+  
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PluginManager::Location)

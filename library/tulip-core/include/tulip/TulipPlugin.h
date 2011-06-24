@@ -37,6 +37,5 @@
 #include <tulip/PlanarityTest.h>
 #include <tulip/SimpleTest.h>
 #include <tulip/TreeTest.h>
-#include <tulip/ExtendedClusterOperation.h>
 #include <tulip/ForEach.h>
 #endif

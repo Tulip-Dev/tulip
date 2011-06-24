@@ -39,7 +39,6 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/ExtendedClusterOperation.h>
 #include <tulip/StableIterator.h>
 #include <tulip/ForEach.h>
 #include <tulip/DrawingTools.h>

@@ -13,7 +13,6 @@ ConvexHull.cpp
 Delaunay.cpp
 DoubleProperty.cpp
 DrawingTools.cpp
-ExtendedClusterOperation.cpp
 FaceIterator.cpp
 GraphAbstract.cpp
 Graph.cpp
