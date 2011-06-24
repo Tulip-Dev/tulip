@@ -223,6 +223,9 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
 		if (result.empty()) {
 			xv = Coord(0,0,1.);
 			Coord dir = xu^xv;
+      // if dir = (0,0,0) => edge have a direction only in z
+      if(dir[0]==0 && dir[1]==0 && dir[2]==0)
+        dir[0]=1.;
 			if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
 			result.push_back(pCurrent - dir*size);
 			result.push_back(pCurrent + dir*size);
@@ -230,6 +233,9 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
 			xu = xv;
 			xv = Coord(0,0,-1);
 			Coord dir = xu^xv;
+      // if dir = (0,0,0) => edge have a direction only in z
+      if(dir[0]==0 && dir[1]==0 && dir[2]==0)
+        dir[0]=1.;
 			if (fabs (dir.norm()) > 1e-3) dir /= dir.norm();
 			result.push_back(pCurrent - dir*static_cast<float>(inversion)*size);
 			result.push_back(pCurrent + dir*static_cast<float>(inversion)*size);
