@@ -18,6 +18,7 @@
  */
 
 #include "QuotientClustering.h"
+#include <tulip/GraphProperty.h>
 
 using namespace std;
 using namespace tlp;

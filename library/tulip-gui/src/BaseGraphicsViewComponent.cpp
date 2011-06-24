@@ -26,7 +26,6 @@
 #include <QtGui/QToolTip>
 #include <QtGui/QFrame>
 
-#include <tulip/ExtendedClusterOperation.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/StableIterator.h>
