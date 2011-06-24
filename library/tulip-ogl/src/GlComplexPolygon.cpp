@@ -499,6 +499,14 @@ void GlComplexPolygon::desactivateQuadBorder(const int polygonId) {
 	}
 }
 //=====================================================
+string GlComplexPolygon::getTextureName() {
+  return textureName;
+}
+//=====================================================
+void GlComplexPolygon::setTextureName(const string &name) {
+  textureName=name;
+}
+//=====================================================
 void GlComplexPolygon::draw(float,Camera *) {
 
 	if(cameraIs3D()){

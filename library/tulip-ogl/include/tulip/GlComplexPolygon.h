@@ -178,6 +178,16 @@ namespace tlp {
     float getTextureZoom(){return textureZoom;}
 
     /**
+     * Get the textureName
+     */
+    std::string getTextureName();
+
+    /**
+     * Set the textureName
+     */
+    void setTextureName(const std::string &name);
+
+    /**
      * Set the texture zoom factor
      * By default if you have a polygon with a size bigger than (1,1,0) the texture will be repeated
      * If you want to don't have this texture repeat you have to modify texture zoom
