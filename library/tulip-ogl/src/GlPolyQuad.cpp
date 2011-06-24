@@ -85,7 +85,7 @@ void GlPolyQuad::draw(float, Camera *) {
 	texCoordsArray.reserve(nbVertices * 2);
 	colorsArray.reserve(nbVertices);
 	quadIndices.reserve(nbVertices);
-	outlineIndices.reserve(nbVertices);
+	outlineIndices.resize(nbVertices);
 
 	for (size_t i = 0 ; i < (polyQuadEdges.size() / 2) - 1 ; ++i) {
 		Vector<float, 4> startColor;
