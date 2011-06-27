@@ -72,7 +72,7 @@ Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &s
   if(zRotation!=0){
     //rerotate
     Coord saveAnchor(anchor);
-    zRot = 2.0*M_PI * zRotation / 360.0;
+    double zRot = 2.0*M_PI * zRotation / 360.0;
     anchor[0] = saveAnchor[0]*cos(zRot) - saveAnchor[1]*sin(zRot);
     anchor[1] = saveAnchor[0]*sin(zRot) + saveAnchor[1]*cos(zRot);
   }
