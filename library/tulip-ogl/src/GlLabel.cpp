@@ -46,6 +46,9 @@ namespace tlp {
 
   static const int SpaceBetweenLine=5;
 
+  std::map<std::string, FTGLPolygonFont*> GlLabel::fontMap;
+  std::map<std::string, FTOutlineFont*> GlLabel::borderFontMap;
+
   GlLabel::GlLabel() {
     init();
   }
@@ -62,18 +65,18 @@ namespace tlp {
     init();
   }
 
-  GlLabel::~GlLabel() {
-    delete font;
-    delete borderFont;
-  }
+  GlLabel::~GlLabel() {}
   //============================================================
   void GlLabel::init(){
     fontName=TulipBitmapDir + "font.ttf";
-    font=new FTPolygonFont(fontName.c_str());
-    borderFont=new FTGLOutlineFont(fontName.c_str());
+	if (fontMap.find(fontName) == fontMap.end()) {
+		fontMap[fontName]=new FTPolygonFont(fontName.c_str());
+		borderFontMap[fontName]=new FTGLOutlineFont(fontName.c_str());
+	} 
+	font = fontMap[fontName];
+	borderFont = borderFontMap[fontName];
     fontSize=20;
-    font->FaceSize(fontSize);
-    borderFont->FaceSize(fontSize);
+    
     outlineColor=Color(0,0,0,255);
     outlineSize=1.;
     renderingMode=0;
@@ -95,7 +98,11 @@ namespace tlp {
   void GlLabel::setText(const string& text) {
     this->text=text;
 
-    if(font->FaceSize()!=(unsigned int)fontSize){
+    
+  }
+  //============================================================
+  void GlLabel::setTextBeforeRendering(const std::string& text) {
+	if(font->FaceSize()!=(unsigned int)fontSize){
       font->FaceSize(fontSize);
       borderFont->FaceSize(fontSize);
     }
@@ -199,23 +206,26 @@ namespace tlp {
 
     fontName=name;
 
-    delete font;
-    delete borderFont;
-    font=new FTGLPolygonFont(fontName.c_str());
-    borderFont=new FTOutlineFont(fontName.c_str());
-    if(font->Error() || borderFont->Error()){
-      if(fontName=="")
-        cerr << "Error in font loading: no font name" << endl;
-      else
-        cerr << "Error in font loading: " << fontName << " cannot be loaded" << endl;
+	if (fontMap.find(fontName) == fontMap.end()) {
+		fontMap[fontName] = new FTGLPolygonFont(fontName.c_str());
+		borderFontMap[fontName]=new FTOutlineFont(fontName.c_str());
+		if(fontMap[fontName]->Error() || borderFontMap[fontName]->Error()){
+			if(fontName=="")
+				cerr << "Error in font loading: no font name" << endl;
+			else
+				cerr << "Error in font loading: " << fontName << " cannot be loaded" << endl;
 
-      delete font;
-      delete borderFont;
+			delete fontMap[fontName];
+			delete borderFontMap[fontName];
+			fontMap.erase(fontName);
+			borderFontMap.erase(fontName);
 
-      fontName=TulipBitmapDir + "font.ttf";
-      font=new FTPolygonFont(fontName.c_str());
-      borderFont=new FTGLOutlineFont(fontName.c_str());
-    }
+			fontName=TulipBitmapDir + "font.ttf";
+		}
+	}
+
+	font = fontMap[fontName];
+	borderFont = borderFontMap[fontName];
   }
   //============================================================
   void GlLabel::setFontNameSizeAndColor(const std::string &name, const int &size, const Color &color){
@@ -237,6 +247,8 @@ namespace tlp {
 
     if(fontSize<=0)
       return;
+
+	setTextBeforeRendering(text);
 
     glPushAttrib(GL_ALL_ATTRIB_BITS);
 

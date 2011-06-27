@@ -20,6 +20,7 @@
 #define Tulip_GLLABEL_H
 
 #include <string>
+#include <map>
 
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
@@ -392,6 +393,8 @@ namespace tlp {
 
   private :
 
+    void setTextBeforeRendering(const std::string& text);
+
     std::string text;
     std::string fontName;
     int fontSize;
@@ -424,6 +427,9 @@ namespace tlp {
     std::vector<std::string> textVector;
     std::vector<float> textWidthVector;
     BoundingBox textBoundingBox;
+
+	static std::map<std::string, FTGLPolygonFont*> fontMap;
+	static std::map<std::string, FTOutlineFont*> borderFontMap;
   };
   /*@}*/
 }
