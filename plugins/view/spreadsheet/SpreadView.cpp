@@ -56,9 +56,7 @@ QWidget *SpreadView::construct(QWidget *parent) {
 
     //Show hide columns.
     ui->editColumnPushButton->setMirrored(true);
-    std::cout<<__PRETTY_FUNCTION__<<" "<<__LINE__<<" "<<ui->editColumnPushButton->sizeHint().width()<<" "<<ui->editColumnPushButton->sizeHint().height()<<std::endl;
     ui->editColumnPushButton->setOrientation(Qt::Vertical);
-    std::cout<<__PRETTY_FUNCTION__<<" "<<__LINE__<<" "<<ui->editColumnPushButton->sizeHint().width()<<" "<<ui->editColumnPushButton->sizeHint().height()<<std::endl;
     ui->editColumnPushButton->setFlat(true);
     ui->editColumnPushButton->setCheckable(true);
     ui->editColumnPushButton->setAutoFillBackground(true);
