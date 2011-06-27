@@ -43,11 +43,13 @@ Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &s
   if( scale.getW() == 0.0f || scale.getH() == 0.0f || scale.getD() == 0.0f )
     return nodeCenter;
 
-  //unrotate
-  Coord saveAnchor(anchor);
-  double zRot =  - 2.0*M_PI * zRotation / 360.0;
-  anchor[0] = saveAnchor[0]*cos(zRot) - saveAnchor[1]*sin(zRot);
-  anchor[1] = saveAnchor[0]*sin(zRot) + saveAnchor[1]*cos(zRot);
+  if(zRotation!=0){
+    //unrotate
+    Coord saveAnchor(anchor);
+    double zRot =  - 2.0*M_PI * zRotation / 360.0;
+    anchor[0] = saveAnchor[0]*cos(zRot) - saveAnchor[1]*sin(zRot);
+    anchor[1] = saveAnchor[0]*sin(zRot) + saveAnchor[1]*cos(zRot);
+  }
 
   // unscale
   anchor.setX( anchor.getX() / scale.getW() );
@@ -67,11 +69,13 @@ Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &s
   if(scale.getD() == 0.0f)
     anchor[2]=0.;
 
-  //rerotate
-  saveAnchor = anchor;
-  zRot = -zRot;
-  anchor[0] = saveAnchor[0]*cos(zRot) - saveAnchor[1]*sin(zRot);
-  anchor[1] = saveAnchor[0]*sin(zRot) + saveAnchor[1]*cos(zRot);
+  if(zRotation!=0){
+    //rerotate
+    Coord saveAnchor(anchor);
+    zRot = 2.0*M_PI * zRotation / 360.0;
+    anchor[0] = saveAnchor[0]*cos(zRot) - saveAnchor[1]*sin(zRot);
+    anchor[1] = saveAnchor[0]*sin(zRot) + saveAnchor[1]*cos(zRot);
+  }
 
   return nodeCenter + anchor;
 }
