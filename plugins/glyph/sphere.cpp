@@ -172,6 +172,7 @@ void Sphere::generateBuffers(int space) {
 		}
 	}
 
+  indices[vertexCount]=vertexCount*2-1;
 
 	glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
 	glBufferData(GL_ARRAY_BUFFER, vertexCount*3*2*sizeof(GLfloat),vertex, GL_STATIC_DRAW);
@@ -226,8 +227,8 @@ void Sphere::drawGlyph(const Color& glyphColor, const string& texture,
 		}
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
-		glDrawElements(GL_TRIANGLE_STRIP, vertexCount * 2, GL_UNSIGNED_SHORT,
-				BUFFER_OFFSET(0));
+    glDrawElements(GL_TRIANGLE_STRIP, vertexCount, GL_UNSIGNED_SHORT,BUFFER_OFFSET(0));
+    glDrawElements(GL_TRIANGLE_STRIP, vertexCount, GL_UNSIGNED_SHORT,BUFFER_OFFSET(vertexCount*sizeof(GLushort)));
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
