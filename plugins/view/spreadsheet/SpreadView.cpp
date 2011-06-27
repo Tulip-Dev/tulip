@@ -28,6 +28,7 @@
 #include <QtGui/QMenu>
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
+#include <QtGui/QToolBar>
 #include "GraphTableModel.h"
 #include <tulip/TlpQtTools.h>
 
@@ -48,9 +49,25 @@ QWidget *SpreadView::construct(QWidget *parent) {
     QWidget *widget = AbstractView::construct(parent);
     QWidget* mainWidget = new QWidget(widget);
     ui->setupUi(mainWidget);
+
     setCentralWidget(mainWidget);
     installEventFilter(mainWidget);
     installEventFilter(ui->nodesTableView);
+
+    //Show hide columns.
+    ui->editColumnPushButton->setMirrored(true);
+    std::cout<<__PRETTY_FUNCTION__<<" "<<__LINE__<<" "<<ui->editColumnPushButton->sizeHint().width()<<" "<<ui->editColumnPushButton->sizeHint().height()<<std::endl;
+    ui->editColumnPushButton->setOrientation(Qt::Vertical);
+    std::cout<<__PRETTY_FUNCTION__<<" "<<__LINE__<<" "<<ui->editColumnPushButton->sizeHint().width()<<" "<<ui->editColumnPushButton->sizeHint().height()<<std::endl;
+    ui->editColumnPushButton->setFlat(true);
+    ui->editColumnPushButton->setCheckable(true);
+    ui->editColumnPushButton->setAutoFillBackground(true);
+    ui->editColumnPushButton->resize(ui->editColumnPushButton->sizeHint());
+    ui->toolBarWidget->resize(ui->editColumnPushButton->width(),ui->toolBarWidget->height());
+    ui->toolBarWidget->setMinimumWidth(ui->editColumnPushButton->sizeHint().width());
+    ui->toolBarWidget->setMaximumWidth(ui->editColumnPushButton->sizeHint().width());
+    ui->editColumnPushButton->updateGeometry();
+    ui->toolBarWidget->updateGeometry();
 
     //Nodes table
     ui->nodesTableView->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);

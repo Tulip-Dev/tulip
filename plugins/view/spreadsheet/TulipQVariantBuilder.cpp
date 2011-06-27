@@ -371,6 +371,93 @@ bool TulipQVariantBuilder::setData(const QVariant& value, ElementType elementTyp
         break;
     }
 }
+
+bool TulipQVariantBuilder::setAllElementData(const QVariant& value,tlp::ElementType elementType,TulipPropertyType propertyType,tlp::PropertyInterface* property){
+    if(!value.isValid()){
+        return false;
+    }
+    switch(propertyType){
+    case BOOLEAN_PROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<BooleanProperty,bool,bool>(value,elementType,(BooleanProperty*)property);
+        break;
+    case DOUBLEPROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<DoubleProperty,double,double>(value,elementType,(DoubleProperty*)property);
+        break;
+    case NODEGLYPHPROPERTY_RTTI:
+    case EDGESHAPEPROPERTY_RTTI:
+    case EDGEEXTREMITYGLYPHPROPERTY_RTTI:
+        {
+            ElementCollection collection = value.value<ElementCollection>();
+            //Get the selected element
+            QList<int> selectedElements = collection.selectedElement();
+            if(!selectedElements.empty()){
+                //Extract the code associated with the selected element.
+                return setAllValuesToTulipPropertyFromQVariant<IntegerProperty,int,int>(collection.data(collection.index(selectedElements.front(),0),Qt::UserRole),elementType,(IntegerProperty*)property);
+            }else{
+                return false;
+            }
+        }
+        break;
+    case INTEGER_PROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<IntegerProperty,int,int>(value,elementType,(IntegerProperty*)property);
+        break;
+    case LAYOUTPROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<LayoutProperty,Coord,vector<Coord> >(value,elementType,(LayoutProperty*)property);
+        break;
+    case COLORPROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<ColorProperty,Color,Color >(value,elementType,(ColorProperty*)property);
+        break;
+    case SIZEPROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<SizeProperty,Size,Size >(value,elementType,(SizeProperty*)property);
+        break;
+    case BOOLEANVECTORPROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<BooleanVectorProperty,vector<bool>,vector<bool> >(value,elementType,(BooleanVectorProperty*)property);
+        break;
+    case COLORVECTORPROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<ColorVectorProperty,vector<Color>,vector<Color> >(value,elementType,(ColorVectorProperty*)property);
+        break;
+    case COORDVECTORPROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<CoordVectorProperty,vector<Coord>,vector<Coord> >(value,elementType,(CoordVectorProperty*)property);
+        break;
+    case DOUBLEVECTORPROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<DoubleVectorProperty,vector<double>,vector<double> >(value,elementType,(DoubleVectorProperty*)property);
+        break;
+    case INTEGERVECTORPROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<IntegerVectorProperty,vector<int>,vector<int> >(value,elementType,(IntegerVectorProperty*)property);
+        break;
+    case SIZEVECTORPROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<SizeVectorProperty,vector<Size>,vector<Size> >(value,elementType,(SizeVectorProperty*)property);
+        break;
+    case STRINGVECTORPROPERTY_RTTI:
+        return setAllValuesToTulipPropertyFromQVariant<StringVectorProperty,vector<string>,vector<string> >(value,elementType,(StringVectorProperty*)property);
+        break;
+    case FONTFILEPROPERTY_RTTI:
+    case TEXTUREPROPERTY_RTTI:
+        {
+            FilteredUrl url = value.value<FilteredUrl>();
+            (elementType == NODE ?((StringProperty*)property)->setAllNodeValue(QStringToTlpString(url.path())):((StringProperty*)property)->setAllEdgeValue(QStringToTlpString(url.path())));
+            return true;
+        }
+        break;
+    default:
+        if(elementType == NODE){
+            const string& oldValue = property->getNodeDefaultStringValue();
+            string newValue = value.toString().toStdString();
+            if(oldValue.compare(newValue)!=0){
+                return property->setAllNodeStringValue(newValue);
+            }
+        }else{
+            const string& oldValue = property->getEdgeDefaultStringValue();
+            string newValue = value.toString().toStdString();
+            if(oldValue.compare(newValue)!=0){
+                return property->setAllEdgeStringValue(newValue);
+            }
+        }
+        return false;
+        break;
+    }
+}
+
 Qt::ItemFlags TulipQVariantBuilder::flags(Qt::ItemFlags defaultFlags,ElementType,unsigned int ,TulipPropertyType propertyType,PropertyInterface*)const{
     switch(propertyType){
         //If we try to display an edge extremity property for nodes desactivate the row.

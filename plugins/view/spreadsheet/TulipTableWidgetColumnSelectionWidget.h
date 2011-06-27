@@ -38,6 +38,13 @@ private slots:
 
     void showCustomPatternProperties(const QString& pattern);
 
+    void showContextMenu(const QPoint& position);
+
+    void showSelectedColumns();
+    void hideSelectedColumns();
+    void createNewColumn();
+    void copyColumn();
+    void deleteSelectedColumns();
 
 private:
     Ui::TableColumnSelectionWidget *ui;

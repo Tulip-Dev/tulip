@@ -2,9 +2,12 @@
 #include "ui_TulipTableWidgetColumnSelectionWidget.h"
 #include "TulipTableWidgetColumnSelectionModel.h"
 #include "GraphTableWidget.h"
+#include "GraphTableModel.h"
 #include <QtGui/QMenu>
 #include <QtGui/QStyledItemDelegate>
+#include <tulip/PropertyCreationDialog.h>
 #include <cassert>
+#include <string>
 
 
 class TulipTableWidgetColumnSelectionWidgetItemDelegate : public QStyledItemDelegate{
@@ -39,6 +42,9 @@ TulipTableWidgetColumnSelectionWidget::TulipTableWidgetColumnSelectionWidget(QWi
     connect(ui->customPatternLineEdit,SIGNAL(textChanged( QString)),this,SLOT(showCustomPatternProperties(QString)));
 
     ui->listView->setItemDelegate(new TulipTableWidgetColumnSelectionWidgetItemDelegate(ui->listView));
+
+    ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->listView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showContextMenu(QPoint)));
 
 }
 
@@ -109,3 +115,75 @@ void TulipTableWidgetColumnSelectionWidget::updateCheckUncheckAllButtonState(){
     ui->checkUncheckAllCheckBox->blockSignals(false);
 }
 
+
+void TulipTableWidgetColumnSelectionWidget::showContextMenu(const QPoint& position){
+
+    QMenu menu(ui->listView);
+    QModelIndex index = ui->listView->indexAt(position);
+
+    //Ensure the clicked index is always selected.
+    if(!ui->listView->selectionModel()->isRowSelected(index.row(),QModelIndex())){
+        ui->listView->selectionModel()->select(_tableColumnModel->index(index.row(),0),QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    }
+    QModelIndexList rows = ui->listView->selectionModel()->selectedRows(0);
+
+    //Properties operations
+    menu.addAction(tr("Show column(s)"),this,SLOT(showSelectedColumns()));
+    menu.addAction(tr("Hide column(s)"),this,SLOT(hideSelectedColumns()));
+
+    menu.addAction(tr("Create new column"),this,SLOT(createNewColumn()));
+
+    QAction *copyToColumnAction = menu.addAction(tr("Copy to"),this,SLOT(copyColumn()));
+    if(rows.size()!=1){
+        copyToColumnAction->setEnabled(false);
+    }
+
+    QAction *deleteColumnAction =menu.addAction(tr("Delete column(s)"));
+    connect(deleteColumnAction,SIGNAL(triggered()),this,SLOT(deleteSelectedColumns()),Qt::QueuedConnection);
+    //Avoid to delete inherited properties
+    for(QModelIndexList::iterator it  = rows.begin() ; it != rows.end(); ++it){
+        //If the property is an inherited property don't erase it
+        if(_tableColumnModel->propertyForIndex(*it)->getGraph() != _tableColumnModel->graphTableModel()->graph()){
+            deleteColumnAction->setEnabled(false);
+        }
+    }
+    menu.exec(ui->listView->mapToGlobal(position));
+
+}
+void TulipTableWidgetColumnSelectionWidget::showSelectedColumns(){
+    QModelIndexList rows = ui->listView->selectionModel()->selectedRows(0);
+    if(!rows.isEmpty()){
+        for(QModelIndexList::iterator it  = rows.begin() ; it != rows.end(); ++it){
+            _tableColumnModel->setColumnVisible((*it).row(),true);
+        }
+    }
+}
+
+void TulipTableWidgetColumnSelectionWidget::hideSelectedColumns(){
+    QModelIndexList rows = ui->listView->selectionModel()->selectedRows(0);
+    if(!rows.isEmpty()){
+        for(QModelIndexList::iterator it  = rows.begin() ; it != rows.end(); ++it){
+            _tableColumnModel->setColumnVisible((*it).row(),false);
+        }
+    }
+}
+
+void TulipTableWidgetColumnSelectionWidget::createNewColumn(){
+    tlp::PropertyCreationDialog::createNewProperty(_tableColumnModel->graphTableModel()->graph(),this);
+}
+
+void TulipTableWidgetColumnSelectionWidget::copyColumn(){
+
+}
+
+
+void TulipTableWidgetColumnSelectionWidget::deleteSelectedColumns(){
+    QModelIndexList rows = ui->listView->selectionModel()->selectedRows(0);
+    ui->listView->selectionModel()->clearSelection();
+    tlp::Observable::holdObservers();
+    for(QModelIndexList::iterator it  = rows.begin() ; it != rows.end(); ++it){
+        tlp::PropertyInterface* property = _tableColumnModel->propertyForIndex(*it);
+        property->getGraph()->delLocalProperty(std::string(property->getName()));
+    }
+    tlp::Observable::unholdObservers();
+}

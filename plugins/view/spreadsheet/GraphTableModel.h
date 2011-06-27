@@ -118,7 +118,20 @@ public:
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
 
+    /**
+      * @brief Convinience function.
+      **/
+    bool setAllElementsData(const QModelIndex& index,const QVariant & value, int role = Qt::EditRole){
+        return setAllElementsData(_orientation==Qt::Horizontal?index.row():index.column(),value,role);
+    }
+
+    /**
+      * @brief Set the given value to all the elements in the model. Call the setAllNodeValue or setAllEdgeValue in function of the kind of elements managed by the model.
+      **/
+    virtual bool setAllElementsData(unsigned int propertyIndex,const QVariant & value, int role = Qt::EditRole);
+
     virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
+
     Qt::ItemFlags flags ( const QModelIndex & index ) const;
 
     //Data modification methods
@@ -136,7 +149,7 @@ public:
     void delNode(tlp::Graph *,const tlp::node );
     void delEdge(tlp::Graph *,const tlp::edge );
     void addLocalProperty(tlp::Graph*, const std::string&);
-    void delLocalProperty(tlp::Graph *, const std::string &);
+    void beforeDelLocalProperty(tlp::Graph *, const std::string &);
     void addInheritedProperty(tlp::Graph*, const std::string&);
     void beforeDelInheritedProperty(tlp::Graph *, const std::string &);
     void afterSetNodeValue(tlp::PropertyInterface*, const tlp::node);

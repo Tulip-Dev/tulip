@@ -12,7 +12,8 @@ SET(spreadsheet_LIB_SRCS
     VectorEditionWidget.cpp        
     GlyphPreviewGenerator.cpp
     TulipTableWidgetColumnSelectionModel.cpp
-    TulipTableWidgetColumnSelectionWidget.cpp    
+    TulipTableWidgetColumnSelectionWidget.cpp        
+    OrientedPushButton.cpp
 )
 
 set(spreadsheet_UI
@@ -29,7 +30,8 @@ set(spreadsheet_MOC
     TulipItemDelegate.h
     VectorEditionWidget.h        
     TulipTableWidgetColumnSelectionModel.h
-    TulipTableWidgetColumnSelectionWidget.h
+    TulipTableWidgetColumnSelectionWidget.h    
+    OrientedPushButton.h
 )
 
 SET(spreadsheet_RCC

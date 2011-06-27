@@ -1,6 +1,10 @@
 #include "TulipTableWidgetColumnSelectionModel.h"
-#include <QtGui/QTableView>
-TulipTableWidgetColumnSelectionModel::TulipTableWidgetColumnSelectionModel(QTableView* tableView ,QObject* parent):QAbstractListModel(parent),_tableView(tableView),_tableModel(tableView->model())
+#include "GraphTableWidget.h"
+#include "GraphTableModel.h"
+#include <tulip/PropertyInterface.h>
+
+using namespace tlp;
+TulipTableWidgetColumnSelectionModel::TulipTableWidgetColumnSelectionModel(GraphTableWidget* tableView ,QObject* parent):QAbstractListModel(parent),_tableView(tableView),_tableModel(tableView->graphModel())
 {
     connect(_tableModel,SIGNAL(columnsAboutToBeInserted(QModelIndex,int,int)),this,SLOT(columnsAboutToBeInserted(QModelIndex,int,int)));
     connect(_tableModel,SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)),this,SLOT(columnsAboutToBeRemoved(QModelIndex,int,int)));
@@ -90,4 +94,8 @@ void TulipTableWidgetColumnSelectionModel::setColumnVisible(int columnIndex,bool
         _tableView->setColumnHidden(columnIndex,!visible);
         emit dataChanged(index(columnIndex,0),index(columnIndex,0));
     }
+}
+
+PropertyInterface* TulipTableWidgetColumnSelectionModel::propertyForIndex(const QModelIndex& index){
+    return _tableModel->propertyForIndex(index);
 }

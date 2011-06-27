@@ -182,6 +182,18 @@ QVariant GraphTableModel::data(const QModelIndex& index, int role ) const{
     }
     return QVariant();
 }
+
+bool GraphTableModel::setAllElementsData(unsigned int propertyIndex,const QVariant & value, int role){
+    switch(role){
+    case Qt::EditRole:
+            TulipQVariantBuilder helper;
+            PropertyInterface* property = propertyForIndex(propertyIndex);
+            return helper.setAllElementData(value,_elementType,property);
+        break;
+    }
+    return false;
+}
+
 bool GraphTableModel::setData( const QModelIndex & index, const QVariant & value, int role ){
     switch(role){
     case Qt::EditRole:
@@ -402,7 +414,7 @@ void GraphTableModel::addLocalProperty(Graph* g, const string& propertyName){
     }
 }
 
-void GraphTableModel::delLocalProperty(tlp::Graph *graph, const std::string & name){    
+void GraphTableModel::beforeDelLocalProperty(tlp::Graph *graph, const std::string & name){
     _propertiesToDelete.insert(graph->getProperty(name));
 }
 

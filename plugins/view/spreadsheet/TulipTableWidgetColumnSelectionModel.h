@@ -1,7 +1,12 @@
 #ifndef TULIPTABLEWIDGETCOLUMNSELECTIONMODEL_H
 #define TULIPTABLEWIDGETCOLUMNSELECTIONMODEL_H
 #include <QtCore/QAbstractListModel>
-class QTableView;
+class GraphTableWidget;
+class GraphTableModel;
+
+namespace tlp{
+class PropertyInterface;
+}
 /**
   * @brief List model controlling the visibility of TulipTableWidget view columns.
   **/
@@ -9,7 +14,7 @@ class TulipTableWidgetColumnSelectionModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    TulipTableWidgetColumnSelectionModel(QTableView* tableView ,QObject* parent=NULL);
+    TulipTableWidgetColumnSelectionModel(GraphTableWidget* tableView ,QObject* parent=NULL);
 
     int rowCount( const QModelIndex & parent = QModelIndex() ) const;
 
@@ -24,9 +29,15 @@ public:
       **/
     void setColumnVisible(int columnIndex,bool visible);
 
+    GraphTableModel* graphTableModel(){
+        return _tableModel;
+    }
+
+    tlp::PropertyInterface* propertyForIndex(const QModelIndex& index);
+
 private :
-        QTableView* _tableView;
-        QAbstractItemModel* _tableModel;
+        GraphTableWidget* _tableView;
+        GraphTableModel* _tableModel;
 
 private slots:
         void columnsAboutToBeInserted( const QModelIndex & parent, int first, int last );

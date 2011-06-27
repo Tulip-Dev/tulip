@@ -120,6 +120,8 @@ public:
         return data(graph,displayRole,elementType,elementId,getPropertyType(elementType,property),property);
     }
 
+    QVariant defaultElementsData(tlp::Graph* graph,int displayRole,tlp::ElementType elementType,TulipPropertyType propertyType,tlp::PropertyInterface* property)const;
+
     Qt::ItemFlags flags(Qt::ItemFlags defaultFlags,tlp::ElementType elementType,unsigned int elementId,TulipPropertyType propertyType,tlp::PropertyInterface* property)const;
 
     inline Qt::ItemFlags flags(Qt::ItemFlags defaultFlags,tlp::ElementType elementType,unsigned int elementId,tlp::PropertyInterface* property)const{
@@ -136,6 +138,17 @@ public:
           **/
     inline bool setData(const QVariant& value,tlp::ElementType elementType,unsigned int elementId,tlp::PropertyInterface* property)const{
         return setData(value,elementType,elementId,getPropertyType(elementType,property),property);
+    }
+
+    /**
+      * @brief Set all the elements value to the given parameter using the setAllNodeValue or setAllEdgeValue
+      **/
+    bool setAllElementData(const QVariant& value,tlp::ElementType elementType,TulipPropertyType propertyType,tlp::PropertyInterface* property);
+    /**
+      * @brief Convinience function
+      **/
+    inline bool setAllElementData(const QVariant& value,tlp::ElementType elementType,tlp::PropertyInterface* property){
+        return setAllElementData(value,elementType,getPropertyType(elementType,property),property);
     }
 
 private:
@@ -165,6 +178,27 @@ private:
             EDGETYPE newValue = data.value<EDGETYPE>();
             if(oldValue != newValue){
                 property->setEdgeValue(tlp::edge(eltId),data.value<EDGETYPE>());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    template<typename PROPERTYCLASS,typename NODETYPE,typename EDGETYPE>
+    bool setAllValuesToTulipPropertyFromQVariant(const QVariant& data,tlp::ElementType eltType,PROPERTYCLASS* property) const{
+        QVariant v;
+        if(eltType == tlp::NODE){
+            const NODETYPE& oldValue = property->getNodeDefaultValue();
+            NODETYPE newValue = data.value<NODETYPE>();
+            if(oldValue != newValue){
+                property->setAllNodeValue(newValue);
+                return true;
+            }
+        }else{
+            const EDGETYPE& oldValue = property->getEdgeDefaultValue();
+            EDGETYPE newValue = data.value<EDGETYPE>();
+            if(oldValue != newValue){
+                property->setAllEdgeValue(data.value<EDGETYPE>());
                 return true;
             }
         }
