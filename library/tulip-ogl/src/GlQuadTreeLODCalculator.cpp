@@ -286,7 +286,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
 			{
 				for(size_t i=0;i<nbEdges;++i){
           // This code is here to expand edge bonding box when we have an edge with direction (0,0,x)
-          if(layerLODUnit->edgesLODVector[i].boundingBox[0][0] == layerLODUnit->edgesLODVector[i].boundingBox[1][0] &
+          if(layerLODUnit->edgesLODVector[i].boundingBox[0][0] == layerLODUnit->edgesLODVector[i].boundingBox[1][0] &&
              layerLODUnit->edgesLODVector[i].boundingBox[0][1] == layerLODUnit->edgesLODVector[i].boundingBox[1][1]){
             layerLODUnit->edgesLODVector[i].boundingBox.expand(layerLODUnit->edgesLODVector[i].boundingBox[1]+Coord(0.01,0.01,0));
           }
