@@ -186,6 +186,16 @@ namespace tlp {
     void setTextureZoom(float zoom){textureZoom=zoom;runTesselation();}
 
     /**
+     * Get the textureName
+     */
+    std::string getTextureName();
+
+    /**
+     * Set the textureName
+     */
+    void setTextureName(const std::string &name);
+
+    /**
      * Draw a thick (textured) border around the polygon.
      * The graphic card must support geometry shader to make this feature to work.
      * The position parameter determines the way the border is drawn (depending on the polygon points ordering):
