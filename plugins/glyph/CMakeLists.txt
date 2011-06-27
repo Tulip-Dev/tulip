@@ -98,6 +98,18 @@ TARGET_LINK_LIBRARIES(RoundedBox-${TulipVersion} ${LibTulipName})
 TARGET_LINK_LIBRARIES(RoundedBox-${TulipVersion} ${LibTulipOglName})
 ##----------------------------------------------------------------------------------------------------------------------------
 
+##----------------------------------------------------------------------------------------------------------------------------
+SET(Diamond_SRCS diamond.cpp)
+ADD_LIBRARY(Diamond-${TulipVersion} SHARED ${Diamond_SRCS})
+TARGET_LINK_LIBRARIES(Diamond-${TulipVersion} ${LibTulipName})
+TARGET_LINK_LIBRARIES(Diamond-${TulipVersion} ${LibTulipOglName})
+
+##----------------------------------------------------------------------------------------------------------------------------
+SET(Cross_SRCS cross.cpp)
+ADD_LIBRARY(Cross-${TulipVersion} SHARED ${Cross_SRCS})
+TARGET_LINK_LIBRARIES(Cross-${TulipVersion} ${LibTulipName})
+TARGET_LINK_LIBRARIES(Cross-${TulipVersion} ${LibTulipOglName})
+
 INSTALL(TARGETS 
 	Circle-${TulipVersion}
 	Hexagone-${TulipVersion}
@@ -115,5 +127,7 @@ INSTALL(TARGETS
 	ChristmasTree-${TulipVersion}
 	Window-${TulipVersion}
 	RoundedBox-${TulipVersion}
+	Diamond-${TulipVersion}
+	Cross-${TulipVersion}
   DESTINATION ${TulipPluginsInstallDir}/glyphs/
   COMPONENT libtulip_ogl_plugins)
