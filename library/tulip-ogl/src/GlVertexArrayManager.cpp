@@ -604,10 +604,12 @@ void GlVertexArrayManager::addNode(Graph *,const node){
 }
 
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property){
-	if(inputData->getElementLayout()==property || inputData->getElementSize()==property){
+  if(inputData->getElementLayout()==property || inputData->getElementSize()==property || inputData->getElementShape()==property){
 		setHaveToComputeLayout(true);
 		clearLayoutData();
-		inputData->getElementLayout()->removePropertyObserver(this);
+    inputData->getElementLayout()->removePropertyObserver(this);
+    inputData->getElementSize()->removePropertyObserver(this);
+    inputData->getElementShape()->removePropertyObserver(this);
 		layoutObserverActivated=false;
 	}
 	if(edgesModified || inputData->getElementColor()==property || inputData->getElementBorderColor()==property ){
@@ -653,14 +655,14 @@ void GlVertexArrayManager::destroy(PropertyInterface*){
 }
 
 void GlVertexArrayManager::addLocalProperty(Graph *, const std::string &name){
-	if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName()){
+  if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName() || name==inputData->getElementShapePropName()){
 		clearData();
 		clearObservers();
 	}
 }
 
 void GlVertexArrayManager::delLocalProperty(Graph *, const std::string &name){
-	if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName()){
+  if(name==inputData->getElementColorPropName() || name==inputData->getElementLayoutPropName() || name ==inputData->getElementSizePropName() || name==inputData->getElementShapePropName()){
 		clearData();
 		clearObservers();
 	}
@@ -725,6 +727,7 @@ void GlVertexArrayManager::initObservers() {
 	if(!layoutObserverActivated){
 		inputData->getElementLayout()->addPropertyObserver(this);
 		inputData->getElementSize()->addPropertyObserver(this);
+    inputData->getElementShape()->addPropertyObserver(this);
 		layoutObserverActivated=true;
 	}
 	if(!colorObserverActivated){
@@ -743,6 +746,7 @@ void GlVertexArrayManager::clearObservers() {
 	if(layoutObserverActivated){
 		inputData->getElementLayout()->removePropertyObserver(this);
 		inputData->getElementSize()->removePropertyObserver(this);
+    inputData->getElementShape()->removePropertyObserver(this);
 		layoutObserverActivated=false;
 	}
 	if(colorObserverActivated){
