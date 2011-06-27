@@ -672,17 +672,18 @@ namespace tlp {
     editMenu->addSeparator();
     editMenu->addAction("&Find...",this,SLOT(editFind()),QKeySequence(tr("Ctrl+F")));
     editMenu->addSeparator();
-    editMenu->addAction("Select all",this,SLOT(editSelectAll()),QKeySequence(tr("Ctrl+A")));
-    editMenu->addAction("Delete selection",this,SLOT(editDelSelection()),QKeySequence(tr("Del")));
-    editMenu->addAction("Deselect all",this,SLOT(editDeselectAll()),QKeySequence(tr("Ctrl+Shift+A")));
-    editMenu->addAction("Invert selection",this,SLOT(editReverseSelection()),QKeySequence(tr("Ctrl+I")));
+    editMenu->addAction("&Select all",this,SLOT(editSelectAll()),QKeySequence(tr("Ctrl+A")));
+    editMenu->addAction("&Deselect all",this,SLOT(editDeselectAll()),QKeySequence(tr("Ctrl+Shift+A")));
+    editMenu->addAction("&Invert selection",this,SLOT(editReverseSelection()),QKeySequence(tr("Ctrl+I")));
     editMenu->addSeparator();
-    editMenu->addAction("Create group",this,SLOT(editCreateGroup()),QKeySequence(tr("Ctrl+G")));
-    editMenu->addAction("Create subgraph",this,SLOT(editCreateSubgraph()),QKeySequence(tr("Ctrl+Shift+G")));
+    editMenu->addAction("Delete s&election",this,SLOT(editDelSelection()),QKeySequence(tr("Del")));
     editMenu->addSeparator();
-    editUndoAction=editMenu->addAction("Undo",this,SLOT(undo()),QKeySequence(tr("Ctrl+Z")));
+    editMenu->addAction("Create &group",this,SLOT(editCreateGroup()),QKeySequence(tr("Ctrl+G")));
+    editMenu->addAction("Create s&ubgraph",this,SLOT(editCreateSubgraph()),QKeySequence(tr("Ctrl+Shift+G")));
+    editMenu->addSeparator();
+    editUndoAction=editMenu->addAction("&Undo",this,SLOT(undo()),QKeySequence(tr("Ctrl+Z")));
     editUndoAction->setEnabled(false);
-    editRedoAction=editMenu->addAction("Redo",this,SLOT(redo()),QKeySequence(tr("Ctrl+Y")));
+    editRedoAction=editMenu->addAction("&Redo",this,SLOT(redo()),QKeySequence(tr("Ctrl+Y")));
     editRedoAction->setEnabled(false);
 
      //Algorithm Menu
