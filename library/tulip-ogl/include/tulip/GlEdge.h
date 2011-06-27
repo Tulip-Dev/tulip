@@ -156,7 +156,7 @@ private :
 	/**
 	 * Thgis function is used to render edge arrows
 	 */
-	void displayArrow(GlGraphInputData *data,edge e,node source,const Size &sizeRatio,float edgeSize,const Color &color,float maxSize,bool selected,
+        void displayArrow(GlGraphInputData *data,edge e,node source,const Size &sizeRatio,float edgeSize,const Color &color,float maxSize,bool selected,float selectionOutlineSize,
 			int srcEdgeGlyph,int tgtEdgeGlyph,size_t numberOfBends,const Coord &anchor,const Coord &tgtCoord,
 			const Coord &srcAnchor,const Coord &tgtAnchor,Coord &lineAnchor);
 

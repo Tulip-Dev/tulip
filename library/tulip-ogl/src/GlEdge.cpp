@@ -246,6 +246,7 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 
 	getEdgeAnchor(data,source,target,bends,srcCoord,tgtCoord,srcSize,tgtSize,srcAnchor,tgtAnchor);
 
+        float selectionOutlineSize= 0.f;
 	if (selected) {
 		glMatrixMode(GL_PROJECTION);
 		glPushMatrix();
@@ -254,8 +255,9 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 
 		Coord p1=camera->screenTo3DWorld(Coord(0,0,0));
 		Coord p2=camera->screenTo3DWorld(Coord(2,0,0));
-		edgeSize[0] += (p2-p1).norm();
-		edgeSize[1] += (p2-p1).norm();
+                selectionOutlineSize = (p2-p1).norm();
+                edgeSize[0] += selectionOutlineSize;
+                edgeSize[1] += selectionOutlineSize;
 
 		glMatrixMode(GL_PROJECTION);
 		glPopMatrix();
@@ -269,14 +271,14 @@ void GlEdge::draw(float lod, GlGraphInputData* data, Camera* camera) {
 	unsigned int endEdgeGlyph = data->getElementTgtAnchorShape()->getEdgeValue(e);
 
 	if (startEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
-								displayArrow(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),srcCol,maxSrcSize,selected,startEdgeGlyph,endEdgeGlyph,
+                                                                displayArrow(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),srcCol,maxSrcSize,selected,selectionOutlineSize,startEdgeGlyph,endEdgeGlyph,
 				bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
 	} else {
 		beginLineAnchor = srcAnchor;
 	}
 
 	if (endEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
-								displayArrow(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),tgtCol,maxTgtSize,selected,endEdgeGlyph,startEdgeGlyph,
+                                                                displayArrow(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),tgtCol,maxTgtSize,selected,selectionOutlineSize,endEdgeGlyph,startEdgeGlyph,
 				bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
 	} else {
 		endLineAnchor = tgtAnchor;
@@ -703,6 +705,7 @@ void GlEdge::displayArrow(GlGraphInputData *data,
 		const Color &color,
 		float maxSize,
 		bool selected,
+                float selectionOutlineSize,
 		int srcEdgeGlyph,
 		int tgtEdgeGlyph,
 		size_t numberOfBends,
@@ -711,7 +714,6 @@ void GlEdge::displayArrow(GlGraphInputData *data,
 		const Coord &srcAnchor,
 		const Coord &tgtAnchor,
 		Coord &lineAnchor){
-//	 = data->elementSrcAnchorSize->getEdgeValue(e);
 
 	//Correct begin tmp Anchor
 	Coord beginTmpAnchor = anchor;
@@ -729,50 +731,36 @@ void GlEdge::displayArrow(GlGraphInputData *data,
 
 	Size size;
 	if (data->parameters->isEdgeSizeInterpolate()) {
-		size[0] = edgeSize / 4.0f;
-		size[1] = edgeSize / 4.0f;
-		size[2] = edgeSize / 4.0f;
+                size[0] = edgeSize / 4.0f;
+                size[1] = edgeSize / 4.0f;
+                size[2] = edgeSize / 4.0f;
 
-	} else {
-		size[0] = sizeRatio[0] > maxGlyphSize ? maxGlyphSize : sizeRatio[0];
-		size[1] = std::min(maxSize, sizeRatio[1]);
-		size[2] = std::min(maxSize, sizeRatio[2]);
-		if (selected)
-			size += 0.05f;
+	} else {            
+            size[0] = sizeRatio[0];
+            size[1] = sizeRatio[1];
+            size[2] = sizeRatio[2];
+            if(data->parameters->getEdgesMaxSizeToNodesSize()){
+                 size[0] = std::min(maxSize, sizeRatio[0]);
+                 size[1] = std::min(maxSize, sizeRatio[1]);
+                 size[2] = std::min(maxSize, sizeRatio[2]);
+            }
 	}
+        if (selected){
+                size[1] += selectionOutlineSize;
+                size[2] += selectionOutlineSize;
+        }
+
+        size[0] = std::min(maxGlyphSize, size[0]);
 
 	EdgeExtremityGlyph *extremityGlyph = data->extremityGlyphs.get(srcEdgeGlyph);
 	assert(extremityGlyph);
 
 	MatrixGL srcTransformationMatrix;
-	MatrixGL srcScalingMatrix;
+        MatrixGL srcScalingMatrix;
 
 	extremityGlyph->getTransformationMatrix(beginTmpAnchor, srcAnchor, size,
 			srcTransformationMatrix, srcScalingMatrix);
 
-	/*BoundingBox box = eeGlyphBoundingBox(srcAnchor, beginTmpAnchor, size[0],
-                                       srcTransformationMatrix, srcScalingMatrix);
-  Coord boxSize( box[1] - box[0] );
-  Coord middle( box[0] + (size) / 2.f);
-  for (int i = objectScale.size() - 1; i >= 0; --i) {
-    middle += objectTranslate[i];
-    middle = objectCoord[i] - (objectCoord[i] - middle) * objectScale[i];
-    boxSize *= objectScale[i];
-  }
-  box[0] = middle - boxSize / 2.f;
-  box[1] = middle + boxSize / 2.f;
-  float lod = 0;
-  if (camera->is3D()) {
-    Coord eyes = camera->getEyes() + (camera->getEyes() - camera->getCenter())
-                 / (float)camera->getZoomFactor();
-    lod = calculateAABBSize(box, eyes, transformMatrix, camera->getViewport(),
-                            camera->getViewport());
-  } else {
-    lod = calculate2DLod(box, camera->getViewport(), camera->getViewport());
-  }
-  if (lod < 10.0) { //less than four pixel on screen, don't draw it
-    beginLineAnchor = srcAnchor;
-  } else {*/
 
 	glPushMatrix();
 	glMultMatrixf((GLfloat *) &srcTransformationMatrix);
