@@ -389,6 +389,14 @@ void GlComplexPolygon::setOutlineSize(double size) {
 	outlineSize=size;
 }
 //=====================================================
+string GlComplexPolygon::getTextureName() {
+  return textureName;
+}
+//=====================================================
+void GlComplexPolygon::setTextureName(const string &name) {
+  textureName=name;
+}
+//=====================================================
 void GlComplexPolygon::addPoint(const Coord& point) {
 	pointsIdx[currentVector].push_back(points[currentVector].size());
 	points[currentVector].push_back(point);
