@@ -37,11 +37,11 @@ PropertyInterface* StringProperty::clonePrototype(Graph * g, const std::string& 
 	return p;
 }
 //=================================================================================
-int StringProperty::compare(const node n1, const node n2){
+int StringProperty::compare(const node n1, const node n2) const{
     return getNodeValue(n1).compare(getNodeValue(n2));
 }
 //=================================================================================
-int StringProperty::compare(const edge e1, const edge e2){
+int StringProperty::compare(const edge e1, const edge e2) const{
     return getEdgeValue(e1).compare(getEdgeValue(e2));
 }
 //=================================================================================

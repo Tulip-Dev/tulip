@@ -123,11 +123,11 @@ void IntegerProperty::clone_handler(AbstractProperty<IntegerType,IntegerType, In
   }
 }
 //=================================================================================
-int IntegerProperty::compare(const node n1, const node n2){
+int IntegerProperty::compare(const node n1, const node n2) const{
     return getNodeValue(n1) - getNodeValue(n2);
 }
 //=================================================================================
-int IntegerProperty::compare(const edge e1, const edge e2){
+int IntegerProperty::compare(const edge e1, const edge e2) const{
     return getEdgeValue(e1) - getEdgeValue(e2);
 }
 //=================================================================================

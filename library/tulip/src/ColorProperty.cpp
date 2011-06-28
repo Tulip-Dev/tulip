@@ -52,11 +52,11 @@ PropertyInterface* ColorVectorProperty::clonePrototype(Graph * g, const std::str
     return p;
 }
 
-int ColorProperty::compare(const node n1, const node n2){    
+int ColorProperty::compare(const node n1, const node n2) const{
    return compareHSVValues(getNodeValue(n1),getNodeValue(n2));
 }
 
-int ColorProperty::compare(const edge e1, const edge e2){    
+int ColorProperty::compare(const edge e1, const edge e2) const{
     return compareHSVValues(getEdgeValue(e1),getEdgeValue(e2));
 }
 
