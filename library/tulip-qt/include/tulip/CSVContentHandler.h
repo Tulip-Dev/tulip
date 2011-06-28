@@ -35,8 +35,8 @@ public:
   virtual void begin() = 0;
   /**
    * Function called for each tokens found in the file.
-   * @param row The row position of the token.
-   * @param column The column position of the token.
+   * @param row The row number of the token.
+   * @param column The column position of the token in the line.
    * @param token The token.
    */
   virtual void token(unsigned int row, unsigned int column, const std::string& token) = 0;

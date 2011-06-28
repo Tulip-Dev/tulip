@@ -84,10 +84,10 @@ void CSVParserConfigurationWidget::changeEvent(QEvent *e)
     }
 }
 
-CSVParser * CSVParserConfigurationWidget::buildParser()const{
+CSVParser * CSVParserConfigurationWidget::buildParser(unsigned int firstLine, unsigned int lastLine)const{
     CSVParser *parser = NULL;
     if(isValid()){
-        parser = new CSVSimpleParser(getFile(),getSeparator(),getTextSeparator(),getEncoding());
+        parser = new CSVSimpleParser(getFile(),getSeparator(),getTextSeparator(),getEncoding(),firstLine,lastLine);
         if(invertMatrix()){
             parser = new CSVInvertMatrixParser(parser);
         }

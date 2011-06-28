@@ -32,7 +32,7 @@ using namespace tlp;
 
 const string defaultRejectedChars = " \r\n";
 const string spaceChars = " \t\r\n";
-CSVSimpleParser::CSVSimpleParser(const string& fileName,const string& separator,char textDelimiter,const string& fileEncoding):fileName(fileName),separator(separator),textDelimiter(textDelimiter),fileEncoding(fileEncoding){
+CSVSimpleParser::CSVSimpleParser(const string& fileName,const string& separator,char textDelimiter,const string& fileEncoding,unsigned int firstLine,unsigned int lastLine):_fileName(fileName),_separator(separator),_textDelimiter(textDelimiter),_fileEncoding(fileEncoding),_firstLine(firstLine),_lastLine(lastLine){
 }
 
 CSVSimpleParser::~CSVSimpleParser() {
@@ -43,9 +43,12 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
         return false;
     }
     handler->begin();
-    ifstream csvFile(fileName.c_str(),ifstream::in|ifstream::binary);
+    ifstream csvFile(_fileName.c_str(),ifstream::in|ifstream::binary);
 
+    //Real row number used to
     unsigned int row = 0;
+    //Read row number
+    unsigned int readRow = 0;
     unsigned int columnMax = 0;
     if (csvFile) {
         csvFile.seekg(0, std::ios_base::end);
@@ -58,16 +61,16 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
 
         unsigned int displayProgressEachLineNumber = 10;
 
-        QTextCodec * codec = QTextCodec::codecForName ( fileEncoding.c_str());
+        QTextCodec * codec = QTextCodec::codecForName ( _fileEncoding.c_str());
         if(codec == NULL){
-            std::cerr << __PRETTY_FUNCTION__<<":"<<__LINE__<<" Cannot found the convertion codec to convert from "<<fileEncoding<<" string will be treated as utf8."<<std::endl;
+            std::cerr << __PRETTY_FUNCTION__<<":"<<__LINE__<<" Cannot found the convertion codec to convert from "<<_fileEncoding<<" string will be treated as utf8."<<std::endl;
             codec = QTextCodec::codecForName("UTF-8");
         }
 
         if (progress) {
             progress->progress(0, 100);
         }
-        while (multiplatformgetline(csvFile, line)) {
+        while (multiplatformgetline(csvFile, line) && row <_lastLine) {
 
             if (progress) {
                 readSize += line.size();
@@ -79,28 +82,30 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
                     // compute progression in function of read size and file size.
                     progress->progress(readSize, fileSize);
                 }
-            }
-            //If the line is empty continue.
-            if(line.empty()){
-                continue;
-            }
-            //Correct the encoding of the line.
-            line = convertStringEncoding(line,codec);
-            tokens.clear();
-            tokenize(line, tokens, separator,textDelimiter, 0);
-            unsigned int column = 0;
-            for (column = 0; column < tokens.size(); ++column) {
+            }            
+
+            if(!line.empty() && row >= _firstLine){
+                //Correct the encoding of the line.
+                line = convertStringEncoding(line,codec);
+                tokens.clear();
+                tokenize(line, tokens, _separator,_textDelimiter, 0);
+                unsigned int column = 0;
+                for (column = 0; column < tokens.size(); ++column) {
+                    handler->token(readRow, column, treatToken(tokens[column], readRow, column));
+                }
+                ++readRow;
+                columnMax = max(columnMax, column);
+
+                //If user want to stop break the import process.
                 if (progress) {
                     if (progress->state() != TLP_CONTINUE) {
                         break;
                     }
                 }
-                handler->token(row, column, treatToken(tokens[column], row, column));
             }
-            columnMax = max(columnMax, column);
             ++row;
         }
-        handler->end(row, columnMax);
+        handler->end(readRow, columnMax);
         return true;
     }else{
         return false;
@@ -124,11 +129,11 @@ bool CSVSimpleParser::multiplatformgetline ( istream& is, string& str ){
             break;
         }else
             if(c=='\n'){
-            break;
-        }else{
-            //Push the character
-            str.push_back(c);
-        }
+                break;
+            }else{
+                //Push the character
+                str.push_back(c);
+            }
     }
     //End of line reading.
     return true;
@@ -163,7 +168,7 @@ void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
             nbExtractedChars = pos - lastPos;
         }
         try {
-        tokens.push_back(str.substr(lastPos, nbExtractedChars));
+            tokens.push_back(str.substr(lastPos, nbExtractedChars));
         }catch (...) {
             //An error occur quit the line parsing.
             break;
@@ -211,7 +216,7 @@ string CSVSimpleParser::treatToken(const string& token, int, int) {
     }
     //Treat string to remove special characters from it's beginning and its end.
     string rejectedChars = defaultRejectedChars;
-    rejectedChars.push_back(textDelimiter);
+    rejectedChars.push_back(_textDelimiter);
     return removeQuotesIfAny(currentToken,rejectedChars);
 }
 

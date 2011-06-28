@@ -45,6 +45,7 @@ private:
     void updatePreview();
     CSVParserConfigurationWidget* parserConfigurationWidget;
     CSVTableWidget* previewTableWidget;
+    unsigned int previewLineNumber;
 
 private slots:
     void parserChanged();

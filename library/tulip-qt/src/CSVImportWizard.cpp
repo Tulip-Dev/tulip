@@ -21,11 +21,11 @@
 #include <tulip/QtProgress.h>
 #include <QtGui/QVBoxLayout>
 using namespace tlp;
-CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage ( QWidget * parent):QWizardPage(parent),parserConfigurationWidget(new CSVParserConfigurationWidget(this)),previewTableWidget(new CSVTableWidget(this)){
+CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage ( QWidget * parent):QWizardPage(parent),parserConfigurationWidget(new CSVParserConfigurationWidget(this)),previewTableWidget(new CSVTableWidget(this)),previewLineNumber(5){
     setLayout(new QVBoxLayout());
     layout()->addWidget(parserConfigurationWidget);
     layout()->addWidget(previewTableWidget);
-    previewTableWidget->setMaxPreviewLineNumber(5);
+    previewTableWidget->setMaxPreviewLineNumber(previewLineNumber);
     previewTableWidget->horizontalHeader()->setVisible(false);
     previewTableWidget->verticalHeader()->setVisible(false);
     connect(parserConfigurationWidget,SIGNAL(parserChanged()),this,SLOT(parserChanged()));
@@ -37,7 +37,7 @@ bool CSVParsingConfigurationQWizardPage::isComplete() const{
 
 void CSVParsingConfigurationQWizardPage::parserChanged(){
     //Fill the preview widget
-    CSVParser* parser = parserConfigurationWidget->buildParser();
+    CSVParser* parser = parserConfigurationWidget->buildParser(0,previewLineNumber);
     //Force widget to clear content.
     previewTableWidget->begin();
     if(parser!=NULL){
@@ -53,8 +53,8 @@ void CSVParsingConfigurationQWizardPage::parserChanged(){
 }
 
 void CSVParsingConfigurationQWizardPage::updatePreview(){
-previewTableWidget->setRowCount(0);
-previewTableWidget->setColumnCount(0);
+    previewTableWidget->setRowCount(0);
+    previewTableWidget->setColumnCount(0);
 }
 
 CSVParser* CSVParsingConfigurationQWizardPage::buildParser() const{
@@ -88,8 +88,8 @@ void CSVGraphMappingConfigurationQWizardPage::initializePage(){
 }
 
 CSVImportWizard::CSVImportWizard(QWidget *parent) :
-        QWizard(parent),
-        ui(new Ui::CSVImportWizard)
+    QWizard(parent),
+    ui(new Ui::CSVImportWizard)
 {
     ui->setupUi(this);
 }
