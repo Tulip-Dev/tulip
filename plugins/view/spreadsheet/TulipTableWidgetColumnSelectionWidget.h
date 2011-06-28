@@ -41,6 +41,7 @@ private slots:
     void showContextMenu(const QPoint& position);
 
     void showSelectedColumns();
+    void showOnlySelectedColumns();
     void hideSelectedColumns();
     void createNewColumn();
     void copyColumn();

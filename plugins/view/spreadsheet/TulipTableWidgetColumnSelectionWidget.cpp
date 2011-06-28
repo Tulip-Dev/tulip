@@ -130,6 +130,7 @@ void TulipTableWidgetColumnSelectionWidget::showContextMenu(const QPoint& positi
 
     //Properties operations
     menu.addAction(tr("Show column(s)"),this,SLOT(showSelectedColumns()));
+    menu.addAction(tr("Show only selected column(s)"),this,SLOT(showOnlySelectedColumns()));
     menu.addAction(tr("Hide column(s)"),this,SLOT(hideSelectedColumns()));
 
     menu.addAction(tr("Create new column"),this,SLOT(createNewColumn()));
@@ -157,6 +158,17 @@ void TulipTableWidgetColumnSelectionWidget::showSelectedColumns(){
         for(QModelIndexList::iterator it  = rows.begin() ; it != rows.end(); ++it){
             _tableColumnModel->setColumnVisible((*it).row(),true);
         }
+    }
+}
+
+void TulipTableWidgetColumnSelectionWidget::showOnlySelectedColumns(){
+    QModelIndexList rows = ui->listView->selectionModel()->selectedRows(0);
+    std::set<int> columnsToShow;
+    for(QModelIndexList::iterator it  = rows.begin() ; it != rows.end(); ++it){
+        columnsToShow.insert((*it).row());
+    }
+    for(int i = 0 ; i < _tableColumnModel->rowCount() ; ++i){
+        _tableColumnModel->setColumnVisible(i,columnsToShow.find(i)!= columnsToShow.end());
     }
 }
 
