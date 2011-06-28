@@ -174,8 +174,10 @@ int GraphTableModel::rowCount(const QModelIndex& ) const{
 QVariant GraphTableModel::data(const QModelIndex& index, int role ) const{
     switch(role){
     default:
-        GraphTableModelIndex tableIndex = element(index);
-        if(tableIndex.isValid()){
+        GraphTableModelIndex tableIndex = element(index);        
+        //Check if the cell is valid : the node and and the property must be defined
+        //If the property is going to be deleted don't display data
+        if(tableIndex.isValid() && _propertiesToDelete.find(tableIndex.property())==_propertiesToDelete.end()){
             TulipQVariantBuilder helper;
             return helper.data(_graph,role,_elementType,tableIndex.element(),tableIndex.property());
         }
@@ -186,9 +188,9 @@ QVariant GraphTableModel::data(const QModelIndex& index, int role ) const{
 bool GraphTableModel::setAllElementsData(unsigned int propertyIndex,const QVariant & value, int role){
     switch(role){
     case Qt::EditRole:
-            TulipQVariantBuilder helper;
-            PropertyInterface* property = propertyForIndex(propertyIndex);
-            return helper.setAllElementData(value,_elementType,property);
+        TulipQVariantBuilder helper;
+        PropertyInterface* property = propertyForIndex(propertyIndex);
+        return helper.setAllElementData(value,_elementType,property);
         break;
     }
     return false;
@@ -213,12 +215,15 @@ QVariant GraphTableModel::headerData(int section, Qt::Orientation orientation, i
         if(orientation == Qt::Vertical){
             return QVariant(QString::number(_idTable[section]));
         }else{
-            QString name = QString::fromStdString(_propertiesTable[section]->getName());
-            name.append("\n");
-            name.append("( ");
-            name.append(propertyInterfaceToPropertyTypeLabel(_propertiesTable[section]));
-            name.append(" )");          
-            return QVariant(name);
+            PropertyInterface* property = _propertiesTable[section];
+            if(_propertiesToDelete.find(property)==_propertiesToDelete.end()){
+                QString name = QString::fromStdString(property->getName());
+                name.append("\n");
+                name.append("( ");
+                name.append(propertyInterfaceToPropertyTypeLabel(_propertiesTable[section]));
+                name.append(" )");
+                return QVariant(name);
+            }
         }
 
         break;

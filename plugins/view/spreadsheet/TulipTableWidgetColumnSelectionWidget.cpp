@@ -6,6 +6,7 @@
 #include <QtGui/QMenu>
 #include <QtGui/QStyledItemDelegate>
 #include <tulip/PropertyCreationDialog.h>
+#include <tulip/CopyPropertyDialog.h>
 #include <cassert>
 #include <string>
 
@@ -172,8 +173,15 @@ void TulipTableWidgetColumnSelectionWidget::createNewColumn(){
     tlp::PropertyCreationDialog::createNewProperty(_tableColumnModel->graphTableModel()->graph(),this);
 }
 
-void TulipTableWidgetColumnSelectionWidget::copyColumn(){
 
+void TulipTableWidgetColumnSelectionWidget::copyColumn(){
+    QModelIndexList rows = ui->listView->selectionModel()->selectedRows(0);
+    if(rows.size()==1){
+        tlp::PropertyInterface* property = _tableColumnModel->propertyForIndex(rows.front());
+        tlp::Observable::holdObservers();
+        tlp::CopyPropertyDialog::copyProperty(_tableColumnModel->graphTableModel()->graph(),property,true,this);
+        tlp::Observable::unholdObservers();
+    }
 }
 
 

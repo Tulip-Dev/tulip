@@ -31,6 +31,7 @@
 #include <QtGui/QToolBar>
 #include "GraphTableModel.h"
 #include <tulip/TlpQtTools.h>
+#include <tulip/CopyPropertyDialog.h>
 
 using namespace std;
 using namespace tlp;
@@ -274,7 +275,13 @@ void SpreadView::createNewProperties(){
 }
 
 void SpreadView::copyColumnToOther(){
-
+    QAction* action = qobject_cast<QAction*>(sender());
+    if(action!=NULL){
+        int index = action->data().toInt();
+        GraphTableWidget* table = currentTable();
+        PropertyInterface* property = table->graphModel()->propertyForIndex(index);
+        CopyPropertyDialog::copyProperty(_graph,property,true,table);
+    }
 }
 
 void SpreadView::setAllColumnValues(){
@@ -513,9 +520,9 @@ void SpreadView::updateFilters(){
                 match = true;
             }else{
                 for(int j=0;j< nodesGraphModel->columnCount() ; ++j){                    
-                        match |= regExp.exactMatch(nodesGraphModel->data(nodesGraphModel->index(i,j)).toString());
-                        if(match)
-                            break;
+                    match |= regExp.exactMatch(nodesGraphModel->data(nodesGraphModel->index(i,j)).toString());
+                    if(match)
+                        break;
                 }
             }
             ui->nodesTableView->setRowHidden(i,!(display && match));
@@ -534,9 +541,9 @@ void SpreadView::updateFilters(){
                 match = true;
             }else{
                 for(int j=0;j< edgesGraphModel->columnCount() ; ++j){                    
-                        match |= regExp.exactMatch(edgesGraphModel->data(edgesGraphModel->index(i,j)).toString());
-                        if(match)
-                            break;
+                    match |= regExp.exactMatch(edgesGraphModel->data(edgesGraphModel->index(i,j)).toString());
+                    if(match)
+                        break;
                 }
             }
             ui->edgesTableView->setRowHidden(i,!(display && match));
