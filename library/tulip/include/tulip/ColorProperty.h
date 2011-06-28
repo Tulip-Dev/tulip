@@ -45,6 +45,16 @@ public :
   std::string getTypename() const {
     return propertyTypename;
   }  
+
+  /**
+    * @brief Compare colors of n1 and n2 using HSV space instead of RGB.
+    **/
+  int compare(const node n1, const node n2);
+  /**
+    * @brief Compare colors of e1 and e2 using HSV space instead of RGB.
+    **/
+  int compare(const edge e1, const edge e2);
+
 };
 
 class TLP_SCOPE ColorVectorProperty:public AbstractVectorProperty<tlp::ColorVectorType, tlp::ColorType> { 
