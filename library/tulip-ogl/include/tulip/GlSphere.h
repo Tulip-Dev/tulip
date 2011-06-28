@@ -64,10 +64,38 @@ namespace tlp {
     virtual void translate(const Coord& mouvement);
 
     /**
+     * Get absolute position
+     */
+    const Coord& getPosition() const {
+      return position;
+    }
+    
+    /**
+     * Set absolute position
+     */
+    void setPosition(const Coord& pos) {
+      position = pos;
+    }
+
+    /**
      * Set the texture name
      */
     virtual void setTexture(const std::string &texture) {
       textureFile=texture;
+    }
+
+    /**
+     * Get the color
+     */
+    const Color& getColor() const {
+      return color;
+    }
+
+    /**
+     * Set the color
+     */
+    void setColor(const Color &newColor) {
+      color = newColor;
     }
 
     /**
