@@ -74,7 +74,7 @@ ADD_LIBRARY(${LibTulipPluginsManagerName} STATIC ${${LibTulipPluginsManagerName}
 TARGET_LINK_LIBRARIES(${LibTulipPluginsManagerName} ${QT_QTNETWORK_LIBRARY})
 
 IF(WIN32)
-  IF(${MSVC})
+  IF(MSVC)
     INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/\${BUILD_TYPE}/tulip_check_pl.exe 
             DESTINATION "${TulipBinInstallDir}"
             COMPONENT tulip_pluginsmanager)
