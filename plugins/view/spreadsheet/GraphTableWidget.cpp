@@ -98,3 +98,6 @@ void GraphTableWidget::highlightAndDisplayElements(const std::set<unsigned int>&
     highlightElements(elements);
     scrollToFirstOf(selectionModel()->selectedIndexes());
 }
+void GraphTableWidget::highlightAllElements(){
+    selectionModel()->select(QItemSelection(model()->index(0,0),model()->index(model()->rowCount()-1,model()->columnCount()-1)),QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+}

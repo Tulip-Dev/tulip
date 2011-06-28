@@ -45,6 +45,8 @@ public:
       **/
     std::set<unsigned int> indexListToIds(const QModelIndexList& elementsIndexes)const;
 
+    void highlightAllElements();
+
     void highlightElements(const std::set<unsigned int>& elementsToHighligh);
 
     /**

@@ -29,6 +29,7 @@
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
 #include <QtGui/QToolBar>
+#include <QtGui/QKeyEvent>
 #include "GraphTableModel.h"
 #include <tulip/TlpQtTools.h>
 #include <tulip/CopyPropertyDialog.h>
@@ -53,7 +54,6 @@ QWidget *SpreadView::construct(QWidget *parent) {
 
     setCentralWidget(mainWidget);
     installEventFilter(mainWidget);
-    installEventFilter(ui->nodesTableView);
 
     //Show hide columns.
     ui->editColumnPushButton->setMirrored(true);
@@ -398,7 +398,9 @@ void SpreadView::deleteElements(){
     if(action!=NULL){
         GraphTableWidget *tableWidget = currentTable();
         QModelIndexList indexes = tableWidget->selectionModel()->selectedRows(0);
+        Observable::holdObservers();
         deleteElements(indexes,tableWidget,false);
+        Observable::unholdObservers();
     }
 }
 
@@ -679,6 +681,32 @@ void SpreadView::dataChanged(const QModelIndex & topLeft, const QModelIndex & bo
     updateFilters();
 }
 
+
+bool SpreadView::eventFilter(QObject *, QEvent *event){
+    //Override default shortcut
+    if(event->type() == QEvent::ShortcutOverride){
+        QKeyEvent* shortcutOverrideEvent  = static_cast<QKeyEvent*>(event);
+        //Highlight all the elements
+        if(shortcutOverrideEvent->modifiers() == Qt::ControlModifier && shortcutOverrideEvent->key() == Qt::Key_A){
+            currentTable()->selectAll();
+            shortcutOverrideEvent->accept();
+            return true;
+        }else if(shortcutOverrideEvent->key() == Qt::Key_Delete){
+            //Suppress selected elements
+            GraphTableWidget *tableWidget = currentTable();
+            QModelIndexList indexes = tableWidget->selectionModel()->selectedRows(0);
+            Observable::holdObservers();
+            deleteElements(indexes,tableWidget,false);
+            Observable::unholdObservers();
+            shortcutOverrideEvent->accept();
+            return true;
+        }
+    }
+    return false;
+
+}
+
 VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "07/06/2011", "Spreadsheet view", "2.0")
+
 
 

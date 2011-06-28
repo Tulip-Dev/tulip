@@ -59,6 +59,7 @@ public:
     QImage createPicture(int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
 
 
+    bool eventFilter(QObject *object, QEvent *event);
 public slots :
 
     /**
