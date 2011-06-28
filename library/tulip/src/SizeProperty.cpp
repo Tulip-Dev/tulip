@@ -20,6 +20,7 @@
 #include <float.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/Observable.h>
+#include <math.h>
 
 using namespace std;
 using namespace tlp;
@@ -170,4 +171,12 @@ PropertyInterface* SizeVectorProperty::clonePrototype(Graph * g, const std::stri
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
+}
+
+int SizeProperty::compare(const node n1, const node n2) const{
+    const Size& s1 = getNodeValue(n1);
+    const Size& s2 = getNodeValue(n2);
+    float v1 = fabs(s1[0])* fabs(s1[1]) * fabs(s1[2]);
+    float v2 = fabs(s2[0])* fabs(s2[1])* fabs(s2[2]);
+    return v1 == v2 ?0:(v1>v2 ? 1 : -1);
 }
