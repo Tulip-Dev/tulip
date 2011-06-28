@@ -532,9 +532,9 @@ unsigned int Observable::countListeners() const {
 }
 //----------------------------------------
 bool Observable::hasOnlookers() const {
-	//	if (!oAlive[n]) {
-	//		throw OLOException("hasOnlookers called on a deleted Observable");
-	//	}
+	if (!oAlive[n]) {
+		throw OLOException("hasOnlookers called on a deleted Observable");
+	}
 	return oGraph.indeg(getNode()) > 0;
 }
 //----------------------------------------
