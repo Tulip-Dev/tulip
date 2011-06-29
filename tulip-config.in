@@ -23,11 +23,11 @@ LINUX=$(sh -c 'uname -s | grep -q Linux; echo $?')
 if [ $MACOSX -eq 0 ] ; then
   libextension=dylib
   pluginldflags="-bundle -Wl,-bind_at_load -flat_namespace"
-  if [ -e $(dirname $thisdir)/lib/libtulip-core.dylib ] ; then
+  if [ -e $(dirname $thisdir)/Frameworks/QtCore ] ; then
 # MacOS bundle
     includedir=$(dirname $thisdir)/include
-    libdir=$(dirname $thisdir)/lib
-    pluginpath=${libdir}/tulip
+    libdir=$(dirname $thisdir)/Frameworks
+    pluginpath=$(dirname $thisdir)/lib/tulip
   fi
 fi
 if [ $WINNT -eq 0 ] ; then
