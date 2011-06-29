@@ -82,6 +82,14 @@ ADD_LIBRARY(RoundedBox-${TulipVersion} SHARED ${RoundedBox_SRCS})
 TARGET_LINK_LIBRARIES(RoundedBox-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+SET(Diamond_SRCS diamond.cpp)
+ADD_LIBRARY(Diamond-${TulipVersion} SHARED ${Diamond_SRCS})
+TARGET_LINK_LIBRARIES(Diamond-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName})
+
+##----------------------------------------------------------------------------------------------------------------------------
+SET(Cross_SRCS cross.cpp)
+ADD_LIBRARY(Cross-${TulipVersion} SHARED ${Cross_SRCS})
+TARGET_LINK_LIBRARIES(Cross-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName})
 
 INSTALL(TARGETS Circle-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Circle-${TulipVersion})
 INSTALL(TARGETS Hexagone-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Hexagone-${TulipVersion})
@@ -99,3 +107,5 @@ INSTALL(TARGETS HalfCylinder-${TulipVersion} DESTINATION ${TulipPluginsInstallDi
 INSTALL(TARGETS ChristmasTree-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ChristmasTree-${TulipVersion})
 INSTALL(TARGETS Window-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Window-${TulipVersion})
 INSTALL(TARGETS RoundedBox-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT RoundedBox-${TulipVersion})
+INSTALL(TARGETS Diamond-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Diamond-${TulipVersion})
+INSTALL(TARGETS Cross-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Cross-${TulipVersion})
