@@ -94,6 +94,8 @@ QWidget *SpreadView::construct(QWidget *parent) {
     connect(ui->filterPatternLineEdit,SIGNAL(returnPressed()),this,SLOT(filterElements()));
     connect(ui->filterPushButton,SIGNAL(clicked()),this,SLOT(filterElements()));
 
+    ui->filterProgressBar->setVisible(false);
+
     return widget;
 }
 
@@ -121,6 +123,9 @@ void SpreadView::setData(Graph *graph, DataSet) {
         connect(ui->edgesTableView->graphModel(),SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(dataChanged(QModelIndex,QModelIndex)));
         connect(ui->edgesTableView->graphModel(),SIGNAL(modelReset()),this,SLOT(modelReset()));
 
+    }else{
+        //Refresh models.
+        draw();
     }
 }
 
@@ -137,6 +142,9 @@ void SpreadView::setGraph(Graph *graph) {
 }
 
 void SpreadView::draw() {
+    //Refresh models.
+    ui->nodesTableView->graphModel()->update();
+    ui->edgesTableView->graphModel()->update();
 }
 
 void SpreadView::refresh() {
@@ -508,8 +516,12 @@ void SpreadView::showOnlySelectedElements(bool show){
 
 void SpreadView::updateFilters(){    
     GraphTableModel* nodesGraphModel = ui->nodesTableView->graphModel();
+    GraphTableModel* edgesGraphModel = ui->edgesTableView->graphModel();
     bool displayOnlySelected = displayOnlySelectedElements();
     QRegExp regExp = elementValuesFilter();
+    ui->filterProgressBar->setVisible(true);
+    int totalOfElements = nodesGraphModel->rowCount() + edgesGraphModel->rowCount();
+    ui->filterProgressBar->setRange(0,totalOfElements);
     for(int i= 0; i < nodesGraphModel->rowCount(); ++i){
         node n(nodesGraphModel->idForIndex(i));
         if(_updatedNodes.get(n.id)){
@@ -529,8 +541,10 @@ void SpreadView::updateFilters(){
             }
             ui->nodesTableView->setRowHidden(i,!(display && match));
         }
+        if(i%200 == 0){
+        ui->filterProgressBar->setValue(ui->filterProgressBar->value()+200);
+        }
     }
-    GraphTableModel* edgesGraphModel = ui->edgesTableView->graphModel();
     for(int i= 0; i < edgesGraphModel->rowCount(); ++i){
         edge e(edgesGraphModel->idForIndex(i));
         if(_updatedEdges.get(e.id)){
@@ -550,9 +564,13 @@ void SpreadView::updateFilters(){
             }
             ui->edgesTableView->setRowHidden(i,!(display && match));
         }
+        if(i%200 == 0){
+            ui->filterProgressBar->setValue(ui->filterProgressBar->value()+200);
+        }
     }
     _updatedNodes.setAll(false);
     _updatedEdges.setAll(false);
+    ui->filterProgressBar->setVisible(false);
 }
 
 void SpreadView::treatEvent(const Event &ev){

@@ -41,6 +41,20 @@ class Graph;
 class BooleanProperty;
 }
 
+
+/*@{*/
+/** \file
+ *  \brief  Table view
+
+ * This view plugin allows to visualize, sort and edit element and properties in a spreadsheet.
+ *
+ * <b>LICENCE</b>
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ */
 class SpreadView: public tlp::AbstractView , public tlp::PropertyObserver, public tlp::Observable{
     Q_OBJECT
 public:

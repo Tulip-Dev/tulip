@@ -230,31 +230,35 @@ QVariant GraphTableModel::headerData(int section, Qt::Orientation orientation, i
     case Qt::ToolTipRole:
         if(orientation == Qt::Horizontal){
             PropertyInterface* property = _propertiesTable[section];
-            QString toolTip;
-            toolTip.append("Property : ");
-            toolTip.append(tlpStringToQString(property->getName()));
-            toolTip.append("\n");
-            toolTip.append("Type : ");
-            toolTip.append(propertyInterfaceToPropertyTypeLabel(property));
-            toolTip.append("\n");
-            Graph* propertyGraph = property->getGraph();
-            if(propertyGraph != _graph){
-                toolTip.append("Inherited property from graph : ");
-                toolTip.append(tlpStringToQString(propertyGraph->getAttribute<string>("name")));
-                toolTip.append(" ( ");
-                toolTip.append(QString::number(propertyGraph->getId()));
-                toolTip.append(" )");
-            }else{
-                toolTip.append("Local property");
+            if(_propertiesToDelete.find(property)==_propertiesToDelete.end()){
+                QString toolTip;
+                toolTip.append("Property : ");
+                toolTip.append(tlpStringToQString(property->getName()));
+                toolTip.append("\n");
+                toolTip.append("Type : ");
+                toolTip.append(propertyInterfaceToPropertyTypeLabel(property));
+                toolTip.append("\n");
+                Graph* propertyGraph = property->getGraph();
+                if(propertyGraph != _graph){
+                    toolTip.append("Inherited property from graph : ");
+                    toolTip.append(tlpStringToQString(propertyGraph->getAttribute<string>("name")));
+                    toolTip.append(" ( ");
+                    toolTip.append(QString::number(propertyGraph->getId()));
+                    toolTip.append(" )");
+                }else{
+                    toolTip.append("Local property");
+                }
+                return QVariant(toolTip);
             }
-            return QVariant(toolTip);
         }
         break;
     case Qt::DecorationRole:
     {
         if(orientation == Qt::Horizontal){
             PropertyInterface* property = _propertiesTable[section];
+            if(_propertiesToDelete.find(property)==_propertiesToDelete.end()){
             return property->getGraph() != _graph?QVariant(QIcon(":/spreadsheet/inherited_properties.png")):QVariant();
+            }
         }
     }
         break;
@@ -264,8 +268,8 @@ QVariant GraphTableModel::headerData(int section, Qt::Orientation orientation, i
 
 Qt::ItemFlags GraphTableModel::flags( const QModelIndex & index ) const{
     GraphTableModelIndex tableIndex = element(index);
-    Qt::ItemFlags defaultFlags = QAbstractTableModel::flags(index);
-    if(tableIndex.isValid()){
+    Qt::ItemFlags defaultFlags = QAbstractTableModel::flags(index);    
+    if(tableIndex.isValid() && _propertiesToDelete.find(tableIndex.property())==_propertiesToDelete.end()){
         TulipQVariantBuilder helper;
         return helper.flags(defaultFlags,_elementType,tableIndex.element(),tableIndex.property());
     }else{
@@ -420,7 +424,10 @@ void GraphTableModel::addLocalProperty(Graph* g, const string& propertyName){
 }
 
 void GraphTableModel::beforeDelLocalProperty(tlp::Graph *graph, const std::string & name){
-    _propertiesToDelete.insert(graph->getProperty(name));
+    PropertyInterface* property = graph->getProperty(name);
+    _propertiesToDelete.insert(property);
+    property->removePropertyObserver(this);
+    property->removeObserver(this);
 }
 
 void GraphTableModel::addInheritedProperty(Graph* g, const string& propertyName){        
@@ -428,7 +435,10 @@ void GraphTableModel::addInheritedProperty(Graph* g, const string& propertyName)
 }
 
 void GraphTableModel::beforeDelInheritedProperty(Graph *graph, const std::string &name){
-    _propertiesToDelete.insert(graph->getProperty(name));
+    PropertyInterface* property = graph->getProperty(name);
+    _propertiesToDelete.insert(property);
+    property->removePropertyObserver(this);
+    property->removeObserver(this);
 }
 
 void GraphTableModel::afterSetNodeValue(PropertyInterface* property, const node n){
@@ -455,17 +465,12 @@ void GraphTableModel::afterSetAllEdgeValue(PropertyInterface* property){
     }
 }
 
-
-void GraphTableModel::treatEvents(const  vector<Event> &){    
+void GraphTableModel::update(){
     if(!_idsToDelete.empty()){
-        removeFromVector<unsigned int>(_idsToDelete,_idTable,_orientation==Qt::Vertical);        
+        removeFromVector<unsigned int>(_idsToDelete,_idTable,_orientation==Qt::Vertical);
         _idsToDelete.clear();
     }
     if(!_propertiesToDelete.empty()){
-        for(set<PropertyInterface*>::iterator it = _propertiesToDelete.begin() ; it != _propertiesToDelete.end();++it){         
-            (*it)->removePropertyObserver(this);
-            (*it)->removeObserver(this);
-        }
         removeFromVector<PropertyInterface*>(_propertiesToDelete,_propertiesTable,_orientation==Qt::Horizontal);
         //Check if the sorting property is deleted
         if(_propertiesToDelete.find(_sortingProperty)!= _propertiesToDelete.end()){
@@ -474,7 +479,7 @@ void GraphTableModel::treatEvents(const  vector<Event> &){
         }
         _propertiesToDelete.clear();
     }
-    if(!_idsToAdd.empty()){            
+    if(!_idsToAdd.empty()){
         if(_sortingProperty != NULL){
             PropertyValueComparator comparator(_order,_elementType,_sortingProperty);
             addToVector<unsigned int,PropertyValueComparator>(_idsToAdd,_idTable,_orientation==Qt::Vertical,&comparator);
@@ -482,11 +487,11 @@ void GraphTableModel::treatEvents(const  vector<Event> &){
             addToVector<unsigned int,PropertyValueComparator>(_idsToAdd,_idTable,_orientation==Qt::Vertical,NULL);
         }
         _idsToAdd.clear();
-    }    
-    if(!_propertiesToAdd.empty()){        
+    }
+    if(!_propertiesToAdd.empty()){
         PropertyComparator comparator;
         addToVector<PropertyInterface*,PropertyComparator>(_propertiesToAdd,_propertiesTable,_orientation==Qt::Horizontal,&comparator);
-        for(set<PropertyInterface*>::iterator it = _propertiesToAdd.begin() ; it != _propertiesToAdd.end();++it){            
+        for(set<PropertyInterface*>::iterator it = _propertiesToAdd.begin() ; it != _propertiesToAdd.end();++it){
             (*it)->addPropertyObserver(this);
             (*it)->addObserver(this);
         }
@@ -498,9 +503,11 @@ void GraphTableModel::treatEvents(const  vector<Event> &){
             //Check if we have a value updated in the sorting property
             bool needToSort = false;
             if(_orientation == Qt::Vertical){
+                //Check if a set all node/edge value occur on the sorting property
                 if(_propertiesUpdated.find(_sortingProperty) != _propertiesUpdated.end()){
                     needToSort = true;
                 }
+                //Check if a node/edge value modification occur on the sorting property
                 if(!needToSort){
                     for(vector<GraphTableModelIndex>::iterator it = _dataUpdated.begin();it != _dataUpdated.end();++it){
                         if((*it).property()==_sortingProperty){
@@ -511,7 +518,7 @@ void GraphTableModel::treatEvents(const  vector<Event> &){
                 }
             }
             if(needToSort){
-                //Sort elements
+                //Sort elements update all the data
                 sortElements(_sortingProperty,_order);
             }else{
                 emit dataChanged(index(0,0),index(rowCount()-1,columnCount()-1));
@@ -523,3 +530,4 @@ void GraphTableModel::treatEvents(const  vector<Event> &){
         _dataUpdated.clear();
     }
 }
+

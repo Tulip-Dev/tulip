@@ -158,6 +158,13 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="0" colspan="3">
+      <widget class="QProgressBar" name="filterProgressBar">
+       <property name="value">
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item row="1" column="0" rowspan="2">

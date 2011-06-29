@@ -87,6 +87,8 @@ public:
       *
       **/
     virtual QList<int> indexesForIds(const std::set<unsigned int>& ids)const;
+
+
     /**
       * @brief Convinience function to get the property for an index call the propertyForIndex function with the right index in function of properties orientation in the model.
       **/
@@ -156,7 +158,11 @@ public:
     void afterSetEdgeValue(tlp::PropertyInterface*, const tlp::edge);
     void afterSetAllNodeValue(tlp::PropertyInterface*);
     void afterSetAllEdgeValue(tlp::PropertyInterface*);    
-    void treatEvents(const  std::vector<tlp::Event> &events );    
+
+    /**
+      * @brief Apply all the modifications occured in the graph on the model.
+      **/
+    void update();
 
 
 protected:
@@ -169,6 +175,7 @@ protected:
     * @brief Fill the propertyTable. For each property in the graph call the useProperty function to know if we add the property in the table.
     **/
     virtual void updatePropertyTable();
+
     /**
       * @brief Return if the property must be integrated in the property table. This function is called before each insertion in the property table.
       **/
@@ -239,7 +246,7 @@ private:
     tlp::Graph* _graph;
     tlp::ElementType _elementType;
     Qt::Orientation _orientation;
-    std::vector<unsigned int> _idTable;
+    std::vector<unsigned int> _idTable;    
     std::vector<tlp::PropertyInterface*> _propertiesTable;
 
     //Sorting var
