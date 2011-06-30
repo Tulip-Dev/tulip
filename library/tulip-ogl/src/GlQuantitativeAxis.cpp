@@ -26,10 +26,10 @@
 
 template <typename T>
 std::string getStringFromNumber(T number, unsigned int precision = 4) {
-  std::ostringstream oss;
-  oss.precision(precision);
-  oss << number;
-  return oss.str();
+	std::ostringstream oss;
+	oss.precision(precision);
+	oss << number;
+	return oss.str();
 }
 
 using namespace std;
@@ -37,18 +37,18 @@ using namespace std;
 namespace tlp {
 
 GlQuantitativeAxis::GlQuantitativeAxis(const std::string &axisName, const Coord &axisBaseCoord, const float axisLength,
-					   const AxisOrientation &axisOrientation, const Color &axisColor,
-					   const bool addArrow, const bool ascendingOrder)
-	: GlAxis(axisName, axisBaseCoord, axisLength, axisOrientation, axisColor) ,
-	  ascendingOrder(ascendingOrder), addArrow(addArrow), logScale(false), logBase(10),
-	  integerScale(false), incrementStep(0), minMaxSet(false) {
+		const AxisOrientation &axisOrientation, const Color &axisColor,
+		const bool addArrow, const bool ascendingOrder)
+: GlAxis(axisName, axisBaseCoord, axisLength, axisOrientation, axisColor) ,
+  ascendingOrder(ascendingOrder), addArrow(addArrow), logScale(false), logBase(10),
+  integerScale(false), incrementStep(0), minMaxSet(false) {
 	if (addArrow) {
 		addArrowDrawing();
 	}
 }
 
 void GlQuantitativeAxis::setAxisParameters(const double minV, const double maxV, const unsigned int nbGrads,
-										   const LabelPosition &axisGradsLabelsPos, const bool firstLabel) {
+		const LabelPosition &axisGradsLabelsPos, const bool firstLabel) {
 	integerScale = false;
 	min = minV;
 	max = maxV;
@@ -63,23 +63,27 @@ void GlQuantitativeAxis::setAxisParameters(const double minV, const double maxV,
 
 
 void GlQuantitativeAxis::setAxisParameters(const int minV, const int maxV, const unsigned int incrementStepV,
-										   const LabelPosition &axisGradsLabelsPos, const bool firstLabel) {
+		const LabelPosition &axisGradsLabelsPos, const bool firstLabel) {
 	integerScale = true;
 	min = minV;
 	int maxVCp = maxV;
 
-  if (incrementStepV)
-    while (((maxVCp - minV)%incrementStepV) != 0) ++maxVCp;
+	if (incrementStepV) {
+		while (((maxVCp - minV)%incrementStepV) != 0) ++maxVCp;
+		incrementStep = incrementStepV;
+	} else {
+		incrementStep = 1;
+	}
 
 	max = maxVCp;
-	incrementStep = incrementStepV;
+
 	if (min == max) {
 		max += incrementStep;
 	}
 	axisGradsLabelsPosition = axisGradsLabelsPos;
 	drawFistLabel = firstLabel;
 	minMaxSet = true;
-  nbGraduations = (maxV - minV) / (incrementStepV > 0 ? incrementStepV : 1) + 1;
+	nbGraduations = (maxV - minV) / (incrementStepV > 0 ? incrementStepV : 1) + 1;
 }
 
 void GlQuantitativeAxis::buildAxisGraduations() {
@@ -105,14 +109,14 @@ void GlQuantitativeAxis::buildAxisGraduations() {
 		increment = incrementStep;
 	}
 
-    scale = axisLength / (maxV - minV);
+	scale = axisLength / (maxV - minV);
 
-    vector<string> axisLabels;
+	vector<string> axisLabels;
 
-    string minStr = getStringFromNumber(min);
-    if (minStr.size() == 1) {
-    	minStr = " " + minStr;
-    }
+	string minStr = getStringFromNumber(min);
+	if (minStr.size() == 1) {
+		minStr = " " + minStr;
+	}
 	axisLabels.push_back(minStr);
 	for (double i = minV + increment ; i < maxV ; i += increment) {
 
@@ -175,7 +179,7 @@ Coord GlQuantitativeAxis::getAxisPointCoordForValue(double value) const {
 		val = log(val) / log(static_cast<double>(logBase));
 	}
 	if (ascendingOrder) {
-		 offset = static_cast<float>((val - minV) * scale);
+		offset = static_cast<float>((val - minV) * scale);
 	} else {
 		offset = static_cast<float>((maxV - val) * scale);
 	}
