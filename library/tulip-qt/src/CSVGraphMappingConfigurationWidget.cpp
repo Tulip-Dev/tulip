@@ -145,8 +145,7 @@ void CSVGraphMappingConfigurationWidget::changeEvent(QEvent *e)
 }
 
 void CSVGraphMappingConfigurationWidget::updateWidget(tlp::Graph* graph,const CSVImportParameters& importParameters){
-    this->graph = graph;
-    this->importParameters = importParameters;
+    this->graph = graph; 
     //Init mapping widgets.
     //Update node mapping widget
     ui->nodeMappingColumncomboBox->setCsvProperties(importParameters);
@@ -171,7 +170,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
             return NULL;
         }
         bool createMissingElement = ui->createMissingNodesCheckBox->isChecked();
-        return new CSVToGraphNodeIdMapping(graph,columnId,idPropertyName,importParameters.getFirstLineIndex(),importParameters.getLastLineIndex(),createMissingElement);
+        return new CSVToGraphNodeIdMapping(graph,columnId,idPropertyName,createMissingElement);
     }
     else if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importEdgesPages){
         string idPropertyName = ui->edgeMappingPropertycomboBox->getSelectedGraphProperty();
@@ -179,7 +178,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
         if(idPropertyName.empty() || columnId ==UINT_MAX){
             return NULL;
         }
-        return new CSVToGraphEdgeIdMapping(graph,columnId,idPropertyName,importParameters.getFirstLineIndex(),importParameters.getLastLineIndex());
+        return new CSVToGraphEdgeIdMapping(graph,columnId,idPropertyName);
     }
     else if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importEdgesFromNodesPage){
         string idPropertyName = ui->graphIndexPropertiesComboBox->getSelectedGraphProperty();
@@ -189,7 +188,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
             return NULL;
         }
         bool createMissingElement = ui->addMissingEdgeAndNodeCheckBox->isChecked();
-        return new CSVToGraphEdgeSrcTgtMapping(graph,srcColumnId,tgtColumnId,idPropertyName,importParameters.getFirstLineIndex(),importParameters.getLastLineIndex(),createMissingElement);
+        return new CSVToGraphEdgeSrcTgtMapping(graph,srcColumnId,tgtColumnId,idPropertyName,createMissingElement);
     }else{
         return NULL;
     }

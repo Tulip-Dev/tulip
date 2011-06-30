@@ -123,8 +123,7 @@ protected:
     void changeEvent(QEvent *e);
     tlp::Graph* graph;
 
-private:
-    CSVImportParameters importParameters;
+private:    
     Ui::CSVGraphMappingConfigurationWidget *ui;
 
 private slots:
