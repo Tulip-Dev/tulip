@@ -31,11 +31,17 @@ public:
 
     void update();
 
-    bool eventFilter(QObject *object, QEvent *event);
 
 
     void treatEvent(const tlp::Event &);
     void treatEvents(const std::vector<tlp::Event> &events);
+
+public slots:
+
+    /**
+      * @brief Delete the highligted elements from the graph.
+      **/
+    void deleteHighlightedElements();
 
 private slots:
 
@@ -71,7 +77,7 @@ private slots:
     void addToSelection();
     void removeFromSelection();
     void highlightElements();
-    void deleteElements();
+
     //Nodes operations
     void copyNodes();
     void group();
@@ -94,7 +100,7 @@ private:
     void showElementsContextMenu(GraphTableWidget* tableWidget,int clickedRowIndex,const QPoint& position);
     void fillElementsContextMenu(QMenu& menu,GraphTableWidget* tableWidget,int clickedRowIndex);
 
-    void deleteElements( const QModelIndexList& elements,GraphTableWidget *tableWidget ,bool delAll);
+    void deleteHighlightedElements( const QModelIndexList& elements,GraphTableWidget *tableWidget ,bool delAll);
 
     bool displayOnlySelectedElements()const;
     QRegExp elementValuesFilter()const;

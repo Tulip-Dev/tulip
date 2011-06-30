@@ -25,8 +25,10 @@
 #include <tulip/TlpQtTools.h>
 #include <QtGui/QPixmap>
 #include <QtGui/QToolBar>
+#include <QtGui/QKeyEvent>
 #include "GraphTableModel.h"
 #include "TulipTableWidgetColumnSelectionWidget.h"
+#include "GraphTableWidget.h"
 
 using namespace std;
 using namespace tlp;
@@ -113,7 +115,34 @@ QImage SpreadView::createPicture(int width, int height, bool , int  , int xOffse
 
 
 
+bool SpreadView::eventFilter(QObject *, QEvent *event){
+    //Override default shortcut
+    if(event->type() == QEvent::ShortcutOverride){
+        QKeyEvent* shortcutOverrideEvent  = static_cast<QKeyEvent*>(event);
+        //Highlight all the elements
+        if(shortcutOverrideEvent->modifiers() == Qt::ControlModifier && shortcutOverrideEvent->key() == Qt::Key_A){
+            currentTable()->graphTableWidget()->selectAll();
+            shortcutOverrideEvent->accept();
+            return true;
+        }else if(shortcutOverrideEvent->key() == Qt::Key_Delete){
+            //Suppress selected elements
+            Observable::holdObservers();
+            currentTable()->deleteHighlightedElements();
+            Observable::unholdObservers();
+            shortcutOverrideEvent->accept();
+            return true;
+        }
+    }
+    return false;
+
+}
+
+SpreadViewTableWidget* SpreadView::currentTable()const{
+        return ui->tabWidget->currentWidget() == ui->nodesTab ? ui->nodesSpreadViewWidget: ui->edgesSpreadViewWidget;
+}
+
 VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "07/06/2011", "Spreadsheet view", "2.0")
+
 
 
 

@@ -35,7 +35,8 @@ namespace Ui {
 class SpreadViewWidget;
 }
 
-class GraphTableWidget;
+
+class SpreadViewTableWidget;
 namespace tlp {
 class Graph;
 class BooleanProperty;
@@ -72,6 +73,8 @@ public:
 
     QImage createPicture(int width, int height, bool center, int zoom = 1, int xOffset = 0, int yOffset = 0);
 
+    bool eventFilter(QObject *object, QEvent *event);
+
 public slots :
 
     void draw();
@@ -81,7 +84,10 @@ public slots :
 
 private:
 
-
+    /**
+      * @brief Get the current displayed table.
+      **/
+    SpreadViewTableWidget* currentTable()const;
     Ui::SpreadViewWidget *ui;
     tlp::Graph* _graph;
 

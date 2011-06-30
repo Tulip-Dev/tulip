@@ -9,7 +9,6 @@
 
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
-#include <QtGui/QKeyEvent>
 
 #include <set>
 
@@ -72,29 +71,6 @@ void SpreadViewTableWidget::update(){
 }
 
 
-bool SpreadViewTableWidget::eventFilter(QObject *, QEvent *event){
-    //Override default shortcut
-    if(event->type() == QEvent::ShortcutOverride){
-        QKeyEvent* shortcutOverrideEvent  = static_cast<QKeyEvent*>(event);
-        //Highlight all the elements
-        if(shortcutOverrideEvent->modifiers() == Qt::ControlModifier && shortcutOverrideEvent->key() == Qt::Key_A){
-            ui->tableView->selectAll();
-            shortcutOverrideEvent->accept();
-            return true;
-        }else if(shortcutOverrideEvent->key() == Qt::Key_Delete){
-            //Suppress selected elements
-
-            QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows(0);
-            Observable::holdObservers();
-            deleteElements(indexes,ui->tableView,false);
-            Observable::unholdObservers();
-            shortcutOverrideEvent->accept();
-            return true;
-        }
-    }
-    return false;
-
-}
 
 void SpreadViewTableWidget::showElementsContextMenu(GraphTableWidget* tableWidget,int clickedRowIndex,const QPoint& position){
     QMenu contextMenu(tableWidget);
@@ -141,7 +117,7 @@ void SpreadViewTableWidget::fillElementsContextMenu(QMenu& menu,GraphTableWidget
         }
     }
 
-    menu.addAction(QIcon(":/i_del.png"),tr("Delete"),this,SLOT(deleteElements()));
+    menu.addAction(QIcon(":/i_del.png"),tr("Delete"),this,SLOT(deleteHighlightedElements()));
 }
 
 
@@ -325,18 +301,15 @@ void SpreadViewTableWidget::highlightElements(){
     tableWidget->highlightAndDisplayElements(ids);
 }
 
-void SpreadViewTableWidget::deleteElements(){
-    QAction* action = qobject_cast<QAction*>(sender());
-    if(action!=NULL){
+void SpreadViewTableWidget::deleteHighlightedElements(){
         GraphTableWidget *tableWidget = ui->tableView;
         QModelIndexList indexes = tableWidget->selectionModel()->selectedRows(0);
         Observable::holdObservers();
-        deleteElements(indexes,tableWidget,false);
+        deleteHighlightedElements(indexes,tableWidget,false);
         Observable::unholdObservers();
-    }
 }
 
-void SpreadViewTableWidget::deleteElements(const QModelIndexList& elements,GraphTableWidget *tableWidget ,bool delAll){
+void SpreadViewTableWidget::deleteHighlightedElements(const QModelIndexList& elements,GraphTableWidget *tableWidget ,bool delAll){
     //Get the elements list
     set<unsigned int> elementsList = tableWidget->indexListToIds(elements);
     Observable::holdObservers();
