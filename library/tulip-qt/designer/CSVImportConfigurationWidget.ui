@@ -23,7 +23,7 @@
    <item>
     <widget class="QCheckBox" name="useFirstLineAsPropertyNamecheckBox">
      <property name="text">
-      <string>Use first line tokens as columns names</string>
+      <string>Use first line tokens as column names</string>
      </property>
      <property name="checked">
       <bool>true</bool>
