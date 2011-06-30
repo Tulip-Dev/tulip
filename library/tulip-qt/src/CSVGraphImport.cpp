@@ -448,11 +448,13 @@ void CSVGraphImport::line(unsigned int row,const std::vector<std::string>& lineT
             if( property != NULL){
                 if(element.first == NODE){
                     if(!property->setNodeStringValue(node(element.second),lineTokens[column])){
-                        std::cerr<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<lineTokens[column]<<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\""<<std::endl;
+                        //We add one to the row number as in the configuration widget we start from row 1 not row 0
+                        std::cerr<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<lineTokens[column]<<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\" at line "<<row+1<<std::endl;
                     }
                 }else{
                     if(!property->setEdgeStringValue(edge(element.second),lineTokens[column])){
-                        std::cerr<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<lineTokens[column]<<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\""<<std::endl;
+                        //We add one to the row number as in the configuration widget we start from row 1 not row 0
+                        std::cerr<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<lineTokens[column]<<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\" at line "<<row+1<<std::endl;
                     }
                 }
             }

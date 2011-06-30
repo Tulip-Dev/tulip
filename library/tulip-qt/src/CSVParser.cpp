@@ -47,8 +47,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
 
     //Real row number used to
     unsigned int row = 0;
-    //Read row number
-    unsigned int readRow = 0;
+    //Read row number    
     unsigned int columnMax = 0;
     if (csvFile) {
         csvFile.seekg(0, std::ios_base::end);
@@ -91,10 +90,9 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
                 tokenize(line, tokens, _separator,_textDelimiter, 0);
                 unsigned int column = 0;
                 for (column = 0; column < tokens.size(); ++column) {
-                    tokens[column]= treatToken(tokens[column], readRow, column);
+                    tokens[column]= treatToken(tokens[column], row, column);
                 }
-                handler->line(row,tokens);
-                ++readRow;
+                handler->line(row,tokens);                
                 columnMax = max(columnMax, column);
 
                 //If user want to stop break the import process.
@@ -106,7 +104,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
             }
             ++row;
         }
-        handler->end(readRow, columnMax);
+        handler->end(row, columnMax);
         return true;
     }else{
         return false;

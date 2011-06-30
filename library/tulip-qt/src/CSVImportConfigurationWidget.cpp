@@ -98,7 +98,7 @@ void PropertyConfigurationWidget::setPropertyNameValidator(QValidator* validator
 }
 
 
-CSVTableWidget::CSVTableWidget(QWidget* parent):QTableWidget(parent),maxLineNumber(UINT_MAX){
+CSVTableWidget::CSVTableWidget(QWidget* parent):QTableWidget(parent),maxLineNumber(UINT_MAX),firstLineIndex(0){
 
 }
 
@@ -106,16 +106,24 @@ void CSVTableWidget::begin(){
     clear();
     setColumnCount(0);
     setRowCount(0);
+    //Force the table view to redraw
+    QApplication::processEvents();
 }
 
 void CSVTableWidget::line(unsigned int row,const vector<string>& lineTokens){
 
-    if(static_cast<unsigned int>(rowCount()) <= row){
-        //If the maximum line number is reach ignore the token.
-        if(static_cast<unsigned>(rowCount()) >= maxLineNumber)
-            return;
-        insertRow(row);
+    //Wait for the first line index
+    if(row < firstLineIndex){
+        return;
     }
+
+    //If the maximum line number is reach ignore the token.
+    if(static_cast<unsigned>(rowCount()) >= maxLineNumber){
+        return;
+    }
+    //Add a new row in the table
+    int currentRow = rowCount();
+    insertRow(currentRow);
 
     for(size_t column = 0 ; column < lineTokens.size() ; ++column){
         //Add a new column if needed
@@ -123,7 +131,7 @@ void CSVTableWidget::line(unsigned int row,const vector<string>& lineTokens){
             insertColumn(column);
         }
         //Fill the table
-        setItem(row,column,new QTableWidgetItem(tlpStringToQString(lineTokens[column])));
+        setItem(currentRow,column,new QTableWidgetItem(tlpStringToQString(lineTokens[column])));
     }
 }
 
@@ -175,6 +183,8 @@ void CSVImportConfigurationWidget::setNewParser(CSVParser *newParser){
     delete parser;
     parser = newParser;
     updateWidget();
+    //Reset import range
+    updateLineNumbers(true);
 
 
 }
@@ -192,25 +202,28 @@ void CSVImportConfigurationWidget::updateWidget(){
 
 void CSVImportConfigurationWidget::begin(){
     ui->previewTableWidget->begin();
+    ui->previewTableWidget->setFirstLineIndex(getFirstLineIndex());
     clearPropertiesTypeList();
 }
 
 void CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& lineTokens){
 
     ui->previewTableWidget->line(row,lineTokens);
-    for(size_t column = 0 ; column < lineTokens.size() ; ++column){
-        //A new column was created set its label and it's configuration widget.
-        if(propertyWidgets.size()<=column){
-            QString columnName = genrateColumnName(column);
-            ui->previewTableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(columnName));
-            addPropertyToPropertyList(QStringToTlpString(columnName),true);
+    //Wait for the first row
+    if(row >= getFirstLineIndex()){
+        for(size_t column = 0 ; column < lineTokens.size() ; ++column){
+            //A new column was created set its label and it's configuration widget.
+            if(propertyWidgets.size()<=column){
+                QString columnName = genrateColumnName(column);
+                ui->previewTableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(columnName));
+                addPropertyToPropertyList(QStringToTlpString(columnName),true);
+            }
         }
     }
 }
 
 void CSVImportConfigurationWidget::end(unsigned int rowNumber, unsigned int){
-    maxLineNumber = rowNumber;
-    updateLineNumbers(true);
+    maxLineNumber = rowNumber;    
     //Force the table to correctly update.
     useFirstLineAsHeaderUpdated();
     //Avoid updating widget.
@@ -226,20 +239,26 @@ void CSVImportConfigurationWidget::filterPreviewLineNumber(bool checked){
         ui->previewTableWidget->setMaxPreviewLineNumber(UINT_MAX);
     }
     updateWidget();
+    //Reset import range
+    updateLineNumbers(true);
 }
 
 void CSVImportConfigurationWidget::previewLineNumberChanged(int maxLineNumber){
-    ui->previewTableWidget->setMaxPreviewLineNumber(maxLineNumber);
+    ui->previewTableWidget->setMaxPreviewLineNumber(maxLineNumber);    
     updateWidget();
+    //Reset import range
+    updateLineNumbers(true);
 }
 
 void CSVImportConfigurationWidget::fromLineValueChanged(int value){
     ui->toLineSpinBox->setMinimum(value);
+    updateWidget();
     emit fileInfoChanged();
 }
 
 void CSVImportConfigurationWidget::toLineValueChanged(int value){
     ui->fromLineSpinBox->setMaximum(value);
+    updateWidget();
     emit fileInfoChanged();
 }
 
@@ -294,23 +313,31 @@ void CSVImportConfigurationWidget::useFirstLineAsHeaderUpdated(){
     emit fileInfoChanged();
 }
 
-void CSVImportConfigurationWidget::updateLineNumbers(bool resetValues){
+void CSVImportConfigurationWidget::updateLineNumbers(bool resetValues){    
     blockSignals(true);
+    ui->fromLineSpinBox->blockSignals(true);
+    ui->toLineSpinBox->blockSignals(true);
     bool wasAtMax = ui->toLineSpinBox->value()==ui->toLineSpinBox->maximum();
     //If the first line is not headers the maximum of line number to import increase.
     int rowNumber = useFirstLineAsPropertyName()?maxLineNumber-1:maxLineNumber;
-    //No need to set the from line number maximum as it will be automatically set when updating the to
-    ui->toLineSpinBox->setMaximum(rowNumber);
+
     //If the old value was at the maximum keep it
     if(wasAtMax){
         ui->toLineSpinBox->setValue(rowNumber);
     }
     //Reset all the values of the spinbox.
-    if(resetValues){
-        ui->fromLineSpinBox->setMinimum(1);
+    if(resetValues){        
         ui->fromLineSpinBox->setValue(1);
         ui->toLineSpinBox->setValue(rowNumber);
     }
+    //Reset min/max values
+    ui->fromLineSpinBox->setMinimum(1);
+    ui->fromLineSpinBox->setMaximum(ui->toLineSpinBox->value());
+    ui->toLineSpinBox->setMinimum(ui->fromLineSpinBox->value());
+    ui->toLineSpinBox->setMaximum(rowNumber);
+
+    ui->fromLineSpinBox->blockSignals(false);
+    ui->toLineSpinBox->blockSignals(false);
     blockSignals(false);    
 }
 
@@ -379,13 +406,16 @@ vector<CSVColumn> CSVImportConfigurationWidget::getPropertiesToImport()const{
     return properties;
 }
 
+unsigned int CSVImportConfigurationWidget::getFirstImportedLineIndex()const{
+    unsigned int firstLine =getFirstLineIndex();
+    //Shift the line number if we use the first line as header.
+    return useFirstLineAsPropertyName()?++firstLine:firstLine;
+
+}
+
 unsigned int CSVImportConfigurationWidget::getFirstLineIndex()const{
-    unsigned int firstLine =ui->fromLineSpinBox->value();
-    //If we don't use first line as header add it in the lines to import.
-    if(!useFirstLineAsPropertyName()){
-        --firstLine;
-    }
-    return firstLine;
+return ui->fromLineSpinBox->value()-1;
+
 }
 unsigned int CSVImportConfigurationWidget::getLastLineIndex()const{
     unsigned int lastLine = ui->toLineSpinBox->value();
@@ -396,7 +426,7 @@ unsigned int CSVImportConfigurationWidget::getLastLineIndex()const{
 }
 
 CSVImportParameters CSVImportConfigurationWidget::getImportParameters()const{
-    return CSVImportParameters(getFirstLineIndex(),getLastLineIndex(),getPropertiesToImport());
+    return CSVImportParameters(getFirstImportedLineIndex(),getLastLineIndex(),getPropertiesToImport());
 }
 
 QValidator::State PropertyNameValidator::validate(QString & input, int&) const {

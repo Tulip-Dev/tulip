@@ -41,8 +41,14 @@
      </item>
      <item>
       <widget class="QSpinBox" name="fromLineSpinBox">
+       <property name="minimum">
+        <number>1</number>
+       </property>
        <property name="maximum">
-        <number>0</number>
+        <number>1</number>
+       </property>
+       <property name="value">
+        <number>1</number>
        </property>
       </widget>
      </item>
