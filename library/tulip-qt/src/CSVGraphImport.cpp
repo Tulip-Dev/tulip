@@ -27,7 +27,7 @@ using namespace std;
 const char minusChar = '-';
 
 string PropertyTools::getPropertyTypeLabel(const string& typeName){
-   return QStringToTlpString(propertyTypeToPropertyTypeLabel(typeName));
+    return QStringToTlpString(propertyTypeToPropertyTypeLabel(typeName));
 }
 
 string PropertyTools::getPropertyTypeFromPropertyTypeLabel(const string& typeNameLabel){
@@ -156,7 +156,7 @@ PropertyInterface *PropertyTools::getProperty(Graph* graph, const string& proper
 }
 
 PropertyInterface *PropertyTools::getLocalProperty(Graph* graph, const string& propertyName,
-                                              const string& propertyType) {
+                                                   const string& propertyType) {
 
     if (propertyType.compare("double") == 0) {
         return graph->getLocalProperty<DoubleProperty> (propertyName);
@@ -249,92 +249,58 @@ unsigned int CSVImportParameters::getLastLineIndex()const{
     return toLine;
 }
 
-AbstractCSVToGraphDataMapping::AbstractCSVToGraphDataMapping(Graph* graph,ElementType type,unsigned int columnIndex,const string& propertyName,unsigned int firstRow,unsigned int lastRow):graph(graph),type(type),columnIndex(columnIndex),keyProperty(NULL),firstRow(firstRow),lastRow(lastRow){
+AbstractCSVToGraphDataMapping::AbstractCSVToGraphDataMapping(Graph* graph,ElementType type,unsigned int columnIndex,const string& propertyName):graph(graph),type(type),columnIndex(columnIndex),keyProperty(NULL){
     assert(graph!=NULL);
     assert(graph->existProperty(propertyName));
     keyProperty = graph->getProperty(propertyName);
 }
 
-bool AbstractCSVToGraphDataMapping::importRow(unsigned int row)const{
-    return firstRow <= row && lastRow>= row;
-}
-
-void AbstractCSVToGraphDataMapping::begin(){
+void AbstractCSVToGraphDataMapping::init(){
     //Clean old informations.
-    rowToGraphId.clear();
     valueToId.clear();
     //Fill map with graph values.
-    fillValuesMap(type,graph,keyProperty,valueToId);
-}
-void AbstractCSVToGraphDataMapping::fillValuesMap(tlp::ElementType type,Graph* graph,tlp::PropertyInterface* keyProperty,map<string,unsigned int>& valuesToId){
     if(type == NODE){
         node n;
         forEach(n,graph->getNodes()){
-            valuesToId[keyProperty->getNodeStringValue(n)]=n.id;
+            valueToId[keyProperty->getNodeStringValue(n)]=n.id;
         }
     }else{
         edge e;
         forEach(e,graph->getEdges()){
-            valuesToId[keyProperty->getEdgeStringValue(e)]=e.id;
+            valueToId[keyProperty->getEdgeStringValue(e)]=e.id;
         }
     }
 }
 
-void AbstractCSVToGraphDataMapping::token(unsigned int row, unsigned int column, const string& token){
-    if(importRow(row) && column == columnIndex){        
-        if(valueToId.find(token) == valueToId.end()){
-            unsigned int id = buildIndexForRow(row,token,graph,keyProperty);
-            //Store the id corresponding to the token.
+
+pair<ElementType,unsigned int> AbstractCSVToGraphDataMapping::getElementForRow(const vector<string>& tokens){
+    if(tokens.size() > columnIndex){
+        if(valueToId.find(tokens[columnIndex]) == valueToId.end()){
+            //Try to generate the element
+            unsigned int id = buildIndexForRow(0,tokens[columnIndex],graph,keyProperty);
+            //If the token was corectly generated.
             if(id!=UINT_MAX){
-                valueToId[token] = id;
+                //Store the id corresponding to the token.
+                valueToId[tokens[columnIndex]] = id;                
             }
+            return pair<ElementType,unsigned int>(type,id);
         }else{
-            //Use the las found id.
-            rowToGraphId[row]=valueToId[token];
+            //Use the last found id.
+            return pair<ElementType,unsigned int>(type,valueToId[tokens[columnIndex]]);
         }
-    }
-}
-
-void AbstractCSVToGraphDataMapping::end(unsigned int, unsigned int){
-}
-
-pair<ElementType,unsigned int> AbstractCSVToGraphDataMapping::getElementForRow(unsigned int row){
-    map<unsigned int, unsigned int>::const_iterator it = rowToGraphId.find(row);
-    if(it != rowToGraphId.end()){
-        return make_pair(type,it->second);
-    }
-    else{
-        return make_pair(type,UINT_MAX);
+    }else{
+        return pair<ElementType,unsigned int>(type,UINT_MAX);
     }
 }
 
 CSVToNewNodeIdMapping::CSVToNewNodeIdMapping(Graph* graph):graph(graph){
 }
 
-pair<ElementType,unsigned int> CSVToNewNodeIdMapping::getElementForRow(unsigned int row){
-    map<unsigned int, unsigned int>::const_iterator it = rowToGraphId.find(row);
-    if(it != rowToGraphId.end()){
-        return make_pair(NODE,it->second);
-    }else{
-        unsigned int newId = graph->addNode().id;
-        rowToGraphId[row] = newId;
-        return make_pair(NODE,newId);
-    }
+pair<ElementType,unsigned int> CSVToNewNodeIdMapping::getElementForRow(const vector<string>&){
+    return make_pair(NODE,graph->addNode().id);
 }
 
-void CSVToNewNodeIdMapping::begin(){
-
-}
-
-void CSVToNewNodeIdMapping::token(unsigned int, unsigned int, const string&){
-
-}
-
-void CSVToNewNodeIdMapping::end(unsigned int, unsigned int){
-
-}
-
-CSVToGraphNodeIdMapping::CSVToGraphNodeIdMapping(Graph* graph,unsigned int columnIndex,const string& propertyName,unsigned int firstRow,unsigned int lastRow,bool createNode):AbstractCSVToGraphDataMapping(graph,NODE,columnIndex,propertyName,firstRow,lastRow),createMissingNodes(createNode){
+CSVToGraphNodeIdMapping::CSVToGraphNodeIdMapping(Graph* graph,unsigned int columnIndex,const string& propertyName,bool createNode):AbstractCSVToGraphDataMapping(graph,NODE,columnIndex,propertyName),createMissingNodes(createNode){
 }
 
 unsigned int CSVToGraphNodeIdMapping::buildIndexForRow(unsigned int,const string& indexKey,Graph* graph,PropertyInterface* keyProperty){
@@ -347,7 +313,7 @@ unsigned int CSVToGraphNodeIdMapping::buildIndexForRow(unsigned int,const string
     }
 }
 
-CSVToGraphEdgeIdMapping::CSVToGraphEdgeIdMapping(Graph* graph,unsigned int columnIndex,const string& propertyName,unsigned int firstRow,unsigned int lastRow):AbstractCSVToGraphDataMapping(graph,EDGE,columnIndex,propertyName,firstRow,lastRow){
+CSVToGraphEdgeIdMapping::CSVToGraphEdgeIdMapping(Graph* graph,unsigned int columnIndex,const string& propertyName):AbstractCSVToGraphDataMapping(graph,EDGE,columnIndex,propertyName){
 }
 
 unsigned int CSVToGraphEdgeIdMapping::buildIndexForRow(unsigned int ,const string& ,Graph* ,PropertyInterface* ){
@@ -355,68 +321,52 @@ unsigned int CSVToGraphEdgeIdMapping::buildIndexForRow(unsigned int ,const strin
 }
 
 CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(Graph* graph,
-                                                         unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const string& propertyName,
-                                                         unsigned int firstRow,unsigned int lastRow,
+                                                         unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const string& propertyName,                                                         
                                                          bool createMissinNodes):
-graph(graph),srcColumnIndex(srcColumnIndex),tgtColumnIndex(tgtColumnIndex),keyProperty(graph->getProperty(propertyName)),firstRow(firstRow),lastRow(lastRow),
-buildMissingElements(createMissinNodes){
+    graph(graph),srcColumnIndex(srcColumnIndex),tgtColumnIndex(tgtColumnIndex),keyProperty(graph->getProperty(propertyName)),
+    buildMissingElements(createMissinNodes){
 }
 
-pair<ElementType,unsigned int> CSVToGraphEdgeSrcTgtMapping::getElementForRow(unsigned int row){
-    //Search if an edge was registered for this row and this couple of nodes.
-    map<unsigned int,edge>::iterator it = rowToEdge.find(row);
-    if(it!=rowToEdge.end()){
-        return make_pair(EDGE,it->second.id);
-    }else{
-        return make_pair(EDGE,UINT_MAX);
-    }
-}
-
-void CSVToGraphEdgeSrcTgtMapping::begin(){
+void CSVToGraphEdgeSrcTgtMapping::init(){
     valueToId.clear();
-    rowToEdge.clear();
-    rowToNodes.clear();
     node n;
     forEach(n,graph->getNodes()){
         valueToId[keyProperty->getNodeStringValue(n)]=n.id;
     }
 }
-
-void CSVToGraphEdgeSrcTgtMapping::token(unsigned int row, unsigned int column, const string& token){
-    if(firstRow <= row && lastRow>= row){
-        if(column == srcColumnIndex){
-            map<string,unsigned int>::iterator it = valueToId.find(token);
-            //token exists in the map
-            node n;
-            if(it != valueToId.end()){
-                n = node(it->second);
-            }else if(buildMissingElements){
-                n = graph->addNode();
-                keyProperty->setNodeStringValue(n,token);
-                valueToId[token] = n.id;
-            }
-            rowToNodes[row].first = n;
-        }else if(column == tgtColumnIndex){
-            map<string,unsigned int>::iterator it = valueToId.find(token);
-            //token exists in the map
-            node n;
-            if(it != valueToId.end()){
-                n =node(it->second);
-            }else if(buildMissingElements){
-                n = graph->addNode();
-                keyProperty->setNodeStringValue(n,token);
-                valueToId[token] = n.id;
-            }
-            rowToNodes[row].second= n;
-        }
-        //If nodes are found create a new edge.
-        pair<node,node> nodes = rowToNodes[row];
-        if( graph->isElement(nodes.first) && graph->isElement(nodes.second) && rowToEdge.find(row)==rowToEdge.end()){
-            rowToEdge[row]=graph->addEdge(nodes.first,nodes.second);
+pair<ElementType,unsigned int> CSVToGraphEdgeSrcTgtMapping::getElementForRow(const vector<string>& lineTokens){
+    //Check if the index is avalable for this line
+    node src;
+    node tgt;
+    if( lineTokens.size() > srcColumnIndex ){
+        TLP_HASH_MAP<string,unsigned int>::iterator it = valueToId.find(lineTokens[srcColumnIndex]);
+        //token exists in the map
+        if(it != valueToId.end()){
+            src = node(it->second);
+        }else if(buildMissingElements){
+            src = graph->addNode();
+            keyProperty->setNodeStringValue(src,lineTokens[srcColumnIndex]);
+            valueToId[lineTokens[srcColumnIndex]] = src.id;
         }
     }
-}
-void CSVToGraphEdgeSrcTgtMapping::end(unsigned int , unsigned int ){
+    //Check if the index is avalable for this line
+    if(lineTokens.size() > tgtColumnIndex){
+        TLP_HASH_MAP<string,unsigned int>::iterator it = valueToId.find(lineTokens[tgtColumnIndex]);
+        //token exists in the map
+        if(it != valueToId.end()){
+            tgt =node(it->second);
+        }else if(buildMissingElements){
+            tgt = graph->addNode();
+            keyProperty->setNodeStringValue(tgt,lineTokens[tgtColumnIndex]);
+            valueToId[lineTokens[tgtColumnIndex]] = tgt.id;
+        }
+    }
+    //If nodes are found create a new edge.
+    edge e;
+    if( src.isValid() && tgt.isValid()){
+        e = graph->addEdge(src,tgt);
+    }
+    return make_pair(EDGE,e.id);
 }
 
 CSVImportColumnToGraphPropertyMappingProxy::CSVImportColumnToGraphPropertyMappingProxy(Graph* graph,const CSVImportParameters& importParameters,QWidget* parent):graph(graph),importParameters(importParameters),parent(parent){
@@ -437,7 +387,7 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
             if (propertyType.empty()) {
                 propertyType = "string";
             }
-        }        
+        }
         PropertyInterface *interf=NULL;
         //The property already exist need to check if existing is compatible with new one.
         if (graph->existProperty(propertyName)) {
@@ -446,7 +396,7 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
                 if (overwritePropertiesButton != QMessageBox::YesToAll && overwritePropertiesButton != QMessageBox::NoToAll) {
                     overwritePropertiesButton = QMessageBox::question(parent, parent->tr("Property exist."),
                                                                       parent->tr("A property with the name \"") + tlpStringToQString(propertyName) + parent->tr(
-                                                                              "\" already exist. Overwrite?"), QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No
+                                                                          "\" already exist. Overwrite?"), QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No
                                                                       | QMessageBox::NoToAll, QMessageBox::Yes);
                 }
                 if (overwritePropertiesButton == QMessageBox::NoToAll || overwritePropertiesButton == QMessageBox::No) {
@@ -458,7 +408,7 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
             else {
                 //If the properties are not compatible skip.
                 QMessageBox::critical(parent, parent->tr("Property exist."), parent->tr("A property with the name \"") + tlpStringToQString(
-                        propertyName) + parent->tr("\" already exist with a different type. This property will be ignored."));
+                                          propertyName) + parent->tr("\" already exist with a different type. This property will be ignored."));
                 interf = NULL;
             }
         }
@@ -476,25 +426,41 @@ CSVGraphImport::CSVGraphImport(CSVToGraphDataMapping* mapping,CSVImportColumnToG
 }
 CSVGraphImport::~CSVGraphImport(){}
 void CSVGraphImport::begin(){
+    mapping->init();
 }
-void CSVGraphImport::token(unsigned int row, unsigned int column, const string& token){
-    if(!importParameters.importRow(row) || !importParameters.importColumn(column)){
+
+void CSVGraphImport::line(unsigned int row,const std::vector<std::string>& lineTokens){
+    //Check if user wants to import the line.
+    if(!importParameters.importRow(row) ){
         return;
     }
-    pair<ElementType,unsigned int> element = mapping->getElementForRow(row);
-    PropertyInterface *interf = propertiesManager->getPropertyInterface(column,token);    
-    if(element.second != UINT_MAX && interf != NULL){        
-        if(element.first == NODE){            
-            if(!interf->setNodeStringValue(node(element.second),token)){
-                std::cerr<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<token<<"\" in property \""<<interf->getName()<<"\" of type \""<<interf->getTypename()<<"\""<<std::endl;
+
+    //Compute the element id associated to the line
+    pair<ElementType,unsigned int> element = mapping->getElementForRow(lineTokens);
+    //Error when getting element
+    if(element.second == UINT_MAX ){
+        return;
+    }
+    for(size_t column = 0 ; column < lineTokens.size() ; ++column){
+        //If user want to import the column
+        if(importParameters.importColumn(column)){
+            PropertyInterface *property = propertiesManager->getPropertyInterface(column,lineTokens[column]);
+            if( property != NULL){
+                if(element.first == NODE){
+                    if(!property->setNodeStringValue(node(element.second),lineTokens[column])){
+                        std::cerr<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<lineTokens[column]<<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\""<<std::endl;
+                    }
+                }else{
+                    if(!property->setEdgeStringValue(edge(element.second),lineTokens[column])){
+                        std::cerr<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<lineTokens[column]<<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\""<<std::endl;
+                    }
+                }
             }
-        }else{
-            if(!interf->setEdgeStringValue(edge(element.second),token)){
-                std::cerr<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<token<<"\" in property \""<<interf->getName()<<"\" of type \""<<interf->getTypename()<<"\""<<std::endl;
-            }
+
         }
     }
 }
-void CSVGraphImport::end(unsigned int, unsigned int){
+
+void CSVGraphImport::end(unsigned int , unsigned int ){
 }
 

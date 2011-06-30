@@ -108,6 +108,7 @@ CSVImportConfigurationQWizardPage* CSVImportWizard::getImportConfigurationPage()
 CSVGraphMappingConfigurationQWizardPage* CSVImportWizard::getMappingConfigurationPage()const{
     return qobject_cast<CSVGraphMappingConfigurationQWizardPage*>(page(2));
 }
+
 void CSVImportWizard::accept(){    
     bool processIsValid=false;
     if(graph != NULL){
@@ -125,17 +126,12 @@ void CSVImportWizard::accept(){
             }
             if(processIsValid){
                 //Launch the import process
-                QtProgress progress(this,"Importing CSV data on graph");
-                progress.setComment("Building index");
-                //Build the mapping index
-                processIsValid = parser->parse(rowMapping,&progress);
-                if(processIsValid){
-                    //Build import object
-                    CSVGraphImport csvToGraph(rowMapping,columnMapping,importParam);
-                    progress.setComment("Importing data");
-                    processIsValid = parser->parse(&csvToGraph,&progress);
-                }
-            }
+                QtProgress progress(this,"Importing CSV data on graph",NULL,1000);
+                //Build import object
+                CSVGraphImport csvToGraph(rowMapping,columnMapping,importParam);
+                progress.setComment("Importing data");
+                processIsValid = parser->parse(&csvToGraph,&progress);
+            }            
             //Release objects
             delete rowMapping;
             delete columnMapping;

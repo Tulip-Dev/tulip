@@ -26,7 +26,7 @@
 #include <fstream>
 #include <algorithm>
 #include <cassert>
-#include <iostream>
+#include <math.h>
 using namespace std;
 using namespace tlp;
 
@@ -59,7 +59,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
         string line;
         vector<string> tokens;
 
-        unsigned int displayProgressEachLineNumber = 10;
+        unsigned int displayProgressEachLineNumber = 200;
 
         QTextCodec * codec = QTextCodec::codecForName ( _fileEncoding.c_str());
         if(codec == NULL){
@@ -91,8 +91,9 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
                 tokenize(line, tokens, _separator,_textDelimiter, 0);
                 unsigned int column = 0;
                 for (column = 0; column < tokens.size(); ++column) {
-                    handler->token(readRow, column, treatToken(tokens[column], readRow, column));
+                    tokens[column]= treatToken(tokens[column], readRow, column);
                 }
+                handler->line(row,tokens);
                 ++readRow;
                 columnMax = max(columnMax, column);
 
@@ -247,13 +248,24 @@ bool CSVInvertMatrixParser::parse(CSVContentHandler *handler, PluginProgress *pr
 }
 
 void CSVInvertMatrixParser::begin(){
+    maxLineSize = 0;
+}
+
+void CSVInvertMatrixParser::line(unsigned int ,const std::vector<std::string>& lineTokens){
+    maxLineSize = max(maxLineSize,static_cast<unsigned int>(lineTokens.size()));
+    columns.push_back(lineTokens);
+}
+
+void CSVInvertMatrixParser::end(unsigned int , unsigned int ){
     handler->begin();
-}
-
-void CSVInvertMatrixParser::token(unsigned int row, unsigned int column, const string &token){
-    handler->token(column,row,token);
-}
-
-void CSVInvertMatrixParser::end(unsigned int rowNumber, unsigned int columnNumber){
-    handler->end(columnNumber,rowNumber);
+    vector<string> tokens(columns.size());
+    //Fill the line wiht
+    for(unsigned int line = 0 ;line < maxLineSize ; ++line){
+        for(unsigned int i = 0 ; i < columns.size() ; ++i ){
+            //Check if the column is great enough
+            tokens[i]=columns[i].size() > line ? columns[i][line] : string();
+        }
+        handler->line(line,tokens);
+    }
+    handler->end(maxLineSize,columns.size());
 }

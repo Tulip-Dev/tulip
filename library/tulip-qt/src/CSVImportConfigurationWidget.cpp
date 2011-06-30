@@ -30,7 +30,7 @@ using namespace std;
 
 PropertyConfigurationWidget::PropertyConfigurationWidget(unsigned int propertyNumber, const QString& propertyName,
                                                          bool propertyNameIsEditable, const std::string& PropertyType, QWidget* parent) :
-QWidget(parent), propertyNameLineEdit(new QLineEdit(this)), propertyTypeComboBox(new QComboBox(this)), usedCheckBox(
+    QWidget(parent), propertyNameLineEdit(new QLineEdit(this)), propertyTypeComboBox(new QComboBox(this)), usedCheckBox(
         new QCheckBox("", this)), nameEditable(propertyNameIsEditable), propertyNumber(propertyNumber) {
     setLayout(new QVBoxLayout());
     layout()->setContentsMargins(0, 0, 0, 0);
@@ -108,28 +108,33 @@ void CSVTableWidget::begin(){
     setRowCount(0);
 }
 
-void CSVTableWidget::token(unsigned int row, unsigned int column, const string& token){
+void CSVTableWidget::line(unsigned int row,const vector<string>& lineTokens){
+
     if(static_cast<unsigned int>(rowCount()) <= row){
         //If the maximum line number is reach ignore the token.
         if(static_cast<unsigned>(rowCount()) >= maxLineNumber)
             return;
         insertRow(row);
     }
-    if(static_cast<unsigned int>(columnCount()) <= column){
-        insertColumn(column);
-        //Set the column name
 
+    for(size_t column = 0 ; column < lineTokens.size() ; ++column){
+        //Add a new column if needed
+        if(static_cast<unsigned int>(columnCount()) <= column ){
+            insertColumn(column);
+        }
+        //Fill the table
+        setItem(row,column,new QTableWidgetItem(tlpStringToQString(lineTokens[column])));
     }
-    setItem(row,column,new QTableWidgetItem(tlpStringToQString(token)));
 }
+
 
 void CSVTableWidget::end(unsigned int, unsigned int){
 
 }
 
 CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
-        QWidget(parent),
-        ui(new Ui::CSVImportConifgurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(NULL)
+    QWidget(parent),
+    ui(new Ui::CSVImportConifgurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(NULL)
 {
     ui->setupUi(this);
 
@@ -190,15 +195,16 @@ void CSVImportConfigurationWidget::begin(){
     clearPropertiesTypeList();
 }
 
-void CSVImportConfigurationWidget::token(unsigned int row, unsigned int column, const string& token){
+void CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& lineTokens){
 
-    ui->previewTableWidget->token(row,column,token);
-    //A new column was created set its label and it's configuration widget.
-//    if(row == 0){
-    if(propertyWidgets.size()<=column){
-        QString columnName = genrateColumnName(column);
-        ui->previewTableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(columnName));
-        addPropertyToPropertyList(QStringToTlpString(columnName),true);
+    ui->previewTableWidget->line(row,lineTokens);
+    for(size_t column = 0 ; column < lineTokens.size() ; ++column){
+        //A new column was created set its label and it's configuration widget.
+        if(propertyWidgets.size()<=column){
+            QString columnName = genrateColumnName(column);
+            ui->previewTableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(columnName));
+            addPropertyToPropertyList(QStringToTlpString(columnName),true);
+        }
     }
 }
 
@@ -270,10 +276,10 @@ QString CSVImportConfigurationWidget::genrateColumnName(unsigned int col)const{
         if(item!=NULL){
             return item->text();
         }else{
-            return QString();
+            return QString("Column_")+QString::number(col);
         }
     }else{
-        return QString("Property_")+QString::number(col);
+        return QString("Column_")+QString::number(col);
     }
 }
 
@@ -332,8 +338,8 @@ void CSVImportConfigurationWidget::addPropertyToPropertyList(const string& prope
     propertyWidgets.push_back(propertyConfigurationWidget);
 }
 PropertyConfigurationWidget *CSVImportConfigurationWidget::createPropertyConfigurationWidget(
-        unsigned int propertyNumber, const QString& propertyName, bool isEditable,
-        const string& propertyType, QWidget* parent) {
+    unsigned int propertyNumber, const QString& propertyName, bool isEditable,
+    const string& propertyType, QWidget* parent) {
     PropertyConfigurationWidget *propertyConfigurationWidget = new PropertyConfigurationWidget(propertyNumber,
                                                                                                propertyName, isEditable, propertyType, parent);
     propertyConfigurationWidget->setPropertyNameValidator(validator);

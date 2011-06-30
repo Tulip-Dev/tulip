@@ -143,13 +143,13 @@ namespace tlp {
         bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress=NULL);
 
         void begin();
-
-        void token(unsigned int row, unsigned int column, const std::string &token);
-
+        void line(unsigned int row,const std::vector<std::string>& lineTokens);
         void end(unsigned int rowNumber, unsigned int columnNumber);
     private:
         CSVParser *parser;
         CSVContentHandler *handler;
+        std::vector<std::vector<std::string> > columns;
+        unsigned int maxLineSize;
     };
 }
 #endif /* CSVDATALOADER_H_ */

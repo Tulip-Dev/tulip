@@ -25,6 +25,7 @@
 #include <map>
 #include <QtGui/QWidget>
 #include <QtGui/QMessageBox>
+#include <tulip/tuliphash.h>
 namespace tlp{    
     class PropertyInterface;
 
@@ -154,13 +155,11 @@ namespace tlp{
   * pair<tlp::ElementType,unsigned int> element = mapping->getElementForRow(0);
   * @endcode
   **/
-class TLP_QT_SCOPE CSVToGraphDataMapping : public tlp::CSVContentHandler {
+class TLP_QT_SCOPE CSVToGraphDataMapping{
 public:
-    virtual ~CSVToGraphDataMapping(){}
-    /**
-      * @brief Return the graph element corresponding to the row.
-      **/
-    virtual std::pair<tlp::ElementType,unsigned int> getElementForRow(unsigned int row)=0;
+    virtual ~CSVToGraphDataMapping(){}    
+    virtual std::pair<tlp::ElementType,unsigned int> getElementForRow(const std::vector<std::string>& tokens)=0;
+    virtual void init()=0;
 };
 
 /**
@@ -171,13 +170,11 @@ public:
   **/
 class TLP_QT_SCOPE AbstractCSVToGraphDataMapping : public CSVToGraphDataMapping {
 public:
-    AbstractCSVToGraphDataMapping(tlp::Graph* graph,tlp::ElementType type,unsigned int columnIndex,const std::string& propertyName,unsigned int firstRow=0,unsigned int lastRow=UINT_MAX);
+    AbstractCSVToGraphDataMapping(tlp::Graph* graph,tlp::ElementType type,unsigned int columnIndex,const std::string& propertyName);
     virtual ~AbstractCSVToGraphDataMapping(){}
 
-    void begin();
-    void token(unsigned int row, unsigned int column, const std::string& token);
-    void end(unsigned int rowNumber, unsigned int columnNumber);
-    std::pair<tlp::ElementType,unsigned int> getElementForRow(unsigned int row);
+    void init();
+    std::pair<tlp::ElementType,unsigned int> getElementForRow(const std::vector<std::string>& tokens);
 protected:
     /**
       * @brief Create a new element if no elements for the given row was found.
@@ -185,37 +182,23 @@ protected:
       **/
     virtual unsigned int buildIndexForRow(unsigned int row,const std::string& indexKey,tlp::Graph* graph,tlp::PropertyInterface* keyProperty)=0;
 
-    /**
-      * @brief Fill the value map to speed up the research in graph.
-      **/
-    virtual void fillValuesMap(tlp::ElementType type,tlp::Graph* graph,tlp::PropertyInterface* keyProperty,std::map<std::string,unsigned int>& valuesToId);
-
-    bool importRow(unsigned int row)const;
-
-private:
-    std::map<unsigned int,unsigned int> rowToGraphId;
-    std::map<std::string,unsigned int> valueToId;
+private:    
+    TLP_HASH_MAP<std::string,unsigned int> valueToId;
     tlp::Graph* graph;
     tlp::ElementType type;
     unsigned int columnIndex;
     tlp::PropertyInterface* keyProperty;
-    unsigned int firstRow;
-    unsigned int lastRow;
 };
 /**
   * @brief Map each row of the CSV file on a new node.
   **/
 class TLP_QT_SCOPE CSVToNewNodeIdMapping: public CSVToGraphDataMapping{
 public:
-    CSVToNewNodeIdMapping(tlp::Graph* graph);
-    std::pair<tlp::ElementType,unsigned int> getElementForRow(unsigned int row);
-    void begin();
-    void token(unsigned int row, unsigned int column, const std::string& token);
-    void end(unsigned int rowNumber, unsigned int columnNumber);
-
+    CSVToNewNodeIdMapping(tlp::Graph* graph);    
+    void init(){}
+    std::pair<tlp::ElementType,unsigned int> getElementForRow(const std::vector<std::string>& tokens);
 private:
-    tlp::Graph* graph;
-    std::map<unsigned int,unsigned int> rowToGraphId;
+    tlp::Graph* graph;    
 };
 
 /**
@@ -233,7 +216,7 @@ public:
       * @param lastRow The last row to search ids.
       * @param createNode If set to true if there is no node for an id in the CSV file a new node will be created for this id.
       **/
-    CSVToGraphNodeIdMapping(tlp::Graph* graph,unsigned int columnIndex,const std::string& propertyName,unsigned int firstRow,unsigned int lastRow,bool createNode=false);
+    CSVToGraphNodeIdMapping(tlp::Graph* graph,unsigned int columnIndex,const std::string& propertyName,bool createNode=false);
 protected:
     unsigned int buildIndexForRow(unsigned int row,const std::string& indexKey,tlp::Graph* graph,tlp::PropertyInterface* keyProperty);
 private:
@@ -253,7 +236,7 @@ public:
     * @param firstRow The first row to search ids.
     * @param lastRow The last row to search ids.    
     **/
-    CSVToGraphEdgeIdMapping(tlp::Graph* graph,unsigned int columnIndex,const std::string& propertyName,unsigned int firstRow,unsigned int lastRow);
+    CSVToGraphEdgeIdMapping(tlp::Graph* graph,unsigned int columnIndex,const std::string& propertyName);
     protected:
     unsigned int buildIndexForRow(unsigned int row,const std::string& indexKey,tlp::Graph* graph,tlp::PropertyInterface* keyProperty);
 };
@@ -275,21 +258,16 @@ public:
     * @param lastRow The last row to search ids.
     * @param createMissinElements If true create source node, destination node if one of them is not found in the graph.
     **/
-    CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& propertyName,unsigned int firstRow,unsigned int lastRow,bool createMissinElements=false);
+    CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& propertyName,bool createMissinElements=false);
     std::pair<tlp::ElementType,unsigned int> getElementForRow(unsigned int row);
-    void begin();
-    void token(unsigned int row, unsigned int column, const std::string& token);
-    void end(unsigned int rowNumber, unsigned int columnNumber);
+    void init();
+     std::pair<tlp::ElementType,unsigned int> getElementForRow(const std::vector<std::string>& tokens);
 private:    
     tlp::Graph* graph;    
-    std::map<std::string,unsigned int> valueToId;
+    TLP_HASH_MAP<std::string,unsigned int> valueToId;
     unsigned int srcColumnIndex;
     unsigned int tgtColumnIndex;
-    tlp::PropertyInterface* keyProperty;
-    unsigned int firstRow;
-    unsigned int lastRow;
-    std::map<unsigned int,edge> rowToEdge;
-    std::map<unsigned int,std::pair<tlp::node,tlp::node> > rowToNodes;
+    tlp::PropertyInterface* keyProperty;    
     bool buildMissingElements;
 };
 
@@ -339,7 +317,7 @@ public:
     CSVGraphImport(CSVToGraphDataMapping* mapping,CSVImportColumnToGraphPropertyMapping* propertiesManager,const CSVImportParameters& importParameters);
     virtual ~CSVGraphImport();    
     void begin();
-    void token(unsigned int row, unsigned int column, const std::string& token);
+    void line(unsigned int row,const std::vector<std::string>& lineTokens);
     void end(unsigned int rowNumber, unsigned int columnNumber);
 protected:
     CSVToGraphDataMapping* mapping;

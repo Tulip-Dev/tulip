@@ -45,8 +45,8 @@ void CSVParserConfigurationWidgetEditableComboBox::keyPressEvent(QKeyEvent *e){
     }
 }
 CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent) :
-        QWidget(parent),
-        ui(new Ui::CSVParserConfigurationWidget)
+    QWidget(parent),
+    ui(new Ui::CSVParserConfigurationWidget)
 {
     ui->setupUi(this);
     //Fill the encoding combo box
@@ -119,7 +119,7 @@ string CSVParserConfigurationWidget::getSeparator()const{
 }
 void CSVParserConfigurationWidget::changeFileNameButtonPressed(){
     QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CSV file"), QString(), tr(
-            "CSV files (*.csv);;Text files (*.txt);;All files (*)"));
+                                                        "CSV files (*.csv);;Text files (*.txt);;All files (*)"));
     setFileToOpen(fileName);
 }
 

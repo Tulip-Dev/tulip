@@ -114,7 +114,7 @@ private:
   public:
       CSVTableWidget(QWidget* parent=NULL);
       void begin();
-      void token(unsigned int row, unsigned int column, const std::string& token);
+      void line(unsigned int row,const std::vector<std::string>& lineTokens);
       void end(unsigned int rowNumber, unsigned int columnNumber);
       /**
         * @brief Limit the line number of the preview. Need to parse the file again to take this limit in account.
@@ -146,7 +146,7 @@ public:
     CSVImportConfigurationWidget(QWidget *parent = 0);
     ~CSVImportConfigurationWidget();
     void begin();
-    void token(unsigned int row, unsigned int column, const std::string& token);
+    void line(unsigned int row,const std::vector<std::string>& lineTokens);
     void end(unsigned int rowNumber, unsigned int columnNumber);
 
     /**
