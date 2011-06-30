@@ -14,13 +14,16 @@ SET(spreadsheet_LIB_SRCS
     TulipTableWidgetColumnSelectionModel.cpp
     TulipTableWidgetColumnSelectionWidget.cpp        
     OrientedPushButton.cpp
+    SpreadViewTableWidget.cpp
 )
 
 set(spreadsheet_UI
     SpreadViewWidget.ui
     VectorEditionWidget.ui    
     TulipTableWidgetColumnSelectionWidget.ui
+    SpreadViewTableWidget.ui
 )
+
 
 set(spreadsheet_MOC
     SpreadView.h
@@ -32,6 +35,7 @@ set(spreadsheet_MOC
     TulipTableWidgetColumnSelectionModel.h
     TulipTableWidgetColumnSelectionWidget.h    
     OrientedPushButton.h
+    SpreadViewTableWidget.h
 )
 
 SET(spreadsheet_RCC

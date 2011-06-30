@@ -202,8 +202,11 @@ void TulipTableWidgetColumnSelectionWidget::deleteSelectedColumns(){
     ui->listView->selectionModel()->clearSelection();
     tlp::Observable::holdObservers();
     for(QModelIndexList::iterator it  = rows.begin() ; it != rows.end(); ++it){
-        tlp::PropertyInterface* property = _tableColumnModel->propertyForIndex(*it);
-        property->getGraph()->delLocalProperty(std::string(property->getName()));
+        tlp::PropertyInterface* property = _tableColumnModel->propertyForIndex(*it);        
+        //Check if the property exist in the graph (avoid to delete a function two time).
+        if(property->getGraph()->existProperty(property->getName())){
+            property->getGraph()->delLocalProperty(std::string(property->getName()));
+        }
     }
     tlp::Observable::unholdObservers();
 }
