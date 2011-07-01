@@ -24,14 +24,19 @@ else
   mkdir /tmp/plugins_doc
 fi
 
-for LIB_DIR in $(find $BUILD_TOP_DIR -name 'lib*-@TulipVersion@.so' -exec dirname {} ";")
+for LIB in $(find $BUILD_TOP_DIR -name 'lib*-@TulipVersion@.so')
 do
 GEN_DOC=no
 FILE_XML=none
 if [ "$GENERATEDOC" == "yes" ]; then
+  LIB_DIR=$(dirname $LIB)
   DIR=$(basename $LIB_DIR)
   SRC_DIR=$(find $1 -path "*/$DIR" -print)
   FILE_CPP=$(find $SRC_DIR -name "$DIR.cpp" -print | xargs grep -l PLUGIN)
+  if [ $? -ne 0 ]; then
+    PLUGIN_NAME=$(echo $(basename $LIB) | sed 's/lib\(.*\)-\(.*\)$/\1/')
+    FILE_CPP=$(find $SRC_DIR -name "$PLUGIN_NAME.cpp" -print | xargs grep -l PLUGIN)
+  fi
   if [ $? -ne 0 ]; then
     FILE_CPP=$(find $SRC_DIR -name "*.cpp" -print | xargs grep -l PLUGIN)
   fi
@@ -47,9 +52,9 @@ if [ "$GENERATEDOC" == "yes" ]; then
     rm -rf /tmp/plugins_doc/*
     sh $(dirname $0)/generate_plugin_doc.sh $FILE /tmp/plugins_doc
     GEN_DOC=yes
-    FILE_XML=$(ls /tmp/plugins_doc/xml/*_8$SUFFIX.xml)
+    FILE_XML=$(ls /tmp/plugins_doc/xml/*_8$SUFFIX.xml | xargs grep -l '<para>')
     if [ $? -ne 0 ]; then
-      FILE_XML=$(ls /tmp/plugins_doc/xml/class*.xml | xargs grep -l '<para>')
+      FILE_XML=$(ls /tmp/plugins_doc/xml/class*.xml /tmp/plugins_doc/xml/*_8$SUFFIX.xml | xargs grep -l '<para>')
       if [ $? -ne 0 ]; then
         GEN_DOC=no
         FILE_XML=none
@@ -59,8 +64,8 @@ if [ "$GENERATEDOC" == "yes" ]; then
 fi
 echo ""
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" >> /tmp/generation.log
-echo ./pluginInstaller $LIB_DIR/lib*-@TulipVersion@.so $FILE_XML $SRV_DIR $GEN_DOC $ARCH >> /tmp/generation.log
-./pluginInstaller $LIB_DIR/lib*-@TulipVersion@.so $FILE_XML $SRV_DIR $GEN_DOC $ARCH >> /tmp/generation.log
+echo ./pluginInstaller $LIB $FILE_XML $SRV_DIR $GEN_DOC $ARCH >> /tmp/generation.log
+./pluginInstaller $LIB $FILE_XML $SRV_DIR $GEN_DOC $ARCH >> /tmp/generation.log
 if [ $? -ne 0 ]; then
   echo pluginInstaller error !!!
   exit
