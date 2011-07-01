@@ -466,6 +466,8 @@ void GraphTableModel::afterSetAllEdgeValue(PropertyInterface* property){
 }
 
 void GraphTableModel::update(){
+
+    //Remove deleted properties and elements from vector.
     if(!_idsToDelete.empty()){
         removeFromVector<unsigned int>(_idsToDelete,_idTable,_orientation==Qt::Vertical);
         _idsToDelete.clear();
@@ -497,6 +499,7 @@ void GraphTableModel::update(){
         }
         _propertiesToAdd.clear();
     }
+    //Send modification events.
     if(!_propertiesUpdated.empty() || !_dataUpdated.empty()){
         if(_sortingProperty != NULL){
             //If the sorting property is updated we need to sort elements again.

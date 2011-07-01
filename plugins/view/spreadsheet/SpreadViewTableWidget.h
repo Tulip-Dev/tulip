@@ -26,7 +26,8 @@ public:
     explicit SpreadViewTableWidget(QWidget *parent = 0);
     ~SpreadViewTableWidget();
 
-    void setData(tlp::Graph* graph,tlp::ElementType type);
+    void setData(tlp::Graph* graph,const tlp::DataSet& data,tlp::ElementType type);
+    tlp::DataSet getData()const;
 
     TulipTableWidgetColumnSelectionWidget* columnEditionWidget();
 

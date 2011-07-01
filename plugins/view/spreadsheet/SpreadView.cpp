@@ -89,12 +89,19 @@ QWidget *SpreadView::construct(QWidget *parent) {
     return widget;
 }
 
-void SpreadView::setData(Graph *graph, DataSet) {
+void SpreadView::setData(Graph *graph, DataSet data) {
     if(graph!= _graph){
         _graph = graph;
-
-        ui->nodesSpreadViewWidget->setData(graph,NODE);
-        ui->edgesSpreadViewWidget->setData(graph,EDGE);
+        DataSet nodesDataset;
+        if(data.exist("nodes")){
+            data.get("nodes",nodesDataset);
+        }
+        DataSet edgesDataset;
+        if(data.exist("edges")){
+            data.get("edges",edgesDataset);
+        }
+        ui->nodesSpreadViewWidget->setData(graph,nodesDataset,NODE);
+        ui->edgesSpreadViewWidget->setData(graph,edgesDataset,EDGE);
 
     }else{
         //Refresh models.
@@ -102,8 +109,12 @@ void SpreadView::setData(Graph *graph, DataSet) {
     }
 }
 
-void SpreadView::getData(Graph **graph, DataSet *) {
+void SpreadView::getData(Graph **graph, DataSet * d) {
     *graph = _graph;
+    DataSet data;
+    data.set("nodes",ui->nodesSpreadViewWidget->getData());
+    data.set("edges",ui->edgesSpreadViewWidget->getData());
+    *d = data;
 }
 
 Graph* SpreadView::getGraph() {

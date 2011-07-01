@@ -51,9 +51,38 @@ SpreadViewTableWidget::~SpreadViewTableWidget()
     delete ui;
 }
 
-void SpreadViewTableWidget::setData(tlp::Graph* graph,tlp::ElementType type){
+DataSet SpreadViewTableWidget::getData()const{
+    //Saving state of header view.
+    DataSet data;
+    QHeaderView *headerView = ui->tableView->horizontalHeader();
+    for(int i = 0 ;  i < headerView->count() ; ++i){
+        DataSet columnData;
+        columnData.set("hidden",headerView->isSectionHidden(i));
+        data.set(QString::number(i).toStdString(),columnData);
+    }
+    return data;
+}
+
+void SpreadViewTableWidget::setData(Graph* graph,const DataSet &data,ElementType type){
     Graph* oldGraph = ui->tableView->graph();
-    ui->tableView->setGraph(graph,type);    
+    ui->tableView->setGraph(graph,type);
+    QHeaderView *headerView = ui->tableView->horizontalHeader();
+    //Reload header view state
+    pair<string, DataType*> columnDataSet;
+    forEach(columnDataSet,data.getValues()){
+        bool conversionWork = false;
+        QString value = QString::fromStdString(columnDataSet.first);
+        int column = value.toInt(&conversionWork);
+        if(conversionWork){
+            DataSet columnData = *static_cast<DataSet*>(columnDataSet.second->value);
+            if(columnData.exist("hidden")){
+                bool hidden;
+                columnData.get("hidden",hidden);
+                headerView->setSectionHidden(column,hidden);
+            }
+        }
+    }
+
     TulipTableWidgetColumnSelectionModel* oldColumnModel = _tableColumnModel;
     _tableColumnModel = new TulipTableWidgetColumnSelectionModel(ui->tableView,this);
     ui->columnEditionWidget->setColumnSelectionModel(_tableColumnModel);
