@@ -179,14 +179,11 @@ void CSVImportConfigurationWidget::changeEvent(QEvent *e)
 }
 
 void CSVImportConfigurationWidget::setNewParser(CSVParser *newParser){
-
     delete parser;
     parser = newParser;
     updateWidget();
     //Reset import range
     updateLineNumbers(true);
-
-
 }
 
 void CSVImportConfigurationWidget::updateWidget(){

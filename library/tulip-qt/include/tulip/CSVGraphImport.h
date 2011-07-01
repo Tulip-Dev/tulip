@@ -31,31 +31,32 @@ namespace tlp{
 
     /**
       * @brief Property management class. Convert property type to property type label.
+      * Remove this class in next version
       **/
     class TLP_QT_SCOPE PropertyTools
     {
     public:
-        static std::string getPropertyTypeLabel(const std::string& typeName);
-        static std::string getPropertyTypeFromPropertyTypeLabel(const std::string& typeNameLabel);
-        static QStringList getPropertyTypeLabelsList();
+        static std::string _DEPRECATED getPropertyTypeLabel(const std::string& typeName);
+        static std::string _DEPRECATED getPropertyTypeFromPropertyTypeLabel(const std::string& typeNameLabel);
+        static QStringList _DEPRECATED getPropertyTypeLabelsList();
         /**
            * @brief Try to find the type from a string.
            */
-        static std::string guessDataType(const std::string& data,const std::string& decimalSeparator);
+        static std::string _DEPRECATED guessDataType(const std::string& data,const std::string& decimalSeparator);
         /**
            * @brief Test if a property is compatible with the given type.
            */
-        static bool existingPropertyIsCompatibleWithType(Graph* graph,const std::string& propertyName,
+        static bool _DEPRECATED existingPropertyIsCompatibleWithType(Graph* graph,const std::string& propertyName,
                                                   const std::string& propertyType);
         /**
            * @brief Find or create a property in the graph.
            */
-        static PropertyInterface *getProperty(Graph* graph, const std::string& propertyName,
+        static PropertyInterface * _DEPRECATED getProperty(Graph* graph, const std::string& propertyName,
                                             const std::string& propertyType);
         /**
            * @brief Find or create a local property in the graph.
            */
-        static PropertyInterface *getLocalProperty(Graph* graph, const std::string& propertyName,
+        static PropertyInterface * _DEPRECATED getLocalProperty(Graph* graph, const std::string& propertyName,
                                             const std::string& propertyType);
     };
 
@@ -159,7 +160,7 @@ class TLP_QT_SCOPE CSVToGraphDataMapping{
 public:
     virtual ~CSVToGraphDataMapping(){}    
     virtual std::pair<tlp::ElementType,unsigned int> getElementForRow(const std::vector<std::string>& tokens)=0;
-    virtual void init()=0;
+    virtual void init(unsigned int rowNumber)=0;
 };
 
 /**
@@ -173,7 +174,7 @@ public:
     AbstractCSVToGraphDataMapping(tlp::Graph* graph,tlp::ElementType type,unsigned int columnIndex,const std::string& propertyName);
     virtual ~AbstractCSVToGraphDataMapping(){}
 
-    void init();
+    void init(unsigned int rowNumber);
     std::pair<tlp::ElementType,unsigned int> getElementForRow(const std::vector<std::string>& tokens);
 protected:
     /**
@@ -182,7 +183,7 @@ protected:
       **/
     virtual unsigned int buildIndexForRow(unsigned int row,const std::string& indexKey,tlp::Graph* graph,tlp::PropertyInterface* keyProperty)=0;
 
-private:    
+protected:
     TLP_HASH_MAP<std::string,unsigned int> valueToId;
     tlp::Graph* graph;
     tlp::ElementType type;
@@ -195,7 +196,7 @@ private:
 class TLP_QT_SCOPE CSVToNewNodeIdMapping: public CSVToGraphDataMapping{
 public:
     CSVToNewNodeIdMapping(tlp::Graph* graph);    
-    void init(){}
+    void init(unsigned int rowNumber);
     std::pair<tlp::ElementType,unsigned int> getElementForRow(const std::vector<std::string>& tokens);
 private:
     tlp::Graph* graph;    
@@ -217,6 +218,7 @@ public:
       * @param createNode If set to true if there is no node for an id in the CSV file a new node will be created for this id.
       **/
     CSVToGraphNodeIdMapping(tlp::Graph* graph,unsigned int columnIndex,const std::string& propertyName,bool createNode=false);
+    void init(unsigned int rowNumber);
 protected:
     unsigned int buildIndexForRow(unsigned int row,const std::string& indexKey,tlp::Graph* graph,tlp::PropertyInterface* keyProperty);
 private:
@@ -260,7 +262,7 @@ public:
     **/
     CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,unsigned int srcColumnIndex,unsigned int tgtColumnIndex,const std::string& propertyName,bool createMissinElements=false);
     std::pair<tlp::ElementType,unsigned int> getElementForRow(unsigned int row);
-    void init();
+    void init(unsigned int lineNumbers);
      std::pair<tlp::ElementType,unsigned int> getElementForRow(const std::vector<std::string>& tokens);
 private:    
     tlp::Graph* graph;    
@@ -300,6 +302,12 @@ public:
     tlp::PropertyInterface* getPropertyInterface(unsigned int column,const std::string& token);
 
 private:
+
+    /**
+      * @brief Try to dertemine the type of a property from the given data.
+      **/
+     std::string guessPropertyDataType(const std::string& data,const std::string& decimalSeparator);
+
     tlp::Graph* graph;
     CSVImportParameters importParameters;
     TLP_HASH_MAP<unsigned int,tlp::PropertyInterface*>propertiesBuffer;
@@ -319,7 +327,8 @@ public:
     void begin();
     void line(unsigned int row,const std::vector<std::string>& lineTokens);
     void end(unsigned int rowNumber, unsigned int columnNumber);
-protected:
+protected:   
+
     CSVToGraphDataMapping* mapping;
     CSVImportColumnToGraphPropertyMapping* propertiesManager;
     CSVImportParameters importParameters;

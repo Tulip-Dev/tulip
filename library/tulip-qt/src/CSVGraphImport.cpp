@@ -24,7 +24,7 @@
 using namespace tlp;
 using namespace std;
 
-const char minusChar = '-';
+static const char minusChar = '-';
 
 string PropertyTools::getPropertyTypeLabel(const string& typeName){
     return QStringToTlpString(propertyTypeToPropertyTypeLabel(typeName));
@@ -255,7 +255,7 @@ AbstractCSVToGraphDataMapping::AbstractCSVToGraphDataMapping(Graph* graph,Elemen
     keyProperty = graph->getProperty(propertyName);
 }
 
-void AbstractCSVToGraphDataMapping::init(){
+void AbstractCSVToGraphDataMapping::init(unsigned int){
     //Clean old informations.
     valueToId.clear();
     //Fill map with graph values.
@@ -296,11 +296,22 @@ pair<ElementType,unsigned int> AbstractCSVToGraphDataMapping::getElementForRow(c
 CSVToNewNodeIdMapping::CSVToNewNodeIdMapping(Graph* graph):graph(graph){
 }
 
+void CSVToNewNodeIdMapping::init(unsigned int rowNumber){
+    graph->reserveNodes(rowNumber);
+}
+
 pair<ElementType,unsigned int> CSVToNewNodeIdMapping::getElementForRow(const vector<string>&){
     return make_pair(NODE,graph->addNode().id);
 }
 
 CSVToGraphNodeIdMapping::CSVToGraphNodeIdMapping(Graph* graph,unsigned int columnIndex,const string& propertyName,bool createNode):AbstractCSVToGraphDataMapping(graph,NODE,columnIndex,propertyName),createMissingNodes(createNode){
+}
+
+void CSVToGraphNodeIdMapping::init(unsigned int rowNumber){
+    AbstractCSVToGraphDataMapping::init(rowNumber);
+    if(createMissingNodes){
+        graph->reserveNodes(rowNumber);
+    }
 }
 
 unsigned int CSVToGraphNodeIdMapping::buildIndexForRow(unsigned int,const string& indexKey,Graph* graph,PropertyInterface* keyProperty){
@@ -327,11 +338,17 @@ CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(Graph* graph,
     buildMissingElements(createMissinNodes){
 }
 
-void CSVToGraphEdgeSrcTgtMapping::init(){
+void CSVToGraphEdgeSrcTgtMapping::init(unsigned int rowNumber){
     valueToId.clear();
     node n;
     forEach(n,graph->getNodes()){
         valueToId[keyProperty->getNodeStringValue(n)]=n.id;
+    }
+    //Reserve memory
+    graph->reserveEdges(rowNumber);
+    if(buildMissingElements){
+        //Need to reserve for source and target nodes.
+        graph->reserveNodes(2*rowNumber);
     }
 }
 pair<ElementType,unsigned int> CSVToGraphEdgeSrcTgtMapping::getElementForRow(const vector<string>& lineTokens){
@@ -382,7 +399,7 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
         //The property type is invalid or autodetect.
         if (propertyType.compare("")==0) {
             //Determine type
-            propertyType = PropertyTools::guessDataType(token,string(";,."));
+            propertyType = guessPropertyDataType(token,string(";,."));
             //If auto detection fail set to default type : string.
             if (propertyType.empty()) {
                 propertyType = "string";
@@ -391,8 +408,9 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
         PropertyInterface *interf=NULL;
         //The property already exist need to check if existing is compatible with new one.
         if (graph->existProperty(propertyName)) {
+            PropertyInterface *existingProperty = graph->getProperty(propertyName);
             //If the properties are compatible query if we had to override existing.
-            if (PropertyTools::existingPropertyIsCompatibleWithType(graph, propertyName, propertyType)) {
+            if (existingProperty->getTypename().compare(propertyType)==0) {
                 if (overwritePropertiesButton != QMessageBox::YesToAll && overwritePropertiesButton != QMessageBox::NoToAll) {
                     overwritePropertiesButton = QMessageBox::question(parent, parent->tr("Property exist."),
                                                                       parent->tr("A property with the name \"") + tlpStringToQString(propertyName) + parent->tr(
@@ -413,7 +431,7 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
             }
         }
         else {
-            interf=PropertyTools::getProperty(graph, propertyName, propertyType);
+            interf=graph->getProperty(propertyName, propertyType);
         }
         propertiesBuffer[column] = interf;
         return interf;
@@ -422,11 +440,54 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
     }
 }
 
+string CSVImportColumnToGraphPropertyMappingProxy::guessPropertyDataType(const string& data, const string& decimalSeparator) {
+    bool stringValue = false;
+    bool intValue = false;
+    bool doubleValue = false;
+    for (unsigned int j = 0; j < data.length(); ++j) {
+        if (isalpha(data[j])) {
+            stringValue = true;
+        }
+        else if (isdigit(data[j]) && !stringValue) {
+            if (!doubleValue) {
+                intValue = true;
+            }
+            else {
+                doubleValue = true;
+            }
+        }
+        else if (decimalSeparator.find_first_of(data[j]) != string::npos && intValue) {
+            doubleValue = true;
+            intValue = false;
+        }
+        else if (j == 0 && data[j] == minusChar) {
+            intValue = true;
+        }
+        else {
+            stringValue = true;
+            intValue = false;
+            doubleValue = false;
+        }
+    }
+    if (stringValue) {
+        return "string";
+    }
+    else if (intValue) {
+        return "int";
+    }
+    else if (doubleValue) {
+        return "double";
+    }
+    else {
+        return "";
+    }
+}
+
 CSVGraphImport::CSVGraphImport(CSVToGraphDataMapping* mapping,CSVImportColumnToGraphPropertyMapping* properties,const CSVImportParameters& importParameters):mapping(mapping),propertiesManager(properties),importParameters(importParameters){
 }
 CSVGraphImport::~CSVGraphImport(){}
 void CSVGraphImport::begin(){
-    mapping->init();
+    mapping->init(importParameters.getLastLineIndex()-importParameters.getFirstLineIndex()+1);
 }
 
 void CSVGraphImport::line(unsigned int row,const std::vector<std::string>& lineTokens){
