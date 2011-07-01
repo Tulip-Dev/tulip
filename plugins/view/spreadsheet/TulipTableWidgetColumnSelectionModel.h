@@ -29,6 +29,8 @@ public:
       **/
     void setColumnVisible(int columnIndex,bool visible);
 
+    bool isColumnVisible(int columnIndex)const;
+
     GraphTableModel* graphTableModel(){
         return _tableModel;
     }

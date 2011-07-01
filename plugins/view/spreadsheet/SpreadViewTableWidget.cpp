@@ -2,6 +2,7 @@
 #include "ui_SpreadViewTableWidget.h"
 #include "GraphTableModel.h"
 #include "GraphTableWidget.h"
+#include "VisibleSectionsModel.h"
 
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/CopyPropertyDialog.h>
@@ -9,6 +10,9 @@
 
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
+#include <QtGui/QSortFilterProxyModel>
+
+#include "TulipTableWidgetColumnSelectionModel.h"
 
 #include <set>
 
@@ -17,7 +21,7 @@ using namespace tlp;
 
 SpreadViewTableWidget::SpreadViewTableWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::SpreadViewTableWidget),_selectionProperty(NULL),_reloadSelectionProperty(false)
+    ui(new Ui::SpreadViewTableWidget),_tableColumnModel(NULL),_selectionProperty(NULL),_reloadSelectionProperty(false)
 {
     ui->setupUi(this);
     //Edges table
@@ -27,6 +31,8 @@ SpreadViewTableWidget::SpreadViewTableWidget(QWidget *parent) :
     connect(ui->tableView->verticalHeader(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showElementsContextMenu(QPoint)));
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tableView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showTableContextMenu(QPoint)));
+
+    connect(ui->comboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(filterColumnChanged(int)));
 
     //Column selection widgets
     ui->columnEditionWidget->setVisible(false);
@@ -45,9 +51,19 @@ SpreadViewTableWidget::~SpreadViewTableWidget()
 }
 
 void SpreadViewTableWidget::setData(tlp::Graph* graph,tlp::ElementType type){
-    ui->tableView->setGraph(graph,type);
-    ui->columnEditionWidget->setTableView(ui->tableView);
+    ui->tableView->setGraph(graph,type);    
+    TulipTableWidgetColumnSelectionModel* oldColumnModel = _tableColumnModel;
+    _tableColumnModel = new TulipTableWidgetColumnSelectionModel(ui->tableView,this);
+    ui->columnEditionWidget->setColumnSelectionModel(_tableColumnModel);
     ui->columnEditionWidget->setEnabled(true);
+
+    if(oldColumnModel != NULL){
+        oldColumnModel->deleteLater();
+    }
+
+    VisibleSectionsModel *visibleColumnsModel = new VisibleSectionsModel(_tableColumnModel,this);
+    visibleColumnsModel->setDynamicSortFilter(true);
+    ui->comboBox->setModel(visibleColumnsModel);
 
     //Connect data modification events to ensure filtering il always up to date.
     connect(ui->tableView->graphModel(),SIGNAL(columnsAboutToBeInserted ( QModelIndex , int , int)),this,SLOT(columnsInserted(QModelIndex,int,int)));
@@ -84,6 +100,7 @@ void SpreadViewTableWidget::fillElementsContextMenu(QMenu& menu,GraphTableWidget
         tableWidget->selectionModel()->select(tulipTableModel->index(clickedRowIndex,0),QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     }
     QModelIndexList rows = tableWidget->selectionModel()->selectedRows(0);
+    std::cout<<__PRETTY_FUNCTION__<<" "<<__LINE__<<" "<<rows.size()<<std::endl;
     set<unsigned int> elements = tableWidget->indexListToIds(rows);
     QAction* selectOnGraph = menu.addAction(tr("Select on graph"),this,SLOT(selectElements()));
     selectOnGraph->setToolTip(tr("Replace the current graph selection by the elements highlighted in the table."));
@@ -302,11 +319,11 @@ void SpreadViewTableWidget::highlightElements(){
 }
 
 void SpreadViewTableWidget::deleteHighlightedElements(){
-        GraphTableWidget *tableWidget = ui->tableView;
-        QModelIndexList indexes = tableWidget->selectionModel()->selectedRows(0);
-        Observable::holdObservers();
-        deleteHighlightedElements(indexes,tableWidget,false);
-        Observable::unholdObservers();
+    GraphTableWidget *tableWidget = ui->tableView;
+    QModelIndexList indexes = tableWidget->selectionModel()->selectedRows(0);
+    Observable::holdObservers();
+    deleteHighlightedElements(indexes,tableWidget,false);
+    Observable::unholdObservers();
 }
 
 void SpreadViewTableWidget::deleteHighlightedElements(const QModelIndexList& elements,GraphTableWidget *tableWidget ,bool delAll){
@@ -417,6 +434,7 @@ void SpreadViewTableWidget::updateFilters(){
     ui->filterProgressBar->setVisible(true);
     int totalOfElements = tableModel->rowCount();
     ui->filterProgressBar->setRange(0,totalOfElements);
+    int searchColumn = ui->comboBox->itemData(ui->comboBox->currentIndex()).toInt();
     for(int i= 0; i < tableModel->rowCount(); ++i){
         unsigned int id =tableModel->idForIndex(i);
         if(_updatedElements.get(id)){
@@ -427,12 +445,8 @@ void SpreadViewTableWidget::updateFilters(){
             bool match = false;
             if(regExp.isEmpty() ){
                 match = true;
-            }else{
-                for(int j=0;j< tableModel->columnCount() ; ++j){
-                    match |= regExp.exactMatch(tableModel->data(tableModel->index(i,j)).toString());
-                    if(match)
-                        break;
-                }
+            }else{                                
+                match |= regExp.exactMatch(tableModel->data(tableModel->index(i,searchColumn)).toString());
             }
             ui->tableView->setRowHidden(i,!(display && match));
         }
@@ -556,5 +570,10 @@ void SpreadViewTableWidget::dataChanged(const QModelIndex & topLeft, const QMode
         _updatedElements.set(model->idForIndex(i),true);
     }
     //Needed to force redraw here as the model can be updated even if the graph structure don't change.
+    updateFilters();
+}
+
+void SpreadViewTableWidget::filterColumnChanged(int){
+    _updatedElements.setAll(true);
     updateFilters();
 }

@@ -3,7 +3,6 @@
 
 #include <QtGui/QWidget>
 #include <QtCore/QRegExp>
-class GraphTableWidget;
 namespace Ui {
     class TableColumnSelectionWidget;
 }
@@ -20,7 +19,11 @@ class TulipTableWidgetColumnSelectionWidget : public QWidget
 public:
     explicit TulipTableWidgetColumnSelectionWidget(QWidget *parent = 0);
     ~TulipTableWidgetColumnSelectionWidget();
-    void setTableView(GraphTableWidget* tableView);
+    /**
+    * @brief Set the column selection model. Do not delete models it's up to the creator of the model to destruct it.
+      *
+      **/
+    void setColumnSelectionModel(TulipTableWidgetColumnSelectionModel* model);
 
 private slots:
 

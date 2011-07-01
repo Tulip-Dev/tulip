@@ -1,7 +1,6 @@
 #include "TulipTableWidgetColumnSelectionWidget.h"
 #include "ui_TulipTableWidgetColumnSelectionWidget.h"
 #include "TulipTableWidgetColumnSelectionModel.h"
-#include "GraphTableWidget.h"
 #include "GraphTableModel.h"
 #include <QtGui/QMenu>
 #include <QtGui/QStyledItemDelegate>
@@ -11,6 +10,9 @@
 #include <string>
 
 
+/**
+  * @brief Internal delegate cobjec to draw the icon on the left instead of the right.
+  **/
 class TulipTableWidgetColumnSelectionWidgetItemDelegate : public QStyledItemDelegate{
 public :
     TulipTableWidgetColumnSelectionWidgetItemDelegate(QObject * parent = 0) : QStyledItemDelegate(parent){
@@ -54,19 +56,16 @@ TulipTableWidgetColumnSelectionWidget::~TulipTableWidgetColumnSelectionWidget()
     delete ui;
 }
 
-void TulipTableWidgetColumnSelectionWidget::setTableView(GraphTableWidget* tableView){
-    assert(tableView != NULL);
+void TulipTableWidgetColumnSelectionWidget::setColumnSelectionModel(TulipTableWidgetColumnSelectionModel* model){
+    assert(model != NULL);
     QAbstractItemModel* oldModel = ui->listView->model();
     if(oldModel){
         disconnect(oldModel,SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(updateCheckUncheckAllButtonState()));
     }
-    _tableColumnModel = new TulipTableWidgetColumnSelectionModel(tableView,this);
+    _tableColumnModel = model;
     ui->listView->setModel(_tableColumnModel);
     updateCheckUncheckAllButtonState();
     connect(_tableColumnModel,SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(updateCheckUncheckAllButtonState()));
-    if(oldModel != NULL){
-        oldModel->deleteLater();
-    }
 }
 
 void TulipTableWidgetColumnSelectionWidget::showVisualProperties(){

@@ -34,7 +34,25 @@ using namespace std;
 using namespace tlp;
 
 
+/**
+  * This class is needed to define a custom SizeHint for the spread view.
+  **/
+class SpreadViewWidget : public QWidget{
+public:
+    SpreadViewWidget(QSize sizeHints,QWidget*parent = NULL):QWidget(parent),_sizeHint(sizeHints){
 
+    }
+
+    QSize sizeHint()const{
+        return _sizeHint;
+    }
+
+    QSize minimumSizeHint()const{
+        return _sizeHint;
+    }
+
+    QSize _sizeHint;
+};
 
 SpreadView::SpreadView() :
     AbstractView(),ui(new Ui::SpreadViewWidget),_graph(NULL){
@@ -45,7 +63,7 @@ SpreadView::~SpreadView() {
 
 QWidget *SpreadView::construct(QWidget *parent) {
     QWidget *widget = AbstractView::construct(parent);
-    QWidget* mainWidget = new QWidget(widget);
+    QWidget* mainWidget = new SpreadViewWidget(QSize(640,480),widget);
     ui->setupUi(mainWidget);
 
     setCentralWidget(mainWidget);

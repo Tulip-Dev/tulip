@@ -99,3 +99,8 @@ void TulipTableWidgetColumnSelectionModel::setColumnVisible(int columnIndex,bool
 PropertyInterface* TulipTableWidgetColumnSelectionModel::propertyForIndex(const QModelIndex& index){
     return _tableModel->propertyForIndex(index);
 }
+
+bool TulipTableWidgetColumnSelectionModel::isColumnVisible(int columnIndex)const{
+    return !_tableView->isColumnHidden(columnIndex);
+
+}

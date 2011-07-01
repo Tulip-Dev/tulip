@@ -82,24 +82,44 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0" colspan="3">
+     <item row="0" column="0" colspan="5">
       <widget class="QCheckBox" name="showOnlySelectedElementsCheckBox">
        <property name="text">
         <string>Show only selected elements</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item row="1" column="4">
       <widget class="QPushButton" name="filterPushButton">
        <property name="text">
         <string>Filter</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0" colspan="3">
+     <item row="2" column="0" colspan="5">
       <widget class="QProgressBar" name="filterProgressBar">
        <property name="value">
         <number>0</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>in</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QComboBox" name="comboBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="frame">
+        <bool>false</bool>
        </property>
       </widget>
      </item>

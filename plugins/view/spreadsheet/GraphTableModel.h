@@ -93,7 +93,7 @@ public:
       * @brief Convinience function to get the property for an index call the propertyForIndex function with the right index in function of properties orientation in the model.
       **/
     tlp::PropertyInterface* propertyForIndex(const QModelIndex& index ) const{
-        return propertyForIndex(_orientation==Qt::Horizontal?index.row():index.column());
+        return propertyForIndex(_orientation==Qt::Horizontal?index.column():index.row());
     }
     /**
       * @brief Get the id property the given index. If the index is not valid return NULL.

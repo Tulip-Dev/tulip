@@ -15,6 +15,8 @@ namespace Ui {
 }
 class TulipTableWidgetColumnSelectionWidget;
 class GraphTableWidget;
+class TulipTableWidgetColumnSelectionModel;
+
 class SpreadViewTableWidget : public QWidget, public tlp::PropertyObserver, public tlp::Observable
 {
     Q_OBJECT
@@ -61,6 +63,9 @@ private slots:
 
     void updateElementVisibility(int state);
     void showOnlySelectedElements(bool show);
+
+    void filterColumnChanged(int index);
+
     void filterElements();
     void filterElements(const QString& pattern);
 
@@ -111,6 +116,7 @@ private:
 
     Ui::SpreadViewTableWidget *ui;
 
+    TulipTableWidgetColumnSelectionModel *_tableColumnModel;
     tlp::MutableContainer<bool> _updatedElements;
     tlp::BooleanProperty* _selectionProperty;
     bool _reloadSelectionProperty;

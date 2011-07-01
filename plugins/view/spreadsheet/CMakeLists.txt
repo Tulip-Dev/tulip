@@ -15,6 +15,7 @@ SET(spreadsheet_LIB_SRCS
     TulipTableWidgetColumnSelectionWidget.cpp        
     OrientedPushButton.cpp
     SpreadViewTableWidget.cpp
+    VisibleSectionsModel.cpp
 )
 
 set(spreadsheet_UI
@@ -36,7 +37,9 @@ set(spreadsheet_MOC
     TulipTableWidgetColumnSelectionWidget.h    
     OrientedPushButton.h
     SpreadViewTableWidget.h
+    VisibleSectionsModel.h
 )
+
 
 SET(spreadsheet_RCC
     Spreadsheet.qrc
