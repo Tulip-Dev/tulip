@@ -99,7 +99,7 @@ void SpreadViewTableWidget::fillElementsContextMenu(QMenu& menu,GraphTableWidget
     if(!tableWidget->selectionModel()->isRowSelected(clickedRowIndex,QModelIndex())){
         tableWidget->selectionModel()->select(tulipTableModel->index(clickedRowIndex,0),QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
     }
-    QModelIndexList rows = tableWidget->selectionModel()->selectedRows(0);
+    QModelIndexList rows = tableWidget->selectedRows(0);
     std::cout<<__PRETTY_FUNCTION__<<" "<<__LINE__<<" "<<rows.size()<<std::endl;
     set<unsigned int> elements = tableWidget->indexListToIds(rows);
     QAction* selectOnGraph = menu.addAction(tr("Select on graph"),this,SLOT(selectElements()));
@@ -281,7 +281,7 @@ void SpreadViewTableWidget::removeFromSelection(){
 
 void SpreadViewTableWidget::updateSelectionForHighlightedElements(GraphTableWidget* tableWidget,bool select,bool clearOldSelection){
     BooleanProperty* selectionProperty = ui->tableView->graph()->getProperty<BooleanProperty>("viewSelection");
-    set<unsigned int> elements = tableWidget->indexListToIds(tableWidget->selectionModel()->selectedRows(0));
+    set<unsigned int> elements = tableWidget->indexListToIds(tableWidget->selectedRows(0));
     Observable::holdObservers();
     if(clearOldSelection){
         if(tableWidget->elementType() == NODE){
@@ -320,7 +320,7 @@ void SpreadViewTableWidget::highlightElements(){
 
 void SpreadViewTableWidget::deleteHighlightedElements(){
     GraphTableWidget *tableWidget = ui->tableView;
-    QModelIndexList indexes = tableWidget->selectionModel()->selectedRows(0);
+    QModelIndexList indexes = tableWidget->selectedRows(0);
     Observable::holdObservers();
     deleteHighlightedElements(indexes,tableWidget,false);
     Observable::unholdObservers();
@@ -344,7 +344,7 @@ void SpreadViewTableWidget::deleteHighlightedElements(const QModelIndexList& ele
 
 void SpreadViewTableWidget::copyNodes(){
     GraphTableWidget *tableWidget = ui->tableView;
-    QModelIndexList rows = tableWidget->selectionModel()->selectedRows(0);
+    QModelIndexList rows = tableWidget->selectedRows(0);
     set<unsigned int> elements = tableWidget->indexListToIds(rows);
     set<unsigned int> createdElements;
     Observable::holdObservers();
@@ -363,7 +363,7 @@ void SpreadViewTableWidget::copyNodes(){
 
 void SpreadViewTableWidget::group(){
     GraphTableWidget *tableWidget = ui->tableView;
-    QModelIndexList rows = tableWidget->selectionModel()->selectedRows(0);
+    QModelIndexList rows = tableWidget->selectedRows(0);
     set<unsigned int> elements = tableWidget->indexListToIds(rows);
     set<node> nodes;
     for(set<unsigned int>::iterator it = elements.begin(); it != elements.end();++it){
@@ -379,7 +379,7 @@ void SpreadViewTableWidget::group(){
 
 void SpreadViewTableWidget::ungroup(){
     GraphTableWidget *tableWidget = ui->tableView;
-    QModelIndexList rows = tableWidget->selectionModel()->selectedRows(0);
+    QModelIndexList rows = tableWidget->selectedRows(0);
     set<unsigned int> elements = tableWidget->indexListToIds(rows);
     set<unsigned int> metanodeNodes;
     set<unsigned int> metanodeEdges;

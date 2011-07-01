@@ -91,7 +91,7 @@ void GraphTableWidget::scrollToFirstOf(const QModelIndexList& indexes){
         }
     }
     if(rowMin != -1 && colMin != -1){
-    QTableView::scrollTo(_tulipTableModel->index(rowMin,colMin),QAbstractItemView::PositionAtTop);
+        QTableView::scrollTo(_tulipTableModel->index(rowMin,colMin),QAbstractItemView::PositionAtTop);
     }
 }
 
@@ -101,4 +101,15 @@ void GraphTableWidget::highlightAndDisplayElements(const std::set<unsigned int>&
 }
 void GraphTableWidget::highlightAllElements(){
     selectionModel()->select(QItemSelection(model()->index(0,0),model()->index(model()->rowCount()-1,model()->columnCount()-1)),QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+}
+
+QModelIndexList GraphTableWidget::selectedRows(int columns)const{
+    QModelIndexList modelSelected = selectionModel()->selectedRows(columns);
+    QModelIndexList viewSelected;
+    for (int i = 0; i < modelSelected.count(); ++i) {
+        QModelIndex index = modelSelected.at(i);
+        if (!isIndexHidden(index))
+            viewSelected.append(index);
+    }
+return viewSelected;
 }

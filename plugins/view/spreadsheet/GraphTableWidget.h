@@ -59,6 +59,12 @@ public:
       **/
     void highlightAndDisplayElements(const std::set<unsigned int>& elements);
 
+    /**
+      * @brief Return the selected rows from QItemSelectionModel but remove hiden rows from the result.
+      *
+      */
+    QModelIndexList selectedRows(int columns=0)const;
+
 protected:
     void setModel(QAbstractItemModel *){}
 

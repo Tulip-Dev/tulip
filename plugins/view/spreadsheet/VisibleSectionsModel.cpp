@@ -24,7 +24,7 @@ QVariant VisibleSectionsModel::data( const QModelIndex & index, int role ) const
 
 }
 
-bool VisibleSectionsModel::filterAcceptsRow ( int source_row, const QModelIndex & source_parent ) const{
+bool VisibleSectionsModel::filterAcceptsRow ( int source_row, const QModelIndex &) const{
     return _columnModel->isColumnVisible(source_row);
 }
 
