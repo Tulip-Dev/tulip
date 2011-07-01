@@ -16,6 +16,7 @@ namespace Ui {
 class TulipTableWidgetColumnSelectionWidget;
 class GraphTableWidget;
 class TulipTableWidgetColumnSelectionModel;
+class VisibleSectionsModel;
 
 class SpreadViewTableWidget : public QWidget, public tlp::PropertyObserver, public tlp::Observable
 {
@@ -35,8 +36,7 @@ public:
 
 
 
-    void treatEvent(const tlp::Event &);
-    void treatEvents(const std::vector<tlp::Event> &events);
+    void treatEvent(const tlp::Event &);    
 
 public slots:
 
@@ -117,9 +117,10 @@ private:
     Ui::SpreadViewTableWidget *ui;
 
     TulipTableWidgetColumnSelectionModel *_tableColumnModel;
+    VisibleSectionsModel *_currentVisibleSectionModel;
     tlp::MutableContainer<bool> _updatedElements;
     tlp::BooleanProperty* _selectionProperty;
-    bool _reloadSelectionProperty;
+    bool _reloadSelectionProperty;    
 };
 
 #endif // SPREADVIEWTABLEWIDGET_H

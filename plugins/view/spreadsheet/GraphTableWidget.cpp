@@ -54,8 +54,7 @@ GraphTableWidget::SelectionStatus GraphTableWidget::selectionStatus(const QModel
 
 set<unsigned int> GraphTableWidget::indexListToIds(const QModelIndexList& elementsIndexes)const{
     set<unsigned int> elements;
-    for(QModelIndexList::const_iterator it = elementsIndexes.begin();it != elementsIndexes.end();++it){
-        std::cout<<__PRETTY_FUNCTION__<<" "<<__LINE__<<" "<<(*it).row()<<" "<<(*it).column()<<" "<< _tulipTableModel->idForIndex(*it)<<std::endl;
+    for(QModelIndexList::const_iterator it = elementsIndexes.begin();it != elementsIndexes.end();++it){        
         elements.insert(_tulipTableModel->idForIndex(*it));
     }
     return elements;
