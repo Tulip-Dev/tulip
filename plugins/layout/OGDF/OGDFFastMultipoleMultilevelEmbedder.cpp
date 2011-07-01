@@ -2,15 +2,27 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
+namespace {
+
+const char * paramHelp[] = {
+		HTML_HELP_OPEN()
+		HTML_HELP_DEF( "type", "int" )
+		HTML_HELP_BODY()
+		"The number of threads to use during the computation of the layout."
+		HTML_HELP_CLOSE()
+};
+}
+
 // comments below have been extracted from OGDF/src/energybased/FastMultipoleEmbedder.cpp
+/** \addtogroup layout */
 /*@{*/
-/** \file
- * \brief Implementation of class FastMultipoleEmbedder.
+/**
+ * Implementation of class FastMultipoleEmbedder.
  *
  * \author Martin Gronemann
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  * Copyright (C) 2005-2009
  *
  * \par
@@ -44,18 +56,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
-namespace {
-
-const char * paramHelp[] = {
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"The number of threads to use during the computation of the layout."
-		HTML_HELP_CLOSE()
-};
-}
-
 class OGDFFastMultipoleMultiLevelEmbedder : public OGDFLayoutPluginBase {
 
 public:
@@ -77,6 +77,6 @@ public:
 	}
 
 };
-
+/*@}*/
 
 LAYOUTPLUGINOFGROUP(OGDFFastMultipoleMultiLevelEmbedder,"Fast Multipole Multilevel Embedder (OGDF)","Martin Gronemann","12/11/2007","Ok","1.0","Multilevel");

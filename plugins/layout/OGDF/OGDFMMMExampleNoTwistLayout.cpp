@@ -3,8 +3,10 @@
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
 // comments below have been extracted from OGDF/src/energybased/multilevelmixer/MMEExampleNoTwistLayout.cpp
-/** \file
- * \brief useable example of the Modular Multilevel Mixer
+/** \addtogroup layout */
+/*@{*/
+/// useable example of the Modular Multilevel Mixer
+/**
  *
  * This example is tuned to reduce twists in the final drawing.
  * Use this layout or a variation of it if many twists occur.
@@ -14,7 +16,7 @@
  * \author Gereon Bartel
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  *
  * Copyright (C). All rights reserved.
  * See README.txt in the root directory of the OGDF installation for details.
@@ -59,6 +61,6 @@ class OGDFMMMExampleNoTwistLayout : public OGDFLayoutPluginBase {
    ~OGDFMMMExampleNoTwistLayout() {}
   
 };
-
+/*@}*/
 
 LAYOUTPLUGINOFGROUP(OGDFMMMExampleNoTwistLayout,"MMM Example No Twist Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel");

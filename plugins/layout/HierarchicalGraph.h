@@ -29,9 +29,8 @@ public:
 
 /** \addtogroup layout */
 /*@{*/
+/// An implementation of hierarchical graph drawing algorithm
 /**
- * \file
- * \brief An implementation of hierarchical graph drawing algorithm
  *
  * This plugin is an implementation of the hierarchical layout algorithm
  * first published as:

@@ -26,7 +26,7 @@ using namespace tlp;
 
 /** \addtogroup layout */
 /*@{*/
-/// TreeRadial.cpp - An implementation of a radial drawing of trees.
+/// An implementation of a radial drawing of trees.
 /** 
  * This algorithm is inspired from
  * MoireGraphs: Radial Focus+Context Visualization and Interaction for Graphs with Visual Nodes

@@ -3,10 +3,10 @@
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
 // comments below have been extracted from OGDF/src/energybased/multilevelmixer/MMEExampleFastLayout.cpp
+/** \addtogroup layout */
 /*@{*/
-/** \file
- * \brief useable example of the Modular Multilevel Mixer
- *
+///  useable example of the Modular Multilevel Mixer
+/**
  * An example Layout using the Modular Mutlievel Mixer.
  *
  * This example is tuned for speed. SolarMerger and SolarPlacer are used as merging
@@ -15,7 +15,7 @@
  * \author Gereon Bartel
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  *
  * Copyright (C). All rights reserved.
  * See README.txt in the root directory of the OGDF installation for details.
@@ -51,7 +51,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
 class OGDFMMMExampleFastLayout : public OGDFLayoutPluginBase {
   
  public:
@@ -60,6 +59,6 @@ class OGDFMMMExampleFastLayout : public OGDFLayoutPluginBase {
    ~OGDFMMMExampleFastLayout() {}
   
 };
-
+/*@}*/
 
 LAYOUTPLUGINOFGROUP(OGDFMMMExampleFastLayout,"MMM Example Fast Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel");

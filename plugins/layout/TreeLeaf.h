@@ -21,11 +21,13 @@
 
 #include <tulip/TulipPlugin.h>
 
+class OrientableLayout;
+class OrientableSizeProxy;
+
 /** \addtogroup layout */
 /*@{*/
-/** 
- * \file
- * \brief An implementation of a simple tree layout.
+/// An implementation of a simple tree layout.
+/**
  *
  * This plugin is an implementation of a simple tree layout.
  * All leaves are placed at a distance one (x-coordinates) and the order
@@ -43,9 +45,6 @@
  *
  * \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class OrientableLayout;
-class OrientableSizeProxy;
-
 class TreeLeaf:public tlp::LayoutAlgorithm { 
 public:
   TreeLeaf(const tlp::PropertyContext &);

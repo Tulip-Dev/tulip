@@ -1,15 +1,26 @@
 #include <ogdf/upward/UpwardPlanarizationLayout.h>
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
+namespace {
+const char * paramHelp[] = {
+		HTML_HELP_OPEN()
+		HTML_HELP_DEF( "type", "bool" )
+		HTML_HELP_BODY()
+		"Sets the option for transposing layout vertically ."
+		HTML_HELP_CLOSE()
+};
+}
+
 // comments below have been extracted from OGDF/src/upward/UpwardPlanarizationLayout.h
+/** \addtogroup layout */
 /*@{*/
-/** \file
- * \brief Declaration of upward planarization layout algorithm.
+/**
+ * upward planarization layout algorithm.
  *
  * \author Hoi-Ming Wong
  *
  * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+ * This is part of the Open Graph Drawing Framework (OGDF).
  * Copyright (C) 2005-2008
  *
  * \par
@@ -43,18 +54,6 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
-
-namespace {
-const char * paramHelp[] = {
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"Sets the option for transposing layout vertically ."
-		HTML_HELP_CLOSE()
-};
-}
-
 class OGDFUpwardPlanarization : public OGDFLayoutPluginBase {
 
 public:
@@ -77,6 +76,6 @@ public:
 	}
 
 };
-
+/*@}*/
 
 LAYOUTPLUGINOFGROUP(OGDFUpwardPlanarization,"Upward Planarization (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical");
