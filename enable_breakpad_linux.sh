@@ -33,6 +33,18 @@ parse_dir() {
     $dump_syms_exe $f > $out_file
     echo -e '  \e[00;32mStripping\e[00m debugging symbols from '$f'.'
     $strip_exe -g $f
+
+    symdir=$(head -n 1 $out_file | cut -f 4 -d ' ')
+    abs_symdir=$output_dir'/'$symdir
+    if [ "$symdir" != "" ]; then
+      echo -e '  \e[00;32mStoring\e[00m symbols in '$abs_symdir'.'
+      mkdir -p $abs_symdir
+      mv $out_file $abs_symdir'/'$(basename $out_file)
+    else
+      echo -e '  \e[01;31mNo folder information found in symbols file.'
+      echo -e '  \e[00;32mRemoving\e[00m '$out_file'.'
+      rm -f $out_file
+    fi
   done
 
   for f in *; do
