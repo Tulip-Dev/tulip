@@ -125,9 +125,6 @@ namespace tlp {
     connect(ui->helpDocumentationAction,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));
     connect(ui->pluginsAction,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
     connect(ui->helpAboutAction,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));
-    connect(ui->fileSaveAction,SIGNAL(triggered()),this,SLOT(save()));
-    connect(ui->fileSaveAsAction,SIGNAL(triggered()),this,SLOT(saveAs()));
-
     attachMainWindow(MainWindowFacade(_mainWindow,ui->toolBar,ui->graphToolBar,workspace));
   }
 
