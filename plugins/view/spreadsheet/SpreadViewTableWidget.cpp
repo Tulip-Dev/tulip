@@ -620,11 +620,10 @@ void SpreadViewTableWidget::modelReset(){
 }
 void SpreadViewTableWidget::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight){
     GraphTableModel* model = static_cast<GraphTableModel*>(sender());
+    std::cout<<__PRETTY_FUNCTION__<<" "<<__LINE__<<" "<<topLeft.row()<<","<<topLeft.column()<<" -> "<<bottomRight.row()<<" , "<<bottomRight.column()<<std::endl;
     for(int i = topLeft.row() ; i <= bottomRight.row() ; ++i){
         _updatedElements.set(model->idForIndex(i),true);
-    }
-    //    //Needed to force redraw here as the model can be updated even if the graph structure don't change.
-    //    updateFilters();
+    }    
 }
 
 void SpreadViewTableWidget::filterColumnChanged(int){

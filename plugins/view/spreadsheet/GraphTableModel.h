@@ -57,6 +57,8 @@ public:
     void setOrientation(Qt::Orientation orientation);
 
 
+
+
     //Data access methods
     /**
       * @brief Convinience function. See the element(int row, int column,const QModelIndex& parent = QModelIndex()) function for more informations.
@@ -105,6 +107,16 @@ public:
       *
       **/
     virtual QList<int> indexesForProperties(const std::set<tlp::PropertyInterface*>& properties)const;
+
+    /**
+      * @brief Compute the area for the list of elements. Return top left and bottom right bounds.
+      **/
+    std::pair<QModelIndex,QModelIndex> computeElementsArea(const std::set<unsigned int>& elementsIds)const;
+
+    /**
+      * @brief Compute the area for the list of elements. Return top left and bottom right bounds.
+      **/
+    std::pair<QModelIndex,QModelIndex> computePropertiesArea(const std::set<tlp::PropertyInterface*>& properties)const;
 
     /**
       * @brief Reimplementation of QAbstractTableModel::columnCount(). Return the size of the property table if the orientation of the model is equal to Qt::Vertical else return the size of the elements table.
@@ -241,6 +253,30 @@ private:
         if(comp != NULL){
             std::stable_sort(vect.begin(),vect.end(),*comp);
         }        
+    }
+
+    template<typename T>
+    std::pair<unsigned int,unsigned int> computeArea(const std::set<T>& elementsToFind,const std::vector<T>& elements)const{
+        if(elementsToFind.empty()){
+            return std::make_pair(0,elements.size()-1);
+        }
+        //Init from and to values
+        int first=0,last=elements.size()-1;
+
+        //Naive method use and maintain a map instead
+        std::set<T> elts = elementsToFind;
+        for(int i = 0 ; (unsigned int)i< elements.size();++i){
+            if(elts.find(elements[i])!=elts.end()){                
+                first = std::min(first,i);
+                last = std::max(last,i);
+                //Remove found element
+                elts.erase(elements[i]);
+                if(elts.empty()){
+                    break;
+                }
+            }
+        }
+        return std::make_pair(first,last);
     }
 
     tlp::Graph* _graph;
