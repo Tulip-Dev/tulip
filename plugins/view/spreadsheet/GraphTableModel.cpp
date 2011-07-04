@@ -119,7 +119,7 @@ QList<int> GraphTableModel::indexesForProperties(const std::set<tlp::PropertyInt
 }
 
 pair<QModelIndex,QModelIndex> GraphTableModel::computeElementsArea(const set<unsigned int>& elementsIds)const{
-    pair<unsigned int,unsigned int> fromTo = computeArea<unsigned int>(elementsIds,_idTable);
+    pair<unsigned int,unsigned int> fromTo = computeArea<unsigned int>(elementsIds,_idTable,_idToIndex);
     if(_orientation == Qt::Vertical){
         return make_pair(index(0,fromTo.first),index(columnCount()-1,fromTo.second));
     }else{
@@ -129,7 +129,7 @@ pair<QModelIndex,QModelIndex> GraphTableModel::computeElementsArea(const set<uns
 
 
 pair<QModelIndex,QModelIndex> GraphTableModel::computePropertiesArea(const set<tlp::PropertyInterface*>& properties)const{
-    pair<unsigned int,unsigned int> fromTo = computeArea<PropertyInterface*>(properties,_propertiesTable);
+    pair<unsigned int,unsigned int> fromTo = computeArea<PropertyInterface*>(properties,_propertiesTable,_propertyToIndex);
     if(_orientation == Qt::Vertical){
         return make_pair(index(fromTo.first,0),index(rowCount()-1,fromTo.second));
     }else{
@@ -152,6 +152,7 @@ void GraphTableModel::updateElementsTable(){
             }
         }
     }
+    updateIndexMap<unsigned int>(_idTable,_idToIndex);
 }
 
 void GraphTableModel::updatePropertyTable(){
@@ -170,6 +171,7 @@ void GraphTableModel::updatePropertyTable(){
         PropertyComparator comparator;        
         std::stable_sort(_propertiesTable.begin(),_propertiesTable.end(),comparator);
     }
+    updateIndexMap<PropertyInterface*>(_propertiesTable,_propertyToIndex);
 }
 
 bool GraphTableModel::useProperty(PropertyInterface* property) const{
@@ -310,6 +312,7 @@ void GraphTableModel::sortElements(tlp::PropertyInterface* property, Qt::SortOrd
     _sortingProperty = property;
     PropertyValueComparator comparator(order,_elementType,_sortingProperty);
     std::stable_sort(_idTable.begin(),_idTable.end(),comparator);
+    updateIndexMap<unsigned int>(_idTable,_idToIndex);
     emit dataChanged(index(0,0),index(rowCount()-1,columnCount()-1));
     if(_orientation == Qt::Vertical){
         emit headerDataChanged ( Qt::Vertical, 0, rowCount()-1 );
@@ -462,13 +465,19 @@ void GraphTableModel::beforeDelInheritedProperty(Graph *graph, const std::string
 
 void GraphTableModel::afterSetNodeValue(PropertyInterface* property, const node n){
     if(_elementType == NODE){
-        _dataUpdated.push_back(GraphTableModelIndex(n.id,property));
+        //If the element was not marked for deletion
+        if(_idsToDelete.find(n.id) == _idsToDelete.end()){
+            _dataUpdated.push_back(GraphTableModelIndex(n.id,property));
+        }
     }
 }
 
 void GraphTableModel::afterSetEdgeValue(PropertyInterface* property, const edge e){
     if(_elementType == EDGE){
-        _dataUpdated.push_back(GraphTableModelIndex(e.id,property));
+         //If the element was not marked for deletion
+        if(_idsToDelete.find(e.id) == _idsToDelete.end()){
+            _dataUpdated.push_back(GraphTableModelIndex(e.id,property));
+        }
     }
 }
 
@@ -487,11 +496,11 @@ void GraphTableModel::afterSetAllEdgeValue(PropertyInterface* property){
 void GraphTableModel::update(){
     //Remove deleted properties and elements from vector.
     if(!_idsToDelete.empty()){
-        removeFromVector<unsigned int>(_idsToDelete,_idTable,_orientation==Qt::Vertical);
+        removeFromVector<unsigned int>(_idsToDelete,_idTable,_idToIndex,_orientation==Qt::Vertical);
         _idsToDelete.clear();
     }
     if(!_propertiesToDelete.empty()){
-        removeFromVector<PropertyInterface*>(_propertiesToDelete,_propertiesTable,_orientation==Qt::Horizontal);
+        removeFromVector<PropertyInterface*>(_propertiesToDelete,_propertiesTable,_propertyToIndex,_orientation==Qt::Horizontal);
         //Check if the sorting property is deleted
         if(_propertiesToDelete.find(_sortingProperty)!= _propertiesToDelete.end()){
             //No sort property
@@ -500,17 +509,14 @@ void GraphTableModel::update(){
         _propertiesToDelete.clear();
     }
     if(!_idsToAdd.empty()){
-        if(_sortingProperty != NULL){
-            PropertyValueComparator comparator(_order,_elementType,_sortingProperty);
-            addToVector<unsigned int,PropertyValueComparator>(_idsToAdd,_idTable,_orientation==Qt::Vertical,&comparator);
-        }else{
-            addToVector<unsigned int,PropertyValueComparator>(_idsToAdd,_idTable,_orientation==Qt::Vertical,NULL);
-        }
+        PropertyValueComparator *comparator = _sortingProperty != NULL?(new PropertyValueComparator(_order,_elementType,_sortingProperty)):(NULL);
+        addToVector<unsigned int,PropertyValueComparator>(_idsToAdd,_idTable,_idToIndex,_orientation==Qt::Vertical,comparator);
+        delete comparator;
         _idsToAdd.clear();
     }
     if(!_propertiesToAdd.empty()){
         PropertyComparator comparator;
-        addToVector<PropertyInterface*,PropertyComparator>(_propertiesToAdd,_propertiesTable,_orientation==Qt::Horizontal,&comparator);
+        addToVector<PropertyInterface*,PropertyComparator>(_propertiesToAdd,_propertiesTable,_propertyToIndex,_orientation==Qt::Horizontal,&comparator);
         for(set<PropertyInterface*>::iterator it = _propertiesToAdd.begin() ; it != _propertiesToAdd.end();++it){
             (*it)->addPropertyObserver(this);
             (*it)->addObserver(this);
@@ -558,15 +564,15 @@ void GraphTableModel::update(){
                 properties.insert((*it).property());
                 elements.insert((*it).element());
             }
-            pair<unsigned int,unsigned int> propertiesArea = computeArea<PropertyInterface*>(properties,_propertiesTable);
+            pair<unsigned int,unsigned int> propertiesArea = computeArea<PropertyInterface*>(properties,_propertiesTable,_propertyToIndex);
             left = propertiesArea.first;
             right = propertiesArea.second;
             if(!updateAllElements){
-                pair<unsigned int,unsigned int> elementsArea = computeArea<unsigned int>(elements,_idTable);
+                pair<unsigned int,unsigned int> elementsArea = computeArea<unsigned int>(elements,_idTable,_idToIndex);
                 first = elementsArea.first;
                 last = elementsArea.second;
             }
-            emit dataChanged(index(left,first),index(right,last));
+            emit dataChanged(index(first,left),index(last,right));
         }
         _propertiesUpdated.clear();
         _dataUpdated.clear();

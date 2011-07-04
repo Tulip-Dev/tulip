@@ -182,7 +182,8 @@ protected:
     /**
     * @brief Fill the idTable.
     **/
-    virtual void updateElementsTable();
+    virtual void updateElementsTable();       
+
     /**
     * @brief Fill the propertyTable. For each property in the graph call the useProperty function to know if we add the property in the table.
     **/
@@ -204,17 +205,12 @@ protected:
 private:
 
     template<typename T>
-    void removeFromVector(const std::set<T>& objects,std::vector<T>& vect,bool deleteRows){
-        std::set<int> indexes;
-        std::set<T> ids(objects.begin(),objects.end());
-        for(unsigned int i = 0 ; i < vect.size();++i){
-            if(ids.find(vect[i])!= ids.end()){
-                ids.erase(vect[i]);
-                indexes.insert(i);
-                if(ids.empty()){
-                    break;
-                }
-            }
+    void removeFromVector(const std::set<T>& objects,std::vector<T>& vect,TLP_HASH_MAP<T,int>& objToIndexes,bool deleteRows){
+        std::set<int> indexes;        
+        for( typename std::set<T>::const_iterator it = objects.begin();it != objects.end();++it){
+            assert(objToIndexes.find(*it)!=objToIndexes.end());
+            indexes.insert(objToIndexes[*it]);
+            objToIndexes.erase(*it);
         }
 
         for(std::set<int>::reverse_iterator it = indexes.rbegin() ; it != indexes.rend();++it){
@@ -224,6 +220,7 @@ private:
                 beginRemoveColumns(QModelIndex(),(*it),(*it));
             }
             vect.erase(vect.begin()+(*it));
+
             if(deleteRows){
                 endRemoveRows();
             }else{
@@ -233,7 +230,7 @@ private:
     }
 
     template<typename T, class Compare>
-    void addToVector(const std::set<T>& objects,std::vector<T>& vect,bool addRows, Compare* comp){
+    void addToVector(const std::set<T>& objects,std::vector<T>& vect,TLP_HASH_MAP<T,int>& objToIndex,bool addRows, Compare* comp){
         if(vect.capacity() <= vect.size() + objects.size()){
             vect.reserve(vect.size() + objects.size());
         }
@@ -243,6 +240,8 @@ private:
             beginInsertColumns(QModelIndex(),vect.size(),vect.size()+objects.size()-1);
         }
         for(typename std::set<T>::const_iterator it = objects.begin();it != objects.end() ; ++it){
+            unsigned int i = vect.size();
+            objToIndex[*it]=i;
             vect.push_back((*it));
         }
         if(addRows){
@@ -252,38 +251,40 @@ private:
         }
         if(comp != NULL){
             std::stable_sort(vect.begin(),vect.end(),*comp);
+            updateIndexMap<T>(vect,objToIndex);
         }        
     }
 
     template<typename T>
-    std::pair<unsigned int,unsigned int> computeArea(const std::set<T>& elementsToFind,const std::vector<T>& elements)const{
-        if(elementsToFind.empty()){
-            return std::make_pair(0,elements.size()-1);
+    void updateIndexMap(const std::vector<T>& table,TLP_HASH_MAP<T,int>& indexMap){
+        indexMap.clear();
+        for(size_t i = 0 ; i < table.size();++i){
+            indexMap[table[i]]=i;
         }
-        //Init from and to values
-        int first=0,last=elements.size()-1;
+    }
 
-        //Naive method use and maintain a map instead
-        std::set<T> elts = elementsToFind;
-        for(int i = 0 ; (unsigned int)i< elements.size();++i){
-            if(elts.find(elements[i])!=elts.end()){                
-                first = std::min(first,i);
-                last = std::max(last,i);
-                //Remove found element
-                elts.erase(elements[i]);
-                if(elts.empty()){
-                    break;
-                }
-            }
+    template<typename T>
+    std::pair<unsigned int,unsigned int> computeArea(const std::set<T>& elementsToFind,const std::vector<T>& elements,const TLP_HASH_MAP<T,int>& objToIndex)const{
+        //Init from and to values
+        int first=elements.size()-1,last=0;
+        for(typename std::set<T>::const_iterator it = elementsToFind.begin();it != elementsToFind.end() ; ++it){
+            assert(objToIndex.find(*it) != objToIndex.end());
+            int index = (*objToIndex.find(*it)).second;
+            first = std::min(first,index);
+            last = std::max(last,index);
         }
+        first = std::max(first,0);
+        last = std::min(last,static_cast<int>(elements.size()-1));
         return std::make_pair(first,last);
     }
 
     tlp::Graph* _graph;
     tlp::ElementType _elementType;
     Qt::Orientation _orientation;
-    std::vector<unsigned int> _idTable;    
+    std::vector<unsigned int> _idTable;
+    TLP_HASH_MAP<unsigned int,int> _idToIndex;
     std::vector<tlp::PropertyInterface*> _propertiesTable;
+    TLP_HASH_MAP<tlp::PropertyInterface*,int> _propertyToIndex;
 
     //Sorting var
     tlp::PropertyInterface* _sortingProperty;
