@@ -1,92 +1,121 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>PreferenceDialogData</class>
- <widget class="QDialog" name="PreferenceDialogData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="PreferenceDialogData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>240</width>
-    <height>218</height>
+    <width>321</width>
+    <height>214</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Preferences</string>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
+  <layout class="QGridLayout">
+   <property name="margin">
     <number>9</number>
    </property>
-   <property name="spacing" >
+   <property name="spacing">
     <number>6</number>
    </property>
-   <item row="0" column="0" >
-    <layout class="QVBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
+   <item row="0" column="0">
+    <layout class="QVBoxLayout">
+     <property name="spacing">
       <number>6</number>
      </property>
+     <property name="margin">
+      <number>0</number>
+     </property>
      <item>
-      <widget class="QTabWidget" name="tabWidget" >
-       <property name="currentIndex" >
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="main" >
-        <attribute name="title" >
+       <widget class="QWidget" name="main">
+        <attribute name="title">
          <string>Main</string>
         </attribute>
-        <layout class="QGridLayout" >
-         <property name="margin" >
+        <layout class="QGridLayout">
+         <property name="margin">
           <number>6</number>
          </property>
-         <property name="spacing" >
+         <property name="spacing">
           <number>0</number>
          </property>
-         <item row="0" column="0" >
-          <layout class="QVBoxLayout" >
-           <property name="margin" >
+         <item row="0" column="0">
+          <layout class="QVBoxLayout">
+           <property name="spacing">
             <number>0</number>
            </property>
-           <property name="spacing" >
+           <property name="margin">
             <number>0</number>
            </property>
            <item>
-            <widget class="QCheckBox" name="autoLoadControllerButton" >
-             <property name="text" >
+            <widget class="QCheckBox" name="autoLoadControllerButton">
+             <property name="text">
               <string>Auto load saved controller</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_2" >
-             <property name="font" >
+            <widget class="QLabel" name="label_2">
+             <property name="font">
               <font>
                <pointsize>7</pointsize>
                <italic>true</italic>
               </font>
              </property>
-             <property name="text" >
+             <property name="text">
               <string>      ( if you have more than one controller ) </string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="networkRadioButton" >
-             <property name="text" >
+            <widget class="QCheckBox" name="networkRadioButton">
+             <property name="text">
               <string>Connect to plugins server at startup</string>
              </property>
-             <property name="checked" >
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="useSpecificMetricCheck">
+             <property name="text">
+              <string>Store metric results in specific properties</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="font">
+              <font>
+               <pointsize>7</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>The viewMetric property will still contain last computed metric results.</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="wordWrap">
               <bool>true</bool>
              </property>
             </widget>
            </item>
            <item>
             <spacer>
-             <property name="orientation" >
+             <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
-             <property name="sizeHint" >
+             <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
                <height>40</height>
@@ -101,12 +130,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QDialogButtonBox" name="buttonBox" >
-       <property name="orientation" >
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="standardButtons" >
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
@@ -122,11 +151,11 @@
    <receiver>PreferenceDialogData</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>248</x>
      <y>254</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>157</x>
      <y>274</y>
     </hint>
@@ -138,11 +167,11 @@
    <receiver>PreferenceDialogData</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>316</x>
      <y>260</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
     </hint>

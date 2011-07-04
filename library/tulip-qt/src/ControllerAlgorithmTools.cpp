@@ -39,6 +39,7 @@
 #include "tulip/NodeLinkDiagramComponent.h"
 #include "tulip/QtProgress.h"
 #include "tulip/TlpQtTools.h"
+#include "tulip/PreferenceManager.h"
 
 #include "tulip/ThreadedComputeProperty.h"
 
@@ -91,6 +92,20 @@ namespace tlp {
     return changeProperty<PROPERTY>(graph,parent,name,destination,DataSet(),view,query,redraw,push);
   }
   //**********************************************************************
+  string dataSetToString(DataSet &dataSet) {
+    stringstream ss;
+    pair<string, DataType*> p;
+    forEach(p, dataSet.getValues()) {
+      DataTypeSerializer *serializer = DataSet::typenameToSerializer(p.second->getTypeName());
+      if (serializer) {
+        ss << "\"" << p.first << "\"=";
+        serializer->writeData(ss, p.second);
+        ss << " ";
+      }
+    }
+    return ss.str();
+  }
+    //**********************************************************************
   template<typename PROPERTY>
   bool ControllerAlgorithmTools::changeProperty(Graph *graph,QWidget *parent,string name, string destination,DataSet dataSet,View *view, bool query, bool redraw, bool push) {
     NodeLinkDiagramComponent *nldc=NULL;
@@ -187,6 +202,15 @@ namespace tlp {
         };
       }
       delete tmp;
+
+      if (PreferenceManager::getInst().getUseSpecificMetric() && typeid(dest) == typeid(DoubleProperty *)) {
+        string copyName = name + " " + dataSetToString(dataSet);
+        if (!graph->existProperty(copyName) || graph->getProperty(copyName)->getTypename() == "double") {
+          PROPERTY *copy = graph->template getProperty<PROPERTY>(copyName);
+          *copy = *dest;
+        }
+      }
+
     }
     Observable::unholdObservers();
     assert(Observable::observersHoldCounter()==holdCount);

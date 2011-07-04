@@ -38,10 +38,12 @@ PreferenceDialog::PreferenceDialog( QWidget* parent)
   PreferenceManager &preferenceManager=PreferenceManager::getInst();
   bool networkConnection=preferenceManager.getNetworkConnection();
   bool autoLoadController=preferenceManager.getAutoLoadController();
+  bool useSpecificMetric=preferenceManager.getUseSpecificMetric();
   Color selectionColor=preferenceManager.getSelectionColor();
 
   networkRadioButton->setChecked(networkConnection);
   autoLoadControllerButton->setChecked(autoLoadController);
+  useSpecificMetricCheck->setChecked(useSpecificMetric);
 }
 
 
@@ -62,6 +64,7 @@ void PreferenceDialog::loadPreference(){
 
   bool networkConnection= settings.value("networkConnection",true).toBool();
   bool autoLoadController = settings.value("autoLoadController",false).toBool();
+  bool useSpecificMetric = settings.value("useSpecificMetric",true).toBool();
 
   settings.endGroup();
 
@@ -69,6 +72,7 @@ void PreferenceDialog::loadPreference(){
   preferenceManager.setNetworkConnection(networkConnection);
   preferenceManager.setSelectionColor(selectionColor);
   preferenceManager.setAutoLoadController(autoLoadController);
+  preferenceManager.setUseSpecificMetric(useSpecificMetric);
 }
 void PreferenceDialog::savePreference(){
   QSettings settings("TulipSoftware","Tulip");
@@ -77,10 +81,12 @@ void PreferenceDialog::savePreference(){
   // Check modification
   modified = modified || (settings.value("networkConnection",true).toBool()!=networkRadioButton->isChecked());
   modified = modified || (settings.value("autoLoadController",true).toBool()!=autoLoadControllerButton->isChecked());
+  modified = modified || (settings.value("useSpecificMetric",true).toBool()!=useSpecificMetricCheck->isChecked());
 
   // Store data
   settings.setValue("networkConnection",networkRadioButton->isChecked());
   settings.setValue("autoLoadController",autoLoadControllerButton->isChecked());
+  settings.setValue("useSpecificMetric",useSpecificMetricCheck->isChecked());
 
   settings.endGroup();
 }

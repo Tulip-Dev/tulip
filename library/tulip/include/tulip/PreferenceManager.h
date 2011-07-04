@@ -91,6 +91,14 @@ namespace tlp {
       return autoLoadController;
     }
 
+    bool getUseSpecificMetric() const {
+      return useSpecificMetric;
+    }
+
+    void setUseSpecificMetric(bool f) {
+      useSpecificMetric = f;
+    }
+
   private:
 
     /**
@@ -103,6 +111,7 @@ namespace tlp {
     bool networkConnection;
     Color selectionColor;
     bool autoLoadController;
+    bool useSpecificMetric;
 
   };
 
