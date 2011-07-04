@@ -28,11 +28,11 @@
 #define STRINGIFY_INTERNAL(PARAM) #PARAM
 
 //MSVC is the only compiler we use that does not have typeof
-#if !_MSC_VER
+#if not defined _MSC_VER
 #  define TYPEOF typeof
 #endif
 
-#if _MSC_VER
+#if defined _MSC_VER
 // disable some annoying Visual Studio warnings 
 #pragma warning(disable: 4251)
 #pragma warning(disable: 4275)
@@ -91,7 +91,7 @@
 #  include <stl_hash_fun.h>
 
 //clang does not define __GNUC_MINOR__, thus having a separate clang #elif seems cleaner than adding defined() in the #else
-#elif __clang__
+#elif defined __clang__
 #  define _DEPRECATED __attribute__ ((deprecated))
 #  define stdext __gnu_cxx
 

@@ -29,7 +29,7 @@
  */
 
 //VS2010 and later can use C++0x's unordered_map; vs2008 uses boost's tr1 implementation
-#if(_MSC_VER > 1500) 
+#if(defined _MSC_VER && _MSC_VER > 1500) 
 #  include <unordered_map>
 #  include <unordered_set>
 #  define TLP_HASH_MAP std::unordered_map
@@ -37,7 +37,7 @@
 #  define TLP_BEGIN_HASH_NAMESPACE namespace std 
 #  define TLP_END_HASH_NAMESPACE
 //clang, and GCC versions prior to the 4.x series do not have tr1; using ext
-#elif  (!_MSC_VER && (__GNUC__ < 4 || __GNUC_MINOR__ < 1 || __clang__))
+#elif  (not defined _MSC_VER && (__GNUC__ < 4 || __GNUC_MINOR__ < 1 || defined __clang__))
 #  include <tulip/tulipconf.h>
 #  if (__GNUC__ < 3 || __clang__)
 #    include <hash_map>

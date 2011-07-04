@@ -49,7 +49,7 @@ class Graph;
 
 ///
 #ifndef SWIG
- DECL_STORED_STRUCT(std::set<tlp::node>);
+ DECL_STORED_STRUCT(std::set<tlp::node>)
 #endif
 
 class TLP_SCOPE GraphType {
@@ -62,7 +62,7 @@ public:
 };
 
 #ifndef SWIG
- DECL_STORED_STRUCT(std::set<tlp::edge>);
+ DECL_STORED_STRUCT(std::set<tlp::edge>)
 #endif
 
 class TLP_SCOPE EdgeSetType
@@ -89,7 +89,7 @@ public:
 };
 
 #ifndef SWIG
-DECL_STORED_STRUCT(std::vector<double>);
+DECL_STORED_STRUCT(std::vector<double>)
 #endif
 
 class TLP_SCOPE DoubleVectorType {
@@ -116,7 +116,7 @@ public:
 };
 
 #ifndef SWIG
-DECL_STORED_STRUCT(std::vector<int>);
+DECL_STORED_STRUCT(std::vector<int>)
 #endif
 
 class TLP_SCOPE IntegerVectorType
@@ -144,7 +144,7 @@ public:
 
 
 #ifndef SWIG
-DECL_STORED_STRUCT(std::vector<bool>);
+DECL_STORED_STRUCT(std::vector<bool>)
 #endif
 
 class TLP_SCOPE BooleanVectorType {
@@ -159,7 +159,7 @@ public:
 };
 
 #ifndef SWIG
- DECL_STORED_STRUCT(std::vector<tlp::Coord>);
+ DECL_STORED_STRUCT(std::vector<tlp::Coord>)
 #endif
 
 class TLP_SCOPE LineType
@@ -174,7 +174,7 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
- DECL_STORED_STRUCT(tlp::Coord);
+ DECL_STORED_STRUCT(tlp::Coord)
 
 class TLP_SCOPE PointType {
 public:
@@ -188,7 +188,7 @@ public:
 };
 
 #ifndef SWIG
- DECL_STORED_STRUCT(tlp::Size);
+ DECL_STORED_STRUCT(tlp::Size)
 #endif
 
 class TLP_SCOPE SizeType {
@@ -203,7 +203,7 @@ public:
 };
 
 #ifndef SWIG
- DECL_STORED_STRUCT(std::vector<tlp::Size>);
+ DECL_STORED_STRUCT(std::vector<tlp::Size>)
 #endif
 
 class TLP_SCOPE SizeVectorType {
@@ -218,7 +218,7 @@ public:
 };
 
 #ifndef SWIG
-DECL_STORED_STRUCT(std::string);
+DECL_STORED_STRUCT(std::string)
 #endif
 
 class TLP_SCOPE StringType {
@@ -233,7 +233,7 @@ public:
 };
 
 #ifndef SWIG
-DECL_STORED_STRUCT(std::vector<std::string>);
+DECL_STORED_STRUCT(std::vector<std::string>)
 #endif
 
 class TLP_SCOPE StringVectorType {
@@ -259,7 +259,7 @@ public:
 };
 
 #ifndef SWIG
- DECL_STORED_STRUCT(std::vector<tlp::Color>);
+ DECL_STORED_STRUCT(std::vector<tlp::Color>)
 #endif
 
 class TLP_SCOPE ColorVectorType {
