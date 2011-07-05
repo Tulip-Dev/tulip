@@ -73,7 +73,7 @@ public:
    * @param description The contents of a serverDescvription.xml file.
    * @return LocationPlugins The list of plugins contained in this server description.
    **/
-  static LocationPlugins parseDescription(const QString& xmlDescription);
+  static LocationPlugins parseDescription(const QString& xmlDescription, const QString& location);
 
 private:
   /**

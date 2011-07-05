@@ -101,7 +101,7 @@ class TLP_QT_SCOPE PluginInformations {
      * @param longDescriptionPath The URL where the long description resides.
      * @param iconPath The URL where the icon resides.
      **/
-    PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const QString& longDescriptionPath, const QString& iconPath);
+    PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const QString& basePath);
 
     void AddPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies);
     void AddPluginInformations(const tlp::PluginInformations* info);

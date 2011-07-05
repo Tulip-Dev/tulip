@@ -64,7 +64,7 @@ QString PluginManager::getPluginServerDescription(const QString& location) {
   return content;
 }
 
-LocationPlugins PluginManager::parseDescription(const QString& xmlDescription) {
+LocationPlugins PluginManager::parseDescription(const QString& xmlDescription, const QString& location) {
   QDomDocument description;
   description.setContent(xmlDescription);
   QDomElement elm = description.documentElement();
@@ -92,10 +92,7 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription) {
     }
     tlp::AbstractPluginInfo* pluginInfo = new DistantPluginInfo(author, date, group, name, info, release, tulipRelease, dependencies);
     
-    //TODO fill these values from the location
-    QString longDescriptionPath;
-    QString iconPath;
-    PluginInformations* pluginInformations = new PluginInformations(pluginInfo, type, longDescriptionPath, iconPath);
+    PluginInformations* pluginInformations = new PluginInformations(pluginInfo, type, location + "/" + name.c_str());
 
 //     PluginInfoWithDependencies infos(pluginInfo, dependencies);
     remotePlugins[pluginInfo->getName().c_str()] = pluginInformations;
@@ -111,5 +108,5 @@ void PluginManager::addRemoteLocation(const QString& location) {
   description.setContent(xmlDocument);
   QDomElement elm = description.documentElement();
   
-  _remoteLocations[elm.attribute("serverName")] = parseDescription(xmlDocument);
+  _remoteLocations[elm.attribute("serverName")] = parseDescription(xmlDocument, location);
 }
