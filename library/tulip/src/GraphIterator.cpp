@@ -88,9 +88,6 @@ SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<b
   prepareNext();
 }
 SGraphNodeIterator::~SGraphNodeIterator() {
-#ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
-#endif
   delete it;
 }
 void SGraphNodeIterator::prepareNext() {
@@ -123,9 +120,6 @@ OutNodesIterator::OutNodesIterator(const Graph *sG, const MutableContainer<bool>
 #endif
 }
 OutNodesIterator::~OutNodesIterator() {
-#ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
-#endif
   delete it;
 }
 node OutNodesIterator::next() {
@@ -149,9 +143,6 @@ InNodesIterator::InNodesIterator(const Graph *sG, const MutableContainer<bool>& 
 #endif
 }
 InNodesIterator::~InNodesIterator() { 
-#ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
-#endif
   delete it; 
 }
 node InNodesIterator:: next() {
@@ -176,9 +167,6 @@ InOutNodesIterator::InOutNodesIterator(const Graph *sG, const MutableContainer<b
 #endif
 }
 InOutNodesIterator::~InOutNodesIterator() {
-#ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
-#endif
   delete it;
 }
 node InOutNodesIterator::next() {
@@ -204,9 +192,6 @@ SGraphEdgeIterator::SGraphEdgeIterator(const Graph *sG, const MutableContainer<b
   prepareNext();
 }
 SGraphEdgeIterator::~SGraphEdgeIterator() {
-#ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
-#endif
   delete it;
 }
 void SGraphEdgeIterator::prepareNext() {
@@ -241,9 +226,6 @@ OutEdgesIterator::OutEdgesIterator(const Graph *sG, const MutableContainer<bool>
   prepareNext();
 }
 OutEdgesIterator::~OutEdgesIterator() {
-#ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
-#endif
   delete it;
 }
 void OutEdgesIterator::prepareNext() {
@@ -277,9 +259,6 @@ bool OutEdgesIterator::hasNext() {
   prepareNext();
 }
 InEdgesIterator::~InEdgesIterator() {
-#ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
-#endif
   delete it;
 }
 void InEdgesIterator::prepareNext() {
@@ -313,9 +292,6 @@ bool InEdgesIterator::hasNext() {
   prepareNext();
 }
 InOutEdgesIterator::~InOutEdgesIterator() {
-#ifndef NDEBUG
-  _parentGraph->removeGraphObserver(this);
-#endif
   delete it;
 }
 void InOutEdgesIterator::prepareNext() {
@@ -354,9 +330,6 @@ bool InOutEdgesIterator::hasNext() {
 #endif
 }
 GraphImplNodeIterator::~GraphImplNodeIterator(){
-#ifndef NDEBUG
-  graph->removeGraphObserver(this);
-#endif
   delete itId;
 }
 node GraphImplNodeIterator::next() {
@@ -379,9 +352,6 @@ GraphImplEdgeIterator::GraphImplEdgeIterator(const Graph*
 #endif
 }
 GraphImplEdgeIterator::~GraphImplEdgeIterator(){
-#ifndef NDEBUG
-  graph->removeGraphObserver(this);
-#endif
   delete itId;
 }
 edge GraphImplEdgeIterator::next() {
