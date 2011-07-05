@@ -51,31 +51,31 @@ FTGL_BEGIN_C_DECLS
 
 // FTBitmapFont::FTBitmapFont();
 C_TOR(ftglCreateBitmapFont, (const char *fontname),
-      FTBitmapFont, (fontname), FONT_BITMAP);
+      FTBitmapFont, (fontname), FONT_BITMAP)
 
 // FTBufferFont::FTBufferFont();
 C_TOR(ftglCreateBufferFont, (const char *fontname),
-      FTBufferFont, (fontname), FONT_BUFFER);
+      FTBufferFont, (fontname), FONT_BUFFER)
 
 // FTExtrudeFont::FTExtrudeFont();
 C_TOR(ftglCreateExtrudeFont, (const char *fontname),
-      FTExtrudeFont, (fontname), FONT_EXTRUDE);
+      FTExtrudeFont, (fontname), FONT_EXTRUDE)
 
 // FTOutlineFont::FTOutlineFont();
 C_TOR(ftglCreateOutlineFont, (const char *fontname),
-      FTOutlineFont, (fontname), FONT_OUTLINE);
+      FTOutlineFont, (fontname), FONT_OUTLINE)
 
 // FTPixmapFont::FTPixmapFont();
 C_TOR(ftglCreatePixmapFont, (const char *fontname),
-      FTPixmapFont, (fontname), FONT_PIXMAP);
+      FTPixmapFont, (fontname), FONT_PIXMAP)
 
 // FTPolygonFont::FTPolygonFont();
 C_TOR(ftglCreatePolygonFont, (const char *fontname),
-      FTPolygonFont, (fontname), FONT_POLYGON);
+      FTPolygonFont, (fontname), FONT_POLYGON)
 
 // FTTextureFont::FTTextureFont();
 C_TOR(ftglCreateTextureFont, (const char *fontname),
-      FTTextureFont, (fontname), FONT_TEXTURE);
+      FTTextureFont, (fontname), FONT_TEXTURE)
 
 // FTCustomFont::FTCustomFont();
 class FTCustomFont : public FTFont
@@ -109,7 +109,7 @@ private:
 
 C_TOR(ftglCreateCustomFont, (char const *fontFilePath, void *data,
                    FTGLglyph * (*makeglyphCallback) (FT_GlyphSlot, void *)),
-      FTCustomFont, (fontFilePath, data, makeglyphCallback), FONT_CUSTOM);
+      FTCustomFont, (fontFilePath, data, makeglyphCallback), FONT_CUSTOM)
 
 #define C_FUN(cret, cname, cargs, cxxerr, cxxname, cxxarg) \
     cret cname cargs \
@@ -136,64 +136,64 @@ void ftglDestroyFont(FTGLfont *f)
 
 // bool FTFont::Attach(const char* fontFilePath);
 C_FUN(int, ftglAttachFile, (FTGLfont *f, const char* path),
-      return 0, Attach, (path));
+      return 0, Attach, (path))
 
-// bool FTFont::Attach(const unsigned char *pBufferBytes,
+// bool FTFont::Attach(const unsigned char *pBufferBytes
 //                     size_t bufferSizeInBytes);
 C_FUN(int, ftglAttachData, (FTGLfont *f, const unsigned char *p, size_t s),
-      return 0, Attach, (p, s));
+      return 0, Attach, (p, s))
 
 // void FTFont::GlyphLoadFlags(FT_Int flags);
 C_FUN(void, ftglSetFontGlyphLoadFlags, (FTGLfont *f, FT_Int flags),
-      return, GlyphLoadFlags, (flags));
+      return, GlyphLoadFlags, (flags))
 
 // bool FTFont::CharMap(FT_Encoding encoding);
 C_FUN(int, ftglSetFontCharMap, (FTGLfont *f, FT_Encoding enc),
-      return 0, CharMap, (enc));
+      return 0, CharMap, (enc))
 
 // unsigned int FTFont::CharMapCount();
 C_FUN(unsigned int, ftglGetFontCharMapCount, (FTGLfont *f),
-      return 0, CharMapCount, ());
+      return 0, CharMapCount, ())
 
 // FT_Encoding* FTFont::CharMapList();
 C_FUN(FT_Encoding *, ftglGetFontCharMapList, (FTGLfont* f),
-      return NULL, CharMapList, ());
+      return NULL, CharMapList, ())
 
 // virtual bool FTFont::FaceSize(const unsigned int size,
 //                               const unsigned int res = 72);
 C_FUN(int, ftglSetFontFaceSize, (FTGLfont *f, unsigned int s, unsigned int r),
-      return 0, FaceSize, (s, r > 0 ? r : 72));
+      return 0, FaceSize, (s, r > 0 ? r : 72))
 
 // unsigned int FTFont::FaceSize() const;
 // XXX: need to call FaceSize() as FTFont::FaceSize() because of FTGLTexture
 C_FUN(unsigned int, ftglGetFontFaceSize, (FTGLfont *f),
-      return 0, FTFont::FaceSize, ());
+      return 0, FTFont::FaceSize, ())
 
 // virtual void FTFont::Depth(float depth);
-C_FUN(void, ftglSetFontDepth, (FTGLfont *f, float d), return, Depth, (d));
+C_FUN(void, ftglSetFontDepth, (FTGLfont *f, float d), return, Depth, (d))
 
 // virtual void FTFont::Outset(float front, float back);
 C_FUN(void, ftglSetFontOutset, (FTGLfont *f, float front, float back),
-      return, FTFont::Outset, (front, back));
+      return, FTFont::Outset, (front, back))
 
 // void FTFont::UseDisplayList(bool useList);
 C_FUN(void, ftglSetFontDisplayList, (FTGLfont *f, int l),
-      return, UseDisplayList, (l != 0));
+      return, UseDisplayList, (l != 0))
 
 // float FTFont::Ascender() const;
-C_FUN(float, ftglGetFontAscender, (FTGLfont *f), return 0.f, Ascender, ());
+C_FUN(float, ftglGetFontAscender, (FTGLfont *f), return 0.f, Ascender, ())
 
 // float FTFont::Descender() const;
-C_FUN(float, ftglGetFontDescender, (FTGLfont *f), return 0.f, Descender, ());
+C_FUN(float, ftglGetFontDescender, (FTGLfont *f), return 0.f, Descender, ())
 
 // float FTFont::LineHeight() const;
-C_FUN(float, ftglGetFontLineHeight, (FTGLfont *f), return 0.f, LineHeight, ());
+C_FUN(float, ftglGetFontLineHeight, (FTGLfont *f), return 0.f, LineHeight, ())
 
 // void FTFont::BBox(const char* string, float& llx, float& lly, float& llz,
 //                   float& urx, float& ury, float& urz);
 extern "C++" {
 C_FUN(static FTBBox, _ftglGetFontBBox, (FTGLfont *f, char const *s, int len),
-      return static_ftbbox, BBox, (s, len));
+      return static_ftbbox, BBox, (s, len))
 }
 
 void ftglGetFontBBox(FTGLfont *f, const char* s, int len, float c[6])
@@ -206,13 +206,13 @@ void ftglGetFontBBox(FTGLfont *f, const char* s, int len, float c[6])
 
 // float FTFont::Advance(const char* string);
 C_FUN(float, ftglGetFontAdvance, (FTGLfont *f, char const *s),
-      return 0.0, Advance, (s));
+      return 0.0, Advance, (s))
 
 // virtual void Render(const char* string, int renderMode);
 extern "C++" {
 C_FUN(static FTPoint, _ftglRenderFont, (FTGLfont *f, char const *s, int len,
                                         FTPoint pos, FTPoint spacing, int mode),
-      return static_ftpoint, Render, (s, len, pos, spacing, mode));
+      return static_ftpoint, Render, (s, len, pos, spacing, mode))
 }
 
 void ftglRenderFont(FTGLfont *f, const char *s, int mode)
@@ -221,7 +221,7 @@ void ftglRenderFont(FTGLfont *f, const char *s, int mode)
 }
 
 // FT_Error FTFont::Error() const;
-C_FUN(FT_Error, ftglGetFontError, (FTGLfont *f), return -1, Error, ());
+C_FUN(FT_Error, ftglGetFontError, (FTGLfont *f), return -1, Error, ())
 
 FTGL_END_C_DECLS
 

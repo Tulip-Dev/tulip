@@ -100,7 +100,7 @@ typedef enum
     GLYPH_OUTLINE,
     GLYPH_POLYGON,
     GLYPH_EXTRUDE,
-    GLYPH_TEXTURE,
+    GLYPH_TEXTURE
 } GlyphType;
 
 struct _FTGLglyph
@@ -118,7 +118,7 @@ typedef enum
     FONT_OUTLINE,
     FONT_POLYGON,
     FONT_EXTRUDE,
-    FONT_TEXTURE,
+    FONT_TEXTURE
 } FontType;
 
 struct _FTGLfont
@@ -129,7 +129,7 @@ struct _FTGLfont
 
 typedef enum
 {
-    LAYOUT_SIMPLE,
+    LAYOUT_SIMPLE
 } LayoutType;
 
 struct _FTGLlayout

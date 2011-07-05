@@ -52,7 +52,7 @@ FTGL_BEGIN_C_DECLS
 
 // FTBitmapGlyph::FTBitmapGlyph();
 C_TOR(ftglCreateBitmapGlyph, (FT_GlyphSlot glyph),
-      FTBitmapGlyph, (glyph), GLYPH_BITMAP);
+      FTBitmapGlyph, (glyph), GLYPH_BITMAP)
 
 // FTBufferGlyph::FTBufferGlyph();
 // FIXME: not implemented
@@ -61,27 +61,27 @@ C_TOR(ftglCreateBitmapGlyph, (FT_GlyphSlot glyph),
 C_TOR(ftglCreateExtrudeGlyph, (FT_GlyphSlot glyph, float depth,
                    float frontOutset, float backOutset, int useDisplayList),
       FTExtrudeGlyph, (glyph, depth, frontOutset, backOutset, (useDisplayList != 0)),
-      GLYPH_EXTRUDE);
+      GLYPH_EXTRUDE)
 
 // FTOutlineGlyph::FTOutlineGlyph();
 C_TOR(ftglCreateOutlineGlyph, (FT_GlyphSlot glyph, float outset,
                                int useDisplayList),
-      FTOutlineGlyph, (glyph, outset, (useDisplayList != 0)), GLYPH_OUTLINE);
+      FTOutlineGlyph, (glyph, outset, (useDisplayList != 0)), GLYPH_OUTLINE)
 
 // FTPixmapGlyph::FTPixmapGlyph();
 C_TOR(ftglCreatePixmapGlyph, (FT_GlyphSlot glyph),
-      FTPixmapGlyph, (glyph), GLYPH_PIXMAP);
+      FTPixmapGlyph, (glyph), GLYPH_PIXMAP)
 
 // FTPolygonGlyph::FTPolygonGlyph();
 C_TOR(ftglCreatePolygonGlyph, (FT_GlyphSlot glyph, float outset,
                                int useDisplayList),
-      FTPolygonGlyph, (glyph, outset, (useDisplayList != 0)), GLYPH_POLYGON);
+      FTPolygonGlyph, (glyph, outset, (useDisplayList != 0)), GLYPH_POLYGON)
 
 // FTTextureGlyph::FTTextureGlyph();
 C_TOR(ftglCreateTextureGlyph, (FT_GlyphSlot glyph, int id, int xOffset,
                                int yOffset, int width, int height),
       FTTextureGlyph, (glyph, id, xOffset, yOffset, width, height),
-      GLYPH_TEXTURE);
+      GLYPH_TEXTURE)
 
 // FTCustomGlyph::FTCustomGlyph();
 class FTCustomGlyph : public FTGlyph
@@ -132,7 +132,7 @@ C_TOR(ftglCreateCustomGlyph, (FTGLglyph *base, void *data,
                                  int, FTGL_DOUBLE *, FTGL_DOUBLE *),
          void (*destroyCallback) (FTGLglyph *, void *)),
       FTCustomGlyph, (base, data, renderCallback, destroyCallback),
-      GLYPH_CUSTOM);
+      GLYPH_CUSTOM)
 
 #define C_FUN(cret, cname, cargs, cxxerr, cxxname, cxxarg) \
     cret cname cargs \
@@ -161,7 +161,7 @@ void ftglDestroyGlyph(FTGLglyph *g)
 extern "C++" {
 C_FUN(static const FTPoint&, _ftglRenderGlyph, (FTGLglyph *g,
                                    const FTPoint& pen, int renderMode),
-      return static_ftpoint, Render, (pen, renderMode));
+      return static_ftpoint, Render, (pen, renderMode))
 }
 
 void ftglRenderGlyph(FTGLglyph *g, FTGL_DOUBLE penx, FTGL_DOUBLE peny,
@@ -175,12 +175,12 @@ void ftglRenderGlyph(FTGLglyph *g, FTGL_DOUBLE penx, FTGL_DOUBLE peny,
 }
 
 // float FTGlyph::Advance() const;
-C_FUN(float, ftglGetGlyphAdvance, (FTGLglyph *g), return 0.0, Advance, ());
+C_FUN(float, ftglGetGlyphAdvance, (FTGLglyph *g), return 0.0, Advance, ())
 
 // const FTBBox& FTGlyph::BBox() const;
 extern "C++" {
 C_FUN(static const FTBBox&, _ftglGetGlyphBBox, (FTGLglyph *g),
-      return static_ftbbox, BBox, ());
+      return static_ftbbox, BBox, ())
 }
 
 void ftglGetGlyphBBox(FTGLglyph *g, float bounds[6])
@@ -192,7 +192,7 @@ void ftglGetGlyphBBox(FTGLglyph *g, float bounds[6])
 }
 
 // FT_Error FTGlyph::Error() const;
-C_FUN(FT_Error, ftglGetGlyphError, (FTGLglyph *g), return -1, Error, ());
+C_FUN(FT_Error, ftglGetGlyphError, (FTGLglyph *g), return -1, Error, ())
 
 FTGL_END_C_DECLS
 
