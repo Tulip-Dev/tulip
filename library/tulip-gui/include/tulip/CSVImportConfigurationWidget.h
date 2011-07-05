@@ -114,7 +114,7 @@ private:
   public:
       CSVTableWidget(QWidget* parent=NULL);
       void begin();
-      void token(unsigned int row, unsigned int column, const std::string& token);
+      void line(unsigned int row,const std::vector<std::string>& lineTokens);
       void end(unsigned int rowNumber, unsigned int columnNumber);
       /**
         * @brief Limit the line number of the preview. Need to parse the file again to take this limit in account.
@@ -130,8 +130,17 @@ private:
           return maxLineNumber;
       }
 
+      unsigned int getFirstLineIndex(){
+          return firstLineIndex;
+      }
+
+      void setFirstLineIndex(unsigned int index){
+            firstLineIndex = index;
+      }
+
   private:
       unsigned int maxLineNumber;
+      unsigned int firstLineIndex;
   };
 
 
@@ -146,7 +155,7 @@ public:
     CSVImportConfigurationWidget(QWidget *parent = 0);
     ~CSVImportConfigurationWidget();
     void begin();
-    void token(unsigned int row, unsigned int column, const std::string& token);
+    void line(unsigned int row,const std::vector<std::string>& lineTokens);
     void end(unsigned int rowNumber, unsigned int columnNumber);
 
     /**
@@ -169,14 +178,29 @@ protected:
     std::vector<CSVColumn> getPropertiesToImport()const;
     void changeEvent(QEvent *e);
 
-    void updateLineNumbers(bool resetValues);    
+    void updateLineNumbers(bool resetValues);
 
     bool useFirstLineAsPropertyName()const;
     unsigned int rowCount()const;
     unsigned int columnCount()const;
 
+
+    /**
+    *@brief The index of the first line to get in the file.
+    *@brief A line number from 0 to LastLineIndex.
+    **/
     unsigned int getFirstLineIndex()const;
+
+    /**
+      * @brief The index of the last line to take in the file.
+      **/
     unsigned int getLastLineIndex()const;
+    /**
+      * @brief The index of the first imported line. This index change if user use the first line as column names.
+      * The first imported line is the firstLineIndex but with the
+      * By example if user want to import all lines but use the first line as column names this funnction will return 1 not 0.
+      **/
+    unsigned int getFirstImportedLineIndex()const;
 
     /**
      * Empty the properties list.

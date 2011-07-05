@@ -30,7 +30,7 @@ using namespace std;
 
 PropertyConfigurationWidget::PropertyConfigurationWidget(unsigned int propertyNumber, const QString& propertyName,
                                                          bool propertyNameIsEditable, const std::string& PropertyType, QWidget* parent) :
-QWidget(parent), propertyNameLineEdit(new QLineEdit(this)), propertyTypeComboBox(new QComboBox(this)), usedCheckBox(
+    QWidget(parent), propertyNameLineEdit(new QLineEdit(this)), propertyTypeComboBox(new QComboBox(this)), usedCheckBox(
         new QCheckBox("", this)), nameEditable(propertyNameIsEditable), propertyNumber(propertyNumber) {
     setLayout(new QVBoxLayout());
     layout()->setContentsMargins(0, 0, 0, 0);
@@ -54,8 +54,23 @@ QWidget(parent), propertyNameLineEdit(new QLineEdit(this)), propertyTypeComboBox
 }
 
 void PropertyConfigurationWidget::fillPropertyTypeComboBox() {
-    QStringList lst = PropertyTools::getPropertyTypeLabelsList();
+    propertyTypeComboBox->clear();
     propertyTypeComboBox->addItem("Auto detect");
+    QStringList lst;
+    lst<<propertyTypeToPropertyTypeLabel(ColorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(IntegerProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(LayoutProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(DoubleProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(BooleanProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(SizeProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(StringProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(BooleanVectorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(ColorVectorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(CoordVectorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(DoubleVectorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(IntegerVectorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(SizeVectorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(StringVectorProperty::propertyTypename);
     propertyTypeComboBox->addItems(lst);
 }
 
@@ -64,7 +79,7 @@ string PropertyConfigurationWidget::getPropertyType() const {
     if(propertyType.compare("Auto detect")==0){
         return string("");
     }else{
-        return PropertyTools::getPropertyTypeFromPropertyTypeLabel(QStringToTlpString(propertyType));
+        return propertyTypeLabelToPropertyType(propertyType);
     }
 }
 QString PropertyConfigurationWidget::getPropertyName() const {
@@ -98,7 +113,7 @@ void PropertyConfigurationWidget::setPropertyNameValidator(QValidator* validator
 }
 
 
-CSVTableWidget::CSVTableWidget(QWidget* parent):QTableWidget(parent),maxLineNumber(UINT_MAX){
+CSVTableWidget::CSVTableWidget(QWidget* parent):QTableWidget(parent),maxLineNumber(UINT_MAX),firstLineIndex(0){
 
 }
 
@@ -106,30 +121,43 @@ void CSVTableWidget::begin(){
     clear();
     setColumnCount(0);
     setRowCount(0);
+    //Force the table view to redraw
+    QApplication::processEvents();
 }
 
-void CSVTableWidget::token(unsigned int row, unsigned int column, const string& token){
-    if(static_cast<unsigned int>(rowCount()) <= row){
-        //If the maximum line number is reach ignore the token.
-        if(static_cast<unsigned>(rowCount()) >= maxLineNumber)
-            return;
-        insertRow(row);
-    }
-    if(static_cast<unsigned int>(columnCount()) <= column){
-        insertColumn(column);
-        //Set the column name
+void CSVTableWidget::line(unsigned int row,const vector<string>& lineTokens){
 
+    //Wait for the first line index
+    if(row < firstLineIndex){
+        return;
     }
-    setItem(row,column,new QTableWidgetItem(tlpStringToQString(token)));
+
+    //If the maximum line number is reach ignore the token.
+    if(static_cast<unsigned>(rowCount()) >= maxLineNumber){
+        return;
+    }
+    //Add a new row in the table
+    int currentRow = rowCount();
+    insertRow(currentRow);
+
+    for(size_t column = 0 ; column < lineTokens.size() ; ++column){
+        //Add a new column if needed
+        if(static_cast<unsigned int>(columnCount()) <= column ){
+            insertColumn(column);
+        }
+        //Fill the table
+        setItem(currentRow,column,new QTableWidgetItem(tlpStringToQString(lineTokens[column])));
+    }
 }
+
 
 void CSVTableWidget::end(unsigned int, unsigned int){
 
 }
 
 CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
-        QWidget(parent),
-        ui(new Ui::CSVImportConifgurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(NULL)
+    QWidget(parent),
+    ui(new Ui::CSVImportConifgurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(NULL)
 {
     ui->setupUi(this);
 
@@ -166,21 +194,20 @@ void CSVImportConfigurationWidget::changeEvent(QEvent *e)
 }
 
 void CSVImportConfigurationWidget::setNewParser(CSVParser *newParser){
-
     delete parser;
     parser = newParser;
     updateWidget();
-
-
+    //Reset import range
+    updateLineNumbers(true);
 }
 
 void CSVImportConfigurationWidget::updateWidget(){
     if(parser){
         setEnabled(true);
-        SimplePluginProgressWidget progress(this);
-        progress.setWindowTitle("Generating previews");
-        progress.setComment("Generating preview");
-        parser->parse(this,&progress);
+        SimplePluginProgressDialog progress(this);
+        progress.setWindowTitle("Generating preview");
+        progress.show();
+        parser->parse(this,progress.progress());
     }else{
         setEnabled(true);
     }
@@ -188,24 +215,28 @@ void CSVImportConfigurationWidget::updateWidget(){
 
 void CSVImportConfigurationWidget::begin(){
     ui->previewTableWidget->begin();
+    ui->previewTableWidget->setFirstLineIndex(getFirstLineIndex());
     clearPropertiesTypeList();
 }
 
-void CSVImportConfigurationWidget::token(unsigned int row, unsigned int column, const string& token){
+void CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& lineTokens){
 
-    ui->previewTableWidget->token(row,column,token);
-    //A new column was created set its label and it's configuration widget.
-//    if(row == 0){
-    if(propertyWidgets.size()<=column){
-        QString columnName = genrateColumnName(column);
-        ui->previewTableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(columnName));
-        addPropertyToPropertyList(QStringToTlpString(columnName),true);
+    ui->previewTableWidget->line(row,lineTokens);
+    //Wait for the first row
+    if(row >= getFirstLineIndex()){
+        for(size_t column = 0 ; column < lineTokens.size() ; ++column){
+            //A new column was created set its label and it's configuration widget.
+            if(propertyWidgets.size()<=column){
+                QString columnName = genrateColumnName(column);
+                ui->previewTableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(columnName));
+                addPropertyToPropertyList(QStringToTlpString(columnName),true);
+            }
+        }
     }
 }
 
 void CSVImportConfigurationWidget::end(unsigned int rowNumber, unsigned int){
-    maxLineNumber = rowNumber;
-    updateLineNumbers(true);
+    maxLineNumber = rowNumber;    
     //Force the table to correctly update.
     useFirstLineAsHeaderUpdated();
     //Avoid updating widget.
@@ -221,20 +252,26 @@ void CSVImportConfigurationWidget::filterPreviewLineNumber(bool checked){
         ui->previewTableWidget->setMaxPreviewLineNumber(UINT_MAX);
     }
     updateWidget();
+    //Reset import range
+    updateLineNumbers(true);
 }
 
 void CSVImportConfigurationWidget::previewLineNumberChanged(int maxLineNumber){
-    ui->previewTableWidget->setMaxPreviewLineNumber(maxLineNumber);
+    ui->previewTableWidget->setMaxPreviewLineNumber(maxLineNumber);    
     updateWidget();
+    //Reset import range
+    updateLineNumbers(true);
 }
 
 void CSVImportConfigurationWidget::fromLineValueChanged(int value){
     ui->toLineSpinBox->setMinimum(value);
+    updateWidget();
     emit fileInfoChanged();
 }
 
 void CSVImportConfigurationWidget::toLineValueChanged(int value){
     ui->fromLineSpinBox->setMaximum(value);
+    updateWidget();
     emit fileInfoChanged();
 }
 
@@ -271,10 +308,10 @@ QString CSVImportConfigurationWidget::genrateColumnName(unsigned int col)const{
         if(item!=NULL){
             return item->text();
         }else{
-            return QString();
+            return QString("Column_")+QString::number(col);
         }
     }else{
-        return QString("Property_")+QString::number(col);
+        return QString("Column_")+QString::number(col);
     }
 }
 
@@ -289,23 +326,31 @@ void CSVImportConfigurationWidget::useFirstLineAsHeaderUpdated(){
     emit fileInfoChanged();
 }
 
-void CSVImportConfigurationWidget::updateLineNumbers(bool resetValues){
+void CSVImportConfigurationWidget::updateLineNumbers(bool resetValues){    
     blockSignals(true);
+    ui->fromLineSpinBox->blockSignals(true);
+    ui->toLineSpinBox->blockSignals(true);
     bool wasAtMax = ui->toLineSpinBox->value()==ui->toLineSpinBox->maximum();
     //If the first line is not headers the maximum of line number to import increase.
     int rowNumber = useFirstLineAsPropertyName()?maxLineNumber-1:maxLineNumber;
-    //No need to set the from line number maximum as it will be automatically set when updating the to
-    ui->toLineSpinBox->setMaximum(rowNumber);
+
     //If the old value was at the maximum keep it
     if(wasAtMax){
         ui->toLineSpinBox->setValue(rowNumber);
     }
     //Reset all the values of the spinbox.
-    if(resetValues){
-        ui->fromLineSpinBox->setMinimum(1);
+    if(resetValues){        
         ui->fromLineSpinBox->setValue(1);
         ui->toLineSpinBox->setValue(rowNumber);
     }
+    //Reset min/max values
+    ui->fromLineSpinBox->setMinimum(1);
+    ui->fromLineSpinBox->setMaximum(ui->toLineSpinBox->value());
+    ui->toLineSpinBox->setMinimum(ui->fromLineSpinBox->value());
+    ui->toLineSpinBox->setMaximum(rowNumber);
+
+    ui->fromLineSpinBox->blockSignals(false);
+    ui->toLineSpinBox->blockSignals(false);
     blockSignals(false);    
 }
 
@@ -333,8 +378,8 @@ void CSVImportConfigurationWidget::addPropertyToPropertyList(const string& prope
     propertyWidgets.push_back(propertyConfigurationWidget);
 }
 PropertyConfigurationWidget *CSVImportConfigurationWidget::createPropertyConfigurationWidget(
-        unsigned int propertyNumber, const QString& propertyName, bool isEditable,
-        const string& propertyType, QWidget* parent) {
+    unsigned int propertyNumber, const QString& propertyName, bool isEditable,
+    const string& propertyType, QWidget* parent) {
     PropertyConfigurationWidget *propertyConfigurationWidget = new PropertyConfigurationWidget(propertyNumber,
                                                                                                propertyName, isEditable, propertyType, parent);
     propertyConfigurationWidget->setPropertyNameValidator(validator);
@@ -374,13 +419,16 @@ vector<CSVColumn> CSVImportConfigurationWidget::getPropertiesToImport()const{
     return properties;
 }
 
+unsigned int CSVImportConfigurationWidget::getFirstImportedLineIndex()const{
+    unsigned int firstLine =getFirstLineIndex();
+    //Shift the line number if we use the first line as header.
+    return useFirstLineAsPropertyName()?++firstLine:firstLine;
+
+}
+
 unsigned int CSVImportConfigurationWidget::getFirstLineIndex()const{
-    unsigned int firstLine =ui->fromLineSpinBox->value();
-    //If we don't use first line as header add it in the lines to import.
-    if(!useFirstLineAsPropertyName()){
-        --firstLine;
-    }
-    return firstLine;
+return ui->fromLineSpinBox->value()-1;
+
 }
 unsigned int CSVImportConfigurationWidget::getLastLineIndex()const{
     unsigned int lastLine = ui->toLineSpinBox->value();
@@ -391,7 +439,7 @@ unsigned int CSVImportConfigurationWidget::getLastLineIndex()const{
 }
 
 CSVImportParameters CSVImportConfigurationWidget::getImportParameters()const{
-    return CSVImportParameters(getFirstLineIndex(),getLastLineIndex(),getPropertiesToImport());
+    return CSVImportParameters(getFirstImportedLineIndex(),getLastLineIndex(),getPropertiesToImport());
 }
 
 QValidator::State PropertyNameValidator::validate(QString & input, int&) const {

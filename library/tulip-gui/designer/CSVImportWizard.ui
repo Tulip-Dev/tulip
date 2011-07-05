@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>800</width>
     <height>480</height>
    </rect>
   </property>
@@ -49,10 +49,10 @@
     </sizepolicy>
    </property>
    <property name="title">
-    <string>Data destination settings</string>
+    <string>Import method</string>
    </property>
    <property name="subTitle">
-    <string>Configure the destination for your data .</string>
+    <string>Choose and configure the import method.</string>
    </property>
   </widget>
  </widget>

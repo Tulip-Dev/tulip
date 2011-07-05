@@ -18,17 +18,21 @@
  */
 #include "tulip/CSVParser.h"
 #include <tulip/PluginProgress.h>
+#include <QtGui/QApplication>
+#include <stdexcept>
+
+#include <iostream>
 
 #include <fstream>
 #include <algorithm>
 #include <cassert>
-#include <iostream>
+#include <math.h>
 using namespace std;
 using namespace tlp;
 
 const string defaultRejectedChars = " \r\n";
 const string spaceChars = " \t\r\n";
-CSVSimpleParser::CSVSimpleParser(const string& fileName,const string& separator,char textDelimiter,const string& fileEncoding):fileName(fileName),separator(separator),textDelimiter(textDelimiter),fileEncoding(fileEncoding){
+CSVSimpleParser::CSVSimpleParser(const string& fileName,const string& separator,char textDelimiter,const string& fileEncoding,unsigned int firstLine,unsigned int lastLine):_fileName(fileName),_separator(separator),_textDelimiter(textDelimiter),_fileEncoding(fileEncoding),_firstLine(firstLine),_lastLine(lastLine){
 }
 
 CSVSimpleParser::~CSVSimpleParser() {
@@ -39,9 +43,11 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
         return false;
     }
     handler->begin();
-    ifstream csvFile(fileName.c_str(),ifstream::in|ifstream::binary);
+    ifstream csvFile(_fileName.c_str(),ifstream::in|ifstream::binary);
 
+    //Real row number used to
     unsigned int row = 0;
+    //Read row number    
     unsigned int columnMax = 0;
     if (csvFile) {
         csvFile.seekg(0, std::ios_base::end);
@@ -52,18 +58,18 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
         string line;
         vector<string> tokens;
 
-        unsigned int displayProgressEachLineNumber = 10;
+        unsigned int displayProgressEachLineNumber = 200;
 
-        QTextCodec * codec = QTextCodec::codecForName ( fileEncoding.c_str());
+        QTextCodec * codec = QTextCodec::codecForName ( _fileEncoding.c_str());
         if(codec == NULL){
-            std::cerr << __PRETTY_FUNCTION__<<":"<<__LINE__<<" Cannot found the convertion codec to convert from "<<fileEncoding<<" string will be treated as utf8."<<std::endl;
+            std::cerr << __PRETTY_FUNCTION__<<":"<<__LINE__<<" Cannot found the convertion codec to convert from "<<_fileEncoding<<" string will be treated as utf8."<<std::endl;
             codec = QTextCodec::codecForName("UTF-8");
         }
 
         if (progress) {
             progress->progress(0, 100);
         }
-        while (multiplatformgetline(csvFile, line)) {
+        while (multiplatformgetline(csvFile, line) && row <_lastLine) {
 
             if (progress) {
                 readSize += line.size();
@@ -75,25 +81,27 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
                     // compute progression in function of read size and file size.
                     progress->progress(readSize, fileSize);
                 }
-            }
-            //If the line is empty continue.
-            if(line.empty()){
-                continue;
-            }
-            //Correct the encoding of the line.
-            line = convertStringEncoding(line,codec);
-            tokens.clear();
-            tokenize(line, tokens, separator,textDelimiter, 0);
-            unsigned int column = 0;
-            for (column = 0; column < tokens.size(); ++column) {
+            }            
+
+            if(!line.empty() && row >= _firstLine){
+                //Correct the encoding of the line.
+                line = convertStringEncoding(line,codec);
+                tokens.clear();
+                tokenize(line, tokens, _separator,_textDelimiter, 0);
+                unsigned int column = 0;
+                for (column = 0; column < tokens.size(); ++column) {
+                    tokens[column]= treatToken(tokens[column], row, column);
+                }
+                handler->line(row,tokens);                
+                columnMax = max(columnMax, column);
+
+                //If user want to stop break the import process.
                 if (progress) {
                     if (progress->state() != TLP_CONTINUE) {
                         break;
                     }
                 }
-                handler->token(row, column, treatToken(tokens[column], row, column));
             }
-            columnMax = max(columnMax, column);
             ++row;
         }
         handler->end(row, columnMax);
@@ -120,11 +128,11 @@ bool CSVSimpleParser::multiplatformgetline ( istream& is, string& str ){
             break;
         }else
             if(c=='\n'){
-            break;
-        }else{
-            //Push the character
-            str.push_back(c);
-        }
+                break;
+            }else{
+                //Push the character
+                str.push_back(c);
+            }
     }
     //End of line reading.
     return true;
@@ -159,7 +167,7 @@ void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
             nbExtractedChars = pos - lastPos;
         }
         try {
-        tokens.push_back(str.substr(lastPos, nbExtractedChars));
+            tokens.push_back(str.substr(lastPos, nbExtractedChars));
         }catch (...) {
             //An error occur quit the line parsing.
             break;
@@ -207,7 +215,7 @@ string CSVSimpleParser::treatToken(const string& token, int, int) {
     }
     //Treat string to remove special characters from it's beginning and its end.
     string rejectedChars = defaultRejectedChars;
-    rejectedChars.push_back(textDelimiter);
+    rejectedChars.push_back(_textDelimiter);
     return removeQuotesIfAny(currentToken,rejectedChars);
 }
 
@@ -238,13 +246,24 @@ bool CSVInvertMatrixParser::parse(CSVContentHandler *handler, PluginProgress *pr
 }
 
 void CSVInvertMatrixParser::begin(){
+    maxLineSize = 0;
+}
+
+void CSVInvertMatrixParser::line(unsigned int ,const std::vector<std::string>& lineTokens){
+    maxLineSize = max(maxLineSize,static_cast<unsigned int>(lineTokens.size()));
+    columns.push_back(lineTokens);
+}
+
+void CSVInvertMatrixParser::end(unsigned int , unsigned int ){
     handler->begin();
-}
-
-void CSVInvertMatrixParser::token(unsigned int row, unsigned int column, const string &token){
-    handler->token(column,row,token);
-}
-
-void CSVInvertMatrixParser::end(unsigned int rowNumber, unsigned int columnNumber){
-    handler->end(columnNumber,rowNumber);
+    vector<string> tokens(columns.size());
+    //Fill the line wiht
+    for(unsigned int line = 0 ;line < maxLineSize ; ++line){
+        for(unsigned int i = 0 ; i < columns.size() ; ++i ){
+            //Check if the column is great enough
+            tokens[i]=columns[i].size() > line ? columns[i][line] : string();
+        }
+        handler->line(line,tokens);
+    }
+    handler->end(maxLineSize,columns.size());
 }

@@ -45,7 +45,10 @@ class TLP_QT_SCOPE CSVParserConfigurationWidget : public QWidget {
 public:
     CSVParserConfigurationWidget(QWidget *parent = 0);
     ~CSVParserConfigurationWidget();    
-    CSVParser * buildParser()const;
+    /**
+      * @brief Generate a csv parser in function of the parameters in the widget. User define the range of line to import.
+      **/
+    CSVParser * buildParser(unsigned int firstLine=0, unsigned int lastLine=UINT_MAX)const;
 
     std::string getFile()const;
     bool isValid()const;

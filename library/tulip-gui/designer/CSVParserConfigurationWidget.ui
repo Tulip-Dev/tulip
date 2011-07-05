@@ -97,7 +97,7 @@
         <item row="2" column="0" colspan="2">
          <widget class="QCheckBox" name="switchRowColumnCheckBox">
           <property name="text">
-           <string>Switch rows and columns</string>
+           <string>Switch rows and column</string>
           </property>
          </widget>
         </item>

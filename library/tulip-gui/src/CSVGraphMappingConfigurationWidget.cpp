@@ -115,15 +115,15 @@ CSVGraphMappingConfigurationWidget::CSVGraphMappingConfigurationWidget(QWidget *
 
     connect(ui->createNewPropertyPushButton,SIGNAL(clicked(bool)),this,SLOT(createNewProperty()),Qt::QueuedConnection);
 
-    ui->graphIndexPropertiesComboBox->setDefaultText(tr("Choose property containing entities ids"));
+    ui->graphIndexPropertiesComboBox->setDefaultText(tr("Choose the property containing existing entities ids"));
     ui->sourceColumnComboBox->setDefaultText(tr("Choose CSV column containing source entities ids"));
     ui->targetColumnComboBox->setDefaultText(tr("Choose CSV column containing target entities ids"));
 
     ui->nodeMappingColumncomboBox->setDefaultText(tr("Choose CSV column containing entities ids"));
-    ui->nodeMappingPropertycomboBox->setDefaultText(tr("Choose property containing entities ids"));
+    ui->nodeMappingPropertycomboBox->setDefaultText(tr("Choose the property containing existing entities ids"));
 
     ui->edgeMappingColumncomboBox->setDefaultText(tr("Choose CSV column containing relations ids"));
-    ui->edgeMappingPropertycomboBox->setDefaultText(tr("Choose property containing relations ids"));
+    ui->edgeMappingPropertycomboBox->setDefaultText(tr("Choose the property containing existing relations ids"));
 
 }
 
@@ -145,8 +145,7 @@ void CSVGraphMappingConfigurationWidget::changeEvent(QEvent *e)
 }
 
 void CSVGraphMappingConfigurationWidget::updateWidget(tlp::Graph* graph,const CSVImportParameters& importParameters){
-    this->graph = graph;
-    this->importParameters = importParameters;
+    this->graph = graph; 
     //Init mapping widgets.
     //Update node mapping widget
     ui->nodeMappingColumncomboBox->setCsvProperties(importParameters);
@@ -171,7 +170,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
             return NULL;
         }
         bool createMissingElement = ui->createMissingNodesCheckBox->isChecked();
-        return new CSVToGraphNodeIdMapping(graph,columnId,idPropertyName,importParameters.getFirstLineIndex(),importParameters.getLastLineIndex(),createMissingElement);
+        return new CSVToGraphNodeIdMapping(graph,columnId,idPropertyName,createMissingElement);
     }
     else if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importEdgesPages){
         string idPropertyName = ui->edgeMappingPropertycomboBox->getSelectedGraphProperty();
@@ -179,7 +178,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
         if(idPropertyName.empty() || columnId ==UINT_MAX){
             return NULL;
         }
-        return new CSVToGraphEdgeIdMapping(graph,columnId,idPropertyName,importParameters.getFirstLineIndex(),importParameters.getLastLineIndex());
+        return new CSVToGraphEdgeIdMapping(graph,columnId,idPropertyName);
     }
     else if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importEdgesFromNodesPage){
         string idPropertyName = ui->graphIndexPropertiesComboBox->getSelectedGraphProperty();
@@ -189,7 +188,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
             return NULL;
         }
         bool createMissingElement = ui->addMissingEdgeAndNodeCheckBox->isChecked();
-        return new CSVToGraphEdgeSrcTgtMapping(graph,srcColumnId,tgtColumnId,idPropertyName,importParameters.getFirstLineIndex(),importParameters.getLastLineIndex(),createMissingElement);
+        return new CSVToGraphEdgeSrcTgtMapping(graph,srcColumnId,tgtColumnId,idPropertyName,createMissingElement);
     }else{
         return NULL;
     }

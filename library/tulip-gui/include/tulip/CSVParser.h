@@ -49,10 +49,10 @@ namespace tlp {
         virtual bool parse(CSVContentHandler * handler,tlp::PluginProgress* progress=NULL) = 0;
     };
 
- /*
+ /**
  * @brief Parse a csv data and send each tokens to the given CSVContentHandler object.
  *
- * Parse a csv data and send each tokens to the given CSVContentHandler object. Get each line of the file and parse them.
+ * Parse a csv data and send each tokens to the given CSVContentHandler object. Get each line of the file in the given range and parse them. This object skip empty lines.
  * Send the found tokens to the CSVContentHandler interface.
  * \code
  * CSVParser parser(fileName,";","\"","UTF-8",true);
@@ -60,11 +60,50 @@ namespace tlp {
  * CSVContentHandler * handler ;
  * parser.parse(handler);
  * \endcode
- */
+ **/
     class TLP_QT_SCOPE CSVSimpleParser : public CSVParser {
     public:
-        CSVSimpleParser(const std::string& fileName,const std::string& separator=std::string(";"),char='"',const std::string& fileEncoding=std::string("UTF-8"));
+        /**
+          * @brief Construct a csv simple file parser.
+          * @param filename The path to the file to import.
+          * @param separator The separator to use.
+          * @param textDelimiter If a token is sourrounded by this charater we ignore all the separators found in this token. Useful if a token contains the separator.
+          * @param firstLine The number of the first line to read. The first line is 0.
+          * @param lastLine The number of the last line to read.
+          **/
+        CSVSimpleParser(const std::string& fileName,const std::string& separator=std::string(";"),char textDelimiter='"',const std::string& fileEncoding=std::string("UTF-8"),unsigned int firstLine = 0,unsigned int lastLine = UINT_MAX);
+
         virtual ~CSVSimpleParser();
+
+        std::string fileName()const{
+            return _fileName;
+        }
+        void setFileName(const std::string& fileName){
+            _fileName = fileName;
+        }
+        std::string separator()const{
+            return _separator;
+        }
+
+        void setSeparator(const std::string& separator){
+            _separator = separator;
+        }
+
+        char textDelimiter()const{
+            return _textDelimiter;
+        }
+
+        void setTextDelimiter(char delimiter){
+            _textDelimiter = delimiter;
+        }
+
+        std::string fileEncoding()const{
+            return _fileEncoding;
+        }
+
+        void setFileEncoding(const std::string& fileEncoding){
+            _fileEncoding = fileEncoding;
+        }
 
         bool parse(CSVContentHandler * handler,tlp::PluginProgress* progress=NULL);
 
@@ -73,7 +112,7 @@ namespace tlp {
 
     private:
         void tokenize(const std::string& str, std::vector<std::string>& tokens,
-                      const std::string& delimiters,char textDelimiter, unsigned int numberOfCol);
+                      const std::string& delimiters,char _textDelimiter, unsigned int numberOfCol);
         inline std::string convertStringEncoding(const std::string& toConvert,QTextCodec* encoder){
            return std::string(encoder->toUnicode ( toConvert.c_str() ).toUtf8().data());
         }
@@ -84,15 +123,17 @@ namespace tlp {
         bool multiplatformgetline ( std::istream& is, std::string& str );
 
         std::string removeQuotesIfAny(const std::string &s,const std::string& rejectedChars);
-        std::string fileName;
-        std::string separator;
-        char textDelimiter;
-        std::string fileEncoding;        
+        std::string _fileName;
+        std::string _separator;
+        char _textDelimiter;
+        std::string _fileEncoding;
+        unsigned int _firstLine;
+        unsigned int _lastLine;
 
     };
 
     /**
-      *@brief CSV parser used to treat rows as columns.
+      *@brief CSV parser used to invert the token matrix in order to treat rows as columns.
       **/
     class TLP_QT_SCOPE CSVInvertMatrixParser : public tlp::CSVParser , public tlp::CSVContentHandler{
     public:
@@ -102,13 +143,13 @@ namespace tlp {
         bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress=NULL);
 
         void begin();
-
-        void token(unsigned int row, unsigned int column, const std::string &token);
-
+        void line(unsigned int row,const std::vector<std::string>& lineTokens);
         void end(unsigned int rowNumber, unsigned int columnNumber);
     private:
         CSVParser *parser;
         CSVContentHandler *handler;
+        std::vector<std::vector<std::string> > columns;
+        unsigned int maxLineSize;
     };
 }
 #endif /* CSVDATALOADER_H_ */
