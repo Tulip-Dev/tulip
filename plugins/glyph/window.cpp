@@ -29,8 +29,6 @@
 using namespace tlp;
 using namespace std;
 
-
-
 const string texture(TulipBitmapDir + "halfCylinderTexture.png");
 const string gradient(TulipBitmapDir + "titlebarGradient.png");
 
@@ -68,7 +66,7 @@ private:
 3------------2  -0.5,-0.5        0.5, -0.5
 */
 
-GLYPHPLUGIN(Window, "2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", 17);
+GLYPHPLUGIN(Window, "2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", 17)
 
 Window::Window(GlyphContext* context): 
   Glyph(context), 

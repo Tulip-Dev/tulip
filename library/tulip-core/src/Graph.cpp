@@ -1007,7 +1007,7 @@ namespace std {
   ((c.source == d.source) && (c.target < d.target));
     }
   };
-};
+}
 
 void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
           vector<node>& metaNodes) {

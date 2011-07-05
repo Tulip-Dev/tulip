@@ -20,7 +20,7 @@
 #include "TreeReingoldAndTilfordExtended.h"
 #include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber and Romain Bourqui","24/09/2010","Beta","1.1","Tree");
+LAYOUTPLUGINOFGROUP(TreeReingoldAndTilfordExtended,"Hierarchical Tree (R-T Extended)","David Auber and Romain Bourqui","24/09/2010","Beta","1.1","Tree")
 using namespace std;
 using namespace tlp;
 

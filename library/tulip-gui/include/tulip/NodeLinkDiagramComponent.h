@@ -33,7 +33,7 @@ namespace tlp {
    */
   class TLP_QT_SCOPE NodeLinkDiagramComponent : public GlMainView{
 
-    Q_OBJECT;
+    Q_OBJECT
 
   public:
 

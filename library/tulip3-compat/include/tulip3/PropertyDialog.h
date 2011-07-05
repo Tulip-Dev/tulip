@@ -38,7 +38,6 @@ class PropertyInterface;
 
 class TLP3_COMPAT_SCOPE PropertyDialog: public QWidget, public Ui::PropertyDialogData {
 Q_OBJECT
-  ;
 
 public:
   PropertyDialog(QWidget *parent = 0);

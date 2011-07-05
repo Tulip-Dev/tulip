@@ -37,8 +37,7 @@ namespace std {
       return false;
     }
   };
-};
-
+}
 
 namespace {
   const char * paramHelp[] = {
@@ -59,7 +58,6 @@ namespace {
     HTML_HELP_CLOSE(),
   };
 }
-
 
 /** \addtogroup import */
 /*@{*/

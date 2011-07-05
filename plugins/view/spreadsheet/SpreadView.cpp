@@ -128,6 +128,5 @@ void SpreadView::updated() {
 	mainWidget->redrawView();
 }
 VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "1.0")
-;
 
 }

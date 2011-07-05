@@ -313,4 +313,4 @@ public:
   }
 };
 
-INTERACTORPLUGIN(SmallMultiplesNavigationInteractor, "InteractorSmallMultiplesNavigation", "Tulip Team", "01/11/2011", "Move into small multiples views", "1.0");
+INTERACTORPLUGIN(SmallMultiplesNavigationInteractor, "InteractorSmallMultiplesNavigation", "Tulip Team", "01/11/2011", "Move into small multiples views", "1.0")

@@ -24,7 +24,6 @@
 #include <QtGui/QTableWidgetItem>
 class ListPropertyWidget: public QWidget, public Ui::Form {
 Q_OBJECT
-	;
 public:
 	ListPropertyWidget(tlp::DynamicTypeHandlerInterface *handler, tlp::TulipTableWidgetItem *orig,
 			QWidget* parent = NULL);

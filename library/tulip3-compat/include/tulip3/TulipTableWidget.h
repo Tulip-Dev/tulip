@@ -63,8 +63,8 @@ public:
 class TLP3_COMPAT_SCOPE ColorButton: public QPushButton {
 
 Q_OBJECT
-	;Q_PROPERTY(QRgb color READ getColor)
-	;
+	Q_PROPERTY(QRgb color READ getColor)
+	
 
 private:
 	QRgb color;
@@ -81,9 +81,9 @@ public slots:
 
 class TLP3_COMPAT_SCOPE FilenameEditor: public QWidget {
 Q_OBJECT
-	;Q_PROPERTY(QString fileName READ fileName WRITE setFileName)
-	;Q_PROPERTY(QString filter READ filter WRITE setFilter)
-	;
+	Q_PROPERTY(QString fileName READ fileName WRITE setFileName)
+	Q_PROPERTY(QString filter READ filter WRITE setFilter)
+	
 
 public:
 	FilenameEditor(QWidget *);
@@ -113,7 +113,6 @@ private:
 
 class TLP3_COMPAT_SCOPE SizeEditor: public QWidget {
 Q_OBJECT
-	;
 private:
 	Size size;
 	QLineEdit *edit[3];
@@ -132,7 +131,6 @@ private slots:
 
 class CoordEditor: public QWidget {
 Q_OBJECT
-	;
 
 private:
 	Coord coord;
@@ -152,7 +150,6 @@ private slots:
 
 class LabelEditor: public QWidget {
 Q_OBJECT
-  ;
 
 private:
   QString label;
@@ -188,7 +185,6 @@ public:
 
 class ListItemPushButton: public QPushButton {
 Q_OBJECT
-	;
 public:
 	ListItemPushButton(DynamicTypeHandlerInterface* handler, TulipTableWidgetItem *orig,
 			QWidget* parent, const QString& text);
@@ -211,10 +207,9 @@ private:
 /* this table handle displaying and editing node or edge properties */
 class TLP3_COMPAT_SCOPE TulipTableWidget: public QTableWidget {
 Q_OBJECT
-	;Q_PROPERTY(QColor backColor1 READ getBackColor1 WRITE setBackColor1 RESET resetBackColor1)
-	;Q_PROPERTY(QColor backColor2 READ getBackColor2 WRITE setBackColor2 RESET resetBackColor2)
-	;Q_PROPERTY(bool updateColumnTitle READ getUpdateColumnTitle WRITE setUpdateColumnTitle)
-	;
+	Q_PROPERTY(QColor backColor1 READ getBackColor1 WRITE setBackColor1 RESET resetBackColor1)
+	Q_PROPERTY(QColor backColor2 READ getBackColor2 WRITE setBackColor2 RESET resetBackColor2)
+	Q_PROPERTY(bool updateColumnTitle READ getUpdateColumnTitle WRITE setUpdateColumnTitle)
 
 protected:
 

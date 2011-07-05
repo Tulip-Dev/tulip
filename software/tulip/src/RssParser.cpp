@@ -7,14 +7,14 @@ RssParser::RssParser(): QXmlDefaultHandler() {
   _result.clear();
 }
 
-bool RssParser::startElement(const QString &namespaceURI, const QString &localName, const QString &qName, const QXmlAttributes &atts) {
+bool RssParser::startElement(const QString &, const QString &localName, const QString &, const QXmlAttributes &) {
   if (localName == "item")
     _result.push_back(RssItem());
   _currentElement = localName;
   return true;
 }
 
-bool RssParser::endElement(const QString &namespaceURI, const QString &localName, const QString &qName) {
+bool RssParser::endElement(const QString &, const QString &, const QString &) {
   _currentElement = "";
   return true;
 }

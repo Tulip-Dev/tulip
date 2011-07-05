@@ -25,7 +25,7 @@
 #include "DatasetTools.h"
 
 
-LAYOUTPLUGINOFGROUP(HierarchicalGraph,"Hierarchical Graph","David Auber","23/05/2000","Alpha","1.0","Hierarchical");
+LAYOUTPLUGINOFGROUP(HierarchicalGraph,"Hierarchical Graph","David Auber","23/05/2000","Alpha","1.0","Hierarchical")
 
 using namespace std;
 using namespace tlp;

@@ -27,7 +27,7 @@ static const char * paramHelp[] = {
   HTML_HELP_CLOSE()
 };
 
-LAYOUTPLUGINOFGROUP(Random,"Random","David Auber","01/12/1999","Ok","1.1","Basic");
+LAYOUTPLUGINOFGROUP(Random,"Random","David Auber","01/12/1999","Ok","1.1","Basic")
 
 using namespace std;
 using namespace tlp;

@@ -44,7 +44,7 @@ namespace tlp {
    */
   class TLP_QT_SCOPE View : public QObject,public WithParameter, public WithDependency{
 
-    Q_OBJECT;
+    Q_OBJECT
 
   public:
 

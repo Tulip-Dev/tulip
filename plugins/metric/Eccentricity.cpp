@@ -23,10 +23,7 @@
 #include <tulip/ConnectedTest.h>
 #include "Eccentricity.h"
 
-
-
-DOUBLEPLUGINOFGROUP(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","2.0","Graph");
-
+DOUBLEPLUGINOFGROUP(EccentricityMetric,"Eccentricity","Auber/Munzner","18/06/2004","Alpha","2.0","Graph")
 
 using namespace std;
 using namespace tlp;

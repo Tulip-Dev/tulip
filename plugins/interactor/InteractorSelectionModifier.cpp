@@ -63,4 +63,4 @@ public:
   QCursor getCursor(){return QCursor(Qt::CrossCursor);}
 };
 
-INTERACTORPLUGIN(InteractorSelectionModifier, "InteractorSelectionModifier", "Tulip Team", "01/04/2009", "Selection Modifier Interactor", "1.0");
+INTERACTORPLUGIN(InteractorSelectionModifier, "InteractorSelectionModifier", "Tulip Team", "01/04/2009", "Selection Modifier Interactor", "1.0")

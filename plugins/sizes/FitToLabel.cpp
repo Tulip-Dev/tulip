@@ -105,4 +105,3 @@ public:
 };
 /*@}*/
 SIZEPLUGIN(FitToLabel,"Fit to label","Tulip Team","25/01/2006","","1.0")
-;

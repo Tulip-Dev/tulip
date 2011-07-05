@@ -27,7 +27,6 @@ class Graph;
 
 class SpreadConfigurationWidget: public QWidget, public Ui::SpreadConfigurationWidget {
 Q_OBJECT
-	;
 public:
 	SpreadConfigurationWidget(QWidget* parent = NULL);
 	virtual ~SpreadConfigurationWidget();

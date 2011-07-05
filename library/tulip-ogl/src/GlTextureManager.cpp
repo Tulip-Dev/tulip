@@ -31,7 +31,7 @@ extern "C" {
 #ifdef HAVE_LIBPNG
 #include <png.h>
 #endif
-};
+}
 
 //====================================================
 tlp::GlTextureManager* tlp::GlTextureManager::inst=0;

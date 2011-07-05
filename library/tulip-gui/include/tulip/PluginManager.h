@@ -41,7 +41,7 @@ public:
     Local = 1,
     Remote = 2
   };
-  Q_DECLARE_FLAGS(Location, PluginLocation);
+  Q_DECLARE_FLAGS(Location, PluginLocation)
   
   /**
    * @brief Lists plugins from the specified locations.

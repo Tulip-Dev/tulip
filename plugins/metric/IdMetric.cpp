@@ -20,7 +20,7 @@
 
 using namespace tlp;
 
-DOUBLEPLUGINOFGROUP(IdMetric,"Id","David Auber","06/04/2000","Alpha","1.0","Misc");
+DOUBLEPLUGINOFGROUP(IdMetric,"Id","David Auber","06/04/2000","Alpha","1.0","Misc")
 
 //==================================================================
 IdMetric::IdMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) {

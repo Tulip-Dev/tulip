@@ -21,7 +21,7 @@
 #include "BubbleTree.h"
 #include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(BubbleTree,"Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1.0","Tree");
+LAYOUTPLUGINOFGROUP(BubbleTree,"Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1.0","Tree")
 
 using namespace std;
 using namespace tlp;

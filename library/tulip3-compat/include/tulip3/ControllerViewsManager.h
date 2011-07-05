@@ -40,7 +40,7 @@ namespace tlp {
    */
   class TLP3_COMPAT_SCOPE ControllerViewsManager : public Controller {
 
-    Q_OBJECT;
+    Q_OBJECT
     
     public :
       

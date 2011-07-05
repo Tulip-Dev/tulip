@@ -43,7 +43,7 @@ class Graph;
 /*@{*/
 /* this table handle displaying and editing node or edge properties */
 class TLP_QT_SIMPLE_SCOPE PropertyWidget : public tlp::TulipTableWidget {
-  Q_OBJECT;
+  Q_OBJECT
 
 private:
   tlp::Graph *graph;

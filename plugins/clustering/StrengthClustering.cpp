@@ -22,7 +22,7 @@
 using namespace std;
 using namespace tlp;
 
-DOUBLEPLUGINOFGROUP(StrengthClustering, "Strength Clustering", "David Auber", "27/01/2003", "Alpha", "2.0","Clustering");
+DOUBLEPLUGINOFGROUP(StrengthClustering, "Strength Clustering", "David Auber", "27/01/2003", "Alpha", "2.0","Clustering")
 
 //================================================================================
 StrengthClustering::~StrengthClustering() {}

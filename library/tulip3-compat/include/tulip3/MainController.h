@@ -49,7 +49,7 @@ namespace tlp {
   class TLP3_COMPAT_SCOPE MainController :  public ControllerViewsManager,
     protected Observable, private GraphObserver {
 
-    Q_OBJECT;
+    Q_OBJECT
 
   public:
     /**

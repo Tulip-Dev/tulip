@@ -49,7 +49,7 @@ NodeMapIterator::NodeMapIterator(Graph *sg, node source, node target) {
   itStl=cloneIt.begin();
 }
 
-NodeMapIterator::~NodeMapIterator(){};
+NodeMapIterator::~NodeMapIterator(){}
 
 node NodeMapIterator::next() {
   node tmp=*itStl;

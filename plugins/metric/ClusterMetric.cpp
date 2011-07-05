@@ -19,7 +19,7 @@
 #include <deque>
 #include "ClusterMetric.h"
 
-DOUBLEPLUGINOFGROUP(ClusterMetric,"Cluster","David Auber","26/02/2003","Beta","1.0","Graph");
+DOUBLEPLUGINOFGROUP(ClusterMetric,"Cluster","David Auber","26/02/2003","Beta","1.0","Graph")
 
 using namespace std;
 using namespace tlp;

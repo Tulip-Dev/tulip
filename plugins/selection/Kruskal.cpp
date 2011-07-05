@@ -18,7 +18,7 @@
  */
 #include "Kruskal.h"
 
-BOOLEANPLUGIN(Kruskal,"Kruskal","Anthony DON","14/04/03","Alpha","1.0");
+BOOLEANPLUGIN(Kruskal,"Kruskal","Anthony DON","14/04/03","Alpha","1.0")
 
 using namespace std;
 using namespace tlp;

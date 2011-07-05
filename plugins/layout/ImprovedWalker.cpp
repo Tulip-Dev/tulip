@@ -31,7 +31,7 @@ LAYOUTPLUGINOFGROUP(ImprovedWalker, "Improved Walker",
 		    "Julien Testut, Antony Durand, Pascal Ollier, "
 		    "Yashvin Nababsing, Sebastien Leclerc, "
 		    "Thibault Ruchon, Eric Dauchier",
-		    "11/11/04", "ok", "1.0","Tree");
+		    "11/11/04", "ok", "1.0","Tree")
 
 //====================================================================
 const node  ImprovedWalker::BADNODE;  

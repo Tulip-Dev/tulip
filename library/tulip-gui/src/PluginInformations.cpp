@@ -2,9 +2,11 @@
 
 #include <tulip/WithDependency.h>
 #include <tulip/AbstractPluginInfo.h>
+#include <tulip/PluginLister.h>
+#include <tulip/SystemDefinition.h>
+#include <tulip/TulipRelease.h>
 
 #include <QtCore/QFileInfo>
-#include <tulip/PluginLister.h>
 
 using namespace tlp;
 
@@ -14,14 +16,14 @@ static std::list<tlp::Dependency> getPluginDependencies(T* factory, U context) {
 }
 
 PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::string& library)
-    :_type(type.c_str()), _isLocal(true), _installedVersion(info->getRelease().c_str()), _updateAvailable(false), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("http://www.perdu.com") {
+    :_type(type.c_str()), _iconPath(":/tulip/gui/icons/logo32x32.png"), _longDescriptionPath("http://www.perdu.com"), _isLocal(true), _installedVersion(info->getRelease().c_str()), _updateAvailable(false) {
   _versions << info->getRelease().c_str();
 //   PluginInfoWithDependencies pluginInfo(info, dependencies);
   _infos[info->getName().c_str()] = info;
 }
 
 PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const QString& basePath)
-    :_type(type.c_str()), _isLocal(false), _installedVersion(QString::null), _updateAvailable(false), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html") {
+    :_type(type.c_str()), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null), _updateAvailable(false) {
   _versions << info->getRelease().c_str();
 //   PluginInfoWithDependencies pluginInfo(info, dependencies);
   _infos[info->getName().c_str()] = info;
@@ -105,7 +107,12 @@ bool PluginInformations::updateAvailable() const {
 }
 
 bool PluginInformations::fetch(QString version) const {
-  //FIXME implement me
+  const QString platform(OS_PLATFORM);
+  const QString architecture(OS_ARCHITECTURE);
+  const QString compiler(OS_COMPILER);
+  const QString tulipVersion = TULIP_RELEASE;
+  const QString archiveName = name().toLower() + /*"-" + info->getRelease().c_str() +*/ "-" + tulipVersion + "-" + platform + architecture + "-" + compiler + ".zip";
+  
   return false;
 }
 

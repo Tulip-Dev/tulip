@@ -32,13 +32,13 @@ namespace tlp {
   class TLP_QT_SIMPLE_SCOPE ElementPropertiesWidget :
   public ElementPropertiesWidgetUI, private GraphObserver, private Observable
     {
-      Q_OBJECT;
+      Q_OBJECT
       // moc as of qt 3.0.5 doesn't understand '::'... silly
       //  Q_ENUMS(Tulip::AtomType);
       //  Q_PROPERTY(Tulip::AtomType displayMode READ getDisplayMode WRITE setDisplayMode);
-      Q_PROPERTY(QStringList nodeListedProperties READ getNodeListedProperties WRITE setNodeListedProperties);
-      Q_PROPERTY(QStringList edgeListedProperties READ getEdgeListedProperties WRITE setEdgeListedProperties);
-      Q_PROPERTY(bool elementDisplayed READ isElementDisplayed);
+      Q_PROPERTY(QStringList nodeListedProperties READ getNodeListedProperties WRITE setNodeListedProperties)
+      Q_PROPERTY(QStringList edgeListedProperties READ getEdgeListedProperties WRITE setEdgeListedProperties)
+      Q_PROPERTY(bool elementDisplayed READ isElementDisplayed)
     protected:
       ElementType displayMode;
       node currentNode;

@@ -20,7 +20,7 @@
 
 using namespace tlp;
 
-DOUBLEPLUGINOFGROUP(DegreeMetric,"Degree","David Auber","04/10/2001","Stable","1.0","Graph");
+DOUBLEPLUGINOFGROUP(DegreeMetric,"Degree","David Auber","04/10/2001","Stable","1.0","Graph")
 
 namespace {
   const char * paramHelp[] = {

@@ -48,7 +48,7 @@ namespace tlp {
 tlp::GlBox* tlp::CubeOutLined::box=0;
 
 namespace tlp {
-  GLYPHPLUGIN(CubeOutLined, "3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 1);
+  GLYPHPLUGIN(CubeOutLined, "3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 1)
 /*@}*/
 
   //===================================================================================
