@@ -75,6 +75,7 @@ static QGLFormat GlInit() {
 	tmpFormat.setOverlay(false);
 	tmpFormat.setStereo(false);
 	tmpFormat.setSampleBuffers(true);
+	tmpFormat.setSamples(8);
 	return tmpFormat;
 }
 
