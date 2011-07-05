@@ -21,11 +21,11 @@
 #include <tulip/SimplePluginProgressWidget.h>
 #include <QtGui/QVBoxLayout>
 using namespace tlp;
-CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage ( QWidget * parent):QWizardPage(parent),parserConfigurationWidget(new CSVParserConfigurationWidget(this)),previewTableWidget(new CSVTableWidget(this)){
+CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage ( QWidget * parent):QWizardPage(parent),parserConfigurationWidget(new CSVParserConfigurationWidget(this)),previewTableWidget(new CSVTableWidget(this)),previewLineNumber(5){
     setLayout(new QVBoxLayout());
     layout()->addWidget(parserConfigurationWidget);
     layout()->addWidget(previewTableWidget);
-    previewTableWidget->setMaxPreviewLineNumber(5);
+    previewTableWidget->setMaxPreviewLineNumber(previewLineNumber);
     previewTableWidget->horizontalHeader()->setVisible(false);
     previewTableWidget->verticalHeader()->setVisible(false);
     connect(parserConfigurationWidget,SIGNAL(parserChanged()),this,SLOT(parserChanged()));
@@ -37,15 +37,14 @@ bool CSVParsingConfigurationQWizardPage::isComplete() const{
 
 void CSVParsingConfigurationQWizardPage::parserChanged(){
     //Fill the preview widget
-    CSVParser* parser = parserConfigurationWidget->buildParser();
+    CSVParser* parser = parserConfigurationWidget->buildParser(0,previewLineNumber);
     //Force widget to clear content.
     previewTableWidget->begin();
     if(parser!=NULL){
         previewTableWidget->setEnabled(true);
-        SimplePluginProgressWidget progress(this);
-        progress.setWindowTitle("Generating preview");
-        progress.setComment("Parsing file");
-        parser->parse(previewTableWidget,&progress);
+        SimplePluginProgressDialog progress(this);
+        progress.setWindowTitle(tr("Parsing file"));
+        parser->parse(previewTableWidget,progress.progress());
     }else{
         previewTableWidget->setEnabled(false);
     }
@@ -54,8 +53,8 @@ void CSVParsingConfigurationQWizardPage::parserChanged(){
 }
 
 void CSVParsingConfigurationQWizardPage::updatePreview(){
-previewTableWidget->setRowCount(0);
-previewTableWidget->setColumnCount(0);
+    previewTableWidget->setRowCount(0);
+    previewTableWidget->setColumnCount(0);
 }
 
 CSVParser* CSVParsingConfigurationQWizardPage::buildParser() const{
@@ -89,8 +88,8 @@ void CSVGraphMappingConfigurationQWizardPage::initializePage(){
 }
 
 CSVImportWizard::CSVImportWizard(QWidget *parent) :
-        QWizard(parent),
-        ui(new Ui::CSVImportWizard)
+    QWizard(parent),
+    ui(new Ui::CSVImportWizard)
 {
     ui->setupUi(this);
 }
@@ -109,6 +108,7 @@ CSVImportConfigurationQWizardPage* CSVImportWizard::getImportConfigurationPage()
 CSVGraphMappingConfigurationQWizardPage* CSVImportWizard::getMappingConfigurationPage()const{
     return qobject_cast<CSVGraphMappingConfigurationQWizardPage*>(page(2));
 }
+
 void CSVImportWizard::accept(){    
     bool processIsValid=false;
     if(graph != NULL){
@@ -125,19 +125,14 @@ void CSVImportWizard::accept(){
                 processIsValid = false;
             }
             if(processIsValid){
+                //Build import object
+                CSVGraphImport csvToGraph(rowMapping,columnMapping,importParam);
                 //Launch the import process
-                SimplePluginProgressWidget progress(this);
-                progress.setWindowTitle("Importing CSV data on graph");
-                progress.setComment("Building index");
-                //Build the mapping index
-                processIsValid = parser->parse(rowMapping,&progress);
-                if(processIsValid){
-                    //Build import object
-                    CSVGraphImport csvToGraph(rowMapping,columnMapping,importParam);
-                    progress.setComment("Importing data");
-                    processIsValid = parser->parse(&csvToGraph,&progress);
-                }
-            }
+                SimplePluginProgressDialog progress(this);
+                progress.show();
+                progress.setWindowTitle("Importing data");
+                processIsValid = parser->parse(&csvToGraph,progress.progress());
+            }            
             //Release objects
             delete rowMapping;
             delete columnMapping;

@@ -45,6 +45,7 @@ private:
     void updatePreview();
     CSVParserConfigurationWidget* parserConfigurationWidget;
     CSVTableWidget* previewTableWidget;
+    unsigned int previewLineNumber;
 
 private slots:
     void parserChanged();
@@ -75,7 +76,7 @@ private:
     CSVGraphMappingConfigurationWidget* graphMappingConfigurationWidget;
 };
 
-class TLP_QT_SCOPE CSVImportWizard : public QWizard
+class CSVImportWizard : public QWizard
 {
     Q_OBJECT
 
