@@ -169,7 +169,7 @@ namespace tlp {
    */
   class TLP3_COMPAT_SCOPE Controller : public tlp::Perspective {
 
-    Q_OBJECT;
+    Q_OBJECT
 
     QString _lastUsedSavePath;
 

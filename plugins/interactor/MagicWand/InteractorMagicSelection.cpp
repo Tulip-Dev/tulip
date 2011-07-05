@@ -71,4 +71,4 @@ class InteractorMagicSelection  : public InteractorChainOfResponsibility {
     MagicSelectionInteractorConfigWidget* configWidget;
 };
 
-INTERACTORPLUGIN(InteractorMagicSelection, "InteractorMagicSelection", "Tulip Team", "01/04/2009", "Magic Selection Interactor", "1.0");
+INTERACTORPLUGIN(InteractorMagicSelection, "InteractorMagicSelection", "Tulip Team", "01/04/2009", "Magic Selection Interactor", "1.0")

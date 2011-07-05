@@ -19,7 +19,7 @@
 #include <assert.h>
 #include "LoopSelection.h"
 
-BOOLEANPLUGIN(LoopSelection,"Loop Selection","David Auber","20/01/2003","Alpha","1.0");
+BOOLEANPLUGIN(LoopSelection,"Loop Selection","David Auber","20/01/2003","Alpha","1.0")
 
 using namespace std;
 using namespace tlp;

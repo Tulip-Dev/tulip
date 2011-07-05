@@ -22,7 +22,7 @@
 #include <tulip/StringProperty.h>
 #include "StrahlerMetric.h"
 
-DOUBLEPLUGINOFGROUP(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","1.0","Graph");
+DOUBLEPLUGINOFGROUP(StrahlerMetric,"Strahler","David Auber","06/04/2000","Alpha","1.0","Graph")
 
 using namespace std;
 using namespace tlp;

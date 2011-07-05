@@ -29,7 +29,7 @@
 #include "MixedModel.h"
 #include "DatasetTools.h"
 
-LAYOUTPLUGINOFGROUP(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","1.0","Planar");
+LAYOUTPLUGINOFGROUP(MixedModel,"Mixed Model","Romain BOURQUI ","09/11/2005","Ok","1.0","Planar")
 
 using namespace std;
 using namespace tlp;

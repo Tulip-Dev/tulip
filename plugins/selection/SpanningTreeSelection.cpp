@@ -22,7 +22,7 @@
 #include <tulip/MethodFactory.h>
 #include <tulip/GraphTools.h>
 
-BOOLEANPLUGIN(SpanningTreeSelection,"Spanning Forest","David Auber","01/12/1999","Alpha","1.0");
+BOOLEANPLUGIN(SpanningTreeSelection,"Spanning Forest","David Auber","01/12/1999","Alpha","1.0")
 
 using namespace std;
 using namespace tlp;

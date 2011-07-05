@@ -35,7 +35,7 @@ protected :
 	static GlTriangle *triangle;
 };
 
-EEGLYPHPLUGIN(GlArrow2DEdgeExtremity,"2D - Arrow","Jonathan Dubois","09/04/09","Edge Extremity with 2D arrow","1.0",50);
+EEGLYPHPLUGIN(GlArrow2DEdgeExtremity,"2D - Arrow","Jonathan Dubois","09/04/09","Edge Extremity with 2D arrow","1.0",50)
 
 GlTriangle* GlArrow2DEdgeExtremity::triangle=0;
 

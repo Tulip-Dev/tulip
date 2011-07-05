@@ -19,7 +19,7 @@
 #include <cassert>
 #include "DagLevelMetric.h"
 
-DOUBLEPLUGINOFGROUP(DagLevelMetric,"Dag Level","David Auber","10/03/2000","Alpha","1.0","Tree");
+DOUBLEPLUGINOFGROUP(DagLevelMetric,"Dag Level","David Auber","10/03/2000","Alpha","1.0","Tree")
 
 using namespace std;
 using namespace tlp;

@@ -49,4 +49,4 @@ public:
   }
 };
 
-INTERACTORPLUGIN(InteractorGetInformation, "InteractorGetInformation", "Tulip Team", "01/04/2009", "Get Information Interactor", "1.0");
+INTERACTORPLUGIN(InteractorGetInformation, "InteractorGetInformation", "Tulip Team", "01/04/2009", "Get Information Interactor", "1.0")

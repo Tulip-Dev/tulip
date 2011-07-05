@@ -18,7 +18,7 @@
  */
 #include "StrengthMetric.h"
 
-DOUBLEPLUGINOFGROUP(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha","1.0","Graph");
+DOUBLEPLUGINOFGROUP(StrengthMetric,"Strength","David Auber","26/02/2003","Alpha","1.0","Graph")
 
 using namespace std;
 using namespace tlp;

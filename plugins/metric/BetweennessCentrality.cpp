@@ -22,8 +22,6 @@
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
 
-
-
 using namespace std;
 using namespace tlp;
 
@@ -180,4 +178,4 @@ public:
   }
 };
 /*@}*/
-DOUBLEPLUGINOFGROUP(BetweennessCentrality,"Betweenness Centrality","David Auber","03/01/2005","Alpha","1.2","Graph");
+DOUBLEPLUGINOFGROUP(BetweennessCentrality,"Betweenness Centrality","David Auber","03/01/2005","Alpha","1.2","Graph")

@@ -42,7 +42,7 @@ namespace tlp {
    */
   class TLP_QT_SCOPE InteractorAction : public QAction {
 
-    Q_OBJECT;
+    Q_OBJECT
 
   public:
 

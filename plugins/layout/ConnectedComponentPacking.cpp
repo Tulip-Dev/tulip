@@ -27,7 +27,7 @@
 using namespace std;
 using namespace tlp;
 
-LAYOUTPLUGINOFGROUP(ConnectedComponentPacking, "Connected Component Packing", "David Auber", "26/05/05", "beta", "1.0", "Misc");
+LAYOUTPLUGINOFGROUP(ConnectedComponentPacking, "Connected Component Packing", "David Auber", "26/05/05", "beta", "1.0", "Misc")
 
 const float spacing = 8;
 #define COMPLEXITY "auto;n5;n4logn;n4;n3logn;n3;n2logn;n2;nlogn;n;"

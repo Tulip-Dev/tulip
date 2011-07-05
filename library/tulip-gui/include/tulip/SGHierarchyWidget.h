@@ -35,7 +35,7 @@ namespace tlp {
   /** \addtogroup Tulip_Widgets */ 
   /*@{*/
   class TLP_QT_SIMPLE_SCOPE SGHierarchyWidget : public QTreeWidget { 
-    Q_OBJECT;
+    Q_OBJECT
     
   public:
     SGHierarchyWidget(QWidget* parent = 0, Graph *rootGraph = 0);

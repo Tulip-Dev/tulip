@@ -36,4 +36,4 @@ public:
     return graph->computeProperty(name, result, err);
   }
 };
-BOOLEANPLUGIN(Test,"Test","Jezequel","03/11/2004","0","1.0");
+BOOLEANPLUGIN(Test,"Test","Jezequel","03/11/2004","0","1.0")

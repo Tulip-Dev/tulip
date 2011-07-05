@@ -892,6 +892,6 @@ namespace tlp {
             return result;
         }
     };
-    IMPORTPLUGINOFGROUP(TLPImport,"tlp","Auber","16/02/2001","Tlp Import plugin","1.0","File");
+    IMPORTPLUGINOFGROUP(TLPImport,"tlp","Auber","16/02/2001","Tlp Import plugin","1.0","File")
     /*@}*/
 }

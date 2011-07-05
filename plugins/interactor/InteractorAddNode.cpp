@@ -51,4 +51,4 @@ public:
   QCursor getCursor(){return QCursor(Qt::PointingHandCursor);}
 };
 
-INTERACTORPLUGIN(InteractorAddNode, "InteractorAddNode", "Tulip Team", "01/04/2009", "Add Node Interactor", "1.0");
+INTERACTORPLUGIN(InteractorAddNode, "InteractorAddNode", "Tulip Team", "01/04/2009", "Add Node Interactor", "1.0")

@@ -44,7 +44,7 @@ class Graph;
 /*@{*/
 
 ///
-DECL_STORED_STRUCT(std::set<tlp::node>);
+DECL_STORED_STRUCT(std::set<tlp::node>)
 
 class TLP_SCOPE GraphType {
 public:
@@ -66,7 +66,7 @@ public:
   static void write(std::ostream&, const RealType &v);
   static bool read(std::istream& istr, RealType& value);
 };
-DECL_STORED_STRUCT(tlp::EdgeSetType::RealType);
+DECL_STORED_STRUCT(tlp::EdgeSetType::RealType)
 
 class TLP_SCOPE DoubleType {
 public:
@@ -89,7 +89,7 @@ public:
   static void write(std::ostream&, const RealType &v);
   static bool read(std::istream& istr, RealType& value);
 };
-DECL_STORED_STRUCT(tlp::DoubleVectorType::RealType);
+DECL_STORED_STRUCT(tlp::DoubleVectorType::RealType)
 
 class TLP_SCOPE IntegerType
 {
@@ -114,7 +114,7 @@ public:
   static void write(std::ostream&, const RealType &v);
   static bool read(std::istream& istr, RealType& value);
 };
-DECL_STORED_STRUCT(tlp::IntegerVectorType::RealType);
+DECL_STORED_STRUCT(tlp::IntegerVectorType::RealType)
 
 class TLP_SCOPE BooleanType {
 public:
@@ -137,7 +137,7 @@ public:
   static void write(std::ostream&, const RealType &v);
   static bool read(std::istream& istr, RealType& value);
 };
-DECL_STORED_STRUCT(tlp::BooleanVectorType::RealType);
+DECL_STORED_STRUCT(tlp::BooleanVectorType::RealType)
 
 class TLP_SCOPE LineType
 {
@@ -150,7 +150,7 @@ public:
   static void write(std::ostream&, const RealType &v);
   static bool read(std::istream& istr, RealType& value);
 };
-DECL_STORED_STRUCT(tlp::LineType::RealType);
+DECL_STORED_STRUCT(tlp::LineType::RealType)
 
 class TLP_SCOPE PointType {
 public:
@@ -162,7 +162,7 @@ public:
   static void write(std::ostream&, const RealType &v);
   static bool read(std::istream& istr, RealType& value);
 };
-DECL_STORED_STRUCT(tlp::PointType::RealType);
+DECL_STORED_STRUCT(tlp::PointType::RealType)
 
 class TLP_SCOPE SizeType {
 public:
@@ -174,7 +174,7 @@ public:
   static void write(std::ostream&, const RealType &v);
   static bool read(std::istream& istr, RealType& value);
 };
-DECL_STORED_STRUCT(tlp::SizeType::RealType);
+DECL_STORED_STRUCT(tlp::SizeType::RealType)
 
 class TLP_SCOPE SizeVectorType {
 public:
@@ -186,7 +186,7 @@ public:
   static void write(std::ostream&, const RealType &v);
   static bool read(std::istream& istr, RealType& value);
 };
-DECL_STORED_STRUCT(tlp::SizeVectorType::RealType);
+DECL_STORED_STRUCT(tlp::SizeVectorType::RealType)
 
 class TLP_SCOPE StringType {
 public:
@@ -198,7 +198,7 @@ public:
   static void write(std::ostream&, const RealType &v);
   static bool read(std::istream& istr, RealType& value);
 };
-DECL_STORED_STRUCT(tlp::StringType::RealType);
+DECL_STORED_STRUCT(tlp::StringType::RealType)
 
 class TLP_SCOPE StringVectorType {
 public:
@@ -210,7 +210,7 @@ public:
   static void write(std::ostream&, const RealType &v);
   static bool read(std::istream& istr, RealType& value);
 };
-DECL_STORED_STRUCT(tlp::StringVectorType::RealType);
+DECL_STORED_STRUCT(tlp::StringVectorType::RealType)
 
 class TLP_SCOPE ColorType {
 public:
@@ -233,7 +233,7 @@ public:
   static void write(std::ostream&, const RealType &v);
   static bool read(std::istream& istr, RealType& value);
 };
-DECL_STORED_STRUCT(tlp::ColorVectorType::RealType);
+DECL_STORED_STRUCT(tlp::ColorVectorType::RealType)
 
 class TLP_SCOPE CoordVectorType {
 public:

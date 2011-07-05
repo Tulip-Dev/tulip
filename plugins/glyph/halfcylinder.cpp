@@ -52,7 +52,7 @@ public:
 private:
 };
 
-GLYPHPLUGIN(HalfCylinder, "3D - Half Cylinder", "Auber David", "31/07/2002", "Textured HalfCylinder", "1.0", 10);
+GLYPHPLUGIN(HalfCylinder, "3D - Half Cylinder", "Auber David", "31/07/2002", "Textured HalfCylinder", "1.0", 10)
 //=================================================================================================
 HalfCylinder::HalfCylinder(GlyphContext *gc): Glyph(gc) {
 }

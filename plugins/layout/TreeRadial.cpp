@@ -377,5 +377,5 @@ public:
   }
 };
 /*@}*/
-LAYOUTPLUGINOFGROUP(TreeRadial,"Tree Radial","Patrick Mary","14/05/2007","Ok","1.0","Tree");
+LAYOUTPLUGINOFGROUP(TreeRadial,"Tree Radial","Patrick Mary","14/05/2007","Ok","1.0","Tree")
 

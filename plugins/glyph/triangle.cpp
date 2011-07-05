@@ -50,7 +50,7 @@ protected:
 GlTriangle* Triangle::triangle=0;
 
 //=====================================================
-GLYPHPLUGIN(Triangle, "2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0", 11);
+GLYPHPLUGIN(Triangle, "2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0", 11)
 //===================================================================================
 Triangle::Triangle(GlyphContext *gc): Glyph(gc){
   if(!triangle)

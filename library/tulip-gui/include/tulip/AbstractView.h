@@ -32,7 +32,7 @@ namespace tlp {
    */
   class TLP_QT_SCOPE AbstractView : public View {
 
-    Q_OBJECT;
+    Q_OBJECT
 
   public:
 

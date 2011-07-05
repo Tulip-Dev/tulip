@@ -179,7 +179,7 @@ namespace tlp {
 	  if(arg1.valueType==SpreadValue::coordv) {
 	    resultArg2.coordV=Coord(arg2.doubleV,arg2.doubleV,arg2.doubleV);
 	  }else{
-	    char tmp;
+	    unsigned char tmp;
 	    if(arg2.doubleV<0)
 	      tmp=0;
 	    else if(arg2.doubleV>255)

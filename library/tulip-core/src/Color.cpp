@@ -97,9 +97,9 @@ int tlp::Color::get##P() const {                     \
   return P;                                     \
 }
 
-HSVGet(H);
-HSVGet(S);
-HSVGet(V);
+HSVGet(H)
+HSVGet(S)
+HSVGet(V)
 #undef HSVGet
 
 #define HSVSet(P)                               \
@@ -110,9 +110,9 @@ void tlp::Color::set##P(int val) {                   \
   HSVtoRGB(H,S,V,array[0],array[1],array[2]);   \
 }
 
-HSVSet(H);
-HSVSet(S);
-HSVSet(V);
+HSVSet(H)
+HSVSet(S)
+HSVSet(V)
 #undef HSVSet
 
 //=================================================================

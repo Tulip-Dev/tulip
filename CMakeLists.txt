@@ -23,7 +23,7 @@ ENDIF(APPLE)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 IF(NOT MSVC) #visual studio does not recognize these options
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused")
+   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -pedantic -Wno-long-long")
 ENDIF()
 
 IF(WIN32)

@@ -23,7 +23,7 @@
 using namespace std;
 using namespace tlp;
 
-ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","OK","1.3");
+ALGORITHMPLUGIN(QuotientClustering,"Quotient Clustering","David Auber","13/06/2001","OK","1.3")
 
 //==============================================================================
 namespace {

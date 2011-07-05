@@ -50,8 +50,7 @@ namespace std {
       return false;
     }
   };
-};
-
+}
 
 namespace
 {
@@ -76,8 +75,6 @@ namespace
 	};
 
 }
-
-
 
 /** \addtogroup import */
 /*@{*/

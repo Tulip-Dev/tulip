@@ -53,4 +53,4 @@ public:
   QCursor getCursor(){return QCursor(Qt::PointingHandCursor);}
 };
 
-INTERACTORPLUGIN(InteractorAddEdge, "InteractorAddEdge", "Tulip Team", "01/04/2009", "Add Edge Interactor", "1.0");
+INTERACTORPLUGIN(InteractorAddEdge, "InteractorAddEdge", "Tulip Team", "01/04/2009", "Add Edge Interactor", "1.0")

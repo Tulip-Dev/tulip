@@ -27,7 +27,7 @@ using namespace tlp;
 
 LAYOUTPLUGINOFGROUP(SquarifiedTreeMap,"Squarified Tree Map",
                     "Tulip Team",
-                    "25/05/2010", "ok", "2.0", "Tree");
+                    "25/05/2010", "ok", "2.0", "Tree")
 //====================================================================
 
 const double SEPARATION_Z  = 10; 
