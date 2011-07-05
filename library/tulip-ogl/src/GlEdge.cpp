@@ -620,14 +620,14 @@ void GlEdge::getEdgeSize(GlGraphInputData *data,edge e,const Size &srcSize, cons
 
 	if (data->parameters->isEdgeSizeInterpolate()) {
 		if(srcSize[0]<srcSize[1])
-			edgeSize[0]=srcSize[0]/16.f;
+			edgeSize[0]=srcSize[0]/8.f;
 		else
-			edgeSize[0]=srcSize[1]/16.f;
+			edgeSize[0]=srcSize[1]/8.f;
 
 		if(tgtSize[0]<tgtSize[1])
-			edgeSize[1]=tgtSize[0]/16.f;
+			edgeSize[1]=tgtSize[0]/8.f;
 		else
-			edgeSize[1]=tgtSize[1]/16.f;
+			edgeSize[1]=tgtSize[1]/8.f;
 	} else {
 		const Size &size = data->getElementSize()->getEdgeValue(e);
 		edgeSize[0]=size[0];
