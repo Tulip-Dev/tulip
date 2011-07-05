@@ -671,12 +671,12 @@ void ObservableGraphTest::testObserverWhenRemoveObservable() {
 
 void ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend() {
     Graph *g1 = graph->addSubGraph();
-    DelInheritedPropertyObserverTest *observer = new DelInheritedPropertyObserverTest();
-    g1->addGraphObserver(observer);
+    DelInheritedPropertyObserverTest observer;
+    g1->addGraphObserver(&observer);
     graph->getLocalProperty<BooleanProperty>("test");
     graph->delLocalProperty("test");
-    CPPUNIT_ASSERT(observer->initialized);
-    CPPUNIT_ASSERT(observer->inheritedPropertyExist);
+    CPPUNIT_ASSERT(observer.initialized);
+    CPPUNIT_ASSERT(observer.inheritedPropertyExist);
 }
 
 //==========================================================

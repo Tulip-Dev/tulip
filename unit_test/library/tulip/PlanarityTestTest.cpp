@@ -143,6 +143,7 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
     toGroup.insert(itn->next());
   node meta3 = g->createMetaNode(toGroup, false);
   toGroup.clear();
+  delete itn;
 
   PlanarConMap *graphMap = computePlanarConMap(g);
   //  graphMap->makePlanar();
