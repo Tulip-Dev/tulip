@@ -161,12 +161,12 @@ class FactoryInterface : public AbstractPluginInfo {
       return NULL;
     }
 
-  /**
-  * @brief Forwards the call to the appropriate PluginLister.
-  *
-  * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > >
-  **/
-  virtual std::list<tlp::Dependency> getDependencies() const {
+    /**
+    * @brief Forwards the call to the appropriate PluginLister.
+    *
+    * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > >
+    **/
+    virtual std::list<tlp::Dependency> getDependencies() const {
       return tlp::StaticPluginLister<PluginObject, PluginContext>::getPluginDependencies(getName());
     }
   };
