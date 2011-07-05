@@ -49,7 +49,7 @@ FTGL_BEGIN_C_DECLS
     }
 
 // FTSimpleLayout::FTSimpleLayout();
-C_TOR(ftglCreateSimpleLayout, (), FTSimpleLayout, (), LAYOUT_SIMPLE);
+C_TOR(ftglCreateSimpleLayout, (), FTSimpleLayout, (), LAYOUT_SIMPLE)
 
 #define C_FUN(cret, cname, cargs, cxxerr, cxxname, cxxarg) \
     cret cname cargs \
@@ -77,7 +77,7 @@ void ftglDestroyLayout(FTGLlayout *l)
 // virtual FTBBox FTLayout::BBox(const char* string)
 extern "C++" {
 C_FUN(static FTBBox, _ftgGetlLayoutBBox, (FTGLlayout *l, const char *s),
-      return static_ftbbox, BBox, (s));
+      return static_ftbbox, BBox, (s))
 }
 
 void ftgGetlLayoutBBox(FTGLlayout *l, const char * s, float c[6])
@@ -90,10 +90,10 @@ void ftgGetlLayoutBBox(FTGLlayout *l, const char * s, float c[6])
 
 // virtual void FTLayout::Render(const char* string, int renderMode);
 C_FUN(void, ftglRenderLayout, (FTGLlayout *l, const char *s, int r),
-      return, Render, (s, r));
+      return, Render, (s, r))
 
 // FT_Error FTLayout::Error() const;
-C_FUN(FT_Error, ftglGetLayoutError, (FTGLlayout *l), return -1, Error, ());
+C_FUN(FT_Error, ftglGetLayoutError, (FTGLlayout *l), return -1, Error, ())
 
 // void FTSimpleLayout::SetFont(FTFont *fontInit)
 void ftglSetLayoutFont(FTGLlayout *l, FTGLfont *font)
@@ -149,23 +149,23 @@ FTGLfont *ftglGetLayoutFont(FTGLlayout *l)
 
 // void FTSimpleLayout::SetLineLength(const float LineLength);
 C_FUN(void, ftglSetLayoutLineLength, (FTGLlayout *l, const float length),
-      return, SetLineLength, (length));
+      return, SetLineLength, (length))
 
 // float FTSimpleLayout::GetLineLength() const
 C_FUN(float, ftglGetLayoutLineLength, (FTGLlayout *l),
-      return 0.0f, GetLineLength, ());
+      return 0.0f, GetLineLength, ())
 
 // void FTSimpleLayout::SetAlignment(const TextAlignment Alignment)
 C_FUN(void, ftglSetLayoutAlignment, (FTGLlayout *l, const int a),
-      return, SetAlignment, ((FTGL::TextAlignment)a));
+      return, SetAlignment, ((FTGL::TextAlignment)a))
 
 // TextAlignment FTSimpleLayout::GetAlignment() const
 C_FUN(int, ftglGetLayoutAlignement, (FTGLlayout *l),
-      return FTGL::ALIGN_LEFT, GetAlignment, ());
+      return FTGL::ALIGN_LEFT, GetAlignment, ())
 
 // void FTSimpleLayout::SetLineSpacing(const float LineSpacing)
 C_FUN(void, ftglSetLayoutLineSpacing, (FTGLlayout *l, const float f),
-      return, SetLineSpacing, (f));
+      return, SetLineSpacing, (f))
 
 FTGL_END_C_DECLS
 
