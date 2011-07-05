@@ -162,7 +162,7 @@ namespace tlp {
       // The algorithm is applied
       // There is a bug in the openmp version distributed with MinGW < 4.5, so for these versions fall back to simple threaded mechanism
       //on other OS's it works fine with any version though
-#if  (!WIN32 || (__GNUC_MINOR__ >= 5 && __GNUC__ == 4)) 
+#if  (!defined(WIN32) || (defined(__GNUC_MINOR__) && (__GNUC_MINOR__ >= 5 && __GNUC__ == 4)))
       AbstractComputeProperty* param = new ComputePropertyTemplate<PROPERTY>(graph, name, tmp, erreurMsg, myProgress, &dataSet);
       ComputePropertyThread* thread = new ComputePropertyThread(param);
 
