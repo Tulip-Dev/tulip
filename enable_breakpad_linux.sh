@@ -15,7 +15,7 @@ usage() {
 
 [ "$#" != "2" ] && usage
 install_dir=$1
-output_dir=$2
+output_dir=$2'/linux/'$(uname -m)'/gcc'
 
 dump_syms_exe=$(which dump_syms)
 strip_exe=$(which strip)
@@ -24,6 +24,7 @@ strip_exe=$(which strip)
 [ "$strip_exe" = "" ] && usage 'strip executable was not found in your PATH'
 
 [ ! -e "$install_dir" ] && usage 'Provided installation directory does not exist'
+if [ ! -e "$output_dir" ]; then mkdir -p $output_dir || usage 'Failed to create output directory: '$output_dir;fi
 
 parse_dir() {
   echo -e '\e[01;34mParsing '$(pwd)'\e[00m'
