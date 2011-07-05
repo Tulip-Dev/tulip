@@ -15,7 +15,7 @@ usage() {
 
 [ "$#" != "2" ] && usage
 install_dir=$1
-output_dir=$2'/linux/'$(uname -m)'/gcc'
+output_dir=$2'/linux/'$(uname -m)'/gcc/@TulipVersion@'
 
 dump_syms_exe=$(which dump_syms)
 strip_exe=$(which strip)
