@@ -54,8 +54,23 @@ PropertyConfigurationWidget::PropertyConfigurationWidget(unsigned int propertyNu
 }
 
 void PropertyConfigurationWidget::fillPropertyTypeComboBox() {
-    QStringList lst = PropertyTools::getPropertyTypeLabelsList();
+    propertyTypeComboBox->clear();
     propertyTypeComboBox->addItem("Auto detect");
+    QStringList lst;
+    lst<<propertyTypeToPropertyTypeLabel(ColorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(IntegerProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(LayoutProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(DoubleProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(BooleanProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(SizeProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(StringProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(BooleanVectorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(ColorVectorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(CoordVectorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(DoubleVectorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(IntegerVectorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(SizeVectorProperty::propertyTypename);
+    lst<<propertyTypeToPropertyTypeLabel(StringVectorProperty::propertyTypename);
     propertyTypeComboBox->addItems(lst);
 }
 
