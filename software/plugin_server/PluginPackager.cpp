@@ -106,7 +106,7 @@ int main(int argc,char **argv) {
     exit(0);
   }
   
-  QString platform;(OS_PLATFORM);
+  QString platform(OS_PLATFORM);
   QString architecture(OS_ARCHITECTURE);
   QString compiler(OS_COMPILER);
   QString tulipVersion = TULIP_RELEASE;
