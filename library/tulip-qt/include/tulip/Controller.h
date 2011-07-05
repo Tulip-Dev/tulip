@@ -167,7 +167,7 @@ namespace tlp {
    */
   class TLP_QT_SCOPE Controller : public QObject, public WithParameter, public WithDependency{
 
-    Q_OBJECT;
+    Q_OBJECT
 
   public:
 

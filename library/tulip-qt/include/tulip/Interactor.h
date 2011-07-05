@@ -40,7 +40,7 @@ namespace tlp {
    */
   class TLP_QT_SCOPE InteractorAction : public QAction {
 
-    Q_OBJECT;
+    Q_OBJECT
 
   public:
 
@@ -233,7 +233,7 @@ CN() {baseInteractor=InteractorManager::getInst().getInteractor(BCNT);if(baseInt
 protected : \
   Interactor *baseInteractor; \
 }; \
-INTERACTORPLUGIN(CN, CNT, A , D , I , R);
+INTERACTORPLUGIN(CN, CNT, A , D , I , R)
 
 /*
 Like INTERACTORPLUGINVIEWEXTENSION(CN,CNT,BCNT,VCN,A,D,I,R) with P
@@ -254,7 +254,7 @@ CN() {setPriority(P);baseInteractor=InteractorManager::getInst().getInteractor(B
 protected : \
   Interactor *baseInteractor; \
 }; \
-INTERACTORPLUGIN(CN, CNT, A , D , I , R);
+INTERACTORPLUGIN(CN, CNT, A , D , I , R)
 
 #endif
 

@@ -120,7 +120,7 @@ private :
 };
 
 
-};
+}
 
 
 #endif /* GLOFFSCREENRENDERER_H_ */

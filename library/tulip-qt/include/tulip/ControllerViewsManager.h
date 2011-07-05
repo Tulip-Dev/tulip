@@ -44,7 +44,7 @@ namespace tlp {
    */
   class TLP_QT_SCOPE ControllerViewsManager : public Controller {
 
-    Q_OBJECT;
+    Q_OBJECT
     
     public :
       

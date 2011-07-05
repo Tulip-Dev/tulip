@@ -34,8 +34,7 @@ set(spreadsheet_MOC
     TulipItemDelegate.h
     VectorEditionWidget.h        
     TulipTableWidgetColumnSelectionModel.h
-    TulipTableWidgetColumnSelectionWidget.h    
-    OrientedPushButton.h
+    TulipTableWidgetColumnSelectionWidget.h
     SpreadViewTableWidget.h
     VisibleSectionsModel.h
 )

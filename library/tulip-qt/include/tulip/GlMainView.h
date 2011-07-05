@@ -61,7 +61,7 @@ namespace tlp {
    */
   class TLP_QT_SCOPE GlMainView : public AbstractView {
 
-    Q_OBJECT;
+    Q_OBJECT
 
   public:
     /**
