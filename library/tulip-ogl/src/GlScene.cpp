@@ -378,10 +378,6 @@ namespace tlp {
               oldCamera = camera;
           }
 
-          //Init GlPointManager for a new rendering pass
-          //GlPointManager::getInst().beginRendering();
-          if(glGraphComposite)
-              glGraphComposite->getInputData()->getGlVertexArrayManager()->beginRendering();
           GlEdge::clearEdgeWidthLodSystem(viewOrtho);
 
           bool zOrdering = false;
@@ -401,6 +397,9 @@ namespace tlp {
 
           if(!zOrdering) {
               // If elements are not zOrdered
+
+            if(glGraphComposite)
+              glGraphComposite->getInputData()->getGlVertexArrayManager()->beginRendering();
 
               // Draw simple entities
               vector<SimpleEntityLODUnit>::iterator it;
@@ -454,6 +453,9 @@ namespace tlp {
                       glEdge.draw((*it).lod,glGraphComposite->getInputData(),camera);
                   }
               }
+              if(glGraphComposite)
+                glGraphComposite->getInputData()->getGlVertexArrayManager()->endRendering();
+
           }
           else {
               // If elements are zOrdered
@@ -546,12 +548,6 @@ namespace tlp {
                   }
               }
           }
-
-          if(glGraphComposite)
-              glGraphComposite->getInputData()->getGlVertexArrayManager()->endRendering();
-
-          // End rendering of GlPointManager
-          //GlPointManager::getInst().endRendering();
 
           /*
             Label draw
