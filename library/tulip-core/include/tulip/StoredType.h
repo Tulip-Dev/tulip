@@ -66,7 +66,7 @@ namespace tlp {
 // the macro below must be used to enable thies type of management
 #define DECL_STORED_STRUCT(T)					\
   template <>							\
-    struct StoredType<T> {					\
+    struct StoredType<T > {					\
     typedef T *Value;						\
     typedef T& ReturnedValue;					\
     typedef const T& ReturnedConstValue;			\
