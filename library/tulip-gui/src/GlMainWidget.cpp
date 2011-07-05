@@ -518,6 +518,31 @@ bool GlMainWidget::selectGlEntities(const int x, const int y,
 	return selectGlEntities(x,y,2,2,pickedEntities,layer);
 }
 //==================================================
+bool GlMainWidget::selectGlEntities(const int x, const int y,
+                const int width, const int height,
+                vector<tlp::GlEntity *>
+                &pickedEntities,
+                tlp::GlLayer* layer){
+           std::vector<GlSimpleEntity*> entities;
+           bool result = selectGlEntities(x,y,width,height,entities,layer);
+           for(std::vector<GlSimpleEntity*>::iterator it = entities.begin() ; it != entities.end() ; ++it){
+               pickedEntities.push_back(*it);
+           }
+         return result;
+       }
+//==================================================
+bool GlMainWidget::selectGlEntities(const int x, const int y,
+                std::vector<tlp::GlEntity *>
+                &pickedEntities,
+                GlLayer* layer) {
+          std::vector<GlSimpleEntity*> entities;
+          bool result =selectGlEntities(x,y,entities,layer);
+          for(std::vector<GlSimpleEntity*>::iterator it = entities.begin() ; it != entities.end() ; ++it){
+              pickedEntities.push_back(*it);
+          }
+        return result;
+        }
+//==================================================
 void GlMainWidget::doSelect(const int x, const int y,
 		const int width ,const int height,
 		std::vector<node> &sNode, std::vector<edge> &sEdge,
