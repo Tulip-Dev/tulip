@@ -79,7 +79,7 @@ string PropertyConfigurationWidget::getPropertyType() const {
     if(propertyType.compare("Auto detect")==0){
         return string("");
     }else{
-        return PropertyTools::getPropertyTypeFromPropertyTypeLabel(QStringToTlpString(propertyType));
+        return propertyTypeLabelToPropertyType(propertyType);
     }
 }
 QString PropertyConfigurationWidget::getPropertyName() const {
