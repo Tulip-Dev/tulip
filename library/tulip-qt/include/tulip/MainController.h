@@ -36,259 +36,260 @@ class QTabWidget;
 
 namespace tlp {
 
-  class Graph;
-  class View;
-  class SGHierarchyWidget;
-  class PropertyDialog;
-  class ElementPropertiesWidget;
-  class Morphing;
-  class GraphState;
+class Graph;
+class View;
+class SGHierarchyWidget;
+class PropertyDialog;
+class ElementPropertiesWidget;
+class Morphing;
+class GraphState;
 
-  /** \brief Default controller of Tulip
-   *
-   * This Controller create a GUI like the old Tulip
-   * On left : Property, and hierarchical view
-   * In view menu you have access to all view plugins
-   */
-  class TLP_QT_SCOPE MainController :  public ControllerViewsManager,
-    protected Observable, private GraphObserver {
+/** \brief Default controller of Tulip
+ *
+ * This Controller create a GUI like the old Tulip
+ * On left : Property, and hierarchical view
+ * In view menu you have access to all view plugins
+ */
+class TLP_QT_SCOPE MainController :  public ControllerViewsManager,
+protected Observable, private GraphObserver {
 
-    Q_OBJECT;
+	Q_OBJECT;
 
-  public:
-    /**
-     * Default constructor
-     */
-    MainController();
-    /**
-     * Default destructor
-     */
-    virtual ~MainController();
+public:
+	/**
+	 * Default constructor
+	 */
+	MainController();
+	/**
+	 * Default destructor
+	 */
+	virtual ~MainController();
 
-    /**
-     * Attach the QMainWindow to the controller
-     */
-    void attachMainWindow(MainWindowFacade facade);
+	/**
+	 * Attach the QMainWindow to the controller
+	 */
+	void attachMainWindow(MainWindowFacade facade);
 
-    /**
-     * Set graph and dataSet to the controller
-     */
-    void setData(Graph *graph=0,DataSet dataSet=DataSet());
-    /**
-     * Return the graph and the dataSet of the controller
-     */
-    void getData(Graph **graph,DataSet *dataSet);
-    
+	/**
+	 * Set graph and dataSet to the controller
+	 */
+	void setData(Graph *graph=0,DataSet dataSet=DataSet());
+	/**
+	 * Return the graph and the dataSet of the controller
+	 */
+	void getData(Graph **graph,DataSet *dataSet);
 
-  protected :
-    /**
-     * Set the default initialization of the graph
-     */
-    void initializeGraph(Graph *graph);
-    /**
-     * Load the GUI
-     */
-    void loadGUI();
-    /**
-     * Construct main menu
-     */
-    void buildMenu();
-    /**
-     * Create and init the main view (NodeLinkDiagramComponent)
-     */
-    View* initMainView(DataSet dataSet);
-    /**
-     * Create a view with name : name
-     */
-    virtual View* createView(const std::string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize=true,const QRect &rect=QRect(0,0,0,0),bool maximized=false);
+	/**
+	 * Construct main menu
+	 */
+	void buildMenu();
 
-    typedef std::set< tlp::Observable * >::iterator ObserverIterator;
+protected :
+	/**
+	 * Set the default initialization of the graph
+	 */
+	void initializeGraph(Graph *graph);
+	/**
+	 * Load the GUI
+	 */
+	void loadGUI();
 
-    /**
-     * Draw/Init all views
-     */
-    virtual void drawViews(bool init=false);
-    /**
-     * This function is call when an observable is destroyed
-     */
-    void observableDestroyed(Observable *);
-    /**
-     * This function is call when an observable is update
-     */
-    void update ( ObserverIterator begin, ObserverIterator end);
-    /**
-     * Init all observers (graph and properties)
-     */
-    void initObservers();
-    /**
-     * Clear all observers
-     */
-    void clearObservers();
-    /**
-     * Called when a subgraph is added.
-     */
-    void addSubGraph(Graph*, Graph *);
-    /**
-     * Called when a subgraph is removed.
-     */
-    void delSubGraph(Graph*, Graph*);    
+	/**
+	 * Create and init the main view (NodeLinkDiagramComponent)
+	 */
+	View* initMainView(DataSet dataSet);
+	/**
+	 * Create a view with name : name
+	 */
+	virtual View* createView(const std::string &name,Graph *graph,DataSet dataSet,bool forceWidgetSize=true,const QRect &rect=QRect(0,0,0,0),bool maximized=false);
 
-    /**
-     * Called when a local property is added
-     */
-    void addLocalProperty(Graph*, const std::string&);
-    /**
-     * Called when a local property is deleted
-     */
-    void delLocalProperty(Graph*, const std::string&);
-    /**
-     * Called when an attribute is set on a graph
-     */
-    void afterSetAttribute(Graph*, const std::string&);
-    /**
-     * Update number of nodes/edges in the status bar and the cluster tree widget.
-     */
-    void updateCurrentGraphInfos();
-    
-    /**
-     * Activate undo/redo button, reload propertyWidget and redrawViews after we have change a property
-     */
-    void afterChangeProperty();
-    
-    /**
-     * Store current view in a GraphState to use it with applyMorphing function
-     */
-    GraphState *constructGraphState();
-    
-    /**
-     * Do a morphing between current state and the given GraphState
-     */
-    void applyMorphing(GraphState *graphState);
+	typedef std::set< tlp::Observable * >::iterator ObserverIterator;
 
-    std::map<View *, int> lastConfigTabIndexOnView;
-    unsigned int currentGraphNbNodes;
-    unsigned int currentGraphNbEdges;
-    Graph *graphToReload;
-    bool propertiesListUpdated;
-    bool blockUpdate;
-    bool inAlgorithm;
+	/**
+	 * Draw/Init all views
+	 */
+	virtual void drawViews(bool init=false);
+	/**
+	 * This function is call when an observable is destroyed
+	 */
+	void observableDestroyed(Observable *);
+	/**
+	 * This function is call when an observable is update
+	 */
+	void update ( ObserverIterator begin, ObserverIterator end);
+	/**
+	 * Init all observers (graph and properties)
+	 */
+	void initObservers();
+	/**
+	 * Clear all observers
+	 */
+	void clearObservers();
+	/**
+	 * Called when a subgraph is added.
+	 */
+	void addSubGraph(Graph*, Graph *);
+	/**
+	 * Called when a subgraph is removed.
+	 */
+	void delSubGraph(Graph*, Graph*);
 
-    Morphing *morph;
+	/**
+	 * Called when a local property is added
+	 */
+	void addLocalProperty(Graph*, const std::string&);
+	/**
+	 * Called when a local property is deleted
+	 */
+	void delLocalProperty(Graph*, const std::string&);
+	/**
+	 * Called when an attribute is set on a graph
+	 */
+	void afterSetAttribute(Graph*, const std::string&);
+	/**
+	 * Update number of nodes/edges in the status bar and the cluster tree widget.
+	 */
+	void updateCurrentGraphInfos();
 
-    QDockWidget *tabWidgetDock;
-    QDockWidget *configWidgetDock;
-    QTabWidget *configWidgetTab;
-    SGHierarchyWidget *clusterTreeWidget;
-    PropertyDialog *propertiesWidget;
-    ElementPropertiesWidget *eltProperties;
+	/**
+	 * Activate undo/redo button, reload propertyWidget and redrawViews after we have change a property
+	 */
+	void afterChangeProperty();
 
-    QMenu *editMenu;
-    QMenu *algorithmMenu;
-    QMenu *viewMenu;
-    QMenu *optionsMenu;
-    QMenu *graphMenu;
+	/**
+	 * Store current view in a GraphState to use it with applyMorphing function
+	 */
+	GraphState *constructGraphState();
 
-    QAction *forceRatioAction;
-    QAction *mapMetricAction;
-    QAction *morphingAction;
-    QAction *undoAction;
-    QAction *redoAction;
-    QAction *snapshotAction;
-    QAction *editUndoAction;
-    QAction *editRedoAction;
+	/**
+	 * Do a morphing between current state and the given GraphState
+	 */
+	void applyMorphing(GraphState *graphState);
 
-    QMenu *intMenu;
-    QMenu *stringMenu;
-    QMenu *sizesMenu;
-    QMenu *colorsMenu;
-    QMenu *layoutMenu;
-    QMenu *metricMenu;
-    QMenu *selectMenu;
-    QMenu *generalMenu;
+	std::map<View *, int> lastConfigTabIndexOnView;
+	unsigned int currentGraphNbNodes;
+	unsigned int currentGraphNbEdges;
+	Graph *graphToReload;
+	bool propertiesListUpdated;
+	bool blockUpdate;
+	bool inAlgorithm;
 
-  protected slots:
-    /**
-     * Change the graph and load it in left part of the GUI
-     */
-    virtual bool changeGraph(Graph *graph);
-    /**
-     * Clear observers when a graph is about to be remove
-     */
-    void graphAboutToBeRemove(Graph *graph);
-    /**
-     * This function is call when a view is activated
-     * Return true if view can be activated (ie this view exist)
-     */
-    virtual bool windowActivated(QWidget *w);
-    /**
-     * Load the interactor (referenced by the given QAction) in current View
-    */
-    virtual bool changeInteractor(QAction* action);
-    /**
-     * This slot is call when a view emit elementSelected
-     * Show the element in left part of the GUI
-     */
-    void showElementProperties(unsigned int eltId, bool isNode);
-    /**
-     * This slot is call to ensure the Graph Editor is visible
-     */
-    void showGraphEditor();
-    /**
-     * This slot is call to ensure the View Editor is visible
-     */
-    void showViewEditor();
-    /**
-     * This slot is call when a view want to change its graph
-     */
-    void viewRequestChangeGraph(tlp::View *view,tlp::Graph *graph);
-    /**
-     * This slot is call went a view will be closed
-     */
-    virtual void widgetWillBeClosed(QObject *object);
+	Morphing *morph;
 
-    void isAcyclic();
-    void isSimple();
-    void isConnected();
-    void isBiconnected();
-    void isTriconnected();
-    void isTree();
-    void isFreeTree();
-    void isPlanar();
-    void isOuterPlanar();
-    void makeAcyclic();
-    void makeBiconnected();
-    void makeSimple();
-    void makeConnected();
-    void makeDirected();
-    void reverseSelectedEdgeDirection();
+	QDockWidget *tabWidgetDock;
+	QDockWidget *configWidgetDock;
+	QTabWidget *configWidgetTab;
+	SGHierarchyWidget *clusterTreeWidget;
+	PropertyDialog *propertiesWidget;
+	ElementPropertiesWidget *eltProperties;
 
-    void changeMetric();
-    void changeString();
-    void changeSizes();
-    void changeColors();
-    void changeInt();
-    void changeSelection();
-    void changeLayout();
-    void applyAlgorithm();
+	QMenu *editMenu;
+	QMenu *algorithmMenu;
+	QMenu *viewMenu;
+	QMenu *optionsMenu;
+	QMenu *graphMenu;
 
-    void updateUndoRedoInfos();
-    void undo();
-    void redo();
-    void snapshot();
+	QAction *forceRatioAction;
+	QAction *mapMetricAction;
+	QAction *morphingAction;
+	QAction *undoAction;
+	QAction *redoAction;
+	QAction *snapshotAction;
+	QAction *editUndoAction;
+	QAction *editRedoAction;
 
-  public slots :
-      void editCut();
-      void editCopy();
-      void editPaste();
-      void editFind();
-      void editCreateGroup();
-      void editCreateSubgraph();
-      void editDelSelection();
-      void editReverseSelection();
-      void editSelectAll();
-      void editDeselectAll();
+	QMenu *intMenu;
+	QMenu *stringMenu;
+	QMenu *sizesMenu;
+	QMenu *colorsMenu;
+	QMenu *layoutMenu;
+	QMenu *metricMenu;
+	QMenu *selectMenu;
+	QMenu *generalMenu;
 
-  };
+protected slots:
+/**
+ * Change the graph and load it in left part of the GUI
+ */
+virtual bool changeGraph(Graph *graph);
+/**
+ * Clear observers when a graph is about to be remove
+ */
+void graphAboutToBeRemove(Graph *graph);
+/**
+ * This function is call when a view is activated
+ * Return true if view can be activated (ie this view exist)
+ */
+virtual bool windowActivated(QWidget *w);
+/**
+ * Load the interactor (referenced by the given QAction) in current View
+ */
+virtual bool changeInteractor(QAction* action);
+/**
+ * This slot is call when a view emit elementSelected
+ * Show the element in left part of the GUI
+ */
+void showElementProperties(unsigned int eltId, bool isNode);
+/**
+ * This slot is call to ensure the Graph Editor is visible
+ */
+void showGraphEditor();
+/**
+ * This slot is call to ensure the View Editor is visible
+ */
+void showViewEditor();
+/**
+ * This slot is call when a view want to change its graph
+ */
+void viewRequestChangeGraph(tlp::View *view,tlp::Graph *graph);
+/**
+ * This slot is call went a view will be closed
+ */
+virtual void widgetWillBeClosed(QObject *object);
+
+void isAcyclic();
+void isSimple();
+void isConnected();
+void isBiconnected();
+void isTriconnected();
+void isTree();
+void isFreeTree();
+void isPlanar();
+void isOuterPlanar();
+void makeAcyclic();
+void makeBiconnected();
+void makeSimple();
+void makeConnected();
+void makeDirected();
+void reverseSelectedEdgeDirection();
+
+void changeMetric();
+void changeString();
+void changeSizes();
+void changeColors();
+void changeInt();
+void changeSelection();
+void changeLayout();
+void applyAlgorithm();
+
+void updateUndoRedoInfos();
+void undo();
+void redo();
+void snapshot();
+
+public slots :
+void editCut();
+void editCopy();
+void editPaste();
+void editFind();
+void editCreateGroup();
+void editCreateSubgraph();
+void editDelSelection();
+void editReverseSelection();
+void editSelectAll();
+void editDeselectAll();
+
+};
 }
 
 
