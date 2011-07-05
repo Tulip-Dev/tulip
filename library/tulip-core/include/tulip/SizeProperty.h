@@ -56,6 +56,11 @@ public :
   virtual void setNodeValue(const node n, const Size &v);
   virtual void setAllNodeValue(const Size &v);
 
+   /**
+  * @brief Compare sizes of n1 and n2 using their volume.
+  **/
+  int compare(const node n1, const node n2)const;
+
 protected:
   void resetMinMax();
 

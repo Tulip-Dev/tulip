@@ -61,12 +61,12 @@ public :
   /**
     * @brief Specific implementation of AbstractProperty::compare(node n1,node n2)
     **/
-  int compare(node n1,node n2);
+  int compare(node n1,node n2)const;
 
   /**
     * @brief Specific implementation of AbstractProperty::compare(edge e1,edge e2)
     **/
-  int compare(edge e1,edge e2);
+  int compare(edge e1,edge e2)const;
 
 protected:
   virtual void clone_handler(AbstractProperty<IntegerType,IntegerType, IntegerAlgorithm> &);
