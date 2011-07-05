@@ -80,13 +80,6 @@ SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<b
  :FactorNodeIterator(sG,filter), sg(sG), value(val) {
   it=_parentGraph->getNodes();
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // iterator creation is set as critical because they may be used
-  // in parallel loops and there is an implicit GraphObserver addition
-  // which results in concurrent updates of the GraphObserver::observers
-  // data member which are not thread safe
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->addGraphObserver(this);
 #endif
   // anticipate first iteration
@@ -94,10 +87,6 @@ SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<b
 }
 SGraphNodeIterator::~SGraphNodeIterator() {
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // same as iterator creation
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->removeGraphObserver(this);
 #endif
   delete it;
@@ -128,19 +117,11 @@ OutNodesIterator::OutNodesIterator(const Graph *sG, const MutableContainer<bool>
   it = new OutEdgesIterator(sG,filter,n);
 #ifndef NDEBUG
   sg = sG;
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->addGraphObserver(this);
 #endif
 }
 OutNodesIterator::~OutNodesIterator() {
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->removeGraphObserver(this);
 #endif
   delete it;
@@ -162,19 +143,11 @@ InNodesIterator::InNodesIterator(const Graph *sG, const MutableContainer<bool>& 
 										   it(new InEdgesIterator(sG,filter,n)) {
 #ifndef NDEBUG
   sg = sG;
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->addGraphObserver(this);
 #endif
 }
 InNodesIterator::~InNodesIterator() { 
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->removeGraphObserver(this);
 #endif
   delete it; 
@@ -197,19 +170,11 @@ InOutNodesIterator::InOutNodesIterator(const Graph *sG, const MutableContainer<b
 											 n(n) {
 #ifndef NDEBUG
   sg = sG;
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->addGraphObserver(this);
 #endif
 }
 InOutNodesIterator::~InOutNodesIterator() {
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->removeGraphObserver(this);
 #endif
   delete it;
@@ -231,10 +196,6 @@ bool InOutNodesIterator::hasNext() {
 SGraphEdgeIterator::SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val):FactorEdgeIterator(sG,filter), sg(sG), value(val) {
   it=_parentGraph->getEdges();
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->addGraphObserver(this);
 #endif
   // anticipate first iteration
@@ -242,10 +203,6 @@ SGraphEdgeIterator::SGraphEdgeIterator(const Graph *sG, const MutableContainer<b
 }
 SGraphEdgeIterator::~SGraphEdgeIterator() {
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->removeGraphObserver(this);
 #endif
   delete it;
@@ -276,10 +233,6 @@ OutEdgesIterator::OutEdgesIterator(const Graph *sG, const MutableContainer<bool>
   assert(sG->isElement(n));
   it=_parentGraph->getOutEdges(n);
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->addGraphObserver(this);
 #endif
   // anticipate first iteration
@@ -287,10 +240,6 @@ OutEdgesIterator::OutEdgesIterator(const Graph *sG, const MutableContainer<bool>
 }
 OutEdgesIterator::~OutEdgesIterator() {
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->removeGraphObserver(this);
 #endif
   delete it;
@@ -320,10 +269,6 @@ bool OutEdgesIterator::hasNext() {
   assert(sG->isElement(n));
   it=_parentGraph->getInEdges(n);
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->addGraphObserver(this);
 #endif
   // anticipate first iteration
@@ -331,10 +276,6 @@ bool OutEdgesIterator::hasNext() {
 }
 InEdgesIterator::~InEdgesIterator() {
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->removeGraphObserver(this);
 #endif
   delete it;
@@ -364,10 +305,6 @@ bool InEdgesIterator::hasNext() {
   assert(sG->isElement(n));
   it=_parentGraph->getInOutEdges(n);
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->addGraphObserver(this);
 #endif
   // anticipate first iteration
@@ -375,10 +312,6 @@ bool InEdgesIterator::hasNext() {
 }
 InOutEdgesIterator::~InOutEdgesIterator() {
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   _parentGraph->removeGraphObserver(this);
 #endif
   delete it;
@@ -407,26 +340,20 @@ bool InOutEdgesIterator::hasNext() {
 //************************************************************
 //************************************************************
 //============================================================
-  GraphImplNodeIterator::GraphImplNodeIterator(const Graph* g, Iterator<node>* it):
+  GraphImplNodeIterator::GraphImplNodeIterator(const Graph*
+#ifndef NDEBUG
+					       g
+#endif
+					       , Iterator<node>* it):
   itId(it) {
 #ifndef NDEBUG
   graph = (GraphImpl *) g;
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   graph->addGraphObserver(this);
-#else
-  (void)g; //avoid unused parameter warning
 #endif
 }
 GraphImplNodeIterator::~GraphImplNodeIterator(){
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
-//   graph->removeGraphObserver(this);
+  graph->removeGraphObserver(this);
 #endif
   delete itId;
 }
@@ -438,25 +365,19 @@ bool GraphImplNodeIterator::hasNext() {
   return (itId->hasNext());
 }
 //===============================================================
-GraphImplEdgeIterator::GraphImplEdgeIterator(const Graph* g, Iterator<edge>* it):
+GraphImplEdgeIterator::GraphImplEdgeIterator(const Graph*
+#ifndef NDEBUG
+					       g
+#endif
+					     , Iterator<edge>* it):
   itId(it) {
 #ifndef NDEBUG
   graph = (GraphImpl *) g;
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   graph->addGraphObserver(this);
-#else
-  (void)g; //avoid unused parameter warning
 #endif
 }
 GraphImplEdgeIterator::~GraphImplEdgeIterator(){
 #ifndef NDEBUG
-#ifdef _OPENMP
-  // see explanation above
-  #pragma omp critical(addRemoveObserver)
-#endif
   graph->removeGraphObserver(this);
 #endif
   delete itId;

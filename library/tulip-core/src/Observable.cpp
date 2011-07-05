@@ -16,6 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#if _MSC_VER
+// disable Visual Studio warning about using this in base member initializer list
+// this is not critical in our case as we only store a pointer
+#pragma warning(disable: 4355)
+#endif
+
 #include <iostream>
 #include <sstream>
 #include <map>
@@ -86,38 +93,46 @@ namespace tlp {
     //----------------------------------
     OLOObject::OLOObject() {
 #ifdef _OPENMP
-        if (omp_get_thread_num() != 0)
-	  throw OLOException("OLO object creation is only allowed in the main thread");
+#pragma omp critical(OLOGraphUpdate)
 #endif
-        oPointer[n = oGraph.addNode()] = this;
+	{
+		n = oGraph.addNode();
+		oPointer[n] = this;
         oAlive[n]   = true;
 #ifndef NDEBUG
 	sent = received = 0;
 #endif
+	}
         //cout << "[OLO node] created:" << n.id << "::" << this << endl;
     }
     //----------------------------------
   OLOObject::OLOObject(const OLOObject &) {
 #ifdef _OPENMP
-        if (omp_get_thread_num() != 0)
-	  throw OLOException("OLO object creation is only allowed in the main thread");
+#pragma omp critical(OLOGraphUpdate)
 #endif
-        oPointer[n = oGraph.addNode()] = this;
+	{
+		n = oGraph.addNode();
+		oPointer[n] = this;
         oAlive[n]   = true;
 #ifndef NDEBUG
 	sent = received = 0;
 #endif
+	}
         //cout << "[OLO node] created (copy constructor):" << n.id << "::" << this << endl;
     }
     //----------------------------------
     OLOObject& OLOObject::operator=(const OLOObject &) {
-#ifndef DNDEBUG
+#ifndef NDEBUG
         cout << "[OLO Warning]: OLO object should reimplement their operator= else nothing is copied" << endl;
 #endif
         return *this;
     }
     //----------------------------------
     OLOObject::~OLOObject() {
+#ifdef _OPENMP
+#pragma omp critical(OLOGraphUpdate)
+#endif
+	{
         if (!oAlive[n])
             throw OLOException("OLO object has already been deleted, possible double free!!!");
         //cout << "[OLO node] destructor:" << n.id  << "::" << this << endl;
@@ -133,6 +148,7 @@ namespace tlp {
 	    oGraph.delEdges(n);
         }
     }
+}
     //----------------------------------
     Iterator<node> * OLOObject::getInObjects() const {
         return new FilterIterator<node, AliveFilter>(oGraph.getInNodes(n), objectAlive);
@@ -207,14 +223,15 @@ namespace tlp {
     void Observable::treatEvents(const  std::vector<Event> &events ) {
       if (events[0].type() == Event::TLP_DELETE) {
 	observableDestroyed(events[0].sender());
-	return;
-      }
+	} else {
       std::set<Observable*> observables;
       for(size_t k=0; k < events.size(); ++k) {
         observables.insert(events[k].sender());
       }
       update(observables.begin(), observables.end());
     }
+
+}
     //=================================
     void Observable::update(std::set<Observable*>::iterator, std::set<Observable*>::iterator) {
       std::cout << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
@@ -301,6 +318,10 @@ namespace tlp {
     }
     //----------------------------------------
     void Observable::addOnlooker(const Observable &obs, OLOEDGETYPE type) const {
+#ifdef _OPENMP
+#pragma omp critical(OLOGraphUpdate)
+#endif
+	{
         if (!oAlive[n]) {
             throw OLOException("addObserver called on a deleted Observable");
         }
@@ -314,13 +335,14 @@ namespace tlp {
 #ifndef NDEBUG
 	  if (oType[link] & type) {
             cerr << "[OLO Warning]: observer already connected" << endl;
-	    return;
 	  }
 #endif
 	  // add the bit for the given type on the edge
 	  oType[link] |= type;
 	}
     }
+
+}
     //----------------------------------------
     void Observable::addObserver(Observable * const obs) const {
       assert(obs != 0);
@@ -353,7 +375,7 @@ namespace tlp {
             std::stringstream str;
             str << "Maximum number of nested calls (" << RECCALL << ") reached, contact tulip team if that limit is too restrictive";
             throw OLOException(str.str());
-            return;
+		//return;
         }
         node backn = n; /** to keep trace of the node if the observable is deleted during the notification, in that crazy case, (*this) is dead thus n is not accessible*/
         ++notifying;
@@ -438,6 +460,10 @@ namespace tlp {
     }
     //----------------------------------------
     void Observable::removeOnlooker(const Observable &obs, OLOEDGETYPE type) const {
+#ifdef _OPENMP
+#pragma omp critical(OLOGraphUpdate)
+#endif
+	{
         if (!oAlive[n]) {
             throw OLOException("removeOnlooker called on a deleted Observable");
         }
@@ -448,6 +474,7 @@ namespace tlp {
                 oGraph.delEdge(link);
         }
     }
+}
     //----------------------------------------
     void Observable::removeObserver(Observable  * const obs) const {
       if (!oAlive[n]) {
@@ -474,7 +501,9 @@ namespace tlp {
     }
     //----------------------------------------
     void Observable::notifyDestroy() {
-      //std::cout << "notifyDestroy no more useful" << std::endl;
+#ifndef NDEBUG
+	cerr << "[OLO Warning]: no event sent on notifyDestroy" << endl;
+#endif
     }
     //----------------------------------------
     unsigned int Observable::countObservers() const {
