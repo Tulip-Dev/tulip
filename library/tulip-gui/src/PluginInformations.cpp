@@ -4,21 +4,27 @@
 #include <tulip/AbstractPluginInfo.h>
 
 #include <QtCore/QFileInfo>
+#include <tulip/PluginLister.h>
 
 using namespace tlp;
 
-PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list< Dependency >& dependencies, const std::string& library)
-    :_type(type.c_str()), _isLocal(true), _installedVersion(info->getRelease().c_str()), _updateAvailable(false) {
-  _versions << info->getRelease().c_str();
-  PluginInfoWithDependencies pluginInfo(info, dependencies);
-  _infos[info->getName().c_str()] = pluginInfo;
+template <class T, class U>
+static std::list<tlp::Dependency> getPluginDependencies(T* factory, U context) {
+  return StaticPluginLister<T, U>::getPluginDependencies(factory->getName());
 }
 
-PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies, const QString& longDescriptionPath, const QString& iconPath)
+PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::string& library)
+    :_type(type.c_str()), _isLocal(true), _installedVersion(info->getRelease().c_str()), _updateAvailable(false) {
+  _versions << info->getRelease().c_str();
+//   PluginInfoWithDependencies pluginInfo(info, dependencies);
+  _infos[info->getName().c_str()] = info;
+}
+
+PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const QString& longDescriptionPath, const QString& iconPath)
     :_type(type.c_str()), _isLocal(false), _installedVersion(QString::null), _updateAvailable(false) {
   _versions << info->getRelease().c_str();
-  PluginInfoWithDependencies pluginInfo(info, dependencies);
-  _infos[info->getName().c_str()] = pluginInfo;
+//   PluginInfoWithDependencies pluginInfo(info, dependencies);
+  _infos[info->getName().c_str()] = info;
 }
 
 void PluginInformations::AddPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies) {
@@ -28,8 +34,8 @@ void PluginInformations::AddPluginInformations(const tlp::AbstractPluginInfo* in
     }
     
     _versions << newVersion;
-    PluginInfoWithDependencies pluginInfo(info, dependencies);
-    _infos[info->getName().c_str()] = pluginInfo;
+//     PluginInfoWithDependencies pluginInfo(info, dependencies);
+    _infos[info->getName().c_str()] = info;
 }
 
 void PluginInformations::AddPluginInformations(const tlp::PluginInformations* info) {
@@ -42,15 +48,15 @@ void PluginInformations::AddPluginInformations(const tlp::PluginInformations* in
 }
 
 QString PluginInformations::identifier() const{
-  return _infos.begin().value().infos->getName().c_str();
+  return _infos.begin().value()->getName().c_str();
 }
 
 QString PluginInformations::name() const{
-  return _infos.begin().value().infos->getName().c_str();
+  return _infos.begin().value()->getName().c_str();
 }
 
 QString PluginInformations::shortDescription() const{
-  return _infos.begin().value().infos->getInfo().c_str();
+  return _infos.begin().value()->getInfo().c_str();
 }
 
 QString PluginInformations::longDescriptionPath() const{
@@ -69,8 +75,13 @@ QString PluginInformations::type() const{
   return _type;
 }
 
-const QStringList& PluginInformations::dependencies(QString version) const{
-  return _infos[version].dependenciesNames;
+const QStringList& PluginInformations::dependencies(QString version) const {
+  QStringList result;
+  result.reserve(_infos[version]->getDependencies().size());
+  for(std::list<tlp::Dependency>::const_iterator it = _infos[version]->getDependencies().begin(); it != _infos[version]->getDependencies().end(); ++it) {
+    result.append(it->pluginName.c_str());
+  }
+  return result;
 }
 
 const QStringList& PluginInformations::versions() const {

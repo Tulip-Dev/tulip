@@ -292,7 +292,7 @@ protected:
   }
 
   /**
-  * @brief Stores the the facotry, dependencies, and parameters of all the plugins that register into this factory.
+  * @brief Stores the the factory, dependencies, and parameters of all the plugins that register into this factory.
   **/
   std::map<std::string , PluginDescription> plugins;
   
