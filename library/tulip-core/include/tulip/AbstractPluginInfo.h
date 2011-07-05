@@ -23,6 +23,7 @@
 #include <string>
 #include <tulip/tulipconf.h>
 #include <tulip/TlpTools.h>
+#include <tulip/PluginLister.h>
 /**
  * \addtogroup plugins
  */ 
@@ -133,9 +134,16 @@ public:
   virtual int getId() const {
     return 0;
   }
+
+  /**
+  * @brief Returns the dependencies of this factory.
+  *
+  * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The dependencies of this plugin.
+  **/
+  virtual std::list<tlp::Dependency> getDependencies() const = 0;
 };
 
-template<class ObjectType, class Context> class PluginLister;
+template<class ObjectType, class Context> class StaticPluginLister;
 
 template <class PluginObject, class PluginContext>
 class FactoryInterface : public AbstractPluginInfo {
@@ -151,6 +159,15 @@ class FactoryInterface : public AbstractPluginInfo {
       std::cerr << "error from FactoryInterface<" << typeid(PluginObject).name() << ", " << typeid(PluginContext).name() <<">" << std::endl;
       assert(false);
       return NULL;
+    }
+
+  /**
+  * @brief Forwards the call to the appropriate PluginLister.
+  *
+  * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > >
+  **/
+  virtual std::list<tlp::Dependency> getDependencies() const {
+      return tlp::StaticPluginLister<PluginObject, PluginContext>::getPluginDependencies(getName());
     }
   };
  

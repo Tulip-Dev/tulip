@@ -25,10 +25,10 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/AbstractPluginInfo.h>
+#include <tulip/WithDependency.h>
 #include <QMap>
 
 namespace tlp {
-  class Dependency;
 
 /**
   * @brief This implementation of AbstractPluginInfo represents a plugin located on a remote server, thus not yet installed.
@@ -37,8 +37,9 @@ namespace tlp {
   **/
 class TLP_QT_SCOPE DistantPluginInfo : public tlp::AbstractPluginInfo {
 public:
-  DistantPluginInfo(const std::string& author, const std::string& date, const std::string& group, const std::string& name, const std::string& info, const std::string& release, const std::string& tulipRelease)
-  : _author(author), _date(date), _group(group), _name(name), _info(info), _release(release), _tulipRelease(tulipRelease) {
+  DistantPluginInfo(const std::string& author, const std::string& date, const std::string& group, const std::string& name, const std::string& info, const std::string& release,
+                    const std::string& tulipRelease, const std::list<tlp::Dependency> dependencies)
+  : _author(author), _date(date), _group(group), _name(name), _info(info), _release(release), _tulipRelease(tulipRelease), _dependencies(dependencies) {
   }
   virtual std::string getAuthor() const {
     return _author;
@@ -61,6 +62,10 @@ public:
   virtual std::string getTulipRelease() const {
     return _tulipRelease;
   }
+  virtual std::list<tlp::Dependency> getDependencies() const {
+    return _dependencies;
+  }
+  
 private:
   const std::string _author;
   const std::string _date;
@@ -69,19 +74,7 @@ private:
   const std::string _info;
   const std::string _release;
   const std::string _tulipRelease;
-};
-
-struct PluginInfoWithDependencies {
-  PluginInfoWithDependencies() {}
-  
-  PluginInfoWithDependencies(const tlp::AbstractPluginInfo* info, const std::list<tlp::Dependency>& dependencies): infos(info), dependencies(dependencies) {
-    for(std::list<tlp::Dependency>::const_iterator it = dependencies.begin(); it != dependencies.end(); ++it) {
-      dependenciesNames.push_back(it->pluginName.c_str());
-    }
-  }
-  const tlp::AbstractPluginInfo* infos;
-  QStringList dependenciesNames;
-  std::list<tlp::Dependency> dependencies;
+  const std::list<tlp::Dependency> _dependencies;
 };
 
 /**
@@ -97,7 +90,7 @@ class TLP_QT_SCOPE PluginInformations {
      * @param dependencies The dependencies of the plugin.
      * @param library The library file from which the plugin was loaded.
      **/
-    PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies, const std::string& library);
+    PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::string& library);
 
     /**
      * @brief This constructor is used for remote plugin description, the long description and icon's paths are directly provided.
@@ -108,7 +101,7 @@ class TLP_QT_SCOPE PluginInformations {
      * @param longDescriptionPath The URL where the long description resides.
      * @param iconPath The URL where the icon resides.
      **/
-    PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies, const QString& longDescriptionPath, const QString& iconPath);
+    PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const QString& longDescriptionPath, const QString& iconPath);
 
     void AddPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies);
     void AddPluginInformations(const tlp::PluginInformations* info);
@@ -146,7 +139,7 @@ class TLP_QT_SCOPE PluginInformations {
     const QString _installedVersion;
     bool _updateAvailable;
     QStringList _versions;
-    QMap<QString, PluginInfoWithDependencies> _infos;
+    QMap<QString, const tlp::AbstractPluginInfo*> _infos;
 };
 
 }

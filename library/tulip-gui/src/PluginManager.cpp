@@ -22,8 +22,7 @@ QList<tlp::PluginInformations*> PluginManager::pluginsList(Location list) {
       while(plugins->hasNext()) {
         string pluginName = plugins->next();
         const AbstractPluginInfo* info = currentLister->pluginInformations(pluginName);
-        PluginInformations* localinfo = new PluginInformations(info, currentLister->getPluginsClassName(),
-                                                                             currentLister->getPluginDependencies(pluginName), currentLister->getPluginLibrary(pluginName));
+        PluginInformations* localinfo = new PluginInformations(info, currentLister->getPluginsClassName(), currentLister->getPluginLibrary(pluginName));
         result[pluginName.c_str()] = localinfo;
       }
       delete plugins;
@@ -85,18 +84,18 @@ LocationPlugins PluginManager::parseDescription(const QString& xmlDescription) {
     const std::string group = childElement.attribute("group").toStdString();
     const std::string tulipRelease = childElement.attribute("tulipRelease").toStdString();
 
-    tlp::AbstractPluginInfo* pluginInfo = new DistantPluginInfo(author, date, group, name, info, release, tulipRelease);
     std::list<tlp::Dependency> dependencies;
     for(QDomNode n = child.firstChild(); !n.isNull(); n = n.nextSibling()) {
       QDomElement dependencyElement = n.toElement();
       tlp::Dependency dep(dependencyElement.attribute("name").toStdString(), dependencyElement.attribute("type").toStdString(), dependencyElement.attribute("version").toStdString());
       dependencies.push_back(dep);
     }
+    tlp::AbstractPluginInfo* pluginInfo = new DistantPluginInfo(author, date, group, name, info, release, tulipRelease, dependencies);
     
     //TODO fill these values from the location
     QString longDescriptionPath;
     QString iconPath;
-    PluginInformations* pluginInformations = new PluginInformations(pluginInfo, type, dependencies, longDescriptionPath, iconPath);
+    PluginInformations* pluginInformations = new PluginInformations(pluginInfo, type, longDescriptionPath, iconPath);
 
 //     PluginInfoWithDependencies infos(pluginInfo, dependencies);
     remotePlugins[pluginInfo->getName().c_str()] = pluginInformations;
