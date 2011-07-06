@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>958</width>
-    <height>786</height>
+    <width>956</width>
+    <height>784</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -111,8 +111,8 @@ QToolButton:pressed {
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>690</width>
-          <height>611</height>
+          <width>688</width>
+          <height>609</height>
          </rect>
         </property>
        </widget>
@@ -146,6 +146,9 @@ QToolButton:pressed {
          </property>
          <property name="text">
           <string>Open project</string>
+         </property>
+         <property name="shortcut">
+          <string>Ctrl+O</string>
          </property>
         </widget>
        </item>
@@ -259,7 +262,7 @@ p, li { white-space: pre-wrap; }
            <x>0</x>
            <y>0</y>
            <width>238</width>
-           <height>324</height>
+           <height>323</height>
           </rect>
          </property>
         </widget>

@@ -25,6 +25,7 @@ public:
 
 signals:
   void openPerspective(QString);
+  void openProject();
 
 protected slots:
   void rssReply(QNetworkReply *);

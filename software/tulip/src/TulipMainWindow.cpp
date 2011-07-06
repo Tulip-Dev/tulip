@@ -48,6 +48,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(_systemTrayIcon,SIGNAL(messageClicked()),this,SLOT(systemTrayMessageClicked()));
   connect(_ui->pages,SIGNAL(currentChanged(int)),this,SLOT(pageSwitched(int)));
   connect(_ui->welcomePage,SIGNAL(openPerspective(QString)),this,SLOT(CreatePerspective(QString)));
+  connect(_ui->welcomePage,SIGNAL(openProject()),this,SLOT(ShowOpenProjectWindow()));
 }
 
 TulipMainWindow::~TulipMainWindow() {

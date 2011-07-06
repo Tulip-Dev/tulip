@@ -23,6 +23,7 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
   //Finalize Ui
   connect(_ui->websiteLabel,SIGNAL(linkActivated(QString)),this,SLOT(openLink(QString)));
   _ui->openProjectButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DirHomeIcon));
+  connect(_ui->openProjectButton,SIGNAL(clicked()),this,SIGNAL(openProject()));
 
   // Fetch RSS
   _ui->rssScroll->setVisible(false);
