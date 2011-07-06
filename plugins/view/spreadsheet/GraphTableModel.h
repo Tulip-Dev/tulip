@@ -219,6 +219,10 @@ private:
             }else{
                 beginRemoveColumns(QModelIndex(),(*it),(*it));
             }
+            //Update objToIndex map
+            for(int i = *it+1 ; i < vect.size() ; ++i){
+                objToIndexes[vect[i]] = i-1;
+            }
             vect.erase(vect.begin()+(*it));
 
             if(deleteRows){
