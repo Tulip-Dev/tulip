@@ -29,6 +29,7 @@ QT4_WRAP_UI(UI_HEADERS
   designer/PluginInformationsListItem.ui
   designer/DetailedPluginInformationsWidget.ui
   designer/TulipPerspectiveCrashHandler.ui
+  designer/PerspectiveSelectionDialog.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS

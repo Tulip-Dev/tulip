@@ -1,6 +1,7 @@
 #include "TulipMainWindow.h"
 
 #include <QtGui/QMenu>
+#include <QtGui/QFileDialog>
 #include <QtGui/QCloseEvent>
 #include <QtCore/QFile>
 #include <QtCore/QProcess>
@@ -8,9 +9,14 @@
 
 #include <tulip/TlpTools.h>
 #include <tulip/TulipRelease.h>
+#include <tulip/TulipProject.h>
+#include <QtGui/QScrollArea>
 
+#include "ui_PerspectiveSelectionDialog.h"
 #include "ui_TulipMainWindow.h"
 #include "TulipPerspectiveProcessHandler.h"
+#include "TulipWelcomePage.h"
+#include "PerspectiveItemWidget.h"
 
 TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new Ui::TulipMainWindowData()), _systemTrayIcon(0) {
   _ui->setupUi(this);
@@ -139,15 +145,29 @@ void TulipMainWindow::CreatePerspective(const QString &name) {
 }
 
 void TulipMainWindow::ShowOpenProjectWindow() {
-
+  setVisible(true);
+  QString filePath = QFileDialog::getOpenFileName(this,trUtf8("Choose a Tulip project to open with its associated perspective. Or select a external file format to import."),QDir::homePath(),".tlpx");
+  if (filePath.isEmpty())
+    return;
+  OpenProject(filePath);
 }
 
 void TulipMainWindow::OpenProject(const QString &file) {
-
+  tlp::TulipProject *project = tlp::TulipProject::openProject(file);
+  if (!project->isValid()) {
+    setVisible(true);
+    PerspectiveSelectionDialog dlg(this);
+    dlg.exec();
+    if (!dlg.selectedPerspectiveName.isNull())
+      OpenProjectWith(file,dlg.selectedPerspectiveName,QVariantMap());
+  }
+  else
+    OpenProjectWith(file, project->perspective(),QVariantMap());
+  delete project;
 }
 
 void TulipMainWindow::OpenProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters) {
-
+  TulipPerspectiveProcessHandler::instance().createPerspective(perspective,file,parameters);
 }
 
 QStringList TulipMainWindow::GetCompatiblePerspectives(const QString &file) {
@@ -156,4 +176,16 @@ QStringList TulipMainWindow::GetCompatiblePerspectives(const QString &file) {
 
 void TulipMainWindow::EnableCrashHandling(const QString &folder, qlonglong pid) {
   TulipPerspectiveProcessHandler::instance().enableCrashHandling(pid,folder);
+}
+
+PerspectiveSelectionDialog::PerspectiveSelectionDialog(QWidget *parent): QDialog(parent) {
+  Ui::PerspectiveSelectionDialogData *ui = new Ui::PerspectiveSelectionDialogData;
+  ui->setupUi(this);
+  ui->perspectiveDialogScrollContents->setLayout(TulipWelcomePage::buildPerspectiveListLayout(this,SLOT(perspectiveSelected())));
+}
+
+void PerspectiveSelectionDialog::perspectiveSelected() {
+  PerspectiveItemWidget *item = static_cast<PerspectiveItemWidget *>(sender());
+  selectedPerspectiveName = item->perspectiveId();
+  close();
 }
