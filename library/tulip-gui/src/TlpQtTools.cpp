@@ -33,6 +33,8 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
+#include <tulip/SystemDefinition.h>
+
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
  */
@@ -122,6 +124,7 @@ bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QCo
 #endif
 }
 
+<<<<<<< HEAD
 QString propertyTypeToPropertyTypeLabel(const string& typeName) {
   map<string,QString>::const_iterator  it = propertyTypeToPropertyTypeLabelMap.find(typeName);
   return it != propertyTypeToPropertyTypeLabelMap.end()?it->second:QString();
@@ -131,4 +134,9 @@ string propertyTypeLabelToPropertyType(const QString& typeNameLabel) {
   map<QString,string>::const_iterator  it = propertyTypeLabelToPropertyTypeMap.find(typeNameLabel);
   return it != propertyTypeLabelToPropertyTypeMap.end()?it->second:string();
 }
+
+QString getPluginPackageName(const QString& pluginName) {
+  return pluginName.toLower() + /*"-" + info->getRelease().c_str() +*/ "-" + TULIP_RELEASE + "-" + OS_PLATFORM + OS_ARCHITECTURE + "-" + OS_COMPILER + ".zip";
+}
+
 }

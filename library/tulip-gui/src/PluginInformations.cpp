@@ -3,10 +3,10 @@
 #include <tulip/WithDependency.h>
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/PluginLister.h>
-#include <tulip/SystemDefinition.h>
 #include <tulip/TulipRelease.h>
 
 #include <QtCore/QFileInfo>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
@@ -23,7 +23,7 @@ PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, cons
 }
 
 PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const QString& basePath)
-  :_type(type.c_str()), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null), _updateAvailable(false) {
+  :_type(type.c_str()), _iconPath(basePath + "/icon.png"), _longDescriptionPath(basePath + "/html/index.html"), _isLocal(false), _installedVersion(QString::null), _updateAvailable(false), _remoteLocation(basePath) {
   _versions << info->getRelease().c_str();
 //   PluginInfoWithDependencies pluginInfo(info, dependencies);
   _infos[info->getName().c_str()] = info;
@@ -111,12 +111,7 @@ bool PluginInformations::updateAvailable() const {
 }
 
 bool PluginInformations::fetch(QString version) const {
-  const QString platform(OS_PLATFORM);
-  const QString architecture(OS_ARCHITECTURE);
-  const QString compiler(OS_COMPILER);
-  const QString tulipVersion = TULIP_RELEASE;
-  const QString archiveName = name().toLower() + /*"-" + info->getRelease().c_str() +*/ "-" + tulipVersion + "-" + platform + architecture + "-" + compiler + ".zip";
-
+  const QString archiveName = tlp::getPluginPackageName(name());
   return false;
 }
 

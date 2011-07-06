@@ -110,6 +110,15 @@ inline QString propertyInterfaceToPropertyTypeLabel(const tlp::PropertyInterface
   * By example for a property of type "double" the label displayed in the GUI will be "Metric".
   **/
 TLP_QT_SCOPE std::string propertyTypeLabelToPropertyType(const QString& typeNameLabel);
+
+/**
+    * @brief Gets the name of the package to retrieve for this version of tulip.
+    * The package name uses the Tulip release, platform (windows, unix, ...), architecture (x86, x86_64), and compiler used (GCC, Clang, MSVC) to determine which package this version can use.
+    *
+    * @param pluginName The name of the plugin for which we want the package name.
+    **/
+  TLP_QT_SCOPE QString getPluginPackageName(const QString& pluginName);
+
 }
 
 #endif

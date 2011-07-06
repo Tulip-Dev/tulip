@@ -30,6 +30,7 @@
 #include <tulip/QuaZIPFacade.h>
 
 #include <fcntl.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -108,11 +109,6 @@ int main(int argc,char **argv) {
     exit(0);
   }
 
-  QString platform(OS_PLATFORM);
-  QString architecture(OS_ARCHITECTURE);
-  QString compiler(OS_COMPILER);
-  QString tulipVersion = TULIP_RELEASE;
-
   QString destinationDir;
 
   if(argc < 3) {
@@ -154,7 +150,7 @@ int main(int argc,char **argv) {
 
     QString pluginSimplifiedName = component.simplified().remove(' ').toLower();
 
-    QString archiveName = pluginSimplifiedName + /*"-" + info->getRelease().c_str() +*/ "-" + tulipVersion + "-" + platform + architecture + "-" + compiler + ".zip";
+    QString archiveName = tlp::getPluginPackageName(pluginSimplifiedName);
 
     QDir pluginDir(destinationDir + "/");
     pluginDir.mkdir(pluginSimplifiedName);
