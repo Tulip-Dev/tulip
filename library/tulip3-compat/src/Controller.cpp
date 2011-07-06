@@ -73,8 +73,10 @@ void Controller::construct() {
     _lastUsedSavePath = _externalFile;
     g = tlp::importGraph("tlp",importData,&progress);
 
-    if (!g)
+    if (!g) {
       g = tlp::newGraph();
+      initializeGraph(g);
+    }
 
     if(importData.exist("controller")) {
       DataSet tmp;
