@@ -83,24 +83,24 @@ private:
 class TLP_QT_SCOPE PluginInformations {
 public:
   /**
-   * @brief This constructor is used for local plugin description, and the library is used to determine the path of the icon and long description.
-   *
-   * @param info The AbstractPluginInfo representing the plugin to describe.
-   * @param type The type of the plugin.
-   * @param dependencies The dependencies of the plugin.
-   * @param library The library file from which the plugin was loaded.
-   **/
+    * @brief This constructor is used for local plugin description, and the library is used to determine the path of the icon and long description.
+    *
+    * @param info The AbstractPluginInfo representing the plugin to describe.
+    * @param type The type of the plugin.
+    * @param dependencies The dependencies of the plugin.
+    * @param library The library file from which the plugin was loaded.
+    **/
   PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::string& library);
 
   /**
-   * @brief This constructor is used for remote plugin description, the long description and icon's paths are directly provided.
-   *
-   * @param info The AbstractPluginInfo representing the plugin to describe.
-   * @param type The type of the plugin.
-   * @param dependencies The dependencies of the plugin.
-   * @param longDescriptionPath The URL where the long description resides.
-   * @param iconPath The URL where the icon resides.
-   **/
+    * @brief This constructor is used for remote plugin description, the long description and icon's paths are directly provided.
+    *
+    * @param info The AbstractPluginInfo representing the plugin to describe.
+    * @param type The type of the plugin.
+    * @param dependencies The dependencies of the plugin.
+    * @param longDescriptionPath The URL where the long description resides.
+    * @param iconPath The URL where the icon resides.
+    **/
   PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const QString& basePath);
 
   void AddPluginInformations(const tlp::AbstractPluginInfo* info);
@@ -109,12 +109,8 @@ public:
   QString identifier() const;
   //TODO this should be a displayname, not the name used to register into the plugin system
   QString name() const;
-  QString author() const {
-    return "author";
-  }
-  QString group() const {
-    return "group";
-  }
+  QString author() const { return "author"; }
+  QString group() const { return "group"; }
 
   QString shortDescription() const;
   QString longDescriptionPath() const;
@@ -125,9 +121,7 @@ public:
   QString type() const;
   const QStringList dependencies(QString version) const;
   const QStringList& versions() const;
-  QString latestVersion() const {
-    return "latestVersion";
-  }
+  QString latestVersion() const { return "latestVersion"; }
 
   QString installedVersion() const;
   bool isInstalled(QString version) const;
@@ -144,6 +138,7 @@ private:
   const bool _isLocal;
   const QString _installedVersion;
   bool _updateAvailable;
+  const QString _remoteLocation;
   QStringList _versions;
   QMap<QString, const tlp::AbstractPluginInfo*> _infos;
 };
