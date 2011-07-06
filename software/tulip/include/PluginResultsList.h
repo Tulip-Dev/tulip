@@ -2,11 +2,13 @@
 #define PLUGINRESULTSLIST_H
 
 #include <QtGui/QScrollArea>
+#include <QtCore/QMap>
 
 namespace tlp {
 class PluginManager;
 class PluginInformations;
 }
+class PluginInformationsListItem;
 
 class PluginResultsList : public QScrollArea {
   Q_OBJECT
@@ -18,6 +20,7 @@ public slots:
   void setTypeFilter(const QStringList &,bool autoRefresh=true);
   void setTypeFilter(const QString &,bool autoRefresh=true);
   void setNameFilter(const QString &,bool autoRefresh=true);
+  void initPluginsCache();
   void refreshResults();
 
 protected slots:
@@ -36,9 +39,11 @@ private:
   tlp::PluginManager *_pluginManager;
   QWidget *_focusedItem;
   QWidget *_resultsListCache;
+  QMap<tlp::PluginInformations *,PluginInformationsListItem *> _pluginWidgetsCache;
 
   QStringList _typeFilter;
   QString _nameFilter;
+
 
 };
 

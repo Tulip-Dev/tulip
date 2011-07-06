@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>877</width>
-    <height>480</height>
+    <width>875</width>
+    <height>478</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -212,29 +212,13 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
          </property>
          <item>
           <property name="text">
-           <string>Categories</string>
+           <string>All</string>
           </property>
           <property name="font">
            <font>
             <weight>75</weight>
             <bold>true</bold>
            </font>
-          </property>
-          <property name="flags">
-           <set>ItemIsEnabled</set>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="flags">
-           <set>NoItemFlags</set>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>All</string>
           </property>
           <property name="icon">
            <iconset>
@@ -673,8 +657,8 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>711</width>
-                <height>192</height>
+                <width>709</width>
+                <height>190</height>
                </rect>
               </property>
               <property name="styleSheet">
@@ -746,8 +730,8 @@ background-color: white;
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>711</width>
-              <height>429</height>
+              <width>98</width>
+              <height>28</height>
              </rect>
             </property>
            </widget>
