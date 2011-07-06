@@ -456,7 +456,7 @@ struct QParamDialog : public QDialog {
 		while( defIt->hasNext() ) {
 			IParam ip;
       ip.name     = defIt->next();;
-			ip.typeName = inDef->getValue(ip.name);
+			ip.typeName = inDef->getTypeName(ip.name);
 			ip.helpText = inDef->getHelp(ip.name);
 			// first part of the parameter name may be used
 			// to indicate a subtype
