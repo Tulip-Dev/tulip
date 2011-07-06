@@ -27,41 +27,43 @@ const std::string SLIDER_TEXTURE_NAME = "cylinderTexture.png";
 
 namespace tlp {
 /**
- * 	This class allows to display a progress bar in OpenGL
+ *  This class allows to display a progress bar in OpenGL
  */
 class TLP_GL_SCOPE GlProgressBar : public GlComposite, public SimplePluginProgress {
 
 public :
 
-	/**
-	 * GlProgressBar constructor
-	 * \param centerPosition the position of the center of the frame containing the progress bar
-	 * \param width the width of the frame containing the progress bar
-	 * \param height the height of the frame containing the progress bar
-	 * \param color the color of the progress bar
-	 */
-	GlProgressBar(const Coord &centerPosition, const unsigned int width, const unsigned int height, const Color &color);
-	~GlProgressBar();
+  /**
+   * GlProgressBar constructor
+   * \param centerPosition the position of the center of the frame containing the progress bar
+   * \param width the width of the frame containing the progress bar
+   * \param height the height of the frame containing the progress bar
+   * \param color the color of the progress bar
+   */
+  GlProgressBar(const Coord &centerPosition, const unsigned int width, const unsigned int height, const Color &color);
+  ~GlProgressBar();
 
-	/**
-	 * This method allow to set a comment message above the progress bar
-	 * \param msg the text of the comment to display
-	 */
-	void setComment(const std::string& msg) {comment = msg;}
-    protected:
-        void progress_handler(int step, int max_step);
+  /**
+   * This method allow to set a comment message above the progress bar
+   * \param msg the text of the comment to display
+   */
+  void setComment(const std::string& msg) {
+    comment = msg;
+  }
+protected:
+  void progress_handler(int step, int max_step);
 
 private :
 
-	float width, height;
-	Color color, percentLabelAndFrameColor;
-	float progressBarMaxWidth, progressBarHeight;
-	float commentWidth, commentHeight;
-	Coord progressBarTLCorner;
-	Coord commentLabelCenter;
+  float width, height;
+  Color color, percentLabelAndFrameColor;
+  float progressBarMaxWidth, progressBarHeight;
+  float commentWidth, commentHeight;
+  Coord progressBarTLCorner;
+  Coord commentLabelCenter;
 
-	unsigned int currentPercent;
-	std::string comment;
+  unsigned int currentPercent;
+  std::string comment;
 };
 
 }

@@ -25,14 +25,14 @@
 #include <QtCore/QDateTime>
 
 namespace {
-  static const char * paramHelp[] = {
-    // directory
-    HTML_HELP_OPEN()				    \
-    HTML_HELP_DEF( "type", "directory pathname" )		    \
-    HTML_HELP_BODY()						      \
-    "The root directory of the filesystem part to import."	      \
-    HTML_HELP_CLOSE(),
-  };
+static const char * paramHelp[] = {
+  // directory
+  HTML_HELP_OPEN()            \
+  HTML_HELP_DEF( "type", "directory pathname" )       \
+  HTML_HELP_BODY()                  \
+  "The root directory of the filesystem part to import."        \
+  HTML_HELP_CLOSE(),
+};
 }
 
 /** \addtogroup import */
@@ -46,7 +46,7 @@ public:
   FileSystem(tlp::AlgorithmContext context):ImportModule(context) {
     addParameter<std::string>("dir::directory", paramHelp[0]);
   }
-  ~FileSystem(){}
+  ~FileSystem() {}
 
   bool import() {
     if (dataSet == 0)
@@ -55,6 +55,7 @@ public:
     std::string rootPathStr;
     dataSet->get("dir::directory",rootPathStr);
     QFileInfo rootInfo(rootPathStr.c_str());
+
     if (!rootInfo.exists())
       return false;
 
@@ -73,10 +74,12 @@ public:
     _suffixes = graph->getProperty<tlp::StringProperty>("Suffix");
 
     tlp::node rootNode = addFileNode(rootInfo,graph);
+
     if (!rootInfo.isDir())
       return true;
 
     bool deleteProgress=false;
+
     if (!pluginProgress) {
       deleteProgress=true;
       pluginProgress = new tlp::SimplePluginProgress;
@@ -85,6 +88,7 @@ public:
     pluginProgress->progress(0,100);
     QStack<QPair<QString,tlp::node> > fsStack;
     fsStack.push(QPair<QString,tlp::node>(rootInfo.absoluteFilePath(),rootNode));
+
     while (!fsStack.empty()) {
       QPair<QString,tlp::node> elem = fsStack.pop();
       QDir currentDir(QDir(elem.first));
@@ -95,11 +99,13 @@ public:
       QFileInfoList entries(currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst));
 
       int i=0;
+
       for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
         pluginProgress->progress(i++,entries.size());
         QFileInfo fileInfos(*it);
         tlp::node fileNode=addFileNode(fileInfos, graph);
         graph->addEdge(parentNode,fileNode);
+
         if (fileInfos.isDir())
           fsStack.push_back(QPair<QString,tlp::node>(fileInfos.absoluteFilePath(),fileNode));
       }

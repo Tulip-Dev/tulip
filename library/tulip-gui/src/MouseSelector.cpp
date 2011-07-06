@@ -33,7 +33,7 @@ using namespace tlp;
 
 //==================================================================
 MouseSelector::MouseSelector(Qt::MouseButton button,
-			     Qt::KeyboardModifier modifier):
+                             Qt::KeyboardModifier modifier):
   mButton(button), kModifier(modifier), x(0),y(0),w(0),h(0),
   started(false),graph(0) {
 }
@@ -42,9 +42,10 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+
     if (qMouseEv->buttons()== mButton &&
         (kModifier == Qt::NoModifier ||
-            ((QMouseEvent *) e)->modifiers() & kModifier)) {
+         ((QMouseEvent *) e)->modifiers() & kModifier)) {
       if (!started) {
         x = qMouseEv->x();
         y = qMouseEv->y();
@@ -61,33 +62,42 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
           return false;
         }
       }
+
       return true;
     }
-    if (qMouseEv->buttons()==Qt::MidButton){
+
+    if (qMouseEv->buttons()==Qt::MidButton) {
       started = false;
       glMainWidget->redraw();
       return true;
     }
   }
+
   if  (e->type() == QEvent::MouseMove &&
-      ((((QMouseEvent *) e)->buttons() & mButton) &&
-          (kModifier == Qt::NoModifier ||
-              ((QMouseEvent *) e)->modifiers() & kModifier))) {
+       ((((QMouseEvent *) e)->buttons() & mButton) &&
+        (kModifier == Qt::NoModifier ||
+         ((QMouseEvent *) e)->modifiers() & kModifier))) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;
       started=false;
     }
-    if (started){
+
+    if (started) {
       int clampedX=qMouseEv->x();
       int clampedY=qMouseEv->y();
+
       if(clampedX<0)
         clampedX=0;
+
       if(clampedY<0)
         clampedY=0;
+
       if(clampedX>glMainWidget->width())
         clampedX=glMainWidget->width();
+
       if(clampedY>glMainWidget->height())
         clampedY=glMainWidget->height();
 
@@ -96,133 +106,168 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
       glMainWidget->redraw();
       return true;
     }
+
     return false;
   }
+
   if  (e->type() == QEvent::MouseButtonRelease) {
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+
     if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
       graph=0;
       started=false;
       return false;
     }
+
     if (started) {
       Observable::holdObservers();
       BooleanProperty* selection=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
       bool revertSelection = false; // add to selection
       bool boolVal = true;
       bool needPush = true; // undo management
+
       if (mousePressModifier !=
 #if defined(__APPLE__)
           Qt::AltModifier
 #else
           Qt::ControlModifier
 #endif
-      ) {
+         ) {
         if (mousePressModifier == Qt::ShiftModifier && kModifier != Qt::ShiftModifier)
           boolVal = false;
         else {
-          if(selection->getNodeDefaultValue()==true || selection->getEdgeDefaultValue()==true){
+          if(selection->getNodeDefaultValue()==true || selection->getEdgeDefaultValue()==true) {
             graph->push();
             selection->setAllNodeValue(false);
             selection->setAllEdgeValue(false);
             needPush=false;
           }
+
           Iterator<node>* itn = selection->getNonDefaultValuatedNodes();
+
           if (itn->hasNext()) {
-            if(needPush){
+            if(needPush) {
               graph->push();
               needPush = false;
             }
+
             delete itn;
             selection->setAllNodeValue(false);
-          } else
+          }
+          else
             delete itn;
+
           Iterator<edge>* ite = selection->getNonDefaultValuatedEdges();
+
           if (ite->hasNext()) {
             if (needPush) {
               graph->push();
               needPush = false;
             }
+
             delete ite;
             selection->setAllEdgeValue(false);
-          } else
+          }
+          else
             delete ite;
         }
-      } else {
+      }
+      else {
         boolVal = true;
       }
+
       if ((w==0) && (h==0)) {
         node tmpNode;
         edge tmpEdge;
         ElementType type;
         bool result = glMainWidget->doSelect(x, y, type, tmpNode, tmpEdge);
+
         if (result) {
           switch(type) {
           case NODE:
             result = selection->getNodeValue(tmpNode);
+
             if (revertSelection || boolVal != result) {
               if (needPush) {
                 graph->push();
                 needPush = false;
               }
+
               selection->setNodeValue(tmpNode, !result);
             }
+
             break;
           case EDGE:
             result = selection->getEdgeValue(tmpEdge);
+
             if (revertSelection || boolVal != result) {
               if (needPush) {
                 graph->push();
                 needPush = false;
               }
+
               selection->setEdgeValue(tmpEdge, !result);
             }
+
             break;
           }
         }
-      } else {
+      }
+      else {
         vector<node> tmpSetNode;
         vector<edge> tmpSetEdge;
+
         if (w < 0) {
           w *= -1;
           x -= w;
         }
+
         if (h<0) {
           h *= -1;
           y -= h;
         }
+
         glMainWidget->doSelect(x, y, w, h, tmpSetNode, tmpSetEdge);
+
         if (needPush)
           graph->push();
+
         vector<node>::const_iterator it;
+
         for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
           selection->setNodeValue(*it,
-              revertSelection ?
-                  !selection->getNodeValue(*it)
-                  : boolVal);
+                                  revertSelection ?
+                                  !selection->getNodeValue(*it)
+                                  : boolVal);
         }
+
         vector<edge>::const_iterator ite;
+
         for (ite=tmpSetEdge.begin(); ite!=tmpSetEdge.end(); ++ite) {
           selection->setEdgeValue(*ite,
-              revertSelection ?
-                  !selection->getEdgeValue(*ite)
-                  : boolVal);
+                                  revertSelection ?
+                                  !selection->getEdgeValue(*ite)
+                                  : boolVal);
         }
       }
-      started = false;      
+
+      started = false;
       Observable::unholdObservers();
       return true;
     }
   }
+
   return false;
 }
 //==================================================================
-bool MouseSelector::draw(GlMainWidget *glMainWidget){
+bool MouseSelector::draw(GlMainWidget *glMainWidget) {
   if (!started) return false;
+
   if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
     graph = 0;
     started = false;
   }
+
   float yy = glMainWidget->height() - y;
   glPushAttrib(GL_ALL_ATTRIB_BITS);
   glMatrixMode (GL_PROJECTION);
@@ -237,26 +282,30 @@ bool MouseSelector::draw(GlMainWidget *glMainWidget){
   glDisable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA,GL_SRC_COLOR);
-  float col[4]={0,0,0,0.2};
+  float col[4]= {0,0,0,0.2};
+
   if (mousePressModifier ==
 #if defined(__APPLE__)
-            Qt::AltModifier
+      Qt::AltModifier
 #else
-            Qt::ControlModifier
+      Qt::ControlModifier
 #endif
-        ){
+     ) {
     col[0]=1.;
     col[1]=0.8;
     col[2]=1.;
-  }else if(mousePressModifier == Qt::ShiftModifier){
+  }
+  else if(mousePressModifier == Qt::ShiftModifier) {
     col[0]=1.;
     col[1]=.7;
     col[2]=.7;
-  }else{
+  }
+  else {
     col[0]=0.8;
     col[1]=0.8;
     col[2]=0.7;
   }
+
   setColor(col);
   glBegin(GL_QUADS);
   glVertex2f(x, yy);

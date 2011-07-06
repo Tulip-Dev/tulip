@@ -39,37 +39,37 @@ namespace {
 }
 
 namespace {
-  static const char * paramHelp[] = {
-    // filename
-    HTML_HELP_OPEN()				    \
-    HTML_HELP_DEF( "type", "pathname" )		    \
-    HTML_HELP_BODY()						      \
-    "This parameter defines the file pathname to import."	      \
-    HTML_HELP_CLOSE(),
-  };
+static const char * paramHelp[] = {
+  // filename
+  HTML_HELP_OPEN()            \
+  HTML_HELP_DEF( "type", "pathname" )       \
+  HTML_HELP_BODY()                  \
+  "This parameter defines the file pathname to import."       \
+  HTML_HELP_CLOSE(),
+};
 }
 
 /** \addtogroup import */
 /*@{*/
 /** This plugin enables to import a graph coded with in dot format
  *
- *  File format: 
+ *  File format:
  *     [ http://www.research.att.com/sw/tools/graphviz/ ]
  *
- *	First (quick) support of the AT&T DOT language
+ *  First (quick) support of the AT&T DOT language
  *        - main graph entities are extracted (node/edges)
- *	  - subgraphs are not already supported
- *  	  - several attributes (node & edge) are supported
- *	  - based on a modified grammar file available with the graphviz software
- *	  - this parser can be largely optimized ...
+ *    - subgraphs are not already supported
+ *      - several attributes (node & edge) are supported
+ *    - based on a modified grammar file available with the graphviz software
+ *    - this parser can be largely optimized ...
  *
  */
 class DotImport:public ImportModule {
 public:
-  DotImport(AlgorithmContext context):ImportModule(context){
+  DotImport(AlgorithmContext context):ImportModule(context) {
     addParameter<string>("file::filename",paramHelp[0]);
   }
-  ~DotImport(){}
+  ~DotImport() {}
 
   bool import() {
 
@@ -77,18 +77,22 @@ public:
     string fn;
     dataSet->get( "file::filename", fn );
     FILE * fd = fopen( fn.c_str(), "r" );
+
     if( !fd ) {
       if (pluginProgress)
-	pluginProgress->setError(strerror(errno));
+        pluginProgress->setError(strerror(errno));
+
       return false;
     }
 
-    // Create & Init YY global data 
+    // Create & Init YY global data
     DOT_YY _dotyy(fd, graph, pluginProgress);
+
     if (pluginProgress) {
       pluginProgress->showPreview(false);
       pluginProgress->progress(1, 100000);
     }
+
     dotyy = &_dotyy;
     yyrestart( fd );
     yyparse();

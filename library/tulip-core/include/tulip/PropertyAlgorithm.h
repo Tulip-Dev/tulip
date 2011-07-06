@@ -22,8 +22,8 @@
  Email : auber@labri.fr
  Last modification : 20/08/2001
  This program is free software; you can redistribute it and/or modify  *
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 
@@ -41,7 +41,7 @@ namespace tlp {
 
 /**
  * \addtogroup plugins
- */ 
+ */
 /*@{*/
 ///
 /**
@@ -60,18 +60,20 @@ public :
     dataSet(context.dataSet) {
   }
   ///
-  virtual ~PropertyAlgorithm(){}
-  
+  virtual ~PropertyAlgorithm() {}
+
   /**
    * @brief Runs the algorithm.
    * It is a good practice to report progress through the PluginProgress, Even if your algorithm is very fast.
    * Keep in mind that Tulip can handle very large graphs.
    * The PluginProgress should also be used to report errors, if any.
-   * 
+   *
    * @return bool Whether the algorithm execution was sucessfull or not.
    **/
-  virtual bool run() {return true;}
-  
+  virtual bool run() {
+    return true;
+  }
+
   /**
    * @brief Checks whether the algorithm can ru on this Graph or not.
    * If not, the reason why should be reported through the PluginProgress.
@@ -79,7 +81,10 @@ public :
    * @param errorMessage A string whose value will be modified to an error message, if the check fails.
    * @return bool Whether the plug-in can run on this Graph.
    **/
-  virtual bool check(std::string &errorMessage) { (void)errorMessage; return true;}
+  virtual bool check(std::string &errorMessage) {
+    (void)errorMessage;
+    return true;
+  }
   ///
   bool preservePropertyUpdates(PropertyInterface* prop) {
     return graph->nextPopKeepPropertyUpdates(prop);
@@ -92,13 +97,13 @@ public :
 
 template<class Property>
 class TLP_SCOPE TemplateAlgorithm : public PropertyAlgorithm {
-  public:
-    Property* result;
-    virtual ~TemplateAlgorithm(){}
-  protected:
-    TemplateAlgorithm (const tlp::PropertyContext  &context) : tlp::PropertyAlgorithm(context) {
-      result = (Property*)context.propertyProxy;
-    }
+public:
+  Property* result;
+  virtual ~TemplateAlgorithm() {}
+protected:
+  TemplateAlgorithm (const tlp::PropertyContext  &context) : tlp::PropertyAlgorithm(context) {
+    result = (Property*)context.propertyProxy;
+  }
 };
 
 class SizeProperty;

@@ -19,12 +19,14 @@ void PluginResultsList::setTypeFilter(const QString &s,bool autoRefresh) {
 
 void PluginResultsList::setTypeFilter(const QStringList &lst,bool autoRefresh) {
   _typeFilter = lst;
+
   if (autoRefresh)
     refreshResults();
 }
 
 void PluginResultsList::setNameFilter(const QString &s,bool autoRefresh) {
   _nameFilter = s;
+
   if (autoRefresh)
     refreshResults();
 }
@@ -41,21 +43,27 @@ void PluginResultsList::refreshResults() {
     item->setParent(0);
     // apply filters
     bool typeMatches=false, nameMatches=false;
+
     if (_typeFilter.isEmpty()) typeMatches = true;
     else {
       QString f;
       foreach(f,_typeFilter)
-        if (infos->type().startsWith(f)) typeMatches = true;
+
+      if (infos->type().startsWith(f)) typeMatches = true;
     }
+
     if (_nameFilter.isEmpty() || infos->name().contains(_nameFilter,Qt::CaseInsensitive)) nameMatches = true;
+
     if (!typeMatches || !nameMatches) {
       continue;
     }
+
     searchLayout->addWidget(item);
     item->setVisible(true);
   }
   searchLayout->addItem(new QSpacerItem(1,1,QSizePolicy::Maximum,QSizePolicy::Expanding));
   setWidget(mainWidget);
+
   if (_resultsListCache) {
     delete _resultsListCache;
     _resultsListCache=0;
@@ -64,16 +72,19 @@ void PluginResultsList::refreshResults() {
 
 void PluginResultsList::changeFocus() {
   PluginInformationsListItem *oldFocus = qobject_cast<PluginInformationsListItem *>(_focusedItem),
-      *newFocus = qobject_cast<PluginInformationsListItem *>(sender());
+                              *newFocus = qobject_cast<PluginInformationsListItem *>(sender());
   _focusedItem = newFocus;
+
   if (oldFocus)
     oldFocus->collapse();
+
   newFocus->expand();
 }
 
 void PluginResultsList::restoreResultsList() {
   if (!_resultsListCache)
     return;
+
   setWidget(_resultsListCache);
   _resultsListCache=0;
 }
@@ -90,6 +101,7 @@ void PluginResultsList::switchToDetailedInformations() {
 
 void PluginResultsList::pluginFetch() {
   PluginInformationsListItem *listItem = dynamic_cast<PluginInformationsListItem *>(sender());
+
   if (listItem)
     emit fetch(listItem->pluginInformations());
   else
@@ -98,6 +110,7 @@ void PluginResultsList::pluginFetch() {
 
 void PluginResultsList::pluginRemove() {
   PluginInformationsListItem *listItem = dynamic_cast<PluginInformationsListItem *>(sender());
+
   if (listItem)
     emit remove(listItem->pluginInformations());
   else

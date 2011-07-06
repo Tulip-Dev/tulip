@@ -31,19 +31,19 @@ namespace tlp {
 class Graph;
 class BooleanProperty;
 
-  class SelfLoops {
-  public:
-    SelfLoops(node n1,node n2,edge e1, edge e2,edge e3,edge old):
-      n1(n1),n2(n2),e1(e1),e2(e2),e3(e3),old(old){
-    }
-    node n1,n2;
-    edge e1,e2,e3,old;  
-  };
+class SelfLoops {
+public:
+  SelfLoops(node n1,node n2,edge e1, edge e2,edge e3,edge old):
+    n1(n1),n2(n2),e1(e1),e2(e2),e3(e3),old(old) {
+  }
+  node n1,n2;
+  edge e1,e2,e3,old;
+};
 
-/** \addtogroup graph_test */ 
+/** \addtogroup graph_test */
 /*@{*/
 /// Class for testing if the graph is acyclic
-  class TLP_SCOPE AcyclicTest : private GraphObserver, private Observable {
+class TLP_SCOPE AcyclicTest : private GraphObserver, private Observable {
 public:
 
   /**

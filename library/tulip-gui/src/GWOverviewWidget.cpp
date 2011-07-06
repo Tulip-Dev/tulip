@@ -52,7 +52,7 @@ private :
 };
 
 //=============================================================================
-  GWOverviewWidget::GWOverviewWidget(QWidget* parent,bool drawIfNotVisible) : QWidget(parent),_ui(new Ui::GWOverviewWidgetData()), _observedView(NULL),_initialCamera(NULL),drawIfNotVisible(drawIfNotVisible){
+GWOverviewWidget::GWOverviewWidget(QWidget* parent,bool drawIfNotVisible) : QWidget(parent),_ui(new Ui::GWOverviewWidgetData()), _observedView(NULL),_initialCamera(NULL),drawIfNotVisible(drawIfNotVisible) {
   _ui->setupUi(this);
 
   // Setup the internal view of the overview
@@ -91,9 +91,11 @@ GlMainWidget *GWOverviewWidget::getView() {
 bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   if ( obj->inherits("tlp::GlMainWidget") &&
        ((e->type() == QEvent::MouseButtonPress) ||
-	(e->type() == QEvent::MouseMove))) {
+        (e->type() == QEvent::MouseMove))) {
     if (_observedView == 0) return false;
+
     QMouseEvent *me = (QMouseEvent *) e;
+
     if (me->buttons()==Qt::LeftButton) {
       assert(((GlMainWidget *) obj) == _view);
       double mouseClicX = me->x();
@@ -104,8 +106,8 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       viewport[0] = viewport[1] = 0;
       Coord upperLeftCorner(viewport[0], viewport[1],0);
       Coord lowerRightCorner(viewport[0] + viewport[2],
-			     viewport[1] + viewport[3],
-			     0);
+                             viewport[1] + viewport[3],
+                             0);
       Coord middle = (upperLeftCorner + lowerRightCorner) / 2.f;
       middle[2] = 0.;
       middle = _observedView->getScene()->getCamera().screenTo3DWorld(middle);
@@ -115,10 +117,12 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       //      cerr << "Square center: " << Coord(x, y, z) << endl;
       float dx, dy;
       int resultViewport;
+
       if(viewport[2]<viewport[3])
         resultViewport=viewport[2];
       else
         resultViewport=viewport[3];
+
       dx = (middle[0] - mouseClicX) * resultViewport * cview.getZoomFactor() / (cover.getZoomFactor() * widgetWidth);
       dy = (middle[1] - (widgetHeight - mouseClicY)) * resultViewport * cview.getZoomFactor() / (cover.getZoomFactor() * widgetHeight);
       //      cerr << "Translation : " << Coord(dx, dy, dz) << endl;
@@ -130,18 +134,22 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       QMenu contextMenu(this);
       QAction *hide=contextMenu.addAction("Hide");
       QAction* menuAction=contextMenu.exec(me->globalPos());
+
       if(menuAction==hide) {
-	emit hideOverview(true);
+        emit hideOverview(true);
       }
+
       return true;
-    }else{
+    }
+    else {
       return false;
     }
   }
+
   return false;
 }
 //=============================================================================
-  void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
+void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   (void) glG;
   assert( glG == _observedView);
@@ -149,13 +157,15 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   if (isVisible() || drawIfNotVisible) {
 
 #ifdef __APPLE__
-      // This code is here to bug fix not visible overview problem on MACOSX with Qt 4.7
-      // We have to test with next version of Qt to check if the problem exist
-      // Or we have to create a new system to display overview : QGraphicsView for example
-      if(isVisible()){
-        ((QWidget*)parent())->hide();
-        ((QWidget*)parent())->show();
-      }
+
+    // This code is here to bug fix not visible overview problem on MACOSX with Qt 4.7
+    // We have to test with next version of Qt to check if the problem exist
+    // Or we have to create a new system to display overview : QGraphicsView for example
+    if(isVisible()) {
+      ((QWidget*)parent())->hide();
+      ((QWidget*)parent())->show();
+    }
+
 #if (QT_VERSION > QT_VERSION_CHECK(4, 7, 1))
 #warning Qt fix must be tested with this version of Qt, see GWOverviewWidget l.150
 #endif
@@ -166,12 +176,13 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       if(_initialCamera && !graphChanged) {
         // Check if the camera changed. If no, only redraw overview
         Camera currentCamera=_observedView->getScene()->getCamera();
+
         if((currentCamera.getUp()==_initialCamera->getUp())) {
           if((currentCamera.getCenter()-currentCamera.getEyes())==(_initialCamera->getCenter()-_initialCamera->getEyes())) {
-  					_view->redraw();
-  					return;
-  				}
-  			}
+            _view->redraw();
+            return;
+          }
+        }
       }
 
       // Draw the overview
@@ -194,15 +205,19 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       //  - Put a new default MetaNodeRenderer
       //  - Put the old MetaNodeRenderer after draw
       GlMetaNodeRenderer *oldMetaNodeRenderer = NULL;
-      if(_view->getScene()->getGlGraphComposite()){
+
+      if(_view->getScene()->getGlGraphComposite()) {
         oldMetaNodeRenderer=_view->getScene()->getGlGraphComposite()->getInputData()->getMetaNodeRenderer();
         _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(&metaNodeRenderer,false);
       }
+
       _view->draw();
+
       if(_view->getScene()->getGlGraphComposite())
         _view->getScene()->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(oldMetaNodeRenderer,false);
 
-    }else{
+    }
+    else {
       // We don't have any observed view : only draw the view
       _view->draw();
     }
@@ -210,16 +225,17 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
 
 }
 //=============================================================================
-  void GWOverviewWidget::setObservedView(GlMainWidget *glWidget,GlSimpleEntity *observedEntity){
+void GWOverviewWidget::setObservedView(GlMainWidget *glWidget,GlSimpleEntity *observedEntity) {
 #ifndef NDEBUG
   cerr << __PRETTY_FUNCTION__ << glWidget << endl << flush;
 #endif
+
   if (_observedView != 0) {
     // Signal deconnection
     disconnect(_observedView, SIGNAL(graphRedrawn(GlMainWidget *,bool)),
-	       this, SLOT(draw(GlMainWidget *,bool)));
+               this, SLOT(draw(GlMainWidget *,bool)));
     disconnect(_observedView, SIGNAL(destroyed(QObject *)),
-	       this, SLOT(observedViewDestroyed(QObject *)));
+               this, SLOT(observedViewDestroyed(QObject *)));
     _observedView = 0;
   }
 
@@ -238,15 +254,17 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
     _view->getScene()->getLayer("Main")->addGlEntity(observedEntity,"overviewEntity");
 
     GlGraphComposite *p_subclass = dynamic_cast<GlGraphComposite *>( observedEntity );
+
     if(p_subclass)
       _view->getScene()->addGlGraphCompositeInfo(_view->getScene()->getGraphLayer(),p_subclass);
 
     // Connect signals
     connect(_observedView, SIGNAL(graphRedrawn(GlMainWidget *,bool)),
-	   this, SLOT(draw(GlMainWidget *,bool)));
+            this, SLOT(draw(GlMainWidget *,bool)));
     connect(_observedView, SIGNAL(destroyed(QObject *)),
-	    this, SLOT(observedViewDestroyed(QObject *)));
-  } else {
+            this, SLOT(observedViewDestroyed(QObject *)));
+  }
+  else {
     // If we don't have any observed view : clear "Main" layer
     _view->getScene()->addGlGraphCompositeInfo(0,0);
     _view->getScene()->getLayer("Main")->deleteGlEntity("overviewEntity");
@@ -269,7 +287,7 @@ void GWOverviewWidget::updateView() {
   }
 }
 //=============================================================================
-void GWOverviewWidget::show(){
+void GWOverviewWidget::show() {
   updateView();
 }
 //=============================================================================
@@ -287,7 +305,8 @@ void RectPosition::draw(GlMainWidget*) {
   points[1] = Coord(viewport[0] + viewport[2], viewport[1], 0);
   points[2] = Coord(viewport[0] + viewport[2], viewport[1] + viewport[3], 0.0);
   points[3] = Coord(viewport[0]              , viewport[1] + viewport[3], 0.0);
-  for (int i=0;i<4;++i)
+
+  for (int i=0; i<4; ++i)
     points[i] = _observedView->getScene()->getCamera().screenTo3DWorld(points[i]);
 
   //_view->makeCurrent();
@@ -298,7 +317,8 @@ void RectPosition::draw(GlMainWidget*) {
   points2[1] = Coord(viewport[0] + viewport[2], viewport[1], 0);
   points2[2] = Coord(viewport[0] + viewport[2], viewport[1] + viewport[3], 0.0);
   points2[3] = Coord(viewport[0]              , viewport[1] + viewport[3], 0.0);
-  for (int i=0;i<4;++i)
+
+  for (int i=0; i<4; ++i)
     points2[i] = _view->getScene()->getCamera().screenTo3DWorld(points2[i]);
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -346,17 +366,21 @@ void RectPosition::draw(GlMainWidget*) {
   glLineWidth(1);
   glStencilFunc(GL_LEQUAL,0x0001,0xFFFF);
   glBegin(GL_LINE_LOOP);
-  for (int i=0;i<4;++i)
+
+  for (int i=0; i<4; ++i)
     glVertex3fv((float *)&points[i]);
+
   glEnd();
   glLineWidth(1);
   glLineStipple(2, 0xAAAA);
   glEnable(GL_LINE_STIPPLE);
   glBegin(GL_LINES);
-  for (int i=0;i<4;++i) {
+
+  for (int i=0; i<4; ++i) {
     glVertex3fv((float *)&points2[i]);
     glVertex3fv((float *)&points[i]);
   }
+
   glEnd();
 
   glPopAttrib();

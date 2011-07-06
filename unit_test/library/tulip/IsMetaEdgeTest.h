@@ -32,8 +32,8 @@ public:
   static CppUnit::Test *suite();
 
 private:
-	
+
   tlp::Graph *graph;
-  tlp::Graph *quotientGraph;	
+  tlp::Graph *quotientGraph;
 
 };

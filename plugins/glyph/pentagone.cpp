@@ -44,12 +44,12 @@ using namespace tlp;
  */
 class Pentagone: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
-	Pentagone(GlyphContext *gc = NULL);
-	Pentagone(EdgeExtremityGlyphContext *gc);
-	virtual ~Pentagone();
-	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
-	virtual void draw(node n, float lod);
-	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
+  Pentagone(GlyphContext *gc = NULL);
+  Pentagone(EdgeExtremityGlyphContext *gc);
+  virtual ~Pentagone();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual void draw(node n, float lod);
+  virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
   virtual void draw(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod);
 
 protected:
@@ -65,12 +65,12 @@ GLYPHPLUGIN(Pentagone, "2D - Pentagone", "David Auber", "09/07/2002", "Textured 
 EEGLYPHPLUGIN(Pentagone, "2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12)
 //===================================================================================
 Pentagone::Pentagone(GlyphContext *gc) :
-	Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
+  Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
   if(!pentagon)
     pentagon=new GlPentagon(Coord(0,0,0),Size(.5,.5,0));
 }
 Pentagone::Pentagone(EdgeExtremityGlyphContext *gc) :
-	Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
+  Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
   if(!pentagon)
     pentagon=new GlPentagon(Coord(0,0,0),Size(.5,.5,0));
 }
@@ -79,13 +79,14 @@ Pentagone::~Pentagone() {
 }
 //=====================================================
 void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-        boundingBox[0] = Coord(-0.30, -0.35, 0);
-        boundingBox[1] = Coord(0.30, 0.35, 0);
+  boundingBox[0] = Coord(-0.30, -0.35, 0);
+  boundingBox[1] = Coord(0.30, 0.35, 0);
 }
 //=====================================================
 void Pentagone::draw(node n, float lod) {
   pentagon->setLightingMode(true);
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
+
   if(textureName!="")
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
@@ -99,6 +100,7 @@ void Pentagone::draw(node n, float lod) {
 void Pentagone::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
   pentagon->setLightingMode(false);
   string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+
   if(textureName!="")
     textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
@@ -114,7 +116,7 @@ void Pentagone::draw(const Color &fillColor,
                      const Color &borderColor,
                      float borderWidth,
                      const std::string &textureName,
-                     float lod){
+                     float lod) {
   if(borderWidth<1e-6)
     borderWidth=1e-6;
 

@@ -48,73 +48,81 @@ namespace tlp {
 class TLP_QT_SCOPE GlOffscreenRenderer {
 
 public :
-	/**
-	 * @brief Get the renderer instance.
-	 **/
-	static GlOffscreenRenderer *getInstance();
+  /**
+   * @brief Get the renderer instance.
+   **/
+  static GlOffscreenRenderer *getInstance();
 
-	~GlOffscreenRenderer();
+  ~GlOffscreenRenderer();
 
-	/**
-	 * @brief Define the viewport size.
-	 **/
-	void setViewPortSize(const unsigned int viewPortWidth, const unsigned int viewPortHeight);
-	unsigned int getViewportWidth();
-	unsigned int getViewportHeight();
-	bool frameBufferOk() const {return glFrameBuf->isValid();}
+  /**
+   * @brief Define the viewport size.
+   **/
+  void setViewPortSize(const unsigned int viewPortWidth, const unsigned int viewPortHeight);
+  unsigned int getViewportWidth();
+  unsigned int getViewportHeight();
+  bool frameBufferOk() const {
+    return glFrameBuf->isValid();
+  }
 
-	GlScene *getScene() {return &scene;}
-	void setZoomFactor(double zoomFactor) {this->zoomFactor = zoomFactor;}
-	void setCameraCenter(const Coord &cameraCenter) {this->cameraCenter = cameraCenter;}
+  GlScene *getScene() {
+    return &scene;
+  }
+  void setZoomFactor(double zoomFactor) {
+    this->zoomFactor = zoomFactor;
+  }
+  void setCameraCenter(const Coord &cameraCenter) {
+    this->cameraCenter = cameraCenter;
+  }
 
-	void setSceneBackgroundColor(const Color &color);
-	/**
-	 * @brief Add an entity to the scene. The scene become the owner of the object.
-	 **/
-	void addGlEntityToScene(GlSimpleEntity *entity);
-	/**
-	 * @brief Add a graph composite to the scene. The scene become the owner of the object.
-	 **/
-	void addGraphCompositeToScene(GlGraphComposite *graphComposite);
+  void setSceneBackgroundColor(const Color &color);
+  /**
+   * @brief Add an entity to the scene. The scene become the owner of the object.
+   **/
+  void addGlEntityToScene(GlSimpleEntity *entity);
+  /**
+   * @brief Add a graph composite to the scene. The scene become the owner of the object.
+   **/
+  void addGraphCompositeToScene(GlGraphComposite *graphComposite);
 
-	/**
-	 * @brief Add a graph to the scene. Just create a new GraphComposite and call GlGraphComposite.
-	 **/
-	void addGraphToScene(Graph* graph);
+  /**
+   * @brief Add a graph to the scene. Just create a new GraphComposite and call GlGraphComposite.
+   **/
+  void addGraphToScene(Graph* graph);
 
-	/**
-	 * @brief Delete all the elements of the scene and clear it.
-	 **/
-	void clearScene();
+  /**
+   * @brief Delete all the elements of the scene and clear it.
+   **/
+  void clearScene();
 
-	/**
-	 * @brief Render the scene in a buffer. You need to call this function before getting the result with getImage or getGlTexture.
-	 **/
-	void renderScene(const bool centerScene = true, const bool antialiased = false);
+  /**
+   * @brief Render the scene in a buffer. You need to call this function before getting the result with getImage or getGlTexture.
+   **/
+  void renderScene(const bool centerScene = true, const bool antialiased = false);
 
-	/**
-	 * @brief Generate a QImage from the scene. You need to call the renderScene function before this function.
-	 **/
-	QImage getImage();
-	/**
-	 * @brief Generate an open gl texture from the scene. You need to call the renderScene function before this function.
-	 **/
-	GLuint getGLTexture(const bool generateMipMaps = false);
+  /**
+   * @brief Generate a QImage from the scene. You need to call the renderScene function before this function.
+   **/
+  QImage getImage();
+  /**
+   * @brief Generate an open gl texture from the scene. You need to call the renderScene function before this function.
+   **/
+  GLuint getGLTexture(const bool generateMipMaps = false);
 
 private :
 
-	GlOffscreenRenderer();
+  GlOffscreenRenderer();
 
-	static GlOffscreenRenderer *instance;
+  static GlOffscreenRenderer *instance;
 
-	unsigned int vPWidth, vPHeight;
-	QGLFramebufferObject *glFrameBuf, *glFrameBuf2;
-	GlScene scene;
-	GlLayer *mainLayer;
-	unsigned int entitiesCpt;
-	double zoomFactor;
-	Coord cameraCenter;
-	bool antialiasedFbo;
+  unsigned int vPWidth, vPHeight;
+  QGLFramebufferObject *glFrameBuf, *glFrameBuf2;
+  GlScene scene;
+  GlLayer *mainLayer;
+  unsigned int entitiesCpt;
+  double zoomFactor;
+  Coord cameraCenter;
+  bool antialiasedFbo;
 
 };
 

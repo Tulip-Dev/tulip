@@ -23,26 +23,26 @@ static const QString PERSPECTIVE_PLUGIN_NAME = "Perspective";
 
 namespace tlp {
 
-  class AbstractPluginInfo;
+class AbstractPluginInfo;
 
-  typedef QMap<QString, tlp::PluginInformations*> LocationPlugins;
-  
-  /**
-   * @brief This class allows to easily install, remove, update, and list plugins (both installed and available).
-   *
-   * For now only listing is available, the rest is coming soon.
-   **/
-  class TLP_QT_SCOPE PluginManager :QObject {
+typedef QMap<QString, tlp::PluginInformations*> LocationPlugins;
+
+/**
+ * @brief This class allows to easily install, remove, update, and list plugins (both installed and available).
+ *
+ * For now only listing is available, the rest is coming soon.
+ **/
+class TLP_QT_SCOPE PluginManager :QObject {
   Q_OBJECT
 public:
-  
+
   enum PluginLocation {
     All = 3,
     Local = 1,
     Remote = 2
   };
   Q_DECLARE_FLAGS(Location, PluginLocation)
-  
+
   /**
    * @brief Lists plugins from the specified locations.
    *
@@ -58,7 +58,7 @@ public:
    * @return void
    **/
   static void addRemoteLocation(const QString& location);
-  
+
   /**
    * @brief Retrieves the serverDescription.xml file from the specified location and returns its contents.
    *
@@ -66,7 +66,7 @@ public:
    * @return QString The contents of the serverDescription.xml file.
    **/
   static QString getPluginServerDescription(const QString& location);
-  
+
   /**
    * @brief Parses the a server description's xml file and creates a list of PluginInformations from it.
    *
@@ -80,7 +80,7 @@ private:
    * @brief Contains all the remote locations added, and for each of them the list of plugins on the location.
    **/
   static QMap<QString, LocationPlugins> _remoteLocations;
-  
+
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PluginManager::Location)

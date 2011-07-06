@@ -23,7 +23,7 @@
 
 /** \addtogroup clustering */
 /*@{*/
-class QuotientClustering:public tlp::Algorithm { 
+class QuotientClustering:public tlp::Algorithm {
 public:
   QuotientClustering(tlp::AlgorithmContext);
   ~QuotientClustering();

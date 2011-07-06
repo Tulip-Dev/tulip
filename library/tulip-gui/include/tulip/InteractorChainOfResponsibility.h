@@ -25,85 +25,89 @@
 namespace tlp {
 
 
-  /** \brief Tulip interactor abstract class with chain of responsibility
-   *
+/** \brief Tulip interactor abstract class with chain of responsibility
+ *
+ */
+class TLP_QT_SCOPE InteractorChainOfResponsibility  : public Interactor {
+
+public:
+
+  /**
+   * Default constructor
    */
-  class TLP_QT_SCOPE InteractorChainOfResponsibility  : public Interactor {
+  InteractorChainOfResponsibility(const QString &iconPath,const QString &text);
 
-  public:
+  /**
+   * Default destructor
+   */
+  ~InteractorChainOfResponsibility();
 
-    /**
-     * Default constructor
-     */
-    InteractorChainOfResponsibility(const QString &iconPath,const QString &text);
+  /**
+   * Set the view attached with this interactor
+   */
+  virtual void setView(View *view);
 
-    /**
-     * Default destructor
-     */
-    ~InteractorChainOfResponsibility();
+  /**
+   * Install eventFilters of interactor on given widget
+   */
+  virtual void install(QWidget *);
 
-    /**
-     * Set the view attached with this interactor
-     */
-    virtual void setView(View *view);
+  /**
+   * Remove eventFilters of interactor
+   */
+  virtual void remove();
 
-    /**
-     * Install eventFilters of interactor on given widget
-     */
-    virtual void install(QWidget *);
+  /**
+   * return QAction of this interactor
+   */
+  virtual InteractorAction* getAction();
 
-    /**
-     * Remove eventFilters of interactor
-     */
-    virtual void remove();
+  /**
+   * Compute InteractorComponents include in this interactor
+   */
+  virtual void compute(GlMainWidget *);
 
-    /**
-     * return QAction of this interactor
-     */
-    virtual InteractorAction* getAction();
+  /**
+   * Draw InteractorComponents include in this interactor
+   */
+  virtual void draw(GlMainWidget *);
 
-    /**
-     * Compute InteractorComponents include in this interactor
-     */
-    virtual void compute(GlMainWidget *);
+  /**
+   * Construct chain of responsibility
+   */
+  virtual void construct() {
+    std::cout << "bad construct" << std::endl; ;
+  }
 
-    /**
-     * Draw InteractorComponents include in this interactor
-     */
-    virtual void draw(GlMainWidget *);
+  /**
+   * This function is call when an undo is perform by the controller
+   */
+  virtual void undoIsDone();
 
-    /**
-     * Construct chain of responsibility
-     */
-    virtual void construct() {std::cout << "bad construct" << std::endl; ;}
+  /**
+   * This function return a QCursor if Interactor have a specific mouse cursor
+   */
+  virtual QCursor getCursor() {
+    return Qt::ArrowCursor;
+  }
 
-    /**
-     * This function is call when an undo is perform by the controller
-     */
-    virtual void undoIsDone();
+protected :
 
-    /**
-     * This function return a QCursor if Interactor have a specific mouse cursor
-     */
-    virtual QCursor getCursor() {return Qt::ArrowCursor;}
+  /**
+   * Push an interactor component on the top of the chain of responsibility
+   * Now interactor component destruction is the responsibility of InteractorChainOfResponsibility
+   */
+  void pushInteractorComponent(InteractorComponent *component);
 
-  protected :
-
-    /**
-     * Push an interactor component on the top of the chain of responsibility
-     * Now interactor component destruction is the responsibility of InteractorChainOfResponsibility
-     */
-    void pushInteractorComponent(InteractorComponent *component);
-
-    View *view;
-    QString interactorIconPath;
-    QString interactorText;
-    InteractorAction *action;
-    std::vector<InteractorComponent *> interactorComponents;
-    std::vector<InteractorComponent *> installedInteractorComponents;
+  View *view;
+  QString interactorIconPath;
+  QString interactorText;
+  InteractorAction *action;
+  std::vector<InteractorComponent *> interactorComponents;
+  std::vector<InteractorComponent *> installedInteractorComponents;
 
 
-  };
+};
 
 }
 

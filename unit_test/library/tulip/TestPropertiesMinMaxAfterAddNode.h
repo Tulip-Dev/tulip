@@ -23,16 +23,16 @@
 
 class TestPropertiesMinMaxAfterAddNode : public CppUnit::TestFixture {
 
- public:
+public:
 
   void setUp();
   void tearDown();
   void testDoublePropertyMinMaxAfterAddNode();
   void testIntegerPropertyMinMaxAfterAddNode();
 
-  static CppUnit::Test *suite();	
+  static CppUnit::Test *suite();
 
- private:
-	
+private:
+
   tlp::Graph *graph;
 };

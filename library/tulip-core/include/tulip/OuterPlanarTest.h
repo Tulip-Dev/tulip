@@ -29,10 +29,10 @@ class Graph;
 struct edge;
 struct node;
 
-/** \addtogroup graph_test */ 
+/** \addtogroup graph_test */
 /*@{*/
 /// class for testing the outerplanarity of a graph
- class TLP_SCOPE OuterPlanarTest  : private GraphObserver, private Observable {
+class TLP_SCOPE OuterPlanarTest  : private GraphObserver, private Observable {
 public:
 
   /**
@@ -41,7 +41,7 @@ public:
    * false otherwise.
    */
   static bool isOuterPlanar(Graph *graph);
-  
+
 private:
   // override some GraphObserver methods
   void addEdge(Graph *,const edge);
@@ -61,4 +61,4 @@ private:
 /*@}*/
 }
 
-#endif 
+#endif

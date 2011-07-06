@@ -40,11 +40,11 @@ struct dfsLeafStruct {
 //=======================================================================
 // original recursive algorithm
 /*double LeafMetric::getNodeValue(const tlp::node n) {
-  if (result->getNodeValue(n) != 0) 
+  if (result->getNodeValue(n) != 0)
     return result->getNodeValue(n);
   double res=0;
   node _n;
-  forEach(_n, graph->getOutNodes(n)) 
+  forEach(_n, graph->getOutNodes(n))
     res += getNodeValue(_n);
   if (res==0) res=1.0;
   result->setNodeValue(n, res);
@@ -53,6 +53,7 @@ struct dfsLeafStruct {
 //=======================================================================
 double LeafMetric::getNodeValue(tlp::node current) {
   double value = result->getNodeValue(current);
+
   if (value != 0.0)
     return value;
 
@@ -62,37 +63,44 @@ double LeafMetric::getNodeValue(tlp::node current) {
   dfsLeafStruct dfsParams(current, outNodes);
   double res = 0.0;
   dfsLevels.push(dfsParams);
+
   while(!dfsLevels.empty()) {
     while (outNodes->hasNext()) {
       node neighbour = outNodes->next();
       value = result->getNodeValue(neighbour);
+
       // compute res
       if (value != 0.0)
-	res += value;
+        res += value;
       else {
-	// store res for current
-	dfsLevels.top().res = res;
-	// push new dfsParams on stack
-	current = dfsParams.current = neighbour;
-	outNodes = dfsParams.outNodes = graph->getOutNodes(neighbour);
-	res = dfsParams.res = 0.0;
-	dfsLevels.push(dfsParams);
-	// and go deeper
-	break;
+        // store res for current
+        dfsLevels.top().res = res;
+        // push new dfsParams on stack
+        current = dfsParams.current = neighbour;
+        outNodes = dfsParams.outNodes = graph->getOutNodes(neighbour);
+        res = dfsParams.res = 0.0;
+        dfsLevels.push(dfsParams);
+        // and go deeper
+        break;
       }
     }
+
     if (outNodes->hasNext())
       // new dfsParams has been pushed on stack
       continue;
+
     // save current res
     if (res == 0.0)
       res = 1.0;
+
     result->setNodeValue(current, res);
     // unstack current dfsParams
     delete outNodes;
     dfsLevels.pop();
+
     if (dfsLevels.empty())
       break;
+
     // get dfsParams on top of dfsLevels
     dfsParams = dfsLevels.top();
     current = dfsParams.current;
@@ -101,6 +109,7 @@ double LeafMetric::getNodeValue(tlp::node current) {
     dfsParams.res += res;
     res = dfsParams.res;
   }
+
   return res;
 }
 //=======================================================================
@@ -109,7 +118,7 @@ bool LeafMetric::run() {
   result->setAllEdgeValue(0);
   node n;
   forEach(n, graph->getNodes())
-    result->setNodeValue(n, getNodeValue(n));
+  result->setNodeValue(n, getNodeValue(n));
   return true;
 }
 //=======================================================================

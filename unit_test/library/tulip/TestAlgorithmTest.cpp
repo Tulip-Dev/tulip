@@ -109,7 +109,7 @@ void TestAlgorithmTest::testTree() {
   clone->delNode(n3);
   CPPUNIT_ASSERT(!TreeTest::isTree(graph));
   CPPUNIT_ASSERT(TreeTest::isTree(clone));
-  //known bug test 
+  //known bug test
   {
     graph->clear();
     node n1 = graph->addNode();
@@ -171,10 +171,13 @@ const std::string GRAPHPATH = "./DATA/graphs/";
 void TestAlgorithmTest::testBiconnected() {
   node n[10];
   edge e[10];
-  for (int i=0;i<4;++i)
+
+  for (int i=0; i<4; ++i)
     n[i]=graph->addNode();
-  for (int i=0;i<4;++i)
+
+  for (int i=0; i<4; ++i)
     e[i]=graph->addEdge(n[i],n[(i+1)%4]);
+
   CPPUNIT_ASSERT(BiconnectedTest::isBiconnected(graph));
   graph->delEdge(e[0]);
   CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
@@ -191,8 +194,10 @@ void TestAlgorithmTest::testBiconnected() {
   CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
   //Root separator
   graph->clear();
-  for (int i=0;i<5;++i)
+
+  for (int i=0; i<5; ++i)
     n[i]=graph->addNode();
+
   e[0]=graph->addEdge(n[0],n[1]);
   e[1]=graph->addEdge(n[0],n[2]);
   e[2]=graph->addEdge(n[1],n[2]);
@@ -215,15 +220,18 @@ void TestAlgorithmTest::testBiconnected() {
   CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(graph));
 
   Graph *tmpGraph;
+
   for (unsigned int i = 0; i<5; ++i) {
     tmpGraph = tlp::loadGraph(GRAPHPATH + "planar/unbiconnected.tlp");
     CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(tmpGraph));
     vector<edge> vEdges;
     BiconnectedTest::makeBiconnected(tmpGraph, vEdges);
     CPPUNIT_ASSERT(BiconnectedTest::isBiconnected(tmpGraph));
+
     for (vector<edge>::iterator it = vEdges.begin(); it != vEdges.end(); ++it) {
       tmpGraph->delEdge(*it, true);
     }
+
     CPPUNIT_ASSERT(!BiconnectedTest::isBiconnected(tmpGraph));
     delete tmpGraph;
   }
@@ -236,20 +244,20 @@ void TestAlgorithmTest::testTriconnected() {
 //==========================================================
 CppUnit::Test * TestAlgorithmTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph Test" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Simple test", 
-								     &TestAlgorithmTest::testSimple ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Free Tree test", 
-								     &TestAlgorithmTest::testFreeTree ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Tree test", 
-								     &TestAlgorithmTest::testTree ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Acyclic test", 
-								     &TestAlgorithmTest::testTree ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Biconnected test", 
-								     &TestAlgorithmTest::testBiconnected ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Connected test", 
-								     &TestAlgorithmTest::testConnected ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Triconnected test", 
-								     &TestAlgorithmTest::testTriconnected ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Simple test",
+                         &TestAlgorithmTest::testSimple ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Free Tree test",
+                         &TestAlgorithmTest::testFreeTree ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Tree test",
+                         &TestAlgorithmTest::testTree ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Acyclic test",
+                         &TestAlgorithmTest::testTree ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Biconnected test",
+                         &TestAlgorithmTest::testBiconnected ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Connected test",
+                         &TestAlgorithmTest::testConnected ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<TestAlgorithmTest>( "Triconnected test",
+                         &TestAlgorithmTest::testTriconnected ) );
   return suiteOfTests;
 }
 //==========================================================

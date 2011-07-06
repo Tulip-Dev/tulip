@@ -36,33 +36,35 @@ namespace tlp {
 
 class TLP_QT_SCOPE TabWidgetHidableMenuGraphicsProxy : public GraphicsWidgetBase {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	TabWidgetHidableMenuGraphicsProxy(const unsigned int offsetWhenHiding);
+  TabWidgetHidableMenuGraphicsProxy(const unsigned int offsetWhenHiding);
 
-	void addTab(QWidget *widget, const QString &tabName);
+  void addTab(QWidget *widget, const QString &tabName);
 
-	void setOffsetWhenHiding(const unsigned int offsetWhenHiding) {this->offsetWhenHiding = offsetWhenHiding;}
+  void setOffsetWhenHiding(const unsigned int offsetWhenHiding) {
+    this->offsetWhenHiding = offsetWhenHiding;
+  }
 
-	void hideTabWidget();
+  void hideTabWidget();
 
 protected :
 
-	void wheelEvent(QGraphicsSceneWheelEvent * event);
-	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
+  void wheelEvent(QGraphicsSceneWheelEvent * event);
+  void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
 
 private slots :
 
-	void animateTranslationStep(int animStep);
+  void animateTranslationStep(int animStep);
 
 private :
 
-	QTabWidget *tabWidget;
-	bool hidden;
-	double xStart, xEnd;
-	unsigned int offsetWhenHiding;
+  QTabWidget *tabWidget;
+  bool hidden;
+  double xStart, xEnd;
+  unsigned int offsetWhenHiding;
 
 };
 

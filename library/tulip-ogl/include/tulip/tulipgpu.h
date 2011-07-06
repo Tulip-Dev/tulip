@@ -42,33 +42,33 @@ TLP_GL_SCOPE GpuGraph* genGpuGraph(const tlp::Graph& graph);
 // return NULL if there is no texture image unit available
 // BooleanProperty
 TLP_GL_SCOPE GpuProperty* genGpuProperty(tlp::BooleanProperty& property,
-					 const tlp::Graph& graph,
-					 GpuValueType type = NODE_VALUES,
-					 bool outputOnly = false);
+    const tlp::Graph& graph,
+    GpuValueType type = NODE_VALUES,
+    bool outputOnly = false);
 // ColorProperty
 TLP_GL_SCOPE GpuProperty* genGpuProperty(tlp::ColorProperty& property,
-					 const tlp::Graph& graph,
-					 GpuValueType type = NODE_VALUES,
-					 bool outputOnly = false);
+    const tlp::Graph& graph,
+    GpuValueType type = NODE_VALUES,
+    bool outputOnly = false);
 // DoubleProperty
 TLP_GL_SCOPE GpuProperty* genGpuProperty(tlp::DoubleProperty& property,
-					 const tlp::Graph& graph,
-					 GpuValueType type = NODE_VALUES,
-					 bool outputOnly = false);
+    const tlp::Graph& graph,
+    GpuValueType type = NODE_VALUES,
+    bool outputOnly = false);
 // IntegerProperty
 TLP_GL_SCOPE GpuProperty* genGpuProperty(tlp::IntegerProperty& property,
-					 const tlp::Graph& graph,
-					 GpuValueType type = NODE_VALUES,
-					 bool outputOnly = false);
+    const tlp::Graph& graph,
+    GpuValueType type = NODE_VALUES,
+    bool outputOnly = false);
 // LayoutProperty (node values only)
 TLP_GL_SCOPE GpuProperty* genGpuProperty(tlp::LayoutProperty& property,
-					 const tlp::Graph& graph,
-					 bool outputOnly = false);
+    const tlp::Graph& graph,
+    bool outputOnly = false);
 // SizeProperty
 TLP_GL_SCOPE GpuProperty* genGpuProperty(tlp::SizeProperty& property,
-					 const tlp::Graph& graph,
-					 GpuValueType type = NODE_VALUES,
-					 bool outputOnly = false);
+    const tlp::Graph& graph,
+    GpuValueType type = NODE_VALUES,
+    bool outputOnly = false);
 
 // set a parameter of a GpuProgram with a Tulip specific object
 // Color

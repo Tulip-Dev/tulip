@@ -27,7 +27,7 @@
 /** This plugins assigns id to nodes and edges. The ids are those used by tulip.
  *
  */
-class IdMetric:public tlp::DoubleAlgorithm { 
+class IdMetric:public tlp::DoubleAlgorithm {
 public:
   IdMetric(const tlp::PropertyContext &);
   bool run();

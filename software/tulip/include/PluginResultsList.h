@@ -14,7 +14,9 @@ class PluginResultsList : public QScrollArea {
   Q_OBJECT
 public:
   explicit PluginResultsList(QWidget *parent=0);
-  tlp::PluginManager *pluginManager() const { return _pluginManager; }
+  tlp::PluginManager *pluginManager() const {
+    return _pluginManager;
+  }
 
 public slots:
   void setTypeFilter(const QStringList &,bool autoRefresh=true);

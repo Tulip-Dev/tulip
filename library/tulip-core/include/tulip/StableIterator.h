@@ -56,56 +56,59 @@ namespace tlp {
   */
 template<class itType>
 struct StableIterator : public Iterator<itType> {
-    //=============================
-    /**
-    * @brief Creates a stable Iterator, that allows to delete elements from a graph while iterating on them.
-    *
-    * @param inputIterator Input Iterator, which defines the sequence on which this Iterator will iterate.
-    * @param nbElements The number of elements the iteration will take place on. Defaults to 0.
-    * @param deleteIterator Whether or not to delete the Iterator given as first parameter. Defaults to true.
-    **/
-    StableIterator(Iterator<itType> *inputIterator, size_t nbElements = 0, bool deleteIterator = true) {
-        sequenceCopy.reserve(nbElements);
-        for (;inputIterator->hasNext();) {
-            sequenceCopy.push_back(inputIterator->next());
-        }
-        if (deleteIterator)
-            delete inputIterator;
-        copyIterator = sequenceCopy.begin();
+  //=============================
+  /**
+  * @brief Creates a stable Iterator, that allows to delete elements from a graph while iterating on them.
+  *
+  * @param inputIterator Input Iterator, which defines the sequence on which this Iterator will iterate.
+  * @param nbElements The number of elements the iteration will take place on. Defaults to 0.
+  * @param deleteIterator Whether or not to delete the Iterator given as first parameter. Defaults to true.
+  **/
+  StableIterator(Iterator<itType> *inputIterator, size_t nbElements = 0, bool deleteIterator = true) {
+    sequenceCopy.reserve(nbElements);
+
+    for (; inputIterator->hasNext();) {
+      sequenceCopy.push_back(inputIterator->next());
     }
-    //=============================
-    ~StableIterator(){};
-    //=============================
-    itType next() {
-        itType tmp(*copyIterator);
-        ++copyIterator;
-        return tmp;
-    }
-    //=============================
-    bool hasNext() {
-        return (copyIterator != sequenceCopy.end());
-    };
-    //=============================
-    
-    /**
-    * @brief Restarts the iteration by moving the Iterator to the beginning of the sequence.
-    *
-    * @return void
-    **/
-    void restart() {
-        copyIterator = sequenceCopy.begin();
-    }
-    //=============================
-  protected :
-    /**
-    * @brief A copy of the sequence of elements to iterate on.
-    **/
-    std::vector<itType> sequenceCopy;
-    
-    /**
-    * @brief STL const_iterator on the cloned sequence.
-    **/
-    typename std::vector<itType>::const_iterator copyIterator;
+
+    if (deleteIterator)
+      delete inputIterator;
+
+    copyIterator = sequenceCopy.begin();
+  }
+  //=============================
+  ~StableIterator() {};
+  //=============================
+  itType next() {
+    itType tmp(*copyIterator);
+    ++copyIterator;
+    return tmp;
+  }
+  //=============================
+  bool hasNext() {
+    return (copyIterator != sequenceCopy.end());
+  };
+  //=============================
+
+  /**
+  * @brief Restarts the iteration by moving the Iterator to the beginning of the sequence.
+  *
+  * @return void
+  **/
+  void restart() {
+    copyIterator = sequenceCopy.begin();
+  }
+  //=============================
+protected :
+  /**
+  * @brief A copy of the sequence of elements to iterate on.
+  **/
+  std::vector<itType> sequenceCopy;
+
+  /**
+  * @brief STL const_iterator on the cloned sequence.
+  **/
+  typename std::vector<itType>::const_iterator copyIterator;
 };
 /*@}*/
 }

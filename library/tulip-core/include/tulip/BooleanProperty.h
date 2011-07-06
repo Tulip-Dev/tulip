@@ -26,17 +26,17 @@
 namespace tlp {
 
 class PropertyContext;
-/** \addtogroup properties */ 
+/** \addtogroup properties */
 /*@{*/
-class TLP_SCOPE BooleanProperty:public AbstractProperty<tlp::BooleanType, tlp::BooleanType, tlp::BooleanAlgorithm> { 
+class TLP_SCOPE BooleanProperty:public AbstractProperty<tlp::BooleanType, tlp::BooleanType, tlp::BooleanAlgorithm> {
 public :
   BooleanProperty (Graph *g, std::string n="") :AbstractProperty<BooleanType,BooleanType, BooleanAlgorithm>(g, n) {}
   // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   static const std::string propertyTypename;
-   std::string getTypename() const {
-     return propertyTypename;
-   }
+  std::string getTypename() const {
+    return propertyTypename;
+  }
 
   /*
    * Reverses all values associated to graph elements,
@@ -62,15 +62,15 @@ public :
   Iterator<edge> *getEdgesEqualTo(const bool val, Graph *g = 0);
 };
 
-class TLP_SCOPE BooleanVectorProperty:public AbstractVectorProperty<tlp::BooleanVectorType, tlp::BooleanType> { 
+class TLP_SCOPE BooleanVectorProperty:public AbstractVectorProperty<tlp::BooleanVectorType, tlp::BooleanType> {
 public :
   BooleanVectorProperty(Graph *g, std::string n="") :AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>(g, n) {}
   // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   static const std::string propertyTypename;
-   std::string getTypename() const {
-     return propertyTypename;
-   }
+  std::string getTypename() const {
+    return propertyTypename;
+  }
 
 };
 

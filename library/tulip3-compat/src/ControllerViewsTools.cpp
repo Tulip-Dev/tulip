@@ -29,97 +29,104 @@
 using namespace std;
 
 namespace tlp {
-  
-  static const string mainViewName="Node Link Diagram view";
-  
+
+static const string mainViewName="Node Link Diagram view";
+
 QWidget *ControllerViewsTools::noInteractorConfigurationWidget=0;
 
-  void ControllerViewsTools::createView(const string &name,Graph *,DataSet,QWidget *parent,string *createdViewName, View **createdView, QWidget **createdWidget){
-    string verifiedName=name;
-    View *newView = ViewLister::getPluginObject(name, NULL);
+void ControllerViewsTools::createView(const string &name,Graph *,DataSet,QWidget *parent,string *createdViewName, View **createdView, QWidget **createdWidget) {
+  string verifiedName=name;
+  View *newView = ViewLister::getPluginObject(name, NULL);
 
-    // if we can not create a view with given name : create a Node Link Diagram Component 
-    if(!newView){
-      verifiedName=mainViewName;
-      newView=ViewLister::getPluginObject(mainViewName, NULL);
-    }
+  // if we can not create a view with given name : create a Node Link Diagram Component
+  if(!newView) {
+    verifiedName=mainViewName;
+    newView=ViewLister::getPluginObject(mainViewName, NULL);
+  }
 
-    // Get interactors for this view and add them to view
-    list<string> interactorsNameList;
-    if(newView->getRealViewName()=="")
-    	interactorsNameList=InteractorManager::getInst().getSortedCompatibleInteractors(verifiedName);
-    else
-    	interactorsNameList=InteractorManager::getInst().getSortedCompatibleInteractors(newView->getRealViewName());
+  // Get interactors for this view and add them to view
+  list<string> interactorsNameList;
 
-    list<Interactor *> interactorsList;
-    for(list<string>::iterator it=interactorsNameList.begin();it!=interactorsNameList.end();++it){
-      interactorsList.push_back(InteractorLister::getPluginObject(*it, NULL));
-    }
-    newView->setInteractors(interactorsList);
+  if(newView->getRealViewName()=="")
+    interactorsNameList=InteractorManager::getInst().getSortedCompatibleInteractors(verifiedName);
+  else
+    interactorsNameList=InteractorManager::getInst().getSortedCompatibleInteractors(newView->getRealViewName());
 
-    QWidget *widget;
-    widget=newView->construct(parent);
-    widget->setObjectName(QString("ViewMainWidget p:")+QString::number((long)widget));
-    widget->setAttribute(Qt::WA_DeleteOnClose,true);
+  list<Interactor *> interactorsList;
 
-    *createdViewName=verifiedName;
-    *createdView=newView;
-    *createdWidget=widget;
+  for(list<string>::iterator it=interactorsNameList.begin(); it!=interactorsNameList.end(); ++it) {
+    interactorsList.push_back(InteractorLister::getPluginObject(*it, NULL));
   }
-  //**********************************************************************
-  void ControllerViewsTools::createMainView(Graph *graph,DataSet dataSet,QWidget *parent,View **createdView, QWidget **createdWidget){
-    string tmp;
-    createView(mainViewName,graph,dataSet,parent,&tmp, createdView, createdWidget);
+
+  newView->setInteractors(interactorsList);
+
+  QWidget *widget;
+  widget=newView->construct(parent);
+  widget->setObjectName(QString("ViewMainWidget p:")+QString::number((long)widget));
+  widget->setAttribute(Qt::WA_DeleteOnClose,true);
+
+  *createdViewName=verifiedName;
+  *createdView=newView;
+  *createdWidget=widget;
+}
+//**********************************************************************
+void ControllerViewsTools::createMainView(Graph *graph,DataSet dataSet,QWidget *parent,View **createdView, QWidget **createdWidget) {
+  string tmp;
+  createView(mainViewName,graph,dataSet,parent,&tmp, createdView, createdWidget);
+}
+//**********************************************************************
+void ControllerViewsTools::installInteractors(View *view,QToolBar *toolBar) {
+  toolBar->clear();
+
+  list<Interactor *> interactorsList=view->getInteractors();
+  list<QAction *> interactorsActionList;
+
+  for(list<Interactor *>::iterator it=interactorsList.begin(); it!=interactorsList.end(); ++it)
+    interactorsActionList.push_back((*it)->getAction());
+
+  for(list<QAction *>::iterator it=interactorsActionList.begin(); it!=interactorsActionList.end(); ++it) {
+    toolBar->addAction(*it);
   }
-  //**********************************************************************
-  void ControllerViewsTools::installInteractors(View *view,QToolBar *toolBar) {
-    toolBar->clear();
-    
-    list<Interactor *> interactorsList=view->getInteractors();
-    list<QAction *> interactorsActionList;
-    for(list<Interactor *>::iterator it=interactorsList.begin();it!=interactorsList.end();++it)
-      interactorsActionList.push_back((*it)->getAction());
-    
-    for(list<QAction *>::iterator it=interactorsActionList.begin();it!=interactorsActionList.end();++it) {
-      toolBar->addAction(*it);
-    }
+}
+//**********************************************************************
+void ControllerViewsTools::changeInteractor(View *view,QToolBar *toolBar,QAction* action,QWidget **createdConfigurationWidget) {
+  QList<QAction*> actions=toolBar->actions();
+
+  for(QList<QAction*>::iterator it=actions.begin(); it!=actions.end(); ++it) {
+    (*it)->setChecked(false);
   }
-  //**********************************************************************
-  void ControllerViewsTools::changeInteractor(View *view,QToolBar *toolBar,QAction* action,QWidget **createdConfigurationWidget) {
-    QList<QAction*> actions=toolBar->actions();
-    for(QList<QAction*>::iterator it=actions.begin();it!=actions.end();++it) {
-      (*it)->setChecked(false);
-    }
-    
-    action->setCheckable(true);
-    action->setChecked(true);
-    
-    InteractorAction *interactorAction=(InteractorAction *)action;
-    view->setActiveInteractor(interactorAction->getInteractor());
-    
-    QWidget *interactorWidget=interactorAction->getInteractor()->getConfigurationWidget();
-    QWidget *containerWidget=new QWidget();
-    QGridLayout *gridLayout = new QGridLayout(containerWidget);
-    gridLayout->setSpacing(0);
-    gridLayout->setMargin(0);
-    if(interactorWidget){
-      gridLayout->addWidget(interactorWidget,0,0);
-    }else{
-      gridLayout->addWidget(getNoInteractorConfigurationWidget(),0,0);
-    }
-    
-    *createdConfigurationWidget=containerWidget;
+
+  action->setCheckable(true);
+  action->setChecked(true);
+
+  InteractorAction *interactorAction=(InteractorAction *)action;
+  view->setActiveInteractor(interactorAction->getInteractor());
+
+  QWidget *interactorWidget=interactorAction->getInteractor()->getConfigurationWidget();
+  QWidget *containerWidget=new QWidget();
+  QGridLayout *gridLayout = new QGridLayout(containerWidget);
+  gridLayout->setSpacing(0);
+  gridLayout->setMargin(0);
+
+  if(interactorWidget) {
+    gridLayout->addWidget(interactorWidget,0,0);
   }
-  //**********************************************************************
-  QWidget *ControllerViewsTools::getNoInteractorConfigurationWidget(){
-    QWidget *noInteractorConfigurationWidget = new QWidget();
-    QGridLayout *gridLayout = new QGridLayout(noInteractorConfigurationWidget);
-    QLabel *label = new QLabel(noInteractorConfigurationWidget);
-    label->setAlignment(Qt::AlignCenter);
-    gridLayout->addWidget(label, 0, 0, 1, 1);
-    label->setText("No interactor configuration");
-    return noInteractorConfigurationWidget;
+  else {
+    gridLayout->addWidget(getNoInteractorConfigurationWidget(),0,0);
   }
-  
+
+  *createdConfigurationWidget=containerWidget;
+}
+//**********************************************************************
+QWidget *ControllerViewsTools::getNoInteractorConfigurationWidget() {
+  QWidget *noInteractorConfigurationWidget = new QWidget();
+  QGridLayout *gridLayout = new QGridLayout(noInteractorConfigurationWidget);
+  QLabel *label = new QLabel(noInteractorConfigurationWidget);
+  label->setAlignment(Qt::AlignCenter);
+  gridLayout->addWidget(label, 0, 0, 1, 1);
+  label->setText("No interactor configuration");
+  return noInteractorConfigurationWidget;
+}
+
 }
 

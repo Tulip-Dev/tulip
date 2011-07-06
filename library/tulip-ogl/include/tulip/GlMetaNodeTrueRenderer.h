@@ -25,35 +25,35 @@
 
 namespace tlp {
 
-  class GlGraphInputData;
+class GlGraphInputData;
 
-  /**
-   * Class use to render a meta node, this version render meta node with old OpenGl tulip system
-   */
-  class TLP_GL_SCOPE GlMetaNodeTrueRenderer : public GlMetaNodeRenderer{
+/**
+ * Class use to render a meta node, this version render meta node with old OpenGl tulip system
+ */
+class TLP_GL_SCOPE GlMetaNodeTrueRenderer : public GlMetaNodeRenderer {
 
-  public:
+public:
 
-    GlMetaNodeTrueRenderer(GlGraphInputData *inputData);
-    virtual ~GlMetaNodeTrueRenderer() {}
+  GlMetaNodeTrueRenderer(GlGraphInputData *inputData);
+  virtual ~GlMetaNodeTrueRenderer() {}
 
-    virtual void render(node n,float lod,Camera* camera);
+  virtual void render(node n,float lod,Camera* camera);
 
-    virtual void setInputData(GlGraphInputData *data){
-      inputData=data;
-    }
-    virtual GlGraphInputData *getInputData(){
-      return inputData;
-    }
+  virtual void setInputData(GlGraphInputData *data) {
+    inputData=data;
+  }
+  virtual GlGraphInputData *getInputData() {
+    return inputData;
+  }
 
 
-  private :
+private :
 
-    GlGraphInputData *inputData;
+  GlGraphInputData *inputData;
 
-    static unsigned int depth;
+  static unsigned int depth;
 
-  };
+};
 
 }
 

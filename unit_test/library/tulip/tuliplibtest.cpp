@@ -31,22 +31,22 @@
 
 int main(int, char**) {
   tlp::initTulipLib();
-    
+
   //CPPUNIT_NS::QtUi::TestRunner runner;
   CPPUNIT_NS::TestResult controller;
   CPPUNIT_NS::TestResultCollector result;
   controller.addListener(&result);
-  
+
   CPPUNIT_NS::TextUi::TestRunner runner;
   runner.addTest(CPPUNIT_NS::TestFactoryRegistry::getRegistry().makeTest());
   runner.run(controller);
-  
+
   std::ofstream xmlFileOut("cpptestresults.xml");
   CPPUNIT_NS::XmlOutputter xmlOut(&result, xmlFileOut);
   xmlOut.write();
 
   CPPUNIT_NS::TextOutputter stdOut(&result, std::cout);
   stdOut.write();
-  
+
   return result.wasSuccessful() ? EXIT_SUCCESS : EXIT_FAILURE;
 }

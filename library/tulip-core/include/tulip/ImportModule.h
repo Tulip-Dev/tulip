@@ -25,7 +25,7 @@
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/PluginLister.h>
 
-/** \addtogroup plugins */ 
+/** \addtogroup plugins */
 namespace tlp {
 class PluginProgress;
 class Graph;
@@ -34,32 +34,31 @@ class DataSet;
 
 /**
 * @brief Base class for import plug-ins.
-* 
+*
 **/
-class ImportModule :public WithParameter, public WithDependency
-{
+class ImportModule :public WithParameter, public WithDependency {
 public:
   /**
   * @brief Initializes the DataSet to the one passed in the context.
   *
   * @param context THe context this import plug-in runs into.
   **/
-  ImportModule (AlgorithmContext context) : 
+  ImportModule (AlgorithmContext context) :
     graph(context.graph),pluginProgress(context.pluginProgress), dataSet(context.dataSet) {}
-  virtual ~ImportModule(){};
-  
+  virtual ~ImportModule() {};
+
   /**
   * @brief The import operations should take place here.
   *
   * @return bool Whether the import was sucessful or not.
   **/
   virtual bool import()=0;
-  
+
   /**
   * @brief The Graph in which to write the data to import.
   **/
   Graph *graph;
-  
+
   /**
   * @brief A means to report progress to the user.
   **/

@@ -30,9 +30,9 @@ namespace tlp {
 class PropertyContext;
 
 typedef AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> AbstractDoubleProperty;
-/** \addtogroup properties */ 
+/** \addtogroup properties */
 /*\@{*/
- class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, private GraphObserver { 
+class TLP_SCOPE DoubleProperty:public AbstractDoubleProperty, private GraphObserver {
 public :
   DoubleProperty (Graph *, std::string n="");
   DoubleType::RealType  getNodeMin(Graph *sg=0);
@@ -48,12 +48,12 @@ public :
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
-   std::string getTypename() const {
-     return propertyTypename;
-   }
+  std::string getTypename() const {
+    return propertyTypename;
+  }
 
 
-  // override some AbstractProperty methods 
+  // override some AbstractProperty methods
   virtual void setNodeValue(const node n, const double &v);
   virtual void setEdgeValue(const edge e, const double &v);
   virtual void setAllNodeValue(const double &v);
@@ -68,12 +68,13 @@ public :
   virtual void delSubGraph(Graph* graph, Graph *sub);
 
   enum PredefinedMetaValueCalculator {NO_CALC = 0, AVG_CALC = 1, SUM_CALC = 2,
-				      MAX_CALC = 3, MIN_CALC = 4};
+                                      MAX_CALC = 3, MIN_CALC = 4
+                                     };
 
   // setMetaValueCalculator overloading
   virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator* calc);
   void setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc = AVG_CALC,
-			      PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
+                              PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
 
 private:
   TLP_HASH_MAP<unsigned int, double> maxN,minN,maxE,minE;
@@ -86,15 +87,15 @@ private:
 
 };
 
- class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVectorType, tlp::DoubleType> { 
+class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVectorType, tlp::DoubleType> {
 public :
   DoubleVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
-   std::string getTypename() const {
-     return propertyTypename;
-   }
+  std::string getTypename() const {
+    return propertyTypename;
+  }
 
 };
 /*@}*/

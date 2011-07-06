@@ -28,7 +28,7 @@
 namespace tlp {
 template <typename TYPE>
 class BmdList {
- public:
+public:
   typedef  tlp::BmdLink<TYPE> BMDTYPE;
 
   BmdList();
@@ -50,7 +50,7 @@ class BmdList {
   void conc(BmdList<TYPE> &l);
   void clear();
   void swap(BmdList<TYPE> &l);
- private:
+private:
   BMDTYPE *head;
   BMDTYPE *tail;
   int count;
@@ -76,7 +76,7 @@ struct BmdListIt : public Iterator<TYPE> {
     pred = tmp;
     return val;
   }
- private:
+private:
   tlp::BmdLink< TYPE > *pos;
   tlp::BmdLink< TYPE > *pred;
   BmdList<TYPE> &bmdList;
@@ -98,7 +98,7 @@ struct BmdListRevIt : public Iterator<TYPE> {
     suc = tmp;
     return val;
   }
- private:
+private:
   tlp::BmdLink< TYPE > *pos;
   tlp::BmdLink< TYPE > *suc;
   BmdList<TYPE> &bmdList;

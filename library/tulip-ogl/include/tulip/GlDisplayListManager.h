@@ -28,67 +28,68 @@
 #include <tulip/tulipconf.h>
 
 namespace tlp {
-  
-  /** \brief Singleton used to manage OpenGl display list 
-   *
-   * Singleton used to manage OpenGl display list. 
-   * First createInst must be call.
+
+/** \brief Singleton used to manage OpenGl display list
+ *
+ * Singleton used to manage OpenGl display list.
+ * First createInst must be call.
+ */
+class TLP_GL_SCOPE GlDisplayListManager {
+
+  typedef std::map<std::string,GLuint> DisplayListMap;
+  typedef std::map<unsigned long, DisplayListMap> ContextAndDisplayListMap;
+
+public:
+
+  /**
+   * Return the current instance. If instance doesn't exist, create it.
    */
-  class TLP_GL_SCOPE GlDisplayListManager {
-  
-    typedef std::map<std::string,GLuint> DisplayListMap;
-    typedef std::map<unsigned long, DisplayListMap> ContextAndDisplayListMap;
+  static GlDisplayListManager &getInst() {
+    if(!inst)
+      inst=new GlDisplayListManager();
 
-  public:
-    
-    /**
-     * Return the current instance. If instance doesn't exist, create it.
-     */
-    static GlDisplayListManager &getInst() {
-      if(!inst)
-	inst=new GlDisplayListManager();
-      return *inst;
-    }
+    return *inst;
+  }
 
-    /**
-     * Change OpenGl context because display list can't be shared in different context
-     */
-    void changeContext(unsigned long context);
+  /**
+   * Change OpenGl context because display list can't be shared in different context
+   */
+  void changeContext(unsigned long context);
 
-    /**
-     * remove context
-     */
-    void removeContext(unsigned long context);
+  /**
+   * remove context
+   */
+  void removeContext(unsigned long context);
 
-    /** 
-     * Begin to record a new display list with name : name
-     */
-    bool beginNewDisplayList(const std::string& name);
-    /**
-     * End the current record of display list
-     */
-    void endNewDisplayList();
+  /**
+   * Begin to record a new display list with name : name
+   */
+  bool beginNewDisplayList(const std::string& name);
+  /**
+   * End the current record of display list
+   */
+  void endNewDisplayList();
 
-    /**
-     * Call display list with name : name
-     */
-    bool callDisplayList(const std::string& name);
+  /**
+   * Call display list with name : name
+   */
+  bool callDisplayList(const std::string& name);
 
-  private:
+private:
 
-    /**
-     * Private constructor for singleton
-     */
-    GlDisplayListManager() {}
+  /**
+   * Private constructor for singleton
+   */
+  GlDisplayListManager() {}
 
-    unsigned long currentContext;
+  unsigned long currentContext;
 
-    static GlDisplayListManager* inst;
+  static GlDisplayListManager* inst;
 
-    ContextAndDisplayListMap displayListMap;
+  ContextAndDisplayListMap displayListMap;
 
-  };
- 
+};
+
 }
 
 #endif // Tulip_GLDISPLAYLISTMANAGER_H

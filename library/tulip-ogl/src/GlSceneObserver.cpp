@@ -27,28 +27,28 @@ namespace tlp {
 
 GlSceneEvent::GlSceneEvent(const GlScene &scene,GlSceneEventType sceneEventType,const std::string &layerName,GlLayer *layer)
   :Event(scene, Event::TLP_MODIFICATION),
-    sceneEventType(sceneEventType),
-    layerName(layerName),
-    layer(layer){
+   sceneEventType(sceneEventType),
+   layerName(layerName),
+   layer(layer) {
 }
 
 GlSceneEvent::GlSceneEvent(const GlScene &scene,GlSimpleEntity *entity)
   :Event(scene, Event::TLP_MODIFICATION),
-    sceneEventType(TLP_MODIFYENTITY),
-    glSimpleEntity(entity){
+   sceneEventType(TLP_MODIFYENTITY),
+   glSimpleEntity(entity) {
 }
 
-GlSimpleEntity *GlSceneEvent::getGlSimpleEntity(){
+GlSimpleEntity *GlSceneEvent::getGlSimpleEntity() {
   assert(sceneEventType==TLP_MODIFYENTITY);
   return glSimpleEntity;
 }
 
-std::string GlSceneEvent::getLayerName(){
+std::string GlSceneEvent::getLayerName() {
   assert(sceneEventType==TLP_ADDLAYER || sceneEventType==TLP_DELLAYER || sceneEventType==TLP_MODIFYLAYER);
   return layerName;
 }
 
-GlLayer *GlSceneEvent::getLayer(){
+GlLayer *GlSceneEvent::getLayer() {
   assert(sceneEventType==TLP_ADDLAYER || sceneEventType==TLP_DELLAYER || sceneEventType==TLP_MODIFYLAYER);
   return layer;
 }

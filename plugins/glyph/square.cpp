@@ -43,19 +43,19 @@ using namespace tlp;
  */
 class Square: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
-	Square(GlyphContext *gc = NULL);
-	Square(EdgeExtremityGlyphContext*gc = NULL);
-	virtual ~Square();
-	virtual void draw(node n, float lod);
-	virtual Coord getAnchor(const Coord &vector) const;
-	virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
+  Square(GlyphContext *gc = NULL);
+  Square(EdgeExtremityGlyphContext*gc = NULL);
+  virtual ~Square();
+  virtual void draw(node n, float lod);
+  virtual Coord getAnchor(const Coord &vector) const;
+  virtual void draw(edge e, node n, const Color& glyphColor, const Color &borderColor, float lod);
 
 protected:
-	inline void drawGlyph(const Color& glyphColor, const string& texture,
-			const string& texturePath, double borderWidth,
-			const Color& borderColor, float lod);
+  inline void drawGlyph(const Color& glyphColor, const string& texture,
+                        const string& texturePath, double borderWidth,
+                        const Color& borderColor, float lod);
 
-	static GlRect *rect;
+  static GlRect *rect;
 };
 
 GlRect* Square::rect=0;
@@ -65,59 +65,62 @@ GLYPHPLUGIN(Square, "2D - Square", "David Auber", "09/07/2002", "Textured square
 EEGLYPHPLUGIN(Square,"2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0", 4)
 //===================================================================================
 Square::Square(GlyphContext *gc) :
-	Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
-	if(!rect)
-		rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
+  Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
+  if(!rect)
+    rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
 }
 Square::Square(EdgeExtremityGlyphContext *gc) :
-	Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
-	if(!rect)
-		rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
+  Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
+  if(!rect)
+    rect = new GlRect(Coord(0,0,0),Size(1,1,0),Color(0,0,0,255),Color(0,0,0,255));
 }
 //=====================================================
 Square::~Square() {
 }
 //=====================================================
 void Square::draw(node n, float lod) {
-	drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
-			glGraphInputData->getElementTexture()->getNodeValue(n),
-			glGraphInputData->parameters->getTexturePath(),
-			glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-			glGraphInputData->getElementBorderColor()->getNodeValue(n), lod);
+  drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
+            glGraphInputData->getElementTexture()->getNodeValue(n),
+            glGraphInputData->parameters->getTexturePath(),
+            glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+            glGraphInputData->getElementBorderColor()->getNodeValue(n), lod);
 
 }
 
 void Square::draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
   glDisable(GL_LIGHTING);
-	drawGlyph(glyphColor,
-			edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
-			edgeExtGlGraphInputData->parameters->getTexturePath(),
-			edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-			borderColor, lod);
+  drawGlyph(glyphColor,
+            edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
+            edgeExtGlGraphInputData->parameters->getTexturePath(),
+            edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+            borderColor, lod);
 }
 
 //=====================================================
 Coord Square::getAnchor(const Coord &vector) const {
-	Coord v(vector);
-	float x, y, z, fmax;
-	v.get(x, y, z);
-	v.setZ(0.0f);
-	fmax = std::max(fabsf(x), fabsf(y));
-	if (fmax > 0.0f)
-		return v * (0.5f / fmax);
-	else
-		return v;
+  Coord v(vector);
+  float x, y, z, fmax;
+  v.get(x, y, z);
+  v.setZ(0.0f);
+  fmax = std::max(fabsf(x), fabsf(y));
+
+  if (fmax > 0.0f)
+    return v * (0.5f / fmax);
+  else
+    return v;
 }
 
 void Square::drawGlyph(const Color& glyphColor, const string& texture,
-		const string& texturePath, double borderWidth,
-		const Color& borderColor, float lod) {
-	rect->setFillColor(glyphColor);
-	rect->setOutlineColor(borderColor);
-	rect->setTextureName(texturePath+texture);
-	if (borderWidth < 1e-6)
-		borderWidth=1e-6;
-	rect->setOutlineSize(borderWidth);
-	rect->draw(lod,NULL);
+                       const string& texturePath, double borderWidth,
+                       const Color& borderColor, float lod) {
+  rect->setFillColor(glyphColor);
+  rect->setOutlineColor(borderColor);
+  rect->setTextureName(texturePath+texture);
+
+  if (borderWidth < 1e-6)
+    borderWidth=1e-6;
+
+  rect->setOutlineSize(borderWidth);
+  rect->draw(lod,NULL);
 }
 /*@}*/

@@ -58,30 +58,30 @@
 namespace {
 
 const char * paramHelp[] = {
-		HTML_HELP_OPEN()				 \
-		HTML_HELP_DEF( "type", "String Collection" ) \
-		HTML_HELP_DEF("values", "Standard <BR> Repulse <BR> Planar") \
-		HTML_HELP_DEF( "default", "Standard" )	 \
-		HTML_HELP_BODY() \
-		"Easy way to set fixed costs. "	\
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()				 \
-		HTML_HELP_DEF( "type", "String Collection" ) \
-		HTML_HELP_DEF("values", "Fast <BR> Medium <BR> HQ") \
-		HTML_HELP_DEF( "default", "Medium" )	 \
-		HTML_HELP_BODY() \
-		"Easy way to set temperature and iterations. "	\
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"the preferred edge length. "
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"the preferred edge length multiplier for attraction. "
-		HTML_HELP_CLOSE()
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "String Collection" ) \
+  HTML_HELP_DEF("values", "Standard <BR> Repulse <BR> Planar") \
+  HTML_HELP_DEF( "default", "Standard" )   \
+  HTML_HELP_BODY() \
+  "Easy way to set fixed costs. " \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "String Collection" ) \
+  HTML_HELP_DEF("values", "Fast <BR> Medium <BR> HQ") \
+  HTML_HELP_DEF( "default", "Medium" )   \
+  HTML_HELP_BODY() \
+  "Easy way to set temperature and iterations. "  \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "the preferred edge length. "
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "the preferred edge length multiplier for attraction. "
+  HTML_HELP_CLOSE()
 };
 }
 
@@ -99,51 +99,62 @@ const char * paramHelp[] = {
 
 class OGDFDavidsonHarel : public OGDFLayoutPluginBase {
 
-	tlp::StringCollection settings;
-	tlp::StringCollection speed;
+  tlp::StringCollection settings;
+  tlp::StringCollection speed;
 
 public:
 
-	OGDFDavidsonHarel(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::DavidsonHarelLayout()) {
-		addParameter<StringCollection>(ELT_SETTINGS, paramHelp[0], ELT_SETTINGSLIST);
-		addParameter<StringCollection>(ELT_SPEED, paramHelp[1], ELT_SPEEDLIST);
-		addParameter<double>("preferredEdgeLength", paramHelp[2], "0");
-		addParameter<double>("preferredEdgeLengthMultiplier", paramHelp[3], "2.0");
+  OGDFDavidsonHarel(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::DavidsonHarelLayout()) {
+    addParameter<StringCollection>(ELT_SETTINGS, paramHelp[0], ELT_SETTINGSLIST);
+    addParameter<StringCollection>(ELT_SPEED, paramHelp[1], ELT_SPEEDLIST);
+    addParameter<double>("preferredEdgeLength", paramHelp[2], "0");
+    addParameter<double>("preferredEdgeLengthMultiplier", paramHelp[3], "2.0");
 
-	}
+  }
 
-	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
-		ogdf::DavidsonHarelLayout *davidson = static_cast<ogdf::DavidsonHarelLayout*>(ogdfLayoutAlgo);
-		if (dataSet != 0) {
-			settings.setCurrent(0);
-			if (dataSet->get(ELT_SETTINGS, settings)) {
-				if (settings.getCurrent() == STANDARD_ELT) {
-					davidson->fixSettings(ogdf::DavidsonHarelLayout::spStandard);
-				} else if (settings.getCurrent() == REPULSE_ELT) {
-					davidson->fixSettings(ogdf::DavidsonHarelLayout::spRepulse);
-				} else {
-					davidson->fixSettings(ogdf::DavidsonHarelLayout::spPlanar);
-				}
-			}
-			speed.setCurrent(0);
-			if (dataSet->get(ELT_SPEED, speed)) {
-				if (speed.getCurrent() == FAST_ELT) {
-					davidson->setSpeed(ogdf::DavidsonHarelLayout::sppFast);
-				} else if (speed.getCurrent() == MEDIUM_ELT) {
-					davidson->setSpeed(ogdf::DavidsonHarelLayout::sppMedium);
-				} else {
-					davidson->setSpeed(ogdf::DavidsonHarelLayout::sppHQ);
-				}
-			}
-			double val = 0;
-			if (dataSet->get("preferredEdgeLength", val))
-				davidson->setPreferredEdgeLength(val);
-			if (dataSet->get("preferredEdgeLengthMultiplier", val))
-				davidson->setPreferredEdgeLengthMultiplier(val);
-		}
-	}
+  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+    ogdf::DavidsonHarelLayout *davidson = static_cast<ogdf::DavidsonHarelLayout*>(ogdfLayoutAlgo);
 
-	~OGDFDavidsonHarel() {}
+    if (dataSet != 0) {
+      settings.setCurrent(0);
+
+      if (dataSet->get(ELT_SETTINGS, settings)) {
+        if (settings.getCurrent() == STANDARD_ELT) {
+          davidson->fixSettings(ogdf::DavidsonHarelLayout::spStandard);
+        }
+        else if (settings.getCurrent() == REPULSE_ELT) {
+          davidson->fixSettings(ogdf::DavidsonHarelLayout::spRepulse);
+        }
+        else {
+          davidson->fixSettings(ogdf::DavidsonHarelLayout::spPlanar);
+        }
+      }
+
+      speed.setCurrent(0);
+
+      if (dataSet->get(ELT_SPEED, speed)) {
+        if (speed.getCurrent() == FAST_ELT) {
+          davidson->setSpeed(ogdf::DavidsonHarelLayout::sppFast);
+        }
+        else if (speed.getCurrent() == MEDIUM_ELT) {
+          davidson->setSpeed(ogdf::DavidsonHarelLayout::sppMedium);
+        }
+        else {
+          davidson->setSpeed(ogdf::DavidsonHarelLayout::sppHQ);
+        }
+      }
+
+      double val = 0;
+
+      if (dataSet->get("preferredEdgeLength", val))
+        davidson->setPreferredEdgeLength(val);
+
+      if (dataSet->get("preferredEdgeLengthMultiplier", val))
+        davidson->setPreferredEdgeLengthMultiplier(val);
+    }
+  }
+
+  ~OGDFDavidsonHarel() {}
 
 };
 

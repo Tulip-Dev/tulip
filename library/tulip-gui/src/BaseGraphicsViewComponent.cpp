@@ -50,89 +50,92 @@ using namespace std;
 
 namespace tlp {
 
-  BaseGraphicsViewComponent::BaseGraphicsViewComponent(const string &realViewName):realViewName(realViewName),graphicsView(NULL),baseView(ViewLister::getPluginObject(realViewName, NULL)){}
+BaseGraphicsViewComponent::BaseGraphicsViewComponent(const string &realViewName):realViewName(realViewName),graphicsView(NULL),baseView(ViewLister::getPluginObject(realViewName, NULL)) {}
 
-  BaseGraphicsViewComponent::~BaseGraphicsViewComponent() {}
+BaseGraphicsViewComponent::~BaseGraphicsViewComponent() {}
 
-  QWidget *BaseGraphicsViewComponent::construct(QWidget *parent) {
-    QWidget *widget=AbstractView::construct(parent);
-    baseView->construct(parent);
-    connect(baseView,SIGNAL(elementSelected(unsigned int,bool)),this,SLOT(elementSelectedSlot(unsigned int,bool)));
+QWidget *BaseGraphicsViewComponent::construct(QWidget *parent) {
+  QWidget *widget=AbstractView::construct(parent);
+  baseView->construct(parent);
+  connect(baseView,SIGNAL(elementSelected(unsigned int,bool)),this,SLOT(elementSelectedSlot(unsigned int,bool)));
 
-    widget->resize(512, 512);
+  widget->resize(512, 512);
 
-    GWOverviewWidget *overviewWidget = static_cast<GlMainView *>(baseView)->getOverviewWidget();
-    QAction *overviewAction = static_cast<GlMainView *>(baseView)->getOverviewAction();
+  GWOverviewWidget *overviewWidget = static_cast<GlMainView *>(baseView)->getOverviewWidget();
+  QAction *overviewAction = static_cast<GlMainView *>(baseView)->getOverviewAction();
 
-    graphicsView = new GlMainWidgetGraphicsView(widget,static_cast<GlMainView *>(baseView)->getGlMainWidget());
-    graphicsView->resize(512, 512);
+  graphicsView = new GlMainWidgetGraphicsView(widget,static_cast<GlMainView *>(baseView)->getGlMainWidget());
+  graphicsView->resize(512, 512);
 
-    setCentralWidget(graphicsView);
+  setCentralWidget(graphicsView);
 
-    tabWidgetProxy = new TabWidgetHidableMenuGraphicsProxy(30);
-    tabWidgetProxy->setPos(0,0);
-    tabWidgetProxy->resize(370, 470);
-    tabWidgetProxy->scale(0.7,0.7);
-    tabWidgetProxy->hideTabWidget();
-    tabWidgetProxy->setZValue(10);
-    list<pair<QWidget *,string> > configWidgets=baseView->getConfigurationWidget();
-    for(list<pair<QWidget *,string> >::iterator it=configWidgets.begin();it!=configWidgets.end();++it){
-    	tabWidgetProxy->addTab((*it).first, (*it).second.c_str());
-    }
+  tabWidgetProxy = new TabWidgetHidableMenuGraphicsProxy(30);
+  tabWidgetProxy->setPos(0,0);
+  tabWidgetProxy->resize(370, 470);
+  tabWidgetProxy->scale(0.7,0.7);
+  tabWidgetProxy->hideTabWidget();
+  tabWidgetProxy->setZValue(10);
+  list<pair<QWidget *,string> > configWidgets=baseView->getConfigurationWidget();
 
-    graphicsView->scene()->addItem(tabWidgetProxy);
-
-    overviewItem = NULL;
-    if(overviewWidget){
-    	overviewWidget->setDrawIfNotVisible(true);
-    	overviewItem=new GlMainWidgetItem(overviewWidget->getView(),100,100,true);
-    	overviewItem->setPos(0,0);
-    	overviewItem->setZValue(1);
-    	graphicsView->scene()->addItem(overviewItem);
-
-    	connect(overviewWidget, SIGNAL(hideOverview(bool)), this, SLOT(hideOverview(bool)));
-    	connect(overviewAction, SIGNAL(triggered(bool)), this, SLOT(setVisibleOverview(bool)));
-
-    	tabWidgetProxy->translate(0,overviewItem->boundingRect().height()+60);
-    }
-
-    return graphicsView;
-
-  }
-  void BaseGraphicsViewComponent::draw() {
-    baseView->draw();
-    graphicsView->draw();
+  for(list<pair<QWidget *,string> >::iterator it=configWidgets.begin(); it!=configWidgets.end(); ++it) {
+    tabWidgetProxy->addTab((*it).first, (*it).second.c_str());
   }
 
-  void BaseGraphicsViewComponent::refresh() {
-    baseView->refresh();
-    graphicsView->redraw();
+  graphicsView->scene()->addItem(tabWidgetProxy);
+
+  overviewItem = NULL;
+
+  if(overviewWidget) {
+    overviewWidget->setDrawIfNotVisible(true);
+    overviewItem=new GlMainWidgetItem(overviewWidget->getView(),100,100,true);
+    overviewItem->setPos(0,0);
+    overviewItem->setZValue(1);
+    graphicsView->scene()->addItem(overviewItem);
+
+    connect(overviewWidget, SIGNAL(hideOverview(bool)), this, SLOT(hideOverview(bool)));
+    connect(overviewAction, SIGNAL(triggered(bool)), this, SLOT(setVisibleOverview(bool)));
+
+    tabWidgetProxy->translate(0,overviewItem->boundingRect().height()+60);
   }
 
-  void BaseGraphicsViewComponent::init() {
-    baseView->init();
-    draw();
-  }
+  return graphicsView;
 
-  void BaseGraphicsViewComponent::elementSelectedSlot(unsigned int id,bool node){
-    emit elementSelected(id,node);
-  }
+}
+void BaseGraphicsViewComponent::draw() {
+  baseView->draw();
+  graphicsView->draw();
+}
 
-  string BaseGraphicsViewComponent::getRealViewName() const {
-    return realViewName;
-  }
+void BaseGraphicsViewComponent::refresh() {
+  baseView->refresh();
+  graphicsView->redraw();
+}
 
-  void BaseGraphicsViewComponent::hideOverview(bool hide){
-  	if(hide){
-  		overviewItem->setVisible(false);
-  	}else{
-  		overviewItem->setVisible(true);
-  	}
-  }
+void BaseGraphicsViewComponent::init() {
+  baseView->init();
+  draw();
+}
 
-  void BaseGraphicsViewComponent::setVisibleOverview(bool visible){
-  	hideOverview(!visible);
+void BaseGraphicsViewComponent::elementSelectedSlot(unsigned int id,bool node) {
+  emit elementSelected(id,node);
+}
+
+string BaseGraphicsViewComponent::getRealViewName() const {
+  return realViewName;
+}
+
+void BaseGraphicsViewComponent::hideOverview(bool hide) {
+  if(hide) {
+    overviewItem->setVisible(false);
   }
+  else {
+    overviewItem->setVisible(true);
+  }
+}
+
+void BaseGraphicsViewComponent::setVisibleOverview(bool visible) {
+  hideOverview(!visible);
+}
 
 
 }

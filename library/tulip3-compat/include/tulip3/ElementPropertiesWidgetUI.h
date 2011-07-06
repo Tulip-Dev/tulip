@@ -36,24 +36,23 @@ namespace tlp {
 
 class TulipTableWidget;
 
-class ElementPropertiesWidgetUI : public QWidget
-{
-    Q_OBJECT
+class ElementPropertiesWidgetUI : public QWidget {
+  Q_OBJECT
 
 public:
-    ElementPropertiesWidgetUI( QWidget* parent = 0);
-    ~ElementPropertiesWidgetUI();
+  ElementPropertiesWidgetUI( QWidget* parent = 0);
+  ~ElementPropertiesWidgetUI();
 
-    QLabel* label;
-    TulipTableWidget* propertyTable;
+  QLabel* label;
+  TulipTableWidget* propertyTable;
 
 protected:
-    QGridLayout* ElementPropertiesWidgetUILayout;
+  QGridLayout* ElementPropertiesWidgetUILayout;
 
 protected slots:
-    virtual void languageChange();
+  virtual void languageChange();
 
-    virtual void propertyTableValueChanged(int, int);
+  virtual void propertyTableValueChanged(int, int);
 
 };
 

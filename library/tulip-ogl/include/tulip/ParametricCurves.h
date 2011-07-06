@@ -55,8 +55,8 @@ TLP_GL_SCOPE void computeBezierPoints(const std::vector<Coord> &controlPoints, s
  * Compute the position of a point 'p' at t (0 <= t <= 1)
  * along Catmull-Rom curve defined by a set of control points.
  * The features of this type of spline are the following :
- * 		-> the spline passes through all of the control points
- *		-> the spline is C1 continuous, meaning that there are no discontinuities in the tangent direction and magnitude
+ *    -> the spline passes through all of the control points
+ *    -> the spline is C1 continuous, meaning that there are no discontinuities in the tangent direction and magnitude
  *      -> the spline is not C2 continuous.  The second derivative is linearly interpolated within each segment, causing the curvature to vary linearly over the length of the segment
  *
  * \param controlPoints a vector of control points
@@ -81,7 +81,7 @@ TLP_GL_SCOPE void computeCatmullRomPoints(const std::vector<Coord> &controlPoint
   * along open uniform B-spline curve defined by a set of control points.
   * An uniform B-spline is a piecewise collection of Bézier curves of the same degree, connected end to end.
   * The features of this type of spline are the following :
-  *		-> the spline is C^2 continuous, meaning there is no discontinuities in curvature
+  *   -> the spline is C^2 continuous, meaning there is no discontinuities in curvature
   *     -> the spline has local control : its parameters only affect a small part of the entire spline
   * A B-spline is qualified as open when it passes through its first and last control points.
   * \param controlPoints a vector of control points

@@ -47,17 +47,17 @@
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class ConeTreeExtended:public tlp::LayoutAlgorithm { 
+class ConeTreeExtended:public tlp::LayoutAlgorithm {
 public:
   ConeTreeExtended(const tlp::PropertyContext& context);
   ~ConeTreeExtended();
   bool run();
 private:
   double treePlace3D(tlp::node n, TLP_HASH_MAP<tlp::node,double> *posRelX,
-		     TLP_HASH_MAP<tlp::node,double> *posRelY);
+                     TLP_HASH_MAP<tlp::node,double> *posRelY);
   void calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node,double> *px,
-		  TLP_HASH_MAP<tlp::node,double> *py,
-		  double x, double y, int level);
+                  TLP_HASH_MAP<tlp::node,double> *py,
+                  double x, double y, int level);
   void computeLayerSize(tlp::node n, unsigned int level);
   void computeYCoodinates(tlp::node root);
   tlp::Graph *tree;

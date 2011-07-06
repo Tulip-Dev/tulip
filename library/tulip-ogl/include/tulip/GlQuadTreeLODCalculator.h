@@ -31,94 +31,102 @@
 
 namespace tlp {
 
-  class Camera;
-  template <class TYPE> class QuadTreeNode;
-  class GlScene;
+class Camera;
+template <class TYPE> class QuadTreeNode;
+class GlScene;
 
-  /**
-   * Class use to compute bounding boxs of a vector of GlEntity
-   */
-  class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator,
-    private GraphObserver, private PropertyObserver, private Observable {
+/**
+ * Class use to compute bounding boxs of a vector of GlEntity
+ */
+class TLP_GL_SCOPE GlQuadTreeLODCalculator : public GlCPULODCalculator,
+  private GraphObserver, private PropertyObserver, private Observable {
 
-  public:
+public:
 
-    GlQuadTreeLODCalculator();
-    ~GlQuadTreeLODCalculator();
+  GlQuadTreeLODCalculator();
+  ~GlQuadTreeLODCalculator();
 
-    void setScene(GlScene &scene);
+  void setScene(GlScene &scene);
 
-    bool needEntities();
-    void setNeedEntities(bool);
+  bool needEntities();
+  void setNeedEntities(bool);
 
-    void addSimpleEntityBoundingBox(GlSimpleEntity * entity,const BoundingBox& bb);
-    void addNodeBoundingBox(unsigned int id,const BoundingBox& bb);
-    void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb);
+  void addSimpleEntityBoundingBox(GlSimpleEntity * entity,const BoundingBox& bb);
+  void addNodeBoundingBox(unsigned int id,const BoundingBox& bb);
+  void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb);
 
-    void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
+  void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
-    void computeFor3DCamera(LayerLODUnit *layerLODUnit,const Coord &eye,
-                            const Matrix<float, 4> transformMatrix,
-                            const Vector<int,4>& globalViewport,
-                            const Vector<int,4>& currentViewport);
+  void computeFor3DCamera(LayerLODUnit *layerLODUnit,const Coord &eye,
+                          const Matrix<float, 4> transformMatrix,
+                          const Vector<int,4>& globalViewport,
+                          const Vector<int,4>& currentViewport);
 
-    void setInputData(GlGraphInputData *newInputData);
+  void setInputData(GlGraphInputData *newInputData);
 
-    virtual GlLODCalculator *clone() {
-      GlQuadTreeLODCalculator *newCalculator=new GlQuadTreeLODCalculator();
-      newCalculator->setScene(*glScene);
-      newCalculator->setInputData(inputData);
-      return newCalculator;
-    }
+  virtual GlLODCalculator *clone() {
+    GlQuadTreeLODCalculator *newCalculator=new GlQuadTreeLODCalculator();
+    newCalculator->setScene(*glScene);
+    newCalculator->setInputData(inputData);
+    return newCalculator;
+  }
 
-  protected :
+protected :
 
-    void update(PropertyInterface *property);
-    void treatEvent(const Event &ev);
-    void observableDestroyed(Observable *){}
-    void afterSetNodeValue(PropertyInterface*,const node n);
-    void afterSetEdgeValue(PropertyInterface*,const edge e);
-    void afterSetAllNodeValue(PropertyInterface*);
-    void afterSetAllEdgeValue(PropertyInterface*);
-    void addNode(Graph *,const node ){setHaveToCompute();}
-    void addEdge(Graph *,const edge ){setHaveToCompute();}
-    void delNode(Graph *,const node ){setHaveToCompute();}
-    void delEdge(Graph *,const edge ){setHaveToCompute();}
-    void addLocalProperty(Graph*, const std::string &name);
-    void delLocalProperty(Graph*, const std::string &name);
-    void destroy(Graph *);
-    void destroy(const Camera *);
+  void update(PropertyInterface *property);
+  void treatEvent(const Event &ev);
+  void observableDestroyed(Observable *) {}
+  void afterSetNodeValue(PropertyInterface*,const node n);
+  void afterSetEdgeValue(PropertyInterface*,const edge e);
+  void afterSetAllNodeValue(PropertyInterface*);
+  void afterSetAllEdgeValue(PropertyInterface*);
+  void addNode(Graph *,const node ) {
+    setHaveToCompute();
+  }
+  void addEdge(Graph *,const edge ) {
+    setHaveToCompute();
+  }
+  void delNode(Graph *,const node ) {
+    setHaveToCompute();
+  }
+  void delEdge(Graph *,const edge ) {
+    setHaveToCompute();
+  }
+  void addLocalProperty(Graph*, const std::string &name);
+  void delLocalProperty(Graph*, const std::string &name);
+  void destroy(Graph *);
+  void destroy(const Camera *);
 
-    void removeObservers();
-    void addObservers();
+  void removeObservers();
+  void addObservers();
 
-    void initCamerasObservers();
-    void clearCamerasObservers();
+  void initCamerasObservers();
+  void clearCamerasObservers();
 
-    void setHaveToCompute();
+  void setHaveToCompute();
 
-    std::vector<QuadTreeNode<unsigned int> *> nodesQuadTree;
-    std::vector<QuadTreeNode<unsigned int> *> edgesQuadTree;
-    std::vector<QuadTreeNode<GlSimpleEntity *> *> entitiesQuadTree;
-    std::vector<std::vector<SimpleEntityLODUnit> > simpleEntities;
+  std::vector<QuadTreeNode<unsigned int> *> nodesQuadTree;
+  std::vector<QuadTreeNode<unsigned int> *> edgesQuadTree;
+  std::vector<QuadTreeNode<GlSimpleEntity *> *> entitiesQuadTree;
+  std::vector<std::vector<SimpleEntityLODUnit> > simpleEntities;
 
-    bool haveToCompute;
+  bool haveToCompute;
 
-    BoundingBox nodesGlobalBoundingBox;
-    BoundingBox edgesGlobalBoundingBox;
-    BoundingBox entitiesGlobalBoundingBox;
+  BoundingBox nodesGlobalBoundingBox;
+  BoundingBox edgesGlobalBoundingBox;
+  BoundingBox entitiesGlobalBoundingBox;
 
-    std::vector<Camera *> cameras;
-    std::map<GlLayer*,std::pair<Camera*, Camera> > layerToCamera;
-    Camera *currentCamera;
-    Graph *currentGraph;
-    PropertyInterface *layoutProperty;
-    PropertyInterface *sizeProperty;
-    PropertyInterface *selectionProperty;
+  std::vector<Camera *> cameras;
+  std::map<GlLayer*,std::pair<Camera*, Camera> > layerToCamera;
+  Camera *currentCamera;
+  Graph *currentGraph;
+  PropertyInterface *layoutProperty;
+  PropertyInterface *sizeProperty;
+  PropertyInterface *selectionProperty;
 
-    int quadTreesVectorPosition;
-    int simpleEntitiesVectorPosition;
-  };
+  int quadTreesVectorPosition;
+  int simpleEntitiesVectorPosition;
+};
 
 }
 

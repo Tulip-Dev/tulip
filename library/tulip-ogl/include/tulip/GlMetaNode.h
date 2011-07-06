@@ -25,34 +25,34 @@
 
 namespace tlp {
 
+/**
+ * Class who represent a meta-node
+ */
+class TLP_GL_SCOPE GlMetaNode : public GlNode {
+
+public:
+
   /**
-   * Class who represent a meta-node
+   * Create a meta-node with the given id
    */
-  class TLP_GL_SCOPE GlMetaNode : public GlNode{
+  GlMetaNode(unsigned int id):GlNode(id) {}
 
-  public:
+  /**
+   * Draw the meta-node
+   */
+  virtual void draw(float lod,GlGraphInputData *data,Camera* camera);
 
-    /**
-     * Create a meta-node with the given id
-     */
-    GlMetaNode(unsigned int id):GlNode(id) {}
+  /**
+   * Draw label of the meta-node
+   */
+  virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data);
 
-    /**
-     * Draw the meta-node
-     */
-    virtual void draw(float lod,GlGraphInputData *data,Camera* camera);
+  /**
+   * Draw label of the meta-node with lod
+   */
+  virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data,float lod,Camera *camera=NULL);
 
-    /**
-     * Draw label of the meta-node
-     */
-    virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data);
-
-    /**
-     * Draw label of the meta-node with lod
-     */
-    virtual void drawLabel(OcclusionTest* test,GlGraphInputData* data,float lod,Camera *camera=NULL);
-
-  };
+};
 
 }
 

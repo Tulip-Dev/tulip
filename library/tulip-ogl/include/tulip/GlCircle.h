@@ -27,40 +27,40 @@
 
 namespace tlp {
 
+/**
+ * \addtogroup GlEntities
+ */
+/*@{*/
+/**
+ * \brief General class used to render circles as GlEntity.
+ *
+ * This class is a generic class to render circles as GlEntity.
+ */
+class TLP_GL_SCOPE GlCircle : public GlRegularPolygon {
+public:
   /**
-   * \addtogroup GlEntities
+   * Constructor
    */
-  /*@{*/
+  GlCircle(const Coord &center = Coord(0,0,0),
+           float radius = 1.,
+           const Color &outlineColor = Color(255, 0 , 0 , 255),
+           const Color &fillColor = Color (0, 0, 255,255),
+           bool filled = false,
+           bool outlined = true,
+           float startAngle = 0.0,
+           unsigned int segments = 10);
+
   /**
-   * \brief General class used to render circles as GlEntity.
-   *
-   * This class is a generic class to render circles as GlEntity.
+   * Write-acess Accessor to the center, the radius and the startAngle of the circle.
    */
-  class TLP_GL_SCOPE GlCircle : public GlRegularPolygon {
-  public:
-    /**
-     * Constructor
-     */
-    GlCircle(const Coord &center = Coord(0,0,0),
-		float radius = 1.,
-		const Color &outlineColor = Color(255, 0 , 0 , 255),
-		const Color &fillColor = Color (0, 0, 255,255),
-		bool filled = false,
-		bool outlined = true,
-		float startAngle = 0.0,
-		unsigned int segments = 10);
+  void set(const Coord &center, float radius, float startAngle);
 
-    /**
-     * Write-acess Accessor to the center, the radius and the startAngle of the circle.
-     */
-    void set(const Coord &center, float radius, float startAngle);
-
-    /**
-     * Function to export data in XML
-     */
-    virtual void getXML(xmlNodePtr rootNode);
-  };
-  /*@}*/
+  /**
+   * Function to export data in XML
+   */
+  virtual void getXML(xmlNodePtr rootNode);
+};
+/*@}*/
 }
 
 #endif

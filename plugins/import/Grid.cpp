@@ -25,43 +25,44 @@ using namespace tlp;
 
 namespace {
 const char
-    * paramHelp[] = {
-    // width
-        HTML_HELP_OPEN()
-        HTML_HELP_DEF( "type", "unsigned int" )
-        HTML_HELP_DEF( "default", "10" )
-        HTML_HELP_BODY()
-        "This parameter defines the grid's node width."
-        HTML_HELP_CLOSE(),
+* paramHelp[] = {
+  // width
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "unsigned int" )
+  HTML_HELP_DEF( "default", "10" )
+  HTML_HELP_BODY()
+  "This parameter defines the grid's node width."
+  HTML_HELP_CLOSE(),
 
-        // height
-        HTML_HELP_OPEN()
-        HTML_HELP_DEF( "type", "unsigned int" )
-        HTML_HELP_DEF( "default", "10" )
-        HTML_HELP_BODY()
-        "This parameter defines the grid's node height."
-        HTML_HELP_CLOSE(),
-        //Connectivity
-        HTML_HELP_OPEN()
-        HTML_HELP_DEF( "type", "StringCollection" )
-        HTML_HELP_DEF( "values", "4 <br> 6 <br> 8" )
-        HTML_HELP_DEF( "default", "4" )
-        HTML_HELP_BODY()
-        "This parameter defines the connectivity number of each node."
-        HTML_HELP_CLOSE(),
-        // tore
-        HTML_HELP_OPEN()
-        HTML_HELP_DEF( "type", "bool" )
-        HTML_HELP_DEF( "default", "false" )
-        HTML_HELP_BODY()
-        "This parameter defines if the opposite node in the grid are connected. In a 4 connectivity the resulting object is a torus."
-        HTML_HELP_CLOSE(),
-        // Line spacing
-        HTML_HELP_OPEN()
-        HTML_HELP_DEF( "type", "double" )
-        HTML_HELP_DEF( "default", "1.0" )
-        HTML_HELP_BODY()
-        "This parameter defines the spacing between each node in the grid." };
+  // height
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "unsigned int" )
+  HTML_HELP_DEF( "default", "10" )
+  HTML_HELP_BODY()
+  "This parameter defines the grid's node height."
+  HTML_HELP_CLOSE(),
+  //Connectivity
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "StringCollection" )
+  HTML_HELP_DEF( "values", "4 <br> 6 <br> 8" )
+  HTML_HELP_DEF( "default", "4" )
+  HTML_HELP_BODY()
+  "This parameter defines the connectivity number of each node."
+  HTML_HELP_CLOSE(),
+  // tore
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_DEF( "default", "false" )
+  HTML_HELP_BODY()
+  "This parameter defines if the opposite node in the grid are connected. In a 4 connectivity the resulting object is a torus."
+  HTML_HELP_CLOSE(),
+  // Line spacing
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_DEF( "default", "1.0" )
+  HTML_HELP_BODY()
+  "This parameter defines the spacing between each node in the grid."
+};
 }
 /** \addtogroup import */
 /*@{*/
@@ -71,7 +72,7 @@ const char
  *  User can specify the connectivity of each nodes in the grid, spacing between nodes and if opposite nodes are connected.
  */
 class Grid: public ImportModule {
- public:
+public:
   Grid(AlgorithmContext context) :
     ImportModule(context) {
     addParameter<unsigned int> ("width", paramHelp[0], "10");
@@ -84,8 +85,8 @@ class Grid: public ImportModule {
   }
 
   void buildRow(const vector<node>& nodes, vector<pair<node, node> >& ends,
-		unsigned int iRow, unsigned width,
-		int conn, bool isTore, double spacing) {
+                unsigned int iRow, unsigned width,
+                int conn, bool isTore, double spacing) {
     LayoutProperty *layout = graph->getProperty<LayoutProperty> ("viewLayout");
 
     //Used for conn == 6
@@ -93,72 +94,87 @@ class Grid: public ImportModule {
     double h = sqrt((r * r) - ((r / 2) * (r / 2)));
     double hHeight = cos(DEGTORAD(60)) * r;
     double shift = 0;
+
     //If iRow is even introduce a shift
     if (iRow % 2 == 0) {
       shift += h;
-    } else {
+    }
+    else {
       shift += 0;
     }
+
     unsigned int iBegin = iRow * width;
     node previous, current;
+
     for (unsigned int i = 0; i < width; ++i) {
       current = nodes[iBegin + i];
+
       if (conn == 6) {
         layout->setNodeValue(current,
-			     Coord(i * 2 * h + shift + i * spacing,
-				   iRow * (1.0 - hHeight + spacing), 0));
-      } else
+                             Coord(i * 2 * h + shift + i * spacing,
+                                   iRow * (1.0 - hHeight + spacing), 0));
+      }
+      else
         layout->setNodeValue(current,
-			     Coord(i * (1.0 + spacing), iRow * (1.0
-								+ spacing), 0));
+                             Coord(i * (1.0 + spacing), iRow * (1.0
+                                   + spacing), 0));
+
       if (previous.isValid())
-	ends.push_back(pair<node, node>(previous, current));
+        ends.push_back(pair<node, node>(previous, current));
+
       previous = current;
     }
+
     if (isTore)
       ends.push_back(pair<node, node>(current, nodes[iBegin]));
   }
 
   void connectRow(const vector<node> &nodes, vector<pair<node, node> > &ends,
-		  unsigned int row1, unsigned int row2, unsigned int width,
-		  int conn, bool isTore) {
+                  unsigned int row1, unsigned int row2, unsigned int width,
+                  int conn, bool isTore) {
     unsigned int row1Begin = row1 * width;
     unsigned int row2Begin = row2 * width;
+
     for (unsigned int i = 0; i < width; ++i) {
       ends.push_back(pair<node, node>(nodes[row1Begin + i],
-				      nodes[row2Begin + i]));
+                                      nodes[row2Begin + i]));
 
       if (conn == 8) {
         if (i > 0) {
           ends.push_back(pair<node, node>(nodes[row1Begin + i],
-					  nodes[row2Begin + i - 1]));
-        } else if (isTore) {
-          ends.push_back(pair<node, node>(nodes[row1Begin + i],
-					  nodes[row2Begin + width - 1]));
+                                          nodes[row2Begin + i - 1]));
         }
+        else if (isTore) {
+          ends.push_back(pair<node, node>(nodes[row1Begin + i],
+                                          nodes[row2Begin + width - 1]));
+        }
+
         if (i < width - 1) {
           ends.push_back(pair<node, node>(nodes[row1Begin + i],
-					  nodes[row2Begin + i + 1]));
-        } else if (isTore) {
+                                          nodes[row2Begin + i + 1]));
+        }
+        else if (isTore) {
           ends.push_back(pair<node, node>(nodes[row1Begin + i],
-					  nodes[row2Begin]));
+                                          nodes[row2Begin]));
         }
       }
+
       if (conn == 6) {
         //In this case row1 must be even in order to ensure right connectivity in the hexagonal grid.
         if (row1 % 2 == 0) {
           if (i < width - 1)
             ends.push_back(pair<node, node>(nodes[row1Begin + i],
-					    nodes[row2Begin + i + 1]));
+                                            nodes[row2Begin + i + 1]));
           else if (isTore)
             ends.push_back(pair<node, node>(nodes[row1Begin + i], nodes[row2Begin]));
-        } else {
+        }
+        else {
           if (i > 0)
             ends.push_back(pair<node, node>(nodes[row1Begin + i],
-					    nodes[row2Begin + i - 1]));
+                                            nodes[row2Begin + i - 1]));
           else if (isTore)
             ends.push_back(pair<node, node>(nodes[row1Begin + i],
-					    nodes[row2Begin + width - 1]));
+                                            nodes[row2Begin + width - 1]));
         }
       }
     }
@@ -172,6 +188,7 @@ class Grid: public ImportModule {
     int conn = 4;
     StringCollection connectivity;
     double spacing = 1.0;
+
     if (dataSet != 0) {
       dataSet->get("width", width);
       dataSet->get("height", height);
@@ -179,21 +196,25 @@ class Grid: public ImportModule {
       dataSet->get("spacing", spacing);
       dataSet->get("connectivity", connectivity);
     }
+
     if (width == 0) {
       if (pluginProgress)
-	pluginProgress->setError(string("Error: width cannot be null"));
+        pluginProgress->setError(string("Error: width cannot be null"));
+
       return false;
     }
 
     if (height == 0) {
       if (pluginProgress)
-	pluginProgress->setError(string("Error: height cannot be null"));
+        pluginProgress->setError(string("Error: height cannot be null"));
+
       return false;
     }
 
     if (spacing < 0.0) {
       if (pluginProgress)
-	pluginProgress->setError(string("Error: spacing must be strictly positive"));
+        pluginProgress->setError(string("Error: spacing must be strictly positive"));
+
       return false;
     }
 
@@ -201,14 +222,17 @@ class Grid: public ImportModule {
       conn = 4;
     else if (connectivity.getCurrentString().compare("6") == 0) {
       conn = 6;
-      if(isTore && height%2 == 1){
-	if (pluginProgress)
-	  pluginProgress->setError("Error : cannot connect opposite nodes in an hexagonal grid with odd height");
-	else
-	  std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " Error : cannot connect opposite nodes in an hexagonal grid with odd height"  <<std::endl;
+
+      if(isTore && height%2 == 1) {
+        if (pluginProgress)
+          pluginProgress->setError("Error : cannot connect opposite nodes in an hexagonal grid with odd height");
+        else
+          std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " Error : cannot connect opposite nodes in an hexagonal grid with odd height"  <<std::endl;
+
         return false;
       }
-    } else
+    }
+    else
       conn = 8;
 
     // graph is predimensioned according the parameters
@@ -218,28 +242,36 @@ class Grid: public ImportModule {
 
     // compute nb edges
     unsigned int nbEdges = height * (width - 1);
+
     if (isTore)
       nbEdges += height;
+
     // add the between rows connections to the in rows connections
     nbEdges += width * (height - 1);
+
     // more between rows connections
     if (conn >= 6) {
       nbEdges += (height - 1) * (width - 1);
+
       if (isTore)
-	nbEdges += height - 1;
+        nbEdges += height - 1;
     }
+
     // more between row connections
     if (conn == 8) {
       nbEdges += (height - 1) * (width - 1);
+
       if (isTore)
-	nbEdges += height - 1;
+        nbEdges += height - 1;
     }
+
     vector<pair<node, node> > ends;
     ends.reserve(nbEdges);
     vector<edge> edges;
     edges.reserve(nbEdges);
 
     buildRow(nodes, ends, 0, width, conn, isTore, spacing);
+
     for (unsigned int i = 1; i < height; ++i) {
       buildRow(nodes, ends, i, width, conn, isTore, spacing);
       connectRow(nodes, ends, i - 1, i, width, conn, isTore);

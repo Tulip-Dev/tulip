@@ -37,8 +37,7 @@
 * 2004.
 *
 */
-class ConvolutionClustering:public tlp::DoubleAlgorithm
-{ 
+class ConvolutionClustering:public tlp::DoubleAlgorithm {
 public:
 
   ConvolutionClustering(tlp::PropertyContext);
@@ -49,7 +48,7 @@ public:
   std::vector<double> *getHistogram();
   void setParameters(int histosize,int threshold,int width);
   void getParameters(int &histosize,int &threshold,int &width);
-  void autoSetParameter();  
+  void autoSetParameter();
   std::list<int> getLocalMinimum();
 private:
 //  void buildSubGraphs(const std::vector<int>& ranges);

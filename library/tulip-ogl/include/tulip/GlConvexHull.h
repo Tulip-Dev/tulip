@@ -29,99 +29,101 @@
 
 namespace tlp {
 
-  struct ConvexHullItem;
+struct ConvexHullItem;
 
-  /** \brief Class used to represent ConvexHull
-   *
-   * Class used to represent ConvexHull. GlHierarchyConvexHull class use this to create all convexHull of the graph
+/** \brief Class used to represent ConvexHull
+ *
+ * Class used to represent ConvexHull. GlHierarchyConvexHull class use this to create all convexHull of the graph
+ */
+class TLP_GL_SCOPE GlConvexHull: public GlComposite {
+public:
+
+  /**
+   * Default constructor
    */
-  class TLP_GL_SCOPE GlConvexHull: public GlComposite {
-  public:
+  GlConvexHull() {}
 
-    /**
-     * Default constructor
-     */
-    GlConvexHull() {}
+  /**
+   * Build a Polygon with the convex hull of points
+   */
+  GlConvexHull(const std::vector<Coord> &points,
+               const std::vector<Color> &fillColors,
+               const std::vector<Color> &outlineColors,
+               const bool filled,
+               const bool outlined,
+               const std::string &name,
+               bool computeHull=true);
 
-    /**
-     * Build a Polygon with the convex hull of points
-     */
-    GlConvexHull(const std::vector<Coord> &points,
-		 const std::vector<Color> &fillColors,
-		 const std::vector<Color> &outlineColors,
-		 const bool filled,
-		 const bool outlined,
-		 const std::string &name,
-		 bool computeHull=true);
+  virtual ~GlConvexHull() {}
 
-    virtual ~GlConvexHull() {}
-
-    /**
-     * Function used to visit composite's children
-     */
-    virtual void acceptVisitor(GlSceneVisitor *visitor) {
-      if(boundingBox.isValid()){
-        visitor->visit(this);
-      }
-
-      for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin();it!=_sortedElements.end();++it) {
-        (*it)->acceptVisitor(visitor);
-      }
+  /**
+   * Function used to visit composite's children
+   */
+  virtual void acceptVisitor(GlSceneVisitor *visitor) {
+    if(boundingBox.isValid()) {
+      visitor->visit(this);
     }
 
+    for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin(); it!=_sortedElements.end(); ++it) {
+      (*it)->acceptVisitor(visitor);
+    }
+  }
 
-    /**
-     * Retrun the name of this convex hull
-     */
-    std::string getName() {return _name;}
 
-    /**
-     * Draw the convexHull
-     */
-    virtual void draw(float lod,Camera *camera);
+  /**
+   * Retrun the name of this convex hull
+   */
+  std::string getName() {
+    return _name;
+  }
 
-    /**
-     * Static function who build a hierarchy of convexHull with the given graph
-     */
-    static ConvexHullItem *buildConvexHullsFromHierarchy(Graph *graph,
-							std::vector<Color> fColors,
-							std::vector<Color> oColors,
-							bool deduceFromChilds = true,
-							Graph *root = 0,
-							unsigned int depth = 0);
+  /**
+   * Draw the convexHull
+   */
+  virtual void draw(float lod,Camera *camera);
 
-    /**
-     * Translate entity
-     */
-    virtual void translate(const Coord& mouvement);
+  /**
+   * Static function who build a hierarchy of convexHull with the given graph
+   */
+  static ConvexHullItem *buildConvexHullsFromHierarchy(Graph *graph,
+      std::vector<Color> fColors,
+      std::vector<Color> oColors,
+      bool deduceFromChilds = true,
+      Graph *root = 0,
+      unsigned int depth = 0);
 
-    /**
-     * Get the data in XML form
-     */
-    void getXML(xmlNodePtr rootNode);
+  /**
+   * Translate entity
+   */
+  virtual void translate(const Coord& mouvement);
 
-    /**
-     * Set the data with XML
-     */
-    void setWithXML(xmlNodePtr rootNode);
+  /**
+   * Get the data in XML form
+   */
+  void getXML(xmlNodePtr rootNode);
 
-    tlp::Graph *_graph;
+  /**
+   * Set the data with XML
+   */
+  void setWithXML(xmlNodePtr rootNode);
 
-  protected:
-    std::vector<Coord> _points;
-    std::vector<Color> _fillColors;
-    std::vector<Color> _outlineColors;
-    bool _filled;
-    bool _outlined;
-    std::string _name;
-  };
+  tlp::Graph *_graph;
 
-  struct ConvexHullItem {
-    GlConvexHull* hull;
-    Graph *_graph;
-    std::string name;
-    std::vector<ConvexHullItem *> children;
-  };
+protected:
+  std::vector<Coord> _points;
+  std::vector<Color> _fillColors;
+  std::vector<Color> _outlineColors;
+  bool _filled;
+  bool _outlined;
+  std::string _name;
+};
+
+struct ConvexHullItem {
+  GlConvexHull* hull;
+  Graph *_graph;
+  std::string name;
+  std::vector<ConvexHullItem *> children;
+};
 
 }
 #endif

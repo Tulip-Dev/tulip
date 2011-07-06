@@ -29,43 +29,43 @@ namespace tlp {
 
 class TLP_QT_SCOPE SimpleStringsListSelectionWidget : public QWidget, public StringsListSelectionWidgetInterface, public Ui::SimpleStringsListSelectionData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	SimpleStringsListSelectionWidget(QWidget *parent = 0, const unsigned int maxSelectedStringsListSize = 0);
+  SimpleStringsListSelectionWidget(QWidget *parent = 0, const unsigned int maxSelectedStringsListSize = 0);
 
-	void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList);
+  void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList);
 
-	void setSelectedStringsList(const std::vector<std::string> &selectedStringsList);
+  void setSelectedStringsList(const std::vector<std::string> &selectedStringsList);
 
-	void clearUnselectedStringsList();
+  void clearUnselectedStringsList();
 
-	void clearSelectedStringsList();
+  void clearSelectedStringsList();
 
-	void setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize);
+  void setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize);
 
-	std::vector<std::string> getSelectedStringsList() const;
+  std::vector<std::string> getSelectedStringsList() const;
 
-	std::vector<std::string> getUnselectedStringsList() const;
+  std::vector<std::string> getUnselectedStringsList() const;
 
-	void selectAllStrings();
+  void selectAllStrings();
 
-	void unselectAllStrings();
+  void unselectAllStrings();
 
 private slots :
 
-	void pressButtonSelectAll();
-	void pressButtonUnselectAll();
-	void listItemClicked(QListWidgetItem *item);
-	void pressButtonUp();
-	void pressButtonDown();
+  void pressButtonSelectAll();
+  void pressButtonUnselectAll();
+  void listItemClicked(QListWidgetItem *item);
+  void pressButtonUp();
+  void pressButtonDown();
 
 private :
 
-	void qtWidgetsConnection();
+  void qtWidgetsConnection();
 
-	unsigned int maxSelectedStringsListSize;
+  unsigned int maxSelectedStringsListSize;
 };
 
 }

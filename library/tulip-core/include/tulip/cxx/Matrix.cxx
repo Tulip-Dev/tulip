@@ -16,34 +16,45 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cmath> 
+#include <cmath>
 
 #define MATRIXTLPGEO tlp::Matrix<Obj,SIZE>
 
 //===================================================================
 //Specialisation
 namespace tlp {
-    template<typename Obj>
-    class Matrix<Obj,1>:public Array<Vector<Obj,1>,1> {
-    public:
-      Obj determinant() {return (*this)[0][0];}
-      //      Matrix<Obj,1>& fill(Obj obj) {return *this;}
-      Matrix<Obj,1>& inverse() {(*this)[0][0] = 1.0 / (*this)[0][0]; return *this;}
-      Matrix<Obj,1>& transpose() {return *this;}
-      Matrix<Obj,1>& operator*=(const Matrix<Obj,1> &mat) {(*this)[0][0] *= mat[0][0]; return *this;}
-      //      Matrix<Obj,1>& operator/=(const Obj &obj){return *this;}
-      Matrix<Obj,1> cofactor() {return *this;}
-    };
+template<typename Obj>
+class Matrix<Obj,1>:public Array<Vector<Obj,1>,1> {
+public:
+  Obj determinant() {
+    return (*this)[0][0];
+  }
+  //      Matrix<Obj,1>& fill(Obj obj) {return *this;}
+  Matrix<Obj,1>& inverse() {
+    (*this)[0][0] = 1.0 / (*this)[0][0];
+    return *this;
+  }
+  Matrix<Obj,1>& transpose() {
+    return *this;
+  }
+  Matrix<Obj,1>& operator*=(const Matrix<Obj,1> &mat) {
+    (*this)[0][0] *= mat[0][0];
+    return *this;
+  }
+  //      Matrix<Obj,1>& operator/=(const Obj &obj){return *this;}
+  Matrix<Obj,1> cofactor() {
+    return *this;
+  }
+};
 }
 
 
 //===================================================================
 template<typename Obj,unsigned int SIZE>
-MATRIXTLPGEO::Matrix(const std::vector<std::vector<Obj> > &covarianceMatrix)
-{
+MATRIXTLPGEO::Matrix(const std::vector<std::vector<Obj> > &covarianceMatrix) {
   for(unsigned int i=0; i < SIZE; i++)
-      for(unsigned int j=0; j < SIZE; j++)
-	  (*this)[i][j] = covarianceMatrix[i][j] / (sqrt(covarianceMatrix[i][i] * covarianceMatrix[j][j]));
+    for(unsigned int j=0; j < SIZE; j++)
+      (*this)[i][j] = covarianceMatrix[i][j] / (sqrt(covarianceMatrix[i][i] * covarianceMatrix[j][j]));
 }
 
 //===================================================================
@@ -51,48 +62,53 @@ template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::fill(Obj obj) {
   for (unsigned int i=0; i<SIZE; ++i)
     (*this)[i].fill(obj);
+
   return (*this);
 }
 //======================================================
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO&  MATRIXTLPGEO::operator+=(const MATRIXTLPGEO &mat) {
-  for (unsigned int i=0;i<SIZE;++i)
+  for (unsigned int i=0; i<SIZE; ++i)
     (*this)[i] += mat[i];
+
   return (*this);
 }
 //======================================================
 template<typename Obj,unsigned int SIZE>
-MATRIXTLPGEO&  MATRIXTLPGEO::operator+(const MATRIXTLPGEO &mat) const{
+MATRIXTLPGEO&  MATRIXTLPGEO::operator+(const MATRIXTLPGEO &mat) const {
   return MATRIXTLPGEO(*this) += mat;
 }
 //======================================================
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO&  MATRIXTLPGEO::operator-=(const MATRIXTLPGEO &mat) {
-  for (unsigned int i=0;i<SIZE;++i)
+  for (unsigned int i=0; i<SIZE; ++i)
     (*this)[i] -= mat[i];
+
   return (*this);
 }
 //======================================================
 template<typename Obj,unsigned int SIZE>
-MATRIXTLPGEO&  MATRIXTLPGEO::operator-(const MATRIXTLPGEO &mat) const{
+MATRIXTLPGEO&  MATRIXTLPGEO::operator-(const MATRIXTLPGEO &mat) const {
   return MATRIXTLPGEO(*this) -= mat;
 }
 //======================================================
 template<typename Obj,unsigned int SIZE>
 bool MATRIXTLPGEO::operator==(const MATRIXTLPGEO &mat) const {
-  for (unsigned int i=0;i<SIZE;++i) {
+  for (unsigned int i=0; i<SIZE; ++i) {
     if (((*this)[i] != mat[i]))
       return false;
   }
+
   return true;
 }
 //======================================================
 template<typename Obj,unsigned int SIZE>
 bool MATRIXTLPGEO::operator!=(const MATRIXTLPGEO &mat) const {
-  for (unsigned int i=0;i<SIZE;++i) {
+  for (unsigned int i=0; i<SIZE; ++i) {
     if (((*this)[i] != mat[i]))
       return true;
   }
+
   return false;
 }
 //===================================================================
@@ -100,24 +116,31 @@ template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::operator*=(const MATRIXTLPGEO &mat) {
   MATRIXTLPGEO tmpMat(*this);
   MATRIXTLPGEO *pMat = (MATRIXTLPGEO *) &mat;
+
   if (pMat == this)
     pMat = new MATRIXTLPGEO(*this);
-  for (unsigned int i=0;i<SIZE;++i)
-    for (unsigned int j=0;j<SIZE;++j) {
+
+  for (unsigned int i=0; i<SIZE; ++i)
+    for (unsigned int j=0; j<SIZE; ++j) {
       Obj tmpObj = (Obj) 0;
-      for (unsigned int k=0;k<SIZE;++k)
-	tmpObj+=tmpMat[i][k]*(*pMat)[k][j];
+
+      for (unsigned int k=0; k<SIZE; ++k)
+        tmpObj+=tmpMat[i][k]*(*pMat)[k][j];
+
       (*this)[i][j] = tmpObj;
     }
+
   if (pMat != &mat)
     delete pMat;
+
   return (*this);
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::operator*=(const Obj &obj) {
-  for (unsigned int i=0;i<SIZE;++i)
+  for (unsigned int i=0; i<SIZE; ++i)
     (*this)[i] *= obj;
+
   return (*this);
 }
 //=====================================================================================
@@ -131,8 +154,9 @@ MATRIXTLPGEO & MATRIXTLPGEO::operator/=(const MATRIXTLPGEO &mat) {
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::operator/=(const Obj &obj) {
-  for (unsigned int i=0;i<SIZE;++i)
+  for (unsigned int i=0; i<SIZE; ++i)
     (*this)[i] /= obj;
+
   return (*this);
 }
 //=====================================================================================
@@ -144,41 +168,47 @@ Obj MATRIXTLPGEO::determinant() const {
     break;
   case 3:
     return (*this)[0][0] * ((*this)[1][1]*(*this)[2][2] - (*this)[1][2] * (*this)[2][1])
-      - (*this)[0][1] * ((*this)[1][0]*(*this)[2][2] - (*this)[1][2] * (*this)[2][0])
-      + (*this)[0][2] * ((*this)[1][0]*(*this)[2][1] - (*this)[1][1] * (*this)[2][0]) ;
+           - (*this)[0][1] * ((*this)[1][0]*(*this)[2][2] - (*this)[1][2] * (*this)[2][0])
+           + (*this)[0][2] * ((*this)[1][0]*(*this)[2][1] - (*this)[1][1] * (*this)[2][0]) ;
     break;
   default:
     int j2;
     Obj det = 0;
+
     for (unsigned int j1=0; j1<SIZE; ++j1) {
       tlp::Matrix<Obj, SIZE - 1> m;
+
       for (unsigned int i=1; i<SIZE; i++) {
-	j2 = 0;
-	for (unsigned int j=0; j<SIZE; ++j) {
-	  if (j == j1)
-	    continue;
-	  m[i-1][j2] = (*this)[i][j];
-	  ++j2;
-	}
+        j2 = 0;
+
+        for (unsigned int j=0; j<SIZE; ++j) {
+          if (j == j1)
+            continue;
+
+          m[i-1][j2] = (*this)[i][j];
+          ++j2;
+        }
       }
 
       if (j1 & 1)
-	det += (*this)[0][j1] * m.determinant();
+        det += (*this)[0][j1] * m.determinant();
       else
-	det -= (*this)[0][j1] * m.determinant();
+        det -= (*this)[0][j1] * m.determinant();
     }
+
     return(det);
   }
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
-MATRIXTLPGEO MATRIXTLPGEO::cofactor() const{
+MATRIXTLPGEO MATRIXTLPGEO::cofactor() const {
   MATRIXTLPGEO result;
-  switch (SIZE){
+
+  switch (SIZE) {
   case 2:
-    (result)[0][0] = (*this)[1][1];	
-    (result)[0][1] = - (*this)[1][0];	
-    (result)[1][0] = - (*this)[0][1];	
+    (result)[0][0] = (*this)[1][1];
+    (result)[0][1] = - (*this)[1][0];
+    (result)[1][0] = - (*this)[0][1];
     (result)[1][1] = (*this)[0][0];
     break;
   case 3:
@@ -189,38 +219,49 @@ MATRIXTLPGEO MATRIXTLPGEO::cofactor() const{
     (result)[1][1] = (*this)[0][0]*(*this)[2][2] - (*this)[0][2]*(*this)[2][0];
     (result)[1][2] = - ((*this)[0][0]*(*this)[2][1] - (*this)[0][1]*(*this)[2][0]);
     (result)[2][0] = (*this)[0][1]*(*this)[1][2] - (*this)[0][2]*(*this)[1][1];
-    (result)[2][1] = - ((*this)[0][0]*(*this)[1][2] - (*this)[0][2]*(*this)[1][0]); 
+    (result)[2][1] = - ((*this)[0][0]*(*this)[1][2] - (*this)[0][2]*(*this)[1][0]);
     (result)[2][2] = (*this)[0][0]*(*this)[1][1] - (*this)[0][1]*(*this)[1][0];
     break;
   default :
     int i1,j1;
     tlp::Matrix<Obj,SIZE - 1> c;
-    for (unsigned int j=0;j<SIZE;++j) {
-      for (unsigned int i=0;i<SIZE;++i) {
-	i1 = 0;
-	for (unsigned int ii=0;ii<SIZE;++ii) {
-	  if (ii == i)
-	    continue;
-	  j1 = 0;
-	  for (unsigned int jj=0;jj<SIZE;jj++) {
-	    if (jj == j)
-	      continue;
-	    c[i1][j1] = (*this)[ii][jj];
-	    ++j1;
-	  }
-	    ++i1;
-	}
-	if ((i+j) & 1)  result[i][j]=c.determinant(); else result[i][j]=-c.determinant();
+
+    for (unsigned int j=0; j<SIZE; ++j) {
+      for (unsigned int i=0; i<SIZE; ++i) {
+        i1 = 0;
+
+        for (unsigned int ii=0; ii<SIZE; ++ii) {
+          if (ii == i)
+            continue;
+
+          j1 = 0;
+
+          for (unsigned int jj=0; jj<SIZE; jj++) {
+            if (jj == j)
+              continue;
+
+            c[i1][j1] = (*this)[ii][jj];
+            ++j1;
+          }
+
+          ++i1;
+        }
+
+        if ((i+j) & 1)  result[i][j]=c.determinant();
+        else result[i][j]=-c.determinant();
       }
     }
+
     break;
   }
+
   return result;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
 MATRIXTLPGEO & MATRIXTLPGEO::transpose() {
   register Obj tmp;
+
   for (unsigned int i=1; i<SIZE; ++i) {
     for (unsigned int j=0; j<i; ++j) {
       tmp = (*this)[i][j];
@@ -228,6 +269,7 @@ MATRIXTLPGEO & MATRIXTLPGEO::transpose() {
       (*this)[j][i] = tmp;
     }
   }
+
   return (*this);
 }
 //=====================================================================================
@@ -238,68 +280,72 @@ MATRIXTLPGEO & MATRIXTLPGEO::inverse() {
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
-  MATRIXTLPGEO tlp::operator*(const MATRIXTLPGEO &mat1 ,const MATRIXTLPGEO &mat2) {
+MATRIXTLPGEO tlp::operator*(const MATRIXTLPGEO &mat1 ,const MATRIXTLPGEO &mat2) {
   return MATRIXTLPGEO(mat1)*=mat2;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
-MATRIXTLPGEO MATRIXTLPGEO::operator/(const MATRIXTLPGEO &mat2) const{
+MATRIXTLPGEO MATRIXTLPGEO::operator/(const MATRIXTLPGEO &mat2) const {
   return  MATRIXTLPGEO(*this)/=mat2;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
-MATRIXTLPGEO MATRIXTLPGEO::operator/(const Obj &obj) const{
+MATRIXTLPGEO MATRIXTLPGEO::operator/(const Obj &obj) const {
   return  MATRIXTLPGEO(*this) /= obj;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
-  MATRIXTLPGEO tlp::operator*(const MATRIXTLPGEO &mat ,const Obj &obj) {
+MATRIXTLPGEO tlp::operator*(const MATRIXTLPGEO &mat ,const Obj &obj) {
   return  MATRIXTLPGEO(mat) *= obj;
 }
 //=====================================================================================
 template<typename Obj, unsigned int SIZE>
-  tlp::Vector<Obj, SIZE> tlp::operator*( const MATRIXTLPGEO &mat , const tlp::Vector<Obj, SIZE> &vec) {
+tlp::Vector<Obj, SIZE> tlp::operator*( const MATRIXTLPGEO &mat , const tlp::Vector<Obj, SIZE> &vec) {
   tlp::Vector<Obj,SIZE> result;
+
   for (unsigned int row=0; row<SIZE; ++row) {
     result[row] = mat[row][0] * vec[0];
   }
+
   for (unsigned int col=1; col<SIZE; ++col) {
     for (unsigned int row=0; row<SIZE; ++row) {
       result[row] += mat[row][col] * vec[col];
     }
   }
+
   return  result;
 }
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
-  tlp::Vector<Obj,SIZE> tlp::operator*( const tlp::Vector<Obj,SIZE> &vec, const MATRIXTLPGEO &mat) {
+tlp::Vector<Obj,SIZE> tlp::operator*( const tlp::Vector<Obj,SIZE> &vec, const MATRIXTLPGEO &mat) {
   tlp::Vector<Obj,SIZE> result;
+
   for (unsigned int row=0; row<SIZE; ++row) {
     result[row] = mat[0][row] * vec[0];
   }
+
   for (unsigned int col=1; col<SIZE; ++col) {
     for (unsigned int row=0; row<SIZE; ++row) {
       result[row] += mat[col][row] * vec[col];
     }
   }
+
   return  result;
 }
 
 //=====================================================================================
 template<typename Obj, unsigned int SIZE>
-tlp::Vector<Obj, SIZE> MATRIXTLPGEO::powerIteration(const unsigned int nIterations) const
-{
+tlp::Vector<Obj, SIZE> MATRIXTLPGEO::powerIteration(const unsigned int nIterations) const {
   tlp::Vector<Obj, SIZE> iteration;
 
   for(unsigned int i=0; i < SIZE; i++)
     iteration[i] = 1;
-  
-  for(unsigned int i=0; i < nIterations; i++)
-    {
-      iteration = (*this) * iteration;
-      
-      iteration /= iteration.norm();
-    }
+
+  for(unsigned int i=0; i < nIterations; i++) {
+    iteration = (*this) * iteration;
+
+    iteration /= iteration.norm();
+  }
 
   return iteration;
 }
@@ -307,79 +353,75 @@ tlp::Vector<Obj, SIZE> MATRIXTLPGEO::powerIteration(const unsigned int nIteratio
 //=====================================================================================
 
 template<typename Obj, unsigned int SIZE>
-bool MATRIXTLPGEO::simplify(tlp::Matrix<Obj, 2> &simplifiedMatrix) const
-{
-   if (SIZE != 3)
-    {
-      std::cerr << "Computation allowed only for 3x3 Matrices. Yours sizes : " << SIZE << "x" << SIZE << std::endl;
+bool MATRIXTLPGEO::simplify(tlp::Matrix<Obj, 2> &simplifiedMatrix) const {
+  if (SIZE != 3) {
+    std::cerr << "Computation allowed only for 3x3 Matrices. Yours sizes : " << SIZE << "x" << SIZE << std::endl;
 
-      return false;
-    } 
+    return false;
+  }
 
-   // We start with a matrix representing an equation system under the following form :
-   // 
-   // ax + by + cz = 0
-   // dx + ey + fz = 0
-   // gx + hy + iz = 0
-   //
-   // So M looks like :
-   //
-   //     ( ax by cz )  *(e1)*
-   // M = ( dx ey fz )  *(e2)*
-   //     ( gx hy iz )  *(e3)*
-   //
-   // What we want is something like that :
-   //
-   // jx + ky = 0
-   // lx + mz = 0
-   //
-   // So to reduce the matrix, we will use the Gaussian Elimination.
-   // For the first line we will apply a Gaussian Elimination between (e1) and (e2)
-   // For the second line we will apply a Gaussian Elimination between (e1) and (e3)
+  // We start with a matrix representing an equation system under the following form :
+  //
+  // ax + by + cz = 0
+  // dx + ey + fz = 0
+  // gx + hy + iz = 0
+  //
+  // So M looks like :
+  //
+  //     ( ax by cz )  *(e1)*
+  // M = ( dx ey fz )  *(e2)*
+  //     ( gx hy iz )  *(e3)*
+  //
+  // What we want is something like that :
+  //
+  // jx + ky = 0
+  // lx + mz = 0
+  //
+  // So to reduce the matrix, we will use the Gaussian Elimination.
+  // For the first line we will apply a Gaussian Elimination between (e1) and (e2)
+  // For the second line we will apply a Gaussian Elimination between (e1) and (e3)
 
-   float coeff;
+  float coeff;
 
-   // First Gaussian Elimination :
-   // The pivot is z
+  // First Gaussian Elimination :
+  // The pivot is z
 
-   coeff = (*this)[1][2] / (*this)[0][2]; // fz / cz
-   
-   // After that:
-   // jx = dx - (coeff * ax)
-   // ky = ey - (coeff * by)
-   simplifiedMatrix[0][0] = (*this)[1][0] - (coeff * (*this)[0][0]);
-   simplifiedMatrix[0][1] = (*this)[1][1] - (coeff * (*this)[0][1]);
+  coeff = (*this)[1][2] / (*this)[0][2]; // fz / cz
 
-   // Second Gaussian Elimination :
-   // The pivot is y
+  // After that:
+  // jx = dx - (coeff * ax)
+  // ky = ey - (coeff * by)
+  simplifiedMatrix[0][0] = (*this)[1][0] - (coeff * (*this)[0][0]);
+  simplifiedMatrix[0][1] = (*this)[1][1] - (coeff * (*this)[0][1]);
 
-   coeff = (*this)[2][1] / (*this)[0][1]; // hy / by
+  // Second Gaussian Elimination :
+  // The pivot is y
 
-   // Idem :
-   // lx = gx - (coeff * ax)
-   // mz = iz - (coeff * cz)
-   simplifiedMatrix[1][0] = (*this)[2][0] - (coeff * (*this)[0][0]);
-   simplifiedMatrix[1][1] = (*this)[2][2] - (coeff * (*this)[0][2]);
-   
-   return true;
+  coeff = (*this)[2][1] / (*this)[0][1]; // hy / by
+
+  // Idem :
+  // lx = gx - (coeff * ax)
+  // mz = iz - (coeff * cz)
+  simplifiedMatrix[1][0] = (*this)[2][0] - (coeff * (*this)[0][0]);
+  simplifiedMatrix[1][1] = (*this)[2][2] - (coeff * (*this)[0][2]);
+
+  return true;
 }
 
 //=====================================================================================
 
 template<typename Obj, unsigned int SIZE>
-bool MATRIXTLPGEO::computeEigenVector(const float x, tlp::Vector<Obj, 3> &eigenVector) const
-{
-  if (SIZE != 2)
-    {
-      std::cerr << "Computation allowed only for 2x2 Matrices. Yours sizes : " << SIZE << "x" << SIZE << std::endl;
+bool MATRIXTLPGEO::computeEigenVector(const float x, tlp::Vector<Obj, 3> &eigenVector) const {
+  if (SIZE != 2) {
+    std::cerr << "Computation allowed only for 2x2 Matrices. Yours sizes : " << SIZE << "x" << SIZE << std::endl;
 
-      return false;
-    }
+    return false;
+  }
 
   eigenVector[0] = x; // Fixed by user
 
   // We know that the matrix we are using is under that form :
-  // 
+  //
   //     ( ax   by )
   // M = (         )
   //     ( cx   dz )

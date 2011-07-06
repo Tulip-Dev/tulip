@@ -27,139 +27,149 @@
 
 namespace tlp {
 
-  class Camera;
-  class GlEntity;
-  class GlSimpleEntity;
-  class GlScene;
-  class GlGraphInputData;
+class Camera;
+class GlEntity;
+class GlSimpleEntity;
+class GlScene;
+class GlGraphInputData;
 
-  enum RenderingEntitiesFlag {
-    RenderingSimpleEntities =1,
-    RenderingNodes = 2,
-    RenderingEdges = 4,
-    RenderingAll = 7,
-    RenderingWithoutRemove = 8
-  };
+enum RenderingEntitiesFlag {
+  RenderingSimpleEntities =1,
+  RenderingNodes = 2,
+  RenderingEdges = 4,
+  RenderingAll = 7,
+  RenderingWithoutRemove = 8
+};
 
-  struct EntityLODUnit {  
-    EntityLODUnit(const BoundingBox &boundingBox):boundingBox(boundingBox),lod(-1){}
-    BoundingBox boundingBox;
-    float lod;
-  };
+struct EntityLODUnit {
+  EntityLODUnit(const BoundingBox &boundingBox):boundingBox(boundingBox),lod(-1) {}
+  BoundingBox boundingBox;
+  float lod;
+};
 
-  // struct to store simple entity lod
-  struct SimpleEntityLODUnit : public EntityLODUnit{
-    SimpleEntityLODUnit(GlSimpleEntity *entity, const BoundingBox &boundingBox):
-            EntityLODUnit(boundingBox),
-            entity(entity) {
-    }
-    GlSimpleEntity *entity;
-  };
+// struct to store simple entity lod
+struct SimpleEntityLODUnit : public EntityLODUnit {
+  SimpleEntityLODUnit(GlSimpleEntity *entity, const BoundingBox &boundingBox):
+    EntityLODUnit(boundingBox),
+    entity(entity) {
+  }
+  GlSimpleEntity *entity;
+};
 
-  // struct to store complex entity (nodes/edges) lod
-  struct ComplexEntityLODUnit : public EntityLODUnit{
-    ComplexEntityLODUnit(unsigned int id,const BoundingBox &boundingBox):EntityLODUnit(boundingBox),id(id){}
-    unsigned int id;
-  };
+// struct to store complex entity (nodes/edges) lod
+struct ComplexEntityLODUnit : public EntityLODUnit {
+  ComplexEntityLODUnit(unsigned int id,const BoundingBox &boundingBox):EntityLODUnit(boundingBox),id(id) {}
+  unsigned int id;
+};
 
-  struct LayerLODUnit{
-    std::vector<SimpleEntityLODUnit>  simpleEntitiesLODVector;
-    std::vector<ComplexEntityLODUnit> nodesLODVector;
-    std::vector<ComplexEntityLODUnit> edgesLODVector;
-    Camera * camera;
-  };
+struct LayerLODUnit {
+  std::vector<SimpleEntityLODUnit>  simpleEntitiesLODVector;
+  std::vector<ComplexEntityLODUnit> nodesLODVector;
+  std::vector<ComplexEntityLODUnit> edgesLODVector;
+  Camera * camera;
+};
 
-  typedef std::vector<LayerLODUnit> LayersLODVector;
+typedef std::vector<LayerLODUnit> LayersLODVector;
+
+/**
+ * Class use to calculate lod of scene entities
+ */
+class TLP_GL_SCOPE GlLODCalculator {
+
+public:
+
+  GlLODCalculator():glScene(NULL),inputData(NULL) {}
+  virtual ~GlLODCalculator() {}
+  virtual GlLODCalculator *clone()=0;
 
   /**
-   * Class use to calculate lod of scene entities
+   * Set scene use by this LOD calculator
    */
-  class TLP_GL_SCOPE GlLODCalculator {
+  virtual void setScene(GlScene &scene) {
+    glScene=&scene;
+  }
 
-  public:
+  /**
+   * Set input data use to render
+   */
+  virtual void setInputData(GlGraphInputData *inputData) {
+    this->inputData=inputData;
+  }
 
-    GlLODCalculator():glScene(NULL),inputData(NULL) {}
-    virtual ~GlLODCalculator() {}
-    virtual GlLODCalculator *clone()=0;
+  /**
+   * Set RenderingEntitiesFlag to : RenderingSimpleEntities,RenderingNodes,RenderingEdges,RenderingAll,RenderingWithoutRemove
+   */
+  virtual void setRenderingEntitiesFlag(RenderingEntitiesFlag flag) {
+    renderingEntitiesFlag=flag;
+  }
 
-    /**
-     * Set scene use by this LOD calculator
-     */
-    virtual void setScene(GlScene &scene){glScene=&scene;}
+  /**
+   * Return if the LODCalculator need to have entities to compute
+   */
+  virtual bool needEntities() {
+    return true;
+  }
+  /**
+   * Set if the LODCalculator need to have entities to compute
+   */
+  virtual void setNeedEntities(bool) {}
+  /**
+   * Begin a new camera
+   */
+  virtual void beginNewCamera(Camera* camera)=0;
+  /**
+   * Record a new simple entity in current camera context
+   */
+  virtual void addSimpleEntityBoundingBox(GlSimpleEntity *entity,const BoundingBox& bb)=0;
+  /**
+   * Record a new node in current camera context
+   */
+  virtual void addNodeBoundingBox(unsigned int id,const BoundingBox& bb)=0;
+  /**
+   * Record a new edge in current camera context
+   */
+  virtual void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb)=0;
 
-    /**
-     * Set input data use to render
-     */
-    virtual void setInputData(GlGraphInputData *inputData) {this->inputData=inputData;}
+  /**
+   * Reserve memory to store nodes LOD
+   */
+  virtual void reserveMemoryForNodes(unsigned int) {}
 
-    /**
-     * Set RenderingEntitiesFlag to : RenderingSimpleEntities,RenderingNodes,RenderingEdges,RenderingAll,RenderingWithoutRemove
-     */
-    virtual void setRenderingEntitiesFlag(RenderingEntitiesFlag flag) {renderingEntitiesFlag=flag;}
+  /**
+   * Reserve memory to store edges LOD
+   */
+  virtual void reserveMemoryForEdges(unsigned int) {}
 
-    /**
-     * Return if the LODCalculator need to have entities to compute
-     */
-    virtual bool needEntities() {return true;}
-    /**
-     * Set if the LODCalculator need to have entities to compute
-     */
-    virtual void setNeedEntities(bool) {}
-    /**
-     * Begin a new camera
-     */
-    virtual void beginNewCamera(Camera* camera)=0;
-    /**
-     * Record a new simple entity in current camera context
-     */
-    virtual void addSimpleEntityBoundingBox(GlSimpleEntity *entity,const BoundingBox& bb)=0;
-    /**
-     * Record a new node in current camera context
-     */
-    virtual void addNodeBoundingBox(unsigned int id,const BoundingBox& bb)=0;
-    /**
-     * Record a new edge in current camera context
-     */
-    virtual void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb)=0;
+  /**
+   * Compute all lod
+   */
+  virtual void compute(const Vector<int,4>& globalViewport, const Vector<int,4>& currentViewport)=0;
 
-    /**
-     * Reserve memory to store nodes LOD
-     */
-    virtual void reserveMemoryForNodes(unsigned int) {}
+  /**
+   * Return a pointer on LOD result
+   */
+  LayersLODVector &getResult() {
+    return layersLODVector;
+  }
 
-    /**
-     * Reserve memory to store edges LOD
-     */
-    virtual void reserveMemoryForEdges(unsigned int) {}
+  /**
+   * Clear class data
+   */
+  virtual void clear() {
+    layersLODVector.clear();
+  }
 
-    /**
-     * Compute all lod
-     */
-    virtual void compute(const Vector<int,4>& globalViewport, const Vector<int,4>& currentViewport)=0;
+  virtual BoundingBox getSceneBoundingBox()=0;
 
-    /**
-     * Return a pointer on LOD result
-     */
-    LayersLODVector &getResult(){return layersLODVector;}
+protected :
 
-    /**
-     * Clear class data
-     */
-    virtual void clear() {
-      layersLODVector.clear();
-    }
+  GlScene *glScene;
+  GlGraphInputData *inputData;
 
-    virtual BoundingBox getSceneBoundingBox()=0;
+  RenderingEntitiesFlag renderingEntitiesFlag;
 
-  protected :
-
-    GlScene *glScene;
-    GlGraphInputData *inputData;
-
-    RenderingEntitiesFlag renderingEntitiesFlag;
-
-    LayersLODVector layersLODVector;
-  };
+  LayersLODVector layersLODVector;
+};
 
 }
 

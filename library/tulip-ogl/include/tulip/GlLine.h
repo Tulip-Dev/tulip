@@ -31,92 +31,92 @@
 #include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
+/**
+ * \addtogroup GlEntities
+ */
+/*@{*/
+/**
+ * \brief This is a general class to render an OpenGL laine
+ * This class is use to render an OpenGl line
+ */
+class TLP_GL_SCOPE GlLine : public GlSimpleEntity {
+public:
   /**
-   * \addtogroup GlEntities
+   * Enpty constructor
    */
-  /*@{*/
+  GlLine():width(1.0),factor(1),pattern(0) {}
   /**
-   * \brief This is a general class to render an OpenGL laine
-   * This class is use to render an OpenGl line
+   * Constructor with a list of coord and a list of color
    */
-  class TLP_GL_SCOPE GlLine : public GlSimpleEntity {
-  public:
-    /**
-     * Enpty constructor
-     */
-    GlLine():width(1.0),factor(1),pattern(0) {}
-    /**
-     * Constructor with a list of coord and a list of color
-     */
-    GlLine(const std::vector<Coord> &points,
-	   const std::vector<Color> &colors);
+  GlLine(const std::vector<Coord> &points,
+         const std::vector<Color> &colors);
 
-    virtual ~GlLine();
+  virtual ~GlLine();
 
-    /**
-     * Render the line
-     */
-    void draw(float lod,Camera *camera);
+  /**
+   * Render the line
+   */
+  void draw(float lod,Camera *camera);
 
-    /**
-     * Change number of points
-     */
-    virtual void resizePoints(const unsigned int nbPoints);
-    /**
-     * Change number of colors
-     */
-    virtual void resizeColors(const unsigned int nbColors);
+  /**
+   * Change number of points
+   */
+  virtual void resizePoints(const unsigned int nbPoints);
+  /**
+   * Change number of colors
+   */
+  virtual void resizeColors(const unsigned int nbColors);
 
-    virtual const Coord& point(const unsigned int i) const;
-    /**
-     * Return the coord of point with given id
-     */
-    virtual Coord& point(const unsigned int i);
-    /**
-     * Add a new point with given coord and given color
-     */
-    virtual void addPoint(const Coord& point, const Color& color);
+  virtual const Coord& point(const unsigned int i) const;
+  /**
+   * Return the coord of point with given id
+   */
+  virtual Coord& point(const unsigned int i);
+  /**
+   * Add a new point with given coord and given color
+   */
+  virtual void addPoint(const Coord& point, const Color& color);
 
-    /**
-     * return the ith color used for draw the line
-     */
-    virtual const Color& color(const unsigned int i) const;
-    /**
-     * return the ith color used for draw the line
-     */
-    virtual Color& color(const unsigned int i);
-    /**
-     * Set line width
-     */
-    virtual void setLineWidth(float width);
-    /**
-     * Set the style of the line (documentation can be found in OpenGL manuel of fuction glLineStipple)
-     */
-    virtual void setLineStipple(unsigned char factor,unsigned int pattern);
+  /**
+   * return the ith color used for draw the line
+   */
+  virtual const Color& color(const unsigned int i) const;
+  /**
+   * return the ith color used for draw the line
+   */
+  virtual Color& color(const unsigned int i);
+  /**
+   * Set line width
+   */
+  virtual void setLineWidth(float width);
+  /**
+   * Set the style of the line (documentation can be found in OpenGL manuel of fuction glLineStipple)
+   */
+  virtual void setLineStipple(unsigned char factor,unsigned int pattern);
 
-    /**
-     * Translate entity
-     */
-    virtual void translate(const Coord& vec);
+  /**
+   * Translate entity
+   */
+  virtual void translate(const Coord& vec);
 
-    /**
-     * Function to export data in XML
-     */
-    virtual void getXML(xmlNodePtr rootNode);
+  /**
+   * Function to export data in XML
+   */
+  virtual void getXML(xmlNodePtr rootNode);
 
-    /**
-     * Function to set data with XML
-     */
-    virtual void setWithXML(xmlNodePtr rootNode);
+  /**
+   * Function to set data with XML
+   */
+  virtual void setWithXML(xmlNodePtr rootNode);
 
-  protected:
-    std::vector<Coord> _points;
-    std::vector<Color> _colors;
-    float width;
-    unsigned char factor;
-    unsigned int pattern;
-  };
-  /*@}*/
+protected:
+  std::vector<Coord> _points;
+  std::vector<Color> _colors;
+  float width;
+  unsigned char factor;
+  unsigned int pattern;
+};
+/*@}*/
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

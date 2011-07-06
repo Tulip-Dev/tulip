@@ -91,11 +91,13 @@ public :
   /**
    * Set if during repaint we have to render GlMainWidget
    */
-  void setRedrawNeeded(bool redrawNeeded){
+  void setRedrawNeeded(bool redrawNeeded) {
     this->redrawNeeded=redrawNeeded;
   }
 
-  GlMainWidget *getGlMainWidget() { return glMainWidget;}
+  GlMainWidget *getGlMainWidget() {
+    return glMainWidget;
+  }
 
   bool eventFilter(QObject *, QEvent *evt);
 

@@ -34,43 +34,43 @@ namespace tlp {
 
 class LockLabel;
 
-  class TLP3_COMPAT_SCOPE SnapshotDialog : public QDialog,public Ui::SnapshotDialogData {
+class TLP3_COMPAT_SCOPE SnapshotDialog : public QDialog,public Ui::SnapshotDialogData {
 
-    Q_OBJECT
+  Q_OBJECT
 
-  public :
+public :
 
-    SnapshotDialog(View &v,QWidget *parent=NULL);
-    ~SnapshotDialog();
+  SnapshotDialog(View &v,QWidget *parent=NULL);
+  ~SnapshotDialog();
 
-  public slots :
+public slots :
 
-    void accept();
+  void accept();
 
-  protected slots :
+protected slots :
 
-    void widthSpinBoxValueChanged(int value);
-    void heightSpinBoxValueChanged(int value);
+  void widthSpinBoxValueChanged(int value);
+  void heightSpinBoxValueChanged(int value);
 
-    void fileNameTextChanged(QString);
-    void browseClicked();
+  void fileNameTextChanged(QString);
+  void browseClicked();
 
-  protected :
+protected :
 
-    void resizeEvent(QResizeEvent *);
+  void resizeEvent(QResizeEvent *);
 
-    void sizeSpinBoxValueChanged();
+  void sizeSpinBoxValueChanged();
 
-    View *view;
+  View *view;
 
-    QGraphicsScene *scene;
-    QGraphicsPixmapItem *pixmapItem;
-    LockLabel *lockLabel;
+  QGraphicsScene *scene;
+  QGraphicsPixmapItem *pixmapItem;
+  LockLabel *lockLabel;
 
-    float ratio;
+  float ratio;
 
-    bool inSizeSpinBoxValueChanged;
-  };
+  bool inSizeSpinBoxValueChanged;
+};
 
 }
 

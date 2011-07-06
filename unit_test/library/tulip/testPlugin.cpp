@@ -24,13 +24,13 @@
 
 using namespace std;
 
-class Test : public tlp::BooleanAlgorithm { 
+class Test : public tlp::BooleanAlgorithm {
 public:
-  Test(const tlp::PropertyContext &context) : tlp::BooleanAlgorithm(context){
+  Test(const tlp::PropertyContext &context) : tlp::BooleanAlgorithm(context) {
     addDependency<tlp::BooleanAlgorithm>("Test", "1.0");
   }
-  ~Test(){}
-  bool run() { 
+  ~Test() {}
+  bool run() {
     std::string name = "Test";
     std::string err = "Error";
     return graph->computeProperty(name, result, err);

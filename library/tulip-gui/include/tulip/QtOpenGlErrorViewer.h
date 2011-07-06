@@ -37,7 +37,7 @@ public :
   /**
    * Basic constructor
    */
-  QtOpenGlErrorViewer(QWidget *parent=0):parent(parent){}
+  QtOpenGlErrorViewer(QWidget *parent=0):parent(parent) {}
 
   /**
    * Display an error in a QDialog with title : title, and text : errorMsg

@@ -45,71 +45,71 @@ Q_DECLARE_METATYPE(std::vector<std::string>)
 
 namespace tlp {
 
-  /**
-   * Open a QT Dialog Box to fill-up an user DataSet according to a required
-   * StructDef
-   * inDef		: Input-variable informations
-   * outSet		: Output (filled) set
-   * [inSet		: Input (optional) set, containing some default values]
-   */
+/**
+ * Open a QT Dialog Box to fill-up an user DataSet according to a required
+ * StructDef
+ * inDef    : Input-variable informations
+ * outSet   : Output (filled) set
+ * [inSet   : Input (optional) set, containing some default values]
+ */
 
-  TLP_QT_SCOPE bool openDataSetDialog	(DataSet & outSet,
-					 const ParameterList *sysDef,
-					 ParameterList *inDef,
-					 const DataSet *inSet	= NULL,
-					 const char *inName = NULL,
-					 Graph *inG = NULL,
-					 QWidget *parent = NULL);
+TLP_QT_SCOPE bool openDataSetDialog (DataSet & outSet,
+                                     const ParameterList *sysDef,
+                                     ParameterList *inDef,
+                                     const DataSet *inSet = NULL,
+                                     const char *inName = NULL,
+                                     Graph *inG = NULL,
+                                     QWidget *parent = NULL);
 
-  /**
-   * Create a main layout in GlMainWidget and display the graph on it
-   */
+/**
+ * Create a main layout in GlMainWidget and display the graph on it
+ */
 
-  TLP_QT_SCOPE void openGraphOnGlMainWidget(Graph *graph,DataSet *dataSet,GlMainWidget *glMainWidget);
+TLP_QT_SCOPE void openGraphOnGlMainWidget(Graph *graph,DataSet *dataSet,GlMainWidget *glMainWidget);
 
-  TLP_QT_SCOPE bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QColor &result);
+TLP_QT_SCOPE bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QColor &result);
 
-  inline QColor colorToQColor(const Color& color) {
-     return QColor(color.getR(), color.getG(), color.getB(), color.getA());
-   }
-  inline Color QColorToColor(const QColor& color) {
-     return Color(color.red(), color.green(), color.blue(), color.alpha());
-   }
-  /**
-    * @brief Convert a string from Tulip to QString.
+inline QColor colorToQColor(const Color& color) {
+  return QColor(color.getR(), color.getG(), color.getB(), color.getA());
+}
+inline Color QColorToColor(const QColor& color) {
+  return Color(color.red(), color.green(), color.blue(), color.alpha());
+}
+/**
+  * @brief Convert a string from Tulip to QString.
+  **/
+inline std::string QStringToTlpString(const QString& toConvert) {
+  return std::string(toConvert.toUtf8());
+}
+/**
+  * @brief Convert a QString to tulip string.
+  **/
+inline QString tlpStringToQString(const std::string& toConvert) {
+  return QString::fromUtf8(toConvert.c_str());
+}
+
+/**
+    * @brief Convert the property type string to a label to display in the GUI.
+    * The property type label is the string to display in the GUI instead of the basic property type string.
+    * By example for a property of type "double" the label displayed in the GUI will be "Metric".
     **/
-  inline std::string QStringToTlpString(const QString& toConvert){
-      return std::string(toConvert.toUtf8());
-  }
-  /**
-    * @brief Convert a QString to tulip string.
-    **/
-  inline QString tlpStringToQString(const std::string& toConvert){
-      return QString::fromUtf8(toConvert.c_str());
-  }
+TLP_QT_SCOPE QString propertyTypeToPropertyTypeLabel(const std::string& typeName);
 
-  /**
-      * @brief Convert the property type string to a label to display in the GUI.
-      * The property type label is the string to display in the GUI instead of the basic property type string.
-      * By example for a property of type "double" the label displayed in the GUI will be "Metric".
-      **/
-    TLP_QT_SCOPE QString propertyTypeToPropertyTypeLabel(const std::string& typeName);
+/**
+  * @brief Get the string to display as property type for the given property.
+  * The property type label is the string to display in the GUI instead of the property type string.
+  * By example for a property of type "double" the label displayed in the GUI will be "Metric".
+  **/
+inline QString propertyInterfaceToPropertyTypeLabel(const tlp::PropertyInterface* const property) {
+  return propertyTypeToPropertyTypeLabel(property->getTypename());
+}
 
-    /**
-      * @brief Get the string to display as property type for the given property.
-      * The property type label is the string to display in the GUI instead of the property type string.
-      * By example for a property of type "double" the label displayed in the GUI will be "Metric".
-      **/
-    inline QString propertyInterfaceToPropertyTypeLabel(const tlp::PropertyInterface* const property){
-        return propertyTypeToPropertyTypeLabel(property->getTypename());
-    }
-
-    /**
-      * @brief Convert the label of a property type to it's corresponding property type.
-      * The property type label is the string to display in the GUI instead of the property type string.
-      * By example for a property of type "double" the label displayed in the GUI will be "Metric".
-      **/
-    TLP_QT_SCOPE std::string propertyTypeLabelToPropertyType(const QString& typeNameLabel);
+/**
+  * @brief Convert the label of a property type to it's corresponding property type.
+  * The property type label is the string to display in the GUI instead of the property type string.
+  * By example for a property of type "double" the label displayed in the GUI will be "Metric".
+  **/
+TLP_QT_SCOPE std::string propertyTypeLabelToPropertyType(const QString& typeNameLabel);
 }
 
 #endif

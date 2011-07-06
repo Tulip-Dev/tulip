@@ -38,7 +38,7 @@ class Graph;
  */
 class TLP_QT_SCOPE MouseShowElementInfos : public InteractorComponent {
 public:
-  ~MouseShowElementInfos(){}
+  ~MouseShowElementInfos() {}
   bool eventFilter(QObject *widget, QEvent *e);
   InteractorComponent *clone();
 };

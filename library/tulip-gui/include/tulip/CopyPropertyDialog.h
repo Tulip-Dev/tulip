@@ -36,11 +36,11 @@
 
 
 
-namespace Ui{
-    class CopyPropertyDialogData;
+namespace Ui {
+class CopyPropertyDialogData;
 }
 
-namespace tlp{
+namespace tlp {
 class Graph;
 class PropertyInterface;
 
@@ -58,8 +58,7 @@ class PropertyInterface;
   *
   **/
 
-class TLP_QT_SCOPE CopyPropertyDialog : public QDialog
-{ 
+class TLP_QT_SCOPE CopyPropertyDialog : public QDialog {
   Q_OBJECT
 public:
   CopyPropertyDialog(QWidget *parent = 0);
@@ -75,16 +74,16 @@ public:
     * This function don't hold observers during the copy process. It's up to user to call Observable::holdObserver and Observable::unholdObserver before and after calling this funtion.
     **/
   tlp::PropertyInterface* copyProperty(QString& errorMsg);
-  
+
   /**
     * @brief Get the name of the destintation property.
     **/
   QString destinationPropertyName()const;
 
-  enum PropertyScope{
-      NEW,
-      LOCAL,
-      INHERITED
+  enum PropertyScope {
+    NEW,
+    LOCAL,
+    INHERITED
   };
 
   /**
@@ -106,7 +105,7 @@ public:
 private:
   Ui::CopyPropertyDialogData *ui;
   tlp::Graph* _graph;
-  tlp::PropertyInterface* _source;  
+  tlp::PropertyInterface* _source;
 
 private slots:
   void checkValidity();

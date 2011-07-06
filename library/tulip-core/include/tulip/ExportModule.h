@@ -27,20 +27,19 @@
 #include <tulip/AbstractPluginInfo.h>
 #include <tulip/PluginLister.h>
 
-/** \addtogroup plugins */ 
+/** \addtogroup plugins */
 
 namespace tlp {
 class Graph;
 class PluginProgress;
 /*@{*/
 /// Interface for exportModule plug-ins
-class ExportModule:public WithParameter, public WithDependency
-{
+class ExportModule:public WithParameter, public WithDependency {
 public:
   ///
-  ExportModule (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet){}
+  ExportModule (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet) {}
   ///
-  virtual ~ExportModule(){};
+  virtual ~ExportModule() {};
   ///
   virtual bool exportGraph(std::ostream &,Graph *)=0;
   /** It is the root graph*/

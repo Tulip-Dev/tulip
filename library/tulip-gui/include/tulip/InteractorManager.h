@@ -31,43 +31,44 @@
 
 namespace tlp {
 
-  class Interactor;
+class Interactor;
 
-  /** \brief Interactor plugins manager
-   *
-   * Interactor plugins manager
+/** \brief Interactor plugins manager
+ *
+ * Interactor plugins manager
+ */
+class TLP_QT_SCOPE InteractorManager {
+
+public:
+
+  static InteractorManager &getInst() {
+    if(!inst)
+      inst=new InteractorManager();
+
+    return *inst;
+  }
+
+  /**
+   * Loads interactor plugins
    */
-  class TLP_QT_SCOPE InteractorManager {
+  void loadInteractorPlugins();
 
-  public:
+  /**
+   * Returns a list of compatible interactors with the view identified by viewName
+   */
+  std::list<std::string> getSortedCompatibleInteractors(const std::string &viewName);
 
-    static InteractorManager &getInst() {
-      if(!inst)
-	inst=new InteractorManager();
-      return *inst;
-    }
-
-    /**
-     * Loads interactor plugins
-     */
-    void loadInteractorPlugins();
-
-    /**
-     * Returns a list of compatible interactors with the view identified by viewName
-     */
-    std::list<std::string> getSortedCompatibleInteractors(const std::string &viewName);
-
-    bool operator() (std::string first, std::string second);
-  private:
+  bool operator() (std::string first, std::string second);
+private:
 //     bool comparePriority(std::string first, std::string second);
-    
-    InteractorManager();
 
-    std::map<std::string,Interactor *> interactorsMap;
+  InteractorManager();
 
-    static InteractorManager* inst;
+  std::map<std::string,Interactor *> interactorsMap;
 
-  };
+  static InteractorManager* inst;
+
+};
 
 }
 

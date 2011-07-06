@@ -27,15 +27,15 @@ using namespace tlp;
 using namespace stdext;
 
 namespace {
-  const char * paramHelp[] = {
-    // nodes
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "unsigned int" ) \
-    HTML_HELP_DEF( "default", "30" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the number of nodes used to build the planar graph." \
-    HTML_HELP_CLOSE(),
-  };
+const char * paramHelp[] = {
+  // nodes
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "unsigned int" ) \
+  HTML_HELP_DEF( "default", "30" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the number of nodes used to build the planar graph." \
+  HTML_HELP_CLOSE(),
+};
 }
 namespace {
 struct Triangle {
@@ -58,44 +58,47 @@ public:
   PlanarGraph(AlgorithmContext context):ImportModule(context) {
     addParameter<unsigned int>("nodes", paramHelp[0], "30");
   }
-  ~PlanarGraph(){}
-  
+  ~PlanarGraph() {}
+
   bool import() {
     unsigned int nbNodes  = 30;
+
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);
     }
 
     if (nbNodes < 3) nbNodes = 3;
-    srand(clock()); 
+
+    srand(clock());
     LayoutProperty *newLayout = graph->getLocalProperty<LayoutProperty>("viewLayout");
     SizeProperty  *newSize   = graph->getLocalProperty<SizeProperty>("viewSize");
-    newSize->setAllNodeValue(Size(1.0,1.0,1.0));    
+    newSize->setAllNodeValue(Size(1.0,1.0,1.0));
 
     vector<Triangle> faces;
     Triangle f(graph->addNode(),
-	       graph->addNode(),
-	       graph->addNode());
+               graph->addNode(),
+               graph->addNode());
     faces.push_back(f);
     graph->addEdge(f.a, f.b);
     graph->addEdge(f.b, f.c);
     graph->addEdge(f.c, f.a);
-    float val = nbNodes;	
+    float val = nbNodes;
     newLayout->setNodeValue(f.a, Coord(-val, -val, 0));
     newLayout->setNodeValue(f.b, Coord(0, val, 0));
     newLayout->setNodeValue(f.c, Coord(val, -val, 0));
     unsigned int nb = 3;
+
     while(nb<nbNodes) {
       //choose a Triangle randomly
-      unsigned int i = rand()%faces.size(); 
+      unsigned int i = rand()%faces.size();
       Triangle f = faces[i];
       node n = graph->addNode();
       Coord tmp = newLayout->getNodeValue(f.a) +
-	newLayout->getNodeValue(f.b) +
-	newLayout->getNodeValue(f.c);
+                  newLayout->getNodeValue(f.b) +
+                  newLayout->getNodeValue(f.c);
       tmp /= 3.0;
       newLayout->setNodeValue(n, tmp);
-	
+
       //Split the triangle in three part
       graph->addEdge(n, f.a);
       graph->addEdge(n, f.b);
@@ -109,6 +112,7 @@ public:
       faces.push_back(f3);
       ++nb;
     }
+
     return  pluginProgress->state()!=TLP_CANCEL;
   }
 };

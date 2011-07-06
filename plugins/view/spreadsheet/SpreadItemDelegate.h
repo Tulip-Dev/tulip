@@ -31,23 +31,22 @@ class QAbstractItemModel;
 
 namespace tlp {
 
-  class SpreadItemDelegate : public QItemDelegate
-  {
-    Q_OBJECT
-   
-      public:
-    SpreadItemDelegate(QAbstractItemDelegate*, QObject* = 0);
-    virtual ~SpreadItemDelegate() {}
-    QWidget* createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const;
-    void setEditorData(QWidget*, const QModelIndex&) const;
-    void setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const;
-      
-  signals:
-    void dataChangedSignal(int, int, QString&, QString&) const;
-      
-  private:
-    QAbstractItemDelegate *lastItemDelegate;
-  };
+class SpreadItemDelegate : public QItemDelegate {
+  Q_OBJECT
+
+public:
+  SpreadItemDelegate(QAbstractItemDelegate*, QObject* = 0);
+  virtual ~SpreadItemDelegate() {}
+  QWidget* createEditor(QWidget*, const QStyleOptionViewItem&, const QModelIndex&) const;
+  void setEditorData(QWidget*, const QModelIndex&) const;
+  void setModelData(QWidget*, QAbstractItemModel*, const QModelIndex&) const;
+
+signals:
+  void dataChangedSignal(int, int, QString&, QString&) const;
+
+private:
+  QAbstractItemDelegate *lastItemDelegate;
+};
 
 }
 

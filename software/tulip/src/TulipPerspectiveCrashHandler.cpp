@@ -80,8 +80,10 @@ void TulipPerspectiveCrashHandler::setEnvData(const QString &plateform, const QS
   _ui->versionValue->setText(version);
   QFile f(dumpFile);
   f.open(QIODevice::ReadOnly);
+
   while (!f.atEnd())
     _ui->dumpEdit->setPlainText(_ui->dumpEdit->toPlainText() + f.read(512));
+
   _reportPath=dumpFile;
 }
 #endif
@@ -92,6 +94,6 @@ void TulipPerspectiveCrashHandler::setPerspectiveData(PerspectiveProcessInfos in
   QString args;
   QString a;
   foreach(a,infos.args.keys())
-    args += "--" + a + "=" + infos.args[a].toString() + " ";
+  args += "--" + a + "=" + infos.args[a].toString() + " ";
   _ui->perspectiveArgumentsValue->setText(args);
 }

@@ -49,16 +49,18 @@ struct TLP_SCOPE ParameterList {
   template<typename T> void add(const std::string parameterName,
                                 const std::string inHelp = std::string(),
                                 const std::string inDefValue = std::string(),
-                                bool isMandatory = true){
+                                bool isMandatory = true) {
     if (parameters.find(parameterName) == parameters.end()) {
       Parameter newParameter(std::string(typeid(T).name()), inHelp, inDefValue, isMandatory);
       parameters[parameterName] = newParameter;
     }
-    #ifndef NDEBUG
+
+#ifndef NDEBUG
     else {
       std::cerr << "ParameterList::addVar " << parameterName << " already exists" << std::endl;
     }
-    #endif
+
+#endif
   }
 
   /**
@@ -76,7 +78,7 @@ struct TLP_SCOPE ParameterList {
    * @return void
    **/
   void erase(std::string parameterName);
-  
+
   /**
    * @brief Sets the value of a parameter.
    *
@@ -100,7 +102,7 @@ struct TLP_SCOPE ParameterList {
    * @return An iterator over the names of the parameters :Iterator< std::string >*
    **/
   tlp::Iterator<std::string>* getParametersNames() const;
-  
+
   /**
    * @brief Retrieves the help string of a parameter.
    *
@@ -117,15 +119,15 @@ struct TLP_SCOPE ParameterList {
    **/
   std::string getDefaultValue(std::string parameterName) const;
 
-  
+
   /**
    * @brief Retrieves whether a parameter is mandatory or optional.
    *
    * @param parameterName The name of the parameter for which to check if it is mandatory or optional.
-   * @return bool true if the parameter is mandatory, false if it is optional. 
+   * @return bool true if the parameter is mandatory, false if it is optional.
    **/
   bool isMandatory(std::string parameterName) const;
-  
+
   /**
    * @brief Builds a DataSet containing the default values for each parameter.
    * If the DataSet has a key which is equal to a parameter's name, the existing value is kept.
@@ -149,7 +151,7 @@ private:
     std::string defaultValue;
     bool mandatory;
   };
-  
+
   std::map<std::string, Parameter> parameters;
 };
 
@@ -163,7 +165,7 @@ private:
 
 /*
  * Usage :
- * 
+ *
  * const char * paramHelp[] = {
  * // property
  * HTML_HELP_OPEN() \
@@ -172,7 +174,7 @@ private:
  * "This metricProxy is used to affect scalar values to graph items." \
  * "The meaning of theses values depends of the choosen color model." \
  * HTML_HELP_CLOSE(),
- * 
+ *
  * // colormodel
  * HTML_HELP_OPEN() \
  * HTML_HELP_DEF( "type", "int" ) \
@@ -190,22 +192,22 @@ addParameter<int>("colormodel",paramHelp[1]);
 ...
 
 */
-  
+
 /**
  * @brief This class describes parameters on a plug-in.
- * 
+ *
  * These parameters can be of any type, and are used to generate a GUI that will be shown when the plug-in in invoked by the user.
  * It is mainly used by algorithms to display options to the user, e.g. a clustering algorithm can let the user choose which measure to use.
  **/
 struct TLP_SCOPE WithParameter {
-  
+
   /**
    * @brief Retrieves the parameters.
    *
    * @return :ParameterList the parameters of the plug-in.
    **/
   tlp::ParameterList getParameters();
-  
+
   /**
    * @brief Adds a parameter to the plug-in.
    *
@@ -216,12 +218,13 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T> void addParameter(const std::string &str,
-           const std::string &inHelp=std::string(),
-           const std::string &inDefValue = std::string(),
-					 bool isMandatory = true)
-  { parameters.template add<T>(str,inHelp,inDefValue,isMandatory); }
+                                         const std::string &inHelp=std::string(),
+                                         const std::string &inDefValue = std::string(),
+                                         bool isMandatory = true) {
+    parameters.template add<T>(str,inHelp,inDefValue,isMandatory);
+  }
 protected:
-  
+
   /**
    * @brief The internal structure storing the parameters.
    **/

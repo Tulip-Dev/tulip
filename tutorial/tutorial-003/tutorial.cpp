@@ -22,7 +22,7 @@
 /**
  * Tutorial 003
  *
- * Create a graph and three sub graphq 
+ * Create a graph and three sub graphq
  * display all the structure using iterators
  */
 
@@ -59,8 +59,10 @@ int main() {
 
   //iterate subgraph (0 and 1 normally ) and output them
   Iterator<Graph *> *itS=graph->getSubGraphs();
-  while (itS->hasNext()) 
+
+  while (itS->hasNext())
     cout << itS->next() << endl;
+
   delete itS;
 
   delete graph;

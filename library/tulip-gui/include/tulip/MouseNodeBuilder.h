@@ -26,14 +26,15 @@ namespace tlp {
 
 /** \addtogroup Mouse_interactor */
 /*@{*/
-class TLP_QT_SCOPE MouseNodeBuilder:public InteractorComponent
-{
+class TLP_QT_SCOPE MouseNodeBuilder:public InteractorComponent {
 
 public:
   MouseNodeBuilder(QEvent::Type eventType = QEvent::MouseButtonPress):_eventType(eventType) {}
   ~MouseNodeBuilder() {}
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() { return new MouseNodeBuilder(_eventType); }
+  InteractorComponent *clone() {
+    return new MouseNodeBuilder(_eventType);
+  }
 private:
   QEvent::Type _eventType;
 };

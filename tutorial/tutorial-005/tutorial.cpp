@@ -73,27 +73,39 @@ int main() {
 
   cout << "List of the local properties present in the subgraph1:" << endl;
   Iterator<string> *it=subgraph1->getLocalProperties();
+
   while (it->hasNext()) {
     cout << it->next() << endl;
-  } delete it;
+  }
+
+  delete it;
 
   cout << "List of inherited properties present in the subgraph1:" << endl;
   it=subgraph1->getInheritedProperties();
+
   while (it->hasNext()) {
     cout << it->next() << endl;
-  } delete it;
+  }
+
+  delete it;
 
   cout << "List of the local properties present in the subgraph2:" << endl;
   it=subgraph2->getLocalProperties();
+
   while (it->hasNext()) {
     cout << it->next() << endl;
-  } delete it;
+  }
+
+  delete it;
 
   cout << "List of inherited properties present in the subgraph2:" << endl;
   it=subgraph2->getInheritedProperties();
+
   while (it->hasNext()) {
     cout << it->next() << endl;
-  } delete it;
+  }
+
+  delete it;
 
   delete graph;
   return EXIT_SUCCESS;

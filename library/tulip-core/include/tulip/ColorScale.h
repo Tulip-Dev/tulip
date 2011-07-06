@@ -59,54 +59,60 @@ class TLP_SCOPE ColorScale : public Observable {
 
 public:
 
-	ColorScale(const bool gradient = true);
-	ColorScale(const std::vector<Color> &colors, const bool gradient = true);
-	ColorScale(const ColorScale& scale);
-        ColorScale& operator=(const ColorScale& scale);
-	virtual ~ColorScale();
+  ColorScale(const bool gradient = true);
+  ColorScale(const std::vector<Color> &colors, const bool gradient = true);
+  ColorScale(const ColorScale& scale);
+  ColorScale& operator=(const ColorScale& scale);
+  virtual ~ColorScale();
 
-	/**
-	 * @brief Configure the color scale.
-	 * This method is used to configure the color scale. If the scale was previously configured the old configuration is lost.
-	 * @param colors The colors to use in the color scale.
-	 * @param gradient If set to true, color scale is a gradient
-	 */
-	virtual void setColorScale(const std::vector<Color> colors, const bool gradient = true);
+  /**
+   * @brief Configure the color scale.
+   * This method is used to configure the color scale. If the scale was previously configured the old configuration is lost.
+   * @param colors The colors to use in the color scale.
+   * @param gradient If set to true, color scale is a gradient
+   */
+  virtual void setColorScale(const std::vector<Color> colors, const bool gradient = true);
 
-	/**
-	 * @brief Add a color to color scale at specific position.
-	 * This method is used to add a color to the color scale at a specific position
-	 * @param pos the position in the color scale (0 <= pos <= 1)
-	 * @param gradient If set to true, color scale is a gradient
-	 */
-	virtual void setColorAtPos(const float pos, const Color &color);
+  /**
+   * @brief Add a color to color scale at specific position.
+   * This method is used to add a color to the color scale at a specific position
+   * @param pos the position in the color scale (0 <= pos <= 1)
+   * @param gradient If set to true, color scale is a gradient
+   */
+  virtual void setColorAtPos(const float pos, const Color &color);
 
-	/**
-	 * @brief Compute the color for the given value.
-	 * @param pos This value defines the position of the color in the scale and must be between 0 and 1.0.
-	 * @return The color corresponding to the position in the scale if the position is beetween 0 and 1.0. If the position is smaller than 0 the color corresponding to the position 0 is returned and if the position is greater than 1.0 the color corresponding to the position 1.0 is returned.
-	 */
-	virtual Color getColorAtPos(const float pos) const;
+  /**
+   * @brief Compute the color for the given value.
+   * @param pos This value defines the position of the color in the scale and must be between 0 and 1.0.
+   * @return The color corresponding to the position in the scale if the position is beetween 0 and 1.0. If the position is smaller than 0 the color corresponding to the position 0 is returned and if the position is greater than 1.0 the color corresponding to the position 1.0 is returned.
+   */
+  virtual Color getColorAtPos(const float pos) const;
 
-	/**
-	 * @brief Return true is the color scale was initialized.
-	 */
-	bool colorScaleInitialized() const {return colorScaleSet;}
-	/**
-	 * @brief Return a map corresponding to the color scale.
-	 * The index of the map is the position for the corresponding color in the color scale.
-	 */
-	std::map<float, Color> getColorMap() const {return colorMap;}
-	/**
-	 * @brief Return true if the color scale is a gradient.
-	 */
-	bool isGradient() const {return gradient;}
+  /**
+   * @brief Return true is the color scale was initialized.
+   */
+  bool colorScaleInitialized() const {
+    return colorScaleSet;
+  }
+  /**
+   * @brief Return a map corresponding to the color scale.
+   * The index of the map is the position for the corresponding color in the color scale.
+   */
+  std::map<float, Color> getColorMap() const {
+    return colorMap;
+  }
+  /**
+   * @brief Return true if the color scale is a gradient.
+   */
+  bool isGradient() const {
+    return gradient;
+  }
 
 protected:
 
-	std::map<float, Color> colorMap;
-	bool gradient;
-	bool colorScaleSet;
+  std::map<float, Color> colorMap;
+  bool gradient;
+  bool colorScaleSet;
 
 };
 

@@ -35,42 +35,42 @@ class Graph;
 class SpreadConfigurationWidget;
 
 class SpreadView: public AbstractView {
-Q_OBJECT
+  Q_OBJECT
 
 public:
 
-	SpreadView();
-	virtual ~SpreadView();
+  SpreadView();
+  virtual ~SpreadView();
 
-	QWidget *construct(QWidget *parent);
-	void setData(Graph *graph, DataSet dataSet);
-	void getData(Graph **graph, DataSet *dataSet);
-	Graph *getGraph();
+  QWidget *construct(QWidget *parent);
+  void setData(Graph *graph, DataSet dataSet);
+  void getData(Graph **graph, DataSet *dataSet);
+  Graph *getGraph();
 
-	void installInteractor(QAction*) {
-	}
+  void installInteractor(QAction*) {
+  }
 
-	virtual void createPicture(const std::string&, int, int);
+  virtual void createPicture(const std::string&, int, int);
 
-	std::list<std::pair<QWidget *, std::string> > getConfigurationWidget();
+  std::list<std::pair<QWidget *, std::string> > getConfigurationWidget();
 
-	std::vector<std::string> getSelectedProperties() const;
+  std::vector<std::string> getSelectedProperties() const;
 protected:
 
 
-	SpreadWidget *mainWidget;
-	SpreadConfigurationWidget *configurationWidget;
+  SpreadWidget *mainWidget;
+  SpreadConfigurationWidget *configurationWidget;
 
 public slots :
 
-	void draw();
-	void refresh();
-	void init();
-	void setGraph(Graph *graph);
+  void draw();
+  void refresh();
+  void init();
+  void setGraph(Graph *graph);
 
 
-	protected slots:
-	void updated();
+protected slots:
+  void updated();
 };
 
 }

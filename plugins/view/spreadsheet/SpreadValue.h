@@ -26,40 +26,40 @@
 #include <tulip/Color.h>
 
 namespace tlp {
-  
-  struct SpreadValue {
-    
-    enum Type{none=-1,doublev=0,coordv,colorv};
-    
-    Type valueType;
-    
-    double doubleV;
-    Coord coordV;
-    Color colorV;
 
-    SpreadValue():valueType(none) {}
-    SpreadValue(Type valueType):valueType(valueType) {}
-    SpreadValue(const double& value):valueType(doublev),doubleV(value){}
-    SpreadValue(const Coord& value):valueType(coordv),coordV(value) {}
-    SpreadValue(const Color& value):valueType(colorv),colorV(value) {}
-    SpreadValue(const QString &value);
+struct SpreadValue {
 
-    static SpreadValue computeOpp2Value(const QChar &,const SpreadValue&, const SpreadValue&);
-    static SpreadValue computeOpp2EqualValueType(const QChar &,const SpreadValue&, const SpreadValue&);
-    static bool transform2SameValueType(const SpreadValue&,const SpreadValue&,SpreadValue&,SpreadValue&);
-    static void value2List(const SpreadValue &,QList<double> &);
-    static bool valueList2List(const QList<SpreadValue> &,QList<QList<double> > &);
-    static void list2Value(QList<double> &,unsigned int,SpreadValue::Type,SpreadValue &);
+  enum Type {none=-1,doublev=0,coordv,colorv};
 
-    QString toString() {
-      if(valueType==doublev)
-	return QString::number(doubleV);
-      else if(valueType==coordv)
-	return QString("("+QString::number(coordV[0])+","+QString::number(coordV[1])+","+QString::number(coordV[2])+")");
-      else
-	return QString("("+QString::number(colorV[0])+","+QString::number(colorV[1])+","+QString::number(colorV[2])+","+QString::number(colorV[3])+")");
-    }
-  };
+  Type valueType;
+
+  double doubleV;
+  Coord coordV;
+  Color colorV;
+
+  SpreadValue():valueType(none) {}
+  SpreadValue(Type valueType):valueType(valueType) {}
+  SpreadValue(const double& value):valueType(doublev),doubleV(value) {}
+  SpreadValue(const Coord& value):valueType(coordv),coordV(value) {}
+  SpreadValue(const Color& value):valueType(colorv),colorV(value) {}
+  SpreadValue(const QString &value);
+
+  static SpreadValue computeOpp2Value(const QChar &,const SpreadValue&, const SpreadValue&);
+  static SpreadValue computeOpp2EqualValueType(const QChar &,const SpreadValue&, const SpreadValue&);
+  static bool transform2SameValueType(const SpreadValue&,const SpreadValue&,SpreadValue&,SpreadValue&);
+  static void value2List(const SpreadValue &,QList<double> &);
+  static bool valueList2List(const QList<SpreadValue> &,QList<QList<double> > &);
+  static void list2Value(QList<double> &,unsigned int,SpreadValue::Type,SpreadValue &);
+
+  QString toString() {
+    if(valueType==doublev)
+      return QString::number(doubleV);
+    else if(valueType==coordv)
+      return QString("("+QString::number(coordV[0])+","+QString::number(coordV[1])+","+QString::number(coordV[2])+")");
+    else
+      return QString("("+QString::number(colorV[0])+","+QString::number(colorV[1])+","+QString::number(colorV[2])+","+QString::number(colorV[3])+")");
+  }
+};
 
 }
 

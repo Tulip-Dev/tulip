@@ -32,7 +32,7 @@
  *   2002.
  *
  */
-class StrengthMetric:public tlp::DoubleAlgorithm { 
+class StrengthMetric:public tlp::DoubleAlgorithm {
 public:
   StrengthMetric(const tlp::PropertyContext &);
   ~StrengthMetric();

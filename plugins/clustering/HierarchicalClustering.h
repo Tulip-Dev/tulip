@@ -26,7 +26,7 @@
 
 /** \addtogroup clustering */
 /*@{*/
-class HierarchicalClustering:public tlp::Algorithm { 
+class HierarchicalClustering:public tlp::Algorithm {
 public:
   HierarchicalClustering(tlp::AlgorithmContext);
   ~HierarchicalClustering();

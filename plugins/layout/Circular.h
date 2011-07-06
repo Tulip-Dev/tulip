@@ -23,7 +23,7 @@
 
 /** \addtogroup layout */
 /*@{*/
-/** 
+/**
  * This plugin is an implementation of a circular layout that takes
  * node size into account.  It manages size of nodes and use a standard dfs
  * for ordering nodes or search the maximum length cycle.
@@ -32,7 +32,7 @@
  *
  * 25/11/2004 version 0.0.2: size and order
  * 01/12/1999 Version 0.0.1: Initial release
- * 
+ *
  *
  * NOTES:
  *
@@ -46,7 +46,7 @@
  * Daniel Archambault The University of British Columbia:
  * Email:  archam@cs.ubc.ca
  */
-class Circular:public tlp::LayoutAlgorithm { 
+class Circular:public tlp::LayoutAlgorithm {
 public:
   Circular(const tlp::PropertyContext &context);
   bool run();

@@ -26,27 +26,27 @@ template <typename TYPE> struct BmdList;
 template <typename TYPE> struct BmdListTest;
 
 namespace tlp {
-  template <typename TYPE>
-  class BmdLink {
-    
+template <typename TYPE>
+class BmdLink {
+
   friend struct BmdList<TYPE>;
   friend struct BmdListTest<TYPE>;
-  public:
-    TYPE getData() {
-      return data;
-    }
-    BmdLink *prev(){
-      return pre;
-    }
-    BmdLink *succ(){
-      return suc;
-    }
-    //protected:
-    TYPE data;
-    BmdLink *pre;
-    BmdLink *suc;
-    BmdLink(TYPE a, BmdLink<TYPE> *pre, BmdLink<TYPE> *suc);
-  };
+public:
+  TYPE getData() {
+    return data;
+  }
+  BmdLink *prev() {
+    return pre;
+  }
+  BmdLink *succ() {
+    return suc;
+  }
+  //protected:
+  TYPE data;
+  BmdLink *pre;
+  BmdLink *suc;
+  BmdLink(TYPE a, BmdLink<TYPE> *pre, BmdLink<TYPE> *suc);
+};
 }
 #include <tulip/cxx/BmdLink.cxx>
 

@@ -26,7 +26,7 @@
 #include <cppunit/TestSuite.h>
 
 class DoublePropertyTest : public CppUnit::TestFixture {
- public:
+public:
 
   void setUp();
   void tearDown();
@@ -39,7 +39,7 @@ class DoublePropertyTest : public CppUnit::TestFixture {
 
   static CppUnit::Test *suite();
 
- private :
+private :
 
   tlp::Graph *graph;
   tlp::node n1, n4;

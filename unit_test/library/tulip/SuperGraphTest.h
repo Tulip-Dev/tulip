@@ -47,7 +47,7 @@ public:
   void testGetNodesEqualTo();
 
   static CppUnit::Test *suite();
- private:
+private:
   void build(unsigned int, unsigned int);
 };
 

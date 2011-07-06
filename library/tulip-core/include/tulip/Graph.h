@@ -39,27 +39,27 @@ class PluginProgress;
 template<class C>struct Iterator;
 
 enum ElementType {NODE=0, EDGE};
-  /**
+/**
  * Loads a graph in the tlp format from a file (extension can be .tlp or .tlp.gz).
  * Returns NULL if the import fails.
  * Warning : this function uses "tlp" import plugin (must be loaded).
-   */
-  TLP_SCOPE Graph * loadGraph(const std::string &filename);
-  /**
+ */
+TLP_SCOPE Graph * loadGraph(const std::string &filename);
+/**
  * Saves a graph to a file in the tlp format. Extension of the destination file can be either
  * .tlp (raw export) or .tlp.gz (compressed export).
  *
  * Returns true if the graph was successfully exported.
-   * Warning : this function use "tlp" export plugin (must be loaded).
-   */
-  TLP_SCOPE bool saveGraph(Graph *, const std::string &filename);
+ * Warning : this function use "tlp" export plugin (must be loaded).
+ */
+TLP_SCOPE bool saveGraph(Graph *, const std::string &filename);
 
 /**
  * Imports a graph using the Tulip import plugin named alg (must be loaded) with parameters stored in dataSet.
  * If newGraph is not NULL, imported graph elements will be added to it. Otherwise, returns a new graph
  * or NULL if the import fails.
  */
-  TLP_SCOPE Graph * importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0,Graph *newGraph=0);
+TLP_SCOPE Graph * importGraph(const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0,Graph *newGraph=0);
 
 /**
  * Exports a graph using the Tulip export plugin named alg (must be loaded) with parameters stored in dataSet.
@@ -67,52 +67,52 @@ enum ElementType {NODE=0, EDGE};
  * by the export plugin.
  * Returns true if the graph was successfully exported.
  */
-  TLP_SCOPE bool exportGraph(Graph *graph,std::ostream  &os,const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0);
+TLP_SCOPE bool exportGraph(Graph *graph,std::ostream  &os,const std::string &alg, DataSet &dataSet, PluginProgress *plugProgress=0);
 
-  /**
+/**
  * Applies an algorithm plugin named alg (must be loaded) on graph . Algorithm plugins are objects
  * implementing the tlp::Algorithm interface. Parameters can be transmit to the algorithm trough a
  * DataSet object (refer to the plugin documentation to get its parameters list).
  * If an error occurs, a message may have been stored by the algorithm in the errosMsg variable.
  * Returns true if the algorithm has been successfully applied.
-   */
+ */
 TLP_SCOPE bool applyAlgorithm(Graph *graph,std::string &errorMsg, DataSet *dataSet =0,const std::string &alg="any", PluginProgress *plugProgress=0);
 
-  /**
+/**
  * Returns a new empty graph.
-   */
+ */
 TLP_SCOPE Graph* newGraph();
 
-  /**
+/**
  *  Creates and returns an empty subgraph of root.
-   */
+ */
 TLP_SCOPE Graph *newSubGraph(Graph *root, std::string name = "unnamed");
 
-  /**
+/**
  *  Creates and returns a subgraph of root that is equal to root (a clone subgraph).
-   */
+ */
 TLP_SCOPE Graph *newCloneSubGraph(Graph *root, std::string name = "unnamed");
 
-  /**
+/**
  *  Finds the first node whose input degree equals 0.
  *  If no node exists, returns false else true.
-   */
+ */
 TLP_SCOPE bool getSource(const Graph *, node &n);
 
-  /**
+/**
  * Appends the selected part of the graph inG (properties, nodes and edges) into the graph outG.
-   * If no selection is done (inSel=NULL), the whole inG graph is appended.
-   * The output selection is used to select the appended nodes & edges
-   * \warning The input selection is extended to all selected edge ends.
-   */
+ * If no selection is done (inSel=NULL), the whole inG graph is appended.
+ * The output selection is used to select the appended nodes & edges
+ * \warning The input selection is extended to all selected edge ends.
+ */
 TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSelection=0, BooleanProperty* outSelection=0 );
 
-  /**
+/**
  * Removes the selected part of the graph ioG (properties values, nodes and edges).
-   * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
-   * \warning The selection is extended to all selected edge ends.
-   */
-  TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection = 0 );
+ * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
+ * \warning The selection is extended to all selected edge ends.
+ */
+TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection = 0 );
 
 /**
  * \defgroup graphs
@@ -122,7 +122,7 @@ TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSel
 /**
  * The class Graph is the interface of a Graph in the Tulip Library.
  */
-  class TLP_SCOPE Graph : public Observable {
+class TLP_SCOPE Graph : public Observable {
 
   friend class GraphAbstract;
   friend class GraphUpdatesRecorder;
@@ -145,7 +145,7 @@ public:
    * if there is no selection an empty sub-graph is returned.
    */
   virtual Graph *addSubGraph(BooleanProperty *selection=0,
-			     unsigned int id = 0)=0;
+                             unsigned int id = 0)=0;
   /**
    *  Creates and returns a new sub-graph of the graph
    *  induced by a set of nodes. The sub-graph contains all
@@ -155,7 +155,7 @@ public:
    *  it will be the parent of the induced sub-graph instead of this.
    */
   Graph *inducedSubGraph(const std::set<node>& nodeSet,
-			 Graph* parentSubGraph = NULL);
+                         Graph* parentSubGraph = NULL);
   /**
    * Deletes a sub-graph of this graph.
    * The sub-graph's sub-graphs become sub-graphs of the graph.
@@ -186,11 +186,11 @@ public:
   /**
    * Indicates if the graph argument is a direct sub-graph.
    */
-	virtual bool isSubGraph(const Graph* sg) const=0;
+  virtual bool isSubGraph(const Graph* sg) const=0;
   /**
    * Indicates if the graph argument is a descendant of this graph.
    */
-	virtual bool isDescendantGraph(const Graph* sg) const=0;
+  virtual bool isDescendantGraph(const Graph* sg) const=0;
   /**
    * Returns a pointer on the sub-graph with the corresponding id
    * or NULL if there is no sub-graph with that id.
@@ -246,7 +246,7 @@ public:
    * the sub-graph relation between graphs.
    * If deleteInAllGraphs is true, these nodes are  deleted
    * in the whole hierarchy of graphs.
-	 * It is the responsibility of the caller to delete the iterator.
+   * It is the responsibility of the caller to delete the iterator.
    */
   virtual void delNodes(Iterator<node>* itN, bool deleteInAllGraphs = false)=0;
   /**
@@ -261,7 +261,7 @@ public:
    * Warning : the addedEdges vector is cleared before adding edges
    */
   virtual void addEdges(const std::vector<std::pair<node, node> >& edges,
-			std::vector<edge>& addedEdges)=0;
+                        std::vector<edge>& addedEdges)=0;
   /**
    * Adds an existing edge in the graph. This edge is also added in all
    * the graph's ancestors to maintain the sub-graph relation between graphs.
@@ -294,7 +294,7 @@ public:
    * If deleteInAllGraphs is true, the edges are deleted
    * in the whole hierarchy of graphs.
    * The ordering of remaining edges is preserved.
-	 * It is the responsibility of the caller to delete the iterator.
+   * It is the responsibility of the caller to delete the iterator.
    */
   virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false)=0;
   /**
@@ -361,7 +361,9 @@ public:
   // Graph, nodes and edges informations about the graph stucture
   //================================================================================
   /// Returns the graph's id. This id is unique.
-  unsigned int getId() const {return id;}
+  unsigned int getId() const {
+    return id;
+  }
   /// Returns the number of nodes in the graph.
   virtual unsigned int numberOfNodes()const =0;
   /// Returns the number of edges in the graph.
@@ -395,7 +397,7 @@ public:
    *  If no edge is found, returns an invalid edge.
    */
   virtual edge existEdge(const node source, const node target,
-			 bool directed = true) const =0;
+                         bool directed = true) const =0;
   //================================================================================
   // Access to the graph attributes and to the node/edge property.
   //================================================================================
@@ -433,25 +435,25 @@ public:
    *  will cause a segmentation violation (use delLocalProperty instead).
    */
   virtual  void addLocalProperty(const std::string &name, PropertyInterface *prop)=0;
- /**
-	 * Returns a pointer to a PropertyInterface which is in the graph properties pool.
-	 * The real type of the PropertyInterface is tested with the template parameter.
-   * If the PropertyInterface is not in the pool, a new one is created and returned.
-   * Using of delete on that property will cause an abort of the program
-   * (use delLocalProperty instead).
-   */
-	template<typename PropertyType>
-	PropertyType* getLocalProperty(const std::string &name);
+  /**
+   * Returns a pointer to a PropertyInterface which is in the graph properties pool.
+   * The real type of the PropertyInterface is tested with the template parameter.
+    * If the PropertyInterface is not in the pool, a new one is created and returned.
+    * Using of delete on that property will cause an abort of the program
+    * (use delLocalProperty instead).
+    */
+  template<typename PropertyType>
+  PropertyType* getLocalProperty(const std::string &name);
 
   /**
-	 * Try to returns a pointer to a PropertyInterface PropertyInterface which is in the graph properties pool.
-	 * The real type of the PropertyInterface is tested with the propertyType string parameter.
+   * Try to returns a pointer to a PropertyInterface PropertyInterface which is in the graph properties pool.
+   * The real type of the PropertyInterface is tested with the propertyType string parameter.
    * If the PropertyInterface is not in the pool, a new one is created and returned.
-	 * If the type parameter is not a valid property type this function returns a NULL pointer.
+   * If the type parameter is not a valid property type this function returns a NULL pointer.
    * Using of delete on that property will cause an abort of the program
    * (use delLocalProperty instead).
    */
-	PropertyInterface *getLocalProperty(const std::string& propertyName, const std::string& propertyType);
+  PropertyInterface *getLocalProperty(const std::string& propertyName, const std::string& propertyType);
 
   /**
    * Computes a property on the current graph
@@ -465,7 +467,7 @@ public:
    */
   template<typename PropertyType>
   bool computeProperty(const std::string &algorithm, PropertyType* result, std::string &msg,
-		       PluginProgress *progress=0, DataSet *data=0);
+                       PluginProgress *progress=0, DataSet *data=0);
   /**
    * Returns a pointer to a PropertyInterface which is in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
    * The real type of the PropertyInterface is tested with the template parameter.
@@ -481,14 +483,14 @@ public:
    * In DEBUG the existence of a property is checked using an assertion.
    */
   virtual PropertyInterface* getProperty(const std::string& name)=0;
- /**
-   * Try to returns a pointer to a PropertyInterface PropertyInterface which is in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-   * The real type of the PropertyInterface is tested with the propertyType string parameter.
-   * If the PropertyInterface is not in the pool, a new one is created and returned.
-   * If the type parameter is not a valid property type this function returns a NULL pointer.
-   * Using of delete on that property will cause an abort of the program
-   * (use delLocalProperty instead).
-   */
+  /**
+    * Try to returns a pointer to a PropertyInterface PropertyInterface which is in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
+    * The real type of the PropertyInterface is tested with the propertyType string parameter.
+    * If the PropertyInterface is not in the pool, a new one is created and returned.
+    * If the type parameter is not a valid property type this function returns a NULL pointer.
+    * Using of delete on that property will cause an abort of the program
+    * (use delLocalProperty instead).
+    */
   PropertyInterface *getProperty(const std::string& propertyName, const std::string& propertyType);
   /**
    *  Returns true if a property of that name exists
@@ -506,27 +508,27 @@ public:
   /**
    * Returns an iterator on the names of the properties local to the graph.
    */
-	virtual Iterator<std::string>* getLocalProperties() const=0;
+  virtual Iterator<std::string>* getLocalProperties() const=0;
   /**
    * Returns an iterator on the names of the properties inherited from the graph���s ancestors.
    */
-	virtual Iterator<std::string>* getInheritedProperties() const=0;
+  virtual Iterator<std::string>* getInheritedProperties() const=0;
   /**
    * Returns an iterator on the name of all the properties attached to the graph.
    */
-	virtual Iterator<std::string>* getProperties() const=0;
+  virtual Iterator<std::string>* getProperties() const=0;
   /**
    * Returns an iterator on the properties local to the graph.
    */
-	virtual Iterator<PropertyInterface*>* getLocalObjectProperties() const=0;
+  virtual Iterator<PropertyInterface*>* getLocalObjectProperties() const=0;
   /**
    * Returns an iterator on the properties inherited from the graph���s ancestors.
    */
-	virtual Iterator<PropertyInterface*>* getInheritedObjectProperties() const=0;
+  virtual Iterator<PropertyInterface*>* getInheritedObjectProperties() const=0;
   /**
    * Returns an iterator on all the properties attached to the graph.
    */
-	virtual Iterator<PropertyInterface*>* getObjectProperties() const=0;
+  virtual Iterator<PropertyInterface*>* getObjectProperties() const=0;
 
   // observation mechanism
   /**
@@ -609,7 +611,7 @@ public:
    *
    */
   void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
-		       std::vector<node>& metaNodes);
+                       std::vector<node>& metaNodes);
   /**
    * Closes an existing subgraph into a metanode.  Edges from nodes
    * in the subgraph to nodes outside the subgraph are replaced with
@@ -637,7 +639,7 @@ protected:
   virtual void restoreNodes(const std::vector<node>& nodes)=0;
   virtual edge restoreEdge(edge, node source, node target)=0;
   virtual void restoreEdges(const std::vector<edge>& edges,
-			    const std::vector<std::pair<node, node> >& ends)=0;
+                            const std::vector<std::pair<node, node> >& ends)=0;
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node)=0;
@@ -672,7 +674,7 @@ protected:
   void notifyAfterSetEnds(const edge e);
   void notifyAfterSetEnds(Graph*, const edge e) {
     notifyAfterSetEnds(e);
-  }  
+  }
   void notifyDelNode(const node n);
   void notifyDelNode(Graph*, const node n) {
     notifyDelNode(n);
@@ -688,7 +690,7 @@ protected:
   void notifyAddSubGraph(const Graph*);
   void notifyAddSubGraph(Graph*, const Graph* sg) {
     notifyAddSubGraph(sg);
-  }  
+  }
   void notifyDelSubGraph(const Graph*);
   void notifyDelSubGraph(Graph*, const Graph* sg) {
     notifyDelSubGraph(sg);
@@ -727,112 +729,112 @@ protected:
 
 /// Event class for specific events on Graph
 class TLP_SCOPE GraphEvent :public Event {
-  public:
-    // be careful about the ordering of the constants
-    // in the enum below because it is used in some assertions
-    enum GraphEventType {
-      TLP_ADD_NODE = 0, TLP_DEL_NODE, TLP_ADD_EDGE, TLP_DEL_EDGE,
-      TLP_REVERSE_EDGE, TLP_BEFORE_SET_ENDS, TLP_AFTER_SET_ENDS,
-      TLP_ADD_NODES, TLP_ADD_EDGES,
-      TLP_ADD_SUBGRAPH, TLP_DEL_SUBGRAPH,
-      TLP_ADD_LOCAL_PROPERTY, TLP_BEFORE_DEL_LOCAL_PROPERTY,TLP_AFTER_DEL_LOCAL_PROPERTY,
-      TLP_ADD_INHERITED_PROPERTY, TLP_BEFORE_DEL_INHERITED_PROPERTY,TLP_AFTER_DEL_INHERITED_PROPERTY,
-      TLP_BEFORE_SET_ATTRIBUTE, TLP_AFTER_SET_ATTRIBUTE, TLP_REMOVE_ATTRIBUTE
-    };
+public:
+  // be careful about the ordering of the constants
+  // in the enum below because it is used in some assertions
+  enum GraphEventType {
+    TLP_ADD_NODE = 0, TLP_DEL_NODE, TLP_ADD_EDGE, TLP_DEL_EDGE,
+    TLP_REVERSE_EDGE, TLP_BEFORE_SET_ENDS, TLP_AFTER_SET_ENDS,
+    TLP_ADD_NODES, TLP_ADD_EDGES,
+    TLP_ADD_SUBGRAPH, TLP_DEL_SUBGRAPH,
+    TLP_ADD_LOCAL_PROPERTY, TLP_BEFORE_DEL_LOCAL_PROPERTY,TLP_AFTER_DEL_LOCAL_PROPERTY,
+    TLP_ADD_INHERITED_PROPERTY, TLP_BEFORE_DEL_INHERITED_PROPERTY,TLP_AFTER_DEL_INHERITED_PROPERTY,
+    TLP_BEFORE_SET_ATTRIBUTE, TLP_AFTER_SET_ATTRIBUTE, TLP_REMOVE_ATTRIBUTE
+  };
 
-    // constructor for node/edge events
-    GraphEvent(const Graph& g, GraphEventType graphEvtType, unsigned int id,
-	       Event::EventType evtType = Event::TLP_MODIFICATION)
-      : Event(g, evtType), evtType(graphEvtType) {
-      info.eltId = id;
-    }
-    // constructor for nodes events
-    GraphEvent(const Graph& g, GraphEventType graphEvtType,
-	       const std::vector<node>& nodes,
-	       Event::EventType evtType = Event::TLP_MODIFICATION)
-      : Event(g, evtType), evtType(graphEvtType) {
-      info.nodes = &nodes;
-    }
-    // constructor for edges events
-    GraphEvent(const Graph& g, GraphEventType graphEvtType,
-	       const std::vector<edge>& edges,
-	       Event::EventType evtType = Event::TLP_MODIFICATION)
-      : Event(g, evtType), evtType(graphEvtType) {
-      info.edges = &edges;
-    }
-    // constructor for subgraph events
-    GraphEvent(const Graph& g, GraphEventType graphEvtType,
-	       const Graph* sg)
-      : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
-      info.subGraph = sg;
-    }
+  // constructor for node/edge events
+  GraphEvent(const Graph& g, GraphEventType graphEvtType, unsigned int id,
+             Event::EventType evtType = Event::TLP_MODIFICATION)
+    : Event(g, evtType), evtType(graphEvtType) {
+    info.eltId = id;
+  }
+  // constructor for nodes events
+  GraphEvent(const Graph& g, GraphEventType graphEvtType,
+             const std::vector<node>& nodes,
+             Event::EventType evtType = Event::TLP_MODIFICATION)
+    : Event(g, evtType), evtType(graphEvtType) {
+    info.nodes = &nodes;
+  }
+  // constructor for edges events
+  GraphEvent(const Graph& g, GraphEventType graphEvtType,
+             const std::vector<edge>& edges,
+             Event::EventType evtType = Event::TLP_MODIFICATION)
+    : Event(g, evtType), evtType(graphEvtType) {
+    info.edges = &edges;
+  }
+  // constructor for subgraph events
+  GraphEvent(const Graph& g, GraphEventType graphEvtType,
+             const Graph* sg)
+    : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
+    info.subGraph = sg;
+  }
 
-    // constructor for attribute/property events
-    GraphEvent(const Graph& g, GraphEventType graphEvtType,
-	       const std::string& str,
-	       Event::EventType evtType = Event::TLP_MODIFICATION)
-      : Event(g, evtType), evtType(graphEvtType) {
-      info.name = new std::string(str);
-    }
+  // constructor for attribute/property events
+  GraphEvent(const Graph& g, GraphEventType graphEvtType,
+             const std::string& str,
+             Event::EventType evtType = Event::TLP_MODIFICATION)
+    : Event(g, evtType), evtType(graphEvtType) {
+    info.name = new std::string(str);
+  }
 
-    // destructor needed to cleanup name if any
-    ~GraphEvent() {
-      if (evtType > TLP_DEL_SUBGRAPH)
-	delete info.name;
-    }
+  // destructor needed to cleanup name if any
+  ~GraphEvent() {
+    if (evtType > TLP_DEL_SUBGRAPH)
+      delete info.name;
+  }
 
-    Graph* getGraph() const {
-      return dynamic_cast<Graph *>(sender());
-    }
+  Graph* getGraph() const {
+    return dynamic_cast<Graph *>(sender());
+  }
 
-    node getNode() const {
-      assert(evtType < TLP_ADD_EDGE);
-      return node(info.eltId);
-    }
+  node getNode() const {
+    assert(evtType < TLP_ADD_EDGE);
+    return node(info.eltId);
+  }
 
-    edge getEdge() const {
-      assert(evtType > TLP_DEL_NODE && evtType < TLP_ADD_NODES);
-      return edge(info.eltId);
-    }
+  edge getEdge() const {
+    assert(evtType > TLP_DEL_NODE && evtType < TLP_ADD_NODES);
+    return edge(info.eltId);
+  }
 
-    const std::vector<node>& getNodes() const {
-      assert(evtType == TLP_ADD_NODES);
-      return *(info.nodes);
-    }
+  const std::vector<node>& getNodes() const {
+    assert(evtType == TLP_ADD_NODES);
+    return *(info.nodes);
+  }
 
-    const std::vector<edge>& getEdges() const {
-      assert(evtType == TLP_ADD_EDGES);
-      return *(info.edges);
-    }
+  const std::vector<edge>& getEdges() const {
+    assert(evtType == TLP_ADD_EDGES);
+    return *(info.edges);
+  }
 
-    const Graph* getSubGraph() const {
-      assert(evtType > TLP_ADD_EDGES && evtType < TLP_ADD_LOCAL_PROPERTY);
-      return info.subGraph;
-    }
+  const Graph* getSubGraph() const {
+    assert(evtType > TLP_ADD_EDGES && evtType < TLP_ADD_LOCAL_PROPERTY);
+    return info.subGraph;
+  }
 
-    const std::string& getAttributeName() const {
-      assert(evtType > TLP_AFTER_DEL_INHERITED_PROPERTY);
-      return *(info.name);
-    }
+  const std::string& getAttributeName() const {
+    assert(evtType > TLP_AFTER_DEL_INHERITED_PROPERTY);
+    return *(info.name);
+  }
 
-    const std::string& getPropertyName() const {
-      assert(evtType > TLP_DEL_SUBGRAPH && evtType < TLP_BEFORE_SET_ATTRIBUTE);
-      return *(info.name);
-    }
+  const std::string& getPropertyName() const {
+    assert(evtType > TLP_DEL_SUBGRAPH && evtType < TLP_BEFORE_SET_ATTRIBUTE);
+    return *(info.name);
+  }
 
-    GraphEventType getType() const {
-      return evtType;
-    }
+  GraphEventType getType() const {
+    return evtType;
+  }
 
-  protected:
-    GraphEventType evtType;
-    union {
-      unsigned int eltId;
-      const Graph* subGraph;
-      std::string* name;
-      const std::vector<node>* nodes;
-      const std::vector<edge>* edges;
-    } info;
+protected:
+  GraphEventType evtType;
+  union {
+    unsigned int eltId;
+    const Graph* subGraph;
+    std::string* name;
+    const std::vector<node>* nodes;
+    const std::vector<edge>* edges;
+  } info;
 };
 
 }

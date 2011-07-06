@@ -27,11 +27,11 @@ using namespace std;
 //============================================================
 // FaceIteratorTest
 //============================================================
-void FaceIteratorTest::build(){
+void FaceIteratorTest::build() {
   carte->clear();
   edges.clear();
   nodes.clear();
-  
+
   for(unsigned int i = 0; i<10; i++)
     nodes.push_back(carte->addNode());
 
@@ -56,64 +56,74 @@ void FaceIteratorTest::build(){
 }
 
 //============================================================
-void FaceIteratorTest::testNodeFaceIterator(){
+void FaceIteratorTest::testNodeFaceIterator() {
   build();
   carte->update();
 
   Iterator<Face>* itf = carte->getFaces();
-  while(itf->hasNext()){
+
+  while(itf->hasNext()) {
     Face f = itf->next();
     unsigned int i = 0;
     Iterator<node>* it = carte->getFaceNodes(f);
-    while(it->hasNext()){
+
+    while(it->hasNext()) {
       node n = it->next();
       i++;
     }
+
     CPPUNIT_ASSERT_MESSAGE(" test NodeFaceIterator ",carte->facesEdges[f].size() == i);
     delete it;
   }
+
   delete itf;
-}  
+}
 
 //============================================================
-void FaceIteratorTest::testFaceAdjIterator(){
+void FaceIteratorTest::testFaceAdjIterator() {
   build();
   carte->update();
 
   unsigned int i = 0;
   Iterator<Face>* it = carte->getFacesAdj(nodes[4]);
-  while(it->hasNext()){
+
+  while(it->hasNext()) {
     it->next();
     i++;
   }
+
   delete it;
   CPPUNIT_ASSERT_MESSAGE(" test FaceAdjIterator nbFaces ", 3 == i);
 
   i = 0;
   it = carte->getFacesAdj(nodes[1]);
-  while(it->hasNext()){
+
+  while(it->hasNext()) {
     it->next();
     i++;
   }
+
   delete it;
   CPPUNIT_ASSERT_MESSAGE(" test FaceadjIterator nbFaces ", 3 == i);
 
   i = 0;
   it = carte->getFacesAdj(nodes[8]);
-  while(it->hasNext()){
+
+  while(it->hasNext()) {
     it->next();
     i++;
   }
+
   delete it;
   CPPUNIT_ASSERT_MESSAGE(" test FaceAdjIterator nbFaces ", 2 == i);
 }
 
 //============================================================
-CppUnit::Test* FaceIteratorTest::suite(){
+CppUnit::Test* FaceIteratorTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite;
   suiteOfTests->addTest(new CppUnit::TestCaller<FaceIteratorTest>(
-		"testNodeFaceIterator", &FaceIteratorTest::testNodeFaceIterator));
+                          "testNodeFaceIterator", &FaceIteratorTest::testNodeFaceIterator));
   suiteOfTests->addTest(new CppUnit::TestCaller<FaceIteratorTest>(
-		"testFaceAdjIterator", &FaceIteratorTest::testFaceAdjIterator));
+                          "testFaceAdjIterator", &FaceIteratorTest::testFaceAdjIterator));
   return suiteOfTests;
 }

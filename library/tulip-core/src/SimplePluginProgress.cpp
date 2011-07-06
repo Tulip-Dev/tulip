@@ -20,8 +20,7 @@
 using namespace tlp;
 using namespace std;
 SimplePluginProgress::SimplePluginProgress(): _state(TLP_CONTINUE),
-_preview(false)
-{
+  _preview(false) {
 }
 ProgressState SimplePluginProgress::progress(int step, int max_step) {
   progress_handler(step,max_step);
@@ -41,9 +40,10 @@ bool SimplePluginProgress::isPreviewMode() const {
 }
 //====================================================
 void SimplePluginProgress::setPreviewMode(bool b) {
-    if (b == _preview) return;
-    _preview = b;
-    preview_handler(_preview);
+  if (b == _preview) return;
+
+  _preview = b;
+  preview_handler(_preview);
 }
 //====================================================
 void SimplePluginProgress::showPreview(bool) {

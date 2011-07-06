@@ -26,17 +26,17 @@ namespace tlp {
 class Graph;
 
 class SpreadConfigurationWidget: public QWidget, public Ui::SpreadConfigurationWidget {
-Q_OBJECT
+  Q_OBJECT
 public:
-	SpreadConfigurationWidget(QWidget* parent = NULL);
-	virtual ~SpreadConfigurationWidget();
-	void setGraph(tlp::Graph *graph);
-	std::vector<std::string> getSelectedProperties();
-	void setSelectedProperties(const std::vector<std::string>& properties);
-	bool allPropertiesSelected();
+  SpreadConfigurationWidget(QWidget* parent = NULL);
+  virtual ~SpreadConfigurationWidget();
+  void setGraph(tlp::Graph *graph);
+  std::vector<std::string> getSelectedProperties();
+  void setSelectedProperties(const std::vector<std::string>& properties);
+  bool allPropertiesSelected();
 
 signals:
-	void updated();
+  void updated();
 };
 }
 #endif /* SPREADCONFIGURATIONWIDGET_H_ */

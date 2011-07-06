@@ -7,7 +7,7 @@
 class QNetworkReply;
 
 class FormPost: public QObject {
-Q_OBJECT
+  Q_OBJECT
 public:
   FormPost();
 

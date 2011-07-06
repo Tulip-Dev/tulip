@@ -36,11 +36,11 @@ class ImprovedWalkerIterator;
  *  Christoph Buchheim and Michael Junger and Sebastian Leipert,
  *  Improving Walker's Algorithm to Run in Linear Time
  *  citeseer.ist.psu.edu/buchheim02improving.html
- * 
+ *
  *  \note This algorith works on tree.
  *  Let n be the number of nodes, the algorithm complexity is in O(n).
  *
- *  \author Julien Testut, Antony Durand, Pascal Ollier, Yashvin Nababsing, \n 
+ *  \author Julien Testut, Antony Durand, Pascal Ollier, Yashvin Nababsing, \n
  *  Sebastien Leclerc, Thibault Ruchon, Eric Dauchier \n
  *  University Bordeaux I France
  **/
@@ -48,13 +48,13 @@ class ImprovedWalkerIterator;
 class ImprovedWalker : public tlp::LayoutAlgorithm {
   friend class ImprovedWalkerUnitTests;
 
- public:
+public:
   ImprovedWalker(const tlp::PropertyContext&);
   ~ImprovedWalker();
 
   bool run();
 
- private:
+private:
   typedef std::vector<float>      levelToFloatType;
   typedef std::map<tlp::node, float>   nodeToFloatType;
   typedef std::map<tlp::node, int>     nodeToIntegerPropertyType;
@@ -90,16 +90,16 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
   void                    firstWalk(tlp::node v);
   void                    secondWalk(tlp::node v, float modifierX, int depth);
   void                    combineSubtree(tlp::node v, tlp::node* defaultAncestor);
-  void                    moveSubtree(tlp::node fromNode, tlp::node toNode, 
-				      float rightShift);
+  void                    moveSubtree(tlp::node fromNode, tlp::node toNode,
+                                      float rightShift);
   void                    executeShifts(tlp::node v);
-    
+
   inline tlp::node getSuperGraph(tlp::node n);
 
   inline tlp::node leftmostChild(tlp::node n);
   inline tlp::node rightmostChild(tlp::node n);
 
-  inline tlp::node leftSibling(tlp::node n);    
+  inline tlp::node leftSibling(tlp::node n);
   inline tlp::node rightSibling(tlp::node n);
   inline tlp::node leftMostSibling(tlp::node n);
 
@@ -108,73 +108,79 @@ class ImprovedWalker : public tlp::LayoutAlgorithm {
   inline tlp::node findCommonAncestor(tlp::node left, tlp::node right, tlp::node defaultAncestor);
 };
 
-//====================================================================    
+//====================================================================
 inline tlp::node ImprovedWalker::getSuperGraph(tlp::node n) {
-   if (tree->indeg(n)<1)
-        return BADNODE;
-    return tree->getInNode(n,1);
+  if (tree->indeg(n)<1)
+    return BADNODE;
+
+  return tree->getInNode(n,1);
 }
 
-//====================================================================    
-inline tlp::node ImprovedWalker::leftmostChild(tlp::node n) {    
-    if (tree->outdeg(n)<1)
-        return BADNODE;
-    return tree->getOutNode(n,1);
+//====================================================================
+inline tlp::node ImprovedWalker::leftmostChild(tlp::node n) {
+  if (tree->outdeg(n)<1)
+    return BADNODE;
+
+  return tree->getOutNode(n,1);
 }
 
 //====================================================================
 inline tlp::node ImprovedWalker::rightmostChild(tlp::node n) {
-    int pos;
-    if ((pos=tree->outdeg(n))<1)
-        return BADNODE;        
-    return tree->getOutNode(n,pos);
+  int pos;
+
+  if ((pos=tree->outdeg(n))<1)
+    return BADNODE;
+
+  return tree->getOutNode(n,pos);
 }
 
-//====================================================================    
-inline tlp::node ImprovedWalker::leftSibling(tlp::node n) {    
-    if (order[n]<=1)
-        return BADNODE; 
-    else
-        return tree->getOutNode( getSuperGraph(n) ,order[n]-1);
+//====================================================================
+inline tlp::node ImprovedWalker::leftSibling(tlp::node n) {
+  if (order[n]<=1)
+    return BADNODE;
+  else
+    return tree->getOutNode( getSuperGraph(n) ,order[n]-1);
 }
 
 //====================================================================
 inline tlp::node ImprovedWalker::rightSibling(tlp::node n) {
-    tlp::node father=getSuperGraph(n);
-    if (order[n]>=int(tree->outdeg(father)))
-        return BADNODE;     
-    return tree->getOutNode(father ,order[n]+1);
+  tlp::node father=getSuperGraph(n);
+
+  if (order[n]>=int(tree->outdeg(father)))
+    return BADNODE;
+
+  return tree->getOutNode(father ,order[n]+1);
 }
 
 //====================================================================
 inline tlp::node ImprovedWalker::leftMostSibling(tlp::node n) {
-    tlp::node father=getSuperGraph(n);
-    return leftmostChild(father);
+  tlp::node father=getSuperGraph(n);
+  return leftmostChild(father);
 }
 
 //====================================================================
 inline tlp::node ImprovedWalker::nextRightContour(tlp::node n) {
-    if (isLeaf(tree, n))
-        return thread[n];
-    else
-        return rightmostChild(n);
+  if (isLeaf(tree, n))
+    return thread[n];
+  else
+    return rightmostChild(n);
 }
 
 //====================================================================
 inline tlp::node ImprovedWalker::nextLeftContour(tlp::node n) {
-    if (isLeaf(tree, n))
-        return thread[n];
-    else
-        return leftmostChild(n);
+  if (isLeaf(tree, n))
+    return thread[n];
+  else
+    return leftmostChild(n);
 }
 
 //====================================================================
-inline tlp::node ImprovedWalker::findCommonAncestor(tlp::node left, tlp::node right, 
-						    tlp::node defaultAncestor) {
-    if (getSuperGraph(ancestor[left]) == getSuperGraph(right) /*&& left!=right*/)
-        return ancestor[left];
-    else
-        return defaultAncestor;
+inline tlp::node ImprovedWalker::findCommonAncestor(tlp::node left, tlp::node right,
+    tlp::node defaultAncestor) {
+  if (getSuperGraph(ancestor[left]) == getSuperGraph(right) /*&& left!=right*/)
+    return ancestor[left];
+  else
+    return defaultAncestor;
 }
 /*@}*/
 #endif

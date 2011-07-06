@@ -38,99 +38,99 @@ class GlGraphInputData;
 
 class EdgeExtremityGlyphContext {
 public:
-	GlGraphInputData *glGraphInputData;
-	///
-	EdgeExtremityGlyphContext(Graph ** = NULL, GlGraphInputData *glGraphInputData = NULL, int =
-			5, int = 5) :
-		glGraphInputData(glGraphInputData) {
-	}
-	///
-	~EdgeExtremityGlyphContext() {
-	}
+  GlGraphInputData *glGraphInputData;
+  ///
+  EdgeExtremityGlyphContext(Graph ** = NULL, GlGraphInputData *glGraphInputData = NULL, int =
+                              5, int = 5) :
+    glGraphInputData(glGraphInputData) {
+  }
+  ///
+  ~EdgeExtremityGlyphContext() {
+  }
 };
 
- class TLP_GL_SCOPE EdgeExtremityGlyph: public WithDependency, public WithParameter {
+class TLP_GL_SCOPE EdgeExtremityGlyph: public WithDependency, public WithParameter {
 public:
-	EdgeExtremityGlyph(EdgeExtremityGlyphContext *gc);
-	virtual ~EdgeExtremityGlyph();
+  EdgeExtremityGlyph(EdgeExtremityGlyphContext *gc);
+  virtual ~EdgeExtremityGlyph();
 
-	virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) = 0;
+  virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod) = 0;
 
-	virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
-			const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix) = 0;
-	//	virtual MatrixGL getTransformationMatrix(const Coord &src, const Coord &dest,
-	//			const Size &glyphSize) = 0;
-	//
-	//	virtual MatrixGL getScalingMatrix(const Size &glyphSize) = 0;
+  virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
+                                       const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix) = 0;
+  //  virtual MatrixGL getTransformationMatrix(const Coord &src, const Coord &dest,
+  //      const Size &glyphSize) = 0;
+  //
+  //  virtual MatrixGL getScalingMatrix(const Size &glyphSize) = 0;
 
 
 protected:
-	GlGraphInputData *edgeExtGlGraphInputData;
+  GlGraphInputData *edgeExtGlGraphInputData;
 };
 
 typedef tlp::StaticPluginLister<EdgeExtremityGlyph, EdgeExtremityGlyphContext*> EdgeExtremityGlyphLister;
 
 #ifdef WIN32
-	template class TLP_GL_SCOPE PluginLister<EdgeExtremityGlyph,EdgeExtremityGlyphContext *>;
+template class TLP_GL_SCOPE PluginLister<EdgeExtremityGlyph,EdgeExtremityGlyphContext *>;
 #endif
 
 class TLP_GL_SCOPE EdgeExtremityGlyphFrom3DGlyph: public EdgeExtremityGlyph {
 public:
-	EdgeExtremityGlyphFrom3DGlyph(EdgeExtremityGlyphContext *gc);
-	virtual ~EdgeExtremityGlyphFrom3DGlyph();
+  EdgeExtremityGlyphFrom3DGlyph(EdgeExtremityGlyphContext *gc);
+  virtual ~EdgeExtremityGlyphFrom3DGlyph();
 
-	virtual void draw(edge, node, const Color&, float,
-			GlGraphInputData*) {
-	}
+  virtual void draw(edge, node, const Color&, float,
+                    GlGraphInputData*) {
+  }
 
-	virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
-			const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix);
+  virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
+                                       const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix);
 
-	//	virtual MatrixGL getTransformationMatrix(const Coord &src, const Coord &dest,
-	//			const Size &glyphSize);
-	//
-	//	virtual MatrixGL getScalingMatrix(const Size &glyphSize);
+  //  virtual MatrixGL getTransformationMatrix(const Coord &src, const Coord &dest,
+  //      const Size &glyphSize);
+  //
+  //  virtual MatrixGL getScalingMatrix(const Size &glyphSize);
 };
 
 class TLP_GL_SCOPE EdgeExtremityGlyphFrom2DGlyph: public EdgeExtremityGlyph {
 public:
-	EdgeExtremityGlyphFrom2DGlyph(EdgeExtremityGlyphContext *gc);
-	virtual ~EdgeExtremityGlyphFrom2DGlyph();
+  EdgeExtremityGlyphFrom2DGlyph(EdgeExtremityGlyphContext *gc);
+  virtual ~EdgeExtremityGlyphFrom2DGlyph();
 
-	virtual void draw(edge, node, const Color&, float,
-			GlGraphInputData*) {
-	}
+  virtual void draw(edge, node, const Color&, float,
+                    GlGraphInputData*) {
+  }
 
-	virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
-			const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix);
-	//	virtual MatrixGL getTransformationMatrix(const Coord &src, const Coord &dest,
-	//			const Size &glyphSize);
-	//
-	//	virtual MatrixGL getScalingMatrix(const Size &glyphSize);
+  virtual void getTransformationMatrix(const Coord &src, const Coord &dest,
+                                       const Size &glyphSize, MatrixGL& transformationMatrix, MatrixGL& scalingMatrix);
+  //  virtual MatrixGL getTransformationMatrix(const Coord &src, const Coord &dest,
+  //      const Size &glyphSize);
+  //
+  //  virtual MatrixGL getScalingMatrix(const Size &glyphSize);
 };
 
 }
 
 #define EEGPLUGINFACTORY(T,C,N,A,D,I,R,ID,G)     \
-class C##T##Factory:public tlp::FactoryInterface<T, T##Context*>	 \
+class C##T##Factory:public tlp::FactoryInterface<T, T##Context*>   \
 {                                                \
 public:                                          \
-  C##T##Factory(){				 \
-    EdgeExtremityGlyphLister::registerPlugin(this);	         \
-  }       					 \
-  std::string getName() const { return std::string(N);}	 \
-  std::string getGroup() const { return std::string(G);}	 \
-  std::string getAuthor() const {return std::string(A);}	 \
-  std::string getDate() const {return std::string(D);}	 \
-  std::string getInfo() const {return std::string(I);}	 \
+  C##T##Factory(){         \
+    EdgeExtremityGlyphLister::registerPlugin(this);          \
+  }                  \
+  std::string getName() const { return std::string(N);}  \
+  std::string getGroup() const { return std::string(G);}   \
+  std::string getAuthor() const {return std::string(A);}   \
+  std::string getDate() const {return std::string(D);}   \
+  std::string getInfo() const {return std::string(I);}   \
   std::string getRelease() const {return std::string(R);}\
   std::string getTulipRelease() const {return std::string(TULIP_RELEASE);}\
-  int    getId() const {return ID;}		 \
-  tlp::T * createPluginObject(tlp::T##Context *gc)	 \
-  {						 \
-    C *tmp = new C(gc);				 \
-    return ((tlp::T *) tmp);			 \
-  }						 \
+  int    getId() const {return ID;}    \
+  tlp::T * createPluginObject(tlp::T##Context *gc)   \
+  {            \
+    C *tmp = new C(gc);        \
+    return ((tlp::T *) tmp);       \
+  }            \
 };                                               \
 extern "C" {                                            \
   C##T##Factory C##T##FactoryInitializer;               \

@@ -47,13 +47,15 @@ Graph * importGraph(GlMainWidget *glw) {
   graph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(1);
   graph->getProperty<IntegerProperty>("viewShape")->setAllEdgeValue(0);
   graph->getProperty<LayoutProperty>("viewLayout")->setAllNodeValue(Coord(0,0,0));
+
   if (graph != 0) {
     openGraphOnGlMainWidget(graph,&dataSet,glw);
   }
+
   return graph;
 }
 /*******************************************************************/
-int main(int argc,char ** argv ){
+int main(int argc,char ** argv ) {
 
   QApplication MainApp(argc,argv);
 

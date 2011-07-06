@@ -32,49 +32,50 @@ class Graph;
 class TLP_GL_SCOPE EdgeExtremityGlyphManager {
 
 public:
-	virtual ~EdgeExtremityGlyphManager() {
-	}
+  virtual ~EdgeExtremityGlyphManager() {
+  }
 
-	/**
-	 * Return the singleton (if the singleton doesn't exist this function create it)
-	 */
-	static EdgeExtremityGlyphManager &getInst() {
-		if (!eeinst)
-			eeinst = new EdgeExtremityGlyphManager();
-		return *eeinst;
-	}
+  /**
+   * Return the singleton (if the singleton doesn't exist this function create it)
+   */
+  static EdgeExtremityGlyphManager &getInst() {
+    if (!eeinst)
+      eeinst = new EdgeExtremityGlyphManager();
 
-	/**
-	 * Return the name of glyph with given id
-	 */
-	std::string glyphName(int id);
-	/**
-	 * Return the id if glyph with given name
-	 */
-	int glyphId(std::string name);
-	/**
-	 * Load glyphs plugins
-	 */
-	void loadGlyphPlugins();
+    return *eeinst;
+  }
 
-	/**
-	 * Create the glyph list and store it in glyphs parameter
-	 */
-	void initGlyphList(Graph **graph, GlGraphInputData* glGraphInputData,
-			MutableContainer<EdgeExtremityGlyph *>& glyphs);
-	/**
-	 * Clear the glyph list
-	 */
-	void clearGlyphList(Graph **graph, GlGraphInputData* glGraphInputData,
-			MutableContainer<EdgeExtremityGlyph *>& glyphs);
+  /**
+   * Return the name of glyph with given id
+   */
+  std::string glyphName(int id);
+  /**
+   * Return the id if glyph with given name
+   */
+  int glyphId(std::string name);
+  /**
+   * Load glyphs plugins
+   */
+  void loadGlyphPlugins();
 
-	static const int NoEdgeExtremetiesId;
+  /**
+   * Create the glyph list and store it in glyphs parameter
+   */
+  void initGlyphList(Graph **graph, GlGraphInputData* glGraphInputData,
+                     MutableContainer<EdgeExtremityGlyph *>& glyphs);
+  /**
+   * Clear the glyph list
+   */
+  void clearGlyphList(Graph **graph, GlGraphInputData* glGraphInputData,
+                      MutableContainer<EdgeExtremityGlyph *>& glyphs);
+
+  static const int NoEdgeExtremetiesId;
 
 private:
 
-	EdgeExtremityGlyphManager();
+  EdgeExtremityGlyphManager();
 
-	static EdgeExtremityGlyphManager* eeinst;
+  static EdgeExtremityGlyphManager* eeinst;
 
 
 };

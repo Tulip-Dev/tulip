@@ -29,33 +29,33 @@ namespace tlp {
 
 class TLP_QT_SCOPE DoubleStringsListSelectionWidget : public QWidget, public StringsListSelectionWidgetInterface, public Ui::DoubleStringsListSelectionData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	DoubleStringsListSelectionWidget(QWidget *parent = 0, const unsigned int maxSelectedStringsListSize = 0);
+  DoubleStringsListSelectionWidget(QWidget *parent = 0, const unsigned int maxSelectedStringsListSize = 0);
 
-	void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList);
+  void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList);
 
-	void setSelectedStringsList(const std::vector<std::string> &selectedStringsList);
+  void setSelectedStringsList(const std::vector<std::string> &selectedStringsList);
 
-	void clearUnselectedStringsList();
+  void clearUnselectedStringsList();
 
-	void clearSelectedStringsList();
+  void clearSelectedStringsList();
 
-	void setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize);
+  void setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize);
 
-	std::vector<std::string> getSelectedStringsList() const;
+  std::vector<std::string> getSelectedStringsList() const;
 
-	std::vector<std::string> getUnselectedStringsList() const;
+  std::vector<std::string> getUnselectedStringsList() const;
 
-	void selectAllStrings();
+  void selectAllStrings();
 
-	void unselectAllStrings();
+  void unselectAllStrings();
 
-	void setUnselectedStringsListLabel(const std::string &unselectedStringsListLabel);
+  void setUnselectedStringsListLabel(const std::string &unselectedStringsListLabel);
 
-	void setSelectedStringsListLabel(const std::string &selectedStringsListLabel);
+  void setSelectedStringsListLabel(const std::string &selectedStringsListLabel);
 
 private slots:
 

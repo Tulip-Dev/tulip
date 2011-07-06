@@ -44,8 +44,10 @@ void TulipSplashScreen::aborted(const std::string &filename, const std::string &
 
 void TulipSplashScreen::finished(bool state, const std::string &msg) {
   _title = trUtf8("Plugins loaded.");
+
   if (!state)
     _message = trUtf8("Errors have been reported, see details on the startup screen.");
+
   repaint();
 }
 
@@ -76,6 +78,7 @@ void TulipSplashScreen::drawContents(QPainter *painter) {
   painter->setPen(QColor(0,0,0,50));
   painter->drawRect(progressRect);
   qreal w = progressRect.width();
+
   if (_numberOfFiles>0)
     w = 1. * _fileCounter*progressRect.width()/_numberOfFiles;
 

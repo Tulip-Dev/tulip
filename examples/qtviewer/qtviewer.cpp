@@ -31,7 +31,7 @@
 using namespace std;
 using namespace tlp;
 
-int main(int argc,char ** argv ){
+int main(int argc,char ** argv ) {
 
   QApplication mainApp(argc,argv);
 
@@ -42,13 +42,13 @@ int main(int argc,char ** argv ){
     exit(1);
   }
 
-  
+
   tlp::initTulipLib();
   PluginLoaderTxt txtPlug;
   tlp::loadPlugins(&txtPlug);   // library side plugins
   InteractorManager::getInst().loadPlugins(&txtPlug);
   GlyphManager::getInst().loadPlugins(&txtPlug);   // software side plugins, i.e. glyphs
-  
+
   QtViewerMainWindow mainWin(argv[1]);
   mainWin.show();
 

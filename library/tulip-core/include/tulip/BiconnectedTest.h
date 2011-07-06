@@ -28,10 +28,10 @@
 namespace tlp {
 class Graph;
 
-/** \addtogroup graph_test */ 
+/** \addtogroup graph_test */
 /*@{*/
 /// class for testing if the graph is biconnected
- class TLP_SCOPE BiconnectedTest : private GraphObserver, private Observable {
+class TLP_SCOPE BiconnectedTest : private GraphObserver, private Observable {
 public:
 
   /**

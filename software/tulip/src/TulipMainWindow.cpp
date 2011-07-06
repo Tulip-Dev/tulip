@@ -66,12 +66,14 @@ void TulipMainWindow::closeEvent(QCloseEvent *e) {
 void TulipMainWindow::pageChooserClicked() {
   if (!isVisible())
     setVisible(true);
+
   _ui->pages->setCurrentIndex(_pageChoosers.indexOf(sender()));
 }
 
 void TulipMainWindow::pageSwitched(int i) {
   if (i >= _pageChoosers.size() || i < 0)
     return;
+
   static_cast<QToolButton *>(_pageChoosers[i])->setChecked(true);
 }
 
@@ -83,6 +85,7 @@ void TulipMainWindow::systemTrayRequest(QSystemTrayIcon::ActivationReason reason
 void TulipMainWindow::systemTrayMessageClicked() {
   if (_currentTrayMessage == PluginErrorMessage)
     _ui->pluginsPage->showErrorsPage();
+
   _currentTrayMessage = NoMessage;
 }
 
@@ -99,6 +102,7 @@ qlonglong TulipMainWindow::pid() const {
 void TulipMainWindow::ShowAboutPage() {
   if (!isVisible())
     setVisible(true);
+
   raise();
   _ui->pages->setCurrentWidget(_ui->aboutPage);
 }
@@ -106,6 +110,7 @@ void TulipMainWindow::ShowAboutPage() {
 void TulipMainWindow::ShowPluginsCenter() {
   if (!isVisible())
     setVisible(true);
+
   raise();
   _ui->pages->setCurrentWidget(_ui->pluginsPage);
 }
@@ -113,6 +118,7 @@ void TulipMainWindow::ShowPluginsCenter() {
 void TulipMainWindow::ShowWelcomeScreen() {
   if (!isVisible())
     setVisible(true);
+
   raise();
   _ui->pages->setCurrentWidget(_ui->welcomePage);
 }

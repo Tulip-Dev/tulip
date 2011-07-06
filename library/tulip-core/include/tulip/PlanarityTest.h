@@ -25,16 +25,16 @@
 #include <tulip/tuliphash.h>
 #include <tulip/Observable.h>
 #include <tulip/ObservableGraph.h>
-#include <tulip/Edge.h> 
+#include <tulip/Edge.h>
 
 namespace tlp {
 
 class Graph;
 
-/** \addtogroup graph_test */ 
+/** \addtogroup graph_test */
 /*@{*/
 /// class for testing the planarity of a graph
- class TLP_SCOPE PlanarityTest : private GraphObserver, private Observable {
+class TLP_SCOPE PlanarityTest : private GraphObserver, private Observable {
 public:
   /*
     The set of edges of the graph is modified during the execution of
@@ -66,7 +66,7 @@ public:
    * (ie. part of the minor of K3,3 or K5).
    */
   static std::list<edge> getObstructionsEdges(Graph *graph);
-  
+
 private:
   // override some GraphObserver methods
   void addEdge(Graph *,const edge);

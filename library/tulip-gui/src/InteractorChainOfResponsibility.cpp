@@ -32,13 +32,14 @@ InteractorChainOfResponsibility::~InteractorChainOfResponsibility() {
   delete action;
 }
 
-void InteractorChainOfResponsibility::setView(View *view){
+void InteractorChainOfResponsibility::setView(View *view) {
   construct();
   this->view=view;
 }
 
 void InteractorChainOfResponsibility::install(QWidget *widget) {
   int id=0;
+
   for(vector<InteractorComponent *>::iterator it =interactorComponents.begin(); it != interactorComponents.end(); ++it) {
     InteractorComponent *newInteractor=(*it)->clone();
     newInteractor->setView(view);
@@ -49,36 +50,38 @@ void InteractorChainOfResponsibility::install(QWidget *widget) {
   }
 }
 
-void InteractorChainOfResponsibility::remove(){
+void InteractorChainOfResponsibility::remove() {
   for(vector<InteractorComponent *>::iterator it =installedInteractorComponents.begin(); it != installedInteractorComponents.end(); ++it) {
     removeEventFilter(*it);
     delete (*it);
   }
+
   installedInteractorComponents.clear();
 }
 
 void InteractorChainOfResponsibility::compute(GlMainWidget *glMainWidget) {
-  for(vector<InteractorComponent *>::iterator it=installedInteractorComponents.begin();it!=installedInteractorComponents.end();++it)
+  for(vector<InteractorComponent *>::iterator it=installedInteractorComponents.begin(); it!=installedInteractorComponents.end(); ++it)
     (*it)->compute(glMainWidget);
 }
 
 void InteractorChainOfResponsibility::draw(GlMainWidget *glMainWidget) {
-  for(vector<InteractorComponent *>::iterator it=installedInteractorComponents.begin();it!=installedInteractorComponents.end();++it)
-      (*it)->draw(glMainWidget);
+  for(vector<InteractorComponent *>::iterator it=installedInteractorComponents.begin(); it!=installedInteractorComponents.end(); ++it)
+    (*it)->draw(glMainWidget);
 }
 
 void InteractorChainOfResponsibility::pushInteractorComponent(InteractorComponent *component) {
   interactorComponents.push_back(component);
 }
 
-InteractorAction* InteractorChainOfResponsibility::getAction(){
+InteractorAction* InteractorChainOfResponsibility::getAction() {
   if(!action)
     action = new InteractorAction(this,QIcon(interactorIconPath),interactorText);
+
   return action;
 }
 
 void InteractorChainOfResponsibility::undoIsDone() {
-  for(vector<InteractorComponent *>::iterator it=installedInteractorComponents.begin();it!=installedInteractorComponents.end();++it){
+  for(vector<InteractorComponent *>::iterator it=installedInteractorComponents.begin(); it!=installedInteractorComponents.end(); ++it) {
     (*it)->undoIsDone();
   }
 }

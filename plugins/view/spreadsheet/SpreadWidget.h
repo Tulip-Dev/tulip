@@ -30,45 +30,44 @@
 #include "ui_SpreadMainWidget.h"
 
 namespace tlp {
-  
-  class Graph;
+
+class Graph;
 class SpreadView;
-  class SpreadWidget : public QWidget, public Ui::SpreadMainWidgetData 
-  {
-    Q_OBJECT
-      
-  public:
+class SpreadWidget : public QWidget, public Ui::SpreadMainWidgetData {
+  Q_OBJECT
 
-    SpreadWidget(SpreadView* view,QWidget *parent=0);
-    virtual ~SpreadWidget() {}
+public:
 
-    void setData(Graph *graph,DataSet dataSet);
-    DataSet getData();
-    Graph *getGraph();
+  SpreadWidget(SpreadView* view,QWidget *parent=0);
+  virtual ~SpreadWidget() {}
 
-  protected:
-    
-    SpreadTable *activeSpread;
-    QTableWidgetItem *currentCell;
-    Graph *graph;
-    
-    bool editingLine;
-    QString currentText;
-    bool nodeTab;
+  void setData(Graph *graph,DataSet dataSet);
+  DataSet getData();
+  Graph *getGraph();
 
-  public slots :
+protected:
 
-    void redrawView();
+  SpreadTable *activeSpread;
+  QTableWidgetItem *currentCell;
+  Graph *graph;
 
-  protected slots :
-    
-    void tableMouseReleasedSlot(SpreadTable*,QTableWidgetItem *);
-    void returnPressedSlot();
-    void beginEditLineSlot();
-    void textChangedSlot(const QString &);
-    void tabChanged(int);
-    
-  };
+  bool editingLine;
+  QString currentText;
+  bool nodeTab;
+
+public slots :
+
+  void redrawView();
+
+protected slots :
+
+  void tableMouseReleasedSlot(SpreadTable*,QTableWidgetItem *);
+  void returnPressedSlot();
+  void beginEditLineSlot();
+  void textChangedSlot(const QString &);
+  void tabChanged(int);
+
+};
 
 }
 

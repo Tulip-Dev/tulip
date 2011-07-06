@@ -15,6 +15,7 @@ QuaZIPFacade::QuaZIPFacade() {
 void copy(QIODevice &in,QIODevice &out) {
   char buffer[40960];
   int cnt;
+
   while ((cnt = in.read(buffer,40960)))
     out.write(buffer,cnt);
 
@@ -31,6 +32,7 @@ bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath
   progress->progress(i,entries.size());
   foreach(info, entries) {
     progress->progress(i++,entries.size());
+
     if (info.isDir()) { // Recurse in directories if they are different from . and ..
       QDir childDir(info.absoluteFilePath());
       QFileInfo childInfo(childDir.absolutePath());
@@ -57,15 +59,19 @@ bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath
 
 bool QuaZIPFacade::zipDir(const QString &rootPath, const QString &archivePath, tlp::PluginProgress *progress) {
   QFileInfo rootInfo(rootPath);
+
   if (!rootInfo.exists() || !rootInfo.isDir())
     return false;
+
   QDir rootDir(rootPath);
 
   QuaZip archive(archivePath);
+
   if (!archive.open(QuaZip::mdCreate))
     return false;
 
   bool deleteProgress = false;
+
   if (!progress) {
     progress = new tlp::SimplePluginProgress;
     deleteProgress = true;
@@ -82,21 +88,27 @@ bool QuaZIPFacade::zipDir(const QString &rootPath, const QString &archivePath, t
 bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tlp::PluginProgress *progress) {
 
   QFileInfo rootPathInfo(rootPath);
+
   if (rootPathInfo.exists() && !rootPathInfo.isDir())
     return false;
+
   QDir rootDir(rootPath);
+
   if (!rootDir.exists() && !rootDir.mkpath(rootPath))
     return false;
 
   QuaZip archive(archivePath);
+
   if (!archive.open(QuaZip::mdUnzip))
     return false;
 
   bool deleteProgress = false;
+
   if (!progress) {
     progress = new tlp::SimplePluginProgress;
     deleteProgress = true;
   }
+
   progress->setComment(("Uncompressing archive " + archivePath).toStdString());
   int i=0,n=archive.getEntriesCount();
   progress->progress(i,n);
@@ -112,6 +124,7 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tl
     rootDir.mkpath(outInfo.absolutePath());
 
     QFile outFile(outInfo.absoluteFilePath());
+
     if (!outFile.open(QIODevice::WriteOnly) || !inFile.open(QIODevice::ReadOnly))
       return false;
 

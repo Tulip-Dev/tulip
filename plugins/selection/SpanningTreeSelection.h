@@ -27,10 +27,10 @@
 /**
  * This selection plugins enables to find a subgraph of G that is a forest (a set of trees).
  *
- *  \author David Auber, LaBRI University Bordeaux I France: 
+ *  \author David Auber, LaBRI University Bordeaux I France:
  *   auber@tulip-software.org
  */
-class SpanningTreeSelection:public tlp::BooleanAlgorithm { 
+class SpanningTreeSelection:public tlp::BooleanAlgorithm {
 public:
   SpanningTreeSelection(const tlp::PropertyContext &);
   ~SpanningTreeSelection();

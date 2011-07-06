@@ -34,9 +34,9 @@ namespace tlp {
  */
 
 class TLP_GL_SCOPE GlRect : public GlPolygon {
- protected:
+protected:
 
- public:
+public:
   /**
    * Constructor : with topLeft/bottomRight coords, topLeft/bottomRight colors and if GlRect is filled/outlined
    */

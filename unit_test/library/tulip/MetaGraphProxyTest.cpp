@@ -109,11 +109,11 @@ void MetaGraphProxyTest::testSetAll() {
 //==========================================================
 CppUnit::Test * MetaGraphProxyTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : GraphProperty" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MetaGraphProxyTest>( "test graph destruction", 
-								      &MetaGraphProxyTest::testDestroyGraph ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MetaGraphProxyTest>( "test set/get", 
-								      &MetaGraphProxyTest::testSetGet ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MetaGraphProxyTest>( "test set all node value", 
-								      &MetaGraphProxyTest::testSetAll ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<MetaGraphProxyTest>( "test graph destruction",
+                         &MetaGraphProxyTest::testDestroyGraph ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<MetaGraphProxyTest>( "test set/get",
+                         &MetaGraphProxyTest::testSetGet ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<MetaGraphProxyTest>( "test set all node value",
+                         &MetaGraphProxyTest::testSetAll ) );
   return suiteOfTests;
 }

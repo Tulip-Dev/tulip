@@ -27,97 +27,97 @@
 #include <tulip/GlTLPFeedBackBuilder.h>
 
 namespace tlp {
-  
+
+/**
+ * Class to build EPS file with OpenGL feedback buffer
+ */
+class TLP_GL_SCOPE GlEPSFeedBackBuilder : public GlTLPFeedBackBuilder {
+
+public:
+
+  GlEPSFeedBackBuilder()
+    :stream_out(std::stringstream::in | std::stringstream::out) {}
+
   /**
-   * Class to build EPS file with OpenGL feedback buffer
+   * Begin new EPS document with viewport, clearColor, pointSize and lineWidth informations
    */
-  class TLP_GL_SCOPE GlEPSFeedBackBuilder : public GlTLPFeedBackBuilder {
-    
-  public:
-  
-    GlEPSFeedBackBuilder() 
-      :stream_out(std::stringstream::in | std::stringstream::out) {}
+  virtual void begin(const Vector<int, 4> &viewport,GLfloat *clearColor,GLfloat pointSize,GLfloat lineWidth);
+  /**
+   * Record a new color
+   */
+  virtual void colorInfo(GLfloat *data);
+  /**
+   * Record a new GlEntity
+   */
+  virtual void beginGlEntity(GLfloat data);
+  /**
+   * End of a GlEntity
+   */
+  virtual void endGlEntity();
+  /**
+   * Record a new GlGraph
+   */
+  virtual void beginGlGraph(GLfloat data);
+  /**
+   * End of a GlGraph
+   */
+  virtual void endGlGraph();
+  /**
+   * Record a new Node
+   */
+  virtual void beginNode(GLfloat data);
+  /**
+   * End of a Node
+   */
+  virtual void endNode();
+  /**
+   * Record a new Edge
+   */
+  virtual void beginEdge(GLfloat data);
+  /**
+   * End of a Edge
+   */
+  virtual void endEdge();
+  /**
+   * Record a new pointToken
+   */
+  virtual void pointToken(GLfloat *data);
+  /**
+   * Record a new lineToken
+   */
+  virtual void lineToken(GLfloat *data);
+  /**
+   * Record a new lineResetToken
+   */
+  virtual void lineResetToken(GLfloat *data);
+  /**
+   * Record a new polygonToken
+   */
+  virtual void polygonToken(GLfloat *data);
+  /**
+   * End of the EPS document
+   */
+  virtual void end();
 
-    /**
-     * Begin new EPS document with viewport, clearColor, pointSize and lineWidth informations
-     */
-    virtual void begin(const Vector<int, 4> &viewport,GLfloat *clearColor,GLfloat pointSize,GLfloat lineWidth);
-    /**
-     * Record a new color
-     */
-    virtual void colorInfo(GLfloat *data);
-    /**
-     * Record a new GlEntity
-     */
-    virtual void beginGlEntity(GLfloat data);
-    /**
-     * End of a GlEntity
-     */
-    virtual void endGlEntity();
-    /**
-     * Record a new GlGraph
-     */
-    virtual void beginGlGraph(GLfloat data);
-    /**
-     * End of a GlGraph
-     */
-    virtual void endGlGraph();
-    /**
-     * Record a new Node
-     */
-    virtual void beginNode(GLfloat data);
-    /**
-     * End of a Node
-     */
-    virtual void endNode();
-    /**
-     * Record a new Edge
-     */
-    virtual void beginEdge(GLfloat data);
-    /**
-     * End of a Edge
-     */
-    virtual void endEdge();
-    /**
-     * Record a new pointToken
-     */
-    virtual void pointToken(GLfloat *data);
-    /**
-     * Record a new lineToken
-     */
-    virtual void lineToken(GLfloat *data);
-    /**
-     * Record a new lineResetToken
-     */
-    virtual void lineResetToken(GLfloat *data);
-    /**
-     * Record a new polygonToken
-     */
-    virtual void polygonToken(GLfloat *data);
-    /**
-     * End of the EPS document
-     */
-    virtual void end();
-    
-    /**
-     * Put in str the built EPS document
-     */
-    virtual void getResult(std::string* str);
-    
-  private:
+  /**
+   * Put in str the built EPS document
+   */
+  virtual void getResult(std::string* str);
 
-    std::stringstream stream_out;
+private:
 
-    GLfloat clearColor[4];
-    GLfloat pointSize;
-    GLfloat lineWidth;
+  std::stringstream stream_out;
 
-    Color fillColor;
-    Color strokeColor;
-    Color textColor;
+  GLfloat clearColor[4];
+  GLfloat pointSize;
+  GLfloat lineWidth;
 
-  };
- 
+  Color fillColor;
+  Color strokeColor;
+  Color textColor;
+
+};
+
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

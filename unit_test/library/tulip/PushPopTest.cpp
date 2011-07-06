@@ -48,9 +48,12 @@ void PushPopTest::build(unsigned int nbNodes, unsigned int edgeRatio) {
   vector<edge> edges;
   unsigned int NB_ADD  = nbNodes;
   unsigned int EDGE_RATIO = edgeRatio;
+
   for (unsigned int i=0; i<NB_ADD; ++i)
     nodes.push_back(graph->addNode());
+
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
+
   for (unsigned int i=0; i< NB_EDGES; ++i)
     edges.push_back(graph->addEdge(nodes[rand()%NB_ADD], nodes[rand()%NB_ADD]));
 }
@@ -109,7 +112,7 @@ void PushPopTest::testAddDel() {
   CPPUNIT_ASSERT(graph->existEdge(n3, n2) == e1);
 
   StlIterator<edge, std::vector<edge>::const_iterator> ite(edges.begin(),
-							   edges.end());
+      edges.end());
   graph->delEdges(&ite);
   CPPUNIT_ASSERT(graph->isElement(edges[0]) == false);
   CPPUNIT_ASSERT(graph->isElement(edges[1]) == false);
@@ -144,7 +147,7 @@ void PushPopTest::testAddDel() {
   CPPUNIT_ASSERT(graph->isElement(e1) == false);
   CPPUNIT_ASSERT(graph->isElement(n2) == false);
   CPPUNIT_ASSERT(graph->isElement(n3) == true);
-  
+
   graph->pop();
   CPPUNIT_ASSERT(graph->isElement(e1) == false);
   CPPUNIT_ASSERT(graph->isElement(n2) == false);
@@ -154,7 +157,7 @@ void PushPopTest::testAddDel() {
   CPPUNIT_ASSERT(graph->isElement(e1) == false);
   CPPUNIT_ASSERT(graph->isElement(n2) == false);
   CPPUNIT_ASSERT(graph->isElement(n3) == true);
-  
+
 }
 
 //==========================================================
@@ -185,7 +188,7 @@ void PushPopTest::testSetEnds() {
   graph->delEdge(e0);
   CPPUNIT_ASSERT(graph->isElement(e0) == false);
   CPPUNIT_ASSERT(graph->existEdge(n3, n2).isValid() == false);
-  
+
   graph->pop();
   CPPUNIT_ASSERT(graph->isElement(e0));
   CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
@@ -205,11 +208,11 @@ void PushPopTest::testSetEnds() {
   g1->setTarget(e0, n2);
   CPPUNIT_ASSERT(graph->isElement(e0));
   CPPUNIT_ASSERT(graph->existEdge(n1, n2) == e0);
-  
+
   graph->pop();
   CPPUNIT_ASSERT(graph->isElement(e0));
   CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
- 
+
   graph->unpop();
   CPPUNIT_ASSERT(graph->isElement(e0));
   CPPUNIT_ASSERT(graph->existEdge(n1, n2) == e0);
@@ -223,7 +226,7 @@ void PushPopTest::testSetEnds() {
   graph->pop();
   CPPUNIT_ASSERT(graph->isElement(e0));
   CPPUNIT_ASSERT(graph->existEdge(n0, n1) == e0);
-  
+
   graph->unpop();
   CPPUNIT_ASSERT(graph->isElement(e0));
   CPPUNIT_ASSERT(graph->existEdge(n0, n2) == e0);
@@ -278,7 +281,7 @@ void PushPopTest::testSetValue() {
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n1) == 2.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n2) == 2.0);
-  
+
   graph->unpop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 3.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n1) == 3.0);
@@ -310,7 +313,7 @@ void PushPopTest::testSetValue() {
   graph->pop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n1) == 2.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 2.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 2.0);
 }
 
 //==========================================================
@@ -374,7 +377,7 @@ void PushPopTest::testSetEltValue() {
   CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
   CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
   CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 1) == 1.0);
-  
+
   graph->unpop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 1);
   CPPUNIT_ASSERT(prop->getNodeEltValue(n0, 0) == 3.0);
@@ -395,7 +398,7 @@ void PushPopTest::testSetEltValue() {
   prop->setEdgeEltValue(e0, 0, 4.0);
   CPPUNIT_ASSERT(prop->getEdgeValue(e0).size() == 1);
   CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 0) == 4.0);
- 
+
   graph->delNode(n1);
   CPPUNIT_ASSERT(graph->isElement(n1) == false);
   CPPUNIT_ASSERT(graph->isElement(e0) == false);
@@ -404,7 +407,7 @@ void PushPopTest::testSetEltValue() {
   CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
   CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
   CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 1) == 1.0);
-  
+
   graph->unpop();
   CPPUNIT_ASSERT(prop->getNodeEltValue(n0, 0) == 3.0);
   CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 0) == 3.0);
@@ -418,7 +421,7 @@ void PushPopTest::testSetEltValue() {
   graph->pop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0).size() == 0);
   CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
-  CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 1) == 2.0);  
+  CPPUNIT_ASSERT(prop->getEdgeEltValue(e0, 1) == 2.0);
 }
 
 //==========================================================
@@ -472,7 +475,7 @@ void PushPopTest::testVectorValue() {
   CPPUNIT_ASSERT(prop->getNodeEltValue(n2, 1) == 1.0);
   CPPUNIT_ASSERT(prop->getEdgeValue(e1).size() == 2);
   CPPUNIT_ASSERT(prop->getEdgeEltValue(e1, 1) == 1.0);
-  
+
   graph->unpop();
   CPPUNIT_ASSERT(prop->getNodeValue(n1).size() == 2);
   CPPUNIT_ASSERT(prop->getNodeEltValue(n1, 1) == 2.0);
@@ -506,8 +509,8 @@ void PushPopTest::testCopyProperty() {
   prop->setEdgeValue(e0, 1.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 1.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n1) == 0.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);  
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 0.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 0.0);
 
   DoubleProperty p(graph);
 
@@ -515,7 +518,7 @@ void PushPopTest::testCopyProperty() {
   p.setEdgeValue(e1, 1.0);
   CPPUNIT_ASSERT(p.getNodeValue(n0) == 0.0);
   CPPUNIT_ASSERT(p.getNodeValue(n1) == 1.0);
-  CPPUNIT_ASSERT(p.getEdgeValue(e0) == 0.0);  
+  CPPUNIT_ASSERT(p.getEdgeValue(e0) == 0.0);
   CPPUNIT_ASSERT(p.getEdgeValue(e1) == 1.0);
 
   graph->push();
@@ -523,13 +526,13 @@ void PushPopTest::testCopyProperty() {
   *prop = p;
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 0.0);  
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 1.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 0.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 1.0);
 
   graph->pop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 1.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n1) == 0.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);
   CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 0.0);
 
   graph->push();
@@ -539,20 +542,20 @@ void PushPopTest::testCopyProperty() {
   prop->setEdgeValue(e1, 1.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 0.0);  
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 1.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 0.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 1.0);
 
   graph->pop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 1.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n1) == 0.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);
   CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 0.0);
 
   graph->unpop();
   CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
   CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
-  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 0.0);  
-  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 1.0);  
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 0.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 1.0);
 }
 
 void PushPopTest::testSubgraph() {
@@ -591,7 +594,7 @@ void PushPopTest::testSubgraph() {
   delete it;
 
   graph->unpop();
-  
+
   it= g2->getSubGraphs();
   CPPUNIT_ASSERT(it->hasNext());
   a = it->next();
@@ -770,7 +773,7 @@ void PushPopTest::testTests() {
   node n3 = graph->addNode();
 
   CPPUNIT_ASSERT(!ConnectedTest::isConnected(graph));
-  
+
   graph->push();
   vector<edge> addedEdges;
   ConnectedTest::makeConnected(graph, addedEdges);
@@ -798,7 +801,7 @@ void PushPopTest::testAddDelProps() {
 
   CPPUNIT_ASSERT(!graph->existProperty("double"));
   CPPUNIT_ASSERT(!graph->isElement(n));
-  
+
   graph->unpop();
   CPPUNIT_ASSERT(graph->existProperty("double"));
   CPPUNIT_ASSERT(graph->getProperty<DoubleProperty>("double") == dProp);
@@ -852,15 +855,16 @@ public:
     return properties.find(prop) != properties.end();
   }
 
-  virtual void destroy(PropertyInterface* prop){
+  virtual void destroy(PropertyInterface* prop) {
     properties.insert(prop);
   }
 
   virtual void treatEvent(const Event& evt) {
-      PropertyInterface* prop = dynamic_cast<PropertyInterface *>(evt.sender());
-      if (prop && evt.type() == Event::TLP_DELETE)
-        destroy(prop);
-      }
+    PropertyInterface* prop = dynamic_cast<PropertyInterface *>(evt.sender());
+
+    if (prop && evt.type() == Event::TLP_DELETE)
+      destroy(prop);
+  }
 
 };
 
@@ -931,21 +935,21 @@ void PushPopTest::testAddSubgraphProp() {
   sg->push();
   DoubleProperty* prop = sg->getLocalProperty<DoubleProperty>("test");
   CPPUNIT_ASSERT(sg->existProperty("test"));
-  
+
   sg->pop();
   CPPUNIT_ASSERT(!sg->existProperty("test"));
-  
+
   sg->unpop();
   CPPUNIT_ASSERT(sg->existProperty("test"));
   CPPUNIT_ASSERT(sg->getLocalProperty<DoubleProperty>("test") == prop);
-  
+
   sg->pop();
   CPPUNIT_ASSERT(!sg->existProperty("test"));
   it = graph->getSubGraphs();
   CPPUNIT_ASSERT(it->hasNext());
   CPPUNIT_ASSERT(sg == it->next());
   delete it;
-  
+
   graph->pop();
   it = graph->getSubGraphs();
   CPPUNIT_ASSERT(!it->hasNext());
@@ -956,7 +960,7 @@ void PushPopTest::testAddSubgraphProp() {
   CPPUNIT_ASSERT(it->hasNext());
   CPPUNIT_ASSERT(sg == it->next());
   delete it;
- 
+
   sg->unpop();
   CPPUNIT_ASSERT(sg->existProperty("test"));
   CPPUNIT_ASSERT(sg->getLocalProperty<DoubleProperty>("test") == prop);
@@ -967,7 +971,7 @@ void PushPopTest::testAddSubgraphProp() {
   CPPUNIT_ASSERT(it->hasNext());
   CPPUNIT_ASSERT(sg == it->next());
   delete it;
-  
+
   graph->pop();
   it = graph->getSubGraphs();
   CPPUNIT_ASSERT(!it->hasNext());
@@ -1022,30 +1026,30 @@ void PushPopTest::testMetaNode() {
 //==========================================================
 CppUnit::Test * PushPopTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Push/Pop" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Add/Del operations (Simple Graph)", 
-								  &PushPopTest::testAddDel) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetNode/EdgeValue operations", 
-								  &PushPopTest::testSetValue) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetNode/EdgeEltValue operations", 
-								  &PushPopTest::testSetEltValue) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Vector Value operations", 
-								  &PushPopTest::testVectorValue) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetEnds operations", 
-								  &PushPopTest::testSetEnds) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Copy Prop operations", 
-								  &PushPopTest::testCopyProperty) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraph operations", 
-								  &PushPopTest::testSubgraph) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraphProp operations", 
-								  &PushPopTest::testAddSubgraphProp) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Tests operations", 
-								  &PushPopTest::testTests) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Add/Del operations (Simple Graph)",
+                         &PushPopTest::testAddDel) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetNode/EdgeValue operations",
+                         &PushPopTest::testSetValue) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetNode/EdgeEltValue operations",
+                         &PushPopTest::testSetEltValue) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Vector Value operations",
+                         &PushPopTest::testVectorValue) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "SetEnds operations",
+                         &PushPopTest::testSetEnds) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Copy Prop operations",
+                         &PushPopTest::testCopyProperty) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraph operations",
+                         &PushPopTest::testSubgraph) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "addSubGraphProp operations",
+                         &PushPopTest::testAddSubgraphProp) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Tests operations",
+                         &PushPopTest::testTests) );
   suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Properties deletion operations",
-                                                                   &PushPopTest::testObserveDelProps) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Properties operations", 
-								  &PushPopTest::testAddDelProps) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "MetaNode operations", 
-								  &PushPopTest::testMetaNode) );
+                         &PushPopTest::testObserveDelProps) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "Properties operations",
+                         &PushPopTest::testAddDelProps) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PushPopTest>( "MetaNode operations",
+                         &PushPopTest::testMetaNode) );
   return suiteOfTests;
 }
 //==========================================================

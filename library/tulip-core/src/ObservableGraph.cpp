@@ -24,8 +24,10 @@ using namespace tlp;
 
 void GraphObserver::treatEvent(const Event& ev) {
   const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&ev);
+
   if (gEvt) {
     Graph* graph = gEvt->getGraph();
+
     switch(gEvt->getType()) {
     case GraphEvent::TLP_ADD_NODE:
       addNode(graph, gEvt->getNode());
@@ -50,14 +52,18 @@ void GraphObserver::treatEvent(const Event& ev) {
       break;
     case GraphEvent::TLP_ADD_NODES: {
       const std::vector<node>& nodes = gEvt->getNodes();
+
       for (unsigned int i = 0; i < nodes.size(); ++i)
-	addNode(graph, nodes[i]);
+        addNode(graph, nodes[i]);
+
       break;
     }
     case GraphEvent::TLP_ADD_EDGES: {
       const std::vector<edge>& edges = gEvt->getEdges();
+
       for (unsigned int i = 0; i < edges.size(); ++i)
-	addEdge(graph, edges[i]);
+        addEdge(graph, edges[i]);
+
       break;
     }
     case GraphEvent::TLP_ADD_SUBGRAPH:
@@ -89,11 +95,13 @@ void GraphObserver::treatEvent(const Event& ev) {
       // this should not happen
       assert(false);
     }
-  } else {
+  }
+  else {
     Graph* graph =
       // From my point of view the use of dynamic_cast should be correct
       // but it fails, so I use reinterpret_cast (pm)
       reinterpret_cast<Graph *>(ev.sender());
+
     if (graph && ev.type() == Event::TLP_DELETE)
       destroy(graph);
   }

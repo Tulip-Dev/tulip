@@ -35,19 +35,31 @@ private:
 public:
   StringCollection();
   explicit StringCollection(const std::vector<std::string> &vectorParam);
-  StringCollection(const std::string param);   
+  StringCollection(const std::string param);
   StringCollection(const std::vector<std::string>&  vectorParam, int currentParam);
   StringCollection(const std::vector<std::string>& vectorParam, std::string currentString);
   std::string getCurrentString();
   bool        setCurrent(unsigned int param);
   bool        setCurrent(std::string param);
   int         getCurrent();
-  void push_back(const std::string& element) { _data.push_back(element); };
-  inline bool empty() { return _data.empty(); }
-  inline std::string at(size_t index) { return _data.at(index); }
-  inline size_t size() { return _data.size(); }
-  inline std::string operator[](const unsigned int i) const { return _data[i]; }
-  inline std::string& operator[](const unsigned int i) { return _data[i];}
+  void push_back(const std::string& element) {
+    _data.push_back(element);
+  };
+  inline bool empty() {
+    return _data.empty();
+  }
+  inline std::string at(size_t index) {
+    return _data.at(index);
+  }
+  inline size_t size() {
+    return _data.size();
+  }
+  inline std::string operator[](const unsigned int i) const {
+    return _data[i];
+  }
+  inline std::string& operator[](const unsigned int i) {
+    return _data[i];
+  }
 };
 
 }

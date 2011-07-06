@@ -34,16 +34,16 @@ public:
   /**
    * Default constructor
    */
-  InteractorGetInformation():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Get information on nodes/edges"){
+  InteractorGetInformation():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Get information on nodes/edges") {
     setPriority(4);
     setConfigurationWidgetText(QString("<h3>Get information interactor</h3>")+
-                   "<b>Mouse left</b> click on an element to display its properties");
+                               "<b>Mouse left</b> click on an element to display its properties");
   }
 
   /**
    * Construct chain of responsibility
    */
-  void construct(){
+  void construct() {
     pushInteractorComponent(new MousePanNZoomNavigator);
     pushInteractorComponent(new MouseShowElementInfos);
   }

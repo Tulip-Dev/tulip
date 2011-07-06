@@ -56,122 +56,142 @@ enum ShaderType {Vertex, Fragment, Geometry};
  */
 class TLP_GL_SCOPE GlShader {
 
-	friend class GlShaderProgram;
+  friend class GlShaderProgram;
 
 public :
 
-	/**
-	 * Vertex and Fragment shader constructor
-	 *
-	 * Use this constructor to create either a vertex shader or a fragment shader
-	 *
-	 * \param shaderType Type of the shader to create, Vertex or Fragment
-	 */
-	GlShader(ShaderType shaderType);
+  /**
+   * Vertex and Fragment shader constructor
+   *
+   * Use this constructor to create either a vertex shader or a fragment shader
+   *
+   * \param shaderType Type of the shader to create, Vertex or Fragment
+   */
+  GlShader(ShaderType shaderType);
 
-	/**
-	 * Geometry shader constructor
-	 *
-	 * Use this constructor to create a geometry shader
-	 *
-	 * \param inputPrimitiveType the type of graphic primitive the geometry shader takes as input.
-	 *        (must be one from the following list : GL_POINTS, GL_LINES, GL_LINES_ADJACENCY_EXT, GL_TRIANGLES, GL_TRIANGLES_ADJACENCY_EXT)
-	 *
-	 * \param outputPrimitiveType the type of graphics primitives the geometry shader will output
-	 *        (must be one of the following list : GL_POINTS, GL_LINE_STRIP, GL_TRIANGLE_STRIP)
-	 */
-	GlShader(GLenum inputPrimitiveType, GLenum outputPrimitiveType);
+  /**
+   * Geometry shader constructor
+   *
+   * Use this constructor to create a geometry shader
+   *
+   * \param inputPrimitiveType the type of graphic primitive the geometry shader takes as input.
+   *        (must be one from the following list : GL_POINTS, GL_LINES, GL_LINES_ADJACENCY_EXT, GL_TRIANGLES, GL_TRIANGLES_ADJACENCY_EXT)
+   *
+   * \param outputPrimitiveType the type of graphics primitives the geometry shader will output
+   *        (must be one of the following list : GL_POINTS, GL_LINE_STRIP, GL_TRIANGLE_STRIP)
+   */
+  GlShader(GLenum inputPrimitiveType, GLenum outputPrimitiveType);
 
-	/**
-	 * GlShader destructor
-	 */
-	~GlShader();
+  /**
+   * GlShader destructor
+   */
+  ~GlShader();
 
-	/**
-	 * Return the GL identifier of this shader object
-	 */
-	GLuint getShaderId() const {return shaderObjectId;}
+  /**
+   * Return the GL identifier of this shader object
+   */
+  GLuint getShaderId() const {
+    return shaderObjectId;
+  }
 
-	/**
-	 * Return the type of the shader (Vertex, Geometry or Fragment)
-	 */
-	ShaderType getShaderType() const {return shaderType;}
+  /**
+   * Return the type of the shader (Vertex, Geometry or Fragment)
+   */
+  ShaderType getShaderType() const {
+    return shaderType;
+  }
 
 
-	/**
-	 * Method only relevant for geometry shaders. Return the graphic primitive type this geometry shader takes as input.
-	 */
-	GLenum getInputPrimitiveType() const {return inputPrimitiveType;}
+  /**
+   * Method only relevant for geometry shaders. Return the graphic primitive type this geometry shader takes as input.
+   */
+  GLenum getInputPrimitiveType() const {
+    return inputPrimitiveType;
+  }
 
-	/**
-	 * Method only relevant for geometry shaders. Return the graphics primitives type this geometry shader will output.
-	 */
-	GLenum getOutputPrimitiveType() const {return outputPrimitiveType;}
+  /**
+   * Method only relevant for geometry shaders. Return the graphics primitives type this geometry shader will output.
+   */
+  GLenum getOutputPrimitiveType() const {
+    return outputPrimitiveType;
+  }
 
-	/**
-	 * Method only relevant for geometry shaders. Set the graphic primitive type this geometry shader takes as input.
-	 * Note that when modifying the input primitive type, the associated shader program (whose object is from type GlShaderProgram)
-	 * has to be relinked for changes to take effect.
-	 *
-	 * \param inputPrimitiveType the type of graphic primitive the geometry shader takes as input.
-	 *        (must be one from the following list : GL_POINTS, GL_LINES, GL_LINES_ADJACENCY_EXT, GL_TRIANGLES, GL_TRIANGLES_ADJACENCY_EXT)
-	 */
-	void setInputPrimitiveType(const GLenum inputPrimitiveType) {this->inputPrimitiveType = inputPrimitiveType;}
+  /**
+   * Method only relevant for geometry shaders. Set the graphic primitive type this geometry shader takes as input.
+   * Note that when modifying the input primitive type, the associated shader program (whose object is from type GlShaderProgram)
+   * has to be relinked for changes to take effect.
+   *
+   * \param inputPrimitiveType the type of graphic primitive the geometry shader takes as input.
+   *        (must be one from the following list : GL_POINTS, GL_LINES, GL_LINES_ADJACENCY_EXT, GL_TRIANGLES, GL_TRIANGLES_ADJACENCY_EXT)
+   */
+  void setInputPrimitiveType(const GLenum inputPrimitiveType) {
+    this->inputPrimitiveType = inputPrimitiveType;
+  }
 
-	/**
-	 * Method only relevant for geometry shaders. Set the graphics primitives type this geometry shader will output.
-	 * Note that when modifying the output primitive type, the associated shader program (whose object is from type GlShaderProgram)
-	 * has to be relinked for changes to take effect.
-	 *
-	 * \param outputPrimitiveType the type of graphics primitives the geometry shader will output
-	 *        (must be one of the following list : GL_POINTS, GL_LINE_STRIP, GL_TRIANGLE_STRIP)
-	 */
-	void setOutputPrimitiveType(const GLenum outputPrimitiveType) {this->outputPrimitiveType = outputPrimitiveType;}
+  /**
+   * Method only relevant for geometry shaders. Set the graphics primitives type this geometry shader will output.
+   * Note that when modifying the output primitive type, the associated shader program (whose object is from type GlShaderProgram)
+   * has to be relinked for changes to take effect.
+   *
+   * \param outputPrimitiveType the type of graphics primitives the geometry shader will output
+   *        (must be one of the following list : GL_POINTS, GL_LINE_STRIP, GL_TRIANGLE_STRIP)
+   */
+  void setOutputPrimitiveType(const GLenum outputPrimitiveType) {
+    this->outputPrimitiveType = outputPrimitiveType;
+  }
 
-	/**
-	 * Set the shader source code from a C string and compile it.
-	 *
-	 *  \param shaderSrc a C string containing the shader source code
-	 */
-	void compileFromSourceCode(const char *shaderSrc);
+  /**
+   * Set the shader source code from a C string and compile it.
+   *
+   *  \param shaderSrc a C string containing the shader source code
+   */
+  void compileFromSourceCode(const char *shaderSrc);
 
-	/**
-	 * Set the shader source code from a C++ string and compile it.
-	 *
-	 *  \param shaderSrc a C++ string containing the shader source code
-	 */
-	void compileFromSourceCode(const std::string &shaderSrc);
+  /**
+   * Set the shader source code from a C++ string and compile it.
+   *
+   *  \param shaderSrc a C++ string containing the shader source code
+   */
+  void compileFromSourceCode(const std::string &shaderSrc);
 
-	/**
-	 * Set the shader source code from a file and compile it.
-	 *
-	 *  \param shaderSrcFilename the absolute path of the file containing the shader source code
-	 */
-	void compileFromSourceFile(const std::string &shaderSrcFilename);
+  /**
+   * Set the shader source code from a file and compile it.
+   *
+   *  \param shaderSrcFilename the absolute path of the file containing the shader source code
+   */
+  void compileFromSourceFile(const std::string &shaderSrcFilename);
 
-	/**
-	 * Return true if the shader compilation was successfull, false otherwise
-	 */
-	bool isCompiled() const {return shaderCompiled;}
+  /**
+   * Return true if the shader compilation was successfull, false otherwise
+   */
+  bool isCompiled() const {
+    return shaderCompiled;
+  }
 
-	/**
-	 * Return the log output by the shader compiler
-	 */
-	std::string getCompilationLog() const {return compilationLog;}
+  /**
+   * Return the log output by the shader compiler
+   */
+  std::string getCompilationLog() const {
+    return compilationLog;
+  }
 
 private :
 
-	void setAnonymousCreation(const bool anonymousCreation) {this->anonymousCreation = anonymousCreation;}
-	bool anonymouslyCreated() const {return anonymousCreation;}
+  void setAnonymousCreation(const bool anonymousCreation) {
+    this->anonymousCreation = anonymousCreation;
+  }
+  bool anonymouslyCreated() const {
+    return anonymousCreation;
+  }
 
-	void compileShaderObject(const char *shaderSrc);
+  void compileShaderObject(const char *shaderSrc);
 
-	ShaderType shaderType;
-	GLuint shaderObjectId;
-	GLenum inputPrimitiveType, outputPrimitiveType;
-	bool shaderCompiled;
-	std::string compilationLog;
-	bool anonymousCreation;
+  ShaderType shaderType;
+  GLuint shaderObjectId;
+  GLenum inputPrimitiveType, outputPrimitiveType;
+  bool shaderCompiled;
+  std::string compilationLog;
+  bool anonymousCreation;
 
 };
 
@@ -189,300 +209,306 @@ class TLP_GL_SCOPE GlShaderProgram {
 
 public :
 
-	/**
-	 * GlShaderProgram constructor
-	 *
-	 * \param name An optionnal name can be provided to identify the shader program
-	 */
-	GlShaderProgram(const std::string &name = "");
+  /**
+   * GlShaderProgram constructor
+   *
+   * \param name An optionnal name can be provided to identify the shader program
+   */
+  GlShaderProgram(const std::string &name = "");
 
-	/**
-	 * GlShaderProgram destructor
-	 */
-	~GlShaderProgram();
+  /**
+   * GlShaderProgram destructor
+   */
+  ~GlShaderProgram();
 
-	/**
-	 * A static function which returns true if vertex and fragment shaders are supported by the host graphic card
-	 */
-	static bool shaderProgramsSupported();
+  /**
+   * A static function which returns true if vertex and fragment shaders are supported by the host graphic card
+   */
+  static bool shaderProgramsSupported();
 
-	/**
-	 * A static function which returns true if geometry shaders are supported by the host graphic card
-	 */
-	static bool geometryShaderSupported();
+  /**
+   * A static function which returns true if geometry shaders are supported by the host graphic card
+   */
+  static bool geometryShaderSupported();
 
-	/**
-	 * A static function which returns the current active shader if any
-	 */
-	static GlShaderProgram *getCurrentActiveShader();
+  /**
+   * A static function which returns the current active shader if any
+   */
+  static GlShaderProgram *getCurrentActiveShader();
 
-	/**
-	 * Return the string identifier of this shader program
-	 */
-	std::string getName() const {return programName;}
+  /**
+   * Return the string identifier of this shader program
+   */
+  std::string getName() const {
+    return programName;
+  }
 
-	/**
-	 * Return the OpenGL identifier of this shader program
-	 */
-	GLuint getShaderProgramId() const {return programObjectId;}
+  /**
+   * Return the OpenGL identifier of this shader program
+   */
+  GLuint getShaderProgramId() const {
+    return programObjectId;
+  }
 
-	/**
-	 * Add a shader object to this shader program
-	 *
-	 * \param shader the shader object to add to this shader program
-	 */
-	void addShader(GlShader *shader);
+  /**
+   * Add a shader object to this shader program
+   *
+   * \param shader the shader object to add to this shader program
+   */
+  void addShader(GlShader *shader);
 
-	/**
-	 * Remove a shader object from this shader program
-	 * Note that the shader object will not be  destroyed
-	 *
-	 * \param shader the shader object to remove from this shader program
-	 */
-	void removeShader(GlShader *shader);
+  /**
+   * Remove a shader object from this shader program
+   * Note that the shader object will not be  destroyed
+   *
+   * \param shader the shader object to remove from this shader program
+   */
+  void removeShader(GlShader *shader);
 
-	/**
-	 * remove all shaders from this shader program
-	 */
-	void removeAllShaders();
+  /**
+   * remove all shaders from this shader program
+   */
+  void removeAllShaders();
 
-	/**
-	 * Convenient method to add a shader object (from type Vertex or Fragment) from a source code stored in a C string
-	 * The created shader object will be automatically destroyed when removing all attached shader objects
-	 * or destroying the shader program
-	 *
-	 * \param shaderType the type of the shader object to add (must be Vertex or Fragment)
-	 * \param shaderSrc the C string containing the shader object source code
-	 */
-	void addShaderFromSourceCode(const ShaderType shaderType, const char *shaderSrc);
+  /**
+   * Convenient method to add a shader object (from type Vertex or Fragment) from a source code stored in a C string
+   * The created shader object will be automatically destroyed when removing all attached shader objects
+   * or destroying the shader program
+   *
+   * \param shaderType the type of the shader object to add (must be Vertex or Fragment)
+   * \param shaderSrc the C string containing the shader object source code
+   */
+  void addShaderFromSourceCode(const ShaderType shaderType, const char *shaderSrc);
 
-	/**
-	 * Convenient method to add a shader object (from type Vertex or Fragment) from a source code stored in a C++ string
-	 * The created shader object will be automatically destroyed when removing all attached shader objects
-	 * or destroying the shader program
-	 *
-	 * \param shaderType the type of the shader object to add (must be Vertex or Fragment)
-	 * \param shaderSrc the C++ string containing the shader object source code
-	 */
-	void addShaderFromSourceCode(const ShaderType shaderType, const std::string &shaderSrc);
+  /**
+   * Convenient method to add a shader object (from type Vertex or Fragment) from a source code stored in a C++ string
+   * The created shader object will be automatically destroyed when removing all attached shader objects
+   * or destroying the shader program
+   *
+   * \param shaderType the type of the shader object to add (must be Vertex or Fragment)
+   * \param shaderSrc the C++ string containing the shader object source code
+   */
+  void addShaderFromSourceCode(const ShaderType shaderType, const std::string &shaderSrc);
 
-	/**
-	 * Convenient method to add a shader object (from type Vertex or Fragment) from a source code stored in a file
-	 * The created shader object will be automatically destroyed when removing all attached shader objects
-	 * or destroying the shader program
-	 *
-	 * \param shaderType the type of the shader object to add (must be Vertex or Fragment)
-	 * \param shaderSrcFilename the aboslute path to the file containing the shader object source code
-	 */
-	void addShaderFromSourceFile(const ShaderType shaderType, const std::string &shaderSrcFilename);
+  /**
+   * Convenient method to add a shader object (from type Vertex or Fragment) from a source code stored in a file
+   * The created shader object will be automatically destroyed when removing all attached shader objects
+   * or destroying the shader program
+   *
+   * \param shaderType the type of the shader object to add (must be Vertex or Fragment)
+   * \param shaderSrcFilename the aboslute path to the file containing the shader object source code
+   */
+  void addShaderFromSourceFile(const ShaderType shaderType, const std::string &shaderSrcFilename);
 
-	/**
-	 * Convenient method to add a geometry shader object from a source code stored in a C string
-	 * The created shader object will be automatically destroyed when removing all attached shader objects
-	 * or destroying the shader program
-	 *
-	 * \param geometryShaderSrc the C string containing the geometry shader object source code
-	 * \param inputPrimitiveType the type of graphic primitive the geometry shader takes as input.
-	 *        (must be one from the following list : GL_POINTS, GL_LINES, GL_LINES_ADJACENCY_EXT, GL_TRIANGLES, GL_TRIANGLES_ADJACENCY_EXT)
-	 *
-	 * \param outputPrimitiveType the type of graphics primitives the geometry shader will output
-	 *        (must be one of the following list : GL_POINTS, GL_LINE_STRIP, GL_TRIANGLE_STRIP)
-	 */
-	void addGeometryShaderFromSourceCode(const char *geometryShaderSrc, GLenum inputPrimitiveType, GLenum outputPrimitiveType);
+  /**
+   * Convenient method to add a geometry shader object from a source code stored in a C string
+   * The created shader object will be automatically destroyed when removing all attached shader objects
+   * or destroying the shader program
+   *
+   * \param geometryShaderSrc the C string containing the geometry shader object source code
+   * \param inputPrimitiveType the type of graphic primitive the geometry shader takes as input.
+   *        (must be one from the following list : GL_POINTS, GL_LINES, GL_LINES_ADJACENCY_EXT, GL_TRIANGLES, GL_TRIANGLES_ADJACENCY_EXT)
+   *
+   * \param outputPrimitiveType the type of graphics primitives the geometry shader will output
+   *        (must be one of the following list : GL_POINTS, GL_LINE_STRIP, GL_TRIANGLE_STRIP)
+   */
+  void addGeometryShaderFromSourceCode(const char *geometryShaderSrc, GLenum inputPrimitiveType, GLenum outputPrimitiveType);
 
-	/**
-	 * Convenient method to add a geometry shader object from a source code stored in a C++ string
-	 * The created shader object will be automatically destroyed when removing all attached shader objects
-	 * or destroying the shader program
-	 *
-	 * \param geometryShaderSrc the C++ string containing the geometry shader object source code
-	 * \param inputPrimitiveType the type of graphic primitive the geometry shader takes as input.
-	 *        (must be one from the following list : GL_POINTS, GL_LINES, GL_LINES_ADJACENCY_EXT, GL_TRIANGLES, GL_TRIANGLES_ADJACENCY_EXT)
-	 *
-	 * \param outputPrimitiveType the type of graphics primitives the geometry shader will output
-	 *        (must be one of the following list : GL_POINTS, GL_LINE_STRIP, GL_TRIANGLE_STRIP)
-	 */
-	void addGeometryShaderFromSourceCode(const std::string &geometryShaderSrc, GLenum inputPrimitiveType, GLenum outputPrimitiveType);
+  /**
+   * Convenient method to add a geometry shader object from a source code stored in a C++ string
+   * The created shader object will be automatically destroyed when removing all attached shader objects
+   * or destroying the shader program
+   *
+   * \param geometryShaderSrc the C++ string containing the geometry shader object source code
+   * \param inputPrimitiveType the type of graphic primitive the geometry shader takes as input.
+   *        (must be one from the following list : GL_POINTS, GL_LINES, GL_LINES_ADJACENCY_EXT, GL_TRIANGLES, GL_TRIANGLES_ADJACENCY_EXT)
+   *
+   * \param outputPrimitiveType the type of graphics primitives the geometry shader will output
+   *        (must be one of the following list : GL_POINTS, GL_LINE_STRIP, GL_TRIANGLE_STRIP)
+   */
+  void addGeometryShaderFromSourceCode(const std::string &geometryShaderSrc, GLenum inputPrimitiveType, GLenum outputPrimitiveType);
 
-	/**
-	 * Convenient method to add a geometry shader object from a source code stored in a file
-	 * The created shader object will be automatically destroyed when removing all attached shader objects
-	 * or destroying the shader program
-	 *
-	 * \param geometryShaderSrcFilename the absolute path to the file containing the geometry shader object source code
-	 * \param inputPrimitiveType the type of graphic primitive the geometry shader takes as input.
-	 *        (must be one from the following list : GL_POINTS, GL_LINES, GL_LINES_ADJACENCY_EXT, GL_TRIANGLES, GL_TRIANGLES_ADJACENCY_EXT)
-	 *
-	 * \param outputPrimitiveType the type of graphics primitives the geometry shader will output
-	 *        (must be one of the following list : GL_POINTS, GL_LINE_STRIP, GL_TRIANGLE_STRIP)
-	 */
-	void addGeometryShaderFromSourceFile(const std::string &geometryShaderSrcFilename, GLenum inputPrimitiveType, GLenum outputPrimitiveType);
+  /**
+   * Convenient method to add a geometry shader object from a source code stored in a file
+   * The created shader object will be automatically destroyed when removing all attached shader objects
+   * or destroying the shader program
+   *
+   * \param geometryShaderSrcFilename the absolute path to the file containing the geometry shader object source code
+   * \param inputPrimitiveType the type of graphic primitive the geometry shader takes as input.
+   *        (must be one from the following list : GL_POINTS, GL_LINES, GL_LINES_ADJACENCY_EXT, GL_TRIANGLES, GL_TRIANGLES_ADJACENCY_EXT)
+   *
+   * \param outputPrimitiveType the type of graphics primitives the geometry shader will output
+   *        (must be one of the following list : GL_POINTS, GL_LINE_STRIP, GL_TRIANGLE_STRIP)
+   */
+  void addGeometryShaderFromSourceFile(const std::string &geometryShaderSrcFilename, GLenum inputPrimitiveType, GLenum outputPrimitiveType);
 
-	/**
-	 * Link the shader program.
-	 */
-	void link();
+  /**
+   * Link the shader program.
+   */
+  void link();
 
-	/**
-	 * return true if the shader program has been successfully linked, false otherwise
-	 */
-	bool isLinked() const {return programLinked;}
+  /**
+   * return true if the shader program has been successfully linked, false otherwise
+   */
+  bool isLinked() const {
+    return programLinked;
+  }
 
-	/**
-	 * Print the info log containing errors and warnings related to shader objects compilation and shader program linkage
-	 */
-	void printInfoLog();
+  /**
+   * Print the info log containing errors and warnings related to shader objects compilation and shader program linkage
+   */
+  void printInfoLog();
 
-	/**
-	 * Activate the shader program. If the shader program has not been linked, the link method will be called.
-	 */
-	void activate();
+  /**
+   * Activate the shader program. If the shader program has not been linked, the link method will be called.
+   */
+  void activate();
 
-	/**
-	 * Deactivate the shader program.
-	 */
-	void desactivate();
+  /**
+   * Deactivate the shader program.
+   */
+  void desactivate();
 
-	void setUniformFloat(const std::string &variateName, const float f);
-	void setUniformVec2Float(const std::string &variableName, const Vector<float, 2> &vec2f);
-	void setUniformVec2Float(const std::string &variableName, const float f1, const float f2);
-	void setUniformVec3Float(const std::string &variableName, const Vector<float, 3> &vec3f);
-	void setUniformVec3Float(const std::string &variableName, const float f1, const float f2, const float f3);
-	void setUniformVec4Float(const std::string &variableName, const Vector<float, 4> &vec4f);
-	void setUniformVec4Float(const std::string &variableName, const float f1, const float f2, const float f3, const float f4);
-	void setUniformMat2Float(const std::string &variableName, const Matrix<float, 2> &mat2f, const bool transpose = false);
-	void setUniformMat2Float(const std::string &variableName, const float *f, const bool transpose = false);
-	void setUniformMat3Float(const std::string &variableName, const Matrix<float, 3> &mat3f, const bool transpose = false);
-	void setUniformMat3Float(const std::string &variableName, const float *f, const bool transpose = false);
-	void setUniformMat4Float(const std::string &variableName, const Matrix<float, 4> &mat4f, const bool transpose = false);
-	void setUniformMat4Float(const std::string &variableName, const float *f, const bool transpose = false);
+  void setUniformFloat(const std::string &variateName, const float f);
+  void setUniformVec2Float(const std::string &variableName, const Vector<float, 2> &vec2f);
+  void setUniformVec2Float(const std::string &variableName, const float f1, const float f2);
+  void setUniformVec3Float(const std::string &variableName, const Vector<float, 3> &vec3f);
+  void setUniformVec3Float(const std::string &variableName, const float f1, const float f2, const float f3);
+  void setUniformVec4Float(const std::string &variableName, const Vector<float, 4> &vec4f);
+  void setUniformVec4Float(const std::string &variableName, const float f1, const float f2, const float f3, const float f4);
+  void setUniformMat2Float(const std::string &variableName, const Matrix<float, 2> &mat2f, const bool transpose = false);
+  void setUniformMat2Float(const std::string &variableName, const float *f, const bool transpose = false);
+  void setUniformMat3Float(const std::string &variableName, const Matrix<float, 3> &mat3f, const bool transpose = false);
+  void setUniformMat3Float(const std::string &variableName, const float *f, const bool transpose = false);
+  void setUniformMat4Float(const std::string &variableName, const Matrix<float, 4> &mat4f, const bool transpose = false);
+  void setUniformMat4Float(const std::string &variableName, const float *f, const bool transpose = false);
 
-	void setUniformInt(const std::string &variableName, const int f);
-	void setUniformVec2Int(const std::string &variableName, const Vector<int, 2> &vec2i);
-	void setUniformVec2Int(const std::string &variableName, const float i1, const float i2);
-	void setUniformVec3Int(const std::string &variableName, const Vector<int, 3> &vec3i);
-	void setUniformVec3Int(const std::string &variableName, const int i1, const int i2, const int i3);
-	void setUniformVec4Int(const std::string &variableName, const Vector<int, 4> &vec4i);
-	void setUniformVec4Int(const std::string &variableName, const int i1, const int i2, const int i3, const int i4);
+  void setUniformInt(const std::string &variableName, const int f);
+  void setUniformVec2Int(const std::string &variableName, const Vector<int, 2> &vec2i);
+  void setUniformVec2Int(const std::string &variableName, const float i1, const float i2);
+  void setUniformVec3Int(const std::string &variableName, const Vector<int, 3> &vec3i);
+  void setUniformVec3Int(const std::string &variableName, const int i1, const int i2, const int i3);
+  void setUniformVec4Int(const std::string &variableName, const Vector<int, 4> &vec4i);
+  void setUniformVec4Int(const std::string &variableName, const int i1, const int i2, const int i3, const int i4);
 
-	void setUniformBool(const std::string &variableName, const bool b);
-	void setUniformVec2Bool(const std::string &variableName, const Array<bool, 2> &vec2b);
-	void setUniformVec2Bool(const std::string &variableName, const bool b1, const bool b2);
-	void setUniformVec3Bool(const std::string &variableName, const Array<bool, 3> &vec3b);
-	void setUniformVec3Bool(const std::string &variableName, const bool b1, const bool b2, const bool b3);
-	void setUniformVec4Bool(const std::string &variableName, const Array<bool, 4> &vec4b);
-	void setUniformVec4Bool(const std::string &variableName, const bool i1, const bool i2, const bool i3, const bool i4);
+  void setUniformBool(const std::string &variableName, const bool b);
+  void setUniformVec2Bool(const std::string &variableName, const Array<bool, 2> &vec2b);
+  void setUniformVec2Bool(const std::string &variableName, const bool b1, const bool b2);
+  void setUniformVec3Bool(const std::string &variableName, const Array<bool, 3> &vec3b);
+  void setUniformVec3Bool(const std::string &variableName, const bool b1, const bool b2, const bool b3);
+  void setUniformVec4Bool(const std::string &variableName, const Array<bool, 4> &vec4b);
+  void setUniformVec4Bool(const std::string &variableName, const bool i1, const bool i2, const bool i3, const bool i4);
 
-	void setAttributeFloat(const std::string &variableName, const float f);
-	void setAttributeVec2Float(const std::string &variableName, const Vector<float, 2> &vec2f);
-	void setAttributeVec2Float(const std::string &variableName, const float f1, const float f2);
-	void setAttributeVec3Float(const std::string &variableName, const Vector<float, 3> &vec3f);
-	void setAttributeVec3Float(const std::string &variableName, const float f1, const float f2, const float f3);
-	void setAttributeVec4Float(const std::string &variableName, const Vector<float, 4> &vec4f);
-	void setAttributeVec4Float(const std::string &variableName, const float f1, const float f2, const float f3, const float f4);
+  void setAttributeFloat(const std::string &variableName, const float f);
+  void setAttributeVec2Float(const std::string &variableName, const Vector<float, 2> &vec2f);
+  void setAttributeVec2Float(const std::string &variableName, const float f1, const float f2);
+  void setAttributeVec3Float(const std::string &variableName, const Vector<float, 3> &vec3f);
+  void setAttributeVec3Float(const std::string &variableName, const float f1, const float f2, const float f3);
+  void setAttributeVec4Float(const std::string &variableName, const Vector<float, 4> &vec4f);
+  void setAttributeVec4Float(const std::string &variableName, const float f1, const float f2, const float f3, const float f4);
 
-	void setAttributeInt(const std::string &variableName, const int f);
-	void setAttributeVec2Int(const std::string &variableName, const Vector<int, 2> &vec2i);
-	void setAttributeVec2Int(const std::string &variableName, const float i1, const float i2);
-	void setAttributeVec3Int(const std::string &variableName, const Vector<int, 3> &vec3i);
-	void setAttributeVec3Int(const std::string &variableName, const int i1, const int i2, const int i3);
-	void setAttributeVec4Int(const std::string &variableName, const Vector<int, 4> &vec4i);
-	void setAttributeVec4Int(const std::string &variableName, const int i1, const int i2, const int i3, const int i4);
+  void setAttributeInt(const std::string &variableName, const int f);
+  void setAttributeVec2Int(const std::string &variableName, const Vector<int, 2> &vec2i);
+  void setAttributeVec2Int(const std::string &variableName, const float i1, const float i2);
+  void setAttributeVec3Int(const std::string &variableName, const Vector<int, 3> &vec3i);
+  void setAttributeVec3Int(const std::string &variableName, const int i1, const int i2, const int i3);
+  void setAttributeVec4Int(const std::string &variableName, const Vector<int, 4> &vec4i);
+  void setAttributeVec4Int(const std::string &variableName, const int i1, const int i2, const int i3, const int i4);
 
-	void setAttributeBool(const std::string &variableName, const bool b);
-	void setAttributeVec2Bool(const std::string &variableName, const Array<bool, 2> &vec2b);
-	void setAttributeVec2Bool(const std::string &variableName, const bool b1, const bool b2);
-	void setAttributeVec3Bool(const std::string &variableName, const Array<bool, 3> &vec3b);
-	void setAttributeVec3Bool(const std::string &variableName, const bool b1, const bool b2, const bool b3);
-	void setAttributeVec4Bool(const std::string &variableName, const Array<bool, 4> &vec4b);
-	void setAttributeVec4Bool(const std::string &variableName, const bool b1, const bool b2, const bool b3, const bool b4);
+  void setAttributeBool(const std::string &variableName, const bool b);
+  void setAttributeVec2Bool(const std::string &variableName, const Array<bool, 2> &vec2b);
+  void setAttributeVec2Bool(const std::string &variableName, const bool b1, const bool b2);
+  void setAttributeVec3Bool(const std::string &variableName, const Array<bool, 3> &vec3b);
+  void setAttributeVec3Bool(const std::string &variableName, const bool b1, const bool b2, const bool b3);
+  void setAttributeVec4Bool(const std::string &variableName, const Array<bool, 4> &vec4b);
+  void setAttributeVec4Bool(const std::string &variableName, const bool b1, const bool b2, const bool b3, const bool b4);
 
-	void setUniformTextureSampler(const std::string &samplerVariateName, const int samplerId);
-	void setUniformColor(const std::string &variableName, const Color &color);
-	void setAttributeColor(const std::string &variableName, const Color &color);
+  void setUniformTextureSampler(const std::string &samplerVariateName, const int samplerId);
+  void setUniformColor(const std::string &variableName, const Color &color);
+  void setAttributeColor(const std::string &variableName, const Color &color);
 
-	template <unsigned int SIZE>
-	void setUniformFloatArray(const std::string &variableName, const Vector<float, SIZE> &vecf);
-	void setUniformFloatArray(const std::string &variableName, const unsigned int fCount, const float *f);
+  template <unsigned int SIZE>
+  void setUniformFloatArray(const std::string &variableName, const Vector<float, SIZE> &vecf);
+  void setUniformFloatArray(const std::string &variableName, const unsigned int fCount, const float *f);
 
-	template <unsigned int SIZE>
-	void setUniformVec2FloatArray(const std::string &variableName, const Array<Vector<float, 2>, SIZE> &vecvec2f);
-	void setUniformVec2FloatArray(const std::string &variableName, const unsigned int vec2fCount, const float *f);
+  template <unsigned int SIZE>
+  void setUniformVec2FloatArray(const std::string &variableName, const Array<Vector<float, 2>, SIZE> &vecvec2f);
+  void setUniformVec2FloatArray(const std::string &variableName, const unsigned int vec2fCount, const float *f);
 
-	template <unsigned int SIZE>
-	void setUniformVec3FloatArray(const std::string &variableName, const Array<Vector<float, 3>, SIZE> &vecvec3f);
-	void setUniformVec3FloatArray(const std::string &variableName, const unsigned int vec3fCount, const float *f);
+  template <unsigned int SIZE>
+  void setUniformVec3FloatArray(const std::string &variableName, const Array<Vector<float, 3>, SIZE> &vecvec3f);
+  void setUniformVec3FloatArray(const std::string &variableName, const unsigned int vec3fCount, const float *f);
 
-	template <unsigned int SIZE>
-	void setUniformVec4FloatArray(const std::string &variableName, const Array<Vector<float, 4>, SIZE> &vecvec4f);
-	void setUniformVec4FloatArray(const std::string &variableName, const unsigned int vec4fCount, const float *f);
+  template <unsigned int SIZE>
+  void setUniformVec4FloatArray(const std::string &variableName, const Array<Vector<float, 4>, SIZE> &vecvec4f);
+  void setUniformVec4FloatArray(const std::string &variableName, const unsigned int vec4fCount, const float *f);
 
-	template <unsigned int SIZE>
-	void setUniformMat2FloatArray(const std::string &variableName, const Vector<Matrix<float, 2>, SIZE> &vecmat2f, const bool transpose = false);
-	void setUniformMat2FloatArray(const std::string &variableName, const unsigned int mat2fCount, const float *f, const bool transpose = false);
+  template <unsigned int SIZE>
+  void setUniformMat2FloatArray(const std::string &variableName, const Vector<Matrix<float, 2>, SIZE> &vecmat2f, const bool transpose = false);
+  void setUniformMat2FloatArray(const std::string &variableName, const unsigned int mat2fCount, const float *f, const bool transpose = false);
 
-	template <unsigned int SIZE>
-	void setUniformMat3FloatArray(const std::string &variableName, const Vector<Matrix<float, 3>, SIZE> &vecmat3f, const bool transpose = false);
-	void setUniformMat3FloatArray(const std::string &variableName, const unsigned int mat3fCount, const float *f, const bool transpose = false);
+  template <unsigned int SIZE>
+  void setUniformMat3FloatArray(const std::string &variableName, const Vector<Matrix<float, 3>, SIZE> &vecmat3f, const bool transpose = false);
+  void setUniformMat3FloatArray(const std::string &variableName, const unsigned int mat3fCount, const float *f, const bool transpose = false);
 
-	template <unsigned int SIZE>
-	void setUniformMat4FloatArray(const std::string &variableName, const Vector<Matrix<float, 4>, SIZE> &vecmat4f, const bool transpose = false);
-	void setUniformMat4FloatArray(const std::string &variableName, const unsigned int mat4fCount, const float *f, const bool transpose = false);
+  template <unsigned int SIZE>
+  void setUniformMat4FloatArray(const std::string &variableName, const Vector<Matrix<float, 4>, SIZE> &vecmat4f, const bool transpose = false);
+  void setUniformMat4FloatArray(const std::string &variableName, const unsigned int mat4fCount, const float *f, const bool transpose = false);
 
-	template <unsigned int SIZE>
-	void setUniformIntArray(const std::string &variableName, const Vector<int, SIZE> &veci);
-	void setUniformIntArray(const std::string &variableName, const unsigned int iCount, const int *i);
+  template <unsigned int SIZE>
+  void setUniformIntArray(const std::string &variableName, const Vector<int, SIZE> &veci);
+  void setUniformIntArray(const std::string &variableName, const unsigned int iCount, const int *i);
 
-	template <unsigned int SIZE>
-	void setUniformVec2IntArray(const std::string &variableName, const Array<Vector<int, 2>, SIZE> &vecvec2i);
-	void setUniformVec2IntArray(const std::string &variableName, const unsigned int vec2iCount, const int *i);
+  template <unsigned int SIZE>
+  void setUniformVec2IntArray(const std::string &variableName, const Array<Vector<int, 2>, SIZE> &vecvec2i);
+  void setUniformVec2IntArray(const std::string &variableName, const unsigned int vec2iCount, const int *i);
 
-	template <unsigned int SIZE>
-	void setUniformVec3IntArray(const std::string &variableName, const Array<Vector<int, 3>, SIZE> &vecvec3i);
-	void setUniformVec3IntArray(const std::string &variableName, const unsigned int vec3iCount, const int *i);
+  template <unsigned int SIZE>
+  void setUniformVec3IntArray(const std::string &variableName, const Array<Vector<int, 3>, SIZE> &vecvec3i);
+  void setUniformVec3IntArray(const std::string &variableName, const unsigned int vec3iCount, const int *i);
 
-	template <unsigned int SIZE>
-	void setUniformVec4IntArray(const std::string &variableName, const Array<Vector<int, 4>, SIZE> &vecvec4i);
-	void setUniformVec4IntArray(const std::string &variableName, const unsigned int vec4iCount, const int *i);
+  template <unsigned int SIZE>
+  void setUniformVec4IntArray(const std::string &variableName, const Array<Vector<int, 4>, SIZE> &vecvec4i);
+  void setUniformVec4IntArray(const std::string &variableName, const unsigned int vec4iCount, const int *i);
 
-	template <unsigned int SIZE>
-	void setUniformBoolArray(const std::string &variableName, const Array<bool, SIZE> &vecb);
-	void setUniformBoolArray(const std::string &variableName, const unsigned int bCount, const bool *b);
+  template <unsigned int SIZE>
+  void setUniformBoolArray(const std::string &variableName, const Array<bool, SIZE> &vecb);
+  void setUniformBoolArray(const std::string &variableName, const unsigned int bCount, const bool *b);
 
-	template <unsigned int SIZE>
-	void setUniformVec2BoolArray(const std::string &variableName, const Array<Array<bool, 2>, SIZE> &vecvec2b);
-	void setUniformVec2BoolArray(const std::string &variableName, const unsigned int vec2bCount, const bool *b);
+  template <unsigned int SIZE>
+  void setUniformVec2BoolArray(const std::string &variableName, const Array<Array<bool, 2>, SIZE> &vecvec2b);
+  void setUniformVec2BoolArray(const std::string &variableName, const unsigned int vec2bCount, const bool *b);
 
-	template <unsigned int SIZE>
-	void setUniformVec3BoolArray(const std::string &variableName, const Array<Array<bool, 3>, SIZE> &vecvec3b);
-	void setUniformVec3BoolArray(const std::string &variableName, const unsigned int vec3bCount, const bool *b);
+  template <unsigned int SIZE>
+  void setUniformVec3BoolArray(const std::string &variableName, const Array<Array<bool, 3>, SIZE> &vecvec3b);
+  void setUniformVec3BoolArray(const std::string &variableName, const unsigned int vec3bCount, const bool *b);
 
-	template <unsigned int SIZE>
-	void setUniformVec4BoolArray(const std::string &variableName, const Array<Array<bool, 4>, SIZE> &vecvec4b);
-	void setUniformVec4BoolArray(const std::string &variableName, const unsigned int vec4bCount, const bool *b);
+  template <unsigned int SIZE>
+  void setUniformVec4BoolArray(const std::string &variableName, const Array<Array<bool, 4>, SIZE> &vecvec4b);
+  void setUniformVec4BoolArray(const std::string &variableName, const unsigned int vec4bCount, const bool *b);
 
-	void getUniformFloatVariableValue(const std::string &variableName, float *value);
-	void getUniformIntVariableValue(const std::string &variableName, int *value);
-	void getUniformBoolVariableValue(const std::string &variableName, bool *value);
-	void getUniformVec2BoolVariableValue(const std::string &variableName, bool *value);
-	void getUniformVec3BoolVariableValue(const std::string &variableName, bool *value);
-	void getUniformVec4BoolVariableValue(const std::string &variableName, bool *value);
+  void getUniformFloatVariableValue(const std::string &variableName, float *value);
+  void getUniformIntVariableValue(const std::string &variableName, int *value);
+  void getUniformBoolVariableValue(const std::string &variableName, bool *value);
+  void getUniformVec2BoolVariableValue(const std::string &variableName, bool *value);
+  void getUniformVec3BoolVariableValue(const std::string &variableName, bool *value);
+  void getUniformVec4BoolVariableValue(const std::string &variableName, bool *value);
 
 
 private :
 
-	GLint getUniformVariableLocation(const std::string &variableName);
-	GLint getAttributeVariableLocation(const std::string &variableName);
+  GLint getUniformVariableLocation(const std::string &variableName);
+  GLint getAttributeVariableLocation(const std::string &variableName);
 
-	std::string programName;
-	GLuint programObjectId;
+  std::string programName;
+  GLuint programObjectId;
 
-	std::string programLinkLog;
-	bool programLinked;
+  std::string programLinkLog;
+  bool programLinked;
 
-	std::vector<GlShader *> attachedShaders;
+  std::vector<GlShader *> attachedShaders;
 
-	static GlShaderProgram *currentActiveShaderProgram;
+  static GlShaderProgram *currentActiveShaderProgram;
 
 };
 

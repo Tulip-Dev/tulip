@@ -35,9 +35,9 @@ public:
   void tearDown();
   void initializeGraph(const std::string& type);
   template<typename PropType>
-    bool computeProperty(const std::string &algorithm,
-			 const std::string& graphType = "Planar Graph",
-                         PropType* prop = NULL);
+  bool computeProperty(const std::string &algorithm,
+                       const std::string& graphType = "Planar Graph",
+                       PropType* prop = NULL);
   void testImportCompleteGraph();
   void testImportCompleteTree();
   void testImportRandomGraph();
@@ -67,9 +67,9 @@ public:
   void testRandomMetric();
   void testStrahlerMetric();
   void testStrengthMetric();
-  void testStrongComponent();  
-  void testMetricColorMapping();  
-  void testEnumeratedColorValuesMapping(); 
+  void testStrongComponent();
+  void testMetricColorMapping();
+  void testEnumeratedColorValuesMapping();
   void testBubbleTree();
   void testCircular();
   void testConeTreeExtended();

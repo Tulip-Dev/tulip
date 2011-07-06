@@ -29,22 +29,23 @@ using namespace tlp;
 namespace {
 //file::filepath
 static const char * paramHelp[] = { HTML_HELP_OPEN()
-HTML_HELP_DEF( "type", "StringProperty" )
-HTML_HELP_BODY()
-"The graph property containing the displayed nodes labels."
-HTML_HELP_CLOSE(),
+                                    HTML_HELP_DEF( "type", "StringProperty" )
+                                    HTML_HELP_BODY()
+                                    "The graph property containing the displayed nodes labels."
+                                    HTML_HELP_CLOSE(),
 
-HTML_HELP_OPEN()
-HTML_HELP_DEF( "type", "StringProperty" )
-HTML_HELP_BODY()
-"The graph property containing the font used to display the label."
-HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "StringProperty" )
+                                    HTML_HELP_BODY()
+                                    "The graph property containing the font used to display the label."
+                                    HTML_HELP_CLOSE(),
 
-HTML_HELP_OPEN()
-HTML_HELP_DEF( "type", "IntegerProperty" )
-HTML_HELP_BODY()
-"The graph property containing the fonts sizes."
-HTML_HELP_CLOSE(), };
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "IntegerProperty" )
+                                    HTML_HELP_BODY()
+                                    "The graph property containing the fonts sizes."
+                                    HTML_HELP_CLOSE(),
+                                  };
 }
 
 /** \addtogroup size */
@@ -90,6 +91,7 @@ public:
     forEach(n, graph->getNodes()) {
       label.setFontNameSizeAndColor(fonts->getNodeValue(n),fontSizes->getNodeValue(n),Color());
       const string &str = labels->getNodeValue(n);
+
       if (str != "") {
         label.setText(str);
         bb=label.getTextBoundingBox();

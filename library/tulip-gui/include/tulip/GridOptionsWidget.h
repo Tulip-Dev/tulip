@@ -29,27 +29,27 @@ namespace tlp {
 /** \brief Widget for displaying a grid on the graph.
  *
  * This class is a widget accessible from the interface of Tulip Software.
- * It is used to display a grid with some options. 
+ * It is used to display a grid with some options.
  *
  * You can, first, choose which type of cell you'll have :
  *  - Subdivisions cells are computed by taking the whole length of each axis of the graph, andby dividing them.
  *  - Sized cells are directly computed with the size you indicate.
- * 
+ *
  * Other options are available :
- * 
+ *
  *  - Display Dimensions : Allows the user to choose on which dimensions the grid will be displayed.
  *
  */
-  class TLP_QT_SCOPE GridOptionsWidget : public QDialog, public Ui::GridOptionsData {
+class TLP_QT_SCOPE GridOptionsWidget : public QDialog, public Ui::GridOptionsData {
 
   Q_OBJECT
 
- protected:
+protected:
   GlMainWidget *glMainWidget; /**< The considered GlMainWidget */
   RenderingParametersDialog *paramDialog; /**< The considered RenderingParametersDialog */
   tlp::GlGrid *grid; /**< The considered GlADGrid */
 
- public:
+public:
   /**
    * Constructor.
    */
@@ -68,10 +68,10 @@ namespace tlp {
   /**
    * Function used to define on which RenderingParametersDialog we are working
    */
-  void setCurrentRenderingParametersDialog(RenderingParametersDialog *paramDialog);						
+  void setCurrentRenderingParametersDialog(RenderingParametersDialog *paramDialog);
 
- public slots:
- 
+public slots:
+
   /**
    * Function used to compute the grid and close the widget (Button OK).
    */

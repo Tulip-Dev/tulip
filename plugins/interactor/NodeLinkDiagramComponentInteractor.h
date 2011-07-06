@@ -23,26 +23,27 @@
 
 namespace tlp {
 
-  /** \brief Tulip interactor abstract class for NodeLinkDiagramComponent
-   *
+/** \brief Tulip interactor abstract class for NodeLinkDiagramComponent
+ *
+ */
+class NodeLinkDiagramComponentInteractor  : public InteractorChainOfResponsibility {
+
+public :
+
+  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text):InteractorChainOfResponsibility(iconPath,text) {
+  }
+
+  /**
+   * return if this interactor is compatible with given View
    */
-  class NodeLinkDiagramComponentInteractor  : public InteractorChainOfResponsibility {
+  virtual bool isCompatible(const std::string &viewName) {
+    if(viewName=="Node Link Diagram view")
+      return true;
 
-  public :
+    return false;
+  }
 
-    NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text):InteractorChainOfResponsibility(iconPath,text){
-    }
-
-    /**
-     * return if this interactor is compatible with given View
-     */
-    virtual bool isCompatible(const std::string &viewName) {
-      if(viewName=="Node Link Diagram view")
-        return true;
-      return false;
-    }
-
-  };
+};
 }
 
 #endif // NODELINKDIAGRAMCOMPONENTINTERACTOR_H

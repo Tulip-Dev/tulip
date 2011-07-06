@@ -24,14 +24,14 @@
 using namespace std;
 using namespace tlp;
 
-class IdLabels:public StringAlgorithm { 
+class IdLabels:public StringAlgorithm {
 public:
-  IdLabels(const PropertyContext &context):StringAlgorithm(context){}
-  ~IdLabels(){}
+  IdLabels(const PropertyContext &context):StringAlgorithm(context) {}
+  ~IdLabels() {}
   string getNodeValue(const node n) {
     char tmp[255];
     sprintf(tmp,"%d",n.id);
-   return string(tmp);
+    return string(tmp);
   }
   string getEdgeValue(const edge e) {
     char tmp[255];

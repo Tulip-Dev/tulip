@@ -27,10 +27,10 @@
 /** This plugins compute for each node n, the maximum path-length between n and the other node.
  *  The graph must be acyclic.
  *
- *  \note This algorithm works on general graphs. 
+ *  \note This algorithm works on general graphs.
  *
  */
-class DepthMetric:public tlp::DoubleAlgorithm { 
+class DepthMetric:public tlp::DoubleAlgorithm {
 public:
   DepthMetric(const tlp::PropertyContext &);
   bool run();

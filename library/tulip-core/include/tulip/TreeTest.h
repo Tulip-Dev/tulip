@@ -30,10 +30,10 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup graph_test */ 
+/** \addtogroup graph_test */
 /*@{*/
 /// Class for testing if the graph is a tree
- class TLP_SCOPE TreeTest : private GraphObserver, private Observable {
+class TLP_SCOPE TreeTest : private GraphObserver, private Observable {
 public:
 
   /**
@@ -71,9 +71,9 @@ public:
    * - if the graph is not connected, makes a clone subgraph,
    *   computes a tree for each of its connected components,
    *   adds a simple source and returns the clone.
-   */  
+   */
   static Graph *computeTree(Graph* graph, PluginProgress *pluginProgress = 0);
-  
+
   /**
    * Clean the graph from a tree previously computed
    * with the computeTree method

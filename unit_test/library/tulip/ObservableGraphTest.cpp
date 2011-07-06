@@ -54,12 +54,14 @@ public:
 
   // Observable methods
   void update(std::set<Observable *>::iterator begin,
-	      std::set<Observable *>::iterator end) {
+              std::set<Observable *>::iterator end) {
     //reset();
     std::set<Observable *>::iterator it = begin;
+
     while(it != end) {
       if (print)
-	cout << "inserting in observer..." << endl;
+        cout << "inserting in observer..." << endl;
+
       observables.insert((*it));
       ++it;
     }
@@ -67,7 +69,7 @@ public:
 
   void observableDestroyed(Observable *obs) {
     observables.insert(obs);
-  }    
+  }
 };
 
 static ObserverGTest* observer;
@@ -104,7 +106,7 @@ public:
     assert(nodes.size() == 1);
     return nodes[0];
   }
-  
+
   vector<node>& getObservedNodes() {
     return nodes;
   }
@@ -117,9 +119,13 @@ public:
   vector<edge>& getObservedEdges() {
     return edges;
   }
-  
-  string& getLocalPropertyName() { return pName; }
-  string& getInheritedPropertyName() { return spName; }
+
+  string& getLocalPropertyName() {
+    return pName;
+  }
+  string& getInheritedPropertyName() {
+    return spName;
+  }
 
   void reset() {
     graphs.clear(), sGraphs.clear();
@@ -164,52 +170,61 @@ public:
   }
   virtual void treatEvent(const Event& evt) {
     const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+
     if (gEvt) {
       Graph* graph = gEvt->getGraph();
+
       switch (gEvt->getType()) {
       case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
-	addInheritedProperty(graph, gEvt->getPropertyName());
-	return;
+        addInheritedProperty(graph, gEvt->getPropertyName());
+        return;
       case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
         afterDelInheritedProperty(graph, gEvt->getPropertyName());
-	return;
+        return;
       default:
-	break;
+        break;
       }
     }
+
     GraphObserver::treatEvent(evt);
   }
-};  
+};
 
 class DelInheritedPropertyObserverTest :public GraphObserver, public Observable {
 public:
-    DelInheritedPropertyObserverTest():inheritedPropertyExist(false),initialized(false){
+  DelInheritedPropertyObserverTest():inheritedPropertyExist(false),initialized(false) {
 
+  }
+  bool inheritedPropertyExist;
+  bool initialized;
+  void delInheritedProperty(Graph* g, const string& name) {
+    if(!initialized) {
+      inheritedPropertyExist = g->getProperty(name)!=NULL;
+
+      if(inheritedPropertyExist) {
+        g->getProperty(name)->getName();
+      }
+
+      initialized = true;
     }
-    bool inheritedPropertyExist;
-    bool initialized;
-    void delInheritedProperty(Graph* g, const string& name) {
-        if(!initialized){
-            inheritedPropertyExist = g->getProperty(name)!=NULL;
-            if(inheritedPropertyExist){
-                g->getProperty(name)->getName();
-            }
-            initialized = true;
-        }else{
-            inheritedPropertyExist = inheritedPropertyExist & (g->getProperty(name)!=NULL);
-            if(inheritedPropertyExist){
-                g->getProperty(name)->getName();
-            }
-        }
-    }
-    virtual void treatEvent(const Event& evt) {
-      const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
-      if (gEvt) {
-        Graph* graph = gEvt->getGraph();
-        if (gEvt->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY)
-	  delInheritedProperty(graph, gEvt->getPropertyName());
+    else {
+      inheritedPropertyExist = inheritedPropertyExist & (g->getProperty(name)!=NULL);
+
+      if(inheritedPropertyExist) {
+        g->getProperty(name)->getName();
       }
     }
+  }
+  virtual void treatEvent(const Event& evt) {
+    const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+
+    if (gEvt) {
+      Graph* graph = gEvt->getGraph();
+
+      if (gEvt->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY)
+        delInheritedProperty(graph, gEvt->getPropertyName());
+    }
+  }
 };
 
 static GraphObserverTest* gObserver;
@@ -249,8 +264,8 @@ void ObservableGraphTest::testAddDel() {
     gObserver->reset();
     observer->reset();
     edges.push_back(graph->addEdge(nodes[i],
-				   (i == NB_NODES - 1)
-				   ? nodes[0] : nodes[i]));
+                                   (i == NB_NODES - 1)
+                                   ? nodes[0] : nodes[i]));
     CPPUNIT_ASSERT(edges[i] == gObserver->getObservedEdge());
     CPPUNIT_ASSERT(graph == gObserver->getObservedGraph());
     CPPUNIT_ASSERT(observer->nbObservables() == 1);
@@ -272,21 +287,25 @@ void ObservableGraphTest::testAddDel() {
     observer->reset();
     graph->delNode(nodes[i]);
     CPPUNIT_ASSERT(nodes[i] == gObserver->getObservedNode());
+
     if (i == 0 || (i%2 && i != (NB_NODES - 1))) {
       vector<Graph*>& graphs = gObserver->getObservedGraphs();
       CPPUNIT_ASSERT(graphs.size() == 2);
       CPPUNIT_ASSERT(graphs[0] == graph);
       CPPUNIT_ASSERT(graphs[1] == graph);
+
       if (i == 0)
-	CPPUNIT_ASSERT(edges[NB_NODES - 1] == gObserver->getObservedEdge());
+        CPPUNIT_ASSERT(edges[NB_NODES - 1] == gObserver->getObservedEdge());
       else
-	CPPUNIT_ASSERT(edges[i] == gObserver->getObservedEdge());
-    } else {
+        CPPUNIT_ASSERT(edges[i] == gObserver->getObservedEdge());
+    }
+    else {
       CPPUNIT_ASSERT(graph == gObserver->getObservedGraph());
     }
+
     CPPUNIT_ASSERT(observer->nbObservables() == 1);
     CPPUNIT_ASSERT(observer->found(graph));
- }
+  }
 }
 //==========================================================
 void ObservableGraphTest::testClear() {
@@ -300,8 +319,8 @@ void ObservableGraphTest::testClear() {
 
   for (unsigned int i=0; i< NB_NODES; ++i) {
     edges.push_back(graph->addEdge(nodes[i],
-				   (i == NB_NODES - 1)
-				   ? nodes[0] : nodes[i]));
+                                   (i == NB_NODES - 1)
+                                   ? nodes[0] : nodes[i]));
   }
 
   gObserver->reset();
@@ -311,17 +330,21 @@ void ObservableGraphTest::testClear() {
 
   vector<node>& oNodes = gObserver->getObservedNodes();
   CPPUNIT_ASSERT(oNodes.size() == NB_NODES);
+
   for(unsigned int i = 0; i < NB_NODES; ++i) {
     CPPUNIT_ASSERT(nodes[i] == oNodes[i]);
   }
+
   vector<edge>& oEdges = gObserver->getObservedEdges();
   CPPUNIT_ASSERT(oEdges.size() == NB_NODES);
+
   for(unsigned int i = 0; i < NB_NODES; ++i) {
     if (i == 0)
       CPPUNIT_ASSERT(oEdges[i] == edges[NB_NODES - 1]);
     else
       CPPUNIT_ASSERT(oEdges[i] == edges[i - 1]);
   }
+
   CPPUNIT_ASSERT(observer->nbObservables() == 1);
   CPPUNIT_ASSERT(observer->found(graph));
 }
@@ -337,9 +360,10 @@ void ObservableGraphTest::testReverse() {
 
   for (unsigned int i=0; i< NB_NODES; ++i) {
     edges.push_back(graph->addEdge(nodes[i],
-				   (i == NB_NODES - 1)
-				   ? nodes[0] : nodes[i + 1]));
+                                   (i == NB_NODES - 1)
+                                   ? nodes[0] : nodes[i + 1]));
   }
+
   for (unsigned int i=0; i< NB_NODES; ++i) {
     gObserver->reset();
     observer->reset();
@@ -349,6 +373,7 @@ void ObservableGraphTest::testReverse() {
     CPPUNIT_ASSERT(observer->nbObservables() == 1);
     CPPUNIT_ASSERT(observer->found(graph));
   }
+
   // sub graph test
   Graph* g1 = graph->addSubGraph();
   g1->addNode(nodes[0]);
@@ -445,7 +470,7 @@ void ObservableGraphTest::testSubgraph() {
   CPPUNIT_ASSERT(nodes[0] == n1);
   CPPUNIT_ASSERT(nodes[1] == n1);
   CPPUNIT_ASSERT(nodes[2] == n1);
-  
+
   gObserver->reset();
   observer->reset();
   g4->addGraphObserver(gObserver);
@@ -463,7 +488,7 @@ void ObservableGraphTest::testSubgraph() {
   CPPUNIT_ASSERT(nodes[0] == n2);
   CPPUNIT_ASSERT(nodes[1] == n2);
   CPPUNIT_ASSERT(nodes[2] == n2);
-  
+
   gObserver->reset();
   observer->reset();
   Observable::holdObservers();
@@ -480,7 +505,7 @@ void ObservableGraphTest::testSubgraph() {
   CPPUNIT_ASSERT(edges.size() == 2);
   CPPUNIT_ASSERT(edges[0] == e);
   CPPUNIT_ASSERT(edges[1] == e);
-  
+
   gObserver->reset();
   observer->reset();
   Observable::holdObservers();
@@ -496,7 +521,7 @@ void ObservableGraphTest::testSubgraph() {
   CPPUNIT_ASSERT(observer->found(g4));
   CPPUNIT_ASSERT(nodes.size() == 2);
   CPPUNIT_ASSERT(nodes[0] == n2);
-  CPPUNIT_ASSERT(nodes[1] == n2);  
+  CPPUNIT_ASSERT(nodes[1] == n2);
   CPPUNIT_ASSERT(edges.size() == 1);
   CPPUNIT_ASSERT(edges[0] == e);
 
@@ -531,7 +556,7 @@ void ObservableGraphTest::testSubgraph() {
   CPPUNIT_ASSERT(observer->found(g2));
   CPPUNIT_ASSERT(nodes.size() == 2);
   CPPUNIT_ASSERT(nodes[0] == n2);
-  CPPUNIT_ASSERT(nodes[1] == n2);  
+  CPPUNIT_ASSERT(nodes[1] == n2);
   CPPUNIT_ASSERT(edges.size() == 2);
   CPPUNIT_ASSERT(edges[0] == e);
   CPPUNIT_ASSERT(edges[1] == e);
@@ -628,7 +653,7 @@ void ObservableGraphTest::testAddDelProperties() {
   CPPUNIT_ASSERT(gObserver->getLocalPropertyName() == "test");
   CPPUNIT_ASSERT(gObserver->sGraphs.size() == 0);
   CPPUNIT_ASSERT(gObserver->getInheritedPropertyName() == "");
-  
+
   g1 = graph->addSubGraph();
   g1->addGraphObserver(gObserver);
   gObserver->reset();
@@ -685,7 +710,7 @@ void ObservableGraphTest::testObserverWhenRemoveObservable() {
   CPPUNIT_ASSERT(graph->countGraphObservers() == 2);
   delete graphObserverTmp;
   CPPUNIT_ASSERT(graph->countGraphObservers() == 1);
-  
+
   /*CPPUNIT_ASSERT(graph->countObservers() == 1);
   ObserverGTest *observerTmp=new ObserverGTest();
   graph->addObserver(observerTmp);
@@ -695,36 +720,36 @@ void ObservableGraphTest::testObserverWhenRemoveObservable() {
 }
 
 void ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend() {
-    Graph *g1 = graph->addSubGraph();
-    DelInheritedPropertyObserverTest *observer = new DelInheritedPropertyObserverTest();
-    g1->addGraphObserver(observer);
-    graph->getLocalProperty<BooleanProperty>("test");
-    graph->delLocalProperty("test");
-    CPPUNIT_ASSERT(observer->initialized);
-    CPPUNIT_ASSERT(observer->inheritedPropertyExist);
+  Graph *g1 = graph->addSubGraph();
+  DelInheritedPropertyObserverTest *observer = new DelInheritedPropertyObserverTest();
+  g1->addGraphObserver(observer);
+  graph->getLocalProperty<BooleanProperty>("test");
+  graph->delLocalProperty("test");
+  CPPUNIT_ASSERT(observer->initialized);
+  CPPUNIT_ASSERT(observer->inheritedPropertyExist);
 }
 
 //==========================================================
 CppUnit::Test * ObservableGraphTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Add/Del operations (Simple Graph)", 
-								  &ObservableGraphTest::testAddDel) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Clean operations (Simple Graph)", 
-								  &ObservableGraphTest::testClear) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Edge reversing", 
-								  &ObservableGraphTest::testReverse) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Add/Del operations (Simple Graph)",
+                         &ObservableGraphTest::testAddDel) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Clean operations (Simple Graph)",
+                         &ObservableGraphTest::testClear) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Edge reversing",
+                         &ObservableGraphTest::testReverse) );
 
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Sub Graph operations (add/del/clean/iterators)", 
-								  &ObservableGraphTest::testSubgraph) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test Sub Graph delete", 
-								  &ObservableGraphTest::testDeleteSubgraph) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Add/Del  properties operations (Graph & subgraphs)", 
-								  &ObservableGraphTest::testAddDelProperties) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test Observer when remove Observable", 
-								  &ObservableGraphTest::testObserverWhenRemoveObservable) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Sub Graph operations (add/del/clean/iterators)",
+                         &ObservableGraphTest::testSubgraph) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test Sub Graph delete",
+                         &ObservableGraphTest::testDeleteSubgraph) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Add/Del  properties operations (Graph & subgraphs)",
+                         &ObservableGraphTest::testAddDelProperties) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test Observer when remove Observable",
+                         &ObservableGraphTest::testObserverWhenRemoveObservable) );
 
   suiteOfTests->addTest( new CppUnit::TestCaller<ObservableGraphTest>( "Test if the property exist when delInherited function is called",
-                                                                  &ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend) );
+                         &ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend) );
 
 
   return suiteOfTests;

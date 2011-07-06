@@ -35,26 +35,29 @@ bool tlp::PluginLister< ObjectType, Context>::pluginExists(const std::string &pl
 template<class ObjectType, class Context>
 void tlp::PluginLister<ObjectType,Context>::registerPlugin(FactoryInterface<ObjectType, Context> *objectFactory) {
   std::string pluginName = objectFactory->getName();
+
   if (!pluginExists(pluginName)) {
     ObjectType *withParam=objectFactory->createPluginObject(Context());
-    
+
     // loop over dependencies
     // to demangle the class names
     std::list<tlp::Dependency> dependencies = withParam->getDependencies();
     std::list<tlp::Dependency>::iterator itD = dependencies.begin();
+
     for (; itD != dependencies.end(); itD++) {
       const char *factoryDepName = (*itD).factoryName.c_str();
       (*itD).factoryName = tlp::demangleTlpClassName(factoryDepName);
     }
-    
+
     PluginDescription description;
     description.factory = objectFactory;
     description.parameters = withParam->getParameters();
     description.dependencies = dependencies;
     description.library = PluginLibraryLoader::getCurrentPluginFileName();
     plugins[pluginName] = description;
-    
+
     delete withParam;
+
     if (currentLoader!=0) {
       currentLoader->loaded(objectFactory, dependencies);
     }
@@ -76,9 +79,11 @@ void tlp::PluginLister<ObjectType,Context>::removePlugin(const std::string &name
 template<class ObjectType, class Context>
 ObjectType * tlp::PluginLister<ObjectType,Context>::getPluginObject(const std::string& name, Context c) const {
   typename std::map<std::string , PluginDescription>::const_iterator it = plugins.find(name);
+
   if (it!=plugins.end()) {
     return (*it).second.factory->createPluginObject(c);
   }
+
   return 0;
 }
 

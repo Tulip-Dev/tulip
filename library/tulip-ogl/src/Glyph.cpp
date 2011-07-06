@@ -38,12 +38,14 @@ Glyph::~Glyph() {
 //=============================================
 Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale, const double zRotation) const {
   Coord anchor = from - nodeCenter;
+
   if( anchor.getX() == 0.0f && anchor.getY() == 0.0f && anchor.getZ() == 0.0f )
     return nodeCenter;
+
   if( scale.getW() == 0.0f || scale.getH() == 0.0f || scale.getD() == 0.0f )
     return nodeCenter;
 
-  if(zRotation!=0){
+  if(zRotation!=0) {
     //unrotate
     Coord saveAnchor(anchor);
     double zRot =  - 2.0*M_PI * zRotation / 360.0;
@@ -54,6 +56,7 @@ Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &s
   // unscale
   anchor.setX( anchor.getX() / scale.getW() );
   anchor.setY( anchor.getY() / scale.getH() );
+
   if(scale.getD() != 0.0f)
     anchor.setZ( anchor.getZ() / scale.getD() );
   else
@@ -69,7 +72,7 @@ Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &s
   if(scale.getD() == 0.0f)
     anchor[2]=0.;
 
-  if(zRotation!=0){
+  if(zRotation!=0) {
     //rerotate
     Coord saveAnchor(anchor);
     double zRot = 2.0*M_PI * zRotation / 360.0;
@@ -80,8 +83,7 @@ Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &s
   return nodeCenter + anchor;
 }
 //=================================================================
-Coord Glyph::getAnchor(const Coord &vector) const
-{
+Coord Glyph::getAnchor(const Coord &vector) const {
   Coord anchor = vector;
   /* anchor must be on the surface of a sphere centered on nodecenter, radius is 0.5 */
   anchor *= 0.5f / anchor.norm();

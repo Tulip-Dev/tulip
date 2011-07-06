@@ -31,7 +31,7 @@ void addSpacingParameters(tlp::LayoutAlgorithm* pLayout);
 void getSpacingParameters(tlp::DataSet* dataSet, float& nodeSpacing, float& layerSpacing);
 void addNodeSizePropertyParameter(tlp::LayoutAlgorithm* pLayout);
 bool getNodeSizePropertyParameter(tlp::DataSet* dataSet, tlp::SizeProperty *&sizes);
-	
+
 orientationType getMask(tlp::DataSet* dataSet);
 bool hasOrthogonalEdge(tlp::DataSet* dataSet);
 

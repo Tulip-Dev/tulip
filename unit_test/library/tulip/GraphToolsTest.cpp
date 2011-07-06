@@ -42,15 +42,18 @@ void GraphToolsTest::build(unsigned int nbNodes, unsigned int edgeRatio) {
   vector<edge> edges;
   unsigned int NB_ADD  = nbNodes;
   unsigned int EDGE_RATIO = edgeRatio;
+
   for (unsigned int i=0; i<NB_ADD; ++i)
     nodes.push_back(graph->addNode());
+
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
+
   for (unsigned int i=0; i< NB_EDGES; ++i)
     graph->addEdge(nodes[rand()%NB_ADD], nodes[rand()%NB_ADD]);
 }
 //==========================================================
 void GraphToolsTest::testComputeEqualValueClustering() {
-  DoubleProperty metric(graph); 
+  DoubleProperty metric(graph);
   // check minimum call to computeEqualValueClustering
   // with an empty graph
   CPPUNIT_ASSERT(computeEqualValueClustering(graph, &metric));
@@ -60,22 +63,25 @@ void GraphToolsTest::testComputeEqualValueClustering() {
   vector<edge> edges;
   unsigned int NB_ADD  = 100;
   unsigned int EDGE_RATIO = 100;
+
   for (unsigned int i=0; i<NB_ADD; ++i) {
     nodes.push_back(graph->addNode());
     metric.setNodeValue(nodes[i], (double) (rand()%NB_ADD));
   }
+
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
+
   for (unsigned int i=0; i< NB_EDGES; ++i)
     graph->addEdge(nodes[rand()%NB_ADD], nodes[rand()%NB_ADD]);
-  
+
   // check dcall to computeEqualValueClustering
   CPPUNIT_ASSERT(computeEqualValueClustering(graph, &metric));
 }
 //==========================================================
 CppUnit::Test* GraphToolsTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Graph" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<GraphToolsTest>( "computeEqualValueClustering", 
-								  &GraphToolsTest::testComputeEqualValueClustering) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<GraphToolsTest>( "computeEqualValueClustering",
+                         &GraphToolsTest::testComputeEqualValueClustering) );
 
   return suiteOfTests;
 }

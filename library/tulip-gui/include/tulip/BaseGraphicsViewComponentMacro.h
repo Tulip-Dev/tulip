@@ -26,7 +26,7 @@
 namespace tlp {
 
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 4, 0))
-#define GRAPHICSVIEWEXTENSION(C,N,BN,A,D,I,R)	\
+#define GRAPHICSVIEWEXTENSION(C,N,BN,A,D,I,R) \
 class C :public BaseGraphicsViewComponent { \
 public : \
 C():BaseGraphicsViewComponent(BN){} \

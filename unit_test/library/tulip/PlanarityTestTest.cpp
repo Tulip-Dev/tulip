@@ -56,22 +56,22 @@ void PlanarityTestTest::planarGraphs() {
 //==========================================================
 /*
  * TODO: move that function in LayoutProperty test.
- * 
+ *
  */
 void PlanarityTestTest::planarEmbeddingFromLayoutGraphs() {
   graph = tlp::loadGraph(GRAPHPATH + "planar/planar30drawnFPP.tlp.gz");
   LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
-  layout->computeEmbedding(graph); 
+  layout->computeEmbedding(graph);
   CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanarEmbedding(graph));
   delete graph;
   graph = tlp::loadGraph(GRAPHPATH + "planar/planar30drawnMM.tlp.gz");
   layout = graph->getProperty<LayoutProperty>("viewLayout");
-  layout->computeEmbedding(graph); 
+  layout->computeEmbedding(graph);
   CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanarEmbedding(graph));
-  delete graph;  
+  delete graph;
   graph = tlp::loadGraph(GRAPHPATH + "notplanar/k33lostInGrip.tlp.gz");
   layout = graph->getProperty<LayoutProperty>("viewLayout");
-  layout->computeEmbedding(graph); 
+  layout->computeEmbedding(graph);
   CPPUNIT_ASSERT_EQUAL(false, PlanarityTest::isPlanarEmbedding(graph));
   delete graph;
 }
@@ -82,15 +82,15 @@ void PlanarityTestTest::notPlanarGraphs() {
   delete graph;
   graph = tlp::loadGraph(GRAPHPATH + "notplanar/k33k55.tlp.gz");
   CPPUNIT_ASSERT_EQUAL(false, PlanarityTest::isPlanar(graph));
-  delete graph;  
+  delete graph;
   graph = tlp::loadGraph(GRAPHPATH + "notplanar/k5lostingrid5050.tlp.gz");
   CPPUNIT_ASSERT_EQUAL(false, PlanarityTest::isPlanar(graph));
   delete graph;
 }
 //==========================================================
 unsigned int eulerIdentity(Graph *graph) {
-  return graph->numberOfEdges() - graph->numberOfNodes() 
-    + 1u + ConnectedTest::numberOfConnectedComponents(graph);
+  return graph->numberOfEdges() - graph->numberOfNodes()
+         + 1u + ConnectedTest::numberOfConnectedComponents(graph);
 }
 //==========================================================
 void PlanarityTestTest::planarGraphsEmbedding() {
@@ -98,7 +98,7 @@ void PlanarityTestTest::planarGraphsEmbedding() {
   graph = tlp::loadGraph(GRAPHPATH + "planar/grid1010.tlp");
   PlanarConMap *graphMap = computePlanarConMap(graph);
   //  graphMap->makePlanar();
-  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
+  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());
   delete graphMap;
   delete graph;
   cerr << "==================================" << endl;
@@ -116,7 +116,7 @@ void PlanarityTestTest::planarGraphsEmbedding() {
   graphMap = computePlanarConMap(graph);
 
   //  graphMap->makePlanar();
-  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
+  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());
 
   delete graphMap;
   delete graph;
@@ -129,24 +129,30 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
   Graph * g= tlp::newCloneSubGraph(graph);
   set<node> toGroup;
   Iterator<node> * itn = g->getNodes();
+
   for(unsigned int i = 0; i < 10; ++i)
     toGroup.insert(itn->next());
+
   node meta = g->createMetaNode(toGroup);
   toGroup.clear();
+
   for(unsigned int i = 0; i < 10; ++i)
     toGroup.insert(itn->next());
+
   node meta2 = g->createMetaNode(toGroup);
   toGroup.clear();
   toGroup.insert(meta2);
+
   for(unsigned int i = 0; i < 10; ++i)
     toGroup.insert(itn->next());
+
   node meta3 = g->createMetaNode(toGroup, false);
   toGroup.clear();
 
   PlanarConMap *graphMap = computePlanarConMap(g);
   //  graphMap->makePlanar();
-  CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanar(g));//eulerIdentity(g), graphMap->nbFaces());  
-  CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanar(graphMap));//eulerIdentity(g), graphMap->nbFaces());  
+  CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanar(g));//eulerIdentity(g), graphMap->nbFaces());
+  CPPUNIT_ASSERT_EQUAL(true, PlanarityTest::isPlanar(graphMap));//eulerIdentity(g), graphMap->nbFaces());
   delete graphMap;
   graph->delSubGraph(g);
   delete graph;
@@ -157,11 +163,11 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
   graphMap = new PlanarConMap(graph);
   cerr << "Graph name : " << graph->getAttribute<string>("name") << endl;
   graphMap->makePlanar();*/
-  /* 
-   * The number of faces must be adapted because the Planarity Test split the 
+  /*
+   * The number of faces must be adapted because the Planarity Test split the
    * external face into several faces (one by connected componnent).
    */
-  /*  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces() - (ConnectedTest::numberOfConnectedComponnents(graph) - 1));  
+  /*  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces() - (ConnectedTest::numberOfConnectedComponnents(graph) - 1));
   delete graphMap;
   delete graph;
   cerr << "==================================" << endl;
@@ -171,7 +177,7 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
   graphMap = new PlanarConMap(graph);
 
   graphMap->makePlanar();
-  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());  
+  CPPUNIT_ASSERT_EQUAL(eulerIdentity(graph), graphMap->nbFaces());
 
   delete graphMap;
   delete graph;
@@ -179,22 +185,22 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
 }
 //==========================================================
 void PlanarityTestTest::notPlanarGraphsObstruction() {
-  
+
 }
 //==========================================================
 CppUnit::Test * PlanarityTestTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Planarity Test" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph", 
-								     &PlanarityTestTest::planarGraphs ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "not planar graph", 
-								     &PlanarityTestTest::notPlanarGraphs ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding", 
-  								     &PlanarityTestTest::planarGraphsEmbedding ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding", 
-  								     &PlanarityTestTest::planarMetaGraphsEmbedding ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding from a layout", 
-  								     &PlanarityTestTest::planarEmbeddingFromLayoutGraphs ) );
-  
+  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph",
+                         &PlanarityTestTest::planarGraphs ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "not planar graph",
+                         &PlanarityTestTest::notPlanarGraphs ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding",
+                         &PlanarityTestTest::planarGraphsEmbedding ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding",
+                         &PlanarityTestTest::planarMetaGraphsEmbedding ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PlanarityTestTest>( "planar graph embedding from a layout",
+                         &PlanarityTestTest::planarEmbeddingFromLayoutGraphs ) );
+
   return suiteOfTests;
 }
 //==========================================================

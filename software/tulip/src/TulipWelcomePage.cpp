@@ -32,6 +32,7 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
 
   // Recent documents list
   QList<QString> recentDocs = TulipSettings::instance().recentDocuments();
+
   if (recentDocs.size() > 0) {
     QString txt;
 
@@ -52,6 +53,7 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
   foreach(info,localPlugins) {
     if (info->type() != "Perspective")
       continue;
+
     PerspectiveItemWidget *item = new PerspectiveItemWidget(info);
     perspectivesLayout->addWidget(item);
     connect(item,SIGNAL(selected()),this,SLOT(perspectiveSelected()));
@@ -68,6 +70,7 @@ void TulipWelcomePage::rssReply(QNetworkReply *reply) {
   QXmlInputSource *rssSource = new QXmlInputSource(reply);
   RssParser *parser = new RssParser;
   rssReader.setContentHandler(parser);
+
   if (rssReader.parse(rssSource)) {
     _ui->rssError->setVisible(false);
     _ui->rssScroll->setVisible(true);
@@ -79,9 +82,11 @@ void TulipWelcomePage::rssReply(QNetworkReply *reply) {
 
     QList<RssParser::RssItem> rssItems = parser->result();
     int i=0;
+
     for (QList<RssParser::RssItem>::iterator it = rssItems.begin(); it != rssItems.end(); ++it) {
       if (i++ >= RSS_LIMIT)
         break;
+
       QString text = "<p><span style=\"color:#626262; font-size:large;\">";
       text += it->title;
       text += "</span></p><p><span>";
@@ -95,6 +100,7 @@ void TulipWelcomePage::rssReply(QNetworkReply *reply) {
       rssLayout->addWidget(label);
     }
   }
+
   delete rssSource;
   delete parser;
 }

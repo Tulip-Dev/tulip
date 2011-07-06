@@ -29,12 +29,12 @@
  */
 
 //VS2010 and later can use C++0x's unordered_map; vs2008 uses boost's tr1 implementation
-#if(_MSC_VER > 1500) 
+#if(_MSC_VER > 1500)
 #  include <unordered_map>
 #  include <unordered_set>
 #  define TLP_HASH_MAP std::unordered_map
 #  define TLP_HASH_SET std::unordered_set
-#  define TLP_BEGIN_HASH_NAMESPACE namespace std 
+#  define TLP_BEGIN_HASH_NAMESPACE namespace std
 #  define TLP_END_HASH_NAMESPACE
 //clang, and GCC versions prior to the 4.x series do not have tr1; using ext
 #elif  (!_MSC_VER && (__GNUC__ < 4 || __GNUC_MINOR__ < 1 || __clang__))
@@ -54,16 +54,22 @@
 #  include <string>
 
 namespace stdext {
-  template<> struct hash<const std::string>{
-    size_t operator()(const std::string &s) const {return hash<const char *>()(s.c_str()); }
-  };
-  template<> struct hash<std::string>{
-    size_t operator()(const std::string &s) const {return hash<const char *>()(s.c_str()); }
-  };
-  template<>
-    struct hash<double> {
-      size_t operator()(const double s) const { return (size_t) s; }
-    };
+template<> struct hash<const std::string> {
+  size_t operator()(const std::string &s) const {
+    return hash<const char *>()(s.c_str());
+  }
+};
+template<> struct hash<std::string> {
+  size_t operator()(const std::string &s) const {
+    return hash<const char *>()(s.c_str());
+  }
+};
+template<>
+struct hash<double> {
+  size_t operator()(const double s) const {
+    return (size_t) s;
+  }
+};
 }
 //MSVC < 2010 use tr1 from boost, and GCC 4.X provides tr1 too.
 #else

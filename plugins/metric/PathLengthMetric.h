@@ -22,7 +22,7 @@
 
 #include <tulip/TulipPlugin.h>
 
-class PathLengthMetric:public tlp::DoubleAlgorithm { 
+class PathLengthMetric:public tlp::DoubleAlgorithm {
 public:
   PathLengthMetric(const tlp::PropertyContext &);
   bool run();

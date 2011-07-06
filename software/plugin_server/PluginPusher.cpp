@@ -9,13 +9,14 @@ using namespace std;
 
 void uploadfolder(const QString& origin, WebDavManager& manager) {
   if(!manager.folderExists(origin)) {
-      manager.mkdir(origin);
+    manager.mkdir(origin);
   }
 
   QDir originDir(origin);
   foreach(const QString& element, originDir.entryList(QDir::Files | QDir::NoSymLinks)) {
     QFile file(originDir.canonicalPath() + "/" + element);
     bool opened = file.open(QIODevice::ReadOnly);
+
     if(opened) {
       manager.putFile(origin + "/" + element, &file);
       file.close();
@@ -45,21 +46,24 @@ int main(int argc, char** argv) {
   WebDavManager manager("webdav." + serverURL, "/perso/huet", credentials);
 
   QFile description(path + "/serverDescription.xml");
+
   if(!description.open(QIODevice::ReadOnly)) {
     std::cout << "could not open " << path.toStdString() << "/serverDescription.xml in Read mode." << std::endl;
     exit(0);
   }
+
   QString localDescription(description.readAll());
 
   QString location = "http://www." + serverURL + "/perso/huet/" + path;
-  
+
   QString remoteDescription = tlp::PluginManager::getPluginServerDescription(location);
 
   QStringList pluginList;
-  
+
   QDomDocument localDocument;
   localDocument.setContent(localDescription);
   QDomNodeList localPlugins(localDocument.elementsByTagName("plugin"));
+
   for(int i = 0; i < localPlugins.count(); ++i) {
     QDomNode currentNode(localPlugins.at(i));
     QDomElement currentElement(currentNode.toElement());
@@ -72,6 +76,7 @@ int main(int argc, char** argv) {
     remoteDocument.setContent(remoteDescription);
     std::cout << remoteDescription.toStdString() << std::endl;
     QDomNodeList remotePlugins(remoteDocument.elementsByTagName("plugin"));
+
     for(int i = 0; i < remotePlugins.count(); ++i) {
       QDomNode currentNode(remotePlugins.at(i));
       QDomElement currentElement(currentNode.toElement());
@@ -86,6 +91,7 @@ int main(int argc, char** argv) {
       }
     }
   }
+
 //Debug output
 //   QFile outputXML("serverDescription.xml");
 //   outputXML.open(QIODevice::ReadWrite);

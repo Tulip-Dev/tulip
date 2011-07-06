@@ -25,72 +25,84 @@
 
 namespace tlp {
 
-  class GlMainWidget;
-  class View;
+class GlMainWidget;
+class View;
 
 
-  /** \brief Tulip interactor component main class
-   *
+/** \brief Tulip interactor component main class
+ *
+ */
+class TLP_QT_SCOPE InteractorComponent : public QObject {
+
+public:
+  typedef unsigned int ID;
+
+protected:
+  ID id;
+  View *view;
+
+public:
+  /**
+    * @brief Default constructor.
+    **/
+  InteractorComponent():id(invalidID),view(NULL) {}
+  /**
+   * Default destructor
    */
-  class TLP_QT_SCOPE InteractorComponent : public QObject{
+  virtual ~InteractorComponent() {}
 
-  public:
-    typedef unsigned int ID;
+  /**
+   * This function compute the interactor visual feedback
+   */
+  virtual bool compute(GlMainWidget*) {
+    return false;
+  }
+  /**
+   * This function draw interactor
+   */
+  virtual bool draw(GlMainWidget*) {
+    return false;
+  }
 
-  protected:
-    ID id;
-    View *view;
+  /**
+   * Set interactor connected view
+   */
+  virtual void setView(View *view) {
+    this->view=view;
+  }
 
-  public:
-    /**
-      * @brief Default constructor.
-      **/
-    InteractorComponent():id(invalidID),view(NULL){}
-    /**
-     * Default destructor
-     */
-    virtual ~InteractorComponent() {}
+  /**
+   * \return the interactor connected view
+   */
+  View *getView() {
+    return view;
+  }
 
-    /**
-     * This function compute the interactor visual feedback
-     */
-    virtual bool compute(GlMainWidget*) { return false; }
-    /**
-     * This function draw interactor
-     */
-    virtual bool draw(GlMainWidget*){ return false; }
+  /**
+   * This function is call when an undo is preform
+   */
+  virtual void undoIsDone() {}
 
-    /**
-     * Set interactor connected view
-     */
-    virtual void setView(View *view) {this->view=view;}
+  /**
+   * Clone this interactor component
+   */
+  virtual InteractorComponent *clone() =0;
 
-    /**
-     * \return the interactor connected view
-     */
-    View *getView() {return view;}
+  /**
+   * \return the id of this interactor
+   */
+  ID getID() {
+    return id;
+  }
+  /**
+   * Set the id of this interactor
+   */
+  void setID(ID i) {
+    id = i;
+  }
+  static const ID invalidID = 0;
 
-    /**
-     * This function is call when an undo is preform
-     */
-    virtual void undoIsDone() {}
-
-    /**
-     * Clone this interactor component
-     */
-    virtual InteractorComponent *clone() =0;
-
-    /**
-     * \return the id of this interactor
-     */
-    ID getID() { return id; }
-    /**
-     * Set the id of this interactor
-     */
-    void setID(ID i) { id = i; }
-    static const ID invalidID = 0;
-
-  };
+};
 
 }
 

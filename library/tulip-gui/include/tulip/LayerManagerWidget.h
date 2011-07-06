@@ -29,44 +29,44 @@ class LayerManagerWidgetData;
 
 namespace tlp {
 
-  class GlScene;
-  class GlLayer;
-  class GlComposite;
-  class GlGraphComposite;
-  class GlMainView;
-  class GlMainWidget;
+class GlScene;
+class GlLayer;
+class GlComposite;
+class GlGraphComposite;
+class GlMainView;
+class GlMainWidget;
 
-  class TLP_QT_SCOPE LayerManagerWidget : public QWidget {
-    Q_OBJECT
+class TLP_QT_SCOPE LayerManagerWidget : public QWidget {
+  Q_OBJECT
 
-    GlMainView *mainView;
-    GlMainWidget* observedMainWidget;
-    bool holdUpdateView;
+  GlMainView *mainView;
+  GlMainWidget* observedMainWidget;
+  bool holdUpdateView;
 
-  public:
-    LayerManagerWidget(QWidget* parent=0);
+public:
+  LayerManagerWidget(QWidget* parent=0);
 
-    void attachMainWidget(GlMainWidget *graphWidget);
+  void attachMainWidget(GlMainWidget *graphWidget);
 
-    void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
-    void addComposite(tlp::GlComposite *composite,QTreeWidgetItem *parent);
-    void createGraphCompositeItem(tlp::GlGraphComposite *glGraphComposite,QTreeWidgetItem *item);
-    void updateLayer(const std::string& name,tlp::GlLayer* layer);
-    void delLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
+  void addLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
+  void addComposite(tlp::GlComposite *composite,QTreeWidgetItem *parent);
+  void createGraphCompositeItem(tlp::GlGraphComposite *glGraphComposite,QTreeWidgetItem *item);
+  void updateLayer(const std::string& name,tlp::GlLayer* layer);
+  void delLayer(tlp::GlScene*, const std::string&, tlp::GlLayer*);
 
-  public slots:
+public slots:
 
-    void apply();
+  void apply();
 
-  protected slots:
+protected slots:
 
-    void itemClicked(QTreeWidgetItem *,int);
-    void applyVisibility();
-    void applyVisibility(QTreeWidgetItem *item,GlComposite *composite);
+  void itemClicked(QTreeWidgetItem *,int);
+  void applyVisibility();
+  void applyVisibility(QTreeWidgetItem *item,GlComposite *composite);
 
-  private:
-    Ui::LayerManagerWidgetData *_ui;
-  };
+private:
+  Ui::LayerManagerWidgetData *_ui;
+};
 
 
 }

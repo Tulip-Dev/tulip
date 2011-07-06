@@ -70,42 +70,46 @@ namespace tlp {
 template <typename  TYPE >
 class MemoryPool {
 public:
-        MemoryPool() {
-        }
+  MemoryPool() {
+  }
 
 #ifndef NDEBUG
-        inline void *operator new( size_t sizeofObj) {
+  inline void *operator new( size_t sizeofObj) {
 #else
-        inline void *operator new( size_t ) {
+  inline void *operator new( size_t ) {
 #endif
-            assert(sizeof(TYPE) == sizeofObj); //to prevent inheritance with different size of object
-            TYPE * t;
-            t = getObject(THREAD_NUMBER);
-            return t;
-        }
+    assert(sizeof(TYPE) == sizeofObj); //to prevent inheritance with different size of object
+    TYPE * t;
+    t = getObject(THREAD_NUMBER);
+    return t;
+  }
 
-        inline void operator delete( void *p ) {
-            _freeObject[THREAD_NUMBER].push_back(p);
-        }
+  inline void operator delete( void *p ) {
+    _freeObject[THREAD_NUMBER].push_back(p);
+  }
 private:
-        static std::vector<void * > _freeObject[MAXNBTHREADS];
+  static std::vector<void * > _freeObject[MAXNBTHREADS];
 
-        static TYPE* getObject(size_t threadId) {
-            TYPE *result;
-            if (_freeObject[threadId].empty()) {
-                TYPE * p = (TYPE *)malloc(BUFFOBJ * sizeof(TYPE));
-                for (size_t j=0; j< BUFFOBJ - 1; ++j) {
-                    _freeObject[threadId].push_back((void *)p);
-                    p += 1;
-                }
-                result = p;
-            }
-            else {
-                result = (TYPE *)_freeObject[threadId].back();
-                _freeObject[threadId].pop_back();
-            }
-            return result;
-        }
+  static TYPE* getObject(size_t threadId) {
+    TYPE *result;
+
+    if (_freeObject[threadId].empty()) {
+      TYPE * p = (TYPE *)malloc(BUFFOBJ * sizeof(TYPE));
+
+      for (size_t j=0; j< BUFFOBJ - 1; ++j) {
+        _freeObject[threadId].push_back((void *)p);
+        p += 1;
+      }
+
+      result = p;
+    }
+    else {
+      result = (TYPE *)_freeObject[threadId].back();
+      _freeObject[threadId].pop_back();
+    }
+
+    return result;
+  }
 };
 
 template <typename  TYPE >

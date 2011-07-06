@@ -10,6 +10,7 @@ RssParser::RssParser(): QXmlDefaultHandler() {
 bool RssParser::startElement(const QString &, const QString &localName, const QString &, const QXmlAttributes &) {
   if (localName == "item")
     _result.push_back(RssItem());
+
   _currentElement = localName;
   return true;
 }
@@ -40,6 +41,7 @@ void RssParser::fetchElement(const QString &name, const QString &value) {
     return;
 
   RssItem item = _result[_result.size()-1];
+
   if (name == "title")
     item.title = value;
   else if (name == "link")

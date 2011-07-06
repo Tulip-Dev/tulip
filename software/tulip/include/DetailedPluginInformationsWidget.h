@@ -4,11 +4,11 @@
 #include <QtGui/QWidget>
 
 namespace Ui {
-  class DetailedPluginInformationsWidgetData;
+class DetailedPluginInformationsWidgetData;
 }
 
 namespace tlp {
-  class PluginInformations;
+class PluginInformations;
 }
 
 class DetailedPluginInformationsWidget: public QWidget {
@@ -16,7 +16,9 @@ class DetailedPluginInformationsWidget: public QWidget {
 public:
   explicit DetailedPluginInformationsWidget(tlp::PluginInformations *infos,QWidget *parent = 0);
 
-  tlp::PluginInformations *pluginInformations() { return _pluginInformations; }
+  tlp::PluginInformations *pluginInformations() {
+    return _pluginInformations;
+  }
 
 signals:
   void goBack();

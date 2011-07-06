@@ -45,9 +45,9 @@ public:
   void testObserveDelProps();
   void testAddSubgraphProp();
   void testMetaNode();
- 
+
   static CppUnit::Test *suite();
- private:
+private:
   void build(unsigned int, unsigned int);
 };
 

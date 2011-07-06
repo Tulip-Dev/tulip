@@ -32,9 +32,11 @@ void IdManagerTest::testFragmentation() {
   for (unsigned int i = 0; i <1000; ++i) {
     CPPUNIT_ASSERT_EQUAL(i, idManager->get());
   }
+
   for (unsigned int i = 1; i <100; ++i) {
     idManager->free(i);
   }
+
   CPPUNIT_ASSERT_EQUAL((size_t) 99, idManager->state.freeIds.size());
   idManager->free(0);
   CPPUNIT_ASSERT_EQUAL((size_t) 0, idManager->state.freeIds.size());
@@ -42,6 +44,7 @@ void IdManagerTest::testFragmentation() {
   for (unsigned int i = 900; i <999; ++i) {
     idManager->free(i);
   }
+
   CPPUNIT_ASSERT_EQUAL((size_t) 99, idManager->state.freeIds.size());
   idManager->free(999);
   CPPUNIT_ASSERT_EQUAL((size_t) 100, idManager->state.freeIds.size());
@@ -49,13 +52,17 @@ void IdManagerTest::testFragmentation() {
 //==========================================================
 void IdManagerTest::testGetFree() {
   unsigned int maxId = 0;
+
   for (unsigned int i = 0; i <1000; ++i) {
     CPPUNIT_ASSERT_EQUAL(i, idManager->get());
   }
+
   maxId = 999;
+
   for (unsigned int i = 0; i <500; ++i) {
     idManager->free(i*2);
   }
+
   for (unsigned int i = 1; i < 500; ++i) {
 #ifdef TLP_NO_IDS_REUSE
     CPPUNIT_ASSERT(idManager->get() == ++maxId);
@@ -63,9 +70,11 @@ void IdManagerTest::testGetFree() {
     CPPUNIT_ASSERT(idManager->get() == i*2);
 #endif
   }
+
   for (unsigned int i = 100; i <= 200; ++i) {
     idManager->free(i);
   }
+
   for (unsigned int i = 100; i <= 200; ++i) {
 #ifdef TLP_NO_IDS_REUSE
     CPPUNIT_ASSERT(idManager->get() == ++maxId);
@@ -77,54 +86,68 @@ void IdManagerTest::testGetFree() {
 //==========================================================
 void IdManagerTest::testIsFree() {
   for (unsigned int i = 0; i <1000; ++i) {
-     idManager->get();
+    idManager->get();
   }
+
   for (unsigned int i = 0; i <500; ++i) {
     idManager->free(i*2);
   }
+
   for (unsigned int i = 0; i < 500; ++i) {
     CPPUNIT_ASSERT_EQUAL( true , idManager->is_free(i * 2));
     CPPUNIT_ASSERT_EQUAL( false, idManager->is_free(i * 2 + 1));
   }
+
   CPPUNIT_ASSERT_EQUAL( true , idManager->is_free(1200));
 }
 //==========================================================
 void IdManagerTest::testIterate() {
   for (unsigned int i = 0; i <1000; ++i) {
-     idManager->get();
+    idManager->get();
   }
+
   Iterator<unsigned int>* it = idManager->getIds<unsigned int>();
   unsigned int id = 0;
+
   while(it->hasNext()) {
     CPPUNIT_ASSERT(it->next() == id);
     ++id;
-  } delete it;
+  }
+
+  delete it;
+
   for (unsigned int i = 0; i <500; ++i) {
     idManager->free(i*2);
   }
+
   it = idManager->getIds<unsigned int>();
   id = 0;
+
   while(it->hasNext()) {
     CPPUNIT_ASSERT(it->next() == 2 * id + 1);
     ++id;
-  } delete it;
+  }
+
+  delete it;
+
   for (unsigned int i = 0; i < 500; ++i) {
     CPPUNIT_ASSERT_EQUAL( true , idManager->is_free(i * 2));
     CPPUNIT_ASSERT_EQUAL( false, idManager->is_free(i * 2 + 1));
   }
+
   CPPUNIT_ASSERT_EQUAL( true , idManager->is_free(1200));
 }
 //==========================================================
 CppUnit::Test * IdManagerTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : IdManager" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<IdManagerTest>( "Is Free test", 
-							      &IdManagerTest::testIsFree ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<IdManagerTest>( "Iterate test", 
-							      &IdManagerTest::testIterate ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<IdManagerTest>( "Get / Free Id", 
-							      &IdManagerTest::testGetFree ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<IdManagerTest>( "Fragmentation", 
-							      &IdManagerTest::testFragmentation ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<IdManagerTest>( "Is Free test",
+                         &IdManagerTest::testIsFree ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<IdManagerTest>( "Iterate test",
+                         &IdManagerTest::testIterate ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<IdManagerTest>( "Get / Free Id",
+                         &IdManagerTest::testGetFree ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<IdManagerTest>( "Fragmentation",
+                         &IdManagerTest::testFragmentation ) );
   return suiteOfTests;
 }
 //==========================================================

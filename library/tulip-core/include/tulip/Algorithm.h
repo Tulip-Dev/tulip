@@ -27,13 +27,13 @@
 
 /**
  * \addtogroup plugins
- */ 
+ */
 namespace tlp {
 
-  class PluginProgress;
-  class Graph;
-  class DataSet;
-  
+class PluginProgress;
+class Graph;
+class DataSet;
+
 /*@{*/
 /**
  * @brief This abstract class describes a basic algorithm plugin.
@@ -42,8 +42,7 @@ namespace tlp {
  * running the algorithm and resetting the algorithm to re-apply it.
  * The algorithm can and should report progress and which task it is performing if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, ...).
  */
-class Algorithm : public WithParameter, public WithDependency
-{ 
+class Algorithm : public WithParameter, public WithDependency {
 public :
   /**
    * @brief Constructs an algorithm and initializes members from the AlgorithmContext.
@@ -51,7 +50,7 @@ public :
    * @param context The context this algorithm runs in, containing the graph, a dataSet for the arameters, and a pluginProgress
    * to give feedback to the user about the tasks the algorithm is performing.
    */
-  Algorithm (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet){}
+  Algorithm (AlgorithmContext context):graph(context.graph),pluginProgress(context.pluginProgress),dataSet(context.dataSet) {}
   virtual ~Algorithm() {}
   /**
    * @brief Runs the algorithm on the context that was specified during construction.
@@ -64,8 +63,10 @@ public :
    *
    * @return Whether the algorithm can be applied or not.
    */
-  virtual bool check(std::string &) {return true;}
-  virtual void reset() {}  
+  virtual bool check(std::string &) {
+    return true;
+  }
+  virtual void reset() {}
 
   /**
    * @brief The Graph this algorithm will be run on. Retrieved from the context at construction.

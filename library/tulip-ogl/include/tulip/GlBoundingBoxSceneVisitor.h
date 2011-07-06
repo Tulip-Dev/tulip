@@ -26,49 +26,51 @@
 
 namespace tlp {
 
-  class GlGraphInputData;
+class GlGraphInputData;
 
-  /** \brief Visitor to collect boundingBox of all GlEntities
-   *
-   * Visitor to collect boundingBox of all GlEntities
-   * At end, boundingBox member contains the scene boundingBox
+/** \brief Visitor to collect boundingBox of all GlEntities
+ *
+ * Visitor to collect boundingBox of all GlEntities
+ * At end, boundingBox member contains the scene boundingBox
+ */
+class TLP_GL_SCOPE GlBoundingBoxSceneVisitor : public GlSceneVisitor {
+
+public:
+
+  /**
+   * Constructor
    */
-  class TLP_GL_SCOPE GlBoundingBoxSceneVisitor : public GlSceneVisitor{
-    
-  public:
-    
-    /**
-     * Constructor 
-     */
-    GlBoundingBoxSceneVisitor(GlGraphInputData* inputData):inputData(inputData){
-      threadSafe=true;
-    }
-    
-    /**
-     * Method used for GlSimpleEntity
-     */
-    virtual void visit(GlSimpleEntity *entity);
-    /**
-     * Method used for GlNodes (and GlMetaNodes)
-     */
-    virtual void visit(GlNode *glNode);
-    /**
-     * Method used for GlEdges
-     */
-    virtual void visit(GlEdge *glEdge);
-    
-    /**
-     * Return the scene boundingBox
-     */
-    BoundingBox getBoundingBox() {return boundingBox;}
-    
-  private:
-    
-    BoundingBox boundingBox;
-    GlGraphInputData* inputData;
+  GlBoundingBoxSceneVisitor(GlGraphInputData* inputData):inputData(inputData) {
+    threadSafe=true;
+  }
 
-  };
-  
+  /**
+   * Method used for GlSimpleEntity
+   */
+  virtual void visit(GlSimpleEntity *entity);
+  /**
+   * Method used for GlNodes (and GlMetaNodes)
+   */
+  virtual void visit(GlNode *glNode);
+  /**
+   * Method used for GlEdges
+   */
+  virtual void visit(GlEdge *glEdge);
+
+  /**
+   * Return the scene boundingBox
+   */
+  BoundingBox getBoundingBox() {
+    return boundingBox;
+  }
+
+private:
+
+  BoundingBox boundingBox;
+  GlGraphInputData* inputData;
+
+};
+
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

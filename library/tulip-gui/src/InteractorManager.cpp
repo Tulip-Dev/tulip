@@ -24,35 +24,39 @@ tlp::InteractorManager* tlp::InteractorManager::inst=0;
 
 using namespace std;
 
-namespace tlp
-{
+namespace tlp {
 
-  bool InteractorManager::operator()(std::string first, std::string second) {
-    return interactorsMap[first]->getPriority() >= interactorsMap[second]->getPriority();
-  }
-  
-  InteractorManager::InteractorManager() {
-  }
-  //====================================================
-  void InteractorManager::loadInteractorPlugins() {
-    // if interactorMap is empty, put all interactors in the Map
-    interactorsMap.clear();
+bool InteractorManager::operator()(std::string first, std::string second) {
+  return interactorsMap[first]->getPriority() >= interactorsMap[second]->getPriority();
+}
 
-    Iterator<string> *itS = InteractorLister::availablePlugins();
-    while (itS->hasNext()) {
-      string interactorName=itS->next();
-      interactorsMap[interactorName]=InteractorLister::getPluginObject(interactorName, NULL);
-    } delete itS;
+InteractorManager::InteractorManager() {
+}
+//====================================================
+void InteractorManager::loadInteractorPlugins() {
+  // if interactorMap is empty, put all interactors in the Map
+  interactorsMap.clear();
+
+  Iterator<string> *itS = InteractorLister::availablePlugins();
+
+  while (itS->hasNext()) {
+    string interactorName=itS->next();
+    interactorsMap[interactorName]=InteractorLister::getPluginObject(interactorName, NULL);
   }
-  
-  //====================================================
-  list<string> InteractorManager::getSortedCompatibleInteractors(const string &viewName) {
-    list<string> compatibleInteractors;
-    for(map<string,Interactor*>::iterator it=interactorsMap.begin();it!=interactorsMap.end();++it){
-      if((*it).second->isCompatible(viewName))
-        compatibleInteractors.push_back((*it).first);
-    }
-    compatibleInteractors.sort(*this);
-    return compatibleInteractors;
+
+  delete itS;
+}
+
+//====================================================
+list<string> InteractorManager::getSortedCompatibleInteractors(const string &viewName) {
+  list<string> compatibleInteractors;
+
+  for(map<string,Interactor*>::iterator it=interactorsMap.begin(); it!=interactorsMap.end(); ++it) {
+    if((*it).second->isCompatible(viewName))
+      compatibleInteractors.push_back((*it).first);
   }
+
+  compatibleInteractors.sort(*this);
+  return compatibleInteractors;
+}
 }

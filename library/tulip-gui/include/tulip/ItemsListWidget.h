@@ -45,7 +45,7 @@ class TLP_QT_SCOPE ItemsListWidget : public QListWidget {
 
   Q_OBJECT
 
- public:
+public:
 
   ItemsListWidget(QWidget *parent = NULL, const unsigned int maxListSize = 0);
 
@@ -57,10 +57,14 @@ class TLP_QT_SCOPE ItemsListWidget : public QListWidget {
 
   // Method which sets the maximum size of the list
   // if 0, there is no size restriction
-  void setMaxListSize(const unsigned int maxListSize) {this->maxListSize = maxListSize;}
-  unsigned int getMaxListSize() const {return maxListSize;}
+  void setMaxListSize(const unsigned int maxListSize) {
+    this->maxListSize = maxListSize;
+  }
+  unsigned int getMaxListSize() const {
+    return maxListSize;
+  }
 
- protected:
+protected:
 
   void mousePressEvent(QMouseEvent *event);
   void mouseMoveEvent(QMouseEvent *event);
@@ -68,7 +72,7 @@ class TLP_QT_SCOPE ItemsListWidget : public QListWidget {
   void dragMoveEvent(QDragMoveEvent *event);
   void dropEvent(QDropEvent *event);
 
- private:
+private:
 
   void startDrag(QListWidgetItem *item);
   void changeStatus(QListWidgetItem *item);

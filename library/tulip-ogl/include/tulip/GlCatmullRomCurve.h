@@ -39,50 +39,54 @@ namespace tlp {
  */
 class TLP_GL_SCOPE GlCatmullRomCurve : public AbstractGlCurve {
 
-	enum ParameterizationType {UNIFORM, CHORD_LENGTH, CENTRIPETAL};
+  enum ParameterizationType {UNIFORM, CHORD_LENGTH, CENTRIPETAL};
 
 public :
 
-	GlCatmullRomCurve();
+  GlCatmullRomCurve();
 
-	/**
-	 * GlCatmullRomCurve constructor
-	 *
-	 * \param controlPoints a vector of control points (size must be greater or equal to 4)
-	 * \param startColor the color at the start of the curve
-	 * \param endColor the color at the end of the curve
-	 * \param startSize the width at the start of the curve
-	 * \param endSize the width at the end of the curve
-	 * \param closedCurve if true, the curve will be closed and a bezier segment will be drawn between the last and first control point
-	 * \param paramType curve parameterization type (GlCatmullRomCurve::UNIFORM | GlCatmullRomCurve::CENTRIPETAL | GlCatmullRomCurve::CHORD_LENGTH (default))
-	 * \param nbCurvePoints the number of curve points to generate
-	 */
-	GlCatmullRomCurve(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
-					  const float startSize, const float endSize, const bool closedCurve = false,
-					  const unsigned int nbCurvePoints = 200, const ParameterizationType paramType = CENTRIPETAL);
+  /**
+   * GlCatmullRomCurve constructor
+   *
+   * \param controlPoints a vector of control points (size must be greater or equal to 4)
+   * \param startColor the color at the start of the curve
+   * \param endColor the color at the end of the curve
+   * \param startSize the width at the start of the curve
+   * \param endSize the width at the end of the curve
+   * \param closedCurve if true, the curve will be closed and a bezier segment will be drawn between the last and first control point
+   * \param paramType curve parameterization type (GlCatmullRomCurve::UNIFORM | GlCatmullRomCurve::CENTRIPETAL | GlCatmullRomCurve::CHORD_LENGTH (default))
+   * \param nbCurvePoints the number of curve points to generate
+   */
+  GlCatmullRomCurve(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
+                    const float startSize, const float endSize, const bool closedCurve = false,
+                    const unsigned int nbCurvePoints = 200, const ParameterizationType paramType = CENTRIPETAL);
 
-	~GlCatmullRomCurve();
+  ~GlCatmullRomCurve();
 
-	void setParameterizationType(const ParameterizationType paramType) {this->paramType = paramType;}
+  void setParameterizationType(const ParameterizationType paramType) {
+    this->paramType = paramType;
+  }
 
-	void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=200);
+  void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=200);
 
-	void setClosedCurve(const bool closedCurve) {this->closedCurve = closedCurve;}
+  void setClosedCurve(const bool closedCurve) {
+    this->closedCurve = closedCurve;
+  }
 
 protected :
 
-	void setCurveVertexShaderRenderingSpecificParameters();
+  void setCurveVertexShaderRenderingSpecificParameters();
 
-	Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t);
+  Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t);
 
-	void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
+  void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
 
 private :
 
-	bool closedCurve;
-	float totalLength;
-	float alpha;
-	ParameterizationType paramType;
+  bool closedCurve;
+  float totalLength;
+  float alpha;
+  ParameterizationType paramType;
 };
 
 

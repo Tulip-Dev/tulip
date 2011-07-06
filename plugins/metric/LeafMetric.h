@@ -26,11 +26,11 @@
 /** This plugin computes the number of leaves in the subtree induced by each node.
  *
  *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
- *  connected component they have the same value else they have a 
+ *  connected component they have the same value else they have a
  *  different value.
  *
  */
-class LeafMetric:public tlp::DoubleAlgorithm { 
+class LeafMetric:public tlp::DoubleAlgorithm {
 public:
   LeafMetric(const tlp::PropertyContext &);
   bool check(std::string &);

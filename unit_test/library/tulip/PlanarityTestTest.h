@@ -28,7 +28,7 @@
 
 class PlanarityTestTest : public CppUnit::TestFixture {
 
- public:
+public:
   void setUp();
   void tearDown();
   void planarGraphs();
@@ -40,8 +40,8 @@ class PlanarityTestTest : public CppUnit::TestFixture {
   void planarEmbeddingFromLayoutGraphs();
   static CppUnit::Test *suite();
 
- private:
+private:
   tlp::Graph *graph;
 };
 
-#endif 
+#endif

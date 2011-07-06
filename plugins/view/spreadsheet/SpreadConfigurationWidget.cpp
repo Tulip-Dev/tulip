@@ -23,9 +23,9 @@
 using namespace tlp;
 using namespace std;
 SpreadConfigurationWidget::SpreadConfigurationWidget(QWidget* parent) :
-	QWidget(parent) {
-	setupUi(this);
-	connect(applyPushButton, SIGNAL(clicked()), this, SIGNAL(updated()));
+  QWidget(parent) {
+  setupUi(this);
+  connect(applyPushButton, SIGNAL(clicked()), this, SIGNAL(updated()));
 
 }
 
@@ -34,29 +34,29 @@ SpreadConfigurationWidget::~SpreadConfigurationWidget() {
 
 void SpreadConfigurationWidget::setGraph(tlp::Graph *graph) {
 
-	graphPropertiesSelectionWidget->clearLists();
-	graphPropertiesSelectionWidget->setWidgetParameters(graph, std::vector<std::string>(), true);
-	vector<string> properties;
-	string propertyName;
-	forEach(propertyName,graph->getProperties()) {
-		properties.push_back(propertyName);
-	}
+  graphPropertiesSelectionWidget->clearLists();
+  graphPropertiesSelectionWidget->setWidgetParameters(graph, std::vector<std::string>(), true);
+  vector<string> properties;
+  string propertyName;
+  forEach(propertyName,graph->getProperties()) {
+    properties.push_back(propertyName);
+  }
 
-	graphPropertiesSelectionWidget->setOutputPropertiesList(properties);
+  graphPropertiesSelectionWidget->setOutputPropertiesList(properties);
 }
 
 std::vector<std::string> SpreadConfigurationWidget::getSelectedProperties() {
-	return graphPropertiesSelectionWidget->getSelectedProperties();
+  return graphPropertiesSelectionWidget->getSelectedProperties();
 }
 
 void SpreadConfigurationWidget::setSelectedProperties(const std::vector<std::string>& properties) {
-	vector<string> copy = graphPropertiesSelectionWidget->getCompleteStringsList();
-	graphPropertiesSelectionWidget->setInputPropertiesList(copy);
-	copy = properties;
-	graphPropertiesSelectionWidget->setOutputPropertiesList(copy);
+  vector<string> copy = graphPropertiesSelectionWidget->getCompleteStringsList();
+  graphPropertiesSelectionWidget->setInputPropertiesList(copy);
+  copy = properties;
+  graphPropertiesSelectionWidget->setOutputPropertiesList(copy);
 }
 
 bool SpreadConfigurationWidget::allPropertiesSelected() {
-	return graphPropertiesSelectionWidget->getSelectedProperties().size()
-			== graphPropertiesSelectionWidget->getCompleteStringsList().size();
+  return graphPropertiesSelectionWidget->getSelectedProperties().size()
+         == graphPropertiesSelectionWidget->getCompleteStringsList().size();
 }

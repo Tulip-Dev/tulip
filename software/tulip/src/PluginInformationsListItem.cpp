@@ -25,6 +25,7 @@ PluginInformationsListItem::PluginInformationsListItem(tlp::PluginInformations *
   _ui->icon->setPixmap(QPixmap(infos->iconPath()));
   _ui->name->setText("<p><span style=\"font-size:large;\"><b>" + infos->name() + "</b></span>");
   _ui->shortDescription->setText("<p><span style=\"font-size:small; color:#626262;\">" + infos->shortDescription() + "</span>");
+
   if (!hasFocus())
     _ui->bottomFrame->hide();
 

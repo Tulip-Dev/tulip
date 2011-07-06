@@ -34,7 +34,7 @@ struct PropertyInterface;
 
 /**
  * \addtogroup types
- */ 
+ */
 /*@{*/
 
 bool stringToColor(std::string &str,Color &col);

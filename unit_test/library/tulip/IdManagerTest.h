@@ -30,8 +30,12 @@ namespace tlp {
 class IdManagerTest : public CppUnit::TestFixture {
 
 public:
-  void setUp() {idManager = new IdManager(); }
-  void tearDown(){ delete idManager;}
+  void setUp() {
+    idManager = new IdManager();
+  }
+  void tearDown() {
+    delete idManager;
+  }
   void testIsFree();
   void testFragmentation();
   void testGetFree();

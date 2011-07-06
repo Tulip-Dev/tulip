@@ -35,57 +35,61 @@ EdgeExtremityGlyphManager::EdgeExtremityGlyphManager() {
 }
 //====================================================
 string EdgeExtremityGlyphManager::glyphName(int id) {
-	if (id == NoEdgeExtremetiesId){
-		return string("NONE");
-	}
-	if (eeglyphIdToName.find(id) != eeglyphIdToName.end()){
-		return eeglyphIdToName[id];
-	}
-	else {
-		cerr << __PRETTY_FUNCTION__ << endl;
-		cerr << "Invalid glyph id" << endl;
-		return string("invalid");
-	}
+  if (id == NoEdgeExtremetiesId) {
+    return string("NONE");
+  }
+
+  if (eeglyphIdToName.find(id) != eeglyphIdToName.end()) {
+    return eeglyphIdToName[id];
+  }
+  else {
+    cerr << __PRETTY_FUNCTION__ << endl;
+    cerr << "Invalid glyph id" << endl;
+    return string("invalid");
+  }
 }
 //====================================================
 int EdgeExtremityGlyphManager::glyphId(string name) {
-	if (name.compare("NONE") == 0){
-		return NoEdgeExtremetiesId;
-	}
-	if (nameToEeGlyphId.find(name) != nameToEeGlyphId.end()){
-		return nameToEeGlyphId[name];
-	}
-	else {
-		cerr << __PRETTY_FUNCTION__ << endl;
-		cerr << "Invalid glyph name" << endl;
-		return 0;
-	}
+  if (name.compare("NONE") == 0) {
+    return NoEdgeExtremetiesId;
+  }
+
+  if (nameToEeGlyphId.find(name) != nameToEeGlyphId.end()) {
+    return nameToEeGlyphId[name];
+  }
+  else {
+    cerr << __PRETTY_FUNCTION__ << endl;
+    cerr << "Invalid glyph name" << endl;
+    return 0;
+  }
 }
 //====================================================
 void EdgeExtremityGlyphManager::loadGlyphPlugins() {
   Iterator<string> *itS = EdgeExtremityGlyphLister::availablePlugins();
-	while (itS->hasNext()) {
-		string pluginName = itS->next();
+
+  while (itS->hasNext()) {
+    string pluginName = itS->next();
     int pluginId = EdgeExtremityGlyphLister::pluginInformations(pluginName)->getId();
-		eeglyphIdToName[pluginId] = pluginName;
-		nameToEeGlyphId[pluginName] = pluginId;
-	}
-	delete itS;
+    eeglyphIdToName[pluginId] = pluginName;
+    nameToEeGlyphId[pluginName] = pluginId;
+  }
+
+  delete itS;
 
 }
 //====================================================
 void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
-		GlGraphInputData* glGraphInputData, MutableContainer<
-				EdgeExtremityGlyph *>& glyphs) {
-		EdgeExtremityGlyphContext gc = EdgeExtremityGlyphContext(graph,
-				glGraphInputData);
-		glyphs.setAll(0);
+    GlGraphInputData* glGraphInputData, MutableContainer<
+    EdgeExtremityGlyph *>& glyphs) {
+  EdgeExtremityGlyphContext gc = EdgeExtremityGlyphContext(graph,
+                                 glGraphInputData);
+  glyphs.setAll(0);
 
-    string glyphName;
-    forEach(glyphName, EdgeExtremityGlyphLister::availablePlugins()) {
-      EdgeExtremityGlyph *newGlyph = EdgeExtremityGlyphLister::getPluginObject(glyphName, &gc);
-      glyphs.set(EdgeExtremityGlyphLister::pluginInformations(glyphName)->getId(), newGlyph);
-    }
+  string glyphName;
+  forEach(glyphName, EdgeExtremityGlyphLister::availablePlugins()) {
+    EdgeExtremityGlyph *newGlyph = EdgeExtremityGlyphLister::getPluginObject(glyphName, &gc);
+    glyphs.set(EdgeExtremityGlyphLister::pluginInformations(glyphName)->getId(), newGlyph);
+  }
 }
 
 void EdgeExtremityGlyphManager::clearGlyphList(Graph **, GlGraphInputData*, MutableContainer<EdgeExtremityGlyph *>& glyphs) {
