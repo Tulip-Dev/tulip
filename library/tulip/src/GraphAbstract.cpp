@@ -49,14 +49,15 @@ GraphAbstract::~GraphAbstract() {
   StableIterator<Graph *> itS(getSubGraphs());
   while(itS.hasNext()) {
     Graph* sg = itS.next();
-    // indicates supergraph destruction
-    sg->setSuperGraph(NULL);
+    if (id == 0)
+      // indicates root destruction (see below)
+      sg->id = 0;
     delAllSubGraphsInternal(sg, true);
   }
 
   delete propertyContainer;
   
-  if (supergraph != NULL && supergraph != this)
+  if (id != 0)
     ((GraphImpl *) getRoot())->freeSubGraphId(id);
 }
 //=========================================================================
@@ -149,15 +150,15 @@ void GraphAbstract::delAllSubGraphsInternal(Graph * toRemove,
     return;
   notifyDelSubGraph(toRemove);
   removeSubGraph(toRemove);
-  StableIterator<Graph *> itS(toRemove->getSubGraphs());
-  while (itS.hasNext())
-    ((GraphAbstract*) toRemove)->delAllSubGraphsInternal(itS.next(),
-							 deleteSubGraphs);
-  if (deleteSubGraphs) {
-    ((GraphAbstract *)toRemove)->clearSubGraphs();
+  if (deleteSubGraphs)
     delete toRemove;
-  } else
+  else {
+    StableIterator<Graph *> itS(toRemove->getSubGraphs());
+    while (itS.hasNext())
+      ((GraphAbstract*) toRemove)->delAllSubGraphsInternal(itS.next(),
+							   deleteSubGraphs);
     toRemove->notifyDestroy();
+  }
 }
 //=========================================================================
 void GraphAbstract::delAllSubGraphs(Graph * toRemove) {

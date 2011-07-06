@@ -343,7 +343,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 	Iterator<node> *it = mnGraph->getNodes();
 	while(it->hasNext()) {
 	  mappingM.set(it->next().id, mn);
-	}
+	} delete it;
       }
     }
     while (metaEdges->hasNext()) {
