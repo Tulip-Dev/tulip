@@ -226,9 +226,9 @@ namespace tlp {
       delete eltProperties;
       delete tabWidgetDock;
       delete configWidgetDock;
-      delete morph;
       delete currentGraph;
     }
+    delete morph;
   }
   //**********************************************************************
   void MainController::attachMainWindow(MainWindowFacade facade){

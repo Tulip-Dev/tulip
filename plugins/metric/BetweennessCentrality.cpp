@@ -146,9 +146,9 @@ public:
 	}
         if (w != s) doubleResult->setNodeValue(w, doubleResult->getNodeValue(w) + delta.get(w.id));
       }
-    }
+    } delete it;
     //Normalization
-    if(norm || !directed){
+    if(norm || !directed) {
       double n = graph->numberOfNodes();
       it = graph->getNodes();
       while(it->hasNext()){
@@ -159,7 +159,7 @@ public:
         else{
           if(!directed) doubleResult->setNodeValue(s,doubleResult->getNodeValue(s)/2.0);
         }
-      }
+      } delete it;
 
       Iterator<edge> *itE = graph->getEdges();
       while(itE->hasNext()){
@@ -174,7 +174,6 @@ public:
       }
       delete itE;
     }
-    delete it;
 
     return pluginProgress->state()!=TLP_CANCEL;
   }

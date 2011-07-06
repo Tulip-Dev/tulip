@@ -81,8 +81,10 @@ double DepthMetric::getNodeValue(tlp::node current) {
 	  dfsLevels.push(dfsParams);
 	  // and go deeper
 	  break;
-	} else
+	} else {
+	  delete outNodes;
 	  outNodes = dfsParams.outNodes;
+	}
       }
     }
     if (outNodes->hasNext())
@@ -92,7 +94,7 @@ double DepthMetric::getNodeValue(tlp::node current) {
     ++maxDepth;
     doubleResult->setNodeValue(current, maxDepth);
     // unstack current dfsParams
-    delete outNodes;
+    delete dfsLevels.top().outNodes;
     dfsLevels.pop();
     if (dfsLevels.empty())
       break;
