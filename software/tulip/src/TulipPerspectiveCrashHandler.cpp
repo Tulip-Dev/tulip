@@ -35,8 +35,6 @@ void TulipPerspectiveCrashHandler::adjustHeight() {
   int w = width();
   adjustSize();
   resize(w,height());
-//  setFixedSize(width(),height());
-
 }
 
 void TulipPerspectiveCrashHandler::toggleDetailedView() {
