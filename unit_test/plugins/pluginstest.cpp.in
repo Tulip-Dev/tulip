@@ -16,7 +16,7 @@
 #endif
 #include <tulip/PluginLibraryLoader.h>
 
-int main( int argc, char** argv ) {
+int main(int, char**) {
 #if defined(_GLIBCXX_HAVE_SETENV)
   std::string tlpdir("@prefix@");
   // check for lib64

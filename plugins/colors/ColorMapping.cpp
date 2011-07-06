@@ -282,4 +282,4 @@ public:
   }
 };
 
-COLORPLUGIN(ColorMapping,"Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","1.0");
+COLORPLUGIN(ColorMapping,"Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","1.0")
