@@ -76,7 +76,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/time.h>
-
+#include <stdint.h>
 static void __cpuid(int CPUInfo[4], int infoType)
 {
 	uint32_t a = CPUInfo[0];
