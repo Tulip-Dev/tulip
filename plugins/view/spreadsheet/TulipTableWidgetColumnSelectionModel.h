@@ -42,8 +42,6 @@ private :
         GraphTableModel* _tableModel;
 
 private slots:
-        void columnsAboutToBeInserted( const QModelIndex & parent, int first, int last );
-        void columnsAboutToBeRemoved( const QModelIndex & parent, int first, int last );
         void columnsInserted ( const QModelIndex & parent, int start, int end );
         void columnsMoved ( const QModelIndex & sourceParent, int sourceStart, int sourceEnd, const QModelIndex & destinationParent, int destinationColumn );
         void columnsRemoved ( const QModelIndex & parent, int start, int end );

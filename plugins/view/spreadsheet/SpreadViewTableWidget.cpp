@@ -2,7 +2,6 @@
 #include "ui_SpreadViewTableWidget.h"
 #include "GraphTableModel.h"
 #include "GraphTableWidget.h"
-#include "VisibleSectionsModel.h"
 
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/CopyPropertyDialog.h>
@@ -11,6 +10,7 @@
 #include <QtGui/QDialog>
 #include <QtGui/QDialogButtonBox>
 #include <QtGui/QSortFilterProxyModel>
+#include <QtCore/QTime>
 
 #include "TulipTableWidgetColumnSelectionModel.h"
 
@@ -21,7 +21,7 @@ using namespace tlp;
 
 SpreadViewTableWidget::SpreadViewTableWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::SpreadViewTableWidget),_tableColumnModel(NULL),_currentVisibleSectionModel(NULL),_selectionProperty(NULL),_reloadSelectionProperty(false)
+    ui(new Ui::SpreadViewTableWidget),_tableColumnModel(NULL)
 {
     ui->setupUi(this);
     //Edges table
@@ -30,20 +30,16 @@ SpreadViewTableWidget::SpreadViewTableWidget(QWidget *parent) :
     ui->tableView->verticalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tableView->verticalHeader(),SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showElementsContextMenu(QPoint)));
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tableView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showTableContextMenu(QPoint)));
-
-    connect(ui->comboBox,SIGNAL(currentIndexChanged(int)),this,SLOT(filterColumnChanged(int)));
+    connect(ui->tableView,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showTableContextMenu(QPoint)));    
 
     //Column selection widgets
     ui->columnEditionWidget->setVisible(false);
     ui->columnEditionWidget->setEnabled(false);
 
-    connect(ui->showOnlySelectedElementsCheckBox,SIGNAL(stateChanged(int)),this,SLOT(updateElementVisibility(int)));
+    //Filtering
+    connect(ui->showOnlySelectedElementsCheckBox,SIGNAL(stateChanged(int)),this,SLOT(filterElements()));
     connect(ui->filterPatternLineEdit,SIGNAL(returnPressed()),this,SLOT(filterElements()));
-    connect(ui->filterPushButton,SIGNAL(clicked()),this,SLOT(filterElements()));
-
-
-    ui->filterProgressBar->setVisible(false);
+    connect(ui->filterPushButton,SIGNAL(clicked()),this,SLOT(filterElements()));    
 }
 
 SpreadViewTableWidget::~SpreadViewTableWidget()
@@ -63,8 +59,7 @@ DataSet SpreadViewTableWidget::getData()const{
     return data;
 }
 
-void SpreadViewTableWidget::setData(Graph* graph,const DataSet &data,ElementType type){
-    Graph* oldGraph = ui->tableView->graph();
+void SpreadViewTableWidget::setData(Graph* graph,const DataSet &data,ElementType type){    
     ui->tableView->setGraph(graph,type);
     QHeaderView *headerView = ui->tableView->horizontalHeader();
     //Reload header view state
@@ -92,39 +87,10 @@ void SpreadViewTableWidget::setData(Graph* graph,const DataSet &data,ElementType
         oldColumnModel->deleteLater();
     }
 
-    //Search in column combobox.
-    VisibleSectionsModel* oldVisibleSectionsModel = _currentVisibleSectionModel;
-    _currentVisibleSectionModel = new VisibleSectionsModel(_tableColumnModel,this);
-    _currentVisibleSectionModel->setDynamicSortFilter(true);
+    //Search in column combobox.    
     ui->comboBox->blockSignals(true);
-    ui->comboBox->setModel(_currentVisibleSectionModel);
-    ui->comboBox->blockSignals(false);
-    if(oldVisibleSectionsModel != NULL){
-        oldVisibleSectionsModel->deleteLater();
-    }
-
-    //Connect data modification events to ensure filtering il always up to date.
-    connect(ui->tableView->graphModel(),SIGNAL(columnsAboutToBeInserted ( QModelIndex , int , int)),this,SLOT(columnsInserted(QModelIndex,int,int)));
-    connect(ui->tableView->graphModel(),SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)),this,SLOT(rowsInserted(QModelIndex,int,int)));
-    connect(ui->tableView->graphModel(),SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),this,SLOT(rowsInserted(QModelIndex,int,int)));
-    connect(ui->tableView->graphModel(),SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(dataChanged(QModelIndex,QModelIndex)));
-    connect(ui->tableView->graphModel(),SIGNAL(modelReset()),this,SLOT(modelReset()));
-
-
-    //Filtering.
-    if(_selectionProperty != NULL){
-        if(oldGraph != NULL){
-            oldGraph->removeListener(this);
-        }
-        _selectionProperty->removeListener(this);
-        _selectionProperty = NULL;
-        _reloadSelectionProperty = true;
-    }
-    //Update filter only when a previous filter was defined.
-    if(displayOnlySelectedElements() || !elementValuesFilter().isEmpty()){
-        _updatedElements.setAll(true);
-        updateFilters();
-    }
+    ui->comboBox->setColumnModel(_tableColumnModel);
+    ui->comboBox->blockSignals(false);        
 
 }
 
@@ -137,8 +103,9 @@ GraphTableWidget* SpreadViewTableWidget::graphTableWidget(){
 }
 
 void SpreadViewTableWidget::update(){
-    ui->tableView->graphModel()->update();
-    updateFilters();
+    setEnabled(false);
+    ui->tableView->update();
+    setEnabled(true);
 }
 
 
@@ -458,134 +425,17 @@ void SpreadViewTableWidget::updateElementVisibility(int state){
     showOnlySelectedElements(state == Qt::Checked);
 }
 
-void SpreadViewTableWidget::showOnlySelectedElements(bool show){
+void SpreadViewTableWidget::showOnlySelectedElements(bool){
     assert(ui->tableView->graph() != NULL);
-    if(show){
-        //Listen for property creation destruction.
-        ui->tableView->graph()->addListener(this);
-        if(ui->tableView->graph()->existProperty("viewSelection")){
-            _selectionProperty = ui->tableView->graph()->getProperty<BooleanProperty>("viewSelection");
-            _selectionProperty->addListener(this);
-        }
-    }else{
-        //No need to listen graph anymore.
-        ui->tableView->graph()->removeListener(this);
-        if(_selectionProperty != NULL){
-            _selectionProperty->removeListener(this);
-            _selectionProperty = NULL;
-        }
-    }
-    //Need to update filter.
-    _updatedElements.setAll(true);
-    updateFilters();
-}
 
-void SpreadViewTableWidget::updateFilters(){
-
-    //Need to reload selection property
-    if (_reloadSelectionProperty) {
-        assert(_selectionProperty == NULL);
-        if(ui->tableView->graph()->existProperty("viewSelection")){
-            _selectionProperty = ui->tableView->graph()->getProperty<BooleanProperty>("viewSelection");
-            _selectionProperty->addListener(this);
-            ui->tableView->graph()->addListener(this);
-        }
-        _reloadSelectionProperty = false;
-    }
-
-    GraphTableModel* tableModel = ui->tableView->graphModel();
-    bool displayOnlySelected = displayOnlySelectedElements();
-    QRegExp regExp = elementValuesFilter();
-    //Show the progression
-    ui->filterProgressBar->setVisible(true);
-    int totalOfElements = tableModel->rowCount();
-    ui->filterProgressBar->setRange(0,totalOfElements);
-    int searchColumn = ui->comboBox->itemData(ui->comboBox->currentIndex()).toInt();
-    for(int i= 0; i < tableModel->rowCount(); ++i){
-        unsigned int id =tableModel->idForIndex(i);
-        if(_updatedElements.get(id)){
-            bool display = true;
-            if(displayOnlySelected && _selectionProperty!=NULL){
-                display =  tableModel->elementType() == NODE ? _selectionProperty->getNodeValue(node(id)):_selectionProperty->getEdgeValue(edge(id));
-            }
-            bool match = false;
-            if(regExp.isEmpty() ){
-                match = true;
-            }else{                                
-                match |= regExp.exactMatch(tableModel->data(tableModel->index(i,searchColumn)).toString());
-            }
-            ui->tableView->setRowHidden(i,!(display && match));
-        }
-        if(i%200 == 0){
-            ui->filterProgressBar->setValue(ui->filterProgressBar->value()+200);
-        }
-    }
-    _updatedElements.setAll(false);
-    ui->filterProgressBar->setVisible(false);
-}
-
-void SpreadViewTableWidget::treatEvent(const Event &ev){
-    const PropertyEvent* propEvt = dynamic_cast<const PropertyEvent*>(&ev);
-    if (propEvt) {
-        switch(propEvt->getType()) {
-        case PropertyEvent::TLP_AFTER_SET_NODE_VALUE:
-            if(ui->tableView->graphModel()->elementType() == NODE){
-                _updatedElements.set(propEvt->getNode(),true);
-            }
-            break;
-        case PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE:
-            if(ui->tableView->graphModel()->elementType() == NODE){
-                _updatedElements.setAll(true);
-            }
-            break;
-        case PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE:
-            if(ui->tableView->graphModel()->elementType() == EDGE){
-                _updatedElements.setAll(true);
-            }
-            break;
-        case PropertyEvent::TLP_AFTER_SET_EDGE_VALUE:
-            if(ui->tableView->graphModel()->elementType() == EDGE){
-                _updatedElements.set(propEvt->getEdge(),true);
-            }
-            break;
-        default:
-            break;
-        }
-    } else {
-        const GraphEvent* graphEvt = dynamic_cast<const GraphEvent*>(&ev);
-        if(graphEvt){
-            switch(graphEvt->getType()) {
-            case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
-            case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
-            case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
-            case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:{
-                string propertyName = graphEvt->getPropertyName();
-                //A new selection property was created or the current one will be destructed.
-                if(propertyName.compare("viewSelection")==0){
-                    ui->tableView->graph()->removeListener(this);
-                    if(_selectionProperty != NULL){
-                        _selectionProperty->removeListener(this);
-                        _selectionProperty = NULL;
-                    }
-                    _updatedElements.setAll(true);
-                    _reloadSelectionProperty = true;
-                }
-            }
-                break;
-            default:
-                break;
-            }
-        }
-    }
 }
 
 void SpreadViewTableWidget::filterElements(){
-    filterElements(ui->filterPatternLineEdit->text());
-}
-
-void SpreadViewTableWidget::filterElements(const QString&){
-    _updatedElements.setAll(true);
-    updateFilters();
+    setEnabled(false);
+    QApplication::processEvents();
+    ui->tableView->setRowFilter(QRegExp(ui->filterPatternLineEdit->text()),(ui->showOnlySelectedElementsCheckBox->checkState() == Qt::Checked),ui->comboBox->itemData(ui->comboBox->currentIndex()).toInt());
+    setEnabled(true);
+    QApplication::processEvents();
 }
 
 bool SpreadViewTableWidget::displayOnlySelectedElements()const{
@@ -596,36 +446,9 @@ QRegExp SpreadViewTableWidget::elementValuesFilter()const{
     return QRegExp(ui->filterPatternLineEdit->text());
 }
 
-void SpreadViewTableWidget::columnsInserted(const QModelIndex & , int , int ){
-    //When adding a column we need to sort all the elements
-    modelReset();
-}
-
-void SpreadViewTableWidget::columnsDeleted(const QModelIndex &, int , int ){
-    //When deleting a column we need to sort all the elements
-    modelReset();
-}
-
-void SpreadViewTableWidget::rowsInserted(const QModelIndex &, int first, int last){
-    GraphTableModel* model = static_cast<GraphTableModel*>(sender());
-    for(int i = first ; i <= last ; ++i){
-        _updatedElements.set(model->idForIndex(i),true);
-    }
-}
-
-void SpreadViewTableWidget::modelReset(){
-    _updatedElements.setAll(true);
-    //Needed to force redraw here as the model can be updated even if the graph structure don't change.
-    updateFilters();
-}
-void SpreadViewTableWidget::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight){
-    GraphTableModel* model = static_cast<GraphTableModel*>(sender());    
-    for(int i = topLeft.row() ; i <= bottomRight.row() ; ++i){
-        _updatedElements.set(model->idForIndex(i),true);
-    }    
-}
-
 void SpreadViewTableWidget::filterColumnChanged(int){
-    _updatedElements.setAll(true);
-    updateFilters();
+}
+
+void SpreadViewTableWidget::invalidateFilter(){
+
 }

@@ -11,20 +11,31 @@
 
 #include "GraphTableModel.h"
 #include "TulipItemDelegate.h"
+#include "TulipFilterProxyModel.h"
 
 using namespace tlp;
 using namespace std;
-GraphTableWidget::GraphTableWidget(QWidget* parent):QTableView(parent),_graph(NULL),_type(NODE),_tulipTableModel(NULL)
+GraphTableWidget::GraphTableWidget(QWidget* parent):QTableView(parent),_graph(NULL),_type(NODE),_tulipTableModel(NULL),_filterModel(NULL)
 {
     horizontalHeader()->setMovable(true);
+    setItemDelegate(new TulipItemDelegate(this));
 }
 
 void GraphTableWidget::setGraph(Graph* graph,ElementType element){
     _graph = graph;
     _type = element;
+    GraphTableModel* oldModel = _tulipTableModel;
+
     _tulipTableModel = new GraphTableModel(graph,element,this);
-    QTableView::setModel(_tulipTableModel);
-    setItemDelegate(new TulipItemDelegate(this));    
+    if(_filterModel){
+        _filterModel->setGraphTableModel(_tulipTableModel);
+        QTableView::setModel(_filterModel);
+    }else{
+        QTableView::setModel(_tulipTableModel);
+    }
+    if(oldModel){
+        oldModel->deleteLater();
+    }
 }
 
 
@@ -107,8 +118,42 @@ QModelIndexList GraphTableWidget::selectedRows(int columns)const{
     QModelIndexList viewSelected;
     for (int i = 0; i < modelSelected.count(); ++i) {
         QModelIndex index = modelSelected.at(i);
-        if (!isIndexHidden(index))
-            viewSelected.append(index);
+        viewSelected.append(_filterModel == NULL?index:_filterModel->mapToSource(index));
     }
-return viewSelected;
+    return viewSelected;
+}
+
+void GraphTableWidget::setRowFilter(QRegExp regExp,bool showOnlySelectedElements,int columnFilter){
+    //Unset the filter
+    if(regExp.isEmpty() && !showOnlySelectedElements){
+        unsetRowFilter();
+    }else{
+        if(_filterModel == NULL){
+            _filterModel = new TulipFilterProxyModel(this);
+            _filterModel->setDynamicSortFilter(true);
+            _filterModel->setGraphTableModel(_tulipTableModel);
+            _filterModel->setShowOnlySelectedElement(showOnlySelectedElements);
+            _filterModel->setFilterKeyColumn(columnFilter);
+            _filterModel->setFilterRegExp(regExp);
+            QTableView::setModel(_filterModel);
+        }else{
+            _filterModel->setShowOnlySelectedElement(showOnlySelectedElements);
+            _filterModel->setFilterKeyColumn(columnFilter);
+            _filterModel->setFilterRegExp(regExp);
+        }
+    }
+}
+
+void GraphTableWidget::unsetRowFilter(){
+    if(_filterModel != NULL){
+        QTableView::setModel(_tulipTableModel);
+        _filterModel->deleteLater();
+        _filterModel = NULL;
+    }
+}
+
+void GraphTableWidget::update(){
+    _tulipTableModel->update();
+    if(_filterModel)
+        _filterModel->update();
 }

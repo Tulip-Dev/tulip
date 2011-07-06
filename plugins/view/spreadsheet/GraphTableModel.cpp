@@ -102,7 +102,12 @@ QList<int> GraphTableModel::indexesForIds(const set<unsigned int>& ids)const{
 
 PropertyInterface* GraphTableModel::propertyForIndex(int index,const QModelIndex&) const{
     if(index > -1 && (unsigned int)index < _propertiesTable.size()){
-        return _propertiesTable[index];
+        //If the property is going to be deleted.
+        if(_propertiesToDelete.find(_propertiesTable[index]) == _propertiesToDelete.end()){
+            return _propertiesTable[index];
+        }else{
+            return NULL;
+        }
     }else{
         return NULL;
     }
@@ -282,7 +287,7 @@ QVariant GraphTableModel::headerData(int section, Qt::Orientation orientation, i
             }
         }
     }
-    break;
+        break;
     }
     return QVariant();
 }
@@ -435,8 +440,9 @@ void GraphTableModel::addLocalProperty(Graph* g, const string& propertyName){
     if(useProperty(property)){
         //If there is an existing inherited property with the same name hide the inherited property.
         for(unsigned int i = 0;i < _propertiesTable.size(); ++i){
-            //Find an existing property hide them
-            if(_propertiesTable[i]->getName().compare(propertyName)==0){
+            //Find an existing property override them
+            //Check if the property is marked for deletion.
+            if( _propertiesToDelete.find(_propertiesTable[i])== _propertiesToDelete.end() && _propertiesTable[i]->getName().compare(propertyName)==0){
                 _propertiesToDelete.insert(_propertiesTable[i]);
                 break;
             }
@@ -452,8 +458,8 @@ void GraphTableModel::beforeDelLocalProperty(tlp::Graph *graph, const std::strin
     property->removeObserver(this);
 }
 
-void GraphTableModel::addInheritedProperty(Graph* g, const string& propertyName){        
-    _propertiesToAdd.insert(g->getProperty(propertyName));
+void GraphTableModel::addInheritedProperty(Graph* g, const string& propertyName){
+        _propertiesToAdd.insert(g->getProperty(propertyName));
 }
 
 void GraphTableModel::beforeDelInheritedProperty(Graph *graph, const std::string &name){
@@ -474,7 +480,7 @@ void GraphTableModel::afterSetNodeValue(PropertyInterface* property, const node 
 
 void GraphTableModel::afterSetEdgeValue(PropertyInterface* property, const edge e){
     if(_elementType == EDGE){
-         //If the element was not marked for deletion
+        //If the element was not marked for deletion
         if(_idsToDelete.find(e.id) == _idsToDelete.end()){
             _dataUpdated.push_back(GraphTableModelIndex(e.id,property));
         }

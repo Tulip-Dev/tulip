@@ -6,9 +6,6 @@
 using namespace tlp;
 TulipTableWidgetColumnSelectionModel::TulipTableWidgetColumnSelectionModel(GraphTableWidget* tableView ,QObject* parent):QAbstractListModel(parent),_tableView(tableView),_tableModel(tableView->graphModel())
 {
-    connect(_tableModel,SIGNAL(columnsAboutToBeInserted(QModelIndex,int,int)),this,SLOT(columnsAboutToBeInserted(QModelIndex,int,int)));
-    connect(_tableModel,SIGNAL(columnsAboutToBeRemoved(QModelIndex,int,int)),this,SLOT(columnsAboutToBeRemoved(QModelIndex,int,int)));
-    connect(_tableModel,SIGNAL(columnsMoved(QModelIndex,int,int,QModelIndex,int)),this,SLOT(columnsMoved(QModelIndex,int,int,QModelIndex,int)));
     connect(_tableModel,SIGNAL(columnsInserted (QModelIndex,int,int)),this,SLOT(columnsInserted(QModelIndex,int,int)));
     connect(_tableModel,SIGNAL(columnsMoved(QModelIndex,int,int,QModelIndex,int)),this,SLOT(columnsMoved(QModelIndex,int,int,QModelIndex,int)));
     connect(_tableModel,SIGNAL(columnsRemoved(QModelIndex,int,int)),this,SLOT(columnsRemoved(QModelIndex,int,int)));
@@ -61,32 +58,23 @@ Qt::ItemFlags TulipTableWidgetColumnSelectionModel::flags( const QModelIndex & i
     return QAbstractListModel::flags(index) | Qt::ItemIsUserCheckable;
 }
 
-void TulipTableWidgetColumnSelectionModel::columnsInserted( const QModelIndex &, int , int  ){
-    endInsertColumns();
-    reset();
+void TulipTableWidgetColumnSelectionModel::columnsInserted( const QModelIndex &, int first, int  last){
+    beginInsertRows(QModelIndex(),first,last);
+    endInsertRows();
 }
 
-void TulipTableWidgetColumnSelectionModel::columnsMoved( const QModelIndex & , int , int , const QModelIndex & , int  ){
-    reset();
+void TulipTableWidgetColumnSelectionModel::columnsMoved( const QModelIndex & , int sourceStart, int sourceEnd, const QModelIndex & , int  destinationRow ){
+    beginMoveRows(QModelIndex(),sourceStart,sourceEnd,QModelIndex(),destinationRow);
+    endMoveRows();
 }
 
-void TulipTableWidgetColumnSelectionModel::columnsRemoved( const QModelIndex & , int , int  ){
-
-    endRemoveColumns();
-    reset();
+void TulipTableWidgetColumnSelectionModel::columnsRemoved( const QModelIndex & , int first, int  last){
+    beginRemoveRows(QModelIndex(),first,last);
+    endRemoveRows();
 }
 
-void TulipTableWidgetColumnSelectionModel::headerDataChanged( Qt::Orientation , int , int  ){
-    reset();
-}
-
-void TulipTableWidgetColumnSelectionModel::columnsAboutToBeInserted( const QModelIndex & , int first, int last ){
-    beginInsertColumns(QModelIndex(),first,last);
-}
-
-
-void TulipTableWidgetColumnSelectionModel::columnsAboutToBeRemoved( const QModelIndex & , int first, int last ){
-    beginRemoveColumns(QModelIndex(),first,last);
+void TulipTableWidgetColumnSelectionModel::headerDataChanged( Qt::Orientation, int firt, int last){
+     emit dataChanged(index(firt),index(last));
 }
 
 void TulipTableWidgetColumnSelectionModel::setColumnVisible(int columnIndex,bool visible){

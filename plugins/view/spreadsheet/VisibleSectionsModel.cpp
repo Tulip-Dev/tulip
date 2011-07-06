@@ -3,28 +3,57 @@
 #include <QtGui/QHeaderView>
 #include "TulipTableWidgetColumnSelectionModel.h"
 #include <tulip/TlpQtTools.h>
-VisibleSectionsModel::VisibleSectionsModel(TulipTableWidgetColumnSelectionModel* columnModel,QObject* parent): QSortFilterProxyModel(parent),_columnModel(columnModel)
-{
-    setSourceModel(columnModel);
+
+using namespace std;
+VisibleSectionsModel::VisibleSectionsModel(QWidget* parent): QComboBox(parent),_columnModel(NULL)
+{    
+
 }
 
-QVariant VisibleSectionsModel::data( const QModelIndex & index, int role ) const{
-    switch(role){
-    case Qt::UserRole:
-        return QVariant(mapToSource(index).row());
-        break;
-     case Qt::DisplayRole:
-        //Display only the name of the property avoid a display bug when having text with more than one line in a QCombobox
-        return QVariant(tlp::tlpStringToQString(_columnModel->propertyForIndex(mapToSource(index))->getName()));
-        break;
-    default:
-        return QSortFilterProxyModel::data(index,role);
-        break;
+void VisibleSectionsModel::setColumnModel(TulipTableWidgetColumnSelectionModel* columModel){
+    _columnModel = columModel;
+    connect(_columnModel,SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(propertiesDataChanged(QModelIndex,QModelIndex)));
+    connect(_columnModel,SIGNAL(rowsInserted(QModelIndex,int,int)),this,SLOT(propertiesInserted(QModelIndex,int,int)));
+    connect(_columnModel,SIGNAL(rowsRemoved(QModelIndex,int,int)),this,SLOT(propertiesRemoved(QModelIndex,int,int)));
+    connect(_columnModel,SIGNAL(rowsMoved(QModelIndex , int , int , QModelIndex, int)),this,SLOT(propertiesMoved(QModelIndex,int,int,QModelIndex,int)));
+    connect(_columnModel,SIGNAL(modelReset()),this,SLOT(propertiesReset()));
+    initModel();
+
+}
+
+void VisibleSectionsModel::initModel(int selectedColumnIndex){
+    int index=0;
+    clear();
+    addItem(tr("All columns"),QVariant(-1));
+    for(int i = 0 ; i < _columnModel->rowCount() ; ++i){
+        if(_columnModel->isColumnVisible(i)){
+            tlp::PropertyInterface* property = _columnModel->propertyForIndex(_columnModel->index(i));
+            addItem(tlp::tlpStringToQString(property->getName()),QVariant(i));
+            //If the last added index match with the column to select
+            if(i == selectedColumnIndex){
+                index = count()-1;
+            }
+        }
     }
-
+    setCurrentIndex(index);
 }
 
-bool VisibleSectionsModel::filterAcceptsRow ( int source_row, const QModelIndex &) const{
-    return _columnModel->isColumnVisible(source_row);
+void VisibleSectionsModel::propertiesInserted ( const QModelIndex &, int , int ){
+    initModel();
 }
 
+void VisibleSectionsModel::propertiesMoved ( const QModelIndex & , int , int , const QModelIndex & , int ){
+    initModel();
+}
+
+void VisibleSectionsModel::propertiesRemoved ( const QModelIndex & , int , int ){
+    initModel();
+}
+
+void VisibleSectionsModel::propertiesDataChanged(const QModelIndex &, const QModelIndex &){
+    initModel();
+}
+
+void VisibleSectionsModel::propertiesReset(){
+    initModel();
+}

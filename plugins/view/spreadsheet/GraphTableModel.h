@@ -98,7 +98,7 @@ public:
         return propertyForIndex(_orientation==Qt::Horizontal?index.column():index.row());
     }
     /**
-      * @brief Get the id property the given index. If the index is not valid return NULL.
+      * @brief Get the id property the given index. If the index is not valid or if the property is marked for deletion return NULL.
       **/
     virtual tlp::PropertyInterface* propertyForIndex(int index,const QModelIndex& parent = QModelIndex()) const;
 
@@ -220,8 +220,8 @@ private:
                 beginRemoveColumns(QModelIndex(),(*it),(*it));
             }
             //Update objToIndex map
-            for(int i = *it+1 ; i < vect.size() ; ++i){
-                objToIndexes[vect[i]] = i-1;
+            for(unsigned int i = *it+1 ; i < vect.size() ; ++i){
+                objToIndexes[vect[i]] = static_cast<int>(i-1);
             }
             vect.erase(vect.begin()+(*it));
 

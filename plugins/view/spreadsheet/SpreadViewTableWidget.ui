@@ -77,6 +77,12 @@
      </item>
      <item row="1" column="1">
       <widget class="QLineEdit" name="filterPatternLineEdit">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>2</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="placeholderText">
         <string>Input a filter pattern</string>
        </property>
@@ -96,13 +102,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0" colspan="5">
-      <widget class="QProgressBar" name="filterProgressBar">
-       <property name="value">
-        <number>0</number>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="2">
       <widget class="QLabel" name="label_2">
        <property name="text">
@@ -111,12 +110,15 @@
       </widget>
      </item>
      <item row="1" column="3">
-      <widget class="QComboBox" name="comboBox">
+      <widget class="VisibleSectionsModel" name="comboBox">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="sizeAdjustPolicy">
+        <enum>QComboBox::AdjustToContents</enum>
        </property>
        <property name="frame">
         <bool>false</bool>
@@ -138,6 +140,11 @@
    <extends>QWidget</extends>
    <header>TulipTableWidgetColumnSelectionWidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>VisibleSectionsModel</class>
+   <extends>QComboBox</extends>
+   <header>VisibleSectionsModel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -16,7 +16,6 @@ namespace Ui {
 class TulipTableWidgetColumnSelectionWidget;
 class GraphTableWidget;
 class TulipTableWidgetColumnSelectionModel;
-class VisibleSectionsModel;
 
 class SpreadViewTableWidget : public QWidget, public tlp::PropertyObserver, public tlp::Observable
 {
@@ -34,10 +33,6 @@ public:
     GraphTableWidget* graphTableWidget();
 
     void update();
-
-
-
-    void treatEvent(const tlp::Event &);    
 
 public slots:
 
@@ -67,8 +62,7 @@ private slots:
 
     void filterColumnChanged(int index);
 
-    void filterElements();
-    void filterElements(const QString& pattern);
+    void filterElements();    
 
     //Columns operations
     void hideColumn();
@@ -89,13 +83,6 @@ private slots:
     void group();
     void ungroup();
 
-    //Model observation
-    void columnsInserted(const QModelIndex & parent, int first, int last);
-    void columnsDeleted(const QModelIndex & parent, int first, int last);
-    void rowsInserted(const QModelIndex & parent, int first, int last);
-    void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
-    void modelReset();
-
 private:
 
     void showPropertiesContextMenu(GraphTableWidget* tableWidget,int clickedColumn,const QPoint& position);
@@ -113,15 +100,12 @@ private:
 
     void updateSelectionForHighlightedElements(GraphTableWidget* tableWidget,bool select,bool clearOldSelection=false);
 
-    void updateFilters();
+    void refreshFilter();
+    void invalidateFilter();
 
     Ui::SpreadViewTableWidget *ui;
 
     TulipTableWidgetColumnSelectionModel *_tableColumnModel;
-    VisibleSectionsModel *_currentVisibleSectionModel;
-    tlp::MutableContainer<bool> _updatedElements;
-    tlp::BooleanProperty* _selectionProperty;
-    bool _reloadSelectionProperty;    
 };
 
 #endif // SPREADVIEWTABLEWIDGET_H

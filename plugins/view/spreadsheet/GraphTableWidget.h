@@ -4,6 +4,7 @@
 #include <tulip/Graph.h>
 
 class GraphTableModel;
+class TulipFilterProxyModel;
 
 /**
   * @brief Table widget object providing convinience functions for handling graph objects.
@@ -35,6 +36,8 @@ public:
         return _tulipTableModel;
     }
 
+    void update();
+
     /**
       * @brief Compute the selection status for the elements list.
       **/
@@ -65,17 +68,22 @@ public:
       */
     QModelIndexList selectedRows(int columns=0)const;
 
+
+    void setRowFilter(QRegExp regExp,bool showOnlySelectedElements,int columnFilter);
+
+    void unsetRowFilter();
+
 protected:
     void setModel(QAbstractItemModel *){}
 
     tlp::Graph* _graph;
     tlp::ElementType _type;
     GraphTableModel* _tulipTableModel;
+    TulipFilterProxyModel* _filterModel;
 
 
 
     void updateHorizontalHeaderVisibility(bool checked);
-
 
 };
 
