@@ -64,7 +64,7 @@ void PreferenceDialog::loadPreference(){
 
   bool networkConnection= settings.value("networkConnection",true).toBool();
   bool autoLoadController = settings.value("autoLoadController",false).toBool();
-  bool useSpecificMetric = settings.value("useSpecificMetric",true).toBool();
+  bool useSpecificMetric = settings.value("useSpecificMetric",false).toBool();
 
   settings.endGroup();
 
@@ -81,7 +81,7 @@ void PreferenceDialog::savePreference(){
   // Check modification
   modified = modified || (settings.value("networkConnection",true).toBool()!=networkRadioButton->isChecked());
   modified = modified || (settings.value("autoLoadController",true).toBool()!=autoLoadControllerButton->isChecked());
-  modified = modified || (settings.value("useSpecificMetric",true).toBool()!=useSpecificMetricCheck->isChecked());
+  modified = modified || (settings.value("useSpecificMetric",false).toBool()!=useSpecificMetricCheck->isChecked());
 
   // Store data
   settings.setValue("networkConnection",networkRadioButton->isChecked());

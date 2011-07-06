@@ -88,7 +88,7 @@
               <string>Store metric results in specific properties</string>
              </property>
              <property name="checked">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
             </widget>
            </item>
