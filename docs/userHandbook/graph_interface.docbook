@@ -617,15 +617,10 @@
       </sect3>
     </sect2>
 
-    <sect2 id="SpreadsheetComponent"><title>Table view</title>
-      <para>
-        Cell color is given by the viewColor property of the element, text color is given by the viewLabelColor property.
-			</para>
+    <!--<sect2 id="SpreadsheetComponent"><title>Table view</title>
       <graphic fileref="images/spreadsheet_view.png"/>
-      <!-- <para> -->
-      <!-- In this view you can visualize the values of the properties of the graph elements (nodes or edges) in a table form, displaying one element's properties values by row. -->
-      <!-- </para> -->
-    </sect2>
+<para> This view</para>
+    </sect2>-->
   </sect1>
 </chapter>
 
