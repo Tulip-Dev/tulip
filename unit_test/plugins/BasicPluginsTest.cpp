@@ -533,8 +533,14 @@ void BasicPluginsTest::testQuotientClustering() {
 void BasicPluginsTest::testStrengthClustering() {
   initializeGraph("Planar Graph");
   string errorMsg;
-  bool result = tlp::applyAlgorithm(graph, errorMsg, NULL,
-				       "Strength Clustering", NULL); 
+  DoubleProperty metric(graph);
+  DataSet ds;
+  bool result = graph->computeProperty("Degree", &metric, errorMsg);
+  CPPUNIT_ASSERT(result);
+  ds.set("metric", &metric);
+  DoubleProperty resultMetric(graph);
+  result = graph->computeProperty("Strength Clustering", &resultMetric,
+				       errorMsg); 
   CPPUNIT_ASSERT(result);
 }
 
