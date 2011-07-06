@@ -3,6 +3,8 @@
 
 #include <QtGui/QWidget>
 
+class QVBoxLayout;
+
 namespace Ui {
 class TulipWelcomePageData;
 }
@@ -18,6 +20,8 @@ class TulipWelcomePage: public QWidget {
 public:
   explicit TulipWelcomePage(QWidget *parent=0);
   virtual ~TulipWelcomePage();
+
+  static QVBoxLayout *buildPerspectiveListLayout(const QObject *receiver, const char *slot);
 
 signals:
   void openPerspective(QString);

@@ -2,11 +2,15 @@
 #define TULIPMAINWINDOW_H
 
 #include <QtGui/QMainWindow>
+#include <QtGui/QDialog>
 #include <QtGui/QSystemTrayIcon>
 #include <QtCore/QVariant>
 
 namespace Ui {
 class TulipMainWindowData;
+}
+namespace tlp {
+class PluginInformations;
 }
 class PluginsCenter;
 
@@ -68,6 +72,16 @@ public Q_SLOTS: // METHODS
   void ShowWelcomeScreen();
 Q_SIGNALS: // SIGNALS
   void Terminate();
+};
+
+class PerspectiveSelectionDialog: public QDialog {
+  Q_OBJECT
+public:
+  PerspectiveSelectionDialog(QWidget *parent=0);
+  QString selectedPerspectiveName;
+
+protected slots:
+  void perspectiveSelected();
 };
 
 #endif // TULIPMAINWINDOW_H

@@ -45,7 +45,12 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
   }
 
   // Perspectives list
-  QVBoxLayout *perspectivesLayout = new QVBoxLayout(_ui->perspectivesFrame);
+  QVBoxLayout *perspectiveLayout = buildPerspectiveListLayout(this, SLOT(perspectiveSelected()));
+  _ui->perspectivesFrame->setLayout(perspectiveLayout);
+}
+
+QVBoxLayout *TulipWelcomePage::buildPerspectiveListLayout(const QObject *receiver, const char *slot) {
+  QVBoxLayout *perspectivesLayout = new QVBoxLayout();
   perspectivesLayout->setContentsMargins(6,6,6,6);
   tlp::PluginManager localPluginManager; // This manager is used to list locally loaded plugins. We won't need to rebuild the list until tulip restarts
   QList<tlp::PluginInformations *> localPlugins = localPluginManager.pluginsList(tlp::PluginManager::Local);
@@ -56,9 +61,10 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
 
     PerspectiveItemWidget *item = new PerspectiveItemWidget(info);
     perspectivesLayout->addWidget(item);
-    connect(item,SIGNAL(selected()),this,SLOT(perspectiveSelected()));
+    connect(item,SIGNAL(selected()),receiver,slot);
   }
   perspectivesLayout->addItem(new QSpacerItem(10,10,QSizePolicy::Maximum,QSizePolicy::Expanding));
+  return perspectivesLayout;
 }
 
 TulipWelcomePage::~TulipWelcomePage() {
