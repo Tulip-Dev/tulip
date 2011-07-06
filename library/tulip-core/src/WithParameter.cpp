@@ -61,17 +61,17 @@ string ParameterList::getHelp(string parameterName) const {
   }
 }
 
-std::string ParameterList::getValue(string parameterName) const {
+std::string ParameterList::getTypeName(string parameterName) const {
   map<string, Parameter>::const_iterator it = parameters.find(parameterName);
   if(it != parameters.end()) {
-    return it->second.data;
+    return it->second.type;
   }
-  #ifndef NDEBUG
   else {
+    #ifndef NDEBUG
     std::cout << "attemp to get value of non-existing parameter: " << parameterName << std::endl;
+    #endif
     return string();
   }
-  #endif
 }
 
 string ParameterList::getDefaultValue(string parameterName) const {
@@ -79,12 +79,12 @@ string ParameterList::getDefaultValue(string parameterName) const {
   if(it != parameters.end()) {
     return it->second.defaultValue;
   }
-  #ifndef NDEBUG
   else {
+    #ifndef NDEBUG
     std::cout << "attemp to get default value of non-existing parameter: " << parameterName << std::endl;
+    #endif
     return string();
   }
-  #endif
 }
 
 void ParameterList::setDefaultValue(string parameterName, string value) {
@@ -112,124 +112,123 @@ bool ParameterList::isMandatory(string parameterName) const {
   }
 }
 
-#undef TN
-#define TN( T ) typeid(T).name()
+#undef TYPE_NAME
+#define TYPE_NAME( T ) typeid(T).name()
 
 void ParameterList::buildDefaultDataSet(DataSet &ioDataSet, Graph *inG) const {
-  Iterator<string> * defIt;
-  defIt = getParametersNames();
+  Iterator<string> * parameterNames = getParametersNames();
   
-  while( defIt->hasNext() ) {
-    const string & name  = defIt->next();
-    const string & tname = getValue(name);
+  while( parameterNames->hasNext() ) {
+    const string & parameterName  = parameterNames->next();
+    const string & parameterTypename = getTypeName(parameterName);
     // Already defined ?
-    if( ioDataSet.exist(name) )
+    if( ioDataSet.exist(parameterName) )
       continue;
     // Has def value ?
-      const string & defv = getDefaultValue(name);
-      if( defv.size() == 0 )
+      const string & defaultValue = getDefaultValue(parameterName);
+      if( defaultValue.size() == 0 )
         continue;
       // bool
-        if( tname == TN(bool) ){
+        if( parameterTypename == TYPE_NAME(bool) ){
           bool v;
-          bool res = BooleanType::fromString( v, defv );
+          bool res = BooleanType::fromString( v, defaultValue );
           assert( res );
           if( res )
-            ioDataSet.set( name, v );
+            ioDataSet.set( parameterName, v );
         }
         // int
-        else if( tname == TN(int) ) {
+        else if( parameterTypename == TYPE_NAME(int) ) {
           int v;
-          bool res = IntegerType::fromString( v, defv );
+          bool res = IntegerType::fromString( v, defaultValue );
           assert( res );
           if( res )
-            ioDataSet.set( name, v );
+            ioDataSet.set( parameterName, v );
         }
         // unsigned int
-        else if( tname == TN(unsigned int) ) {
-          unsigned int v = atol( defv.c_str() );
-          ioDataSet.set( name, v );
+        else if( parameterTypename == TYPE_NAME(unsigned int) ) {
+          unsigned int v = atol( defaultValue.c_str() );
+          ioDataSet.set( parameterName, v );
         }
         // unsigned int
-        else if( tname == TN(long) ) {
-          long v = atol( defv.c_str() );
-          ioDataSet.set( name, v );
+        else if( parameterTypename == TYPE_NAME(long) ) {
+          long v = atol( defaultValue.c_str() );
+          ioDataSet.set( parameterName, v );
         }
         // fp
-        else if( tname == TN(double) ) {
+        else if( parameterTypename == TYPE_NAME(double) ) {
           double v;
-          bool res = DoubleType::fromString( v, defv );
+          bool res = DoubleType::fromString( v, defaultValue );
           assert( res );
           if( res )
-            ioDataSet.set( name, (double)v );
+            ioDataSet.set( parameterName, (double)v );
         }
-        else if( tname == TN(float) ) {
+        else if( parameterTypename == TYPE_NAME(float) ) {
           double v;
-          bool res = DoubleType::fromString( v, defv );
+          bool res = DoubleType::fromString( v, defaultValue );
           assert( res );
           if( res )
-            ioDataSet.set( name, (float)v );
+            ioDataSet.set( parameterName, (float)v );
         }
         // string
-        else if( tname == TN(string) ) {
-          ioDataSet.set( name, defv );
+        else if( parameterTypename == TYPE_NAME(string) ) {
+          ioDataSet.set( parameterName, defaultValue );
         }
         // Color
-        else if( tname == TN(Color) ) {
+        else if( parameterTypename == TYPE_NAME(Color) ) {
           Color v;
-          bool res = ColorType::fromString( v, defv );
+          bool res = ColorType::fromString( v, defaultValue );
           assert( res );
           if( res ) {
-            ioDataSet.set( name, v );
+            ioDataSet.set( parameterName, v );
             //cout << v;
           }
         }
         // Size
-        else if( tname == TN(Size) ) {
+        else if( parameterTypename == TYPE_NAME(Size) ) {
           Size v;
-          bool res = SizeType::fromString( v, defv );
+          bool res = SizeType::fromString( v, defaultValue );
           assert( res );
           if( res )
-            ioDataSet.set( name, v );
+            ioDataSet.set( parameterName, v );
         } else
           // look for an already existing property
-          if (inG && (inG->existProperty(defv))) {
+          if (inG && (inG->existProperty(defaultValue))) {
             // BooleanProperty
-            if( tname == TN(BooleanProperty) ) {
-              ioDataSet.set( name, inG->getProperty<BooleanProperty>(defv) );
+            if( parameterTypename == TYPE_NAME(BooleanProperty) ) {
+              ioDataSet.set( parameterName, inG->getProperty<BooleanProperty>(defaultValue) );
             }
             // DoubleProperty
-            else if( tname == TN(DoubleProperty) ) {
+            else if( parameterTypename == TYPE_NAME(DoubleProperty) ) {
               // look for an already existing property
-              if (inG->existProperty(defv))
-                ioDataSet.set( name, inG->getProperty<DoubleProperty>(defv) );
+              if (inG->existProperty(defaultValue))
+                ioDataSet.set( parameterName, inG->getProperty<DoubleProperty>(defaultValue) );
             }
             // LayoutProperty
-            else if( tname == TN(LayoutProperty) ) {
-              ioDataSet.set( name, inG->getProperty<LayoutProperty>(defv) );
+            else if( parameterTypename == TYPE_NAME(LayoutProperty) ) {
+              ioDataSet.set( parameterName, inG->getProperty<LayoutProperty>(defaultValue) );
             }
             // StringProperty
-            else if( tname == TN(StringProperty) ) {
-              ioDataSet.set( name, inG->getProperty<StringProperty>(defv) );
+            else if( parameterTypename == TYPE_NAME(StringProperty) ) {
+              ioDataSet.set( parameterName, inG->getProperty<StringProperty>(defaultValue) );
             }
             // IntegerProperty
-            else if( tname == TN(IntegerProperty) ) {
-              ioDataSet.set( name, inG->getProperty<IntegerProperty>(defv) );
+            else if( parameterTypename == TYPE_NAME(IntegerProperty) ) {
+              ioDataSet.set( parameterName, inG->getProperty<IntegerProperty>(defaultValue) );
             }
             // SizeProperty
-            else if( tname == TN(SizeProperty) ) {
-              ioDataSet.set( name, inG->getProperty<SizeProperty>(defv) );
+            else if( parameterTypename == TYPE_NAME(SizeProperty) ) {
+              ioDataSet.set( parameterName, inG->getProperty<SizeProperty>(defaultValue) );
             }
             // ColorProperty
-            else if( tname == TN(ColorProperty) ) {
-              ioDataSet.set( name, inG->getProperty<ColorProperty>(defv) );
+            else if( parameterTypename == TYPE_NAME(ColorProperty) ) {
+              ioDataSet.set( parameterName, inG->getProperty<ColorProperty>(defaultValue) );
             }
             //
-            else if ( tname == TN(PropertyInterface*) ) {
-              ioDataSet.set( name, inG->getProperty(defv) );
+            else if ( parameterTypename == TYPE_NAME(PropertyInterface*) ) {
+              ioDataSet.set( parameterName, inG->getProperty(defaultValue) );
             }
           }
   }
-  delete defIt;
+  delete parameterNames;
 }
 

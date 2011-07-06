@@ -62,12 +62,12 @@ struct TLP_SCOPE ParameterList {
   }
 
   /**
-  * @brief Retrieves the value of a parameter.
+  * @brief Retrieves the typename of a parameter.
   *
-  * @param parameterName The name of the parameter to retrieve the value of.
-  * @return The value of the parameter, or an empty string:string
+  * @param parameterName The name of the parameter to retrieve the typename of.
+  * @return The typename of the parameter, or an empty string:string
   **/
-  std::string getValue(std::string parameterName) const;
+  std::string getTypeName(std::string parameterName) const;
 
   /**
    * @brief Erases a parameter from the list
@@ -94,14 +94,12 @@ struct TLP_SCOPE ParameterList {
    **/
   bool hasField(std::string parameterName) const;
 
-  
   /**
    * @brief Retrieves an Iterator on the names of the parameters.
    *
    * @return An iterator over the names of the parameters :Iterator< std::string >*
    **/
   tlp::Iterator<std::string>* getParametersNames() const;
-
   
   /**
    * @brief Retrieves the help string of a parameter.
@@ -138,11 +136,15 @@ struct TLP_SCOPE ParameterList {
    **/
   void buildDefaultDataSet( DataSet & ioDataSet, Graph * inG = 0 ) const;
 private:
+
+  /**
+   * @brief Describes a parameter with a type, default value, whether or not is it mandatory and a help string describing what this aprameter should be sued ofr.
+   **/
   struct Parameter {
     Parameter() {}
-    Parameter(std::string data, std::string help, std::string defaultValue, bool mandatory): data(data), help(help), defaultValue(defaultValue), mandatory(mandatory) {
+    Parameter(std::string type, std::string help, std::string defaultValue, bool mandatory): type(type), help(help), defaultValue(defaultValue), mandatory(mandatory) {
     }
-    std::string data;
+    std::string type;
     std::string help;
     std::string defaultValue;
     bool mandatory;
