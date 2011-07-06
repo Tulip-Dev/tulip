@@ -35,16 +35,16 @@ class GWOverviewWidgetData;
 }
 
 namespace tlp {
-  class GlGraph;
+class GlGraph;
 
-  class GlMainWidget;
-  struct RectPosition;
-  class GWOverviewWidget;
+class GlMainWidget;
+struct RectPosition;
+class GWOverviewWidget;
 
 /** \addtogroup Tulip_Widgets */
 /*@{*/
-  class TLP_QT_SIMPLE_SCOPE GWOverviewWidget :
-    public QWidget {
+class TLP_QT_SIMPLE_SCOPE GWOverviewWidget :
+  public QWidget {
   Q_OBJECT
 
 public:
@@ -54,7 +54,9 @@ public:
   GlMainWidget *getObservedView();
   GlMainWidget *getView();
 
-  void setDrawIfNotVisible(bool drawIfNotVisible){this->drawIfNotVisible=drawIfNotVisible;}
+  void setDrawIfNotVisible(bool drawIfNotVisible) {
+    this->drawIfNotVisible=drawIfNotVisible;
+  }
 
 signals:
 

@@ -34,7 +34,9 @@ bool MultipleEdgeSelection::run() {
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
   vector<edge>::const_iterator it;
-  for (it = multipleEdges.begin(); it != multipleEdges.end(); ++it) 
+
+  for (it = multipleEdges.begin(); it != multipleEdges.end(); ++it)
     result->setEdgeValue(*it, true);
+
   return true;
 }

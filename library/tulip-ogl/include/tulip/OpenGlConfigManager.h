@@ -43,82 +43,86 @@
 
 namespace tlp {
 
-  class OpenGlErrorViewer;
+class OpenGlErrorViewer;
 
-  /** \brief Singleton used to manage OpenGl configuration
-   *
-   * Singleton used to manage OpenGl configuration
+/** \brief Singleton used to manage OpenGl configuration
+ *
+ * Singleton used to manage OpenGl configuration
+ */
+class TLP_GL_SCOPE OpenGlConfigManager {
+
+public:
+
+  /**
+   * Return the current instance. If instance doesn't exist, create it.
    */
-  class TLP_GL_SCOPE OpenGlConfigManager {
+  static OpenGlConfigManager &getInst() {
+    if(!inst)
+      inst=new OpenGlConfigManager();
 
-  public:
+    return *inst;
+  }
 
-    /**
-     * Return the current instance. If instance doesn't exist, create it.
-     */
-    static OpenGlConfigManager &getInst() {
-      if(!inst)
-        inst=new OpenGlConfigManager();
-      return *inst;
-    }
+  /**
+   * Change the error viewer and return the old one
+   */
+  OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer);
 
-    /**
-     * Change the error viewer and return the old one
-     */
-    OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer);
+  /**
+   * Check if system has good graphics card drivers
+   */
+  void checkDrivers();
 
-    /**
-     * Check if system has good graphics card drivers
-     */
-    void checkDrivers();
+  /**
+   * Init Glew
+   */
+  void initGlew();
 
-    /**
-     * Init Glew
-     */
-    void initGlew();
+  /**
+   * Glew is init
+   */
+  bool glewIsInit() {
+    return glewIsChecked;
+  }
 
-    /**
-     * Glew is init
-     */
-    bool glewIsInit() {
-     return glewIsChecked;
-    }
+  /**
+   * Return if glew can be used
+   */
+  bool canUseGlew() {
+    if(!glewIsChecked)
+      return false;
 
-    /**
-     * Return if glew can be used
-     */
-    bool canUseGlew() {
-      if(!glewIsChecked)
-        return false;
-      return glewIsOk;
-    }
+    return glewIsOk;
+  }
 
-    void setAntiAliasing(const bool antialiasing) {antialiased = antialiasing;}
+  void setAntiAliasing(const bool antialiasing) {
+    antialiased = antialiasing;
+  }
 
-    void activateLineAndPointAntiAliasing();
-    void desactivateLineAndPointAntiAliasing();
+  void activateLineAndPointAntiAliasing();
+  void desactivateLineAndPointAntiAliasing();
 
-    void activatePolygonAntiAliasing();
-    void desactivatePolygonAntiAliasing();
+  void activatePolygonAntiAliasing();
+  void desactivatePolygonAntiAliasing();
 
 
-  private:
+private:
 
-    /**
-     * Private constructor for singleton
-     */
-    OpenGlConfigManager();
+  /**
+   * Private constructor for singleton
+   */
+  OpenGlConfigManager();
 
-    static OpenGlConfigManager* inst;
+  static OpenGlConfigManager* inst;
 
-    OpenGlErrorViewer *errorViewer;
+  OpenGlErrorViewer *errorViewer;
 
-    bool glewIsChecked;
-    bool driversAreChecked;
-    bool glewIsOk;
-    bool antialiased;
+  bool glewIsChecked;
+  bool driversAreChecked;
+  bool glewIsOk;
+  bool antialiased;
 
-  };
+};
 
 }
 

@@ -27,58 +27,57 @@ tlp::GlyphManager* tlp::GlyphManager::inst=0;
 
 using namespace std;
 
-namespace tlp
-{
-  static TLP_HASH_MAP<int,std::string>   glyphIdToName;
-  static TLP_HASH_MAP<std::string, int>  nameToGlyphId;
+namespace tlp {
+static TLP_HASH_MAP<int,std::string>   glyphIdToName;
+static TLP_HASH_MAP<std::string, int>  nameToGlyphId;
 
-  GlyphManager::GlyphManager() {
+GlyphManager::GlyphManager() {
+}
+//====================================================
+string GlyphManager::glyphName(int id) {
+  if (glyphIdToName.find(id)!=glyphIdToName.end())
+    return glyphIdToName[id];
+  else {
+    cerr << __PRETTY_FUNCTION__ << endl;
+    cerr << "Invalid glyph id" << endl;
+    return string("invalid");
   }
-  //====================================================
-  string GlyphManager::glyphName(int id) {
-    if (glyphIdToName.find(id)!=glyphIdToName.end())
-      return glyphIdToName[id];
-    else {
-      cerr << __PRETTY_FUNCTION__ << endl;
-      cerr << "Invalid glyph id" << endl;
-      return string("invalid");
-    }
+}
+//====================================================
+int GlyphManager::glyphId(string name) {
+  if (nameToGlyphId.find(name)!=nameToGlyphId.end())
+    return nameToGlyphId[name];
+  else {
+    cerr << __PRETTY_FUNCTION__ << endl;
+    cerr << "Invalid glyph name" << endl;
+    return 0;
   }
-  //====================================================
-  int GlyphManager::glyphId(string name) {
-    if (nameToGlyphId.find(name)!=nameToGlyphId.end())
-      return nameToGlyphId[name];
-    else {
-      cerr << __PRETTY_FUNCTION__ << endl;
-      cerr << "Invalid glyph name" << endl;
-      return 0;
-    }
+}
+//====================================================
+void GlyphManager::loadGlyphPlugins() {
+  string pluginName;
+  forEach(pluginName, GlyphLister::availablePlugins()) {
+    int pluginId=GlyphLister::pluginInformations(pluginName)->getId();
+    glyphIdToName[pluginId]=pluginName;
+    nameToGlyphId[pluginName]=pluginId;
   }
-  //====================================================
-  void GlyphManager::loadGlyphPlugins() {
-    string pluginName;
-    forEach(pluginName, GlyphLister::availablePlugins()) {
-      int pluginId=GlyphLister::pluginInformations(pluginName)->getId();
-      glyphIdToName[pluginId]=pluginName;
-      nameToGlyphId[pluginName]=pluginId;
-    }
-  }
-  
-  void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs) {
-    GlyphContext gc = GlyphContext(graph,glGraphInputData);
-    glyphs.setAll(GlyphLister::getPluginObject("3D - Cube OutLined", &gc));
+}
 
-    string glyphName;
-    forEach(glyphName, GlyphLister::availablePlugins()) {
-      Glyph *newGlyph = GlyphLister::getPluginObject(glyphName, &gc);
-      glyphs.set(GlyphLister::pluginInformations(glyphName)->getId(), newGlyph);
-    }
-  }
+void GlyphManager::initGlyphList(Graph **graph,GlGraphInputData* glGraphInputData,MutableContainer<Glyph *>& glyphs) {
+  GlyphContext gc = GlyphContext(graph,glGraphInputData);
+  glyphs.setAll(GlyphLister::getPluginObject("3D - Cube OutLined", &gc));
 
-  void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Glyph *>& glyphs) {
-    string glyphName;
-    forEach(glyphName, GlyphLister::availablePlugins()) {
-      delete glyphs.get(GlyphLister::pluginInformations(glyphName)->getId());
-    }
+  string glyphName;
+  forEach(glyphName, GlyphLister::availablePlugins()) {
+    Glyph *newGlyph = GlyphLister::getPluginObject(glyphName, &gc);
+    glyphs.set(GlyphLister::pluginInformations(glyphName)->getId(), newGlyph);
   }
-} 
+}
+
+void GlyphManager::clearGlyphList(Graph**,GlGraphInputData*,MutableContainer<Glyph *>& glyphs) {
+  string glyphName;
+  forEach(glyphName, GlyphLister::availablePlugins()) {
+    delete glyphs.get(GlyphLister::pluginInformations(glyphName)->getId());
+  }
+}
+}

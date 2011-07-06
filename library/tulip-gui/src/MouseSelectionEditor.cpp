@@ -46,7 +46,7 @@ const unsigned int twoArrowWithLineSize=10;
 const Coord twoArrowWithLine[] = {Coord(0,0,0),Coord(5,-5,0),Coord(-5,-5,0),Coord(0,0,0),Coord(-5,0,0),Coord(5,0,0),Coord(0,0,0),Coord(5,5,0),Coord(-5,5,0),Coord(0,0,0)};
 
 //========================================================================================
-MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),layer(NULL),composite(NULL){
+MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),layer(NULL),composite(NULL) {
   operation = NONE;
 
   _controls[0].resizePoints(3); //triangle
@@ -86,14 +86,14 @@ MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),layer(NULL),comp
   }
 }
 //========================================================================================
-MouseSelectionEditor::~MouseSelectionEditor(){
-  if(layer){
+MouseSelectionEditor::~MouseSelectionEditor() {
+  if(layer) {
     glMainWidget->getScene()->removeLayer(layer,true);
     layer=NULL;
   }
 }
 //========================================================================================
-void MouseSelectionEditor::getOperation(GlEntity *select){
+void MouseSelectionEditor::getOperation(GlEntity *select) {
   //left <-> right anchor
   // stretch_x
   if (select == &_controls[0] || select == &_controls[4]) {
@@ -101,6 +101,7 @@ void MouseSelectionEditor::getOperation(GlEntity *select){
     glMainWidget->setCursor(QCursor(Qt::SizeHorCursor));
     return;
   }
+
   //top <-> bottom anchor
   // stretch_y
   if (select == &_controls[2] || select == &_controls[6]) {
@@ -108,6 +109,7 @@ void MouseSelectionEditor::getOperation(GlEntity *select){
     glMainWidget->setCursor(QCursor(Qt::SizeVerCursor));
     return;
   }
+
   //Corner anchor bottom-right top-left
   // rotate
   if (select == &_controls[3] || select == &_controls[7]) {
@@ -115,6 +117,7 @@ void MouseSelectionEditor::getOperation(GlEntity *select){
     operation = ROTATE_Z;
     return;
   }
+
   //Corner anchor top-right bottom-left
   //stretch_xy
   if (select == &_controls[1] || select == &_controls[5]) {
@@ -123,27 +126,32 @@ void MouseSelectionEditor::getOperation(GlEntity *select){
     return;
   }
 
-  if( select == &_advControls[0]){
+  if( select == &_advControls[0]) {
     operation = ALIGN_TOP;
     return;
   }
-  if( select == &_advControls[1]){
+
+  if( select == &_advControls[1]) {
     operation = ALIGN_BOTTOM;
     return;
   }
-  if( select == &_advControls[2]){
+
+  if( select == &_advControls[2]) {
     operation = ALIGN_LEFT;
     return;
   }
-  if( select == &_advControls[3]){
+
+  if( select == &_advControls[3]) {
     operation = ALIGN_RIGHT;
     return;
   }
-  if( select == &_advControls[4]){
+
+  if( select == &_advControls[4]) {
     operation = ALIGN_HORIZONTALLY;
     return;
   }
-  if( select == &_advControls[5]){
+
+  if( select == &_advControls[5]) {
     operation = ALIGN_VERTICALLY;
     return;
   }
@@ -170,6 +178,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     //  cerr << "edit pos:" << editPosition << endl;
 
     vector < GlSimpleEntity *> select;
+
     switch(qMouseEv->buttons()) {
     case Qt::LeftButton : {
       // first ensure that something is selected
@@ -179,6 +188,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
         hasSelection = true;
         break;
       }
+
       if (!hasSelection) {
         edge ed;
         forEach(ed, _selection->getEdgesEqualTo(true, _graph)) {
@@ -186,9 +196,10 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
           break;
         }
       }
+
       if (!hasSelection ||
           (!glMainWidget->selectGlEntities((int)editPosition[0]-3, (int)editPosition[1]-3,
-              6, 6, select,layer))) {
+                                           6, 6, select,layer))) {
         // event occurs outside the selection rectangle
         // so from now we delegate the job to a MouseSelector object
         // which should intercept the event
@@ -196,29 +207,33 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
         glMainWidget->setCursor(QCursor(Qt::CrossCursor));
         return false;
       }
+
       glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
 
       int shapeId=-1;
       bool advShape=false;
 
       for (unsigned int i = 0; (i < select.size()) && (shapeId==-1); ++i) {
-        for(int j=0 ; j<8;++j) {
-          if(select[i]==&_controls[j]){
+        for(int j=0 ; j<8; ++j) {
+          if(select[i]==&_controls[j]) {
             shapeId=i;
           }
         }
-        for(int j=0 ; j<6;++j) {
-          if(select[i]==&_advControls[j]){
+
+        for(int j=0 ; j<6; ++j) {
+          if(select[i]==&_advControls[j]) {
             advShape=true;
             shapeId=i;
           }
         }
       }
+
       if (shapeId != -1) {
-        if(!advShape){
+        if(!advShape) {
           ((GlCircle *)select[shapeId])->setFillColor(Color(40,255,40,200));
           ((GlCircle *)select[shapeId])->setOutlineColor(Color(20,128,20,200));
         }
+
         getOperation(select[shapeId]);
 
         switch (operation) {
@@ -248,7 +263,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 #else
             Qt::ControlModifier
 #endif
-        ) {
+           ) {
           operation = ROTATE_XY;
           glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
         }
@@ -259,16 +274,19 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       }
 
       mode = COORD_AND_SIZE;
+
       if (qMouseEv->modifiers() & Qt::ShiftModifier)
         mode = COORD;
+
       if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
           Qt::AltModifier
 #else
           Qt::ControlModifier
 #endif
-      )
+         )
         mode = SIZE;
+
       initEdition();
       break;
     }
@@ -276,28 +294,34 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       undoEdition();
       glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
       break;
-    default: return false;
+    default:
+      return false;
     }
+
     glMainWidget->redraw();
     return true;
   }
+
   if (e->type() == QEvent::MouseButtonRelease &&
       ((QMouseEvent *) e)->button() == Qt::LeftButton &&
       operation != NONE) {
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     stopEdition();
+
     //restore colors
     for(unsigned int i=0; i < 8; ++i) {
       _controls[i].setFillColor(Color(255,40,40,200));
       _controls[i].setOutlineColor(Color(128,20,20,200));
     }
+
     glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
     glMainWidget->draw();
     return true;
   }
+
   if  (e->type() == QEvent::MouseMove &&
-      ((QMouseEvent *) e)->buttons() & Qt::LeftButton &&
-      operation != NONE) {
+       ((QMouseEvent *) e)->buttons() & Qt::LeftButton &&
+       operation != NONE) {
     QMouseEvent * qMouseEv = (QMouseEvent *) e;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     int newX = qMouseEv->x();
@@ -328,12 +352,13 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       break;
     }
   }
+
   return false;
 }
 //========================================================================================
 bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
   if (computeFFD(glMainWidget)) {
-    if(!layer){
+    if(!layer) {
       layer=new GlLayer("selectionEditorLayer",true);
       layer->setCamera(Camera(glMainWidget->getScene(),false));
       glMainWidget->getScene()->insertLayerAfter(layer,"Main");
@@ -353,14 +378,18 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
 
     Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
     int moreThanOneNode=0;
-    while(itN->hasNext()){
+
+    while(itN->hasNext()) {
       if(moreThanOneNode>=2)
         break;
+
       moreThanOneNode++;
       itN->next();
     }
+
     delete itN;
-    if(moreThanOneNode>=2){
+
+    if(moreThanOneNode>=2) {
       composite->addGlEntity(&advRect, "AdvRectangle");
 
       composite->addGlEntity(&_advControls[0], "center-top");
@@ -369,7 +398,8 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
       composite->addGlEntity(&_advControls[3], "center-left");
       composite->addGlEntity(&_advControls[4], "center-horizontally");
       composite->addGlEntity(&_advControls[5], "center-vertically");
-    }else{
+    }
+    else {
       composite->deleteGlEntity("AdvRectangle");
 
       composite->deleteGlEntity("center-top");
@@ -379,13 +409,16 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
       composite->deleteGlEntity("center-horizontally");
       composite->deleteGlEntity("center-vertically");
     }
+
     this->glMainWidget=glMainWidget;
     return true;
-  }else{
-    if(layer){
+  }
+  else {
+    if(layer) {
       glMainWidget->getScene()->removeLayer(layer,true);
       layer=NULL;
     }
+
     return false;
   }
 }
@@ -401,13 +434,14 @@ void MouseSelectionEditor::initEdition() {
 //========================================================================================
 void MouseSelectionEditor::undoEdition() {
   if (operation == NONE) return;
+
   _graph->pop();
   operation = NONE;
 }
 //========================================================================================
 void MouseSelectionEditor::stopEdition() {
   //cerr << __PRETTY_FUNCTION__ << endl;
-  if(layer){
+  if(layer) {
     glMainWidget->getScene()->removeLayer(layer,true);
     layer=NULL;
   }
@@ -447,18 +481,22 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWid
   //  cerr << __PRETTY_FUNCTION__ << "/op=" << operation << ", mod:" << mode << endl;
   Coord curPos(newX, newY, 0);
   Coord stretch(1,1,1);
+
   //  cerr << "cur : << " << curPos << " center : " << editCenter << endl;
   if (operation == STRETCH_X || operation == STRETCH_XY) {
     stretch[0] =  (curPos[0] - editCenter[0]) / (editPosition[0] - editCenter[0]);
   }
+
   if (operation == STRETCH_Y || operation == STRETCH_XY) {
     stretch[1] = (curPos[1] - editCenter[1]) / (editPosition[1] - editCenter[1]);
   }
+
   //  cerr << "stretch : << "<< stretch << endl;
 
   Observable::holdObservers();
   _graph->pop();
   _graph->push();
+
   //stretch layout
   if (mode == COORD_AND_SIZE || mode == COORD) {
     Coord center(editLayoutCenter);
@@ -467,26 +505,32 @@ void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWid
     Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
     Iterator<edge> *itE = _selection->getEdgesEqualTo(true, _graph);
     _layout->translate(center, itN, itE);
-    delete itN; delete itE;
+    delete itN;
+    delete itE;
     //scale the drawing
     itN = _selection->getNodesEqualTo(true, _graph);
     itE = _selection->getEdgesEqualTo(true, _graph);
     _layout->scale(stretch, itN, itE);
-    delete itN; delete itE;
+    delete itN;
+    delete itE;
     //replace the center of the graph at its originale position
     center *= -1.;
     itN = _selection->getNodesEqualTo(true, _graph);
     itE = _selection->getEdgesEqualTo(true, _graph);
     _layout->translate(center, itN, itE);
-    delete itN; delete itE;
+    delete itN;
+    delete itE;
   }
+
   //stretch size
   if (mode == COORD_AND_SIZE || mode == SIZE) {
     Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
     Iterator<edge> *itE = _selection->getEdgesEqualTo(true, _graph);
     _sizes->scale(stretch, itN, itE);
-    delete itN; delete itE;
+    delete itN;
+    delete itE;
   }
+
   Observable::unholdObservers();
 }
 //========================================================================================
@@ -512,6 +556,7 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
     _graph->push();
 
     double degAngle = (deltaAngle * 180.0 / M_PI);
+
     //rotate layout
     if (mode == COORD_AND_SIZE || mode == COORD) {
       Coord center(editLayoutCenter);
@@ -519,33 +564,42 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
       Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
       Iterator<edge> *itE = _selection->getEdgesEqualTo(true, _graph);
       _layout->translate(center, itN, itE);
-      delete itN; delete itE;
+      delete itN;
+      delete itE;
       itN = _selection->getNodesEqualTo(true, _graph);
       itE = _selection->getEdgesEqualTo(true, _graph);
       _layout->rotateZ(-degAngle, itN, itE);
-      delete itN; delete itE;
+      delete itN;
+      delete itE;
       center *= -1.;
       itN = _selection->getNodesEqualTo(true, _graph);
       itE = _selection->getEdgesEqualTo(true, _graph);
       _layout->translate(center, itN, itE);
-      delete itN; delete itE;
+      delete itN;
+      delete itE;
     }
+
     if (mode == COORD_AND_SIZE || mode == SIZE) {
       Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
+
       while(itN->hasNext()) {
-  node n = itN->next();
-  double rotation = _rotation->getNodeValue(n);
-  _rotation->setNodeValue(n, rotation - degAngle);
-      } delete itN;
+        node n = itN->next();
+        double rotation = _rotation->getNodeValue(n);
+        _rotation->setNodeValue(n, rotation - degAngle);
+      }
+
+      delete itN;
     }
 
     Observable::unholdObservers();
-  } else {
+  }
+  else {
     double initDelta, delta, cosa;
     double xAngle = 0, yAngle = 0;
     double nbPI = 0;
 
     delta = abs(newX - editPosition[0]);
+
     if (delta > abs(newY - editPosition[1])) {
       initDelta = abs(editCenter[0] - editPosition[0]);
       nbPI = floor(delta / (2. * initDelta));
@@ -553,7 +607,8 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
       cosa = (initDelta - delta)/initDelta;
 
       yAngle = (acos(cosa) + (nbPI * M_PI)) * 180.0 / M_PI;
-    } else {
+    }
+    else {
       delta = abs(newY - editPosition[1]);
       initDelta = abs(editCenter[1] - editPosition[1]);
       nbPI = floor(delta / (2. * initDelta));
@@ -574,36 +629,43 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
     Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
     Iterator<edge> *itE = _selection->getEdgesEqualTo(true, _graph);
     _layout->translate(center, itN, itE);
-    delete itN; delete itE;
+    delete itN;
+    delete itE;
     itN = _selection->getNodesEqualTo(true, _graph);
     itE = _selection->getEdgesEqualTo(true, _graph);
+
     if (yAngle > xAngle)
       _layout->rotateY(yAngle, itN, itE);
     else
       _layout->rotateX(xAngle, itN, itE);
-    delete itN; delete itE;
+
+    delete itN;
+    delete itE;
     center *= -1.;
     itN = _selection->getNodesEqualTo(true, _graph);
     itE = _selection->getEdgesEqualTo(true, _graph);
     _layout->translate(center, itN, itE);
-    delete itN; delete itE;
+    delete itN;
+    delete itE;
 
     Observable::unholdObservers();
   }
 }
 //========================================================================================
-void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*){
+void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*) {
   Observable::holdObservers();
   _graph->push();
 
   Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
   bool init=false;
   float min = -FLT_MAX, max = FLT_MAX;
+
   while (itN->hasNext()) {
     node n=itN->next();
 
     float valueMin = -FLT_MAX, valueMax = FLT_MAX;
-    switch(operation){
+
+    switch(operation) {
     case ALIGN_TOP:
       valueMax=_layout->getNodeValue(n)[1]+_sizes->getNodeValue(n)[1]/2.;
       break;
@@ -634,26 +696,35 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*){
     default:
       break;
     }
-    if(!init){
+
+    if(!init) {
       max=valueMax;
       min=valueMin;
       init=true;
-    }else{
-      switch(operation){
+    }
+    else {
+      switch(operation) {
       case ALIGN_TOP:
       case ALIGN_RIGHT:
+
         if(valueMax>max)
           max=valueMax;
+
         break;
       case ALIGN_BOTTOM:
       case ALIGN_LEFT:
+
         if(valueMin<min)
           min=valueMin;
+
         break;
       case ALIGN_HORIZONTALLY:
       case ALIGN_VERTICALLY:
+
         if(valueMax>max) max=valueMax;
+
         if(valueMin<min) min=valueMin;
+
         break;
       case STRETCH_X:
       case STRETCH_Y:
@@ -669,10 +740,12 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*){
   }
 
   itN = _selection->getNodesEqualTo(true, _graph);
+
   while (itN->hasNext()) {
     node n=itN->next();
     Coord old(_layout->getNodeValue(n));
-    switch(operation){
+
+    switch(operation) {
     case ALIGN_TOP:
       old[1]=max-_sizes->getNodeValue(n)[1]/2.;
       break;
@@ -701,35 +774,44 @@ void MouseSelectionEditor::mAlign(EditOperation operation,GlMainWidget*){
     default:
       break;
     }
+
     _layout->setNodeValue(n,old);
   }
+
   Observable::unholdObservers();
 }
 //========================================================================================
 Coord minCoord(const Coord &v1, const Coord &v2) {
   Coord result;
+
   for (unsigned int i =0; i<3; ++i)
     result[i] = std::min(v1[i], v2[i]);
+
   return result;
 }
 Coord maxCoord(const Coord &v1, const Coord &v2) {
   Coord result;
+
   for (unsigned int i =0; i<3; ++i)
     result[i] = std::max(v1[i], v2[i]);
+
   return result;
 }
 //========================================================================================
 //========================================================================================
 bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   if (!glMainWidget->getScene()->getGlGraphComposite() || !glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph())
-      return false;
+    return false;
+
   // We calculate the bounding box for the selection :
   initProxies(glMainWidget);
   BoundingBox boundingBox = tlp::computeBoundingBox(_graph, _layout, _sizes, _rotation, _selection);
 
   if (!boundingBox.isValid()) return false;
+
   if(operation==NONE)
     glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
+
   Coord min2D, max2D;
   _layoutCenter = Coord(boundingBox.center());
 
@@ -740,6 +822,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   tmp = glMainWidget->getScene()->getCamera().worldTo2DScreen(tmp);
   min2D = tmp;
   max2D = tmp;
+
   //v2, v3, V4
   for (unsigned int i=0; i<3; ++i) {
     tmp = Coord(boundingBox[0]);
@@ -748,6 +831,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
     min2D = minCoord(tmp, min2D);
     max2D = maxCoord(tmp, max2D);
   }
+
   //v4
   tmp = Coord(boundingBox[0]);
   tmp[0] += bbsize[0];
@@ -791,6 +875,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   int y = int(max2D[1] - min2D[1]) / 2 + 1; //the rectangle can be too small.
 
   if (x < 20) x = 18;
+
   if (y < 20) y = 18;
 
   Coord positions[8];
@@ -806,7 +891,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   positions[6] = Coord( 0,  y, ffdCenter[2]) + tmpCenter; // Bottom
   positions[7] = Coord( x,  y, ffdCenter[2]) + tmpCenter; // Bottom l
 
-  for(int i=0;i<8;i++){
+  for(int i=0; i<8; i++) {
     positions[i][2]=0;
   }
 
@@ -826,26 +911,50 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   _controls[7].set(positions[7], 5, 0.);//s
 
   vector<Coord> advControlVect;
-  for(unsigned int i=0;i<arrowWithLineSize;++i){advControlVect.push_back(arrowWithLine[i]+positions[7]+Coord(-11,8,0));}
+
+  for(unsigned int i=0; i<arrowWithLineSize; ++i) {
+    advControlVect.push_back(arrowWithLine[i]+positions[7]+Coord(-11,8,0));
+  }
+
   _advControls[0] = GlComplexPolygon(advControlVect,Color(255,40,40,200),Color(128,20,20,200));
   advControlVect.clear();
-  for(unsigned int i=0;i<arrowWithLineSize;++i){advControlVect.push_back(Coord(arrowWithLine[i][0],-arrowWithLine[i][1],0)+positions[7]+Coord(-25,8,0));}
+
+  for(unsigned int i=0; i<arrowWithLineSize; ++i) {
+    advControlVect.push_back(Coord(arrowWithLine[i][0],-arrowWithLine[i][1],0)+positions[7]+Coord(-25,8,0));
+  }
+
   _advControls[1] = GlComplexPolygon(advControlVect,Color(255,40,40,200),Color(128,20,20,200));
   advControlVect.clear();
-  for(unsigned int i=0;i<arrowWithLineSize;++i){advControlVect.push_back(Coord(-arrowWithLine[i][1],arrowWithLine[i][0],0)+positions[7]+Coord(-39,8,0));}
+
+  for(unsigned int i=0; i<arrowWithLineSize; ++i) {
+    advControlVect.push_back(Coord(-arrowWithLine[i][1],arrowWithLine[i][0],0)+positions[7]+Coord(-39,8,0));
+  }
+
   _advControls[2] = GlComplexPolygon(advControlVect,Color(255,40,40,200),Color(128,20,20,200));
   advControlVect.clear();
-  for(unsigned int i=0;i<arrowWithLineSize;++i){advControlVect.push_back(Coord(arrowWithLine[i][1],arrowWithLine[i][0],0)+positions[7]+Coord(-53,8,0));}
+
+  for(unsigned int i=0; i<arrowWithLineSize; ++i) {
+    advControlVect.push_back(Coord(arrowWithLine[i][1],arrowWithLine[i][0],0)+positions[7]+Coord(-53,8,0));
+  }
+
   _advControls[3] = GlComplexPolygon(advControlVect,Color(255,40,40,200),Color(128,20,20,200));
   advControlVect.clear();
-  for(unsigned int i=0;i<twoArrowWithLineSize;++i){advControlVect.push_back(twoArrowWithLine[i]+positions[7]+Coord(-67,8,0));}
+
+  for(unsigned int i=0; i<twoArrowWithLineSize; ++i) {
+    advControlVect.push_back(twoArrowWithLine[i]+positions[7]+Coord(-67,8,0));
+  }
+
   _advControls[4] = GlComplexPolygon(advControlVect,Color(255,40,40,200),Color(128,20,20,200));
   advControlVect.clear();
-  for(unsigned int i=0;i<twoArrowWithLineSize;++i){advControlVect.push_back(Coord(twoArrowWithLine[i][1],twoArrowWithLine[i][0],0)+positions[7]+Coord(-81,8,0));}
+
+  for(unsigned int i=0; i<twoArrowWithLineSize; ++i) {
+    advControlVect.push_back(Coord(twoArrowWithLine[i][1],twoArrowWithLine[i][0],0)+positions[7]+Coord(-81,8,0));
+  }
+
   _advControls[5] = GlComplexPolygon(advControlVect,Color(255,40,40,200),Color(128,20,20,200));
   advControlVect.clear();
 
-  for(unsigned int i=0;i<6;++i){
+  for(unsigned int i=0; i<6; ++i) {
     _advControls[i].setStencil(0);
   }
 

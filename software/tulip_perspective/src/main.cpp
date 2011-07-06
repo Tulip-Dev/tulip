@@ -22,10 +22,12 @@ using namespace tlp;
 
 void usage(const QString &error) {
   int returnCode = 0;
+
   if (!error.isEmpty()) {
     QMessageBox::warning(0,"Error",error);
     returnCode = 1;
   }
+
   cout << "Usage: tulip_perspective [OPTION] [FILE]" << endl
        << "Run a Tulip Perspective plugin into its dedicated process." << endl
        << "If Tulip main process is already running, embedded perspective will run into managed mode." << endl << endl
@@ -105,12 +107,14 @@ int main(int argc,char **argv) {
 
   if (!projectFilePath.isNull()) {
     project = TulipProject::openProject(projectFilePath,progress);
+
     if (!project->isValid()) {
       error = project->lastError();
       delete project;
       project = NULL;
     }
   }
+
   if (project)
     perspectiveName = project->perspective();
   else {
@@ -131,18 +135,22 @@ int main(int argc,char **argv) {
   QMainWindow *mainWindow = new QMainWindow();
   mainWindow->setVisible(false);
   QString title("Tulip [" + perspectiveName + "]");
+
   if (project) {
     title += " - ";
+
     if (!project->name().isNull())
       title += project->name();
     else
       title += projectFilePath;
   }
+
   mainWindow->setWindowTitle(title);
   context.mainWindow = mainWindow;
 
   // Create perspective object
   Perspective *perspective = StaticPluginLister<Perspective,PerspectiveContext>::getPluginObject(perspectiveName.toStdString(), context);
+
   if (!perspective)
     usage("Failed to create perspective: " + perspectiveName);
 

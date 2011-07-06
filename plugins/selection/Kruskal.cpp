@@ -24,14 +24,14 @@ using namespace std;
 using namespace tlp;
 
 namespace {
-  const char * paramHelp[] = {
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "DoubleProperty" ) \
-    HTML_HELP_DEF( "default", "\"viewMetric\"" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the metric used for edges weight." \
-    HTML_HELP_CLOSE(),
-  };
+const char * paramHelp[] = {
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "DoubleProperty" ) \
+  HTML_HELP_DEF( "default", "\"viewMetric\"" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the metric used for edges weight." \
+  HTML_HELP_CLOSE(),
+};
 }
 //======================================================
 Kruskal::Kruskal(const tlp::PropertyContext &context):BooleanAlgorithm(context) {
@@ -54,12 +54,14 @@ bool Kruskal::check(std::string &erreurMsg) {
 }
 //======================================================
 /// Compute the Minimum Spanning Tree
-bool Kruskal::run(){
+bool Kruskal::run() {
   /* Initialisation */
   DoubleProperty *edgeWeight = 0;
+
   if ( dataSet!=0) {
     dataSet->get("edge weight", edgeWeight);
   }
+
   if (edgeWeight == 0)
     edgeWeight = graph->getProperty<DoubleProperty>("viewMetric");
 

@@ -25,13 +25,13 @@
 /*@{*/
 /** This plugin compute the degree of each node
  *
- *  \note This plug-in exists to obtain a uniform interface in the 
+ *  \note This plug-in exists to obtain a uniform interface in the
  *  Tulip graph visualization software. To access to the degree
  *  of a node it is recommended to use directly the degree function
  *  available in each graph.
  *
  */
-class DegreeMetric:public tlp::DoubleAlgorithm { 
+class DegreeMetric:public tlp::DoubleAlgorithm {
 public:
   DegreeMetric(const tlp::PropertyContext &);
   bool run();

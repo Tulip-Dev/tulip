@@ -52,7 +52,7 @@ GlTriangle* Triangle::triangle=0;
 //=====================================================
 GLYPHPLUGIN(Triangle, "2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0", 11)
 //===================================================================================
-Triangle::Triangle(GlyphContext *gc): Glyph(gc){
+Triangle::Triangle(GlyphContext *gc): Glyph(gc) {
   if(!triangle)
     triangle = new GlTriangle(Coord(0,0,0),Size(0.5,0.5,0));
 }
@@ -70,20 +70,26 @@ void Triangle::draw(node n,float lod) {
   triangle->setFillColor(glGraphInputData->getElementColor()->getNodeValue(n));
 
   string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
+
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     triangle->setTextureName(texturePath+texFile);
-  }else{
+  }
+  else {
     triangle->setTextureName("");
   }
 
   triangle->setOutlineColor(glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor")->getNodeValue(n));
-  if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth")){
+
+  if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth")) {
     double lineWidth=glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth")->getNodeValue(n);
+
     if (lineWidth < 1e-6)
       lineWidth=1e-6;
+
     triangle->setOutlineSize(lineWidth);
-  }else{
+  }
+  else {
     triangle->setOutlineSize(2.);
   }
 

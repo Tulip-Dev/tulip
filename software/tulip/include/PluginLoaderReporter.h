@@ -16,7 +16,9 @@ public:
   virtual void aborted(const std::string &,const  std::string &);
   virtual void finished(bool ,const std::string &) {}
 
-  QMap<QString,QString> errors() { return _errors; }
+  QMap<QString,QString> errors() {
+    return _errors;
+  }
 
 private:
   QMap<QString,QString> _errors;

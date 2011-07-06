@@ -28,12 +28,12 @@ using namespace tlp;
 
 MagicSelectionInteractorConfigWidget::MagicSelectionInteractorConfigWidget(QWidget* parent ): QWidget(parent), _graph(NULL), _currentProperty(NULL) {
   setupUi(this);
-  
+
   connect(selectionAdd, SIGNAL(toggled(bool)), this, SLOT(pushButtontoggled(bool)));
   connect(selectionRemove, SIGNAL(toggled(bool)), this, SLOT(pushButtontoggled(bool)));
   connect(selectionReplace, SIGNAL(toggled(bool)), this, SLOT(pushButtontoggled(bool)));
   connect(selectionIntersection, SIGNAL(toggled(bool)), this, SLOT(pushButtontoggled(bool)));
-  
+
   connect(properties, SIGNAL(currentIndexChanged(QString)), this, SLOT(selectedPropertyChanged(const QString&)));
 }
 
@@ -43,7 +43,7 @@ void MagicSelectionInteractorConfigWidget::pushButtontoggled(bool pushed) {
   selectionButtons[1] = selectionRemove;
   selectionButtons[2] = selectionReplace;
   selectionButtons[3] = selectionIntersection;
-  
+
   if(pushed) {
     for(std::vector<QPushButton*>::const_iterator it = selectionButtons.begin(); it != selectionButtons.end(); ++it) {
       if(*it != QObject::sender()) {
@@ -54,13 +54,14 @@ void MagicSelectionInteractorConfigWidget::pushButtontoggled(bool pushed) {
   else {
     bool canToggle = false;
     QPushButton* sender = (QPushButton*)QObject::sender();
-    
+
     for(std::vector<QPushButton*>::const_iterator it = selectionButtons.begin(); it != selectionButtons.end(); ++it) {
       if(*it != sender && (*it)->isChecked()) {
         canToggle = true;
         break;
       }
     }
+
     if(!canToggle) {
       sender->setChecked(false);
     }
@@ -71,16 +72,16 @@ Selectionbehavior MagicSelectionInteractorConfigWidget::selectionBehavior() cons
   if(selectionAdd->isChecked()) {
     return Add;
   }
-  else if(selectionIntersection->isChecked()){
+  else if(selectionIntersection->isChecked()) {
     return Intersect;
   }
-  else if(selectionRemove->isChecked()){
+  else if(selectionRemove->isChecked()) {
     return Remove;
   }
-  else if(selectionReplace->isChecked()){
+  else if(selectionReplace->isChecked()) {
     return Replace;
   }
-  
+
   return Replace;
 }
 
@@ -92,10 +93,10 @@ void MagicSelectionInteractorConfigWidget::setGraph(tlp::Graph* graph) {
   if(_graph) {
     _graph->removeObserver(this);
   }
-  
+
   _graph = graph;
   _graph->addObserver(this);
-  
+
   updateAvailableProperties();
 }
 
@@ -103,7 +104,7 @@ void MagicSelectionInteractorConfigWidget::selectedPropertyChanged(const QString
   if(_currentProperty) {
     _currentProperty->removeObserver(this);
   }
-  
+
   if(!propertyName.isEmpty()) {
     _currentProperty = _graph->getProperty(propertyName.toStdString());
     _currentProperty->addObserver(this);
@@ -114,27 +115,30 @@ void MagicSelectionInteractorConfigWidget::selectedPropertyChanged(const QString
 }
 
 void MagicSelectionInteractorConfigWidget::updateAvailableProperties() {
-  
+
   QString previouslySelected = properties->currentText();
-  
+
   Iterator<string>* propIt = _graph->getProperties();
   properties->clear();
+
   while(propIt->hasNext()) {
     string propertyName = propIt->next();
     PropertyInterface* propertyInterface = _graph->getProperty(propertyName);
+
     if(propertyInterface->getTypename() == "double" || propertyInterface->getTypename() == "int") {
       properties->addItem(QString::fromStdString(propertyName));
     }
   }
+
   delete propIt;
-  
+
   for(int i = 0; i < properties->count(); ++i) {
     if(properties->itemText(i) == previouslySelected) {
       properties->setCurrentIndex(i);
       break;
     }
   }
-  
+
 }
 
 bool MagicSelectionInteractorConfigWidget::directedSelection() const {

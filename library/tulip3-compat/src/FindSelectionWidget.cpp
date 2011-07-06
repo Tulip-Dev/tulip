@@ -28,9 +28,9 @@
 using namespace tlp;
 
 FindSelectionWidget::FindSelectionWidget(Graph *graph, std::string& currentProperty,
-					 QWidget *parent) : 
+    QWidget *parent) :
   QDialog(parent),
-  graph(graph){
+  graph(graph) {
   setupUi(this);
   insertProperties(currentProperty);
   propertyChanged(-1);
@@ -38,7 +38,7 @@ FindSelectionWidget::FindSelectionWidget(Graph *graph, std::string& currentPrope
 
 static bool IsEvaluableProxy( PropertyInterface *p) {
   return dynamic_cast<DoubleProperty*>(p) || dynamic_cast<StringProperty*>(p) ||
-    dynamic_cast<BooleanProperty*>(p) || dynamic_cast<IntegerProperty*>(p);
+         dynamic_cast<BooleanProperty*>(p) || dynamic_cast<IntegerProperty*>(p);
 }
 
 struct TLP3_COMPAT_SCOPE GItem {
@@ -55,54 +55,67 @@ static bool EvalProxy( PropertyInterface *p, const GItem &gi, std::string value,
   StringProperty  * strp = dynamic_cast<StringProperty*>(p);
   BooleanProperty * selp = dynamic_cast<BooleanProperty*>(p);
   IntegerProperty * intp = dynamic_cast<IntegerProperty*>(p);
-  
+
   if( metp ) {
-    // DoubleProperty 
+    // DoubleProperty
     DoubleType::RealType v = gi.isnode ? metp->getNodeValue( gi.n ) : metp->getEdgeValue( gi.e );
     DoubleType::RealType v0 = atof( value.c_str() );
-    if( mode == 0 )		return v < v0;
-    if( mode == 1 )		return v <= v0;
-    if( mode == 2 )		return v == v0;
-    if( mode == 3 )		return v >= v0;
-    if( mode == 4 )		return v > v0;
+
+    if( mode == 0 )   return v < v0;
+
+    if( mode == 1 )   return v <= v0;
+
+    if( mode == 2 )   return v == v0;
+
+    if( mode == 3 )   return v >= v0;
+
+    if( mode == 4 )   return v > v0;
     else return v != v0;
   }
-  
+
   if( strp ) {
-    // StringProperty 
+    // StringProperty
     std::string v = gi.isnode ? strp->getNodeValue( gi.n ) : strp->getEdgeValue( gi.e );
     std::string v0 = value.c_str();
     QRegExp rexp( v0.c_str() );
+
     if( mode == 2 ) return rexp.exactMatch( v.c_str() );
     else return !rexp.exactMatch( v.c_str() );
   }
-  
+
   if( selp ) {
-    // BooleanProperty 
+    // BooleanProperty
     bool v  = gi.isnode ? selp->getNodeValue( gi.n )
-      : selp->getEdgeValue( gi.e );
+              : selp->getEdgeValue( gi.e );
     bool v0 = !( value.size() == 0 || value == "False" || value == "false" || value == "0" );
+
     if( mode == 2 ) return v == v0;
     else return v != v0;
   }
 
   if( intp ) {
-    // IntegerProperty 
+    // IntegerProperty
     IntegerType::RealType v = gi.isnode ? intp->getNodeValue( gi.n ) : intp->getEdgeValue( gi.e );
     IntegerType::RealType v0 = atoi( value.c_str() );
-    if( mode == 0 )		return v < v0;
-    if( mode == 1 )		return v <= v0;
-    if( mode == 2 )		return v == v0;
-    if( mode == 3 )		return v >= v0;
-    if( mode == 4 )		return v > v0;
+
+    if( mode == 0 )   return v < v0;
+
+    if( mode == 1 )   return v <= v0;
+
+    if( mode == 2 )   return v == v0;
+
+    if( mode == 3 )   return v >= v0;
+
+    if( mode == 4 )   return v > v0;
     else return v != v0;
   }
-  
+
   return false;
 }
 
 void FindSelectionWidget::propertyChanged(int) {
   PropertyInterface * p = getProperty();
+
   if( dynamic_cast<DoubleProperty*>(p) ) {
     filterOp->clear();
     filterOp->addItem( "<" );
@@ -140,7 +153,7 @@ void FindSelectionWidget::propertyChanged(int) {
     filterOp->addItem( "True" );
     filterValue->hide();
     filterValue->setValidator( 0 );
-      filterValue->setText( QString() );
+    filterValue->setText( QString() );
   }
 }
 
@@ -161,9 +174,12 @@ PropertyInterface * FindSelectionWidget::getProperty() {
 }
 
 int FindSelectionWidget::getOperation() {
-  if(setToSelectionOpt->isChecked())	return 0;
-  if(addToSelectionOpt->isChecked())	return 1;
-  if(rmvFromSelectionOpt->isChecked())	return 2;
+  if(setToSelectionOpt->isChecked())  return 0;
+
+  if(addToSelectionOpt->isChecked())  return 1;
+
+  if(rmvFromSelectionOpt->isChecked())  return 2;
+
   return 3;
 }
 
@@ -173,16 +189,21 @@ int FindSelectionWidget::getSource() {
 
 void FindSelectionWidget::insertProperties(std::string &currentProperty) {
   Iterator<std::string> * propIt = graph->getProperties();
+
   while( propIt->hasNext() ) {
     std::string n = propIt->next();
     PropertyInterface* p = graph->getProperty( n );
+
     if (IsEvaluableProxy(p)) {
       inputProp->addItem(QString::fromUtf8(n.c_str()));
+
       if (currentProperty == n)
-	inputProp->setCurrentIndex(inputProp->count() - 1);
+        inputProp->setCurrentIndex(inputProp->count() - 1);
     }
-  } delete propIt;
-    
+  }
+
+  delete propIt;
+
 }
 
 int FindSelectionWidget::exec() {
@@ -192,52 +213,66 @@ int FindSelectionWidget::exec() {
 }
 
 void FindSelectionWidget::evalNodes(PropertyInterface *p, int mode,
-				    std::string fv, int operation,
-				    BooleanProperty *selection) {
+                                    std::string fv, int operation,
+                                    BooleanProperty *selection) {
   Iterator<node> * nodeIt = graph->getNodes();
+
   while( nodeIt->hasNext() ) {
     node n = nodeIt->next();
     bool v = EvalProxy( p, GItem(n), fv, mode );
+
     if (v)
       ++nbItemsFound;
+
     if( operation == 0 ) {
       selection->setNodeValue( n, v );
-    } else if( operation == 1 ) {
+    }
+    else if( operation == 1 ) {
       if( v )
-	selection->setNodeValue( n, true );
-    } else if( operation == 2 )  {
+        selection->setNodeValue( n, true );
+    }
+    else if( operation == 2 )  {
       if( v )
-	selection->setNodeValue( n, false );
-    } else {
+        selection->setNodeValue( n, false );
+    }
+    else {
       if( !v )
-	selection->setNodeValue( n, false );
+        selection->setNodeValue( n, false );
     }
   }
+
   delete nodeIt;
 }
 
 void FindSelectionWidget::evalEdges(PropertyInterface *p, int mode,
-				    std::string fv, int operation, 
-				    BooleanProperty *selection) {
+                                    std::string fv, int operation,
+                                    BooleanProperty *selection) {
   Iterator<edge> * edgeIt = graph->getEdges();
+
   while( edgeIt->hasNext() ) {
     edge e = edgeIt->next();
     bool v = EvalProxy( p, GItem(e), fv, mode );
+
     if (v)
       ++nbItemsFound;
-      if( operation == 0 ) {
-	selection->setEdgeValue( e, v );
-      } else if( operation == 1 ) {
-	if( v )
-	  selection->setEdgeValue( e, true );
-      } else if( operation == 2 ) {
-	if( v )
-	  selection->setEdgeValue( e, false );
-      } else {
-	if( !v )
-	  selection->setEdgeValue( e, false );
-      }
+
+    if( operation == 0 ) {
+      selection->setEdgeValue( e, v );
+    }
+    else if( operation == 1 ) {
+      if( v )
+        selection->setEdgeValue( e, true );
+    }
+    else if( operation == 2 ) {
+      if( v )
+        selection->setEdgeValue( e, false );
+    }
+    else {
+      if( !v )
+        selection->setEdgeValue( e, false );
+    }
   }
+
   delete edgeIt;
 }
 
@@ -247,15 +282,19 @@ void FindSelectionWidget::find(BooleanProperty *selP) {
   std::string fv = filterValue->text().toUtf8().data();
   int op = getOperation();
   nbItemsFound = 0;
-  if( (getSource()+1) & 1 ) 
-      evalNodes(p, mode, fv, op, selP);
+
+  if( (getSource()+1) & 1 )
+    evalNodes(p, mode, fv, op, selP);
+
   if( (getSource()+1) & 2 )
     evalEdges(p, mode, fv, op, selP);
 }
 
 void FindSelectionWidget::accept() {
   BooleanProperty * selP = graph->getProperty<BooleanProperty>("viewSelection");
+
   if (!selP) return;
+
   find(selP);
   close();
 }

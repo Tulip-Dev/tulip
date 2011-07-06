@@ -42,8 +42,10 @@ void buildGraph(Graph *graph) {
 
 void displayAdjacency(node n, Graph *graph) {
   Iterator<edge>*ite=graph->getInOutEdges(n);
+
   while(ite->hasNext())
     cout << ite->next().id << " ";
+
   delete ite;
   cout << endl;
 }
@@ -66,7 +68,7 @@ int main() {
 
   //display current order of edge around n1
   displayAdjacency(n1,graph);
-  
+
   //change e2 et e4
   graph->swapEdgeOrder(n1,e2,e4);
 

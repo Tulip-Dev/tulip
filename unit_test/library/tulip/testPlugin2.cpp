@@ -24,11 +24,11 @@
 
 using namespace std;
 
-class Test2 : public tlp::BooleanAlgorithm { 
+class Test2 : public tlp::BooleanAlgorithm {
 public:
-  Test2(const tlp::PropertyContext &context) : tlp::BooleanAlgorithm(context){}
-  ~Test2(){}
-  bool run() { 
+  Test2(const tlp::PropertyContext &context) : tlp::BooleanAlgorithm(context) {}
+  ~Test2() {}
+  bool run() {
     return true;
   }
 };

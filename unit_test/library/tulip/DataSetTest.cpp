@@ -98,7 +98,7 @@ struct Struct {
     value = st.value;
     return *this;
   }
-      
+
   Struct() {
     ++nbInstances;
   }
@@ -130,7 +130,7 @@ void DataSetTest::testSetGetStruct() {
   CPPUNIT_ASSERT_EQUAL(Struct::nbInstances, nbInstances);
   CPPUNIT_ASSERT(!v1.value.empty());
   CPPUNIT_ASSERT(v2.value.empty());
-  
+
   CPPUNIT_ASSERT_EQUAL(false, dSet.get("struct", v1));
 
   dSet.set("struct", v1);
@@ -145,16 +145,16 @@ void DataSetTest::testSetGetStruct() {
 //==========================================================
 CppUnit::Test * DataSetTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : DataSet" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetBool", 
-							      &DataSetTest::testSetGetBool ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetDouble", 
-							      &DataSetTest::testSetGetDouble ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetInt", 
-							      &DataSetTest::testSetGetInt ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetString", 
-							      &DataSetTest::testSetGetString ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetStruct", 
-							      &DataSetTest::testSetGetStruct ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetBool",
+                         &DataSetTest::testSetGetBool ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetDouble",
+                         &DataSetTest::testSetGetDouble ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetInt",
+                         &DataSetTest::testSetGetInt ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetString",
+                         &DataSetTest::testSetGetString ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<DataSetTest>( "setGetStruct",
+                         &DataSetTest::testSetGetStruct ) );
   return suiteOfTests;
 }
 //==========================================================

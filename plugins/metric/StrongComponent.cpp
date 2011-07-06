@@ -26,30 +26,36 @@ using namespace std;
 using namespace tlp;
 
 int StrongComponent::attachNumerotation(tlp::node n,
-					TLP_HASH_MAP<tlp::node,bool> &visited,
-					TLP_HASH_MAP<tlp::node,bool> &finished,
-					TLP_HASH_MAP<tlp::node,int> &minAttach,
-					int &id,
-					std::stack<tlp::node> &renum,
-					int &curComponent
-					)
-{
+                                        TLP_HASH_MAP<tlp::node,bool> &visited,
+                                        TLP_HASH_MAP<tlp::node,bool> &finished,
+                                        TLP_HASH_MAP<tlp::node,int> &minAttach,
+                                        int &id,
+                                        std::stack<tlp::node> &renum,
+                                        int &curComponent
+                                       ) {
   if (visited[n]) return minAttach[n];
+
   visited[n]=true;
-  int myId=id;  
+  int myId=id;
   id++;
   minAttach[n]=myId;
   renum.push(n);
   int res=myId;
   Iterator<node> *itN=graph->getOutNodes(n);
-  for (;itN->hasNext();) {
+
+  for (; itN->hasNext();) {
     node tmpN=itN->next();
+
     if (!finished[tmpN]) {
       int tmp=attachNumerotation(tmpN,visited,finished,minAttach,id,renum,curComponent);
+
       if (res>tmp) res=tmp;
     }
-  } delete itN;
+  }
+
+  delete itN;
   minAttach[n]=res;
+
   if (res==myId) {
     while (renum.top()!=n) {
       node tmp=renum.top();
@@ -58,11 +64,13 @@ int StrongComponent::attachNumerotation(tlp::node n,
       minAttach[tmp]=res;
       result->setNodeValue(tmp,curComponent);
     }
+
     finished[n]=true;
     result->setNodeValue(n,curComponent);
     curComponent++;
     renum.pop();
   }
+
   return res;
 }
 
@@ -78,22 +86,32 @@ bool StrongComponent::run() {
   int id=1;
   int curComponent=0;
   Iterator<node> *itN=graph->getNodes();
+
   while (itN->hasNext()) {
     node itn=itN->next();
-    if (!visited[itn]) {attachNumerotation(itn,visited,finished,cachedValues,id,renum,curComponent);}
-  } delete itN;
+
+    if (!visited[itn]) {
+      attachNumerotation(itn,visited,finished,cachedValues,id,renum,curComponent);
+    }
+  }
+
+  delete itN;
 
 
   Iterator<edge> *itE=graph->getEdges();
+
   while (itE->hasNext()) {
     edge ite=itE->next();
     node source= graph->source(ite);
     node target= graph->target(ite);
+
     if (result->getNodeValue(source)==result->getNodeValue(target))
       result->setEdgeValue(ite,result->getNodeValue(source));
     else
       result->setEdgeValue(ite,curComponent);
-  } delete itE;
+  }
+
+  delete itE;
 
 
   return true;

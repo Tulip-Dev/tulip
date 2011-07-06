@@ -24,7 +24,9 @@
 class LessThanNode2 {
 public:
   tlp::DoubleProperty *metric;
-  bool operator() (tlp::node n1, tlp::node n2){return (metric->getNodeValue(n1) < metric->getNodeValue(n2));}
+  bool operator() (tlp::node n1, tlp::node n2) {
+    return (metric->getNodeValue(n1) < metric->getNodeValue(n2));
+  }
 };
 
 /** \addtogroup layout */
@@ -43,7 +45,7 @@ public:
  *  pages 105 - 126.
  *
 */
-class HierarchicalGraph:public tlp::LayoutAlgorithm { 
+class HierarchicalGraph:public tlp::LayoutAlgorithm {
 
 public:
   HierarchicalGraph(const tlp::PropertyContext& context);
@@ -56,8 +58,8 @@ private:
   tlp::DoubleProperty *embedding;
   void twoLayerCrossReduction(tlp::Graph* sg, unsigned int freeLayer, bool);
   void crossReduction(tlp::Graph* sg);
-  void computeEdgeBends(const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout, 
-			const TLP_HASH_MAP<tlp::edge,tlp::edge> &replacedEdges, const std::vector<tlp::edge> &reversedEdges);
+  void computeEdgeBends(const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
+                        const TLP_HASH_MAP<tlp::edge,tlp::edge> &replacedEdges, const std::vector<tlp::edge> &reversedEdges);
   void computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops);
   void buildGrid(tlp::Graph*);
   unsigned int degree(tlp::Graph* sg, tlp::node n, bool sense);

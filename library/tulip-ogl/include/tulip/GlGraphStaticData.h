@@ -25,24 +25,24 @@
 
 namespace tlp {
 
-  enum EdgeShape {POLYLINESHAPE = 0, BEZIERSHAPE = 4, SPLINESHAPE = 8, CUBICBSPLINE=16};
-  
-  class TLP_GL_SCOPE GlGraphStaticData {
-  
-  public:
+enum EdgeShape {POLYLINESHAPE = 0, BEZIERSHAPE = 4, SPLINESHAPE = 8, CUBICBSPLINE=16};
 
-    static const int edgeShapesCount;
-    static int edgeShapeIds[];
-    static std::string labelPositionNames[];
-    
-    static std::string edgeShapeName(int id);
-    static int edgeShapeId(std::string name);
-  
-    static std::string labelPositionName(int id);
-    static int labelPositionId(std::string name);
-    
-  };
-  
+class TLP_GL_SCOPE GlGraphStaticData {
+
+public:
+
+  static const int edgeShapesCount;
+  static int edgeShapeIds[];
+  static std::string labelPositionNames[];
+
+  static std::string edgeShapeName(int id);
+  static int edgeShapeId(std::string name);
+
+  static std::string labelPositionName(int id);
+  static int labelPositionId(std::string name);
+
+};
+
 }
 
 #endif // Tulip_GLGRAPHSTATICDATA_H

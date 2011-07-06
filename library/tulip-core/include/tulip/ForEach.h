@@ -26,35 +26,36 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
-  /**
-  * @brief Encapsulation of a Tulip Iterator intended to be allocated on the stack instead of the heap,
-  * so it gets deleted when out of scope.
-  * 
-  **/
-  template<typename TYPE>
-  struct _TLP_IT {
-    _TLP_IT(Iterator<TYPE> *_it) : _it(_it) {
-    }
-    ~_TLP_IT() {
-      delete _it;
-    }
-    Iterator<TYPE> *_it;
-  };
-
-  /**
-  * @brief 
-  **/
-  template<typename TYPE>
-  inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
-    assert(_it._it != NULL);
-    if(_it._it->hasNext()) {
-      n = _it._it->next();
-      return true;
-    } 
-    else {
-      return false;
-    }
+/**
+* @brief Encapsulation of a Tulip Iterator intended to be allocated on the stack instead of the heap,
+* so it gets deleted when out of scope.
+*
+**/
+template<typename TYPE>
+struct _TLP_IT {
+  _TLP_IT(Iterator<TYPE> *_it) : _it(_it) {
   }
+  ~_TLP_IT() {
+    delete _it;
+  }
+  Iterator<TYPE> *_it;
+};
+
+/**
+* @brief
+**/
+template<typename TYPE>
+inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
+  assert(_it._it != NULL);
+
+  if(_it._it->hasNext()) {
+    n = _it._it->next();
+    return true;
+  }
+  else {
+    return false;
+  }
+}
 }
 #endif //DOXYGEN_NOTFOR_DEVEL
 

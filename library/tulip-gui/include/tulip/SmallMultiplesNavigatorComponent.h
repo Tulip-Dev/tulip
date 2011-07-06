@@ -39,7 +39,9 @@ public:
   ~SmallMultiplesNavigatorComponent();
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() { return new SmallMultiplesNavigatorComponent(); }
+  InteractorComponent *clone() {
+    return new SmallMultiplesNavigatorComponent();
+  }
 
 private:
   MouseNKeysNavigator *_navigator;

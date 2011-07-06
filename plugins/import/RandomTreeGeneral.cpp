@@ -27,37 +27,36 @@ using namespace tlp;
 
 namespace {
 
-  const char * paramHelp[] =
-    {
-      // minsize
-      HTML_HELP_OPEN() \
-      HTML_HELP_DEF( "type", "int" ) \
-      HTML_HELP_DEF( "default", "10" ) \
-      HTML_HELP_BODY() \
-      "This parameter defines the minimal amount of node used to build the randomized tree." \
-      HTML_HELP_CLOSE(),
-      // maxsize
-      HTML_HELP_OPEN() \
-      HTML_HELP_DEF( "type", "int" ) \
-      HTML_HELP_DEF( "default", "100" ) \
-      HTML_HELP_BODY() \
-      "This parameter defines the maximal amount of node used to build the randomized tree." \
-      HTML_HELP_CLOSE(),
-      // maxdegree
-      HTML_HELP_OPEN() \
-      HTML_HELP_DEF( "type", "int" ) \
-      HTML_HELP_DEF( "default", "5" ) \
-      HTML_HELP_BODY() \
-      "This parameter defines the maximal degree of node used to build the randomized tree." \
-      HTML_HELP_CLOSE(),
-      // tree layout
-      HTML_HELP_OPEN() \
-      HTML_HELP_DEF( "type", "bool" ) \
-      HTML_HELP_DEF( "default", "false" ) \
-      HTML_HELP_BODY() \
-      "This parameter indicates if the generated tree has to be drawn with a tree layout algorithm." \
-      HTML_HELP_CLOSE(),
-    };
+const char * paramHelp[] = {
+  // minsize
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "int" ) \
+  HTML_HELP_DEF( "default", "10" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the minimal amount of node used to build the randomized tree." \
+  HTML_HELP_CLOSE(),
+  // maxsize
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "int" ) \
+  HTML_HELP_DEF( "default", "100" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the maximal amount of node used to build the randomized tree." \
+  HTML_HELP_CLOSE(),
+  // maxdegree
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "int" ) \
+  HTML_HELP_DEF( "default", "5" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the maximal degree of node used to build the randomized tree." \
+  HTML_HELP_CLOSE(),
+  // tree layout
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "default", "false" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicates if the generated tree has to be drawn with a tree layout algorithm." \
+  HTML_HELP_CLOSE(),
+};
 }
 
 
@@ -77,74 +76,92 @@ public:
     addParameter<int>("maxdegree",paramHelp[2],"5");
     addParameter<bool>("tree layout",paramHelp[3],"false");
     addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
- }
+  }
   ~RandomTreeGeneral() {
   }
   bool buildNode(node n,unsigned int sizeM,int arityMax) {
     if (graph->numberOfNodes()>sizeM) return true;
+
     bool result=true;
     int randNumber=rand();
     int i = 0;
+
     while (randNumber < RAND_MAX/pow(2.0,1.0+i))
       ++i;
+
     i = i % arityMax;
-    for (;i>0;i--) {
+
+    for (; i>0; i--) {
       node n1;
       n1=graph->addNode();
       graph->addEdge(n,n1);
       result= result && buildNode(n1,sizeM,arityMax);
     }
+
     return result;
   }
 
   bool import() {
-    srand(clock()); 
+    srand(clock());
 
     unsigned int sizeMin  = 10;
     unsigned int sizeMax  = 100;
     unsigned int arityMax = 5;
     bool needLayout = false;
+
     if (dataSet!=0) {
-      dataSet->get("minsize", sizeMin);   
+      dataSet->get("minsize", sizeMin);
       dataSet->get("maxsize", sizeMax);
       dataSet->get("maxdegree", arityMax);
       dataSet->get("tree layout", needLayout);
     }
+
     if (arityMax < 1) {
       if (pluginProgress)
-	pluginProgress->setError("Error: maxdegree must be a strictly positive integer");
+        pluginProgress->setError("Error: maxdegree must be a strictly positive integer");
+
       return false;
     }
+
     if (sizeMax < 1) {
       if (pluginProgress)
-	pluginProgress->setError("Error: maxsize must be a strictly positive integer");
+        pluginProgress->setError("Error: maxsize must be a strictly positive integer");
+
       return false;
     }
+
     bool ok=true;
     int i=0;
     unsigned int nbTest=0;
+
     while (ok) {
       ++nbTest;
+
       if (nbTest%100 == 0) {
-	if (pluginProgress->progress((i/100)%100,100)!=TLP_CONTINUE) break;
+        if (pluginProgress->progress((i/100)%100,100)!=TLP_CONTINUE) break;
       }
+
       i++;
       graph->clear();
       node n=graph->addNode();
       ok=!buildNode(n,sizeMax,arityMax);
       ok=false;
+
       if (graph->numberOfNodes()<sizeMin) ok=true;
     }
+
     if (pluginProgress->progress(100,100)==TLP_CANCEL)
       return false;
+
     if (needLayout) {
       // apply Tree Leaf
       DataSet dSet;
       string errMsg;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
       return graph->computeProperty("Tree Leaf", layout, errMsg,
-				    pluginProgress, &dSet);
+                                    pluginProgress, &dSet);
     }
+
     return true;
   }
 };

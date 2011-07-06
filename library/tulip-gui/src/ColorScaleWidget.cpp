@@ -23,9 +23,9 @@
  *      Author: Jonathan Dubois
  *       Email: jonathan.dubois@labri.fr
  *
- *	This program is free software; you can redistribute it and/or modify  *
- *  it under the terms of the GNU Lesser General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
+ *  This program is free software; you can redistribute it and/or modify  *
+ *  it under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  */
 #include "tulip/ColorScaleWidget.h"
@@ -47,9 +47,11 @@ void ColorScaleWidget::setColorScale(ColorScale *colorScale) {
 
 void ColorScaleWidget::paintEvent(QPaintEvent * event) {
   QPainter painter(this);
+
   if (colorScale != NULL) {
     paintColorScale(painter, event->rect());
   }
+
   painter.setPen(QPen(QBrush(QColor("black")), 1.0));
   painter.drawRect(QRect(event->rect().x(), event->rect().y(), event->rect().width() - 1, event->rect().height() - 1));
 
@@ -58,9 +60,11 @@ void ColorScaleWidget::paintEvent(QPaintEvent * event) {
 void ColorScaleWidget::paintColorScale(QPainter& painter, const QRect& rect) {
   painter.setPen(Qt::NoPen);
   map<float, Color> colorMap = colorScale->getColorMap();
+
   if (colorScale->isGradient()) {
     QPoint start;
     QPoint stop;
+
     if (orientation == Qt::Horizontal) {
       start = QPoint(rect.left(), rect.center().y());
       stop = QPoint(rect.right(), rect.center().y());
@@ -69,18 +73,23 @@ void ColorScaleWidget::paintColorScale(QPainter& painter, const QRect& rect) {
       start = QPoint(rect.center().x(), rect.bottom());
       stop = QPoint(rect.center().x(), rect.top());
     }
+
     QLinearGradient qLinearGradient(start, stop);
+
     for (map<float, Color>::iterator it = colorMap.begin(); it != colorMap.end(); ++it) {
       qLinearGradient.setColorAt(it->first, QColor(it->second[0], it->second[1], it->second[2], it->second[3]));
     }
+
     painter.fillRect(rect, qLinearGradient);
   }
   else {
     unsigned int nb = 0;
     float rectWidth = ((float) rect.width()) / colorMap.size();
     float rectHeight = ((float) rect.height()) / colorMap.size();
+
     for (map<float, Color>::iterator it = colorMap.begin(); it != colorMap.end(); ++it) {
       QRectF rectangle;
+
       if (orientation == Qt::Horizontal) {
         rectangle.setTopLeft(QPointF(rect.left() + nb * rectWidth, rect.top()));
         rectangle.setSize(QSizeF(rectWidth, rect.height()));
@@ -89,6 +98,7 @@ void ColorScaleWidget::paintColorScale(QPainter& painter, const QRect& rect) {
         rectangle.setTopLeft(QPointF(rect.left(), rect.bottom() - (nb + 1) * rectHeight));
         rectangle.setSize(QSizeF(rect.width(), rectHeight));
       }
+
       painter.fillRect(rectangle, QBrush(QColor(it->second[0], it->second[1], it->second[2], it->second[3])));
       ++nb;
     }
@@ -111,7 +121,7 @@ QSize ColorScaleWidget::minimumSizeHint() const {
   }
 }
 
-QSize ColorScaleWidget::sizeHint () const{
+QSize ColorScaleWidget::sizeHint () const {
   return minimumSizeHint();
 
 }

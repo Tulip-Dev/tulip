@@ -26,83 +26,89 @@ tlp::OpenGlConfigManager* tlp::OpenGlConfigManager::inst=0;
 
 using namespace std;
 
-namespace tlp
-{
+namespace tlp {
 OpenGlConfigManager::OpenGlConfigManager():errorViewer(new OpenGlErrorViewer()),glewIsChecked(false),driversAreChecked(false),glewIsOk(false),antialiased(true) {
 }
 
-OpenGlErrorViewer *OpenGlConfigManager::setErrorViewer(OpenGlErrorViewer *errorViewer){
-	OpenGlErrorViewer *oldErrorViewer=this->errorViewer;
-	this->errorViewer=errorViewer;
-	return oldErrorViewer;
+OpenGlErrorViewer *OpenGlConfigManager::setErrorViewer(OpenGlErrorViewer *errorViewer) {
+  OpenGlErrorViewer *oldErrorViewer=this->errorViewer;
+  this->errorViewer=errorViewer;
+  return oldErrorViewer;
 }
 
 void OpenGlConfigManager::checkDrivers() {
-	if(driversAreChecked)
-		return;
-	driversAreChecked=true;
+  if(driversAreChecked)
+    return;
 
-	bool nvidia=false;
-	bool ati=false;
-	string vendor(((const char*)glGetString(GL_VENDOR)));
-	if(vendor.find("NVIDIA")!=string::npos)
-		nvidia=true;
-	if(vendor.find("ATI")!=string::npos)
-		ati=true;
+  driversAreChecked=true;
 
-	if(!nvidia && !ati){
-		errorViewer->displayErrorWithAskAgain("Graphics card warning","Warning :\n\nYour graphics card is not powerful enough\nor it is not configured with the correct driver\nto suit the Tulip graphics rendering needs.\n\nIf you have an ATI or NVIDIA graphics card,\nwe recommend to install the official driver\nto benefit from an optimal graphics rendering.");
-	}
+  bool nvidia=false;
+  bool ati=false;
+  string vendor(((const char*)glGetString(GL_VENDOR)));
+
+  if(vendor.find("NVIDIA")!=string::npos)
+    nvidia=true;
+
+  if(vendor.find("ATI")!=string::npos)
+    ati=true;
+
+  if(!nvidia && !ati) {
+    errorViewer->displayErrorWithAskAgain("Graphics card warning","Warning :\n\nYour graphics card is not powerful enough\nor it is not configured with the correct driver\nto suit the Tulip graphics rendering needs.\n\nIf you have an ATI or NVIDIA graphics card,\nwe recommend to install the official driver\nto benefit from an optimal graphics rendering.");
+  }
 }
 
 void OpenGlConfigManager::initGlew() {
-	if(glewIsChecked)
-		return;
+  if(glewIsChecked)
+    return;
 
-	GLenum err = glewInit();
-	if (GLEW_OK != err) {
-		glewIsOk=false;
-	}else{
-		if(((void*)(glGenBuffers))!=NULL){
-			glewIsOk=true;
-		}else{
-			glewIsOk=false;
-		}
-	}
-	glewIsChecked=true;
+  GLenum err = glewInit();
+
+  if (GLEW_OK != err) {
+    glewIsOk=false;
+  }
+  else {
+    if(((void*)(glGenBuffers))!=NULL) {
+      glewIsOk=true;
+    }
+    else {
+      glewIsOk=false;
+    }
+  }
+
+  glewIsChecked=true;
 }
 
 void OpenGlConfigManager::activateLineAndPointAntiAliasing() {
-	if (antialiased) {
-		glDisable(GL_MULTISAMPLE);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_LINE_SMOOTH);
-		glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
-		glEnable(GL_POINT_SMOOTH);
-		glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
-	}
+  if (antialiased) {
+    glDisable(GL_MULTISAMPLE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_LINE_SMOOTH);
+    glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
+    glEnable(GL_POINT_SMOOTH);
+    glHint(GL_POINT_SMOOTH_HINT,GL_NICEST);
+  }
 }
 
 void OpenGlConfigManager::desactivateLineAndPointAntiAliasing() {
-	if (antialiased) {
-		glDisable(GL_LINE_SMOOTH);
-		glDisable(GL_POINT_SMOOTH);
-	}
+  if (antialiased) {
+    glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_POINT_SMOOTH);
+  }
 }
 
 void OpenGlConfigManager::activatePolygonAntiAliasing() {
-	if (antialiased) {
-		glDisable(GL_LINE_SMOOTH);
-		glDisable(GL_POINT_SMOOTH);
-		glEnable(GL_MULTISAMPLE);
-	}
+  if (antialiased) {
+    glDisable(GL_LINE_SMOOTH);
+    glDisable(GL_POINT_SMOOTH);
+    glEnable(GL_MULTISAMPLE);
+  }
 }
 
 void OpenGlConfigManager::desactivatePolygonAntiAliasing() {
-	if (antialiased) {
-		glDisable(GL_MULTISAMPLE);
-	}
+  if (antialiased) {
+    glDisable(GL_MULTISAMPLE);
+  }
 }
 
 }

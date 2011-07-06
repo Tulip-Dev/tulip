@@ -48,12 +48,12 @@ public:
 private:
   void fill(std::string &result);
   bool siteconnect(const std::string &server, const std::string &url,
-		   const int serverport, bool headonly);
+                   const int serverport, bool headonly);
 
 private:
   HttpContext *context;
 
- public:
+public:
   bool isValid() {
     return !server.empty();
   }
@@ -72,25 +72,28 @@ private:
 
 namespace std {
 template <>
-  struct less<UrlElement> {
-    bool operator()(const UrlElement &lhs, const UrlElement &rhs) const {
-      if (lhs.server.compare(rhs.server) < 0 ) return true;
-      if (lhs.server.compare(rhs.server) > 0 ) return false;
-      return lhs.getUrl().compare(rhs.getUrl()) < 0;
-    }
-  };
+struct less<UrlElement> {
+  bool operator()(const UrlElement &lhs, const UrlElement &rhs) const {
+    if (lhs.server.compare(rhs.server) < 0 ) return true;
+
+    if (lhs.server.compare(rhs.server) > 0 ) return false;
+
+    return lhs.getUrl().compare(rhs.getUrl()) < 0;
+  }
+};
 }
 
 HttpContext::HttpContext() {
   // connect the requestFinished signal to our finished slot
   connect(this, SIGNAL(requestFinished(int, bool)), this, SLOT(finished(int, bool)));
   connect(this, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
-	  this, SLOT(headerReceived(const QHttpResponseHeader &)));
+          this, SLOT(headerReceived(const QHttpResponseHeader &)));
 }
 
 void HttpContext::finished(int id, bool error) {
   // check to see if it is the request we made
   if(id !=rqid) return;
+
   // set status of the request
   status = !error;
   // OK
@@ -100,16 +103,18 @@ void HttpContext::finished(int id, bool error) {
 void HttpContext::headerReceived(const QHttpResponseHeader & resp) {
   if ((isHtml = resp.isValid())) {
     code = resp.statusCode();
+
     if (code > 399) /* error codes */
       isHtml = false;
     else if ((code > 299) &&
-	     (code < 305 || code == 307)) {
+             (code < 305 || code == 307)) {
       /* redirection codes */
       redirected = true;
       newLocation = resp.value(QString("Location")).toAscii().data();
-    } else /* normal codes */
+    }
+    else   /* normal codes */
       isHtml = resp.hasContentType() &&
-	resp.contentType().contains(QString("text/html"));
+               resp.contentType().contains(QString("text/html"));
   }
 }
 
@@ -135,6 +140,7 @@ UrlElement::UrlElement(const UrlElement &c):
 void UrlElement::setUrl(const std::string& theUrl) {
   url = theUrl;
   size_t len = theUrl.find_first_of("?", 0);
+
   if (len != string::npos)
     clean_url = theUrl.substr(0, len);
   else
@@ -152,6 +158,7 @@ void UrlElement::clear() {
     delete context;
     context = 0;
   }
+
   data = "";
 }
 
@@ -159,6 +166,7 @@ void UrlElement::clear() {
 bool UrlElement::load() {
   if (!siteconnect(server,url,serverport,false))
     return false;
+
   fill(data);
   return true;
 }
@@ -172,13 +180,17 @@ static const char* not_html_extensions[] = {
 bool UrlElement::isHtmlPage() {
   string lowercase(url);
   size_t len = lowercase.length();
+
   for (size_t i = 0; i < len; ++i)
     lowercase[i] = tolower(lowercase[i]);
+
   for (unsigned int i = 0; not_html_extensions[i]; i++)
     if (lowercase.rfind(not_html_extensions[i], len) != string::npos)
       return false;
+
   if(!siteconnect(server,url,serverport,true))
     return false;
+
   return context->isHtml;
 }
 
@@ -191,26 +203,32 @@ bool UrlElement::siteconnect(const std::string &server, const std::string &url,c
 
   context->setHost(QString(server.c_str()), serverport);
   string theUrl("/");
+
   // prefix the url with / if it doesn't start with it..
   if (url.empty() || url.c_str()[0] != '/')
     theUrl += url;
   else
     theUrl = url;
+
   context->processed = context->isHtml = context->redirected = false;
+
   // start the request and store the request ID
   if (headonly)
     context->rqid = context->head(QString(theUrl.c_str()));
   else
     context->rqid = context->get(QString(theUrl.c_str()));
+
   // block until the request is finished
   // or there is timeout
   QTimer timer;
   timer.setSingleShot(true);
   context->setTimer(&timer);
   timer.start(2000);
+
   while(!context->processed) {
     QCoreApplication::processEvents();
   }
+
   timer.stop();
   return context->status && context->code < 400;
 } /* end, siteconnect */
@@ -224,156 +242,184 @@ UrlElement UrlElement::parseUrl (const std::string &href) {
   UrlElement newUrl;
   string lowercase(href);
   size_t i, len = lowercase.length();
+
   for (i = 0; i < len; ++i)
     lowercase[i] = tolower(lowercase[i]);
+
   for (i = 0; rejected_protocols[i] != 0; i++) {
     if (lowercase.find(rejected_protocols[i]) != string::npos)
       break;
   }
+
   if (rejected_protocols[i]) {
     newUrl.is_http = false;
+
     if (i != 3 /* no javascript */)
       newUrl.server = href;
+
     return newUrl;
   }
+
   size_t pos=0;
   bool host = false;
   pos = lowercase.rfind("http://", len);
+
   if (pos == string::npos)
     pos=0;
   else {
     host=true;
     pos+=7;
   }
+
   if (host) {
     size_t endhost = lowercase.find_first_of("/ ",pos);
+
     if (endhost == string::npos)
       endhost=len;
+
     string hostname = href.substr(pos,endhost-pos);
     newUrl.server = hostname;
     newUrl.setUrl(href.substr(endhost));
-  } else {
+  }
+  else {
     size_t querystart = lowercase.find_first_of("#",pos); /* previously ?#  instead of # */
+
     if (querystart != string::npos)
       len = querystart;
+
     string theUrl = href.substr(pos,len-pos);
+
     if (theUrl.empty())
       return newUrl;
+
     //Manage relative urls
     if (theUrl[0]!='/') {
       string urlreference(this->url);
       size_t findUp = urlreference.rfind("/", urlreference.length());
+
       if (findUp==string::npos) {
-	urlreference.clear();
-	urlreference.append(1, '/');
+        urlreference.clear();
+        urlreference.append(1, '/');
       }
       else
-	urlreference = urlreference.substr(0, findUp + 1);
+        urlreference = urlreference.substr(0, findUp + 1);
+
       size_t pos;
+
       // remove space chars at the beginning
       for (pos = 0; pos < theUrl.size(); ++pos) {
-	char c = theUrl[pos];
-	if (c != ' ' && c != '\t')
-	  break;
+        char c = theUrl[pos];
+
+        if (c != ' ' && c != '\t')
+          break;
       }
+
       if (pos > 0)
-	theUrl = theUrl.substr(pos);
+        theUrl = theUrl.substr(pos);
+
       while ((pos = theUrl.find("./")) != string::npos) {
-	if (pos == 0) {
-	  theUrl = theUrl.substr(2);
-	  continue;
-	}
-	if (theUrl[pos - 1] == '.') {
-	  theUrl = theUrl.substr(3);
-	  findUp = urlreference.rfind('/', findUp - 1);
-	  if (findUp==string::npos) {
-	    cerr << "bad url reference, to much ../" << endl;
-	    return newUrl;
-	  }
-	  urlreference = urlreference.substr(0, findUp + 1);
-	} else {
-	  cerr << "bad url reference, to much ../" << endl;
-	  return newUrl;
-	}
+        if (pos == 0) {
+          theUrl = theUrl.substr(2);
+          continue;
+        }
+
+        if (theUrl[pos - 1] == '.') {
+          theUrl = theUrl.substr(3);
+          findUp = urlreference.rfind('/', findUp - 1);
+
+          if (findUp==string::npos) {
+            cerr << "bad url reference, to much ../" << endl;
+            return newUrl;
+          }
+
+          urlreference = urlreference.substr(0, findUp + 1);
+        }
+        else {
+          cerr << "bad url reference, to much ../" << endl;
+          return newUrl;
+        }
       }
+
       theUrl = urlreference + theUrl;
     }
+
     if (theUrl != "/") {
       newUrl.setUrl(theUrl);
       newUrl.server = this->server;
       newUrl.serverport = this->serverport;
     }
   }
+
   return newUrl;
 }
 
 
 namespace {
-  const char * paramHelp[] = {
-    // server
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "string" ) \
-    HTML_HELP_DEF( "default", "www.labri.fr" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the web server that you want to inspect. No need for http:// at the beginning; http protocol is always assumed. No need for / at the end." \
-    HTML_HELP_CLOSE(),
-    // initial page
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "string" ) \
-    HTML_HELP_DEF( "default", "" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the first web page to visit. No need for / at the beginning."\
-    HTML_HELP_CLOSE(),
-    // max number of links
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "unsigned int" ) \
-    HTML_HELP_DEF( "default", "1000" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the maximum number of nodes (different pages) allowed in the extracted graph." \
-    HTML_HELP_CLOSE(),
-    // non http links
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "boolean" ) \
-    HTML_HELP_DEF( "default", "true" ) \
-    HTML_HELP_BODY() \
-    "This parameter indicates if non http links (https, ftp, mailto...) have to be extracted." \
-    HTML_HELP_CLOSE(),
-    // other server
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "boolean" ) \
-    HTML_HELP_DEF( "default", "false" ) \
-    HTML_HELP_BODY() \
-    "This parameter indicates if links or redirection to other server pages have to be followed." \
-    HTML_HELP_CLOSE(),
-    // compute layout
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "boolean" ) \
-    HTML_HELP_DEF( "default", "true" ) \
-    HTML_HELP_BODY() \
-    "This parameter indicates if a layout of the extracted graph has to be computed." \
-    HTML_HELP_CLOSE(),
-    // page color
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "color" ) \
-    HTML_HELP_DEF( "default", "red" ) \
-    HTML_HELP_BODY() \
-    "This parameter indicated the color used to display nodes." \
-    HTML_HELP_CLOSE(),
-    // link color
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "color" ) \
-    HTML_HELP_DEF( "default", "blue" ) \
-    HTML_HELP_BODY() \
-    "This parameter indicated the color used to display links." \
-    HTML_HELP_CLOSE(),
-    // link color
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "color" ) \
-    HTML_HELP_DEF( "default", "yellow" ) \
-    HTML_HELP_BODY() \
-    "This parameter indicated the color used to display redirections." \
-    HTML_HELP_CLOSE()
-  };
+const char * paramHelp[] = {
+  // server
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "string" ) \
+  HTML_HELP_DEF( "default", "www.labri.fr" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the web server that you want to inspect. No need for http:// at the beginning; http protocol is always assumed. No need for / at the end." \
+  HTML_HELP_CLOSE(),
+  // initial page
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "string" ) \
+  HTML_HELP_DEF( "default", "" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the first web page to visit. No need for / at the beginning."\
+  HTML_HELP_CLOSE(),
+  // max number of links
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "unsigned int" ) \
+  HTML_HELP_DEF( "default", "1000" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the maximum number of nodes (different pages) allowed in the extracted graph." \
+  HTML_HELP_CLOSE(),
+  // non http links
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "boolean" ) \
+  HTML_HELP_DEF( "default", "true" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicates if non http links (https, ftp, mailto...) have to be extracted." \
+  HTML_HELP_CLOSE(),
+  // other server
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "boolean" ) \
+  HTML_HELP_DEF( "default", "false" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicates if links or redirection to other server pages have to be followed." \
+  HTML_HELP_CLOSE(),
+  // compute layout
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "boolean" ) \
+  HTML_HELP_DEF( "default", "true" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicates if a layout of the extracted graph has to be computed." \
+  HTML_HELP_CLOSE(),
+  // page color
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "color" ) \
+  HTML_HELP_DEF( "default", "red" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicated the color used to display nodes." \
+  HTML_HELP_CLOSE(),
+  // link color
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "color" ) \
+  HTML_HELP_DEF( "default", "blue" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicated the color used to display links." \
+  HTML_HELP_CLOSE(),
+  // link color
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "color" ) \
+  HTML_HELP_DEF( "default", "yellow" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicated the color used to display redirections." \
+  HTML_HELP_CLOSE()
+};
 }
 
 struct WebImport:public ImportModule {
@@ -401,36 +447,44 @@ struct WebImport:public ImportModule {
     addDependency<LayoutAlgorithm>("GEM (Frick)", "1.1");
   }
 
-  string urlDecode(const string& url) { 
+  string urlDecode(const string& url) {
     string buffer = "";
     int len = url.length();
 
     for (int i = 0; i < len; ++i) {
       char ch = url.at(i);
-      if (ch == '%'){
-	int chnum = 0;
-	ch = url.at(++i);
-	chnum = ch - '0';
-	if (chnum > 9) {
-	  if (ch >= 'A')
-	    chnum = 10 + (ch - 'A');
-	  else
-	    chnum = 10 + (ch - 'a');
-	}
-	chnum *= 16;
-	ch = url.at(++i);
-	if (ch - '0' > 9) {
-	  if (ch >= 'A')
-	    chnum += ch - 'A';
-	  else
-	    chnum += ch - 'a';
-	} else
-	  chnum += ch - '0';
-	buffer += chnum;
-      } else {
-	buffer += ch;
+
+      if (ch == '%') {
+        int chnum = 0;
+        ch = url.at(++i);
+        chnum = ch - '0';
+
+        if (chnum > 9) {
+          if (ch >= 'A')
+            chnum = 10 + (ch - 'A');
+          else
+            chnum = 10 + (ch - 'a');
+        }
+
+        chnum *= 16;
+        ch = url.at(++i);
+
+        if (ch - '0' > 9) {
+          if (ch >= 'A')
+            chnum += ch - 'A';
+          else
+            chnum += ch - 'a';
+        }
+        else
+          chnum += ch - '0';
+
+        buffer += chnum;
+      }
+      else {
+        buffer += ch;
       }
     }
+
     return buffer;
   }
 
@@ -439,47 +493,58 @@ struct WebImport:public ImportModule {
     if (nodes.find(url)==nodes.end()) {
       // no more added node after maxSize
       if (nbNodes == maxSize) {
-	n = node();
-	return false;
+        n = node();
+        return false;
       }
+
       n=graph->addNode();
       ++nbNodes;
       stringstream str;
       str << url.server;
+
       if (url.url[0] != '/')
-	str << "/";
+        str << "/";
+
       str << url.getUrl();
       labels->setNodeValue(n, urlDecode(str.str()));
       ostringstream oss;
-      if(url.is_http){
-    	  oss<<"http://";
+
+      if(url.is_http) {
+        oss<<"http://";
       }
+
       oss << str.str();
       urls->setNodeValue(n,oss.str());
       nodes[url] = n;
       return true;
     }
+
     n = nodes[url];
     return false;
   }
 
   //========================================================
   bool addEdge(const UrlElement &source, const UrlElement &target,
-	       const char* type, const Color *color) {
+               const char* type, const Color *color) {
     node sNode,tNode;
     bool sAdded = addNode(source, sNode);
     bool tAdded = addNode(target, tNode);
+
     // if new nodes can node be added (nbNodes > maxSize)
     // stop adding edge
     if (!sNode.isValid() || !tNode.isValid())
       return false;
+
     if (sAdded || tAdded || ((sNode != tNode) && !graph->existEdge(sNode, tNode).isValid())) {
       edge e = graph->addEdge(sNode, tNode);
+
       if (type)
-	labels->setEdgeValue(e, type);
+        labels->setEdgeValue(e, type);
+
       if (color)
-	colors->setEdgeValue(e, *color);
+        colors->setEdgeValue(e, *color);
     }
+
     return true;
   }
   //========================================================
@@ -488,57 +553,66 @@ struct WebImport:public ImportModule {
     while(!toVisit.empty()) {
       url = toVisit.front();
       toVisit.pop_front();
+
       if (visited.find(url)==visited.end()) {
-	visited.insert(url);
-	return true;
+        visited.insert(url);
+        return true;
       }
     }
+
     return false;
   }
   //========================================================
   void findAndTreatUrls(const string&lowercase,
-			const string&balise, UrlElement &url) {
+                        const string&balise, UrlElement &url) {
     size_t llen = lowercase.length();
     size_t len = llen;
+
     while ( len != string::npos ) {
       len = lowercase.rfind(balise, len);
       bool urlFound = true;
+
       if( len != string::npos ) {
-	// find the next '=' then the first '"'
-	size_t start = len + balise.length();
-	len--;
-	char c = '=';
-	for (; start < llen; start++) {
-	  if (lowercase[start] == c) {
-	    // found =
-	    if (c == '=') {
-	      // now looking for "
-	      c = '"';
-	      continue;
-	    }
-	    else
-	      break;
-	  }
-	  // only space chars allowed between balise and '='
-	  // and between '=' and the first '"' too
-	  if (lowercase[start] != ' ') {
-	    urlFound = false;
-	    break;
-	  }
-	}
-	if (urlFound) {
-	  ++start;
-	  size_t end = start;
-	  // find the end of the string
-	  for (; end < llen; end++) {
-	    if (lowercase[end] == '"')
-	      break;
-	  }
-	  if (end != start) {
-	    string newurl = url.data.substr(start, end - start);
-	    parseUrl(newurl, url);
-	  }
-	}
+        // find the next '=' then the first '"'
+        size_t start = len + balise.length();
+        len--;
+        char c = '=';
+
+        for (; start < llen; start++) {
+          if (lowercase[start] == c) {
+            // found =
+            if (c == '=') {
+              // now looking for "
+              c = '"';
+              continue;
+            }
+            else
+              break;
+          }
+
+          // only space chars allowed between balise and '='
+          // and between '=' and the first '"' too
+          if (lowercase[start] != ' ') {
+            urlFound = false;
+            break;
+          }
+        }
+
+        if (urlFound) {
+          ++start;
+          size_t end = start;
+
+          // find the end of the string
+          for (; end < llen; end++) {
+            if (lowercase[end] == '"')
+              break;
+          }
+
+          if (end != start) {
+            string newurl = url.data.substr(start, end - start);
+            parseUrl(newurl, url);
+          }
+        }
       }
     }
   }
@@ -547,9 +621,12 @@ struct WebImport:public ImportModule {
   void parseHtml (UrlElement &url) {
     //cerr << __PRETTY_FUNCTION__ << endl << flush;
     if (url.data.empty()) return;
+
     string lowercase(url.data);
+
     for (size_t i = 0; i< lowercase.length(); ++i)
       lowercase[i] = tolower(lowercase[i]);
+
     findAndTreatUrls(lowercase," href",url);
     findAndTreatUrls(lowercase," src",url);
   }
@@ -557,6 +634,7 @@ struct WebImport:public ImportModule {
   void addUrl (const UrlElement &url, bool _toVisit) {
     if (visited.find(url)!=visited.end())
       return;
+
     if (_toVisit && url.is_http)
       toVisit.push_back(url);
   }
@@ -567,57 +645,71 @@ struct WebImport:public ImportModule {
     tmpUrl.setUrl("/");
     tmpUrl.serverport = 80;
     tmpUrl.data = "";
+
     if (visited.find(tmpUrl)!=visited.end())
       return;
+
     toVisit.push_back(tmpUrl);
   }
   //========================================================
   void parseUrl (const string &href, UrlElement &starturl) {
     UrlElement newUrl = starturl.parseUrl(href);
+
     if (newUrl.isValid() && (extractNonHttp || newUrl.is_http) &&
-	addEdge(starturl, newUrl, 0, 0))
+        addEdge(starturl, newUrl, 0, 0))
       addUrl(newUrl, visitOther || (newUrl.server == starturl.server));
   }
   //========================================================
   bool start() {
     UrlElement url;
     unsigned step = 20;
+
     while (nextUrl(url)) {
       if (url.isHtmlPage()) {
-	if (pluginProgress && ((nbNodes % step) == 0)) {
-	  pluginProgress->setComment(string("Visiting ") +
-				     urlDecode(url.server + url.url));
-	  if (pluginProgress->progress(nbNodes, maxSize) !=TLP_CONTINUE)
-	    return pluginProgress->state()!= TLP_CANCEL;
-	}
+        if (pluginProgress && ((nbNodes % step) == 0)) {
+          pluginProgress->setComment(string("Visiting ") +
+                                     urlDecode(url.server + url.url));
+
+          if (pluginProgress->progress(nbNodes, maxSize) !=TLP_CONTINUE)
+            return pluginProgress->state()!= TLP_CANCEL;
+        }
+
 #ifndef NDEBUG
-	cerr << "Visiting: " << url.server << url.url << " ..." << flush;
+        cerr << "Visiting: " << url.server << url.url << " ..." << flush;
 #endif
-	if (url.isRedirected()) {
-	  UrlElement redirection = url.getRedirection();
-	  if (redirection.isValid()) {
+
+        if (url.isRedirected()) {
+          UrlElement redirection = url.getRedirection();
+
+          if (redirection.isValid()) {
 #ifndef NDEBUG
-	    cerr << endl << "redirected to " << redirection.server << redirection.url << endl;
+            cerr << endl << "redirected to " << redirection.server << redirection.url << endl;
 #endif
-	    if (addEdge(url, redirection,  "redirection", redirectionColor))
-	      addUrl(redirection,
-		     visitOther || redirection.server == url.server);
-	  } else
-	    cerr << endl << "invalid redirection" << endl;
-	} else {
-	  url.load();
-	  parseHtml(url);
-	  url.clear();
+
+            if (addEdge(url, redirection,  "redirection", redirectionColor))
+              addUrl(redirection,
+                     visitOther || redirection.server == url.server);
+          }
+          else
+            cerr << endl << "invalid redirection" << endl;
+        }
+        else {
+          url.load();
+          parseHtml(url);
+          url.clear();
 #ifndef NDEBUG
-	  cerr << " done" << endl << flush;
+          cerr << " done" << endl << flush;
 #endif
-	}
+        }
       }
+
 #ifndef NDEBUG
       else
-	cerr << "Omitting : " << url.server << url.url << " ==> [not html]"<< endl;
+        cerr << "Omitting : " << url.server << url.url << " ==> [not html]"<< endl;
+
 #endif
     }
+
     return true;
   }
 
@@ -633,6 +725,7 @@ struct WebImport:public ImportModule {
     nbNodes = 0;
     visitOther = false;
     extractNonHttp = true;
+
     if (dataSet != 0) {
       dataSet->get("server", server);
       dataSet->get("web page", url);
@@ -647,19 +740,25 @@ struct WebImport:public ImportModule {
 
     UrlElement mySite;
     size_t pos = server.find("http://");
+
     if (pos == 0)
       // remove http:// prefix
       server = server.substr(7);
+
     // remove / prfix
     if (server[0] == 0)
       server = server.substr(1);
+
     if (server[server.size() - 1] == '/')
       // remove / suffix
-      server = server.substr(0, server.size() - 1); 
+      server = server.substr(0, server.size() - 1);
+
     mySite.server = server;
+
     if (url[0] == '/')
       // remove / prefix
       url = url.substr(1);
+
     mySite.setUrl(string("/") + url);
     mySite.serverport = 80;
     mySite.data = "";
@@ -673,15 +772,18 @@ struct WebImport:public ImportModule {
     redirectionColor = &rColor;
 
     graph->getProperty<IntegerProperty>("viewShape")
-      ->setAllNodeValue(14); // GlyphManager::getInst().glyphId("2D - Circle")
+    ->setAllNodeValue(14); // GlyphManager::getInst().glyphId("2D - Circle")
+
     if (!mySite.load()) {
       if (pluginProgress) {
-	stringstream sstr;
-	sstr << "Unable to access http://" << mySite.server << mySite.url << " (ERROR " << mySite.getCode() << ')';
-	pluginProgress->setError(sstr.str());
+        stringstream sstr;
+        sstr << "Unable to access http://" << mySite.server << mySite.url << " (ERROR " << mySite.getCode() << ')';
+        pluginProgress->setError(sstr.str());
       }
+
       return false;
     }
+
     node n;
     toVisit.push_back(mySite);
     addNode(mySite, n);
@@ -690,8 +792,10 @@ struct WebImport:public ImportModule {
       pluginProgress->showPreview(false);
       pluginProgress->setComment(std::string("Visiting ") + mySite.server + mySite.url);
     }
+
     if (!start())
       return false;
+
     if (computelayout) {
       pluginProgress->setComment("Layouting extracted graph using GEM...");
       string errMsg;
@@ -700,8 +804,9 @@ struct WebImport:public ImportModule {
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
       tmp.set("initial layout", layout);
       return graph->computeProperty("GEM (Frick)", layout,
-				    errMsg, pluginProgress, &tmp);
+                                    errMsg, pluginProgress, &tmp);
     }
+
     return true;
   }
 };

@@ -31,44 +31,44 @@ using namespace tlp;
  *
  */
 class InteractorMagicSelection  : public InteractorChainOfResponsibility {
-  public:
+public:
 
-    /**
-    * Default constructor
-    */
-    InteractorMagicSelection():InteractorChainOfResponsibility(":/tulip/gui/icons/i_magic.png","Fuzzy selection: select neighboring nodes based on their value of a metric."), configWidget(NULL) {
-      setPriority(3);
-      setConfigurationWidgetText(QString("<h3>Magic selection interactor</h3>")+
-                    "Select neighbour elements which have the same value on a metric");
-    }
+  /**
+  * Default constructor
+  */
+  InteractorMagicSelection():InteractorChainOfResponsibility(":/tulip/gui/icons/i_magic.png","Fuzzy selection: select neighboring nodes based on their value of a metric."), configWidget(NULL) {
+    setPriority(3);
+    setConfigurationWidgetText(QString("<h3>Magic selection interactor</h3>")+
+                               "Select neighbour elements which have the same value on a metric");
+  }
 
-    ~InteractorMagicSelection() {
-    	delete configWidget;
-    }
+  ~InteractorMagicSelection() {
+    delete configWidget;
+  }
 
-    virtual bool isCompatible(const std::string &viewName) {
-      return viewName=="Node Link Diagram view";
-    }
+  virtual bool isCompatible(const std::string &viewName) {
+    return viewName=="Node Link Diagram view";
+  }
 
-    QWidget* getConfigurationWidget() {
-      return configWidget;
-    }
+  QWidget* getConfigurationWidget() {
+    return configWidget;
+  }
 
-    /**
-    * Construct chain of responsibility
-    */
-    void construct() {
-      configWidget = new MagicSelectionInteractorConfigWidget();
-      pushInteractorComponent(new MousePanNZoomNavigator);
-      pushInteractorComponent(new MouseMagicWandSelector(configWidget));
-    }
-    
-    virtual void setView(View* view) {
-      InteractorChainOfResponsibility::setView(view);
-    }
-    
-  private:
-    MagicSelectionInteractorConfigWidget* configWidget;
+  /**
+  * Construct chain of responsibility
+  */
+  void construct() {
+    configWidget = new MagicSelectionInteractorConfigWidget();
+    pushInteractorComponent(new MousePanNZoomNavigator);
+    pushInteractorComponent(new MouseMagicWandSelector(configWidget));
+  }
+
+  virtual void setView(View* view) {
+    InteractorChainOfResponsibility::setView(view);
+  }
+
+private:
+  MagicSelectionInteractorConfigWidget* configWidget;
 };
 
 INTERACTORPLUGIN(InteractorMagicSelection, "InteractorMagicSelection", "Tulip Team", "01/04/2009", "Magic Selection Interactor", "1.0")

@@ -32,9 +32,8 @@ class LayoutProperty;
 /** \addtogroup Mouse_interactor */
 /*@{*/
 class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent,
-  private GraphObserver, private PropertyObserver, private Observable
-{
- private:
+  private GraphObserver, private PropertyObserver, private Observable {
+private:
   node source;
   bool started;
   Coord startPos,curPos;
@@ -42,7 +41,7 @@ class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent,
   Graph *graph;
   LayoutProperty *layoutProperty;
 
- public:
+public:
   MouseEdgeBuilder();
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
@@ -54,7 +53,9 @@ class TLP_QT_SCOPE MouseEdgeBuilder:public InteractorComponent,
   void destroy(PropertyInterface*);
   void treatEvent(const Event&);
 
-  InteractorComponent *clone() { return new MouseEdgeBuilder(); }
+  InteractorComponent *clone() {
+    return new MouseEdgeBuilder();
+  }
 };
 /*@}*/
 

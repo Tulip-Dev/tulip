@@ -36,9 +36,11 @@ bool SpanningDagSelection::run() {
   result->setAllEdgeValue(true);
   vector<edge> obstructions;
   AcyclicTest::acyclicTest(graph, &obstructions);
+
   for (vector<edge>::const_iterator it = obstructions.begin(); it != obstructions.end(); ++it) {
     result->setEdgeValue(*it, false);
   }
+
   return true;
 }
 //=================================================================

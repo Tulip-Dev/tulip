@@ -65,12 +65,12 @@ GLYPHPLUGIN(Diamond, "2D - Diamond", "Patrick Mary", "23/06/2011", "Textured Dia
 EEGLYPHPLUGIN(Diamond,"2D - Diamond", "David Auber", "23/06/2011", "Textured Diamond", "1.0", 5)
 //===================================================================================
 Diamond::Diamond(GlyphContext *gc) :
-	Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
+  Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
   if(!diamond)
     diamond=new GlRegularPolygon(Coord(0,0,0),Size(.5,.5,0), 4);
 }
 Diamond::Diamond(EdgeExtremityGlyphContext *gc) :
-	Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
+  Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
   if(!diamond)
     diamond=new GlRegularPolygon(Coord(0,0,0), Size(.5,.5,0), 4);
 }
@@ -79,13 +79,14 @@ Diamond::~Diamond() {
 }
 //=====================================================
 void Diamond::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-        boundingBox[0] = Coord(-0.35, -0.35, 0);
-        boundingBox[1] = Coord(0.35, 0.35, 0);
+  boundingBox[0] = Coord(-0.35, -0.35, 0);
+  boundingBox[1] = Coord(0.35, 0.35, 0);
 }
 //=====================================================
 void Diamond::draw(node n, float lod) {
   diamond->setLightingMode(true);
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
+
   if(textureName!="")
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
@@ -97,12 +98,13 @@ void Diamond::draw(node n, float lod) {
 }
 
 void Diamond::draw(edge e,
-                    node,
-                    const Color & glyphColor,
-                    const Color &borderColor,
-                    float lod) {
+                   node,
+                   const Color & glyphColor,
+                   const Color &borderColor,
+                   float lod) {
   diamond->setLightingMode(false);
   string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+
   if(textureName!="")
     textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
@@ -114,10 +116,10 @@ void Diamond::draw(edge e,
 }
 //=====================================================
 void Diamond::draw(const Color &fillColor,
-                    const Color &borderColor,
-                    float borderWidth,
-                    const std::string &textureName,
-                    float lod){
+                   const Color &borderColor,
+                   float borderWidth,
+                   const std::string &textureName,
+                   float lod) {
   if(borderWidth<1e-6)
     borderWidth=1e-6;
 
@@ -137,19 +139,24 @@ Coord Diamond::getAnchor(const Coord &vector) const {
   float distMin = x*x + ((y - 0.5) * (y - 0.5));
   // check with the right corner
   float dist = ((x - 0.5) * (x - 0.5)) + y*y;
+
   if (distMin > dist) {
     distMin = dist;
     anchor = Coord(0.5, 0, 0);
   }
+
   // check with the bottom corner
   dist = x*x + ((y + 0.5)*(y + 0.5));
+
   if (distMin > dist) {
     distMin = dist;
     anchor = Coord(0, -0.5, 0);
   }
+
   // check with left corner
   if (distMin > ((x + 0.5) * (x + 0.5)) + y*y)
     return Coord(-0.5, 0, 0);
+
   return anchor;
 }
 /*@}*/

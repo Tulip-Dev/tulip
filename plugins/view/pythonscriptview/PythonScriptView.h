@@ -47,7 +47,7 @@ class SGHierarchyWidget;
  *
  *  The view allows to write a script that will operate on the graph currently loaded in Tulip.
  *  Its graphical interface contains the following components :
- *  	- a nice script editor with syntax highlighting and auto-completion
+ *    - a nice script editor with syntax highlighting and auto-completion
  *      - some buttons to start / stop the current edited script
  *      - a console output widget
  *
@@ -57,69 +57,73 @@ class SGHierarchyWidget;
 
 class PythonScriptView : public tlp::AbstractView {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	PythonScriptView();
-	~PythonScriptView();
+  PythonScriptView();
+  ~PythonScriptView();
 
-	QWidget *construct(QWidget *parent);
+  QWidget *construct(QWidget *parent);
 
-	void setData(tlp::Graph *graph, tlp::DataSet dataSet);
+  void setData(tlp::Graph *graph, tlp::DataSet dataSet);
 
-	void getData(tlp::Graph **graph, tlp::DataSet *dataSet);
+  void getData(tlp::Graph **graph, tlp::DataSet *dataSet);
 
-	tlp::Graph* getGraph() {return graph;}
-	void createPicture(const std::string&, int, int) {}
-	void setGraph(tlp::Graph* graph) {this->graph = graph;}
-	void draw() {}
-	void refresh() {}
-	void init() {}
+  tlp::Graph* getGraph() {
+    return graph;
+  }
+  void createPicture(const std::string&, int, int) {}
+  void setGraph(tlp::Graph* graph) {
+    this->graph = graph;
+  }
+  void draw() {}
+  void refresh() {}
+  void init() {}
 
-	bool eventFilter(QObject *obj, QEvent *event);
+  bool eventFilter(QObject *obj, QEvent *event);
 
 private slots :
 
-	void newScript();
-	void loadScript();
-	void saveScript();
-	void executeCurrentScript();
-	void stopCurrentScript();
-	void showApiDocumentation();
-	void newStringModule();
-	void newFileModule();
-	void loadModule();
-	void saveModuleToFile();
+  void newScript();
+  void loadScript();
+  void saveScript();
+  void executeCurrentScript();
+  void stopCurrentScript();
+  void showApiDocumentation();
+  void newStringModule();
+  void newFileModule();
+  void loadModule();
+  void saveModuleToFile();
 
-	void closeMainScriptTabRequested(int tab);
-	void closeModuleTabRequested(int tab);
+  void closeMainScriptTabRequested(int tab);
+  void closeModuleTabRequested(int tab);
 
 
 private :
 
-	bool loadScript(const QString &fileName);
-	bool loadModule(const QString &fileName);
-	bool loadModuleFromSrcCode(const std::string &moduleName, const std::string &moduleSrcCode);
-	void saveModule();
-	void saveModule(int tabIdx);
-	void saveAllModules();
-	void reloadAllModules();
+  bool loadScript(const QString &fileName);
+  bool loadModule(const QString &fileName);
+  bool loadModuleFromSrcCode(const std::string &moduleName, const std::string &moduleSrcCode);
+  void saveModule();
+  void saveModule(int tabIdx);
+  void saveAllModules();
+  void reloadAllModules();
 
 
 
-	PythonScriptViewWidget *viewWidget;
-	PythonInterpreter *pythonInterpreter;
-	tlp::Graph *graph;
-	QDialog *browserDialog;
-	QWebView *browser;
+  PythonScriptViewWidget *viewWidget;
+  PythonInterpreter *pythonInterpreter;
+  tlp::Graph *graph;
+  QDialog *browserDialog;
+  QWebView *browser;
 
-	std::map<int, std::string> editedMainScripts;
-	std::map<int, std::string> editedModules;
+  std::map<int, std::string> editedMainScripts;
+  std::map<int, std::string> editedModules;
 
 
-	tlp::SGHierarchyWidget *clusterTreeWidget;
-	bool scriptStopped;
+  tlp::SGHierarchyWidget *clusterTreeWidget;
+  bool scriptStopped;
 
 };
 

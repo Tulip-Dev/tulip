@@ -43,12 +43,12 @@ using namespace tlp;
  */
 class Circle: public Glyph, public EdgeExtremityGlyphFrom2DGlyph {
 public:
-	Circle(GlyphContext *gc = NULL);
-	Circle(EdgeExtremityGlyphContext *gc = NULL);
-	virtual ~Circle();
-	virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
-	virtual void draw(node n, float lod);
-	virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod);
+  Circle(GlyphContext *gc = NULL);
+  Circle(EdgeExtremityGlyphContext *gc = NULL);
+  virtual ~Circle();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual void draw(node n, float lod);
+  virtual void draw(edge e, node n, const Color& glyphColor,const Color &borderColor, float lod);
   virtual void draw(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod);
 
 protected:
@@ -63,12 +63,12 @@ GLYPHPLUGIN(Circle, "2D - Circle", "David Auber", "09/07/2002", "Textured Circle
 EEGLYPHPLUGIN(Circle,"2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", 14)
 //===================================================================================
 Circle::Circle(GlyphContext *gc) :
-	Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
+  Glyph(gc), EdgeExtremityGlyphFrom2DGlyph(NULL) {
   if(!circle)
     circle=new GlCircle(Coord(0,0,0),0.5,Color(0,0,0,255),Color(0,0,0,255),true,true,0.,30);
 }
 Circle::Circle(EdgeExtremityGlyphContext  *gc) :
-	Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
+  Glyph(NULL), EdgeExtremityGlyphFrom2DGlyph(gc) {
   if(!circle)
     circle=new GlCircle(Coord(0,0,0),1.,Color(0,0,0,255),Color(0,0,0,255),true,true);
 }
@@ -77,13 +77,14 @@ Circle::~Circle() {
 }
 //=====================================================
 void Circle::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-        boundingBox[0] = Coord(-0.35, -0.35, 0);
-        boundingBox[1] = Coord(0.35, 0.35, 0);
+  boundingBox[0] = Coord(-0.35, -0.35, 0);
+  boundingBox[1] = Coord(0.35, 0.35, 0);
 }
 //=====================================================
 void Circle::draw(edge e, node, const Color& glyphColor,const Color &borderColor, float lod) {
   circle->setLightingMode(false);
   string textureName=edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+
   if(textureName!="")
     textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
@@ -98,6 +99,7 @@ void Circle::draw(edge e, node, const Color& glyphColor,const Color &borderColor
 void Circle::draw(node n, float lod) {
   circle->setLightingMode(true);
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
+
   if(textureName!="")
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
@@ -113,7 +115,7 @@ void Circle::draw(const Color &fillColor,
                   const Color &borderColor,
                   float borderWidth,
                   const std::string &textureName,
-                  float lod){
+                  float lod) {
   if(borderWidth<1e-6)
     borderWidth=1e-6;
 

@@ -25,53 +25,53 @@
 #include <tulip/CSVContentHandler.h>
 
 namespace Ui {
-    class CSVParserConfigurationWidget;
+class CSVParserConfigurationWidget;
 }
 
-namespace tlp{
+namespace tlp {
 
 
-    class CSVParserConfigurationWidgetEditableComboBox : public QComboBox {
-        Q_OBJECT
-    public :
-            CSVParserConfigurationWidgetEditableComboBox(QWidget * parent = 0 );
-    protected:
-            //Qt workaround avoiding QDialog to close automatically when pressing return or enter.
-            void keyPressEvent(QKeyEvent *e);
-    };
+class CSVParserConfigurationWidgetEditableComboBox : public QComboBox {
+  Q_OBJECT
+public :
+  CSVParserConfigurationWidgetEditableComboBox(QWidget * parent = 0 );
+protected:
+  //Qt workaround avoiding QDialog to close automatically when pressing return or enter.
+  void keyPressEvent(QKeyEvent *e);
+};
 
 class TLP_QT_SCOPE CSVParserConfigurationWidget : public QWidget {
-    Q_OBJECT    
+  Q_OBJECT
 public:
-    CSVParserConfigurationWidget(QWidget *parent = 0);
-    ~CSVParserConfigurationWidget();    
-    /**
-      * @brief Generate a csv parser in function of the parameters in the widget. User define the range of line to import.
-      **/
-    CSVParser * buildParser(unsigned int firstLine=0, unsigned int lastLine=UINT_MAX)const;
+  CSVParserConfigurationWidget(QWidget *parent = 0);
+  ~CSVParserConfigurationWidget();
+  /**
+    * @brief Generate a csv parser in function of the parameters in the widget. User define the range of line to import.
+    **/
+  CSVParser * buildParser(unsigned int firstLine=0, unsigned int lastLine=UINT_MAX)const;
 
-    std::string getFile()const;
-    bool isValid()const;
-    std::string getSeparator()const;
-    char getTextSeparator()const;
-    std::string getEncoding()const;
-    bool invertMatrix()const;
+  std::string getFile()const;
+  bool isValid()const;
+  std::string getSeparator()const;
+  char getTextSeparator()const;
+  std::string getEncoding()const;
+  bool invertMatrix()const;
 
 public slots:
-    void setFileToOpen(const QString& fileToOpen);
+  void setFileToOpen(const QString& fileToOpen);
 protected:
-    void fillEncodingComboBox();
-    void changeEvent(QEvent *e);
+  void fillEncodingComboBox();
+  void changeEvent(QEvent *e);
 
 protected slots:
-    void changeFileNameButtonPressed();
-    void encodingChanged();
+  void changeFileNameButtonPressed();
+  void encodingChanged();
 
 private:
-    Ui::CSVParserConfigurationWidget *ui;
+  Ui::CSVParserConfigurationWidget *ui;
 
 signals:
-    void parserChanged();
+  void parserChanged();
 };
 }
 #endif // CSVPARSERCONFIGURATIONWIDGET_H

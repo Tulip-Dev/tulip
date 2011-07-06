@@ -25,7 +25,7 @@ using namespace std;
 using namespace tlp;
 
 //====================================================================
-NodeMetric::NodeMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context) 
+NodeMetric::NodeMetric(const tlp::PropertyContext &context):DoubleAlgorithm(context)
 {}
 
 // structure below is used to implement dfs loop
@@ -53,6 +53,7 @@ struct dfsStruct {
 //=======================================================================
 double NodeMetric::getNodeValue(tlp::node current) {
   double value = result->getNodeValue(current);
+
   if (value != 0.0)
     return value;
 
@@ -62,35 +63,41 @@ double NodeMetric::getNodeValue(tlp::node current) {
   dfsStruct dfsParams(current, outNodes);
   double res = 1.0;
   dfsLevels.push(dfsParams);
+
   while(!dfsLevels.empty()) {
     while (outNodes->hasNext()) {
       node neighbour = outNodes->next();
       value = result->getNodeValue(neighbour);
+
       // compute res
       if (value != 0.0)
-	res += value;
+        res += value;
       else {
-	// store res for current
-	dfsLevels.top().res = res;
-	// push new dfsParams on stack
-	current = dfsParams.current = neighbour;
-	outNodes = dfsParams.outNodes = graph->getOutNodes(neighbour);
-	res = dfsParams.res = 1.0;
-	dfsLevels.push(dfsParams);
-	// and go deeper
-	break;
+        // store res for current
+        dfsLevels.top().res = res;
+        // push new dfsParams on stack
+        current = dfsParams.current = neighbour;
+        outNodes = dfsParams.outNodes = graph->getOutNodes(neighbour);
+        res = dfsParams.res = 1.0;
+        dfsLevels.push(dfsParams);
+        // and go deeper
+        break;
       }
     }
+
     if (outNodes->hasNext())
       // new dfsParams has been pushed on stack
       continue;
+
     // save current res
     result->setNodeValue(current, res);
     // unstack current dfsParams
     delete outNodes;
     dfsLevels.pop();
+
     if (dfsLevels.empty())
       break;
+
     // get dfsParams on top of dfsLevels
     dfsParams = dfsLevels.top();
     current = dfsParams.current;
@@ -99,6 +106,7 @@ double NodeMetric::getNodeValue(tlp::node current) {
     dfsParams.res += res;
     res = dfsParams.res;
   }
+
   return res;
 }
 //====================================================================
@@ -107,7 +115,7 @@ bool NodeMetric::run() {
   result->setAllNodeValue(0);
   node _n;
   forEach(_n, graph->getNodes())
-    result->setNodeValue(_n,getNodeValue(_n));
+  result->setNodeValue(_n,getNodeValue(_n));
   return true;
 }
 //====================================================================

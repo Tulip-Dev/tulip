@@ -33,9 +33,11 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ExtendedClusterOperationTest );
 void ExtendedClusterOperationTest::setUp() {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   graph = tlp::newGraph();
+
   for (unsigned int i=0; i<5; ++i) {
     nodes.push_back(graph->addNode());
   }
+
   edges.push_back(graph->addEdge(nodes[0], nodes[1]));
   edges.push_back(graph->addEdge(nodes[0], nodes[2]));
   edges.push_back(graph->addEdge(nodes[1], nodes[3]));
@@ -82,11 +84,14 @@ void ExtendedClusterOperationTest::testBugCreateOpenMetaNode() {
   edge e02 = quotient->addEdge(nodes[0], nodes[2]);
   Iterator<edge>* ite = quotient->getInEdges(nodes[2]);
   unsigned nbEdges = 0;
+
   while (ite->hasNext()) {
     ++nbEdges;
     edge e = ite->next();
     CPPUNIT_ASSERT(e == e02 || e == edges[1]);
-  } delete ite;
+  }
+
+  delete ite;
   CPPUNIT_ASSERT(nbEdges = 2);
 
   CPPUNIT_ASSERT(quotient->isElement(e02));
@@ -99,11 +104,14 @@ void ExtendedClusterOperationTest::testBugCreateOpenMetaNode() {
 
   ite = quotient->getEdgeMetaInfo(metaE);
   nbEdges = 0;
+
   while (ite->hasNext()) {
     ++nbEdges;
     edge e = ite->next();
     CPPUNIT_ASSERT(e == e02 || e == edges[1]);
-  } delete ite;
+  }
+
+  delete ite;
   CPPUNIT_ASSERT(nbEdges = 2);
 
   quotient->openMetaNode(meta);
@@ -118,8 +126,9 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   //take the quotient graph
   Graph * subgraph = 0;
   bool find = false;
-  forEach(subgraph, graph->getSubGraphs()){
+  forEach(subgraph, graph->getSubGraphs()) {
     string name = subgraph->getAttribute<string>("name");
+
     if (name == "unnamed") {
       find = true;
       break;
@@ -142,16 +151,16 @@ void ExtendedClusterOperationTest::testOpenMetaNode() {
 
   meta = quotient->createMetaNode(group);
   quotient->openMetaNode(meta);
-  
+
   CPPUNIT_ASSERT_EQUAL(false, quotient->isElement(meta));
   CPPUNIT_ASSERT_EQUAL(false, graph->isElement(meta));
 
   CPPUNIT_ASSERT_EQUAL( 5u, graph->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL( 5u, graph->numberOfEdges());
-  
+
   CPPUNIT_ASSERT_EQUAL( 5u, quotient->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL( 5u, quotient->numberOfEdges());
-  
+
   CPPUNIT_ASSERT(quotient->existEdge(nodes[0], nodes[1]).isValid());
   CPPUNIT_ASSERT(quotient->existEdge(nodes[0], nodes[2]).isValid());
   CPPUNIT_ASSERT(quotient->existEdge(nodes[1], nodes[3]).isValid());
@@ -169,7 +178,7 @@ void ExtendedClusterOperationTest::testOpenMetaNodes() {
   node meta2 = quotient->createMetaNode(group);
   quotient->openMetaNode(meta);
   quotient->openMetaNode(meta2);
-  
+
   CPPUNIT_ASSERT_EQUAL(false, quotient->isElement(meta));
   CPPUNIT_ASSERT_EQUAL(false, graph->isElement(meta));
   CPPUNIT_ASSERT_EQUAL(false, quotient->isElement(meta2));
@@ -177,10 +186,10 @@ void ExtendedClusterOperationTest::testOpenMetaNodes() {
 
   CPPUNIT_ASSERT_EQUAL( 5u, graph->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL( 5u, graph->numberOfEdges());
-  
+
   CPPUNIT_ASSERT_EQUAL( 5u, quotient->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL( 5u, quotient->numberOfEdges());
-  
+
   CPPUNIT_ASSERT(quotient->existEdge(nodes[0], nodes[1]).isValid());
   CPPUNIT_ASSERT(quotient->existEdge(nodes[0], nodes[2]).isValid());
   CPPUNIT_ASSERT(quotient->existEdge(nodes[1], nodes[3]).isValid());
@@ -191,16 +200,16 @@ void ExtendedClusterOperationTest::testOpenMetaNodes() {
 //==========================================================
 CppUnit::Test * ExtendedClusterOperationTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : ExtendedClusterOperation" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Group a set of nodes", 
-								    &ExtendedClusterOperationTest::testCreateMetaNode ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Ungroup a MetaNode", 
-								    &ExtendedClusterOperationTest::testOpenMetaNode ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Ungroup MetaNodes in reverse order", 
-								    &ExtendedClusterOperationTest::testOpenMetaNodes ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Open a metanode in a hierarchy of subgraph #BUG-1", 
-										&ExtendedClusterOperationTest::testBugOpenInSubgraph ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Create a metanode on a non simple graph #BUG-1", 
-										&ExtendedClusterOperationTest::testBugCreateOpenMetaNode ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Group a set of nodes",
+                         &ExtendedClusterOperationTest::testCreateMetaNode ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Ungroup a MetaNode",
+                         &ExtendedClusterOperationTest::testOpenMetaNode ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Ungroup MetaNodes in reverse order",
+                         &ExtendedClusterOperationTest::testOpenMetaNodes ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Open a metanode in a hierarchy of subgraph #BUG-1",
+                         &ExtendedClusterOperationTest::testBugOpenInSubgraph ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<ExtendedClusterOperationTest>( "Create a metanode on a non simple graph #BUG-1",
+                         &ExtendedClusterOperationTest::testBugCreateOpenMetaNode ) );
   return suiteOfTests;
 }
 //==========================================================

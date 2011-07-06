@@ -46,10 +46,10 @@ class BooleanProperty;
   *
   */
 TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
-                                           const LayoutProperty *layout,
-                                           const SizeProperty *size,
-                                           const DoubleProperty *rotation,
-                                           const BooleanProperty *selection = 0);
+    const LayoutProperty *layout,
+    const SizeProperty *size,
+    const DoubleProperty *rotation,
+    const BooleanProperty *selection = 0);
 
 
 /**
@@ -59,11 +59,11 @@ TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
  * Iterator itN and itE will be deleted after the computations (ie. no need to delete them yourself)
  */
 TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
-										 Iterator<edge> *itE,
-									     const LayoutProperty *layout,
-									     const SizeProperty *size,
-									     const DoubleProperty *rotation,
-									     const BooleanProperty *selection = 0);
+    Iterator<edge> *itE,
+    const LayoutProperty *layout,
+    const SizeProperty *size,
+    const DoubleProperty *rotation,
+    const BooleanProperty *selection = 0);
 /**
   *
   * Compute a bounding sphere of a graph according to node position edge bends
@@ -73,10 +73,10 @@ TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
   * @todo test if that function correctly compute a bounding sphere.
   */
 TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (const Graph *graph,
-                                                           const LayoutProperty *layout,
-                                                           const SizeProperty *size,
-                                                           const DoubleProperty *rotation,
-                                                           const BooleanProperty *selection = 0);
+    const LayoutProperty *layout,
+    const SizeProperty *size,
+    const DoubleProperty *rotation,
+    const BooleanProperty *selection = 0);
 /**
   *
   * Compute a convexHull of a graph according to node position edge bends
@@ -85,10 +85,10 @@ TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (const Graph *graph,
   *
   */
 TLP_SCOPE   std::vector<Coord> computeConvexHull (const Graph *graph,
-                                                  const LayoutProperty *layout,
-                                                  const SizeProperty *size,
-                                                  const DoubleProperty *rotation,
-                                                  const BooleanProperty *selection = 0);
+    const LayoutProperty *layout,
+    const SizeProperty *size,
+    const DoubleProperty *rotation,
+    const BooleanProperty *selection = 0);
 
 }
 

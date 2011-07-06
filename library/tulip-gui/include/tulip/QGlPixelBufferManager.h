@@ -23,7 +23,7 @@
 
 namespace tlp {
 
-  typedef QGlBufferManager QGlPixelBufferManager;
+typedef QGlBufferManager QGlPixelBufferManager;
 
 }
 #endif // Tulip_QGLPIXELBUFFERMANAGER_H

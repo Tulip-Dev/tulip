@@ -7,7 +7,7 @@
 #include <QtCore/QDebug>
 
 PluginsCenter::PluginsCenter(QWidget *parent) :
-    QWidget(parent), _ui(new Ui::PluginsCenterData()) {
+  QWidget(parent), _ui(new Ui::PluginsCenterData()) {
   _ui->setupUi(this);
   connect(_ui->repoButton,SIGNAL(clicked()),this,SLOT(showReposPage()));
   connect(_ui->homeButton,SIGNAL(clicked()),this,SLOT(showHomePage()));
@@ -45,14 +45,17 @@ void PluginsCenter::showReposPage() {
 
 void PluginsCenter::showPage(QWidget *page) {
   QStackedWidget *stackedParent = static_cast<QStackedWidget *>(parent());
+
   if (!stackedParent)
     return;
+
   stackedParent->setCurrentWidget(this);
   _ui->pluginsContent->setCurrentWidget(page);
 }
 
 void PluginsCenter::listItemSelected() {
   int row = _ui->pluginsSideList->currentRow();
+
   switch (row) {
   case 0:
     browseAll();

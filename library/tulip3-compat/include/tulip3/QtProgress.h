@@ -24,34 +24,34 @@
 #include <QtGui/QDialog>
 
 namespace tlp {
-    class PluginProgressWidget;
-    /**
-      * @brief QDialog wrapping a PluginProgressWidget. See the PluginProgressWidget and PluginProgress documentation for more information.
-      *
-      * Display and control a PluginProgress widget inside a QDialog.
-      **/
-    class TLP3_COMPAT_SCOPE QtProgress : public QDialog, public tlp::PluginProgress{
-        Q_OBJECT
-    public:
-        QtProgress(QWidget* parent, std::string text, tlp::View *view=NULL,int updateInterval=200);
-        virtual ~QtProgress();
-    signals:
-        void sendProgress(int, int);
-    public slots:
-        tlp::ProgressState progress(int step, int max_step);
-        void cancel();
-        void stop();
-        bool isPreviewMode() const ;
-        void setPreviewMode(bool);
-        void showPreview(bool);
-        tlp::ProgressState state() const;
-        std::string getError();
-        void setError(std::string error);
-        void setComment(std::string);
-    private:
-        PluginProgressWidget* progressWidget;
-        bool firstCall;
-    };
+class PluginProgressWidget;
+/**
+  * @brief QDialog wrapping a PluginProgressWidget. See the PluginProgressWidget and PluginProgress documentation for more information.
+  *
+  * Display and control a PluginProgress widget inside a QDialog.
+  **/
+class TLP3_COMPAT_SCOPE QtProgress : public QDialog, public tlp::PluginProgress {
+  Q_OBJECT
+public:
+  QtProgress(QWidget* parent, std::string text, tlp::View *view=NULL,int updateInterval=200);
+  virtual ~QtProgress();
+signals:
+  void sendProgress(int, int);
+public slots:
+  tlp::ProgressState progress(int step, int max_step);
+  void cancel();
+  void stop();
+  bool isPreviewMode() const ;
+  void setPreviewMode(bool);
+  void showPreview(bool);
+  tlp::ProgressState state() const;
+  std::string getError();
+  void setError(std::string error);
+  void setComment(std::string);
+private:
+  PluginProgressWidget* progressWidget;
+  bool firstCall;
+};
 }
 
 #endif

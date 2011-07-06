@@ -62,15 +62,18 @@ void StringVectorPropertyTest::simpleTest() {
   node n = graph->addNode();
   StringVectorProperty *stP = graph->getProperty<StringVectorProperty>("data_1");
   vector<string> tmp;
+
   for (unsigned int i=0; i<5; ++i) {
     stringstream tmpstr;
     tmpstr << "fdjlksjflksjl : " << i;
     tmp.push_back(tmpstr.str());
   }
+
   stP->setNodeValue(n, tmp);
 
   const vector<string>& value = stP->getNodeValue(n);
   CPPUNIT_ASSERT(value.size() == 5);
+
   for(unsigned int i=0; i< value.size(); ++i) {
     CPPUNIT_ASSERT(tmp[i] == value[i]);
   }
@@ -81,15 +84,18 @@ void StringVectorPropertyTest::simpleDavidTest() {
   node n = graph->addNode();
   StringVectorProperty *stP = graph->getProperty<StringVectorProperty>("stp");
   vector<string> tmp;
+
   for (unsigned int i=0; i<5; ++i) {
     stringstream tmpstr;
     tmpstr << "fdjlksjflks\"jl : " << i;
     tmp.push_back(tmpstr.str());
   }
+
   stP->setNodeValue(n, tmp);
 
   const vector<string>& value = stP->getNodeValue(n);
   CPPUNIT_ASSERT(value.size() == 5);
+
   for(unsigned int i=0; i< value.size(); ++i) {
     CPPUNIT_ASSERT(tmp[i] == value[i]);
   }
@@ -100,6 +106,7 @@ void StringVectorPropertyTest::complexTest() {
   node n = graph->addNode();
   StringVectorProperty *stP = graph->getProperty<StringVectorProperty>("stp");
   vector<string> tmp;
+
   for (unsigned int i=0; i<5000; ++i) {
     stringstream tmpstr;
     tmpstr << "fdjlksjflksjl : " << i;
@@ -110,7 +117,9 @@ void StringVectorPropertyTest::complexTest() {
   }
 
   const vector<string>& value = stP->getNodeValue(n);
+
   CPPUNIT_ASSERT(value.size() == 5000);
+
   for(unsigned int i=0; i< value.size(); ++i) {
     CPPUNIT_ASSERT(tmp[i] == value[i]);
   }
@@ -121,6 +130,7 @@ void StringVectorPropertyTest::complexDavidTest() {
   StringVectorProperty *stP = graph->getProperty<StringVectorProperty>("stp");
   vector<string> expectedValues;
   vector<string> tmp;
+
   for (unsigned int i=0; i<5000; ++i) {
     stringstream tmpstr;
     tmpstr << "fdjlksjflks\"jl : " << i;
@@ -132,7 +142,9 @@ void StringVectorPropertyTest::complexDavidTest() {
   }
 
   const vector<string>& value = stP->getNodeValue(n);
+
   CPPUNIT_ASSERT(value.size() == expectedValues.size());
+
   for(unsigned int i=0; i< value.size(); ++i) {
     CPPUNIT_ASSERT(expectedValues[i] == value[i]);
   }
@@ -141,14 +153,14 @@ void StringVectorPropertyTest::complexDavidTest() {
 //==========================================================
 CppUnit::Test * StringVectorPropertyTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : Vector property" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<StringVectorPropertyTest>( "simple StringVectorProperty", 
-								  &StringVectorPropertyTest::simpleTest) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<StringVectorPropertyTest>( "simple david StringVectorProperty", 
-								  &StringVectorPropertyTest::simpleDavidTest) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<StringVectorPropertyTest>( "complex StringVectorProperty", 
-								  &StringVectorPropertyTest::complexTest) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<StringVectorPropertyTest>( "complex david StringVectorProperty", 
-								  &StringVectorPropertyTest::complexDavidTest) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<StringVectorPropertyTest>( "simple StringVectorProperty",
+                         &StringVectorPropertyTest::simpleTest) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<StringVectorPropertyTest>( "simple david StringVectorProperty",
+                         &StringVectorPropertyTest::simpleDavidTest) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<StringVectorPropertyTest>( "complex StringVectorProperty",
+                         &StringVectorPropertyTest::complexTest) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<StringVectorPropertyTest>( "complex david StringVectorProperty",
+                         &StringVectorPropertyTest::complexDavidTest) );
   return suiteOfTests;
 }
 //==========================================================

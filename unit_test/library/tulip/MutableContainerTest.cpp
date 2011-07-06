@@ -46,24 +46,29 @@ void MutableContainerTest::testCompression() {
   mutDouble->setAll(10.0);
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
   CPPUNIT_ASSERT_EQUAL(unsigned(0)   , mutDouble->elementInserted);
+
   for (unsigned int i=0; i<1000; ++i) {
     mutDouble->set(100+i,13.0);
     CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
     CPPUNIT_ASSERT_EQUAL(i+1 , mutDouble->elementInserted);
   }
+
   mutDouble->setAll(10.0);
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
   CPPUNIT_ASSERT_EQUAL(unsigned(0)   , mutDouble->elementInserted);
+
   for (unsigned int i=0; i<1000; ++i) {
     mutDouble->set(10000+i*2,13.0);
     CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
     CPPUNIT_ASSERT_EQUAL(i+1 , mutDouble->elementInserted);
   }
+
   for (unsigned int i=0; i<1000; ++i) {
     mutDouble->set(10000+i*2,13.0);
     CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
     CPPUNIT_ASSERT_EQUAL(unsigned(1000) , mutDouble->elementInserted);
   }
+
   mutDouble->setAll(10.0);
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
   CPPUNIT_ASSERT_EQUAL(unsigned(0)   , mutDouble->elementInserted);
@@ -71,14 +76,17 @@ void MutableContainerTest::testCompression() {
   mutDouble->set(10000, 345);
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::HASH, mutDouble->state);
   CPPUNIT_ASSERT_EQUAL(unsigned(2)   , mutDouble->elementInserted);
+
   for (unsigned int i=1001; i<10000; ++i) {
     mutDouble->set(i, 345);
     CPPUNIT_ASSERT_EQUAL(unsigned(i+2-1000) , mutDouble->elementInserted);
   }
+
   CPPUNIT_ASSERT_EQUAL(MutableContainer<double>::VECT, mutDouble->state);
   mutDouble->setAll(-1);
   std::ifstream in("sillyMutableData.txt");
   unsigned int id;
+
   while (in >> id) {
     double value;
     in >> value;
@@ -90,15 +98,15 @@ void MutableContainerTest::testFindAll() {
   mutBool->setAll(false);
   mutDouble->setAll(10.0);
   mutString->setAll("David");
-  
+
   mutBool->set(10,true);
   mutBool->set(15,true);
   mutBool->set(17,true);
-  
+
   mutDouble->set(10,13.0);
   mutDouble->set(15,13.0);
   mutDouble->set(17,13.0);
-  
+
   mutString->set(10,"Sophie");
   mutString->set(15,"Sophie");
   mutString->set(17,"Sophie");
@@ -121,7 +129,7 @@ void MutableContainerTest::testFindAll() {
   CPPUNIT_ASSERT( itB->next() == 15 );
   CPPUNIT_ASSERT( itD->hasNext());
   CPPUNIT_ASSERT( itD->next() == 15 );
-  CPPUNIT_ASSERT( itS->hasNext());  
+  CPPUNIT_ASSERT( itS->hasNext());
   CPPUNIT_ASSERT( itS->next() == 15 );
 
   CPPUNIT_ASSERT( itB->hasNext());
@@ -149,16 +157,18 @@ void MutableContainerTest::testSetAll() {
   mutBool->setAll(true);
   mutDouble->setAll(10.0);
   mutString->setAll("David");
-  for (unsigned int i=0;i<NBTEST;++i) {
+
+  for (unsigned int i=0; i<NBTEST; ++i) {
     CPPUNIT_ASSERT( mutBool->get(i) == true );
     CPPUNIT_ASSERT( mutDouble->get(i) == 10.0 );
     CPPUNIT_ASSERT( mutString->get(i) == string("David") );
   }
-  
+
   mutBool->setAll(false);
   mutDouble->setAll(-33.0);
   mutString->setAll("Sophie");
-  for (unsigned int i=0;i<NBTEST;++i) {
+
+  for (unsigned int i=0; i<NBTEST; ++i) {
     CPPUNIT_ASSERT( mutBool->get(i) == false );
     CPPUNIT_ASSERT( mutDouble->get(i) == -33.0 );
     CPPUNIT_ASSERT( mutString->get(i) == string("Sophie") );
@@ -189,16 +199,20 @@ void MutableContainerTest::testSetGet() {
   CPPUNIT_ASSERT( mutDouble->get(100) == 10 );
   CPPUNIT_ASSERT( mutDouble->get(1000000) == 20 );
   mutDouble->set(1000000,-33.0);
+
   for (unsigned int i=101; i<1000; ++i) {
     mutDouble->set(i,i);
     CPPUNIT_ASSERT( mutDouble->get(i) == i );
   }
+
   for (unsigned int i=101; i<999; ++i) {
     mutDouble->set(i,-33.0);
   }
+
   CPPUNIT_ASSERT( mutDouble->get(100) == 10 );
 
   mutString->setAll("Sophie");
+
   for (unsigned int i=0; i<NBTEST*10; ++i) {
     unsigned int rando=rand()%NBTEST;
     mutBool->set(rando,true);
@@ -208,13 +222,16 @@ void MutableContainerTest::testSetGet() {
     CPPUNIT_ASSERT( mutDouble->get(rando) == rando );
     CPPUNIT_ASSERT( mutString->get(rando) == string("David") );
   }
+
   mutBool->setAll(true);
-  for (unsigned int i=0;i<NBTEST*10;++i) {
+
+  for (unsigned int i=0; i<NBTEST*10; ++i) {
     unsigned int rando=rand()%NBTEST;
     mutBool->set(rando, false);
     CPPUNIT_ASSERT( mutBool->get(rando) == false );
   }
-  for (unsigned int i=0;i<NBTEST*10;++i) {
+
+  for (unsigned int i=0; i<NBTEST*10; ++i) {
     unsigned int rando=rand()%NBTEST;
     bool isNotDefault = true;
     mutBool->set(rando, true);
@@ -228,18 +245,18 @@ void MutableContainerTest::testSetGet() {
 //==========================================================
 CppUnit::Test * MutableContainerTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite( "Tulip lib : MutableContainer" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>( 
-								       "test setAll", 
-								       &MutableContainerTest::testSetAll ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>( 
-								       "test set/get", 
-								       &MutableContainerTest::testSetGet ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>( 
-								       "test find all", 
-								       &MutableContainerTest::testFindAll ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>( 
-								       "test state of the mutable", 
-								       &MutableContainerTest::testCompression ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>(
+                           "test setAll",
+                           &MutableContainerTest::testSetAll ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>(
+                           "test set/get",
+                           &MutableContainerTest::testSetGet ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>(
+                           "test find all",
+                           &MutableContainerTest::testFindAll ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<MutableContainerTest>(
+                           "test state of the mutable",
+                           &MutableContainerTest::testCompression ) );
   return suiteOfTests;
 }
 //==========================================================

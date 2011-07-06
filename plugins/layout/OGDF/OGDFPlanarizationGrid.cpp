@@ -55,23 +55,23 @@
 namespace {
 
 const char * paramHelp[] = {
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"Sets the option pageRatio."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_DEF( "type", "StringCollection")
-		HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FastPlanarSubgraph : <FONT COLOR=\"black\"> Computation of a planar subgraph using PQ-trees. <BR> <FONT COLOR=\"red\"> MaximalPlanarSubgraphSimple")
-		HTML_HELP_DEF( "default", "FastPlanarSubgraph " )
-		HTML_HELP_BODY()
-		"Sets the module option for the computation of the planar subgraph."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_DEF( "type", "StringCollection")
-		HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FixedEmbeddingInserter : <FONT COLOR=\"black\"> Edge insertion module that inserts each edge optimally into a fixed embedding. <BR> <FONT COLOR=\"red\"> VariableEmbeddingInserter : <FONT COLOR=\"black\"> optimal edge insertion algorithm, which inserts a single edge with a minum number of crossings into a planar graph. <BR> <FONT COLOR=\"red\"> VariableEmbeddingInserter2 ")
-		HTML_HELP_DEF( "default", "FixedEmbeddingInserter " )
-		HTML_HELP_BODY()
-		"Sets the module option for edge insertion."
-		HTML_HELP_CLOSE()
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "Sets the option pageRatio."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_DEF( "type", "StringCollection")
+  HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FastPlanarSubgraph : <FONT COLOR=\"black\"> Computation of a planar subgraph using PQ-trees. <BR> <FONT COLOR=\"red\"> MaximalPlanarSubgraphSimple")
+  HTML_HELP_DEF( "default", "FastPlanarSubgraph " )
+  HTML_HELP_BODY()
+  "Sets the module option for the computation of the planar subgraph."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_DEF( "type", "StringCollection")
+  HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FixedEmbeddingInserter : <FONT COLOR=\"black\"> Edge insertion module that inserts each edge optimally into a fixed embedding. <BR> <FONT COLOR=\"red\"> VariableEmbeddingInserter : <FONT COLOR=\"black\"> optimal edge insertion algorithm, which inserts a single edge with a minum number of crossings into a planar graph. <BR> <FONT COLOR=\"red\"> VariableEmbeddingInserter2 ")
+  HTML_HELP_DEF( "default", "FixedEmbeddingInserter " )
+  HTML_HELP_BODY()
+  "Sets the module option for edge insertion."
+  HTML_HELP_CLOSE()
 };
 }
 
@@ -90,37 +90,43 @@ class OGDFPlanarizationGrid : public OGDFLayoutPluginBase {
 
 public:
 
-	OGDFPlanarizationGrid(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::PlanarizationGridLayout()) {
-		addParameter<double>("page ratio", paramHelp[0], "1.0");
-		addParameter<StringCollection>(ELT_PLANARSUBGRAPH, paramHelp[1], ELT_PLANARSUBGRAPHLIST);
-		addParameter<StringCollection>(ELT_EDGEINSERTION, paramHelp[2], ELT_EDGEINSERTIONLIST);
-	}
+  OGDFPlanarizationGrid(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::PlanarizationGridLayout()) {
+    addParameter<double>("page ratio", paramHelp[0], "1.0");
+    addParameter<StringCollection>(ELT_PLANARSUBGRAPH, paramHelp[1], ELT_PLANARSUBGRAPHLIST);
+    addParameter<StringCollection>(ELT_EDGEINSERTION, paramHelp[2], ELT_EDGEINSERTIONLIST);
+  }
 
-	~OGDFPlanarizationGrid() {}
+  ~OGDFPlanarizationGrid() {}
 
-	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
-		ogdf::PlanarizationGridLayout *pgl = static_cast<ogdf::PlanarizationGridLayout*>(ogdfLayoutAlgo);
-		if (dataSet != 0) {
-			double dval = 0;
-			StringCollection sc;
-			if (dataSet->get("page ratio", dval))
-				pgl->pageRatio(dval);
-			if (dataSet->get(ELT_PLANARSUBGRAPH, sc)) {
-				if (sc.getCurrent() == ELT_FASTPLANAR) {
-					pgl->setSubgraph(new ogdf::FastPlanarSubgraph());
-				} else {
-					pgl->setSubgraph(new ogdf::MaximalPlanarSubgraphSimple());
-				}
-			}
-			if (dataSet->get(ELT_EDGEINSERTION, sc)) {
-				if (sc.getCurrent() == ELT_FIXEDEMBEDDING) {
-					pgl->setInserter(new ogdf::FixedEmbeddingInserter());
-				} else {
-					pgl->setInserter(new ogdf::VariableEmbeddingInserter);
-				}
-			}
-		}
-	}
+  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+    ogdf::PlanarizationGridLayout *pgl = static_cast<ogdf::PlanarizationGridLayout*>(ogdfLayoutAlgo);
+
+    if (dataSet != 0) {
+      double dval = 0;
+      StringCollection sc;
+
+      if (dataSet->get("page ratio", dval))
+        pgl->pageRatio(dval);
+
+      if (dataSet->get(ELT_PLANARSUBGRAPH, sc)) {
+        if (sc.getCurrent() == ELT_FASTPLANAR) {
+          pgl->setSubgraph(new ogdf::FastPlanarSubgraph());
+        }
+        else {
+          pgl->setSubgraph(new ogdf::MaximalPlanarSubgraphSimple());
+        }
+      }
+
+      if (dataSet->get(ELT_EDGEINSERTION, sc)) {
+        if (sc.getCurrent() == ELT_FIXEDEMBEDDING) {
+          pgl->setInserter(new ogdf::FixedEmbeddingInserter());
+        }
+        else {
+          pgl->setInserter(new ogdf::VariableEmbeddingInserter);
+        }
+      }
+    }
+  }
 
 };
 

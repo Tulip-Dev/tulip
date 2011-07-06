@@ -29,21 +29,21 @@ class PropertyContext;
 
 typedef AbstractProperty<tlp::ColorType, tlp::ColorType, tlp::ColorAlgorithm> AbstractColorProperty;
 
-/** \addtogroup properties */ 
+/** \addtogroup properties */
 /*@{*/
-class TLP_SCOPE ColorProperty:public AbstractColorProperty { 
+class TLP_SCOPE ColorProperty:public AbstractColorProperty {
 public :
   ColorProperty (Graph *g, std::string n="") :AbstractColorProperty(g, n) {}
   // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   static const std::string propertyTypename;
-   std::string getTypename() const {
-     return propertyTypename;
-   }
+  std::string getTypename() const {
+    return propertyTypename;
+  }
 
-   /**
-  * @brief Compare colors of n1 and n2 using HSV space instead of RGB.
-  **/
+  /**
+    * @brief Compare colors of n1 and n2 using HSV space instead of RGB.
+    **/
   int compare(const node n1, const node n2) const;
   /**
   * @brief Compare colors of e1 and e2 using HSV space instead of RGB.
@@ -52,15 +52,15 @@ public :
 
 };
 
-class TLP_SCOPE ColorVectorProperty:public AbstractVectorProperty<tlp::ColorVectorType, tlp::ColorType> { 
+class TLP_SCOPE ColorVectorProperty:public AbstractVectorProperty<tlp::ColorVectorType, tlp::ColorType> {
 public :
- ColorVectorProperty(Graph *g, std::string n="") :AbstractVectorProperty<ColorVectorType, tlp::ColorType>(g, n) {}
+  ColorVectorProperty(Graph *g, std::string n="") :AbstractVectorProperty<ColorVectorType, tlp::ColorType>(g, n) {}
   // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   static const std::string propertyTypename;
-   std::string getTypename() const {
-     return propertyTypename;
-   }
+  std::string getTypename() const {
+    return propertyTypename;
+  }
 };
 /*@}*/
 

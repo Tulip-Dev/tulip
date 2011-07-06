@@ -29,37 +29,37 @@
 #include "Shape.h"
 
 namespace tlprender {
-  
-  class GlHTMLFeedBackBuilder : public tlp::GlTLPFeedBackBuilder {
-  
-  public:
-  
-    GlHTMLFeedBackBuilder(bool outputBody,const std::string &filename,tlp::StringProperty *hrefp,tlp::StringProperty *altp);
 
-    virtual void begin(const tlp::Vector<int, 4> &viewport,GLfloat *clearColor,GLfloat pointSize,GLfloat lineWidth);
-    virtual void beginNode(GLfloat data);
-    virtual void endNode();
-    virtual void polygonToken(GLfloat *data);
-    virtual void end();
-    
-    virtual void getResult(std::string* str);
-    
-  private:
+class GlHTMLFeedBackBuilder : public tlp::GlTLPFeedBackBuilder {
 
-    std::stringstream stream_out;
-    std::priority_queue<Shape *> shapeQueue;
+public:
 
-    bool outputBody;
-    std::string filename;
-    tlp::StringProperty *hrefp;
-    tlp::StringProperty *altp;
-    Shape *poly;
-    int nodeId;
+  GlHTMLFeedBackBuilder(bool outputBody,const std::string &filename,tlp::StringProperty *hrefp,tlp::StringProperty *altp);
 
-    int height;
+  virtual void begin(const tlp::Vector<int, 4> &viewport,GLfloat *clearColor,GLfloat pointSize,GLfloat lineWidth);
+  virtual void beginNode(GLfloat data);
+  virtual void endNode();
+  virtual void polygonToken(GLfloat *data);
+  virtual void end();
 
-  };
-  
+  virtual void getResult(std::string* str);
+
+private:
+
+  std::stringstream stream_out;
+  std::priority_queue<Shape *> shapeQueue;
+
+  bool outputBody;
+  std::string filename;
+  tlp::StringProperty *hrefp;
+  tlp::StringProperty *altp;
+  Shape *poly;
+  int nodeId;
+
+  int height;
+
+};
+
 }
 
 #endif // Tulip_GLHTMLFEEDBACKBUILDER_H

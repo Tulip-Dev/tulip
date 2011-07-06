@@ -23,12 +23,12 @@
 #include <list>
 #include <tulip/Rectangle.h>
 
-/** 
+/**
  *This structure enables the stocking of the datas corresponding to the search
- *of the optimal position of the rectangle designated by the field 
+ *of the optimal position of the rectangle designated by the field
  *rectangleIterator.
  */
-struct RectangleRelativePosition{
+struct RectangleRelativePosition {
   std::vector<tlp::Rectangle<float> >::iterator rectangleIterator;/**< pointer towards the rectangle whose position optimal is searched.*/
   int rectangleNumber; /**< the number which identifies the rectangle. */
   float rectangleWidth; /**< the width of the rectangle. */
@@ -42,33 +42,33 @@ struct RectangleRelativePosition{
 };
 
 /**
- *This class is a list of structures of RectangleRelativePosition. It enables 
+ *This class is a list of structures of RectangleRelativePosition. It enables
  *the stocking of the first sequence of the even sequence made up as we insert
  *the new rectangles.
  */
 class RectangleRelativePositionList:public std::list<RectangleRelativePosition> {
 
- public:
+public:
   /**
    *Add a structure RectangleRelativePosition to the list.
    */
-  void addRectangleRelativePosition(std::vector<tlp::Rectangle<float> >::iterator itr, 
-				    int numRect, float wdth, float hght, 
-				    float x, float y,  
-				    std::list<RectangleRelativePosition>::iterator itRectangleRelativePosition);
+  void addRectangleRelativePosition(std::vector<tlp::Rectangle<float> >::iterator itr,
+                                    int numRect, float wdth, float hght,
+                                    float x, float y,
+                                    std::list<RectangleRelativePosition>::iterator itRectangleRelativePosition);
 
   /**
-   *Modify the co-ordinates of the Rectangles pointed by the fields 
-   *RectangleIterator of the elements of the list. These new co-ordinates are 
-   *calculated from the values of the fields rectangleLeftAbscissa and 
+   *Modify the co-ordinates of the Rectangles pointed by the fields
+   *RectangleIterator of the elements of the list. These new co-ordinates are
+   *calculated from the values of the fields rectangleLeftAbscissa and
    *rectangleLowOrdinate.
    */
   void allocateCoordinates();
 
   /**
-   *Stock the values of the fields rectangleTemporaryLeftAbscissa and 
+   *Stock the values of the fields rectangleTemporaryLeftAbscissa and
    *rectangleTemporaryLowOrdinate in the fields rectangle
-   *TemporaryBestLeftAbscissa and rectangleTemporaryBestLowOrdinate for all 
+   *TemporaryBestLeftAbscissa and rectangleTemporaryBestLowOrdinate for all
    *the elements of the list from one position in the list.
    */
   void stockOfTemporaryBestCoordinates(int bestPlaceInFirstSequence);

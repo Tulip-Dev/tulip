@@ -30,194 +30,215 @@ namespace tlp {
 GlOffscreenRenderer *GlOffscreenRenderer::instance(NULL);
 
 GlOffscreenRenderer *GlOffscreenRenderer::getInstance() {
-	if (instance == NULL) {
-		instance = new GlOffscreenRenderer();
-	}
-	return instance;
+  if (instance == NULL) {
+    instance = new GlOffscreenRenderer();
+  }
+
+  return instance;
 }
 
 GlOffscreenRenderer::GlOffscreenRenderer()
-: vPWidth(512), vPHeight(512), glFrameBuf(NULL), glFrameBuf2(NULL), mainLayer(new GlLayer("Main")),
-  entitiesCpt(0), zoomFactor(DBL_MAX), cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
-	GlLayer *backgroundLayer=new GlLayer("Background");
-	backgroundLayer->setVisible(true);
-	GlLayer *foregroundLayer=new GlLayer("Foreground");
-	foregroundLayer->setVisible(true);
-	backgroundLayer->set2DMode();
-	foregroundLayer->set2DMode();
-	scene.addLayer(backgroundLayer);
-	scene.addLayer(mainLayer);
-	scene.addLayer(foregroundLayer);
-	antialiasedFbo = false;
+  : vPWidth(512), vPHeight(512), glFrameBuf(NULL), glFrameBuf2(NULL), mainLayer(new GlLayer("Main")),
+    entitiesCpt(0), zoomFactor(DBL_MAX), cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
+  GlLayer *backgroundLayer=new GlLayer("Background");
+  backgroundLayer->setVisible(true);
+  GlLayer *foregroundLayer=new GlLayer("Foreground");
+  foregroundLayer->setVisible(true);
+  backgroundLayer->set2DMode();
+  foregroundLayer->set2DMode();
+  scene.addLayer(backgroundLayer);
+  scene.addLayer(mainLayer);
+  scene.addLayer(foregroundLayer);
+  antialiasedFbo = false;
 }
 
 GlOffscreenRenderer::~GlOffscreenRenderer() {
-	delete glFrameBuf;
-	delete glFrameBuf2;
-	clearScene();
-	delete mainLayer;
+  delete glFrameBuf;
+  delete glFrameBuf2;
+  clearScene();
+  delete mainLayer;
 }
 
 void GlOffscreenRenderer::setViewPortSize(const unsigned int viewPortWidth, const unsigned int viewPortHeight) {
-	vPWidth = viewPortWidth;
-	vPHeight = viewPortHeight;
+  vPWidth = viewPortWidth;
+  vPHeight = viewPortHeight;
 }
 
 void GlOffscreenRenderer::setSceneBackgroundColor(const Color &color) {
-	scene.setBackgroundColor(color);
+  scene.setBackgroundColor(color);
 }
 
 unsigned int GlOffscreenRenderer::getViewportWidth() {
-	return glFrameBuf->width();
+  return glFrameBuf->width();
 }
 
 unsigned int GlOffscreenRenderer::getViewportHeight() {
-	return glFrameBuf->height();
+  return glFrameBuf->height();
 }
 
 void GlOffscreenRenderer::addGlEntityToScene(GlSimpleEntity *entity) {
-	ostringstream oss;
-	oss << "entity " << ++entitiesCpt;
-	mainLayer->addGlEntity(entity, oss.str());
+  ostringstream oss;
+  oss << "entity " << ++entitiesCpt;
+  mainLayer->addGlEntity(entity, oss.str());
 }
 
-void GlOffscreenRenderer::addGraphToScene(Graph* graph){
-	addGraphCompositeToScene(new GlGraphComposite(graph));
+void GlOffscreenRenderer::addGraphToScene(Graph* graph) {
+  addGraphCompositeToScene(new GlGraphComposite(graph));
 }
 
 void GlOffscreenRenderer::addGraphCompositeToScene(GlGraphComposite *graphComposite) {
-	//Delete old composite if it exist
-	GlSimpleEntity *oldComposite = mainLayer->findGlEntity("graph");
-	if(oldComposite!=NULL){
-		mainLayer->deleteGlEntity(oldComposite);
-	}
-	GlVertexArrayManager *vertexArrayManager=graphComposite->getInputData()->getGlVertexArrayManager();
-	vertexArrayManager->setHaveToComputeAll(true);
-	mainLayer->addGlEntity(graphComposite, "graph");
-	scene.addGlGraphCompositeInfo(mainLayer, graphComposite);
+  //Delete old composite if it exist
+  GlSimpleEntity *oldComposite = mainLayer->findGlEntity("graph");
+
+  if(oldComposite!=NULL) {
+    mainLayer->deleteGlEntity(oldComposite);
+  }
+
+  GlVertexArrayManager *vertexArrayManager=graphComposite->getInputData()->getGlVertexArrayManager();
+  vertexArrayManager->setHaveToComputeAll(true);
+  mainLayer->addGlEntity(graphComposite, "graph");
+  scene.addGlGraphCompositeInfo(mainLayer, graphComposite);
 }
 
 void GlOffscreenRenderer::clearScene() {
-	mainLayer->getComposite()->reset(false);
-	vector<pair<string, GlLayer *> > *layersList = scene.getLayersList();
-	for (unsigned int i = 0 ; i < layersList->size() ; ++i) {
-		if ((*layersList)[i].second != mainLayer) {
-			(*layersList)[i].second->getComposite()->reset(true);
-		}
-	}
-	entitiesCpt = 0;
-	zoomFactor = DBL_MAX;
+  mainLayer->getComposite()->reset(false);
+  vector<pair<string, GlLayer *> > *layersList = scene.getLayersList();
+
+  for (unsigned int i = 0 ; i < layersList->size() ; ++i) {
+    if ((*layersList)[i].second != mainLayer) {
+      (*layersList)[i].second->getComposite()->reset(true);
+    }
+  }
+
+  entitiesCpt = 0;
+  zoomFactor = DBL_MAX;
 }
 
 void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antialiased) {
 
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-	antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
+  antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
 #endif
 
-	if (glFrameBuf != NULL && (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
-		delete glFrameBuf;
-		glFrameBuf = NULL;
-		delete glFrameBuf2;
-		glFrameBuf2 = NULL;
-	}
+  if (glFrameBuf != NULL && (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
+    delete glFrameBuf;
+    glFrameBuf = NULL;
+    delete glFrameBuf2;
+    glFrameBuf2 = NULL;
+  }
 
-	if (glFrameBuf == NULL) {
+  if (glFrameBuf == NULL) {
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-		QGLFramebufferObjectFormat fboFmt;
-		fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
-		if (antialiasedFbo)
-			fboFmt.setSamples(8);
-		glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
-	}
-	if (antialiasedFbo && glFrameBuf2 == NULL) {
-		glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
-	}
+    QGLFramebufferObjectFormat fboFmt;
+    fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
+
+    if (antialiasedFbo)
+      fboFmt.setSamples(8);
+
+    glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
+  }
+
+  if (antialiasedFbo && glFrameBuf2 == NULL) {
+    glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
+  }
+
 #else
-	glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, QGLFramebufferObject::CombinedDepthStencil);
-	}
+    glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, QGLFramebufferObject::CombinedDepthStencil);
+  }
 #endif
-	scene.setViewport(0,0,vPWidth, vPHeight);
+  scene.setViewport(0,0,vPWidth, vPHeight);
 
-	glPushAttrib(GL_ALL_ATTRIB_BITS);
+  glPushAttrib(GL_ALL_ATTRIB_BITS);
 
-	glMatrixMode(GL_PROJECTION);
-	glPushMatrix();
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
 
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
 
-	Camera &camera = scene.getCamera();
-	glFrameBuf->bind();
-	if (centerScene) {
-		scene.centerScene();
-	}
-	if (cameraCenter != Coord(FLT_MAX, FLT_MAX, FLT_MAX)) {
-		camera.setCenter(cameraCenter);
-		camera.setEyes(Coord(0, 0, camera.getSceneRadius()));
-		camera.setEyes(camera.getEyes() + camera.getCenter());
-		camera.setUp(Coord(0, 1., 0));
-	}
-	if (zoomFactor != DBL_MAX) {
-		camera.setZoomFactor(zoomFactor);
-	}
-	scene.draw();
-	glFrameBuf->release();
+  Camera &camera = scene.getCamera();
+  glFrameBuf->bind();
 
-	#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
-	if (antialiasedFbo)
-		QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
-	#endif
+  if (centerScene) {
+    scene.centerScene();
+  }
 
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
+  if (cameraCenter != Coord(FLT_MAX, FLT_MAX, FLT_MAX)) {
+    camera.setCenter(cameraCenter);
+    camera.setEyes(Coord(0, 0, camera.getSceneRadius()));
+    camera.setEyes(camera.getEyes() + camera.getCenter());
+    camera.setUp(Coord(0, 1., 0));
+  }
 
-	glMatrixMode(GL_PROJECTION);
-	glPopMatrix();
+  if (zoomFactor != DBL_MAX) {
+    camera.setZoomFactor(zoomFactor);
+  }
 
-	glPopAttrib();
+  scene.draw();
+  glFrameBuf->release();
+
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+
+  if (antialiasedFbo)
+    QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
+
+#endif
+
+  glMatrixMode(GL_MODELVIEW);
+  glPopMatrix();
+
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
+
+  glPopAttrib();
 }
 
 QImage GlOffscreenRenderer::getImage() {
-	if (!antialiasedFbo)
-		return glFrameBuf->toImage();
-	else
-		return glFrameBuf2->toImage();
+  if (!antialiasedFbo)
+    return glFrameBuf->toImage();
+  else
+    return glFrameBuf2->toImage();
 }
 
 GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
-	GLuint textureId = 0;
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
+  GLuint textureId = 0;
+  glGenTextures(1, &textureId);
+  glBindTexture(GL_TEXTURE_2D, textureId);
 
-	if (generateMipMaps) {
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	} else {
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	}
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  if (generateMipMaps) {
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  }
+  else {
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  }
 
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	unsigned char* buff = new unsigned char[getViewportWidth()*getViewportHeight()*4];
-	if (!antialiasedFbo)
-		glBindTexture(GL_TEXTURE_2D, glFrameBuf->texture());
-	else
-		glBindTexture(GL_TEXTURE_2D, glFrameBuf2->texture());
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	if (generateMipMaps) {
-		gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_RGBA, GL_UNSIGNED_BYTE, buff);
-	} else {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
-	}
+  unsigned char* buff = new unsigned char[getViewportWidth()*getViewportHeight()*4];
 
-	delete [] buff;
+  if (!antialiasedFbo)
+    glBindTexture(GL_TEXTURE_2D, glFrameBuf->texture());
+  else
+    glBindTexture(GL_TEXTURE_2D, glFrameBuf2->texture());
 
-	return textureId;
+  glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+
+  glBindTexture(GL_TEXTURE_2D, textureId);
+
+  if (generateMipMaps) {
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_RGBA, GL_UNSIGNED_BYTE, buff);
+  }
+  else {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+  }
+
+  delete [] buff;
+
+  return textureId;
 
 }
 

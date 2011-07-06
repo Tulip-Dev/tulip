@@ -19,7 +19,7 @@
 #ifndef _TreeReingoldAndTilfordExtended_H
 #define _TreeReingoldAndTilfordExtended_H
 #include <string>
-#include <math.h> 
+#include <math.h>
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
 
@@ -48,7 +48,7 @@ struct LR {
  *  (int)"treeEdgeLength" for the edge length.
  *
  */
-class TreeReingoldAndTilfordExtended:public tlp::LayoutAlgorithm { 
+class TreeReingoldAndTilfordExtended:public tlp::LayoutAlgorithm {
 public:
   TreeReingoldAndTilfordExtended(const tlp::PropertyContext &);
   ~TreeReingoldAndTilfordExtended();

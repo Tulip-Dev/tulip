@@ -21,7 +21,7 @@
 
 #include <tulip/TulipPlugin.h>
 
-class EqualValueClustering:public tlp::Algorithm { 
+class EqualValueClustering:public tlp::Algorithm {
 public:
   EqualValueClustering(tlp::AlgorithmContext);
   bool run();

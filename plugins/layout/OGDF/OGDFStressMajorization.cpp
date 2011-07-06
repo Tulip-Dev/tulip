@@ -48,46 +48,46 @@
 namespace {
 
 const char * paramHelp[] = {
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"Sets a fixed number of iterations for stress majorization in main step."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"Sets the value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"If set to true, the given layout is used for the initial positions."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"f set to true, number of iterations is computed depending on G."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"Sets the number of global iterations to i."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"Sets the number of local iterations to i."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"If set to true, radial constraints are added."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"If set to true, upward constraints are added. "
-		HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "Sets a fixed number of iterations for stress majorization in main step."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "Sets the value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "If set to true, the given layout is used for the initial positions."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "f set to true, number of iterations is computed depending on G."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "Sets the number of global iterations to i."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "Sets the number of local iterations to i."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "If set to true, radial constraints are added."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "If set to true, upward constraints are added. "
+  HTML_HELP_CLOSE(),
 };
 }
 
@@ -95,42 +95,51 @@ class OGDFStressMajorization : public OGDFLayoutPluginBase {
 
 public:
 
-	OGDFStressMajorization(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::StressMajorization()) {
-		addParameter<int>("iterations", paramHelp[0], "300");
-		addParameter<double>("stop tolerance", paramHelp[1], "0.001");
-		addParameter<bool>("used layout", paramHelp[2], "false");
-		addParameter<bool>("compute max iterations", paramHelp[3], "true");
-		addParameter<int>("global iterations", paramHelp[4], "50");
-		addParameter<int>("local iterations", paramHelp[5], "50");
-		addParameter<bool>("radial", paramHelp[6], "false");
-		addParameter<bool>("upward", paramHelp[7], "false");
-	}
-	~OGDFStressMajorization() {}
+  OGDFStressMajorization(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::StressMajorization()) {
+    addParameter<int>("iterations", paramHelp[0], "300");
+    addParameter<double>("stop tolerance", paramHelp[1], "0.001");
+    addParameter<bool>("used layout", paramHelp[2], "false");
+    addParameter<bool>("compute max iterations", paramHelp[3], "true");
+    addParameter<int>("global iterations", paramHelp[4], "50");
+    addParameter<int>("local iterations", paramHelp[5], "50");
+    addParameter<bool>("radial", paramHelp[6], "false");
+    addParameter<bool>("upward", paramHelp[7], "false");
+  }
+  ~OGDFStressMajorization() {}
 
-	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
-		ogdf::StressMajorization *stressm = static_cast<ogdf::StressMajorization*>(ogdfLayoutAlgo);
-		if (dataSet != 0) {
-			double dval = 0;
-			int ival = 0;
-			bool bval = false;
-			if (dataSet->get("iterations", ival))
-				stressm->setIterations(ival);
-			if (dataSet->get("stop tolerance", dval))
-				stressm->setStopTolerance(dval);
-			if (dataSet->get("use layout", bval))
-				stressm->setUseLayout(bval);
-			if (dataSet->get("compute max iterations", bval))
-				stressm->computeMaxIterations(bval);
-			if (dataSet->get("global iterations", ival))
-				stressm->setMaxGlobalIterations(ival);
-			if (dataSet->get("local iterations", ival))
-				stressm->setMaxLocalIterations(ival);
-			if (dataSet->get("radial", bval))
-				stressm->radial(bval);
-			if (dataSet->get("upward", bval))
-				stressm->upward(bval);
-		}
-	}
+  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+    ogdf::StressMajorization *stressm = static_cast<ogdf::StressMajorization*>(ogdfLayoutAlgo);
+
+    if (dataSet != 0) {
+      double dval = 0;
+      int ival = 0;
+      bool bval = false;
+
+      if (dataSet->get("iterations", ival))
+        stressm->setIterations(ival);
+
+      if (dataSet->get("stop tolerance", dval))
+        stressm->setStopTolerance(dval);
+
+      if (dataSet->get("use layout", bval))
+        stressm->setUseLayout(bval);
+
+      if (dataSet->get("compute max iterations", bval))
+        stressm->computeMaxIterations(bval);
+
+      if (dataSet->get("global iterations", ival))
+        stressm->setMaxGlobalIterations(ival);
+
+      if (dataSet->get("local iterations", ival))
+        stressm->setMaxLocalIterations(ival);
+
+      if (dataSet->get("radial", bval))
+        stressm->radial(bval);
+
+      if (dataSet->get("upward", bval))
+        stressm->upward(bval);
+    }
+  }
 
 };
 

@@ -28,29 +28,29 @@
 
 namespace tlp {
 
-class PlanarConMapTest : public CppUnit::TestFixture{
-  
+class PlanarConMapTest : public CppUnit::TestFixture {
+
 private :
   tlp::Graph* graph;
   tlp::PlanarConMap* carte;
 
   std::vector<edge> edges;
-  std::vector<node> nodes; 
+  std::vector<node> nodes;
 
   void build();
   void build2();
   void build3();
   void build4();
-  
+
 public :
-  void setUp(){
+  void setUp() {
     graph = tlp::newGraph();
     //carte = new PlanarConMap(graph);
     edges.clear();
     nodes.clear();
   }
-  
-  void tearDown(){
+
+  void tearDown() {
     delete carte;
     delete graph;
   }
@@ -64,8 +64,8 @@ public :
   void testMergeFaces();
   void testSplitFace();
 
-  void testSuccCycleEdge();   
-  void testPrecCycleEdge();  
+  void testSuccCycleEdge();
+  void testPrecCycleEdge();
 
   void testComputeFaces();
 

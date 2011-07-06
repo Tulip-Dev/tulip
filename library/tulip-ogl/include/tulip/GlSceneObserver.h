@@ -29,36 +29,36 @@
 
 namespace tlp {
 
-  class GlLayer;
-  class GlScene;
-  class GlSimpleEntity;
+class GlLayer;
+class GlScene;
+class GlSimpleEntity;
 
-  /** \brief An observer to the scene
-   * An observer to the scene who observe layers
-   */
-  class TLP_GL_SCOPE GlSceneEvent : public Event {
-  public:
+/** \brief An observer to the scene
+ * An observer to the scene who observe layers
+ */
+class TLP_GL_SCOPE GlSceneEvent : public Event {
+public:
 
-    enum GlSceneEventType {TLP_ADDLAYER=0, TLP_DELLAYER, TLP_MODIFYLAYER, TLP_MODIFYENTITY};
+  enum GlSceneEventType {TLP_ADDLAYER=0, TLP_DELLAYER, TLP_MODIFYLAYER, TLP_MODIFYENTITY};
 
-    GlSceneEvent(const GlScene &scene,GlSceneEventType sceneEventType,const std::string &layerName,GlLayer *layer);
+  GlSceneEvent(const GlScene &scene,GlSceneEventType sceneEventType,const std::string &layerName,GlLayer *layer);
 
-    GlSceneEvent(const GlScene &scene,GlSimpleEntity *entity);
+  GlSceneEvent(const GlScene &scene,GlSimpleEntity *entity);
 
-    GlSimpleEntity *getGlSimpleEntity();
+  GlSimpleEntity *getGlSimpleEntity();
 
-    std::string getLayerName();
+  std::string getLayerName();
 
-    GlLayer *getLayer();
+  GlLayer *getLayer();
 
-  protected :
+protected :
 
-    GlSceneEventType sceneEventType;
-    std::string layerName;
-    GlLayer *layer;
-    GlSimpleEntity *glSimpleEntity;
+  GlSceneEventType sceneEventType;
+  std::string layerName;
+  GlLayer *layer;
+  GlSimpleEntity *glSimpleEntity;
 
-  };
+};
 }
 
 #endif

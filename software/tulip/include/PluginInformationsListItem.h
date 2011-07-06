@@ -14,7 +14,9 @@ class PluginInformationsListItem: public QWidget {
   Q_OBJECT
 public:
   explicit PluginInformationsListItem(tlp::PluginInformations *, QWidget *parent = 0);
-  tlp::PluginInformations *pluginInformations() const { return _pluginInformations; }
+  tlp::PluginInformations *pluginInformations() const {
+    return _pluginInformations;
+  }
 
 protected:
   void focusInEvent(QFocusEvent *);

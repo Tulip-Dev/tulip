@@ -68,7 +68,7 @@ struct TLP_SCOPE NodeMapIterator : public Iterator<node> {
   node next();
   ///Return true if it exist a next element
   bool hasNext();
-  
+
 private :
   std::list<node> cloneIt;
   std::list<node>::iterator itStl;
@@ -97,7 +97,7 @@ struct TLP_SCOPE EdgeMapIterator : public Iterator<edge> {
   edge next();
   ///Return true if it exist a next element
   bool hasNext();
-  
+
 private :
   std::vector<edge> adj;
   edge start;

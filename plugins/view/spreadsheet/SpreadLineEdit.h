@@ -26,25 +26,24 @@
 
 namespace tlp {
 
-  class SpreadLineEdit : public QLineEdit 
-  {
-    Q_OBJECT
+class SpreadLineEdit : public QLineEdit {
+  Q_OBJECT
 
-  public :
-    
-    SpreadLineEdit(QWidget *parent=NULL):QLineEdit(parent){}
+public :
 
-  signals:
+  SpreadLineEdit(QWidget *parent=NULL):QLineEdit(parent) {}
 
-    void widgetActivate();
+signals:
 
-  protected :
-    
-    void mousePressEvent(QMouseEvent *event) {
-      emit widgetActivate();
-      QLineEdit::mousePressEvent(event);
-    }
-  };
+  void widgetActivate();
+
+protected :
+
+  void mousePressEvent(QMouseEvent *event) {
+    emit widgetActivate();
+    QLineEdit::mousePressEvent(event);
+  }
+};
 
 }
 

@@ -39,37 +39,37 @@ class TLP_GL_SCOPE GlOpenUniformCubicBSpline : public AbstractGlCurve {
 public:
 
 
-	GlOpenUniformCubicBSpline();
+  GlOpenUniformCubicBSpline();
 
-	/**
-	 * GlOpenUniformCubicBSpline constructor
-	 *
-	 * \param controlPoints a vector of control points (size must be greater or equal to 4)
-	 * \param startColor the color at the start of the curve
-	 * \param endColor the color at the end of the curve
-	 * \param startSize the width at the start of the curve
-	 * \param endSize the width at the end of the curve
-	 * \param nbCurvePoints the number of curve points to generate
-	*/
-	GlOpenUniformCubicBSpline(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
-							  const float startSize, const float endSize, const unsigned int nbCurvePoints = 200);
+  /**
+   * GlOpenUniformCubicBSpline constructor
+   *
+   * \param controlPoints a vector of control points (size must be greater or equal to 4)
+   * \param startColor the color at the start of the curve
+   * \param endColor the color at the end of the curve
+   * \param startSize the width at the start of the curve
+   * \param endSize the width at the end of the curve
+   * \param nbCurvePoints the number of curve points to generate
+  */
+  GlOpenUniformCubicBSpline(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
+                            const float startSize, const float endSize, const unsigned int nbCurvePoints = 200);
 
-	~GlOpenUniformCubicBSpline();
+  ~GlOpenUniformCubicBSpline();
 
-	void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=200);
+  void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=200);
 
 protected :
 
-	void setCurveVertexShaderRenderingSpecificParameters();
+  void setCurveVertexShaderRenderingSpecificParameters();
 
-	Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t);
+  Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t);
 
-	void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
+  void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
 
 private:
 
-	unsigned nbKnots;
-	float stepKnots;
+  unsigned nbKnots;
+  float stepKnots;
 
 };
 

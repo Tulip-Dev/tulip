@@ -39,7 +39,7 @@ class GraphUpdatesRecorder;
 class TLP_SCOPE GraphImpl:public GraphAbstract {
 
   friend class GraphUpdatesRecorder;
-  friend class TLPExport;  
+  friend class TLPExport;
 
 public:
   GraphImpl();
@@ -54,7 +54,7 @@ public:
   void addNodes(Iterator<node>* nodes);
   edge addEdge(const node ,const node);
   void addEdges(const std::vector<std::pair<node, node> >& edges,
-		std::vector<edge>& addedEdges);
+                std::vector<edge>& addedEdges);
   void addEdge(const edge);
   void addEdges(Iterator<edge>* edges);
   void delNode(const tlp::node n, bool deleteInAllGraphs = false);
@@ -114,7 +114,7 @@ protected:
   virtual void restoreNodes(const std::vector<node>&);
   virtual edge restoreEdge(edge, node source, node target);
   virtual void restoreEdges(const std::vector<edge>& edges,
-			    const std::vector<std::pair<node, node> >& ends);
+                            const std::vector<std::pair<node, node> >& ends);
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);

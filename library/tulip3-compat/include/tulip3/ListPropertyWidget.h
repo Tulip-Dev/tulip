@@ -23,22 +23,22 @@
 #include "tulip3/TulipTableWidget.h"
 #include <QtGui/QTableWidgetItem>
 class ListPropertyWidget: public QWidget, public Ui::Form {
-Q_OBJECT
+  Q_OBJECT
 public:
-	ListPropertyWidget(tlp::DynamicTypeHandlerInterface *handler, tlp::TulipTableWidgetItem *orig,
-			QWidget* parent = NULL);
-	virtual ~ListPropertyWidget();
-	void updateData();
+  ListPropertyWidget(tlp::DynamicTypeHandlerInterface *handler, tlp::TulipTableWidgetItem *orig,
+                     QWidget* parent = NULL);
+  virtual ~ListPropertyWidget();
+  void updateData();
 private slots:
-	void addRow();
-	void removeRows();
-	void setAll();
+  void addRow();
+  void removeRows();
+  void setAll();
 private:
 
-	void fillList();
+  void fillList();
 
-	tlp::DynamicTypeHandlerInterface *handler;
-	tlp::TulipTableWidgetItem *orig;
+  tlp::DynamicTypeHandlerInterface *handler;
+  tlp::TulipTableWidgetItem *orig;
 };
 
 #endif /* LISTPROPERTYWIDGET_H_ */

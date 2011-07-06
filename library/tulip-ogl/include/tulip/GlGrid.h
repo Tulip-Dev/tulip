@@ -30,13 +30,13 @@
 
 namespace tlp {
 /** \brief General class used to render grids as augmented displays.
- * 
+ *
  * This class is a generic class to render grids as augmented displays.
  * It does not uses the basic parameters of the GlAugmentedDisplay(position and color).
  */
 class TLP_GL_SCOPE GlGrid : public GlSimpleEntity {
 
- public:
+public:
 
   /**
    * Constructor
@@ -53,8 +53,8 @@ class TLP_GL_SCOPE GlGrid : public GlSimpleEntity {
    * \param displays The dimensions of the grid to display.
    * \param hollowGrid Indicates if the grid chould be hollowed.
    */
-  GlGrid(const Coord& frontTopLeft, const Coord& backBottomRight, 
-	   const Size& cell, const Color& color, bool displays[3]);
+  GlGrid(const Coord& frontTopLeft, const Coord& backBottomRight,
+         const Size& cell, const Color& color, bool displays[3]);
   /**
    * Virtual function used to draw the grid.
    */
@@ -77,14 +77,14 @@ class TLP_GL_SCOPE GlGrid : public GlSimpleEntity {
    * Get the data in XML form
    */
   void getXML(xmlNodePtr rootNode);
-  
+
   /**
    * Set the data with XML
    */
   void setWithXML(xmlNodePtr rootNode);
-  
 
- protected:
+
+protected:
   bool displayDim[3]; /**< Which dimensions should be displayed ? Note that only one dimension at most should be disabled*/
   bool hollowGrid; /**< Should the grid be hollowed ?*/
   Coord frontTopLeft; /**< Front top left point of the grid, the "minimum" */

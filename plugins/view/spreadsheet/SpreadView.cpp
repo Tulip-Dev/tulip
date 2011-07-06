@@ -27,19 +27,20 @@
 using namespace std;
 
 static void tokenize(const string& str, vector<string>& tokens, const string& delimiters = " ") {
-	string::size_type lastPos = str.find_first_not_of(delimiters, 0);
-	string::size_type pos = str.find_first_of(delimiters, lastPos);
-	while (string::npos != pos || string::npos != lastPos) {
-		tokens.push_back(str.substr(lastPos, pos - lastPos));
-		lastPos = str.find_first_not_of(delimiters, pos);
-		pos = str.find_first_of(delimiters, lastPos);
-	}
+  string::size_type lastPos = str.find_first_not_of(delimiters, 0);
+  string::size_type pos = str.find_first_of(delimiters, lastPos);
+
+  while (string::npos != pos || string::npos != lastPos) {
+    tokens.push_back(str.substr(lastPos, pos - lastPos));
+    lastPos = str.find_first_not_of(delimiters, pos);
+    pos = str.find_first_of(delimiters, lastPos);
+  }
 }
 
 namespace tlp {
 
 SpreadView::SpreadView() :
-	AbstractView(),configurationWidget(NULL) {
+  AbstractView(),configurationWidget(NULL) {
 }
 SpreadView::~SpreadView() {
   if(configurationWidget)
@@ -47,85 +48,91 @@ SpreadView::~SpreadView() {
 }
 
 QWidget *SpreadView::construct(QWidget *parent) {
-	QWidget *widget = AbstractView::construct(parent);
-	mainWidget = new SpreadWidget(this, widget);
-	setCentralWidget(mainWidget);
+  QWidget *widget = AbstractView::construct(parent);
+  mainWidget = new SpreadWidget(this, widget);
+  setCentralWidget(mainWidget);
 
-	configurationWidget = new SpreadConfigurationWidget();
-	connect(configurationWidget, SIGNAL(updated()), this, SLOT(updated()));
+  configurationWidget = new SpreadConfigurationWidget();
+  connect(configurationWidget, SIGNAL(updated()), this, SLOT(updated()));
 
-	return widget;
+  return widget;
 }
 
 void SpreadView::setData(Graph *graph, DataSet dataSet) {
-	configurationWidget->setGraph(graph);
-	if (dataSet.exist("data")) {
-		DataSet data;
-		dataSet.get("data", data);
-		if (data.exist("displayedProperties")) {
-			string properties;
-			data.get("displayedProperties", properties);
-			vector<string> propertiesVector;
-			tokenize(properties, propertiesVector, ";");
-			configurationWidget->setSelectedProperties(propertiesVector);
-		}
-	}
-	mainWidget->setData(graph, dataSet);
+  configurationWidget->setGraph(graph);
+
+  if (dataSet.exist("data")) {
+    DataSet data;
+    dataSet.get("data", data);
+
+    if (data.exist("displayedProperties")) {
+      string properties;
+      data.get("displayedProperties", properties);
+      vector<string> propertiesVector;
+      tokenize(properties, propertiesVector, ";");
+      configurationWidget->setSelectedProperties(propertiesVector);
+    }
+  }
+
+  mainWidget->setData(graph, dataSet);
 }
 
 void SpreadView::getData(Graph **graph, DataSet *dataSet) {
-	DataSet data;
+  DataSet data;
 
-	if (!configurationWidget->allPropertiesSelected()) {
-		ostringstream oss;
-		vector<string> selectedProperties = configurationWidget->getSelectedProperties();
-		for (vector<string>::iterator it = selectedProperties.begin(); it
-				!= selectedProperties.end(); ++it) {
-			oss << *it << ";";
-		}
-		data.set("displayedProperties", oss.str());
-	}
-	dataSet->set<DataSet> ("data", data);
-	*graph = mainWidget->getGraph();
+  if (!configurationWidget->allPropertiesSelected()) {
+    ostringstream oss;
+    vector<string> selectedProperties = configurationWidget->getSelectedProperties();
+
+    for (vector<string>::iterator it = selectedProperties.begin(); it
+         != selectedProperties.end(); ++it) {
+      oss << *it << ";";
+    }
+
+    data.set("displayedProperties", oss.str());
+  }
+
+  dataSet->set<DataSet> ("data", data);
+  *graph = mainWidget->getGraph();
 }
 
 Graph* SpreadView::getGraph() {
-	return mainWidget->getGraph();
+  return mainWidget->getGraph();
 }
 
 void SpreadView::setGraph(Graph *graph) {
-	mainWidget->setData(graph, DataSet());
+  mainWidget->setData(graph, DataSet());
 }
 
 void SpreadView::draw() {
-	mainWidget->redrawView();
+  mainWidget->redrawView();
 }
 
 void SpreadView::refresh() {
-	draw();
+  draw();
 }
 
 void SpreadView::init() {
-	draw();
+  draw();
 }
 
 void SpreadView::createPicture(const std::string&, int, int) {
-	cout << "createPicture not implement yet for SpreadView" << endl;
+  cout << "createPicture not implement yet for SpreadView" << endl;
 }
 
 list<pair<QWidget *, string> > SpreadView::getConfigurationWidget() {
-	list<pair<QWidget *, string> > widgets;
-	widgets.push_back(make_pair(configurationWidget, "Properties Selection"));
-	return widgets;
+  list<pair<QWidget *, string> > widgets;
+  widgets.push_back(make_pair(configurationWidget, "Properties Selection"));
+  return widgets;
 }
 
 std::vector<std::string> SpreadView::getSelectedProperties() const {
-	return configurationWidget->getSelectedProperties();
+  return configurationWidget->getSelectedProperties();
 }
 
 void SpreadView::updated() {
-	//Force to reload
-	mainWidget->redrawView();
+  //Force to reload
+  mainWidget->redrawView();
 }
 VIEWPLUGIN(SpreadView, "Table view", "Tulip Team", "16/04/2008", "Spreadsheet view", "1.0")
 

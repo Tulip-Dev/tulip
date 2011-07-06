@@ -28,74 +28,76 @@
 
 namespace tlp {
 
-  class LayoutProperty;
-  class BooleanProperty;
-  class SizeProperty;
-  class DoubleProperty;
-  class CoordVectorProperty;
-  class IntegerProperty;
+class LayoutProperty;
+class BooleanProperty;
+class SizeProperty;
+class DoubleProperty;
+class CoordVectorProperty;
+class IntegerProperty;
 
-  /// This interactor allows to move/add/delete EdgeBends
-  class TLP_QT_SCOPE MouseEdgeBendEditor:public InteractorComponent {
+/// This interactor allows to move/add/delete EdgeBends
+class TLP_QT_SCOPE MouseEdgeBendEditor:public InteractorComponent {
 
-  public:
+public:
 
-    MouseEdgeBendEditor();
-    ~MouseEdgeBendEditor();
-    bool compute(GlMainWidget *glMainWidget);
-    bool draw(GlMainWidget *);
-    bool eventFilter(QObject *, QEvent *);
-    InteractorComponent *clone() { return new MouseEdgeBendEditor(); }
+  MouseEdgeBendEditor();
+  ~MouseEdgeBendEditor();
+  bool compute(GlMainWidget *glMainWidget);
+  bool draw(GlMainWidget *);
+  bool eventFilter(QObject *, QEvent *);
+  InteractorComponent *clone() {
+    return new MouseEdgeBendEditor();
+  }
 
-  private:
-    enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
-    enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
+private:
+  enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
+  enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
 
-    Graph *_graph;
-    GlMainWidget* glMainWidget;
-    LayoutProperty *_layout;
-    BooleanProperty *_selection;
-    DoubleProperty *_rotation;
-    SizeProperty *_sizes;
-    IntegerProperty *_shape;
-    CoordVectorProperty *_coordsVectorProperty;
-    LayoutProperty *_copyLayout;
-    SizeProperty *_copySizes;
-    DoubleProperty *_copyRotation;
+  Graph *_graph;
+  GlMainWidget* glMainWidget;
+  LayoutProperty *_layout;
+  BooleanProperty *_selection;
+  DoubleProperty *_rotation;
+  SizeProperty *_sizes;
+  IntegerProperty *_shape;
+  CoordVectorProperty *_coordsVectorProperty;
+  LayoutProperty *_copyLayout;
+  SizeProperty *_copySizes;
+  DoubleProperty *_copyRotation;
 
-    void initProxies(GlMainWidget *glMainWidget);
-    void saveInfo();
-    void restoreInfo();
-    void initEdition();
-    void undoEdition();
-    void stopEdition();
+  void initProxies(GlMainWidget *glMainWidget);
+  void saveInfo();
+  void restoreInfo();
+  void initEdition();
+  void undoEdition();
+  void stopEdition();
 
-    EditOperation operation;
-    OperationTarget mode;
+  EditOperation operation;
+  OperationTarget mode;
 
-    Coord editPosition;
+  Coord editPosition;
 
-    GlLayer *layer;
-    std::vector<tlp::GlCircle> circles;
-    std::vector<Coord> coordinates;
-    GlCircle basicCircle;
-    GlTriangle targetTriangle;
-    GlCircle sourceCircle;
-    GlComposite *circleString;
-    std::vector <GlSimpleEntity * > select;
-    bool edgeSelected;
-    edge mEdge;
-    node mNode;
-    Coord start, end;
-    std::string selectedEntity;
-    bool belong(Coord, Coord, Coord, GlMainWidget*);
-    bool haveSelection(GlMainWidget *);
-    void computeSrcTgtEntities(GlMainWidget *);
-    bool computeBendsCircles(GlMainWidget*);
-    void mMouseTranslate(double, double, GlMainWidget*);
-    void mMouseDelete();
-    void mMouseCreate(double, double, GlMainWidget*);
-  };
+  GlLayer *layer;
+  std::vector<tlp::GlCircle> circles;
+  std::vector<Coord> coordinates;
+  GlCircle basicCircle;
+  GlTriangle targetTriangle;
+  GlCircle sourceCircle;
+  GlComposite *circleString;
+  std::vector <GlSimpleEntity * > select;
+  bool edgeSelected;
+  edge mEdge;
+  node mNode;
+  Coord start, end;
+  std::string selectedEntity;
+  bool belong(Coord, Coord, Coord, GlMainWidget*);
+  bool haveSelection(GlMainWidget *);
+  void computeSrcTgtEntities(GlMainWidget *);
+  bool computeBendsCircles(GlMainWidget*);
+  void mMouseTranslate(double, double, GlMainWidget*);
+  void mMouseDelete();
+  void mMouseCreate(double, double, GlMainWidget*);
+};
 
 }
 /*@}*/

@@ -30,18 +30,17 @@ using namespace tlp;
  *
  *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
  */
-class AutoSize:public SizeAlgorithm
-{ 
+class AutoSize:public SizeAlgorithm {
 public:
-  AutoSize(const PropertyContext &context):SizeAlgorithm(context){}
+  AutoSize(const PropertyContext &context):SizeAlgorithm(context) {}
 
   bool run() {
     node n;
     forEach(n,graph->getNodes())
-      result->setNodeValue(n, getNodeValue(n));
+    result->setNodeValue(n, getNodeValue(n));
     edge e;
     forEach(e,graph->getEdges())
-      result->setEdgeValue(e, getEdgeValue(e));
+    result->setEdgeValue(e, getEdgeValue(e));
     return true;
   }
 
@@ -54,31 +53,39 @@ private:
     Iterator<node> *itN=graph->getNodes();
     const Coord& tmp1=entryLayout->getNodeValue(n);
     double dist=1000;
+
     if (itN->hasNext()) {
       node itn=itN->next();
+
       while ((itn==n) && itN->hasNext()) itn=itN->next();
+
       if (itn!=n) {
-	const Coord& tmp2=entryLayout->getNodeValue(itn);
-	dist=sqrt((tmp1.getX()-tmp2.getX())*(tmp1.getX()-tmp2.getX())
-		  +(tmp1.getY()-tmp2.getY())*(tmp1.getY()-tmp2.getY())
-		  +(tmp1.getZ()-tmp2.getZ())*(tmp1.getZ()-tmp2.getZ())
-		  );
+        const Coord& tmp2=entryLayout->getNodeValue(itn);
+        dist=sqrt((tmp1.getX()-tmp2.getX())*(tmp1.getX()-tmp2.getX())
+                  +(tmp1.getY()-tmp2.getY())*(tmp1.getY()-tmp2.getY())
+                  +(tmp1.getZ()-tmp2.getZ())*(tmp1.getZ()-tmp2.getZ())
+                 );
       }
       else {
-	dist=10;
+        dist=10;
       }
     }
-    for (;itN->hasNext();) {
+
+    for (; itN->hasNext();) {
       node itn=itN->next();
+
       if (itn!=n) {
-	const Coord& tmp2=entryLayout->getNodeValue(itn);
-	double tmpDist=sqrt( (tmp1.getX()-tmp2.getX())*(tmp1.getX()-tmp2.getX())
-			     +(tmp1.getY()-tmp2.getY())*(tmp1.getY()-tmp2.getY())
-			     +(tmp1.getZ()-tmp2.getZ())*(tmp1.getZ()-tmp2.getZ())
-			     );
-	if (tmpDist<dist) dist=tmpDist;
+        const Coord& tmp2=entryLayout->getNodeValue(itn);
+        double tmpDist=sqrt( (tmp1.getX()-tmp2.getX())*(tmp1.getX()-tmp2.getX())
+                             +(tmp1.getY()-tmp2.getY())*(tmp1.getY()-tmp2.getY())
+                             +(tmp1.getZ()-tmp2.getZ())*(tmp1.getZ()-tmp2.getZ())
+                           );
+
+        if (tmpDist<dist) dist=tmpDist;
       }
-    }delete itN;
+    }
+
+    delete itN;
     return Size(dist/2,dist/2,dist/2);
   }
 

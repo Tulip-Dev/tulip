@@ -22,63 +22,63 @@
 #include <tulip/GlPolygon.h>
 
 namespace tlp {
+/**
+ * \addtogroup GlEntities
+ */
+/*@{*/
+/**
+ * class to create a regular polygon
+ */
+class TLP_GL_SCOPE GlRegularPolygon : public GlPolygon {
+public:
   /**
-   * \addtogroup GlEntities
+   * Constructor
    */
-  /*@{*/
+  GlRegularPolygon(const Coord &position,
+                   const Size &size,
+                   unsigned int numberOfSides,
+                   const Color &outlineColor = Color(255, 0 , 0 , 255),
+                   const Color &fillColor = Color (0, 0, 255,255),
+                   bool filled = true,
+                   bool outlined =true,
+                   const std::string &textureName="",
+                   float outlineSize=1.);
   /**
-   * class to create a regular polygon
+   * Default empty destructor
    */
-  class TLP_GL_SCOPE GlRegularPolygon : public GlPolygon {
-  public:
-    /**
-     * Constructor
-     */
-    GlRegularPolygon(const Coord &position,
-                     const Size &size,
-                     unsigned int numberOfSides,
-                     const Color &outlineColor = Color(255, 0 , 0 , 255),
-                     const Color &fillColor = Color (0, 0, 255,255),
-                     bool filled = true,
-                     bool outlined =true,
-                     const std::string &textureName="",
-                     float outlineSize=1.);
-    /**
-     * Default empty destructor
-     */
-    virtual ~GlRegularPolygon();
+  virtual ~GlRegularPolygon();
 
-    /**
-     * Set the start angle
-     */
-    void setStartAngle(float angle);
+  /**
+   * Set the start angle
+   */
+  void setStartAngle(float angle);
 
-    /**
-     * Get the number of Sides
-     */
-    unsigned int getNumberOfSides();
+  /**
+   * Get the number of Sides
+   */
+  unsigned int getNumberOfSides();
 
-    /**
-     * Set the number of sides (use setNumberOfSides)
-     */
-    void resizePoints(const unsigned int number);
+  /**
+   * Set the number of sides (use setNumberOfSides)
+   */
+  void resizePoints(const unsigned int number);
 
-    /**
-     * Set the number of sides
-     */
-    void setNumberOfSides(unsigned int number);
+  /**
+   * Set the number of sides
+   */
+  void setNumberOfSides(unsigned int number);
 
-  protected :
+protected :
 
-    void computePolygon();
+  void computePolygon();
 
 
-    Coord position;
-    Size size;
-    unsigned int numberOfSides;
-    float startAngle;
+  Coord position;
+  Size size;
+  unsigned int numberOfSides;
+  float startAngle;
 
-  };
-  /*@}*/
+};
+/*@}*/
 }
 #endif

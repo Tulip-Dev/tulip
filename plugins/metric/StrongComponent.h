@@ -22,8 +22,8 @@
 #include <stack>
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPlugin.h>
-struct NodeInfo{
-  NodeInfo(int stra=0,int sta=0):prefixOrder(stra),minAttach(sta){}
+struct NodeInfo {
+  NodeInfo(int stra=0,int sta=0):prefixOrder(stra),minAttach(sta) {}
   int prefixOrder;
   int minAttach;
 };
@@ -31,23 +31,23 @@ struct NodeInfo{
 /** This plugin is an implementation of the Stongly connected algorithm.
  *
  *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
- *  strongly connected component they have the same value else they have a 
+ *  strongly connected component they have the same value else they have a
  *  different value.
  *
  */
-class StrongComponent:public tlp::DoubleAlgorithm { 
+class StrongComponent:public tlp::DoubleAlgorithm {
 public:
   StrongComponent(const tlp::PropertyContext &);
   ~StrongComponent();
   bool run();
   bool check(std::string &);
   void reset();
-  
+
 private:
   int  attachNumerotation(tlp::node, TLP_HASH_MAP<tlp::node,bool> &,
-			  TLP_HASH_MAP<tlp::node,bool> &,
-			  TLP_HASH_MAP<tlp::node,int> &, int &,
-			  std::stack<tlp::node> &, int &);
+                          TLP_HASH_MAP<tlp::node,bool> &,
+                          TLP_HASH_MAP<tlp::node,int> &, int &,
+                          std::stack<tlp::node> &, int &);
 };
 
 #endif

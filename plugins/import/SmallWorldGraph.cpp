@@ -27,34 +27,34 @@ static const int WIDTH = 1024;
 static const int HEIGHT = 1024;
 
 namespace {
-  const char * paramHelp[] = {
-    // nodes
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "unsigned int" ) \
-    HTML_HELP_DEF( "default", "100" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the amount of node used to build the small-world graph." \
-    HTML_HELP_CLOSE(),
+const char * paramHelp[] = {
+  // nodes
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "unsigned int" ) \
+  HTML_HELP_DEF( "default", "100" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the amount of node used to build the small-world graph." \
+  HTML_HELP_CLOSE(),
 
-    // degree
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "unsigned int" ) \
-    HTML_HELP_DEF( "default", "10" ) \
-    HTML_HELP_BODY() \
-    "This parameter defines the average degree of node used to build the small-world graph." \
-    HTML_HELP_CLOSE(),
+  // degree
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "unsigned int" ) \
+  HTML_HELP_DEF( "default", "10" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the average degree of node used to build the small-world graph." \
+  HTML_HELP_CLOSE(),
 
-    // degree
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "bool" ) \
-    HTML_HELP_DEF( "default", "false" ) \
-    HTML_HELP_BODY() \
-    "If true long distance edges will be added in the grid approximation." \
-    HTML_HELP_CLOSE(),
-  };
+  // degree
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "default", "false" ) \
+  HTML_HELP_BODY() \
+  "If true long distance edges will be added in the grid approximation." \
+  HTML_HELP_CLOSE(),
+};
 }
 
-/* 
+/*
  * TODO :
  * Use a quadtree in order to change the complexity from n*n to n*log(n)
  */
@@ -73,66 +73,77 @@ public:
     addParameter<unsigned int>("degree",paramHelp[1],"10");
     addParameter<bool>("long edge",paramHelp[2],"false");
   }
-  ~SmallWorldGraph(){}
-  
+  ~SmallWorldGraph() {}
+
   bool import() {
     unsigned int nbNodes  = 200;
     unsigned int avgDegree = 10;
     bool enableLongEdge = false;
+
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("degree", avgDegree);
       dataSet->get("long edge", enableLongEdge);
     }
+
     if (nbNodes == 0) {
       if (pluginProgress)
-	pluginProgress->setError(string("Error: the number of nodes cannot be null"));
+        pluginProgress->setError(string("Error: the number of nodes cannot be null"));
+
       return false;
     }
 
     if (avgDegree == 0) {
       if (pluginProgress)
-	pluginProgress->setError(string("Error: the average degree cannot be null"));
+        pluginProgress->setError(string("Error: the average degree cannot be null"));
+
       return false;
     }
 
     double maxDistance = sqrt(double(avgDegree)*double(WIDTH)*double(HEIGHT)
-			      / (double (nbNodes) * M_PI));
-    srand(clock()); 
+                              / (double (nbNodes) * M_PI));
+    srand(clock());
     LayoutProperty *newLayout=graph->getLocalProperty<LayoutProperty>("viewLayout");
     vector<node> sg(nbNodes);
 
     pluginProgress->showPreview(false);
 
-    for (unsigned int i=0; i<nbNodes;++i) {
+    for (unsigned int i=0; i<nbNodes; ++i) {
       sg[i]=graph->addNode();
       newLayout->setNodeValue(sg[i],Coord(rand()%WIDTH, rand()%HEIGHT, 0));
     }
+
     unsigned int count = 0;
     unsigned int iterations = nbNodes*(nbNodes-1)/2;
     double minSize = DBL_MAX;
-    for (unsigned int i=0;i<nbNodes-1;++i) {
+
+    for (unsigned int i=0; i<nbNodes-1; ++i) {
       bool longEdge =false;
+
       if (pluginProgress->progress(count,iterations)!=TLP_CONTINUE) break;
-      for (unsigned int j=i+1;j<nbNodes;++j) {
-	++count;
-	if (i!=j) {
-	  double distance = newLayout->getNodeValue(sg[i]).dist(newLayout->getNodeValue(sg[j]));
-	  minSize = std::min(distance, minSize);
-	  //newSize->setAllNodeValue(Size(minSize/2.0, minSize/2.0, 1));
-	  if ( distance  < (double)maxDistance)
-	    graph->addEdge(sg[i],sg[j]);
-	  else 
-	    if (!longEdge && enableLongEdge) {
-	      double distrand = (double)rand()/(double)RAND_MAX;
-	      if (distrand < 1.0/(2.0+double(nbNodes-i-1))) {
-		longEdge = true;
-		graph->addEdge(sg[i],sg[j]);
-	      }
-	    }
-	}
+
+      for (unsigned int j=i+1; j<nbNodes; ++j) {
+        ++count;
+
+        if (i!=j) {
+          double distance = newLayout->getNodeValue(sg[i]).dist(newLayout->getNodeValue(sg[j]));
+          minSize = std::min(distance, minSize);
+
+          //newSize->setAllNodeValue(Size(minSize/2.0, minSize/2.0, 1));
+          if ( distance  < (double)maxDistance)
+            graph->addEdge(sg[i],sg[j]);
+          else if (!longEdge && enableLongEdge) {
+            double distrand = (double)rand()/(double)RAND_MAX;
+
+            if (distrand < 1.0/(2.0+double(nbNodes-i-1))) {
+              longEdge = true;
+              graph->addEdge(sg[i],sg[j]);
+            }
+          }
+        }
       }
     }
+
     return  pluginProgress->state()!=TLP_CANCEL;
   }
 };

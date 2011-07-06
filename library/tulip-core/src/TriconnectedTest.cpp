@@ -25,36 +25,47 @@ using namespace tlp;
 //=================================================================
 TriconnectedTest * TriconnectedTest::instance=0;
 //=================================================================
-TriconnectedTest::TriconnectedTest(){
+TriconnectedTest::TriconnectedTest() {
 }
 //=================================================================
 bool TriconnectedTest::isTriconnected(Graph *graph) {
   if (instance==0)
     instance=new TriconnectedTest();
+
   return instance->compute(graph);
 }
 //=================================================================
 bool TriconnectedTest::compute(Graph *graph) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) 
+  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     return resultsBuffer[(unsigned long)graph];
+
   if (graph->numberOfNodes()==0) return false;
+
   graph->addGraphObserver(this);
   bool result = true;
   Graph *tmp = tlp::newCloneSubGraph(graph);
   Iterator<node> *itN = graph->getNodes();
+
   while(itN->hasNext()) {
     node n = itN->next();
     tmp->delNode(n);
+
     if (!BiconnectedTest::isBiconnected(tmp)) {
       result = false;
       break;
     }
+
     tmp->addNode(n);
     Iterator<edge> *itE = graph->getInOutEdges(n);
+
     while(itE->hasNext()) {
       tmp->addEdge(itE->next());
-    } delete itE;
-  } delete itN;
+    }
+
+    delete itE;
+  }
+
+  delete itN;
   graph->delSubGraph(tmp);
   resultsBuffer[(unsigned long)graph] = result;
   return result;
@@ -63,6 +74,7 @@ bool TriconnectedTest::compute(Graph *graph) {
 void TriconnectedTest::addEdge(Graph *graph,const edge) {
   if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
     if (resultsBuffer[(unsigned long)graph]) return;
+
   graph->removeGraphObserver(this);
   resultsBuffer.erase((unsigned long)graph);
 }

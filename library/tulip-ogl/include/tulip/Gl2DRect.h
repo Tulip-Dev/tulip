@@ -24,88 +24,88 @@
 #include <tulip/GlRect.h>
 
 namespace tlp {
+/**
+ * \addtogroup GlEntities
+ */
+/*@{*/
+/**
+ * \brief Create a 2D rectangle
+ *
+ * This rect add screen percentage system (for example you can create a rectangle that start on (10%,10%) and finish on (90%90%)
+ * If you whan a simple 2D rectangle with normal coordinates use GlRect class
+ */
+class TLP_GL_SCOPE Gl2DRect : public GlRect {
+
+public:
+  Gl2DRect();
+
   /**
-   * \addtogroup GlEntities
+   * Constructor : with top/bottom/left/right coords, textureName and if inPercent is true coords are in percent
    */
-  /*@{*/
+  Gl2DRect(float top,float bottom,float left, float right,
+           const std::string& textureName,
+           bool inPercent=false);
+
   /**
-   * \brief Create a 2D rectangle
-   *
-   * This rect add screen percentage system (for example you can create a rectangle that start on (10%,10%) and finish on (90%90%)
-   * If you whan a simple 2D rectangle with normal coordinates use GlRect class
+   * Constructor : with bottom/left height,width coords, textureName and if xInv/yInv is true coords viewport - coord
    */
-  class TLP_GL_SCOPE Gl2DRect : public GlRect {
-
-  public:
-    Gl2DRect();
-
-    /**
-     * Constructor : with top/bottom/left/right coords, textureName and if inPercent is true coords are in percent
-     */
-    Gl2DRect(float top,float bottom,float left, float right,
-             const std::string& textureName,
-             bool inPercent=false);
-
-    /**
-     * Constructor : with bottom/left height,width coords, textureName and if xInv/yInv is true coords viewport - coord
-     */
-    Gl2DRect(float bottom,float left,float height, float width,
+  Gl2DRect(float bottom,float left,float height, float width,
            const std::string& textureName,
            bool xInv, bool yInv);
 
-    virtual ~Gl2DRect() {}
+  virtual ~Gl2DRect() {}
 
-    /**
-     * Return the bounding box
-     */
-    virtual BoundingBox getBoundingBox();
+  /**
+   * Return the bounding box
+   */
+  virtual BoundingBox getBoundingBox();
 
-    /**
-     * Draw the rectangle
-     */
-    virtual void draw(float lod,Camera *camera);
+  /**
+   * Draw the rectangle
+   */
+  virtual void draw(float lod,Camera *camera);
 
-    /**
-     * Translate entity
-     */
-    virtual void translate(const Coord& mouvement);
+  /**
+   * Translate entity
+   */
+  virtual void translate(const Coord& mouvement);
 
-    /**
-     * Set texture of the GlRectTextured
-     */
-    virtual void setTexture(const std::string &name);
+  /**
+   * Set texture of the GlRectTextured
+   */
+  virtual void setTexture(const std::string &name);
 
-    /**
-     * Get texture of the GlRectTextured
-     */
-    virtual std::string getTexture();
+  /**
+   * Get texture of the GlRectTextured
+   */
+  virtual std::string getTexture();
 
-    /**
-     * Set coordinates of rectangle
-     */
-    virtual void setCoordinates(float bottom, float left, float width, float height);
+  /**
+   * Set coordinates of rectangle
+   */
+  virtual void setCoordinates(float bottom, float left, float width, float height);
 
-    /**
-     * Function to export data in XML
-     */
-    virtual void getXML(xmlNodePtr rootNode);
+  /**
+   * Function to export data in XML
+   */
+  virtual void getXML(xmlNodePtr rootNode);
 
-    /**
-     * Function to set data with XML
-     */
-    virtual void setWithXML(xmlNodePtr rootNode);
+  /**
+   * Function to set data with XML
+   */
+  virtual void setWithXML(xmlNodePtr rootNode);
 
-  protected:
+protected:
 
-    float top;
-    float bottom;
-    float left;
-    float right;
-    bool inPercent;
-    bool xInv;
-    bool yInv;
+  float top;
+  float bottom;
+  float left;
+  float right;
+  bool inPercent;
+  bool xInv;
+  bool yInv;
 
-  };
-  /*@}*/
+};
+/*@}*/
 }
 #endif

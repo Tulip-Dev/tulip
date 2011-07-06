@@ -37,7 +37,7 @@ namespace tlp {
   * to save the state of the ids manage by the GraphStorage class
   */
 class GraphStorageIdsMemento {
- public:
+public:
   virtual ~GraphStorageIdsMemento() {}
 };
 //===========================================
@@ -47,7 +47,7 @@ class GraphStorageIdsMemento {
   * for the storage of graph  elts (nodes edges)
   */
 class GraphStorage {
- public:
+public:
   //=======================================================
   void clear();
   //=======================================================
@@ -145,7 +145,7 @@ class GraphStorage {
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
   Iterator<edge>* getInEdges(node n) const;
-   //=======================================================
+  //=======================================================
   /**
    * @brief Return a Tulip Iterator on adjacent nodes of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
@@ -157,7 +157,7 @@ class GraphStorage {
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
   Iterator<node>* getInNodes(node n) const;
-   //=======================================================
+  //=======================================================
   /**
    * @brief Return a Tulip Iterator on out nodes of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
@@ -310,7 +310,7 @@ class GraphStorage {
    * these structures will be devalidated.
    */
   edge addEdge(const node src, const node tgt,
-	       const edge e, bool updateEndsEdges);
+               const edge e, bool updateEndsEdges);
   //=======================================================
   /**
    * @brief Add a new edge between src and tgt and return it
@@ -328,7 +328,7 @@ class GraphStorage {
    * these structures will be devalidated.
    */
   void addEdges(const std::vector<std::pair<node, node> >& edges,
-		std::vector<edge>& addedEdges); 
+                std::vector<edge>& addedEdges);
   //=======================================================
   /**
    * @brief restore edges in the structure and returns them
@@ -338,8 +338,8 @@ class GraphStorage {
    * these structures will be devalidated.
    */
   void restoreEdges(const std::vector<edge>& edgesToRestore,
-		    const std::vector<std::pair<node, node> >& ends);
- //=======================================================
+                    const std::vector<std::pair<node, node> >& ends);
+//=======================================================
   /**
    * @brief Delete an edge in the graph
    * @warning: That operation modify the array of edges
@@ -364,12 +364,12 @@ class GraphStorage {
    */
   void delAllNodes();
   //=======================================================
- private :
+private :
   // specific types
   typedef SimpleVector<edge> EdgeContainer;
   typedef std::vector<EdgeContainer> Nodes;
   typedef std::vector<std::pair< node , node > > Edges;
-  
+
   // data members
   MutableContainer<unsigned int> outDegree;
   mutable Edges edges;

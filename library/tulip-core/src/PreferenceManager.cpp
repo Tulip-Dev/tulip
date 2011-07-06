@@ -22,6 +22,5 @@ tlp::PreferenceManager* tlp::PreferenceManager::inst=0;
 
 using namespace std;
 
-namespace tlp
-{
+namespace tlp {
 }

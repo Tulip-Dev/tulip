@@ -23,14 +23,14 @@
 
 /** \addtogroup metric */
 /*@{*/
-/** This plugin is an implementation of the connected component decompostion algorithm. each 
+/** This plugin is an implementation of the connected component decompostion algorithm. each
  *  node and edge that belongs to the same component receive the same value.
  *
  *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
  *  connected component they have the same value else they have a different value.
  *
  */
-class ConnectedComponent:public tlp::DoubleAlgorithm { 
+class ConnectedComponent:public tlp::DoubleAlgorithm {
 public:
   ConnectedComponent(const tlp::PropertyContext &);
   ~ConnectedComponent();

@@ -31,10 +31,10 @@ const string DoubleVectorProperty::propertyTypename="vector<double>";
 // Predefined Meta Value Calculators
 //=============================================================
 typedef void (*DoubleNodePredefinedCalculator) (AbstractDoubleProperty* metric,
-						node mN, Graph* sg);
+    node mN, Graph* sg);
 
 typedef void (*DoubleEdgePredefinedCalculator) (AbstractDoubleProperty* metric, edge mE,
-						Iterator<edge>* itE);
+    Iterator<edge>* itE);
 
 // average values
 static void computeNodeAvgValue(AbstractDoubleProperty* metric, node mN, Graph* sg) {
@@ -51,11 +51,13 @@ static void computeNodeAvgValue(AbstractDoubleProperty* metric, node mN, Graph* 
 static void computeEdgeAvgValue(AbstractDoubleProperty* metric, edge mE, Iterator<edge>* itE) {
   double value = 0;
   unsigned int nbEdges = 0;
+
   while(itE->hasNext()) {
     edge e = itE->next();
     ++nbEdges;
     value += metric->getEdgeValue(e);
   }
+
   metric->setEdgeValue(mE, value/nbEdges);
 }
 
@@ -71,10 +73,12 @@ static void computeNodeSumValue(AbstractDoubleProperty* metric, node mN, Graph* 
 
 static void computeEdgeSumValue(AbstractDoubleProperty* metric, edge mE, Iterator<edge>* itE) {
   double value = 0;
+
   while(itE->hasNext()) {
     edge e = itE->next();
     value += metric->getEdgeValue(e);
   }
+
   metric->setEdgeValue(mE, value);
 }
 
@@ -84,6 +88,7 @@ static void computeNodeMaxValue(AbstractDoubleProperty* metric, node mN, Graph* 
   node n;
   forEach(n, sg->getNodes()) {
     const double& nVal = metric->getNodeValue(n);
+
     if (nVal > value)
       value = nVal;
   }
@@ -92,11 +97,14 @@ static void computeNodeMaxValue(AbstractDoubleProperty* metric, node mN, Graph* 
 
 static void computeEdgeMaxValue(AbstractDoubleProperty* metric, edge mE, Iterator<edge>* itE) {
   double value = -DBL_MAX;
+
   while(itE->hasNext()) {
     const double& eVal = metric->getEdgeValue(itE->next());
+
     if (eVal > value)
       value = eVal;
   }
+
   metric->setEdgeValue(mE, value);
 }
 
@@ -106,6 +114,7 @@ static void computeNodeMinValue(AbstractDoubleProperty* metric, node mN, Graph* 
   node n;
   forEach(n, sg->getNodes()) {
     const double& nVal = metric->getNodeValue(n);
+
     if (nVal < value)
       value = nVal;
   }
@@ -114,11 +123,14 @@ static void computeNodeMinValue(AbstractDoubleProperty* metric, node mN, Graph* 
 
 static void computeEdgeMinValue(AbstractDoubleProperty* metric, edge mE, Iterator<edge>* itE) {
   double value = DBL_MAX;
+
   while(itE->hasNext()) {
     const double& eVal = metric->getEdgeValue(itE->next());
+
     if (eVal < value)
       value = eVal;
   }
+
   metric->setEdgeValue(mE, value);
 }
 
@@ -145,21 +157,21 @@ class DoublePropertyPredefinedCalculator :public AbstractDoubleProperty::MetaVal
 
 public:
   DoublePropertyPredefinedCalculator(DoubleProperty::PredefinedMetaValueCalculator nCalc =
-				     DoubleProperty::AVG_CALC,
-				     DoubleProperty::PredefinedMetaValueCalculator eCalc =
-				     DoubleProperty::AVG_CALC)
+                                       DoubleProperty::AVG_CALC,
+                                     DoubleProperty::PredefinedMetaValueCalculator eCalc =
+                                       DoubleProperty::AVG_CALC)
     :AbstractDoubleProperty::MetaValueCalculator(),
      nodeCalc(nodeCalculators[(int) nCalc]),
      edgeCalc(edgeCalculators[(int) eCalc]) {}
 
   void computeMetaValue(AbstractDoubleProperty* metric, node mN, Graph* sg,
-			Graph*) {
+                        Graph*) {
     if (nodeCalc)
       nodeCalc(metric, mN, sg);
   }
 
   void computeMetaValue(AbstractDoubleProperty* metric, edge mE,
-			Iterator<edge>* itE, Graph*) {
+                        Iterator<edge>* itE, Graph*) {
     if (edgeCalc)
       edgeCalc(metric, mE, itE);
   }
@@ -186,137 +198,183 @@ void DoubleProperty::uniformQuantification(unsigned int k) {
 void DoubleProperty::nodesUniformQuantification(unsigned int k) {
   std::map<double,double> nodeMapping;
 
-  { //build the histogram of node values
+  {
+    //build the histogram of node values
     map<double,int> histogram;
     Iterator<node> *itN=graph->getNodes();
+
     while (itN->hasNext()) {
       node itn=itN->next();
       const double& nodeValue=getNodeValue(itn);
+
       if (histogram.find(nodeValue)==histogram.end())
-    histogram[nodeValue]=1;
+        histogram[nodeValue]=1;
       else
-    histogram[nodeValue]+=1;
-    } delete itN;
+        histogram[nodeValue]+=1;
+    }
+
+    delete itN;
     //Build the color map
     map<double,int>::iterator it;
     double sum=0;
     double cK=double(graph->numberOfNodes())/double(k);
     int k2=0;
-    for (it=histogram.begin();it!=histogram.end();++it) {
+
+    for (it=histogram.begin(); it!=histogram.end(); ++it) {
       sum+=(*it).second;
       nodeMapping[(*it).first]=k2;
+
       while (sum>cK*double(k2+1)) ++k2;
     }
   }
 
   Iterator<node> *itN=graph->getNodes();
+
   while(itN->hasNext()) {
     node itn=itN->next();
     setNodeValue(itn,nodeMapping[getNodeValue(itn)]);
-  } delete itN;
+  }
+
+  delete itN;
 }
 //===============================================================
 void DoubleProperty::edgesUniformQuantification(unsigned int k) {
   std::map<double,double> edgeMapping;
-  { //build the histogram of edges values
+  {
+    //build the histogram of edges values
     map<double,int> histogram;
     Iterator<edge> *itE=graph->getEdges();
+
     while (itE->hasNext()) {
       edge ite=itE->next();
       const double& value=getEdgeValue(ite);
+
       if (histogram.find(value)==histogram.end())
-    histogram[value]=1;
+        histogram[value]=1;
       else
-    histogram[value]+=1;
-    } delete itE;
+        histogram[value]+=1;
+    }
+
+    delete itE;
     //===============================================================
     //Build the color map
     map<double,int>::iterator it;
     double sum=0;
     double cK=double(graph->numberOfEdges())/double(k);
     int k2=0;
-    for (it=histogram.begin();it!=histogram.end();++it) {
+
+    for (it=histogram.begin(); it!=histogram.end(); ++it) {
       sum+=(*it).second;
       edgeMapping[(*it).first]=k2;
+
       while (sum>cK*double(k2+1)) ++k2;
     }
   }
 
   Iterator<edge> *itE=graph->getEdges();
+
   while(itE->hasNext()) {
     edge ite=itE->next();
     setEdgeValue(ite,edgeMapping[getEdgeValue(ite)]);
-  } delete itE;
+  }
+
+  delete itE;
 }
 //====================================================================
 ///Renvoie le minimum de la metrique associe aux noeuds du DoubleProperty
 double DoubleProperty::getNodeMin(Graph *sg) {
   if (sg==0) sg=graph;
+
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.find(sgi);
+
   if ((it == minMaxOkNode.end()) || ((*it).second == false))
     computeMinMaxNode(sg);
+
   return minN[sgi];
 }
 //====================================================================
 ///Renvoie le maximum de la metrique associe aux noeuds du DoubleProperty
 double DoubleProperty::getNodeMax(Graph *sg) {
   if (sg==0) sg=graph;
+
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.find(sgi);
+
   if ((it == minMaxOkNode.end()) || ((*it).second == false))
     computeMinMaxNode(sg);
+
   return maxN[sgi];
 }
 //====================================================================
 ///Renvoie le Minimum de la metrique associe aux aretes du DoubleProperty
 double DoubleProperty::getEdgeMin(Graph *sg) {
   if (sg==0) sg=graph;
+
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.find(sgi);
+
   if ((it == minMaxOkEdge.end()) || ((*it).second == false))
     computeMinMaxEdge(sg);
+
   return minE[sgi];
 }
 //====================================================================
 ///Renvoie le Maximum de la metrique associe aux aretes du DoubleProperty
 double DoubleProperty::getEdgeMax(Graph *sg) {
   if (sg==0) sg=graph;
+
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.find(sgi);
+
   if ((it == minMaxOkEdge.end()) || ((*it).second == false))
     computeMinMaxEdge(sg);
+
   return maxE[sgi];
 }
 //=========================================================
 void DoubleProperty::computeMinMaxNode(Graph *sg) {
   double maxN2 = -DBL_MAX, minN2 = DBL_MAX;
+
   if (sg==0) sg=graph;
+
   Iterator<node> *itN=sg->getNodes();
+
   while (itN->hasNext()) {
     node itn=itN->next();
     const double& tmp=getNodeValue(itn);
+
     if (tmp>maxN2) maxN2=tmp;
+
     if (tmp<minN2) minN2=tmp;
-  } delete itN;
+  }
+
+  delete itN;
 
   unsigned int sgi = sg->getId();
 
-  minMaxOkNode[sgi]=true;  
+  minMaxOkNode[sgi]=true;
   minN[sgi]=minN2;
   maxN[sgi]=maxN2;
 }
 //=========================================================
 void DoubleProperty::computeMinMaxEdge(Graph *sg) {
   double maxE2 = -DBL_MAX, minE2 = DBL_MAX;
+
   if (sg==0) sg=graph;
+
   Iterator<edge> *itE=sg->getEdges();
+
   while (itE->hasNext()) {
     edge ite=itE->next();
     const double& tmp=getEdgeValue(ite);
+
     if (tmp>maxE2) maxE2=tmp;
+
     if (tmp<minE2) minE2=tmp;
-  } delete itE;
+  }
+
+  delete itE;
 
   unsigned int sgi = sg->getId();
 
@@ -337,54 +395,63 @@ void DoubleProperty::clone_handler(AbstractProperty<DoubleType,DoubleType, Doubl
 //=================================================================================
 void DoubleProperty::setNodeValue(const node n, const double &v) {
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.begin();
+
   if (it != minMaxOkNode.end()) {
     double oldV = getNodeValue(n);
+
     if (v != oldV) {
       // loop on subgraph min/max
       for(; it != minMaxOkNode.end(); ++it) {
-	// if min/max is ok for the current subgraph
-	// check if min or max has to be updated
-	if ((*it).second == true) {
-	  unsigned int gid = (*it).first;
-	  double minV = minN[gid];
-	  double maxV = maxN[gid];
-	  if ((v < minV) || (v > maxV) || (oldV == minV) || (oldV == maxV)) {
-	    minMaxOkNode.clear();
-	    break;
-	  }
-	}
+        // if min/max is ok for the current subgraph
+        // check if min or max has to be updated
+        if ((*it).second == true) {
+          unsigned int gid = (*it).first;
+          double minV = minN[gid];
+          double maxV = maxN[gid];
+
+          if ((v < minV) || (v > maxV) || (oldV == minV) || (oldV == maxV)) {
+            minMaxOkNode.clear();
+            break;
+          }
+        }
       }
     }
   }
+
   AbstractDoubleProperty::setNodeValue(n, v);
 }
 //=================================================================================
 void DoubleProperty::setEdgeValue(const edge e, const double &v) {
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.begin();
+
   if (it != minMaxOkEdge.end()) {
     double oldV = getEdgeValue(e);
+
     if (v != oldV) {
       // loop on subgraph min/max
       for(; it != minMaxOkEdge.end(); ++it) {
-	// if min/max is ok for the current subgraph
-	// check if min or max has to be updated
-	if ((*it).second == true) {
-	  unsigned int gid = (*it).first;
-	  double minV = minE[gid];
-	  double maxV = maxE[gid];
-	  if ((v < minV) || (v > maxV) || (oldV == minV) || (oldV == maxV)) {
-	    minMaxOkEdge.clear();
-	    break;
-	  }
-	}
+        // if min/max is ok for the current subgraph
+        // check if min or max has to be updated
+        if ((*it).second == true) {
+          unsigned int gid = (*it).first;
+          double minV = minE[gid];
+          double maxV = maxE[gid];
+
+          if ((v < minV) || (v > maxV) || (oldV == minV) || (oldV == maxV)) {
+            minMaxOkEdge.clear();
+            break;
+          }
+        }
       }
     }
   }
+
   AbstractDoubleProperty::setEdgeValue(e, v);
 }
 //=================================================================================
 void DoubleProperty::setAllNodeValue(const double &v) {
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.begin();
+
   if (it != minMaxOkNode.end()) {
     // loop on subgraph min/max
     for(; it != minMaxOkNode.end(); ++it) {
@@ -393,11 +460,13 @@ void DoubleProperty::setAllNodeValue(const double &v) {
       minMaxOkNode[gid] = true;
     }
   }
+
   AbstractDoubleProperty::setAllNodeValue(v);
 }
 //=================================================================================
 void DoubleProperty::setAllEdgeValue(const double &v) {
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.begin();
+
   if (it != minMaxOkEdge.end()) {
     // loop on subgraph min/max
     for(; it != minMaxOkEdge.end(); ++it) {
@@ -406,6 +475,7 @@ void DoubleProperty::setAllEdgeValue(const double &v) {
       minMaxOkEdge[gid] = true;
     }
   }
+
   AbstractDoubleProperty::setAllEdgeValue(v);
 }
 //=================================================================================
@@ -424,8 +494,10 @@ void DoubleProperty::addEdge(Graph*, const edge) {
 void DoubleProperty::delNode(Graph* sg, const node n) {
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkNode.find(sgi);
+
   if (it != minMaxOkNode.end() && it->second) {
     double oldV = getNodeValue(n);
+
     // check if min or max has to be updated
     if ((oldV == minN[sgi]) || (oldV == maxN[sgi]))
       minMaxOkNode[sgi] = false;
@@ -435,8 +507,10 @@ void DoubleProperty::delNode(Graph* sg, const node n) {
 void DoubleProperty::delEdge(Graph* sg, const edge e) {
   unsigned int sgi = sg->getId();
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOkEdge.find(sgi);
+
   if (it != minMaxOkEdge.end() && it->second) {
     double oldV = getEdgeValue(e);
+
     // check if min or max has to be updated
     if ((oldV == minE[sgi]) || (oldV == maxE[sgi])) {
       minMaxOkEdge[sgi] = false;
@@ -447,7 +521,7 @@ void DoubleProperty::delEdge(Graph* sg, const edge e) {
 void DoubleProperty::addSubGraph(Graph*, Graph *sg) {
   // the property observes the new subgraph
   sg->addGraphObserver(this);
-}  
+}
 //=================================================================================
 void DoubleProperty::delSubGraph(Graph*, Graph *sg) {
   // the property no longer observes the subgraph
@@ -457,6 +531,7 @@ void DoubleProperty::delSubGraph(Graph*, Graph *sg) {
 PropertyInterface* DoubleProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
+
   DoubleProperty * p = g->getLocalProperty<DoubleProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
@@ -466,6 +541,7 @@ PropertyInterface* DoubleProperty::clonePrototype(Graph * g, const std::string& 
 PropertyInterface* DoubleVectorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
     return 0;
+
   DoubleVectorProperty * p = g->getLocalProperty<DoubleVectorProperty>( n );
   p->setAllNodeValue( getNodeDefaultValue() );
   p->setAllEdgeValue( getEdgeDefaultValue() );
@@ -473,7 +549,7 @@ PropertyInterface* DoubleVectorProperty::clonePrototype(Graph * g, const std::st
 }
 //=============================================================
 void DoubleProperty::setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc,
-					    PredefinedMetaValueCalculator edgeCalc) {
+    PredefinedMetaValueCalculator edgeCalc) {
   setMetaValueCalculator(new DoublePropertyPredefinedCalculator(nodeCalc, edgeCalc));
 }
 //=============================================================
@@ -481,11 +557,12 @@ void DoubleProperty::setMetaValueCalculator(PropertyInterface::MetaValueCalculat
   if (metaValueCalculator && metaValueCalculator != &avgCalculator &&
       typeid(metaValueCalculator) == typeid(DoublePropertyPredefinedCalculator))
     delete metaValueCalculator;
+
   metaValueCalculator = calc;
 }
 //=============================================================
 void DoubleProperty::treatEvent(const Event& evt) {
   GraphObserver::treatEvent(evt);
 }
-   
+
 

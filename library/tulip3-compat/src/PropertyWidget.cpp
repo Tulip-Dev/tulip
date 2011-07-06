@@ -63,7 +63,7 @@ using namespace tlp;
 
 //================================================================================
 PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
-  TulipTableWidget(parent, name), graph(0), vScrollPos(0),displayNode(true),inUpdate(false){
+  TulipTableWidget(parent, name), graph(0), vScrollPos(0),displayNode(true),inUpdate(false) {
   resetBackColor1();
   resetBackColor2();
   editedProperty=0;
@@ -78,12 +78,14 @@ PropertyWidget::PropertyWidget(QWidget *parent, const char *name) :
   // enable context menu
   setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this,SIGNAL(customContextMenuRequested (const QPoint &)),
-	  SLOT(showContextMenu(const QPoint&)));
+          SLOT(showContextMenu(const QPoint&)));
 }
 
 PropertyWidget::~PropertyWidget() {}
 
-Graph *PropertyWidget::getGraph() const {return graph;}
+Graph *PropertyWidget::getGraph() const {
+  return graph;
+}
 void PropertyWidget::setGraph(Graph *s) {
   editedProperty=0;
   clearContents();
@@ -98,6 +100,7 @@ void PropertyWidget::setGraph(Graph *s) {
 
 void PropertyWidget::changeProperty(Graph *sg,const std::string &name) {
   graph=sg;
+
   if (!graph->existProperty(name)) {
     editedProperty=0;
   }
@@ -105,6 +108,7 @@ void PropertyWidget::changeProperty(Graph *sg,const std::string &name) {
     editedProperty=graph->getProperty(name);
     editedPropertyName=name;
   }
+
   setColumnCount(2);
   horizontalHeaderItem(0)->setText("Id");
   horizontalHeaderItem(1)->setText(QString::fromUtf8(name.c_str()));
@@ -119,6 +123,7 @@ void PropertyWidget::selectNodeOrEdge(bool b) {
 void PropertyWidget::changePropertyValue(int i,int j) {
   if(inUpdate)
     return;
+
   if (displayNode)
     changePropertyNodeValue(i,j);
   else
@@ -128,6 +133,7 @@ void PropertyWidget::changePropertyValue(int i,int j) {
 void PropertyWidget::changePropertyEdgeValue(int i,int j) {
   //  cerr << __PRETTY_FUNCTION__ << endl;
   if (editedProperty == NULL) return;
+
   Observable::holdObservers();
   bool result=true;
   string str=((TulipTableWidgetItem *)item(i,j))->textForTulip().toUtf8().data();
@@ -136,22 +142,27 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
   edge tmp;
   // allow to undo
   graph->push();
+
   for (int pos=0; it->hasNext();) {
     tmp=it->next();
+
     if (!_filterSelection || tmpSel->getEdgeValue(tmp)) {
       if (pos==i) {
         result=editedProperty->setEdgeStringValue(tmp,str);
         break;
       }
+
       ++pos;
     }
-  } delete it;
+  }
+
+  delete it;
 
   if (!result) {
     QMessageBox::critical( 0, "Tulip Property Editor Change Failed",
                            QString("The input value for this edge is not correct,\n"
                                    "The change won't be applied.")
-                           );
+                         );
     // restore old value
     disconnect(this,SIGNAL(cellChanged(int,int)), this, SLOT(changePropertyValue(int,int)));
     setTulipEdgeItem(editedProperty, editedPropertyName, tmp, i, 1);
@@ -167,6 +178,7 @@ void PropertyWidget::changePropertyEdgeValue(int i,int j) {
 
 void PropertyWidget::changePropertyNodeValue(int i, int j) {
   if (editedProperty == NULL) return;
+
   Observable::holdObservers();
   bool result=true;
   string str = ((TulipTableWidgetItem*)item(i, j))->textForTulip().toUtf8().data();
@@ -175,22 +187,27 @@ void PropertyWidget::changePropertyNodeValue(int i, int j) {
   node tmp;
   // allow to undo
   graph->push();
+
   for (int pos=0; it->hasNext();) {
-      tmp=it->next();
-      if (!_filterSelection || tmpSel->getNodeValue(tmp)) {
-        if (pos==i) {
-          result=editedProperty->setNodeStringValue(tmp,str);
-          break;
-        }
-        ++pos;
+    tmp=it->next();
+
+    if (!_filterSelection || tmpSel->getNodeValue(tmp)) {
+      if (pos==i) {
+        result=editedProperty->setNodeStringValue(tmp,str);
+        break;
       }
-  } delete it;
+
+      ++pos;
+    }
+  }
+
+  delete it;
 
   if (!result) {
     QMessageBox::critical( 0, "Tulip Property Editor Change Failed",
                            QString("The input value for this node is not correct,\n"
                                    "The change won't be applied.")
-                           );
+                         );
     // restore old value
     disconnect(this,SIGNAL(cellChanged(int,int)), this, SLOT(changePropertyValue(int,int)));
     setTulipNodeItem(editedProperty, editedPropertyName, tmp, i, 1);
@@ -199,29 +216,36 @@ void PropertyWidget::changePropertyNodeValue(int i, int j) {
   else {
     emit tulipNodePropertyChanged(graph, tmp, editedPropertyName.c_str(), str.c_str());
   }
+
   this->setColumnWidth(1, this->horizontalHeader()->width() - this->columnWidth(0));
   Observable::unholdObservers();
 }
 
 void PropertyWidget::filterSelection(bool b) {
   _filterSelection=b;
+
   if (!b)
     updateNbElements();
+
   //update();
 }
 
 void PropertyWidget::scroll(int i) {
   if (editedProperty == NULL) return;
+
   int curId = i;
   bool toUpdate = false;
+
   if (curId > (vScrollPos + TABLEBUFSIZE/2)) {
     if ((vScrollPos + TABLEBUFSIZE+1) != (int) nbElement) {
       if (curId + TABLEBUFSIZE >= (int) nbElement)
         curId=nbElement-TABLEBUFSIZE-1;
+
       vScrollPos=curId;
       toUpdate=true;
     }
   }
+
   if (curId<vScrollPos) {
     if (vScrollPos!=0) {
       vScrollPos=curId;
@@ -229,13 +253,14 @@ void PropertyWidget::scroll(int i) {
     }
   }
 
-  if (toUpdate){
+  if (toUpdate) {
     update();
   }
 }
 
 void PropertyWidget::update() {
   if (graph == NULL) return;
+
   // check editedProperty
   if (editedProperty && !graph->existProperty(editedPropertyName))
     editedProperty = NULL;
@@ -243,10 +268,12 @@ void PropertyWidget::update() {
   bool lastUpdateStatus=inUpdate;
   inUpdate=true;
   clearContents();
+
   if (displayNode)
     updateNodes();
   else
     updateEdges();
+
   inUpdate=lastUpdateStatus;
   horizontalHeader()->setResizeMode(0, QHeaderView::ResizeToContents);
   QTableWidget::repaint();
@@ -256,13 +283,16 @@ void PropertyWidget::updateEdges() {
   if (editedProperty == NULL) {
     return;
   }
+
   updateNbElements();
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
   setRowCount(nbElement);
   Iterator<edge> *it=graph->getEdges();
+
   for (int i=0; it->hasNext();) {
     char buf[16];
     edge tmp=it->next();
+
     if (!_filterSelection || tmpSel->getEdgeValue(tmp)) {
       if ((i>=vScrollPos) && (i<=vScrollPos+TABLEBUFSIZE)) {
         sprintf (buf,"%d", tmp.id );
@@ -272,22 +302,28 @@ void PropertyWidget::updateEdges() {
         setTulipEdgeItem(editedProperty, editedPropertyName, tmp, i, 1);
       }
       else if (i>vScrollPos+TABLEBUFSIZE) break;
+
       ++i;
     }
-  } delete it;
+  }
+
+  delete it;
   //adjustColumn(0);
   setColumnWidth(1, horizontalHeader()->length() - columnWidth(0));
 }
 
 void PropertyWidget::updateNodes() {
   if (editedProperty == NULL) return;
+
   updateNbElements();
   BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
   setRowCount(nbElement);
   Iterator<node> *it=graph->getNodes();
+
   for (int i=0; it->hasNext();) {
     char buf[16];
     node tmp=it->next();
+
     if (!_filterSelection || tmpSel->getNodeValue(tmp)) {
       if ((i>=vScrollPos) && (i<=vScrollPos+TABLEBUFSIZE)) {
         sprintf (buf,"%d", tmp.id );
@@ -297,16 +333,21 @@ void PropertyWidget::updateNodes() {
         setTulipNodeItem(editedProperty, editedPropertyName, tmp, i, 1);
       }
       else if (i>vScrollPos+TABLEBUFSIZE) break;
+
       ++i;
     }
-  } delete it;
+  }
+
+  delete it;
   //adjustColumn(0);
   setColumnWidth(1, horizontalHeader()->length() - columnWidth(0));
 }
 
 void PropertyWidget::updateNbElements() {
   if (graph == NULL) return;
+
   unsigned int nbNode,nbEdge;
+
   if (!_filterSelection) {
     nbNode=graph->numberOfNodes();
     nbEdge=graph->numberOfEdges();
@@ -316,27 +357,35 @@ void PropertyWidget::updateNbElements() {
     nbNode=0;
     nbEdge=0;
     Iterator<node> *it=graph->getNodes();
+
     while (it->hasNext())
       if (tmpSel->getNodeValue(it->next())) nbNode++;
+
     delete it;
     Iterator<edge> *itE=graph->getEdges();
+
     while (itE->hasNext())
       if (tmpSel->getEdgeValue(itE->next())) nbEdge++;
+
     delete itE;
   }
-  if (displayNode) nbElement=nbNode; else nbElement=nbEdge;
+
+  if (displayNode) nbElement=nbNode;
+  else nbElement=nbEdge;
 }
 
 void PropertyWidget::setAll() {
   if (displayNode)
-   setAllNodeValue();
+    setAllNodeValue();
   else
-   setAllEdgeValue();
+    setAllEdgeValue();
+
   QTableWidget::update();
 }
 
 void PropertyWidget::setAllNodeValue() {
   if (editedProperty == NULL) return;
+
   Observable::holdObservers();
   bool ok=false;
   string tmpStr;
@@ -344,39 +393,50 @@ void PropertyWidget::setAllNodeValue() {
   if (editedPropertyName == "viewShape") {
     QStringList tmp;
     Iterator<string> *itS=GlyphLister::availablePlugins();
-    while (itS->hasNext()){
+
+    while (itS->hasNext()) {
       tmp.append(QString(itS->next().c_str()));
-    }delete itS;
+    }
+
+    delete itS;
 
     QString shapeName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
-                                              "Please choose a shape",
-                                              tmp, 0, false, &ok);
+                        "Please choose a shape",
+                        tmp, 0, false, &ok);
+
     if (ok) {
       stringstream ss;
       ss << GlyphManager::getInst().glyphId(shapeName.toUtf8().data());
       tmpStr = ss.str();
     }
-  } else if (editedPropertyName == "viewFont") {
+  }
+  else if (editedPropertyName == "viewFont") {
     ChooseFileNameDialog dialog(QString("Font (*.ttf)"),this);
-    if(dialog.exec()==QDialog::Accepted){
+
+    if(dialog.exec()==QDialog::Accepted) {
       tmpStr=dialog.getText().toStdString();
       ok=true;
     }
-  } else if (editedPropertyName == "viewTexture") {
+  }
+  else if (editedPropertyName == "viewTexture") {
     ChooseFileNameDialog dialog(QString("Images (*.png *.jpeg *.jpg *.bmp)"),TulipBitmapDir.c_str(),this);
-    if(dialog.exec()==QDialog::Accepted){
+
+    if(dialog.exec()==QDialog::Accepted) {
       tmpStr=dialog.getText().toStdString();
       GlTextureManager::getInst().clearErrorVector();
       ok=true;
     }
-  } else if (editedPropertyName == "viewLabelPosition") {
+  }
+  else if (editedPropertyName == "viewLabelPosition") {
     QStringList tmp;
+
     for (int i = 0; i < 5; i++)
       tmp.append(QString(GlGraphStaticData::labelPositionName(i).c_str()));
 
     QString labelPosName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
-                                              "Please choose a position",
-                                              tmp, 0, false, &ok);
+                           "Please choose a position",
+                           tmp, 0, false, &ok);
+
     if (ok) {
       stringstream ss;
       ss << GlGraphStaticData::labelPositionId(labelPosName.toUtf8().data());
@@ -388,6 +448,7 @@ void PropertyWidget::setAllNodeValue() {
                                        "Please enter your value",
                                        0, -2147483647, 2147483647, 10,
                                        &ok);
+
     if (ok) {
       stringstream ss;
       ss << d;
@@ -396,6 +457,7 @@ void PropertyWidget::setAllNodeValue() {
   }
   else if (typeid(*editedProperty) == typeid(ColorProperty)) {
     QColor col;
+
     if (getColorDialog(qRgba(255,0,0,200),NULL,"Color chooser",col)) {
       ok=true;
       stringstream ss;
@@ -403,13 +465,15 @@ void PropertyWidget::setAllNodeValue() {
       tmpStr = ss.str();
     }
   }
-  else if(editedPropertyName == "viewLabel"){
+  else if(editedPropertyName == "viewLabel") {
     TextEditDialog textEditDialog("");
     QString text;
-    if(textEditDialog.exec()){
+
+    if(textEditDialog.exec()) {
       text=textEditDialog.getText();
       ok=true;
     }
+
     if (ok) tmpStr = text.toUtf8().data();
     else ok = false;
   }
@@ -417,12 +481,14 @@ void PropertyWidget::setAllNodeValue() {
     QString text = QInputDialog::getText(this, QString::fromUtf8(string("Property \"" + editedPropertyName + "\": set all node value").c_str()),
                                          "Please enter your value",
                                          QLineEdit::Normal,QString::null, &ok);
+
     if (ok) tmpStr = text.toUtf8().data();
     else ok = false;
   }
 
   // allow to undo
   graph->push();
+
   if (ok) {
     bool result=true;
     BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
@@ -432,20 +498,25 @@ void PropertyWidget::setAllNodeValue() {
     }
     else {
       Iterator<node> *it=graph->getNodes();
+
       while (it->hasNext()) {
         node tmp=it->next();
+
         if (!_filterSelection || tmpSel->getNodeValue(tmp)) {
           result = editedProperty->setNodeStringValue(tmp,tmpStr);
+
           if (!result) break;
         }
-      } delete it;
+      }
+
+      delete it;
     }
 
     if (!result) {
       QMessageBox::critical(0, "Tulip Property Editor : set all node value Failed",
                             QString("The input value for the nodes is not correct,\n"
                                     "The change won't be applied.")
-                            );
+                           );
     }
     else {
       this->update();
@@ -457,12 +528,14 @@ void PropertyWidget::setAllNodeValue() {
 
 void  PropertyWidget::setAllEdgeValue() {
   if (editedProperty == NULL) return;
+
   Observable::holdObservers();
   bool ok=false;
   string tmpStr;
 
   if (typeid(*editedProperty) == typeid(ColorProperty)) {
     QColor col;
+
     if (getColorDialog(qRgba(0,0,0,200),NULL,"Color chooser",col)) {
       ok=true;
       stringstream ss;
@@ -472,78 +545,96 @@ void  PropertyWidget::setAllEdgeValue() {
   }
   else if (editedPropertyName == "viewShape") {
     QStringList tmp;
+
     for (int i = 0; i < GlGraphStaticData::edgeShapesCount; i++)
       tmp.append(QString(GlGraphStaticData::edgeShapeName(GlGraphStaticData::edgeShapeIds[i]).c_str()));
 
     QString shapeName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all node value").c_str(),
-                                              "Please choose a shape",
-                                              tmp, 0, false, &ok);
+                        "Please choose a shape",
+                        tmp, 0, false, &ok);
+
     if (ok) {
       stringstream ss;
       ss << GlGraphStaticData::edgeShapeId(shapeName.toUtf8().data());
       tmpStr = ss.str();
     }
   }
-  else if(editedPropertyName == "viewSrcAnchorShape" || editedPropertyName == "viewTgtAnchorShape"){
-	  QStringList tmp;
-	  tmp.append("NONE");
-	  Iterator<string> *itS=EdgeExtremityGlyphLister::availablePlugins();
-	  while (itS->hasNext()){
-		  tmp.append(QString(itS->next().c_str()));
-	  }delete itS;
+  else if(editedPropertyName == "viewSrcAnchorShape" || editedPropertyName == "viewTgtAnchorShape") {
+    QStringList tmp;
+    tmp.append("NONE");
+    Iterator<string> *itS=EdgeExtremityGlyphLister::availablePlugins();
 
-	  QString shapeName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all edge value").c_str(),
-	                                                "Please choose a shape",
-	                                                tmp, 0, false, &ok);
-	  if(ok){
-		  stringstream ss;
-		  ss << EdgeExtremityGlyphManager::getInst().glyphId(shapeName.toUtf8().data());
-		  tmpStr = ss.str();
-	  }
-  } else if (editedPropertyName == "viewTexture") {
+    while (itS->hasNext()) {
+      tmp.append(QString(itS->next().c_str()));
+    }
+
+    delete itS;
+
+    QString shapeName = QInputDialog::getItem(this, string("Property \"" + editedPropertyName + "\": set all edge value").c_str(),
+                        "Please choose a shape",
+                        tmp, 0, false, &ok);
+
+    if(ok) {
+      stringstream ss;
+      ss << EdgeExtremityGlyphManager::getInst().glyphId(shapeName.toUtf8().data());
+      tmpStr = ss.str();
+    }
+  }
+  else if (editedPropertyName == "viewTexture") {
     ChooseFileNameDialog dialog(QString("Images (*.png *.jpeg *.jpg *.bmp)"),TulipBitmapDir.c_str(),this);
-    if(dialog.exec()==QDialog::Accepted){
+
+    if(dialog.exec()==QDialog::Accepted) {
       tmpStr=dialog.getText().toStdString();
       GlTextureManager::getInst().clearErrorVector();
       ok=true;
     }
-  } else {
+  }
+  else {
     QString text = QInputDialog::getText(this, QString::fromUtf8(string("Property \"" + editedPropertyName + "\": set all edge value").c_str()),
                                          "Please enter your value",
                                          QLineEdit::Normal, QString::null, &ok);
+
     if (ok) tmpStr = text.toUtf8().data();
     else ok = false;
   }
 
   // allow to undo
   graph->push();
+
   if (ok) {
     bool result=true;
     BooleanProperty *tmpSel=graph->getProperty<BooleanProperty>("viewSelection");
+
     if (!_filterSelection && graph->existLocalProperty(editedPropertyName)) {
       result=editedProperty->setAllEdgeStringValue(tmpStr);
     }
     else {
       Iterator<edge> *itE=graph->getEdges();
+
       while (itE->hasNext()) {
         edge tmp=itE->next();
+
         if (!_filterSelection || tmpSel->getEdgeValue(tmp)) {
           result = editedProperty->setEdgeStringValue(tmp, tmpStr);
+
           if (!result) break;
         }
-      } delete itE;
+      }
+
+      delete itE;
     }
 
     if (!result) {
       QMessageBox::critical(0, "Tulip Property Editor set all node value Failed",
                             QString("The input value for the edges is not correct,\n"
                                     "change won't be applied.")
-                            );
+                           );
     }
     else {
       this->update();
     }
   }
+
   Observable::unholdObservers();
 }
 
@@ -555,8 +646,10 @@ void PropertyWidget::connectNotify ( const char * signal ) {
 void PropertyWidget::showContextMenu(const QPoint & pos) {
   QModelIndex index = indexAt(pos);
   int row = index.row();
+
   if ((unsigned int) row < nbElement) {
     std::string textId(item(row, 0)->text().toUtf8().data());
+
     if (textId.size() && (textId.find_first_not_of("0123456789") == string::npos)) {
       selectRow(row);
       QMenu contextMenu(this);
@@ -569,41 +662,52 @@ void PropertyWidget::showContextMenu(const QPoint & pos) {
       QAction* selectAction = contextMenu.addAction(tr("Select"));
       QAction* deleteAction = contextMenu.addAction(tr("Delete"));
       QAction* propAction = NULL;
+
       if (showProperties) {
-	contextMenu.addSeparator();
-	propAction = contextMenu.addAction(tr("Properties"));
+        contextMenu.addSeparator();
+        propAction = contextMenu.addAction(tr("Properties"));
       }
+
       QAction* action = contextMenu.exec(mapToGlobal(pos), selectAction);
       clearSelection();
+
       if (!action)
-	return;
+        return;
+
       unsigned int itemId = (unsigned int) atoi(textId.c_str());
       Observable::holdObservers();
+
       if (action == deleteAction) { // Delete
-	// delete graph item
-	if (displayNode)
-	  graph->delNode(node(itemId));
-	else
-	  graph->delEdge(edge(itemId));
+        // delete graph item
+        if (displayNode)
+          graph->delNode(node(itemId));
+        else
+          graph->delEdge(edge(itemId));
       }
+
       if (showProperties && action == propAction) {
-	emit showElementProperties(itemId, displayNode);
-      }	else {
-	BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
-	if (action == selectAction) { // Select
-	  // empty selection
-	  elementSelected->setAllNodeValue(false);
-	  elementSelected->setAllEdgeValue(false);
-	}
-	// select graph item
-	if (displayNode) {
-	  node tmpNode(itemId);
-	  elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode));
-	} else {
-	  edge tmpEdge(itemId);
-	  elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge));
-	}
+        emit showElementProperties(itemId, displayNode);
       }
+      else {
+        BooleanProperty *elementSelected = graph->getProperty<BooleanProperty>("viewSelection");
+
+        if (action == selectAction) { // Select
+          // empty selection
+          elementSelected->setAllNodeValue(false);
+          elementSelected->setAllEdgeValue(false);
+        }
+
+        // select graph item
+        if (displayNode) {
+          node tmpNode(itemId);
+          elementSelected->setNodeValue(tmpNode, !elementSelected->getNodeValue(tmpNode));
+        }
+        else {
+          edge tmpEdge(itemId);
+          elementSelected->setEdgeValue(tmpEdge, !elementSelected->getEdgeValue(tmpEdge));
+        }
+      }
+
       Observable::unholdObservers();
     }
   }

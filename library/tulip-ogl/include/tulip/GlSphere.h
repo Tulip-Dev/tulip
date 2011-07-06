@@ -28,92 +28,92 @@
 
 namespace tlp {
 
+/**
+ * \addtogroup GlEntities
+ */
+/*@{*/
+/**
+ * Class to create a sphere with GlEntity system
+ */
+class TLP_GL_SCOPE GlSphere : public GlSimpleEntity {
+
+public:
+
+  GlSphere() {}
   /**
-   * \addtogroup GlEntities
+   * Create a sphere with a position, a radius a fill color and multiple rotation (if you want)
    */
-  /*@{*/
+  GlSphere(const Coord &position,float radius,const Color &color=Color(0,0,0,255),float rotX=0,float rotY=0,float rotZ=0);
   /**
-   * Class to create a sphere with GlEntity system
+      * Create a sphere with a position, a radius, a texture, an alphe and multiple rotation (if you want)
+      */
+  GlSphere(const Coord &position,float radius,const std::string& textureFile,int alpha=255,float rotX=0,float rotY=0,float rotZ=0);
+
+  /**
+   * Draw the sphere
    */
-  class TLP_GL_SCOPE GlSphere : public GlSimpleEntity {
+  virtual void draw(float lod,Camera *camera);
 
-  public:
+  /**
+   * Translate entity
+   */
+  virtual void translate(const Coord& mouvement);
 
-    GlSphere() {}
-    /**
-     * Create a sphere with a position, a radius a fill color and multiple rotation (if you want)
-     */
-    GlSphere(const Coord &position,float radius,const Color &color=Color(0,0,0,255),float rotX=0,float rotY=0,float rotZ=0);
-    /**
-        * Create a sphere with a position, a radius, a texture, an alphe and multiple rotation (if you want)
-        */
-    GlSphere(const Coord &position,float radius,const std::string& textureFile,int alpha=255,float rotX=0,float rotY=0,float rotZ=0);
+  /**
+   * Get absolute position
+   */
+  const Coord& getPosition() const {
+    return position;
+  }
 
-    /**
-     * Draw the sphere
-     */
-    virtual void draw(float lod,Camera *camera);
+  /**
+   * Set absolute position
+   */
+  void setPosition(const Coord& pos) {
+    position = pos;
+  }
 
-    /**
-     * Translate entity
-     */
-    virtual void translate(const Coord& mouvement);
+  /**
+   * Set the texture name
+   */
+  virtual void setTexture(const std::string &texture) {
+    textureFile=texture;
+  }
 
-    /**
-     * Get absolute position
-     */
-    const Coord& getPosition() const {
-      return position;
-    }
-    
-    /**
-     * Set absolute position
-     */
-    void setPosition(const Coord& pos) {
-      position = pos;
-    }
+  /**
+   * Get the color
+   */
+  const Color& getColor() const {
+    return color;
+  }
 
-    /**
-     * Set the texture name
-     */
-    virtual void setTexture(const std::string &texture) {
-      textureFile=texture;
-    }
+  /**
+   * Set the color
+   */
+  void setColor(const Color &newColor) {
+    color = newColor;
+  }
 
-    /**
-     * Get the color
-     */
-    const Color& getColor() const {
-      return color;
-    }
+  /**
+   * Function to export data in XML
+   */
+  virtual void getXML(xmlNodePtr rootNode);
 
-    /**
-     * Set the color
-     */
-    void setColor(const Color &newColor) {
-      color = newColor;
-    }
+  /**
+   * Function to set data with XML
+   */
+  virtual void setWithXML(xmlNodePtr rootNode);
 
-    /**
-     * Function to export data in XML
-     */
-    virtual void getXML(xmlNodePtr rootNode);
+private:
 
-    /**
-     * Function to set data with XML
-     */
-    virtual void setWithXML(xmlNodePtr rootNode);
+  Coord position;
+  float radius;
+  Color color;
+  std::string textureFile;
+  Coord rot;
 
-  private:
-
-    Coord position;
-    float radius;
-    Color color;
-    std::string textureFile;
-    Coord rot;
-
-  };
-  /*@}*/
+};
+/*@}*/
 
 }
 

@@ -38,11 +38,11 @@ class TLP_QT_SCOPE GraphicsWidgetBase : public QGraphicsProxyWidget {
 
 public :
 
-	GraphicsWidgetBase();
+  GraphicsWidgetBase();
 
 protected :
 
-	void wheelEvent(QGraphicsSceneWheelEvent * event);
+  void wheelEvent(QGraphicsSceneWheelEvent * event);
 };
 
 }

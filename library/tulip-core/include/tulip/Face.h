@@ -26,18 +26,24 @@
 
 /**
  * \addtogroup graphs
- */ 
+ */
 namespace tlp {
 
 /*@{*/
 /// class face
-struct Face { 
+struct Face {
   unsigned int id;
-  Face():id(UINT_MAX){}
-  explicit Face(unsigned int j):id(j){}
-  bool operator!=(const Face f) const {return id!=f.id;}
-  bool operator==(const Face f) const {return id==f.id;}
-  bool isValid() const {return id!=UINT_MAX;}
+  Face():id(UINT_MAX) {}
+  explicit Face(unsigned int j):id(j) {}
+  bool operator!=(const Face f) const {
+    return id!=f.id;
+  }
+  bool operator==(const Face f) const {
+    return id==f.id;
+  }
+  bool isValid() const {
+    return id!=UINT_MAX;
+  }
 };
 /*@}*/
 }
@@ -52,12 +58,16 @@ TLP_BEGIN_HASH_NAMESPACE {
 TLP_END_HASH_NAMESPACE
 
 namespace std {
-  template<> struct equal_to<tlp::Face> {
-    size_t operator()(const tlp::Face f,const tlp::Face f2) const {return f.id == f2.id;}
-  };
-  template<> struct less<tlp::Face>{
-    size_t operator()(const tlp::Face f,const tlp::Face f2) const {return f.id < f2.id;}
-  };
+template<> struct equal_to<tlp::Face> {
+  size_t operator()(const tlp::Face f,const tlp::Face f2) const {
+    return f.id == f2.id;
+  }
+};
+template<> struct less<tlp::Face> {
+  size_t operator()(const tlp::Face f,const tlp::Face f2) const {
+    return f.id < f2.id;
+  }
+};
 }
 #endif // DOXYGEN_NOTFOR_DEVEL
 

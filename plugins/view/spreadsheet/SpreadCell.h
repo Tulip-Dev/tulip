@@ -27,21 +27,20 @@
 
 namespace tlp {
 
-  class SpreadCell : public QTableWidgetItem
-  {
-    friend QDataStream& operator<<(QDataStream&, const SpreadCell&);
-    friend QDataStream& operator>>(QDataStream&, SpreadCell&);
-    
-  public:
-    SpreadCell();
-    QTableWidgetItem* clone() const;
-    QString computeValue(QString &data);
-    QVariant data(int) const;
-    void setData(int, const QVariant&);
-   
-  private:
-    int editor;
-  };
+class SpreadCell : public QTableWidgetItem {
+  friend QDataStream& operator<<(QDataStream&, const SpreadCell&);
+  friend QDataStream& operator>>(QDataStream&, SpreadCell&);
+
+public:
+  SpreadCell();
+  QTableWidgetItem* clone() const;
+  QString computeValue(QString &data);
+  QVariant data(int) const;
+  void setData(int, const QVariant&);
+
+private:
+  int editor;
+};
 
 }
 

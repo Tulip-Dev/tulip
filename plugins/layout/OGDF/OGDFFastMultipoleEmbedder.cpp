@@ -49,36 +49,36 @@
 namespace {
 
 const char * paramHelp[] = {
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"The maximum number of iterations."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"The number of coefficients for the expansions."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "bool" )
-		HTML_HELP_BODY()
-		"If true, layout algorithm will randomize the layout in the beginning."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"the default node size."
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "double" )
-		HTML_HELP_BODY()
-		"the default edge length. "
-		HTML_HELP_CLOSE(),
-		HTML_HELP_OPEN()
-		HTML_HELP_DEF( "type", "int" )
-		HTML_HELP_BODY()
-		"The number of threads to use during the computation of the layout."
-		HTML_HELP_CLOSE()
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "The maximum number of iterations."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "The number of coefficients for the expansions."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "bool" )
+  HTML_HELP_BODY()
+  "If true, layout algorithm will randomize the layout in the beginning."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "the default node size."
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "double" )
+  HTML_HELP_BODY()
+  "the default edge length. "
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()
+  HTML_HELP_DEF( "type", "int" )
+  HTML_HELP_BODY()
+  "The number of threads to use during the computation of the layout."
+  HTML_HELP_CLOSE()
 };
 }
 
@@ -86,37 +86,44 @@ class OGDFFastMultipoleEmbedder : public OGDFLayoutPluginBase {
 
 public:
 
-	OGDFFastMultipoleEmbedder(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleEmbedder()) {
-		addParameter<int>("number of iterations", paramHelp[0], "100");
-		addParameter<int>("number of coefficients", paramHelp[1], "5");
-		addParameter<bool>("randomize layout", paramHelp[2], "true");
-		addParameter<double>("default node size", paramHelp[3], "20.0");
-		addParameter<double>("default edge length", paramHelp[3], "40.0");
-		addParameter<int>("number of threads", paramHelp[4], "3");
-	}
+  OGDFFastMultipoleEmbedder(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleEmbedder()) {
+    addParameter<int>("number of iterations", paramHelp[0], "100");
+    addParameter<int>("number of coefficients", paramHelp[1], "5");
+    addParameter<bool>("randomize layout", paramHelp[2], "true");
+    addParameter<double>("default node size", paramHelp[3], "20.0");
+    addParameter<double>("default edge length", paramHelp[3], "40.0");
+    addParameter<int>("number of threads", paramHelp[4], "3");
+  }
 
-	~OGDFFastMultipoleEmbedder() {}
+  ~OGDFFastMultipoleEmbedder() {}
 
-	void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
-		ogdf::FastMultipoleEmbedder *fme = static_cast<ogdf::FastMultipoleEmbedder*>(ogdfLayoutAlgo);
-		if (dataSet != 0) {
-			double dval = 0;
-			int ival = 0;
-			bool bval = 0;
-			if (dataSet->get("number of iterations", ival))
-				fme->setNumIterations(ival);
-			if (dataSet->get("number of coefficients", ival))
-				fme->setMultipolePrec(ival);
-			if (dataSet->get("number of threads", ival))
-				fme->setNumberOfThreads(ival);
-			if (dataSet->get("default node size", dval))
-				fme->setDefaultNodeSize(dval);
-			if (dataSet->get("default edge length", dval))
-				fme->setDefaultEdgeLength(dval);
-			if (dataSet->get("randomize layout", bval))
-				fme->setRandomize(bval);
-		}
-	}
+  void beforeCall(TulipToOGDF*, ogdf::LayoutModule *ogdfLayoutAlgo) {
+    ogdf::FastMultipoleEmbedder *fme = static_cast<ogdf::FastMultipoleEmbedder*>(ogdfLayoutAlgo);
+
+    if (dataSet != 0) {
+      double dval = 0;
+      int ival = 0;
+      bool bval = 0;
+
+      if (dataSet->get("number of iterations", ival))
+        fme->setNumIterations(ival);
+
+      if (dataSet->get("number of coefficients", ival))
+        fme->setMultipolePrec(ival);
+
+      if (dataSet->get("number of threads", ival))
+        fme->setNumberOfThreads(ival);
+
+      if (dataSet->get("default node size", dval))
+        fme->setDefaultNodeSize(dval);
+
+      if (dataSet->get("default edge length", dval))
+        fme->setDefaultEdgeLength(dval);
+
+      if (dataSet->get("randomize layout", bval))
+        fme->setRandomize(bval);
+    }
+  }
 
 };
 

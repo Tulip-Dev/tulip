@@ -21,20 +21,23 @@
 //DataSet implementation
 template<typename T> bool tlp::DataSet::get(const std::string& str,T& value) const {
   for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
-	 data.begin(); it != data.end(); ++it) {
+         data.begin(); it != data.end(); ++it) {
     const std::pair<std::string, tlp::DataType*> &p = *it;
+
     if (p.first == str) {
       value = *((T*) p.second->value);
       return true;
     }
   }
+
   return false;
 }
 
 template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& value) {
   for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
-	 data.begin(); it != data.end(); ++it) {
+         data.begin(); it != data.end(); ++it) {
     std::pair<std::string, tlp::DataType *> &p = *it;
+
     if (p.first == str) {
       value = *((T*) p.second->value);
       delete p.second;
@@ -42,11 +45,12 @@ template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& val
       return true;
     }
   }
+
   return false;
 }
 
 template<typename T> void tlp::DataSet::set(const std::string &str,
-					    const T& value) {
+    const T& value) {
   TypedData<T> dtc(new T(value));
   setData(str, &dtc);
 }

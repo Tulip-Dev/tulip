@@ -33,7 +33,9 @@ class TLP_QT_SCOPE SimplePluginProgressDialog: public QDialog {
 public:
   explicit SimplePluginProgressDialog(QWidget *parent=0);
   virtual ~SimplePluginProgressDialog();
-  tlp::PluginProgress *progress() const { return _progress; }
+  tlp::PluginProgress *progress() const {
+    return _progress;
+  }
 
 private:
   tlp::PluginProgress *_progress;

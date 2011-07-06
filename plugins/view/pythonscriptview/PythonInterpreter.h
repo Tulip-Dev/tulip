@@ -33,27 +33,27 @@
 #include <set>
 
 namespace tlp {
-	class Graph;
+class Graph;
 }
 
 class ConsoleOutputDialog : public QDialog {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	ConsoleOutputDialog(QWidget *parent = 0);
+  ConsoleOutputDialog(QWidget *parent = 0);
 
-	QPlainTextEdit *consoleWidget;
+  QPlainTextEdit *consoleWidget;
 
 public slots:
 
-	void showOnOutputWrite();
-	void hideConsoleOutputDialog();
+  void showOnOutputWrite();
+  void hideConsoleOutputDialog();
 
 private:
 
-	QPoint lastPos;
+  QPoint lastPos;
 
 };
 
@@ -61,42 +61,46 @@ class PythonInterpreter {
 
 public :
 
-	static PythonInterpreter *getInstance();
+  static PythonInterpreter *getInstance();
 
-	bool interpreterInit() const;
+  bool interpreterInit() const;
 
-	void registerNewModule(const std::string &moduleName, PyMethodDef *moduleDef);
-	void registerNewModuleFromString(const std::string &moduleName, const std::string &moduleSrcCode);
-	void setTraceFunction(Py_tracefunc tracefunc);
-	bool runString(const std::string &pyhtonCode);
-	bool runGraphScript(const std::string &module, const std::string &function, tlp::Graph *graph);
-	bool functionExists(const std::string &moduleName, const std::string &functionName);
-	void addModuleSearchPath(const std::string &path, const bool beforeOtherPaths = false);
-	void deleteModule(const std::string &moduleName);
-	void reloadModule(const std::string &moduleName);
-	void stopCurrentScript();
-	bool isRunningScript() const {return runningScript;}
-	std::string getPythonVersion() const {return pythonVersion;}
-	void setDefaultSIGINTHandler();
+  void registerNewModule(const std::string &moduleName, PyMethodDef *moduleDef);
+  void registerNewModuleFromString(const std::string &moduleName, const std::string &moduleSrcCode);
+  void setTraceFunction(Py_tracefunc tracefunc);
+  bool runString(const std::string &pyhtonCode);
+  bool runGraphScript(const std::string &module, const std::string &function, tlp::Graph *graph);
+  bool functionExists(const std::string &moduleName, const std::string &functionName);
+  void addModuleSearchPath(const std::string &path, const bool beforeOtherPaths = false);
+  void deleteModule(const std::string &moduleName);
+  void reloadModule(const std::string &moduleName);
+  void stopCurrentScript();
+  bool isRunningScript() const {
+    return runningScript;
+  }
+  std::string getPythonVersion() const {
+    return pythonVersion;
+  }
+  void setDefaultSIGINTHandler();
 
-	
-	void setDefaultConsoleWidget();
-	void setConsoleWidget(QPlainTextEdit *consoleWidget);
+
+  void setDefaultConsoleWidget();
+  void setConsoleWidget(QPlainTextEdit *consoleWidget);
 
 private :
 
-	PythonInterpreter();
-	~PythonInterpreter();
+  PythonInterpreter();
+  ~PythonInterpreter();
 
-	static PythonInterpreter instance;
-	
-	bool runningScript;
+  static PythonInterpreter instance;
 
-	std::set<std::string> currentImportPaths;
+  bool runningScript;
 
-	ConsoleOutputDialog *consoleDialog;
-	
-	std::string pythonVersion; 
+  std::set<std::string> currentImportPaths;
+
+  ConsoleOutputDialog *consoleDialog;
+
+  std::string pythonVersion;
 
 };
 

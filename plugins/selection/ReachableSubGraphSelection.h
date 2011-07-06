@@ -26,12 +26,12 @@
 /**
  * This selection plugin enables to find all nodes and edges at a fixed distance of a set of nodes.
  * It takes three parameters :
- * - <b>int</b> distance 
+ * - <b>int</b> distance
  * - <b>int</b> direction : 0 means directed, 1 reverse directed, 2 undirected
  * - <b>BooleanProperty *</b> startingnodes : the selected nodes of this BooleanProperty
  * (those whose associated value is true) will be used as starting nodes.
  *
- *  \author David Auber, LaBRI University Bordeaux I France: 
+ *  \author David Auber, LaBRI University Bordeaux I France:
  *   auber@tulip-software.org
  */
 class ReachableSubGraphSelection:public tlp::BooleanAlgorithm {

@@ -18,7 +18,9 @@ class PerspectiveItemWidget : public QWidget {
   Ui::PerspectiveItemData *_ui;
 public:
   explicit PerspectiveItemWidget(tlp::PluginInformations *infos,QWidget *parent = 0);
-  QString perspectiveId() const { return _perspectiveId; }
+  QString perspectiveId() const {
+    return _perspectiveId;
+  }
 
 signals:
   void selected();

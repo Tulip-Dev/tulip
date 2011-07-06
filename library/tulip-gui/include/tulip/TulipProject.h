@@ -148,20 +148,26 @@ public:
     @brief Returns the last error raised.
     @note The returned string is null if no error was raised.
     */
-  QString lastError() const { return _lastError; }
+  QString lastError() const {
+    return _lastError;
+  }
 
   /**
     @brief Check if the object is a valid TulipProject.
     @warning Calling methods on invalid TulipProject instances may result in undefined behavior.
     */
-  bool isValid() const { return _isValid; }
+  bool isValid() const {
+    return _isValid;
+  }
 
   /**
     @brief Return the archive file associated with this project.
     If the project has been opened from an existing file or if the write method has already been called, this method will return the last file path specified.
     In other cases, this method will return an empty string.
     */
-  QString projectFile() const { return _projectFile; }
+  QString projectFile() const {
+    return _projectFile;
+  }
 
   /**
     @brief This method returns the real absolute path corresponding to / in the TulipProject.
@@ -174,19 +180,19 @@ public:
   /**
     @brief the name of the project
     */
-Q_PROPERTY(QString name READ name WRITE setName)
+  Q_PROPERTY(QString name READ name WRITE setName)
   QString name() const;
 
   /**
     @brief User-written description of the project
     */
-Q_PROPERTY(QString description READ description WRITE setDescription)
+  Q_PROPERTY(QString description READ description WRITE setDescription)
   QString description() const;
 
   /**
     @brief Name of the author
     */
-Q_PROPERTY(QString author READ author WRITE setAuthor)
+  Q_PROPERTY(QString author READ author WRITE setAuthor)
   QString author() const;
 
   /**
@@ -196,7 +202,7 @@ Q_PROPERTY(QString author READ author WRITE setAuthor)
 
     @warning If the perspective name associated to the project is invalid or correspond to a missing plugin, tulip may not be able to open the file.
     */
-Q_PROPERTY(QString perspective READ perspective WRITE setPerspective)
+  Q_PROPERTY(QString perspective READ perspective WRITE setPerspective)
   QString perspective() const;
 
   /**

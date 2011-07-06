@@ -26,7 +26,7 @@
 #include <tulip/PluginLister.h>
 /**
  * \addtogroup plugins
- */ 
+ */
 namespace tlp {
 /*@{*/
 /**
@@ -41,7 +41,7 @@ namespace tlp {
 
 class AbstractPluginInfo {
 public:
-  virtual ~AbstractPluginInfo(){}
+  virtual ~AbstractPluginInfo() {}
 
   /**
    * @brief Returns the name of the plug-in, as registered in the Tulip plug-in system.
@@ -88,7 +88,7 @@ public:
    * @return string The release version.
    */
   virtual  std::string getRelease() const=0;
-  
+
   /**
    * @brief The version of Tulip this plug-in was built with.
    * Tulip versions are X.Y.Z, X eing the major, Y the minor, and Z the patch.
@@ -96,7 +96,7 @@ public:
    * @return The Tulip version the plug-in was built with.
    */
   virtual  std::string getTulipRelease() const=0;
-  
+
   /**
    * @brief Only the major of the plug-in version.
    * A version should be X.Y, X being the major.
@@ -106,7 +106,7 @@ public:
   virtual  std::string getMajor() const {
     return tlp::getMajor(getRelease());
   }
-  
+
   /**
    * @brief Only the minor of the plug-in version.
    * A version should be X.Y, Y being the major.
@@ -147,30 +147,30 @@ template<class ObjectType, class Context> class StaticPluginLister;
 
 template <class PluginObject, class PluginContext>
 class FactoryInterface : public AbstractPluginInfo {
-  public:
-    /**
-     * @brief Creates a new Algorithm object.
-     *
-     * @param context The context for the new plug-in.
-     * @return PluginObject* A newly created algorithm plug-in.
-     **/
-    virtual PluginObject* createPluginObject(PluginContext context) {
-      (void) context;
-      std::cerr << "error from FactoryInterface<" << typeid(PluginObject).name() << ", " << typeid(PluginContext).name() <<">" << std::endl;
-      assert(false);
-      return NULL;
-    }
+public:
+  /**
+   * @brief Creates a new Algorithm object.
+   *
+   * @param context The context for the new plug-in.
+   * @return PluginObject* A newly created algorithm plug-in.
+   **/
+  virtual PluginObject* createPluginObject(PluginContext context) {
+    (void) context;
+    std::cerr << "error from FactoryInterface<" << typeid(PluginObject).name() << ", " << typeid(PluginContext).name() <<">" << std::endl;
+    assert(false);
+    return NULL;
+  }
 
-    /**
-    * @brief Forwards the call to the appropriate PluginLister.
-    *
-    * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > >
-    **/
-    virtual std::list<tlp::Dependency> getDependencies() const {
-      return tlp::StaticPluginLister<PluginObject, PluginContext>::getPluginDependencies(getName());
-    }
-  };
- 
+  /**
+  * @brief Forwards the call to the appropriate PluginLister.
+  *
+  * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > >
+  **/
+  virtual std::list<tlp::Dependency> getDependencies() const {
+    return tlp::StaticPluginLister<PluginObject, PluginContext>::getPluginDependencies(getName());
+  }
+};
+
 /*@}*/
 }
 #endif

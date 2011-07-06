@@ -40,7 +40,7 @@ class Graph;
 
 /**
  * \defgroup types
- */ 
+ */
 /*@{*/
 
 ///
@@ -55,8 +55,7 @@ public:
   static bool fromString(RealType & v, const std::string & s );
 };
 
-class TLP_SCOPE EdgeSetType
-{
+class TLP_SCOPE EdgeSetType {
 public:
   typedef std::set<edge> RealType;
   static std::set<edge> undefinedValue();
@@ -91,8 +90,7 @@ public:
 };
 DECL_STORED_STRUCT(tlp::DoubleVectorType::RealType)
 
-class TLP_SCOPE IntegerType
-{
+class TLP_SCOPE IntegerType {
 public:
   typedef int RealType;
   static int undefinedValue();
@@ -103,8 +101,7 @@ public:
   static bool read(std::istream& istr, RealType& value);
 };
 
-class TLP_SCOPE IntegerVectorType
-{
+class TLP_SCOPE IntegerVectorType {
 public:
   typedef std::vector<int> RealType;
   static std::vector<int> undefinedValue();
@@ -139,8 +136,7 @@ public:
 };
 DECL_STORED_STRUCT(tlp::BooleanVectorType::RealType)
 
-class TLP_SCOPE LineType
-{
+class TLP_SCOPE LineType {
 public:
   typedef std::vector<Coord> RealType;
   static std::vector<Coord> undefinedValue();
@@ -248,13 +244,13 @@ public:
 
 extern TLP_SCOPE void initTypeSerializers();
 #ifdef _MSC_VER
-	template class AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>;
-	template class AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>;
-	template class AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>;
-	template class AbstractVectorProperty<StringVectorType, tlp::StringType>;
-	template class AbstractVectorProperty<ColorVectorType, tlp::ColorType>;
-	template class AbstractVectorProperty<SizeVectorType, tlp::SizeType>;
-	template class AbstractVectorProperty<CoordVectorType, tlp::PointType>;
+template class AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>;
+template class AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>;
+template class AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>;
+template class AbstractVectorProperty<StringVectorType, tlp::StringType>;
+template class AbstractVectorProperty<ColorVectorType, tlp::ColorType>;
+template class AbstractVectorProperty<SizeVectorType, tlp::SizeType>;
+template class AbstractVectorProperty<CoordVectorType, tlp::PointType>;
 #endif
 }
 

@@ -24,58 +24,74 @@ using namespace std;
 using namespace tlp;
 
 namespace {
-  template<typename T, int openParen>
-  static bool readVector(istream& is, vector<T>& v) {
-    v.clear();
+template<typename T, int openParen>
+static bool readVector(istream& is, vector<T>& v) {
+  v.clear();
 
-    char c =' ';
-    T val;
-    bool firstVal = true;
-    bool sepFound = false;
-    // go to first '('
-    while((is >> c) && isspace(c)) {}
-    if (c != '(')
+  char c =' ';
+  T val;
+  bool firstVal = true;
+  bool sepFound = false;
+
+  // go to first '('
+  while((is >> c) && isspace(c)) {}
+
+  if (c != '(')
+    return false;
+
+  for(;;) {
+    if( !(is >> c) )
       return false;
-    for(;;) {
-      if( !(is >> c) )
-	return false;
-      if (isspace(c))
-	continue;
-      if(c == ')') {
-	if (sepFound)
-	  return false;
-	return true;
-      }
-      if (c == ',') {
-	if (firstVal || sepFound)
-	  return false;
-	sepFound = true;
-      } else {
-	if (firstVal || sepFound) {
-	  if (openParen && c != '(')
-	    return false;	    
-	  is.unget();
-	  if( !(is >> val) )
-	    return false;
-	  v.push_back(val);
-	  firstVal = false;
-	  sepFound = false;
-	} else
-	  return false;
-      }
+
+    if (isspace(c))
+      continue;
+
+    if(c == ')') {
+      if (sepFound)
+        return false;
+
+      return true;
     }
+
+    if (c == ',') {
+      if (firstVal || sepFound)
+        return false;
+
+      sepFound = true;
+    }
+    else {
+      if (firstVal || sepFound) {
+        if (openParen && c != '(')
+          return false;
+
+        is.unget();
+
+        if( !(is >> val) )
+          return false;
+
+        v.push_back(val);
+        firstVal = false;
+        sepFound = false;
+      }
+      else
+        return false;
+    }
+  }
+}
+
+template<typename T>
+static void writeVector(ostream& os, const vector<T>& v) {
+  os << '(';
+
+  for( unsigned int i = 0 ; i < v.size() ; i++ ) {
+    if (i)
+      os << ", ";
+
+    os << v[i];
   }
 
-  template<typename T>
-  static void writeVector(ostream& os, const vector<T>& v) {
-    os << '(';
-    for( unsigned int i = 0 ; i < v.size() ; i++ ) {
-      if (i)
-	os << ", ";
-      os << v[i];
-    }
-    os << ')';
-  }
+  os << ')';
+}
 }
 
 //
@@ -93,6 +109,7 @@ string GraphType::toString( const RealType & v ) {
   // NULL ?
   if( !v )
     return string();
+
   ostringstream oss;
   oss << v->getId();
   return oss.str();
@@ -103,10 +120,12 @@ bool GraphType::fromString(RealType & v, const string & s ) {
   iss.str( s );
   unsigned long lv;
   bool ok = iss >> lv;
+
   if (ok)
     v = (RealType) lv;
   else
     v = 0;
+
   return ok;
 }
 
@@ -124,8 +143,10 @@ set<edge> EdgeSetType::defaultValue() {
 void EdgeSetType::write(ostream& os, const RealType & v ) {
   os << '(';
   set<edge>::const_iterator it;
+
   for(it = v.begin() ; it != v.end() ; ++it)
     os << (*it).id << ' ';
+
   os << ')';
 }
 
@@ -139,22 +160,31 @@ bool EdgeSetType::read(istream& is, RealType & v) {
   v.clear();
   char c  = ' ';
   bool ok;
+
   // go to first '('
   while((ok = (is >> c)) && isspace(c)) {}
+
   // for compatibility with older version (3.0)
   if (!ok)
     return true;
+
   if (c != '(')
     return false;
+
   edge e;
+
   for( ;; ) {
     if( !(is >> c) )
       return false;
+
     if( c == ')' )
       return true;
+
     is.unget();
+
     if( !(is >> e.id) )
       return false;
+
     v.insert( e );
   }
 }
@@ -309,25 +339,35 @@ string BooleanType::toString( const RealType & v ) {
 
 bool BooleanType::read(istream& is, RealType & v) {
   char c = ' ';
+
   while((is >> c) && isspace(c)) {}
+
   c = ::tolower(c);
+
   if (c != 't' && c != 'f')
     return false;
+
   string s;
+
   if (c == 't') {
     s.append("true");
     v = true;
-  } else {
+  }
+  else {
     s.append("false");
     v = false;
   }
+
   for(unsigned int i = 1; i < s.size(); ++i) {
     if (!(is >> c))
       return false;
+
     c = ::tolower(c);
+
     if (c != s[i])
       return false;
   }
+
   return true;
 }
 
@@ -349,11 +389,14 @@ vector<bool> BooleanVectorType::defaultValue() {
 
 void BooleanVectorType::write(ostream& os, const RealType & v) {
   os << '(';
+
   for( unsigned int i = 0 ; i < v.size() ; i++ ) {
     if (i)
       os << ", ";
+
     os << (v[i] ? "true" : "false");
   }
+
   os << ')';
 }
 
@@ -368,26 +411,36 @@ bool BooleanVectorType::read(istream& is,  RealType & v) {
 
   char c =' ';
   bool firstVal = true;
+
   // go to first '('
   while((is >> c) && isspace(c)) {}
+
   if (c != '(')
     return false;
+
   for(;;) {
     if( !(is >> c) )
       return false;
+
     if (isspace(c))
       continue;
+
     if(c == ')') {
       return true;
     }
+
     if (c == ',') {
       if (firstVal)
-	return false;
-    } else
+        return false;
+    }
+    else
       is.unget();
+
     bool val;
+
     if (!BooleanType::read(is, val))
       return false;
+
     v.push_back(val);
     firstVal = false;
   }
@@ -425,45 +478,61 @@ bool LineType::read(istream& is, RealType& v) {
   char c =' ';
   bool firstVal = true;
   bool dbqFound = false;
+
   // go to first '('
   // skip space chars
   while((is >> c) && isspace(c)) {}
+
   // value may have been enclosed by double quotes
   if (c == '"') {
     // open double quotes found
     dbqFound = true;
+
     // skip space chars
     while((is >> c) && isspace(c)) {}
   }
+
   if (c != '(')
     return false;
+
   for(;;) {
     if( !(is >> c) )
       return false;
+
     if (isspace(c))
       continue;
+
     if(c == ')') {
       if (dbqFound) {
-	// expect it is the next non space char
-	while((is >> c) && isspace(c)) {}
-	if (c != '"')
-	  return false;
+        // expect it is the next non space char
+        while((is >> c) && isspace(c)) {}
+
+        if (c != '"')
+          return false;
       }
+
       return true;
     }
+
     if (c == ',') {
       if (firstVal)
-	return false;
+        return false;
+
       Coord val;
+
       if (!PointType::read(is, val))
-	return false;
+        return false;
+
       v.push_back(val);
-     } else {
+    }
+    else {
       // , is not required between coords
       is.unget();
       Coord val;
+
       if (!PointType::read(is, val))
-	return false;
+        return false;
+
       v.push_back(val);
       firstVal = false;
     }
@@ -501,22 +570,29 @@ bool PointType::read(istream& is, RealType & v) {
   // value may have been enclosed by double quotes
   char c = ' ';
   bool ok;
+
   // skip spaces
   while((ok = (is >> c)) && isspace(c)) {}
+
   bool dbqFound = false;
+
   if (c == '"')
     // open double quotes found
     dbqFound = true;
   else
     is.unget();
+
   ok = is >> v;
+
   if (ok && dbqFound) {
     // look for the close double quote
     ok = is >> c;
+
     if (c != '"')
       return false;
   }
-  return ok; 
+
+  return ok;
 }
 
 bool PointType::fromString( RealType & v, const string & s ) {
@@ -549,22 +625,29 @@ bool SizeType::read(istream& is, RealType & v) {
   // value may have been enclosed by double quotes
   char c = ' ';
   bool ok;
+
   // skip spaces
   while((ok = (is >> c)) && isspace(c)) {}
+
   bool dbqFound = false;
+
   if (c == '"')
     // open double quotes found
     dbqFound = true;
   else
     is.unget();
+
   ok = is >> v;
+
   if (ok && dbqFound) {
     // look for the close double quote
     ok = is >> c;
+
     if (c != '"')
       return false;
   }
-  return ok; 
+
+  return ok;
 }
 
 bool SizeType::fromString( RealType & v, const string & s ) {
@@ -615,12 +698,16 @@ string StringType::defaultValue() {
 
 void StringType::write(ostream& os, const RealType & v ) {
   os << '"';
+
   for(char* str = (char *) v.c_str(); *str; ++str) {
     char c = *str;
+
     if (c == '\\' || c == '"')
       os << '\\';
+
     os << c;
   }
+
   os << '"';
 }
 
@@ -630,28 +717,36 @@ string StringType::toString( const RealType & v ) {
 
 bool StringType::read(istream& is, RealType & v) {
   char c= ' ';
+
   // go to first '"'
   while((is >> c) && isspace(c)) {}
+
   if (c != '"')
     return false;
+
   bool bslashFound = false;
   string str;
+
   for(;;) {
     if ( !(is >> c) )
       return false;
+
     if (bslashFound) {
       str.push_back(c);
       bslashFound = false;
-    } else {
+    }
+    else {
       if (c == '\\')
-	bslashFound = true;
+        bslashFound = true;
       else {
-	if (c == '"')
-	  break;
-	str.push_back(c);
+        if (c == '"')
+          break;
+
+        str.push_back(c);
       }
     }
   }
+
   v = str;
   return true;
 }
@@ -674,11 +769,14 @@ vector<string> StringVectorType::defaultValue() {
 
 void StringVectorType::write(ostream& os, const RealType & v) {
   os << '(';
+
   for( unsigned int i = 0 ; i < v.size() ; i++ ) {
     if (i)
       os << ", ";
+
     StringType::write(os, v[i]);
   }
+
   os << ')';
 }
 
@@ -691,8 +789,10 @@ string StringVectorType::toString( const RealType & v ) {
 bool StringVectorType::read(istream& is, RealType & v) {
   v.clear();
   char c = ' ';
+
   // go to first '('
   while((is >> c) && isspace(c)) {}
+
   if (c != '(')
     return false;
 
@@ -700,34 +800,45 @@ bool StringVectorType::read(istream& is, RealType & v) {
   bool endFound = false;
   bool firstVal = true;
   bool sepFound = false;
+
   for( ;; ) {
     if( !(is >> c) )
       return endFound;
+
     if (isspace(c))
       continue;
+
     if (endFound)
       return false;
+
     if( c == ')' ) {
       if (sepFound)
-	return false;
+        return false;
+
       endFound = true;
       continue;
     }
+
     if (c == ',') {
       if (sepFound)
-	return false;
+        return false;
+
       sepFound = true;
-    } else {
+    }
+    else {
       if ((firstVal || sepFound) && c == '"') {
-	string str;
-	is.unget();
-	if (!StringType::read(is, str))
-	  return false;
-	v.push_back(str);
-	firstVal = false;
-	sepFound = false;
-      } else
-	return false;
+        string str;
+        is.unget();
+
+        if (!StringType::read(is, str))
+          return false;
+
+        v.push_back(str);
+        firstVal = false;
+        sepFound = false;
+      }
+      else
+        return false;
     }
   }
 }
@@ -763,22 +874,29 @@ bool ColorType::read(istream& is, RealType & v) {
   // value may have been enclosed by double quotes
   char c = ' ';
   bool ok;
+
   // skip spaces
   while((ok = (is >> c)) && isspace(c)) {}
+
   bool dbqFound = false;
+
   if (c == '"')
     // open double quotes found
     dbqFound = true;
   else
     is.unget();
+
   ok = is >> v;
+
   if (ok && dbqFound) {
     // look for the close double quote
     ok = is >> c;
+
     if (c != '"')
       return false;
   }
-  return ok; 
+
+  return ok;
 }
 
 bool ColorType::fromString( RealType & v, const string & s ) {
@@ -851,7 +969,7 @@ template<typename T>
 struct KnownTypeSerializer :public TypedDataSerializer<typename T::RealType> {
   KnownTypeSerializer(const string& otn):TypedDataSerializer<typename T::RealType>(otn) {}
   KnownTypeSerializer(const char* otn):TypedDataSerializer<typename T::RealType>(string(otn)) {}
-  
+
   DataTypeSerializer* clone() const {
     return new KnownTypeSerializer<T>(this->outputTypeName);
   }
@@ -951,4 +1069,4 @@ void tlp::initTypeSerializers() {
   DataSet::registerDataTypeSerializer<DataSet>(DataSetTypeSerializer());
 }
 
- 
+

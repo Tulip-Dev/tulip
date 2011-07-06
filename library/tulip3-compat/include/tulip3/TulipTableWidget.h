@@ -50,106 +50,106 @@ class PropertyInterface;
 class DynamicTypeHandlerInterface {
 
 public:
-	virtual std::string getString() =0;
+  virtual std::string getString() =0;
 
-	virtual unsigned int size() = 0;
+  virtual unsigned int size() = 0;
 
-	virtual std::string get(unsigned int i) = 0;
-	virtual void set(unsigned int i, const std::string& value) = 0;
-	virtual void clear()=0;
+  virtual std::string get(unsigned int i) = 0;
+  virtual void set(unsigned int i, const std::string& value) = 0;
+  virtual void clear()=0;
 
 };
 
 class TLP3_COMPAT_SCOPE ColorButton: public QPushButton {
 
-Q_OBJECT
-	Q_PROPERTY(QRgb color READ getColor)
-	
+  Q_OBJECT
+  Q_PROPERTY(QRgb color READ getColor)
+
 
 private:
-	QRgb color;
+  QRgb color;
 public:
-	ColorButton(const QRgb &c, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
-	~ColorButton();
+  ColorButton(const QRgb &c, QWidget *parent = 0, const char *name = 0, Qt::WFlags f = 0);
+  ~ColorButton();
 
-	QRgb getColor() const;
-	void paintEvent(QPaintEvent *);
+  QRgb getColor() const;
+  void paintEvent(QPaintEvent *);
 
 public slots:
-	void colorDialog();
+  void colorDialog();
 };
 
 class TLP3_COMPAT_SCOPE FilenameEditor: public QWidget {
-Q_OBJECT
-	Q_PROPERTY(QString fileName READ fileName WRITE setFileName)
-	Q_PROPERTY(QString filter READ filter WRITE setFilter)
-	
+  Q_OBJECT
+  Q_PROPERTY(QString fileName READ fileName WRITE setFileName)
+  Q_PROPERTY(QString filter READ filter WRITE setFilter)
+
 
 public:
-	FilenameEditor(QWidget *);
-	~FilenameEditor();
+  FilenameEditor(QWidget *);
+  ~FilenameEditor();
 
-	QString fileName() const;
-	QString filter() const;
-    QString getBasePath() const;
+  QString fileName() const;
+  QString filter() const;
+  QString getBasePath() const;
 
 public slots:
-	void setFileName(const QString &);
-	void setFilter(const QString &);
-    void setBasePath(const QString &);
+  void setFileName(const QString &);
+  void setFilter(const QString &);
+  void setBasePath(const QString &);
 
 signals:
-	void fileNameChanged(const QString &);
+  void fileNameChanged(const QString &);
 
 private slots:
-	void buttonPressed();
+  void buttonPressed();
 
 private:
-	QLineEdit *lineedit;
-	QPushButton *button;
-	QString fileFilter;
-    QString basePath;
+  QLineEdit *lineedit;
+  QPushButton *button;
+  QString fileFilter;
+  QString basePath;
 };
 
 class TLP3_COMPAT_SCOPE SizeEditor: public QWidget {
-Q_OBJECT
+  Q_OBJECT
 private:
-	Size size;
-	QLineEdit *edit[3];
+  Size size;
+  QLineEdit *edit[3];
 
 public:
-	SizeEditor(const Size &, QWidget *);
-	~SizeEditor();
-	Size getSize() const;
-	void setFocus();
+  SizeEditor(const Size &, QWidget *);
+  ~SizeEditor();
+  Size getSize() const;
+  void setFocus();
 
 private slots:
-	void changeW(const QString &);
-	void changeH(const QString &);
-	void changeD(const QString &);
+  void changeW(const QString &);
+  void changeH(const QString &);
+  void changeD(const QString &);
 };
 
 class CoordEditor: public QWidget {
-Q_OBJECT
+  Q_OBJECT
 
 private:
-	Coord coord;
-	QLineEdit *edit[3];
+  Coord coord;
+  QLineEdit *edit[3];
 
 public:
-	CoordEditor(const Coord &, QWidget *);
-	~CoordEditor();
-	Coord getCoord() const;
-	void setFocus();
+  CoordEditor(const Coord &, QWidget *);
+  ~CoordEditor();
+  Coord getCoord() const;
+  void setFocus();
 
 private slots:
-	void changeX(const QString &);
-	void changeY(const QString &);
-	void changeZ(const QString &);
+  void changeX(const QString &);
+  void changeY(const QString &);
+  void changeZ(const QString &);
 };
 
 class LabelEditor: public QWidget {
-Q_OBJECT
+  Q_OBJECT
 
 private:
   QString label;
@@ -164,41 +164,41 @@ public:
 /* table items */
 class TLP3_COMPAT_SCOPE TulipTableWidgetItem: public QTableWidgetItem {
 public:
-	TulipTableWidgetItem(int type) :
-		QTableWidgetItem(type) {
-	}
-	TulipTableWidgetItem(QString s, int type = QTableWidgetItem::Type) :
-		QTableWidgetItem(s, type) {
-	}
-	virtual QTableWidgetItem * clone() const {
-		return new TulipTableWidgetItem(text(), type());
-	}
+  TulipTableWidgetItem(int type) :
+    QTableWidgetItem(type) {
+  }
+  TulipTableWidgetItem(QString s, int type = QTableWidgetItem::Type) :
+    QTableWidgetItem(s, type) {
+  }
+  virtual QTableWidgetItem * clone() const {
+    return new TulipTableWidgetItem(text(), type());
+  }
 
-	virtual QString textForTulip() const {
-		return text();
-	}
+  virtual QString textForTulip() const {
+    return text();
+  }
 
-	virtual void setTextFromTulip(const std::string& data) {
-	  setText(QString::fromUtf8(data.c_str()));
-	}
+  virtual void setTextFromTulip(const std::string& data) {
+    setText(QString::fromUtf8(data.c_str()));
+  }
 };
 
 class ListItemPushButton: public QPushButton {
-Q_OBJECT
+  Q_OBJECT
 public:
-	ListItemPushButton(DynamicTypeHandlerInterface* handler, TulipTableWidgetItem *orig,
-			QWidget* parent, const QString& text);
-	~ListItemPushButton();
-	tlp::DynamicTypeHandlerInterface *getHandler() {
-		return handler;
-	}
+  ListItemPushButton(DynamicTypeHandlerInterface* handler, TulipTableWidgetItem *orig,
+                     QWidget* parent, const QString& text);
+  ~ListItemPushButton();
+  tlp::DynamicTypeHandlerInterface *getHandler() {
+    return handler;
+  }
 
 private slots:
-	void showListDialog();
+  void showListDialog();
 
 private:
-	tlp::TulipTableWidgetItem *orig;
-	DynamicTypeHandlerInterface *handler;
+  tlp::TulipTableWidgetItem *orig;
+  DynamicTypeHandlerInterface *handler;
 };
 
 #endif //DOXYGEN_NOTFOR_USER
@@ -206,39 +206,39 @@ private:
 /*@{*/
 /* this table handle displaying and editing node or edge properties */
 class TLP3_COMPAT_SCOPE TulipTableWidget: public QTableWidget {
-Q_OBJECT
-	Q_PROPERTY(QColor backColor1 READ getBackColor1 WRITE setBackColor1 RESET resetBackColor1)
-	Q_PROPERTY(QColor backColor2 READ getBackColor2 WRITE setBackColor2 RESET resetBackColor2)
-	Q_PROPERTY(bool updateColumnTitle READ getUpdateColumnTitle WRITE setUpdateColumnTitle)
+  Q_OBJECT
+  Q_PROPERTY(QColor backColor1 READ getBackColor1 WRITE setBackColor1 RESET resetBackColor1)
+  Q_PROPERTY(QColor backColor2 READ getBackColor2 WRITE setBackColor2 RESET resetBackColor2)
+  Q_PROPERTY(bool updateColumnTitle READ getUpdateColumnTitle WRITE setUpdateColumnTitle)
 
 protected:
 
-	QColor backColor1;
-	QColor backColor2;
-	bool updateColumnTitle;
+  QColor backColor1;
+  QColor backColor2;
+  bool updateColumnTitle;
 
 public:
-	TulipTableWidget(QWidget *, const char *);
-	~TulipTableWidget();
+  TulipTableWidget(QWidget *, const char *);
+  ~TulipTableWidget();
 
-	void setTulipNodeItem(const PropertyInterface *, const std::string propertyName, const node &,
-			const int row, const int col);
-	QString getTulipNodeValue(const int row, const int col) const;
-	void setTulipEdgeItem(const PropertyInterface *, const std::string propertyName, const edge &,
-			const int row, const int col);
-	QString getTulipEdgeValue(const int row, const int col) const;
-	QColor getBackColor1() const;
-	QColor getBackColor2() const;
-	bool getUpdateColumnTitle() const;
-	QColor backgroundColor(const int row) const;
-	//void paintCell(QPainter *, int row, int col, const QRect &, bool selected, const QColorGroup &);
+  void setTulipNodeItem(const PropertyInterface *, const std::string propertyName, const node &,
+                        const int row, const int col);
+  QString getTulipNodeValue(const int row, const int col) const;
+  void setTulipEdgeItem(const PropertyInterface *, const std::string propertyName, const edge &,
+                        const int row, const int col);
+  QString getTulipEdgeValue(const int row, const int col) const;
+  QColor getBackColor1() const;
+  QColor getBackColor2() const;
+  bool getUpdateColumnTitle() const;
+  QColor backgroundColor(const int row) const;
+  //void paintCell(QPainter *, int row, int col, const QRect &, bool selected, const QColorGroup &);
 
 public slots:
-	void setBackColor1(const QColor &);
-	void resetBackColor1();
-	void setBackColor2(const QColor &);
-	void resetBackColor2();
-	void setUpdateColumnTitle(const bool);
+  void setBackColor1(const QColor &);
+  void resetBackColor1();
+  void setBackColor2(const QColor &);
+  void resetBackColor2();
+  void setUpdateColumnTitle(const bool);
 };
 
 

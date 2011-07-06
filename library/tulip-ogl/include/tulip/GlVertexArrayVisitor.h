@@ -24,42 +24,42 @@
 
 namespace tlp {
 
-  class GlGraphInputData;
+class GlGraphInputData;
 
-  /** \brief Visitor to collect edges/nodes vertex array data
-   *
-   * Visitor to collect edges/nodes vertex array data
+/** \brief Visitor to collect edges/nodes vertex array data
+ *
+ * Visitor to collect edges/nodes vertex array data
+ */
+class TLP_GL_SCOPE GlVertexArrayVisitor : public GlSceneVisitor {
+
+public:
+
+  /**
+   * Constructor
    */
-  class TLP_GL_SCOPE GlVertexArrayVisitor : public GlSceneVisitor{
-    
-  public:
-    
-    /**
-     * Constructor 
-     */
-    GlVertexArrayVisitor(GlGraphInputData* inputData):inputData(inputData){
-      threadSafe=true;
-    }
-    
-    /**
-     * Method used for GlSimpleEntity
-     */
-    virtual void visit(GlSimpleEntity*) {}
-    /**
-     * Method used for GlNodes (and GlMetaNodes)
-     */
-    virtual void visit(GlNode *glNode);
-    /**
-     * Method used for GlEdges
-     */
-    virtual void visit(GlEdge *glEdge);
-    
-  private:
+  GlVertexArrayVisitor(GlGraphInputData* inputData):inputData(inputData) {
+    threadSafe=true;
+  }
 
-    GlGraphInputData* inputData;
+  /**
+   * Method used for GlSimpleEntity
+   */
+  virtual void visit(GlSimpleEntity*) {}
+  /**
+   * Method used for GlNodes (and GlMetaNodes)
+   */
+  virtual void visit(GlNode *glNode);
+  /**
+   * Method used for GlEdges
+   */
+  virtual void visit(GlEdge *glEdge);
 
-  };
-  
+private:
+
+  GlGraphInputData* inputData;
+
+};
+
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

@@ -33,24 +33,24 @@
  *  1998 \n
  *
  *  Let n be the number of nodes, the original algorithm complexity is in O(n).\n
- *  But the implementation of the canonical ordering has not been made in O(n).\n 
- *  This version of the algorithm considers each connected component of the graph, 
- *  tests if it is planar or not. If not, it computes a planar subgraphs, which is 
- *  a maximal planar "sub-map". Then an area aware version of Gutwenger and Mutzel 's 
+ *  But the implementation of the canonical ordering has not been made in O(n).\n
+ *  This version of the algorithm considers each connected component of the graph,
+ *  tests if it is planar or not. If not, it computes a planar subgraphs, which is
+ *  a maximal planar "sub-map". Then an area aware version of Gutwenger and Mutzel 's
  *  algorithm is used, and if the connected component was not planar, it adds the
- *  "unplanar" edges in 3D. Finally, it uses the Connected Component Packing plugin 
+ *  "unplanar" edges in 3D. Finally, it uses the Connected Component Packing plugin
  *  of Tulip Software to pack the connected components.\n
  *
  */
 class MixedModel : public tlp::LayoutAlgorithm {
- public:
+public:
   MixedModel(const tlp::PropertyContext &context);
   ~MixedModel();
   bool run();
   bool check(std::string &);
 
- private:
-  
+private:
+
   std::vector<tlp::edge> getPlanarSubGraph(tlp::PlanarConMap *graph, std::vector<tlp::edge> unplanar_edges);
   void initPartition();
   void assignInOutPoints();
@@ -60,21 +60,21 @@ class MixedModel : public tlp::LayoutAlgorithm {
   tlp::edge existEdge(tlp::node n, tlp::node v) {
     return carte->existEdge(n , v, false);
   }
-  
+
   tlp::node rightV(unsigned int k);
   tlp::node leftV(unsigned int k);
   int next_right(unsigned int k, const tlp::node v);
   int next_left(unsigned int k, const tlp::node v);
-  
+
   tlp::PlanarConMap* carte;
   std::vector< std::vector<tlp::node> > V;
   std::map<tlp::node, tlp::Coord> NodeCoords;
-  
+
   std::map<tlp::node, int> outl;
   std::map<tlp::node, int> outr;
   std::map<tlp::node, int> inl;
   std::map<tlp::node, int> inr;
-  
+
   std::map<tlp::node, unsigned int> rank;
   std::map<tlp::node, std::vector<tlp::edge> > EdgesIN;
   std::map<tlp::node, std::vector<tlp::edge> > EdgesOUT;

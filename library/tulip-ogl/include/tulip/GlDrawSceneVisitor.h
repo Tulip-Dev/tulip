@@ -23,26 +23,28 @@
 #include <tulip/GlSceneVisitor.h>
 
 namespace tlp {
-  
-  class GlGraphInputData;
 
-  class TLP_GL_SCOPE GlDrawSceneVisitor : public GlSceneVisitor{
+class GlGraphInputData;
 
-  public:
+class TLP_GL_SCOPE GlDrawSceneVisitor : public GlSceneVisitor {
 
-    GlDrawSceneVisitor(TLP_HASH_MAP<unsigned int,float>* lod,GlGraphInputData* inputData):inputData(inputData) {lodMap=lod;}
+public:
 
-    virtual void visit(GlSimpleEntity *entity);
-    virtual void visit(GlComplexeEntity *entity);
-    virtual void visit(GlLayout *layout);
+  GlDrawSceneVisitor(TLP_HASH_MAP<unsigned int,float>* lod,GlGraphInputData* inputData):inputData(inputData) {
+    lodMap=lod;
+  }
 
-  private:
-    
-    TLP_HASH_MAP<unsigned int,float>* lodMap;
-    GlGraphInputData *inputData;
+  virtual void visit(GlSimpleEntity *entity);
+  virtual void visit(GlComplexeEntity *entity);
+  virtual void visit(GlLayout *layout);
 
-  };
-  
+private:
+
+  TLP_HASH_MAP<unsigned int,float>* lodMap;
+  GlGraphInputData *inputData;
+
+};
+
 }
 
 #endif // Tulip_GLDRAWSCENEVISITOR_H

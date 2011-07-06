@@ -26,7 +26,7 @@
 /** This plugins assigns random values to nodes and edges. the values are between 0 and 1.
  *
  */
-class RandomMetric:public tlp::DoubleAlgorithm { 
+class RandomMetric:public tlp::DoubleAlgorithm {
 public:
   RandomMetric(const tlp::PropertyContext &);
   bool run();

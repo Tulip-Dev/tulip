@@ -36,7 +36,7 @@ class MainControllerProfile : public QObject {
 
 public :
 
-  MainControllerProfile(tlp::Graph *graph,tlp::MainController *mainController):number(0),graph(graph),mainController(mainController){
+  MainControllerProfile(tlp::Graph *graph,tlp::MainController *mainController):number(0),graph(graph),mainController(mainController) {
     tlp::BooleanProperty* selection=graph->getProperty<tlp::BooleanProperty>("viewSelection");
 
     selection->setAllNodeValue(true);
@@ -45,33 +45,33 @@ public :
     mainController->editCopy();
   }
 
-  public slots :
+public slots :
 
-    void delNodes() {
-      std::cout << "turn : " << number << std::endl;
+  void delNodes() {
+    std::cout << "turn : " << number << std::endl;
 
-      //mainController->editDelSelection();
+    //mainController->editDelSelection();
 
-      //QTimer::singleShot(0, this, SLOT(addNodes()));
-    }
+    //QTimer::singleShot(0, this, SLOT(addNodes()));
+  }
 
-    void addNodes() {
-      mainController->editPaste();
+  void addNodes() {
+    mainController->editPaste();
 
-      if(number==10)
-        QCoreApplication::exit(0);
-      else
-        QTimer::singleShot(0, this, SLOT(delNodes()));
+    if(number==10)
+      QCoreApplication::exit(0);
+    else
+      QTimer::singleShot(0, this, SLOT(delNodes()));
 
-      ++number;
+    ++number;
 
-    }
+  }
 
-  protected :
+protected :
 
-    int number;
-    tlp::Graph *graph;
-    tlp::MainController *mainController;
+  int number;
+  tlp::Graph *graph;
+  tlp::MainController *mainController;
 };
 
 #endif

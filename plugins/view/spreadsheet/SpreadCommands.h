@@ -28,199 +28,185 @@
 
 namespace tlp {
 
-  class DataChanged : public QUndoCommand
-  {
-  public:
-    DataChanged(SpreadTable*, int, int, const QString&, const QString&);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    int row;
-    int column;
-    QString oldData;
-    QString newData;
-  };
+class DataChanged : public QUndoCommand {
+public:
+  DataChanged(SpreadTable*, int, int, const QString&, const QString&);
+  virtual void undo();
+  virtual void redo();
 
-  class InsertRowsCommand : public QUndoCommand
-  {
-  public:
-    InsertRowsCommand(SpreadTable*, int, int);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    int amount;
-    int position;
-  };
+private:
+  SpreadTable *table;
+  int row;
+  int column;
+  QString oldData;
+  QString newData;
+};
 
-  class InsertColumnsCommand : public QUndoCommand
-  {
-  public:
-    InsertColumnsCommand(SpreadTable*, int, int);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    int amount;
-    int position;
-  };
+class InsertRowsCommand : public QUndoCommand {
+public:
+  InsertRowsCommand(SpreadTable*, int, int);
+  virtual void undo();
+  virtual void redo();
 
-  class DeleteContents : public QUndoCommand
-  {
-  public:
-    DeleteContents(SpreadTable*);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    QTableWidgetSelectionRange range;
-    QMimeData oldData;
-  };
+private:
+  SpreadTable *table;
+  int amount;
+  int position;
+};
 
-  class DeleteEntireRows : public QUndoCommand
-  {
-  public:
-    DeleteEntireRows(SpreadTable*, int, int);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    int position;
-    int amount;
-    QMimeData oldData;
-  };
+class InsertColumnsCommand : public QUndoCommand {
+public:
+  InsertColumnsCommand(SpreadTable*, int, int);
+  virtual void undo();
+  virtual void redo();
 
-  class DeleteEntireColumns : public QUndoCommand
-  {
-  public:
-    DeleteEntireColumns(SpreadTable*, int, int);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    int position;
-    int amount;
-    QMimeData oldData;
-  };
+private:
+  SpreadTable *table;
+  int amount;
+  int position;
+};
 
-  class CutCommand : public QUndoCommand
-  {
-  public:
-    CutCommand(SpreadTable*);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    QMimeData oldData;
-    QTableWidgetSelectionRange selectedRange;
-  };
+class DeleteContents : public QUndoCommand {
+public:
+  DeleteContents(SpreadTable*);
+  virtual void undo();
+  virtual void redo();
 
-  class PasteCommand : public QUndoCommand
-  {
-  public:
-    PasteCommand(SpreadTable*);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    QMimeData oldData;
-    QMimeData newData;
-    int row;
-    int column;
-  };
+private:
+  SpreadTable *table;
+  QTableWidgetSelectionRange range;
+  QMimeData oldData;
+};
 
-  class ChangeCellsEditor : public QUndoCommand
-  {
-  public:
-    ChangeCellsEditor(SpreadTable*, QTableWidgetSelectionRange, int);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    QTableWidgetSelectionRange range;
-    QList<int> oldEditors;
-    int newEditor;
-  };
+class DeleteEntireRows : public QUndoCommand {
+public:
+  DeleteEntireRows(SpreadTable*, int, int);
+  virtual void undo();
+  virtual void redo();
 
-  class ChangeCellsFont : public QUndoCommand
-  {
-  public:
-    ChangeCellsFont(SpreadTable*, QTableWidgetSelectionRange, QFont);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    QTableWidgetSelectionRange range;
-    QList<QFont> oldFonts;
-    QFont newFont;
-  };
+private:
+  SpreadTable *table;
+  int position;
+  int amount;
+  QMimeData oldData;
+};
 
-  class ChangeCellsAlignment : public QUndoCommand
-  {
-  public:
-    ChangeCellsAlignment(SpreadTable*, QTableWidgetSelectionRange, int);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    QTableWidgetSelectionRange range;
-    QList<int> oldAlignments;
-    int newAlignment;
-  };
+class DeleteEntireColumns : public QUndoCommand {
+public:
+  DeleteEntireColumns(SpreadTable*, int, int);
+  virtual void undo();
+  virtual void redo();
 
-  class ChangeCellsBackground : public QUndoCommand
-  {
-  public:
-    ChangeCellsBackground(SpreadTable*, QTableWidgetSelectionRange, QColor);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    QTableWidgetSelectionRange range;
-    QList<QColor> oldBackgrounds;
-    QColor newBackground;
-  };
+private:
+  SpreadTable *table;
+  int position;
+  int amount;
+  QMimeData oldData;
+};
 
-  class ChangeCellsForeground : public QUndoCommand
-  {
-  public:
-    ChangeCellsForeground(SpreadTable*, QTableWidgetSelectionRange, QColor);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    QTableWidgetSelectionRange range;
-    QList<QColor> oldForegrounds;
-    QColor newForeground;
-  };
+class CutCommand : public QUndoCommand {
+public:
+  CutCommand(SpreadTable*);
+  virtual void undo();
+  virtual void redo();
 
-  class SortCommand : public QUndoCommand
-  {
-  public:
-    SortCommand(SpreadTable*, const SpreadTableSort&);
-    virtual void undo();
-    virtual void redo();
-      
-  private:
-    SpreadTable *table;
-    QMimeData oldData;
-    QTableWidgetSelectionRange range;
-    SpreadTableSort tableSort;
-  };
+private:
+  SpreadTable *table;
+  QMimeData oldData;
+  QTableWidgetSelectionRange selectedRange;
+};
+
+class PasteCommand : public QUndoCommand {
+public:
+  PasteCommand(SpreadTable*);
+  virtual void undo();
+  virtual void redo();
+
+private:
+  SpreadTable *table;
+  QMimeData oldData;
+  QMimeData newData;
+  int row;
+  int column;
+};
+
+class ChangeCellsEditor : public QUndoCommand {
+public:
+  ChangeCellsEditor(SpreadTable*, QTableWidgetSelectionRange, int);
+  virtual void undo();
+  virtual void redo();
+
+private:
+  SpreadTable *table;
+  QTableWidgetSelectionRange range;
+  QList<int> oldEditors;
+  int newEditor;
+};
+
+class ChangeCellsFont : public QUndoCommand {
+public:
+  ChangeCellsFont(SpreadTable*, QTableWidgetSelectionRange, QFont);
+  virtual void undo();
+  virtual void redo();
+
+private:
+  SpreadTable *table;
+  QTableWidgetSelectionRange range;
+  QList<QFont> oldFonts;
+  QFont newFont;
+};
+
+class ChangeCellsAlignment : public QUndoCommand {
+public:
+  ChangeCellsAlignment(SpreadTable*, QTableWidgetSelectionRange, int);
+  virtual void undo();
+  virtual void redo();
+
+private:
+  SpreadTable *table;
+  QTableWidgetSelectionRange range;
+  QList<int> oldAlignments;
+  int newAlignment;
+};
+
+class ChangeCellsBackground : public QUndoCommand {
+public:
+  ChangeCellsBackground(SpreadTable*, QTableWidgetSelectionRange, QColor);
+  virtual void undo();
+  virtual void redo();
+
+private:
+  SpreadTable *table;
+  QTableWidgetSelectionRange range;
+  QList<QColor> oldBackgrounds;
+  QColor newBackground;
+};
+
+class ChangeCellsForeground : public QUndoCommand {
+public:
+  ChangeCellsForeground(SpreadTable*, QTableWidgetSelectionRange, QColor);
+  virtual void undo();
+  virtual void redo();
+
+private:
+  SpreadTable *table;
+  QTableWidgetSelectionRange range;
+  QList<QColor> oldForegrounds;
+  QColor newForeground;
+};
+
+class SortCommand : public QUndoCommand {
+public:
+  SortCommand(SpreadTable*, const SpreadTableSort&);
+  virtual void undo();
+  virtual void redo();
+
+private:
+  SpreadTable *table;
+  QMimeData oldData;
+  QTableWidgetSelectionRange range;
+  SpreadTableSort tableSort;
+};
 
 }
 

@@ -80,19 +80,19 @@ void PluginsTest::testAncestorGraph() {
   // ensure child3 is not empty
   child3->addNode();
   BooleanProperty sel(child);
-  CPPUNIT_ASSERT(!graph->computeProperty(name, &sel, err));  
-  CPPUNIT_ASSERT(!child2->computeProperty(name, &sel, err));  
+  CPPUNIT_ASSERT(!graph->computeProperty(name, &sel, err));
+  CPPUNIT_ASSERT(!child2->computeProperty(name, &sel, err));
   CPPUNIT_ASSERT(child3->computeProperty(name, &sel, err));
 }
 
 CppUnit::Test * PluginsTest::suite() {
   CppUnit::TestSuite *suiteOfTests = new CppUnit::TestSuite("Tulip lib : Plugins mechanism" );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>("loadPlugin", 
-							      &PluginsTest::testloadPlugin ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>("Circular call", 
-							      &PluginsTest::testCircularPlugin ) );
-  suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>("Graph validity", 
-							      &PluginsTest::testAncestorGraph) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>("loadPlugin",
+                         &PluginsTest::testloadPlugin ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>("Circular call",
+                         &PluginsTest::testCircularPlugin ) );
+  suiteOfTests->addTest( new CppUnit::TestCaller<PluginsTest>("Graph validity",
+                         &PluginsTest::testAncestorGraph) );
 
   return suiteOfTests;
 }

@@ -27,20 +27,19 @@
 #include <tulip/GlTextureManager.h>
 
 namespace tlp {
-  /**
-   * \addtogroup GlEntities
-   */
-  /*@{*/
-  /**
-   *
-   *\brief General class used to render boxes as GlEntity.
-   *
-   * This class is a generic class to render boxes as GlEntity.
-   */
-class TLP_GL_SCOPE GlBox : public GlSimpleEntity
-{
+/**
+ * \addtogroup GlEntities
+ */
+/*@{*/
+/**
+ *
+ *\brief General class used to render boxes as GlEntity.
+ *
+ * This class is a generic class to render boxes as GlEntity.
+ */
+class TLP_GL_SCOPE GlBox : public GlSimpleEntity {
 
- public:  
+public:
 
   /**
    * The default constructor
@@ -141,7 +140,7 @@ class TLP_GL_SCOPE GlBox : public GlSimpleEntity
    * Function to export data in XML
    */
   virtual void getXML(xmlNodePtr rootNode);
-  
+
   /**
    * Function to set data with XML
    */

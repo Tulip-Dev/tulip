@@ -34,7 +34,7 @@ class PropertyObserver;
 
 /**
  * \defgroup properties
- */ 
+ */
 /*@{*/
 //=============================================================
 class TLP_SCOPE PropertyInterface: public Observable {
@@ -100,7 +100,7 @@ public:
   * that the one used to get that property.
   */
   tlp::Graph * getGraph() {
-      return graph;
+    return graph;
   }
 
   /**
@@ -264,15 +264,15 @@ public:
     *
     * @return Return 0 if values are equal otherwise a number different from 0 is returned, with its sign indicating whether the value ot the node n1 is considered greater than the comparing value of the node n2(positive sign), or smaller (negative sign).
     **/
-   virtual int compare(const node n1,const node n2) const = 0;
-   /**
-     * @brief Compare value of the edge e1 to the value of the edge e2.
-     *
-     * @return Return 0 if values are equal otherwise a number different from 0 is returned, with its sign indicating whether the value of edge e1 is considered greater than the comparing value of the edge e2 (positive sign), or smaller (negative sign).
-     **/
-   virtual int compare(const edge e1,const edge e2) const = 0;
+  virtual int compare(const node n1,const node n2) const = 0;
+  /**
+    * @brief Compare value of the edge e1 to the value of the edge e2.
+    *
+    * @return Return 0 if values are equal otherwise a number different from 0 is returned, with its sign indicating whether the value of edge e1 is considered greater than the comparing value of the edge e2 (positive sign), or smaller (negative sign).
+    **/
+  virtual int compare(const edge e1,const edge e2) const = 0;
 
- protected:
+protected:
   MetaValueCalculator* metaValueCalculator;
 
   // for notification of PropertyObserver
@@ -289,44 +289,45 @@ public:
 
 /// Event class for specific events on PropertyInterface
 class TLP_SCOPE PropertyEvent :public Event {
-  public:
+public:
 
-    // be careful about the ordering of the constants
-    // in the enum below because it is used in some assertions
-    enum PropertyEventType {TLP_BEFORE_SET_NODE_VALUE = 0,
-                            TLP_AFTER_SET_NODE_VALUE,
-                            TLP_BEFORE_SET_ALL_NODE_VALUE,
-                            TLP_AFTER_SET_ALL_NODE_VALUE,
-                            TLP_BEFORE_SET_ALL_EDGE_VALUE,
-                            TLP_AFTER_SET_ALL_EDGE_VALUE,
-                            TLP_BEFORE_SET_EDGE_VALUE,
-                            TLP_AFTER_SET_EDGE_VALUE};
-    PropertyEvent(const PropertyInterface& prop, PropertyEventType propEvtType,
-                  Event::EventType evtType = Event::TLP_MODIFICATION,
-                  unsigned int id = UINT_MAX)
-      : Event(prop, evtType), evtType(propEvtType), eltId(id) {}
+  // be careful about the ordering of the constants
+  // in the enum below because it is used in some assertions
+  enum PropertyEventType {TLP_BEFORE_SET_NODE_VALUE = 0,
+                          TLP_AFTER_SET_NODE_VALUE,
+                          TLP_BEFORE_SET_ALL_NODE_VALUE,
+                          TLP_AFTER_SET_ALL_NODE_VALUE,
+                          TLP_BEFORE_SET_ALL_EDGE_VALUE,
+                          TLP_AFTER_SET_ALL_EDGE_VALUE,
+                          TLP_BEFORE_SET_EDGE_VALUE,
+                          TLP_AFTER_SET_EDGE_VALUE
+                         };
+  PropertyEvent(const PropertyInterface& prop, PropertyEventType propEvtType,
+                Event::EventType evtType = Event::TLP_MODIFICATION,
+                unsigned int id = UINT_MAX)
+    : Event(prop, evtType), evtType(propEvtType), eltId(id) {}
 
-    PropertyInterface* getProperty() const {
-      return reinterpret_cast<PropertyInterface *>(sender());
-    }
+  PropertyInterface* getProperty() const {
+    return reinterpret_cast<PropertyInterface *>(sender());
+  }
 
-    node getNode() const {
-      assert(evtType < TLP_BEFORE_SET_ALL_NODE_VALUE);
-      return node(eltId);
-    }
+  node getNode() const {
+    assert(evtType < TLP_BEFORE_SET_ALL_NODE_VALUE);
+    return node(eltId);
+  }
 
-    edge getEdge() const {
-      assert(evtType > TLP_AFTER_SET_ALL_EDGE_VALUE);
-      return edge(eltId);
-    }
+  edge getEdge() const {
+    assert(evtType > TLP_AFTER_SET_ALL_EDGE_VALUE);
+    return edge(eltId);
+  }
 
-    PropertyEventType getType() const {
-      return evtType;
-    }
+  PropertyEventType getType() const {
+    return evtType;
+  }
 
-  protected:
-    PropertyEventType evtType;
-    unsigned int eltId;
+protected:
+  PropertyEventType evtType;
+  unsigned int eltId;
 };
 
 }

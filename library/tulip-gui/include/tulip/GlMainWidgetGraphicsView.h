@@ -76,9 +76,13 @@ public:
    */
   void redraw();
 
-  QGLWidget * getViewportWidget() const {return viewportWidet;}
+  QGLWidget * getViewportWidget() const {
+    return viewportWidet;
+  }
 
-  GlMainWidgetItem *getGlMainWidgetItem() const {return glSceneItem;}
+  GlMainWidgetItem *getGlMainWidgetItem() const {
+    return glSceneItem;
+  }
 
 protected:
 

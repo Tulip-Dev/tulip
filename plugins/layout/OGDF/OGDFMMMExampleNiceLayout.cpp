@@ -52,12 +52,12 @@
  ***************************************************************/
 
 class OGDFMMMExampleNiceLayout : public OGDFLayoutPluginBase {
-  
- public:
 
-	OGDFMMMExampleNiceLayout(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleNiceLayout()) {}
-   ~OGDFMMMExampleNiceLayout() {}
-  
+public:
+
+  OGDFMMMExampleNiceLayout(const tlp::PropertyContext &context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleNiceLayout()) {}
+  ~OGDFMMMExampleNiceLayout() {}
+
 };
 
 

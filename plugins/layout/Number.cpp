@@ -21,12 +21,11 @@
 float Number::infini=-1 ;
 
 
-bool Number::operator > (float b)
-{
+bool Number::operator > (float b) {
   if(b==Number::infini)
     return false;
 
-  if(this->value == Number::infini) 
-    return true; 
+  if(this->value == Number::infini)
+    return true;
   else return (this->value > b);
-} 
+}

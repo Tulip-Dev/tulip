@@ -33,18 +33,18 @@ class Graph;
 
 typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> AbstractLayoutProperty;
 
-/** \addtogroup properties */ 
+/** \addtogroup properties */
 /*@{*/
- class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, private GraphObserver {
+class TLP_SCOPE LayoutProperty:public AbstractLayoutProperty, private GraphObserver {
 public:
   LayoutProperty(Graph *, std::string n="", bool updateOnEdgeReversal = true);
 
   // override some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
-   std::string getTypename() const {
-     return propertyTypename;
-   }
+  std::string getTypename() const {
+    return propertyTypename;
+  }
 
 
   //=======================================
@@ -81,7 +81,7 @@ public:
   //======================================================================
   /**
    * Returns the length of an edge, the bends are taken into account.
-   * Thus, it measure the length of a polyline. Warning this function 
+   * Thus, it measure the length of a polyline. Warning this function
    * only measure the length of the polyline between bends, when using
    * curves like bezier etc... the result will not be the length of the curve.
    */
@@ -143,15 +143,15 @@ private:
   void treatEvent(const Event&);
 };
 
-class TLP_SCOPE CoordVectorProperty:public AbstractVectorProperty<tlp::CoordVectorType, tlp::PointType> { 
+class TLP_SCOPE CoordVectorProperty:public AbstractVectorProperty<tlp::CoordVectorType, tlp::PointType> {
 public :
   CoordVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<CoordVectorType, tlp::PointType>(g, n) {}
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
-   std::string getTypename() const {
-     return propertyTypename;
-   }
+  std::string getTypename() const {
+    return propertyTypename;
+  }
 
 };
 

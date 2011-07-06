@@ -27,86 +27,90 @@
 #include <tulip/GlLODCalculator.h>
 
 namespace tlp {
-  class GlSimpleEntity;
-  class Camera;
+class GlSimpleEntity;
+class Camera;
+
+/**
+ * \brief Class used to compute LOD of GlEntities with OpenMP parallelization
+ *
+ * This class perform LOD computation of GlEntities based on screen projection of entities bounding boxes
+ * \warning By default this class don't compute LOD for edges (for optimisation) and return a lod of 10. to these edges, if you want to compute edges' LOD call setComputeEdgesLOD(true)
+ */
+class TLP_GL_SCOPE GlCPULODCalculator : public GlLODCalculator {
+
+public:
+
+  GlCPULODCalculator();
+  virtual ~GlCPULODCalculator();
+  virtual GlLODCalculator *clone() {
+    return new GlCPULODCalculator;
+  }
 
   /**
-   * \brief Class used to compute LOD of GlEntities with OpenMP parallelization
-   *
-   * This class perform LOD computation of GlEntities based on screen projection of entities bounding boxes
-   * \warning By default this class don't compute LOD for edges (for optimisation) and return a lod of 10. to these edges, if you want to compute edges' LOD call setComputeEdgesLOD(true)
+   * Begin a new camera (use to render next entities)
    */
-  class TLP_GL_SCOPE GlCPULODCalculator : public GlLODCalculator {
+  virtual void beginNewCamera(Camera* camera);
+  /**
+   * Add a bounding box for a simple entity
+   */
+  virtual void addSimpleEntityBoundingBox(GlSimpleEntity * entity, const BoundingBox& bb);
+  /**
+   * Add a bounding box for a node
+   */
+  virtual void addNodeBoundingBox(unsigned int id,const BoundingBox& bb);
+  /**
+   * Add a bounding box for an edge
+   */
+  virtual void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb);
 
-  public:
+  /**
+   * Reserve memory to store nodes LOD
+   */
+  virtual void reserveMemoryForNodes(unsigned int numberOfNodes);
 
-    GlCPULODCalculator();
-    virtual ~GlCPULODCalculator();
-    virtual GlLODCalculator *clone(){return new GlCPULODCalculator;}
+  /**
+   * Reserve memory to store edges LOD
+   */
+  virtual void reserveMemoryForEdges(unsigned int numberOfEdges);
 
-    /**
-     * Begin a new camera (use to render next entities)
-     */
-    virtual void beginNewCamera(Camera* camera);
-    /**
-     * Add a bounding box for a simple entity
-     */
-    virtual void addSimpleEntityBoundingBox(GlSimpleEntity * entity, const BoundingBox& bb);
-    /**
-     * Add a bounding box for a node
-     */
-    virtual void addNodeBoundingBox(unsigned int id,const BoundingBox& bb);
-    /**
-     * Add a bounding box for an edge
-     */
-    virtual void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb);
+  /**
+   * Compute all bounding boxes
+   * If you want to compute LOD for a simple scene, you just have to call this function with same value on globalViewport and currentViewport
+   * But if you want to perform a sub screen part selection you have to call this function with : globalViewport the viewport of the visualisation and currentViewport the viewport of the selection
+   * \param globalViewport is used to compute LOD
+   * \param currentViewport : return -1 for all entities outside this viewport
+   */
+  virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
-    /**
-     * Reserve memory to store nodes LOD
-     */
-    virtual void reserveMemoryForNodes(unsigned int numberOfNodes);
+  /**
+   * This function return the scene bounding box
+   */
+  virtual BoundingBox getSceneBoundingBox() {
+    return sceneBoundingBox;
+  }
 
-    /**
-     * Reserve memory to store edges LOD
-     */
-    virtual void reserveMemoryForEdges(unsigned int numberOfEdges);
-
-    /**
-     * Compute all bounding boxes
-     * If you want to compute LOD for a simple scene, you just have to call this function with same value on globalViewport and currentViewport
-     * But if you want to perform a sub screen part selection you have to call this function with : globalViewport the viewport of the visualisation and currentViewport the viewport of the selection
-     * \param globalViewport is used to compute LOD
-     * \param currentViewport : return -1 for all entities outside this viewport
-     */
-    virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
-
-    /**
-     * This function return the scene bounding box
-     */
-    virtual BoundingBox getSceneBoundingBox() {return sceneBoundingBox;}
-
-    /**
-     * Set if the edge LOD must be calculated
-     * \Warning at default the edge LOD is not calculated and return 10.
-     */
-    void setComputeEdgesLOD(bool state){
-      computeEdgesLOD=state;
-    }
+  /**
+   * Set if the edge LOD must be calculated
+   * \Warning at default the edge LOD is not calculated and return 10.
+   */
+  void setComputeEdgesLOD(bool state) {
+    computeEdgesLOD=state;
+  }
 
 
-  protected:
+protected:
 
-    virtual void computeFor3DCamera(LayerLODUnit *layerLODUnit, const Coord &eye, const Matrix<float, 4> transformMatrix, const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
+  virtual void computeFor3DCamera(LayerLODUnit *layerLODUnit, const Coord &eye, const Matrix<float, 4> transformMatrix, const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
-    virtual void computeFor2DCamera(LayerLODUnit *layerLODUnit,const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
+  virtual void computeFor2DCamera(LayerLODUnit *layerLODUnit,const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
-    bool computeEdgesLOD;
+  bool computeEdgesLOD;
 
-    BoundingBox sceneBoundingBox;
+  BoundingBox sceneBoundingBox;
 
-    LayerLODUnit *currentLayerLODUnit;
+  LayerLODUnit *currentLayerLODUnit;
 
-  };
+};
 
 }
 

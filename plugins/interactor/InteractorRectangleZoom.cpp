@@ -34,21 +34,23 @@ public:
   /**
    * Default constructor
    */
-  InteractorRectangleZoom():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_zoom.png","Zoom on rectangle"){
+  InteractorRectangleZoom():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_zoom.png","Zoom on rectangle") {
     setPriority(2);
     setConfigurationWidgetText(QString("<h3>Rectangle zoom interactor</h3>")+
-                   "Zoom on selected rectangle.<br><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.");
+                               "Zoom on selected rectangle.<br><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.");
   }
 
   /**
    * Construct chain of responsibility
    */
-  void construct(){
+  void construct() {
     pushInteractorComponent(new MousePanNZoomNavigator);
     pushInteractorComponent(new MouseBoxZoomer);
   }
 
-  QCursor getCursor(){return QCursor(Qt::CrossCursor);}
+  QCursor getCursor() {
+    return QCursor(Qt::CrossCursor);
+  }
 };
 
 INTERACTORPLUGIN(InteractorRectangleZoom, "InteractorRectangleZoom", "Tulip Team", "01/04/2009", "Rectangle Zoom Interactor", "1.0")

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -39,7 +39,7 @@ class TLP_QT_SCOPE DistantPluginInfo : public tlp::AbstractPluginInfo {
 public:
   DistantPluginInfo(const std::string& author, const std::string& date, const std::string& group, const std::string& name, const std::string& info, const std::string& release,
                     const std::string& tulipRelease, const std::list<tlp::Dependency> dependencies)
-  : _author(author), _date(date), _group(group), _name(name), _info(info), _release(release), _tulipRelease(tulipRelease), _dependencies(dependencies) {
+    : _author(author), _date(date), _group(group), _name(name), _info(info), _release(release), _tulipRelease(tulipRelease), _dependencies(dependencies) {
   }
   virtual std::string getAuthor() const {
     return _author;
@@ -65,7 +65,7 @@ public:
   virtual std::list<tlp::Dependency> getDependencies() const {
     return _dependencies;
   }
-  
+
 private:
   const std::string _author;
   const std::string _date;
@@ -81,65 +81,71 @@ private:
  * @brief Straightforward implementation of PluginInformationsInterface, useable for both remote and local plugins.
  **/
 class TLP_QT_SCOPE PluginInformations {
-  public:
-    /**
-     * @brief This constructor is used for local plugin description, and the library is used to determine the path of the icon and long description.
-     *
-     * @param info The AbstractPluginInfo representing the plugin to describe.
-     * @param type The type of the plugin.
-     * @param dependencies The dependencies of the plugin.
-     * @param library The library file from which the plugin was loaded.
-     **/
-    PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::string& library);
+public:
+  /**
+   * @brief This constructor is used for local plugin description, and the library is used to determine the path of the icon and long description.
+   *
+   * @param info The AbstractPluginInfo representing the plugin to describe.
+   * @param type The type of the plugin.
+   * @param dependencies The dependencies of the plugin.
+   * @param library The library file from which the plugin was loaded.
+   **/
+  PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::string& library);
 
-    /**
-     * @brief This constructor is used for remote plugin description, the long description and icon's paths are directly provided.
-     *
-     * @param info The AbstractPluginInfo representing the plugin to describe.
-     * @param type The type of the plugin.
-     * @param dependencies The dependencies of the plugin.
-     * @param longDescriptionPath The URL where the long description resides.
-     * @param iconPath The URL where the icon resides.
-     **/
-    PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const QString& basePath);
+  /**
+   * @brief This constructor is used for remote plugin description, the long description and icon's paths are directly provided.
+   *
+   * @param info The AbstractPluginInfo representing the plugin to describe.
+   * @param type The type of the plugin.
+   * @param dependencies The dependencies of the plugin.
+   * @param longDescriptionPath The URL where the long description resides.
+   * @param iconPath The URL where the icon resides.
+   **/
+  PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const QString& basePath);
 
-    void AddPluginInformations(const tlp::AbstractPluginInfo* info);
-    void AddPluginInformations(const tlp::PluginInformations* info);
+  void AddPluginInformations(const tlp::AbstractPluginInfo* info);
+  void AddPluginInformations(const tlp::PluginInformations* info);
 
-    QString identifier() const;
-    //TODO this should be a displayname, not the name used to register into the plugin system
-    QString name() const;
-    QString author() const { return "author"; }
-    QString group() const { return "group"; }
-    
-    QString shortDescription() const;
-    QString longDescriptionPath() const;
-    
-    QString iconPath() const;
-    QDateTime installDate() const;
-    
-    QString type() const;
-    const QStringList dependencies(QString version) const;
-    const QStringList& versions() const;
-    QString latestVersion() const { return "latestVersion"; }
+  QString identifier() const;
+  //TODO this should be a displayname, not the name used to register into the plugin system
+  QString name() const;
+  QString author() const {
+    return "author";
+  }
+  QString group() const {
+    return "group";
+  }
 
-    QString installedVersion() const;
-    bool isInstalled(QString version) const;
-    bool isInstalled() const;
-    bool updateAvailable() const;
+  QString shortDescription() const;
+  QString longDescriptionPath() const;
 
-    bool fetch(QString version) const;
-    bool remove() const;
-  private:
-    QString _lastVersion;
-    const QString _type;
-    const QString _iconPath;
-    const QString _longDescriptionPath;
-    const bool _isLocal;
-    const QString _installedVersion;
-    bool _updateAvailable;
-    QStringList _versions;
-    QMap<QString, const tlp::AbstractPluginInfo*> _infos;
+  QString iconPath() const;
+  QDateTime installDate() const;
+
+  QString type() const;
+  const QStringList dependencies(QString version) const;
+  const QStringList& versions() const;
+  QString latestVersion() const {
+    return "latestVersion";
+  }
+
+  QString installedVersion() const;
+  bool isInstalled(QString version) const;
+  bool isInstalled() const;
+  bool updateAvailable() const;
+
+  bool fetch(QString version) const;
+  bool remove() const;
+private:
+  QString _lastVersion;
+  const QString _type;
+  const QString _iconPath;
+  const QString _longDescriptionPath;
+  const bool _isLocal;
+  const QString _installedVersion;
+  bool _updateAvailable;
+  QStringList _versions;
+  QMap<QString, const tlp::AbstractPluginInfo*> _infos;
 };
 
 }

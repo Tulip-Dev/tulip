@@ -25,21 +25,21 @@
 
 namespace tlp {
 
-QtOpenGlErrorViewerWithAskAgainDialog::QtOpenGlErrorViewerWithAskAgainDialog(QWidget *parent):QDialog(parent),_ui(new Ui::QtOpenGlErrorViewerWithAskAgainDialogData()){
+QtOpenGlErrorViewerWithAskAgainDialog::QtOpenGlErrorViewerWithAskAgainDialog(QWidget *parent):QDialog(parent),_ui(new Ui::QtOpenGlErrorViewerWithAskAgainDialogData()) {
   _ui->setupUi(this);
   connect(_ui->okButton,SIGNAL(clicked()),this,SLOT(accept()));
 }
 
-void QtOpenGlErrorViewer::displayError(const std::string &title,const std::string &errorMsg){
+void QtOpenGlErrorViewer::displayError(const std::string &title,const std::string &errorMsg) {
   QMessageBox::warning(parent, title.c_str(), errorMsg.c_str());
 }
 
-void QtOpenGlErrorViewer::displayErrorWithAskAgain(const std::string &title,const std::string &errorMsg){
+void QtOpenGlErrorViewer::displayErrorWithAskAgain(const std::string &title,const std::string &errorMsg) {
   QSettings settings("TulipSoftware","Tulip");
   settings.beginGroup("QtOpenGlErrorViewer");
   bool askAgain=settings.value(title.c_str(),true).toBool();
 
-  if(askAgain){
+  if(askAgain) {
     QtOpenGlErrorViewerWithAskAgainDialog dialog;
     dialog.setWindowTitle(title.c_str());
     dialog._ui->textLabel->setText(errorMsg.c_str());

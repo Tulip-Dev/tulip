@@ -25,8 +25,10 @@ using namespace tlp;
 
 void PropertyObserver::treatEvent(const Event& ev) {
   const PropertyEvent* propEvt = dynamic_cast<const PropertyEvent*>(&ev);
+
   if (propEvt) {
     PropertyInterface* prop = propEvt->getProperty();
+
     switch(propEvt->getType()) {
     case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
       beforeSetNodeValue(prop, propEvt->getNode());
@@ -56,8 +58,10 @@ void PropertyObserver::treatEvent(const Event& ev) {
       // this should not happen
       assert(false);
     }
-  } else {
+  }
+  else {
     PropertyInterface* prop = dynamic_cast<PropertyInterface *>(ev.sender());
+
     if (prop && ev.type() == Event::TLP_DELETE)
       destroy(prop);
   }

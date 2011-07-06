@@ -30,203 +30,203 @@
 #include <tulip/GlTools.h>
 
 namespace tlp {
+/**
+ * \addtogroup GlEntities
+ */
+/*@{*/
+/**
+ * class to create a abstract polygon
+ */
+class TLP_GL_SCOPE GlAbstractPolygon : public GlSimpleEntity {
+public:
   /**
-   * \addtogroup GlEntities
+   * Constructor
    */
-  /*@{*/
+  GlAbstractPolygon();
   /**
-   * class to create a abstract polygon
+   * Default empty destructor
    */
-  class TLP_GL_SCOPE GlAbstractPolygon : public GlSimpleEntity {
-  public:
-    /**
-     * Constructor
-     */
-    GlAbstractPolygon();
-    /**
-     * Default empty destructor
-     */
-    virtual ~GlAbstractPolygon();
+  virtual ~GlAbstractPolygon();
 
-    enum PolygonMode {POLYGON = 0, QUAD_STRIP = 1};
+  enum PolygonMode {POLYGON = 0, QUAD_STRIP = 1};
 
-    /**
-     * Get the polygon mode (see PolygonMode enum)
-     */
-    PolygonMode getPolygonMode();
+  /**
+   * Get the polygon mode (see PolygonMode enum)
+   */
+  PolygonMode getPolygonMode();
 
-    /**
-     * Set the polygon mode (see PolygonMode enum)
-     */
-    void setPolygonMode(PolygonMode mode);
+  /**
+   * Set the polygon mode (see PolygonMode enum)
+   */
+  void setPolygonMode(PolygonMode mode);
 
-    /**
-     * Get if the polygon is filled or not
-     */
-    bool getFillMode();
+  /**
+   * Get if the polygon is filled or not
+   */
+  bool getFillMode();
 
-    /**
-     * Set if the polygon is filled or not
-     */
-    void setFillMode(const bool);
+  /**
+   * Set if the polygon is filled or not
+   */
+  void setFillMode(const bool);
 
-    /**
-     * Get if the polygon is outlined or not
-     */
-    bool getOutlineMode();
+  /**
+   * Get if the polygon is outlined or not
+   */
+  bool getOutlineMode();
 
-    /**
-     * Set if the polygon is outlined or not
-     */
-    void setOutlineMode(const bool);
+  /**
+   * Set if the polygon is outlined or not
+   */
+  void setOutlineMode(const bool);
 
-    /**
-     * Get if the polygon use light or not
-     */
-    bool getLightingMode();
+  /**
+   * Get if the polygon use light or not
+   */
+  bool getLightingMode();
 
-    /**
-     * Set if the polygon use light or not
-     */
-    void setLightingMode(const bool);
+  /**
+   * Set if the polygon use light or not
+   */
+  void setLightingMode(const bool);
 
-    /**
-     * Get the ith color used to filling the polygon
-     */
-    Color getFillColor(unsigned int i);
+  /**
+   * Get the ith color used to filling the polygon
+   */
+  Color getFillColor(unsigned int i);
 
-    /**
-     * Set the ith color used to filling the polygon
-     */
-    void setFillColor(unsigned int i, const Color &color);
+  /**
+   * Set the ith color used to filling the polygon
+   */
+  void setFillColor(unsigned int i, const Color &color);
 
-    /**
-     * Set color used to filling the whole polygon
-     */
-    void setFillColor(const Color &color);
+  /**
+   * Set color used to filling the whole polygon
+   */
+  void setFillColor(const Color &color);
 
-    /**
-     * Get the ith color used to outlining the polygon
-     */
-    Color getOutlineColor(unsigned int i);
+  /**
+   * Get the ith color used to outlining the polygon
+   */
+  Color getOutlineColor(unsigned int i);
 
-    /**
-     * Set the ith color used to outlining the polygon
-     */
-    void setOutlineColor(unsigned int i, const Color &color);
+  /**
+   * Set the ith color used to outlining the polygon
+   */
+  void setOutlineColor(unsigned int i, const Color &color);
 
-    /**
-     * Set the color used to outlining the whole polygon
-     */
-    void setOutlineColor(const Color &color);
+  /**
+   * Set the color used to outlining the whole polygon
+   */
+  void setOutlineColor(const Color &color);
 
-    /**
-     * Get the textureName
-     */
-    std::string getTextureName();
+  /**
+   * Get the textureName
+   */
+  std::string getTextureName();
 
-    /**
-     * Set the textureName
-     */
-    void setTextureName(const std::string &name);
+  /**
+   * Set the textureName
+   */
+  void setTextureName(const std::string &name);
 
-    /**
-     * Get the outline size
-     */
-    float getOutlineSize();
+  /**
+   * Get the outline size
+   */
+  float getOutlineSize();
 
-    /**
-     * Set the outline size
-     */
-    void setOutlineSize(float size);
+  /**
+   * Set the outline size
+   */
+  void setOutlineSize(float size);
 
-    /**
-     * Get the lod outline value, below this lod value outline will not be displayed
-     */
-    float getHideOutlineLod();
+  /**
+   * Get the lod outline value, below this lod value outline will not be displayed
+   */
+  float getHideOutlineLod();
 
-    /**
-     * Set the lod outline value, below this lod value outline will not be displayed
-     */
-    void setHideOutlineLod(float lod);
+  /**
+   * Set the lod outline value, below this lod value outline will not be displayed
+   */
+  void setHideOutlineLod(float lod);
 
-    /**
-     * Draw the polygon
-     */
-    virtual void draw(float lod,Camera *camera);
+  /**
+   * Draw the polygon
+   */
+  virtual void draw(float lod,Camera *camera);
 
-    /**
-     * Translate entity
-     */
-    virtual void translate(const Coord& mouvement);
+  /**
+   * Translate entity
+   */
+  virtual void translate(const Coord& mouvement);
 
-    /**
-     * Function to export data and type in XML
-     */
-    virtual void getXML(xmlNodePtr rootNode);
+  /**
+   * Function to export data and type in XML
+   */
+  virtual void getXML(xmlNodePtr rootNode);
 
-    /**
-     * Function to export data in XML
-     */
-    virtual void getXMLOnlyData(xmlNodePtr rootNode);
+  /**
+   * Function to export data in XML
+   */
+  virtual void getXMLOnlyData(xmlNodePtr rootNode);
 
-    /**
-     * Function to set data with XML
-     */
-    virtual void setWithXML(xmlNodePtr rootNode);
+  /**
+   * Function to set data with XML
+   */
+  virtual void setWithXML(xmlNodePtr rootNode);
 
-  protected:
+protected:
 
-    /**
-     * set Coords of the polygon
-     */
-    virtual void setPoints(const std::vector<Coord> &points);
+  /**
+   * set Coords of the polygon
+   */
+  virtual void setPoints(const std::vector<Coord> &points);
 
-    /**
-     * set ith Coord of the polygon
-     */
-    virtual void setPoint(unsigned int index, const Coord &point);
+  /**
+   * set ith Coord of the polygon
+   */
+  virtual void setPoint(unsigned int index, const Coord &point);
 
-    /**
-     * set fill colors of the polygon
-     */
-    virtual void setFillColors(const std::vector<Color> &colors);
+  /**
+   * set fill colors of the polygon
+   */
+  virtual void setFillColors(const std::vector<Color> &colors);
 
-    /**
-     * set outline colors of the polygon
-     */
-    virtual void setOutlineColors(const std::vector<Color> &colors);
+  /**
+   * set outline colors of the polygon
+   */
+  virtual void setOutlineColors(const std::vector<Color> &colors);
 
-    /**
-     * Clear previous bounding box and expand bounding box with polygons' points
-     */
-    virtual void recomputeBoundingBox();
+  /**
+   * Clear previous bounding box and expand bounding box with polygons' points
+   */
+  virtual void recomputeBoundingBox();
 
-    /**
-     * Clear previously generated VBO
-     */
-    virtual void clearGenerated();
+  /**
+   * Clear previously generated VBO
+   */
+  virtual void clearGenerated();
 
-    PolygonMode polygonMode;
-    std::vector<Coord> points;
-    std::vector<Color> fillColors;
-    std::vector<Color> outlineColors;
-    bool filled;
-    bool outlined;
-    bool lighting;
-    bool invertYTexture;
-    std::string textureName;
-    float outlineSize;
-    float hideOutlineLod;
+  PolygonMode polygonMode;
+  std::vector<Coord> points;
+  std::vector<Color> fillColors;
+  std::vector<Color> outlineColors;
+  bool filled;
+  bool outlined;
+  bool lighting;
+  bool invertYTexture;
+  std::string textureName;
+  float outlineSize;
+  float hideOutlineLod;
 
-    std::vector<Coord> normalArray;
-    GLubyte *indices;
-    GLubyte *auxIndices;
-    GLfloat *texArray;
+  std::vector<Coord> normalArray;
+  GLubyte *indices;
+  GLubyte *auxIndices;
+  GLfloat *texArray;
 
-    bool generated;
-    GLuint buffers[7];
-  };
-  /*@}*/
+  bool generated;
+  GLuint buffers[7];
+};
+/*@}*/
 }
 #endif

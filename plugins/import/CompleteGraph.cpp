@@ -25,27 +25,25 @@ using namespace tlp;
  * TODO Add documentation
  **/
 
-namespace
-{
+namespace {
 
-	const char * paramHelp[] =
-	{
-		// nodes
-		HTML_HELP_OPEN() \
-		HTML_HELP_DEF( "type", "int" ) \
-		HTML_HELP_DEF( "default", "5" ) \
-		HTML_HELP_BODY() \
-		"This parameter defines the amount of nodes composing the completed graph." \
-		HTML_HELP_CLOSE(),
-		// bool
-		HTML_HELP_OPEN() \
-		HTML_HELP_DEF( "type", "bool" ) \
-		HTML_HELP_DEF( "default", "true" ) \
-		HTML_HELP_BODY() \
-		"This parameter defines wether or not the graph is undirected, if false two edges will be created between each couple of nodes." \
-		HTML_HELP_CLOSE(),
-	  
-	};
+const char * paramHelp[] = {
+  // nodes
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "int" ) \
+  HTML_HELP_DEF( "default", "5" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the amount of nodes composing the completed graph." \
+  HTML_HELP_CLOSE(),
+  // bool
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "default", "true" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines wether or not the graph is undirected, if false two edges will be created between each couple of nodes." \
+  HTML_HELP_CLOSE(),
+
+};
 }
 
 
@@ -55,36 +53,41 @@ public:
     addParameter<unsigned int>("nodes",paramHelp[0],"5");
     addParameter<bool>("undirected",paramHelp[1],"true");
   }
-  ~CompleteGraph(){
+  ~CompleteGraph() {
   }
-  
+
   bool import() {
     unsigned int nbNodes  = 5;
     bool undirected = false;
+
     if (dataSet!=0) {
       dataSet->get("nodes", nbNodes);
-      dataSet->get("undirected", undirected);      
+      dataSet->get("undirected", undirected);
     }
 
     if (nbNodes == 0) {
       if (pluginProgress)
-	pluginProgress->setError(string("Error: number of nodes cannot be null"));
+        pluginProgress->setError(string("Error: number of nodes cannot be null"));
+
       return false;
     }
+
     if (pluginProgress)
       pluginProgress->showPreview(false);
 
     vector<node> nodes(nbNodes);
-    for (size_t j=0; j<nbNodes; ++j) 
+
+    for (size_t j=0; j<nbNodes; ++j)
       nodes[j] = graph->addNode();
-    
-    for (size_t i=0; i < nbNodes-1; ++i) 
+
+    for (size_t i=0; i < nbNodes-1; ++i)
       for (size_t j = i+1; j < nbNodes; ++j) {
-	graph->addEdge(nodes[i], nodes[j]);
-	if (!undirected)
-	  graph->addEdge(nodes[j], nodes[i]);	
+        graph->addEdge(nodes[i], nodes[j]);
+
+        if (!undirected)
+          graph->addEdge(nodes[j], nodes[i]);
       }
-    
+
     return true;
   }
 };

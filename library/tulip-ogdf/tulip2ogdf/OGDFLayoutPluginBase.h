@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -30,21 +30,21 @@
 #include "TulipToOGDF.h"
 
 class TLP_OGDF_SCOPE OGDFLayoutPluginBase: public tlp::LayoutAlgorithm {
-  public:
-    OGDFLayoutPluginBase(const tlp::PropertyContext &context, ogdf::LayoutModule *ogdfLayoutAlgo);
-    virtual ~OGDFLayoutPluginBase();
+public:
+  OGDFLayoutPluginBase(const tlp::PropertyContext &context, ogdf::LayoutModule *ogdfLayoutAlgo);
+  virtual ~OGDFLayoutPluginBase();
 
-    virtual bool run();
+  virtual bool run();
 
-  protected:
-    virtual void beforeCall(TulipToOGDF *, ogdf::LayoutModule *) {}
-    virtual void afterCall(TulipToOGDF *, ogdf::LayoutModule *) {}
+protected:
+  virtual void beforeCall(TulipToOGDF *, ogdf::LayoutModule *) {}
+  virtual void afterCall(TulipToOGDF *, ogdf::LayoutModule *) {}
 
-    void transposeLayoutVertically();
+  void transposeLayoutVertically();
 
-  private:
-    TulipToOGDF *tlpToOGDF;
-    ogdf::LayoutModule *ogdfLayoutAlgo;
+private:
+  TulipToOGDF *tlpToOGDF;
+  ogdf::LayoutModule *ogdfLayoutAlgo;
 };
 
 #endif // OGDF_LAYOUT_PLUGIN_BASE

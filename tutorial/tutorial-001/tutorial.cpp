@@ -23,11 +23,11 @@
  *
  * Tutorial 001
  *
- * Create a graph 
+ * Create a graph
  * add three nodes and three edges
  * remove an edge and a node
  * print the result on the standard output
- * 
+ *
  */
 
 using namespace std;

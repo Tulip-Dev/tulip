@@ -52,7 +52,9 @@ struct dfsDepthStruct {
 //=================================================
 double DepthMetric::getNodeValue(tlp::node current) {
   if (graph->outdeg(current) == 0) return 0.0;
+
   double value = result->getNodeValue(current);
+
   if (value > 0.1)
     return value;
 
@@ -62,40 +64,48 @@ double DepthMetric::getNodeValue(tlp::node current) {
   dfsDepthStruct dfsParams(current, outNodes);
   double maxDepth = 0;
   dfsLevels.push(dfsParams);
+
   while(!dfsLevels.empty()) {
     while (outNodes->hasNext()) {
       node neighbour = outNodes->next();
       value = result->getNodeValue(neighbour);
+
       // compute max
       if (value > 0.1)
-	maxDepth = std::max(maxDepth, value);
+        maxDepth = std::max(maxDepth, value);
       else {
-	outNodes = graph->getOutNodes(neighbour);
-	if (outNodes->hasNext()) {
-	  // store maxDepth for current
-	  dfsLevels.top().maxDepth = maxDepth;
-	  // push new dfsParams on stack
-	  current = dfsParams.current = neighbour;
-	  dfsParams.outNodes = outNodes;
-	  maxDepth = dfsParams.maxDepth = 0.0;
-	  dfsLevels.push(dfsParams);
-	  // and go deeper
-	  break;
-	} else
-	  outNodes = dfsParams.outNodes;
+        outNodes = graph->getOutNodes(neighbour);
+
+        if (outNodes->hasNext()) {
+          // store maxDepth for current
+          dfsLevels.top().maxDepth = maxDepth;
+          // push new dfsParams on stack
+          current = dfsParams.current = neighbour;
+          dfsParams.outNodes = outNodes;
+          maxDepth = dfsParams.maxDepth = 0.0;
+          dfsLevels.push(dfsParams);
+          // and go deeper
+          break;
+        }
+        else
+          outNodes = dfsParams.outNodes;
       }
     }
+
     if (outNodes->hasNext())
       // new dfsParams has been pushed on stack
       continue;
+
     // save current maxDepth
     ++maxDepth;
     result->setNodeValue(current, maxDepth);
     // unstack current dfsParams
     delete outNodes;
     dfsLevels.pop();
+
     if (dfsLevels.empty())
       break;
+
     // get dfsParams on top of dfsLevels
     dfsParams = dfsLevels.top();
     current = dfsParams.current;
@@ -104,6 +114,7 @@ double DepthMetric::getNodeValue(tlp::node current) {
     dfsParams.maxDepth = std::max(dfsParams.maxDepth, maxDepth);
     maxDepth = dfsParams.maxDepth;
   }
+
   return maxDepth;
 }
 //====================================================================
@@ -112,7 +123,7 @@ bool DepthMetric::run() {
   result->setAllNodeValue(0);
   node _n;
   forEach(_n, graph->getNodes())
-    result->setNodeValue(_n, getNodeValue(_n));
+  result->setNodeValue(_n, getNodeValue(_n));
   return true;
 }
 //=================================================

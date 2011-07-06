@@ -30,9 +30,8 @@ namespace tlp {
  * \author Maxime Delorme maxime.delorme@gmail.com
  *
 */
-class Polynome
-{
- public:
+class Polynome {
+public:
   float a, b, c, d;
 
   /**

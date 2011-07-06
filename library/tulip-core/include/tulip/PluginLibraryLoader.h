@@ -28,23 +28,23 @@
 
 namespace tlp {
 
-  /**
-   * @brief This class takes care of the actual loading of the libraries.
-   * You can use it to load a single plugin (loadPluginLibrary) or all the plugins in a given folder (loadPlugins).0
-   * 
-   * It is a singleton to guarantee the currentPluginLibrary member is initialized, but it only shows static functions for syntactic sugar.
-   **/
+/**
+ * @brief This class takes care of the actual loading of the libraries.
+ * You can use it to load a single plugin (loadPluginLibrary) or all the plugins in a given folder (loadPlugins).0
+ *
+ * It is a singleton to guarantee the currentPluginLibrary member is initialized, but it only shows static functions for syntactic sugar.
+ **/
 class TLP_SCOPE PluginLibraryLoader {
- public:
-   
+public:
+
   /**
   * @brief Loads all the plugins in each directory contained in TulipPluginsPath.
   * This function will not look into subfolders of the specified folder.
-  * 
-  * 
-  * To load all the plugins in the following example, you need to call this function once for the lib/tulip folder, 
+  *
+  *
+  * To load all the plugins in the following example, you need to call this function once for the lib/tulip folder,
   * once for the glyph folder, and once for the interactors folder.
-  * 
+  *
   * lib/tulip/
   * ├── glyphs
   * │   ├── libBillboard-4.0.0.so
@@ -55,15 +55,15 @@ class TLP_SCOPE PluginLibraryLoader {
   * ├── libAdjacencyMatrixImport-4.0.0.so
   * ├── libColorMapping-4.0.0.so
   * ├── libCompleteGraph-4.0.0.so
-  * 
+  *
   *
   * @param plug A PluginLoader to output what is going on. Defaults to 0.
   * @param folder A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
   * @return void
-  * 
+  *
   **/
   static void loadPlugins(PluginLoader *loader = NULL, std::string pluginPath = "");
-  
+
   /**
    * @brief Loads a single plugin library.
    *
@@ -72,7 +72,7 @@ class TLP_SCOPE PluginLibraryLoader {
    * @return bool Whether the plugin was sucessfully loaded.
    **/
   static bool loadPluginLibrary(const std::string & filename, PluginLoader *loader = 0);
-  
+
   /**
    * @brief Gets the name of the plug-in library being loaded.
    * If the plugin is statically linked into the tulip library, returns an empty string.
@@ -83,20 +83,21 @@ class TLP_SCOPE PluginLibraryLoader {
     return getInstance()->currentPluginLibrary;
   }
 
- private:
+private:
   PluginLibraryLoader() {}
   bool loadNextPluginLibrary(PluginLoader *loader);
 
   void initPluginDir(PluginLoader *loader);
-  
+
   static PluginLibraryLoader* getInstance() {
     if(_instance == NULL) {
       _instance = new PluginLibraryLoader();
     }
+
     return _instance;
   }
   static PluginLibraryLoader* _instance;
-  
+
   std::string message;
   std::string pluginPath;
   std::string currentPluginLibrary;

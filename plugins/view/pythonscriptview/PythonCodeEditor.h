@@ -27,16 +27,16 @@ class PythonCodeEditor : public QsciScintilla {
 
 public :
 
-	PythonCodeEditor(QWidget *parent=0, const int foontZoom=0);
+  PythonCodeEditor(QWidget *parent=0, const int foontZoom=0);
 
-	void indicateScriptCurrentError(int lineNumber);
-	void clearErrorIndicator();
+  void indicateScriptCurrentError(int lineNumber);
+  void clearErrorIndicator();
 
 private :
 
-	int errorIndicator;
+  int errorIndicator;
 
-	static QsciLexerPython *pythonLexer;
+  static QsciLexerPython *pythonLexer;
 };
 
 

@@ -22,21 +22,27 @@
 #include <tulip/tuliphash.h>
 /**
  * \addtogroup graphs
- */ 
+ */
 namespace tlp {
 
 /*@{*/
 /// class edge
-struct edge { 
+struct edge {
   unsigned int id;
-  edge():id(UINT_MAX){}
-  explicit edge(unsigned int j):id(j){}
+  edge():id(UINT_MAX) {}
+  explicit edge(unsigned int j):id(j) {}
   operator unsigned int() const {
     return id;
   }
-  bool operator==(const edge e) const{return id==e.id;}
-  bool operator!=(const edge e) const{return id!=e.id;}
-  bool isValid() const {return id!=UINT_MAX;}
+  bool operator==(const edge e) const {
+    return id==e.id;
+  }
+  bool operator!=(const edge e) const {
+    return id!=e.id;
+  }
+  bool isValid() const {
+    return id!=UINT_MAX;
+  }
 };
 /*@}*/
 }
@@ -51,14 +57,18 @@ TLP_BEGIN_HASH_NAMESPACE {
 } TLP_END_HASH_NAMESPACE
 
 namespace std {
-  template<>
-  struct equal_to<tlp::edge>{size_t operator()(const tlp::edge e,const tlp::edge e2) const {
-    return e.id==e2.id;}
-  };
-  template<>
-  struct less<tlp::edge>{size_t operator()(const tlp::edge e,const tlp::edge e2) const {
-    return e.id<e2.id;}
-  };
+template<>
+struct equal_to<tlp::edge> {
+  size_t operator()(const tlp::edge e,const tlp::edge e2) const {
+    return e.id==e2.id;
+  }
+};
+template<>
+struct less<tlp::edge> {
+  size_t operator()(const tlp::edge e,const tlp::edge e2) const {
+    return e.id<e2.id;
+  }
+};
 }
 #endif
 #endif

@@ -39,13 +39,17 @@ int main(int argc, char **argv) {
   // Retrieve session bus address and update environment variables
   dbus_daemon.waitForReadyRead(-1);
   QRegExp sessionBusAddressRegexp("^DBUS_SESSION_BUS_ADDRESS\\=(unix\\:[^\\n\\r]*).*");
+
   if (sessionBusAddressRegexp.exactMatch(dbus_daemon.readLine()))
-      setenv("DBUS_SESSION_BUS_ADDRESS",sessionBusAddressRegexp.cap(1).toStdString().c_str(),1);
+    setenv("DBUS_SESSION_BUS_ADDRESS",sessionBusAddressRegexp.cap(1).toStdString().c_str(),1);
+
   // Retrieve dbus_daemon PID to be able to kill it when application ends.
   QRegExp dbusPidRegexp("DBUS_SESSION_BUS_PID\\=([0-9]*).*");
   pid_t dbusPid = 0;
+
   if (dbusPidRegexp.exactMatch(dbus_daemon.readLine()))
     dbusPid = dbusPidRegexp.cap(1).toLong();
+
 #endif
 
   // There can be only one tulip_agent running at a time on the same system.
@@ -74,6 +78,7 @@ int main(int argc, char **argv) {
 
   TulipMainWindow *mainWindow = new TulipMainWindow;
   QMap<QString,QString> errorsMap(errorReport->errors());
+
   for(QMap<QString,QString>::iterator it = errorsMap.begin(); it != errorsMap.end(); ++it)
     mainWindow->pluginsCenter()->reportPluginError(it.key(), it.value());
 
@@ -83,8 +88,10 @@ int main(int argc, char **argv) {
   new TulipAgentServiceAdaptor(mainWindow);
   bool dbusRegisterServiceOk = QDBusConnection::sessionBus().registerService("org.labri.Tulip");
   bool dbusRegisterObjectOk = QDBusConnection::sessionBus().registerObject("/",mainWindow);
+
   if (!dbusRegisterServiceOk)
     qWarning() << "D-Bus registration of service org.labri.Tulip failed.";
+
   if (!dbusRegisterObjectOk)
     qWarning() << "D-Bus registration of object / over service org.labri.Tulip failed.";
 

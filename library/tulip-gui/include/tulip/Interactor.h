@@ -33,125 +33,127 @@ class QAction;
 
 namespace tlp {
 
-  class GlMainWidget;
-  class View;
-  class Interactor;
+class GlMainWidget;
+class View;
+class Interactor;
 
-  /** \brief InteractorAction extend QAction to provide Interactor information
-   *
+/** \brief InteractorAction extend QAction to provide Interactor information
+ *
+ */
+class TLP_QT_SCOPE InteractorAction : public QAction {
+
+  Q_OBJECT
+
+public:
+
+  InteractorAction(Interactor *interactor,const QIcon &icon, const QString &text);
+
+  Interactor *getInteractor() {
+    return interactor;
+  }
+
+protected :
+
+  Interactor *interactor;
+
+};
+
+/** \brief Tulip interactor main class
+ *
+ */
+class TLP_QT_SCOPE Interactor  : public QObject, public WithParameter, public WithDependency {
+
+protected :
+
+  int priority;
+
+  QString configurationWidgetText;
+
+public:
+  /**
+   * Default constructor
    */
-  class TLP_QT_SCOPE InteractorAction : public QAction {
+  Interactor():priority(0) {}
 
-    Q_OBJECT
-
-  public:
-
-    InteractorAction(Interactor *interactor,const QIcon &icon, const QString &text);
-
-    Interactor *getInteractor() {return interactor;}
-
-  protected :
-
-    Interactor *interactor;
-
-  };
-
-  /** \brief Tulip interactor main class
-   *
+  /*
+   * Default destructor
    */
-  class TLP_QT_SCOPE Interactor  : public QObject, public WithParameter, public WithDependency {
+  virtual ~Interactor() {}
 
-  protected :
+  /**
+   * Set the view attached with this interactor
+   */
+  virtual void setView(View *view) = 0;
 
-    int priority;
-    
-    QString configurationWidgetText;
+  /**
+   * Install eventFilters of interactor on given widget
+   */
+  virtual void install(QWidget *) = 0;
 
-  public:
-    /**
-     * Default constructor
-     */
-    Interactor():priority(0) {}
+  /**
+   * Remove eventFilters of interactor
+   */
+  virtual void remove() = 0;
 
-    /*
-     * Default destructor
-     */
-    virtual ~Interactor() {}
+  /**
+   * set html text displayed by configuration widget
+   */
+  virtual void setConfigurationWidgetText(const QString &text);
 
-    /**
-     * Set the view attached with this interactor
-     */
-    virtual void setView(View *view) = 0;
+  /**
+   * return widget of configuration of this interactor
+   * if you previouly call setHtmlText, getConfigurationWidget return a QTextEdit with this text
+   */
+  virtual QWidget *getConfigurationWidget();
 
-    /**
-     * Install eventFilters of interactor on given widget
-     */
-    virtual void install(QWidget *) = 0;
+  /**
+   * return if this interactor is compatible with given View
+   */
+  virtual bool isCompatible(const std::string &viewName) = 0;
 
-    /**
-     * Remove eventFilters of interactor
-     */
-    virtual void remove() = 0;
+  /**
+   * Return the menu display priority
+   */
+  int getPriority() {
+    return priority;
+  }
 
-    /**
-     * set html text displayed by configuration widget
-     */
-    virtual void setConfigurationWidgetText(const QString &text);
+  /**
+   * Set the menu display priority
+   */
+  void setPriority(int number) {
+    priority=number;
+  }
 
-    /**
-     * return widget of configuration of this interactor
-     * if you previouly call setHtmlText, getConfigurationWidget return a QTextEdit with this text
-     */
-    virtual QWidget *getConfigurationWidget();
+  /**
+   * return QAction of this interactor
+   */
+  virtual InteractorAction* getAction() = 0;
 
-    /**
-     * return if this interactor is compatible with given View
-     */
-    virtual bool isCompatible(const std::string &viewName) = 0;
+  /**
+   * Compute InteractorComponents include in this interactor
+   */
+  virtual void compute(GlMainWidget *) = 0;
 
-    /**
-     * Return the menu display priority
-     */
-    int getPriority() {
-      return priority;
-    }
+  /**
+   * Draw InteractorComponents include in this interactor
+   */
+  virtual void draw(GlMainWidget *) = 0;
 
-    /**
-     * Set the menu display priority
-     */
-    void setPriority(int number) {
-      priority=number;
-    }
+  /**
+   * This function is call when an undo is perform by the controller
+   */
+  virtual void undoIsDone() {}
+};
 
-    /**
-     * return QAction of this interactor
-     */
-    virtual InteractorAction* getAction() = 0;
+class TLP_QT_SCOPE InteractorContext {
+};
 
-    /**
-     * Compute InteractorComponents include in this interactor
-     */
-    virtual void compute(GlMainWidget *) = 0;
+typedef StaticPluginLister<Interactor, InteractorContext*> InteractorLister;
 
-    /**
-     * Draw InteractorComponents include in this interactor
-     */
-    virtual void draw(GlMainWidget *) = 0;
-
-    /**
-     * This function is call when an undo is perform by the controller
-     */
-    virtual void undoIsDone() {}
-  };
-
-  class TLP_QT_SCOPE InteractorContext {
-  };
-
-  typedef StaticPluginLister<Interactor, InteractorContext*> InteractorLister;
-
-  #ifdef WIN32
-	template class TLP_QT_SCOPE PluginLister<Interactor,InteractorContext *>;
-  #endif
+#ifdef WIN32
+template class TLP_QT_SCOPE PluginLister<Interactor,InteractorContext *>;
+#endif
 }
 
 #define INTERACTORPLUGINOFGROUP(C,N,A,D,I,R,G) POINTERCONTEXTPLUGINFACTORY(Interactor,C,N,A,D,I,R,G)

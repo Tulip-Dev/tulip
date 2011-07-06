@@ -25,8 +25,8 @@
 #include <cppunit/TestSuite.h>
 
 class IntegerPropertyMinMaxSubgraphTest : public CppUnit::TestFixture {
- public:
-    
+public:
+
   void setUp();
   void tearDown();
   void testIntegerPropertyRootGraphMin();
@@ -36,7 +36,7 @@ class IntegerPropertyMinMaxSubgraphTest : public CppUnit::TestFixture {
 
   static CppUnit::Test *suite();
 
- private :
+private :
 
   tlp::Graph *graph, *subGraph;
 

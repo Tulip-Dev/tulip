@@ -24,8 +24,10 @@ using namespace tlp;
 edge tlp::nextFaceEdge(Graph *g, edge e, node n) {
   EdgeMapIterator it(g, e, n);
   edge result;
+
   if (it.hasNext())
     result = it.next();
+
   return result;
 }
 
@@ -33,23 +35,27 @@ NodeMapIterator::NodeMapIterator(Graph *sg, node source, node target) {
   assert(cloneIt.empty());
   bool start=true;
   Iterator<node> *itIn=sg->getInOutNodes(target);
+
   while (itIn->hasNext()) {
     node tmp=itIn->next();
+
     if ((start) && (tmp==source)) {
       start=false;
       itStl=cloneIt.begin();
     }
     else {
       if (start)
-	cloneIt.push_back(tmp);
-      else 
-	cloneIt.insert(itStl,tmp);
+        cloneIt.push_back(tmp);
+      else
+        cloneIt.insert(itStl,tmp);
     }
-  } delete itIn;
+  }
+
+  delete itIn;
   itStl=cloneIt.begin();
 }
 
-NodeMapIterator::~NodeMapIterator(){}
+NodeMapIterator::~NodeMapIterator() {}
 
 node NodeMapIterator::next() {
   node tmp=*itStl;
@@ -68,12 +74,17 @@ EdgeMapIterator::EdgeMapIterator(Graph *sg, edge source, node target) {
   treat = 0;
   pos   = 0;
   Iterator<edge> *it=sg->getInOutEdges(target);
+
   while (it->hasNext()) {
     edge e = it->next();
+
     if (e == source)
-        pos = treat + 1;
+      pos = treat + 1;
+
     adj[treat++] = e;
-  } delete it;
+  }
+
+  delete it;
 }
 //=========================================
 

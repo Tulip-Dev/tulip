@@ -34,21 +34,23 @@ public:
   /**
    * Default constructor
    */
-  InteractorAddNode():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addnode.png","Add nodes"){
+  InteractorAddNode():NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addnode.png","Add nodes") {
     setPriority(1);
     setConfigurationWidgetText(QString("<h3>Add node interactor</h3>")+
-                   "<b>Mouse left</b> click to add a node in the graph");
+                               "<b>Mouse left</b> click to add a node in the graph");
   }
 
   /**
    * Construct chain of responsibility
    */
-  void construct(){
+  void construct() {
     pushInteractorComponent(new MousePanNZoomNavigator);
     pushInteractorComponent(new MouseNodeBuilder);
   }
 
-  QCursor getCursor(){return QCursor(Qt::PointingHandCursor);}
+  QCursor getCursor() {
+    return QCursor(Qt::PointingHandCursor);
+  }
 };
 
 INTERACTORPLUGIN(InteractorAddNode, "InteractorAddNode", "Tulip Team", "01/04/2009", "Add Node Interactor", "1.0")

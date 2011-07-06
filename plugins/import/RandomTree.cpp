@@ -27,32 +27,31 @@ using namespace tlp;
 
 namespace {
 
-  const char * paramHelp[] =
-    {
-      // minsize
-      HTML_HELP_OPEN() \
-      HTML_HELP_DEF( "type", "unsigned int" ) \
-      HTML_HELP_DEF( "default", "100" ) \
-      HTML_HELP_BODY() \
-      "This parameter defines the minimal amount of node used to build the randomized tree." \
-      HTML_HELP_CLOSE(),
+const char * paramHelp[] = {
+  // minsize
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "unsigned int" ) \
+  HTML_HELP_DEF( "default", "100" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the minimal amount of node used to build the randomized tree." \
+  HTML_HELP_CLOSE(),
 
-      // maxsize
-      HTML_HELP_OPEN() \
-      HTML_HELP_DEF( "type", "unsigned int" ) \
-      HTML_HELP_DEF( "default", "1000" ) \
-      HTML_HELP_BODY() \
-      "This parameter defines the maximal amount of node used to build the randomized tree." \
-      HTML_HELP_CLOSE(),
+  // maxsize
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "unsigned int" ) \
+  HTML_HELP_DEF( "default", "1000" ) \
+  HTML_HELP_BODY() \
+  "This parameter defines the maximal amount of node used to build the randomized tree." \
+  HTML_HELP_CLOSE(),
 
-      // tree layout
-      HTML_HELP_OPEN() \
-      HTML_HELP_DEF( "type", "bool" ) \
-      HTML_HELP_DEF( "default", "false" ) \
-      HTML_HELP_BODY() \
-      "This parameter indicates if the generated tree has to be drawn with a tree layout algorithm." \
-      HTML_HELP_CLOSE(),
-    };
+  // tree layout
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "default", "false" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicates if the generated tree has to be drawn with a tree layout algorithm." \
+  HTML_HELP_CLOSE(),
+};
 }
 
 /** \addtogroup import */
@@ -75,8 +74,10 @@ public:
 
   bool buildNode(node n, unsigned int sizeM) {
     if (graph->numberOfNodes()>sizeM+2) return false;
+
     bool result=true;
     int randNumber=rand();
+
     if (randNumber>RAND_MAX/2) {
       node n1,n2;
       n1=graph->addNode();
@@ -86,15 +87,17 @@ public:
       result= result && buildNode(n1,sizeM);
       result= result && buildNode(n2,sizeM);
     }
+
     return result;
   }
 
   bool import() {
-    srand(clock()); 
+    srand(clock());
     unsigned int minSize  = 100;
     unsigned int maxSize  = 1000;
     bool needLayout = false;
-   if (dataSet!=0) {
+
+    if (dataSet!=0) {
       dataSet->get("minsize", minSize);
       dataSet->get("maxsize", maxSize);
       dataSet->get("tree layout", needLayout);
@@ -102,13 +105,15 @@ public:
 
     if (maxSize == 0) {
       if (pluginProgress)
-	pluginProgress->setError(string("Error: maxsize cannot be null"));
+        pluginProgress->setError(string("Error: maxsize cannot be null"));
+
       return false;
     }
 
     if (minSize > maxSize) {
       if (pluginProgress)
-	pluginProgress->setError(string("Error: maxsize must be greater than minsize"));
+        pluginProgress->setError(string("Error: maxsize must be greater than minsize"));
+
       return false;
     }
 
@@ -117,24 +122,30 @@ public:
 
     bool ok=true;
     int i=0;
+
     while (ok) {
       if (pluginProgress->progress(i%100,100)!=TLP_CONTINUE) break;
+
       i++;
       graph->clear();
       node n=graph->addNode();
       ok = !buildNode(n,maxSize);
+
       if (graph->numberOfNodes()<minSize-2) ok=true;
     }
+
     if (pluginProgress->progress(100,100)==TLP_CANCEL)
       return false;
+
     if (needLayout) {
       // apply Tree Leaf
       DataSet dSet;
       string errMsg;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
       return graph->computeProperty("Tree Leaf", layout, errMsg,
-				    pluginProgress, &dSet);
+                                    pluginProgress, &dSet);
     }
+
     return true;
   }
 };

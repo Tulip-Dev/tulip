@@ -26,24 +26,24 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 
-class FaceIteratorTest : public CppUnit::TestFixture{
-  
+class FaceIteratorTest : public CppUnit::TestFixture {
+
 private :
   PlanarConMap* carte;
 
   std::vector<edge> edges;
-  std::vector<node> nodes; 
+  std::vector<node> nodes;
 
   void build();
-  
+
 public :
-  void setUp(){
+  void setUp() {
     carte = computePlanarConMap(tlp::newGraph());
     edges.clear();
     nodes.clear();
   }
-  
-  void tearDown(){
+
+  void tearDown() {
     delete carte;
   }
 

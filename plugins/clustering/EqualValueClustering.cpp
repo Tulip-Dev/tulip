@@ -26,28 +26,28 @@ using namespace tlp;
 ALGORITHMPLUGIN(EqualValueClustering,"Equal Value","David Auber","20/05/2008","Beta","1.1")
 
 namespace {
-  const char * paramHelp[] = {
-    // selectedNodes
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "PropertyInterface*" ) \
-    HTML_HELP_BODY() \
-    "Specify the property that will be used to partition the graph" \
-    HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN()				 \
-    HTML_HELP_DEF( "type", "String Collection" ) \
-    HTML_HELP_DEF("values", "nodes <BR> edges") \
-    HTML_HELP_DEF( "default", "nodes" )	 \
-    HTML_HELP_BODY() \
-    "This parameter enables to choose the type of graph elements to partition"	\
-    HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN()				 \
-    HTML_HELP_DEF( "type", "bool" ) \
-    HTML_HELP_DEF( "values", "[true, false]" ) \
-    HTML_HELP_DEF( "default", "false" ) \
-    HTML_HELP_BODY() \
-    "This parameter indicates whether the subgraphs have to be connected." \
-    HTML_HELP_CLOSE()
-  };
+const char * paramHelp[] = {
+  // selectedNodes
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "PropertyInterface*" ) \
+  HTML_HELP_BODY() \
+  "Specify the property that will be used to partition the graph" \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "String Collection" ) \
+  HTML_HELP_DEF("values", "nodes <BR> edges") \
+  HTML_HELP_DEF( "default", "nodes" )  \
+  HTML_HELP_BODY() \
+  "This parameter enables to choose the type of graph elements to partition"  \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "values", "[true, false]" ) \
+  HTML_HELP_DEF( "default", "false" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicates whether the subgraphs have to be connected." \
+  HTML_HELP_CLOSE()
+};
 }
 #define ELT_TYPE "Type"
 #define ELT_TYPES "nodes;edges;"
@@ -66,8 +66,9 @@ bool EqualValueClustering::run() {
   StringCollection eltTypes(ELT_TYPES);
   bool connected = false;
   eltTypes.setCurrent(0);
+
   if (dataSet!=0) {
-    dataSet->get("Property", property);  
+    dataSet->get("Property", property);
     dataSet->get(ELT_TYPE, eltTypes);
     dataSet->get("Connected", connected);
   }
@@ -76,6 +77,6 @@ bool EqualValueClustering::run() {
     property = graph->getProperty("viewMetric");
 
   return computeEqualValueClustering(graph, property, eltTypes.getCurrent() == NODE_ELT,
-				     connected, pluginProgress);
+                                     connected, pluginProgress);
 }
 //================================================================================

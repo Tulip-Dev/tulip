@@ -68,6 +68,7 @@ void tlp::initTulipLib(const char* appDirPath) {
   string::size_type pos;
 
   getEnvTlp=getenv("TLP_DIR");
+
   if (getEnvTlp==0) {
     if (appDirPath) {
 #ifdef _WIN32
@@ -75,50 +76,61 @@ void tlp::initTulipLib(const char* appDirPath) {
 #else
       // one dir up to initialize the lib dir
       TulipLibDir.append(appDirPath,
-			 strlen(appDirPath) -
-			 strlen(strrchr(appDirPath, '/') + 1));
+                         strlen(appDirPath) -
+                         strlen(strrchr(appDirPath, '/') + 1));
 #ifdef I64
       // check for lib64
       string tlpPath64 = TulipLibDir + "lib64/tulip";
       struct stat statInfo;
+
       if (stat(tlpPath64.c_str(), &statInfo) == 0)
-	TulipLibDir.append("lib64");
+        TulipLibDir.append("lib64");
       else
 #endif
-	TulipLibDir.append("lib");
+        TulipLibDir.append("lib");
+
 #endif
-    } else
+    }
+    else
       TulipLibDir=string(_TULIP_LIB_DIR);
   }
   else
     TulipLibDir=string(getEnvTlp);
+
 #ifdef _WIN32
   // ensure it is a unix-style path
   pos = TulipLibDir.find('\\', 0);
+
   while(pos != string::npos) {
     TulipLibDir[pos] = '/';
     pos = TulipLibDir.find('\\', pos);
   }
- #endif
+
+#endif
+
   // ensure it is '/' terminated
   if (TulipLibDir[TulipLibDir.length() - 1] != '/')
     TulipLibDir+='/';
-  
+
   getEnvTlp=getenv(TULIP_PLUGINS_PATH_VARIABLE);
+
   if (getEnvTlp!=0) {
     TulipPluginsPath=string(getEnvTlp);
 #ifdef _WIN32
     // ensure it is a unix-style path
     pos = TulipPluginsPath.find('\\', 0);
+
     while(pos != string::npos) {
       TulipPluginsPath[pos] = '/';
       pos = TulipPluginsPath.find('\\', pos);
     }
+
 #endif
     TulipPluginsPath= TulipLibDir + "tulip" + PATH_DELIMITER + TulipPluginsPath;
-  } else
+  }
+  else
     TulipPluginsPath= TulipLibDir + "tulip";
-    
+
 
   // one dir up to initialize the doc dir
   pos = TulipLibDir.length() - 2;
@@ -154,18 +166,18 @@ std::string tlp::demangleTlpClassName(const char* className) {
   int status;
   size_t length = 256;
   abi::__cxa_demangle((char *) className, (char *) demangleBuffer,
-		      &length, &status);
+                      &length, &status);
   // skip tlp::
   return std::string(demangleBuffer + 5);
 }
 #elif _MSC_VER
 
 std::string tlp::demangleTlpClassName(const char* className) {
-	std::string result;
-	static char demangleBuffer[256];
-	UnDecorateSymbolName(className, demangleBuffer, 256, UNDNAME_32_BIT_DECODE);
-	result = std::string(demangleBuffer + 5);
-	return result;
+  std::string result;
+  static char demangleBuffer[256];
+  UnDecorateSymbolName(className, demangleBuffer, 256, UNDNAME_32_BIT_DECODE);
+  result = std::string(demangleBuffer + 5);
+  return result;
 }
 #else
 #error define symbols demangling function
@@ -180,11 +192,15 @@ std::string tlp::getMajor(const std::string& v) {
 //=========================================================
 std::string tlp::getMinor(const std::string& v) {
   size_t pos = v.find('.');
+
   if (pos == string::npos)
     return string("0");
+
   unsigned int rpos = v.rfind('.');
+
   if (pos == rpos)
     return v.substr(pos+1);
+
   return v.substr(pos + 1, rpos - pos - 1);
 }
 

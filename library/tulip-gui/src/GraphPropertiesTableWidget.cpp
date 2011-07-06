@@ -53,6 +53,7 @@ void GraphPropertiesTableWidget::updateTable() {
   //Keep old selection
   vector<string> oldSelection = getSelectedPropertiesNames();
   clear();
+
   if (graph != NULL) {
     vector<string> propertiesName;
     string propertyName;
@@ -80,8 +81,10 @@ void GraphPropertiesTableWidget::updateTable() {
       for (int j = 0; j < columnCount(); ++j) {
         setItem(i, j, createPropertyItem(graph->getProperty(propertiesName[i]), j));
       }
+
       setRowHeight(i, ROW_HEIGHT);
     }
+
     //Restore sorting
     setSortingEnabled(previousSortingState);
     //Restore old selection.
@@ -101,12 +104,14 @@ QTableWidgetItem* GraphPropertiesTableWidget::createPropertyItem(PropertyInterfa
   else if (column == 1) {
     //Update the name to correspond with interface name of properties.
     string propertyType = property->getTypename();
+
     if (propertyType.compare("bool") == 0) {
       propertyType = "selection";
     }
     else if (propertyType.compare("double") == 0) {
       propertyType = "metric";
     }
+
     return new QTableWidgetItem(QString::fromUtf8(propertyType.c_str()));
   }
   else if (column == 2) {
@@ -126,6 +131,7 @@ vector<string> GraphPropertiesTableWidget::getSelectedPropertiesNames() const {
   vector<string> properties;
   //Use the range difference to compute the number of row selected.
   QList<QTableWidgetSelectionRange> range = selectedRanges();
+
   for (QList<QTableWidgetSelectionRange>::iterator it = range.begin(); it != range.end(); ++it) {
     for (int i = 0; i < (*it).rowCount(); ++i) {
       if (((*it).bottomRow() + i) < rowCount()) {
@@ -133,14 +139,17 @@ vector<string> GraphPropertiesTableWidget::getSelectedPropertiesNames() const {
       }
     }
   }
+
   return properties;
 }
 
 vector<string> GraphPropertiesTableWidget::getDisplayedPropertiesNames() const {
   vector<string> properties;
+
   for (int i = 0; i < rowCount(); ++i) {
     properties.push_back(getPropertyNameForRow(i));
   }
+
   return properties;
 }
 
@@ -158,17 +167,21 @@ bool GraphPropertiesTableWidget::checkPropertyFilter(const string& propertyName)
   if (typeFilter == All) {
     return true;
   }
+
   bool isViewPrefix = propertyName.substr(0, 4).compare("view") == 0;
   return (typeFilter == View) ? isViewPrefix : !isViewPrefix;
 }
 
 bool GraphPropertiesTableWidget::checkPropertyName(const string& propertyName) {
 #ifdef NDEBUG
+
   //Don't display viewMetaGraphProperty in release
   if (propertyName.compare("viewMetaGraph") == 0) {
     return false;
   }
+
 #endif
+
   if (nameFilter.isValid()) {
     //Find if the reg exp match in the string.
     return nameFilter.indexIn(QString::fromUtf8(propertyName.c_str())) != -1;
@@ -188,13 +201,16 @@ void GraphPropertiesTableWidget::setSelectedPropertiesNames(const vector<string>
   blockSignals(true);
   //Destroy previous selection.
   clearSelection();
+
   for (vector<string>::const_iterator it = selectedProperties.begin(); it != selectedProperties.end(); ++it) {
     for (int i = 0; i < rowCount(); ++i) {
       QTableWidgetItem *propertyItem = item(i, 0);
+
       if (propertyItem->text().compare(QString::fromUtf8(it->c_str())) == 0) {
         selectRow(i);
       }
     }
   }
+
   blockSignals(false);
 }

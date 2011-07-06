@@ -32,19 +32,19 @@ using namespace tlp;
 typedef std::set< tlp::Observable * >::iterator ObserverIterator;
 
 class QtViewerMainWindow : public QMainWindow, public Observer {
-  
+
   Q_OBJECT
 
 public :
 
   QtViewerMainWindow(const string &filename);
-  ~QtViewerMainWindow();	
+  ~QtViewerMainWindow();
 
 public slots:
-  
+
   void observableDestroyed(Observable *) {}
   void changeInteractor();
-  void update ( ObserverIterator begin, ObserverIterator end);		
+  void update ( ObserverIterator begin, ObserverIterator end);
 
 
 private :

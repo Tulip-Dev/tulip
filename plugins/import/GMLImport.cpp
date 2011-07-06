@@ -50,18 +50,22 @@ void edgeAttributeError() {
 struct GMLGraphBuilder:public GMLTrue {
   Graph *_graph;
   map<int,node> nodeIndex;
-  virtual ~GMLGraphBuilder(){}
+  virtual ~GMLGraphBuilder() {}
   GMLGraphBuilder(Graph *graph):_graph(graph) {
     //cer << "buil GraphBuilder" << endl;
   }
   bool addNode(int id) {
-    if (nodeIndex.find(id)==nodeIndex.end()) {nodeIndex[id]=_graph->addNode();}
+    if (nodeIndex.find(id)==nodeIndex.end()) {
+      nodeIndex[id]=_graph->addNode();
+    }
+
     return true;
   }
   edge addEdge(int idSource,int idTarget) {
     // return and invalid edge if one of the two nodes does not exits
     if (_graph->isElement(nodeIndex[idSource]) && _graph->isElement(nodeIndex[idTarget]))
       return _graph->addEdge(nodeIndex[idSource],nodeIndex[idTarget]);
+
     return edge();
   }
   bool setNodeValue(int nodeId, const string propertyName, string value) {
@@ -69,72 +73,79 @@ struct GMLGraphBuilder:public GMLTrue {
       _graph->getLocalProperty<StringProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
+
     return false;
   }
-  bool setNodeValue(int nodeId, const string propertyName, double value) { 
+  bool setNodeValue(int nodeId, const string propertyName, double value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<DoubleProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
+
     return false;
   }
-  bool setNodeValue(int nodeId, const string propertyName, int value) { 
+  bool setNodeValue(int nodeId, const string propertyName, int value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<IntegerProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
+
     return false;
   }
-  bool setNodeValue(int nodeId, const string propertyName, bool value) { 
+  bool setNodeValue(int nodeId, const string propertyName, bool value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<BooleanProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
+
     return false;
   }
-  bool setNodeValue(int nodeId, const string propertyName, Coord value) { 
+  bool setNodeValue(int nodeId, const string propertyName, Coord value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<LayoutProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
+
     return false;
   }
-  bool setNodeValue(int nodeId, const string propertyName, Size value) { 
+  bool setNodeValue(int nodeId, const string propertyName, Size value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<SizeProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
+
     return false;
   }
-  bool setNodeValue(int nodeId, const string propertyName, Color value) { 
+  bool setNodeValue(int nodeId, const string propertyName, Color value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<ColorProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
     }
+
     return false;
   }
 
-	/**
-	 * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
-	 */
+  /**
+   * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+   */
   bool setEdgeValue(edge, const string &, string) {
     return true;
   }
   /**
-	 * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
-	 */
+   * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+   */
   bool setEdgeValue(edge, const string &, int) {
     return true;
   }
   /**
-	 * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
-	 */
+   * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+   */
   bool setEdgeValue(edge, const string &, bool) {
     return true;
   }
   /**
-	 * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
-	 */
+   * Set the values of the property 2st param on the edge 1st param, to the value 3rd param.
+   */
   bool setEdgeValue(edge, const string &, double) {
     return true;
   }
@@ -145,8 +156,8 @@ struct GMLGraphBuilder:public GMLTrue {
     return true;
   }
   /**
-	 * Set all the edges values of the property 1st param, of type 2nd param to the value 3rd param.
-	 */
+   * Set all the edges values of the property 1st param, of type 2nd param to the value 3rd param.
+   */
   bool setAllEdgeValue(const string &, const string &, string) {
     return true;
   }
@@ -165,15 +176,17 @@ struct GMLNodeBuilder:public GMLBuilder {
   bool addInt(const string &st,const int id) {
     if (st==ID) {
       bool result=graphBuilder->addNode(id);
+
       if (result) idSet=id;
       else return false;
     }
     else {
       if (idSet!=-1)
-	graphBuilder->setNodeValue(idSet, st, id);
+        graphBuilder->setNodeValue(idSet, st, id);
       else
-	nodeAttributeError();
+        nodeAttributeError();
     }
+
     return true;
   }
   bool addDouble(const string &st,const double real) {
@@ -181,24 +194,27 @@ struct GMLNodeBuilder:public GMLBuilder {
       graphBuilder->setNodeValue(idSet, st, real);
     else
       nodeAttributeError();
+
     return true;
   }
   bool addString(const string &st,const string &str) {
     if (idSet!=-1) {
       if (st==LABEL)
-	graphBuilder->setNodeValue(idSet,"viewLabel",str);
+        graphBuilder->setNodeValue(idSet,"viewLabel",str);
       else
-	graphBuilder->setNodeValue(idSet, st, str);
+        graphBuilder->setNodeValue(idSet, st, str);
     }
     else
       nodeAttributeError();
+
     return true;
   }
-  bool addBool(const string &st,const bool boolean) {    
+  bool addBool(const string &st,const bool boolean) {
     if (idSet!=-1)
       graphBuilder->setNodeValue(idSet,st,boolean);
     else
       nodeAttributeError();
+
     return true;
   }
   void setColor(const Color &color) {
@@ -211,7 +227,9 @@ struct GMLNodeBuilder:public GMLBuilder {
     graphBuilder->setNodeValue(idSet,"viewLayout",coord);
   }
   bool addStruct(const string& structName,GMLBuilder*&newBuilder);
-  bool close(){return true;}
+  bool close() {
+    return true;
+  }
 };
 
 //=================================================================================
@@ -230,44 +248,67 @@ struct GMLNodeGraphicsBuilder:public GMLTrue {
 
   bool addInt(const string &st,const int integer) {
     if (st=="x") coord.setX(integer);
+
     if (st=="y") coord.setY(integer);
+
     if (st=="z") coord.setZ(integer);
+
     if (st=="w") size.setW(integer);
+
     if (st=="h") size.setH(integer);
+
     if (st=="d") size.setD(integer);
+
     return true;
   }
   bool addDouble(const string &st,const double real) {
     if (st=="x") coord.setX(real);
+
     if (st=="y") coord.setY(real);
+
     if (st=="z") coord.setZ(real);
+
     if (st=="w") size.setW(real);
+
     if (st=="h") size.setH(real);
+
     if (st=="d") size.setD(real);
+
     return true;
   }
   bool addString(const string &st,const string &str) {
     if (st == "fill") {
       // parse color in format #rrggbb
       if (str[0] == '#' && str.length() == 7) {
-	char *c_str = (char *) str.c_str() + 1;
-	for (int i = 0; i < 3; i++, c_str++) {
-	  unsigned char value = 0;
-	  if (isdigit(*c_str))
-	    value += (*c_str - '0') * 16;
-	  else value += ((tolower(*c_str) - 'a') + 10) * 16;
-	  c_str++;
-	  if (isdigit(*c_str))
-	    value += *c_str - '0';
-	  else value += (tolower(*c_str) - 'a') + 10;
-	  switch(i) {
-	  case 0: color.setR(value); break;
-	  case 1: color.setG(value); break;
-	  case 2: color.setB(value);
-	  }
-	}
+        char *c_str = (char *) str.c_str() + 1;
+
+        for (int i = 0; i < 3; i++, c_str++) {
+          unsigned char value = 0;
+
+          if (isdigit(*c_str))
+            value += (*c_str - '0') * 16;
+          else value += ((tolower(*c_str) - 'a') + 10) * 16;
+
+          c_str++;
+
+          if (isdigit(*c_str))
+            value += *c_str - '0';
+          else value += (tolower(*c_str) - 'a') + 10;
+
+          switch(i) {
+          case 0:
+            color.setR(value);
+            break;
+          case 1:
+            color.setG(value);
+            break;
+          case 2:
+            color.setB(value);
+          }
+        }
       }
     }
+
     return true;
   }
   bool close() {
@@ -284,10 +325,12 @@ bool GMLNodeBuilder::addStruct(const string& structName,GMLBuilder*&newBuilder) 
     nodeAttributeError();
     return true;
   }
+
   if (structName==GRAPHICS)
     newBuilder=new GMLNodeGraphicsBuilder(this);
   else
     newBuilder=new GMLTrue();
+
   return true;
 }
 //=================================================================================
@@ -305,15 +348,23 @@ struct GMLEdgeBuilder:public GMLTrue {
   }
   bool addInt(const string &st,const int id) {
     bool result=true;
+
     if (st==SOURCE) source=id;
+
     if (st==TARGET) target=id;
-    if ((!edgeOk) && (source!=-1) && (target!=-1)) {edgeOk=true;curEdge=graphBuilder->addEdge(source,target);}
+
+    if ((!edgeOk) && (source!=-1) && (target!=-1)) {
+      edgeOk=true;
+      curEdge=graphBuilder->addEdge(source,target);
+    }
+
     if ((st!=SOURCE) && (st!=TARGET)) {
       if (edgeOk && curEdge.isValid())
-	result=graphBuilder->setEdgeValue(curEdge, st, id);
+        result=graphBuilder->setEdgeValue(curEdge, st, id);
       else
-	edgeAttributeError();
+        edgeAttributeError();
     }
+
     return result;
   }
   bool addDouble(const string &st,const double real) {
@@ -321,6 +372,7 @@ struct GMLEdgeBuilder:public GMLTrue {
       graphBuilder->setEdgeValue(curEdge, st, real);
     else
       edgeAttributeError();
+
     return true;
   }
   bool addString(const string &st,const string &str) {
@@ -328,6 +380,7 @@ struct GMLEdgeBuilder:public GMLTrue {
       graphBuilder->setEdgeValue(curEdge, st, str);
     else
       edgeAttributeError();
+
     return true;
   }
   bool addBool(const string &st,const bool boolean) {
@@ -335,6 +388,7 @@ struct GMLEdgeBuilder:public GMLTrue {
       graphBuilder->setEdgeValue(curEdge, st, boolean);
     else
       edgeAttributeError();
+
     return true;
   }
   void setEdgeValue(const LineType::RealType &lCoord) {
@@ -374,7 +428,7 @@ struct GMLEdgeGraphicsLineBuilder:public GMLTrue {
   GMLEdgeGraphicsLineBuilder(GMLEdgeGraphicsBuilder *edgeGraphicsBuilder):
     edgeGraphicsBuilder(edgeGraphicsBuilder)
   {}
-  virtual ~GMLEdgeGraphicsLineBuilder(){}
+  virtual ~GMLEdgeGraphicsLineBuilder() {}
   bool addStruct(const string& structName,GMLBuilder*&newBuilder);
   void addPoint(const Coord &coord) {
     lCoord.push_back(coord);
@@ -394,14 +448,20 @@ struct GMLEdgeGraphicsLinePointBuilder:public GMLTrue {
   {}
   bool addInt(const string &st,const int integer) {
     if (st=="x") coord.setX(integer);
+
     if (st=="y") coord.setY(integer);
+
     if (st=="z") coord.setZ(integer);
+
     return true;
   }
   bool addDouble(const string &st,const double real) {
     if (st=="x") coord.setX(real);
+
     if (st=="y") coord.setY(real);
+
     if (st=="z") coord.setZ(real);
+
     return true;
   }
   bool close() {
@@ -415,14 +475,16 @@ bool GMLEdgeGraphicsLineBuilder::addStruct(const string& structName,GMLBuilder*&
     newBuilder=new GMLEdgeGraphicsLinePointBuilder(this);
   else
     newBuilder=new GMLTrue();
+
   return true;
-} 
+}
 //=================================================================================
 bool GMLEdgeGraphicsBuilder::addStruct(const string& structName,GMLBuilder*&newBuilder) {
   if (structName==LINE)
     newBuilder=new GMLEdgeGraphicsLineBuilder(this);
   else
     newBuilder=new GMLTrue();
+
   return true;
 }
 //=================================================================================
@@ -432,10 +494,12 @@ bool GMLEdgeBuilder::addStruct(const string& structName,GMLBuilder*&newBuilder) 
     edgeAttributeError();
     return true;
   }
+
   if (structName==GRAPHICS)
     newBuilder=new GMLEdgeGraphicsBuilder(this);
   else
     newBuilder=new GMLTrue();
+
   return true;
 }
 //=================================================================================
@@ -451,20 +515,21 @@ bool GMLGraphBuilder::addStruct(const string& structName,GMLBuilder*&newBuilder)
   }
   else
     newBuilder=new GMLTrue();
+
   return true;
 }
 //=================================================================================
 
 
 namespace {
-  const char * paramHelp[] = {
-    // filename
-    HTML_HELP_OPEN()				    \
-    HTML_HELP_DEF( "type", "pathname" )		    \
-    HTML_HELP_BODY()						      \
-    "This parameter defines the file pathname to import."	      \
-    HTML_HELP_CLOSE(),
-  };
+const char * paramHelp[] = {
+  // filename
+  HTML_HELP_OPEN()            \
+  HTML_HELP_DEF( "type", "pathname" )       \
+  HTML_HELP_BODY()                  \
+  "This parameter defines the file pathname to import."       \
+  HTML_HELP_CLOSE(),
+};
 }
 
 
@@ -481,23 +546,26 @@ public:
   GMLImport(AlgorithmContext context):ImportModule(context) {
     addParameter<string>("file::filename",paramHelp[0]);
   }
-  ~GMLImport(){}
+  ~GMLImport() {}
   bool import() {
     string filename;
+
     if (!dataSet->get<string>("file::filename", filename))
       return false;
 
     struct stat infoEntry;
     int result;
-    #ifdef _WIN32
+#ifdef _WIN32
     result = stat(filename.c_str(),&infoEntry);
-    #else
+#else
     result = lstat(filename.c_str(),&infoEntry);
-    #endif
+#endif
+
     if (result == -1) {
       pluginProgress->setError(strerror(errno));
       return false;
     }
+
     ifstream myFile(filename.c_str());
     GMLParser<true> myParser(myFile,new GMLGraphBuilder(graph));
     myParser.parse();
