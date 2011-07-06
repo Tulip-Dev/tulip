@@ -29,7 +29,7 @@
 
 #include <tulip/TlpTools.h>
 
-int main( int argc, char** argv ) {
+int main(int, char**) {
   tlp::initTulipLib();
     
   //CPPUNIT_NS::QtUi::TestRunner runner;

@@ -29,7 +29,7 @@ PluginInformations::PluginInformations(const tlp::AbstractPluginInfo* info, cons
   _infos[info->getName().c_str()] = info;
 }
 
-void PluginInformations::AddPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies) {
+void PluginInformations::AddPluginInformations(const tlp::AbstractPluginInfo* info) {
     QString newVersion = info->getRelease().c_str();
     if(_installedVersion > newVersion) {
       _updateAvailable = true;
@@ -77,7 +77,7 @@ QString PluginInformations::type() const{
   return _type;
 }
 
-const QStringList& PluginInformations::dependencies(QString version) const {
+const QStringList PluginInformations::dependencies(QString version) const {
   QStringList result;
   result.reserve(_infos[version]->getDependencies().size());
   for(std::list<tlp::Dependency>::const_iterator it = _infos[version]->getDependencies().begin(); it != _infos[version]->getDependencies().end(); ++it) {

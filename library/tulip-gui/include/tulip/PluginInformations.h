@@ -103,7 +103,7 @@ class TLP_QT_SCOPE PluginInformations {
      **/
     PluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const QString& basePath);
 
-    void AddPluginInformations(const tlp::AbstractPluginInfo* info, const std::string& type, const std::list<tlp::Dependency>& dependencies);
+    void AddPluginInformations(const tlp::AbstractPluginInfo* info);
     void AddPluginInformations(const tlp::PluginInformations* info);
 
     QString identifier() const;
@@ -119,7 +119,7 @@ class TLP_QT_SCOPE PluginInformations {
     QDateTime installDate() const;
     
     QString type() const;
-    const QStringList& dependencies(QString version) const;
+    const QStringList dependencies(QString version) const;
     const QStringList& versions() const;
     QString latestVersion() const { return "latestVersion"; }
 

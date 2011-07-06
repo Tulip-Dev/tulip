@@ -164,7 +164,7 @@ namespace tlp {
 	  if(arg2.valueType==SpreadValue::coordv) {
 	    resultArg1.coordV=Coord(arg1.doubleV,arg1.doubleV,arg1.doubleV);
 	  }else{
-	    char tmp;
+	    unsigned char tmp;
 	    if(arg1.doubleV<0)
 	      tmp=0;
 	    else if(arg1.doubleV>255)

@@ -19,7 +19,7 @@
 #include <stack>
 #include "NodeMetric.h"
 
-DOUBLEPLUGINOFGROUP(NodeMetric,"Node","David Auber","20/12/1999","Alpha","1.0","Tree");
+DOUBLEPLUGINOFGROUP(NodeMetric,"Node","David Auber","20/12/1999","Alpha","1.0","Tree")
 
 using namespace std;
 using namespace tlp;
