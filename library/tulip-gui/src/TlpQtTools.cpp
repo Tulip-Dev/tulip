@@ -124,7 +124,6 @@ bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QCo
 #endif
 }
 
-<<<<<<< HEAD
 QString propertyTypeToPropertyTypeLabel(const string& typeName) {
   map<string,QString>::const_iterator  it = propertyTypeToPropertyTypeLabelMap.find(typeName);
   return it != propertyTypeToPropertyTypeLabelMap.end()?it->second:QString();
