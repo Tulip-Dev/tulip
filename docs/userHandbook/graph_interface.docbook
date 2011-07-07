@@ -617,10 +617,10 @@
       </sect3>
     </sect2>
 
-    <!--<sect2 id="SpreadsheetComponent"><title>Table view</title>
+    <sect2 id="SpreadsheetComponent"><title>Table view</title>
       <graphic fileref="images/spreadsheet_view.png"/>
-<para> This view</para>
-    </sect2>-->
+    <para> In this view you can visualize and edit the values of the properties of the graph elements (nodes or edges) in a table form.</para>
+    </sect2>
   </sect1>
 </chapter>
 
